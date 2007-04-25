@@ -1,0 +1,5 @@
+[ChannelHandler]
+BusName = org.gnome.Empathy.Chat
+ObjectPath = /org/freedesktop/Telepathy/ChannelHandler
+ChannelType = org.freedesktop.Telepathy.Channel.Type.Text
+

@@ -1,0 +1,237 @@
+<gconfschemafile>
+  <schemalist>
+
+    <schema>
+      <key>/schemas/apps/empathy/ui/show_offline</key>
+      <applyto>/apps/empathy/ui/show_offline</applyto>
+      <owner>empathy</owner>
+      <type>bool</type>
+      <default>false</default>
+      <locale name="C">
+        <short>Show offline contacts</short>
+	<long>
+	Whether or not to show contacts that are offline in the contact list.
+	</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/empathy/ui/show_avatars</key>
+      <applyto>/apps/empathy/ui/show_avatars</applyto>
+      <owner>empathy</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+        <short>Show avatars</short>
+	<long>
+	Whether or not to show avatars for contacts in the contact
+      list and chat windows.
+	</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/empathy/ui/compact_contact_list</key>
+      <applyto>/apps/empathy/ui/compact_contact_list</applyto>
+      <owner>empathy</owner>
+      <type>bool</type>
+      <default>false</default>
+      <locale name="C">
+        <short>Compact contact list</short>
+	<long>
+	Whether to show the contact list in compact mode or not. 
+	</long>
+      </locale>
+    </schema>
+
+    <schema>
+       <key>/schemas/apps/empathy/ui/main_window_hidden</key>
+       <applyto>/apps/empathy/ui/main_window_hidden</applyto>
+       <owner>empathy</owner>
+       <type>bool</type>
+       <default>false</default>
+       <locale name="C">
+          <short>Hide main window</short>
+          <long>
+            Hide the main window.
+          </long>
+       </locale>
+    </schema>
+
+    <schema>
+       <key>/schemas/apps/empathy/ui/avatar_directory</key>
+       <applyto>/apps/empathy/ui/avatar_directory</applyto>
+       <owner>empathy</owner>
+       <type>string</type>
+       <default></default>
+       <locale name="C">
+          <short>Default directory to select an avatar image from</short>
+          <long>
+	    The last directory that an avatar image was chosen from.
+          </long>
+       </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/empathy/notifications/play_sounds</key>
+      <applyto>/apps/empathy/notifications/play_sounds</applyto>
+      <owner>empathy</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+         <short>Use notification sounds</short>
+         <long>
+	 Whether or not to play a sound when messages arrive.
+         </long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/empathy/notifications/sound_when_away</key>
+      <applyto>/apps/empathy/notifications/sound_when_away</applyto>
+      <owner>empathy</owner>
+      <type>bool</type>
+      <default>false</default>
+      <locale name="C">
+         <short>Enable sound when away</short>
+         <long>
+	 Whether or not to play sounds when away.
+         </long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/empathy/notifications/sound_when_busy</key>
+      <applyto>/apps/empathy/notifications/sound_when_busy</applyto>
+      <owner>empathy</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+         <short>Enable sound when busy</short>
+         <long>
+	 Whether or not to play sounds when busy.
+         </long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/empathy/notifications/popup_when_contact_available</key>
+      <applyto>/apps/empathy/notifications/popup_when_contact_available</applyto>
+      <owner>empathy</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+         <short>Enable popup when contact is available</short>
+         <long>
+	 Whether or not to show a popup when a contact becomes available.
+         </long>
+      </locale>
+    </schema>
+
+    <schema>
+       <key>/schemas/apps/empathy/ui/separate_chat_windows</key>
+       <applyto>/apps/empathy/ui/separate_chat_windows</applyto>
+       <owner>empathy</owner>
+       <type>bool</type>
+       <default>false</default>
+       <locale name="C">
+          <short>Open new chats in separate windows</short>
+          <long>
+	    Always open a separate chat window for new chats.
+          </long>
+       </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/empathy/conversation/graphical_smileys</key>
+      <applyto>/apps/empathy/conversation/graphical_smileys</applyto>
+      <owner>empathy</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+         <short>Use graphical smileys</short>
+         <long>
+	 Whether or not to convert smileys into graphical images in
+	 conversations.
+         </long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/empathy/conversation/theme</key>
+      <applyto>/apps/empathy/conversation/theme</applyto>
+      <owner>empathy</owner>
+      <type>string</type>
+      <default>classic</default>
+      <locale name="C">
+         <short>Chat window theme</short>
+         <long>
+           The theme that is used to display the conversation in chat windows.
+         </long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/empathy/conversation/theme_chat_room</key>
+      <applyto>/apps/empathy/conversation/theme_chat_room</applyto>
+      <owner>empathy</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+         <short>Use theme for chat rooms</short>
+         <long>
+           Whether to use the theme for chat rooms or not.
+         </long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/empathy/conversation/spell_checker_languages</key>
+      <applyto>/apps/empathy/conversation/spell_checker_languages</applyto>
+      <owner>empathy</owner>
+      <type>string</type>
+      <default>en</default>
+      <locale name="C">
+	<short>Spell checking languages</short>
+	<long>
+	  Comma separated list of spell checker languages to use (e.g. en, fr, nl).
+	</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/empathy/conversation/spell_checker_enabled</key>
+      <applyto>/apps/empathy/conversation/spell_checker_enabled</applyto>
+      <owner>empathy</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+        <short>Enable spell checker</short>
+	<long>
+	Whether or not to check words typed against the languages you
+      want to check with.
+	</long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/empathy/hints/close_main_window</key>
+      <applyto>/apps/empathy/hints/close_main_window</applyto>
+      <owner>empathy</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+        <short>Show hint about closing the main window</short>
+	<long>
+	Whether or not to show the message dialog about closing the
+      main window with the 'x' button in the title bar.
+	</long>
+      </locale>
+    </schema>
+
+  </schemalist>  
+</gconfschemafile>
+
+
+
+

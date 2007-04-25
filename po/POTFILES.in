@@ -1,0 +1,20 @@
+# List of source files containing translatable strings.
+# Please keep this file sorted alphabetically.
+
+
+libempathy/gossip-contact.c
+libempathy/gossip-presence.c
+
+libempathy-gtk/empathy.schemas.in
+libempathy-gtk/empathy-chat.glade
+libempathy-gtk/empathy-accounts.glade
+libempathy-gtk/gossip-accounts-dialog.c
+libempathy-gtk/gossip-account-widget-generic.c
+libempathy-gtk/gossip-chat.c
+libempathy-gtk/gossip-chat-view.c
+libempathy-gtk/gossip-chat-window.c
+libempathy-gtk/gossip-contact-list.c
+libempathy-gtk/gossip-preferences.c
+libempathy-gtk/gossip-private-chat.c
+libempathy-gtk/gossip-theme-manager.c
+

@@ -1,0 +1,20 @@
+Things you can do if you want to help:
+
+ - Find a good name, empathy is already used and gaim had legal problems with it.
+ - Rename all files and functions name to use the new name once we get a cool one.
+ - Porting gossip-account-widget-*.{c,h} from gossip project (Guillaume is already working on IRC widget).
+ - Make a EmpathyChatroom object inherited from EmpathyChat and adding support for topic, invite, members list, etc.
+ - Porting various UI widgets from gossip to libempathy-gtk for contact info, adding contact, personal info, etc.
+ - GtkWidget-ify gossip widgets imported in libempathy-gtk. Actually most window/dialog do not inherit from GtkWindow/GtkDialog...
+ - Set up the translation system and import po files from gossip? Or re-translate everything?
+ - Fix setting subscription for contacts in EmpathyContactList.
+ - Write a MC plugin to filter channels before dispatching them. For example we need a GtkStatusIcon that blink when an event arrives (text/voip/ft channel) and tells the MC to dispatch the channel only when the user clicked the icon. Like in gossip.
+ - Testing and Bugfixing.
+
+SoC projects:
+ - Adding VoIP support based on the patch proposed for gossip.
+ - Adding FileTransfer support.
+ 
+If you want to contribute you can ask for information at
+ - #telepathy on freenode
+ - Telepathy's mailing list.
