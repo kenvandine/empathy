@@ -43,7 +43,7 @@
 
 #include "gossip-chat.h"
 #include "gossip-chat-window.h"
-//#include "gossip-geometry.h"
+#include "gossip-geometry.h"
 #include "gossip-preferences.h"
 #include "gossip-spell.h"
 //#include "gossip-spell-dialog.h"
@@ -69,6 +69,7 @@ struct _GossipChatPriv {
 	GtkTooltips      *tooltips;
 	guint             composing_stop_timeout_id;
 	gboolean          sensitive;
+	gchar            *id;
 	/* Used to automatically shrink a window that has temporarily
 	 * grown due to long input. 
 	 */
@@ -1038,7 +1039,7 @@ gossip_chat_save_geometry (GossipChat *chat,
 			   gint        w,
 			   gint        h)
 {
-	//FIXME: gossip_geometry_save_for_chat (chat, x, y, w, h);
+	gossip_geometry_save (gossip_chat_get_id (chat), x, y, w, h);
 }
 
 void
@@ -1048,7 +1049,7 @@ gossip_chat_load_geometry (GossipChat *chat,
 			   gint       *w,
 			   gint       *h)
 {
-	//FIXME: gossip_geometry_load_for_chat (chat, x, y, w, h);
+	gossip_geometry_load (gossip_chat_get_id (chat), x, y, w, h);
 }
 
 void
@@ -1077,7 +1078,9 @@ gossip_chat_set_tp_chat (GossipChat    *chat,
 		g_object_unref (priv->tp_chat);
 	}
 
+	g_free (priv->id);
 	priv->tp_chat = g_object_ref (tp_chat);
+	priv->id = g_strdup (empathy_tp_chat_get_id (tp_chat));
 
 	g_signal_connect (tp_chat, "message-received",
 			  G_CALLBACK (chat_message_received_cb),
@@ -1094,6 +1097,16 @@ gossip_chat_set_tp_chat (GossipChat    *chat,
 		gossip_chat_view_append_event (chat->view, _("Connected"));
 		priv->sensitive = TRUE;
 	}
+}
+
+const gchar *
+gossip_chat_get_id (GossipChat *chat)
+{
+	GossipChatPriv *priv;
+
+	priv = GET_PRIV (chat);
+
+	return priv->id;
 }
 
 void

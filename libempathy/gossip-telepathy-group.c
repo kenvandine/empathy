@@ -418,7 +418,7 @@ gossip_telepathy_group_get_name (GossipTelepathyGroup *group)
 		return NULL;
 	}
 
-	group_handles = g_array_new (FALSE, FALSE, sizeof (gint));
+	group_handles = g_array_new (FALSE, FALSE, sizeof (guint));
 	g_array_append_val (group_handles, channel_handle);
 	if (!tp_conn_inspect_handles (DBUS_G_PROXY (priv->tp_conn),
 				      handle_type,

@@ -25,6 +25,7 @@
 #include <libtelepathy/tp-helpers.h>
 #include <libtelepathy/tp-chan-type-text-gen.h>
 #include <libtelepathy/tp-chan-iface-chat-state-gen.h>
+#include <libtelepathy/tp-conn.h>
 
 #include "empathy-tp-chat.h"
 #include "empathy-contact-manager.h"
@@ -41,6 +42,9 @@
 
 struct _EmpathyTpChatPriv {
 	EmpathyContactList *list;
+	McAccount          *account;
+	gchar              *id;
+
 	TpChan             *tp_chan;
 	DBusGProxy         *text_iface;
 	DBusGProxy	   *chat_state_iface;
@@ -160,6 +164,10 @@ tp_chat_finalize (GObject *object)
 	if (priv->list) {
 		g_object_unref (priv->list);
 	}
+	if (priv->account) {
+		g_object_unref (priv->account);
+	}
+	g_free (priv->id);
 
 	G_OBJECT_CLASS (empathy_tp_chat_parent_class)->finalize (object);
 }
@@ -181,6 +189,7 @@ empathy_tp_chat_new (McAccount *account,
 	manager = empathy_session_get_contact_manager ();
 	priv->list = empathy_contact_manager_get_list (manager, account);
 	priv->tp_chan = g_object_ref (tp_chan);
+	priv->account = g_object_ref (account);
 	g_object_ref (priv->list);
 
 	priv->text_iface = tp_chan_get_interface (tp_chan,
@@ -358,6 +367,55 @@ empathy_tp_chat_send_state (EmpathyTpChat      *chat,
 			g_clear_error (&error);
 		}
 	}
+}
+
+const gchar *
+empathy_tp_chat_get_id (EmpathyTpChat *chat)
+{
+	EmpathyTpChatPriv  *priv;
+	MissionControl     *mc;
+	TpConn             *tp_conn;
+	GArray             *handles;
+	gchar             **names;
+	GError             *error = NULL;
+
+	g_return_val_if_fail (EMPATHY_IS_TP_CHAT (chat), NULL);
+
+	priv = GET_PRIV (chat);
+
+	if (priv->id) {
+		return priv->id;
+	}
+
+	mc = empathy_session_get_mission_control ();
+	tp_conn = mission_control_get_connection (mc, priv->account, NULL);
+	handles = g_array_new (FALSE, FALSE, sizeof (guint));
+	g_array_append_val (handles, priv->tp_chan->handle);
+
+	if (!tp_conn_inspect_handles (DBUS_G_PROXY (tp_conn),
+				      priv->tp_chan->handle_type,
+				      handles,
+				      &names,
+				      &error)) {
+		gossip_debug (DEBUG_DOMAIN, 
+			      "Couldn't get id: %s",
+			      error ? error->message : "No error given");
+		g_clear_error (&error);
+		g_array_free (handles, TRUE);
+		g_object_unref (tp_conn);
+		
+		return NULL;
+	}
+
+	/* A handle name is unique only for a specific account */
+	priv->id = g_strdup_printf ("%s/%s",
+				    mc_account_get_unique_name (priv->account),
+				    *names);
+
+	g_strfreev (names);
+	g_object_unref (tp_conn);
+
+	return priv->id;
 }
 
 static void

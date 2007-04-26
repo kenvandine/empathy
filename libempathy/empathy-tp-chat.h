@@ -71,6 +71,7 @@ void           empathy_tp_chat_send             (EmpathyTpChat      *chat,
 						 GossipMessage      *message);
 void           empathy_tp_chat_send_state       (EmpathyTpChat      *chat,
 						 EmpathyTpChatState  state);
+const gchar *  empathy_tp_chat_get_id           (EmpathyTpChat      *chat);
 
 G_END_DECLS
 

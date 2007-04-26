@@ -126,6 +126,7 @@ void              gossip_chat_load_geometry         (GossipChat       *chat,
 						     gint             *h);
 void              gossip_chat_set_tp_chat           (GossipChat       *chat,
 						     EmpathyTpChat    *tp_chat);
+const gchar *     gossip_chat_get_id                (GossipChat       *chat);
 
 /* For spell checker dialog to correct the misspelled word. */
 gboolean          gossip_chat_get_is_command        (const gchar      *str);

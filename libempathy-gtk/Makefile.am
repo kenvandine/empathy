@@ -24,6 +24,7 @@ libempathy_gtk_la_SOURCES =             					\
 	gossip-chat-view.c			gossip-chat-view.h		\
 	gossip-chat-window.c			gossip-chat-window.h		\
 	gossip-private-chat.c			gossip-private-chat.h		\
+	gossip-geometry.c			gossip-geometry.h		\
 	gossip-ui-utils.c			gossip-ui-utils.h
 
 libempathy_gtk_la_LIBADD =							\
