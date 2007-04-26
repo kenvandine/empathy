@@ -275,6 +275,8 @@ chat_finalize (GObject *object)
 		g_object_unref (priv->tp_chat);
 	}
 
+	g_free (priv->id);
+
 	G_OBJECT_CLASS (gossip_chat_parent_class)->finalize (object);
 }
 
