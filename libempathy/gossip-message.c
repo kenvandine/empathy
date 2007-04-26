@@ -1,6 +1,7 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /*
  * Copyright (C) 2004-2007 Imendio AB
+ * Copyright (C) 2007 Collabora Ltd.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -18,6 +19,7 @@
  * Boston, MA 02111-1307, USA.
  *
  * Authors: Mikael Hallendal <micke@imendio.com>
+ *          Xavier Claessens <xclaesse@gmail.com>
  */
 
 #include "config.h"
