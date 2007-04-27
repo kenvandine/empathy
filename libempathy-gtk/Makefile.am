@@ -25,6 +25,8 @@ libempathy_gtk_la_SOURCES =             					\
 	gossip-chat-window.c			gossip-chat-window.h		\
 	gossip-private-chat.c			gossip-private-chat.h		\
 	gossip-geometry.c			gossip-geometry.h		\
+	gossip-status-presets.c			gossip-status-presets.h		\
+	gossip-presence-chooser.c		gossip-presence-chooser.h	\
 	gossip-ui-utils.c			gossip-ui-utils.h
 
 libempathy_gtk_la_LIBADD =							\
@@ -40,6 +42,7 @@ glade_DATA = 				\
 
 dtddir = $(datadir)/empathy
 dtd_DATA = 									\
+	gossip-status-presets.dtd						\
 	gossip-contact-groups.dtd
 
 schemasdir	 = $(GCONF_SCHEMA_FILE_DIR)

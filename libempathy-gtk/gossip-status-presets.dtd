@@ -1,0 +1,16 @@
+<!--
+  DTD for Gossips status presets.
+  by Martyn Russell <martyn@imendio.com>
+-->
+
+<!-- Root element. -->
+<!ELEMENT presets ((default?),status*)>
+
+<!ELEMENT default (#PCDATA)>
+<!ATTLIST default
+    presence (available|busy|away|ext_away) "available">
+
+<!ELEMENT status (#PCDATA)>
+<!ATTLIST status
+    presence (available|busy|away|ext_away) "available">
+
