@@ -65,14 +65,7 @@ const gchar *      gossip_contact_get_id                    (GossipContact      
 const gchar *      gossip_contact_get_name                  (GossipContact      *contact);
 GossipAvatar *     gossip_contact_get_avatar                (GossipContact      *contact);
 McAccount *        gossip_contact_get_account               (GossipContact      *contact);
-void               gossip_contact_add_presence              (GossipContact      *contact,
-							     GossipPresence     *presence);
-void               gossip_contact_remove_presence           (GossipContact      *contact,
-							     GossipPresence     *presence);
-GossipPresence *   gossip_contact_get_presence_for_resource (GossipContact      *contact,
-							     const gchar        *resource);
-GossipPresence *   gossip_contact_get_active_presence       (GossipContact      *contact);
-GList *            gossip_contact_get_presence_list         (GossipContact      *contact);
+GossipPresence *   gossip_contact_get_presence              (GossipContact      *contact);
 GList *            gossip_contact_get_groups                (GossipContact      *contact);
 GossipSubscription gossip_contact_get_subscription          (GossipContact      *contact);
 guint              gossip_contact_get_handle                (GossipContact      *contact);
@@ -84,6 +77,8 @@ void               gossip_contact_set_avatar                (GossipContact      
 							     GossipAvatar       *avatar);
 void               gossip_contact_set_account               (GossipContact      *contact,
 							     McAccount          *account);
+void               gossip_contact_set_presence              (GossipContact      *contact,
+							     GossipPresence     *presence);
 void               gossip_contact_set_groups                (GossipContact      *contact,
 							     GList              *categories);
 void               gossip_contact_set_subscription          (GossipContact      *contact,

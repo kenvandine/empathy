@@ -401,7 +401,7 @@ gossip_pixbuf_for_contact (GossipContact *contact)
 	g_return_val_if_fail (GOSSIP_IS_CONTACT (contact),
 			      gossip_pixbuf_offline ());
 
-	presence = gossip_contact_get_active_presence (contact);
+	presence = gossip_contact_get_presence (contact);
 
 	if (presence) {
 		return gossip_pixbuf_for_presence (presence);

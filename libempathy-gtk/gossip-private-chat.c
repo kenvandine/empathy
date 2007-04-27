@@ -363,7 +363,7 @@ private_chat_setup (GossipPrivateChat *chat,
 			  G_CALLBACK (private_chat_contact_updated_cb),
 			  chat);
 	g_signal_connect (priv->contact, 
-			  "notify::presences",
+			  "notify::presence",
 			  G_CALLBACK (private_chat_contact_presence_updated_cb),
 			  chat);
 

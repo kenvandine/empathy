@@ -57,25 +57,14 @@ GType               gossip_presence_get_type                 (void) G_GNUC_CONST
 GossipPresence *    gossip_presence_new                      (void);
 GossipPresence *    gossip_presence_new_full                 (GossipPresenceState  state,
 							      const gchar         *status);
-
-const gchar *       gossip_presence_get_resource             (GossipPresence      *presence);
 GossipPresenceState gossip_presence_get_state                (GossipPresence      *presence);
 const gchar *       gossip_presence_get_status               (GossipPresence      *presence);
-gint                gossip_presence_get_priority             (GossipPresence      *presence);
-
-void                gossip_presence_set_resource             (GossipPresence      *presence,
-							      const gchar         *resource);
 void                gossip_presence_set_state                (GossipPresence      *presence,
 							      GossipPresenceState  state);
 void                gossip_presence_set_status               (GossipPresence      *presence,
 							      const gchar         *status);
-void                gossip_presence_set_priority             (GossipPresence      *presence,
-							      gint                 priority);
-gboolean            gossip_presence_resource_equal           (gconstpointer        a,
-							      gconstpointer        b);
 gint                gossip_presence_sort_func                (gconstpointer        a,
 							      gconstpointer        b);
-
 const gchar *       gossip_presence_state_get_default_status (GossipPresenceState  state);
 
 G_END_DECLS

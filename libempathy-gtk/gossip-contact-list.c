@@ -793,7 +793,7 @@ contact_list_contact_added_cb (EmpathyContactManager *manager,
 	g_signal_connect (contact, "notify::groups",
 			  G_CALLBACK (contact_list_contact_groups_updated_cb),
 			  list);
-	g_signal_connect (contact, "notify::presences",
+	g_signal_connect (contact, "notify::presence",
 			  G_CALLBACK (contact_list_contact_updated_cb),
 			  list);
 	g_signal_connect (contact, "notify::name",

@@ -1732,12 +1732,7 @@ contact_list_parse_presence_foreach (guint               handle,
 		      handle);
 
 	contact_list_block_contact (list, contact);
-	if (presence) {
-		gossip_contact_add_presence (contact, presence);
-		g_object_unref (presence);
-	} else {
-		g_object_set (contact, "presences", NULL, NULL);
-	}
+	gossip_contact_set_presence (contact, presence);
 	contact_list_unblock_contact (list, contact);
 }
 
@@ -1767,8 +1762,6 @@ contact_list_presences_table_foreach (const gchar     *state_str,
 		gossip_presence_set_status (*presence,
 					    g_value_get_string (message));
 	}
-
-	gossip_presence_set_resource (*presence, "");
 }
 
 static GossipPresenceState
