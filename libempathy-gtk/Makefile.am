@@ -11,6 +11,7 @@ noinst_LTLIBRARIES = libempathy-gtk.la
 libempathy_gtk_la_SOURCES =             					\
 	gossip-accounts-dialog.c		gossip-accounts-dialog.h	\
 	gossip-account-widget-generic.c		gossip-account-widget-generic.h	\
+	gossip-account-widget-jabber.c		gossip-account-widget-jabber.h	\
 	gossip-profile-chooser.c		gossip-profile-chooser.h	\
 	gossip-cell-renderer-expander.c		gossip-cell-renderer-expander.h	\
 	gossip-cell-renderer-text.c		gossip-cell-renderer-text.h	\
@@ -36,9 +37,10 @@ libempathy_gtk_la_LIBADD =							\
 libempathy_gtk_includedir = $(includedir)/empathy/
 
 gladedir = $(datadir)/empathy
-glade_DATA = 				\
-	empathy-accounts.glade		\
-	empathy-chat.glade
+glade_DATA = 					\
+	gossip-accounts-dialog.glade		\
+	gossip-account-widget-jabber.glade	\
+	gossip-chat.glade
 
 dtddir = $(datadir)/empathy
 dtd_DATA = 									\

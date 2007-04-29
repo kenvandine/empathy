@@ -47,6 +47,7 @@
 #include "gossip-accounts-dialog.h"
 #include "gossip-profile-chooser.h"
 #include "gossip-account-widget-generic.h"
+#include "gossip-account-widget-jabber.h"
 
 #define DEBUG_DOMAIN "AccountDialog"
 
@@ -284,7 +285,9 @@ accounts_dialog_update_account (GossipAccountsDialog *dialog,
 		profile = mc_account_get_profile (account);
 		config_ui = mc_profile_get_configuration_ui (profile);
 
-		if (strcmp (config_ui, "blah") == 0) {
+		if (strcmp (config_ui, "jabber") == 0) {
+			dialog->settings_widget = 
+				gossip_account_widget_jabber_new (account);
 		} else {
 			dialog->settings_widget = 
 				gossip_account_widget_generic_new (account,
@@ -957,7 +960,7 @@ gossip_accounts_dialog_show (void)
 
 	dialog = g_new0 (GossipAccountsDialog, 1);
 
-	glade = gossip_glade_get_file ("empathy-accounts.glade",
+	glade = gossip_glade_get_file ("gossip-accounts-dialog.glade",
 				       "accounts_dialog",
 				       NULL,
 				       "accounts_dialog", &dialog->window,

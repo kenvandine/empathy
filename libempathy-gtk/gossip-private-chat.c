@@ -159,7 +159,7 @@ private_chat_create_ui (GossipPrivateChat *chat)
 
 	priv = GET_PRIV (chat);
 
-	glade = gossip_glade_get_file ("empathy-chat.glade",
+	glade = gossip_glade_get_file ("gossip-chat.glade",
 				       "chat_widget",
 				       NULL,
 				      "chat_widget", &priv->widget,
