@@ -74,7 +74,7 @@ typedef struct {
 	GtkWidget        *entry_name;
 	GtkWidget        *table_new_account;
 	GtkWidget        *button_create;
-	GtkWidget        *button_cancel;
+	GtkWidget        *button_back;
 
 	GtkWidget        *image_type;
 	GtkWidget        *label_name;
@@ -136,7 +136,7 @@ static void       accounts_dialog_entry_name_changed_cb     (GtkWidget          
 							     GossipAccountsDialog            *dialog);
 static void       accounts_dialog_button_create_clicked_cb  (GtkWidget                       *button,
 							     GossipAccountsDialog            *dialog);
-static void       accounts_dialog_button_cancel_clicked_cb  (GtkWidget                       *button,
+static void       accounts_dialog_button_back_clicked_cb    (GtkWidget                       *button,
 							     GossipAccountsDialog            *dialog);
 static void       accounts_dialog_button_connect_clicked_cb (GtkWidget                       *button,
 							     GossipAccountsDialog            *dialog);
@@ -779,8 +779,8 @@ accounts_dialog_button_create_clicked_cb (GtkWidget             *button,
 }
 
 static void
-accounts_dialog_button_cancel_clicked_cb (GtkWidget             *button,
-					  GossipAccountsDialog  *dialog)
+accounts_dialog_button_back_clicked_cb (GtkWidget             *button,
+					GossipAccountsDialog  *dialog)
 {
 	McAccount *account;
 
@@ -969,7 +969,7 @@ gossip_accounts_dialog_show (void)
 				       "entry_name", &dialog->entry_name,
 				       "table_new_account", &dialog->table_new_account,
 				       "button_create", &dialog->button_create,
-				       "button_cancel", &dialog->button_cancel,
+				       "button_back", &dialog->button_back,
 				       "image_type", &dialog->image_type,
 				       "label_type", &dialog->label_type,
 				       "label_name", &dialog->label_name,
@@ -983,7 +983,7 @@ gossip_accounts_dialog_show (void)
 			      "accounts_dialog", "destroy", accounts_dialog_destroy_cb,
 			      "accounts_dialog", "response", accounts_dialog_response_cb,
 			      "button_create", "clicked", accounts_dialog_button_create_clicked_cb,
-			      "button_cancel", "clicked", accounts_dialog_button_cancel_clicked_cb,
+			      "button_back", "clicked", accounts_dialog_button_back_clicked_cb,
 			      "entry_name", "changed", accounts_dialog_entry_name_changed_cb,
 			      "treeview", "row-activated", accounts_dialog_treeview_row_activated_cb,
 			      "button_connect", "clicked", accounts_dialog_button_connect_clicked_cb,
