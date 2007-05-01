@@ -246,6 +246,10 @@ static void     chat_view_append_irc_message         (GossipChatView           *
 						      GossipMessage            *msg);
 static void     chat_view_append_fancy_message       (GossipChatView           *view,
 						      GossipMessage            *msg);
+static GdkPixbuf *chat_view_pad_to_size              (GdkPixbuf                *pixbuf,
+						      gint                      width,
+						      gint                      height,
+						      gint                      extra_padding_right);
 
 G_DEFINE_TYPE (GossipChatView, gossip_chat_view, GTK_TYPE_TEXT_VIEW);
 
@@ -1055,7 +1059,8 @@ chat_view_maybe_append_fancy_header (GossipChatView *view,
 	const gchar        *line_top_tag;
 	const gchar        *line_bottom_tag;
 	gboolean            from_self;
-	GdkPixbuf          *avatar;
+	GdkPixbuf          *pixbuf = NULL;
+	GdkPixbuf          *avatar = NULL;
 
 	priv = GET_PRIV (view);
 
@@ -1111,7 +1116,12 @@ chat_view_maybe_append_fancy_header (GossipChatView *view,
 						  line_top_tag,
 						  NULL);
 
-	avatar = gossip_pixbuf_avatar_from_contact_scaled (sender, 32, 32);
+	/* FIXME: we should have a cash of avatar pixbufs */
+	pixbuf = gossip_pixbuf_avatar_from_contact_scaled (sender, 32, 32);
+	if (pixbuf) {
+		avatar = chat_view_pad_to_size (pixbuf, 32, 32, 6);
+		g_object_unref (pixbuf);
+	}
 
 	if (avatar) {
 		GtkTextIter start;
@@ -1367,6 +1377,45 @@ chat_view_theme_changed_cb (GossipThemeManager *manager,
 			       GOSSIP_PREFS_UI_SHOW_AVATARS,
 			       &show_avatars);
 	gossip_theme_manager_update_show_avatars (manager, view, show_avatars);
+}
+
+/* Pads a pixbuf to the specified size, by centering it in a larger transparent
+ * pixbuf. Returns a new ref.
+ */
+static GdkPixbuf *
+chat_view_pad_to_size (GdkPixbuf *pixbuf,
+		       gint       width,
+		       gint       height,
+		       gint       extra_padding_right)
+{
+	gint       src_width, src_height;
+	GdkPixbuf *padded;
+	gint       x_offset, y_offset;
+
+	src_width = gdk_pixbuf_get_width (pixbuf);
+	src_height = gdk_pixbuf_get_height (pixbuf);
+
+	x_offset = (width - src_width) / 2;
+	y_offset = (height - src_height) / 2;
+
+	padded = gdk_pixbuf_new (gdk_pixbuf_get_colorspace (pixbuf),
+				 TRUE, /* alpha */
+				 gdk_pixbuf_get_bits_per_sample (pixbuf),
+				 width + extra_padding_right,
+				 height);
+
+	gdk_pixbuf_fill (padded, 0);
+
+	gdk_pixbuf_copy_area (pixbuf,
+			      0, /* source coords */
+			      0,
+			      src_width,
+			      src_height,
+			      padded,
+			      x_offset, /* dest coords */
+			      y_offset);
+
+	return padded;
 }
 
 GossipChatView *
