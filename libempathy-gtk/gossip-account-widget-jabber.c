@@ -91,7 +91,7 @@ account_widget_jabber_entry_focus_cb (GtkWidget                 *widget,
 
 	str = gtk_entry_get_text (GTK_ENTRY (widget));
 	if (G_STR_EMPTY (str)) {
-		gchar *value;
+		gchar *value = NULL;
 
 		mc_account_get_param_string (settings->account, param, &value);
 		gtk_entry_set_text (GTK_ENTRY (widget), value ? value : "");
@@ -120,7 +120,7 @@ account_widget_jabber_checkbutton_toggled_cb (GtkWidget                 *widget,
 					      GossipAccountWidgetJabber *settings)
 {
 	if (widget == settings->checkbutton_ssl) {
-		gint     port;
+		gint     port = 0;
 		gboolean old_ssl;
 
 		mc_account_get_param_int (settings->account, "port", &port);

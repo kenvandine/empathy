@@ -86,6 +86,8 @@ void               gossip_contact_set_subscription          (GossipContact      
 void               gossip_contact_set_handle                (GossipContact      *contact,
 							     guint               handle);
 gboolean           gossip_contact_is_online                 (GossipContact      *contact);
+gboolean           gossip_contact_is_in_group               (GossipContact      *contact,
+							     const gchar        *group);
 const gchar *      gossip_contact_get_status                (GossipContact      *contact);
 gboolean           gossip_contact_equal                     (gconstpointer       v1,
 							     gconstpointer       v2);

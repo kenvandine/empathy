@@ -54,17 +54,19 @@ GossipContactList *gossip_contact_list_new                (void);
 GossipContact *    gossip_contact_list_get_selected       (GossipContactList *list);
 gchar *            gossip_contact_list_get_selected_group (GossipContactList *list);
 gboolean           gossip_contact_list_get_show_offline   (GossipContactList *list);
-void               gossip_contact_list_set_show_offline   (GossipContactList *list,
-							   gboolean           show_offline);
 gboolean           gossip_contact_list_get_show_avatars   (GossipContactList *list);
-void               gossip_contact_list_set_show_avatars   (GossipContactList *list,
-							   gboolean           show_avatars);
 gboolean           gossip_contact_list_get_is_compact     (GossipContactList *list);
-void               gossip_contact_list_set_is_compact     (GossipContactList *list,
-							   gboolean           is_compact);
 GtkWidget *        gossip_contact_list_get_contact_menu   (GossipContactList *list,
 							   GossipContact     *contact);
 GtkWidget *        gossip_contact_list_get_group_menu     (GossipContactList *list);
+void               gossip_contact_list_set_show_offline   (GossipContactList *list,
+							   gboolean           show_offline);
+void               gossip_contact_list_set_show_avatars   (GossipContactList *list,
+							   gboolean           show_avatars);
+void               gossip_contact_list_set_is_compact     (GossipContactList *list,
+							   gboolean           is_compact);
+void               gossip_contact_list_set_filter         (GossipContactList *list,
+							   const gchar       *filter);
 
 G_END_DECLS
 

@@ -317,8 +317,7 @@ gossip_dbus_type_to_g_type (const gchar *dbus_type_string)
 const gchar *
 gossip_g_type_to_dbus_type (GType g_type)
 {
-	switch (g_type)
-	{
+	switch (g_type) {
 	case G_TYPE_STRING:
 		return "s";
 	case G_TYPE_BOOLEAN:

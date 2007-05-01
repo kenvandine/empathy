@@ -610,6 +610,24 @@ gossip_contact_is_online (GossipContact *contact)
 	return (priv->presence != NULL);
 }
 
+gboolean
+gossip_contact_is_in_group (GossipContact *contact,
+			    const gchar   *group)
+{
+	GossipContactPriv *priv;
+
+	g_return_val_if_fail (GOSSIP_IS_CONTACT (contact), FALSE);
+	g_return_val_if_fail (!G_STR_EMPTY (group), FALSE);
+
+	priv = GET_PRIV (contact);
+
+	if (g_list_find_custom (priv->groups, group, (GCompareFunc) strcmp)) {
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
 const gchar *
 gossip_contact_get_status (GossipContact *contact)
 {

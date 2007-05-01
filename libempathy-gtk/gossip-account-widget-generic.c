@@ -213,7 +213,7 @@ account_widget_generic_setup_foreach (McProtocolParam            *param,
 				  0, 0);
 	}
 	else if (param->signature[0] == 'b') {
-		gboolean value;
+		gboolean value = FALSE;
 
 		mc_account_get_param_boolean (settings->account,
 					      param->name,
