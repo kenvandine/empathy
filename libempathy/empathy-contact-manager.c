@@ -24,6 +24,7 @@
 
 #include <string.h>
 
+#include <libtelepathy/tp-helpers.h>
 #include <libtelepathy/tp-constants.h>
 
 #include "empathy-contact-manager.h"
@@ -37,8 +38,9 @@
 #define DEBUG_DOMAIN "ContactManager"
 
 struct _EmpathyContactManagerPriv {
-	GHashTable *lists;
-	gboolean    setup;
+	GHashTable     *lists;
+	MissionControl *mc;
+	gboolean        setup;
 };
 
 typedef struct {
@@ -130,7 +132,6 @@ static void
 empathy_contact_manager_init (EmpathyContactManager *manager)
 {
 	EmpathyContactManagerPriv *priv;
-	MissionControl            *mc;
 	GSList                    *accounts, *l;
 
 	priv = GET_PRIV (manager);
@@ -140,14 +141,15 @@ empathy_contact_manager_init (EmpathyContactManager *manager)
 					     (GDestroyNotify) g_object_unref,
 					     (GDestroyNotify) g_object_unref);
 
-	mc = empathy_session_get_mission_control ();
+	priv->mc = mission_control_new (tp_get_bus ());
 
-	dbus_g_proxy_connect_signal (DBUS_G_PROXY (mc), "AccountStatusChanged",
+	dbus_g_proxy_connect_signal (DBUS_G_PROXY (priv->mc),
+				     "AccountStatusChanged",
 				     G_CALLBACK (contact_manager_status_changed_cb),
 				     manager, NULL);
 
 	/* Get ContactList for existing connections */
-	accounts = mission_control_get_online_connections (mc, NULL);
+	accounts = mission_control_get_online_connections (priv->mc, NULL);
 	for (l = accounts; l; l = l->next) {
 		McAccount *account;
 
@@ -167,6 +169,7 @@ contact_manager_finalize (GObject *object)
 	priv = GET_PRIV (object);
 
 	g_hash_table_destroy (priv->lists);
+	g_object_unref (priv->mc);
 }
 
 EmpathyContactManager *

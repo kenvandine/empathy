@@ -275,7 +275,7 @@ gossip_chat_window_init (GossipChatWindow *window)
 	priv->tooltips = g_object_ref (gtk_tooltips_new ());
 	gtk_object_sink (GTK_OBJECT (priv->tooltips));
 
-	glade = gossip_glade_get_file ("empathy-chat.glade",
+	glade = gossip_glade_get_file ("gossip-chat.glade",
 				       "chat_window",
 				       NULL,
 				       "chat_window", &priv->dialog,

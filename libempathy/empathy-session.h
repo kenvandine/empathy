@@ -30,9 +30,7 @@
 
 G_BEGIN_DECLS
 
-void                   empathy_session_connect             (void);
 void                   empathy_session_finalize            (void);
-MissionControl *       empathy_session_get_mission_control (void);
 EmpathyContactManager *empathy_session_get_contact_manager (void);
 
 G_END_DECLS

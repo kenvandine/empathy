@@ -29,6 +29,7 @@
 
 #include <libtelepathy/tp-conn.h>
 #include <libtelepathy/tp-chan.h>
+#include <libtelepathy/tp-helpers.h>
 #include <libmissioncontrol/mc-account.h>
 
 #include <libempathy/gossip-contact.h>
@@ -57,7 +58,7 @@ new_channel_cb (EmpathyChandler *chandler,
 		GossipPrivateChat     *chat;
 
 		/* We have a private chat channel */
-		mc = empathy_session_get_mission_control ();
+		mc = mission_control_new (tp_get_bus ());
 		account = mission_control_get_account_for_connection (mc, tp_conn, NULL);
 		manager = empathy_session_get_contact_manager ();
 		list = empathy_contact_manager_get_list (manager, account);
@@ -66,6 +67,7 @@ new_channel_cb (EmpathyChandler *chandler,
 		chat = gossip_private_chat_new_with_channel (contact, tp_chan);
 		gossip_chat_present (GOSSIP_CHAT (chat));
 
+		g_object_unref (mc);
 		g_object_unref (account);
 		g_object_unref (contact);
 		g_object_unref (chat);

@@ -37,8 +37,8 @@
 #include <libmissioncontrol/mission-control.h>
 #include <libmissioncontrol/mc-account-monitor.h>
 #include <libtelepathy/tp-constants.h>
+#include <libtelepathy/tp-helpers.h>
 
-#include <libempathy/empathy-session.h>
 #include <libempathy/gossip-debug.h>
 #include <libempathy/gossip-paths.h>
 #include <libempathy/gossip-utils.h>
@@ -55,35 +55,38 @@
 #define FLASH_TIMEOUT 500
 
 typedef struct {
-	GtkWidget *window;
+	GtkWidget        *window;
 
-	GtkWidget *alignment_settings;
+	GtkWidget        *alignment_settings;
 
-	GtkWidget *vbox_details;
-	GtkWidget *frame_no_account;
-	GtkWidget *label_no_account;
-	GtkWidget *label_no_account_blurb;
+	GtkWidget        *vbox_details;
+	GtkWidget        *frame_no_account;
+	GtkWidget        *label_no_account;
+	GtkWidget        *label_no_account_blurb;
 
-	GtkWidget *treeview;
+	GtkWidget        *treeview;
 
-	GtkWidget *button_remove;
-	GtkWidget *button_connect;
+	GtkWidget        *button_remove;
+	GtkWidget        *button_connect;
 
-	GtkWidget *frame_new_account;
-	GtkWidget *combobox_profile;
-	GtkWidget *entry_name;
-	GtkWidget *table_new_account;
-	GtkWidget *button_create;
-	GtkWidget *button_cancel;
+	GtkWidget        *frame_new_account;
+	GtkWidget        *combobox_profile;
+	GtkWidget        *entry_name;
+	GtkWidget        *table_new_account;
+	GtkWidget        *button_create;
+	GtkWidget        *button_cancel;
 
-	GtkWidget *image_type;
-	GtkWidget *label_name;
-	GtkWidget *label_type;
-	GtkWidget *settings_widget;
+	GtkWidget        *image_type;
+	GtkWidget        *label_name;
+	GtkWidget        *label_type;
+	GtkWidget        *settings_widget;
 
-	gboolean   connecting_show;
-	guint      connecting_id;
-	gboolean   account_changed;
+	gboolean          connecting_show;
+	guint             connecting_id;
+	gboolean          account_changed;
+
+	MissionControl   *mc;
+	McAccountMonitor *monitor;
 } GossipAccountsDialog;
 
 enum {
@@ -162,13 +165,11 @@ accounts_dialog_setup (GossipAccountsDialog *dialog)
 	GtkTreeSelection *selection;
 	GtkTreeIter       iter;
 	GList            *accounts, *l;
-	MissionControl   *mc;
 
 	view = GTK_TREE_VIEW (dialog->treeview);
 	store = GTK_LIST_STORE (gtk_tree_view_get_model (view));
 	selection = gtk_tree_view_get_selection (view);
 
-	mc = empathy_session_get_mission_control ();
 	accounts = mc_accounts_list ();
 
 	for (l = accounts; l; l = l->next) {
@@ -183,7 +184,7 @@ accounts_dialog_setup (GossipAccountsDialog *dialog)
 			continue;
 		}
 
-		status = mission_control_get_connection_status (mc, account, NULL);
+		status = mission_control_get_connection_status (dialog->mc, account, NULL);
 
 		gtk_list_store_append (store, &iter);
 		gtk_list_store_set (store, &iter,
@@ -192,7 +193,7 @@ accounts_dialog_setup (GossipAccountsDialog *dialog)
 				    COL_ACCOUNT_POINTER, account,
 				    -1);
 
-		accounts_dialog_status_changed_cb (mc,
+		accounts_dialog_status_changed_cb (dialog->mc,
 						   status,
 						   MC_PRESENCE_UNSET,
 						   TP_CONN_STATUS_REASON_NONE_SPECIFIED,
@@ -554,7 +555,6 @@ static void
 accounts_dialog_add_account (GossipAccountsDialog *dialog,
 			     McAccount            *account)
 {
-	MissionControl            *mc;
 	TelepathyConnectionStatus  status;
 	const gchar               *name;
 	GtkTreeView               *view;
@@ -585,8 +585,7 @@ accounts_dialog_add_account (GossipAccountsDialog *dialog,
 		}
 	}
 
-	mc = empathy_session_get_mission_control ();
-	status = mission_control_get_connection_status (mc, account, NULL);
+	status = mission_control_get_connection_status (dialog->mc, account, NULL);
 	name = mc_account_get_display_name (account);
 
 	g_return_if_fail (name != NULL);
@@ -618,10 +617,8 @@ accounts_dialog_account_removed_cb (McAccountMonitor     *monitor,
 				    gchar                *unique_name,
 				    GossipAccountsDialog *dialog)
 {
-	MissionControl *mc;
-	McAccount      *account;
+	McAccount *account;
 
-	mc = empathy_session_get_mission_control ();
 	account = mc_account_lookup (unique_name);
 
 	accounts_dialog_model_set_selected (dialog, account);
@@ -902,23 +899,19 @@ static void
 accounts_dialog_destroy_cb (GtkWidget            *widget,
 			    GossipAccountsDialog *dialog)
 {
-	MissionControl   *mc;
-	McAccountMonitor *monitor;
-	GList            *accounts, *l;
-
-	mc = empathy_session_get_mission_control ();
-	monitor = mc_account_monitor_new ();
+	GList *accounts, *l;
 
 	/* Disconnect signals */
-	g_signal_handlers_disconnect_by_func (monitor,
+	g_signal_handlers_disconnect_by_func (dialog->monitor,
 					      accounts_dialog_account_added_cb,
 					      dialog);
-	g_signal_handlers_disconnect_by_func (monitor,
+	g_signal_handlers_disconnect_by_func (dialog->monitor,
 					      accounts_dialog_account_removed_cb,
 					      dialog);
-	dbus_g_proxy_disconnect_signal (DBUS_G_PROXY (mc), "AccountStatusChanged",
-				     G_CALLBACK (accounts_dialog_status_changed_cb),
-				     dialog);
+	dbus_g_proxy_disconnect_signal (DBUS_G_PROXY (dialog->mc),
+					"AccountStatusChanged",
+					G_CALLBACK (accounts_dialog_status_changed_cb),
+					dialog);
 
 	/* Delete incomplete accounts */
 	accounts = mc_accounts_list ();
@@ -940,6 +933,9 @@ accounts_dialog_destroy_cb (GtkWidget            *widget,
 		g_source_remove (dialog->connecting_id);
 	}
 
+	g_object_unref (dialog->mc);
+	g_object_unref (dialog->monitor);
+	
 	g_free (dialog);
 }
 
@@ -947,8 +943,6 @@ GtkWidget *
 gossip_accounts_dialog_show (void)
 {
 	static GossipAccountsDialog *dialog = NULL;
-	MissionControl              *mc;
-	McAccountMonitor            *monitor;
 	GladeXML                    *glade;
 	GtkWidget                   *bbox;
 	GtkWidget                   *button_close;
@@ -1010,17 +1004,17 @@ gossip_accounts_dialog_show (void)
 	gtk_widget_show (dialog->combobox_profile);
 
 	/* Set up signalling */
-	mc = empathy_session_get_mission_control ();
-	monitor = mc_account_monitor_new ();
+	dialog->mc = mission_control_new (tp_get_bus ());
+	dialog->monitor = mc_account_monitor_new ();
 
 	/* FIXME: connect account-enabled/disabled too */
-	g_signal_connect (monitor, "account-created",
+	g_signal_connect (dialog->monitor, "account-created",
 			  G_CALLBACK (accounts_dialog_account_added_cb),
 			  dialog);
-	g_signal_connect (monitor, "account-deleted",
+	g_signal_connect (dialog->monitor, "account-deleted",
 			  G_CALLBACK (accounts_dialog_account_removed_cb),
 			  dialog);
-	dbus_g_proxy_connect_signal (DBUS_G_PROXY (mc), "AccountStatusChanged",
+	dbus_g_proxy_connect_signal (DBUS_G_PROXY (dialog->mc), "AccountStatusChanged",
 				     G_CALLBACK (accounts_dialog_status_changed_cb),
 				     dialog, NULL);
 

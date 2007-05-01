@@ -173,12 +173,12 @@ account_widget_jabber_destroy_cb (GtkWidget                 *widget,
 static void
 account_widget_jabber_setup (GossipAccountWidgetJabber *settings)
 {
-	gint      port;
-	gchar    *id;
-	gchar    *resource;
-	gchar    *server;
-	gchar    *password;
-	gboolean  old_ssl;
+	gint      port = 0;
+	gchar    *id = NULL;
+	gchar    *resource = NULL;
+	gchar    *server = NULL;
+	gchar    *password = NULL;
+	gboolean  old_ssl = FALSE;
 
 	mc_account_get_param_int (settings->account, "port", &port);
 	mc_account_get_param_string (settings->account, "account", &id);

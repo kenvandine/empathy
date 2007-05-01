@@ -312,7 +312,7 @@ empathy_contact_list_new (McAccount *account)
 
 	g_return_val_if_fail (MC_IS_ACCOUNT (account), NULL);
 
-	mc = empathy_session_get_mission_control ();
+	mc = mission_control_new (tp_get_bus ());
 
 	if (mission_control_get_connection_status (mc, account, NULL) != 0) {
 		/* The account is not connected, nothing to do. */
@@ -320,6 +320,7 @@ empathy_contact_list_new (McAccount *account)
 	}
 
 	tp_conn = mission_control_get_connection (mc, account, NULL);
+	g_object_unref (mc);
 	g_return_val_if_fail (tp_conn != NULL, NULL);
 
 	list = g_object_new (EMPATHY_TYPE_CONTACT_LIST, NULL);

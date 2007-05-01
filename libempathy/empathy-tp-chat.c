@@ -44,6 +44,7 @@ struct _EmpathyTpChatPriv {
 	EmpathyContactList *list;
 	McAccount          *account;
 	gchar              *id;
+	MissionControl     *mc;
 
 	TpChan             *tp_chan;
 	DBusGProxy         *text_iface;
@@ -167,6 +168,9 @@ tp_chat_finalize (GObject *object)
 	if (priv->account) {
 		g_object_unref (priv->account);
 	}
+	if (priv->mc) {
+		g_object_unref (priv->mc);
+	}
 	g_free (priv->id);
 
 	G_OBJECT_CLASS (empathy_tp_chat_parent_class)->finalize (object);
@@ -190,6 +194,7 @@ empathy_tp_chat_new (McAccount *account,
 	priv->list = empathy_contact_manager_get_list (manager, account);
 	priv->tp_chan = g_object_ref (tp_chan);
 	priv->account = g_object_ref (account);
+	priv->mc = mission_control_new (tp_get_bus ());
 	g_object_ref (priv->list);
 
 	priv->text_iface = tp_chan_get_interface (tp_chan,
@@ -230,7 +235,7 @@ empathy_tp_chat_new_with_contact (GossipContact *contact)
 
 	g_return_val_if_fail (GOSSIP_IS_CONTACT (contact), NULL);
 
-	mc = empathy_session_get_mission_control ();
+	mc = mission_control_new (tp_get_bus ());
 	account = gossip_contact_get_account (contact);
 
 	if (mission_control_get_connection_status (mc, account, NULL) != 0) {
@@ -255,6 +260,7 @@ empathy_tp_chat_new_with_contact (GossipContact *contact)
 
 	g_object_unref (tp_conn);
 	g_object_unref (text_chan);
+	g_object_unref (mc);
 
 	return chat;
 }
@@ -373,7 +379,6 @@ const gchar *
 empathy_tp_chat_get_id (EmpathyTpChat *chat)
 {
 	EmpathyTpChatPriv  *priv;
-	MissionControl     *mc;
 	TpConn             *tp_conn;
 	GArray             *handles;
 	gchar             **names;
@@ -387,8 +392,7 @@ empathy_tp_chat_get_id (EmpathyTpChat *chat)
 		return priv->id;
 	}
 
-	mc = empathy_session_get_mission_control ();
-	tp_conn = mission_control_get_connection (mc, priv->account, NULL);
+	tp_conn = mission_control_get_connection (priv->mc, priv->account, NULL);
 	handles = g_array_new (FALSE, FALSE, sizeof (guint));
 	g_array_append_val (handles, priv->tp_chan->handle);
 

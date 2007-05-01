@@ -27,8 +27,11 @@
 #include <glib.h>
 #include <gtk/gtk.h>
 
-#include <libempathy/gossip-contact.h>
+#include <libtelepathy/tp-helpers.h>
+#include <libmissioncontrol/mission-control.h>
+
 #include <libempathy/empathy-session.h>
+#include <libempathy/gossip-contact.h>
 #include <libempathy-gtk/gossip-contact-list.h>
 #include <libempathy-gtk/gossip-private-chat.h>
 #include <libempathy-gtk/gossip-stock.h>
@@ -43,11 +46,11 @@ destroy_cb (GtkWidget *window,
 }
 
 static void
-contact_chat_cb (GtkWidget     *list,
-		 GossipContact *contact,
-		 gpointer       user_data)
+contact_chat_cb (GtkWidget      *list,
+		 GossipContact  *contact,
+		 MissionControl *mc)
 {
-	mission_control_request_channel (empathy_session_get_mission_control (),
+	mission_control_request_channel (mc,
 					 gossip_contact_get_account (contact),
 					 TP_IFACE_CHANNEL_TYPE_TEXT,
 					 gossip_contact_get_handle (contact),
@@ -63,8 +66,6 @@ main (int argc, char *argv[])
 	GtkWidget *sw;
 
 	gtk_init (&argc, &argv);
-
-	empathy_session_connect ();
 
 	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 	gossip_stock_init (window);
@@ -84,7 +85,7 @@ main (int argc, char *argv[])
 			  NULL);
 	g_signal_connect (list, "contact-chat",
 			  G_CALLBACK (contact_chat_cb),
-			  NULL);
+			  mission_control_new (tp_get_bus ()));
 
 	gtk_widget_show_all (window);
 
