@@ -1181,7 +1181,7 @@ contact_list_add_contact (GossipContactList *list,
 		return;
 	}
 
-	model = GTK_TREE_MODEL (priv->store);
+	model = gtk_tree_view_get_model (GTK_TREE_VIEW (list));
 
 	/* If no groups just add it at the top level. */
 	groups = gossip_contact_get_groups (contact);

@@ -70,6 +70,8 @@ struct _GossipChatPriv {
 	guint             composing_stop_timeout_id;
 	gboolean          sensitive;
 	gchar            *id;
+	GSList           *sent_messages;
+	gint              sent_messages_index;
 	/* Used to automatically shrink a window that has temporarily
 	 * grown due to long input. 
 	 */
@@ -98,6 +100,10 @@ static void             chat_input_text_view_send         (GossipChat      *chat
 static void             chat_message_received_cb          (EmpathyTpChat   *tp_chat,
 							   GossipMessage   *message,
 							   GossipChat      *chat);
+void                    chat_sent_message_add             (GossipChat      *chat,
+							   const gchar     *str);
+const gchar *           chat_sent_message_get_next        (GossipChat      *chat);
+const gchar *           chat_sent_message_get_last        (GossipChat      *chat);
 static gboolean         chat_input_key_press_event_cb     (GtkWidget       *widget,
 							   GdkEventKey     *event,
 							   GossipChat      *chat);
@@ -219,6 +225,8 @@ gossip_chat_init (GossipChat *chat)
 	priv->default_window_height = -1;
 	priv->vscroll_visible = FALSE;
 	priv->sensitive = TRUE;
+	priv->sent_messages = NULL;
+	priv->sent_messages_index = -1;
 
 	g_signal_connect (chat->input_text_view,
 			  "key_press_event",
@@ -268,6 +276,9 @@ chat_finalize (GObject *object)
 
 	gossip_debug (DEBUG_DOMAIN, "Finalized: %p", object);
 
+	g_slist_foreach (priv->sent_messages, (GFunc) g_free, NULL);
+	g_slist_free (priv->sent_messages);
+
 	chat_composing_remove_timeout (chat);
 	g_object_unref (GOSSIP_CHAT (object)->account);
 
@@ -312,9 +323,11 @@ chat_send (GossipChat  *chat,
 
 	priv = GET_PRIV (chat);
 
-	if (msg == NULL || msg[0] == '\0') {
+	if (G_STR_EMPTY (msg)) {
 		return;
 	}
+
+	chat_sent_message_add (chat, msg);
 
 	if (g_str_has_prefix (msg, "/clear")) {
 		gossip_chat_view_clear (chat->view);
@@ -388,6 +401,97 @@ chat_message_received_cb (EmpathyTpChat *tp_chat,
 	g_signal_emit_by_name (chat, "new-message", message);
 }
 
+void 
+chat_sent_message_add (GossipChat  *chat,
+		       const gchar *str)
+{
+	GossipChatPriv *priv;
+	GSList         *list;
+	GSList         *item;
+
+	priv = GET_PRIV (chat);
+
+	/* Save the sent message in our repeat buffer */
+	list = priv->sent_messages;
+	
+	/* Remove any other occurances of this msg */
+	while ((item = g_slist_find_custom (list, str, (GCompareFunc) strcmp)) != NULL) {
+		list = g_slist_remove_link (list, item);
+		g_free (item->data);
+		g_slist_free1 (item);
+	}
+
+	/* Trim the list to the last 10 items */
+	while (g_slist_length (list) > 10) {
+		item = g_slist_last (list);
+		if (item) {
+			list = g_slist_remove_link (list, item);
+			g_free (item->data);
+			g_slist_free1 (item);
+		}
+	}
+
+	/* Add new message */
+	list = g_slist_prepend (list, g_strdup (str));
+
+	/* Set list and reset the index */
+	priv->sent_messages = list;
+	priv->sent_messages_index = -1;
+}
+
+const gchar *
+chat_sent_message_get_next (GossipChat *chat)
+{
+	GossipChatPriv *priv;
+	gint            max;
+	
+	priv = GET_PRIV (chat);
+
+	if (!priv->sent_messages) {
+		gossip_debug (DEBUG_DOMAIN, 
+			      "No sent messages, next message is NULL");
+		return NULL;
+	}
+
+	max = g_slist_length (priv->sent_messages) - 1;
+
+	if (priv->sent_messages_index < max) {
+		priv->sent_messages_index++;
+	}
+	
+	gossip_debug (DEBUG_DOMAIN, 
+		      "Returning next message index:%d",
+		      priv->sent_messages_index);
+
+	return g_slist_nth_data (priv->sent_messages, priv->sent_messages_index);
+}
+
+const gchar *
+chat_sent_message_get_last (GossipChat *chat)
+{
+	GossipChatPriv *priv;
+
+	g_return_val_if_fail (GOSSIP_IS_CHAT (chat), NULL);
+
+	priv = GET_PRIV (chat);
+	
+	if (!priv->sent_messages) {
+		gossip_debug (DEBUG_DOMAIN, 
+			      "No sent messages, last message is NULL");
+		return NULL;
+	}
+
+	if (priv->sent_messages_index >= 0) {
+		priv->sent_messages_index--;
+	}
+
+	gossip_debug (DEBUG_DOMAIN, 
+		      "Returning last message index:%d",
+		      priv->sent_messages_index);
+
+	return g_slist_nth_data (priv->sent_messages, priv->sent_messages_index);
+}
+
 static gboolean
 chat_input_key_press_event_cb (GtkWidget   *widget,
 			       GdkEventKey *event,
@@ -403,6 +507,33 @@ chat_input_key_press_event_cb (GtkWidget   *widget,
 	if (event->keyval == GDK_Tab && !(event->state & GDK_CONTROL_MASK)) {
 		return TRUE;
 	}
+g_print ("1\n");
+	/* Catch ctrl+up/down so we can traverse messages we sent */
+	if ((event->state & GDK_CONTROL_MASK) && 
+	    (event->keyval == GDK_Up || 
+	     event->keyval == GDK_Down)) {
+		GtkTextBuffer *buffer;
+		const gchar   *str;
+
+		buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (chat->input_text_view));
+
+		if (event->keyval == GDK_Up) {
+			str = chat_sent_message_get_next (chat);
+		} else {
+			str = chat_sent_message_get_last (chat);
+		}
+
+		g_signal_handlers_block_by_func (buffer, 
+						 chat_input_text_buffer_changed_cb,
+						 chat);
+		gtk_text_buffer_set_text (buffer, str ? str : "", -1);
+		g_signal_handlers_unblock_by_func (buffer, 
+						   chat_input_text_buffer_changed_cb,
+						   chat);
+
+		return TRUE;    
+	}
+g_print ("2\n");
 
 	/* Catch enter but not ctrl/shift-enter */
 	if (IS_ENTER (event->keyval) && !(event->state & GDK_SHIFT_MASK)) {
@@ -419,12 +550,15 @@ chat_input_key_press_event_cb (GtkWidget   *widget,
 			GTK_TEXT_VIEW (chat->input_text_view)->need_im_reset = TRUE;
 			return TRUE;
 		}
+g_print ("3\n");
 
 		chat_input_text_view_send (chat);
 		return TRUE;
 	}
+g_print ("4\n");
 
 	text_view_sw = gtk_widget_get_parent (GTK_WIDGET (chat->view));
+
 	if (IS_ENTER (event->keyval) && (event->state & GDK_SHIFT_MASK)) {
 		/* Newline for shift-enter. */
 		return FALSE;
@@ -444,6 +578,7 @@ chat_input_key_press_event_cb (GtkWidget   *widget,
 
 		return TRUE;
 	}
+g_print ("5\n");
 
 	return FALSE;
 }
