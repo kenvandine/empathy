@@ -20,44 +20,15 @@
  * Authors: Xavier Claessens <xclaesse@gmail.com>
  */
 
-#include <config.h>
+#ifndef __EMPATHY_MAIN_WINDOW_H__
+#define __EMPATHY_MAIN_WINDOW_H__
 
-#include <stdlib.h>
+#include <gtk/gtkwidget.h>
 
-#include <glib.h>
-#include <gtk/gtk.h>
+G_BEGIN_DECLS
 
-#include <libempathy/empathy-session.h>
-#include <libempathy-gtk/empathy-main-window.h>
-#include <libempathy-gtk/gossip-stock.h>
+GtkWidget *empathy_main_window_new (void);
 
-static void
-destroy_cb (GtkWidget *window,
-	    gpointer   user_data)
-{
-	gossip_stock_finalize ();
-	empathy_session_finalize ();
-	gtk_main_quit ();
-}
+G_END_DECLS
 
-int
-main (int argc, char *argv[])
-{
-	GtkWidget *window;
-
-	gtk_init (&argc, &argv);
-
-	window = empathy_main_window_new ();
-	gossip_stock_init (window);
-
-	g_signal_connect (window, "destroy",
-			  G_CALLBACK (destroy_cb),
-			  NULL);
-
-	gtk_widget_show (window);
-
-	gtk_main ();
-
-	return EXIT_SUCCESS;
-}
-
+#endif /* __EMPATHY_MAIN_WINDOW_H__ */

@@ -29,7 +29,10 @@
 #include <gtk/gtk.h>
 #include <glade/glade.h>
 
+#include <libtelepathy/tp-helpers.h>
+
 #include <libmissioncontrol/mc-account.h>
+#include <libmissioncontrol/mission-control.h>
 
 #include <libempathy/empathy-contact-manager.h>
 #include <libempathy/gossip-debug.h>
@@ -247,23 +250,12 @@ static gboolean contact_list_find_contact_foreach            (GtkTreeModel      
 							      FindContact            *fc);
 static void     contact_list_action_cb                       (GtkAction              *action,
 							      GossipContactList      *list);
+static void     contact_list_action_activated                (GossipContactList      *list,
+							      GossipContact          *contact);
 static gboolean contact_list_update_list_mode_foreach        (GtkTreeModel           *model,
 							      GtkTreePath            *path,
 							      GtkTreeIter            *iter,
 							      GossipContactList      *list);
-enum {
-	CONTACT_CHAT,
-	CONTACT_INFORMATION,
-	CONTACT_EDIT,
-	CONTACT_REMOVE,
-	CONTACT_INVITE,
-	CONTACT_SEND_FILE,
-	CONTACT_LOG,
-	GROUP_RENAME,
-	LAST_SIGNAL
-};
-
-static guint signals[LAST_SIGNAL];
 
 enum {
 	COL_PIXBUF_STATUS,
@@ -382,80 +374,6 @@ gossip_contact_list_class_init (GossipContactListClass *klass)
 	object_class->finalize = contact_list_finalize;
 	object_class->get_property = contact_list_get_property;
 	object_class->set_property = contact_list_set_property;
-
-	signals[CONTACT_CHAT] =
-		g_signal_new ("contact-chat",
-			      G_TYPE_FROM_CLASS (klass),
-			      G_SIGNAL_RUN_LAST,
-			      0,
-			      NULL, NULL,
-			      g_cclosure_marshal_VOID__OBJECT,
-			      G_TYPE_NONE,
-			      1, GOSSIP_TYPE_CONTACT);
-	signals[CONTACT_INFORMATION] =
-		g_signal_new ("contact-information",
-			      G_TYPE_FROM_CLASS (klass),
-			      G_SIGNAL_RUN_LAST,
-			      0,
-			      NULL, NULL,
-			      g_cclosure_marshal_VOID__OBJECT,
-			      G_TYPE_NONE,
-			      1, GOSSIP_TYPE_CONTACT);
-	signals[CONTACT_EDIT] =
-		g_signal_new ("contact-edit",
-			      G_TYPE_FROM_CLASS (klass),
-			      G_SIGNAL_RUN_LAST,
-			      0,
-			      NULL, NULL,
-			      g_cclosure_marshal_VOID__OBJECT,
-			      G_TYPE_NONE,
-			      1, GOSSIP_TYPE_CONTACT);
-	signals[CONTACT_REMOVE] =
-		g_signal_new ("contact-remove",
-			      G_TYPE_FROM_CLASS (klass),
-			      G_SIGNAL_RUN_LAST,
-			      0,
-			      NULL, NULL,
-			      g_cclosure_marshal_VOID__OBJECT,
-			      G_TYPE_NONE,
-			      1, GOSSIP_TYPE_CONTACT);
-	signals[CONTACT_INVITE] =
-		g_signal_new ("contact-invite",
-			      G_TYPE_FROM_CLASS (klass),
-			      G_SIGNAL_RUN_LAST,
-			      0,
-			      NULL, NULL,
-			      g_cclosure_marshal_VOID__OBJECT,
-			      G_TYPE_NONE,
-			      1, GOSSIP_TYPE_CONTACT);
-	signals[CONTACT_SEND_FILE] =
-		g_signal_new ("contact-send-file",
-			      G_TYPE_FROM_CLASS (klass),
-			      G_SIGNAL_RUN_LAST,
-			      0,
-			      NULL, NULL,
-			      g_cclosure_marshal_VOID__OBJECT,
-			      G_TYPE_NONE,
-			      1, GOSSIP_TYPE_CONTACT);
-	signals[CONTACT_LOG] =
-		g_signal_new ("contact-log",
-			      G_TYPE_FROM_CLASS (klass),
-			      G_SIGNAL_RUN_LAST,
-			      0,
-			      NULL, NULL,
-			      g_cclosure_marshal_VOID__OBJECT,
-			      G_TYPE_NONE,
-			      1, GOSSIP_TYPE_CONTACT);
-	signals[GROUP_RENAME] =
-		g_signal_new ("group-rename",
-			      G_TYPE_FROM_CLASS (klass),
-			      G_SIGNAL_RUN_LAST,
-			      0,
-			      NULL, NULL,
-			      g_cclosure_marshal_VOID__STRING,
-			      G_TYPE_NONE,
-			      1, G_TYPE_STRING);
-
 
 	g_object_class_install_property (object_class,
 					 PROP_SHOW_OFFLINE,
@@ -2205,7 +2123,7 @@ contact_list_row_activated_cb (GossipContactList *list,
 	gtk_tree_model_get (model, &iter, COL_CONTACT, &contact, -1);
 
 	if (contact) {
-		g_signal_emit (list, signals[CONTACT_CHAT], 0, contact);
+		contact_list_action_activated (list, contact);
 		g_object_unref (contact);
 	}
 }
@@ -2485,34 +2403,43 @@ contact_list_action_cb (GtkAction         *action,
 	group = gossip_contact_list_get_selected_group (list);
 
 	if (contact && strcmp (name, "Chat") == 0) {
-		g_signal_emit (list, signals[CONTACT_CHAT], 0, contact);
+		contact_list_action_activated (list, contact);
 	}
 	else if (contact && strcmp (name, "Information") == 0) {
-		g_signal_emit (list, signals[CONTACT_INFORMATION], 0, contact);
 	}
 	else if (contact && strcmp (name, "Edit") == 0) {
-		g_signal_emit (list, signals[CONTACT_EDIT], 0, contact);
 	}
 	else if (contact && strcmp (name, "Remove") == 0) {
-		g_signal_emit (list, signals[CONTACT_REMOVE], 0, contact);
 	}
 	else if (contact && strcmp (name, "Invite") == 0) {
-		g_signal_emit (list, signals[CONTACT_INVITE], 0, contact);
 	}
 	else if (contact && strcmp (name, "SendFile") == 0) {
-		g_signal_emit (list, signals[CONTACT_SEND_FILE], 0, contact);
 	}
 	else if (contact && strcmp (name, "Log") == 0) {
-		g_signal_emit (list, signals[CONTACT_LOG], 0, contact);
 	}
 	else if (group && strcmp (name, "Rename") == 0) {
-		g_signal_emit (list, signals[GROUP_RENAME], 0, group);
 	}
 
 	g_free (group);
 	if (contact) {
 		g_object_unref (contact);
 	}
+}
+
+static void
+contact_list_action_activated (GossipContactList *list,
+			       GossipContact     *contact)
+{
+	MissionControl *mc;
+
+	mc = mission_control_new (tp_get_bus ());
+	mission_control_request_channel (mc,
+					 gossip_contact_get_account (contact),
+					 TP_IFACE_CHANNEL_TYPE_TEXT,
+					 gossip_contact_get_handle (contact),
+					 TP_HANDLE_TYPE_CONTACT,
+					 NULL, NULL);
+	g_object_unref (mc);
 }
 
 static gboolean

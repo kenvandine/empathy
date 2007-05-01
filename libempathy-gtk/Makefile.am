@@ -9,6 +9,8 @@ AM_CPPFLAGS =                                           \
 noinst_LTLIBRARIES = libempathy-gtk.la
 
 libempathy_gtk_la_SOURCES =             					\
+	ephy-spinner.c				ephy-spinner.h			\
+	empathy-main-window.c			empathy-main-window.h		\
 	gossip-accounts-dialog.c		gossip-accounts-dialog.h	\
 	gossip-account-widget-generic.c		gossip-account-widget-generic.h	\
 	gossip-account-widget-jabber.c		gossip-account-widget-jabber.h	\
@@ -38,6 +40,7 @@ libempathy_gtk_includedir = $(includedir)/empathy/
 
 gladedir = $(datadir)/empathy
 glade_DATA = 					\
+	empathy-main-window.glade		\
 	gossip-accounts-dialog.glade		\
 	gossip-account-widget-jabber.glade	\
 	gossip-chat.glade
