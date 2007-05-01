@@ -507,7 +507,7 @@ chat_input_key_press_event_cb (GtkWidget   *widget,
 	if (event->keyval == GDK_Tab && !(event->state & GDK_CONTROL_MASK)) {
 		return TRUE;
 	}
-g_print ("1\n");
+
 	/* Catch ctrl+up/down so we can traverse messages we sent */
 	if ((event->state & GDK_CONTROL_MASK) && 
 	    (event->keyval == GDK_Up || 
@@ -533,7 +533,6 @@ g_print ("1\n");
 
 		return TRUE;    
 	}
-g_print ("2\n");
 
 	/* Catch enter but not ctrl/shift-enter */
 	if (IS_ENTER (event->keyval) && !(event->state & GDK_SHIFT_MASK)) {
@@ -550,12 +549,10 @@ g_print ("2\n");
 			GTK_TEXT_VIEW (chat->input_text_view)->need_im_reset = TRUE;
 			return TRUE;
 		}
-g_print ("3\n");
 
 		chat_input_text_view_send (chat);
 		return TRUE;
 	}
-g_print ("4\n");
 
 	text_view_sw = gtk_widget_get_parent (GTK_WIDGET (chat->view));
 
@@ -578,7 +575,6 @@ g_print ("4\n");
 
 		return TRUE;
 	}
-g_print ("5\n");
 
 	return FALSE;
 }

@@ -321,6 +321,9 @@ gossip_message_set_body (GossipMessage *message,
 		type = GOSSIP_MESSAGE_TYPE_ACTION;
 		body += 4;
 	}
+	else if (g_str_has_prefix (body, "/say")) {
+		body += 5;
+	}
 
 	if (body) {
 		priv->body = g_strdup (body);
