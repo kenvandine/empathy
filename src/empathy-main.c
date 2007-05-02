@@ -36,6 +36,7 @@
 #include <libempathy/empathy-session.h>
 #include <libempathy/gossip-debug.h>
 #include <libempathy-gtk/empathy-main-window.h>
+#include <libempathy-gtk/gossip-status-presets.h>
 #include <libempathy-gtk/gossip-stock.h>
 #include <libempathy-gtk/gossip-accounts-dialog.h>
 
@@ -85,23 +86,19 @@ start_mission_control (MissionControl *mc)
 
 	presence = mission_control_get_presence_actual (mc, NULL);
 
-	if (presence != MC_PRESENCE_UNSET &&
-	    presence != MC_PRESENCE_OFFLINE) {
+	if (presence > MC_PRESENCE_OFFLINE) {
 		/* MC is already running and online, nothing to do */
 		return;
 	}
 
 	gossip_debug (DEBUG_DOMAIN, "Starting Mission Control...");
 
-	/* FIXME: Save/Restore status message */
-	mission_control_set_presence (mc, MC_PRESENCE_AVAILABLE,
-				      NULL,
+	gossip_status_presets_get_all ();
+	mission_control_set_presence (mc,
+				      gossip_status_presets_get_default_state (),
+				      gossip_status_presets_get_default_status (),
 				      (McCallback) error_cb,
 				      NULL);
-
-	mission_control_connect_all_with_default_presence (mc,
-							   (McCallback) error_cb,
-							   NULL);
 }
 
 static void
@@ -138,6 +135,17 @@ main (int argc, char *argv[])
 	/* FIXME: This is a horrible hack */
 	gossip_stock_init (gtk_window_new (GTK_WINDOW_TOPLEVEL));
 
+	/* Setting up MC */
+	monitor = mc_account_monitor_new ();
+	mc = mission_control_new (tp_get_bus ());
+	g_signal_connect (monitor, "account-enabled",
+			  G_CALLBACK (account_enabled_cb),
+			  mc);
+	g_signal_connect (mc, "ServiceEnded",
+			  G_CALLBACK (service_ended_cb),
+			  NULL);
+	start_mission_control (mc);
+
 	/* Setting up the main window */
 	window = empathy_main_window_show ();
 	g_signal_connect (window, "destroy",
@@ -148,7 +156,7 @@ main (int argc, char *argv[])
 			  NULL);
 
 	/* Setting up the tray icon */
-	icon = gtk_status_icon_new_from_stock (GOSSIP_STOCK_AVAILABLE);
+	icon = gtk_status_icon_new_from_stock (GOSSIP_STOCK_MESSAGE);
 	gtk_status_icon_set_tooltip (icon, "Empathy - click here to show/hide the main window");
 	gtk_status_icon_set_visible (icon, TRUE);
 	g_signal_connect (icon, "activate",
@@ -162,17 +170,6 @@ main (int argc, char *argv[])
 	} else {
 		gossip_accounts_dialog_show ();
 	}
-
-	/* Setting up MC */
-	monitor = mc_account_monitor_new ();
-	mc = mission_control_new (tp_get_bus ());
-	g_signal_connect (monitor, "account-enabled",
-			  G_CALLBACK (account_enabled_cb),
-			  mc);
-	g_signal_connect (mc, "ServiceEnded",
-			  G_CALLBACK (service_ended_cb),
-			  NULL);
-	start_mission_control (mc);
 
 	gtk_main ();
 

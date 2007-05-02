@@ -7,10 +7,8 @@
 <!ELEMENT presets ((default?),status*)>
 
 <!ELEMENT default (#PCDATA)>
-<!ATTLIST default
-    presence (available|busy|away|ext_away) "available">
+<!ATTLIST default presence CDATA #REQUIRED>
 
 <!ELEMENT status (#PCDATA)>
-<!ATTLIST status
-    presence (available|busy|away|ext_away) "available">
+<!ATTLIST status presence CDATA #REQUIRED>
 

@@ -830,15 +830,16 @@ gossip_presence_chooser_new (void)
 GtkWidget *
 gossip_presence_chooser_create_menu (GossipPresenceChooser *chooser)
 {
+	const gchar *status;
 	GtkWidget *menu;
 	GtkWidget *item;
+	GtkWidget *image;
 	guint      i;
 
 	menu = gtk_menu_new ();
 
 	for (i = 0; i < G_N_ELEMENTS (states); i++) {
 		GList       *list, *l;
-		const gchar *status;
 
 		status = gossip_presence_state_get_default_status (states[i]);
 		presence_chooser_menu_add_item (chooser,
@@ -869,8 +870,24 @@ gossip_presence_chooser_create_menu (GossipPresenceChooser *chooser)
 		gtk_widget_show (item);
 	}
 
-	item = gtk_menu_item_new_with_label (_("Clear List..."));
+	/* Offline to disconnect */
+	status = gossip_presence_state_get_default_status (MC_PRESENCE_OFFLINE);
+	presence_chooser_menu_add_item (chooser,
+					menu,
+					status,
+					MC_PRESENCE_OFFLINE,
+					FALSE);
+	/* Separator. */
+	item = gtk_menu_item_new ();
 	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+	gtk_widget_show (item);
+
+	/* Clear list */
+	item = gtk_image_menu_item_new_with_label (_("Clear List..."));
+	image = gtk_image_new_from_stock (GTK_STOCK_CLEAR, GTK_ICON_SIZE_MENU);
+	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
+	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+	gtk_widget_show (image);
 	gtk_widget_show (item);
 
 	g_signal_connect (item,

@@ -17,4 +17,7 @@ empathy_LDADD = \
 	$(top_builddir)/libempathy-gtk/libempathy-gtk.la			\
 	$(EMPATHY_LIBS)
 
-
+autostartdir = $(datadir)/gnome/autostart
+autostart_in_files = empathy.desktop.in
+autostart_DATA = $(autostart_in_files:.desktop.in=.desktop)
+@INTLTOOL_DESKTOP_RULE@

@@ -58,6 +58,7 @@ void                gossip_presence_set_status               (GossipPresence *pr
 gint                gossip_presence_sort_func                (gconstpointer   a,
 							      gconstpointer   b);
 const gchar *       gossip_presence_state_get_default_status (McPresence      state);
+const gchar *       gossip_presence_state_to_str             (McPresence      state);
 McPresence          gossip_presence_state_from_str           (const gchar    *str);
 
 G_END_DECLS

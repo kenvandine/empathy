@@ -152,7 +152,7 @@ status_presets_file_parse (const gchar *filename)
 
 	/* Use the default if not set */
 	if (!default_preset) {
-		status_presets_set_default (MC_PRESENCE_AVAILABLE, NULL);
+		status_presets_set_default (MC_PRESENCE_OFFLINE, NULL);
 	}
 
 	gossip_debug (DEBUG_DOMAIN, "Parsed %d status presets", g_list_length (presets));
@@ -186,23 +186,6 @@ gossip_status_presets_get_all (void)
 	g_free (file_with_path);
 }
 
-const gchar *
-status_presets_get_state_as_str (McPresence state)
-{
-	switch (state) {
-	case MC_PRESENCE_AVAILABLE:
-		return "available";
-	case MC_PRESENCE_DO_NOT_DISTURB:
-		return "busy";
-	case MC_PRESENCE_AWAY:
-		return "away";
-	case MC_PRESENCE_EXTENDED_AWAY:
-		return "ext_away";
-	default:
-		return "unknown";
-	}
-}
-
 static gboolean
 status_presets_file_save (void)
 {
@@ -231,7 +214,7 @@ status_presets_file_save (void)
 		xmlNodePtr  subnode;
 		xmlChar    *state;
 
-		state = (gchar*) status_presets_get_state_as_str (default_preset->state);
+		state = (gchar*) gossip_presence_state_to_str (default_preset->state);
 
 		subnode = xmlNewTextChild (root, NULL, "default",
 					   default_preset->status);
@@ -244,7 +227,7 @@ status_presets_file_save (void)
 		xmlChar      *state;
 
 		sp = l->data;
-		state = (gchar*) status_presets_get_state_as_str (sp->state);
+		state = (gchar*) gossip_presence_state_to_str (sp->state);
 
 		count[sp->state]++;
 		if (count[sp->state] > STATUS_PRESETS_MAX_EACH) {
@@ -358,7 +341,7 @@ McPresence
 gossip_status_presets_get_default_state (void)
 {
 	if (!default_preset) {
-		return MC_PRESENCE_AVAILABLE;
+		return MC_PRESENCE_OFFLINE;
 	}
 
 	return default_preset->state;

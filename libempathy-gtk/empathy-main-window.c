@@ -70,9 +70,6 @@ typedef struct {
 	GtkTooltips       *tooltips;
 
 	/* Menu widgets */
-	GtkWidget         *chat_connect;
-	GtkWidget         *chat_disconnect;
-	GtkWidget         *chat_search;
 	GtkWidget         *room;
 	GtkWidget         *room_menu;
 	GtkWidget         *room_sep;
@@ -99,12 +96,6 @@ static void     main_window_destroy_cb                     (GtkWidget           
 							    EmpathyMainWindow   *window);
 static void     main_window_favorite_chatroom_menu_setup   (void);
 static void     main_window_chat_quit_cb                   (GtkWidget           *widget,
-							    EmpathyMainWindow   *window);
-static void     main_window_chat_connect_cb                (GtkWidget           *widget,
-							    EmpathyMainWindow   *window);
-static void     main_window_chat_disconnect_cb             (GtkWidget           *widget,
-							    EmpathyMainWindow   *window);
-static void     main_window_chat_search_cb                 (GtkWidget           *widget,
 							    EmpathyMainWindow   *window);
 static void     main_window_chat_new_message_cb            (GtkWidget           *widget,
 							    EmpathyMainWindow   *window);
@@ -192,9 +183,6 @@ empathy_main_window_show (void)
 				       NULL,
 				       "main_window", &window->window,
 				       "main_vbox", &window->main_vbox,
-				       "chat_connect", &window->chat_connect,
-				       "chat_disconnect", &window->chat_disconnect,
-				       "chat_search", &window->chat_search,
 				       "chat_show_offline", &show_offline_widget,
 				       "room", &window->room,
 				       "room_sep", &window->room_sep,
@@ -210,9 +198,6 @@ empathy_main_window_show (void)
 			      "main_window", "destroy", main_window_destroy_cb,
 			      "main_window", "configure_event", main_window_configure_event_cb,
 			      "chat_quit", "activate", main_window_chat_quit_cb,
-			      "chat_connect", "activate", main_window_chat_connect_cb,
-			      "chat_disconnect", "activate", main_window_chat_disconnect_cb,
-			      "chat_search", "activate", main_window_chat_search_cb,
 			      "chat_new_message", "activate", main_window_chat_new_message_cb,
 			      "chat_history", "activate", main_window_chat_history_cb,
 			      "room_join_new", "activate", main_window_room_join_new_cb,
@@ -391,24 +376,6 @@ main_window_chat_quit_cb (GtkWidget         *widget,
 			  EmpathyMainWindow *window)
 {
 	gtk_widget_destroy (window->window);
-}
-
-static void
-main_window_chat_connect_cb (GtkWidget         *widget,
-			     EmpathyMainWindow *window)
-{
-}
-
-static void
-main_window_chat_disconnect_cb (GtkWidget         *widget,
-				EmpathyMainWindow *window)
-{
-}
-
-static void
-main_window_chat_search_cb (GtkWidget         *widget,
-			    EmpathyMainWindow *window)
-{
 }
 
 static void

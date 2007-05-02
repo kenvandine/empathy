@@ -281,8 +281,35 @@ gossip_presence_state_get_default_status (McPresence state)
 		return _("Unavailable");
 	case MC_PRESENCE_OFFLINE:
 		return _("Offline");
+	case MC_PRESENCE_UNSET:
+		return _("Unset");
 	default:
-		return NULL;
+		g_assert_not_reached ();
+	}
+
+	return NULL;
+}
+
+const gchar *
+gossip_presence_state_to_str (McPresence state)
+{
+	switch (state) {
+	case MC_PRESENCE_AVAILABLE:
+		return "available";
+	case MC_PRESENCE_DO_NOT_DISTURB:
+		return "busy";
+	case MC_PRESENCE_AWAY:
+		return "away";
+	case MC_PRESENCE_EXTENDED_AWAY:
+		return "ext_away";
+	case MC_PRESENCE_HIDDEN:
+		return "hidden";
+	case MC_PRESENCE_OFFLINE:
+		return "offline";
+	case MC_PRESENCE_UNSET:
+		return "unset";
+	default:
+		g_assert_not_reached ();
 	}
 
 	return NULL;
@@ -303,9 +330,10 @@ gossip_presence_state_from_str (const gchar *str)
 		return MC_PRESENCE_HIDDEN;
 	} else if (strcmp (str, "offline") == 0) {
 		return MC_PRESENCE_OFFLINE;
-	} else if (strcmp (str, "chat") == 0) {
-		/* We don't support chat, so treat it like available. */
-		return MC_PRESENCE_AVAILABLE;
+	} else if (strcmp (str, "unset") == 0) {
+		return MC_PRESENCE_UNSET;
+	} else {
+		g_assert_not_reached ();
 	}
 
 	return MC_PRESENCE_AVAILABLE;
