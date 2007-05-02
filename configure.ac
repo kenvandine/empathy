@@ -67,7 +67,6 @@ AC_OUTPUT([
   pixmaps/Makefile
   libempathy/Makefile
   libempathy-gtk/Makefile
-  launcher/Makefile
   accounts/Makefile
   contact-list/Makefile
   chat/Makefile

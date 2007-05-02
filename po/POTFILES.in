@@ -6,8 +6,8 @@ libempathy/gossip-contact.c
 libempathy/gossip-presence.c
 
 libempathy-gtk/empathy.schemas.in
-libempathy-gtk/empathy-chat.glade
-libempathy-gtk/empathy-accounts.glade
+libempathy-gtk/gossip-chat.glade
+libempathy-gtk/gossip-accounts-dialog.glade
 libempathy-gtk/gossip-accounts-dialog.c
 libempathy-gtk/gossip-account-widget-generic.c
 libempathy-gtk/gossip-chat.c
