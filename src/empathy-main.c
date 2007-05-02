@@ -21,16 +21,25 @@
  */
 
 #include <config.h>
+
 #include <stdlib.h>
+
 #include <glib.h>
+#include <gtk/gtk.h>
 
 #include <libtelepathy/tp-helpers.h>
+
+#include <libmissioncontrol/mc-account.h>
 #include <libmissioncontrol/mc-account-monitor.h>
 #include <libmissioncontrol/mission-control.h>
 
+#include <libempathy/empathy-session.h>
 #include <libempathy/gossip-debug.h>
+#include <libempathy-gtk/empathy-main-window.h>
+#include <libempathy-gtk/gossip-stock.h>
+#include <libempathy-gtk/gossip-accounts-dialog.h>
 
-#define DEBUG_DOMAIN "Launcher"
+#define DEBUG_DOMAIN "Empathy"
 
 static void error_cb              (MissionControl *mc,
 				   GError         *error,
@@ -38,9 +47,10 @@ static void error_cb              (MissionControl *mc,
 static void service_ended_cb      (MissionControl *mc,
 				   gpointer        user_data);
 static void start_mission_control (MissionControl *mc);
-
-
-
+static void destroy_cb            (GtkWidget      *window,
+				   gpointer        user_data);
+static void icon_activate_cb      (GtkStatusIcon  *status_icon,
+				   GtkWidget      *window);
 
 static void
 error_cb (MissionControl *mc,
@@ -94,33 +104,82 @@ start_mission_control (MissionControl *mc)
 							   NULL);
 }
 
+static void
+destroy_cb (GtkWidget *window,
+	    gpointer   user_data)
+{
+	gossip_stock_finalize ();
+	empathy_session_finalize ();
+	gtk_main_quit ();
+}
+
+static void
+icon_activate_cb (GtkStatusIcon *status_icon,
+		  GtkWidget     *window)
+{
+	if (GTK_WIDGET_VISIBLE (window)) {
+		gtk_widget_hide (window);
+	} else {
+		gtk_widget_show (window);
+	}
+}
+
 int
 main (int argc, char *argv[])
 {
-	GMainLoop        *main_loop;
+	GList            *accounts;
+	GtkStatusIcon    *icon;
+	GtkWidget        *window;
 	MissionControl   *mc;
 	McAccountMonitor *monitor;
 
-	g_type_init ();
+	gtk_init (&argc, &argv);
 
-	main_loop = g_main_loop_new (NULL, FALSE);
+	/* FIXME: This is a horrible hack */
+	gossip_stock_init (gtk_window_new (GTK_WINDOW_TOPLEVEL));
+
+	/* Setting up the main window */
+	window = empathy_main_window_show ();
+	g_signal_connect (window, "destroy",
+			  G_CALLBACK (destroy_cb),
+			  NULL);
+	g_signal_connect (window, "delete-event",
+			  G_CALLBACK (gtk_widget_hide_on_delete),
+			  NULL);
+
+	/* Setting up the tray icon */
+	icon = gtk_status_icon_new_from_stock (GOSSIP_STOCK_AVAILABLE);
+	gtk_status_icon_set_tooltip (icon, "Empathy - click here to show/hide the main window");
+	gtk_status_icon_set_visible (icon, TRUE);
+	g_signal_connect (icon, "activate",
+			  G_CALLBACK (icon_activate_cb),
+			  window);
+
+	/* Show the accounts dialog if there is no enabled accounts */
+	accounts = mc_accounts_list_by_enabled (TRUE);
+	if (accounts) {
+		mc_accounts_list_free (accounts);
+	} else {
+		gossip_accounts_dialog_show ();
+	}
+
+	/* Setting up MC */
 	monitor = mc_account_monitor_new ();
 	mc = mission_control_new (tp_get_bus ());
-
 	g_signal_connect (monitor, "account-enabled",
 			  G_CALLBACK (account_enabled_cb),
 			  mc);
 	g_signal_connect (mc, "ServiceEnded",
 			  G_CALLBACK (service_ended_cb),
 			  NULL);
-
 	start_mission_control (mc);
 
-	g_main_loop_run (main_loop);
+	gtk_main ();
 
 	g_object_unref (monitor);
 	g_object_unref (mc);
+	g_object_unref (icon);
 
-	return 0;
+	return EXIT_SUCCESS;
 }
 

@@ -1,4 +1,4 @@
-SUBDIRS = po profiles pixmaps libempathy libempathy-gtk launcher accounts contact-list chat
+SUBDIRS = po profiles pixmaps libempathy libempathy-gtk launcher accounts contact-list chat src
 
 DISTCHECK_CONFIGURE_FLAGS =	\
 	--disable-scrollkeeper

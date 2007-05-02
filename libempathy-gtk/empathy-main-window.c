@@ -44,7 +44,7 @@
 #include "gossip-preferences.h"
 #include "gossip-accounts-dialog.h"
 
-#define DEBUG_DOMAIN "EmpathyMainWindow"
+#define DEBUG_DOMAIN "MainWindow"
 
 /* Minimum width of roster window if something goes wrong. */
 #define MIN_WIDTH 50

@@ -71,5 +71,6 @@ AC_OUTPUT([
   accounts/Makefile
   contact-list/Makefile
   chat/Makefile
+  src/Makefile
 ])
 
