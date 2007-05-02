@@ -59,7 +59,7 @@ typedef struct {
 	gchar      *scroll_status;
 } GossipPresenceChooserPriv;
 
-/* States for listed in the menu */
+/* States to be listed in the menu */
 static McPresence states[] = {MC_PRESENCE_AVAILABLE,
 			      MC_PRESENCE_DO_NOT_DISTURB,
 			      MC_PRESENCE_AWAY};
