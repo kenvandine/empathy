@@ -27,9 +27,12 @@
 #include <glib.h>
 #include <gtk/gtk.h>
 
+#include <libmissioncontrol/mc-account.h>
+
 #include <libempathy/empathy-session.h>
 #include <libempathy-gtk/empathy-main-window.h>
 #include <libempathy-gtk/gossip-stock.h>
+#include <libempathy-gtk/gossip-accounts-dialog.h>
 
 static void
 destroy_cb (GtkWidget *window,
@@ -44,17 +47,24 @@ int
 main (int argc, char *argv[])
 {
 	GtkWidget *window;
+	GList     *accounts;
 
 	gtk_init (&argc, &argv);
 
-	window = empathy_main_window_new ();
+	window = empathy_main_window_show ();
 	gossip_stock_init (window);
 
 	g_signal_connect (window, "destroy",
 			  G_CALLBACK (destroy_cb),
 			  NULL);
 
-	gtk_widget_show (window);
+	/* Show the accounts dialog if there is no enabled accounts */
+	accounts = mc_accounts_list_by_enabled (TRUE);
+	if (accounts) {
+		mc_accounts_list_free (accounts);
+	} else {
+		gossip_accounts_dialog_show ();
+	}
 
 	gtk_main ();
 

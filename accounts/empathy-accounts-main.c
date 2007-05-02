@@ -48,7 +48,6 @@ main (int argc, char *argv[])
 
 	dialog = gossip_accounts_dialog_show ();
 
-	gtk_widget_show (dialog);
 	g_signal_connect (dialog, "destroy",
 			  G_CALLBACK (destroy_cb),
 			  NULL);

@@ -4,15 +4,12 @@ How to use empathy ?
 $ ./autogen
 $ make && make install
 
-2) Setup and enable some accounts
-$ empathy-accounts
-
-3) Start the MC
+2) Start the MC
 $ empathy-launcher
 This will start MC and connect all enabled accounts. If you start a private chat
 or someone is saying something to you, empathy-chat will be started
 automagicaly and display a chat UI for your conversation.
 
-4) To see the contact list
+3) To see the contact list and setting accounts
 $ empathy-contact-list
 

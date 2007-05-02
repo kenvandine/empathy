@@ -39,6 +39,7 @@
 #include "gossip-status-presets.h"
 #include "gossip-geometry.h"
 #include "gossip-preferences.h"
+#include "gossip-accounts-dialog.h"
 
 #define DEBUG_DOMAIN "EmpathyMainWindow"
 
@@ -155,20 +156,25 @@ static void     main_window_notify_compact_contact_list_cb (GossipConf          
 							    EmpathyMainWindow   *window);
 
 GtkWidget *
-empathy_main_window_new (void)
+empathy_main_window_show (void)
 {
-	EmpathyMainWindow *window;
-	GladeXML          *glade;
-	GossipConf        *conf;
-	GtkWidget         *sw;
-	GtkWidget         *show_offline_widget;
-	GtkWidget         *ebox;
-	GtkToolItem       *item;
-	gchar             *str;
-	gboolean           show_offline;
-	gboolean           show_avatars;
-	gboolean           compact_contact_list;
-	gint               x, y, w, h;
+	static EmpathyMainWindow *window = NULL;
+	GladeXML                 *glade;
+	GossipConf               *conf;
+	GtkWidget                *sw;
+	GtkWidget                *show_offline_widget;
+	GtkWidget                *ebox;
+	GtkToolItem              *item;
+	gchar                    *str;
+	gboolean                  show_offline;
+	gboolean                  show_avatars;
+	gboolean                  compact_contact_list;
+	gint                      x, y, w, h;
+
+	if (window) {
+		gtk_window_present (GTK_WINDOW (window->window));
+		return window->window;
+	}
 
 	window = g_new0 (EmpathyMainWindow, 1);
 
@@ -331,6 +337,8 @@ empathy_main_window_new (void)
 		      "show-avatars", show_avatars,
 		      "is-compact", compact_contact_list,
 		      NULL);
+
+	gtk_widget_show (window->window);
 
 	return window->window;
 }
@@ -509,7 +517,7 @@ static void
 main_window_edit_accounts_cb (GtkWidget         *widget,
 			      EmpathyMainWindow *window)
 {
-	//gossip_accounts_dialog_show (NULL);
+	gossip_accounts_dialog_show ();
 }
 
 static void
@@ -550,7 +558,7 @@ main_window_throbber_button_press_event_cb (GtkWidget      *throbber_ebox,
 		return FALSE;
 	}
 
-	//gossip_accounts_dialog_show (NULL);
+	gossip_accounts_dialog_show ();
 
 	return FALSE;
 }
