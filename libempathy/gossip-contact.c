@@ -642,7 +642,7 @@ gossip_contact_get_status (GossipContact *contact)
 
 		status = gossip_presence_get_status (priv->presence);
 		if (!status) {
-			GossipPresenceState state;
+			McPresence state;
 
 			state = gossip_presence_get_state (priv->presence);
 			status = gossip_presence_state_get_default_status (state);

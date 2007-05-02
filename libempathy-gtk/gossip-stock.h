@@ -28,6 +28,8 @@
 #include <glib.h>
 #include <gtk/gtk.h>
 
+#include <libmissioncontrol/mission-control.h>
+
 G_BEGIN_DECLS
 
 #define GOSSIP_STOCK_OFFLINE             "gossip-offline"
@@ -50,10 +52,11 @@ G_BEGIN_DECLS
 
 #define GOSSIP_STOCK_GROUP_MESSAGE       "gossip-group-message"
 
-void        gossip_stock_init     (GtkWidget   *widget);
-void        gossip_stock_finalize (void);
-GdkPixbuf * gossip_stock_render   (const gchar *stock,
-				   GtkIconSize  size);
+void          gossip_stock_init      (GtkWidget   *widget);
+void          gossip_stock_finalize  (void);
+GdkPixbuf *   gossip_stock_render    (const gchar *stock,
+				      GtkIconSize  size);
+const gchar * gossip_stock_for_state (McPresence   state);
 
 G_END_DECLS
 

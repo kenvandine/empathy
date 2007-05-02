@@ -73,7 +73,7 @@ GdkPixbuf *     gossip_pixbuf_from_profile               (McProfile           *a
 							  GtkIconSize          icon_size);
 GdkPixbuf *     gossip_pixbuf_from_account               (McAccount           *account,
 							  GtkIconSize          icon_size);
-GdkPixbuf *     gossip_pixbuf_for_presence_state         (GossipPresenceState  state);
+GdkPixbuf *     gossip_pixbuf_for_presence_state         (McPresence           state);
 GdkPixbuf *     gossip_pixbuf_for_presence               (GossipPresence      *presence);
 GdkPixbuf *     gossip_pixbuf_for_contact                (GossipContact       *contact);
 GdkPixbuf *     gossip_pixbuf_offline                    (void);

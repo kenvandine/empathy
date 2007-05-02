@@ -27,19 +27,17 @@
 
 G_BEGIN_DECLS
 
-void                gossip_status_presets_get_all            (void);
-GList *             gossip_status_presets_get                (GossipPresenceState  state,
-							      gint                 max_number);
-void                gossip_status_presets_set_last           (GossipPresenceState  state,
-							      const gchar         *status);
-void                gossip_status_presets_reset              (void);
-
-/* Default */
-GossipPresenceState gossip_status_presets_get_default_state  (void);
-const gchar *       gossip_status_presets_get_default_status (void);
-void                gossip_status_presets_set_default        (GossipPresenceState  state,
-							      const gchar         *status);
-void                gossip_status_presets_clear_default      (void);
+void          gossip_status_presets_get_all            (void);
+GList *       gossip_status_presets_get                (McPresence   state,
+							gint         max_number);
+void          gossip_status_presets_set_last           (McPresence   state,
+							const gchar *status);
+void          gossip_status_presets_reset              (void);
+McPresence    gossip_status_presets_get_default_state  (void);
+const gchar * gossip_status_presets_get_default_status (void);
+void          gossip_status_presets_set_default        (McPresence   state,
+							const gchar *status);
+void          gossip_status_presets_clear_default      (void);
 
 G_END_DECLS
 

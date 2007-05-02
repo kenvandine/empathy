@@ -22,6 +22,7 @@
 #define __GOSSIP_PRESENCE_H__
 
 #include <glib-object.h>
+#include <libmissioncontrol/mission-control.h>
 
 G_BEGIN_DECLS
 
@@ -43,29 +44,21 @@ struct _GossipPresenceClass {
 	GObjectClass parent_class;
 };
 
-typedef enum {
-	GOSSIP_PRESENCE_STATE_AVAILABLE,
-	GOSSIP_PRESENCE_STATE_BUSY,
-	GOSSIP_PRESENCE_STATE_AWAY,
-	GOSSIP_PRESENCE_STATE_EXT_AWAY,
-	GOSSIP_PRESENCE_STATE_HIDDEN,      /* When you appear offline to others */
-	GOSSIP_PRESENCE_STATE_UNAVAILABLE,
-} GossipPresenceState;
-
 GType               gossip_presence_get_type                 (void) G_GNUC_CONST;
 
 GossipPresence *    gossip_presence_new                      (void);
-GossipPresence *    gossip_presence_new_full                 (GossipPresenceState  state,
-							      const gchar         *status);
-GossipPresenceState gossip_presence_get_state                (GossipPresence      *presence);
-const gchar *       gossip_presence_get_status               (GossipPresence      *presence);
-void                gossip_presence_set_state                (GossipPresence      *presence,
-							      GossipPresenceState  state);
-void                gossip_presence_set_status               (GossipPresence      *presence,
-							      const gchar         *status);
-gint                gossip_presence_sort_func                (gconstpointer        a,
-							      gconstpointer        b);
-const gchar *       gossip_presence_state_get_default_status (GossipPresenceState  state);
+GossipPresence *    gossip_presence_new_full                 (McPresence      state,
+							      const gchar    *status);
+McPresence          gossip_presence_get_state                (GossipPresence *presence);
+const gchar *       gossip_presence_get_status               (GossipPresence *presence);
+void                gossip_presence_set_state                (GossipPresence *presence,
+							      McPresence      state);
+void                gossip_presence_set_status               (GossipPresence *presence,
+							      const gchar    *status);
+gint                gossip_presence_sort_func                (gconstpointer   a,
+							      gconstpointer   b);
+const gchar *       gossip_presence_state_get_default_status (McPresence      state);
+McPresence          gossip_presence_state_from_str           (const gchar    *str);
 
 G_END_DECLS
 

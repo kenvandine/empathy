@@ -51,9 +51,10 @@ main (int argc, char *argv[])
 
 	gtk_init (&argc, &argv);
 
-	window = empathy_main_window_show ();
-	gossip_stock_init (window);
+	/* FIXME: This is a horrible hack */
+	gossip_stock_init (gtk_window_new (GTK_WINDOW_TOPLEVEL));
 
+	window = empathy_main_window_show ();
 	g_signal_connect (window, "destroy",
 			  G_CALLBACK (destroy_cb),
 			  NULL);

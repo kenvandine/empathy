@@ -353,28 +353,11 @@ gossip_pixbuf_from_account (McAccount   *account,
 }
 
 GdkPixbuf *
-gossip_pixbuf_for_presence_state (GossipPresenceState state)
+gossip_pixbuf_for_presence_state (McPresence state)
 {
-	const gchar *stock = NULL;
+	const gchar *stock;
 
-	switch (state) {
-	case GOSSIP_PRESENCE_STATE_AVAILABLE:
-		stock = GOSSIP_STOCK_AVAILABLE;
-		break;
-	case GOSSIP_PRESENCE_STATE_BUSY:
-		stock = GOSSIP_STOCK_BUSY;
-		break;
-	case GOSSIP_PRESENCE_STATE_AWAY:
-		stock = GOSSIP_STOCK_AWAY;
-		break;
-	case GOSSIP_PRESENCE_STATE_EXT_AWAY:
-		stock = GOSSIP_STOCK_EXT_AWAY;
-		break;
-	case GOSSIP_PRESENCE_STATE_HIDDEN:
-	case GOSSIP_PRESENCE_STATE_UNAVAILABLE:
-		stock = GOSSIP_STOCK_OFFLINE;
-		break;
-	}
+	stock = gossip_stock_for_state (state);
 
 	return gossip_stock_render (stock, GTK_ICON_SIZE_MENU);
 }
@@ -382,7 +365,7 @@ gossip_pixbuf_for_presence_state (GossipPresenceState state)
 GdkPixbuf *
 gossip_pixbuf_for_presence (GossipPresence *presence)
 {
-	GossipPresenceState state;
+	McPresence state;
 
 	g_return_val_if_fail (GOSSIP_IS_PRESENCE (presence),
 			      gossip_pixbuf_offline ());

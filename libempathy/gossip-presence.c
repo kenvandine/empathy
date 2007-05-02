@@ -34,20 +34,20 @@
 typedef struct _GossipPresencePriv GossipPresencePriv;
 
 struct _GossipPresencePriv {
-	GossipPresenceState  state;
-	gchar               *status;
-	GossipTime           timestamp;
+	McPresence  state;
+	gchar      *status;
+	GossipTime  timestamp;
 };
 
-static void         presence_finalize           (GObject             *object);
-static void         presence_get_property       (GObject             *object,
-						 guint                param_id,
-						 GValue              *value,
-						 GParamSpec          *pspec);
-static void         presence_set_property       (GObject             *object,
-						 guint                param_id,
-						 const GValue        *value,
-						 GParamSpec          *pspec);
+static void         presence_finalize     (GObject      *object);
+static void         presence_get_property (GObject      *object,
+					   guint         param_id,
+					   GValue       *value,
+					   GParamSpec   *pspec);
+static void         presence_set_property (GObject      *object,
+					   guint         param_id,
+					   const GValue *value,
+					   GParamSpec   *pspec);
 
 enum {
 	PROP_0,
@@ -73,9 +73,9 @@ gossip_presence_class_init (GossipPresenceClass *class)
 					 g_param_spec_int ("state",
 							   "Presence State",
 							   "The current state of the presence",
-							   GOSSIP_PRESENCE_STATE_AVAILABLE,
-							   GOSSIP_PRESENCE_STATE_EXT_AWAY,
-							   GOSSIP_PRESENCE_STATE_AVAILABLE,
+							   MC_PRESENCE_UNSET,
+							   LAST_MC_PRESENCE,
+							   MC_PRESENCE_AVAILABLE,
 							   G_PARAM_READWRITE));
 	g_object_class_install_property (object_class,
 					 PROP_STATUS,
@@ -95,7 +95,7 @@ gossip_presence_init (GossipPresence *presence)
 
 	priv = GET_PRIV (presence);
 
-	priv->state = GOSSIP_PRESENCE_STATE_AVAILABLE;
+	priv->state = MC_PRESENCE_AVAILABLE;
 	priv->status = NULL;
 	priv->timestamp = gossip_time_get_current ();
 }
@@ -166,8 +166,8 @@ gossip_presence_new (void)
 }
 
 GossipPresence *
-gossip_presence_new_full (GossipPresenceState  state,
-			  const gchar         *status)
+gossip_presence_new_full (McPresence   state,
+			  const gchar *status)
 {
 	return g_object_new (GOSSIP_TYPE_PRESENCE,
 			     "state", state,
@@ -188,13 +188,13 @@ gossip_presence_get_status (GossipPresence *presence)
 	return priv->status;
 }
 
-GossipPresenceState
+McPresence
 gossip_presence_get_state (GossipPresence *presence)
 {
 	GossipPresencePriv *priv;
 
 	g_return_val_if_fail (GOSSIP_IS_PRESENCE (presence),
-			      GOSSIP_PRESENCE_STATE_AVAILABLE);
+			      MC_PRESENCE_AVAILABLE);
 
 	priv = GET_PRIV (presence);
 
@@ -202,8 +202,8 @@ gossip_presence_get_state (GossipPresence *presence)
 }
 
 void
-gossip_presence_set_state (GossipPresence      *presence,
-			   GossipPresenceState  state)
+gossip_presence_set_state (GossipPresence *presence,
+			   McPresence      state)
 {
 	GossipPresencePriv *priv;
 
@@ -267,26 +267,47 @@ gossip_presence_sort_func (gconstpointer a,
 }
 
 const gchar *
-gossip_presence_state_get_default_status (GossipPresenceState state)
+gossip_presence_state_get_default_status (McPresence state)
 {
 	switch (state) {
-	case GOSSIP_PRESENCE_STATE_AVAILABLE:
+	case MC_PRESENCE_AVAILABLE:
 		return _("Available");
-		break;
-
-	case GOSSIP_PRESENCE_STATE_BUSY:
+	case MC_PRESENCE_DO_NOT_DISTURB:
 		return _("Busy");
-		break;
-
-	case GOSSIP_PRESENCE_STATE_AWAY:
-	case GOSSIP_PRESENCE_STATE_EXT_AWAY:
+	case MC_PRESENCE_AWAY:
+	case MC_PRESENCE_EXTENDED_AWAY:
 		return _("Away");
-		break;
-
-	case GOSSIP_PRESENCE_STATE_HIDDEN:
-	case GOSSIP_PRESENCE_STATE_UNAVAILABLE:
+	case MC_PRESENCE_HIDDEN:
 		return _("Unavailable");
+	case MC_PRESENCE_OFFLINE:
+		return _("Offline");
+	default:
+		return NULL;
 	}
 
-	return _("Available");
+	return NULL;
 }
+
+McPresence
+gossip_presence_state_from_str (const gchar *str)
+{
+	if (strcmp (str, "available") == 0) {
+		return MC_PRESENCE_AVAILABLE;
+	} else if ((strcmp (str, "dnd") == 0) || (strcmp (str, "busy") == 0)) {
+		return MC_PRESENCE_DO_NOT_DISTURB;
+	} else if ((strcmp (str, "away") == 0) || (strcmp (str, "brb") == 0)) {
+		return MC_PRESENCE_AWAY;
+	} else if ((strcmp (str, "xa") == 0) || (strcmp (str, "ext_away") == 0)) {
+		return MC_PRESENCE_EXTENDED_AWAY;
+	} else if (strcmp (str, "hidden") == 0) {
+		return MC_PRESENCE_HIDDEN;
+	} else if (strcmp (str, "offline") == 0) {
+		return MC_PRESENCE_OFFLINE;
+	} else if (strcmp (str, "chat") == 0) {
+		/* We don't support chat, so treat it like available. */
+		return MC_PRESENCE_AVAILABLE;
+	}
+
+	return MC_PRESENCE_AVAILABLE;
+}
+

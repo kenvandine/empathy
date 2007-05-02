@@ -53,17 +53,17 @@ GtkWidget *gossip_presence_chooser_new                (void);
 GtkWidget *gossip_presence_chooser_create_menu        (GossipPresenceChooser *chooser);
 
 void       gossip_presence_chooser_set_state          (GossipPresenceChooser *chooser,
-						       GossipPresenceState    state);
+						       McPresence             state);
 void       gossip_presence_chooser_set_status         (GossipPresenceChooser *chooser,
 						       const gchar           *status);
 void       gossip_presence_chooser_set_flash_interval (GossipPresenceChooser *chooser,
 						       guint                  ms);
 
 void       gossip_presence_chooser_flash_start        (GossipPresenceChooser *chooser,
-						       GossipPresenceState    state_1,
-						       GossipPresenceState    state_2);
+						       McPresence             state_1,
+						       McPresence             state_2);
 void       gossip_presence_chooser_flash_stop         (GossipPresenceChooser *chooser,
-						       GossipPresenceState    state);
+						       McPresence             state);
 gboolean   gossip_presence_chooser_is_flashing        (GossipPresenceChooser *chooser);
 
 G_END_DECLS

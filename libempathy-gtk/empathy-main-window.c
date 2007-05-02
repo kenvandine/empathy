@@ -27,6 +27,9 @@
 #include <glade/glade.h>
 #include <glib/gi18n.h>
 
+#include <libtelepathy/tp-helpers.h>
+#include <libmissioncontrol/mission-control.h>
+
 #include <libempathy/gossip-conf.h>
 #include <libempathy/gossip-contact.h>
 #include <libempathy/gossip-debug.h>
@@ -56,39 +59,40 @@
 #define GEOMETRY_NAME "main-window"
 
 typedef struct {
-	GossipContactList     *contact_list;
+	GossipContactList *contact_list;
+	MissionControl    *mc;
 
 	/* Main widgets */
-	GtkWidget             *window;
-	GtkWidget             *main_vbox;
+	GtkWidget         *window;
+	GtkWidget         *main_vbox;
 
 	/* Tooltips for all widgets */
-	GtkTooltips           *tooltips;
+	GtkTooltips       *tooltips;
 
 	/* Menu widgets */
-	GtkWidget             *chat_connect;
-	GtkWidget             *chat_disconnect;
-	GtkWidget             *chat_search;
-	GtkWidget             *room;
-	GtkWidget             *room_menu;
-	GtkWidget             *room_sep;
-	GtkWidget             *room_join_favorites;
-	GtkWidget             *edit_context;
-	GtkWidget             *edit_context_separator;
+	GtkWidget         *chat_connect;
+	GtkWidget         *chat_disconnect;
+	GtkWidget         *chat_search;
+	GtkWidget         *room;
+	GtkWidget         *room_menu;
+	GtkWidget         *room_sep;
+	GtkWidget         *room_join_favorites;
+	GtkWidget         *edit_context;
+	GtkWidget         *edit_context_separator;
 
 	/* Throbber */
-	GtkWidget             *throbber;
+	GtkWidget         *throbber;
 
 	/* Widgets that are enabled when we're connected/disconnected */
-	GList                 *widgets_connected;
-	GList                 *widgets_disconnected;
+	GList             *widgets_connected;
+	GList             *widgets_disconnected;
 
 	/* Status popup */
-	GtkWidget             *presence_toolbar;
-	GtkWidget             *presence_chooser;
+	GtkWidget         *presence_toolbar;
+	GtkWidget         *presence_chooser;
 
 	/* Misc */
-	guint                  size_timeout_id;
+	guint              size_timeout_id;
 } EmpathyMainWindow;
 
 static void     main_window_destroy_cb                     (GtkWidget           *widget,
@@ -137,8 +141,11 @@ static void     main_window_accels_save                    (void);
 static void     main_window_connection_items_setup         (EmpathyMainWindow   *window,
 							    GladeXML            *glade);
 //static void     main_window_connection_items_update        (void);
+static void     main_window_presence_changed_cb            (DBusGProxy          *proxy,
+							    McPresence           state,
+							    EmpathyMainWindow   *window);
 static void     main_window_presence_chooser_changed_cb    (GtkWidget           *chooser,
-							    GossipPresenceState  state,
+							    McPresence           state,
 							    const gchar         *status,
 							    EmpathyMainWindow   *window);
 static gboolean main_window_configure_event_timeout_cb     (EmpathyMainWindow   *window);
@@ -166,6 +173,7 @@ empathy_main_window_show (void)
 	GtkWidget                *ebox;
 	GtkToolItem              *item;
 	gchar                    *str;
+	McPresence                state;
 	gboolean                  show_offline;
 	gboolean                  show_avatars;
 	gboolean                  compact_contact_list;
@@ -232,11 +240,26 @@ empathy_main_window_show (void)
 	gtk_widget_hide (window->edit_context);
 	gtk_widget_hide (window->edit_context_separator);
 
-	/* Set up presence chooser */
+	/* Set up presence chooser
+	 * FIXME: Update status message not yet supported by MC 
+	 */
+	window->mc = mission_control_new (tp_get_bus ());
 	window->presence_chooser = gossip_presence_chooser_new ();
 	gtk_widget_show (window->presence_chooser);
 	gossip_presence_chooser_set_flash_interval (GOSSIP_PRESENCE_CHOOSER (window->presence_chooser),
 						    FLASH_TIMEOUT);
+	state = mission_control_get_presence (window->mc, NULL);
+	gossip_presence_chooser_set_state (GOSSIP_PRESENCE_CHOOSER (window->presence_chooser),
+					   state);
+	dbus_g_proxy_connect_signal (DBUS_G_PROXY (window->mc),
+				     "PresenceStatusRequested",
+				     G_CALLBACK (main_window_presence_changed_cb),
+				     window, NULL);
+	g_signal_connect (window->presence_chooser,
+			  "changed",
+			  G_CALLBACK (main_window_presence_chooser_changed_cb),
+			  window);
+
 
 	item = gtk_tool_item_new ();
 	gtk_widget_show (GTK_WIDGET (item));
@@ -244,11 +267,6 @@ empathy_main_window_show (void)
 	gtk_tool_item_set_is_important (item, TRUE);
 	gtk_tool_item_set_expand (item, TRUE);
 	gtk_toolbar_insert (GTK_TOOLBAR (window->presence_toolbar), item, -1);
-
-	g_signal_connect (window->presence_chooser,
-			  "changed",
-			  G_CALLBACK (main_window_presence_chooser_changed_cb),
-			  window);
 
 	window->widgets_connected = g_list_prepend (window->widgets_connected,
 						  window->presence_chooser);
@@ -358,6 +376,7 @@ main_window_destroy_cb (GtkWidget         *widget,
 	g_list_free (window->widgets_disconnected);
 
 	g_object_unref (window->tooltips);
+	g_object_unref (window->mc);
 
 	g_free (window);
 }
@@ -763,12 +782,23 @@ main_window_connection_items_update (void)
 #endif
 
 static void
-main_window_presence_chooser_changed_cb (GtkWidget           *chooser,
-					 GossipPresenceState  state,
-					 const gchar         *status,
-					 EmpathyMainWindow   *window)
+main_window_presence_changed_cb (DBusGProxy        *proxy,
+				 McPresence         state,
+				 EmpathyMainWindow *window)
+{
+	gossip_debug (DEBUG_DOMAIN, "presence changed to %d", state);
+	gossip_presence_chooser_set_state (GOSSIP_PRESENCE_CHOOSER (window->presence_chooser),
+					   state);
+}
+
+static void
+main_window_presence_chooser_changed_cb (GtkWidget         *chooser,
+					 McPresence         state,
+					 const gchar       *status,
+					 EmpathyMainWindow *window)
 {
 	gossip_status_presets_set_default (state, status);
+	mission_control_set_presence (window->mc, state, status, NULL, NULL);
 }
 
 static gboolean

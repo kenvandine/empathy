@@ -44,25 +44,25 @@
 #define STATUS_PRESETS_MAX_EACH     15
 
 typedef struct {
-	gchar               *status;
-	GossipPresenceState  state;
+	gchar      *status;
+	McPresence  state;
 } StatusPreset;
 
-static StatusPreset *status_preset_new               (GossipPresenceState  state,
-						      const gchar         *status);
-static void          status_preset_free              (StatusPreset        *status);
-static void          status_presets_file_parse       (const gchar         *filename);
-static gboolean      status_presets_file_save        (void);
-const gchar *        status_presets_get_state_as_str (GossipPresenceState  state);
-static void          status_presets_set_default      (GossipPresenceState  state,
-						      const gchar         *status);
+static StatusPreset *status_preset_new          (McPresence    state,
+						 const gchar  *status);
+static void     status_preset_free              (StatusPreset *status);
+static void     status_presets_file_parse       (const gchar  *filename);
+const gchar *   status_presets_get_state_as_str (McPresence    state);
+static gboolean status_presets_file_save        (void);
+static void     status_presets_set_default      (McPresence    state,
+						 const gchar  *status);
 
 static GList        *presets = NULL;
 static StatusPreset *default_preset = NULL;
 
 static StatusPreset *
-status_preset_new (GossipPresenceState  state,
-		   const gchar         *status)
+status_preset_new (McPresence   state,
+		   const gchar *status)
 {
 	StatusPreset *preset;
 
@@ -115,11 +115,11 @@ status_presets_file_parse (const gchar *filename)
 	while (node) {
 		if (strcmp ((gchar *) node->name, "status") == 0 ||
 		    strcmp ((gchar *) node->name, "default") == 0) {
-			GossipPresenceState  state;
-			gchar               *status;
-			gchar               *state_str;
-			StatusPreset        *preset;
-			gboolean             is_default = FALSE;
+			McPresence    state;
+			gchar        *status;
+			gchar        *state_str;
+			StatusPreset *preset;
+			gboolean      is_default = FALSE;
 
 			if (strcmp ((gchar *) node->name, "default") == 0) {
 				is_default = TRUE;
@@ -129,20 +129,7 @@ status_presets_file_parse (const gchar *filename)
 			state_str = (gchar *) xmlGetProp (node, "presence");
 
 			if (state_str) {
-				if (strcmp (state_str, "available") == 0) {
-					state = GOSSIP_PRESENCE_STATE_AVAILABLE;
-				}
-				else if (strcmp (state_str, "busy") == 0) {
-					state = GOSSIP_PRESENCE_STATE_BUSY;
-				}
-				else if (strcmp (state_str, "away") == 0) {
-					state = GOSSIP_PRESENCE_STATE_AWAY;
-				}
-				else if (strcmp (state_str, "ext_away") == 0) {
-					state = GOSSIP_PRESENCE_STATE_EXT_AWAY;
-				} else {
-					state = GOSSIP_PRESENCE_STATE_AVAILABLE;
-				}
+				state = gossip_presence_state_from_str (state_str);
 
 				if (is_default) {
 					gossip_debug (DEBUG_DOMAIN,
@@ -165,7 +152,7 @@ status_presets_file_parse (const gchar *filename)
 
 	/* Use the default if not set */
 	if (!default_preset) {
-		status_presets_set_default (GOSSIP_PRESENCE_STATE_AVAILABLE, NULL);
+		status_presets_set_default (MC_PRESENCE_AVAILABLE, NULL);
 	}
 
 	gossip_debug (DEBUG_DOMAIN, "Parsed %d status presets", g_list_length (presets));
@@ -200,16 +187,16 @@ gossip_status_presets_get_all (void)
 }
 
 const gchar *
-status_presets_get_state_as_str (GossipPresenceState state)
+status_presets_get_state_as_str (McPresence state)
 {
 	switch (state) {
-	case GOSSIP_PRESENCE_STATE_AVAILABLE:
+	case MC_PRESENCE_AVAILABLE:
 		return "available";
-	case GOSSIP_PRESENCE_STATE_BUSY:
+	case MC_PRESENCE_DO_NOT_DISTURB:
 		return "busy";
-	case GOSSIP_PRESENCE_STATE_AWAY:
+	case MC_PRESENCE_AWAY:
 		return "away";
-	case GOSSIP_PRESENCE_STATE_EXT_AWAY:
+	case MC_PRESENCE_EXTENDED_AWAY:
 		return "ext_away";
 	default:
 		return "unknown";
@@ -224,7 +211,12 @@ status_presets_file_save (void)
 	GList      *l;
 	gchar      *dir;
 	gchar      *file;
-	gint        count[4] = { 0, 0, 0, 0};
+	gint        count[LAST_MC_PRESENCE];
+	gint        i;
+
+	for (i = 0; i < LAST_MC_PRESENCE; i++) {
+		count[i] = 0;
+	}
 
 	dir = g_build_filename (g_get_home_dir (), ".gnome2", PACKAGE_NAME, NULL);
 	g_mkdir_with_parents (dir, S_IRUSR | S_IWUSR | S_IXUSR);
@@ -277,8 +269,8 @@ status_presets_file_save (void)
 }
 
 GList *
-gossip_status_presets_get (GossipPresenceState state,
-			   gint                max_number)
+gossip_status_presets_get (McPresence state,
+			   gint       max_number)
 {
 	GList *list = NULL;
 	GList *l;
@@ -306,8 +298,8 @@ gossip_status_presets_get (GossipPresenceState state,
 }
 
 void
-gossip_status_presets_set_last (GossipPresenceState  state,
-				const gchar         *status)
+gossip_status_presets_set_last (McPresence   state,
+				const gchar *status)
 {
 	GList        *l;
 	StatusPreset *preset;
@@ -357,16 +349,16 @@ gossip_status_presets_reset (void)
 
 	presets = NULL;
 
-	status_presets_set_default (GOSSIP_PRESENCE_STATE_AVAILABLE, NULL);
+	status_presets_set_default (MC_PRESENCE_AVAILABLE, NULL);
 
 	status_presets_file_save ();
 }
 
-GossipPresenceState
+McPresence
 gossip_status_presets_get_default_state (void)
 {
 	if (!default_preset) {
-		return GOSSIP_PRESENCE_STATE_AVAILABLE;
+		return MC_PRESENCE_AVAILABLE;
 	}
 
 	return default_preset->state;
@@ -384,8 +376,8 @@ gossip_status_presets_get_default_status (void)
 }
 
 static void
-status_presets_set_default (GossipPresenceState  state,
-			    const gchar         *status)
+status_presets_set_default (McPresence   state,
+			    const gchar *status)
 {
 	if (default_preset) {
 		status_preset_free (default_preset);
@@ -395,8 +387,8 @@ status_presets_set_default (GossipPresenceState  state,
 }
 
 void
-gossip_status_presets_set_default (GossipPresenceState  state,
-				   const gchar         *status)
+gossip_status_presets_set_default (McPresence   state,
+				   const gchar *status)
 {
 	status_presets_set_default (state, status);
 	status_presets_file_save ();

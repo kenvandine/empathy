@@ -41,38 +41,40 @@
 #define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GOSSIP_TYPE_PRESENCE_CHOOSER, GossipPresenceChooserPriv))
 
 typedef struct {
-	GtkWidget           *hbox;
-	GtkWidget           *image;
-	GtkWidget           *label;
+	GtkWidget  *hbox;
+	GtkWidget  *image;
+	GtkWidget  *label;
+	GtkWidget  *menu;
 
-	GtkWidget           *menu;
+	McPresence  last_state;
 
-	GossipPresenceState  last_state;
-
-	guint                flash_interval;
-
-	GossipPresenceState  flash_state_1;
-	GossipPresenceState  flash_state_2;
-
-	guint                flash_timeout_id;
+	guint       flash_interval;
+	McPresence  flash_state_1;
+	McPresence  flash_state_2;
+	guint       flash_timeout_id;
 
 	/* The handle the kind of unnessecary scroll support. */
-	guint                scroll_timeout_id;
-	GossipPresenceState  scroll_state;
-	gchar               *scroll_status;
+	guint       scroll_timeout_id;
+	McPresence  scroll_state;
+	gchar      *scroll_status;
 } GossipPresenceChooserPriv;
+
+/* States for listed in the menu */
+static McPresence states[] = {MC_PRESENCE_AVAILABLE,
+			      MC_PRESENCE_DO_NOT_DISTURB,
+			      MC_PRESENCE_AWAY};
 
 static void     presence_chooser_finalize               (GObject               *object);
 static void     presence_chooser_reset_scroll_timeout   (GossipPresenceChooser *chooser);
 static void     presence_chooser_set_state              (GossipPresenceChooser *chooser,
-							 GossipPresenceState    state,
+							 McPresence             state,
 							 const gchar           *status,
 							 gboolean               save);
 static void     presence_chooser_dialog_response_cb     (GtkWidget             *dialog,
 							 gint                   response,
 							 GossipPresenceChooser *chooser);
 static void     presence_chooser_show_dialog            (GossipPresenceChooser *chooser,
-							 GossipPresenceState    state);
+							 McPresence             state);
 static void     presence_chooser_custom_activate_cb     (GtkWidget             *item,
 							 GossipPresenceChooser *chooser);
 static void     presence_chooser_clear_response_cb      (GtkWidget             *widget,
@@ -83,7 +85,7 @@ static void     presence_chooser_clear_activate_cb      (GtkWidget             *
 static void     presence_chooser_menu_add_item          (GossipPresenceChooser *chooser,
 							 GtkWidget             *menu,
 							 const gchar           *str,
-							 GossipPresenceState    state,
+							 McPresence             state,
 							 gboolean               custom);
 static void     presence_chooser_menu_align_func        (GtkMenu               *menu,
 							 gint                  *x,
@@ -225,7 +227,7 @@ presence_chooser_reset_scroll_timeout (GossipPresenceChooser *chooser)
 
 static void
 presence_chooser_set_state (GossipPresenceChooser *chooser,
-			    GossipPresenceState    state,
+			    McPresence             state,
 			    const gchar           *status,
 			    gboolean               save)
 {
@@ -262,7 +264,7 @@ presence_chooser_dialog_response_cb (GtkWidget             *dialog,
 		GtkListStore        *store;
 		GtkTreeModel        *model;
 		GtkTreeIter          iter;
-		GossipPresenceState  state;
+		McPresence           state;
 		const gchar         *status;
 		gboolean             save;
 		gboolean             duplicate = FALSE;
@@ -309,11 +311,11 @@ presence_chooser_dialog_response_cb (GtkWidget             *dialog,
 
 static void
 presence_chooser_show_dialog (GossipPresenceChooser *chooser,
-			      GossipPresenceState    state)
+			      McPresence             state)
 {
 	GossipPresenceChooserPriv *priv;
-	static GtkWidget          *dialog;
-	static GtkListStore       *store[3] = { NULL, NULL, NULL };
+	static GtkWidget          *dialog = NULL;
+	static GtkListStore       *store[LAST_MC_PRESENCE];
 	GladeXML                  *glade;
 	GtkWidget                 *image;
 	GtkWidget                 *combo;
@@ -327,6 +329,12 @@ presence_chooser_show_dialog (GossipPresenceChooser *chooser,
 	if (dialog) {
 		gtk_widget_destroy (dialog);
 		dialog = NULL;
+	} else {
+		guint i;
+
+		for (i = 0; i < LAST_MC_PRESENCE; i++) {
+			store[i] = NULL;
+		}
 	}
 
 	glade = gossip_glade_get_file ("gossip-presence-chooser.glade",
@@ -390,7 +398,7 @@ static void
 presence_chooser_custom_activate_cb (GtkWidget             *item,
 				     GossipPresenceChooser *chooser)
 {
-	GossipPresenceState state;
+	McPresence state;
 
 	state = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (item), "state"));
 
@@ -401,12 +409,11 @@ static void
 presence_chooser_noncustom_activate_cb (GtkWidget             *item,
 					GossipPresenceChooser *chooser)
 {
-	GossipPresenceState  state;
-	const gchar         *status;
+	McPresence   state;
+	const gchar *status;
 
 	status = g_object_get_data (G_OBJECT (item), "status");
 	state = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (item), "state"));
-
 	presence_chooser_reset_scroll_timeout (chooser);
 	g_signal_emit (chooser, signals[CHANGED], 0, state, status);
 }
@@ -474,7 +481,7 @@ static void
 presence_chooser_menu_add_item (GossipPresenceChooser *chooser,
 				GtkWidget             *menu,
 				const gchar           *str,
-				GossipPresenceState    state,
+				McPresence             state,
 				gboolean               custom)
 {
 	GtkWidget   *item;
@@ -482,25 +489,7 @@ presence_chooser_menu_add_item (GossipPresenceChooser *chooser,
 	const gchar *stock;
 
 	item = gtk_image_menu_item_new_with_label (str);
-
-	switch (state) {
-	case GOSSIP_PRESENCE_STATE_AVAILABLE:
-		stock = GOSSIP_STOCK_AVAILABLE;
-		break;
-
-	case GOSSIP_PRESENCE_STATE_BUSY:
-		stock = GOSSIP_STOCK_BUSY;
-		break;
-
-	case GOSSIP_PRESENCE_STATE_AWAY:
-		stock = GOSSIP_STOCK_AWAY;
-		break;
-
-	default:
-		g_assert_not_reached ();
-		stock = NULL;
-		break;
-	}
+	stock = gossip_stock_for_state (state);
 
 	if (custom) {
 		g_signal_connect (
@@ -680,13 +669,13 @@ presence_chooser_button_press_event_cb (GtkWidget      *chooser,
 }
 
 typedef struct {
-	GossipPresenceState  state;
-	const gchar         *status;
+	McPresence   state;
+	const gchar *status;
 } StateAndStatus;
 
 static StateAndStatus *
-presence_chooser_state_and_status_new (GossipPresenceState  state,
-				       const gchar         *status)
+presence_chooser_state_and_status_new (McPresence   state,
+				       const gchar *status)
 {
 	StateAndStatus *sas;
 
@@ -701,46 +690,25 @@ presence_chooser_state_and_status_new (GossipPresenceState  state,
 static GList *
 presence_chooser_get_presets (GossipPresenceChooser *chooser)
 {
-	GList          *list, *presets, *p;
-	StateAndStatus *sas;
+	GList      *list = NULL;
+	guint       i;
 
-	list = NULL;
+	for (i = 0; i < G_N_ELEMENTS (states); i++) {
+		GList          *presets, *p;
+		StateAndStatus *sas;
+		const gchar    *status;
 
-	sas = presence_chooser_state_and_status_new (
-		GOSSIP_PRESENCE_STATE_AVAILABLE, _("Available"));
-	list = g_list_append (list, sas);
-
-	presets = gossip_status_presets_get (GOSSIP_PRESENCE_STATE_AVAILABLE, 5);
-	for (p = presets; p; p = p->next) {
-		sas = presence_chooser_state_and_status_new (
-			GOSSIP_PRESENCE_STATE_AVAILABLE, p->data);
+		status = gossip_presence_state_get_default_status (states[i]);
+		sas = presence_chooser_state_and_status_new (states[i], status);
 		list = g_list_append (list, sas);
+	
+		presets = gossip_status_presets_get (states[i], 5);
+		for (p = presets; p; p = p->next) {
+			sas = presence_chooser_state_and_status_new (states[i], p->data);
+			list = g_list_append (list, sas);
+		}
+		g_list_free (presets);
 	}
-	g_list_free (presets);
-
-	sas = presence_chooser_state_and_status_new (
-		GOSSIP_PRESENCE_STATE_BUSY, _("Busy"));
-	list = g_list_append (list, sas);
-
-	presets = gossip_status_presets_get (GOSSIP_PRESENCE_STATE_BUSY, 5);
-	for (p = presets; p; p = p->next) {
-		sas = presence_chooser_state_and_status_new (
-			GOSSIP_PRESENCE_STATE_BUSY, p->data);
-		list = g_list_append (list, sas);
-	}
-	g_list_free (presets);
-
-	sas = presence_chooser_state_and_status_new (
-		GOSSIP_PRESENCE_STATE_AWAY, _("Away"));
-	list = g_list_append (list, sas);
-
-	presets = gossip_status_presets_get (GOSSIP_PRESENCE_STATE_AWAY, 5);
-	for (p = presets; p; p = p->next) {
-		sas = presence_chooser_state_and_status_new (
-			GOSSIP_PRESENCE_STATE_AWAY, p->data);
-		list = g_list_append (list, sas);
-	}
-	g_list_free (presets);
 
 	return list;
 }
@@ -839,7 +807,7 @@ presence_chooser_scroll_event_cb (GtkWidget      *chooser,
 		 */
 		presence_chooser_reset_scroll_timeout (GOSSIP_PRESENCE_CHOOSER (chooser));
 		g_signal_emit (chooser, signals[CHANGED], 0,
-			       GOSSIP_PRESENCE_STATE_AVAILABLE,
+			       MC_PRESENCE_AVAILABLE,
 			       _("Available"));
 	}
 
@@ -864,93 +832,42 @@ gossip_presence_chooser_create_menu (GossipPresenceChooser *chooser)
 {
 	GtkWidget *menu;
 	GtkWidget *item;
-	GList     *list, *l;
+	guint      i;
 
 	menu = gtk_menu_new ();
 
-	presence_chooser_menu_add_item (chooser,
-					menu,
-					_("Available"),
-					GOSSIP_PRESENCE_STATE_AVAILABLE,
-					FALSE);
+	for (i = 0; i < G_N_ELEMENTS (states); i++) {
+		GList       *list, *l;
+		const gchar *status;
 
-	list = gossip_status_presets_get (GOSSIP_PRESENCE_STATE_AVAILABLE, 5);
-	for (l = list; l; l = l->next) {
+		status = gossip_presence_state_get_default_status (states[i]);
 		presence_chooser_menu_add_item (chooser,
 						menu,
-						l->data,
-						GOSSIP_PRESENCE_STATE_AVAILABLE,
+						status,
+						states[i],
 						FALSE);
-	}
 
-	g_list_free (list);
+		list = gossip_status_presets_get (states[i], 5);
+		for (l = list; l; l = l->next) {
+			presence_chooser_menu_add_item (chooser,
+							menu,
+							l->data,
+							states[i],
+							FALSE);
+		}
+		g_list_free (list);
 
-	presence_chooser_menu_add_item (chooser,
-					menu,
-					_("Custom message..."),
-					GOSSIP_PRESENCE_STATE_AVAILABLE,
-					TRUE);
-
-	/* Separator. */
-	item = gtk_menu_item_new ();
-	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-	gtk_widget_show (item);
-
-	presence_chooser_menu_add_item (chooser,
-					menu,
-					_("Busy"),
-					GOSSIP_PRESENCE_STATE_BUSY,
-					FALSE);
-
-	list = gossip_status_presets_get (GOSSIP_PRESENCE_STATE_BUSY, 5);
-	for (l = list; l; l = l->next) {
 		presence_chooser_menu_add_item (chooser,
 						menu,
-						l->data,
-						GOSSIP_PRESENCE_STATE_BUSY,
-						FALSE);
+						_("Custom message..."),
+						states[i],
+						TRUE);
+
+		/* Separator. */
+		item = gtk_menu_item_new ();
+		gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+		gtk_widget_show (item);
 	}
-
-	g_list_free (list);
-
-	presence_chooser_menu_add_item (chooser,
-					menu,
-					_("Custom message..."),
-					GOSSIP_PRESENCE_STATE_BUSY,
-					TRUE);
-
-	/* Separator. */
-	item = gtk_menu_item_new ();
-	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-	gtk_widget_show (item);
-
-	presence_chooser_menu_add_item (chooser,
-					menu,
-					_("Away"),
-					GOSSIP_PRESENCE_STATE_AWAY,
-					FALSE);
-
-	list = gossip_status_presets_get (GOSSIP_PRESENCE_STATE_AWAY, 5);
-	for (l = list; l; l = l->next) {
-		presence_chooser_menu_add_item (chooser,
-						menu,
-						l->data,
-						GOSSIP_PRESENCE_STATE_AWAY,
-						FALSE);
-	}
-
-	g_list_free (list);
-
-	presence_chooser_menu_add_item (chooser,
-					menu,
-					_("Custom message..."),
-					GOSSIP_PRESENCE_STATE_AWAY,
-					TRUE);
-
-	/* Separator. */
-	item = gtk_menu_item_new ();
-	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-	gtk_widget_show (item);
 
 	item = gtk_menu_item_new_with_label (_("Clear List..."));
 	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
@@ -966,7 +883,7 @@ gossip_presence_chooser_create_menu (GossipPresenceChooser *chooser)
 
 void
 gossip_presence_chooser_set_state (GossipPresenceChooser *chooser,
-				   GossipPresenceState    state)
+				   McPresence             state)
 {
 	GossipPresenceChooserPriv *priv;
 
@@ -1008,7 +925,7 @@ static gboolean
 presence_chooser_flash_timeout_cb (GossipPresenceChooser *chooser)
 {
 	GossipPresenceChooserPriv *priv;
-	GossipPresenceState        state;
+	McPresence                 state;
 	GdkPixbuf                 *pixbuf;
 	static gboolean            on = FALSE;
 
@@ -1031,8 +948,8 @@ presence_chooser_flash_timeout_cb (GossipPresenceChooser *chooser)
 
 void
 gossip_presence_chooser_flash_start (GossipPresenceChooser *chooser,
-				     GossipPresenceState    state_1,
-				     GossipPresenceState    state_2)
+				     McPresence             state_1,
+				     McPresence             state_2)
 {
 	GossipPresenceChooserPriv *priv;
 
@@ -1054,7 +971,7 @@ gossip_presence_chooser_flash_start (GossipPresenceChooser *chooser,
 
 void
 gossip_presence_chooser_flash_stop (GossipPresenceChooser *chooser,
-				    GossipPresenceState    state)
+				    McPresence             state)
 {
 	GossipPresenceChooserPriv *priv;
 	GdkPixbuf                 *pixbuf;
@@ -1090,3 +1007,4 @@ gossip_presence_chooser_is_flashing (GossipPresenceChooser *chooser)
 
 	return FALSE;
 }
+

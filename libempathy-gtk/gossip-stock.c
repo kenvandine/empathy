@@ -103,3 +103,27 @@ gossip_stock_render (const gchar *stock,
 	return gtk_widget_render_icon (main_widget, stock, size, NULL);
 }
 
+const gchar *
+gossip_stock_for_state (McPresence state)
+{
+	switch (state) {
+	case MC_PRESENCE_AVAILABLE:
+		return GOSSIP_STOCK_AVAILABLE;
+	case MC_PRESENCE_DO_NOT_DISTURB:
+		return GOSSIP_STOCK_BUSY;
+	case MC_PRESENCE_AWAY:
+		return GOSSIP_STOCK_AWAY;
+	case MC_PRESENCE_EXTENDED_AWAY:
+		return GOSSIP_STOCK_EXT_AWAY;
+	case MC_PRESENCE_HIDDEN:
+	case MC_PRESENCE_OFFLINE:
+	case MC_PRESENCE_UNSET:
+		return GOSSIP_STOCK_OFFLINE;
+	default:
+		g_assert_not_reached ();
+	}
+
+	return NULL;
+}
+
+

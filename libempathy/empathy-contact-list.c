@@ -192,7 +192,6 @@ static void                   contact_list_parse_presence_foreach   (guint      
 static void                   contact_list_presences_table_foreach  (const gchar                   *state_str,
 								     GHashTable                    *presences_table,
 								     GossipPresence               **presence);
-static GossipPresenceState    contact_list_presence_state_from_str  (const gchar                   *str);
 
 enum {
 	CONTACT_ADDED,
@@ -1728,9 +1727,11 @@ contact_list_parse_presence_foreach (guint               handle,
 			      (GHFunc) contact_list_presences_table_foreach,
 			      &presence);
 
-	gossip_debug (DEBUG_DOMAIN, "Presence changed for %s (%d)",
+	gossip_debug (DEBUG_DOMAIN, "Presence changed for %s (%d) to %s (%d)",
 		      gossip_contact_get_name (contact),
-		      handle);
+		      handle,
+		      presence ? gossip_presence_get_status (presence) : "unset",
+		      presence ? gossip_presence_get_state (presence) : MC_PRESENCE_UNSET);
 
 	contact_list_block_contact (list, contact);
 	gossip_contact_set_presence (contact, presence);
@@ -1742,17 +1743,17 @@ contact_list_presences_table_foreach (const gchar     *state_str,
 				      GHashTable      *presences_table,
 				      GossipPresence **presence)
 {
-	GossipPresenceState  state;
-	const GValue        *message;
+	McPresence    state;
+	const GValue *message;
+
+	state = gossip_presence_state_from_str (state_str);
+	if ((state == MC_PRESENCE_UNSET) || (state == MC_PRESENCE_OFFLINE)) {
+		return;
+	}
 
 	if (*presence) {
 		g_object_unref (*presence);
 		*presence = NULL;
-	}
-
-	state = contact_list_presence_state_from_str (state_str);
-	if (state == GOSSIP_PRESENCE_STATE_UNAVAILABLE) {
-		return;
 	}
 
 	*presence = gossip_presence_new ();
@@ -1763,28 +1764,5 @@ contact_list_presences_table_foreach (const gchar     *state_str,
 		gossip_presence_set_status (*presence,
 					    g_value_get_string (message));
 	}
-}
-
-static GossipPresenceState
-contact_list_presence_state_from_str (const gchar *str)
-{
-	if (strcmp (str, "available") == 0) {
-		return GOSSIP_PRESENCE_STATE_AVAILABLE;
-	} else if ((strcmp (str, "dnd") == 0) || (strcmp (str, "busy") == 0)) {
-		return GOSSIP_PRESENCE_STATE_BUSY;
-	} else if ((strcmp (str, "away") == 0) || (strcmp (str, "brb") == 0)) {
-		return GOSSIP_PRESENCE_STATE_AWAY;
-	} else if (strcmp (str, "xa") == 0) {
-		return GOSSIP_PRESENCE_STATE_EXT_AWAY;
-	} else if (strcmp (str, "hidden") == 0) {
-		return GOSSIP_PRESENCE_STATE_HIDDEN;
-	} else if (strcmp (str, "offline") == 0) {
-		return GOSSIP_PRESENCE_STATE_UNAVAILABLE;
-	} else if (strcmp (str, "chat") == 0) {
-		/* We don't support chat, so treat it like available. */
-		return GOSSIP_PRESENCE_STATE_AVAILABLE;
-	}
-
-	return GOSSIP_PRESENCE_STATE_AVAILABLE;
 }
 
