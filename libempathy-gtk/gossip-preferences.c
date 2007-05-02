@@ -823,7 +823,7 @@ preferences_destroy_cb (GtkWidget         *widget,
 	g_free (preferences);
 }
 
-void
+GtkWidget *
 gossip_preferences_show (void)
 {
 	static GossipPreferences *preferences;
@@ -831,13 +831,13 @@ gossip_preferences_show (void)
 
 	if (preferences) {
 		gtk_window_present (GTK_WINDOW (preferences->dialog));
-		return;
+		return preferences->dialog;
 	}
 
 	preferences = g_new0 (GossipPreferences, 1);
 
 	glade = gossip_glade_get_file (
-		"main.glade",
+		"gossip-preferences.glade",
 		"preferences_dialog",
 		NULL,
 		"preferences_dialog", &preferences->dialog,
@@ -882,4 +882,7 @@ gossip_preferences_show (void)
 	}
 
 	gtk_widget_show (preferences->dialog);
+
+	return preferences->dialog;
 }
+

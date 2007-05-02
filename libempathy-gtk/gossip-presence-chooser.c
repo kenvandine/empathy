@@ -329,7 +329,7 @@ presence_chooser_show_dialog (GossipPresenceChooser *chooser,
 		dialog = NULL;
 	}
 
-	glade = gossip_glade_get_file ("main.glade",
+	glade = gossip_glade_get_file ("gossip-presence-chooser.glade",
 				       "status_message_dialog",
 				       NULL,
 				       "status_message_dialog", &dialog,

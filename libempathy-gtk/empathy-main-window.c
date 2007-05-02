@@ -531,7 +531,7 @@ static void
 main_window_edit_preferences_cb (GtkWidget         *widget,
 				 EmpathyMainWindow *window)
 {
-	//gossip_preferences_show ();
+	gossip_preferences_show ();
 }
 
 static void

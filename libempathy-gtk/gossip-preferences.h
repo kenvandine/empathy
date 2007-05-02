@@ -25,6 +25,8 @@
 #ifndef __GOSSIP_PREFERENCES_H__
 #define __GOSSIP_PREFERENCES_H__
 
+#include <gtk/gtkwidget.h>
+
 G_BEGIN_DECLS
 
 #define GOSSIP_PREFS_PATH "/apps/empathy"
@@ -46,7 +48,7 @@ G_BEGIN_DECLS
 #define GOSSIP_PREFS_CONTACTS_SHOW_OFFLINE        GOSSIP_PREFS_PATH "/contacts/show_offline"
 #define GOSSIP_PREFS_HINTS_CLOSE_MAIN_WINDOW      GOSSIP_PREFS_PATH "/hints/close_main_window"
 
-void gossip_preferences_show (void);
+GtkWidget * gossip_preferences_show (void);
 
 G_END_DECLS
 
