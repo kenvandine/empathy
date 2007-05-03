@@ -38,7 +38,6 @@
 #include "gossip-debug.h"
 #include "gossip-utils.h"
 #include "gossip-paths.h"
-#include "empathy-session.h"
 #include "empathy-contact-manager.h"
 
 #define DEBUG_DOMAIN "Utils"
@@ -437,12 +436,15 @@ gossip_get_own_contact_from_contact (GossipContact  *contact)
 {
 	EmpathyContactManager *manager;
 	McAccount             *account;
+	GossipContact         *own_contact;
 
 	g_return_val_if_fail (GOSSIP_IS_CONTACT (contact), NULL);
 
-	manager = empathy_session_get_contact_manager ();
+	manager = empathy_contact_manager_new ();
 	account = gossip_contact_get_account (contact);
+	own_contact = empathy_contact_manager_get_own (manager, account);
+	g_object_unref (manager);
 
-	return empathy_contact_manager_get_own (manager, account);
+	return own_contact;
 }
 

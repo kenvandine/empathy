@@ -36,7 +36,6 @@
 
 #include <libempathy/empathy-contact-manager.h>
 #include <libempathy/gossip-debug.h>
-#include <libempathy/empathy-session.h>
 
 #include "gossip-contact-list.h"
 #include "gossip-contact-groups.h"
@@ -420,8 +419,7 @@ gossip_contact_list_init (GossipContactList *list)
 
 	priv = GET_PRIV (list);
 
-	priv->manager = empathy_session_get_contact_manager ();
-	g_object_ref (priv->manager);
+	priv->manager = empathy_contact_manager_new ();
 	priv->is_compact = FALSE;
 	priv->show_active = TRUE;
 	priv->show_avatars = TRUE;

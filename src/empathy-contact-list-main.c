@@ -22,35 +22,51 @@
 
 #include <config.h>
 
+#include <stdlib.h>
+
 #include <glib.h>
+#include <gtk/gtk.h>
 
-#include <libtelepathy/tp-helpers.h>
+#include <libmissioncontrol/mc-account.h>
 
-#include <libmissioncontrol/mc-account-monitor.h>
+#include <libempathy-gtk/empathy-main-window.h>
+#include <libempathy-gtk/gossip-stock.h>
+#include <libempathy-gtk/gossip-accounts-dialog.h>
 
-#include "empathy-session.h"
-#include "gossip-debug.h"
-
-#define DEBUG_DOMAIN "Session"
-
-static EmpathyContactManager *contact_manager = NULL;
-
-void
-empathy_session_finalize (void)
+static void
+destroy_cb (GtkWidget *window,
+	    gpointer   user_data)
 {
-	if (contact_manager) {
-		g_object_unref (contact_manager);
-		contact_manager = NULL;
-	}
+	gossip_stock_finalize ();
+	gtk_main_quit ();
 }
 
-EmpathyContactManager *
-empathy_session_get_contact_manager (void)
+int
+main (int argc, char *argv[])
 {
-	if (!contact_manager) {
-		contact_manager = empathy_contact_manager_new ();
+	GtkWidget *window;
+	GList     *accounts;
+
+	gtk_init (&argc, &argv);
+
+	/* FIXME: This is a horrible hack */
+	gossip_stock_init (gtk_window_new (GTK_WINDOW_TOPLEVEL));
+
+	window = empathy_main_window_show ();
+	g_signal_connect (window, "destroy",
+			  G_CALLBACK (destroy_cb),
+			  NULL);
+
+	/* Show the accounts dialog if there is no enabled accounts */
+	accounts = mc_accounts_list_by_enabled (TRUE);
+	if (accounts) {
+		mc_accounts_list_free (accounts);
+	} else {
+		gossip_accounts_dialog_show ();
 	}
 
-	return contact_manager;
+	gtk_main ();
+
+	return EXIT_SUCCESS;
 }
 

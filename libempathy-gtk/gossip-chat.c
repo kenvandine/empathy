@@ -35,7 +35,6 @@
 #include <gtk/gtk.h>
 #include <glade/glade.h>
 
-#include <libempathy/empathy-session.h>
 #include <libempathy/empathy-contact-manager.h>
 #include <libempathy/gossip-debug.h>
 #include <libempathy/gossip-utils.h>
@@ -63,22 +62,23 @@
 #define COMPOSING_STOP_TIMEOUT 5
 
 struct _GossipChatPriv {
-	EmpathyTpChat    *tp_chat;
-	GossipChatWindow *window;
+	EmpathyContactManager *manager;
+	EmpathyTpChat         *tp_chat;
+	GossipChatWindow      *window;
 
-	GtkTooltips      *tooltips;
-	guint             composing_stop_timeout_id;
-	gboolean          sensitive;
-	gchar            *id;
-	GSList           *sent_messages;
-	gint              sent_messages_index;
+	GtkTooltips           *tooltips;
+	guint                  composing_stop_timeout_id;
+	gboolean               sensitive;
+	gchar                 *id;
+	GSList                *sent_messages;
+	gint                   sent_messages_index;
 	/* Used to automatically shrink a window that has temporarily
 	 * grown due to long input. 
 	 */
-	gint              padding_height;
-	gint              default_window_height;
-	gint              last_input_height;
-	gboolean          vscroll_visible;
+	gint                   padding_height;
+	gint                   default_window_height;
+	gint                   last_input_height;
+	gboolean               vscroll_visible;
 };
 
 typedef struct {
@@ -220,8 +220,8 @@ gossip_chat_init (GossipChat *chat)
 
 	priv = GET_PRIV (chat);
 
+	priv->manager = empathy_contact_manager_new ();
 	priv->tooltips = gtk_tooltips_new ();
-
 	priv->default_window_height = -1;
 	priv->vscroll_visible = FALSE;
 	priv->sensitive = TRUE;
@@ -238,7 +238,7 @@ gossip_chat_init (GossipChat *chat)
 			  "changed",
 			  G_CALLBACK (chat_input_text_buffer_changed_cb),
 			  chat);
-	g_signal_connect (GOSSIP_CHAT (chat)->view,
+	g_signal_connect (chat->view,
 			  "focus_in_event",
 			  G_CALLBACK (chat_text_view_focus_in_event_cb),
 			  chat);
@@ -280,7 +280,8 @@ chat_finalize (GObject *object)
 	g_slist_free (priv->sent_messages);
 
 	chat_composing_remove_timeout (chat);
-	g_object_unref (GOSSIP_CHAT (object)->account);
+	g_object_unref (chat->account);
+	g_object_unref (priv->manager);
 
 	if (priv->tp_chat) {
 		g_object_unref (priv->tp_chat);
@@ -1097,13 +1098,13 @@ gossip_chat_get_contact (GossipChat *chat)
 GossipContact *
 gossip_chat_get_own_contact (GossipChat *chat)
 {
-	EmpathyContactManager *manager;
+	GossipChatPriv *priv;
 
 	g_return_val_if_fail (GOSSIP_IS_CHAT (chat), NULL);
 
-	manager = empathy_session_get_contact_manager ();
+	priv = GET_PRIV (chat);
 
-	return empathy_contact_manager_get_own (manager, chat->account);
+	return empathy_contact_manager_get_own (priv->manager, chat->account);
 }
 
 GtkWidget *
@@ -1367,7 +1368,7 @@ gossip_chat_should_play_sound (GossipChat *chat)
 
 	g_return_val_if_fail (GOSSIP_IS_CHAT (chat), FALSE);
 
-	window = gossip_chat_get_window (GOSSIP_CHAT (chat));
+	window = gossip_chat_get_window (chat);
 	if (!window) {
 		return TRUE;
 	}

@@ -1,4 +1,4 @@
-SUBDIRS = po profiles pixmaps libempathy libempathy-gtk accounts contact-list chat src
+SUBDIRS = po profiles pixmaps libempathy libempathy-gtk src
 
 DISTCHECK_CONFIGURE_FLAGS =	\
 	--disable-scrollkeeper
@@ -22,3 +22,7 @@ DISTCLEANFILES = 		\
 # Workaround broken scrollkeeper that doesn't remove its files on
 # uninstall.
 distuninstallcheck_listfiles = find . -type f -print | grep -v '^\./var/scrollkeeper'
+
+dist-hook:
+	chmod a+w ${distdir}/ChangeLog
+	if test -d _darcs; then darcs changes >${distdir}/ChangeLog; fi

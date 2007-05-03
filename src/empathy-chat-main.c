@@ -34,7 +34,6 @@
 
 #include <libempathy/gossip-contact.h>
 #include <libempathy/empathy-chandler.h>
-#include <libempathy/empathy-session.h>
 #include <libempathy/empathy-contact-manager.h>
 #include <libempathy/empathy-contact-list.h>
 #include <libempathy-gtk/gossip-private-chat.h>
@@ -60,7 +59,7 @@ new_channel_cb (EmpathyChandler *chandler,
 		/* We have a private chat channel */
 		mc = mission_control_new (tp_get_bus ());
 		account = mission_control_get_account_for_connection (mc, tp_conn, NULL);
-		manager = empathy_session_get_contact_manager ();
+		manager = empathy_contact_manager_new ();
 		list = empathy_contact_manager_get_list (manager, account);
 		contact = empathy_contact_list_get_from_handle (list, tp_chan->handle);
 
@@ -71,6 +70,7 @@ new_channel_cb (EmpathyChandler *chandler,
 		g_object_unref (account);
 		g_object_unref (contact);
 		g_object_unref (chat);
+		g_object_unref (manager);
 	}
 }
 

@@ -34,7 +34,6 @@
 #include <libtelepathy/tp-conn-iface-avatars-gen.h>
 
 #include "empathy-contact-list.h"
-#include "empathy-session.h"
 #include "gossip-debug.h"
 #include "gossip-telepathy-group.h"
 

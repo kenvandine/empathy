@@ -33,7 +33,6 @@
 #include <libmissioncontrol/mc-account-monitor.h>
 #include <libmissioncontrol/mission-control.h>
 
-#include <libempathy/empathy-session.h>
 #include <libempathy/gossip-debug.h>
 #include <libempathy-gtk/empathy-main-window.h>
 #include <libempathy-gtk/gossip-status-presets.h>
@@ -106,7 +105,6 @@ destroy_cb (GtkWidget *window,
 	    gpointer   user_data)
 {
 	gossip_stock_finalize ();
-	empathy_session_finalize ();
 	gtk_main_quit ();
 }
 

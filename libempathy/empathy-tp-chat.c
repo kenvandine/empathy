@@ -30,7 +30,6 @@
 #include "empathy-tp-chat.h"
 #include "empathy-contact-manager.h"
 #include "empathy-contact-list.h"
-#include "empathy-session.h"
 #include "empathy-marshal.h"
 #include "gossip-debug.h"
 #include "gossip-time.h"
@@ -41,14 +40,15 @@
 #define DEBUG_DOMAIN "TpChat"
 
 struct _EmpathyTpChatPriv {
-	EmpathyContactList *list;
-	McAccount          *account;
-	gchar              *id;
-	MissionControl     *mc;
+	EmpathyContactList    *list;
+	EmpathyContactManager *manager;
+	McAccount             *account;
+	gchar                 *id;
+	MissionControl        *mc;
 
-	TpChan             *tp_chan;
-	DBusGProxy         *text_iface;
-	DBusGProxy	   *chat_state_iface;
+	TpChan                *tp_chan;
+	DBusGProxy            *text_iface;
+	DBusGProxy	      *chat_state_iface;
 };
 
 static void empathy_tp_chat_class_init (EmpathyTpChatClass *klass);
@@ -162,6 +162,9 @@ tp_chat_finalize (GObject *object)
 		g_object_unref (priv->tp_chan);
 	}
 
+	if (priv->manager) {
+		g_object_unref (priv->manager);
+	}
 	if (priv->list) {
 		g_object_unref (priv->list);
 	}
@@ -182,7 +185,6 @@ empathy_tp_chat_new (McAccount *account,
 {
 	EmpathyTpChatPriv     *priv;
 	EmpathyTpChat         *chat;
-	EmpathyContactManager *manager;
 
 	g_return_val_if_fail (MC_IS_ACCOUNT (account), NULL);
 	g_return_val_if_fail (TELEPATHY_IS_CHAN (tp_chan), NULL);
@@ -190,8 +192,8 @@ empathy_tp_chat_new (McAccount *account,
 	chat = g_object_new (EMPATHY_TYPE_TP_CHAT, NULL);
 	priv = GET_PRIV (chat);
 
-	manager = empathy_session_get_contact_manager ();
-	priv->list = empathy_contact_manager_get_list (manager, account);
+	priv->manager = empathy_contact_manager_new ();
+	priv->list = empathy_contact_manager_get_list (priv->manager, account);
 	priv->tp_chan = g_object_ref (tp_chan);
 	priv->account = g_object_ref (account);
 	priv->mc = mission_control_new (tp_get_bus ());

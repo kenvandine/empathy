@@ -16,23 +16,42 @@
  * License along with this program; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
- *
+ * 
  * Authors: Xavier Claessens <xclaesse@gmail.com>
  */
 
-#ifndef __EMPATHY_SESSION_H__
-#define __EMPATHY_SESSION_H__
+#include <config.h>
+
+#include <string.h>
+#include <stdlib.h>
 
 #include <glib.h>
+#include <gtk/gtk.h>
 
-#include <libmissioncontrol/mission-control.h>
-#include "empathy-contact-manager.h"
+#include <libempathy-gtk/gossip-accounts-dialog.h>
 
-G_BEGIN_DECLS
+static void
+destroy_cb (GtkWidget *dialog,
+	    gpointer   user_data)
+{
+	gtk_main_quit ();
+}
 
-void                   empathy_session_finalize            (void);
-EmpathyContactManager *empathy_session_get_contact_manager (void);
+int
+main (int argc, char *argv[])
+{
+	GtkWidget *dialog;
 
-G_END_DECLS
+	gtk_init (&argc, &argv);
 
-#endif /* __EMPATHY_MISSION_CONTROL_H__ */
+	dialog = gossip_accounts_dialog_show ();
+
+	g_signal_connect (dialog, "destroy",
+			  G_CALLBACK (destroy_cb),
+			  NULL);
+
+	gtk_main ();
+
+	return EXIT_SUCCESS;
+}
+

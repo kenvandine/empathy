@@ -28,7 +28,6 @@
 #include <libtelepathy/tp-constants.h>
 
 #include "empathy-contact-manager.h"
-#include "empathy-session.h"
 #include "gossip-utils.h"
 #include "gossip-debug.h"
 
@@ -175,7 +174,16 @@ contact_manager_finalize (GObject *object)
 EmpathyContactManager *
 empathy_contact_manager_new (void)
 {
-	return g_object_new (EMPATHY_TYPE_CONTACT_MANAGER, NULL);
+	static EmpathyContactManager *manager = NULL;
+
+	if (!manager) {
+		manager = g_object_new (EMPATHY_TYPE_CONTACT_MANAGER, NULL);
+		g_object_add_weak_pointer (G_OBJECT (manager), (gpointer) &manager);
+	} else {
+		g_object_ref (manager);
+	}
+
+	return manager;
 }
 
 void

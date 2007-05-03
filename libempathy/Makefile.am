@@ -24,7 +24,6 @@ libempathy_la_SOURCES =             						\
 	gossip-debug.c			gossip-debug.h				\
 	gossip-utils.c			gossip-utils.h				\
 	gossip-message.c		gossip-message.h			\
-	empathy-session.c		empathy-session.h			\
 	empathy-contact-list.c		empathy-contact-list.h			\
 	empathy-contact-manager.c	empathy-contact-manager.h		\
 	empathy-tp-chat.c		empathy-tp-chat.h			\
