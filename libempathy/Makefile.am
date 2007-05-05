@@ -1,10 +1,11 @@
 AM_CPPFLAGS =                                           \
-	-I.                                             \
-	-I$(top_srcdir)                                 \
 	-DDATADIR=\""$(datadir)"\"              	\
 	-DLOCALEDIR=\""$(datadir)/locale"\"		\
-	$(EMPATHY_CFLAGS)				\
+	$(LIBEMPATHY_CFLAGS)				\
 	$(WARN_CFLAGS)
+
+AM_LDFLAGS =						\
+	$(LIBEMPATHY_LIBS)
 
 BUILT_SOURCES = 					\
 	empathy-marshal.h				\
@@ -29,9 +30,6 @@ libempathy_la_SOURCES =             						\
 	empathy-tp-chat.c		empathy-tp-chat.h			\
 	empathy-chandler.c		empathy-chandler.h			\
 	empathy-marshal-main.c
-
-libempathy_la_LIBADD =              			\
-	$(EMPATHY_LIBS)
 
 libempathy_includedir = $(includedir)/empathy/
 

@@ -1,29 +1,33 @@
-AM_CPPFLAGS =	                                 		\
-	-I$(top_srcdir)                          		\
-	-DPREFIX="\"$(prefix)"\"				\
-	-DSYSCONFDIR=\""$(sysconfdir)"\"			\
-	-DDATADIR=\""$(datadir)"\"              		\
-	-DLIBDIR=\""$(libdir)"\"				\
-	$(EMPATHY_CFLAGS)					\
-	$(WARN_CFLAGS)
+cflags = $(EMPATHY_CFLAGS)					\
+	 $(WARN_CFLAGS)
 
-LDADD =								\
-	$(top_builddir)/libempathy/libempathy.la		\
+libs =	$(top_builddir)/libempathy/libempathy.la		\
 	$(top_builddir)/libempathy-gtk/libempathy-gtk.la	\
 	$(EMPATHY_LIBS)
 
 bin_PROGRAMS = empathy empathy-accounts empathy-chat empathy-contact-list
-empathy_SOURCES =						\
-	empathy-main.c
 
-empathy_accounts_SOURCES =					\
-	empathy-accounts-main.c
+empathy_SOURCES = empathy-main.c
+empathy_CPPFLAGS = $(cflags)
+empathy_LDFLAGS = $(libs)
 
-empathy_chat_SOURCES =						\
-	empathy-chat-main.c
+empathy_accounts_SOURCES = empathy-accounts-main.c
+empathy_accounts_CPPFLAGS = $(cflags)
+empathy_accounts_LDFLAGS = $(libs)
 
-empathy_contact_list_SOURCES =					\
-	empathy-contact-list-main.c
+empathy_chat_SOURCES = empathy-chat-main.c
+empathy_chat_CPPFLAGS = $(cflags)
+empathy_chat_LDFLAGS = $(libs)
+
+empathy_contact_list_SOURCES = empathy-contact-list-main.c
+empathy_contact_list_CPPFLAGS = $(cflags)
+empathy_contact_list_LDFLAGS = $(libs)
+
+# MC plugin
+pluginlib_LTLIBRARIES = libempathy-filter-plugin.la
+libempathy_filter_plugin_la_SOURCES = empathy-filter-plugin.c
+libempathy_filter_plugin_la_CPPFLAGS = $(MISSION_CONTROL_PLUGINS_CFLAGS)
+libempathy_filter_plugin_la_LDFLAGS = $(MISSION_CONTROL_PLUGINS_LIBS)
 
 # Dbus service file
 servicedir = $(datadir)/dbus-1/services

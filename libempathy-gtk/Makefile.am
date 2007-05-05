@@ -1,10 +1,10 @@
 AM_CPPFLAGS =                                           \
-	-I.                                             \
-	-I$(top_srcdir)                                 \
-	-DDATADIR=\""$(datadir)"\"              	\
-	-DLOCALEDIR=\""$(datadir)/locale"\"		\
 	$(EMPATHY_CFLAGS)				\
 	$(WARN_CFLAGS)
+
+AM_LDFLAGS =						\
+	$(top_builddir)/libempathy/libempathy.la	\
+	$(EMPATHY_LIBS)
 
 noinst_LTLIBRARIES = libempathy-gtk.la
 
@@ -31,10 +31,6 @@ libempathy_gtk_la_SOURCES =             					\
 	gossip-status-presets.c			gossip-status-presets.h		\
 	gossip-presence-chooser.c		gossip-presence-chooser.h	\
 	gossip-ui-utils.c			gossip-ui-utils.h
-
-libempathy_gtk_la_LIBADD =							\
-	$(top_builddir)/libempathy/libempathy.la				\
-	$(EMPATHY_LIBS)
 
 libempathy_gtk_includedir = $(includedir)/empathy/
 

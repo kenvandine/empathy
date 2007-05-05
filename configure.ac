@@ -26,16 +26,39 @@ GTK_REQUIRED=2.10.0
 GCONF_REQUIRED=1.2.0
 LIBGLADE_REQUIRED=2.0.0
 TELEPATHY_REQUIRED=0.0.51
-MISSION_CONTROL_REQUIRED=4.20
+MISSION_CONTROL_REQUIRED=0.21
+
+IDT_COMPILE_WARNINGS
 
 GLIB_GENMARSHAL=`$PKG_CONFIG glib-2.0 --variable=glib_genmarshal`
 AC_SUBST(GLIB_GENMARSHAL)
 
-IDT_COMPILE_WARNINGS
+pluginlibdir=`$PKG_CONFIG mission-control --variable=pluginlibdir`
+AC_SUBST(pluginlibdir)
+
+dnl -----------------------------------------------------------
+dnl Language Support
+dnl -----------------------------------------------------------
+
+GETTEXT_PACKAGE=empathy
+AC_SUBST(GETTEXT_PACKAGE)
+AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE",[Gettext package name])
+
+AM_GLIB_GNU_GETTEXT
 
 dnl -----------------------------------------------------------
 dnl Pkg-Config dependency checks
 dnl -----------------------------------------------------------
+
+PKG_CHECK_MODULES(LIBEMPATHY,
+[
+   glib-2.0 >= $GLIB_REQUIRED
+   gobject-2.0
+   gconf-2.0 >= $GCONF_REQUIRED
+   libxml-2.0
+   libtelepathy >= $TELEPATHY_REQUIRED
+   libmissioncontrol >= $MISSION_CONTROL_REQUIRED
+])
 
 PKG_CHECK_MODULES(EMPATHY,
 [
@@ -49,15 +72,14 @@ PKG_CHECK_MODULES(EMPATHY,
    libmissioncontrol >= $MISSION_CONTROL_REQUIRED
 ])
 
-dnl -----------------------------------------------------------
-dnl Language Support
-dnl -----------------------------------------------------------
-GETTEXT_PACKAGE=empathy
-AC_SUBST(GETTEXT_PACKAGE)
-AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE",[Gettext package name])
-
-AM_GLIB_GNU_GETTEXT
-
+PKG_CHECK_MODULES(MISSION_CONTROL_PLUGINS,
+[
+   mission-control >= $MISSION_CONTROL_REQUIRED
+   glib-2.0 >= $GLIB_REQUIRED
+   gobject-2.0
+   dbus-glib-1
+   libtelepathy >= $TELEPATHY_REQUIRED
+])
 
 dnl -----------------------------------------------------------
 AC_OUTPUT([
