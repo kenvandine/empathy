@@ -332,8 +332,6 @@ gossip_presence_state_from_str (const gchar *str)
 		return MC_PRESENCE_OFFLINE;
 	} else if (strcmp (str, "unset") == 0) {
 		return MC_PRESENCE_UNSET;
-	} else {
-		g_assert_not_reached ();
 	}
 
 	return MC_PRESENCE_AVAILABLE;
