@@ -384,6 +384,8 @@ empathy_contact_list_setup (EmpathyContactList *list)
 
 	priv = GET_PRIV (list);
 
+	gossip_debug (DEBUG_DOMAIN, "setup contact list: %p", list);
+
 	dbus_g_proxy_connect_signal (DBUS_G_PROXY (priv->tp_conn), "NewChannel",
 				     G_CALLBACK (contact_list_newchannel_cb),
 				     list, NULL);
