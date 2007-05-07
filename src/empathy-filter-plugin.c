@@ -22,8 +22,8 @@
 
 #include <glib.h>
 
-#include <mission-control/mcd-dispatcher.h>
-#include <mission-control/mcd-dispatcher-context.h>
+#include <mcd-dispatcher.h>
+#include <mcd-dispatcher-context.h>
 
 static void filter_plugin_text_channel (McdDispatcherContext *ctx);
 
