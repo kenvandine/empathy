@@ -10,6 +10,7 @@ noinst_LTLIBRARIES = libempathy-gtk.la
 
 libempathy_gtk_la_SOURCES =             					\
 	ephy-spinner.c				ephy-spinner.h			\
+	empathy-images.h							\
 	empathy-main-window.c			empathy-main-window.h		\
 	gossip-accounts-dialog.c		gossip-accounts-dialog.h	\
 	gossip-account-widget-generic.c		gossip-account-widget-generic.h	\
@@ -17,7 +18,6 @@ libempathy_gtk_la_SOURCES =             					\
 	gossip-profile-chooser.c		gossip-profile-chooser.h	\
 	gossip-cell-renderer-expander.c		gossip-cell-renderer-expander.h	\
 	gossip-cell-renderer-text.c		gossip-cell-renderer-text.h	\
-	gossip-stock.c				gossip-stock.h			\
 	gossip-spell.c				gossip-spell.h			\
 	gossip-contact-groups.c			gossip-contact-groups.h		\
 	gossip-contact-list.c			gossip-contact-list.h		\

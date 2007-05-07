@@ -84,9 +84,9 @@ PKG_CHECK_MODULES(MISSION_CONTROL_PLUGINS,
 dnl -----------------------------------------------------------
 AC_OUTPUT([
   Makefile
+  data/Makefile
+  data/16x16/Makefile
   po/Makefile.in
-  profiles/Makefile
-  pixmaps/Makefile
   libempathy/Makefile
   libempathy-gtk/Makefile
   src/Makefile

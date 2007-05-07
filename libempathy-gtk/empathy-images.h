@@ -20,48 +20,23 @@
  * Authors: Xavier Claessens <xclaesse@gmail.com>
  */
 
-#include <config.h>
+#ifndef __EMPATHY_IMAGES_H__
+#define __EMPATHY_IMAGES_H__
 
-#include <stdlib.h>
+G_BEGIN_DECLS
 
-#include <glib.h>
-#include <gtk/gtk.h>
+#define EMPATHY_IMAGE_OFFLINE             "empathy-offline"
+#define EMPATHY_IMAGE_AVAILABLE           "empathy-available"
+#define EMPATHY_IMAGE_BUSY                "empathy-busy"
+#define EMPATHY_IMAGE_AWAY                "empathy-away"
+#define EMPATHY_IMAGE_EXT_AWAY            "empathy-extended-away"
+#define EMPATHY_IMAGE_PENDING             "empathy-pending"
 
-#include <libmissioncontrol/mc-account.h>
+#define EMPATHY_IMAGE_MESSAGE             "empathy-message"
+#define EMPATHY_IMAGE_TYPING              "empathy-typing"
+#define EMPATHY_IMAGE_CONTACT_INFORMATION "vcard_16"
+#define EMPATHY_IMAGE_GROUP_MESSAGE       "gossip-group-message"
 
-#include <libempathy-gtk/empathy-main-window.h>
-#include <libempathy-gtk/gossip-accounts-dialog.h>
+G_END_DECLS
 
-static void
-destroy_cb (GtkWidget *window,
-	    gpointer   user_data)
-{
-	gtk_main_quit ();
-}
-
-int
-main (int argc, char *argv[])
-{
-	GtkWidget *window;
-	GList     *accounts;
-
-	gtk_init (&argc, &argv);
-
-	window = empathy_main_window_show ();
-	g_signal_connect (window, "destroy",
-			  G_CALLBACK (destroy_cb),
-			  NULL);
-
-	/* Show the accounts dialog if there is no enabled accounts */
-	accounts = mc_accounts_list_by_enabled (TRUE);
-	if (accounts) {
-		mc_accounts_list_free (accounts);
-	} else {
-		gossip_accounts_dialog_show ();
-	}
-
-	gtk_main ();
-
-	return EXIT_SUCCESS;
-}
-
+#endif /* __EMPATHY_IMAGES_ICONS_H__ */

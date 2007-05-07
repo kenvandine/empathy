@@ -1,17 +1,11 @@
-imagedir = $(datadir)/empathy
+SUBDIRS = 16x16
 
-image_DATA =				\
-	gossip-offline.png		\
-	gossip-available.png    	\
-	gossip-busy.png			\
-	gossip-away.png			\
-	gossip-extended-away.png 	\
-	gossip-pending.png 		\
-	gossip-message.png		\
-	gossip-typing.png		\
-	gossip-group-message.png 	\
-	vcard_16.png			\
-	vcard_48.png
+profiledir = $(datadir)/mission-control/profiles
+profile_DATA = 				\
+	jabber.profile			\
+	gtalk.profile			\
+	salut.profile			\
+	msn.profile
 
 gtk_update_icon_cache = gtk-update-icon-cache -f -t $(datadir)/icons/hicolor
 
@@ -27,6 +21,7 @@ update-icon-cache:
 	fi
 
 EXTRA_DIST = 		\
-	$(image_DATA)
+	$(image_DATA)	\
+	$(profile_DATA)
 
 

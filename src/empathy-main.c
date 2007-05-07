@@ -35,8 +35,8 @@
 
 #include <libempathy/gossip-debug.h>
 #include <libempathy-gtk/empathy-main-window.h>
+#include <libempathy-gtk/empathy-images.h>
 #include <libempathy-gtk/gossip-status-presets.h>
-#include <libempathy-gtk/gossip-stock.h>
 #include <libempathy-gtk/gossip-accounts-dialog.h>
 
 #define DEBUG_DOMAIN "Empathy"
@@ -104,7 +104,6 @@ static void
 destroy_cb (GtkWidget *window,
 	    gpointer   user_data)
 {
-	gossip_stock_finalize ();
 	gtk_main_quit ();
 }
 
@@ -130,9 +129,6 @@ main (int argc, char *argv[])
 
 	gtk_init (&argc, &argv);
 
-	/* FIXME: This is a horrible hack */
-	gossip_stock_init (gtk_window_new (GTK_WINDOW_TOPLEVEL));
-
 	/* Setting up MC */
 	monitor = mc_account_monitor_new ();
 	mc = mission_control_new (tp_get_bus ());
@@ -154,7 +150,7 @@ main (int argc, char *argv[])
 			  NULL);
 
 	/* Setting up the tray icon */
-	icon = gtk_status_icon_new_from_stock (GOSSIP_STOCK_MESSAGE);
+	icon = gtk_status_icon_new_from_icon_name (EMPATHY_IMAGE_MESSAGE);
 	gtk_status_icon_set_tooltip (icon, "Empathy - click here to show/hide the main window");
 	gtk_status_icon_set_visible (icon, TRUE);
 	g_signal_connect (icon, "activate",

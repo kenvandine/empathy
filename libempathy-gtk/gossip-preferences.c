@@ -33,7 +33,6 @@
 #include <libempathy/gossip-conf.h>
 
 #include "gossip-preferences.h"
-#include "gossip-stock.h"
 #include "gossip-ui-utils.h"
 #include "gossip-theme-manager.h"
 #include "gossip-spell.h"

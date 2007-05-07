@@ -37,7 +37,6 @@
 #include <libempathy/empathy-contact-manager.h>
 #include <libempathy/empathy-contact-list.h>
 #include <libempathy-gtk/gossip-private-chat.h>
-#include <libempathy-gtk/gossip-stock.h>
 
 #define BUS_NAME "org.gnome.Empathy.Chat"
 #define OBJECT_PATH "/org/freedesktop/Telepathy/ChannelHandler"
@@ -80,8 +79,6 @@ main (int argc, char *argv[])
 	EmpathyChandler *chandler;
 
 	gtk_init (&argc, &argv);
-	/* FIXME: This is a horrible hack */
-	gossip_stock_init (gtk_window_new (GTK_WINDOW_TOPLEVEL));
 
 	chandler = empathy_chandler_new (BUS_NAME, OBJECT_PATH);
 

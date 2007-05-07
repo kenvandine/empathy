@@ -44,7 +44,7 @@
 #include "gossip-chat.h"
 #include "gossip-preferences.h"
 //#include "gossip-sound.h"
-#include "gossip-stock.h"
+#include "empathy-images.h"
 #include "gossip-ui-utils.h"
 
 #define DEBUG_DOMAIN "PrivateChat"
@@ -78,13 +78,9 @@ static void           private_chat_widget_destroy_cb            (GtkWidget      
 								 GossipPrivateChat      *chat);
 static const gchar *  private_chat_get_name                     (GossipChat             *chat);
 static gchar *        private_chat_get_tooltip                  (GossipChat             *chat);
-static GdkPixbuf *    private_chat_get_status_pixbuf            (GossipChat             *chat);
+static const gchar *  private_chat_get_status_icon_name         (GossipChat             *chat);
 static GossipContact *private_chat_get_contact                  (GossipChat             *chat);
 static GtkWidget *    private_chat_get_widget                   (GossipChat             *chat);
-/*static GdkPixbuf *    private_chat_pad_to_size                  (GdkPixbuf              *pixbuf,
-								 gint                    width,
-								 gint                    height,
-								 gint                    extra_padding_right);*/
 
 G_DEFINE_TYPE (GossipPrivateChat, gossip_private_chat, GOSSIP_TYPE_CHAT);
 
@@ -96,14 +92,14 @@ gossip_private_chat_class_init (GossipPrivateChatClass *klass)
 
 	object_class->finalize = private_chat_finalize;
 
-	chat_class->get_name          = private_chat_get_name;
-	chat_class->get_tooltip       = private_chat_get_tooltip;
-	chat_class->get_status_pixbuf = private_chat_get_status_pixbuf;
-	chat_class->get_contact       = private_chat_get_contact;
-	chat_class->get_widget        = private_chat_get_widget;
-	chat_class->get_show_contacts = NULL;
-	chat_class->set_show_contacts = NULL;
-	chat_class->is_group_chat     = NULL;
+	chat_class->get_name             = private_chat_get_name;
+	chat_class->get_tooltip          = private_chat_get_tooltip;
+	chat_class->get_status_icon_name = private_chat_get_status_icon_name;
+	chat_class->get_contact          = private_chat_get_contact;
+	chat_class->get_widget           = private_chat_get_widget;
+	chat_class->get_show_contacts    = NULL;
+	chat_class->set_show_contacts    = NULL;
+	chat_class->is_group_chat        = NULL;
 
 	g_type_class_add_private (object_class, sizeof (GossipPrivateChatPriv));
 }
@@ -283,8 +279,8 @@ private_chat_get_tooltip (GossipChat *chat)
 				status);
 }
 
-static GdkPixbuf *
-private_chat_get_status_pixbuf (GossipChat *chat)
+static const gchar *
+private_chat_get_status_icon_name (GossipChat *chat)
 {
 	GossipPrivateChatPriv *priv;
 	GossipContact         *contact;
@@ -295,7 +291,7 @@ private_chat_get_status_pixbuf (GossipChat *chat)
 
 	contact = gossip_chat_get_contact (chat);
 
-	return gossip_pixbuf_for_contact (contact);
+	return gossip_icon_name_for_contact (contact);
 }
 
 static GossipContact *

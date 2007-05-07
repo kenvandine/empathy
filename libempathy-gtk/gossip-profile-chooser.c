@@ -64,16 +64,16 @@ gossip_profile_chooser_new (void)
 
 	/* set up combo box with new store */
 	store = gtk_list_store_new (COL_COUNT,
-				    GDK_TYPE_PIXBUF,  /* Icon    */
-				    G_TYPE_STRING,    /* Label   */
-				    MC_TYPE_PROFILE); /* Profile */
+				    G_TYPE_STRING,    /* Icon name */
+				    G_TYPE_STRING,    /* Label     */
+				    MC_TYPE_PROFILE); /* Profile   */
 	combo_box = gtk_combo_box_new_with_model (GTK_TREE_MODEL (store));
 
 
 	renderer = gtk_cell_renderer_pixbuf_new ();
 	gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo_box), renderer, FALSE);
 	gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combo_box), renderer,
-					"pixbuf", COL_ICON,
+					"icon-name", COL_ICON,
 					NULL);
 	renderer = gtk_cell_renderer_text_new ();
 	gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo_box), renderer, TRUE);
@@ -89,7 +89,7 @@ gossip_profile_chooser_new (void)
 
 		gtk_list_store_append (store, &iter);
 		gtk_list_store_set (store, &iter,
-				    COL_ICON, gossip_pixbuf_from_profile (profile, GTK_ICON_SIZE_BUTTON),
+				    COL_ICON, mc_profile_get_icon_name (profile),
 				    COL_LABEL, mc_profile_get_display_name (profile),
 				    COL_PROFILE, profile,
 				    -1);

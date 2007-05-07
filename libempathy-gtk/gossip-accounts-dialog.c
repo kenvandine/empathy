@@ -305,15 +305,12 @@ accounts_dialog_update_account (GossipAccountsDialog *dialog,
 
 	if (account) {
 		McProfile *profile;
-		GdkPixbuf *pixbuf;
-
-		pixbuf = gossip_pixbuf_from_account (account, GTK_ICON_SIZE_DIALOG);
-		gtk_image_set_from_pixbuf (GTK_IMAGE (dialog->image_type), pixbuf);
-		if (pixbuf) {
-			g_object_unref (pixbuf);
-		}
 
 		profile = mc_account_get_profile (account);
+		gtk_image_set_from_icon_name (GTK_IMAGE (dialog->image_type),
+					      mc_profile_get_icon_name (profile),
+					      GTK_ICON_SIZE_DIALOG);
+		
 
 		gtk_label_set_text (GTK_LABEL (dialog->label_type),
 				    mc_profile_get_display_name (profile));
@@ -412,6 +409,7 @@ accounts_dialog_model_pixbuf_data_func (GtkTreeViewColumn    *tree_column,
 					GossipAccountsDialog *dialog)
 {
 	McAccount                 *account;
+	const gchar               *icon_name;
 	GdkPixbuf                 *pixbuf;
 	TelepathyConnectionStatus  status;
 
@@ -420,7 +418,8 @@ accounts_dialog_model_pixbuf_data_func (GtkTreeViewColumn    *tree_column,
 			    COL_ACCOUNT_POINTER, &account,
 			    -1);
 
-	pixbuf = gossip_pixbuf_from_account (account, GTK_ICON_SIZE_BUTTON);
+	icon_name = gossip_icon_name_from_account (account);
+	pixbuf = gossip_pixbuf_from_icon_name (icon_name, GTK_ICON_SIZE_BUTTON);
 
 	if (pixbuf) {
 		if (status == TP_CONN_STATUS_DISCONNECTED ||

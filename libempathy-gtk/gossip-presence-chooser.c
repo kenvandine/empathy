@@ -34,7 +34,7 @@
 #include <libempathy/empathy-marshal.h>
 
 #include "gossip-ui-utils.h"
-#include "gossip-stock.h"
+#include "empathy-images.h"
 #include "gossip-presence-chooser.h"
 #include "gossip-status-presets.h"
 
@@ -321,7 +321,6 @@ presence_chooser_show_dialog (GossipPresenceChooser *chooser,
 	GtkWidget                 *combo;
 	GtkWidget                 *entry;
 	GtkWidget                 *checkbutton;
-	GdkPixbuf                 *pixbuf;
 	const gchar               *default_status;
 
 	priv = GET_PRIV (chooser);
@@ -355,9 +354,9 @@ presence_chooser_show_dialog (GossipPresenceChooser *chooser,
 			  G_CALLBACK (presence_chooser_dialog_response_cb),
 			  chooser);
 
-	pixbuf = gossip_pixbuf_for_presence_state (state);
-	gtk_image_set_from_pixbuf (GTK_IMAGE (image), pixbuf);
-	g_object_unref (pixbuf);
+	gtk_image_set_from_icon_name (GTK_IMAGE (image),
+				      gossip_icon_name_for_presence_state (state),
+				      GTK_ICON_SIZE_MENU);
 
 	if (!store[state]) {
 		GList       *presets, *l;
@@ -486,10 +485,10 @@ presence_chooser_menu_add_item (GossipPresenceChooser *chooser,
 {
 	GtkWidget   *item;
 	GtkWidget   *image;
-	const gchar *stock;
+	const gchar *icon_name;
 
 	item = gtk_image_menu_item_new_with_label (str);
-	stock = gossip_stock_for_state (state);
+	icon_name = gossip_icon_name_for_presence_state (state);
 
 	if (custom) {
 		g_signal_connect (
@@ -505,7 +504,7 @@ presence_chooser_menu_add_item (GossipPresenceChooser *chooser,
 			chooser);
 	}
 
-	image = gtk_image_new_from_stock (stock, GTK_ICON_SIZE_MENU);
+	image = gtk_image_new_from_icon_name (icon_name, GTK_ICON_SIZE_MENU);
 	gtk_widget_show (image);
 
 	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
@@ -943,7 +942,6 @@ presence_chooser_flash_timeout_cb (GossipPresenceChooser *chooser)
 {
 	GossipPresenceChooserPriv *priv;
 	McPresence                 state;
-	GdkPixbuf                 *pixbuf;
 	static gboolean            on = FALSE;
 
 	priv = GET_PRIV (chooser);
@@ -954,9 +952,9 @@ presence_chooser_flash_timeout_cb (GossipPresenceChooser *chooser)
 		state = priv->flash_state_2;
 	}
 
-	pixbuf = gossip_pixbuf_for_presence_state (state);
-	gtk_image_set_from_pixbuf (GTK_IMAGE (priv->image), pixbuf);
-	g_object_unref (pixbuf);
+	gtk_image_set_from_icon_name (GTK_IMAGE (priv->image),
+				      gossip_icon_name_for_presence_state (state),
+				      GTK_ICON_SIZE_MENU);
 
 	on = !on;
 
@@ -991,7 +989,6 @@ gossip_presence_chooser_flash_stop (GossipPresenceChooser *chooser,
 				    McPresence             state)
 {
 	GossipPresenceChooserPriv *priv;
-	GdkPixbuf                 *pixbuf;
 
 	g_return_if_fail (GOSSIP_IS_PRESENCE_CHOOSER (chooser));
 
@@ -1002,9 +999,9 @@ gossip_presence_chooser_flash_stop (GossipPresenceChooser *chooser,
 		priv->flash_timeout_id = 0;
 	}
 
-	pixbuf = gossip_pixbuf_for_presence_state (state);
-	gtk_image_set_from_pixbuf (GTK_IMAGE (priv->image), pixbuf);
-	g_object_unref (pixbuf);
+	gtk_image_set_from_icon_name (GTK_IMAGE (priv->image),
+				      gossip_icon_name_for_presence_state (state),
+				      GTK_ICON_SIZE_MENU);
 
 	priv->last_state = state;
 }

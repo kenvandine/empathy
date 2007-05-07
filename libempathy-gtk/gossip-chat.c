@@ -1072,13 +1072,13 @@ gossip_chat_get_tooltip (GossipChat *chat)
 	return NULL;
 }
 
-GdkPixbuf *
-gossip_chat_get_status_pixbuf (GossipChat *chat)
+const gchar *
+gossip_chat_get_status_icon_name (GossipChat *chat)
 {
 	g_return_val_if_fail (GOSSIP_IS_CHAT (chat), NULL);
 
-	if (GOSSIP_CHAT_GET_CLASS (chat)->get_status_pixbuf) {
-		return GOSSIP_CHAT_GET_CLASS (chat)->get_status_pixbuf (chat);
+	if (GOSSIP_CHAT_GET_CLASS (chat)->get_status_icon_name) {
+		return GOSSIP_CHAT_GET_CLASS (chat)->get_status_icon_name (chat);
 	}
 
 	return NULL;

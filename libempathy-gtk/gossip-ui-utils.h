@@ -67,16 +67,14 @@ void            gossip_glade_setup_size_group            (GladeXML            *g
 							  gchar               *first_widget,
 							  ...);
 /* Pixbufs */
+GdkPixbuf *     gossip_pixbuf_from_icon_name             (const gchar         *icon_name,
+							  GtkIconSize          icon_size);
 GdkPixbuf *     gossip_pixbuf_from_smiley                (GossipSmiley         type,
 							  GtkIconSize          icon_size);
-GdkPixbuf *     gossip_pixbuf_from_profile               (McProfile           *account,
-							  GtkIconSize          icon_size);
-GdkPixbuf *     gossip_pixbuf_from_account               (McAccount           *account,
-							  GtkIconSize          icon_size);
-GdkPixbuf *     gossip_pixbuf_for_presence_state         (McPresence           state);
-GdkPixbuf *     gossip_pixbuf_for_presence               (GossipPresence      *presence);
-GdkPixbuf *     gossip_pixbuf_for_contact                (GossipContact       *contact);
-GdkPixbuf *     gossip_pixbuf_offline                    (void);
+const gchar *   gossip_icon_name_from_account            (McAccount           *account);
+const gchar *   gossip_icon_name_for_presence_state      (McPresence           state);
+const gchar *   gossip_icon_name_for_presence            (GossipPresence      *presence);
+const gchar *   gossip_icon_name_for_contact             (GossipContact       *contact);
 GdkPixbuf *     gossip_pixbuf_from_avatar_scaled         (GossipAvatar        *avatar,
 							  gint                 width,
 							  gint                 height);

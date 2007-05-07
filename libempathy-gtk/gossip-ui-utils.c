@@ -41,7 +41,9 @@
 #include <libempathy/gossip-debug.h>
 
 #include "gossip-ui-utils.h"
-#include "gossip-stock.h"
+#include "empathy-images.h"
+
+#define DEBUG_DOMAIN "UiUtils"
 
 struct SizeData {
 	gint     width;
@@ -200,23 +202,33 @@ gossip_glade_setup_size_group (GladeXML         *gui,
 }
 
 GdkPixbuf *
-gossip_pixbuf_from_smiley (GossipSmiley type,
-			   GtkIconSize  icon_size)
+gossip_pixbuf_from_icon_name (const gchar *icon_name,
+			      GtkIconSize  icon_size)
 {
 	GtkIconTheme  *theme;
 	GdkPixbuf     *pixbuf = NULL;
 	GError        *error = NULL;
-	gint           w, h;
-	gint           size;
-	const gchar   *icon_id;
 
 	theme = gtk_icon_theme_get_default ();
 
-	if (!gtk_icon_size_lookup (icon_size, &w, &h)) {
-		size = 16;
-	} else {
-		size = (w + h) / 2;
+	pixbuf = gtk_icon_theme_load_icon (theme,
+					   icon_name,
+					   icon_size,
+					   0,
+					   &error);
+	if (error) {
+		gossip_debug (DEBUG_DOMAIN, "Error loading icon: %s", error->message);
+		g_clear_error (&error);
 	}
+
+	return pixbuf;
+}
+
+GdkPixbuf *
+gossip_pixbuf_from_smiley (GossipSmiley type,
+			   GtkIconSize  icon_size)
+{
+	const gchar *icon_id;
 
 	switch (type) {
 	case GOSSIP_SMILEY_NORMAL:       /*  :)   */
@@ -306,106 +318,79 @@ gossip_pixbuf_from_smiley (GossipSmiley type,
 		icon_id = NULL;
 	}
 
-	pixbuf = gtk_icon_theme_load_icon (theme,
-					   icon_id,     /* icon name */
-					   size,        /* size */
-					   0,           /* flags */
-					   &error);
 
-	return pixbuf;
+	return gossip_pixbuf_from_icon_name (icon_id, icon_size);
 }
 
-GdkPixbuf *
-gossip_pixbuf_from_profile (McProfile   *profile,
-			    GtkIconSize  icon_size)
-{
-	GtkIconTheme  *theme;
-	gint           size = 48;
-	gint           w, h;
-	const gchar   *icon_id = NULL;
-	GError        *error = NULL;
-
-	theme = gtk_icon_theme_get_default ();
-
-	if (gtk_icon_size_lookup (icon_size, &w, &h)) {
-		size = (w + h) / 2;
-	}
-
-	icon_id = mc_profile_get_icon_name (profile);
-
-	theme = gtk_icon_theme_get_default ();
-	return gtk_icon_theme_load_icon (theme,
-					 icon_id,     /* Icon name */
-					 size,        /* Size */
-					 0,           /* Flags */
-					 &error);
-}
-
-GdkPixbuf *
-gossip_pixbuf_from_account (McAccount   *account,
-			    GtkIconSize  icon_size)
+const gchar *
+gossip_icon_name_from_account (McAccount *account)
 {
 	McProfile *profile;
 
 	profile = mc_account_get_profile (account);
 
-	return gossip_pixbuf_from_profile (profile, icon_size);
+	return mc_profile_get_icon_name (profile);
 }
 
-GdkPixbuf *
-gossip_pixbuf_for_presence_state (McPresence state)
+const gchar *
+gossip_icon_name_for_presence_state (McPresence state)
 {
-	const gchar *stock;
+	switch (state) {
+	case MC_PRESENCE_AVAILABLE:
+		return EMPATHY_IMAGE_AVAILABLE;
+	case MC_PRESENCE_DO_NOT_DISTURB:
+		return EMPATHY_IMAGE_BUSY;
+	case MC_PRESENCE_AWAY:
+		return EMPATHY_IMAGE_AWAY;
+	case MC_PRESENCE_EXTENDED_AWAY:
+		return EMPATHY_IMAGE_EXT_AWAY;
+	case MC_PRESENCE_HIDDEN:
+	case MC_PRESENCE_OFFLINE:
+	case MC_PRESENCE_UNSET:
+		return EMPATHY_IMAGE_OFFLINE;
+	default:
+		g_assert_not_reached ();
+	}
 
-	stock = gossip_stock_for_state (state);
-
-	return gossip_stock_render (stock, GTK_ICON_SIZE_MENU);
+	return NULL;
 }
 
-GdkPixbuf *
-gossip_pixbuf_for_presence (GossipPresence *presence)
+const gchar *
+gossip_icon_name_for_presence (GossipPresence *presence)
 {
 	McPresence state;
 
 	g_return_val_if_fail (GOSSIP_IS_PRESENCE (presence),
-			      gossip_pixbuf_offline ());
+			      EMPATHY_IMAGE_OFFLINE);
 
 	state = gossip_presence_get_state (presence);
 
-	return gossip_pixbuf_for_presence_state (state);
+	return gossip_icon_name_for_presence_state (state);
 }
 
-GdkPixbuf *
-gossip_pixbuf_for_contact (GossipContact *contact)
+const gchar *
+gossip_icon_name_for_contact (GossipContact *contact)
 {
 	GossipPresence     *presence;
 	GossipSubscription  subscription;
 
 	g_return_val_if_fail (GOSSIP_IS_CONTACT (contact),
-			      gossip_pixbuf_offline ());
+			      EMPATHY_IMAGE_OFFLINE);
 
 	presence = gossip_contact_get_presence (contact);
 
 	if (presence) {
-		return gossip_pixbuf_for_presence (presence);
+		return gossip_icon_name_for_presence (presence);
 	}
 
 	subscription = gossip_contact_get_subscription (contact);
 
 	if (subscription != GOSSIP_SUBSCRIPTION_BOTH &&
 	    subscription != GOSSIP_SUBSCRIPTION_TO) {
-		return gossip_stock_render (GOSSIP_STOCK_PENDING,
-					    GTK_ICON_SIZE_MENU);
+		return EMPATHY_IMAGE_PENDING;
 	}
 
-	return gossip_pixbuf_offline ();
-}
-
-GdkPixbuf *
-gossip_pixbuf_offline (void)
-{
-	return gossip_stock_render (GOSSIP_STOCK_OFFLINE,
-				    GTK_ICON_SIZE_MENU);
+	return EMPATHY_IMAGE_OFFLINE;
 }
 
 GdkPixbuf *

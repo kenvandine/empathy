@@ -40,6 +40,7 @@
 #include <libempathy/gossip-conf.h>
 
 #include "gossip-chat-window.h"
+#include "empathy-images.h"
 //#include "gossip-add-contact-dialog.h"
 //#include "gossip-chat-invite.h"
 //#include "gossip-contact-info-dialog.h"
@@ -48,7 +49,6 @@
 #include "gossip-preferences.h"
 #include "gossip-private-chat.h"
 //#include "gossip-sound.h"
-#include "gossip-stock.h"
 #include "gossip-ui-utils.h"
 
 #define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GOSSIP_TYPE_CHAT_WINDOW, GossipChatWindowPriv))
@@ -106,8 +106,6 @@ struct _GossipChatWindowPriv {
 static void       gossip_chat_window_class_init         (GossipChatWindowClass *klass);
 static void       gossip_chat_window_init               (GossipChatWindow      *window);
 static void       gossip_chat_window_finalize           (GObject               *object);
-static GdkPixbuf *chat_window_get_status_pixbuf         (GossipChatWindow      *window,
-							 GossipChat            *chat);
 static void       chat_window_accel_cb                  (GtkAccelGroup         *accelgroup,
 							 GObject               *object,
 							 guint                  key,
@@ -354,9 +352,9 @@ gossip_chat_window_init (GossipChatWindow *window)
 	 * stock image
 	 */
 	image = gtk_image_menu_item_get_image (GTK_IMAGE_MENU_ITEM (priv->menu_conv_info));
-	gtk_image_set_from_stock (GTK_IMAGE (image),
-				  GOSSIP_STOCK_CONTACT_INFORMATION,
-				  GTK_ICON_SIZE_MENU);
+	gtk_image_set_from_icon_name (GTK_IMAGE (image),
+				      EMPATHY_IMAGE_CONTACT_INFORMATION,
+				      GTK_ICON_SIZE_MENU);
 
 	/* Set up smiley menu */
 	menu = gossip_chat_view_get_smiley_menu (
@@ -502,30 +500,6 @@ gossip_chat_window_finalize (GObject *object)
 	G_OBJECT_CLASS (gossip_chat_window_parent_class)->finalize (object);
 }
 
-static GdkPixbuf *
-chat_window_get_status_pixbuf (GossipChatWindow *window,
-			       GossipChat       *chat)
-{
-	GossipChatWindowPriv *priv;
-	GdkPixbuf            *pixbuf;
-
-	priv = GET_PRIV (window);
-
-	if (g_list_find (priv->chats_new_msg, chat)) {
-		pixbuf = gossip_stock_render (GOSSIP_STOCK_MESSAGE,
-					      GTK_ICON_SIZE_MENU);
-	}
-	else if (g_list_find (priv->chats_composing, chat)) {
-		pixbuf = gossip_stock_render (GOSSIP_STOCK_TYPING,
-					      GTK_ICON_SIZE_MENU);
-	}
-	else {
-		pixbuf = gossip_chat_get_status_pixbuf (chat);
-	}
-
-	return pixbuf;
-}
-
 static void
 chat_window_accel_cb (GtkAccelGroup    *accelgroup,
 		      GObject          *object,
@@ -668,15 +642,24 @@ static void
 chat_window_update_status (GossipChatWindow *window,
 			   GossipChat       *chat)
 {
-	GtkImage  *image;
-	GdkPixbuf *pixbuf;
+	GossipChatWindowPriv *priv;
+	GtkImage             *image;
+	const gchar          *icon_name = NULL;
 
-	pixbuf = chat_window_get_status_pixbuf (window, chat);
+	priv = GET_PRIV (window);
+
+	if (g_list_find (priv->chats_new_msg, chat)) {
+		icon_name = EMPATHY_IMAGE_MESSAGE;
+	}
+	else if (g_list_find (priv->chats_composing, chat)) {
+		icon_name = EMPATHY_IMAGE_TYPING;
+	}
+	else {
+		icon_name = gossip_chat_get_status_icon_name (chat);
+	}
 	image = g_object_get_data (G_OBJECT (chat), "chat-window-tab-image");
-	gtk_image_set_from_pixbuf (image, pixbuf);
+	gtk_image_set_from_icon_name (image, icon_name, GTK_ICON_SIZE_MENU);
 
-	g_object_unref (pixbuf);
-	
 	chat_window_update_title (window, chat);
 	chat_window_update_tooltip (window, chat);
 }
@@ -686,7 +669,6 @@ chat_window_update_title (GossipChatWindow *window,
 			  GossipChat       *chat)
 {
 	GossipChatWindowPriv	*priv;
-	GdkPixbuf		*pixbuf = NULL;
 	const gchar             *str;
 	gchar			*title;
 	gint  			 n_chats;
@@ -742,16 +724,10 @@ chat_window_update_title (GossipChatWindow *window,
 	g_free (title);
 
 	if (priv->chats_new_msg) {
-		pixbuf = gossip_stock_render (GOSSIP_STOCK_MESSAGE,
-					      GTK_ICON_SIZE_MENU);
+		gtk_window_set_icon_name (GTK_WINDOW (priv->dialog),
+					  EMPATHY_IMAGE_MESSAGE);
 	} else {
-		pixbuf = NULL;
-	}
-
-	gtk_window_set_icon (GTK_WINDOW (priv->dialog), pixbuf);
-
-	if (pixbuf) {
-		g_object_unref (pixbuf);
+		gtk_window_set_icon_name (GTK_WINDOW (priv->dialog), NULL);
 	}
 }
 
