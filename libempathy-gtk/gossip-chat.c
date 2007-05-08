@@ -1002,7 +1002,7 @@ chat_composing_stop_timeout_cb (GossipChat *chat)
 
 	priv->composing_stop_timeout_id = 0;
 	empathy_tp_chat_set_state (priv->tp_chat,
-				   TP_CHANNEL_CHAT_STATE_ACTIVE);
+				   TP_CHANNEL_CHAT_STATE_PAUSED);
 
 	return FALSE;
 }
