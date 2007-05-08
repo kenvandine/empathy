@@ -1,4 +1,6 @@
 AM_CPPFLAGS =                                           \
+	-I.                                             \
+	-I$(top_srcdir)                                 \
 	$(EMPATHY_CFLAGS)				\
 	$(WARN_CFLAGS)
 

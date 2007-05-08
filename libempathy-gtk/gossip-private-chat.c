@@ -49,8 +49,6 @@
 
 #define DEBUG_DOMAIN "PrivateChat"
 
-#define COMPOSING_STOP_TIMEOUT 5
-
 #define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GOSSIP_TYPE_PRIVATE_CHAT, GossipPrivateChatPriv))
 
 struct _GossipPrivateChatPriv {   

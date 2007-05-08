@@ -34,8 +34,9 @@
 #include <libtelepathy/tp-conn-iface-avatars-gen.h>
 
 #include "empathy-contact-list.h"
-#include "gossip-debug.h"
 #include "gossip-telepathy-group.h"
+#include "gossip-debug.h"
+#include "gossip-utils.h"
 
 #define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), \
 		       EMPATHY_TYPE_CONTACT_LIST, EmpathyContactListPriv))
@@ -46,6 +47,7 @@
 struct _EmpathyContactListPriv {
 	TpConn               *tp_conn;
 	McAccount            *account;
+	MissionControl       *mc;
 	GossipContact        *own_contact;
 
 	GossipTelepathyGroup *known;
@@ -191,6 +193,12 @@ static void                   contact_list_parse_presence_foreach   (guint      
 static void                   contact_list_presences_table_foreach  (const gchar                   *state_str,
 								     GHashTable                    *presences_table,
 								     GossipPresence               **presence);
+static void                   contact_list_status_changed_cb        (MissionControl                *mc,
+								     TelepathyConnectionStatus      status,
+								     McPresence                     presence,
+								     TelepathyConnectionStatusReason reason,
+								     const gchar                   *unique_name,
+								     EmpathyContactList            *list);
 
 enum {
 	CONTACT_ADDED,
@@ -273,8 +281,14 @@ contact_list_finalize (GObject *object)
 
 	gossip_debug (DEBUG_DOMAIN, "finalize: %p", object);
 
+	dbus_g_proxy_disconnect_signal (DBUS_G_PROXY (priv->mc),
+					"AccountStatusChanged",
+					G_CALLBACK (contact_list_status_changed_cb),
+					list);
+
+	contact_list_finalize_proxies (list);
+
 	if (priv->tp_conn) {
-		contact_list_finalize_proxies (list);
 		g_object_unref (priv->tp_conn);
 	}
 
@@ -292,6 +306,7 @@ contact_list_finalize (GObject *object)
 
 	g_object_unref (priv->account);
 	g_object_unref (priv->own_contact);
+	g_object_unref (priv->mc);
 	g_hash_table_destroy (priv->groups);
 	g_hash_table_destroy (priv->contacts);
 
@@ -304,7 +319,6 @@ empathy_contact_list_new (McAccount *account)
 	EmpathyContactListPriv *priv;
 	EmpathyContactList     *list;
 	MissionControl         *mc;
-	TpConn                 *tp_conn;
 	guint                   handle;
 	GError                 *error = NULL;
 
@@ -317,19 +331,20 @@ empathy_contact_list_new (McAccount *account)
 		return NULL;
 	}
 
-	tp_conn = mission_control_get_connection (mc, account, NULL);
-	g_object_unref (mc);
-	g_return_val_if_fail (tp_conn != NULL, NULL);
-
 	list = g_object_new (EMPATHY_TYPE_CONTACT_LIST, NULL);
 	priv = GET_PRIV (list);
 
-	priv->tp_conn = tp_conn;
+	priv->tp_conn = mission_control_get_connection (mc, account, NULL);
 	priv->account = g_object_ref (account);
+	priv->mc = mc;
 
 	g_signal_connect (priv->tp_conn, "destroy",
 			  G_CALLBACK (contact_list_destroy_cb),
 			  list);
+	dbus_g_proxy_connect_signal (DBUS_G_PROXY (priv->mc),
+				     "AccountStatusChanged",
+				     G_CALLBACK (contact_list_status_changed_cb),
+				     list, NULL);
 
 	priv->aliasing_iface = tp_conn_get_interface (priv->tp_conn,
 						      TELEPATHY_CONN_IFACE_ALIASING_QUARK);
@@ -753,12 +768,14 @@ contact_list_finalize_proxies (EmpathyContactList *list)
 
 	priv = GET_PRIV (list);
 
-	g_signal_handlers_disconnect_by_func (priv->tp_conn,
-					      contact_list_destroy_cb,
-					      list);
-	dbus_g_proxy_disconnect_signal (DBUS_G_PROXY (priv->tp_conn), "NewChannel",
-					G_CALLBACK (contact_list_newchannel_cb),
-					list);
+	if (priv->tp_conn) {
+		g_signal_handlers_disconnect_by_func (priv->tp_conn,
+						      contact_list_destroy_cb,
+						      list);
+		dbus_g_proxy_disconnect_signal (DBUS_G_PROXY (priv->tp_conn), "NewChannel",
+						G_CALLBACK (contact_list_newchannel_cb),
+						list);
+	}
 
 	if (priv->aliasing_iface) {
 		dbus_g_proxy_disconnect_signal (priv->aliasing_iface,
@@ -783,15 +800,15 @@ contact_list_finalize_proxies (EmpathyContactList *list)
 }
 
 static void
-contact_list_destroy_cb (DBusGProxy           *proxy,
+contact_list_destroy_cb (DBusGProxy         *proxy,
 			 EmpathyContactList *list)
 {
 	EmpathyContactListPriv *priv;
 
 	priv = GET_PRIV (list);
 
-	gossip_debug (DEBUG_DOMAIN, "Connection destroyed. "
-				    "Account disconnected or CM crashed.");
+	gossip_debug (DEBUG_DOMAIN, "Connection destroyed... "
+		      "Account disconnected or CM crashed");
 
 	/* DBus proxies should NOT be used anymore */
 	g_object_unref (priv->tp_conn);
@@ -1765,5 +1782,34 @@ contact_list_presences_table_foreach (const gchar     *state_str,
 		gossip_presence_set_status (*presence,
 					    g_value_get_string (message));
 	}
+}
+
+static void
+contact_list_status_changed_cb (MissionControl                  *mc,
+				TelepathyConnectionStatus        status,
+				McPresence                       presence,
+				TelepathyConnectionStatusReason  reason,
+				const gchar                     *unique_name,
+				EmpathyContactList              *list)
+{
+	EmpathyContactListPriv *priv;
+	McAccount              *account;
+
+	priv = GET_PRIV (list);
+
+	account = mc_account_lookup (unique_name);
+	if (status != TP_CONN_STATUS_DISCONNECTED ||
+	    !gossip_account_equal (account, priv->account)) {
+		g_object_unref (account);
+		return;
+	}
+
+	/* We are disconnected, do just like if the connection was destroyed */
+	g_signal_handlers_disconnect_by_func (priv->tp_conn,
+					      contact_list_destroy_cb,
+					      list);
+	contact_list_destroy_cb (DBUS_G_PROXY (priv->tp_conn), list);
+
+	g_object_unref (account);
 }
 

@@ -26,6 +26,7 @@
 #include <glib.h>
 
 #include <libtelepathy/tp-chan.h>
+#include <libtelepathy/tp-constants.h>
 
 #include <libmissioncontrol/mc-account.h>
 
@@ -54,24 +55,16 @@ struct _EmpathyTpChatClass {
 	GObjectClass parent_class;
 };
 
-typedef enum {
-    EMPATHY_TP_CHAT_STATE_GONE,
-    EMPATHY_TP_CHAT_STATE_INACTIVE,
-    EMPATHY_TP_CHAT_STATE_ACTIVE,
-    EMPATHY_TP_CHAT_STATE_PAUSED,
-    EMPATHY_TP_CHAT_STATE_COMPOSING
-} EmpathyTpChatState;
-
 GType          empathy_tp_chat_get_type         (void) G_GNUC_CONST;
-EmpathyTpChat *empathy_tp_chat_new              (McAccount          *account,
-						 TpChan             *tp_chan);
-EmpathyTpChat *empathy_tp_chat_new_with_contact (GossipContact      *contact);
-void           empathy_tp_chat_request_pending  (EmpathyTpChat      *chat);
-void           empathy_tp_chat_send             (EmpathyTpChat      *chat,
-						 GossipMessage      *message);
-void           empathy_tp_chat_send_state       (EmpathyTpChat      *chat,
-						 EmpathyTpChatState  state);
-const gchar *  empathy_tp_chat_get_id           (EmpathyTpChat      *chat);
+EmpathyTpChat *empathy_tp_chat_new              (McAccount                 *account,
+						 TpChan                    *tp_chan);
+EmpathyTpChat *empathy_tp_chat_new_with_contact (GossipContact             *contact);
+void           empathy_tp_chat_request_pending  (EmpathyTpChat             *chat);
+void           empathy_tp_chat_send             (EmpathyTpChat             *chat,
+						 GossipMessage             *message);
+void           empathy_tp_chat_set_state        (EmpathyTpChat             *chat,
+						 TelepathyChannelChatState  state);
+const gchar *  empathy_tp_chat_get_id           (EmpathyTpChat             *chat);
 
 G_END_DECLS
 

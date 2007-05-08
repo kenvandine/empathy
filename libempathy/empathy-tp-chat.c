@@ -51,33 +51,35 @@ struct _EmpathyTpChatPriv {
 	DBusGProxy	      *chat_state_iface;
 };
 
-static void empathy_tp_chat_class_init (EmpathyTpChatClass *klass);
-static void empathy_tp_chat_init       (EmpathyTpChat      *chat);
-static void tp_chat_finalize           (GObject            *object);
-static void tp_chat_destroy_cb         (TpChan             *text_chan,
-					EmpathyTpChat      *chat);
-static void tp_chat_received_cb        (DBusGProxy         *text_iface,
-					guint               message_id,
-					guint               timestamp,
-					guint               from_handle,
-					guint               message_type,
-					guint               message_flags,
-					gchar              *message_body,
-					EmpathyTpChat      *chat);
-static void tp_chat_sent_cb            (DBusGProxy         *text_iface,
-					guint               timestamp,
-					guint               message_type,
-					gchar              *message_body,
-					EmpathyTpChat      *chat);
-static void tp_chat_state_changed_cb   (DBusGProxy         *chat_state_iface,
-					guint               handle,
-					EmpathyTpChatState  state,
-					EmpathyTpChat      *chat);
-static void tp_chat_emit_message       (EmpathyTpChat      *chat,
-					guint               type,
-					guint               timestamp,
-					guint               from_handle,
-					const gchar        *message_body);
+static void empathy_tp_chat_class_init (EmpathyTpChatClass        *klass);
+static void empathy_tp_chat_init       (EmpathyTpChat             *chat);
+static void tp_chat_finalize           (GObject                   *object);
+static void tp_chat_destroy_cb         (TpChan                    *text_chan,
+					EmpathyTpChat             *chat);
+static void tp_chat_closed_cb          (TpChan                    *text_chan,
+					EmpathyTpChat             *chat);
+static void tp_chat_received_cb        (DBusGProxy                *text_iface,
+					guint                      message_id,
+					guint                      timestamp,
+					guint                      from_handle,
+					guint                      message_type,
+					guint                      message_flags,
+					gchar                     *message_body,
+					EmpathyTpChat             *chat);
+static void tp_chat_sent_cb            (DBusGProxy                *text_iface,
+					guint                      timestamp,
+					guint                      message_type,
+					gchar                     *message_body,
+					EmpathyTpChat             *chat);
+static void tp_chat_state_changed_cb   (DBusGProxy                *chat_state_iface,
+					guint                      handle,
+					TelepathyChannelChatState  state,
+					EmpathyTpChat             *chat);
+static void tp_chat_emit_message       (EmpathyTpChat             *chat,
+					guint                      type,
+					guint                      timestamp,
+					guint                      from_handle,
+					const gchar               *message_body);
 
 enum {
 	MESSAGE_RECEIVED,
@@ -207,6 +209,9 @@ empathy_tp_chat_new (McAccount *account,
 	g_signal_connect (priv->tp_chan, "destroy",
 			  G_CALLBACK (tp_chat_destroy_cb),
 			  chat);
+	dbus_g_proxy_connect_signal (DBUS_G_PROXY (priv->tp_chan), "Closed",
+				     G_CALLBACK (tp_chat_closed_cb),
+				     chat, NULL);
 	dbus_g_proxy_connect_signal (priv->text_iface, "Received",
 				     G_CALLBACK (tp_chat_received_cb),
 				     chat, NULL);
@@ -354,8 +359,8 @@ empathy_tp_chat_send (EmpathyTpChat *chat,
 }
 
 void
-empathy_tp_chat_send_state (EmpathyTpChat      *chat,
-			    EmpathyTpChatState  state)
+empathy_tp_chat_set_state (EmpathyTpChat             *chat,
+			   TelepathyChannelChatState  state)
 {
 	EmpathyTpChatPriv *priv;
 	GError            *error = NULL;
@@ -432,7 +437,7 @@ tp_chat_destroy_cb (TpChan        *text_chan,
 
 	priv = GET_PRIV (chat);
 
-	gossip_debug (DEBUG_DOMAIN, "Channel destroyed");
+	gossip_debug (DEBUG_DOMAIN, "Channel Closed or CM crashed");
 
 	g_object_unref  (priv->tp_chan);
 	priv->tp_chan = NULL;
@@ -440,6 +445,22 @@ tp_chat_destroy_cb (TpChan        *text_chan,
 	priv->chat_state_iface = NULL;
 
 	g_signal_emit (chat, signals[DESTROY], 0);
+}
+
+static void
+tp_chat_closed_cb (TpChan        *text_chan,
+		   EmpathyTpChat *chat)
+{
+	EmpathyTpChatPriv *priv;
+
+	priv = GET_PRIV (chat);
+
+	/* The channel is closed, do just like if the proxy was destroyed */
+	g_signal_handlers_disconnect_by_func (priv->tp_chan,
+					      tp_chat_destroy_cb,
+					      chat);
+	tp_chat_destroy_cb (text_chan, chat);
+
 }
 
 static void
@@ -489,10 +510,10 @@ tp_chat_sent_cb (DBusGProxy    *text_iface,
 }
 
 static void
-tp_chat_state_changed_cb (DBusGProxy         *chat_state_iface,
-			  guint               handle,
-			  EmpathyTpChatState  state,
-			  EmpathyTpChat      *chat)
+tp_chat_state_changed_cb (DBusGProxy                *chat_state_iface,
+			  guint                      handle,
+			  TelepathyChannelChatState  state,
+			  EmpathyTpChat             *chat)
 {
 	EmpathyTpChatPriv *priv;
 	GossipContact     *contact;
@@ -500,6 +521,11 @@ tp_chat_state_changed_cb (DBusGProxy         *chat_state_iface,
 	priv = GET_PRIV (chat);
 
 	contact = empathy_contact_list_get_from_handle (priv->list, handle);
+
+	gossip_debug (DEBUG_DOMAIN, "Chat state changed for %s (%d): %d",
+		      gossip_contact_get_name (contact),
+		      handle,
+		      state);
 
 	g_signal_emit (chat, signals[CHAT_STATE_CHANGED], 0, contact, state);
 

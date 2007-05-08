@@ -39,6 +39,8 @@
 #include <libempathy-gtk/gossip-status-presets.h>
 #include <libempathy-gtk/gossip-accounts-dialog.h>
 
+#include "empathy-filter.h"
+
 #define DEBUG_DOMAIN "Empathy"
 
 static void error_cb              (MissionControl *mc,
@@ -118,6 +120,18 @@ icon_activate_cb (GtkStatusIcon *status_icon,
 	}
 }
 
+static void
+new_channel_cb (EmpathyFilter *filter,
+		TpConn        *tp_conn,
+		TpChan        *tp_chan,
+		guint          context_handle,
+		gpointer       user_data)
+{
+	gossip_debug (DEBUG_DOMAIN, "Filtering context handle: %d",
+		      context_handle);
+	empathy_filter_process (filter, context_handle, TRUE);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -126,8 +140,15 @@ main (int argc, char *argv[])
 	GtkWidget        *window;
 	MissionControl   *mc;
 	McAccountMonitor *monitor;
+	EmpathyFilter    *filter;
 
 	gtk_init (&argc, &argv);
+
+	/* Setting up channel filter */
+	filter = empathy_filter_new ();
+	g_signal_connect (filter, "new-channel",
+			  G_CALLBACK (new_channel_cb),
+			  NULL);
 
 	/* Setting up MC */
 	monitor = mc_account_monitor_new ();

@@ -133,6 +133,10 @@ static void             chat_composing_start              (GossipChat      *chat
 static void             chat_composing_stop               (GossipChat      *chat);
 static void             chat_composing_remove_timeout     (GossipChat      *chat);
 static gboolean         chat_composing_stop_timeout_cb    (GossipChat      *chat);
+static void             chat_state_changed_cb             (EmpathyTpChat   *tp_chat,
+							   GossipContact   *contact,
+							   TelepathyChannelChatState  state,
+							   GossipChat      *chat);
 
 enum {
 	COMPOSING,
@@ -954,10 +958,8 @@ chat_composing_start (GossipChat *chat)
 		/* Just restart the timeout */
 		chat_composing_remove_timeout (chat);
 	} else {
-	/* FIXME:
-		gossip_session_send_composing (gossip_app_get_session (),
-					       priv->contact, TRUE);
-					      */
+		empathy_tp_chat_set_state (priv->tp_chat,
+					   TP_CHANNEL_CHAT_STATE_COMPOSING);
 	}
 
 	priv->composing_stop_timeout_id = g_timeout_add (
@@ -974,9 +976,8 @@ chat_composing_stop (GossipChat *chat)
 	priv = GET_PRIV (chat);
 
 	chat_composing_remove_timeout (chat);
-	/* FIXME:
-	gossip_session_send_composing (gossip_app_get_session (),
-				       priv->contact, FALSE);*/
+	empathy_tp_chat_set_state (priv->tp_chat,
+				   TP_CHANNEL_CHAT_STATE_ACTIVE);
 }
 
 static void
@@ -1000,11 +1001,19 @@ chat_composing_stop_timeout_cb (GossipChat *chat)
 	priv = GET_PRIV (chat);
 
 	priv->composing_stop_timeout_id = 0;
-	/* FIXME:
-	gossip_session_send_composing (gossip_app_get_session (),
-				       priv->contact, FALSE);*/
+	empathy_tp_chat_set_state (priv->tp_chat,
+				   TP_CHANNEL_CHAT_STATE_ACTIVE);
 
 	return FALSE;
+}
+
+static void
+chat_state_changed_cb (EmpathyTpChat             *tp_chat,
+		       GossipContact             *contact,
+		       TelepathyChannelChatState  state,
+		       GossipChat                *chat)
+{
+	/* FIXME: not yet implemented */
 }
 
 gboolean
@@ -1218,6 +1227,9 @@ gossip_chat_set_tp_chat (GossipChat    *chat,
 
 	g_signal_connect (tp_chat, "message-received",
 			  G_CALLBACK (chat_message_received_cb),
+			  chat);
+	g_signal_connect (tp_chat, "chat-state-changed",
+			  G_CALLBACK (chat_state_changed_cb),
 			  chat);
 	g_signal_connect (tp_chat, "destroy",
 			  G_CALLBACK (chat_destroy_cb),

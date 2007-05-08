@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<node name="/Filter">
+  <interface name="org.gnome.Empathy.Filter">
+    <annotation name="org.freedesktop.DBus.GLib.ClientCSymbol" value="empathy_filter"/>
+    <method name="HandleChannel">
+      <arg direction="in" type="s" name="bus_name" />
+      <arg direction="in" type="o" name="connection" />
+      <arg direction="in" type="s" name="channel_type" />
+      <arg direction="in" type="o" name="channel" />
+      <arg direction="in" type="u" name="handle_type" />
+      <arg direction="in" type="u" name="handle" />
+      <arg direction="in" type="u" name="context_handle" />
+    </method>
+    <signal name="Process">
+      <arg type="u" name="context_handle" />
+      <arg type="u" name="result" />
+    </signal>
+  </interface>
+</node>

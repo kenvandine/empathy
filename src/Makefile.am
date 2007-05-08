@@ -1,33 +1,28 @@
-cflags = $(EMPATHY_CFLAGS)					\
-	 $(WARN_CFLAGS)
+AM_CPPFLAGS =                                           	\
+	-I.                                             	\
+	-I$(top_srcdir)                                 	\
+	$(EMPATHY_CFLAGS)					\
+	$(WARN_CFLAGS)
 
-libs =	$(top_builddir)/libempathy/libempathy.la		\
+AM_LDFLAGS =							\
+	$(top_builddir)/libempathy/libempathy.la		\
 	$(top_builddir)/libempathy-gtk/libempathy-gtk.la	\
 	$(EMPATHY_LIBS)
 
 bin_PROGRAMS = empathy empathy-accounts empathy-chat empathy-contact-list
 
-empathy_SOURCES = empathy-main.c
-empathy_CPPFLAGS = $(cflags)
-empathy_LDFLAGS = $(libs)
-
+empathy_SOURCES =						\
+	empathy-main.c						\
+	empathy-filter.c	empathy-filter.h
 empathy_accounts_SOURCES = empathy-accounts-main.c
-empathy_accounts_CPPFLAGS = $(cflags)
-empathy_accounts_LDFLAGS = $(libs)
-
 empathy_chat_SOURCES = empathy-chat-main.c
-empathy_chat_CPPFLAGS = $(cflags)
-empathy_chat_LDFLAGS = $(libs)
-
 empathy_contact_list_SOURCES = empathy-contact-list-main.c
-empathy_contact_list_CPPFLAGS = $(cflags)
-empathy_contact_list_LDFLAGS = $(libs)
 
 # MC plugin
-pluginlib_LTLIBRARIES = libempathy-filter-plugin.la
-libempathy_filter_plugin_la_SOURCES = empathy-filter-plugin.c
-libempathy_filter_plugin_la_CPPFLAGS = $(MISSION_CONTROL_PLUGINS_CFLAGS)
-libempathy_filter_plugin_la_LDFLAGS = $(MISSION_CONTROL_PLUGINS_LIBS)
+#pluginlib_LTLIBRARIES = libempathy-filter-plugin.la
+#libempathy_filter_plugin_la_SOURCES = empathy-filter-plugin.c
+#libempathy_filter_plugin_la_CPPFLAGS = $(MISSION_CONTROL_PLUGINS_CFLAGS)
+#libempathy_filter_plugin_la_LDFLAGS = $(MISSION_CONTROL_PLUGINS_LIBS)
 
 # Dbus service file
 servicedir = $(datadir)/dbus-1/services
@@ -46,11 +41,20 @@ autostart_in_files = empathy.desktop.in
 autostart_DATA = $(autostart_in_files:.desktop.in=.desktop)
 @INTLTOOL_DESKTOP_RULE@
 
+# Empathy filter DBus API
+empathy-filter-glue.h: empathy-filter.xml
+	$(LIBTOOL) --mode=execute $(DBUS_BINDING_TOOL) --prefix=empathy_filter --mode=glib-server --output=$@ $<
+empathy-filter-gen.h: empathy-filter.xml
+	$(LIBTOOL) --mode=execute $(DBUS_BINDING_TOOL) --prefix=empathy_filter --mode=glib-client --output=$@ $<
+
 BUILT_SOURCES =							\
-	org.gnome.Empathy.Chat.service
+	org.gnome.Empathy.Chat.service				\
+	empathy-filter-glue.h					\
+	empathy-filter-gen.h
 
 EXTRA_DIST =							\
 	org.gnome.Empathy.Chat.service.in			\
+	empathy-filter.xml					\
 	$(autostart_DATA)					\
 	$(chandler_DATA)
 

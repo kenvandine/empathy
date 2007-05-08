@@ -1,4 +1,6 @@
 AM_CPPFLAGS =                                           \
+	-I.                                             \
+	-I$(top_srcdir)                                 \
 	-DDATADIR=\""$(datadir)"\"              	\
 	-DLOCALEDIR=\""$(datadir)/locale"\"		\
 	$(LIBEMPATHY_CFLAGS)				\
