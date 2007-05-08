@@ -20,8 +20,14 @@ update-icon-cache:
 		echo "***   $(gtk_update_icon_cache)"; \
 	fi
 
-EXTRA_DIST = 		\
-	$(image_DATA)	\
+autostartdir = $(datadir)/gnome/autostart
+autostart_in_files = empathy.desktop.in
+autostart_DATA = $(autostart_in_files:.desktop.in=.desktop)
+@INTLTOOL_DESKTOP_RULE@
+
+EXTRA_DIST = 				\
+	$(image_DATA)			\
+	$(autostart_DATA)		\
 	$(profile_DATA)
 
 

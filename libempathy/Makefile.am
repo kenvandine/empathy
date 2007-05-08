@@ -6,9 +6,6 @@ AM_CPPFLAGS =                                           \
 	$(LIBEMPATHY_CFLAGS)				\
 	$(WARN_CFLAGS)
 
-AM_LDFLAGS =						\
-	$(LIBEMPATHY_LIBS)
-
 BUILT_SOURCES = 					\
 	empathy-marshal.h				\
 	empathy-marshal.c				\
@@ -32,6 +29,9 @@ libempathy_la_SOURCES =             						\
 	empathy-tp-chat.c		empathy-tp-chat.h			\
 	empathy-chandler.c		empathy-chandler.h			\
 	empathy-marshal-main.c
+
+libempathy_la_LIBADD =		\
+	$(LIBEMPATHY_LIBS)
 
 libempathy_includedir = $(includedir)/empathy/
 

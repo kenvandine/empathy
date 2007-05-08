@@ -1,28 +1,42 @@
-AM_CPPFLAGS =                                           	\
-	-I.                                             	\
-	-I$(top_srcdir)                                 	\
-	$(EMPATHY_CFLAGS)					\
+cppflags =			\
+	-I.			\
+	-I$(top_srcdir)		\
+	$(EMPATHY_CFLAGS)	\
 	$(WARN_CFLAGS)
 
-AM_LDFLAGS =							\
-	$(top_builddir)/libempathy/libempathy.la		\
+libs =								\
 	$(top_builddir)/libempathy-gtk/libempathy-gtk.la	\
 	$(EMPATHY_LIBS)
 
-bin_PROGRAMS = empathy empathy-accounts empathy-chat empathy-contact-list
+bin_PROGRAMS =			\
+	empathy			\
+	empathy-chat		\
+	empathy-accounts	\
+	empathy-contact-list
 
 empathy_SOURCES =						\
 	empathy-main.c						\
 	empathy-filter.c	empathy-filter.h
+empathy_CPPFLAGS = $(cppflags)
+empathy_LDADD = $(libs)
+
 empathy_accounts_SOURCES = empathy-accounts-main.c
+empathy_accounts_CPPFLAGS = $(cppflags)
+empathy_accounts_LDADD = $(libs)
+
 empathy_chat_SOURCES = empathy-chat-main.c
+empathy_chat_CPPFLAGS = $(cppflags)
+empathy_chat_LDADD = $(libs)
+
 empathy_contact_list_SOURCES = empathy-contact-list-main.c
+empathy_contact_list_CPPFLAGS = $(cppflags)
+empathy_contact_list_LDADD = $(libs)
 
 # MC plugin
 #pluginlib_LTLIBRARIES = libempathy-filter-plugin.la
 #libempathy_filter_plugin_la_SOURCES = empathy-filter-plugin.c
 #libempathy_filter_plugin_la_CPPFLAGS = $(MISSION_CONTROL_PLUGINS_CFLAGS)
-#libempathy_filter_plugin_la_LDFLAGS = $(MISSION_CONTROL_PLUGINS_LIBS)
+#libempathy_filter_plugin_la_LIBADD = $(MISSION_CONTROL_PLUGINS_LIBS)
 
 # Dbus service file
 servicedir = $(datadir)/dbus-1/services
@@ -35,11 +49,6 @@ $(service_DATA): $(service_in_files) Makefile
 
 chandlerdir = $(datadir)/telepathy/managers
 chandler_DATA = empathy-chat.chandler
-
-autostartdir = $(datadir)/gnome/autostart
-autostart_in_files = empathy.desktop.in
-autostart_DATA = $(autostart_in_files:.desktop.in=.desktop)
-@INTLTOOL_DESKTOP_RULE@
 
 # Empathy filter DBus API
 empathy-filter-glue.h: empathy-filter.xml
