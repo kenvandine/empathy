@@ -36,7 +36,6 @@
 #include <libempathy/gossip-debug.h>
 #include <libempathy-gtk/empathy-main-window.h>
 #include <libempathy-gtk/empathy-images.h>
-#include <libempathy-gtk/gossip-status-presets.h>
 #include <libempathy-gtk/gossip-accounts-dialog.h>
 
 #include "empathy-filter.h"
@@ -50,7 +49,7 @@ static void service_ended_cb      (MissionControl *mc,
 				   gpointer        user_data);
 static void start_mission_control (MissionControl *mc);
 static void destroy_cb            (GtkWidget      *window,
-				   gpointer        user_data);
+				   MissionControl *mc);
 static void icon_activate_cb      (GtkStatusIcon  *status_icon,
 				   GtkWidget      *window);
 
@@ -94,18 +93,21 @@ start_mission_control (MissionControl *mc)
 
 	gossip_debug (DEBUG_DOMAIN, "Starting Mission Control...");
 
-	gossip_status_presets_get_all ();
 	mission_control_set_presence (mc,
-				      gossip_status_presets_get_default_state (),
-				      gossip_status_presets_get_default_status (),
+				      MC_PRESENCE_AVAILABLE,
+				      NULL,
 				      (McCallback) error_cb,
 				      NULL);
 }
 
 static void
-destroy_cb (GtkWidget *window,
-	    gpointer   user_data)
+destroy_cb (GtkWidget      *window,
+	    MissionControl *mc)
 {
+	mission_control_set_presence (mc,
+				      MC_PRESENCE_OFFLINE,
+				      NULL, NULL, NULL);
+
 	gtk_main_quit ();
 }
 
@@ -165,7 +167,7 @@ main (int argc, char *argv[])
 	window = empathy_main_window_show ();
 	g_signal_connect (window, "destroy",
 			  G_CALLBACK (destroy_cb),
-			  NULL);
+			  mc);
 	g_signal_connect (window, "delete-event",
 			  G_CALLBACK (gtk_widget_hide_on_delete),
 			  NULL);
