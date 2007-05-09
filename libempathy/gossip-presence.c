@@ -278,11 +278,9 @@ gossip_presence_state_get_default_status (McPresence state)
 	case MC_PRESENCE_EXTENDED_AWAY:
 		return _("Away");
 	case MC_PRESENCE_HIDDEN:
-		return _("Unavailable");
 	case MC_PRESENCE_OFFLINE:
-		return _("Offline");
 	case MC_PRESENCE_UNSET:
-		return _("Unset");
+		return _("Offline");
 	default:
 		g_assert_not_reached ();
 	}

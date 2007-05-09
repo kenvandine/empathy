@@ -34,24 +34,25 @@
 #include <libmissioncontrol/mission-control.h>
 
 #include <libempathy/gossip-debug.h>
+#include <libempathy/gossip-presence.h>
 #include <libempathy-gtk/empathy-main-window.h>
-#include <libempathy-gtk/empathy-images.h>
+#include <libempathy-gtk/empathy-status-icon.h>
 #include <libempathy-gtk/gossip-accounts-dialog.h>
 
 #include "empathy-filter.h"
 
 #define DEBUG_DOMAIN "EmpathyMain"
 
-static void error_cb              (MissionControl *mc,
-				   GError         *error,
-				   gpointer        data);
-static void service_ended_cb      (MissionControl *mc,
-				   gpointer        user_data);
-static void start_mission_control (MissionControl *mc);
-static void destroy_cb            (GtkWidget      *window,
-				   MissionControl *mc);
-static void icon_activate_cb      (GtkStatusIcon  *status_icon,
-				   GtkWidget      *window);
+static void error_cb              (MissionControl    *mc,
+				   GError            *error,
+				   gpointer           data);
+static void service_ended_cb      (MissionControl    *mc,
+				   gpointer           user_data);
+static void start_mission_control (MissionControl    *mc);
+static void destroy_cb            (GtkWidget         *window,
+				   MissionControl    *mc);
+static void icon_activate_cb      (EmpathyStatusIcon *icon,
+				   GtkWidget         *window);
 
 static void
 error_cb (MissionControl *mc,
@@ -112,8 +113,8 @@ destroy_cb (GtkWidget      *window,
 }
 
 static void
-icon_activate_cb (GtkStatusIcon *status_icon,
-		  GtkWidget     *window)
+icon_activate_cb (EmpathyStatusIcon *icon,
+		  GtkWidget         *window)
 {
 	if (GTK_WIDGET_VISIBLE (window)) {
 		gtk_widget_hide (window);
@@ -137,12 +138,12 @@ new_channel_cb (EmpathyFilter *filter,
 int
 main (int argc, char *argv[])
 {
-	GList            *accounts;
-	GtkStatusIcon    *icon;
-	GtkWidget        *window;
-	MissionControl   *mc;
-	McAccountMonitor *monitor;
-	EmpathyFilter    *filter;
+	GList             *accounts;
+	EmpathyStatusIcon *icon;
+	GtkWidget         *window;
+	MissionControl    *mc;
+	McAccountMonitor  *monitor;
+	EmpathyFilter     *filter;
 
 	gtk_init (&argc, &argv);
 
@@ -172,10 +173,8 @@ main (int argc, char *argv[])
 			  G_CALLBACK (gtk_widget_hide_on_delete),
 			  NULL);
 
-	/* Setting up the tray icon */
-	icon = gtk_status_icon_new_from_icon_name (EMPATHY_IMAGE_MESSAGE);
-	gtk_status_icon_set_tooltip (icon, "Empathy - click here to show/hide the main window");
-	gtk_status_icon_set_visible (icon, TRUE);
+	/* Setting up the status icon */
+	icon = empathy_status_icon_new ();
 	g_signal_connect (icon, "activate",
 			  G_CALLBACK (icon_activate_cb),
 			  window);

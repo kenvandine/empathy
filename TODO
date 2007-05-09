@@ -8,6 +8,7 @@ Things you can do if you want to help:
  - Set up the translation system and import po files from gossip? Or re-translate everything?
  - Fix setting subscription for contacts in EmpathyContactList.
  - Write a MC plugin to filter channels before dispatching them. For example we need a GtkStatusIcon that blink when an event arrives (text/voip/ft channel) and tells the MC to dispatch the channel only when the user clicked the icon. Like in gossip.
+ - Make use of NetworkManager and gnome-screensaver to set the presence
  - Testing and Bugfixing.
 
 SoC projects:

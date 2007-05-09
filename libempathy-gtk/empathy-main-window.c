@@ -33,6 +33,7 @@
 #include <libempathy/gossip-conf.h>
 #include <libempathy/gossip-contact.h>
 #include <libempathy/gossip-debug.h>
+#include <libempathy/gossip-utils.h>
 
 #include "empathy-main-window.h"
 #include "ephy-spinner.h"
@@ -132,7 +133,7 @@ static void     main_window_accels_save                    (void);
 static void     main_window_connection_items_setup         (EmpathyMainWindow   *window,
 							    GladeXML            *glade);
 //static void     main_window_connection_items_update        (void);
-static void     main_window_presence_changed_cb            (DBusGProxy          *proxy,
+static void     main_window_presence_changed_cb            (MissionControl      *mc,
 							    McPresence           state,
 							    EmpathyMainWindow   *window);
 static void     main_window_presence_chooser_changed_cb    (GtkWidget           *chooser,
@@ -228,26 +229,22 @@ empathy_main_window_show (void)
 	gtk_widget_hide (window->edit_context);
 	gtk_widget_hide (window->edit_context_separator);
 
-	/* Set up presence chooser
-	 * FIXME: Update status message not yet supported by MC 
-	 */
+	/* Set up presence chooser */
 	window->mc = mission_control_new (tp_get_bus ());
 	window->presence_chooser = gossip_presence_chooser_new ();
-	gtk_widget_show (window->presence_chooser);
 	gossip_presence_chooser_set_flash_interval (GOSSIP_PRESENCE_CHOOSER (window->presence_chooser),
 						    FLASH_TIMEOUT);
-	state = mission_control_get_presence (window->mc, NULL);
-	gossip_presence_chooser_set_state (GOSSIP_PRESENCE_CHOOSER (window->presence_chooser),
-					   state);
 	dbus_g_proxy_connect_signal (DBUS_G_PROXY (window->mc),
-				     "PresenceStatusRequested",
+				     "PresenceStatusActual",
 				     G_CALLBACK (main_window_presence_changed_cb),
 				     window, NULL);
 	g_signal_connect (window->presence_chooser,
 			  "changed",
 			  G_CALLBACK (main_window_presence_chooser_changed_cb),
 			  window);
-
+	state = mission_control_get_presence_actual (window->mc, NULL);
+	main_window_presence_changed_cb (window->mc, state, window);
+	gtk_widget_show (window->presence_chooser);
 
 	item = gtk_tool_item_new ();
 	gtk_widget_show (GTK_WIDGET (item));
@@ -762,13 +759,26 @@ main_window_connection_items_update (void)
 #endif
 
 static void
-main_window_presence_changed_cb (DBusGProxy        *proxy,
+main_window_presence_changed_cb (MissionControl    *mc,
 				 McPresence         state,
 				 EmpathyMainWindow *window)
 {
+	gchar *status;
+
 	gossip_debug (DEBUG_DOMAIN, "presence changed to %d", state);
+
+	status = mission_control_get_presence_message_actual (window->mc, NULL);
+
+	if (G_STR_EMPTY (status)) {
+		g_free (status);
+		status = g_strdup (gossip_presence_state_get_default_status (state));
+	}
+
 	gossip_presence_chooser_set_state (GOSSIP_PRESENCE_CHOOSER (window->presence_chooser),
 					   state);
+	gossip_presence_chooser_set_status (GOSSIP_PRESENCE_CHOOSER (window->presence_chooser),
+					    status);
+	g_free (status);
 }
 
 static void
