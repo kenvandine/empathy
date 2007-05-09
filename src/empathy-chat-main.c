@@ -33,13 +33,67 @@
 #include <libmissioncontrol/mc-account.h>
 
 #include <libempathy/gossip-contact.h>
+#include <libempathy/gossip-debug.h>
 #include <libempathy/empathy-chandler.h>
 #include <libempathy/empathy-contact-manager.h>
 #include <libempathy/empathy-contact-list.h>
 #include <libempathy-gtk/gossip-private-chat.h>
 
+#define DEBUG_DOMAIN "ChatMain"
+
 #define BUS_NAME "org.gnome.Empathy.Chat"
 #define OBJECT_PATH "/org/freedesktop/Telepathy/ChannelHandler"
+
+/* Time to wait before exit, in seconds */
+#define EXIT_TIMEOUT 5
+
+
+static guint chat_count = 0;
+static guint exit_timeout = 0;
+
+
+static gboolean
+exit_timeout_cb (gpointer user_data)
+{
+	gossip_debug (DEBUG_DOMAIN, "Timeout, exiting");
+
+	gtk_main_quit ();
+
+	return FALSE;
+}
+
+static void
+exit_timeout_start (void)
+{
+	if (exit_timeout) {
+		return;
+	}
+
+	exit_timeout = g_timeout_add (EXIT_TIMEOUT * 1000,
+				      (GSourceFunc) exit_timeout_cb,
+				      NULL);
+}
+
+static void
+exit_timeout_stop (void)
+{
+	if (exit_timeout) {
+		gossip_debug (DEBUG_DOMAIN, "Exit timeout canceled");
+		g_source_remove (exit_timeout);
+		exit_timeout = 0;
+	}
+}
+
+static void
+chat_finalized_cb (gpointer    user_data,
+		   GossipChat *chat)
+{
+	chat_count--;
+	if (chat_count == 0) {
+		gossip_debug (DEBUG_DOMAIN, "No more chat, start exit timeout");
+		exit_timeout_start ();
+	}
+}
 
 static void
 new_channel_cb (EmpathyChandler *chandler,
@@ -63,6 +117,13 @@ new_channel_cb (EmpathyChandler *chandler,
 		contact = empathy_contact_list_get_from_handle (list, tp_chan->handle);
 
 		chat = gossip_private_chat_new_with_channel (contact, tp_chan);
+		g_object_weak_ref (G_OBJECT (chat),
+				   (GWeakNotify) chat_finalized_cb,
+				   NULL);
+
+		exit_timeout_stop ();
+		chat_count++;
+
 		gossip_chat_present (GOSSIP_CHAT (chat));
 
 		g_object_unref (mc);
@@ -80,6 +141,7 @@ main (int argc, char *argv[])
 
 	gtk_init (&argc, &argv);
 
+	exit_timeout_start ();
 	chandler = empathy_chandler_new (BUS_NAME, OBJECT_PATH);
 
 	g_signal_connect (chandler, "new-channel",

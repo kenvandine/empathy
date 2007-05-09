@@ -562,7 +562,7 @@ chat_input_key_press_event_cb (GtkWidget   *widget,
 
 	text_view_sw = gtk_widget_get_parent (GTK_WIDGET (chat->view));
 
-	if (IS_ENTER (event->keyval) && (event->state & GDK_SHIFT_MASK)) {
+	if (IS_ENTER (event->keyval) && (event->state & (GDK_SHIFT_MASK | GDK_CONTROL_MASK))) {
 		/* Newline for shift-enter. */
 		return FALSE;
 	}

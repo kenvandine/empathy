@@ -41,7 +41,7 @@
 
 #include "empathy-filter.h"
 
-#define DEBUG_DOMAIN "Empathy"
+#define DEBUG_DOMAIN "EmpathyMain"
 
 static void error_cb              (MissionControl *mc,
 				   GError         *error,
