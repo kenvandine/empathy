@@ -177,6 +177,7 @@ static void       chat_window_composing_cb              (GossipChat            *
 							 GossipChatWindow      *window);
 static void       chat_window_new_message_cb            (GossipChat            *chat,
 							 GossipMessage         *message,
+							 gboolean               is_backlog,
 							 GossipChatWindow      *window);
 static GtkNotebook* chat_window_detach_hook             (GtkNotebook           *source,
 							 GtkWidget             *page,
@@ -1339,6 +1340,7 @@ chat_window_composing_cb (GossipChat       *chat,
 static void
 chat_window_new_message_cb (GossipChat       *chat,
 			    GossipMessage    *message,
+			    gboolean          is_backlog,
 			    GossipChatWindow *window)
 {
 	GossipChatWindowPriv *priv;
@@ -1358,7 +1360,8 @@ chat_window_new_message_cb (GossipChat       *chat,
 
 	needs_urgency = FALSE;
 	if (gossip_chat_is_group_chat (chat)) {		
-		if (gossip_chat_should_highlight_nick (message)) {
+		if (!is_backlog && 
+		    gossip_chat_should_highlight_nick (message)) {
 			gossip_debug (DEBUG_DOMAIN, "Highlight this nick");
 			needs_urgency = TRUE;
 		}
@@ -1370,7 +1373,8 @@ chat_window_new_message_cb (GossipChat       *chat,
 		chat_window_set_urgency_hint (window, TRUE);
 	}
 
-	if (!g_list_find (priv->chats_new_msg, chat)) {
+	if (!is_backlog && 
+	    !g_list_find (priv->chats_new_msg, chat)) {
 		priv->chats_new_msg = g_list_prepend (priv->chats_new_msg, chat);
 		chat_window_update_status (window, chat);
 	}
@@ -1476,16 +1480,16 @@ chat_window_page_added_cb (GtkNotebook      *notebook,
 	gossip_chat_set_window (chat, window);
 
 	/* Connect chat signals for this window */
-	g_signal_connect (chat, "status_changed",
+	g_signal_connect (chat, "status-changed",
 			  G_CALLBACK (chat_window_status_changed_cb),
 			  window);
-	g_signal_connect (chat, "name_changed",
+	g_signal_connect (chat, "name-changed",
 			  G_CALLBACK (chat_window_name_changed_cb),
 			  window);
 	g_signal_connect (chat, "composing",
 			  G_CALLBACK (chat_window_composing_cb),
 			  window);
-	g_signal_connect (chat, "new_message",
+	g_signal_connect (chat, "new-message",
 			  G_CALLBACK (chat_window_new_message_cb),
 			  window);
 

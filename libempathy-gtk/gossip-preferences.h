@@ -46,6 +46,7 @@ G_BEGIN_DECLS
 #define GOSSIP_PREFS_UI_SHOW_AVATARS              GOSSIP_PREFS_PATH "/ui/show_avatars"
 #define GOSSIP_PREFS_UI_COMPACT_CONTACT_LIST      GOSSIP_PREFS_PATH "/ui/compact_contact_list"
 #define GOSSIP_PREFS_CONTACTS_SHOW_OFFLINE        GOSSIP_PREFS_PATH "/contacts/show_offline"
+#define GOSSIP_PREFS_CONTACTS_SORT_CRITERIUM      GOSSIP_PREFS_PATH "/contacts/sort_criterium"
 #define GOSSIP_PREFS_HINTS_CLOSE_MAIN_WINDOW      GOSSIP_PREFS_PATH "/hints/close_main_window"
 
 GtkWidget * gossip_preferences_show (void);

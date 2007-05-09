@@ -39,6 +39,7 @@
 #include <libempathy/gossip-debug.h>
 #include <libempathy/gossip-utils.h>
 #include <libempathy/gossip-conf.h>
+#include <libempathy/empathy-marshal.h>
 
 #include "gossip-chat.h"
 #include "gossip-chat-window.h"
@@ -175,9 +176,9 @@ gossip_chat_class_init (GossipChatClass *klass)
 			      G_SIGNAL_RUN_LAST,
 			      0,
 			      NULL, NULL,
-			      g_cclosure_marshal_VOID__OBJECT,
+			      empathy_marshal_VOID__OBJECT_BOOLEAN,
 			      G_TYPE_NONE,
-			      1, GOSSIP_TYPE_MESSAGE);
+			      2, GOSSIP_TYPE_MESSAGE, G_TYPE_BOOLEAN);
 
 	chat_signals[NAME_CHANGED] =
 		g_signal_new ("name-changed",
@@ -403,7 +404,7 @@ chat_message_received_cb (EmpathyTpChat *tp_chat,
 		// FIXME: gossip_sound_play (GOSSIP_SOUND_CHAT);
 	}
 
-	g_signal_emit_by_name (chat, "new-message", message);
+	g_signal_emit_by_name (chat, "new-message", message, FALSE);
 }
 
 void 

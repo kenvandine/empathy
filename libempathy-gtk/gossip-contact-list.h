@@ -30,6 +30,21 @@
 
 G_BEGIN_DECLS
 
+/*
+ * GossipContactListSort
+ */ 
+#define GOSSIP_TYPE_CONTACT_LIST_SORT    (gossip_contact_list_sort_get_type ())
+
+typedef enum {
+	GOSSIP_CONTACT_LIST_SORT_STATE,
+	GOSSIP_CONTACT_LIST_SORT_NAME
+} GossipContactListSort;
+
+GType gossip_contact_list_sort_get_type (void) G_GNUC_CONST;
+
+/*
+ * GossipContactList 
+ */ 
 #define GOSSIP_TYPE_CONTACT_LIST         (gossip_contact_list_get_type ())
 #define GOSSIP_CONTACT_LIST(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), GOSSIP_TYPE_CONTACT_LIST, GossipContactList))
 #define GOSSIP_CONTACT_LIST_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST((k), GOSSIP_TYPE_CONTACT_LIST, GossipContactListClass))
@@ -49,24 +64,27 @@ struct _GossipContactListClass {
 	GtkTreeViewClass       parent_class;
 };
 
-GType              gossip_contact_list_get_type           (void) G_GNUC_CONST;
-GossipContactList *gossip_contact_list_new                (void);
-GossipContact *    gossip_contact_list_get_selected       (GossipContactList *list);
-gchar *            gossip_contact_list_get_selected_group (GossipContactList *list);
-gboolean           gossip_contact_list_get_show_offline   (GossipContactList *list);
-gboolean           gossip_contact_list_get_show_avatars   (GossipContactList *list);
-gboolean           gossip_contact_list_get_is_compact     (GossipContactList *list);
-GtkWidget *        gossip_contact_list_get_contact_menu   (GossipContactList *list,
-							   GossipContact     *contact);
-GtkWidget *        gossip_contact_list_get_group_menu     (GossipContactList *list);
-void               gossip_contact_list_set_show_offline   (GossipContactList *list,
-							   gboolean           show_offline);
-void               gossip_contact_list_set_show_avatars   (GossipContactList *list,
-							   gboolean           show_avatars);
-void               gossip_contact_list_set_is_compact     (GossipContactList *list,
-							   gboolean           is_compact);
-void               gossip_contact_list_set_filter         (GossipContactList *list,
-							   const gchar       *filter);
+GType                 gossip_contact_list_get_type           (void) G_GNUC_CONST;
+GossipContactList *   gossip_contact_list_new                (void);
+GossipContact *       gossip_contact_list_get_selected       (GossipContactList     *list);
+gchar *               gossip_contact_list_get_selected_group (GossipContactList     *list);
+gboolean              gossip_contact_list_get_show_offline   (GossipContactList     *list);
+gboolean              gossip_contact_list_get_show_avatars   (GossipContactList     *list);
+gboolean              gossip_contact_list_get_is_compact     (GossipContactList     *list);
+GossipContactListSort gossip_contact_list_get_sort_criterium (GossipContactList     *list);
+GtkWidget *           gossip_contact_list_get_contact_menu   (GossipContactList     *list,
+							      GossipContact         *contact);
+GtkWidget *           gossip_contact_list_get_group_menu     (GossipContactList     *list);
+void                  gossip_contact_list_set_show_offline   (GossipContactList     *list,
+							      gboolean               show_offline);
+void                  gossip_contact_list_set_show_avatars   (GossipContactList     *list,
+							      gboolean               show_avatars);
+void                  gossip_contact_list_set_is_compact     (GossipContactList     *list,
+							      gboolean               is_compact);
+void                  gossip_contact_list_set_sort_criterium (GossipContactList     *list,
+							      GossipContactListSort  sort_criterium);
+void                  gossip_contact_list_set_filter         (GossipContactList     *list,
+							      const gchar           *filter);
 
 G_END_DECLS
 

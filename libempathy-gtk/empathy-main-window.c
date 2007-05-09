@@ -152,6 +152,9 @@ static void     main_window_notify_show_avatars_cb         (GossipConf          
 static void     main_window_notify_compact_contact_list_cb (GossipConf          *conf,
 							    const gchar         *key,
 							    EmpathyMainWindow   *window);
+static void     main_window_notify_sort_criterium_cb       (GossipConf          *conf,
+							    const gchar         *key,
+							    EmpathyMainWindow   *window);
 
 GtkWidget *
 empathy_main_window_show (void)
@@ -308,8 +311,9 @@ empathy_main_window_show (void)
 		gtk_window_move (GTK_WINDOW (window->window), x, y);
 	}
 
-	/* Get preferences */
 	conf = gossip_conf_get ();
+	
+	/* Show offline ? */
 	gossip_conf_get_bool (conf,
 			      GOSSIP_PREFS_CONTACTS_SHOW_OFFLINE,
 			      &show_offline);
@@ -321,6 +325,7 @@ empathy_main_window_show (void)
 	gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (show_offline_widget),
 					show_offline);
 
+	/* Show avatars ? */
 	gossip_conf_get_bool (conf,
 			      GOSSIP_PREFS_UI_SHOW_AVATARS,
 			      &show_avatars);
@@ -328,6 +333,9 @@ empathy_main_window_show (void)
 				GOSSIP_PREFS_UI_SHOW_AVATARS,
 				(GossipConfNotifyFunc) main_window_notify_show_avatars_cb,
 				window);
+	gossip_contact_list_set_show_avatars (window->contact_list, show_avatars);
+
+	/* Is compact ? */
 	gossip_conf_get_bool (conf,
 			      GOSSIP_PREFS_UI_COMPACT_CONTACT_LIST,
 			      &compact_contact_list);
@@ -335,11 +343,16 @@ empathy_main_window_show (void)
 				GOSSIP_PREFS_UI_COMPACT_CONTACT_LIST,
 				(GossipConfNotifyFunc) main_window_notify_compact_contact_list_cb,
 				window);
+	gossip_contact_list_set_is_compact (window->contact_list, compact_contact_list);
 
-	g_object_set (window->contact_list,
-		      "show-avatars", show_avatars,
-		      "is-compact", compact_contact_list,
-		      NULL);
+	/* Sort criterium */
+	gossip_conf_notify_add (conf,
+				GOSSIP_PREFS_CONTACTS_SORT_CRITERIUM,
+				(GossipConfNotifyFunc) main_window_notify_sort_criterium_cb,
+				window);
+	main_window_notify_sort_criterium_cb (conf,
+					      GOSSIP_PREFS_CONTACTS_SORT_CRITERIUM,
+					      window);
 
 	gtk_widget_show (window->window);
 
@@ -835,6 +848,29 @@ main_window_notify_compact_contact_list_cb (GossipConf        *conf,
 	if (gossip_conf_get_bool (conf, key, &compact_contact_list)) {
 		gossip_contact_list_set_is_compact (window->contact_list,
 						    compact_contact_list);
+	}
+}
+
+static void
+main_window_notify_sort_criterium_cb (GossipConf        *conf,
+				      const gchar       *key,
+				      EmpathyMainWindow *window)
+{
+	gchar *str = NULL;
+
+	if (gossip_conf_get_string (conf, key, &str)) {
+		GType       type;
+		GEnumClass *enum_class;
+		GEnumValue *enum_value;
+
+		type = gossip_contact_list_sort_get_type ();
+		enum_class = G_ENUM_CLASS (g_type_class_peek (type));
+		enum_value = g_enum_get_value_by_nick (enum_class, str);
+
+		if (enum_value) {
+			gossip_contact_list_set_sort_criterium (window->contact_list, 
+								enum_value->value);
+		}
 	}
 }
 

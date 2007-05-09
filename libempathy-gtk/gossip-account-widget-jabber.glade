@@ -21,7 +21,6 @@
 
   <child>
     <widget class="GtkTable" id="vbox_jabber_settings">
-      <property name="visible">True</property>
       <property name="n_rows">6</property>
       <property name="n_columns">3</property>
       <property name="homogeneous">False</property>

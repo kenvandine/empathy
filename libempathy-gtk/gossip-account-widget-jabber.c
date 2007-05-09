@@ -260,6 +260,8 @@ gossip_account_widget_jabber_new (McAccount *account)
 
 	g_object_unref (size_group);
 
+	gtk_widget_show (settings->vbox_settings);
+
 	return settings->vbox_settings;
 }
 

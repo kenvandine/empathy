@@ -36,6 +36,7 @@
 #include "gossip-ui-utils.h"
 #include "gossip-theme-manager.h"
 #include "gossip-spell.h"
+#include "gossip-contact-list.h"
 
 typedef struct {
 	GtkWidget *dialog;
@@ -48,6 +49,8 @@ typedef struct {
 	GtkWidget *combobox_chat_theme;
 	GtkWidget *checkbutton_theme_chat_room;
 	GtkWidget *checkbutton_separate_chat_windows;
+	GtkWidget *radiobutton_contact_list_sort_by_name;
+	GtkWidget *radiobutton_contact_list_sort_by_state;
 
 	GtkWidget *checkbutton_sounds_for_messages;
 	GtkWidget *checkbutton_sounds_when_busy;
@@ -109,6 +112,9 @@ static void     preferences_hookup_entry                 (GossipPreferences     
 static void     preferences_hookup_toggle_button         (GossipPreferences      *preferences,
 							  const gchar            *key,
 							  GtkWidget              *widget);
+static void     preferences_hookup_radio_button          (GossipPreferences      *preferences,
+							  const gchar            *key,
+							  GtkWidget              *widget);
 static void     preferences_hookup_string_combo          (GossipPreferences      *preferences,
 							  const gchar            *key,
 							  GtkWidget              *widget);
@@ -120,6 +126,8 @@ static void     preferences_spin_button_value_changed_cb (GtkWidget             
 static void     preferences_entry_value_changed_cb       (GtkWidget              *entry,
 							  gpointer                user_data);
 static void     preferences_toggle_button_toggled_cb     (GtkWidget              *button,
+							  gpointer                user_data);
+static void     preferences_radio_button_toggled_cb      (GtkWidget              *button,
 							  gpointer                user_data);
 static void     preferences_string_combo_changed_cb      (GtkWidget *button,
 							  gpointer                user_data);
@@ -195,6 +203,10 @@ preferences_setup_widgets (GossipPreferences *preferences)
 	preferences_hookup_sensitivity (preferences,
 					GOSSIP_PREFS_CHAT_SPELL_CHECKER_ENABLED,
 					preferences->treeview_spell_checker);
+
+	preferences_hookup_radio_button (preferences,
+					 GOSSIP_PREFS_CONTACTS_SORT_CRITERIUM,
+					 preferences->radiobutton_contact_list_sort_by_name);
 }
 
 static void
@@ -476,7 +488,9 @@ preferences_widget_sync_int (const gchar *key, GtkWidget *widget)
 	gint value;
 
 	if (gossip_conf_get_int (gossip_conf_get (), key, &value)) {
-		gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), value);
+		if (GTK_IS_SPIN_BUTTON (widget)) {
+			gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), value);
+		}
 	}
 }
 
@@ -486,7 +500,31 @@ preferences_widget_sync_string (const gchar *key, GtkWidget *widget)
 	gchar *value;
 
 	if (gossip_conf_get_string (gossip_conf_get (), key, &value) && value) {
-		gtk_entry_set_text (GTK_ENTRY (widget), value);
+		if (GTK_IS_ENTRY (widget)) {
+			gtk_entry_set_text (GTK_ENTRY (widget), value);
+		} else if (GTK_IS_RADIO_BUTTON (widget)) {
+			if (strcmp (key, GOSSIP_PREFS_CONTACTS_SORT_CRITERIUM) == 0) {
+				GType        type;
+				GEnumClass  *enum_class;
+				GEnumValue  *enum_value;
+				GSList      *list;
+				GtkWidget   *toggle_widget;
+				
+				/* Get index from new string */
+				type = gossip_contact_list_sort_get_type ();
+				enum_class = G_ENUM_CLASS (g_type_class_peek (type));
+				enum_value = g_enum_get_value_by_nick (enum_class, value);
+				
+				if (enum_value) { 
+					list = gtk_radio_button_get_group (GTK_RADIO_BUTTON (widget));
+					toggle_widget = g_slist_nth_data (list, enum_value->value);
+					gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (toggle_widget), TRUE);
+				}
+			} else {
+				g_warning ("Unhandled key:'%s' just had string change", key);
+			}
+		}
+
 		g_free (value);
 	}
 }
@@ -541,11 +579,7 @@ preferences_notify_int_cb (GossipConf  *conf,
 			   const gchar *key,
 			   gpointer     user_data)
 {
-	gint value;
-
-	if (gossip_conf_get_int (conf, key, &value)) {
-		gtk_spin_button_set_value (GTK_SPIN_BUTTON (user_data), value);
-	}
+	preferences_widget_sync_int (key, user_data);	
 }
 
 static void
@@ -553,12 +587,7 @@ preferences_notify_string_cb (GossipConf  *conf,
 			      const gchar *key,
 			      gpointer     user_data)
 {
-	gchar *value;
-
-	if (gossip_conf_get_string (conf, key, &value) && value) {
-		gtk_entry_set_text (GTK_ENTRY (user_data), value);
-		g_free (value);
-	}
+	preferences_widget_sync_string (key, user_data);
 }
 
 static void
@@ -575,12 +604,6 @@ preferences_notify_bool_cb (GossipConf  *conf,
 			    gpointer     user_data)
 {
 	preferences_widget_sync_bool (key, user_data);
-/*
-	if (gossip_conf_get_bool (conf, key, &value)) {
-		gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (user_data),
-					      gconf_value_get_bool (value));
-					      }
-*/
 }
 
 static void
@@ -681,9 +704,39 @@ preferences_hookup_toggle_button (GossipPreferences *preferences,
 			  NULL);
 
 	id = gossip_conf_notify_add (gossip_conf_get (),
-				      key,
-				      preferences_notify_bool_cb,
-				      widget);
+				     key,
+				     preferences_notify_bool_cb,
+				     widget);
+	if (id) {
+		preferences_add_id (preferences, id);
+	}
+}
+
+static void
+preferences_hookup_radio_button (GossipPreferences *preferences,
+				 const gchar       *key,
+				 GtkWidget         *widget)
+{
+	GSList *group, *l;
+	guint   id;
+
+	preferences_widget_sync_string (key, widget);
+
+	group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (widget));
+	for (l = group; l; l = l->next) {
+		g_signal_connect (l->data,
+				  "toggled",
+				  G_CALLBACK (preferences_radio_button_toggled_cb),
+				  NULL);
+
+		g_object_set_data_full (G_OBJECT (l->data), "key",
+					g_strdup (key), g_free);
+	}
+
+	id = gossip_conf_notify_add (gossip_conf_get (),
+				     key,
+				     preferences_notify_string_cb,
+				     widget);
 	if (id) {
 		preferences_add_id (preferences, id);
 	}
@@ -776,6 +829,44 @@ preferences_toggle_button_toggled_cb (GtkWidget *button,
 }
 
 static void
+preferences_radio_button_toggled_cb (GtkWidget *button,
+				     gpointer   user_data)
+{
+	const gchar *key;
+	const gchar *value = NULL;
+
+	if (!gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button))) {
+		return;
+	}
+
+	key = g_object_get_data (G_OBJECT (button), "key");
+
+	if (key && strcmp (key, GOSSIP_PREFS_CONTACTS_SORT_CRITERIUM) == 0) {
+		GSList      *group;
+		GType        type;
+		GEnumClass  *enum_class;
+		GEnumValue  *enum_value;
+		
+		group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
+		
+		/* Get string from index */
+		type = gossip_contact_list_sort_get_type ();
+		enum_class = G_ENUM_CLASS (g_type_class_peek (type));
+		enum_value = g_enum_get_value (enum_class, g_slist_index (group, button));
+		
+		if (!enum_value) {
+			g_warning ("No GEnumValue for GossipContactListSort with GtkRadioButton index:%d", 
+				   g_slist_index (group, button));
+			return;
+		}
+
+		value = enum_value->value_nick;
+	}
+
+	gossip_conf_set_string (gossip_conf_get (), key, value);
+}
+
+static void
 preferences_string_combo_changed_cb (GtkWidget *combo,
 				     gpointer   user_data)
 {
@@ -847,6 +938,8 @@ gossip_preferences_show (void)
 		"combobox_chat_theme", &preferences->combobox_chat_theme,
 		"checkbutton_theme_chat_room", &preferences->checkbutton_theme_chat_room,
 		"checkbutton_separate_chat_windows", &preferences->checkbutton_separate_chat_windows,
+		"radiobutton_contact_list_sort_by_name", &preferences->radiobutton_contact_list_sort_by_name,
+		"radiobutton_contact_list_sort_by_state", &preferences->radiobutton_contact_list_sort_by_state,
 		"checkbutton_sounds_for_messages", &preferences->checkbutton_sounds_for_messages,
 		"checkbutton_sounds_when_busy", &preferences->checkbutton_sounds_when_busy,
 		"checkbutton_sounds_when_away", &preferences->checkbutton_sounds_when_away,

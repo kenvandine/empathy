@@ -186,12 +186,12 @@ accounts_dialog_setup (GossipAccountsDialog *dialog)
 
 		status = mission_control_get_connection_status (dialog->mc, account, NULL);
 
-		gtk_list_store_append (store, &iter);
-		gtk_list_store_set (store, &iter,
-				    COL_NAME, name,
-				    COL_STATUS, status,
-				    COL_ACCOUNT_POINTER, account,
-				    -1);
+		gtk_list_store_insert_with_values (store, &iter,
+						   -1,
+						   COL_NAME, name,
+						   COL_STATUS, status,
+						   COL_ACCOUNT_POINTER, account,
+						   -1);
 
 		accounts_dialog_status_changed_cb (dialog->mc,
 						   status,
@@ -591,12 +591,12 @@ accounts_dialog_add_account (GossipAccountsDialog *dialog,
 
 	gossip_debug (DEBUG_DOMAIN, "Adding new account: %s", name);
 
-	gtk_list_store_append (store, &iter);
-	gtk_list_store_set (store, &iter,
-			    COL_NAME, name,
-			    COL_STATUS, status,
-			    COL_ACCOUNT_POINTER, account,
-			    -1);
+	gtk_list_store_insert_with_values (store, &iter,
+					   -1,
+					   COL_NAME, name,
+					   COL_STATUS, status,
+					   COL_ACCOUNT_POINTER, account,
+					   -1);
 }
 
 static void
@@ -737,6 +737,8 @@ accounts_dialog_status_changed_cb (MissionControl                  *mc,
 		g_source_remove (dialog->connecting_id);
 		dialog->connecting_id = 0;
 	}
+
+	gtk_widget_show (dialog->window);
 }
 
 static void          
@@ -1019,10 +1021,9 @@ gossip_accounts_dialog_show (void)
 
 	accounts_dialog_model_setup (dialog);
 	accounts_dialog_setup (dialog);
+	accounts_dialog_model_select_first (dialog);
 
 	gtk_widget_show (dialog->window);
-
-	accounts_dialog_model_select_first (dialog);
 
 	return dialog->window;
 }

@@ -16,6 +16,22 @@
     </schema>
 
     <schema>
+      <key>/schemas/apps/gossip/contacts/sort_criterium</key>
+      <applyto>/apps/gossip/contacts/sort_criterium</applyto>
+      <owner>gossip</owner>
+      <type>string</type>
+      <default>name</default>
+      <locale name="C">
+        <short>Contact list sort criterium</short>
+        <long>
+	Which criterium to use when sorting the contact list.
+	Default is to use sort by the contact's name with the value
+	"name". A value of "state" will sort the contact list by state.
+        </long>
+      </locale>
+    </schema>
+
+    <schema>
       <key>/schemas/apps/empathy/ui/show_avatars</key>
       <applyto>/apps/empathy/ui/show_avatars</applyto>
       <owner>empathy</owner>
@@ -25,7 +41,7 @@
         <short>Show avatars</short>
 	<long>
 	Whether or not to show avatars for contacts in the contact
-      list and chat windows.
+        list and chat windows.
 	</long>
       </locale>
     </schema>

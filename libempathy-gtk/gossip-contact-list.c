@@ -82,6 +82,8 @@ struct _GossipContactListPriv {
 	gboolean               show_avatars;
 	gboolean               is_compact;
 	gboolean               show_active;
+
+	GossipContactListSort  sort_criterium;
 };
 
 typedef struct {
@@ -234,7 +236,11 @@ static void     contact_list_row_expand_or_collapse_cb       (GossipContactList 
 							      GtkTreeIter            *iter,
 							      GtkTreePath            *path,
 							      gpointer                user_data);
-static gint     contact_list_sort_func                       (GtkTreeModel           *model,
+static gint     contact_list_name_sort_func                  (GtkTreeModel           *model,
+							      GtkTreeIter            *iter_a,
+							      GtkTreeIter            *iter_b,
+							      gpointer                user_data);
+static gint     contact_list_state_sort_func                 (GtkTreeModel           *model,
 							      GtkTreeIter            *iter_a,
 							      GtkTreeIter            *iter_b,
 							      gpointer                user_data);
@@ -276,7 +282,8 @@ enum {
 	PROP_SHOW_OFFLINE,
 	PROP_SHOW_AVATARS,
 	PROP_IS_COMPACT,
-	PROP_FILTER
+	PROP_FILTER,
+	PROP_SORT_CRITERIUM
 };
 
 static const GtkActionEntry entries[] = {
@@ -363,6 +370,28 @@ static const GtkTargetEntry drag_types_source[] = {
 static GdkAtom drag_atoms_dest[G_N_ELEMENTS (drag_types_dest)];
 static GdkAtom drag_atoms_source[G_N_ELEMENTS (drag_types_source)];
 
+GType
+gossip_contact_list_sort_get_type (void)
+{
+	static GType etype = 0;
+
+	if (etype == 0) {
+		static const GEnumValue values[] = {
+			{ GOSSIP_CONTACT_LIST_SORT_NAME, 
+			  "GOSSIP_CONTACT_LIST_SORT_NAME", 
+			  "name" },
+			{ GOSSIP_CONTACT_LIST_SORT_STATE, 
+			  "GOSSIP_CONTACT_LIST_SORT_STATE", 
+			  "state" },
+			{ 0, NULL, NULL }
+		};
+
+		etype = g_enum_register_static ("GossipContactListSort", values);
+	}
+
+	return etype;
+}
+
 G_DEFINE_TYPE (GossipContactList, gossip_contact_list, GTK_TYPE_TREE_VIEW);
 
 static void
@@ -405,6 +434,15 @@ gossip_contact_list_class_init (GossipContactListClass *klass)
 							      "The text to use to filter the contact list",
 							      NULL,
 							      G_PARAM_READWRITE));
+
+	g_object_class_install_property (object_class,
+					 PROP_SORT_CRITERIUM,
+					 g_param_spec_enum ("sort-criterium",
+							     "Sort citerium",
+							     "The sort criterium to use for sorting the contact list",
+							     GOSSIP_TYPE_CONTACT_LIST_SORT,
+							     GOSSIP_CONTACT_LIST_SORT_NAME,
+							     G_PARAM_READWRITE));
 
 	g_type_class_add_private (object_class, sizeof (GossipContactListPriv));
 }
@@ -533,6 +571,9 @@ contact_list_get_property (GObject    *object,
 	case PROP_FILTER:
 		g_value_set_string (value, priv->filter_text);
 		break;
+	case PROP_SORT_CRITERIUM:
+		g_value_set_enum (value, priv->sort_criterium);
+		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
 		break;
@@ -565,6 +606,10 @@ contact_list_set_property (GObject      *object,
 	case PROP_FILTER:
 		gossip_contact_list_set_filter (GOSSIP_CONTACT_LIST (object),
 						g_value_get_string (value));
+		break;
+	case PROP_SORT_CRITERIUM:
+		gossip_contact_list_set_sort_criterium (GOSSIP_CONTACT_LIST (object),
+							g_value_get_enum (value));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
@@ -1306,12 +1351,14 @@ contact_list_create_model (GossipContactList *list)
 	/* Set up sorting */
 	gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (model),
 					 COL_NAME,
-					 contact_list_sort_func,
+					 contact_list_name_sort_func,
+					 list, NULL);
+	gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (model),
+					 COL_STATUS,
+					 contact_list_state_sort_func,
 					 list, NULL);
 
-	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (model),
-					      COL_NAME,
-					      GTK_SORT_ASCENDING);
+	gossip_contact_list_set_sort_criterium (list, priv->sort_criterium);
 
 	/* Create filter */
 	priv->filter = gtk_tree_model_filter_new (model, NULL);
@@ -2129,10 +2176,96 @@ contact_list_row_expand_or_collapse_cb (GossipContactList *list,
 }
 
 static gint
-contact_list_sort_func (GtkTreeModel *model,
-			GtkTreeIter  *iter_a,
-			GtkTreeIter  *iter_b,
-			gpointer      user_data)
+contact_list_state_sort_func (GtkTreeModel *model,
+			      GtkTreeIter  *iter_a,
+			      GtkTreeIter  *iter_b,
+			      gpointer      user_data)
+{
+	gint            ret_val = 0;
+	gchar          *name_a, *name_b;
+	gboolean        is_separator_a, is_separator_b;
+	GossipContact  *contact_a, *contact_b;
+	GossipPresence *presence_a, *presence_b;
+	McPresence      state_a, state_b;
+
+	gtk_tree_model_get (model, iter_a,
+			    COL_NAME, &name_a,
+			    COL_CONTACT, &contact_a,
+			    COL_IS_SEPARATOR, &is_separator_a,
+			    -1);
+	gtk_tree_model_get (model, iter_b,
+			    COL_NAME, &name_b,
+			    COL_CONTACT, &contact_b,
+			    COL_IS_SEPARATOR, &is_separator_b,
+			    -1);
+
+	/* Separator or group? */
+	if (is_separator_a || is_separator_b) {
+		if (is_separator_a) {
+			ret_val = -1;
+		} else if (is_separator_b) {
+			ret_val = 1;
+		}
+	} else if (!contact_a && contact_b) {
+		ret_val = 1;
+	} else if (contact_a && !contact_b) {
+		ret_val = -1;
+	} else if (!contact_a && !contact_b) {
+		/* Handle groups */
+		ret_val = g_utf8_collate (name_a, name_b);
+	}
+
+	if (ret_val) {
+		goto free_and_out;
+	}
+
+	/* If we managed to get this far, we can start looking at
+	 * the presences.
+	 */
+	presence_a = gossip_contact_get_presence (GOSSIP_CONTACT (contact_a));
+	presence_b = gossip_contact_get_presence (GOSSIP_CONTACT (contact_b));
+
+	if (!presence_a && presence_b) {
+		ret_val = 1;
+	} else if (presence_a && !presence_b) {
+		ret_val = -1;
+	} else if (!presence_a && !presence_b) {
+		/* Both offline, sort by name */
+		ret_val = g_utf8_collate (name_a, name_b);
+	} else {
+		state_a = gossip_presence_get_state (presence_a);
+		state_b = gossip_presence_get_state (presence_b);
+
+		if (state_a < state_b) {
+			ret_val = -1;
+		} else if (state_a > state_b) {
+			ret_val = 1;
+		} else {
+			/* Fallback: compare by name */
+			ret_val = g_utf8_collate (name_a, name_b);
+		}
+	}
+
+free_and_out:
+	g_free (name_a);
+	g_free (name_b);
+
+	if (contact_a) {
+		g_object_unref (contact_a);
+	}
+
+	if (contact_b) {
+		g_object_unref (contact_b);
+	}
+
+	return ret_val;
+}
+
+static gint
+contact_list_name_sort_func (GtkTreeModel *model,
+			     GtkTreeIter  *iter_a,
+			     GtkTreeIter  *iter_b,
+			     gpointer      user_data)
 {
 	gchar         *name_a, *name_b;
 	GossipContact *contact_a, *contact_b;
@@ -2540,6 +2673,18 @@ gossip_contact_list_get_is_compact (GossipContactList *list)
 	return priv->is_compact;
 }
 
+GossipContactListSort
+gossip_contact_list_get_sort_criterium (GossipContactList *list)
+{
+	GossipContactListPriv *priv;
+
+	g_return_val_if_fail (GOSSIP_IS_CONTACT_LIST (list), 0);
+
+	priv = GET_PRIV (list);
+
+	return priv->sort_criterium;
+}
+
 void
 gossip_contact_list_set_show_offline (GossipContactList *list,
 				      gboolean           show_offline)
@@ -2614,6 +2759,33 @@ gossip_contact_list_set_is_compact (GossipContactList *list,
 				(GtkTreeModelForeachFunc)
 				contact_list_update_list_mode_foreach,
 				list);
+}
+
+void
+gossip_contact_list_set_sort_criterium (GossipContactList     *list,
+					GossipContactListSort  sort_criterium)
+{
+	GossipContactListPriv *priv;
+
+	g_return_if_fail (GOSSIP_IS_CONTACT_LIST (list));
+
+	priv = GET_PRIV (list);
+
+	priv->sort_criterium = sort_criterium;
+
+	switch (sort_criterium) {
+	case GOSSIP_CONTACT_LIST_SORT_STATE:
+		gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (priv->store),
+						      COL_STATUS,
+						      GTK_SORT_ASCENDING);
+		break;
+		
+	case GOSSIP_CONTACT_LIST_SORT_NAME:
+		gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (priv->store),
+						      COL_NAME,
+						      GTK_SORT_ASCENDING);
+		break;
+	}
 }
 
 void
