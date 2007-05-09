@@ -48,6 +48,10 @@ static void error_cb              (MissionControl    *mc,
 				   gpointer           data);
 static void service_ended_cb      (MissionControl    *mc,
 				   gpointer           user_data);
+static void operation_error_cb    (MissionControl    *mc,
+				   guint              operation_id,
+				   guint              error_code,
+				   gpointer           user_data);
 static void start_mission_control (MissionControl    *mc);
 static void destroy_cb            (GtkWidget         *window,
 				   MissionControl    *mc);
@@ -69,6 +73,17 @@ service_ended_cb (MissionControl *mc,
 		  gpointer        user_data)
 {
 	gossip_debug (DEBUG_DOMAIN, "Mission Control stopped");
+}
+
+static void
+operation_error_cb (MissionControl *mc,
+		    guint           operation_id,
+		    guint           error_code,
+		    gpointer        user_data)
+{
+	gossip_debug (DEBUG_DOMAIN, "Error code %d during operation %d",
+		      error_code,
+		      operation_id);
 }
 
 static void
@@ -161,6 +176,9 @@ main (int argc, char *argv[])
 			  mc);
 	g_signal_connect (mc, "ServiceEnded",
 			  G_CALLBACK (service_ended_cb),
+			  NULL);
+	g_signal_connect (mc, "Error",
+			  G_CALLBACK (operation_error_cb),
 			  NULL);
 	start_mission_control (mc);
 
