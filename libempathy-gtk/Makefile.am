@@ -40,6 +40,7 @@ libempathy_gtk_includedir = $(includedir)/empathy/
 gladedir = $(datadir)/empathy
 glade_DATA = 					\
 	empathy-main-window.glade		\
+	empathy-status-icon.glade		\
 	gossip-preferences.glade		\
 	gossip-presence-chooser.glade		\
 	gossip-accounts-dialog.glade		\

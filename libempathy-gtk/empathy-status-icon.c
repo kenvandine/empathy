@@ -24,8 +24,9 @@
 
 #include <string.h>
 
-#include <glib.h>
+#include <glib/gi18n.h>
 #include <gtk/gtk.h>
+#include <glade/glade.h>
 
 #include <libtelepathy/tp-helpers.h>
 
@@ -35,6 +36,7 @@
 #include <libempathy/gossip-utils.h>
 
 #include "empathy-status-icon.h"
+#include "gossip-presence-chooser.h"
 #include "gossip-ui-utils.h"
 
 #define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), \
@@ -46,6 +48,11 @@ struct _EmpathyStatusIconPriv {
 	MissionControl *mc;
 	GtkStatusIcon  *icon;
 	GtkWindow      *window;
+
+	GtkWidget      *popup_menu;
+	GtkWidget      *show_window_item;
+	GtkWidget      *message_item;
+	GtkWidget      *status_item;
 };
 
 static void empathy_status_icon_class_init  (EmpathyStatusIconClass *klass);
@@ -56,6 +63,17 @@ static void status_icon_presence_changed_cb (MissionControl         *mc,
 					     EmpathyStatusIcon      *icon);
 static void status_icon_toggle_visibility   (EmpathyStatusIcon      *icon);
 static void status_icon_activate_cb         (GtkStatusIcon          *status_icon,
+					     EmpathyStatusIcon      *icon);
+static void status_icon_popup_menu_cb       (GtkStatusIcon          *status_icon,
+					     guint                   button,
+					     guint                   activate_time,
+					     EmpathyStatusIcon      *icon);
+static void status_icon_create_menu         (EmpathyStatusIcon      *icon);
+static void status_icon_new_message_cb      (GtkWidget              *widget,
+					     EmpathyStatusIcon      *icon);
+static void status_icon_quit_cb             (GtkWidget              *window,
+					     EmpathyStatusIcon      *icon);
+static void status_icon_show_hide_window_cb (GtkWidget              *widget,
 					     EmpathyStatusIcon      *icon);
 
 G_DEFINE_TYPE (EmpathyStatusIcon, empathy_status_icon, G_TYPE_OBJECT);
@@ -80,9 +98,12 @@ empathy_status_icon_init (EmpathyStatusIcon *icon)
 
 	priv->icon = gtk_status_icon_new ();
 	priv->mc = mission_control_new (tp_get_bus ());
+
+	status_icon_create_menu (icon);
+
 	state = mission_control_get_presence_actual (priv->mc, NULL);
 	status_icon_presence_changed_cb (priv->mc, state, icon);
-
+	
 	dbus_g_proxy_connect_signal (DBUS_G_PROXY (priv->mc),
 				     "PresenceStatusActual",
 				     G_CALLBACK (status_icon_presence_changed_cb),
@@ -90,10 +111,9 @@ empathy_status_icon_init (EmpathyStatusIcon *icon)
 	g_signal_connect (priv->icon, "activate",
 			  G_CALLBACK (status_icon_activate_cb),
 			  icon);
-/*	g_signal_connect (priv->icon, "popup-menu",
+	g_signal_connect (priv->icon, "popup-menu",
 			  G_CALLBACK (status_icon_popup_menu_cb),
 			  icon);
-*/
 }
 
 static void
@@ -151,6 +171,14 @@ status_icon_presence_changed_cb (MissionControl    *mc,
 	gtk_status_icon_set_tooltip (priv->icon, status);
 
 	g_free (status);
+
+	if (state < MC_PRESENCE_AVAILABLE) {
+		gtk_widget_set_sensitive (priv->status_item, FALSE);
+		gtk_widget_set_sensitive (priv->message_item, FALSE);
+	} else {
+		gtk_widget_set_sensitive (priv->status_item, TRUE);
+		gtk_widget_set_sensitive (priv->message_item, TRUE);
+	}
 }
 
 static void
@@ -176,7 +204,7 @@ status_icon_activate_cb (GtkStatusIcon     *status_icon,
 {
 	status_icon_toggle_visibility (icon);
 }
-#if 0
+
 static void
 status_icon_popup_menu_cb (GtkStatusIcon     *status_icon,
 			   guint              button,
@@ -192,61 +220,78 @@ status_icon_popup_menu_cb (GtkStatusIcon     *status_icon,
 	show = gossip_window_get_is_visible (GTK_WINDOW (priv->window));
 
 	g_signal_handlers_block_by_func (priv->show_window_item,
-					 contact_list_show_hide_window_cb,
+					 status_icon_show_hide_window_cb,
 					 icon);
 	gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (priv->show_window_item),
 					show);
 	g_signal_handlers_unblock_by_func (priv->show_window_item,
-					   contact_list_show_hide_window_cb,
+					   status_icon_show_hide_window_cb,
 					   icon);
 
-	submenu = gossip_presence_chooser_create_menu (
-		GOSSIP_PRESENCE_CHOOSER (priv->presence_chooser));
-	gtk_menu_item_set_submenu (GTK_MENU_ITEM (priv->popup_menu_status_item),
+	submenu = gossip_presence_chooser_create_menu ();
+	gtk_menu_item_set_submenu (GTK_MENU_ITEM (priv->status_item),
 				   submenu);
 
 	gtk_menu_popup (GTK_MENU (priv->popup_menu),
 			NULL, NULL,
 			gtk_status_icon_position_menu,
-			priv->status_icon,
+			priv->icon,
 			button,
 			activate_time);
 }
 
 static void
-app_status_icon_create_menu (void)
+status_icon_create_menu (EmpathyStatusIcon *icon)
 {
-	GossipAppPriv *priv;
-	GladeXML      *glade;
-	GtkWidget     *message_item;
+	EmpathyStatusIconPriv *priv;
+	GladeXML              *glade;
 
-	priv = GET_PRIV (app);
+	priv = GET_PRIV (icon);
 
-	glade = gossip_glade_get_file ("main.glade",
+	glade = gossip_glade_get_file ("empathy-status-icon.glade",
 				       "tray_menu",
 				       NULL,
 				       "tray_menu", &priv->popup_menu,
-				       "tray_show_list", &priv->popup_menu_show_list_item,
-				       "tray_new_message", &message_item,
-				       "tray_status", &priv->popup_menu_status_item,
+				       "tray_show_list", &priv->show_window_item,
+				       "tray_new_message", &priv->message_item,
+				       "tray_status", &priv->status_item,
 				       NULL);
 
 	gossip_glade_connect (glade,
-			      app,
-			      "tray_new_message", "activate", app_popup_new_message_cb,
-			      "tray_quit", "activate", app_chat_quit_cb,
+			      icon,
+			      "tray_new_message", "activate", status_icon_new_message_cb,
+			      "tray_quit", "activate", status_icon_quit_cb,
 			      NULL);
 
-	g_signal_connect (priv->popup_menu_show_list_item, "toggled",
-			  G_CALLBACK (app_show_hide_list_cb), app);
-
-	priv->widgets_connected = g_list_prepend (priv->widgets_connected,
-						  priv->popup_menu_status_item);
-
-	priv->widgets_connected = g_list_prepend (priv->widgets_connected,
-						  message_item);
+	g_signal_connect (priv->show_window_item, "toggled",
+			  G_CALLBACK (status_icon_show_hide_window_cb),
+			  icon);
 
 	g_object_unref (glade);
 }
-#endif
+
+static void
+status_icon_new_message_cb (GtkWidget         *widget,
+			    EmpathyStatusIcon *icon)
+{
+	EmpathyStatusIconPriv *priv;
+
+	priv = GET_PRIV (icon);
+
+	//gossip_new_message_dialog_show (GTK_WINDOW (priv->window));
+}
+
+static void
+status_icon_quit_cb (GtkWidget         *window,
+		     EmpathyStatusIcon *icon)
+{
+	gtk_main_quit ();
+}
+
+static void
+status_icon_show_hide_window_cb (GtkWidget         *widget,
+				 EmpathyStatusIcon *icon)
+{
+	status_icon_toggle_visibility (icon);
+}
 
