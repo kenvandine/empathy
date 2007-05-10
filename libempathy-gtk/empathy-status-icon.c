@@ -34,9 +34,11 @@
 
 #include <libempathy/gossip-debug.h>
 #include <libempathy/gossip-utils.h>
+#include <libempathy/gossip-conf.h>
 
 #include "empathy-status-icon.h"
 #include "gossip-presence-chooser.h"
+#include "gossip-preferences.h"
 #include "gossip-ui-utils.h"
 
 #define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), \
@@ -55,26 +57,29 @@ struct _EmpathyStatusIconPriv {
 	GtkWidget      *status_item;
 };
 
-static void empathy_status_icon_class_init  (EmpathyStatusIconClass *klass);
-static void empathy_status_icon_init        (EmpathyStatusIcon      *icon);
-static void status_icon_finalize            (GObject                *object);
-static void status_icon_presence_changed_cb (MissionControl         *mc,
-					     McPresence              state,
-					     EmpathyStatusIcon      *icon);
-static void status_icon_toggle_visibility   (EmpathyStatusIcon      *icon);
-static void status_icon_activate_cb         (GtkStatusIcon          *status_icon,
-					     EmpathyStatusIcon      *icon);
-static void status_icon_popup_menu_cb       (GtkStatusIcon          *status_icon,
-					     guint                   button,
-					     guint                   activate_time,
-					     EmpathyStatusIcon      *icon);
-static void status_icon_create_menu         (EmpathyStatusIcon      *icon);
-static void status_icon_new_message_cb      (GtkWidget              *widget,
-					     EmpathyStatusIcon      *icon);
-static void status_icon_quit_cb             (GtkWidget              *window,
-					     EmpathyStatusIcon      *icon);
-static void status_icon_show_hide_window_cb (GtkWidget              *widget,
-					     EmpathyStatusIcon      *icon);
+static void     empathy_status_icon_class_init  (EmpathyStatusIconClass *klass);
+static void     empathy_status_icon_init        (EmpathyStatusIcon      *icon);
+static void     status_icon_finalize            (GObject                *object);
+static void     status_icon_presence_changed_cb (MissionControl         *mc,
+						 McPresence              state,
+						 EmpathyStatusIcon      *icon);
+static void     status_icon_toggle_visibility   (EmpathyStatusIcon      *icon);
+static void     status_icon_activate_cb         (GtkStatusIcon          *status_icon,
+						 EmpathyStatusIcon      *icon);
+static gboolean status_icon_delete_event_cb     (GtkWidget              *widget,
+						 GdkEvent               *event,
+						 EmpathyStatusIcon      *icon);
+static void     status_icon_popup_menu_cb       (GtkStatusIcon          *status_icon,
+						 guint                   button,
+						 guint                   activate_time,
+						 EmpathyStatusIcon      *icon);
+static void     status_icon_create_menu         (EmpathyStatusIcon      *icon);
+static void     status_icon_new_message_cb      (GtkWidget              *widget,
+						 EmpathyStatusIcon      *icon);
+static void     status_icon_quit_cb             (GtkWidget              *window,
+						 EmpathyStatusIcon      *icon);
+static void     status_icon_show_hide_window_cb (GtkWidget              *widget,
+						 EmpathyStatusIcon      *icon);
 
 G_DEFINE_TYPE (EmpathyStatusIcon, empathy_status_icon, G_TYPE_OBJECT);
 
@@ -146,6 +151,10 @@ empathy_status_icon_new (GtkWindow *window)
 
 	priv->window = g_object_ref (window);
 
+	g_signal_connect (priv->window, "delete-event",
+			  G_CALLBACK (status_icon_delete_event_cb),
+			  icon);
+
 	return icon;
 }
 
@@ -193,8 +202,12 @@ status_icon_toggle_visibility (EmpathyStatusIcon *icon)
 
 	if (visible) {
 		gtk_widget_hide (GTK_WIDGET (priv->window));
+		gossip_conf_set_bool (gossip_conf_get (),
+				      GOSSIP_PREFS_UI_MAIN_WINDOW_HIDDEN, TRUE);
 	} else {
 		gossip_window_present (GTK_WINDOW (priv->window), TRUE);
+		gossip_conf_set_bool (gossip_conf_get (),
+				      GOSSIP_PREFS_UI_MAIN_WINDOW_HIDDEN, FALSE);
 	}
 }
 
@@ -203,6 +216,16 @@ status_icon_activate_cb (GtkStatusIcon     *status_icon,
 			 EmpathyStatusIcon *icon)
 {
 	status_icon_toggle_visibility (icon);
+}
+
+static gboolean
+status_icon_delete_event_cb (GtkWidget         *widget,
+			     GdkEvent          *event,
+			     EmpathyStatusIcon *icon)
+{
+	status_icon_toggle_visibility (icon);
+
+	return TRUE;
 }
 
 static void
