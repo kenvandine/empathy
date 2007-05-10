@@ -75,6 +75,8 @@ gossip_profile_chooser_new (void)
 	gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combo_box), renderer,
 					"icon-name", COL_ICON,
 					NULL);
+	g_object_set (renderer, "stock-size", GTK_ICON_SIZE_BUTTON, NULL);
+
 	renderer = gtk_cell_renderer_text_new ();
 	gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (combo_box), renderer, TRUE);
 	gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (combo_box), renderer,

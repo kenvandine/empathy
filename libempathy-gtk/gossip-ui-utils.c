@@ -208,12 +208,18 @@ gossip_pixbuf_from_icon_name (const gchar *icon_name,
 	GtkIconTheme  *theme;
 	GdkPixbuf     *pixbuf = NULL;
 	GError        *error = NULL;
+	gint           w, h;
+	gint           size = 48;
 
 	theme = gtk_icon_theme_get_default ();
 
+	if (gtk_icon_size_lookup (icon_size, &w, &h)) {
+		size = (w + h) / 2;
+	}
+
 	pixbuf = gtk_icon_theme_load_icon (theme,
 					   icon_name,
-					   icon_size,
+					   size,
 					   0,
 					   &error);
 	if (error) {

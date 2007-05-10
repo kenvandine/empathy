@@ -529,6 +529,7 @@ main_window_throbber_button_press_event_cb (GtkWidget      *throbber_ebox,
 
 	return FALSE;
 }
+
 #if 0
 static void
 main_window_session_protocol_connecting_cb (GossipSession  *session,
