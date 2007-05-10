@@ -45,23 +45,18 @@
 struct _EmpathyStatusIconPriv {
 	MissionControl *mc;
 	GtkStatusIcon  *icon;
+	GtkWindow      *window;
 };
 
-static void empathy_status_icon_class_init  (EmpathyStatusIconClass          *klass);
-static void empathy_status_icon_init        (EmpathyStatusIcon               *icon);
-static void status_icon_finalize            (GObject                         *object);
-static void status_icon_presence_changed_cb (MissionControl                  *mc,
-					     McPresence                       state,
-					     EmpathyStatusIcon               *icon);
-static void status_icon_activate_cb         (GtkStatusIcon                   *status_icon,
-					     EmpathyStatusIcon               *icon);
-
-enum {
-	ACTIVATE,
-	LAST_SIGNAL
-};
-
-static guint signals[LAST_SIGNAL];
+static void empathy_status_icon_class_init  (EmpathyStatusIconClass *klass);
+static void empathy_status_icon_init        (EmpathyStatusIcon      *icon);
+static void status_icon_finalize            (GObject                *object);
+static void status_icon_presence_changed_cb (MissionControl         *mc,
+					     McPresence              state,
+					     EmpathyStatusIcon      *icon);
+static void status_icon_toggle_visibility   (EmpathyStatusIcon      *icon);
+static void status_icon_activate_cb         (GtkStatusIcon          *status_icon,
+					     EmpathyStatusIcon      *icon);
 
 G_DEFINE_TYPE (EmpathyStatusIcon, empathy_status_icon, G_TYPE_OBJECT);
 
@@ -71,16 +66,6 @@ empathy_status_icon_class_init (EmpathyStatusIconClass *klass)
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
 	object_class->finalize = status_icon_finalize;
-
-	signals[ACTIVATE] =
-		g_signal_new ("activate",
-			      G_TYPE_FROM_CLASS (klass),
-			      G_SIGNAL_RUN_LAST,
-			      0,
-			      NULL, NULL,
-			      g_cclosure_marshal_VOID__VOID,
-			      G_TYPE_NONE,
-			      0);
 
 	g_type_class_add_private (object_class, sizeof (EmpathyStatusIconPriv));
 }
@@ -93,8 +78,10 @@ empathy_status_icon_init (EmpathyStatusIcon *icon)
 
 	priv = GET_PRIV (icon);
 
-	priv->mc = mission_control_new (tp_get_bus ());
 	priv->icon = gtk_status_icon_new ();
+	priv->mc = mission_control_new (tp_get_bus ());
+	state = mission_control_get_presence_actual (priv->mc, NULL);
+	status_icon_presence_changed_cb (priv->mc, state, icon);
 
 	dbus_g_proxy_connect_signal (DBUS_G_PROXY (priv->mc),
 				     "PresenceStatusActual",
@@ -103,9 +90,10 @@ empathy_status_icon_init (EmpathyStatusIcon *icon)
 	g_signal_connect (priv->icon, "activate",
 			  G_CALLBACK (status_icon_activate_cb),
 			  icon);
-
-	state = mission_control_get_presence_actual (priv->mc, NULL);
-	status_icon_presence_changed_cb (priv->mc, state, icon);
+/*	g_signal_connect (priv->icon, "popup-menu",
+			  G_CALLBACK (status_icon_popup_menu_cb),
+			  icon);
+*/
 }
 
 static void
@@ -119,18 +107,26 @@ status_icon_finalize (GObject *object)
 					"PresenceStatusActual",
 					G_CALLBACK (status_icon_presence_changed_cb),
 					object);
-	g_signal_handlers_disconnect_by_func (priv->icon,
-					      status_icon_activate_cb,
-					      object);
 
 	g_object_unref (priv->mc);
 	g_object_unref (priv->icon);
+	g_object_unref (priv->window);
 }
 
 EmpathyStatusIcon *
-empathy_status_icon_new (void)
+empathy_status_icon_new (GtkWindow *window)
 {
-	return g_object_new (EMPATHY_TYPE_STATUS_ICON, NULL);
+	EmpathyStatusIconPriv *priv;
+	EmpathyStatusIcon     *icon;
+
+	g_return_val_if_fail (GTK_IS_WINDOW (window), NULL);
+
+	icon = g_object_new (EMPATHY_TYPE_STATUS_ICON, NULL);
+	priv = GET_PRIV (icon);
+
+	priv->window = g_object_ref (window);
+
+	return icon;
 }
 
 static void
@@ -158,9 +154,99 @@ status_icon_presence_changed_cb (MissionControl    *mc,
 }
 
 static void
+status_icon_toggle_visibility (EmpathyStatusIcon *icon)
+{
+	EmpathyStatusIconPriv *priv;
+	gboolean               visible;
+
+	priv = GET_PRIV (icon);
+
+	visible = gossip_window_get_is_visible (GTK_WINDOW (priv->window));
+
+	if (visible) {
+		gtk_widget_hide (GTK_WIDGET (priv->window));
+	} else {
+		gossip_window_present (GTK_WINDOW (priv->window), TRUE);
+	}
+}
+
+static void
 status_icon_activate_cb (GtkStatusIcon     *status_icon,
 			 EmpathyStatusIcon *icon)
 {
-	g_signal_emit (icon, signals[ACTIVATE], 0);
+	status_icon_toggle_visibility (icon);
 }
+#if 0
+static void
+status_icon_popup_menu_cb (GtkStatusIcon     *status_icon,
+			   guint              button,
+			   guint              activate_time,
+			   EmpathyStatusIcon *icon)
+{
+	EmpathyStatusIconPriv *priv;
+	GtkWidget             *submenu;
+	gboolean               show;
+
+	priv = GET_PRIV (icon);
+
+	show = gossip_window_get_is_visible (GTK_WINDOW (priv->window));
+
+	g_signal_handlers_block_by_func (priv->show_window_item,
+					 contact_list_show_hide_window_cb,
+					 icon);
+	gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (priv->show_window_item),
+					show);
+	g_signal_handlers_unblock_by_func (priv->show_window_item,
+					   contact_list_show_hide_window_cb,
+					   icon);
+
+	submenu = gossip_presence_chooser_create_menu (
+		GOSSIP_PRESENCE_CHOOSER (priv->presence_chooser));
+	gtk_menu_item_set_submenu (GTK_MENU_ITEM (priv->popup_menu_status_item),
+				   submenu);
+
+	gtk_menu_popup (GTK_MENU (priv->popup_menu),
+			NULL, NULL,
+			gtk_status_icon_position_menu,
+			priv->status_icon,
+			button,
+			activate_time);
+}
+
+static void
+app_status_icon_create_menu (void)
+{
+	GossipAppPriv *priv;
+	GladeXML      *glade;
+	GtkWidget     *message_item;
+
+	priv = GET_PRIV (app);
+
+	glade = gossip_glade_get_file ("main.glade",
+				       "tray_menu",
+				       NULL,
+				       "tray_menu", &priv->popup_menu,
+				       "tray_show_list", &priv->popup_menu_show_list_item,
+				       "tray_new_message", &message_item,
+				       "tray_status", &priv->popup_menu_status_item,
+				       NULL);
+
+	gossip_glade_connect (glade,
+			      app,
+			      "tray_new_message", "activate", app_popup_new_message_cb,
+			      "tray_quit", "activate", app_chat_quit_cb,
+			      NULL);
+
+	g_signal_connect (priv->popup_menu_show_list_item, "toggled",
+			  G_CALLBACK (app_show_hide_list_cb), app);
+
+	priv->widgets_connected = g_list_prepend (priv->widgets_connected,
+						  priv->popup_menu_status_item);
+
+	priv->widgets_connected = g_list_prepend (priv->widgets_connected,
+						  message_item);
+
+	g_object_unref (glade);
+}
+#endif
 

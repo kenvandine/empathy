@@ -50,15 +50,7 @@ struct _GossipPresenceChooserClass {
 
 GType      gossip_presence_chooser_get_type           (void) G_GNUC_CONST;
 GtkWidget *gossip_presence_chooser_new                (void);
-GtkWidget *gossip_presence_chooser_create_menu        (GossipPresenceChooser *chooser);
-
-void       gossip_presence_chooser_set_state          (GossipPresenceChooser *chooser,
-						       McPresence             state);
-void       gossip_presence_chooser_set_status         (GossipPresenceChooser *chooser,
-						       const gchar           *status);
-void       gossip_presence_chooser_set_flash_interval (GossipPresenceChooser *chooser,
-						       guint                  ms);
-
+GtkWidget *gossip_presence_chooser_create_menu        (void);
 void       gossip_presence_chooser_flash_start        (GossipPresenceChooser *chooser,
 						       McPresence             state_1,
 						       McPresence             state_2);

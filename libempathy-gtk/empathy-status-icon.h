@@ -46,8 +46,8 @@ struct _EmpathyStatusIconClass {
 	GObjectClass parent_class;
 };
 
-GType              empathy_status_icon_get_type    (void) G_GNUC_CONST;
-EmpathyStatusIcon *empathy_status_icon_new         (void);
+GType              empathy_status_icon_get_type (void) G_GNUC_CONST;
+EmpathyStatusIcon *empathy_status_icon_new      (GtkWindow *window);
 
 G_END_DECLS
 

@@ -53,10 +53,6 @@ static void operation_error_cb    (MissionControl    *mc,
 				   guint              error_code,
 				   gpointer           user_data);
 static void start_mission_control (MissionControl    *mc);
-static void destroy_cb            (GtkWidget         *window,
-				   MissionControl    *mc);
-static void icon_activate_cb      (EmpathyStatusIcon *icon,
-				   GtkWidget         *window);
 
 static void
 error_cb (MissionControl *mc,
@@ -117,28 +113,6 @@ start_mission_control (MissionControl *mc)
 }
 
 static void
-destroy_cb (GtkWidget      *window,
-	    MissionControl *mc)
-{
-	mission_control_set_presence (mc,
-				      MC_PRESENCE_OFFLINE,
-				      NULL, NULL, NULL);
-
-	gtk_main_quit ();
-}
-
-static void
-icon_activate_cb (EmpathyStatusIcon *icon,
-		  GtkWidget         *window)
-{
-	if (GTK_WIDGET_VISIBLE (window)) {
-		gtk_widget_hide (window);
-	} else {
-		gtk_widget_show (window);
-	}
-}
-
-static void
 new_channel_cb (EmpathyFilter *filter,
 		TpConn        *tp_conn,
 		TpChan        *tp_chan,
@@ -182,20 +156,9 @@ main (int argc, char *argv[])
 			  NULL);
 	start_mission_control (mc);
 
-	/* Setting up the main window */
+	/* Setting up UI */
 	window = empathy_main_window_show ();
-	g_signal_connect (window, "destroy",
-			  G_CALLBACK (destroy_cb),
-			  mc);
-	g_signal_connect (window, "delete-event",
-			  G_CALLBACK (gtk_widget_hide_on_delete),
-			  NULL);
-
-	/* Setting up the status icon */
-	icon = empathy_status_icon_new ();
-	g_signal_connect (icon, "activate",
-			  G_CALLBACK (icon_activate_cb),
-			  window);
+	icon = empathy_status_icon_new (GTK_WINDOW (window));
 
 	/* Show the accounts dialog if there is no enabled accounts */
 	accounts = mc_accounts_list_by_enabled (TRUE);
@@ -206,6 +169,10 @@ main (int argc, char *argv[])
 	}
 
 	gtk_main ();
+
+	mission_control_set_presence (mc,
+				      MC_PRESENCE_OFFLINE,
+				      NULL, NULL, NULL);
 
 	g_object_unref (monitor);
 	g_object_unref (mc);
