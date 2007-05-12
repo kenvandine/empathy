@@ -65,7 +65,7 @@
        <applyto>/apps/empathy/ui/main_window_hidden</applyto>
        <owner>empathy</owner>
        <type>bool</type>
-       <default>false</default>
+       <default>true</default>
        <locale name="C">
           <short>Hide main window</short>
           <long>
