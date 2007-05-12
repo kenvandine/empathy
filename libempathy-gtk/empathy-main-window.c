@@ -331,7 +331,6 @@ empathy_main_window_show (void)
 					      window);
 
 	main_window_update_status (window);
-	gtk_widget_show (window->window);
 
 	return window->window;
 }

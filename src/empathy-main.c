@@ -36,7 +36,6 @@
 #include <libempathy/gossip-presence.h>
 #include <libempathy-gtk/empathy-main-window.h>
 #include <libempathy-gtk/empathy-status-icon.h>
-#include <libempathy-gtk/gossip-accounts-dialog.h>
 
 #include "empathy-filter.h"
 
@@ -126,7 +125,6 @@ new_channel_cb (EmpathyFilter *filter,
 int
 main (int argc, char *argv[])
 {
-	GList             *accounts;
 	EmpathyStatusIcon *icon;
 	GtkWidget         *window;
 	MissionControl    *mc;
@@ -158,14 +156,6 @@ main (int argc, char *argv[])
 	/* Setting up UI */
 	window = empathy_main_window_show ();
 	icon = empathy_status_icon_new (GTK_WINDOW (window));
-
-	/* Show the accounts dialog if there is no enabled accounts */
-	accounts = mc_accounts_list_by_enabled (TRUE);
-	if (accounts) {
-		mc_accounts_list_free (accounts);
-	} else {
-		gossip_accounts_dialog_show ();
-	}
 
 	gtk_main ();
 

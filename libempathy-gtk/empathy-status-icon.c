@@ -38,6 +38,7 @@
 #include "gossip-presence-chooser.h"
 #include "gossip-preferences.h"
 #include "gossip-ui-utils.h"
+#include "gossip-accounts-dialog.h"
 
 #define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), \
 		       EMPATHY_TYPE_STATUS_ICON, EmpathyStatusIconPriv))
@@ -141,6 +142,8 @@ empathy_status_icon_new (GtkWindow *window)
 {
 	EmpathyStatusIconPriv *priv;
 	EmpathyStatusIcon     *icon;
+	gboolean               should_hide;
+	gboolean               visible;
 
 	g_return_val_if_fail (GTK_IS_WINDOW (window), NULL);
 
@@ -152,6 +155,15 @@ empathy_status_icon_new (GtkWindow *window)
 	g_signal_connect (priv->window, "delete-event",
 			  G_CALLBACK (status_icon_delete_event_cb),
 			  icon);
+
+	gossip_conf_get_bool (gossip_conf_get (),
+			      GOSSIP_PREFS_UI_MAIN_WINDOW_HIDDEN,
+			      &should_hide);
+	visible = gossip_window_get_is_visible (window);
+
+	if ((!should_hide && !visible) || (should_hide && visible)) {
+		status_icon_toggle_visibility (icon);
+	}
 
 	return icon;
 }
@@ -201,9 +213,21 @@ status_icon_toggle_visibility (EmpathyStatusIcon *icon)
 		gossip_conf_set_bool (gossip_conf_get (),
 				      GOSSIP_PREFS_UI_MAIN_WINDOW_HIDDEN, TRUE);
 	} else {
+		GList *accounts;
+
 		gossip_window_present (GTK_WINDOW (priv->window), TRUE);
 		gossip_conf_set_bool (gossip_conf_get (),
 				      GOSSIP_PREFS_UI_MAIN_WINDOW_HIDDEN, FALSE);
+	
+		/* Show the accounts dialog if there is no enabled accounts */
+		accounts = mc_accounts_list_by_enabled (TRUE);
+		if (accounts) {
+			mc_accounts_list_free (accounts);
+		} else {
+			gossip_debug (DEBUG_DOMAIN,
+				      "No enabled account, Showing account dialog");
+			gossip_accounts_dialog_show ();
+		}
 	}
 }
 
