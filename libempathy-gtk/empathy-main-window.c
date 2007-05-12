@@ -41,6 +41,8 @@
 #include "gossip-geometry.h"
 #include "gossip-preferences.h"
 #include "gossip-accounts-dialog.h"
+#include "gossip-about-dialog.h"
+
 
 #define DEBUG_DOMAIN "MainWindow"
 
@@ -517,7 +519,7 @@ static void
 main_window_help_about_cb (GtkWidget         *widget,
 			   EmpathyMainWindow *window)
 {
-	//gossip_about_dialog_new (GTK_WINDOW (window->window));
+	gossip_about_dialog_new (GTK_WINDOW (window->window));
 }
 
 static void

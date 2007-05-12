@@ -133,6 +133,8 @@ main (int argc, char *argv[])
 
 	gtk_init (&argc, &argv);
 
+	g_set_application_name (PACKAGE_NAME);
+
 	/* Setting up channel filter */
 	filter = empathy_filter_new ();
 	g_signal_connect (filter, "new-channel",

@@ -29,6 +29,7 @@ libempathy_gtk_la_SOURCES =             					\
 	gossip-geometry.c			gossip-geometry.h		\
 	gossip-status-presets.c			gossip-status-presets.h		\
 	gossip-presence-chooser.c		gossip-presence-chooser.h	\
+	gossip-about-dialog.c			gossip-about-dialog.h		\
 	gossip-ui-utils.c			gossip-ui-utils.h
 
 libempathy_gtk_la_LIBADD =				\
