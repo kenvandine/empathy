@@ -1,5 +1,9 @@
 2006-05-13  Xavier Claessens  <xclaesse@gmail.com>
 
+	* configure.ac: Change version from 0.3darcs to 0.3svn
+
+2006-05-13  Xavier Claessens  <xclaesse@gmail.com>
+
 	* autogen.sh: Set executable
 	* po/POTFILES.in: Update translatable files
 
