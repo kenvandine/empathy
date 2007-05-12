@@ -86,6 +86,9 @@ AC_OUTPUT([
   Makefile
   data/Makefile
   data/16x16/Makefile
+  data/22x22/Makefile
+  data/32x32/Makefile
+  data/scalable/Makefile
   po/Makefile.in
   libempathy/Makefile
   libempathy-gtk/Makefile

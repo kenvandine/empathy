@@ -2,6 +2,6 @@
 Manager=butterfly
 Protocol=msn
 DisplayName=MSN
-IconName = im-msn
+IconName = empathy-proto-msn
 ConfigurationUI = msn
 SupportsInvisible = 1

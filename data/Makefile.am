@@ -1,4 +1,4 @@
-SUBDIRS = 16x16
+SUBDIRS = 16x16 22x22 32x32 scalable
 
 profiledir = $(datadir)/mission-control/profiles
 profile_DATA = 				\

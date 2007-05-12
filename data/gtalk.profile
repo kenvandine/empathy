@@ -2,7 +2,7 @@
 Manager=gabble
 Protocol=jabber
 DisplayName=Google Talk
-IconName = im-jabber
+IconName = empathy-proto-google-talk
 ConfigurationUI = jabber
 DefaultAccountDomain = gmail.com, googlemail.com
 Default-server = talk.google.com

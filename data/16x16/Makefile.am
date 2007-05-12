@@ -8,6 +8,10 @@ icon_DATA =					\
 	empathy-pending.png			\
 	empathy-message.png			\
 	empathy-message-new.png			\
-	empathy-typing.png
-
+	empathy-typing.png			\
+	empathy-proto-ekiga.png			\
+	empathy-proto-google-talk.png		\
+	empathy-proto-msn.png			\
+	empathy-proto-gizmo.png			\
+	empathy-proto-jabber.png
 EXTRA_DIST = $(icon_DATA)
