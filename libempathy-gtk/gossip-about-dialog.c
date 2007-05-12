@@ -54,6 +54,8 @@ static const char *documenters[] = {
 };
 
 static const char *artists[] = {
+	"Andreas Nilsson <nisses.mail@home.se>",
+	"Vinicius Depizzol <vdepizzol@gmail.com>",
 	NULL
 };
 
