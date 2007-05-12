@@ -27,13 +27,12 @@
 #include <glib.h>
 #include <gtk/gtk.h>
 
-#include <libtelepathy/tp-helpers.h>
-
 #include <libmissioncontrol/mc-account.h>
 #include <libmissioncontrol/mc-account-monitor.h>
 #include <libmissioncontrol/mission-control.h>
 
 #include <libempathy/gossip-debug.h>
+#include <libempathy/gossip-utils.h>
 #include <libempathy/gossip-presence.h>
 #include <libempathy-gtk/empathy-main-window.h>
 #include <libempathy-gtk/empathy-status-icon.h>
@@ -144,7 +143,7 @@ main (int argc, char *argv[])
 
 	/* Setting up MC */
 	monitor = mc_account_monitor_new ();
-	mc = mission_control_new (tp_get_bus ());
+	mc = gossip_mission_control_new ();
 	g_signal_connect (monitor, "account-enabled",
 			  G_CALLBACK (account_enabled_cb),
 			  mc);

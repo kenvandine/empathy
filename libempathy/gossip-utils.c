@@ -34,6 +34,7 @@
 
 #include <libxml/uri.h>
 #include <libmissioncontrol/mc-account.h>
+#include <libtelepathy/tp-helpers.h>
 
 #include "gossip-debug.h"
 #include "gossip-utils.h"
@@ -446,5 +447,20 @@ gossip_get_own_contact_from_contact (GossipContact  *contact)
 	g_object_unref (manager);
 
 	return own_contact;
+}
+
+MissionControl *
+gossip_mission_control_new (void)
+{
+	static MissionControl *mc = NULL;
+
+	if (!mc) {
+		mc = mission_control_new (tp_get_bus ());
+		g_object_add_weak_pointer (G_OBJECT (mc), (gpointer) &mc);
+	} else {
+		g_object_ref (mc);
+	}
+
+	return mc;
 }
 

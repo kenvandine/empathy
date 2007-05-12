@@ -30,7 +30,6 @@
 #include <gtk/gtk.h>
 #include <glade/glade.h>
 
-#include <libtelepathy/tp-helpers.h>
 #include <libmissioncontrol/mission-control.h>
 
 #include <libempathy/gossip-utils.h>
@@ -202,7 +201,7 @@ gossip_presence_chooser_init (GossipPresenceChooser *chooser)
 			  G_CALLBACK (presence_chooser_scroll_event_cb),
 			  NULL);
 
-	priv->mc = mission_control_new (tp_get_bus ());
+	priv->mc = gossip_mission_control_new ();
 	state = mission_control_get_presence_actual (priv->mc, NULL);
 	presence_chooser_presence_changed_cb (priv->mc, state, chooser);
 	dbus_g_proxy_connect_signal (DBUS_G_PROXY (priv->mc),
@@ -869,7 +868,7 @@ presence_chooser_set_state (McPresence   state,
 	gossip_debug (DEBUG_DOMAIN, "Setting presence to %s (%d)",
 		      status, state);
 
-	mc = mission_control_new (tp_get_bus ());
+	mc = gossip_mission_control_new ();
 	mission_control_set_presence (mc, state, status, NULL, NULL);
 	g_object_unref (mc);
 }

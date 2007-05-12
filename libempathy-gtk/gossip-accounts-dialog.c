@@ -37,7 +37,6 @@
 #include <libmissioncontrol/mission-control.h>
 #include <libmissioncontrol/mc-account-monitor.h>
 #include <libtelepathy/tp-constants.h>
-#include <libtelepathy/tp-helpers.h>
 
 #include <libempathy/gossip-debug.h>
 #include <libempathy/gossip-paths.h>
@@ -676,6 +675,10 @@ accounts_dialog_status_changed_cb (MissionControl                  *mc,
 	model = gtk_tree_view_get_model (view);
 	account = mc_account_lookup (unique_name);
 
+	gossip_debug (DEBUG_DOMAIN, "Status changed for account %s: "
+		      "status=%d presence=%d",
+		      unique_name, status, presence);
+
 	for (ok = gtk_tree_model_get_iter_first (model, &iter);
 	     ok;
 	     ok = gtk_tree_model_iter_next (model, &iter)) {
@@ -1005,7 +1008,7 @@ gossip_accounts_dialog_show (void)
 	gtk_widget_show (dialog->combobox_profile);
 
 	/* Set up signalling */
-	dialog->mc = mission_control_new (tp_get_bus ());
+	dialog->mc = gossip_mission_control_new ();
 	dialog->monitor = mc_account_monitor_new ();
 
 	/* FIXME: connect account-enabled/disabled too */

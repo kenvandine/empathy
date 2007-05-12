@@ -29,11 +29,11 @@
 
 #include <libtelepathy/tp-conn.h>
 #include <libtelepathy/tp-chan.h>
-#include <libtelepathy/tp-helpers.h>
 #include <libmissioncontrol/mc-account.h>
 
 #include <libempathy/gossip-contact.h>
 #include <libempathy/gossip-debug.h>
+#include <libempathy/gossip-utils.h>
 #include <libempathy/empathy-chandler.h>
 #include <libempathy/empathy-contact-manager.h>
 #include <libempathy/empathy-contact-list.h>
@@ -110,7 +110,7 @@ new_channel_cb (EmpathyChandler *chandler,
 		GossipPrivateChat     *chat;
 
 		/* We have a private chat channel */
-		mc = mission_control_new (tp_get_bus ());
+		mc = gossip_mission_control_new ();
 		account = mission_control_get_account_for_connection (mc, tp_conn, NULL);
 		manager = empathy_contact_manager_new ();
 		list = empathy_contact_manager_get_list (manager, account);

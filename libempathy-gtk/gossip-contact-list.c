@@ -29,13 +29,12 @@
 #include <gtk/gtk.h>
 #include <glade/glade.h>
 
-#include <libtelepathy/tp-helpers.h>
-
 #include <libmissioncontrol/mc-account.h>
 #include <libmissioncontrol/mission-control.h>
 
 #include <libempathy/empathy-contact-manager.h>
 #include <libempathy/gossip-debug.h>
+#include <libempathy/gossip-utils.h>
 
 #include "empathy-images.h"
 #include "gossip-contact-list.h"
@@ -2543,7 +2542,7 @@ contact_list_action_activated (GossipContactList *list,
 {
 	MissionControl *mc;
 
-	mc = mission_control_new (tp_get_bus ());
+	mc = gossip_mission_control_new ();
 	mission_control_request_channel (mc,
 					 gossip_contact_get_account (contact),
 					 TP_IFACE_CHANNEL_TYPE_TEXT,

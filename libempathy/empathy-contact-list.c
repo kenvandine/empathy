@@ -25,9 +25,9 @@
 
 #include <string.h>
 
+#include <libtelepathy/tp-helpers.h>
 #include <libtelepathy/tp-conn.h>
 #include <libtelepathy/tp-chan.h>
-#include <libtelepathy/tp-helpers.h>
 #include <libtelepathy/tp-chan-type-contact-list-gen.h>
 #include <libtelepathy/tp-conn-iface-aliasing-gen.h>
 #include <libtelepathy/tp-conn-iface-presence-gen.h>
@@ -324,7 +324,7 @@ empathy_contact_list_new (McAccount *account)
 
 	g_return_val_if_fail (MC_IS_ACCOUNT (account), NULL);
 
-	mc = mission_control_new (tp_get_bus ());
+	mc = gossip_mission_control_new ();
 
 	if (mission_control_get_connection_status (mc, account, NULL) != 0) {
 		/* The account is not connected, nothing to do. */

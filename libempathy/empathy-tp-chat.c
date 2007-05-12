@@ -22,10 +22,10 @@
 
 #include <config.h>
 
-#include <libtelepathy/tp-helpers.h>
 #include <libtelepathy/tp-chan-type-text-gen.h>
 #include <libtelepathy/tp-chan-iface-chat-state-gen.h>
 #include <libtelepathy/tp-conn.h>
+#include <libtelepathy/tp-helpers.h>
 
 #include "empathy-tp-chat.h"
 #include "empathy-contact-manager.h"
@@ -33,6 +33,7 @@
 #include "empathy-marshal.h"
 #include "gossip-debug.h"
 #include "gossip-time.h"
+#include "gossip-utils.h"
 
 #define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), \
 		       EMPATHY_TYPE_TP_CHAT, EmpathyTpChatPriv))
@@ -198,7 +199,7 @@ empathy_tp_chat_new (McAccount *account,
 	priv->list = empathy_contact_manager_get_list (priv->manager, account);
 	priv->tp_chan = g_object_ref (tp_chan);
 	priv->account = g_object_ref (account);
-	priv->mc = mission_control_new (tp_get_bus ());
+	priv->mc = gossip_mission_control_new ();
 	g_object_ref (priv->list);
 
 	priv->text_iface = tp_chan_get_interface (tp_chan,
@@ -242,7 +243,7 @@ empathy_tp_chat_new_with_contact (GossipContact *contact)
 
 	g_return_val_if_fail (GOSSIP_IS_CONTACT (contact), NULL);
 
-	mc = mission_control_new (tp_get_bus ());
+	mc = gossip_mission_control_new ();
 	account = gossip_contact_get_account (contact);
 
 	if (mission_control_get_connection_status (mc, account, NULL) != 0) {

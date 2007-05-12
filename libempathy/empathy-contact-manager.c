@@ -24,7 +24,6 @@
 
 #include <string.h>
 
-#include <libtelepathy/tp-helpers.h>
 #include <libtelepathy/tp-constants.h>
 
 #include "empathy-contact-manager.h"
@@ -140,7 +139,7 @@ empathy_contact_manager_init (EmpathyContactManager *manager)
 					     (GDestroyNotify) g_object_unref,
 					     (GDestroyNotify) g_object_unref);
 
-	priv->mc = mission_control_new (tp_get_bus ());
+	priv->mc = gossip_mission_control_new ();
 
 	dbus_g_proxy_connect_signal (DBUS_G_PROXY (priv->mc),
 				     "AccountStatusChanged",

@@ -32,6 +32,8 @@
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 
+#include <libmissioncontrol/mission-control.h>
+
 #include "gossip-contact.h"
 
 G_BEGIN_DECLS
@@ -87,6 +89,8 @@ guint        gossip_account_hash                    (gconstpointer   key);
 gboolean     gossip_account_equal                   (gconstpointer   a,
 						     gconstpointer   b);
 GossipContact * gossip_get_own_contact_from_contact (GossipContact  *contact);
+MissionControl *gossip_mission_control_new (void);
+
 G_END_DECLS
 
 #endif /*  __GOSSIP_UTILS_H__ */

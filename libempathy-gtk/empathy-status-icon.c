@@ -28,8 +28,6 @@
 #include <gtk/gtk.h>
 #include <glade/glade.h>
 
-#include <libtelepathy/tp-helpers.h>
-
 #include <libmissioncontrol/mission-control.h>
 
 #include <libempathy/gossip-debug.h>
@@ -102,7 +100,7 @@ empathy_status_icon_init (EmpathyStatusIcon *icon)
 	priv = GET_PRIV (icon);
 
 	priv->icon = gtk_status_icon_new ();
-	priv->mc = mission_control_new (tp_get_bus ());
+	priv->mc = gossip_mission_control_new ();
 
 	status_icon_create_menu (icon);
 
@@ -182,10 +180,8 @@ status_icon_presence_changed_cb (MissionControl    *mc,
 	g_free (status);
 
 	if (state < MC_PRESENCE_AVAILABLE) {
-		gtk_widget_set_sensitive (priv->status_item, FALSE);
 		gtk_widget_set_sensitive (priv->message_item, FALSE);
 	} else {
-		gtk_widget_set_sensitive (priv->status_item, TRUE);
 		gtk_widget_set_sensitive (priv->message_item, TRUE);
 	}
 }
