@@ -70,6 +70,7 @@ void              gossip_chat_window_move_chat       (GossipChatWindow *old_wind
 void              gossip_chat_window_switch_to_chat  (GossipChatWindow *window,
 						      GossipChat       *chat);
 gboolean          gossip_chat_window_has_focus       (GossipChatWindow *window);
+GossipChat *      gossip_chat_window_find_chat_by_id (const gchar      *id);
 
 G_END_DECLS
 

@@ -1874,3 +1874,31 @@ gossip_chat_window_has_focus (GossipChatWindow *window)
 
 	return has_focus;
 }
+
+GossipChat *
+gossip_chat_window_find_chat_by_id (const gchar *id)
+{
+	GList *l;
+
+	for (l = chat_windows; l; l = l->next) {
+		GossipChatWindowPriv *priv;
+		GossipChatWindow     *window;
+		GList                *ll;
+
+		window = l->data;
+		priv = GET_PRIV (window);
+
+		for (ll = priv->chats; ll; ll = ll->next) {
+			GossipChat *chat;
+
+			chat = ll->data;
+
+			if (strcmp (id, gossip_chat_get_id (chat)) == 0) {
+				return chat;
+			}
+		}
+	}
+
+	return NULL;
+}
+

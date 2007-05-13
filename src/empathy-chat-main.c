@@ -37,6 +37,7 @@
 #include <libempathy/empathy-chandler.h>
 #include <libempathy/empathy-contact-manager.h>
 #include <libempathy/empathy-contact-list.h>
+#include <libempathy/empathy-tp-chat.h>
 #include <libempathy-gtk/gossip-private-chat.h>
 
 #define DEBUG_DOMAIN "ChatMain"
@@ -101,17 +102,38 @@ new_channel_cb (EmpathyChandler *chandler,
 		TpChan          *tp_chan,
 		gpointer         user_data)
 {
+	MissionControl *mc;
+	McAccount      *account;
+	GossipChat     *chat;
+	gchar          *id;
+
+	mc = gossip_mission_control_new ();
+	account = mission_control_get_account_for_connection (mc, tp_conn, NULL);
+	id = empathy_tp_chat_build_id (account, tp_chan);
+
+	chat = gossip_chat_window_find_chat_by_id (id);
+	if (chat) {
+		/* The chat already exists */
+		if (!gossip_chat_is_connected (chat)) {
+			EmpathyTpChat *tp_chat;
+
+			/* The chat died, give him the new text channel */
+			tp_chat = empathy_tp_chat_new (account, tp_chan);
+			gossip_chat_set_tp_chat (chat, tp_chat);
+			g_object_unref (tp_chat);
+		}
+		gossip_chat_present (chat);
+
+		goto OUT;
+	}
+
 	if (tp_chan->handle_type == TP_HANDLE_TYPE_CONTACT) {
-		MissionControl        *mc;
-		McAccount             *account;
 		EmpathyContactManager *manager;
 		EmpathyContactList    *list;
 		GossipContact         *contact;
 		GossipPrivateChat     *chat;
 
-		/* We have a private chat channel */
-		mc = gossip_mission_control_new ();
-		account = mission_control_get_account_for_connection (mc, tp_conn, NULL);
+		/* We have a new private chat channel */
 		manager = empathy_contact_manager_new ();
 		list = empathy_contact_manager_get_list (manager, account);
 		contact = empathy_contact_list_get_from_handle (list, tp_chan->handle);
@@ -126,12 +148,15 @@ new_channel_cb (EmpathyChandler *chandler,
 
 		gossip_chat_present (GOSSIP_CHAT (chat));
 
-		g_object_unref (mc);
-		g_object_unref (account);
 		g_object_unref (contact);
 		g_object_unref (chat);
 		g_object_unref (manager);
 	}
+
+OUT:
+	g_free (id);
+	g_object_unref (account);
+	g_object_unref (mc);
 }
 
 int

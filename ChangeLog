@@ -1,5 +1,14 @@
 2006-05-13  Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/gossip-chat-window.c:
+	* libempathy-gtk/gossip-chat-window.h:
+	* src/empathy-chat-main.c:
+	* libempathy/empathy-tp-chat.c:
+	* libempathy/empathy-tp-chat.h: When a new text channel arrives, check
+	if there is no existing GossipChat object for it.
+
+2006-05-13  Xavier Claessens  <xclaesse@gmail.com>
+
 	* src/Makefile.am:
 	* src/empathy-contact-list-main.c: Removing empathy-contact-list
 	program, it's useless.
