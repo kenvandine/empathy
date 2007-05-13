@@ -1,5 +1,10 @@
 2006-05-13  Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/gossip-account-widget-jabber.glade: Add an example
+	label for jid.
+
+2006-05-13  Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/gossip-chat-window.c:
 	* libempathy-gtk/gossip-chat-window.h:
 	* src/empathy-chat-main.c:
