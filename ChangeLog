@@ -1,5 +1,11 @@
 2006-05-13  Xavier Claessens  <xclaesse@gmail.com>
 
+	* src/Makefile.am:
+	* src/empathy-contact-list-main.c: Removing empathy-contact-list
+	program, it's useless.
+
+2006-05-13  Xavier Claessens  <xclaesse@gmail.com>
+
 	* configure.ac: Change version from 0.3darcs to 0.3svn
 
 2006-05-13  Xavier Claessens  <xclaesse@gmail.com>

@@ -11,8 +11,7 @@ libs =								\
 bin_PROGRAMS =			\
 	empathy			\
 	empathy-chat		\
-	empathy-accounts	\
-	empathy-contact-list
+	empathy-accounts
 
 empathy_SOURCES =						\
 	empathy-main.c						\
@@ -27,10 +26,6 @@ empathy_accounts_LDADD = $(libs)
 empathy_chat_SOURCES = empathy-chat-main.c
 empathy_chat_CPPFLAGS = $(cppflags)
 empathy_chat_LDADD = $(libs)
-
-empathy_contact_list_SOURCES = empathy-contact-list-main.c
-empathy_contact_list_CPPFLAGS = $(cppflags)
-empathy_contact_list_LDADD = $(libs)
 
 # MC plugin
 #pluginlib_LTLIBRARIES = libempathy-filter-plugin.la
