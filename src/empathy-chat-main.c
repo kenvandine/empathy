@@ -25,7 +25,11 @@
 #include <stdlib.h>
 
 #include <glib.h>
+#include <glib/gi18n.h>
 #include <gtk/gtk.h>
+
+#include <libgnome/gnome-program.h>
+#include <libgnomeui/gnome-ui-init.h>
 
 #include <libtelepathy/tp-conn.h>
 #include <libtelepathy/tp-chan.h>
@@ -38,6 +42,7 @@
 #include <libempathy/empathy-contact-manager.h>
 #include <libempathy/empathy-contact-list.h>
 #include <libempathy/empathy-tp-chat.h>
+#include <libempathy/gossip-paths.h>
 #include <libempathy-gtk/gossip-private-chat.h>
 
 #define DEBUG_DOMAIN "ChatMain"
@@ -49,9 +54,9 @@
 #define EXIT_TIMEOUT 5
 
 
-static guint chat_count = 0;
-static guint exit_timeout = 0;
-
+static guint    chat_count = 0;
+static guint    exit_timeout = 0;
+static gboolean debug_mode = FALSE;
 
 static gboolean
 exit_timeout_cb (gpointer user_data)
@@ -66,7 +71,7 @@ exit_timeout_cb (gpointer user_data)
 static void
 exit_timeout_start (void)
 {
-	if (exit_timeout) {
+	if (exit_timeout || debug_mode) {
 		return;
 	}
 
@@ -163,8 +168,26 @@ int
 main (int argc, char *argv[])
 {
 	EmpathyChandler *chandler;
+	GnomeProgram    *program;
+	gchar           *localedir;
 
-	gtk_init (&argc, &argv);
+	localedir = gossip_paths_get_locale_path ();
+	bindtextdomain (GETTEXT_PACKAGE, localedir);
+	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
+	textdomain (GETTEXT_PACKAGE);
+	g_free (localedir);
+
+	program = gnome_program_init ("empathy-chat",
+				      PACKAGE_VERSION,
+				      LIBGNOMEUI_MODULE,
+				      argc, argv,
+				      GNOME_PROGRAM_STANDARD_PROPERTIES,
+				      GNOME_PARAM_HUMAN_READABLE_NAME, PACKAGE_NAME,
+				      NULL);
+
+	if (g_getenv ("EMPATHY_DEBUG")) {
+		debug_mode = TRUE;
+	}
 
 	exit_timeout_start ();
 	chandler = empathy_chandler_new (BUS_NAME, OBJECT_PATH);
@@ -174,6 +197,9 @@ main (int argc, char *argv[])
 			  NULL);
 
 	gtk_main ();
+
+	g_object_unref (program);
+	g_object_unref (chandler);
 
 	return EXIT_SUCCESS;
 }

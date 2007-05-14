@@ -1,6 +1,9 @@
 cppflags =			\
-	-I.			\
-	-I$(top_srcdir)		\
+	-I$(top_srcdir)                          	\
+	-DPREFIX="\"$(prefix)"\"			\
+	-DSYSCONFDIR=\""$(sysconfdir)"\"		\
+	-DDATADIR=\""$(datadir)"\"              	\
+	-DLIBDIR=\""$(libdir)"\"			\
 	$(EMPATHY_CFLAGS)	\
 	$(WARN_CFLAGS)
 

@@ -25,7 +25,11 @@
 #include <stdlib.h>
 
 #include <glib.h>
+#include <glib/gi18n.h>
 #include <gtk/gtk.h>
+
+#include <libgnome/gnome-program.h>
+#include <libgnomeui/gnome-ui-init.h>
 
 #include <libmissioncontrol/mc-account.h>
 #include <libmissioncontrol/mc-account-monitor.h>
@@ -34,6 +38,7 @@
 #include <libempathy/gossip-debug.h>
 #include <libempathy/gossip-utils.h>
 #include <libempathy/gossip-presence.h>
+#include <libempathy/gossip-paths.h>
 #include <libempathy-gtk/empathy-main-window.h>
 #include <libempathy-gtk/empathy-status-icon.h>
 
@@ -41,16 +46,16 @@
 
 #define DEBUG_DOMAIN "EmpathyMain"
 
-static void error_cb              (MissionControl    *mc,
-				   GError            *error,
-				   gpointer           data);
-static void service_ended_cb      (MissionControl    *mc,
-				   gpointer           user_data);
-static void operation_error_cb    (MissionControl    *mc,
-				   guint              operation_id,
-				   guint              error_code,
-				   gpointer           user_data);
-static void start_mission_control (MissionControl    *mc);
+static void error_cb              (MissionControl *mc,
+				   GError         *error,
+				   gpointer        data);
+static void service_ended_cb      (MissionControl *mc,
+				   gpointer        user_data);
+static void operation_error_cb    (MissionControl *mc,
+				   guint           operation_id,
+				   guint           error_code,
+				   gpointer        user_data);
+static void start_mission_control (MissionControl *mc);
 
 static void
 error_cb (MissionControl *mc,
@@ -130,10 +135,36 @@ main (int argc, char *argv[])
 	MissionControl    *mc;
 	McAccountMonitor  *monitor;
 	EmpathyFilter     *filter;
+	gchar             *localedir;
+	GnomeProgram      *program;
+	gboolean           no_connect = FALSE;
+	GOptionContext    *context;
+	GOptionEntry       options[] = {
+		{ "no-connect", 'n',
+		  0, G_OPTION_ARG_NONE, &no_connect,
+		  N_("Don't connect on startup"),
+		  NULL },
+	};
 
-	gtk_init (&argc, &argv);
+	localedir = gossip_paths_get_locale_path ();
+	bindtextdomain (GETTEXT_PACKAGE, localedir);
+	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
+	textdomain (GETTEXT_PACKAGE);
+	g_free (localedir);
+
+	context = g_option_context_new (_("- Empathy Instant Messenger"));
+	g_option_context_add_main_entries (context, options, GETTEXT_PACKAGE);
 
 	g_set_application_name (PACKAGE_NAME);
+
+	program = gnome_program_init ("empathy",
+				      PACKAGE_VERSION,
+				      LIBGNOMEUI_MODULE,
+				      argc, argv,
+				      GNOME_PROGRAM_STANDARD_PROPERTIES,
+				      "goption-context", context,
+				      GNOME_PARAM_HUMAN_READABLE_NAME, PACKAGE_NAME,
+				      NULL);
 
 	/* Setting up channel filter */
 	filter = empathy_filter_new ();
@@ -153,7 +184,10 @@ main (int argc, char *argv[])
 	g_signal_connect (mc, "Error",
 			  G_CALLBACK (operation_error_cb),
 			  NULL);
-	start_mission_control (mc);
+
+	if (!no_connect) {
+		start_mission_control (mc);
+	}
 
 	/* Setting up UI */
 	window = empathy_main_window_show ();
@@ -168,6 +202,7 @@ main (int argc, char *argv[])
 	g_object_unref (monitor);
 	g_object_unref (mc);
 	g_object_unref (icon);
+	g_object_unref (program);
 
 	return EXIT_SUCCESS;
 }
