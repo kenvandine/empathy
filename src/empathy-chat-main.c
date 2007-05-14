@@ -185,6 +185,8 @@ main (int argc, char *argv[])
 				      GNOME_PARAM_HUMAN_READABLE_NAME, PACKAGE_NAME,
 				      NULL);
 
+	gtk_window_set_default_icon_name ("empathy");
+
 	if (g_getenv ("EMPATHY_DEBUG")) {
 		debug_mode = TRUE;
 	}

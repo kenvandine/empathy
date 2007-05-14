@@ -1,5 +1,6 @@
 icondir = $(datadir)/icons/hicolor/scalable/apps
 icon_DATA =					\
+	empathy.svg				\
 	empathy-available.svg			\
 	empathy-offline.svg			\
 	empathy-away.svg			\

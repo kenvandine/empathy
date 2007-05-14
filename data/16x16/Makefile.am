@@ -1,5 +1,6 @@
 icondir = $(datadir)/icons/hicolor/16x16/apps
 icon_DATA =					\
+	empathy.png				\
 	empathy-available.png			\
 	empathy-offline.png			\
 	empathy-away.png			\

@@ -166,6 +166,8 @@ main (int argc, char *argv[])
 				      GNOME_PARAM_HUMAN_READABLE_NAME, PACKAGE_NAME,
 				      NULL);
 
+	gtk_window_set_default_icon_name ("empathy");
+
 	/* Setting up channel filter */
 	filter = empathy_filter_new ();
 	g_signal_connect (filter, "new-channel",

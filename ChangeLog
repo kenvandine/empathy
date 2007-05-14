@@ -1,6 +1,24 @@
 2006-05-14  Xavier Claessens  <xclaesse@gmail.com>
 
 	* src/empathy-chat-main.c:
+	* src/empathy-main.c:
+	* configure.ac:
+	* data/22x22/Makefile.am:
+	* data/22x22/empathy.png:
+	* data/48x48:
+	* data/48x48/Makefile.am:
+	* data/48x48/empathy.png:
+	* data/32x32/Makefile.am:
+	* data/32x32/empathy.png:
+	* data/16x16/empathy.png:
+	* data/16x16/Makefile.am:
+	* data/scalable/empathy.svg:
+	* data/scalable/Makefile.am:
+	* data/Makefile.am: Add empathy icon stolen from cohoba.
+
+2006-05-14  Xavier Claessens  <xclaesse@gmail.com>
+
+	* src/empathy-chat-main.c:
 	* src/Makefile.am:
 	* src/empathy-main.c:
 	* po/POTFILES.in
