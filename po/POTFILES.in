@@ -1,6 +1,7 @@
 # List of source files containing translatable strings.
 # Please keep this file sorted alphabetically.
 
+data/empathy.desktop.in
 data/empathy.schemas.in
 
 libempathy/gossip-contact.c

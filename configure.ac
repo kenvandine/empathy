@@ -1,4 +1,4 @@
-AC_INIT(Empathy, 0.4)
+AC_INIT(Empathy, 0.4, http://bugzilla.gnome.org/browse.cgi?product=empathy)
 AC_PREREQ(2.59)
 AC_COPYRIGHT([Copyright (C) 2003-2007 Imendio AB])
 
@@ -26,7 +26,7 @@ GTK_REQUIRED=2.10.0
 GCONF_REQUIRED=1.2.0
 LIBGLADE_REQUIRED=2.0.0
 TELEPATHY_REQUIRED=0.0.51
-MISSION_CONTROL_REQUIRED=0.21
+MISSION_CONTROL_REQUIRED=4.22
 
 IDT_COMPILE_WARNINGS
 
@@ -35,6 +35,9 @@ AC_SUBST(GLIB_GENMARSHAL)
 
 pluginlibdir=`$PKG_CONFIG mission-control --variable=pluginlibdir`
 AC_SUBST(pluginlibdir)
+
+BUGZILLA_COMPONENT=General
+AC_SUBST(BUGZILLA_COMPONENT)
 
 dnl -----------------------------------------------------------
 dnl Language Support
@@ -85,6 +88,7 @@ dnl -----------------------------------------------------------
 AC_OUTPUT([
   Makefile
   data/Makefile
+  data/empathy.desktop.in
   data/16x16/Makefile
   data/22x22/Makefile
   data/32x32/Makefile

@@ -1,5 +1,14 @@
 2006-05-15  Xavier Claessens  <xclaesse@gmail.com>
 
+	* configure.ac:
+	* data/empathy.desktop.in:
+	* data/Makefile.am:
+	* data/empathy.desktop.in.in:
+	* po/POTFILES.in: Set bugzilla information in desktop file and add it 
+	to POTFILES.in
+
+2006-05-15  Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/empathy-status-icon.glade:
 	* libempathy-gtk/empathy-main-window.glade: Fix using of gossip icons
 	in menus.

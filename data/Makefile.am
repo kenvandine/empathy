@@ -43,11 +43,13 @@ endif
 
 EXTRA_DIST = 				\
 	$(image_DATA)			\
-	$(autostart_DATA)		\
 	$(profile_DATA)			\
+	$(autostart_in_files)		\
+	$(autostart_DATA)		\
 	$(schemas_in_files)		\
 	$(schemas_DATA)
 
-DISTCLEANFILES = 		\
+DISTCLEANFILES = 			\
+	$(autostart_DATA)		\
 	$(schemas_DATA)
 
