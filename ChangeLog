@@ -1,3 +1,9 @@
+2006-05-15  Xavier Claessens  <xclaesse@gmail.com>
+
+	* libempathy-gtk/empathy-status-icon.glade:
+	* libempathy-gtk/empathy-main-window.glade: Fix using of gossip icons
+	in menus.
+
 2006-05-14  Xavier Claessens  <xclaesse@gmail.com>
 
 	* src/empathy-chat-main.c:
