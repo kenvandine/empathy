@@ -1,0 +1,2081 @@
+# This file is distributed under the same license as the gossip package.
+# Copyright (C) 2006 Samuli Seppänen and Henna Nykänen.
+#
+# Ilkka Tuohela <hile@iki.fi>, 2006.
+# Samuli Seppänen & Henna Nykänen <sjsepp@utu.fi>, 2006.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: gossip\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2007-05-15 23:46+0200\n"
+"PO-Revision-Date: 2006-10-17 20:50+0300\n"
+"Last-Translator: Samuli Seppänen & Henna Nykänen <sjsepp@utu.fi>\n"
+"Language-Team:  <en@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.10.2\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: ../data/empathy.desktop.in.h:1
+#, fuzzy
+msgid "Empathy Instant Messenger"
+msgstr "Pikaviestiohjelma"
+
+#: ../data/empathy.desktop.in.h:2
+msgid "Instant Messenger"
+msgstr "Pikaviestiohjelma"
+
+#: ../data/empathy.schemas.in.h:1
+msgid "Always open a separate chat window for new chats."
+msgstr "Avaa aina uusi ikkuna uusille keskusteluille."
+
+#: ../data/empathy.schemas.in.h:2
+msgid "Chat window theme"
+msgstr "Keskusteluikkunan teema"
+
+#: ../data/empathy.schemas.in.h:3
+msgid ""
+"Comma separated list of spell checker languages to use (e.g. en, fr, nl)."
+msgstr ""
+"Pilkuilla erotettu luettelo kielentarkastuksessa käytettävistä kielistä "
+"(esim. en, fr, nl)."
+
+#: ../data/empathy.schemas.in.h:4
+msgid "Compact contact list"
+msgstr "Pienikokoinen tuttavalista"
+
+#: ../data/empathy.schemas.in.h:5
+msgid "Contact list sort criterium"
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:6
+msgid "Default directory to select an avatar image from"
+msgstr "Oletushakemisto, josta avatar-kuvat haetaan"
+
+#: ../data/empathy.schemas.in.h:7
+msgid "Enable popup when contact is available"
+msgstr "Näytä ponnahdusikkuna, kun yhteystieto on linjoilla"
+
+#: ../data/empathy.schemas.in.h:8
+msgid "Enable sound when away"
+msgstr "Käytä ääniä poissa-tilassa"
+
+#: ../data/empathy.schemas.in.h:9
+msgid "Enable sound when busy"
+msgstr "Käytä ääniä varattu-tilassa"
+
+#: ../data/empathy.schemas.in.h:10
+msgid "Enable spell checker"
+msgstr "Ota käyttöön oikeinkirjoituksen tarkistus"
+
+#: ../data/empathy.schemas.in.h:11
+msgid "Hide main window"
+msgstr "Piilota pääikkuna"
+
+#: ../data/empathy.schemas.in.h:12
+msgid "Hide the main window."
+msgstr "Piilota pääikkuna."
+
+#: ../data/empathy.schemas.in.h:13
+msgid "Open new chats in separate windows"
+msgstr "Avaa uusi ikkuna uusille keskusteluille"
+
+#: ../data/empathy.schemas.in.h:14
+msgid "Show avatars"
+msgstr "Näytä avatar-kuvat"
+
+#: ../data/empathy.schemas.in.h:15
+msgid "Show hint about closing the main window"
+msgstr "Näytä vihje pääikkunan sulkemisesta"
+
+#: ../data/empathy.schemas.in.h:16
+msgid "Show offline contacts"
+msgstr "Näytä linjoilta poissa olevat tuttavat"
+
+#: ../data/empathy.schemas.in.h:17
+msgid "Spell checking languages"
+msgstr "Kielentarkastuksessa käytetyt kielet"
+
+#: ../data/empathy.schemas.in.h:18
+msgid "The last directory that an avatar image was chosen from."
+msgstr "Viimeisin hakemisto, josta avatar-kuva oli valittu."
+
+#: ../data/empathy.schemas.in.h:19
+msgid "The theme that is used to display the conversation in chat windows."
+msgstr "Keskusteluikkunoissa käytettävä teema."
+
+#: ../data/empathy.schemas.in.h:20
+msgid "Use graphical smileys"
+msgstr "Käytä hymiökuvakkeita"
+
+#: ../data/empathy.schemas.in.h:21
+msgid "Use notification sounds"
+msgstr "Käytä merkkiääniä"
+
+#: ../data/empathy.schemas.in.h:22
+msgid "Use theme for chat rooms"
+msgstr "Käytä teemaa keskusteluhuoneille"
+
+#: ../data/empathy.schemas.in.h:23
+msgid ""
+"Whether or not to check words typed against the languages you want to check "
+"with."
+msgstr "Tarkistetaanko oikeinkirjoitus haluamiasi kieliä vasten."
+
+#: ../data/empathy.schemas.in.h:24
+msgid ""
+"Whether or not to convert smileys into graphical images in conversations."
+msgstr "Muunnetaanko hymiöt graafisiksi?"
+
+#: ../data/empathy.schemas.in.h:25
+msgid "Whether or not to play a sound when messages arrive."
+msgstr "Annetaanko viestien saapuessa merkkiääni?"
+
+#: ../data/empathy.schemas.in.h:26
+msgid "Whether or not to play sounds when away."
+msgstr "Käytetäänko merkkiääniä Poissa-tilassa?"
+
+#: ../data/empathy.schemas.in.h:27
+msgid "Whether or not to play sounds when busy."
+msgstr "Käytetäänkö merkkiääniä Varattu-tilassa?"
+
+#: ../data/empathy.schemas.in.h:28
+msgid "Whether or not to show a popup when a contact becomes available."
+msgstr "Näytetäänkö ponnahdusikkuna, kun yhteystieto tulee linjoille."
+
+#: ../data/empathy.schemas.in.h:29
+msgid ""
+"Whether or not to show avatars for contacts in the contact list and chat "
+"windows."
+msgstr ""
+"Näytetäänkö yhteystiedoille yhteystietolistassa ja keskusteluikkunoissa "
+"avatarit."
+
+#: ../data/empathy.schemas.in.h:30
+msgid "Whether or not to show contacts that are offline in the contact list."
+msgstr "Näytetäänkö tuttavalistassa myös linjoilta poissa olevat tuttavat?"
+
+#: ../data/empathy.schemas.in.h:31
+msgid ""
+"Whether or not to show the message dialog about closing the main window with "
+"the 'x' button in the title bar."
+msgstr ""
+"Näytetäänkö viesti-ikkuna pääikkunan sulkemisesta suljettaessa ikkuna X-"
+"napista."
+
+#: ../data/empathy.schemas.in.h:32
+msgid "Whether to show the contact list in compact mode or not."
+msgstr "Näytetäänkö tuttavalista pienikokoisena."
+
+#: ../data/empathy.schemas.in.h:33
+msgid "Whether to use the theme for chat rooms or not."
+msgstr "Käytetäänkö teemaa keskusteluhuoneille."
+
+#: ../data/empathy.schemas.in.h:34
+msgid ""
+"Which criterium to use when sorting the contact list. Default is to use sort "
+"by the contact's name with the value \"name\". A value of \"state\" will "
+"sort the contact list by state."
+msgstr ""
+
+#: ../libempathy/gossip-contact.c:654 ../libempathy/gossip-presence.c:184
+#: ../libempathy/gossip-presence.c:283
+msgid "Offline"
+msgstr "Poissa linjoilta"
+
+#: ../libempathy/gossip-presence.c:274
+msgid "Available"
+msgstr "Tavoitettavissa"
+
+#: ../libempathy/gossip-presence.c:276
+msgid "Busy"
+msgstr "Varattu"
+
+#: ../libempathy/gossip-presence.c:279
+msgid "Away"
+msgstr "Poissa"
+
+#: ../libempathy-gtk/empathy-main-window.c:254
+msgid "Show and edit accounts"
+msgstr "Näytä ja muokkaa tilejä"
+
+#: ../libempathy-gtk/empathy-main-window.c:456
+msgid "Group"
+msgstr "Ryhmä"
+
+#: ../libempathy-gtk/empathy-main-window.c:477
+msgid "Contact"
+msgstr "Tuttavat"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:1
+#, fuzzy
+msgid "Contact List - Empathy"
+msgstr "_Näytä tuttavalista"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:2
+msgid "Context"
+msgstr "Yhteys"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:3
+#, fuzzy
+msgid "Join _Favorites"
+msgstr "Liity _suosikkeihin"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:4
+#: ../libempathy-gtk/gossip-chat.glade.h:10
+msgid "Join _New..."
+msgstr "Liity _uuteen..."
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:5
+#, fuzzy
+msgid "Manage Favorites..."
+msgstr "Hallitse keskusteluhuoneita..."
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:6
+msgid "Show _Offline Contacts"
+msgstr "Näytä _poissa linjoilta olevat tuttavat"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:7
+msgid "_About"
+msgstr "_Tietoja"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:8
+msgid "_Accounts"
+msgstr "_Käyttäjätilit"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:9
+#: ../libempathy-gtk/gossip-chat.glade.h:15
+msgid "_Add Contact..."
+msgstr "Lisää _tuttava..."
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:10
+#: ../libempathy-gtk/gossip-contact-list.c:298
+msgid "_Chat"
+msgstr "_Keskustele"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:11
+msgid "_Contents"
+msgstr "_Sisältö"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:12
+#: ../libempathy-gtk/gossip-chat.glade.h:21
+#: ../libempathy-gtk/gossip-contact-list.c:310
+msgid "_Edit"
+msgstr "_Muokkaa"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:13
+msgid "_Help"
+msgstr "O_hje"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:14
+#: ../libempathy-gtk/empathy-status-icon.glade.h:2
+msgid "_New Message..."
+msgstr "_Uusi viesti..."
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:15
+msgid "_Personal Information"
+msgstr "_Henkilötiedot"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:16
+msgid "_Preferences"
+msgstr "_Asetukset"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:17
+#: ../libempathy-gtk/empathy-status-icon.glade.h:3
+msgid "_Quit"
+msgstr "_Lopeta"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:18
+#: ../libempathy-gtk/gossip-chat.glade.h:25
+msgid "_Room"
+msgstr "_Huone"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:19
+#: ../libempathy-gtk/gossip-chat.glade.h:28
+#: ../libempathy-gtk/gossip-contact-list.c:326
+msgid "_View Previous Conversations"
+msgstr "_Näytä edelliset keskustelut"
+
+#: ../libempathy-gtk/empathy-status-icon.glade.h:1
+msgid "Status"
+msgstr "Tila"
+
+#: ../libempathy-gtk/empathy-status-icon.glade.h:4
+msgid "_Show Contact List"
+msgstr "_Näytä tuttavalista"
+
+#: ../libempathy-gtk/gossip-about-dialog.c:63
+#, fuzzy
+msgid ""
+"Empathy is free software; you can redistribute it and/or modify it under the "
+"terms of the GNU General Public License as published by the Free Software "
+"Foundation; either version 2 of the License, or (at your option) any later "
+"version."
+msgstr ""
+"Gossip is free software; you can redistribute it and/or modify it under the "
+"terms of the GNU General Public License as published by the Free Software "
+"Foundation; either version 2 of the License, or (at your option) any later "
+"version."
+
+#: ../libempathy-gtk/gossip-about-dialog.c:67
+#, fuzzy
+msgid ""
+"Empathy is distributed in the hope that it will be useful, but WITHOUT ANY "
+"WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS "
+"FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more "
+"details."
+msgstr ""
+"Gossip is distributed in the hope that it will be useful, but WITHOUT ANY "
+"WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS "
+"FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more "
+"details."
+
+#: ../libempathy-gtk/gossip-about-dialog.c:71
+#, fuzzy
+msgid ""
+"You should have received a copy of the GNU General Public License along with "
+"Empathy; if not, write to the Free Software Foundation, Inc., 51 Franklin "
+"Street, Fifth Floor, Boston, MA 02110-130159 USA"
+msgstr ""
+"You should have received a copy of the GNU General Public License along with "
+"Gossip; if not, write to the Free Software Foundation, Inc., 51 Franklin "
+"Street, Fifth Floor, Boston, MA 02110-130159 USA"
+
+#: ../libempathy-gtk/gossip-about-dialog.c:99
+msgid "An Instant Messaging client for GNOME"
+msgstr "Gnomen pikaviestiohjelma"
+
+#: ../libempathy-gtk/gossip-about-dialog.c:105
+msgid "translator-credits"
+msgstr ""
+"Samuli Seppänen ja Henna Nykänen, 2006.\n"
+"Ilkka Tuohela, 2006.\n"
+"\n"
+"http://www.gnome.fi/"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:224
+#, fuzzy
+msgid "Disable"
+msgstr "Tavoitettavissa"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:227
+#, fuzzy
+msgid "Enable"
+msgstr "Esimerkki"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:261
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:3
+msgid "<b>No Account Selected</b>"
+msgstr "<b>Tiliä ei ole valittu</b>"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:263
+msgid ""
+"To add a new account, you can click on the 'Add' button and a new entry will "
+"be created for you to start configuring.\n"
+"\n"
+"If you do not want to add an account, simply click on the account you want "
+"to configure in the list on the left."
+msgstr ""
+"Jos haluat lisätä uuden tilin, napsauta \"Lisää\"-painiketta ja määrittele "
+"tilin asetukset listaan lisätystä kohdasta.\n"
+"\n"
+"Jos et halua lisätä uutta tiliä, muokkaa olemassaolevaa tiliä napsauttamalla "
+"sen kohtaa vasemmalla olevasta listasta."
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:272
+msgid "<b>No Accounts Configured</b>"
+msgstr "<b>Tilejä ei ole määritelty</b>"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:274
+msgid ""
+"To add a new account, you can click on the 'Add' button and a new entry will "
+"be created for you to start configuring."
+msgstr ""
+"Jos haluat lisätä uuden tilin, voit napsauttaa \"Lisää\"-painiketta ja uusi "
+"kohta lisätään, josta voit määritellä tilin asetukset."
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:362
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:6
+msgid "Accounts"
+msgstr "Käyttäjätilit"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:857
+#, c-format
+msgid ""
+"You are about to remove your %s account!\n"
+"Are you sure you want to proceed?"
+msgstr ""
+"Olet poistamassa %s-tilisi!\n"
+"Haluatko varmasti jatkaa?"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:863
+msgid ""
+"Any associated conversations and chat rooms will NOT be removed if you "
+"decide to proceed.\n"
+"\n"
+"Should you decide to add the account back at a later time, they will still "
+"be available."
+msgstr ""
+"Liitettyjä keskusteluja ja keskusteluhuoneita ei poisteta, jos päätät "
+"jatkaa.\n"
+"\n"
+"Jos päätät myöhemmin lisätä tilin takaisin, ovat vanhat keskustelut ja "
+"keskusteluhuoneet jälleen käytettävissä."
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:1
+msgid "<b>Account</b>"
+msgstr "<b>Tili</b>"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:2
+#, fuzzy
+msgid "<b>New Account</b>"
+msgstr "<b>Tili</b>"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:4
+msgid "<b>Settings</b>"
+msgstr "<b>Asetukset</b>"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:5
+msgid "A unique name for this account to identify it personally to you."
+msgstr ""
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:7
+#, fuzzy
+msgid "Cr_eate"
+msgstr "Keskustele!"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:8
+msgid "Imendio "
+msgstr ""
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:9
+msgid "Jabber"
+msgstr "Jabber"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:10
+msgid ""
+"To add a new account, you can click on the 'Add' button and a new entry will "
+"be created for you to started configuring.\n"
+"\n"
+"If you do not want to add an account, simply click on the account you want "
+"to configure in the list on the left."
+msgstr ""
+"Jos haluat lisätä uuden tilin, napsauta \"Lisää\"-painiketta ja määrittele "
+"tilin asetukset listaan lisätystä kohdasta.\n"
+"\n"
+"Jos et halua lisätä uutta tiliä, muokkaa olemassaolevaa tiliä napsauttamalla "
+"sen kohtaa vasemmalla olevasta listasta."
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:13
+msgid "_Name:"
+msgstr "_Nimi:"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:14
+#, fuzzy
+msgid "_Type:"
+msgstr "_Aihe:"
+
+#: ../libempathy-gtk/gossip-account-widget-generic.c:144
+#: ../libempathy-gtk/gossip-account-widget-generic.c:186
+#, c-format
+msgid "%s:"
+msgstr "%s:"
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:1
+#, fuzzy
+msgid ""
+"<small><b><span foreground=\"#555\">Example: user@jabber.org</span></b></"
+"small>"
+msgstr "<span size=\"smaller\">Esimerkki: seppo@jabber.org</span>"
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:2
+msgid "Forget password and clear the entry."
+msgstr ""
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:3
+msgid "Login I_D:"
+msgstr "_Käyttäjätunnus:"
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:4
+msgid "Pass_word:"
+msgstr "S_alasana:"
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:5
+msgid "Reso_urce:"
+msgstr "Res_urssi:"
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:6
+msgid "Use encryption (SS_L)"
+msgstr "Käytä salausta (SS_L)"
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:7
+msgid "_Port:"
+msgstr "_Portti:"
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:8
+msgid "_Server:"
+msgstr "Pal_velin:"
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:9
+msgid "jabber account settings"
+msgstr "jabber-tilin asetukset"
+
+#: ../libempathy-gtk/gossip-chat.c:314
+msgid "Disconnected"
+msgstr "Ei yhteyttä"
+
+#: ../libempathy-gtk/gossip-chat.c:858
+msgid "Insert Smiley"
+msgstr "Lisää hymiö"
+
+#: ../libempathy-gtk/gossip-chat.c:906
+msgid "_Check Word Spelling..."
+msgstr "_Tarkasta oikeinkirjoitus..."
+
+#: ../libempathy-gtk/gossip-chat.c:1244
+msgid "Connected"
+msgstr "Yhdistetty"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:1
+msgid "C_lear"
+msgstr "_Tyhjennä"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:2
+msgid "Change _Topic..."
+msgstr ""
+
+#: ../libempathy-gtk/gossip-chat.glade.h:3
+msgid "Chat"
+msgstr "Keskustelu"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:4
+msgid "Contact Infor_mation"
+msgstr "_Yhteystiedot"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:5
+msgid "Cu_t"
+msgstr "_Leikkaa"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:6
+#, fuzzy
+msgid "In_vite..."
+msgstr "_Kutsu"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:7
+msgid "Insert _Smiley"
+msgstr "Lisää _hymiö"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:8
+#, fuzzy
+msgid "Invitation _message:"
+msgstr "Kutsuviesti:"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:9
+msgid "Invite"
+msgstr "Kutsu"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:11
+msgid "Move Tab _Left"
+msgstr "Siirrä välilehti _vasemmalle"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:12
+msgid "Move Tab _Right"
+msgstr "Siirrä välilehti _oikealle"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:13
+msgid "Select who would you like to invite:"
+msgstr "Valitse ketkä haluat kutsua:"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:14
+msgid "You have been invited to join a chat conference."
+msgstr "Olet saanut kutsun ryhmäkeskusteluun."
+
+#: ../libempathy-gtk/gossip-chat.glade.h:16
+msgid "_Add To Favorites"
+msgstr "Lisää _suosikkeihin"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:17
+msgid "_Close"
+msgstr "_Sulje"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:18
+msgid "_Conversation"
+msgstr "_Keskustelu"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:19
+msgid "_Copy"
+msgstr "_Kopioi"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:20
+msgid "_Detach Tab"
+msgstr "_Irrota välilehti"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:22
+msgid "_Next Tab"
+msgstr "_Seuraava välilehti"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:23
+msgid "_Paste"
+msgstr "_Liitä"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:24
+msgid "_Previous Tab"
+msgstr "_Edellinen välilehti"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:26
+msgid "_Show Contacts"
+msgstr "_Näytä tuttavat"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:27
+msgid "_Tabs"
+msgstr "V_älilehdet"
+
+#: ../libempathy-gtk/gossip-chat-view.c:544
+msgid "_Copy Link Address"
+msgstr "_Kopioi linkin osoite"
+
+#: ../libempathy-gtk/gossip-chat-view.c:552
+msgid "_Open Link"
+msgstr "_Avaa linkki"
+
+#: ../libempathy-gtk/gossip-chat-view.c:889
+msgid "%A %d %B %Y"
+msgstr "%A %d. %Bta %Y"
+
+#: ../libempathy-gtk/gossip-chat-window.c:685
+#: ../libempathy-gtk/gossip-chat-window.c:715
+#, fuzzy
+msgid "New Message"
+msgid_plural "New Messages"
+msgstr[0] "Uusi viesti"
+msgstr[1] "Uusi viesti"
+
+#: ../libempathy-gtk/gossip-chat-window.c:691
+msgid "Chat Room"
+msgstr "Keskusteluhuone"
+
+#: ../libempathy-gtk/gossip-chat-window.c:696
+#: ../libempathy-gtk/gossip-chat-window.c:719
+#, fuzzy, c-format
+msgid "Conversation"
+msgid_plural "Conversations (%d)"
+msgstr[0] "_Keskustelu"
+msgstr[1] "_Keskustelu"
+
+#: ../libempathy-gtk/gossip-chat-window.c:1295
+msgid "Typing a message."
+msgstr "Kirjoittaa viestiä."
+
+#: ../libempathy-gtk/gossip-contact-list.c:290
+msgid "_Contact"
+msgstr "_Tuttavat"
+
+#: ../libempathy-gtk/gossip-contact-list.c:294
+msgid "_Group"
+msgstr "_Ryhmä"
+
+#: ../libempathy-gtk/gossip-contact-list.c:298
+msgid "Chat with contact"
+msgstr "Keskustele tuttavan kanssa"
+
+#: ../libempathy-gtk/gossip-contact-list.c:302
+msgid "Infor_mation"
+msgstr "_Tietoja"
+
+#: ../libempathy-gtk/gossip-contact-list.c:302
+msgid "View contact information"
+msgstr "Näytä yhteystiedot"
+
+#: ../libempathy-gtk/gossip-contact-list.c:306
+msgid "Re_name"
+msgstr "Nimeä _uudelleen"
+
+#: ../libempathy-gtk/gossip-contact-list.c:306
+msgid "Rename"
+msgstr "Nimeä uudelleen"
+
+#: ../libempathy-gtk/gossip-contact-list.c:310
+msgid "Edit the groups and name for this contact"
+msgstr "Muokkaa yhteystiedon ryhmiä ja nimeä"
+
+#: ../libempathy-gtk/gossip-contact-list.c:314
+msgid "_Remove"
+msgstr "_Poista"
+
+#: ../libempathy-gtk/gossip-contact-list.c:314
+msgid "Remove contact"
+msgstr "_Poista tuttavan yhteystiedot"
+
+#: ../libempathy-gtk/gossip-contact-list.c:318
+msgid "_Invite to Chat Room"
+msgstr "K_utsu keskusteluhuoneeseen"
+
+#: ../libempathy-gtk/gossip-contact-list.c:318
+msgid "Invite to a currently open chat room"
+msgstr "Kutsu avoinna olevaan keskusteluhuoneeseen"
+
+#: ../libempathy-gtk/gossip-contact-list.c:322
+msgid "_Send File..."
+msgstr "_Lähetä tiedosto..."
+
+#: ../libempathy-gtk/gossip-contact-list.c:322
+msgid "Send a file"
+msgstr "Lähetä tiedosto"
+
+#: ../libempathy-gtk/gossip-contact-list.c:326
+msgid "View previous conversations with this contact"
+msgstr "Näytä edelliset keskustelut tämän tuttavan kanssa"
+
+#: ../libempathy-gtk/gossip-preferences.c:250
+msgid "Language"
+msgstr "Kieli"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:1
+msgid "<b>Appearance</b>"
+msgstr "<b>Ulkoasu</b>"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:2
+msgid "<b>Audio</b>"
+msgstr "<b>Ääni</b>"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:3
+msgid "<b>Behaviour</b>"
+msgstr "<b>Toiminta</b>"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:4
+#, fuzzy
+msgid "<b>Contact List</b>"
+msgstr "<b>Yhteys</b>"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:5
+msgid "<b>Languages</b>"
+msgstr "<b>Kielet</b>"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:6
+msgid "<b>Options</b>"
+msgstr "<b>Valinnat</b>"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:7
+msgid "<b>Visual</b>"
+msgstr "<b>Ulkoasu</b>"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:8
+msgid ""
+"<small>The list of languages reflects only the languages for which you have "
+"a dictionary installed.</small>"
+msgstr ""
+"<small>Lista kielistä sisältää ainoastaan ne kielet, joille tietokoneessasi "
+"on asennettu sanakirja.</small>"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:9
+msgid "Avatars are user chosen images shown in the contact list"
+msgstr "Avatarit ovat käyttäjän valitsemia kuvia yhteystietolistassa"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:10
+msgid "Chat Th_eme:"
+msgstr "Keskustelun _teema:"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:11
+msgid "Display notifications when contacts come _online"
+msgstr "Näytä huomautuksia, kun yhteystiedot saapuvat _linjoille"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:12
+msgid "Enable sounds when _away"
+msgstr "Merkkiäänet poissa-tilassa"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:13
+msgid "Enable sounds when _busy"
+msgstr "Merkkiäänet varattu-tilassa"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:14
+msgid "General"
+msgstr "Yleinen"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:15
+msgid "Notifications"
+msgstr "Huomautukset"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:16
+msgid "Preferences"
+msgstr "Asetukset"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:17
+msgid "Show _avatars"
+msgstr "Näytä _avattaret"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:18
+msgid "Show _smileys as images"
+msgstr "Näytä _hymiöt hymiökuvakkeina"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:19
+msgid "Show co_mpact contact list"
+msgstr "Näytä _pieni tuttavalista"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:20
+msgid "Sort by _name"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:21
+msgid "Sort by s_tate"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:22
+msgid "Spell Checking"
+msgstr "Kielentarkastus"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:23
+msgid "Themes"
+msgstr "Teemat"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:24
+msgid "_Enable spell checking"
+msgstr "_Ota käyttöön oikeinkirjoituksen tarkistus"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:25
+msgid "_Open new chats in separate windows"
+msgstr "_Avaa uusi ikkuna uusille keskusteluille"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:26
+msgid "_Play sound when messages arrive"
+msgstr "_Merkkiääni viestin saapuessa"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:27
+msgid "_Use for chat rooms"
+msgstr "_Käytä keskusteluhuoneille"
+
+#: ../libempathy-gtk/gossip-presence-chooser.c:702
+msgid "Custom message..."
+msgstr "_Oma viesti..."
+
+#. Clear list
+#: ../libempathy-gtk/gossip-presence-chooser.c:724
+msgid "Clear List..."
+msgstr "Tyhjennä lista..."
+
+#: ../libempathy-gtk/gossip-presence-chooser.c:803
+msgid "Are you sure you want to clear the list?"
+msgstr "Haluatko varmasti tyhjentää listan?"
+
+#: ../libempathy-gtk/gossip-presence-chooser.c:807
+msgid ""
+"This will remove any custom messages you have added to the list of preset "
+"status messages."
+msgstr ""
+"Tämä poistaa omat viestisi, jotka olet lisännyt tilaviestien esivalintojen "
+"listaan."
+
+#: ../libempathy-gtk/gossip-presence-chooser.c:812
+msgid "Clear List"
+msgstr "Tyhjennä lista"
+
+#: ../libempathy-gtk/gossip-presence-chooser.glade.h:1
+msgid "Enter status message:"
+msgstr "Tilaviesti:"
+
+#: ../libempathy-gtk/gossip-presence-chooser.glade.h:2
+msgid "Status Message Presets"
+msgstr "Tilaviestien oletusasetukset"
+
+#: ../libempathy-gtk/gossip-presence-chooser.glade.h:3
+msgid "_Add to status message list"
+msgstr "Lisää _tilaviestien listaan"
+
+#: ../libempathy-gtk/gossip-private-chat.c:198
+#, c-format
+msgid "%s went offline"
+msgstr "%s poistui linjoilta"
+
+#: ../libempathy-gtk/gossip-private-chat.c:212
+#, c-format
+msgid "%s has come online"
+msgstr "%s on kirjautunut sisään"
+
+#: ../libempathy-gtk/gossip-theme-manager.c:87
+msgid "Classic"
+msgstr "Perinteinen"
+
+#: ../libempathy-gtk/gossip-theme-manager.c:88
+msgid "Simple"
+msgstr "Yksinkertainen"
+
+#: ../libempathy-gtk/gossip-theme-manager.c:89
+msgid "Clean"
+msgstr "Siisti"
+
+#: ../libempathy-gtk/gossip-theme-manager.c:90
+msgid "Blue"
+msgstr "Sininen"
+
+#: ../src/empathy-main.c:145
+msgid "Don't connect on startup"
+msgstr "Älä yhdistä käynnistettäessä"
+
+#: ../src/empathy-main.c:155
+#, fuzzy
+msgid "- Empathy Instant Messenger"
+msgstr "- Gossip-pikaviestiohjelma"
+
+#~ msgid "Gossip Instant Messenger"
+#~ msgstr "Gossip-pikaviestiohjelma"
+
+#~ msgid "Normal"
+#~ msgstr "Normaali"
+
+#~ msgid "Joining"
+#~ msgstr "Liitytään keskusteluun"
+
+#~ msgid "Active"
+#~ msgstr "Aktiivinen"
+
+#~ msgid "Inactive"
+#~ msgstr "Ei-aktiivinen"
+
+#~ msgid "Unknown"
+#~ msgstr "Tuntematon"
+
+#~ msgid "Error"
+#~ msgstr "Virhe"
+
+#~ msgid "Moderator"
+#~ msgid_plural "Moderators"
+#~ msgstr[0] "järjestäjä"
+#~ msgstr[1] "järjestäjää"
+
+#~ msgid "Participant"
+#~ msgid_plural "Participants"
+#~ msgstr[0] "osallistuja"
+#~ msgstr[1] "osallistujaa"
+
+#~ msgid "Visitor"
+#~ msgid_plural "Visitors"
+#~ msgstr[0] "vierailija"
+#~ msgstr[1] "vierailijaa"
+
+#~ msgid "No role"
+#~ msgstr "Ei roolia"
+
+#~ msgid "Owner"
+#~ msgid_plural "Owners"
+#~ msgstr[0] "omistaja"
+#~ msgstr[1] "omistajaa"
+
+#~ msgid "Administrator"
+#~ msgid_plural "Administrators"
+#~ msgstr[0] "ylläpitäjä"
+#~ msgstr[1] "ylläpitäjää"
+
+#~ msgid "Member"
+#~ msgid_plural "Members"
+#~ msgstr[0] "jäsen"
+#~ msgstr[1] "jäsentä"
+
+#~ msgid "Outcast"
+#~ msgid_plural "Outcasts"
+#~ msgstr[0] "hylätty"
+#~ msgstr[1] "hylättyä"
+
+#~ msgid "No affiliation"
+#~ msgstr "Ei suhdetta"
+
+#~ msgid "The nickname you have chosen is already in use."
+#~ msgstr "Valitsemasi nimimerkki on jo käytössä."
+
+#~ msgid "The chat room you tried to join requires a password."
+#~ msgstr "Keskusteluhuoneeseen vaaditaan salasana."
+
+#~ msgid "The remote conference server did not respond in a sensible time."
+#~ msgstr "Ryhmäkeskustelupalvelin ei vastannut kohtuullisessa ajassa."
+
+#~ msgid "The conference server you tried to join could not be found."
+#~ msgstr "Ryhmäkeskustelupalvelinta ei löytynyt."
+
+#~ msgid "An unknown error occurred, check your details are correct."
+#~ msgstr "Tuntematon virhe, tarkasta asetuksesi."
+
+#, fuzzy
+#~ msgid "Joining the chatroom was canceled."
+#~ msgstr "Yhdistä keskusteluhuoneeseen"
+
+#~ msgid "Unavailable"
+#~ msgstr "Ei tavoitettavissa"
+
+#~ msgid "An unknown error occurred."
+#~ msgstr "Tuntematon virhe."
+
+#~ msgid "Connection refused."
+#~ msgstr "Yhteys torjuttu."
+
+#~ msgid "Server address could not be resolved."
+#~ msgstr "Palvelinta ei löydetty."
+
+#~ msgid "Connection timed out."
+#~ msgstr "Yhteys aikakatkaistiin."
+
+#~ msgid "Authentication failed."
+#~ msgstr "Todennus epäonnistui."
+
+#~ msgid "The username you are trying already exists."
+#~ msgstr "Käyttäjätunnus on jo olemassa."
+
+#~ msgid "The username you are trying is not valid."
+#~ msgstr "Käyttäjätunnus ei ole voimassa."
+
+#~ msgid "This feature is unavailable."
+#~ msgstr "Ominaisuus puuttuu."
+
+#~ msgid "This feature is unauthorized."
+#~ msgstr "Ominaisuuden käyttö ei ole sallittu."
+
+#~ msgid "A specific protocol error occurred that was unexpected."
+#~ msgstr "Odottamaton protokollavirhe."
+
+#~ msgid "new account"
+#~ msgstr "uusi tili"
+
+#~ msgid "Home"
+#~ msgstr "Koti"
+
+#~ msgid "Couldn't send message!"
+#~ msgstr "Viestiä ei voitu lähettää!"
+
+#~ msgid "Connection could not be opened"
+#~ msgstr "Yhteyttä ei voitu avata"
+
+#, fuzzy
+#~ msgid "This service is unavailable or not found"
+#~ msgstr "Ominaisuus puuttuu."
+
+#, fuzzy
+#~ msgid "This feature is not implemented"
+#~ msgstr "Ominaisuuden käyttö ei ole sallittu."
+
+#~ msgid "Stop"
+#~ msgstr "Pysäytä"
+
+#~ msgid "Disconnect"
+#~ msgstr "Katkaise yhteys"
+
+#~ msgid "Connect"
+#~ msgstr "Yhdistä"
+
+#~ msgid "Successfully registered your new account settings."
+#~ msgstr "Uuden käyttäjätilin asetukset rekisteröitiin onnistuneesti. "
+
+#~ msgid "You should now be able to connect to your new account."
+#~ msgstr "Uusi tilisi pitäisi nyt olla valmis käytettäväksi."
+
+#~ msgid "Failed to register your new account settings."
+#~ msgstr "Uuden käyttäjätilin asetusten rekisteröinti epäonnistui. "
+
+#, fuzzy
+#~ msgid "Successfully changed your account password."
+#~ msgstr "Uuden käyttäjätilin asetukset rekisteröitiin onnistuneesti. "
+
+#, fuzzy
+#~ msgid "You should now be able to connect with your new password."
+#~ msgstr "Uusi tilisi pitäisi nyt olla valmis käytettäväksi."
+
+#, fuzzy
+#~ msgid "Failed to change your account password."
+#~ msgstr "Salasana:"
+
+#, fuzzy
+#~ msgid ""
+#~ "Please enter a new password for this account:\n"
+#~ "%s"
+#~ msgstr "Anna ryhmälle %s uusi nimi:"
+
+#~ msgid "No information is available for this contact."
+#~ msgstr "Tuttavasta ei ole tietoja."
+
+#~ msgid "Information requested, please wait..."
+#~ msgstr "Pyydetään tietoja, odota hetki..."
+
+#~ msgid "I would like to add you to my contact list."
+#~ msgstr "Haluaisin liittää sinut tuttavalistaani."
+
+#~ msgid "To summarize:"
+#~ msgstr "Yhteenveto:"
+
+#~ msgid "%d new message"
+#~ msgid_plural "%d new messages"
+#~ msgstr[0] "%d uusi viesti"
+#~ msgstr[1] "%d uutta viestiä"
+
+#~ msgid "%d subscription request"
+#~ msgid_plural "%d subscription requests"
+#~ msgstr[0] "%d liittymispyyntö"
+#~ msgstr[1] "%d liittymispyyntöä"
+
+#~ msgid "%d file transfer request"
+#~ msgid_plural "%d file transfer requests"
+#~ msgstr[0] "%d tiedostonsiirtopyyntö"
+#~ msgstr[1] "%d tiedostonsiirtopyyntöä"
+
+#~ msgid "%d server message"
+#~ msgid_plural "%d server messages"
+#~ msgstr[0] "%d palvelinviesti"
+#~ msgstr[1] "%d palvlinviestiä"
+
+#~ msgid "%d error"
+#~ msgid_plural "%d errors"
+#~ msgstr[0] "%d virhe"
+#~ msgstr[1] "%d virhettä"
+
+#~ msgid "If you quit, you will lose all unread information."
+#~ msgstr "Jos lopetat, menetät kaiken lukemattoman tiedon."
+
+#~ msgid "Gossip is still running, it is just hidden."
+#~ msgstr "Gossip on vielä käytössä, se on vain piilotettu."
+
+#~ msgid "Click on the notification area icon to show Gossip."
+#~ msgstr "Napsauta ilmoitusaluetta kun haluat näyttää Gossipin."
+
+#~ msgid "You were about to quit!"
+#~ msgstr "Meinasit sulkea ohjelman!"
+
+#~ msgid ""
+#~ "Since no system or notification tray has been found, this action would "
+#~ "normally quit Gossip.\n"
+#~ "\n"
+#~ "This is just a reminder, from now on, Gossip will quit when performing "
+#~ "this action unless you uncheck the option below."
+#~ msgstr ""
+#~ "Koska ilmoitusaluetta ei löytynyt, sulkisi tämä toiminto normaalisti "
+#~ "Gossipin.\n"
+#~ "\n"
+#~ "Tämä on ainoastaan muistutus ja jatkossa Gossip suljetaan tehtäessä tämä "
+#~ "toiminto, jollet poista alla olevaa rastia ruudusta."
+
+#~ msgid "Edit Account _Details"
+#~ msgstr "Muokkaa tilin _yksityiskohtia"
+
+#~ msgid "Click to enlarge"
+#~ msgstr "Napsauta suurentaaksesi"
+
+#~ msgid "Word"
+#~ msgstr "Sana"
+
+#~ msgid "Select who would you like to invite to room:"
+#~ msgstr "Valitse henkilöt, jotka haluat kutsua keskusteluhuoneeseen:"
+
+#~ msgid "Select which room you would like to invite:"
+#~ msgstr "Valitse keskusteluhuone, johon haluat kutsua:"
+
+#~ msgid "New message from %s"
+#~ msgstr "Uusi viesti tuttavalta %s"
+
+#~ msgid "Your invitation has been declined"
+#~ msgstr "Kutsuasi ei hyväksytty"
+
+#~ msgid "Accept"
+#~ msgstr "Hyväksy"
+
+#~ msgid "Decline"
+#~ msgstr "Kieltäydy"
+
+#, fuzzy
+#~ msgid "Name"
+#~ msgstr "Nimi:"
+
+#, fuzzy
+#~ msgid "Room"
+#~ msgstr "_Huone"
+
+#~ msgid "Auto Connect"
+#~ msgstr "Yhdistä automaattisesti"
+
+#~ msgid "Information requested..."
+#~ msgstr "Pyydetään tietoja..."
+
+#~ msgid "Do you want to remove this contact from your roster?"
+#~ msgstr "Haluatko poistaa tämän tuttavan listaltasi?"
+
+#~ msgid ""
+#~ "Please enter a new name for the group:\n"
+#~ "%s"
+#~ msgstr "Anna ryhmälle %s uusi nimi:"
+
+#~ msgid "Select"
+#~ msgstr "Valitse"
+
+#~ msgid "Unsorted"
+#~ msgstr "Järjestämätön"
+
+#~ msgid ""
+#~ "Set the alias you want to use for:\n"
+#~ "<b>%s</b>\n"
+#~ "\n"
+#~ "You can retrieve contact information from the server."
+#~ msgstr ""
+#~ "Aseta lempinimi seuraavalle yhteystiedolle:\n"
+#~ "<b>%s</b>\n"
+#~ "\n"
+#~ "Voit hakea yhteystiedot palvelimelta."
+
+#~ msgid "New file transfer request from %s"
+#~ msgstr "Tiedostonsiirtopyyntö tuttavalta %s"
+
+#~ msgid "File transfer is not supported by both parties."
+#~ msgstr "Molemmat osapuolet eivät tue tiedostonsiirtoa."
+
+#~ msgid "Your file transfer offer declined."
+#~ msgstr "Tiedostonsiirtopyyntö torjuttu."
+
+#~ msgid "The other user decided not to continue."
+#~ msgstr "Vastapuoli keskeytti tiedostonsiirron."
+
+#~ msgid "Unknown error occurred during file transfer."
+#~ msgstr "Tiedostonsiirrossa tapahtui tuntematon virhe."
+
+#~ msgid "%s would like to send you a file."
+#~ msgstr "%s haluaa lähettää sinulle tiedoston."
+
+#~ msgid "Someone would like to send you a file."
+#~ msgstr "Sinulle halutaan lähettää tiedosto."
+
+#~ msgid "Select a file"
+#~ msgstr "Valitse tiedosto"
+
+#, fuzzy
+#~ msgid "Connecting..."
+#~ msgstr "Yhdistetään"
+
+#, fuzzy
+#~ msgid "Retry connection"
+#~ msgstr "Katkaise yhteys"
+
+#~ msgid "Invited %s to join this chat conference."
+#~ msgstr "Kutsuttiin %s ryhmäkeskusteluun."
+
+#, fuzzy
+#~ msgid "%s has set the topic: %s"
+#~ msgstr "%s on valinnut aiheen"
+
+#, fuzzy
+#~ msgid "Enter the new topic you want to set for this room:"
+#~ msgstr "Nimimerkki tuttavallesi"
+
+#, fuzzy
+#~ msgid "%s has joined the room"
+#~ msgstr "%s on valinnut aiheen"
+
+#, fuzzy
+#~ msgid "%s has left the room"
+#~ msgstr "%s on valinnut aiheen"
+
+#, fuzzy
+#~ msgid "Topic: %s"
+#~ msgstr "_Aihe:"
+
+#~ msgid "Account"
+#~ msgstr "Käyttäjätili"
+
+#~ msgid "Conversation With"
+#~ msgstr "Keskustelukumppani"
+
+#~ msgid "Date"
+#~ msgstr "Päivämäärä"
+
+#~ msgid "Allow multiple instances of the application to run at the same time"
+#~ msgstr "Salli useita kopioita ohjelmasta suoritettavan samaan aikaan"
+
+#~ msgid "List the available accounts"
+#~ msgstr "Näytä kaikki käyttäjätilit"
+
+#~ msgid "Which account to connect to on startup"
+#~ msgstr "Käyttäjätili, johon yhdistetään käynnistettäessä"
+
+#~ msgid "ACCOUNT-NAME"
+#~ msgstr "KÄYTTÄJÄTILIN NIMI"
+
+#~ msgid "You can not use --no-connect together with --account"
+#~ msgstr "Et voi käyttää valitsinta --no-connect valitsimen --account kanssa"
+
+#~ msgid "No accounts available."
+#~ msgstr "Käyttäjätilejä ei ole luotu."
+
+#~ msgid "Available accounts:"
+#~ msgstr "Käyttäjätilit:"
+
+#~ msgid "[default]"
+#~ msgstr "[oletus]"
+
+#~ msgid "There is no account with the name '%s'."
+#~ msgstr "Käyttäjätiliä %s ei ole olemassa."
+
+#~ msgid "Join"
+#~ msgstr "Liity"
+
+#, fuzzy
+#~ msgid "Create"
+#~ msgstr "Päivämäärä"
+
+#~ msgid "Chat Rooms"
+#~ msgstr "Keskusteluhuoneet"
+
+#, fuzzy
+#~ msgid "Browsing for conference rooms, please wait..."
+#~ msgstr "Pyydetään tietoja, odota hetki..."
+
+#~ msgid "Default"
+#~ msgstr "Oletus"
+
+#~ msgid "Chat!"
+#~ msgstr "Keskustele!"
+
+#~ msgid "%s wants to be added to your contact list."
+#~ msgstr "%s haluaa tuttavalistallesi."
+
+#~ msgid "Someone wants to be added to your contact list."
+#~ msgstr "Joku haluaa tulla lisätyksi tuttavalistaasi."
+
+#~ msgid "Subscription request"
+#~ msgstr "Liittymispyyntö"
+
+#~ msgid "Show"
+#~ msgstr "Näytä"
+
+#~ msgid "Contact Information"
+#~ msgstr "Yhteystiedot"
+
+#~ msgid "Subject: %s"
+#~ msgstr "Otsikko: %s"
+
+#~ msgid "Suggestions for the word"
+#~ msgstr "Korjausehdotukset"
+
+#~ msgid "New subscription request from %s"
+#~ msgstr "%s haluaa liittyä tuttavalistallesi"
+
+#~ msgid "Do you want to add this person to your contact list?"
+#~ msgstr "Haluatko lisätä tämän henkilön tuttavalistallesi?"
+
+#~ msgid "Do you want to add %s to your contact list?"
+#~ msgstr "Lisätäänkö tuttava %s listallesi?"
+
+#~ msgid "Please enter your %s account password"
+#~ msgstr "Käyttäjätilisi %s salasana"
+
+#, fuzzy
+#~ msgid "Logging in to account '%s'"
+#~ msgstr "Kirjaudutaan sisään käyttäjänä %s"
+
+#~ msgid "Remember Password?"
+#~ msgstr "Muistetaanko salasana?"
+
+#~ msgid "Do not show this again"
+#~ msgstr "Älä näytä tätä enää uudestaan"
+
+#~ msgid "Could not display the help contents."
+#~ msgstr "Ohjetiedostoa ei voida näyttää."
+
+#~ msgid "Select Your Avatar Image"
+#~ msgstr "Valitse avatar-kuvasi"
+
+#~ msgid "No Image"
+#~ msgstr "Ei kuvaa"
+
+#~ msgid "The server does not seem to be responding."
+#~ msgstr "Palvelin ei vastaa."
+
+#~ msgid "Try again later."
+#~ msgstr "Yritä uudelleen myöhemmin."
+
+#, fuzzy
+#~ msgid "Change"
+#~ msgstr "Keskustelu"
+
+#~ msgid "Contact goes offline"
+#~ msgstr "Tuttava on poistunut linjoilta"
+
+#~ msgid "Contact goes online"
+#~ msgstr "Tuttava on kirjautunut sisään"
+
+#~ msgid "Contact ID:"
+#~ msgstr "Käyttäjätunnus:"
+
+#~ msgid "Do you want to accept this file?"
+#~ msgstr "Hyväksytäänkö tiedosto?"
+
+#~ msgid "File Transfer Request"
+#~ msgstr "Tiedostonsiirtopyyntö"
+
+#~ msgid "File name:"
+#~ msgstr "Tiedostonimi:"
+
+#~ msgid "File size:"
+#~ msgstr "Tiedoston koko:"
+
+#~ msgid "Not supported yet"
+#~ msgstr "Toiminto ei ole tuettu"
+
+#~ msgid "This person wishes to send you this file:"
+#~ msgstr "Tuttava haluaa lähettää sinulle seuraavan tiedoston:"
+
+#~ msgid "Web site:"
+#~ msgstr "WWW-sivusto:"
+
+#~ msgid "_Accept"
+#~ msgstr "_Hyväksy"
+
+#~ msgid "_Deny"
+#~ msgstr "H_ylkää"
+
+#, fuzzy
+#~ msgid "<b>Topic:</b>"
+#~ msgstr "<b>Ryhmät</b>"
+
+#~ msgid "Account:"
+#~ msgstr "Käyttäjätili:"
+
+#, fuzzy
+#~ msgid "Edit Favorite Room"
+#~ msgstr "Muokkaa keskusteluhuoneen asetuksia"
+
+#~ msgid "Group Chat"
+#~ msgstr "Ryhmäkeskustelu"
+
+#, fuzzy
+#~ msgid "Join New"
+#~ msgstr "Liity _uuteen..."
+
+#~ msgid "Join room on start_up"
+#~ msgstr "Yhdistä _keskusteluhuoneeseen käynnistettäessä"
+
+#~ msgid "Join this chat room when Gossip starts and you are connected"
+#~ msgstr "Yhdistä tähän keskusteluhuoneeseen, kun yhteys on muodostettu"
+
+#, fuzzy
+#~ msgid "Manage Favorite Rooms"
+#~ msgstr "Hallitse keskusteluhuoneita..."
+
+#~ msgid "N_ame:"
+#~ msgstr "_Nimi:"
+
+#~ msgid "S_erver:"
+#~ msgstr "_Palvelin:"
+
+#~ msgid "_Nickname:"
+#~ msgstr "_Nimimerkki:"
+
+#~ msgid "_Room:"
+#~ msgstr "_Keskusteluhuone:"
+
+#~ msgid "-"
+#~ msgstr "-"
+
+#~ msgid "<b>About</b>"
+#~ msgstr "<b>Tietoja</b>"
+
+#~ msgid "<b>Client Information</b>"
+#~ msgstr "<b>Tietoja asiakasohjelmasta</b>"
+
+#~ msgid "<b>Groups</b>"
+#~ msgstr "<b>Ryhmät</b>"
+
+#~ msgid "<b>Name</b>"
+#~ msgstr "<b>Nimi</b>"
+
+#~ msgid "<b>Personal Details</b>"
+#~ msgstr "<b>Henkilötiedot</b>"
+
+#~ msgid "<b>Status</b>"
+#~ msgstr "<b>Tila</b>"
+
+#, fuzzy
+#~ msgid "<b>Subscription</b>"
+#~ msgstr "<b>Valinnat</b>"
+
+#~ msgid "<span size=\"smaller\">Example: Mikael or user@server.org</span>"
+#~ msgstr "<span size=\"smaller\">Esimerkki: Seppo tai seppo@server.org</span>"
+
+#~ msgid "Accou_nt:"
+#~ msgstr "Käyttäjä_tili:"
+
+#~ msgid "Add Contact"
+#~ msgstr "Lisää tuttava"
+
+#~ msgid "Alia_s:"
+#~ msgstr "Ni_mimerkki:"
+
+#~ msgid "Avatar:"
+#~ msgstr "Avatar:"
+
+#~ msgid "Ch_at"
+#~ msgstr "_Keskustele"
+
+#~ msgid "Client:"
+#~ msgstr "Asiakasohjelma:"
+
+#~ msgid "Con_tact:"
+#~ msgstr "Yh_teystieto:"
+
+#~ msgid "Connect on S_tartup"
+#~ msgstr "_Yhdistä käynnistettäessä"
+
+#~ msgid "Contacts"
+#~ msgstr "Tuttavat"
+
+#~ msgid "Country:"
+#~ msgstr "Maa:"
+
+#~ msgid "Decide _Later"
+#~ msgstr "_Päätä myöhemmin"
+
+#~ msgid "Edit Contact"
+#~ msgstr "Muokkaa yhteystietoja"
+
+#~ msgid "Edit Groups"
+#~ msgstr "Muokkaa ryhmiä"
+
+#~ msgid "Email:"
+#~ msgstr "Sähköposti:"
+
+#~ msgid "ID:"
+#~ msgstr "Käyttäjätunnus:"
+
+#~ msgid ""
+#~ "If you chose to decide later you will be asked the next time you log on."
+#~ msgstr ""
+#~ "Jos haluat päättää myöhemmin, sinulta kysytään tätä uudestaan "
+#~ "kirjautuessasi sisään seuraavan kerran."
+
+#~ msgid "Name:"
+#~ msgstr "Nimi:"
+
+#~ msgid "OS:"
+#~ msgstr "Käyttöjärjestelmä:"
+
+#~ msgid "Personal Details"
+#~ msgstr "Henkilötiedot"
+
+#~ msgid "R_egister"
+#~ msgstr "R_ekisteröityminen"
+
+#~ msgid "Search"
+#~ msgstr "Etsi"
+
+#~ msgid ""
+#~ "Select the groups you want this contact to appear in, you can select more "
+#~ "than one group or no groups."
+#~ msgstr ""
+#~ "Valitse ryhmät, joissa haluat tämän yhteystiedon näkyvän. Voit valita "
+#~ "useita ryhmiä tai olla valitsematta yhtään ryhmää."
+
+#, fuzzy
+#~ msgid ""
+#~ "Set the alias you want to use for:\n"
+#~ "<b>foo@bar.baz</b>\n"
+#~ "\n"
+#~ "You can retrieve contact information from the server. "
+#~ msgstr ""
+#~ "Aseta lempinimi seuraavalle yhteystiedolle:\n"
+#~ "<b>%s</b>\n"
+#~ "\n"
+#~ "Voit hakea yhteystiedot palvelimelta."
+
+#~ msgid "Spell Checker"
+#~ msgstr "Kielentarkastus"
+
+#~ msgid "Subscription Request"
+#~ msgstr "Liittymispyyntö"
+
+#~ msgid "Suggestions for the word:"
+#~ msgstr "Korjausehdotuksia:"
+
+#~ msgid ""
+#~ "This acts as a filter to the contact list below. You can use segments of "
+#~ "contact's name or ID, for example, \"jabber.org\" will list everyone "
+#~ "using that server"
+#~ msgstr ""
+#~ "Tämän avulla voit näyttää haluamasi osan tuttavalistasta.Voit syöttää "
+#~ "tähän osan tuttavan nimestä tai osoitteesta, esimerkiksi \"jabber.org\", "
+#~ "jolloin näet tälle palvelimelle kirjautuneet tuttavat. "
+
+#~ msgid "This is the name that will be used on your roster for this contact"
+#~ msgstr "Tämä on nimi, jota tuttavastasi käytetään nimilistassasi"
+
+#~ msgid "This name will be used to identify you in chat windows"
+#~ msgstr "Tätä nimeä käytetään identiteettinäsi keskusteluikkunoissa"
+
+#~ msgid ""
+#~ "This name will be used to identify you when new contacts lookup your "
+#~ "details"
+#~ msgstr ""
+#~ "Tätä käytetään identiteettinäsi, kun ystävät katsovat yksityiskohtia "
+#~ "sinusta"
+
+#~ msgid "Use default name here from the contact's VCard."
+#~ msgstr "Käytä tässä oletusnimeä yhteystiedon VCardista."
+
+#~ msgid "Use system pro_xy"
+#~ msgstr "Käytä järjestelmän _välipalvelinta"
+
+#~ msgid "Version:"
+#~ msgstr "Versio:"
+
+#~ msgid "View Previous Conversations"
+#~ msgstr "Näytä edelliset keskustelut"
+
+#~ msgid "Which account do you want to use?"
+#~ msgstr "Käyttäjätili jota haluat käyttää"
+
+#~ msgid "You are not subscribed to this contact."
+#~ msgstr "Et ole tuttavasi listalla."
+
+#~ msgid "_Connect"
+#~ msgstr "_Yhdistä"
+
+#, fuzzy
+#~ msgid "_Description:"
+#~ msgstr "Kuvaus:"
+
+#~ msgid "_Disconnect"
+#~ msgstr "_Katkaise yhteys"
+
+#, fuzzy
+#~ msgid "_Email:"
+#~ msgstr "Sähköposti:"
+
+#, fuzzy
+#~ msgid ""
+#~ "_Enter the name or contact ID of the person you want to chat to below:"
+#~ msgstr "Tuttavan nimi tai käyttäjätunnus:"
+
+#, fuzzy
+#~ msgid "_For:"
+#~ msgstr "_Portti:"
+
+#, fuzzy
+#~ msgid "_Full Name:"
+#~ msgstr "_Nimi:"
+
+#~ msgid "_Group:"
+#~ msgstr "_Ryhmä:"
+
+#, fuzzy
+#~ msgid "_Nick Name:"
+#~ msgstr "_Nimimerkki:"
+
+#, fuzzy
+#~ msgid "_Password:"
+#~ msgstr "S_alasana:"
+
+#, fuzzy
+#~ msgid "_Quit Message:"
+#~ msgstr "Uusi viesti"
+
+#~ msgid "_Retrieve"
+#~ msgstr "_Nouda"
+
+#~ msgid "_Subscribe"
+#~ msgstr "_Liittymispyyntö"
+
+#, fuzzy
+#~ msgid "_Web site:"
+#~ msgstr "WWW-sivusto:"
+
+#, fuzzy
+#~ msgid "irc account settings"
+#~ msgstr "jabber-tilin asetukset"
+
+#, fuzzy
+#~ msgid "msn account settings"
+#~ msgstr "jabber-tilin asetukset"
+
+#~ msgid "Favourite"
+#~ msgstr "Suosikki"
+
+#~ msgid "Add to _favourites"
+#~ msgstr "Lisää _suosikkeihin"
+
+#~ msgid ""
+#~ "Customize your own nickname, the server and chatroom which you wish to "
+#~ "join."
+#~ msgstr "Valitse nimimerkki, palvelin ja keskusteluhuone, johon liitytään."
+
+#~ msgid "Edit your chat room details:"
+#~ msgstr "Muokkaa keskusteluhuoneen asetuksia:"
+
+#~ msgid "Na_me:"
+#~ msgstr "_Nimi:"
+
+#~ msgid "New Chat Room"
+#~ msgstr "Uusi keskusteluhuone"
+
+#~ msgid ""
+#~ "Pick a saved chat room from the presets available below and click Join to "
+#~ "start chatting."
+#~ msgstr ""
+#~ "Valitse tallennettu keskusteluhuone allaolevasta listasta ja napsauta "
+#~ "Liity aloittaaksesi keskustelun."
+
+#~ msgid "Save _this chat room"
+#~ msgstr "_Tallenna keskusteluhuone"
+
+#~ msgid "    "
+#~ msgstr "    "
+
+#~ msgid "Gossip"
+#~ msgstr "Gossip"
+
+#~ msgid "Group:"
+#~ msgstr "Ryhmä:"
+
+#~ msgid "Nickname:"
+#~ msgstr "Nimimerkki:"
+
+#~ msgid "Press Subscribe to request to receive their status"
+#~ msgstr "Napsauta painiketta Tilaa nähdäksesi heidän tilansa"
+
+#~ msgid ""
+#~ "Set the alias you want to use for:\n"
+#~ "<b>martyn@imendio.com</b>\n"
+#~ "\n"
+#~ "You can retrieve contact information from the server. "
+#~ msgstr ""
+#~ "Aseta lempinimi seuraavalle yhteystiedolle:\n"
+#~ "<b>martyn@imendio.com</b>\n"
+#~ "\n"
+#~ "Voit hakea yhteystiedot palvelimelta."
+
+#~ msgid "Web Site:"
+#~ msgstr "WWW-sivusto:"
+
+#~ msgid "_Forget"
+#~ msgstr "_Poista"
+
+#~ msgid "_Group Chat"
+#~ msgstr "_Ryhmäkeskustelu"
+
+#~ msgid "%s will be added to your contact list."
+#~ msgstr "%s liitetään tuttavalistallesi."
+
+#~ msgid "%s ID of new contact:"
+#~ msgstr "%s ID uudelle tuttavalle:"
+
+#~ msgid "Example: %s"
+#~ msgstr "Esimerkki: %s"
+
+#~ msgid "You have no Instant Messaging accounts configured!"
+#~ msgstr "Käyttäjätilejä ei ole määritetty!"
+
+#~ msgid ""
+#~ "Next you will be presented with the Account Information dialog to set "
+#~ "your details up."
+#~ msgstr "Seuraavaksi luodaan käyttäjätilin asetukset."
+
+#~ msgid "Registering account"
+#~ msgstr "Rekisteröidään käyttäjätiliä"
+
+#~ msgid "<b>Information requested, please wait...</b>"
+#~ msgstr "<b>Kysely käynnissä, odota...</b>"
+
+#~ msgid "<span size=\"smaller\">Example:</span>"
+#~ msgstr "<span size=\"smaller\">Esimerkki:</span>"
+
+#~ msgid "Account Name"
+#~ msgstr "Käyttäjätilin nimi"
+
+#~ msgid "Add a contact"
+#~ msgstr "Lisää tuttava"
+
+#~ msgid "Connection Details"
+#~ msgstr "Yhteyden tiedot"
+
+#~ msgid "Contact information"
+#~ msgstr "Yhteystiedot"
+
+#~ msgid "Do you already have an account set up on a server?"
+#~ msgstr "Oletko jo luonut käyttäjätilin palvelimelle?"
+
+#~ msgid "Enter a name for this account"
+#~ msgstr "Anna nimi käyttäjätilille"
+
+#~ msgid "Enter the port used in the connection for this account"
+#~ msgstr "Tämän tilin yhdeydelle käytettävä portti"
+
+#~ msgid "Enter the server used in the connection for this account"
+#~ msgstr "Tämän tilin yhteydelle käytettävä palvelin"
+
+#~ msgid "Enter the user's contact ID:"
+#~ msgstr "Käyttäjätunnus:"
+
+#~ msgid "Enter your real name here"
+#~ msgstr "Syötä oma nimesi"
+
+#~ msgid "Finished"
+#~ msgstr "Lopetettiin"
+
+#~ msgid "For increased security, enable this option"
+#~ msgstr "Valitse tämä, jos haluat enemmän tietoturvaa"
+
+#~ msgid ""
+#~ "Gossip is a modern client for the Jabber Instant Messaging system.\n"
+#~ "\n"
+#~ "This assistant will help you configure Gossip and connect you to your "
+#~ "favorite Jabber server.\n"
+#~ "\n"
+#~ "To get started, just click \"Forward\"."
+#~ msgstr ""
+#~ "Gossip on nykyaikainen Jabber-pikaviestinohjelma\n"
+#~ "\n"
+#~ "Tämän asetusohjelman avulla saat helposti säädettyä Gossipin asetukset "
+#~ "kohdalleen.\n"
+#~ "\n"
+#~ "Paina \"Eteenpäin\" jatkaaksesi."
+
+#~ msgid ""
+#~ "If you have another machine on your network which 'proxies' the "
+#~ "connection to the internet and you want to use it, enable this option"
+#~ msgstr ""
+#~ "Valitse tämä vaihtoehto, jos sinulla on verkossasi toinen tietokone, joka "
+#~ "toimii välipalvelimena verkkoon ja haluat käyttää sitä"
+
+#~ msgid ""
+#~ "If you need to set specific connection details, like a different server "
+#~ "or port, you can configure that here:"
+#~ msgstr ""
+#~ "Jos tarvitset erityisiä yhteysasetuksia, esimerkiksi vaihtoehtoisen "
+#~ "palvelimen tai portin, voit muokata asetuksia tästä:"
+
+#~ msgid ""
+#~ "In order to subscribe to presence notifications from the user, a request "
+#~ "will be sent. Until this request is approved, the user will always be "
+#~ "shown as \"Offline\" in your contact list."
+#~ msgstr ""
+#~ "Nähdäksesi milloin tuttavasi on linjoilla, sinun tulee liittyä hänen "
+#~ "tuttavalistalleen. Tuttavasi tila on \"Poissa linjoilta\" kunnes hän on "
+#~ "hyväksynyt liittymispyyntösi."
+
+#~ msgid "In which group do you want to place this contact?"
+#~ msgstr "Mihin ryhmään tuttava liitetään?"
+
+#~ msgid "Jabber ID:"
+#~ msgstr "Jabber-käyttäjätunnus:"
+
+#~ msgid ""
+#~ "Leave this blank if you don't want your password stored on a public "
+#~ "machine. If you decide to do this, you will be prompted each time you "
+#~ "connect for a password"
+#~ msgstr ""
+#~ "Jätä tämä kohta tyhjäksi, jos et halua, että salasanasi tallennetaan "
+#~ "tälle tietokoneelle. Jos et tallenna salasanaa, joudut kirjoittamaan "
+#~ "salasanasi aina sisäänirjautuessasi."
+
+#~ msgid "Port:"
+#~ msgstr "Portti:"
+
+#~ msgid "Registering Account"
+#~ msgstr "Käyttäjätiliä rekisteröidään"
+
+#~ msgid "Resource:"
+#~ msgstr "Resurssi:"
+
+#~ msgid "Sending request"
+#~ msgstr "Pyyntöä lähetetään"
+
+#~ msgid "Server:"
+#~ msgstr "Palvelin:"
+
+#~ msgid "Welcome to Gossip"
+#~ msgstr "Tervetuloa Gossipiin"
+
+#~ msgid "What instant messaging system does the contact use?"
+#~ msgstr "Tuttavasi käyttämä pikaviestiohjelma"
+
+#~ msgid "What is your name?"
+#~ msgstr "Nimesi"
+
+#~ msgid ""
+#~ "What name do you want to use to identify this account?\n"
+#~ "\n"
+#~ "This name could be something associated with the service provider, for "
+#~ "example, <b>Google</b>."
+#~ msgstr ""
+#~ "Käyttäjätilisi nimi\n"
+#~ "\n"
+#~ "Gossip käyttää sitä käyttäjäprofiilisi nimenä."
+
+#~ msgid "What password do you want to use?"
+#~ msgstr "Salasana"
+
+#~ msgid "What username do you use?"
+#~ msgstr "Nykyinen käyttäjätunnus"
+
+#~ msgid "What username do you want to use?"
+#~ msgstr "Uusi käyttäjätunnus"
+
+#~ msgid "Which account do you want to add this contact to?"
+#~ msgstr "Mihin käyttäjätiliin tämä tuttava liitetään?"
+
+#~ msgid ""
+#~ "You can change your account settings later by selecting the Edit-"
+#~ ">Accounts menu item."
+#~ msgstr ""
+#~ "Voit muuttaa käyttäjätilisi asetuksia myöhemmin valitsemalla Muokkaa - "
+#~ "Käyttäjätilit."
+
+#~ msgid ""
+#~ "You need to set a name for the connection, for example, <b>Home</b> or "
+#~ "<b>Laptop</b>."
+#~ msgstr ""
+#~ "Anna nimi yhteydelle, esimerkiksi <b>Kotikone</b> tai <b>Kannettava</b>."
+
+#~ msgid "Your Account"
+#~ msgstr "Käyttäjätilisi"
+
+#~ msgid "Your Identity"
+#~ msgstr "Henkilötietosi"
+
+#~ msgid "Your new account has now been set up."
+#~ msgstr "Käyttäjätili on luotu."
+
+#~ msgid "_No"
+#~ msgstr "_Ei"
+
+#~ msgid "_Search..."
+#~ msgstr "_Etsi..."
+
+#~ msgid "_Yes"
+#~ msgstr "_Kyllä"
+
+#~ msgid "Edit"
+#~ msgstr "Muokkaa"
+
+#~ msgid "Perhaps you are trying to connect to the wrong port?"
+#~ msgstr "Onko palvelimen portti varmasti oikea?"
+
+#~ msgid "Perhaps the service is not currently running?"
+#~ msgstr "Onko palvelu varmasti käynnissä?"
+
+#~ msgid "Check your connection details."
+#~ msgstr "Tarkasta yhteysasetuksesi."
+
+#~ msgid "Perhaps the server is not running this service."
+#~ msgstr "Palvelu ei ole ehkä käytössä tällä palvelimella."
+
+#~ msgid "Check your username and password are correct."
+#~ msgstr "Tarkasta käyttäjätunnuksesi ja salasanasi."
+
+#~ msgid "Show accounts and pending connections"
+#~ msgstr "Näytä tilit ja odotettavat yhteydet"
+
+#~ msgid ""
+#~ "Please enter your invitation message to:\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Kirjoita tähän kutsuviesti tuttavalle:\n"
+#~ "%s"
+
+#~ msgid "Rename contact"
+#~ msgstr "Nimeä tuttava uudelleen"
+
+#~ msgid "Re_name group"
+#~ msgstr "Nimeä ryh_mä uudelleen"
+
+#~ msgid "Rename group"
+#~ msgstr "Nimeä ryh_mä uudelleen"
+
+#~ msgid "_Edit Groups"
+#~ msgstr "Muokkaa _ryhmiä"
+
+#~ msgid ""
+#~ "Please enter a new nickname for the contact\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Anna uusi nimimerkki tuttavalle\n"
+#~ "%s"
+
+#~ msgid "Edit groups for %s"
+#~ msgstr "Muokkaa %s:n ryhmiä"
+
+#~ msgid "_Hide Contact List"
+#~ msgstr "Piil_ota tuttavalista"
+
+#~ msgid "Preset status messages"
+#~ msgstr "Palauta tilaviestien oletusasetukset"
+
+#~ msgid "Preset status messages."
+#~ msgstr "Palauta tilaviestien oletusasetukset."
+
+#~ msgid "/Contact Infor_mation"
+#~ msgstr "/_Yhteystiedot"
+
+#~ msgid "/_View Previous Conversations"
+#~ msgstr "/Näytä _edelliset keskustelut"
+
+#~ msgid "Conversation Log"
+#~ msgstr "Keskusteluloki"
+
+#~ msgid "Respond"
+#~ msgstr "Vastaa"
+
+#~ msgid "Dark"
+#~ msgstr "Tumma"
+
+#~ msgid "Be silent when away"
+#~ msgstr "Ei merkkiääniä Poissa-tilassa"
+
+#~ msgid "Be silent when busy"
+#~ msgstr "Ei merkkiääniä Varattu-tilassa"
+
+#~ msgid "Height of main window"
+#~ msgstr "Pääikkunan korkeus"
+
+#~ msgid "The X position of the main window."
+#~ msgstr "Pääikkunan X-koordinaatti."
+
+#~ msgid "The Y position of the main window."
+#~ msgstr "Pääikkunan Y-koordinaatti."
+
+#~ msgid "The width of the main window."
+#~ msgstr "Pääikkunan leveys."
+
+#~ msgid "Whether spell checking should be turned on."
+#~ msgstr "Otetaanko kielentarkastus käyttöön?"
+
+#~ msgid "Width of the main window"
+#~ msgstr "Pääikkunan leveys"
+
+#~ msgid "X position of main window"
+#~ msgstr "Pääikkunan X-koordinaatti"
+
+#~ msgid "Y position of main window"
+#~ msgstr "Pääikkunan Y-koordinaatti"
+
+#~ msgid "Gossip, Instant Messaging Client"
+#~ msgstr "Gossip-pikaviestiohjelma"
+
+#~ msgid "Close this chat window"
+#~ msgstr "Sulje keskusteluikkuna"
+
+#~ msgid "Contact Information for %s"
+#~ msgstr "Tuttavan %s yhteystiedot"
+
+#~ msgid "Requested Information"
+#~ msgstr "Pyydetyt tiedot"
+
+#~ msgid "Contact _Information"
+#~ msgstr "_Yhteystiedot"
+
+#~ msgid "Check spelling while I _type"
+#~ msgstr "_Tarkasta oikeinkirjoitus kirjoitettaessa"
+
+#~ msgid "Gossip - Accounts"
+#~ msgstr "Gossip – Käyttäjätilit"
+
+#~ msgid "Join _Group Chat..."
+#~ msgstr "_Liity ryhmäkeskusteluun"
+
+#~ msgid "Por_t:"
+#~ msgstr "P_ortti:"
+
+#~ msgid "Requested information."
+#~ msgstr "Pyydetyt tiedot."
+
+#~ msgid "Requesting contact information, please wait..."
+#~ msgstr "Pyydetään yhteystietoja, odota hetki..."

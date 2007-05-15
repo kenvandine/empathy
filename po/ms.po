@@ -1,0 +1,1982 @@
+# GnomeICU Malay Translation
+# Copyright (C) 2001-2003 Free Software Foundation, Inc.
+# 1. Khairulanuar Abd Majid <khairul@ikhlas.com>, 2001, 2002.
+# 2. Hasbullah Bin Pit <sebol@ikhlas.com> 2002,2003
+msgid ""
+msgstr ""
+"Project-Id-Version: gnomeicu 0.95.5\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2007-05-15 23:46+0200\n"
+"PO-Revision-Date: 2003-11-30 00:07+0730\n"
+"Last-Translator: Hasbullah Bin Pit <sebol@ikhlas.com>\n"
+"Language-Team: Bahasa Melayu <gabai-penyumbang@lists.sourceforge.net>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../data/empathy.desktop.in.h:1
+#, fuzzy
+msgid "Empathy Instant Messenger"
+msgstr "Pesanan Segera"
+
+#: ../data/empathy.desktop.in.h:2
+msgid "Instant Messenger"
+msgstr "Pesanan Segera"
+
+#: ../data/empathy.schemas.in.h:1
+msgid "Always open a separate chat window for new chats."
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:2
+msgid "Chat window theme"
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:3
+msgid ""
+"Comma separated list of spell checker languages to use (e.g. en, fr, nl)."
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:4
+#, fuzzy
+msgid "Compact contact list"
+msgstr "Tambah ke senarai kenalan"
+
+#: ../data/empathy.schemas.in.h:5
+msgid "Contact list sort criterium"
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:6
+msgid "Default directory to select an avatar image from"
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:7
+msgid "Enable popup when contact is available"
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:8
+#, fuzzy
+msgid "Enable sound when away"
+msgstr "Matikan bunyi ketika _away"
+
+#: ../data/empathy.schemas.in.h:9
+#, fuzzy
+msgid "Enable sound when busy"
+msgstr "Matikan bunyi ketika _sibuk"
+
+#: ../data/empathy.schemas.in.h:10
+#, fuzzy
+msgid "Enable spell checker"
+msgstr "Gossip - Kirim Mesej"
+
+#: ../data/empathy.schemas.in.h:11
+#, fuzzy
+msgid "Hide main window"
+msgstr "Lebar bagi tetingkap utama"
+
+#: ../data/empathy.schemas.in.h:12
+#, fuzzy
+msgid "Hide the main window."
+msgstr "Lebar bagi tetingkap utama"
+
+#: ../data/empathy.schemas.in.h:13
+msgid "Open new chats in separate windows"
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:14
+#, fuzzy
+msgid "Show avatars"
+msgstr "_Papar Senarai Kenalan"
+
+#: ../data/empathy.schemas.in.h:15
+#, fuzzy
+msgid "Show hint about closing the main window"
+msgstr "Tinggi bagi tetingkap utama."
+
+#: ../data/empathy.schemas.in.h:16
+msgid "Show offline contacts"
+msgstr "Papar kenalan luartalian"
+
+#: ../data/empathy.schemas.in.h:17
+msgid "Spell checking languages"
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:18
+msgid "The last directory that an avatar image was chosen from."
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:19
+msgid "The theme that is used to display the conversation in chat windows."
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:20
+msgid "Use graphical smileys"
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:21
+msgid "Use notification sounds"
+msgstr "Guna bunyi pemakluman"
+
+#: ../data/empathy.schemas.in.h:22
+msgid "Use theme for chat rooms"
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:23
+msgid ""
+"Whether or not to check words typed against the languages you want to check "
+"with."
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:24
+msgid ""
+"Whether or not to convert smileys into graphical images in conversations."
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:25
+msgid "Whether or not to play a sound when messages arrive."
+msgstr "Samada memainkan bunyi ketika mesej tiba atau tidak."
+
+#: ../data/empathy.schemas.in.h:26
+msgid "Whether or not to play sounds when away."
+msgstr "Samada memainkan bunyi ketika away atau tidak."
+
+#: ../data/empathy.schemas.in.h:27
+msgid "Whether or not to play sounds when busy."
+msgstr "Samada memainkan bunyi ketika sibuk atau tidak."
+
+#: ../data/empathy.schemas.in.h:28
+#, fuzzy
+msgid "Whether or not to show a popup when a contact becomes available."
+msgstr "Samada memainkan bunyi ketika mesej tiba atau tidak."
+
+#: ../data/empathy.schemas.in.h:29
+#, fuzzy
+msgid ""
+"Whether or not to show avatars for contacts in the contact list and chat "
+"windows."
+msgstr "Samada memapar senarai kenalan yang luartalian pada senarai kenalan."
+
+#: ../data/empathy.schemas.in.h:30
+msgid "Whether or not to show contacts that are offline in the contact list."
+msgstr "Samada memapar senarai kenalan yang luartalian pada senarai kenalan."
+
+#: ../data/empathy.schemas.in.h:31
+msgid ""
+"Whether or not to show the message dialog about closing the main window with "
+"the 'x' button in the title bar."
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:32
+#, fuzzy
+msgid "Whether to show the contact list in compact mode or not."
+msgstr "Samada memapar senarai kenalan yang luartalian pada senarai kenalan."
+
+#: ../data/empathy.schemas.in.h:33
+msgid "Whether to use the theme for chat rooms or not."
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:34
+msgid ""
+"Which criterium to use when sorting the contact list. Default is to use sort "
+"by the contact's name with the value \"name\". A value of \"state\" will "
+"sort the contact list by state."
+msgstr ""
+
+#: ../libempathy/gossip-contact.c:654 ../libempathy/gossip-presence.c:184
+#: ../libempathy/gossip-presence.c:283
+msgid "Offline"
+msgstr "Luar Talian"
+
+#: ../libempathy/gossip-presence.c:274
+msgid "Available"
+msgstr "Ada"
+
+#: ../libempathy/gossip-presence.c:276
+msgid "Busy"
+msgstr "Sibuk"
+
+#: ../libempathy/gossip-presence.c:279
+msgid "Away"
+msgstr "Away"
+
+#: ../libempathy-gtk/empathy-main-window.c:254
+#, fuzzy
+msgid "Show and edit accounts"
+msgstr "_Papar Senarai Kenalan"
+
+#: ../libempathy-gtk/empathy-main-window.c:456
+msgid "Group"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-main-window.c:477
+#, fuzzy
+msgid "Contact"
+msgstr "_Tambah Kenalan..."
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:1
+#, fuzzy
+msgid "Contact List - Empathy"
+msgstr "_Sorok Senarai Kenalan"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:2
+#, fuzzy
+msgid "Context"
+msgstr "Sambung"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:3
+#, fuzzy
+msgid "Join _Favorites"
+msgstr "_Edit Kegemaran..."
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:4
+#: ../libempathy-gtk/gossip-chat.glade.h:10
+msgid "Join _New..."
+msgstr ""
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:5
+msgid "Manage Favorites..."
+msgstr ""
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:6
+msgid "Show _Offline Contacts"
+msgstr "Papar Kenalan _Luartalian"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:7
+#, fuzzy
+msgid "_About"
+msgstr "_Terima"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:8
+#, fuzzy
+msgid "_Accounts"
+msgstr "_Terima"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:9
+#: ../libempathy-gtk/gossip-chat.glade.h:15
+msgid "_Add Contact..."
+msgstr "_Tambah Kenalan..."
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:10
+#: ../libempathy-gtk/gossip-contact-list.c:298
+msgid "_Chat"
+msgstr "_Chat"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:11
+#, fuzzy
+msgid "_Contents"
+msgstr "Sambung"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:12
+#: ../libempathy-gtk/gossip-chat.glade.h:21
+#: ../libempathy-gtk/gossip-contact-list.c:310
+#, fuzzy
+msgid "_Edit"
+msgstr "_Keluar"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:13
+msgid "_Help"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:14
+#: ../libempathy-gtk/empathy-status-icon.glade.h:2
+#, fuzzy
+msgid "_New Message..."
+msgstr "Kirim _Mesej..."
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:15
+#, fuzzy
+msgid "_Personal Information"
+msgstr "Maklumat peribadi"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:16
+msgid "_Preferences"
+msgstr "Ke_utamaan"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:17
+#: ../libempathy-gtk/empathy-status-icon.glade.h:3
+msgid "_Quit"
+msgstr "_Keluar"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:18
+#: ../libempathy-gtk/gossip-chat.glade.h:25
+#, fuzzy
+msgid "_Room"
+msgstr "_Bilik:"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:19
+#: ../libempathy-gtk/gossip-chat.glade.h:28
+#: ../libempathy-gtk/gossip-contact-list.c:326
+#, fuzzy
+msgid "_View Previous Conversations"
+msgstr "Per_bualan"
+
+#: ../libempathy-gtk/empathy-status-icon.glade.h:1
+#, fuzzy
+msgid "Status"
+msgstr "Mesej Status"
+
+#: ../libempathy-gtk/empathy-status-icon.glade.h:4
+msgid "_Show Contact List"
+msgstr "_Papar Senarai Kenalan"
+
+#: ../libempathy-gtk/gossip-about-dialog.c:63
+msgid ""
+"Empathy is free software; you can redistribute it and/or modify it under the "
+"terms of the GNU General Public License as published by the Free Software "
+"Foundation; either version 2 of the License, or (at your option) any later "
+"version."
+msgstr ""
+
+#: ../libempathy-gtk/gossip-about-dialog.c:67
+msgid ""
+"Empathy is distributed in the hope that it will be useful, but WITHOUT ANY "
+"WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS "
+"FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more "
+"details."
+msgstr ""
+
+#: ../libempathy-gtk/gossip-about-dialog.c:71
+msgid ""
+"You should have received a copy of the GNU General Public License along with "
+"Empathy; if not, write to the Free Software Foundation, Inc., 51 Franklin "
+"Street, Fifth Floor, Boston, MA 02110-130159 USA"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-about-dialog.c:99
+#, fuzzy
+msgid "An Instant Messaging client for GNOME"
+msgstr "Klien Jabber bagi GNOME"
+
+#: ../libempathy-gtk/gossip-about-dialog.c:105
+#, fuzzy
+msgid "translator-credits"
+msgstr ""
+"Khairulanuar Abd Majid\n"
+"Hasbullah Bin Pit"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:224
+#, fuzzy
+msgid "Disable"
+msgstr "Ada"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:227
+msgid "Enable"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:261
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:3
+#, fuzzy
+msgid "<b>No Account Selected</b>"
+msgstr "<b>Kegemaran:</b>"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:263
+msgid ""
+"To add a new account, you can click on the 'Add' button and a new entry will "
+"be created for you to start configuring.\n"
+"\n"
+"If you do not want to add an account, simply click on the account you want "
+"to configure in the list on the left."
+msgstr ""
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:272
+#, fuzzy
+msgid "<b>No Accounts Configured</b>"
+msgstr "<b>Kegemaran:</b>"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:274
+msgid ""
+"To add a new account, you can click on the 'Add' button and a new entry will "
+"be created for you to start configuring."
+msgstr ""
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:362
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:6
+#, fuzzy
+msgid "Accounts"
+msgstr "Akaun Jabber"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:857
+#, c-format
+msgid ""
+"You are about to remove your %s account!\n"
+"Are you sure you want to proceed?"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:863
+msgid ""
+"Any associated conversations and chat rooms will NOT be removed if you "
+"decide to proceed.\n"
+"\n"
+"Should you decide to add the account back at a later time, they will still "
+"be available."
+msgstr ""
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:1
+#, fuzzy
+msgid "<b>Account</b>"
+msgstr "<b>Kegemaran:</b>"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:2
+#, fuzzy
+msgid "<b>New Account</b>"
+msgstr "<b>Kegemaran:</b>"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:4
+#, fuzzy
+msgid "<b>Settings</b>"
+msgstr "Mesej Status"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:5
+msgid "A unique name for this account to identify it personally to you."
+msgstr ""
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:7
+#, fuzzy
+msgid "Cr_eate"
+msgstr "Chat"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:8
+msgid "Imendio "
+msgstr ""
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:9
+msgid "Jabber"
+msgstr "Jabber"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:10
+msgid ""
+"To add a new account, you can click on the 'Add' button and a new entry will "
+"be created for you to started configuring.\n"
+"\n"
+"If you do not want to add an account, simply click on the account you want "
+"to configure in the list on the left."
+msgstr ""
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:13
+#, fuzzy
+msgid "_Name:"
+msgstr "Nama:"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:14
+#, fuzzy
+msgid "_Type:"
+msgstr "_Topik:"
+
+#: ../libempathy-gtk/gossip-account-widget-generic.c:144
+#: ../libempathy-gtk/gossip-account-widget-generic.c:186
+#, c-format
+msgid "%s:"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:1
+#, fuzzy
+msgid ""
+"<small><b><span foreground=\"#555\">Example: user@jabber.org</span></b></"
+"small>"
+msgstr "<span size=\"smaller\">Contoh: sebol@jabber.org</span>"
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:2
+msgid "Forget password and clear the entry."
+msgstr ""
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:3
+msgid "Login I_D:"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:4
+#, fuzzy
+msgid "Pass_word:"
+msgstr "_Katalaluan:"
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:5
+#, fuzzy
+msgid "Reso_urce:"
+msgstr "_Sumber:"
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:6
+#, fuzzy
+msgid "Use encryption (SS_L)"
+msgstr "Guna peng_enkripsian (SSL)"
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:7
+#, fuzzy
+msgid "_Port:"
+msgstr "_Liang:"
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:8
+msgid "_Server:"
+msgstr "_Pelayan:"
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:9
+msgid "jabber account settings"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-chat.c:314
+#, fuzzy
+msgid "Disconnected"
+msgstr "_Putus"
+
+#: ../libempathy-gtk/gossip-chat.c:858
+msgid "Insert Smiley"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-chat.c:906
+msgid "_Check Word Spelling..."
+msgstr ""
+
+#: ../libempathy-gtk/gossip-chat.c:1244
+#, fuzzy
+msgid "Connected"
+msgstr "Sambung"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:1
+msgid "C_lear"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-chat.glade.h:2
+msgid "Change _Topic..."
+msgstr ""
+
+#: ../libempathy-gtk/gossip-chat.glade.h:3
+msgid "Chat"
+msgstr "Chat"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:4
+#, fuzzy
+msgid "Contact Infor_mation"
+msgstr "_Maklumat Kenalan"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:5
+#, fuzzy
+msgid "Cu_t"
+msgstr "Chat"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:6
+#, fuzzy
+msgid "In_vite..."
+msgstr "_Daftar..."
+
+#: ../libempathy-gtk/gossip-chat.glade.h:7
+msgid "Insert _Smiley"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-chat.glade.h:8
+#, fuzzy
+msgid "Invitation _message:"
+msgstr "Mesej status:"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:9
+msgid "Invite"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-chat.glade.h:11
+msgid "Move Tab _Left"
+msgstr "Alih Tab ke Ki_ri"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:12
+msgid "Move Tab _Right"
+msgstr "Alih Tab ke Ka_nan"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:13
+msgid "Select who would you like to invite:"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-chat.glade.h:14
+msgid "You have been invited to join a chat conference."
+msgstr ""
+
+#: ../libempathy-gtk/gossip-chat.glade.h:16
+#, fuzzy
+msgid "_Add To Favorites"
+msgstr "_Edit Kegemaran..."
+
+#: ../libempathy-gtk/gossip-chat.glade.h:17
+msgid "_Close"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-chat.glade.h:18
+msgid "_Conversation"
+msgstr "Per_bualan"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:19
+msgid "_Copy"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-chat.glade.h:20
+msgid "_Detach Tab"
+msgstr "_Leraikan Tab"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:22
+msgid "_Next Tab"
+msgstr "Tab _Berikutnya"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:23
+msgid "_Paste"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-chat.glade.h:24
+msgid "_Previous Tab"
+msgstr "Tab _Terdahulu"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:26
+#, fuzzy
+msgid "_Show Contacts"
+msgstr "_Papar Senarai Kenalan"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:27
+msgid "_Tabs"
+msgstr "_Tab"
+
+#: ../libempathy-gtk/gossip-chat-view.c:544
+msgid "_Copy Link Address"
+msgstr "_Salin Alamat Pautan"
+
+#: ../libempathy-gtk/gossip-chat-view.c:552
+msgid "_Open Link"
+msgstr "_Buka Pautan"
+
+#: ../libempathy-gtk/gossip-chat-view.c:889
+msgid "%A %d %B %Y"
+msgstr "%A %d %B %Y"
+
+#: ../libempathy-gtk/gossip-chat-window.c:685
+#: ../libempathy-gtk/gossip-chat-window.c:715
+#, fuzzy
+msgid "New Message"
+msgid_plural "New Messages"
+msgstr[0] "Kirim _Mesej..."
+msgstr[1] "Kirim _Mesej..."
+
+#: ../libempathy-gtk/gossip-chat-window.c:691
+#, fuzzy
+msgid "Chat Room"
+msgstr "Gossip - Chat"
+
+#: ../libempathy-gtk/gossip-chat-window.c:696
+#: ../libempathy-gtk/gossip-chat-window.c:719
+#, fuzzy, c-format
+msgid "Conversation"
+msgid_plural "Conversations (%d)"
+msgstr[0] "Per_bualan"
+msgstr[1] "Per_bualan"
+
+#: ../libempathy-gtk/gossip-chat-window.c:1295
+#, fuzzy
+msgid "Typing a message."
+msgstr "Mesej sibuk"
+
+#: ../libempathy-gtk/gossip-contact-list.c:290
+#, fuzzy
+msgid "_Contact"
+msgstr "_Tambah Kenalan..."
+
+#: ../libempathy-gtk/gossip-contact-list.c:294
+#, fuzzy
+msgid "_Group"
+msgstr "Gossip - Chat"
+
+#: ../libempathy-gtk/gossip-contact-list.c:298
+#, fuzzy
+msgid "Chat with contact"
+msgstr "Tambah kenalan"
+
+#: ../libempathy-gtk/gossip-contact-list.c:302
+#, fuzzy
+msgid "Infor_mation"
+msgstr "_Maklumat Kenalan"
+
+#: ../libempathy-gtk/gossip-contact-list.c:302
+#, fuzzy
+msgid "View contact information"
+msgstr "Maklumat kenalan"
+
+#: ../libempathy-gtk/gossip-contact-list.c:306
+#, fuzzy
+msgid "Re_name"
+msgstr "/_Tukarnama kumpulan"
+
+#: ../libempathy-gtk/gossip-contact-list.c:306
+#, fuzzy
+msgid "Rename"
+msgstr "Nama _pengguna:"
+
+#: ../libempathy-gtk/gossip-contact-list.c:310
+#, fuzzy
+msgid "Edit the groups and name for this contact"
+msgstr ""
+"Sila masukkan gelaran baru bagi kenalan\n"
+" %s"
+
+#: ../libempathy-gtk/gossip-contact-list.c:314
+msgid "_Remove"
+msgstr "_Buang"
+
+#: ../libempathy-gtk/gossip-contact-list.c:314
+#, fuzzy
+msgid "Remove contact"
+msgstr "/_Buang kenalan"
+
+#: ../libempathy-gtk/gossip-contact-list.c:318
+#, fuzzy
+msgid "_Invite to Chat Room"
+msgstr "Gossip - Edit Chat Kumpulan"
+
+#: ../libempathy-gtk/gossip-contact-list.c:318
+msgid "Invite to a currently open chat room"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-contact-list.c:322
+#, fuzzy
+msgid "_Send File..."
+msgstr "Kirim _Mesej..."
+
+#: ../libempathy-gtk/gossip-contact-list.c:322
+#, fuzzy
+msgid "Send a file"
+msgstr "Kirim _Mesej..."
+
+#: ../libempathy-gtk/gossip-contact-list.c:326
+#, fuzzy
+msgid "View previous conversations with this contact"
+msgstr "Per_bualan"
+
+#: ../libempathy-gtk/gossip-preferences.c:250
+msgid "Language"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:1
+#, fuzzy
+msgid "<b>Appearance</b>"
+msgstr "Penampilan"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:2
+#, fuzzy
+msgid "<b>Audio</b>"
+msgstr "<b>Kegemaran:</b>"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:3
+#, fuzzy
+msgid "<b>Behaviour</b>"
+msgstr "<b>Kegemaran:</b>"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:4
+#, fuzzy
+msgid "<b>Contact List</b>"
+msgstr "Mesej Status"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:5
+msgid "<b>Languages</b>"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:6
+#, fuzzy
+msgid "<b>Options</b>"
+msgstr "Sambung"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:7
+#, fuzzy
+msgid "<b>Visual</b>"
+msgstr "<b>Kegemaran:</b>"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:8
+msgid ""
+"<small>The list of languages reflects only the languages for which you have "
+"a dictionary installed.</small>"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:9
+msgid "Avatars are user chosen images shown in the contact list"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:10
+#, fuzzy
+msgid "Chat Th_eme:"
+msgstr "_Nama chat:"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:11
+msgid "Display notifications when contacts come _online"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:12
+#, fuzzy
+msgid "Enable sounds when _away"
+msgstr "Matikan bunyi ketika _away"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:13
+#, fuzzy
+msgid "Enable sounds when _busy"
+msgstr "Matikan bunyi ketika _sibuk"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:14
+msgid "General"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:15
+#, fuzzy
+msgid "Notifications"
+msgstr "Guna bunyi pemakluman"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:16
+#, fuzzy
+msgid "Preferences"
+msgstr "Ke_utamaan"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:17
+msgid "Show _avatars"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:18
+#, fuzzy
+msgid "Show _smileys as images"
+msgstr "Tukar _smiley ke imej grafik"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:19
+#, fuzzy
+msgid "Show co_mpact contact list"
+msgstr "_Papar Senarai Kenalan"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:20
+msgid "Sort by _name"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:21
+msgid "Sort by s_tate"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:22
+msgid "Spell Checking"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:23
+msgid "Themes"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:24
+msgid "_Enable spell checking"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:25
+msgid "_Open new chats in separate windows"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:26
+#, fuzzy
+msgid "_Play sound when messages arrive"
+msgstr "Mainkan bunyi bila mesej  tiba"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:27
+#, fuzzy
+msgid "_Use for chat rooms"
+msgstr "Gossip - Edit Chat Kumpulan"
+
+#: ../libempathy-gtk/gossip-presence-chooser.c:702
+#, fuzzy
+msgid "Custom message..."
+msgstr "Mesej Tersendiri..."
+
+#. Clear list
+#: ../libempathy-gtk/gossip-presence-chooser.c:724
+#, fuzzy
+msgid "Clear List..."
+msgstr "_Edit Kegemaran..."
+
+#: ../libempathy-gtk/gossip-presence-chooser.c:803
+#, fuzzy
+msgid "Are you sure you want to clear the list?"
+msgstr "Adakah anda ingin menerima permintaan?"
+
+#: ../libempathy-gtk/gossip-presence-chooser.c:807
+msgid ""
+"This will remove any custom messages you have added to the list of preset "
+"status messages."
+msgstr ""
+
+#: ../libempathy-gtk/gossip-presence-chooser.c:812
+msgid "Clear List"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-presence-chooser.glade.h:1
+#, fuzzy
+msgid "Enter status message:"
+msgstr "Mesej status:"
+
+#: ../libempathy-gtk/gossip-presence-chooser.glade.h:2
+#, fuzzy
+msgid "Status Message Presets"
+msgstr "Mesej Status"
+
+#: ../libempathy-gtk/gossip-presence-chooser.glade.h:3
+#, fuzzy
+msgid "_Add to status message list"
+msgstr "Mesej status:"
+
+#: ../libempathy-gtk/gossip-private-chat.c:198
+#, c-format
+msgid "%s went offline"
+msgstr "%s telah luartalian"
+
+#: ../libempathy-gtk/gossip-private-chat.c:212
+#, fuzzy, c-format
+msgid "%s has come online"
+msgstr "%s sedang dalamtalian"
+
+#: ../libempathy-gtk/gossip-theme-manager.c:87
+msgid "Classic"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-theme-manager.c:88
+msgid "Simple"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-theme-manager.c:89
+#, fuzzy
+msgid "Clean"
+msgstr "Klien:"
+
+#: ../libempathy-gtk/gossip-theme-manager.c:90
+msgid "Blue"
+msgstr ""
+
+#: ../src/empathy-main.c:145
+msgid "Don't connect on startup"
+msgstr "Jangan sambung pada permulaan"
+
+#: ../src/empathy-main.c:155
+#, fuzzy
+msgid "- Empathy Instant Messenger"
+msgstr "Pesanan Segera"
+
+#, fuzzy
+#~ msgid "Gossip Instant Messenger"
+#~ msgstr "Pesanan Segera"
+
+#, fuzzy
+#~ msgid "Joining"
+#~ msgstr "_Sertai"
+
+#, fuzzy
+#~ msgid "Unknown"
+#~ msgstr "Ralat tidak diketahui"
+
+#, fuzzy
+#~ msgid "No affiliation"
+#~ msgstr "Guna bunyi pemakluman"
+
+#, fuzzy
+#~ msgid "An unknown error occurred, check your details are correct."
+#~ msgstr "Ralat tidak diketahui"
+
+#, fuzzy
+#~ msgid "Unavailable"
+#~ msgstr "Ada"
+
+#, fuzzy
+#~ msgid "An unknown error occurred."
+#~ msgstr "Ralat tidak diketahui"
+
+#, fuzzy
+#~ msgid "Connection refused."
+#~ msgstr "Sambung"
+
+#, fuzzy
+#~ msgid "Connection timed out."
+#~ msgstr "Sambung"
+
+#, fuzzy
+#~ msgid "This feature is unavailable."
+#~ msgstr "Pelayan mungkin kini tidak berfungsi."
+
+#, fuzzy
+#~ msgid "new account"
+#~ msgstr "Akaun Jabber"
+
+#~ msgid "Home"
+#~ msgstr "Rumah"
+
+#, fuzzy
+#~ msgid "This service is unavailable or not found"
+#~ msgstr "Pelayan mungkin kini tidak berfungsi."
+
+#, fuzzy
+#~ msgid "Registration is required"
+#~ msgstr "Mendaftar akaun"
+
+#, fuzzy
+#~ msgid "This feature is not implemented"
+#~ msgstr "Pelayan mungkin kini tidak berfungsi."
+
+#, fuzzy
+#~ msgid "Disconnect"
+#~ msgstr "_Putus"
+
+#~ msgid "Connect"
+#~ msgstr "Sambung"
+
+#, fuzzy
+#~ msgid "Successfully registered your new account settings."
+#~ msgstr "Berjaya mendaftar akaun"
+
+#, fuzzy
+#~ msgid "Failed to register your new account settings."
+#~ msgstr "Gagal mendaftar akaun"
+
+#, fuzzy
+#~ msgid "Successfully changed your account password."
+#~ msgstr "Sila masukkan katalaluan anda:"
+
+#, fuzzy
+#~ msgid "Failed to change your account password."
+#~ msgstr "Sila masukkan katalaluan anda:"
+
+#, fuzzy
+#~ msgid ""
+#~ "Please enter a new password for this account:\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Sila masukkan nama baru bagi kumpulan\n"
+#~ "%s"
+
+#, fuzzy
+#~ msgid "Information requested, please wait..."
+#~ msgstr "<b>Maklumat dipinta, Sila tunggu...</b>"
+
+#~ msgid "I would like to add you to my contact list."
+#~ msgstr "Saya ingin menambah anda ke senarai kenalan saya."
+
+#, fuzzy
+#~ msgid "%d new message"
+#~ msgid_plural "%d new messages"
+#~ msgstr[0] "Kirim _Mesej..."
+#~ msgstr[1] "Kirim _Mesej..."
+
+#, fuzzy
+#~ msgid "%d server message"
+#~ msgid_plural "%d server messages"
+#~ msgstr[0] "Mesej permintaan"
+#~ msgstr[1] "Mesej permintaan"
+
+#, fuzzy
+#~ msgid "Edit Account _Details"
+#~ msgstr "Edit Maklumat Akaun"
+
+#~ msgid "New message from %s"
+#~ msgstr "Mesej baru dari %s"
+
+#, fuzzy
+#~ msgid "Accept"
+#~ msgstr "_Terima"
+
+#, fuzzy
+#~ msgid "Name"
+#~ msgstr "Nama:"
+
+#, fuzzy
+#~ msgid "Room"
+#~ msgstr "_Bilik:"
+
+#, fuzzy
+#~ msgid "Auto Connect"
+#~ msgstr "Sambung"
+
+#, fuzzy
+#~ msgid "Information requested..."
+#~ msgstr "<b>Maklumat dipinta, Sila tunggu...</b>"
+
+#, fuzzy
+#~ msgid "Do you want to remove this contact from your roster?"
+#~ msgstr ""
+#~ "Anda pasti untuk membuang kenalan\n"
+#~ "%s\n"
+#~ " dari senarai kenalan anda?"
+
+#, fuzzy
+#~ msgid ""
+#~ "Please enter a new name for the group:\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Sila masukkan nama baru bagi kumpulan\n"
+#~ "%s"
+
+#~ msgid "Unsorted"
+#~ msgstr "Tidak Diisih"
+
+#, fuzzy
+#~ msgid "Unknown error occurred during file transfer."
+#~ msgstr "Ralat tidak diketahui"
+
+#, fuzzy
+#~ msgid "%s would like to send you a file."
+#~ msgstr "Saya ingin menambah anda ke senarai kenalan saya."
+
+#, fuzzy
+#~ msgid "Someone would like to send you a file."
+#~ msgstr "Saya ingin menambah anda ke senarai kenalan saya."
+
+#, fuzzy
+#~ msgid "Connecting..."
+#~ msgstr "_Sambung"
+
+#, fuzzy
+#~ msgid "Retry connection"
+#~ msgstr "Sambung"
+
+#, fuzzy
+#~ msgid "Enter the new topic you want to set for this room:"
+#~ msgstr "Nama gelaran apa yang anda ingin gunakan bagi kenalan ini?"
+
+#, fuzzy
+#~ msgid "Topic: %s"
+#~ msgstr "_Topik:"
+
+#, fuzzy
+#~ msgid "Account"
+#~ msgstr "Akaun Jabber"
+
+#, fuzzy
+#~ msgid "Conversation With"
+#~ msgstr "Per_bualan"
+
+#~ msgid "List the available accounts"
+#~ msgstr "Senarai akaun yang ada"
+
+#~ msgid "Which account to connect to on startup"
+#~ msgstr "Akaun mana untuk disambung pada permulaan"
+
+#~ msgid "ACCOUNT-NAME"
+#~ msgstr "NAMA-AKAUN"
+
+#~ msgid "Available accounts:"
+#~ msgstr "Akaun yang ada:"
+
+#~ msgid "[default]"
+#~ msgstr "[default]"
+
+#~ msgid "There is no account with the name '%s'."
+#~ msgstr "Tiada akaun dengan nama '%s'."
+
+#, fuzzy
+#~ msgid "Join"
+#~ msgstr "_Sertai"
+
+#, fuzzy
+#~ msgid "Create"
+#~ msgstr "Chat"
+
+#, fuzzy
+#~ msgid "Chat Rooms"
+#~ msgstr "Gossip - Chat"
+
+#, fuzzy
+#~ msgid "Browsing for conference rooms, please wait..."
+#~ msgstr "<b>Maklumat dipinta, Sila tunggu...</b>"
+
+#, fuzzy
+#~ msgid "Default"
+#~ msgstr "[default]"
+
+#, fuzzy
+#~ msgid "Chat!"
+#~ msgstr "Chat"
+
+#, fuzzy
+#~ msgid "%s wants to be added to your contact list."
+#~ msgstr "%s akan ditambah ke senarai kenalan anda."
+
+#, fuzzy
+#~ msgid "Someone wants to be added to your contact list."
+#~ msgstr "%s akan ditambah ke senarai kenalan anda."
+
+#, fuzzy
+#~ msgid "Subscription request"
+#~ msgstr "Menghantar permintaan"
+
+#, fuzzy
+#~ msgid "Contact Information"
+#~ msgstr "_Maklumat Kenalan"
+
+#, fuzzy
+#~ msgid "Do you want to add this person to your contact list?"
+#~ msgstr ""
+#~ "Anda pasti untuk membuang kenalan\n"
+#~ "%s\n"
+#~ " dari senarai kenalan anda?"
+
+#, fuzzy
+#~ msgid "Do you want to add %s to your contact list?"
+#~ msgstr ""
+#~ "Anda pasti untuk membuang kenalan\n"
+#~ "%s\n"
+#~ " dari senarai kenalan anda?"
+
+#, fuzzy
+#~ msgid "Please enter your %s account password"
+#~ msgstr "Sila masukkan katalaluan anda:"
+
+#~ msgid "Remember Password?"
+#~ msgstr "Ingat katalaluan?"
+
+#, fuzzy
+#~ msgid "Change"
+#~ msgstr "Chat"
+
+#, fuzzy
+#~ msgid "Contact goes online"
+#~ msgstr "%s sedang dalamtalian"
+
+#, fuzzy
+#~ msgid "Do you want to accept this file?"
+#~ msgstr "Adakah anda ingin menerima permintaan?"
+
+#, fuzzy
+#~ msgid "File name:"
+#~ msgstr "Nama _pengguna:"
+
+#, fuzzy
+#~ msgid "File size:"
+#~ msgstr "Tapak Web:"
+
+#~ msgid "Web site:"
+#~ msgstr "Tapak Web:"
+
+#~ msgid "_Accept"
+#~ msgstr "_Terima"
+
+#~ msgid "_Deny"
+#~ msgstr "_Dinafikan"
+
+#, fuzzy
+#~ msgid "<b>Topic:</b>"
+#~ msgstr "<b>Kegemaran:</b>"
+
+#, fuzzy
+#~ msgid "Account:"
+#~ msgstr "Akaun Jabber"
+
+#, fuzzy
+#~ msgid "Edit Favorite Room"
+#~ msgstr "Gossip - Edit Chat Kumpulan"
+
+#, fuzzy
+#~ msgid "Group Chat"
+#~ msgstr "Gossip - Chat"
+
+#, fuzzy
+#~ msgid "Join New"
+#~ msgstr "_Sertai"
+
+#, fuzzy
+#~ msgid "Join room on start_up"
+#~ msgstr "Jangan sambung pada permulaan"
+
+#, fuzzy
+#~ msgid "N_ame:"
+#~ msgstr "Nama:"
+
+#, fuzzy
+#~ msgid "S_erver:"
+#~ msgstr "Pelayan:"
+
+#~ msgid "_Nickname:"
+#~ msgstr "_Gelaran:"
+
+#~ msgid "_Room:"
+#~ msgstr "_Bilik:"
+
+#, fuzzy
+#~ msgid "<b>About</b>"
+#~ msgstr "<b>Kegemaran:</b>"
+
+#, fuzzy
+#~ msgid "<b>Client Information</b>"
+#~ msgstr "Maklumat klien"
+
+#, fuzzy
+#~ msgid "<b>Groups</b>"
+#~ msgstr "<b>Kegemaran:</b>"
+
+#, fuzzy
+#~ msgid "<b>Name</b>"
+#~ msgstr "Mesej Status"
+
+#, fuzzy
+#~ msgid "<b>Personal Details</b>"
+#~ msgstr "<b>Tetapan Akaun</b>"
+
+#, fuzzy
+#~ msgid "<b>Subscription</b>"
+#~ msgstr "Sambung"
+
+#, fuzzy
+#~ msgid "<span size=\"smaller\">Example: Mikael or user@server.org</span>"
+#~ msgstr "<span size=\"smaller\">Contoh: sebol@jabber.org</span>"
+
+#, fuzzy
+#~ msgid "Accou_nt:"
+#~ msgstr "Akaun Jabber"
+
+#, fuzzy
+#~ msgid "Add Contact"
+#~ msgstr "_Tambah Kenalan..."
+
+#, fuzzy
+#~ msgid "Ch_at"
+#~ msgstr "Chat"
+
+#~ msgid "Client:"
+#~ msgstr "Klien:"
+
+#, fuzzy
+#~ msgid "Con_tact:"
+#~ msgstr "_Tambah Kenalan..."
+
+#, fuzzy
+#~ msgid "Connect on S_tartup"
+#~ msgstr "Jangan sambung pada permulaan"
+
+#, fuzzy
+#~ msgid "Contacts"
+#~ msgstr "_Tambah Kenalan..."
+
+#~ msgid "Country:"
+#~ msgstr "Negara:"
+
+#, fuzzy
+#~ msgid "Edit Contact"
+#~ msgstr "_Tambah Kenalan..."
+
+#, fuzzy
+#~ msgid "Edit Groups"
+#~ msgstr "Gossip - Edit Chat Kumpulan"
+
+#~ msgid "Email:"
+#~ msgstr "Emel:"
+
+#, fuzzy
+#~ msgid "ID:"
+#~ msgstr "JID"
+
+#~ msgid "Name:"
+#~ msgstr "Nama:"
+
+#~ msgid "OS:"
+#~ msgstr "OS:"
+
+#, fuzzy
+#~ msgid "Personal Details"
+#~ msgstr "<b>Tetapan Akaun</b>"
+
+#, fuzzy
+#~ msgid "R_egister"
+#~ msgstr "_Daftar..."
+
+#, fuzzy
+#~ msgid "Search"
+#~ msgstr "_Cari:"
+
+#, fuzzy
+#~ msgid "Spell Checker"
+#~ msgstr "Gossip - Kirim Mesej"
+
+#, fuzzy
+#~ msgid "This is the name that will be used on your roster for this contact"
+#~ msgstr "Nama gelaran apa yang anda ingin gunakan bagi kenalan ini?"
+
+#~ msgid "Version:"
+#~ msgstr "Versi:"
+
+#, fuzzy
+#~ msgid "View Previous Conversations"
+#~ msgstr "Per_bualan"
+
+#, fuzzy
+#~ msgid "Which account do you want to use?"
+#~ msgstr "Apakah namapengguna anda ingin gunakan?"
+
+#, fuzzy
+#~ msgid "_Connect"
+#~ msgstr "Sambung"
+
+#, fuzzy
+#~ msgid "_Description:"
+#~ msgstr "Keterangan"
+
+#~ msgid "_Disconnect"
+#~ msgstr "_Putus"
+
+#, fuzzy
+#~ msgid "_Email:"
+#~ msgstr "Emel:"
+
+#, fuzzy
+#~ msgid ""
+#~ "_Enter the name or contact ID of the person you want to chat to below:"
+#~ msgstr "Masukka  ID pengguna bagi orang yang anda ingin kirim mesej chat."
+
+#, fuzzy
+#~ msgid "_For:"
+#~ msgstr "_Liang:"
+
+#, fuzzy
+#~ msgid "_Full Name:"
+#~ msgstr "Nama:"
+
+#, fuzzy
+#~ msgid "_Group:"
+#~ msgstr "Gossip - Chat"
+
+#, fuzzy
+#~ msgid "_Nick Name:"
+#~ msgstr "_Gelaran:"
+
+#, fuzzy
+#~ msgid "_Password:"
+#~ msgstr "_Katalaluan:"
+
+#, fuzzy
+#~ msgid "_Quit Message:"
+#~ msgstr "Mesej _Status"
+
+#, fuzzy
+#~ msgid "_Retrieve"
+#~ msgstr "_Buang"
+
+#, fuzzy
+#~ msgid "_Web site:"
+#~ msgstr "Tapak Web:"
+
+#, fuzzy
+#~ msgid "Preset status messages"
+#~ msgstr "Mesej status:"
+
+#, fuzzy
+#~ msgid "Preset status messages."
+#~ msgstr "Mesej status:"
+
+#, fuzzy
+#~ msgid "Connecting"
+#~ msgstr "Sambung"
+
+#~ msgid "%s will be added to your contact list."
+#~ msgstr "%s akan ditambah ke senarai kenalan anda."
+
+#, fuzzy
+#~ msgid "%s ID of new contact:"
+#~ msgstr "ID _Jabber bagi kenalan baru:"
+
+#, fuzzy
+#~ msgid ""
+#~ "Please enter your invitation message to:\n"
+#~ "%s"
+#~ msgstr "Sila masukkan katalaluan anda:"
+
+#~ msgid "Contact Information for %s"
+#~ msgstr "Maklumat Kenalan bagi %s"
+
+#, fuzzy
+#~ msgid "/Contact Infor_mation"
+#~ msgstr "/_Maklumat Kenalan"
+
+#, fuzzy
+#~ msgid "/Re_name Contact"
+#~ msgstr "/_Tukarnama kenalan"
+
+#, fuzzy
+#~ msgid "/_Edit Groups"
+#~ msgstr "Gossip - Edit Chat Kumpulan"
+
+#, fuzzy
+#~ msgid "/_View Previous Conversations"
+#~ msgstr "Per_bualan"
+
+#~ msgid ""
+#~ "Please enter a new nickname for the contact\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Sila masukkan gelaran baru bagi kenalan\n"
+#~ " %s"
+
+#~ msgid "Conversation Log"
+#~ msgstr "Log Perbualan"
+
+#~ msgid "Registering account"
+#~ msgstr "Mendaftar akaun"
+
+#, fuzzy
+#~ msgid "Respond"
+#~ msgstr "Sebab:"
+
+#, fuzzy
+#~ msgid "Add to _favourites"
+#~ msgstr "_Edit Kegemaran..."
+
+#, fuzzy
+#~ msgid "Na_me:"
+#~ msgstr "Nama:"
+
+#, fuzzy
+#~ msgid "New Chat Room"
+#~ msgstr "Gossip - Chat"
+
+#~ msgid "    "
+#~ msgstr "    "
+
+#, fuzzy
+#~ msgid "<b>Information requested, please wait...</b>"
+#~ msgstr "<b>Maklumat dipinta, Sila tunggu...</b>"
+
+#, fuzzy
+#~ msgid "<span size=\"smaller\">Example:</span>"
+#~ msgstr "<span size=\"smaller\">Contoh: sebol@jabber.org</span>"
+
+#, fuzzy
+#~ msgid "Chat Rooms..."
+#~ msgstr "Gossip - Chat"
+
+#, fuzzy
+#~ msgid "Do you already have an account set up on a server?"
+#~ msgstr "Adakah anda sudah mempunyai akaun pada pelayan Jabber?"
+
+#, fuzzy
+#~ msgid "Enter the port used in the connection for this account"
+#~ msgstr ""
+#~ "Sila masukkan gelaran baru bagi kenalan\n"
+#~ " %s"
+
+#, fuzzy
+#~ msgid "Enter the server used in the connection for this account"
+#~ msgstr ""
+#~ "Sila masukkan gelaran baru bagi kenalan\n"
+#~ " %s"
+
+#, fuzzy
+#~ msgid "Finished"
+#~ msgstr "Tetapan Selesai"
+
+#~ msgid "Gossip"
+#~ msgstr "Gossip"
+
+#~ msgid ""
+#~ "Gossip is a modern client for the Jabber Instant Messaging system.\n"
+#~ "\n"
+#~ "This assistant will help you configure Gossip and connect you to your "
+#~ "favorite Jabber server.\n"
+#~ "\n"
+#~ "To get started, just click \"Forward\"."
+#~ msgstr ""
+#~ "Gossip adalah klien moden bagi sistem Pesanan Segera Jabber.\n"
+#~ "\n"
+#~ "Pembantu ini akan membantu anda mengkonfigurasikan Gossip dan sambungkan "
+#~ "anda ke pelayan Jabber kegemaran anda.\n"
+#~ "\n"
+#~ "Untuk bermula, hanya klik \"Maju\"."
+
+#~ msgid "In which group do you want to place this contact?"
+#~ msgstr "Dalam kumpulan mana anda ingin letak kenalan ini?"
+
+#~ msgid "Jabber ID:"
+#~ msgstr "ID Jabber:"
+
+#, fuzzy
+#~ msgid "Nickname:"
+#~ msgstr "_Gelaran:"
+
+#, fuzzy
+#~ msgid "Port:"
+#~ msgstr "_Liang:"
+
+#, fuzzy
+#~ msgid "Registering Account"
+#~ msgstr "Mendaftar akaun"
+
+#, fuzzy
+#~ msgid "Resource:"
+#~ msgstr "_Sumber:"
+
+#~ msgid "Server:"
+#~ msgstr "Pelayan:"
+
+#, fuzzy
+#~ msgid "Web Site:"
+#~ msgstr "Tapak Web:"
+
+#~ msgid "Welcome to Gossip"
+#~ msgstr "Selamat Datang ke Gossip"
+
+#~ msgid "What instant messaging system does the contact use?"
+#~ msgstr "Apa sistem pesanan segera yang anda gunakan yg kenalan ini gunakan?"
+
+#~ msgid "What is your name?"
+#~ msgstr "Apakah nama anda?"
+
+#, fuzzy
+#~ msgid "What password do you want to use?"
+#~ msgstr "Apakah pelayan anda ingin gunakan?"
+
+#~ msgid "What username do you use?"
+#~ msgstr "Apakah namapengguna anda gunakan?"
+
+#~ msgid "What username do you want to use?"
+#~ msgstr "Apakah namapengguna anda ingin gunakan?"
+
+#, fuzzy
+#~ msgid "Which account do you want to add this contact to?"
+#~ msgstr "Dalam kumpulan mana anda ingin letak kenalan ini?"
+
+#, fuzzy
+#~ msgid ""
+#~ "You can change your account settings later by selecting the Edit-"
+#~ ">Accounts menu item."
+#~ msgstr ""
+#~ "Gossip kini dikonfigurasikan untuk sistem anda.\n"
+#~ "Anda boleh menukar tetapan akaun anda kemudian hari, dengan memilih item "
+#~ "menu Chat->Sambung...  ."
+
+#, fuzzy
+#~ msgid "Your Account"
+#~ msgstr "Akaun Jabber"
+
+#~ msgid "Your Identity"
+#~ msgstr "Indentiti Anda"
+
+#, fuzzy
+#~ msgid "_No"
+#~ msgstr "Tidak"
+
+#~ msgid "_Search..."
+#~ msgstr "_Cari:"
+
+#, fuzzy
+#~ msgid "_Yes"
+#~ msgstr "Ya"
+
+#~ msgid "Be silent when away"
+#~ msgstr "Senyap bila away"
+
+#~ msgid "Be silent when busy"
+#~ msgstr "Senyap bila sibuk"
+
+#~ msgid "Height of main window"
+#~ msgstr "Tinggi tetingkap utama"
+
+#, fuzzy
+#~ msgid "The X position of the main window."
+#~ msgstr "Lebar bagi tetingkap utama."
+
+#, fuzzy
+#~ msgid "The Y position of the main window."
+#~ msgstr "Lebar bagi tetingkap utama."
+
+#~ msgid "The width of the main window."
+#~ msgstr "Lebar bagi tetingkap utama."
+
+#, fuzzy
+#~ msgid "Width of the main window"
+#~ msgstr "Lebar bagi tetingkap utama"
+
+#, fuzzy
+#~ msgid "X position of main window"
+#~ msgstr "Lebar bagi tetingkap utama"
+
+#, fuzzy
+#~ msgid "Y position of main window"
+#~ msgstr "Lebar bagi tetingkap utama"
+
+#, fuzzy
+#~ msgid "Gossip, Instant Messaging Client"
+#~ msgstr "Klien Jabber bagi GNOME"
+
+#, fuzzy
+#~ msgid "Close this chat window"
+#~ msgstr "Lebar bagi tetingkap utama"
+
+#, fuzzy
+#~ msgid "Requested Information"
+#~ msgstr "Maklumat _Akaun"
+
+#, fuzzy
+#~ msgid "Send Message"
+#~ msgstr "Mesej Status"
+
+#, fuzzy
+#~ msgid "%s has gone offline"
+#~ msgstr "%s telah luartalian"
+
+#, fuzzy
+#~ msgid "Available..."
+#~ msgstr "Ada"
+
+#, fuzzy
+#~ msgid "Busy..."
+#~ msgstr "Sibuk"
+
+#, fuzzy
+#~ msgid "Away..."
+#~ msgstr "Away"
+
+#~ msgid "Contact _Information"
+#~ msgstr "_Maklumat Kenalan"
+
+#, fuzzy
+#~ msgid "Gossip - Accounts"
+#~ msgstr "Gossip -  Chat Kumpulan"
+
+#, fuzzy
+#~ msgid "Join _Group Chat..."
+#~ msgstr " _Sertai Chat Kumpulan..."
+
+#, fuzzy
+#~ msgid "Por_t:"
+#~ msgstr "_Liang:"
+
+#, fuzzy
+#~ msgid "Requested information."
+#~ msgstr "Maklumat klien"
+
+#, fuzzy
+#~ msgid "Could not find the server you wanted to use"
+#~ msgstr "Apakah pelayan anda ingin gunakan?"
+
+#, fuzzy
+#~ msgid "Connection to the server failed."
+#~ msgstr "<b>Sambung ke pelayan</b>"
+
+#, fuzzy
+#~ msgid "Account ID"
+#~ msgstr "Maklumat _Akaun"
+
+#~ msgid "%sChat - %s"
+#~ msgstr "%sChat - %s"
+
+#~ msgid "/Show _Log"
+#~ msgstr "/Papar log"
+
+#, fuzzy
+#~ msgid "Persian"
+#~ msgstr "Versi:"
+
+#, fuzzy
+#~ msgid "Latvian"
+#~ msgstr "Makan"
+
+#, fuzzy
+#~ msgid "View Lo_g"
+#~ msgstr "Lo_g"
+
+#~ msgid "Gossip - Group Chat"
+#~ msgstr "Gossip -  Chat Kumpulan"
+
+#, fuzzy
+#~ msgid "Gossip - Add contact"
+#~ msgstr "Tambah kenalan"
+
+#, fuzzy
+#~ msgid "Gossip - Contact Information"
+#~ msgstr "_Maklumat Kenalan"
+
+#, fuzzy
+#~ msgid "Gossip - Edit Groups"
+#~ msgstr "Gossip - Edit Chat Kumpulan"
+
+#, fuzzy
+#~ msgid "Gossip - New Account"
+#~ msgstr "Gossip -  Chat Kumpulan"
+
+#, fuzzy
+#~ msgid "Gossip - New Message"
+#~ msgstr "Gossip - Kirim Mesej"
+
+#, fuzzy
+#~ msgid "Gossip - Personal Details"
+#~ msgstr "Gossip - Kirim Mesej"
+
+#, fuzzy
+#~ msgid "Gossip - Preferences"
+#~ msgstr "Keutamaan"
+
+#, fuzzy
+#~ msgid "Gossip - Status Message"
+#~ msgstr "Gossip - Kirim Mesej"
+
+#~ msgid "What request message do you want to send to %s?"
+#~ msgstr "Mesej permintaan apa yang anda ingin kirim ke %s?"
+
+#~ msgid "Make sure that your account information is correct."
+#~ msgstr "Pastikan maklumat akaun anda betul"
+
+#~ msgid "%s wants to be notified of your presence."
+#~ msgstr "%s ingin dimaklumkan dengan kehadiran anda"
+
+#~ msgid "You were disconnected from the server. Do you want to reconnect?"
+#~ msgstr "Anda diputuskan drpd pelayan. Adakah anda ingin ulangsambung?"
+
+#, fuzzy
+#~ msgid ""
+#~ "Make sure that your account information is correct. The server may also "
+#~ "currently be unavailable."
+#~ msgstr "Pastikan maklumat akaun anda betul"
+
+#~ msgid "An error occurred when chatting with %s."
+#~ msgstr "Ralat berlaku bila berchat dengan %s."
+
+#~ msgid "Details:"
+#~ msgstr "Perincian:"
+
+#~ msgid "Unable to enter the group chat %s."
+#~ msgstr "Tak dapat masuk ke chat kumpulan %s."
+
+#~ msgid "Gossip will now try to use your account:"
+#~ msgstr "Gossip kini akan cuba menggunakan akaun anda:"
+
+#~ msgid "Gossip will now try to register the account:"
+#~ msgstr "Gossip kini akan cuba mendaftarkan akaun:"
+
+#~ msgid "*"
+#~ msgstr "*"
+
+#~ msgid "From:"
+#~ msgstr "Dari:"
+
+#~ msgid "Gossip - Received Message"
+#~ msgstr "Gossip - Mesej Diterima"
+
+#~ msgid "To:"
+#~ msgstr "Ke:"
+
+#~ msgid "_Reply..."
+#~ msgstr "_Balas..."
+
+#~ msgid "_Send"
+#~ msgstr "_Kirim"
+
+#~ msgid "C_onnect"
+#~ msgstr "_Sambung"
+
+#~ msgid "        "
+#~ msgstr "        "
+
+#~ msgid "<b>Available chat rooms</b>"
+#~ msgstr "<b>Bilik chat yang ada</b>"
+
+#~ msgid "<b>Chat room information</b>"
+#~ msgstr "<b>Maklumat bilik chat</b>"
+
+#~ msgid "Gossip - Join Group Chat"
+#~ msgstr "Gossip - Sertai Chat Kumpulan"
+
+#~ msgid "N_ickname:"
+#~ msgstr "_Gelaran:"
+
+#~ msgid ""
+#~ "Pick a favorite, or enter nickname, server name, and the name of the chat "
+#~ "room to enter."
+#~ msgstr ""
+#~ "Pilih kegemaran, atau masukkan nama gelaran, nama pelayan, dan nama bagi "
+#~ "bilik chat untuk dimasuki."
+
+#~ msgid "R_emove"
+#~ msgstr "_Buang"
+
+#~ msgid "_Add"
+#~ msgstr "_Tambah"
+
+#~ msgid " "
+#~ msgstr " "
+
+#~ msgid "<i>Information not available</i>"
+#~ msgstr "<i>Maklumat tidak ada</i>"
+
+#~ msgid "Choose a Server"
+#~ msgstr "Pilih Pelayan"
+
+#~ msgid "Choose from list:"
+#~ msgstr "Pilih dari senarai:"
+
+#~ msgid "Information about ..."
+#~ msgstr "Maklumat perihal ...."
+
+#~ msgid "Jabber.com"
+#~ msgstr "Jabber.com"
+
+#~ msgid "Jabber.org"
+#~ msgstr "Jabber.org"
+
+#~ msgid "On what server do you have a Jabber account?"
+#~ msgstr "Pada pelayan apa yg anda mempunyai akaun jabber?"
+
+#~ msgid "Sound"
+#~ msgstr "Bunyi"
+
+#~ msgid "Use a different server"
+#~ msgstr "Guna pengenkodan lain"
+
+#~ msgid "What request message do you want to send to ...?"
+#~ msgstr "Mesej permintaan apa yang anda ingin kirim ..?"
+
+#, fuzzy
+#~ msgid "About Gossip"
+#~ msgstr "Gossip"
+
+#, fuzzy
+#~ msgid "translator_credits_old"
+#~ msgstr ""
+#~ "Khairulanuar Abd Majid <khairul@ikhlas.com>\n"
+#~ "Hasbullah Bin Pit <sebol@ikhlas.com>, Merlimau."
+
+#~ msgid "Gossip Website"
+#~ msgstr "Tapak Web Gossip"
+
+#~ msgid "Gossip, Jabber Client"
+#~ msgstr "Gossip, Klien Jabber"
+
+#~ msgid "About to leave..."
+#~ msgstr "Akan keluar..."
+
+#~ msgid "Autoaway message"
+#~ msgstr "Mesej auto away"
+
+#~ msgid "Away messages"
+#~ msgstr "Mesej away"
+
+#~ msgid "Message to show before going away"
+#~ msgstr "Mesej untuk dipapar sebelum away"
+
+#~ msgid "Not at the computer"
+#~ msgstr "Tiada di sisi komputer"
+
+#~ msgid "Just about to leave..."
+#~ msgstr "Baru nak keluar..."
+
+#~ msgid "Custom Busy Message..."
+#~ msgstr "Mesej Sibuk Tersendiri..."
+
+#~ msgid "Leave..."
+#~ msgstr "Keluar..."
+
+#~ msgid "New Busy Message"
+#~ msgstr "Mesej Sibuk Baru"
+
+#~ msgid "New Away Message"
+#~ msgstr "Mesej Away Baru"
+
+#~ msgid "Working"
+#~ msgstr "Bekerja"
+
+#~ msgid "Sleeping"
+#~ msgstr "Tidur"
+
+#~ msgid "Enter the new message:"
+#~ msgstr "Masukkan mesej baru:"
+
+#~ msgid "Leave"
+#~ msgstr "Keluar"
+
+#~ msgid "Preset messages for quickly setting away status."
+#~ msgstr "Mesej preset bagi penetapan cepat status away."
+
+#~ msgid "Preset messages for quickly setting busy status."
+#~ msgstr "Mesej preset bagi penetapan cepat status sibuk"
+
+#~ msgid "Reason for being busy:"
+#~ msgstr "Alasan menjadi sibuk:"
+
+#~ msgid "Reason for leaving:"
+#~ msgstr "Alasan keluar:"

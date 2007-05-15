@@ -1,0 +1,3090 @@
+# Catalan translation for Gossip
+# Copyright © 2003, 2004, 2005, 2006 Free Software Foundation, Inc.
+# This file is distributed under the same licence as the gossip package.
+# Jordi Mallach <jordi@sindominio.net>, 2003, 2004, 2005, 2006.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: gossip 0.11.2\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2007-05-15 23:46+0200\n"
+"PO-Revision-Date: 2006-08-26 16:58+0200\n"
+"Last-Translator: Jordi Mallach <jordi@sindominio.net>\n"
+"Language-Team: Catalan <tradgnome@softcatala.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n!=1;\n"
+
+#: ../data/empathy.desktop.in.h:1
+#, fuzzy
+msgid "Empathy Instant Messenger"
+msgstr "Missatgeria instantània"
+
+#: ../data/empathy.desktop.in.h:2
+msgid "Instant Messenger"
+msgstr "Missatgeria instantània"
+
+#: ../data/empathy.schemas.in.h:1
+msgid "Always open a separate chat window for new chats."
+msgstr "Obre sempre una finestra de xat separada per a xats nous."
+
+#: ../data/empathy.schemas.in.h:2
+msgid "Chat window theme"
+msgstr "Tema de la finestra de xat"
+
+#: ../data/empathy.schemas.in.h:3
+msgid ""
+"Comma separated list of spell checker languages to use (e.g. en, fr, nl)."
+msgstr ""
+"Llista separada per comes de les llengües de corrector ortogràfic a "
+"utilitzar (p. ex. ca, en, es, fr)."
+
+#: ../data/empathy.schemas.in.h:4
+#, fuzzy
+msgid "Compact contact list"
+msgstr "Cap contacte"
+
+#: ../data/empathy.schemas.in.h:5
+msgid "Contact list sort criterium"
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:6
+msgid "Default directory to select an avatar image from"
+msgstr "El directori per defecte des d'on seleccionar una imatge d'àvatar"
+
+#: ../data/empathy.schemas.in.h:7
+msgid "Enable popup when contact is available"
+msgstr "Habilita les finestres emergents quan un contacte és disponible"
+
+#: ../data/empathy.schemas.in.h:8
+msgid "Enable sound when away"
+msgstr "Habilita els sons quan s'està absent"
+
+#: ../data/empathy.schemas.in.h:9
+msgid "Enable sound when busy"
+msgstr "Habilita els sons quan s'està ocupat"
+
+#: ../data/empathy.schemas.in.h:10
+msgid "Enable spell checker"
+msgstr "Habilita el corrector ortogràfic"
+
+#: ../data/empathy.schemas.in.h:11
+msgid "Hide main window"
+msgstr "Amaga la finestra principal"
+
+#: ../data/empathy.schemas.in.h:12
+msgid "Hide the main window."
+msgstr "Amaga la finestra principal."
+
+#: ../data/empathy.schemas.in.h:13
+msgid "Open new chats in separate windows"
+msgstr "Obre les finestres de xat noves en finestres separades"
+
+#: ../data/empathy.schemas.in.h:14
+msgid "Show avatars"
+msgstr "Mostra els àvatars"
+
+#: ../data/empathy.schemas.in.h:15
+msgid "Show hint about closing the main window"
+msgstr "Mostra un consell sobre tancar la finestra principal"
+
+#: ../data/empathy.schemas.in.h:16
+msgid "Show offline contacts"
+msgstr "Mostra els contactes desconnectats"
+
+#: ../data/empathy.schemas.in.h:17
+msgid "Spell checking languages"
+msgstr "Llengües per a la correcció ortogràfica"
+
+#: ../data/empathy.schemas.in.h:18
+msgid "The last directory that an avatar image was chosen from."
+msgstr "L'últim directori des d'on es va seleccionar una imatge d'àvatar."
+
+#: ../data/empathy.schemas.in.h:19
+msgid "The theme that is used to display the conversation in chat windows."
+msgstr "El tema que s'usa per a mostrar la conversa a les finestres de xat."
+
+#: ../data/empathy.schemas.in.h:20
+msgid "Use graphical smileys"
+msgstr "Utilitza emoticones gràfiques"
+
+#: ../data/empathy.schemas.in.h:21
+msgid "Use notification sounds"
+msgstr "Utilitza sons de notificació"
+
+#: ../data/empathy.schemas.in.h:22
+msgid "Use theme for chat rooms"
+msgstr "Usa el tema per a les sales de xat"
+
+#: ../data/empathy.schemas.in.h:23
+msgid ""
+"Whether or not to check words typed against the languages you want to check "
+"with."
+msgstr ""
+"Si s'han de comprovar o no les paraules introduïdes contra les llengües amb "
+"les quals voler fer comprovacions."
+
+#: ../data/empathy.schemas.in.h:24
+msgid ""
+"Whether or not to convert smileys into graphical images in conversations."
+msgstr ""
+"Si s'ha de convertir o no les emoticones a imatges gràfiques a les converses."
+
+#: ../data/empathy.schemas.in.h:25
+msgid "Whether or not to play a sound when messages arrive."
+msgstr "Si s'ha de reproduir o no un so quan arriba un missatge."
+
+#: ../data/empathy.schemas.in.h:26
+msgid "Whether or not to play sounds when away."
+msgstr "Si s'ha de reproduir o no sons quan s'està absent."
+
+#: ../data/empathy.schemas.in.h:27
+msgid "Whether or not to play sounds when busy."
+msgstr "Si s'ha de reproduir o no sons quan s'està ocupat."
+
+#: ../data/empathy.schemas.in.h:28
+msgid "Whether or not to show a popup when a contact becomes available."
+msgstr ""
+"Si s'ha de mostrar o no una finestra emergent quan un contacte esdevé "
+"disponible."
+
+#: ../data/empathy.schemas.in.h:29
+msgid ""
+"Whether or not to show avatars for contacts in the contact list and chat "
+"windows."
+msgstr ""
+"Si s'han de mostrar o no els àvatars per als contactes a la llista de "
+"contactes i finestres de xat."
+
+#: ../data/empathy.schemas.in.h:30
+msgid "Whether or not to show contacts that are offline in the contact list."
+msgstr ""
+"Si s'han de mostrar o no els contactes que estan desconnectats a la llista "
+"de contactes."
+
+#: ../data/empathy.schemas.in.h:31
+msgid ""
+"Whether or not to show the message dialog about closing the main window with "
+"the 'x' button in the title bar."
+msgstr ""
+"Si s'ha de mostrar o no el diàleg de missatge sobre tancar la finestra "
+"principal amb el botó «x» de la barra de títol."
+
+#: ../data/empathy.schemas.in.h:32
+#, fuzzy
+msgid "Whether to show the contact list in compact mode or not."
+msgstr "Si s'ha d'usar o no el tema per a les sales de xat."
+
+#: ../data/empathy.schemas.in.h:33
+msgid "Whether to use the theme for chat rooms or not."
+msgstr "Si s'ha d'usar o no el tema per a les sales de xat."
+
+#: ../data/empathy.schemas.in.h:34
+msgid ""
+"Which criterium to use when sorting the contact list. Default is to use sort "
+"by the contact's name with the value \"name\". A value of \"state\" will "
+"sort the contact list by state."
+msgstr ""
+
+#: ../libempathy/gossip-contact.c:654 ../libempathy/gossip-presence.c:184
+#: ../libempathy/gossip-presence.c:283
+msgid "Offline"
+msgstr "Desconnectat"
+
+#: ../libempathy/gossip-presence.c:274
+msgid "Available"
+msgstr "Disponible"
+
+#: ../libempathy/gossip-presence.c:276
+msgid "Busy"
+msgstr "Ocupat"
+
+#: ../libempathy/gossip-presence.c:279
+msgid "Away"
+msgstr "Absent"
+
+#: ../libempathy-gtk/empathy-main-window.c:254
+#, fuzzy
+msgid "Show and edit accounts"
+msgstr "_Mostra els contactes"
+
+#: ../libempathy-gtk/empathy-main-window.c:456
+msgid "Group"
+msgstr "Grup"
+
+#: ../libempathy-gtk/empathy-main-window.c:477
+msgid "Contact"
+msgstr "Contacte"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:1
+#, fuzzy
+msgid "Contact List - Empathy"
+msgstr "_Mostra la llista de contactes"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:2
+msgid "Context"
+msgstr "Context"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:3
+#, fuzzy
+msgid "Join _Favorites"
+msgstr "Uneix-te als _favorits"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:4
+#: ../libempathy-gtk/gossip-chat.glade.h:10
+msgid "Join _New..."
+msgstr "Uneix-te a un _nou..."
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:5
+#, fuzzy
+msgid "Manage Favorites..."
+msgstr "Uneix-te als _favorits"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:6
+msgid "Show _Offline Contacts"
+msgstr "M_ostra els contactes desconnectats"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:7
+msgid "_About"
+msgstr "_Quant a"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:8
+msgid "_Accounts"
+msgstr "_Comptes"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:9
+#: ../libempathy-gtk/gossip-chat.glade.h:15
+msgid "_Add Contact..."
+msgstr "_Afegeix un contacte..."
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:10
+#: ../libempathy-gtk/gossip-contact-list.c:298
+msgid "_Chat"
+msgstr "_Xat"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:11
+msgid "_Contents"
+msgstr "_Continguts"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:12
+#: ../libempathy-gtk/gossip-chat.glade.h:21
+#: ../libempathy-gtk/gossip-contact-list.c:310
+msgid "_Edit"
+msgstr "_Edita"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:13
+msgid "_Help"
+msgstr "A_juda"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:14
+#: ../libempathy-gtk/empathy-status-icon.glade.h:2
+msgid "_New Message..."
+msgstr "_Nou missatge..."
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:15
+msgid "_Personal Information"
+msgstr "Informació _personal"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:16
+msgid "_Preferences"
+msgstr "_Preferències"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:17
+#: ../libempathy-gtk/empathy-status-icon.glade.h:3
+msgid "_Quit"
+msgstr "_Surt"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:18
+#: ../libempathy-gtk/gossip-chat.glade.h:25
+msgid "_Room"
+msgstr "_Sala"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:19
+#: ../libempathy-gtk/gossip-chat.glade.h:28
+#: ../libempathy-gtk/gossip-contact-list.c:326
+msgid "_View Previous Conversations"
+msgstr "_Visualitza les converses anteriors"
+
+#: ../libempathy-gtk/empathy-status-icon.glade.h:1
+msgid "Status"
+msgstr "Estat"
+
+#: ../libempathy-gtk/empathy-status-icon.glade.h:4
+msgid "_Show Contact List"
+msgstr "_Mostra la llista de contactes"
+
+#: ../libempathy-gtk/gossip-about-dialog.c:63
+msgid ""
+"Empathy is free software; you can redistribute it and/or modify it under the "
+"terms of the GNU General Public License as published by the Free Software "
+"Foundation; either version 2 of the License, or (at your option) any later "
+"version."
+msgstr ""
+
+#: ../libempathy-gtk/gossip-about-dialog.c:67
+msgid ""
+"Empathy is distributed in the hope that it will be useful, but WITHOUT ANY "
+"WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS "
+"FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more "
+"details."
+msgstr ""
+
+#: ../libempathy-gtk/gossip-about-dialog.c:71
+msgid ""
+"You should have received a copy of the GNU General Public License along with "
+"Empathy; if not, write to the Free Software Foundation, Inc., 51 Franklin "
+"Street, Fifth Floor, Boston, MA 02110-130159 USA"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-about-dialog.c:99
+msgid "An Instant Messaging client for GNOME"
+msgstr "Un client de missatgeria instantània per al GNOME"
+
+#: ../libempathy-gtk/gossip-about-dialog.c:105
+msgid "translator-credits"
+msgstr "Jordi Mallach <jordi@sindominio.net>"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:224
+#, fuzzy
+msgid "Disable"
+msgstr "Disponible"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:227
+msgid "Enable"
+msgstr "Habilita"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:261
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:3
+#, fuzzy
+msgid "<b>No Account Selected</b>"
+msgstr "<b>Configuració del compte</b>"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:263
+msgid ""
+"To add a new account, you can click on the 'Add' button and a new entry will "
+"be created for you to start configuring.\n"
+"\n"
+"If you do not want to add an account, simply click on the account you want "
+"to configure in the list on the left."
+msgstr ""
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:272
+#, fuzzy
+msgid "<b>No Accounts Configured</b>"
+msgstr "<b>Configuració del compte</b>"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:274
+msgid ""
+"To add a new account, you can click on the 'Add' button and a new entry will "
+"be created for you to start configuring."
+msgstr ""
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:362
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:6
+msgid "Accounts"
+msgstr "Comptes"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:857
+#, c-format
+msgid ""
+"You are about to remove your %s account!\n"
+"Are you sure you want to proceed?"
+msgstr ""
+"Esteu a punt de suprimir el vostre compte %s.\n"
+"Esteu segur de voler continuar?"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:863
+msgid ""
+"Any associated conversations and chat rooms will NOT be removed if you "
+"decide to proceed.\n"
+"\n"
+"Should you decide to add the account back at a later time, they will still "
+"be available."
+msgstr ""
+"Qualsevol conversa i sales de xat associades NO es suprimiran si decidiu "
+"continuar.\n"
+"\n"
+"Si decidiu tornar a afegir el compte més tard, encara seran disponibles."
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:1
+msgid "<b>Account</b>"
+msgstr "<b>Compte</b>"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:2
+#, fuzzy
+msgid "<b>New Account</b>"
+msgstr "<b>Compte</b>"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:4
+#, fuzzy
+msgid "<b>Settings</b>"
+msgstr "<b>Configuració del compte</b>"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:5
+msgid "A unique name for this account to identify it personally to you."
+msgstr ""
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:7
+#, fuzzy
+msgid "Cr_eate"
+msgstr "Xateja!"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:8
+#, fuzzy
+msgid "Imendio "
+msgstr "Imendio Gossip"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:9
+msgid "Jabber"
+msgstr "Jabber"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:10
+msgid ""
+"To add a new account, you can click on the 'Add' button and a new entry will "
+"be created for you to started configuring.\n"
+"\n"
+"If you do not want to add an account, simply click on the account you want "
+"to configure in the list on the left."
+msgstr ""
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:13
+msgid "_Name:"
+msgstr "_Nom:"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:14
+#, fuzzy
+msgid "_Type:"
+msgstr "_Tema:"
+
+#: ../libempathy-gtk/gossip-account-widget-generic.c:144
+#: ../libempathy-gtk/gossip-account-widget-generic.c:186
+#, c-format
+msgid "%s:"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:1
+#, fuzzy
+msgid ""
+"<small><b><span foreground=\"#555\">Example: user@jabber.org</span></b></"
+"small>"
+msgstr "<span size=\"smaller\">Exemple: usuari@jabber.org</span>"
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:2
+msgid "Forget password and clear the entry."
+msgstr ""
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:3
+msgid "Login I_D:"
+msgstr "I_D d'entrada:"
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:4
+msgid "Pass_word:"
+msgstr "Con_trasenya:"
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:5
+msgid "Reso_urce:"
+msgstr "Rec_urs:"
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:6
+#, fuzzy
+msgid "Use encryption (SS_L)"
+msgstr "Utilitza el _xifrat (SSL)"
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:7
+msgid "_Port:"
+msgstr "_Port:"
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:8
+msgid "_Server:"
+msgstr "_Servidor:"
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:9
+#, fuzzy
+msgid "jabber account settings"
+msgstr "<b>Configuració del compte</b>"
+
+#: ../libempathy-gtk/gossip-chat.c:314
+msgid "Disconnected"
+msgstr "Desconnectat"
+
+#: ../libempathy-gtk/gossip-chat.c:858
+msgid "Insert Smiley"
+msgstr "Insereix una emoticona"
+
+#: ../libempathy-gtk/gossip-chat.c:906
+msgid "_Check Word Spelling..."
+msgstr "_Comprova l'ortografia de la paraula..."
+
+#: ../libempathy-gtk/gossip-chat.c:1244
+msgid "Connected"
+msgstr "Connectat"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:1
+msgid "C_lear"
+msgstr "_Neteja"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:2
+msgid "Change _Topic..."
+msgstr ""
+
+#: ../libempathy-gtk/gossip-chat.glade.h:3
+msgid "Chat"
+msgstr "Xat"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:4
+msgid "Contact Infor_mation"
+msgstr "Infor_mació del contacte"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:5
+msgid "Cu_t"
+msgstr "Re_tall"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:6
+#, fuzzy
+msgid "In_vite..."
+msgstr "Con_vida"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:7
+msgid "Insert _Smiley"
+msgstr "Insereix una e_moticona"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:8
+#, fuzzy
+msgid "Invitation _message:"
+msgstr "Missatge d'invitació:"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:9
+msgid "Invite"
+msgstr "Convida"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:11
+msgid "Move Tab _Left"
+msgstr "Mou la pestanya a l'_esquerra"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:12
+msgid "Move Tab _Right"
+msgstr "Mou la pestanya a la d_reta"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:13
+msgid "Select who would you like to invite:"
+msgstr "Seleccioneu qui voleu convidar:"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:14
+msgid "You have been invited to join a chat conference."
+msgstr "Us han convidat a unir-vos a una conferència de xat."
+
+#: ../libempathy-gtk/gossip-chat.glade.h:16
+msgid "_Add To Favorites"
+msgstr "_Afegeix als favorits"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:17
+msgid "_Close"
+msgstr "_Tanca"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:18
+msgid "_Conversation"
+msgstr "_Conversa"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:19
+msgid "_Copy"
+msgstr "_Copia"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:20
+msgid "_Detach Tab"
+msgstr "D_esenganxa la pestanya"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:22
+msgid "_Next Tab"
+msgstr "Pestanya següe_nt"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:23
+msgid "_Paste"
+msgstr "_Enganxa"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:24
+msgid "_Previous Tab"
+msgstr "_Pestanya anterior"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:26
+msgid "_Show Contacts"
+msgstr "_Mostra els contactes"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:27
+msgid "_Tabs"
+msgstr "Pes_tanyes"
+
+#: ../libempathy-gtk/gossip-chat-view.c:544
+msgid "_Copy Link Address"
+msgstr "_Còpia l'adreça de l'enllaç"
+
+#: ../libempathy-gtk/gossip-chat-view.c:552
+msgid "_Open Link"
+msgstr "_Obre l'enllaç"
+
+#: ../libempathy-gtk/gossip-chat-view.c:889
+msgid "%A %d %B %Y"
+msgstr "%A %d %B %Y"
+
+#: ../libempathy-gtk/gossip-chat-window.c:685
+#: ../libempathy-gtk/gossip-chat-window.c:715
+#, fuzzy
+msgid "New Message"
+msgid_plural "New Messages"
+msgstr[0] "Missatge nou"
+msgstr[1] "Missatge nou"
+
+#: ../libempathy-gtk/gossip-chat-window.c:691
+msgid "Chat Room"
+msgstr "Sala de xat"
+
+#: ../libempathy-gtk/gossip-chat-window.c:696
+#: ../libempathy-gtk/gossip-chat-window.c:719
+#, fuzzy, c-format
+msgid "Conversation"
+msgid_plural "Conversations (%d)"
+msgstr[0] "_Conversa"
+msgstr[1] "_Conversa"
+
+#: ../libempathy-gtk/gossip-chat-window.c:1295
+msgid "Typing a message."
+msgstr "S'està teclejant un missatge..."
+
+#: ../libempathy-gtk/gossip-contact-list.c:290
+msgid "_Contact"
+msgstr "_Contacte"
+
+#: ../libempathy-gtk/gossip-contact-list.c:294
+msgid "_Group"
+msgstr "_Grup"
+
+#: ../libempathy-gtk/gossip-contact-list.c:298
+msgid "Chat with contact"
+msgstr "Xateja amb un contacte"
+
+#: ../libempathy-gtk/gossip-contact-list.c:302
+msgid "Infor_mation"
+msgstr "Infor_mació"
+
+#: ../libempathy-gtk/gossip-contact-list.c:302
+msgid "View contact information"
+msgstr "Visualitza la informació del contacte"
+
+#: ../libempathy-gtk/gossip-contact-list.c:306
+msgid "Re_name"
+msgstr "/Rea_nomena"
+
+#: ../libempathy-gtk/gossip-contact-list.c:306
+msgid "Rename"
+msgstr "Reanomena"
+
+#: ../libempathy-gtk/gossip-contact-list.c:310
+msgid "Edit the groups and name for this contact"
+msgstr "Edita els grups i nom per a aquest contacte"
+
+#: ../libempathy-gtk/gossip-contact-list.c:314
+msgid "_Remove"
+msgstr "_Elimina"
+
+#: ../libempathy-gtk/gossip-contact-list.c:314
+msgid "Remove contact"
+msgstr "Suprimeix el contacte"
+
+#: ../libempathy-gtk/gossip-contact-list.c:318
+msgid "_Invite to Chat Room"
+msgstr "Conv_ida a una sala de xat"
+
+#: ../libempathy-gtk/gossip-contact-list.c:318
+msgid "Invite to a currently open chat room"
+msgstr "Convida a una sala de xat actualment oberta"
+
+#: ../libempathy-gtk/gossip-contact-list.c:322
+msgid "_Send File..."
+msgstr "E_nvia un fitxer..."
+
+#: ../libempathy-gtk/gossip-contact-list.c:322
+msgid "Send a file"
+msgstr "Envia un fitxer"
+
+#: ../libempathy-gtk/gossip-contact-list.c:326
+msgid "View previous conversations with this contact"
+msgstr "Visualitza les converses anteriors amb aquest contacte"
+
+#: ../libempathy-gtk/gossip-preferences.c:250
+msgid "Language"
+msgstr "Llengua"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:1
+msgid "<b>Appearance</b>"
+msgstr "<b>Aparença</b>"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:2
+msgid "<b>Audio</b>"
+msgstr "<b>Àudio</b>"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:3
+msgid "<b>Behaviour</b>"
+msgstr "<b>Comportament</b>"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:4
+#, fuzzy
+msgid "<b>Contact List</b>"
+msgstr "<b>Connexió</b>"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:5
+msgid "<b>Languages</b>"
+msgstr "<b>Llengües</b>"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:6
+msgid "<b>Options</b>"
+msgstr "<b>Opcions</b>"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:7
+msgid "<b>Visual</b>"
+msgstr "<b>Visual</b>"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:8
+msgid ""
+"<small>The list of languages reflects only the languages for which you have "
+"a dictionary installed.</small>"
+msgstr ""
+"<small>La llista de llengües només reflecteix les llengües per a les quals "
+"teniu un diccionari instal·lat.</small>"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:9
+msgid "Avatars are user chosen images shown in the contact list"
+msgstr ""
+"Els àvatar són imatges seleccionades per l'usuari que es mostren a la llista "
+"de contactes"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:10
+msgid "Chat Th_eme:"
+msgstr "T_ema de xat:"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:11
+msgid "Display notifications when contacts come _online"
+msgstr "Mostra les notificacions quan els contactes es c_onnecten"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:12
+msgid "Enable sounds when _away"
+msgstr "Habilita els sons quan s'està _absent"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:13
+msgid "Enable sounds when _busy"
+msgstr "Habilita els sons quan s'està _ocupat"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:14
+msgid "General"
+msgstr "General"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:15
+msgid "Notifications"
+msgstr "Notificacions"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:16
+msgid "Preferences"
+msgstr "Preferències"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:17
+msgid "Show _avatars"
+msgstr "Mostra els àv_atars"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:18
+msgid "Show _smileys as images"
+msgstr "Mo_stra les emoticones com a imatges"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:19
+#, fuzzy
+msgid "Show co_mpact contact list"
+msgstr "_Mostra la llista de contactes"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:20
+msgid "Sort by _name"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:21
+#, fuzzy
+msgid "Sort by s_tate"
+msgstr "Estableix l'estat:"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:22
+msgid "Spell Checking"
+msgstr "Correcció ortogràfica"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:23
+#, fuzzy
+msgid "Themes"
+msgstr "T_ema:"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:24
+msgid "_Enable spell checking"
+msgstr "_Habilita la correcció ortogràfica"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:25
+msgid "_Open new chats in separate windows"
+msgstr "_Obre xats nous en finestres separades"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:26
+msgid "_Play sound when messages arrive"
+msgstr "Re_produeix un so quan arriben missatges"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:27
+msgid "_Use for chat rooms"
+msgstr "_Utilitza a les sales de xat"
+
+#: ../libempathy-gtk/gossip-presence-chooser.c:702
+msgid "Custom message..."
+msgstr "Missatge personalitzat..."
+
+#. Clear list
+#: ../libempathy-gtk/gossip-presence-chooser.c:724
+msgid "Clear List..."
+msgstr "Neteja la llista..."
+
+#: ../libempathy-gtk/gossip-presence-chooser.c:803
+msgid "Are you sure you want to clear the list?"
+msgstr "Esteu segur de voler buidar la llista?"
+
+#: ../libempathy-gtk/gossip-presence-chooser.c:807
+msgid ""
+"This will remove any custom messages you have added to the list of preset "
+"status messages."
+msgstr ""
+"Això suprimirà qualsevol missatge personalitzat que hagueu afegit a la "
+"llista de missatges d'estat preestablerts."
+
+#: ../libempathy-gtk/gossip-presence-chooser.c:812
+msgid "Clear List"
+msgstr "Neteja la llista"
+
+#: ../libempathy-gtk/gossip-presence-chooser.glade.h:1
+msgid "Enter status message:"
+msgstr "Introduïu el missatge d'estat:"
+
+#: ../libempathy-gtk/gossip-presence-chooser.glade.h:2
+msgid "Status Message Presets"
+msgstr "Missatges d'estat predefinits"
+
+#: ../libempathy-gtk/gossip-presence-chooser.glade.h:3
+msgid "_Add to status message list"
+msgstr "_Afegeix a la llista de missatges d'estat"
+
+#: ../libempathy-gtk/gossip-private-chat.c:198
+#, c-format
+msgid "%s went offline"
+msgstr "%s s'ha desconnectat"
+
+#: ../libempathy-gtk/gossip-private-chat.c:212
+#, c-format
+msgid "%s has come online"
+msgstr "%s s'ha connectat"
+
+#: ../libempathy-gtk/gossip-theme-manager.c:87
+msgid "Classic"
+msgstr "Clàssic"
+
+#: ../libempathy-gtk/gossip-theme-manager.c:88
+msgid "Simple"
+msgstr "Simple"
+
+#: ../libempathy-gtk/gossip-theme-manager.c:89
+msgid "Clean"
+msgstr "Net"
+
+#: ../libempathy-gtk/gossip-theme-manager.c:90
+msgid "Blue"
+msgstr "Blau"
+
+#: ../src/empathy-main.c:145
+msgid "Don't connect on startup"
+msgstr "No connectes en iniciar"
+
+#: ../src/empathy-main.c:155
+#, fuzzy
+msgid "- Empathy Instant Messenger"
+msgstr "- Missatgeria instantània Gossip"
+
+#~ msgid "Gossip Instant Messenger"
+#~ msgstr "Missatgeria instantània Gossip"
+
+#~ msgid "Normal"
+#~ msgstr "Normal"
+
+#~ msgid "Joining"
+#~ msgstr "S'està entrant"
+
+#~ msgid "Active"
+#~ msgstr "Actiu"
+
+#~ msgid "Inactive"
+#~ msgstr "Inactiu"
+
+#~ msgid "Unknown"
+#~ msgstr "Desconegut"
+
+#~ msgid "Error"
+#~ msgstr "Error"
+
+#, fuzzy
+#~ msgid "Participant"
+#~ msgid_plural "Participants"
+#~ msgstr[0] "Gallec"
+#~ msgstr[1] "Gallec"
+
+#, fuzzy
+#~ msgid "No role"
+#~ msgstr "Normal"
+
+#, fuzzy
+#~ msgid "No affiliation"
+#~ msgstr "Notificacions"
+
+#~ msgid "The nickname you have chosen is already in use."
+#~ msgstr "El sobrenom que heu triat ja està en ús."
+
+#~ msgid "The chat room you tried to join requires a password."
+#~ msgstr ""
+#~ "La sala de xat a la qual heu intentat unir-vos requereix una contrasenya."
+
+#~ msgid "The remote conference server did not respond in a sensible time."
+#~ msgstr ""
+#~ "El servidor de conferències remot no ha contestat en un temps raonable."
+
+#~ msgid "The conference server you tried to join could not be found."
+#~ msgstr ""
+#~ "No s'ha trobat el servidor de conferències al qual heu intentat unir-vos."
+
+#~ msgid "An unknown error occurred, check your details are correct."
+#~ msgstr ""
+#~ "S'ha produït un error desconegut, comproveu que els vostres detalls són "
+#~ "correctes."
+
+#, fuzzy
+#~ msgid "Joining the chatroom was canceled."
+#~ msgstr "Uneix-te a la sala de xat"
+
+#~ msgid "Unavailable"
+#~ msgstr "No disponible"
+
+#~ msgid "An unknown error occurred."
+#~ msgstr "S'ha produït un error desconegut."
+
+#~ msgid "Connection refused."
+#~ msgstr "S'ha rebutjat la connexió."
+
+#~ msgid "Server address could not be resolved."
+#~ msgstr "No s'ha pogut resoldre l'adreça del servidor."
+
+#~ msgid "Connection timed out."
+#~ msgstr "S'ha exhaurit el temps d'espera de la connexió."
+
+#~ msgid "Authentication failed."
+#~ msgstr "Ha fallat l'autenticació."
+
+#~ msgid "The username you are trying already exists."
+#~ msgstr "El nom d'usuari que esteu intentant fer servir ja existeix."
+
+#~ msgid "The username you are trying is not valid."
+#~ msgstr "El nom d'usuari que esteu intentant fer servir no és vàlid."
+
+#~ msgid "This feature is unavailable."
+#~ msgstr "Aquesta funcionalitat no està disponible."
+
+#~ msgid "This feature is unauthorized."
+#~ msgstr "Aquesta funcionalitat no està autoritzada."
+
+#~ msgid "A specific protocol error occurred that was unexpected."
+#~ msgstr "S'ha produït un error de protocol específic inesperat."
+
+#, fuzzy
+#~ msgid "new account"
+#~ msgstr "Compte nou"
+
+#~ msgid "Home"
+#~ msgstr "Casa"
+
+#~ msgid "Couldn't send message!"
+#~ msgstr "No s'ha pogut enviar el missatge!"
+
+#~ msgid "Connection could not be opened"
+#~ msgstr "No s'ha pogut obrir la connexió"
+
+#, fuzzy
+#~ msgid "This service is unavailable or not found"
+#~ msgstr "Aquesta funcionalitat no està disponible."
+
+#, fuzzy
+#~ msgid "Registration is required"
+#~ msgstr "Enregistrament"
+
+#, fuzzy
+#~ msgid "There was an internal service error"
+#~ msgstr "Error intern del servidor"
+
+#, fuzzy
+#~ msgid "This feature is not implemented"
+#~ msgstr "Aquesta funcionalitat no està autoritzada."
+
+#, fuzzy
+#~ msgid "The remote service timed out"
+#~ msgstr "Temps d'espera esgotat per a un servidor remot"
+
+#~ msgid "Stop"
+#~ msgstr "Atura"
+
+#~ msgid "Disconnect"
+#~ msgstr "Desconnecta"
+
+#~ msgid "Connect"
+#~ msgstr "Connecta"
+
+#, fuzzy
+#~ msgid "Successfully registered your new account settings."
+#~ msgstr "S'ha registrat el compte correctament"
+
+#, fuzzy
+#~ msgid "You should now be able to connect to your new account."
+#~ msgstr "No podeu utilitzar --no-connect amb --account"
+
+#, fuzzy
+#~ msgid "Failed to register your new account settings."
+#~ msgstr "No s'han pogut registrar els paràmetres del compte nous."
+
+#, fuzzy
+#~ msgid "Successfully changed your account password."
+#~ msgstr "Introduïu la contrasenya del vostre compte:"
+
+#, fuzzy
+#~ msgid "Failed to change your account password."
+#~ msgstr "Introduïu la contrasenya del vostre compte:"
+
+#, fuzzy
+#~ msgid ""
+#~ "Please enter a new password for this account:\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Introduïu un nom nou per al grup:\n"
+#~ "%s"
+
+#~ msgid "No information is available for this contact."
+#~ msgstr "No hi ha informació disponible per a aquest contacte."
+
+#~ msgid "Information requested, please wait..."
+#~ msgstr "S'ha demanat la informació, espereu, si us plau..."
+
+#~ msgid "I would like to add you to my contact list."
+#~ msgstr "M'agradaria afegir-te a la meua llista de contactes."
+
+#~ msgid "To summarize:"
+#~ msgstr "En resum:"
+
+#~ msgid "%d new message"
+#~ msgid_plural "%d new messages"
+#~ msgstr[0] "%d missatge nou"
+#~ msgstr[1] "%d missatges nous"
+
+#~ msgid "%d subscription request"
+#~ msgid_plural "%d subscription requests"
+#~ msgstr[0] "%d petició de subscripció"
+#~ msgstr[1] "%d peticions de subscripció"
+
+#~ msgid "%d file transfer request"
+#~ msgid_plural "%d file transfer requests"
+#~ msgstr[0] "%d petició de transferència de fitxer"
+#~ msgstr[1] "%d peticions de transferència de fitxer"
+
+#~ msgid "%d server message"
+#~ msgid_plural "%d server messages"
+#~ msgstr[0] "%d missatge del servidor"
+#~ msgstr[1] "%d missatges del servidor"
+
+#~ msgid "%d error"
+#~ msgid_plural "%d errors"
+#~ msgstr[0] "%d error"
+#~ msgstr[1] "%d errors"
+
+#~ msgid "If you quit, you will lose all unread information."
+#~ msgstr "Si sortiu, perdreu tota la informació no llegida."
+
+#~ msgid "Gossip is still running, it is just hidden."
+#~ msgstr "El Gossip encara s'està executant, només està amagat."
+
+#~ msgid "Click on the notification area icon to show Gossip."
+#~ msgstr "Feu clic a l'àrea de notificació per a mostrar el Gossip."
+
+#~ msgid "You were about to quit!"
+#~ msgstr "Estàveu a punt de sortir!"
+
+#~ msgid ""
+#~ "Since no system or notification tray has been found, this action would "
+#~ "normally quit Gossip.\n"
+#~ "\n"
+#~ "This is just a reminder, from now on, Gossip will quit when performing "
+#~ "this action unless you uncheck the option below."
+#~ msgstr ""
+#~ "Com no s'ha trobat una safata del sistema o de notificació, aquesta acció "
+#~ "normalment sortiria del Gossip.\n"
+#~ "\n"
+#~ "Això només és un recordatori, des d'ara Gossip sortirà quan realitzeu "
+#~ "aquesta acció a no ser que desmarqueu la següent opció."
+
+#~ msgid "Edit Account _Details"
+#~ msgstr "Edita els _detalls del compte"
+
+#~ msgid "Click to enlarge"
+#~ msgstr "Feu clic per a fer gran"
+
+#~ msgid "Word"
+#~ msgstr "Paraula"
+
+#~ msgid "Select who would you like to invite to room:"
+#~ msgstr "Seleccioneu a qui us agradaria convidar a la sala:"
+
+#~ msgid "Select which room you would like to invite:"
+#~ msgstr "Seleccioneu a quina sala voldrieu convidar:"
+
+#~ msgid "New message from %s"
+#~ msgstr "Nou missatge de %s"
+
+#~ msgid "Your invitation has been declined"
+#~ msgstr "S'ha declinat la vostra invitació"
+
+#~ msgid "Accept"
+#~ msgstr "Accepta"
+
+#~ msgid "Decline"
+#~ msgstr "Declina"
+
+#, fuzzy
+#~ msgid "Name"
+#~ msgstr "Nom:"
+
+#, fuzzy
+#~ msgid "Room"
+#~ msgstr "_Sala"
+
+#~ msgid "Auto Connect"
+#~ msgstr "Connexió automàtica"
+
+#~ msgid "Information requested..."
+#~ msgstr "S'ha demanat la informació..."
+
+#~ msgid "Do you want to remove this contact from your roster?"
+#~ msgstr "Voleu eliminar aquest contacte de la llista de contactes?"
+
+#~ msgid ""
+#~ "Please enter a new name for the group:\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Introduïu un nom nou per al grup:\n"
+#~ "%s"
+
+#~ msgid "Select"
+#~ msgstr "Selecciona"
+
+#~ msgid "Unsorted"
+#~ msgstr "Sense ordenar"
+
+#~ msgid ""
+#~ "Set the alias you want to use for:\n"
+#~ "<b>%s</b>\n"
+#~ "\n"
+#~ "You can retrieve contact information from the server."
+#~ msgstr ""
+#~ "Establiu l'àlias que voleu usar per a:\n"
+#~ "<b>%s</b>\n"
+#~ "\n"
+#~ "Podeu obtenir informació del contacte des del servidor."
+
+#~ msgid "New file transfer request from %s"
+#~ msgstr "Petició de transferència de fitxer nova de %s"
+
+#~ msgid "File transfer is not supported by both parties."
+#~ msgstr "La transferència de fitxers no està suportada pels dos usuaris."
+
+#~ msgid "Your file transfer offer declined."
+#~ msgstr "S'ha declinat el vostre oferiment de transferència."
+
+#~ msgid "The other user decided not to continue."
+#~ msgstr "L'altre usuari ha decidit no continuar."
+
+#~ msgid "Unknown error occurred during file transfer."
+#~ msgstr ""
+#~ "S'ha produït un error desconegut durant la transferència del fitxer."
+
+#~ msgid "%s would like to send you a file."
+#~ msgstr "%s vol enviar-vos un fitxer."
+
+#~ msgid "Someone would like to send you a file."
+#~ msgstr "Algú vol enviar-vos un fitxer."
+
+#~ msgid "Select a file"
+#~ msgstr "Seleccioneu un fitxer"
+
+#~ msgid "Connecting..."
+#~ msgstr "S'està connectant..."
+
+#, fuzzy
+#~ msgid "Retry connection"
+#~ msgstr "Atura la connexió"
+
+#~ msgid "Invited %s to join this chat conference."
+#~ msgstr "S'ha convidat a %s a unir-se a aquesta conferència de xat."
+
+#, fuzzy
+#~ msgid "%s has set the topic: %s"
+#~ msgstr "%s ha establert el tema"
+
+#, fuzzy
+#~ msgid "Enter the new topic you want to set for this room:"
+#~ msgstr "Quin àlies voleu utilitzar per a aquest contacte?"
+
+#, fuzzy
+#~ msgid "%s has joined the room"
+#~ msgstr "%s ha establert el tema"
+
+#, fuzzy
+#~ msgid "%s has left the room"
+#~ msgstr "%s ha establert el tema"
+
+#, fuzzy
+#~ msgid "Topic: %s"
+#~ msgstr "_Tema:"
+
+#~ msgid "Account"
+#~ msgstr "Compte"
+
+#~ msgid "Conversation With"
+#~ msgstr "Conversa amb"
+
+#~ msgid "Date"
+#~ msgstr "Data"
+
+#~ msgid "Allow multiple instances of the application to run at the same time"
+#~ msgstr "Permet que s'executen diverses instàncies de l'aplicació a l'hora"
+
+#~ msgid "List the available accounts"
+#~ msgstr "Llista els comptes disponibles"
+
+#~ msgid "Which account to connect to on startup"
+#~ msgstr "A quin compte connectar en iniciar"
+
+#~ msgid "ACCOUNT-NAME"
+#~ msgstr "NOM-COMPTE"
+
+#~ msgid "You can not use --no-connect together with --account"
+#~ msgstr "No podeu utilitzar --no-connect amb --account"
+
+#~ msgid "No accounts available."
+#~ msgstr "No hi ha comptes disponibles."
+
+#~ msgid "Available accounts:"
+#~ msgstr "Comptes disponibles:"
+
+#~ msgid "[default]"
+#~ msgstr "[predeterminat]"
+
+#~ msgid "There is no account with the name '%s'."
+#~ msgstr "No hi ha cap compte amb el nom «%s»."
+
+#~ msgid "Join"
+#~ msgstr "Uneix-te"
+
+#, fuzzy
+#~ msgid "Create"
+#~ msgstr "Data"
+
+#~ msgid "Chat Rooms"
+#~ msgstr "Sales de xat"
+
+#, fuzzy
+#~ msgid "Browsing for conference rooms, please wait..."
+#~ msgstr "S'està intentant unir-se al xat en grup, espereu..."
+
+#~ msgid "Default"
+#~ msgstr "Predeterminat"
+
+#~ msgid "Chat!"
+#~ msgstr "Xateja!"
+
+#~ msgid "%s wants to be added to your contact list."
+#~ msgstr "%s vol afegir-se a la vostra llista de contactes."
+
+#~ msgid "Someone wants to be added to your contact list."
+#~ msgstr "Algú vol afegir-se a la vostra llista de contactes."
+
+#~ msgid "Subscription request"
+#~ msgstr "Petició de subscripció"
+
+#~ msgid "Show"
+#~ msgstr "Mostra"
+
+#~ msgid "Contact Information"
+#~ msgstr "Informació del contacte"
+
+#~ msgid "Subject: %s"
+#~ msgstr "Assumpte: %s"
+
+#~ msgid "Suggestions for the word"
+#~ msgstr "Suggeriments per a la paraula"
+
+#~ msgid "New subscription request from %s"
+#~ msgstr "Petició de subscripció nova de %s"
+
+#~ msgid "Do you want to add this person to your contact list?"
+#~ msgstr "Voleu afegir a aquesta persona a la vostra llista de contactes?"
+
+#~ msgid "Do you want to add %s to your contact list?"
+#~ msgstr "Voleu afegir a %s a la vostra llista de contactes?"
+
+#~ msgid "Please enter your %s account password"
+#~ msgstr "Si us plau, introduïu la contrasenya per al compte %s"
+
+#, fuzzy
+#~ msgid "Logging in to account '%s'"
+#~ msgstr "S'està entrant amb: %s"
+
+#~ msgid "Remember Password?"
+#~ msgstr "Voleu que es recorde la contrasenya?"
+
+#~ msgid "Do not show this again"
+#~ msgstr "No mostres això de nou"
+
+#~ msgid "Could not display the help contents."
+#~ msgstr "No s'han pogut mostrar els continguts de l'ajuda."
+
+#~ msgid "Select Your Avatar Image"
+#~ msgstr "Seleccioneu la vostra imatge d'àvatar"
+
+#~ msgid "No Image"
+#~ msgstr "Cap imatge"
+
+#~ msgid "Cancel"
+#~ msgstr "Cancel·la"
+
+#~ msgid "The server does not seem to be responding."
+#~ msgstr "Sembla que el servidor no està responent."
+
+#~ msgid "Try again later."
+#~ msgstr "Proveu-ho més tard."
+
+#, fuzzy
+#~ msgid "Change"
+#~ msgstr "Cancel·la"
+
+#~ msgid "Contact goes offline"
+#~ msgstr "El contacte s'ha desconnectat"
+
+#~ msgid "Contact goes online"
+#~ msgstr "El contacte s'ha connectat"
+
+#~ msgid "Contact ID:"
+#~ msgstr "ID del contacte:"
+
+#~ msgid "Do you want to accept this file?"
+#~ msgstr "Voleu acceptar aquest fitxer?"
+
+#~ msgid "File Transfer Request"
+#~ msgstr "Petició de transferència de fitxer"
+
+#~ msgid "File name:"
+#~ msgstr "Nom del fitxer:"
+
+#~ msgid "File size:"
+#~ msgstr "Mida del fitxer:"
+
+#~ msgid "Not supported yet"
+#~ msgstr "Encara no està implementat"
+
+#~ msgid "This person wishes to send you this file:"
+#~ msgstr "Aquesta persona us vol enviar aquest fitxer:"
+
+#~ msgid "Web site:"
+#~ msgstr "Pàgina web:"
+
+#~ msgid "_Accept"
+#~ msgstr "_Accepta"
+
+#~ msgid "_Deny"
+#~ msgstr "_Denega"
+
+#, fuzzy
+#~ msgid "<b>Topic:</b>"
+#~ msgstr "<b>Grups</b>"
+
+#~ msgid "Account:"
+#~ msgstr "Compte:"
+
+#, fuzzy
+#~ msgid "Edit Favorite Room"
+#~ msgstr "Edita la sala de xat"
+
+#~ msgid "Group Chat"
+#~ msgstr "Xat en grup"
+
+#, fuzzy
+#~ msgid "Join New"
+#~ msgstr "Uneix-te a un _nou..."
+
+#~ msgid "Join room on start_up"
+#~ msgstr "Uneix-te a la sala en _iniciar"
+
+#~ msgid "Join this chat room when Gossip starts and you are connected"
+#~ msgstr ""
+#~ "Uneix-te a aquesta sala de xat quan s'inicie el Gossip i es connecte"
+
+#, fuzzy
+#~ msgid "Manage Favorite Rooms"
+#~ msgstr "Gestiona les sales de xat"
+
+#~ msgid "N_ame:"
+#~ msgstr "N_om:"
+
+#~ msgid "S_erver:"
+#~ msgstr "S_ervidor:"
+
+#~ msgid "_Nickname:"
+#~ msgstr "Àl_ies:"
+
+#~ msgid "_Room:"
+#~ msgstr "Sa_la:"
+
+#~ msgid "-"
+#~ msgstr "-"
+
+#~ msgid "<b>About</b>"
+#~ msgstr "<b>Quant a</b>"
+
+#~ msgid "<b>Client Information</b>"
+#~ msgstr "<b>Informació del client</b>"
+
+#~ msgid "<b>Groups</b>"
+#~ msgstr "<b>Grups</b>"
+
+#~ msgid "<b>Name</b>"
+#~ msgstr "<b>Nom</b>"
+
+#~ msgid "<b>Personal Details</b>"
+#~ msgstr "<b>Detalls personals</b>"
+
+#~ msgid "<b>Status</b>"
+#~ msgstr "<b>Estat</b>"
+
+#, fuzzy
+#~ msgid "<b>Subscription</b>"
+#~ msgstr "Subscripció"
+
+#~ msgid "<span size=\"smaller\">Example: Mikael or user@server.org</span>"
+#~ msgstr "<span size=\"smaller\">Exemple: Pere o usuari@jabber.org</span>"
+
+#, fuzzy
+#~ msgid "Accou_nt:"
+#~ msgstr "Compte:"
+
+#~ msgid "Add Contact"
+#~ msgstr "Afegeix un contacte"
+
+#, fuzzy
+#~ msgid "Alia_s:"
+#~ msgstr "Àlies:"
+
+#~ msgid "Avatar:"
+#~ msgstr "Àvatar:"
+
+#, fuzzy
+#~ msgid "C_hange"
+#~ msgstr "Cancel·la"
+
+#~ msgid "Ch_at"
+#~ msgstr "X_at"
+
+#~ msgid "Client:"
+#~ msgstr "Client:"
+
+#, fuzzy
+#~ msgid "Con_tact:"
+#~ msgstr "Contacte"
+
+#~ msgid "Connect on S_tartup"
+#~ msgstr "Connec_ta en iniciar"
+
+#~ msgid "Contacts"
+#~ msgstr "Contactes"
+
+#~ msgid "Country:"
+#~ msgstr "Estat:"
+
+#~ msgid "Decide _Later"
+#~ msgstr "_Decideix després"
+
+#~ msgid "Edit Contact"
+#~ msgstr "Edita el contacte"
+
+#~ msgid "Edit Groups"
+#~ msgstr "Edita els grups"
+
+#~ msgid "Email:"
+#~ msgstr "Correu electrònic:"
+
+#~ msgid "ID:"
+#~ msgstr "ID:"
+
+#~ msgid ""
+#~ "If you chose to decide later you will be asked the next time you log on."
+#~ msgstr ""
+#~ "Si trieu decidir-ho més tard, se us tornarà a preguntar la pròxima vegada "
+#~ "que entreu."
+
+#~ msgid "Name:"
+#~ msgstr "Nom:"
+
+#~ msgid "OS:"
+#~ msgstr "SO:"
+
+#~ msgid "Personal Details"
+#~ msgstr "Detalls personals"
+
+#, fuzzy
+#~ msgid "R_egister"
+#~ msgstr "Re_gistra'm..."
+
+#~ msgid "Search"
+#~ msgstr "Cerca"
+
+#~ msgid ""
+#~ "Select the groups you want this contact to appear in, you can select more "
+#~ "than one group or no groups."
+#~ msgstr ""
+#~ "Seleccioneu els grups en els quals voleu que aparega aquest contacte, "
+#~ "podeu seleccionar més d'un grup o cap grup."
+
+#, fuzzy
+#~ msgid ""
+#~ "Set the alias you want to use for:\n"
+#~ "<b>foo@bar.baz</b>\n"
+#~ "\n"
+#~ "You can retrieve contact information from the server. "
+#~ msgstr ""
+#~ "Establiu l'àlias que voleu usar per a:\n"
+#~ "<b>%s</b>\n"
+#~ "\n"
+#~ "Podeu obtenir informació del contacte des del servidor."
+
+#~ msgid "Spell Checker"
+#~ msgstr "Corrector ortogràfica"
+
+#~ msgid "Subscription Request"
+#~ msgstr "Petició de subscripció"
+
+#~ msgid "Suggestions for the word:"
+#~ msgstr "Suggeriments per a la paraula:"
+
+#~ msgid ""
+#~ "This acts as a filter to the contact list below. You can use segments of "
+#~ "contact's name or ID, for example, \"jabber.org\" will list everyone "
+#~ "using that server"
+#~ msgstr ""
+#~ "Això actua com un filtre per a la llista de contactes. Podeu utilitzar "
+#~ "segments del nom del contacte o ID; per exemple, «jabber.org» mostrarà a "
+#~ "tothom que utilitze aquest servidor"
+
+#~ msgid "This is the name that will be used on your roster for this contact"
+#~ msgstr ""
+#~ "Aquest és el nom que s'utilitzarà per a aquest contacte a la vostra "
+#~ "llista de contactes"
+
+#~ msgid "This name will be used to identify you in chat windows"
+#~ msgstr "Aquest nom s'usarà per a indentificar-vos en les finestres de xat"
+
+#~ msgid ""
+#~ "This name will be used to identify you when new contacts lookup your "
+#~ "details"
+#~ msgstr ""
+#~ "Aquest nom s'usarà per a indentificar-vos quan contactes nous cerquen els "
+#~ "vostres detalls"
+
+#~ msgid "Use default name here from the contact's VCard."
+#~ msgstr "Utilitza ací el nom per defecte de l'VCard del contacte."
+
+#~ msgid "Use system pro_xy"
+#~ msgstr "Utilitza el _servidor intermediari del sistema"
+
+#~ msgid "Version:"
+#~ msgstr "Versió:"
+
+#~ msgid "View Previous Conversations"
+#~ msgstr "Visualitza les converses anteriors"
+
+#~ msgid "Which account do you want to use?"
+#~ msgstr "Quin compte voleu utilitzar?"
+
+#~ msgid "You are not subscribed to this contact."
+#~ msgstr "No esteu subscrit a aquest contacte."
+
+#, fuzzy
+#~ msgid "_Birthday:"
+#~ msgstr "_Prioritat:"
+
+#~ msgid "_Connect"
+#~ msgstr "_Connecta"
+
+#, fuzzy
+#~ msgid "_Description:"
+#~ msgstr "Descripció:"
+
+#~ msgid "_Disconnect"
+#~ msgstr "_Desconnecta"
+
+#, fuzzy
+#~ msgid "_Email:"
+#~ msgstr "Correu electrònic:"
+
+#, fuzzy
+#~ msgid ""
+#~ "_Enter the name or contact ID of the person you want to chat to below:"
+#~ msgstr "Introduïu l'ID d'usuari de la persona amb la qual voleu xatejar:"
+
+#, fuzzy
+#~ msgid "_For:"
+#~ msgstr "_Port:"
+
+#, fuzzy
+#~ msgid "_Full Name:"
+#~ msgstr "_Nom:"
+
+#, fuzzy
+#~ msgid "_Group:"
+#~ msgstr "_Grup"
+
+#, fuzzy
+#~ msgid "_Nick Name:"
+#~ msgstr "Àl_ies:"
+
+#~ msgid "_Password:"
+#~ msgstr "Con_trassenya:"
+
+#, fuzzy
+#~ msgid "_Quit Message:"
+#~ msgstr "Missatge d'e_stat"
+
+#~ msgid "_Retrieve"
+#~ msgstr "_Obté"
+
+#~ msgid "_Subscribe"
+#~ msgstr "_Subscriu"
+
+#, fuzzy
+#~ msgid "_Web site:"
+#~ msgstr "Pàgina web:"
+
+#, fuzzy
+#~ msgid "irc account settings"
+#~ msgstr "<b>Configuració del compte</b>"
+
+#, fuzzy
+#~ msgid "msn account settings"
+#~ msgstr "<b>Configuració del compte</b>"
+
+#~ msgid "Edit"
+#~ msgstr "Edita"
+
+#~ msgid "Connecting"
+#~ msgstr "S'està connectant"
+
+#~ msgid "Perhaps you are trying to connect to the wrong port?"
+#~ msgstr "Potser us esteu intentant connectar al port incorrecte?"
+
+#~ msgid "Perhaps the service is not currently running?"
+#~ msgstr "Potser el servei no s'està executant actualment?"
+
+#~ msgid "Check your connection details."
+#~ msgstr "Comproveu els detalls de la connexió."
+
+#~ msgid "Perhaps the server is not running this service."
+#~ msgstr "Potser el servidor no està executant aquest servei."
+
+#~ msgid "Check your username and password are correct."
+#~ msgstr "Comproveu que el vostre nom d'usuari i contrasenya són correctes."
+
+#~ msgid "%s will be added to your contact list."
+#~ msgstr "S'afegirà a %s a la vostra llista de contactes."
+
+#~ msgid "%s ID of new contact:"
+#~ msgstr "%s ID del nou contacte:"
+
+#~ msgid "Example: %s"
+#~ msgstr "Exemple: %s"
+
+#~ msgid "Show accounts and pending connections"
+#~ msgstr "Mostra els comptes i les connexions pendents"
+
+#~ msgid "You have no Instant Messaging accounts configured!"
+#~ msgstr "No teniu cap compte de missatgeria instantània configurat!"
+
+#~ msgid ""
+#~ "Next you will be presented with the Account Information dialog to set "
+#~ "your details up."
+#~ msgstr ""
+#~ "A continuació s'obrirà el diàleg d'Informació del compte per a que "
+#~ "establiu els vostres paràmetres."
+
+#~ msgid "Favourite"
+#~ msgstr "Favorit"
+
+#~ msgid "Registering account"
+#~ msgstr "S'està registrant el compte"
+
+#~ msgid "Example"
+#~ msgstr "Exemple"
+
+#~ msgid "Add to _favourites"
+#~ msgstr "Afegeix als _favorits"
+
+#~ msgid ""
+#~ "Customize your own nickname, the server and chatroom which you wish to "
+#~ "join."
+#~ msgstr ""
+#~ "Personalitzeu el vostre sobrenom, el servidor i sala de xat a la qual "
+#~ "voleu entrar."
+
+#~ msgid "Edit your chat room details:"
+#~ msgstr "Editeu els detalls de la sala de xat:"
+
+#~ msgid "Na_me:"
+#~ msgstr "No_m:"
+
+#~ msgid "New Chat Room"
+#~ msgstr "Sala de xat nova"
+
+#~ msgid ""
+#~ "Pick a saved chat room from the presets available below and click Join to "
+#~ "start chatting."
+#~ msgstr ""
+#~ "Seleccioneu una sala de xat desada de les predefinides a continuació i "
+#~ "feu clic en «Uneix-te» per a començar a xatejar."
+
+#~ msgid "Save _this chat room"
+#~ msgstr "Desa aques_ta sala de xat"
+
+#~ msgid "    "
+#~ msgstr "    "
+
+#~ msgid "<b>Information requested, please wait...</b>"
+#~ msgstr "<b>S'ha demanat la informació, espereu, si us plau...</b>"
+
+#~ msgid "<span size=\"smaller\">Example:</span>"
+#~ msgstr "<span size=\"smaller\">Exemple:</span>"
+
+#~ msgid "Account Name"
+#~ msgstr "Nom del compte"
+
+#~ msgid "Add a contact"
+#~ msgstr "Afegeix un contacte"
+
+#~ msgid "Connection Details"
+#~ msgstr "Detalls de la connexió"
+
+#~ msgid "Contact information"
+#~ msgstr "Informació del contacte"
+
+#~ msgid "Do you already have an account set up on a server?"
+#~ msgstr "Teniu ja un compte configurat en un servidor?"
+
+#~ msgid "Enter a name for this account"
+#~ msgstr "Introduïu un nom per a aquest compte"
+
+#~ msgid "Enter the port used in the connection for this account"
+#~ msgstr "Introduïu el port utilitzat en la connexió per a aquest compte"
+
+#~ msgid "Enter the server used in the connection for this account"
+#~ msgstr "Introduïu el servidor utilitzat en la connexió per a aquest compte"
+
+#~ msgid "Enter the user's contact ID:"
+#~ msgstr "Introduïu l'ID de contacte de l'usuari:"
+
+#~ msgid "Enter your real name here"
+#~ msgstr "Introduïu ací el vostre nom real"
+
+#~ msgid "Finished"
+#~ msgstr "Finalitzat"
+
+#~ msgid "For increased security, enable this option"
+#~ msgstr "Per a més seguretat, habiliteu aquesta opció"
+
+#~ msgid "Gossip"
+#~ msgstr "Gossip"
+
+#~ msgid ""
+#~ "Gossip is a modern client for the Jabber Instant Messaging system.\n"
+#~ "\n"
+#~ "This assistant will help you configure Gossip and connect you to your "
+#~ "favorite Jabber server.\n"
+#~ "\n"
+#~ "To get started, just click \"Forward\"."
+#~ msgstr ""
+#~ "Gossip és un client modern per al sistema de missatgeria instantània "
+#~ "Jabber.\n"
+#~ "\n"
+#~ "Aquest assistent vos ajudarà a configurar Gossip i connectar-vos al "
+#~ "vostre\n"
+#~ "servidor de Jabber favorit.\n"
+#~ "\n"
+#~ "Per començar, feu clic en «Endavant»."
+
+#~ msgid "Group:"
+#~ msgstr "Grup:"
+
+#~ msgid ""
+#~ "If you have another machine on your network which 'proxies' the "
+#~ "connection to the internet and you want to use it, enable this option"
+#~ msgstr ""
+#~ "Si teniu un altre ordinador que fa de «servidor intermediari» de la "
+#~ "connexió a Internet i el voleu utilitzar, habiliteu aquesta opció"
+
+#~ msgid ""
+#~ "If you need to set specific connection details, like a different server "
+#~ "or port, you can configure that here:"
+#~ msgstr ""
+#~ "Si necessiteu establir detalls de connexió específics, com un servidor o "
+#~ "port diferent, ho podeu configurar ací:"
+
+#~ msgid ""
+#~ "In order to subscribe to presence notifications from the user, a request "
+#~ "will be sent. Until this request is approved, the user will always be "
+#~ "shown as \"Offline\" in your contact list."
+#~ msgstr ""
+#~ "Per a subscriure a les notificacions de presència de l'usuari, s'enviarà "
+#~ "una petició. Fins que s'aprove aquesta petició, l'usuari es mostrarà "
+#~ "sempre com «Desconnectat» a la vostra llista de contactes."
+
+#~ msgid "In which group do you want to place this contact?"
+#~ msgstr "A quin grup voleu afegir a aquest contacte?"
+
+#~ msgid "Jabber ID:"
+#~ msgstr "Jabber ID:"
+
+#~ msgid ""
+#~ "Leave this blank if you don't want your password stored on a public "
+#~ "machine. If you decide to do this, you will be prompted each time you "
+#~ "connect for a password"
+#~ msgstr ""
+#~ "Deixeu això en blanc si no voleu que s'emmagatzeme la vostra contrasenya "
+#~ "en un ordinador públic. Si decidiu fer això, se us preguntarà per la "
+#~ "contrasenya cada vegada que us connecteu"
+
+#~ msgid "Nickname:"
+#~ msgstr "Àlies:"
+
+#~ msgid "Port:"
+#~ msgstr "Port:"
+
+#~ msgid "Press Subscribe to request to receive their status"
+#~ msgstr "Premeu «Subscriu» per a demanar la recepció del seu estat"
+
+#~ msgid "Registering Account"
+#~ msgstr "S'està registrant el compte"
+
+#~ msgid "Resource:"
+#~ msgstr "Recurs:"
+
+#~ msgid "Sending request"
+#~ msgstr "S'està enviant la petició"
+
+#~ msgid "Server:"
+#~ msgstr "Servidor:"
+
+#~ msgid ""
+#~ "Set the alias you want to use for:\n"
+#~ "<b>martyn@imendio.com</b>\n"
+#~ "\n"
+#~ "You can retrieve contact information from the server. "
+#~ msgstr ""
+#~ "Establiu l'àlias que voleu usar per a:\n"
+#~ "<b>martyn@imendio.com</b>\n"
+#~ "\n"
+#~ "Podeu obtenir informació del contacte des del servidor."
+
+#~ msgid "Web Site:"
+#~ msgstr "Pàgina web:"
+
+#~ msgid "Welcome to Gossip"
+#~ msgstr "Benvinguts a Gossip"
+
+#~ msgid "What instant messaging system does the contact use?"
+#~ msgstr "Quin sistema de missatgeria instantània utilitza el contacte?"
+
+#~ msgid "What is your name?"
+#~ msgstr "Quin és el vostre nom?"
+
+#~ msgid ""
+#~ "What name do you want to use to identify this account?\n"
+#~ "\n"
+#~ "This name could be something associated with the service provider, for "
+#~ "example, <b>Google</b>."
+#~ msgstr ""
+#~ "Quin nom voleu utilitzar per a identificar aquest compte?\n"
+#~ "\n"
+#~ "Aquest nom pot ser alguna cosa associada amb el proveidor del servei, per "
+#~ "exemple, <b>Google</b>."
+
+#~ msgid "What password do you want to use?"
+#~ msgstr "Quina contrasenya voleu utilitzar?"
+
+#~ msgid "What username do you use?"
+#~ msgstr "Quin nom d'usuari utilitzeu?"
+
+#~ msgid "What username do you want to use?"
+#~ msgstr "Quin nom d'usuari voleu utilitzar?"
+
+#~ msgid "Which account do you want to add this contact to?"
+#~ msgstr "A quin compte voleu afegir a aquest contacte?"
+
+#~ msgid ""
+#~ "You can change your account settings later by selecting the Edit-"
+#~ ">Accounts menu item."
+#~ msgstr ""
+#~ "Podeu canviar els paràmetres del vostre compte més endavant, seleccionant "
+#~ "l'element del menú «Edita->Comptes»."
+
+#~ msgid ""
+#~ "You need to set a name for the connection, for example, <b>Home</b> or "
+#~ "<b>Laptop</b>."
+#~ msgstr ""
+#~ "Heu d'establir un nom per a la connexió, per exemple <b>Casa</b> o "
+#~ "<b>Portàtil</b>."
+
+#~ msgid "Your Account"
+#~ msgstr "El vostre compte"
+
+#~ msgid "Your Identity"
+#~ msgstr "La vostra identitat"
+
+#~ msgid "Your new account has now been set up."
+#~ msgstr "S'ha configurat el vostre compte nou."
+
+#~ msgid "_Forget"
+#~ msgstr "_Oblida-la"
+
+#~ msgid "_Group Chat"
+#~ msgstr "Xat en _grup"
+
+#~ msgid "_No"
+#~ msgstr "_No"
+
+#~ msgid "_Search..."
+#~ msgstr "_Cerca..."
+
+#~ msgid "_Yes"
+#~ msgstr "_Sí"
+
+#~ msgid "Preset status messages"
+#~ msgstr "Missatges d'estat preestablerts"
+
+#~ msgid "Preset status messages."
+#~ msgstr "Missatges d'estat preestablerts."
+
+#~ msgid ""
+#~ "Please enter your invitation message to:\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Introduïu el vostre missatge d'invitació a:\n"
+#~ "%s"
+
+#~ msgid "Contact Information for %s"
+#~ msgstr "Informació del contacte %s"
+
+#~ msgid "/Contact Infor_mation"
+#~ msgstr "/Infor_mació del contacte"
+
+#~ msgid "/Re_name Contact"
+#~ msgstr "/Rea_nomena el contacte"
+
+#~ msgid "/_Edit Groups"
+#~ msgstr "/_Edita els grups"
+
+#~ msgid "/_View Previous Conversations"
+#~ msgstr "/_Visualitza converses prèvies"
+
+#~ msgid ""
+#~ "Please enter a new nickname for the contact\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Introduïu un àlias nou per al contacte\n"
+#~ "%s"
+
+#~ msgid "Edit groups for %s"
+#~ msgstr "Edita els grups per %s"
+
+#~ msgid "Conversation Log"
+#~ msgstr "Registre de conversa"
+
+#~ msgid "Respond"
+#~ msgstr "Respon!"
+
+#~ msgid "Chat Rooms..."
+#~ msgstr "Sales de xat..."
+
+#~ msgid "_Hide Contact List"
+#~ msgstr "_Amaga la llista de contactes"
+
+#~ msgid "Be silent when away"
+#~ msgstr "Sigues silenciós quan s'està absent"
+
+#~ msgid "Be silent when busy"
+#~ msgstr "Sigues silenciós quan s'està ocupat"
+
+#~ msgid "Height of main window"
+#~ msgstr "Alçada de la finestra principal"
+
+#~ msgid "The X position of the main window."
+#~ msgstr "La posició X de la finestra principal."
+
+#~ msgid "The Y position of the main window."
+#~ msgstr "La posició Y de la finestra principal."
+
+#~ msgid "The width of the main window."
+#~ msgstr "L'amplada de la finestra principal."
+
+#~ msgid "Whether spell checking should be turned on."
+#~ msgstr "Si s'hauria d'habilitar la correcció ortogràfica."
+
+#~ msgid "Width of the main window"
+#~ msgstr "Amplada de la finestra principal"
+
+#~ msgid "X position of main window"
+#~ msgstr "Posició X de la finestra principal"
+
+#~ msgid "Y position of main window"
+#~ msgstr "Posició Y de la finestra principal"
+
+#~ msgid "Gossip, Instant Messaging Client"
+#~ msgstr "Gossip, un client de missatgeria instantània"
+
+#~ msgid "Close this chat window"
+#~ msgstr "Tanca aquesta finestra de xat"
+
+#~ msgid "Requested Information"
+#~ msgstr "Informació sol·licitada"
+
+#~ msgid "Available..."
+#~ msgstr "Disponible..."
+
+#~ msgid "Busy..."
+#~ msgstr "Ocupat..."
+
+#~ msgid "Away..."
+#~ msgstr "Absent..."
+
+#~ msgid "<b>Sound</b>"
+#~ msgstr "<b>So</b>"
+
+#~ msgid "Check spelling while I _type"
+#~ msgstr "Comprova l'ortografia mentre s'escriu"
+
+#~ msgid "Join _Group Chat..."
+#~ msgstr "Entra a un xat en _grup..."
+
+#~ msgid "Requested information."
+#~ msgstr "S'ha demanat la informació."
+
+#~ msgid "Requesting contact information, please wait..."
+#~ msgstr "S'està demanant la informació del contacte, espereu..."
+
+#~ msgid "/_Invite to Chat Conference"
+#~ msgstr "/_Convida a una conferència de xat"
+
+#~ msgid "Contact _Information"
+#~ msgstr "_Informació del contacte"
+
+#~ msgid "Gossip - Accounts"
+#~ msgstr "Gossip - Comptes"
+
+#~ msgid "Por_t:"
+#~ msgstr "Por_t:"
+
+#~ msgid "Open"
+#~ msgstr "Obert"
+
+#~ msgid "Could not find the server you wanted to use"
+#~ msgstr "No s'ha trobat el servidor que volieu utilitzar"
+
+#~ msgid "Connection to the server failed."
+#~ msgstr "Ha fallat la connexió al servidor."
+
+#~ msgid "Authentication failed"
+#~ msgstr "Ha fallat l'autenticació"
+
+#~ msgid "Written by:"
+#~ msgstr "Escrit per:"
+
+#~ msgid "Artwork by:"
+#~ msgstr "Art per:"
+
+#~ msgid "Translated by:"
+#~ msgstr "Traduït per:"
+
+#~ msgid "Account ID"
+#~ msgstr "ID del compte"
+
+#~ msgid "Last Error"
+#~ msgstr "Últim error"
+
+#~ msgid "%sChat - %s"
+#~ msgstr "%sXat - %s"
+
+#~ msgid "/Show _Log"
+#~ msgstr "/Mostra el _registre"
+
+#~ msgid "Afrikaans"
+#~ msgstr "Afrikaans"
+
+#~ msgid "Amharic"
+#~ msgstr "Amhàric"
+
+#~ msgid "Arabic"
+#~ msgstr "Àrab"
+
+#~ msgid "Azerbaijani"
+#~ msgstr "Àzeri"
+
+#~ msgid "Belarusian"
+#~ msgstr "Bielorús"
+
+#~ msgid "Bulgarian"
+#~ msgstr "Búlgar"
+
+#~ msgid "Bengali"
+#~ msgstr "Bengalès"
+
+#~ msgid "Breton"
+#~ msgstr "Bretó"
+
+#~ msgid "Bosnian"
+#~ msgstr "Bosni"
+
+#~ msgid "Catalan"
+#~ msgstr "Català"
+
+#~ msgid "Czech"
+#~ msgstr "Txec"
+
+#~ msgid "Welsh"
+#~ msgstr "Gal·lès"
+
+#~ msgid "Danish"
+#~ msgstr "Danès"
+
+#~ msgid "German"
+#~ msgstr "Alemany"
+
+#~ msgid "German (Austria)"
+#~ msgstr "Alemany (Àustria)"
+
+#~ msgid "German (Germany)"
+#~ msgstr "Alemany (Alemanya)"
+
+#~ msgid "German (Swiss)"
+#~ msgstr "Alemany (Suïssa)"
+
+#~ msgid "Greek"
+#~ msgstr "Grec"
+
+#~ msgid "English"
+#~ msgstr "Anglès"
+
+#~ msgid "English (Canadian)"
+#~ msgstr "Anglès (canadenc)"
+
+#~ msgid "English (British)"
+#~ msgstr "Anglès (britànic)"
+
+#~ msgid "English (American)"
+#~ msgstr "Anglès (americà)"
+
+#~ msgid "Esperanto"
+#~ msgstr "Esperanto"
+
+#~ msgid "Spanish"
+#~ msgstr "Castellà"
+
+#~ msgid "Estonian"
+#~ msgstr "Estonià"
+
+#~ msgid "Persian"
+#~ msgstr "Persa"
+
+#~ msgid "Finnish"
+#~ msgstr "Finès"
+
+#~ msgid "French"
+#~ msgstr "Francès"
+
+#~ msgid "French (France)"
+#~ msgstr "Francès (França)"
+
+#~ msgid "French (Swiss)"
+#~ msgstr "Francès (Suïssa)"
+
+#~ msgid "Irish Gaelic"
+#~ msgstr "Gaèlic irlandès"
+
+#~ msgid "Scots Gaelic"
+#~ msgstr "Gaèlic escocès"
+
+#~ msgid "Gujarati"
+#~ msgstr "Gujarati"
+
+#~ msgid "Manx Gaelic"
+#~ msgstr "Manx"
+
+#~ msgid "Hebrew"
+#~ msgstr "Hebreu"
+
+#~ msgid "Hindi"
+#~ msgstr "Hindi"
+
+#~ msgid "Croatian"
+#~ msgstr "Croat"
+
+#~ msgid "Hungarian"
+#~ msgstr "Hongarès"
+
+#~ msgid "Indonesian"
+#~ msgstr "Indonesi"
+
+#~ msgid "Icelandic"
+#~ msgstr "Islandès"
+
+#~ msgid "Italian"
+#~ msgstr "Italià"
+
+#~ msgid "Japanese"
+#~ msgstr "Japonès"
+
+#~ msgid "Georgian"
+#~ msgstr "Georgià"
+
+#~ msgid "Kannada"
+#~ msgstr "Kannada"
+
+#~ msgid "Korean"
+#~ msgstr "Coreà"
+
+#~ msgid "Kurdish"
+#~ msgstr "Kurd"
+
+#~ msgid "Limburgish"
+#~ msgstr "Limburguès"
+
+#~ msgid "Lithuanian"
+#~ msgstr "Lituà"
+
+#~ msgid "Latvian"
+#~ msgstr "Letó"
+
+#~ msgid "Maori"
+#~ msgstr "Maori"
+
+#~ msgid "Macedonian"
+#~ msgstr "Macedoni"
+
+#~ msgid "Malayalam"
+#~ msgstr "Malailam"
+
+#~ msgid "Mongolian"
+#~ msgstr "Mongol"
+
+#~ msgid "Marathi"
+#~ msgstr "Marati"
+
+#~ msgid "Malay"
+#~ msgstr "Malai"
+
+#~ msgid "Norwegian (Bokmal)"
+#~ msgstr "Noruec (Bokmål)"
+
+#~ msgid "Nepali"
+#~ msgstr "Nepalès"
+
+#~ msgid "Dutch"
+#~ msgstr "Holandès"
+
+#~ msgid "Norwegian"
+#~ msgstr "Noruec"
+
+#~ msgid "Norwegian (Nynorsk)"
+#~ msgstr "Noruec (Nynorsk)"
+
+#~ msgid "Norwegian (Nyorsk)"
+#~ msgstr "Norwegian (Nyorsk)"
+
+#~ msgid "Oriya"
+#~ msgstr "Oriya"
+
+#~ msgid "Punjabi"
+#~ msgstr "Panjabi"
+
+#~ msgid "Polish"
+#~ msgstr "Polonès"
+
+#~ msgid "Portuguese"
+#~ msgstr "Portuguès"
+
+#~ msgid "Portuguese (Portugal)"
+#~ msgstr "Portuguès (Portugal)"
+
+#~ msgid "Portuguese (Brazil)"
+#~ msgstr "Portuguès (Brasil)"
+
+#~ msgid "Romanian"
+#~ msgstr "Romanès"
+
+#~ msgid "Russian"
+#~ msgstr "Rus"
+
+# NOTA: Segons el Termcat (Josep)
+#~ msgid "Kinyarwanda"
+#~ msgstr "Kinyarwanda"
+
+#~ msgid "Slovak"
+#~ msgstr "Eslovac"
+
+#~ msgid "Slovenian"
+#~ msgstr "Eslovè"
+
+#~ msgid "Albanian"
+#~ msgstr "Albanès"
+
+#~ msgid "Serbian"
+#~ msgstr "Serbi"
+
+#~ msgid "Swedish"
+#~ msgstr "Suec"
+
+#~ msgid "Tamil"
+#~ msgstr "Tàmil"
+
+#~ msgid "Telugu"
+#~ msgstr "Telugu"
+
+#~ msgid "Thai"
+#~ msgstr "Tailandès"
+
+#~ msgid "Turkmen"
+#~ msgstr "Turcman"
+
+#~ msgid "Turkish"
+#~ msgstr "Turc"
+
+#~ msgid "Ukrainian"
+#~ msgstr "Ucraïnès"
+
+#~ msgid "Vietnamese"
+#~ msgstr "Vietnamita"
+
+#~ msgid "Wallon"
+#~ msgstr "Való"
+
+#~ msgid "Xhosa"
+#~ msgstr "Xhosa"
+
+# Nota: Segons el Termcat (Josep)
+#~ msgid "Yiddish"
+#~ msgstr "Jiddisch"
+
+#~ msgid "Chinese Simplified"
+#~ msgstr "Xinès simplificat"
+
+#~ msgid "Chinese Traditional"
+#~ msgstr "Xinès tradicional"
+
+#~ msgid "View Lo_g"
+#~ msgstr "Visualitza el re_gistre"
+
+#~ msgid "Gossip - Group Chat"
+#~ msgstr "Gossip - Xat en grup"
+
+#~ msgid "Gossip - New Chatroom"
+#~ msgstr "Gossip - Sala de xat nova"
+
+#~ msgid "Idle"
+#~ msgstr "Inactiu"
+
+#~ msgid "Progress:"
+#~ msgstr "Progrés:"
+
+#~ msgid "Gossip - Add contact"
+#~ msgstr "Gossip - Afegeix un contacte"
+
+#~ msgid "Gossip - Contact Information"
+#~ msgstr "Gossip - Informació del contacte"
+
+#~ msgid "Gossip - Edit Groups"
+#~ msgstr "Gossip - Edita els grups"
+
+#~ msgid "Gossip - New Account"
+#~ msgstr "Gossip - Compte nou"
+
+#~ msgid "Gossip - New Message"
+#~ msgstr "Gossip - Missatge nou"
+
+#~ msgid "Gossip - Personal Details"
+#~ msgstr "Gossip - Detalls personals"
+
+#~ msgid "Gossip - Preferences"
+#~ msgstr "Gossip - Preferències"
+
+#~ msgid "Gossip - Spell Checker"
+#~ msgstr "Gossip - Corrector ortogràfic"
+
+#~ msgid "Gossip - Status Message"
+#~ msgstr "Gossip - missatge d'estat"
+
+#~ msgid "Personal Details Saved!"
+#~ msgstr "S'han desat els detalls personals."
+
+#~ msgid "Waiting for server to respond, please wait..."
+#~ msgstr "S'està esperant a la resposta del servidor, espereu..."
+
+#~ msgid ""
+#~ "You can identify this account with a name, for example, <b>Home</b> or "
+#~ "<b>Work</b>.  Choose a name for this account:"
+#~ msgstr ""
+#~ "Podeu identificar aquest compte amb un nom, com per exemple, <b>Casa</b> "
+#~ "o <b>Feina</b>. Seleccioneu un nom per a aquest compte:"
+
+#~ msgid "Redirect"
+#~ msgstr "Redirecció"
+
+#~ msgid "Bad Request"
+#~ msgstr "Petició incorrecta"
+
+#~ msgid "Not Authorized"
+#~ msgstr "No autoritzat"
+
+#~ msgid "Payment Required"
+#~ msgstr "Es requereix pagament"
+
+#~ msgid "Forbidden"
+#~ msgstr "Prohibit"
+
+#~ msgid "Not Found"
+#~ msgstr "No s'ha trobat"
+
+#~ msgid "Not Allowed"
+#~ msgstr "No permés"
+
+#~ msgid "Not Acceptable"
+#~ msgstr "No acceptable"
+
+#~ msgid "Request Timeout"
+#~ msgstr "Temps d'espera esgotat per a la petició"
+
+#~ msgid "Conflict"
+#~ msgstr "Conflicte"
+
+#~ msgid "Not Implemented"
+#~ msgstr "No implementat"
+
+#~ msgid "Remote Server Error"
+#~ msgstr "Error d'un servidor remot"
+
+#~ msgid "Service Unavailable"
+#~ msgstr "Servei no disponible"
+
+#~ msgid "Edit List..."
+#~ msgstr "Edita la llista..."
+
+#~ msgid "Custom"
+#~ msgstr "Personalitzat"
+
+#~ msgid "Gossip will now try to use your account:"
+#~ msgstr "Gossip tractarà d'utilitzar el vostre compte:"
+
+#~ msgid "Gossip will now try to register the account:"
+#~ msgstr "Gossip tractarà d'enregistrar el compte:"
+
+#~ msgid ""
+#~ "If you continue, you will not be able to talk to the 1 contact you are "
+#~ "using this account for!"
+#~ msgstr ""
+#~ "Si continueu, no podreu parlar amb el contacte amb qui esteu utilitzant "
+#~ "aquest compte!"
+
+#~ msgid ""
+#~ "If you continue, you will not be able to add or talk to contacts using "
+#~ "this transport!"
+#~ msgstr ""
+#~ "Si continueu, no podreu afegir o parlar amb els contactes que utilitzen "
+#~ "aquest transport!"
+
+#~ msgid ""
+#~ "If you continue, you will not be able to talk to the %d contacts you are "
+#~ "using this account for!"
+#~ msgstr ""
+#~ "Si continueu, no podreu parlar amb els %d contactes amb els quals esteu "
+#~ "utilitzant aquest compte!"
+
+#~ msgid "Searching Local Services..."
+#~ msgstr "S'estan cercant els serveis locals..."
+
+#~ msgid "Searching Local Services (%d of %d)"
+#~ msgstr "S'estan cercant els serveis locals (%d de %d)"
+
+#~ msgid "Talking to available services..."
+#~ msgstr "S'està communicant amb els serveis disponibles..."
+
+#~ msgid "Searching 3rd Party Services..."
+#~ msgstr "S'estan cercant serveis de tercers..."
+
+#~ msgid "Searching 3rd Party Services (%d of %d)"
+#~ msgstr "S'estan cercant serveis de tercers (%d de %d)"
+
+#~ msgid "Sorry, no services found at this time."
+#~ msgstr "No s'ha trobat cap servei ara mateix."
+
+#~ msgid ""
+#~ "Currently no providers are available for the account type you are trying "
+#~ "to configure. Please try again later."
+#~ msgstr ""
+#~ "Actualment no hi ha proveïdors disponibles per al tipus de compte que "
+#~ "esteu intentant configurar. Intenteu-ho de nou més tard."
+
+#~ msgid "This will be used to configure your account details."
+#~ msgstr ""
+#~ "Això s'utilitzarà per a configurar els vostres paràmetres de compte."
+
+#~ msgid "Unable to Register"
+#~ msgstr "No s'ha pogut registrar"
+
+#~ msgid "The service confirmed the user '%s' is already registered."
+#~ msgstr "El servei ha confirmat que l'usuari «%s» ja està registrat."
+
+#~ msgid ""
+#~ "When registering a token is provided by the service to register with, in "
+#~ "this case, the token has not been sent."
+#~ msgstr ""
+#~ "Quan vos registreu, el servei amb qui us esteu registrent proporciona un "
+#~ "testimoni, però en aquest cas no s'ha enviat cap."
+
+#~ msgid "Please try again, or perhaps another service."
+#~ msgstr "Proveu-ho de nou, o potser un altre servei."
+
+#~ msgid "Configuring Roster"
+#~ msgstr "S'està configurant el roster"
+
+#~ msgid "Registration Successful!"
+#~ msgstr "El registre ha tingut èxit!"
+
+#~ msgid "You are now able to add contacts using this transport."
+#~ msgstr "Ara podeu afegir contactes utilitzant aquest transport."
+
+#~ msgid "Service"
+#~ msgstr "Servei"
+
+#~ msgid "Checking your local service first..."
+#~ msgstr "S'està comprovant el vostre servei local primer..."
+
+#~ msgid ""
+#~ "<b>Configuring your new service...</b>\n"
+#~ "This will take a few moments, please wait."
+#~ msgstr ""
+#~ "<b>S'està configurant el servei nou...</b>\n"
+#~ "Això trigarà uns moments, espereu."
+
+#~ msgid "Registering With Service"
+#~ msgstr "S'està registrant amb el servei"
+
+#~ msgid "Saving personal details, please wait..."
+#~ msgstr "S'estan desant els detalls personals, espereu..."
+
+#~ msgid "*"
+#~ msgstr "*"
+
+#~ msgid "From:"
+#~ msgstr "De:"
+
+#~ msgid "Gossip - Received Message"
+#~ msgstr "Gossip - Missatge rebut"
+
+#~ msgid "In reply to:"
+#~ msgstr "En resposta a:"
+
+#~ msgid "To:"
+#~ msgstr "A:"
+
+#~ msgid "_Reply..."
+#~ msgstr "_Respon..."
+
+#~ msgid "_Send"
+#~ msgstr "_Envia"
+
+#~ msgid "<b>Connect to server</b>"
+#~ msgstr "<b>Connecta a un servidor</b>"
+
+#~ msgid "C_onnect"
+#~ msgstr "C_onnecta"
+
+#~ msgid "Connect _Server:"
+#~ msgstr "_Servidor de connexió:"
+
+#~ msgid "_Jabber ID:"
+#~ msgstr "_Jabber ID:"
+
+#~ msgid "_Resource:"
+#~ msgstr "_Recurs:"
+
+#~ msgid "Imendio Gossip - Group Chat"
+#~ msgstr "Imendio Gossip - Xat en grup"
+
+#~ msgid " "
+#~ msgstr " "
+
+#~ msgid "<b>Personal information</b>"
+#~ msgstr "<b>Informació personal</b>"
+
+#~ msgid "<b>Recommended Services</b>"
+#~ msgstr "<b>Serveis recomanats</b>"
+
+#~ msgid ""
+#~ "<b>Requested service requirements...</b>\n"
+#~ "This will take a few moments, please wait."
+#~ msgstr ""
+#~ "<b>S'han demanat els requeriments del servei...</b>\n"
+#~ "Això trigarà uns moments, espereu."
+
+#~ msgid "<b>Spell Checking</b>"
+#~ msgstr "<b>Correció ortogràfica</b>"
+
+#~ msgid "<i>Information not available</i>"
+#~ msgstr "<i>Informació no disponible</i>"
+
+#~ msgid "Add Another Account"
+#~ msgstr "Afegeix un altre compte"
+
+#~ msgid "Choose a Server"
+#~ msgstr "Seleccioneu un servidor"
+
+#~ msgid "Choose from list:"
+#~ msgstr "Seleccioneu de la llista:"
+
+#~ msgid "Configure Transport"
+#~ msgstr "Configura el transport"
+
+#~ msgid "Configure Transports"
+#~ msgstr "Configura els transports"
+
+#~ msgid "Configuring Service"
+#~ msgstr "Configuració del servei"
+
+#~ msgid "If you prefer, you can specify your own service:"
+#~ msgstr "Si ho preferiu, podeu especificar el vostre propi servei:"
+
+#~ msgid "Information about ..."
+#~ msgstr "Informació sobre..."
+
+#~ msgid "Jabber Account"
+#~ msgstr "Compte Jabber"
+
+#~ msgid "Jabber.com"
+#~ msgstr "Jabber.com"
+
+#~ msgid "Jabber.org"
+#~ msgstr "Jabber.org"
+
+#~ msgid "Nick name:"
+#~ msgstr "Àlies:"
+
+#~ msgid "On what server do you have a Jabber account?"
+#~ msgstr "A quin servidor teniu un compte Jabber?"
+
+#~ msgid "Please complete the details below to set up your account:  "
+#~ msgstr "Introduïu els detalls a sota per a configurar el vostre compte:"
+
+#~ msgid "Populating services..."
+#~ msgstr "S'estan emplenant els serveis..."
+
+#~ msgid "Remove Account"
+#~ msgstr "Supimeix el compte"
+
+#~ msgid "Service Details"
+#~ msgstr "Detalls del servei"
+
+#~ msgid "Service:"
+#~ msgstr "Servei:"
+
+#~ msgid "Status Message"
+#~ msgstr "Missatge d'estat"
+
+#~ msgid ""
+#~ "This wizard will allow you to configure your account settings for another "
+#~ "protocol. "
+#~ msgstr ""
+#~ "Aquest auxiliar vos permetrà configurar els vostres paràmetres de compte "
+#~ "per a un altre protocol. "
+
+#~ msgid "Transport Accounts"
+#~ msgstr "Comptes de transports"
+
+#~ msgid "Use a different server"
+#~ msgstr "Utilitza un servidor diferent"
+
+#~ msgid "Which protocol would you like to set up? "
+#~ msgstr "Quin protocol voleu configurar? "
+
+#~ msgid ""
+#~ "You can set the status presets which appear in the presence menu on the "
+#~ "main window here."
+#~ msgstr ""
+#~ "Ací podeu establir els estats preestablerts que apareixen al menú de "
+#~ "presència de la finestra principal."
+
+#~ msgid "You currently have the following accounts set up:"
+#~ msgstr "Actualment teniu els comptes següents configurats:"
+
+#~ msgid "_Connect..."
+#~ msgstr "_Connecta..."
+
+#~ msgid "_Jabber ID of new contact:"
+#~ msgstr "_Jabber ID del nou contacte:"
+
+#~ msgid "What request message do you want to send to %s?"
+#~ msgstr "Quin missatge de petició voleu enviar a %s?"
+
+#~ msgid "        "
+#~ msgstr "        "
+
+#~ msgid "<b>Available chat rooms</b>"
+#~ msgstr "<b>Sales de xat disponibles</b>"
+
+#~ msgid "<b>Chat room information</b>"
+#~ msgstr "<b>Informació sobre la sala de xat</b>"
+
+#~ msgid "N_ickname:"
+#~ msgstr "Àl_ies:"
+
+#~ msgid "R_emove"
+#~ msgstr "_Elimina"
+
+#~ msgid "_Add"
+#~ msgstr "_Afegeix"
+
+#~ msgid "<b>Preset status messages</b>"
+#~ msgstr "<b>Missatges d'estat preestablerts</b>"
+
+#~ msgid "Add to your contact list"
+#~ msgstr "Afegeix a la llista de contactes"
+
+#~ msgid "What request message do you want to send to ...?"
+#~ msgstr "Quin missatge de petició voleu enviar a ...?"
+
+#~ msgid "Sound"
+#~ msgstr "So"
+
+#~ msgid "Make sure that your account information is correct."
+#~ msgstr "Assegureu-vos que la informació del vostre compte és correcta."
+
+#~ msgid "%s wants to be notified of your status."
+#~ msgstr "%s vol ser notificat del vostre estat."
+
+#~ msgid "You were disconnected from the server. Do you want to reconnect?"
+#~ msgstr "Vos heu desconnectat del servidor. Voleu reconnectar?"
+
+#~ msgid ""
+#~ "Make sure that your account information is correct. The server may also "
+#~ "currently be unavailable."
+#~ msgstr ""
+#~ "Assegureu-vos que la informació del vostre compte és correcta. El "
+#~ "servidor també pot no estar disponible en aquest moment."
+
+#~ msgid "Details:"
+#~ msgstr "Detalls:"
+
+#~ msgid "Unable to enter the group chat %s."
+#~ msgstr "No s'ha pogut entrar al xat en grup %s."
+
+#~ msgid "An error occurred when chatting with %s."
+#~ msgstr "S'ha produït un error mentre es xatejava amb %s."
+
+#~ msgid "Discover Services"
+#~ msgstr "Descobreix serveix"
+
+#~ msgid "_AIM"
+#~ msgstr "_AIM"
+
+#~ msgid "_ICQ"
+#~ msgstr "_ICQ"
+
+#~ msgid "_MSN"
+#~ msgstr "_MSN"
+
+#~ msgid "_Yahoo!"
+#~ msgstr "_Yahoo!"
+
+#~ msgid "subscription_label"
+#~ msgstr "etiqueta de subscripció"
+
+#~ msgid "Gossip Website"
+#~ msgstr "Lloc web del Gossip"
+
+#~ msgid "Gossip, Jabber Client"
+#~ msgstr "Gossip, client de Jabber"
+
+#~ msgid "About to leave..."
+#~ msgstr "Estic a punt de sortir..."
+
+#~ msgid "Autoaway message"
+#~ msgstr "Missatge d'absència automàtica"
+
+#~ msgid "Away messages"
+#~ msgstr "Missatges d'absència"
+
+#~ msgid "Busy messages"
+#~ msgstr "Missatge d'ocupat"
+
+#~ msgid "Message to show before going away"
+#~ msgstr "Missatge a mostrar abans de canviar a absent"
+
+#~ msgid "Not at the computer"
+#~ msgstr "No estic a l'ordinador"
+
+#~ msgid "Enter the new available message"
+#~ msgstr "Introduïu el nou missatge per «Disponible»"
+
+#~ msgid "Enter the new busy message"
+#~ msgstr "Introduïu el nou missatge per «Ocupat»"
+
+#~ msgid "Enter the new away message"
+#~ msgstr "Introduïu el nou missatge per «Absent»"
+
+#~ msgid "<b>Preset messages for quickly setting your status</b>"
+#~ msgstr ""
+#~ "<b>Preestableix missatges per a establir ràpidament el vostre estat</b>"
+
+#~ msgid "Enter the new message:"
+#~ msgstr "Introduïu el nou missatge:"
+
+#~ msgid "Leave"
+#~ msgstr "Surt"
+
+#~ msgid "New Status Message"
+#~ msgstr "Nou missatge d'estat"
+
+#~ msgid "Reason for being busy:"
+#~ msgstr "Raó per estar ocupat:"
+
+#~ msgid "Reason for leaving:"
+#~ msgstr "Raó per sortir:"
+
+#~ msgid "Just about to leave..."
+#~ msgstr "Estic a punt de sortir..."
+
+#~ msgid "Custom Busy Message..."
+#~ msgstr "Missatge «Ocupat» personalitzat..."
+
+#~ msgid "Leave..."
+#~ msgstr "Surt..."
+
+#~ msgid "New Busy Message"
+#~ msgstr "Nou missatge d'ocupat"
+
+#~ msgid "New Away Message"
+#~ msgstr "Nou missatge d'absència"
+
+#~ msgid "Working"
+#~ msgstr "Treballant"
+
+#~ msgid "Eating"
+#~ msgstr "Menjant"
+
+#~ msgid "Sleeping"
+#~ msgstr "Dormint"
+
+#~ msgid "Preset messages for quickly setting busy status."
+#~ msgstr "Preestableix missatges per a establir ràpidament estats d'ocupat."
+
+#~ msgid ""
+#~ "Note: contacts can belong to multiple groups or they can be in no group "
+#~ "at all."
+#~ msgstr ""
+#~ "Nota: els contactes poden estar en múltiples grups o poden no estar en "
+#~ "cap grup."
+
+#~ msgid "As _Windows"
+#~ msgstr "Com _finestres"
+
+#~ msgid "As a _List"
+#~ msgstr "Com una _llista"
+
+#~ msgid "_Go"
+#~ msgstr "_Vés"
+
+#~ msgid "Open conversations in single window with list view"
+#~ msgstr "Obre els xats a una sola finestra amb una vista de llista"
+
+#~ msgid "Timestamp all messages"
+#~ msgstr "Fica marques de temps a tots els missatges"
+
+#~ msgid "Whether or not to timestamp all messages in conversations."
+#~ msgstr ""
+#~ "Si s'ha de ficar marques de temps o no a tots els missatges als xats."
+
+#~ msgid "[Eating,Sleeping]"
+#~ msgstr "[Menjant,Dormint]"
+
+#~ msgid "[Working]"
+#~ msgstr "[Treballant]"
+
+#~ msgid "Custom Away Message..."
+#~ msgstr "Missatge d'absència personalitzat..."
+
+#~ msgid "Messages"
+#~ msgstr "Missatges"
+
+#~ msgid "Open conversations in a single window with _list view"
+#~ msgstr "Obre els xats en una sola finestra amb una vista de _llista"
+
+#~ msgid ""
+#~ "These messages are used to describe your status when you're about to "
+#~ "leave and when you're away."
+#~ msgstr ""
+#~ "Aquests missatges s'utilitzen per a descriure el vostre estat quan esteu "
+#~ "a punt de sortir i quan esteu absent."
+
+#~ msgid "Use com_pact conversation style"
+#~ msgstr "Utilitza l'estil de xat com_pacte"
+
+#~ msgid "Use sounds to _notify when new messages arrive"
+#~ msgstr "Utilitza sons per a _notificar quan arriben missatges nous"
+
+#~ msgid "_Timestamp all messages"
+#~ msgstr "Fica _marques de temps a tots els missatges"
+
+#~ msgid "%sChat"
+#~ msgstr "%sXat"
+
+#~ msgid "Offline "
+#~ msgstr "Desconnectats"
+
+#~ msgid "Others"
+#~ msgstr "Altres"
+
+#~ msgid "Get _Info"
+#~ msgstr "Obté _informació"
+
+#~ msgid "I'm here"
+#~ msgstr "Estic ací"
+
+#~ msgid "I'm not here right now"
+#~ msgstr "No estic ací ara mateix"
+
+#~ msgid "Available:"
+#~ msgstr "Disponible:"
+
+#~ msgid "Use ta_bs instead of windows for conversations"
+#~ msgstr "Utilitza pes_tanyes en comptes de finestres per als xats"
+
+#~ msgid "Auto away enabled"
+#~ msgstr "Absència automàtica habilitada"
+
+#~ msgid "Extended autoaway time"
+#~ msgstr "Temps per a canviar a absent fa estona automàticament"
+
+#~ msgid ""
+#~ "The number of minutes of idle time before automatically going into \"away"
+#~ "\" mode."
+#~ msgstr ""
+#~ "El nombre de minuts d'inactivitat abans de canviar automàticament al mode "
+#~ "«absent»."
+
+#~ msgid ""
+#~ "The number of minutes of idle time before automatically going into "
+#~ "\"extended away\" mode."
+#~ msgstr ""
+#~ "El nombre de minuts d'inactivitat abans de canviar automàticament al mode "
+#~ "«absent fa estona»."
+
+#~ msgid "Timestamp messages"
+#~ msgstr "Posa marques de temps als missatges"
+
+#~ msgid ""
+#~ "Whether or not to go into \"away\" mode automatically when a certain time "
+#~ "of idling has passed."
+#~ msgstr ""
+#~ "Si s'ha de canviar al mode «absent» automàticament quan ha passat una "
+#~ "certa quantitat de temps."
+
+#~ msgid "Free to chat"
+#~ msgstr "Disponible per xatejar"
+
+#~ msgid "Extended away"
+#~ msgstr "Absent fa estona"
+
+#~ msgid "_Edit Account..."
+#~ msgstr "_Edita el compte..."
+
+#~ msgid "<b>Additional information</b>"
+#~ msgstr "<b>Informació addicional</b>"
+
+#~ msgid "<b>Address</b>"
+#~ msgstr "<b>Adreça</b>"
+
+#~ msgid "<b>Auto away</b>"
+#~ msgstr "<b>Absència automàtica</b>"
+
+#~ msgid "<b>Jabber ID:</b>"
+#~ msgstr "<b>Jabber ID:</b>"
+
+#~ msgid "<b>Setup Finished</b>"
+#~ msgstr "<b>Configuració finalitzada</b>"
+
+#~ msgid "Automatically enter away mode during inactivity"
+#~ msgstr "Entra en mode «Absent» automàticament quan s'està inactiu"
+
+#~ msgid "Enter away mode after"
+#~ msgstr "Entra en mode «Absent» després de"
+
+#~ msgid "I'm away eating dinner, bbiab..."
+#~ msgstr "Estic sopant, tornaré aviat..."
+
+#~ msgid "Presence:"
+#~ msgstr "Presència:"
+
+#~ msgid "Priority:"
+#~ msgstr "Prioritat:"
+
+#~ msgid "Set the status you want to use"
+#~ msgstr "Estableix l'estat que voleu utilitzar"
+
+#~ msgid "_Approve"
+#~ msgstr "_Aprova"
+
+#~ msgid "_Defer"
+#~ msgstr "Retar_da"
+
+#~ msgid "minutes"
+#~ msgstr "minuts"
+
+#~ msgid "Default Account"
+#~ msgstr "Compte predeterminat"
+
+#~ msgid "Could not open the address \"%s\": %s"
+#~ msgstr "No s'ha pogut obrir l'adreça «%s»: %s"
+
+#~ msgid "<b>Available accounts</b>"
+#~ msgstr "<b>Comptes disponibles</b>"
+
+#~ msgid "<b>What account do you want to use for this connection?</b>"
+#~ msgstr "<b>Quin compte voleu utilitzar per a aquesta connexió?</b>"
+
+#~ msgid "Use SS_L"
+#~ msgstr "Utilitza SS_L"
+
+#~ msgid "_User:"
+#~ msgstr "_Usuari:"
+
+#~ msgid "What request message do you want to send to <b>micke</b>?"
+#~ msgstr "Quin missatge de petició voleu enviar a <b>micke</b>?"
+
+#~ msgid "Operating system:"
+#~ msgstr "Sistema operatiu:"

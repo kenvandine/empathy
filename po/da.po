@@ -1,0 +1,2578 @@
+# Danish translation of Gossip.
+# Copyright (C) 2003, 04, 06 Free Software Foundation, Inc.
+# Ole Laursen <olau@hardworking.dk>, 2003, 04, 06.
+# David Nielsen <dnielsen@breakmygentoo.net>, 2002, 06.
+#
+# Konventioner:
+#
+#   instant messaging client -> samtaleklient
+#   join -> deltag (om gruppesamtaler)
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: gossip\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2007-05-15 23:46+0200\n"
+"PO-Revision-Date: 2006-04-23 17:32+0200\n"
+"Last-Translator: Ole Laursen <olau@hardworking.dk>\n"
+"Language-Team: Danish <dansk@klid.dk>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../data/empathy.desktop.in.h:1
+#, fuzzy
+msgid "Empathy Instant Messenger"
+msgstr "Samtaleklient"
+
+#: ../data/empathy.desktop.in.h:2
+msgid "Instant Messenger"
+msgstr "Samtaleklient"
+
+#: ../data/empathy.schemas.in.h:1
+msgid "Always open a separate chat window for new chats."
+msgstr "Åbn altid et særskilt samtalevindue for nye samtaler."
+
+#: ../data/empathy.schemas.in.h:2
+msgid "Chat window theme"
+msgstr "Tema for samtalevindue"
+
+#: ../data/empathy.schemas.in.h:3
+msgid ""
+"Comma separated list of spell checker languages to use (e.g. en, fr, nl)."
+msgstr ""
+"Komma-adskilt liste af sprog der skal bruges ved stavekontrol (f.eks. \"en, "
+"fr, nl\")."
+
+#: ../data/empathy.schemas.in.h:4
+#, fuzzy
+msgid "Compact contact list"
+msgstr "Tilføj til din kontaktliste"
+
+#: ../data/empathy.schemas.in.h:5
+msgid "Contact list sort criterium"
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:6
+msgid "Default directory to select an avatar image from"
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:7
+msgid "Enable popup when contact is available"
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:8
+#, fuzzy
+msgid "Enable sound when away"
+msgstr "Deaktivér lyde når brugeren er _fraværende"
+
+#: ../data/empathy.schemas.in.h:9
+#, fuzzy
+msgid "Enable sound when busy"
+msgstr "Deaktivér lyde når brugeren er _optaget"
+
+#: ../data/empathy.schemas.in.h:10
+#, fuzzy
+msgid "Enable spell checker"
+msgstr "Slå stavekontrol til"
+
+#: ../data/empathy.schemas.in.h:11
+msgid "Hide main window"
+msgstr "Skjul hovedvindue"
+
+#: ../data/empathy.schemas.in.h:12
+msgid "Hide the main window."
+msgstr "Skjul hovedvinduet."
+
+#: ../data/empathy.schemas.in.h:13
+msgid "Open new chats in separate windows"
+msgstr "Åbn nye samtaler i adskilte vinduer"
+
+#: ../data/empathy.schemas.in.h:14
+#, fuzzy
+msgid "Show avatars"
+msgstr "_Vis kontaktliste"
+
+#: ../data/empathy.schemas.in.h:15
+#, fuzzy
+msgid "Show hint about closing the main window"
+msgstr "Hovedvinduets højde."
+
+#: ../data/empathy.schemas.in.h:16
+msgid "Show offline contacts"
+msgstr "Vis frakoblede kontakter"
+
+#: ../data/empathy.schemas.in.h:17
+msgid "Spell checking languages"
+msgstr "Stavekontrolleringssprog"
+
+#: ../data/empathy.schemas.in.h:18
+msgid "The last directory that an avatar image was chosen from."
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:19
+msgid "The theme that is used to display the conversation in chat windows."
+msgstr "Det tema der bruges ved visning af samtalen i samtalevinduer."
+
+#: ../data/empathy.schemas.in.h:20
+msgid "Use graphical smileys"
+msgstr "Benyt grafiske tekstansigter"
+
+#: ../data/empathy.schemas.in.h:21
+msgid "Use notification sounds"
+msgstr "Benyt påmindelseslyde"
+
+#: ../data/empathy.schemas.in.h:22
+#, fuzzy
+msgid "Use theme for chat rooms"
+msgstr "Deltag i samtalerummet"
+
+#: ../data/empathy.schemas.in.h:23
+msgid ""
+"Whether or not to check words typed against the languages you want to check "
+"with."
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:24
+msgid ""
+"Whether or not to convert smileys into graphical images in conversations."
+msgstr "Om tekstansigter skal konverteres til grafiske billeder i samtaler."
+
+#: ../data/empathy.schemas.in.h:25
+msgid "Whether or not to play a sound when messages arrive."
+msgstr "Om der skal afspilles en lyd når en besked ankommer."
+
+#: ../data/empathy.schemas.in.h:26
+msgid "Whether or not to play sounds when away."
+msgstr "Om der skal afspilles lyde når brugeren er fraværende."
+
+#: ../data/empathy.schemas.in.h:27
+msgid "Whether or not to play sounds when busy."
+msgstr "Om der skal afspilles lyde når brugeren er optaget."
+
+#: ../data/empathy.schemas.in.h:28
+#, fuzzy
+msgid "Whether or not to show a popup when a contact becomes available."
+msgstr "Om der skal afspilles en lyd når en besked ankommer."
+
+#: ../data/empathy.schemas.in.h:29
+#, fuzzy
+msgid ""
+"Whether or not to show avatars for contacts in the contact list and chat "
+"windows."
+msgstr "Om kontakter der ikke er tilsluttet, skal vises i kontaktlisten."
+
+#: ../data/empathy.schemas.in.h:30
+msgid "Whether or not to show contacts that are offline in the contact list."
+msgstr "Om kontakter der ikke er tilsluttet, skal vises i kontaktlisten."
+
+#: ../data/empathy.schemas.in.h:31
+msgid ""
+"Whether or not to show the message dialog about closing the main window with "
+"the 'x' button in the title bar."
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:32
+#, fuzzy
+msgid "Whether to show the contact list in compact mode or not."
+msgstr "Om kontakter der ikke er tilsluttet, skal vises i kontaktlisten."
+
+#: ../data/empathy.schemas.in.h:33
+msgid "Whether to use the theme for chat rooms or not."
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:34
+msgid ""
+"Which criterium to use when sorting the contact list. Default is to use sort "
+"by the contact's name with the value \"name\". A value of \"state\" will "
+"sort the contact list by state."
+msgstr ""
+
+#: ../libempathy/gossip-contact.c:654 ../libempathy/gossip-presence.c:184
+#: ../libempathy/gossip-presence.c:283
+msgid "Offline"
+msgstr "Frakoblet"
+
+#: ../libempathy/gossip-presence.c:274
+msgid "Available"
+msgstr "Tilgængelig"
+
+#: ../libempathy/gossip-presence.c:276
+msgid "Busy"
+msgstr "Optaget"
+
+#: ../libempathy/gossip-presence.c:279
+msgid "Away"
+msgstr "Fraværende"
+
+#: ../libempathy-gtk/empathy-main-window.c:254
+#, fuzzy
+msgid "Show and edit accounts"
+msgstr "_Vis kontaktliste"
+
+#: ../libempathy-gtk/empathy-main-window.c:456
+msgid "Group"
+msgstr "Gruppe"
+
+#: ../libempathy-gtk/empathy-main-window.c:477
+#, fuzzy
+msgid "Contact"
+msgstr "Kon_takt:"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:1
+#, fuzzy
+msgid "Contact List - Empathy"
+msgstr "_Skjul kontaktliste"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:2
+#, fuzzy
+msgid "Context"
+msgstr "_Indhold"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:3
+#, fuzzy
+msgid "Join _Favorites"
+msgstr "_Tilføj til favoritter"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:4
+#: ../libempathy-gtk/gossip-chat.glade.h:10
+msgid "Join _New..."
+msgstr ""
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:5
+#, fuzzy
+msgid "Manage Favorites..."
+msgstr "_Tilføj til favoritter"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:6
+msgid "Show _Offline Contacts"
+msgstr "Vis _frakoblede kontakter"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:7
+#, fuzzy
+msgid "_About"
+msgstr "_Konti"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:8
+msgid "_Accounts"
+msgstr "_Konti"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:9
+#: ../libempathy-gtk/gossip-chat.glade.h:15
+msgid "_Add Contact..."
+msgstr "_Tilføj kontakt..."
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:10
+#: ../libempathy-gtk/gossip-contact-list.c:298
+msgid "_Chat"
+msgstr "_Samtale"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:11
+msgid "_Contents"
+msgstr "_Indhold"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:12
+#: ../libempathy-gtk/gossip-chat.glade.h:21
+#: ../libempathy-gtk/gossip-contact-list.c:310
+#, fuzzy
+msgid "_Edit"
+msgstr "Redigér"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:13
+msgid "_Help"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:14
+#: ../libempathy-gtk/empathy-status-icon.glade.h:2
+msgid "_New Message..."
+msgstr "_Ny besked..."
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:15
+msgid "_Personal Information"
+msgstr "_Personlige oplysninger"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:16
+msgid "_Preferences"
+msgstr "_Indstillinger"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:17
+#: ../libempathy-gtk/empathy-status-icon.glade.h:3
+msgid "_Quit"
+msgstr "_Afslut"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:18
+#: ../libempathy-gtk/gossip-chat.glade.h:25
+msgid "_Room"
+msgstr "_Rum"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:19
+#: ../libempathy-gtk/gossip-chat.glade.h:28
+#: ../libempathy-gtk/gossip-contact-list.c:326
+msgid "_View Previous Conversations"
+msgstr "_Vis foregående samtaler"
+
+#: ../libempathy-gtk/empathy-status-icon.glade.h:1
+msgid "Status"
+msgstr "Status"
+
+#: ../libempathy-gtk/empathy-status-icon.glade.h:4
+msgid "_Show Contact List"
+msgstr "_Vis kontaktliste"
+
+#: ../libempathy-gtk/gossip-about-dialog.c:63
+#, fuzzy
+msgid ""
+"Empathy is free software; you can redistribute it and/or modify it under the "
+"terms of the GNU General Public License as published by the Free Software "
+"Foundation; either version 2 of the License, or (at your option) any later "
+"version."
+msgstr ""
+"Gossip er frit programmel. Du kan redistribuere og/eller ændre programmet "
+"under betingelserne givet i GNU General Public License som udgives af Free "
+"Software Foundation; enten version 2 af licensen, eller (hvis du ønsker det) "
+"enhver senere version."
+
+#: ../libempathy-gtk/gossip-about-dialog.c:67
+#, fuzzy
+msgid ""
+"Empathy is distributed in the hope that it will be useful, but WITHOUT ANY "
+"WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS "
+"FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more "
+"details."
+msgstr ""
+"Gossip distribueres i håb om at programmet er nyttigt, men uden NOGEN "
+"GARANTI, ikke engang underforstået garanti om at det er SALGBART eller "
+"PASSER TIL ET BESTEMT FORMÅL. Se GNU General Public License for detaljer."
+
+#: ../libempathy-gtk/gossip-about-dialog.c:71
+#, fuzzy
+msgid ""
+"You should have received a copy of the GNU General Public License along with "
+"Empathy; if not, write to the Free Software Foundation, Inc., 51 Franklin "
+"Street, Fifth Floor, Boston, MA 02110-130159 USA"
+msgstr ""
+"Du burde have modtaget en kopi af GNU General Public License sammen med "
+"Gossip. Hvis du ikke har det, kan du skrive til Free Software Foundation, "
+"Inc. 59 Temple Place, Suite 330, Boston, MA 02111-1307 USA."
+
+#: ../libempathy-gtk/gossip-about-dialog.c:99
+msgid "An Instant Messaging client for GNOME"
+msgstr "En samtaleklient til GNOME."
+
+#: ../libempathy-gtk/gossip-about-dialog.c:105
+msgid "translator-credits"
+msgstr ""
+"Ole Laursen\n"
+"David Nielsen\n"
+"\n"
+"Dansk-gruppen <dansk@dansk-gruppen.dk>\n"
+"Mere info: http://www.dansk-gruppen.dk"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:224
+#, fuzzy
+msgid "Disable"
+msgstr "Tilgængelig"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:227
+msgid "Enable"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:261
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:3
+#, fuzzy
+msgid "<b>No Account Selected</b>"
+msgstr "<b>Kontoindstillinger</b>"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:263
+msgid ""
+"To add a new account, you can click on the 'Add' button and a new entry will "
+"be created for you to start configuring.\n"
+"\n"
+"If you do not want to add an account, simply click on the account you want "
+"to configure in the list on the left."
+msgstr ""
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:272
+#, fuzzy
+msgid "<b>No Accounts Configured</b>"
+msgstr "<b>Kontoindstillinger</b>"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:274
+msgid ""
+"To add a new account, you can click on the 'Add' button and a new entry will "
+"be created for you to start configuring."
+msgstr ""
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:362
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:6
+msgid "Accounts"
+msgstr "Konti"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:857
+#, c-format
+msgid ""
+"You are about to remove your %s account!\n"
+"Are you sure you want to proceed?"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:863
+msgid ""
+"Any associated conversations and chat rooms will NOT be removed if you "
+"decide to proceed.\n"
+"\n"
+"Should you decide to add the account back at a later time, they will still "
+"be available."
+msgstr ""
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:1
+#, fuzzy
+msgid "<b>Account</b>"
+msgstr "<b>Om</b>"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:2
+#, fuzzy
+msgid "<b>New Account</b>"
+msgstr "<b>Om</b>"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:4
+#, fuzzy
+msgid "<b>Settings</b>"
+msgstr "<b>Kontoindstillinger</b>"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:5
+msgid "A unique name for this account to identify it personally to you."
+msgstr ""
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:7
+#, fuzzy
+msgid "Cr_eate"
+msgstr "Samtale!"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:8
+msgid "Imendio "
+msgstr ""
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:9
+msgid "Jabber"
+msgstr "Jabber"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:10
+msgid ""
+"To add a new account, you can click on the 'Add' button and a new entry will "
+"be created for you to started configuring.\n"
+"\n"
+"If you do not want to add an account, simply click on the account you want "
+"to configure in the list on the left."
+msgstr ""
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:13
+msgid "_Name:"
+msgstr "_Navn:"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:14
+#, fuzzy
+msgid "_Type:"
+msgstr "_Emne:"
+
+#: ../libempathy-gtk/gossip-account-widget-generic.c:144
+#: ../libempathy-gtk/gossip-account-widget-generic.c:186
+#, c-format
+msgid "%s:"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:1
+#, fuzzy
+msgid ""
+"<small><b><span foreground=\"#555\">Example: user@jabber.org</span></b></"
+"small>"
+msgstr "<span size=\"smaller\">Eksempel: bruger@jabber.org</span>"
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:2
+msgid "Forget password and clear the entry."
+msgstr ""
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:3
+msgid "Login I_D:"
+msgstr "Login i_d"
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:4
+#, fuzzy
+msgid "Pass_word:"
+msgstr "Adgangskode:"
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:5
+#, fuzzy
+msgid "Reso_urce:"
+msgstr "Resurse:"
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:6
+#, fuzzy
+msgid "Use encryption (SS_L)"
+msgstr "Anvend _kryptering (SSL)"
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:7
+#, fuzzy
+msgid "_Port:"
+msgstr "Port:"
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:8
+msgid "_Server:"
+msgstr "_Server:"
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:9
+#, fuzzy
+msgid "jabber account settings"
+msgstr "<b>Kontoindstillinger</b>"
+
+#: ../libempathy-gtk/gossip-chat.c:314
+msgid "Disconnected"
+msgstr "Frakoblet"
+
+#: ../libempathy-gtk/gossip-chat.c:858
+msgid "Insert Smiley"
+msgstr "Indsæt tekstansigt"
+
+#: ../libempathy-gtk/gossip-chat.c:906
+msgid "_Check Word Spelling..."
+msgstr "_Kontrollér stavning af ord..."
+
+#: ../libempathy-gtk/gossip-chat.c:1244
+msgid "Connected"
+msgstr "Tilsluttet"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:1
+msgid "C_lear"
+msgstr "_Ryd"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:2
+msgid "Change _Topic..."
+msgstr ""
+
+#: ../libempathy-gtk/gossip-chat.glade.h:3
+msgid "Chat"
+msgstr "Samtale"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:4
+#, fuzzy
+msgid "Contact Infor_mation"
+msgstr "Kontaktoplysninger"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:5
+#, fuzzy
+msgid "Cu_t"
+msgstr "S_amtale"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:6
+#, fuzzy
+msgid "In_vite..."
+msgstr "_Invitér"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:7
+msgid "Insert _Smiley"
+msgstr "Indsæt tekst_ansigt"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:8
+#, fuzzy
+msgid "Invitation _message:"
+msgstr "Indtast statusbesked:"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:9
+#, fuzzy
+msgid "Invite"
+msgstr "_Invitér"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:11
+msgid "Move Tab _Left"
+msgstr "Flyt til _venstre"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:12
+msgid "Move Tab _Right"
+msgstr "Flyt til _højre"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:13
+msgid "Select who would you like to invite:"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-chat.glade.h:14
+msgid "You have been invited to join a chat conference."
+msgstr "Du er blevet inviteret til at deltage i en konferencesamtale."
+
+#: ../libempathy-gtk/gossip-chat.glade.h:16
+msgid "_Add To Favorites"
+msgstr "_Tilføj til favoritter"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:17
+msgid "_Close"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-chat.glade.h:18
+msgid "_Conversation"
+msgstr "_Samtale"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:19
+msgid "_Copy"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-chat.glade.h:20
+msgid "_Detach Tab"
+msgstr "_Frigør faneblad"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:22
+msgid "_Next Tab"
+msgstr "_Næste faneblad"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:23
+#, fuzzy
+msgid "_Paste"
+msgstr "Dato"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:24
+msgid "_Previous Tab"
+msgstr "_Forrige faneblad"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:26
+msgid "_Show Contacts"
+msgstr "_Vis kontaktliste"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:27
+msgid "_Tabs"
+msgstr "_Faneblade"
+
+#: ../libempathy-gtk/gossip-chat-view.c:544
+msgid "_Copy Link Address"
+msgstr "_Kopiér adresse"
+
+#: ../libempathy-gtk/gossip-chat-view.c:552
+msgid "_Open Link"
+msgstr "_Åbn adresse"
+
+#: ../libempathy-gtk/gossip-chat-view.c:889
+msgid "%A %d %B %Y"
+msgstr "%A %d %B %Y"
+
+#: ../libempathy-gtk/gossip-chat-window.c:685
+#: ../libempathy-gtk/gossip-chat-window.c:715
+#, fuzzy
+msgid "New Message"
+msgid_plural "New Messages"
+msgstr[0] "Ny besked"
+msgstr[1] "Ny besked"
+
+#: ../libempathy-gtk/gossip-chat-window.c:691
+#, fuzzy
+msgid "Chat Room"
+msgstr "Samtalerum"
+
+#: ../libempathy-gtk/gossip-chat-window.c:696
+#: ../libempathy-gtk/gossip-chat-window.c:719
+#, fuzzy, c-format
+msgid "Conversation"
+msgid_plural "Conversations (%d)"
+msgstr[0] "_Samtale"
+msgstr[1] "_Samtale"
+
+#: ../libempathy-gtk/gossip-chat-window.c:1295
+msgid "Typing a message."
+msgstr "Skriver en besked."
+
+#: ../libempathy-gtk/gossip-contact-list.c:290
+#, fuzzy
+msgid "_Contact"
+msgstr "Kon_takt:"
+
+#: ../libempathy-gtk/gossip-contact-list.c:294
+#, fuzzy
+msgid "_Group"
+msgstr "Gruppe"
+
+#: ../libempathy-gtk/gossip-contact-list.c:298
+#, fuzzy
+msgid "Chat with contact"
+msgstr "Tilføj en kontakt"
+
+#: ../libempathy-gtk/gossip-contact-list.c:302
+#, fuzzy
+msgid "Infor_mation"
+msgstr "Kontaktoplysninger"
+
+#: ../libempathy-gtk/gossip-contact-list.c:302
+#, fuzzy
+msgid "View contact information"
+msgstr "Kontaktoplysninger"
+
+#: ../libempathy-gtk/gossip-contact-list.c:306
+#, fuzzy
+msgid "Re_name"
+msgstr "/Om_døb gruppe"
+
+#: ../libempathy-gtk/gossip-contact-list.c:306
+#, fuzzy
+msgid "Rename"
+msgstr "Filnavn:"
+
+#: ../libempathy-gtk/gossip-contact-list.c:310
+#, fuzzy
+msgid "Edit the groups and name for this contact"
+msgstr "Indtast et navn for konto."
+
+#: ../libempathy-gtk/gossip-contact-list.c:314
+msgid "_Remove"
+msgstr "_Fjern"
+
+#: ../libempathy-gtk/gossip-contact-list.c:314
+#, fuzzy
+msgid "Remove contact"
+msgstr "/_Fjern kontakt"
+
+#: ../libempathy-gtk/gossip-contact-list.c:318
+#, fuzzy
+msgid "_Invite to Chat Room"
+msgstr "/_Invitér til samtalerum"
+
+#: ../libempathy-gtk/gossip-contact-list.c:318
+msgid "Invite to a currently open chat room"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-contact-list.c:322
+#, fuzzy
+msgid "_Send File..."
+msgstr "/Send _fil..."
+
+#: ../libempathy-gtk/gossip-contact-list.c:322
+#, fuzzy
+msgid "Send a file"
+msgstr "Vælg en fil"
+
+#: ../libempathy-gtk/gossip-contact-list.c:326
+#, fuzzy
+msgid "View previous conversations with this contact"
+msgstr "Vis foregående samtaler"
+
+#: ../libempathy-gtk/gossip-preferences.c:250
+msgid "Language"
+msgstr "Sprog"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:1
+#, fuzzy
+msgid "<b>Appearance</b>"
+msgstr "Udseende"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:2
+#, fuzzy
+msgid "<b>Audio</b>"
+msgstr "<b>Om</b>"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:3
+#, fuzzy
+msgid "<b>Behaviour</b>"
+msgstr "<b>Favorit:</b>"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:4
+#, fuzzy
+msgid "<b>Contact List</b>"
+msgstr "Tilslutning"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:5
+msgid "<b>Languages</b>"
+msgstr "<b>Sprog</b>"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:6
+msgid "<b>Options</b>"
+msgstr "<b>Indstillinger</b>"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:7
+#, fuzzy
+msgid "<b>Visual</b>"
+msgstr "<b>E-post:</b>"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:8
+#, fuzzy
+msgid ""
+"<small>The list of languages reflects only the languages for which you have "
+"a dictionary installed.</small>"
+msgstr ""
+"Denne liste af sprog reflekterer kun de sprog som du har en ordbog "
+"installeret for."
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:9
+msgid "Avatars are user chosen images shown in the contact list"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:10
+#, fuzzy
+msgid "Chat Th_eme:"
+msgstr "Samtale_tema:"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:11
+msgid "Display notifications when contacts come _online"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:12
+#, fuzzy
+msgid "Enable sounds when _away"
+msgstr "Deaktivér lyde når brugeren er _fraværende"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:13
+#, fuzzy
+msgid "Enable sounds when _busy"
+msgstr "Deaktivér lyde når brugeren er _optaget"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:14
+msgid "General"
+msgstr "Generelt"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:15
+#, fuzzy
+msgid "Notifications"
+msgstr "Bekendtgørelse"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:16
+msgid "Preferences"
+msgstr "Indstillinger"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:17
+msgid "Show _avatars"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:18
+#, fuzzy
+msgid "Show _smileys as images"
+msgstr "Konvertér _tekstansigter til små billeder"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:19
+#, fuzzy
+msgid "Show co_mpact contact list"
+msgstr "_Vis kontaktliste"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:20
+msgid "Sort by _name"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:21
+#, fuzzy
+msgid "Sort by s_tate"
+msgstr "Sæt din status:"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:22
+msgid "Spell Checking"
+msgstr "Stavekontrol"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:23
+msgid "Themes"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:24
+#, fuzzy
+msgid "_Enable spell checking"
+msgstr "Slå stavekontrol til"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:25
+msgid "_Open new chats in separate windows"
+msgstr "_Åbn nye samtaler i særskilte vinduer"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:26
+msgid "_Play sound when messages arrive"
+msgstr "_Afspil lyd når beskeder ankommer"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:27
+#, fuzzy
+msgid "_Use for chat rooms"
+msgstr "Gem _dette samtalerum"
+
+#: ../libempathy-gtk/gossip-presence-chooser.c:702
+#, fuzzy
+msgid "Custom message..."
+msgstr "Egen besked..."
+
+#. Clear list
+#: ../libempathy-gtk/gossip-presence-chooser.c:724
+#, fuzzy
+msgid "Clear List..."
+msgstr "Ryd liste"
+
+#: ../libempathy-gtk/gossip-presence-chooser.c:803
+#, fuzzy
+msgid "Are you sure you want to clear the list?"
+msgstr "Ønsker du at acceptere denne fil?"
+
+#: ../libempathy-gtk/gossip-presence-chooser.c:807
+msgid ""
+"This will remove any custom messages you have added to the list of preset "
+"status messages."
+msgstr ""
+
+#: ../libempathy-gtk/gossip-presence-chooser.c:812
+msgid "Clear List"
+msgstr "Ryd liste"
+
+#: ../libempathy-gtk/gossip-presence-chooser.glade.h:1
+msgid "Enter status message:"
+msgstr "Indtast statusbesked:"
+
+#: ../libempathy-gtk/gossip-presence-chooser.glade.h:2
+msgid "Status Message Presets"
+msgstr "Foruddefinerede statusbeskeder"
+
+#: ../libempathy-gtk/gossip-presence-chooser.glade.h:3
+#, fuzzy
+msgid "_Add to status message list"
+msgstr "Tilføj til statusbeskedliste"
+
+#: ../libempathy-gtk/gossip-private-chat.c:198
+#, c-format
+msgid "%s went offline"
+msgstr "%s frakoblede sig"
+
+#: ../libempathy-gtk/gossip-private-chat.c:212
+#, c-format
+msgid "%s has come online"
+msgstr "%s har tilsluttet sig"
+
+#: ../libempathy-gtk/gossip-theme-manager.c:87
+msgid "Classic"
+msgstr "Klassisk"
+
+#: ../libempathy-gtk/gossip-theme-manager.c:88
+#, fuzzy
+msgid "Simple"
+msgstr "Eksempel"
+
+#: ../libempathy-gtk/gossip-theme-manager.c:89
+#, fuzzy
+msgid "Clean"
+msgstr "_Ryd"
+
+#: ../libempathy-gtk/gossip-theme-manager.c:90
+msgid "Blue"
+msgstr "Blå"
+
+#: ../src/empathy-main.c:145
+msgid "Don't connect on startup"
+msgstr "Tilslut ikke ved start"
+
+#: ../src/empathy-main.c:155
+#, fuzzy
+msgid "- Empathy Instant Messenger"
+msgstr "- Gossip - samtaleklient"
+
+#~ msgid "Gossip Instant Messenger"
+#~ msgstr "Gossip - samtaleklient"
+
+#~ msgid "Normal"
+#~ msgstr "Normal"
+
+#~ msgid "Joining"
+#~ msgstr "Tilslutter"
+
+#~ msgid "Active"
+#~ msgstr "Aktiv"
+
+#~ msgid "Inactive"
+#~ msgstr "Inaktiv"
+
+#~ msgid "Unknown"
+#~ msgstr "Ukendt"
+
+#~ msgid "Error"
+#~ msgstr "Fejl"
+
+#, fuzzy
+#~ msgid "No role"
+#~ msgstr "Normal"
+
+#, fuzzy
+#~ msgid "No affiliation"
+#~ msgstr "Bekendtgørelse"
+
+#~ msgid "The nickname you have chosen is already in use."
+#~ msgstr "Kælenavnet du har valgt, er allerede i brug."
+
+#~ msgid "The chat room you tried to join requires a password."
+#~ msgstr ""
+#~ "Samtalerummet du forsøgte at tilslutte dig til, kræver en adgangskode."
+
+#~ msgid "The remote conference server did not respond in a sensible time."
+#~ msgstr ""
+#~ "Fjernkonferenceserveren svarede ikke inden for en rimelig tidsfrist."
+
+#~ msgid "The conference server you tried to join could not be found."
+#~ msgstr "Konferenceserveren du forsøgte at tilslutte dig kunne ikke findes."
+
+#~ msgid "An unknown error occurred, check your details are correct."
+#~ msgstr ""
+#~ "En ukendt fejl opstod, kontrollér at dine indstillinger er korrekte."
+
+#, fuzzy
+#~ msgid "Joining the chatroom was canceled."
+#~ msgstr "Deltag i samtalerummet"
+
+#, fuzzy
+#~ msgid "Unavailable"
+#~ msgstr "Tilgængelig"
+
+#~ msgid "An unknown error occurred."
+#~ msgstr "Der opstod en ukendt fejl."
+
+#~ msgid "Connection refused."
+#~ msgstr "Tilslutning afvist"
+
+#~ msgid "Server address could not be resolved."
+#~ msgstr "Serveradressen kunne ikke findes."
+
+#~ msgid "Connection timed out."
+#~ msgstr "Tidsfrist for forbindelsen løb ud."
+
+#~ msgid "Authentication failed."
+#~ msgstr "Godkendelse mislykkedes."
+
+#~ msgid "The username you are trying already exists."
+#~ msgstr "Brugernavnet du forsøger at bruge, eksisterer allerede."
+
+#~ msgid "The username you are trying is not valid."
+#~ msgstr "Brugernavnet du forsøger at bruge, er ugyldigt."
+
+#~ msgid "This feature is unavailable."
+#~ msgstr "Denne funktion er ikke tilgængelig."
+
+#~ msgid "This feature is unauthorized."
+#~ msgstr "Denne funktion er ikke godkendt."
+
+#~ msgid "A specific protocol error occurred that was unexpected."
+#~ msgstr "En specifik protokolfejl opstod uventet."
+
+#, fuzzy
+#~ msgid "new account"
+#~ msgstr "Ny konto"
+
+#~ msgid "Home"
+#~ msgstr "Hjemme"
+
+#~ msgid "Couldn't send message!"
+#~ msgstr "Kunne ikke sende besked!"
+
+#~ msgid "Connection could not be opened"
+#~ msgstr "Forbindelsen kunne ikke åbnes"
+
+#, fuzzy
+#~ msgid "This service is unavailable or not found"
+#~ msgstr "Denne funktion er ikke tilgængelig."
+
+#, fuzzy
+#~ msgid "Registration is required"
+#~ msgstr "Registrering"
+
+#, fuzzy
+#~ msgid "This feature is not implemented"
+#~ msgstr "Denne funktion er ikke godkendt."
+
+#~ msgid "Disconnect"
+#~ msgstr "Frakobl"
+
+#~ msgid "Connect"
+#~ msgstr "Tilslut"
+
+#, fuzzy
+#~ msgid "Successfully registered your new account settings."
+#~ msgstr "Det lykkedes at registrere kontoen"
+
+#, fuzzy
+#~ msgid "You should now be able to connect to your new account."
+#~ msgstr "Du kan ikke bruge --no-connect sammen med --account"
+
+#, fuzzy
+#~ msgid "Failed to register your new account settings."
+#~ msgstr "Det mislykkedes at registrere de nye kontoindstillinger"
+
+#, fuzzy
+#~ msgid "Successfully changed your account password."
+#~ msgstr "Indtast din konto-adgangskode:"
+
+#, fuzzy
+#~ msgid "Failed to change your account password."
+#~ msgstr "Indtast din konto-adgangskode:"
+
+#, fuzzy
+#~ msgid ""
+#~ "Please enter a new password for this account:\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Indtast et nyt navn til gruppen\n"
+#~ "%s"
+
+#~ msgid "No information is available for this contact."
+#~ msgstr "Ingen oplysninger tilgængelige om denne kontakt."
+
+#~ msgid "Information requested, please wait..."
+#~ msgstr "Oplysninger forespurgt, vent venligst..."
+
+#~ msgid "I would like to add you to my contact list."
+#~ msgstr "Jeg vil gerne tilføje dig til min kontaktliste."
+
+#~ msgid "To summarize:"
+#~ msgstr "For at opsummere:"
+
+#, fuzzy
+#~ msgid "%d new message"
+#~ msgid_plural "%d new messages"
+#~ msgstr[0] "Ny besked"
+#~ msgstr[1] "Ny besked"
+
+#, fuzzy
+#~ msgid "%d subscription request"
+#~ msgid_plural "%d subscription requests"
+#~ msgstr[0] "Abonneringsanmodning"
+#~ msgstr[1] "Abonneringsanmodning"
+
+#, fuzzy
+#~ msgid "%d file transfer request"
+#~ msgid_plural "%d file transfer requests"
+#~ msgstr[0] "Anmodning om filoverførsel"
+#~ msgstr[1] "Anmodning om filoverførsel"
+
+#, fuzzy
+#~ msgid "%d server message"
+#~ msgid_plural "%d server messages"
+#~ msgstr[0] "Anmodningsbesked"
+#~ msgstr[1] "Anmodningsbesked"
+
+#, fuzzy
+#~ msgid "%d error"
+#~ msgid_plural "%d errors"
+#~ msgstr[0] "Fejl"
+#~ msgstr[1] "Fejl"
+
+#~ msgid "If you quit, you will lose all unread information."
+#~ msgstr "Hvis du afslutter, vil alt ulæst information gå tabt."
+
+#, fuzzy
+#~ msgid "Edit Account _Details"
+#~ msgstr "Redigér kontooplysninger"
+
+#~ msgid "Word"
+#~ msgstr "Ord"
+
+#~ msgid "New message from %s"
+#~ msgstr "Ny besked fra %s"
+
+#, fuzzy
+#~ msgid "Your invitation has been declined"
+#~ msgstr "Dit filoverførselstilbud blev afvist."
+
+#~ msgid "Accept"
+#~ msgstr "Acceptér"
+
+#, fuzzy
+#~ msgid "Decline"
+#~ msgstr "Middag"
+
+#, fuzzy
+#~ msgid "Name"
+#~ msgstr "Navn:"
+
+#, fuzzy
+#~ msgid "Room"
+#~ msgstr "_Rum"
+
+#, fuzzy
+#~ msgid "Auto Connect"
+#~ msgstr "Stop tilslutning"
+
+#, fuzzy
+#~ msgid "Information requested..."
+#~ msgstr "Oplysninger forespurgt, vent venligst..."
+
+#~ msgid "Do you want to remove this contact from your roster?"
+#~ msgstr "Ønsker du at fjerne denne kontakt fra din kontaktliste?"
+
+#~ msgid ""
+#~ "Please enter a new name for the group:\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Indtast et nyt navn til gruppen\n"
+#~ "%s"
+
+#~ msgid "Select"
+#~ msgstr "Vælg"
+
+#~ msgid "Unsorted"
+#~ msgstr "Usorteret"
+
+#~ msgid "New file transfer request from %s"
+#~ msgstr "Ny filoverførselsanmodning fra %s"
+
+#~ msgid "File transfer is not supported by both parties."
+#~ msgstr "Filoverførsel er ikke understøttet af begge parter."
+
+#~ msgid "Your file transfer offer declined."
+#~ msgstr "Dit filoverførselstilbud blev afvist."
+
+#~ msgid "The other user decided not to continue."
+#~ msgstr "Den anden bruger besluttede ikke at forsætte."
+
+#~ msgid "Unknown error occurred during file transfer."
+#~ msgstr "Ukendt fejl opstod under filoverførsel."
+
+#~ msgid "%s would like to send you a file."
+#~ msgstr "%s vil gerne sende dig en fil."
+
+#
+#~ msgid "Someone would like to send you a file."
+#~ msgstr "Nogen vil gerne sende dig en fil."
+
+#~ msgid "Select a file"
+#~ msgstr "Vælg en fil"
+
+#, fuzzy
+#~ msgid "Connecting..."
+#~ msgstr "Tilslutter"
+
+#, fuzzy
+#~ msgid "Retry connection"
+#~ msgstr "Stop tilslutning"
+
+#~ msgid "Invited %s to join this chat conference."
+#~ msgstr "Inviterede %s til at deltage i denne konferencesamtale."
+
+#, fuzzy
+#~ msgid "%s has set the topic: %s"
+#~ msgstr "%s har sat emnet"
+
+#, fuzzy
+#~ msgid "Enter the new topic you want to set for this room:"
+#~ msgstr "Hvilket kælenavn ønsker du at bruge til denne kontakt?"
+
+#, fuzzy
+#~ msgid "%s has joined the room"
+#~ msgstr "%s har sat emnet"
+
+#, fuzzy
+#~ msgid "%s has left the room"
+#~ msgstr "%s har sat emnet"
+
+#, fuzzy
+#~ msgid "Topic: %s"
+#~ msgstr "_Emne:"
+
+#~ msgid "Account"
+#~ msgstr "Konto"
+
+#~ msgid "Conversation With"
+#~ msgstr "Samtale med"
+
+#~ msgid "Date"
+#~ msgstr "Dato"
+
+#~ msgid "List the available accounts"
+#~ msgstr "Vis de tilgængelige konti"
+
+#~ msgid "Which account to connect to on startup"
+#~ msgstr "Hvilken konto skal benyttes ved start"
+
+#~ msgid "ACCOUNT-NAME"
+#~ msgstr "KONTONAVN"
+
+#~ msgid "You can not use --no-connect together with --account"
+#~ msgstr "Du kan ikke bruge --no-connect sammen med --account"
+
+#~ msgid "No accounts available."
+#~ msgstr "Ingen konti tilgængelige."
+
+#~ msgid "Available accounts:"
+#~ msgstr "Tilgængelige konti:"
+
+#~ msgid "[default]"
+#~ msgstr "[forvalgt]"
+
+#~ msgid "There is no account with the name '%s'."
+#~ msgstr "Der er ingen konto med navnet \"%s\"."
+
+#~ msgid "Join"
+#~ msgstr "Deltag"
+
+#, fuzzy
+#~ msgid "Create"
+#~ msgstr "Dato"
+
+#~ msgid "Chat Rooms"
+#~ msgstr "Samtalerum"
+
+#, fuzzy
+#~ msgid "Browsing for conference rooms, please wait..."
+#~ msgstr "Oplysninger forespurgt, vent venligst..."
+
+#~ msgid "Default"
+#~ msgstr "Forvalgt"
+
+#~ msgid "Chat!"
+#~ msgstr "Samtale!"
+
+#~ msgid "%s wants to be added to your contact list."
+#~ msgstr "%s ønsker at blive tilføjet til din kontaktliste."
+
+#~ msgid "Someone wants to be added to your contact list."
+#~ msgstr "Nogen ønsker at blive tilføjet til din kontaktliste."
+
+#, fuzzy
+#~ msgid "Subscription request"
+#~ msgstr "Abonneringsanmodning"
+
+#~ msgid "Contact Information"
+#~ msgstr "Kontaktoplysninger"
+
+#~ msgid "Subject: %s"
+#~ msgstr "Emne: %s"
+
+#~ msgid "Suggestions for the word"
+#~ msgstr "Forslag for ordet"
+
+#~ msgid "New subscription request from %s"
+#~ msgstr "Ny abonneringsanmodning fra %s"
+
+#~ msgid "Do you want to add this person to your contact list?"
+#~ msgstr "Ønsker du at tilføje denne person til din kontaktliste?"
+
+#~ msgid "Do you want to add %s to your contact list?"
+#~ msgstr "Ønsker du at tilføje %s til din kontaktliste?"
+
+#~ msgid "Please enter your %s account password"
+#~ msgstr "Indtast din adgangskode for kontoen %s"
+
+#, fuzzy
+#~ msgid "Logging in to account '%s'"
+#~ msgstr "Logger på med: %s"
+
+#~ msgid "Remember Password?"
+#~ msgstr "Husk adgangskode?"
+
+#~ msgid "Could not display the help contents."
+#~ msgstr "Kunne ikke vise hjælp."
+
+#~ msgid "The server does not seem to be responding."
+#~ msgstr "Serveren ser ikke ud til at svare."
+
+#~ msgid "Try again later."
+#~ msgstr "Prøv igen senere."
+
+#, fuzzy
+#~ msgid "Change"
+#~ msgstr "Samtale"
+
+#~ msgid "Contact goes offline"
+#~ msgstr "Kontakten frakobler sig"
+
+#~ msgid "Contact goes online"
+#~ msgstr "Kontakten tilslutter sig"
+
+#~ msgid "Contact ID:"
+#~ msgstr "Kontakt-id:"
+
+#~ msgid "Do you want to accept this file?"
+#~ msgstr "Ønsker du at acceptere denne fil?"
+
+#~ msgid "File Transfer Request"
+#~ msgstr "Anmodning om filoverførsel"
+
+#~ msgid "File name:"
+#~ msgstr "Filnavn:"
+
+#~ msgid "File size:"
+#~ msgstr "Filstørrelse:"
+
+#, fuzzy
+#~ msgid "Not supported yet"
+#~ msgstr "Ikke understøttet på nuværende tidspunkt."
+
+#~ msgid "This person wishes to send you this file:"
+#~ msgstr "Denne person ønsker at sende dig denne fil:"
+
+#~ msgid "Web site:"
+#~ msgstr "Hjemmeside:"
+
+#~ msgid "_Accept"
+#~ msgstr "_Acceptér"
+
+#~ msgid "_Deny"
+#~ msgstr "_Afvis"
+
+#, fuzzy
+#~ msgid "<b>Topic:</b>"
+#~ msgstr "<b>Indstillinger</b>"
+
+#~ msgid "Account:"
+#~ msgstr "Konto:"
+
+#, fuzzy
+#~ msgid "Browse:"
+#~ msgstr "Gennemse"
+
+#, fuzzy
+#~ msgid "Edit Favorite Room"
+#~ msgstr "Redigér samtalerum"
+
+#~ msgid "Group Chat"
+#~ msgstr "Gruppesamtale"
+
+#, fuzzy
+#~ msgid "Join New"
+#~ msgstr "Deltag"
+
+#~ msgid "Join room on start_up"
+#~ msgstr "Deltag i rum ved _start"
+
+#, fuzzy
+#~ msgid "Join this chat room when Gossip starts and you are connected"
+#~ msgstr "Deltag i dette samtalerum når Gossip starter og du er tilsluttet."
+
+#~ msgid "N_ame:"
+#~ msgstr "N_avn:"
+
+#~ msgid "S_erver:"
+#~ msgstr "S_erver:"
+
+#~ msgid "_Nickname:"
+#~ msgstr "Kæle_navn:"
+
+#~ msgid "_Room:"
+#~ msgstr "_Rum:"
+
+#~ msgid "-"
+#~ msgstr "-"
+
+#~ msgid "<b>About</b>"
+#~ msgstr "<b>Om</b>"
+
+#~ msgid "<b>Client Information</b>"
+#~ msgstr "<b>Klientoplysninger</b>"
+
+#, fuzzy
+#~ msgid "<b>Groups</b>"
+#~ msgstr "<b>Om</b>"
+
+#, fuzzy
+#~ msgid "<b>Name</b>"
+#~ msgstr "<b>Sprog</b>"
+
+#~ msgid "<b>Personal Details</b>"
+#~ msgstr "<b>Personlige detaljer</b>"
+
+#~ msgid "<b>Status</b>"
+#~ msgstr "<b>Status</b>"
+
+#, fuzzy
+#~ msgid "<b>Subscription</b>"
+#~ msgstr "Abonnering"
+
+#~ msgid "<span size=\"smaller\">Example: Mikael or user@server.org</span>"
+#~ msgstr ""
+#~ "<span size=\"smaller\">Eksempel: Mikael eller bruger@jabber.org</span>"
+
+#, fuzzy
+#~ msgid "Accou_nt:"
+#~ msgstr "Konto:"
+
+#~ msgid "Add Contact"
+#~ msgstr "Tilføj kontakt"
+
+#, fuzzy
+#~ msgid "Alia_s:"
+#~ msgstr "Alias"
+
+#~ msgid "Ch_at"
+#~ msgstr "S_amtale"
+
+#~ msgid "Client:"
+#~ msgstr "Klient:"
+
+#, fuzzy
+#~ msgid "Con_tact:"
+#~ msgstr "Kon_takt:"
+
+#, fuzzy
+#~ msgid "Connect on S_tartup"
+#~ msgstr "Tilslut ved _start"
+
+#, fuzzy
+#~ msgid "Contacts"
+#~ msgstr "Kon_takt:"
+
+#~ msgid "Country:"
+#~ msgstr "Land:"
+
+#~ msgid "Decide _Later"
+#~ msgstr "Beslut _senere"
+
+#, fuzzy
+#~ msgid "Edit Contact"
+#~ msgstr "Tilføj kontakt"
+
+#~ msgid "Edit Groups"
+#~ msgstr "Redigér grupper"
+
+#~ msgid "Email:"
+#~ msgstr "E-post:"
+
+#~ msgid "ID:"
+#~ msgstr "Id:"
+
+#~ msgid ""
+#~ "If you chose to decide later you will be asked the next time you log on."
+#~ msgstr ""
+#~ "Hvis du vælger at beslutte senere, vil du blive spurgt næste gang du "
+#~ "logger på."
+
+#~ msgid "Name:"
+#~ msgstr "Navn:"
+
+#~ msgid "OS:"
+#~ msgstr "Styresystem:"
+
+#~ msgid "Personal Details"
+#~ msgstr "Personlige detaljer"
+
+#, fuzzy
+#~ msgid "R_egister"
+#~ msgstr "Re_gistrér..."
+
+#~ msgid "Search"
+#~ msgstr "Søg"
+
+#~ msgid "Spell Checker"
+#~ msgstr "Stavekontrol"
+
+#~ msgid "Subscription Request"
+#~ msgstr "Abonneringsanmodning"
+
+#~ msgid "Suggestions for the word:"
+#~ msgstr "Forslag for ordet:"
+
+#, fuzzy
+#~ msgid ""
+#~ "This acts as a filter to the contact list below. You can use segments of "
+#~ "contact's name or ID, for example, \"jabber.org\" will list everyone "
+#~ "using that server"
+#~ msgstr ""
+#~ "Dette agerer som et filter for kontaktlisten nedenfor. Du kan bruge dele "
+#~ "af kontaktens navn eller id, f.eks. vil \"jabber.org\" liste alle der "
+#~ "bruger den server."
+
+#, fuzzy
+#~ msgid "This is the name that will be used on your roster for this contact"
+#~ msgstr "Dette navn bliver brugt i din kontaktliste for denne kontakt"
+
+#, fuzzy
+#~ msgid "This name will be used to identify you in chat windows"
+#~ msgstr "Dette navn bliver brugt til at identificere dig i samtalevinduer."
+
+#, fuzzy
+#~ msgid ""
+#~ "This name will be used to identify you when new contacts lookup your "
+#~ "details"
+#~ msgstr ""
+#~ "Dette navn bliver brugt til at identificere dig når nye kontakter laver "
+#~ "et opslag efter dine detaljer."
+
+#~ msgid "Use system pro_xy"
+#~ msgstr "Benyt systemets _mellemvært"
+
+#~ msgid "Version:"
+#~ msgstr "Version:"
+
+#~ msgid "View Previous Conversations"
+#~ msgstr "Vis foregående samtaler"
+
+#~ msgid "Which account do you want to use?"
+#~ msgstr "Hvilken konto ønsker du at benytte?"
+
+#~ msgid "You are not subscribed to this contact."
+#~ msgstr "Du abonnerer ikke på denne kontakt."
+
+#, fuzzy
+#~ msgid "_Birthday:"
+#~ msgstr "_Prioritet:"
+
+#~ msgid "_Connect"
+#~ msgstr "_Tilslut"
+
+#, fuzzy
+#~ msgid "_Description:"
+#~ msgstr "Beskrivelse:"
+
+#~ msgid "_Disconnect"
+#~ msgstr "_Frakobl"
+
+#, fuzzy
+#~ msgid "_Email:"
+#~ msgstr "E-post:"
+
+#, fuzzy
+#~ msgid ""
+#~ "_Enter the name or contact ID of the person you want to chat to below:"
+#~ msgstr ""
+#~ "Indtast navn eller kontakt-id på den person du ønsker at samtale med "
+#~ "nedenfor."
+
+#, fuzzy
+#~ msgid "_For:"
+#~ msgstr "Port:"
+
+#, fuzzy
+#~ msgid "_Full Name:"
+#~ msgstr "_Navn:"
+
+#, fuzzy
+#~ msgid "_Group:"
+#~ msgstr "Gruppe:"
+
+#, fuzzy
+#~ msgid "_Nick Name:"
+#~ msgstr "Kæle_navn:"
+
+#~ msgid "_Password:"
+#~ msgstr "_Adgangskode:"
+
+#, fuzzy
+#~ msgid "_Quit Message:"
+#~ msgstr "_Statusbeskeder"
+
+#, fuzzy
+#~ msgid "_Retrieve"
+#~ msgstr "_Fjern"
+
+#~ msgid "_Subscribe"
+#~ msgstr "_Abonnér"
+
+#, fuzzy
+#~ msgid "_Web site:"
+#~ msgstr "Hjemmeside:"
+
+#, fuzzy
+#~ msgid "irc account settings"
+#~ msgstr "<b>Kontoindstillinger</b>"
+
+#, fuzzy
+#~ msgid "msn account settings"
+#~ msgstr "<b>Kontoindstillinger</b>"
+
+#~ msgid "Preset status messages"
+#~ msgstr "Forvalgte statusbeskeder"
+
+#~ msgid "Preset status messages."
+#~ msgstr "Forvalgte statusbeskeder."
+
+#~ msgid "Perhaps you are trying to connect to the wrong port?"
+#~ msgstr "Måske forsøger du at tilslutte til den forkerte port?"
+
+#~ msgid "Perhaps the service is not currently running?"
+#~ msgstr "Måske kører tjenesten ikke på nuværende tidspunkt?"
+
+#~ msgid "Check your connection details."
+#~ msgstr "Kontrollér dine forbindelsesindstillinger."
+
+#~ msgid "Perhaps the server is not running this service."
+#~ msgstr "Måske kører serveren ikke denne tjeneste."
+
+#~ msgid "Check your username and password are correct."
+#~ msgstr "Kontrollér at brugernavn og adgangskode er korrekte."
+
+#~ msgid "%s will be added to your contact list."
+#~ msgstr "%s vil blive tilføjet til din kontaktliste."
+
+#~ msgid "%s ID of new contact:"
+#~ msgstr "%s-id for ny kontakt:"
+
+#~ msgid "Example: %s"
+#~ msgstr "Eksempel: %s"
+
+#~ msgid "You have no Instant Messaging accounts configured!"
+#~ msgstr "Du har ingen samtalekonti konfiguret!"
+
+#~ msgid ""
+#~ "Next you will be presented with the Account Information dialog to set "
+#~ "your details up."
+#~ msgstr ""
+#~ "Som det næste bliver du præsenteret for kontooplysningsvinduet for at "
+#~ "konfigurere dine detaljer."
+
+#~ msgid ""
+#~ "Please enter your invitation message to:\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Indtast venligst din invitationsbesked to:\n"
+#~ "%s"
+
+#, fuzzy
+#~ msgid "Favourite"
+#~ msgstr "<b>Favorit:</b>"
+
+#~ msgid "Contact Information for %s"
+#~ msgstr "Kontaktoplysninger for %s"
+
+#, fuzzy
+#~ msgid "/Contact Infor_mation"
+#~ msgstr "/_Kontaktoplysninger"
+
+#~ msgid "/Re_name Contact"
+#~ msgstr "/Om_døb kontakt"
+
+#~ msgid "/_Edit Groups"
+#~ msgstr "/_Redigér grupper"
+
+#~ msgid "/_View Previous Conversations"
+#~ msgstr "/_Vis foregående samtaler"
+
+#~ msgid ""
+#~ "Please enter a new nickname for the contact\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Indtast et nyt kælenavn til kontakten\n"
+#~ "%s"
+
+#~ msgid "Edit groups for %s"
+#~ msgstr "Redigér grupper for %s"
+
+#~ msgid "Conversation Log"
+#~ msgstr "Samtalelog"
+
+#~ msgid "Registering account"
+#~ msgstr "Registrering af konto"
+
+#~ msgid "Respond"
+#~ msgstr "Svar"
+
+#, fuzzy
+#~ msgid "Add to _favourites"
+#~ msgstr "_Tilføj til favoritter"
+
+#~ msgid ""
+#~ "Customize your own nickname, the server and chatroom which you wish to "
+#~ "join."
+#~ msgstr ""
+#~ "Tilpas dit kælenavn, den server og det samtalerum du ønsker at deltage i."
+
+#~ msgid "Edit your chat room details:"
+#~ msgstr "Redigér dine indstillinger for samtalerum:"
+
+#~ msgid "Na_me:"
+#~ msgstr "Na_vn:"
+
+#~ msgid "New Chat Room"
+#~ msgstr "Nyt samtalerum"
+
+#~ msgid ""
+#~ "Pick a saved chat room from the presets available below and click Join to "
+#~ "start chatting."
+#~ msgstr ""
+#~ "Vælg a gemt samtalerum fra de nedenstående forvalgte og klik på \"Deltag"
+#~ "\" for at påbegynde samtale."
+
+#~ msgid "    "
+#~ msgstr "    "
+
+#~ msgid "<b>Information requested, please wait...</b>"
+#~ msgstr "<b>Information forespurgt, vent venligst...</b>"
+
+#~ msgid "<span size=\"smaller\">Example:</span>"
+#~ msgstr "<span size=\"smaller\">Eksempel:</span>"
+
+#~ msgid "Account Name"
+#~ msgstr "Kontonavn"
+
+#, fuzzy
+#~ msgid "Chat Rooms..."
+#~ msgstr "Samtalerum"
+
+#~ msgid "Connection Details"
+#~ msgstr "Forbindelsesdetaljer"
+
+#~ msgid "Do you already have an account set up on a server?"
+#~ msgstr "Har du allerede en konto på en server?"
+
+#, fuzzy
+#~ msgid "Enter the port used in the connection for this account"
+#~ msgstr "Indtast den port der bliver brugt ved tilslutning for denne konto."
+
+#, fuzzy
+#~ msgid "Enter the server used in the connection for this account"
+#~ msgstr ""
+#~ "Indtast den server der bliver brugt ved tilslutning for denne konto."
+
+#~ msgid "Enter the user's contact ID:"
+#~ msgstr "Indtast brugerens kontakt-ID:"
+
+#, fuzzy
+#~ msgid "Enter your real name here"
+#~ msgstr "Indtast dit rigtige navn her."
+
+#~ msgid "Finished"
+#~ msgstr "Afsluttet"
+
+#, fuzzy
+#~ msgid "For increased security, enable this option"
+#~ msgstr "Slå denne indstilling til for øget sikkerhed."
+
+#~ msgid "Gossip"
+#~ msgstr "Gossip"
+
+#~ msgid ""
+#~ "Gossip is a modern client for the Jabber Instant Messaging system.\n"
+#~ "\n"
+#~ "This assistant will help you configure Gossip and connect you to your "
+#~ "favorite Jabber server.\n"
+#~ "\n"
+#~ "To get started, just click \"Forward\"."
+#~ msgstr ""
+#~ "Gossip er en moderne klient til samtalesystemet Jabber\n"
+#~ "\n"
+#~ "Denne assistent sætter dig i gang med at konfigurere Gossip og tilslutte "
+#~ "dig til din favorit Jabber-server.\n"
+#~ "\n"
+#~ "Klik på \"Fremad\" for at komme i gang."
+
+#, fuzzy
+#~ msgid ""
+#~ "If you have another machine on your network which 'proxies' the "
+#~ "connection to the internet and you want to use it, enable this option"
+#~ msgstr ""
+#~ "Hvis du har en anden maskine på dit netværk som fungerer som mellemvært "
+#~ "for forbindelsen til internettet og du ønsker at bruge den, så slå denne "
+#~ "indstilling til"
+
+#~ msgid ""
+#~ "If you need to set specific connection details, like a different server "
+#~ "or port, you can configure that here:"
+#~ msgstr ""
+#~ "Hvis du har brug for at angive specifikke forbindelsesdetaljer, såsom en "
+#~ "anden server eller port, kan du konfigurere det her:"
+
+#~ msgid ""
+#~ "In order to subscribe to presence notifications from the user, a request "
+#~ "will be sent. Until this request is approved, the user will always be "
+#~ "shown as \"Offline\" in your contact list."
+#~ msgstr ""
+#~ "For at kunne få at vide når brugeren kommer og går, vil en "
+#~ "tilstedeværelses-anmodning blive sendt. Før denne anmodning er "
+#~ "accepteret, vil brugeren altid blive vist som frakoblet i din "
+#~ "kontaktliste."
+
+#~ msgid "In which group do you want to place this contact?"
+#~ msgstr "Hvilken gruppe ønsker du at placere denne kontakt i?"
+
+#~ msgid "Jabber ID:"
+#~ msgstr "Jabber-id:"
+
+#, fuzzy
+#~ msgid ""
+#~ "Leave this blank if you don't want your password stored on a public "
+#~ "machine. If you decide to do this, you will be prompted each time you "
+#~ "connect for a password"
+#~ msgstr ""
+#~ "Du kan lade dette være tomt hvis du ikke ønsker at din adgangskode skal "
+#~ "være gemt på en offentlig maskine. Hvis du gør dette, vil du blive spurgt "
+#~ "efter adgangskoden hver gang du tilslutter."
+
+#~ msgid "Nickname:"
+#~ msgstr "Kælenavn:"
+
+#~ msgid "Port:"
+#~ msgstr "Port:"
+
+#, fuzzy
+#~ msgid "Press Subscribe to request to receive their status"
+#~ msgstr "Tryk på \"Abonnér\" for at modtage deres status."
+
+#~ msgid "Registering Account"
+#~ msgstr "Registrering af konto"
+
+#~ msgid "Resource:"
+#~ msgstr "Resurse:"
+
+#~ msgid "Sending request"
+#~ msgstr "Sender forespørgsel"
+
+#~ msgid "Server:"
+#~ msgstr "Server:"
+
+#~ msgid "Web Site:"
+#~ msgstr "Hjemmeside:"
+
+#~ msgid "Welcome to Gossip"
+#~ msgstr "Velkommen til Gossip"
+
+#~ msgid "What instant messaging system does the contact use?"
+#~ msgstr "Hvilket samtalesystem anvender kontakten?"
+
+#~ msgid "What is your name?"
+#~ msgstr "Hvad er dit navn?"
+
+#~ msgid ""
+#~ "What name do you want to use to identify this account?\n"
+#~ "\n"
+#~ "This name could be something associated with the service provider, for "
+#~ "example, <b>Google</b>."
+#~ msgstr ""
+#~ "Hvilket navn ønsker du at bruge til at identificere denne konto?\n"
+#~ "\n"
+#~ "Dette navn kunne være noget der er associeret med tjenesteudbyderen, f."
+#~ "eks. <b>Google</b>."
+
+#~ msgid "What password do you want to use?"
+#~ msgstr "Hvilken adgangskode ønsker du at anvende?"
+
+#~ msgid "What username do you use?"
+#~ msgstr "Hvilket brugernavn benytter du?"
+
+#~ msgid "What username do you want to use?"
+#~ msgstr "Hvilket brugernavn ønsker du at benytte?"
+
+#~ msgid "Which account do you want to add this contact to?"
+#~ msgstr "Hvilken konto ønsker du at tilføje denne kontakt til?"
+
+#~ msgid ""
+#~ "You can change your account settings later by selecting the Edit-"
+#~ ">Accounts menu item."
+#~ msgstr ""
+#~ "Du kan ændre dine kontoindstillinger senere ved at vælge menupunktet "
+#~ "Redigér->Konti."
+
+#~ msgid ""
+#~ "You need to set a name for the connection, for example, <b>Home</b> or "
+#~ "<b>Laptop</b>."
+#~ msgstr ""
+#~ "Du skal give forbindelsen et navn, f.eks. <b>Hjemme</b> eller <b>Bærbar</"
+#~ "b>."
+
+#~ msgid "Your Account"
+#~ msgstr "Din konto"
+
+#~ msgid "Your Identity"
+#~ msgstr "Din identitet"
+
+#~ msgid "Your new account has now been set up."
+#~ msgstr "Din nye konto er nu konfigureret."
+
+#~ msgid "_Forget"
+#~ msgstr "_Glem"
+
+#, fuzzy
+#~ msgid "_Group Chat"
+#~ msgstr "Gruppesamtale"
+
+#~ msgid "_No"
+#~ msgstr "_Nej"
+
+#~ msgid "_Search..."
+#~ msgstr "_Søg..."
+
+#~ msgid "_Yes"
+#~ msgstr "_Ja"
+
+#~ msgid "Be silent when away"
+#~ msgstr "Vær stille når brugeren er fraværende"
+
+#~ msgid "Be silent when busy"
+#~ msgstr "Vær stille når brugeren er optaget"
+
+#~ msgid "Height of main window"
+#~ msgstr "Hovedvinduets højde"
+
+#~ msgid "The X position of the main window."
+#~ msgstr "Vandret placering af hovedvinduet."
+
+#~ msgid "The Y position of the main window."
+#~ msgstr "Lodret placering af hovedvinduet."
+
+#~ msgid "The width of the main window."
+#~ msgstr "Bredden af hovedvinduet."
+
+#~ msgid "Whether spell checking should be turned on."
+#~ msgstr "Om stavekontrol skal være slået til."
+
+#~ msgid "Width of the main window"
+#~ msgstr "Hovedvinduets bredde"
+
+#~ msgid "X position of main window"
+#~ msgstr "Vandret placering af hovedvindue"
+
+#~ msgid "Y position of main window"
+#~ msgstr "Lodret placering af hovedvindue"
+
+#~ msgid "Gossip, Instant Messaging Client"
+#~ msgstr "Gossip, samtaleklient"
+
+#~ msgid "Close this chat window"
+#~ msgstr "Luk dette samtalerum"
+
+#~ msgid "Requested Information"
+#~ msgstr "Anmodede oplysninger"
+
+#~ msgid "Available..."
+#~ msgstr "Tilgængelig..."
+
+#~ msgid "Busy..."
+#~ msgstr "Optaget..."
+
+#~ msgid "Away..."
+#~ msgstr "Væk..."
+
+#~ msgid "Contact _Information"
+#~ msgstr "Kontakt_oplysninger"
+
+#~ msgid "<b>Appearance and Behavior</b>"
+#~ msgstr "<b>Udseende og opførsel</b>"
+
+#~ msgid "<b>Sound</b>"
+#~ msgstr "<b>Lyd</b>"
+
+#~ msgid "Check spelling while I _type"
+#~ msgstr "Kontrollér stavning mens jeg _skriver"
+
+#~ msgid "Gossip - Accounts"
+#~ msgstr "Gossip - konti"
+
+#~ msgid "Join _Group Chat..."
+#~ msgstr "Deltag i _gruppesamtale..."
+
+#~ msgid "Por_t:"
+#~ msgstr "Por_t:"
+
+#~ msgid "Requested information."
+#~ msgstr "Forespurgte oplysninger."
+
+#~ msgid "Requesting contact information, please wait..."
+#~ msgstr "Forespørger kontaktoplysninger, vent venligst..."
+
+#~ msgid "%s has gone offline"
+#~ msgstr "%s frakoblede sig"
+
+#~ msgid "%sChat - %s"
+#~ msgstr "%sSamtale - %s"
+
+#~ msgid "/Show _Log"
+#~ msgstr "/Vis _log"
+
+#~ msgid "View Lo_g"
+#~ msgstr "Vis lo_g"
+
+#~ msgid "Gossip - Group Chat"
+#~ msgstr "Gossip - gruppesamtale"
+
+#~ msgid "Gossip - New Chatroom"
+#~ msgstr "Gossip - nyt samtalerum"
+
+#~ msgid "Status:"
+#~ msgstr "Status:"
+
+#~ msgid "Conversation Hi_story"
+#~ msgstr "Samtale_historik"
+
+#~ msgid "Gossip - Add contact"
+#~ msgstr "Gossip - tilføj kontakt"
+
+#~ msgid "Gossip - Contact Information"
+#~ msgstr "Gossip - kontaktoplysninger"
+
+#~ msgid "Gossip - Edit Groups"
+#~ msgstr "Gossip - redigér grupper"
+
+#~ msgid "Gossip - Logs"
+#~ msgstr "Gossip - log"
+
+#~ msgid "Gossip - New Account"
+#~ msgstr "Gossip - ny konto"
+
+#~ msgid "Gossip - New Message"
+#~ msgstr "Gossip - ny besked"
+
+#~ msgid "Gossip - Personal Details"
+#~ msgstr "Gossip - personlige detaljer"
+
+#~ msgid "Gossip - Preferences"
+#~ msgstr "Gossip - indstillinger"
+
+#~ msgid "Gossip - Spell Checker"
+#~ msgstr "Gossip - stavekontrol"
+
+#~ msgid "Gossip - Status Message"
+#~ msgstr "Gossip - statusbesked"
+
+#~ msgid "_Find:"
+#~ msgstr "_Find:"
+
+#~ msgid "_Highlight"
+#~ msgstr "_Fremhæv"
+
+#~ msgid "Artwork by:"
+#~ msgstr "Grafik af:"
+
+#~ msgid "Translated by:"
+#~ msgstr "Oversat af:"
+
+#~ msgid "Danish"
+#~ msgstr "Dansk"
+
+#~ msgid "German"
+#~ msgstr "Tysk"
+
+#~ msgid "German (Germany)"
+#~ msgstr "Tysk (Tyskland)"
+
+#~ msgid "Greek"
+#~ msgstr "Græsk"
+
+#~ msgid "English"
+#~ msgstr "Engelsk"
+
+#~ msgid "English (Canadian)"
+#~ msgstr "Engelsk (Canadisk)"
+
+#~ msgid "English (British)"
+#~ msgstr "Engelsk (Britisk)"
+
+#~ msgid "English (American)"
+#~ msgstr "Engelsk (Amerikansk)"
+
+#~ msgid "Esperanto"
+#~ msgstr "Esperanto"
+
+#~ msgid "Spanish"
+#~ msgstr "Spansk"
+
+#~ msgid "Persian"
+#~ msgstr "Persisk"
+
+#~ msgid "Finnish"
+#~ msgstr "Finsk"
+
+#~ msgid "French"
+#~ msgstr "Fransk"
+
+#~ msgid "French (France)"
+#~ msgstr "Fransk (Frankrig)"
+
+#~ msgid "Hungarian"
+#~ msgstr "Hungarsk"
+
+#~ msgid "Icelandic"
+#~ msgstr "Islandsk"
+
+#~ msgid "Italian"
+#~ msgstr "Italiansk"
+
+#~ msgid "Japanese"
+#~ msgstr "Japansk"
+
+#~ msgid "Norwegian (Bokmal)"
+#~ msgstr "Norsk (Bokmål)"
+
+#~ msgid "Norwegian"
+#~ msgstr "Norsk"
+
+#~ msgid "Norwegian (Nynorsk)"
+#~ msgstr "Norsk (Nynorsk)"
+
+#~ msgid "Norwegian (Nyorsk)"
+#~ msgstr "Norsk (Nynorsk)"
+
+#~ msgid "Polish"
+#~ msgstr "Polsk"
+
+#~ msgid "Russian"
+#~ msgstr "Russisk"
+
+#~ msgid "Swedish"
+#~ msgstr "Svensk"
+
+#~ msgid "Idle"
+#~ msgstr "Inaktiv"
+
+#~ msgid "Progress:"
+#~ msgstr "Fremgang"
+
+#~ msgid "You were disconnected from the server. Do you want to reconnect?"
+#~ msgstr "Du blev koblet fra serveren. Ønsker du at tilslutte igen?"
+
+#~ msgid ""
+#~ "Make sure that your account information is correct. The server may also "
+#~ "currently be unavailable."
+#~ msgstr ""
+#~ "Sikr dig at dine kontooplysninger er korrekte. Det kan dog også være at "
+#~ "serveren ikke er tilgængelig i øjeblikket."
+
+#~ msgid "Edit List..."
+#~ msgstr "Redigér liste..."
+
+#~ msgid "An error occurred when chatting in the group chat %s."
+#~ msgstr "En fejl opstod i gruppesamtalen %s."
+
+#~ msgid "Details:"
+#~ msgstr "Detaljer:"
+
+#~ msgid "Unable to enter the group chat %s."
+#~ msgstr "Kunne ikke deltage i gruppesamtalen %s."
+
+#~ msgid "An error occurred when chatting with %s."
+#~ msgstr "En fejl opstod under samtale med %s."
+
+#~ msgid "Gossip will now try to use your account:"
+#~ msgstr "Gossip vil nu forsøge at anvende din konto:"
+
+#~ msgid "Gossip will now try to register the account:"
+#~ msgstr "Gossip vil nu forsøge at registrere kontoen:"
+
+#~ msgid "Saving personal details, please wait..."
+#~ msgstr "Gemmer personlige detaljer, vent venligst..."
+
+#~ msgid "*"
+#~ msgstr "*"
+
+#~ msgid "From:"
+#~ msgstr "Fra:"
+
+#~ msgid "Gossip - Received Message"
+#~ msgstr "Gossip - modtaget besked"
+
+#~ msgid "In reply to:"
+#~ msgstr "Svar på:"
+
+#~ msgid "To:"
+#~ msgstr "Til:"
+
+#~ msgid "_Reply..."
+#~ msgstr "_Besvar..."
+
+#~ msgid "_Send"
+#~ msgstr "_Send"
+
+#~ msgid "C_onnect"
+#~ msgstr "_Tilslut"
+
+#~ msgid "Connect _Server:"
+#~ msgstr "Tilslut til _server:"
+
+#~ msgid "_Jabber ID:"
+#~ msgstr "_Jabber-id:"
+
+#~ msgid "        "
+#~ msgstr "        "
+
+#~ msgid "<b>Available chat rooms</b>"
+#~ msgstr "<b>Tilgængelige samtalerum</b>"
+
+#~ msgid "<b>Chat room information</b>"
+#~ msgstr "<b>Oplysninger om samtalerum</b>"
+
+#~ msgid "Imendio Gossip - Group Chat"
+#~ msgstr "Gossip - gruppesamtale"
+
+#~ msgid "N_ickname:"
+#~ msgstr "_Kælenavn:"
+
+#~ msgid ""
+#~ "Pick a favorite, or enter nickname, server name, and the name of the chat "
+#~ "room to enter."
+#~ msgstr ""
+#~ "Vælg en favorit eller indtast kælenavn, servernavn og navnet på det "
+#~ "samtalerum der skal indtrædes i."
+
+#~ msgid "R_emove"
+#~ msgstr "_Fjern"
+
+#~ msgid "_Add"
+#~ msgstr "_Tilføj"
+
+#~ msgid " "
+#~ msgstr " "
+
+#~ msgid ""
+#~ "<b>Finding the best server...</b>\n"
+#~ "This will take a few moments, please wait."
+#~ msgstr ""
+#~ "<b>Finder den bedste server...</b>\n"
+#~ "Dette vil tage et øjeblik, vent venligst."
+
+#~ msgid "<b>Personal information</b>"
+#~ msgstr "<b>Personlige oplysninger</b>"
+
+#~ msgid "<b>Preset status messages</b>"
+#~ msgstr "<b>Forvalgte statusbeskeder</b>"
+
+#~ msgid "<i>Information not available</i>"
+#~ msgstr "<i>Information ikke tilgængelig</i>"
+
+#~ msgid "Add Another Account"
+#~ msgstr "Tilføj en anden konto"
+
+#~ msgid "Choose a Server"
+#~ msgstr "Vælg en server"
+
+#~ msgid "Choose from list:"
+#~ msgstr "Vælg fra liste:"
+
+#~ msgid "Configuring Service"
+#~ msgstr "Registeringstjeneste"
+
+#~ msgid "Discover Services"
+#~ msgstr "Opdagelsestjenester"
+
+#~ msgid "Information about ..."
+#~ msgstr "Information om..."
+
+#~ msgid "Jabber.com"
+#~ msgstr "Jabber.com"
+
+#~ msgid "Jabber.org"
+#~ msgstr "Jabber.org"
+
+#~ msgid "Nick name:"
+#~ msgstr "Kælenavn:"
+
+#~ msgid "On what server do you have a Jabber account?"
+#~ msgstr "På hvilken server har du en Jabber-konto?"
+
+#~ msgid ""
+#~ "Please enter your user name, password and all other required details "
+#~ "below to set up your account.  "
+#~ msgstr ""
+#~ "Indtast venligst dit brugernavn, adgangskode og andre påkrævede detaljer "
+#~ "nedenforfor at opsætte din konto"
+
+#~ msgid "Server Details"
+#~ msgstr "Serverdetaljer"
+
+#~ msgid "Sound"
+#~ msgstr "Lyd"
+
+#~ msgid "Status Message"
+#~ msgstr "Statusbesked"
+
+#~ msgid ""
+#~ "This wizard will allow you to configure your account settings for another "
+#~ "protocol. "
+#~ msgstr ""
+#~ "Denne hjælper tillader dig at konfigurere dine kontoindstillinger til en "
+#~ "anden protokol."
+
+#~ msgid "Use a different server"
+#~ msgstr "Benyt en anden server"
+
+#~ msgid "What request message do you want to send to ...?"
+#~ msgstr "Hvilken forespørgselsbesked ønsker du at sende til ...?"
+
+#~ msgid "Which protocol would you like to set up? "
+#~ msgstr "Hvilken protokol ønsker du at opsætte? "
+
+#~ msgid "_AIM"
+#~ msgstr "_AIM"
+
+#~ msgid "_ICQ"
+#~ msgstr "_ICQ"
+
+#~ msgid "_MSN"
+#~ msgstr "_MSN"
+
+#~ msgid "_Yahoo!"
+#~ msgstr "_Yahoo!"
+
+#~ msgid "subscription_label"
+#~ msgstr "abonnerings_etiket"
+
+#~ msgid "Gossip Website"
+#~ msgstr "Gossips hjemmeside"
+
+#~ msgid "Gossip, Jabber Client"
+#~ msgstr "Gossip, Jabberklient"
+
+#~ msgid "About to leave..."
+#~ msgstr "Skal til at gå..."
+
+#~ msgid "Autoaway message"
+#~ msgstr "Automatisk fraværsbesked"
+
+#~ msgid "Away messages"
+#~ msgstr "Fraværsbeskeder"
+
+#~ msgid "Busy messages"
+#~ msgstr "Optaget-beskeder"
+
+#~ msgid "Message to show before going away"
+#~ msgstr "Besked som skal vises før maskinen forlades"
+
+#~ msgid "Not at the computer"
+#~ msgstr "Ikke ved maskinen"
+
+#~ msgid "Just about to leave..."
+#~ msgstr "Skal lige til at gå..."
+
+#~ msgid "Custom Busy Message..."
+#~ msgstr "Egen optaget-besked..."
+
+#~ msgid "Leave..."
+#~ msgstr "Forlad..."
+
+#~ msgid "New Busy Message"
+#~ msgstr "Ny optaget-besked"
+
+#~ msgid "New Away Message"
+#~ msgstr "Ny fraværsbesked"
+
+#~ msgid "Working"
+#~ msgstr "Arbejder"
+
+#~ msgid "Eating"
+#~ msgstr "Spiser"
+
+#~ msgid "Sleeping"
+#~ msgstr "Sover"
+
+#~ msgid "Enter the new message:"
+#~ msgstr "Indtast den nye besked:"
+
+#~ msgid "Leave"
+#~ msgstr "Forlad"
+
+#~ msgid "Preset messages for quickly setting away status."
+#~ msgstr "Foruddefinerede beskeder til hurtigt at sætte fraværs-status."
+
+#~ msgid "Preset messages for quickly setting busy status."
+#~ msgstr "Foruddefinerede beskeder til hurtigt at sætte optaget-status."
+
+#~ msgid "Reason for being busy:"
+#~ msgstr "Grund til at være optaget:"
+
+#~ msgid "Reason for leaving:"
+#~ msgstr "Grund til at forlade:"
+
+#~ msgid "As _Windows"
+#~ msgstr "Som _vinduer"
+
+#~ msgid "As a _List"
+#~ msgstr "Som en _liste"
+
+#~ msgid "_Go"
+#~ msgstr "_Navigér"
+
+#~ msgid "Open conversations in single window with list view"
+#~ msgstr "Åbn samtaler i et enkelt vindue med listevisning"
+
+#~ msgid "Whether or not to timestamp all messages in conversations."
+#~ msgstr "Om alle beskeder i samtaler skal tidsstemples."
+
+#~ msgid "[Eating,Sleeping]"
+#~ msgstr "[Spiser,Sover]"
+
+#~ msgid "[Working]"
+#~ msgstr "[Arbejder]"
+
+#~ msgid "Custom Away Message..."
+#~ msgstr "Egen fraværsbesked..."
+
+#~ msgid "Messages"
+#~ msgstr "Beskeder"
+
+#~ msgid "Open conversations in a single window with _list view"
+#~ msgstr "Åbn samtaler i et enkelt vindue med _listevisning"
+
+#~ msgid ""
+#~ "These messages are used to describe your status when you're about to "
+#~ "leave and when you're away."
+#~ msgstr ""
+#~ "Disse beskeder bruges til at beskrive din status når du skal til at gå og "
+#~ "når du er fraværende."
+
+#~ msgid "Use com_pact conversation style"
+#~ msgstr "Benyt _kompakt samtalestil"
+
+#~ msgid "Use sounds to _notify when new messages arrive"
+#~ msgstr "Udsend lyd for at _annoncere når nye beskeder ankommer"
+
+#~ msgid "_Timestamp all messages"
+#~ msgstr "_Tidsstempl alle beskeder"
+
+#~ msgid "Auto away enabled"
+#~ msgstr "Auto-fravær aktiveret"
+
+#~ msgid "Extended autoaway time"
+#~ msgstr "Udvidet-fraværstid"
+
+#~ msgid ""
+#~ "The number of minutes of idle time before automatically going into \"away"
+#~ "\" mode."
+#~ msgstr ""
+#~ "Antal minutters inaktivitet før der automatisk skiftes til \"fraværende\"."
+
+#~ msgid ""
+#~ "The number of minutes of idle time before automatically going into "
+#~ "\"extended away\" mode."
+#~ msgstr ""
+#~ "Antal minutters inaktivitet før der automatisk skiftes til \"udvidet "
+#~ "fravær\"."
+
+#~ msgid ""
+#~ "Whether or not to go into \"away\" mode automatically when a certain time "
+#~ "of idling has passed."
+#~ msgstr ""
+#~ "Om der skal skiftes til \"fraværende\" automatisk når et bestemt tidsrum "
+#~ "af inaktivitet er forløbet."
+
+#~ msgid "%sChat"
+#~ msgstr "%sSamtale"
+
+#~ msgid "Offline "
+#~ msgstr "Ikke tilkoblet"
+
+#~ msgid "Others"
+#~ msgstr "Andre"
+
+#~ msgid "Use ta_bs instead of windows for conversations"
+#~ msgstr "Benyt _faneblade i stedet for vinduer til samtaler"
+
+#~ msgid "Free to chat"
+#~ msgstr "Ledig til snak"
+
+#~ msgid "Extended away"
+#~ msgstr "Udvidet fravær"
+
+#~ msgid "_Edit Account..."
+#~ msgstr "_Redigér kontoen..."
+
+#~ msgid "<b>Additional information</b>"
+#~ msgstr "<b>Yderligere information</b>"
+
+#~ msgid "<b>Address</b>"
+#~ msgstr "<b>Adresse</b>"
+
+#~ msgid "<b>Auto away</b>"
+#~ msgstr "<b>Auto-forvær</b>"
+
+#~ msgid "<b>Jabber ID:</b>"
+#~ msgstr "<b>Jabber-id:</b>"
+
+#~ msgid "<b>Setup Finished</b>"
+#~ msgstr "<b>Konfiguration afsluttet</b>"
+
+#~ msgid "Automatically enter away mode during inactivity"
+#~ msgstr "Skift automatisk til \"fraværende\" hvis inaktiv"
+
+#~ msgid "Enter away mode after"
+#~ msgstr "Skift til \"fraværende\" efter"
+
+#~ msgid "I'm away eating dinner, bbiab..."
+#~ msgstr "Jeg spiser middag, kommer snart..."
+
+#~ msgid "Presence:"
+#~ msgstr "Tilstedeværelse:"
+
+#~ msgid "Priority:"
+#~ msgstr "Prioritet:"
+
+#~ msgid "Set the status you want to use"
+#~ msgstr "Sæt den status du ønsker at bruge"
+
+#~ msgid "_Approve"
+#~ msgstr "_Godkend"
+
+#~ msgid "_Defer"
+#~ msgstr "_Udskyd"
+
+#~ msgid "minutes"
+#~ msgstr "minutter"

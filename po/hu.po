@@ -1,52 +1,49 @@
-# translation of gossip.HEAD.po to español
-# Copyright (C) 2003 Free Software Foundation
-# This file is distributed under the same license as the Gossip package.
+# Hungarian translation of gossip
+# This file is distributed under the same license as the gossip package.
+# Copyright (C) 2005, 2006, Free Software Foundation, Inc.
 #
-# Ezequiel Pérez <eazel7@yahoo.com.ar>, 2003.
-# Francisco Javier F. Serrador <serrador@cvs.gnome.org>, 2003, 2004, 2006.
-# Maria Majadas <maria.majadas@hispalinux.es>, 2005.
-# maria <maria.majadas@hispalinux.es>, 2005, 2006.
+# Gabor Kelemen <kelemeng@gnome.hu>, 2005, 2006.
 msgid ""
 msgstr ""
 "Project-Id-Version: gossip.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-05-15 23:46+0200\n"
-"PO-Revision-Date: 2006-11-28 00:50+0100\n"
-"Last-Translator: maria <maria.majadas@hispalinux.es>\n"
-"Language-Team: español <traductores@es.gnome.org>\n"
+"PO-Revision-Date: 2006-11-29 04:48+0100\n"
+"Last-Translator: Gabor Kelemen <kelemeng@gnome.hu>\n"
+"Language-Team: Hungarian <gnome@gnome.hu>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.11.4\n"
+"X-Generator: KBabel 1.11.2\n"
 "Plural-Forms:  nplurals=2; plural=(n != 1);\n"
 
 #: ../data/empathy.desktop.in.h:1
 #, fuzzy
 msgid "Empathy Instant Messenger"
-msgstr "Mensajería instantánea"
+msgstr "Azonnali üzenetküldő"
 
 #: ../data/empathy.desktop.in.h:2
 msgid "Instant Messenger"
-msgstr "Mensajería instantánea"
+msgstr "Azonnali üzenetküldő"
 
 #: ../data/empathy.schemas.in.h:1
 msgid "Always open a separate chat window for new chats."
-msgstr "Siempre abrir una ventana de chat separada para chats nuevos."
+msgstr "Mindig külön ablakot nyisson az új csevegéseknek."
 
 #: ../data/empathy.schemas.in.h:2
 msgid "Chat window theme"
-msgstr "Tema de la ventana de charla"
+msgstr "Csevegőablak témája"
 
 #: ../data/empathy.schemas.in.h:3
 msgid ""
 "Comma separated list of spell checker languages to use (e.g. en, fr, nl)."
 msgstr ""
-"Lista separada por comas de idiomas que se usarán en la revisión ortográfica "
-"(ej. en, fr, nl)."
+"A helyesírás-ellenőrző által használandó nyelvek vesszővel elválasztott "
+"listája (például en, fr, hu)."
 
 #: ../data/empathy.schemas.in.h:4
 msgid "Compact contact list"
-msgstr "Lista compacta de contactos"
+msgstr "Tömör partnerlista"
 
 #: ../data/empathy.schemas.in.h:5
 msgid "Contact list sort criterium"
@@ -54,135 +51,125 @@ msgstr ""
 
 #: ../data/empathy.schemas.in.h:6
 msgid "Default directory to select an avatar image from"
-msgstr "Directorio predeterminado para seleccionar un avatar"
+msgstr "Alapértelmezett könyvtár avatar kép kiválasztásához"
 
 #: ../data/empathy.schemas.in.h:7
 msgid "Enable popup when contact is available"
-msgstr "Activar ventana emergente cuando un contacto está disponible"
+msgstr "Felugró ablak engedélyezése partner elérhetővé válásakor"
 
 #: ../data/empathy.schemas.in.h:8
 msgid "Enable sound when away"
-msgstr "Activar sonido al ausentarse"
+msgstr "Hang engedélyezése, ha távol vagyok"
 
 #: ../data/empathy.schemas.in.h:9
 msgid "Enable sound when busy"
-msgstr "Activar sonido cuando se esté ocupado"
+msgstr "Hang engedélyezése, ha elfoglalt vagyok"
 
 #: ../data/empathy.schemas.in.h:10
 msgid "Enable spell checker"
-msgstr "Activar revisor ortográfico"
+msgstr "Helyesírás-ellenőrző engedélyezése"
 
 #: ../data/empathy.schemas.in.h:11
 msgid "Hide main window"
-msgstr "Ocultar la ventana principal"
+msgstr "Főablak elrejtése"
 
 #: ../data/empathy.schemas.in.h:12
 msgid "Hide the main window."
-msgstr "Ocultar la ventana principal."
+msgstr "A főablak elrejtése."
 
 #: ../data/empathy.schemas.in.h:13
 msgid "Open new chats in separate windows"
-msgstr "Abrir chats nuevos en ventanas separadas"
+msgstr "Új csevegések megnyitása külön ablakokban"
 
 #: ../data/empathy.schemas.in.h:14
 msgid "Show avatars"
-msgstr "Mostrar avatares"
+msgstr "Avatarok mutatása"
 
 #: ../data/empathy.schemas.in.h:15
 msgid "Show hint about closing the main window"
-msgstr "Mostrar consejo sobre cómo cerrar la ventana principal"
+msgstr "Tanács megjelenítése a főablak bezárásakor"
 
 #: ../data/empathy.schemas.in.h:16
 msgid "Show offline contacts"
-msgstr "Mostrar contactos no conectados"
+msgstr "Kilépett partnerek mutatása"
 
 #: ../data/empathy.schemas.in.h:17
 msgid "Spell checking languages"
-msgstr "Idiomas para revisión ortográfica"
+msgstr "Helyesírás-ellenőrző nyelvei"
 
 #: ../data/empathy.schemas.in.h:18
 msgid "The last directory that an avatar image was chosen from."
-msgstr "Último directorio del que fue elegido un avatar."
+msgstr "Az utolsó könyvtár, amelyből egy avatar kép kiválasztásra került."
 
 #: ../data/empathy.schemas.in.h:19
 msgid "The theme that is used to display the conversation in chat windows."
-msgstr ""
-"El tema que se usará para mostrar la conversación en las ventanas de chat."
+msgstr "A beszélgetés megjelenítésére használt téma a csevegőablakokban."
 
 #: ../data/empathy.schemas.in.h:20
 msgid "Use graphical smileys"
-msgstr "Usar emoticonos gráficos"
+msgstr "Grafikus hangulatjelek használata"
 
 #: ../data/empathy.schemas.in.h:21
 msgid "Use notification sounds"
-msgstr "Usar sonidos de notificación"
+msgstr "Értesítő hangok használata"
 
 #: ../data/empathy.schemas.in.h:22
 msgid "Use theme for chat rooms"
-msgstr "Usar tema para salas de chat"
+msgstr "Téma használata a csevegőszobákhoz"
 
 #: ../data/empathy.schemas.in.h:23
 msgid ""
 "Whether or not to check words typed against the languages you want to check "
 "with."
-msgstr ""
-"Indica si se debe o no revisar las palabras tecleadas con respecto a los "
-"idiomas con los que quiere comprobarlo."
+msgstr "A beírt szavak ellenőrzése az ellenőrizni kívánt nyelveken."
 
 #: ../data/empathy.schemas.in.h:24
 msgid ""
 "Whether or not to convert smileys into graphical images in conversations."
-msgstr ""
-"Indica si debe o no debe convertir los emoticonos en imágenes gráficas en "
-"las conversaciones."
+msgstr "Hangulatjelek képekké alakítása társalgások közben."
 
 #: ../data/empathy.schemas.in.h:25
 msgid "Whether or not to play a sound when messages arrive."
-msgstr "Indica si debe reproducir un sonido cuando lleguen mensajes."
+msgstr "Lejátsszon-e hangot üzenetek érkezésekor?"
 
 #: ../data/empathy.schemas.in.h:26
 msgid "Whether or not to play sounds when away."
-msgstr "Indica si debe o no reproducir sonidos cuando se esté ausente."
+msgstr "Lejátsszon-e hangot ha Ön távol van?"
 
 #: ../data/empathy.schemas.in.h:27
 msgid "Whether or not to play sounds when busy."
-msgstr "Indica si debe o no reproducir sonidos cuando esté ocupado."
+msgstr "Lejátsszon-e hangot ha Ön elfoglalt?"
 
 #: ../data/empathy.schemas.in.h:28
 msgid "Whether or not to show a popup when a contact becomes available."
-msgstr ""
-"Indica si debe o no mostrar una ventana emergente cuando un contacto vuelva "
-"a estar disponible."
+msgstr "Megjelenjen-e egy felugró ablak egy partner elérhetővé válásakor?"
 
 #: ../data/empathy.schemas.in.h:29
 msgid ""
 "Whether or not to show avatars for contacts in the contact list and chat "
 "windows."
 msgstr ""
-"Indica si debe o no mostrar los avatares para los contactos en la lista de "
-"contactos y ventanas de chat."
+"Megjelenjenek-e az avatarok a partnerekhez a partnerlistában és "
+"csevegőablakokban?"
 
 #: ../data/empathy.schemas.in.h:30
 msgid "Whether or not to show contacts that are offline in the contact list."
-msgstr ""
-"Indica si debe o no mostrar los contactos que están desconectados en la "
-"lista de contactos."
+msgstr "Kilépett partnerek mutatása a partnerlistában."
 
 #: ../data/empathy.schemas.in.h:31
 msgid ""
 "Whether or not to show the message dialog about closing the main window with "
 "the 'x' button in the title bar."
 msgstr ""
-"Indica si debe o no mostrar un mensaje de diálogo sobre cómo cerrar la "
-"ventana principal con el botón 'x' en la barra de título."
+"Megjelenjen-e párbeszédablak a főablak bezárásakor a címsor X gombjával."
 
 #: ../data/empathy.schemas.in.h:32
 msgid "Whether to show the contact list in compact mode or not."
-msgstr "Indica si debe o no mostrar la lista de contactos en modo compacto."
+msgstr "Megjelenjen-e a partnerlista tömör módban."
 
 #: ../data/empathy.schemas.in.h:33
 msgid "Whether to use the theme for chat rooms or not."
-msgstr "Indica si debe o no usar el tema para salas de chat."
+msgstr "A téma használata csevegőszobákhoz."
 
 #: ../data/empathy.schemas.in.h:34
 msgid ""
@@ -194,126 +181,126 @@ msgstr ""
 #: ../libempathy/gossip-contact.c:654 ../libempathy/gossip-presence.c:184
 #: ../libempathy/gossip-presence.c:283
 msgid "Offline"
-msgstr "Desconectado"
+msgstr "Kilépett"
 
 #: ../libempathy/gossip-presence.c:274
 msgid "Available"
-msgstr "Disponible"
+msgstr "Elérhető"
 
 #: ../libempathy/gossip-presence.c:276
 msgid "Busy"
-msgstr "Ocupado"
+msgstr "Elfoglalt"
 
 #: ../libempathy/gossip-presence.c:279
 msgid "Away"
-msgstr "Ausente"
+msgstr "Távol"
 
 #: ../libempathy-gtk/empathy-main-window.c:254
 msgid "Show and edit accounts"
-msgstr "Mostrar y editar cuentas"
+msgstr "Fiókok megjelenítése és szerkesztése"
 
 #: ../libempathy-gtk/empathy-main-window.c:456
 msgid "Group"
-msgstr "Grupo"
+msgstr "Csoport"
 
 #: ../libempathy-gtk/empathy-main-window.c:477
 msgid "Contact"
-msgstr "Contacto"
+msgstr "Partner"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:1
 #, fuzzy
 msgid "Contact List - Empathy"
-msgstr "_Mostrar lista de contactos"
+msgstr "Partnerlista m_utatása"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:2
 msgid "Context"
-msgstr "Contexto"
+msgstr "Környezet"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:3
 msgid "Join _Favorites"
-msgstr "Unir a _favoritos"
+msgstr "_Csatlakozás a kedvencekhez"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:4
 #: ../libempathy-gtk/gossip-chat.glade.h:10
 msgid "Join _New..."
-msgstr "Unirse a _nuevo…"
+msgstr "Csatlakozás ú_jhoz..."
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:5
 msgid "Manage Favorites..."
-msgstr "Gestionar favoritos…"
+msgstr "Kedvencek kezelése..."
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:6
 msgid "Show _Offline Contacts"
-msgstr "Mostrar contactos _desconectados"
+msgstr "Kilé_pett partnerek mutatása"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:7
 msgid "_About"
-msgstr "_Acerca de"
+msgstr "_Névjegy"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:8
 msgid "_Accounts"
-msgstr "_Cuentas"
+msgstr "_Fiókok"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:9
 #: ../libempathy-gtk/gossip-chat.glade.h:15
 msgid "_Add Contact..."
-msgstr "_Añadir contacto…"
+msgstr "Partner _felvétele..."
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:10
 #: ../libempathy-gtk/gossip-contact-list.c:298
 msgid "_Chat"
-msgstr "_Chat"
+msgstr "_Csevegés"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:11
 msgid "_Contents"
-msgstr "_Contenido"
+msgstr "_Tartalom"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:12
 #: ../libempathy-gtk/gossip-chat.glade.h:21
 #: ../libempathy-gtk/gossip-contact-list.c:310
 msgid "_Edit"
-msgstr "_Editar"
+msgstr "S_zerkesztés"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:13
 msgid "_Help"
-msgstr "Ay_uda"
+msgstr "_Súgó"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:14
 #: ../libempathy-gtk/empathy-status-icon.glade.h:2
 msgid "_New Message..."
-msgstr "Mensaje _nuevo…"
+msgstr "Ú_j üzenet..."
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:15
 msgid "_Personal Information"
-msgstr "Información _personal"
+msgstr "S_zemélyes információk"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:16
 msgid "_Preferences"
-msgstr "_Preferencias"
+msgstr "_Beállítások"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:17
 #: ../libempathy-gtk/empathy-status-icon.glade.h:3
 msgid "_Quit"
-msgstr "_Salir"
+msgstr "_Kilépés"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:18
 #: ../libempathy-gtk/gossip-chat.glade.h:25
 msgid "_Room"
-msgstr "_Sala"
+msgstr "Sz_oba"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:19
 #: ../libempathy-gtk/gossip-chat.glade.h:28
 #: ../libempathy-gtk/gossip-contact-list.c:326
 msgid "_View Previous Conversations"
-msgstr "_Ver conversaciones previas"
+msgstr "K_orábbi társalgások megjelenítése"
 
 #: ../libempathy-gtk/empathy-status-icon.glade.h:1
 msgid "Status"
-msgstr "Estado"
+msgstr "Állapot"
 
 #: ../libempathy-gtk/empathy-status-icon.glade.h:4
 msgid "_Show Contact List"
-msgstr "_Mostrar lista de contactos"
+msgstr "Partnerlista m_utatása"
 
 #: ../libempathy-gtk/gossip-about-dialog.c:63
 #, fuzzy
@@ -323,10 +310,9 @@ msgid ""
 "Foundation; either version 2 of the License, or (at your option) any later "
 "version."
 msgstr ""
-"Gossip es software libre; puede redistribuirlo y /o modificarlo bajo los "
-"términos de la Licencia Pública General tal como la publica la Free Software "
-"Foundation; ya sea en la versión 2 de la Licencia, o (a su elección) "
-"cualquier versión posterior."
+"A Gossip szabad szoftver, terjesztheti és/vagy módosíthatja a Free "
+"Software Foundation által kiadott GNU General Public License második (vagy "
+"bármely későbbi) változatában foglaltak alapján."
 
 #: ../libempathy-gtk/gossip-about-dialog.c:67
 #, fuzzy
@@ -336,10 +322,10 @@ msgid ""
 "FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more "
 "details."
 msgstr ""
-"Gossip se distribuye con la esperanza de que le sea útil,pero SIN NINGUNA "
-"GARANTÍA; sin incluso la garantía implícita de MERCANTILIDAD o IDONEIDAD "
-"PARA UN PROPÓSITO PARTICULAR. Vea la Licencia Pública General de GNU para "
-"más detalles."
+"A Gossip programot abban a reményben terjesztjük, hogy hasznos lesz, de nem "
+"vállalunk SEMMIFÉLE GARANCIÁT, még olyan értelemben sem, hogy a program "
+"alkalmas-e a KÖZREADÁSRA vagy EGY BIZONYOS FELADAT ELVÉGZÉSÉRE. További "
+"részletekért tanulmányozza a GNU GPL licencet."
 
 #: ../libempathy-gtk/gossip-about-dialog.c:71
 #, fuzzy
@@ -348,25 +334,22 @@ msgid ""
 "Empathy; if not, write to the Free Software Foundation, Inc., 51 Franklin "
 "Street, Fifth Floor, Boston, MA 02110-130159 USA"
 msgstr ""
-"Debería haber recibido una copia de la Licencia Pública General GNU junto "
-"con Gossip ; si no, escriba a la Free Software Foundation, Inc., 51 Franklin "
-"Street, Fifth Floor, Boston, MA 02110-130159 USA"
+"A Gossip programhoz a GNU General Public License egy példánya is jár, ha nem "
+"kapta meg, írjon a Free Software Foundation Inc.-nek. Levélcímük: 51 "
+"Franklin Street, Fifth Floor, Boston, MA 02110-130159 USA"
 
 #: ../libempathy-gtk/gossip-about-dialog.c:99
 msgid "An Instant Messaging client for GNOME"
-msgstr "Un cliente de mensajería instantánea para GNOME"
+msgstr "Egy azonnali üzenőkliens a GNOME-hoz"
 
 #: ../libempathy-gtk/gossip-about-dialog.c:105
 msgid "translator-credits"
-msgstr ""
-"María Majadas\n"
-"Ezequiel Pérez\n"
-"QA: Francisco Javier F. Serrador"
+msgstr "Kelemen Gábor <kelemeng@gnome.hu>"
 
 #: ../libempathy-gtk/gossip-accounts-dialog.c:224
 #, fuzzy
 msgid "Disable"
-msgstr "Disponible"
+msgstr "Elérhető"
 
 #: ../libempathy-gtk/gossip-accounts-dialog.c:227
 msgid "Enable"
@@ -375,7 +358,7 @@ msgstr ""
 #: ../libempathy-gtk/gossip-accounts-dialog.c:261
 #: ../libempathy-gtk/gossip-accounts-dialog.glade.h:3
 msgid "<b>No Account Selected</b>"
-msgstr "<b>Sin cuenta seleccionada</b>"
+msgstr "<b>Nincs kiválasztva fiók</b>"
 
 #: ../libempathy-gtk/gossip-accounts-dialog.c:263
 msgid ""
@@ -385,28 +368,28 @@ msgid ""
 "If you do not want to add an account, simply click on the account you want "
 "to configure in the list on the left."
 msgstr ""
-"Para añadir una nueva cuenta, puede pulsar en el botón 'Añadir' y una nueva "
-"entrada será creada para que empiece a configurarla.\n"
+"Új fiók hozzáadásához kattintson a Hozzáadás gombra és létrejön egy új "
+"bejegyzés a beállítás elkezdéséhez.\n"
 "\n"
-"Si no quiere añadir una cuenta, simplemente pulse en la cuenta que quiere "
-"configurar en la lista de la izquierda."
+"Ha nem kíván fiókot hozzáadni, akkor kattintson a beállítani kívánt fiókra a "
+"bal oldali listában."
 
 #: ../libempathy-gtk/gossip-accounts-dialog.c:272
 msgid "<b>No Accounts Configured</b>"
-msgstr "<b>No hay ninguna cuenta configurada</b>"
+msgstr "<b>Nincsenek beállítva fiókok</b>"
 
 #: ../libempathy-gtk/gossip-accounts-dialog.c:274
 msgid ""
 "To add a new account, you can click on the 'Add' button and a new entry will "
 "be created for you to start configuring."
 msgstr ""
-"Para añadir una cuenta nueva, pulse en el botón 'Añadir' y se creará una "
-"entrada nueva para que la configure."
+"Új fiók hozzáadásához kattintson a Hozzáadás gombra és létrejön egy új "
+"bejegyzés a beállítás elkezdéséhez."
 
 #: ../libempathy-gtk/gossip-accounts-dialog.c:362
 #: ../libempathy-gtk/gossip-accounts-dialog.glade.h:6
 msgid "Accounts"
-msgstr "Cuentas"
+msgstr "Fiókok"
 
 #: ../libempathy-gtk/gossip-accounts-dialog.c:857
 #, c-format
@@ -414,8 +397,8 @@ msgid ""
 "You are about to remove your %s account!\n"
 "Are you sure you want to proceed?"
 msgstr ""
-"Va a eliminar su cuenta %s\n"
-"¿Seguro que quiere continuar?"
+"A(z) %s fiókjának eltávolítására készül!\n"
+"Biztosan folytatni akarja?"
 
 #: ../libempathy-gtk/gossip-accounts-dialog.c:863
 msgid ""
@@ -425,23 +408,23 @@ msgid ""
 "Should you decide to add the account back at a later time, they will still "
 "be available."
 msgstr ""
-"Cualquier conversación o sala de chat asociada NO se eliminará si decide "
-"continuar.\n"
+"A társított társalgások és csevegőszobák NEM kerülnek törlésre ha a "
+"folytatást választja.\n"
 "\n"
-"Si decidiera volver a añadir la cuenta más tarde, estarán aún disponibles."
+"Ha később a fiók visszaállítása mellett dönt, akkor ezek elérhetővé válnak."
 
 #: ../libempathy-gtk/gossip-accounts-dialog.glade.h:1
 msgid "<b>Account</b>"
-msgstr "<b>Cuenta</b>"
+msgstr "<b>Fiók</b>"
 
 #: ../libempathy-gtk/gossip-accounts-dialog.glade.h:2
 #, fuzzy
 msgid "<b>New Account</b>"
-msgstr "<b>Cuenta</b>"
+msgstr "<b>Fiók</b>"
 
 #: ../libempathy-gtk/gossip-accounts-dialog.glade.h:4
 msgid "<b>Settings</b>"
-msgstr "<b>Configuración</b>"
+msgstr "<b>Beállítások</b>"
 
 #: ../libempathy-gtk/gossip-accounts-dialog.glade.h:5
 msgid "A unique name for this account to identify it personally to you."
@@ -450,7 +433,7 @@ msgstr ""
 #: ../libempathy-gtk/gossip-accounts-dialog.glade.h:7
 #, fuzzy
 msgid "Cr_eate"
-msgstr "Crear"
+msgstr "Létrehozás"
 
 #: ../libempathy-gtk/gossip-accounts-dialog.glade.h:8
 msgid "Imendio "
@@ -468,20 +451,20 @@ msgid ""
 "If you do not want to add an account, simply click on the account you want "
 "to configure in the list on the left."
 msgstr ""
-"Para añadir una cuenta nueva, pulse en el botón de 'Añadir' y una se creará "
-"una entrada nueva para que la configure.\n"
+"Új fiók hozzáadásához kattintson a Hozzáadás gombra és létrejön egy új "
+"bejegyzés a beállítás elkezdéséhez.\n"
 "\n"
-"Si no quiere añadir una cuenta, simplemente pulse en la cuenta que quiere "
-"configurar en la lista de la izquierda."
+"Ha nem kíván fiókot hozzáadni, akkor kattintson a beállítani kívánt fiókra a "
+"bal oldali listában."
 
 #: ../libempathy-gtk/gossip-accounts-dialog.glade.h:13
 msgid "_Name:"
-msgstr "_Nombre:"
+msgstr "_Név:"
 
 #: ../libempathy-gtk/gossip-accounts-dialog.glade.h:14
 #, fuzzy
 msgid "_Type:"
-msgstr "_Tema:"
+msgstr "_Téma:"
 
 #: ../libempathy-gtk/gossip-account-widget-generic.c:144
 #: ../libempathy-gtk/gossip-account-widget-generic.c:186
@@ -501,51 +484,51 @@ msgstr ""
 
 #: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:3
 msgid "Login I_D:"
-msgstr "_ID de sesión:"
+msgstr "Bejelentkezési a_zonosító:"
 
 #: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:4
 msgid "Pass_word:"
-msgstr "Contra_seña:"
+msgstr "_Jelszó:"
 
 #: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:5
 msgid "Reso_urce:"
-msgstr "Re_curso:"
+msgstr "_Erőforrás:"
 
 #: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:6
 msgid "Use encryption (SS_L)"
-msgstr "Usar encriptado (SS_L)"
+msgstr "_Titkosítás használata (SSL)"
 
 #: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:7
 msgid "_Port:"
-msgstr "_Puerto:"
+msgstr "_Port:"
 
 #: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:8
 msgid "_Server:"
-msgstr "_Servidor:"
+msgstr "_Kiszolgáló:"
 
 #: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:9
 msgid "jabber account settings"
-msgstr "propiedades de la cuenta jabber"
+msgstr "jabber fiókbeállítások"
 
 #: ../libempathy-gtk/gossip-chat.c:314
 msgid "Disconnected"
-msgstr "Desconectado"
+msgstr "Kapcsolat bontva"
 
 #: ../libempathy-gtk/gossip-chat.c:858
 msgid "Insert Smiley"
-msgstr "Insertar emoticono"
+msgstr "Hangulatjel beszúrása"
 
 #: ../libempathy-gtk/gossip-chat.c:906
 msgid "_Check Word Spelling..."
-msgstr "_Comprobar ortografía…"
+msgstr "Szó _helyesírásának ellenőrzése..."
 
 #: ../libempathy-gtk/gossip-chat.c:1244
 msgid "Connected"
-msgstr "Conectado"
+msgstr "Kapcsolódva"
 
 #: ../libempathy-gtk/gossip-chat.glade.h:1
 msgid "C_lear"
-msgstr "_Limpiar"
+msgstr "_Törlés"
 
 #: ../libempathy-gtk/gossip-chat.glade.h:2
 msgid "Change _Topic..."
@@ -553,273 +536,273 @@ msgstr ""
 
 #: ../libempathy-gtk/gossip-chat.glade.h:3
 msgid "Chat"
-msgstr "Chat"
+msgstr "Csevegés"
 
 #: ../libempathy-gtk/gossip-chat.glade.h:4
 msgid "Contact Infor_mation"
-msgstr "Informa_ción del contacto"
+msgstr "_Partnerinformációk"
 
 #: ../libempathy-gtk/gossip-chat.glade.h:5
 msgid "Cu_t"
-msgstr "Cor_tar"
+msgstr "_Kivágás"
 
 #: ../libempathy-gtk/gossip-chat.glade.h:6
 #, fuzzy
 msgid "In_vite..."
-msgstr "In_vitar"
+msgstr "_Meghívás"
 
 #: ../libempathy-gtk/gossip-chat.glade.h:7
 msgid "Insert _Smiley"
-msgstr "Insertar _emoticono"
+msgstr "Ha_ngulatjel beszúrása"
 
 #: ../libempathy-gtk/gossip-chat.glade.h:8
 #, fuzzy
 msgid "Invitation _message:"
-msgstr "Mensaje de invitación:"
+msgstr "Meghívó üzenetet:"
 
 #: ../libempathy-gtk/gossip-chat.glade.h:9
 msgid "Invite"
-msgstr "Invitar"
+msgstr "Meghívás"
 
 #: ../libempathy-gtk/gossip-chat.glade.h:11
 msgid "Move Tab _Left"
-msgstr "Mover solapa a la _izquierda"
+msgstr "Lap _balra"
 
 #: ../libempathy-gtk/gossip-chat.glade.h:12
 msgid "Move Tab _Right"
-msgstr "Mover solapa a la _derecha"
+msgstr "Lap j_obbra"
 
 #: ../libempathy-gtk/gossip-chat.glade.h:13
 msgid "Select who would you like to invite:"
-msgstr "Seleccione a quién quiere invitar:"
+msgstr "Válassza ki, hogy kit szeretne meghívni:"
 
 #: ../libempathy-gtk/gossip-chat.glade.h:14
 msgid "You have been invited to join a chat conference."
-msgstr "Le han invitado a unirse a una conferencia por chat."
+msgstr "Meghívást kapott egy konferenciacsevegésre."
 
 #: ../libempathy-gtk/gossip-chat.glade.h:16
 msgid "_Add To Favorites"
-msgstr "Añadir a _favoritos"
+msgstr "_Hozzáadás a kedvencekhez"
 
 #: ../libempathy-gtk/gossip-chat.glade.h:17
 msgid "_Close"
-msgstr "_Cerrar"
+msgstr "_Bezárás"
 
 #: ../libempathy-gtk/gossip-chat.glade.h:18
 msgid "_Conversation"
-msgstr "_Conversación"
+msgstr "_Társalgás"
 
 #: ../libempathy-gtk/gossip-chat.glade.h:19
 msgid "_Copy"
-msgstr "_Copiar"
+msgstr "_Másolás"
 
 #: ../libempathy-gtk/gossip-chat.glade.h:20
 msgid "_Detach Tab"
-msgstr "_Desacoplar solapa"
+msgstr "_Lap leválasztása"
 
 #: ../libempathy-gtk/gossip-chat.glade.h:22
 msgid "_Next Tab"
-msgstr "Solapa _siguiente"
+msgstr "_Következő lap"
 
 #: ../libempathy-gtk/gossip-chat.glade.h:23
 msgid "_Paste"
-msgstr "_Pegar"
+msgstr "_Beillesztés"
 
 #: ../libempathy-gtk/gossip-chat.glade.h:24
 msgid "_Previous Tab"
-msgstr "Solapa _anterior"
+msgstr "_Előző lap"
 
 #: ../libempathy-gtk/gossip-chat.glade.h:26
 msgid "_Show Contacts"
-msgstr "_Mostrar contactos"
+msgstr "Partnerek _mutatása"
 
 #: ../libempathy-gtk/gossip-chat.glade.h:27
 msgid "_Tabs"
-msgstr "_Solapas"
+msgstr "_Lapok"
 
 #: ../libempathy-gtk/gossip-chat-view.c:544
 msgid "_Copy Link Address"
-msgstr "_Copiar la dirección del enlace"
+msgstr "Hivatkozás cí_mének másolása"
 
 #: ../libempathy-gtk/gossip-chat-view.c:552
 msgid "_Open Link"
-msgstr "_Abrir enlace"
+msgstr "_Hivatkozás megnyitása"
 
 #: ../libempathy-gtk/gossip-chat-view.c:889
 msgid "%A %d %B %Y"
-msgstr "%A %d %B %Y"
+msgstr "%y. %B %e %A"
 
 #: ../libempathy-gtk/gossip-chat-window.c:685
 #: ../libempathy-gtk/gossip-chat-window.c:715
 #, fuzzy
 msgid "New Message"
 msgid_plural "New Messages"
-msgstr[0] "Mensaje nuevo"
-msgstr[1] "Mensaje nuevo"
+msgstr[0] "Új üzenet"
+msgstr[1] "Új üzenet"
 
 #: ../libempathy-gtk/gossip-chat-window.c:691
 #, fuzzy
 msgid "Chat Room"
-msgstr "Salas de chat"
+msgstr "Csevegőszobák"
 
 #: ../libempathy-gtk/gossip-chat-window.c:696
 #: ../libempathy-gtk/gossip-chat-window.c:719
 #, fuzzy, c-format
 msgid "Conversation"
 msgid_plural "Conversations (%d)"
-msgstr[0] "_Conversación"
-msgstr[1] "_Conversación"
+msgstr[0] "_Társalgás"
+msgstr[1] "_Társalgás"
 
 #: ../libempathy-gtk/gossip-chat-window.c:1295
 msgid "Typing a message."
-msgstr "Tecleando un mensaje."
+msgstr "Üzenet írása."
 
 #: ../libempathy-gtk/gossip-contact-list.c:290
 msgid "_Contact"
-msgstr "Con_tacto"
+msgstr "_Partner"
 
 #: ../libempathy-gtk/gossip-contact-list.c:294
 msgid "_Group"
-msgstr "_Grupo"
+msgstr "_Csoport"
 
 #: ../libempathy-gtk/gossip-contact-list.c:298
 msgid "Chat with contact"
-msgstr "Chat con un contacto"
+msgstr "Csevegés partnerrel"
 
 #: ../libempathy-gtk/gossip-contact-list.c:302
 msgid "Infor_mation"
-msgstr "Informa_ción"
+msgstr "_Információk"
 
 #: ../libempathy-gtk/gossip-contact-list.c:302
 msgid "View contact information"
-msgstr "Ver información del contacto"
+msgstr "Partnerinformációk megjelenítése"
 
 #: ../libempathy-gtk/gossip-contact-list.c:306
 msgid "Re_name"
-msgstr "Re_nombrar"
+msgstr "Át_nevezés"
 
 #: ../libempathy-gtk/gossip-contact-list.c:306
 msgid "Rename"
-msgstr "Renombrar"
+msgstr "Átnevezés"
 
 #: ../libempathy-gtk/gossip-contact-list.c:310
 msgid "Edit the groups and name for this contact"
-msgstr "Editar grupos y nombre para este contacto"
+msgstr "Partner csoportjainak és nevének szerkesztése"
 
 #: ../libempathy-gtk/gossip-contact-list.c:314
 msgid "_Remove"
-msgstr "_Quitar"
+msgstr "_Eltávolítás"
 
 #: ../libempathy-gtk/gossip-contact-list.c:314
 msgid "Remove contact"
-msgstr "Quita el contacto"
+msgstr "Partner eltávolítása"
 
 #: ../libempathy-gtk/gossip-contact-list.c:318
 msgid "_Invite to Chat Room"
-msgstr "_Invitar a sala de chat"
+msgstr "Meg_hívás csevegőszobába"
 
 #: ../libempathy-gtk/gossip-contact-list.c:318
 msgid "Invite to a currently open chat room"
-msgstr "Invita a una sala de chat ya abierta"
+msgstr "Meghívás egy jelenleg megnyitott csevegőszobába"
 
 #: ../libempathy-gtk/gossip-contact-list.c:322
 msgid "_Send File..."
-msgstr "_Enviar archivo…"
+msgstr "_Fájl küldése..."
 
 #: ../libempathy-gtk/gossip-contact-list.c:322
 msgid "Send a file"
-msgstr "Envía un archivo"
+msgstr "Fájl küldése"
 
 #: ../libempathy-gtk/gossip-contact-list.c:326
 msgid "View previous conversations with this contact"
-msgstr "Ver conversaciones anteriores con este contacto"
+msgstr "A partnerrel folytatott korábbi társalgások megjelenítése"
 
 #: ../libempathy-gtk/gossip-preferences.c:250
 msgid "Language"
-msgstr "Idioma"
+msgstr "Nyelv"
 
 #: ../libempathy-gtk/gossip-preferences.glade.h:1
 msgid "<b>Appearance</b>"
-msgstr "<b>Apariencia</b>"
+msgstr "<b>Megjelenés</b>"
 
 #: ../libempathy-gtk/gossip-preferences.glade.h:2
 msgid "<b>Audio</b>"
-msgstr "<b>Sonido</b>"
+msgstr "<b>Audio</b>"
 
 #: ../libempathy-gtk/gossip-preferences.glade.h:3
 msgid "<b>Behaviour</b>"
-msgstr "<b>Comportamiento</b>"
+msgstr "<b>Viselkedés</b>"
 
 #: ../libempathy-gtk/gossip-preferences.glade.h:4
 #, fuzzy
 msgid "<b>Contact List</b>"
-msgstr "<b>Estado</b>"
+msgstr "<b>Állapot</b>"
 
 #: ../libempathy-gtk/gossip-preferences.glade.h:5
 msgid "<b>Languages</b>"
-msgstr "<b>Idiomas</b>"
+msgstr "<b>Nyelvek</b>"
 
 #: ../libempathy-gtk/gossip-preferences.glade.h:6
 msgid "<b>Options</b>"
-msgstr "<b>Opciones</b>"
+msgstr "<b>Beállítások</b>"
 
 #: ../libempathy-gtk/gossip-preferences.glade.h:7
 msgid "<b>Visual</b>"
-msgstr "<b>Visual</b>"
+msgstr "<b>Látvány</b>"
 
 #: ../libempathy-gtk/gossip-preferences.glade.h:8
 msgid ""
 "<small>The list of languages reflects only the languages for which you have "
 "a dictionary installed.</small>"
 msgstr ""
-"<small>La lista de idiomas refleja sólo los idiomas para los cuales tiene un "
-"diccionario instalado.</small>"
+"<small>Ezen az oldalon csak azok a nyelvek vannak felsorolva, amelyekhez "
+"telepítve van szótár.</small>"
 
 #: ../libempathy-gtk/gossip-preferences.glade.h:9
 msgid "Avatars are user chosen images shown in the contact list"
 msgstr ""
-"Los avatares son imágenes elegidas por el usuario que se muestran en la "
-"lista de contactos"
+"Az avatarok a felhasználó által kiválasztott és a partnerlistában megjelenő "
+"képek"
 
 #: ../libempathy-gtk/gossip-preferences.glade.h:10
 msgid "Chat Th_eme:"
-msgstr "_Tema del chat:"
+msgstr "Csevegés té_mája:"
 
 #: ../libempathy-gtk/gossip-preferences.glade.h:11
 msgid "Display notifications when contacts come _online"
-msgstr "Mostrar notificaciones cuando los contactos se _conecten"
+msgstr "Értesítések _megjelenítése, ha a partnerek elérhetővé válnak"
 
 #: ../libempathy-gtk/gossip-preferences.glade.h:12
 msgid "Enable sounds when _away"
-msgstr "Activar sonidos al _ausentarse"
+msgstr "Hangok engedélyezése, ha _távol vagyok"
 
 #: ../libempathy-gtk/gossip-preferences.glade.h:13
 msgid "Enable sounds when _busy"
-msgstr "Activar sonidos cuando se esté _ocupado"
+msgstr "Hangok engedélyezése, ha el_foglalt vagyok"
 
 #: ../libempathy-gtk/gossip-preferences.glade.h:14
 msgid "General"
-msgstr "General"
+msgstr "Általános"
 
 #: ../libempathy-gtk/gossip-preferences.glade.h:15
 msgid "Notifications"
-msgstr "Notificaciones"
+msgstr "Értesítések"
 
 #: ../libempathy-gtk/gossip-preferences.glade.h:16
 msgid "Preferences"
-msgstr "Preferencias"
+msgstr "Beállítások"
 
 #: ../libempathy-gtk/gossip-preferences.glade.h:17
 msgid "Show _avatars"
-msgstr "Mostrar _avatares"
+msgstr "_Avatarok megjelenítése"
 
 #: ../libempathy-gtk/gossip-preferences.glade.h:18
 msgid "Show _smileys as images"
-msgstr "Mostrar los _emoticonos como imágenes"
+msgstr "Hang_ulatjelek képekké alakítása"
 
 #: ../libempathy-gtk/gossip-preferences.glade.h:19
 msgid "Show co_mpact contact list"
-msgstr "Mostrar lista de contactos co_mpacta"
+msgstr "_Tömör partnerlista mutatása"
 
 #: ../libempathy-gtk/gossip-preferences.glade.h:20
 msgid "Sort by _name"
@@ -831,320 +814,318 @@ msgstr ""
 
 #: ../libempathy-gtk/gossip-preferences.glade.h:22
 msgid "Spell Checking"
-msgstr "Revisión ortográfica"
+msgstr "Helyesírás-ellenőrzés"
 
 #: ../libempathy-gtk/gossip-preferences.glade.h:23
 msgid "Themes"
-msgstr "Temas"
+msgstr "Témák"
 
 #: ../libempathy-gtk/gossip-preferences.glade.h:24
 msgid "_Enable spell checking"
-msgstr "_Activar revisor ortográfico"
+msgstr "_Helyesírás-ellenőrzés bekapcsolása"
 
 #: ../libempathy-gtk/gossip-preferences.glade.h:25
 msgid "_Open new chats in separate windows"
-msgstr "_Abrir charlas nuevas en ventanas separadas"
+msgstr "Új csevegések megnyitása _külön ablakokban"
 
 #: ../libempathy-gtk/gossip-preferences.glade.h:26
 msgid "_Play sound when messages arrive"
-msgstr "_Reproducir sonido cuando lleguen mensajes"
+msgstr "_Hang lejátszása üzenetek érkezésekor"
 
 #: ../libempathy-gtk/gossip-preferences.glade.h:27
 msgid "_Use for chat rooms"
-msgstr "_Usar para sala de chat"
+msgstr "Használat _csevegőszobákhoz"
 
 #: ../libempathy-gtk/gossip-presence-chooser.c:702
 msgid "Custom message..."
-msgstr "Mensaje personalizado…"
+msgstr "Egyéni üzenet..."
 
 #. Clear list
 #: ../libempathy-gtk/gossip-presence-chooser.c:724
 msgid "Clear List..."
-msgstr "Limpiar lista…"
+msgstr "Lista törlése..."
 
 #: ../libempathy-gtk/gossip-presence-chooser.c:803
 msgid "Are you sure you want to clear the list?"
-msgstr "¿Está seguro que quiere vaciar la lista?"
+msgstr "Ki kívánja üríteni a listát?"
 
 #: ../libempathy-gtk/gossip-presence-chooser.c:807
 msgid ""
 "This will remove any custom messages you have added to the list of preset "
 "status messages."
 msgstr ""
-"Esto eliminará cualquier mensaje personalizado que haya añadido a las lista "
-"de mensajes de estado predeterminada."
+"Ez eltávolít minden egyéni üzenetet, amit az előre beállított "
+"állapotüzenetek listájához adott."
 
 #: ../libempathy-gtk/gossip-presence-chooser.c:812
 msgid "Clear List"
-msgstr "Vaciar lista"
+msgstr "Lista törlése"
 
 #: ../libempathy-gtk/gossip-presence-chooser.glade.h:1
 msgid "Enter status message:"
-msgstr "Introduzca mensaje de estado:"
+msgstr "Adja meg az állapotüzenetet:"
 
 #: ../libempathy-gtk/gossip-presence-chooser.glade.h:2
 msgid "Status Message Presets"
-msgstr "Preconfiguraciones de mensajes de estado"
+msgstr "Állapotüzenetek listája"
 
 #: ../libempathy-gtk/gossip-presence-chooser.glade.h:3
 msgid "_Add to status message list"
-msgstr "_Añadir a la lista de mensajes de estado"
+msgstr "H_ozzáadás az állapotüzenetek listájához"
 
 #: ../libempathy-gtk/gossip-private-chat.c:198
 #, c-format
 msgid "%s went offline"
-msgstr "%s se ha desconectado"
+msgstr "%s kilépett"
 
 #: ../libempathy-gtk/gossip-private-chat.c:212
 #, c-format
 msgid "%s has come online"
-msgstr "%s se ha conectado"
+msgstr "%s elérhetővé vált"
 
 #: ../libempathy-gtk/gossip-theme-manager.c:87
 msgid "Classic"
-msgstr "Clásico"
+msgstr "Klasszikus"
 
 #: ../libempathy-gtk/gossip-theme-manager.c:88
 msgid "Simple"
-msgstr "Simple"
+msgstr "Egyszerű"
 
 #: ../libempathy-gtk/gossip-theme-manager.c:89
 msgid "Clean"
-msgstr "Limpiar"
+msgstr "Tiszta"
 
 #: ../libempathy-gtk/gossip-theme-manager.c:90
 msgid "Blue"
-msgstr "Azul"
+msgstr "Kék"
 
 #: ../src/empathy-main.c:145
 msgid "Don't connect on startup"
-msgstr "No conectarse al inicio"
+msgstr "Ne kapcsolódjon indításkor"
 
 #: ../src/empathy-main.c:155
 #, fuzzy
 msgid "- Empathy Instant Messenger"
-msgstr "- Mensajería instantánea Gossip"
+msgstr "- Gossip azonnali üzenetküldő"
 
 #~ msgid "Gossip Instant Messenger"
-#~ msgstr "Mensajería instantánea Gossip"
+#~ msgstr "Gossip azonnali üzenetküldő"
 
 #~ msgid "Normal"
-#~ msgstr "Normal"
+#~ msgstr "Normál"
 
 #~ msgid "Joining"
-#~ msgstr "Uniéndose"
+#~ msgstr "Csatlakozik"
 
 #~ msgid "Active"
-#~ msgstr "Activo"
+#~ msgstr "Aktív"
 
 #~ msgid "Inactive"
-#~ msgstr "Inactivo"
+#~ msgstr "Inaktív"
 
 #~ msgid "Unknown"
-#~ msgstr "Desconocido"
+#~ msgstr "Ismeretlen"
 
 #~ msgid "Error"
-#~ msgstr "Error"
+#~ msgstr "Hiba"
 
 #~ msgid "Moderator"
 #~ msgid_plural "Moderators"
-#~ msgstr[0] "Moderador"
-#~ msgstr[1] "Moderadores"
+#~ msgstr[0] "Moderátor"
+#~ msgstr[1] "Moderátorok"
 
 #~ msgid "Participant"
 #~ msgid_plural "Participants"
-#~ msgstr[0] "Participante"
-#~ msgstr[1] "Participantes"
+#~ msgstr[0] "Résztvevő"
+#~ msgstr[1] "Résztvevők"
 
 #~ msgid "Visitor"
 #~ msgid_plural "Visitors"
-#~ msgstr[0] "Visitante"
-#~ msgstr[1] "Visitantes"
+#~ msgstr[0] "Látogató"
+#~ msgstr[1] "Látogatók"
 
 #~ msgid "No role"
-#~ msgstr "Sin rol"
+#~ msgstr "Nincs szerep"
 
 #~ msgid "Owner"
 #~ msgid_plural "Owners"
-#~ msgstr[0] "Dueño"
-#~ msgstr[1] "Dueños"
+#~ msgstr[0] "Tulajdonos"
+#~ msgstr[1] "Tulajdonosok"
 
 #~ msgid "Administrator"
 #~ msgid_plural "Administrators"
-#~ msgstr[0] "Administrador"
-#~ msgstr[1] "Administradores"
+#~ msgstr[0] "Adminisztrátor"
+#~ msgstr[1] "Adminisztrátorok"
 
 #~ msgid "Member"
 #~ msgid_plural "Members"
-#~ msgstr[0] "Miembro"
-#~ msgstr[1] "Miembros"
+#~ msgstr[0] "Tag"
+#~ msgstr[1] "Tagok"
 
 #~ msgid "Outcast"
 #~ msgid_plural "Outcasts"
-#~ msgstr[0] "Paria"
-#~ msgstr[1] "Parias"
+#~ msgstr[0] "Száműzött"
+#~ msgstr[1] "Száműzöttek"
 
 #~ msgid "No affiliation"
-#~ msgstr "Sin afiliación"
+#~ msgstr "Nincs kapcsolat"
 
 #~ msgid "The nickname you have chosen is already in use."
-#~ msgstr "El apodo que ha elegido ya se está usando."
+#~ msgstr "A választott becenév már használatban van."
 
 #~ msgid "The chat room you tried to join requires a password."
-#~ msgstr ""
-#~ "La sala de chat a la que está intentando unirse requiere una contraseña."
+#~ msgstr "A csevegőszoba, amelyhez csatlakozni próbált, jelszót igényel."
 
 #~ msgid "The remote conference server did not respond in a sensible time."
 #~ msgstr ""
-#~ "El servidor remoto de la conferencia no respondió en un tiempo razonable."
+#~ "A távoli konferenciakiszolgáló nem válaszolt elfogadható időn belül."
 
 #~ msgid "The conference server you tried to join could not be found."
 #~ msgstr ""
-#~ "No se pudo encontrar el servidor de conferencias al que intentó unirse."
+#~ "A konferenciakiszolgáló, amelyhez csatlakozni próbált, nem található."
 
 #~ msgid "An unknown error occurred, check your details are correct."
-#~ msgstr ""
-#~ "Ocurrió un error desconocido, compruebe si sus detalles son correctos."
+#~ msgstr "Ismeretlen hiba történt, ellenőrizze adatai helyességét."
 
 #~ msgid "Unavailable"
-#~ msgstr "No disponible"
+#~ msgstr "Nem érhető el"
 
 #~ msgid "An unknown error occurred."
-#~ msgstr "Ha ocurrido un error desconocido."
+#~ msgstr "Ismeretlen hiba történt."
 
 #~ msgid "Connection refused."
-#~ msgstr "Conexión rechazada."
+#~ msgstr "Kapcsolat visszautasítva."
 
 #~ msgid "Server address could not be resolved."
-#~ msgstr "La dirección del servidor no se ha podido resolver."
+#~ msgstr "A kiszolgáló címe nem oldható fel."
 
 #~ msgid "Connection timed out."
-#~ msgstr "La conexión expiró."
+#~ msgstr "A kapcsolódás időtúllépés miatt sikertelen."
 
 #~ msgid "Authentication failed."
-#~ msgstr "Falló la autenticación."
+#~ msgstr "Hitelesítés sikertelen."
 
 #~ msgid "The username you are trying already exists."
-#~ msgstr "El usuario que ha elegido ya existe."
+#~ msgstr "A választott becenév már létezik."
 
 #~ msgid "The username you are trying is not valid."
-#~ msgstr "El usuario que ha elegido no es válido."
+#~ msgstr "A választott becenév nem érvényes."
 
 #~ msgid "This feature is unavailable."
-#~ msgstr "Esta característica no está disponible."
+#~ msgstr "Ez a szolgáltatás nem áll rendelkezésre."
 
 #~ msgid "This feature is unauthorized."
-#~ msgstr "Esta característica no está autorizada."
+#~ msgstr "Ez a szolgáltatás nincs felhatalmazva."
 
 #~ msgid "A specific protocol error occurred that was unexpected."
-#~ msgstr "Ocurrió un error inesperado específico del protocolo."
+#~ msgstr "Egy adott váratlan protokollhiba történt."
 
 #~ msgid "new account"
-#~ msgstr "Cuenta nueva"
+#~ msgstr "új fiók"
 
 #~ msgid "Home"
-#~ msgstr "Domicilio"
+#~ msgstr "Saját mappa"
 
 #~ msgid "Couldn't send message!"
-#~ msgstr "No se pudo enviar el mensaje."
+#~ msgstr "Nem lehet üzenetet küldeni!"
 
 #~ msgid "Connection could not be opened"
-#~ msgstr "La conexión no se pudo abrir"
+#~ msgstr "A kapcsolat nem nyitható meg"
 
 #, fuzzy
 #~ msgid "This service is unavailable or not found"
-#~ msgstr "Esta característica no está disponible."
+#~ msgstr "Ez a szolgáltatás nem áll rendelkezésre."
 
 #, fuzzy
 #~ msgid "This feature is not implemented"
-#~ msgstr "Esta característica no está autorizada."
+#~ msgstr "Ez a szolgáltatás nincs felhatalmazva."
 
 #~ msgid "Stop"
-#~ msgstr "Parar"
+#~ msgstr "Leállítás"
 
 #~ msgid "Disconnect"
-#~ msgstr "Desconectar"
+#~ msgstr "Bontás"
 
 #~ msgid "Connect"
-#~ msgstr "Conectar"
+#~ msgstr "Kapcsolódás"
 
 #~ msgid "Successfully registered your new account settings."
-#~ msgstr "Se ha registrado con éxito la configuración de su cuenta nueva."
+#~ msgstr "Az új fiókbeállítások sikeresen regisztrálva."
 
 #~ msgid "You should now be able to connect to your new account."
-#~ msgstr "Ahora debería poder conectarse a su cuenta nueva."
+#~ msgstr "Mostantól kapcsolódhat az új fiókjához."
 
 #~ msgid "Failed to register your new account settings."
-#~ msgstr "Falló al registrar la configuración de su cuenta nueva"
+#~ msgstr "Az új fiók beállításainak regisztrálása meghiúsult"
 
 #, fuzzy
 #~ msgid "Successfully changed your account password."
-#~ msgstr "Se ha registrado con éxito la configuración de su cuenta nueva."
+#~ msgstr "Az új fiókbeállítások sikeresen regisztrálva."
 
 #, fuzzy
 #~ msgid "You should now be able to connect with your new password."
-#~ msgstr "Ahora debería poder conectarse a su cuenta nueva."
+#~ msgstr "Mostantól kapcsolódhat az új fiókjához."
 
 #, fuzzy
 #~ msgid "Failed to change your account password."
-#~ msgstr "Introduzca la contraseña de su cuenta %s:"
+#~ msgstr "Kérem adja meg a(z) %s fiókjának jelszavát"
 
 #, fuzzy
 #~ msgid ""
 #~ "Please enter a new password for this account:\n"
 #~ "%s"
 #~ msgstr ""
-#~ "Introduzca un nombre nuevo para el grupo:\n"
+#~ "Kérem adjon meg egy új nevet a következő csoportnak:\n"
 #~ "%s"
 
 #~ msgid "No information is available for this contact."
-#~ msgstr "No hay información disponible para este contacto."
+#~ msgstr "Nem állnak rendelkezésre információk erről a partnerről."
 
 #~ msgid "Information requested, please wait..."
-#~ msgstr "Información solicitada, espere por favor…"
+#~ msgstr "Információk lekérve, kérem várjon..."
 
 #~ msgid "I would like to add you to my contact list."
-#~ msgstr "Quisiera añadirle a mi lista de contactos."
+#~ msgstr "Szeretném hozzáadni Önt a partnerlistámhoz."
 
 #~ msgid "To summarize:"
-#~ msgstr "Para resumir:"
+#~ msgstr "Összegzendő:"
 
 #~ msgid "%d new message"
 #~ msgid_plural "%d new messages"
-#~ msgstr[0] "%d mensaje nuevo"
-#~ msgstr[1] "%d mensajes nuevos"
+#~ msgstr[0] "%d új üzenet"
+#~ msgstr[1] "%d új üzenet"
 
 #~ msgid "%d subscription request"
 #~ msgid_plural "%d subscription requests"
-#~ msgstr[0] "%d solicitud de subscripción"
-#~ msgstr[1] "%d solicitudes de subscripción"
+#~ msgstr[0] "%d feliratkozási kérés"
+#~ msgstr[1] "%d feliratkozási kérés"
 
 #~ msgid "%d file transfer request"
 #~ msgid_plural "%d file transfer requests"
-#~ msgstr[0] "%d solicitud de transferencia de archivo"
-#~ msgstr[1] "%d solicitudes de transferencia de archivo"
+#~ msgstr[0] "%d fájlátviteli kérés"
+#~ msgstr[1] "%d fájlátviteli kérés"
 
 #~ msgid "%d server message"
 #~ msgid_plural "%d server messages"
-#~ msgstr[0] "%d mensaje del servidor"
-#~ msgstr[1] "%d mensajes del servidor"
+#~ msgstr[0] "%d kiszolgálóüzenet"
+#~ msgstr[1] "%d kiszolgálóüzenet"
 
 #~ msgid "%d error"
 #~ msgid_plural "%d errors"
-#~ msgstr[0] "%d error"
-#~ msgstr[1] "%d errores"
+#~ msgstr[0] "%d hiba"
+#~ msgstr[1] "%d hiba"
 
 #~ msgid "If you quit, you will lose all unread information."
-#~ msgstr "Si sale, usted perderá toda la información no leída."
+#~ msgstr "Ha kilép, minden olvasatlan információt elveszít."
 
 #~ msgid "Gossip is still running, it is just hidden."
-#~ msgstr "Gossip todavía se está ejecutando, sólo está oculto."
+#~ msgstr "A Gossip még fut, csak el van rejtve."
 
 #~ msgid "Click on the notification area icon to show Gossip."
-#~ msgstr "Pulse en el icono del área de notificación para mostrar Gossip."
+#~ msgstr "A Gossip megjelenítéséhez kattintson az értesítési terület ikonra."
 
 #~ msgid "You were about to quit!"
-#~ msgstr "¡Ibas a cerrarlo!"
+#~ msgstr "Megpróbált kilépni"
 
 #~ msgid ""
 #~ "Since no system or notification tray has been found, this action would "
@@ -1153,66 +1134,67 @@ msgstr "- Mensajería instantánea Gossip"
 #~ "This is just a reminder, from now on, Gossip will quit when performing "
 #~ "this action unless you uncheck the option below."
 #~ msgstr ""
-#~ "Ya que no se ha encontrado ninguna bandeja de sistema o notificación, "
-#~ "esta acción cerraría normalmente Gossip.\n"
+#~ "Mivel nem található rendszertálca vagy értesítési terület, ez a művelet "
+#~ "normális esetben kilép a Gossipból.\n"
 #~ "\n"
-#~ "Esto es solo un recordatoria, desde ahora, Gossip terminará al realizar "
-#~ "esta acción a menos que desmarque la opción de abajo."
+#~ "Ez csak egy emlékeztető, mostantól a Gossip ezen művelet végrehajtásakor "
+#~ "kilép, hacsak nem jelöli be az alábbi lehetőséget."
 
 #~ msgid "Edit Account _Details"
-#~ msgstr "Editar _detalles de la cuenta"
+#~ msgstr "A _fiók részleteinek szerkesztése"
 
 #~ msgid "Click to enlarge"
-#~ msgstr "Pulsar para ampliar"
+#~ msgstr "Kattintson ide a nagyításhoz"
 
 #~ msgid "Word"
-#~ msgstr "Palabra"
+#~ msgstr "Szó"
 
 #~ msgid "Select who would you like to invite to room:"
-#~ msgstr "Seleccione a quién quiere invitar a esta sala:"
+#~ msgstr "Válassza ki, hogy kit szeretne meghívni a szobába:"
 
 #~ msgid "Select which room you would like to invite:"
-#~ msgstr "Seleccione a qué sala quiere invitar:"
+#~ msgstr "Válassza ki, hogy melyik szobát szeretné meghívni:"
 
 #~ msgid "New message from %s"
-#~ msgstr "Mensaje nuevo de %s"
+#~ msgstr "Új üzenet a következőtől: %s"
 
 #~ msgid "Your invitation has been declined"
-#~ msgstr "Su invitación ha sido rechazada"
+#~ msgstr "A meghívását elutasították"
 
 #~ msgid "Accept"
-#~ msgstr "Aceptar"
+#~ msgstr "Elfogadás"
 
 #~ msgid "Decline"
-#~ msgstr "Rechazar"
+#~ msgstr "Elutasítás"
 
 #~ msgid "Name"
-#~ msgstr "Nombre"
+#~ msgstr "Név"
 
 #~ msgid "Room"
-#~ msgstr "Sala"
+#~ msgstr "Szoba"
 
 #~ msgid "Auto Connect"
-#~ msgstr "Autoconectar"
+#~ msgstr "Automatikus kapcsolódás"
 
 #~ msgid "Information requested..."
-#~ msgstr "Información solicitada…"
+#~ msgstr "Információk lekérve..."
 
+# fixme: wtf is a "roster"?
 #~ msgid "Do you want to remove this contact from your roster?"
-#~ msgstr "¿Quiere quitar este contacto de su lista de contactos?"
+#~ msgstr "El szeretné távolítani ezt a partnert a névsorból?"
 
 #~ msgid ""
 #~ "Please enter a new name for the group:\n"
 #~ "%s"
 #~ msgstr ""
-#~ "Introduzca un nombre nuevo para el grupo:\n"
+#~ "Kérem adjon meg egy új nevet a következő csoportnak:\n"
 #~ "%s"
 
 #~ msgid "Select"
-#~ msgstr "Seleccionar"
+#~ msgstr "Kijelölés"
 
 #~ msgid "Unsorted"
-#~ msgstr "Desordenados"
+#~ msgstr "Rendezetlen"
 
 #~ msgid ""
 #~ "Set the alias you want to use for:\n"
@@ -1220,372 +1202,368 @@ msgstr "- Mensajería instantánea Gossip"
 #~ "\n"
 #~ "You can retrieve contact information from the server."
 #~ msgstr ""
-#~ "Ponga el apodo que quiere utilizar:\n"
+#~ "Állítsa be a használni kívánt álnevet a következőhöz:\n"
 #~ "<b>%s</b>\n"
 #~ "\n"
-#~ "Puede obtener la información del contacto desde el servidor."
+#~ "A kiszolgálóról lekérheti a partnerinformációkat."
 
 #~ msgid "New file transfer request from %s"
-#~ msgstr "Nueva solicitud de transferencia de archivo desde %s"
+#~ msgstr "Új fájlküldési kérés a következőtől: %s"
 
 #~ msgid "File transfer is not supported by both parties."
-#~ msgstr "La transferencia de archivos no está soportada por ambas partes."
+#~ msgstr "A fájlátvitelt nem támogatja mindkét fél."
 
 #~ msgid "Your file transfer offer declined."
-#~ msgstr "Su ofrecimiento de transferencia de archivo ha sido rechazado."
+#~ msgstr "A fájl átvitelét visszautasították."
 
 #~ msgid "The other user decided not to continue."
-#~ msgstr "El otro usuario decidió no continuar."
+#~ msgstr "A másik felhasználó a megszakítást választotta."
 
 #~ msgid "Unknown error occurred during file transfer."
-#~ msgstr ""
-#~ "Ha ocurrido un error desconocido durante la transferencia del archivo."
+#~ msgstr "Ismeretlen hiba lépett fel a fájlátvitel közben."
 
 #~ msgid "%s would like to send you a file."
-#~ msgstr "%s quiere mandarle un archivo."
+#~ msgstr "%s szeretne egy fájlt küldeni Önnek."
 
 #~ msgid "Someone would like to send you a file."
-#~ msgstr "Alguien quiere mandarle un archivo."
+#~ msgstr "Valaki szeretne egy fájlt küldeni Önnek."
 
 #~ msgid "Select a file"
-#~ msgstr "Seleccione un archivo"
+#~ msgstr "Válasszon ki egy fájlt"
 
 #, fuzzy
 #~ msgid "Connecting..."
-#~ msgstr "Conectar"
+#~ msgstr "Kapcsolódás"
 
 #~ msgid "Invited %s to join this chat conference."
-#~ msgstr "Invitó a %s a unirse en esta conferencia por chat."
+#~ msgstr "%s meghívva erre a konferenciacsevegésre."
 
 #, fuzzy
 #~ msgid "%s has set the topic: %s"
-#~ msgstr "%s ha puesto el tema"
+#~ msgstr "%s beállította a témakört"
 
 #, fuzzy
 #~ msgid "%s has joined the room"
-#~ msgstr "%s ha puesto el tema"
+#~ msgstr "%s beállította a témakört"
 
 #, fuzzy
 #~ msgid "%s has left the room"
-#~ msgstr "%s ha puesto el tema"
+#~ msgstr "%s beállította a témakört"
 
 #, fuzzy
 #~ msgid "Topic: %s"
-#~ msgstr "_Tema:"
+#~ msgstr "_Téma:"
 
 #~ msgid "Account"
-#~ msgstr "Cuenta"
+#~ msgstr "Fiók"
 
 #~ msgid "Conversation With"
-#~ msgstr "Conversación con"
+#~ msgstr "Társalgás a következővel:"
 
 #~ msgid "Date"
-#~ msgstr "Fecha"
+#~ msgstr "Dátum"
 
 #~ msgid "Allow multiple instances of the application to run at the same time"
-#~ msgstr "Permite ejecutar varias instancias de la aplicación al mismo tiempo"
+#~ msgstr "Az alkalmazás több példánya futhat egyidejűleg"
 
 #~ msgid "List the available accounts"
-#~ msgstr "Listar las cuentas disponibles"
+#~ msgstr "A rendelkezésre álló fiókok listája"
 
 #~ msgid "Which account to connect to on startup"
-#~ msgstr "Cuenta a la cual conectarse al inicio"
+#~ msgstr "Melyik fiókhoz kapcsolódjon indításkor"
 
 #~ msgid "ACCOUNT-NAME"
-#~ msgstr "NOMBRE-DE-CUENTA"
+#~ msgstr "FIÓKNÉV"
 
 #~ msgid "You can not use --no-connect together with --account"
-#~ msgstr "No puede usar --no-connect junto con --account"
+#~ msgstr "Nem használhatja a --no-connect és a --account kapcsolókat"
 
 #~ msgid "No accounts available."
-#~ msgstr "Ninguna cuenta está disponible."
+#~ msgstr "Nem állnak rendelkezésre fiókok."
 
 #~ msgid "Available accounts:"
-#~ msgstr "Cuentas disponibles:"
+#~ msgstr "Rendelkezésre álló fiókok:"
 
 #~ msgid "[default]"
-#~ msgstr "[predeterminada]"
+#~ msgstr "[alapértelmezett]"
 
 #~ msgid "There is no account with the name '%s'."
-#~ msgstr "No hay ninguna cuenta llamada «%s»."
+#~ msgstr "\"%s\" nevű fiók nem létezik."
 
 #~ msgid "Join"
-#~ msgstr "Unirse"
+#~ msgstr "Csatlakozás"
 
 #~ msgid "Create"
-#~ msgstr "Crear"
+#~ msgstr "Létrehozás"
 
 #~ msgid "Chat Rooms"
-#~ msgstr "Salas de chat"
+#~ msgstr "Csevegőszobák"
 
 #~ msgid "Found %d conference rooms"
-#~ msgstr "Se encontraron %d salas de conferencia"
+#~ msgstr "%d konferenciaszoba található"
 
 #~ msgid "Browsing for conference rooms, please wait..."
-#~ msgstr "Buscando salas de conferencia, espere por favor…"
+#~ msgstr "Konferenciaszobák keresése, kérem várjon..."
 
 #~ msgid "Browsing cancelled!"
-#~ msgstr "¡Búsqueda cancelada!"
+#~ msgstr "A keresés megszakítva"
 
 #~ msgid "Default"
-#~ msgstr "Predeterminado"
+#~ msgstr "Alapértelmezett"
 
 #~ msgid "Chat!"
-#~ msgstr "Chat!"
+#~ msgstr "Csevegés!"
 
 #~ msgid "%s wants to be added to your contact list."
-#~ msgstr "%s quiere que le añada a su lista de contactos."
+#~ msgstr "%s szeretne felkerülni az Ön partnerlistájára."
 
 #~ msgid "Someone wants to be added to your contact list."
-#~ msgstr "Alguien quiere que le añada a su lista de contactos."
+#~ msgstr "Valaki szeretne felkerülni az Ön partnerlistájára."
 
 #~ msgid "Subscription request"
-#~ msgstr "Solicitud de subscripción"
+#~ msgstr "Feliratkozási kérés"
 
 #~ msgid "Show"
-#~ msgstr "Mostrar"
+#~ msgstr "Megjelenítés"
 
 #~ msgid "Contact Information"
-#~ msgstr "Información del contacto"
+#~ msgstr "Partnerinformációk"
 
 #~ msgid "Subject: %s"
-#~ msgstr "Asunto: %s"
+#~ msgstr "Tárgy: %s"
 
 #~ msgid "Suggestions for the word"
-#~ msgstr "Sugerencias para la palabra"
+#~ msgstr "Javaslat a szóra"
 
 #~ msgid "New subscription request from %s"
-#~ msgstr "Solicitud de subscripción de %s"
+#~ msgstr "Új feliratkozási kérés a következőtől: %s"
 
 #~ msgid "Do you want to add this person to your contact list?"
-#~ msgstr "¿Quiere añadir a esta persona a su lista de contactos?"
+#~ msgstr "Szeretné ezt a személyt felvenni a partnerlistájára?"
 
 #~ msgid "Do you want to add %s to your contact list?"
-#~ msgstr "¿Quiere añadir a %s a su lista de contactos?"
+#~ msgstr "Szeretné felvenni a következőt: %s a partnerlistájára?"
 
 #~ msgid "Please enter your %s account password"
-#~ msgstr "Introduzca la contraseña de su cuenta %s:"
+#~ msgstr "Kérem adja meg a(z) %s fiókjának jelszavát"
 
 #, fuzzy
 #~ msgid "Logging in to account '%s'"
-#~ msgstr "Iniciando sesión con: %s"
+#~ msgstr "Bejelentkezés a következővel: %s"
 
 #~ msgid "Remember Password?"
-#~ msgstr "¿Desea recordar su contraseña?"
+#~ msgstr "Jelszó megjegyzése?"
 
 #~ msgid "Do not show this again"
-#~ msgstr "No mostrar esto otra vez"
+#~ msgstr "Ne mutassa ezt újra"
 
 #~ msgid "Could not display the help contents."
-#~ msgstr "No se pudo mostrar el contenido de la ayuda."
+#~ msgstr "Nem lehet megjeleníteni a súgótartalmat."
 
 #~ msgid "Select Your Avatar Image"
-#~ msgstr "Seleccione su avatar"
+#~ msgstr "Válassza ki az avatarját"
 
 #~ msgid "No Image"
-#~ msgstr "Sin imagen"
+#~ msgstr "Nincs kép"
 
 #~ msgid "The server does not seem to be responding."
-#~ msgstr "El servidor parece no estar respondiendo."
+#~ msgstr "Úgy tűnik, a kiszolgáló nem válaszol."
 
 #~ msgid "Try again later."
-#~ msgstr "Inténtelo otra vez más tarde."
+#~ msgstr "Próbálja újra később."
 
 #, fuzzy
 #~ msgid "Change"
-#~ msgstr "Chat"
+#~ msgstr "Csevegés"
 
 #~ msgid "Contact goes offline"
-#~ msgstr "El contacto se desconecta"
+#~ msgstr "A partner kilép"
 
 #~ msgid "Contact goes online"
-#~ msgstr "El contacto se conecta"
+#~ msgstr "A partner belép"
 
 #~ msgid "Contact ID:"
-#~ msgstr "ID del contacto:"
+#~ msgstr "Partnerazonosító:"
 
 #~ msgid "Do you want to accept this file?"
-#~ msgstr "¿Quiere aceptar este archivo?"
+#~ msgstr "Szeretné elfogadni ezt a fájlt?"
 
 #~ msgid "File Transfer Request"
-#~ msgstr "Solicitud de transferencia de archivo"
+#~ msgstr "Fájlátviteli kérés"
 
 #~ msgid "File name:"
-#~ msgstr "Nombre de archivo:"
+#~ msgstr "Fájlnév:"
 
 #~ msgid "File size:"
-#~ msgstr "Tamaño del archivo:"
+#~ msgstr "Fájl mérete:"
 
 #~ msgid "Not supported yet"
-#~ msgstr "Aún no soportado."
+#~ msgstr "Még nem támogatott"
 
 #~ msgid "This person wishes to send you this file:"
-#~ msgstr "Esta persona desea mandarle este archivo:"
+#~ msgstr "Ez a személy a következő fájlt kívánja Önnek küldeni:"
 
 #~ msgid "Web site:"
-#~ msgstr "Sitio web:"
+#~ msgstr "Weboldal:"
 
 #~ msgid "_Accept"
-#~ msgstr "_Aceptar"
+#~ msgstr "Elfog_adás"
 
 #~ msgid "_Deny"
-#~ msgstr "_Denegar"
+#~ msgstr "_Megtagad"
 
 #, fuzzy
 #~ msgid "<b>Topic:</b>"
-#~ msgstr "<b>Grupos</b>"
+#~ msgstr "<b>Csoportok</b>"
 
 #~ msgid "Account:"
-#~ msgstr "Cuenta:"
+#~ msgstr "Fiók:"
 
 #~ msgid "Browse:"
-#~ msgstr "Buscar:"
+#~ msgstr "Keresés:"
 
 #~ msgid "Edit Favorite Room"
-#~ msgstr "Editar sala favorita"
+#~ msgstr "Kedvenc szoba szerkesztése"
 
 #~ msgid ""
 #~ "Enter the room name to join here or click on one or more rooms in the "
 #~ "list."
 #~ msgstr ""
-#~ "Introduzca el nombre de la sala para unirse aquí o pulse en una o más "
-#~ "salas de la lista."
+#~ "Itt adja meg a szoba nevét a csatlakozáshoz, vagy kattintson néhány, a "
+#~ "listán látható szobára."
 
 #~ msgid "Group Chat"
-#~ msgstr "Grupo de chat"
+#~ msgstr "Csoportos csevegés"
 
 #~ msgid "Join New"
-#~ msgstr "Unirse a nuevo"
+#~ msgstr "Csatlakozás újhoz"
 
 #~ msgid "Join room on start_up"
-#~ msgstr "Unirse a la sala al _inicio"
+#~ msgstr "_Csatlakozás a szobához indításkor"
 
 #~ msgid "Join this chat room when Gossip starts and you are connected"
-#~ msgstr ""
-#~ "Unirse a esta sala de chat cuando Gossip se inicia y estás conectado."
+#~ msgstr "Csatlakozás ehhez a csevegőszobához a Gossip indításakor"
 
 #~ msgid "Manage Favorite Rooms"
-#~ msgstr "Gestionar salas favoritas"
+#~ msgstr "Kedvenc szobák kezelése"
 
 #~ msgid "N_ame:"
-#~ msgstr "_Nombre:"
+#~ msgstr "Né_v:"
 
 #~ msgid "Re_fresh"
-#~ msgstr "_Recargar"
+#~ msgstr "_Frissítés"
 
 #~ msgid "S_erver:"
-#~ msgstr "_Servidor:"
+#~ msgstr "_Kiszolgáló:"
 
 #~ msgid ""
 #~ "This list represents all chat rooms hosted on the server you have entered."
-#~ msgstr ""
-#~ "Esta lista representa todas los chat que alberga el servidor al que ha "
-#~ "entrado."
+#~ msgstr "A lista a kiszolgálón található összes csevegőszobát képviseli."
 
 #~ msgid "_Nickname:"
-#~ msgstr "A_podo:"
+#~ msgstr "_Becenév:"
 
 #~ msgid "_Room:"
-#~ msgstr "_Sala:"
+#~ msgstr "Sz_oba:"
 
 #~ msgid "-"
 #~ msgstr "-"
 
 #~ msgid "<b>About</b>"
-#~ msgstr "<b>Acerca de</b>"
+#~ msgstr "<b>Névjegy</b>"
 
 #~ msgid "<b>Client Information</b>"
-#~ msgstr "<b>Información del cliente</b>"
+#~ msgstr "<b>Kliensinformációk</b>"
 
 #~ msgid "<b>Groups</b>"
-#~ msgstr "<b>Grupos</b>"
+#~ msgstr "<b>Csoportok</b>"
 
 #~ msgid "<b>Name</b>"
-#~ msgstr "<b>Nombre</b>"
+#~ msgstr "<b>Név</b>"
 
 #~ msgid "<b>Personal Details</b>"
-#~ msgstr "<b>Detalles personales</b>"
+#~ msgstr "<b>Személyes információk</b>"
 
 #~ msgid "<b>Subscription</b>"
-#~ msgstr "<b>Subscripción</b>"
+#~ msgstr "<b>Feliratkozás</b>"
 
 #~ msgid "<span size=\"smaller\">Example: Mikael or user@server.org</span>"
 #~ msgstr ""
-#~ "<span size=\"smaller\">Ejemplo: Miguel  o usuario@servidor.org</span>"
+#~ "<span size=\"smaller\">Például: Gábor vagy felhasználó@jabber.org</span>"
 
 #~ msgid "Accou_nt:"
-#~ msgstr "_Cuenta:"
+#~ msgstr "_Fiók:"
 
 #, fuzzy
 #~ msgid "Add Contact"
-#~ msgstr "_Añadir contacto…"
+#~ msgstr "Partner _felvétele..."
 
 #~ msgid "Alia_s:"
-#~ msgstr "Alia_s:"
+#~ msgstr "Ál_név:"
 
 #~ msgid "Avatar:"
 #~ msgstr "Avatar:"
 
 #~ msgid "Ch_at"
-#~ msgstr "_Charlar"
+#~ msgstr "_Csevegés"
 
 #~ msgid "Client:"
-#~ msgstr "Cliente:"
+#~ msgstr "Kliens:"
 
 #~ msgid "Con_tact:"
-#~ msgstr "_Contacto:"
+#~ msgstr "_Partner:"
 
 #~ msgid "Connect on S_tartup"
-#~ msgstr "Conectar al _iniciar"
+#~ msgstr "_Kapcsolódás indításkor"
 
 #~ msgid "Contacts"
-#~ msgstr "Contactos"
+#~ msgstr "Partnerek"
 
 #~ msgid "Country:"
-#~ msgstr "País:"
+#~ msgstr "Ország:"
 
 #~ msgid "Decide _Later"
-#~ msgstr "_Decidir más tarde"
+#~ msgstr "_Döntés később"
 
 #~ msgid "Edit Contact"
-#~ msgstr "Editar contacto"
+#~ msgstr "Partner hozzáadása"
 
 #~ msgid "Edit Groups"
-#~ msgstr "Editar grupos"
+#~ msgstr "Csoportok szerkesztése"
 
 #~ msgid "Email:"
-#~ msgstr "Correo-e:"
+#~ msgstr "E-mail:"
 
 #~ msgid "ID:"
-#~ msgstr "ID:"
+#~ msgstr "Azonosító:"
 
 #~ msgid ""
 #~ "If you chose to decide later you will be asked the next time you log on."
 #~ msgstr ""
-#~ "Si elige decidir más tarde se le preguntará la próxima vez que inicie una "
-#~ "sesión."
+#~ "Ha a későbbi döntést választja, a következő bejelentkezésnél válaszolhat "
+#~ "a kérdésre."
 
 #~ msgid "Name:"
-#~ msgstr "Nombre:"
+#~ msgstr "Név:"
 
 #~ msgid "OS:"
-#~ msgstr "SO:"
+#~ msgstr "OS:"
 
 #~ msgid "Personal Details"
-#~ msgstr "Detalles personales"
+#~ msgstr "Személyes adatok"
 
 #~ msgid "R_egister"
-#~ msgstr "_Registrar"
+#~ msgstr "_Regisztráció"
 
 #~ msgid "Search"
-#~ msgstr "Buscar"
+#~ msgstr "Keresés"
 
 #~ msgid ""
 #~ "Select the groups you want this contact to appear in, you can select more "
 #~ "than one group or no groups."
 #~ msgstr ""
-#~ "Seleccione los grupos donde quiere que aparezca este contacto, se puede "
-#~ "seleccionar más de un grupo o ningún grupo."
+#~ "Válassza ki azokat a csoportokat, amelyekben a partner megjelenjen, "
+#~ "kiválaszthat nulla vagy több csoportot is."
 
 #, fuzzy
 #~ msgid ""
@@ -1594,123 +1572,123 @@ msgstr "- Mensajería instantánea Gossip"
 #~ "\n"
 #~ "You can retrieve contact information from the server. "
 #~ msgstr ""
-#~ "Ponga el apodo que quiere utilizar:\n"
+#~ "Állítsa be a használni kívánt álnevet a következőhöz:\n"
 #~ "<b>%s</b>\n"
 #~ "\n"
-#~ "Puede obtener la información del contacto desde el servidor."
+#~ "A kiszolgálóról lekérheti a partnerinformációkat."
 
 #~ msgid "Spell Checker"
-#~ msgstr "Revisor ortográfico"
+#~ msgstr "Helyesírás-ellenőrző"
 
 #~ msgid "Subscription Request"
-#~ msgstr "Solicitud de subscripción"
+#~ msgstr "Feliratkozási kérés"
 
 #~ msgid "Suggestions for the word:"
-#~ msgstr "Sugerencias para la palabra:"
+#~ msgstr "Javaslatok a szóhoz:"
 
 #~ msgid ""
 #~ "This acts as a filter to the contact list below. You can use segments of "
 #~ "contact's name or ID, for example, \"jabber.org\" will list everyone "
 #~ "using that server"
 #~ msgstr ""
-#~ "Esto actúa como un filtro para la lista de contactos de abajo. Puede "
-#~ "utilizar segmentos del nombre del contacto o del ID, por ejemplo, «jabber."
-#~ "org» listará a todo el mundo usando ese servidor"
+#~ "Ez a lenti partnerlista szűrőjeként működik. A partnerek neveinek vagy "
+#~ "azonosítójának darabjait használhatja, például a \"jabber.hu\" mindenkit "
+#~ "felsorol, aki ezt a kiszolgálót használja"
 
 #~ msgid "This is the name that will be used on your roster for this contact"
-#~ msgstr "Éste es el nombre que se usará en su lista para este contacto"
+#~ msgstr "A partnerhez a névsorban ez a név kerül felhasználásra"
 
 #~ msgid "This name will be used to identify you in chat windows"
-#~ msgstr "Este nombre se usará para identificarle en sus ventanas de chat"
+#~ msgstr "Ön ezzel a névvel lesz azonosítva a csevegőablakokban"
 
 #~ msgid ""
 #~ "This name will be used to identify you when new contacts lookup your "
 #~ "details"
 #~ msgstr ""
-#~ "Este nombre se usará para identificarle cuando sus contactos nuevos "
-#~ "busquen sus detalles"
+#~ "Ön ezzel a névvel lesz azonosítva amikor az új partnerek kikeresik a "
+#~ "részleteit"
 
 #~ msgid "Use default name here from the contact's VCard."
-#~ msgstr "Use aquí el nombre predeterminado de la tarjeta VCard del contacto."
+#~ msgstr "Az alapértelmezett név használata a partner VCard-jából."
 
 #~ msgid "Use system pro_xy"
-#~ msgstr "Usar el pro_xy del sistema"
+#~ msgstr "Ren_dszerproxy használata"
 
 #~ msgid "Version:"
-#~ msgstr "Versión:"
+#~ msgstr "Verzió:"
 
 #~ msgid "View Previous Conversations"
-#~ msgstr "Ver conversaciones anteriores"
+#~ msgstr "Korábbi társalgások megjelenítése"
 
 #~ msgid "Which account do you want to use?"
-#~ msgstr "¿Qué cuenta quiere usar?"
+#~ msgstr "Melyik fiókot szeretné használni?"
 
 #~ msgid "You are not subscribed to this contact."
-#~ msgstr "Usted no está subscrito a este contacto."
+#~ msgstr "Nincs feliratkozva erre a partnerre."
 
 #~ msgid "_Connect"
-#~ msgstr "_Conectar"
+#~ msgstr "Kapcs_olódás"
 
 #, fuzzy
 #~ msgid "_Description:"
-#~ msgstr "Descripción:"
+#~ msgstr "Leírás:"
 
 #~ msgid "_Disconnect"
-#~ msgstr "_Desconectar"
+#~ msgstr "_Bontás"
 
 #, fuzzy
 #~ msgid "_Email:"
-#~ msgstr "Correo-e:"
+#~ msgstr "E-mail:"
 
 #, fuzzy
 #~ msgid ""
 #~ "_Enter the name or contact ID of the person you want to chat to below:"
 #~ msgstr ""
-#~ "Introduzca abajo el nombre o el ID de contacto de la persona con la que "
-#~ "quiera hablar:"
+#~ "Adja meg a felhasználó nevét vagy partnerazonosítóját, akivel csevegni "
+#~ "szeretne:"
 
 #~ msgid "_For:"
-#~ msgstr "_Para:"
+#~ msgstr "_Ehhez:"
 
 #, fuzzy
 #~ msgid "_Full Name:"
-#~ msgstr "_Nombre:"
+#~ msgstr "_Név:"
 
 #~ msgid "_Group:"
-#~ msgstr "_Grupo:"
+#~ msgstr "_Csoport:"
 
 #, fuzzy
 #~ msgid "_Nick Name:"
-#~ msgstr "A_podo:"
+#~ msgstr "_Becenév:"
 
 #, fuzzy
 #~ msgid "_Password:"
-#~ msgstr "Contra_seña:"
+#~ msgstr "_Jelszó:"
 
 #, fuzzy
 #~ msgid "_Quit Message:"
-#~ msgstr "Mensaje nuevo"
+#~ msgstr "Új üzenet"
 
 #~ msgid "_Retrieve"
-#~ msgstr "_Recuperar"
+#~ msgstr "_Lekérés"
 
 #~ msgid "_Subscribe"
-#~ msgstr "_Suscribirse"
+#~ msgstr "_Feliratkozás"
 
 #, fuzzy
 #~ msgid "_Web site:"
-#~ msgstr "Sitio web:"
+#~ msgstr "Weboldal:"
 
 #, fuzzy
 #~ msgid "irc account settings"
-#~ msgstr "propiedades de la cuenta jabber"
+#~ msgstr "jabber fiókbeállítások"
 
 #, fuzzy
 #~ msgid "msn account settings"
-#~ msgstr "propiedades de la cuenta jabber"
+#~ msgstr "jabber fiókbeállítások"
 
 #~ msgid "Server"
-#~ msgstr "Servidor"
+#~ msgstr "Kiszolgáló"
 
 #~ msgid "    "
 #~ msgstr "    "
@@ -1719,10 +1697,10 @@ msgstr "- Mensajería instantánea Gossip"
 #~ msgstr "Gossip"
 
 #~ msgid "Group:"
-#~ msgstr "Grupo:"
+#~ msgstr "Csoport:"
 
 #~ msgid "Nickname:"
-#~ msgstr "Apodo:"
+#~ msgstr "Becenév:"
 
 #~ msgid ""
 #~ "Set the alias you want to use for:\n"
@@ -1730,16 +1708,13 @@ msgstr "- Mensajería instantánea Gossip"
 #~ "\n"
 #~ "You can retrieve contact information from the server. "
 #~ msgstr ""
-#~ "Ponga el alias que quiere usar: \n"
+#~ "Állítsa be a használni kívánt álnevet a következőhöz:\n"
 #~ "<b>martyn@imendio.com</b>\n"
 #~ "\n"
-#~ "Puede obtener la  información del contacto desde el servidor."
+#~ "A kiszolgálóról lekérheti a partnerinformációkat."
 
 #~ msgid "Web Site:"
-#~ msgstr "Sitio web:"
+#~ msgstr "Weboldal:"
 
 #~ msgid "_Forget"
-#~ msgstr "_Olvidar"
-
-#~ msgid "Press Subscribe to request to receive their status"
-#~ msgstr "Pulse «Suscribir» para solicitar recibir su estado"
+#~ msgstr "_Felejtse el"

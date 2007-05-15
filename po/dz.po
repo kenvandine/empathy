@@ -1,0 +1,1745 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: gossip.HEAD.pot\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2007-05-15 23:46+0200\n"
+"PO-Revision-Date: 2007-03-25 23:37+0530\n"
+"Last-Translator: yangka <yanang_ka@hotmail.com>\n"
+"Language-Team: Dzongkha <pgeyleg@dit.gov.bt>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+"X-Poedit-Language: Dzongkha\n"
+"X-Poedit-Country: BHUTAN\n"
+"X-Poedit-SourceCharset: utf-8\n"
+
+#: ../data/empathy.desktop.in.h:1
+#, fuzzy
+msgid "Empathy Instant Messenger"
+msgstr "འཕྲལ་མྱུར་འཕྲིན་བསྐྱེལ་པ་"
+
+#: ../data/empathy.desktop.in.h:2
+msgid "Instant Messenger"
+msgstr "འཕྲལ་མྱུར་འཕྲིན་བསྐྱེལ་པ་"
+
+#: ../data/empathy.schemas.in.h:1
+msgid "Always open a separate chat window for new chats."
+msgstr "ཁ་སླབ་གསརཔ་གི་དོན་ལུ་ ཁ་སླབ་སྒོ་སྒྲིག་སོ་སོ་ཅིག་ཨ་རྟག་རང་ཁ་ཕྱེ།"
+
+#: ../data/empathy.schemas.in.h:2
+msgid "Chat window theme"
+msgstr "ཁ་སླབ་སྒོ་སྒྲིག་བརྗོད་དོན་"
+
+#: ../data/empathy.schemas.in.h:3
+msgid ""
+"Comma separated list of spell checker languages to use (e.g. en, fr, nl)."
+msgstr ""
+"ལག་ལེན་འཐབ་ནིའི་དོན་ལས་ སྡེབ་དཔྱོདཔ་སྐད་ཡིག་ཚུ་གི་ ལྷད་རྟགས་ཀྱིས་སོ་སོ་འཕྱལ་འཕྱལ་བའི་ཐོ་ཡིག་ (དཔེར་"
+"ན་  ཨི་ཨེན་  ཨེཕ་ཨར་  ཨེན་ཨེལ་)"
+
+#: ../data/empathy.schemas.in.h:4
+msgid "Compact contact list"
+msgstr "སྲབ་ཆུང་འབྲེལ་བ་འཐབ་ནིའི་ཐོ་ཡིག་"
+
+#: ../data/empathy.schemas.in.h:5
+msgid "Contact list sort criterium"
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:6
+msgid "Default directory to select an avatar image from"
+msgstr "ལས་ ཨེ་ཝ་ཊར་གཟུགས་བརྙན་ཅིག་སེལ་འཐུ་འབད་ནིའི་དོན་ལས་ སྔོན་སྒྲིག་སྣོད་ཐོ་"
+
+#: ../data/empathy.schemas.in.h:7
+msgid "Enable popup when contact is available"
+msgstr "འབྲེལ་བ་འཐབ་ས་འདི་འཐོབ་ཚུགསཔ་ཡོད་པའི་སྐབས་ པོཔ་ཨཔ་ལྕོགས་ཅན་བཟོ་"
+
+#: ../data/empathy.schemas.in.h:8
+msgid "Enable sound when away"
+msgstr "ཕྱི་ཁར་ཨིན་པའི་སྐབས་ སྒྲ་སྐད་ལྕོགས་ཅན་བཟོ་"
+
+#: ../data/empathy.schemas.in.h:9
+msgid "Enable sound when busy"
+msgstr "ཁོམ་མེད་ཨིན་པའི་སྐབས་ སྒྲ་སྐད་ལྕོགས་ཅན་བཟོ་"
+
+#: ../data/empathy.schemas.in.h:10
+msgid "Enable spell checker"
+msgstr "སྡེབ་དཔྱོདཔ་ལྕོགས་ཅན་བཟོ་"
+
+#: ../data/empathy.schemas.in.h:11
+msgid "Hide main window"
+msgstr "སྒོ་སྒྲིག་གཙོ་བོ་སྦ་བཞག་"
+
+#: ../data/empathy.schemas.in.h:12
+msgid "Hide the main window."
+msgstr "སྒོ་སྒྲིག་གཙོ་བོ་འདི་སྦ་བཞག་"
+
+#: ../data/empathy.schemas.in.h:13
+msgid "Open new chats in separate windows"
+msgstr "ཁ་སླབ་གསརཔ་ཚུ་ སྒོ་སྒྲིག་སོ་སོ་ཚུ་ནང་ཁ་ཕྱེ་"
+
+#: ../data/empathy.schemas.in.h:14
+msgid "Show avatars"
+msgstr "ཨེ་ཝ་ཊར་ཚུ་སྟོན་"
+
+#: ../data/empathy.schemas.in.h:15
+msgid "Show hint about closing the main window"
+msgstr "སྒོ་སྒྲིག་གཙོ་བོ་འདི་ཁ་བསྡམ་ནིའི་སྐོར་ལས་ བརྡ་མཚོན་ནི་སྟོན་"
+
+#: ../data/empathy.schemas.in.h:16
+msgid "Show offline contacts"
+msgstr "གློག་ལམ་མེད་པའི་འབྲེལ་བ་འཐབ་ཚུ་ས་སྟོན་"
+
+#: ../data/empathy.schemas.in.h:17
+msgid "Spell checking languages"
+msgstr "སྡེབ་དཔྱད་འབད་ནིའི་སྐད་ཡིག་ཚུ་"
+
+#: ../data/empathy.schemas.in.h:18
+msgid "The last directory that an avatar image was chosen from."
+msgstr "ལས་གདམ་ཁ་རྐྱབས་ཡོད་མི་ ཨེ་ཝ་ཊར་གཟུགས་བརྙན་ཅིག་གི་ མཇུག་གི་སྣོད་ཐོ།"
+
+#: ../data/empathy.schemas.in.h:19
+msgid "The theme that is used to display the conversation in chat windows."
+msgstr ""
+"ཁ་སླབ་སྒོ་སྒྲིག་ཚུ་ནང་ གྲོས་གླེང་འདི་བཀྲམ་སྟོན་འབད་ནིའི་དོན་ལས་ ལག་ལེན་འཐབ་ཡོད་མི་བརྗོད་དོན་འདི།"
+
+#: ../data/empathy.schemas.in.h:20
+msgid "Use graphical smileys"
+msgstr "ཚད་རིས་ཅན་གྱི་སི་མའི་ལི་ཚུ་ལག་ལེན་འཐབ་"
+
+#: ../data/empathy.schemas.in.h:21
+msgid "Use notification sounds"
+msgstr "བརྡ་བསྐུལ་སྒྲ་སྐད་ཚུ་ལག་ལེན་འཐབ་"
+
+#: ../data/empathy.schemas.in.h:22
+msgid "Use theme for chat rooms"
+msgstr "ཁ་སླབ་ཁང་མིག་ཚུ་གི་དོན་ལུ་བརྗོད་དོན་ལག་ལེན་འཐབ་"
+
+#: ../data/empathy.schemas.in.h:23
+msgid ""
+"Whether or not to check words typed against the languages you want to check "
+"with."
+msgstr ""
+"ཁྱོད་ཀྱིས་ཞིབ་དཔྱད་འབད་ནི་ཨིན་མི་ སྐད་ཡིག་ཚུ་གི་རྒྱབ་འགལ་དུ་ཡིག་དཔར་རྐྱབས་ཡོད་པའི་མིང་ཚིག་ཚུ་ ཞིབ་དཔྱད་"
+"འབད་ནི་ཨིན་ན་མེན་ན།"
+
+#: ../data/empathy.schemas.in.h:24
+msgid ""
+"Whether or not to convert smileys into graphical images in conversations."
+msgstr "སི་མའི་ལི་ཚུ་ གྲོས་གླེང་ནང་ ཚད་རིས་ཅན་གྱི་གཟུགས་བརྙན་ནང་ལུ་གཞི་བསྒྱུར་འབད་ནི་ཨིན་ན་མེན་ན།"
+
+#: ../data/empathy.schemas.in.h:25
+msgid "Whether or not to play a sound when messages arrive."
+msgstr "འཕྲིན་དོན་ཚུ་འབྱོར་བའི་སྐབས་ སྒྲ་སྐད་གཏང་ནི་ཨིན་ན་མེན་ན།"
+
+#: ../data/empathy.schemas.in.h:26
+msgid "Whether or not to play sounds when away."
+msgstr "ཕྱི་ཁར་ཨིན་པའི་སྐབས་ སྒྲ་སྐད་ཚུ་གཏང་ནི་ཨིན་ན་མེན་ན།"
+
+#: ../data/empathy.schemas.in.h:27
+msgid "Whether or not to play sounds when busy."
+msgstr "ཁོམ་མེད་པའི་སྐབས་ སྒྲ་སྐད་གཏང་ནི་ཨིན་ན་མེན་ན།"
+
+#: ../data/empathy.schemas.in.h:28
+msgid "Whether or not to show a popup when a contact becomes available."
+msgstr "འབྲེལ་བ་འཐབ་ས་ཅིག་འཐོབ་ཚུགསཔ་འགྱོཝ་ད་ པོཔ་ཨཔ་ཅིག་སྟོན་ནི་ཨིན་ན་མེན་ན།"
+
+#: ../data/empathy.schemas.in.h:29
+msgid ""
+"Whether or not to show avatars for contacts in the contact list and chat "
+"windows."
+msgstr ""
+"འབྲེལ་བ་འཐབ་སའི་ཐོ་ཡིག་དང་ཁ་སླབ་སྒོ་སྒྲིག་ཚུ་ནང་གི་ འབྲེལ་བ་འཐབ་ས་ཚུ་གི་དོན་ལུ་ ཨེ་ཝ་ཊར་ཚུ་སྟོན་ནི་"
+"ཨིན་ན་མེན་ན།"
+
+#: ../data/empathy.schemas.in.h:30
+msgid "Whether or not to show contacts that are offline in the contact list."
+msgstr "འབྲེལ་བ་འཐབ་སའི་ཐོ་ཡིག་ནང་ལུ་ གློག་ལམ་མེད་པའི་འབྲེལ་བ་འཐབ་ས་ཚུ་ སྟོན་ནི་ཨིན་ན་མེན་ན།"
+
+#: ../data/empathy.schemas.in.h:31
+msgid ""
+"Whether or not to show the message dialog about closing the main window with "
+"the 'x' button in the title bar."
+msgstr ""
+"མགོ་མིང་ཕྲ་རིང་ནང་ལུ་  'x' ཨེབ་རྟ་དང་གཅིག་ཁར་ སྒོ་སྒྲིག་གཙོ་བོ་འདི་གི་ཁ་བསྡམ་ཐངས་ཀྱི་སྐོར་ལས་ འཕྲིན་"
+"དོན་ཌའི་ལོག་འདི་ སྟོན་ནི་ཨིན་ན་མེན་ན།"
+
+#: ../data/empathy.schemas.in.h:32
+msgid "Whether to show the contact list in compact mode or not."
+msgstr "སྲབ་ཆུང་ཐབས་ལམ་ནང་འབྲེལ་བ་འཐབ་སའི་ཐོ་ཡིག་འདི་སྟོན་ནི་ཨིན་ན་མེན་ན།"
+
+#: ../data/empathy.schemas.in.h:33
+msgid "Whether to use the theme for chat rooms or not."
+msgstr "ཁ་སླབ་ཁང་མིག་ཚུ་གི་དོན་ལུ་ བརྗོད་དོན་འདི་ལག་ལེན་འཐབ་ནི་ཨིན་ན་མེན།"
+
+#: ../data/empathy.schemas.in.h:34
+msgid ""
+"Which criterium to use when sorting the contact list. Default is to use sort "
+"by the contact's name with the value \"name\". A value of \"state\" will "
+"sort the contact list by state."
+msgstr ""
+
+#: ../libempathy/gossip-contact.c:654 ../libempathy/gossip-presence.c:184
+#: ../libempathy/gossip-presence.c:283
+msgid "Offline"
+msgstr "གློག་ལམ་མེད་པ་"
+
+#: ../libempathy/gossip-presence.c:274
+msgid "Available"
+msgstr "འཐོབ་ཚུགསཔ་"
+
+#: ../libempathy/gossip-presence.c:276
+msgid "Busy"
+msgstr "ཁོམ་མེདཔ་"
+
+#: ../libempathy/gossip-presence.c:279
+msgid "Away"
+msgstr "ཕྱི་ཁར་"
+
+#: ../libempathy-gtk/empathy-main-window.c:254
+msgid "Show and edit accounts"
+msgstr "རྩིས་ཐོ་ཚུ་སྟོན་ཞིནམ་ལས་ཟུན་དག་འབད་"
+
+#: ../libempathy-gtk/empathy-main-window.c:456
+msgid "Group"
+msgstr "སྡེ་ཚན་"
+
+#: ../libempathy-gtk/empathy-main-window.c:477
+msgid "Contact"
+msgstr "འབྲེལ་ས་"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:1
+#, fuzzy
+msgid "Contact List - Empathy"
+msgstr "འབྲེལ་སའི་ཐོ་ཡིག་-གོསིཔ།"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:2
+msgid "Context"
+msgstr "སྐབས་དོན་"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:3
+msgid "Join _Favorites"
+msgstr "དགའ་མི་ཚུ་མཐུད་(_F)"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:4
+#: ../libempathy-gtk/gossip-chat.glade.h:10
+msgid "Join _New..."
+msgstr "གསརཔ་མཐུད་(_N)"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:5
+msgid "Manage Favorites..."
+msgstr "དགའ་མི་ཚུ་འཛིན་སྐྱོང་འཐབ་"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:6
+msgid "Show _Offline Contacts"
+msgstr "གློག་ལམ་མེད་པའི་འབྲེལ་ས་ཚུ་སྟོན་(_O)"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:7
+msgid "_About"
+msgstr "སྐོར་ལས་(_A)"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:8
+msgid "_Accounts"
+msgstr "རྩིས་ཐོ་ཚུ་(_A)"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:9
+#: ../libempathy-gtk/gossip-chat.glade.h:15
+msgid "_Add Contact..."
+msgstr "འབྲེལ་ས་ཁ་སྐོང་རྐྱབས་(_A)"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:10
+#: ../libempathy-gtk/gossip-contact-list.c:298
+msgid "_Chat"
+msgstr "ཁ་སླབ་(_C)"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:11
+msgid "_Contents"
+msgstr "ནང་དོན་ཚུ་(_C)"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:12
+#: ../libempathy-gtk/gossip-chat.glade.h:21
+#: ../libempathy-gtk/gossip-contact-list.c:310
+msgid "_Edit"
+msgstr "ཞུན་དག་(_E)"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:13
+msgid "_Help"
+msgstr "གྲོགས་རམ་(_H)"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:14
+#: ../libempathy-gtk/empathy-status-icon.glade.h:2
+msgid "_New Message..."
+msgstr "འཕྲིན་དོན་གསརཔ་(_N)"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:15
+msgid "_Personal Information"
+msgstr "རང་དོན་བརྡ་དོན་(_P)"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:16
+msgid "_Preferences"
+msgstr "དགའ་གདམ་ཚུ་(_P)"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:17
+#: ../libempathy-gtk/empathy-status-icon.glade.h:3
+msgid "_Quit"
+msgstr "སྤང་(_Q)"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:18
+#: ../libempathy-gtk/gossip-chat.glade.h:25
+msgid "_Room"
+msgstr "ཁང་མིག་(_R)"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:19
+#: ../libempathy-gtk/gossip-chat.glade.h:28
+#: ../libempathy-gtk/gossip-contact-list.c:326
+msgid "_View Previous Conversations"
+msgstr "ཧེ་མའི་གྲོས་གླེང་ཚུ་སྟོན་(_V)"
+
+#: ../libempathy-gtk/empathy-status-icon.glade.h:1
+msgid "Status"
+msgstr "གནས་ཚད་"
+
+#: ../libempathy-gtk/empathy-status-icon.glade.h:4
+msgid "_Show Contact List"
+msgstr "འབྲེལ་སའི་ཐོ་ཡིག་སྟོན་(_S)"
+
+#: ../libempathy-gtk/gossip-about-dialog.c:63
+#, fuzzy
+msgid ""
+"Empathy is free software; you can redistribute it and/or modify it under the "
+"terms of the GNU General Public License as published by the Free Software "
+"Foundation; either version 2 of the License, or (at your option) any later "
+"version."
+msgstr ""
+"གོ་སིཔ་འདི་རང་དབང་མཉེན་ཆས་ཅིག་ཨིན་  ཁྱོད་ཀྱིས་འདི་ལོག་བགོ་བཀྲམ་འབད་ཚུགས་ དེ་ལས་/ཡང་ན་ འདི་ རང་"
+"དབང་མཉེན་ཆས་གཞི་ཚོགས་གིས་ དཔེ་བསྐྲུན་འབད་དོ་བཟུམ་སྦེ་ ཇི་ཨེན་ཡུ་ ཡོངས་ཁྱབ་མི་མང་ཆོག་ཐམ་འདི་གི་ ཐ་"
+"སྙད་འོག་ལུ་ལེགས་བཅོས་འབད་ཚུགས་  ཡང་ཅིན་ཆོག་ཐམ་འདི་གི་ཐོན་རིམ་ ༢   ཡང་ན་ (ཁྱོད་རའི་གདམ་ཁ་"
+"ཐོག་) ཤུལ་ལས་ཀྱི་ཐོན་རིམ་ག་འབད་རུང་།"
+
+#: ../libempathy-gtk/gossip-about-dialog.c:67
+#, fuzzy
+msgid ""
+"Empathy is distributed in the hope that it will be useful, but WITHOUT ANY "
+"WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS "
+"FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more "
+"details."
+msgstr ""
+"གོ་སིཔ་འདི་ ཕན་ཐོག་ཅན་ཅིག་གི་རེ་བ་ལུ་དམིགས་ཏེ་ བགོ་བཀྲམ་འབད་འབདཝ་ཨིན་ དེ་འབདཝ་ད་ ཉེན་ལེན་ག་ནི་"
+"ཡང་མེད་པར་ ཡང་ན་ཚོང་འབྲེལ་ཡང་ན་དམིགས་བསལ་དགོས་དོན་ཅིག་གི་དོན་ལུ་ཚུད་སྒྲིག་གི་ བསྟར་སྤྱོད་འབད་འབད་"
+"བའི་ཉེན་ལེན་ག་ནི་ཡང་མེད་པར། རྒྱས་བཤད་ཧེང་བཀལ་གྱི་དོན་ལུ་ ཇི་ཨེན་ཡུ་ཡོངས་ཁྱབ་མི་མང་ཆོག་ཐམ་བལྟ།"
+
+#: ../libempathy-gtk/gossip-about-dialog.c:71
+#, fuzzy
+msgid ""
+"You should have received a copy of the GNU General Public License along with "
+"Empathy; if not, write to the Free Software Foundation, Inc., 51 Franklin "
+"Street, Fifth Floor, Boston, MA 02110-130159 USA"
+msgstr ""
+"ཁྱོད་ཀྱིས་གོ་སིཔ་དང་གཅིག་ཁར་ ཇི་ཨེན་ཡུ་ཡོངས་ཁྱབ་མི་མང་ཆོག་ཐམ་འདི་གི་ འདྲ་བཤུས་ཅིག་འཐོབ་འཐོབ་འོང་ མ་"
+"འཐོབ་པ་ཅིན་ རང་དབང་བར་སྟོང་མཉེན་ཆས་འདི་ལུ་འབྲི་  Inc. ༥༡ ཕི་རེངཀ་ལིན་ ཨིསི་ཊིརིཊི་  ཐོག་ཚད་ལྔ་"
+"པ་ བོསི་ཊོན་ ཨེམ་ཨེ་ ༠༢༡༡༠-༡༣༠༡༥༩ ཡུ་ཨེསི་ཨེ་"
+
+#: ../libempathy-gtk/gossip-about-dialog.c:99
+msgid "An Instant Messaging client for GNOME"
+msgstr "ཇི་ནོམ་གི་དོན་ལུ་ འཕྲལ་མྱུར་འཕྲིན་གཏོང་ཞབས་ཏོག་སྤྱོད་མི་"
+
+#: ../libempathy-gtk/gossip-about-dialog.c:105
+msgid "translator-credits"
+msgstr ""
+"ཨའི་ཌི་ཨར་སི་གི་མ་དངུལ་རྒྱབ་སྐྱོར་ཐོག་ལས་་བརྡ་དོན་འཕྲུལ་རིག་ལས་ཁུངས་ནང་ སྐད་བསྒྱུར་འབད་ཡི། ཁ་གསལ་གྱི་"
+"དོན་ལུ་ འབྲེལ་བ་འཐབ་ས་: <pema_geyleg@druknet.bt>"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:224
+#, fuzzy
+msgid "Disable"
+msgstr "འཐོབ་ཚུགསཔ་"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:227
+msgid "Enable"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:261
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:3
+msgid "<b>No Account Selected</b>"
+msgstr "<b>རྩིས་ཐོ་གཅིག་ཡང་སེལ་འཐུ་མ་འབད་བས་</b>"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:263
+msgid ""
+"To add a new account, you can click on the 'Add' button and a new entry will "
+"be created for you to start configuring.\n"
+"\n"
+"If you do not want to add an account, simply click on the account you want "
+"to configure in the list on the left."
+msgstr ""
+"རྩིས་ཐོ་གསརཔ་ཅིག་ཁ་སྐོང་རྐྱབས་ནིའི་དོན་ལས་ ཁྱོད་ཀྱིས་ 'ཁ་སྐོང་' ཨེབ་གཏང་འབད་བཏུབ་ དེ་ལས་ ཁྱོད་ཀྱི་དོན་"
+"ལུ་ ཐོ་བཀོད་གསརཔ་ཅིག་ རིམ་སྲིག་འགོ་བཙུགས་ནིའི་དོན་ལས་ གསར་བསྐྲུན་འབད་འོང་།\n"
+"\n"
+"ཁྱོད་ཀྱིས་རྩིས་ཐོ་ཅིག་ཁ་སྐོང་མི་རྐྱབས་ནི་ཨིན་པ་ཅིན་ གཡོན་ཁ་ཐུག་ལུ་ ཐོ་ཡིག་ནང་ ཁྱོད་ཀྱིས་རིམ་སྒྲིག་འབད་དགོ་"
+"མནོ་མི་ རྩིས་ཐོ་འདི་གུ་ཨེབ་གཏང་འབད།"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:272
+msgid "<b>No Accounts Configured</b>"
+msgstr "<b>རྩིས་ཐོ་གཅིག་ཡང་རིམ་སྒྲིག་མ་འབད་བས་</b>"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:274
+msgid ""
+"To add a new account, you can click on the 'Add' button and a new entry will "
+"be created for you to start configuring."
+msgstr ""
+"རྩིས་ཐོ་གསརཔ་ཅིག་ཁ་རྐྱབས་ནིའི་དཅན་ལས་ ཁྱོད་ཀྱིས་ 'ཁ་སྐོང་' ཨེབ་རྟ་འདི་གུ་ཨེབ་གཏང་འབད་བཏུབ་ དེ་ལས་ "
+"ཐོ་བཀོད་གསརཔ་ཅིག་ཁྱོད་ཀྱི་དོན་ལུ་ རིམ་སྒྲིག་འགོ་བཙུགས་ནིའི་དོན་ལས་ གསར་བསྐྲུན་འབད་འོང་།"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:362
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:6
+msgid "Accounts"
+msgstr "རྩིས་ཐོ་"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:857
+#, c-format
+msgid ""
+"You are about to remove your %s account!\n"
+"Are you sure you want to proceed?"
+msgstr ""
+"ཁྱོད་ཀྱིས་ཁྱོད་རའི་ %s རྩིས་ཐོ་རྩ་བསྐྲད་གཏང་ནི་འབད་དེས་!\n"
+"ཁྱོད་ཀྱིས་འཕྲོ་མཐུད་དེ་འབད་ནི་ངེས་ཐིག་ཨིན་ན?"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:863
+msgid ""
+"Any associated conversations and chat rooms will NOT be removed if you "
+"decide to proceed.\n"
+"\n"
+"Should you decide to add the account back at a later time, they will still "
+"be available."
+msgstr ""
+"འབྲེལ་ཡོད་གྲོས་གླེང་དང་ ཁ་སླབ་ཁང་མིག་ཚུ་ ཁྱོད་ཀྱིས་འཕྲོ་མཐུད་ནི་གི་གྲོས་ཐག་བཅད་པ་ཅིན་ རྩ་བསྐད་མི་གཏང་"
+"།\n"
+"\n"
+"ཁྱོད་ཀྱིས་ ཤུལ་ལས་ཀྱི་དུས་ཚོད་ཅིག་ལུ་ རྩིས་ཐོ་འདི་ལོག་ཁ་སྐོང་རྐྱབས་ནིའི་གྲོས་ཐག་བཅད་ནི་ཨིན་ན་  འདི་འཐོབ་"
+"ཚུགསཔ་འོང་།"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:1
+msgid "<b>Account</b>"
+msgstr "<b>རྩིས་ཐོ་</b>"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:2
+msgid "<b>New Account</b>"
+msgstr "<b>རྩིས་ཐོ་གསརཔ་</b>"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:4
+msgid "<b>Settings</b>"
+msgstr "<b>སྒྲིག་སྟངས་</b>"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:5
+msgid "A unique name for this account to identify it personally to you."
+msgstr "ཁྱོད་ལུ་འདི་མི་ངོམ་ངོས་འཛིན་འབད་ནི་ལུ་རྩིས་ཐོ་འདིའི་དོན་ལུ་མཐུན་མོང་མ་ཡིན་པའི་མིང་ཅིག་"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:7
+#, fuzzy
+msgid "Cr_eate"
+msgstr "གསར་བསྐྲུན་འབད་ནི!(_e)"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:8
+msgid "Imendio "
+msgstr "ཨའི་མིན་ཌིའོ།"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:9
+msgid "Jabber"
+msgstr "ཇེབ་བར།"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:10
+msgid ""
+"To add a new account, you can click on the 'Add' button and a new entry will "
+"be created for you to started configuring.\n"
+"\n"
+"If you do not want to add an account, simply click on the account you want "
+"to configure in the list on the left."
+msgstr ""
+"རྩིས་ཐོ་གསརཔ་ཁ་སྐོང་རྐྱབས་ནིའི་དོན་ལས་ ཁྱོད་ཀྱིས་ 'ཁ་སྐོང་' ཨེབ་རྟ་འདི་གུ་ཨེབ་གཏང་འབད་བཏུབ་ དེ་ལས་ "
+"ཐོ་བཀོད་གསརཔ་ཅིག་ ཁྱོད་ལུ་རིམ་སྒྲིག་འགོ་བཙུགས་ནིའི་དོན་ལུ་ གསར་བསྐྲུན་འབད་འོང་།\n"
+"\n"
+"ཁྱོད་ཀྱིས་རྩིས་ཐོ་ཅིག་ཁ་སྐོང་མི་རྐྱབས་ནི་ཨིན་པ་ཅིན་ གཡོན་ཁ་ཐུག་གི་ཐོ་ཡིག་འདི་ནང་ཁྱོད་ཀྱིས་རིམ་སྒྲིག་འབད་ནི་"
+"ཨིན་མི་ རྩིས་ཐོ་འདི་གུ་ཨེབ་གཏང་འབད།"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:13
+msgid "_Name:"
+msgstr "མིང་:(_N)"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:14
+msgid "_Type:"
+msgstr "དབྱེ་བ།(_T)"
+
+#: ../libempathy-gtk/gossip-account-widget-generic.c:144
+#: ../libempathy-gtk/gossip-account-widget-generic.c:186
+#, c-format
+msgid "%s:"
+msgstr "%s:"
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:1
+msgid ""
+"<small><b><span foreground=\"#555\">Example: user@jabber.org</span></b></"
+"small>"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:2
+msgid "Forget password and clear the entry."
+msgstr "ཆོག་ཡིག་བརྗེད་བཞག་ནི་དང་ཐོ་བཀོད་འདི་བསལ།"
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:3
+msgid "Login I_D:"
+msgstr "ནང་བསྐྱོད་ཨའི་ཌི་:(_D)"
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:4
+msgid "Pass_word:"
+msgstr "ཆོག་ཡིག་:(_w)"
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:5
+msgid "Reso_urce:"
+msgstr "ཐོན་ཁུངས་:(_u)"
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:6
+msgid "Use encryption (SS_L)"
+msgstr "གསང་བཟོ་ལག་ལེན་འཐབ་ (ཨེསི་ཨེསི་ཨེལ་) (_L)"
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:7
+msgid "_Port:"
+msgstr "འདྲེན་ལམ་:(_P)"
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:8
+msgid "_Server:"
+msgstr "སར་བར་:(_S)"
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:9
+msgid "jabber account settings"
+msgstr "ཇེབ་བར་རྩིས་ཐོ་སྒྲིག་སྟངས་"
+
+#: ../libempathy-gtk/gossip-chat.c:314
+msgid "Disconnected"
+msgstr "མཐུད་ལམ་བཏོག་ཡོདཔ་"
+
+#: ../libempathy-gtk/gossip-chat.c:858
+msgid "Insert Smiley"
+msgstr "སི་མའི་ལི་བཙུགས་"
+
+#: ../libempathy-gtk/gossip-chat.c:906
+msgid "_Check Word Spelling..."
+msgstr "མིང་ཚིག་ཡིག་སྡེབ་ཞིབ་དཔྱད་འབད་(_C)"
+
+#: ../libempathy-gtk/gossip-chat.c:1244
+msgid "Connected"
+msgstr "མཐུད་ཡོདཔ་"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:1
+msgid "C_lear"
+msgstr "བསལ་(_l)"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:2
+msgid "Change _Topic..."
+msgstr "གནད་དོན་བསྒྱུར་བཅོས་འབད་་་(_T)"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:3
+msgid "Chat"
+msgstr "ཁ་སླབ་"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:4
+msgid "Contact Infor_mation"
+msgstr "འབྲེལ་སའི་བརྡ་དོན་(_m)"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:5
+msgid "Cu_t"
+msgstr "བཏོག་(_t)"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:6
+msgid "In_vite..."
+msgstr "མགྲོན་བརྡ་འབད་་་(_v)"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:7
+msgid "Insert _Smiley"
+msgstr "སི་མའི་ལི་བཙུགས་(_S)"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:8
+msgid "Invitation _message:"
+msgstr "མགྲོན་བརྡའི་འཕྲིན་དོན་:(_m)"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:9
+msgid "Invite"
+msgstr "མགྲོན་བརྡ་འབད་"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:11
+msgid "Move Tab _Left"
+msgstr "མཆོང་ལྡེ་གཡོན་ཁ་ཐུག་བཤུད་(_L)"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:12
+msgid "Move Tab _Right"
+msgstr "མཇོང་ལྡེ་གཡས་ཁ་ཐུག་བཤུད་(_R)"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:13
+msgid "Select who would you like to invite:"
+msgstr "ཁྱོད་ཀྱིས་ག་མགྲོན་བརྡ་འབད་ནི་ཨིན་སེལ་འཐུ་འབད་:"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:14
+msgid "You have been invited to join a chat conference."
+msgstr "ཁྱོད་ལུ་ཁ་སླབ་ཞལ་འཛོམས་ཅིག་གི་གྲངསསུ་འཛུལ་ནི་གི་མགྲོན་བརྡ་འབད་ཡོད།"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:16
+msgid "_Add To Favorites"
+msgstr "དགའ་མི་ལུ་ཁ་སྐོང་རྐྱབས་(_A)"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:17
+msgid "_Close"
+msgstr "ཁ་བསྡམ་(_C)"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:18
+msgid "_Conversation"
+msgstr "གྲོས་གླེང་(_C)"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:19
+msgid "_Copy"
+msgstr "འདྲ་བཤུས་(_C)"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:20
+msgid "_Detach Tab"
+msgstr "མཆོང་ལྡེ་ཁ་འཕྱལ་(_D)"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:22
+msgid "_Next Tab"
+msgstr "ཤུལ་མའི་མཆོང་ལྡེ་(_N)"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:23
+msgid "_Paste"
+msgstr "སྦྱར་(_P)"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:24
+msgid "_Previous Tab"
+msgstr "ཧེ་མའི་མཆོང་ལྡེ་(_P)"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:26
+msgid "_Show Contacts"
+msgstr "འབྲེལ་ས་སྟོན་(_S)"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:27
+msgid "_Tabs"
+msgstr "མཆོང་ལྡེ་ཚུ་(_T)"
+
+#: ../libempathy-gtk/gossip-chat-view.c:544
+msgid "_Copy Link Address"
+msgstr "འབྲེལ་ལམ་ཁ་བྱང་འདྲ་བཤུས་རྐྱབས་(_C)"
+
+#: ../libempathy-gtk/gossip-chat-view.c:552
+msgid "_Open Link"
+msgstr "འབྲེལ་ལམ་ཁ་ཕྱེ་(_O)"
+
+#: ../libempathy-gtk/gossip-chat-view.c:889
+msgid "%A %d %B %Y"
+msgstr "%A %d %B %Y"
+
+#: ../libempathy-gtk/gossip-chat-window.c:685
+#: ../libempathy-gtk/gossip-chat-window.c:715
+msgid "New Message"
+msgid_plural "New Messages"
+msgstr[0] "འཕྲིན་དོན་གསརཔ།"
+msgstr[1] "འཕྲིན་དོན་གསརཔ་ཚུ།"
+
+#: ../libempathy-gtk/gossip-chat-window.c:691
+msgid "Chat Room"
+msgstr "ཁ་སླབ་ ཁང་མིག་"
+
+#: ../libempathy-gtk/gossip-chat-window.c:696
+#: ../libempathy-gtk/gossip-chat-window.c:719
+#, c-format
+msgid "Conversation"
+msgid_plural "Conversations (%d)"
+msgstr[0] "གྲོས་གླེང་"
+msgstr[1] "གྲོས་གླེང་ཚུ་(%d)"
+
+#: ../libempathy-gtk/gossip-chat-window.c:1295
+msgid "Typing a message."
+msgstr "འཕྲིན་དོན་ཅིག་ཡིག་དཔར་རྐྱབས་དོ།"
+
+#: ../libempathy-gtk/gossip-contact-list.c:290
+msgid "_Contact"
+msgstr "འབྲེལ་ས་(_C)"
+
+#: ../libempathy-gtk/gossip-contact-list.c:294
+msgid "_Group"
+msgstr "སྡེ་ཚན་(_G)"
+
+#: ../libempathy-gtk/gossip-contact-list.c:298
+msgid "Chat with contact"
+msgstr "འབྲེལ་ས་དང་གཅིག་ཁར་ཁ་སླབ་"
+
+#: ../libempathy-gtk/gossip-contact-list.c:302
+msgid "Infor_mation"
+msgstr "བརྡ་དོན་(_m)"
+
+#: ../libempathy-gtk/gossip-contact-list.c:302
+msgid "View contact information"
+msgstr "འབྲེལ་སའི་བརྡ་དོན་སྟོན་"
+
+#: ../libempathy-gtk/gossip-contact-list.c:306
+msgid "Re_name"
+msgstr "བསྐྱར་མིང་བཏགས་(_n)"
+
+#: ../libempathy-gtk/gossip-contact-list.c:306
+msgid "Rename"
+msgstr "བསྐྱར་མིང་བཏགས་"
+
+#: ../libempathy-gtk/gossip-contact-list.c:310
+msgid "Edit the groups and name for this contact"
+msgstr "འ་ནི་འབྲེལ་ས་འདི་གི་དོན་ལུ་ སྡེ་ཚན་དང་མིང་འདི་ཞུན་དག་འབད་"
+
+#: ../libempathy-gtk/gossip-contact-list.c:314
+msgid "_Remove"
+msgstr "རྩ་བསྐྲད་གཏང་(_R)"
+
+#: ../libempathy-gtk/gossip-contact-list.c:314
+msgid "Remove contact"
+msgstr "འབྲེལ་ས་རྩ་བསྐྲད་གཏང་"
+
+#: ../libempathy-gtk/gossip-contact-list.c:318
+msgid "_Invite to Chat Room"
+msgstr "ཁ་སླབ་ཁང་མིག་ལུ་མགྲོན་བརྡ་འབད་(_I)"
+
+#: ../libempathy-gtk/gossip-contact-list.c:318
+msgid "Invite to a currently open chat room"
+msgstr "ད་ལྟོ་ཁ་ཕྱེ་ཡོད་པའི་ཁ་སླབ་ཁང་མིག་ནང་ མགྲོན་བརྡ་འབད་"
+
+#: ../libempathy-gtk/gossip-contact-list.c:322
+msgid "_Send File..."
+msgstr "ཡིག་སྣོད་གཏང་(_S)"
+
+#: ../libempathy-gtk/gossip-contact-list.c:322
+msgid "Send a file"
+msgstr "ཡིག་སྣོད་ཅིག་གཏང་"
+
+#: ../libempathy-gtk/gossip-contact-list.c:326
+msgid "View previous conversations with this contact"
+msgstr "འ་ནི་འབྲེལ་ས་དང་གཅིག་ ཧེ་མའི་གྲོས་གླེང་ཚུ་སྟོན་"
+
+#: ../libempathy-gtk/gossip-preferences.c:250
+msgid "Language"
+msgstr "སྐད་ཡིག་"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:1
+msgid "<b>Appearance</b>"
+msgstr "<b>འབྱུང་སྣང་</b>"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:2
+msgid "<b>Audio</b>"
+msgstr "<b>རྣར་ཉན་</b>"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:3
+msgid "<b>Behaviour</b>"
+msgstr "<b>སྤྱོད་ལམ་</b>"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:4
+#, fuzzy
+msgid "<b>Contact List</b>"
+msgstr "<b>གནས་ཚད་</b>"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:5
+msgid "<b>Languages</b>"
+msgstr "<b>སྐད་ཡིག་ཚུ་</b>"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:6
+msgid "<b>Options</b>"
+msgstr "<b>གདམ་ཁ་ཚུ་</b>"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:7
+msgid "<b>Visual</b>"
+msgstr "<b>མཐོང་བའི་</b>"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:8
+msgid ""
+"<small>The list of languages reflects only the languages for which you have "
+"a dictionary installed.</small>"
+msgstr ""
+"<small>སྐད་ཡིག་ཚུ་གི་ཐོ་ཡིག་གིས་ ཁྱོད་ལུ་ཚིག་མཛོད་གཞི་བཙུགས་འབད་ཡོད་མི་གི་དོན་ལུ་ སྐད་ཡིག་ཚུ་རྐྱངམ་"
+"ཅིག་ བརྡ་མཚོནམ་ཨིན།</small>"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:9
+msgid "Avatars are user chosen images shown in the contact list"
+msgstr ""
+"ཨེ་ཝ་ཊར་ཚུ་ ལག་ལེན་པ་གིས་གདམ་ཁ་རྐྱབས་ཡོད་པའི་ གཟུགས་བརྙན་ འབྲེལ་སའི་ཐོ་ཡིག་འདི་ནང་སྟོན་ཡོད་མི་འདི་"
+"ཨིན་"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:10
+msgid "Chat Th_eme:"
+msgstr "ཁ་སླབ་བརྗོད་དོན་:(_e)"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:11
+msgid "Display notifications when contacts come _online"
+msgstr "འབྲེལ་ས་འདི་གློག་ལམ་ཐོག་འོང་པའི་སྐབས་ བརྡ་བསྐུལ་བཀྲམ་སྟོན་འབད་ (_o)"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:12
+msgid "Enable sounds when _away"
+msgstr "ཕྱི་ཁར་ཨིན་པའི་སྐབས་སྒྲ་སྐད་ལྕོགས་ཅན་བཟོ་(_a)"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:13
+msgid "Enable sounds when _busy"
+msgstr "ཁོམ་མེད་པའི་སྐབས་སྒྲ་སྐད་ལྕོགས་ཅན་བཟོ་(_b)"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:14
+msgid "General"
+msgstr "ཡོངས་ཁྱབ་"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:15
+msgid "Notifications"
+msgstr "བརྡ་བསྐུལ་ཚུ་"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:16
+msgid "Preferences"
+msgstr "དགའ་གདམ་ཚུ་"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:17
+msgid "Show _avatars"
+msgstr "ཨེ་ཝ་ཊར་ཚུ་སྟོན་(_a)"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:18
+msgid "Show _smileys as images"
+msgstr "སི་མའི་ལི་ཚུ་ གཟུགས་བརྙན་སྦེ་སྟོན་(_s)"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:19
+msgid "Show co_mpact contact list"
+msgstr "སྲབ་ཆུང་འབྲེལ་སའི་ཐོ་ཡིག་སྟོན་(_m)"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:20
+msgid "Sort by _name"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:21
+msgid "Sort by s_tate"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:22
+msgid "Spell Checking"
+msgstr "སྡེབ་དཔྱད་འབད་དོ་"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:23
+msgid "Themes"
+msgstr "བརྗོད་དོན་ཚུ་"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:24
+msgid "_Enable spell checking"
+msgstr "སྡེབ་དཔྱད་འབད་ནི་ལྕོགས་ཅན་བཟོ་(_E)"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:25
+msgid "_Open new chats in separate windows"
+msgstr "ཁ་སླབ་གསརཔ་ཚུ་ སྒོ་སྒྲིག་སོ་སོ་ནང་ཁ་ཕྱེ་(_O)"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:26
+msgid "_Play sound when messages arrive"
+msgstr "འཕྲིན་དོན་འབྱོར་བའི་སྐབས་ སྒྲ་སྐད་གཏང་(_P)"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:27
+msgid "_Use for chat rooms"
+msgstr "ཁ་སླབ་ཁང་མིག་ཚུ་གི་དོན་ལུ་ལག་ལེན་(_U)"
+
+#: ../libempathy-gtk/gossip-presence-chooser.c:702
+msgid "Custom message..."
+msgstr "སྲོལ་སྒྲིག་འཕྲིན་དོན་"
+
+#. Clear list
+#: ../libempathy-gtk/gossip-presence-chooser.c:724
+msgid "Clear List..."
+msgstr "ཐོ་ཡིག་བསལ་"
+
+#: ../libempathy-gtk/gossip-presence-chooser.c:803
+msgid "Are you sure you want to clear the list?"
+msgstr "ཁྱོད་ཀྱིས་འ་ནི་ཐོ་ཡིག་འདི་བསལ་ནི་ངེས་གཏན་ཨིན་ན?"
+
+#: ../libempathy-gtk/gossip-presence-chooser.c:807
+msgid ""
+"This will remove any custom messages you have added to the list of preset "
+"status messages."
+msgstr ""
+"འ་ནི་འདི་གིས་ ཁྱོད་ཀྱིས་ སྔར་སྒྲིག་གནས་ཚད་འཕྲིན་དོན་ཚུ་གི་ཐོ་ཡིག་འདི་ལུ་ ཁ་སྐོང་རྐྱབས་ཡོད་མི་ སྲོལ་སྒྲིག་"
+"འཕྲིན་ག་ཅི་འབད་རུང་རྩ་བསྐྲད་གཏང་འོང་།"
+
+#: ../libempathy-gtk/gossip-presence-chooser.c:812
+msgid "Clear List"
+msgstr "ཐོ་ཡིག་བསལ་"
+
+#: ../libempathy-gtk/gossip-presence-chooser.glade.h:1
+msgid "Enter status message:"
+msgstr "གནས་ཚད་འཕྲིན་དོན་ཐོ་བཀོདའབད་:"
+
+#: ../libempathy-gtk/gossip-presence-chooser.glade.h:2
+msgid "Status Message Presets"
+msgstr "གནས་ཚད་འཕྲིན་དོན་སྔར་སྒྲིག་འབདཝ་ཨིན་"
+
+#: ../libempathy-gtk/gossip-presence-chooser.glade.h:3
+msgid "_Add to status message list"
+msgstr "གནས་ཚད་འཕྲིན་དོན་ཐོ་ཡིག་ལུ་ཁ་སྐོང་རྐྱབས་(_A)"
+
+#: ../libempathy-gtk/gossip-private-chat.c:198
+#, c-format
+msgid "%s went offline"
+msgstr "%s འདི་གློག་ལམ་མེད་པར་ཡར་སོང་ནུག"
+
+#: ../libempathy-gtk/gossip-private-chat.c:212
+#, c-format
+msgid "%s has come online"
+msgstr "%s འདི་གློག་ལམ་ཐོག་ལུ་འོང་ཡོད་"
+
+#: ../libempathy-gtk/gossip-theme-manager.c:87
+msgid "Classic"
+msgstr "སྔོན་སྲོལ་"
+
+#: ../libempathy-gtk/gossip-theme-manager.c:88
+msgid "Simple"
+msgstr "འཇམ་སམ་"
+
+#: ../libempathy-gtk/gossip-theme-manager.c:89
+msgid "Clean"
+msgstr "གཙང་དག་བཟོ་"
+
+#: ../libempathy-gtk/gossip-theme-manager.c:90
+msgid "Blue"
+msgstr "ཧོནམ་"
+
+#: ../src/empathy-main.c:145
+msgid "Don't connect on startup"
+msgstr "འགོ་བཙུགས་ལུ་མ་མཐུད་"
+
+#: ../src/empathy-main.c:155
+#, fuzzy
+msgid "- Empathy Instant Messenger"
+msgstr "- གོ་སིཔ་འཕྲལ་མྱུར་འཕྲིན་བསྐྱེལ་པ་"
+
+#~ msgid "Gossip Instant Messenger"
+#~ msgstr "གོ་སིཔ་འཕྲལ་མྱུར་འཕྲིན་བསྐྱེལ་པ་"
+
+#~ msgid "Normal"
+#~ msgstr "སྤྱིར་བཏང་"
+
+#~ msgid "Joining"
+#~ msgstr "མཐུད་དོ་"
+
+#~ msgid "Active"
+#~ msgstr "ཤུགས་ལྡན་"
+
+#~ msgid "Inactive"
+#~ msgstr "ཤུགས་མེད་"
+
+#~ msgid "Unknown"
+#~ msgstr "མ་ཤེསཔ་"
+
+#~ msgid "Error"
+#~ msgstr "འཛོལ་བ་"
+
+#~ msgid "Moderator"
+#~ msgid_plural "Moderators"
+#~ msgstr[0] "མཐུན་སྒྲིག་འབད་མི་"
+#~ msgstr[1] "མཐུན་སྒྲིག་འབད་མི་ཚུ་"
+
+#~ msgid "Participant"
+#~ msgid_plural "Participants"
+#~ msgstr[0] "བཅའ་མར་གཏོགས་མི་"
+#~ msgstr[1] "བཅའ་མར་གཏོགས་མི་ཚུ་"
+
+#~ msgid "Visitor"
+#~ msgid_plural "Visitors"
+#~ msgstr[0] "ལྟ་སྐོར་པ་"
+#~ msgstr[1] "ལྟ་སྐོར་པ་ཚུ་"
+
+#~ msgid "No role"
+#~ msgstr "ལས་འགན་མེད་"
+
+#~ msgid "Owner"
+#~ msgid_plural "Owners"
+#~ msgstr[0] "བདག་པོ་"
+#~ msgstr[1] "བདག་པོ་ཚུ་"
+
+#~ msgid "Administrator"
+#~ msgid_plural "Administrators"
+#~ msgstr[0] "བདག་སྐྱོང་པ་"
+#~ msgstr[1] "བདག་སྐྱོང་པ་ཚུ་"
+
+#~ msgid "Member"
+#~ msgid_plural "Members"
+#~ msgstr[0] "འཐུས་མི་"
+#~ msgstr[1] "འཐུས་མི་ཚུ་"
+
+#~ msgid "Outcast"
+#~ msgid_plural "Outcasts"
+#~ msgstr[0] "ཕྱིར་བཏོན་བཞག་མི་"
+#~ msgstr[1] "ཕྱིར་བཏོན་བཞག་མི་ཚུ་"
+
+#~ msgid "No affiliation"
+#~ msgstr "འབྲེལ་གཏོགས་མེད་"
+
+#~ msgid "The nickname you have chosen is already in use."
+#~ msgstr "ཁྱོད་ཀྱིས་གདམ་ཁ་རྐྱབས་མི་ སྐྱོན་མིང་འདི་ཧེ་མ་ལས་རང་ལག་ལེན་འཐབ་སྟེ་ཡོདཔ་ཨིན།"
+
+#~ msgid "The chat room you tried to join requires a password."
+#~ msgstr "ཁྱོད་ཀྱིས་མཐུད་ནི་འབད་རྩོལ་བསྐྱེད་མི་ཁ་སླབ་ཁང་མིག་འདི་ལུ་ ཆོག་ཡིག་ཅིག་དགོཔ་ཨིན།"
+
+#~ msgid "The remote conference server did not respond in a sensible time."
+#~ msgstr "ཐག་རིང་གི་ཞལ་འཛོམས་སར་བར་འདི་གིས་ དྲན་ཤེས་ལྡན་པའི་དུས་ཚོད་ལུ་ལན་བཀོད་མ་འབད།"
+
+#~ msgid "The conference server you tried to join could not be found."
+#~ msgstr "ཁྱོད་ཀྱིས་མཐུད་ནི་གི་འབད་རྩོལ་བསྐྱེད་མི་ཞལ་འཛོམས་སར་བར་འདི་ འཚོལ་མ་འཐོབ།"
+
+#~ msgid "An unknown error occurred, check your details are correct."
+#~ msgstr "མ་ཤེས་པའི་འཛོལ་བ་ཅིག་འབྱུང་ཡོད་ ཁྱོད་ཀྱི་རྒྱས་བཤད་ཚུ་ངེས་བདེན་ཨིནམ་ཞིབ་དཔྱད་འབད།"
+
+#~ msgid "Joining the chatroom was canceled."
+#~ msgstr "ཁ་སླབ་ཁང་མིག་མཐུད་ནི་འདི་ཆ་མེད་གཏང་ཡོད།"
+
+#~ msgid "Unavailable"
+#~ msgstr "འཐོབ་ཚུགསཔ་མེདཔ་"
+
+#~ msgid "An unknown error occurred."
+#~ msgstr "མ་ཤེས་པའི་འཛོལ་བ་ཅིག་འབྱུང་ཡོདཔ།"
+
+#~ msgid "Connection refused."
+#~ msgstr "མཐུད་ལམ་ངོས་ལེན་མ་འབད་བས།"
+
+#~ msgid "Server address could not be resolved."
+#~ msgstr "སར་བར་ཁ་བྱང་འདི་ མོས་མཐུན་འབད་མ་ཚུགས།"
+
+#~ msgid "Connection timed out."
+#~ msgstr "མཐུད་ལམ་ངལ་མཚམས་ལུས་ཡོདཔ།"
+
+#~ msgid "Authentication failed."
+#~ msgstr "བདེན་བཤད་འཐུས་ཤོར་འབྱུང་ཡོདཔ།"
+
+#~ msgid "The username you are trying already exists."
+#~ msgstr "ལག་ལེན་པའི་མིང་ ཁྱོད་ཀྱིས་འབད་རྩོལ་བསྐྱེད་མི་འདི་ ཧེ་མ་ལས་རང་ཡོདཔ་ཨིན།"
+
+#~ msgid "The username you are trying is not valid."
+#~ msgstr "ལག་ལེན་པའི་མིང་ ཁྱོད་ཀྱིས་འབད་རྩོལ་བསྐྱེད་མི་འདི་ ནུས་ལྡན་མེན།"
+
+#~ msgid "This feature is unavailable."
+#~ msgstr "ཁྱད་རྣམ་འདི་འཐོབ་མི་ཚུགས།"
+
+#~ msgid "This feature is unauthorized."
+#~ msgstr "ཁྱད་རྣམ་འདི་དབང་སྤྲོད་མ་འབད་བས།"
+
+#~ msgid "A specific protocol error occurred that was unexpected."
+#~ msgstr "རེ་བ་མ་བསྐྱེད་པའི་ དམིགས་བསལ་གྱི་གནད་སྤེལ་ལམ་ལུགས་འཛོལ་བ་ཅིག་འབྱུང་ཡོད།"
+
+#~ msgid "new account"
+#~ msgstr "རྩིས་ཐོ་གསརཔ་"
+
+#~ msgid "Home"
+#~ msgstr "ཁྱིམ་"
+
+#~ msgid "Couldn't send message!"
+#~ msgstr "འཕྲིན་དོན་གཏང་མ་ཚུགས་!"
+
+#~ msgid "Connection could not be opened"
+#~ msgstr "མཐུད་ལམ་འདི་ཁ་ཕྱེ་མ་ཚུགས་"
+
+#~ msgid "Service has gone and is no longer available"
+#~ msgstr "ཞབས་ཏོག་འདི་ཡར་སོངམ་དང་ད་ཐོབ་མ་ཚུགསཔ་མེདཔ།"
+
+#~ msgid "Bad or malformed request to this service"
+#~ msgstr "ཞབས་ཏོག་འདི་ལུ་བྱང་ཉེས་ཡང་ན་བཟོ་ཉེས་གྱུར་བའི་ཞུ་བ།"
+
+#~ msgid "Unauthorized request to this service"
+#~ msgstr "ཞབས་ཏོག་འདི་ལུ་བདེན་དབང་མེད་པའི་ཞུ་བ།"
+
+#~ msgid "Payment is required for this service"
+#~ msgstr "ཞབས་ཏོག་གི་དོན་ལུ་གླ་དངུལ་འདི་དགོས་མཁོ་ཡོདཔ།"
+
+#~ msgid "This service is forbidden"
+#~ msgstr "ཞབས་ཏོག་འདི་མ་ཆོགཔ་ཨིན།"
+
+#~ msgid "This service is unavailable or not found"
+#~ msgstr "ཞབས་ཏོག་འདི་ཐོབ་མ་ཚུགསཔ་ཡང་ན་ཐོབ་མ་ཚུགསཔ།"
+
+#~ msgid "Unacceptable request sent to this services"
+#~ msgstr "ཞབས་ཏོག་དེ་ཚུ་ལུ་དང་ལེན་འབད་མ་བཏུབ་པའི་ཞུ་བ་བཏང་ཡོདཔ།"
+
+#~ msgid "Registration is required"
+#~ msgstr "ཐོ་འགོད་འབད་ནི་འདི་དགོས་མཁོ་ཡོདཔ།"
+
+#~ msgid "There was a conflict of interest trying to use this service"
+#~ msgstr "ཐབས་འཕྲུལ་འདི་ལག་ལེན་འཐབ་ནི་ལུ་སྤྲོད་འབད་རྩོལ་བསྐྱེད་ནི་གི་མི་མཐུན་པ་ཅིག་ཡོདཔ།"
+
+#~ msgid "There was an internal service error"
+#~ msgstr "ནང་འཁོད་ཞབས་ཏོག་འཛོལ་བ་ཅིག་ཡོདཔ།"
+
+#~ msgid "This feature is not implemented"
+#~ msgstr "ཁྱད་རྣམ་འདི་བསྟར་སྤྱོད་འབད་མེདཔ།"
+
+#~ msgid "The remote service timed out"
+#~ msgstr "ཐག་རིང་གི་ཞབས་ཏོག་འདི་ངལ་མཚམས་ཨིནམ།"
+
+#~ msgid "Using the %s backend"
+#~ msgstr "རྒྱབ་མཐའ་འདི་ %s ལག་ལེན་འཐབ་དེ།"
+
+#~ msgid "Stop"
+#~ msgstr "བཀག"
+
+#~ msgid "Disconnect"
+#~ msgstr "མཐུད་ལམ་བཏོག་"
+
+#~ msgid "Connect"
+#~ msgstr "མཐུད་"
+
+#~ msgid "Bye bye"
+#~ msgstr "བཱའི་བཱའི།"
+
+#~ msgid "Successfully registered your new account settings."
+#~ msgstr "ཁྱོད་ཀྱི་རྩིས་ཐོའི་སྒྲིག་སྟངས་ མཐར་འཁྱོལ་སྦེ་ཐོ་བཀོད་འབད་ཡོད།"
+
+#~ msgid "You should now be able to connect to your new account."
+#~ msgstr "ཁྱོད་ད་ ཁྱོད་རའི་རྩིས་ཐོ་གསརཔ་མཐུད་ཚུགས་དགོ"
+
+#~ msgid "Failed to register your new account settings."
+#~ msgstr "ཁྱོད་ཀྱི་རྩིས་ཐོ་གསརཔ་གི་སྒྲིག་སྟངས་ཚུ་ཐོ་བཀོད་འབད་ནི་འཐུས་ཤོར་འབྱུང་ཡོད།"
+
+#~ msgid "Successfully changed your account password."
+#~ msgstr "ཁྱོད་ཀྱི་རྩིས་ཐོའི་ཆོག་ཡིག་བསྒྱུར་བཅོས་འབད་ནི་མཐར་འཁྱོལ་ཡོདཔ།"
+
+#~ msgid "You should now be able to connect with your new password."
+#~ msgstr "ཁྱོད་ད་ ཁྱོད་རའི་ཆོག་ཡིག་གསརཔ་དང་གཅིག་ཁར་མཐུད་ཚུགསཔ་དགོཔ།"
+
+#~ msgid "Failed to change your account password."
+#~ msgstr "ཁྱོད་ཀྱི་རྩིས་ཐོའི་ཆོག་ཡིག་བསྒྱུར་བཅོས་འབད་ནི་འཐུས་ཤོར་འབྱུང་ཡོདཔ།"
+
+#~ msgid ""
+#~ "Please enter a new password for this account:\n"
+#~ "%s"
+#~ msgstr ""
+#~ "རྩིས་ཐོ་འདིའི་དོན་ལུ་ཆོག་ཡིག་གསརཔ་ཅིག་བཙུགས་གནང་།\n"
+#~ "%s"
+
+#~ msgid "No information is available for this contact."
+#~ msgstr "འ་ནི་འབྲེལ་སའི་དོན་ལུ་ བརྡ་དོན་འཐོབ་ཚུགསཔ་མེད།"
+
+#~ msgid "Information requested, please wait..."
+#~ msgstr "བརྡ་དོན་དགོས་མཁོ་ཡོདཔ་ཨིན་ བསྒུག་གནང་"
+
+#~ msgid "I would like to add you to my contact list."
+#~ msgstr "ང་གིས་ཁྱོད་ ངེས་ཀྱི་འབྲེལ་སའི་ཐོ་ཡིག་ནང་ལུ་ཁ་སྐོང་རྐྱབས་ནི་ཨིན།"
+
+#~ msgid "To summarize:"
+#~ msgstr "བཅུད་བསྡུ་ནིའི་དོན་ལས་:"
+
+#~ msgid "%d new message"
+#~ msgid_plural "%d new messages"
+#~ msgstr[0] "%d འཕྲིན་དོན་གསརཔ་ཚུ་"
+#~ msgstr[1] "%d འཕྲིན་དོན་གསརཔ་"
+
+#~ msgid "%d subscription request"
+#~ msgid_plural "%d subscription requests"
+#~ msgstr[0] "%d མཁོ་མངགས་ཞུ་བ་"
+#~ msgstr[1] "%d མཁོ་མངགས་ཞུ་བ་ཚུ་"
+
+#~ msgid "%d file transfer request"
+#~ msgid_plural "%d file transfer requests"
+#~ msgstr[0] "%d ཡིག་སྣོད་གནས་སོར་ཞུ་བ་"
+#~ msgstr[1] "%d ཡིག་སྣོད་གནས་སོར་ཞུ་བ་ཚུ་"
+
+#~ msgid "%d server message"
+#~ msgid_plural "%d server messages"
+#~ msgstr[0] "%d སར་བར་འཕྲིན་དོན་"
+#~ msgstr[1] "%d སར་བར་འཕྲིན་དོན་ཚུ་"
+
+#~ msgid "%d error"
+#~ msgid_plural "%d errors"
+#~ msgstr[0] "%d འཛོལ་བ་"
+#~ msgstr[1] "%d འཛོལ་བ་ཚུ་"
+
+#~ msgid "If you quit, you will lose all unread information."
+#~ msgstr "ཁྱོད་ཀྱིས་སྤང་པ་ཅིན་ མ་ལྷག་པའི་བརྡ་དོན་ཚུ་ཆ་མཉམ་བརླག་སྟོར་ཞུགས་འོང་།"
+
+#~ msgid "Gossip is still running, it is just hidden."
+#~ msgstr "གོ་སིཔ་འདི་ད་ལྟོ་ཡང་གཡོག་བཀོལ་དེས་ འདི་སྦ་བཞག་ནུག"
+
+#~ msgid "Click on the notification area icon to show Gossip."
+#~ msgstr "གོ་སིཔ་སྟོན་ནིའི་དོན་ལས་ བརྡ་བསྐུལ་མངའ་ཁོངས་ངོས་དཔར་འདི་གུ་ཨེབ་གཏང་འབད།"
+
+#~ msgid "You were about to quit!"
+#~ msgstr "ཁྱོད་སྤང་ནི་འབད་དེས་!"
+
+#~ msgid ""
+#~ "Since no system or notification tray has been found, this action would "
+#~ "normally quit Gossip.\n"
+#~ "\n"
+#~ "This is just a reminder, from now on, Gossip will quit when performing "
+#~ "this action unless you uncheck the option below."
+#~ msgstr ""
+#~ "རིམ་ལུགས་དང་བརྡ་བསྐུལ་ཤོག་སྣོད་མ་འཐོབ་ལས་རྟེན་ འ་ནི་བྱ་བ་འདི་གིས་ སྤྱིར་བཏང་ལུ་ གོ་སིཔ་སྤང་འོང་"
+#~ "།\n"
+#~ "\n"
+#~ "འ་ནི་འདི་དྲན་བསྐུལ་ཙམ་ཅིག་ཨིན་ ད་ལས་ཕར་ གོ་སིཔ་གིས་ ཁྱོད་ཀྱིས་འོག་གི་གདམ་ཁ་འདི་ཞིབ་དཔྱད་མ་"
+#~ "འབད་ཚུན་ འ་ནི་བྱ་བ་འདི་ལཱ་འགན་གྲུབ་པའི་སྐབས་ སྤང་འོང་།"
+
+#~ msgid "Edit Account _Details"
+#~ msgstr "རྩིས་ཐོའི་རྒྱས་བཤད་ཚུ་ཞུན་དག་འབད་(_D)"
+
+#~ msgid "Click to enlarge"
+#~ msgstr "ཆེར་བསྐྱེད་འབད་ནིའི་དོན་ལས་ཨེབ་གཏང་འབད་"
+
+#~ msgid "Word"
+#~ msgstr "མིང་ཚིག་"
+
+#~ msgid "Select who would you like to invite to room:"
+#~ msgstr "ཁྱོད་ཀྱིས་ཁང་མིག་ནང་ག་མགྲོན་བརྡ་འབད་ནི་ཨིན་ན་ སེལ་འཐུ་འབད་:"
+
+#~ msgid "Select which room you would like to invite:"
+#~ msgstr "ཁྱོད་ཀྱིས་ཁང་མིག་ག་འདི་མགྲོན་བརྡ་འབད་ནི་ཨིན་ན་ སེལའ་ཐུ་འབད་:"
+
+#~ msgid "New message from %s"
+#~ msgstr "%s ལས་འཕྲིན་དོན་གསརཔ་"
+
+#~ msgid "Your invitation has been declined"
+#~ msgstr "ཁྱོད་ཀྱི་མགྲོན་བརྡ་འདི་ཉམས་ཡོདཔ་"
+
+#~ msgid "Accept"
+#~ msgstr "དང་ལེན་"
+
+#~ msgid "Decline"
+#~ msgstr "ཁ་མི་བཟད་ནི་"
+
+#~ msgid "Name"
+#~ msgstr "མིང་"
+
+#~ msgid "Room"
+#~ msgstr "ཁང་མིག་"
+
+#~ msgid "Auto Connect"
+#~ msgstr "རང་བཞིན་མཐུད་ནི་"
+
+#~ msgid "Information requested..."
+#~ msgstr "བརྡ་དོན་ཞུ་བ་འབད་ཡོད་"
+
+#~ msgid "Do you want to remove this contact from your roster?"
+#~ msgstr "ཁྱོད་ཀྱིས་འ་ནི་འབྲེལ་ས་འདི་ཁྱོད་རའི་ལས་རིམ་རེའུ་མིག་ལས་ རྩ་བསྐྲད་གཏང་ནི་ཨིན་ན?"
+
+#~ msgid ""
+#~ "Please enter a new name for the group:\n"
+#~ "%s"
+#~ msgstr ""
+#~ "སྡེ་ཚན་འདི་གི་དོན་ལུ་ མིང་གསརཔ་ཅིག་ཐོ་བཀོད་འབད་གནང་:\n"
+#~ "%s"
+
+#~ msgid "Select"
+#~ msgstr "སེལ་འཐུ་འབད་"
+
+#~ msgid "Unsorted"
+#~ msgstr "དབྱེ་སེལ་མ་འབདཝ་"
+
+#~ msgid ""
+#~ "Set the alias you want to use for:\n"
+#~ "<b>%s</b>\n"
+#~ "\n"
+#~ "You can retrieve contact information from the server."
+#~ msgstr ""
+#~ "དོན་ལུ་ ཁྱོད་ཀྱིས་ལག་ལེན་འཐབ་ནི་ཨིན་མི་ མིང་གཞན་འདི་བལྟ་:\n"
+#~ "<b>%s</b>\n"
+#~ "\n"
+#~ "ཁྱོད་ཀྱིས་འབྲེལ་སའི་བརྡ་དོན་འདི་ སར་བར་ལས་སླར་འདྲེན་འབད་ཚུགས།"
+
+#~ msgid "New file transfer request from %s"
+#~ msgstr "%s ལས་ ཡིག་སྣོད་གསརཔ་གནས་སོར་ཞུ་བ་"
+
+#~ msgid "File transfer is not supported by both parties."
+#~ msgstr "ཡིག་སྣོད་གནས་སོར་འདི་ སྡེ་ཚོགས་གཉིས་ཆ་རང་གིས་རྒྱབ་སྐྱོར་མ་འབད་བས།"
+
+#~ msgid "Your file transfer offer declined."
+#~ msgstr "ཁྱོད་ཀྱི་ཡིག་སྣོད་གནས་སོར་བྱིན་མི་འདི་ཉམས་ཡོདཔ་"
+
+#~ msgid "The other user decided not to continue."
+#~ msgstr "གཞན་མི་ལག་ལེན་པ་འདི་གིས་ འཕྲོ་མི་མཐུད་ནིའི་གྲོས་ཐག་བཅད་ནུག"
+
+#~ msgid "Unknown error occurred during file transfer."
+#~ msgstr "ཡིག་སྣོད་གནས་སོར་སྐབས་ མ་ཤེས་པའི་འཛོལ་བ་ཅིག་འབྱུང་ཡོད།"
+
+#~ msgid "%s would like to send you a file."
+#~ msgstr "%s གིས་ཁྱོད་ལུ་ཡིག་སྣོད་ཅིག་གཏང་ནི་ཨིན་པས།"
+
+#~ msgid "Someone would like to send you a file."
+#~ msgstr "མི་ཅིག་གིས་ཁྱོད་ལུ་ཡིག་སྣོད་ཅིག་ཏང་ནི་ཨིན་པས།"
+
+#~ msgid "Select a file"
+#~ msgstr "ཡིག་སྣོད་ཅིག་སེལ་འཐུ་འབད་"
+
+#~ msgid "Connecting..."
+#~ msgstr "མཐུད་དོ་"
+
+#~ msgid "Retry connection"
+#~ msgstr "མཐུད་ལམ་སླར་འབད་རྩོལ་བསྐྱེད་"
+
+#~ msgid "Invited %s to join this chat conference."
+#~ msgstr "%s འདི་ འ་ནི་ཁ་སླབ་ཞལ་འཛོམས་གི་གྲངས་སུ་འཛུལ་ནིའི་དོན་ལས་ མགྲོན་བརྡ་འབད་ཡོདཔ།"
+
+#~ msgid "%s has set the topic: %s"
+#~ msgstr "%s གིས་ གནད་དོན་གཞི་སྒྲིག་འབད་ཡོད་%s"
+
+#~ msgid "Enter the new topic you want to set for this room:"
+#~ msgstr ""
+#~ "འ་ནི་ཁང་མིག་འདི་གི་དོན་ལུ་ ཁྱོད་ཀྱིས་གཞི་སྒྲིག་འབད་དགོ་མནོ་མི་གནད་དོན་གསརཔ་འདི་ཐོ་བཀོད་འབད་:"
+
+#~ msgid "%s has joined the room"
+#~ msgstr "%s གིས་ ཁང་མིག་ནང་འཛུལ་ཡོདཔ་"
+
+#~ msgid "%s has left the room"
+#~ msgstr "%s གིས་ཁང་མིག་བཞག་ཡོདཔ་"
+
+#~ msgid "Topic: %s"
+#~ msgstr "གནད་དོན། %s"
+
+#~ msgid "Account"
+#~ msgstr "རྩིས་ཐོ་"
+
+#~ msgid "Conversation With"
+#~ msgstr "དང་གཅིག་ཁར་གྲོས་གླེང་"
+
+#~ msgid "Date"
+#~ msgstr "ཚེས་གྲངས་"
+
+#~ msgid "Allow multiple instances of the application to run at the same time"
+#~ msgstr "གློག་རིམ་འདི་གི་སྣ་མང་འཕྲལ་མྱུར་འདི་ དུས་ཚོད་གཅིག་པ་ལུ་གཡོག་བཀོལ་བཅུག"
+
+#~ msgid "List the available accounts"
+#~ msgstr "འཐོབ་ཚུགས་པའི་རྩིས་ཐོའི་ཐོ་ཡིག་"
+
+#~ msgid "Which account to connect to on startup"
+#~ msgstr "འགོ་བཙུགས་ལུ་ རྩིས་ཐོ་ག་འདི་མཐུད་ནི་ཨིན་ན་"
+
+#~ msgid "ACCOUNT-NAME"
+#~ msgstr "རྩིས་ཐོ་-མིང་"
+
+#~ msgid "You can not use --no-connect together with --account"
+#~ msgstr "ཁྱོད་ཀྱིས་ --རྩིས་ཐོ་དང་གཅིག་ཁར་ --མཐུད་ལམ་མེད་ ལག་ལེན་འཐབ་མི་བཏུབ་"
+
+#~ msgid "No accounts available."
+#~ msgstr "རྩིས་ཐོ་གཅིག་ཡང་འཐོབ་ཚུགསཔ་མེད།"
+
+#~ msgid "Available accounts:"
+#~ msgstr "འཐོབ་ཚུགས་པའི་རྩིས་ཐོ་:"
+
+#~ msgid "[default]"
+#~ msgstr "[སྔོན་སྒྲིག་]"
+
+#~ msgid "There is no account with the name '%s'."
+#~ msgstr "མིང་ '%s' འབད་མི་རྩིས་ཐོ་གཅིག་ཡང་མིན་འདུག"
+
+#~ msgid "Join"
+#~ msgstr "མཐུད་"
+
+#~ msgid "Create"
+#~ msgstr "གསར་བསྐྲུན་འབད་"
+
+#~ msgid "Chat Rooms"
+#~ msgstr "ཁ་སླབ་ཁང་མིག་"
+
+#~ msgid "Found %d conference rooms"
+#~ msgstr "%d ཞལ་འཛོམས་ཁང་མིག་འཐོབ་ཡོད་"
+
+#~ msgid "Browsing for conference rooms, please wait..."
+#~ msgstr "ཞལ་འཛོམས་ཁང་མིག་ཚུ་གི་དོན་ལུ་བརྡ་འཚོལ་འབད་དོ་ བསྒུག་གནང་"
+
+#~ msgid "Browsing cancelled!"
+#~ msgstr "བརྡ་འཚོལ་འབད་ནི་ཆ་མེད་གཏང་ཡོདཔ་!"
+
+#~ msgid "Default"
+#~ msgstr "སྔོན་སྒྲིག་"
+
+#~ msgid "Chat!"
+#~ msgstr "ཁ་སླབ་!"
+
+#~ msgid "%s wants to be added to your contact list."
+#~ msgstr "%s འདི་ ཁྱོད་ཀྱི་འབྲེལ་སའི་ཐོ་ཡིག་ལུ་ཁ་སྐོང་རྐྱབས་དགོ་ནི་ཨིན་པས།"
+
+#~ msgid "Someone wants to be added to your contact list."
+#~ msgstr "མི་ཅིག་ ཁྱོད་ཀྱི་འབྲེལ་སའི་ཐོ་ཡིག་ལུ་ཁ་སྐོང་རྐྱབས་དགོ་ནི་ཨིན་པས།"
+
+#~ msgid "Subscription request"
+#~ msgstr "མཁོ་མངགས་ཞུ་བ་"
+
+#~ msgid "Show"
+#~ msgstr "སྟོན་"
+
+#~ msgid "Contact Information"
+#~ msgstr "འབྲེལ་སའི་བརྡ་དོན་"
+
+#~ msgid "Subject: %s"
+#~ msgstr "དོན་ཚན་: %s"
+
+#~ msgid "Suggestions for the word"
+#~ msgstr "མིང་ཚིག་འདི་གི་དོན་ལུ་བསམ་འཆར་"
+
+#~ msgid "New subscription request from %s"
+#~ msgstr "%s ལས་མཁོ་མངགས་ཞུ་བ་གསརཔ་"
+
+#~ msgid "Do you want to add this person to your contact list?"
+#~ msgstr "ཁྱོད་ཀྱིས་འ་ནི་གང་ཟག་འདི་ ཁྱོད་རའི་འབྲེལ་སའི་ཐོ་ཡིག་ལུ་ཁ་སྐོང་རྐྱབས་ནི་ཨིན་ན?"
+
+#~ msgid "Do you want to add %s to your contact list?"
+#~ msgstr "ཁྱོད་ཀྱིས་ %s འདི་ ཁྱོད་རའི་འབྲེལ་སའི་ཐོ་ཡིག་ལུ་ཁ་སྐོང་རྐྱབས་ནི་ཨིན་ན?"
+
+#~ msgid "Please enter your %s account password"
+#~ msgstr "ཁྱོད་རའི་ %s རྩིས་ཐོ་ཆོག་ཡིག་ཐོ་བཀོད་འབད་གནང་"
+
+#~ msgid "Logging in to account '%s'"
+#~ msgstr "རྩིས་ཐོ་ལུ་ནང་ན་ལུ་བསྐྱོད་འབད་དོ། %s "
+
+#~ msgid "Remember Password?"
+#~ msgstr "ཆོག་ཡིག་སེམས་ཁར་བཞག?"
+
+#~ msgid "Do not show this again"
+#~ msgstr "འ་ནི་ལོག་མ་སྟོན་"
+
+#~ msgid "Could not display the help contents."
+#~ msgstr "གྲོགས་རམ་ནང་དོན་འདི་བཀྲམ་སྟོན་འབད་མི་ཚུགས།"
+
+#~ msgid "Select Your Avatar Image"
+#~ msgstr "ཁྱོད་རའི་ཨེ་ཝ་ཊར་གཟུགས་བརྙན་སེལ་འཐུ་འབད་"
+
+#~ msgid "No Image"
+#~ msgstr "གཟུག་བརྙན་མེད་"
+
+#~ msgid "Cancel"
+#~ msgstr "ཆ་མེད་གཏང་ནི།"
+
+#~ msgid "OK"
+#~ msgstr "བཏུབ།"
+
+#~ msgid "The server does not seem to be responding."
+#~ msgstr "སར་བར་འདི་ལན་བཀོད་མི་འབད་དོ་བཟུམ་སྦེ་མཐོངམ་མས།"
+
+#~ msgid "Try again later."
+#~ msgstr "ལོག་ཤུལ་ལས་འབད་རྩོལ་བསྐྱེད།"
+
+#~ msgid "Change"
+#~ msgstr "བསྒྱུར་བཅོས།"
+
+#~ msgid "Contact goes offline"
+#~ msgstr "འབྲེལ་ས་འདི་གློག་ལམ་མེདཔ་འགྱོཝ་ཨིན་"
+
+#~ msgid "Contact goes online"
+#~ msgstr "འབྲེལ་ས་འདི་གློག་ལམ་ཐོག་འགྱོཝ་ཨིན་"
+
+#~ msgid "Contact ID:"
+#~ msgstr "འབྲེལ་སའི་ཨའི་ཌི་:"
+
+#~ msgid "Do you want to accept this file?"
+#~ msgstr "ཁྱོད་ཀྱིས་འ་ནི་ཡིག་སྣོད་འདི་དང་ལེན་འབད་ནི་ཨིན་ན?"
+
+#~ msgid "File Transfer Request"
+#~ msgstr "ཡིག་སྣོད་གནས་སོར་ཞུ་བ་"
+
+#~ msgid "File name:"
+#~ msgstr "ཡིག་སྣོད་མིང་:"
+
+#~ msgid "File size:"
+#~ msgstr "ཡིག་སྣོད་ཚད་:"
+
+#~ msgid "Not supported yet"
+#~ msgstr "ད་ཚུན་རྒྱབ་སྐྱོར་མ་འབད་བས་"
+
+#~ msgid "This person wishes to send you this file:"
+#~ msgstr "འ་ནི་གང་ཟག་གིས་ ཁྱོད་ལུ་ འ་ནི་ཡིག་སྣོན་གཏང་ནི་གི་རེ་སྨོན་བསྐྱེདཔ་ཨིན་པས་:"
+
+#~ msgid "Web site:"
+#~ msgstr "ཝེབ་ས་ཁོངས་:"
+
+#~ msgid "_Accept"
+#~ msgstr "དང་ལེན་(_A)"
+
+#~ msgid "_Deny"
+#~ msgstr "ཉན་མི་བཏུབ་པས་(_D)"
+
+#~ msgid "<b>Topic:</b>"
+#~ msgstr "<b>གནད་དོན་:</b>"
+
+#~ msgid "Account:"
+#~ msgstr "རྩིས་ཐོ་:"
+
+#~ msgid "Browse:"
+#~ msgstr "བརྡོ་འཚོལ་:"
+
+#~ msgid "Edit Favorite Room"
+#~ msgstr "དགའ་མི་ཁང་མིག་ཞུན་དག་འབད་"
+
+#~ msgid ""
+#~ "Enter the room name to join here or click on one or more rooms in the "
+#~ "list."
+#~ msgstr ""
+#~ "ན་ལུ་འཛུལ་ནིའི་དོན་ལས་ ཁང་མིག་མིང་འདི་ཐོ་བཀོད་འབད་ ཡང་ན་ ཐོ་ཡིག་ནང་གི་ཁང་མིག་གཅིག་ཡང་ན་དེ་"
+#~ "ལས་ལྷག་སྟེ་ཨེབ་གཏང་འབད།"
+
+#~ msgid "Group Chat"
+#~ msgstr "སྡེ་ཚན་ཁ་སླབ་"
+
+#~ msgid "Join New"
+#~ msgstr "གསརཔ་མཐུད་"
+
+#~ msgid "Join room on start_up"
+#~ msgstr "འགོ་བཙུགས་ལུ་ཁང་མིག་མཐུད་(_u)"
+
+#~ msgid "Join this chat room when Gossip starts and you are connected"
+#~ msgstr ""
+#~ "གོ་སིཔ་འདི་འགོ་བཙུགས་ནི་དང་ ཁྱོད་མཐུད་ཡོད་པའི་སྐབས་ འ་ནི་ཁ་སླབ་ཁང་མིག་འདི་གི་གྲངས་སུ་འཛུལ་"
+
+#~ msgid "Manage Favorite Rooms"
+#~ msgstr "དགའ་མི་ཁང་མིག་ཚུ་འཛིན་སྐྱོང་འཐབ་"
+
+#~ msgid "N_ame:"
+#~ msgstr "མིང་:(_a)"
+
+#~ msgid "Re_fresh"
+#~ msgstr "ཡང་སེལ་འབད་(_f)"
+
+#~ msgid "S_erver:"
+#~ msgstr "སར་བར་:(_e)"
+
+#~ msgid ""
+#~ "This list represents all chat rooms hosted on the server you have entered."
+#~ msgstr ""
+#~ "འ་ནི་ཐོ་ཡིག་འདི་གིས་ ཁྱོད་ཀྱིས་ཐོ་བཀོད་ཐོ་བཀོད་འབད་ཡོད་མི་ སར་བར་འདི་གུ་ ཧོསིཊི་འབད་ཡོད་མི་ ཁ་"
+#~ "སླབ་ཁང་མིག་ཆ་མཉམ་ ཁྱད་ཚབ་འབདཝ་ཨིན།"
+
+#~ msgid "_Nickname:"
+#~ msgstr "སྐྱོན་མིང་:(_N)"
+
+#~ msgid "_Room:"
+#~ msgstr "ཁང་མིག་:(_R)"
+
+#~ msgid "-"
+#~ msgstr "-"
+
+#~ msgid "<b>About</b>"
+#~ msgstr "<b>སྐོར་ལས་</b>"
+
+#~ msgid "<b>Client Information</b>"
+#~ msgstr "<b>ཞབས་ཐོག་སྤྱོད་མིའི་བརྡ་དོན་</b>"
+
+#~ msgid "<b>Groups</b>"
+#~ msgstr "<b>སྡེ་ཚན་ཚུ་</b>"
+
+#~ msgid "<b>Name</b>"
+#~ msgstr "<b>མིང་</b>"
+
+#~ msgid "<b>Personal Details</b>"
+#~ msgstr "<b>རང་དོན་རྒྱས་བཤད་ཚུ་</b>"
+
+#~ msgid "<b>Subscription</b>"
+#~ msgstr "<b>མཁོ་མངགས་</b>"
+
+#~ msgid "<span size=\"smaller\">Example: Mikael or user@server.org</span>"
+#~ msgstr ""
+#~ "<འཕར་ཚད་ལྗིད་ཚད་=\"smaller\">དཔེར་བརྗོད་: མའི་ཀེལ་ ཡང་ན་ user@server.org</span>"
+
+#~ msgid "Accou_nt:"
+#~ msgstr "རྩིས་ཐོ་:(_n)"
+
+#~ msgid "Add Contact"
+#~ msgstr "འབྲེལ་ས་ཁ་སྐོང་རྐྱབས།"
+
+#~ msgid "Alia_s:"
+#~ msgstr "མིང་གཞན་:(_s)"
+
+#~ msgid "Avatar:"
+#~ msgstr "ཨེ་ཝ་ཏར་:"
+
+#~ msgid "Birthday:"
+#~ msgstr "སྐྱེ་བའི་ཞིནམ་:"
+
+#~ msgid "C_hange"
+#~ msgstr "བསྒྱུར་བཅོས།(_h)"
+
+#~ msgid "Ch_at"
+#~ msgstr "ཁ་སླབ་(_a)"
+
+#~ msgid "Client:"
+#~ msgstr "ཞབས་ཏོག་སྤྱོད་མི་:"
+
+#~ msgid "Con_tact:"
+#~ msgstr "འབྲེལ་ས་:(_t)"
+
+#~ msgid "Connect on S_tartup"
+#~ msgstr "འགོ་བཙུགས་ལུ་མཐུད་(_t)"
+
+#~ msgid "Contacts"
+#~ msgstr "འབྲེལ་ས་ཚུ་"
+
+#~ msgid "Country:"
+#~ msgstr "རྒྱལ་ཁབ་:"
+
+#~ msgid "Decide _Later"
+#~ msgstr "ཤུལ་ལས་གྲོས་ཐག་བཅད་(_L)"
+
+#~ msgid "Edit Contact"
+#~ msgstr "འབྲེལ་ས་ཞུན་དག་འབད་"
+
+#~ msgid "Edit Groups"
+#~ msgstr "སྡེ་ཚན་ཚུ་ཞུན་དག་འབད་"
+
+#~ msgid "Email:"
+#~ msgstr "གློག་འཕྲིན་:"
+
+#~ msgid "ID:"
+#~ msgstr "ཨའི་ཌི་:"
+
+#~ msgid ""
+#~ "If you chose to decide later you will be asked the next time you log on."
+#~ msgstr ""
+#~ "ཁྱོད་ཀྱིས་ཤུལ་ལས་གྲོས་ཐག་བཅད་ནི་གདམ་ཁ་རྐྱབསཔ་ཅིན་ ཁྱོད་ཤུལ་མ་ནང་བསྐྱོད་འབདཝ་ད་འདྲི་འོང་།"
+
+#~ msgid "Name:"
+#~ msgstr "མིང་:"
+
+#~ msgid "OS:"
+#~ msgstr "ཨོ་ཨེསི་:"
+
+#~ msgid "Personal Details"
+#~ msgstr "རང་དོན་རྒྱས་བཤད་ཚུ་"
+
+#~ msgid "R_egister"
+#~ msgstr "ཐོ་འགོད་(_e)"
+
+#~ msgid "Search"
+#~ msgstr "འཚོལ་ཞིབ་"
+
+#~ msgid ""
+#~ "Select the groups you want this contact to appear in, you can select more "
+#~ "than one group or no groups."
+#~ msgstr ""
+#~ "ཁྱོད་ཀྱིས་འ་ནི་འབྲེལ་ས་ཚུ་འབྱུང་དགོ་མནོ་མི་ སྡེ་ཚན་འདི་ཚུ་སེལ་འཐུ་འབད་ ཁྱོད་ཀྱིས་  སྡེ་ཚན་གཅིག་ལས་"
+#~ "ལྷག་སྟེ་ཡང་ན་ སྡེ་ཚན་མེད་མི་སེལ་འཐུ་འབད་བཏུབ།"
+
+#~ msgid ""
+#~ "Set the alias you want to use for:\n"
+#~ "<b>foo@bar.baz</b>\n"
+#~ "\n"
+#~ "You can retrieve contact information from the server. "
+#~ msgstr ""
+#~ "དོན་ལུ་ ཁྱོད་ཀྱིས་ལག་ལེན་འཐབ་ནི་ཨིན་མི་ མིང་གཞན་འདིགཞི་སྒྲིག་འབད།\n"
+#~ "<b>foo@bar.baz</b>\n"
+#~ "\n"
+#~ "ཁྱོད་ཀྱིས་འབྲེལ་སའི་བརྡ་དོན་འདི་ སར་བར་ལས་སླར་འདྲེན་འབད་ཚུགས།"
+
+#~ msgid "Spell Checker"
+#~ msgstr "སྡེབ་དཔྱོདཔ་"
+
+#~ msgid "Subscription Request"
+#~ msgstr "མཁོ་མངགས་ཞུ་བ་"
+
+#~ msgid "Suggestions for the word:"
+#~ msgstr "མིང་ཚིག་འདི་གི་དོན་ལུ་བསམ་འཆར་:"
+
+#~ msgid ""
+#~ "This acts as a filter to the contact list below. You can use segments of "
+#~ "contact's name or ID, for example, \"jabber.org\" will list everyone "
+#~ "using that server"
+#~ msgstr ""
+#~ "འ་ནི་འདི་གིས་ འོག་གི་འབྲེལ་སའི་ཐོ་ཡིག་འདི་གི་དོན་ལུ་ ཚགས་མ་སྦེ་འབདཝ་ཨིན། ཁྱོད་ཀྱྀས་ འབྲེལ་སའི་མིང་"
+#~ "ཡང་ན་ ཨའི་ཌི་གི་ཆ་བགོས་ཚུ་ལག་ལེན་འཐབ་ དཔེར་ན་  \"jabber.org\" གིས་ འ་ནི་སར་བར་ལག་"
+#~ "ལེན་འཐབ་མི་ག་ར་ཐོ་བཀོད་འབད་འོང་"
+
+#~ msgid "This is the name that will be used on your roster for this contact"
+#~ msgstr ""
+#~ "འ་ནི་འདི་ འབྲེལ་ས་འདི་གི་དོན་ལུ་ ཁྱོད་རའི་ལས་རིམ་རེའུ་མིག་གུ་ ལག་ལེན་འཐབ་ནི་ཨིན་མི་ མིང་འདི་ཨིན་"
+
+#~ msgid "This name will be used to identify you in chat windows"
+#~ msgstr "འ་ནི་མིང་འདི་ ཁ་སླབ་སྒོ་སྒྲིག་ནང་ལུ་ཁྱོད་ངོས་འཛིན་འབད་ནིའི་དོན་ལས་ ལག་ལེན་འཐབ་འོང་"
+
+#~ msgid ""
+#~ "This name will be used to identify you when new contacts lookup your "
+#~ "details"
+#~ msgstr ""
+#~ "འ་ནི་མིང་འདི་ འབྲེལ་ས་གསརཔ་ཚུ་གིས་ ཁྱོད་ཀྱི་རྒྱས་བཤད་བལྟ་བའི་སྐབས་ ཁྱོད་ངོས་འཛིན་འབད་ནིའི་དོན་"
+#~ "ལས་ ལག་ལེན་འཐབ་འོང་"
+
+#~ msgid "Use default name here from the contact's VCard."
+#~ msgstr "འབྲེལ་སའི་ཝི་ཤོག་བྱང་འདི་ལས་ ནཱ་ལུ་སྔོན་སྒྲིག་མིང་ལག་ལེན་འཐབ།"
+
+#~ msgid "Use system pro_xy"
+#~ msgstr "རིམ་ལུགས་པོརོ་སི་ལག་ལེན་འཐབ་(_x)"
+
+#~ msgid "Version:"
+#~ msgstr "ཐོན་རིམ་:"
+
+#~ msgid "View Previous Conversations"
+#~ msgstr "ཧེ་མའི་གྲོས་གླེང་སྟོན་"
+
+#~ msgid "Which account do you want to use?"
+#~ msgstr "ཁྱོད་ཀྱིས་རྩིས་ཐོ་ག་འདི་ལག་ལེན་འཐབ་ནི་ཨིན་སྨོ?"
+
+#~ msgid "You are not subscribed to this contact."
+#~ msgstr "ཁྱོད་འ་ནི་འབྲེལ་ས་ལུ་མཁོ་མངགས་མ་འབད་བས།"
+
+#~ msgid "_Birthday:"
+#~ msgstr "སྐྱེ་བའི་ཉིནམ་:(_B)"
+
+#~ msgid "_Connect"
+#~ msgstr "མཐུད་(_C)"
+
+#~ msgid "_Description:"
+#~ msgstr "འགྲེལ་བཤད་:(_D)"
+
+#~ msgid "_Disconnect"
+#~ msgstr "མཐུད་ལམ་བཏོག་(_D)"
+
+#~ msgid "_Email:"
+#~ msgstr "གློག་འཕྲིན་:(_E)"
+
+#~ msgid ""
+#~ "_Enter the name or contact ID of the person you want to chat to below:"
+#~ msgstr ""
+#~ "ཁྱོད་ཀྱིས་འོག་ལུ་ ཁ་སླབ་ནི་ཨིན་མི་གང་ཟག་འདི་གི་ མིང་ཡང་ན་འབྲེལ་སའི་ཨའི་ཌི་འདི་ཐོ་བཀོད་འབད་:(_E)"
+
+#~ msgid "_For:"
+#~ msgstr "དོན་ལུ་:(_F)"
+
+#~ msgid "_Full Name:"
+#~ msgstr "མིང་གངམ་(_F)"
+
+#~ msgid "_Group:"
+#~ msgstr "སྡེ་ཚན་:(_G)"
+
+#~ msgid "_Nick Name:"
+#~ msgstr "སྐྱོན་མིང་(_N)"
+
+#~ msgid "_Password:"
+#~ msgstr "ཆོག་ཡིག་:(_P)"
+
+#~ msgid "_Quit Message:"
+#~ msgstr "འཕྲིན་དོན་སྤང།(_Q)"
+
+#~ msgid "_Retrieve"
+#~ msgstr "སླར་འདྲེན་(_R)"
+
+#~ msgid "_Subscribe"
+#~ msgstr "མཁོ་མངགས་འབད་ནི་(_S)"
+
+#~ msgid "_Web site:"
+#~ msgstr "ཝེབ་ས་ཁོངས་:(_W)"
+
+#~ msgid "irc account settings"
+#~ msgstr "ཨའི་ཨར་སི་་རྩིས་ཐོ་སྒྲིག་སྟངས་ཚུ།"
+
+#~ msgid "msn account settings"
+#~ msgstr "ཨེམ་ཨེསི་ཨེན་རྩིས་ཐོ་སྒྲིག་སྟངས་ཚུ།"
+
+#~ msgid "Gossip"
+#~ msgstr "གོ་སིཔ་"
+
+#~ msgid "Martyn Russell"
+#~ msgstr "མར་ཊིན་ རཱས་སེལ་"
+
+#~ msgid ""
+#~ "Set the alias you want to use for:\n"
+#~ "<b>martyn@imendio.com</b>\n"
+#~ "\n"
+#~ "You can retrieve contact information from the server. "
+#~ msgstr ""
+#~ "དོན་ལུ་ཁྱོད་ཀྱིས་ལག་ལེན་འཐབ་ནི་ཨིན་མི་ མིང་གཞན་འདི་གཞི་སྒྲིག་འབད་:\n"
+#~ "<b>martyn@imendio.com</b>\n"
+#~ "\n"
+#~ "ཁྱོད་ཀྱིས་ འབྲེལ་སའི་བརྡ་དོན་འདི་ སར་བར་ལས་སླར་འདྲེན་འབད་ཚུགས།"
+
+#~ msgid "_Forget"
+#~ msgstr "བརྗེད་ནི་(_F)"

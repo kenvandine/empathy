@@ -1,52 +1,52 @@
-# translation of gossip.HEAD.po to español
-# Copyright (C) 2003 Free Software Foundation
-# This file is distributed under the same license as the Gossip package.
+# translation of lt.po to Lithuanian
+# Lithuanian translation of gossip.
+# Copyright (C) 2004-2007 Free Software Foundation, Inc.
+# This file is distributed under the same license as the gossip package.
 #
-# Ezequiel Pérez <eazel7@yahoo.com.ar>, 2003.
-# Francisco Javier F. Serrador <serrador@cvs.gnome.org>, 2003, 2004, 2006.
-# Maria Majadas <maria.majadas@hispalinux.es>, 2005.
-# maria <maria.majadas@hispalinux.es>, 2005, 2006.
+#
+# Justina Klingaitė <justina.klingaite@gmail.com>, 2006.
+# Gintautas Miliauskas <gintas@akl.lt>, 2006.
+# Žygimantas Beručka <zygis@gnome.org>, 2004-2007.
 msgid ""
 msgstr ""
-"Project-Id-Version: gossip.HEAD\n"
+"Project-Id-Version: gossip HEAD\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-05-15 23:46+0200\n"
-"PO-Revision-Date: 2006-11-28 00:50+0100\n"
-"Last-Translator: maria <maria.majadas@hispalinux.es>\n"
-"Language-Team: español <traductores@es.gnome.org>\n"
+"PO-Revision-Date: 2007-01-14 14:23+0200\n"
+"Last-Translator: Žygimantas Beručka <zygis@gnome.org>\n"
+"Language-Team: Lithuanian <komp_lt@konferencijos.lt>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: KBabel 1.11.4\n"
-"Plural-Forms:  nplurals=2; plural=(n != 1);\n"
+"Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && (n%"
+"100<10 || n%100>=20) ? 1 : 2);\n"
 
 #: ../data/empathy.desktop.in.h:1
 #, fuzzy
 msgid "Empathy Instant Messenger"
-msgstr "Mensajería instantánea"
+msgstr "Bendravimas žinutėmis"
 
 #: ../data/empathy.desktop.in.h:2
 msgid "Instant Messenger"
-msgstr "Mensajería instantánea"
+msgstr "Bendravimas žinutėmis"
 
 #: ../data/empathy.schemas.in.h:1
 msgid "Always open a separate chat window for new chats."
-msgstr "Siempre abrir una ventana de chat separada para chats nuevos."
+msgstr "Naujiems pokalbiams visada atverti atskirą pokalbio langą."
 
 #: ../data/empathy.schemas.in.h:2
 msgid "Chat window theme"
-msgstr "Tema de la ventana de charla"
+msgstr "Pokalbio lango tema"
 
 #: ../data/empathy.schemas.in.h:3
 msgid ""
 "Comma separated list of spell checker languages to use (e.g. en, fr, nl)."
 msgstr ""
-"Lista separada por comas de idiomas que se usarán en la revisión ortográfica "
-"(ej. en, fr, nl)."
+"Kableliu atskirtų kalbų, kurių rašyba tikrinama, sąrašas (pvz. lt, en, fr)."
 
 #: ../data/empathy.schemas.in.h:4
 msgid "Compact contact list"
-msgstr "Lista compacta de contactos"
+msgstr "Kompaktiškas bičiulių sąrašas"
 
 #: ../data/empathy.schemas.in.h:5
 msgid "Contact list sort criterium"
@@ -54,135 +54,125 @@ msgstr ""
 
 #: ../data/empathy.schemas.in.h:6
 msgid "Default directory to select an avatar image from"
-msgstr "Directorio predeterminado para seleccionar un avatar"
+msgstr "Katalogas, iš kurio renkamas paveikslėlis"
 
 #: ../data/empathy.schemas.in.h:7
 msgid "Enable popup when contact is available"
-msgstr "Activar ventana emergente cuando un contacto está disponible"
+msgstr "Įjungti iššokantį langą, rodomą žmogui prisijungus"
 
 #: ../data/empathy.schemas.in.h:8
 msgid "Enable sound when away"
-msgstr "Activar sonido al ausentarse"
+msgstr "Atjungti garsus, kai manęs nėra"
 
 #: ../data/empathy.schemas.in.h:9
 msgid "Enable sound when busy"
-msgstr "Activar sonido cuando se esté ocupado"
+msgstr "Atjungti garsus, kai aš užsiėmęs"
 
 #: ../data/empathy.schemas.in.h:10
 msgid "Enable spell checker"
-msgstr "Activar revisor ortográfico"
+msgstr "Įjungti rašybos tikrinimą"
 
 #: ../data/empathy.schemas.in.h:11
 msgid "Hide main window"
-msgstr "Ocultar la ventana principal"
+msgstr "Paslėpti pagrindinį langą"
 
 #: ../data/empathy.schemas.in.h:12
 msgid "Hide the main window."
-msgstr "Ocultar la ventana principal."
+msgstr "Paslėpti pagrindinį langą."
 
 #: ../data/empathy.schemas.in.h:13
 msgid "Open new chats in separate windows"
-msgstr "Abrir chats nuevos en ventanas separadas"
+msgstr "Atverti pokalbiu atskiruose languose"
 
 #: ../data/empathy.schemas.in.h:14
 msgid "Show avatars"
-msgstr "Mostrar avatares"
+msgstr "Rodyti bičiulių paveikslėlius"
 
 #: ../data/empathy.schemas.in.h:15
 msgid "Show hint about closing the main window"
-msgstr "Mostrar consejo sobre cómo cerrar la ventana principal"
+msgstr "Rodyti pranešimą apie pagrindinio lango užvėrimą"
 
 #: ../data/empathy.schemas.in.h:16
 msgid "Show offline contacts"
-msgstr "Mostrar contactos no conectados"
+msgstr "Rodyti atsijungusius bičiulius"
 
 #: ../data/empathy.schemas.in.h:17
 msgid "Spell checking languages"
-msgstr "Idiomas para revisión ortográfica"
+msgstr "Kalbų rašybos tikrinimas"
 
 #: ../data/empathy.schemas.in.h:18
 msgid "The last directory that an avatar image was chosen from."
-msgstr "Último directorio del que fue elegido un avatar."
+msgstr "Paskutinis katalogas, iš kurio pasirinktas paveikslėlis."
 
 #: ../data/empathy.schemas.in.h:19
 msgid "The theme that is used to display the conversation in chat windows."
-msgstr ""
-"El tema que se usará para mostrar la conversación en las ventanas de chat."
+msgstr "Tema naudojama pokalbio rodymui pokalbių lange."
 
 #: ../data/empathy.schemas.in.h:20
 msgid "Use graphical smileys"
-msgstr "Usar emoticonos gráficos"
+msgstr "Naudoti grafines šypsenėles"
 
 #: ../data/empathy.schemas.in.h:21
 msgid "Use notification sounds"
-msgstr "Usar sonidos de notificación"
+msgstr "Naudoti įspėjimo garsus"
 
 #: ../data/empathy.schemas.in.h:22
 msgid "Use theme for chat rooms"
-msgstr "Usar tema para salas de chat"
+msgstr "Naudoti temą pokalbių kambariams"
 
 #: ../data/empathy.schemas.in.h:23
 msgid ""
 "Whether or not to check words typed against the languages you want to check "
 "with."
-msgstr ""
-"Indica si se debe o no revisar las palabras tecleadas con respecto a los "
-"idiomas con los que quiere comprobarlo."
+msgstr "Ar tikrinti žodžių rašybą pagal pasirinktą kalbą."
 
 #: ../data/empathy.schemas.in.h:24
 msgid ""
 "Whether or not to convert smileys into graphical images in conversations."
-msgstr ""
-"Indica si debe o no debe convertir los emoticonos en imágenes gráficas en "
-"las conversaciones."
+msgstr "Ar pokalbiuose paversti šypsenėles į grafinius paveiksliukus."
 
 #: ../data/empathy.schemas.in.h:25
 msgid "Whether or not to play a sound when messages arrive."
-msgstr "Indica si debe reproducir un sonido cuando lleguen mensajes."
+msgstr "Ar sugroti garsą kai atvyksta nauja žinutė."
 
 #: ../data/empathy.schemas.in.h:26
 msgid "Whether or not to play sounds when away."
-msgstr "Indica si debe o no reproducir sonidos cuando se esté ausente."
+msgstr "Ar groti garsus kai tavęs nėra."
 
 #: ../data/empathy.schemas.in.h:27
 msgid "Whether or not to play sounds when busy."
-msgstr "Indica si debe o no reproducir sonidos cuando esté ocupado."
+msgstr "Ar groti garsu kai tu užsiėmęs."
 
 #: ../data/empathy.schemas.in.h:28
 msgid "Whether or not to show a popup when a contact becomes available."
-msgstr ""
-"Indica si debe o no mostrar una ventana emergente cuando un contacto vuelva "
-"a estar disponible."
+msgstr "Ar rodyti iššokantį langą, kai žmogus prisijungia prie tinklo."
 
 #: ../data/empathy.schemas.in.h:29
 msgid ""
 "Whether or not to show avatars for contacts in the contact list and chat "
 "windows."
 msgstr ""
-"Indica si debe o no mostrar los avatares para los contactos en la lista de "
-"contactos y ventanas de chat."
+"Ar rodyti pašnekovų paveikslėlius kontaktų sąraše ir pokalbių languose."
 
 #: ../data/empathy.schemas.in.h:30
 msgid "Whether or not to show contacts that are offline in the contact list."
-msgstr ""
-"Indica si debe o no mostrar los contactos que están desconectados en la "
-"lista de contactos."
+msgstr "Ar bičiulių sąraše rodyti bičiulius, kurie yra atsijungę."
 
 #: ../data/empathy.schemas.in.h:31
 msgid ""
 "Whether or not to show the message dialog about closing the main window with "
 "the 'x' button in the title bar."
 msgstr ""
-"Indica si debe o no mostrar un mensaje de diálogo sobre cómo cerrar la "
-"ventana principal con el botón 'x' en la barra de título."
+"Ar rodyti pranešimo apie pagrindinio lango uždarymą dialogą su mygtuku „x“ "
+"antraštės juostoje."
 
 #: ../data/empathy.schemas.in.h:32
 msgid "Whether to show the contact list in compact mode or not."
-msgstr "Indica si debe o no mostrar la lista de contactos en modo compacto."
+msgstr "Ar bičiulių sąrašą rodyti kompaktiniame režime ar ne."
 
 #: ../data/empathy.schemas.in.h:33
 msgid "Whether to use the theme for chat rooms or not."
-msgstr "Indica si debe o no usar el tema para salas de chat."
+msgstr "Ar naudoti temą pokalbių kambariams ar ne."
 
 #: ../data/empathy.schemas.in.h:34
 msgid ""
@@ -194,126 +184,126 @@ msgstr ""
 #: ../libempathy/gossip-contact.c:654 ../libempathy/gossip-presence.c:184
 #: ../libempathy/gossip-presence.c:283
 msgid "Offline"
-msgstr "Desconectado"
+msgstr "Atsijungęs"
 
 #: ../libempathy/gossip-presence.c:274
 msgid "Available"
-msgstr "Disponible"
+msgstr "Esu"
 
 #: ../libempathy/gossip-presence.c:276
 msgid "Busy"
-msgstr "Ocupado"
+msgstr "Užsiėmęs"
 
 #: ../libempathy/gossip-presence.c:279
 msgid "Away"
-msgstr "Ausente"
+msgstr "Manęs nėra."
 
 #: ../libempathy-gtk/empathy-main-window.c:254
 msgid "Show and edit accounts"
-msgstr "Mostrar y editar cuentas"
+msgstr "Rodyti ir taisyti abonentus"
 
 #: ../libempathy-gtk/empathy-main-window.c:456
 msgid "Group"
-msgstr "Grupo"
+msgstr "Grupė"
 
 #: ../libempathy-gtk/empathy-main-window.c:477
 msgid "Contact"
-msgstr "Contacto"
+msgstr "Bičiulis"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:1
 #, fuzzy
 msgid "Contact List - Empathy"
-msgstr "_Mostrar lista de contactos"
+msgstr "_Rodyti bičiulių sąrašą"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:2
 msgid "Context"
-msgstr "Contexto"
+msgstr "Konktestas"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:3
 msgid "Join _Favorites"
-msgstr "Unir a _favoritos"
+msgstr "Prisijungti prie _mėgstamų"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:4
 #: ../libempathy-gtk/gossip-chat.glade.h:10
 msgid "Join _New..."
-msgstr "Unirse a _nuevo…"
+msgstr "Prisijungi prie _naujo..."
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:5
 msgid "Manage Favorites..."
-msgstr "Gestionar favoritos…"
+msgstr "Tvarkyti mėgstamus..."
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:6
 msgid "Show _Offline Contacts"
-msgstr "Mostrar contactos _desconectados"
+msgstr "Rodyti _atsijungusius bičiulius"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:7
 msgid "_About"
-msgstr "_Acerca de"
+msgstr "_Apie"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:8
 msgid "_Accounts"
-msgstr "_Cuentas"
+msgstr "_Abonentai"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:9
 #: ../libempathy-gtk/gossip-chat.glade.h:15
 msgid "_Add Contact..."
-msgstr "_Añadir contacto…"
+msgstr "Pri_dėti bičiulį..."
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:10
 #: ../libempathy-gtk/gossip-contact-list.c:298
 msgid "_Chat"
-msgstr "_Chat"
+msgstr "P_okalbis"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:11
 msgid "_Contents"
-msgstr "_Contenido"
+msgstr "_Turinys"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:12
 #: ../libempathy-gtk/gossip-chat.glade.h:21
 #: ../libempathy-gtk/gossip-contact-list.c:310
 msgid "_Edit"
-msgstr "_Editar"
+msgstr "_Keisti"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:13
 msgid "_Help"
-msgstr "Ay_uda"
+msgstr "_Žinynas"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:14
 #: ../libempathy-gtk/empathy-status-icon.glade.h:2
 msgid "_New Message..."
-msgstr "Mensaje _nuevo…"
+msgstr "_Nauja žinutė..."
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:15
 msgid "_Personal Information"
-msgstr "Información _personal"
+msgstr "_Asmeninė informacija"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:16
 msgid "_Preferences"
-msgstr "_Preferencias"
+msgstr "_Nustatymai"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:17
 #: ../libempathy-gtk/empathy-status-icon.glade.h:3
 msgid "_Quit"
-msgstr "_Salir"
+msgstr "Iš_eiti"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:18
 #: ../libempathy-gtk/gossip-chat.glade.h:25
 msgid "_Room"
-msgstr "_Sala"
+msgstr "_Kambarys"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:19
 #: ../libempathy-gtk/gossip-chat.glade.h:28
 #: ../libempathy-gtk/gossip-contact-list.c:326
 msgid "_View Previous Conversations"
-msgstr "_Ver conversaciones previas"
+msgstr "Žiūrė_ti ankstesnius pokalbius"
 
 #: ../libempathy-gtk/empathy-status-icon.glade.h:1
 msgid "Status"
-msgstr "Estado"
+msgstr "Būsena"
 
 #: ../libempathy-gtk/empathy-status-icon.glade.h:4
 msgid "_Show Contact List"
-msgstr "_Mostrar lista de contactos"
+msgstr "_Rodyti bičiulių sąrašą"
 
 #: ../libempathy-gtk/gossip-about-dialog.c:63
 #, fuzzy
@@ -323,10 +313,10 @@ msgid ""
 "Foundation; either version 2 of the License, or (at your option) any later "
 "version."
 msgstr ""
-"Gossip es software libre; puede redistribuirlo y /o modificarlo bajo los "
-"términos de la Licencia Pública General tal como la publica la Free Software "
-"Foundation; ya sea en la versión 2 de la Licencia, o (a su elección) "
-"cualquier versión posterior."
+"Gossip yra laisva programinė įranga; galite ją platinti ir/ar modifikuoti "
+"GNU bendrosios viešosios licencijos sąlygomis, kurios paskelbtos Laisvosios "
+"programinės įrangos fondo; 2-osios arba (Jūsų pasirinkimu) bet kurios "
+"vėlesnės licencijos versijos sąlygomis."
 
 #: ../libempathy-gtk/gossip-about-dialog.c:67
 #, fuzzy
@@ -336,10 +326,9 @@ msgid ""
 "FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more "
 "details."
 msgstr ""
-"Gossip se distribuye con la esperanza de que le sea útil,pero SIN NINGUNA "
-"GARANTÍA; sin incluso la garantía implícita de MERCANTILIDAD o IDONEIDAD "
-"PARA UN PROPÓSITO PARTICULAR. Vea la Licencia Pública General de GNU para "
-"más detalles."
+"Gossip yra platinama tikintis, kad jis bus naudinga, bet BE JOKIŲ GARANTIJŲ; "
+"netgi be numanomų PARDAVIMO arba TINKAMUMO TAM TIKRAM TIKSLUI garantijų. Dėl "
+"išsamesnės informacijos žiūrėkite GNU bendrąją viešąją licenciją."
 
 #: ../libempathy-gtk/gossip-about-dialog.c:71
 #, fuzzy
@@ -348,25 +337,24 @@ msgid ""
 "Empathy; if not, write to the Free Software Foundation, Inc., 51 Franklin "
 "Street, Fifth Floor, Boston, MA 02110-130159 USA"
 msgstr ""
-"Debería haber recibido una copia de la Licencia Pública General GNU junto "
-"con Gossip ; si no, escriba a la Free Software Foundation, Inc., 51 Franklin "
-"Street, Fifth Floor, Boston, MA 02110-130159 USA"
+"Jūs turėjote gauti GNU bendrosios viešosios licencijos kopiją kartu su "
+"Gossip; jeigu negavote, rašykite Laisvosios programinės įrangos fondui, 51 "
+"Franklin Street, Fifth Floor, Boston, MA 02110-130159 USA"
 
 #: ../libempathy-gtk/gossip-about-dialog.c:99
 msgid "An Instant Messaging client for GNOME"
-msgstr "Un cliente de mensajería instantánea para GNOME"
+msgstr "Greitų žinučių klientas skirtas GNOME"
 
 #: ../libempathy-gtk/gossip-about-dialog.c:105
 msgid "translator-credits"
 msgstr ""
-"María Majadas\n"
-"Ezequiel Pérez\n"
-"QA: Francisco Javier F. Serrador"
+"Žygimantas Beručka\n"
+"Justina Klingaitė"
 
 #: ../libempathy-gtk/gossip-accounts-dialog.c:224
 #, fuzzy
 msgid "Disable"
-msgstr "Disponible"
+msgstr "Esu"
 
 #: ../libempathy-gtk/gossip-accounts-dialog.c:227
 msgid "Enable"
@@ -375,7 +363,7 @@ msgstr ""
 #: ../libempathy-gtk/gossip-accounts-dialog.c:261
 #: ../libempathy-gtk/gossip-accounts-dialog.glade.h:3
 msgid "<b>No Account Selected</b>"
-msgstr "<b>Sin cuenta seleccionada</b>"
+msgstr "<b>Abonentas nepasirinktas</b>"
 
 #: ../libempathy-gtk/gossip-accounts-dialog.c:263
 msgid ""
@@ -385,28 +373,28 @@ msgid ""
 "If you do not want to add an account, simply click on the account you want "
 "to configure in the list on the left."
 msgstr ""
-"Para añadir una nueva cuenta, puede pulsar en el botón 'Añadir' y una nueva "
-"entrada será creada para que empiece a configurarla.\n"
+"Norėdami pridėti naują abonentą, galite spustelėti mygtuką „Pridėti“ ir bus "
+"sukurtas naujas įrašas konfigūravimui.\n"
 "\n"
-"Si no quiere añadir una cuenta, simplemente pulse en la cuenta que quiere "
-"configurar en la lista de la izquierda."
+"Jeigu nenorite pridėti abonento, paprasčiausiai spustelėkite pageidaujamą "
+"konfigūruoti abonentą sąraše kairėje pusėje."
 
 #: ../libempathy-gtk/gossip-accounts-dialog.c:272
 msgid "<b>No Accounts Configured</b>"
-msgstr "<b>No hay ninguna cuenta configurada</b>"
+msgstr "<b>Nėra sukonfigūruotų abonentų</b>"
 
 #: ../libempathy-gtk/gossip-accounts-dialog.c:274
 msgid ""
 "To add a new account, you can click on the 'Add' button and a new entry will "
 "be created for you to start configuring."
 msgstr ""
-"Para añadir una cuenta nueva, pulse en el botón 'Añadir' y se creará una "
-"entrada nueva para que la configure."
+"Norėdami pridėti naują abonentą, galite spustelėti mygtuką „Pridėti“ ir bus "
+"sukurtas naujas įrašas konfigūravimui."
 
 #: ../libempathy-gtk/gossip-accounts-dialog.c:362
 #: ../libempathy-gtk/gossip-accounts-dialog.glade.h:6
 msgid "Accounts"
-msgstr "Cuentas"
+msgstr "Abonentai"
 
 #: ../libempathy-gtk/gossip-accounts-dialog.c:857
 #, c-format
@@ -414,8 +402,8 @@ msgid ""
 "You are about to remove your %s account!\n"
 "Are you sure you want to proceed?"
 msgstr ""
-"Va a eliminar su cuenta %s\n"
-"¿Seguro que quiere continuar?"
+"Ištrinsite abonentą %s!\n"
+"Ar tikrai norite tęsti?"
 
 #: ../libempathy-gtk/gossip-accounts-dialog.c:863
 msgid ""
@@ -425,23 +413,23 @@ msgid ""
 "Should you decide to add the account back at a later time, they will still "
 "be available."
 msgstr ""
-"Cualquier conversación o sala de chat asociada NO se eliminará si decide "
-"continuar.\n"
+"Jei nuspręsite tęsti, susiję pokalbiai bei pokalbių kambariai nebus "
+"ištrinti.\n"
 "\n"
-"Si decidiera volver a añadir la cuenta más tarde, estarán aún disponibles."
+"Jei vėliau vėl pridėsite abonentą, jie vis dar bus prieinami."
 
 #: ../libempathy-gtk/gossip-accounts-dialog.glade.h:1
 msgid "<b>Account</b>"
-msgstr "<b>Cuenta</b>"
+msgstr "<b>Abonentas</b>"
 
 #: ../libempathy-gtk/gossip-accounts-dialog.glade.h:2
 #, fuzzy
 msgid "<b>New Account</b>"
-msgstr "<b>Cuenta</b>"
+msgstr "<b>Abonentas</b>"
 
 #: ../libempathy-gtk/gossip-accounts-dialog.glade.h:4
 msgid "<b>Settings</b>"
-msgstr "<b>Configuración</b>"
+msgstr "<b>Nustatymai</b>"
 
 #: ../libempathy-gtk/gossip-accounts-dialog.glade.h:5
 msgid "A unique name for this account to identify it personally to you."
@@ -450,7 +438,7 @@ msgstr ""
 #: ../libempathy-gtk/gossip-accounts-dialog.glade.h:7
 #, fuzzy
 msgid "Cr_eate"
-msgstr "Crear"
+msgstr "Sukurti"
 
 #: ../libempathy-gtk/gossip-accounts-dialog.glade.h:8
 msgid "Imendio "
@@ -468,20 +456,19 @@ msgid ""
 "If you do not want to add an account, simply click on the account you want "
 "to configure in the list on the left."
 msgstr ""
-"Para añadir una cuenta nueva, pulse en el botón de 'Añadir' y una se creará "
-"una entrada nueva para que la configure.\n"
+"Norėdami pridėti naują abonentą, galite spustelėti mygtuką „Pridėti“ ir bus "
+"sukurtas naujas įrašas konfigūravimui.\n"
 "\n"
-"Si no quiere añadir una cuenta, simplemente pulse en la cuenta que quiere "
-"configurar en la lista de la izquierda."
+"Jeigu nenorite pridėti abonento, paprasčiausiai spustelėkite pageidaujamą "
+"konfigūruoti abonentą sąraše kairėje pusėje."
 
 #: ../libempathy-gtk/gossip-accounts-dialog.glade.h:13
 msgid "_Name:"
-msgstr "_Nombre:"
+msgstr "_Vardas:"
 
 #: ../libempathy-gtk/gossip-accounts-dialog.glade.h:14
-#, fuzzy
 msgid "_Type:"
-msgstr "_Tema:"
+msgstr ""
 
 #: ../libempathy-gtk/gossip-account-widget-generic.c:144
 #: ../libempathy-gtk/gossip-account-widget-generic.c:186
@@ -497,153 +484,151 @@ msgstr ""
 
 #: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:2
 msgid "Forget password and clear the entry."
-msgstr ""
+msgstr "Užmiršti slaptažodį ir išvalyri įrašą."
 
 #: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:3
 msgid "Login I_D:"
-msgstr "_ID de sesión:"
+msgstr "Prisijungimo I_D:"
 
 #: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:4
 msgid "Pass_word:"
-msgstr "Contra_seña:"
+msgstr "Sla_ptažodis:"
 
 #: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:5
 msgid "Reso_urce:"
-msgstr "Re_curso:"
+msgstr "Res_ursas:"
 
 #: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:6
 msgid "Use encryption (SS_L)"
-msgstr "Usar encriptado (SS_L)"
+msgstr "Naudoti šifravimą (SS_L)"
 
 #: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:7
 msgid "_Port:"
-msgstr "_Puerto:"
+msgstr "_Prievadas:"
 
 #: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:8
 msgid "_Server:"
-msgstr "_Servidor:"
+msgstr "_Serveris:"
 
 #: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:9
 msgid "jabber account settings"
-msgstr "propiedades de la cuenta jabber"
+msgstr "jabber abonento nustatymai"
 
 #: ../libempathy-gtk/gossip-chat.c:314
 msgid "Disconnected"
-msgstr "Desconectado"
+msgstr "Neprisijungęs"
 
 #: ../libempathy-gtk/gossip-chat.c:858
 msgid "Insert Smiley"
-msgstr "Insertar emoticono"
+msgstr "Įterpti šypsniuką"
 
 #: ../libempathy-gtk/gossip-chat.c:906
 msgid "_Check Word Spelling..."
-msgstr "_Comprobar ortografía…"
+msgstr "_Tikrinti žodžių rašybą..."
 
 #: ../libempathy-gtk/gossip-chat.c:1244
 msgid "Connected"
-msgstr "Conectado"
+msgstr "Prisijungęs"
 
 #: ../libempathy-gtk/gossip-chat.glade.h:1
 msgid "C_lear"
-msgstr "_Limpiar"
+msgstr "Išva_lyti"
 
 #: ../libempathy-gtk/gossip-chat.glade.h:2
 msgid "Change _Topic..."
-msgstr ""
+msgstr "Pakeisti _temą..."
 
 #: ../libempathy-gtk/gossip-chat.glade.h:3
 msgid "Chat"
-msgstr "Chat"
+msgstr "Pokalbis"
 
 #: ../libempathy-gtk/gossip-chat.glade.h:4
 msgid "Contact Infor_mation"
-msgstr "Informa_ción del contacto"
+msgstr "Bičiulio infor_macija"
 
 #: ../libempathy-gtk/gossip-chat.glade.h:5
 msgid "Cu_t"
-msgstr "Cor_tar"
+msgstr "_Iškirpti"
 
 #: ../libempathy-gtk/gossip-chat.glade.h:6
-#, fuzzy
 msgid "In_vite..."
-msgstr "In_vitar"
+msgstr "_Pakviesti..."
 
 #: ../libempathy-gtk/gossip-chat.glade.h:7
 msgid "Insert _Smiley"
-msgstr "Insertar _emoticono"
+msgstr "Įterpti _šypsiuką"
 
 #: ../libempathy-gtk/gossip-chat.glade.h:8
-#, fuzzy
 msgid "Invitation _message:"
-msgstr "Mensaje de invitación:"
+msgstr "Pakvietimo ži_nutė:"
 
 #: ../libempathy-gtk/gossip-chat.glade.h:9
 msgid "Invite"
-msgstr "Invitar"
+msgstr "Pakviesti"
 
 #: ../libempathy-gtk/gossip-chat.glade.h:11
 msgid "Move Tab _Left"
-msgstr "Mover solapa a la _izquierda"
+msgstr "Perkelti kortelę į _kairę"
 
 #: ../libempathy-gtk/gossip-chat.glade.h:12
 msgid "Move Tab _Right"
-msgstr "Mover solapa a la _derecha"
+msgstr "Perkelti kortelę į _dešinę"
 
 #: ../libempathy-gtk/gossip-chat.glade.h:13
 msgid "Select who would you like to invite:"
-msgstr "Seleccione a quién quiere invitar:"
+msgstr "Pasirinkite ką norite pakviesti:"
 
 #: ../libempathy-gtk/gossip-chat.glade.h:14
 msgid "You have been invited to join a chat conference."
-msgstr "Le han invitado a unirse a una conferencia por chat."
+msgstr "Esate kviečiami prisijungti prie pokalbių konferencijos."
 
 #: ../libempathy-gtk/gossip-chat.glade.h:16
 msgid "_Add To Favorites"
-msgstr "Añadir a _favoritos"
+msgstr "Į_dėti į mėgstamiausius"
 
 #: ../libempathy-gtk/gossip-chat.glade.h:17
 msgid "_Close"
-msgstr "_Cerrar"
+msgstr "_Užverti"
 
 #: ../libempathy-gtk/gossip-chat.glade.h:18
 msgid "_Conversation"
-msgstr "_Conversación"
+msgstr "_Pokalbis"
 
 #: ../libempathy-gtk/gossip-chat.glade.h:19
 msgid "_Copy"
-msgstr "_Copiar"
+msgstr "_Kopijuoti"
 
 #: ../libempathy-gtk/gossip-chat.glade.h:20
 msgid "_Detach Tab"
-msgstr "_Desacoplar solapa"
+msgstr "A_tkabinti kortelę"
 
 #: ../libempathy-gtk/gossip-chat.glade.h:22
 msgid "_Next Tab"
-msgstr "Solapa _siguiente"
+msgstr "_Sekanti kortelė"
 
 #: ../libempathy-gtk/gossip-chat.glade.h:23
 msgid "_Paste"
-msgstr "_Pegar"
+msgstr "Į_dėti"
 
 #: ../libempathy-gtk/gossip-chat.glade.h:24
 msgid "_Previous Tab"
-msgstr "Solapa _anterior"
+msgstr "_Ankstesnė kortelė"
 
 #: ../libempathy-gtk/gossip-chat.glade.h:26
 msgid "_Show Contacts"
-msgstr "_Mostrar contactos"
+msgstr "_Rodyti bičiulius"
 
 #: ../libempathy-gtk/gossip-chat.glade.h:27
 msgid "_Tabs"
-msgstr "_Solapas"
+msgstr "K_ortelės"
 
 #: ../libempathy-gtk/gossip-chat-view.c:544
 msgid "_Copy Link Address"
-msgstr "_Copiar la dirección del enlace"
+msgstr "_Kopijuoti nuorodos adresą"
 
 #: ../libempathy-gtk/gossip-chat-view.c:552
 msgid "_Open Link"
-msgstr "_Abrir enlace"
+msgstr "_Atverti nuorodą"
 
 #: ../libempathy-gtk/gossip-chat-view.c:889
 msgid "%A %d %B %Y"
@@ -654,172 +639,172 @@ msgstr "%A %d %B %Y"
 #, fuzzy
 msgid "New Message"
 msgid_plural "New Messages"
-msgstr[0] "Mensaje nuevo"
-msgstr[1] "Mensaje nuevo"
+msgstr[0] "Nauja žinutė"
+msgstr[1] "Nauja žinutė"
+msgstr[2] "Nauja žinutė"
 
 #: ../libempathy-gtk/gossip-chat-window.c:691
 #, fuzzy
 msgid "Chat Room"
-msgstr "Salas de chat"
+msgstr "Pokalbių kambariai"
 
 #: ../libempathy-gtk/gossip-chat-window.c:696
 #: ../libempathy-gtk/gossip-chat-window.c:719
 #, fuzzy, c-format
 msgid "Conversation"
 msgid_plural "Conversations (%d)"
-msgstr[0] "_Conversación"
-msgstr[1] "_Conversación"
+msgstr[0] "_Pokalbis"
+msgstr[1] "_Pokalbis"
+msgstr[2] "_Pokalbis"
 
 #: ../libempathy-gtk/gossip-chat-window.c:1295
 msgid "Typing a message."
-msgstr "Tecleando un mensaje."
+msgstr "Rašoma žinutė."
 
 #: ../libempathy-gtk/gossip-contact-list.c:290
 msgid "_Contact"
-msgstr "Con_tacto"
+msgstr "_Bičiulis"
 
 #: ../libempathy-gtk/gossip-contact-list.c:294
 msgid "_Group"
-msgstr "_Grupo"
+msgstr "_Grupė"
 
 #: ../libempathy-gtk/gossip-contact-list.c:298
 msgid "Chat with contact"
-msgstr "Chat con un contacto"
+msgstr "Šnekėti su bičiuliu"
 
 #: ../libempathy-gtk/gossip-contact-list.c:302
 msgid "Infor_mation"
-msgstr "Informa_ción"
+msgstr "Infor_macija"
 
 #: ../libempathy-gtk/gossip-contact-list.c:302
 msgid "View contact information"
-msgstr "Ver información del contacto"
+msgstr "Žiūrėti bičiulio informaciją"
 
 #: ../libempathy-gtk/gossip-contact-list.c:306
 msgid "Re_name"
-msgstr "Re_nombrar"
+msgstr "Pervadi_nti"
 
 #: ../libempathy-gtk/gossip-contact-list.c:306
 msgid "Rename"
-msgstr "Renombrar"
+msgstr "Pervadinti"
 
 #: ../libempathy-gtk/gossip-contact-list.c:310
 msgid "Edit the groups and name for this contact"
-msgstr "Editar grupos y nombre para este contacto"
+msgstr "Keisti šio bičiulio grupes ir vardą"
 
 #: ../libempathy-gtk/gossip-contact-list.c:314
 msgid "_Remove"
-msgstr "_Quitar"
+msgstr "_Pašalinti"
 
 #: ../libempathy-gtk/gossip-contact-list.c:314
 msgid "Remove contact"
-msgstr "Quita el contacto"
+msgstr "Pašalinti bičiulį"
 
 #: ../libempathy-gtk/gossip-contact-list.c:318
 msgid "_Invite to Chat Room"
-msgstr "_Invitar a sala de chat"
+msgstr "Pa_kviesti į pokalbių kambarį"
 
 #: ../libempathy-gtk/gossip-contact-list.c:318
 msgid "Invite to a currently open chat room"
-msgstr "Invita a una sala de chat ya abierta"
+msgstr "Pakviesti į dabar atvertą pokalbių kambarį"
 
 #: ../libempathy-gtk/gossip-contact-list.c:322
 msgid "_Send File..."
-msgstr "_Enviar archivo…"
+msgstr "_Siųsti rinkmeną..."
 
 #: ../libempathy-gtk/gossip-contact-list.c:322
 msgid "Send a file"
-msgstr "Envía un archivo"
+msgstr "Siųsti rinkmeną"
 
 #: ../libempathy-gtk/gossip-contact-list.c:326
 msgid "View previous conversations with this contact"
-msgstr "Ver conversaciones anteriores con este contacto"
+msgstr "Žiūrėti ankstesnius pokalbius su šiuo bičiuliu"
 
 #: ../libempathy-gtk/gossip-preferences.c:250
 msgid "Language"
-msgstr "Idioma"
+msgstr "Kalba"
 
 #: ../libempathy-gtk/gossip-preferences.glade.h:1
 msgid "<b>Appearance</b>"
-msgstr "<b>Apariencia</b>"
+msgstr "<b>Išvaizda</b>"
 
 #: ../libempathy-gtk/gossip-preferences.glade.h:2
 msgid "<b>Audio</b>"
-msgstr "<b>Sonido</b>"
+msgstr "<b>Garsai</b>"
 
 #: ../libempathy-gtk/gossip-preferences.glade.h:3
 msgid "<b>Behaviour</b>"
-msgstr "<b>Comportamiento</b>"
+msgstr "<b>Elgsena</b>"
 
 #: ../libempathy-gtk/gossip-preferences.glade.h:4
 #, fuzzy
 msgid "<b>Contact List</b>"
-msgstr "<b>Estado</b>"
+msgstr "<b>Būsena</b>"
 
 #: ../libempathy-gtk/gossip-preferences.glade.h:5
 msgid "<b>Languages</b>"
-msgstr "<b>Idiomas</b>"
+msgstr "<b>Kalbos</b>"
 
 #: ../libempathy-gtk/gossip-preferences.glade.h:6
 msgid "<b>Options</b>"
-msgstr "<b>Opciones</b>"
+msgstr "<b>Parinktys</b>"
 
 #: ../libempathy-gtk/gossip-preferences.glade.h:7
 msgid "<b>Visual</b>"
-msgstr "<b>Visual</b>"
+msgstr "<b>Vaizdas</b>"
 
 #: ../libempathy-gtk/gossip-preferences.glade.h:8
 msgid ""
 "<small>The list of languages reflects only the languages for which you have "
 "a dictionary installed.</small>"
 msgstr ""
-"<small>La lista de idiomas refleja sólo los idiomas para los cuales tiene un "
-"diccionario instalado.</small>"
+"<small>Šiame kalbų sąraše yra tik tos kalbos, kurių žodynus turite įdiegę.</"
+"small>"
 
 #: ../libempathy-gtk/gossip-preferences.glade.h:9
 msgid "Avatars are user chosen images shown in the contact list"
-msgstr ""
-"Los avatares son imágenes elegidas por el usuario que se muestran en la "
-"lista de contactos"
+msgstr "Paveikslėliai, pasirinkti naudotojų, rodomi bičiulių sąraše."
 
 #: ../libempathy-gtk/gossip-preferences.glade.h:10
 msgid "Chat Th_eme:"
-msgstr "_Tema del chat:"
+msgstr "Pokalbio t_ema:"
 
 #: ../libempathy-gtk/gossip-preferences.glade.h:11
 msgid "Display notifications when contacts come _online"
-msgstr "Mostrar notificaciones cuando los contactos se _conecten"
+msgstr "Rodyti pranešimus, kai bičiuliai prisijungia"
 
 #: ../libempathy-gtk/gossip-preferences.glade.h:12
 msgid "Enable sounds when _away"
-msgstr "Activar sonidos al _ausentarse"
+msgstr "Įjungti garsus, kai m_anęs nėra"
 
 #: ../libempathy-gtk/gossip-preferences.glade.h:13
 msgid "Enable sounds when _busy"
-msgstr "Activar sonidos cuando se esté _ocupado"
+msgstr "Įjungti garsus, kai aš _užsiėmęs"
 
 #: ../libempathy-gtk/gossip-preferences.glade.h:14
 msgid "General"
-msgstr "General"
+msgstr "Bendra"
 
 #: ../libempathy-gtk/gossip-preferences.glade.h:15
 msgid "Notifications"
-msgstr "Notificaciones"
+msgstr "Pranešimai"
 
 #: ../libempathy-gtk/gossip-preferences.glade.h:16
 msgid "Preferences"
-msgstr "Preferencias"
+msgstr "Nustatymai"
 
 #: ../libempathy-gtk/gossip-preferences.glade.h:17
 msgid "Show _avatars"
-msgstr "Mostrar _avatares"
+msgstr "Rodyti _paveikslėlius"
 
 #: ../libempathy-gtk/gossip-preferences.glade.h:18
 msgid "Show _smileys as images"
-msgstr "Mostrar los _emoticonos como imágenes"
+msgstr "Versti šyp_senėles į grafinius paveiksliukus"
 
 #: ../libempathy-gtk/gossip-preferences.glade.h:19
 msgid "Show co_mpact contact list"
-msgstr "Mostrar lista de contactos co_mpacta"
+msgstr "Rodyti ko_mpaktišką bičiulių sąrašą"
 
 #: ../libempathy-gtk/gossip-preferences.glade.h:20
 msgid "Sort by _name"
@@ -831,320 +816,356 @@ msgstr ""
 
 #: ../libempathy-gtk/gossip-preferences.glade.h:22
 msgid "Spell Checking"
-msgstr "Revisión ortográfica"
+msgstr "Rašybos tikrinimas"
 
 #: ../libempathy-gtk/gossip-preferences.glade.h:23
 msgid "Themes"
-msgstr "Temas"
+msgstr "Temos"
 
 #: ../libempathy-gtk/gossip-preferences.glade.h:24
 msgid "_Enable spell checking"
-msgstr "_Activar revisor ortográfico"
+msgstr "Įj_ungti rašybos tikrinimą"
 
 #: ../libempathy-gtk/gossip-preferences.glade.h:25
 msgid "_Open new chats in separate windows"
-msgstr "_Abrir charlas nuevas en ventanas separadas"
+msgstr "_Atverti naujus pokalbius atskiruose languose"
 
 #: ../libempathy-gtk/gossip-preferences.glade.h:26
 msgid "_Play sound when messages arrive"
-msgstr "_Reproducir sonido cuando lleguen mensajes"
+msgstr "_Gavus žinutę sugroti garsą"
 
 #: ../libempathy-gtk/gossip-preferences.glade.h:27
 msgid "_Use for chat rooms"
-msgstr "_Usar para sala de chat"
+msgstr "_Naudoti pokalbių kambariams"
 
 #: ../libempathy-gtk/gossip-presence-chooser.c:702
 msgid "Custom message..."
-msgstr "Mensaje personalizado…"
+msgstr "Nurodyta žinutė..."
 
 #. Clear list
 #: ../libempathy-gtk/gossip-presence-chooser.c:724
 msgid "Clear List..."
-msgstr "Limpiar lista…"
+msgstr "Išvalyti sąrašą..."
 
 #: ../libempathy-gtk/gossip-presence-chooser.c:803
 msgid "Are you sure you want to clear the list?"
-msgstr "¿Está seguro que quiere vaciar la lista?"
+msgstr "Ar tikrai norite išvalyti sąrašą?"
 
 #: ../libempathy-gtk/gossip-presence-chooser.c:807
 msgid ""
 "This will remove any custom messages you have added to the list of preset "
 "status messages."
-msgstr ""
-"Esto eliminará cualquier mensaje personalizado que haya añadido a las lista "
-"de mensajes de estado predeterminada."
+msgstr "Visos žinutės iš greitų būsenos žinučių sąrašo bus ištrintos."
 
 #: ../libempathy-gtk/gossip-presence-chooser.c:812
 msgid "Clear List"
-msgstr "Vaciar lista"
+msgstr "Išvalyti sąrašą"
 
 #: ../libempathy-gtk/gossip-presence-chooser.glade.h:1
 msgid "Enter status message:"
-msgstr "Introduzca mensaje de estado:"
+msgstr "Įveskite būsenos žinutę:"
 
 #: ../libempathy-gtk/gossip-presence-chooser.glade.h:2
 msgid "Status Message Presets"
-msgstr "Preconfiguraciones de mensajes de estado"
+msgstr "Būsenos žinučių šablonai"
 
 #: ../libempathy-gtk/gossip-presence-chooser.glade.h:3
 msgid "_Add to status message list"
-msgstr "_Añadir a la lista de mensajes de estado"
+msgstr "Į_dėti į būsenų žinučių sąrašą"
 
 #: ../libempathy-gtk/gossip-private-chat.c:198
 #, c-format
 msgid "%s went offline"
-msgstr "%s se ha desconectado"
+msgstr "%s atsijungė"
 
 #: ../libempathy-gtk/gossip-private-chat.c:212
 #, c-format
 msgid "%s has come online"
-msgstr "%s se ha conectado"
+msgstr "%s prisijungė"
 
 #: ../libempathy-gtk/gossip-theme-manager.c:87
 msgid "Classic"
-msgstr "Clásico"
+msgstr "Klasikinė"
 
 #: ../libempathy-gtk/gossip-theme-manager.c:88
 msgid "Simple"
-msgstr "Simple"
+msgstr "Paprasta"
 
 #: ../libempathy-gtk/gossip-theme-manager.c:89
 msgid "Clean"
-msgstr "Limpiar"
+msgstr "Tvarkinga"
 
 #: ../libempathy-gtk/gossip-theme-manager.c:90
 msgid "Blue"
-msgstr "Azul"
+msgstr "Mėlyna"
 
 #: ../src/empathy-main.c:145
 msgid "Don't connect on startup"
-msgstr "No conectarse al inicio"
+msgstr "Paleidimo metu neprisijungti"
 
 #: ../src/empathy-main.c:155
 #, fuzzy
 msgid "- Empathy Instant Messenger"
-msgstr "- Mensajería instantánea Gossip"
+msgstr "- Greitų žinučių programa „Gossip“"
 
 #~ msgid "Gossip Instant Messenger"
-#~ msgstr "Mensajería instantánea Gossip"
+#~ msgstr "Greitų žinučių programa „Gossip“"
 
 #~ msgid "Normal"
-#~ msgstr "Normal"
+#~ msgstr "Normalus"
 
 #~ msgid "Joining"
-#~ msgstr "Uniéndose"
+#~ msgstr "Jungiamasi"
 
 #~ msgid "Active"
-#~ msgstr "Activo"
+#~ msgstr "Aktyvus"
 
 #~ msgid "Inactive"
-#~ msgstr "Inactivo"
+#~ msgstr "Neaktyvus"
 
 #~ msgid "Unknown"
-#~ msgstr "Desconocido"
+#~ msgstr "Nežinoma"
 
 #~ msgid "Error"
-#~ msgstr "Error"
+#~ msgstr "Klaida"
 
 #~ msgid "Moderator"
 #~ msgid_plural "Moderators"
-#~ msgstr[0] "Moderador"
-#~ msgstr[1] "Moderadores"
+#~ msgstr[0] "Moderatorius"
+#~ msgstr[1] "Moderatoriai"
+#~ msgstr[2] "Moderatorių"
 
 #~ msgid "Participant"
 #~ msgid_plural "Participants"
-#~ msgstr[0] "Participante"
-#~ msgstr[1] "Participantes"
+#~ msgstr[0] "Dalyvis"
+#~ msgstr[1] "Dalyviai"
+#~ msgstr[2] "Dalyvių"
 
 #~ msgid "Visitor"
 #~ msgid_plural "Visitors"
-#~ msgstr[0] "Visitante"
-#~ msgstr[1] "Visitantes"
+#~ msgstr[0] "Lankytojas"
+#~ msgstr[1] "Lankytojai"
+#~ msgstr[2] "Lankytojų"
 
 #~ msgid "No role"
-#~ msgstr "Sin rol"
+#~ msgstr "Nėra vaidmens"
 
 #~ msgid "Owner"
 #~ msgid_plural "Owners"
-#~ msgstr[0] "Dueño"
-#~ msgstr[1] "Dueños"
+#~ msgstr[0] "Sąvininkas"
+#~ msgstr[1] "Sąvininkai"
+#~ msgstr[2] "Sąvininkų"
 
 #~ msgid "Administrator"
 #~ msgid_plural "Administrators"
-#~ msgstr[0] "Administrador"
-#~ msgstr[1] "Administradores"
+#~ msgstr[0] "Administratorius"
+#~ msgstr[1] "Administratoriai"
+#~ msgstr[2] "Administratorių"
 
 #~ msgid "Member"
 #~ msgid_plural "Members"
-#~ msgstr[0] "Miembro"
-#~ msgstr[1] "Miembros"
+#~ msgstr[0] "Narys"
+#~ msgstr[1] "Nariai"
+#~ msgstr[2] "Narių"
 
 #~ msgid "Outcast"
 #~ msgid_plural "Outcasts"
-#~ msgstr[0] "Paria"
-#~ msgstr[1] "Parias"
+#~ msgstr[0] "Benamis"
+#~ msgstr[1] "Benamiai"
+#~ msgstr[2] "Benamių"
 
 #~ msgid "No affiliation"
-#~ msgstr "Sin afiliación"
+#~ msgstr "Ne narys"
 
 #~ msgid "The nickname you have chosen is already in use."
-#~ msgstr "El apodo que ha elegido ya se está usando."
+#~ msgstr "Toks slapyvardis jau naudojamas."
 
 #~ msgid "The chat room you tried to join requires a password."
-#~ msgstr ""
-#~ "La sala de chat a la que está intentando unirse requiere una contraseña."
+#~ msgstr "Prisijungimui prie šio kambario reikalingas slaptažodis."
 
 #~ msgid "The remote conference server did not respond in a sensible time."
-#~ msgstr ""
-#~ "El servidor remoto de la conferencia no respondió en un tiempo razonable."
+#~ msgstr "Nutolęs konferencijos serveris per ilgai neatsakė."
 
 #~ msgid "The conference server you tried to join could not be found."
-#~ msgstr ""
-#~ "No se pudo encontrar el servidor de conferencias al que intentó unirse."
+#~ msgstr "Konferencijos serveris, prie kurio bandėte prisijungti, nerastas."
 
 #~ msgid "An unknown error occurred, check your details are correct."
-#~ msgstr ""
-#~ "Ocurrió un error desconocido, compruebe si sus detalles son correctos."
+#~ msgstr "Įvyko nežinoma klaida.  Patikrinkite, ar informacija teisinga."
+
+#~ msgid "Joining the chatroom was canceled."
+#~ msgstr "Prisijungimas prie pokalbių kambario buvo atšauktas."
 
 #~ msgid "Unavailable"
-#~ msgstr "No disponible"
+#~ msgstr "Neprieinamas"
 
 #~ msgid "An unknown error occurred."
-#~ msgstr "Ha ocurrido un error desconocido."
+#~ msgstr "Iškilo nežinoma klaida."
 
 #~ msgid "Connection refused."
-#~ msgstr "Conexión rechazada."
+#~ msgstr "Susijungimas atmestas."
 
 #~ msgid "Server address could not be resolved."
-#~ msgstr "La dirección del servidor no se ha podido resolver."
+#~ msgstr "Nepavyko rasti serverio adreso."
 
 #~ msgid "Connection timed out."
-#~ msgstr "La conexión expiró."
+#~ msgstr "Prisijungimas dėl neaktyvumo nutrauktas."
 
 #~ msgid "Authentication failed."
-#~ msgstr "Falló la autenticación."
+#~ msgstr "Autentikuotis nepavyko."
 
 #~ msgid "The username you are trying already exists."
-#~ msgstr "El usuario que ha elegido ya existe."
+#~ msgstr "Pasirinktas naudotojo vardas jau užimtas."
 
 #~ msgid "The username you are trying is not valid."
-#~ msgstr "El usuario que ha elegido no es válido."
+#~ msgstr "Pasirinktas naudotojo vardas netinkamas."
 
 #~ msgid "This feature is unavailable."
-#~ msgstr "Esta característica no está disponible."
+#~ msgstr "Šios funkcijos nėra."
 
 #~ msgid "This feature is unauthorized."
-#~ msgstr "Esta característica no está autorizada."
+#~ msgstr "Ši funkcija neleistina."
 
 #~ msgid "A specific protocol error occurred that was unexpected."
-#~ msgstr "Ocurrió un error inesperado específico del protocolo."
+#~ msgstr "Iškilo netikėta specifinė protokolo klaida."
 
 #~ msgid "new account"
-#~ msgstr "Cuenta nueva"
+#~ msgstr "naujas abonentas"
 
 #~ msgid "Home"
-#~ msgstr "Domicilio"
+#~ msgstr "Namai"
 
 #~ msgid "Couldn't send message!"
-#~ msgstr "No se pudo enviar el mensaje."
+#~ msgstr "Nepavyko išsiųsti žinutės!"
 
 #~ msgid "Connection could not be opened"
-#~ msgstr "La conexión no se pudo abrir"
+#~ msgstr "Nepavyko atverti ryšio"
 
-#, fuzzy
+#~ msgid "Service has gone and is no longer available"
+#~ msgstr "Paslauga dingo ir daugiau neteikiama"
+
+#~ msgid "Bad or malformed request to this service"
+#~ msgstr "Neteisinga paslaugos užklausa"
+
+#~ msgid "Unauthorized request to this service"
+#~ msgstr "Neleistina paslaugos užklausa"
+
+#~ msgid "Payment is required for this service"
+#~ msgstr "Už šią paslaugą reikia apmokėti"
+
+#~ msgid "This service is forbidden"
+#~ msgstr "Ši paslauga uždrausta"
+
 #~ msgid "This service is unavailable or not found"
-#~ msgstr "Esta característica no está disponible."
+#~ msgstr "Ši paslauga neteikiama arba nerasta"
+
+#~ msgid "Unacceptable request sent to this services"
+#~ msgstr "Neprieinama užklausa nusiųsta į šią paslaugą"
+
+#~ msgid "Registration is required"
+#~ msgstr "Būtina registracija"
+
+#~ msgid "There was a conflict of interest trying to use this service"
+#~ msgstr "Interesų susikirtimas bandant naudoti šią paslaugą"
+
+#~ msgid "There was an internal service error"
+#~ msgstr "Vidinė paslaugos klaida"
+
+#~ msgid "This feature is not implemented"
+#~ msgstr "Ši funkcija nesukurta"
 
 #, fuzzy
-#~ msgid "This feature is not implemented"
-#~ msgstr "Esta característica no está autorizada."
+#~ msgid "The remote service timed out"
+#~ msgstr "Pašalinimo paslaugos laikas baigėsi"
 
 #~ msgid "Stop"
-#~ msgstr "Parar"
+#~ msgstr "Sustabdyti"
 
 #~ msgid "Disconnect"
-#~ msgstr "Desconectar"
+#~ msgstr "Atsijungti"
 
 #~ msgid "Connect"
-#~ msgstr "Conectar"
+#~ msgstr "Prisijungti"
 
 #~ msgid "Successfully registered your new account settings."
-#~ msgstr "Se ha registrado con éxito la configuración de su cuenta nueva."
+#~ msgstr "Naujo abonento nustatymai sėkmingai užregistruoti."
 
 #~ msgid "You should now be able to connect to your new account."
-#~ msgstr "Ahora debería poder conectarse a su cuenta nueva."
+#~ msgstr "Dabar turėtumėte galėti prisijungti naujuoju abonentu."
 
 #~ msgid "Failed to register your new account settings."
-#~ msgstr "Falló al registrar la configuración de su cuenta nueva"
+#~ msgstr "Nepavyko užregistruoti naujo abonento nustatymų."
 
-#, fuzzy
 #~ msgid "Successfully changed your account password."
-#~ msgstr "Se ha registrado con éxito la configuración de su cuenta nueva."
+#~ msgstr "Naujo abonento slaptažodis sėkmingai pakeistas."
 
-#, fuzzy
 #~ msgid "You should now be able to connect with your new password."
-#~ msgstr "Ahora debería poder conectarse a su cuenta nueva."
+#~ msgstr "Dabar turėtumėte galėti prisijungti su naujuoju slaptažodžiu."
 
-#, fuzzy
 #~ msgid "Failed to change your account password."
-#~ msgstr "Introduzca la contraseña de su cuenta %s:"
+#~ msgstr "Nepavyko pakeisti Jūsų abonento slaptažodžio."
 
-#, fuzzy
 #~ msgid ""
 #~ "Please enter a new password for this account:\n"
 #~ "%s"
 #~ msgstr ""
-#~ "Introduzca un nombre nuevo para el grupo:\n"
+#~ "Įveskite naują šio abonento slaptažodį:\n"
 #~ "%s"
 
 #~ msgid "No information is available for this contact."
-#~ msgstr "No hay información disponible para este contacto."
+#~ msgstr "Šio bičiulio informacija neprieinama."
 
 #~ msgid "Information requested, please wait..."
-#~ msgstr "Información solicitada, espere por favor…"
+#~ msgstr "Informacija užklausta, prašome palaukti..."
 
 #~ msgid "I would like to add you to my contact list."
-#~ msgstr "Quisiera añadirle a mi lista de contactos."
+#~ msgstr "Norėčiau Jus įtraukti į savo bičiulių sąrašą."
 
 #~ msgid "To summarize:"
-#~ msgstr "Para resumir:"
+#~ msgstr "Apibendrinti:"
 
 #~ msgid "%d new message"
 #~ msgid_plural "%d new messages"
-#~ msgstr[0] "%d mensaje nuevo"
-#~ msgstr[1] "%d mensajes nuevos"
+#~ msgstr[0] "%d nauja žinutė"
+#~ msgstr[1] "%d naujos žinutės"
+#~ msgstr[2] "%d naujų žinučių"
 
 #~ msgid "%d subscription request"
 #~ msgid_plural "%d subscription requests"
-#~ msgstr[0] "%d solicitud de subscripción"
-#~ msgstr[1] "%d solicitudes de subscripción"
+#~ msgstr[0] "%d užsisakymo prašymas"
+#~ msgstr[1] "%d užsisakymo prašymai"
+#~ msgstr[2] "%d užsisakymo prašymų"
 
 #~ msgid "%d file transfer request"
 #~ msgid_plural "%d file transfer requests"
-#~ msgstr[0] "%d solicitud de transferencia de archivo"
-#~ msgstr[1] "%d solicitudes de transferencia de archivo"
+#~ msgstr[0] "%d rinkmenų siuntimo užklausa"
+#~ msgstr[1] "%d rinkmenų siuntimo užklausos"
+#~ msgstr[2] "%d rinkmenų siuntimo užklausų"
 
 #~ msgid "%d server message"
 #~ msgid_plural "%d server messages"
-#~ msgstr[0] "%d mensaje del servidor"
-#~ msgstr[1] "%d mensajes del servidor"
+#~ msgstr[0] "%d serverio pranešimas"
+#~ msgstr[1] "%d serverio pranešimai"
+#~ msgstr[2] "%d serverio pranešimų"
 
 #~ msgid "%d error"
 #~ msgid_plural "%d errors"
-#~ msgstr[0] "%d error"
-#~ msgstr[1] "%d errores"
+#~ msgstr[0] "%d klaida"
+#~ msgstr[1] "%d klaidos"
+#~ msgstr[2] "%d klaidų"
 
 #~ msgid "If you quit, you will lose all unread information."
-#~ msgstr "Si sale, usted perderá toda la información no leída."
+#~ msgstr "Jeigu užversite, prarasite visą neperskaitytą informaciją."
 
 #~ msgid "Gossip is still running, it is just hidden."
-#~ msgstr "Gossip todavía se está ejecutando, sólo está oculto."
+#~ msgstr "Gossip vis dar veikia, ji tiesiog paslėpta."
 
 #~ msgid "Click on the notification area icon to show Gossip."
-#~ msgstr "Pulse en el icono del área de notificación para mostrar Gossip."
+#~ msgstr ""
+#~ "Spragtelėkite pranešimų vietoje esančią piktogramą norėdami pamatyti "
+#~ "Gossip."
 
 #~ msgid "You were about to quit!"
-#~ msgstr "¡Ibas a cerrarlo!"
+#~ msgstr "Ketinate užverti programą!"
 
 #~ msgid ""
 #~ "Since no system or notification tray has been found, this action would "
@@ -1153,66 +1174,66 @@ msgstr "- Mensajería instantánea Gossip"
 #~ "This is just a reminder, from now on, Gossip will quit when performing "
 #~ "this action unless you uncheck the option below."
 #~ msgstr ""
-#~ "Ya que no se ha encontrado ninguna bandeja de sistema o notificación, "
-#~ "esta acción cerraría normalmente Gossip.\n"
+#~ "Kadangi nerasta sistemos ar pranešimų vietos skydelių, šiuo veiksmu "
+#~ "Gossip uždaroma.\n"
 #~ "\n"
-#~ "Esto es solo un recordatoria, desde ahora, Gossip terminará al realizar "
-#~ "esta acción a menos que desmarque la opción de abajo."
+#~ "Tai tik priminimas, nuo dabar, atliekant šį veiksmą Gossip bus uždaroma, "
+#~ "nebent išjungsite žemiau esančią parinktį."
 
 #~ msgid "Edit Account _Details"
-#~ msgstr "Editar _detalles de la cuenta"
+#~ msgstr "Keisti abonento _informaciją"
 
 #~ msgid "Click to enlarge"
-#~ msgstr "Pulsar para ampliar"
+#~ msgstr "Spauskite padidinti"
 
 #~ msgid "Word"
-#~ msgstr "Palabra"
+#~ msgstr "Žodis"
 
 #~ msgid "Select who would you like to invite to room:"
-#~ msgstr "Seleccione a quién quiere invitar a esta sala:"
+#~ msgstr "Pasirinkite ką norite pakviesti į kabarį:"
 
 #~ msgid "Select which room you would like to invite:"
-#~ msgstr "Seleccione a qué sala quiere invitar:"
+#~ msgstr "Pasirinkite į kurį kambarį norite pasiekti:"
 
 #~ msgid "New message from %s"
-#~ msgstr "Mensaje nuevo de %s"
+#~ msgstr "Nauja žinutė iš %s"
 
 #~ msgid "Your invitation has been declined"
-#~ msgstr "Su invitación ha sido rechazada"
+#~ msgstr "Pakvietimo buvo atsisakyta"
 
 #~ msgid "Accept"
-#~ msgstr "Aceptar"
+#~ msgstr "Priimti"
 
 #~ msgid "Decline"
-#~ msgstr "Rechazar"
+#~ msgstr "Atsisakyti"
 
 #~ msgid "Name"
-#~ msgstr "Nombre"
+#~ msgstr "Vardas"
 
 #~ msgid "Room"
-#~ msgstr "Sala"
+#~ msgstr "Kambarys"
 
 #~ msgid "Auto Connect"
-#~ msgstr "Autoconectar"
+#~ msgstr "Automatiškai prisijungti"
 
 #~ msgid "Information requested..."
-#~ msgstr "Información solicitada…"
+#~ msgstr "Informacija užklausta..."
 
 #~ msgid "Do you want to remove this contact from your roster?"
-#~ msgstr "¿Quiere quitar este contacto de su lista de contactos?"
+#~ msgstr "Ar norite pašalinti bičiulį iš sąrašo?"
 
 #~ msgid ""
 #~ "Please enter a new name for the group:\n"
 #~ "%s"
 #~ msgstr ""
-#~ "Introduzca un nombre nuevo para el grupo:\n"
+#~ "Įveskite naują pavadinimą grupei:\n"
 #~ "%s"
 
 #~ msgid "Select"
-#~ msgstr "Seleccionar"
+#~ msgstr "Rinktis"
 
 #~ msgid "Unsorted"
-#~ msgstr "Desordenados"
+#~ msgstr "Nesurūšiuota"
 
 #~ msgid ""
 #~ "Set the alias you want to use for:\n"
@@ -1220,341 +1241,350 @@ msgstr "- Mensajería instantánea Gossip"
 #~ "\n"
 #~ "You can retrieve contact information from the server."
 #~ msgstr ""
-#~ "Ponga el apodo que quiere utilizar:\n"
+#~ "Nurodykite alternatyvų vardą norimą naudoti:\n"
 #~ "<b>%s</b>\n"
 #~ "\n"
-#~ "Puede obtener la información del contacto desde el servidor."
+#~ "Galite gauti bičiulio inforamciją iš serverio."
 
 #~ msgid "New file transfer request from %s"
-#~ msgstr "Nueva solicitud de transferencia de archivo desde %s"
+#~ msgstr "Nauja rinkmenos siuntimo užklausa iš %s"
 
 #~ msgid "File transfer is not supported by both parties."
-#~ msgstr "La transferencia de archivos no está soportada por ambas partes."
+#~ msgstr "Rinkmenų siuntimas nepalaikomas abiejų pusių."
 
 #~ msgid "Your file transfer offer declined."
-#~ msgstr "Su ofrecimiento de transferencia de archivo ha sido rechazado."
+#~ msgstr "Rinkmenos siuntimo atsisakyta."
 
 #~ msgid "The other user decided not to continue."
-#~ msgstr "El otro usuario decidió no continuar."
+#~ msgstr "Kitas naudotojas nusprendė nebetęsti."
 
 #~ msgid "Unknown error occurred during file transfer."
-#~ msgstr ""
-#~ "Ha ocurrido un error desconocido durante la transferencia del archivo."
+#~ msgstr "Rinkmenos siuntimo metu iškilo nežinoma klaida."
 
 #~ msgid "%s would like to send you a file."
-#~ msgstr "%s quiere mandarle un archivo."
+#~ msgstr "%s nori Jums atsiųsti rinkmeną."
 
 #~ msgid "Someone would like to send you a file."
-#~ msgstr "Alguien quiere mandarle un archivo."
+#~ msgstr "Kažkas nori Jums atsiųsti rinkmeną."
 
 #~ msgid "Select a file"
-#~ msgstr "Seleccione un archivo"
+#~ msgstr "Pasirinkite rinkmeną"
 
-#, fuzzy
 #~ msgid "Connecting..."
-#~ msgstr "Conectar"
+#~ msgstr "Jungiamasi..."
+
+#~ msgid "Retry connection"
+#~ msgstr "Prisijungti iš naujo"
 
 #~ msgid "Invited %s to join this chat conference."
-#~ msgstr "Invitó a %s a unirse en esta conferencia por chat."
+#~ msgstr "%s pakviestas prisijungti prie šios pokalbio konferencijos."
 
-#, fuzzy
 #~ msgid "%s has set the topic: %s"
-#~ msgstr "%s ha puesto el tema"
+#~ msgstr "%s nustatė temą: %s"
 
-#, fuzzy
+#~ msgid "Enter the new topic you want to set for this room:"
+#~ msgstr "Įveskite naują šio kambario temą:"
+
 #~ msgid "%s has joined the room"
-#~ msgstr "%s ha puesto el tema"
+#~ msgstr "%s įėjo į kambarį"
 
-#, fuzzy
 #~ msgid "%s has left the room"
-#~ msgstr "%s ha puesto el tema"
+#~ msgstr "%s išėjo iš kambario"
 
-#, fuzzy
 #~ msgid "Topic: %s"
-#~ msgstr "_Tema:"
+#~ msgstr "Tema: %s"
 
 #~ msgid "Account"
-#~ msgstr "Cuenta"
+#~ msgstr "Abonentas"
 
 #~ msgid "Conversation With"
-#~ msgstr "Conversación con"
+#~ msgstr "Pokalbis su"
 
 #~ msgid "Date"
-#~ msgstr "Fecha"
+#~ msgstr "Data"
 
 #~ msgid "Allow multiple instances of the application to run at the same time"
-#~ msgstr "Permite ejecutar varias instancias de la aplicación al mismo tiempo"
+#~ msgstr "Leisti tuo pačiu metu veikti keletui programos egzempliorių"
 
 #~ msgid "List the available accounts"
-#~ msgstr "Listar las cuentas disponibles"
+#~ msgstr "Prieinamų abonentų sąrašas"
 
 #~ msgid "Which account to connect to on startup"
-#~ msgstr "Cuenta a la cual conectarse al inicio"
+#~ msgstr "Prie kurio abonento prisijungti paleidimo metu"
 
 #~ msgid "ACCOUNT-NAME"
-#~ msgstr "NOMBRE-DE-CUENTA"
+#~ msgstr "ABONEMENTO-VARDAS"
 
 #~ msgid "You can not use --no-connect together with --account"
-#~ msgstr "No puede usar --no-connect junto con --account"
+#~ msgstr "Negalite naudoti --no-connect kartu su --account"
 
 #~ msgid "No accounts available."
-#~ msgstr "Ninguna cuenta está disponible."
+#~ msgstr "Nėra prieinamų abonentų."
 
 #~ msgid "Available accounts:"
-#~ msgstr "Cuentas disponibles:"
+#~ msgstr "Prieinami abonentai:"
 
 #~ msgid "[default]"
-#~ msgstr "[predeterminada]"
+#~ msgstr "[numatytasis]"
 
 #~ msgid "There is no account with the name '%s'."
-#~ msgstr "No hay ninguna cuenta llamada «%s»."
+#~ msgstr "Abonento vardu „%s“ nėra."
 
 #~ msgid "Join"
-#~ msgstr "Unirse"
+#~ msgstr "Prisijungti"
 
 #~ msgid "Create"
-#~ msgstr "Crear"
+#~ msgstr "Sukurti"
 
 #~ msgid "Chat Rooms"
-#~ msgstr "Salas de chat"
+#~ msgstr "Pokalbių kambariai"
 
 #~ msgid "Found %d conference rooms"
-#~ msgstr "Se encontraron %d salas de conferencia"
+#~ msgstr "Rasta %d konferencinių kambarių"
 
 #~ msgid "Browsing for conference rooms, please wait..."
-#~ msgstr "Buscando salas de conferencia, espere por favor…"
+#~ msgstr "Ieškoma konferencinių kambarių, palaukite..."
 
 #~ msgid "Browsing cancelled!"
-#~ msgstr "¡Búsqueda cancelada!"
+#~ msgstr "Paieška atšaukta!"
 
 #~ msgid "Default"
-#~ msgstr "Predeterminado"
+#~ msgstr "Numatytasis"
 
 #~ msgid "Chat!"
-#~ msgstr "Chat!"
+#~ msgstr "Pokalbis!"
 
 #~ msgid "%s wants to be added to your contact list."
-#~ msgstr "%s quiere que le añada a su lista de contactos."
+#~ msgstr "%s nori būti įtrauktas į bičiulių sąrašą."
 
 #~ msgid "Someone wants to be added to your contact list."
-#~ msgstr "Alguien quiere que le añada a su lista de contactos."
+#~ msgstr "Kažkas nori būti įtrauktas į bičiulių sąrašą."
 
 #~ msgid "Subscription request"
-#~ msgstr "Solicitud de subscripción"
+#~ msgstr "Užsisakymo prašymas"
 
 #~ msgid "Show"
-#~ msgstr "Mostrar"
+#~ msgstr "Rodyti"
 
 #~ msgid "Contact Information"
-#~ msgstr "Información del contacto"
+#~ msgstr "Bičiulio informacija"
 
 #~ msgid "Subject: %s"
-#~ msgstr "Asunto: %s"
+#~ msgstr "Tema: %s"
 
 #~ msgid "Suggestions for the word"
-#~ msgstr "Sugerencias para la palabra"
+#~ msgstr "Žodžio pasiūlymas"
 
 #~ msgid "New subscription request from %s"
-#~ msgstr "Solicitud de subscripción de %s"
+#~ msgstr "Naujas užsisakymo prašymas iš %s"
 
 #~ msgid "Do you want to add this person to your contact list?"
-#~ msgstr "¿Quiere añadir a esta persona a su lista de contactos?"
+#~ msgstr "Ar norite įtraukti šį asmenį į bičiulių sąrašą?"
 
 #~ msgid "Do you want to add %s to your contact list?"
-#~ msgstr "¿Quiere añadir a %s a su lista de contactos?"
+#~ msgstr "Ar norite įtraukti %s į bičiulių sąrašą?"
 
 #~ msgid "Please enter your %s account password"
-#~ msgstr "Introduzca la contraseña de su cuenta %s:"
+#~ msgstr "Įveskite abonento %s slaptažodį"
 
 #, fuzzy
 #~ msgid "Logging in to account '%s'"
-#~ msgstr "Iniciando sesión con: %s"
+#~ msgstr "Registruojamasi su: %s"
 
 #~ msgid "Remember Password?"
-#~ msgstr "¿Desea recordar su contraseña?"
+#~ msgstr "Atsiminti slaptažodį?"
 
 #~ msgid "Do not show this again"
-#~ msgstr "No mostrar esto otra vez"
+#~ msgstr "Daugiau to nerodyti"
 
 #~ msgid "Could not display the help contents."
-#~ msgstr "No se pudo mostrar el contenido de la ayuda."
+#~ msgstr "Nepavyko parodyti žinyno turinio."
 
 #~ msgid "Select Your Avatar Image"
-#~ msgstr "Seleccione su avatar"
+#~ msgstr "Pasirinkite savo paveikslėlį"
 
 #~ msgid "No Image"
-#~ msgstr "Sin imagen"
+#~ msgstr "Paveikslėlio nėra"
+
+#~ msgid "Cancel"
+#~ msgstr "Atšaukti"
+
+#~ msgid "OK"
+#~ msgstr "Gerai"
 
 #~ msgid "The server does not seem to be responding."
-#~ msgstr "El servidor parece no estar respondiendo."
+#~ msgstr "Serveris neatsako."
 
 #~ msgid "Try again later."
-#~ msgstr "Inténtelo otra vez más tarde."
+#~ msgstr "Bandykite vėliau."
 
-#, fuzzy
 #~ msgid "Change"
-#~ msgstr "Chat"
+#~ msgstr "Pakeisti"
 
 #~ msgid "Contact goes offline"
-#~ msgstr "El contacto se desconecta"
+#~ msgstr "Bičiulis atsijungia"
 
 #~ msgid "Contact goes online"
-#~ msgstr "El contacto se conecta"
+#~ msgstr "Bičiulis prisijungia"
 
 #~ msgid "Contact ID:"
-#~ msgstr "ID del contacto:"
+#~ msgstr "Bičiulio ID:"
 
 #~ msgid "Do you want to accept this file?"
-#~ msgstr "¿Quiere aceptar este archivo?"
+#~ msgstr "Ar norite priimti šią rinkmeną?"
 
 #~ msgid "File Transfer Request"
-#~ msgstr "Solicitud de transferencia de archivo"
+#~ msgstr "Rinkmenos siuntimo užklausa"
 
 #~ msgid "File name:"
-#~ msgstr "Nombre de archivo:"
+#~ msgstr "Rinkmenos vardas:"
 
 #~ msgid "File size:"
-#~ msgstr "Tamaño del archivo:"
+#~ msgstr "Rinkmenos dydis:"
 
 #~ msgid "Not supported yet"
-#~ msgstr "Aún no soportado."
+#~ msgstr "Dar nepalaikoma."
 
 #~ msgid "This person wishes to send you this file:"
-#~ msgstr "Esta persona desea mandarle este archivo:"
+#~ msgstr "Šis asmuo nori Jums atsiųsti šią rinkmeną:"
 
 #~ msgid "Web site:"
-#~ msgstr "Sitio web:"
+#~ msgstr "Tinklapis:"
 
 #~ msgid "_Accept"
-#~ msgstr "_Aceptar"
+#~ msgstr "_Priimti"
 
 #~ msgid "_Deny"
-#~ msgstr "_Denegar"
+#~ msgstr "_Atmesti"
 
-#, fuzzy
 #~ msgid "<b>Topic:</b>"
-#~ msgstr "<b>Grupos</b>"
+#~ msgstr "<b>Tema:</b>"
 
 #~ msgid "Account:"
-#~ msgstr "Cuenta:"
+#~ msgstr "Abonentas:"
 
 #~ msgid "Browse:"
-#~ msgstr "Buscar:"
+#~ msgstr "Naršyti:"
 
 #~ msgid "Edit Favorite Room"
-#~ msgstr "Editar sala favorita"
+#~ msgstr "Taisyti mėgiamą kambarį"
 
 #~ msgid ""
 #~ "Enter the room name to join here or click on one or more rooms in the "
 #~ "list."
 #~ msgstr ""
-#~ "Introduzca el nombre de la sala para unirse aquí o pulse en una o más "
-#~ "salas de la lista."
+#~ "Įveskite kambario pavadinimą arba spustelėkite vieną ar daugiau kambarių "
+#~ "sąraše."
 
 #~ msgid "Group Chat"
-#~ msgstr "Grupo de chat"
+#~ msgstr "Grupinis pokalbis"
 
 #~ msgid "Join New"
-#~ msgstr "Unirse a nuevo"
+#~ msgstr "Prisijungi prie naujo"
 
 #~ msgid "Join room on start_up"
-#~ msgstr "Unirse a la sala al _inicio"
+#~ msgstr "Įeiti į kambarį paleidimo met_u"
 
 #~ msgid "Join this chat room when Gossip starts and you are connected"
 #~ msgstr ""
-#~ "Unirse a esta sala de chat cuando Gossip se inicia y estás conectado."
+#~ "Įeiti į šį pokalbių kambarį, kai paleidžiamas Gossip ir prisijungus."
 
 #~ msgid "Manage Favorite Rooms"
-#~ msgstr "Gestionar salas favoritas"
+#~ msgstr "Tvarkyti mėgiamus kambarius"
 
 #~ msgid "N_ame:"
-#~ msgstr "_Nombre:"
+#~ msgstr "V_ardas:"
 
 #~ msgid "Re_fresh"
-#~ msgstr "_Recargar"
+#~ msgstr "At_naujinti"
 
 #~ msgid "S_erver:"
-#~ msgstr "_Servidor:"
+#~ msgstr "S_erveris:"
 
 #~ msgid ""
 #~ "This list represents all chat rooms hosted on the server you have entered."
 #~ msgstr ""
-#~ "Esta lista representa todas los chat que alberga el servidor al que ha "
-#~ "entrado."
+#~ "Šiame sąraše pateikiami visi pokalbių kambariai esantys šiame serveryje."
 
 #~ msgid "_Nickname:"
-#~ msgstr "A_podo:"
+#~ msgstr "_Slapyvardis:"
 
 #~ msgid "_Room:"
-#~ msgstr "_Sala:"
+#~ msgstr "_Kambarys:"
 
 #~ msgid "-"
 #~ msgstr "-"
 
 #~ msgid "<b>About</b>"
-#~ msgstr "<b>Acerca de</b>"
+#~ msgstr "<b>Apie</b>"
 
 #~ msgid "<b>Client Information</b>"
-#~ msgstr "<b>Información del cliente</b>"
+#~ msgstr "<b>Kliento informacija</b>"
 
 #~ msgid "<b>Groups</b>"
-#~ msgstr "<b>Grupos</b>"
+#~ msgstr "<b>Grupės</b>"
 
 #~ msgid "<b>Name</b>"
-#~ msgstr "<b>Nombre</b>"
+#~ msgstr "<b>Vardas</b>"
 
 #~ msgid "<b>Personal Details</b>"
-#~ msgstr "<b>Detalles personales</b>"
+#~ msgstr "<b>Asmeninė informacija</b>"
 
 #~ msgid "<b>Subscription</b>"
-#~ msgstr "<b>Subscripción</b>"
+#~ msgstr "<b>Abonentas</b>"
 
 #~ msgid "<span size=\"smaller\">Example: Mikael or user@server.org</span>"
 #~ msgstr ""
-#~ "<span size=\"smaller\">Ejemplo: Miguel  o usuario@servidor.org</span>"
+#~ "<span size=\"smaller\">Pavyzdys: Jonas arba naudotojas@akl.lt</span>"
 
 #~ msgid "Accou_nt:"
-#~ msgstr "_Cuenta:"
+#~ msgstr "Abo_nentas:"
 
 #, fuzzy
 #~ msgid "Add Contact"
-#~ msgstr "_Añadir contacto…"
+#~ msgstr "Pri_dėti bičiulį..."
 
 #~ msgid "Alia_s:"
-#~ msgstr "Alia_s:"
+#~ msgstr "Alternatyvu_s vardas:"
 
 #~ msgid "Avatar:"
-#~ msgstr "Avatar:"
+#~ msgstr "Paveikslėlis:"
+
+#~ msgid "Birthday:"
+#~ msgstr "Gimtadienis:"
+
+#~ msgid "C_hange"
+#~ msgstr "Pa_keisti"
 
 #~ msgid "Ch_at"
-#~ msgstr "_Charlar"
+#~ msgstr "Pok_albis"
 
 #~ msgid "Client:"
-#~ msgstr "Cliente:"
+#~ msgstr "Klientas:"
 
 #~ msgid "Con_tact:"
-#~ msgstr "_Contacto:"
+#~ msgstr "_Bičiulis:"
 
 #~ msgid "Connect on S_tartup"
-#~ msgstr "Conectar al _iniciar"
+#~ msgstr "Prisij_ungti paleidimo metu"
 
 #~ msgid "Contacts"
-#~ msgstr "Contactos"
+#~ msgstr "Bičiuliai"
 
 #~ msgid "Country:"
-#~ msgstr "País:"
+#~ msgstr "Šalis:"
 
 #~ msgid "Decide _Later"
-#~ msgstr "_Decidir más tarde"
+#~ msgstr "Nuspręsti vė_liau"
 
 #~ msgid "Edit Contact"
-#~ msgstr "Editar contacto"
+#~ msgstr "Keisti bičiulį"
 
 #~ msgid "Edit Groups"
-#~ msgstr "Editar grupos"
+#~ msgstr "Keisti grupes"
 
 #~ msgid "Email:"
-#~ msgstr "Correo-e:"
+#~ msgstr "El. paštas:"
 
 #~ msgid "ID:"
 #~ msgstr "ID:"
@@ -1562,184 +1592,154 @@ msgstr "- Mensajería instantánea Gossip"
 #~ msgid ""
 #~ "If you chose to decide later you will be asked the next time you log on."
 #~ msgstr ""
-#~ "Si elige decidir más tarde se le preguntará la próxima vez que inicie una "
-#~ "sesión."
+#~ "Jeigu pasirinksite nuspręsti vėliau, bus paklausta kito prisijungimo metu."
 
 #~ msgid "Name:"
-#~ msgstr "Nombre:"
+#~ msgstr "Vardas:"
 
 #~ msgid "OS:"
-#~ msgstr "SO:"
+#~ msgstr "OS:"
 
 #~ msgid "Personal Details"
-#~ msgstr "Detalles personales"
+#~ msgstr "Asmeninė informacija"
 
 #~ msgid "R_egister"
-#~ msgstr "_Registrar"
+#~ msgstr "R_egistruotis"
 
 #~ msgid "Search"
-#~ msgstr "Buscar"
+#~ msgstr "Ieškoti"
 
 #~ msgid ""
 #~ "Select the groups you want this contact to appear in, you can select more "
 #~ "than one group or no groups."
 #~ msgstr ""
-#~ "Seleccione los grupos donde quiere que aparezca este contacto, se puede "
-#~ "seleccionar más de un grupo o ningún grupo."
+#~ "Pasirinkite grupes, kuriose rodyti šį bičiulį. Galite pasirinkti daugiau "
+#~ "nei vieną grupę arba nei vienos grupės."
 
-#, fuzzy
 #~ msgid ""
 #~ "Set the alias you want to use for:\n"
 #~ "<b>foo@bar.baz</b>\n"
 #~ "\n"
 #~ "You can retrieve contact information from the server. "
 #~ msgstr ""
-#~ "Ponga el apodo que quiere utilizar:\n"
-#~ "<b>%s</b>\n"
+#~ "Nurodykite alternatyvų vardą, kurį norite naudoti:\n"
+#~ "<b>foo@bar.baz</b>\n"
 #~ "\n"
-#~ "Puede obtener la información del contacto desde el servidor."
+#~ "Bičiulio informaciją galite gauti iš serverio."
 
 #~ msgid "Spell Checker"
-#~ msgstr "Revisor ortográfico"
+#~ msgstr "Rašybos tikrinimas"
 
 #~ msgid "Subscription Request"
-#~ msgstr "Solicitud de subscripción"
+#~ msgstr "Užsisakymo prašymas"
 
 #~ msgid "Suggestions for the word:"
-#~ msgstr "Sugerencias para la palabra:"
+#~ msgstr "Žodžio pasiūlymai:"
 
 #~ msgid ""
 #~ "This acts as a filter to the contact list below. You can use segments of "
 #~ "contact's name or ID, for example, \"jabber.org\" will list everyone "
 #~ "using that server"
 #~ msgstr ""
-#~ "Esto actúa como un filtro para la lista de contactos de abajo. Puede "
-#~ "utilizar segmentos del nombre del contacto o del ID, por ejemplo, «jabber."
-#~ "org» listará a todo el mundo usando ese servidor"
+#~ "Tai veikia kaip žemiau esančio kontaktų sąrašo filtras. Galite naudoti "
+#~ "bičiulio vardo ar ID dalis. Pvz., „akl.lt“ parodys visų, naudojančių šį "
+#~ "serverį, sąrašą."
 
 #~ msgid "This is the name that will be used on your roster for this contact"
-#~ msgstr "Éste es el nombre que se usará en su lista para este contacto"
+#~ msgstr "Tai vardas, kuris bus naudojamas šiam bičiuliui bičiulių sąraše"
 
 #~ msgid "This name will be used to identify you in chat windows"
-#~ msgstr "Este nombre se usará para identificarle en sus ventanas de chat"
+#~ msgstr "Šis vardas bus Jūsų tapatybė pokalbių languose"
 
 #~ msgid ""
 #~ "This name will be used to identify you when new contacts lookup your "
 #~ "details"
 #~ msgstr ""
-#~ "Este nombre se usará para identificarle cuando sus contactos nuevos "
-#~ "busquen sus detalles"
+#~ "Šis vardas bus naudojamas Jūsų tapatybė, kai nauji bičiuliai žiūrės "
+#~ "informaciją apie Jus"
 
 #~ msgid "Use default name here from the contact's VCard."
-#~ msgstr "Use aquí el nombre predeterminado de la tarjeta VCard del contacto."
+#~ msgstr "Čia naudoti numatytąjį vardą iš bičiulio VCard."
 
 #~ msgid "Use system pro_xy"
-#~ msgstr "Usar el pro_xy del sistema"
+#~ msgstr "Naudoti sistemos tarpinį ser_verį"
 
 #~ msgid "Version:"
-#~ msgstr "Versión:"
+#~ msgstr "Versija:"
 
 #~ msgid "View Previous Conversations"
-#~ msgstr "Ver conversaciones anteriores"
+#~ msgstr "Žiūrėti ankstesnius pokalbius"
 
 #~ msgid "Which account do you want to use?"
-#~ msgstr "¿Qué cuenta quiere usar?"
+#~ msgstr "Kokį abonentą norite naudoti?"
 
 #~ msgid "You are not subscribed to this contact."
-#~ msgstr "Usted no está subscrito a este contacto."
+#~ msgstr "Šio bičiulio nesekate."
+
+#~ msgid "_Birthday:"
+#~ msgstr "_Gimtadienis:"
 
 #~ msgid "_Connect"
-#~ msgstr "_Conectar"
+#~ msgstr "_Prisijungti"
 
-#, fuzzy
 #~ msgid "_Description:"
-#~ msgstr "Descripción:"
+#~ msgstr "_Aprašymas:"
 
 #~ msgid "_Disconnect"
-#~ msgstr "_Desconectar"
+#~ msgstr "_Atsijungti"
 
-#, fuzzy
 #~ msgid "_Email:"
-#~ msgstr "Correo-e:"
+#~ msgstr "_El. paštas:"
 
-#, fuzzy
 #~ msgid ""
 #~ "_Enter the name or contact ID of the person you want to chat to below:"
 #~ msgstr ""
-#~ "Introduzca abajo el nombre o el ID de contacto de la persona con la que "
-#~ "quiera hablar:"
+#~ "Ž_emiau įveskite asmens, su kuriuo norite kalbėti, vardą ar bičiulio ID:"
 
 #~ msgid "_For:"
-#~ msgstr "_Para:"
+#~ msgstr "_Kam:"
 
 #, fuzzy
 #~ msgid "_Full Name:"
-#~ msgstr "_Nombre:"
+#~ msgstr "_Vardas:"
 
 #~ msgid "_Group:"
-#~ msgstr "_Grupo:"
+#~ msgstr "_Grupė:"
 
 #, fuzzy
 #~ msgid "_Nick Name:"
-#~ msgstr "A_podo:"
+#~ msgstr "_Slapyvardis:"
 
 #, fuzzy
 #~ msgid "_Password:"
-#~ msgstr "Contra_seña:"
+#~ msgstr "Sla_ptažodis:"
 
 #, fuzzy
 #~ msgid "_Quit Message:"
-#~ msgstr "Mensaje nuevo"
+#~ msgstr "Nauja žinutė"
 
 #~ msgid "_Retrieve"
-#~ msgstr "_Recuperar"
+#~ msgstr "_Gauti"
 
 #~ msgid "_Subscribe"
-#~ msgstr "_Suscribirse"
+#~ msgstr "_Užsisakyti"
 
-#, fuzzy
 #~ msgid "_Web site:"
-#~ msgstr "Sitio web:"
+#~ msgstr "_Tinklapis:"
 
 #, fuzzy
 #~ msgid "irc account settings"
-#~ msgstr "propiedades de la cuenta jabber"
+#~ msgstr "jabber abonento nustatymai"
 
 #, fuzzy
 #~ msgid "msn account settings"
-#~ msgstr "propiedades de la cuenta jabber"
+#~ msgstr "jabber abonento nustatymai"
 
-#~ msgid "Server"
-#~ msgstr "Servidor"
+#~ msgid "Protocol:"
+#~ msgstr "Protokolas:"
 
-#~ msgid "    "
-#~ msgstr "    "
+#~ msgid "Choose the protocol"
+#~ msgstr "Pasirinkite protokolą"
 
 #~ msgid "Gossip"
 #~ msgstr "Gossip"
-
-#~ msgid "Group:"
-#~ msgstr "Grupo:"
-
-#~ msgid "Nickname:"
-#~ msgstr "Apodo:"
-
-#~ msgid ""
-#~ "Set the alias you want to use for:\n"
-#~ "<b>martyn@imendio.com</b>\n"
-#~ "\n"
-#~ "You can retrieve contact information from the server. "
-#~ msgstr ""
-#~ "Ponga el alias que quiere usar: \n"
-#~ "<b>martyn@imendio.com</b>\n"
-#~ "\n"
-#~ "Puede obtener la  información del contacto desde el servidor."
-
-#~ msgid "Web Site:"
-#~ msgstr "Sitio web:"
-
-#~ msgid "_Forget"
-#~ msgstr "_Olvidar"
-
-#~ msgid "Press Subscribe to request to receive their status"
-#~ msgstr "Pulse «Suscribir» para solicitar recibir su estado"

@@ -36,9 +36,6 @@ AC_SUBST(GLIB_GENMARSHAL)
 pluginlibdir=`$PKG_CONFIG mission-control --variable=pluginlibdir`
 AC_SUBST(pluginlibdir)
 
-BUGZILLA_COMPONENT=General
-AC_SUBST(BUGZILLA_COMPONENT)
-
 dnl -----------------------------------------------------------
 dnl Language Support
 dnl -----------------------------------------------------------

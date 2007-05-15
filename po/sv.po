@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gossip\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-05-14 17:02+0200\n"
+"POT-Creation-Date: 2007-05-15 23:46+0200\n"
 "PO-Revision-Date: 2007-05-14 17:02+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
@@ -22,12 +22,13 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #: ../data/empathy.desktop.in.h:1
-msgid "Empathy"
-msgstr "Empathy"
+#, fuzzy
+msgid "Empathy Instant Messenger"
+msgstr "- Empathy snabbmeddelandeklient"
 
 #: ../data/empathy.desktop.in.h:2
-msgid "Gnome Instant Messaging Client"
-msgstr "Snabbmeddelandeklient för Gnome"
+msgid "Instant Messenger"
+msgstr "Snabbmeddelandeklient"
 
 #: ../data/empathy.schemas.in.h:1
 msgid "Always open a separate chat window for new chats."
@@ -225,733 +226,94 @@ msgstr "Kontaktlista - Empathy"
 
 # Hm?
 #: ../libempathy-gtk/empathy-main-window.glade.h:2
-#: ../libempathy-gtk/empathy-status-icon.glade.h:41
 msgid "Context"
 msgstr "Sammanhang"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:3
-#: ../libempathy-gtk/empathy-status-icon.glade.h:59
 msgid "Join _Favorites"
 msgstr "Gå in i _favoriter"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:4
-#: ../libempathy-gtk/empathy-status-icon.glade.h:60
 #: ../libempathy-gtk/gossip-chat.glade.h:10
 msgid "Join _New..."
 msgstr "Gå in i _nytt..."
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:5
-#: ../libempathy-gtk/empathy-status-icon.glade.h:62
 msgid "Manage Favorites..."
 msgstr "Hantera favoriter..."
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:6
-#: ../libempathy-gtk/empathy-status-icon.glade.h:79
 msgid "Show _Offline Contacts"
 msgstr "Visa _frånkopplade kontakter"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:7
-#: ../libempathy-gtk/empathy-status-icon.glade.h:112
 msgid "_About"
 msgstr "_Om"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:8
-#: ../libempathy-gtk/empathy-status-icon.glade.h:114
 msgid "_Accounts"
 msgstr "_Konton"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:9
-#: ../libempathy-gtk/empathy-status-icon.glade.h:115
 #: ../libempathy-gtk/gossip-chat.glade.h:15
 msgid "_Add Contact..."
 msgstr "_Lägg till kontakt..."
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:10
-#: ../libempathy-gtk/empathy-status-icon.glade.h:118
 #: ../libempathy-gtk/gossip-contact-list.c:298
 msgid "_Chat"
 msgstr "_Chatta"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:11
-#: ../libempathy-gtk/empathy-status-icon.glade.h:120
 msgid "_Contents"
 msgstr "I_nnehåll"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:12
-#: ../libempathy-gtk/empathy-status-icon.glade.h:124
 #: ../libempathy-gtk/gossip-chat.glade.h:21
 #: ../libempathy-gtk/gossip-contact-list.c:310
 msgid "_Edit"
 msgstr "_Redigera"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:13
-#: ../libempathy-gtk/empathy-status-icon.glade.h:131
 msgid "_Help"
 msgstr "_Hjälp"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:14
-#: ../libempathy-gtk/empathy-status-icon.glade.h:133
+#: ../libempathy-gtk/empathy-status-icon.glade.h:2
 msgid "_New Message..."
 msgstr "_Nytt meddelande..."
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:15
-#: ../libempathy-gtk/empathy-status-icon.glade.h:138
 msgid "_Personal Information"
 msgstr "_Personlig information"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:16
-#: ../libempathy-gtk/empathy-status-icon.glade.h:141
 msgid "_Preferences"
 msgstr "In_ställningar"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:17
-#: ../libempathy-gtk/empathy-status-icon.glade.h:142
+#: ../libempathy-gtk/empathy-status-icon.glade.h:3
 msgid "_Quit"
 msgstr "_Avsluta"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:18
-#: ../libempathy-gtk/empathy-status-icon.glade.h:145
 #: ../libempathy-gtk/gossip-chat.glade.h:25
 msgid "_Room"
 msgstr "_Rum"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:19
-#: ../libempathy-gtk/empathy-status-icon.glade.h:152
 #: ../libempathy-gtk/gossip-chat.glade.h:28
 #: ../libempathy-gtk/gossip-contact-list.c:326
 msgid "_View Previous Conversations"
 msgstr "_Visa tidigare samtal"
 
 #: ../libempathy-gtk/empathy-status-icon.glade.h:1
-msgid "-"
-msgstr "-"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:2
-msgid "<b>About</b>"
-msgstr "<b>Om</b>"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:3
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:1
-msgid "<b>Account</b>"
-msgstr "<b>Konto</b>"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:4
-#: ../libempathy-gtk/gossip-preferences.glade.h:1
-msgid "<b>Appearance</b>"
-msgstr "<b>Utseende</b>"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:5
-#: ../libempathy-gtk/gossip-preferences.glade.h:2
-msgid "<b>Audio</b>"
-msgstr "<b>Ljud</b>"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:6
-#: ../libempathy-gtk/gossip-preferences.glade.h:3
-msgid "<b>Behaviour</b>"
-msgstr "<b>Beteende</b>"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:7
-msgid "<b>Client Information</b>"
-msgstr "<b>Klientinformation</b>"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:8
-#: ../libempathy-gtk/gossip-preferences.glade.h:4
-msgid "<b>Contact List</b>"
-msgstr "<b>Kontaktlista</b>"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:9
-msgid "<b>Groups</b>"
-msgstr "<b>Grupper</b>"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:10
-#: ../libempathy-gtk/gossip-preferences.glade.h:5
-msgid "<b>Languages</b>"
-msgstr "<b>Språk</b>"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:11
-msgid "<b>Name</b>"
-msgstr "<b>Namn</b>"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:12
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:2
-msgid "<b>New Account</b>"
-msgstr "<b>Nytt konto</b>"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:13
-#: ../libempathy-gtk/gossip-accounts-dialog.c:261
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:3
-msgid "<b>No Account Selected</b>"
-msgstr "<b>Inget konto valt</b>"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:14
-#: ../libempathy-gtk/gossip-preferences.glade.h:6
-msgid "<b>Options</b>"
-msgstr "<b>Alternativ</b>"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:15
-msgid "<b>Personal Details</b>"
-msgstr "<b>Personliga detaljer</b>"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:16
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:4
-msgid "<b>Settings</b>"
-msgstr "<b>Inställningar</b>"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:17
-msgid "<b>Status</b>"
-msgstr "<b>Status</b>"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:18
-msgid "<b>Subscription</b>"
-msgstr "<b>Prenumeration</b>"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:19
-#: ../libempathy-gtk/gossip-preferences.glade.h:7
-msgid "<b>Visual</b>"
-msgstr "<b>Visuellt</b>"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:20
-#: ../libempathy-gtk/gossip-preferences.glade.h:8
-msgid ""
-"<small>The list of languages reflects only the languages for which you have "
-"a dictionary installed.</small>"
-msgstr ""
-"<small>Listan visar endast språk du har en ordlista installerad för.</small>"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:21
-msgid "<span size=\"smaller\">Example: Mikael or user@server.org</span>"
-msgstr ""
-"<span size=\"smaller\">Exempel: Mikael eller användare@server.org</span>"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:22
-msgid ""
-"<span size=\"smaller\">Note: You must select an account if the contact is "
-"unknown</span>"
-msgstr ""
-"<span size=\"smaller\">Observera: Du måste välja ett konto om kontakten är "
-"okänd</span>"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:23
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:5
-msgid "A unique name for this account to identify it personally to you."
-msgstr "Ett unikt namn på kontot för att personligen identifiera det till dig."
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:24
-msgid "Accou_nt:"
-msgstr "Ko_nto:"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:25
-msgid "Account:"
-msgstr "Konto:"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:26
-#: ../libempathy-gtk/gossip-accounts-dialog.c:362
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:6
-msgid "Accounts"
-msgstr "Konton"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:27
-msgid "Add Contact"
-msgstr "Lägg till kontakt"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:28
-msgid "Alia_s:"
-msgstr "_Alias:"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:29
-msgid "Avatar:"
-msgstr "Avatar:"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:30
-#: ../libempathy-gtk/gossip-preferences.glade.h:9
-msgid "Avatars are user chosen images shown in the contact list"
-msgstr "Avatarer är användarvalda bilder som visas i kontaktlistan"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:31
-msgid "Birthday:"
-msgstr "Födelsedag:"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:32
-msgid "C_hange"
-msgstr "_Ändra"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:33
-msgid "Ch_at"
-msgstr "Ch_atta"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:34
-msgid "Chat Rooms"
-msgstr "Chattrum"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:35
-#: ../libempathy-gtk/gossip-preferences.glade.h:10
-msgid "Chat Th_eme:"
-msgstr "Chatt_ema:"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:36
-msgid "Client:"
-msgstr "Klient:"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:37
-msgid "Con_tact:"
-msgstr "_Kontakt:"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:38
-msgid "Connect on S_tartup"
-msgstr "Anslut vid _uppstart"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:39
-msgid "Contact List - Gossip"
-msgstr "Kontaktlista - Gossip"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:40
-msgid "Contacts"
-msgstr "Kontakter"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:42
-msgid "Country:"
-msgstr "Land:"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:43
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:7
-msgid "Cr_eate"
-msgstr "Ska_pa"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:44
-msgid "Decide _Later"
-msgstr "Bestäm _senare"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:45
-#: ../libempathy-gtk/gossip-preferences.glade.h:11
-msgid "Display notifications when contacts come _online"
-msgstr "Visa notifiering när kontakter _ansluts"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:46
-msgid "Edit Contact"
-msgstr "Redigera kontakt"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:47
-msgid "Edit Groups"
-msgstr "Redigera grupper"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:48
-msgid "Email:"
-msgstr "E-post:"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:49
-#: ../libempathy-gtk/gossip-preferences.glade.h:12
-msgid "Enable sounds when _away"
-msgstr "Aktivera ljud under _frånvaro"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:50
-#: ../libempathy-gtk/gossip-preferences.glade.h:13
-msgid "Enable sounds when _busy"
-msgstr "Aktivera ljud under _upptagetläge"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:51
-#: ../libempathy-gtk/gossip-presence-chooser.glade.h:1
-msgid "Enter status message:"
-msgstr "Ange statusmeddelande:"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:52
-#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:2
-msgid "Forget password and clear the entry."
-msgstr "Glöm lösenordet och töm inmatningen."
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:53
-#: ../libempathy-gtk/gossip-preferences.glade.h:14
-msgid "General"
-msgstr "Allmänt"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:54
-msgid "ID:"
-msgstr "Id:"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:55
-msgid ""
-"If you chose to decide later you will be asked the next time you log on."
-msgstr ""
-"Om du väljer att bestämma dig senare kommer du att bli frågad nästa gång du "
-"logga in."
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:56
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:8
-msgid "Imendio "
-msgstr "Imendio "
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:57
-msgid "Information requested..."
-msgstr "Information begärd..."
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:58
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:9
-msgid "Jabber"
-msgstr "Jabber"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:61
-#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:3
-msgid "Login I_D:"
-msgstr "Inloggningsid:"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:63
-msgid "N_ame:"
-msgstr "N_amn:"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:64
-msgid "Name:"
-msgstr "Namn:"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:65
-#: ../libempathy-gtk/gossip-chat-window.c:685
-#: ../libempathy-gtk/gossip-chat-window.c:715
-msgid "New Message"
-msgid_plural "New Messages"
-msgstr[0] "Nytt meddelande"
-msgstr[1] "Nya meddelanden"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:66
-#: ../libempathy-gtk/gossip-preferences.glade.h:15
-msgid "Notifications"
-msgstr "Notifieringar"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:67
-msgid "OS:"
-msgstr "OS:"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:68
-#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:4
-msgid "Pass_word:"
-msgstr "L_ösenord:"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:69
-msgid "Personal Details"
-msgstr "Personliga detaljer"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:70
-#: ../libempathy-gtk/gossip-preferences.glade.h:16
-msgid "Preferences"
-msgstr "Inställningar"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:71
-msgid "R_egister"
-msgstr "Re_gistrera"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:72
-#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:5
-msgid "Reso_urce:"
-msgstr "_Resurs:"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:73
-msgid "Search"
-msgstr "Sök"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:74
-msgid ""
-"Select the groups you want this contact to appear in, you can select more "
-"than one group or no groups."
-msgstr ""
-"Välj grupperna som du vill att denna kontakt ska finnas i, du kan välja fler "
-"än en grupp eller inga grupper alls."
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:75
-msgid ""
-"Set the alias you want to use for:\n"
-"<b>foo@bar.baz</b>\n"
-"\n"
-"You can retrieve contact information from the server. "
-msgstr ""
-"Ställ in det alias du vill använda för:\n"
-"<b>foo@bar.baz</b>\n"
-"\n"
-"Du kan hämta kontaktinformation från servern."
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:80
-#: ../libempathy-gtk/gossip-preferences.glade.h:17
-msgid "Show _avatars"
-msgstr "Visa _avatarer"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:81
-#: ../libempathy-gtk/gossip-preferences.glade.h:18
-msgid "Show _smileys as images"
-msgstr "Visa _smilisar som bilder"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:82
-#: ../libempathy-gtk/gossip-preferences.glade.h:19
-msgid "Show co_mpact contact list"
-msgstr "Visa ko_mpakt kontaktlista"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:83
-#: ../libempathy-gtk/gossip-preferences.glade.h:20
-msgid "Sort by _name"
-msgstr "Sortera efter _namn"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:84
-#: ../libempathy-gtk/gossip-preferences.glade.h:21
-msgid "Sort by s_tate"
-msgstr "Sortera efter _tillstånd"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:85
-msgid "Spell Checker"
-msgstr "Stavningskontroll"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:86
-#: ../libempathy-gtk/gossip-preferences.glade.h:22
-msgid "Spell Checking"
-msgstr "Stavningskontroll"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:87
 msgid "Status"
 msgstr "Status"
 
-#: ../libempathy-gtk/empathy-status-icon.glade.h:88
-#: ../libempathy-gtk/gossip-presence-chooser.glade.h:2
-msgid "Status Message Presets"
-msgstr "Förinställda statusmeddelanden"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:89
-msgid "Subscription Request"
-msgstr "Prenumerationsförfrågan"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:90
-msgid "Suggestions for the word:"
-msgstr "Förslag för ordet:"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:91
-#: ../libempathy-gtk/gossip-preferences.glade.h:23
-msgid "Themes"
-msgstr "Teman"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:92
-msgid ""
-"This acts as a filter to the contact list below.\n"
-"\n"
-"You can use segments of contact's name or ID, for example, \"jabber.org\" "
-"will list everyone using that server.\n"
-"\n"
-"You can also use the name of a group to show only contacts in a specific "
-"group."
-msgstr ""
-"Detta fungerar som ett filter till kontaktlistan nedan.\n"
-"\n"
-"Du kan använda delar av kontaktens namn eller id, till exempel \"jabber.org"
-"\" kommer att lista alla som använder den servern.\n"
-"\n"
-"Du kan även använda namnet på en grupp för att endast visa kontakterna i en "
-"specifik grupp."
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:97
-msgid ""
-"This acts as a filter to the contact list below. You can use segments of "
-"contact's name or ID, for example, \"jabber.org\" will list everyone using "
-"that server"
-msgstr ""
-"Detta fungerar som ett filter till kontaktlistan nedan. Du kan använda delar "
-"av kontaktens namn eller id, till exempel \"jabber.org\" kommer att lista "
-"alla som använder den servern"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:98
-msgid "This is the name that will be used on your roster for this contact"
-msgstr ""
-"Detta är namnet som kommer att användas på din kontaktlista för denna kontakt"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:99
-msgid "This name will be used to identify you in chat windows"
-msgstr "Detta namn kommer att användas för att identifiera dig i chattfönster"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:100
-msgid ""
-"This name will be used to identify you when new contacts lookup your details"
-msgstr ""
-"Detta namn kommer att användas för att identifiera dig när nya kontakter "
-"kontrollerar din information"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:101
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:10
-msgid ""
-"To add a new account, you can click on the 'Add' button and a new entry will "
-"be created for you to started configuring.\n"
-"\n"
-"If you do not want to add an account, simply click on the account you want "
-"to configure in the list on the left."
-msgstr ""
-"För att lägga till ett nytt konto kan du klicka på knappen \"Lägg till\" och "
-"en ny post kommer att skapas för dig att börja konfigurera.\n"
-"\n"
-"Om du inte vill lägga till ett konto, kan du helt enkelt klicka på kontot, i "
-"listan till vänster, som du vill konfigurera."
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:104
-msgid "Use default name here from the contact's VCard."
-msgstr "Använd standardnamnet här från kontaktens VCard."
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:105
-#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:6
-msgid "Use encryption (SS_L)"
-msgstr "Använd _kryptering (SSL)"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:106
-msgid "Use system pro_xy"
-msgstr "Använd systemets pro_xyinställningar"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:107
-msgid "Version:"
-msgstr "Version:"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:108
-msgid "View Previous Conversations"
-msgstr "Visa tidigare samtal"
-
-# "Web site" är "webbplats". "Web page" är "webbsida".
-#: ../libempathy-gtk/empathy-status-icon.glade.h:109
-msgid "Web site:"
-msgstr "Webbplats:"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:110
-msgid "Which account do you want to use?"
-msgstr "Vilket konto vill du använda?"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:111
-msgid "You are not subscribed to this contact."
-msgstr "Du prenumererar inte på denna kontakt."
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:113
-msgid "_Accept"
-msgstr "_Acceptera"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:116
-#: ../libempathy-gtk/gossip-presence-chooser.glade.h:3
-msgid "_Add to status message list"
-msgstr "_Lägg till i statusmeddelandelistan"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:117
-msgid "_Birthday:"
-msgstr "_Födelsedag:"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:119
-msgid "_Connect"
-msgstr "An_slut"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:121
-msgid "_Deny"
-msgstr "_Neka"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:122
-msgid "_Description:"
-msgstr "_Beskrivning:"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:123
-msgid "_Disconnect"
-msgstr "_Koppla ifrån"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:125
-msgid "_Email:"
-msgstr "_E-post:"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:126
-#: ../libempathy-gtk/gossip-preferences.glade.h:24
-msgid "_Enable spell checking"
-msgstr "_Aktivera stavningskontroll"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:127
-msgid "_Enter the name or contact ID of the person you want to chat to below:"
-msgstr "Ange _namnet eller kontakt-id för den person du vill chatta med:"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:128
-msgid "_For:"
-msgstr "_För:"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:129
-msgid "_Full Name:"
-msgstr "_Fullständigt namn:"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:130
-msgid "_Group:"
-msgstr "_Grupp:"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:132
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:13
-msgid "_Name:"
-msgstr "_Namn:"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:134
-msgid "_Nick Name:"
-msgstr "_Smeknamn:"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:135
-msgid "_Nickname:"
-msgstr "Smek_namn:"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:136
-#: ../libempathy-gtk/gossip-preferences.glade.h:25
-msgid "_Open new chats in separate windows"
-msgstr "_Öppna nya chattar i separata fönster"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:137
-msgid "_Password:"
-msgstr "_Lösenord:"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:139
-#: ../libempathy-gtk/gossip-preferences.glade.h:26
-msgid "_Play sound when messages arrive"
-msgstr "_Spela ljud när meddelanden kommer"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:140
-#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:7
-msgid "_Port:"
-msgstr "_Port:"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:143
-msgid "_Quit Message:"
-msgstr "_Avslutsmeddelande:"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:144
-msgid "_Retrieve"
-msgstr "_Hämta"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:146
-msgid "_Search"
-msgstr "_Sök"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:147
-#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:8
-msgid "_Server:"
-msgstr "_Server:"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:148
+#: ../libempathy-gtk/empathy-status-icon.glade.h:4
 msgid "_Show Contact List"
 msgstr "_Visa kontaktlista"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:149
-msgid "_Subscribe"
-msgstr "_Prenumerera"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:150
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:14
-msgid "_Type:"
-msgstr "_Typ:"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:151
-#: ../libempathy-gtk/gossip-preferences.glade.h:27
-msgid "_Use for chat rooms"
-msgstr "Använd för _chattrum"
-
-# "Web site" är "webbplats". "Web page" är "webbsida".
-#: ../libempathy-gtk/empathy-status-icon.glade.h:153
-msgid "_Web site:"
-msgstr "_Webbplats:"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:154
-msgid "irc account settings"
-msgstr "inställningar för irc-konto"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:155
-#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:9
-msgid "jabber account settings"
-msgstr "inställningar för jabberkonto"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:156
-msgid "msn account settings"
-msgstr "inställningar för msn-konto"
 
 #: ../libempathy-gtk/gossip-about-dialog.c:63
 msgid ""
@@ -1008,6 +370,11 @@ msgstr "Inaktivera"
 msgid "Enable"
 msgstr "Aktivera"
 
+#: ../libempathy-gtk/gossip-accounts-dialog.c:261
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:3
+msgid "<b>No Account Selected</b>"
+msgstr "<b>Inget konto valt</b>"
+
 #: ../libempathy-gtk/gossip-accounts-dialog.c:263
 msgid ""
 "To add a new account, you can click on the 'Add' button and a new entry will "
@@ -1034,6 +401,11 @@ msgstr ""
 "För att lägga till ett nytt konto, klicka på knappen \"Lägg till\" och en ny "
 "post kommer att skapas för dig att börja konfigurera."
 
+#: ../libempathy-gtk/gossip-accounts-dialog.c:362
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:6
+msgid "Accounts"
+msgstr "Konton"
+
 #: ../libempathy-gtk/gossip-accounts-dialog.c:857
 #, c-format
 msgid ""
@@ -1056,6 +428,56 @@ msgstr ""
 "Om du senare lägger till kontot igen, kommer dessa fortfarande vara "
 "tillgängliga."
 
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:1
+msgid "<b>Account</b>"
+msgstr "<b>Konto</b>"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:2
+msgid "<b>New Account</b>"
+msgstr "<b>Nytt konto</b>"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:4
+msgid "<b>Settings</b>"
+msgstr "<b>Inställningar</b>"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:5
+msgid "A unique name for this account to identify it personally to you."
+msgstr "Ett unikt namn på kontot för att personligen identifiera det till dig."
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:7
+msgid "Cr_eate"
+msgstr "Ska_pa"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:8
+msgid "Imendio "
+msgstr "Imendio "
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:9
+msgid "Jabber"
+msgstr "Jabber"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:10
+msgid ""
+"To add a new account, you can click on the 'Add' button and a new entry will "
+"be created for you to started configuring.\n"
+"\n"
+"If you do not want to add an account, simply click on the account you want "
+"to configure in the list on the left."
+msgstr ""
+"För att lägga till ett nytt konto kan du klicka på knappen \"Lägg till\" och "
+"en ny post kommer att skapas för dig att börja konfigurera.\n"
+"\n"
+"Om du inte vill lägga till ett konto, kan du helt enkelt klicka på kontot, i "
+"listan till vänster, som du vill konfigurera."
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:13
+msgid "_Name:"
+msgstr "_Namn:"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:14
+msgid "_Type:"
+msgstr "_Typ:"
+
 #: ../libempathy-gtk/gossip-account-widget-generic.c:144
 #: ../libempathy-gtk/gossip-account-widget-generic.c:186
 #, c-format
@@ -1069,6 +491,38 @@ msgid ""
 msgstr ""
 "<small><b><span foreground=\"#555\">Exempel: användare@jabber.org</span></"
 "b></small>"
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:2
+msgid "Forget password and clear the entry."
+msgstr "Glöm lösenordet och töm inmatningen."
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:3
+msgid "Login I_D:"
+msgstr "Inloggningsid:"
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:4
+msgid "Pass_word:"
+msgstr "L_ösenord:"
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:5
+msgid "Reso_urce:"
+msgstr "_Resurs:"
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:6
+msgid "Use encryption (SS_L)"
+msgstr "Använd _kryptering (SSL)"
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:7
+msgid "_Port:"
+msgstr "_Port:"
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:8
+msgid "_Server:"
+msgstr "_Server:"
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:9
+msgid "jabber account settings"
+msgstr "inställningar för jabberkonto"
 
 #: ../libempathy-gtk/gossip-chat.c:314
 msgid "Disconnected"
@@ -1190,6 +644,13 @@ msgstr "_Öppna länk"
 msgid "%A %d %B %Y"
 msgstr "%A %d %B %Y"
 
+#: ../libempathy-gtk/gossip-chat-window.c:685
+#: ../libempathy-gtk/gossip-chat-window.c:715
+msgid "New Message"
+msgid_plural "New Messages"
+msgstr[0] "Nytt meddelande"
+msgstr[1] "Nya meddelanden"
+
 #: ../libempathy-gtk/gossip-chat-window.c:691
 msgid "Chat Room"
 msgstr "Chattrum"
@@ -1270,6 +731,117 @@ msgstr "Visa tidigare samtal med denna kontakt"
 msgid "Language"
 msgstr "Språk"
 
+#: ../libempathy-gtk/gossip-preferences.glade.h:1
+msgid "<b>Appearance</b>"
+msgstr "<b>Utseende</b>"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:2
+msgid "<b>Audio</b>"
+msgstr "<b>Ljud</b>"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:3
+msgid "<b>Behaviour</b>"
+msgstr "<b>Beteende</b>"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:4
+msgid "<b>Contact List</b>"
+msgstr "<b>Kontaktlista</b>"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:5
+msgid "<b>Languages</b>"
+msgstr "<b>Språk</b>"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:6
+msgid "<b>Options</b>"
+msgstr "<b>Alternativ</b>"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:7
+msgid "<b>Visual</b>"
+msgstr "<b>Visuellt</b>"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:8
+msgid ""
+"<small>The list of languages reflects only the languages for which you have "
+"a dictionary installed.</small>"
+msgstr ""
+"<small>Listan visar endast språk du har en ordlista installerad för.</small>"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:9
+msgid "Avatars are user chosen images shown in the contact list"
+msgstr "Avatarer är användarvalda bilder som visas i kontaktlistan"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:10
+msgid "Chat Th_eme:"
+msgstr "Chatt_ema:"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:11
+msgid "Display notifications when contacts come _online"
+msgstr "Visa notifiering när kontakter _ansluts"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:12
+msgid "Enable sounds when _away"
+msgstr "Aktivera ljud under _frånvaro"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:13
+msgid "Enable sounds when _busy"
+msgstr "Aktivera ljud under _upptagetläge"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:14
+msgid "General"
+msgstr "Allmänt"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:15
+msgid "Notifications"
+msgstr "Notifieringar"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:16
+msgid "Preferences"
+msgstr "Inställningar"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:17
+msgid "Show _avatars"
+msgstr "Visa _avatarer"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:18
+msgid "Show _smileys as images"
+msgstr "Visa _smilisar som bilder"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:19
+msgid "Show co_mpact contact list"
+msgstr "Visa ko_mpakt kontaktlista"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:20
+msgid "Sort by _name"
+msgstr "Sortera efter _namn"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:21
+msgid "Sort by s_tate"
+msgstr "Sortera efter _tillstånd"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:22
+msgid "Spell Checking"
+msgstr "Stavningskontroll"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:23
+msgid "Themes"
+msgstr "Teman"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:24
+msgid "_Enable spell checking"
+msgstr "_Aktivera stavningskontroll"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:25
+msgid "_Open new chats in separate windows"
+msgstr "_Öppna nya chattar i separata fönster"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:26
+msgid "_Play sound when messages arrive"
+msgstr "_Spela ljud när meddelanden kommer"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:27
+msgid "_Use for chat rooms"
+msgstr "Använd för _chattrum"
+
 #: ../libempathy-gtk/gossip-presence-chooser.c:702
 msgid "Custom message..."
 msgstr "Eget meddelande..."
@@ -1294,6 +866,18 @@ msgstr ""
 #: ../libempathy-gtk/gossip-presence-chooser.c:812
 msgid "Clear List"
 msgstr "Töm listan"
+
+#: ../libempathy-gtk/gossip-presence-chooser.glade.h:1
+msgid "Enter status message:"
+msgstr "Ange statusmeddelande:"
+
+#: ../libempathy-gtk/gossip-presence-chooser.glade.h:2
+msgid "Status Message Presets"
+msgstr "Förinställda statusmeddelanden"
+
+#: ../libempathy-gtk/gossip-presence-chooser.glade.h:3
+msgid "_Add to status message list"
+msgstr "_Lägg till i statusmeddelandelistan"
 
 #: ../libempathy-gtk/gossip-private-chat.c:198
 #, c-format
@@ -1329,11 +913,292 @@ msgstr "Anslut inte vid uppstart"
 msgid "- Empathy Instant Messenger"
 msgstr "- Empathy snabbmeddelandeklient"
 
+#~ msgid "Empathy"
+#~ msgstr "Empathy"
+
+#~ msgid "Gnome Instant Messaging Client"
+#~ msgstr "Snabbmeddelandeklient för Gnome"
+
+#~ msgid "-"
+#~ msgstr "-"
+
+#~ msgid "<b>About</b>"
+#~ msgstr "<b>Om</b>"
+
+#~ msgid "<b>Client Information</b>"
+#~ msgstr "<b>Klientinformation</b>"
+
+#~ msgid "<b>Groups</b>"
+#~ msgstr "<b>Grupper</b>"
+
+#~ msgid "<b>Name</b>"
+#~ msgstr "<b>Namn</b>"
+
+#~ msgid "<b>Personal Details</b>"
+#~ msgstr "<b>Personliga detaljer</b>"
+
+#~ msgid "<b>Status</b>"
+#~ msgstr "<b>Status</b>"
+
+#~ msgid "<b>Subscription</b>"
+#~ msgstr "<b>Prenumeration</b>"
+
+#~ msgid "<span size=\"smaller\">Example: Mikael or user@server.org</span>"
+#~ msgstr ""
+#~ "<span size=\"smaller\">Exempel: Mikael eller användare@server.org</span>"
+
+#~ msgid ""
+#~ "<span size=\"smaller\">Note: You must select an account if the contact is "
+#~ "unknown</span>"
+#~ msgstr ""
+#~ "<span size=\"smaller\">Observera: Du måste välja ett konto om kontakten "
+#~ "är okänd</span>"
+
+#~ msgid "Accou_nt:"
+#~ msgstr "Ko_nto:"
+
+#~ msgid "Account:"
+#~ msgstr "Konto:"
+
+#~ msgid "Add Contact"
+#~ msgstr "Lägg till kontakt"
+
+#~ msgid "Alia_s:"
+#~ msgstr "_Alias:"
+
+#~ msgid "Avatar:"
+#~ msgstr "Avatar:"
+
+#~ msgid "Birthday:"
+#~ msgstr "Födelsedag:"
+
+#~ msgid "C_hange"
+#~ msgstr "_Ändra"
+
+#~ msgid "Ch_at"
+#~ msgstr "Ch_atta"
+
+#~ msgid "Chat Rooms"
+#~ msgstr "Chattrum"
+
+#~ msgid "Client:"
+#~ msgstr "Klient:"
+
+#~ msgid "Con_tact:"
+#~ msgstr "_Kontakt:"
+
+#~ msgid "Connect on S_tartup"
+#~ msgstr "Anslut vid _uppstart"
+
+#~ msgid "Contact List - Gossip"
+#~ msgstr "Kontaktlista - Gossip"
+
+#~ msgid "Contacts"
+#~ msgstr "Kontakter"
+
+#~ msgid "Country:"
+#~ msgstr "Land:"
+
+#~ msgid "Decide _Later"
+#~ msgstr "Bestäm _senare"
+
+#~ msgid "Edit Contact"
+#~ msgstr "Redigera kontakt"
+
+#~ msgid "Edit Groups"
+#~ msgstr "Redigera grupper"
+
+#~ msgid "Email:"
+#~ msgstr "E-post:"
+
+#~ msgid "ID:"
+#~ msgstr "Id:"
+
+#~ msgid ""
+#~ "If you chose to decide later you will be asked the next time you log on."
+#~ msgstr ""
+#~ "Om du väljer att bestämma dig senare kommer du att bli frågad nästa gång "
+#~ "du logga in."
+
+#~ msgid "Information requested..."
+#~ msgstr "Information begärd..."
+
+#~ msgid "N_ame:"
+#~ msgstr "N_amn:"
+
+#~ msgid "Name:"
+#~ msgstr "Namn:"
+
+#~ msgid "OS:"
+#~ msgstr "OS:"
+
+#~ msgid "Personal Details"
+#~ msgstr "Personliga detaljer"
+
+#~ msgid "R_egister"
+#~ msgstr "Re_gistrera"
+
+#~ msgid "Search"
+#~ msgstr "Sök"
+
+#~ msgid ""
+#~ "Select the groups you want this contact to appear in, you can select more "
+#~ "than one group or no groups."
+#~ msgstr ""
+#~ "Välj grupperna som du vill att denna kontakt ska finnas i, du kan välja "
+#~ "fler än en grupp eller inga grupper alls."
+
+#~ msgid ""
+#~ "Set the alias you want to use for:\n"
+#~ "<b>foo@bar.baz</b>\n"
+#~ "\n"
+#~ "You can retrieve contact information from the server. "
+#~ msgstr ""
+#~ "Ställ in det alias du vill använda för:\n"
+#~ "<b>foo@bar.baz</b>\n"
+#~ "\n"
+#~ "Du kan hämta kontaktinformation från servern."
+
+#~ msgid "Spell Checker"
+#~ msgstr "Stavningskontroll"
+
+#~ msgid "Subscription Request"
+#~ msgstr "Prenumerationsförfrågan"
+
+#~ msgid "Suggestions for the word:"
+#~ msgstr "Förslag för ordet:"
+
+#~ msgid ""
+#~ "This acts as a filter to the contact list below.\n"
+#~ "\n"
+#~ "You can use segments of contact's name or ID, for example, \"jabber.org\" "
+#~ "will list everyone using that server.\n"
+#~ "\n"
+#~ "You can also use the name of a group to show only contacts in a specific "
+#~ "group."
+#~ msgstr ""
+#~ "Detta fungerar som ett filter till kontaktlistan nedan.\n"
+#~ "\n"
+#~ "Du kan använda delar av kontaktens namn eller id, till exempel \"jabber."
+#~ "org\" kommer att lista alla som använder den servern.\n"
+#~ "\n"
+#~ "Du kan även använda namnet på en grupp för att endast visa kontakterna i "
+#~ "en specifik grupp."
+
+#~ msgid ""
+#~ "This acts as a filter to the contact list below. You can use segments of "
+#~ "contact's name or ID, for example, \"jabber.org\" will list everyone "
+#~ "using that server"
+#~ msgstr ""
+#~ "Detta fungerar som ett filter till kontaktlistan nedan. Du kan använda "
+#~ "delar av kontaktens namn eller id, till exempel \"jabber.org\" kommer att "
+#~ "lista alla som använder den servern"
+
+#~ msgid "This is the name that will be used on your roster for this contact"
+#~ msgstr ""
+#~ "Detta är namnet som kommer att användas på din kontaktlista för denna "
+#~ "kontakt"
+
+#~ msgid "This name will be used to identify you in chat windows"
+#~ msgstr ""
+#~ "Detta namn kommer att användas för att identifiera dig i chattfönster"
+
+#~ msgid ""
+#~ "This name will be used to identify you when new contacts lookup your "
+#~ "details"
+#~ msgstr ""
+#~ "Detta namn kommer att användas för att identifiera dig när nya kontakter "
+#~ "kontrollerar din information"
+
+#~ msgid "Use default name here from the contact's VCard."
+#~ msgstr "Använd standardnamnet här från kontaktens VCard."
+
+#~ msgid "Use system pro_xy"
+#~ msgstr "Använd systemets pro_xyinställningar"
+
+#~ msgid "Version:"
+#~ msgstr "Version:"
+
+#~ msgid "View Previous Conversations"
+#~ msgstr "Visa tidigare samtal"
+
+# "Web site" är "webbplats". "Web page" är "webbsida".
+#~ msgid "Web site:"
+#~ msgstr "Webbplats:"
+
+#~ msgid "Which account do you want to use?"
+#~ msgstr "Vilket konto vill du använda?"
+
+#~ msgid "You are not subscribed to this contact."
+#~ msgstr "Du prenumererar inte på denna kontakt."
+
+#~ msgid "_Accept"
+#~ msgstr "_Acceptera"
+
+#~ msgid "_Birthday:"
+#~ msgstr "_Födelsedag:"
+
+#~ msgid "_Connect"
+#~ msgstr "An_slut"
+
+#~ msgid "_Deny"
+#~ msgstr "_Neka"
+
+#~ msgid "_Description:"
+#~ msgstr "_Beskrivning:"
+
+#~ msgid "_Disconnect"
+#~ msgstr "_Koppla ifrån"
+
+#~ msgid "_Email:"
+#~ msgstr "_E-post:"
+
+#~ msgid ""
+#~ "_Enter the name or contact ID of the person you want to chat to below:"
+#~ msgstr "Ange _namnet eller kontakt-id för den person du vill chatta med:"
+
+#~ msgid "_For:"
+#~ msgstr "_För:"
+
+#~ msgid "_Full Name:"
+#~ msgstr "_Fullständigt namn:"
+
+#~ msgid "_Group:"
+#~ msgstr "_Grupp:"
+
+#~ msgid "_Nick Name:"
+#~ msgstr "_Smeknamn:"
+
+#~ msgid "_Nickname:"
+#~ msgstr "Smek_namn:"
+
+#~ msgid "_Password:"
+#~ msgstr "_Lösenord:"
+
+#~ msgid "_Quit Message:"
+#~ msgstr "_Avslutsmeddelande:"
+
+#~ msgid "_Retrieve"
+#~ msgstr "_Hämta"
+
+#~ msgid "_Search"
+#~ msgstr "_Sök"
+
+#~ msgid "_Subscribe"
+#~ msgstr "_Prenumerera"
+
+# "Web site" är "webbplats". "Web page" är "webbsida".
+#~ msgid "_Web site:"
+#~ msgstr "_Webbplats:"
+
+#~ msgid "irc account settings"
+#~ msgstr "inställningar för irc-konto"
+
+#~ msgid "msn account settings"
+#~ msgstr "inställningar för msn-konto"
+
 #~ msgid "Gossip Instant Messenger"
 #~ msgstr "Snabbmeddelandeklienten Gossip"
-
-#~ msgid "Instant Messenger"
-#~ msgstr "Snabbmeddelandeklient"
 
 #~ msgid "Normal"
 #~ msgstr "Normalt"

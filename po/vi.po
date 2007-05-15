@@ -1,0 +1,1940 @@
+# Vietnamese translation for Gossip.
+# Copyright © 2006 Gnome i18n Project for Vietnamese.
+# Clytie Siddall <clytie@riverland.net.au>, 2006.
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: gossip HEAD\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2007-05-15 23:46+0200\n"
+"PO-Revision-Date: 2006-08-28 20:58+0930\n"
+"Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
+"Language-Team: Vietnamese <gnomevi-list@lists.sourceforge.net>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: LocFactoryEditor 1.6fc1\n"
+
+#: ../data/empathy.desktop.in.h:1
+#, fuzzy
+msgid "Empathy Instant Messenger"
+msgstr "Bộ tin nhắn tức khắc"
+
+#: ../data/empathy.desktop.in.h:2
+msgid "Instant Messenger"
+msgstr "Bộ tin nhắn tức khắc"
+
+#: ../data/empathy.schemas.in.h:1
+msgid "Always open a separate chat window for new chats."
+msgstr "Luôn mở cửa sổ riêng cho cuộc trò chuyện mới."
+
+#: ../data/empathy.schemas.in.h:2
+msgid "Chat window theme"
+msgstr "Sắc thái cửa sổ trò chuyện"
+
+#: ../data/empathy.schemas.in.h:3
+msgid ""
+"Comma separated list of spell checker languages to use (e.g. en, fr, nl)."
+msgstr ""
+"Danh sách định giới bằng dấu phẩy các ngôn ngữ kiểm tra chính tả cần dùng (v."
+"d. en, fr, ja, vi)."
+
+#: ../data/empathy.schemas.in.h:4
+#, fuzzy
+msgid "Compact contact list"
+msgstr "Hiện danh _sách liên lạc"
+
+#: ../data/empathy.schemas.in.h:5
+msgid "Contact list sort criterium"
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:6
+msgid "Default directory to select an avatar image from"
+msgstr "Thư mục mặc định nơi cần chọn ảnh riêng"
+
+#: ../data/empathy.schemas.in.h:7
+msgid "Enable popup when contact is available"
+msgstr "Bật lên khi liên lạc sẵn sàng"
+
+#: ../data/empathy.schemas.in.h:8
+msgid "Enable sound when away"
+msgstr "Bật âm thanh khi vắng mặt"
+
+#: ../data/empathy.schemas.in.h:9
+msgid "Enable sound when busy"
+msgstr "Bật âm thanh khi bận"
+
+#: ../data/empathy.schemas.in.h:10
+msgid "Enable spell checker"
+msgstr "Kiểm tra chính tả"
+
+#: ../data/empathy.schemas.in.h:11
+msgid "Hide main window"
+msgstr "Ẩn cửa sổ chính"
+
+#: ../data/empathy.schemas.in.h:12
+msgid "Hide the main window."
+msgstr "Ẩn cửa sổ chính."
+
+#: ../data/empathy.schemas.in.h:13
+msgid "Open new chats in separate windows"
+msgstr "Mở mỗi cuộc trò chuyện mới trong cửa sổ riêng."
+
+#: ../data/empathy.schemas.in.h:14
+msgid "Show avatars"
+msgstr "Hiện ảnh riêng"
+
+#: ../data/empathy.schemas.in.h:15
+msgid "Show hint about closing the main window"
+msgstr "Hiện mẹo về việc đóng cửa sổ chính"
+
+#: ../data/empathy.schemas.in.h:16
+msgid "Show offline contacts"
+msgstr "Hiện liên lạc ngoại tuyến"
+
+#: ../data/empathy.schemas.in.h:17
+msgid "Spell checking languages"
+msgstr "Ngôn ngữ kiểm tra chính tả"
+
+#: ../data/empathy.schemas.in.h:18
+msgid "The last directory that an avatar image was chosen from."
+msgstr "Thư mục cuối cùng nơi đã chọn ảnh riêng."
+
+#: ../data/empathy.schemas.in.h:19
+msgid "The theme that is used to display the conversation in chat windows."
+msgstr "Sắc thái được dùng để hiển thị cuộc đối thoại trong cửa sổ trò chuyện."
+
+#: ../data/empathy.schemas.in.h:20
+msgid "Use graphical smileys"
+msgstr "Dùng biểu tượng xúc cảm"
+
+#: ../data/empathy.schemas.in.h:21
+msgid "Use notification sounds"
+msgstr "Dùng âm thanh thông báo"
+
+#: ../data/empathy.schemas.in.h:22
+msgid "Use theme for chat rooms"
+msgstr "Dùng sắc thái cho phòng trò chuyện"
+
+#: ../data/empathy.schemas.in.h:23
+msgid ""
+"Whether or not to check words typed against the languages you want to check "
+"with."
+msgstr "Có nên kiểm tra đoạn gõ so với những ngôn ngữ đã chọn hay không."
+
+#: ../data/empathy.schemas.in.h:24
+msgid ""
+"Whether or not to convert smileys into graphical images in conversations."
+msgstr ""
+"Bật/tắt chuyển đổi ký tự miêu tả mặt cười thành biểu tượng xúc cảm trong đối "
+"thoại."
+
+#: ../data/empathy.schemas.in.h:25
+msgid "Whether or not to play a sound when messages arrive."
+msgstr "Bật/tắt phát âm thanh khi mới nhận tin nhẳn."
+
+#: ../data/empathy.schemas.in.h:26
+msgid "Whether or not to play sounds when away."
+msgstr "Bật/tắt phát âm thanh khi vắng mặt."
+
+#: ../data/empathy.schemas.in.h:27
+msgid "Whether or not to play sounds when busy."
+msgstr "Bật/tắt phát âm thanh khi bận."
+
+#: ../data/empathy.schemas.in.h:28
+msgid "Whether or not to show a popup when a contact becomes available."
+msgstr "Có nên bật lên khi liên lạc mới sẵn sàng hay không."
+
+#: ../data/empathy.schemas.in.h:29
+msgid ""
+"Whether or not to show avatars for contacts in the contact list and chat "
+"windows."
+msgstr ""
+"Có nên hiển thị ảnh riêng cho mỗi liên lạc nằm trong danh sách liên lạc và "
+"cửa sổ trò chuyện hay không."
+
+#: ../data/empathy.schemas.in.h:30
+msgid "Whether or not to show contacts that are offline in the contact list."
+msgstr ""
+"Bật/tắt hiển thị các liên lác đang ngoại tuyến trong danh sách liên lạc."
+
+#: ../data/empathy.schemas.in.h:31
+msgid ""
+"Whether or not to show the message dialog about closing the main window with "
+"the 'x' button in the title bar."
+msgstr ""
+"Có nên hiển thị hộp thoại thông điệp về việc đóng cửa sổ chính bằng cái nút "
+"« x » trên thanh tựa hay không."
+
+#: ../data/empathy.schemas.in.h:32
+#, fuzzy
+msgid "Whether to show the contact list in compact mode or not."
+msgstr "Có nên dùng sắc thái cho các phòng trò chuyện hay không."
+
+#: ../data/empathy.schemas.in.h:33
+msgid "Whether to use the theme for chat rooms or not."
+msgstr "Có nên dùng sắc thái cho các phòng trò chuyện hay không."
+
+#: ../data/empathy.schemas.in.h:34
+msgid ""
+"Which criterium to use when sorting the contact list. Default is to use sort "
+"by the contact's name with the value \"name\". A value of \"state\" will "
+"sort the contact list by state."
+msgstr ""
+
+#: ../libempathy/gossip-contact.c:654 ../libempathy/gossip-presence.c:184
+#: ../libempathy/gossip-presence.c:283
+msgid "Offline"
+msgstr "Ngoại tuyến"
+
+#: ../libempathy/gossip-presence.c:274
+msgid "Available"
+msgstr "Sẵn sàng"
+
+#: ../libempathy/gossip-presence.c:276
+msgid "Busy"
+msgstr "Bận"
+
+#: ../libempathy/gossip-presence.c:279
+msgid "Away"
+msgstr "Vắng mặt"
+
+#: ../libempathy-gtk/empathy-main-window.c:254
+#, fuzzy
+msgid "Show and edit accounts"
+msgstr "_Hiện các liên lạc"
+
+#: ../libempathy-gtk/empathy-main-window.c:456
+msgid "Group"
+msgstr "Nhóm"
+
+#: ../libempathy-gtk/empathy-main-window.c:477
+msgid "Contact"
+msgstr "Liên lạc"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:1
+#, fuzzy
+msgid "Contact List - Empathy"
+msgstr "Hiện danh _sách liên lạc"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:2
+msgid "Context"
+msgstr "Ngữ cảnh"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:3
+#, fuzzy
+msgid "Join _Favorites"
+msgstr "Vào Ư_a thích"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:4
+#: ../libempathy-gtk/gossip-chat.glade.h:10
+msgid "Join _New..."
+msgstr "Vào _Mới..."
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:5
+#, fuzzy
+msgid "Manage Favorites..."
+msgstr "Vào Ư_a thích"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:6
+msgid "Show _Offline Contacts"
+msgstr "Hiện các liên lạc ng_oại tuyến"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:7
+msgid "_About"
+msgstr "_Giới thiệu"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:8
+msgid "_Accounts"
+msgstr "_Tài khoản"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:9
+#: ../libempathy-gtk/gossip-chat.glade.h:15
+msgid "_Add Contact..."
+msgstr "Thê_m liên lạc..."
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:10
+#: ../libempathy-gtk/gossip-contact-list.c:298
+msgid "_Chat"
+msgstr "Trò _chuyện"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:11
+msgid "_Contents"
+msgstr "Mục lụ_c"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:12
+#: ../libempathy-gtk/gossip-chat.glade.h:21
+#: ../libempathy-gtk/gossip-contact-list.c:310
+msgid "_Edit"
+msgstr "_Sửa"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:13
+msgid "_Help"
+msgstr "Trợ _giúp"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:14
+#: ../libempathy-gtk/empathy-status-icon.glade.h:2
+msgid "_New Message..."
+msgstr "Ti_n nhẳn mới..."
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:15
+msgid "_Personal Information"
+msgstr "_Thông tin cá nhân"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:16
+msgid "_Preferences"
+msgstr "Tù_y thích"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:17
+#: ../libempathy-gtk/empathy-status-icon.glade.h:3
+msgid "_Quit"
+msgstr "T_hoát"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:18
+#: ../libempathy-gtk/gossip-chat.glade.h:25
+msgid "_Room"
+msgstr "_Phóng"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:19
+#: ../libempathy-gtk/gossip-chat.glade.h:28
+#: ../libempathy-gtk/gossip-contact-list.c:326
+msgid "_View Previous Conversations"
+msgstr "_Xem đối thoại trước"
+
+#: ../libempathy-gtk/empathy-status-icon.glade.h:1
+msgid "Status"
+msgstr "Trạng thái"
+
+#: ../libempathy-gtk/empathy-status-icon.glade.h:4
+msgid "_Show Contact List"
+msgstr "Hiện danh _sách liên lạc"
+
+#: ../libempathy-gtk/gossip-about-dialog.c:63
+#, fuzzy
+msgid ""
+"Empathy is free software; you can redistribute it and/or modify it under the "
+"terms of the GNU General Public License as published by the Free Software "
+"Foundation; either version 2 of the License, or (at your option) any later "
+"version."
+msgstr ""
+"Gossip là phần mềm tự do : bạn có thể phân phái lại và/hay sửa đổi nó với "
+"điều kiện của Quyền Công Chung GNU (GPL), như do Tổ chức Phần mềm Tự do xuất "
+"bản, hoặc phiên bản 2 của Quyền này, hoặc (tùy chọn) bất kỳ phiên bản mới "
+"hơn."
+
+#: ../libempathy-gtk/gossip-about-dialog.c:67
+#, fuzzy
+msgid ""
+"Empathy is distributed in the hope that it will be useful, but WITHOUT ANY "
+"WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS "
+"FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more "
+"details."
+msgstr ""
+"Chúng tôi phân phối Gossip vì mong muốn nó có ích, nhưng KHÔNG bảo đảm gì "
+"cả, dù khả năng bán hay khả năng làm việc dứt khoát. Xem Quyền Công Chung "
+"GNU để tìm chi tiết."
+
+#: ../libempathy-gtk/gossip-about-dialog.c:71
+#, fuzzy
+msgid ""
+"You should have received a copy of the GNU General Public License along with "
+"Empathy; if not, write to the Free Software Foundation, Inc., 51 Franklin "
+"Street, Fifth Floor, Boston, MA 02110-130159 USA"
+msgstr ""
+"Bạn đã nhận một bản sao của Giấy Phép Công Cộng GNU cùng với chương trình "
+"này; nếu không, hãy viết thư cho Tổ Chức Phần Mềm Tự Do,\n"
+"Free Software Foundation, Inc.,\n"
+" 51 Franklin Street, Fifth Floor,\n"
+"Boston, MA  02110-1301, USA."
+
+#: ../libempathy-gtk/gossip-about-dialog.c:99
+msgid "An Instant Messaging client for GNOME"
+msgstr "Ứng dụng khách tin nhắn tức khắc cho Gnome"
+
+#: ../libempathy-gtk/gossip-about-dialog.c:105
+msgid "translator-credits"
+msgstr "Nhóm Việt hóa Gnome <gnomevi-list@lists.sourceforge.net>"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:224
+#, fuzzy
+msgid "Disable"
+msgstr "Sẵn sàng"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:227
+#, fuzzy
+msgid "Enable"
+msgstr "Ví dụ"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:261
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:3
+#, fuzzy
+msgid "<b>No Account Selected</b>"
+msgstr "<b>Tài khoản</b>"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:263
+msgid ""
+"To add a new account, you can click on the 'Add' button and a new entry will "
+"be created for you to start configuring.\n"
+"\n"
+"If you do not want to add an account, simply click on the account you want "
+"to configure in the list on the left."
+msgstr ""
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:272
+#, fuzzy
+msgid "<b>No Accounts Configured</b>"
+msgstr "<b>Tài khoản</b>"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:274
+msgid ""
+"To add a new account, you can click on the 'Add' button and a new entry will "
+"be created for you to start configuring."
+msgstr ""
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:362
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:6
+msgid "Accounts"
+msgstr "Tài khoản"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:857
+#, c-format
+msgid ""
+"You are about to remove your %s account!\n"
+"Are you sure you want to proceed?"
+msgstr ""
+"Bạn sắp gỡ bỏ tài khoản %s của mình !\n"
+"Bạn có chắc muốn tiếp tục không?"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:863
+msgid ""
+"Any associated conversations and chat rooms will NOT be removed if you "
+"decide to proceed.\n"
+"\n"
+"Should you decide to add the account back at a later time, they will still "
+"be available."
+msgstr ""
+"Cuộc đối thoại nào hay phòng trò chuyện nào tương ứng sẽ KHÔNG bị gỡ bỏ nếu "
+"bạn chọn tiếp tục.\n"
+"\n"
+"Như thế thì chúng sẽ vẫn còn sẵn sàng nếu bạn chọn thêm lại tài khoản này "
+"vào lúc sau."
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:1
+msgid "<b>Account</b>"
+msgstr "<b>Tài khoản</b>"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:2
+#, fuzzy
+msgid "<b>New Account</b>"
+msgstr "<b>Tài khoản</b>"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:4
+#, fuzzy
+msgid "<b>Settings</b>"
+msgstr "<b>Trạng thái</b>"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:5
+msgid "A unique name for this account to identify it personally to you."
+msgstr ""
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:7
+#, fuzzy
+msgid "Cr_eate"
+msgstr "Trò chuyện !"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:8
+msgid "Imendio "
+msgstr ""
+
+# Name: don't translate / Tên: đừng dịch
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:9
+msgid "Jabber"
+msgstr "Jabber"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:10
+msgid ""
+"To add a new account, you can click on the 'Add' button and a new entry will "
+"be created for you to started configuring.\n"
+"\n"
+"If you do not want to add an account, simply click on the account you want "
+"to configure in the list on the left."
+msgstr ""
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:13
+msgid "_Name:"
+msgstr "Tê_n:"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:14
+#, fuzzy
+msgid "_Type:"
+msgstr "_Chủ đề:"
+
+#: ../libempathy-gtk/gossip-account-widget-generic.c:144
+#: ../libempathy-gtk/gossip-account-widget-generic.c:186
+#, c-format
+msgid "%s:"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:1
+#, fuzzy
+msgid ""
+"<small><b><span foreground=\"#555\">Example: user@jabber.org</span></b></"
+"small>"
+msgstr "<span size=\"smaller\">Ví dụ : người_dùng@jabber.org</span>"
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:2
+msgid "Forget password and clear the entry."
+msgstr ""
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:3
+msgid "Login I_D:"
+msgstr "I_D đăng nhập:"
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:4
+msgid "Pass_word:"
+msgstr "_Mật khẩu :"
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:5
+msgid "Reso_urce:"
+msgstr "Tài ng_uyên:"
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:6
+#, fuzzy
+msgid "Use encryption (SS_L)"
+msgstr "Dùng _mật mã (SSL)"
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:7
+msgid "_Port:"
+msgstr "_Cổng:"
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:8
+msgid "_Server:"
+msgstr "Máy phục _vụ :"
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:9
+msgid "jabber account settings"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-chat.c:314
+msgid "Disconnected"
+msgstr "Kết nối bị ngắt"
+
+#: ../libempathy-gtk/gossip-chat.c:858
+msgid "Insert Smiley"
+msgstr "Chèn ảnh cười"
+
+#: ../libempathy-gtk/gossip-chat.c:906
+msgid "_Check Word Spelling..."
+msgstr "Kiểm tra _chính tả từ..."
+
+#: ../libempathy-gtk/gossip-chat.c:1244
+msgid "Connected"
+msgstr "Được kết nối"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:1
+msgid "C_lear"
+msgstr "X_oá"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:2
+msgid "Change _Topic..."
+msgstr ""
+
+#: ../libempathy-gtk/gossip-chat.glade.h:3
+msgid "Chat"
+msgstr "Trò chuyện"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:4
+msgid "Contact Infor_mation"
+msgstr "Thông tin _liên lạc"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:5
+msgid "Cu_t"
+msgstr "Cắ_t"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:6
+#, fuzzy
+msgid "In_vite..."
+msgstr "_Mời"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:7
+msgid "Insert _Smiley"
+msgstr "Chèn ảnh _cười"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:8
+#, fuzzy
+msgid "Invitation _message:"
+msgstr "Thông điệp mời:"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:9
+msgid "Invite"
+msgstr "Mời"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:11
+msgid "Move Tab _Left"
+msgstr "Chuyển thanh t_rái"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:12
+msgid "Move Tab _Right"
+msgstr "Chuyển thanh _phải"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:13
+msgid "Select who would you like to invite:"
+msgstr "Chọn người nào bạn muốn mời:"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:14
+msgid "You have been invited to join a chat conference."
+msgstr "Bạn đã được mời tham gia một hội thảo trò chuyện."
+
+#: ../libempathy-gtk/gossip-chat.glade.h:16
+msgid "_Add To Favorites"
+msgstr "Thêm vào Ư_a thích"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:17
+msgid "_Close"
+msgstr "Đón_g"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:18
+msgid "_Conversation"
+msgstr "Đối th_oại"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:19
+msgid "_Copy"
+msgstr "_Chép"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:20
+msgid "_Detach Tab"
+msgstr "Gỡ _ra thanh"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:22
+msgid "_Next Tab"
+msgstr "Tha_nh kế"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:23
+msgid "_Paste"
+msgstr "_Dán"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:24
+msgid "_Previous Tab"
+msgstr "Thanh t_rước"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:26
+msgid "_Show Contacts"
+msgstr "_Hiện các liên lạc"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:27
+msgid "_Tabs"
+msgstr "_Thanh"
+
+#: ../libempathy-gtk/gossip-chat-view.c:544
+msgid "_Copy Link Address"
+msgstr "_Chép địa chỉ liên kết"
+
+#: ../libempathy-gtk/gossip-chat-view.c:552
+msgid "_Open Link"
+msgstr "_Mở liên kết"
+
+#: ../libempathy-gtk/gossip-chat-view.c:889
+msgid "%A %d %B %Y"
+msgstr "%A %d %B %Y"
+
+#: ../libempathy-gtk/gossip-chat-window.c:685
+#: ../libempathy-gtk/gossip-chat-window.c:715
+#, fuzzy
+msgid "New Message"
+msgid_plural "New Messages"
+msgstr[0] "Tin nhẳn mới"
+
+#: ../libempathy-gtk/gossip-chat-window.c:691
+msgid "Chat Room"
+msgstr "Phòng trò chuyện"
+
+#: ../libempathy-gtk/gossip-chat-window.c:696
+#: ../libempathy-gtk/gossip-chat-window.c:719
+#, fuzzy, c-format
+msgid "Conversation"
+msgid_plural "Conversations (%d)"
+msgstr[0] "Đối th_oại"
+
+#: ../libempathy-gtk/gossip-chat-window.c:1295
+msgid "Typing a message."
+msgstr "Đang gõ tin nhẳn."
+
+#: ../libempathy-gtk/gossip-contact-list.c:290
+msgid "_Contact"
+msgstr "Liên lạ_c"
+
+#: ../libempathy-gtk/gossip-contact-list.c:294
+msgid "_Group"
+msgstr "_Nhóm"
+
+#: ../libempathy-gtk/gossip-contact-list.c:298
+msgid "Chat with contact"
+msgstr "Trò chuyện với liên lạc"
+
+#: ../libempathy-gtk/gossip-contact-list.c:302
+msgid "Infor_mation"
+msgstr "_Thông tin"
+
+#: ../libempathy-gtk/gossip-contact-list.c:302
+msgid "View contact information"
+msgstr "Xem thông tin liên lạc"
+
+#: ../libempathy-gtk/gossip-contact-list.c:306
+msgid "Re_name"
+msgstr "Thay tê_n"
+
+#: ../libempathy-gtk/gossip-contact-list.c:306
+msgid "Rename"
+msgstr "Thay tên"
+
+#: ../libempathy-gtk/gossip-contact-list.c:310
+msgid "Edit the groups and name for this contact"
+msgstr "Hiệu chỉnh những nhóm và tên cho liên lạc này"
+
+#: ../libempathy-gtk/gossip-contact-list.c:314
+msgid "_Remove"
+msgstr "Gỡ _bỏ"
+
+#: ../libempathy-gtk/gossip-contact-list.c:314
+msgid "Remove contact"
+msgstr "Gỡ bỏ liên lạc"
+
+#: ../libempathy-gtk/gossip-contact-list.c:318
+msgid "_Invite to Chat Room"
+msgstr "Mờ_i vào phòng trò chuyện"
+
+#: ../libempathy-gtk/gossip-contact-list.c:318
+msgid "Invite to a currently open chat room"
+msgstr "Mời vào một phòng trò chuyện hiện thời được mở"
+
+#: ../libempathy-gtk/gossip-contact-list.c:322
+msgid "_Send File..."
+msgstr "_Gởi tập tin..."
+
+#: ../libempathy-gtk/gossip-contact-list.c:322
+msgid "Send a file"
+msgstr "Gởi một tập tin"
+
+#: ../libempathy-gtk/gossip-contact-list.c:326
+msgid "View previous conversations with this contact"
+msgstr "Xem cuộc đối thoại trước đây với liên lạc này"
+
+#: ../libempathy-gtk/gossip-preferences.c:250
+msgid "Language"
+msgstr "Ngôn ngữ"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:1
+msgid "<b>Appearance</b>"
+msgstr "<b>Diện mạo</b>"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:2
+msgid "<b>Audio</b>"
+msgstr "<b>Âm thanh</b>"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:3
+msgid "<b>Behaviour</b>"
+msgstr "<b>Ứng xử</b>"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:4
+#, fuzzy
+msgid "<b>Contact List</b>"
+msgstr "<b>Kết nối</b>"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:5
+msgid "<b>Languages</b>"
+msgstr "<b>Ngôn ngữ</b>"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:6
+msgid "<b>Options</b>"
+msgstr "<b>Tùy chọn</b>"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:7
+msgid "<b>Visual</b>"
+msgstr "<b>Hiển thị</b>"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:8
+msgid ""
+"<small>The list of languages reflects only the languages for which you have "
+"a dictionary installed.</small>"
+msgstr ""
+"<small>Danh sách ngôn ngữ phản ánh chỉ mỗi ngôn ngữ cho đó bạn đã cài đặt từ "
+"điển.</small>"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:9
+msgid "Avatars are user chosen images shown in the contact list"
+msgstr ""
+"Ảnh riêng là ảnh được người dùng chọn, được hiển thị trong danh sách liên lạc"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:10
+msgid "Chat Th_eme:"
+msgstr "_Sắc thái trò chuyện:"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:11
+msgid "Display notifications when contacts come _online"
+msgstr "Thông bá_o khi liên lạc mới trực tuyến"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:12
+msgid "Enable sounds when _away"
+msgstr "Bật âm th_anh khi vắng mặt"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:13
+msgid "Enable sounds when _busy"
+msgstr "Bật âm thanh khi _bận"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:14
+msgid "General"
+msgstr "Chung"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:15
+msgid "Notifications"
+msgstr "Thông báo"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:16
+msgid "Preferences"
+msgstr "Tùy thích"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:17
+msgid "Show _avatars"
+msgstr "Hiện ảnh _riêng"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:18
+msgid "Show _smileys as images"
+msgstr "Hiện _mặt cười là ảnh"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:19
+#, fuzzy
+msgid "Show co_mpact contact list"
+msgstr "Hiện danh _sách liên lạc"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:20
+msgid "Sort by _name"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:21
+msgid "Sort by s_tate"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:22
+msgid "Spell Checking"
+msgstr "Kiểm tra chính tả"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:23
+msgid "Themes"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:24
+msgid "_Enable spell checking"
+msgstr "_Kiểm tra chính tả"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:25
+msgid "_Open new chats in separate windows"
+msgstr "Mở cuộc trò chuyện mới tr_ong cửa sổ riêng"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:26
+msgid "_Play sound when messages arrive"
+msgstr "_Phát âm thanh khi mới nhận tin nhẳn"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:27
+msgid "_Use for chat rooms"
+msgstr "Dùng cho phòng trò ch_uyện"
+
+#: ../libempathy-gtk/gossip-presence-chooser.c:702
+msgid "Custom message..."
+msgstr "Tin nhẳn tự chọn..."
+
+#. Clear list
+#: ../libempathy-gtk/gossip-presence-chooser.c:724
+msgid "Clear List..."
+msgstr "Xoá danh sách..."
+
+#: ../libempathy-gtk/gossip-presence-chooser.c:803
+msgid "Are you sure you want to clear the list?"
+msgstr "Bạn có chắc muốn xoá danh sách này không?"
+
+#: ../libempathy-gtk/gossip-presence-chooser.c:807
+msgid ""
+"This will remove any custom messages you have added to the list of preset "
+"status messages."
+msgstr ""
+"Việc này sẽ gỡ bỏ thông điệp riêng nào bạn đã thêm vào danh sách các thông "
+"điệp trạng thái định sẵn."
+
+#: ../libempathy-gtk/gossip-presence-chooser.c:812
+msgid "Clear List"
+msgstr "Xoá danh sách"
+
+#: ../libempathy-gtk/gossip-presence-chooser.glade.h:1
+msgid "Enter status message:"
+msgstr "Gõ thông điệp trạng thái:"
+
+#: ../libempathy-gtk/gossip-presence-chooser.glade.h:2
+msgid "Status Message Presets"
+msgstr "Định sẵn thông điệp trạng thái"
+
+#: ../libempathy-gtk/gossip-presence-chooser.glade.h:3
+msgid "_Add to status message list"
+msgstr "Thêm vào d_anh sách thông điệp trạng thái"
+
+#: ../libempathy-gtk/gossip-private-chat.c:198
+#, c-format
+msgid "%s went offline"
+msgstr "%s mới ngoại tuyến"
+
+#: ../libempathy-gtk/gossip-private-chat.c:212
+#, c-format
+msgid "%s has come online"
+msgstr "%s mới trực tuyến"
+
+#: ../libempathy-gtk/gossip-theme-manager.c:87
+msgid "Classic"
+msgstr "Cổ điển"
+
+#: ../libempathy-gtk/gossip-theme-manager.c:88
+msgid "Simple"
+msgstr "Đơn giản"
+
+#: ../libempathy-gtk/gossip-theme-manager.c:89
+msgid "Clean"
+msgstr "Làm sạch"
+
+#: ../libempathy-gtk/gossip-theme-manager.c:90
+msgid "Blue"
+msgstr "Xanh dương"
+
+#: ../src/empathy-main.c:145
+msgid "Don't connect on startup"
+msgstr "Đừng kết nối khi khởi chạy"
+
+#: ../src/empathy-main.c:155
+#, fuzzy
+msgid "- Empathy Instant Messenger"
+msgstr "- Bộ tin nhắn tức khắc Gossip"
+
+#~ msgid "Gossip Instant Messenger"
+#~ msgstr "Bộ tin nhắn tức khắc Gossip"
+
+#~ msgid "Normal"
+#~ msgstr "Chuẩn"
+
+#~ msgid "Joining"
+#~ msgstr "Tham gia"
+
+#~ msgid "Active"
+#~ msgstr "Hoạt động"
+
+#~ msgid "Inactive"
+#~ msgstr "Bị động"
+
+#~ msgid "Unknown"
+#~ msgstr "Không rõ"
+
+#~ msgid "Error"
+#~ msgstr "Lỗi"
+
+#, fuzzy
+#~ msgid "No role"
+#~ msgstr "Chuẩn"
+
+#, fuzzy
+#~ msgid "No affiliation"
+#~ msgstr "Thông báo"
+
+#~ msgid "The nickname you have chosen is already in use."
+#~ msgstr "Bạn đã chọn một tên hiệu đang được dùng."
+
+#~ msgid "The chat room you tried to join requires a password."
+#~ msgstr "Bạn đang cố tham gia một phòng trò chuyện cần thiết mật khẩu."
+
+#~ msgid "The remote conference server did not respond in a sensible time."
+#~ msgstr "Máy phục vụ hội thảo ở xa chưa đáp ứng sau một thời gian hợp lý."
+
+#~ msgid "The conference server you tried to join could not be found."
+#~ msgstr "Bạn đã cố tham gia một máy phục vụ hội thảo không thể được tìm."
+
+#~ msgid "An unknown error occurred, check your details are correct."
+#~ msgstr "Gặp lỗi lạ: hãy kiểm tra xem bạn đã gõ đúng chi tiết mình."
+
+#, fuzzy
+#~ msgid "Joining the chatroom was canceled."
+#~ msgstr "Vào phòng trò chuyện"
+
+#~ msgid "Unavailable"
+#~ msgstr "Không sẵn sàng"
+
+#~ msgid "An unknown error occurred."
+#~ msgstr "Gặp lỗi không rõ."
+
+#~ msgid "Connection refused."
+#~ msgstr "Kết nối bị từ chối."
+
+#~ msgid "Server address could not be resolved."
+#~ msgstr "Không thể quyết định địa chỉ của máy phục vụ."
+
+#~ msgid "Connection timed out."
+#~ msgstr "Kết nối đã quá giờ."
+
+#~ msgid "Authentication failed."
+#~ msgstr "Việc xác thực bị lỗi."
+
+#~ msgid "The username you are trying already exists."
+#~ msgstr "Bạn đang thử ra một tên người dùng đã có."
+
+#~ msgid "The username you are trying is not valid."
+#~ msgstr "Bạn đang thử ra một tên người dùng không hợp lệ."
+
+#~ msgid "This feature is unavailable."
+#~ msgstr "Không có tính năng này."
+
+#~ msgid "This feature is unauthorized."
+#~ msgstr "Tính năng này không được xác thực."
+
+#~ msgid "A specific protocol error occurred that was unexpected."
+#~ msgstr "Gặp một lỗi giao thức dứt khoát mà bất ngờ."
+
+#, fuzzy
+#~ msgid "new account"
+#~ msgstr "Tài khoản mới"
+
+#~ msgid "Home"
+#~ msgstr "Nhà"
+
+#~ msgid "Couldn't send message!"
+#~ msgstr "Không thể gởi tin nhẳn."
+
+#~ msgid "Connection could not be opened"
+#~ msgstr "Không thể mở kết nối."
+
+#, fuzzy
+#~ msgid "This service is unavailable or not found"
+#~ msgstr "Không có tính năng này."
+
+#, fuzzy
+#~ msgid "Registration is required"
+#~ msgstr "Đang ký"
+
+#, fuzzy
+#~ msgid "This feature is not implemented"
+#~ msgstr "Tính năng này không được xác thực."
+
+#~ msgid "Stop"
+#~ msgstr "Dừng"
+
+#~ msgid "Disconnect"
+#~ msgstr "Ngắt kết nối"
+
+#~ msgid "Connect"
+#~ msgstr "Kết nối"
+
+#, fuzzy
+#~ msgid "Successfully registered your new account settings."
+#~ msgstr "Việc đăng ký thiết lập tài khoản mới của bạn bị lỗi."
+
+#, fuzzy
+#~ msgid "You should now be able to connect to your new account."
+#~ msgstr ""
+#~ "Bạn không thể sử dụng tùy chọn « --no-connect » (không kết nối) cùng với "
+#~ "tùy chọn « --account » (tài khoản)"
+
+#, fuzzy
+#~ msgid "Failed to register your new account settings."
+#~ msgstr "Việc đăng ký thiết lập tài khoản mới của bạn bị lỗi."
+
+#, fuzzy
+#~ msgid "Successfully changed your account password."
+#~ msgstr "Hãy gõ mật khẩu tài khoản:"
+
+#, fuzzy
+#~ msgid "Failed to change your account password."
+#~ msgstr "Hãy gõ mật khẩu tài khoản:"
+
+#, fuzzy
+#~ msgid ""
+#~ "Please enter a new password for this account:\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Hãy gõ tên mới cho nhóm này:\n"
+#~ "%s"
+
+#~ msgid "No information is available for this contact."
+#~ msgstr "Không có thông tin công bố về liên lạc này."
+
+#~ msgid "Information requested, please wait..."
+#~ msgstr "Thông tin đã được yêu cầu, hãy đợi..."
+
+#~ msgid "I would like to add you to my contact list."
+#~ msgstr "Tôi muốn thêm bạn vào danh sách liên lạc mình."
+
+#~ msgid "To summarize:"
+#~ msgstr "Tóm tắt:"
+
+#~ msgid "%d new message"
+#~ msgid_plural "%d new messages"
+#~ msgstr[0] "%d tin nhẳn mới"
+
+#~ msgid "%d subscription request"
+#~ msgid_plural "%d subscription requests"
+#~ msgstr[0] "%d yêu cầu đăng ký"
+
+#~ msgid "%d file transfer request"
+#~ msgid_plural "%d file transfer requests"
+#~ msgstr[0] "%d yêu cầu truyền tập tin"
+
+#~ msgid "%d server message"
+#~ msgid_plural "%d server messages"
+#~ msgstr[0] "%d thông điệp máy phục vụ"
+
+#~ msgid "%d error"
+#~ msgid_plural "%d errors"
+#~ msgstr[0] "%d lỗi"
+
+#~ msgid "If you quit, you will lose all unread information."
+#~ msgstr "Nếu bạn thoát, các thông tin chưa đọc sẽ bị mất hoàn toàn."
+
+#~ msgid "Gossip is still running, it is just hidden."
+#~ msgstr "Trình Gossip vẫn còn chạy, chỉ ẩn."
+
+#~ msgid "Click on the notification area icon to show Gossip."
+#~ msgstr "Nhấn vào vùng thông báo để hiển thị trình Gossip."
+
+#~ msgid "You were about to quit!"
+#~ msgstr "Bạn đã sắp thoát !"
+
+#~ msgid ""
+#~ "Since no system or notification tray has been found, this action would "
+#~ "normally quit Gossip.\n"
+#~ "\n"
+#~ "This is just a reminder, from now on, Gossip will quit when performing "
+#~ "this action unless you uncheck the option below."
+#~ msgstr ""
+#~ "Vì không tìm thấy khay hệ thống hay thông báo, hành động này thường thoát "
+#~ "khỏi trình Gossip.\n"
+#~ "\n"
+#~ "Đây chỉ là lời nhắc nhở, kể từ bây giờ, trình Gossip sẽ thoát khi thực "
+#~ "hiện hành động này, nếu bạn không bỏ chọn tùy chọn bên dưới."
+
+#~ msgid "Edit Account _Details"
+#~ msgstr "Sử_a chi tiết tài khoản"
+
+#~ msgid "Click to enlarge"
+#~ msgstr "Nhấn để phóng to"
+
+#~ msgid "Word"
+#~ msgstr "Từ"
+
+#~ msgid "Select who would you like to invite to room:"
+#~ msgstr "Chọn người nào bạn muốn mời vào phòng:"
+
+#~ msgid "Select which room you would like to invite:"
+#~ msgstr "Chọn phòng vào đó bạn muốn mời người:"
+
+#~ msgid "New message from %s"
+#~ msgstr "Tin nhẳn mới từ %s"
+
+#~ msgid "Your invitation has been declined"
+#~ msgstr "Lời mời của bạn đã bị từ chối"
+
+#~ msgid "Accept"
+#~ msgstr "Chấp nhận"
+
+#~ msgid "Decline"
+#~ msgstr "Từ chối"
+
+#, fuzzy
+#~ msgid "Name"
+#~ msgstr "Tên:"
+
+#, fuzzy
+#~ msgid "Room"
+#~ msgstr "_Phóng"
+
+#~ msgid "Auto Connect"
+#~ msgstr "Kết nối tự động"
+
+#~ msgid "Information requested..."
+#~ msgstr "Thông tin được yêu cầu..."
+
+#~ msgid "Do you want to remove this contact from your roster?"
+#~ msgstr "Bạn có muốn gỡ bỏ liên lạc này ra bản liệt kê không?"
+
+#~ msgid ""
+#~ "Please enter a new name for the group:\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Hãy gõ tên mới cho nhóm này:\n"
+#~ "%s"
+
+#~ msgid "Select"
+#~ msgstr "Chọn"
+
+#~ msgid "Unsorted"
+#~ msgstr "Chưa sắp xếp"
+
+#~ msgid ""
+#~ "Set the alias you want to use for:\n"
+#~ "<b>%s</b>\n"
+#~ "\n"
+#~ "You can retrieve contact information from the server."
+#~ msgstr ""
+#~ "Đặt tên hiệu bạn muốn dùng cho :\n"
+#~ "<b>%s</b>\n"
+#~ "\n"
+#~ "Bạn có khả năng lấy thông tin liên lạc từ máy phục vụ."
+
+#~ msgid "New file transfer request from %s"
+#~ msgstr "Yêu cầu truyền tập tin mới từ %s"
+
+#~ msgid "File transfer is not supported by both parties."
+#~ msgstr "Không phải cả hai người hỗ trợ việc truyền tập tin."
+
+#~ msgid "Your file transfer offer declined."
+#~ msgstr "Người khác đã từ chối truyền tập tin."
+
+#~ msgid "The other user decided not to continue."
+#~ msgstr "Người dùng khác đã quyết định sẽ không tiếp tục."
+
+#~ msgid "Unknown error occurred during file transfer."
+#~ msgstr "Gặp lỗi lạ trong khi truyền tập tin."
+
+#~ msgid "%s would like to send you a file."
+#~ msgstr "%s muốn gởi tập tin cho bạn."
+
+#~ msgid "Someone would like to send you a file."
+#~ msgstr "Người nào muốn gởi tập tin cho bạn."
+
+#~ msgid "Select a file"
+#~ msgstr "Chọn tập tin"
+
+#, fuzzy
+#~ msgid "Connecting..."
+#~ msgstr "Đang kết nối..."
+
+#, fuzzy
+#~ msgid "Retry connection"
+#~ msgstr "Dừng kết nối"
+
+#~ msgid "Invited %s to join this chat conference."
+#~ msgstr "Đã mời %s tham gia hội thảo trò chuyện này."
+
+#, fuzzy
+#~ msgid "%s has set the topic: %s"
+#~ msgstr "%s đã đặt chủ đề"
+
+#, fuzzy
+#~ msgid "Enter the new topic you want to set for this room:"
+#~ msgstr "Cho liên lạc này, bạn có muốn sử dụng tên hiệu nào?"
+
+#, fuzzy
+#~ msgid "%s has joined the room"
+#~ msgstr "%s đã đặt chủ đề"
+
+#, fuzzy
+#~ msgid "%s has left the room"
+#~ msgstr "%s đã đặt chủ đề"
+
+#, fuzzy
+#~ msgid "Topic: %s"
+#~ msgstr "_Chủ đề:"
+
+#~ msgid "Account"
+#~ msgstr "Tài khoản"
+
+#~ msgid "Conversation With"
+#~ msgstr "Đối thoại với"
+
+#~ msgid "Date"
+#~ msgstr "Ngày"
+
+#~ msgid "Allow multiple instances of the application to run at the same time"
+#~ msgstr "Cho phép nhiều bản sao của ứng dụng này có chạy đồng thời"
+
+#~ msgid "List the available accounts"
+#~ msgstr "Liệt kê các tài khoản sẵn sàng"
+
+#~ msgid "Which account to connect to on startup"
+#~ msgstr "Tài khoản nào cần kết nối khi khởi chạy"
+
+#~ msgid "ACCOUNT-NAME"
+#~ msgstr "TÊN TÀI KHOẢN"
+
+#~ msgid "You can not use --no-connect together with --account"
+#~ msgstr ""
+#~ "Bạn không thể sử dụng tùy chọn « --no-connect » (không kết nối) cùng với "
+#~ "tùy chọn « --account » (tài khoản)"
+
+#~ msgid "No accounts available."
+#~ msgstr "Không có tài khoản sẵn sàng."
+
+#~ msgid "Available accounts:"
+#~ msgstr "Các tài khoản sẵn sàng:"
+
+#~ msgid "[default]"
+#~ msgstr "[mặc định]"
+
+#~ msgid "There is no account with the name '%s'."
+#~ msgstr "Không có tài khoản tên « %s »."
+
+#~ msgid "Join"
+#~ msgstr "Tham gia"
+
+#, fuzzy
+#~ msgid "Create"
+#~ msgstr "Ngày"
+
+#~ msgid "Chat Rooms"
+#~ msgstr "Phòng trò chuyện"
+
+#, fuzzy
+#~ msgid "Browsing for conference rooms, please wait..."
+#~ msgstr "Thông tin đã được yêu cầu, hãy đợi..."
+
+#~ msgid "Default"
+#~ msgstr "Mặc định"
+
+#~ msgid "Chat!"
+#~ msgstr "Trò chuyện !"
+
+#~ msgid "%s wants to be added to your contact list."
+#~ msgstr "%s muốn được thêm vào danh sách liên lạc của bạn."
+
+#~ msgid "Someone wants to be added to your contact list."
+#~ msgstr "Người nào muốn được thêm vào danh sách liên lạc của bạn."
+
+#~ msgid "Subscription request"
+#~ msgstr "Yêu cầu đăng ký"
+
+#~ msgid "Show"
+#~ msgstr "Hiện"
+
+#~ msgid "Contact Information"
+#~ msgstr "Thông tin liên lạc"
+
+#~ msgid "Subject: %s"
+#~ msgstr "Chủ đề : %s"
+
+#~ msgid "Suggestions for the word"
+#~ msgstr "Đề nghị từ"
+
+#~ msgid "New subscription request from %s"
+#~ msgstr "Yêu cầu đăng ký mới từ %s"
+
+#~ msgid "Do you want to add this person to your contact list?"
+#~ msgstr "Bạn có muốn thêm họ vào danh sách liên lạc không?"
+
+#~ msgid "Do you want to add %s to your contact list?"
+#~ msgstr "Bạn có muốn thêm %s vào danh sách liên lạc không?"
+
+#~ msgid "Please enter your %s account password"
+#~ msgstr "Hãy gõ mật khẩu của bạn cho tài khoản %s"
+
+#, fuzzy
+#~ msgid "Logging in to account '%s'"
+#~ msgstr "Đang đăng nhập với : %s"
+
+#~ msgid "Remember Password?"
+#~ msgstr "Nhớ mật khẩu ?"
+
+#~ msgid "Do not show this again"
+#~ msgstr "Đừng hiện câu này lần nữa"
+
+#~ msgid "Could not display the help contents."
+#~ msgstr "Không thể hiển thị nội dung trợ giúp."
+
+#~ msgid "Select Your Avatar Image"
+#~ msgstr "Chọn ảnh riêng"
+
+#~ msgid "No Image"
+#~ msgstr "Không có ảnh"
+
+#~ msgid "The server does not seem to be responding."
+#~ msgstr "Máy phục vụ có vẻ không phải đáp ứng."
+
+#~ msgid "Try again later."
+#~ msgstr "Thử lại sau."
+
+#, fuzzy
+#~ msgid "Change"
+#~ msgstr "Trò chuyện"
+
+#~ msgid "Contact goes offline"
+#~ msgstr "Liên lạc mới ngoại tuyến"
+
+#~ msgid "Contact goes online"
+#~ msgstr "Liên lạc mới trực tuyến"
+
+#~ msgid "Contact ID:"
+#~ msgstr "ID liên lạc:"
+
+#~ msgid "Do you want to accept this file?"
+#~ msgstr "Bạn có muốn chấp nhận tập tin này không?"
+
+#~ msgid "File Transfer Request"
+#~ msgstr "Yêu cầu truyền tập tin"
+
+#~ msgid "File name:"
+#~ msgstr "Tên tập tin:"
+
+#~ msgid "File size:"
+#~ msgstr "Cỡ tập tin:"
+
+#~ msgid "Not supported yet"
+#~ msgstr "Chưa hỗ trợ"
+
+#~ msgid "This person wishes to send you this file:"
+#~ msgstr "Người này muốn gởi cho bạn tập tin này:"
+
+#~ msgid "Web site:"
+#~ msgstr "Chỗ Mạng:"
+
+#~ msgid "_Accept"
+#~ msgstr "Chấ_p nhận"
+
+#~ msgid "_Deny"
+#~ msgstr "_Từ chối"
+
+#, fuzzy
+#~ msgid "<b>Topic:</b>"
+#~ msgstr "<b>Nhóm</b>"
+
+#~ msgid "Account:"
+#~ msgstr "Tài khoản:"
+
+#, fuzzy
+#~ msgid "Edit Favorite Room"
+#~ msgstr "Sửa đổi phòng trò chuyện"
+
+#~ msgid "Group Chat"
+#~ msgstr "Trò chuyện nhóm"
+
+#, fuzzy
+#~ msgid "Join New"
+#~ msgstr "Vào _Mới..."
+
+#~ msgid "Join room on start_up"
+#~ msgstr "Vào phòng khi khởi chạ_y"
+
+#~ msgid "Join this chat room when Gossip starts and you are connected"
+#~ msgstr ""
+#~ "Vào phòng trò chuyện này khi trình Gossip khởi chạy và bạn đã kết nối"
+
+#, fuzzy
+#~ msgid "Manage Favorite Rooms"
+#~ msgstr "Quản lý phòng trò chuyện"
+
+#~ msgid "N_ame:"
+#~ msgstr "_Tên:"
+
+#~ msgid "S_erver:"
+#~ msgstr "Máy _phục vụ :"
+
+#~ msgid "_Nickname:"
+#~ msgstr "Tê_n hiệu :"
+
+#~ msgid "_Room:"
+#~ msgstr "_Phóng:"
+
+#~ msgid "-"
+#~ msgstr "—"
+
+#~ msgid "<b>About</b>"
+#~ msgstr "<b>Giới thiệu</b>"
+
+#~ msgid "<b>Client Information</b>"
+#~ msgstr "<b>Thông tin ứng dụng khách</b>"
+
+#~ msgid "<b>Groups</b>"
+#~ msgstr "<b>Nhóm</b>"
+
+#~ msgid "<b>Name</b>"
+#~ msgstr "<b>Tên</b>"
+
+#~ msgid "<b>Personal Details</b>"
+#~ msgstr "<b>Chi tiết cá nhân</b>"
+
+#~ msgid "<b>Status</b>"
+#~ msgstr "<b>Trạng thái</b>"
+
+#, fuzzy
+#~ msgid "<b>Subscription</b>"
+#~ msgstr "<b>Tùy chọn</b>"
+
+#~ msgid "<span size=\"smaller\">Example: Mikael or user@server.org</span>"
+#~ msgstr ""
+#~ "<span size=\"smaller\">Ví dụ : Văn Minh hoặc người_dùng@máy_phục_vụ.org</"
+#~ "span>"
+
+#, fuzzy
+#~ msgid "Accou_nt:"
+#~ msgstr "Tài khoản:"
+
+#~ msgid "Add Contact"
+#~ msgstr "Thêm liên lạc"
+
+#~ msgid "Avatar:"
+#~ msgstr "Ảnh riêng:"
+
+#~ msgid "Ch_at"
+#~ msgstr "Trò ch_uyện"
+
+#~ msgid "Client:"
+#~ msgstr "Ứng dụng khách:"
+
+#, fuzzy
+#~ msgid "Con_tact:"
+#~ msgstr "Liên lạc"
+
+#~ msgid "Connect on S_tartup"
+#~ msgstr "Kế_t nối khi khởi chạy"
+
+#~ msgid "Contacts"
+#~ msgstr "Liên lạc"
+
+#~ msgid "Country:"
+#~ msgstr "Quốc gia:"
+
+#~ msgid "Decide _Later"
+#~ msgstr "Quyết định _sau này"
+
+#~ msgid "Edit Contact"
+#~ msgstr "Sửa liên lạc"
+
+#~ msgid "Edit Groups"
+#~ msgstr "Sửa nhóm"
+
+#~ msgid "Email:"
+#~ msgstr "Thư điện tử :"
+
+#~ msgid "ID:"
+#~ msgstr "ID:"
+
+#~ msgid ""
+#~ "If you chose to decide later you will be asked the next time you log on."
+#~ msgstr ""
+#~ "Nếu bạn chọn quyết định sau này, bạn sẽ được nhắc lại lần kế tiếp đăng "
+#~ "nhập."
+
+#~ msgid "Name:"
+#~ msgstr "Tên:"
+
+#~ msgid "OS:"
+#~ msgstr "HĐH:"
+
+#~ msgid "Personal Details"
+#~ msgstr "Chi tiết cá nhân"
+
+#, fuzzy
+#~ msgid "R_egister"
+#~ msgstr "Đang ký"
+
+#~ msgid "Search"
+#~ msgstr "Tìm kiếm"
+
+#~ msgid ""
+#~ "Select the groups you want this contact to appear in, you can select more "
+#~ "than one group or no groups."
+#~ msgstr ""
+#~ "Chọn những nhóm nơi bạn muốn liên lạc này xuất hiện; bạn có khả năng chọn "
+#~ "một hay nhiều nhóm, hay không chọn nhóm (≥0 nhóm)."
+
+#, fuzzy
+#~ msgid ""
+#~ "Set the alias you want to use for:\n"
+#~ "<b>foo@bar.baz</b>\n"
+#~ "\n"
+#~ "You can retrieve contact information from the server. "
+#~ msgstr ""
+#~ "Đặt tên hiệu bạn muốn dùng cho :\n"
+#~ "<b>%s</b>\n"
+#~ "\n"
+#~ "Bạn có khả năng lấy thông tin liên lạc từ máy phục vụ."
+
+#~ msgid "Spell Checker"
+#~ msgstr "Kiểm tra chính tả"
+
+#~ msgid "Subscription Request"
+#~ msgstr "Yêu cầu đăng ký"
+
+#~ msgid "Suggestions for the word:"
+#~ msgstr "Đề nghị từ :"
+
+#~ msgid ""
+#~ "This acts as a filter to the contact list below. You can use segments of "
+#~ "contact's name or ID, for example, \"jabber.org\" will list everyone "
+#~ "using that server"
+#~ msgstr ""
+#~ "Điều này lọc danh sách liên lạc bên dưới. Bạn có khả năng sử dụng phần "
+#~ "tên hoặc ID của liên lạc; thí dụ, « jabber.org » sẽ liệt kê mọi người sử "
+#~ "dụng máy phục vụ đó."
+
+#~ msgid "This is the name that will be used on your roster for this contact"
+#~ msgstr ""
+#~ "Điều này là tên sẽ được dùng trên bản liệt kê của bạn cho liên lạc này"
+
+#~ msgid "This name will be used to identify you in chat windows"
+#~ msgstr "Tên này sẽ được dùng để nhận diện bạn trong cửa sổ trò chuyện"
+
+#~ msgid ""
+#~ "This name will be used to identify you when new contacts lookup your "
+#~ "details"
+#~ msgstr ""
+#~ "Tên này sẽ được dùng để nhận diện bạn khi liên lạc mới tra tìm chi tiết "
+#~ "về bạn"
+
+#~ msgid "Use default name here from the contact's VCard."
+#~ msgstr "Ở đây dùng tên mặc định từ vCard của liên lạc."
+
+#~ msgid "Use system pro_xy"
+#~ msgstr "Dùng ủ_y nhiệm hệ thống"
+
+#~ msgid "Version:"
+#~ msgstr "Phiên bản:"
+
+#~ msgid "View Previous Conversations"
+#~ msgstr "Xem đối thoại trước"
+
+#~ msgid "Which account do you want to use?"
+#~ msgstr "Bạn có muốn sử dụng tài khoản nào?"
+
+#~ msgid "You are not subscribed to this contact."
+#~ msgstr "Bạn chưa đăng ký với liên lạc này."
+
+#~ msgid "_Connect"
+#~ msgstr "_Kết nối"
+
+#, fuzzy
+#~ msgid "_Description:"
+#~ msgstr "Mô tả:"
+
+#~ msgid "_Disconnect"
+#~ msgstr "_Ngắt kết nối"
+
+#, fuzzy
+#~ msgid "_Email:"
+#~ msgstr "Thư điện tử :"
+
+#, fuzzy
+#~ msgid ""
+#~ "_Enter the name or contact ID of the person you want to chat to below:"
+#~ msgstr ""
+#~ "Hãy gõ bên dưới tên hoặc ID liên lạc của người với mà bạn muốn trò chuyện:"
+
+#, fuzzy
+#~ msgid "_For:"
+#~ msgstr "_Cổng:"
+
+#, fuzzy
+#~ msgid "_Full Name:"
+#~ msgstr "Tê_n:"
+
+#, fuzzy
+#~ msgid "_Group:"
+#~ msgstr "_Nhóm"
+
+#, fuzzy
+#~ msgid "_Nick Name:"
+#~ msgstr "Tê_n hiệu :"
+
+#, fuzzy
+#~ msgid "_Password:"
+#~ msgstr "_Mật khẩu :"
+
+#, fuzzy
+#~ msgid "_Quit Message:"
+#~ msgstr "Tin nhẳn mới"
+
+#~ msgid "_Retrieve"
+#~ msgstr "_Lấy"
+
+#~ msgid "_Subscribe"
+#~ msgstr "Đăng _ký"
+
+#, fuzzy
+#~ msgid "_Web site:"
+#~ msgstr "Chỗ Mạng:"
+
+#, fuzzy
+#~ msgid "irc account settings"
+#~ msgstr "Sử_a chi tiết tài khoản"
+
+#~ msgid "Edit"
+#~ msgstr "Hiệu chỉnh"
+
+#~ msgid "Perhaps you are trying to connect to the wrong port?"
+#~ msgstr "Có lẽ bạn đang cố kết nối đến cổng không đúng?"
+
+#~ msgid "Perhaps the service is not currently running?"
+#~ msgstr "Có lẽ dịch vụ không đang chạy?"
+
+#~ msgid "Check your connection details."
+#~ msgstr "Hãy kiểm tra xem chi tiết kết nối là đúng."
+
+#~ msgid "Perhaps the server is not running this service."
+#~ msgstr "Có lẽ máy phục vụ không đang chạy dịch vụ này."
+
+#~ msgid "Check your username and password are correct."
+#~ msgstr "Hãy kiểm tra xem đã gõ tên người dùng và mật khẩu đúng."
+
+#~ msgid "%s will be added to your contact list."
+#~ msgstr "%s sẽ được thêm vào danh sách liên lạc của bạn."
+
+#~ msgid "%s ID of new contact:"
+#~ msgstr "%s ID của liên lạc mới :"
+
+#~ msgid "Example: %s"
+#~ msgstr "Ví dụ : %s"
+
+#~ msgid "Show accounts and pending connections"
+#~ msgstr "Hiện các tài khoản và kết nối bị hoãn"
+
+#~ msgid "You have no Instant Messaging accounts configured!"
+#~ msgstr "Bạn chưa cấu hình tài khoản Tin nhắn tức khắc."
+
+#~ msgid ""
+#~ "Next you will be presented with the Account Information dialog to set "
+#~ "your details up."
+#~ msgstr ""
+#~ "Bước sau, bạn có thể thiết lập chi tiết mình trong hộp thoại Thông tin "
+#~ "Tài khoản."
+
+#~ msgid "Favourite"
+#~ msgstr "Ưa thích"
+
+#~ msgid "Registering account"
+#~ msgstr "Đang đăng ký tài khoản..."
+
+#~ msgid "Add to _favourites"
+#~ msgstr "Thêm vào ư_a thích"
+
+#~ msgid ""
+#~ "Customize your own nickname, the server and chatroom which you wish to "
+#~ "join."
+#~ msgstr ""
+#~ "Tùy chỉnh tên hiệu mình, máy phục vụ và phòng trò chuyện bạn muốn vào."
+
+#~ msgid "Edit your chat room details:"
+#~ msgstr "Hiệu chỉnh chi tiết phòng trò chuyện:"
+
+#~ msgid "Na_me:"
+#~ msgstr "Tê_n:"
+
+#~ msgid "New Chat Room"
+#~ msgstr "Phòng trò chuyện mới"
+
+#~ msgid ""
+#~ "Pick a saved chat room from the presets available below and click Join to "
+#~ "start chatting."
+#~ msgstr ""
+#~ "Chọn một phòng trò chuyện đã lưu trong danh sách định sẵn bên dưới, rồi "
+#~ "nhắp vào nút « Tham gia » để bắt đầu nói chuyện."
+
+#~ msgid "Save _this chat room"
+#~ msgstr "Lưu phòng _trò chuyện này"
+
+#~ msgid "    "
+#~ msgstr "    "
+
+#~ msgid "<b>Information requested, please wait...</b>"
+#~ msgstr "<b>Thông tin được yêu cầu, hãy đợi...</b>"
+
+#~ msgid "<span size=\"smaller\">Example:</span>"
+#~ msgstr "<span size=\"smaller\">Ví dụ</span>"
+
+#~ msgid "Account Name"
+#~ msgstr "Tên tài khoản"
+
+#~ msgid "Add a contact"
+#~ msgstr "Thêm liên lạc"
+
+#~ msgid "Connection Details"
+#~ msgstr "Chi tiết kết nối"
+
+#~ msgid "Contact information"
+#~ msgstr "Thông tin liên lạc"
+
+#~ msgid "Do you already have an account set up on a server?"
+#~ msgstr "Bạn đã thiết lập tài khoản trên máy phục vụ chưa?"
+
+#~ msgid "Enter a name for this account"
+#~ msgstr "Gõ tên cho tài khoản này"
+
+#~ msgid "Enter the port used in the connection for this account"
+#~ msgstr "Hãy gõ số hiệu cổng dùng khi kết nối tài khoản này"
+
+#~ msgid "Enter the server used in the connection for this account"
+#~ msgstr "Hãy gõ máy phục vụ dùng khi kết nối tài khoản này"
+
+#~ msgid "Enter the user's contact ID:"
+#~ msgstr "Hãy gõ ID liên lạc của người dùng:"
+
+#~ msgid "Enter your real name here"
+#~ msgstr "Hãy gõ vào đây tên thật của bạn"
+
+#~ msgid "Finished"
+#~ msgstr "Đã xong"
+
+#~ msgid "For increased security, enable this option"
+#~ msgstr "Bật tùy chọn này để bảo mật hơn"
+
+#~ msgid "Gossip"
+#~ msgstr "Gossip"
+
+#~ msgid ""
+#~ "Gossip is a modern client for the Jabber Instant Messaging system.\n"
+#~ "\n"
+#~ "This assistant will help you configure Gossip and connect you to your "
+#~ "favorite Jabber server.\n"
+#~ "\n"
+#~ "To get started, just click \"Forward\"."
+#~ msgstr ""
+#~ "Gossip là một ứng dụng khách hiện thời cho hệ thống Tin nhắn tức khắc "
+#~ "Jabber.\n"
+#~ "\n"
+#~ "Trợ lý này sẽ giúp đỡ bạn cấu hình trình Gossip và kết nối bạn đến mấy "
+#~ "phục vụ Jabber ưa thích.\n"
+#~ "\n"
+#~ "Để bắt đầu tiến trình cấu hình, đơn giản hãy nhắp vào nút « Tiếp »."
+
+#~ msgid "Group:"
+#~ msgstr "Nhóm:"
+
+#~ msgid ""
+#~ "If you have another machine on your network which 'proxies' the "
+#~ "connection to the internet and you want to use it, enable this option"
+#~ msgstr ""
+#~ "Nếu bạn có máy khác nằm trên mạng mà làm « ủy nhiệm » kết nối đến Mạng và "
+#~ "bạn muốn sử dụng nó, hãy bật tùy chọn này"
+
+#~ msgid ""
+#~ "If you need to set specific connection details, like a different server "
+#~ "or port, you can configure that here:"
+#~ msgstr ""
+#~ "Nếu bạn cần phải đặt một số chi tiết kết nối riêng, lấy thí dụ, máy phục "
+#~ "vụ hay cổng khác, có thể cấu hình nó ở đây."
+
+#~ msgid ""
+#~ "In order to subscribe to presence notifications from the user, a request "
+#~ "will be sent. Until this request is approved, the user will always be "
+#~ "shown as \"Offline\" in your contact list."
+#~ msgstr ""
+#~ "Bạn cần yêu cầu nhận thông báo sự có mặt của người dùng. Người dùng này "
+#~ "sẽ được hiển thị « Ngoại tuyến »  trong danh sách liên lạc của bạn, cho "
+#~ "đến khi yêu cầu thông báo đã được chấp nhận."
+
+#~ msgid "In which group do you want to place this contact?"
+#~ msgstr "Bạn có muốn để liên lạc này vào nhóm nào?"
+
+#~ msgid "Jabber ID:"
+#~ msgstr "ID Jabber:"
+
+#~ msgid ""
+#~ "Leave this blank if you don't want your password stored on a public "
+#~ "machine. If you decide to do this, you will be prompted each time you "
+#~ "connect for a password"
+#~ msgstr ""
+#~ "Bỏ rỗng nếu bạn không muốn cho phép mật khẩu của mình được cất giữ trên "
+#~ "máy công. Tuy nhiên, bạn sẽ được nhắc với mật khẩu mỗi lần kết nối"
+
+#~ msgid "Nickname:"
+#~ msgstr "Tên hiệu :"
+
+#~ msgid "Port:"
+#~ msgstr "Cổng:"
+
+#~ msgid "Press Subscribe to request to receive their status"
+#~ msgstr "Ấn nút « Đăng ký » để yêu cầu nhận thông báo trạng thái của họ"
+
+#~ msgid "Registering Account"
+#~ msgstr "Đăng ký tài khoản"
+
+#~ msgid "Resource:"
+#~ msgstr "Tài nguyên:"
+
+#~ msgid "Sending request"
+#~ msgstr "Đang gởi yêu cầu..."
+
+#~ msgid "Server:"
+#~ msgstr "Máy phục vụ :"
+
+#~ msgid ""
+#~ "Set the alias you want to use for:\n"
+#~ "<b>martyn@imendio.com</b>\n"
+#~ "\n"
+#~ "You can retrieve contact information from the server. "
+#~ msgstr ""
+#~ "Đặt tên hiệu bạn muốn dùng cho:\n"
+#~ "<b>martyn@imendio.com</b>\n"
+#~ "\n"
+#~ "Bạn có khả năng lấy thông tin liên lạc từ máy phục vụ. "
+
+#~ msgid "Web Site:"
+#~ msgstr "Chỗ Mạng:"
+
+#~ msgid "Welcome to Gossip"
+#~ msgstr "Chúc mừng bạn dùng Gossip"
+
+#~ msgid "What instant messaging system does the contact use?"
+#~ msgstr "Liên lạc này có sử dụng hệ thống tin nhắn tức khắc nào?"
+
+#~ msgid "What is your name?"
+#~ msgstr "Bạn tên nào?"
+
+#~ msgid ""
+#~ "What name do you want to use to identify this account?\n"
+#~ "\n"
+#~ "This name could be something associated with the service provider, for "
+#~ "example, <b>Google</b>."
+#~ msgstr ""
+#~ "Để nhận diện tài khoản này, bạn có muốn sử dụng tên nào?\n"
+#~ "\n"
+#~ "Lấy thí dụ, có thể chọn một tên liên quan đến bộ cung cấp dịch vụ, như "
+#~ "<b>Google</b>."
+
+#~ msgid "What password do you want to use?"
+#~ msgstr "Bạn có muốn sử dụng mật khẩu nào?"
+
+#~ msgid "What username do you use?"
+#~ msgstr "Bạn có sử dụng tên người dùng nào?"
+
+#~ msgid "What username do you want to use?"
+#~ msgstr "Bạn có muốn sử dụng tên người dùng nào?"
+
+#~ msgid "Which account do you want to add this contact to?"
+#~ msgstr "Bạn có muốn thêm liên lạc này vào tài khoản nào?"
+
+#~ msgid ""
+#~ "You can change your account settings later by selecting the Edit-"
+#~ ">Accounts menu item."
+#~ msgstr ""
+#~ "Bạn có thể thay đổi thiết lập tài khoản sau này, bằng cách chọn mục trình "
+#~ "đơn Hiệu chỉnh → Tài khoản."
+
+#~ msgid ""
+#~ "You need to set a name for the connection, for example, <b>Home</b> or "
+#~ "<b>Laptop</b>."
+#~ msgstr ""
+#~ "Bạn cần đặt tên riêng cho sự kết nối này, lấy thí dụ <b>Ở nhà</b> hoặc "
+#~ "<b>Máy tính xách tay</b>."
+
+#~ msgid "Your Account"
+#~ msgstr "Tài khoản của bạn"
+
+#~ msgid "Your Identity"
+#~ msgstr "Thực thể của bạn"
+
+#~ msgid "Your new account has now been set up."
+#~ msgstr "Tài khoản mới của bạn đã được thiết lập."
+
+#~ msgid "_Forget"
+#~ msgstr "_Quên"
+
+#~ msgid "_Group Chat"
+#~ msgstr "T_rò chuyện nhóm"
+
+#~ msgid "_No"
+#~ msgstr "Khô_ng"
+
+#~ msgid "_Search..."
+#~ msgstr "Tìm _kiếm..."
+
+#~ msgid "_Yes"
+#~ msgstr "_Có"

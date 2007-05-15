@@ -1,7 +1,6 @@
-2007-05-15  Jorge Gonzalez <jorgegon@svn.gnome.org>
+2007-05-15  Xavier Claessens <xclaesse@gmail.com>
 
-        * es.po: Added Spanish translation
-	* LINGUAS: Added es
+	* *.po: Import all po files from Gossip.
 
 2007-05-15  David Lodge <dave@cirt.net>
 

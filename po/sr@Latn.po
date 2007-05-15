@@ -1,0 +1,2314 @@
+# Serbian translation of gossip
+# Courtesy of Prevod.org team (http://prevod.org/) -- 2003, 2004.
+#
+# This file is distributed under the same license as the gossip package.
+#
+# Maintainer: Dejan Matijević <dejan@ns.sympatico.ca>
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: gossip\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2007-05-15 23:46+0200\n"
+"PO-Revision-Date: 2004-02-27 23:05+0100\n"
+"Last-Translator: Danilo Šegan <danilo@prevod.org>\n"
+"Language-Team: Serbian (sr) <serbiangnome-lista@nongnu.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../data/empathy.desktop.in.h:1
+#, fuzzy
+msgid "Empathy Instant Messenger"
+msgstr "Brzi glasnik"
+
+#: ../data/empathy.desktop.in.h:2
+msgid "Instant Messenger"
+msgstr "Brzi glasnik"
+
+#: ../data/empathy.schemas.in.h:1
+msgid "Always open a separate chat window for new chats."
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:2
+#, fuzzy
+msgid "Chat window theme"
+msgstr "Ćaskaj sa:"
+
+#: ../data/empathy.schemas.in.h:3
+msgid ""
+"Comma separated list of spell checker languages to use (e.g. en, fr, nl)."
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:4
+#, fuzzy
+msgid "Compact contact list"
+msgstr "Dodaj u svoj spisak drugara"
+
+#: ../data/empathy.schemas.in.h:5
+msgid "Contact list sort criterium"
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:6
+msgid "Default directory to select an avatar image from"
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:7
+msgid "Enable popup when contact is available"
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:8
+#, fuzzy
+msgid "Enable sound when away"
+msgstr "Isključi zvuk kada ste _odsutni"
+
+#: ../data/empathy.schemas.in.h:9
+#, fuzzy
+msgid "Enable sound when busy"
+msgstr "Isključi zvuk kada ste _zauzeti"
+
+#: ../data/empathy.schemas.in.h:10
+#, fuzzy
+msgid "Enable spell checker"
+msgstr "Čavrljanje - Pošalji poruku"
+
+#: ../data/empathy.schemas.in.h:11
+msgid "Hide main window"
+msgstr "Sakrij glavni prozor"
+
+#: ../data/empathy.schemas.in.h:12
+msgid "Hide the main window."
+msgstr "Sakrij glavni prozor."
+
+#: ../data/empathy.schemas.in.h:13
+msgid "Open new chats in separate windows"
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:14
+#, fuzzy
+msgid "Show avatars"
+msgstr "_Prikaži spisak kontakata"
+
+#: ../data/empathy.schemas.in.h:15
+#, fuzzy
+msgid "Show hint about closing the main window"
+msgstr "Visina glavnog prozora."
+
+#: ../data/empathy.schemas.in.h:16
+msgid "Show offline contacts"
+msgstr "Prikaži nepovezane kontakte"
+
+#: ../data/empathy.schemas.in.h:17
+msgid "Spell checking languages"
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:18
+msgid "The last directory that an avatar image was chosen from."
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:19
+msgid "The theme that is used to display the conversation in chat windows."
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:20
+msgid "Use graphical smileys"
+msgstr "Prikaži grafički smešak"
+
+#: ../data/empathy.schemas.in.h:21
+msgid "Use notification sounds"
+msgstr "Koristi zvuk za napomene"
+
+#: ../data/empathy.schemas.in.h:22
+msgid "Use theme for chat rooms"
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:23
+msgid ""
+"Whether or not to check words typed against the languages you want to check "
+"with."
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:24
+msgid ""
+"Whether or not to convert smileys into graphical images in conversations."
+msgstr "Da li da pretvori smeške u grafičke slike u čavrljanju."
+
+#: ../data/empathy.schemas.in.h:25
+msgid "Whether or not to play a sound when messages arrive."
+msgstr "Da li da pusti zvuk kada poruka stigne."
+
+#: ../data/empathy.schemas.in.h:26
+msgid "Whether or not to play sounds when away."
+msgstr "Da li da pusti zvuk kada je odsutan."
+
+#: ../data/empathy.schemas.in.h:27
+msgid "Whether or not to play sounds when busy."
+msgstr "Da li da pusti zvuk kada je zauzet."
+
+#: ../data/empathy.schemas.in.h:28
+#, fuzzy
+msgid "Whether or not to show a popup when a contact becomes available."
+msgstr "Da li da pusti zvuk kada poruka stigne."
+
+#: ../data/empathy.schemas.in.h:29
+#, fuzzy
+msgid ""
+"Whether or not to show avatars for contacts in the contact list and chat "
+"windows."
+msgstr "Da li da prikažem nepovezane kontakte u spisku kontakata."
+
+#: ../data/empathy.schemas.in.h:30
+msgid "Whether or not to show contacts that are offline in the contact list."
+msgstr "Da li da prikažem nepovezane kontakte u spisku kontakata."
+
+#: ../data/empathy.schemas.in.h:31
+msgid ""
+"Whether or not to show the message dialog about closing the main window with "
+"the 'x' button in the title bar."
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:32
+#, fuzzy
+msgid "Whether to show the contact list in compact mode or not."
+msgstr "Da li da prikažem nepovezane kontakte u spisku kontakata."
+
+#: ../data/empathy.schemas.in.h:33
+msgid "Whether to use the theme for chat rooms or not."
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:34
+msgid ""
+"Which criterium to use when sorting the contact list. Default is to use sort "
+"by the contact's name with the value \"name\". A value of \"state\" will "
+"sort the contact list by state."
+msgstr ""
+
+#: ../libempathy/gossip-contact.c:654 ../libempathy/gossip-presence.c:184
+#: ../libempathy/gossip-presence.c:283
+msgid "Offline"
+msgstr "Nepovezan"
+
+#: ../libempathy/gossip-presence.c:274
+msgid "Available"
+msgstr "Dostupan"
+
+#: ../libempathy/gossip-presence.c:276
+msgid "Busy"
+msgstr "Zauzet"
+
+#: ../libempathy/gossip-presence.c:279
+msgid "Away"
+msgstr "Odsutan"
+
+#: ../libempathy-gtk/empathy-main-window.c:254
+#, fuzzy
+msgid "Show and edit accounts"
+msgstr "_Prikaži spisak kontakata"
+
+#: ../libempathy-gtk/empathy-main-window.c:456
+msgid "Group"
+msgstr "Grupa"
+
+#: ../libempathy-gtk/empathy-main-window.c:477
+#, fuzzy
+msgid "Contact"
+msgstr "Dodaj kontakt"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:1
+#, fuzzy
+msgid "Contact List - Empathy"
+msgstr "_Sakrij spisak kontakata"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:2
+#, fuzzy
+msgid "Context"
+msgstr "Poveži se"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:3
+#, fuzzy
+msgid "Join _Favorites"
+msgstr "U_redi omiljene..."
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:4
+#: ../libempathy-gtk/gossip-chat.glade.h:10
+msgid "Join _New..."
+msgstr ""
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:5
+msgid "Manage Favorites..."
+msgstr ""
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:6
+msgid "Show _Offline Contacts"
+msgstr "_Prikaži nepovezane kontakte"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:7
+#, fuzzy
+msgid "_About"
+msgstr "_Akcije"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:8
+#, fuzzy
+msgid "_Accounts"
+msgstr "_Akcije"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:9
+#: ../libempathy-gtk/gossip-chat.glade.h:15
+msgid "_Add Contact..."
+msgstr "_Dodaj kontakt..."
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:10
+#: ../libempathy-gtk/gossip-contact-list.c:298
+msgid "_Chat"
+msgstr "_Razgovor"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:11
+#, fuzzy
+msgid "_Contents"
+msgstr "Poveži se"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:12
+#: ../libempathy-gtk/gossip-chat.glade.h:21
+#: ../libempathy-gtk/gossip-contact-list.c:310
+#, fuzzy
+msgid "_Edit"
+msgstr "_Izađi"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:13
+msgid "_Help"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:14
+#: ../libempathy-gtk/empathy-status-icon.glade.h:2
+msgid "_New Message..."
+msgstr "_Nova poruka..."
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:15
+#, fuzzy
+msgid "_Personal Information"
+msgstr "Lični podaci"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:16
+msgid "_Preferences"
+msgstr "_Postavke"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:17
+#: ../libempathy-gtk/empathy-status-icon.glade.h:3
+msgid "_Quit"
+msgstr "_Izađi"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:18
+#: ../libempathy-gtk/gossip-chat.glade.h:25
+#, fuzzy
+msgid "_Room"
+msgstr "_Soba:"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:19
+#: ../libempathy-gtk/gossip-chat.glade.h:28
+#: ../libempathy-gtk/gossip-contact-list.c:326
+#, fuzzy
+msgid "_View Previous Conversations"
+msgstr "S_ledeći razgovor"
+
+#: ../libempathy-gtk/empathy-status-icon.glade.h:1
+msgid "Status"
+msgstr "Stanje"
+
+#: ../libempathy-gtk/empathy-status-icon.glade.h:4
+msgid "_Show Contact List"
+msgstr "_Prikaži spisak kontakata"
+
+#: ../libempathy-gtk/gossip-about-dialog.c:63
+msgid ""
+"Empathy is free software; you can redistribute it and/or modify it under the "
+"terms of the GNU General Public License as published by the Free Software "
+"Foundation; either version 2 of the License, or (at your option) any later "
+"version."
+msgstr ""
+
+#: ../libempathy-gtk/gossip-about-dialog.c:67
+msgid ""
+"Empathy is distributed in the hope that it will be useful, but WITHOUT ANY "
+"WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS "
+"FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more "
+"details."
+msgstr ""
+
+#: ../libempathy-gtk/gossip-about-dialog.c:71
+msgid ""
+"You should have received a copy of the GNU General Public License along with "
+"Empathy; if not, write to the Free Software Foundation, Inc., 51 Franklin "
+"Street, Fifth Floor, Boston, MA 02110-130159 USA"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-about-dialog.c:99
+#, fuzzy
+msgid "An Instant Messaging client for GNOME"
+msgstr "Brzi glasnik za Gnoma"
+
+#  Note to translators: put here your name (and address) so it
+#  * will shop up in the "about" box
+#: ../libempathy-gtk/gossip-about-dialog.c:105
+#, fuzzy
+msgid "translator-credits"
+msgstr "Dejan Matijević"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:224
+#, fuzzy
+msgid "Disable"
+msgstr "Dostupan"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:227
+msgid "Enable"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:261
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:3
+#, fuzzy
+msgid "<b>No Account Selected</b>"
+msgstr "<b>Nalog:</b>"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:263
+msgid ""
+"To add a new account, you can click on the 'Add' button and a new entry will "
+"be created for you to start configuring.\n"
+"\n"
+"If you do not want to add an account, simply click on the account you want "
+"to configure in the list on the left."
+msgstr ""
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:272
+#, fuzzy
+msgid "<b>No Accounts Configured</b>"
+msgstr "<b>Nalog:</b>"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:274
+msgid ""
+"To add a new account, you can click on the 'Add' button and a new entry will "
+"be created for you to start configuring."
+msgstr ""
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:362
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:6
+#, fuzzy
+msgid "Accounts"
+msgstr "Ime naloga:"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:857
+#, c-format
+msgid ""
+"You are about to remove your %s account!\n"
+"Are you sure you want to proceed?"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:863
+msgid ""
+"Any associated conversations and chat rooms will NOT be removed if you "
+"decide to proceed.\n"
+"\n"
+"Should you decide to add the account back at a later time, they will still "
+"be available."
+msgstr ""
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:1
+#, fuzzy
+msgid "<b>Account</b>"
+msgstr "<b>Nalog:</b>"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:2
+#, fuzzy
+msgid "<b>New Account</b>"
+msgstr "<b>Nalog:</b>"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:4
+#, fuzzy
+msgid "<b>Settings</b>"
+msgstr "<b>Zvuk</b>"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:5
+msgid "A unique name for this account to identify it personally to you."
+msgstr ""
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:7
+#, fuzzy
+msgid "Cr_eate"
+msgstr "Ćaskaj"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:8
+msgid "Imendio "
+msgstr ""
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:9
+msgid "Jabber"
+msgstr "DŽaber"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:10
+msgid ""
+"To add a new account, you can click on the 'Add' button and a new entry will "
+"be created for you to started configuring.\n"
+"\n"
+"If you do not want to add an account, simply click on the account you want "
+"to configure in the list on the left."
+msgstr ""
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:13
+#, fuzzy
+msgid "_Name:"
+msgstr "Ime:"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:14
+#, fuzzy
+msgid "_Type:"
+msgstr "_Tema:"
+
+#: ../libempathy-gtk/gossip-account-widget-generic.c:144
+#: ../libempathy-gtk/gossip-account-widget-generic.c:186
+#, c-format
+msgid "%s:"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:1
+#, fuzzy
+msgid ""
+"<small><b><span foreground=\"#555\">Example: user@jabber.org</span></b></"
+"small>"
+msgstr "<span size=\"smaller\">Primer: korisnik@jabber.org</span>"
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:2
+msgid "Forget password and clear the entry."
+msgstr ""
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:3
+msgid "Login I_D:"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:4
+#, fuzzy
+msgid "Pass_word:"
+msgstr "_Lozinka:"
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:5
+#, fuzzy
+msgid "Reso_urce:"
+msgstr "Izvor:"
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:6
+#, fuzzy
+msgid "Use encryption (SS_L)"
+msgstr "Koristi _šifrovanje (SSL)"
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:7
+#, fuzzy
+msgid "_Port:"
+msgstr "P_ort:"
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:8
+msgid "_Server:"
+msgstr "_Server:"
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:9
+msgid "jabber account settings"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-chat.c:314
+msgid "Disconnected"
+msgstr "Nepovezan"
+
+#: ../libempathy-gtk/gossip-chat.c:858
+msgid "Insert Smiley"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-chat.c:906
+msgid "_Check Word Spelling..."
+msgstr ""
+
+#: ../libempathy-gtk/gossip-chat.c:1244
+msgid "Connected"
+msgstr "Povezan"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:1
+msgid "C_lear"
+msgstr "Oč_isti"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:2
+msgid "Change _Topic..."
+msgstr ""
+
+#: ../libempathy-gtk/gossip-chat.glade.h:3
+msgid "Chat"
+msgstr "Ćaskaj"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:4
+#, fuzzy
+msgid "Contact Infor_mation"
+msgstr "Po_daci za kontakt"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:5
+#, fuzzy
+msgid "Cu_t"
+msgstr "Ćaskaj"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:6
+#, fuzzy
+msgid "In_vite..."
+msgstr "Re_gistrovanje..."
+
+#: ../libempathy-gtk/gossip-chat.glade.h:7
+msgid "Insert _Smiley"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-chat.glade.h:8
+#, fuzzy
+msgid "Invitation _message:"
+msgstr "Unesite poruku o stanju:"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:9
+msgid "Invite"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-chat.glade.h:11
+msgid "Move Tab _Left"
+msgstr "Premesti jezičak _levo"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:12
+msgid "Move Tab _Right"
+msgstr "Premesti jezičak _desno"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:13
+msgid "Select who would you like to invite:"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-chat.glade.h:14
+msgid "You have been invited to join a chat conference."
+msgstr ""
+
+#: ../libempathy-gtk/gossip-chat.glade.h:16
+#, fuzzy
+msgid "_Add To Favorites"
+msgstr "U_redi omiljene..."
+
+#: ../libempathy-gtk/gossip-chat.glade.h:17
+msgid "_Close"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-chat.glade.h:18
+msgid "_Conversation"
+msgstr "_Razgovor"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:19
+msgid "_Copy"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-chat.glade.h:20
+msgid "_Detach Tab"
+msgstr "_Odvoji list"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:22
+msgid "_Next Tab"
+msgstr "_Sledeći list"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:23
+msgid "_Paste"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-chat.glade.h:24
+msgid "_Previous Tab"
+msgstr "P_rethodni list"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:26
+#, fuzzy
+msgid "_Show Contacts"
+msgstr "_Prikaži spisak kontakata"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:27
+msgid "_Tabs"
+msgstr "_Listovi"
+
+#: ../libempathy-gtk/gossip-chat-view.c:544
+msgid "_Copy Link Address"
+msgstr "_Umnoži adresu veze"
+
+#: ../libempathy-gtk/gossip-chat-view.c:552
+msgid "_Open Link"
+msgstr "_Otvori vezu"
+
+#: ../libempathy-gtk/gossip-chat-view.c:889
+msgid "%A %d %B %Y"
+msgstr "%A, %d. %B %Y."
+
+#: ../libempathy-gtk/gossip-chat-window.c:685
+#: ../libempathy-gtk/gossip-chat-window.c:715
+#, fuzzy
+msgid "New Message"
+msgid_plural "New Messages"
+msgstr[0] "_Nova poruka..."
+msgstr[1] "_Nova poruka..."
+
+#: ../libempathy-gtk/gossip-chat-window.c:691
+#, fuzzy
+msgid "Chat Room"
+msgstr "Čavrljanje - Čavrljaj"
+
+#: ../libempathy-gtk/gossip-chat-window.c:696
+#: ../libempathy-gtk/gossip-chat-window.c:719
+#, fuzzy, c-format
+msgid "Conversation"
+msgid_plural "Conversations (%d)"
+msgstr[0] "_Razgovor"
+msgstr[1] "_Razgovor"
+
+#: ../libempathy-gtk/gossip-chat-window.c:1295
+#, fuzzy
+msgid "Typing a message."
+msgstr "Pošalji poruku čavrljanja..."
+
+#: ../libempathy-gtk/gossip-contact-list.c:290
+#, fuzzy
+msgid "_Contact"
+msgstr "Dodaj kontakt"
+
+#: ../libempathy-gtk/gossip-contact-list.c:294
+#, fuzzy
+msgid "_Group"
+msgstr "Grupa"
+
+#: ../libempathy-gtk/gossip-contact-list.c:298
+#, fuzzy
+msgid "Chat with contact"
+msgstr "Dodaj kontakt"
+
+#: ../libempathy-gtk/gossip-contact-list.c:302
+#, fuzzy
+msgid "Infor_mation"
+msgstr "Po_daci za kontakt"
+
+#: ../libempathy-gtk/gossip-contact-list.c:302
+#, fuzzy
+msgid "View contact information"
+msgstr "Informacije za kontakt"
+
+#: ../libempathy-gtk/gossip-contact-list.c:306
+#, fuzzy
+msgid "Re_name"
+msgstr "/Prei_menuj grupu"
+
+#: ../libempathy-gtk/gossip-contact-list.c:306
+#, fuzzy
+msgid "Rename"
+msgstr "Ukloni"
+
+#: ../libempathy-gtk/gossip-contact-list.c:310
+#, fuzzy
+msgid "Edit the groups and name for this contact"
+msgstr ""
+"Unesite novi nadimak za kontakt\n"
+"%s"
+
+#: ../libempathy-gtk/gossip-contact-list.c:314
+msgid "_Remove"
+msgstr "Ukloni"
+
+#: ../libempathy-gtk/gossip-contact-list.c:314
+#, fuzzy
+msgid "Remove contact"
+msgstr "/Ukloni kontakt"
+
+#: ../libempathy-gtk/gossip-contact-list.c:318
+#, fuzzy
+msgid "_Invite to Chat Room"
+msgstr "Čavrljanje - Uredi Grupno Čavrljanje"
+
+#: ../libempathy-gtk/gossip-contact-list.c:318
+msgid "Invite to a currently open chat room"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-contact-list.c:322
+#, fuzzy
+msgid "_Send File..."
+msgstr "Pošalji po_ruku..."
+
+#: ../libempathy-gtk/gossip-contact-list.c:322
+#, fuzzy
+msgid "Send a file"
+msgstr "Izaberi"
+
+#: ../libempathy-gtk/gossip-contact-list.c:326
+#, fuzzy
+msgid "View previous conversations with this contact"
+msgstr "S_ledeći razgovor"
+
+#: ../libempathy-gtk/gossip-preferences.c:250
+msgid "Language"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:1
+#, fuzzy
+msgid "<b>Appearance</b>"
+msgstr "Izgled"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:2
+#, fuzzy
+msgid "<b>Audio</b>"
+msgstr "<b>Nalog:</b>"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:3
+#, fuzzy
+msgid "<b>Behaviour</b>"
+msgstr "<b>Omiljeno:</b>"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:4
+#, fuzzy
+msgid "<b>Contact List</b>"
+msgstr "Poveži se"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:5
+#, fuzzy
+msgid "<b>Languages</b>"
+msgstr "<b>Podrazumevane poruke</b>"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:6
+#, fuzzy
+msgid "<b>Options</b>"
+msgstr "<b>Zvuk</b>"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:7
+#, fuzzy
+msgid "<b>Visual</b>"
+msgstr "<b>E-pošta:</b>"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:8
+msgid ""
+"<small>The list of languages reflects only the languages for which you have "
+"a dictionary installed.</small>"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:9
+msgid "Avatars are user chosen images shown in the contact list"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:10
+#, fuzzy
+msgid "Chat Th_eme:"
+msgstr "Ime za čavrljanje:"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:11
+msgid "Display notifications when contacts come _online"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:12
+#, fuzzy
+msgid "Enable sounds when _away"
+msgstr "Isključi zvuk kada ste _odsutni"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:13
+#, fuzzy
+msgid "Enable sounds when _busy"
+msgstr "Isključi zvuk kada ste _zauzeti"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:14
+msgid "General"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:15
+#, fuzzy
+msgid "Notifications"
+msgstr "Obaveštenje"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:16
+#, fuzzy
+msgid "Preferences"
+msgstr "_Postavke"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:17
+msgid "Show _avatars"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:18
+#, fuzzy
+msgid "Show _smileys as images"
+msgstr "Pretvori _smeške u grafičke simbole"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:19
+#, fuzzy
+msgid "Show co_mpact contact list"
+msgstr "_Prikaži spisak kontakata"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:20
+msgid "Sort by _name"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:21
+#, fuzzy
+msgid "Sort by s_tate"
+msgstr "Podesite vaše stanje:"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:22
+msgid "Spell Checking"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:23
+msgid "Themes"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:24
+msgid "_Enable spell checking"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:25
+msgid "_Open new chats in separate windows"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:26
+#, fuzzy
+msgid "_Play sound when messages arrive"
+msgstr "Puštaj zvuk po pristizanju poruka"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:27
+#, fuzzy
+msgid "_Use for chat rooms"
+msgstr "Čavrljanje - Uredi Grupno Čavrljanje"
+
+#: ../libempathy-gtk/gossip-presence-chooser.c:702
+#, fuzzy
+msgid "Custom message..."
+msgstr "Posebna poruka..."
+
+#. Clear list
+#: ../libempathy-gtk/gossip-presence-chooser.c:724
+#, fuzzy
+msgid "Clear List..."
+msgstr "Oč_isti"
+
+#: ../libempathy-gtk/gossip-presence-chooser.c:803
+#, fuzzy
+msgid "Are you sure you want to clear the list?"
+msgstr "Da li želite da prihvatite zahtev?"
+
+#: ../libempathy-gtk/gossip-presence-chooser.c:807
+msgid ""
+"This will remove any custom messages you have added to the list of preset "
+"status messages."
+msgstr ""
+
+#: ../libempathy-gtk/gossip-presence-chooser.c:812
+#, fuzzy
+msgid "Clear List"
+msgstr "Oč_isti"
+
+#: ../libempathy-gtk/gossip-presence-chooser.glade.h:1
+msgid "Enter status message:"
+msgstr "Unesite poruku o stanju:"
+
+#: ../libempathy-gtk/gossip-presence-chooser.glade.h:2
+#, fuzzy
+msgid "Status Message Presets"
+msgstr "Poruke o stanju"
+
+# Pretpostaviti je nešto smatrati datim bez izričitog navođenja, upravo kao i ovde.
+#: ../libempathy-gtk/gossip-presence-chooser.glade.h:3
+#, fuzzy
+msgid "_Add to status message list"
+msgstr "Pretpostavljene poruke stanja"
+
+#: ../libempathy-gtk/gossip-private-chat.c:198
+#, c-format
+msgid "%s went offline"
+msgstr "%s prekide vezu"
+
+#: ../libempathy-gtk/gossip-private-chat.c:212
+#, fuzzy, c-format
+msgid "%s has come online"
+msgstr "%s se poveza"
+
+#: ../libempathy-gtk/gossip-theme-manager.c:87
+msgid "Classic"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-theme-manager.c:88
+msgid "Simple"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-theme-manager.c:89
+#, fuzzy
+msgid "Clean"
+msgstr "Oč_isti"
+
+#: ../libempathy-gtk/gossip-theme-manager.c:90
+msgid "Blue"
+msgstr ""
+
+#: ../src/empathy-main.c:145
+msgid "Don't connect on startup"
+msgstr "Ne uspostavljaj vezu pri pokretanju"
+
+#: ../src/empathy-main.c:155
+#, fuzzy
+msgid "- Empathy Instant Messenger"
+msgstr "Brzi glasnik"
+
+#, fuzzy
+#~ msgid "Gossip Instant Messenger"
+#~ msgstr "Brzi glasnik"
+
+#, fuzzy
+#~ msgid "Joining"
+#~ msgstr "_Pridruži"
+
+#, fuzzy
+#~ msgid "Active"
+#~ msgstr "_Akcije"
+
+#, fuzzy
+#~ msgid "Unknown"
+#~ msgstr "Nepoznata greška"
+
+#, fuzzy
+#~ msgid "No affiliation"
+#~ msgstr "Obaveštenje"
+
+#, fuzzy
+#~ msgid "An unknown error occurred, check your details are correct."
+#~ msgstr "Nepoznata greška"
+
+#, fuzzy
+#~ msgid "Unavailable"
+#~ msgstr "Dostupan"
+
+#, fuzzy
+#~ msgid "An unknown error occurred."
+#~ msgstr "Nepoznata greška"
+
+#, fuzzy
+#~ msgid "Connection refused."
+#~ msgstr "Povezan"
+
+#, fuzzy
+#~ msgid "Connection timed out."
+#~ msgstr "Povezan"
+
+#, fuzzy
+#~ msgid "This feature is unavailable."
+#~ msgstr "Možda je server trenutno nedostupan."
+
+#, fuzzy
+#~ msgid "new account"
+#~ msgstr "Nov nalog"
+
+#~ msgid "Home"
+#~ msgstr "Početak"
+
+#, fuzzy
+#~ msgid "This service is unavailable or not found"
+#~ msgstr "Možda je server trenutno nedostupan."
+
+#, fuzzy
+#~ msgid "Registration is required"
+#~ msgstr "Registrovanje naloga"
+
+#, fuzzy
+#~ msgid "This feature is not implemented"
+#~ msgstr "Možda je server trenutno nedostupan."
+
+#, fuzzy
+#~ msgid "Disconnect"
+#~ msgstr "_Raskini vezu"
+
+#~ msgid "Connect"
+#~ msgstr "Poveži se"
+
+#, fuzzy
+#~ msgid "Successfully registered your new account settings."
+#~ msgstr "Uspešno registrovan nalog"
+
+#, fuzzy
+#~ msgid "Failed to register your new account settings."
+#~ msgstr "Nije uspeo da registruje nalog"
+
+#, fuzzy
+#~ msgid "Successfully changed your account password."
+#~ msgstr "Unesite vašu lozinku:"
+
+#, fuzzy
+#~ msgid "Failed to change your account password."
+#~ msgstr "Unesite vašu lozinku:"
+
+#, fuzzy
+#~ msgid ""
+#~ "Please enter a new password for this account:\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Unesite novo ime za grupu\n"
+#~ "%s"
+
+#, fuzzy
+#~ msgid "No information is available for this contact."
+#~ msgstr "Preuzmite podatke o ovom kontaktu"
+
+#, fuzzy
+#~ msgid "Information requested, please wait..."
+#~ msgstr "<b>Tražio je informacije, molim sačekajte...</b>"
+
+#~ msgid "I would like to add you to my contact list."
+#~ msgstr "Ja bih voleo da dodam tebe na moju listu drugara."
+
+#, fuzzy
+#~ msgid "%d new message"
+#~ msgid_plural "%d new messages"
+#~ msgstr[0] "_Nova poruka..."
+#~ msgstr[1] "_Nova poruka..."
+
+#, fuzzy
+#~ msgid "%d subscription request"
+#~ msgid_plural "%d subscription requests"
+#~ msgstr[0] "Zahtev za poboljšanjem"
+#~ msgstr[1] "Zahtev za poboljšanjem"
+
+#, fuzzy
+#~ msgid "%d server message"
+#~ msgid_plural "%d server messages"
+#~ msgstr[0] "Poruka sa zahtevom"
+#~ msgstr[1] "Poruka sa zahtevom"
+
+#, fuzzy
+#~ msgid "Edit Account _Details"
+#~ msgstr "Uredi podatke o nalogu"
+
+#~ msgid "New message from %s"
+#~ msgstr "Nova poruka od %s"
+
+#, fuzzy
+#~ msgid "Accept"
+#~ msgstr "_Prihvati"
+
+#, fuzzy
+#~ msgid "Decline"
+#~ msgstr "Večera"
+
+#, fuzzy
+#~ msgid "Name"
+#~ msgstr "Ime:"
+
+#, fuzzy
+#~ msgid "Room"
+#~ msgstr "_Soba:"
+
+#, fuzzy
+#~ msgid "Auto Connect"
+#~ msgstr "Čavrljanje - Povezati se"
+
+#, fuzzy
+#~ msgid "Information requested..."
+#~ msgstr "<b>Tražio je informacije, molim sačekajte...</b>"
+
+#, fuzzy
+#~ msgid "Do you want to remove this contact from your roster?"
+#~ msgstr ""
+#~ "Da li želite da uklonite kontakt\n"
+#~ "%s\n"
+#~ "iz vašeg spiska drugara?"
+
+#, fuzzy
+#~ msgid ""
+#~ "Please enter a new name for the group:\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Unesite novo ime za grupu\n"
+#~ "%s"
+
+#~ msgid "Select"
+#~ msgstr "Izaberi"
+
+# :-)
+#~ msgid "Unsorted"
+#~ msgstr "Nesvrstani"
+
+#, fuzzy
+#~ msgid "Unknown error occurred during file transfer."
+#~ msgstr "Nepoznata greška"
+
+#, fuzzy
+#~ msgid "%s would like to send you a file."
+#~ msgstr "Ja bih voleo da dodam tebe na moju listu drugara."
+
+#, fuzzy
+#~ msgid "Someone would like to send you a file."
+#~ msgstr "Ja bih voleo da dodam tebe na moju listu drugara."
+
+#, fuzzy
+#~ msgid "Select a file"
+#~ msgstr "Izaberi"
+
+#, fuzzy
+#~ msgid "Connecting..."
+#~ msgstr "Po_vezivanje..."
+
+#, fuzzy
+#~ msgid "Retry connection"
+#~ msgstr "Čavrljanje - Povezati se"
+
+#, fuzzy
+#~ msgid "Enter the new topic you want to set for this room:"
+#~ msgstr "Koji nadimak želite da koristite za ovog korisnika?"
+
+#, fuzzy
+#~ msgid "Topic: %s"
+#~ msgstr "_Tema:"
+
+#, fuzzy
+#~ msgid "Account"
+#~ msgstr "Ime naloga:"
+
+#, fuzzy
+#~ msgid "Conversation With"
+#~ msgstr "_Razgovor"
+
+#~ msgid "List the available accounts"
+#~ msgstr "Spisak dostupnih naloga"
+
+#~ msgid "Which account to connect to on startup"
+#~ msgstr "Sa kojim nalogom da uspostavi vezu pri pokretanju"
+
+#~ msgid "ACCOUNT-NAME"
+#~ msgstr "IME NALOGA"
+
+#~ msgid "Available accounts:"
+#~ msgstr "Dostupni nalozi:"
+
+#~ msgid "[default]"
+#~ msgstr "[podrazumevano]"
+
+#~ msgid "There is no account with the name '%s'."
+#~ msgstr "Nepostoji nalog sa imenom '%s'."
+
+#, fuzzy
+#~ msgid "Join"
+#~ msgstr "_Pridruži"
+
+#, fuzzy
+#~ msgid "Create"
+#~ msgstr "Ćaskaj"
+
+#, fuzzy
+#~ msgid "Chat Rooms"
+#~ msgstr "Čavrljanje - Čavrljaj"
+
+#, fuzzy
+#~ msgid "Browsing for conference rooms, please wait..."
+#~ msgstr "<b>Tražio je informacije, molim sačekajte...</b>"
+
+#~ msgid "Default"
+#~ msgstr "Podrazumevano"
+
+#, fuzzy
+#~ msgid "Chat!"
+#~ msgstr "Ćaskaj"
+
+#, fuzzy
+#~ msgid "%s wants to be added to your contact list."
+#~ msgstr "%s će biti dodat u vašu listu drugara."
+
+#, fuzzy
+#~ msgid "Someone wants to be added to your contact list."
+#~ msgstr "Kontant će biti dodat u vašu listu drugara"
+
+#, fuzzy
+#~ msgid "Subscription request"
+#~ msgstr "Zahtev za poboljšanjem"
+
+#, fuzzy
+#~ msgid "Contact Information"
+#~ msgstr "Po_daci za kontakt"
+
+#, fuzzy
+#~ msgid "New subscription request from %s"
+#~ msgstr "Zahtev za poboljšanjem"
+
+#, fuzzy
+#~ msgid "Do you want to add this person to your contact list?"
+#~ msgstr ""
+#~ "Da li želite da uklonite kontakt\n"
+#~ "%s\n"
+#~ "iz vašeg spiska drugara?"
+
+#, fuzzy
+#~ msgid "Do you want to add %s to your contact list?"
+#~ msgstr ""
+#~ "Da li želite da uklonite kontakt\n"
+#~ "%s\n"
+#~ "iz vašeg spiska drugara?"
+
+#, fuzzy
+#~ msgid "Please enter your %s account password"
+#~ msgstr "Unesite vašu lozinku:"
+
+#~ msgid "Remember Password?"
+#~ msgstr "Da li ste zapamtili lozinku?"
+
+#, fuzzy
+#~ msgid "Change"
+#~ msgstr "Ćaskaj"
+
+#, fuzzy
+#~ msgid "Contact goes online"
+#~ msgstr "%s se poveza"
+
+#, fuzzy
+#~ msgid "Do you want to accept this file?"
+#~ msgstr "Da li želite da prihvatite zahtev?"
+
+#, fuzzy
+#~ msgid "File name:"
+#~ msgstr "_Korisničko ime:"
+
+#, fuzzy
+#~ msgid "File size:"
+#~ msgstr "Veb sajt :"
+
+#~ msgid "Web site:"
+#~ msgstr "Veb sajt :"
+
+#~ msgid "_Accept"
+#~ msgstr "_Prihvati"
+
+#~ msgid "_Deny"
+#~ msgstr "O_dbij"
+
+#, fuzzy
+#~ msgid "<b>Topic:</b>"
+#~ msgstr "<b>Zvuk</b>"
+
+#, fuzzy
+#~ msgid "Account:"
+#~ msgstr "Ime naloga:"
+
+#, fuzzy
+#~ msgid "Edit Favorite Room"
+#~ msgstr "Čavrljanje - Uredi Grupno Čavrljanje"
+
+#, fuzzy
+#~ msgid "Group Chat"
+#~ msgstr "Čavrljanje - Čavrljaj"
+
+#, fuzzy
+#~ msgid "Join New"
+#~ msgstr "_Pridruži"
+
+#, fuzzy
+#~ msgid "Join room on start_up"
+#~ msgstr "Ne uspostavljaj vezu pri pokretanju"
+
+#, fuzzy
+#~ msgid "N_ame:"
+#~ msgstr "Ime:"
+
+#, fuzzy
+#~ msgid "S_erver:"
+#~ msgstr "Server:"
+
+#~ msgid "_Nickname:"
+#~ msgstr "_Nadimak:"
+
+#~ msgid "_Room:"
+#~ msgstr "_Soba:"
+
+#, fuzzy
+#~ msgid "<b>About</b>"
+#~ msgstr "<b>Nalog:</b>"
+
+#, fuzzy
+#~ msgid "<b>Client Information</b>"
+#~ msgstr "Podaci o klijentu"
+
+#, fuzzy
+#~ msgid "<b>Groups</b>"
+#~ msgstr "<b>Nalog:</b>"
+
+#, fuzzy
+#~ msgid "<b>Name</b>"
+#~ msgstr "<b>Ime:</b>"
+
+#, fuzzy
+#~ msgid "<b>Personal Details</b>"
+#~ msgstr "<b>Podešavanja naloga</b>"
+
+#, fuzzy
+#~ msgid "<b>Status</b>"
+#~ msgstr "<b>Zvuk</b>"
+
+#, fuzzy
+#~ msgid "<b>Subscription</b>"
+#~ msgstr "<b>Zvuk</b>"
+
+#, fuzzy
+#~ msgid "<span size=\"smaller\">Example: Mikael or user@server.org</span>"
+#~ msgstr "<span size=\"smaller\">Primer: korisnik@jabber.org</span>"
+
+#, fuzzy
+#~ msgid "Accou_nt:"
+#~ msgstr "Ime naloga:"
+
+#, fuzzy
+#~ msgid "Add Contact"
+#~ msgstr "Dodaj kontakt"
+
+#, fuzzy
+#~ msgid "Ch_at"
+#~ msgstr "Ćaskaj"
+
+#~ msgid "Client:"
+#~ msgstr "Klijent:"
+
+#, fuzzy
+#~ msgid "Con_tact:"
+#~ msgstr "Dodaj kontakt"
+
+#, fuzzy
+#~ msgid "Connect on S_tartup"
+#~ msgstr "Ne uspostavljaj vezu pri pokretanju"
+
+#, fuzzy
+#~ msgid "Contacts"
+#~ msgstr "Dodaj kontakt"
+
+#~ msgid "Country:"
+#~ msgstr "Država:"
+
+#, fuzzy
+#~ msgid "Decide _Later"
+#~ msgstr "O_dluči kasnije"
+
+#, fuzzy
+#~ msgid "Edit Contact"
+#~ msgstr "Dodaj kontakt"
+
+#~ msgid "Edit Groups"
+#~ msgstr "Uredi grupe"
+
+#~ msgid "Email:"
+#~ msgstr "E-pošta:"
+
+# DŽaber identifikaciona oznaka :-)
+#, fuzzy
+#~ msgid "ID:"
+#~ msgstr "DŽIO"
+
+#~ msgid "Name:"
+#~ msgstr "Ime:"
+
+#~ msgid "OS:"
+#~ msgstr "OS:"
+
+#, fuzzy
+#~ msgid "Personal Details"
+#~ msgstr "<b>Podešavanja naloga</b>"
+
+#, fuzzy
+#~ msgid "R_egister"
+#~ msgstr "Re_gistrovanje..."
+
+#, fuzzy
+#~ msgid "Search"
+#~ msgstr "_Traži..."
+
+#, fuzzy
+#~ msgid "Spell Checker"
+#~ msgstr "Čavrljanje - Pošalji poruku"
+
+#, fuzzy
+#~ msgid "Subscription Request"
+#~ msgstr "Zahtev za poboljšanjem"
+
+#, fuzzy
+#~ msgid "This is the name that will be used on your roster for this contact"
+#~ msgstr "Koji nadimak želite da koristite za ovog korisnika?"
+
+#~ msgid "Version:"
+#~ msgstr "Verzija:"
+
+#, fuzzy
+#~ msgid "View Previous Conversations"
+#~ msgstr "S_ledeći razgovor"
+
+#, fuzzy
+#~ msgid "Which account do you want to use?"
+#~ msgstr "Koji nadimak želite da koristite?"
+
+#, fuzzy
+#~ msgid "_Birthday:"
+#~ msgstr "_Važnost:"
+
+#, fuzzy
+#~ msgid "_Connect"
+#~ msgstr "Poveži se"
+
+#, fuzzy
+#~ msgid "_Description:"
+#~ msgstr "Opis"
+
+#~ msgid "_Disconnect"
+#~ msgstr "_Raskini vezu"
+
+#, fuzzy
+#~ msgid "_Email:"
+#~ msgstr "E-pošta:"
+
+#, fuzzy
+#~ msgid ""
+#~ "_Enter the name or contact ID of the person you want to chat to below:"
+#~ msgstr ""
+#~ "Unesite korisnički ID od osobe kojoj želite da pošanjete poruku za "
+#~ "čavrljanje."
+
+#, fuzzy
+#~ msgid "_For:"
+#~ msgstr "P_ort:"
+
+#, fuzzy
+#~ msgid "_Full Name:"
+#~ msgstr "Ime:"
+
+#, fuzzy
+#~ msgid "_Group:"
+#~ msgstr "Grupa"
+
+#, fuzzy
+#~ msgid "_Nick Name:"
+#~ msgstr "_Nadimak:"
+
+#, fuzzy
+#~ msgid "_Password:"
+#~ msgstr "_Lozinka:"
+
+#, fuzzy
+#~ msgid "_Quit Message:"
+#~ msgstr "Poruk_e o stanju"
+
+#, fuzzy
+#~ msgid "_Retrieve"
+#~ msgstr "Ukloni"
+
+#, fuzzy
+#~ msgid "_Web site:"
+#~ msgstr "Veb sajt :"
+
+# Pretpostaviti je nešto smatrati datim bez izričitog navođenja, upravo kao i ovde.
+#~ msgid "Preset status messages"
+#~ msgstr "Pretpostavljene poruke stanja"
+
+#~ msgid "Preset status messages."
+#~ msgstr "Pretpostavljene poruke stanja."
+
+#, fuzzy
+#~ msgid "Connecting"
+#~ msgstr "Poveži se"
+
+#~ msgid "%s will be added to your contact list."
+#~ msgstr "%s će biti dodat u vašu listu drugara."
+
+#, fuzzy
+#~ msgid "%s ID of new contact:"
+#~ msgstr "_DŽaber ID novog kontakta:"
+
+#, fuzzy
+#~ msgid ""
+#~ "Please enter your invitation message to:\n"
+#~ "%s"
+#~ msgstr "Unesite vašu lozinku:"
+
+#, fuzzy
+#~ msgid "Favourite"
+#~ msgstr "<b>Omiljeno:</b>"
+
+#~ msgid "Contact Information for %s"
+#~ msgstr "Kontakt informacije za %s"
+
+#, fuzzy
+#~ msgid "/Contact Infor_mation"
+#~ msgstr "/Informacije za kontakt"
+
+#, fuzzy
+#~ msgid "/Re_name Contact"
+#~ msgstr "/_Preimenuj kontakt"
+
+#, fuzzy
+#~ msgid "/_Edit Groups"
+#~ msgstr "/Uredi _grupe"
+
+#, fuzzy
+#~ msgid "/_View Previous Conversations"
+#~ msgstr "S_ledeći razgovor"
+
+#~ msgid ""
+#~ "Please enter a new nickname for the contact\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Unesite novi nadimak za kontakt\n"
+#~ "%s"
+
+#~ msgid "Edit groups for %s"
+#~ msgstr "Uredi grupe za %s"
+
+#~ msgid "Conversation Log"
+#~ msgstr "Dnevnik razgovora"
+
+#~ msgid "Registering account"
+#~ msgstr "Registrovanje naloga"
+
+#, fuzzy
+#~ msgid "Respond"
+#~ msgstr "Razlog:"
+
+#, fuzzy
+#~ msgid "Add to _favourites"
+#~ msgstr "U_redi omiljene..."
+
+#, fuzzy
+#~ msgid "Na_me:"
+#~ msgstr "Ime:"
+
+#, fuzzy
+#~ msgid "New Chat Room"
+#~ msgstr "Čavrljanje - Čavrljaj"
+
+#~ msgid "    "
+#~ msgstr "    "
+
+#, fuzzy
+#~ msgid "<b>Information requested, please wait...</b>"
+#~ msgstr "<b>Tražio je informacije, molim sačekajte...</b>"
+
+#, fuzzy
+#~ msgid "<span size=\"smaller\">Example:</span>"
+#~ msgstr "<span size=\"smaller\">Primer: korisnik@jabber.org</span>"
+
+#, fuzzy
+#~ msgid "Account Name"
+#~ msgstr "Ime naloga:"
+
+#, fuzzy
+#~ msgid "Chat Rooms..."
+#~ msgstr "Čavrljanje - Čavrljaj"
+
+#, fuzzy
+#~ msgid "Do you already have an account set up on a server?"
+#~ msgstr "Da li već imate nalog na DŽaber serveru?"
+
+#, fuzzy
+#~ msgid "Enter the port used in the connection for this account"
+#~ msgstr ""
+#~ "Unesite novi nadimak za kontakt\n"
+#~ "%s"
+
+#, fuzzy
+#~ msgid "Enter the server used in the connection for this account"
+#~ msgstr ""
+#~ "Unesite novi nadimak za kontakt\n"
+#~ "%s"
+
+#, fuzzy
+#~ msgid "Enter the user's contact ID:"
+#~ msgstr "Kliknite da dobijete korisničke kontakt informacije"
+
+#, fuzzy
+#~ msgid "Finished"
+#~ msgstr "Podešavanje je završeno"
+
+#~ msgid "Gossip"
+#~ msgstr "Čavrljanje"
+
+#~ msgid ""
+#~ "Gossip is a modern client for the Jabber Instant Messaging system.\n"
+#~ "\n"
+#~ "This assistant will help you configure Gossip and connect you to your "
+#~ "favorite Jabber server.\n"
+#~ "\n"
+#~ "To get started, just click \"Forward\"."
+#~ msgstr ""
+#~ "Čavrljanje je moderan klijent za DŽaber sistem brzih poruka.\n"
+#~ "\n"
+#~ "Ovaj pomoćnik će vam pomoći da podesite Čavrljanje i povežete se na vaš "
+#~ "omiljen DŽaber server.\n"
+#~ "\n"
+#~ "Da počnete, samo kliknite „Napred“."
+
+#~ msgid ""
+#~ "In order to subscribe to presence notifications from the user, a request "
+#~ "will be sent. Until this request is approved, the user will always be "
+#~ "shown as \"Offline\" in your contact list."
+#~ msgstr ""
+#~ "Zahtev će biti poslat i tražiti da vidite prisutnost korisnika, Dok se "
+#~ "zahtev ne odobri, korisnik će uvek biti prikazan kao \"Ne povezan\" u "
+#~ "vašoj listi prijatelja."
+
+#~ msgid "In which group do you want to place this contact?"
+#~ msgstr "U koju grupu želite da rasporedite ovaj kontakt?"
+
+#~ msgid "Jabber ID:"
+#~ msgstr "DŽaber ID:"
+
+#, fuzzy
+#~ msgid "Nickname:"
+#~ msgstr "_Nadimak:"
+
+#, fuzzy
+#~ msgid "Port:"
+#~ msgstr "P_ort:"
+
+#, fuzzy
+#~ msgid "Registering Account"
+#~ msgstr "Registrovanje naloga"
+
+#, fuzzy
+#~ msgid "Resource:"
+#~ msgstr "Izvor:"
+
+#~ msgid "Sending request"
+#~ msgstr "Zahtev za slanje"
+
+#~ msgid "Server:"
+#~ msgstr "Server:"
+
+#, fuzzy
+#~ msgid "Web Site:"
+#~ msgstr "Veb sajt :"
+
+#~ msgid "Welcome to Gossip"
+#~ msgstr "Dobrodošli u Čavrljanje"
+
+#~ msgid "What instant messaging system does the contact use?"
+#~ msgstr "Koji sistem trenutnih poruka korisnik koristi?"
+
+#~ msgid "What is your name?"
+#~ msgstr "Kako se zovete?"
+
+#, fuzzy
+#~ msgid "What password do you want to use?"
+#~ msgstr "Koji server želite da koristite?"
+
+#~ msgid "What username do you use?"
+#~ msgstr "Koji nadimak koristite?"
+
+#~ msgid "What username do you want to use?"
+#~ msgstr "Koji nadimak želite da koristite?"
+
+#, fuzzy
+#~ msgid "Which account do you want to add this contact to?"
+#~ msgstr "U koju grupu želite da rasporedite ovaj kontakt?"
+
+#, fuzzy
+#~ msgid ""
+#~ "You can change your account settings later by selecting the Edit-"
+#~ ">Accounts menu item."
+#~ msgstr ""
+#~ "Sada je Čavrljanje odgovarajuće podešeno za vaš sistem.\n"
+#~ "Vi možete da promenite podešavanja vašeg naloga kasnije izborom menija "
+#~ "Razgovor->Povezivanje...."
+
+#, fuzzy
+#~ msgid "Your Account"
+#~ msgstr "DŽaber Nalog"
+
+#~ msgid "Your Identity"
+#~ msgstr "Vaš identitet"
+
+#, fuzzy
+#~ msgid "_Group Chat"
+#~ msgstr "Čavrljanje - Čavrljaj"
+
+#, fuzzy
+#~ msgid "_No"
+#~ msgstr "Ne"
+
+#~ msgid "_Search..."
+#~ msgstr "_Traži..."
+
+#, fuzzy
+#~ msgid "_Yes"
+#~ msgstr "Da"
+
+#~ msgid "Be silent when away"
+#~ msgstr "Budi tih na odsustvu"
+
+#~ msgid "Be silent when busy"
+#~ msgstr "Budi tih na odsustvu"
+
+#~ msgid "Height of main window"
+#~ msgstr "Visina glavnog prozora"
+
+#~ msgid "The X position of the main window."
+#~ msgstr "Vodoravni položaj glavnog prozora."
+
+#~ msgid "The Y position of the main window."
+#~ msgstr "Uspravni položaj glavnog prozora."
+
+#~ msgid "The width of the main window."
+#~ msgstr "Širina glavnog prozora."
+
+#~ msgid "Width of the main window"
+#~ msgstr "Širina glavnog prozora"
+
+#~ msgid "X position of main window"
+#~ msgstr "Vodoravni položaj glavnog prozora"
+
+#~ msgid "Y position of main window"
+#~ msgstr "Uspravni položaj glavnog prozora"
+
+#~ msgid "Gossip, Instant Messaging Client"
+#~ msgstr "Čavrljanje, brzi glasnik za Gnoma"
+
+#, fuzzy
+#~ msgid "Close this chat window"
+#~ msgstr "Sakrij glavni prozor."
+
+#, fuzzy
+#~ msgid "Requested Information"
+#~ msgstr "Podaci o _nalogu"
+
+#, fuzzy
+#~ msgid "Send Message"
+#~ msgstr "Pošalji poruku u _razgovor..."
+
+#, fuzzy
+#~ msgid "%s has gone offline"
+#~ msgstr "%s prekide vezu"
+
+#~ msgid "Available..."
+#~ msgstr "Dostupan..."
+
+#~ msgid "Busy..."
+#~ msgstr "Zauzet..."
+
+#~ msgid "Away..."
+#~ msgstr "Odsutan..."
+
+#~ msgid "Contact _Information"
+#~ msgstr "Po_daci za kontakt"
+
+#~ msgid "<b>Sound</b>"
+#~ msgstr "<b>Zvuk</b>"
+
+#, fuzzy
+#~ msgid "Gossip - Accounts"
+#~ msgstr "Čavrljanje - Uredi Nalog"
+
+#, fuzzy
+#~ msgid "Join _Group Chat..."
+#~ msgstr "_Priključi se grupnom čavrljanju..."
+
+#, fuzzy
+#~ msgid "Por_t:"
+#~ msgstr "P_ort:"
+
+#, fuzzy
+#~ msgid "Requested information."
+#~ msgstr "Podaci o klijentu"
+
+#, fuzzy
+#~ msgid "Could not find the server you wanted to use"
+#~ msgstr "Koji server želite da koristite?"
+
+#, fuzzy
+#~ msgid "Connection to the server failed."
+#~ msgstr "<b>Poveži se na server</b>"
+
+#~ msgid "Artwork by:"
+#~ msgstr "Crteži:"
+
+#, fuzzy
+#~ msgid "Account ID"
+#~ msgstr "Ime naloga:"
+
+#~ msgid "%sChat - %s"
+#~ msgstr "%sČavrljanje - %s"
+
+#~ msgid "/Show _Log"
+#~ msgstr "/Prikaži _dnevnik"
+
+#, fuzzy
+#~ msgid "Persian"
+#~ msgstr "Verzija:"
+
+#, fuzzy
+#~ msgid "Croatian"
+#~ msgstr "Razgovor"
+
+#, fuzzy
+#~ msgid "Latvian"
+#~ msgstr "Napuštam:"
+
+#~ msgid "View Lo_g"
+#~ msgstr "Pogledaj dne_vnik"
+
+#~ msgid "Gossip - Group Chat"
+#~ msgstr "Čavrljanje - Grupno Čavrljanje"
+
+#, fuzzy
+#~ msgid "Gossip - Add contact"
+#~ msgstr "Čavrljanje - Povezati se"
+
+#, fuzzy
+#~ msgid "Gossip - Contact Information"
+#~ msgstr "Po_daci za kontakt"
+
+#, fuzzy
+#~ msgid "Gossip - Edit Groups"
+#~ msgstr "Čavrljanje - Uredi Grupno Čavrljanje"
+
+#, fuzzy
+#~ msgid "Gossip - New Account"
+#~ msgstr "Čavrljanje - Uredi Nalog"
+
+#, fuzzy
+#~ msgid "Gossip - New Message"
+#~ msgstr "Čavrljanje - Pošalji poruku"
+
+#, fuzzy
+#~ msgid "Gossip - Personal Details"
+#~ msgstr "Čavrljanje - Povezati se"
+
+#, fuzzy
+#~ msgid "Gossip - Preferences"
+#~ msgstr "Postavke"
+
+#, fuzzy
+#~ msgid "Gossip - Status Message"
+#~ msgstr "Čavrljanje - Pošalji poruku"
+
+#~ msgid "What request message do you want to send to %s?"
+#~ msgstr "Koju poruku sa zahtevom želite da pošaljete %s?"
+
+#~ msgid "Make sure that your account information is correct."
+#~ msgstr "Proverite da li su podaci o nalogu ispravni."
+
+#~ msgid "%s wants to be notified of your presence."
+#~ msgstr "%s želi obaveštenja o vašem prisustvu."
+
+#~ msgid "You were disconnected from the server. Do you want to reconnect?"
+#~ msgstr "Vi ste razvezani sa servera.  Želiteli da se ponovo povežete?"
+
+#, fuzzy
+#~ msgid ""
+#~ "Make sure that your account information is correct. The server may also "
+#~ "currently be unavailable."
+#~ msgstr ""
+#~ "Proverite da li su podaci o nalogu ispravni, kao što je korisničko ime i "
+#~ "lozinka.."
+
+#~ msgid "Edit List..."
+#~ msgstr "Uredi spisak..."
+
+#~ msgid "An error occurred when chatting with %s."
+#~ msgstr "Dogodila se greška prilikom čavrljanje sa %s."
+
+#~ msgid "Details:"
+#~ msgstr "Detalji:"
+
+#~ msgid "An error occurred when chatting in the group chat %s."
+#~ msgstr "Dogodila se greška prilikom čavrljanje u grupi %s."
+
+#~ msgid "Unable to enter the group chat %s."
+#~ msgstr "Nije moguće uneti grupu grupu za čavrljanje %s."
+
+#~ msgid "Gossip will now try to use your account:"
+#~ msgstr "Čavrljanje će sada probati da koristi vaš nalog:"
+
+#~ msgid "Gossip will now try to register the account:"
+#~ msgstr "Čavrljanje će sada probati da registruje vaš nalog:"
+
+#~ msgid "*"
+#~ msgstr "*"
+
+#~ msgid "From:"
+#~ msgstr "Od:"
+
+#~ msgid "Gossip - Received Message"
+#~ msgstr "Čavrljanje - Primi poruku"
+
+#~ msgid "In reply to:"
+#~ msgstr "Kao odgovor na:"
+
+#~ msgid "To:"
+#~ msgstr "Kome:"
+
+#~ msgid "_Reply..."
+#~ msgstr "Odgo_vori..."
+
+#~ msgid "_Send"
+#~ msgstr "_Pošalji"
+
+#~ msgid "C_onnect"
+#~ msgstr "P_oveži se"
+
+#~ msgid "_Resource:"
+#~ msgstr "_Resurs:"
+
+#~ msgid "        "
+#~ msgstr "        "
+
+#~ msgid "<b>Available chat rooms</b>"
+#~ msgstr "<b>Dostupne sobe za čavrljanje</b>"
+
+#~ msgid "<b>Chat room information</b>"
+#~ msgstr "<b>Informacija sobe za čavrljanje</b>"
+
+#~ msgid "Gossip - Join Group Chat"
+#~ msgstr "Čavrljanje - Pridruži se Grupnom Čavrljanju"
+
+#~ msgid "N_ickname:"
+#~ msgstr "Nad_imak:"
+
+#~ msgid ""
+#~ "Pick a favorite, or enter nickname, server name, and the name of the chat "
+#~ "room to enter."
+#~ msgstr ""
+#~ "Da uđete, izaberite omiljeno ili unesite nadimak, ime servera i ime od "
+#~ "sobe za čavrljanje."
+
+#~ msgid "R_emove"
+#~ msgstr "_Ukloni"
+
+#~ msgid "_Add"
+#~ msgstr "_Dodaj"
+
+#~ msgid " "
+#~ msgstr " "
+
+#~ msgid "<b>Preset status messages</b>"
+#~ msgstr "<b>Pretpostavljene poruke stanja</b>"
+
+#~ msgid "<i>Information not available</i>"
+#~ msgstr "<i>Informacija nije dostupana</i>"
+
+#~ msgid "Choose a Server"
+#~ msgstr "Izaberi server"
+
+#~ msgid "Choose from list:"
+#~ msgstr "Odaberite iz spiska:"
+
+#~ msgid "Information about ..."
+#~ msgstr "Informacije o..."
+
+#~ msgid "Jabber.com"
+#~ msgstr "Jabber.com"
+
+#~ msgid "Jabber.org"
+#~ msgstr "Jabber.org"
+
+#~ msgid "On what server do you have a Jabber account?"
+#~ msgstr "Na kom serveru imate DŽaber nalog?"
+
+#~ msgid "Sound"
+#~ msgstr "Zvuk"
+
+#~ msgid "Status Message"
+#~ msgstr "Poruka o stanju"
+
+#~ msgid "Use a different server"
+#~ msgstr "Koristi drugi server"
+
+#~ msgid "What request message do you want to send to ...?"
+#~ msgstr "Koju poruku sa zahtevom želite da pošaljete ...?"
+
+#, fuzzy
+#~ msgid "About Gossip"
+#~ msgstr "Čavrljanje"
+
+#  Note to translators: put here your name (and address) so it
+#  * will shop up in the "about" box
+#, fuzzy
+#~ msgid "translator_credits_old"
+#~ msgstr "Dejan Matijević <dejan@ns.sympatico.ca>"
+
+#~ msgid "Gossip Website"
+#~ msgstr "Veb stranica Čavrljanja"
+
+#~ msgid "Unable to Authenticate"
+#~ msgstr "Ne mogu da se identifikujem"
+
+#~ msgid "Gossip, Jabber Client"
+#~ msgstr "Čavrljanje, DŽaber Klijent"
+
+#~ msgid "About to leave..."
+#~ msgstr "Upravo odlazim..."
+
+#~ msgid "Autoaway message"
+#~ msgstr "Poruka za samoodsustvo"
+
+#~ msgid "Away messages"
+#~ msgstr "Poruke za odsustvo"
+
+#~ msgid "Busy messages"
+#~ msgstr "Poruke za zauzeće"
+
+#~ msgid "Message to show before going away"
+#~ msgstr "Poruka koja se prikazuje pre odlaska"
+
+#~ msgid "Not at the computer"
+#~ msgstr "Nisam za računarom"
+
+#~ msgid "Just about to leave..."
+#~ msgstr "Upravo odlazim..."
+
+#~ msgid "Custom Busy Message..."
+#~ msgstr "Posebna poruka za zauzeće..."
+
+#~ msgid "Leave..."
+#~ msgstr "Napusti..."
+
+#~ msgid "New Busy Message"
+#~ msgstr "Nova poruka za zauzeće"
+
+#~ msgid "New Away Message"
+#~ msgstr "Nova poruka za odsustvo"
+
+#~ msgid "Working"
+#~ msgstr "Radim"
+
+#~ msgid "Eating"
+#~ msgstr "Jedem"
+
+#~ msgid "Sleeping"
+#~ msgstr "Spavam"
+
+#~ msgid "Enter the new message:"
+#~ msgstr "Unesite novu poruku:"
+
+#~ msgid "Leave"
+#~ msgstr "Napusti"
+
+#~ msgid ""
+#~ "Note: contacts can belong to multiple groups or they can be in no group "
+#~ "at all."
+#~ msgstr ""
+#~ "Pažnja: kontakti mogu da pripadaju većem broju grupa ili nijednoj grupi."
+
+#~ msgid "Preset messages for quickly setting away status."
+#~ msgstr "Postavljanje poruke za brzo odlaženje na odsustvo."
+
+#~ msgid "Preset messages for quickly setting busy status."
+#~ msgstr "Postavljanje poruke za brzo podešavanje zauzeća."
+
+#~ msgid "Reason for being busy:"
+#~ msgstr "Razlog zauzeća:"
+
+#~ msgid "Reason for leaving:"
+#~ msgstr "Razlog odlaska:"
+
+#~ msgid "As _Windows"
+#~ msgstr "Kao _prozori"
+
+#~ msgid "As a _List"
+#~ msgstr "Kao _spisak"
+
+#~ msgid "_Go"
+#~ msgstr "_Idi"
+
+#~ msgid "Open conversations in single window with list view"
+#~ msgstr "Otvori razgovore u jednom prozoru prikazujući ih u spisku"
+
+#~ msgid "[Eating,Sleeping]"
+#~ msgstr "[Jedem,spavam]"
+
+#~ msgid "[Working]"
+#~ msgstr "[Radim]"
+
+#~ msgid "Add"
+#~ msgstr "Dodaj"
+
+#~ msgid "Open conversations in a single window with _list view"
+#~ msgstr "Otvori razgovore u jednom prozoru kao sp_isak"
+
+#~ msgid "<b>Away messages</b>"
+#~ msgstr "<b>Poruke za odsustvo</b>"
+
+#~ msgid "Available:"
+#~ msgstr "Dostupan:"
+
+#~ msgid "Away:"
+#~ msgstr "Odsutan:"
+
+#~ msgid "Messages"
+#~ msgstr "Poruke"
+
+#~ msgid ""
+#~ "These messages are used to describe your status when you're about to "
+#~ "leave and when you're away."
+#~ msgstr ""
+#~ "Ove poruke se koriste za opisivanje vašeg stanja kada upravo odlazite ili "
+#~ "ste odsutni."
+
+#~ msgid ""
+#~ "These messages are used to describe your status when you're available, "
+#~ "about to leave, or automatically set away due to inactivity."
+#~ msgstr ""
+#~ "Ove poruke se koriste za opisivanje vašeg stanja kada ste dostupni, "
+#~ "upravo odlazite ili ste odsutni usled neaktivnosti."
+
+#~ msgid "Use com_pact conversation style"
+#~ msgstr "Koristi stil sa_žetog razgovora"
+
+#~ msgid "Use sounds to _notify when new messages arrive"
+#~ msgstr "Koristi zvuk za _obaveštenje kada nova poruka stigne"
+
+#~ msgid "Timestamp all messages"
+#~ msgstr "Označi vreme za sve poruke"
+
+#~ msgid "Whether or not to timestamp all messages in conversations."
+#~ msgstr "Da li da doda oznake vremena na sve poruke u razgovorima."
+
+#~ msgid "_Timestamp all messages"
+#~ msgstr "Dodaj oznaku _vremenskog trenutka na sve poruke"
+
+#~ msgid "Custom Away Message..."
+#~ msgstr "Posebna poruka za odsustvo..."
+
+#  Translators: See comment for "%sChat - %s".
+#~ msgid "%sChat"
+#~ msgstr "%sČavrljanje"
+
+#  The extra space is to differentiate the string from Offline as status. It
+#  * might need a different translation, at least in Swedish.
+#~ msgid "Offline "
+#~ msgstr "Nepovezan"
+
+#~ msgid "Others"
+#~ msgstr "Drugi"
+
+#~ msgid "Get _Info"
+#~ msgstr "_Podaci"
+
+#~ msgid "Use ta_bs instead of windows for conversations"
+#~ msgstr "Koristi _listove umesto prozora za razgovore"
+
+#~ msgid "I'm here"
+#~ msgstr "Ovde sam"
+
+#~ msgid "I'm not here right now"
+#~ msgstr "Trenutno nisam ovde"
+
+#~ msgid "Auto away enabled"
+#~ msgstr "Automatski odsutan uključeno"
+
+#~ msgid "Extended autoaway time"
+#~ msgstr "Produženo vreme za automatski odsutan"
+
+#~ msgid ""
+#~ "The number of minutes of idle time before automatically going into \"away"
+#~ "\" mode."
+#~ msgstr ""
+#~ "Broj minuta od neaktivnog vremena pre nego što automatski ode u mod "
+#~ "\"odsutan\""
+
+#~ msgid ""
+#~ "The number of minutes of idle time before automatically going into "
+#~ "\"extended away\" mode."
+#~ msgstr ""
+#~ "Broj minuta od neaktivnog vremena pre nego što automatski ode u mod "
+#~ "\"dugo odsutan\""
+
+#~ msgid ""
+#~ "Whether or not to go into \"away\" mode automatically when a certain time "
+#~ "of idling has passed."
+#~ msgstr ""
+#~ "Da li da ode u mod \"odsutan\" automatski kada određeno vreme "
+#~ "neaktivnosti prođe."
+
+#~ msgid "_Busy"
+#~ msgstr "_Zauzet"
+
+#~ msgid "Present"
+#~ msgstr "Prisutni"
+
+#~ msgid "Timestamp messages"
+#~ msgstr "Prikaži oznaku vremenskog trenutka na porukama"
+
+#~ msgid "Free to chat"
+#~ msgstr "Slobodan za ćaskanje"
+
+#~ msgid "Extended away"
+#~ msgstr "Dugo odsutan"
+
+#~ msgid "_Edit Account..."
+#~ msgstr "_Uređivanje naloga..."
+
+#~ msgid ""
+#~ "<b>Welcome to Gossip</b>\n"
+#~ "\n"
+#~ "Gossip is a modern client for the Jabber Instant Message system.\n"
+#~ "\n"
+#~ "This assistant will help you configure Gossip and connect you to your "
+#~ "favorite Jabber server."
+#~ msgstr ""
+#~ "<b>Dobrodošli u Čavrljanje</b>\n"
+#~ "\n"
+#~ "Čavrljanje je moderan klijent za DŽaber Trenutne Poruke.\n"
+#~ "\n"
+#~ "Ovaj pomoćnik će vam pomoći da podesite Čavrljanje i konektujete se na "
+#~ "vaš omiljen DŽaber server."
+
+#~ msgid "<b>Additional information</b>"
+#~ msgstr "<b>Dodatne informacije</b>"
+
+#~ msgid "<b>Address</b>"
+#~ msgstr "<b>Adresa</b>"
+
+#~ msgid "<b>Auto away</b>"
+#~ msgstr "<b>Automatski odsutan</b>"
+
+#~ msgid "Automatically enter away mode during inactivity"
+#~ msgstr "Automatski uđi u mod odsutnosti za vreme neaktivnosti"
+
+#~ msgid "Enter away mode after"
+#~ msgstr "Uđi u mod odsutnosti posle"
+
+#~ msgid "I'm away eating dinner, bbiab..."
+#~ msgstr "Ja sam odsutan dok večeram, vraćam se za..."
+
+#~ msgid "Priority:"
+#~ msgstr "Važnost:"
+
+#~ msgid "Set the status you want to use"
+#~ msgstr "Podesite stanje koje želite da koristite"
+
+#~ msgid "minutes"
+#~ msgstr "minuta"
+
+#~ msgid "<b>Jabber ID:</b>"
+#~ msgstr "<b>DŽaber ID:</b>"
+
+#~ msgid "<b>Setup Finished</b>"
+#~ msgstr "<b>Postavka je završena</b>"
+
+#~ msgid ""
+#~ "This user wants to subscribe to your presence.\n"
+#~ "Do you approve?"
+#~ msgstr ""
+#~ "Ovaj korisnik je poslao zahtev da vidi vašu prisutnost.\n"
+#~ "Da li odobravate?"
+
+#~ msgid "_Approve"
+#~ msgstr "Odo_bri"
+
+#~ msgid "_Defer"
+#~ msgstr "_Odbij"
+
+#~ msgid "Default Account"
+#~ msgstr "Podrazumevani Nalog"
+
+#~ msgid "Could not open the address \"%s\": %s"
+#~ msgstr "Ne može da pristupi adresi „%s“: %s"
+
+#~ msgid "<b>Available accounts</b>"
+#~ msgstr "<b>Dostupni nalozi</b>"
+
+#~ msgid "<b>What account do you want to use for this connection?</b>"
+#~ msgstr "<b>Koji nalog želite da koristite za ovu vezu?</b>"
+
+#~ msgid "Use SS_L"
+#~ msgstr "Koristi SSL"
+
+#~ msgid "_User:"
+#~ msgstr "Korisnik:"
+
+#~ msgid "What request message do you want to send to <b>micke</b>?"
+#~ msgstr "Koji zahtev želite da pošaljete <b>Miljenku</b>?"

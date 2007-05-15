@@ -32,7 +32,7 @@
 #include "gossip-about-dialog.h"
 #include "gossip-ui-utils.h"
 
-#define WEB_SITE "http://telepathy.freedesktop.org/wiki/Empathy"
+#define WEB_SITE "http://live.gnome.org/Empathy"
 
 static void about_dialog_activate_link_cb (GtkAboutDialog  *about,
 					   const gchar     *link,

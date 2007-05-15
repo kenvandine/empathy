@@ -1,0 +1,1742 @@
+# translation of el.po to Greek
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Dimitris Glezos <dimitris@glezos.com>, 2006.
+# Christos Trochalakis <yatiohi@ideopolis.gr>, 2006.
+msgid ""
+msgstr ""
+"Project-Id-Version: el\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2007-05-15 23:46+0200\n"
+"PO-Revision-Date: 2006-11-30 20:16+0000\n"
+"Last-Translator: Dimitris Glezos <dimitris@glezos.com>\n"
+"Language-Team: Greek <team@gnome.gr>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms:  nplurals=2; plural=(n != 1);\n"
+"X-Generator: KBabel 1.11.4\n"
+
+#: ../data/empathy.desktop.in.h:1
+#, fuzzy
+msgid "Empathy Instant Messenger"
+msgstr "Instant Messenger"
+
+#: ../data/empathy.desktop.in.h:2
+msgid "Instant Messenger"
+msgstr "Instant Messenger"
+
+#: ../data/empathy.schemas.in.h:1
+msgid "Always open a separate chat window for new chats."
+msgstr "Να γίνεται πάντα άνοιγμα νέων συζητήσεων σε ξεχωριστό παράθυρο."
+
+#: ../data/empathy.schemas.in.h:2
+msgid "Chat window theme"
+msgstr "Θέμα εμφάνισης παραθύρου συζήτησης"
+
+#: ../data/empathy.schemas.in.h:3
+msgid ""
+"Comma separated list of spell checker languages to use (e.g. en, fr, nl)."
+msgstr ""
+"Λίστα γλωσσών για ορθογραφικό έλεγχο χωρισμένες με κόμματα (πχ. en, el, fr). "
+
+#: ../data/empathy.schemas.in.h:4
+msgid "Compact contact list"
+msgstr "Συμπυκνωμένη λίστα επαφών"
+
+#: ../data/empathy.schemas.in.h:5
+msgid "Contact list sort criterium"
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:6
+msgid "Default directory to select an avatar image from"
+msgstr "Προεπιλεγμένος κατάλογος για επιλογή προσωπικής εικόνας"
+
+#: ../data/empathy.schemas.in.h:7
+msgid "Enable popup when contact is available"
+msgstr "Ενεργοποίηση αναδυόμενου παραθύρου όταν η επαφή είναι διαθέσιμη"
+
+#: ../data/empathy.schemas.in.h:8
+msgid "Enable sound when away"
+msgstr "Ενεργοποίηση ήχων όταν απουσιάζετε"
+
+#: ../data/empathy.schemas.in.h:9
+msgid "Enable sound when busy"
+msgstr "Ενεργοποίηση ήχων όταν είστε απασχολημένος"
+
+#: ../data/empathy.schemas.in.h:10
+msgid "Enable spell checker"
+msgstr "Ενεργοποίηση ορθογράφου"
+
+#: ../data/empathy.schemas.in.h:11
+msgid "Hide main window"
+msgstr "Απόκρυψη κυρίως παραθύρου"
+
+#: ../data/empathy.schemas.in.h:12
+msgid "Hide the main window."
+msgstr "Απόκρυψη του κυρίως παραθύρου."
+
+#: ../data/empathy.schemas.in.h:13
+msgid "Open new chats in separate windows"
+msgstr "Άνοιγμα νέων συζητήσεων σε ξεχωριστά παράθυρα"
+
+#: ../data/empathy.schemas.in.h:14
+msgid "Show avatars"
+msgstr "Εμφάνιση προσωπικών εικόνων"
+
+#: ../data/empathy.schemas.in.h:15
+msgid "Show hint about closing the main window"
+msgstr "Εμφάνιση υπόδειξης για κλείσιμο κυρίως παραθύρου"
+
+#: ../data/empathy.schemas.in.h:16
+msgid "Show offline contacts"
+msgstr "Εμφάνιση επαφών εκτός σύνδεσης"
+
+#: ../data/empathy.schemas.in.h:17
+msgid "Spell checking languages"
+msgstr "Γλώσσες υπό ορθογραφικό έλεγχο"
+
+#: ../data/empathy.schemas.in.h:18
+msgid "The last directory that an avatar image was chosen from."
+msgstr "Τελευταίος κατάλογος από τον οποίο επιλέχθηκε προσωπική εικόνα."
+
+#: ../data/empathy.schemas.in.h:19
+msgid "The theme that is used to display the conversation in chat windows."
+msgstr ""
+"Το θέμα που χρησιμοποιείται για την εμφάνιση της συζήτησης στα παράθυρα."
+
+#: ../data/empathy.schemas.in.h:20
+msgid "Use graphical smileys"
+msgstr "Χρήση γραφικών χαμόγελων"
+
+#: ../data/empathy.schemas.in.h:21
+msgid "Use notification sounds"
+msgstr "Χρήση ήχων ειδοποίησης"
+
+#: ../data/empathy.schemas.in.h:22
+msgid "Use theme for chat rooms"
+msgstr "Χρήση θέματος για τα δωμάτια συζήτησης"
+
+#: ../data/empathy.schemas.in.h:23
+msgid ""
+"Whether or not to check words typed against the languages you want to check "
+"with."
+msgstr ""
+"Κατά πόσο ή όχι να γίνεται έλεγχος σε λέξεις γλωσσών που επιλέξατε για "
+"έλεγχο."
+
+#: ../data/empathy.schemas.in.h:24
+msgid ""
+"Whether or not to convert smileys into graphical images in conversations."
+msgstr ""
+"Κατά πόσο ή όχι να μετατρέπονται τα χαμόγελα σε εικονίδια στις συζητήσεις."
+
+#: ../data/empathy.schemas.in.h:25
+msgid "Whether or not to play a sound when messages arrive."
+msgstr "Κατά πόσο ή όχι να όταν φτάνουν μηνύματα."
+
+#: ../data/empathy.schemas.in.h:26
+msgid "Whether or not to play sounds when away."
+msgstr "Κατά πόσο ή όχι να αναπαράγεται ένας ήχος σε κατάσταση απουσίας."
+
+#: ../data/empathy.schemas.in.h:27
+msgid "Whether or not to play sounds when busy."
+msgstr "Κατά πόσο ή όχι να αναπαράγεται ένας ήχος σε κατάσταση απασχολημένος."
+
+#: ../data/empathy.schemas.in.h:28
+msgid "Whether or not to show a popup when a contact becomes available."
+msgstr ""
+"Κατά πόσο ή όχι να εμφανίζεται αναδυόμενο παράθυρο όταν μία επαφή γίνεται "
+"διαθέσιμη."
+
+#: ../data/empathy.schemas.in.h:29
+msgid ""
+"Whether or not to show avatars for contacts in the contact list and chat "
+"windows."
+msgstr ""
+"Κατά πόσο ή όχι να εμφανίζονται προσωπικές εικόνες των επαφών στην λίστα "
+"επαφών και τα παράθυρα συζήτησης."
+
+#: ../data/empathy.schemas.in.h:30
+msgid "Whether or not to show contacts that are offline in the contact list."
+msgstr ""
+"Κατά πόσο ή όχι να εμφανίζονται επαφές εκτός σύνδεσης στην λίστα επαφών."
+
+#: ../data/empathy.schemas.in.h:31
+msgid ""
+"Whether or not to show the message dialog about closing the main window with "
+"the 'x' button in the title bar."
+msgstr ""
+"Κατά πόσο ή όχι να εμφανίζεται επιβεβαίωση για κλείσιμο του κυρίως παραθύρου "
+"πατώντας το κουμπί 'x' στην γραμμή τίτλου."
+
+#: ../data/empathy.schemas.in.h:32
+msgid "Whether to show the contact list in compact mode or not."
+msgstr "Κατά πόσο η λίστα επαφών να εμφανίζεται σε συμπυκνωμένη μορφή ή όχι."
+
+#: ../data/empathy.schemas.in.h:33
+msgid "Whether to use the theme for chat rooms or not."
+msgstr "Κατά πόσο να χρησιμοποιείται το θέμα για δωμάτια συζήτησης ή όχι."
+
+#: ../data/empathy.schemas.in.h:34
+msgid ""
+"Which criterium to use when sorting the contact list. Default is to use sort "
+"by the contact's name with the value \"name\". A value of \"state\" will "
+"sort the contact list by state."
+msgstr ""
+
+#: ../libempathy/gossip-contact.c:654 ../libempathy/gossip-presence.c:184
+#: ../libempathy/gossip-presence.c:283
+msgid "Offline"
+msgstr "Εκτός σύνδεσης"
+
+#: ../libempathy/gossip-presence.c:274
+msgid "Available"
+msgstr "Διαθέσιμος"
+
+#: ../libempathy/gossip-presence.c:276
+msgid "Busy"
+msgstr "Απασχολημένος"
+
+#: ../libempathy/gossip-presence.c:279
+msgid "Away"
+msgstr "Απών"
+
+#: ../libempathy-gtk/empathy-main-window.c:254
+msgid "Show and edit accounts"
+msgstr "Εμφάνιση και επεξεργασία λογαριασμών"
+
+#: ../libempathy-gtk/empathy-main-window.c:456
+msgid "Group"
+msgstr "Ομάδα"
+
+#: ../libempathy-gtk/empathy-main-window.c:477
+msgid "Contact"
+msgstr "Επαφή"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:1
+#, fuzzy
+msgid "Contact List - Empathy"
+msgstr "Εμφάνιση _λίστας επαφών"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:2
+msgid "Context"
+msgstr "Περιεχόμενο"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:3
+msgid "Join _Favorites"
+msgstr "Σύνδεση στα α_γαπημένα"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:4
+#: ../libempathy-gtk/gossip-chat.glade.h:10
+msgid "Join _New..."
+msgstr "Σύνδεση σε _νέο..."
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:5
+msgid "Manage Favorites..."
+msgstr "Διαχείριση αγαπημένων..."
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:6
+msgid "Show _Offline Contacts"
+msgstr "Εμφάνιση επαφών ε_κτός σύνδεσης"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:7
+msgid "_About"
+msgstr "Πε_ρί"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:8
+msgid "_Accounts"
+msgstr "_Λογαριασμοί"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:9
+#: ../libempathy-gtk/gossip-chat.glade.h:15
+msgid "_Add Contact..."
+msgstr "Πρόσ_θεση επαφής..."
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:10
+#: ../libempathy-gtk/gossip-contact-list.c:298
+msgid "_Chat"
+msgstr "_Συζήτηση"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:11
+msgid "_Contents"
+msgstr "_Περιεχόμενα"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:12
+#: ../libempathy-gtk/gossip-chat.glade.h:21
+#: ../libempathy-gtk/gossip-contact-list.c:310
+msgid "_Edit"
+msgstr "_Επεξεργασία"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:13
+msgid "_Help"
+msgstr "_Βοήθεια"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:14
+#: ../libempathy-gtk/empathy-status-icon.glade.h:2
+msgid "_New Message..."
+msgstr "_Νέο Μήνυμα..."
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:15
+msgid "_Personal Information"
+msgstr "Π_ροσωπικές πληροφορίες"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:16
+msgid "_Preferences"
+msgstr "_Προτιμήσεις"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:17
+#: ../libempathy-gtk/empathy-status-icon.glade.h:3
+msgid "_Quit"
+msgstr "Έ_ξοδος"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:18
+#: ../libempathy-gtk/gossip-chat.glade.h:25
+msgid "_Room"
+msgstr "_Δωμάτιο"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:19
+#: ../libempathy-gtk/gossip-chat.glade.h:28
+#: ../libempathy-gtk/gossip-contact-list.c:326
+msgid "_View Previous Conversations"
+msgstr "Π_ροηγούμενες συζητήσεις"
+
+#: ../libempathy-gtk/empathy-status-icon.glade.h:1
+msgid "Status"
+msgstr "Κατάσταση"
+
+#: ../libempathy-gtk/empathy-status-icon.glade.h:4
+msgid "_Show Contact List"
+msgstr "Εμφάνιση _λίστας επαφών"
+
+#: ../libempathy-gtk/gossip-about-dialog.c:63
+#, fuzzy
+msgid ""
+"Empathy is free software; you can redistribute it and/or modify it under the "
+"terms of the GNU General Public License as published by the Free Software "
+"Foundation; either version 2 of the License, or (at your option) any later "
+"version."
+msgstr ""
+"Το Gossip είναι ελεύθερο λογισμικό: Μπορείτε να το διανείμετε εκ νέου και/ή "
+"να το τροποποιήσετε κάτω από τους όρους της GNU Γενικής Δημόσιας Άδειας "
+"Χρήσης (GPL) όπως είναι δημοσιευμένη από το Free Software Foundation: είτε "
+"με την έκδοση 2 της Άδειας, είτε (κατά την επιλογή σας) με οποιαδήποτε "
+"νεότερη έκδοση."
+
+#: ../libempathy-gtk/gossip-about-dialog.c:67
+#, fuzzy
+msgid ""
+"Empathy is distributed in the hope that it will be useful, but WITHOUT ANY "
+"WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS "
+"FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more "
+"details."
+msgstr ""
+"Το Gossip διανέμεται με την ελπίδα ότι θα είναι χρήσιμο, αλλά χωρίς καμία "
+"εγγύηση: ούτε καν της υπονοούμενης εγγύησης εμπορικότητας και καταλληλότητας "
+"για ένα συγκεκριμένο σκοπό. Ανατρέξτε στη GNU Γενική Δημόσια Άδεια Χρήσης "
+"(GPL) για περισσότερες πληροφορίες."
+
+#: ../libempathy-gtk/gossip-about-dialog.c:71
+#, fuzzy
+msgid ""
+"You should have received a copy of the GNU General Public License along with "
+"Empathy; if not, write to the Free Software Foundation, Inc., 51 Franklin "
+"Street, Fifth Floor, Boston, MA 02110-130159 USA"
+msgstr ""
+"Θα πρέπει να έχετε λάβει ένα αντίγραφο της  GNU Γενικής Δημόσιας Άδειας "
+"Χρήσης (GPL) μαζί με το Gossip. Αν όχι γράψτε στο Free Software Foundation, "
+"Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-130159 USA"
+
+#: ../libempathy-gtk/gossip-about-dialog.c:99
+msgid "An Instant Messaging client for GNOME"
+msgstr "Ένας στιγμιαίος αποστολέας μηνυμάτων για το GNOME"
+
+#: ../libempathy-gtk/gossip-about-dialog.c:105
+msgid "translator-credits"
+msgstr ""
+"Χρήστος Τροχαλάκης <yatiohi@ideopolis.gr>\n"
+"Δημήτρης Γλέζος <dimitris@glezos.com>"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:224
+#, fuzzy
+msgid "Disable"
+msgstr "Διαθέσιμος"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:227
+msgid "Enable"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:261
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:3
+msgid "<b>No Account Selected</b>"
+msgstr "<b>Δεν επιλέχθηκε λογαριασμός</b>"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:263
+msgid ""
+"To add a new account, you can click on the 'Add' button and a new entry will "
+"be created for you to start configuring.\n"
+"\n"
+"If you do not want to add an account, simply click on the account you want "
+"to configure in the list on the left."
+msgstr ""
+"Για να προσθέσετε ένα νέο λογαριασμό μπορείτε να κάνετε κλικ στο κουμπί "
+"'Προσθήκη' και ένας νέος λογαριασμός θα δημιουργηθεί για να τον ρυθμίσετε.\n"
+"\n"
+"Αν δεν θέλετε να προσθέσετε λογαριασμό, απλά επιλέξτε το λογαριασμό που "
+"θέλετε να ρυθμίσετε από την αριστερή στήλη."
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:272
+msgid "<b>No Accounts Configured</b>"
+msgstr "<b>Κανένας ρυθμισμένος Λογαριασμός</b>"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:274
+msgid ""
+"To add a new account, you can click on the 'Add' button and a new entry will "
+"be created for you to start configuring."
+msgstr ""
+"Για να προσθέσετε έναν νέο λογαριασμό μπορείτε να κάνετε κλικ στο κουμπί "
+"'Προσθήκη' και ένας νέος λογαριασμός θα δημιουργηθεί για να τον ρυθμίσετε."
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:362
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:6
+msgid "Accounts"
+msgstr "Λογαριασμοί"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:857
+#, c-format
+msgid ""
+"You are about to remove your %s account!\n"
+"Are you sure you want to proceed?"
+msgstr ""
+"Ετοιμάζεστε να διαγράψετε το λογαριασμό %s!\n"
+"Είστε σίγουρος πώς θέλετε να συνεχίσετε;"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:863
+msgid ""
+"Any associated conversations and chat rooms will NOT be removed if you "
+"decide to proceed.\n"
+"\n"
+"Should you decide to add the account back at a later time, they will still "
+"be available."
+msgstr ""
+"Όλες οι σχετικές συζητήσεις και τα δωμάτια συζητήσεων ΔΕ θα διαγραφούν αν "
+"αποφασίσετε να συνεχίσετε.\n"
+"\n"
+"Αν αποφασίσετε να προσθέσετε και πάλι τον λογαριασμό αργότερα, θα είναι "
+"ακόμα διαθέσιμα."
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:1
+msgid "<b>Account</b>"
+msgstr "<b>Λογαριασμός</b>"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:2
+#, fuzzy
+msgid "<b>New Account</b>"
+msgstr "<b>Λογαριασμός</b>"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:4
+msgid "<b>Settings</b>"
+msgstr "<b>Ρυθμίσεις</b>"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:5
+msgid "A unique name for this account to identify it personally to you."
+msgstr ""
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:7
+#, fuzzy
+msgid "Cr_eate"
+msgstr "Δημιουργία"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:8
+msgid "Imendio "
+msgstr ""
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:9
+msgid "Jabber"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:10
+msgid ""
+"To add a new account, you can click on the 'Add' button and a new entry will "
+"be created for you to started configuring.\n"
+"\n"
+"If you do not want to add an account, simply click on the account you want "
+"to configure in the list on the left."
+msgstr ""
+"Για να προσθέσετε ένα νέο λογαριασμό μπορείτε να επιλέξετε 'Προσθήκη' και "
+"ένας νέος λογαριασμός θα δημιουργηθεί για να τον ρυθμίσετε.\n"
+"\n"
+"Αν δεν θέλετε να προσθέσετε λογαριασμό, απλά κάντε κλικ στον λογαριασμό που "
+"θέλετε να ρυθμίσετε από την αριστερή στήλη. "
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:13
+msgid "_Name:"
+msgstr "Ό_νομα:"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:14
+#, fuzzy
+msgid "_Type:"
+msgstr "_Θέμα:"
+
+#: ../libempathy-gtk/gossip-account-widget-generic.c:144
+#: ../libempathy-gtk/gossip-account-widget-generic.c:186
+#, c-format
+msgid "%s:"
+msgstr "%s:"
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:1
+msgid ""
+"<small><b><span foreground=\"#555\">Example: user@jabber.org</span></b></"
+"small>"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:2
+msgid "Forget password and clear the entry."
+msgstr ""
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:3
+msgid "Login I_D:"
+msgstr "ΙD ει_σόδου:"
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:4
+msgid "Pass_word:"
+msgstr "_Συνθηματικό:"
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:5
+msgid "Reso_urce:"
+msgstr "_Πόρος:"
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:6
+msgid "Use encryption (SS_L)"
+msgstr "Χρήση κω_δικοποίησης (SSL)"
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:7
+msgid "_Port:"
+msgstr "_Θύρα:"
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:8
+msgid "_Server:"
+msgstr "_Εξυπηρετητής:"
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:9
+msgid "jabber account settings"
+msgstr "Ρυθμίσεις λογαριασμού Jabber"
+
+#: ../libempathy-gtk/gossip-chat.c:314
+msgid "Disconnected"
+msgstr "Αποσυνδέθηκε"
+
+#: ../libempathy-gtk/gossip-chat.c:858
+msgid "Insert Smiley"
+msgstr "Εισαγωγή χαμόγελου"
+
+#: ../libempathy-gtk/gossip-chat.c:906
+msgid "_Check Word Spelling..."
+msgstr "Έ_λεγχος ορθογραφίας..."
+
+#: ../libempathy-gtk/gossip-chat.c:1244
+msgid "Connected"
+msgstr "Συνδεδεμένος"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:1
+msgid "C_lear"
+msgstr "Ε_κκαθάριση"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:2
+msgid "Change _Topic..."
+msgstr ""
+
+#: ../libempathy-gtk/gossip-chat.glade.h:3
+msgid "Chat"
+msgstr "Συζήτηση"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:4
+msgid "Contact Infor_mation"
+msgstr "_Πληροφορίες επαφής"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:5
+msgid "Cu_t"
+msgstr "Απο_κοπή"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:6
+#, fuzzy
+msgid "In_vite..."
+msgstr "_Πρόσκληση"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:7
+msgid "Insert _Smiley"
+msgstr "_Εισαγωγή χαμόγελου"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:8
+#, fuzzy
+msgid "Invitation _message:"
+msgstr "Μήνυμα πρόσκλησης:"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:9
+msgid "Invite"
+msgstr "Πρόσκληση"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:11
+msgid "Move Tab _Left"
+msgstr "Μετακίνηση καρτέλας _αριστερά"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:12
+msgid "Move Tab _Right"
+msgstr "Μετακίνηση καρτέλας _δεξιά"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:13
+msgid "Select who would you like to invite:"
+msgstr "Επιλέξτε ποιόν θέλετε να καλέσετε:"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:14
+msgid "You have been invited to join a chat conference."
+msgstr "Έχετε λάβει πρόσκληση να συμμετάσχετε σε μια ομαδική συζήτηση."
+
+#: ../libempathy-gtk/gossip-chat.glade.h:16
+msgid "_Add To Favorites"
+msgstr "Προσθήκη στα α_γαπημένα"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:17
+msgid "_Close"
+msgstr "_Κλείσιμο"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:18
+msgid "_Conversation"
+msgstr "_Συζήτηση"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:19
+msgid "_Copy"
+msgstr "Αντι_γραφή"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:20
+msgid "_Detach Tab"
+msgstr "Από_σπαση καρτέλας"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:22
+msgid "_Next Tab"
+msgstr "_Επόμενη καρτέλα"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:23
+msgid "_Paste"
+msgstr "_Επικόλληση"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:24
+msgid "_Previous Tab"
+msgstr "_Προηγούμενη καρτέλα"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:26
+msgid "_Show Contacts"
+msgstr "Εμφάνιση _επαφών"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:27
+msgid "_Tabs"
+msgstr "_Καρτέλες"
+
+#: ../libempathy-gtk/gossip-chat-view.c:544
+msgid "_Copy Link Address"
+msgstr "Αντιγρα_φή διεύθυνσης συνδέσμου"
+
+#: ../libempathy-gtk/gossip-chat-view.c:552
+msgid "_Open Link"
+msgstr "Ά_νοιγμα συνδέσμου"
+
+#: ../libempathy-gtk/gossip-chat-view.c:889
+msgid "%A %d %B %Y"
+msgstr "%A %d %B %Y"
+
+#: ../libempathy-gtk/gossip-chat-window.c:685
+#: ../libempathy-gtk/gossip-chat-window.c:715
+#, fuzzy
+msgid "New Message"
+msgid_plural "New Messages"
+msgstr[0] "Νέο μήνυμα"
+msgstr[1] "Νέο μήνυμα"
+
+#: ../libempathy-gtk/gossip-chat-window.c:691
+#, fuzzy
+msgid "Chat Room"
+msgstr "Δωμάτια συζήτησης"
+
+#: ../libempathy-gtk/gossip-chat-window.c:696
+#: ../libempathy-gtk/gossip-chat-window.c:719
+#, fuzzy, c-format
+msgid "Conversation"
+msgid_plural "Conversations (%d)"
+msgstr[0] "_Συζήτηση"
+msgstr[1] "_Συζήτηση"
+
+#: ../libempathy-gtk/gossip-chat-window.c:1295
+msgid "Typing a message."
+msgstr "Γράφει ένα μήνυμα."
+
+#: ../libempathy-gtk/gossip-contact-list.c:290
+msgid "_Contact"
+msgstr "_Επαφή"
+
+#: ../libempathy-gtk/gossip-contact-list.c:294
+msgid "_Group"
+msgstr "_Ομάδα"
+
+#: ../libempathy-gtk/gossip-contact-list.c:298
+msgid "Chat with contact"
+msgstr "Συζητήστε με την επαφή"
+
+#: ../libempathy-gtk/gossip-contact-list.c:302
+msgid "Infor_mation"
+msgstr "Πληροφο_ρίες"
+
+#: ../libempathy-gtk/gossip-contact-list.c:302
+msgid "View contact information"
+msgstr "Προβολή πληροφοριών επαφής"
+
+#: ../libempathy-gtk/gossip-contact-list.c:306
+msgid "Re_name"
+msgstr "Μετο_νομασία"
+
+#: ../libempathy-gtk/gossip-contact-list.c:306
+msgid "Rename"
+msgstr "Μετονομασία"
+
+#: ../libempathy-gtk/gossip-contact-list.c:310
+msgid "Edit the groups and name for this contact"
+msgstr "Επεξεργασία ομάδων και ονόματος για αυτήν την επαφή"
+
+#: ../libempathy-gtk/gossip-contact-list.c:314
+msgid "_Remove"
+msgstr "_Απομάκρυνση"
+
+#: ../libempathy-gtk/gossip-contact-list.c:314
+msgid "Remove contact"
+msgstr "Αφαίρεση επαφής"
+
+#: ../libempathy-gtk/gossip-contact-list.c:318
+msgid "_Invite to Chat Room"
+msgstr "_Πρόσκληση στο δωμάτιο"
+
+#: ../libempathy-gtk/gossip-contact-list.c:318
+msgid "Invite to a currently open chat room"
+msgstr "Πρόσκληση σε ένα ανοιχτό δωμάτιο"
+
+#: ../libempathy-gtk/gossip-contact-list.c:322
+msgid "_Send File..."
+msgstr "Αποστολή α_ρχείου..."
+
+#: ../libempathy-gtk/gossip-contact-list.c:322
+msgid "Send a file"
+msgstr "Αποστολή αρχείου"
+
+#: ../libempathy-gtk/gossip-contact-list.c:326
+msgid "View previous conversations with this contact"
+msgstr "Προβολή προηγούμενων συζητήσεων με την επαφή"
+
+#: ../libempathy-gtk/gossip-preferences.c:250
+msgid "Language"
+msgstr "Γλώσσα"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:1
+msgid "<b>Appearance</b>"
+msgstr "<b>Εμφάνιση</b>"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:2
+msgid "<b>Audio</b>"
+msgstr "<b>Ήχοι</b>"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:3
+msgid "<b>Behaviour</b>"
+msgstr "<b>Συμπεριφορά</b>"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:4
+#, fuzzy
+msgid "<b>Contact List</b>"
+msgstr "<b>Κατάσταση</b>"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:5
+msgid "<b>Languages</b>"
+msgstr "<b>Γλώσσες</b>"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:6
+msgid "<b>Options</b>"
+msgstr "<b>Επιλογές</b>"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:7
+msgid "<b>Visual</b>"
+msgstr "<b>Εμφάνιση</b>"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:8
+msgid ""
+"<small>The list of languages reflects only the languages for which you have "
+"a dictionary installed.</small>"
+msgstr ""
+"<small>Η λίστα γλωσσών περιέχει μόνο τις γλώσσες για τις οποίες υπάρχει "
+"εγκατεστημένο λεξικό.</small>"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:9
+msgid "Avatars are user chosen images shown in the contact list"
+msgstr "Οι προσωπικές εικόνες είναι εικόνες που εμφανίζονται στην λίστα επαφών"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:10
+msgid "Chat Th_eme:"
+msgstr "_Θέμα:"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:11
+msgid "Display notifications when contacts come _online"
+msgstr "_Ειδοποιήσεις όταν οι επαφές συνδέονται"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:12
+msgid "Enable sounds when _away"
+msgstr "Ενεργοποίηση ήχων όταν α_πουσιάζετε"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:13
+msgid "Enable sounds when _busy"
+msgstr "Ενεργοποίηση ήχων όταν είστε απα_σχολημένος"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:14
+msgid "General"
+msgstr "Γενικά"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:15
+msgid "Notifications"
+msgstr "Ειδοποιήσεις"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:16
+msgid "Preferences"
+msgstr "Προτιμήσεις"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:17
+msgid "Show _avatars"
+msgstr "Εμφάνιση προσωπικών _εικόνων"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:18
+msgid "Show _smileys as images"
+msgstr "Εμφάνιση γραφικών _χαμόγελων"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:19
+msgid "Show co_mpact contact list"
+msgstr "Εμφάνιση συμπυκνωμένης λίστας"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:20
+msgid "Sort by _name"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:21
+msgid "Sort by s_tate"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:22
+msgid "Spell Checking"
+msgstr "Έλεγχος ορθογραφίας"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:23
+msgid "Themes"
+msgstr "Θέματα"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:24
+msgid "_Enable spell checking"
+msgstr "Ενεργοποίηση ορ_θογράφου"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:25
+msgid "_Open new chats in separate windows"
+msgstr "Ά_νοιγμα νέων συζητήσεων σε ξεχωριστά παράθυρα"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:26
+msgid "_Play sound when messages arrive"
+msgstr "Ή_χος για νέα μηνύματα"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:27
+msgid "_Use for chat rooms"
+msgstr "_Χρήση για δωμ. συζήτησης"
+
+#: ../libempathy-gtk/gossip-presence-chooser.c:702
+msgid "Custom message..."
+msgstr "Προσαρμοσμένο μήνυμα..."
+
+#. Clear list
+#: ../libempathy-gtk/gossip-presence-chooser.c:724
+msgid "Clear List..."
+msgstr "Καθαρισμός..."
+
+#: ../libempathy-gtk/gossip-presence-chooser.c:803
+msgid "Are you sure you want to clear the list?"
+msgstr "Είστε σίγουροι πως θέλετε να καθαρίσετε την λίστα;"
+
+#: ../libempathy-gtk/gossip-presence-chooser.c:807
+msgid ""
+"This will remove any custom messages you have added to the list of preset "
+"status messages."
+msgstr ""
+"Αυτό θα αφαιρέσει όλα τα μηνύματα που προσθέσατε στην λίστα των "
+"προκαθορισμένων μηνυμάτων κατάστασης."
+
+#: ../libempathy-gtk/gossip-presence-chooser.c:812
+msgid "Clear List"
+msgstr "Καθαρισμός"
+
+#: ../libempathy-gtk/gossip-presence-chooser.glade.h:1
+msgid "Enter status message:"
+msgstr "Εισάγετε μήνυμα κατάστασης:"
+
+#: ../libempathy-gtk/gossip-presence-chooser.glade.h:2
+msgid "Status Message Presets"
+msgstr "Προκαθορισμένα μηνύματα κατάστασης"
+
+#: ../libempathy-gtk/gossip-presence-chooser.glade.h:3
+msgid "_Add to status message list"
+msgstr "Προσθήκη στη _λίστα μηνυμάτων κατάστασης"
+
+#: ../libempathy-gtk/gossip-private-chat.c:198
+#, c-format
+msgid "%s went offline"
+msgstr "Ο χρήστης %s αποσυνδέθηκε"
+
+#: ../libempathy-gtk/gossip-private-chat.c:212
+#, c-format
+msgid "%s has come online"
+msgstr "Ο χρήστης %s συνδέθηκε"
+
+#: ../libempathy-gtk/gossip-theme-manager.c:87
+msgid "Classic"
+msgstr "Κλασσικό"
+
+#: ../libempathy-gtk/gossip-theme-manager.c:88
+msgid "Simple"
+msgstr "Απλό"
+
+#: ../libempathy-gtk/gossip-theme-manager.c:89
+msgid "Clean"
+msgstr "Καθαρισμός"
+
+#: ../libempathy-gtk/gossip-theme-manager.c:90
+msgid "Blue"
+msgstr "Μπλε"
+
+#: ../src/empathy-main.c:145
+msgid "Don't connect on startup"
+msgstr "Χωρίς σύνδεση κατά την εκκίνηση"
+
+#: ../src/empathy-main.c:155
+#, fuzzy
+msgid "- Empathy Instant Messenger"
+msgstr "- Gossip Instant Messenger"
+
+#~ msgid "Gossip Instant Messenger"
+#~ msgstr "Gossip Instant Messenger"
+
+#~ msgid "Normal"
+#~ msgstr "Κανονικό"
+
+#~ msgid "Joining"
+#~ msgstr "Σύνδεση"
+
+#~ msgid "Active"
+#~ msgstr "Ενεργό"
+
+#~ msgid "Inactive"
+#~ msgstr "Ανενεργό"
+
+#~ msgid "Unknown"
+#~ msgstr "Άγνωστο"
+
+#~ msgid "Error"
+#~ msgstr "Σφάλμα"
+
+#~ msgid "Moderator"
+#~ msgid_plural "Moderators"
+#~ msgstr[0] "Επιμελητής"
+#~ msgstr[1] "Επιμελητές"
+
+#~ msgid "Participant"
+#~ msgid_plural "Participants"
+#~ msgstr[0] "Συμμετέχων"
+#~ msgstr[1] "Συμμετέχοντες"
+
+#~ msgid "Visitor"
+#~ msgid_plural "Visitors"
+#~ msgstr[0] "Επισκέπτης"
+#~ msgstr[1] "Επισκέπτες"
+
+#~ msgid "No role"
+#~ msgstr "Χωρίς ρόλο"
+
+#~ msgid "Owner"
+#~ msgid_plural "Owners"
+#~ msgstr[0] "Ιδιοκτήτης"
+#~ msgstr[1] "Ιδιοκτήτες"
+
+#~ msgid "Administrator"
+#~ msgid_plural "Administrators"
+#~ msgstr[0] "Διαχειριστής"
+#~ msgstr[1] "Διαχειριστές"
+
+#~ msgid "Member"
+#~ msgid_plural "Members"
+#~ msgstr[0] "Μέλος"
+#~ msgstr[1] "Μέλη"
+
+#~ msgid "Outcast"
+#~ msgid_plural "Outcasts"
+#~ msgstr[0] "Εξόριστος"
+#~ msgstr[1] "Εξόριστοι"
+
+#~ msgid "No affiliation"
+#~ msgstr "Χωρίς σχέση"
+
+#~ msgid "The nickname you have chosen is already in use."
+#~ msgstr "Το ψευδώνυμο σας φαίνεται να χρησιμοποιείται ήδη."
+
+#~ msgid "The chat room you tried to join requires a password."
+#~ msgstr "Το δωμάτιο που προσπαθήσατε να συνδεθείτε απαιτεί κωδικό."
+
+#~ msgid "The remote conference server did not respond in a sensible time."
+#~ msgstr ""
+#~ "Ο απομακρυσμένος εξυπηρετητής συνεδριών δεν απάντησε σε λογικό πλαίσιο "
+#~ "χρόνου."
+
+#~ msgid "The conference server you tried to join could not be found."
+#~ msgstr ""
+#~ "Ο εξυπηρετητής συνεδριών που προσπαθήσατε να συνδεθείτε δεν βρέθηκε."
+
+#~ msgid "An unknown error occurred, check your details are correct."
+#~ msgstr ""
+#~ "Ένα άγνωστο σφάλμα συνέβη, επιβεβαιώστε ότι οι λεπτομέρειες είναι σωστές."
+
+#~ msgid "Unavailable"
+#~ msgstr "Μη διαθέσιμος"
+
+#~ msgid "An unknown error occurred."
+#~ msgstr "Ένα άγνωστο σφάλμα συνέβη."
+
+#~ msgid "Connection refused."
+#~ msgstr "Δεν επιτράπηκε η σύνδεση."
+
+#~ msgid "Server address could not be resolved."
+#~ msgstr "Η διεύθυνση του εξυπηρετητή δε μπόρεσε να επιλυθεί."
+
+#~ msgid "Connection timed out."
+#~ msgstr "Τέλος χρονικού ορίου σύνδεσης."
+
+#~ msgid "Authentication failed."
+#~ msgstr "Η πιστοποίηση απέτυχε."
+
+#~ msgid "The username you are trying already exists."
+#~ msgstr "Το ψευδώνυμο αυτό υπάρχει ήδη."
+
+#~ msgid "The username you are trying is not valid."
+#~ msgstr "Το ψευδώνυμο αυτό δεν είναι έγκυρο."
+
+#~ msgid "This feature is unavailable."
+#~ msgstr "Αυτή η δυνατότητα δεν είναι διαθέσιμη."
+
+#~ msgid "This feature is unauthorized."
+#~ msgstr "Δεν έχετε δικαιώματα γι' αυτή τη δυνατότητα."
+
+#~ msgid "A specific protocol error occurred that was unexpected."
+#~ msgstr "Παρουσιάστηκε μη αναμενόμενο σφάλμα πρωτοκόλλου."
+
+#~ msgid "new account"
+#~ msgstr "νέος λογαριασμός"
+
+#~ msgid "Home"
+#~ msgstr "Αρχικός κατάλογος"
+
+#~ msgid "Couldn't send message!"
+#~ msgstr "Το μήνυμα δεν μπόρεσε να σταλεί!"
+
+#~ msgid "Connection could not be opened"
+#~ msgstr "Δεν ήταν δυνατό να ανοιχθεί η σύνδεση"
+
+#, fuzzy
+#~ msgid "This service is unavailable or not found"
+#~ msgstr "Αυτή η δυνατότητα δεν είναι διαθέσιμη."
+
+#, fuzzy
+#~ msgid "This feature is not implemented"
+#~ msgstr "Δεν έχετε δικαιώματα γι' αυτή τη δυνατότητα."
+
+#~ msgid "Stop"
+#~ msgstr "Διακοπή"
+
+#~ msgid "Disconnect"
+#~ msgstr "Αποσύνδεση"
+
+#~ msgid "Connect"
+#~ msgstr "Σύνδεση"
+
+#~ msgid "Successfully registered your new account settings."
+#~ msgstr "Οι ρυθμίσεις του νέου λογαριασμού σας καταχωρήθηκαν με επιτυχία."
+
+#~ msgid "You should now be able to connect to your new account."
+#~ msgstr ""
+#~ "Θα πρέπει τώρα να είστε έτοιμος να συνδεθείτε στον νέο λογαριασμό σας."
+
+#~ msgid "Failed to register your new account settings."
+#~ msgstr "Οι ρυθμίσεις του νέου σας λογαριασμού απέτυχαν να καταχωρηθούν."
+
+#, fuzzy
+#~ msgid "Successfully changed your account password."
+#~ msgstr "Οι ρυθμίσεις του νέου λογαριασμού σας καταχωρήθηκαν με επιτυχία."
+
+#, fuzzy
+#~ msgid "You should now be able to connect with your new password."
+#~ msgstr ""
+#~ "Θα πρέπει τώρα να είστε έτοιμος να συνδεθείτε στον νέο λογαριασμό σας."
+
+#, fuzzy
+#~ msgid "Failed to change your account password."
+#~ msgstr "Εισάγετε τον κωδικό του λογαριασμού %s"
+
+#, fuzzy
+#~ msgid ""
+#~ "Please enter a new password for this account:\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Παρακαλώ εισάγετε ένα νέο όνομα για την ομάδα:\n"
+#~ "%s"
+
+#~ msgid "No information is available for this contact."
+#~ msgstr "Δεν υπάρχουν διαθέσιμες πληροφορίες για αυτήν την επαφή."
+
+#~ msgid "Information requested, please wait..."
+#~ msgstr "Ζητούνται πληροφορίες, παρακαλώ περιμένετε..."
+
+#~ msgid "I would like to add you to my contact list."
+#~ msgstr "Θα ήθελα να σε προσθέσω στην λίστα επαφών μου."
+
+#~ msgid "To summarize:"
+#~ msgstr "Συνοψίζοντας:"
+
+#~ msgid "%d new message"
+#~ msgid_plural "%d new messages"
+#~ msgstr[0] "%d νέο μήνυμα"
+#~ msgstr[1] "%d νέα μηνύματα"
+
+#~ msgid "%d subscription request"
+#~ msgid_plural "%d subscription requests"
+#~ msgstr[0] "%d αίτηση εγγραφής"
+#~ msgstr[1] "%d αιτήσεις εγγραφών"
+
+#~ msgid "%d file transfer request"
+#~ msgid_plural "%d file transfer requests"
+#~ msgstr[0] "%d αίτηση μεταφοράς αρχείου"
+#~ msgstr[1] "%d αιτήσεις μεταφοράς αρχείων"
+
+#~ msgid "%d server message"
+#~ msgid_plural "%d server messages"
+#~ msgstr[0] "%d μήνυμα εξυπηρετητή"
+#~ msgstr[1] "%d μηνύματα εξυπηρετητή"
+
+#~ msgid "%d error"
+#~ msgid_plural "%d errors"
+#~ msgstr[0] "%d σφάλμα"
+#~ msgstr[1] "%d σφάλματα"
+
+#~ msgid "If you quit, you will lose all unread information."
+#~ msgstr "Αν κλείσετε, θα χάσετε όλες τις μη διαβασμένες πληροφορίες."
+
+#~ msgid "Gossip is still running, it is just hidden."
+#~ msgstr "Το Gossip εξακολουθεί να εκτελείται, απλά είναι κρυμμένο."
+
+#~ msgid "Click on the notification area icon to show Gossip."
+#~ msgstr ""
+#~ "Κάντε κλικ στο εικονίδιο της περιοχής ειδοποιήσεων για να εμφανίσετε το "
+#~ "Gossip."
+
+#~ msgid "You were about to quit!"
+#~ msgstr "Ετοιμάζεστε να εγκαταλήψετε!"
+
+#~ msgid ""
+#~ "Since no system or notification tray has been found, this action would "
+#~ "normally quit Gossip.\n"
+#~ "\n"
+#~ "This is just a reminder, from now on, Gossip will quit when performing "
+#~ "this action unless you uncheck the option below."
+#~ msgstr ""
+#~ "Εφόσον δεν βρέθηκε περιοχή ειδοποιήσεων αυτή η ενέργεια κανονικά θα "
+#~ "τερματίσει το Gossip.\n"
+#~ "\n"
+#~ "Αυτή είναι απλά μια υπενθύμιση, από εδώ και στο εξής, το Gossip θα "
+#~ "κλείνει με την εκτέλεση αυτής της ενέργειας εκτός αν αποεπιλέξετε την "
+#~ "παρακάτω επιλογή."
+
+#~ msgid "Edit Account _Details"
+#~ msgstr "Επεξεργασία _λεπτομερειών Λογαριασμού"
+
+#~ msgid "Click to enlarge"
+#~ msgstr "Κάντε κλικ για μεγέθυνση"
+
+#~ msgid "Word"
+#~ msgstr "Λέξη"
+
+#~ msgid "Select who would you like to invite to room:"
+#~ msgstr "Επιλέξτε ποιον θέλετε να καλέσετε στο δωμάτιο:"
+
+#~ msgid "Select which room you would like to invite:"
+#~ msgstr "Επιλέξτε ποιο δωμάτιο θέλετε να καλέσετε:"
+
+#~ msgid "New message from %s"
+#~ msgstr "Νέο μήνυμα από %s"
+
+#~ msgid "Your invitation has been declined"
+#~ msgstr "Η πρόσκληση σας απορρίφθηκε"
+
+#~ msgid "Accept"
+#~ msgstr "Αποδοχή"
+
+#~ msgid "Decline"
+#~ msgstr "Άρνηση"
+
+#~ msgid "Name"
+#~ msgstr "Όνομα"
+
+#~ msgid "Room"
+#~ msgstr "Δωμάτιο"
+
+#~ msgid "Auto Connect"
+#~ msgstr "Αυτόματη σύνδεση"
+
+#~ msgid "Information requested..."
+#~ msgstr "Αιτήθηκαν πληροφορίες..."
+
+#~ msgid "Do you want to remove this contact from your roster?"
+#~ msgstr "Θέλετε να αφαιρέσετε αυτήν την επαφή από την λίστα σας;"
+
+#~ msgid ""
+#~ "Please enter a new name for the group:\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Παρακαλώ εισάγετε ένα νέο όνομα για την ομάδα:\n"
+#~ "%s"
+
+#~ msgid "Select"
+#~ msgstr "Επιλογή"
+
+#~ msgid "Unsorted"
+#~ msgstr "Μη ταξινομημένα"
+
+#~ msgid ""
+#~ "Set the alias you want to use for:\n"
+#~ "<b>%s</b>\n"
+#~ "\n"
+#~ "You can retrieve contact information from the server."
+#~ msgstr ""
+#~ "Ορίστε το ψευδώνυμο για τον/την:\n"
+#~ "<b>%s</b>\n"
+#~ "\n"
+#~ "Μπορείτε να  ανακτήσετε τις πληροφορίες της επαφής από τον εξυπηρετητή."
+
+#~ msgid "New file transfer request from %s"
+#~ msgstr "Νέα αίτηση μεταφοράς αρχείου από %s"
+
+#~ msgid "File transfer is not supported by both parties."
+#~ msgstr "Οι μεταφορές αρχείων δεν υποστηρίζονται και από τις δύο πλευρές."
+
+#~ msgid "Your file transfer offer declined."
+#~ msgstr "Η αίτηση σας για μεταφορά αρχείου απορρίφθηκε."
+
+#~ msgid "The other user decided not to continue."
+#~ msgstr "Ο άλλος χρήστης αποφάσισε να διακόψει."
+
+#~ msgid "Unknown error occurred during file transfer."
+#~ msgstr "Συνέβηκε άγνωστο σφάλμα κατά την μεταφορά του αρχείου."
+
+#~ msgid "%s would like to send you a file."
+#~ msgstr "Ο χρήστης %s θέλει να σας στείλει ένα αρχείο."
+
+#~ msgid "Someone would like to send you a file."
+#~ msgstr "Κάποιος θέλει να σας στείλει ένα αρχείο."
+
+#~ msgid "Select a file"
+#~ msgstr "Επιλέξτε ένα αρχείο"
+
+#, fuzzy
+#~ msgid "Connecting..."
+#~ msgstr "Σύνδεση"
+
+#~ msgid "Invited %s to join this chat conference."
+#~ msgstr "Προκαλέσατε το χρήστης %s να συμμετάσχει στην ομαδική συζήτηση."
+
+#, fuzzy
+#~ msgid "%s has set the topic: %s"
+#~ msgstr "Το θέμα ορίστηκε από το χρήστη %s"
+
+#, fuzzy
+#~ msgid "%s has joined the room"
+#~ msgstr "Το θέμα ορίστηκε από το χρήστη %s"
+
+#, fuzzy
+#~ msgid "%s has left the room"
+#~ msgstr "Το θέμα ορίστηκε από το χρήστη %s"
+
+#, fuzzy
+#~ msgid "Topic: %s"
+#~ msgstr "_Θέμα:"
+
+#~ msgid "Account"
+#~ msgstr "Λογαριασμός"
+
+#~ msgid "Conversation With"
+#~ msgstr "Συζήτηση με"
+
+#~ msgid "Date"
+#~ msgstr "Ημερομηνία"
+
+#~ msgid "Allow multiple instances of the application to run at the same time"
+#~ msgstr "Να επιτρέπονται πολλαπλές ταυτόχρονες εκτελέσεις της εφαρμογής"
+
+#~ msgid "List the available accounts"
+#~ msgstr "Λίστα διαθέσιμων λογαριασμών"
+
+#~ msgid "Which account to connect to on startup"
+#~ msgstr "Ποιος λογαριασμός να συνδέεται κατά την εκκίνηση"
+
+#~ msgid "ACCOUNT-NAME"
+#~ msgstr "OΝΟΜΑ-ΛΟΓΑΡΙΑΣΜΟΥ"
+
+#~ msgid "You can not use --no-connect together with --account"
+#~ msgstr ""
+#~ "Δε μπορείτε να χρησιμοποιήσετε συγχρόνως τις παραμέτρους --no-connect και "
+#~ "--account"
+
+#~ msgid "No accounts available."
+#~ msgstr "Κανένας διαθέσιμος λογαριασμός."
+
+#~ msgid "Available accounts:"
+#~ msgstr "Διαθέσιμοι λογαριασμοί:"
+
+#~ msgid "[default]"
+#~ msgstr "[προεπιλογή]"
+
+#~ msgid "There is no account with the name '%s'."
+#~ msgstr "Δεν υπάρχει λογαριασμός με το όνομα '%s'."
+
+#~ msgid "Join"
+#~ msgstr "Σύνδεση"
+
+#~ msgid "Create"
+#~ msgstr "Δημιουργία"
+
+#~ msgid "Chat Rooms"
+#~ msgstr "Δωμάτια συζήτησης"
+
+#~ msgid "Found %d conference rooms"
+#~ msgstr "Βρέθηκαν %d δωμάτια συνεδριών"
+
+#~ msgid "Browsing for conference rooms, please wait..."
+#~ msgstr "Γίνεται πλοήγηση για δωμάτια συνεδριών, παρακαλώ περιμένετε..."
+
+#~ msgid "Browsing cancelled!"
+#~ msgstr "Η πλοήγηση ακυρώθηκε!"
+
+#~ msgid "Default"
+#~ msgstr "Προεπιλογή"
+
+#~ msgid "Chat!"
+#~ msgstr "Συζήτηση!"
+
+#~ msgid "%s wants to be added to your contact list."
+#~ msgstr "Ο χρήστης %s θέλει να προστεθεί στην λίστα επαφών σας."
+
+#~ msgid "Someone wants to be added to your contact list."
+#~ msgstr "Κάποιος θέλει να προστεθεί στην λίστα επαφών σας."
+
+#~ msgid "Subscription request"
+#~ msgstr "Αίτηση εγγραφής"
+
+#~ msgid "Show"
+#~ msgstr "Εμφάνιση"
+
+#~ msgid "Contact Information"
+#~ msgstr "Πληροφορίες επαφής"
+
+#~ msgid "Subject: %s"
+#~ msgstr "Θέμα: %s"
+
+#~ msgid "Suggestions for the word"
+#~ msgstr "Προτάσεις για τη λέξη"
+
+#~ msgid "New subscription request from %s"
+#~ msgstr "Νέα αίτηση εγγραφής από το χρήστη %s"
+
+#~ msgid "Do you want to add this person to your contact list?"
+#~ msgstr "Θέλετε να προσθέσετε αυτό το άτομο στη λίστα επαφών σας;"
+
+#~ msgid "Do you want to add %s to your contact list?"
+#~ msgstr "Θέλετε να προσθέσετε το χρήστη %s στη λίστα επαφών σας;"
+
+#~ msgid "Please enter your %s account password"
+#~ msgstr "Εισάγετε τον κωδικό του λογαριασμού %s"
+
+#, fuzzy
+#~ msgid "Logging in to account '%s'"
+#~ msgstr "Γίνεται σύνδεση με: %s"
+
+#~ msgid "Remember Password?"
+#~ msgstr "Απομνημόνευση κωδικού;"
+
+#~ msgid "Do not show this again"
+#~ msgstr "Να μην εμφανιστεί ξανά"
+
+#~ msgid "Could not display the help contents."
+#~ msgstr "Δεν ήταν δυνατό να εμφανιστούν τα περιεχόμενα βοήθειας."
+
+#~ msgid "Select Your Avatar Image"
+#~ msgstr "Επιλέξτε την προσωπική σας εικόνα"
+
+#~ msgid "No Image"
+#~ msgstr "Χωρίς εικόνα"
+
+#~ msgid "The server does not seem to be responding."
+#~ msgstr "Ο εξυπηρετητής δε φαίνεται να ανταποκρίνεται."
+
+#~ msgid "Try again later."
+#~ msgstr "Δοκιμάστε πάλι αργότερα."
+
+#, fuzzy
+#~ msgid "Change"
+#~ msgstr "Συζήτηση"
+
+#~ msgid "Contact goes offline"
+#~ msgstr "Η επαφή αποσυνδέεται"
+
+#~ msgid "Contact goes online"
+#~ msgstr "Η επαφή συνδέεται"
+
+#~ msgid "Contact ID:"
+#~ msgstr "ID επαφής:"
+
+#~ msgid "Do you want to accept this file?"
+#~ msgstr "Θέλετε να δεχτείτε αυτό το αρχείο;"
+
+#~ msgid "File Transfer Request"
+#~ msgstr "Αίτηση για μεταφορά αρχείου"
+
+#~ msgid "File name:"
+#~ msgstr "Όνομα αρχείου:"
+
+#~ msgid "File size:"
+#~ msgstr "Μέγεθος αρχείου:"
+
+#~ msgid "Not supported yet"
+#~ msgstr "Δεν υποστηρίζεται ακόμα"
+
+#~ msgid "This person wishes to send you this file:"
+#~ msgstr "Αυτό το άτομο επιθυμεί να σας στείλει αυτό το αρχείο:"
+
+#~ msgid "Web site:"
+#~ msgstr "Ιστότοπος:"
+
+#~ msgid "_Accept"
+#~ msgstr "_Αποδοχή"
+
+#~ msgid "_Deny"
+#~ msgstr "Άρ_νηση"
+
+#, fuzzy
+#~ msgid "<b>Topic:</b>"
+#~ msgstr "<b>Ομάδες</b>"
+
+#~ msgid "Account:"
+#~ msgstr "Λογαριασμός:"
+
+#~ msgid "Browse:"
+#~ msgstr "Πλοήγηση:"
+
+#~ msgid "Edit Favorite Room"
+#~ msgstr "Επεξεργασία αγαπημένου δωματίου"
+
+#~ msgid ""
+#~ "Enter the room name to join here or click on one or more rooms in the "
+#~ "list."
+#~ msgstr ""
+#~ "Εισάγετε εδώ το όνομα του δωματίου στο οποίο θέλετε να συνδεθείτε ή "
+#~ "επιλέξτε ένα ή περισσότερα δωμάτια από τη λίστα."
+
+#~ msgid "Group Chat"
+#~ msgstr "Ομαδική συζήτηση"
+
+#~ msgid "Join New"
+#~ msgstr "Σύνδεση σε νέο"
+
+#~ msgid "Join room on start_up"
+#~ msgstr "Σύνδεση στο δωμάτιο κατά την εκκίνηση"
+
+#~ msgid "Join this chat room when Gossip starts and you are connected"
+#~ msgstr ""
+#~ "Σύνδεση στο δωμάτιο κατά την εκκίνηση του Gossip και είστε συνδεδεμένοι"
+
+#~ msgid "Manage Favorite Rooms"
+#~ msgstr "Διαχείριση αγαπημένων δωματίων"
+
+#~ msgid "N_ame:"
+#~ msgstr "Όνο_μα:"
+
+#~ msgid "Re_fresh"
+#~ msgstr "Α_νανέωση"
+
+#~ msgid "S_erver:"
+#~ msgstr "Εξ_υπηρετητής:"
+
+#~ msgid ""
+#~ "This list represents all chat rooms hosted on the server you have entered."
+#~ msgstr ""
+#~ "Αυτή η λίστα περιέχει όλα τα δωμάτια συζητήσεων που φιλοξενούνται στον "
+#~ "εξυπηρετητή που έχετε εισάγει."
+
+#~ msgid "_Nickname:"
+#~ msgstr "_Ψευδώνυμο:"
+
+#~ msgid "_Room:"
+#~ msgstr "_Δωμάτιο:"
+
+#~ msgid "-"
+#~ msgstr "-"
+
+#~ msgid "<b>About</b>"
+#~ msgstr "<b>Περί</b>"
+
+#~ msgid "<b>Client Information</b>"
+#~ msgstr "<b>Πληροφορίες πελάτη</b>"
+
+#~ msgid "<b>Groups</b>"
+#~ msgstr "<b>Ομάδες</b>"
+
+#~ msgid "<b>Name</b>"
+#~ msgstr "<b>Όνομα</b>"
+
+#~ msgid "<b>Personal Details</b>"
+#~ msgstr "<b>Προσωπικές λεπτομέρειες</b>"
+
+#~ msgid "<b>Subscription</b>"
+#~ msgstr "<b>Εγγραφή</b>"
+
+#~ msgid "<span size=\"smaller\">Example: Mikael or user@server.org</span>"
+#~ msgstr ""
+#~ "<span size=\"smaller\"> Παράδειγμα: Γιώργος ή user@server.org</span>"
+
+#~ msgid "Accou_nt:"
+#~ msgstr "_Λογαριασμός:"
+
+#, fuzzy
+#~ msgid "Add Contact"
+#~ msgstr "Πρόσ_θεση επαφής..."
+
+#~ msgid "Alia_s:"
+#~ msgstr "_Ψευδώνυμο:"
+
+#~ msgid "Avatar:"
+#~ msgstr "Πρ. εικόνα:"
+
+#~ msgid "Ch_at"
+#~ msgstr "_Συζήτηση"
+
+#~ msgid "Client:"
+#~ msgstr "Πελάτης:"
+
+#~ msgid "Con_tact:"
+#~ msgstr "_Επαφή:"
+
+#~ msgid "Connect on S_tartup"
+#~ msgstr "Σύνδεση κατά την _εκκίνηση"
+
+#~ msgid "Contacts"
+#~ msgstr "Επαφές"
+
+#~ msgid "Country:"
+#~ msgstr "Χώρα:"
+
+#~ msgid "Decide _Later"
+#~ msgstr "Αποφασίστε αρ_γότερα"
+
+#~ msgid "Edit Contact"
+#~ msgstr "Επεξεργασία επαφής"
+
+#~ msgid "Edit Groups"
+#~ msgstr "Επεξεργασία ομάδων"
+
+#~ msgid "Email:"
+#~ msgstr "Email:"
+
+#~ msgid "ID:"
+#~ msgstr "ID:"
+
+#~ msgid ""
+#~ "If you chose to decide later you will be asked the next time you log on."
+#~ msgstr ""
+#~ "Αν επιλέξετε να αποφασίσετε αργότερα θα ερωτηθείτε στην επόμενη σύνδεση."
+
+#~ msgid "Name:"
+#~ msgstr "Όνομα:"
+
+#~ msgid "OS:"
+#~ msgstr "Λειτουργικό σύστημα:"
+
+#~ msgid "Personal Details"
+#~ msgstr "Προσωπικές λεπτομέρειες"
+
+#~ msgid "R_egister"
+#~ msgstr "Ε_γγραφή"
+
+#~ msgid "Search"
+#~ msgstr "Αναζήτηση"
+
+#~ msgid ""
+#~ "Select the groups you want this contact to appear in, you can select more "
+#~ "than one group or no groups."
+#~ msgstr ""
+#~ "Επιλέξτε τις ομάδες στις οποίες επιθυμείτε να εμφανίζεται η επαφή. "
+#~ "Μπορείτε να επιλέξετε καμία, μία ή παραπάνω ομάδες."
+
+#, fuzzy
+#~ msgid ""
+#~ "Set the alias you want to use for:\n"
+#~ "<b>foo@bar.baz</b>\n"
+#~ "\n"
+#~ "You can retrieve contact information from the server. "
+#~ msgstr ""
+#~ "Ορίστε το ψευδώνυμο για τον/την:\n"
+#~ "<b>%s</b>\n"
+#~ "\n"
+#~ "Μπορείτε να  ανακτήσετε τις πληροφορίες της επαφής από τον εξυπηρετητή."
+
+#~ msgid "Spell Checker"
+#~ msgstr "Ελεγκτής ορθογραφίας"
+
+#~ msgid "Subscription Request"
+#~ msgstr "Αίτηση εγγραφής"
+
+#~ msgid "Suggestions for the word:"
+#~ msgstr "Προτάσεις για τη λέξη:"
+
+#~ msgid ""
+#~ "This acts as a filter to the contact list below. You can use segments of "
+#~ "contact's name or ID, for example, \"jabber.org\" will list everyone "
+#~ "using that server"
+#~ msgstr ""
+#~ "Αυτό συμπεριφέρεται σαν φίλτρο της παρακάτω λίστας επαφών. Μπορείτε να "
+#~ "χρησιμοποιήσετε τμήματα ονομάτων επαφών ή ID, για παράδειγμα, το \"jabber."
+#~ "org\" θα εμφανίσει όποιον χρησιμοποιεί αυτόν τον εξυπηρετητή"
+
+#~ msgid "This is the name that will be used on your roster for this contact"
+#~ msgstr ""
+#~ "Αυτό είναι το όνομα που θα χρησιμοποιείται στη λίστα σας γι' αυτήν την "
+#~ "επαφή"
+
+#~ msgid "This name will be used to identify you in chat windows"
+#~ msgstr "Αυτό το όνομα θα σας προσδιορίζει στα παράθυρα συζήτησης"
+
+#~ msgid ""
+#~ "This name will be used to identify you when new contacts lookup your "
+#~ "details"
+#~ msgstr ""
+#~ "Αυτό το όνομα θα σας προσδιορίζει όταν νέες επαφές αναζητούν τα στοιχεία "
+#~ "σας"
+
+#~ msgid "Use default name here from the contact's VCard."
+#~ msgstr "Χρήση προκαθορισμένου όνοματος από τη VCard της επαφής."
+
+#~ msgid "Use system pro_xy"
+#~ msgstr "Χρήση διαμεσολα_βητή συστήματος"
+
+#~ msgid "Version:"
+#~ msgstr "Έκδοση:"
+
+#~ msgid "View Previous Conversations"
+#~ msgstr "Προβολή προηγούμενων συζητήσεων"
+
+#~ msgid "Which account do you want to use?"
+#~ msgstr "Ποιο λογαριασμό θέλετε να χρησιμοποιήσετε;"
+
+#~ msgid "You are not subscribed to this contact."
+#~ msgstr "Δεν είστε γραμμένος σε αυτήν την επαφή."
+
+#~ msgid "_Connect"
+#~ msgstr "_Σύνδεση"
+
+#, fuzzy
+#~ msgid "_Description:"
+#~ msgstr "Περιγραφή:"
+
+#~ msgid "_Disconnect"
+#~ msgstr "_Αποσύνδεση"
+
+#, fuzzy
+#~ msgid "_Email:"
+#~ msgstr "Email:"
+
+#, fuzzy
+#~ msgid ""
+#~ "_Enter the name or contact ID of the person you want to chat to below:"
+#~ msgstr ""
+#~ "Εισάγετε το όνομα ή το ID του ατόμου με το οποίο θέλετε να συζητήσετε:"
+
+#~ msgid "_For:"
+#~ msgstr "_Για:"
+
+#, fuzzy
+#~ msgid "_Full Name:"
+#~ msgstr "Ό_νομα:"
+
+#~ msgid "_Group:"
+#~ msgstr "_Ομάδα:"
+
+#, fuzzy
+#~ msgid "_Nick Name:"
+#~ msgstr "_Ψευδώνυμο:"
+
+#, fuzzy
+#~ msgid "_Password:"
+#~ msgstr "_Συνθηματικό:"
+
+#, fuzzy
+#~ msgid "_Quit Message:"
+#~ msgstr "Νέο μήνυμα"
+
+#~ msgid "_Retrieve"
+#~ msgstr "Ανά_κτηση"
+
+#~ msgid "_Subscribe"
+#~ msgstr "Ε_γγραφή"
+
+#, fuzzy
+#~ msgid "_Web site:"
+#~ msgstr "Ιστότοπος:"
+
+#, fuzzy
+#~ msgid "irc account settings"
+#~ msgstr "Ρυθμίσεις λογαριασμού Jabber"
+
+#, fuzzy
+#~ msgid "msn account settings"
+#~ msgstr "Ρυθμίσεις λογαριασμού Jabber"
+
+#~ msgid "Server"
+#~ msgstr "Εξυπηρετητής"
+
+#~ msgid "    "
+#~ msgstr "    "
+
+#~ msgid "Gossip"
+#~ msgstr "Gossip"
+
+#~ msgid "Group:"
+#~ msgstr "Ομάδα:"
+
+#~ msgid "Nickname:"
+#~ msgstr "Ψευδώνυμο:"
+
+#~ msgid ""
+#~ "Set the alias you want to use for:\n"
+#~ "<b>martyn@imendio.com</b>\n"
+#~ "\n"
+#~ "You can retrieve contact information from the server. "
+#~ msgstr ""
+#~ "Ορίστε ψευδώνυμου για το χρήστη:\n"
+#~ "<b>martyn@imendio.com</b>\n"
+#~ "\n"
+#~ "Μπορείτε να ανακτήσετε τις πληροφορίες επαφής από τον εξυπηρετητή."
+
+#~ msgid "Web Site:"
+#~ msgstr "Ιστότοπος:"
+
+#~ msgid "_Forget"
+#~ msgstr "_Λησμόνηση"

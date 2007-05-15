@@ -1,0 +1,2380 @@
+# Canadian English translation of gossip.
+# Copyright (C) 2004-2005 Adam Weinberger and the GNOME Foundation
+# This file is distributed under the same licence as the gossip package.
+# Adam Weinberger <adamw@gnome.org>, 2004, 2005.
+# 
+# 
+msgid ""
+msgstr ""
+"Project-Id-Version: gossip\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2007-05-15 23:46+0200\n"
+"PO-Revision-Date: 2005-08-27 20:31-0500\n"
+"Last-Translator: Adam Weinberger <adamw@gnome.org>\n"
+"Language-Team: Canadian English <adamw@gnome.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../data/empathy.desktop.in.h:1
+#, fuzzy
+msgid "Empathy Instant Messenger"
+msgstr "Instant Messenger"
+
+#: ../data/empathy.desktop.in.h:2
+msgid "Instant Messenger"
+msgstr "Instant Messenger"
+
+#: ../data/empathy.schemas.in.h:1
+msgid "Always open a separate chat window for new chats."
+msgstr "Always open a separate chat window for new chats."
+
+#: ../data/empathy.schemas.in.h:2
+msgid "Chat window theme"
+msgstr "Chat window theme"
+
+#: ../data/empathy.schemas.in.h:3
+msgid ""
+"Comma separated list of spell checker languages to use (e.g. en, fr, nl)."
+msgstr ""
+"Comma-separated list of spell checker languages to use (e.g. en, fr, nl)."
+
+#: ../data/empathy.schemas.in.h:4
+#, fuzzy
+msgid "Compact contact list"
+msgstr "_Show Contact List"
+
+#: ../data/empathy.schemas.in.h:5
+msgid "Contact list sort criterium"
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:6
+msgid "Default directory to select an avatar image from"
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:7
+msgid "Enable popup when contact is available"
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:8
+#, fuzzy
+msgid "Enable sound when away"
+msgstr "Disable sounds when _away"
+
+#: ../data/empathy.schemas.in.h:9
+#, fuzzy
+msgid "Enable sound when busy"
+msgstr "Disable sounds when _busy"
+
+#: ../data/empathy.schemas.in.h:10
+#, fuzzy
+msgid "Enable spell checker"
+msgstr "Enable spell checking"
+
+#: ../data/empathy.schemas.in.h:11
+msgid "Hide main window"
+msgstr "Hide main window"
+
+#: ../data/empathy.schemas.in.h:12
+msgid "Hide the main window."
+msgstr "Hide the main window."
+
+#: ../data/empathy.schemas.in.h:13
+msgid "Open new chats in separate windows"
+msgstr "Open new chats in separate windows"
+
+#: ../data/empathy.schemas.in.h:14
+#, fuzzy
+msgid "Show avatars"
+msgstr "_Show Contacts"
+
+#: ../data/empathy.schemas.in.h:15
+#, fuzzy
+msgid "Show hint about closing the main window"
+msgstr "The height of the main window."
+
+#: ../data/empathy.schemas.in.h:16
+msgid "Show offline contacts"
+msgstr "Show offline contacts"
+
+#: ../data/empathy.schemas.in.h:17
+msgid "Spell checking languages"
+msgstr "Spell checking languages"
+
+#: ../data/empathy.schemas.in.h:18
+msgid "The last directory that an avatar image was chosen from."
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:19
+msgid "The theme that is used to display the conversation in chat windows."
+msgstr "The theme that is used to display the conversation in chat windows."
+
+#: ../data/empathy.schemas.in.h:20
+msgid "Use graphical smileys"
+msgstr "Use graphical smileys"
+
+#: ../data/empathy.schemas.in.h:21
+msgid "Use notification sounds"
+msgstr "Use notification sounds"
+
+#: ../data/empathy.schemas.in.h:22
+#, fuzzy
+msgid "Use theme for chat rooms"
+msgstr "_Invite to Chat Room"
+
+#: ../data/empathy.schemas.in.h:23
+msgid ""
+"Whether or not to check words typed against the languages you want to check "
+"with."
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:24
+msgid ""
+"Whether or not to convert smileys into graphical images in conversations."
+msgstr ""
+"Whether or not to convert smileys into graphical images in conversations."
+
+#: ../data/empathy.schemas.in.h:25
+msgid "Whether or not to play a sound when messages arrive."
+msgstr "Whether or not to play a sound when messages arrive."
+
+#: ../data/empathy.schemas.in.h:26
+msgid "Whether or not to play sounds when away."
+msgstr "Whether or not to play sounds when away."
+
+#: ../data/empathy.schemas.in.h:27
+msgid "Whether or not to play sounds when busy."
+msgstr "Whether or not to play sounds when busy."
+
+#: ../data/empathy.schemas.in.h:28
+#, fuzzy
+msgid "Whether or not to show a popup when a contact becomes available."
+msgstr "Whether or not to play a sound when messages arrive."
+
+#: ../data/empathy.schemas.in.h:29
+#, fuzzy
+msgid ""
+"Whether or not to show avatars for contacts in the contact list and chat "
+"windows."
+msgstr "Whether or not to show contacts that are offline in the contact list."
+
+#: ../data/empathy.schemas.in.h:30
+msgid "Whether or not to show contacts that are offline in the contact list."
+msgstr "Whether or not to show contacts that are offline in the contact list."
+
+#: ../data/empathy.schemas.in.h:31
+msgid ""
+"Whether or not to show the message dialog about closing the main window with "
+"the 'x' button in the title bar."
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:32
+#, fuzzy
+msgid "Whether to show the contact list in compact mode or not."
+msgstr "Whether or not to show contacts that are offline in the contact list."
+
+#: ../data/empathy.schemas.in.h:33
+msgid "Whether to use the theme for chat rooms or not."
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:34
+msgid ""
+"Which criterium to use when sorting the contact list. Default is to use sort "
+"by the contact's name with the value \"name\". A value of \"state\" will "
+"sort the contact list by state."
+msgstr ""
+
+#: ../libempathy/gossip-contact.c:654 ../libempathy/gossip-presence.c:184
+#: ../libempathy/gossip-presence.c:283
+msgid "Offline"
+msgstr "Offline"
+
+#: ../libempathy/gossip-presence.c:274
+#, fuzzy
+msgid "Available"
+msgstr "Available..."
+
+#: ../libempathy/gossip-presence.c:276
+#, fuzzy
+msgid "Busy"
+msgstr "Busy..."
+
+#: ../libempathy/gossip-presence.c:279
+#, fuzzy
+msgid "Away"
+msgstr "Away..."
+
+#: ../libempathy-gtk/empathy-main-window.c:254
+#, fuzzy
+msgid "Show and edit accounts"
+msgstr "_Show Contacts"
+
+#: ../libempathy-gtk/empathy-main-window.c:456
+msgid "Group"
+msgstr "Group"
+
+#: ../libempathy-gtk/empathy-main-window.c:477
+#, fuzzy
+msgid "Contact"
+msgstr "_Add Contact..."
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:1
+#, fuzzy
+msgid "Contact List - Empathy"
+msgstr "_Hide Contact List"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:2
+#, fuzzy
+msgid "Context"
+msgstr "_Contents"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:3
+#, fuzzy
+msgid "Join _Favorites"
+msgstr "_Add to Favourites"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:4
+#: ../libempathy-gtk/gossip-chat.glade.h:10
+msgid "Join _New..."
+msgstr ""
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:5
+#, fuzzy
+msgid "Manage Favorites..."
+msgstr "_Add to Favourites"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:6
+msgid "Show _Offline Contacts"
+msgstr "Show _Offline Contacts"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:7
+#, fuzzy
+msgid "_About"
+msgstr "_Accounts"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:8
+msgid "_Accounts"
+msgstr "_Accounts"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:9
+#: ../libempathy-gtk/gossip-chat.glade.h:15
+msgid "_Add Contact..."
+msgstr "_Add Contact..."
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:10
+#: ../libempathy-gtk/gossip-contact-list.c:298
+msgid "_Chat"
+msgstr "_Chat"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:11
+msgid "_Contents"
+msgstr "_Contents"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:12
+#: ../libempathy-gtk/gossip-chat.glade.h:21
+#: ../libempathy-gtk/gossip-contact-list.c:310
+#, fuzzy
+msgid "_Edit"
+msgstr "Edit"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:13
+msgid "_Help"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:14
+#: ../libempathy-gtk/empathy-status-icon.glade.h:2
+msgid "_New Message..."
+msgstr "_New Message..."
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:15
+msgid "_Personal Information"
+msgstr "_Personal Information"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:16
+msgid "_Preferences"
+msgstr "_Preferences"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:17
+#: ../libempathy-gtk/empathy-status-icon.glade.h:3
+msgid "_Quit"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:18
+#: ../libempathy-gtk/gossip-chat.glade.h:25
+#, fuzzy
+msgid "_Room"
+msgstr "_Room:"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:19
+#: ../libempathy-gtk/gossip-chat.glade.h:28
+#: ../libempathy-gtk/gossip-contact-list.c:326
+#, fuzzy
+msgid "_View Previous Conversations"
+msgstr "_Conversation"
+
+#: ../libempathy-gtk/empathy-status-icon.glade.h:1
+msgid "Status"
+msgstr "Status"
+
+#: ../libempathy-gtk/empathy-status-icon.glade.h:4
+msgid "_Show Contact List"
+msgstr "_Show Contact List"
+
+#: ../libempathy-gtk/gossip-about-dialog.c:63
+msgid ""
+"Empathy is free software; you can redistribute it and/or modify it under the "
+"terms of the GNU General Public License as published by the Free Software "
+"Foundation; either version 2 of the License, or (at your option) any later "
+"version."
+msgstr ""
+
+#: ../libempathy-gtk/gossip-about-dialog.c:67
+msgid ""
+"Empathy is distributed in the hope that it will be useful, but WITHOUT ANY "
+"WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS "
+"FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more "
+"details."
+msgstr ""
+
+#: ../libempathy-gtk/gossip-about-dialog.c:71
+msgid ""
+"You should have received a copy of the GNU General Public License along with "
+"Empathy; if not, write to the Free Software Foundation, Inc., 51 Franklin "
+"Street, Fifth Floor, Boston, MA 02110-130159 USA"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-about-dialog.c:99
+#, fuzzy
+msgid "An Instant Messaging client for GNOME"
+msgstr "Gossip, Instant Messaging Client"
+
+#: ../libempathy-gtk/gossip-about-dialog.c:105
+#, fuzzy
+msgid "translator-credits"
+msgstr "Adam Weinberger"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:224
+#, fuzzy
+msgid "Disable"
+msgstr "Available..."
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:227
+msgid "Enable"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:261
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:3
+#, fuzzy
+msgid "<b>No Account Selected</b>"
+msgstr "<b>About</b>"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:263
+msgid ""
+"To add a new account, you can click on the 'Add' button and a new entry will "
+"be created for you to start configuring.\n"
+"\n"
+"If you do not want to add an account, simply click on the account you want "
+"to configure in the list on the left."
+msgstr ""
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:272
+#, fuzzy
+msgid "<b>No Accounts Configured</b>"
+msgstr "<b>About</b>"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:274
+msgid ""
+"To add a new account, you can click on the 'Add' button and a new entry will "
+"be created for you to start configuring."
+msgstr ""
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:362
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:6
+msgid "Accounts"
+msgstr "Accounts"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:857
+#, c-format
+msgid ""
+"You are about to remove your %s account!\n"
+"Are you sure you want to proceed?"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:863
+msgid ""
+"Any associated conversations and chat rooms will NOT be removed if you "
+"decide to proceed.\n"
+"\n"
+"Should you decide to add the account back at a later time, they will still "
+"be available."
+msgstr ""
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:1
+#, fuzzy
+msgid "<b>Account</b>"
+msgstr "<b>About</b>"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:2
+#, fuzzy
+msgid "<b>New Account</b>"
+msgstr "<b>About</b>"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:4
+#, fuzzy
+msgid "<b>Settings</b>"
+msgstr "<b>Status</b>"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:5
+msgid "A unique name for this account to identify it personally to you."
+msgstr ""
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:7
+#, fuzzy
+msgid "Cr_eate"
+msgstr "Chat"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:8
+msgid "Imendio "
+msgstr ""
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:9
+msgid "Jabber"
+msgstr "Jabber"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:10
+msgid ""
+"To add a new account, you can click on the 'Add' button and a new entry will "
+"be created for you to started configuring.\n"
+"\n"
+"If you do not want to add an account, simply click on the account you want "
+"to configure in the list on the left."
+msgstr ""
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:13
+msgid "_Name:"
+msgstr "_Name:"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:14
+#, fuzzy
+msgid "_Type:"
+msgstr "_Topic:"
+
+#: ../libempathy-gtk/gossip-account-widget-generic.c:144
+#: ../libempathy-gtk/gossip-account-widget-generic.c:186
+#, c-format
+msgid "%s:"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:1
+#, fuzzy
+msgid ""
+"<small><b><span foreground=\"#555\">Example: user@jabber.org</span></b></"
+"small>"
+msgstr "<span size=\"smaller\">Example: user@jabber.org</span>"
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:2
+msgid "Forget password and clear the entry."
+msgstr ""
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:3
+msgid "Login I_D:"
+msgstr "Login I_D:"
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:4
+#, fuzzy
+msgid "Pass_word:"
+msgstr "_Password:"
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:5
+#, fuzzy
+msgid "Reso_urce:"
+msgstr "R_esource:"
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:6
+#, fuzzy
+msgid "Use encryption (SS_L)"
+msgstr "Use _encryption (SSL)"
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:7
+#, fuzzy
+msgid "_Port:"
+msgstr "Por_t:"
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:8
+msgid "_Server:"
+msgstr "_Server:"
+
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:9
+msgid "jabber account settings"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-chat.c:314
+msgid "Disconnected"
+msgstr "Disconnected"
+
+#: ../libempathy-gtk/gossip-chat.c:858
+msgid "Insert Smiley"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-chat.c:906
+msgid "_Check Word Spelling..."
+msgstr "_Check Word Spelling..."
+
+#: ../libempathy-gtk/gossip-chat.c:1244
+msgid "Connected"
+msgstr "Connected"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:1
+msgid "C_lear"
+msgstr "C_lear"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:2
+msgid "Change _Topic..."
+msgstr ""
+
+#: ../libempathy-gtk/gossip-chat.glade.h:3
+msgid "Chat"
+msgstr "Chat"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:4
+#, fuzzy
+msgid "Contact Infor_mation"
+msgstr "Contact _Information"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:5
+#, fuzzy
+msgid "Cu_t"
+msgstr "Ch_at"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:6
+msgid "In_vite..."
+msgstr ""
+
+#: ../libempathy-gtk/gossip-chat.glade.h:7
+msgid "Insert _Smiley"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-chat.glade.h:8
+#, fuzzy
+msgid "Invitation _message:"
+msgstr "Enter status message:"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:9
+msgid "Invite"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-chat.glade.h:11
+msgid "Move Tab _Left"
+msgstr "Move Tab _Left"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:12
+msgid "Move Tab _Right"
+msgstr "Move Tab _Right"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:13
+msgid "Select who would you like to invite:"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-chat.glade.h:14
+msgid "You have been invited to join a chat conference."
+msgstr "You have been invited to join a chat conference."
+
+#: ../libempathy-gtk/gossip-chat.glade.h:16
+#, fuzzy
+msgid "_Add To Favorites"
+msgstr "_Add to Favourites"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:17
+msgid "_Close"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-chat.glade.h:18
+msgid "_Conversation"
+msgstr "_Conversation"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:19
+msgid "_Copy"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-chat.glade.h:20
+msgid "_Detach Tab"
+msgstr "_Detach Tab"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:22
+msgid "_Next Tab"
+msgstr "_Next Tab"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:23
+msgid "_Paste"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-chat.glade.h:24
+msgid "_Previous Tab"
+msgstr "_Previous Tab"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:26
+msgid "_Show Contacts"
+msgstr "_Show Contacts"
+
+#: ../libempathy-gtk/gossip-chat.glade.h:27
+msgid "_Tabs"
+msgstr "_Tabs"
+
+#: ../libempathy-gtk/gossip-chat-view.c:544
+msgid "_Copy Link Address"
+msgstr "_Copy Link Address"
+
+#: ../libempathy-gtk/gossip-chat-view.c:552
+msgid "_Open Link"
+msgstr "_Open Link"
+
+#: ../libempathy-gtk/gossip-chat-view.c:889
+msgid "%A %d %B %Y"
+msgstr "%A %d %B %Y"
+
+#: ../libempathy-gtk/gossip-chat-window.c:685
+#: ../libempathy-gtk/gossip-chat-window.c:715
+#, fuzzy
+msgid "New Message"
+msgid_plural "New Messages"
+msgstr[0] "_New Message..."
+msgstr[1] "_New Message..."
+
+#: ../libempathy-gtk/gossip-chat-window.c:691
+#, fuzzy
+msgid "Chat Room"
+msgstr "Chat Room:"
+
+#: ../libempathy-gtk/gossip-chat-window.c:696
+#: ../libempathy-gtk/gossip-chat-window.c:719
+#, fuzzy, c-format
+msgid "Conversation"
+msgid_plural "Conversations (%d)"
+msgstr[0] "_Conversation"
+msgstr[1] "_Conversation"
+
+#: ../libempathy-gtk/gossip-chat-window.c:1295
+msgid "Typing a message."
+msgstr "Typing a message."
+
+#: ../libempathy-gtk/gossip-contact-list.c:290
+#, fuzzy
+msgid "_Contact"
+msgstr "_Add Contact..."
+
+#: ../libempathy-gtk/gossip-contact-list.c:294
+#, fuzzy
+msgid "_Group"
+msgstr "Group"
+
+#: ../libempathy-gtk/gossip-contact-list.c:298
+#, fuzzy
+msgid "Chat with contact"
+msgstr "Add a contact"
+
+#: ../libempathy-gtk/gossip-contact-list.c:302
+#, fuzzy
+msgid "Infor_mation"
+msgstr "Contact _Information"
+
+#: ../libempathy-gtk/gossip-contact-list.c:302
+#, fuzzy
+msgid "View contact information"
+msgstr "Contact information"
+
+#: ../libempathy-gtk/gossip-contact-list.c:306
+#, fuzzy
+msgid "Re_name"
+msgstr "/Re_name group"
+
+#: ../libempathy-gtk/gossip-contact-list.c:306
+#, fuzzy
+msgid "Rename"
+msgstr "File name:"
+
+#: ../libempathy-gtk/gossip-contact-list.c:310
+#, fuzzy
+msgid "Edit the groups and name for this contact"
+msgstr ""
+"Please enter a new nickname for the contact\n"
+"%s"
+
+#: ../libempathy-gtk/gossip-contact-list.c:314
+#, fuzzy
+msgid "_Remove"
+msgstr "/_Remove Contact"
+
+#: ../libempathy-gtk/gossip-contact-list.c:314
+#, fuzzy
+msgid "Remove contact"
+msgstr "/_Remove Contact"
+
+#: ../libempathy-gtk/gossip-contact-list.c:318
+#, fuzzy
+msgid "_Invite to Chat Room"
+msgstr "_Invite to Chat Room"
+
+#: ../libempathy-gtk/gossip-contact-list.c:318
+msgid "Invite to a currently open chat room"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-contact-list.c:322
+#, fuzzy
+msgid "_Send File..."
+msgstr "/_Send File..."
+
+#: ../libempathy-gtk/gossip-contact-list.c:322
+#, fuzzy
+msgid "Send a file"
+msgstr "Select a file"
+
+#: ../libempathy-gtk/gossip-contact-list.c:326
+#, fuzzy
+msgid "View previous conversations with this contact"
+msgstr "_Conversation"
+
+#: ../libempathy-gtk/gossip-preferences.c:250
+msgid "Language"
+msgstr "Language"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:1
+#, fuzzy
+msgid "<b>Appearance</b>"
+msgstr "<b>Appearance and Behaviour</b>"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:2
+#, fuzzy
+msgid "<b>Audio</b>"
+msgstr "<b>About</b>"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:3
+#, fuzzy
+msgid "<b>Behaviour</b>"
+msgstr "<b>Appearance and Behaviour</b>"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:4
+#, fuzzy
+msgid "<b>Contact List</b>"
+msgstr "<b>Status</b>"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:5
+msgid "<b>Languages</b>"
+msgstr "<b>Languages</b>"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:6
+#, fuzzy
+msgid "<b>Options</b>"
+msgstr "Connection"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:7
+#, fuzzy
+msgid "<b>Visual</b>"
+msgstr "<b>Options</b>"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:8
+#, fuzzy
+msgid ""
+"<small>The list of languages reflects only the languages for which you have "
+"a dictionary installed.</small>"
+msgstr ""
+"The list of languages here reflects only the languages for which you have a "
+"dictionary installed."
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:9
+msgid "Avatars are user chosen images shown in the contact list"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:10
+#, fuzzy
+msgid "Chat Th_eme:"
+msgstr "Chat window theme"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:11
+msgid "Display notifications when contacts come _online"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:12
+#, fuzzy
+msgid "Enable sounds when _away"
+msgstr "Disable sounds when _away"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:13
+#, fuzzy
+msgid "Enable sounds when _busy"
+msgstr "Disable sounds when _busy"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:14
+msgid "General"
+msgstr "General"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:15
+#, fuzzy
+msgid "Notifications"
+msgstr "Use notification sounds"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:16
+#, fuzzy
+msgid "Preferences"
+msgstr "_Preferences"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:17
+msgid "Show _avatars"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:18
+#, fuzzy
+msgid "Show _smileys as images"
+msgstr "Convert _smileys to graphical images"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:19
+#, fuzzy
+msgid "Show co_mpact contact list"
+msgstr "_Show Contact List"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:20
+msgid "Sort by _name"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:21
+msgid "Sort by s_tate"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:22
+msgid "Spell Checking"
+msgstr "Spell Checking"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:23
+msgid "Themes"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:24
+#, fuzzy
+msgid "_Enable spell checking"
+msgstr "Enable spell checking"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:25
+msgid "_Open new chats in separate windows"
+msgstr "_Open new chats in separate windows"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:26
+msgid "_Play sound when messages arrive"
+msgstr "_Play sound when messages arrive"
+
+#: ../libempathy-gtk/gossip-preferences.glade.h:27
+#, fuzzy
+msgid "_Use for chat rooms"
+msgstr "_Invite to Chat Room"
+
+#: ../libempathy-gtk/gossip-presence-chooser.c:702
+#, fuzzy
+msgid "Custom message..."
+msgstr "_New Message..."
+
+#. Clear list
+#: ../libempathy-gtk/gossip-presence-chooser.c:724
+#, fuzzy
+msgid "Clear List..."
+msgstr "Clear List"
+
+#: ../libempathy-gtk/gossip-presence-chooser.c:803
+#, fuzzy
+msgid "Are you sure you want to clear the list?"
+msgstr "Do you want to accept this file?"
+
+#: ../libempathy-gtk/gossip-presence-chooser.c:807
+msgid ""
+"This will remove any custom messages you have added to the list of preset "
+"status messages."
+msgstr ""
+
+#: ../libempathy-gtk/gossip-presence-chooser.c:812
+msgid "Clear List"
+msgstr "Clear List"
+
+#: ../libempathy-gtk/gossip-presence-chooser.glade.h:1
+msgid "Enter status message:"
+msgstr "Enter status message:"
+
+#: ../libempathy-gtk/gossip-presence-chooser.glade.h:2
+#, fuzzy
+msgid "Status Message Presets"
+msgstr "Add to status message list"
+
+#: ../libempathy-gtk/gossip-presence-chooser.glade.h:3
+#, fuzzy
+msgid "_Add to status message list"
+msgstr "Add to status message list"
+
+#: ../libempathy-gtk/gossip-private-chat.c:198
+#, c-format
+msgid "%s went offline"
+msgstr "%s went offline"
+
+#: ../libempathy-gtk/gossip-private-chat.c:212
+#, fuzzy, c-format
+msgid "%s has come online"
+msgstr "%s comes online"
+
+#: ../libempathy-gtk/gossip-theme-manager.c:87
+msgid "Classic"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-theme-manager.c:88
+#, fuzzy
+msgid "Simple"
+msgstr "Example: %s"
+
+#: ../libempathy-gtk/gossip-theme-manager.c:89
+#, fuzzy
+msgid "Clean"
+msgstr "C_lear"
+
+#: ../libempathy-gtk/gossip-theme-manager.c:90
+#, fuzzy
+msgid "Blue"
+msgstr "Basque"
+
+#: ../src/empathy-main.c:145
+msgid "Don't connect on startup"
+msgstr "Don't connect on startup"
+
+#: ../src/empathy-main.c:155
+#, fuzzy
+msgid "- Empathy Instant Messenger"
+msgstr "Gossip Instant Messenger"
+
+#~ msgid "Gossip Instant Messenger"
+#~ msgstr "Gossip Instant Messenger"
+
+#, fuzzy
+#~ msgid "Joining"
+#~ msgstr "_Join"
+
+#, fuzzy
+#~ msgid "Active"
+#~ msgstr "Actions"
+
+#~ msgid "Unknown"
+#~ msgstr "Unknown"
+
+#, fuzzy
+#~ msgid "Error"
+#~ msgstr "Last Error"
+
+#, fuzzy
+#~ msgid "Participant"
+#~ msgid_plural "Participants"
+#~ msgstr[0] "Galician"
+#~ msgstr[1] "Galician"
+
+#, fuzzy
+#~ msgid "No affiliation"
+#~ msgstr "Use notification sounds"
+
+#~ msgid "The nickname you have chosen is already in use."
+#~ msgstr "The nickname you have chosen is already in use."
+
+#~ msgid "The chat room you tried to join requires a password."
+#~ msgstr "The chat room you tried to join requires a password."
+
+#~ msgid "The remote conference server did not respond in a sensible time."
+#~ msgstr "The remote conference server did not respond in a sensible time."
+
+#~ msgid "The conference server you tried to join could not be found."
+#~ msgstr "The conference server you tried to join could not be found."
+
+#, fuzzy
+#~ msgid "An unknown error occurred, check your details are correct."
+#~ msgstr "Ensure that your details are correct."
+
+#, fuzzy
+#~ msgid "Unavailable"
+#~ msgstr "Service Unavailable"
+
+#, fuzzy
+#~ msgid "An unknown error occurred."
+#~ msgstr "An unknown error occurred."
+
+#~ msgid "Connection refused."
+#~ msgstr "Connection refused."
+
+#~ msgid "Server address could not be resolved."
+#~ msgstr "Server address could not be resolved."
+
+#~ msgid "Connection timed out."
+#~ msgstr "Connection timed out."
+
+#~ msgid "Authentication failed."
+#~ msgstr "Authentication failed."
+
+#, fuzzy
+#~ msgid "The username you are trying already exists."
+#~ msgstr "The nickname you have chosen is already in use."
+
+#, fuzzy
+#~ msgid "The username you are trying is not valid."
+#~ msgstr "The nickname you have chosen is already in use."
+
+#, fuzzy
+#~ msgid "This feature is unavailable."
+#~ msgstr "No accounts available."
+
+#, fuzzy
+#~ msgid "new account"
+#~ msgstr "Account"
+
+#~ msgid "Home"
+#~ msgstr "Home"
+
+#~ msgid "Couldn't send message!"
+#~ msgstr "Could not send message."
+
+#~ msgid "Connection could not be opened"
+#~ msgstr "Connection could not be opened"
+
+#, fuzzy
+#~ msgid "This service is unavailable or not found"
+#~ msgstr "No accounts available."
+
+#, fuzzy
+#~ msgid "Registration is required"
+#~ msgstr "Registration Required"
+
+#, fuzzy
+#~ msgid "There was an internal service error"
+#~ msgstr "Internal Server Error"
+
+#, fuzzy
+#~ msgid "This feature is not implemented"
+#~ msgstr "No accounts available."
+
+#, fuzzy
+#~ msgid "The remote service timed out"
+#~ msgstr "Remote Server Timeout"
+
+#~ msgid "Disconnect"
+#~ msgstr "Disconnect"
+
+#~ msgid "Connect"
+#~ msgstr "Connect"
+
+#, fuzzy
+#~ msgid "Successfully registered your new account settings."
+#~ msgstr "Successfully registered the account"
+
+#, fuzzy
+#~ msgid "Failed to register your new account settings."
+#~ msgstr "Failed registering the account"
+
+#, fuzzy
+#~ msgid "Successfully changed your account password."
+#~ msgstr "Please enter your password:"
+
+#, fuzzy
+#~ msgid "Failed to change your account password."
+#~ msgstr "Please enter your password:"
+
+#, fuzzy
+#~ msgid ""
+#~ "Please enter a new password for this account:\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Please enter a new name for the group:\n"
+#~ "%s"
+
+#~ msgid "No information is available for this contact."
+#~ msgstr "No information is available for this contact."
+
+#~ msgid "Information requested, please wait..."
+#~ msgstr "Information requested, please wait..."
+
+#~ msgid "I would like to add you to my contact list."
+#~ msgstr "I would like to add you to my contact list."
+
+#~ msgid "To summarize:"
+#~ msgstr "To summarize:"
+
+#, fuzzy
+#~ msgid "%d new message"
+#~ msgid_plural "%d new messages"
+#~ msgstr[0] "_New Message..."
+#~ msgstr[1] "_New Message..."
+
+#, fuzzy
+#~ msgid "%d subscription request"
+#~ msgid_plural "%d subscription requests"
+#~ msgstr[0] "Gossip - Subscription Request"
+#~ msgstr[1] "Gossip - Subscription Request"
+
+#, fuzzy
+#~ msgid "%d file transfer request"
+#~ msgid_plural "%d file transfer requests"
+#~ msgstr[0] "Gossip - File Transfer Request"
+#~ msgstr[1] "Gossip - File Transfer Request"
+
+#, fuzzy
+#~ msgid "%d server message"
+#~ msgid_plural "%d server messages"
+#~ msgstr[0] "Could not send message."
+#~ msgstr[1] "Could not send message."
+
+#, fuzzy
+#~ msgid "%d error"
+#~ msgid_plural "%d errors"
+#~ msgstr[0] "Last Error"
+#~ msgstr[1] "Last Error"
+
+#, fuzzy
+#~ msgid "If you quit, you will lose all unread information."
+#~ msgstr "If you quit, you will loose all unread information."
+
+#, fuzzy
+#~ msgid "Edit Account _Details"
+#~ msgstr "Edit your chat room details:"
+
+#~ msgid "Word"
+#~ msgstr "Word"
+
+#~ msgid "New message from %s"
+#~ msgstr "New message from %s"
+
+#, fuzzy
+#~ msgid "Your invitation has been declined"
+#~ msgstr "Your file transfer offer was declined."
+
+#~ msgid "Accept"
+#~ msgstr "Accept"
+
+#, fuzzy
+#~ msgid "Name"
+#~ msgstr "Name:"
+
+#, fuzzy
+#~ msgid "Room"
+#~ msgstr "_Room:"
+
+#, fuzzy
+#~ msgid "Auto Connect"
+#~ msgstr "Stop Connecting"
+
+#, fuzzy
+#~ msgid "Information requested..."
+#~ msgstr "Information requested, please wait..."
+
+#, fuzzy
+#~ msgid "Do you want to remove this contact from your roster?"
+#~ msgstr ""
+#~ "Do you want to remove the contact\n"
+#~ "%s\n"
+#~ "from your contact list?"
+
+#~ msgid ""
+#~ "Please enter a new name for the group:\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Please enter a new name for the group:\n"
+#~ "%s"
+
+#~ msgid "Select"
+#~ msgstr "Select"
+
+#~ msgid "Unsorted"
+#~ msgstr "Unsorted"
+
+#~ msgid "New file transfer request from %s"
+#~ msgstr "New file transfer request from %s"
+
+#~ msgid "File transfer is not supported by both parties."
+#~ msgstr "File transfer is not supported by both parties."
+
+#~ msgid "Your file transfer offer declined."
+#~ msgstr "Your file transfer offer was declined."
+
+#~ msgid "The other user decided not to continue."
+#~ msgstr "The other user decided not to continue."
+
+#, fuzzy
+#~ msgid "Unknown error occurred during file transfer."
+#~ msgstr "Unknown error occured during file transfer."
+
+#~ msgid "%s would like to send you a file."
+#~ msgstr "%s would like to send you a file."
+
+#~ msgid "Someone would like to send you a file."
+#~ msgstr "Someone would like to send you a file."
+
+#~ msgid "Select a file"
+#~ msgstr "Select a file"
+
+#, fuzzy
+#~ msgid "Connecting..."
+#~ msgstr "Connecting"
+
+#, fuzzy
+#~ msgid "Retry connection"
+#~ msgstr "Stop Connecting"
+
+#~ msgid "Invited %s to join this chat conference."
+#~ msgstr "Invited %s to join this chat conference."
+
+#, fuzzy
+#~ msgid "Enter the new topic you want to set for this room:"
+#~ msgstr "What nickname do you want to use for this contact?"
+
+#, fuzzy
+#~ msgid "Topic: %s"
+#~ msgstr "_Topic:"
+
+#~ msgid "Account"
+#~ msgstr "Account"
+
+#, fuzzy
+#~ msgid "Conversation With"
+#~ msgstr "_Conversation"
+
+#~ msgid "List the available accounts"
+#~ msgstr "List the available accounts"
+
+#~ msgid "Which account to connect to on startup"
+#~ msgstr "Which account to connect to on startup"
+
+#~ msgid "ACCOUNT-NAME"
+#~ msgstr "ACCOUNT-NAME"
+
+#~ msgid "No accounts available."
+#~ msgstr "No accounts available."
+
+#~ msgid "Available accounts:"
+#~ msgstr "Available accounts:"
+
+#~ msgid "[default]"
+#~ msgstr "[default]"
+
+#~ msgid "There is no account with the name '%s'."
+#~ msgstr "There is no account with the name '%s'."
+
+#, fuzzy
+#~ msgid "Join"
+#~ msgstr "_Join"
+
+#, fuzzy
+#~ msgid "Create"
+#~ msgstr "Chat"
+
+#, fuzzy
+#~ msgid "Chat Rooms"
+#~ msgstr "Chat Room:"
+
+#, fuzzy
+#~ msgid "Browsing for conference rooms, please wait..."
+#~ msgstr "Trying to join chat room, please wait..."
+
+#, fuzzy
+#~ msgid "Default"
+#~ msgstr "[default]"
+
+#, fuzzy
+#~ msgid "Chat!"
+#~ msgstr "Chat"
+
+#~ msgid "%s wants to be added to your contact list."
+#~ msgstr "%s wants to be added to your contact list."
+
+#~ msgid "Someone wants to be added to your contact list."
+#~ msgstr "Someone wants to be added to your contact list."
+
+#, fuzzy
+#~ msgid "Subscription request"
+#~ msgstr "Gossip - Subscription Request"
+
+#, fuzzy
+#~ msgid "Contact Information"
+#~ msgstr "Contact _Information"
+
+#~ msgid "Suggestions for the word"
+#~ msgstr "Suggestions for the word"
+
+#~ msgid "New subscription request from %s"
+#~ msgstr "New subscription request from %s"
+
+#~ msgid "Do you want to add this person to your contact list?"
+#~ msgstr "Do you want to add this person to your contact list?"
+
+#~ msgid "Do you want to add %s to your contact list?"
+#~ msgstr "Do you want to add %s to your contact list?"
+
+#, fuzzy
+#~ msgid "Please enter your %s account password"
+#~ msgstr "Please enter your password:"
+
+#~ msgid "Remember Password?"
+#~ msgstr "Remember Password?"
+
+#~ msgid "Could not display the help contents."
+#~ msgstr "Could not display the help contents."
+
+#, fuzzy
+#~ msgid "Select Your Avatar Image"
+#~ msgstr "Select another and try again"
+
+#~ msgid "The server does not seem to be responding."
+#~ msgstr "The server does not seem to be responding."
+
+#~ msgid "Try again later."
+#~ msgstr "Try again later."
+
+#, fuzzy
+#~ msgid "Change"
+#~ msgstr "Chat"
+
+#~ msgid "Contact goes offline"
+#~ msgstr "Contact goes offline"
+
+#~ msgid "Contact goes online"
+#~ msgstr "Contact goes online"
+
+#~ msgid "Contact ID:"
+#~ msgstr "Contact ID:"
+
+#~ msgid "Do you want to accept this file?"
+#~ msgstr "Do you want to accept this file?"
+
+#, fuzzy
+#~ msgid "File Transfer Request"
+#~ msgstr "Gossip - File Transfer Request"
+
+#~ msgid "File name:"
+#~ msgstr "File name:"
+
+#~ msgid "File size:"
+#~ msgstr "File size:"
+
+#, fuzzy
+#~ msgid "Not supported yet"
+#~ msgstr "Not supported yet."
+
+#~ msgid "This person wishes to send you this file:"
+#~ msgstr "This person wishes to send you this file:"
+
+#~ msgid "Web site:"
+#~ msgstr "Web site:"
+
+#~ msgid "_Accept"
+#~ msgstr "_Accept"
+
+#~ msgid "_Deny"
+#~ msgstr "_Deny"
+
+#, fuzzy
+#~ msgid "<b>Topic:</b>"
+#~ msgstr "<b>About</b>"
+
+#~ msgid "Account:"
+#~ msgstr "Account:"
+
+#, fuzzy
+#~ msgid "Browse:"
+#~ msgstr "Faroese"
+
+#, fuzzy
+#~ msgid "Edit Favorite Room"
+#~ msgstr "Gossip - Edit Chat Room"
+
+#, fuzzy
+#~ msgid "Group Chat"
+#~ msgstr "Gossip - Chat"
+
+#, fuzzy
+#~ msgid "Join New"
+#~ msgstr "_Join"
+
+#, fuzzy
+#~ msgid "Join room on start_up"
+#~ msgstr "Join Room on Start_up"
+
+#~ msgid "N_ame:"
+#~ msgstr "N_ame:"
+
+#~ msgid "S_erver:"
+#~ msgstr "S_erver:"
+
+#~ msgid "_Nickname:"
+#~ msgstr "_Nickname:"
+
+#~ msgid "_Room:"
+#~ msgstr "_Room:"
+
+#~ msgid "-"
+#~ msgstr "-"
+
+#~ msgid "<b>About</b>"
+#~ msgstr "<b>About</b>"
+
+#~ msgid "<b>Client Information</b>"
+#~ msgstr "<b>Client Information</b>"
+
+#, fuzzy
+#~ msgid "<b>Groups</b>"
+#~ msgstr "<b>About</b>"
+
+#, fuzzy
+#~ msgid "<b>Name</b>"
+#~ msgstr "<b>Languages</b>"
+
+#~ msgid "<b>Personal Details</b>"
+#~ msgstr "<b>Personal Details</b>"
+
+#, fuzzy
+#~ msgid "<b>Subscription</b>"
+#~ msgstr "Connection"
+
+#~ msgid "<span size=\"smaller\">Example: Mikael or user@server.org</span>"
+#~ msgstr "<span size=\"smaller\">Example: Mikael or user@server.org</span>"
+
+#, fuzzy
+#~ msgid "Accou_nt:"
+#~ msgstr "Account:"
+
+#, fuzzy
+#~ msgid "Add Contact"
+#~ msgstr "_Add Contact..."
+
+#, fuzzy
+#~ msgid "Alia_s:"
+#~ msgstr "Alias:"
+
+#~ msgid "Ch_at"
+#~ msgstr "Ch_at"
+
+#~ msgid "Client:"
+#~ msgstr "Client:"
+
+#, fuzzy
+#~ msgid "Con_tact:"
+#~ msgstr "_Add Contact..."
+
+#, fuzzy
+#~ msgid "Connect on S_tartup"
+#~ msgstr "Connect on Start_up"
+
+#, fuzzy
+#~ msgid "Contacts"
+#~ msgstr "_Add Contact..."
+
+#~ msgid "Country:"
+#~ msgstr "Country:"
+
+#~ msgid "Decide _Later"
+#~ msgstr "Decide _Later"
+
+#, fuzzy
+#~ msgid "Edit Contact"
+#~ msgstr "_Add Contact..."
+
+#, fuzzy
+#~ msgid "Edit Groups"
+#~ msgstr "/_Edit Groups"
+
+#~ msgid "Email:"
+#~ msgstr "Email:"
+
+#~ msgid "ID:"
+#~ msgstr "ID:"
+
+#~ msgid ""
+#~ "If you chose to decide later you will be asked the next time you log on."
+#~ msgstr ""
+#~ "If you chose to decide later you will be asked the next time you log on."
+
+#~ msgid "Name:"
+#~ msgstr "Name:"
+
+#~ msgid "OS:"
+#~ msgstr "OS:"
+
+#, fuzzy
+#~ msgid "Personal Details"
+#~ msgstr "Personal Details Saved!"
+
+#, fuzzy
+#~ msgid "R_egister"
+#~ msgstr "Registration Required"
+
+#, fuzzy
+#~ msgid "Search"
+#~ msgstr "_Search..."
+
+#, fuzzy
+#~ msgid "Spell Checker"
+#~ msgstr "Spell Checking"
+
+#, fuzzy
+#~ msgid "Subscription Request"
+#~ msgstr "Gossip - Subscription Request"
+
+#~ msgid "Suggestions for the word:"
+#~ msgstr "Suggestions for the word:"
+
+#, fuzzy
+#~ msgid ""
+#~ "This acts as a filter to the contact list below. You can use segments of "
+#~ "contact's name or ID, for example, \"jabber.org\" will list everyone "
+#~ "using that server"
+#~ msgstr ""
+#~ "This acts as a filter of the contact list below.  You can use segments of "
+#~ "contact's name or ID; for example, \"jabber.org\" will list everyone "
+#~ "using that server. "
+
+#, fuzzy
+#~ msgid "This is the name that will be used on your roster for this contact"
+#~ msgstr "This is the name that will be used on your roster for this contact."
+
+#, fuzzy
+#~ msgid "This name will be used to identify you in chat windows"
+#~ msgstr "This name will be used to identify you in chat windows."
+
+#, fuzzy
+#~ msgid ""
+#~ "This name will be used to identify you when new contacts lookup your "
+#~ "details"
+#~ msgstr "This name will be used to identify you in chat windows."
+
+#~ msgid "Use system pro_xy"
+#~ msgstr "Use system pro_xy"
+
+#~ msgid "Version:"
+#~ msgstr "Version:"
+
+#, fuzzy
+#~ msgid "View Previous Conversations"
+#~ msgstr "_Conversation"
+
+#, fuzzy
+#~ msgid "Which account do you want to use?"
+#~ msgstr "Which username do you want to use?"
+
+#~ msgid "You are not subscribed to this contact."
+#~ msgstr "You are not subscribed to this contact."
+
+#~ msgid "_Connect"
+#~ msgstr "_Connect"
+
+#, fuzzy
+#~ msgid "_Description:"
+#~ msgstr "Description:"
+
+#~ msgid "_Disconnect"
+#~ msgstr "_Disconnect"
+
+#, fuzzy
+#~ msgid "_Email:"
+#~ msgstr "Email:"
+
+#, fuzzy
+#~ msgid ""
+#~ "_Enter the name or contact ID of the person you want to chat to below:"
+#~ msgstr ""
+#~ "Enter the name or contact ID of the person you want to chat with below:"
+
+#, fuzzy
+#~ msgid "_For:"
+#~ msgstr "Por_t:"
+
+#, fuzzy
+#~ msgid "_Full Name:"
+#~ msgstr "_Name:"
+
+#, fuzzy
+#~ msgid "_Group:"
+#~ msgstr "Group:"
+
+#, fuzzy
+#~ msgid "_Nick Name:"
+#~ msgstr "_Nickname:"
+
+#, fuzzy
+#~ msgid "_Password:"
+#~ msgstr "_Password:"
+
+#, fuzzy
+#~ msgid "_Quit Message:"
+#~ msgstr "_New Message..."
+
+#~ msgid "_Subscribe"
+#~ msgstr "_Subscribe"
+
+#, fuzzy
+#~ msgid "_Web site:"
+#~ msgstr "Web site:"
+
+#~ msgid "Preset status messages"
+#~ msgstr "Preset status messages"
+
+#~ msgid "Preset status messages."
+#~ msgstr "Preset status messages."
+
+#~ msgid "Connecting"
+#~ msgstr "Connecting"
+
+#~ msgid "Perhaps you are trying to connect to the wrong port?"
+#~ msgstr "Perhaps you are trying to connect to the wrong port?"
+
+#~ msgid "Perhaps the service is not currently running?"
+#~ msgstr "Perhaps the service is not currently running?"
+
+#~ msgid "Check your connection details."
+#~ msgstr "Check your connection details."
+
+#~ msgid "Perhaps the server is not running this service."
+#~ msgstr "Perhaps the server is not running this service."
+
+#~ msgid "Check your username and password are correct."
+#~ msgstr "Ensure that your username and password are correct."
+
+#~ msgid "%s will be added to your contact list."
+#~ msgstr "%s will be added to your contact list."
+
+#~ msgid "%s ID of new contact:"
+#~ msgstr "%s ID of new contact:"
+
+#~ msgid "Example: %s"
+#~ msgstr "Example: %s"
+
+#~ msgid "You have no Instant Messaging accounts configured!"
+#~ msgstr "You have no Instant Messaging accounts configured!"
+
+#~ msgid ""
+#~ "Next you will be presented with the Account Information dialog to set "
+#~ "your details up."
+#~ msgstr ""
+#~ "Next you will be presented with the Account Information dialogue to set "
+#~ "up your details."
+
+#~ msgid ""
+#~ "Please enter your invitation message to:\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Please enter your invitation message to:\n"
+#~ "%s"
+
+#, fuzzy
+#~ msgid "Favourite"
+#~ msgstr "_Add to Favourites"
+
+#~ msgid "Contact Information for %s"
+#~ msgstr "Contact Information for %s"
+
+#, fuzzy
+#~ msgid "/Contact Infor_mation"
+#~ msgstr "/Contact _Information"
+
+#~ msgid "/Re_name Contact"
+#~ msgstr "/Re_name Contact"
+
+#~ msgid "/_Edit Groups"
+#~ msgstr "/_Edit Groups"
+
+#, fuzzy
+#~ msgid "/_View Previous Conversations"
+#~ msgstr "_Conversation"
+
+#~ msgid ""
+#~ "Please enter a new nickname for the contact\n"
+#~ "%s"
+#~ msgstr ""
+#~ "Please enter a new nickname for the contact\n"
+#~ "%s"
+
+#~ msgid "Edit groups for %s"
+#~ msgstr "Edit groups for %s"
+
+#~ msgid "Conversation Log"
+#~ msgstr "Conversation Log"
+
+#~ msgid "Registering account"
+#~ msgstr "Registering account"
+
+#, fuzzy
+#~ msgid "Respond"
+#~ msgstr "Reason:"
+
+#, fuzzy
+#~ msgid "Add to _favourites"
+#~ msgstr "_Add to Favourites"
+
+#, fuzzy
+#~ msgid ""
+#~ "Customize your own nickname, the server and chatroom which you wish to "
+#~ "join."
+#~ msgstr ""
+#~ "Pick a saved chat room or customize your own nickname, server and chat "
+#~ "room to join."
+
+#, fuzzy
+#~ msgid "Na_me:"
+#~ msgstr "Name:"
+
+#, fuzzy
+#~ msgid "New Chat Room"
+#~ msgstr "Chat Room:"
+
+#, fuzzy
+#~ msgid ""
+#~ "Pick a saved chat room from the presets available below and click Join to "
+#~ "start chatting."
+#~ msgstr ""
+#~ "Pick a saved chat room or customize your own nickname, server and chat "
+#~ "room to join."
+
+#~ msgid "    "
+#~ msgstr "    "
+
+#~ msgid "<b>Information requested, please wait...</b>"
+#~ msgstr "<b>Information requested, please wait...</b>"
+
+#, fuzzy
+#~ msgid "<span size=\"smaller\">Example:</span>"
+#~ msgstr "<span size=\"smaller\">Example: user@jabber.org</span>"
+
+#~ msgid "Account Name"
+#~ msgstr "Account Name"
+
+#, fuzzy
+#~ msgid "Chat Rooms..."
+#~ msgstr "Chat Room:"
+
+#, fuzzy
+#~ msgid "Connection Details"
+#~ msgstr "Connection"
+
+#~ msgid "Do you already have an account set up on a server?"
+#~ msgstr "Do you already have an account set up on a server?"
+
+#, fuzzy
+#~ msgid "Enter the port used in the connection for this account"
+#~ msgstr ""
+#~ "Please enter a new nickname for the contact\n"
+#~ "%s"
+
+#, fuzzy
+#~ msgid "Enter the server used in the connection for this account"
+#~ msgstr ""
+#~ "Please enter a new nickname for the contact\n"
+#~ "%s"
+
+#~ msgid "Enter the user's contact ID:"
+#~ msgstr "Enter the user's contact ID:"
+
+#~ msgid "Finished"
+#~ msgstr "Finished"
+
+#~ msgid "Gossip"
+#~ msgstr "Gossip"
+
+#~ msgid ""
+#~ "Gossip is a modern client for the Jabber Instant Messaging system.\n"
+#~ "\n"
+#~ "This assistant will help you configure Gossip and connect you to your "
+#~ "favorite Jabber server.\n"
+#~ "\n"
+#~ "To get started, just click \"Forward\"."
+#~ msgstr ""
+#~ "Gossip is a modern client for the Jabber Instant Messaging system.\n"
+#~ "\n"
+#~ "This assistant will help you configure Gossip and connect you to your "
+#~ "favourite Jabber server.\n"
+#~ "\n"
+#~ "To get started, just click \"Forward\"."
+
+#~ msgid ""
+#~ "In order to subscribe to presence notifications from the user, a request "
+#~ "will be sent. Until this request is approved, the user will always be "
+#~ "shown as \"Offline\" in your contact list."
+#~ msgstr ""
+#~ "In order to subscribe to presence notifications from the user, a request "
+#~ "will be sent. Until this request is approved, the user will always be "
+#~ "shown as \"Offline\" in your contact list."
+
+#~ msgid "In which group do you want to place this contact?"
+#~ msgstr "In which group do you want to place this contact?"
+
+#~ msgid "Jabber ID:"
+#~ msgstr "Jabber ID:"
+
+#~ msgid "Nickname:"
+#~ msgstr "Nickname:"
+
+#, fuzzy
+#~ msgid "Port:"
+#~ msgstr "Por_t:"
+
+#, fuzzy
+#~ msgid "Press Subscribe to request to receive their status"
+#~ msgstr "Press Subscribe to request to receive their status."
+
+#, fuzzy
+#~ msgid "Registering Account"
+#~ msgstr "Registering account"
+
+#, fuzzy
+#~ msgid "Resource:"
+#~ msgstr "R_esource:"
+
+#~ msgid "Sending request"
+#~ msgstr "Sending request"
+
+#, fuzzy
+#~ msgid "Server:"
+#~ msgstr "_Server:"
+
+#~ msgid "Web Site:"
+#~ msgstr "Web Site:"
+
+#~ msgid "Welcome to Gossip"
+#~ msgstr "Welcome to Gossip"
+
+#~ msgid "What instant messaging system does the contact use?"
+#~ msgstr "Which instant messaging system does the contact use?"
+
+#~ msgid "What is your name?"
+#~ msgstr "What is your name?"
+
+#, fuzzy
+#~ msgid "What password do you want to use?"
+#~ msgstr "What server do you want to use?"
+
+#~ msgid "What username do you use?"
+#~ msgstr "What username do you use?"
+
+#~ msgid "What username do you want to use?"
+#~ msgstr "Which username do you want to use?"
+
+#~ msgid "Which account do you want to add this contact to?"
+#~ msgstr "To which account do you want to add this contact?"
+
+#~ msgid ""
+#~ "You can change your account settings later by selecting the Edit-"
+#~ ">Accounts menu item."
+#~ msgstr ""
+#~ "You can change your account settings later by selecting the Edit-"
+#~ ">Accounts menu item."
+
+#~ msgid "Your Account"
+#~ msgstr "Your Account"
+
+#~ msgid "Your Identity"
+#~ msgstr "Your Identity"
+
+#~ msgid "Your new account has now been set up."
+#~ msgstr "Your new account has now been set up."
+
+#, fuzzy
+#~ msgid "_Group Chat"
+#~ msgstr "Gossip - Chat"
+
+#~ msgid "_No"
+#~ msgstr "_No"
+
+#~ msgid "_Search..."
+#~ msgstr "_Search..."
+
+#~ msgid "_Yes"
+#~ msgstr "_Yes"
+
+#~ msgid "Be silent when away"
+#~ msgstr "Be silent when away"
+
+#~ msgid "Be silent when busy"
+#~ msgstr "Be silent when busy"
+
+#~ msgid "Height of main window"
+#~ msgstr "Height of main window"
+
+#~ msgid "The X position of the main window."
+#~ msgstr "The X position of the main window."
+
+#~ msgid "The Y position of the main window."
+#~ msgstr "The Y position of the main window."
+
+#~ msgid "The width of the main window."
+#~ msgstr "The width of the main window."
+
+#~ msgid "Whether spell checking should be turned on."
+#~ msgstr "Whether spell checking should be enabled."
+
+#~ msgid "Width of the main window"
+#~ msgstr "Width of the main window"
+
+#~ msgid "X position of main window"
+#~ msgstr "X position of main window"
+
+#~ msgid "Y position of main window"
+#~ msgstr "Y position of main window"
+
+#~ msgid "Gossip, Instant Messaging Client"
+#~ msgstr "Gossip, Instant Messaging Client"
+
+#, fuzzy
+#~ msgid "Close this chat window"
+#~ msgstr "_Invite to Chat Room"
+
+#~ msgid "Requested Information"
+#~ msgstr "Requested Information"
+
+#~ msgid "/_Invite to Chat Conference"
+#~ msgstr "/_Invite to Chat Conference"
+
+#, fuzzy
+#~ msgid "Send Message"
+#~ msgstr "_New Message..."
+
+#, fuzzy
+#~ msgid "%s has gone offline"
+#~ msgstr "%s went offline"
+
+#~ msgid "Contact _Information"
+#~ msgstr "Contact _Information"
+
+#~ msgid "<b>Sound</b>"
+#~ msgstr "<b>Sound</b>"
+
+#~ msgid "Check spelling while I _type"
+#~ msgstr "Check spelling while I _type"
+
+#~ msgid "Gossip - Accounts"
+#~ msgstr "Gossip - Accounts"
+
+#, fuzzy
+#~ msgid "Join _Group Chat..."
+#~ msgstr "_Join Group Chat..."
+
+#~ msgid "Por_t:"
+#~ msgstr "Por_t:"
+
+#~ msgid "Requested information."
+#~ msgstr "Requested information."
+
+#~ msgid "Requesting contact information, please wait..."
+#~ msgstr "Requesting contact information, please wait..."
+
+#~ msgid "Could not open connection"
+#~ msgstr "Could not open connection"
+
+#~ msgid "Could not find the server you wanted to use"
+#~ msgstr "Could not find the server you wanted to use"
+
+#~ msgid "Connection to the server failed."
+#~ msgstr "Connection to the server failed."
+
+#~ msgid "Authentication failed"
+#~ msgstr "Authentication failed"
+
+#~ msgid "Written by:"
+#~ msgstr "Written by:"
+
+#~ msgid "Artwork by:"
+#~ msgstr "Artwork by:"
+
+#~ msgid "Translated by:"
+#~ msgstr "Translated by:"
+
+#~ msgid "Account ID"
+#~ msgstr "Account ID"
+
+#~ msgid "Last Error"
+#~ msgstr "Last Error"
+
+#~ msgid "%sChat - %s"
+#~ msgstr "%sChat - %s"
+
+#~ msgid "/Show _Log"
+#~ msgstr "/Show _Log"
+
+#~ msgid "Afrikaans"
+#~ msgstr "Afrikaans"
+
+#~ msgid "Amharic"
+#~ msgstr "Amharic"
+
+#~ msgid "Arabic"
+#~ msgstr "Arabic"
+
+#~ msgid "Azerbaijani"
+#~ msgstr "Azerbaijani"
+
+#~ msgid "Belarusian"
+#~ msgstr "Belarusian"
+
+#~ msgid "Bulgarian"
+#~ msgstr "Bulgarian"
+
+#~ msgid "Bengali"
+#~ msgstr "Bengali"
+
+#~ msgid "Breton"
+#~ msgstr "Breton"
+
+#~ msgid "Bosnian"
+#~ msgstr "Bosnian"
+
+#~ msgid "Catalan"
+#~ msgstr "Catalan"
+
+#~ msgid "Czech"
+#~ msgstr "Czech"
+
+#~ msgid "Welsh"
+#~ msgstr "Welsh"
+
+#~ msgid "Danish"
+#~ msgstr "Danish"
+
+#~ msgid "German"
+#~ msgstr "German"
+
+#~ msgid "German (Austria)"
+#~ msgstr "German (Austria)"
+
+#~ msgid "German (Germany)"
+#~ msgstr "German (Germany)"
+
+#~ msgid "German (Swiss)"
+#~ msgstr "German (Swiss)"
+
+#~ msgid "Greek"
+#~ msgstr "Greek"
+
+#~ msgid "English"
+#~ msgstr "English"
+
+#~ msgid "English (Canadian)"
+#~ msgstr "English (Canadian)"
+
+#~ msgid "English (British)"
+#~ msgstr "English (British)"
+
+#~ msgid "English (American)"
+#~ msgstr "English (American)"
+
+#~ msgid "Esperanto"
+#~ msgstr "Esperanto"
+
+#~ msgid "Spanish"
+#~ msgstr "Spanish"
+
+#~ msgid "Estonian"
+#~ msgstr "Estonian"
+
+#~ msgid "Persian"
+#~ msgstr "Persian"
+
+#~ msgid "Finnish"
+#~ msgstr "Finnish"
+
+#~ msgid "French"
+#~ msgstr "French"
+
+#~ msgid "French (France)"
+#~ msgstr "French (France)"
+
+#~ msgid "French (Swiss)"
+#~ msgstr "French (Swiss)"
+
+#~ msgid "Irish Gaelic"
+#~ msgstr "Irish Gaelic"
+
+#~ msgid "Scots Gaelic"
+#~ msgstr "Scots Gaelic"
+
+#~ msgid "Gujarati"
+#~ msgstr "Gujarati"
+
+#~ msgid "Manx Gaelic"
+#~ msgstr "Manx Gaelic"
+
+#~ msgid "Hebrew"
+#~ msgstr "Hebrew"
+
+#~ msgid "Hindi"
+#~ msgstr "Hindi"
+
+#~ msgid "Croatian"
+#~ msgstr "Croatian"
+
+#~ msgid "Hungarian"
+#~ msgstr "Hungarian"
+
+#~ msgid "Indonesian"
+#~ msgstr "Indonesian"
+
+#~ msgid "Icelandic"
+#~ msgstr "Icelandic"
+
+#~ msgid "Italian"
+#~ msgstr "Italian"
+
+#~ msgid "Japanese"
+#~ msgstr "Japanese"
+
+#~ msgid "Georgian"
+#~ msgstr "Georgian"
+
+#~ msgid "Kannada"
+#~ msgstr "Kannada"
+
+#~ msgid "Korean"
+#~ msgstr "Korean"
+
+#~ msgid "Kurdish"
+#~ msgstr "Kurdish"
+
+#~ msgid "Cornish"
+#~ msgstr "Cornish"
+
+#~ msgid "Limburgish"
+#~ msgstr "Limburgish"
+
+#~ msgid "Lithuanian"
+#~ msgstr "Lithuanian"
+
+#~ msgid "Latvian"
+#~ msgstr "Latvian"
+
+#~ msgid "Maori"
+#~ msgstr "Maori"
+
+#~ msgid "Macedonian"
+#~ msgstr "Macedonian"
+
+#~ msgid "Malayalam"
+#~ msgstr "Malayalam"
+
+#~ msgid "Mongolian"
+#~ msgstr "Mongolian"
+
+#~ msgid "Marathi"
+#~ msgstr "Marathi"
+
+#~ msgid "Malay"
+#~ msgstr "Malay"
+
+#~ msgid "Norwegian (Bokmal)"
+#~ msgstr "Norwegian (Bokmal)"
+
+#~ msgid "Nepali"
+#~ msgstr "Nepali"
+
+#~ msgid "Dutch"
+#~ msgstr "Dutch"
+
+#~ msgid "Norwegian"
+#~ msgstr "Norwegian"
+
+#~ msgid "Norwegian (Nynorsk)"
+#~ msgstr "Norwegian (Nynorsk)"
+
+#~ msgid "Norwegian (Nyorsk)"
+#~ msgstr "Norwegian (Nyorsk)"
+
+#~ msgid "Oriya"
+#~ msgstr "Oriya"
+
+#~ msgid "Punjabi"
+#~ msgstr "Punjabi"
+
+#~ msgid "Polish"
+#~ msgstr "Polish"
+
+#~ msgid "Portuguese"
+#~ msgstr "Portuguese"
+
+#~ msgid "Portuguese (Portugal)"
+#~ msgstr "Portuguese (Portugal)"
+
+#~ msgid "Portuguese (Brazil)"
+#~ msgstr "Portuguese (Brazil)"
+
+#~ msgid "Romanian"
+#~ msgstr "Romanian"
+
+#~ msgid "Russian"
+#~ msgstr "Russian"
+
+#~ msgid "Kinyarwanda"
+#~ msgstr "Kinyarwanda"
+
+#~ msgid "Slovak"
+#~ msgstr "Slovak"
+
+#~ msgid "Slovenian"
+#~ msgstr "Slovenian"
+
+#~ msgid "Albanian"
+#~ msgstr "Albanian"
+
+#~ msgid "Serbian"
+#~ msgstr "Serbian"
+
+#~ msgid "Swedish"
+#~ msgstr "Swedish"
+
+#~ msgid "Tamil"
+#~ msgstr "Tamil"
+
+#~ msgid "Telugu"
+#~ msgstr "Telugu"
+
+#~ msgid "Thai"
+#~ msgstr "Thai"
+
+#~ msgid "Turkmen"
+#~ msgstr "Turkmen"
+
+#~ msgid "Turkish"
+#~ msgstr "Turkish"
+
+#~ msgid "Ukrainian"
+#~ msgstr "Ukrainian"
+
+#~ msgid "Vietnamese"
+#~ msgstr "Vietnamese"
+
+#~ msgid "Wallon"
+#~ msgstr "Wallon"
+
+#~ msgid "Xhosa"
+#~ msgstr "Xhosa"
+
+#~ msgid "Yiddish"
+#~ msgstr "Yiddish"
+
+#~ msgid "Chinese Simplified"
+#~ msgstr "Chinese Simplified"
+
+#~ msgid "Chinese Traditional"
+#~ msgstr "Chinese Traditional"
+
+#~ msgid "View Lo_g"
+#~ msgstr "View Lo_g"
+
+#, fuzzy
+#~ msgid "Gossip - Chat Rooms"
+#~ msgstr "Gossip - Edit Chat Room"
+
+#~ msgid "Gossip - Group Chat"
+#~ msgstr "Gossip - Group Chat"
+
+#, fuzzy
+#~ msgid "Gossip - New Chatroom"
+#~ msgstr "Gossip - Edit Chat Room"
+
+#~ msgid "Gossip - Add contact"
+#~ msgstr "Gossip - Add contact"
+
+#~ msgid "Gossip - Contact Information"
+#~ msgstr "Gossip - Contact Information"
+
+#~ msgid "Gossip - Edit Groups"
+#~ msgstr "Gossip - Edit Groups"
+
+#~ msgid "Gossip - New Account"
+#~ msgstr "Gossip - New Account"
+
+#~ msgid "Gossip - New Message"
+#~ msgstr "Gossip - New Message"
+
+#~ msgid "Gossip - Personal Details"
+#~ msgstr "Gossip - Personal Details"
+
+#~ msgid "Gossip - Preferences"
+#~ msgstr "Gossip - Preferences"
+
+#~ msgid "Gossip - Spell Checker"
+#~ msgstr "Gossip - Spell Checker"
+
+#~ msgid "Gossip - Status Message"
+#~ msgstr "Gossip - Status Message"
+
+#~ msgid "Waiting for server to respond, please wait..."
+#~ msgstr "Waiting for server to respond; please wait..."
+
+#~ msgid "Connection could not be created"
+#~ msgstr "Connection could not be created"
+
+#~ msgid "Redirect"
+#~ msgstr "Redirect"
+
+#~ msgid "Bad Request"
+#~ msgstr "Bad Request"
+
+#~ msgid "Not Authorized"
+#~ msgstr "Not Authorized"
+
+#~ msgid "Payment Required"
+#~ msgstr "Payment Required"
+
+#~ msgid "Forbidden"
+#~ msgstr "Forbidden"
+
+#~ msgid "Not Found"
+#~ msgstr "Not Found"
+
+#~ msgid "Not Allowed"
+#~ msgstr "Not Allowed"
+
+#~ msgid "Not Acceptable"
+#~ msgstr "Not Acceptable"
+
+#~ msgid "Request Timeout"
+#~ msgstr "Request Timeout"
+
+#~ msgid "Conflict"
+#~ msgstr "Conflict"
+
+#~ msgid "Not Implemented"
+#~ msgstr "Not Implemented"
+
+#~ msgid "Remote Server Error"
+#~ msgstr "Remote Server Error"
+
+#~ msgid "Unknown error."
+#~ msgstr "Unknown error."
+
+#~ msgid "Custom"
+#~ msgstr "Custom"
+
+#~ msgid "The chat room you are trying is not responding."
+#~ msgstr "The chat room you are trying is not responding."
+
+#~ msgid "Check your details and try again."
+#~ msgstr "Check your details and try again."
+
+#~ msgid "This is currently unsupported."
+#~ msgstr "This is currently unsupported."
+
+#~ msgid "Perhaps the conference server is busy, try again later."
+#~ msgstr "Perhaps the conference server is busy; try again later."
+
+#~ msgid "Check the server host name is correct and is available."
+#~ msgstr "Check the server host name is correct and is available."
+
+#~ msgid "Gossip will now try to use your account:"
+#~ msgstr "Gossip will now try to use your account:"
+
+#~ msgid "Gossip will now try to register the account:"
+#~ msgstr "Gossip will now try to register the account:"
+
+#~ msgid "Cus_tomize"
+#~ msgstr "Cus_tomize"
+
+#~ msgid "Edit or Delete this favorite."
+#~ msgstr "Edit or Delete this favourite."
+
+#~ msgid "Gossip - Join Chat Room "
+#~ msgstr "Gossip - Join Chat Room "
+
+#~ msgid "Choose a Server"
+#~ msgstr "Choose a Server"
+
+#~ msgid "On what server do you have an account?"
+#~ msgstr "On what server do you have an account?"

@@ -11,5 +11,5 @@ Type=Application
 Categories=GNOME;GTK;Network;InstantMessaging;
 X-GNOME-Bugzilla-Bugzilla=GNOME
 X-GNOME-Bugzilla-Product=empathy
-X-GNOME-Bugzilla-Component=@BUGZILLA_COMPONENT@
+X-GNOME-Bugzilla-Component=General
 X-GNOME-Bugzilla-Version=@VERSION@
