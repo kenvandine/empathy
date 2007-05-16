@@ -28,6 +28,7 @@ libempathy_la_SOURCES =             						\
 	empathy-contact-manager.c	empathy-contact-manager.h		\
 	empathy-tp-chat.c		empathy-tp-chat.h			\
 	empathy-chandler.c		empathy-chandler.h			\
+	empathy-idle.c			empathy-idle.h				\
 	empathy-marshal-main.c
 
 libempathy_la_LIBADD =		\

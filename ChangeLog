@@ -1,3 +1,12 @@
+2006-05-16  Xavier Claessens  <xclaesse@gmail.com>
+
+	* libempathy-gtk/empathy-status-icon.c:
+	* libempathy/empathy-idle.c:
+	* libempathy/empathy-idle.h:
+	* libempathy/Makefile.am:
+	* po/POTFILES.in: New object EmpathyIdle to manage autoaway and
+	extended autoaway states.
+
 2006-05-15  Xavier Claessens  <xclaesse@gmail.com>
 
 	* configure.ac:

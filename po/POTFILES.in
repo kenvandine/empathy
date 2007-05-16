@@ -4,6 +4,7 @@
 data/empathy.desktop.in
 data/empathy.schemas.in
 
+libempathy/empathy-idle.c
 libempathy/gossip-contact.c
 libempathy/gossip-presence.c
 

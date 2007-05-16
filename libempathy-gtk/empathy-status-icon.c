@@ -24,7 +24,6 @@
 
 #include <string.h>
 
-#include <glib/gi18n.h>
 #include <gtk/gtk.h>
 #include <glade/glade.h>
 
@@ -33,12 +32,14 @@
 #include <libempathy/gossip-debug.h>
 #include <libempathy/gossip-utils.h>
 #include <libempathy/gossip-conf.h>
+#include <libempathy/empathy-idle.h>
 
 #include "empathy-status-icon.h"
 #include "gossip-presence-chooser.h"
 #include "gossip-preferences.h"
 #include "gossip-ui-utils.h"
 #include "gossip-accounts-dialog.h"
+
 
 #define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), \
 		       EMPATHY_TYPE_STATUS_ICON, EmpathyStatusIconPriv))
@@ -48,6 +49,8 @@
 struct _EmpathyStatusIconPriv {
 	MissionControl *mc;
 	GtkStatusIcon  *icon;
+	EmpathyIdle    *idle;
+
 	GtkWindow      *window;
 
 	GtkWidget      *popup_menu;
@@ -102,6 +105,7 @@ empathy_status_icon_init (EmpathyStatusIcon *icon)
 
 	priv->icon = gtk_status_icon_new ();
 	priv->mc = gossip_mission_control_new ();
+	priv->idle = empathy_idle_new ();
 
 	status_icon_create_menu (icon);
 
@@ -135,6 +139,7 @@ status_icon_finalize (GObject *object)
 	g_object_unref (priv->mc);
 	g_object_unref (priv->icon);
 	g_object_unref (priv->window);
+	g_object_unref (priv->idle);
 }
 
 EmpathyStatusIcon *

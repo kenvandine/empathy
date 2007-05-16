@@ -2,6 +2,6 @@
 Manager=salut
 Protocol=salut
 DisplayName=Salut
-IconName = im-jabber
+IconName = empathy-proto-jabber
 ConfigurationUI = salut
 
