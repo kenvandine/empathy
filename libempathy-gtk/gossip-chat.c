@@ -66,13 +66,13 @@ struct _GossipChatPriv {
 	EmpathyContactManager *manager;
 	EmpathyTpChat         *tp_chat;
 	GossipChatWindow      *window;
-
 	GtkTooltips           *tooltips;
 	guint                  composing_stop_timeout_id;
 	gboolean               sensitive;
 	gchar                 *id;
 	GSList                *sent_messages;
 	gint                   sent_messages_index;
+	GList                 *compositors;
 	/* Used to automatically shrink a window that has temporarily
 	 * grown due to long input. 
 	 */
@@ -147,7 +147,7 @@ enum {
 	LAST_SIGNAL
 };
 
-static guint chat_signals[LAST_SIGNAL] = { 0 };
+static guint signals[LAST_SIGNAL] = { 0 };
 
 G_DEFINE_TYPE (GossipChat, gossip_chat, G_TYPE_OBJECT);
 
@@ -160,7 +160,7 @@ gossip_chat_class_init (GossipChatClass *klass)
 
 	object_class->finalize = chat_finalize;
 
-	chat_signals[COMPOSING] =
+	signals[COMPOSING] =
 		g_signal_new ("composing",
 			      G_OBJECT_CLASS_TYPE (object_class),
 			      G_SIGNAL_RUN_LAST,
@@ -170,7 +170,7 @@ gossip_chat_class_init (GossipChatClass *klass)
 			      G_TYPE_NONE,
 			      1, G_TYPE_BOOLEAN);
 
-	chat_signals[NEW_MESSAGE] =
+	signals[NEW_MESSAGE] =
 		g_signal_new ("new-message",
 			      G_OBJECT_CLASS_TYPE (object_class),
 			      G_SIGNAL_RUN_LAST,
@@ -180,7 +180,7 @@ gossip_chat_class_init (GossipChatClass *klass)
 			      G_TYPE_NONE,
 			      2, GOSSIP_TYPE_MESSAGE, G_TYPE_BOOLEAN);
 
-	chat_signals[NAME_CHANGED] =
+	signals[NAME_CHANGED] =
 		g_signal_new ("name-changed",
 			      G_OBJECT_CLASS_TYPE (object_class),
 			      G_SIGNAL_RUN_LAST,
@@ -190,7 +190,7 @@ gossip_chat_class_init (GossipChatClass *klass)
 			      G_TYPE_NONE,
 			      1, G_TYPE_POINTER);
 
-	chat_signals[STATUS_CHANGED] =
+	signals[STATUS_CHANGED] =
 		g_signal_new ("status-changed",
 			      G_OBJECT_CLASS_TYPE (object_class),
 			      G_SIGNAL_RUN_LAST,
@@ -283,6 +283,9 @@ chat_finalize (GObject *object)
 
 	g_slist_foreach (priv->sent_messages, (GFunc) g_free, NULL);
 	g_slist_free (priv->sent_messages);
+
+	g_list_foreach (priv->compositors, (GFunc) g_object_unref, NULL);
+	g_list_free (priv->compositors);
 
 	chat_composing_remove_timeout (chat);
 	g_object_unref (chat->account);
@@ -404,7 +407,7 @@ chat_message_received_cb (EmpathyTpChat *tp_chat,
 		// FIXME: gossip_sound_play (GOSSIP_SOUND_CHAT);
 	}
 
-	g_signal_emit_by_name (chat, "new-message", message, FALSE);
+	g_signal_emit (chat, signals[NEW_MESSAGE], 0, message, FALSE);
 }
 
 void 
@@ -1014,7 +1017,54 @@ chat_state_changed_cb (EmpathyTpChat             *tp_chat,
 		       TelepathyChannelChatState  state,
 		       GossipChat                *chat)
 {
-	/* FIXME: not yet implemented */
+	GossipChatPriv *priv;
+	GList          *l;
+	gboolean        was_composing;
+
+	priv = GET_PRIV (chat);
+
+	was_composing = (priv->compositors != NULL);
+
+	/* Find the contact in the list. After that l is the list elem or NULL */
+	for (l = priv->compositors; l; l = l->next) {
+		if (gossip_contact_equal (contact, l->data)) {
+			break;
+		}
+	}
+
+	switch (state) {
+	case TP_CHANNEL_CHAT_STATE_GONE:
+	case TP_CHANNEL_CHAT_STATE_INACTIVE:
+	case TP_CHANNEL_CHAT_STATE_ACTIVE:
+		/* Contact is not composing */
+		if (l) {
+			priv->compositors = g_list_remove_link (priv->compositors, l);
+			g_object_unref (l->data);
+			g_list_free1 (l);
+		}
+		break;
+	case TP_CHANNEL_CHAT_STATE_PAUSED:
+	case TP_CHANNEL_CHAT_STATE_COMPOSING:
+		/* Contact is composing */
+		if (!l) {
+			priv->compositors = g_list_prepend (priv->compositors,
+							    g_object_ref (contact));
+		}
+		break;
+	default:
+		g_assert_not_reached ();
+	}
+
+	gossip_debug (DEBUG_DOMAIN, "Was composing: %s now composing: %s",
+		      was_composing ? "yes" : "no",
+		      priv->compositors ? "yes" : "no");
+
+	if ((was_composing && !priv->compositors) ||
+	    (!was_composing && priv->compositors)) {
+		/* Composing state changed */
+		g_signal_emit (chat, signals[COMPOSING], 0,
+			       (gboolean) priv->compositors);
+	}
 }
 
 gboolean
