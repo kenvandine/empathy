@@ -432,23 +432,6 @@ gossip_account_equal (gconstpointer a,
 	return g_str_equal (name_a, name_b);
 }
 
-GossipContact *
-gossip_get_own_contact_from_contact (GossipContact  *contact)
-{
-	EmpathyContactManager *manager;
-	McAccount             *account;
-	GossipContact         *own_contact;
-
-	g_return_val_if_fail (GOSSIP_IS_CONTACT (contact), NULL);
-
-	manager = empathy_contact_manager_new ();
-	account = gossip_contact_get_account (contact);
-	own_contact = empathy_contact_manager_get_own (manager, account);
-	g_object_unref (manager);
-
-	return own_contact;
-}
-
 MissionControl *
 gossip_mission_control_new (void)
 {

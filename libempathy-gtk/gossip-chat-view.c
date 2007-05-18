@@ -1065,7 +1065,7 @@ chat_view_maybe_append_fancy_header (GossipChatView *view,
 	priv = GET_PRIV (view);
 
 	sender = gossip_message_get_sender (msg);
-	my_contact = gossip_get_own_contact_from_contact (sender);
+	my_contact = gossip_contact_get_user (sender);
 	name = gossip_contact_get_name (sender);
 	from_self = gossip_contact_equal (sender, my_contact);
 
@@ -1189,7 +1189,7 @@ chat_view_append_irc_action (GossipChatView *view,
 	gossip_debug (DEBUG_DOMAIN, "Add IRC action");
 
 	sender = gossip_message_get_sender (msg);
-	my_contact = gossip_get_own_contact_from_contact (sender);
+	my_contact = gossip_contact_get_user (sender);
 	name = gossip_contact_get_name (sender);
 
 	/* Skip the "/me ". */
@@ -1239,7 +1239,7 @@ chat_view_append_fancy_action (GossipChatView *view,
 	gossip_debug (DEBUG_DOMAIN, "Add fancy action");
 
 	sender = gossip_message_get_sender (msg);
-	my_contact = gossip_get_own_contact_from_contact (sender);
+	my_contact = gossip_contact_get_user (sender);
 	name = gossip_contact_get_name (sender);
 
 	if (gossip_contact_equal (sender, my_contact)) {
@@ -1284,7 +1284,7 @@ chat_view_append_irc_message (GossipChatView *view,
 
 	body = gossip_message_get_body (msg);
 	sender = gossip_message_get_sender (msg);
-	my_contact = gossip_get_own_contact_from_contact (sender);
+	my_contact = gossip_contact_get_user (sender);
 	name = gossip_contact_get_name (sender);
 
 	if (gossip_contact_equal (sender, my_contact)) {
@@ -1335,7 +1335,7 @@ chat_view_append_fancy_message (GossipChatView *view,
 	priv = GET_PRIV (view);
 
 	sender = gossip_message_get_sender (msg);
-	my_contact = gossip_get_own_contact_from_contact (sender);
+	my_contact = gossip_contact_get_user (sender);
 
 	if (gossip_contact_equal (sender, my_contact)) {
 		tag = "fancy-body-self";

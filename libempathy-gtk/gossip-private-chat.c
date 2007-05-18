@@ -55,7 +55,6 @@ struct _GossipPrivateChatPriv {
 	GossipContact *contact;
 	gchar         *name;
 
-	guint          scroll_idle_id;
 	gboolean       is_online;
 
 	GtkWidget     *widget;
@@ -77,7 +76,6 @@ static void           private_chat_widget_destroy_cb            (GtkWidget      
 static const gchar *  private_chat_get_name                     (GossipChat             *chat);
 static gchar *        private_chat_get_tooltip                  (GossipChat             *chat);
 static const gchar *  private_chat_get_status_icon_name         (GossipChat             *chat);
-static GossipContact *private_chat_get_contact                  (GossipChat             *chat);
 static GtkWidget *    private_chat_get_widget                   (GossipChat             *chat);
 
 G_DEFINE_TYPE (GossipPrivateChat, gossip_private_chat, GOSSIP_TYPE_CHAT);
@@ -93,11 +91,7 @@ gossip_private_chat_class_init (GossipPrivateChatClass *klass)
 	chat_class->get_name             = private_chat_get_name;
 	chat_class->get_tooltip          = private_chat_get_tooltip;
 	chat_class->get_status_icon_name = private_chat_get_status_icon_name;
-	chat_class->get_contact          = private_chat_get_contact;
 	chat_class->get_widget           = private_chat_get_widget;
-	chat_class->get_show_contacts    = NULL;
-	chat_class->set_show_contacts    = NULL;
-	chat_class->is_group_chat        = NULL;
 
 	g_type_class_add_private (object_class, sizeof (GossipPrivateChatPriv));
 }
@@ -133,10 +127,6 @@ private_chat_finalize (GObject *object)
 
 	if (priv->contact) {
 		g_object_unref (priv->contact);
-	}
-
-	if (priv->scroll_idle_id) {
-		g_source_remove (priv->scroll_idle_id);
 	}
 
 	g_free (priv->name);
@@ -262,18 +252,16 @@ static gchar *
 private_chat_get_tooltip (GossipChat *chat)
 {
 	GossipPrivateChatPriv *priv;
-	GossipContact         *contact;
 	const gchar           *status;
 
 	g_return_val_if_fail (GOSSIP_IS_PRIVATE_CHAT (chat), NULL);
 
 	priv = GET_PRIV (chat);
 
-	contact = gossip_chat_get_contact (chat);
-	status = gossip_contact_get_status (contact);
+	status = gossip_contact_get_status (priv->contact);
 
 	return g_strdup_printf ("%s\n%s",
-				gossip_contact_get_id (contact),
+				gossip_contact_get_id (priv->contact),
 				status);
 }
 
@@ -281,19 +269,16 @@ static const gchar *
 private_chat_get_status_icon_name (GossipChat *chat)
 {
 	GossipPrivateChatPriv *priv;
-	GossipContact         *contact;
 
 	g_return_val_if_fail (GOSSIP_IS_PRIVATE_CHAT (chat), NULL);
 
 	priv = GET_PRIV (chat);
 
-	contact = gossip_chat_get_contact (chat);
-
-	return gossip_icon_name_for_contact (contact);
+	return gossip_icon_name_for_contact (priv->contact);
 }
 
-static GossipContact *
-private_chat_get_contact (GossipChat *chat)
+GossipContact *
+gossip_private_chat_get_contact (GossipPrivateChat *chat)
 {
 	GossipPrivateChatPriv *priv;
 
@@ -314,34 +299,12 @@ private_chat_get_widget (GossipChat *chat)
 	return priv->widget;
 }
 
-/* Scroll down after the back-log has been received. */
-static gboolean
-private_chat_scroll_down_idle_func (GossipChat *chat)
-{
-	GossipPrivateChatPriv *priv;
-
-	priv = GET_PRIV (chat);
-
-	gossip_chat_scroll_down (chat);
-	g_object_unref (chat);
-
-	priv->scroll_idle_id = 0;
-
-	return FALSE;
-}
-
 static void
 private_chat_setup (GossipPrivateChat *chat,
 		    GossipContact     *contact,
 		    EmpathyTpChat     *tp_chat)
 {
 	GossipPrivateChatPriv *priv;
-	//GossipLogManager      *log_manager;
-	GossipChatView        *view;
-/*	GossipContact         *sender;
-	GossipMessage         *message;
-	GList                 *messages, *l;
-	gint                   num_messages, i;*/
 
 	priv = GET_PRIV (chat);
 
@@ -360,51 +323,6 @@ private_chat_setup (GossipPrivateChat *chat,
 			  "notify::presence",
 			  G_CALLBACK (private_chat_contact_presence_updated_cb),
 			  chat);
-
-	view = GOSSIP_CHAT (chat)->view;
-
-	/* Turn off scrolling temporarily */
-	gossip_chat_view_scroll (view, FALSE);
-#if 0
-FIXME:
-	/* Add messages from last conversation */
-	log_manager = gossip_session_get_log_manager (gossip_app_get_session ());
-	messages = gossip_log_get_last_for_contact (log_manager, priv->contact);
-	num_messages  = g_list_length (messages);
-
-	for (l = messages, i = 0; l; l = l->next, i++) {
-		message = l->data;
-
-		if (num_messages - i > 10) {
-			continue;
-		}
-
-		sender = gossip_message_get_sender (message);
-		if (gossip_contact_equal (priv->own_contact, sender)) {
-			gossip_chat_view_append_message_from_self (view,
-								   message,
-								   priv->own_contact,
-								   priv->own_avatar);
-		} else {
-			gossip_chat_view_append_message_from_other (view,
-								    message,
-								    sender,
-								    priv->other_avatar);
-		}
-	}
-
-	g_list_foreach (messages, (GFunc) g_object_unref, NULL);
-	g_list_free (messages);
-#endif
-	/* Turn back on scrolling */
-	gossip_chat_view_scroll (view, TRUE);
-
-	/* Scroll to the most recent messages, we reference the chat
-	 * for the duration of the scroll func.
-	 */
-	priv->scroll_idle_id = g_idle_add ((GSourceFunc) 
-					   private_chat_scroll_down_idle_func, 
-					   g_object_ref (chat));
 
 	priv->is_online = gossip_contact_is_online (priv->contact);
 }

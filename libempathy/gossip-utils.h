@@ -88,7 +88,6 @@ gboolean     gossip_g_value_equal                  (const GValue    *value1,
 guint        gossip_account_hash                    (gconstpointer   key);
 gboolean     gossip_account_equal                   (gconstpointer   a,
 						     gconstpointer   b);
-GossipContact * gossip_get_own_contact_from_contact (GossipContact  *contact);
 MissionControl *gossip_mission_control_new (void);
 
 G_END_DECLS

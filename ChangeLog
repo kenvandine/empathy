@@ -1,3 +1,32 @@
+2006-05-18  Xavier Claessens  <xclaesse@gmail.com>
+
+	* libempathy-gtk/gossip-private-chat.h:
+	* libempathy-gtk/gossip-contact-list.c:
+	* libempathy-gtk/gossip-chat.c:
+	* libempathy-gtk/gossip-chat.h:
+	* libempathy-gtk/gossip-chat-window.c:
+	* libempathy-gtk/Makefile.am:
+	* libempathy-gtk/gossip-chat-view.c:
+	* libempathy-gtk/gossip-private-chat.c:
+	* src/empathy-chat-main.c:
+	* libempathy/gossip-utils.c:
+	* libempathy/gossip-contact.h:
+	* libempathy/empathy-tp-chat.c:
+	* libempathy/gossip-utils.h:
+	* libempathy/empathy-contact-manager.c:
+	* libempathy/empathy-contact-manager.h:
+	* libempathy/empathy-tp-contact-list.c:
+	* libempathy/empathy-tp-contact-list.h:
+	* libempathy/empathy-tp-chatroom.c:
+	* libempathy/empathy-tp-chatroom.h:
+	* libempathy/empathy-contact-list.c:
+	* libempathy/empathy-contact-list.h:
+	* libempathy/Makefile.am:
+	* libempathy/gossip-contact.c: EmpathyContactList is now an interface
+	implemented by EmpathyTpContactList, EmpathyContactManager and
+	EmpathyTpChatroom. GossipContactList use that interface to display a 
+	treeview.
+
 2006-05-17  Xavier Claessens  <xclaesse@gmail.com>
 
 	* libempathy-gtk/gossip-chat.c: Display ChatState.

@@ -810,13 +810,16 @@ FIXME:
 						   window);
 #endif
 	} else {
+		GossipPrivateChat  *chat;
 		GossipSubscription  subscription;
 		GossipContact      *contact;
+
+		chat = GOSSIP_PRIVATE_CHAT (priv->current_chat);
 
 		/* Show / Hide widgets */
 		gtk_widget_hide (priv->menu_room);
 
-		contact = gossip_chat_get_contact (priv->current_chat);
+		contact = gossip_private_chat_get_contact (chat);
 		subscription = gossip_contact_get_subscription (contact);
 		if (!(subscription & GOSSIP_SUBSCRIPTION_FROM)) {
 			gtk_widget_show (priv->menu_conv_add_contact);
@@ -872,11 +875,11 @@ chat_window_add_contact_activate_cb (GtkWidget        *menuitem,
 				     GossipChatWindow *window)
 {
 	GossipChatWindowPriv *priv;
-	GossipContact        *contact;
+	//GossipContact        *contact;
 
 	priv = GET_PRIV (window);
 
-	contact = gossip_chat_get_contact (priv->current_chat);
+	//contact = gossip_chat_get_contact (priv->current_chat);
 
 	// FIXME: gossip_add_contact_dialog_show (NULL, contact);
 }
@@ -911,13 +914,13 @@ chat_window_info_activate_cb (GtkWidget        *menuitem,
 			      GossipChatWindow *window)
 {
 	GossipChatWindowPriv *priv;
-	GossipContact        *contact;
+	//GossipContact        *contact;
 
 	priv = GET_PRIV (window);
-
+/*FIXME:
 	contact = gossip_chat_get_contact (priv->current_chat);
 
-/*FIXME:	gossip_contact_info_dialog_show (contact,
+	gossip_contact_info_dialog_show (contact,
 					 GTK_WINDOW (priv->dialog));*/
 }
 
@@ -1007,7 +1010,7 @@ chat_window_show_contacts_toggled_cb (GtkWidget        *menuitem,
 	g_return_if_fail (priv->current_chat != NULL);
 
 	show = gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM (priv->menu_room_show_contacts));
-	gossip_chat_set_show_contacts (priv->current_chat, show);
+	//gossip_group_chat_set_show_contacts (GOSSIP_GROUP_CHAT (priv->current_chat), show);
 }
 
 static void

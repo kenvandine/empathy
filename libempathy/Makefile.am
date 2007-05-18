@@ -26,7 +26,9 @@ libempathy_la_SOURCES =             						\
 	gossip-message.c		gossip-message.h			\
 	empathy-contact-list.c		empathy-contact-list.h			\
 	empathy-contact-manager.c	empathy-contact-manager.h		\
+	empathy-tp-contact-list.c	empathy-tp-contact-list.h		\
 	empathy-tp-chat.c		empathy-tp-chat.h			\
+	empathy-tp-chatroom.c		empathy-tp-chatroom.h			\
 	empathy-chandler.c		empathy-chandler.h			\
 	empathy-idle.c			empathy-idle.h				\
 	empathy-marshal-main.c

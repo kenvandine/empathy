@@ -22,9 +22,9 @@ libempathy_gtk_la_SOURCES =             					\
 	gossip-contact-list.c			gossip-contact-list.h		\
 	gossip-preferences.c			gossip-preferences.h		\
 	gossip-theme-manager.c			gossip-theme-manager.h		\
+	gossip-chat-window.c			gossip-chat-window.h		\
 	gossip-chat.c				gossip-chat.h			\
 	gossip-chat-view.c			gossip-chat-view.h		\
-	gossip-chat-window.c			gossip-chat-window.h		\
 	gossip-private-chat.c			gossip-private-chat.h		\
 	gossip-geometry.c			gossip-geometry.h		\
 	gossip-status-presets.c			gossip-status-presets.h		\

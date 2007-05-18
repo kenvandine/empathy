@@ -89,6 +89,7 @@ gboolean           gossip_contact_is_online                 (GossipContact      
 gboolean           gossip_contact_is_in_group               (GossipContact      *contact,
 							     const gchar        *group);
 const gchar *      gossip_contact_get_status                (GossipContact      *contact);
+GossipContact *    gossip_contact_get_user                  (GossipContact      *contact);
 gboolean           gossip_contact_equal                     (gconstpointer       v1,
 							     gconstpointer       v2);
 guint              gossip_contact_hash                      (gconstpointer       key);

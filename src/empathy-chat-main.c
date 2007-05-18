@@ -134,14 +134,14 @@ new_channel_cb (EmpathyChandler *chandler,
 
 	if (tp_chan->handle_type == TP_HANDLE_TYPE_CONTACT) {
 		EmpathyContactManager *manager;
-		EmpathyContactList    *list;
+		EmpathyTpContactList  *list;
 		GossipContact         *contact;
 		GossipPrivateChat     *chat;
 
 		/* We have a new private chat channel */
 		manager = empathy_contact_manager_new ();
 		list = empathy_contact_manager_get_list (manager, account);
-		contact = empathy_contact_list_get_from_handle (list, tp_chan->handle);
+		contact = empathy_tp_contact_list_get_from_handle (list, tp_chan->handle);
 
 		chat = gossip_private_chat_new_with_channel (contact, tp_chan);
 		g_object_weak_ref (G_OBJECT (chat),
@@ -156,6 +156,24 @@ new_channel_cb (EmpathyChandler *chandler,
 		g_object_unref (contact);
 		g_object_unref (chat);
 		g_object_unref (manager);
+	}
+	if (tp_chan->handle_type == TP_HANDLE_TYPE_ROOM) {
+#if 0
+		GossipGroupChat *chat;
+
+		/* We have a new group chat channel */
+		chat = gossip_group_chat_new (account, tp_chan);
+		g_object_weak_ref (G_OBJECT (chat),
+				   (GWeakNotify) chat_finalized_cb,
+				   NULL);
+
+		exit_timeout_stop ();
+		chat_count++;
+
+		gossip_chat_present (GOSSIP_CHAT (chat));
+
+		g_object_unref (chat);
+#endif
 	}
 
 OUT:

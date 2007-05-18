@@ -28,6 +28,8 @@
 #ifndef __GOSSIP_PRIVATE_CHAT_H__
 #define __GOSSIP_PRIVATE_CHAT_H__
 
+#include <libtelepathy/tp-chan.h>
+
 #include <libempathy/gossip-contact.h>
 #include <libempathy/gossip-message.h>
 
@@ -55,9 +57,10 @@ struct _GossipPrivateChatClass {
 };
 
 GType               gossip_private_chat_get_type         (void);
-GossipPrivateChat * gossip_private_chat_new              (GossipContact *contact);
-GossipPrivateChat * gossip_private_chat_new_with_channel (GossipContact *contact,
-							  TpChan        *tp_chan);
+GossipPrivateChat * gossip_private_chat_new              (GossipContact     *contact);
+GossipPrivateChat * gossip_private_chat_new_with_channel (GossipContact     *contact,
+							  TpChan            *tp_chan);
+GossipContact *     gossip_private_chat_get_contact      (GossipPrivateChat *chat);
 
 G_END_DECLS
 

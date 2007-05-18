@@ -69,23 +69,8 @@ struct _GossipChatClass {
 	const gchar *    (*get_name)            (GossipChat  *chat);
 	gchar *          (*get_tooltip)         (GossipChat  *chat);
 	const gchar *    (*get_status_icon_name)(GossipChat  *chat);
-	GossipContact *  (*get_contact)         (GossipChat  *chat);
 	GtkWidget *      (*get_widget)          (GossipChat  *chat);
-
-	gboolean         (*get_show_contacts)   (GossipChat  *chat);
-	void             (*set_show_contacts)   (GossipChat  *chat,
-						 gboolean     show);
 	gboolean         (*is_group_chat)       (GossipChat  *chat);
-	void             (*save_geometry)       (GossipChat  *chat,
-						 gint         x,
-						 gint         y,
-						 gint         w,
-						 gint         h);
-	void             (*load_geometry)       (GossipChat  *chat,
-						 gint        *x,
-						 gint        *y,
-						 gint        *w,
-						 gint        *h);
 };
 
 GType             gossip_chat_get_type              (void);
@@ -103,12 +88,7 @@ void              gossip_chat_paste                 (GossipChat       *chat);
 const gchar *     gossip_chat_get_name              (GossipChat       *chat);
 gchar *           gossip_chat_get_tooltip           (GossipChat       *chat);
 const gchar *     gossip_chat_get_status_icon_name  (GossipChat       *chat);
-GossipContact *   gossip_chat_get_contact           (GossipChat       *chat);
-GossipContact *   gossip_chat_get_own_contact       (GossipChat       *chat);
 GtkWidget *       gossip_chat_get_widget            (GossipChat       *chat);
-gboolean          gossip_chat_get_show_contacts     (GossipChat       *chat);
-void              gossip_chat_set_show_contacts     (GossipChat       *chat,
-						     gboolean          show);
 gboolean          gossip_chat_is_group_chat         (GossipChat       *chat);
 gboolean          gossip_chat_is_connected          (GossipChat       *chat);
 

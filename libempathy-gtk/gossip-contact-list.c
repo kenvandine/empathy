@@ -32,6 +32,7 @@
 #include <libmissioncontrol/mc-account.h>
 #include <libmissioncontrol/mission-control.h>
 
+#include <libempathy/empathy-contact-list.h>
 #include <libempathy/empathy-contact-manager.h>
 #include <libempathy/gossip-debug.h>
 #include <libempathy/gossip-utils.h>
@@ -66,7 +67,7 @@
 #define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GOSSIP_TYPE_CONTACT_LIST, GossipContactListPriv))
 
 struct _GossipContactListPriv {
-	EmpathyContactManager *manager;
+	EmpathyContactList    *list;
 
 	GHashTable            *groups;
 
@@ -125,7 +126,7 @@ static gboolean contact_list_row_separator_func              (GtkTreeModel      
 							      gpointer                data);
 static void     contact_list_contact_update                  (GossipContactList      *list,
 							      GossipContact          *contact);
-static void     contact_list_contact_added_cb                (EmpathyContactManager  *manager,
+static void     contact_list_contact_added_cb                (EmpathyContactList     *list_iface,
 							      GossipContact          *contact,
 							      GossipContactList      *list);
 static void     contact_list_contact_updated_cb              (GossipContact          *contact,
@@ -134,7 +135,7 @@ static void     contact_list_contact_updated_cb              (GossipContact     
 static void     contact_list_contact_groups_updated_cb       (GossipContact          *contact,
 							      GParamSpec             *param,
 							      GossipContactList      *list);
-static void     contact_list_contact_removed_cb              (EmpathyContactManager  *manager,
+static void     contact_list_contact_removed_cb              (EmpathyContactList     *list_iface,
 							      GossipContact          *contact,
 							      GossipContactList      *list);
 static void     contact_list_contact_set_active              (GossipContactList      *list,
@@ -456,14 +457,14 @@ gossip_contact_list_init (GossipContactList *list)
 
 	priv = GET_PRIV (list);
 
-	priv->manager = empathy_contact_manager_new ();
+	priv->list = EMPATHY_CONTACT_LIST (empathy_contact_manager_new ());
 	priv->is_compact = FALSE;
 	priv->show_active = TRUE;
 	priv->show_avatars = TRUE;
 
 	contact_list_create_model (list);
 	contact_list_setup_view (list);
-	empathy_contact_manager_setup (priv->manager);
+	empathy_contact_list_setup (priv->list);
 
 	/* Get saved group states. */
 	gossip_contact_groups_get_all ();
@@ -488,11 +489,11 @@ gossip_contact_list_init (GossipContactList *list)
 					      NULL, NULL);
 
 	/* Signal connection. */
-	g_signal_connect (priv->manager,
+	g_signal_connect (priv->list,
 			  "contact-added",
 			  G_CALLBACK (contact_list_contact_added_cb),
 			  list);
-	g_signal_connect (priv->manager,
+	g_signal_connect (priv->list,
 			  "contact-removed",
 			  G_CALLBACK (contact_list_contact_removed_cb),
 			  list);
@@ -516,13 +517,13 @@ gossip_contact_list_init (GossipContactList *list)
 			  GINT_TO_POINTER (FALSE));
 
 	/* Add contacts already created */
-	contacts = empathy_contact_manager_get_contacts (priv->manager);
+	contacts = empathy_contact_list_get_contacts (priv->list);
 	for (l = contacts; l; l = l->next) {
 		GossipContact *contact;
 
 		contact = l->data;
 
-		contact_list_contact_added_cb (priv->manager, contact, list);
+		contact_list_contact_added_cb (priv->list, contact, list);
 
 		g_object_unref (contact);
 	}
@@ -536,9 +537,9 @@ contact_list_finalize (GObject *object)
 
 	priv = GET_PRIV (object);
 
-	/* FIXME: disconnect all signals on the manager and contacts */
+	/* FIXME: disconnect all signals on the list and contacts */
 
-	g_object_unref (priv->manager);
+	g_object_unref (priv->list);
 	g_object_unref (priv->ui);
 	g_object_unref (priv->store);
 	g_object_unref (priv->filter);
@@ -780,9 +781,9 @@ contact_list_contact_update (GossipContactList *list,
 }
 
 static void
-contact_list_contact_added_cb (EmpathyContactManager *manager,
-			       GossipContact         *contact,
-			       GossipContactList     *list)
+contact_list_contact_added_cb (EmpathyContactList *list_iface,
+			       GossipContact      *contact,
+			       GossipContactList  *list)
 {
 	GossipContactListPriv *priv;
 
@@ -848,9 +849,9 @@ contact_list_contact_updated_cb (GossipContact     *contact,
 }
 
 static void
-contact_list_contact_removed_cb (EmpathyContactManager *manager,
-				 GossipContact         *contact,
-				 GossipContactList     *list)
+contact_list_contact_removed_cb (EmpathyContactList *list_iface,
+				 GossipContact      *contact,
+				 GossipContactList  *list)
 {
 	gossip_debug (DEBUG_DOMAIN, "Contact:'%s' removed",
 		      gossip_contact_get_name (contact));
@@ -1569,7 +1570,7 @@ contact_list_drag_data_received (GtkWidget         *widget,
 		      id);
 
 	/* FIXME: This is ambigous, an id can come from multiple accounts */
-	contact = empathy_contact_manager_find (priv->manager, id);
+	contact = empathy_contact_list_find (priv->list, id);
 	if (!contact) {
 		gossip_debug (DEBUG_DOMAIN, "No contact found associated with drag & drop");
 		return;
@@ -2365,7 +2366,7 @@ contact_list_filter_show_group (GossipContactList *list,
 	 * group should be shown because a contact we want to
 	 * show exists in it.
 	 */
-	contacts = empathy_contact_manager_get_contacts (priv->manager);
+	contacts = empathy_contact_list_get_contacts (priv->list);
 	for (l = contacts; l && !show_group; l = l->next) {
 		if (!gossip_contact_is_in_group (l->data, group)) {
 			continue;
@@ -2702,7 +2703,7 @@ gossip_contact_list_set_show_offline (GossipContactList *list,
 	/* Disable temporarily. */
 	priv->show_active = FALSE;
 
-	contacts = empathy_contact_manager_get_contacts (priv->manager);
+	contacts = empathy_contact_list_get_contacts (priv->list);
 	for (l = contacts; l; l = l->next) {
 		GossipContact *contact;
 

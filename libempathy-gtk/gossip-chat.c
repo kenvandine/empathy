@@ -73,6 +73,7 @@ struct _GossipChatPriv {
 	GSList                *sent_messages;
 	gint                   sent_messages_index;
 	GList                 *compositors;
+	guint                  scroll_idle_id;
 	/* Used to automatically shrink a window that has temporarily
 	 * grown due to long input. 
 	 */
@@ -138,6 +139,7 @@ static void             chat_state_changed_cb             (EmpathyTpChat   *tp_c
 							   GossipContact   *contact,
 							   TelepathyChannelChatState  state,
 							   GossipChat      *chat);
+static gboolean         chat_scroll_down_idle_func        (GossipChat      *chat);
 
 enum {
 	COMPOSING,
@@ -268,6 +270,51 @@ gossip_chat_init (GossipChat *chat)
 				    "misspelled",
 				    "underline", PANGO_UNDERLINE_ERROR,
 				    NULL);
+
+
+
+	/* Turn off scrolling temporarily */
+	gossip_chat_view_scroll (chat->view, FALSE);
+#if 0
+FIXME:
+	/* Add messages from last conversation */
+	log_manager = gossip_session_get_log_manager (gossip_app_get_session ());
+	messages = gossip_log_get_last_for_contact (log_manager, priv->contact);
+	num_messages  = g_list_length (messages);
+
+	for (l = messages, i = 0; l; l = l->next, i++) {
+		message = l->data;
+
+		if (num_messages - i > 10) {
+			continue;
+		}
+
+		sender = gossip_message_get_sender (message);
+		if (gossip_contact_equal (priv->own_contact, sender)) {
+			gossip_chat_view_append_message_from_self (view,
+								   message,
+								   priv->own_contact,
+								   priv->own_avatar);
+		} else {
+			gossip_chat_view_append_message_from_other (view,
+								    message,
+								    sender,
+								    priv->other_avatar);
+		}
+	}
+
+	g_list_foreach (messages, (GFunc) g_object_unref, NULL);
+	g_list_free (messages);
+#endif
+	/* Turn back on scrolling */
+	gossip_chat_view_scroll (chat->view, TRUE);
+
+	/* Scroll to the most recent messages, we reference the chat
+	 * for the duration of the scroll func.
+	 */
+	priv->scroll_idle_id = g_idle_add ((GSourceFunc) chat_scroll_down_idle_func, 
+					   g_object_ref (chat));
+
 }
 
 static void
@@ -293,6 +340,10 @@ chat_finalize (GObject *object)
 
 	if (priv->tp_chat) {
 		g_object_unref (priv->tp_chat);
+	}
+
+	if (priv->scroll_idle_id) {
+		g_source_remove (priv->scroll_idle_id);
 	}
 
 	g_free (priv->id);
@@ -343,9 +394,12 @@ chat_send (GossipChat  *chat,
 		return;
 	}
 
+	/* FIXME: add here something to let group/privrate chat handle
+	 *        some special messages */
+
 	/* FIXME: gossip_app_set_not_away ();*/
 
-	own_contact = gossip_chat_get_own_contact (chat);
+	own_contact = empathy_contact_manager_get_user (priv->manager, chat->account);
 	message = gossip_message_new (msg);
 	gossip_message_set_sender (message, own_contact);
 
@@ -544,7 +598,7 @@ chat_input_key_press_event_cb (GtkWidget   *widget,
 	}
 
 	/* Catch enter but not ctrl/shift-enter */
-	if (IS_ENTER (event->keyval) && !(event->state & GDK_SHIFT_MASK)) {
+	if (IS_ENTER (event->keyval) && !(event->state & (GDK_SHIFT_MASK | GDK_CONTROL_MASK))) {
 		GtkTextView *view;
 
 		/* This is to make sure that kinput2 gets the enter. And if
@@ -1067,6 +1121,22 @@ chat_state_changed_cb (EmpathyTpChat             *tp_chat,
 	}
 }
 
+/* Scroll down after the back-log has been received. */
+static gboolean
+chat_scroll_down_idle_func (GossipChat *chat)
+{
+	GossipChatPriv *priv;
+
+	priv = GET_PRIV (chat);
+
+	gossip_chat_scroll_down (chat);
+	g_object_unref (chat);
+
+	priv->scroll_idle_id = 0;
+
+	return FALSE;
+}
+
 gboolean
 gossip_chat_get_is_command (const gchar *str)
 {
@@ -1144,29 +1214,6 @@ gossip_chat_get_status_icon_name (GossipChat *chat)
 	return NULL;
 }
 
-GossipContact *
-gossip_chat_get_contact (GossipChat *chat)
-{
-	g_return_val_if_fail (GOSSIP_IS_CHAT (chat), NULL);
-
-	if (GOSSIP_CHAT_GET_CLASS (chat)->get_contact) {
-		return GOSSIP_CHAT_GET_CLASS (chat)->get_contact (chat);
-	}
-
-	return NULL;
-}
-GossipContact *
-gossip_chat_get_own_contact (GossipChat *chat)
-{
-	GossipChatPriv *priv;
-
-	g_return_val_if_fail (GOSSIP_IS_CHAT (chat), NULL);
-
-	priv = GET_PRIV (chat);
-
-	return empathy_contact_manager_get_own (priv->manager, chat->account);
-}
-
 GtkWidget *
 gossip_chat_get_widget (GossipChat *chat)
 {
@@ -1201,29 +1248,6 @@ gossip_chat_is_connected (GossipChat *chat)
 	priv = GET_PRIV (chat);
 
 	return (priv->tp_chat != NULL);
-}
-
-gboolean
-gossip_chat_get_show_contacts (GossipChat *chat)
-{
-	g_return_val_if_fail (GOSSIP_IS_CHAT (chat), FALSE);
-
-	if (GOSSIP_CHAT_GET_CLASS (chat)->get_show_contacts) {
-		return GOSSIP_CHAT_GET_CLASS (chat)->get_show_contacts (chat);
-	}
-
-	return FALSE;
-}
-
-void
-gossip_chat_set_show_contacts (GossipChat *chat,
-			       gboolean    show)
-{
-	g_return_if_fail (GOSSIP_IS_CHAT (chat));
-
-	if (GOSSIP_CHAT_GET_CLASS (chat)->set_show_contacts) {
-		GOSSIP_CHAT_GET_CLASS (chat)->set_show_contacts (chat, show);
-	}
 }
 
 void
@@ -1461,7 +1485,7 @@ gossip_chat_should_highlight_nick (GossipMessage *message)
 		return FALSE;
 	}
 
-	my_contact = gossip_get_own_contact_from_contact (gossip_message_get_sender (message));
+	my_contact = gossip_contact_get_user (gossip_message_get_sender (message));
 	to = gossip_contact_get_name (my_contact);
 	if (!to) {
 		return FALSE;

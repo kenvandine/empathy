@@ -28,7 +28,7 @@
 #include <libmissioncontrol/mc-account.h>
 
 #include "gossip-contact.h"
-#include "empathy-contact-list.h"
+#include "empathy-tp-contact-list.h"
 
 G_BEGIN_DECLS
 
@@ -53,26 +53,17 @@ struct _EmpathyContactManagerClass {
 
 GType                  empathy_contact_manager_get_type     (void) G_GNUC_CONST;
 EmpathyContactManager *empathy_contact_manager_new          (void);
-void                   empathy_contact_manager_setup        (EmpathyContactManager *manager);
-EmpathyContactList *   empathy_contact_manager_get_list     (EmpathyContactManager *manager,
+EmpathyTpContactList * empathy_contact_manager_get_list     (EmpathyContactManager *manager,
 							     McAccount             *account);
-GossipContact *        empathy_contact_manager_get_own      (EmpathyContactManager *manager,
+GossipContact *        empathy_contact_manager_get_user     (EmpathyContactManager *manager,
 							     McAccount             *account);
-GossipContact *        empathy_contact_manager_find         (EmpathyContactManager *manager,
-							     const gchar           *id);
 GossipContact *        empathy_contact_manager_create       (EmpathyContactManager *manager,
 							     McAccount             *account,
 							     const gchar           *id);
-void                   empathy_contact_manager_add          (EmpathyContactManager *manager,
-							     GossipContact         *contact,
-							     const gchar           *message);
-void                   empathy_contact_manager_remove       (EmpathyContactManager *manager,
-							     GossipContact         *contact);
 void                   empathy_contact_manager_rename_group (EmpathyContactManager *manager,
 							     const gchar           *old_group,
 							     const gchar           *new_group);
 GList *                empathy_contact_manager_get_groups   (EmpathyContactManager *manager);
-GList *                empathy_contact_manager_get_contacts (EmpathyContactManager *manager);
 
 G_END_DECLS
 

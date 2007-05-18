@@ -22,6 +22,8 @@
 
 #include <config.h>
 
+#include <string.h>
+
 #include <libtelepathy/tp-chan-type-text-gen.h>
 #include <libtelepathy/tp-chan-iface-chat-state-gen.h>
 #include <libtelepathy/tp-conn.h>
@@ -29,7 +31,7 @@
 
 #include "empathy-tp-chat.h"
 #include "empathy-contact-manager.h"
-#include "empathy-contact-list.h"
+#include "empathy-tp-contact-list.h"
 #include "empathy-marshal.h"
 #include "gossip-debug.h"
 #include "gossip-time.h"
@@ -41,7 +43,7 @@
 #define DEBUG_DOMAIN "TpChat"
 
 struct _EmpathyTpChatPriv {
-	EmpathyContactList    *list;
+	EmpathyTpContactList  *list;
 	EmpathyContactManager *manager;
 	McAccount             *account;
 	gchar                 *id;
@@ -52,35 +54,51 @@ struct _EmpathyTpChatPriv {
 	DBusGProxy	      *chat_state_iface;
 };
 
-static void empathy_tp_chat_class_init (EmpathyTpChatClass        *klass);
-static void empathy_tp_chat_init       (EmpathyTpChat             *chat);
-static void tp_chat_finalize           (GObject                   *object);
-static void tp_chat_destroy_cb         (TpChan                    *text_chan,
-					EmpathyTpChat             *chat);
-static void tp_chat_closed_cb          (TpChan                    *text_chan,
-					EmpathyTpChat             *chat);
-static void tp_chat_received_cb        (DBusGProxy                *text_iface,
-					guint                      message_id,
-					guint                      timestamp,
-					guint                      from_handle,
-					guint                      message_type,
-					guint                      message_flags,
-					gchar                     *message_body,
-					EmpathyTpChat             *chat);
-static void tp_chat_sent_cb            (DBusGProxy                *text_iface,
-					guint                      timestamp,
-					guint                      message_type,
-					gchar                     *message_body,
-					EmpathyTpChat             *chat);
-static void tp_chat_state_changed_cb   (DBusGProxy                *chat_state_iface,
-					guint                      handle,
-					TelepathyChannelChatState  state,
-					EmpathyTpChat             *chat);
-static void tp_chat_emit_message       (EmpathyTpChat             *chat,
-					guint                      type,
-					guint                      timestamp,
-					guint                      from_handle,
-					const gchar               *message_body);
+static void      empathy_tp_chat_class_init (EmpathyTpChatClass        *klass);
+static void      empathy_tp_chat_init       (EmpathyTpChat             *chat);
+static void      tp_chat_finalize           (GObject                   *object);
+static GObject * tp_chat_constructor        (GType                      type,
+					     guint                      n_props,
+					     GObjectConstructParam     *props);
+static void      tp_chat_get_property       (GObject                   *object,
+					     guint                      param_id,
+					     GValue                    *value,
+					     GParamSpec                *pspec);
+static void      tp_chat_set_property       (GObject                   *object,
+					     guint                      param_id,
+					     const GValue              *value,
+					     GParamSpec                *pspec);
+static void      tp_chat_destroy_cb         (TpChan                    *text_chan,
+					     EmpathyTpChat             *chat);
+static void      tp_chat_closed_cb          (TpChan                    *text_chan,
+					     EmpathyTpChat             *chat);
+static void      tp_chat_received_cb        (DBusGProxy                *text_iface,
+					     guint                      message_id,
+					     guint                      timestamp,
+					     guint                      from_handle,
+					     guint                      message_type,
+					     guint                      message_flags,
+					     gchar                     *message_body,
+					     EmpathyTpChat             *chat);
+static void      tp_chat_sent_cb            (DBusGProxy                *text_iface,
+					     guint                      timestamp,
+					     guint                      message_type,
+					     gchar                     *message_body,
+					     EmpathyTpChat             *chat);
+static void      tp_chat_state_changed_cb   (DBusGProxy                *chat_state_iface,
+					     guint                      handle,
+					     TelepathyChannelChatState  state,
+					     EmpathyTpChat             *chat);
+static void      tp_chat_emit_message       (EmpathyTpChat             *chat,
+					     guint                      type,
+					     guint                      timestamp,
+					     guint                      from_handle,
+					     const gchar               *message_body);
+enum {
+	PROP_0,
+	PROP_ACCOUNT,
+	PROP_TP_CHAN
+};
 
 enum {
 	MESSAGE_RECEIVED,
@@ -99,6 +117,27 @@ empathy_tp_chat_class_init (EmpathyTpChatClass *klass)
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
 	object_class->finalize = tp_chat_finalize;
+	object_class->constructor = tp_chat_constructor;
+	object_class->get_property = tp_chat_get_property;
+	object_class->set_property = tp_chat_set_property;
+
+	g_object_class_install_property (object_class,
+					 PROP_ACCOUNT,
+					 g_param_spec_object ("account",
+							      "channel Account",
+							      "The account associated with the channel",
+							      MC_TYPE_ACCOUNT,
+							      G_PARAM_READWRITE |
+							      G_PARAM_CONSTRUCT_ONLY));
+
+	g_object_class_install_property (object_class,
+					 PROP_TP_CHAN,
+					 g_param_spec_object ("tp-chan",
+							      "telepathy channel",
+							      "The text channel for the chat",
+							      TELEPATHY_CHAN_TYPE,
+							      G_PARAM_READWRITE |
+							      G_PARAM_CONSTRUCT_ONLY));
 
 	signals[MESSAGE_RECEIVED] =
 		g_signal_new ("message-received",
@@ -182,29 +221,26 @@ tp_chat_finalize (GObject *object)
 	G_OBJECT_CLASS (empathy_tp_chat_parent_class)->finalize (object);
 }
 
-EmpathyTpChat *
-empathy_tp_chat_new (McAccount *account,
-		     TpChan    *tp_chan)
+static GObject *
+tp_chat_constructor (GType                  type,
+		     guint                  n_props,
+		     GObjectConstructParam *props)
 {
-	EmpathyTpChatPriv     *priv;
-	EmpathyTpChat         *chat;
+	GObject           *chat;
+	EmpathyTpChatPriv *priv;
 
-	g_return_val_if_fail (MC_IS_ACCOUNT (account), NULL);
-	g_return_val_if_fail (TELEPATHY_IS_CHAN (tp_chan), NULL);
+	chat = G_OBJECT_CLASS (empathy_tp_chat_parent_class)->constructor (type, n_props, props);
 
-	chat = g_object_new (EMPATHY_TYPE_TP_CHAT, NULL);
 	priv = GET_PRIV (chat);
-
+g_print ("**********tp_chat_constructor");
 	priv->manager = empathy_contact_manager_new ();
-	priv->list = empathy_contact_manager_get_list (priv->manager, account);
-	priv->tp_chan = g_object_ref (tp_chan);
-	priv->account = g_object_ref (account);
+	priv->list = empathy_contact_manager_get_list (priv->manager, priv->account);
 	priv->mc = gossip_mission_control_new ();
 	g_object_ref (priv->list);
 
-	priv->text_iface = tp_chan_get_interface (tp_chan,
+	priv->text_iface = tp_chan_get_interface (priv->tp_chan,
 						  TELEPATHY_CHAN_IFACE_TEXT_QUARK);
-	priv->chat_state_iface = tp_chan_get_interface (tp_chan,
+	priv->chat_state_iface = tp_chan_get_interface (priv->tp_chan,
 							TELEPATHY_CHAN_IFACE_CHAT_STATE_QUARK);
 
 	g_signal_connect (priv->tp_chan, "destroy",
@@ -228,6 +264,62 @@ empathy_tp_chat_new (McAccount *account,
 	}
 
 	return chat;
+}
+
+static void
+tp_chat_get_property (GObject    *object,
+		      guint       param_id,
+		      GValue     *value,
+		      GParamSpec *pspec)
+{
+	EmpathyTpChatPriv *priv;
+
+	priv = GET_PRIV (object);
+
+	switch (param_id) {
+	case PROP_ACCOUNT:
+		g_value_set_object (value, priv->account);
+		break;
+	case PROP_TP_CHAN:
+		g_value_set_object (value, priv->tp_chan);
+		break;
+	default:
+		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
+		break;
+	};
+}
+
+static void
+tp_chat_set_property (GObject      *object,
+		      guint         param_id,
+		      const GValue *value,
+		      GParamSpec   *pspec)
+{
+	EmpathyTpChatPriv *priv;
+
+	priv = GET_PRIV (object);
+
+	switch (param_id) {
+	case PROP_ACCOUNT:
+		priv->account = g_object_ref (g_value_get_object (value));
+		break;
+	case PROP_TP_CHAN:
+		priv->tp_chan = g_object_ref (g_value_get_object (value));
+		break;
+	default:
+		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
+		break;
+	};
+}
+
+EmpathyTpChat *
+empathy_tp_chat_new (McAccount *account,
+		     TpChan    *tp_chan)
+{
+	return g_object_new (EMPATHY_TYPE_TP_CHAT, 
+			     "account", account,
+			     "tp-chan", tp_chan,
+			     NULL);
 }
 
 EmpathyTpChat *
@@ -538,7 +630,7 @@ tp_chat_state_changed_cb (DBusGProxy                *chat_state_iface,
 
 	priv = GET_PRIV (chat);
 
-	contact = empathy_contact_list_get_from_handle (priv->list, handle);
+	contact = empathy_tp_contact_list_get_from_handle (priv->list, handle);
 
 	gossip_debug (DEBUG_DOMAIN, "Chat state changed for %s (%d): %d",
 		      gossip_contact_get_name (contact),
@@ -564,11 +656,11 @@ tp_chat_emit_message (EmpathyTpChat *chat,
 	priv = GET_PRIV (chat);
 
 	if (from_handle == 0) {
-		sender = empathy_contact_list_get_own (priv->list);
+		sender = empathy_tp_contact_list_get_user (priv->list);
 		g_object_ref (sender);
 	} else {
-		sender = empathy_contact_list_get_from_handle (priv->list,
-							       from_handle);
+		sender = empathy_tp_contact_list_get_from_handle (priv->list,
+								  from_handle);
 	}
 
 	message = gossip_message_new (message_body);

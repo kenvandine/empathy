@@ -30,6 +30,7 @@
 #include "gossip-contact.h"
 #include "gossip-utils.h"
 #include "gossip-debug.h"
+#include "empathy-contact-manager.h"
 
 #define DEBUG_DOMAIN "Contact"
 
@@ -652,6 +653,24 @@ gossip_contact_get_status (GossipContact *contact)
 	}
 
 	return _("Offline");
+}
+
+GossipContact *
+gossip_contact_get_user (GossipContact *contact)
+{
+	GossipContactPriv     *priv;
+	EmpathyContactManager *manager;
+	GossipContact         *user_contact;
+
+	g_return_val_if_fail (GOSSIP_IS_CONTACT (contact), NULL);
+
+	priv = GET_PRIV (contact);
+
+	manager = empathy_contact_manager_new ();
+	user_contact = empathy_contact_manager_get_user (manager, priv->account);
+	g_object_unref (manager);
+
+	return user_contact;
 }
 
 gboolean
