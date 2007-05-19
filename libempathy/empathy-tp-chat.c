@@ -232,7 +232,7 @@ tp_chat_constructor (GType                  type,
 	chat = G_OBJECT_CLASS (empathy_tp_chat_parent_class)->constructor (type, n_props, props);
 
 	priv = GET_PRIV (chat);
-g_print ("**********tp_chat_constructor");
+
 	priv->manager = empathy_contact_manager_new ();
 	priv->list = empathy_contact_manager_get_list (priv->manager, priv->account);
 	priv->mc = gossip_mission_control_new ();

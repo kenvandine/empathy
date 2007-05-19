@@ -1,5 +1,15 @@
 2007-05-19  Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/Makefile.am:
+	* libempathy/empathy-tp-chat.c:
+	* libempathy/empathy-contact-manager.c:
+	* libempathy/empathy-contact-list.c: Fix indentation
+	* libempathy/empathy-tp-contact-list.c: Fix not returning the contact
+	in tp_contact_list_find()
+	* TODO: Updated.
+
+2007-05-19  Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/gossip-contact-list-store.c:
 	* libempathy-gtk/gossip-preferences.c:
 	* libempathy-gtk/gossip-contact-list-store.h:

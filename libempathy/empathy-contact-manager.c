@@ -397,7 +397,7 @@ contact_manager_find_foreach (McAccount              *account,
 {
 	data->contact = empathy_contact_list_find (EMPATHY_CONTACT_LIST (list),
 						   data->id);
-	
+
 	if (data->contact) {
 		return TRUE;
 	}

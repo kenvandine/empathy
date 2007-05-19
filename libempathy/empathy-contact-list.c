@@ -86,7 +86,7 @@ empathy_contact_list_setup (EmpathyContactList *list)
 
 GossipContact *
 empathy_contact_list_find (EmpathyContactList *list,
-				 const gchar             *id)
+			   const gchar        *id)
 {
 	g_return_val_if_fail (EMPATHY_IS_CONTACT_LIST (list), NULL);
 

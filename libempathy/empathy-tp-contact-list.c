@@ -447,17 +447,14 @@ tp_contact_list_find (EmpathyContactList *list,
 		      const gchar        *id)
 {
 	EmpathyTpContactListPriv *priv;
-	GossipContact            *contact;
 
 	g_return_val_if_fail (EMPATHY_IS_TP_CONTACT_LIST (list), NULL);
 
 	priv = GET_PRIV (list);
 
-	contact = g_hash_table_find (priv->contacts,
-				     (GHRFunc) tp_contact_list_find_foreach,
-				     (gchar*) id);
-
-	return NULL;
+	return g_hash_table_find (priv->contacts,
+				  (GHRFunc) tp_contact_list_find_foreach,
+				  (gchar*) id);
 }
 
 static void
