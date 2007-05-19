@@ -1,9 +1,25 @@
-2006-05-19  Xavier Claessens  <xclaesse@gmail.com>
+2007-05-19  Xavier Claessens  <xclaesse@gmail.com>
+
+	* libempathy-gtk/gossip-contact-list-store.c:
+	* libempathy-gtk/gossip-preferences.c:
+	* libempathy-gtk/gossip-contact-list-store.h:
+	* libempathy-gtk/gossip-contact-list.c:
+	* libempathy-gtk/gossip-contact-list.h:
+	* libempathy-gtk/empathy-main-window.c:
+	* libempathy-gtk/gossip-contact-list-model.c:
+	* libempathy-gtk/gossip-contact-list-model.h:
+	* libempathy-gtk/Makefile.am:
+	* libempathy/empathy-marshal.list: Split GossipContactList into
+	two objects: GossipContactListStore inheriting from GtkTreeStore and
+	GossipContactListView inheriting from GtkTreeView. This makes
+	easier to build new UI widgets reusing the GtkTreeModel.
+
+2007-05-19  Xavier Claessens  <xclaesse@gmail.com>
 
 	* libempathy/empathy-idle.c: Auto away when session id idle, instead of
 	when screensaver is active.
 
-2006-05-18  Xavier Claessens  <xclaesse@gmail.com>
+2007-05-18  Xavier Claessens  <xclaesse@gmail.com>
 
 	* libempathy-gtk/gossip-private-chat.h:
 	* libempathy-gtk/gossip-contact-list.c:
@@ -32,11 +48,11 @@
 	EmpathyTpChatroom. GossipContactList use that interface to display a 
 	treeview.
 
-2006-05-17  Xavier Claessens  <xclaesse@gmail.com>
+2007-05-17  Xavier Claessens  <xclaesse@gmail.com>
 
 	* libempathy-gtk/gossip-chat.c: Display ChatState.
 
-2006-05-16  Xavier Claessens  <xclaesse@gmail.com>
+2007-05-16  Xavier Claessens  <xclaesse@gmail.com>
 
 	* libempathy-gtk/empathy-status-icon.c:
 	* libempathy/empathy-idle.c:
@@ -45,7 +61,7 @@
 	* po/POTFILES.in: New object EmpathyIdle to manage autoaway and
 	extended autoaway states.
 
-2006-05-15  Xavier Claessens  <xclaesse@gmail.com>
+2007-05-15  Xavier Claessens  <xclaesse@gmail.com>
 
 	* configure.ac:
 	* data/empathy.desktop.in:
@@ -54,13 +70,13 @@
 	* po/POTFILES.in: Set bugzilla information in desktop file and add it 
 	to POTFILES.in
 
-2006-05-15  Xavier Claessens  <xclaesse@gmail.com>
+2007-05-15  Xavier Claessens  <xclaesse@gmail.com>
 
 	* libempathy-gtk/empathy-status-icon.glade:
 	* libempathy-gtk/empathy-main-window.glade: Fix using of gossip icons
 	in menus.
 
-2006-05-14  Xavier Claessens  <xclaesse@gmail.com>
+2007-05-14  Xavier Claessens  <xclaesse@gmail.com>
 
 	* src/empathy-chat-main.c:
 	* src/empathy-main.c:
@@ -78,7 +94,7 @@
 	* data/scalable/Makefile.am:
 	* data/Makefile.am: Add empathy icon stolen from cohoba.
 
-2006-05-14  Xavier Claessens  <xclaesse@gmail.com>
+2007-05-14  Xavier Claessens  <xclaesse@gmail.com>
 
 	* src/empathy-chat-main.c:
 	* src/Makefile.am:
@@ -89,12 +105,12 @@
 
 	* po/Makefile.in.in: Removed, it's generated at build time.
 
-2006-05-13  Xavier Claessens  <xclaesse@gmail.com>
+2007-05-13  Xavier Claessens  <xclaesse@gmail.com>
 
 	* libempathy-gtk/gossip-account-widget-jabber.glade: Add an example
 	label for jid.
 
-2006-05-13  Xavier Claessens  <xclaesse@gmail.com>
+2007-05-13  Xavier Claessens  <xclaesse@gmail.com>
 
 	* libempathy-gtk/gossip-chat-window.c:
 	* libempathy-gtk/gossip-chat-window.h:
@@ -103,22 +119,22 @@
 	* libempathy/empathy-tp-chat.h: When a new text channel arrives, check
 	if there is no existing GossipChat object for it.
 
-2006-05-13  Xavier Claessens  <xclaesse@gmail.com>
+2007-05-13  Xavier Claessens  <xclaesse@gmail.com>
 
 	* src/Makefile.am:
 	* src/empathy-contact-list-main.c: Removing empathy-contact-list
 	program, it's useless.
 
-2006-05-13  Xavier Claessens  <xclaesse@gmail.com>
+2007-05-13  Xavier Claessens  <xclaesse@gmail.com>
 
 	* configure.ac: Change version from 0.3darcs to 0.3svn
 
-2006-05-13  Xavier Claessens  <xclaesse@gmail.com>
+2007-05-13  Xavier Claessens  <xclaesse@gmail.com>
 
 	* autogen.sh: Set executable
 	* po/POTFILES.in: Update translatable files
 
-2006-03-16  Xavier Claessens  <xclaesse@gmail.com>
+2007-03-16  Xavier Claessens  <xclaesse@gmail.com>
 
 	* Initial version
 

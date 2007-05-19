@@ -36,7 +36,7 @@
 #include "gossip-ui-utils.h"
 #include "gossip-theme-manager.h"
 #include "gossip-spell.h"
-#include "gossip-contact-list.h"
+#include "gossip-contact-list-store.h"
 
 typedef struct {
 	GtkWidget *dialog;
@@ -511,7 +511,7 @@ preferences_widget_sync_string (const gchar *key, GtkWidget *widget)
 				GtkWidget   *toggle_widget;
 				
 				/* Get index from new string */
-				type = gossip_contact_list_sort_get_type ();
+				type = gossip_contact_list_store_sort_get_type ();
 				enum_class = G_ENUM_CLASS (g_type_class_peek (type));
 				enum_value = g_enum_get_value_by_nick (enum_class, value);
 				
@@ -850,7 +850,7 @@ preferences_radio_button_toggled_cb (GtkWidget *button,
 		group = gtk_radio_button_get_group (GTK_RADIO_BUTTON (button));
 		
 		/* Get string from index */
-		type = gossip_contact_list_sort_get_type ();
+		type = gossip_contact_list_store_sort_get_type ();
 		enum_class = G_ENUM_CLASS (g_type_class_peek (type));
 		enum_value = g_enum_get_value (enum_class, g_slist_index (group, button));
 		

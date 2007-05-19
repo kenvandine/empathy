@@ -31,10 +31,13 @@
 #include <libempathy/gossip-contact.h>
 #include <libempathy/gossip-debug.h>
 #include <libempathy/gossip-utils.h>
+#include <libempathy/empathy-contact-list.h>
+#include <libempathy/empathy-contact-manager.h>
 
 #include "empathy-main-window.h"
 #include "ephy-spinner.h"
-#include "gossip-contact-list.h"
+#include "gossip-contact-list-store.h"
+#include "gossip-contact-list-view.h"
 #include "gossip-presence-chooser.h"
 #include "gossip-ui-utils.h"
 #include "gossip-status-presets.h"
@@ -56,37 +59,38 @@
 #define GEOMETRY_NAME "main-window"
 
 typedef struct {
-	GossipContactList *contact_list;
-	MissionControl    *mc;
+	GossipContactListView  *list_view;
+	GossipContactListStore *list_store;
+	MissionControl         *mc;
 
 	/* Main widgets */
-	GtkWidget         *window;
-	GtkWidget         *main_vbox;
+	GtkWidget              *window;
+	GtkWidget              *main_vbox;
 
 	/* Tooltips for all widgets */
-	GtkTooltips       *tooltips;
+	GtkTooltips            *tooltips;
 
 	/* Menu widgets */
-	GtkWidget         *room;
-	GtkWidget         *room_menu;
-	GtkWidget         *room_sep;
-	GtkWidget         *room_join_favorites;
-	GtkWidget         *edit_context;
-	GtkWidget         *edit_context_separator;
+	GtkWidget              *room;
+	GtkWidget              *room_menu;
+	GtkWidget              *room_sep;
+	GtkWidget              *room_join_favorites;
+	GtkWidget              *edit_context;
+	GtkWidget              *edit_context_separator;
 
 	/* Throbber */
-	GtkWidget         *throbber;
+	GtkWidget              *throbber;
 
 	/* Widgets that are enabled when there is... */
-	GList             *widgets_connected;		/* ... connected accounts */
-	GList             *widgets_disconnected;	/* ... disconnected accounts */
+	GList                  *widgets_connected;		/* ... connected accounts */
+	GList                  *widgets_disconnected;	/* ... disconnected accounts */
 
 	/* Status popup */
-	GtkWidget         *presence_toolbar;
-	GtkWidget         *presence_chooser;
+	GtkWidget              *presence_toolbar;
+	GtkWidget              *presence_chooser;
 
 	/* Misc */
-	guint              size_timeout_id;
+	guint                   size_timeout_id;
 } EmpathyMainWindow;
 
 static void     main_window_destroy_cb                     (GtkWidget                       *widget,
@@ -156,6 +160,7 @@ GtkWidget *
 empathy_main_window_show (void)
 {
 	static EmpathyMainWindow *window = NULL;
+	EmpathyContactList       *list_iface;
 	GladeXML                 *glade;
 	GossipConf               *conf;
 	GtkWidget                *sw;
@@ -262,10 +267,16 @@ empathy_main_window_show (void)
 
 	/* Set up contact list. */
 	gossip_status_presets_get_all ();
-	window->contact_list = gossip_contact_list_new ();
-	gtk_widget_show (GTK_WIDGET (window->contact_list));
+
+	list_iface = EMPATHY_CONTACT_LIST (empathy_contact_manager_new ());
+	empathy_contact_list_setup (list_iface);
+	window->list_store = gossip_contact_list_store_new (list_iface);
+	window->list_view = gossip_contact_list_view_new (window->list_store);
+	g_object_unref (list_iface);
+
+	gtk_widget_show (GTK_WIDGET (window->list_view));
 	gtk_container_add (GTK_CONTAINER (sw),
-			   GTK_WIDGET (window->contact_list));
+			   GTK_WIDGET (window->list_view));
 
 	/* Load user-defined accelerators. */
 	main_window_accels_load ();
@@ -311,7 +322,7 @@ empathy_main_window_show (void)
 				GOSSIP_PREFS_UI_SHOW_AVATARS,
 				(GossipConfNotifyFunc) main_window_notify_show_avatars_cb,
 				window);
-	gossip_contact_list_set_show_avatars (window->contact_list, show_avatars);
+	gossip_contact_list_store_set_show_avatars (window->list_store, show_avatars);
 
 	/* Is compact ? */
 	gossip_conf_get_bool (conf,
@@ -321,7 +332,7 @@ empathy_main_window_show (void)
 				GOSSIP_PREFS_UI_COMPACT_CONTACT_LIST,
 				(GossipConfNotifyFunc) main_window_notify_compact_contact_list_cb,
 				window);
-	gossip_contact_list_set_is_compact (window->contact_list, compact_contact_list);
+	gossip_contact_list_store_set_is_compact (window->list_store, compact_contact_list);
 
 	/* Sort criterium */
 	gossip_conf_notify_add (conf,
@@ -357,6 +368,7 @@ main_window_destroy_cb (GtkWidget         *widget,
 
 	g_object_unref (window->tooltips);
 	g_object_unref (window->mc);
+	g_object_unref (window->list_store);
 
 	g_free (window);
 }
@@ -429,7 +441,7 @@ main_window_chat_show_offline_cb (GtkCheckMenuItem  *item,
 
 	/* Turn off sound just while we alter the contact list. */
 	// FIXME: gossip_sound_set_enabled (FALSE);
-	g_object_set (window->contact_list, "show_offline", current, NULL);
+	gossip_contact_list_store_set_show_offline (window->list_store, current);
 	//gossip_sound_set_enabled (TRUE);
 }
 
@@ -445,7 +457,7 @@ main_window_edit_button_press_event_cb (GtkWidget         *widget,
 		return FALSE;
 	}
 
-	group = gossip_contact_list_get_selected_group (window->contact_list);
+	group = gossip_contact_list_view_get_selected_group (window->list_view);
 	if (group) {
 		GtkMenuItem *item;
 		GtkWidget   *label;
@@ -458,7 +470,7 @@ main_window_edit_button_press_event_cb (GtkWidget         *widget,
 		gtk_widget_show (window->edit_context);
 		gtk_widget_show (window->edit_context_separator);
 
-		submenu = gossip_contact_list_get_group_menu (window->contact_list);
+		submenu = gossip_contact_list_view_get_group_menu (window->list_view);
 		gtk_menu_item_set_submenu (item, submenu);
 
 		g_free (group);
@@ -466,7 +478,7 @@ main_window_edit_button_press_event_cb (GtkWidget         *widget,
 		return FALSE;
 	}
 
-	contact = gossip_contact_list_get_selected (window->contact_list);
+	contact = gossip_contact_list_view_get_selected (window->list_view);
 	if (contact) {
 		GtkMenuItem *item;
 		GtkWidget   *label;
@@ -479,8 +491,8 @@ main_window_edit_button_press_event_cb (GtkWidget         *widget,
 		gtk_widget_show (window->edit_context);
 		gtk_widget_show (window->edit_context_separator);
 
-		submenu = gossip_contact_list_get_contact_menu (window->contact_list,
-								contact);
+		submenu = gossip_contact_list_view_get_contact_menu (window->list_view,
+								     contact);
 		gtk_menu_item_set_submenu (item, submenu);
 
 		g_object_unref (contact);
@@ -723,8 +735,8 @@ main_window_notify_show_avatars_cb (GossipConf        *conf,
 	gboolean show_avatars;
 
 	if (gossip_conf_get_bool (conf, key, &show_avatars)) {
-		gossip_contact_list_set_show_avatars (window->contact_list,
-						      show_avatars);
+		gossip_contact_list_store_set_show_avatars (window->list_store,
+							    show_avatars);
 	}
 }
 
@@ -736,8 +748,8 @@ main_window_notify_compact_contact_list_cb (GossipConf        *conf,
 	gboolean compact_contact_list;
 
 	if (gossip_conf_get_bool (conf, key, &compact_contact_list)) {
-		gossip_contact_list_set_is_compact (window->contact_list,
-						    compact_contact_list);
+		gossip_contact_list_store_set_is_compact (window->list_store,
+							  compact_contact_list);
 	}
 }
 
@@ -753,13 +765,13 @@ main_window_notify_sort_criterium_cb (GossipConf        *conf,
 		GEnumClass *enum_class;
 		GEnumValue *enum_value;
 
-		type = gossip_contact_list_sort_get_type ();
+		type = gossip_contact_list_store_sort_get_type ();
 		enum_class = G_ENUM_CLASS (g_type_class_peek (type));
 		enum_value = g_enum_get_value_by_nick (enum_class, str);
 
 		if (enum_value) {
-			gossip_contact_list_set_sort_criterium (window->contact_list, 
-								enum_value->value);
+			gossip_contact_list_store_set_sort_criterium (window->list_store, 
+								      enum_value->value);
 		}
 	}
 }
