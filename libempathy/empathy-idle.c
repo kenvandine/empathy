@@ -48,21 +48,21 @@ enum {
 struct _EmpathyIdlePriv {
 	MissionControl *mc;
 	DBusGProxy     *gs_proxy;
-	gboolean        is_active;
+	gboolean        is_idle;
 	McPresence      last_state;
 	gchar          *last_status;
 	guint           ext_away_timeout;
 };
 
-static void     empathy_idle_class_init (EmpathyIdleClass *klass);
-static void     empathy_idle_init       (EmpathyIdle      *idle);
-static void     idle_finalize           (GObject          *object);
-static void     idle_active_changed_cb  (DBusGProxy       *gs_proxy,
-					 gboolean          is_active,
-					 EmpathyIdle      *idle);
-static void     idle_ext_away_start     (EmpathyIdle      *idle);
-static void     idle_ext_away_stop      (EmpathyIdle      *idle);
-static gboolean idle_ext_away_cb        (EmpathyIdle      *idle);
+static void     empathy_idle_class_init      (EmpathyIdleClass *klass);
+static void     empathy_idle_init            (EmpathyIdle      *idle);
+static void     idle_finalize                (GObject          *object);
+static void     idle_session_idle_changed_cb (DBusGProxy       *gs_proxy,
+					      gboolean          is_idle,
+					      EmpathyIdle      *idle);
+static void     idle_ext_away_start          (EmpathyIdle      *idle);
+static void     idle_ext_away_stop           (EmpathyIdle      *idle);
+static gboolean idle_ext_away_cb             (EmpathyIdle      *idle);
 
 //static guint signals[LAST_SIGNAL];
 
@@ -85,7 +85,7 @@ empathy_idle_init (EmpathyIdle *idle)
 
 	priv = GET_PRIV (idle);
 
-	priv->is_active = FALSE;
+	priv->is_idle = FALSE;
 	priv->mc = gossip_mission_control_new ();
 	priv->gs_proxy = dbus_g_proxy_new_for_name (tp_get_bus (),
 						    "org.gnome.ScreenSaver",
@@ -96,11 +96,11 @@ empathy_idle_init (EmpathyIdle *idle)
 		return;
 	}
 
-	dbus_g_proxy_add_signal (priv->gs_proxy, "ActiveChanged",
+	dbus_g_proxy_add_signal (priv->gs_proxy, "SessionIdleChanged",
 				 G_TYPE_BOOLEAN,
 				 G_TYPE_INVALID);
-	dbus_g_proxy_connect_signal (priv->gs_proxy, "ActiveChanged",
-				     G_CALLBACK (idle_active_changed_cb),
+	dbus_g_proxy_connect_signal (priv->gs_proxy, "SessionIdleChanged",
+				     G_CALLBACK (idle_session_idle_changed_cb),
 				     idle, NULL);
 }
 
@@ -137,20 +137,20 @@ empathy_idle_new (void)
 }
 
 static void
-idle_active_changed_cb (DBusGProxy  *gs_proxy,
-			gboolean     is_active,
-			EmpathyIdle *idle)
+idle_session_idle_changed_cb (DBusGProxy  *gs_proxy,
+			      gboolean     is_idle,
+			      EmpathyIdle *idle)
 {
 	EmpathyIdlePriv *priv;
 
 	priv = GET_PRIV (idle);
 
-	gossip_debug (DEBUG_DOMAIN, "Screensaver state changed, %s -> %s",
-		      priv->is_active ? "yes" : "no",
-		      is_active ? "yes" : "no");
+	gossip_debug (DEBUG_DOMAIN, "Session idle state changed, %s -> %s",
+		      priv->is_idle ? "yes" : "no",
+		      is_idle ? "yes" : "no");
 
-	if (is_active && !priv->is_active) {
-		/* The screensaver is now running */
+	if (is_idle && !priv->is_idle) {
+		/* We are now idle, set state to away */
 		g_free (priv->last_status);
 		idle_ext_away_stop (idle);
 
@@ -163,8 +163,8 @@ idle_active_changed_cb (DBusGProxy  *gs_proxy,
 					      _("Autoaway"),
 					      NULL, NULL);
 		idle_ext_away_start (idle);
-	} else if (!is_active && priv->is_active) {
-		/* The screensaver stoped */
+	} else if (!is_idle && priv->is_idle) {
+		/* We are no more idle, restore state */
 		idle_ext_away_stop (idle);
 
 		gossip_debug (DEBUG_DOMAIN, "Restoring state to %d %s",
@@ -177,7 +177,7 @@ idle_active_changed_cb (DBusGProxy  *gs_proxy,
 					      NULL, NULL);
 	}
 
-	priv->is_active = is_active;
+	priv->is_idle = is_idle;
 }
 
 static void
