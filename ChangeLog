@@ -1,5 +1,9 @@
 2007-05-20  Xavier Claessens  <xclaesse@gmail.com>
 
+	* configure.ac: Bump version to 0.5
+
+2007-05-20  Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/gossip-contact-list-store.c: Allow to set custom 
 	function for getting groups of a contact. Make possible to have groups
 	for presence or role/affiliation in chatroom for example.
