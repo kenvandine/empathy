@@ -1,5 +1,12 @@
 2007-05-20  Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/gossip-contact-list-model.c:
+	* libempathy-gtk/gossip-contact-list-model.h: Removed.
+	* libempathy-gtk/gossip-contact-list-view.c:
+	* libempathy-gtk/gossip-contact-list-view.h: Added.
+
+2007-05-20  Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/gossip-contact-list-store.c: Set COL_NAME earlier like
 	that it can directly be sorted.
 	* data/empathy.schemas.in: s/gossip/empathy/
