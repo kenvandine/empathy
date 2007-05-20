@@ -20,7 +20,7 @@ libempathy-gtk/gossip-chat.c
 libempathy-gtk/gossip-chat.glade
 libempathy-gtk/gossip-chat-view.c
 libempathy-gtk/gossip-chat-window.c
-libempathy-gtk/gossip-contact-list.c
+libempathy-gtk/gossip-contact-list-view.c
 libempathy-gtk/gossip-preferences.c
 libempathy-gtk/gossip-preferences.glade
 libempathy-gtk/gossip-presence-chooser.c

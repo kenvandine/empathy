@@ -8,6 +8,8 @@ Things you can do if you want to help:
  - Filter channels before dispatching them. For example we need a GtkStatusIcon that blink when an event arrives (text/voip/ft channel) and tells the MC to dispatch the channel only when the user clicked the icon. Like in gossip. For that we need a filter DBus API in MC, not yet written.
  - Make use of NetworkManager to set the presence
  - Remove Quit option everywhere, empathy is a session service and shouldn't be leaved.
+ - Add sound events
+ - Import loggin system from gossip
  - Testing and Bugfixing.
 
 SoC projects:

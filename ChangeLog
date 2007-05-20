@@ -1,3 +1,15 @@
+2007-05-20  Xavier Claessens  <xclaesse@gmail.com>
+
+	* libempathy-gtk/gossip-contact-list-store.c: Allow to set custom 
+	function for getting groups of a contact. Make possible to have groups
+	for presence or role/affiliation in chatroom for example.
+	* libempathy-gtk/gossip-contact-list-store.h: Allow to set custom
+	function to handle DnD of contact. Useful when a custom function is set
+	for groups.
+	* src/empathy-chat-main.c: Minor fix.
+	* TODO:
+	* po/POTFILES.in: Updated.
+
 2007-05-19  Xavier Claessens  <xclaesse@gmail.com>
 
 	* libempathy-gtk/Makefile.am:

@@ -128,11 +128,8 @@ new_channel_cb (EmpathyChandler *chandler,
 			g_object_unref (tp_chat);
 		}
 		gossip_chat_present (chat);
-
-		goto OUT;
 	}
-
-	if (tp_chan->handle_type == TP_HANDLE_TYPE_CONTACT) {
+	else if (tp_chan->handle_type == TP_HANDLE_TYPE_CONTACT) {
 		EmpathyContactManager *manager;
 		EmpathyTpContactList  *list;
 		GossipContact         *contact;
@@ -157,7 +154,7 @@ new_channel_cb (EmpathyChandler *chandler,
 		g_object_unref (chat);
 		g_object_unref (manager);
 	}
-	if (tp_chan->handle_type == TP_HANDLE_TYPE_ROOM) {
+	else if (tp_chan->handle_type == TP_HANDLE_TYPE_ROOM) {
 #if 0
 		GossipGroupChat *chat;
 
@@ -176,7 +173,6 @@ new_channel_cb (EmpathyChandler *chandler,
 #endif
 	}
 
-OUT:
 	g_free (id);
 	g_object_unref (account);
 	g_object_unref (mc);

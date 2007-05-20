@@ -57,6 +57,9 @@ struct _GossipContactListStorePriv {
 	gboolean                    is_compact;
 	gboolean                    show_active;
 	GossipContactListStoreSort  sort_criterium;
+
+	GossipContactGroupsFunc     get_contact_groups;
+	gpointer                    get_contact_groups_data;
 };
 
 typedef struct {
@@ -622,6 +625,69 @@ gossip_contact_list_store_search_equal_func (GtkTreeModel *model,
 	return ret;
 }
 
+void
+gossip_contact_list_store_set_contact_groups_func (GossipContactListStore  *store,
+						   GossipContactGroupsFunc  func,
+						   gpointer                 user_data)
+{
+	GossipContactListStorePriv *priv;
+	GList                      *contacts, *l;
+
+	g_return_if_fail (GOSSIP_IS_CONTACT_LIST_STORE (store));
+
+	priv = GET_PRIV (store);
+
+	if (func) {
+		priv->get_contact_groups = func;
+		priv->get_contact_groups_data = user_data;
+	} else {
+		priv->get_contact_groups = NULL;
+		priv->get_contact_groups_data = NULL;
+	}
+
+	/* If we set a custom function to get contacts groups  we have to
+	 * disconnect our default notify::groups signal and wait for the user
+	 * to call himself gossip_contact_list_store_update_contact_groups ()
+	 * when needed. If func is NULL we come back to default.
+	 */
+	contacts = empathy_contact_list_get_contacts (priv->list);
+	for (l = contacts; l; l = l->next) {
+		GossipContact *contact;
+
+		contact = l->data;
+
+		if (func) {
+			g_signal_handlers_disconnect_by_func (contact, 
+							      G_CALLBACK (contact_list_store_contact_groups_updated_cb),
+							      store);
+		} else {
+			g_signal_connect (contact, "notify::groups",
+					  G_CALLBACK (contact_list_store_contact_groups_updated_cb),
+					  store);
+		}
+
+		gossip_contact_list_store_update_contact_groups (store, contact);
+
+		g_object_unref (contact);
+	}
+	g_list_free (contacts);
+}
+
+void
+gossip_contact_list_store_update_contact_groups (GossipContactListStore *store,
+						 GossipContact          *contact)
+{
+	gossip_debug (DEBUG_DOMAIN, "Contact:'%s' updating groups",
+		      gossip_contact_get_name (contact));
+
+	/* We do this to make sure the groups are correct, if not, we
+	 * would have to check the groups already set up for each
+	 * contact and then see what has been updated.
+	 */
+	contact_list_store_remove_contact (store, contact);
+	contact_list_store_add_contact (store, contact);
+}
+
 static void
 contact_list_store_setup (GossipContactListStore *store)
 {
@@ -668,9 +734,11 @@ contact_list_store_contact_added_cb (EmpathyContactList     *list_iface,
 		      "Contact:'%s' added",
 		      gossip_contact_get_name (contact));
 
-	g_signal_connect (contact, "notify::groups",
-			  G_CALLBACK (contact_list_store_contact_groups_updated_cb),
-			  store);
+	if (!priv->get_contact_groups) {
+		g_signal_connect (contact, "notify::groups",
+				  G_CALLBACK (contact_list_store_contact_groups_updated_cb),
+				  store);
+	}
 	g_signal_connect (contact, "notify::presence",
 			  G_CALLBACK (contact_list_store_contact_updated_cb),
 			  store);
@@ -702,7 +770,13 @@ contact_list_store_add_contact (GossipContactListStore *store,
 	}
 
 	/* If no groups just add it at the top level. */
-	groups = gossip_contact_get_groups (contact);
+	if (priv->get_contact_groups) {
+		groups = priv->get_contact_groups (contact,
+						   priv->get_contact_groups_data);
+	} else {
+		groups = gossip_contact_get_groups (contact);
+	}
+
 	if (!groups) {
 		gtk_tree_store_append (GTK_TREE_STORE (store), &iter, NULL);
 		gtk_tree_store_set (GTK_TREE_STORE (store), &iter,
@@ -942,15 +1016,7 @@ contact_list_store_contact_groups_updated_cb (GossipContact          *contact,
 					      GParamSpec             *param,
 					      GossipContactListStore *store)
 {
-	gossip_debug (DEBUG_DOMAIN, "Contact:'%s' groups updated",
-		      gossip_contact_get_name (contact));
-
-	/* We do this to make sure the groups are correct, if not, we
-	 * would have to check the groups already set up for each
-	 * contact and then see what has been updated.
-	 */
-	contact_list_store_remove_contact (store, contact);
-	contact_list_store_add_contact (store, contact);
+	gossip_contact_list_store_update_contact_groups (store, contact);
 }
 
 static void

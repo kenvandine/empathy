@@ -81,6 +81,8 @@ struct _GossipContactListStore {
 struct _GossipContactListStoreClass {
 	GtkTreeStoreClass       parent_class;
 };
+typedef GList *            (*GossipContactGroupsFunc)                   (GossipContact              *contact,
+									 gpointer                    user_data);
 
 GType                      gossip_contact_list_store_get_type           (void) G_GNUC_CONST;
 GossipContactListStore *   gossip_contact_list_store_new                (EmpathyContactList         *list_iface);
@@ -108,6 +110,11 @@ gboolean                   gossip_contact_list_store_search_equal_func  (GtkTree
 									 const gchar                *key,
 									 GtkTreeIter                *iter,
 									 gpointer                    search_data);
+void                       gossip_contact_list_store_set_contact_groups_func (GossipContactListStore*store,
+									 GossipContactGroupsFunc     func,
+									 gpointer                    user_data);
+void                       gossip_contact_list_store_update_contact_groups (GossipContactListStore  *store,
+									 GossipContact              *contact);
 
 G_END_DECLS
 
