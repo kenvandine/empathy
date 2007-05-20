@@ -1,0 +1,21 @@
+
+NEW in 0.4:
+==============
+ - contact list refactoring: EmpathyContactList is an iface implemented by
+   EmpathyTpContactList, EmpathyContactManager and EmpathyTpChatroom.
+   GossipContactList splitted into GossipContactListStore and
+   GossipContactListView, it can display any object implementing the
+   EmpathyContactList iface. Make possible to set custom functions to define
+   the groups of a contact, by default it gets the "group" property of the
+   GossipContact object. This make possible to reuse the contact list UI from
+   the main window for chatrooms where groups are the role/affiliation of the
+   contact on that room.
+ - Auto away when gnome-screensaver says the session is idle and extended away
+   30min after that.
+ - Display ChatState when the contact is composing.
+ - Bugbuddy now reports crashes to GNOME Bugzilla.
+ - New program icon.
+ - Setting i18n support and importing po files from gossip.
+ - Add an example label for jid.
+ - Do not open chat window twice for the same conversation.
+ 
