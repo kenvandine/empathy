@@ -30,8 +30,9 @@
 
 #include <libtelepathy/tp-chan.h>
 
+#include <libmissioncontrol/mc-account.h>
+
 #include <libempathy/gossip-contact.h>
-#include <libempathy/gossip-message.h>
 
 G_BEGIN_DECLS
 
@@ -57,9 +58,9 @@ struct _GossipPrivateChatClass {
 };
 
 GType               gossip_private_chat_get_type         (void);
-GossipPrivateChat * gossip_private_chat_new              (GossipContact     *contact);
-GossipPrivateChat * gossip_private_chat_new_with_channel (GossipContact     *contact,
+GossipPrivateChat * gossip_private_chat_new              (McAccount         *account,
 							  TpChan            *tp_chan);
+GossipPrivateChat * gossip_private_chat_new_with_contact (GossipContact     *contact);
 GossipContact *     gossip_private_chat_get_contact      (GossipPrivateChat *chat);
 
 G_END_DECLS

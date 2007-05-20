@@ -33,10 +33,10 @@
 #include <glade/glade.h>
 #include <glib/gi18n.h>
 
-#include <libmissioncontrol/mc-account.h>
-
 #include <libempathy/gossip-debug.h>
 #include <libempathy/empathy-tp-chat.h>
+#include <libempathy/empathy-tp-contact-list.h>
+#include <libempathy/empathy-contact-manager.h>
 //#include <libgossip/gossip-log.h>
 
 #include "gossip-private-chat.h"
@@ -328,7 +328,36 @@ private_chat_setup (GossipPrivateChat *chat,
 }
 
 GossipPrivateChat *
-gossip_private_chat_new (GossipContact *contact)
+gossip_private_chat_new (McAccount *account,
+			 TpChan    *tp_chan)
+{
+	GossipPrivateChat     *chat;
+	EmpathyTpChat         *tp_chat;
+	EmpathyContactManager *manager;
+	EmpathyTpContactList  *list;
+	GossipContact         *contact;
+
+	g_return_val_if_fail (MC_IS_ACCOUNT (account), NULL);
+	g_return_val_if_fail (TELEPATHY_IS_CHAN (tp_chan), NULL);
+
+	manager = empathy_contact_manager_new ();
+	list = empathy_contact_manager_get_list (manager, account);
+	contact = empathy_tp_contact_list_get_from_handle (list, tp_chan->handle);
+
+	chat = g_object_new (GOSSIP_TYPE_PRIVATE_CHAT, NULL);
+	tp_chat = empathy_tp_chat_new (account, tp_chan);
+
+	private_chat_setup (chat, contact, tp_chat);
+
+	g_object_unref (tp_chat);
+	g_object_unref (contact);
+	g_object_unref (manager);
+
+	return chat;
+}
+
+GossipPrivateChat *
+gossip_private_chat_new_with_contact (GossipContact *contact)
 {
 	GossipPrivateChat *chat;
 	EmpathyTpChat     *tp_chat;
@@ -337,27 +366,6 @@ gossip_private_chat_new (GossipContact *contact)
 
 	chat = g_object_new (GOSSIP_TYPE_PRIVATE_CHAT, NULL);
 	tp_chat = empathy_tp_chat_new_with_contact (contact);
-
-	private_chat_setup (chat, contact, tp_chat);
-	g_object_unref (tp_chat);
-
-	return chat;
-}
-
-GossipPrivateChat *
-gossip_private_chat_new_with_channel (GossipContact *contact,
-				      TpChan        *tp_chan)
-{
-	GossipPrivateChat *chat;
-	EmpathyTpChat     *tp_chat;
-	McAccount         *account;
-
-	g_return_val_if_fail (GOSSIP_IS_CONTACT (contact), NULL);
-	g_return_val_if_fail (TELEPATHY_IS_CHAN (tp_chan), NULL);
-
-	account = gossip_contact_get_account (contact);
-	chat = g_object_new (GOSSIP_TYPE_PRIVATE_CHAT, NULL);
-	tp_chat = empathy_tp_chat_new (account, tp_chan);
 
 	private_chat_setup (chat, contact, tp_chat);
 	g_object_unref (tp_chat);

@@ -39,11 +39,10 @@
 #include <libempathy/gossip-debug.h>
 #include <libempathy/gossip-utils.h>
 #include <libempathy/empathy-chandler.h>
-#include <libempathy/empathy-contact-manager.h>
-#include <libempathy/empathy-contact-list.h>
 #include <libempathy/empathy-tp-chat.h>
 #include <libempathy/gossip-paths.h>
 #include <libempathy-gtk/gossip-private-chat.h>
+#include <libempathy-gtk/gossip-group-chat.h>
 
 #define DEBUG_DOMAIN "ChatMain"
 
@@ -115,8 +114,11 @@ new_channel_cb (EmpathyChandler *chandler,
 	mc = gossip_mission_control_new ();
 	account = mission_control_get_account_for_connection (mc, tp_conn, NULL);
 	id = empathy_tp_chat_build_id (account, tp_chan);
-
 	chat = gossip_chat_window_find_chat_by_id (id);
+
+	g_free (id);
+	g_object_unref (mc);
+
 	if (chat) {
 		/* The chat already exists */
 		if (!gossip_chat_is_connected (chat)) {
@@ -128,54 +130,32 @@ new_channel_cb (EmpathyChandler *chandler,
 			g_object_unref (tp_chat);
 		}
 		gossip_chat_present (chat);
+
+		g_object_unref (account);
+		return;
 	}
-	else if (tp_chan->handle_type == TP_HANDLE_TYPE_CONTACT) {
-		EmpathyContactManager *manager;
-		EmpathyTpContactList  *list;
-		GossipContact         *contact;
-		GossipPrivateChat     *chat;
 
+	if (tp_chan->handle_type == TP_HANDLE_TYPE_CONTACT) {
 		/* We have a new private chat channel */
-		manager = empathy_contact_manager_new ();
-		list = empathy_contact_manager_get_list (manager, account);
-		contact = empathy_tp_contact_list_get_from_handle (list, tp_chan->handle);
-
-		chat = gossip_private_chat_new_with_channel (contact, tp_chan);
-		g_object_weak_ref (G_OBJECT (chat),
-				   (GWeakNotify) chat_finalized_cb,
-				   NULL);
-
-		exit_timeout_stop ();
-		chat_count++;
-
-		gossip_chat_present (GOSSIP_CHAT (chat));
-
-		g_object_unref (contact);
-		g_object_unref (chat);
-		g_object_unref (manager);
+		chat = GOSSIP_CHAT (gossip_private_chat_new (account, tp_chan));
 	}
 	else if (tp_chan->handle_type == TP_HANDLE_TYPE_ROOM) {
-#if 0
-		GossipGroupChat *chat;
-
 		/* We have a new group chat channel */
-		chat = gossip_group_chat_new (account, tp_chan);
-		g_object_weak_ref (G_OBJECT (chat),
-				   (GWeakNotify) chat_finalized_cb,
-				   NULL);
-
-		exit_timeout_stop ();
-		chat_count++;
-
-		gossip_chat_present (GOSSIP_CHAT (chat));
-
-		g_object_unref (chat);
-#endif
+		chat = GOSSIP_CHAT (gossip_group_chat_new (account, tp_chan));
 	}
 
-	g_free (id);
+	g_object_weak_ref (G_OBJECT (chat),
+			   (GWeakNotify) chat_finalized_cb,
+			   NULL);
+
+	exit_timeout_stop ();
+	chat_count++;
+
+	gossip_chat_present (GOSSIP_CHAT (chat));
+
+	g_object_unref (chat);
 	g_object_unref (account);
-	g_object_unref (mc);
+
 }
 
 int

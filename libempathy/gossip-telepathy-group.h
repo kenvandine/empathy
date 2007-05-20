@@ -46,6 +46,13 @@ struct _GossipTelepathyGroupClass {
 	GObjectClass parent_class;
 };
 
+typedef struct {
+	guint  member;
+	guint  actor;
+	guint  reason;
+	gchar *message;
+} GossipTpGroupInfo;
+
 GType                 gossip_telepathy_group_get_type        (void) G_GNUC_CONST;
 GossipTelepathyGroup *gossip_telepathy_group_new             (TpChan                *tp_chan,
 							      TpConn                *tp_conn);
@@ -66,8 +73,9 @@ void                  gossip_telepathy_group_get_all_members (GossipTelepathyGro
 							      GArray               **members,
 							      GArray               **local_pending,
 							      GArray               **remote_pending);
-GPtrArray *           gossip_telepathy_group_get_local_pending_members_with_info
+GList *               gossip_telepathy_group_get_local_pending_members_with_info
 							     (GossipTelepathyGroup  *group);
+void                  gossip_telepathy_group_info_list_free  (GList                 *infos);
 const gchar *         gossip_telepathy_group_get_name        (GossipTelepathyGroup  *group);
 guint                 gossip_telepathy_group_get_self_handle (GossipTelepathyGroup  *group);
 const gchar *         gossip_telepathy_group_get_object_path (GossipTelepathyGroup  *group);

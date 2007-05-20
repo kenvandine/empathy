@@ -52,10 +52,15 @@ struct _EmpathyTpChatroomClass {
 	EmpathyTpChatClass parent_class;
 };
 
-GType              empathy_tp_chatroom_get_type (void) G_GNUC_CONST;
-EmpathyTpChatroom *empathy_tp_chatroom_new      (McAccount *account,
-						 TpChan    *tp_chan);
-
+GType              empathy_tp_chatroom_get_type          (void) G_GNUC_CONST;
+EmpathyTpChatroom *empathy_tp_chatroom_new               (McAccount          *account,
+							  TpChan             *tp_chan);
+gboolean           empathy_tp_chatroom_get_invitation    (EmpathyTpChatroom  *chatroom,
+							  GossipContact     **contact,
+							  const gchar       **message);
+void               empathy_tp_chatroom_accept_invitation (EmpathyTpChatroom *chatroom);
+void               empathy_tp_chatroom_set_topic         (EmpathyTpChatroom *chatroom,
+							  const gchar       *topic);
 G_END_DECLS
 
 #endif /* __EMPATHY_TP_CHATROOM_H__ */

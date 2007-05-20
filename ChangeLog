@@ -1,3 +1,19 @@
+2007-05-21  Xavier Claessens  <xclaesse@gmail.com>
+
+	* libempathy-gtk/gossip-group-chat.c:
+	* libempathy-gtk/gossip-group-chat.h:
+	* libempathy-gtk/gossip-private-chat.c:
+	* libempathy-gtk/gossip-private-chat.h:
+	* libempathy-gtk/gossip-group-chat.glade:
+	* libempathy-gtk/Makefile.am:
+	* src/empathy-chat-main.c:
+	* libempathy/empathy-tp-contact-list.c:
+	* libempathy/gossip-telepathy-group.c:
+	* libempathy/gossip-telepathy-group.h:
+	* libempathy/empathy-tp-chatroom.c:
+	* libempathy/empathy-tp-chatroom.h: Implementing basic chatroom support.
+	Actually it works only if we get invited in a chatroom.
+
 2007-05-20  Xavier Claessens  <xclaesse@gmail.com>
 
 	* libempathy-gtk/gossip-chat-view.c: Correctly remember the contact

@@ -314,11 +314,13 @@ gossip_telepathy_group_get_all_members (GossipTelepathyGroup  *group,
 	}
 }
 
-GPtrArray *
-gossip_telepathy_group_get_local_pending_members_with_info (GossipTelepathyGroup  *group)
+GList *
+gossip_telepathy_group_get_local_pending_members_with_info (GossipTelepathyGroup *group)
 {
 	GossipTelepathyGroupPriv *priv;
-	GPtrArray                *info = NULL;
+	GPtrArray                *array;
+	guint                     i;
+	GList                    *infos = NULL;
 	GError                   *error = NULL;
 
 	g_return_val_if_fail (GOSSIP_IS_TELEPATHY_GROUP (group), NULL);
@@ -326,16 +328,61 @@ gossip_telepathy_group_get_local_pending_members_with_info (GossipTelepathyGroup
 	priv = GET_PRIV (group);
 
 	if (!tp_chan_iface_group_get_local_pending_members_with_info (priv->group_iface,
-								      &info,
+								      &array,
 								      &error)) {
 		gossip_debug (DEBUG_DOMAIN, 
 			      "GetLocalPendingMembersWithInfo failed: %s",
 			      error ? error->message : "No error given");
 		g_clear_error (&error);
+
+		return NULL;
 	}
 
-	return info;
+	if (!array) {
+		/* This happens with butterfly because
+		 * GetLocalPendingMembersWithInfo is not 
+		 * implemented */
+		return NULL;
+	}
+
+	for (i = 0; array->len > i; i++) {
+		GValueArray       *pending_struct;
+		GossipTpGroupInfo *info;
+		const gchar       *message;
+
+		info = g_slice_new (GossipTpGroupInfo);
+
+		pending_struct = g_ptr_array_index (array, i);
+		info->member = g_value_get_uint (g_value_array_get_nth (pending_struct, 0));
+		info->actor = g_value_get_uint (g_value_array_get_nth (pending_struct, 1));
+		info->reason = g_value_get_uint (g_value_array_get_nth (pending_struct, 2));
+		message = g_value_get_string (g_value_array_get_nth (pending_struct, 3));
+		info->message = g_strdup (message);
+		g_value_array_free (pending_struct);
+
+		infos = g_list_prepend (infos, info);
+	}
+	g_ptr_array_free (array, TRUE);
+
+	return infos;
 }
+
+void
+gossip_telepathy_group_info_list_free (GList *infos)
+{
+	GList *l;
+
+	for (l = infos; l; l = l->next) {
+		GossipTpGroupInfo *info;
+
+		info = l->data;
+
+		g_free (info->message);
+		g_slice_free (GossipTpGroupInfo, info);
+	}
+	g_list_free (infos);
+}
+
 
 static void
 telepathy_group_destroy_cb (DBusGProxy           *proxy,

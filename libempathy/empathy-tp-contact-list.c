@@ -622,6 +622,11 @@ empathy_tp_contact_list_get_from_handles (EmpathyTpContactList *list,
 		guint          handle;
 
 		handle = g_array_index (handles, guint, i);
+
+		if (handle == 0) {
+			continue;
+		}
+
 		contact = g_hash_table_lookup (priv->contacts,
 					       GUINT_TO_POINTER (handle));
 
@@ -974,49 +979,34 @@ tp_contact_list_newchannel_cb (DBusGProxy           *proxy,
 			g_array_free (members, TRUE);
 		}
 		if (list_type == TP_CONTACT_LIST_TYPE_PUBLISH) {
-			GPtrArray *info;
-			GArray    *pending; 
-			guint      i;
+			GList  *members, *l;
+			GArray *pending;
 
 			g_signal_connect (group, "local-pending",
 					  G_CALLBACK (tp_contact_list_local_pending_cb),
 					  list);
 
-			info = gossip_telepathy_group_get_local_pending_members_with_info (group);
-
-			if (!info) {
-				/* This happens with butterfly because
-				 * GetLocalPendingMembersWithInfo is not 
-				 * implemented */
+			members = gossip_telepathy_group_get_local_pending_members_with_info (group);
+			if (!members) {
 				g_object_unref (new_chan);
 				return;
 			}
 
 			pending = g_array_sized_new (FALSE, FALSE, sizeof (guint), 1);
-			for (i = 0; info->len > i; i++) {
-				GValueArray *pending_struct;
-				guint        member;
-				guint        invitor;
-				guint        reason;
-				const gchar *message;
+			for (l = members; l; l = l->next) {
+				GossipTpGroupInfo *info;
 
-				pending_struct = g_ptr_array_index (info, i);
-				member = g_value_get_uint (g_value_array_get_nth (pending_struct, 0));
-				invitor = g_value_get_uint (g_value_array_get_nth (pending_struct, 1));
-				reason = g_value_get_uint (g_value_array_get_nth (pending_struct, 2));
-				message = g_value_get_string (g_value_array_get_nth (pending_struct, 3));
+				info = l->data;
 
-				g_array_insert_val (pending, 0, member);
-
+				g_array_insert_val (pending, 0, info->member);
 				tp_contact_list_local_pending_cb (group, pending,
-							       invitor,
-							       reason,
-							       message, list);
-
-				g_value_array_free (pending_struct);
+								  info->actor,
+								  info->reason,
+								  info->message,
+								  list);
 			}
 
-			g_ptr_array_free (info, TRUE);
+			gossip_telepathy_group_info_list_free (members);
 			g_array_free (pending, TRUE);
 		}
 	}
