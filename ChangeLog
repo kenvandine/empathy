@@ -1,5 +1,11 @@
 2007-05-20  Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/gossip-contact-list-store.c: Set COL_NAME earlier like
+	that it can directly be sorted.
+	* data/empathy.schemas.in: s/gossip/empathy/
+
+2007-05-20  Xavier Claessens  <xclaesse@gmail.com>
+
 	* configure.ac: Bump version to 0.5
 
 2007-05-20  Xavier Claessens  <xclaesse@gmail.com>

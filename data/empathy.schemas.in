@@ -16,9 +16,9 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/gossip/contacts/sort_criterium</key>
-      <applyto>/apps/gossip/contacts/sort_criterium</applyto>
-      <owner>gossip</owner>
+      <key>/schemas/apps/empathy/contacts/sort_criterium</key>
+      <applyto>/apps/empathy/contacts/sort_criterium</applyto>
+      <owner>empathy</owner>
       <type>string</type>
       <default>name</default>
       <locale name="C">

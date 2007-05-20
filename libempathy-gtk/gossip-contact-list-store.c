@@ -780,7 +780,10 @@ contact_list_store_add_contact (GossipContactListStore *store,
 	if (!groups) {
 		gtk_tree_store_append (GTK_TREE_STORE (store), &iter, NULL);
 		gtk_tree_store_set (GTK_TREE_STORE (store), &iter,
+				    COL_NAME, gossip_contact_get_name (contact),
 				    COL_CONTACT, contact,
+				    COL_IS_GROUP, FALSE,
+				    COL_IS_SEPARATOR, FALSE,
 				    -1);
 	}
 
@@ -799,7 +802,10 @@ contact_list_store_add_contact (GossipContactListStore *store,
 		gtk_tree_store_insert_after (GTK_TREE_STORE (store), &iter,
 					     &iter_group, NULL);
 		gtk_tree_store_set (GTK_TREE_STORE (store), &iter,
+				    COL_NAME, gossip_contact_get_name (contact),
 				    COL_CONTACT, contact,
+				    COL_IS_GROUP, FALSE,
+				    COL_IS_SEPARATOR, FALSE,
 				    -1);
 	}
 
