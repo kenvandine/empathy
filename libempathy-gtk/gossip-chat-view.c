@@ -1472,16 +1472,17 @@ gossip_chat_view_append_message (GossipChatView *view,
 
 	my_contact = gossip_contact_get_user (sender);
 
-	if (gossip_contact_equal (my_contact, sender)) {
-		priv->last_block_type = BLOCK_TYPE_SELF;
-	} else {
-		priv->last_block_type = BLOCK_TYPE_OTHER;
-	}
-
-	/* Reset the last inserted contact, since it was from self. */
+	/* Reset the last inserted contact. */
 	if (priv->last_contact) {
 		g_object_unref (priv->last_contact);
+	}
+
+	if (gossip_contact_equal (my_contact, sender)) {
+		priv->last_block_type = BLOCK_TYPE_SELF;
 		priv->last_contact = NULL;
+	} else {
+		priv->last_block_type = BLOCK_TYPE_OTHER;
+		priv->last_contact = g_object_ref (sender);
 	}
 
 	if (scroll_down) {

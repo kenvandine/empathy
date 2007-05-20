@@ -1,5 +1,10 @@
 2007-05-20  Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/gossip-chat-view.c: Correctly remember the contact
+	who sent last message.
+
+2007-05-20  Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/gossip-chat-view.c: Correctly remember if last message
 	comes from the self contact or another.
 
