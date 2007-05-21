@@ -1,5 +1,11 @@
 2007-05-21  Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy/empathy-idle.c: If we are offline do not set away on idle.
+	If we are already away restore to available when we are no mode idle.
+	Do no modify status message.
+
+2007-05-21  Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/gossip-group-chat.c:
 	* libempathy-gtk/gossip-group-chat.h:
 	* libempathy-gtk/gossip-private-chat.c:

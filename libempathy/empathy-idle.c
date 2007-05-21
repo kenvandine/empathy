@@ -49,8 +49,8 @@ struct _EmpathyIdlePriv {
 	MissionControl *mc;
 	DBusGProxy     *gs_proxy;
 	gboolean        is_idle;
-	McPresence      last_state;
-	gchar          *last_status;
+	McPresence      saved_state;
+	gchar          *saved_status;
 	guint           ext_away_timeout;
 };
 
@@ -111,7 +111,7 @@ idle_finalize (GObject *object)
 
 	priv = GET_PRIV (object);
 
-	g_free (priv->last_status);
+	g_free (priv->saved_status);
 	g_object_unref (priv->mc);
 
 	if (priv->gs_proxy) {
@@ -150,17 +150,30 @@ idle_session_idle_changed_cb (DBusGProxy  *gs_proxy,
 		      is_idle ? "yes" : "no");
 
 	if (is_idle && !priv->is_idle) {
+		McPresence new_state = MC_PRESENCE_AWAY;
 		/* We are now idle, set state to away */
-		g_free (priv->last_status);
-		idle_ext_away_stop (idle);
 
-		priv->last_state = mission_control_get_presence_actual (priv->mc, NULL);
-		priv->last_status = mission_control_get_presence_message_actual (priv->mc, NULL);
+		priv->saved_state = mission_control_get_presence_actual (priv->mc, NULL);
+
+		if (priv->saved_state <= MC_PRESENCE_OFFLINE ||
+		    priv->saved_state == MC_PRESENCE_HIDDEN) {
+			/* We are not online so nothing to do here */
+			return;
+		} else if (priv->saved_state == MC_PRESENCE_AWAY ||
+			   priv->saved_state == MC_PRESENCE_EXTENDED_AWAY) {
+			/* User set away manually, when coming back we restore
+			 * default presence. */
+			new_state = priv->saved_state;
+			priv->saved_state = MC_PRESENCE_AVAILABLE;
+			priv->saved_status = NULL;
+		}
+
+		priv->saved_status = mission_control_get_presence_message_actual (priv->mc, NULL);
 
 		gossip_debug (DEBUG_DOMAIN, "Going to autoaway");
 		mission_control_set_presence (priv->mc,
-					      MC_PRESENCE_AWAY,
-					      _("Autoaway"),
+					      new_state,
+					      priv->saved_status,
 					      NULL, NULL);
 		idle_ext_away_start (idle);
 	} else if (!is_idle && priv->is_idle) {
@@ -168,13 +181,15 @@ idle_session_idle_changed_cb (DBusGProxy  *gs_proxy,
 		idle_ext_away_stop (idle);
 
 		gossip_debug (DEBUG_DOMAIN, "Restoring state to %d %s",
-			      priv->last_state,
-			      priv->last_status);
+			      priv->saved_state,
+			      priv->saved_status);
 
 		mission_control_set_presence (priv->mc,
-					      priv->last_state,
-					      priv->last_status,
+					      priv->saved_state,
+					      priv->saved_status,
 					      NULL, NULL);
+		g_free (priv->saved_status);
+		priv->saved_status = NULL;
 	}
 
 	priv->is_idle = is_idle;
