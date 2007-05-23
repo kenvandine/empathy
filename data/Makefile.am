@@ -5,6 +5,7 @@ profile_DATA = 				\
 	jabber.profile			\
 	gtalk.profile			\
 	salut.profile			\
+	irc.profile			\
 	msn.profile
 
 gtk_update_icon_cache = gtk-update-icon-cache -f -t $(datadir)/icons/hicolor

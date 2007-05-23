@@ -32,6 +32,8 @@ libempathy_gtk_la_SOURCES =             					\
 	gossip-status-presets.c			gossip-status-presets.h		\
 	gossip-presence-chooser.c		gossip-presence-chooser.h	\
 	gossip-about-dialog.c			gossip-about-dialog.h		\
+	gossip-account-chooser.c		gossip-account-chooser.h	\
+	gossip-new-chatroom-dialog.c		gossip-new-chatroom-dialog.h	\
 	gossip-ui-utils.c			gossip-ui-utils.h
 
 libempathy_gtk_la_LIBADD =				\
@@ -48,6 +50,7 @@ glade_DATA = 					\
 	gossip-presence-chooser.glade		\
 	gossip-accounts-dialog.glade		\
 	gossip-account-widget-jabber.glade	\
+	gossip-new-chatroom-dialog.glade	\
 	gossip-group-chat.glade			\
 	gossip-chat.glade
 

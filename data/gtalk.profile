@@ -4,6 +4,7 @@ Protocol=jabber
 DisplayName=Google Talk
 IconName = empathy-proto-google-talk
 ConfigurationUI = jabber
+Capabilities = chat-p2p, chat-room, chat-room-list, voice-p2p, split-account, supports-avatars, supports-alias
 DefaultAccountDomain = gmail.com, googlemail.com
 Default-server = talk.google.com
 Default-port = 5223

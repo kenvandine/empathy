@@ -250,8 +250,6 @@ tp_chatroom_members_added_cb (GossipTelepathyGroup *group,
 	EmpathyTpChatroomPriv *priv;
 	GList                 *contacts, *l;
 
-	g_return_if_fail (EMPATHY_IS_TP_CHATROOM (chatroom));
-
 	priv = GET_PRIV (chatroom);
 
 	contacts = empathy_tp_contact_list_get_from_handles (priv->list, handles);
@@ -275,6 +273,22 @@ tp_chatroom_members_removed_cb (GossipTelepathyGroup *group,
 				const gchar          *message,
 				EmpathyTpChatroom    *chatroom)
 {
+	EmpathyTpChatroomPriv *priv;
+	GList                 *contacts, *l;
+
+	priv = GET_PRIV (chatroom);
+
+	contacts = empathy_tp_contact_list_get_from_handles (priv->list, handles);
+	for (l = contacts; l; l = l->next) {
+		GossipContact *contact;
+
+		contact = l->data;
+
+		g_signal_emit_by_name (chatroom, "contact-removed", contact);
+
+		g_object_unref (contact);
+	}
+	g_list_free (contacts);
 }
 
 static void
@@ -295,6 +309,16 @@ tp_chatroom_add (EmpathyContactList *list,
 		 GossipContact      *contact,
 		 const gchar        *message)
 {
+	EmpathyTpChatroomPriv *priv;
+
+	g_return_if_fail (EMPATHY_IS_TP_CHATROOM (list));
+	g_return_if_fail (GOSSIP_IS_CONTACT (contact));
+
+	priv = GET_PRIV (list);
+
+	gossip_telepathy_group_add_member (priv->group,
+					   gossip_contact_get_handle (contact),
+					   message);
 }
 
 static void
@@ -302,6 +326,16 @@ tp_chatroom_remove (EmpathyContactList *list,
 		    GossipContact      *contact,
 		    const gchar        *message)
 {
+	EmpathyTpChatroomPriv *priv;
+
+	g_return_if_fail (EMPATHY_IS_TP_CHATROOM (list));
+	g_return_if_fail (GOSSIP_IS_CONTACT (contact));
+
+	priv = GET_PRIV (list);
+
+	gossip_telepathy_group_remove_member (priv->group,
+					      gossip_contact_get_handle (contact),
+					      message);
 }
 
 static GList *

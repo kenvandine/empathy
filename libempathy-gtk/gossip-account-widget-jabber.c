@@ -30,6 +30,8 @@
 #include <gtk/gtk.h>
 #include <glade/glade.h>
 
+#include <libmissioncontrol/mc-profile.h>
+
 #include <libempathy/gossip-utils.h>
 
 #include "gossip-account-widget-jabber.h"
@@ -186,6 +188,18 @@ account_widget_jabber_setup (GossipAccountWidgetJabber *settings)
 	mc_account_get_param_string (settings->account, "server", &server);
 	mc_account_get_param_string (settings->account, "password", &password);
 	mc_account_get_param_boolean (settings->account, "old-ssl", &old_ssl);
+
+	if (!id) {
+		McProfile   *profile;
+		const gchar *server;
+
+		profile = mc_account_get_profile (settings->account);
+		server = mc_profile_get_default_account_domain (profile);
+		if (server) {
+			id = g_strconcat ("user@", server, NULL);
+		}
+		g_object_unref (profile);
+	}
 
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (settings->checkbutton_ssl), old_ssl);
 	gtk_entry_set_text (GTK_ENTRY (settings->entry_id), id ? id : "");

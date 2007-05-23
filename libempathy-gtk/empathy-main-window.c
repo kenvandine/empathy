@@ -45,7 +45,7 @@
 #include "gossip-preferences.h"
 #include "gossip-accounts-dialog.h"
 #include "gossip-about-dialog.h"
-
+#include "gossip-new-chatroom-dialog.h"
 
 #define DEBUG_DOMAIN "MainWindow"
 
@@ -403,7 +403,7 @@ static void
 main_window_room_join_new_cb (GtkWidget         *widget,
 			      EmpathyMainWindow *window)
 {
-	//gossip_new_chatroom_dialog_show (GTK_WINDOW (window->window));
+	gossip_new_chatroom_dialog_show (GTK_WINDOW (window->window));
 }
 
 static void

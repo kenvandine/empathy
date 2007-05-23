@@ -1,3 +1,25 @@
+2007-05-24  Xavier Claessens  <xclaesse@gmail.com>
+
+	* libempathy-gtk/gossip-account-chooser.c:
+	* libempathy-gtk/gossip-new-chatroom-dialog.c:
+	* libempathy-gtk/gossip-account-widget-jabber.c:
+	* libempathy-gtk/gossip-account-chooser.h:
+	* libempathy-gtk/gossip-new-chatroom-dialog.h:
+	* libempathy-gtk/gossip-group-chat.c:
+	* libempathy-gtk/empathy-main-window.c:
+	* libempathy-gtk/gossip-new-chatroom-dialog.glade:
+	* libempathy-gtk/gossip-account-widget-jabber.glade:
+	* libempathy-gtk/Makefile.am:
+	* libempathy/empathy-tp-chatroom.c:
+	* data/gtalk.profile:
+	* data/jabber.profile:
+	* data/salut.profile:
+	* data/Makefile.am:
+	* data/empathy.desktop.in.in:
+	* data/msn.profile:
+	* data/irc.profile: New objects: GossipAccountChooser and
+	GossipNewChatroom, we can now join any chatroom. Adding IRC profile.
+
 2007-05-21  Xavier Claessens  <xclaesse@gmail.com>
 
 	* libempathy/empathy-idle.c: If we are offline do not set away on idle.

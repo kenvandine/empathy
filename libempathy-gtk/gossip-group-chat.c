@@ -187,6 +187,7 @@ gossip_group_chat_new (McAccount *account,
 	/* Create contact list */
 	priv->store = gossip_contact_list_store_new (EMPATHY_CONTACT_LIST (priv->tp_chat));
 	priv->view = gossip_contact_list_view_new (priv->store);
+	gossip_contact_list_store_set_show_offline (priv->store, TRUE);
 	gtk_container_add (GTK_CONTAINER (priv->scrolled_window_contacts),
 			   GTK_WIDGET (priv->view));
 	gtk_widget_show (GTK_WIDGET (priv->view));
