@@ -1,3 +1,51 @@
+2007-05-25  Xavier Claessens  <xclaesse@gmail.com>
+
+	* libempathy-gtk/gossip-new-chatroom-dialog.c: Preset the server only
+	for jabber protocol to conference.server. This fixes a warning.
+
+	* libempathy-gtk/gossip-group-chat.h:
+	* libempathy-gtk/gossip-group-chat.c: gossip_group_chat_set_topic() is 
+	a public function.
+
+	* libempathy-gtk/empathy-images.h:
+	* libempathy-gtk/empathy-main-window.glade:
+	* libempathy-gtk/empathy-status-icon.glade: Make use of
+	empathy-new-message icon name.
+
+	* libempathy-gtk/gossip-contact-list-store.c: By default we sort by
+	contacts names.
+
+	* libempathy-gtk/gossip-chat.c: Do not display composing state if
+	it's our own contact that is composing.
+
+	* src/empathy-chat-main.c:
+	* libempathy/empathy-tp-chat.c:
+	* libempathy/empathy-tp-chat.h: Make possible to build the id based on
+	the account and the channel's name. For private chats that means the
+	contact's id.
+
+	* libempathy-gtk/gossip-chat-window.c: Un-comment the code related to
+	chatrooms that is now implemented. We can now Show/Hide contact list
+	for group chats, DnD contact on the window to begin a discussion, join
+	a new chatroom.
+
+	* libempathy-gtk/gossip-account-chooser.c: Add a FIXME message.
+
+	* data/22x22/empathy-new-message.png:
+	* data/22x22/empathy-proto-irc.png:
+	* data/22x22/Makefile.am:
+	* data/32x32/empathy-proto-irc.png:
+	* data/32x32/Makefile.am:
+	* data/gtalk.profile:
+	* data/16x16/empathy-new-message:
+	* data/16x16/empathy-message-new.png:
+	* data/16x16/empathy-proto-irc.png:
+	* data/16x16/Makefile.am:
+	* data/scalable/empathy-proto-irc.svg:
+	* data/scalable/Makefile.am:
+	* data/irc.profile: Adding icons for empathy-new-message and IRC
+	protocol. Make use of the irc icon in the irc profile.
+
 2007-05-24  Xavier Claessens  <xclaesse@gmail.com>
 
 	* libempathy-gtk/gossip-new-chatroom-dialog.c:

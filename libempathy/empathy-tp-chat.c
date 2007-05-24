@@ -488,14 +488,24 @@ empathy_tp_chat_get_id (EmpathyTpChat *chat)
 		return priv->id;
 	}
 
-	priv->id = empathy_tp_chat_build_id (priv->account, priv->tp_chan);
+	priv->id = empathy_tp_chat_build_id_for_chan (priv->account, priv->tp_chan);
 
 	return priv->id;
 }
 
 gchar *
-empathy_tp_chat_build_id (McAccount *account,
-			  TpChan    *tp_chan)
+empathy_tp_chat_build_id (McAccount   *account,
+			  const gchar *contact_id)
+{
+	/* A handle name is unique only for a specific account */
+	return g_strdup_printf ("%s/%s",
+				mc_account_get_unique_name (account),
+				contact_id);
+}
+
+gchar *
+empathy_tp_chat_build_id_for_chan (McAccount *account,
+				   TpChan    *tp_chan)
 {
 	MissionControl *mc;
 	TpConn         *tp_conn;
@@ -511,6 +521,7 @@ empathy_tp_chat_build_id (McAccount *account,
 	tp_conn = mission_control_get_connection (mc, account, NULL);
 	g_object_unref (mc);
 
+	/* Get the handle's name */
 	handles = g_array_new (FALSE, FALSE, sizeof (guint));
 	g_array_append_val (handles, tp_chan->handle);
 	if (!tp_conn_inspect_handles (DBUS_G_PROXY (tp_conn),
@@ -528,10 +539,7 @@ empathy_tp_chat_build_id (McAccount *account,
 		return NULL;
 	}
 
-	/* A handle name is unique only for a specific account */
-	id = g_strdup_printf ("%s/%s",
-			      mc_account_get_unique_name (account),
-			      *names);
+	id = empathy_tp_chat_build_id (account, *names);
 
 	g_strfreev (names);
 	g_object_unref (tp_conn);

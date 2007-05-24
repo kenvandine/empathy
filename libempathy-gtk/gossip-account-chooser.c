@@ -554,6 +554,7 @@ account_chooser_status_changed_cb (MissionControl                  *mc,
 				   const gchar                     *unique_name,
 				   GossipAccountChooser            *chooser)
 {
+	/* FIXME: implement */
 }
 
 static gboolean

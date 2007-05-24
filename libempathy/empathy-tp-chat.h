@@ -55,18 +55,20 @@ struct _EmpathyTpChatClass {
 	GObjectClass parent_class;
 };
 
-GType          empathy_tp_chat_get_type         (void) G_GNUC_CONST;
-EmpathyTpChat *empathy_tp_chat_new              (McAccount                 *account,
-						 TpChan                    *tp_chan);
-EmpathyTpChat *empathy_tp_chat_new_with_contact (GossipContact             *contact);
-void           empathy_tp_chat_request_pending  (EmpathyTpChat             *chat);
-void           empathy_tp_chat_send             (EmpathyTpChat             *chat,
-						 GossipMessage             *message);
-void           empathy_tp_chat_set_state        (EmpathyTpChat             *chat,
-						 TelepathyChannelChatState  state);
-const gchar *  empathy_tp_chat_get_id           (EmpathyTpChat             *chat);
-gchar *        empathy_tp_chat_build_id         (McAccount                 *account,
-						 TpChan                    *tp_chan);
+GType          empathy_tp_chat_get_type             (void) G_GNUC_CONST;
+EmpathyTpChat *empathy_tp_chat_new                  (McAccount                 *account,
+						     TpChan                    *tp_chan);
+EmpathyTpChat *empathy_tp_chat_new_with_contact     (GossipContact             *contact);
+void           empathy_tp_chat_request_pending      (EmpathyTpChat             *chat);
+void           empathy_tp_chat_send                 (EmpathyTpChat             *chat,
+						     GossipMessage             *message);
+void           empathy_tp_chat_set_state            (EmpathyTpChat             *chat,
+						     TelepathyChannelChatState  state);
+const gchar *  empathy_tp_chat_get_id               (EmpathyTpChat             *chat);
+gchar *        empathy_tp_chat_build_id             (McAccount                 *account,
+						     const gchar               *contact_id);
+gchar *        empathy_tp_chat_build_id_for_chan    (McAccount                 *account,
+						     TpChan                    *tp_chan);
 
 G_END_DECLS
 

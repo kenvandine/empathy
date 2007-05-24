@@ -34,6 +34,8 @@
 #include <glade/glade.h>
 #include <glib/gi18n.h>
 
+#include <libempathy/empathy-contact-manager.h>
+#include <libempathy/empathy-contact-list.h>
 #include <libempathy/gossip-contact.h>
 #include <libempathy/gossip-debug.h>
 #include <libempathy/gossip-message.h>
@@ -45,9 +47,10 @@
 //#include "gossip-chat-invite.h"
 //#include "gossip-contact-info-dialog.h"
 //#include "gossip-log-window.h"
-//#include "gossip-new-chatroom-dialog.h"
+#include "gossip-new-chatroom-dialog.h"
 #include "gossip-preferences.h"
 #include "gossip-private-chat.h"
+#include "gossip-group-chat.h"
 //#include "gossip-sound.h"
 #include "gossip-ui-utils.h"
 
@@ -228,7 +231,7 @@ typedef enum {
 } DndDragType;
 
 static const GtkTargetEntry drag_types_dest[] = {
-	{ "text/contact-id", GTK_TARGET_SAME_APP, DND_DRAG_TYPE_CONTACT_ID },
+	{ "text/contact-id", 0, DND_DRAG_TYPE_CONTACT_ID },
 	{ "GTK_NOTEBOOK_TAB", GTK_TARGET_SAME_APP, DND_DRAG_TYPE_TAB },
 };
 
@@ -759,16 +762,11 @@ chat_window_update_menu (GossipChatWindow *window)
 	is_connected = gossip_chat_is_connected (priv->current_chat);
 
 	if (gossip_chat_is_group_chat (priv->current_chat)) {
-#if 0
-FIXME:
-		GossipGroupChat       *group_chat;
-		GossipChatroomManager *manager;
-		GossipChatroom        *chatroom;
-		GossipChatroomId       id;
-		gboolean               saved;
+		GossipGroupChat *group_chat;
+		gboolean         saved = TRUE;
+		gboolean         show_contacts;
 
 		group_chat = GOSSIP_GROUP_CHAT (priv->current_chat);
-		chatroom = gossip_group_chat_get_chatroom (group_chat);
 
 		/* Show / Hide widgets */
 		gtk_widget_show (priv->menu_room);
@@ -780,9 +778,11 @@ FIXME:
 		/* Can we add this room to our favourites and are we
 		 * connected to the room?
 		 */
+		/* FIXME:
 		manager = gossip_app_get_chatroom_manager ();
 		id = gossip_chatroom_get_id (chatroom);
 		saved = gossip_chatroom_manager_find (manager, id) != NULL;
+		*/
 
 		gtk_widget_set_sensitive (priv->menu_room_add, !saved);
 		gtk_widget_set_sensitive (priv->menu_conv_insert_smiley, is_connected);
@@ -795,7 +795,7 @@ FIXME:
 		 * with 2 or more group chat windows where showing
 		 * contacts doesn't do anything.
 		 */
-		show_contacts = gossip_chat_get_show_contacts (priv->current_chat);
+		show_contacts = gossip_group_chat_get_show_contacts (group_chat);
 
 		g_signal_handlers_block_by_func (priv->menu_room_show_contacts,
 						 chat_window_show_contacts_toggled_cb,
@@ -808,7 +808,6 @@ FIXME:
 		g_signal_handlers_unblock_by_func (priv->menu_room_show_contacts,
 						   chat_window_show_contacts_toggled_cb,
 						   window);
-#endif
 	} else {
 		GossipPrivateChat  *chat;
 		GossipSubscription  subscription;
@@ -1010,7 +1009,7 @@ chat_window_show_contacts_toggled_cb (GtkWidget        *menuitem,
 	g_return_if_fail (priv->current_chat != NULL);
 
 	show = gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM (priv->menu_room_show_contacts));
-	//gossip_group_chat_set_show_contacts (GOSSIP_GROUP_CHAT (priv->current_chat), show);
+	gossip_group_chat_set_show_contacts (GOSSIP_GROUP_CHAT (priv->current_chat), show);
 }
 
 static void
@@ -1030,7 +1029,6 @@ static void
 chat_window_room_set_topic_activate_cb (GtkWidget        *menuitem,
 					GossipChatWindow *window)
 {
-/*FIXME
 	GossipChatWindowPriv *priv;
 	
 	priv = GET_PRIV (window);
@@ -1040,7 +1038,7 @@ chat_window_room_set_topic_activate_cb (GtkWidget        *menuitem,
 
 		group_chat = GOSSIP_GROUP_CHAT (priv->current_chat);
 		gossip_group_chat_set_topic (group_chat);
-	}*/
+	}
 }
 
 static void
@@ -1051,7 +1049,7 @@ chat_window_room_join_new_activate_cb (GtkWidget        *menuitem,
 
 	priv = GET_PRIV (window);
 
-	// FIXME: gossip_new_chatroom_dialog_show (GTK_WINDOW (priv->dialog));
+	gossip_new_chatroom_dialog_show (GTK_WINDOW (priv->dialog));
 }
 
 static void
@@ -1591,14 +1589,15 @@ chat_window_drag_data_received (GtkWidget        *widget,
 				guint             time,
 				GossipChatWindow *window)
 {
+	/* FIXME: DnD of contact do not seems to work... */
 	if (info == DND_DRAG_TYPE_CONTACT_ID) {
-#if 0
-FIXME:
-		GossipChatManager *manager;
-		GossipContact     *contact;
-		GossipChat        *chat;
-		GossipChatWindow  *old_window;
-		const gchar       *id = NULL;
+		EmpathyContactManager *manager;
+		GossipContact         *contact;
+		GossipChat            *chat;
+		GossipChatWindow      *old_window;
+		McAccount             *account;
+		const gchar           *id = NULL;
+		gchar                 *chat_id;
 
 		if (selection) {
 			id = (const gchar*) selection->data;
@@ -1606,15 +1605,20 @@ FIXME:
 
 		gossip_debug (DEBUG_DOMAIN, "DND contact from roster with id:'%s'", id);
 		
-		contact = gossip_session_find_contact (gossip_app_get_session (), id);
+		manager = empathy_contact_manager_new ();
+		contact = empathy_contact_list_find (EMPATHY_CONTACT_LIST (manager), id);
+		g_object_unref (manager);
+
 		if (!contact) {
 			gossip_debug (DEBUG_DOMAIN, "DND contact from roster not found");
 			return;
 		}
 		
-		manager = gossip_app_get_chat_manager ();
-		chat = GOSSIP_CHAT (gossip_chat_manager_get_chat (manager, contact));
+		account = gossip_contact_get_account (contact);
+		chat_id = empathy_tp_chat_build_id (account, id);
+		chat = gossip_chat_window_find_chat_by_id (chat_id);
 		old_window = gossip_chat_get_window (chat);
+		g_free (chat_id);
 		
 		if (old_window) {
 			if (old_window == window) {
@@ -1628,7 +1632,7 @@ FIXME:
 		}
 		
 		/* Added to take care of any outstanding chat events */
-		gossip_chat_manager_show_chat (manager, contact);
+		gossip_chat_present (chat);
 
 		/* We should return TRUE to remove the data when doing
 		 * GDK_ACTION_MOVE, but we don't here otherwise it has
@@ -1636,7 +1640,6 @@ FIXME:
 		 * anyway with add_chat() and remove_chat().
 		 */
 		gtk_drag_finish (context, TRUE, FALSE, time);
-#endif
 	}
 	else if (info == DND_DRAG_TYPE_TAB) {
 		GossipChat        *chat = NULL;

@@ -1072,10 +1072,17 @@ chat_state_changed_cb (EmpathyTpChat             *tp_chat,
 		       GossipChat                *chat)
 {
 	GossipChatPriv *priv;
+	GossipContact  *own_contact;
 	GList          *l;
 	gboolean        was_composing;
 
 	priv = GET_PRIV (chat);
+
+	own_contact = gossip_contact_get_user (contact);
+	if (gossip_contact_equal (own_contact, contact)) {
+		/* We don't care about our own chat state */
+		return;
+	}
 
 	was_composing = (priv->compositors != NULL);
 

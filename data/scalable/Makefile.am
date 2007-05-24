@@ -11,5 +11,6 @@ icon_DATA =					\
 	empathy-proto-google-talk.svg		\
 	empathy-proto-msn.svg			\
 	empathy-proto-gizmo.svg			\
+	empathy-proto-irc.svg			\
 	empathy-proto-jabber.svg
 EXTRA_DIST = $(icon_DATA)

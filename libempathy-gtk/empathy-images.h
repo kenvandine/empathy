@@ -33,9 +33,10 @@ G_BEGIN_DECLS
 #define EMPATHY_IMAGE_PENDING             "empathy-pending"
 
 #define EMPATHY_IMAGE_MESSAGE             "empathy-message"
+#define EMPATHY_IMAGE_NEW_MESSAGE         "empathy-new-message"
 #define EMPATHY_IMAGE_TYPING              "empathy-typing"
-#define EMPATHY_IMAGE_CONTACT_INFORMATION "vcard_16"
-#define EMPATHY_IMAGE_GROUP_MESSAGE       "gossip-group-message"
+#define EMPATHY_IMAGE_CONTACT_INFORMATION "empathy-contact-information"
+#define EMPATHY_IMAGE_GROUP_MESSAGE       "empathy-group-message"
 
 G_END_DECLS
 

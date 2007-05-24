@@ -127,7 +127,6 @@ static void     new_chatroom_dialog_model_row_deleted_cb            (GtkTreeMode
 								     GossipNewChatroomDialog *dialog);
 static void     new_chatroom_dialog_model_selection_changed         (GtkTreeSelection        *selection,
 								     GossipNewChatroomDialog *dialog);
-static void     new_chatroom_dialog_set_defaults                    (GossipNewChatroomDialog *dialog);
 static void     new_chatroom_dialog_join                            (GossipNewChatroomDialog *dialog);
 static void     new_chatroom_dialog_request_handles_cb              (DBusGProxy              *proxy,
 								     GArray                  *handles,
@@ -418,11 +417,29 @@ new_chatroom_dialog_update_widgets (GossipNewChatroomDialog *dialog)
 	protocol = mc_profile_get_protocol_name (profile);
 
 	/* hardcode here known protocols */
-	if (strcmp (protocol, "jabber") == 0 ||
-	    strcmp (protocol, "salut") == 0) {
+	if (strcmp (protocol, "jabber") == 0) {
+		const gchar *server;
+
+		server = mc_profile_get_default_account_domain (profile);
+		if (server) {
+			gchar *conference_server;
+
+			conference_server = g_strconcat ("conference.",
+							 server, NULL);
+			gtk_entry_set_text (GTK_ENTRY (dialog->entry_server),
+						       conference_server);
+			g_free (conference_server);
+		}
+
 		gtk_widget_show (dialog->hbox_server);
 		gtk_widget_show (dialog->hbox_nick);
 		gtk_widget_show (dialog->vbox_browse);
+
+	}
+	else if (strcmp (protocol, "salut") == 0) {
+		gtk_widget_hide (dialog->hbox_server);
+		gtk_widget_show (dialog->hbox_nick);
+		gtk_widget_show (dialog->vbox_browse);		
 	}
 	else if (strcmp (protocol, "irc") == 0) {
 		gtk_widget_hide (dialog->hbox_server);
@@ -434,7 +451,6 @@ new_chatroom_dialog_update_widgets (GossipNewChatroomDialog *dialog)
 		gtk_widget_hide (dialog->vbox_browse);
 	}
 
-	new_chatroom_dialog_set_defaults (dialog);
 	new_chatroom_dialog_update_buttons (dialog);
 
 	/* Final set up of the dialog */
@@ -580,33 +596,6 @@ new_chatroom_dialog_model_selection_changed (GtkTreeSelection      *selection,
 					     GossipNewChatroomDialog *dialog)
 {
 	new_chatroom_dialog_update_buttons (dialog);
-}
-
-static void
-new_chatroom_dialog_set_defaults (GossipNewChatroomDialog *dialog)
-{
-	McAccount            *account;
-	McProfile            *profile;
-	GossipAccountChooser *account_chooser;
-	const gchar          *server;
-
-	account_chooser = GOSSIP_ACCOUNT_CHOOSER (dialog->account_chooser);
-	account = gossip_account_chooser_get_account (account_chooser);
-	profile = mc_account_get_profile (account);
-	server = mc_profile_get_default_account_domain (profile);
-
-	if (server) {
-		gchar *conference_server;
-
-		conference_server = g_strconcat ("conference.",
-						 server, NULL);
-		gtk_entry_set_text (GTK_ENTRY (dialog->entry_server),
-					       conference_server);
-		g_free (conference_server);
-	}
-
-	g_object_unref (account);
-	g_object_unref (profile);
 }
 
 static void

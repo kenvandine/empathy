@@ -718,6 +718,7 @@ contact_list_store_setup (GossipContactListStore *store)
 					 contact_list_store_state_sort_func,
 					 store, NULL);
 
+	priv->sort_criterium = GOSSIP_CONTACT_LIST_STORE_SORT_NAME;
 	gossip_contact_list_store_set_sort_criterium (store, priv->sort_criterium);
 }
 

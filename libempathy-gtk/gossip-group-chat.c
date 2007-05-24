@@ -92,7 +92,6 @@ static void          group_chat_topic_entry_activate_cb  (GtkWidget         *ent
 static void          group_chat_topic_response_cb        (GtkWidget         *dialog,
 							  gint               response,			      
 							  GossipGroupChat   *chat);
-void                 gossip_group_chat_set_topic         (GossipGroupChat   *chat);
 static const gchar * group_chat_get_name                 (GossipChat        *chat);
 static gchar *       group_chat_get_tooltip              (GossipChat        *chat);
 static const gchar * group_chat_get_status_icon_name     (GossipChat        *chat);
@@ -209,7 +208,7 @@ gossip_group_chat_new (McAccount *account,
 }
 
 gboolean
-gossip_group_chat_get_show_contacts (GossipChat *chat)
+gossip_group_chat_get_show_contacts (GossipGroupChat *chat)
 {
 	GossipGroupChat     *group_chat;
 	GossipGroupChatPriv *priv;
@@ -223,8 +222,8 @@ gossip_group_chat_get_show_contacts (GossipChat *chat)
 }
 
 void
-gossip_group_chat_set_show_contacts (GossipChat *chat,
-				     gboolean    show)
+gossip_group_chat_set_show_contacts (GossipGroupChat *chat,
+				     gboolean         show)
 {
 	GossipGroupChat     *group_chat;
 	GossipGroupChatPriv *priv;
@@ -244,6 +243,55 @@ gossip_group_chat_set_show_contacts (GossipChat *chat,
 		priv->contacts_width = gtk_paned_get_position (GTK_PANED (priv->hpaned));
 		gtk_widget_hide (priv->scrolled_window_contacts);
 	}
+}
+
+void
+gossip_group_chat_set_topic (GossipGroupChat *chat)
+{
+	GossipGroupChatPriv *priv;
+	GossipChatWindow    *chat_window;
+	GtkWidget           *chat_dialog;
+	GtkWidget           *dialog;
+	GtkWidget           *entry;
+	GtkWidget           *hbox;
+	const gchar         *topic;
+
+	g_return_if_fail (GOSSIP_IS_GROUP_CHAT (chat));
+
+	priv = GET_PRIV (chat);
+
+	chat_window = gossip_chat_get_window (GOSSIP_CHAT (chat));
+	chat_dialog = gossip_chat_window_get_dialog (chat_window);
+
+	dialog = gtk_message_dialog_new (GTK_WINDOW (chat_dialog),
+					 0,
+					 GTK_MESSAGE_QUESTION,
+					 GTK_BUTTONS_OK_CANCEL,
+					 _("Enter the new topic you want to set for this room:"));
+
+	topic = gtk_label_get_text (GTK_LABEL (priv->label_topic));
+
+	hbox = gtk_hbox_new (FALSE, 0);
+	gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox),
+			    hbox, FALSE, TRUE, 4);
+
+	entry = gtk_entry_new ();
+	gtk_entry_set_text (GTK_ENTRY (entry), topic);
+	gtk_editable_select_region (GTK_EDITABLE (entry), 0, -1);
+		    
+	gtk_box_pack_start (GTK_BOX (hbox), entry, TRUE, TRUE, 4);
+
+	g_object_set (GTK_MESSAGE_DIALOG (dialog)->label, "use-markup", TRUE, NULL);
+	g_object_set_data (G_OBJECT (dialog), "entry", entry);
+
+	g_signal_connect (entry, "activate",
+			  G_CALLBACK (group_chat_topic_entry_activate_cb),
+			  dialog);
+	g_signal_connect (dialog, "response",
+			  G_CALLBACK (group_chat_topic_response_cb),
+			  chat);
+
+	gtk_widget_show_all (dialog);
 }
 
 static void
@@ -400,53 +448,6 @@ group_chat_topic_response_cb (GtkWidget       *dialog,
 	}
 
 	gtk_widget_destroy (dialog);
-}
-
-void
-gossip_group_chat_set_topic (GossipGroupChat *chat)
-{
-	GossipGroupChatPriv *priv;
-	GossipChatWindow    *chat_window;
-	GtkWidget           *chat_dialog;
-	GtkWidget           *dialog;
-	GtkWidget           *entry;
-	GtkWidget           *hbox;
-	const gchar         *topic;
-
-	priv = GET_PRIV (chat);
-
-	chat_window = gossip_chat_get_window (GOSSIP_CHAT (chat));
-	chat_dialog = gossip_chat_window_get_dialog (chat_window);
-
-	dialog = gtk_message_dialog_new (GTK_WINDOW (chat_dialog),
-					 0,
-					 GTK_MESSAGE_QUESTION,
-					 GTK_BUTTONS_OK_CANCEL,
-					 _("Enter the new topic you want to set for this room:"));
-
-	topic = gtk_label_get_text (GTK_LABEL (priv->label_topic));
-
-	hbox = gtk_hbox_new (FALSE, 0);
-	gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox),
-			    hbox, FALSE, TRUE, 4);
-
-	entry = gtk_entry_new ();
-	gtk_entry_set_text (GTK_ENTRY (entry), topic);
-	gtk_editable_select_region (GTK_EDITABLE (entry), 0, -1);
-		    
-	gtk_box_pack_start (GTK_BOX (hbox), entry, TRUE, TRUE, 4);
-
-	g_object_set (GTK_MESSAGE_DIALOG (dialog)->label, "use-markup", TRUE, NULL);
-	g_object_set_data (G_OBJECT (dialog), "entry", entry);
-
-	g_signal_connect (entry, "activate",
-			  G_CALLBACK (group_chat_topic_entry_activate_cb),
-			  dialog);
-	g_signal_connect (dialog, "response",
-			  G_CALLBACK (group_chat_topic_response_cb),
-			  chat);
-
-	gtk_widget_show_all (dialog);
 }
 
 static const gchar *

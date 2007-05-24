@@ -113,7 +113,7 @@ new_channel_cb (EmpathyChandler *chandler,
 
 	mc = gossip_mission_control_new ();
 	account = mission_control_get_account_for_connection (mc, tp_conn, NULL);
-	id = empathy_tp_chat_build_id (account, tp_chan);
+	id = empathy_tp_chat_build_id_for_chan (account, tp_chan);
 	chat = gossip_chat_window_find_chat_by_id (id);
 
 	g_free (id);

@@ -57,11 +57,12 @@ struct _GossipGroupChatClass {
 };
 
 GType            gossip_group_chat_get_type          (void) G_GNUC_CONST;
-GossipGroupChat *gossip_group_chat_new               (McAccount  *account,
-						      TpChan     *tp_chan);
-gboolean         gossip_group_chat_get_show_contacts (GossipChat *chat);
-void             gossip_group_chat_set_show_contacts (GossipChat *chat,
-						      gboolean    show);
+GossipGroupChat *gossip_group_chat_new               (McAccount       *account,
+						      TpChan          *tp_chan);
+gboolean         gossip_group_chat_get_show_contacts (GossipGroupChat *chat);
+void             gossip_group_chat_set_show_contacts (GossipGroupChat *chat,
+						      gboolean         show);
+void             gossip_group_chat_set_topic         (GossipGroupChat *chat);
 
 G_END_DECLS
 
