@@ -82,7 +82,7 @@ typedef struct {
 	GtkWidget              *throbber;
 
 	/* Widgets that are enabled when there is... */
-	GList                  *widgets_connected;		/* ... connected accounts */
+	GList                  *widgets_connected;	/* ... connected accounts */
 	GList                  *widgets_disconnected;	/* ... disconnected accounts */
 
 	/* Status popup */

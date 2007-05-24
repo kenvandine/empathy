@@ -1,5 +1,10 @@
 2007-05-24  Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/gossip-new-chatroom-dialog.c:
+	* libempathy-gtk/empathy-main-window.c: White space fix.
+
+2007-05-24  Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/gossip-account-chooser.c:
 	* libempathy-gtk/gossip-new-chatroom-dialog.c:
 	* libempathy-gtk/gossip-account-widget-jabber.c:

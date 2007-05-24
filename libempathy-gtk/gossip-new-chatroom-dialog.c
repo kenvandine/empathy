@@ -96,74 +96,51 @@ enum {
 	COL_COUNT
 };
 
-static void
-new_chatroom_dialog_response_cb (GtkWidget               *widget,
-				 gint                     response,
-				 GossipNewChatroomDialog *dialog);
-static void
-new_chatroom_dialog_destroy_cb (GtkWidget               *widget,
-				GossipNewChatroomDialog *dialog);
-static void
-new_chatroom_dialog_model_setup (GossipNewChatroomDialog *dialog);
-static void
-new_chatroom_dialog_model_add_columns (GossipNewChatroomDialog *dialog);
-static void
-new_chatroom_dialog_update_buttons (GossipNewChatroomDialog *dialog);
-static void
-new_chatroom_dialog_update_widgets (GossipNewChatroomDialog *dialog);
-static void
-new_chatroom_dialog_account_changed_cb (GtkComboBox             *combobox,
-					GossipNewChatroomDialog *dialog);
-static void
-new_chatroom_dialog_model_add (GossipNewChatroomDialog *dialog,
-			       EmpathyRoomListItem     *item);
-static void
-new_chatroom_dialog_model_clear (GossipNewChatroomDialog *dialog);
-static GList *
-new_chatroom_dialog_model_get_selected (GossipNewChatroomDialog *dialog);
-static gboolean
-new_chatroom_dialog_model_filter_func (GtkTreeModel            *model,
-				       GtkTreeIter             *iter,
-				       GossipNewChatroomDialog *dialog);
-static void
-new_chatroom_dialog_model_row_activated_cb (GtkTreeView             *tree_view,
-					    GtkTreePath             *path,
-					    GtkTreeViewColumn       *column,
-					    GossipNewChatroomDialog *dialog);
-static void
-new_chatroom_dialog_model_row_inserted_cb (GtkTreeModel            *model,
-					   GtkTreePath             *path,
-					   GtkTreeIter             *iter,
-					   GossipNewChatroomDialog *dialog);
-static void
-new_chatroom_dialog_model_row_deleted_cb (GtkTreeModel            *model,
-					  GtkTreePath             *path,
-					  GossipNewChatroomDialog *dialog);
-static void
-new_chatroom_dialog_model_selection_changed (GtkTreeSelection      *selection,
-					     GossipNewChatroomDialog *dialog);
-static void
-new_chatroom_dialog_set_defaults (GossipNewChatroomDialog *dialog);
-static void
-new_chatroom_dialog_join (GossipNewChatroomDialog *dialog);
-static void
-new_chatroom_dialog_request_handles_cb (DBusGProxy *proxy,
-					GArray     *handles,
-					GError     *error,
-					McAccount  *account);
-static void
-new_chatroom_dialog_entry_changed_cb (GtkWidget               *entry,
-				      GossipNewChatroomDialog *dialog);
-static void
-new_chatroom_dialog_browse_start (GossipNewChatroomDialog *dialog);
-static void
-new_chatroom_dialog_browse_stop (GossipNewChatroomDialog *dialog);
-static void
-new_chatroom_dialog_entry_server_activate_cb (GtkWidget                *widget,
-					      GossipNewChatroomDialog  *dialog);
-static void
-new_chatroom_dialog_togglebutton_refresh_toggled_cb (GtkWidget               *widget,
-						     GossipNewChatroomDialog *dialog);
+static void     new_chatroom_dialog_response_cb                     (GtkWidget               *widget,
+								     gint                     response,
+								     GossipNewChatroomDialog *dialog);
+static void     new_chatroom_dialog_destroy_cb                      (GtkWidget               *widget,
+								     GossipNewChatroomDialog *dialog);
+static void     new_chatroom_dialog_model_setup                     (GossipNewChatroomDialog *dialog);
+static void     new_chatroom_dialog_model_add_columns               (GossipNewChatroomDialog *dialog);
+static void     new_chatroom_dialog_update_buttons                  (GossipNewChatroomDialog *dialog);
+static void     new_chatroom_dialog_update_widgets                  (GossipNewChatroomDialog *dialog);
+static void     new_chatroom_dialog_account_changed_cb              (GtkComboBox             *combobox,
+								     GossipNewChatroomDialog *dialog);
+static void     new_chatroom_dialog_model_add                       (GossipNewChatroomDialog *dialog,
+								     EmpathyRoomListItem     *item);
+static void     new_chatroom_dialog_model_clear                     (GossipNewChatroomDialog *dialog);
+static GList *  new_chatroom_dialog_model_get_selected              (GossipNewChatroomDialog *dialog);
+static gboolean new_chatroom_dialog_model_filter_func               (GtkTreeModel            *model,
+								     GtkTreeIter             *iter,
+								     GossipNewChatroomDialog *dialog);
+static void     new_chatroom_dialog_model_row_activated_cb          (GtkTreeView             *tree_view,
+								     GtkTreePath             *path,
+								     GtkTreeViewColumn       *column,
+								     GossipNewChatroomDialog *dialog);
+static void     new_chatroom_dialog_model_row_inserted_cb           (GtkTreeModel            *model,
+								     GtkTreePath             *path,
+								     GtkTreeIter             *iter,
+								     GossipNewChatroomDialog *dialog);
+static void     new_chatroom_dialog_model_row_deleted_cb            (GtkTreeModel            *model,
+								     GtkTreePath             *path,
+								     GossipNewChatroomDialog *dialog);
+static void     new_chatroom_dialog_model_selection_changed         (GtkTreeSelection        *selection,
+								     GossipNewChatroomDialog *dialog);
+static void     new_chatroom_dialog_set_defaults                    (GossipNewChatroomDialog *dialog);
+static void     new_chatroom_dialog_join                            (GossipNewChatroomDialog *dialog);
+static void     new_chatroom_dialog_request_handles_cb              (DBusGProxy              *proxy,
+								     GArray                  *handles,
+								     GError                  *error,
+								     McAccount               *account);
+static void     new_chatroom_dialog_entry_changed_cb                (GtkWidget               *entry,
+								     GossipNewChatroomDialog *dialog);
+static void     new_chatroom_dialog_browse_start                    (GossipNewChatroomDialog *dialog);
+static void     new_chatroom_dialog_browse_stop                     (GossipNewChatroomDialog *dialog);
+static void     new_chatroom_dialog_entry_server_activate_cb        (GtkWidget               *widget,
+								     GossipNewChatroomDialog *dialog);
+static void     new_chatroom_dialog_togglebutton_refresh_toggled_cb (GtkWidget               *widget,
+								     GossipNewChatroomDialog *dialog);
 
 static GossipNewChatroomDialog *dialog_p = NULL;
 
