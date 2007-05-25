@@ -323,7 +323,7 @@ group_chat_create_ui (GossipGroupChat *chat)
 
 	g_object_unref (glade);
 
-	g_object_set_data (G_OBJECT (priv->widget), "chat", chat);
+	g_object_set_data (G_OBJECT (priv->widget), "chat", g_object_ref (chat));
 
 	/* Add room GtkTextView. */
 	gtk_container_add (GTK_CONTAINER (priv->scrolled_window_chat),

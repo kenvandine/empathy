@@ -106,7 +106,6 @@ gossip_private_chat_init (GossipPrivateChat *chat)
 	priv->is_online = FALSE;
 
 	private_chat_create_ui (chat);
-
 }
 
 static void

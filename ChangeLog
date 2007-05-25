@@ -1,5 +1,14 @@
 2007-05-25  Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/gossip-group-chat.c: Fix refcounting of
+	GossipGroupChat.
+	* libempathy/empathy-tp-contact-list.c: Add debug message when alias
+	request fails.
+	* data/22x22/empathy-group-message.png:
+	* data/22x22/Makefile.am: Add group message icon.
+
+2007-05-25  Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/gossip-new-chatroom-dialog.c: Do not use the server
 	entry's value if it's hidden.
 	* libempathy-gtk/gossip-contact-list-view.c:Do not highlight groups

@@ -1714,7 +1714,12 @@ tp_contact_list_request_aliases_cb (DBusGProxy                       *proxy,
 	guint   i = 0;
 	gchar **name;
 
-	for (name = contact_names; *name && !error; name++) {
+	if (error) {
+		gossip_debug (DEBUG_DOMAIN, "Error requesting aliases: %s",
+			      error->message);
+	}
+
+	for (name = contact_names; *name; name++) {
 		GossipContact *contact;
 
 		contact = empathy_tp_contact_list_get_from_handle (data->list,
