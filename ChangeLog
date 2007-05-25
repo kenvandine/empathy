@@ -1,5 +1,9 @@
 2007-05-25  Xavier Claessens  <xclaesse@gmail.com>
 
+	* configure.ac: Bump version to 0.6
+
+2007-05-25  Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/gossip-group-chat.c: Fix refcounting of
 	GossipGroupChat.
 	* libempathy/empathy-tp-contact-list.c: Add debug message when alias
