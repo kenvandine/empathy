@@ -11,9 +11,9 @@
 
 	* libempathy-gtk/gossip-new-chatroom-dialog.c: Do not use the server
 	entry's value if it's hidden.
-	* libempathy-gtk/gossip-contact-list-view.c:Do not highlight groups
+	* libempathy-gtk/gossip-contact-list-view.c: Do not highlight groups
 	when adding them in the roster.
-	* libempathy/empathy-tp-contact-list.c: DO not create new GossipContact
+	* libempathy/empathy-tp-contact-list.c: Do not create new GossipContact
 	object in presence/avatar/alias changed signal if we don't already know
 	that contact from a contact list channel. This should fix DBus max
 	pending calls limit reached in some cases.

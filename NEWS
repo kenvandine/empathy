@@ -1,6 +1,21 @@
 
+NEW in 0.5:
+===========
+ - Do not highlight groups when adding them in the roster.
+ - Do not create new GossipContact object in presence/avatar/alias changed
+   signal if we don't already know that contact from a contact list channel.
+   This should fix DBus max pending calls limit reached in some cases.
+ - New icon for empathy-new-message, empathy-group-message and
+   empathy-proto-irc.
+ - Chatroom support. New objects: GossipNewChatroomDialog, GossipAccountChooser,
+   GossipGroupChat
+ - If we are offline do not set away on idle. If we are already away restore to
+   available when we are no mode idle. Do no modify status message.
+ - Fixed message displaying with fancy themes.
+ - Many bugs fixed.
+
 NEW in 0.4:
-==============
+===========
  - contact list refactoring: EmpathyContactList is an iface implemented by
    EmpathyTpContactList, EmpathyContactManager and EmpathyTpChatroom.
    GossipContactList splitted into GossipContactListStore and
