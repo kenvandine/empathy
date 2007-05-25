@@ -1079,32 +1079,9 @@ contact_list_view_cell_set_background (GossipContactListView *view,
 				      NULL);
 		}
 	} else {
-#if 0
-		gint color_sum_normal;
-		gint color_sum_selected;
-		
-		color = style->base[GTK_STATE_SELECTED];
-		color_sum_normal = color.red+color.green+color.blue;
-		color = style->base[GTK_STATE_NORMAL];
-		color_sum_selected = color.red+color.green+color.blue;
-		color = style->text_aa[GTK_STATE_INSENSITIVE];
-
-		if (color_sum_normal < color_sum_selected) { 
-			/* Found a light theme */
-			color.red = (color.red + (style->white).red) / 2;
-			color.green = (color.green + (style->white).green) / 2;
-			color.blue = (color.blue + (style->white).blue) / 2;
-		} else { 
-			/* Found a dark theme */
-			color.red = (color.red + (style->black).red) / 2;
-			color.green = (color.green + (style->black).green) / 2;
-			color.blue = (color.blue + (style->black).blue) / 2;
-		}
-
 		g_object_set (cell,
-			      "cell-background-gdk", &color,
+			      "cell-background-gdk", NULL,
 			      NULL);
-#endif
 	}
 }
 

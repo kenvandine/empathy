@@ -607,7 +607,7 @@ new_chatroom_dialog_join (GossipNewChatroomDialog *dialog)
 	TpConn               *tp_conn;
 	GList                *chatrooms, *l;
 	const gchar          *room;
-	const gchar          *server;
+	const gchar          *server = NULL;
 	gchar                *room_name = NULL;
 	const gchar          *room_names[2] = {NULL, NULL};
 
@@ -621,7 +621,9 @@ new_chatroom_dialog_join (GossipNewChatroomDialog *dialog)
 	}
 
 	room = gtk_entry_get_text (GTK_ENTRY (dialog->entry_room));
-	server = gtk_entry_get_text (GTK_ENTRY (dialog->entry_server));
+	if (GTK_WIDGET_VISIBLE (dialog->hbox_server)) {
+		server = gtk_entry_get_text (GTK_ENTRY (dialog->entry_server));
+	}
 	account_chooser = GOSSIP_ACCOUNT_CHOOSER (dialog->account_chooser);
 	account = gossip_account_chooser_get_account (account_chooser);
 	mc = gossip_mission_control_new ();

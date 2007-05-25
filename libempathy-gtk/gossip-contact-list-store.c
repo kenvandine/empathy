@@ -1164,10 +1164,10 @@ contact_list_store_get_group_foreach (GtkTreeModel *model,
 
 static void
 contact_list_store_get_group (GossipContactListStore *store,
-			      const gchar       *name,
-			      GtkTreeIter       *iter_group_to_set,
-			      GtkTreeIter       *iter_separator_to_set,
-			      gboolean          *created)
+			      const gchar            *name,
+			      GtkTreeIter            *iter_group_to_set,
+			      GtkTreeIter            *iter_separator_to_set,
+			      gboolean               *created)
 {
 	GossipContactListStorePriv *priv;
 	GtkTreeModel               *model;

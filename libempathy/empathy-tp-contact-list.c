@@ -50,6 +50,7 @@ struct _EmpathyTpContactListPriv {
 	McAccount            *account;
 	MissionControl       *mc;
 	GossipContact        *user_contact;
+	gboolean              setup;
 
 	GossipTelepathyGroup *known;
 	GossipTelepathyGroup *publish;
@@ -402,6 +403,7 @@ tp_contact_list_setup (EmpathyContactList *list)
 
 	gossip_debug (DEBUG_DOMAIN, "setup contact list: %p", list);
 
+	priv->setup = TRUE;
 	dbus_g_proxy_connect_signal (DBUS_G_PROXY (priv->tp_conn), "NewChannel",
 				     G_CALLBACK (tp_contact_list_newchannel_cb),
 				     list, NULL);
@@ -431,10 +433,10 @@ tp_contact_list_setup (EmpathyContactList *list)
 		handle = g_value_get_uint (g_value_array_get_nth (chan_struct, 3));
 
 		tp_contact_list_newchannel_cb (DBUS_G_PROXY (priv->tp_conn),
-					    object_path, chan_iface,
-					    handle_type, handle,
-					    FALSE,
-					    EMPATHY_TP_CONTACT_LIST (list));
+					       object_path, chan_iface,
+					       handle_type, handle,
+					       FALSE,
+					       EMPATHY_TP_CONTACT_LIST (list));
 
 		g_value_array_free (chan_struct);
 	}
@@ -914,7 +916,8 @@ tp_contact_list_newchannel_cb (DBusGProxy           *proxy,
 	priv = GET_PRIV (list);
 
 	if (strcmp (channel_type, TP_IFACE_CHANNEL_TYPE_CONTACT_LIST) != 0 ||
-	    suppress_handle) {
+	    suppress_handle ||
+	    !priv->setup) {
 		return;
 	}
 
@@ -1615,6 +1618,15 @@ tp_contact_list_avatar_update_cb (DBusGProxy           *proxy,
 				  gchar                *new_token,
 				  EmpathyTpContactList *list)
 {
+	EmpathyTpContactListPriv *priv;
+
+	priv = GET_PRIV (list);
+
+	if (!g_hash_table_lookup (priv->contacts, GUINT_TO_POINTER (handle))) {
+		/* We don't know this contact, skip */
+		return;
+	}
+
 	gossip_debug (DEBUG_DOMAIN, "Changing avatar for %d to %s",
 		      handle, new_token);
 
@@ -1659,7 +1671,10 @@ tp_contact_list_aliases_update_cb (DBusGProxy           *proxy,
 				   GPtrArray            *renamed_handlers,
 				   EmpathyTpContactList *list)
 {
-	gint i;
+	EmpathyTpContactListPriv *priv;
+	guint                     i;
+
+	priv = GET_PRIV (list);
 
 	for (i = 0; renamed_handlers->len > i; i++) {
 		guint          handle;
@@ -1671,7 +1686,12 @@ tp_contact_list_aliases_update_cb (DBusGProxy           *proxy,
 		handle = g_value_get_uint(g_value_array_get_nth (renamed_struct, 0));
 		alias = g_value_get_string(g_value_array_get_nth (renamed_struct, 1));
 
-		if (alias && *alias == '\0') {
+		if (!g_hash_table_lookup (priv->contacts, GUINT_TO_POINTER (handle))) {
+			/* We don't know this contact, skip */
+			continue;
+		}
+
+		if (G_STR_EMPTY (alias)) {
 			alias = NULL;
 		}
 
@@ -1728,9 +1748,17 @@ tp_contact_list_parse_presence_foreach (guint                 handle,
 					GValueArray          *presence_struct,
 					EmpathyTpContactList *list)
 {
+	EmpathyTpContactListPriv *priv;
 	GHashTable     *presences_table;
 	GossipContact  *contact;
 	GossipPresence *presence = NULL;
+
+	priv = GET_PRIV (list);
+
+	if (!g_hash_table_lookup (priv->contacts, GUINT_TO_POINTER (handle))) {
+		/* We don't know this contact, skip */
+		return;
+	}
 
 	contact = empathy_tp_contact_list_get_from_handle (list, handle);
 	presences_table = g_value_get_boxed (g_value_array_get_nth (presence_struct, 1));
