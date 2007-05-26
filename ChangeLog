@@ -1,3 +1,12 @@
+2007-05-26  Xavier Claessens  <xclaesse@gmail.com>
+
+	* libempathy-gtk/gossip-contact-list-store.c: Do not highlight contacts
+	already known when creating the contact list.
+	* libempathy/empathy-tp-contact-list.c: Do not set alias if DBus
+	returns an error.
+	* libempathy/empathy-idle.c: Do not set status message to
+	"Extended autoaway", let user's message unchanged.
+
 2007-05-25  Xavier Claessens  <xclaesse@gmail.com>
 
 	* configure.ac: Bump version to 0.6
@@ -10,7 +19,6 @@
 	request fails.
 	* data/22x22/empathy-group-message.png:
 	* data/22x22/Makefile.am: Add group message icon.
-
 2007-05-25  Xavier Claessens  <xclaesse@gmail.com>
 
 	* libempathy-gtk/gossip-new-chatroom-dialog.c: Do not use the server

@@ -1719,11 +1719,11 @@ tp_contact_list_request_aliases_cb (DBusGProxy                       *proxy,
 			      error->message);
 	}
 
-	for (name = contact_names; *name; name++) {
+	for (name = contact_names; *name && !error; name++) {
 		GossipContact *contact;
 
 		contact = empathy_tp_contact_list_get_from_handle (data->list,
-								data->handles[i]);
+								   data->handles[i]);
 		tp_contact_list_block_contact (data->list, contact);
 		gossip_contact_set_name (contact, *name);
 		tp_contact_list_unblock_contact (data->list, contact);

@@ -231,7 +231,7 @@ idle_ext_away_cb (EmpathyIdle *idle)
 	gossip_debug (DEBUG_DOMAIN, "Going to extended autoaway");
 	mission_control_set_presence (priv->mc,
 				      MC_PRESENCE_EXTENDED_AWAY,
-				      _("Extended autoaway"),
+				      priv->saved_status,
 				      NULL, NULL);
 
 	priv->ext_away_timeout = 0;

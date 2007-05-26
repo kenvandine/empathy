@@ -320,6 +320,7 @@ gossip_contact_list_store_new (EmpathyContactList *list_iface)
 	GossipContactListStore     *store;
 	GossipContactListStorePriv *priv;
 	GList                      *contacts, *l;
+	gboolean                    show_active;
 
 	g_return_val_if_fail (EMPATHY_IS_CONTACT_LIST (list_iface), NULL);
 
@@ -339,7 +340,9 @@ gossip_contact_list_store_new (EmpathyContactList *list_iface)
 			  G_CALLBACK (contact_list_store_contact_removed_cb),
 			  store);
 
-	/* Add contacts already created */
+	/* Add contacts already created. Do not highlight them. */
+	show_active = priv->show_active;
+	priv->show_active = FALSE;
 	contacts = empathy_contact_list_get_contacts (priv->list);
 	for (l = contacts; l; l = l->next) {
 		GossipContact *contact;
@@ -351,6 +354,7 @@ gossip_contact_list_store_new (EmpathyContactList *list_iface)
 		g_object_unref (contact);
 	}
 	g_list_free (contacts);
+	priv->show_active = show_active;
 
 	return store;
 }
