@@ -128,10 +128,6 @@ static void     new_chatroom_dialog_model_row_deleted_cb            (GtkTreeMode
 static void     new_chatroom_dialog_model_selection_changed         (GtkTreeSelection        *selection,
 								     GossipNewChatroomDialog *dialog);
 static void     new_chatroom_dialog_join                            (GossipNewChatroomDialog *dialog);
-static void     new_chatroom_dialog_request_handles_cb              (DBusGProxy              *proxy,
-								     GArray                  *handles,
-								     GError                  *error,
-								     McAccount               *account);
 static void     new_chatroom_dialog_entry_changed_cb                (GtkWidget               *entry,
 								     GossipNewChatroomDialog *dialog);
 static void     new_chatroom_dialog_browse_start                    (GossipNewChatroomDialog *dialog);
@@ -604,12 +600,10 @@ new_chatroom_dialog_join (GossipNewChatroomDialog *dialog)
 	McAccount            *account;
 	GossipAccountChooser *account_chooser;
 	MissionControl       *mc;
-	TpConn               *tp_conn;
 	GList                *chatrooms, *l;
 	const gchar          *room;
 	const gchar          *server = NULL;
 	gchar                *room_name = NULL;
-	const gchar          *room_names[2] = {NULL, NULL};
 
 	chatrooms = new_chatroom_dialog_model_get_selected (dialog);
 	if (chatrooms) {
@@ -626,66 +620,24 @@ new_chatroom_dialog_join (GossipNewChatroomDialog *dialog)
 	}
 	account_chooser = GOSSIP_ACCOUNT_CHOOSER (dialog->account_chooser);
 	account = gossip_account_chooser_get_account (account_chooser);
-	mc = gossip_mission_control_new ();
-	tp_conn = mission_control_get_connection (mc, account, NULL);
-
-	if (!tp_conn) {
-		g_object_unref (mc);
-		return;
-	}
 
 	if (!G_STR_EMPTY (server)) {
 		room_name = g_strconcat (room, "@", server, NULL);
-		room_names[0] = room_name;
 	} else {
-		room_names[0] = room;
+		room_name = g_strdup (room);
 	}
 
-	gossip_debug (DEBUG_DOMAIN, "Requesting handle for room '%s'",
-		      room_names[0]);
-
-	/* Gives the ref of account/tp_conn to the callback */
-	tp_conn_request_handles_async (DBUS_G_PROXY (tp_conn),
-				       TP_HANDLE_TYPE_ROOM,
-				       room_names,
-				       (tp_conn_request_handles_reply)
-				       new_chatroom_dialog_request_handles_cb,
-				       account);
-	g_free (room_name);
-	g_object_unref (mc);
-}
-
-static void
-new_chatroom_dialog_request_handles_cb (DBusGProxy *proxy,
-					GArray     *handles,
-					GError     *error,
-					McAccount  *account)
-{
-	MissionControl *mc;
-	guint           handle;
-
-	if (error) {
-		gossip_debug (DEBUG_DOMAIN,
-			      "Error requesting room handle: %s",
-			      error ? error->message : "No error given");
-		goto OUT;
-	}
+	gossip_debug (DEBUG_DOMAIN, "Requesting channel for '%s'", room_name);
 
 	mc = gossip_mission_control_new ();
-	handle = g_array_index (handles, guint, 0);
-
-	gossip_debug (DEBUG_DOMAIN, "Got handle %d, requesting channel", handle);
-	mission_control_request_channel (mc,
-					 account,
-					 TP_IFACE_CHANNEL_TYPE_TEXT,
-					 handle,
-					 TP_HANDLE_TYPE_ROOM,
-					 NULL, NULL);	
+	mission_control_request_channel_with_string_handle (mc,
+							    account,
+							    TP_IFACE_CHANNEL_TYPE_TEXT,
+							    room_name,
+							    TP_HANDLE_TYPE_ROOM,
+							    NULL, NULL);	
+	g_free (room_name);
 	g_object_unref (mc);
-
-OUT:
-	g_object_unref (account);
-	g_object_unref (proxy);
 }
 
 static void

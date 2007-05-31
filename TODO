@@ -10,6 +10,7 @@ Things you can do if you want to help:
  - Remove Quit option everywhere, empathy is a session service and shouldn't be leaved.
  - Add sound events
  - Import loggin system from gossip
+ - Add register capability in GossipAccountsDialog if the profile says it's supported.
  - Testing and Bugfixing.
 
 SoC projects:

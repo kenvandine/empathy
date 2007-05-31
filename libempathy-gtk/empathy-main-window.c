@@ -111,6 +111,7 @@ static void     main_window_favorite_chatroom_menu_activate_cb (GtkMenuItem     
 static void     main_window_favorite_chatroom_menu_update      (EmpathyMainWindow               *window);
 static void     main_window_favorite_chatroom_menu_add         (EmpathyMainWindow               *window,
 								GossipChatroom                  *chatroom);
+static void     main_window_favorite_chatroom_join             (GossipChatroom                  *chatroom);
 static void     main_window_chat_quit_cb                       (GtkWidget                       *widget,
 								EmpathyMainWindow               *window);
 static void     main_window_chat_new_message_cb                (GtkWidget                       *widget,
@@ -446,17 +447,7 @@ static void
 main_window_favorite_chatroom_menu_activate_cb (GtkMenuItem    *menu_item,
 						GossipChatroom *chatroom)
 {
-/*FIXME:
-	GossipSession          *session;
-	GossipAccount          *account;
-	GossipChatroomProvider *provider;
-
-	session = gossip_app_get_session ();
-	account = gossip_chatroom_get_account (chatroom);
-	provider = gossip_session_get_chatroom_provider (session, account);
-
-	gossip_group_chat_new (provider, chatroom);
-*/
+	main_window_favorite_chatroom_join (chatroom);
 }
 
 static void
@@ -502,6 +493,28 @@ main_window_favorite_chatroom_menu_add (EmpathyMainWindow *window,
 }
 
 static void
+main_window_favorite_chatroom_join (GossipChatroom *chatroom)
+{
+	MissionControl *mc;
+	McAccount      *account;
+	const gchar    *room;
+
+	mc = gossip_mission_control_new ();
+	account = gossip_chatroom_get_account (chatroom);
+	room = gossip_chatroom_get_room (chatroom);
+
+	gossip_debug (DEBUG_DOMAIN, "Requesting channel for '%s'", room);
+
+	mission_control_request_channel_with_string_handle (mc,
+							    account,
+							    TP_IFACE_CHANNEL_TYPE_TEXT,
+							    room,
+							    TP_HANDLE_TYPE_ROOM,
+							    NULL, NULL);	
+	g_object_unref (mc);
+}
+
+static void
 main_window_chat_quit_cb (GtkWidget         *widget,
 			  EmpathyMainWindow *window)
 {
@@ -533,7 +546,13 @@ static void
 main_window_room_join_favorites_cb (GtkWidget         *widget,
 				    EmpathyMainWindow *window)
 {
-	//gossip_session_chatroom_join_favorites (window->session);
+	GList *chatrooms, *l;
+
+	chatrooms = gossip_chatroom_manager_get_chatrooms (window->chatroom_manager, NULL);
+	for (l = chatrooms; l; l = l->next) {
+		main_window_favorite_chatroom_join (l->data);
+	}
+	g_list_free (chatrooms);
 }
 
 static void

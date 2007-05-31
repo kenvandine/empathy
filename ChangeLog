@@ -1,5 +1,15 @@
 2007-05-31  Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/gossip-new-chatroom-dialog.c: No need to RequestHandle,
+	MissionControl has API to request the channel from handle string.
+
+	* libempathy-gtk/empathy-main-window.c: Request room channel when
+	clicking on favorite rooms.
+
+	* TODO: Add a task: supporting registering.
+
+2007-05-31  Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy/empathy-idle.c: Do not restore away presence message when
 	coming back after the user set manually to away.
 
