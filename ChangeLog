@@ -1,5 +1,10 @@
 2007-05-31  Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy/empathy-idle.c: Do not restore away presence message when
+	coming back after the user set manually to away.
+
+2007-05-31  Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/gossip-account-chooser.c: Fix warning when selecting
 	all accounts.
 

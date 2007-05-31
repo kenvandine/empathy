@@ -154,6 +154,7 @@ idle_session_idle_changed_cb (DBusGProxy  *gs_proxy,
 		/* We are now idle, set state to away */
 
 		priv->saved_state = mission_control_get_presence_actual (priv->mc, NULL);
+		priv->saved_status = mission_control_get_presence_message_actual (priv->mc, NULL);
 
 		if (priv->saved_state <= MC_PRESENCE_OFFLINE ||
 		    priv->saved_state == MC_PRESENCE_HIDDEN) {
@@ -167,8 +168,6 @@ idle_session_idle_changed_cb (DBusGProxy  *gs_proxy,
 			priv->saved_state = MC_PRESENCE_AVAILABLE;
 			priv->saved_status = NULL;
 		}
-
-		priv->saved_status = mission_control_get_presence_message_actual (priv->mc, NULL);
 
 		gossip_debug (DEBUG_DOMAIN, "Going to autoaway");
 		mission_control_set_presence (priv->mc,
