@@ -1,5 +1,6 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /*
+ * Copyright (C) 2004-2007 Imendio AB
  * Copyright (C) 2007 Collabora Ltd.
  *
  * This program is free software; you can redistribute it and/or
@@ -16,42 +17,19 @@
  * License along with this program; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
- * 
+ *
  * Authors: Xavier Claessens <xclaesse@gmail.com>
+ *          Martyn Russell <martyn@imendio.com>
+ *          Mikael Hallendal <micke@imendio.com>
  */
 
-#include <config.h>
+#ifndef __GOSSIP_CHATROOMS_WINDOW_H__
+#define __GOSSIP_CHATROOMS_WINDOW_H__
 
-#include <string.h>
-#include <stdlib.h>
+G_BEGIN_DECLS
 
-#include <glib.h>
-#include <gtk/gtk.h>
+void gossip_chatrooms_window_show (GtkWindow *parent);
 
-#include <libempathy-gtk/gossip-accounts-dialog.h>
+G_END_DECLS
 
-static void
-destroy_cb (GtkWidget *dialog,
-	    gpointer   user_data)
-{
-	gtk_main_quit ();
-}
-
-int
-main (int argc, char *argv[])
-{
-	GtkWidget *dialog;
-
-	gtk_init (&argc, &argv);
-
-	dialog = gossip_accounts_dialog_show (NULL);
-
-	g_signal_connect (dialog, "destroy",
-			  G_CALLBACK (destroy_cb),
-			  NULL);
-
-	gtk_main ();
-
-	return EXIT_SUCCESS;
-}
-
+#endif /* __GOSSIP_CHATROOMS_WINDOW_H__ */

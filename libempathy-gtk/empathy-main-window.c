@@ -31,6 +31,8 @@
 #include <libempathy/gossip-contact.h>
 #include <libempathy/gossip-debug.h>
 #include <libempathy/gossip-utils.h>
+#include <libempathy/gossip-chatroom-manager.h>
+#include <libempathy/gossip-chatroom.h>
 #include <libempathy/empathy-contact-list.h>
 #include <libempathy/empathy-contact-manager.h>
 
@@ -46,6 +48,7 @@
 #include "gossip-accounts-dialog.h"
 #include "gossip-about-dialog.h"
 #include "gossip-new-chatroom-dialog.h"
+#include "gossip-chatrooms-window.h"
 
 #define DEBUG_DOMAIN "MainWindow"
 
@@ -62,6 +65,7 @@ typedef struct {
 	GossipContactListView  *list_view;
 	GossipContactListStore *list_store;
 	MissionControl         *mc;
+	GossipChatroomManager  *chatroom_manager;
 
 	/* Main widgets */
 	GtkWidget              *window;
@@ -93,68 +97,79 @@ typedef struct {
 	guint                   size_timeout_id;
 } EmpathyMainWindow;
 
-static void     main_window_destroy_cb                     (GtkWidget                       *widget,
-							    EmpathyMainWindow               *window);
-static void     main_window_favorite_chatroom_menu_setup   (void);
-static void     main_window_chat_quit_cb                   (GtkWidget                       *widget,
-							    EmpathyMainWindow               *window);
-static void     main_window_chat_new_message_cb            (GtkWidget                       *widget,
-							    EmpathyMainWindow               *window);
-static void     main_window_chat_history_cb                (GtkWidget                       *widget,
-							    EmpathyMainWindow               *window);
-static void     main_window_room_join_new_cb               (GtkWidget                       *widget,
-							    EmpathyMainWindow               *window);
-static void     main_window_room_join_favorites_cb         (GtkWidget                       *widget,
-							    EmpathyMainWindow               *window);
-static void     main_window_room_manage_favorites_cb       (GtkWidget                       *widget,
-							    EmpathyMainWindow               *window);
-static void     main_window_chat_add_contact_cb            (GtkWidget                       *widget,
-							    EmpathyMainWindow               *window);
-static void     main_window_chat_show_offline_cb           (GtkCheckMenuItem                *item,
-							    EmpathyMainWindow               *window);
-static gboolean main_window_edit_button_press_event_cb     (GtkWidget                       *widget,
-							    GdkEventButton                  *event,
-							    EmpathyMainWindow               *window);
-static void     main_window_edit_accounts_cb               (GtkWidget                       *widget,
-							    EmpathyMainWindow               *window);
-static void     main_window_edit_personal_information_cb   (GtkWidget                       *widget,
-							    EmpathyMainWindow               *window);
-static void     main_window_edit_preferences_cb            (GtkWidget                       *widget,
-							    EmpathyMainWindow               *window);
-static void     main_window_help_about_cb                  (GtkWidget                       *widget,
-							    EmpathyMainWindow               *window);
-static void     main_window_help_contents_cb               (GtkWidget                       *widget,
-							    EmpathyMainWindow               *window);
-static gboolean main_window_throbber_button_press_event_cb (GtkWidget                       *throbber_ebox,
-							    GdkEventButton                  *event,
-							    gpointer                         user_data);
-static void     main_window_status_changed_cb              (MissionControl                  *mc,
-							    TelepathyConnectionStatus        status,
-							    McPresence                       presence,
-							    TelepathyConnectionStatusReason  reason,
-							    const gchar                     *unique_name,
-							    EmpathyMainWindow               *window);
-static void     main_window_update_status                  (EmpathyMainWindow               *window);
-static void     main_window_accels_load                    (void);
-static void     main_window_accels_save                    (void);
-static void     main_window_connection_items_setup         (EmpathyMainWindow               *window,
-							    GladeXML                        *glade);
-static gboolean main_window_configure_event_timeout_cb     (EmpathyMainWindow               *window);
-static gboolean main_window_configure_event_cb             (GtkWidget                       *widget,
-							    GdkEventConfigure               *event,
-							    EmpathyMainWindow               *window);
-static void     main_window_notify_show_offline_cb         (GossipConf                      *conf,
-							    const gchar                     *key,
-							    gpointer                         check_menu_item);
-static void     main_window_notify_show_avatars_cb         (GossipConf                      *conf,
-							    const gchar                     *key,
-							    EmpathyMainWindow               *window);
-static void     main_window_notify_compact_contact_list_cb (GossipConf                      *conf,
-							    const gchar                     *key,
-							    EmpathyMainWindow               *window);
-static void     main_window_notify_sort_criterium_cb       (GossipConf                      *conf,
-							    const gchar                     *key,
-							    EmpathyMainWindow               *window);
+static void     main_window_destroy_cb                         (GtkWidget                       *widget,
+								EmpathyMainWindow               *window);
+static void     main_window_favorite_chatroom_menu_setup       (EmpathyMainWindow               *window);
+static void     main_window_favorite_chatroom_menu_added_cb    (GossipChatroomManager           *manager,
+								GossipChatroom                  *chatroom,
+								EmpathyMainWindow               *window);
+static void     main_window_favorite_chatroom_menu_removed_cb  (GossipChatroomManager           *manager,
+								GossipChatroom                  *chatroom,
+								EmpathyMainWindow               *window);
+static void     main_window_favorite_chatroom_menu_activate_cb (GtkMenuItem                     *menu_item,
+								GossipChatroom                  *chatroom);
+static void     main_window_favorite_chatroom_menu_update      (EmpathyMainWindow               *window);
+static void     main_window_favorite_chatroom_menu_add         (EmpathyMainWindow               *window,
+								GossipChatroom                  *chatroom);
+static void     main_window_chat_quit_cb                       (GtkWidget                       *widget,
+								EmpathyMainWindow               *window);
+static void     main_window_chat_new_message_cb                (GtkWidget                       *widget,
+								EmpathyMainWindow               *window);
+static void     main_window_chat_history_cb                    (GtkWidget                       *widget,
+								EmpathyMainWindow               *window);
+static void     main_window_room_join_new_cb                   (GtkWidget                       *widget,
+								EmpathyMainWindow               *window);
+static void     main_window_room_join_favorites_cb             (GtkWidget                       *widget,
+								EmpathyMainWindow               *window);
+static void     main_window_room_manage_favorites_cb           (GtkWidget                       *widget,
+								EmpathyMainWindow               *window);
+static void     main_window_chat_add_contact_cb                (GtkWidget                       *widget,
+								EmpathyMainWindow               *window);
+static void     main_window_chat_show_offline_cb               (GtkCheckMenuItem                *item,
+								EmpathyMainWindow               *window);
+static gboolean main_window_edit_button_press_event_cb         (GtkWidget                       *widget,
+								GdkEventButton                  *event,
+								EmpathyMainWindow               *window);
+static void     main_window_edit_accounts_cb                   (GtkWidget                       *widget,
+								EmpathyMainWindow               *window);
+static void     main_window_edit_personal_information_cb       (GtkWidget                       *widget,
+								EmpathyMainWindow               *window);
+static void     main_window_edit_preferences_cb                (GtkWidget                       *widget,
+								EmpathyMainWindow               *window);
+static void     main_window_help_about_cb                      (GtkWidget                       *widget,
+								EmpathyMainWindow               *window);
+static void     main_window_help_contents_cb                   (GtkWidget                       *widget,
+								EmpathyMainWindow               *window);
+static gboolean main_window_throbber_button_press_event_cb     (GtkWidget                       *throbber_ebox,
+								GdkEventButton                  *event,
+								EmpathyMainWindow               *window);
+static void     main_window_status_changed_cb                  (MissionControl                  *mc,
+								TelepathyConnectionStatus        status,
+								McPresence                       presence,
+								TelepathyConnectionStatusReason  reason,
+								const gchar                     *unique_name,
+								EmpathyMainWindow               *window);
+static void     main_window_update_status                      (EmpathyMainWindow               *window);
+static void     main_window_accels_load                        (void);
+static void     main_window_accels_save                        (void);
+static void     main_window_connection_items_setup             (EmpathyMainWindow               *window,
+								GladeXML                        *glade);
+static gboolean main_window_configure_event_timeout_cb         (EmpathyMainWindow               *window);
+static gboolean main_window_configure_event_cb                 (GtkWidget                       *widget,
+								GdkEventConfigure               *event,
+								EmpathyMainWindow               *window);
+static void     main_window_notify_show_offline_cb             (GossipConf                      *conf,
+								const gchar                     *key,
+								gpointer                         check_menu_item);
+static void     main_window_notify_show_avatars_cb             (GossipConf                      *conf,
+								const gchar                     *key,
+								EmpathyMainWindow               *window);
+static void     main_window_notify_compact_contact_list_cb     (GossipConf                      *conf,
+								const gchar                     *key,
+								EmpathyMainWindow               *window);
+static void     main_window_notify_sort_criterium_cb           (GossipConf                      *conf,
+								const gchar                     *key,
+								EmpathyMainWindow               *window);
 
 GtkWidget *
 empathy_main_window_show (void)
@@ -227,7 +242,7 @@ empathy_main_window_show (void)
 				     window, NULL);
 
 	/* Set up menu */
-	main_window_favorite_chatroom_menu_setup ();
+	main_window_favorite_chatroom_menu_setup (window);
 
 	gtk_widget_hide (window->edit_context);
 	gtk_widget_hide (window->edit_context_separator);
@@ -263,7 +278,7 @@ empathy_main_window_show (void)
 	g_signal_connect (ebox,
 			  "button-press-event",
 			  G_CALLBACK (main_window_throbber_button_press_event_cb),
-			  NULL);
+			  window);
 
 	/* Set up contact list. */
 	gossip_status_presets_get_all ();
@@ -374,8 +389,116 @@ main_window_destroy_cb (GtkWidget         *widget,
 }
 
 static void
-main_window_favorite_chatroom_menu_setup (void)
+main_window_favorite_chatroom_menu_setup (EmpathyMainWindow *window)
 {
+	GList *chatrooms, *l;
+
+	window->chatroom_manager = gossip_chatroom_manager_new ();
+	chatrooms = gossip_chatroom_manager_get_chatrooms (window->chatroom_manager, NULL);
+	window->room_menu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (window->room));
+
+	for (l = chatrooms; l; l = l->next) {
+		main_window_favorite_chatroom_menu_add (window, l->data);
+	}
+
+	if (!chatrooms) {
+		gtk_widget_hide (window->room_sep);
+	}
+
+	gtk_widget_set_sensitive (window->room_join_favorites, chatrooms != NULL);
+
+	g_signal_connect (window->chatroom_manager, "chatroom-added",
+			  G_CALLBACK (main_window_favorite_chatroom_menu_added_cb),
+			  window);
+	g_signal_connect (window->chatroom_manager, "chatroom-removed",
+			  G_CALLBACK (main_window_favorite_chatroom_menu_removed_cb),
+			  window);
+
+	g_list_free (chatrooms);
+}
+
+static void
+main_window_favorite_chatroom_menu_added_cb (GossipChatroomManager *manager,
+					     GossipChatroom        *chatroom,
+					     EmpathyMainWindow     *window)
+{
+	main_window_favorite_chatroom_menu_add (window, chatroom);
+	gtk_widget_show (window->room_sep);
+	gtk_widget_set_sensitive (window->room_join_favorites, TRUE);
+}
+
+static void
+main_window_favorite_chatroom_menu_removed_cb (GossipChatroomManager *manager,
+					       GossipChatroom        *chatroom,
+					       EmpathyMainWindow     *window)
+{
+	GtkWidget *menu_item;
+
+	menu_item = g_object_get_data (G_OBJECT (chatroom), "menu_item");
+
+	g_object_set_data (G_OBJECT (chatroom), "menu_item", NULL);
+	gtk_widget_destroy (menu_item);
+
+	main_window_favorite_chatroom_menu_update (window);
+}
+
+static void
+main_window_favorite_chatroom_menu_activate_cb (GtkMenuItem    *menu_item,
+						GossipChatroom *chatroom)
+{
+/*FIXME:
+	GossipSession          *session;
+	GossipAccount          *account;
+	GossipChatroomProvider *provider;
+
+	session = gossip_app_get_session ();
+	account = gossip_chatroom_get_account (chatroom);
+	provider = gossip_session_get_chatroom_provider (session, account);
+
+	gossip_group_chat_new (provider, chatroom);
+*/
+}
+
+static void
+main_window_favorite_chatroom_menu_update (EmpathyMainWindow *window)
+{
+	GList *chatrooms;
+
+	chatrooms = gossip_chatroom_manager_get_chatrooms (window->chatroom_manager, NULL);
+
+	if (chatrooms) {
+		gtk_widget_show (window->room_sep);
+	} else {
+		gtk_widget_hide (window->room_sep);
+	}
+
+	gtk_widget_set_sensitive (window->room_join_favorites, chatrooms != NULL);
+	g_list_free (chatrooms);
+}
+
+static void
+main_window_favorite_chatroom_menu_add (EmpathyMainWindow *window,
+					GossipChatroom    *chatroom)
+{
+	GtkWidget   *menu_item;
+	const gchar *name;
+
+	if (g_object_get_data (G_OBJECT (chatroom), "menu_item")) {
+		return;
+	}
+
+	name = gossip_chatroom_get_name (chatroom);
+	menu_item = gtk_menu_item_new_with_label (name);
+
+	g_object_set_data (G_OBJECT (chatroom), "menu_item", menu_item);
+	g_signal_connect (menu_item, "activate",
+			  G_CALLBACK (main_window_favorite_chatroom_menu_activate_cb),
+			  chatroom);
+
+	gtk_menu_shell_insert (GTK_MENU_SHELL (window->room_menu),
+			       menu_item, 3);
+
+	gtk_widget_show (menu_item);
 }
 
 static void
@@ -417,7 +540,7 @@ static void
 main_window_room_manage_favorites_cb (GtkWidget         *widget,
 				      EmpathyMainWindow *window)
 {
-	//gossip_chatrooms_window_show (NULL, FALSE);
+	gossip_chatrooms_window_show (GTK_WINDOW (window->window));
 }
 
 static void
@@ -510,7 +633,7 @@ static void
 main_window_edit_accounts_cb (GtkWidget         *widget,
 			      EmpathyMainWindow *window)
 {
-	gossip_accounts_dialog_show ();
+	gossip_accounts_dialog_show (GTK_WINDOW (window->window));
 }
 
 static void
@@ -524,7 +647,7 @@ static void
 main_window_edit_preferences_cb (GtkWidget         *widget,
 				 EmpathyMainWindow *window)
 {
-	gossip_preferences_show ();
+	gossip_preferences_show (GTK_WINDOW (window->window));
 }
 
 static void
@@ -542,16 +665,16 @@ main_window_help_contents_cb (GtkWidget         *widget,
 }
 
 static gboolean
-main_window_throbber_button_press_event_cb (GtkWidget      *throbber_ebox,
-					    GdkEventButton *event,
-					    gpointer        user_data)
+main_window_throbber_button_press_event_cb (GtkWidget         *throbber_ebox,
+					    GdkEventButton    *event,
+					    EmpathyMainWindow *window)
 {
 	if (event->type != GDK_BUTTON_PRESS ||
 	    event->button != 1) {
 		return FALSE;
 	}
 
-	gossip_accounts_dialog_show ();
+	gossip_accounts_dialog_show (GTK_WINDOW (window->window));
 
 	return FALSE;
 }
@@ -614,8 +737,6 @@ main_window_update_status (EmpathyMainWindow *window)
 	for (l = window->widgets_disconnected; l; l = l->next) {
 		gtk_widget_set_sensitive (l->data, (disconnected > 0));
 	}
-
-	//app_favorite_chatroom_menu_update ();	
 }
 
 /*
@@ -768,6 +889,7 @@ main_window_notify_sort_criterium_cb (GossipConf        *conf,
 		type = gossip_contact_list_store_sort_get_type ();
 		enum_class = G_ENUM_CLASS (g_type_class_peek (type));
 		enum_value = g_enum_get_value_by_nick (enum_class, str);
+		g_free (str);
 
 		if (enum_value) {
 			gossip_contact_list_store_set_sort_criterium (window->list_store, 

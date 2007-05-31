@@ -1,3 +1,50 @@
+2007-05-31  Xavier Claessens  <xclaesse@gmail.com>
+
+	* libempathy-gtk/gossip-account-chooser.c: Fix warning when selecting
+	all accounts.
+
+	* src/empathy-accounts-main.c:
+	* libempathy-gtk/empathy-status-icon.c:
+	* libempathy-gtk/gossip-accounts-dialog.h:
+	* libempathy-gtk/gossip-accounts-dialog.c:
+	* libempathy-gtk/gossip-preferences.h:
+	* libempathy-gtk/gossip-preferences.c: Set parent window.
+
+	* libempathy-gtk/empathy-main-window.c: Implement favorite chatroom
+	menu and fix a leak.
+
+	* libempathy-gtk/Makefile.am:
+	* libempathy/Makefile.am:
+	* libempathy/gossip-chatroom.c:
+	* libempathy/gossip-chatroom.h:
+	* libempathy/gossip-chatroom-manager.c:
+	* libempathy/gossip-chatroom-manager.h:
+	* libempathy/gossip-chatroom-manager.dtd:
+	* libempathy-gtk/gossip-chatrooms-window.glade:
+	* libempathy-gtk/gossip-chatrooms-window.c:
+	* libempathy-gtk/gossip-chatrooms-window.h: New files to implement
+	favorite chatrooms and a window to show them.
+
+
+	* libempathy-gtk/gossip-chat.c: Fix tooltip leaked.
+
+	* libempathy-gtk/gossip-chat-window.h:
+	* libempathy-gtk/gossip-chat-window.c: Do not use deprecated
+	gtk_object_sink(). Implement favorite chatroom features. Find a chat
+	by comparing the account AND the chat ID.
+
+	* src/empathy-chat-main.c:
+	* libempathy/empathy-tp-chat.h:
+	* libempathy/empathy-tp-chat.c:
+	* libempathy/gossip-utils.h:
+	* libempathy/gossip-utils.c: empathy_tp_chat_get_id() returns the Text
+	channel's name. The chat ID is unique only for a specified account.
+
+	* libempathy/empathy-tp-contact-list.c: Fix some leaks and add a FIXME
+	comment for a leak not yet fixed.
+
+	* TODO: Would be cool to have a glade catalog for libempathy-gtk.
+
 2007-05-26  Xavier Claessens  <xclaesse@gmail.com>
 
 	* libempathy-gtk/gossip-contact-list-store.c: Do not highlight contacts

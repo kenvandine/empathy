@@ -30,6 +30,8 @@
 
 #include <glib-object.h>
 
+#include <libmissioncontrol/mc-account.h>
+
 G_BEGIN_DECLS
 
 #define GOSSIP_TYPE_CHAT_WINDOW         (gossip_chat_window_get_type ())
@@ -70,7 +72,8 @@ void              gossip_chat_window_move_chat       (GossipChatWindow *old_wind
 void              gossip_chat_window_switch_to_chat  (GossipChatWindow *window,
 						      GossipChat       *chat);
 gboolean          gossip_chat_window_has_focus       (GossipChatWindow *window);
-GossipChat *      gossip_chat_window_find_chat_by_id (const gchar      *id);
+GossipChat *      gossip_chat_window_find_chat       (McAccount        *account,
+						      const gchar      *id);
 
 G_END_DECLS
 

@@ -641,6 +641,7 @@ empathy_tp_contact_list_get_from_handles (EmpathyTpContactList *list,
 	}
 
 	if (new_handles->len == 0) {
+		g_array_free (new_handles, TRUE);
 		return contacts;
 	}
 
@@ -1448,6 +1449,7 @@ tp_contact_list_group_members_added_cb (GossipTelepathyGroup *group,
 		contact = GOSSIP_CONTACT (l->data);
 		contact_groups = gossip_contact_get_groups (contact);
 
+		/* FIXME: this leaks */
 		if (!g_list_find_custom (contact_groups,
 					 group_name,
 					 (GCompareFunc) strcmp)) {
@@ -1663,6 +1665,7 @@ tp_contact_list_request_avatar_cb (DBusGProxy                     *proxy,
 	n_avatar_requests--;
 	tp_contact_list_start_avatar_requests (data->list);
 
+	g_object_unref (contact);
 	g_slice_free (TpContactListAvatarRequestData, data);
 }
 
@@ -1699,6 +1702,7 @@ tp_contact_list_aliases_update_cb (DBusGProxy           *proxy,
 		tp_contact_list_block_contact (list, contact);
 		gossip_contact_set_name (contact, alias);
 		tp_contact_list_unblock_contact (list, contact);
+		g_object_unref (contact);
 
 		gossip_debug (DEBUG_DOMAIN, "contact %d renamed to %s (update cb)",
 			      handle, alias);
@@ -1727,6 +1731,7 @@ tp_contact_list_request_aliases_cb (DBusGProxy                       *proxy,
 		tp_contact_list_block_contact (data->list, contact);
 		gossip_contact_set_name (contact, *name);
 		tp_contact_list_unblock_contact (data->list, contact);
+		g_object_unref (contact);
 
 		gossip_debug (DEBUG_DOMAIN, "contact %d renamed to %s (request cb)",
 			      data->handles[i], *name);
@@ -1781,6 +1786,8 @@ tp_contact_list_parse_presence_foreach (guint                 handle,
 	tp_contact_list_block_contact (list, contact);
 	gossip_contact_set_presence (contact, presence);
 	tp_contact_list_unblock_contact (list, contact);
+
+	g_object_unref (contact);
 }
 
 static void

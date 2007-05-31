@@ -36,10 +36,12 @@
 
 #include <libempathy/empathy-contact-manager.h>
 #include <libempathy/empathy-contact-list.h>
+#include <libempathy/gossip-chatroom-manager.h>
 #include <libempathy/gossip-contact.h>
 #include <libempathy/gossip-debug.h>
 #include <libempathy/gossip-message.h>
 #include <libempathy/gossip-conf.h>
+#include <libempathy/gossip-utils.h>
 
 #include "gossip-chat-window.h"
 #include "empathy-images.h"
@@ -274,8 +276,7 @@ gossip_chat_window_init (GossipChatWindow *window)
 
 	priv = GET_PRIV (window);
 
-	priv->tooltips = g_object_ref (gtk_tooltips_new ());
-	gtk_object_sink (GTK_OBJECT (priv->tooltips));
+	priv->tooltips = g_object_ref_sink (gtk_tooltips_new ());
 
 	glade = gossip_glade_get_file ("gossip-chat.glade",
 				       "chat_window",
@@ -762,9 +763,10 @@ chat_window_update_menu (GossipChatWindow *window)
 	is_connected = gossip_chat_is_connected (priv->current_chat);
 
 	if (gossip_chat_is_group_chat (priv->current_chat)) {
-		GossipGroupChat *group_chat;
-		gboolean         saved = TRUE;
-		gboolean         show_contacts;
+		GossipGroupChat       *group_chat;
+		GossipChatroom        *chatroom;
+		GossipChatroomManager *manager;
+		gboolean               show_contacts;
 
 		group_chat = GOSSIP_GROUP_CHAT (priv->current_chat);
 
@@ -778,13 +780,13 @@ chat_window_update_menu (GossipChatWindow *window)
 		/* Can we add this room to our favourites and are we
 		 * connected to the room?
 		 */
-		/* FIXME:
-		manager = gossip_app_get_chatroom_manager ();
-		id = gossip_chatroom_get_id (chatroom);
-		saved = gossip_chatroom_manager_find (manager, id) != NULL;
-		*/
+		manager = gossip_chatroom_manager_new ();
+		chatroom = gossip_chatroom_manager_find (manager,
+							 priv->current_chat->account,
+							 gossip_chat_get_id (priv->current_chat));
+		g_object_unref (manager);
 
-		gtk_widget_set_sensitive (priv->menu_room_add, !saved);
+		gtk_widget_set_sensitive (priv->menu_room_add, chatroom == NULL);
 		gtk_widget_set_sensitive (priv->menu_conv_insert_smiley, is_connected);
 		gtk_widget_set_sensitive (priv->menu_room_join_new, is_connected);
 		gtk_widget_set_sensitive (priv->menu_room_invite, is_connected);
@@ -1079,9 +1081,7 @@ static void
 chat_window_room_add_activate_cb (GtkWidget        *menuitem,
 				  GossipChatWindow *window)
 {
-/* FIXME:
 	GossipChatWindowPriv  *priv;
-	GossipGroupChat       *group_chat;
 	GossipChatroomManager *manager;
 	GossipChatroom        *chatroom;
 
@@ -1093,16 +1093,17 @@ chat_window_room_add_activate_cb (GtkWidget        *menuitem,
 		return;
 	}
 
-	group_chat = GOSSIP_GROUP_CHAT (priv->current_chat);
-	chatroom = gossip_group_chat_get_chatroom (group_chat);
-	gossip_chatroom_set_favourite (chatroom, TRUE);
+	chatroom = gossip_chatroom_new_full (priv->current_chat->account,
+					     gossip_chat_get_id (priv->current_chat),
+					     gossip_chat_get_name (priv->current_chat),
+					     FALSE);
 
-	manager = gossip_app_get_chatroom_manager ();
+	manager = gossip_chatroom_manager_new ();
 	gossip_chatroom_manager_add (manager, chatroom);
-	gossip_chatroom_manager_store (manager);
-
 	chat_window_update_menu (window);
-*/
+
+	g_object_unref (chatroom);
+	g_object_unref (manager);
 }
 
 static void
@@ -1597,7 +1598,6 @@ chat_window_drag_data_received (GtkWidget        *widget,
 		GossipChatWindow      *old_window;
 		McAccount             *account;
 		const gchar           *id = NULL;
-		gchar                 *chat_id;
 
 		if (selection) {
 			id = (const gchar*) selection->data;
@@ -1615,10 +1615,8 @@ chat_window_drag_data_received (GtkWidget        *widget,
 		}
 		
 		account = gossip_contact_get_account (contact);
-		chat_id = empathy_tp_chat_build_id (account, id);
-		chat = gossip_chat_window_find_chat_by_id (chat_id);
+		chat = gossip_chat_window_find_chat (account, id);
 		old_window = gossip_chat_get_window (chat);
-		g_free (chat_id);
 		
 		if (old_window) {
 			if (old_window == window) {
@@ -1882,7 +1880,8 @@ gossip_chat_window_has_focus (GossipChatWindow *window)
 }
 
 GossipChat *
-gossip_chat_window_find_chat_by_id (const gchar *id)
+gossip_chat_window_find_chat (McAccount   *account,
+			      const gchar *id)
 {
 	GList *l;
 
@@ -1899,7 +1898,8 @@ gossip_chat_window_find_chat_by_id (const gchar *id)
 
 			chat = ll->data;
 
-			if (strcmp (id, gossip_chat_get_id (chat)) == 0) {
+			if (gossip_account_equal (account, chat->account) &&
+			    strcmp (id, gossip_chat_get_id (chat)) == 0) {
 				return chat;
 			}
 		}

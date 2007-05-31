@@ -593,6 +593,9 @@ account_chooser_set_account_foreach (GtkTreeModel   *model,
 	/* Special case so we can make it possible to select the All option */
 	if (!data->account && !account) {
 		equal = TRUE;
+	}
+	else if ((data->account && !account) || (!data->account && account)) {
+		equal = FALSE;
 	} else {
 		equal = gossip_account_equal (data->account, account);
 		g_object_unref (account);

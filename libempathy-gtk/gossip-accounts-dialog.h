@@ -28,7 +28,7 @@
 
 G_BEGIN_DECLS
 
-GtkWidget *gossip_accounts_dialog_show (void);
+GtkWidget *gossip_accounts_dialog_show (GtkWindow *parent);
 
 G_END_DECLS
 

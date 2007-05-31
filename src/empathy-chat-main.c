@@ -113,8 +113,8 @@ new_channel_cb (EmpathyChandler *chandler,
 
 	mc = gossip_mission_control_new ();
 	account = mission_control_get_account_for_connection (mc, tp_conn, NULL);
-	id = empathy_tp_chat_build_id_for_chan (account, tp_chan);
-	chat = gossip_chat_window_find_chat_by_id (id);
+	id = gossip_get_channel_id (account, tp_chan);
+	chat = gossip_chat_window_find_chat (account, id);
 
 	g_free (id);
 	g_object_unref (mc);
@@ -185,7 +185,7 @@ main (int argc, char *argv[])
 		debug_mode = TRUE;
 	}
 
-	exit_timeout_start ();
+	//sexit_timeout_start ();
 	chandler = empathy_chandler_new (BUS_NAME, OBJECT_PATH);
 
 	g_signal_connect (chandler, "new-channel",

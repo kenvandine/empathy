@@ -944,7 +944,7 @@ accounts_dialog_destroy_cb (GtkWidget            *widget,
 }
 
 GtkWidget *
-gossip_accounts_dialog_show (void)
+gossip_accounts_dialog_show (GtkWindow *parent)
 {
 	static GossipAccountsDialog *dialog = NULL;
 	GladeXML                    *glade;
@@ -1025,6 +1025,11 @@ gossip_accounts_dialog_show (void)
 	accounts_dialog_model_setup (dialog);
 	accounts_dialog_setup (dialog);
 	accounts_dialog_model_select_first (dialog);
+
+	if (parent) {
+		gtk_window_set_transient_for (GTK_WINDOW (dialog->window),
+					      GTK_WINDOW (parent));
+	}
 
 	gtk_widget_show (dialog->window);
 

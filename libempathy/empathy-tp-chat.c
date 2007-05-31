@@ -488,63 +488,9 @@ empathy_tp_chat_get_id (EmpathyTpChat *chat)
 		return priv->id;
 	}
 
-	priv->id = empathy_tp_chat_build_id_for_chan (priv->account, priv->tp_chan);
+	priv->id = gossip_get_channel_id (priv->account, priv->tp_chan);
 
 	return priv->id;
-}
-
-gchar *
-empathy_tp_chat_build_id (McAccount   *account,
-			  const gchar *contact_id)
-{
-	/* A handle name is unique only for a specific account */
-	return g_strdup_printf ("%s/%s",
-				mc_account_get_unique_name (account),
-				contact_id);
-}
-
-gchar *
-empathy_tp_chat_build_id_for_chan (McAccount *account,
-				   TpChan    *tp_chan)
-{
-	MissionControl *mc;
-	TpConn         *tp_conn;
-	GArray         *handles;
-	gchar         **names;
-	gchar          *id;
-	GError         *error = NULL;
-	
-	g_return_val_if_fail (MC_IS_ACCOUNT (account), NULL);
-	g_return_val_if_fail (TELEPATHY_IS_CHAN (tp_chan), NULL);
-
-	mc = gossip_mission_control_new ();
-	tp_conn = mission_control_get_connection (mc, account, NULL);
-	g_object_unref (mc);
-
-	/* Get the handle's name */
-	handles = g_array_new (FALSE, FALSE, sizeof (guint));
-	g_array_append_val (handles, tp_chan->handle);
-	if (!tp_conn_inspect_handles (DBUS_G_PROXY (tp_conn),
-				      tp_chan->handle_type,
-				      handles,
-				      &names,
-				      &error)) {
-		gossip_debug (DEBUG_DOMAIN, 
-			      "Couldn't get id: %s",
-			      error ? error->message : "No error given");
-		g_clear_error (&error);
-		g_array_free (handles, TRUE);
-		g_object_unref (tp_conn);
-		
-		return NULL;
-	}
-
-	id = empathy_tp_chat_build_id (account, *names);
-
-	g_strfreev (names);
-	g_object_unref (tp_conn);
-
-	return id;
 }
 
 static void

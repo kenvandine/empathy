@@ -33,7 +33,6 @@
 #include <glib/gi18n.h>
 
 #include <libxml/uri.h>
-#include <libmissioncontrol/mc-account.h>
 #include <libtelepathy/tp-helpers.h>
 
 #include "gossip-debug.h"
@@ -445,5 +444,53 @@ gossip_mission_control_new (void)
 	}
 
 	return mc;
+}
+
+gchar *
+gossip_get_channel_id (McAccount *account,
+		       TpChan    *tp_chan)
+{
+	MissionControl  *mc;
+	TpConn          *tp_conn;
+	GArray          *handles;
+	gchar          **names;
+	gchar           *name;
+	GError          *error;
+
+	g_return_val_if_fail (MC_IS_ACCOUNT (account), NULL);
+	g_return_val_if_fail (TELEPATHY_IS_CHAN (tp_chan), NULL);
+
+	mc = gossip_mission_control_new ();
+	tp_conn = mission_control_get_connection (mc, account, NULL);
+	g_object_unref (mc);
+
+	if (!tp_conn) {
+		return NULL;
+	}
+
+	/* Get the handle's name */
+	handles = g_array_new (FALSE, FALSE, sizeof (guint));
+	g_array_append_val (handles, tp_chan->handle);
+	if (!tp_conn_inspect_handles (DBUS_G_PROXY (tp_conn),
+				      tp_chan->handle_type,
+				      handles,
+				      &names,
+				      &error)) {
+		gossip_debug (DEBUG_DOMAIN, 
+			      "Couldn't get id: %s",
+			      error ? error->message : "No error given");
+
+		g_clear_error (&error);
+		g_array_free (handles, TRUE);
+		g_object_unref (tp_conn);
+		
+		return NULL;
+	}
+
+	name = *names;
+	g_free (names);
+	g_object_unref (tp_conn);
+
+	return name;
 }
 

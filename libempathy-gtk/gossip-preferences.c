@@ -914,7 +914,7 @@ preferences_destroy_cb (GtkWidget         *widget,
 }
 
 GtkWidget *
-gossip_preferences_show (void)
+gossip_preferences_show (GtkWindow *parent)
 {
 	static GossipPreferences *preferences;
 	GladeXML                 *glade;
@@ -971,6 +971,11 @@ gossip_preferences_show (void)
 
 		page = gtk_notebook_get_nth_page (GTK_NOTEBOOK (preferences->notebook), 2);
 		gtk_widget_show (page);
+	}
+
+	if (parent) {
+		gtk_window_set_transient_for (GTK_WINDOW (preferences->dialog),
+					      GTK_WINDOW (parent));
 	}
 
 	gtk_widget_show (preferences->dialog);

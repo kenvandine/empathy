@@ -25,7 +25,7 @@
 #ifndef __GOSSIP_PREFERENCES_H__
 #define __GOSSIP_PREFERENCES_H__
 
-#include <gtk/gtkwidget.h>
+#include <gtk/gtkwindow.h>
 
 G_BEGIN_DECLS
 
@@ -49,7 +49,7 @@ G_BEGIN_DECLS
 #define GOSSIP_PREFS_CONTACTS_SORT_CRITERIUM      GOSSIP_PREFS_PATH "/contacts/sort_criterium"
 #define GOSSIP_PREFS_HINTS_CLOSE_MAIN_WINDOW      GOSSIP_PREFS_PATH "/hints/close_main_window"
 
-GtkWidget * gossip_preferences_show (void);
+GtkWidget * gossip_preferences_show (GtkWindow *parent);
 
 G_END_DECLS
 

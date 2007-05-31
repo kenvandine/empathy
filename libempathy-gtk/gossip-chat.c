@@ -228,7 +228,7 @@ gossip_chat_init (GossipChat *chat)
 	priv = GET_PRIV (chat);
 
 	priv->manager = empathy_contact_manager_new ();
-	priv->tooltips = gtk_tooltips_new ();
+	priv->tooltips = g_object_ref_sink (gtk_tooltips_new ());
 	priv->default_window_height = -1;
 	priv->vscroll_visible = FALSE;
 	priv->sensitive = TRUE;
@@ -337,6 +337,7 @@ chat_finalize (GObject *object)
 	chat_composing_remove_timeout (chat);
 	g_object_unref (chat->account);
 	g_object_unref (priv->manager);
+	g_object_unref (priv->tooltips);
 
 	if (priv->tp_chat) {
 		g_object_unref (priv->tp_chat);

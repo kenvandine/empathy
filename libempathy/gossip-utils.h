@@ -32,6 +32,9 @@
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 
+#include <libtelepathy/tp-chan.h>
+
+#include <libmissioncontrol/mc-account.h>
 #include <libmissioncontrol/mission-control.h>
 
 #include "gossip-contact.h"
@@ -85,10 +88,12 @@ GValue *     gossip_string_to_g_value              (const gchar     *str,
 gboolean     gossip_g_value_equal                  (const GValue    *value1,
 						    const GValue    *value2);
 
-guint        gossip_account_hash                    (gconstpointer   key);
-gboolean     gossip_account_equal                   (gconstpointer   a,
-						     gconstpointer   b);
-MissionControl *gossip_mission_control_new (void);
+guint        gossip_account_hash                   (gconstpointer    key);
+gboolean     gossip_account_equal                  (gconstpointer    a,
+						    gconstpointer    b);
+MissionControl *gossip_mission_control_new         (void);
+gchar *      gossip_get_channel_id                 (McAccount       *account,
+						    TpChan          *tp_chan);
 
 G_END_DECLS
 

@@ -231,7 +231,7 @@ status_icon_toggle_visibility (EmpathyStatusIcon *icon)
 		} else {
 			gossip_debug (DEBUG_DOMAIN,
 				      "No enabled account, Showing account dialog");
-			gossip_accounts_dialog_show ();
+			gossip_accounts_dialog_show (GTK_WINDOW (priv->window));
 		}
 	}
 }

@@ -24,6 +24,8 @@ libempathy_la_SOURCES =             						\
 	gossip-debug.c			gossip-debug.h				\
 	gossip-utils.c			gossip-utils.h				\
 	gossip-message.c		gossip-message.h			\
+	gossip-chatroom-manager.c	gossip-chatroom-manager.h		\
+	gossip-chatroom.c		gossip-chatroom.h			\
 	empathy-contact-list.c		empathy-contact-list.h			\
 	empathy-contact-manager.c	empathy-contact-manager.h		\
 	empathy-tp-contact-list.c	empathy-tp-contact-list.h		\
@@ -49,8 +51,13 @@ libempathy_includedir = $(includedir)/empathy/
 empathy-chandler-glue.h: empathy-chandler.xml
 	$(LIBTOOL) --mode=execute $(DBUS_BINDING_TOOL) --prefix=empathy_chandler --mode=glib-server --output=$@ $<
 
+dtddir = $(datadir)/empathy
+dtd_DATA = 					\
+	gossip-chatroom-manager.dtd
+
 EXTRA_DIST = 			\
 	empathy-marshal.list	\
-	empathy-chandler.xml
+	empathy-chandler.xml	\
+	$(dtd_DATA)
 
 CLEANFILES = $(BUILT_SOURCES)
