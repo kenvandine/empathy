@@ -65,7 +65,7 @@
 	* libempathy-gtk/gossip-contact-list-store.c: Do not highlight contacts
 	already known when creating the contact list.
 	* libempathy/empathy-tp-contact-list.c: Do not set alias if DBus
-	returns an error.
+	returns an error. Fixes bug #442639.
 	* libempathy/empathy-idle.c: Do not set status message to
 	"Extended autoaway", let user's message unchanged.
 
