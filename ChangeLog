@@ -1,3 +1,7 @@
+2007-06-01  Xavier Claessens  <xclaesse@gmail.com>
+
+	* configure.ac: Bump version to 0.7
+
 2007-05-31  Xavier Claessens  <xclaesse@gmail.com>
 
 	* libempathy-gtk/gossip-new-chatroom-dialog.c: No need to RequestHandle,
