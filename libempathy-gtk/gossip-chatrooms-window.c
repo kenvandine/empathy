@@ -84,6 +84,13 @@ static void             chatrooms_window_button_close_clicked_cb         (GtkWid
 static void             chatrooms_window_chatroom_added_cb               (GossipChatroomManager *manager,
 									  GossipChatroom        *chatroom,
 									  GossipChatroomsWindow *window);
+static void             chatrooms_window_chatroom_removed_cb             (GossipChatroomManager *manager,
+									  GossipChatroom        *chatroom,
+									  GossipChatroomsWindow *window);
+static gboolean         chatrooms_window_remove_chatroom_foreach         (GtkTreeModel          *model,
+									  GtkTreePath           *path,
+									  GtkTreeIter           *iter,
+									  GossipChatroom        *chatroom);
 static void             chatrooms_window_account_changed_cb              (GtkWidget             *combo_box,
 									  GossipChatroomsWindow *window);
 
@@ -138,6 +145,9 @@ gossip_chatrooms_window_show (GtkWindow *parent)
 
 	g_signal_connect (window->manager, "chatroom-added",
 			  G_CALLBACK (chatrooms_window_chatroom_added_cb),
+			  window);
+	g_signal_connect (window->manager, "chatroom-removed",
+			  G_CALLBACK (chatrooms_window_chatroom_removed_cb),
 			  window);
 
 	/* Account chooser for chat rooms */
@@ -519,6 +529,41 @@ chatrooms_window_chatroom_added_cb (GossipChatroomManager *manager,
 
 		g_object_unref (account);
 	}
+}
+
+static void
+chatrooms_window_chatroom_removed_cb (GossipChatroomManager *manager,
+				      GossipChatroom        *chatroom,
+				      GossipChatroomsWindow *window)
+{
+	GtkTreeModel *model;
+
+	model = gtk_tree_view_get_model (GTK_TREE_VIEW (window->treeview));
+
+	gtk_tree_model_foreach (model,
+				(GtkTreeModelForeachFunc) chatrooms_window_remove_chatroom_foreach,
+				chatroom);
+}
+
+static gboolean
+chatrooms_window_remove_chatroom_foreach (GtkTreeModel   *model,
+					  GtkTreePath    *path,
+					  GtkTreeIter    *iter,
+					  GossipChatroom *chatroom)
+{
+	GossipChatroom *this_chatroom;
+
+	gtk_tree_model_get (model, iter, COL_POINTER, &this_chatroom, -1);
+
+	if (gossip_chatroom_equal (chatroom, this_chatroom)) {
+		gtk_list_store_remove (GTK_LIST_STORE (model), iter);
+		g_object_unref (this_chatroom);
+		return TRUE;
+	}
+
+	g_object_unref (this_chatroom);
+
+	return FALSE;
 }
 
 static void

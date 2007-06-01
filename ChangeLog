@@ -1,5 +1,15 @@
 2007-06-01  Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/gossip-chatrooms-window.c:
+	* libempathy-gtk/gossip-chat-window.c:
+	* libempathy/gossip-chatroom.c:
+	* libempathy/gossip-chatroom-manager.c:
+	* configure.ac: Monitor changes on chatrooms.xml file and relead it 
+	when it's modified. connect chatroom-added/removed in some places where
+	needed.
+
+2007-06-01  Xavier Claessens  <xclaesse@gmail.com>
+
 	* configure.ac: Bump version to 0.7
 
 2007-05-31  Xavier Claessens  <xclaesse@gmail.com>

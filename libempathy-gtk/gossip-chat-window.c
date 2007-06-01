@@ -63,49 +63,50 @@
 #define URGENCY_TIMEOUT 60*1000
 
 struct _GossipChatWindowPriv {
-	GList       *chats;
-	GList       *chats_new_msg;
-	GList       *chats_composing;
+	GossipChatroomManager *chatroom_manager;
+	GList                 *chats;
+	GList                 *chats_new_msg;
+	GList                 *chats_composing;
 
-	GossipChat  *current_chat;
+	GossipChat            *current_chat;
 
-	gboolean     page_added;
-	gboolean     dnd_same_window;
+	gboolean               page_added;
+	gboolean               dnd_same_window;
 
-	guint        urgency_timeout_id;
+	guint                  urgency_timeout_id;
 
-	GtkWidget   *dialog;
-	GtkWidget   *notebook;
+	GtkWidget             *dialog;
+	GtkWidget             *notebook;
 
-	GtkTooltips *tooltips;
+	GtkTooltips           *tooltips;
 
 	/* Menu items. */
-	GtkWidget   *menu_conv_clear;
-	GtkWidget   *menu_conv_insert_smiley;
-	GtkWidget   *menu_conv_log;
-	GtkWidget   *menu_conv_separator;
-	GtkWidget   *menu_conv_add_contact;
-	GtkWidget   *menu_conv_info;
-	GtkWidget   *menu_conv_close;
+	GtkWidget             *menu_conv_clear;
+	GtkWidget             *menu_conv_insert_smiley;
+	GtkWidget             *menu_conv_log;
+	GtkWidget             *menu_conv_separator;
+	GtkWidget             *menu_conv_add_contact;
+	GtkWidget             *menu_conv_info;
+	GtkWidget             *menu_conv_close;
 
-	GtkWidget   *menu_room;
-	GtkWidget   *menu_room_set_topic;
-	GtkWidget   *menu_room_join_new;
-	GtkWidget   *menu_room_invite;
-	GtkWidget   *menu_room_add;
-	GtkWidget   *menu_room_show_contacts;
+	GtkWidget             *menu_room;
+	GtkWidget             *menu_room_set_topic;
+	GtkWidget             *menu_room_join_new;
+	GtkWidget             *menu_room_invite;
+	GtkWidget             *menu_room_add;
+	GtkWidget             *menu_room_show_contacts;
 
-	GtkWidget   *menu_edit_cut;
-	GtkWidget   *menu_edit_copy;
-	GtkWidget   *menu_edit_paste;
+	GtkWidget             *menu_edit_cut;
+	GtkWidget             *menu_edit_copy;
+	GtkWidget             *menu_edit_paste;
 
-	GtkWidget   *menu_tabs_next;
-	GtkWidget   *menu_tabs_prev;
-	GtkWidget   *menu_tabs_left;
-	GtkWidget   *menu_tabs_right;
-	GtkWidget   *menu_tabs_detach;
+	GtkWidget             *menu_tabs_next;
+	GtkWidget             *menu_tabs_prev;
+	GtkWidget             *menu_tabs_left;
+	GtkWidget             *menu_tabs_right;
+	GtkWidget             *menu_tabs_detach;
 
-	guint        save_geometry_id;
+	guint                  save_geometry_id;
 };
 
 static void       gossip_chat_window_class_init         (GossipChatWindowClass *klass);
@@ -331,6 +332,15 @@ gossip_chat_window_init (GossipChatWindow *window)
 
 	g_object_unref (glade);
 
+	/* Set up chatroom manager */
+	priv->chatroom_manager = gossip_chatroom_manager_new ();
+	g_signal_connect_swapped (priv->chatroom_manager, "chatroom-added",
+				  G_CALLBACK (chat_window_update_menu),
+				  window);
+	g_signal_connect_swapped (priv->chatroom_manager, "chatroom-removed",
+				  G_CALLBACK (chat_window_update_menu),
+				  window);
+
 	priv->notebook = gtk_notebook_new ();
  	gtk_notebook_set_group_id (GTK_NOTEBOOK (priv->notebook), 1); 
 	gtk_box_pack_start (GTK_BOX (chat_vbox), priv->notebook, TRUE, TRUE, 0);
@@ -500,6 +510,7 @@ gossip_chat_window_finalize (GObject *object)
 	chat_windows = g_list_remove (chat_windows, window);
 	gtk_widget_destroy (priv->dialog);
 
+	g_object_unref (priv->chatroom_manager);
 	g_object_unref (priv->tooltips);
 
 	G_OBJECT_CLASS (gossip_chat_window_parent_class)->finalize (object);
@@ -763,10 +774,9 @@ chat_window_update_menu (GossipChatWindow *window)
 	is_connected = gossip_chat_is_connected (priv->current_chat);
 
 	if (gossip_chat_is_group_chat (priv->current_chat)) {
-		GossipGroupChat       *group_chat;
-		GossipChatroom        *chatroom;
-		GossipChatroomManager *manager;
-		gboolean               show_contacts;
+		GossipGroupChat *group_chat;
+		GossipChatroom  *chatroom;
+		gboolean         show_contacts;
 
 		group_chat = GOSSIP_GROUP_CHAT (priv->current_chat);
 
@@ -780,11 +790,9 @@ chat_window_update_menu (GossipChatWindow *window)
 		/* Can we add this room to our favourites and are we
 		 * connected to the room?
 		 */
-		manager = gossip_chatroom_manager_new ();
-		chatroom = gossip_chatroom_manager_find (manager,
+		chatroom = gossip_chatroom_manager_find (priv->chatroom_manager,
 							 priv->current_chat->account,
 							 gossip_chat_get_id (priv->current_chat));
-		g_object_unref (manager);
 
 		gtk_widget_set_sensitive (priv->menu_room_add, chatroom == NULL);
 		gtk_widget_set_sensitive (priv->menu_conv_insert_smiley, is_connected);

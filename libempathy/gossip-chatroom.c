@@ -300,12 +300,14 @@ gossip_chatroom_set_name (GossipChatroom *chatroom,
 	GossipChatroomPriv *priv;
 
 	g_return_if_fail (GOSSIP_IS_CHATROOM (chatroom));
-	g_return_if_fail (name != NULL);
 
 	priv = GET_PRIV (chatroom);
 
 	g_free (priv->name);
-	priv->name = g_strdup (name);
+	priv->name = NULL;
+	if (name) {
+		priv->name = g_strdup (name);
+	}
 
 	g_object_notify (G_OBJECT (chatroom), "name");
 }

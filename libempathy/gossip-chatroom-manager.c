@@ -31,6 +31,8 @@
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 
+#include <libgnomevfs/gnome-vfs.h>
+
 #include "gossip-debug.h"
 #include "gossip-chatroom-manager.h"
 #include "gossip-utils.h"
@@ -43,13 +45,19 @@
 #define CHATROOMS_DTD_FILENAME "gossip-chatroom-manager.dtd"
 
 struct _GossipChatroomManagerPriv {
-	GList *chatrooms;
+	GList      *chatrooms;
+	GHashTable *monitors;
 };
 
 static void     gossip_chatroom_manager_class_init (GossipChatroomManagerClass *klass);
 static void     gossip_chatroom_manager_init       (GossipChatroomManager      *manager);
 static void     chatroom_manager_finalize          (GObject                    *object);
 static gboolean chatroom_manager_get_all           (GossipChatroomManager      *manager);
+static void     chatroom_manager_file_changed_cb   (GnomeVFSMonitorHandle      *handle,
+						    const gchar                *monitor_uri,
+						    const gchar                *info_uri,
+						    GnomeVFSMonitorEventType    event_type,
+						    GossipChatroomManager      *manager);
 static gboolean chatroom_manager_file_parse        (GossipChatroomManager      *manager,
 						    const gchar                *filename);
 static void     chatroom_manager_parse_chatroom    (GossipChatroomManager      *manager,
@@ -99,6 +107,14 @@ gossip_chatroom_manager_class_init (GossipChatroomManagerClass *klass)
 static void
 gossip_chatroom_manager_init (GossipChatroomManager *manager)
 {
+	GossipChatroomManagerPriv *priv;
+
+	priv = GET_PRIV (manager);
+
+	priv->monitors = g_hash_table_new_full (g_str_hash,
+						g_str_equal,
+						(GDestroyNotify) g_free,
+						(GDestroyNotify) gnome_vfs_monitor_cancel);
 }
 
 static void
@@ -110,6 +126,7 @@ chatroom_manager_finalize (GObject *object)
 
 	g_list_foreach (priv->chatrooms, (GFunc) g_object_unref, NULL);
 	g_list_free (priv->chatrooms);
+	g_hash_table_destroy (priv->monitors);
 
 	(G_OBJECT_CLASS (gossip_chatroom_manager_parent_class)->finalize) (object);
 }
@@ -149,7 +166,7 @@ gossip_chatroom_manager_add (GossipChatroomManager *manager,
 	if (!gossip_chatroom_manager_find (manager,
 					   gossip_chatroom_get_account (chatroom),
 					   gossip_chatroom_get_room (chatroom))) {
-		priv->chatrooms = g_list_append (priv->chatrooms, g_object_ref (chatroom));
+		priv->chatrooms = g_list_prepend (priv->chatrooms, g_object_ref (chatroom));
 		chatroom_manager_file_save (manager);
 
 		g_signal_emit (manager, signals[CHATROOM_ADDED], 0, chatroom);
@@ -322,6 +339,31 @@ chatroom_manager_get_all (GossipChatroomManager *manager)
 	return TRUE;
 }
 
+static void
+chatroom_manager_file_changed_cb (GnomeVFSMonitorHandle    *handle,
+				  const gchar              *monitor_uri,
+				  const gchar              *info_uri,
+				  GnomeVFSMonitorEventType  event_type,
+				  GossipChatroomManager    *manager)
+{
+	GossipChatroomManagerPriv *priv;
+	GList                     *l;
+
+	priv = GET_PRIV (manager);
+
+	gossip_debug (DEBUG_DOMAIN, "Reload file: %s", monitor_uri);
+
+	/* FIXME: This is not optimised */
+	for (l = priv->chatrooms; l; l = l->next) {
+		g_signal_emit (manager, signals[CHATROOM_REMOVED], 0, l->data);
+		g_object_unref (l->data);
+	}
+	g_list_free (priv->chatrooms);
+	priv->chatrooms = NULL;
+
+	chatroom_manager_get_all (manager);
+}
+
 static gboolean
 chatroom_manager_file_parse (GossipChatroomManager *manager,
 			     const gchar           *filename)
@@ -333,6 +375,19 @@ chatroom_manager_file_parse (GossipChatroomManager *manager,
 	xmlNodePtr                 node;
 
 	priv = GET_PRIV (manager);
+
+	/* Do not monitor this file twice if it's already monitored */
+	if (!g_hash_table_lookup (priv->monitors, filename)) {
+		GnomeVFSMonitorHandle *handle;
+
+		gnome_vfs_monitor_add (&handle,
+				       filename,
+				       GNOME_VFS_MONITOR_FILE,
+				       (GnomeVFSMonitorCallback) chatroom_manager_file_changed_cb,
+				       manager);
+
+		g_hash_table_insert (priv->monitors, g_strdup (filename), handle);
+	}
 
 	gossip_debug (DEBUG_DOMAIN, "Attempting to parse file:'%s'...", filename);
 
@@ -432,12 +487,9 @@ chatroom_manager_parse_chatroom (GossipChatroomManager *manager,
 		return;
 	}
 
-	chatroom = gossip_chatroom_new_full (account,
-					     room,
-					     name,
-					     auto_connect);
-
+	chatroom = gossip_chatroom_new_full (account, room, name, auto_connect);
 	priv->chatrooms = g_list_prepend (priv->chatrooms, chatroom);
+	g_signal_emit (manager, signals[CHATROOM_ADDED], 0, chatroom);
 
 	g_object_unref (account);
 	g_free (name);
