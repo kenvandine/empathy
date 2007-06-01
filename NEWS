@@ -1,3 +1,14 @@
+NEW in 0.6:
+===========
+ - Join room when clicking on favorite rooms.
+ - Do not restore away presence message when coming back after the user set
+   manually to away.
+ - Set parent window when poping a new window/dialog.
+ - Implement favorite chatroom menu.
+ - Do not highlight contacts already known when creating the contact list.
+ - Do not set status message to "Extended autoaway", let user's message
+   unchanged.
+ - Many bugs and leaks fixed.
 
 NEW in 0.5:
 ===========
