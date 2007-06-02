@@ -1845,7 +1845,8 @@ tp_contact_list_status_changed_cb (MissionControl                  *mc,
 
 	account = mc_account_lookup (unique_name);
 	if (status != TP_CONN_STATUS_DISCONNECTED ||
-	    !gossip_account_equal (account, priv->account)) {
+	    !gossip_account_equal (account, priv->account) ||
+	    !priv->tp_conn) {
 		g_object_unref (account);
 		return;
 	}

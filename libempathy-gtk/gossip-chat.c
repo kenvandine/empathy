@@ -1314,7 +1314,6 @@ gossip_chat_set_tp_chat (GossipChat    *chat,
 		priv->first_tp_chat = FALSE;
 	}
 
-
 	g_signal_connect (tp_chat, "message-received",
 			  G_CALLBACK (chat_message_received_cb),
 			  chat);

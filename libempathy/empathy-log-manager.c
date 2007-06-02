@@ -331,7 +331,7 @@ empathy_log_manager_get_last_messages (EmpathyLogManager *manager,
 				       McAccount         *account,
 				       const gchar       *chat_id)
 {
-	GList *messages;
+	GList *messages = NULL;
 	GList *dates;
 	GList *l;
 
@@ -342,10 +342,12 @@ empathy_log_manager_get_last_messages (EmpathyLogManager *manager,
 	dates = empathy_log_manager_get_dates (manager, account, chat_id);
 
 	l = g_list_last (dates);
-	messages = empathy_log_manager_get_messages_for_date (manager,
-							      account,
-							      chat_id,
-							      l->data);
+	if (l) {
+		messages = empathy_log_manager_get_messages_for_date (manager,
+								      account,
+								      chat_id,
+								      l->data);
+	}
 
 	g_list_foreach (dates, (GFunc) g_free, NULL);
 	g_list_free (dates);

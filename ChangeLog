@@ -1,5 +1,12 @@
 2007-06-02  Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy/empathy-log-manager.c: Fix crash when there is no log
+	available for a chat.
+	* libempathy/empathy-tp-contact-list.c: Fix a crash when destroy signal
+	is emitted before StatusChanged.
+
+2007-06-02  Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/gossip-group-chat.c:
 	* libempathy-gtk/gossip-private-chat.c:
 	* libempathy-gtk/gossip-chat.c:
