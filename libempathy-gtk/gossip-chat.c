@@ -36,6 +36,7 @@
 #include <glade/glade.h>
 
 #include <libempathy/empathy-contact-manager.h>
+#include <libempathy/empathy-log-manager.h>
 #include <libempathy/gossip-debug.h>
 #include <libempathy/gossip-utils.h>
 #include <libempathy/gossip-conf.h>
@@ -64,6 +65,7 @@
 
 struct _GossipChatPriv {
 	EmpathyContactManager *manager;
+	EmpathyLogManager     *log_manager;
 	EmpathyTpChat         *tp_chat;
 	GossipChatWindow      *window;
 	GtkTooltips           *tooltips;
@@ -74,6 +76,7 @@ struct _GossipChatPriv {
 	gint                   sent_messages_index;
 	GList                 *compositors;
 	guint                  scroll_idle_id;
+	gboolean               first_tp_chat;
 	/* Used to automatically shrink a window that has temporarily
 	 * grown due to long input. 
 	 */
@@ -139,6 +142,7 @@ static void             chat_state_changed_cb             (EmpathyTpChat   *tp_c
 							   GossipContact   *contact,
 							   TelepathyChannelChatState  state,
 							   GossipChat      *chat);
+static void             chat_add_logs                     (GossipChat      *chat);
 static gboolean         chat_scroll_down_idle_func        (GossipChat      *chat);
 
 enum {
@@ -228,12 +232,14 @@ gossip_chat_init (GossipChat *chat)
 	priv = GET_PRIV (chat);
 
 	priv->manager = empathy_contact_manager_new ();
+	priv->log_manager = empathy_log_manager_new ();
 	priv->tooltips = g_object_ref_sink (gtk_tooltips_new ());
 	priv->default_window_height = -1;
 	priv->vscroll_visible = FALSE;
 	priv->sensitive = TRUE;
 	priv->sent_messages = NULL;
 	priv->sent_messages_index = -1;
+	priv->first_tp_chat = TRUE;
 
 	g_signal_connect (chat->input_text_view,
 			  "key_press_event",
@@ -270,51 +276,6 @@ gossip_chat_init (GossipChat *chat)
 				    "misspelled",
 				    "underline", PANGO_UNDERLINE_ERROR,
 				    NULL);
-
-
-
-	/* Turn off scrolling temporarily */
-	gossip_chat_view_scroll (chat->view, FALSE);
-#if 0
-FIXME:
-	/* Add messages from last conversation */
-	log_manager = gossip_session_get_log_manager (gossip_app_get_session ());
-	messages = gossip_log_get_last_for_contact (log_manager, priv->contact);
-	num_messages  = g_list_length (messages);
-
-	for (l = messages, i = 0; l; l = l->next, i++) {
-		message = l->data;
-
-		if (num_messages - i > 10) {
-			continue;
-		}
-
-		sender = gossip_message_get_sender (message);
-		if (gossip_contact_equal (priv->own_contact, sender)) {
-			gossip_chat_view_append_message_from_self (view,
-								   message,
-								   priv->own_contact,
-								   priv->own_avatar);
-		} else {
-			gossip_chat_view_append_message_from_other (view,
-								    message,
-								    sender,
-								    priv->other_avatar);
-		}
-	}
-
-	g_list_foreach (messages, (GFunc) g_object_unref, NULL);
-	g_list_free (messages);
-#endif
-	/* Turn back on scrolling */
-	gossip_chat_view_scroll (chat->view, TRUE);
-
-	/* Scroll to the most recent messages, we reference the chat
-	 * for the duration of the scroll func.
-	 */
-	priv->scroll_idle_id = g_idle_add ((GSourceFunc) chat_scroll_down_idle_func, 
-					   g_object_ref (chat));
-
 }
 
 static void
@@ -337,6 +298,7 @@ chat_finalize (GObject *object)
 	chat_composing_remove_timeout (chat);
 	g_object_unref (chat->account);
 	g_object_unref (priv->manager);
+	g_object_unref (priv->log_manager);
 	g_object_unref (priv->tooltips);
 
 	if (priv->tp_chat) {
@@ -377,10 +339,9 @@ static void
 chat_send (GossipChat  *chat,
 	   const gchar *msg)
 {
-	GossipChatPriv   *priv;
-	//GossipLogManager *log_manager;
-	GossipMessage    *message;
-	GossipContact    *own_contact;
+	GossipChatPriv    *priv;
+	GossipMessage     *message;
+	GossipContact     *own_contact;
 
 	priv = GET_PRIV (chat);
 
@@ -398,14 +359,9 @@ chat_send (GossipChat  *chat,
 	/* FIXME: add here something to let group/privrate chat handle
 	 *        some special messages */
 
-	/* FIXME: gossip_app_set_not_away ();*/
-
 	own_contact = empathy_contact_manager_get_user (priv->manager, chat->account);
 	message = gossip_message_new (msg);
 	gossip_message_set_sender (message, own_contact);
-
-	//FIXME: log_manager = gossip_session_get_log_manager (gossip_app_get_session ());
-	//gossip_log_message_for_contact (log_manager, message, FALSE);
 
 	empathy_tp_chat_send (priv->tp_chat, message);
 
@@ -443,8 +399,7 @@ chat_message_received_cb (EmpathyTpChat *tp_chat,
 			  GossipChat    *chat)
 {
 	GossipChatPriv *priv;
-	//GossipLogManager      *log_manager;
-	GossipContact         *sender;
+	GossipContact  *sender;
 
 	priv = GET_PRIV (chat);
 
@@ -452,10 +407,10 @@ chat_message_received_cb (EmpathyTpChat *tp_chat,
 	gossip_debug (DEBUG_DOMAIN, "Appending message ('%s')",
 		      gossip_contact_get_name (sender));
 
-/*FIXME:
-	log_manager = gossip_session_get_log_manager (gossip_app_get_session ());
-	gossip_log_message_for_contact (log_manager, message, TRUE);
-*/
+	empathy_log_manager_add_message (priv->log_manager,
+					 gossip_chat_get_id (chat),
+					 message);
+
 	gossip_chat_view_append_message (chat->view, message);
 
 	if (gossip_chat_should_play_sound (chat)) {
@@ -1129,6 +1084,52 @@ chat_state_changed_cb (EmpathyTpChat             *tp_chat,
 	}
 }
 
+static void
+chat_add_logs (GossipChat *chat)
+{
+	GossipChatPriv *priv;
+	GList          *messages, *l;
+	guint           num_messages;
+	guint           i;
+
+	priv = GET_PRIV (chat);
+
+	/* Turn off scrolling temporarily */
+	gossip_chat_view_scroll (chat->view, FALSE);
+
+	/* Add messages from last conversation */
+	messages = empathy_log_manager_get_last_messages (priv->log_manager,
+							  chat->account,
+							  gossip_chat_get_id (chat));
+	num_messages  = g_list_length (messages);
+
+	for (l = messages, i = 0; l; l = l->next, i++) {
+		GossipMessage *message;
+
+		message = l->data;
+
+		/* Only add 10 last messages */
+		if (num_messages - i > 10) {
+			g_object_unref (message);
+			continue;
+		}
+
+
+		gossip_chat_view_append_message (chat->view, message);
+		g_object_unref (message);
+	}
+	g_list_free (messages);
+
+	/* Turn back on scrolling */
+	gossip_chat_view_scroll (chat->view, TRUE);
+
+	/* Scroll to the most recent messages, we reference the chat
+	 * for the duration of the scroll func.
+	 */
+	priv->scroll_idle_id = g_idle_add ((GSourceFunc) chat_scroll_down_idle_func, 
+					   g_object_ref (chat));
+}
+
 /* Scroll down after the back-log has been received. */
 static gboolean
 chat_scroll_down_idle_func (GossipChat *chat)
@@ -1307,6 +1308,12 @@ gossip_chat_set_tp_chat (GossipChat    *chat,
 	g_free (priv->id);
 	priv->tp_chat = g_object_ref (tp_chat);
 	priv->id = g_strdup (empathy_tp_chat_get_id (tp_chat));
+
+	if (priv->first_tp_chat) {
+		chat_add_logs (chat);
+		priv->first_tp_chat = FALSE;
+	}
+
 
 	g_signal_connect (tp_chat, "message-received",
 			  G_CALLBACK (chat_message_received_cb),

@@ -307,12 +307,11 @@ private_chat_setup (GossipPrivateChat *chat,
 
 	priv = GET_PRIV (chat);
 
-	gossip_chat_set_tp_chat (GOSSIP_CHAT (chat), tp_chat);
-
-	priv->contact = g_object_ref (contact);
 	GOSSIP_CHAT (chat)->account = g_object_ref (gossip_contact_get_account (contact));
-
+	priv->contact = g_object_ref (contact);
 	priv->name = g_strdup (gossip_contact_get_name (contact));
+
+	gossip_chat_set_tp_chat (GOSSIP_CHAT (chat), tp_chat);
 
 	g_signal_connect (priv->contact, 
 			  "notify::name",

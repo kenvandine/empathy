@@ -33,6 +33,7 @@ libempathy_la_SOURCES =             						\
 	empathy-tp-chatroom.c		empathy-tp-chatroom.h			\
 	empathy-chandler.c		empathy-chandler.h			\
 	empathy-idle.c			empathy-idle.h				\
+	empathy-log-manager.c		empathy-log-manager.h			\
 	empathy-marshal-main.c
 
 libempathy_la_LIBADD =		\
@@ -55,9 +56,14 @@ dtddir = $(datadir)/empathy
 dtd_DATA = 					\
 	gossip-chatroom-manager.dtd
 
+stylesheetdir = $(datadir)/empathy
+stylesheet_DATA =		\
+	empathy-log-manager.xsl
+
 EXTRA_DIST = 			\
 	empathy-marshal.list	\
 	empathy-chandler.xml	\
+	$(stylesheet_DATA)	\
 	$(dtd_DATA)
 
 CLEANFILES = $(BUILT_SOURCES)

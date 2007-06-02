@@ -176,9 +176,9 @@ gossip_group_chat_new (McAccount *account,
 
 	priv = GET_PRIV (chat);
 
+	GOSSIP_CHAT (chat)->account = g_object_ref (account);
 	priv->tp_chat = empathy_tp_chatroom_new (account, tp_chan);
 	gossip_chat_set_tp_chat (GOSSIP_CHAT (chat), EMPATHY_TP_CHAT (priv->tp_chat));
-	GOSSIP_CHAT (chat)->account = g_object_ref (account);
 
 	/* FIXME: Ask the user before accepting */
 	empathy_tp_chatroom_accept_invitation (priv->tp_chat);

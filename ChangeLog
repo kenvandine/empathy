@@ -1,6 +1,17 @@
 2007-06-02  Xavier Claessens  <xclaesse@gmail.com>
 
 	* libempathy-gtk/gossip-group-chat.c:
+	* libempathy-gtk/gossip-private-chat.c:
+	* libempathy-gtk/gossip-chat.c:
+	* libempathy/empathy-log-manager.c:
+	* libempathy/empathy-log-manager.h:
+	* libempathy/empathy-log-manager.xsl:
+	* libempathy/Makefile.am: Log chats and display 10 last messages when
+	opening a new chat.
+
+2007-06-02  Xavier Claessens  <xclaesse@gmail.com>
+
+	* libempathy-gtk/gossip-group-chat.c:
 	* libempathy/empathy-tp-contact-list.c:
 	* libempathy/gossip-contact.c: Set default presence to available if
 	there is no presence iface.
