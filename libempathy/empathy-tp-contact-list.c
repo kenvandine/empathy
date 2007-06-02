@@ -684,6 +684,18 @@ empathy_tp_contact_list_get_from_handles (EmpathyTpContactList *list,
 					"handle", handle,
 					NULL);
 
+		if (!priv->presence_iface) {
+			GossipPresence *presence;
+
+			/* We have no presence iface, set default presence
+			 * to available */
+			presence = gossip_presence_new_full (MC_PRESENCE_AVAILABLE,
+							     NULL);
+
+			gossip_contact_set_presence (contact, presence);
+			g_object_unref (presence);
+		}
+
 		g_signal_connect (contact, "notify::groups",
 				  G_CALLBACK (tp_contact_list_groups_updated_cb),
 				  list);

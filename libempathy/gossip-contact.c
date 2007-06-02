@@ -333,9 +333,9 @@ gossip_contact_new (McAccount *account)
 }
 
 GossipContact *
-gossip_contact_new_full (McAccount *account,
-			 const gchar   *id,
-			 const gchar   *name)
+gossip_contact_new_full (McAccount   *account,
+			 const gchar *id,
+			 const gchar *name)
 {
 	return g_object_new (GOSSIP_TYPE_CONTACT,
 			     "account", account,
