@@ -33,7 +33,7 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 #include <glade/glade.h>
-#include <libgnome/libgnome.h>
+#include <libgnomevfs/gnome-vfs-utils.h>
 
 #include <libmissioncontrol/mc-profile.h>
 
@@ -1279,14 +1279,15 @@ fixup_url (const gchar *url)
 void
 gossip_url_show (const char *url)
 {
-	gchar  *real_url;
-	GError *error = NULL;
+	gchar          *real_url;
+	GnomeVFSResult  res;
 
 	real_url = fixup_url (url);
-	gnome_url_show (real_url, &error);
-	if (error) {
-		g_warning ("Couldn't show URL:'%s'", real_url);
-		g_error_free (error);
+	res = gnome_vfs_url_show (real_url);
+	if (res != GNOME_VFS_OK) {
+		gossip_debug (DEBUG_DOMAIN, "Couldn't show URL %s: %s",
+			      real_url,
+			      gnome_vfs_result_to_string (res));
 	}
 
 	g_free (real_url);
@@ -1312,13 +1313,6 @@ gossip_link_button_new (const gchar *url,
 	}
 
 	return gtk_link_button_new_with_label (url, title);
-}
-
-/* FIXME: Do this in a proper way at some point, probably in GTK+? */
-void
-gossip_window_set_default_icon_name (const gchar *name)
-{
-	gtk_window_set_default_icon_name (name);
 }
 
 void

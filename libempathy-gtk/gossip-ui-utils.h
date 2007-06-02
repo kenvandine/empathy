@@ -98,10 +98,7 @@ gboolean   gossip_text_iter_backward_search         (const GtkTextIter   *iter,
 gboolean   gossip_window_get_is_visible             (GtkWindow           *window);
 void       gossip_window_present                    (GtkWindow           *window,
 						     gboolean             steal_focus);
-void       gossip_window_set_default_icon_name      (const gchar         *name);
-
 void       gossip_url_show                          (const char          *url);
-
 void       gossip_toggle_button_set_state_quietly   (GtkWidget           *widget,
 						     GCallback            callback,
 						     gpointer             user_data,

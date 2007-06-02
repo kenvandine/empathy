@@ -65,12 +65,14 @@ PKG_CHECK_MODULES(EMPATHY,
 [
    glib-2.0 >= $GLIB_REQUIRED
    gobject-2.0
-   gtk+-2.0 >= $GTK_REQUIRED
    gconf-2.0 >= $GCONF_REQUIRED
-   libglade-2.0 >= $LIBGLADE_REQUIRED
-   libgnomeui-2.0
+   libxml-2.0
+   gnome-vfs-2.0
    libtelepathy >= $TELEPATHY_REQUIRED
    libmissioncontrol >= $MISSION_CONTROL_REQUIRED
+   gtk+-2.0 >= $GTK_REQUIRED
+   libglade-2.0 >= $LIBGLADE_REQUIRED
+   libgnomeui-2.0
 ])
 
 PKG_CHECK_MODULES(MISSION_CONTROL_PLUGINS,

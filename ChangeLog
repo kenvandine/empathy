@@ -1,3 +1,10 @@
+2007-06-02  Xavier Claessens  <xclaesse@gmail.com>
+
+	* libempathy-gtk/gossip-ui-utils.c:
+	* libempathy-gtk/gossip-ui-utils.h:
+	* configure.ac: Use gnome_vfs_url_show() instead of gnome_url_show()
+	to avoid libgnomeui dependency (Ross Burton).
+
 2007-06-01  Xavier Claessens  <xclaesse@gmail.com>
 
 	* libempathy-gtk/gossip-chatrooms-window.c:
