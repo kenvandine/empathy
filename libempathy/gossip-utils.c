@@ -37,7 +37,6 @@
 
 #include "gossip-debug.h"
 #include "gossip-utils.h"
-#include "gossip-paths.h"
 #include "empathy-contact-manager.h"
 
 #define DEBUG_DOMAIN "Utils"
@@ -208,7 +207,7 @@ gossip_xml_validate (xmlDoc      *doc,
 	xmlDtd       *dtd;
 	gboolean      ret;
 
-	path = gossip_paths_get_dtd_path (dtd_filename);
+	path = g_build_filename (DATADIR, "empathy", dtd_filename, NULL);
 
 	/* The list of valid chars is taken from libxml. */
 	escaped = xmlURIEscapeStr (path, ":@&=+$,/?;");

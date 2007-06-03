@@ -1,6 +1,7 @@
 AM_CPPFLAGS =                                           \
 	-I.                                             \
 	-I$(top_srcdir)                                 \
+	-DDATADIR=\""$(datadir)"\"              	\
 	$(EMPATHY_CFLAGS)				\
 	$(WARN_CFLAGS)
 

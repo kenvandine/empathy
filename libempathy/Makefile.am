@@ -2,7 +2,6 @@ AM_CPPFLAGS =                                           \
 	-I.                                             \
 	-I$(top_srcdir)                                 \
 	-DDATADIR=\""$(datadir)"\"              	\
-	-DLOCALEDIR=\""$(datadir)/locale"\"		\
 	$(LIBEMPATHY_CFLAGS)				\
 	$(WARN_CFLAGS)
 
@@ -20,7 +19,6 @@ libempathy_la_SOURCES =             						\
 	gossip-time.c			gossip-time.h				\
 	gossip-presence.c		gossip-presence.h			\
 	gossip-telepathy-group.c	gossip-telepathy-group.h		\
-	gossip-paths.c			gossip-paths.h				\
 	gossip-debug.c			gossip-debug.h				\
 	gossip-utils.c			gossip-utils.h				\
 	gossip-message.c		gossip-message.h			\

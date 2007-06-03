@@ -4,7 +4,8 @@ cppflags =			\
 	-DSYSCONFDIR=\""$(sysconfdir)"\"		\
 	-DDATADIR=\""$(datadir)"\"              	\
 	-DLIBDIR=\""$(libdir)"\"			\
-	$(EMPATHY_CFLAGS)	\
+	-DLOCALEDIR=\""$(datadir)/locale"\"		\
+	$(EMPATHY_CFLAGS)				\
 	$(WARN_CFLAGS)
 
 libs =								\
@@ -16,9 +17,7 @@ bin_PROGRAMS =			\
 	empathy-chat		\
 	empathy-accounts
 
-empathy_SOURCES =						\
-	empathy-main.c						\
-	empathy-filter.c	empathy-filter.h
+empathy_SOURCES = empathy-main.c
 empathy_CPPFLAGS = $(cppflags)
 empathy_LDADD = $(libs)
 
@@ -29,12 +28,6 @@ empathy_accounts_LDADD = $(libs)
 empathy_chat_SOURCES = empathy-chat-main.c
 empathy_chat_CPPFLAGS = $(cppflags)
 empathy_chat_LDADD = $(libs)
-
-# MC plugin
-#pluginlib_LTLIBRARIES = libempathy-filter-plugin.la
-#libempathy_filter_plugin_la_SOURCES = empathy-filter-plugin.c
-#libempathy_filter_plugin_la_CPPFLAGS = $(MISSION_CONTROL_PLUGINS_CFLAGS)
-#libempathy_filter_plugin_la_LIBADD = $(MISSION_CONTROL_PLUGINS_LIBS)
 
 # Dbus service file
 servicedir = $(datadir)/dbus-1/services
@@ -48,20 +41,11 @@ $(service_DATA): $(service_in_files) Makefile
 chandlerdir = $(datadir)/telepathy/managers
 chandler_DATA = empathy-chat.chandler
 
-# Empathy filter DBus API
-empathy-filter-glue.h: empathy-filter.xml
-	$(LIBTOOL) --mode=execute $(DBUS_BINDING_TOOL) --prefix=empathy_filter --mode=glib-server --output=$@ $<
-empathy-filter-gen.h: empathy-filter.xml
-	$(LIBTOOL) --mode=execute $(DBUS_BINDING_TOOL) --prefix=empathy_filter --mode=glib-client --output=$@ $<
-
 BUILT_SOURCES =							\
-	org.gnome.Empathy.Chat.service				\
-	empathy-filter-glue.h					\
-	empathy-filter-gen.h
+	org.gnome.Empathy.Chat.service
 
 EXTRA_DIST =							\
 	org.gnome.Empathy.Chat.service.in			\
-	empathy-filter.xml					\
 	$(autostart_DATA)					\
 	$(chandler_DATA)
 

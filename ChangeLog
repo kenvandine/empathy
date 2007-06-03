@@ -1,5 +1,23 @@
 2007-06-03 Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/gossip-ui-utils.c
+	* libempathy-gtk/gossip-accounts-dialog.c
+	* libempathy-gtk/Makefile.am
+	* src/empathy-accounts-main.c
+	* src/empathy-chat-main.c
+	* src/Makefile.am
+	* src/empathy-main.c
+	* libempathy/gossip-utils.c
+	* libempathy/Makefile.am
+	* src/empathy-filter.h
+	* src/empathy-filter-plugin.c
+	* src/empathy-filter.xml
+	* src/empathy-filter.c
+	* libempathy/gossip-paths.c
+	* libempathy/gossip-paths.h: Remove unused code.
+
+2007-06-03 Xavier Claessens  <xclaesse@gmail.com>
+
 	* po/POTFILES.in:
 	* po/POTFILES.skip: Add missing files that have strings for translation.
 	Skip empathy-desktop.in.in. (Olivier Crete)

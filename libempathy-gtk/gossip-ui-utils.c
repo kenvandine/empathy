@@ -37,7 +37,6 @@
 
 #include <libmissioncontrol/mc-profile.h>
 
-#include <libempathy/gossip-paths.h>
 #include <libempathy/gossip-debug.h>
 
 #include "gossip-ui-utils.h"
@@ -63,7 +62,7 @@ get_glade_file (const gchar *filename,
 	const char *name;
 	GtkWidget **widget_ptr;
 
-	path = gossip_paths_get_glade_path (filename);
+	path = g_build_filename (DATADIR, "empathy", filename, NULL);
 	gui = glade_xml_new (path, root, domain);
 	g_free (path);
 

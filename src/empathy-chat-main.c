@@ -40,7 +40,6 @@
 #include <libempathy/gossip-utils.h>
 #include <libempathy/empathy-chandler.h>
 #include <libempathy/empathy-tp-chat.h>
-#include <libempathy/gossip-paths.h>
 #include <libempathy-gtk/gossip-private-chat.h>
 #include <libempathy-gtk/gossip-group-chat.h>
 
@@ -163,13 +162,10 @@ main (int argc, char *argv[])
 {
 	EmpathyChandler *chandler;
 	GnomeProgram    *program;
-	gchar           *localedir;
 
-	localedir = gossip_paths_get_locale_path ();
-	bindtextdomain (GETTEXT_PACKAGE, localedir);
+	bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
 	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
 	textdomain (GETTEXT_PACKAGE);
-	g_free (localedir);
 
 	program = gnome_program_init ("empathy-chat",
 				      PACKAGE_VERSION,
@@ -180,6 +176,8 @@ main (int argc, char *argv[])
 				      NULL);
 
 	gtk_window_set_default_icon_name ("empathy");
+	gtk_icon_theme_append_search_path (gtk_icon_theme_get_default (),
+					   DATADIR G_DIR_SEPARATOR_S "empathy");
 
 	if (g_getenv ("EMPATHY_DEBUG")) {
 		debug_mode = TRUE;

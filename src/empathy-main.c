@@ -38,11 +38,8 @@
 #include <libempathy/gossip-debug.h>
 #include <libempathy/gossip-utils.h>
 #include <libempathy/gossip-presence.h>
-#include <libempathy/gossip-paths.h>
 #include <libempathy-gtk/empathy-main-window.h>
 #include <libempathy-gtk/empathy-status-icon.h>
-
-#include "empathy-filter.h"
 
 #define DEBUG_DOMAIN "EmpathyMain"
 
@@ -115,18 +112,6 @@ start_mission_control (MissionControl *mc)
 				      NULL);
 }
 
-static void
-new_channel_cb (EmpathyFilter *filter,
-		TpConn        *tp_conn,
-		TpChan        *tp_chan,
-		guint          context_handle,
-		gpointer       user_data)
-{
-	gossip_debug (DEBUG_DOMAIN, "Filtering context handle: %d",
-		      context_handle);
-	empathy_filter_process (filter, context_handle, TRUE);
-}
-
 int
 main (int argc, char *argv[])
 {
@@ -134,8 +119,6 @@ main (int argc, char *argv[])
 	GtkWidget         *window;
 	MissionControl    *mc;
 	McAccountMonitor  *monitor;
-	EmpathyFilter     *filter;
-	gchar             *localedir;
 	GnomeProgram      *program;
 	gboolean           no_connect = FALSE;
 	GOptionContext    *context;
@@ -146,11 +129,9 @@ main (int argc, char *argv[])
 		  NULL },
 	};
 
-	localedir = gossip_paths_get_locale_path ();
-	bindtextdomain (GETTEXT_PACKAGE, localedir);
+	bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
 	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
 	textdomain (GETTEXT_PACKAGE);
-	g_free (localedir);
 
 	context = g_option_context_new (_("- Empathy Instant Messenger"));
 	g_option_context_add_main_entries (context, options, GETTEXT_PACKAGE);
@@ -167,12 +148,8 @@ main (int argc, char *argv[])
 				      NULL);
 
 	gtk_window_set_default_icon_name ("empathy");
-
-	/* Setting up channel filter */
-	filter = empathy_filter_new ();
-	g_signal_connect (filter, "new-channel",
-			  G_CALLBACK (new_channel_cb),
-			  NULL);
+	gtk_icon_theme_append_search_path (gtk_icon_theme_get_default (),
+					   DATADIR G_DIR_SEPARATOR_S "empathy");
 
 	/* Setting up MC */
 	monitor = mc_account_monitor_new ();

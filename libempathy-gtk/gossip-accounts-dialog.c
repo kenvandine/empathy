@@ -39,7 +39,6 @@
 #include <libtelepathy/tp-constants.h>
 
 #include <libempathy/gossip-debug.h>
-#include <libempathy/gossip-paths.h>
 #include <libempathy/gossip-utils.h>
 #include <libempathy-gtk/gossip-ui-utils.h>
 
