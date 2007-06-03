@@ -1,5 +1,13 @@
 2007-06-03 Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/gossip-accounts-dialog.glade: Set use_stock for
+	button_connect to False, to avoid a crasher when opening the accounts
+	window with GTK+ trunk. Fixes bug #439931.
+	* libempathy-gtk/gossip-chat.c: Do not add backlog for chatrooms and
+	do not log backlog from jabber server.
+
+2007-06-03 Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/gossip-ui-utils.c
 	* libempathy-gtk/gossip-accounts-dialog.c
 	* libempathy-gtk/Makefile.am

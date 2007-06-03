@@ -77,6 +77,7 @@ struct _GossipChatPriv {
 	GList                 *compositors;
 	guint                  scroll_idle_id;
 	gboolean               first_tp_chat;
+	GossipTime             time_joined;
 	/* Used to automatically shrink a window that has temporarily
 	 * grown due to long input. 
 	 */
@@ -401,6 +402,7 @@ chat_message_received_cb (EmpathyTpChat *tp_chat,
 {
 	GossipChatPriv *priv;
 	GossipContact  *sender;
+	GossipTime      timestamp;
 
 	priv = GET_PRIV (chat);
 
@@ -408,9 +410,13 @@ chat_message_received_cb (EmpathyTpChat *tp_chat,
 	gossip_debug (DEBUG_DOMAIN, "Appending message ('%s')",
 		      gossip_contact_get_name (sender));
 
-	empathy_log_manager_add_message (priv->log_manager,
-					 gossip_chat_get_id (chat),
-					 message);
+	/* Log the message only if it's not backlog */
+	timestamp = gossip_message_get_timestamp (message);
+	if (timestamp >= priv->time_joined) {
+		empathy_log_manager_add_message (priv->log_manager,
+						 gossip_chat_get_id (chat),
+						 message);
+	}
 
 	gossip_chat_view_append_message (chat->view, message);
 
@@ -1095,6 +1101,11 @@ chat_add_logs (GossipChat *chat)
 
 	priv = GET_PRIV (chat);
 
+	/* Do not display backlog for chatrooms */
+	if (gossip_chat_is_group_chat (chat)) {
+		return;
+	}
+
 	/* Turn off scrolling temporarily */
 	gossip_chat_view_scroll (chat->view, FALSE);
 
@@ -1308,6 +1319,7 @@ gossip_chat_set_tp_chat (GossipChat    *chat,
 	g_free (priv->id);
 	priv->tp_chat = g_object_ref (tp_chat);
 	priv->id = g_strdup (empathy_tp_chat_get_id (tp_chat));
+	priv->time_joined = gossip_time_get_current ();
 
 	if (priv->first_tp_chat) {
 		chat_add_logs (chat);
