@@ -1,3 +1,13 @@
+2007-06-03 Xavier Claessens  <xclaesse@gmail.com>
+
+	* libempathy-gtk/gossip-group-chat.c:
+	* libempathy-gtk/gossip-private-chat.c:
+	* libempathy-gtk/gossip-chat.c:
+	* libempathy-gtk/gossip-chat.h:
+	* libempathy/empathy-tp-chat.c: Add all properties described by TP spec
+	for the Text channel on EmpathyTpChat. Make use of "name" and "subject"
+	properties in GossipGroupChat.
+
 2007-06-02  Xavier Claessens  <xclaesse@gmail.com>
 
 	* libempathy/empathy-log-manager.c: Fix crash when there is no log

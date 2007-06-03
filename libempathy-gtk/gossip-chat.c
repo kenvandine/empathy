@@ -319,7 +319,6 @@ chat_destroy_cb (EmpathyTpChat *tp_chat,
 		 GossipChat    *chat)
 {
 	GossipChatPriv *priv;
-	GtkWidget      *widget;
 
 	priv = GET_PRIV (chat);
 
@@ -327,12 +326,14 @@ chat_destroy_cb (EmpathyTpChat *tp_chat,
 		g_object_unref (priv->tp_chat);
 		priv->tp_chat = NULL;
 	}
+	priv->sensitive = FALSE;
 
 	gossip_chat_view_append_event (chat->view, _("Disconnected"));
+	gtk_widget_set_sensitive (chat->input_text_view, FALSE);
 
-	widget = gossip_chat_get_widget (chat);
-	gtk_widget_set_sensitive (widget, FALSE);
-	priv->sensitive = FALSE;
+	if (GOSSIP_CHAT_GET_CLASS (chat)->set_tp_chat) {
+		GOSSIP_CHAT_GET_CLASS (chat)->set_tp_chat (chat, NULL);
+	}
 }
 
 static void
@@ -1284,7 +1285,6 @@ gossip_chat_set_tp_chat (GossipChat    *chat,
 			 EmpathyTpChat *tp_chat)
 {
 	GossipChatPriv *priv;
-	GtkWidget      *widget;
 
 	g_return_if_fail (GOSSIP_IS_CHAT (chat));
 	g_return_if_fail (EMPATHY_IS_TP_CHAT (tp_chat));
@@ -1327,11 +1327,15 @@ gossip_chat_set_tp_chat (GossipChat    *chat,
 	empathy_tp_chat_request_pending (tp_chat);
 
 	if (!priv->sensitive) {
-		widget = gossip_chat_get_widget (chat);
-		gtk_widget_set_sensitive (widget, TRUE);
+		gtk_widget_set_sensitive (chat->input_text_view, TRUE);
 		gossip_chat_view_append_event (chat->view, _("Connected"));
 		priv->sensitive = TRUE;
 	}
+
+	if (GOSSIP_CHAT_GET_CLASS (chat)->set_tp_chat) {
+		GOSSIP_CHAT_GET_CLASS (chat)->set_tp_chat (chat, tp_chat);
+	}
+
 }
 
 const gchar *

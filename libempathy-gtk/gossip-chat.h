@@ -57,6 +57,7 @@ struct _GossipChat {
 
 	/* Protected */
 	GossipChatView  *view;
+	EmpathyTpChat   *tp_chat;
 	GtkWidget       *input_text_view;
 	gboolean         is_first_char;
 	McAccount       *account;
@@ -66,11 +67,13 @@ struct _GossipChatClass {
 	GObjectClass parent;
 
 	/* VTable */
-	const gchar *    (*get_name)            (GossipChat  *chat);
-	gchar *          (*get_tooltip)         (GossipChat  *chat);
-	const gchar *    (*get_status_icon_name)(GossipChat  *chat);
-	GtkWidget *      (*get_widget)          (GossipChat  *chat);
-	gboolean         (*is_group_chat)       (GossipChat  *chat);
+	const gchar *    (*get_name)            (GossipChat    *chat);
+	gchar *          (*get_tooltip)         (GossipChat    *chat);
+	const gchar *    (*get_status_icon_name)(GossipChat    *chat);
+	GtkWidget *      (*get_widget)          (GossipChat    *chat);
+	gboolean         (*is_group_chat)       (GossipChat    *chat);
+	void             (*set_tp_chat)         (GossipChat    *chat,
+						 EmpathyTpChat *tp_chat);
 };
 
 GType             gossip_chat_get_type              (void);

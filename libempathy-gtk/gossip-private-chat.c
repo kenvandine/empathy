@@ -92,6 +92,7 @@ gossip_private_chat_class_init (GossipPrivateChatClass *klass)
 	chat_class->get_tooltip          = private_chat_get_tooltip;
 	chat_class->get_status_icon_name = private_chat_get_status_icon_name;
 	chat_class->get_widget           = private_chat_get_widget;
+	chat_class->set_tp_chat          = NULL;
 
 	g_type_class_add_private (object_class, sizeof (GossipPrivateChatPriv));
 }

@@ -97,6 +97,14 @@ static gchar *       group_chat_get_tooltip              (GossipChat        *cha
 static const gchar * group_chat_get_status_icon_name     (GossipChat        *chat);
 static GtkWidget *   group_chat_get_widget               (GossipChat        *chat);
 static gboolean      group_chat_is_group_chat            (GossipChat        *chat);
+static void          group_chat_set_tp_chat              (GossipChat        *chat,
+							  EmpathyTpChat     *tp_chat);
+static void          group_chat_subject_notify_cb        (EmpathyTpChat     *tp_chat,
+							  GParamSpec        *param,
+							  GossipGroupChat   *chat);
+static void          group_chat_name_notify_cb           (EmpathyTpChat     *tp_chat,
+							  GParamSpec        *param,
+							  GossipGroupChat   *chat);
 /*static gboolean      group_chat_key_press_event          (GtkWidget         *widget,
 							  GdkEventKey       *event,
 							  GossipGroupChat   *chat);*/
@@ -122,6 +130,7 @@ gossip_group_chat_class_init (GossipGroupChatClass *klass)
 	chat_class->get_status_icon_name = group_chat_get_status_icon_name;
 	chat_class->get_widget           = group_chat_get_widget;
 	chat_class->is_group_chat        = group_chat_is_group_chat;
+	chat_class->set_tp_chat          = group_chat_set_tp_chat;
 
 	g_type_class_add_private (object_class, sizeof (GossipGroupChatPriv));
 }
@@ -179,29 +188,6 @@ gossip_group_chat_new (McAccount *account,
 	GOSSIP_CHAT (chat)->account = g_object_ref (account);
 	priv->tp_chat = empathy_tp_chatroom_new (account, tp_chan);
 	gossip_chat_set_tp_chat (GOSSIP_CHAT (chat), EMPATHY_TP_CHAT (priv->tp_chat));
-
-	/* FIXME: Ask the user before accepting */
-	empathy_tp_chatroom_accept_invitation (priv->tp_chat);
-
-	/* Create contact list */
-	priv->store = gossip_contact_list_store_new (EMPATHY_CONTACT_LIST (priv->tp_chat));
-	priv->view = gossip_contact_list_view_new (priv->store);
-	gtk_container_add (GTK_CONTAINER (priv->scrolled_window_contacts),
-			   GTK_WIDGET (priv->view));
-	gtk_widget_show (GTK_WIDGET (priv->view));
-
-	g_signal_connect (priv->tp_chat, "contact-added",
-			  G_CALLBACK (group_chat_contact_added_cb),
-			  chat);
-	g_signal_connect (priv->tp_chat, "contact-removed",
-			  G_CALLBACK (group_chat_contact_removed_cb),
-			  chat);
-/*	g_signal_connect (priv->tp_chat, "chatroom-topic-changed",
-			  G_CALLBACK (group_chat_topic_changed_cb),
-			  chat);
-	g_signal_connect (priv->tp_chat, "contact-info-changed",
-			  G_CALLBACK (group_chat_contact_info_changed_cb),
-			  chat);*/
 
 	return chat;
 }
@@ -395,29 +381,7 @@ group_chat_contact_removed_cb (EmpathyTpChatroom *tp_chat,
 	gossip_chat_view_append_event (GOSSIP_CHAT (chat)->view, str);
 	g_free (str);
 }
-/*
-static void
-group_chat_topic_changed_cb (EmpathyTpChatroom *tp_chat,
-			     const gchar       *new_topic,
-			     GossipGroupChat   *chat)
-{
-	GossipGroupChatPriv *priv;
-	gchar               *str;
 
-	priv = GET_PRIV (chat);
-
-	gossip_debug (DEBUG_DOMAIN, "Topic changed by to:'%s'", new_topic);
-
-	g_free (priv->topic);
-	priv->topic = g_strdup (new_topic);
-	
-	gtk_label_set_text (GTK_LABEL (priv->label_topic), new_topic);
-
-	str = g_strdup_printf (_("Topic set to: %s"), new_topic);
-	gossip_chat_view_append_event (GOSSIP_CHAT (chat)->view, str);
-	g_free (str);
-}
-*/
 static void
 group_chat_topic_entry_activate_cb (GtkWidget *entry,
 				    GtkDialog *dialog)
@@ -459,6 +423,20 @@ group_chat_get_name (GossipChat *chat)
 
 	group_chat = GOSSIP_GROUP_CHAT (chat);
 	priv = GET_PRIV (group_chat);
+
+	if (!priv->name) {
+		const gchar *id;
+		const gchar *server;
+
+		id = gossip_chat_get_id (chat);
+		server = strstr (id, "@");
+
+		if (server) {
+			priv->name = g_strndup (id, server - id);
+		} else {
+			priv->name = g_strdup (id);
+		} 
+	}
 
 	return priv->name;
 }
@@ -514,6 +492,104 @@ group_chat_is_group_chat (GossipChat *chat)
 
 	return TRUE;
 }
+
+static void
+group_chat_set_tp_chat (GossipChat    *chat,
+			EmpathyTpChat *tp_chat)
+{
+	GossipGroupChat     *group_chat;
+	GossipGroupChatPriv *priv;
+
+	g_return_if_fail (GOSSIP_IS_GROUP_CHAT (chat));
+
+	group_chat = GOSSIP_GROUP_CHAT (chat);
+	priv = GET_PRIV (group_chat);
+
+	/* Free all resources related to tp_chat */
+	if (priv->tp_chat) {
+		g_object_unref (priv->tp_chat);
+		priv->tp_chat = NULL;
+	}
+	if (priv->view) {
+		gtk_widget_destroy (GTK_WIDGET (priv->view));
+		g_object_unref (priv->store);
+	}
+	g_free (priv->name);
+	g_free (priv->topic);
+	priv->name = NULL;
+	priv->topic = NULL;
+
+	if (!tp_chat) {
+		/* We are no more connected */
+		gtk_widget_set_sensitive (priv->hbox_topic, FALSE);
+		gtk_widget_set_sensitive (priv->scrolled_window_contacts, FALSE);
+		return;
+	}
+
+	/* We are connected */
+	gtk_widget_set_sensitive (priv->hbox_topic, TRUE);
+	gtk_widget_set_sensitive (priv->scrolled_window_contacts, TRUE);
+
+	priv->tp_chat = g_object_ref (tp_chat);
+
+	/* FIXME: Ask the user before accepting */
+	empathy_tp_chatroom_accept_invitation (priv->tp_chat);
+
+	/* Create contact list */
+	priv->store = gossip_contact_list_store_new (EMPATHY_CONTACT_LIST (priv->tp_chat));
+	priv->view = gossip_contact_list_view_new (priv->store);
+	gtk_container_add (GTK_CONTAINER (priv->scrolled_window_contacts),
+			   GTK_WIDGET (priv->view));
+	gtk_widget_show (GTK_WIDGET (priv->view));
+
+	/* Connect signals */
+	g_signal_connect (priv->tp_chat, "contact-added",
+			  G_CALLBACK (group_chat_contact_added_cb),
+			  chat);
+	g_signal_connect (priv->tp_chat, "contact-removed",
+			  G_CALLBACK (group_chat_contact_removed_cb),
+			  chat);
+	g_signal_connect (priv->tp_chat, "notify::subject",
+			  G_CALLBACK (group_chat_subject_notify_cb),
+			  chat);
+	g_signal_connect (priv->tp_chat, "notify::name",
+			  G_CALLBACK (group_chat_name_notify_cb),
+			  chat);
+}
+
+static void
+group_chat_subject_notify_cb (EmpathyTpChat   *tp_chat,
+			      GParamSpec      *param,
+			      GossipGroupChat *chat)
+{
+	GossipGroupChatPriv *priv;
+	gchar               *str;
+
+	priv = GET_PRIV (chat);
+
+	g_free (priv->topic);
+
+	g_object_get (priv->tp_chat, "subject", &priv->topic, NULL);
+	gtk_label_set_text (GTK_LABEL (priv->label_topic), priv->topic);
+
+	str = g_strdup_printf (_("Topic set to: %s"), priv->topic);
+	gossip_chat_view_append_event (GOSSIP_CHAT (chat)->view, str);
+	g_free (str);
+}
+
+static void
+group_chat_name_notify_cb (EmpathyTpChat   *tp_chat,
+			   GParamSpec      *param,
+			   GossipGroupChat *chat)
+{
+	GossipGroupChatPriv *priv;
+
+	priv = GET_PRIV (chat);
+
+	g_free (priv->name);
+	g_object_get (priv->tp_chat, "name", &priv->name, NULL);
+}
+
 #if 0
 static gboolean
 group_chat_key_press_event (GtkWidget       *widget,
