@@ -14,7 +14,8 @@
 	* src/empathy-filter.xml
 	* src/empathy-filter.c
 	* libempathy/gossip-paths.c
-	* libempathy/gossip-paths.h: Remove unused code.
+	* libempathy/gossip-paths.h: Remove unused code and append DATADIR to
+	dirs where GTK should search icons.
 
 2007-06-03 Xavier Claessens  <xclaesse@gmail.com>
 
