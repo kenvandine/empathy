@@ -1,5 +1,11 @@
 2007-06-03 Xavier Claessens  <xclaesse@gmail.com>
 
+	* po/POTFILES.in:
+	* po/POTFILES.skip: Add missing files that have strings for translation.
+	Skip empathy-desktop.in.in. (Olivier Crete)
+
+2007-06-03 Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/gossip-group-chat.c:
 	* libempathy-gtk/gossip-private-chat.c:
 	* libempathy-gtk/gossip-chat.c:
