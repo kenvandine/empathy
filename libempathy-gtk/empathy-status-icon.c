@@ -39,7 +39,7 @@
 #include <libempathy/empathy-idle.h>
 
 #include "empathy-status-icon.h"
-#include "empathy-subscription-dialog.h"
+#include "empathy-contact-dialogs.h"
 #include "gossip-presence-chooser.h"
 #include "gossip-preferences.h"
 #include "gossip-ui-utils.h"

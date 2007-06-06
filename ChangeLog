@@ -1,5 +1,22 @@
 2007-06-06 Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/empathy-contact-dialogs.glade:
+	* libempathy-gtk/empathy-contact-widget.glade:
+	* libempathy-gtk/empathy-status-icon.c:
+	* libempathy-gtk/empathy-contact-dialogs.c:
+	* libempathy-gtk/empathy-contact-dialogs.h:
+	* libempathy-gtk/gossip-ui-utils.c:
+	* libempathy-gtk/empathy-subscription-dialog.glade:
+	* libempathy-gtk/empathy-contact-widget.c:
+	* libempathy-gtk/gossip-ui-utils.h:
+	* libempathy-gtk/gossip-contact-list-view.c:
+	* libempathy-gtk/empathy-subscription-dialog.c:
+	* libempathy-gtk/Makefile.am:
+	* libempathy-gtk/empathy-subscription-dialog.h: Implement editing and
+	viewing contact information with right click on the roster.
+
+2007-06-06 Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/empathy-contact-widget.glade:
 	* libempathy-gtk/empathy-contact-widget.c:
 	* libempathy-gtk/empathy-contact-widget.h:

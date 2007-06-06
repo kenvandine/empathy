@@ -275,7 +275,11 @@ contact_widget_contact_setup (EmpathyContactWidget *information)
 				  information);
 	} else {
 		information->widget_alias = gtk_label_new (NULL);
+		gtk_label_set_selectable (GTK_LABEL (information->widget_alias), TRUE);
 	}
+	gtk_table_attach_defaults (GTK_TABLE (information->table_contact),
+				   information->widget_alias,
+				   1, 2, 1, 2);
 	gtk_widget_show (information->widget_alias);
 
 	/* Setup id label */

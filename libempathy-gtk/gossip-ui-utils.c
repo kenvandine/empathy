@@ -1254,6 +1254,21 @@ gossip_window_present (GtkWindow *window,
 	}
 }
 
+GtkWindow *
+gossip_get_toplevel_window (GtkWidget *widget)
+{
+	GtkWidget *toplevel;
+
+	g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+
+	toplevel = gtk_widget_get_toplevel (widget);
+	if (GTK_IS_WINDOW (toplevel)) {
+		return GTK_WINDOW (toplevel);
+	}
+
+	return NULL;
+}
+
 /* The URL opening code can't handle schemeless strings, so we try to be
  * smart and add http if there is no scheme or doesn't look like a mail
  * address. This should work in most cases, and let us click on strings

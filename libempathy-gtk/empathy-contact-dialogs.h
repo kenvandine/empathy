@@ -20,8 +20,8 @@
  * Authors: Xavier Claessens <xclaesse@gmail.com>
  */
 
-#ifndef __EMPATHY_SUBSCRIPTION_DIALOG_H__
-#define __EMPATHY_SUBSCRIPTION_DIALOG_H__
+#ifndef __EMPATHY_CONTACT_DIALOGS_H__
+#define __EMPATHY_CONTACT_DIALOGS_H__
 
 #include <gtk/gtk.h>
 
@@ -29,9 +29,12 @@
 
 G_BEGIN_DECLS
 
-void empathy_subscription_dialog_show (GossipContact *contact,
-				       GtkWindow     *parent);
+void empathy_subscription_dialog_show        (GossipContact *contact,
+				              GtkWindow     *parent);
+void empathy_contact_information_dialog_show (GossipContact *contact,
+					      GtkWindow     *parent,
+					      gboolean       edit);
 
 G_END_DECLS
 
-#endif /*  __EMPATHY_SUBSCRIPTION_DIALOG_H__ */
+#endif /*  __EMPATHY_CONTACT_DIALOGS_H__ */

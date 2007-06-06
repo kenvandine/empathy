@@ -47,9 +47,8 @@
 #include "gossip-cell-renderer-expander.h"
 #include "gossip-cell-renderer-text.h"
 #include "gossip-ui-utils.h"
+#include "empathy-contact-dialogs.h"
 //#include "gossip-chat-invite.h"
-//#include "gossip-contact-info-dialog.h"
-//#include "gossip-edit-contact-dialog.h"
 //#include "gossip-ft-window.h"
 //#include "gossip-log-window.h"
 
@@ -1452,6 +1451,7 @@ contact_list_view_action_cb (GtkAction             *action,
 	GossipContact             *contact;
 	const gchar               *name;
 	gchar                     *group;
+	GtkWindow                 *parent;
 
 	priv = GET_PRIV (view);
 
@@ -1464,15 +1464,19 @@ contact_list_view_action_cb (GtkAction             *action,
 
 	contact = gossip_contact_list_view_get_selected (view);
 	group = gossip_contact_list_view_get_selected_group (view);
+	parent = gossip_get_toplevel_window (GTK_WIDGET (view));
 
 	if (contact && strcmp (name, "Chat") == 0) {
 		contact_list_view_action_activated (view, contact);
 	}
 	else if (contact && strcmp (name, "Information") == 0) {
+		empathy_contact_information_dialog_show (contact, parent, FALSE);
 	}
 	else if (contact && strcmp (name, "Edit") == 0) {
+		empathy_contact_information_dialog_show (contact, parent, TRUE);
 	}
 	else if (contact && strcmp (name, "Remove") == 0) {
+		/* FIXME: Ask for confirmation */
 		EmpathyContactList *list;
 
 		list = gossip_contact_list_store_get_list_iface (priv->store);
