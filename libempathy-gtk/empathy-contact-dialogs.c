@@ -131,7 +131,10 @@ contact_information_response_cb (GtkDialog *dialog,
 	GossipContact *contact;
 
 	contact = empathy_contact_widget_get_contact (contact_widget);
-	empathy_contact_widget_save (contact_widget);
+
+	if (response == GTK_RESPONSE_OK) {
+		empathy_contact_widget_save (contact_widget);
+	}
 
 	g_hash_table_remove (information_dialogs, contact);
 }

@@ -1,6 +1,12 @@
 2007-06-06 Xavier Claessens  <xclaesse@gmail.com>
 
 	* libempathy-gtk/empathy-contact-dialogs.glade:
+	* libempathy-gtk/empathy-contact-dialogs.c: Fix response and action
+	buttons.
+
+2007-06-06 Xavier Claessens  <xclaesse@gmail.com>
+
+	* libempathy-gtk/empathy-contact-dialogs.glade:
 	* libempathy-gtk/empathy-contact-widget.glade:
 	* libempathy-gtk/empathy-status-icon.c:
 	* libempathy-gtk/empathy-contact-dialogs.c:
