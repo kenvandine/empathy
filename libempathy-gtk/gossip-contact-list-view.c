@@ -806,7 +806,7 @@ contact_list_view_drag_data_received (GtkWidget         *widget,
 				      gpointer           user_data)
 {
 	GossipContactListViewPriv *priv;
-	EmpathyContactManager     *manager;
+	EmpathyContactList        *list;
 	GtkTreeModel              *model;
 	GtkTreePath               *path;
 	GtkTreeViewDropPosition    position;
@@ -825,9 +825,8 @@ contact_list_view_drag_data_received (GtkWidget         *widget,
 		      id);
 
 	/* FIXME: This is ambigous, an id can come from multiple accounts */
-	manager = empathy_contact_manager_new ();
-	contact = empathy_contact_list_find (EMPATHY_CONTACT_LIST (manager), id);
-	g_object_unref (manager);
+	list = gossip_contact_list_store_get_list_iface (priv->store);
+	contact = empathy_contact_list_find (list, id);
 
 	if (!contact) {
 		gossip_debug (DEBUG_DOMAIN, "No contact found associated with drag & drop");
@@ -1449,9 +1448,12 @@ static void
 contact_list_view_action_cb (GtkAction             *action,
 			     GossipContactListView *view)
 {
-	GossipContact *contact;
-	const gchar   *name;
-	gchar         *group;
+	GossipContactListViewPriv *priv;
+	GossipContact             *contact;
+	const gchar               *name;
+	gchar                     *group;
+
+	priv = GET_PRIV (view);
 
 	name = gtk_action_get_name (action);
 	if (!name) {
@@ -1471,6 +1473,11 @@ contact_list_view_action_cb (GtkAction             *action,
 	else if (contact && strcmp (name, "Edit") == 0) {
 	}
 	else if (contact && strcmp (name, "Remove") == 0) {
+		EmpathyContactList *list;
+
+		list = gossip_contact_list_store_get_list_iface (priv->store);
+		empathy_contact_list_remove (list, contact,
+					     _("Sorry, I don't want you in my contact list anymore."));
 	}
 	else if (contact && strcmp (name, "Invite") == 0) {
 	}

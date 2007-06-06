@@ -211,6 +211,19 @@ static void
 contact_widget_destroy_cb (GtkWidget            *widget,
 			   EmpathyContactWidget *information)
 {
+	g_signal_handlers_disconnect_by_func (information->contact,
+					      contact_widget_name_notify_cb,
+					      information);
+	g_signal_handlers_disconnect_by_func (information->contact,
+					      contact_widget_presence_notify_cb,
+					      information);
+	g_signal_handlers_disconnect_by_func (information->contact,
+					      contact_widget_avatar_notify_cb,
+					      information);
+	g_signal_handlers_disconnect_by_func (information->contact,
+					      contact_widget_groups_notify_cb,
+					      information);
+
 	g_object_unref (information->contact);
 	g_slice_free (EmpathyContactWidget, information);
 }
@@ -384,6 +397,7 @@ contact_widget_groups_populate_data (EmpathyContactWidget *information)
 	manager = empathy_contact_manager_new ();
 	all_groups = empathy_contact_manager_get_groups (manager);
 	groups = gossip_contact_get_groups (information->contact);
+	g_object_unref (manager);
 
 	for (l = groups; l; l = l->next) {
 		const gchar *group_str;

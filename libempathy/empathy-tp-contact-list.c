@@ -471,6 +471,7 @@ tp_contact_list_add (EmpathyContactList *list,
 
 	handle = gossip_contact_get_handle (contact);
 	gossip_telepathy_group_add_member (priv->subscribe, handle, message);
+	gossip_telepathy_group_add_member (priv->publish, handle, message);
 }
 
 static void

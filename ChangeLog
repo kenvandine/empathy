@@ -1,6 +1,21 @@
 2007-06-06 Xavier Claessens  <xclaesse@gmail.com>
 
 	* libempathy-gtk/empathy-status-icon.c:
+	* libempathy-gtk/empathy-subscription-dialog.glade:
+	* libempathy-gtk/empathy-contact-widget.c:
+	* libempathy-gtk/gossip-contact-list-view.c:
+	* libempathy-gtk/empathy-subscription-dialog.c:
+	* libempathy-gtk/Makefile.am:
+	* libempathy-gtk/empathy-subscription-dialog.h:
+	* libempathy/empathy-tp-contact-list.c: New dialog:
+	EmpathySubscriptionDialog. It uses EmpathyContactWidget to display
+	information about the contact who wants to get your presence. This
+	dialog appears when clicking on the status icon when it blinks. You
+	can also remove contacts when right-click on it in the roster.
+
+2007-06-06 Xavier Claessens  <xclaesse@gmail.com>
+
+	* libempathy-gtk/empathy-status-icon.c:
 	* libempathy-gtk/empathy-contact-widget.glade:
 	* libempathy-gtk/empathy-contact-widget.c:
 	* libempathy-gtk/empathy-contact-widget.h:

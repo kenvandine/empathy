@@ -13,6 +13,7 @@ libempathy_gtk_la_SOURCES =             					\
 	empathy-main-window.c			empathy-main-window.h		\
 	empathy-status-icon.c			empathy-status-icon.h		\
 	empathy-contact-widget.c		empathy-contact-widget.h	\
+	empathy-subscription-dialog.c		empathy-subscription-dialog.c	\
 	gossip-accounts-dialog.c		gossip-accounts-dialog.h	\
 	gossip-account-widget-generic.c		gossip-account-widget-generic.h	\
 	gossip-account-widget-jabber.c		gossip-account-widget-jabber.h	\
@@ -50,6 +51,7 @@ glade_DATA = 					\
 	empathy-main-window.glade		\
 	empathy-status-icon.glade		\
 	empathy-contact-widget.glade		\
+	empathy-subscription-dialog.glade	\
 	gossip-preferences.glade		\
 	gossip-presence-chooser.glade		\
 	gossip-accounts-dialog.glade		\
