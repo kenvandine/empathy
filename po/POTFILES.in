@@ -1,6 +1,8 @@
 # List of source files containing translatable strings.
 # Please keep this file sorted alphabetically.
 
+
+
 data/empathy.desktop.in
 data/empathy.schemas.in
 
@@ -8,9 +10,14 @@ libempathy/empathy-idle.c
 libempathy/gossip-contact.c
 libempathy/gossip-presence.c
 
+libempathy-gtk/empathy-contact-widget.c
+libempathy-gtk/empathy-contact-widget.glade
 libempathy-gtk/empathy-main-window.c
 libempathy-gtk/empathy-main-window.glade
+libempathy-gtk/empathy-status-icon.c
 libempathy-gtk/empathy-status-icon.glade
+libempathy-gtk/empathy-subscription-dialog.c
+libempathy-gtk/empathy-subscription-dialog.glade
 libempathy-gtk/gossip-about-dialog.c
 libempathy-gtk/gossip-account-chooser.c
 libempathy-gtk/gossip-accounts-dialog.c
