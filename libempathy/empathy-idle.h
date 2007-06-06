@@ -25,6 +25,8 @@
 
 #include <glib.h>
 
+#include <libmissioncontrol/mission-control.h>
+
 G_BEGIN_DECLS
 
 #define EMPATHY_TYPE_IDLE         (empathy_idle_get_type ())
@@ -46,8 +48,17 @@ struct _EmpathyIdleClass {
 	GObjectClass parent_class;
 };
 
-GType        empathy_idle_get_type (void) G_GNUC_CONST;
-EmpathyIdle *empathy_idle_new      (void);
+GType        empathy_idle_get_type        (void) G_GNUC_CONST;
+EmpathyIdle *empathy_idle_new             (void);
+McPresence   empathy_idle_get_state       (EmpathyIdle *idle);
+void         empathy_idle_set_state       (EmpathyIdle *idle,
+					   McPresence   state);
+const gchar *empathy_idle_get_status      (EmpathyIdle *idle);
+void         empathy_idle_set_status      (EmpathyIdle *idle,
+					   const gchar *message);
+McPresence   empathy_idle_get_slack_state (EmpathyIdle *idle);
+void         empathy_idle_set_slack_state (EmpathyIdle *idle,
+					   McPresence   state);
 
 G_END_DECLS
 

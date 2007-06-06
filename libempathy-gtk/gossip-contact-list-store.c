@@ -343,7 +343,7 @@ gossip_contact_list_store_new (EmpathyContactList *list_iface)
 	/* Add contacts already created. Do not highlight them. */
 	show_active = priv->show_active;
 	priv->show_active = FALSE;
-	contacts = empathy_contact_list_get_contacts (priv->list);
+	contacts = empathy_contact_list_get_members (priv->list);
 	for (l = contacts; l; l = l->next) {
 		GossipContact *contact;
 
@@ -401,7 +401,7 @@ gossip_contact_list_store_set_show_offline (GossipContactListStore *store,
 	/* Disable temporarily. */
 	priv->show_active = FALSE;
 
-	contacts = empathy_contact_list_get_contacts (priv->list);
+	contacts = empathy_contact_list_get_members (priv->list);
 	for (l = contacts; l; l = l->next) {
 		GossipContact *contact;
 
@@ -654,7 +654,7 @@ gossip_contact_list_store_set_contact_groups_func (GossipContactListStore  *stor
 	 * to call himself gossip_contact_list_store_update_contact_groups ()
 	 * when needed. If func is NULL we come back to default.
 	 */
-	contacts = empathy_contact_list_get_contacts (priv->list);
+	contacts = empathy_contact_list_get_members (priv->list);
 	for (l = contacts; l; l = l->next) {
 		GossipContact *contact;
 

@@ -1383,7 +1383,7 @@ contact_list_view_filter_show_group (GossipContactListView *view,
 	 * show exists in it.
 	 */
 	list = gossip_contact_list_store_get_list_iface (priv->store);
-	contacts = empathy_contact_list_get_contacts (list);
+	contacts = empathy_contact_list_get_members (list);
 	for (l = contacts; l && !show_group; l = l->next) {
 		if (!gossip_contact_is_in_group (l->data, group)) {
 			continue;

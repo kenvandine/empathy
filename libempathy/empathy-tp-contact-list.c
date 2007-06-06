@@ -52,12 +52,12 @@ struct _EmpathyTpContactListPriv {
 	GossipContact        *user_contact;
 	gboolean              setup;
 
-	GossipTelepathyGroup *known;
 	GossipTelepathyGroup *publish;
 	GossipTelepathyGroup *subscribe;
 
 	GHashTable           *groups;
 	GHashTable           *contacts;
+	GList                *local_pending;
 
 	DBusGProxy           *aliasing_iface;
 	DBusGProxy           *avatars_iface;
@@ -67,7 +67,6 @@ struct _EmpathyTpContactListPriv {
 };
 
 typedef enum {
-	TP_CONTACT_LIST_TYPE_KNOWN,
 	TP_CONTACT_LIST_TYPE_PUBLISH,
 	TP_CONTACT_LIST_TYPE_SUBSCRIBE,
 	TP_CONTACT_LIST_TYPE_UNKNOWN,
@@ -103,7 +102,10 @@ static void                   tp_contact_list_add                      (EmpathyC
 static void                   tp_contact_list_remove                   (EmpathyContactList              *list,
 									GossipContact                   *contact,
 									const gchar                     *message);
-static GList *                tp_contact_list_get_contacts             (EmpathyContactList              *list);
+static GList *                tp_contact_list_get_members              (EmpathyContactList              *list);
+static GList *                tp_contact_list_get_local_pending        (EmpathyContactList              *list);
+static void                   tp_contact_list_remove_local_pending     (EmpathyTpContactList            *list,
+									GossipContact                   *contact);
 static void                   tp_contact_list_contact_removed_foreach  (guint                            handle,
 									GossipContact                   *contact,
 									EmpathyTpContactList            *list);
@@ -120,20 +122,20 @@ static void                   tp_contact_list_newchannel_cb            (DBusGPro
 									gboolean                         suppress_handle,
 									EmpathyTpContactList            *list);
 static TpContactListType      tp_contact_list_get_type                 (EmpathyTpContactList            *list,
-									TpChan                          *list_chan);
-static void                   tp_contact_list_contact_added_cb         (GossipTelepathyGroup            *group,
+									GossipTelepathyGroup            *group);
+static void                   tp_contact_list_added_cb                 (GossipTelepathyGroup            *group,
 									GArray                          *handles,
 									guint                            actor_handle,
 									guint                            reason,
 									const gchar                     *message,
 									EmpathyTpContactList            *list);
-static void                   tp_contact_list_contact_removed_cb       (GossipTelepathyGroup            *group,
+static void                   tp_contact_list_removed_cb               (GossipTelepathyGroup            *group,
 									GArray                          *handles,
 									guint                            actor_handle,
 									guint                            reason,
 									const gchar                     *message,
 									EmpathyTpContactList            *list);
-static void                   tp_contact_list_local_pending_cb         (GossipTelepathyGroup            *group,
+static void                   tp_contact_list_pending_cb               (GossipTelepathyGroup            *group,
 									GArray                          *handles,
 									guint                            actor_handle,
 									guint                            reason,
@@ -173,7 +175,7 @@ static void                   tp_contact_list_group_members_removed_cb (GossipTe
 									guint                            reason,
 									const gchar                     *message,
 									EmpathyTpContactList            *list);
-static void                   tp_contact_list_get_contacts_foreach     (guint                            handle,
+static void                   tp_contact_list_get_members_foreach      (guint                            handle,
 									GossipContact                   *contact,
 									GList                          **contacts);
 static void                   tp_contact_list_get_info                 (EmpathyTpContactList            *list,
@@ -248,11 +250,12 @@ empathy_tp_contact_list_class_init (EmpathyTpContactListClass *klass)
 static void
 tp_contact_list_iface_init (EmpathyContactListIface *iface)
 {
-	iface->setup = tp_contact_list_setup;
-	iface->find = tp_contact_list_find;
-	iface->add = tp_contact_list_add;
-	iface->remove = tp_contact_list_remove;
-	iface->get_contacts = tp_contact_list_get_contacts;
+	iface->setup             = tp_contact_list_setup;
+	iface->find              = tp_contact_list_find;
+	iface->add               = tp_contact_list_add;
+	iface->remove            = tp_contact_list_remove;
+	iface->get_members       = tp_contact_list_get_members;
+	iface->get_local_pending = tp_contact_list_get_local_pending;
 }
 
 static void
@@ -293,15 +296,9 @@ tp_contact_list_finalize (GObject *object)
 	if (priv->tp_conn) {
 		g_object_unref (priv->tp_conn);
 	}
-
-	if (priv->known) {
-		g_object_unref (priv->known);
-	}
-
 	if (priv->subscribe) {
 		g_object_unref (priv->subscribe);
 	}
-
 	if (priv->publish) {
 		g_object_unref (priv->publish);
 	}
@@ -311,6 +308,9 @@ tp_contact_list_finalize (GObject *object)
 	g_object_unref (priv->mc);
 	g_hash_table_destroy (priv->groups);
 	g_hash_table_destroy (priv->contacts);
+
+	g_list_foreach (priv->local_pending, (GFunc) empathy_contact_list_info_free, NULL);
+	g_list_free (priv->local_pending);
 
 	G_OBJECT_CLASS (empathy_tp_contact_list_parent_class)->finalize (object);
 }
@@ -383,6 +383,7 @@ empathy_tp_contact_list_new (McAccount *account)
 			      error ? error->message : "No error given");
 		g_clear_error (&error);
 	} else {
+		/* FIXME: this adds the handle to the roster */
 		priv->user_contact = empathy_tp_contact_list_get_from_handle (list, handle);
 	}
 
@@ -490,11 +491,10 @@ tp_contact_list_remove (EmpathyContactList *list,
 	handle = gossip_contact_get_handle (contact);
 	gossip_telepathy_group_remove_member (priv->subscribe, handle, message);
 	gossip_telepathy_group_remove_member (priv->publish, handle, message);
-	gossip_telepathy_group_remove_member (priv->known, handle, message);
 }
 
 static GList *
-tp_contact_list_get_contacts (EmpathyContactList *list)
+tp_contact_list_get_members (EmpathyContactList *list)
 {
 	EmpathyTpContactListPriv *priv;
 	GList                    *contacts = NULL;
@@ -503,12 +503,23 @@ tp_contact_list_get_contacts (EmpathyContactList *list)
 
 	priv = GET_PRIV (list);
 
-	/* FIXME: we should only return contacts that are in the contact list */
 	g_hash_table_foreach (priv->contacts,
-			      (GHFunc) tp_contact_list_get_contacts_foreach,
+			      (GHFunc) tp_contact_list_get_members_foreach,
 			      &contacts);
 
 	return contacts;
+}
+
+static GList *
+tp_contact_list_get_local_pending (EmpathyContactList *list)
+{
+	EmpathyTpContactListPriv *priv;
+
+	g_return_val_if_fail (EMPATHY_IS_TP_CONTACT_LIST (list), NULL);
+
+	priv = GET_PRIV (list);
+
+	return g_list_copy (priv->local_pending);
 }
 
 McAccount *
@@ -943,87 +954,77 @@ tp_contact_list_newchannel_cb (DBusGProxy           *proxy,
 	if (handle_type == TP_HANDLE_TYPE_LIST) {
 		TpContactListType list_type;
 
-		list_type = tp_contact_list_get_type (list, new_chan);
-		if (list_type == TP_CONTACT_LIST_TYPE_UNKNOWN) {
-			gossip_debug (DEBUG_DOMAIN, "Unknown contact list channel");
-			g_object_unref (new_chan);
-			return;
-		}
-
-		gossip_debug (DEBUG_DOMAIN, "New contact list channel of type: %d",
-			      list_type);
-
 		group = gossip_telepathy_group_new (new_chan, priv->tp_conn);
 
-		switch (list_type) {
-		case TP_CONTACT_LIST_TYPE_KNOWN:
-			if (priv->known) {
-				g_object_unref (priv->known);
-			}
-			priv->known = group;
-			break;
-		case TP_CONTACT_LIST_TYPE_PUBLISH:
+		list_type = tp_contact_list_get_type (list, group);
+		if (list_type == TP_CONTACT_LIST_TYPE_UNKNOWN) {
+			gossip_debug (DEBUG_DOMAIN,
+				      "Type of contact list channel unknown: %s",
+				      gossip_telepathy_group_get_name (group));
+
+			g_object_unref (new_chan);
+			g_object_unref (group);
+			return;
+		} else {
+			gossip_debug (DEBUG_DOMAIN,
+				      "New contact list channel of type: %d",
+				      list_type);
+		}
+
+		g_signal_connect (group, "members-added",
+				  G_CALLBACK (tp_contact_list_added_cb),
+				  list);
+		g_signal_connect (group, "members-removed",
+				  G_CALLBACK (tp_contact_list_removed_cb),
+				  list);
+
+		members = gossip_telepathy_group_get_members (group);
+		tp_contact_list_added_cb (group, members, 0,
+					  TP_CHANNEL_GROUP_CHANGE_REASON_NONE,
+					  NULL, list);
+		g_array_free (members, TRUE);
+
+		if (list_type == TP_CONTACT_LIST_TYPE_PUBLISH) {
+			GList *pendings, *l;
+
 			if (priv->publish) {
 				g_object_unref (priv->publish);
 			}
 			priv->publish = group;
-			break;
-		case TP_CONTACT_LIST_TYPE_SUBSCRIBE:
+
+			/* Makes no sense to be in remote-pending */
+			g_signal_connect (group, "local-pending",
+					  G_CALLBACK (tp_contact_list_pending_cb),
+					  list);
+
+			pendings = gossip_telepathy_group_get_local_pending_members_with_info (group);
+			if (pendings) {
+				GArray *pending;
+
+				pending = g_array_sized_new (FALSE, FALSE, sizeof (guint), 1);
+				for (l = pendings; l; l = l->next) {
+					GossipTpGroupInfo *info;
+
+					info = l->data;
+
+					g_array_insert_val (pending, 0, info->member);
+					tp_contact_list_pending_cb (group, pending,
+								    info->actor,
+								    info->reason,
+								    info->message,
+								    list);
+				}
+				g_array_free (pending, TRUE);
+				gossip_telepathy_group_info_list_free (pendings);
+			}
+		}
+		else if (list_type == TP_CONTACT_LIST_TYPE_SUBSCRIBE) {
 			if (priv->subscribe) {
 				g_object_unref (priv->subscribe);
 			}
 			priv->subscribe = group;
-			break;
-		default:
+		} else {
 			g_assert_not_reached ();
-		}
-
-		/* Connect and setup the new contact-list group */
-		if (list_type == TP_CONTACT_LIST_TYPE_KNOWN ||
-		    list_type == TP_CONTACT_LIST_TYPE_SUBSCRIBE) {
-			g_signal_connect (group, "members-added",
-					  G_CALLBACK (tp_contact_list_contact_added_cb),
-					  list);
-			g_signal_connect (group, "members-removed",
-					  G_CALLBACK (tp_contact_list_contact_removed_cb),
-					  list);
-
-			members = gossip_telepathy_group_get_members (group);
-			tp_contact_list_contact_added_cb (group, members, 0,
-						       TP_CHANNEL_GROUP_CHANGE_REASON_NONE,
-						       NULL, list);
-			g_array_free (members, TRUE);
-		}
-		if (list_type == TP_CONTACT_LIST_TYPE_PUBLISH) {
-			GList  *members, *l;
-			GArray *pending;
-
-			g_signal_connect (group, "local-pending",
-					  G_CALLBACK (tp_contact_list_local_pending_cb),
-					  list);
-
-			members = gossip_telepathy_group_get_local_pending_members_with_info (group);
-			if (!members) {
-				g_object_unref (new_chan);
-				return;
-			}
-
-			pending = g_array_sized_new (FALSE, FALSE, sizeof (guint), 1);
-			for (l = members; l; l = l->next) {
-				GossipTpGroupInfo *info;
-
-				info = l->data;
-
-				g_array_insert_val (pending, 0, info->member);
-				tp_contact_list_local_pending_cb (group, pending,
-								  info->actor,
-								  info->reason,
-								  info->message,
-								  list);
-			}
-
-			gossip_telepathy_group_info_list_free (members);
-			g_array_free (pending, TRUE);
 		}
 	}
 	else if (handle_type == TP_HANDLE_TYPE_GROUP) {
@@ -1065,72 +1066,69 @@ tp_contact_list_newchannel_cb (DBusGProxy           *proxy,
 
 static TpContactListType
 tp_contact_list_get_type (EmpathyTpContactList *list,
-			  TpChan               *list_chan)
+			  GossipTelepathyGroup *group)
 {
 	EmpathyTpContactListPriv  *priv;
-	GArray                    *handles;
-	gchar                    **handle_name;
 	TpContactListType          list_type;
-	GError                    *error = NULL;
+	const gchar               *name;
 
 	priv = GET_PRIV (list);
 
-	handles = g_array_new (FALSE, FALSE, sizeof (guint));
-	g_array_append_val (handles, list_chan->handle);
-
-	if (!tp_conn_inspect_handles (DBUS_G_PROXY (priv->tp_conn),
-				      TP_HANDLE_TYPE_LIST,
-				      handles,
-				      &handle_name,
-				      &error)) {
-		gossip_debug (DEBUG_DOMAIN, 
-			      "InspectHandle Error: %s",
-			      error ? error->message : "No error given");
-		g_clear_error (&error);
-		g_array_free (handles, TRUE);
-		return TP_CONTACT_LIST_TYPE_UNKNOWN;
-	}
-
-	if (strcmp (*handle_name, "subscribe") == 0) {
+	name = gossip_telepathy_group_get_name (group);
+	if (strcmp (name, "subscribe") == 0) {
 		list_type = TP_CONTACT_LIST_TYPE_SUBSCRIBE;
-	} else if (strcmp (*handle_name, "publish") == 0) {
+	} else if (strcmp (name, "publish") == 0) {
 		list_type = TP_CONTACT_LIST_TYPE_PUBLISH;
-	} else if (strcmp (*handle_name, "known") == 0) {
-		list_type = TP_CONTACT_LIST_TYPE_KNOWN;
 	} else {
 		list_type = TP_CONTACT_LIST_TYPE_UNKNOWN;
 	}
-
-	g_strfreev (handle_name);
-	g_array_free (handles, TRUE);
 
 	return list_type;
 }
 
 static void
-tp_contact_list_contact_added_cb (GossipTelepathyGroup *group,
-				  GArray               *handles,
-				  guint                 actor_handle,
-				  guint                 reason,
-				  const gchar          *message,
-				  EmpathyTpContactList *list)
+tp_contact_list_added_cb (GossipTelepathyGroup *group,
+			  GArray               *handles,
+			  guint                 actor_handle,
+			  guint                 reason,
+			  const gchar          *message,
+			  EmpathyTpContactList *list)
 {
 	EmpathyTpContactListPriv *priv;
 	GList                    *added_list, *l;
+	TpContactListType         list_type;
 
 	priv = GET_PRIV (list);
 
-	added_list = empathy_tp_contact_list_get_from_handles (list, handles);
+	list_type = tp_contact_list_get_type (list, group);
 
+	added_list = empathy_tp_contact_list_get_from_handles (list, handles);
 	for (l = added_list; l; l = l->next) {
-		GossipContact *contact;
+		GossipContact      *contact;
+		GossipSubscription  subscription;
 
 		contact = GOSSIP_CONTACT (l->data);
+
+		gossip_debug (DEBUG_DOMAIN, "Contact '%s' added to list type %d",
+			      gossip_contact_get_name (contact),
+			      list_type);
+
+		subscription = gossip_contact_get_subscription (contact);
+		if (list_type == TP_CONTACT_LIST_TYPE_SUBSCRIBE) {
+			subscription |= GOSSIP_SUBSCRIPTION_FROM;
+		}
+		else if (list_type == TP_CONTACT_LIST_TYPE_PUBLISH) {
+			subscription |= GOSSIP_SUBSCRIPTION_TO;
+		}
+
 		tp_contact_list_block_contact (list, contact);
-		gossip_contact_set_subscription (contact, GOSSIP_SUBSCRIPTION_BOTH);
+		gossip_contact_set_subscription (contact, subscription);
 		tp_contact_list_unblock_contact (list, contact);
 
-		g_signal_emit_by_name (list, "contact-added", contact);
+		if (list_type == TP_CONTACT_LIST_TYPE_PUBLISH) {
+			tp_contact_list_remove_local_pending (list, contact);
+			g_signal_emit_by_name (list, "contact-added", contact);
+		}
 
 		g_object_unref (contact);
 	}
@@ -1139,31 +1137,48 @@ tp_contact_list_contact_added_cb (GossipTelepathyGroup *group,
 }
 
 static void
-tp_contact_list_contact_removed_cb (GossipTelepathyGroup *group,
-				    GArray               *handles,
-				    guint                 actor_handle,
-				    guint                 reason,
-				    const gchar          *message,
-				    EmpathyTpContactList *list)
+tp_contact_list_removed_cb (GossipTelepathyGroup *group,
+			    GArray               *handles,
+			    guint                 actor_handle,
+			    guint                 reason,
+			    const gchar          *message,
+			    EmpathyTpContactList *list)
 {
 	EmpathyTpContactListPriv *priv;
 	GList                    *removed_list, *l;
+	TpContactListType         list_type;
 
 	priv = GET_PRIV (list);
 
-	removed_list = empathy_tp_contact_list_get_from_handles (list, handles);
+	list_type = tp_contact_list_get_type (list, group);
 
+	removed_list = empathy_tp_contact_list_get_from_handles (list, handles);
 	for (l = removed_list; l; l = l->next) {
-		GossipContact *contact;
-		guint          handle;
+		GossipContact      *contact;
+		GossipSubscription  subscription;
 
 		contact = GOSSIP_CONTACT (l->data);
 
-		handle = gossip_contact_get_handle (contact);
-		g_hash_table_remove (priv->contacts, GUINT_TO_POINTER (handle));
+		gossip_debug (DEBUG_DOMAIN, "Contact '%s' removed from list type %d",
+			      gossip_contact_get_name (contact),
+			      list_type);
 
-		g_signal_emit_by_name (list, "contact-removed", contact);
+		subscription = gossip_contact_get_subscription (contact);
+		if (list_type == TP_CONTACT_LIST_TYPE_SUBSCRIBE) {
+			subscription &= !GOSSIP_SUBSCRIPTION_FROM;
+		}
+		else if (list_type == TP_CONTACT_LIST_TYPE_PUBLISH) {
+			subscription &= !GOSSIP_SUBSCRIPTION_TO;
+		}
 
+		tp_contact_list_block_contact (list, contact);
+		gossip_contact_set_subscription (contact, subscription);
+		tp_contact_list_unblock_contact (list, contact);
+
+		if (list_type == TP_CONTACT_LIST_TYPE_PUBLISH) {
+			tp_contact_list_remove_local_pending (list, contact);
+			g_signal_emit_by_name (list, "contact-removed", contact);
+		}
 		g_object_unref (contact);
 	}
 
@@ -1171,35 +1186,70 @@ tp_contact_list_contact_removed_cb (GossipTelepathyGroup *group,
 }
 
 static void
-tp_contact_list_local_pending_cb (GossipTelepathyGroup *group,
-				  GArray               *handles,
-				  guint                 actor_handle,
-				  guint                 reason,
-				  const gchar          *message,
-				  EmpathyTpContactList *list)
+tp_contact_list_pending_cb (GossipTelepathyGroup *group,
+			    GArray               *handles,
+			    guint                 actor_handle,
+			    guint                 reason,
+			    const gchar          *message,
+			    EmpathyTpContactList *list)
 {
 	EmpathyTpContactListPriv *priv;
 	GList                    *pending_list, *l;
+	TpContactListType         list_type;
 
 	priv = GET_PRIV (list);
 
-	pending_list = empathy_tp_contact_list_get_from_handles (list, handles);
+	list_type = tp_contact_list_get_type (list, group);
 
+	pending_list = empathy_tp_contact_list_get_from_handles (list, handles);
 	for (l = pending_list; l; l = l->next) {
 		GossipContact *contact;
 
 		contact = GOSSIP_CONTACT (l->data);
 
-		/* FIXME: Is that the correct way ? */
-		tp_contact_list_block_contact (list, contact);
-		gossip_contact_set_subscription (contact, GOSSIP_SUBSCRIPTION_FROM);
-		tp_contact_list_unblock_contact (list, contact);
-		g_signal_emit_by_name (list, "contact-added", contact);
+		gossip_debug (DEBUG_DOMAIN, "Contact '%s' pending in list type %d",
+			      gossip_contact_get_name (contact),
+			      list_type);
+
+		if (list_type == TP_CONTACT_LIST_TYPE_PUBLISH) {
+			EmpathyContactListInfo *info;
+
+			info = empathy_contact_list_info_new (contact, message);
+			priv->local_pending = g_list_prepend (priv->local_pending,
+							      info);
+
+			g_signal_emit_by_name (list, "local-pending",
+					       contact, message);
+		}
 
 		g_object_unref (contact);
 	}
 
 	g_list_free (pending_list);
+}
+
+static void
+tp_contact_list_remove_local_pending (EmpathyTpContactList *list,
+				      GossipContact        *contact)
+{
+	EmpathyTpContactListPriv *priv;
+	GList                    *l;
+
+	priv = GET_PRIV (list);
+
+	for (l = priv->local_pending; l; l = l->next) {
+		EmpathyContactListInfo *info;
+
+		info = l->data;
+		if (gossip_contact_equal (contact, info->contact)) {
+			gossip_debug (DEBUG_DOMAIN, "Contact no more local-pending: %s",
+				      gossip_contact_get_name (contact));
+
+			priv->local_pending = g_list_delete_link (priv->local_pending, l);
+			empathy_contact_list_info_free (info);
+			break;
+		}
+	}
 }
 
 static void
@@ -1531,11 +1581,16 @@ tp_contact_list_group_members_removed_cb (GossipTelepathyGroup *group,
 }
 
 static void
-tp_contact_list_get_contacts_foreach (guint           handle,
+tp_contact_list_get_members_foreach (guint           handle,
 				      GossipContact  *contact,
 				      GList         **contacts)
 {
-	*contacts = g_list_append (*contacts, g_object_ref (contact));
+	GossipSubscription subscription;
+
+	subscription = gossip_contact_get_subscription (contact);
+	if (subscription & GOSSIP_SUBSCRIPTION_TO) {
+		*contacts = g_list_append (*contacts, g_object_ref (contact));
+	}
 }
 
 static void

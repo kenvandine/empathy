@@ -72,7 +72,7 @@ static void            tp_chatroom_add                (EmpathyContactList      *
 static void            tp_chatroom_remove             (EmpathyContactList      *list,
 						       GossipContact           *contact,
 						       const gchar             *message);
-static GList *         tp_chatroom_get_contacts       (EmpathyContactList      *list);
+static GList *         tp_chatroom_get_members        (EmpathyContactList      *list);
 
 G_DEFINE_TYPE_WITH_CODE (EmpathyTpChatroom, empathy_tp_chatroom, EMPATHY_TYPE_TP_CHAT,
 			 G_IMPLEMENT_INTERFACE (EMPATHY_TYPE_CONTACT_LIST,
@@ -91,11 +91,11 @@ empathy_tp_chatroom_class_init (EmpathyTpChatroomClass *klass)
 static void
 tp_chatroom_iface_init (EmpathyContactListIface *iface)
 {
-	iface->setup = tp_chatroom_setup;
-	iface->find = tp_chatroom_find;
-	iface->add = tp_chatroom_add;
-	iface->remove = tp_chatroom_remove;
-	iface->get_contacts = tp_chatroom_get_contacts;
+	iface->setup       = tp_chatroom_setup;
+	iface->find        = tp_chatroom_find;
+	iface->add         = tp_chatroom_add;
+	iface->remove      = tp_chatroom_remove;
+	iface->get_members = tp_chatroom_get_members;
 }
 
 static void
@@ -339,7 +339,7 @@ tp_chatroom_remove (EmpathyContactList *list,
 }
 
 static GList *
-tp_chatroom_get_contacts (EmpathyContactList *list)
+tp_chatroom_get_members (EmpathyContactList *list)
 {
 	EmpathyTpChatroomPriv *priv;
 	GArray                *members;

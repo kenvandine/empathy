@@ -1,3 +1,26 @@
+2007-06-06 Xavier Claessens  <xclaesse@gmail.com>
+
+	* libempathy-gtk/empathy-status-icon.c: Add support for blinking when
+	there is an event. Make use of EmpathyIdle for presence handling. Add
+	an event when a contact requets subscription.
+
+	* libempathy-gtk/gossip-contact-list-store.c:
+	* libempathy-gtk/gossip-contact-list-view.c:
+	* libempathy/empathy-contact-manager.c:
+	* libempathy/empathy-tp-contact-list.c:
+	* libempathy/empathy-tp-chatroom.c:
+	* libempathy/empathy-contact-list.c:
+	* libempathy/empathy-contact-list.h: get_contacts() is renamed to
+	get_members(). Adding a signal and a method for local-pending with
+	contacts with the message. Rework completely the contact-list handling in
+	EmpathyTpContactList to follow tp spec.
+
+	* libempathy/empathy-idle.c:
+	* libempathy/empathy-idle.h: Add properties for the state and the 
+	status message. EmpathyIdle is now a singleton to manager self presence.
+
+	* TODO: Updated.
+
 2007-06-03 Xavier Claessens  <xclaesse@gmail.com>
 
 	* libempathy-gtk/gossip-accounts-dialog.glade: Set use_stock for

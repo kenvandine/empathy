@@ -23,6 +23,7 @@
 #include "config.h"
 
 #include "empathy-contact-list.h"
+#include "empathy-marshal.h"
 
 static void contact_list_base_init (gpointer klass);
 
@@ -70,8 +71,47 @@ contact_list_base_init (gpointer klass)
 			      G_TYPE_NONE,
 			      1, GOSSIP_TYPE_CONTACT);
 
+		g_signal_new ("local-pending",
+			      G_TYPE_FROM_CLASS (klass),
+			      G_SIGNAL_RUN_LAST,
+			      0,
+			      NULL, NULL,
+			      empathy_marshal_VOID__OBJECT_STRING,
+			      G_TYPE_NONE,
+			      2, GOSSIP_TYPE_CONTACT, G_TYPE_STRING);
+
 		initialized = TRUE;
 	}
+}
+
+EmpathyContactListInfo *
+empathy_contact_list_info_new (GossipContact *contact,
+			       const gchar   *message)
+{
+	EmpathyContactListInfo *info;
+
+	g_return_val_if_fail (GOSSIP_IS_CONTACT (contact), NULL);
+
+	info = g_slice_new0 (EmpathyContactListInfo);
+	info->contact = g_object_ref (contact);
+	info->message = g_strdup (message);
+
+	return info;
+}			       
+
+void
+empathy_contact_list_info_free (EmpathyContactListInfo *info)
+{
+	if (!info) {
+		return;
+	}
+
+	if (info->contact) {
+		g_object_unref (info->contact);
+	}
+	g_free (info->message);
+
+	g_slice_free (EmpathyContactListInfo, info);
 }
 
 void
@@ -122,12 +162,24 @@ empathy_contact_list_remove (EmpathyContactList *list,
 }
 
 GList *
-empathy_contact_list_get_contacts (EmpathyContactList *list)
+empathy_contact_list_get_members (EmpathyContactList *list)
 {
 	g_return_val_if_fail (EMPATHY_IS_CONTACT_LIST (list), NULL);
 
-	if (EMPATHY_CONTACT_LIST_GET_IFACE (list)->get_contacts) {
-		return EMPATHY_CONTACT_LIST_GET_IFACE (list)->get_contacts (list);
+	if (EMPATHY_CONTACT_LIST_GET_IFACE (list)->get_members) {
+		return EMPATHY_CONTACT_LIST_GET_IFACE (list)->get_members (list);
+	}
+
+	return NULL;
+}
+
+GList *
+empathy_contact_list_get_local_pending (EmpathyContactList *list)
+{
+	g_return_val_if_fail (EMPATHY_IS_CONTACT_LIST (list), NULL);
+
+	if (EMPATHY_CONTACT_LIST_GET_IFACE (list)->get_local_pending) {
+		return EMPATHY_CONTACT_LIST_GET_IFACE (list)->get_local_pending (list);
 	}
 
 	return NULL;

@@ -65,7 +65,8 @@ static void           contact_manager_add                  (EmpathyContactList  
 static void           contact_manager_remove               (EmpathyContactList              *manager,
 							    GossipContact                   *contact,
 							    const gchar                     *message);
-static GList *        contact_manager_get_contacts         (EmpathyContactList              *manager);
+static GList *        contact_manager_get_members          (EmpathyContactList              *manager);
+static GList *        contact_manager_get_local_pending    (EmpathyContactList              *manager);
 static void           contact_manager_setup_foreach        (McAccount                       *account,
 							    EmpathyTpContactList            *list,
 							    EmpathyContactManager           *manager);
@@ -80,6 +81,10 @@ static void           contact_manager_added_cb             (EmpathyTpContactList
 static void           contact_manager_removed_cb           (EmpathyTpContactList            *list,
 							    GossipContact                   *contact,
 							    EmpathyContactManager           *manager);
+static void           contact_manager_local_pending_cb     (EmpathyTpContactList            *list,
+							    GossipContact                   *contact,
+							    const gchar                     *message,
+							    EmpathyContactManager           *manager);
 static void           contact_manager_destroy_cb           (EmpathyTpContactList            *list,
 							    EmpathyContactManager           *manager);
 static void           contact_manager_rename_group_foreach (McAccount                       *account,
@@ -88,7 +93,10 @@ static void           contact_manager_rename_group_foreach (McAccount           
 static void           contact_manager_get_groups_foreach   (McAccount                       *account,
 							    EmpathyTpContactList            *list,
 							    GList                          **all_groups);
-static void           contact_manager_get_contacts_foreach (McAccount                       *account,
+static void           contact_manager_get_members_foreach  (McAccount                       *account,
+							    EmpathyTpContactList            *list,
+							    GList                          **contacts);
+static void           contact_manager_get_local_pending_foreach (McAccount                  *account,
 							    EmpathyTpContactList            *list,
 							    GList                          **contacts);
 static void           contact_manager_status_changed_cb    (MissionControl                  *mc,
@@ -115,11 +123,12 @@ empathy_contact_manager_class_init (EmpathyContactManagerClass *klass)
 static void
 contact_manager_iface_init (EmpathyContactListIface *iface)
 {
-	iface->setup = contact_manager_setup;
-	iface->find = contact_manager_find;
-	iface->add = contact_manager_add;
-	iface->remove = contact_manager_remove;
-	iface->get_contacts = contact_manager_get_contacts;
+	iface->setup             = contact_manager_setup;
+	iface->find              = contact_manager_find;
+	iface->add               = contact_manager_add;
+	iface->remove            = contact_manager_remove;
+	iface->get_members       = contact_manager_get_members;
+	iface->get_local_pending = contact_manager_get_local_pending;
 }
 
 static void
@@ -269,7 +278,7 @@ contact_manager_remove (EmpathyContactList *manager,
 }
 
 static GList *
-contact_manager_get_contacts (EmpathyContactList *manager)
+contact_manager_get_members (EmpathyContactList *manager)
 {
 	EmpathyContactManagerPriv *priv;
 	GList                     *contacts = NULL;
@@ -279,10 +288,27 @@ contact_manager_get_contacts (EmpathyContactList *manager)
 	priv = GET_PRIV (manager);
 
 	g_hash_table_foreach (priv->lists,
-			      (GHFunc) contact_manager_get_contacts_foreach,
+			      (GHFunc) contact_manager_get_members_foreach,
 			      &contacts);
 
 	return contacts;
+}
+
+static GList *
+contact_manager_get_local_pending (EmpathyContactList *manager)
+{
+	EmpathyContactManagerPriv *priv;
+	GList                     *pending = NULL;
+
+	g_return_val_if_fail (EMPATHY_IS_CONTACT_MANAGER (manager), NULL);
+
+	priv = GET_PRIV (manager);
+
+	g_hash_table_foreach (priv->lists,
+			      (GHFunc) contact_manager_get_local_pending_foreach,
+			      &pending);
+
+	return pending;
 }
 
 EmpathyTpContactList *
@@ -435,6 +461,9 @@ contact_manager_add_account (EmpathyContactManager *manager,
 	g_signal_connect (list, "contact-removed",
 			  G_CALLBACK (contact_manager_removed_cb),
 			  manager);
+	g_signal_connect (list, "local-pending",
+			  G_CALLBACK (contact_manager_local_pending_cb),
+			  manager);
 	g_signal_connect (list, "destroy",
 			  G_CALLBACK (contact_manager_destroy_cb),
 			  manager);
@@ -461,6 +490,15 @@ contact_manager_removed_cb (EmpathyTpContactList  *list,
 }
 
 static void
+contact_manager_local_pending_cb (EmpathyTpContactList  *list,
+				  GossipContact         *contact,
+				  const gchar           *message,
+				  EmpathyContactManager *manager)
+{
+	g_signal_emit_by_name (manager, "local-pending", contact, message);
+}
+
+static void
 contact_manager_destroy_cb (EmpathyTpContactList  *list,
 			    EmpathyContactManager *manager)
 {
@@ -480,6 +518,9 @@ contact_manager_destroy_cb (EmpathyTpContactList  *list,
 					      manager);
 	g_signal_handlers_disconnect_by_func (list,
 					      contact_manager_removed_cb,
+					      manager);
+	g_signal_handlers_disconnect_by_func (list,
+					      contact_manager_local_pending_cb,
 					      manager);
 	g_signal_handlers_disconnect_by_func (list,
 					      contact_manager_destroy_cb,
@@ -520,13 +561,24 @@ contact_manager_get_groups_foreach (McAccount             *account,
 }
 
 static void
-contact_manager_get_contacts_foreach (McAccount             *account,
-				      EmpathyTpContactList  *list,
-				      GList                **contacts)
+contact_manager_get_members_foreach (McAccount             *account,
+				     EmpathyTpContactList  *list,
+				     GList                **contacts)
 {
 	GList *l;
 
-	l = empathy_contact_list_get_contacts (EMPATHY_CONTACT_LIST (list));
+	l = empathy_contact_list_get_members (EMPATHY_CONTACT_LIST (list));
+	*contacts = g_list_concat (*contacts, l);
+}
+
+static void
+contact_manager_get_local_pending_foreach (McAccount             *account,
+					   EmpathyTpContactList  *list,
+					   GList                **contacts)
+{
+	GList *l;
+
+	l = empathy_contact_list_get_local_pending (EMPATHY_CONTACT_LIST (list));
 	*contacts = g_list_concat (*contacts, l);
 }
 
