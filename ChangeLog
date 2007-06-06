@@ -1,5 +1,13 @@
 2007-06-06 Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/empathy-contact-widget.glade:
+	* libempathy-gtk/empathy-contact-widget.c:
+	* libempathy-gtk/empathy-contact-widget.h:
+	* libempathy-gtk/empathy-subscription-dialog.c: EmpatchContactWidget
+	has 2 modes: editable or not.
+
+2007-06-06 Xavier Claessens  <xclaesse@gmail.com>
+
 	* po/POTFILES.in: Updated with new files.
 
 2007-06-06 Xavier Claessens  <xclaesse@gmail.com>

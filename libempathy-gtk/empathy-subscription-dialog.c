@@ -39,13 +39,16 @@
 static GHashTable *dialogs = NULL;
 
 static void
-subscription_dialog_response_cb (GtkDialog     *dialog,
-				 gint           response,
-				 GossipContact *contact)
+subscription_dialog_response_cb (GtkDialog *dialog,
+				 gint       response,
+				 GtkWidget *contact_widget)
 {
 	EmpathyContactManager *manager;
+	GossipContact         *contact;
 
 	manager = empathy_contact_manager_new ();
+	contact = empathy_contact_widget_get_contact (contact_widget);
+	empathy_contact_widget_save (contact_widget);
 
 	if (response == GTK_RESPONSE_YES) {
 		empathy_contact_list_add (EMPATHY_CONTACT_LIST (manager),
@@ -68,6 +71,7 @@ empathy_subscription_dialog_show (GossipContact *contact,
 {
 	GtkWidget *dialog;
 	GtkWidget *hbox_subscription;
+	GtkWidget *contact_widget;
 
 	g_return_if_fail (GOSSIP_IS_CONTACT (contact));
 
@@ -91,16 +95,17 @@ empathy_subscription_dialog_show (GossipContact *contact,
 				      "hbox_subscription", &hbox_subscription,
 				      NULL);
 
-	g_signal_connect (dialog, "response",
-			  G_CALLBACK (subscription_dialog_response_cb),
-			  contact);
-
 	g_hash_table_insert (dialogs, g_object_ref (contact), dialog);
 
+	contact_widget = empathy_contact_widget_new (contact, TRUE);
 	gtk_box_pack_end (GTK_BOX (hbox_subscription),
-			  empathy_contact_widget_new (contact),
+			  contact_widget,
 			  TRUE, TRUE,
 			  0);
+
+	g_signal_connect (dialog, "response",
+			  G_CALLBACK (subscription_dialog_response_cb),
+			  contact_widget);
 
 	if (parent) {
 		gtk_window_set_transient_for (GTK_WINDOW (dialog), parent);

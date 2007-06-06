@@ -37,19 +37,21 @@
 typedef struct {
 	GossipContact   *contact;
 	gboolean         is_user;
+	gboolean         editable;
 	gboolean         changes_made;
 	GtkCellRenderer *renderer;
 
 	GtkWidget       *vbox_contact_widget;
 
 	GtkWidget       *vbox_contact;
+	GtkWidget       *widget_avatar;
 	GtkWidget       *label_id;
 	GtkWidget       *entry_alias;
+	GtkWidget       *widget_alias;
 	GtkWidget       *image_state;
 	GtkWidget       *label_status;
 	GtkWidget       *table_contact;
 	GtkWidget       *hbox_contact;
-	GtkWidget       *image_avatar;
 
 	GtkWidget       *vbox_groups;
 	GtkWidget       *entry_group;
@@ -122,7 +124,8 @@ enum {
 };
 
 GtkWidget *
-empathy_contact_widget_new (GossipContact *contact)
+empathy_contact_widget_new (GossipContact *contact,
+			    gboolean       editable)
 {
 	EmpathyContactWidget *information;
 	GladeXML             *glade;
@@ -134,6 +137,7 @@ empathy_contact_widget_new (GossipContact *contact)
 	information->contact = g_object_ref (contact);
 	user_contact = gossip_contact_get_user (contact);
 	information->is_user = gossip_contact_equal (contact, user_contact);
+	information->editable = editable;
 
 	glade = gossip_glade_get_file ("empathy-contact-widget.glade",
 				       "vbox_contact_widget",
@@ -141,7 +145,6 @@ empathy_contact_widget_new (GossipContact *contact)
 				       "vbox_contact_widget", &information->vbox_contact_widget,
 				       "vbox_contact", &information->vbox_contact,
 				       "label_id", &information->label_id,
-				       "entry_alias", &information->entry_alias,
 				       "image_state", &information->image_state,
 				       "label_status", &information->label_status,
 				       "table_contact", &information->table_contact,
@@ -161,7 +164,6 @@ empathy_contact_widget_new (GossipContact *contact)
 	gossip_glade_connect (glade,
 			      information,
 			      "vbox_contact_widget", "destroy", contact_widget_destroy_cb,
-			      "entry_alias", "changed", contact_widget_entry_alias_changed_cb,
 			      "entry_group", "changed", contact_widget_entry_group_changed_cb,
 			      "entry_group", "activate", contact_widget_entry_group_activate_cb,
 			      "button_group", "clicked", contact_widget_button_group_clicked_cb,
@@ -193,11 +195,13 @@ empathy_contact_widget_save (GtkWidget *widget)
 	g_return_if_fail (GTK_IS_WIDGET (widget));
 
 	information = g_object_get_data (G_OBJECT (widget), "EmpathyContactWidget");
-	if (!information || !information->changes_made) {
+	if (!information ||
+	    !information->editable ||
+	    !information->changes_made) {
 		return;
 	}
 
-	name = gtk_entry_get_text (GTK_ENTRY (information->entry_alias));
+	name = gtk_entry_get_text (GTK_ENTRY (information->widget_alias));
 	groups = contact_widget_model_find_selected (information);
 
 	gossip_contact_set_name (information->contact, name);
@@ -207,6 +211,21 @@ empathy_contact_widget_save (GtkWidget *widget)
 	g_list_free (groups);
 }
 
+GossipContact *
+empathy_contact_widget_get_contact (GtkWidget *widget)
+{
+	EmpathyContactWidget *information;
+
+	g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
+
+	information = g_object_get_data (G_OBJECT (widget), "EmpathyContactWidget");
+	if (!information) {
+		return NULL;
+	}
+
+	return information->contact;
+}
+	
 static void
 contact_widget_destroy_cb (GtkWidget            *widget,
 			   EmpathyContactWidget *information)
@@ -241,14 +260,29 @@ contact_widget_contact_setup (EmpathyContactWidget *information)
 				  G_CALLBACK (contact_widget_avatar_notify_cb),
 				  information);
 
-	information->image_avatar = gtk_image_new ();
+	/* FIXME: Use GossipAvatarImage if (editable && is_user)  */
+	information->widget_avatar = gtk_image_new ();
 	gtk_box_pack_end (GTK_BOX (information->hbox_contact),
-	 		  information->image_avatar,
+	 		  information->widget_avatar,
 	 		  FALSE, FALSE,
 	 		  6);
 
+	/* Setup alias entry or label */
+	if (information->editable) {
+		information->widget_alias = gtk_entry_new ();
+		g_signal_connect (information->widget_alias, "changed",
+				  G_CALLBACK (contact_widget_entry_alias_changed_cb),
+				  information);
+	} else {
+		information->widget_alias = gtk_label_new (NULL);
+	}
+	gtk_widget_show (information->widget_alias);
+
+	/* Setup id label */
 	gtk_label_set_text (GTK_LABEL (information->label_id),
 			    gossip_contact_get_id (information->contact));
+
+	/* Update all widgets */
 	contact_widget_name_notify_cb (information);
 	contact_widget_presence_notify_cb (information);
 	contact_widget_avatar_notify_cb (information);
@@ -257,8 +291,13 @@ contact_widget_contact_setup (EmpathyContactWidget *information)
 static void
 contact_widget_name_notify_cb (EmpathyContactWidget *information)
 {
-	gtk_entry_set_text (GTK_ENTRY (information->entry_alias),
-			    gossip_contact_get_name (information->contact));
+	if (information->editable) {
+		gtk_entry_set_text (GTK_ENTRY (information->widget_alias),
+				    gossip_contact_get_name (information->contact));
+	} else {
+		gtk_label_set_label (GTK_LABEL (information->widget_alias),
+				     gossip_contact_get_name (information->contact));
+	}
 }
 
 static void
@@ -281,19 +320,19 @@ contact_widget_avatar_notify_cb (EmpathyContactWidget *information)
 								  48, 48);
 
 	if (avatar_pixbuf) {
-		gtk_image_set_from_pixbuf (GTK_IMAGE (information->image_avatar),
+		gtk_image_set_from_pixbuf (GTK_IMAGE (information->widget_avatar),
 					   avatar_pixbuf);
-		gtk_widget_show  (information->image_avatar);
+		gtk_widget_show  (information->widget_avatar);
 		g_object_unref (avatar_pixbuf);
 	} else {
-		gtk_widget_hide  (information->image_avatar);
+		gtk_widget_hide  (information->widget_avatar);
 	}
 }
 
 static void
 contact_widget_groups_setup (EmpathyContactWidget *information)
 {
-	if (!information->is_user) {
+	if (information->editable) {
 		contact_widget_model_setup (information);
 
 		g_signal_connect_swapped (information->contact, "notify::groups",
