@@ -652,7 +652,7 @@ gossip_contact_get_status (GossipContact *contact)
 		return status;
 	}
 
-	return _("Offline");
+	return gossip_presence_state_get_default_status (MC_PRESENCE_OFFLINE);
 }
 
 GossipContact *

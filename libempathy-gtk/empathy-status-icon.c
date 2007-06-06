@@ -39,6 +39,7 @@
 #include <libempathy/empathy-idle.h>
 
 #include "empathy-status-icon.h"
+#include "empathy-contact-widget.h"
 #include "gossip-presence-chooser.h"
 #include "gossip-preferences.h"
 #include "gossip-ui-utils.h"
@@ -462,6 +463,8 @@ status_icon_event_subscribe_cb (StatusIconEvent *event)
 	GossipContact *contact;
 
 	contact = GOSSIP_CONTACT (event->user_data);
+
+	//empathy_subscription_dialog_show (contact);
 
 	g_object_unref (contact);
 }

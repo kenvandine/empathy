@@ -1,5 +1,23 @@
 2007-06-06 Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/empathy-status-icon.c:
+	* libempathy-gtk/empathy-contact-widget.glade:
+	* libempathy-gtk/empathy-contact-widget.c:
+	* libempathy-gtk/empathy-contact-widget.h:
+	* libempathy-gtk/Makefile.am: New widget: EmpathyContactWidget. It
+	displays information about a contact, it can be used in any kind of
+	dialog which needs to display contact information like alias, groups,
+	avatar, etc. If the contact is the selfcontact information are editable.
+
+	* libempathy/empathy-tp-contact-list.c: Do not take care of subscription
+	changes.
+
+	* libempathy/gossip-contact.c: Use
+	gossip_presence_state_get_default_status (MC_PRESENCE_OFFLINE)
+	when there is no presence.
+
+2007-06-06 Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/empathy-status-icon.c: Add support for blinking when
 	there is an event. Make use of EmpathyIdle for presence handling. Add
 	an event when a contact requets subscription.

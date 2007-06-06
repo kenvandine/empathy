@@ -144,9 +144,6 @@ static void                   tp_contact_list_pending_cb               (GossipTe
 static void                   tp_contact_list_groups_updated_cb        (GossipContact                   *contact,
 									GParamSpec                      *param,
 									EmpathyTpContactList            *list);
-static void                   tp_contact_list_subscription_updated_cb  (GossipContact                   *contact,
-									GParamSpec                      *param,
-									EmpathyTpContactList            *list);
 static void                   tp_contact_list_name_updated_cb          (GossipContact                   *contact,
 									GParamSpec                      *param,
 									EmpathyTpContactList            *list);
@@ -710,9 +707,6 @@ empathy_tp_contact_list_get_from_handles (EmpathyTpContactList *list,
 		g_signal_connect (contact, "notify::groups",
 				  G_CALLBACK (tp_contact_list_groups_updated_cb),
 				  list);
-		g_signal_connect (contact, "notify::subscription",
-				  G_CALLBACK (tp_contact_list_subscription_updated_cb),
-				  list);
 		g_signal_connect (contact, "notify::name",
 				  G_CALLBACK (tp_contact_list_name_updated_cb),
 				  list);
@@ -871,9 +865,6 @@ tp_contact_list_contact_removed_foreach (guint                 handle,
 					      tp_contact_list_groups_updated_cb,
 					      list);
 	g_signal_handlers_disconnect_by_func (contact,
-					      tp_contact_list_subscription_updated_cb,
-					      list);
-	g_signal_handlers_disconnect_by_func (contact,
 					      tp_contact_list_name_updated_cb,
 					      list);
 
@@ -888,9 +879,6 @@ tp_contact_list_block_contact (EmpathyTpContactList *list,
 					 tp_contact_list_groups_updated_cb,
 					 list);
 	g_signal_handlers_block_by_func (contact,
-					 tp_contact_list_subscription_updated_cb,
-					 list);
-	g_signal_handlers_block_by_func (contact,
 					 tp_contact_list_name_updated_cb,
 					 list);
 }
@@ -901,9 +889,6 @@ tp_contact_list_unblock_contact (EmpathyTpContactList *list,
 {
 	g_signal_handlers_unblock_by_func (contact,
 					   tp_contact_list_groups_updated_cb,
-					   list);
-	g_signal_handlers_unblock_by_func (contact,
-					   tp_contact_list_subscription_updated_cb,
 					   list);
 	g_signal_handlers_unblock_by_func (contact,
 					   tp_contact_list_name_updated_cb,
@@ -1275,28 +1260,6 @@ tp_contact_list_groups_updated_cb (GossipContact        *contact,
 	g_hash_table_foreach (priv->groups,
 			      (GHFunc) tp_contact_list_update_groups_foreach,
 			      &data);
-}
-
-static void
-tp_contact_list_subscription_updated_cb (GossipContact        *contact,
-					 GParamSpec           *param,
-					 EmpathyTpContactList *list)
-{
-	EmpathyTpContactListPriv *priv;
-	GossipSubscription        subscription;
-	guint                     handle;
-
-	priv = GET_PRIV (list);
-
-	subscription = gossip_contact_get_subscription (contact);
-	handle = gossip_contact_get_handle (contact);
-
-	/* FIXME: what to do here, I'm a bit lost... */
-	if (subscription) {
-		gossip_telepathy_group_add_member (priv->publish, handle, "");
-	} else {
-		gossip_telepathy_group_remove_member (priv->publish, handle, "");
-	}
 }
 
 static void
