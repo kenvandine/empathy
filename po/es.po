@@ -6,28 +6,20 @@
 # Francisco Javier F. Serrador <serrador@cvs.gnome.org>, 2003, 2004, 2006.
 # Maria Majadas <maria.majadas@hispalinux.es>, 2005.
 # maria <maria.majadas@hispalinux.es>, 2005, 2006.
+# Jorge González <jorgegonz@svn.gnome.org>, 2007.
 msgid ""
 msgstr ""
-"Project-Id-Version: gossip.HEAD\n"
+"Project-Id-Version: empathy.HEAD.es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-05-15 23:46+0200\n"
-"PO-Revision-Date: 2006-11-28 00:50+0100\n"
-"Last-Translator: maria <maria.majadas@hispalinux.es>\n"
-"Language-Team: español <traductores@es.gnome.org>\n"
+"POT-Creation-Date: 2007-05-15 19:33+0100\n"
+"PO-Revision-Date: 2007-06-07 21:38+0200\n"
+"Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
+"Language-Team: Spanish <traductores@es.gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.11.4\n"
 "Plural-Forms:  nplurals=2; plural=(n != 1);\n"
-
-#: ../data/empathy.desktop.in.h:1
-#, fuzzy
-msgid "Empathy Instant Messenger"
-msgstr "Mensajería instantánea"
-
-#: ../data/empathy.desktop.in.h:2
-msgid "Instant Messenger"
-msgstr "Mensajería instantánea"
 
 #: ../data/empathy.schemas.in.h:1
 msgid "Always open a separate chat window for new chats."
@@ -38,8 +30,7 @@ msgid "Chat window theme"
 msgstr "Tema de la ventana de charla"
 
 #: ../data/empathy.schemas.in.h:3
-msgid ""
-"Comma separated list of spell checker languages to use (e.g. en, fr, nl)."
+msgid "Comma separated list of spell checker languages to use (e.g. en, fr, nl)."
 msgstr ""
 "Lista separada por comas de idiomas que se usarán en la revisión ortográfica "
 "(ej. en, fr, nl)."
@@ -50,7 +41,7 @@ msgstr "Lista compacta de contactos"
 
 #: ../data/empathy.schemas.in.h:5
 msgid "Contact list sort criterium"
-msgstr ""
+msgstr "Criterio de ordenamiento de la lista de contactos"
 
 #: ../data/empathy.schemas.in.h:6
 msgid "Default directory to select an avatar image from"
@@ -106,8 +97,7 @@ msgstr "Último directorio del que fue elegido un avatar."
 
 #: ../data/empathy.schemas.in.h:19
 msgid "The theme that is used to display the conversation in chat windows."
-msgstr ""
-"El tema que se usará para mostrar la conversación en las ventanas de chat."
+msgstr "El tema que se usará para mostrar la conversación en las ventanas de chat."
 
 #: ../data/empathy.schemas.in.h:20
 msgid "Use graphical smileys"
@@ -130,8 +120,7 @@ msgstr ""
 "idiomas con los que quiere comprobarlo."
 
 #: ../data/empathy.schemas.in.h:24
-msgid ""
-"Whether or not to convert smileys into graphical images in conversations."
+msgid "Whether or not to convert smileys into graphical images in conversations."
 msgstr ""
 "Indica si debe o no debe convertir los emoticonos en imágenes gráficas en "
 "las conversaciones."
@@ -189,7 +178,7 @@ msgid ""
 "Which criterium to use when sorting the contact list. Default is to use sort "
 "by the contact's name with the value \"name\". A value of \"state\" will "
 "sort the contact list by state."
-msgstr ""
+msgstr "Qué criterio usar al ordenar la lista de contactos. El criterio predeterminado es ordenar por el nombre del contacto con el valor «nombre». Un valor «estado» ordenará la lista por el estado."
 
 #: ../libempathy/gossip-contact.c:654 ../libempathy/gossip-presence.c:184
 #: ../libempathy/gossip-presence.c:283
@@ -221,9 +210,8 @@ msgid "Contact"
 msgstr "Contacto"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:1
-#, fuzzy
 msgid "Contact List - Empathy"
-msgstr "_Mostrar lista de contactos"
+msgstr "Lista de contactos - Empathy"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:2
 msgid "Context"
@@ -316,33 +304,30 @@ msgid "_Show Contact List"
 msgstr "_Mostrar lista de contactos"
 
 #: ../libempathy-gtk/gossip-about-dialog.c:63
-#, fuzzy
 msgid ""
 "Empathy is free software; you can redistribute it and/or modify it under the "
 "terms of the GNU General Public License as published by the Free Software "
 "Foundation; either version 2 of the License, or (at your option) any later "
 "version."
 msgstr ""
-"Gossip es software libre; puede redistribuirlo y /o modificarlo bajo los "
+"Empathy es software libre; puede redistribuirlo y /o modificarlo bajo los "
 "términos de la Licencia Pública General tal como la publica la Free Software "
 "Foundation; ya sea en la versión 2 de la Licencia, o (a su elección) "
 "cualquier versión posterior."
 
 #: ../libempathy-gtk/gossip-about-dialog.c:67
-#, fuzzy
 msgid ""
 "Empathy is distributed in the hope that it will be useful, but WITHOUT ANY "
 "WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS "
 "FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more "
 "details."
 msgstr ""
-"Gossip se distribuye con la esperanza de que le sea útil,pero SIN NINGUNA "
+"Empathy se distribuye con la esperanza de que le sea útil,pero SIN NINGUNA "
 "GARANTÍA; sin incluso la garantía implícita de MERCANTILIDAD o IDONEIDAD "
 "PARA UN PROPÓSITO PARTICULAR. Vea la Licencia Pública General de GNU para "
 "más detalles."
 
 #: ../libempathy-gtk/gossip-about-dialog.c:71
-#, fuzzy
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "Empathy; if not, write to the Free Software Foundation, Inc., 51 Franklin "
@@ -350,7 +335,7 @@ msgid ""
 msgstr ""
 "Debería haber recibido una copia de la Licencia Pública General GNU junto "
 "con Gossip ; si no, escriba a la Free Software Foundation, Inc., 51 Franklin "
-"Street, Fifth Floor, Boston, MA 02110-130159 USA"
+"Street, Fifth Floor, Boston, MA 02110-130159 EE.UU."
 
 #: ../libempathy-gtk/gossip-about-dialog.c:99
 msgid "An Instant Messaging client for GNOME"
@@ -359,18 +344,18 @@ msgstr "Un cliente de mensajería instantánea para GNOME"
 #: ../libempathy-gtk/gossip-about-dialog.c:105
 msgid "translator-credits"
 msgstr ""
-"María Majadas\n"
-"Ezequiel Pérez\n"
-"QA: Francisco Javier F. Serrador"
+"Jorge González <jorgegonz@svn.gnome.org>, 2007\n"
+"María Majadas <maria.majadas@hispalinux.es> 2005\n"
+"Ezequiel Pérez <eazel7@yahoo.com.ar>, 2003\n"
+"QA: Francisco Javier F. Serrador <serrador@cvs.gnome.org>, 2003, 2004, 2006"
 
 #: ../libempathy-gtk/gossip-accounts-dialog.c:224
-#, fuzzy
 msgid "Disable"
-msgstr "Disponible"
+msgstr "Deshabilitar"
 
 #: ../libempathy-gtk/gossip-accounts-dialog.c:227
 msgid "Enable"
-msgstr ""
+msgstr "Activar"
 
 #: ../libempathy-gtk/gossip-accounts-dialog.c:261
 #: ../libempathy-gtk/gossip-accounts-dialog.glade.h:3
@@ -435,9 +420,8 @@ msgid "<b>Account</b>"
 msgstr "<b>Cuenta</b>"
 
 #: ../libempathy-gtk/gossip-accounts-dialog.glade.h:2
-#, fuzzy
 msgid "<b>New Account</b>"
-msgstr "<b>Cuenta</b>"
+msgstr "<b>Nueva cuenta</b>"
 
 #: ../libempathy-gtk/gossip-accounts-dialog.glade.h:4
 msgid "<b>Settings</b>"
@@ -445,20 +429,19 @@ msgstr "<b>Configuración</b>"
 
 #: ../libempathy-gtk/gossip-accounts-dialog.glade.h:5
 msgid "A unique name for this account to identify it personally to you."
-msgstr ""
+msgstr "Un nombre único para identificar esta cuenta personalmente con usted."
 
 #: ../libempathy-gtk/gossip-accounts-dialog.glade.h:7
-#, fuzzy
 msgid "Cr_eate"
-msgstr "Crear"
+msgstr "Cr_ear"
 
 #: ../libempathy-gtk/gossip-accounts-dialog.glade.h:8
 msgid "Imendio "
-msgstr ""
+msgstr "Imendio "
 
 #: ../libempathy-gtk/gossip-accounts-dialog.glade.h:9
 msgid "Jabber"
-msgstr ""
+msgstr "Jabber"
 
 #: ../libempathy-gtk/gossip-accounts-dialog.glade.h:10
 msgid ""
@@ -479,9 +462,8 @@ msgid "_Name:"
 msgstr "_Nombre:"
 
 #: ../libempathy-gtk/gossip-accounts-dialog.glade.h:14
-#, fuzzy
 msgid "_Type:"
-msgstr "_Tema:"
+msgstr "_Tipo:"
 
 #: ../libempathy-gtk/gossip-account-widget-generic.c:144
 #: ../libempathy-gtk/gossip-account-widget-generic.c:186
@@ -493,11 +475,11 @@ msgstr "%s:"
 msgid ""
 "<small><b><span foreground=\"#555\">Example: user@jabber.org</span></b></"
 "small>"
-msgstr ""
+msgstr "<small><b><span foreground=\"#555\">Ejemplo: usuario@jabber.org</span></b></small>"
 
 #: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:2
 msgid "Forget password and clear the entry."
-msgstr ""
+msgstr "Olvidar la contraseña y limpiar la entrada."
 
 #: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:3
 msgid "Login I_D:"
@@ -549,7 +531,7 @@ msgstr "_Limpiar"
 
 #: ../libempathy-gtk/gossip-chat.glade.h:2
 msgid "Change _Topic..."
-msgstr ""
+msgstr "Cambiar el _tema..."
 
 #: ../libempathy-gtk/gossip-chat.glade.h:3
 msgid "Chat"
@@ -564,18 +546,16 @@ msgid "Cu_t"
 msgstr "Cor_tar"
 
 #: ../libempathy-gtk/gossip-chat.glade.h:6
-#, fuzzy
 msgid "In_vite..."
-msgstr "In_vitar"
+msgstr "In_vitar..."
 
 #: ../libempathy-gtk/gossip-chat.glade.h:7
 msgid "Insert _Smiley"
 msgstr "Insertar _emoticono"
 
 #: ../libempathy-gtk/gossip-chat.glade.h:8
-#, fuzzy
 msgid "Invitation _message:"
-msgstr "Mensaje de invitación:"
+msgstr "_Mensaje de invitación:"
 
 #: ../libempathy-gtk/gossip-chat.glade.h:9
 msgid "Invite"
@@ -651,24 +631,22 @@ msgstr "%A %d %B %Y"
 
 #: ../libempathy-gtk/gossip-chat-window.c:685
 #: ../libempathy-gtk/gossip-chat-window.c:715
-#, fuzzy
 msgid "New Message"
 msgid_plural "New Messages"
 msgstr[0] "Mensaje nuevo"
-msgstr[1] "Mensaje nuevo"
+msgstr[1] "Mensajes nuevos"
 
 #: ../libempathy-gtk/gossip-chat-window.c:691
-#, fuzzy
 msgid "Chat Room"
-msgstr "Salas de chat"
+msgstr "Sala de chat"
 
 #: ../libempathy-gtk/gossip-chat-window.c:696
 #: ../libempathy-gtk/gossip-chat-window.c:719
-#, fuzzy, c-format
+#, c-format
 msgid "Conversation"
 msgid_plural "Conversations (%d)"
-msgstr[0] "_Conversación"
-msgstr[1] "_Conversación"
+msgstr[0] "Conversación"
+msgstr[1] "Conversaciones (%d)"
 
 #: ../libempathy-gtk/gossip-chat-window.c:1295
 msgid "Typing a message."
@@ -751,9 +729,8 @@ msgid "<b>Behaviour</b>"
 msgstr "<b>Comportamiento</b>"
 
 #: ../libempathy-gtk/gossip-preferences.glade.h:4
-#, fuzzy
 msgid "<b>Contact List</b>"
-msgstr "<b>Estado</b>"
+msgstr "<b>Lista de contactos</b>"
 
 #: ../libempathy-gtk/gossip-preferences.glade.h:5
 msgid "<b>Languages</b>"
@@ -823,11 +800,11 @@ msgstr "Mostrar lista de contactos co_mpacta"
 
 #: ../libempathy-gtk/gossip-preferences.glade.h:20
 msgid "Sort by _name"
-msgstr ""
+msgstr "Ordenar por _nombre"
 
 #: ../libempathy-gtk/gossip-preferences.glade.h:21
 msgid "Sort by s_tate"
-msgstr ""
+msgstr "Ordenar por es_tado"
 
 #: ../libempathy-gtk/gossip-preferences.glade.h:22
 msgid "Spell Checking"
@@ -921,825 +898,6 @@ msgid "Don't connect on startup"
 msgstr "No conectarse al inicio"
 
 #: ../src/empathy-main.c:155
-#, fuzzy
 msgid "- Empathy Instant Messenger"
-msgstr "- Mensajería instantánea Gossip"
+msgstr "- Mensajería instantánea Empathy"
 
-#~ msgid "Gossip Instant Messenger"
-#~ msgstr "Mensajería instantánea Gossip"
-
-#~ msgid "Normal"
-#~ msgstr "Normal"
-
-#~ msgid "Joining"
-#~ msgstr "Uniéndose"
-
-#~ msgid "Active"
-#~ msgstr "Activo"
-
-#~ msgid "Inactive"
-#~ msgstr "Inactivo"
-
-#~ msgid "Unknown"
-#~ msgstr "Desconocido"
-
-#~ msgid "Error"
-#~ msgstr "Error"
-
-#~ msgid "Moderator"
-#~ msgid_plural "Moderators"
-#~ msgstr[0] "Moderador"
-#~ msgstr[1] "Moderadores"
-
-#~ msgid "Participant"
-#~ msgid_plural "Participants"
-#~ msgstr[0] "Participante"
-#~ msgstr[1] "Participantes"
-
-#~ msgid "Visitor"
-#~ msgid_plural "Visitors"
-#~ msgstr[0] "Visitante"
-#~ msgstr[1] "Visitantes"
-
-#~ msgid "No role"
-#~ msgstr "Sin rol"
-
-#~ msgid "Owner"
-#~ msgid_plural "Owners"
-#~ msgstr[0] "Dueño"
-#~ msgstr[1] "Dueños"
-
-#~ msgid "Administrator"
-#~ msgid_plural "Administrators"
-#~ msgstr[0] "Administrador"
-#~ msgstr[1] "Administradores"
-
-#~ msgid "Member"
-#~ msgid_plural "Members"
-#~ msgstr[0] "Miembro"
-#~ msgstr[1] "Miembros"
-
-#~ msgid "Outcast"
-#~ msgid_plural "Outcasts"
-#~ msgstr[0] "Paria"
-#~ msgstr[1] "Parias"
-
-#~ msgid "No affiliation"
-#~ msgstr "Sin afiliación"
-
-#~ msgid "The nickname you have chosen is already in use."
-#~ msgstr "El apodo que ha elegido ya se está usando."
-
-#~ msgid "The chat room you tried to join requires a password."
-#~ msgstr ""
-#~ "La sala de chat a la que está intentando unirse requiere una contraseña."
-
-#~ msgid "The remote conference server did not respond in a sensible time."
-#~ msgstr ""
-#~ "El servidor remoto de la conferencia no respondió en un tiempo razonable."
-
-#~ msgid "The conference server you tried to join could not be found."
-#~ msgstr ""
-#~ "No se pudo encontrar el servidor de conferencias al que intentó unirse."
-
-#~ msgid "An unknown error occurred, check your details are correct."
-#~ msgstr ""
-#~ "Ocurrió un error desconocido, compruebe si sus detalles son correctos."
-
-#~ msgid "Unavailable"
-#~ msgstr "No disponible"
-
-#~ msgid "An unknown error occurred."
-#~ msgstr "Ha ocurrido un error desconocido."
-
-#~ msgid "Connection refused."
-#~ msgstr "Conexión rechazada."
-
-#~ msgid "Server address could not be resolved."
-#~ msgstr "La dirección del servidor no se ha podido resolver."
-
-#~ msgid "Connection timed out."
-#~ msgstr "La conexión expiró."
-
-#~ msgid "Authentication failed."
-#~ msgstr "Falló la autenticación."
-
-#~ msgid "The username you are trying already exists."
-#~ msgstr "El usuario que ha elegido ya existe."
-
-#~ msgid "The username you are trying is not valid."
-#~ msgstr "El usuario que ha elegido no es válido."
-
-#~ msgid "This feature is unavailable."
-#~ msgstr "Esta característica no está disponible."
-
-#~ msgid "This feature is unauthorized."
-#~ msgstr "Esta característica no está autorizada."
-
-#~ msgid "A specific protocol error occurred that was unexpected."
-#~ msgstr "Ocurrió un error inesperado específico del protocolo."
-
-#~ msgid "new account"
-#~ msgstr "Cuenta nueva"
-
-#~ msgid "Home"
-#~ msgstr "Domicilio"
-
-#~ msgid "Couldn't send message!"
-#~ msgstr "No se pudo enviar el mensaje."
-
-#~ msgid "Connection could not be opened"
-#~ msgstr "La conexión no se pudo abrir"
-
-#, fuzzy
-#~ msgid "This service is unavailable or not found"
-#~ msgstr "Esta característica no está disponible."
-
-#, fuzzy
-#~ msgid "This feature is not implemented"
-#~ msgstr "Esta característica no está autorizada."
-
-#~ msgid "Stop"
-#~ msgstr "Parar"
-
-#~ msgid "Disconnect"
-#~ msgstr "Desconectar"
-
-#~ msgid "Connect"
-#~ msgstr "Conectar"
-
-#~ msgid "Successfully registered your new account settings."
-#~ msgstr "Se ha registrado con éxito la configuración de su cuenta nueva."
-
-#~ msgid "You should now be able to connect to your new account."
-#~ msgstr "Ahora debería poder conectarse a su cuenta nueva."
-
-#~ msgid "Failed to register your new account settings."
-#~ msgstr "Falló al registrar la configuración de su cuenta nueva"
-
-#, fuzzy
-#~ msgid "Successfully changed your account password."
-#~ msgstr "Se ha registrado con éxito la configuración de su cuenta nueva."
-
-#, fuzzy
-#~ msgid "You should now be able to connect with your new password."
-#~ msgstr "Ahora debería poder conectarse a su cuenta nueva."
-
-#, fuzzy
-#~ msgid "Failed to change your account password."
-#~ msgstr "Introduzca la contraseña de su cuenta %s:"
-
-#, fuzzy
-#~ msgid ""
-#~ "Please enter a new password for this account:\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Introduzca un nombre nuevo para el grupo:\n"
-#~ "%s"
-
-#~ msgid "No information is available for this contact."
-#~ msgstr "No hay información disponible para este contacto."
-
-#~ msgid "Information requested, please wait..."
-#~ msgstr "Información solicitada, espere por favor…"
-
-#~ msgid "I would like to add you to my contact list."
-#~ msgstr "Quisiera añadirle a mi lista de contactos."
-
-#~ msgid "To summarize:"
-#~ msgstr "Para resumir:"
-
-#~ msgid "%d new message"
-#~ msgid_plural "%d new messages"
-#~ msgstr[0] "%d mensaje nuevo"
-#~ msgstr[1] "%d mensajes nuevos"
-
-#~ msgid "%d subscription request"
-#~ msgid_plural "%d subscription requests"
-#~ msgstr[0] "%d solicitud de subscripción"
-#~ msgstr[1] "%d solicitudes de subscripción"
-
-#~ msgid "%d file transfer request"
-#~ msgid_plural "%d file transfer requests"
-#~ msgstr[0] "%d solicitud de transferencia de archivo"
-#~ msgstr[1] "%d solicitudes de transferencia de archivo"
-
-#~ msgid "%d server message"
-#~ msgid_plural "%d server messages"
-#~ msgstr[0] "%d mensaje del servidor"
-#~ msgstr[1] "%d mensajes del servidor"
-
-#~ msgid "%d error"
-#~ msgid_plural "%d errors"
-#~ msgstr[0] "%d error"
-#~ msgstr[1] "%d errores"
-
-#~ msgid "If you quit, you will lose all unread information."
-#~ msgstr "Si sale, usted perderá toda la información no leída."
-
-#~ msgid "Gossip is still running, it is just hidden."
-#~ msgstr "Gossip todavía se está ejecutando, sólo está oculto."
-
-#~ msgid "Click on the notification area icon to show Gossip."
-#~ msgstr "Pulse en el icono del área de notificación para mostrar Gossip."
-
-#~ msgid "You were about to quit!"
-#~ msgstr "¡Ibas a cerrarlo!"
-
-#~ msgid ""
-#~ "Since no system or notification tray has been found, this action would "
-#~ "normally quit Gossip.\n"
-#~ "\n"
-#~ "This is just a reminder, from now on, Gossip will quit when performing "
-#~ "this action unless you uncheck the option below."
-#~ msgstr ""
-#~ "Ya que no se ha encontrado ninguna bandeja de sistema o notificación, "
-#~ "esta acción cerraría normalmente Gossip.\n"
-#~ "\n"
-#~ "Esto es solo un recordatoria, desde ahora, Gossip terminará al realizar "
-#~ "esta acción a menos que desmarque la opción de abajo."
-
-#~ msgid "Edit Account _Details"
-#~ msgstr "Editar _detalles de la cuenta"
-
-#~ msgid "Click to enlarge"
-#~ msgstr "Pulsar para ampliar"
-
-#~ msgid "Word"
-#~ msgstr "Palabra"
-
-#~ msgid "Select who would you like to invite to room:"
-#~ msgstr "Seleccione a quién quiere invitar a esta sala:"
-
-#~ msgid "Select which room you would like to invite:"
-#~ msgstr "Seleccione a qué sala quiere invitar:"
-
-#~ msgid "New message from %s"
-#~ msgstr "Mensaje nuevo de %s"
-
-#~ msgid "Your invitation has been declined"
-#~ msgstr "Su invitación ha sido rechazada"
-
-#~ msgid "Accept"
-#~ msgstr "Aceptar"
-
-#~ msgid "Decline"
-#~ msgstr "Rechazar"
-
-#~ msgid "Name"
-#~ msgstr "Nombre"
-
-#~ msgid "Room"
-#~ msgstr "Sala"
-
-#~ msgid "Auto Connect"
-#~ msgstr "Autoconectar"
-
-#~ msgid "Information requested..."
-#~ msgstr "Información solicitada…"
-
-#~ msgid "Do you want to remove this contact from your roster?"
-#~ msgstr "¿Quiere quitar este contacto de su lista de contactos?"
-
-#~ msgid ""
-#~ "Please enter a new name for the group:\n"
-#~ "%s"
-#~ msgstr ""
-#~ "Introduzca un nombre nuevo para el grupo:\n"
-#~ "%s"
-
-#~ msgid "Select"
-#~ msgstr "Seleccionar"
-
-#~ msgid "Unsorted"
-#~ msgstr "Desordenados"
-
-#~ msgid ""
-#~ "Set the alias you want to use for:\n"
-#~ "<b>%s</b>\n"
-#~ "\n"
-#~ "You can retrieve contact information from the server."
-#~ msgstr ""
-#~ "Ponga el apodo que quiere utilizar:\n"
-#~ "<b>%s</b>\n"
-#~ "\n"
-#~ "Puede obtener la información del contacto desde el servidor."
-
-#~ msgid "New file transfer request from %s"
-#~ msgstr "Nueva solicitud de transferencia de archivo desde %s"
-
-#~ msgid "File transfer is not supported by both parties."
-#~ msgstr "La transferencia de archivos no está soportada por ambas partes."
-
-#~ msgid "Your file transfer offer declined."
-#~ msgstr "Su ofrecimiento de transferencia de archivo ha sido rechazado."
-
-#~ msgid "The other user decided not to continue."
-#~ msgstr "El otro usuario decidió no continuar."
-
-#~ msgid "Unknown error occurred during file transfer."
-#~ msgstr ""
-#~ "Ha ocurrido un error desconocido durante la transferencia del archivo."
-
-#~ msgid "%s would like to send you a file."
-#~ msgstr "%s quiere mandarle un archivo."
-
-#~ msgid "Someone would like to send you a file."
-#~ msgstr "Alguien quiere mandarle un archivo."
-
-#~ msgid "Select a file"
-#~ msgstr "Seleccione un archivo"
-
-#, fuzzy
-#~ msgid "Connecting..."
-#~ msgstr "Conectar"
-
-#~ msgid "Invited %s to join this chat conference."
-#~ msgstr "Invitó a %s a unirse en esta conferencia por chat."
-
-#, fuzzy
-#~ msgid "%s has set the topic: %s"
-#~ msgstr "%s ha puesto el tema"
-
-#, fuzzy
-#~ msgid "%s has joined the room"
-#~ msgstr "%s ha puesto el tema"
-
-#, fuzzy
-#~ msgid "%s has left the room"
-#~ msgstr "%s ha puesto el tema"
-
-#, fuzzy
-#~ msgid "Topic: %s"
-#~ msgstr "_Tema:"
-
-#~ msgid "Account"
-#~ msgstr "Cuenta"
-
-#~ msgid "Conversation With"
-#~ msgstr "Conversación con"
-
-#~ msgid "Date"
-#~ msgstr "Fecha"
-
-#~ msgid "Allow multiple instances of the application to run at the same time"
-#~ msgstr "Permite ejecutar varias instancias de la aplicación al mismo tiempo"
-
-#~ msgid "List the available accounts"
-#~ msgstr "Listar las cuentas disponibles"
-
-#~ msgid "Which account to connect to on startup"
-#~ msgstr "Cuenta a la cual conectarse al inicio"
-
-#~ msgid "ACCOUNT-NAME"
-#~ msgstr "NOMBRE-DE-CUENTA"
-
-#~ msgid "You can not use --no-connect together with --account"
-#~ msgstr "No puede usar --no-connect junto con --account"
-
-#~ msgid "No accounts available."
-#~ msgstr "Ninguna cuenta está disponible."
-
-#~ msgid "Available accounts:"
-#~ msgstr "Cuentas disponibles:"
-
-#~ msgid "[default]"
-#~ msgstr "[predeterminada]"
-
-#~ msgid "There is no account with the name '%s'."
-#~ msgstr "No hay ninguna cuenta llamada «%s»."
-
-#~ msgid "Join"
-#~ msgstr "Unirse"
-
-#~ msgid "Create"
-#~ msgstr "Crear"
-
-#~ msgid "Chat Rooms"
-#~ msgstr "Salas de chat"
-
-#~ msgid "Found %d conference rooms"
-#~ msgstr "Se encontraron %d salas de conferencia"
-
-#~ msgid "Browsing for conference rooms, please wait..."
-#~ msgstr "Buscando salas de conferencia, espere por favor…"
-
-#~ msgid "Browsing cancelled!"
-#~ msgstr "¡Búsqueda cancelada!"
-
-#~ msgid "Default"
-#~ msgstr "Predeterminado"
-
-#~ msgid "Chat!"
-#~ msgstr "Chat!"
-
-#~ msgid "%s wants to be added to your contact list."
-#~ msgstr "%s quiere que le añada a su lista de contactos."
-
-#~ msgid "Someone wants to be added to your contact list."
-#~ msgstr "Alguien quiere que le añada a su lista de contactos."
-
-#~ msgid "Subscription request"
-#~ msgstr "Solicitud de subscripción"
-
-#~ msgid "Show"
-#~ msgstr "Mostrar"
-
-#~ msgid "Contact Information"
-#~ msgstr "Información del contacto"
-
-#~ msgid "Subject: %s"
-#~ msgstr "Asunto: %s"
-
-#~ msgid "Suggestions for the word"
-#~ msgstr "Sugerencias para la palabra"
-
-#~ msgid "New subscription request from %s"
-#~ msgstr "Solicitud de subscripción de %s"
-
-#~ msgid "Do you want to add this person to your contact list?"
-#~ msgstr "¿Quiere añadir a esta persona a su lista de contactos?"
-
-#~ msgid "Do you want to add %s to your contact list?"
-#~ msgstr "¿Quiere añadir a %s a su lista de contactos?"
-
-#~ msgid "Please enter your %s account password"
-#~ msgstr "Introduzca la contraseña de su cuenta %s:"
-
-#, fuzzy
-#~ msgid "Logging in to account '%s'"
-#~ msgstr "Iniciando sesión con: %s"
-
-#~ msgid "Remember Password?"
-#~ msgstr "¿Desea recordar su contraseña?"
-
-#~ msgid "Do not show this again"
-#~ msgstr "No mostrar esto otra vez"
-
-#~ msgid "Could not display the help contents."
-#~ msgstr "No se pudo mostrar el contenido de la ayuda."
-
-#~ msgid "Select Your Avatar Image"
-#~ msgstr "Seleccione su avatar"
-
-#~ msgid "No Image"
-#~ msgstr "Sin imagen"
-
-#~ msgid "The server does not seem to be responding."
-#~ msgstr "El servidor parece no estar respondiendo."
-
-#~ msgid "Try again later."
-#~ msgstr "Inténtelo otra vez más tarde."
-
-#, fuzzy
-#~ msgid "Change"
-#~ msgstr "Chat"
-
-#~ msgid "Contact goes offline"
-#~ msgstr "El contacto se desconecta"
-
-#~ msgid "Contact goes online"
-#~ msgstr "El contacto se conecta"
-
-#~ msgid "Contact ID:"
-#~ msgstr "ID del contacto:"
-
-#~ msgid "Do you want to accept this file?"
-#~ msgstr "¿Quiere aceptar este archivo?"
-
-#~ msgid "File Transfer Request"
-#~ msgstr "Solicitud de transferencia de archivo"
-
-#~ msgid "File name:"
-#~ msgstr "Nombre de archivo:"
-
-#~ msgid "File size:"
-#~ msgstr "Tamaño del archivo:"
-
-#~ msgid "Not supported yet"
-#~ msgstr "Aún no soportado."
-
-#~ msgid "This person wishes to send you this file:"
-#~ msgstr "Esta persona desea mandarle este archivo:"
-
-#~ msgid "Web site:"
-#~ msgstr "Sitio web:"
-
-#~ msgid "_Accept"
-#~ msgstr "_Aceptar"
-
-#~ msgid "_Deny"
-#~ msgstr "_Denegar"
-
-#, fuzzy
-#~ msgid "<b>Topic:</b>"
-#~ msgstr "<b>Grupos</b>"
-
-#~ msgid "Account:"
-#~ msgstr "Cuenta:"
-
-#~ msgid "Browse:"
-#~ msgstr "Buscar:"
-
-#~ msgid "Edit Favorite Room"
-#~ msgstr "Editar sala favorita"
-
-#~ msgid ""
-#~ "Enter the room name to join here or click on one or more rooms in the "
-#~ "list."
-#~ msgstr ""
-#~ "Introduzca el nombre de la sala para unirse aquí o pulse en una o más "
-#~ "salas de la lista."
-
-#~ msgid "Group Chat"
-#~ msgstr "Grupo de chat"
-
-#~ msgid "Join New"
-#~ msgstr "Unirse a nuevo"
-
-#~ msgid "Join room on start_up"
-#~ msgstr "Unirse a la sala al _inicio"
-
-#~ msgid "Join this chat room when Gossip starts and you are connected"
-#~ msgstr ""
-#~ "Unirse a esta sala de chat cuando Gossip se inicia y estás conectado."
-
-#~ msgid "Manage Favorite Rooms"
-#~ msgstr "Gestionar salas favoritas"
-
-#~ msgid "N_ame:"
-#~ msgstr "_Nombre:"
-
-#~ msgid "Re_fresh"
-#~ msgstr "_Recargar"
-
-#~ msgid "S_erver:"
-#~ msgstr "_Servidor:"
-
-#~ msgid ""
-#~ "This list represents all chat rooms hosted on the server you have entered."
-#~ msgstr ""
-#~ "Esta lista representa todas los chat que alberga el servidor al que ha "
-#~ "entrado."
-
-#~ msgid "_Nickname:"
-#~ msgstr "A_podo:"
-
-#~ msgid "_Room:"
-#~ msgstr "_Sala:"
-
-#~ msgid "-"
-#~ msgstr "-"
-
-#~ msgid "<b>About</b>"
-#~ msgstr "<b>Acerca de</b>"
-
-#~ msgid "<b>Client Information</b>"
-#~ msgstr "<b>Información del cliente</b>"
-
-#~ msgid "<b>Groups</b>"
-#~ msgstr "<b>Grupos</b>"
-
-#~ msgid "<b>Name</b>"
-#~ msgstr "<b>Nombre</b>"
-
-#~ msgid "<b>Personal Details</b>"
-#~ msgstr "<b>Detalles personales</b>"
-
-#~ msgid "<b>Subscription</b>"
-#~ msgstr "<b>Subscripción</b>"
-
-#~ msgid "<span size=\"smaller\">Example: Mikael or user@server.org</span>"
-#~ msgstr ""
-#~ "<span size=\"smaller\">Ejemplo: Miguel  o usuario@servidor.org</span>"
-
-#~ msgid "Accou_nt:"
-#~ msgstr "_Cuenta:"
-
-#, fuzzy
-#~ msgid "Add Contact"
-#~ msgstr "_Añadir contacto…"
-
-#~ msgid "Alia_s:"
-#~ msgstr "Alia_s:"
-
-#~ msgid "Avatar:"
-#~ msgstr "Avatar:"
-
-#~ msgid "Ch_at"
-#~ msgstr "_Charlar"
-
-#~ msgid "Client:"
-#~ msgstr "Cliente:"
-
-#~ msgid "Con_tact:"
-#~ msgstr "_Contacto:"
-
-#~ msgid "Connect on S_tartup"
-#~ msgstr "Conectar al _iniciar"
-
-#~ msgid "Contacts"
-#~ msgstr "Contactos"
-
-#~ msgid "Country:"
-#~ msgstr "País:"
-
-#~ msgid "Decide _Later"
-#~ msgstr "_Decidir más tarde"
-
-#~ msgid "Edit Contact"
-#~ msgstr "Editar contacto"
-
-#~ msgid "Edit Groups"
-#~ msgstr "Editar grupos"
-
-#~ msgid "Email:"
-#~ msgstr "Correo-e:"
-
-#~ msgid "ID:"
-#~ msgstr "ID:"
-
-#~ msgid ""
-#~ "If you chose to decide later you will be asked the next time you log on."
-#~ msgstr ""
-#~ "Si elige decidir más tarde se le preguntará la próxima vez que inicie una "
-#~ "sesión."
-
-#~ msgid "Name:"
-#~ msgstr "Nombre:"
-
-#~ msgid "OS:"
-#~ msgstr "SO:"
-
-#~ msgid "Personal Details"
-#~ msgstr "Detalles personales"
-
-#~ msgid "R_egister"
-#~ msgstr "_Registrar"
-
-#~ msgid "Search"
-#~ msgstr "Buscar"
-
-#~ msgid ""
-#~ "Select the groups you want this contact to appear in, you can select more "
-#~ "than one group or no groups."
-#~ msgstr ""
-#~ "Seleccione los grupos donde quiere que aparezca este contacto, se puede "
-#~ "seleccionar más de un grupo o ningún grupo."
-
-#, fuzzy
-#~ msgid ""
-#~ "Set the alias you want to use for:\n"
-#~ "<b>foo@bar.baz</b>\n"
-#~ "\n"
-#~ "You can retrieve contact information from the server. "
-#~ msgstr ""
-#~ "Ponga el apodo que quiere utilizar:\n"
-#~ "<b>%s</b>\n"
-#~ "\n"
-#~ "Puede obtener la información del contacto desde el servidor."
-
-#~ msgid "Spell Checker"
-#~ msgstr "Revisor ortográfico"
-
-#~ msgid "Subscription Request"
-#~ msgstr "Solicitud de subscripción"
-
-#~ msgid "Suggestions for the word:"
-#~ msgstr "Sugerencias para la palabra:"
-
-#~ msgid ""
-#~ "This acts as a filter to the contact list below. You can use segments of "
-#~ "contact's name or ID, for example, \"jabber.org\" will list everyone "
-#~ "using that server"
-#~ msgstr ""
-#~ "Esto actúa como un filtro para la lista de contactos de abajo. Puede "
-#~ "utilizar segmentos del nombre del contacto o del ID, por ejemplo, «jabber."
-#~ "org» listará a todo el mundo usando ese servidor"
-
-#~ msgid "This is the name that will be used on your roster for this contact"
-#~ msgstr "Éste es el nombre que se usará en su lista para este contacto"
-
-#~ msgid "This name will be used to identify you in chat windows"
-#~ msgstr "Este nombre se usará para identificarle en sus ventanas de chat"
-
-#~ msgid ""
-#~ "This name will be used to identify you when new contacts lookup your "
-#~ "details"
-#~ msgstr ""
-#~ "Este nombre se usará para identificarle cuando sus contactos nuevos "
-#~ "busquen sus detalles"
-
-#~ msgid "Use default name here from the contact's VCard."
-#~ msgstr "Use aquí el nombre predeterminado de la tarjeta VCard del contacto."
-
-#~ msgid "Use system pro_xy"
-#~ msgstr "Usar el pro_xy del sistema"
-
-#~ msgid "Version:"
-#~ msgstr "Versión:"
-
-#~ msgid "View Previous Conversations"
-#~ msgstr "Ver conversaciones anteriores"
-
-#~ msgid "Which account do you want to use?"
-#~ msgstr "¿Qué cuenta quiere usar?"
-
-#~ msgid "You are not subscribed to this contact."
-#~ msgstr "Usted no está subscrito a este contacto."
-
-#~ msgid "_Connect"
-#~ msgstr "_Conectar"
-
-#, fuzzy
-#~ msgid "_Description:"
-#~ msgstr "Descripción:"
-
-#~ msgid "_Disconnect"
-#~ msgstr "_Desconectar"
-
-#, fuzzy
-#~ msgid "_Email:"
-#~ msgstr "Correo-e:"
-
-#, fuzzy
-#~ msgid ""
-#~ "_Enter the name or contact ID of the person you want to chat to below:"
-#~ msgstr ""
-#~ "Introduzca abajo el nombre o el ID de contacto de la persona con la que "
-#~ "quiera hablar:"
-
-#~ msgid "_For:"
-#~ msgstr "_Para:"
-
-#, fuzzy
-#~ msgid "_Full Name:"
-#~ msgstr "_Nombre:"
-
-#~ msgid "_Group:"
-#~ msgstr "_Grupo:"
-
-#, fuzzy
-#~ msgid "_Nick Name:"
-#~ msgstr "A_podo:"
-
-#, fuzzy
-#~ msgid "_Password:"
-#~ msgstr "Contra_seña:"
-
-#, fuzzy
-#~ msgid "_Quit Message:"
-#~ msgstr "Mensaje nuevo"
-
-#~ msgid "_Retrieve"
-#~ msgstr "_Recuperar"
-
-#~ msgid "_Subscribe"
-#~ msgstr "_Suscribirse"
-
-#, fuzzy
-#~ msgid "_Web site:"
-#~ msgstr "Sitio web:"
-
-#, fuzzy
-#~ msgid "irc account settings"
-#~ msgstr "propiedades de la cuenta jabber"
-
-#, fuzzy
-#~ msgid "msn account settings"
-#~ msgstr "propiedades de la cuenta jabber"
-
-#~ msgid "Server"
-#~ msgstr "Servidor"
-
-#~ msgid "    "
-#~ msgstr "    "
-
-#~ msgid "Gossip"
-#~ msgstr "Gossip"
-
-#~ msgid "Group:"
-#~ msgstr "Grupo:"
-
-#~ msgid "Nickname:"
-#~ msgstr "Apodo:"
-
-#~ msgid ""
-#~ "Set the alias you want to use for:\n"
-#~ "<b>martyn@imendio.com</b>\n"
-#~ "\n"
-#~ "You can retrieve contact information from the server. "
-#~ msgstr ""
-#~ "Ponga el alias que quiere usar: \n"
-#~ "<b>martyn@imendio.com</b>\n"
-#~ "\n"
-#~ "Puede obtener la  información del contacto desde el servidor."
-
-#~ msgid "Web Site:"
-#~ msgstr "Sitio web:"
-
-#~ msgid "_Forget"
-#~ msgstr "_Olvidar"
-
-#~ msgid "Press Subscribe to request to receive their status"
-#~ msgstr "Pulse «Suscribir» para solicitar recibir su estado"
