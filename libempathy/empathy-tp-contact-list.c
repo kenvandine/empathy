@@ -1470,24 +1470,12 @@ tp_contact_list_group_members_added_cb (GossipTelepathyGroup *group,
 
 	for (l = added_list; l; l = l->next) {
 		GossipContact *contact;
-		GList         *contact_groups;
 
 		contact = GOSSIP_CONTACT (l->data);
-		contact_groups = gossip_contact_get_groups (contact);
 
-		/* FIXME: this leaks */
-		if (!g_list_find_custom (contact_groups,
-					 group_name,
-					 (GCompareFunc) strcmp)) {
-			gossip_debug (DEBUG_DOMAIN, "Contact %s added to group '%s'",
-				      gossip_contact_get_name (contact),
-				      group_name);
-			contact_groups = g_list_append (contact_groups,
-							g_strdup (group_name));
-			tp_contact_list_block_contact (list, contact);
-			gossip_contact_set_groups (contact, contact_groups);
-			tp_contact_list_unblock_contact (list, contact);
-		}
+		tp_contact_list_block_contact (list, contact);
+		gossip_contact_add_group (contact, group_name);
+		tp_contact_list_unblock_contact (list, contact);
 
 		g_object_unref (contact);
 	}
@@ -1514,29 +1502,12 @@ tp_contact_list_group_members_removed_cb (GossipTelepathyGroup *group,
 
 	for (l = removed_list; l; l = l->next) {
 		GossipContact *contact;
-		GList         *contact_groups;
-		GList         *to_remove;
 
-		/* FIXME: Does it leak ? */
-		contact = GOSSIP_CONTACT (l->data);
-		contact_groups = gossip_contact_get_groups (contact);
-		contact_groups = g_list_copy (contact_groups);
+		contact = l->data;
 
-		to_remove = g_list_find_custom (contact_groups,
-						group_name,
-						(GCompareFunc) strcmp);
-		if (to_remove) {
-			gossip_debug (DEBUG_DOMAIN, "Contact %d removed from group '%s'",
-				      gossip_contact_get_handle (contact),
-				      group_name);
-			contact_groups = g_list_remove_link (contact_groups,
-							     to_remove);
-			tp_contact_list_block_contact (list, contact);
-			gossip_contact_set_groups (contact, contact_groups);
-			tp_contact_list_unblock_contact (list, contact);
-		}
-
-		g_list_free (contact_groups);
+		tp_contact_list_block_contact (list, contact);
+		gossip_contact_remove_group (contact, group_name);
+		tp_contact_list_unblock_contact (list, contact);
 
 		g_object_unref (contact);
 	}

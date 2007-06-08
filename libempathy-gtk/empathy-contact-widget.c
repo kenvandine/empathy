@@ -38,7 +38,6 @@ typedef struct {
 	GossipContact   *contact;
 	gboolean         is_user;
 	gboolean         editable;
-	gboolean         changes_made;
 	GtkCellRenderer *renderer;
 
 	GtkWidget       *vbox_contact_widget;
@@ -74,11 +73,6 @@ typedef struct {
 	GtkTreeIter           found_iter;
 } FindName;
 
-typedef struct {
-	EmpathyContactWidget *information;
-	GList                *list;
-} FindSelected;
-
 static void     contact_widget_destroy_cb                  (GtkWidget             *widget,
 							    EmpathyContactWidget  *information);
 static void     contact_widget_contact_setup               (EmpathyContactWidget  *information);
@@ -97,15 +91,11 @@ static gboolean contact_widget_model_find_name_foreach     (GtkTreeModel        
 							    GtkTreePath           *path,
 							    GtkTreeIter           *iter,
 							    FindName              *data);
-static GList *  contact_widget_model_find_selected         (EmpathyContactWidget  *information);
-static gboolean contact_widget_model_find_selected_foreach (GtkTreeModel          *model,
-							    GtkTreePath           *path,
-							    GtkTreeIter           *iter,
-							    FindSelected          *data);
 static void     contact_widget_cell_toggled                (GtkCellRendererToggle *cell,
 							    gchar                 *path_string,
 							    EmpathyContactWidget  *information);
-static void     contact_widget_entry_alias_changed_cb      (GtkEditable           *editable,
+static void     contact_widget_entry_alias_focus_event_cb  (GtkEditable           *editable,
+							    GdkEventFocus         *event,
 							    EmpathyContactWidget  *information);
 static void     contact_widget_entry_group_changed_cb      (GtkEditable           *editable,
 							    EmpathyContactWidget  *information);
@@ -185,32 +175,6 @@ empathy_contact_widget_new (GossipContact *contact,
 	return information->vbox_contact_widget;
 }
 
-void
-empathy_contact_widget_save (GtkWidget *widget)
-{
-	EmpathyContactWidget *information;
-	const gchar          *name;
-	GList                *groups;
-
-	g_return_if_fail (GTK_IS_WIDGET (widget));
-
-	information = g_object_get_data (G_OBJECT (widget), "EmpathyContactWidget");
-	if (!information ||
-	    !information->editable ||
-	    !information->changes_made) {
-		return;
-	}
-
-	name = gtk_entry_get_text (GTK_ENTRY (information->widget_alias));
-	groups = contact_widget_model_find_selected (information);
-
-	gossip_contact_set_name (information->contact, name);
-	gossip_contact_set_groups (information->contact, groups);
-
-	g_list_foreach (groups, (GFunc) g_free, NULL);
-	g_list_free (groups);
-}
-
 GossipContact *
 empathy_contact_widget_get_contact (GtkWidget *widget)
 {
@@ -270,8 +234,8 @@ contact_widget_contact_setup (EmpathyContactWidget *information)
 	/* Setup alias entry or label */
 	if (information->editable) {
 		information->widget_alias = gtk_entry_new ();
-		g_signal_connect (information->widget_alias, "changed",
-				  G_CALLBACK (contact_widget_entry_alias_changed_cb),
+		g_signal_connect (information->widget_alias, "focus-out-event",
+				  G_CALLBACK (contact_widget_entry_alias_focus_event_cb),
 				  information);
 	} else {
 		information->widget_alias = gtk_label_new (NULL);
@@ -430,8 +394,7 @@ contact_widget_groups_populate_data (EmpathyContactWidget *information)
 	GtkTreeView           *view;
 	GtkListStore          *store;
 	GtkTreeIter            iter;
-	GList                 *groups, *l;
-	GList                 *my_groups = NULL;
+	GList                 *my_groups, *l;
 	GList                 *all_groups;
 
 	view = GTK_TREE_VIEW (information->treeview_groups);
@@ -439,28 +402,14 @@ contact_widget_groups_populate_data (EmpathyContactWidget *information)
 
 	manager = empathy_contact_manager_new ();
 	all_groups = empathy_contact_manager_get_groups (manager);
-	groups = gossip_contact_get_groups (information->contact);
+	my_groups = gossip_contact_get_groups (information->contact);
 	g_object_unref (manager);
-
-	for (l = groups; l; l = l->next) {
-		const gchar *group_str;
-
-		group_str = l->data;
-		if (strcmp (group_str, _("Unsorted")) == 0) {
-			continue;
-		}
-
-		my_groups = g_list_append (my_groups, g_strdup (group_str));
-	}
 
 	for (l = all_groups; l; l = l->next) {
 		const gchar *group_str;
 		gboolean     enabled;
 
 		group_str = l->data;
-		if (strcmp (group_str, _("Unsorted")) == 0) {
-			continue;
-		}
 
 		enabled = g_list_find_custom (my_groups,
 					      group_str,
@@ -473,9 +422,6 @@ contact_widget_groups_populate_data (EmpathyContactWidget *information)
 				    COL_ENABLED, enabled,
 				    -1);
 	}
-
-	g_list_foreach (my_groups, (GFunc) g_free, NULL);
-	g_list_free (my_groups);
 
 	g_list_free (all_groups);
 }
@@ -548,54 +494,6 @@ contact_widget_model_find_name_foreach (GtkTreeModel *model,
 	return FALSE;
 }
 
-static GList *
-contact_widget_model_find_selected (EmpathyContactWidget *information)
-{
-	GtkTreeView  *view;
-	GtkTreeModel *model;
-	FindSelected  data;
-
-	data.information = information;
-	data.list = NULL;
-
-	view = GTK_TREE_VIEW (information->treeview_groups);
-	model = gtk_tree_view_get_model (view);
-
-	gtk_tree_model_foreach (model,
-				(GtkTreeModelForeachFunc) contact_widget_model_find_selected_foreach,
-				&data);
-
-	return data.list;
-}
-
-static gboolean
-contact_widget_model_find_selected_foreach (GtkTreeModel *model,
-					    GtkTreePath  *path,
-					    GtkTreeIter  *iter,
-					    FindSelected *data)
-{
-	gchar    *name;
-	gboolean  selected;
-
-	gtk_tree_model_get (model, iter,
-			    COL_NAME, &name,
-			    COL_ENABLED, &selected,
-			    -1);
-
-	if (!name) {
-		return FALSE;
-	}
-
-	if (selected) {
-		data->list = g_list_append (data->list, name);
-		return FALSE;
-	}
-
-	g_free (name);
-
-	return FALSE;
-}
-
 static void
 contact_widget_cell_toggled (GtkCellRendererToggle *cell,
 			     gchar                 *path_string,
@@ -607,6 +505,7 @@ contact_widget_cell_toggled (GtkCellRendererToggle *cell,
 	GtkTreePath  *path;
 	GtkTreeIter   iter;
 	gboolean      enabled;
+	gchar        *group;
 
 	view = GTK_TREE_VIEW (information->treeview_groups);
 	model = gtk_tree_view_get_model (view);
@@ -615,21 +514,34 @@ contact_widget_cell_toggled (GtkCellRendererToggle *cell,
 	path = gtk_tree_path_new_from_string (path_string);
 
 	gtk_tree_model_get_iter (model, &iter, path);
-	gtk_tree_model_get (model, &iter, COL_ENABLED, &enabled, -1);
+	gtk_tree_model_get (model, &iter,
+			    COL_ENABLED, &enabled,
+			    COL_NAME, &group,
+			    -1);
 
-	enabled ^= 1;
-
-	gtk_list_store_set (store, &iter, COL_ENABLED, enabled, -1);
+	gtk_list_store_set (store, &iter, COL_ENABLED, !enabled, -1);
 	gtk_tree_path_free (path);
 
-	information->changes_made = TRUE;
+	if (group) {
+		if (enabled) {
+			gossip_contact_remove_group (information->contact, group);
+		} else {
+			gossip_contact_add_group (information->contact, group);	
+		}
+
+		g_free (group);
+	}
 }
 
 static void
-contact_widget_entry_alias_changed_cb (GtkEditable           *editable,
-				       EmpathyContactWidget  *information)
+contact_widget_entry_alias_focus_event_cb (GtkEditable          *editable,
+					   GdkEventFocus        *event,
+					   EmpathyContactWidget *information)
 {
-	information->changes_made = TRUE;
+	const gchar *name;
+
+	name = gtk_entry_get_text (GTK_ENTRY (editable));
+	gossip_contact_set_name (information->contact, name);
 }
 
 static void
@@ -677,7 +589,7 @@ contact_widget_button_group_clicked_cb (GtkButton             *button,
 			    COL_ENABLED, TRUE,
 			    -1);
 
-	information->changes_made = TRUE;
+	gossip_contact_add_group (information->contact, group);
 }
 
 static void

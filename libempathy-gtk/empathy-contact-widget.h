@@ -31,7 +31,6 @@ G_BEGIN_DECLS
 
 GtkWidget *    empathy_contact_widget_new         (GossipContact *contact,
 						   gboolean       editable);
-void           empathy_contact_widget_save        (GtkWidget     *widget);
 GossipContact *empathy_contact_widget_get_contact (GtkWidget     *widget);
 
 G_END_DECLS

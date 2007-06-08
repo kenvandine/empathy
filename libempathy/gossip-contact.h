@@ -85,6 +85,10 @@ void               gossip_contact_set_subscription          (GossipContact      
 							     GossipSubscription  subscription);
 void               gossip_contact_set_handle                (GossipContact      *contact,
 							     guint               handle);
+void               gossip_contact_add_group                 (GossipContact      *contact,
+							     const gchar        *group);
+void               gossip_contact_remove_group              (GossipContact      *contact,
+							     const gchar        *group);
 gboolean           gossip_contact_is_online                 (GossipContact      *contact);
 gboolean           gossip_contact_is_in_group               (GossipContact      *contact,
 							     const gchar        *group);

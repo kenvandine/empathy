@@ -592,11 +592,50 @@ gossip_contact_set_handle (GossipContact *contact,
 {
 	GossipContactPriv *priv;
 
+	g_return_if_fail (GOSSIP_IS_CONTACT (contact));
+
 	priv = GET_PRIV (contact);
 
 	priv->handle = handle;
 
 	g_object_notify (G_OBJECT (contact), "handle");
+}
+
+void
+gossip_contact_add_group (GossipContact *contact,
+			  const gchar   *group)
+{
+	GossipContactPriv *priv;
+
+	g_return_if_fail (GOSSIP_IS_CONTACT (contact));
+	g_return_if_fail (group != NULL);
+
+	priv = GET_PRIV (contact);
+
+	if (!g_list_find_custom (priv->groups, group, (GCompareFunc) strcmp)) {
+		priv->groups = g_list_prepend (priv->groups, g_strdup (group));
+		g_object_notify (G_OBJECT (contact), "groups");
+	}
+}
+
+void
+gossip_contact_remove_group (GossipContact *contact,
+			     const gchar   *group)
+{
+	GossipContactPriv *priv;
+	GList             *l;
+
+	g_return_if_fail (GOSSIP_IS_CONTACT (contact));
+	g_return_if_fail (group != NULL);
+
+	priv = GET_PRIV (contact);
+
+	l = g_list_find_custom (priv->groups, group, (GCompareFunc) strcmp);
+	if (l) {
+		g_free (l->data);
+		priv->groups = g_list_delete_link (priv->groups, l);
+		g_object_notify (G_OBJECT (contact), "groups");
+	}
 }
 
 gboolean

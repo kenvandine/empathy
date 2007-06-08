@@ -1,5 +1,18 @@
 2007-06-08 Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/empathy-contact-dialogs.c:
+	* libempathy-gtk/empathy-contact-widget.c:
+	* libempathy-gtk/empathy-contact-widget.h: Do not save when closing the
+	dialog. Update information in real-time and just provides a "Close"
+	button. That's more GNOME spirite.
+	* libempathy/empathy-tp-contact-list.c:
+	* libempathy/gossip-contact.h:
+	* libempathy/gossip-contact.c: New methods:
+	gossip_contact_add/remove_group(). This fixes leaks when a contact is
+	added/removed from a group.
+
+2007-06-08 Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/gossip-chat.c: Fix build on 64bits arch.
 	Fixes bug #444680 (Matej Cepl).
 

@@ -53,7 +53,6 @@ subscription_dialog_response_cb (GtkDialog *dialog,
 
 	manager = empathy_contact_manager_new ();
 	contact = empathy_contact_widget_get_contact (contact_widget);
-	empathy_contact_widget_save (contact_widget);
 
 	if (response == GTK_RESPONSE_YES) {
 		empathy_contact_list_add (EMPATHY_CONTACT_LIST (manager),
@@ -131,11 +130,6 @@ contact_information_response_cb (GtkDialog *dialog,
 	GossipContact *contact;
 
 	contact = empathy_contact_widget_get_contact (contact_widget);
-
-	if (response == GTK_RESPONSE_OK) {
-		empathy_contact_widget_save (contact_widget);
-	}
-
 	g_hash_table_remove (information_dialogs, contact);
 }
 
@@ -163,35 +157,20 @@ empathy_contact_information_dialog_show (GossipContact *contact,
 		return;
 	}
 
+	/* Create dialog */
 	dialog = gtk_dialog_new ();
 	gtk_dialog_set_has_separator (GTK_DIALOG (dialog), FALSE);
 	gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
 
-	if (edit) {
-		/* Cancel button */
-		button = gtk_button_new_with_label (GTK_STOCK_CANCEL);
-		gtk_button_set_use_stock (GTK_BUTTON (button), TRUE);
-		gtk_dialog_add_action_widget (GTK_DIALOG (dialog),
-					      button,
-					      GTK_RESPONSE_CANCEL);
-		gtk_widget_show (button);
-
-		button = gtk_button_new_with_label (GTK_STOCK_SAVE);
-		gtk_button_set_use_stock (GTK_BUTTON (button), TRUE);
-		gtk_dialog_add_action_widget (GTK_DIALOG (dialog),
-					      button,
-					      GTK_RESPONSE_OK);
-		gtk_widget_show (button);
-	} else {
-		/* Close button */
-		button = gtk_button_new_with_label (GTK_STOCK_CLOSE);
-		gtk_button_set_use_stock (GTK_BUTTON (button), TRUE);
-		gtk_dialog_add_action_widget (GTK_DIALOG (dialog),
-					      button,
-					      GTK_RESPONSE_CLOSE);
-		gtk_widget_show (button);
-	}
+	/* Close button */
+	button = gtk_button_new_with_label (GTK_STOCK_CLOSE);
+	gtk_button_set_use_stock (GTK_BUTTON (button), TRUE);
+	gtk_dialog_add_action_widget (GTK_DIALOG (dialog),
+				      button,
+				      GTK_RESPONSE_CLOSE);
+	gtk_widget_show (button);
 	
+	/* Contact infor widget */
 	contact_widget = empathy_contact_widget_new (contact, edit);
 	gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox),
 			    contact_widget,
