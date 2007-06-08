@@ -1,5 +1,10 @@
 2007-06-08 Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy/gossip-chatroom-manager.c: Checks if the chatroom has
+	an account and a room. Fixes bug #444135.
+
+2007-06-08 Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/empathy-contact-dialogs.c:
 	* libempathy-gtk/empathy-contact-widget.c:
 	* libempathy-gtk/empathy-contact-widget.h: Do not save when closing the

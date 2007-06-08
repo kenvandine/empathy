@@ -229,7 +229,8 @@ gossip_chatroom_manager_find (GossipChatroomManager *manager,
 		this_account = gossip_chatroom_get_account (chatroom);
 		this_room = gossip_chatroom_get_room (chatroom);
 
-		if (gossip_account_equal (account, this_account) &&
+		if (this_account && this_room &&
+		    gossip_account_equal (account, this_account) &&
 		    strcmp (this_room, room) == 0) {
 			return chatroom;
 		}
