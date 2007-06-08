@@ -1087,7 +1087,7 @@ chat_state_changed_cb (EmpathyTpChat             *tp_chat,
 	    (!was_composing && priv->compositors)) {
 		/* Composing state changed */
 		g_signal_emit (chat, signals[COMPOSING], 0,
-			       (gboolean) priv->compositors);
+			       priv->compositors != NULL);
 	}
 }
 
