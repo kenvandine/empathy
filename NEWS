@@ -1,3 +1,14 @@
+NEW in 0.7:
+===========
+ - Adding new contacts.
+ - Accept/Reject contacts who wants to get our presence.
+ - Edit/View contacts information.
+ - Get name and topic properties for chatrooms.
+ - Log chats and display 10 last messages when opening a new chat.
+ - Set presence to available for protocols that do not supports presence
+   (SIP, IRC).
+ - Lots of bugs fixed.
+
 NEW in 0.6:
 ===========
  - Join room when clicking on favorite rooms.
