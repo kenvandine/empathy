@@ -1,5 +1,17 @@
 2007-06-09 Xavier Claessens  <xclaesse@gmail.com>
 
+	* configure.ac: Bump version to 0.8
+
+	* libempathy-gtk/gossip-ui-utils.c: Fix usage of contact subscription
+	property.
+
+	* data/gtalk.profile:
+	* data/jabber.profile:
+	* data/msn.profile: Add VCardField and VCardDefault to profiles for
+	eds-sync support.
+
+2007-06-09 Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/empathy-contact-widget.c: Fix a warning.
 
 2007-06-09 Xavier Claessens  <xclaesse@gmail.com>

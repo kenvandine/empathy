@@ -383,15 +383,12 @@ gossip_icon_name_for_contact (GossipContact *contact)
 			      EMPATHY_IMAGE_OFFLINE);
 
 	presence = gossip_contact_get_presence (contact);
-
 	if (presence) {
 		return gossip_icon_name_for_presence (presence);
 	}
 
 	subscription = gossip_contact_get_subscription (contact);
-
-	if (subscription != GOSSIP_SUBSCRIPTION_BOTH &&
-	    subscription != GOSSIP_SUBSCRIPTION_TO) {
+	if (!(subscription & GOSSIP_SUBSCRIPTION_FROM)) {
 		return EMPATHY_IMAGE_PENDING;
 	}
 
