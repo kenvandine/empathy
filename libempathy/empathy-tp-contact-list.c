@@ -562,7 +562,7 @@ empathy_tp_contact_list_get_from_id (EmpathyTpContactList *list,
 
 	contact = tp_contact_list_find (EMPATHY_CONTACT_LIST (list), id);
 	if (contact) {
-		return contact;
+		return g_object_ref (contact);
 	}
 
 	/* The id is unknown, requests a new handle */
@@ -574,7 +574,7 @@ empathy_tp_contact_list_get_from_id (EmpathyTpContactList *list,
 			      "RequestHandle for %s failed: %s", id,
 			      error ? error->message : "No error given");
 		g_clear_error (&error);
-		return 0;
+		return NULL;
 	}
 
 	handle = g_array_index(handles, guint, 0);

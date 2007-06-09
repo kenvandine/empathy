@@ -36,8 +36,23 @@
 #include "empathy-contact-widget.h"
 #include "gossip-ui-utils.h"
 
-static GHashTable *subscription_dialogs = NULL;
-static GHashTable *information_dialogs = NULL;
+static GList *subscription_dialogs = NULL;
+static GList *information_dialogs = NULL;
+static GtkWidget *new_contact_dialog = NULL;
+
+
+static gint
+contact_dialogs_find (GtkDialog     *dialog,
+		      GossipContact *contact)
+{
+	GtkWidget     *contact_widget;
+	GossipContact *this_contact;
+
+	contact_widget = g_object_get_data (G_OBJECT (dialog), "contact_widget");
+	this_contact = empathy_contact_widget_get_contact (contact_widget);
+
+	return !gossip_contact_equal (contact, this_contact);
+}
 
 /*
  *  Subscription dialog
@@ -65,7 +80,8 @@ subscription_dialog_response_cb (GtkDialog *dialog,
 					     _("Sorry, I don't want you in my contact list."));
 	}
 
-	g_hash_table_remove (subscription_dialogs, contact);
+	subscription_dialogs = g_list_remove (subscription_dialogs, dialog);
+	gtk_widget_destroy (GTK_WIDGET (dialog));
 	g_object_unref (manager);
 }
 
@@ -76,19 +92,15 @@ empathy_subscription_dialog_show (GossipContact *contact,
 	GtkWidget *dialog;
 	GtkWidget *hbox_subscription;
 	GtkWidget *contact_widget;
+	GList     *l;
 
 	g_return_if_fail (GOSSIP_IS_CONTACT (contact));
 
-	if (!subscription_dialogs) {
-		subscription_dialogs = g_hash_table_new_full (gossip_contact_hash,
-							      gossip_contact_equal,
-							      (GDestroyNotify) g_object_unref,
-							      (GDestroyNotify) gtk_widget_destroy);
-	}
-
-	dialog = g_hash_table_lookup (subscription_dialogs, contact);
-	if (dialog) {
-		gtk_window_present (GTK_WINDOW (dialog));
+	l = g_list_find_custom (subscription_dialogs,
+				contact,
+				(GCompareFunc) contact_dialogs_find);
+	if (l) {
+		gtk_window_present (GTK_WINDOW (l->data));
 		return;
 	}
 
@@ -99,13 +111,14 @@ empathy_subscription_dialog_show (GossipContact *contact,
 				      "hbox_subscription", &hbox_subscription,
 				      NULL);
 
-	g_hash_table_insert (subscription_dialogs, g_object_ref (contact), dialog);
-
 	contact_widget = empathy_contact_widget_new (contact, TRUE);
 	gtk_box_pack_end (GTK_BOX (hbox_subscription),
 			  contact_widget,
 			  TRUE, TRUE,
 			  0);
+
+	g_object_set_data (G_OBJECT (dialog), "contact_widget", contact_widget);
+	subscription_dialogs = g_list_prepend (subscription_dialogs, dialog);
 
 	g_signal_connect (dialog, "response",
 			  G_CALLBACK (subscription_dialog_response_cb),
@@ -127,10 +140,8 @@ contact_information_response_cb (GtkDialog *dialog,
 				 gint       response,
 				 GtkWidget *contact_widget)
 {
-	GossipContact *contact;
-
-	contact = empathy_contact_widget_get_contact (contact_widget);
-	g_hash_table_remove (information_dialogs, contact);
+	information_dialogs = g_list_remove (information_dialogs, dialog);
+	gtk_widget_destroy (GTK_WIDGET (dialog));
 }
 
 void
@@ -141,19 +152,15 @@ empathy_contact_information_dialog_show (GossipContact *contact,
 	GtkWidget *dialog;
 	GtkWidget *button;
 	GtkWidget *contact_widget;
+	GList     *l;
 
 	g_return_if_fail (GOSSIP_IS_CONTACT (contact));
 
-	if (!information_dialogs) {
-		information_dialogs = g_hash_table_new_full (gossip_contact_hash,
-							     gossip_contact_equal,
-							     (GDestroyNotify) g_object_unref,
-							     (GDestroyNotify) gtk_widget_destroy);
-	}
-
-	dialog = g_hash_table_lookup (information_dialogs, contact);
-	if (dialog) {
-		gtk_window_present (GTK_WINDOW (dialog));
+	l = g_list_find_custom (information_dialogs,
+				contact,
+				(GCompareFunc) contact_dialogs_find);
+	if (l) {
+		gtk_window_present (GTK_WINDOW (l->data));
 		return;
 	}
 
@@ -176,11 +183,90 @@ empathy_contact_information_dialog_show (GossipContact *contact,
 			    contact_widget,
 			    TRUE, TRUE, 0);
 
+	g_object_set_data (G_OBJECT (dialog), "contact_widget", contact_widget);
+	information_dialogs = g_list_prepend (information_dialogs, dialog);
+
 	g_signal_connect (dialog, "response",
 			  G_CALLBACK (contact_information_response_cb),
 			  contact_widget);
 
-	g_hash_table_insert (information_dialogs, g_object_ref (contact), dialog);
+	if (parent) {
+		gtk_window_set_transient_for (GTK_WINDOW (dialog), parent);
+	}
+
+	gtk_widget_show (dialog);
+}
+
+/*
+ *  New contact dialog
+ */
+
+static void
+new_contact_response_cb (GtkDialog *dialog,
+			 gint       response,
+			 GtkWidget *contact_widget)
+{
+	EmpathyContactManager *manager;
+	GossipContact         *contact;
+
+	manager = empathy_contact_manager_new ();
+	contact = empathy_contact_widget_get_contact (contact_widget);
+
+	if (contact && response == GTK_RESPONSE_OK) {
+		empathy_contact_list_add (EMPATHY_CONTACT_LIST (manager),
+					  contact,
+					  _("I would like to add you to my contact list."));
+	}
+
+	new_contact_dialog = NULL;
+	gtk_widget_destroy (GTK_WIDGET (dialog));
+	g_object_unref (manager);
+}
+
+void
+empathy_new_contact_dialog_show (GtkWindow *parent)
+{
+	GtkWidget *dialog;
+	GtkWidget *button;
+	GtkWidget *contact_widget;
+
+	if (new_contact_dialog) {
+		gtk_window_present (GTK_WINDOW (new_contact_dialog));
+		return;
+	}
+
+	/* Create dialog */
+	dialog = gtk_dialog_new ();
+	gtk_dialog_set_has_separator (GTK_DIALOG (dialog), FALSE);
+	gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
+
+	/* Cancel button */
+	button = gtk_button_new_with_label (GTK_STOCK_CANCEL);
+	gtk_button_set_use_stock (GTK_BUTTON (button), TRUE);
+	gtk_dialog_add_action_widget (GTK_DIALOG (dialog),
+				      button,
+				      GTK_RESPONSE_CANCEL);
+	gtk_widget_show (button);
+	
+	/* Add button */
+	button = gtk_button_new_with_label (GTK_STOCK_ADD);
+	gtk_button_set_use_stock (GTK_BUTTON (button), TRUE);
+	gtk_dialog_add_action_widget (GTK_DIALOG (dialog),
+				      button,
+				      GTK_RESPONSE_OK);
+	gtk_widget_show (button);
+
+	/* Contact infor widget */
+	contact_widget = empathy_contact_widget_new (NULL, TRUE);
+	gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox),
+			    contact_widget,
+			    TRUE, TRUE, 0);
+
+	new_contact_dialog = dialog;
+
+	g_signal_connect (dialog, "response",
+			  G_CALLBACK (new_contact_response_cb),
+			  contact_widget);
 
 	if (parent) {
 		gtk_window_set_transient_for (GTK_WINDOW (dialog), parent);

@@ -1,3 +1,16 @@
+2007-06-09 Xavier Claessens  <xclaesse@gmail.com>
+
+	* libempathy-gtk/empathy-main-window.c:
+	* libempathy-gtk/empathy-contact-widget.glade:
+	* libempathy-gtk/empathy-contact-dialogs.c:
+	* libempathy-gtk/empathy-contact-dialogs.h:
+	* libempathy-gtk/empathy-contact-widget.c: We can now add a new contact.
+	EmpathyContactWidget can change the contact it's displaying on-the-fly,
+	like that we can display info when typing the contact ID we want to
+	add to our contact list.
+
+	* libempathy/empathy-tp-contact-list.c: Fix a refcount bug.
+
 2007-06-08 Xavier Claessens  <xclaesse@gmail.com>
 
 	* libempathy/gossip-chatroom-manager.c: Checks if the chatroom has

@@ -34,6 +34,7 @@ void empathy_subscription_dialog_show        (GossipContact *contact,
 void empathy_contact_information_dialog_show (GossipContact *contact,
 					      GtkWindow     *parent,
 					      gboolean       edit);
+void empathy_new_contact_dialog_show         (GtkWindow     *parent);
 
 G_END_DECLS
 

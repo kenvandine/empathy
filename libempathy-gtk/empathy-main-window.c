@@ -37,6 +37,7 @@
 #include <libempathy/empathy-contact-manager.h>
 
 #include "empathy-main-window.h"
+#include "empathy-contact-dialogs.h"
 #include "ephy-spinner.h"
 #include "gossip-contact-list-store.h"
 #include "gossip-contact-list-view.h"
@@ -566,7 +567,7 @@ static void
 main_window_chat_add_contact_cb (GtkWidget         *widget,
 				 EmpathyMainWindow *window)
 {
-	//gossip_add_contact_dialog_show (GTK_WINDOW (window->window), NULL);
+	empathy_new_contact_dialog_show (GTK_WINDOW (window->window));
 }
 
 static void
