@@ -13,7 +13,7 @@ libempathy_gtk_la_SOURCES =             					\
 	empathy-main-window.c			empathy-main-window.h		\
 	empathy-status-icon.c			empathy-status-icon.h		\
 	empathy-contact-widget.c		empathy-contact-widget.h	\
-	empathy-contact-dialogs.c		empathy-contact-dialogs.c	\
+	empathy-contact-dialogs.c		empathy-contact-dialogs.h	\
 	gossip-accounts-dialog.c		gossip-accounts-dialog.h	\
 	gossip-account-widget-generic.c		gossip-account-widget-generic.h	\
 	gossip-account-widget-jabber.c		gossip-account-widget-jabber.h	\
