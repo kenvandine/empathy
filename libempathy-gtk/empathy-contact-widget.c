@@ -98,7 +98,7 @@ static void     contact_widget_account_changed_cb         (GtkComboBox          
 static gboolean contact_widget_id_focus_out_cb            (GtkWidget             *widget,
 							   GdkEventFocus         *event,
 							   EmpathyContactWidget  *information);
-static void     contact_widget_entry_alias_focus_event_cb (GtkEditable           *editable,
+static gboolean contact_widget_entry_alias_focus_event_cb (GtkEditable           *editable,
 							   GdkEventFocus         *event,
 							   EmpathyContactWidget  *information);
 static void     contact_widget_name_notify_cb             (EmpathyContactWidget  *information);
@@ -435,7 +435,7 @@ contact_widget_id_focus_out_cb (GtkWidget            *widget,
 	return FALSE;
 }
 
-static void
+static gboolean
 contact_widget_entry_alias_focus_event_cb (GtkEditable          *editable,
 					   GdkEventFocus        *event,
 					   EmpathyContactWidget *information)
@@ -446,6 +446,8 @@ contact_widget_entry_alias_focus_event_cb (GtkEditable          *editable,
 		name = gtk_entry_get_text (GTK_ENTRY (editable));
 		gossip_contact_set_name (information->contact, name);
 	}
+
+	return FALSE;
 }
 
 static void

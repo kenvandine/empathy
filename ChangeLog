@@ -1,5 +1,9 @@
 2007-06-09 Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/empathy-contact-widget.c: Fix a warning.
+
+2007-06-09 Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/empathy-main-window.c:
 	* libempathy-gtk/empathy-contact-widget.glade:
 	* libempathy-gtk/empathy-contact-dialogs.c:
