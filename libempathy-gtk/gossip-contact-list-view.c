@@ -113,27 +113,27 @@ static void        contact_list_view_drag_data_received        (GtkWidget       
 								gint                        y,
 								GtkSelectionData           *selection,
 								guint                       info,
-								guint                       time,
-								gpointer                    user_data);
+								guint                       time);
 static gboolean    contact_list_view_drag_motion               (GtkWidget                  *widget,
 								GdkDragContext             *context,
 								gint                        x,
 								gint                        y,
-								guint                       time,
-								gpointer                    data);
+								guint                       time);
 static gboolean    contact_list_view_drag_motion_cb            (DragMotionData             *data);
 static void        contact_list_view_drag_begin                (GtkWidget                  *widget,
-								GdkDragContext             *context,
-								gpointer                    user_data);
+								GdkDragContext             *context);
 static void        contact_list_view_drag_data_get             (GtkWidget                  *widget,
 								GdkDragContext             *context,
 								GtkSelectionData           *selection,
 								guint                       info,
-								guint                       time,
-								gpointer                    user_data);
+								guint                       time);
 static void        contact_list_view_drag_end                  (GtkWidget                  *widget,
-								GdkDragContext             *context,
-								gpointer                    user_data);
+								GdkDragContext             *context);
+static gboolean    contact_list_view_drag_drop                 (GtkWidget                  *widget,
+								GdkDragContext             *drag_context,
+								gint                        x,
+								gint                        y,
+								guint                       time);
 static void        contact_list_view_cell_set_background       (GossipContactListView      *view,
 								GtkCellRenderer            *cell,
 								gboolean                    is_group,
@@ -286,11 +286,23 @@ G_DEFINE_TYPE (GossipContactListView, gossip_contact_list_view, GTK_TYPE_TREE_VI
 static void
 gossip_contact_list_view_class_init (GossipContactListViewClass *klass)
 {
-	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+	GObjectClass   *object_class = G_OBJECT_CLASS (klass);
+	GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 
 	object_class->finalize = contact_list_view_finalize;
 	object_class->get_property = contact_list_view_get_property;
 	object_class->set_property = contact_list_view_set_property;
+
+	widget_class->drag_data_received = contact_list_view_drag_data_received;
+	widget_class->drag_drop          = contact_list_view_drag_drop;
+	widget_class->drag_begin         = contact_list_view_drag_begin;
+	widget_class->drag_data_get      = contact_list_view_drag_data_get;
+	widget_class->drag_end           = contact_list_view_drag_end;
+	/* FIXME: noticed but when you drag the row over the treeview
+	 * fast, it seems to stop redrawing itself, if we don't
+	 * connect this signal, all is fine.
+	 */
+	widget_class->drag_motion        = contact_list_view_drag_motion;
 
 	signals[DRAG_CONTACT_RECEIVED] =
 		g_signal_new ("drag-contact-received",
@@ -685,33 +697,6 @@ contact_list_view_setup (GossipContactListView *view)
 			   drag_types_dest,
 			   G_N_ELEMENTS (drag_types_dest),
 			   GDK_ACTION_MOVE | GDK_ACTION_LINK);
-
-	g_signal_connect (GTK_WIDGET (view),
-			  "drag-data-received",
-			  G_CALLBACK (contact_list_view_drag_data_received),
-			  NULL);
-
-	/* FIXME: noticed but when you drag the row over the treeview
-	 * fast, it seems to stop redrawing itself, if we don't
-	 * connect this signal, all is fine.
-	 */
-	g_signal_connect (view,
-			  "drag-motion",
-			  G_CALLBACK (contact_list_view_drag_motion),
-			  NULL);
-
-	g_signal_connect (view,
-			  "drag-begin",
-			  G_CALLBACK (contact_list_view_drag_begin),
-			  NULL);
-	g_signal_connect (view,
-			  "drag-data-get",
-			  G_CALLBACK (contact_list_view_drag_data_get),
-			  NULL);
-	g_signal_connect (view,
-			  "drag-end",
-			  G_CALLBACK (contact_list_view_drag_end),
-			  NULL);
 }
 
 static void
@@ -801,8 +786,7 @@ contact_list_view_drag_data_received (GtkWidget         *widget,
 				      gint               y,
 				      GtkSelectionData  *selection,
 				      guint              info,
-				      guint              time,
-				      gpointer           user_data)
+				      guint              time)
 {
 	GossipContactListViewPriv *priv;
 	EmpathyContactList        *list;
@@ -885,8 +869,7 @@ contact_list_view_drag_motion (GtkWidget      *widget,
 			       GdkDragContext *context,
 			       gint            x,
 			       gint            y,
-			       guint           time,
-			       gpointer        data)
+			       guint           time)
 {
 	static DragMotionData *dm = NULL;
 	GtkTreePath           *path;
@@ -955,8 +938,7 @@ contact_list_view_drag_motion_cb (DragMotionData *data)
 
 static void
 contact_list_view_drag_begin (GtkWidget      *widget,
-			      GdkDragContext *context,
-			      gpointer        user_data)
+			      GdkDragContext *context)
 {
 	GossipContactListViewPriv *priv;
 	GtkTreeSelection          *selection;
@@ -965,6 +947,9 @@ contact_list_view_drag_begin (GtkWidget      *widget,
 	GtkTreeIter                iter;
 
 	priv = GET_PRIV (widget);
+
+	GTK_WIDGET_CLASS (gossip_contact_list_view_parent_class)->drag_begin (widget,
+									      context);
 
 	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (widget));
 	if (!gtk_tree_selection_get_selected (selection, &model, &iter)) {
@@ -981,8 +966,7 @@ contact_list_view_drag_data_get (GtkWidget        *widget,
 				 GdkDragContext   *context,
 				 GtkSelectionData *selection,
 				 guint             info,
-				 guint             time,
-				 gpointer          user_data)
+				 guint             time)
 {
 	GossipContactListViewPriv *priv;
 	GtkTreePath               *src_path;
@@ -1031,17 +1015,29 @@ contact_list_view_drag_data_get (GtkWidget        *widget,
 
 static void
 contact_list_view_drag_end (GtkWidget      *widget,
-			    GdkDragContext *context,
-			    gpointer        user_data)
+			    GdkDragContext *context)
 {
 	GossipContactListViewPriv *priv;
 
 	priv = GET_PRIV (widget);
 
+	GTK_WIDGET_CLASS (gossip_contact_list_view_parent_class)->drag_end (widget,
+									    context);
+
 	if (priv->drag_row) {
 		gtk_tree_row_reference_free (priv->drag_row);
 		priv->drag_row = NULL;
 	}
+}
+
+static gboolean
+contact_list_view_drag_drop (GtkWidget      *widget,
+			     GdkDragContext *drag_context,
+			     gint            x,
+			     gint            y,
+			     guint           time)
+{
+	return FALSE;
 }
 
 static void

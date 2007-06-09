@@ -1,5 +1,10 @@
 2007-06-09 Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/gossip-contact-list-view.c: Fix warning for DnD.
+	patch imported from gossip.
+
+2007-06-09 Xavier Claessens  <xclaesse@gmail.com>
+
 	* configure.ac: Bump version to 0.8
 
 	* libempathy-gtk/gossip-ui-utils.c: Fix usage of contact subscription
