@@ -1,5 +1,10 @@
 2007-06-09 Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy/gossip-contact.c: Emit notify signal only if the property
+	value effectively changed.
+
+2007-06-09 Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/gossip-contact-list-view.c: Fix warning for DnD.
 	patch imported from gossip.
 

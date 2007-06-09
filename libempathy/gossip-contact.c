@@ -460,6 +460,10 @@ gossip_contact_set_id (GossipContact *contact,
 
 	priv = GET_PRIV (contact);
 
+	if (priv->id && strcmp (id, priv->id) == 0) {
+		return;
+	}
+
 	g_free (priv->id);
 	priv->id = g_strdup (id);
 
@@ -477,6 +481,10 @@ gossip_contact_set_name (GossipContact *contact,
 
 	priv = GET_PRIV (contact);
 
+	if (priv->name && strcmp (name, priv->name) == 0) {
+		return;
+	}
+
 	g_free (priv->name);
 	priv->name = g_strdup (name);
 
@@ -492,6 +500,10 @@ gossip_contact_set_avatar (GossipContact *contact,
 	g_return_if_fail (GOSSIP_IS_CONTACT (contact));
 
 	priv = GET_PRIV (contact);
+
+	if (priv->avatar == avatar) {
+		return;
+	}
 
 	if (priv->avatar) {
 		gossip_avatar_unref (priv->avatar);
@@ -516,6 +528,10 @@ gossip_contact_set_account (GossipContact *contact,
 
 	priv = GET_PRIV (contact);
 
+	if (account == priv->account) {
+		return;
+	}
+
 	if (priv->account) {
 		g_object_unref (priv->account);
 	}
@@ -533,6 +549,10 @@ gossip_contact_set_presence (GossipContact  *contact,
 	g_return_if_fail (GOSSIP_IS_CONTACT (contact));
 
 	priv = GET_PRIV (contact);
+
+	if (presence == priv->presence) {
+		return;
+	}
 
 	if (priv->presence) {
 		g_object_unref (priv->presence);
@@ -581,6 +601,10 @@ gossip_contact_set_subscription (GossipContact      *contact,
 
 	priv = GET_PRIV (contact);
 
+	if (priv->subscription == subscription) {
+		return;
+	}
+
 	priv->subscription = subscription;
 
 	g_object_notify (G_OBJECT (contact), "subscription");
@@ -595,6 +619,10 @@ gossip_contact_set_handle (GossipContact *contact,
 	g_return_if_fail (GOSSIP_IS_CONTACT (contact));
 
 	priv = GET_PRIV (contact);
+
+	if (priv->handle == handle) {
+		return;
+	}
 
 	priv->handle = handle;
 
