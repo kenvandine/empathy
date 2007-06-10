@@ -40,6 +40,8 @@ libempathy-gtk/gossip-preferences.glade
 libempathy-gtk/gossip-presence-chooser.c
 libempathy-gtk/gossip-presence-chooser.glade
 libempathy-gtk/gossip-private-chat.c
+libempathy-gtk/gossip-spell-dialog.c
+libempathy-gtk/gossip-spell-dialog.glade
 libempathy-gtk/gossip-theme-manager.c
 
 src/empathy-main.c
