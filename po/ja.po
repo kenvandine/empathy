@@ -7,22 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: empathy trunk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-05-26 15:46+0900\n"
-"PO-Revision-Date: 2007-05-26 15:45+0900\n"
+"POT-Creation-Date: 2007-06-10 14:34+0900\n"
+"PO-Revision-Date: 2007-06-10 14:31+0900\n"
 "Last-Translator: Takeshi AIHANA <takeshi.aihana@gmail.com>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-
-#: ../data/empathy.desktop.in.in.h:1
-msgid "Empathy Instant Messenger"
-msgstr "Empathy インスタント・メッセンジャー"
-
-#: ../data/empathy.desktop.in.in.h:2
-msgid "Instant Messenger"
-msgstr "インスタント・メッセンジャー"
 
 #: ../data/empathy.schemas.in.h:1
 msgid "Always open a separate chat window for new chats."
@@ -177,12 +169,7 @@ msgstr ""
 "仲間リストの中で仲間を並び替える際に使用する条件です。デフォルトは仲間の名前 "
 "(\"name\") です。他に使用可能な値: \"state\" (仲間の状態)"
 
-#: ../libempathy/empathy-idle.c:234
-msgid "Extended autoaway"
-msgstr "Extended autoaway"
-
-#: ../libempathy/gossip-contact.c:655 ../libempathy/gossip-presence.c:184
-#: ../libempathy/gossip-presence.c:283
+#: ../libempathy/gossip-presence.c:184 ../libempathy/gossip-presence.c:283
 msgid "Offline"
 msgstr "オフライン"
 
@@ -198,15 +185,111 @@ msgstr "取り込み中"
 msgid "Away"
 msgstr "離席中"
 
-#: ../libempathy-gtk/empathy-main-window.c:259
-msgid "Show and edit accounts"
-msgstr "アカウントの一覧を表示して編集します"
+#: ../libempathy-gtk/empathy-contact-dialogs.c:75
+#: ../libempathy-gtk/empathy-contact-dialogs.c:218
+msgid "I would like to add you to my contact list."
+msgstr "あなたを私の仲間一覧に追加したいです"
 
-#: ../libempathy-gtk/empathy-main-window.c:468
+#: ../libempathy-gtk/empathy-contact-dialogs.c:80
+msgid "Sorry, I don't want you in my contact list."
+msgstr "すみませんが、あなたを私の仲間一覧に登録したくありません"
+
+#: ../libempathy-gtk/empathy-contact-dialogs.glade.h:1
+msgid "Decide _Later"
+msgstr "あとで決める(_L)"
+
+#: ../libempathy-gtk/empathy-contact-dialogs.glade.h:2
+msgid "Subscription Request"
+msgstr "登録のリクエスト"
+
+#: ../libempathy-gtk/empathy-contact-widget.c:561
+msgid "Select"
+msgstr "選択"
+
+#: ../libempathy-gtk/empathy-contact-widget.c:571
+#: ../libempathy-gtk/empathy-main-window.c:611
 msgid "Group"
 msgstr "グループ"
 
-#: ../libempathy-gtk/empathy-main-window.c:489
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:1
+msgid "<b>Client Information</b>"
+msgstr "<b>クライアントの情報</b>"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:2
+msgid "<b>Contact Details</b>"
+msgstr "<b>仲間の詳細</b>"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:3
+msgid "<b>Contact</b>"
+msgstr "<b>仲間</b>"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:4
+msgid "<b>Groups</b>"
+msgstr "<b>グループ</b>"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:5
+#: ../libempathy-gtk/gossip-chatrooms-window.glade.h:1
+#: ../libempathy-gtk/gossip-new-chatroom-dialog.glade.h:1
+msgid "Account:"
+msgstr "アカウント:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:6
+msgid "Alias:"
+msgstr "あだ名:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:7
+msgid "Birthday:"
+msgstr "誕生日:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:8
+msgid "Client:"
+msgstr "クライアント:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:9
+msgid "Contact information"
+msgstr "仲間の情報"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:10
+msgid "Email:"
+msgstr "E-メール:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:11
+msgid "Fullname:"
+msgstr "氏名:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:12
+msgid "Identifier:"
+msgstr "スクリーン名:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:13
+msgid "Information requested..."
+msgstr "情報の取得中..."
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:14
+msgid "OS:"
+msgstr "OS:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:15
+msgid ""
+"Select the groups you want this contact to appear in, you can select more "
+"than one group or no groups."
+msgstr ""
+"この仲間を登録するグループを選択して下さい (グループは１つ以上選択したり、あ"
+"るいは全く選択しなくても構いません)"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:16
+msgid "Version:"
+msgstr "バージョン:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:17
+msgid "Web site:"
+msgstr "ホームページ:"
+
+#: ../libempathy-gtk/empathy-main-window.c:276
+msgid "Show and edit accounts"
+msgstr "アカウントの一覧を表示して編集します"
+
+#: ../libempathy-gtk/empathy-main-window.c:632
 msgid "Contact"
 msgstr "仲間"
 
@@ -249,7 +332,7 @@ msgid "_Add Contact..."
 msgstr "仲間の追加(_A)..."
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:10
-#: ../libempathy-gtk/gossip-contact-list-view.c:204
+#: ../libempathy-gtk/gossip-contact-list-view.c:203
 msgid "_Chat"
 msgstr "会話(_C)"
 
@@ -259,7 +342,7 @@ msgstr "目次(_C)"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:12
 #: ../libempathy-gtk/gossip-chat.glade.h:21
-#: ../libempathy-gtk/gossip-contact-list-view.c:216
+#: ../libempathy-gtk/gossip-contact-list-view.c:215
 msgid "_Edit"
 msgstr "編集(_E)"
 
@@ -292,9 +375,16 @@ msgstr "部屋(_R)"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:19
 #: ../libempathy-gtk/gossip-chat.glade.h:28
-#: ../libempathy-gtk/gossip-contact-list-view.c:232
+#: ../libempathy-gtk/gossip-contact-list-view.c:231
 msgid "_View Previous Conversations"
 msgstr "以前の会話を表示する(_V)"
+
+#: ../libempathy-gtk/empathy-status-icon.c:448
+#, c-format
+msgid ""
+"Subscription requested for %s\n"
+"Message: %s"
+msgstr ""
 
 #: ../libempathy-gtk/empathy-status-icon.glade.h:1
 msgid "Status"
@@ -344,20 +434,24 @@ msgstr "GNOME 向けのインスタント・メッセンジャー・クライア
 msgid "translator-credits"
 msgstr "相花 毅 <takeshi.aihana@gmail.com>"
 
-#: ../libempathy-gtk/gossip-accounts-dialog.c:224
+#: ../libempathy-gtk/gossip-account-chooser.c:391
+msgid "All"
+msgstr "全て"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:223
 msgid "Disable"
 msgstr "サインアウト"
 
-#: ../libempathy-gtk/gossip-accounts-dialog.c:227
+#: ../libempathy-gtk/gossip-accounts-dialog.c:226
 msgid "Enable"
 msgstr "サインイン"
 
-#: ../libempathy-gtk/gossip-accounts-dialog.c:261
+#: ../libempathy-gtk/gossip-accounts-dialog.c:260
 #: ../libempathy-gtk/gossip-accounts-dialog.glade.h:3
 msgid "<b>No Account Selected</b>"
 msgstr "<b>アカウントが選択されていません</b>"
 
-#: ../libempathy-gtk/gossip-accounts-dialog.c:263
+#: ../libempathy-gtk/gossip-accounts-dialog.c:262
 msgid ""
 "To add a new account, you can click on the 'Add' button and a new entry will "
 "be created for you to start configuring.\n"
@@ -371,11 +465,11 @@ msgstr ""
 "アカウントを編集する場合は、左側の一覧にあるアカウントをクリックして編集して"
 "下さい。"
 
-#: ../libempathy-gtk/gossip-accounts-dialog.c:272
+#: ../libempathy-gtk/gossip-accounts-dialog.c:271
 msgid "<b>No Accounts Configured</b>"
 msgstr "<b>アカウントが登録されていません</b>"
 
-#: ../libempathy-gtk/gossip-accounts-dialog.c:274
+#: ../libempathy-gtk/gossip-accounts-dialog.c:273
 msgid ""
 "To add a new account, you can click on the 'Add' button and a new entry will "
 "be created for you to start configuring."
@@ -383,12 +477,12 @@ msgstr ""
 "新しいアカウントを登録するには [追加] ボタンをクリックして下さい。すると、新"
 "しいアカウントの設定画面が表示されるので必要な情報を入力して下さい。"
 
-#: ../libempathy-gtk/gossip-accounts-dialog.c:362
+#: ../libempathy-gtk/gossip-accounts-dialog.c:361
 #: ../libempathy-gtk/gossip-accounts-dialog.glade.h:6
 msgid "Accounts"
 msgstr "アカウント"
 
-#: ../libempathy-gtk/gossip-accounts-dialog.c:857
+#: ../libempathy-gtk/gossip-accounts-dialog.c:856
 #, c-format
 msgid ""
 "You are about to remove your %s account!\n"
@@ -397,7 +491,7 @@ msgstr ""
 "%s というアカウントを削除使用としています！\n"
 "本当に削除してもよろしいですか？"
 
-#: ../libempathy-gtk/gossip-accounts-dialog.c:863
+#: ../libempathy-gtk/gossip-accounts-dialog.c:862
 msgid ""
 "Any associated conversations and chat rooms will NOT be removed if you "
 "decide to proceed.\n"
@@ -492,6 +586,7 @@ msgid "_Port:"
 msgstr "ポート番号(_P):"
 
 #: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:7
+#: ../libempathy-gtk/gossip-new-chatroom-dialog.glade.h:10
 msgid "_Server:"
 msgstr "サーバ(_S):"
 
@@ -499,19 +594,19 @@ msgstr "サーバ(_S):"
 msgid "jabber account settings"
 msgstr "Jabber アカウントの設定"
 
-#: ../libempathy-gtk/gossip-chat.c:368
+#: ../libempathy-gtk/gossip-chat.c:332
 msgid "Disconnected"
 msgstr "オフライン"
 
-#: ../libempathy-gtk/gossip-chat.c:915
+#: ../libempathy-gtk/gossip-chat.c:878
 msgid "Insert Smiley"
 msgstr "スマイリーの挿入"
 
-#: ../libempathy-gtk/gossip-chat.c:963
+#: ../libempathy-gtk/gossip-chat.c:926
 msgid "_Check Word Spelling..."
 msgstr "スペル・チェック(_C)..."
 
-#: ../libempathy-gtk/gossip-chat.c:1325
+#: ../libempathy-gtk/gossip-chat.c:1343
 msgid "Connected"
 msgstr "オンライン"
 
@@ -619,88 +714,208 @@ msgstr "リンクを開く(_O)"
 msgid "%A %d %B %Y"
 msgstr "%Y年%B%e日 %A"
 
-#: ../libempathy-gtk/gossip-chat-window.c:688
-#: ../libempathy-gtk/gossip-chat-window.c:718
+#: ../libempathy-gtk/gossip-chat-window.c:700
+#: ../libempathy-gtk/gossip-chat-window.c:730
 msgid "New Message"
 msgid_plural "New Messages"
 msgstr[0] "新しいメッセージ"
 msgstr[1] "複数の新しいメッセージ"
 
-#: ../libempathy-gtk/gossip-chat-window.c:694
+#: ../libempathy-gtk/gossip-chat-window.c:706
 msgid "Chat Room"
 msgstr "チャット部屋"
 
-#: ../libempathy-gtk/gossip-chat-window.c:699
-#: ../libempathy-gtk/gossip-chat-window.c:722
+#: ../libempathy-gtk/gossip-chat-window.c:711
+#: ../libempathy-gtk/gossip-chat-window.c:734
 #, c-format
 msgid "Conversation"
 msgid_plural "Conversations (%d)"
 msgstr[0] "会話"
 msgstr[1] "会話 (%d 個)"
 
-#: ../libempathy-gtk/gossip-chat-window.c:1296
+#: ../libempathy-gtk/gossip-chat-window.c:1305
 msgid "Typing a message."
 msgstr "メッセージを入力しています"
 
-#: ../libempathy-gtk/gossip-contact-list-view.c:196
+#: ../libempathy-gtk/gossip-chatrooms-window.c:251
+msgid "Name"
+msgstr "名前"
+
+#: ../libempathy-gtk/gossip-chatrooms-window.c:269
+msgid "Room"
+msgstr "部屋"
+
+#: ../libempathy-gtk/gossip-chatrooms-window.c:278
+msgid "Auto Connect"
+msgstr "自動サインイン"
+
+#: ../libempathy-gtk/gossip-chatrooms-window.glade.h:2
+msgid "Edit Favorite Room"
+msgstr "お気に入りの部屋の編集"
+
+#: ../libempathy-gtk/gossip-chatrooms-window.glade.h:3
+msgid "Join room on start_up"
+msgstr "起動時に入室する"
+
+#: ../libempathy-gtk/gossip-chatrooms-window.glade.h:4
+msgid "Join this chat room when Gossip starts and you are connected"
+msgstr "Gossip を起動してサインインしたら、この部屋に入室するかどうかです"
+
+#: ../libempathy-gtk/gossip-chatrooms-window.glade.h:5
+msgid "Manage Favorite Rooms"
+msgstr "お気に入りの部屋"
+
+#: ../libempathy-gtk/gossip-chatrooms-window.glade.h:6
+msgid "N_ame:"
+msgstr "名前(_A):"
+
+#: ../libempathy-gtk/gossip-chatrooms-window.glade.h:7
+msgid "S_erver:"
+msgstr "サーバ(_E):"
+
+#: ../libempathy-gtk/gossip-chatrooms-window.glade.h:8
+#: ../libempathy-gtk/gossip-new-chatroom-dialog.glade.h:8
+msgid "_Nickname:"
+msgstr "あだ名(_N):"
+
+#: ../libempathy-gtk/gossip-chatrooms-window.glade.h:9
+#: ../libempathy-gtk/gossip-new-chatroom-dialog.glade.h:9
+msgid "_Room:"
+msgstr "部屋(_R):"
+
+#: ../libempathy-gtk/gossip-contact-list-view.c:195
 msgid "_Contact"
 msgstr "仲間(_C)"
 
-#: ../libempathy-gtk/gossip-contact-list-view.c:200
+#: ../libempathy-gtk/gossip-contact-list-view.c:199
 msgid "_Group"
 msgstr "グループ(_G)"
 
-#: ../libempathy-gtk/gossip-contact-list-view.c:204
+#: ../libempathy-gtk/gossip-contact-list-view.c:203
 msgid "Chat with contact"
 msgstr "仲間とチャットする"
 
-#: ../libempathy-gtk/gossip-contact-list-view.c:208
+#: ../libempathy-gtk/gossip-contact-list-view.c:207
 msgid "Infor_mation"
 msgstr "情報(_M)"
 
-#: ../libempathy-gtk/gossip-contact-list-view.c:208
+#: ../libempathy-gtk/gossip-contact-list-view.c:207
 msgid "View contact information"
 msgstr "仲間の情報を表示します"
 
-#: ../libempathy-gtk/gossip-contact-list-view.c:212
+#: ../libempathy-gtk/gossip-contact-list-view.c:211
 msgid "Re_name"
 msgstr "名前の変更(_N)"
 
-#: ../libempathy-gtk/gossip-contact-list-view.c:212
+#: ../libempathy-gtk/gossip-contact-list-view.c:211
 msgid "Rename"
 msgstr "名前の変更"
 
-#: ../libempathy-gtk/gossip-contact-list-view.c:216
+#: ../libempathy-gtk/gossip-contact-list-view.c:215
 msgid "Edit the groups and name for this contact"
 msgstr "この仲間のグループと名前を編集します"
 
-#: ../libempathy-gtk/gossip-contact-list-view.c:220
+#: ../libempathy-gtk/gossip-contact-list-view.c:219
 msgid "_Remove"
 msgstr "削除(_R)"
 
-#: ../libempathy-gtk/gossip-contact-list-view.c:220
+#: ../libempathy-gtk/gossip-contact-list-view.c:219
 msgid "Remove contact"
 msgstr "仲間を削除します"
 
-#: ../libempathy-gtk/gossip-contact-list-view.c:224
+#: ../libempathy-gtk/gossip-contact-list-view.c:223
 msgid "_Invite to Chat Room"
 msgstr "チャット部屋へ招待する(_I)"
 
-#: ../libempathy-gtk/gossip-contact-list-view.c:224
+#: ../libempathy-gtk/gossip-contact-list-view.c:223
 msgid "Invite to a currently open chat room"
 msgstr "現在開いているチャット部屋へ招待します"
 
-#: ../libempathy-gtk/gossip-contact-list-view.c:228
+#: ../libempathy-gtk/gossip-contact-list-view.c:227
 msgid "_Send File..."
 msgstr "ファイルの転送(_S)..."
 
-#: ../libempathy-gtk/gossip-contact-list-view.c:228
+#: ../libempathy-gtk/gossip-contact-list-view.c:227
 msgid "Send a file"
 msgstr "ファイルを送信します"
 
-#: ../libempathy-gtk/gossip-contact-list-view.c:232
+#: ../libempathy-gtk/gossip-contact-list-view.c:231
 msgid "View previous conversations with this contact"
 msgstr "この仲間と以前会話した内容を表示します"
+
+#: ../libempathy-gtk/gossip-contact-list-view.c:1480
+msgid "Sorry, I don't want you in my contact list anymore."
+msgstr ""
+
+#: ../libempathy-gtk/gossip-group-chat.c:255
+msgid "Enter the new topic you want to set for this room:"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-group-chat.c:363
+#, c-format
+msgid "%s has joined the room"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-group-chat.c:379
+#, c-format
+msgid "%s has left the room"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-group-chat.c:458
+#, c-format
+msgid "Topic: %s"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-group-chat.c:575
+#, c-format
+msgid "Topic set to: %s"
+msgstr ""
+
+#: ../libempathy-gtk/gossip-group-chat.glade.h:1
+msgid "<b>Topic:</b>"
+msgstr "<b>トピック:</b>"
+
+#: ../libempathy-gtk/gossip-group-chat.glade.h:2
+msgid "Group Chat"
+msgstr "グループ・チャット"
+
+#: ../libempathy-gtk/gossip-new-chatroom-dialog.c:342
+msgid "Chat Rooms"
+msgstr "チャット部屋"
+
+#: ../libempathy-gtk/gossip-new-chatroom-dialog.c:388
+msgid "Create"
+msgstr "生成する"
+
+#: ../libempathy-gtk/gossip-new-chatroom-dialog.c:393
+#: ../libempathy-gtk/gossip-new-chatroom-dialog.glade.h:4
+msgid "Join"
+msgstr "入室する"
+
+#: ../libempathy-gtk/gossip-new-chatroom-dialog.glade.h:2
+msgid "Browse:"
+msgstr "参照:"
+
+#: ../libempathy-gtk/gossip-new-chatroom-dialog.glade.h:3
+msgid ""
+"Enter the room name to join here or click on one or more rooms in the list."
+msgstr ""
+"入室する部屋の名前を入力するか、下にある一覧から１つ以上の部屋をクリックして"
+"下さい"
+
+#: ../libempathy-gtk/gossip-new-chatroom-dialog.glade.h:5
+msgid "Join New"
+msgstr "新しいチャット部屋"
+
+#: ../libempathy-gtk/gossip-new-chatroom-dialog.glade.h:6
+msgid "Re_fresh"
+msgstr "更新する(_F)"
+
+#: ../libempathy-gtk/gossip-new-chatroom-dialog.glade.h:7
+msgid ""
+"This list represents all chat rooms hosted on the server you have entered."
+msgstr ""
+"この一覧にはサーバで提供しているチャット専用の部屋が全て一覧表示されます"
 
 #: ../libempathy-gtk/gossip-preferences.c:250
 msgid "Language"
@@ -853,12 +1068,12 @@ msgstr "状態メッセージの編集"
 msgid "_Add to status message list"
 msgstr "状態メッセージの一覧に追加する(_A)"
 
-#: ../libempathy-gtk/gossip-private-chat.c:187
+#: ../libempathy-gtk/gossip-private-chat.c:188
 #, c-format
 msgid "%s went offline"
 msgstr "%s さんがオフラインになりました"
 
-#: ../libempathy-gtk/gossip-private-chat.c:201
+#: ../libempathy-gtk/gossip-private-chat.c:202
 #, c-format
 msgid "%s has come online"
 msgstr "%s さんがオンラインになりました"
@@ -879,10 +1094,10 @@ msgstr "クリン"
 msgid "Blue"
 msgstr "ブルー"
 
-#: ../src/empathy-main.c:145
+#: ../src/empathy-main.c:128
 msgid "Don't connect on startup"
 msgstr "起動時にサインインしない"
 
-#: ../src/empathy-main.c:155
+#: ../src/empathy-main.c:136
 msgid "- Empathy Instant Messenger"
 msgstr "- Empathy インスタント・メッセンジャー"
