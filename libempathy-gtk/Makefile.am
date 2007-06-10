@@ -21,6 +21,7 @@ libempathy_gtk_la_SOURCES =             					\
 	gossip-cell-renderer-expander.c		gossip-cell-renderer-expander.h	\
 	gossip-cell-renderer-text.c		gossip-cell-renderer-text.h	\
 	gossip-spell.c				gossip-spell.h			\
+	gossip-spell-dialog.c			gossip-spell-dialog.h		\
 	gossip-contact-groups.c			gossip-contact-groups.h		\
 	gossip-contact-list-store.c		gossip-contact-list-store.h	\
 	gossip-contact-list-view.c		gossip-contact-list-view.h	\
@@ -59,6 +60,7 @@ glade_DATA = 					\
 	gossip-new-chatroom-dialog.glade	\
 	gossip-group-chat.glade			\
 	gossip-chatrooms-window.glade		\
+	gossip-spell-dialog.glade		\
 	gossip-chat.glade
 
 dtddir = $(datadir)/empathy

@@ -159,9 +159,6 @@ gossip_conf_get_int (GossipConf  *conf,
 				       key,
 				       &error);
 
-	gossip_debug (DEBUG_DOMAIN, "Getting int:'%s' (=%d), error:'%s'",
-		      key, *value, error ? error->message : "None");
-
 	if (error) {
 		g_error_free (error);
 		return FALSE;
@@ -209,10 +206,6 @@ gossip_conf_get_bool (GossipConf  *conf,
 					key,
 					&error);
 
-	gossip_debug (DEBUG_DOMAIN, "Getting bool:'%s' (=%d ---> %s), error:'%s'",
-		      key, *value, *value ? "true" : "false",
-		      error ? error->message : "None");
-
 	if (error) {
 		g_error_free (error);
 		return FALSE;
@@ -258,9 +251,6 @@ gossip_conf_get_string (GossipConf   *conf,
 	*value = gconf_client_get_string (priv->gconf_client,
 					  key,
 					  &error);
-
-	gossip_debug (DEBUG_DOMAIN, "Getting string:'%s' (='%s'), error:'%s'",
-		      key, *value, error ? error->message : "None");
 
 	if (error) {
 		g_error_free (error);

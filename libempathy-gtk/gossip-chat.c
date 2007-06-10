@@ -47,7 +47,7 @@
 #include "gossip-geometry.h"
 #include "gossip-preferences.h"
 #include "gossip-spell.h"
-//#include "gossip-spell-dialog.h"
+#include "gossip-spell-dialog.h"
 #include "gossip-ui-utils.h"
 
 #define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GOSSIP_TYPE_CHAT, GossipChatPriv))
@@ -936,10 +936,10 @@ static void
 chat_text_check_word_spelling_cb (GtkMenuItem     *menuitem,
 				  GossipChatSpell *chat_spell)
 {
-/*FIXME:	gossip_spell_dialog_show (chat_spell->chat,
+	gossip_spell_dialog_show (chat_spell->chat,
 				  chat_spell->start,
 				  chat_spell->end,
-				  chat_spell->word);*/
+				  chat_spell->word);
 }
 
 static GossipChatSpell *

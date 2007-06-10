@@ -204,7 +204,6 @@ spell_setup_languages (void)
 	}
 
 	if (languages) {
-		gossip_debug (DEBUG_DOMAIN, "No languages to setup");
 		return;
 	}
 
@@ -393,8 +392,6 @@ gossip_spell_supported (void)
 		return FALSE;
 	}
 
-	gossip_debug (DEBUG_DOMAIN, "Support enabled");
-
 	return TRUE;
 }
 
@@ -403,8 +400,6 @@ gossip_spell_supported (void)
 gboolean
 gossip_spell_supported (void)
 {
-	gossip_debug (DEBUG_DOMAIN, "Support disabled");
-
 	return FALSE;
 }
 

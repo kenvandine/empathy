@@ -1,5 +1,17 @@
 2007-06-10 Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/gossip-spell-dialog.glade:
+	* libempathy-gtk/gossip-spell-dialog.c:
+	* libempathy-gtk/gossip-spell-dialog.h:
+	* libempathy-gtk/gossip-chat.c:
+	* libempathy-gtk/Makefile.am:
+	* configure.ac: Adding spellcheck support.
+
+	* libempathy-gtk/gossip-spell.c:
+	* libempathy/gossip-conf.c: Remove useless debug messages.
+
+2007-06-10 Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/gossip-chat-view.c: Smooth scrolling.
 	Fixes bug #445859 (Raphael Slinckx).
 

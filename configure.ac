@@ -75,14 +75,52 @@ PKG_CHECK_MODULES(EMPATHY,
    libgnomeui-2.0
 ])
 
-PKG_CHECK_MODULES(MISSION_CONTROL_PLUGINS,
-[
-   mission-control >= $MISSION_CONTROL_REQUIRED
-   glib-2.0 >= $GLIB_REQUIRED
-   gobject-2.0
-   dbus-glib-1
-   libtelepathy >= $TELEPATHY_REQUIRED
-])
+dnl -----------------------------------------------------------
+dnl ISO codes, used for aspell support
+dnl -----------------------------------------------------------
+AC_MSG_CHECKING([whether iso-codes exists and has iso-639 domain])
+if $PKG_CONFIG --variable=domains iso-codes | grep -q 639 ; then
+   AC_MSG_RESULT([yes])
+   iso_codes_prefix=`$PKG_CONFIG --variable=prefix iso-codes`
+   iso_codes_pkgconfig=iso-codes
+   have_iso_codes=yes
+else
+   AC_MSG_RESULT([no])
+   iso_codes_prefix=
+   iso_codes_pkgconfig=
+   have_iso_codes=no
+fi
+
+AC_DEFINE_UNQUOTED([ISO_CODES_PREFIX],["$iso_codes_prefix"],[ISO codes prefix])
+
+dnl -----------------------------------------------------------
+dnl ASpell
+dnl -----------------------------------------------------------
+AC_ARG_ENABLE(aspell,
+              AS_HELP_STRING([--enable-aspell=@<:@no/yes/auto@:>@],
+                             [compile with aspell support]), ,
+                             enable_aspell=auto)
+
+if test "x$enable_aspell" = "xyes" -a "x$have_iso_codes" != "xyes"; then
+   AC_MSG_ERROR([You must have iso-codes with the iso-639 domain to use aspell.])
+fi
+
+if test "x$enable_aspell" != "xno" -a "x$have_iso_codes" = "xyes"; then
+   AC_CHECK_LIB(aspell, aspell_speller_check,have_aspell=yes,have_aspell=no,)
+
+   if test "x$have_aspell" = "xyes"; then
+      AC_DEFINE(HAVE_ASPELL, 1, [Define if we have aspell])
+      EMPATHY_LIBS="$EMPATHY_LIBS -laspell"
+   else
+      have_aspell=no
+   fi
+else
+   have_aspell=no
+fi
+
+if test "x$enable_aspell" = "xyes" -a "x$have_aspell" != "xyes"; then
+   AC_MSG_ERROR([Couldn't find aspell.])
+fi
 
 dnl -----------------------------------------------------------
 AC_OUTPUT([
