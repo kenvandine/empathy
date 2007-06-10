@@ -57,6 +57,8 @@
 #define TIMESTAMP_INTERVAL 300
 
 #define MAX_LINES 800
+#define MAX_SCROLL_TIME 0.4 /* seconds */
+#define SCROLL_DELAY 33     /* milliseconds */
 
 #define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), GOSSIP_TYPE_CHAT_VIEW, GossipChatViewPriv))
 
@@ -77,6 +79,8 @@ struct _GossipChatViewPriv {
 	BlockType      last_block_type;
 
 	gboolean       allow_scrolling;
+	guint          scroll_src;
+	GTimer        *scroll_time;
 	gboolean       is_group_chat;
 
 	GtkTextMark   *find_mark_previous;
@@ -342,6 +346,12 @@ chat_view_finalize (GObject *object)
 
 	if (priv->last_contact) {
 		g_object_unref (priv->last_contact);
+	}
+	if (priv->scroll_time) {
+		g_timer_destroy (priv->scroll_time);
+	}
+	if (priv->scroll_src) {
+		g_source_remove (priv->scroll_src);
 	}
 
 	G_OBJECT_CLASS (gossip_chat_view_parent_class)->finalize (object);
@@ -1629,13 +1639,38 @@ gossip_chat_view_scroll (GossipChatView *view,
 		      allow_scrolling ? "enabled" : "disabled");
 }
 
+/* Code stolen from pidgin/gtkimhtml.c */
+static gboolean
+chat_view_scroll_cb (GossipChatView *view)
+{
+	GossipChatViewPriv *priv;
+	GtkAdjustment      *adj;
+	gdouble             max_val;
+
+	priv = GET_PRIV (view);
+	adj = GTK_TEXT_VIEW (view)->vadjustment;
+	max_val = adj->upper - adj->page_size;
+
+	g_return_val_if_fail (priv->scroll_time != NULL, FALSE);
+
+	if (g_timer_elapsed (priv->scroll_time, NULL) > MAX_SCROLL_TIME) {
+		/* time's up. jump to the end and kill the timer */
+		gtk_adjustment_set_value (adj, max_val);
+		g_timer_destroy (priv->scroll_time);
+		priv->scroll_time = NULL;
+		priv->scroll_src = 0;
+		return FALSE;
+	}
+
+	/* scroll by 1/3rd the remaining distance */
+	gtk_adjustment_set_value (adj, gtk_adjustment_get_value (adj) + ((max_val - gtk_adjustment_get_value (adj)) / 3));
+	return TRUE;
+}
+
 void
 gossip_chat_view_scroll_down (GossipChatView *view)
 {
 	GossipChatViewPriv *priv;
-	GtkTextBuffer      *buffer;
-	GtkTextIter         iter;
-	GtkTextMark        *mark;
 
 	g_return_if_fail (GOSSIP_IS_CHAT_VIEW (view));
 
@@ -1647,22 +1682,17 @@ gossip_chat_view_scroll_down (GossipChatView *view)
 
 	gossip_debug (DEBUG_DOMAIN, "Scrolling down");
 
-	buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
+	if (priv->scroll_time) {
+		g_timer_destroy (priv->scroll_time);
+	}
+	if (priv->scroll_src) {
+		g_source_remove (priv->scroll_src);
+	}
 
-	gtk_text_buffer_get_end_iter (buffer, &iter);
-	mark = gtk_text_buffer_create_mark (buffer,
-					    NULL,
-					    &iter,
-					    FALSE);
-
-	gtk_text_view_scroll_to_mark (GTK_TEXT_VIEW (view),
-				      mark,
-				      0.0,
-				      FALSE,
-				      0,
-				      0);
-
-	gtk_text_buffer_delete_mark (buffer, mark);
+	priv->scroll_time = g_timer_new();
+	priv->scroll_src = g_timeout_add (SCROLL_DELAY,
+					  (GSourceFunc) chat_view_scroll_cb,
+					  view);
 }
 
 gboolean

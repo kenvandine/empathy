@@ -1,3 +1,8 @@
+2007-06-10 Xavier Claessens  <xclaesse@gmail.com>
+
+	* libempathy-gtk/gossip-chat-view.c: Smooth scrolling.
+	Fixes bug #445859 (Raphael Slinckx).
+
 2007-06-09 Xavier Claessens  <xclaesse@gmail.com>
 
 	* libempathy/gossip-contact.c: Emit notify signal only if the property
