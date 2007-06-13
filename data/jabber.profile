@@ -9,4 +9,5 @@ DefaultAccountDomain = jabber.org
 SupportsInvisible = 0
 VCardField = X-Jabber
 VCardDefault = true
+Default-ignore-ssl-errors = 1
 

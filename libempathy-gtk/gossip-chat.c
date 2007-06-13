@@ -341,9 +341,8 @@ static void
 chat_send (GossipChat  *chat,
 	   const gchar *msg)
 {
-	GossipChatPriv    *priv;
-	GossipMessage     *message;
-	GossipContact     *own_contact;
+	GossipChatPriv *priv;
+	GossipMessage  *message;
 
 	priv = GET_PRIV (chat);
 
@@ -361,9 +360,7 @@ chat_send (GossipChat  *chat,
 	/* FIXME: add here something to let group/privrate chat handle
 	 *        some special messages */
 
-	own_contact = empathy_contact_manager_get_user (priv->manager, chat->account);
 	message = gossip_message_new (msg);
-	gossip_message_set_sender (message, own_contact);
 
 	empathy_tp_chat_send (priv->tp_chat, message);
 
@@ -415,6 +412,7 @@ chat_message_received_cb (EmpathyTpChat *tp_chat,
 	if (timestamp >= priv->time_joined) {
 		empathy_log_manager_add_message (priv->log_manager,
 						 gossip_chat_get_id (chat),
+						 gossip_chat_is_group_chat (chat),
 						 message);
 	}
 
@@ -1035,14 +1033,12 @@ chat_state_changed_cb (EmpathyTpChat             *tp_chat,
 		       GossipChat                *chat)
 {
 	GossipChatPriv *priv;
-	GossipContact  *own_contact;
 	GList          *l;
 	gboolean        was_composing;
 
 	priv = GET_PRIV (chat);
 
-	own_contact = gossip_contact_get_user (contact);
-	if (gossip_contact_equal (own_contact, contact)) {
+	if (gossip_contact_is_user (contact)) {
 		/* We don't care about our own chat state */
 		return;
 	}
@@ -1112,7 +1108,8 @@ chat_add_logs (GossipChat *chat)
 	/* Add messages from last conversation */
 	messages = empathy_log_manager_get_last_messages (priv->log_manager,
 							  chat->account,
-							  gossip_chat_get_id (chat));
+							  gossip_chat_get_id (chat),
+							  gossip_chat_is_group_chat (chat));
 	num_messages  = g_list_length (messages);
 
 	for (l = messages, i = 0; l; l = l->next, i++) {
@@ -1498,7 +1495,7 @@ gossip_chat_should_play_sound (GossipChat *chat)
 gboolean
 gossip_chat_should_highlight_nick (GossipMessage *message)
 {
-	GossipContact *my_contact;
+	GossipContact *contact;
 	const gchar   *msg, *to;
 	gchar         *cf_msg, *cf_to;
 	gchar         *ch;
@@ -1515,8 +1512,12 @@ gossip_chat_should_highlight_nick (GossipMessage *message)
 		return FALSE;
 	}
 
-	my_contact = gossip_contact_get_user (gossip_message_get_sender (message));
-	to = gossip_contact_get_name (my_contact);
+	contact = gossip_message_get_receiver (message);
+	if (!contact || !gossip_contact_is_user (contact)) {
+		return FALSE;
+	}
+
+	to = gossip_contact_get_name (contact);
 	if (!to) {
 		return FALSE;
 	}

@@ -79,7 +79,7 @@ struct _GossipChatViewPriv {
 	BlockType      last_block_type;
 
 	gboolean       allow_scrolling;
-	guint          scroll_src;
+	guint          scroll_timeout;
 	GTimer        *scroll_time;
 	gboolean       is_group_chat;
 
@@ -350,8 +350,8 @@ chat_view_finalize (GObject *object)
 	if (priv->scroll_time) {
 		g_timer_destroy (priv->scroll_time);
 	}
-	if (priv->scroll_src) {
-		g_source_remove (priv->scroll_src);
+	if (priv->scroll_timeout) {
+		g_source_remove (priv->scroll_timeout);
 	}
 
 	G_OBJECT_CLASS (gossip_chat_view_parent_class)->finalize (object);
@@ -382,7 +382,10 @@ chat_view_size_allocate (GtkWidget     *widget,
 	GTK_WIDGET_CLASS (gossip_chat_view_parent_class)->size_allocate (widget, alloc);
 
 	if (down) {
-		gossip_chat_view_scroll_down (GOSSIP_CHAT_VIEW (widget));
+		GtkAdjustment *adj;
+
+		adj = GTK_TEXT_VIEW (widget)->vadjustment;
+		gtk_adjustment_set_value (adj, adj->upper - adj->page_size);
 	}
 }
 
@@ -1059,7 +1062,6 @@ chat_view_maybe_append_fancy_header (GossipChatView *view,
 {
 	GossipChatViewPriv *priv;
 	GossipContact      *sender;
-	GossipContact      *my_contact;
 	const gchar        *name;
 	gboolean            header;
 	GtkTextIter         iter;
@@ -1075,9 +1077,8 @@ chat_view_maybe_append_fancy_header (GossipChatView *view,
 	priv = GET_PRIV (view);
 
 	sender = gossip_message_get_sender (msg);
-	my_contact = gossip_contact_get_user (sender);
 	name = gossip_contact_get_name (sender);
-	from_self = gossip_contact_equal (sender, my_contact);
+	from_self = gossip_contact_is_user (sender);
 
 	gossip_debug (DEBUG_DOMAIN, "Maybe add fancy header");
 
@@ -1186,7 +1187,6 @@ chat_view_append_irc_action (GossipChatView *view,
 			     GossipMessage  *msg)
 {
 	GossipChatViewPriv *priv;
-	GossipContact      *my_contact;
 	GossipContact      *sender;
 	const gchar        *name;
 	GtkTextIter         iter;
@@ -1199,11 +1199,9 @@ chat_view_append_irc_action (GossipChatView *view,
 	gossip_debug (DEBUG_DOMAIN, "Add IRC action");
 
 	sender = gossip_message_get_sender (msg);
-	my_contact = gossip_contact_get_user (sender);
 	name = gossip_contact_get_name (sender);
 
-	/* Skip the "/me ". */
-	if (gossip_contact_equal (sender, my_contact)) {
+	if (gossip_contact_is_user (sender)) {
 		tag = "irc-action-self";
 	} else {
 		tag = "irc-action-other";
@@ -1236,7 +1234,6 @@ chat_view_append_fancy_action (GossipChatView *view,
 {
 	GossipChatViewPriv *priv;
 	GossipContact      *sender;
-	GossipContact      *my_contact;
 	const gchar        *name;
 	const gchar        *body;
 	GtkTextIter         iter;
@@ -1249,10 +1246,9 @@ chat_view_append_fancy_action (GossipChatView *view,
 	gossip_debug (DEBUG_DOMAIN, "Add fancy action");
 
 	sender = gossip_message_get_sender (msg);
-	my_contact = gossip_contact_get_user (sender);
 	name = gossip_contact_get_name (sender);
 
-	if (gossip_contact_equal (sender, my_contact)) {
+	if (gossip_contact_is_user (sender)) {
 		tag = "fancy-action-self";
 		line_tag = "fancy-line-self";
 	} else {
@@ -1280,7 +1276,6 @@ chat_view_append_irc_message (GossipChatView *view,
 {
 	GossipChatViewPriv *priv;
 	GossipContact      *sender;
-	GossipContact      *my_contact;
 	const gchar        *name;
 	const gchar        *body;
 	const gchar        *nick_tag;
@@ -1294,10 +1289,9 @@ chat_view_append_irc_message (GossipChatView *view,
 
 	body = gossip_message_get_body (msg);
 	sender = gossip_message_get_sender (msg);
-	my_contact = gossip_contact_get_user (sender);
 	name = gossip_contact_get_name (sender);
 
-	if (gossip_contact_equal (sender, my_contact)) {
+	if (gossip_contact_is_user (sender)) {
 		nick_tag = "irc-nick-self";
 		body_tag = "irc-body-self";
 	} else {
@@ -1338,16 +1332,14 @@ chat_view_append_fancy_message (GossipChatView *view,
 {
 	GossipChatViewPriv *priv;
 	GossipContact      *sender;
-	GossipContact      *my_contact;
 	const gchar        *body;
 	const gchar        *tag;
 
 	priv = GET_PRIV (view);
 
 	sender = gossip_message_get_sender (msg);
-	my_contact = gossip_contact_get_user (sender);
 
-	if (gossip_contact_equal (sender, my_contact)) {
+	if (gossip_contact_is_user (sender)) {
 		tag = "fancy-body-self";
 	} else {
 		tag = "fancy-body-other";
@@ -1441,7 +1433,6 @@ gossip_chat_view_append_message (GossipChatView *view,
 {
 	GossipChatViewPriv *priv;
 	GossipContact      *sender;
-	GossipContact      *my_contact;
 	const gchar        *body;
 	gboolean            scroll_down;
 
@@ -1480,14 +1471,12 @@ gossip_chat_view_append_message (GossipChatView *view,
 		}
 	}
 
-	my_contact = gossip_contact_get_user (sender);
-
 	/* Reset the last inserted contact. */
 	if (priv->last_contact) {
 		g_object_unref (priv->last_contact);
 	}
 
-	if (gossip_contact_equal (my_contact, sender)) {
+	if (gossip_contact_is_user (sender)) {
 		priv->last_block_type = BLOCK_TYPE_SELF;
 		priv->last_contact = NULL;
 	} else {
@@ -1658,7 +1647,7 @@ chat_view_scroll_cb (GossipChatView *view)
 		gtk_adjustment_set_value (adj, max_val);
 		g_timer_destroy (priv->scroll_time);
 		priv->scroll_time = NULL;
-		priv->scroll_src = 0;
+		priv->scroll_timeout = 0;
 		return FALSE;
 	}
 
@@ -1683,16 +1672,15 @@ gossip_chat_view_scroll_down (GossipChatView *view)
 	gossip_debug (DEBUG_DOMAIN, "Scrolling down");
 
 	if (priv->scroll_time) {
-		g_timer_destroy (priv->scroll_time);
+		g_timer_reset (priv->scroll_time);
+	} else {
+		priv->scroll_time = g_timer_new();
 	}
-	if (priv->scroll_src) {
-		g_source_remove (priv->scroll_src);
+	if (!priv->scroll_timeout) {
+		priv->scroll_timeout = g_timeout_add (SCROLL_DELAY,
+						      (GSourceFunc) chat_view_scroll_cb,
+						      view);
 	}
-
-	priv->scroll_time = g_timer_new();
-	priv->scroll_src = g_timeout_add (SCROLL_DELAY,
-					  (GSourceFunc) chat_view_scroll_cb,
-					  view);
 }
 
 gboolean

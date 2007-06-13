@@ -2,14 +2,18 @@ Things you can do if you want to help:
 
  - Rename all files and functions name to use the empathy namespace. Bug #444490.
  - Porting gossip-account-widget-*.{c,h} from gossip project (Guillaume is already working on IRC widget).
- - Porting various UI widgets from gossip to libempathy-gtk for contact info, adding contact, personal info, etc.
- - GtkWidget-ify gossip widgets imported in libempathy-gtk. Actually most window/dialog do not inherit from GtkWindow/GtkDialog. Need to create a glade catalog.
+ - UI for inviting a contact in a chatroom.
+ - UI for accept/refuse invitation to join a chatroom.
+ - UI to send a message directly to a contact.
+ - GtkWidget-ify libempathy-gtk. Actually most window/dialog do not inherit from GtkWindow/GtkDialog. Need to create a glade catalog.
  - Filter channels before dispatching them. For example we need a GtkStatusIcon that blink when an event arrives (text/voip/ft channel) and tells the MC to dispatch the channel only when the user clicked the icon. Like in gossip. For that we need a filter DBus API in MC, not yet written, a draft spec is proposed on the telepathy ML.
  - Make use of NetworkManager to set the presence
  - Remove Quit option everywhere, empathy is a session service and shouldn't be leaved.
  - Add sound events
  - Add register capability in GossipAccountsDialog if the profile says it's supported.
+ - Write a manual based on gossip's.
  - Testing and Bugfixing.
+ - Update translations.
 
 SoC projects:
  - Adding VoIP support based on the patch proposed for gossip.

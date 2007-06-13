@@ -148,10 +148,7 @@ empathy_contact_widget_new (GossipContact *contact,
 	information = g_slice_new0 (EmpathyContactWidget);
 	information->editable = editable;
 	if (contact) {
-		GossipContact *user_contact;
-	
-		user_contact = gossip_contact_get_user (contact);
-		information->is_user = gossip_contact_equal (contact, user_contact);
+		information->is_user = gossip_contact_is_user (contact);
 		information->can_change_contact = FALSE;
 	} else {
 		information->is_user = FALSE;

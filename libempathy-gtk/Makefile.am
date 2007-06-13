@@ -39,6 +39,7 @@ libempathy_gtk_la_SOURCES =             					\
 	gossip-account-chooser.c		gossip-account-chooser.h	\
 	gossip-new-chatroom-dialog.c		gossip-new-chatroom-dialog.h	\
 	gossip-chatrooms-window.c		gossip-chatrooms-window.h	\
+	gossip-log-window.c			gossip-log-window.h		\
 	gossip-ui-utils.c			gossip-ui-utils.h
 
 libempathy_gtk_la_LIBADD =				\
@@ -61,6 +62,7 @@ glade_DATA = 					\
 	gossip-group-chat.glade			\
 	gossip-chatrooms-window.glade		\
 	gossip-spell-dialog.glade		\
+	gossip-log-window.glade			\
 	gossip-chat.glade
 
 dtddir = $(datadir)/empathy

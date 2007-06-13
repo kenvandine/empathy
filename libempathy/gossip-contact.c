@@ -30,7 +30,6 @@
 #include "gossip-contact.h"
 #include "gossip-utils.h"
 #include "gossip-debug.h"
-#include "empathy-contact-manager.h"
 
 #define DEBUG_DOMAIN "Contact"
 
@@ -47,6 +46,7 @@ struct _GossipContactPriv {
 	GList              *groups;
 	GossipSubscription  subscription;
 	guint               handle;
+	gboolean            is_user;
 };
 
 static void contact_class_init    (GossipContactClass *class);
@@ -70,7 +70,8 @@ enum {
 	PROP_PRESENCE,
 	PROP_GROUPS,
 	PROP_SUBSCRIPTION,
-	PROP_HANDLE
+	PROP_HANDLE,
+	PROP_IS_USER
 };
 
 static gpointer parent_class = NULL;
@@ -180,6 +181,13 @@ contact_class_init (GossipContactClass *class)
 							    G_MAXUINT,
 							    0,
 							    G_PARAM_READWRITE));
+	g_object_class_install_property (object_class,
+					 PROP_IS_USER,
+					 g_param_spec_boolean ("is-user",
+							       "Contact is-user",
+							       "Is contact the user",
+							       FALSE,
+							       G_PARAM_READWRITE));
 
 	g_type_class_add_private (object_class, sizeof (GossipContactPriv));
 }
@@ -187,17 +195,6 @@ contact_class_init (GossipContactClass *class)
 static void
 contact_init (GossipContact *contact)
 {
-	GossipContactPriv *priv;
-
-	priv = GET_PRIV (contact);
-
-	priv->id       = NULL;
-	priv->name     = NULL;
-	priv->avatar   = NULL;
-	priv->account  = NULL;
-	priv->presence = NULL;
-	priv->groups   = NULL;
-	priv->handle   = 0;
 }
 
 static void
@@ -269,6 +266,9 @@ contact_get_property (GObject    *object,
 	case PROP_HANDLE:
 		g_value_set_uint (value, priv->handle);
 		break;
+	case PROP_IS_USER:
+		g_value_set_boolean (value, priv->is_user);
+		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
 		break;
@@ -317,6 +317,10 @@ contact_set_property (GObject      *object,
 	case PROP_HANDLE:
 		gossip_contact_set_handle (GOSSIP_CONTACT (object),
 					   g_value_get_uint (value));
+		break;
+	case PROP_IS_USER:
+		gossip_contact_set_is_user (GOSSIP_CONTACT (object),
+					    g_value_get_boolean (value));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
@@ -447,6 +451,18 @@ gossip_contact_get_handle (GossipContact *contact)
 	priv = GET_PRIV (contact);
 
 	return priv->handle;
+}
+
+gboolean
+gossip_contact_is_user (GossipContact *contact)
+{
+	GossipContactPriv *priv;
+
+	g_return_val_if_fail (GOSSIP_IS_CONTACT (contact), FALSE);
+
+	priv = GET_PRIV (contact);
+
+	return priv->is_user;
 }
 
 void
@@ -630,6 +646,25 @@ gossip_contact_set_handle (GossipContact *contact,
 }
 
 void
+gossip_contact_set_is_user (GossipContact *contact,
+			    gboolean       is_user)
+{
+	GossipContactPriv *priv;
+
+	g_return_if_fail (GOSSIP_IS_CONTACT (contact));
+
+	priv = GET_PRIV (contact);
+
+	if (priv->is_user == is_user) {
+		return;
+	}
+
+	priv->is_user = is_user;
+
+	g_object_notify (G_OBJECT (contact), "is-user");
+}
+
+void
 gossip_contact_add_group (GossipContact *contact,
 			  const gchar   *group)
 {
@@ -720,24 +755,6 @@ gossip_contact_get_status (GossipContact *contact)
 	}
 
 	return gossip_presence_state_get_default_status (MC_PRESENCE_OFFLINE);
-}
-
-GossipContact *
-gossip_contact_get_user (GossipContact *contact)
-{
-	GossipContactPriv     *priv;
-	EmpathyContactManager *manager;
-	GossipContact         *user_contact;
-
-	g_return_val_if_fail (GOSSIP_IS_CONTACT (contact), NULL);
-
-	priv = GET_PRIV (contact);
-
-	manager = empathy_contact_manager_new ();
-	user_contact = empathy_contact_manager_get_user (manager, priv->account);
-	g_object_unref (manager);
-
-	return user_contact;
 }
 
 gboolean

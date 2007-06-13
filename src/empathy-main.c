@@ -127,6 +127,7 @@ main (int argc, char *argv[])
 		  0, G_OPTION_ARG_NONE, &no_connect,
 		  N_("Don't connect on startup"),
 		  NULL },
+		{ NULL }
 	};
 
 	bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);

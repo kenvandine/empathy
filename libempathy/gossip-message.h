@@ -66,6 +66,9 @@ void              gossip_message_set_type                (GossipMessage        *
 GossipContact *   gossip_message_get_sender              (GossipMessage        *message);
 void              gossip_message_set_sender              (GossipMessage        *message,
 							  GossipContact        *contact);
+GossipContact *   gossip_message_get_receiver            (GossipMessage        *message);
+void              gossip_message_set_receiver            (GossipMessage        *message,
+							  GossipContact        *contact);
 const gchar *     gossip_message_get_body                (GossipMessage        *message);
 void              gossip_message_set_body                (GossipMessage        *message,
 							  const gchar          *body);

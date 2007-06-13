@@ -50,6 +50,7 @@
 #include "gossip-about-dialog.h"
 #include "gossip-new-chatroom-dialog.h"
 #include "gossip-chatrooms-window.h"
+#include "gossip-log-window.h"
 
 #define DEBUG_DOMAIN "MainWindow"
 
@@ -533,7 +534,7 @@ static void
 main_window_chat_history_cb (GtkWidget         *widget,
 			     EmpathyMainWindow *window)
 {
-	//gossip_log_window_show (NULL, NULL);
+	gossip_log_window_show (NULL, NULL, FALSE, GTK_WINDOW (window->window));
 }
 
 static void

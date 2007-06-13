@@ -57,6 +57,7 @@ struct _GossipContactListStorePriv {
 	gboolean                    is_compact;
 	gboolean                    show_active;
 	GossipContactListStoreSort  sort_criterium;
+	guint                       inhibit_active;
 
 	GossipContactGroupsFunc     get_contact_groups;
 	gpointer                    get_contact_groups_data;
@@ -92,6 +93,7 @@ static void             contact_list_store_set_property              (GObject   
 								      const GValue                *value,
 								      GParamSpec                  *pspec);
 static void             contact_list_store_setup                     (GossipContactListStore      *store);
+static gboolean         contact_list_store_inibit_active_cb          (GossipContactListStore      *store);
 static void             contact_list_store_contact_added_cb          (EmpathyContactList          *list_iface,
 								      GossipContact               *contact,
 								      GossipContactListStore      *store);
@@ -231,9 +233,9 @@ gossip_contact_list_store_init (GossipContactListStore *store)
 
 	priv = GET_PRIV (store);
 
-	priv->is_compact = FALSE;
-	priv->show_active = TRUE;
-	priv->show_avatars = TRUE;
+	priv->inhibit_active = g_timeout_add (1000,
+					      (GSourceFunc) contact_list_store_inibit_active_cb,
+					      store);
 }
 
 static void
@@ -247,6 +249,10 @@ contact_list_store_finalize (GObject *object)
 
 	if (priv->list) {
 		g_object_unref (priv->list);
+	}
+
+	if (priv->inhibit_active) {
+		g_source_remove (priv->inhibit_active);
 	}
 
 	G_OBJECT_CLASS (gossip_contact_list_store_parent_class)->finalize (object);
@@ -320,7 +326,6 @@ gossip_contact_list_store_new (EmpathyContactList *list_iface)
 	GossipContactListStore     *store;
 	GossipContactListStorePriv *priv;
 	GList                      *contacts, *l;
-	gboolean                    show_active;
 
 	g_return_val_if_fail (EMPATHY_IS_CONTACT_LIST (list_iface), NULL);
 
@@ -340,9 +345,7 @@ gossip_contact_list_store_new (EmpathyContactList *list_iface)
 			  G_CALLBACK (contact_list_store_contact_removed_cb),
 			  store);
 
-	/* Add contacts already created. Do not highlight them. */
-	show_active = priv->show_active;
-	priv->show_active = FALSE;
+	/* Add contacts already created. */
 	contacts = empathy_contact_list_get_members (priv->list);
 	for (l = contacts; l; l = l->next) {
 		GossipContact *contact;
@@ -354,7 +357,6 @@ gossip_contact_list_store_new (EmpathyContactList *list_iface)
 		g_object_unref (contact);
 	}
 	g_list_free (contacts);
-	priv->show_active = show_active;
 
 	return store;
 }
@@ -681,6 +683,14 @@ void
 gossip_contact_list_store_update_contact_groups (GossipContactListStore *store,
 						 GossipContact          *contact)
 {
+	GossipContactListStorePriv *priv;
+	gboolean                    show_active;
+
+	g_return_if_fail (GOSSIP_IS_CONTACT_LIST_STORE (store));
+	g_return_if_fail (GOSSIP_IS_CONTACT (contact));
+
+	priv = GET_PRIV (store);
+
 	gossip_debug (DEBUG_DOMAIN, "Contact:'%s' updating groups",
 		      gossip_contact_get_name (contact));
 
@@ -688,8 +698,11 @@ gossip_contact_list_store_update_contact_groups (GossipContactListStore *store,
 	 * would have to check the groups already set up for each
 	 * contact and then see what has been updated.
 	 */
+	show_active = priv->show_active;
+	priv->show_active = FALSE;
 	contact_list_store_remove_contact (store, contact);
 	contact_list_store_add_contact (store, contact);
+	priv->show_active = show_active;
 }
 
 static void
@@ -724,6 +737,19 @@ contact_list_store_setup (GossipContactListStore *store)
 
 	priv->sort_criterium = GOSSIP_CONTACT_LIST_STORE_SORT_NAME;
 	gossip_contact_list_store_set_sort_criterium (store, priv->sort_criterium);
+}
+
+static gboolean
+contact_list_store_inibit_active_cb (GossipContactListStore *store)
+{
+	GossipContactListStorePriv *priv;
+
+	priv = GET_PRIV (store);
+
+	priv->show_active = TRUE;
+	priv->inhibit_active = 0;
+
+	return FALSE;
 }
 
 static void

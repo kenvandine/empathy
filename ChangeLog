@@ -1,3 +1,38 @@
+2007-06-13 Xavier Claessens  <xclaesse@gmail.com>
+
+	* libempathy-gtk/Makefile.am:
+	* libempathy-gtk/gossip-log-window.glade:
+	* libempathy-gtk/gossip-log-window.h:
+	* libempathy-gtk/gossip-log-window.c:
+	* libempathy/empathy-log-manager.c:
+	* libempathy/empathy-log-manager.h:
+	* libempathy-gtk/gossip-chat.c:
+	* libempathy-gtk/empathy-main-window.c: New window for viewing logs.
+
+	* libempathy-gtk/gossip-chat-view.c: Do not use smooth scroll when
+	resizing the view.
+
+	* libempathy-gtk/gossip-contact-list-store.c: Do not set active
+	contacts when creating the store, and when contact groups changed.
+
+	* src/empathy-main.c: Fix warning when using command-line options.
+
+	* libempathy/empathy-tp-contact-list.c: Check if we have an aliasing
+	iface before setting the alias of a contact.
+
+	* TODO: Updated.
+
+	* data/jabber.profile: Ignore ssl errors by default. This is a security
+	vulnerability but we don't really have the choice.
+
+	* libempathy/gossip-contact.h:
+	* libempathy/gossip-contact.c: Add a "is-user" property to know if
+	it's our self contact.
+
+	* libempathy/gossip-message.h:
+	* libempathy/gossip-message.c: Add a "receiver" property like that we
+	have our self contact for nick highlight.
+
 2007-06-10 Xavier Claessens  <xclaesse@gmail.com>
 
 	* libempathy-gtk/gossip-spell-dialog.glade:

@@ -33,6 +33,7 @@ typedef struct _GossipMessagePriv GossipMessagePriv;
 struct _GossipMessagePriv {
 	GossipMessageType     type;
 	GossipContact        *sender;
+	GossipContact        *receiver;
 	gchar                *body;
 	GossipTime            timestamp;
 
@@ -54,6 +55,7 @@ enum {
 	PROP_0,
 	PROP_TYPE,
 	PROP_SENDER,
+	PROP_RECEIVER,
 	PROP_BODY,
 	PROP_TIMESTAMP,
 };
@@ -114,7 +116,13 @@ gossip_message_class_init (GossipMessageClass *class)
 							      "The sender of the message",
 							      GOSSIP_TYPE_CONTACT,
 							      G_PARAM_READWRITE));
-
+	g_object_class_install_property (object_class,
+					 PROP_RECEIVER,
+					 g_param_spec_object ("receiver",
+							      "Message Receiver",
+							      "The receiver of the message",
+							      GOSSIP_TYPE_CONTACT,
+							      G_PARAM_READWRITE));
 	g_object_class_install_property (object_class,
 					 PROP_BODY,
 					 g_param_spec_string ("body",
@@ -144,9 +152,6 @@ gossip_message_init (GossipMessage *message)
 
 	priv = GET_PRIV (message);
 
-	priv->type = GOSSIP_MESSAGE_TYPE_NORMAL;
-	priv->sender = NULL;
-	priv->body = NULL;
 	priv->timestamp = gossip_time_get_current ();
 }
 
@@ -159,6 +164,9 @@ gossip_message_finalize (GObject *object)
 
 	if (priv->sender) {
 		g_object_unref (priv->sender);
+	}
+	if (priv->receiver) {
+		g_object_unref (priv->receiver);
 	}
 
 	g_free (priv->body);
@@ -182,6 +190,9 @@ message_get_property (GObject    *object,
 		break;
 	case PROP_SENDER:
 		g_value_set_object (value, priv->sender);
+		break;
+	case PROP_RECEIVER:
+		g_value_set_object (value, priv->receiver);
 		break;
 	case PROP_BODY:
 		g_value_set_string (value, priv->body);
@@ -210,6 +221,10 @@ message_set_property (GObject      *object,
 	case PROP_SENDER:
 		gossip_message_set_sender (GOSSIP_MESSAGE (object),
 					   GOSSIP_CONTACT (g_value_get_object (value)));
+		break;
+	case PROP_RECEIVER:
+		gossip_message_set_receiver (GOSSIP_MESSAGE (object),
+					     GOSSIP_CONTACT (g_value_get_object (value)));
 		break;
 	case PROP_BODY:
 		gossip_message_set_body (GOSSIP_MESSAGE (object),
@@ -288,6 +303,39 @@ gossip_message_set_sender (GossipMessage *message, GossipContact *contact)
 	}
 
 	g_object_notify (G_OBJECT (message), "sender");
+}
+
+GossipContact *
+gossip_message_get_receiver (GossipMessage *message)
+{
+	GossipMessagePriv *priv;
+
+	g_return_val_if_fail (GOSSIP_IS_MESSAGE (message), NULL);
+
+	priv = GET_PRIV (message);
+
+	return priv->receiver;
+}
+
+void
+gossip_message_set_receiver (GossipMessage *message, GossipContact *contact)
+{
+	GossipMessagePriv *priv;
+	GossipContact     *old_receiver;
+
+	g_return_if_fail (GOSSIP_IS_MESSAGE (message));
+	g_return_if_fail (GOSSIP_IS_CONTACT (contact));
+
+	priv = GET_PRIV (message);
+
+	old_receiver = priv->receiver;
+	priv->receiver = g_object_ref (contact);
+
+	if (old_receiver) {
+		g_object_unref (old_receiver);
+	}
+
+	g_object_notify (G_OBJECT (message), "receiver");
 }
 
 const gchar *

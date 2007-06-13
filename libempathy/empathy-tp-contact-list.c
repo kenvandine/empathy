@@ -380,8 +380,8 @@ empathy_tp_contact_list_new (McAccount *account)
 			      error ? error->message : "No error given");
 		g_clear_error (&error);
 	} else {
-		/* FIXME: this adds the handle to the roster */
 		priv->user_contact = empathy_tp_contact_list_get_from_handle (list, handle);
+		gossip_contact_set_is_user (priv->user_contact, TRUE);
 	}
 
 	return list;
@@ -1276,6 +1276,10 @@ tp_contact_list_name_updated_cb (GossipContact        *contact,
 
 	priv = GET_PRIV (list);
 	
+	if (!priv->aliasing_iface) {
+		return;
+	}
+
 	handle = gossip_contact_get_handle (contact);
 	new_name = gossip_contact_get_name (contact);
 

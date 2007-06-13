@@ -69,6 +69,7 @@ GossipPresence *   gossip_contact_get_presence              (GossipContact      
 GList *            gossip_contact_get_groups                (GossipContact      *contact);
 GossipSubscription gossip_contact_get_subscription          (GossipContact      *contact);
 guint              gossip_contact_get_handle                (GossipContact      *contact);
+gboolean           gossip_contact_is_user                   (GossipContact      *contact);
 void               gossip_contact_set_id                    (GossipContact      *contact,
 							     const gchar        *id);
 void               gossip_contact_set_name                  (GossipContact      *contact,
@@ -85,6 +86,8 @@ void               gossip_contact_set_subscription          (GossipContact      
 							     GossipSubscription  subscription);
 void               gossip_contact_set_handle                (GossipContact      *contact,
 							     guint               handle);
+void               gossip_contact_set_is_user               (GossipContact      *contact,
+							     gboolean            is_user);
 void               gossip_contact_add_group                 (GossipContact      *contact,
 							     const gchar        *group);
 void               gossip_contact_remove_group              (GossipContact      *contact,
@@ -93,7 +96,6 @@ gboolean           gossip_contact_is_online                 (GossipContact      
 gboolean           gossip_contact_is_in_group               (GossipContact      *contact,
 							     const gchar        *group);
 const gchar *      gossip_contact_get_status                (GossipContact      *contact);
-GossipContact *    gossip_contact_get_user                  (GossipContact      *contact);
 gboolean           gossip_contact_equal                     (gconstpointer       v1,
 							     gconstpointer       v2);
 guint              gossip_contact_hash                      (gconstpointer       key);

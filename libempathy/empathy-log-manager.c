@@ -39,6 +39,7 @@
 
 #define LOG_DIR_CREATE_MODE       (S_IRUSR | S_IWUSR | S_IXUSR)
 #define LOG_FILE_CREATE_MODE      (S_IRUSR | S_IWUSR)
+#define LOG_DIR_CHATROOMS         "chatrooms"
 #define LOG_FILENAME_SUFFIX       ".log"
 #define LOG_TIME_FORMAT_FULL      "%Y%m%dT%H:%M:%S"
 #define LOG_TIME_FORMAT           "%Y%m%d"
@@ -51,21 +52,35 @@
     "</log>\n"
 
 struct _EmpathyLogManagerPriv {
-	gboolean dummy;
+	gchar *basedir;
 };
 
-static void    empathy_log_manager_class_init         (EmpathyLogManagerClass *klass);
-static void    empathy_log_manager_init               (EmpathyLogManager      *manager);
-static void    log_manager_finalize                   (GObject                *object);
-static gchar * log_manager_get_dir                    (McAccount              *account,
-						       const gchar            *chat_id);
-static gchar * log_manager_get_filename               (McAccount              *account,
-						       const gchar            *chat_id);
-static gchar * log_manager_get_filename_for_date      (McAccount              *account,
-						       const gchar            *chat_id,
-						       const gchar            *date);
-static gchar * log_manager_get_timestamp_filename     (void);
-static gchar * log_manager_get_timestamp_from_message (GossipMessage          *message);
+static void                 empathy_log_manager_class_init         (EmpathyLogManagerClass *klass);
+static void                 empathy_log_manager_init               (EmpathyLogManager      *manager);
+static void                 log_manager_finalize                   (GObject                *object);
+static const gchar *        log_manager_get_basedir                (EmpathyLogManager      *manager);
+static GList *              log_manager_get_all_files              (EmpathyLogManager      *manager,
+								    const gchar            *dir);
+static GList *              log_manager_get_chats                  (EmpathyLogManager      *manager,
+								    const gchar            *dir,
+								    gboolean                is_chatroom);
+static gchar *              log_manager_get_dir                    (EmpathyLogManager      *manager,
+								    McAccount              *account,
+								    const gchar            *chat_id,
+								    gboolean                chatroom);
+static gchar *              log_manager_get_filename               (EmpathyLogManager      *manager,
+								    McAccount              *account,
+								    const gchar            *chat_id,
+								    gboolean                chatroom);
+static gchar *              log_manager_get_filename_for_date      (EmpathyLogManager      *manager,
+								    McAccount              *account,
+								    const gchar            *chat_id,
+								    gboolean                chatroom,
+								    const gchar            *date);
+static gchar *              log_manager_get_timestamp_filename     (void);
+static gchar *              log_manager_get_timestamp_from_message (GossipMessage          *message);
+static EmpathyLogSearchHit *log_manager_search_hit_new             (EmpathyLogManager      *manager,
+								    const gchar            *filename);
 
 G_DEFINE_TYPE (EmpathyLogManager, empathy_log_manager, G_TYPE_OBJECT);
 
@@ -87,6 +102,11 @@ empathy_log_manager_init (EmpathyLogManager *manager)
 static void
 log_manager_finalize (GObject *object)
 {
+	EmpathyLogManagerPriv *priv;
+
+	priv = GET_PRIV (object);
+
+	g_free (priv->basedir);
 }
 
 EmpathyLogManager *
@@ -107,6 +127,7 @@ empathy_log_manager_new (void)
 void
 empathy_log_manager_add_message (EmpathyLogManager *manager,
 				 const gchar       *chat_id,
+				 gboolean           chatroom,
 				 GossipMessage     *message)
 {
 	FILE          *file;
@@ -132,7 +153,7 @@ empathy_log_manager_add_message (EmpathyLogManager *manager,
 		return;
 	}
 
-	filename = log_manager_get_filename (account, chat_id);
+	filename = log_manager_get_filename (manager, account, chat_id, chatroom);
 
 	gossip_debug (DEBUG_DOMAIN, "Adding message: '%s' to file: '%s'",
 		      body_str, filename);
@@ -154,24 +175,17 @@ empathy_log_manager_add_message (EmpathyLogManager *manager,
 	timestamp = log_manager_get_timestamp_from_message (message);
 
 	str = gossip_contact_get_name (sender);
-	if (!str) {
-		contact_name = g_strdup ("");
-	} else {
-		contact_name = g_markup_escape_text (str, -1);
-	}
+	contact_name = g_markup_escape_text (str, -1);
 
 	str = gossip_contact_get_id (sender);
-	if (!str) {
-		contact_id = g_strdup ("");
-	} else {
-		contact_id = g_markup_escape_text (str, -1);
-	}
+	contact_id = g_markup_escape_text (str, -1);
 
 	g_fprintf (file,
-		   "<message time='%s' id='%s' name='%s'>%s</message>\n" LOG_FOOTER,
+		   "<message time='%s' id='%s' name='%s' isuser='%s'>%s</message>\n" LOG_FOOTER,
 		   timestamp,
 		   contact_id,
 		   contact_name,
+		   gossip_contact_is_user (sender) ? "true" : "false",
 		   body);
 
 	fclose (file);
@@ -185,7 +199,8 @@ empathy_log_manager_add_message (EmpathyLogManager *manager,
 GList *
 empathy_log_manager_get_dates (EmpathyLogManager *manager,
 			       McAccount         *account,
-			       const gchar       *chat_id)
+			       const gchar       *chat_id,
+			       gboolean           chatroom)
 {
 	GList       *dates = NULL;
 	gchar       *date;
@@ -198,7 +213,7 @@ empathy_log_manager_get_dates (EmpathyLogManager *manager,
 	g_return_val_if_fail (MC_IS_ACCOUNT (account), NULL);
 	g_return_val_if_fail (chat_id != NULL, NULL);
 
-	directory = log_manager_get_dir (account, chat_id);
+	directory = log_manager_get_dir (manager, account, chat_id, chatroom);
 	if (!directory) {
 		return NULL;
 	}
@@ -238,6 +253,7 @@ GList *
 empathy_log_manager_get_messages_for_date (EmpathyLogManager *manager,
 					   McAccount         *account,
 					   const gchar       *chat_id,
+					   gboolean           chatroom,
 					   const gchar       *date)
 {
 	gchar            *filename;
@@ -251,7 +267,7 @@ empathy_log_manager_get_messages_for_date (EmpathyLogManager *manager,
 	g_return_val_if_fail (MC_IS_ACCOUNT (account), NULL);
 	g_return_val_if_fail (chat_id != NULL, NULL);
 
-	filename = log_manager_get_filename_for_date (account, chat_id, date);
+	filename = log_manager_get_filename_for_date (manager, account, chat_id, chatroom, date);
 
 	gossip_debug (DEBUG_DOMAIN, "Attempting to parse filename:'%s'...", filename);
 
@@ -291,6 +307,8 @@ empathy_log_manager_get_messages_for_date (EmpathyLogManager *manager,
 		gchar         *sender_id;
 		gchar         *sender_name;
 		gchar         *body;
+		gchar         *is_user_str;
+		gboolean       is_user = FALSE;
 
 		if (strcmp (node->name, "message") != 0) {
 			continue;
@@ -300,10 +318,16 @@ empathy_log_manager_get_messages_for_date (EmpathyLogManager *manager,
 		time = xmlGetProp (node, "time");
 		sender_id = xmlGetProp (node, "id");
 		sender_name = xmlGetProp (node, "name");
+		is_user_str = xmlGetProp (node, "isuser");
+
+		if (is_user_str) {
+			is_user = strcmp (is_user_str, "true") == 0;
+		}
 
 		t = gossip_time_parse (time);
 
 		sender = gossip_contact_new_full (account, sender_id, sender_name);
+		gossip_contact_set_is_user (sender, is_user);
 		message = gossip_message_new (body);
 		gossip_message_set_sender (message, sender);
 		gossip_message_set_timestamp (message, t);
@@ -329,7 +353,8 @@ empathy_log_manager_get_messages_for_date (EmpathyLogManager *manager,
 GList *
 empathy_log_manager_get_last_messages (EmpathyLogManager *manager,
 				       McAccount         *account,
-				       const gchar       *chat_id)
+				       const gchar       *chat_id,
+				       gboolean           chatroom)
 {
 	GList *messages = NULL;
 	GList *dates;
@@ -339,13 +364,14 @@ empathy_log_manager_get_last_messages (EmpathyLogManager *manager,
 	g_return_val_if_fail (MC_IS_ACCOUNT (account), NULL);
 	g_return_val_if_fail (chat_id != NULL, NULL);
 
-	dates = empathy_log_manager_get_dates (manager, account, chat_id);
+	dates = empathy_log_manager_get_dates (manager, account, chat_id, chatroom);
 
 	l = g_list_last (dates);
 	if (l) {
 		messages = empathy_log_manager_get_messages_for_date (manager,
 								      account,
 								      chat_id,
+								      chatroom,
 								      l->data);
 	}
 
@@ -355,22 +381,238 @@ empathy_log_manager_get_last_messages (EmpathyLogManager *manager,
 	return messages;
 }
 
+GList *
+empathy_log_manager_get_chats (EmpathyLogManager *manager,
+			       McAccount         *account)
+{
+	const gchar *basedir;
+	gchar       *dir;
+
+	basedir = log_manager_get_basedir (manager);
+	dir = g_build_filename (basedir,
+				mc_account_get_unique_name (account),
+				NULL);
+
+	return log_manager_get_chats (manager, dir, FALSE);
+}
+
+GList *
+empathy_log_manager_search_new (EmpathyLogManager *manager,
+				const gchar       *text)
+{
+	GList *files, *l;
+	GList *hits = NULL;
+	gchar *text_casefold;
+
+	g_return_val_if_fail (EMPATHY_IS_LOG_MANAGER (manager), NULL);
+	g_return_val_if_fail (!G_STR_EMPTY (text), NULL);
+
+	text_casefold = g_utf8_casefold (text, -1);
+
+	files = log_manager_get_all_files (manager, NULL);
+	gossip_debug (DEBUG_DOMAIN, "Found %d log files in total",
+		      g_list_length (files));
+
+	for (l = files; l; l = l->next) {
+		gchar       *filename;
+		GMappedFile *file;
+		gsize        length;
+		gchar       *contents;
+		gchar       *contents_casefold;
+
+		filename = l->data;
+
+		file = g_mapped_file_new (filename, FALSE, NULL);
+		if (!file) {
+			continue;
+		}
+
+		length = g_mapped_file_get_length (file);
+		contents = g_mapped_file_get_contents (file);
+		contents_casefold = g_utf8_casefold (contents, length);
+
+		g_mapped_file_free (file);
+
+		if (strstr (contents_casefold, text_casefold)) {
+			EmpathyLogSearchHit *hit;
+
+			hit = log_manager_search_hit_new (manager, filename);
+
+			if (hit) {
+				hits = g_list_prepend (hits, hit);
+				gossip_debug (DEBUG_DOMAIN, 
+					      "Found text:'%s' in file:'%s' on date:'%s'...",
+					      text, hit->filename, hit->date);
+			}
+		}
+
+		g_free (contents_casefold);
+		g_free (filename);
+	}
+	g_list_free (files);
+
+	g_free (text_casefold);
+
+	return hits;
+}
+
+void
+empathy_log_manager_search_free (GList *hits)
+{
+	GList               *l;
+	EmpathyLogSearchHit *hit;
+
+	for (l = hits; l; l = l->next) {
+		hit = l->data;
+
+		if (hit->account) {
+			g_object_unref (hit->account);
+		}
+
+		g_free (hit->date);
+		g_free (hit->filename);
+		g_free (hit->chat_id);
+
+		g_slice_free (EmpathyLogSearchHit, hit);
+	}
+	
+	g_list_free (hits);
+}
+
+/* Format is just date, 20061201. */
+gchar *
+empathy_log_manager_get_date_readable (const gchar *date)
+{
+	GossipTime t;
+
+	t = gossip_time_parse (date);
+
+	return gossip_time_to_string_local (t, "%a %d %b %Y");
+}
+
+static const gchar *
+log_manager_get_basedir (EmpathyLogManager *manager)
+{
+	EmpathyLogManagerPriv *priv;	
+
+	priv = GET_PRIV (manager);
+
+	if (priv->basedir) {
+		return priv->basedir;
+	}
+
+	priv->basedir = g_build_path (G_DIR_SEPARATOR_S,
+				      g_get_home_dir (),
+				      ".gnome2",
+				      PACKAGE_NAME,
+				      "logs",
+				      NULL);
+
+	return priv->basedir;
+}
+
+static GList *
+log_manager_get_all_files (EmpathyLogManager *manager,
+			   const gchar       *dir)
+{
+	GDir        *gdir;
+	GList       *files = NULL;
+	const gchar *name;
+	
+	if (!dir) {
+		dir = log_manager_get_basedir (manager);
+	}
+
+	gdir = g_dir_open (dir, 0, NULL);
+	if (!gdir) {
+		return NULL;
+	}
+
+	while ((name = g_dir_read_name (gdir)) != NULL) {
+		gchar *filename;
+
+		filename = g_build_filename (dir, name, NULL);
+		if (g_str_has_suffix (filename, LOG_FILENAME_SUFFIX)) {
+			files = g_list_prepend (files, filename);
+			continue;
+		}
+
+		if (g_file_test (filename, G_FILE_TEST_IS_DIR)) {
+			/* Recursively get all log files */
+			files = g_list_concat (files, log_manager_get_all_files (manager, filename));
+		}
+		g_free (filename);
+	}
+
+	g_dir_close (gdir);
+
+	return files;
+}
+
+static GList *
+log_manager_get_chats (EmpathyLogManager *manager,
+		       const gchar       *dir,
+		       gboolean           is_chatroom)
+{
+	GDir        *gdir;
+	GList       *hits = NULL;
+	const gchar *name;
+
+	gdir = g_dir_open (dir, 0, NULL);
+	if (!gdir) {
+		return NULL;
+	}
+
+	while ((name = g_dir_read_name (gdir)) != NULL) {
+		EmpathyLogSearchHit *hit;
+		gchar *filename;
+
+		filename = g_build_filename (dir, name, NULL);
+		if (strcmp (name, LOG_DIR_CHATROOMS) == 0) {
+			hits = g_list_concat (hits, log_manager_get_chats (manager, filename, TRUE));
+			g_free (filename);
+			continue;
+		}
+
+		hit = g_slice_new0 (EmpathyLogSearchHit);
+		hit->chat_id = g_strdup (name);
+		hit->is_chatroom = is_chatroom;
+
+		hits = g_list_prepend (hits, hit);
+	}
+
+	g_dir_close (gdir);
+
+	return hits;
+}
+
 static gchar *
-log_manager_get_dir (McAccount   *account,
-		     const gchar *chat_id)
+log_manager_get_dir (EmpathyLogManager *manager,
+		     McAccount         *account,
+		     const gchar       *chat_id,
+		     gboolean           chatroom)
 {
 	const gchar *account_id;
 	gchar       *basedir;
+	gchar       *str;
 
 	account_id = mc_account_get_unique_name (account);
-	basedir = g_build_path (G_DIR_SEPARATOR_S,
-				g_get_home_dir (),
-				".gnome2",
-				PACKAGE_NAME,
-				"logs",
-				account_id,
-				chat_id,
-				NULL);
+	basedir = 
+	str = g_build_path (G_DIR_SEPARATOR_S,
+			    log_manager_get_basedir (manager),
+			    account_id,
+			    chat_id,
+			    NULL);
+
+	if (chatroom) {
+		basedir = g_build_path (G_DIR_SEPARATOR_S,
+					str,
+					LOG_DIR_CHATROOMS,
+					NULL);
+		g_free (str);
+	} else {
+		basedir = str;
+	}
 
 	if (!g_file_test (basedir, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR)) {
 		gossip_debug (DEBUG_DOMAIN, "Creating directory:'%s'", basedir);
@@ -382,14 +624,16 @@ log_manager_get_dir (McAccount   *account,
 }
 
 static gchar *
-log_manager_get_filename (McAccount   *account,
-			  const gchar *chat_id)
+log_manager_get_filename (EmpathyLogManager *manager,
+			  McAccount         *account,
+			  const gchar       *chat_id,
+			  gboolean           chatroom)
 {
 	gchar *basedir;
 	gchar *timestamp;
 	gchar *filename;
 
-	basedir = log_manager_get_dir (account, chat_id);
+	basedir = log_manager_get_dir (manager, account, chat_id, chatroom);
 	timestamp = log_manager_get_timestamp_filename ();
 	filename = g_build_filename (basedir, timestamp, NULL);
 
@@ -400,15 +644,17 @@ log_manager_get_filename (McAccount   *account,
 }
 
 static gchar *
-log_manager_get_filename_for_date (McAccount   *account,
-				   const gchar *chat_id,
-				   const gchar *date)
+log_manager_get_filename_for_date (EmpathyLogManager *manager,
+				   McAccount         *account,
+				   const gchar       *chat_id,
+				   gboolean           chatroom,
+				   const gchar       *date)
 {
 	gchar *basedir;
 	gchar *timestamp;
 	gchar *filename;
 
-	basedir = log_manager_get_dir (account, chat_id);
+	basedir = log_manager_get_dir (manager, account, chat_id, chatroom);
 	timestamp = g_strconcat (date, LOG_FILENAME_SUFFIX, NULL);
 	filename = g_build_filename (basedir, timestamp, NULL);
 
@@ -443,5 +689,41 @@ log_manager_get_timestamp_from_message (GossipMessage *message)
 
 	/* We keep the timestamps in the messages as UTC. */
 	return gossip_time_to_string_utc (t, LOG_TIME_FORMAT_FULL);
+}
+
+static EmpathyLogSearchHit *
+log_manager_search_hit_new (EmpathyLogManager *manager,
+			    const gchar       *filename)
+{
+	EmpathyLogSearchHit  *hit;
+	const gchar          *account_name;
+	const gchar          *end;
+	gchar               **strv;
+	guint                 len;
+
+	if (!g_str_has_suffix (filename, LOG_FILENAME_SUFFIX)) {
+		return NULL;
+	}
+
+	strv = g_strsplit (filename, G_DIR_SEPARATOR_S, -1);
+	len = g_strv_length (strv);
+
+	hit = g_slice_new0 (EmpathyLogSearchHit);
+
+	end = strstr (strv[len-1], LOG_FILENAME_SUFFIX);
+	hit->date = g_strndup (strv[len-1], end - strv[len-1]);
+	hit->chat_id = g_strdup (strv[len-2]);
+	hit->is_chatroom = (strcmp (strv[len-3], LOG_DIR_CHATROOMS) == 0);
+	if (hit->is_chatroom) {
+		account_name = strv[len-4];
+	} else {
+		account_name = strv[len-3];
+	}
+	hit->account = mc_account_lookup (account_name);
+	hit->filename = g_strdup (filename);
+
+	g_strfreev (strv);
+
+	return hit;
 }
 

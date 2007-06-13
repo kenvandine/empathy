@@ -790,12 +790,13 @@ tp_chat_emit_message (EmpathyTpChat *chat,
 	EmpathyTpChatPriv *priv;
 	GossipMessage     *message;
 	GossipContact     *sender;
+	GossipContact     *receiver;
 
 	priv = GET_PRIV (chat);
 
+	receiver = empathy_tp_contact_list_get_user (priv->list);
 	if (from_handle == 0) {
-		sender = empathy_tp_contact_list_get_user (priv->list);
-		g_object_ref (sender);
+		sender = g_object_ref (receiver);
 	} else {
 		sender = empathy_tp_contact_list_get_from_handle (priv->list,
 								  from_handle);
@@ -804,6 +805,7 @@ tp_chat_emit_message (EmpathyTpChat *chat,
 	message = gossip_message_new (message_body);
 	gossip_message_set_type (message, type);
 	gossip_message_set_sender (message, sender);
+	gossip_message_set_receiver (message, receiver);
 	gossip_message_set_timestamp (message, (GossipTime) timestamp);
 
 	g_signal_emit (chat, signals[MESSAGE_RECEIVED], 0, message);
