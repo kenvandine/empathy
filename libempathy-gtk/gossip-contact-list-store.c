@@ -233,7 +233,7 @@ gossip_contact_list_store_init (GossipContactListStore *store)
 
 	priv = GET_PRIV (store);
 
-	priv->inhibit_active = g_timeout_add (1000,
+	priv->inhibit_active = g_timeout_add (ACTIVE_USER_WAIT_TO_ENABLE_TIME,
 					      (GSourceFunc) contact_list_store_inibit_active_cb,
 					      store);
 }
