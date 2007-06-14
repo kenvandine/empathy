@@ -1,5 +1,18 @@
 2007-06-14 Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/empathy-images.h:
+	* libempathy-gtk/gossip-chat.c: Use gtk-info for contact informaiton.
+
+	* data/22x22/empathy-proto-salut.png:
+	* data/22x22/Makefile.am:
+	* data/16x16/empathy-proto-salut.png:
+	* data/16x16/Makefile.am:
+	* data/scalable/empathy-proto-salut.svg:
+	* data/scalable/Makefile.am:
+	* data/salut.profile: Add salut icon. Fixes bug #447659 (Michael Monreal).
+
+2007-06-14 Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/gossip-contact-list-view.c: Show logs when right
 	click on a contact in the roster.
 

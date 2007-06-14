@@ -35,7 +35,7 @@ G_BEGIN_DECLS
 #define EMPATHY_IMAGE_MESSAGE             "empathy-message"
 #define EMPATHY_IMAGE_NEW_MESSAGE         "empathy-new-message"
 #define EMPATHY_IMAGE_TYPING              "empathy-typing"
-#define EMPATHY_IMAGE_CONTACT_INFORMATION "empathy-contact-information"
+#define EMPATHY_IMAGE_CONTACT_INFORMATION "gtk-info"
 #define EMPATHY_IMAGE_GROUP_MESSAGE       "empathy-group-message"
 
 G_END_DECLS

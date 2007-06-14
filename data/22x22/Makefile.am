@@ -8,5 +8,7 @@ icon_DATA =					\
 	empathy-proto-msn.png			\
 	empathy-proto-gizmo.png			\
 	empathy-proto-irc.png			\
-	empathy-proto-jabber.png
+	empathy-proto-jabber.png        \
+	empathy-proto-salut.png
+
 EXTRA_DIST = $(icon_DATA)
