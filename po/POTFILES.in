@@ -46,4 +46,4 @@ libempathy-gtk/gossip-spell-dialog.c
 libempathy-gtk/gossip-spell-dialog.glade
 libempathy-gtk/gossip-theme-manager.c
 
-src/empathy-main.c
+src/empathy.c
