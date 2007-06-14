@@ -1,4 +1,4 @@
-cppflags =			\
+AM_CPPFLAGS =						\
 	-I$(top_srcdir)                          	\
 	-DPREFIX="\"$(prefix)"\"			\
 	-DSYSCONFDIR=\""$(sysconfdir)"\"		\
@@ -8,26 +8,16 @@ cppflags =			\
 	$(EMPATHY_CFLAGS)				\
 	$(WARN_CFLAGS)
 
-libs =								\
+LDADD =							\
 	$(top_builddir)/libempathy-gtk/libempathy-gtk.la	\
 	$(EMPATHY_LIBS)
 
 bin_PROGRAMS =			\
 	empathy			\
-	empathy-chat		\
 	empathy-accounts
 
-empathy_SOURCES = empathy-main.c
-empathy_CPPFLAGS = $(cppflags)
-empathy_LDADD = $(libs)
-
-empathy_accounts_SOURCES = empathy-accounts-main.c
-empathy_accounts_CPPFLAGS = $(cppflags)
-empathy_accounts_LDADD = $(libs)
-
-empathy_chat_SOURCES = empathy-chat-main.c
-empathy_chat_CPPFLAGS = $(cppflags)
-empathy_chat_LDADD = $(libs)
+empathy_SOURCES = empathy.c
+empathy_accounts_SOURCES = empathy-accounts.c
 
 # Dbus service file
 servicedir = $(datadir)/dbus-1/services

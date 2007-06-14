@@ -1,5 +1,19 @@
 2007-06-14 Xavier Claessens  <xclaesse@gmail.com>
 
+	* src/org.gnome.Empathy.Chat.service.in:
+	* src/empathy-accounts.c:
+	* src/empathy-accounts-main.c:
+	* src/empathy-chat-main.c:
+	* src/empathy.c:
+	* src/Makefile.am:
+	* src/empathy-main.c:
+	* libempathy/gossip-chatroom-manager.c:
+	* autogen.sh: Empathy is no more splitted into 2 processes. It makes
+	debugging more difficult when emmpathy-chat crashes. It's also more
+	optimised like that since contact objects can be shared.
+
+2007-06-14 Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/gossip-chat-window.c: Disconnect signals from
 	chatroom_manager. Fixes bug #447178.
 

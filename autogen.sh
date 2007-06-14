@@ -17,7 +17,7 @@ ORIGDIR=`pwd`
 cd $srcdir
 PROJECT="empathy"
 TEST_TYPE=-f
-FILE=src/empathy-main.c
+FILE=src/empathy.c
 CONFIGURE=configure.ac
 
 DIE=0

@@ -34,89 +34,97 @@
 #include <libtelepathy/tp-conn.h>
 #include <libtelepathy/tp-chan.h>
 #include <libmissioncontrol/mc-account.h>
+#include <libmissioncontrol/mc-account-monitor.h>
+#include <libmissioncontrol/mission-control.h>
 
-#include <libempathy/gossip-contact.h>
 #include <libempathy/gossip-debug.h>
 #include <libempathy/gossip-utils.h>
+#include <libempathy/gossip-presence.h>
+#include <libempathy/gossip-contact.h>
 #include <libempathy/empathy-chandler.h>
 #include <libempathy/empathy-tp-chat.h>
+#include <libempathy-gtk/empathy-main-window.h>
+#include <libempathy-gtk/empathy-status-icon.h>
 #include <libempathy-gtk/gossip-private-chat.h>
 #include <libempathy-gtk/gossip-group-chat.h>
 
-#define DEBUG_DOMAIN "ChatMain"
+#define DEBUG_DOMAIN "EmpathyMain"
 
 #define BUS_NAME "org.gnome.Empathy.Chat"
 #define OBJECT_PATH "/org/freedesktop/Telepathy/ChannelHandler"
 
-/* Time to wait before exit, in seconds */
-#define EXIT_TIMEOUT 5
-
-
-static guint    chat_count = 0;
-static guint    exit_timeout = 0;
-static gboolean debug_mode = FALSE;
-
-static gboolean
-exit_timeout_cb (gpointer user_data)
+static void
+error_cb (MissionControl *mc,
+	  GError         *error,
+	  gpointer        data)
 {
-	gossip_debug (DEBUG_DOMAIN, "Timeout, exiting");
-
-	gtk_main_quit ();
-
-	return FALSE;
+	if (error) {
+		gossip_debug (DEBUG_DOMAIN, "Error: %s", error->message);
+	}
 }
 
 static void
-exit_timeout_start (void)
+service_ended_cb (MissionControl *mc,
+		  gpointer        user_data)
 {
-	if (exit_timeout || debug_mode) {
+	gossip_debug (DEBUG_DOMAIN, "Mission Control stopped");
+}
+
+static void
+operation_error_cb (MissionControl *mc,
+		    guint           operation_id,
+		    guint           error_code,
+		    gpointer        user_data)
+{
+	gossip_debug (DEBUG_DOMAIN, "Error code %d during operation %d",
+		      error_code,
+		      operation_id);
+}
+
+static void
+start_mission_control (MissionControl *mc)
+{
+	McPresence presence;
+
+	presence = mission_control_get_presence_actual (mc, NULL);
+
+	if (presence > MC_PRESENCE_OFFLINE) {
+		/* MC is already running and online, nothing to do */
 		return;
 	}
 
-	exit_timeout = g_timeout_add (EXIT_TIMEOUT * 1000,
-				      (GSourceFunc) exit_timeout_cb,
+	gossip_debug (DEBUG_DOMAIN, "Starting Mission Control...");
+
+	mission_control_set_presence (mc,
+				      MC_PRESENCE_AVAILABLE,
+				      NULL,
+				      (McCallback) error_cb,
 				      NULL);
 }
 
 static void
-exit_timeout_stop (void)
+account_enabled_cb (McAccountMonitor *monitor,
+		    gchar            *unique_name,
+		    MissionControl   *mc)
 {
-	if (exit_timeout) {
-		gossip_debug (DEBUG_DOMAIN, "Exit timeout canceled");
-		g_source_remove (exit_timeout);
-		exit_timeout = 0;
-	}
-}
-
-static void
-chat_finalized_cb (gpointer    user_data,
-		   GossipChat *chat)
-{
-	chat_count--;
-	if (chat_count == 0) {
-		gossip_debug (DEBUG_DOMAIN, "No more chat, start exit timeout");
-		exit_timeout_start ();
-	}
+	gossip_debug (DEBUG_DOMAIN, "Account enabled: %s", unique_name);
+	start_mission_control (mc);
 }
 
 static void
 new_channel_cb (EmpathyChandler *chandler,
 		TpConn          *tp_conn,
 		TpChan          *tp_chan,
-		gpointer         user_data)
+		MissionControl  *mc)
 {
-	MissionControl *mc;
-	McAccount      *account;
-	GossipChat     *chat;
-	gchar          *id;
+	McAccount  *account;
+	GossipChat *chat;
+	gchar      *id;
 
-	mc = gossip_mission_control_new ();
 	account = mission_control_get_account_for_connection (mc, tp_conn, NULL);
 	id = gossip_get_channel_id (account, tp_chan);
 	chat = gossip_chat_window_find_chat (account, id);
-
 	g_free (id);
-	g_object_unref (mc);
 
 	if (chat) {
 		/* The chat already exists */
@@ -143,35 +151,46 @@ new_channel_cb (EmpathyChandler *chandler,
 		chat = GOSSIP_CHAT (gossip_group_chat_new (account, tp_chan));
 	}
 
-	g_object_weak_ref (G_OBJECT (chat),
-			   (GWeakNotify) chat_finalized_cb,
-			   NULL);
-
-	exit_timeout_stop ();
-	chat_count++;
-
 	gossip_chat_present (GOSSIP_CHAT (chat));
 
 	g_object_unref (chat);
 	g_object_unref (account);
-
 }
 
 int
 main (int argc, char *argv[])
 {
-	EmpathyChandler *chandler;
-	GnomeProgram    *program;
+	EmpathyStatusIcon *icon;
+	GtkWidget         *window;
+	MissionControl    *mc;
+	McAccountMonitor  *monitor;
+	EmpathyChandler   *chandler;
+	GnomeProgram      *program;
+	gboolean           no_connect = FALSE;
+	GOptionContext    *context;
+	GOptionEntry       options[] = {
+		{ "no-connect", 'n',
+		  0, G_OPTION_ARG_NONE, &no_connect,
+		  N_("Don't connect on startup"),
+		  NULL },
+		{ NULL }
+	};
 
 	bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
 	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
 	textdomain (GETTEXT_PACKAGE);
 
-	program = gnome_program_init ("empathy-chat",
+	context = g_option_context_new (_("- Empathy Instant Messenger"));
+	g_option_context_add_main_entries (context, options, GETTEXT_PACKAGE);
+
+	g_set_application_name (PACKAGE_NAME);
+
+	program = gnome_program_init ("empathy",
 				      PACKAGE_VERSION,
 				      LIBGNOMEUI_MODULE,
 				      argc, argv,
 				      GNOME_PROGRAM_STANDARD_PROPERTIES,
+				      "goption-context", context,
 				      GNOME_PARAM_HUMAN_READABLE_NAME, PACKAGE_NAME,
 				      NULL);
 
@@ -179,21 +198,44 @@ main (int argc, char *argv[])
 	gtk_icon_theme_append_search_path (gtk_icon_theme_get_default (),
 					   DATADIR G_DIR_SEPARATOR_S "empathy");
 
-	if (g_getenv ("EMPATHY_DEBUG")) {
-		debug_mode = TRUE;
+	/* Setting up MC */
+	monitor = mc_account_monitor_new ();
+	mc = gossip_mission_control_new ();
+	g_signal_connect (monitor, "account-enabled",
+			  G_CALLBACK (account_enabled_cb),
+			  mc);
+	g_signal_connect (mc, "ServiceEnded",
+			  G_CALLBACK (service_ended_cb),
+			  NULL);
+	g_signal_connect (mc, "Error",
+			  G_CALLBACK (operation_error_cb),
+			  NULL);
+
+	if (!no_connect) {
+		start_mission_control (mc);
 	}
 
-	//sexit_timeout_start ();
-	chandler = empathy_chandler_new (BUS_NAME, OBJECT_PATH);
+	/* Setting up UI */
+	window = empathy_main_window_show ();
+	icon = empathy_status_icon_new (GTK_WINDOW (window));
 
+	/* Setting up channel handler  */
+	chandler = empathy_chandler_new (BUS_NAME, OBJECT_PATH);
 	g_signal_connect (chandler, "new-channel",
 			  G_CALLBACK (new_channel_cb),
-			  NULL);
+			  mc);
 
 	gtk_main ();
 
-	g_object_unref (program);
+	mission_control_set_presence (mc,
+				      MC_PRESENCE_OFFLINE,
+				      NULL, NULL, NULL);
+
 	g_object_unref (chandler);
+	g_object_unref (monitor);
+	g_object_unref (mc);
+	g_object_unref (icon);
+	g_object_unref (program);
 
 	return EXIT_SUCCESS;
 }
