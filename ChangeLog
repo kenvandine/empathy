@@ -1,5 +1,11 @@
 2007-06-14 Xavier Claessens  <xclaesse@gmail.com>
 
+	* po/POTFILES.in:
+	* po/POTFILES.skip: Get strings in empathy.desktop.in.in and skip
+	empathy.desktop.in. Fixes bug #446161.
+
+2007-06-14 Xavier Claessens  <xclaesse@gmail.com>
+
 	* po/POTFILES.in: Adding missing files.
 
 2007-06-14 Xavier Claessens  <xclaesse@gmail.com>

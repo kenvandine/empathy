@@ -3,7 +3,7 @@
 
 
 
-data/empathy.desktop.in
+data/empathy.desktop.in.in
 data/empathy.schemas.in
 
 libempathy/empathy-idle.c
