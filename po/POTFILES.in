@@ -33,6 +33,8 @@ libempathy-gtk/gossip-chatrooms-window.glade
 libempathy-gtk/gossip-contact-list-view.c
 libempathy-gtk/gossip-group-chat.c
 libempathy-gtk/gossip-group-chat.glade
+libempathy-gtk/gossip-log-window.c
+libempathy-gtk/gossip-log-window.glade
 libempathy-gtk/gossip-new-chatroom-dialog.c
 libempathy-gtk/gossip-new-chatroom-dialog.glade
 libempathy-gtk/gossip-preferences.c
