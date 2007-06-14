@@ -136,6 +136,7 @@ empathy_log_manager_add_message (EmpathyLogManager *manager,
 	const gchar   *body_str;
 	const gchar   *str;
 	gchar         *filename;
+	gchar         *basedir;
 	gchar         *body;
 	gchar         *timestamp;
 	gchar         *contact_name;
@@ -154,6 +155,13 @@ empathy_log_manager_add_message (EmpathyLogManager *manager,
 	}
 
 	filename = log_manager_get_filename (manager, account, chat_id, chatroom);
+	basedir = g_path_get_dirname (filename);
+	if (!g_file_test (basedir, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR)) {
+		gossip_debug (DEBUG_DOMAIN, "Creating directory:'%s'", basedir);
+
+		g_mkdir_with_parents (basedir, LOG_DIR_CREATE_MODE);
+	}
+	g_free (basedir);
 
 	gossip_debug (DEBUG_DOMAIN, "Adding message: '%s' to file: '%s'",
 		      body_str, filename);
@@ -196,6 +204,22 @@ empathy_log_manager_add_message (EmpathyLogManager *manager,
 	g_free (body);
 }
 
+gboolean
+empathy_log_manager_exists (EmpathyLogManager *manager,
+			    McAccount         *account,
+			    const gchar       *chat_id,
+			    gboolean           chatroom)
+{
+	gchar    *dir;
+	gboolean  exists;
+
+	dir = log_manager_get_dir (manager, account, chat_id, chatroom);
+	exists = g_file_test (dir, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR);
+	g_free (dir);
+
+	return exists;
+}
+
 GList *
 empathy_log_manager_get_dates (EmpathyLogManager *manager,
 			       McAccount         *account,
@@ -214,10 +238,6 @@ empathy_log_manager_get_dates (EmpathyLogManager *manager,
 	g_return_val_if_fail (chat_id != NULL, NULL);
 
 	directory = log_manager_get_dir (manager, account, chat_id, chatroom);
-	if (!directory) {
-		return NULL;
-	}
-
 	dir = g_dir_open (directory, 0, NULL);
 	if (!dir) {
 		gossip_debug (DEBUG_DOMAIN, "Could not open directory:'%s'", directory);
@@ -612,12 +632,6 @@ log_manager_get_dir (EmpathyLogManager *manager,
 		g_free (str);
 	} else {
 		basedir = str;
-	}
-
-	if (!g_file_test (basedir, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR)) {
-		gossip_debug (DEBUG_DOMAIN, "Creating directory:'%s'", basedir);
-
-		g_mkdir_with_parents (basedir, LOG_DIR_CREATE_MODE);
 	}
 
 	return basedir;

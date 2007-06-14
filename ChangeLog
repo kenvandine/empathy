@@ -1,5 +1,14 @@
 2007-06-13 Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/gossip-log-window.c:
+	* libempathy-gtk/gossip-chat-window.c:
+	* libempathy/empathy-log-manager.c:
+	* libempathy/empathy-log-manager.h: Do not create log directory for a
+	chat if there is no messages to put in. Show logs and information for
+	the contact we are speaking with in the chat window menu.
+
+2007-06-13 Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/Makefile.am:
 	* libempathy-gtk/gossip-log-window.glade:
 	* libempathy-gtk/gossip-log-window.h:

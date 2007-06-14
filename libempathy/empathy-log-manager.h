@@ -65,6 +65,10 @@ void               empathy_log_manager_add_message           (EmpathyLogManager 
 							      const gchar       *chat_id,
 							      gboolean           chatroom,
 							      GossipMessage     *message);
+gboolean           empathy_log_manager_exists                (EmpathyLogManager *manager,
+							      McAccount         *account,
+							      const gchar       *chat_id,
+							      gboolean           chatroom);
 GList *            empathy_log_manager_get_dates             (EmpathyLogManager *manager,
 							      McAccount         *account,
 							      const gchar       *chat_id,

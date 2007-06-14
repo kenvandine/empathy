@@ -36,6 +36,7 @@
 
 #include <libempathy/empathy-contact-manager.h>
 #include <libempathy/empathy-contact-list.h>
+#include <libempathy/empathy-log-manager.h>
 #include <libempathy/gossip-chatroom-manager.h>
 #include <libempathy/gossip-contact.h>
 #include <libempathy/gossip-debug.h>
@@ -45,10 +46,9 @@
 
 #include "gossip-chat-window.h"
 #include "empathy-images.h"
-//#include "gossip-add-contact-dialog.h"
 //#include "gossip-chat-invite.h"
-//#include "gossip-contact-info-dialog.h"
-//#include "gossip-log-window.h"
+#include "empathy-contact-dialogs.h"
+#include "gossip-log-window.h"
 #include "gossip-new-chatroom-dialog.h"
 #include "gossip-preferences.h"
 #include "gossip-private-chat.h"
@@ -897,25 +897,14 @@ static void
 chat_window_log_activate_cb (GtkWidget        *menuitem,
 			     GossipChatWindow *window)
 {
-/* FIXME:
 	GossipChatWindowPriv *priv;
 
 	priv = GET_PRIV (window);
 
-	if (gossip_chat_is_group_chat (priv->current_chat)) {
-		GossipGroupChat *group_chat;
-		GossipChatroom  *chatroom;
-
-		group_chat = GOSSIP_GROUP_CHAT (priv->current_chat);
-		chatroom = gossip_group_chat_get_chatroom (group_chat);
-		gossip_log_window_show (NULL, chatroom);
-	} else {
-		GossipContact *contact;
-
-		contact = gossip_chat_get_contact (priv->current_chat);
-		gossip_log_window_show (contact, NULL);
-	}
-*/
+	gossip_log_window_show (priv->current_chat->account,
+				gossip_chat_get_id (priv->current_chat),
+				gossip_chat_is_group_chat (priv->current_chat),
+				GTK_WINDOW (priv->dialog));
 }
 
 static void
@@ -923,14 +912,15 @@ chat_window_info_activate_cb (GtkWidget        *menuitem,
 			      GossipChatWindow *window)
 {
 	GossipChatWindowPriv *priv;
-	//GossipContact        *contact;
+	GossipContact        *contact;
 
 	priv = GET_PRIV (window);
-/*FIXME:
-	contact = gossip_chat_get_contact (priv->current_chat);
 
-	gossip_contact_info_dialog_show (contact,
-					 GTK_WINDOW (priv->dialog));*/
+	contact = gossip_private_chat_get_contact (GOSSIP_PRIVATE_CHAT (priv->current_chat));
+
+	empathy_contact_information_dialog_show (contact,
+						 GTK_WINDOW (priv->dialog),
+						 FALSE);
 }
 
 static gboolean
@@ -982,28 +972,18 @@ chat_window_conv_activate_cb (GtkWidget        *menuitem,
 			      GossipChatWindow *window)
 {
 	GossipChatWindowPriv *priv;
+	EmpathyLogManager    *manager;
 	gboolean              log_exists = FALSE;
 
 	priv = GET_PRIV (window);
-/* FIXME:
-	if (gossip_chat_is_group_chat (priv->current_chat)) {
-		GossipGroupChat *group_chat;
-		GossipChatroom  *chatroom;
 
-		group_chat = GOSSIP_GROUP_CHAT (priv->current_chat);
-		chatroom = gossip_group_chat_get_chatroom (group_chat);
-		if (chatroom) {
-			log_exists = gossip_log_exists_for_chatroom (chatroom);
-		}
-	} else {
-		GossipContact *contact;
+	manager = empathy_log_manager_new ();
+	log_exists = empathy_log_manager_exists (manager,
+						 priv->current_chat->account,
+						 gossip_chat_get_id (priv->current_chat),
+						 gossip_chat_is_group_chat (priv->current_chat));
+	g_object_unref (manager);
 
-		contact = gossip_chat_get_contact (priv->current_chat);
-		if (contact) {
-			log_exists = gossip_log_exists_for_contact (contact);
-		}
-	}
-*/
 	gtk_widget_set_sensitive (priv->menu_conv_log, log_exists);
 }
 

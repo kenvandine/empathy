@@ -109,8 +109,6 @@ static void
 log_window_chats_new_message_cb (GossipContact   *own_contact,
 				 GossipMessage   *message,
 				 GossipLogWindow *window);
-//static gboolean
-//log_window_chats_is_today_selected (GossipLogWindow *window);
 static void
 log_window_chats_set_selected  (GossipLogWindow *window,
 				McAccount       *account,
@@ -666,7 +664,7 @@ log_window_chats_populate (GossipLogWindow *window)
 
 		gtk_list_store_append (store, &iter);
 		gtk_list_store_set (store, &iter,
-				    COL_CHAT_ICON, "empathy-available",
+				    COL_CHAT_ICON, "empathy-available", /* FIXME */
 				    COL_CHAT_NAME, hit->chat_id,				
 				    COL_CHAT_ACCOUNT, account,
 				    COL_CHAT_ID, hit->chat_id,
@@ -769,55 +767,22 @@ log_window_chats_new_message_cb (GossipContact   *own_contact,
 	gossip_chat_view_scroll_down (window->chatview_chats);
 }
 
-#if 0
-static gboolean
-log_window_chats_is_today_selected (GossipLogWindow *window)
-{
-	GossipTime  t;
-	gchar      *timestamp;
-	guint       year_selected;
-	guint       year;
-	guint       month;
-	guint       month_selected;
-	guint       day;
-	guint       day_selected;
-	gboolean    selected;
-
-	t = gossip_time_get_current ();
-	timestamp = gossip_time_to_string_local (t, "%Y%m%d");
-
-	sscanf (timestamp, "%4d%2d%2d", &year, &month, &day);
-
-	gtk_calendar_get_date (GTK_CALENDAR (window->calendar_chats),
-			       &year_selected,
-			       &month_selected,
-			       &day_selected);
-
-	/* Hack since this starts at 0 */
-	month_selected++;
-
-	selected = (day_selected == day &&
-		    month_selected == month &&
-		    year_selected == year);
-
-	g_free (timestamp);
-
-	return selected;
-}
-#endif
-
 static void
 log_window_chats_set_selected  (GossipLogWindow *window,
 				McAccount       *account,
 				const gchar     *chat_id,
 				gboolean         is_chatroom)
 {
-	GtkTreeView      *view;
-	GtkTreeModel     *model;
-	GtkTreeSelection *selection;
-	GtkTreeIter       iter;
-	GtkTreePath      *path;
-	gboolean          ok;
+	GossipAccountChooser *account_chooser;
+	GtkTreeView          *view;
+	GtkTreeModel         *model;
+	GtkTreeSelection     *selection;
+	GtkTreeIter           iter;
+	GtkTreePath          *path;
+	gboolean              ok;
+
+	account_chooser = GOSSIP_ACCOUNT_CHOOSER (window->account_chooser_chats);
+	gossip_account_chooser_set_account (account_chooser, account);
 
 	view = GTK_TREE_VIEW (window->treeview_chats);
 	model = gtk_tree_view_get_model (view);
