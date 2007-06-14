@@ -509,9 +509,12 @@ gossip_chat_window_finalize (GObject *object)
 
 	chat_windows = g_list_remove (chat_windows, window);
 	gtk_widget_destroy (priv->dialog);
-
-	g_object_unref (priv->chatroom_manager);
 	g_object_unref (priv->tooltips);
+
+	g_signal_handlers_disconnect_by_func (priv->chatroom_manager,
+					      chat_window_update_menu,
+					      window);
+	g_object_unref (priv->chatroom_manager);
 
 	G_OBJECT_CLASS (gossip_chat_window_parent_class)->finalize (object);
 }

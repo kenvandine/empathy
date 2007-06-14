@@ -1,5 +1,10 @@
 2007-06-14 Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/gossip-chat-window.c: Disconnect signals from
+	chatroom_manager. Fixes bug #447178.
+
+2007-06-14 Xavier Claessens  <xclaesse@gmail.com>
+
 	* po/POTFILES.in:
 	* po/POTFILES.skip: Get strings in empathy.desktop.in.in and skip
 	empathy.desktop.in. Fixes bug #446161.
