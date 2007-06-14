@@ -1,5 +1,10 @@
 2007-06-14 Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/gossip-contact-list-view.c: Show logs when right
+	click on a contact in the roster.
+
+2007-06-14 Xavier Claessens  <xclaesse@gmail.com>
+
 	* src/org.gnome.Empathy.Chat.service.in:
 	* src/empathy-accounts.c:
 	* src/empathy-accounts-main.c:

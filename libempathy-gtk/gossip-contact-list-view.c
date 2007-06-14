@@ -36,6 +36,7 @@
 
 #include <libempathy/empathy-contact-manager.h>
 #include <libempathy/empathy-contact-list.h>
+#include <libempathy/empathy-log-manager.h>
 #include <libempathy/gossip-debug.h>
 #include <libempathy/gossip-utils.h>
 #include <libempathy/empathy-marshal.h>
@@ -50,7 +51,7 @@
 #include "empathy-contact-dialogs.h"
 //#include "gossip-chat-invite.h"
 //#include "gossip-ft-window.h"
-//#include "gossip-log-window.h"
+#include "gossip-log-window.h"
 
 #define DEBUG_DOMAIN "ContactListView"
 
@@ -526,14 +527,20 @@ GtkWidget *
 gossip_contact_list_view_get_contact_menu (GossipContactListView *view,
 					   GossipContact         *contact)
 {
-	gboolean can_show_log;
-	gboolean can_send_file;
+	EmpathyLogManager *log_manager;
+	gboolean           can_show_log;
+	gboolean           can_send_file;
 
 	g_return_val_if_fail (GOSSIP_IS_CONTACT_LIST_VIEW (view), NULL);
 	g_return_val_if_fail (GOSSIP_IS_CONTACT (contact), NULL);
 
-	can_show_log = FALSE; /* FIXME: gossip_log_exists_for_contact (contact); */
+	log_manager = empathy_log_manager_new ();
+	can_show_log = empathy_log_manager_exists (log_manager,
+						   gossip_contact_get_account (contact),
+						   gossip_contact_get_id (contact),
+						   FALSE);
 	can_send_file = FALSE;
+	g_object_unref (log_manager);
 
 	return contact_list_view_get_contact_menu (view,
 						   can_send_file,
@@ -1484,6 +1491,10 @@ contact_list_view_action_cb (GtkAction             *action,
 	else if (contact && strcmp (name, "SendFile") == 0) {
 	}
 	else if (contact && strcmp (name, "Log") == 0) {
+		gossip_log_window_show (gossip_contact_get_account (contact),
+					gossip_contact_get_id (contact),
+					FALSE,
+					parent);
 	}
 	else if (group && strcmp (name, "Rename") == 0) {
 	}
