@@ -54,23 +54,23 @@
 /* Number of ms to wait when blinking */
 #define BLINK_TIMEOUT 500
 
+typedef struct _StatusIconEvent StatusIconEvent;
+
 struct _EmpathyStatusIconPriv {
 	GtkStatusIcon         *icon;
 	EmpathyContactManager *manager;
 	EmpathyIdle           *idle;
 	GList                 *events;
+	GList                 *current_event;
+	StatusIconEvent       *flash_state_event;
 	guint                  blink_timeout;
-	gboolean               showing_state_icon;
 
 	GtkWindow             *window;
-
 	GtkWidget             *popup_menu;
 	GtkWidget             *show_window_item;
 	GtkWidget             *message_item;
 	GtkWidget             *status_item;
 };
-
-typedef struct _StatusIconEvent StatusIconEvent;
 
 typedef void (*EventActivatedFunc) (StatusIconEvent *event);
 
@@ -85,9 +85,7 @@ struct _StatusIconEvent {
 static void       empathy_status_icon_class_init  (EmpathyStatusIconClass *klass);
 static void       empathy_status_icon_init        (EmpathyStatusIcon      *icon);
 static void       status_icon_finalize            (GObject                *object);
-static void       status_icon_idle_notify_cb      (EmpathyIdle            *idle,
-						   GParamSpec             *param,
-						   EmpathyStatusIcon      *icon);
+static void       status_icon_idle_notify_cb      (EmpathyStatusIcon      *icon);
 static void       status_icon_update_tooltip      (EmpathyStatusIcon      *icon);
 static void       status_icon_set_from_state      (EmpathyStatusIcon      *icon);
 static void       status_icon_toggle_visibility   (EmpathyStatusIcon      *icon);
@@ -112,6 +110,7 @@ static void       status_icon_local_pending_cb    (EmpathyContactManager  *manag
 						   gchar                  *message,
 						   EmpathyStatusIcon      *icon);
 static void       status_icon_event_subscribe_cb  (StatusIconEvent        *event);
+static void       status_icon_event_flash_state_cb (StatusIconEvent       *event);
 static StatusIconEvent * status_icon_event_new    (EmpathyStatusIcon      *icon,
 						   const gchar            *icon_name,
 						   const gchar            *message);
@@ -143,15 +142,13 @@ empathy_status_icon_init (EmpathyStatusIcon *icon)
 	priv->icon = gtk_status_icon_new ();
 	priv->idle = empathy_idle_new ();
 	priv->manager = empathy_contact_manager_new ();
-	priv->showing_state_icon = TRUE;
 
 	status_icon_create_menu (icon);
-	status_icon_set_from_state (icon);
-	status_icon_update_tooltip (icon);
+	status_icon_idle_notify_cb (icon);
 
-	g_signal_connect (priv->idle, "notify",
-			  G_CALLBACK (status_icon_idle_notify_cb),
-			  icon);
+	g_signal_connect_swapped (priv->idle, "notify",
+				  G_CALLBACK (status_icon_idle_notify_cb),
+				  icon);
 	g_signal_connect (priv->icon, "activate",
 			  G_CALLBACK (status_icon_activate_cb),
 			  icon);
@@ -227,15 +224,37 @@ empathy_status_icon_new (GtkWindow *window)
 }
 
 static void
-status_icon_idle_notify_cb (EmpathyIdle       *idle,
-			    GParamSpec        *param,
-			    EmpathyStatusIcon *icon)
+status_icon_idle_notify_cb (EmpathyStatusIcon *icon)
 {
 	EmpathyStatusIconPriv *priv;
+	McPresence             flash_state;
 
 	priv = GET_PRIV (icon);
 
-	if (priv->showing_state_icon) {
+	flash_state = empathy_idle_get_flash_state (priv->idle);
+	if (flash_state != MC_PRESENCE_UNSET) {
+		const gchar *icon_name;
+
+		icon_name = gossip_icon_name_for_presence_state (flash_state);
+		if (!priv->flash_state_event) {
+			/* We are now flashing */
+			priv->flash_state_event = status_icon_event_new (icon, icon_name, NULL);
+			priv->flash_state_event->user_data = icon;
+			priv->flash_state_event->func = status_icon_event_flash_state_cb;
+
+		} else {
+			/* We are still flashing but with another state */
+			g_free (priv->flash_state_event->icon_name);
+			priv->flash_state_event->icon_name = g_strdup (icon_name);
+		}
+	}
+	else if (priv->flash_state_event) {
+		/* We are no more flashing */
+		status_icon_event_remove (icon, priv->flash_state_event);
+		priv->flash_state_event = NULL;
+	}
+
+	if (!priv->current_event) {
 		status_icon_set_from_state (icon);
 	}
 
@@ -469,6 +488,17 @@ status_icon_event_subscribe_cb (StatusIconEvent *event)
 	g_object_unref (contact);
 }
 
+static void
+status_icon_event_flash_state_cb (StatusIconEvent *event)
+{
+	EmpathyStatusIconPriv *priv;
+
+	priv = GET_PRIV (event->user_data);
+
+	empathy_idle_set_flash_state (priv->idle, MC_PRESENCE_UNSET);
+}
+
+
 static StatusIconEvent *
 status_icon_event_new (EmpathyStatusIcon *icon,
 		       const gchar       *icon_name,
@@ -485,6 +515,7 @@ status_icon_event_new (EmpathyStatusIcon *icon,
 
 	priv->events = g_list_append (priv->events, event);
 	if (!priv->blink_timeout) {
+		priv->current_event = NULL;
 		priv->blink_timeout = g_timeout_add (BLINK_TIMEOUT,
 						     (GSourceFunc) status_icon_event_timeout_cb,
 						     icon);
@@ -507,19 +538,17 @@ status_icon_event_remove (EmpathyStatusIcon *icon,
 	}
 	priv->events = g_list_remove (priv->events, event);
 	status_icon_event_free (event);
+	priv->current_event = NULL;
 	status_icon_update_tooltip (icon);
+	status_icon_set_from_state (icon);
 
 	if (priv->events) {
 		return;
 	}
 
-	status_icon_set_from_state (icon);
-	priv->showing_state_icon = TRUE;
-
 	if (priv->blink_timeout) {
 		g_source_remove (priv->blink_timeout);
 		priv->blink_timeout = 0;
-
 	}
 }
 
@@ -530,14 +559,18 @@ status_icon_event_timeout_cb (EmpathyStatusIcon *icon)
 
 	priv = GET_PRIV (icon);
 
-	priv->showing_state_icon = !priv->showing_state_icon;
+	if (priv->current_event) {
+		priv->current_event = priv->current_event->next;
+	} else {
+		priv->current_event = priv->events;
+	}
 
-	if (priv->showing_state_icon) {
+	if (!priv->current_event) {
 		status_icon_set_from_state (icon);
 	} else {
 		StatusIconEvent *event;
 
-		event = priv->events->data;
+		event = priv->current_event->data;
 		gtk_status_icon_set_from_icon_name (priv->icon, event->icon_name);
 	}
 	status_icon_update_tooltip (icon);

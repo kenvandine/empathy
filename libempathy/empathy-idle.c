@@ -48,7 +48,7 @@ struct _EmpathyIdlePriv {
 	DBusGProxy     *gs_proxy;
 	gboolean        is_idle;
 	McPresence      state;
-	McPresence      slack_state;
+	McPresence      flash_state;
 	gchar          *status;
 	McPresence      saved_state;
 	gchar          *saved_status;
@@ -80,7 +80,7 @@ enum {
 	PROP_0,
 	PROP_STATE,
 	PROP_STATUS,
-	PROP_SLACK_STATE
+	PROP_FLASH_STATE
 };
 
 G_DEFINE_TYPE (EmpathyIdle, empathy_idle, G_TYPE_OBJECT)
@@ -111,10 +111,10 @@ empathy_idle_class_init (EmpathyIdleClass *klass)
 							      NULL,
 							      G_PARAM_READWRITE));
 	g_object_class_install_property (object_class,
-					 PROP_SLACK_STATE,
-					 g_param_spec_uint ("slack-state",
-							    "slack-state",
-							    "slack-state",
+					 PROP_FLASH_STATE,
+					 g_param_spec_uint ("flash-state",
+							    "flash-state",
+							    "flash-state",
 							    MC_PRESENCE_UNSET,
 							    LAST_MC_PRESENCE,
 							    MC_PRESENCE_UNSET,
@@ -133,7 +133,8 @@ empathy_idle_init (EmpathyIdle *idle)
 	priv->is_idle = FALSE;
 	priv->mc = gossip_mission_control_new ();
 	priv->state = mission_control_get_presence_actual (priv->mc, NULL);
-	priv->status = mission_control_get_presence_message_actual (priv->mc, NULL);
+	idle_presence_changed_cb (priv->mc, priv->state, idle);
+
 	priv->gs_proxy = dbus_g_proxy_new_for_name (tp_get_bus (),
 						    "org.gnome.ScreenSaver",
 						    "/org/gnome/ScreenSaver",
@@ -192,8 +193,8 @@ idle_get_property (GObject    *object,
 	case PROP_STATUS:
 		g_value_set_string (value, empathy_idle_get_status (idle));
 		break;
-	case PROP_SLACK_STATE:
-		g_value_set_uint (value, empathy_idle_get_slack_state (idle));
+	case PROP_FLASH_STATE:
+		g_value_set_uint (value, empathy_idle_get_flash_state (idle));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
@@ -220,8 +221,8 @@ idle_set_property (GObject      *object,
 	case PROP_STATUS:
 		empathy_idle_set_status (idle, g_value_get_string (value));
 		break;
-	case PROP_SLACK_STATE:
-		empathy_idle_set_slack_state (idle, g_value_get_uint (value));
+	case PROP_FLASH_STATE:
+		empathy_idle_set_flash_state (idle, g_value_get_uint (value));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
@@ -293,26 +294,44 @@ empathy_idle_set_status (EmpathyIdle *idle,
 }
 
 McPresence
-empathy_idle_get_slack_state (EmpathyIdle *idle)
+empathy_idle_get_flash_state (EmpathyIdle *idle)
 {
 	EmpathyIdlePriv *priv;
 
 	priv = GET_PRIV (idle);
 
-	return priv->slack_state;
+	return priv->flash_state;
 }
 
 void
-empathy_idle_set_slack_state (EmpathyIdle *idle,
+empathy_idle_set_flash_state (EmpathyIdle *idle,
 			      McPresence   state)
 {
 	EmpathyIdlePriv *priv;
 
 	priv = GET_PRIV (idle);
 
-	priv->slack_state = state;
+	priv->flash_state = state;
 
-	g_object_notify (G_OBJECT (idle), "slack-state");
+	if (state == MC_PRESENCE_UNSET) {
+	}
+
+	g_object_notify (G_OBJECT (idle), "flash-state");
+}
+
+void
+empathy_idle_set_presence (EmpathyIdle *idle,
+			   McPresence   state,
+			   const gchar *status)
+{
+	EmpathyIdlePriv *priv;
+
+	priv = GET_PRIV (idle);
+
+	mission_control_set_presence (priv->mc,
+				      state,
+				      status,
+				      NULL, NULL);
 }
 
 static void
@@ -352,7 +371,7 @@ idle_session_idle_changed_cb (DBusGProxy  *gs_proxy,
 
 	if (is_idle && !priv->is_idle) {
 		McPresence new_state;
-		/* We are now idle, set state to away */
+		/* We are now idle */
 
 		if (priv->state <= MC_PRESENCE_OFFLINE ||
 		    priv->state == MC_PRESENCE_HIDDEN) {

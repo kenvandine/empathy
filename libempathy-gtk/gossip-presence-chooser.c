@@ -30,8 +30,7 @@
 #include <gtk/gtk.h>
 #include <glade/glade.h>
 
-#include <libmissioncontrol/mission-control.h>
-
+#include <libempathy/empathy-idle.h>
 #include <libempathy/gossip-utils.h>
 #include <libempathy/gossip-debug.h>
 #include <libempathy/empathy-marshal.h>
@@ -49,23 +48,23 @@
 #define FLASH_TIMEOUT 500
 
 typedef struct {
-	MissionControl *mc;
+	EmpathyIdle *idle;
 
-	GtkWidget      *hbox;
-	GtkWidget      *image;
-	GtkWidget      *label;
-	GtkWidget      *menu;
+	GtkWidget   *hbox;
+	GtkWidget   *image;
+	GtkWidget   *label;
+	GtkWidget   *menu;
 
-	McPresence      last_state;
+	McPresence   last_state;
 
-	McPresence      flash_state_1;
-	McPresence      flash_state_2;
-	guint           flash_timeout_id;
+	McPresence   flash_state_1;
+	McPresence   flash_state_2;
+	guint        flash_timeout_id;
 
 	/* The handle the kind of unnessecary scroll support. */
-	guint           scroll_timeout_id;
-	McPresence      scroll_state;
-	gchar          *scroll_status;
+	guint        scroll_timeout_id;
+	McPresence   scroll_state;
+	gchar       *scroll_status;
 } GossipPresenceChooserPriv;
 
 typedef struct {
@@ -81,9 +80,7 @@ static McPresence states[] = {MC_PRESENCE_AVAILABLE,
 static void            gossip_presence_chooser_class_init      (GossipPresenceChooserClass *klass);
 static void            gossip_presence_chooser_init            (GossipPresenceChooser      *chooser);
 static void            presence_chooser_finalize               (GObject                    *object);
-static void            presence_chooser_presence_changed_cb    (MissionControl             *mc,
-								McPresence                  state,
-								GossipPresenceChooser      *chooser);
+static void            presence_chooser_presence_changed_cb    (GossipPresenceChooser      *chooser);
 static void            presence_chooser_reset_scroll_timeout   (GossipPresenceChooser      *chooser);
 static gboolean        presence_chooser_scroll_timeout_cb      (GossipPresenceChooser      *chooser);
 static gboolean        presence_chooser_scroll_event_cb        (GossipPresenceChooser      *chooser,
@@ -93,12 +90,11 @@ static GList *         presence_chooser_get_presets            (GossipPresenceCh
 static StateAndStatus *presence_chooser_state_and_status_new   (McPresence                  state,
 								const gchar                *status);
 static gboolean        presence_chooser_flash_timeout_cb       (GossipPresenceChooser      *chooser);
-void                   gossip_presence_chooser_flash_start     (GossipPresenceChooser      *chooser,
+static void            presence_chooser_flash_start            (GossipPresenceChooser      *chooser,
 								McPresence                  state_1,
 								McPresence                  state_2);
-void                   gossip_presence_chooser_flash_stop      (GossipPresenceChooser      *chooser,
+static void            presence_chooser_flash_stop             (GossipPresenceChooser      *chooser,
 								McPresence                  state);
-gboolean               gossip_presence_chooser_is_flashing     (GossipPresenceChooser      *chooser);
 static gboolean        presence_chooser_button_press_event_cb  (GtkWidget                  *chooser,
 								GdkEventButton             *event,
 								gpointer                    user_data);
@@ -156,7 +152,6 @@ gossip_presence_chooser_init (GossipPresenceChooser *chooser)
 	GossipPresenceChooserPriv *priv;
 	GtkWidget                 *arrow;
 	GtkWidget                 *alignment;
-	McPresence                 state;
 
 	priv = GET_PRIV (chooser);
 
@@ -201,13 +196,11 @@ gossip_presence_chooser_init (GossipPresenceChooser *chooser)
 			  G_CALLBACK (presence_chooser_scroll_event_cb),
 			  NULL);
 
-	priv->mc = gossip_mission_control_new ();
-	state = mission_control_get_presence_actual (priv->mc, NULL);
-	presence_chooser_presence_changed_cb (priv->mc, state, chooser);
-	dbus_g_proxy_connect_signal (DBUS_G_PROXY (priv->mc),
-				     "PresenceStatusActual",
-				     G_CALLBACK (presence_chooser_presence_changed_cb),
-				     chooser, NULL);
+	priv->idle = empathy_idle_new ();
+	presence_chooser_presence_changed_cb (chooser);
+	g_signal_connect_swapped (priv->idle, "notify",
+				  G_CALLBACK (presence_chooser_presence_changed_cb),
+				  chooser);
 }
 
 static void
@@ -225,11 +218,10 @@ presence_chooser_finalize (GObject *object)
 		g_source_remove (priv->scroll_timeout_id);
 	}
 
-	dbus_g_proxy_disconnect_signal (DBUS_G_PROXY (priv->mc),
-					"PresenceStatusActual",
-					G_CALLBACK (presence_chooser_presence_changed_cb),
-					object);
-	g_object_unref (priv->mc);
+	g_signal_handlers_disconnect_by_func (priv->idle,
+					      presence_chooser_presence_changed_cb,
+					      object);
+	g_object_unref (priv->idle);
 
 	G_OBJECT_CLASS (gossip_presence_chooser_parent_class)->finalize (object);
 }
@@ -245,29 +237,27 @@ gossip_presence_chooser_new (void)
 }
 
 static void
-presence_chooser_presence_changed_cb (MissionControl        *mc,
-				      McPresence             state,
-				      GossipPresenceChooser *chooser)
+presence_chooser_presence_changed_cb (GossipPresenceChooser *chooser)
 {
 	GossipPresenceChooserPriv *priv;
-	gchar                     *status;
+	McPresence                 state;
+	McPresence                 flash_state;
+	const gchar               *status;
 
 	priv = GET_PRIV (chooser);
 
-	status = mission_control_get_presence_message_actual (priv->mc, NULL);
-	if (G_STR_EMPTY (status)) {
-		g_free (status);
-		status = g_strdup (gossip_presence_state_get_default_status (state));
-	}
-
-	gossip_debug (DEBUG_DOMAIN, "Presence changed to %s (%d)",
-		      status, state);
+	state = empathy_idle_get_state (priv->idle);
+	status = empathy_idle_get_status (priv->idle);
+	flash_state = empathy_idle_get_flash_state (priv->idle);
 
 	presence_chooser_reset_scroll_timeout (chooser);
-	gossip_presence_chooser_flash_stop (chooser, state);
 	gtk_label_set_text (GTK_LABEL (priv->label), status);
 
-	g_free (status);
+	if (flash_state != MC_PRESENCE_UNSET) {
+		presence_chooser_flash_start (chooser, state, flash_state);
+	} else {
+		presence_chooser_flash_stop (chooser, state);
+	}
 }
 
 static void
@@ -295,13 +285,9 @@ presence_chooser_scroll_timeout_cb (GossipPresenceChooser *chooser)
 
 	priv->scroll_timeout_id = 0;
 
-	gossip_debug (DEBUG_DOMAIN, "Setting presence to %s (%d)",
-		      priv->scroll_status, priv->scroll_state);
-
-	mission_control_set_presence (priv->mc,
-				      priv->scroll_state,
-				      priv->scroll_status,
-				      NULL, NULL);
+	empathy_idle_set_presence (priv->idle,
+				   priv->scroll_state,
+				   priv->scroll_status);
 
 	g_free (priv->scroll_status);
 	priv->scroll_status = NULL;
@@ -373,7 +359,7 @@ presence_chooser_scroll_event_cb (GossipPresenceChooser *chooser,
 				       (GSourceFunc) presence_chooser_scroll_timeout_cb,
 				       chooser);
 
-		gossip_presence_chooser_flash_stop (chooser, sas->state);
+		presence_chooser_flash_stop (chooser, sas->state);
 		gtk_label_set_text (GTK_LABEL (priv->label), sas->status);	
 	}
 	else if (!match) {
@@ -383,14 +369,8 @@ presence_chooser_scroll_event_cb (GossipPresenceChooser *chooser,
 		 */
 		status = gossip_presence_state_get_default_status (states[0]);
 
-		gossip_debug (DEBUG_DOMAIN, "Setting presence to %s (%d)",
-			      status, states[0]);
-
 		presence_chooser_reset_scroll_timeout (chooser);
-		mission_control_set_presence (priv->mc,
-					      states[0],
-					      status,
-					      NULL, NULL);
+		empathy_idle_set_presence (priv->idle, states[0], status);
 	}
 
 	g_list_foreach (list, (GFunc) g_free, NULL);
@@ -463,10 +443,10 @@ presence_chooser_flash_timeout_cb (GossipPresenceChooser *chooser)
 	return TRUE;
 }
 
-void
-gossip_presence_chooser_flash_start (GossipPresenceChooser *chooser,
-				     McPresence             state_1,
-				     McPresence             state_2)
+static void
+presence_chooser_flash_start (GossipPresenceChooser *chooser,
+			      McPresence             state_1,
+			      McPresence             state_2)
 {
 	GossipPresenceChooserPriv *priv;
 
@@ -474,21 +454,19 @@ gossip_presence_chooser_flash_start (GossipPresenceChooser *chooser,
 
 	priv = GET_PRIV (chooser);
 
-	if (priv->flash_timeout_id != 0) {
-		return;
-	}
-
 	priv->flash_state_1 = state_1;
 	priv->flash_state_2 = state_2;
 
-	priv->flash_timeout_id = g_timeout_add (FLASH_TIMEOUT,
-						(GSourceFunc) presence_chooser_flash_timeout_cb,
-						chooser);
+	if (!priv->flash_timeout_id) {
+		priv->flash_timeout_id = g_timeout_add (FLASH_TIMEOUT,
+							(GSourceFunc) presence_chooser_flash_timeout_cb,
+							chooser);
+	}
 }
 
-void
-gossip_presence_chooser_flash_stop (GossipPresenceChooser *chooser,
-				    McPresence             state)
+static void
+presence_chooser_flash_stop (GossipPresenceChooser *chooser,
+			     McPresence             state)
 {
 	GossipPresenceChooserPriv *priv;
 
@@ -506,22 +484,6 @@ gossip_presence_chooser_flash_stop (GossipPresenceChooser *chooser,
 				      GTK_ICON_SIZE_MENU);
 
 	priv->last_state = state;
-}
-
-gboolean
-gossip_presence_chooser_is_flashing (GossipPresenceChooser *chooser)
-{
-	GossipPresenceChooserPriv *priv;
-
-	g_return_val_if_fail (GOSSIP_IS_PRESENCE_CHOOSER (chooser), FALSE);
-
-	priv = GET_PRIV (chooser);
-
-	if (priv->flash_timeout_id) {
-		return TRUE;
-	}
-
-	return FALSE;
 }
 
 static gboolean
@@ -851,26 +813,21 @@ presence_chooser_set_state (McPresence   state,
 			    const gchar *status,
 			    gboolean     save)
 {
-	const gchar    *default_status;
-	MissionControl *mc;
+	EmpathyIdle *idle;
 
-	default_status = gossip_presence_state_get_default_status (state);
+	if (!G_STR_EMPTY (status)) {
+		const gchar *default_status;
 
-	if (G_STR_EMPTY (status)) {
-		status = default_status;
-	} else {
 		/* Only store the value if it differs from the default ones. */
+		default_status = gossip_presence_state_get_default_status (state);
 		if (save && strcmp (status, default_status) != 0) {
 			gossip_status_presets_set_last (state, status);
 		}
 	}
 
-	gossip_debug (DEBUG_DOMAIN, "Setting presence to %s (%d)",
-		      status, state);
-
-	mc = gossip_mission_control_new ();
-	mission_control_set_presence (mc, state, status, NULL, NULL);
-	g_object_unref (mc);
+	idle = empathy_idle_new ();
+	empathy_idle_set_presence (idle, state, status);
+	g_object_unref (idle);
 }
 
 static void

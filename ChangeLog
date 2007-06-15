@@ -1,3 +1,12 @@
+2007-06-15 Xavier Claessens  <xclaesse@gmail.com>
+
+	* libempathy-gtk/empathy-status-icon.c:
+	* libempathy-gtk/gossip-presence-chooser.c:
+	* libempathy-gtk/gossip-presence-chooser.h:
+	* libempathy/empathy-idle.c:
+	* libempathy/empathy-idle.h: Prepare for slack time when coming back
+	from auto away. Not yet fully implemented.
+
 2007-06-14 Xavier Claessens  <xclaesse@gmail.com>
 
 	* libempathy-gtk/empathy-images.h:
