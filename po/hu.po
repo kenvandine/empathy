@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gossip.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-05-15 19:33+0100\n"
-"PO-Revision-Date: 2007-06-11 00:33+0200\n"
+"POT-Creation-Date: 2007-06-16 04:01+0100\n"
+"PO-Revision-Date: 2007-06-18 23:51+0200\n"
 "Last-Translator: Gabor Kelemen <kelemeng@gnome.hu>\n"
 "Language-Team: Hungarian <gnome@gnome.hu>\n"
 "MIME-Version: 1.0\n"
@@ -16,6 +16,14 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.11.4\n"
 "Plural-Forms:  nplurals=2; plural=(n != 1);\n"
+
+#: ../data/empathy.desktop.in.in.h:1
+msgid "Empathy Instant Messenger"
+msgstr "Empathy azonnali üzenő"
+
+#: ../data/empathy.desktop.in.in.h:2
+msgid "Instant Messenger"
+msgstr "Azonnali üzenetküldő"
 
 #: ../data/empathy.schemas.in.h:1
 msgid "Always open a separate chat window for new chats."
@@ -164,10 +172,9 @@ msgid ""
 "Which criterium to use when sorting the contact list. Default is to use sort "
 "by the contact's name with the value \"name\". A value of \"state\" will "
 "sort the contact list by state."
-msgstr ""
+msgstr "A partnerlista rendezéséhez használandó feltétel. A lehetséges értékek: \"name\" (név, ez az alapértelmezett) és \"state\" (állapot)."
 
-#: ../libempathy/gossip-contact.c:654 ../libempathy/gossip-presence.c:184
-#: ../libempathy/gossip-presence.c:283
+#: ../libempathy/gossip-presence.c:184 ../libempathy/gossip-presence.c:283
 msgid "Offline"
 msgstr "Kilépett"
 
@@ -183,22 +190,117 @@ msgstr "Elfoglalt"
 msgid "Away"
 msgstr "Távol"
 
-#: ../libempathy-gtk/empathy-main-window.c:254
-msgid "Show and edit accounts"
-msgstr "Fiókok megjelenítése és szerkesztése"
+#: ../libempathy-gtk/empathy-contact-dialogs.c:75
+#: ../libempathy-gtk/empathy-contact-dialogs.c:218
+msgid "I would like to add you to my contact list."
+msgstr "Szeretném hozzáadni Önt a partnerlistámhoz."
 
-#: ../libempathy-gtk/empathy-main-window.c:456
+#: ../libempathy-gtk/empathy-contact-dialogs.c:80
+msgid "Sorry, I don't want you in my contact list."
+msgstr "Elnézést, nem szeretném Önt a partnerlistámon látni."
+
+#: ../libempathy-gtk/empathy-contact-dialogs.glade.h:1
+msgid "Decide _Later"
+msgstr "_Döntés később"
+
+#: ../libempathy-gtk/empathy-contact-dialogs.glade.h:2
+msgid "Subscription Request"
+msgstr "Feliratkozási kérés"
+
+#: ../libempathy-gtk/empathy-contact-widget.c:558
+msgid "Select"
+msgstr "Kijelölés"
+
+#: ../libempathy-gtk/empathy-contact-widget.c:568
+#: ../libempathy-gtk/empathy-main-window.c:612
 msgid "Group"
 msgstr "Csoport"
 
-#: ../libempathy-gtk/empathy-main-window.c:477
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:1
+msgid "<b>Client Information</b>"
+msgstr "<b>Kliensinformációk</b>"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:2
+msgid "<b>Contact Details</b>"
+msgstr "<b>Partner részletei</b>"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:3
+msgid "<b>Contact</b>"
+msgstr "<b>Partner</b>"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:4
+msgid "<b>Groups</b>"
+msgstr "<b>Csoportok</b>"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:5
+#: ../libempathy-gtk/gossip-chatrooms-window.glade.h:1
+#: ../libempathy-gtk/gossip-new-chatroom-dialog.glade.h:1
+msgid "Account:"
+msgstr "Felhasználói fiók:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:6
+msgid "Alias:"
+msgstr "Álnév:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:7
+msgid "Birthday:"
+msgstr "Születésnap:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:8
+msgid "Client:"
+msgstr "Kliens:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:9
+msgid "Contact information"
+msgstr "Partnerinformációk"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:10
+msgid "Email:"
+msgstr "E-mail:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:11
+msgid "Fullname:"
+msgstr "Teljes név:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:12
+msgid "Identifier:"
+msgstr "Azonosító:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:13
+msgid "Information requested..."
+msgstr "Információk lekérve..."
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:14
+msgid "OS:"
+msgstr "OS:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:15
+msgid ""
+"Select the groups you want this contact to appear in, you can select more "
+"than one group or no groups."
+msgstr ""
+"Válassza ki azokat a csoportokat, amelyekben a partner megjelenjen, "
+"kiválaszthat nulla vagy több csoportot is."
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:16
+msgid "Version:"
+msgstr "Verzió:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:17
+msgid "Web site:"
+msgstr "Weboldal:"
+
+#: ../libempathy-gtk/empathy-main-window.c:277
+msgid "Show and edit accounts"
+msgstr "Fiókok megjelenítése és szerkesztése"
+
+#: ../libempathy-gtk/empathy-main-window.c:633
 msgid "Contact"
 msgstr "Partner"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:1
-#, fuzzy
 msgid "Contact List - Empathy"
-msgstr "Partnerlista m_utatása"
+msgstr "Partnerlista - Empathy"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:2
 msgid "Context"
@@ -235,7 +337,7 @@ msgid "_Add Contact..."
 msgstr "Partner _felvétele..."
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:10
-#: ../libempathy-gtk/gossip-contact-list.c:298
+#: ../libempathy-gtk/gossip-contact-list-view.c:204
 msgid "_Chat"
 msgstr "_Csevegés"
 
@@ -245,7 +347,7 @@ msgstr "_Tartalom"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:12
 #: ../libempathy-gtk/gossip-chat.glade.h:21
-#: ../libempathy-gtk/gossip-contact-list.c:310
+#: ../libempathy-gtk/gossip-contact-list-view.c:216
 msgid "_Edit"
 msgstr "S_zerkesztés"
 
@@ -278,9 +380,18 @@ msgstr "Sz_oba"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:19
 #: ../libempathy-gtk/gossip-chat.glade.h:28
-#: ../libempathy-gtk/gossip-contact-list.c:326
+#: ../libempathy-gtk/gossip-contact-list-view.c:232
 msgid "_View Previous Conversations"
 msgstr "K_orábbi társalgások megjelenítése"
+
+#: ../libempathy-gtk/empathy-status-icon.c:467
+#, c-format
+msgid ""
+"Subscription requested for %s\n"
+"Message: %s"
+msgstr ""
+"Új feliratkozási kérés a következőtől: %s\n"
+"Üzenet: %s"
 
 #: ../libempathy-gtk/empathy-status-icon.glade.h:1
 msgid "Status"
@@ -291,39 +402,34 @@ msgid "_Show Contact List"
 msgstr "Partnerlista m_utatása"
 
 #: ../libempathy-gtk/gossip-about-dialog.c:63
-#, fuzzy
 msgid ""
 "Empathy is free software; you can redistribute it and/or modify it under the "
 "terms of the GNU General Public License as published by the Free Software "
 "Foundation; either version 2 of the License, or (at your option) any later "
 "version."
 msgstr ""
-"A Gossip szabad szoftver, terjesztheti és/vagy módosíthatja a Free "
+"Az Empathy szabad szoftver, terjesztheti és/vagy módosíthatja a Free "
 "Software Foundation által kiadott GNU General Public License második (vagy "
 "bármely későbbi) változatában foglaltak alapján."
 
 #: ../libempathy-gtk/gossip-about-dialog.c:67
-#, fuzzy
 msgid ""
 "Empathy is distributed in the hope that it will be useful, but WITHOUT ANY "
 "WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS "
 "FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more "
 "details."
 msgstr ""
-"A Gossip programot abban a reményben terjesztjük, hogy hasznos lesz, de nem "
-"vállalunk SEMMIFÉLE GARANCIÁT, még olyan értelemben sem, hogy a program "
+"Az Empathy programot abban a reményben terjesztjük, hogy hasznos lesz, de nem vállalunk SEMMIFÉLE GARANCIÁT, még olyan értelemben sem, hogy a program "
 "alkalmas-e a KÖZREADÁSRA vagy EGY BIZONYOS FELADAT ELVÉGZÉSÉRE. További "
 "részletekért tanulmányozza a GNU GPL licencet."
 
 #: ../libempathy-gtk/gossip-about-dialog.c:71
-#, fuzzy
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "Empathy; if not, write to the Free Software Foundation, Inc., 51 Franklin "
 "Street, Fifth Floor, Boston, MA 02110-130159 USA"
 msgstr ""
-"A Gossip programhoz a GNU General Public License egy példánya is jár, ha nem "
-"kapta meg, írjon a Free Software Foundation Inc.-nek. Levélcímük: 51 "
+"Az Empathy programhoz a GNU General Public License egy példánya is jár, ha nem kapta meg, írjon a Free Software Foundation Inc.-nek. Levélcímük: 51 "
 "Franklin Street, Fifth Floor, Boston, MA 02110-130159 USA"
 
 #: ../libempathy-gtk/gossip-about-dialog.c:99
@@ -334,22 +440,24 @@ msgstr "Egy azonnali üzenőkliens a GNOME-hoz"
 msgid "translator-credits"
 msgstr "Kelemen Gábor <kelemeng@gnome.hu>"
 
-#: ../libempathy-gtk/gossip-accounts-dialog.c:224
-#, fuzzy
+#: ../libempathy-gtk/gossip-account-chooser.c:391
+msgid "All"
+msgstr "Minden"
+
+#: ../libempathy-gtk/gossip-accounts-dialog.c:223
 msgid "Disable"
 msgstr "Tiltás"
 
-#: ../libempathy-gtk/gossip-accounts-dialog.c:227
-#, fuzzy
+#: ../libempathy-gtk/gossip-accounts-dialog.c:226
 msgid "Enable"
 msgstr "Engedélyezés"
 
-#: ../libempathy-gtk/gossip-accounts-dialog.c:261
+#: ../libempathy-gtk/gossip-accounts-dialog.c:260
 #: ../libempathy-gtk/gossip-accounts-dialog.glade.h:3
 msgid "<b>No Account Selected</b>"
 msgstr "<b>Nincs kiválasztva fiók</b>"
 
-#: ../libempathy-gtk/gossip-accounts-dialog.c:263
+#: ../libempathy-gtk/gossip-accounts-dialog.c:262
 msgid ""
 "To add a new account, you can click on the 'Add' button and a new entry will "
 "be created for you to start configuring.\n"
@@ -363,11 +471,11 @@ msgstr ""
 "Ha nem kíván fiókot hozzáadni, akkor kattintson a beállítani kívánt fiókra a "
 "bal oldali listában."
 
-#: ../libempathy-gtk/gossip-accounts-dialog.c:272
+#: ../libempathy-gtk/gossip-accounts-dialog.c:271
 msgid "<b>No Accounts Configured</b>"
 msgstr "<b>Nincsenek beállítva fiókok</b>"
 
-#: ../libempathy-gtk/gossip-accounts-dialog.c:274
+#: ../libempathy-gtk/gossip-accounts-dialog.c:273
 msgid ""
 "To add a new account, you can click on the 'Add' button and a new entry will "
 "be created for you to start configuring."
@@ -375,12 +483,12 @@ msgstr ""
 "Új fiók hozzáadásához kattintson a Hozzáadás gombra és létrejön egy új "
 "bejegyzés a beállítás elkezdéséhez."
 
-#: ../libempathy-gtk/gossip-accounts-dialog.c:362
+#: ../libempathy-gtk/gossip-accounts-dialog.c:361
 #: ../libempathy-gtk/gossip-accounts-dialog.glade.h:6
 msgid "Accounts"
 msgstr "Fiókok"
 
-#: ../libempathy-gtk/gossip-accounts-dialog.c:857
+#: ../libempathy-gtk/gossip-accounts-dialog.c:856
 #, c-format
 msgid ""
 "You are about to remove your %s account!\n"
@@ -389,7 +497,7 @@ msgstr ""
 "A(z) %s fiókjának eltávolítására készül!\n"
 "Biztosan folytatni akarja?"
 
-#: ../libempathy-gtk/gossip-accounts-dialog.c:863
+#: ../libempathy-gtk/gossip-accounts-dialog.c:862
 msgid ""
 "Any associated conversations and chat rooms will NOT be removed if you "
 "decide to proceed.\n"
@@ -407,9 +515,8 @@ msgid "<b>Account</b>"
 msgstr "<b>Fiók</b>"
 
 #: ../libempathy-gtk/gossip-accounts-dialog.glade.h:2
-#, fuzzy
 msgid "<b>New Account</b>"
-msgstr "<b>Fiók</b>"
+msgstr "<b>Új fiók</b>"
 
 #: ../libempathy-gtk/gossip-accounts-dialog.glade.h:4
 msgid "<b>Settings</b>"
@@ -417,19 +524,17 @@ msgstr "<b>Beállítások</b>"
 
 #: ../libempathy-gtk/gossip-accounts-dialog.glade.h:5
 msgid "A unique name for this account to identify it personally to you."
-msgstr ""
+msgstr "A fiók egyedi neve, amellyel azonosíthatja."
 
 #: ../libempathy-gtk/gossip-accounts-dialog.glade.h:7
-#, fuzzy
 msgid "Cr_eate"
-msgstr "Létrehozás"
+msgstr "_Létrehozás"
 
 #: ../libempathy-gtk/gossip-accounts-dialog.glade.h:8
 msgid "Imendio "
-msgstr ""
+msgstr "Imendio "
 
 #: ../libempathy-gtk/gossip-accounts-dialog.glade.h:9
-#, fuzzy
 msgid "Jabber"
 msgstr "Jabber"
 
@@ -452,7 +557,6 @@ msgid "_Name:"
 msgstr "_Név:"
 
 #: ../libempathy-gtk/gossip-accounts-dialog.glade.h:14
-#, fuzzy
 msgid "_Type:"
 msgstr "_Típus:"
 
@@ -463,56 +567,51 @@ msgid "%s:"
 msgstr "%s:"
 
 #: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:1
-msgid ""
-"<small><b><span foreground=\"#555\">Example: user@jabber.org</span></b></"
-"small>"
-msgstr ""
+msgid "Forget password and clear the entry."
+msgstr "A jelszó elfelejtése és a mező törlése."
 
 #: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:2
-msgid "Forget password and clear the entry."
-msgstr ""
-
-#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:3
 msgid "Login I_D:"
 msgstr "Bejelentkezési a_zonosító:"
 
-#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:4
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:3
 msgid "Pass_word:"
 msgstr "_Jelszó:"
 
-#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:5
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:4
 msgid "Reso_urce:"
 msgstr "_Erőforrás:"
 
-#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:6
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:5
 msgid "Use encryption (SS_L)"
 msgstr "_Titkosítás használata (SSL)"
 
-#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:7
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:6
 msgid "_Port:"
 msgstr "_Port:"
 
-#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:8
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:7
+#: ../libempathy-gtk/gossip-new-chatroom-dialog.glade.h:10
 msgid "_Server:"
 msgstr "_Kiszolgáló:"
 
-#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:9
+#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:8
 msgid "jabber account settings"
 msgstr "jabber fiókbeállítások"
 
-#: ../libempathy-gtk/gossip-chat.c:314
+#: ../libempathy-gtk/gossip-chat.c:331
 msgid "Disconnected"
 msgstr "Kapcsolat bontva"
 
-#: ../libempathy-gtk/gossip-chat.c:858
+#: ../libempathy-gtk/gossip-chat.c:875
 msgid "Insert Smiley"
 msgstr "Hangulatjel beszúrása"
 
-#: ../libempathy-gtk/gossip-chat.c:906
+#: ../libempathy-gtk/gossip-chat.c:923
 msgid "_Check Word Spelling..."
 msgstr "Szó _helyesírásának ellenőrzése..."
 
-#: ../libempathy-gtk/gossip-chat.c:1244
+#: ../libempathy-gtk/gossip-chat.c:1339
 msgid "Connected"
 msgstr "Kapcsolódva"
 
@@ -522,7 +621,7 @@ msgstr "_Törlés"
 
 #: ../libempathy-gtk/gossip-chat.glade.h:2
 msgid "Change _Topic..."
-msgstr ""
+msgstr "_Téma módosítása..."
 
 #: ../libempathy-gtk/gossip-chat.glade.h:3
 msgid "Chat"
@@ -537,18 +636,16 @@ msgid "Cu_t"
 msgstr "_Kivágás"
 
 #: ../libempathy-gtk/gossip-chat.glade.h:6
-#, fuzzy
 msgid "In_vite..."
-msgstr "_Meghívás"
+msgstr "_Meghívás..."
 
 #: ../libempathy-gtk/gossip-chat.glade.h:7
 msgid "Insert _Smiley"
 msgstr "Ha_ngulatjel beszúrása"
 
 #: ../libempathy-gtk/gossip-chat.glade.h:8
-#, fuzzy
 msgid "Invitation _message:"
-msgstr "Meghívó üzenetet:"
+msgstr "Meghívó ü_zenet:"
 
 #: ../libempathy-gtk/gossip-chat.glade.h:9
 msgid "Invite"
@@ -610,102 +707,242 @@ msgstr "Partnerek _mutatása"
 msgid "_Tabs"
 msgstr "_Lapok"
 
-#: ../libempathy-gtk/gossip-chat-view.c:544
+#: ../libempathy-gtk/gossip-chat-view.c:557
 msgid "_Copy Link Address"
 msgstr "Hivatkozás cí_mének másolása"
 
-#: ../libempathy-gtk/gossip-chat-view.c:552
+#: ../libempathy-gtk/gossip-chat-view.c:565
 msgid "_Open Link"
 msgstr "_Hivatkozás megnyitása"
 
-#: ../libempathy-gtk/gossip-chat-view.c:889
+#: ../libempathy-gtk/gossip-chat-view.c:902
 msgid "%A %d %B %Y"
 msgstr "%y. %B %e %A"
 
-#: ../libempathy-gtk/gossip-chat-window.c:685
-#: ../libempathy-gtk/gossip-chat-window.c:715
-#, fuzzy
+#: ../libempathy-gtk/gossip-chat-window.c:703
+#: ../libempathy-gtk/gossip-chat-window.c:733
 msgid "New Message"
 msgid_plural "New Messages"
 msgstr[0] "Új üzenet"
 msgstr[1] "Új üzenet"
 
-#: ../libempathy-gtk/gossip-chat-window.c:691
-#, fuzzy
+#: ../libempathy-gtk/gossip-chat-window.c:709
 msgid "Chat Room"
-msgstr "Csevegőszobák"
+msgstr "Csevegőszoba"
 
-#: ../libempathy-gtk/gossip-chat-window.c:696
-#: ../libempathy-gtk/gossip-chat-window.c:719
-#, fuzzy, c-format
+#: ../libempathy-gtk/gossip-chat-window.c:714
+#: ../libempathy-gtk/gossip-chat-window.c:737
+#: ../libempathy-gtk/gossip-log-window.c:525
+#, c-format
 msgid "Conversation"
 msgid_plural "Conversations (%d)"
-msgstr[0] "_Társalgás"
-msgstr[1] "_Társalgás"
+msgstr[0] "Társalgás"
+msgstr[1] "Társalgások (%d)"
 
-#: ../libempathy-gtk/gossip-chat-window.c:1295
+#: ../libempathy-gtk/gossip-chat-window.c:1288
 msgid "Typing a message."
 msgstr "Üzenet írása."
 
-#: ../libempathy-gtk/gossip-contact-list.c:290
+#: ../libempathy-gtk/gossip-chatrooms-window.c:251
+msgid "Name"
+msgstr "Név"
+
+#: ../libempathy-gtk/gossip-chatrooms-window.c:269
+msgid "Room"
+msgstr "Szoba"
+
+#: ../libempathy-gtk/gossip-chatrooms-window.c:278
+msgid "Auto Connect"
+msgstr "Automatikus kapcsolódás"
+
+#: ../libempathy-gtk/gossip-chatrooms-window.glade.h:2
+msgid "Edit Favorite Room"
+msgstr "Kedvenc szoba szerkesztése"
+
+#: ../libempathy-gtk/gossip-chatrooms-window.glade.h:3
+msgid "Join room on start_up"
+msgstr "_Csatlakozás a szobához indításkor"
+
+#: ../libempathy-gtk/gossip-chatrooms-window.glade.h:4
+msgid "Join this chat room when Gossip starts and you are connected"
+msgstr "Csatlakozás ehhez a csevegőszobához a Gossip indításakor"
+
+#: ../libempathy-gtk/gossip-chatrooms-window.glade.h:5
+msgid "Manage Favorite Rooms"
+msgstr "Kedvenc szobák kezelése"
+
+#: ../libempathy-gtk/gossip-chatrooms-window.glade.h:6
+msgid "N_ame:"
+msgstr "Né_v:"
+
+#: ../libempathy-gtk/gossip-chatrooms-window.glade.h:7
+msgid "S_erver:"
+msgstr "_Kiszolgáló:"
+
+#: ../libempathy-gtk/gossip-chatrooms-window.glade.h:8
+#: ../libempathy-gtk/gossip-new-chatroom-dialog.glade.h:8
+msgid "_Nickname:"
+msgstr "_Becenév:"
+
+#: ../libempathy-gtk/gossip-chatrooms-window.glade.h:9
+#: ../libempathy-gtk/gossip-new-chatroom-dialog.glade.h:9
+msgid "_Room:"
+msgstr "Sz_oba:"
+
+#: ../libempathy-gtk/gossip-contact-list-view.c:196
 msgid "_Contact"
 msgstr "_Partner"
 
-#: ../libempathy-gtk/gossip-contact-list.c:294
+#: ../libempathy-gtk/gossip-contact-list-view.c:200
 msgid "_Group"
 msgstr "_Csoport"
 
-#: ../libempathy-gtk/gossip-contact-list.c:298
+#: ../libempathy-gtk/gossip-contact-list-view.c:204
 msgid "Chat with contact"
 msgstr "Csevegés partnerrel"
 
-#: ../libempathy-gtk/gossip-contact-list.c:302
+#: ../libempathy-gtk/gossip-contact-list-view.c:208
 msgid "Infor_mation"
 msgstr "_Információk"
 
-#: ../libempathy-gtk/gossip-contact-list.c:302
+#: ../libempathy-gtk/gossip-contact-list-view.c:208
 msgid "View contact information"
 msgstr "Partnerinformációk megjelenítése"
 
-#: ../libempathy-gtk/gossip-contact-list.c:306
+#: ../libempathy-gtk/gossip-contact-list-view.c:212
 msgid "Re_name"
 msgstr "Át_nevezés"
 
-#: ../libempathy-gtk/gossip-contact-list.c:306
+#: ../libempathy-gtk/gossip-contact-list-view.c:212
 msgid "Rename"
 msgstr "Átnevezés"
 
-#: ../libempathy-gtk/gossip-contact-list.c:310
+#: ../libempathy-gtk/gossip-contact-list-view.c:216
 msgid "Edit the groups and name for this contact"
 msgstr "Partner csoportjainak és nevének szerkesztése"
 
-#: ../libempathy-gtk/gossip-contact-list.c:314
+#: ../libempathy-gtk/gossip-contact-list-view.c:220
 msgid "_Remove"
 msgstr "_Eltávolítás"
 
-#: ../libempathy-gtk/gossip-contact-list.c:314
+#: ../libempathy-gtk/gossip-contact-list-view.c:220
 msgid "Remove contact"
 msgstr "Partner eltávolítása"
 
-#: ../libempathy-gtk/gossip-contact-list.c:318
+#: ../libempathy-gtk/gossip-contact-list-view.c:224
 msgid "_Invite to Chat Room"
 msgstr "Meg_hívás csevegőszobába"
 
-#: ../libempathy-gtk/gossip-contact-list.c:318
+#: ../libempathy-gtk/gossip-contact-list-view.c:224
 msgid "Invite to a currently open chat room"
 msgstr "Meghívás egy jelenleg megnyitott csevegőszobába"
 
-#: ../libempathy-gtk/gossip-contact-list.c:322
+#: ../libempathy-gtk/gossip-contact-list-view.c:228
 msgid "_Send File..."
 msgstr "_Fájl küldése..."
 
-#: ../libempathy-gtk/gossip-contact-list.c:322
+#: ../libempathy-gtk/gossip-contact-list-view.c:228
 msgid "Send a file"
 msgstr "Fájl küldése"
 
-#: ../libempathy-gtk/gossip-contact-list.c:326
+#: ../libempathy-gtk/gossip-contact-list-view.c:232
 msgid "View previous conversations with this contact"
 msgstr "A partnerrel folytatott korábbi társalgások megjelenítése"
+
+#: ../libempathy-gtk/gossip-contact-list-view.c:1487
+msgid "Sorry, I don't want you in my contact list anymore."
+msgstr "Elnézést, már nem szeretném a partnerlistámon látni."
+
+#: ../libempathy-gtk/gossip-group-chat.c:255
+msgid "Enter the new topic you want to set for this room:"
+msgstr "Adja meg a szoba új témáját:"
+
+#: ../libempathy-gtk/gossip-group-chat.c:363
+#, c-format
+msgid "%s has joined the room"
+msgstr "%s belépett a szobába"
+
+#: ../libempathy-gtk/gossip-group-chat.c:379
+#, c-format
+msgid "%s has left the room"
+msgstr "%s elhagyta a szobát"
+
+#: ../libempathy-gtk/gossip-group-chat.c:458
+#, c-format
+msgid "Topic: %s"
+msgstr "Téma: %s"
+
+#: ../libempathy-gtk/gossip-group-chat.c:575
+#, c-format
+msgid "Topic set to: %s"
+msgstr "Téma beállítva: %s"
+
+#: ../libempathy-gtk/gossip-group-chat.glade.h:1
+msgid "<b>Topic:</b>"
+msgstr "<b>Téma:</b>"
+
+#: ../libempathy-gtk/gossip-group-chat.glade.h:2
+msgid "Group Chat"
+msgstr "Csoport"
+
+#: ../libempathy-gtk/gossip-log-window.c:518
+msgid "Account"
+msgstr "Fiók"
+
+#: ../libempathy-gtk/gossip-log-window.c:535
+msgid "Date"
+msgstr "Dátum"
+
+#: ../libempathy-gtk/gossip-log-window.glade.h:1
+msgid "Conversations"
+msgstr "Társalgások"
+
+#: ../libempathy-gtk/gossip-log-window.glade.h:2
+msgid "Search"
+msgstr "Keresés"
+
+#: ../libempathy-gtk/gossip-log-window.glade.h:3
+msgid "View Previous Conversations"
+msgstr "Korábbi társalgások megjelenítése"
+
+#: ../libempathy-gtk/gossip-log-window.glade.h:4
+msgid "_For:"
+msgstr "_Ehhez:"
+
+#: ../libempathy-gtk/gossip-new-chatroom-dialog.c:342
+msgid "Chat Rooms"
+msgstr "Csevegőszobák"
+
+#: ../libempathy-gtk/gossip-new-chatroom-dialog.c:388
+msgid "Create"
+msgstr "Létrehozás"
+
+#: ../libempathy-gtk/gossip-new-chatroom-dialog.c:393
+#: ../libempathy-gtk/gossip-new-chatroom-dialog.glade.h:4
+msgid "Join"
+msgstr "Csatlakozás"
+
+#: ../libempathy-gtk/gossip-new-chatroom-dialog.glade.h:2
+msgid "Browse:"
+msgstr "Keresés:"
+
+#: ../libempathy-gtk/gossip-new-chatroom-dialog.glade.h:3
+msgid "Enter the room name to join here or click on one or more rooms in the list."
+msgstr ""
+"Itt adja meg a szoba nevét a csatlakozáshoz, vagy kattintson néhány, a "
+"listán látható szobára."
+
+#: ../libempathy-gtk/gossip-new-chatroom-dialog.glade.h:5
+msgid "Join New"
+msgstr "Csatlakozás újhoz"
+
+#: ../libempathy-gtk/gossip-new-chatroom-dialog.glade.h:6
+msgid "Re_fresh"
+msgstr "_Frissítés"
+
+#: ../libempathy-gtk/gossip-new-chatroom-dialog.glade.h:7
+msgid "This list represents all chat rooms hosted on the server you have entered."
+msgstr "A lista a kiszolgálón található összes csevegőszobát képviseli."
 
 #: ../libempathy-gtk/gossip-preferences.c:250
 msgid "Language"
@@ -724,9 +961,8 @@ msgid "<b>Behaviour</b>"
 msgstr "<b>Viselkedés</b>"
 
 #: ../libempathy-gtk/gossip-preferences.glade.h:4
-#, fuzzy
 msgid "<b>Contact List</b>"
-msgstr "<b>Állapot</b>"
+msgstr "<b>Partnerlista</b>"
 
 #: ../libempathy-gtk/gossip-preferences.glade.h:5
 msgid "<b>Languages</b>"
@@ -796,11 +1032,11 @@ msgstr "_Tömör partnerlista mutatása"
 
 #: ../libempathy-gtk/gossip-preferences.glade.h:20
 msgid "Sort by _name"
-msgstr ""
+msgstr "Rendezés _név szerint"
 
 #: ../libempathy-gtk/gossip-preferences.glade.h:21
 msgid "Sort by s_tate"
-msgstr ""
+msgstr "Rendezés áll_apot szerint"
 
 #: ../libempathy-gtk/gossip-preferences.glade.h:22
 msgid "Spell Checking"
@@ -826,20 +1062,20 @@ msgstr "_Hang lejátszása üzenetek érkezésekor"
 msgid "_Use for chat rooms"
 msgstr "Használat _csevegőszobákhoz"
 
-#: ../libempathy-gtk/gossip-presence-chooser.c:702
+#: ../libempathy-gtk/gossip-presence-chooser.c:664
 msgid "Custom message..."
 msgstr "Egyéni üzenet..."
 
 #. Clear list
-#: ../libempathy-gtk/gossip-presence-chooser.c:724
+#: ../libempathy-gtk/gossip-presence-chooser.c:686
 msgid "Clear List..."
 msgstr "Lista törlése..."
 
-#: ../libempathy-gtk/gossip-presence-chooser.c:803
+#: ../libempathy-gtk/gossip-presence-chooser.c:765
 msgid "Are you sure you want to clear the list?"
 msgstr "Ki kívánja üríteni a listát?"
 
-#: ../libempathy-gtk/gossip-presence-chooser.c:807
+#: ../libempathy-gtk/gossip-presence-chooser.c:769
 msgid ""
 "This will remove any custom messages you have added to the list of preset "
 "status messages."
@@ -847,7 +1083,7 @@ msgstr ""
 "Ez eltávolít minden egyéni üzenetet, amit az előre beállított "
 "állapotüzenetek listájához adott."
 
-#: ../libempathy-gtk/gossip-presence-chooser.c:812
+#: ../libempathy-gtk/gossip-presence-chooser.c:774
 msgid "Clear List"
 msgstr "Lista törlése"
 
@@ -863,15 +1099,31 @@ msgstr "Állapotüzenetek listája"
 msgid "_Add to status message list"
 msgstr "H_ozzáadás az állapotüzenetek listájához"
 
-#: ../libempathy-gtk/gossip-private-chat.c:198
+#: ../libempathy-gtk/gossip-private-chat.c:188
 #, c-format
 msgid "%s went offline"
 msgstr "%s kilépett"
 
-#: ../libempathy-gtk/gossip-private-chat.c:212
+#: ../libempathy-gtk/gossip-private-chat.c:202
 #, c-format
 msgid "%s has come online"
 msgstr "%s elérhetővé vált"
+
+#: ../libempathy-gtk/gossip-spell-dialog.c:85
+msgid "Word"
+msgstr "Szó"
+
+#: ../libempathy-gtk/gossip-spell-dialog.c:258
+msgid "Suggestions for the word"
+msgstr "Javaslat a szóra"
+
+#: ../libempathy-gtk/gossip-spell-dialog.glade.h:1
+msgid "Spell Checker"
+msgstr "Helyesírás-ellenőrző"
+
+#: ../libempathy-gtk/gossip-spell-dialog.glade.h:2
+msgid "Suggestions for the word:"
+msgstr "Javaslatok a szóhoz:"
 
 #: ../libempathy-gtk/gossip-theme-manager.c:87
 msgid "Classic"
@@ -889,12 +1141,11 @@ msgstr "Tiszta"
 msgid "Blue"
 msgstr "Kék"
 
-#: ../src/empathy-main.c:145
+#: ../src/empathy.c:174
 msgid "Don't connect on startup"
 msgstr "Ne kapcsolódjon indításkor"
 
-#: ../src/empathy-main.c:155
-#, fuzzy
+#: ../src/empathy.c:183
 msgid "- Empathy Instant Messenger"
-msgstr "- Gossip azonnali üzenetküldő"
+msgstr "- Empathy azonnali üzenő"
 
