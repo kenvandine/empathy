@@ -43,6 +43,7 @@
 #include <libempathy/gossip-contact.h>
 #include <libempathy/empathy-chandler.h>
 #include <libempathy/empathy-tp-chat.h>
+#include <libempathy/empathy-idle.h>
 #include <libempathy-gtk/empathy-main-window.h>
 #include <libempathy-gtk/empathy-status-icon.h>
 #include <libempathy-gtk/gossip-private-chat.h>
@@ -52,16 +53,6 @@
 
 #define BUS_NAME "org.gnome.Empathy.Chat"
 #define OBJECT_PATH "/org/freedesktop/Telepathy/ChannelHandler"
-
-static void
-error_cb (MissionControl *mc,
-	  GError         *error,
-	  gpointer        data)
-{
-	if (error) {
-		gossip_debug (DEBUG_DOMAIN, "Error: %s", error->message);
-	}
-}
 
 static void
 service_ended_cb (MissionControl *mc,
@@ -82,33 +73,27 @@ operation_error_cb (MissionControl *mc,
 }
 
 static void
-start_mission_control (MissionControl *mc)
+start_mission_control (EmpathyIdle *idle)
 {
 	McPresence presence;
 
-	presence = mission_control_get_presence_actual (mc, NULL);
+	presence = empathy_idle_get_state (idle);
 
 	if (presence > MC_PRESENCE_OFFLINE) {
 		/* MC is already running and online, nothing to do */
 		return;
 	}
 
-	gossip_debug (DEBUG_DOMAIN, "Starting Mission Control...");
-
-	mission_control_set_presence (mc,
-				      MC_PRESENCE_AVAILABLE,
-				      NULL,
-				      (McCallback) error_cb,
-				      NULL);
+	empathy_idle_set_state (idle, MC_PRESENCE_AVAILABLE);
 }
 
 static void
 account_enabled_cb (McAccountMonitor *monitor,
 		    gchar            *unique_name,
-		    MissionControl   *mc)
+		    EmpathyIdle      *idle)
 {
 	gossip_debug (DEBUG_DOMAIN, "Account enabled: %s", unique_name);
-	start_mission_control (mc);
+	start_mission_control (idle);
 }
 
 static void
@@ -164,6 +149,7 @@ main (int argc, char *argv[])
 	GtkWidget         *window;
 	MissionControl    *mc;
 	McAccountMonitor  *monitor;
+	EmpathyIdle       *idle;
 	EmpathyChandler   *chandler;
 	GnomeProgram      *program;
 	gboolean           no_connect = FALSE;
@@ -201,9 +187,10 @@ main (int argc, char *argv[])
 	/* Setting up MC */
 	monitor = mc_account_monitor_new ();
 	mc = gossip_mission_control_new ();
+	idle = empathy_idle_new ();
 	g_signal_connect (monitor, "account-enabled",
 			  G_CALLBACK (account_enabled_cb),
-			  mc);
+			  idle);
 	g_signal_connect (mc, "ServiceEnded",
 			  G_CALLBACK (service_ended_cb),
 			  NULL);
@@ -212,7 +199,7 @@ main (int argc, char *argv[])
 			  NULL);
 
 	if (!no_connect) {
-		start_mission_control (mc);
+		start_mission_control (idle);
 	}
 
 	/* Setting up UI */
@@ -227,13 +214,12 @@ main (int argc, char *argv[])
 
 	gtk_main ();
 
-	mission_control_set_presence (mc,
-				      MC_PRESENCE_OFFLINE,
-				      NULL, NULL, NULL);
+	empathy_idle_set_state (idle, MC_PRESENCE_OFFLINE);
 
 	g_object_unref (chandler);
 	g_object_unref (monitor);
 	g_object_unref (mc);
+	g_object_unref (idle);
 	g_object_unref (icon);
 	g_object_unref (program);
 
