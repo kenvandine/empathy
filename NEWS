@@ -1,3 +1,21 @@
+NEW in 0.8:
+===========
+ - Fixed contact list handling.
+ - Make use of NetworkManager to set presence to OFFILE when we are disconnected
+   and restore presence once we are reconnected.
+ - UI for searching in conversation history and to view all conversations with
+   a given contact.
+ - Do not use 2 different processes (empathy and empathy-chat), merge them
+   into one client. This is easier for debugging and share data.
+ - Do not create log directory for a chat if there is no messages to put in.
+ - Do not set active contacts when creating the store, and when contact groups
+   changed.
+ - Fix warning when using command-line options.
+ - Ignore ssl errors by default. This is needed to connect jabber accounts
+   using ssl.
+ - Adding spellcheck support using aspell.
+ - Lots of bugs fixed.
+
 NEW in 0.7:
 ===========
  - Adding new contacts.
