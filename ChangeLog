@@ -1,5 +1,9 @@
 2007-06-21 Xavier Claessens  <xclaesse@gmail.com>
 
+	* configure.ac: Bump version to 0.9
+
+2007-06-21 Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy/empathy-tp-contact-list.c: Fix typo causing warnings.
 
 2007-06-21 Xavier Claessens  <xclaesse@gmail.com>
