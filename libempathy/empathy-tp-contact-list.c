@@ -503,7 +503,7 @@ tp_contact_list_get_members (EmpathyContactList *list)
 
 	priv = GET_PRIV (list);
 
-	g_list_foreach (priv->local_pending, (GFunc) g_object_ref, NULL);
+	g_list_foreach (priv->members, (GFunc) g_object_ref, NULL);
 	return g_list_copy (priv->members);
 }
 

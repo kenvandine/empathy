@@ -1,5 +1,9 @@
 2007-06-21 Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy/empathy-tp-contact-list.c: Fix typo causing warnings.
+
+2007-06-21 Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/empathy-contact-dialogs.c:
 	* libempathy-gtk/gossip-contact-list-store.c:
 	* libempathy-gtk/gossip-contact-list-view.c:
