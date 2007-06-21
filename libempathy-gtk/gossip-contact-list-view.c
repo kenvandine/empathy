@@ -1387,14 +1387,15 @@ contact_list_view_filter_show_group (GossipContactListView *view,
 	contacts = empathy_contact_list_get_members (list);
 	for (l = contacts; l && !show_group; l = l->next) {
 		if (!gossip_contact_is_in_group (l->data, group)) {
+			g_object_unref (l->data);
 			continue;
 		}
 
 		if (contact_list_view_filter_show_contact (l->data, filter)) {
 			show_group = TRUE;
 		}
+		g_object_unref (l->data);
 	}
-	g_list_foreach (contacts, (GFunc) g_object_unref, NULL);
 	g_list_free (contacts);
 	g_free (str);
 

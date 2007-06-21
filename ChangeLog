@@ -1,3 +1,17 @@
+2007-06-21 Xavier Claessens  <xclaesse@gmail.com>
+
+	* libempathy-gtk/empathy-contact-dialogs.c:
+	* libempathy-gtk/gossip-contact-list-store.c:
+	* libempathy-gtk/gossip-contact-list-view.c:
+	* libempathy/empathy-contact-manager.c:
+	* libempathy/empathy-tp-contact-list.c:
+	* libempathy/empathy-contact-list.c:
+	* libempathy/empathy-contact-list.h:
+	* libempathy/gossip-contact.c: We show in our roster all contacts
+	members and remote-pending of subscribe list. Adding/Removing a contact
+	only add/remove from subscribe list. Accept/Reject a contact in
+	local-pending of publish list is done using _process_pending().
+
 2007-06-15 Xavier Claessens  <xclaesse@gmail.com>
 
 	* src/empathy.c:

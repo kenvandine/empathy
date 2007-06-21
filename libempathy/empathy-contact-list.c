@@ -185,3 +185,17 @@ empathy_contact_list_get_local_pending (EmpathyContactList *list)
 	return NULL;
 }
 
+void
+empathy_contact_list_process_pending (EmpathyContactList *list,
+				      GossipContact      *contact,
+				      gboolean            accept)
+{
+	g_return_if_fail (EMPATHY_IS_CONTACT_LIST (list));
+
+	if (EMPATHY_CONTACT_LIST_GET_IFACE (list)->process_pending) {
+		EMPATHY_CONTACT_LIST_GET_IFACE (list)->process_pending (list,
+									contact,
+									accept);
+	}
+}
+

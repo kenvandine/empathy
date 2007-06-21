@@ -70,14 +70,12 @@ subscription_dialog_response_cb (GtkDialog *dialog,
 	contact = empathy_contact_widget_get_contact (contact_widget);
 
 	if (response == GTK_RESPONSE_YES) {
-		empathy_contact_list_add (EMPATHY_CONTACT_LIST (manager),
-					  contact,
-					  _("I would like to add you to my contact list."));
+		empathy_contact_list_process_pending (EMPATHY_CONTACT_LIST (manager),
+						      contact, TRUE);
 	}
 	else if (response == GTK_RESPONSE_NO) {
-		empathy_contact_list_remove (EMPATHY_CONTACT_LIST (manager),
-					     contact,
-					     _("Sorry, I don't want you in my contact list."));
+		empathy_contact_list_process_pending (EMPATHY_CONTACT_LIST (manager),
+						      contact, FALSE);
 	}
 
 	subscription_dialogs = g_list_remove (subscription_dialogs, dialog);

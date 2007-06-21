@@ -373,7 +373,7 @@ gossip_contact_get_name (GossipContact *contact)
 
 	priv = GET_PRIV (contact);
 
-	if (priv->name == NULL) {
+	if (G_STR_EMPTY (priv->name)) {
 		return gossip_contact_get_id (contact);
 	}
 
@@ -710,7 +710,11 @@ gossip_contact_is_online (GossipContact *contact)
 
 	priv = GET_PRIV (contact);
 
-	return (priv->presence != NULL);
+	if (!priv->presence) {
+		return FALSE;
+	}
+
+	return (gossip_presence_get_state (priv->presence) > MC_PRESENCE_OFFLINE);
 }
 
 gboolean

@@ -67,6 +67,9 @@ static void           contact_manager_remove               (EmpathyContactList  
 							    const gchar                     *message);
 static GList *        contact_manager_get_members          (EmpathyContactList              *manager);
 static GList *        contact_manager_get_local_pending    (EmpathyContactList              *manager);
+static void           contact_manager_process_pending      (EmpathyContactList              *manager,
+							    GossipContact                   *contact,
+							    gboolean                         accept);
 static void           contact_manager_setup_foreach        (McAccount                       *account,
 							    EmpathyTpContactList            *list,
 							    EmpathyContactManager           *manager);
@@ -129,6 +132,7 @@ contact_manager_iface_init (EmpathyContactListIface *iface)
 	iface->remove            = contact_manager_remove;
 	iface->get_members       = contact_manager_get_members;
 	iface->get_local_pending = contact_manager_get_local_pending;
+	iface->process_pending   = contact_manager_process_pending;
 }
 
 static void
@@ -309,6 +313,28 @@ contact_manager_get_local_pending (EmpathyContactList *manager)
 			      &pending);
 
 	return pending;
+}
+
+static void
+contact_manager_process_pending (EmpathyContactList *manager,
+				 GossipContact      *contact,
+				 gboolean            accept)
+{
+	EmpathyContactManagerPriv *priv;
+	EmpathyContactList        *list;
+	McAccount                 *account;
+
+	g_return_if_fail (EMPATHY_IS_CONTACT_MANAGER (manager));
+	g_return_if_fail (GOSSIP_IS_CONTACT (contact));
+
+	priv = GET_PRIV (manager);
+
+	account = gossip_contact_get_account (contact);
+	list = g_hash_table_lookup (priv->lists, account);
+
+	if (list) {
+		empathy_contact_list_process_pending (list, contact, accept);
+	}
 }
 
 EmpathyTpContactList *

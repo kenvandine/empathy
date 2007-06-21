@@ -410,7 +410,7 @@ gossip_contact_list_store_set_show_offline (GossipContactListStore *store,
 		contact = GOSSIP_CONTACT (l->data);
 
 		contact_list_store_contact_update (store, contact);
-		
+
 		g_object_unref (contact);
 	}
 	g_list_free (contacts);
