@@ -1,5 +1,9 @@
 2007-06-22 Xavier Claessens  <xclaesse@gmail.com>
 
+	* po/POTFILES.in: s/gossip/empathy/
+
+2007-06-22 Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy/*.[ch]:
 	* libempathy-gtk/*.[ch]:
 	* src/*.[ch]: Rename all filenames starting with "gossip" by "empathy",
