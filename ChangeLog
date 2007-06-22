@@ -1,5 +1,14 @@
 2007-06-22 Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/libempathy-gtk.pc.in:
+	* libempathy-gtk/Makefile.am:
+	* libempathy/libempathy.pc.in:
+	* libempathy/Makefile.am:
+	* configure.ac: Install libempathy and libempathy-gtk and make their
+	API public.
+
+2007-06-22 Xavier Claessens  <xclaesse@gmail.com>
+
 	* po/POTFILES.in: s/gossip/empathy/
 
 2007-06-22 Xavier Claessens  <xclaesse@gmail.com>

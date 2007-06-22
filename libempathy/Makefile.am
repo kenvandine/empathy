@@ -10,34 +10,54 @@ BUILT_SOURCES = 					\
 	empathy-marshal.c				\
 	empathy-chandler-glue.h
 
-noinst_LTLIBRARIES = libempathy.la
+lib_LTLIBRARIES = libempathy.la
 
-libempathy_la_SOURCES =             						\
-	empathy-conf.c			empathy-conf.h				\
-	empathy-contact.c		empathy-contact.h			\
-	empathy-avatar.c		empathy-avatar.h			\
-	empathy-time.c			empathy-time.h				\
-	empathy-presence.c		empathy-presence.h			\
-	empathy-debug.c			empathy-debug.h				\
-	empathy-utils.c			empathy-utils.h				\
-	empathy-message.c		empathy-message.h			\
-	empathy-chatroom-manager.c	empathy-chatroom-manager.h		\
-	empathy-chatroom.c		empathy-chatroom.h			\
-	empathy-contact-list.c		empathy-contact-list.h			\
-	empathy-contact-manager.c	empathy-contact-manager.h		\
-	empathy-tp-group.c		empathy-tp-group.h			\
-	empathy-tp-contact-list.c	empathy-tp-contact-list.h		\
-	empathy-tp-chat.c		empathy-tp-chat.h			\
-	empathy-tp-chatroom.c		empathy-tp-chatroom.h			\
-	empathy-chandler.c		empathy-chandler.h			\
-	empathy-idle.c			empathy-idle.h				\
-	empathy-log-manager.c		empathy-log-manager.h			\
+libempathy_la_SOURCES =					\
+	empathy-conf.c					\
+	empathy-contact.c				\
+	empathy-avatar.c				\
+	empathy-time.c					\
+	empathy-presence.c				\
+	empathy-debug.c					\
+	empathy-utils.c					\
+	empathy-message.c				\
+	empathy-chatroom-manager.c			\
+	empathy-chatroom.c				\
+	empathy-contact-list.c				\
+	empathy-contact-manager.c			\
+	empathy-tp-group.c				\
+	empathy-tp-contact-list.c			\
+	empathy-tp-chat.c				\
+	empathy-tp-chatroom.c				\
+	empathy-chandler.c				\
+	empathy-idle.c					\
+	empathy-log-manager.c				\
 	empathy-marshal-main.c
 
 libempathy_la_LIBADD =		\
 	$(LIBEMPATHY_LIBS)
 
-libempathy_includedir = $(includedir)/empathy/
+libempathydir = $(includedir)/libempathy/
+libempathy_HEADERS =				\
+	empathy-conf.h				\
+	empathy-contact.h			\
+	empathy-avatar.h			\
+	empathy-time.h				\
+	empathy-presence.h			\
+	empathy-debug.h				\
+	empathy-utils.h				\
+	empathy-message.h			\
+	empathy-chatroom-manager.h		\
+	empathy-chatroom.h			\
+	empathy-contact-list.h			\
+	empathy-contact-manager.h		\
+	empathy-tp-group.h			\
+	empathy-tp-contact-list.h		\
+	empathy-tp-chat.h			\
+	empathy-tp-chatroom.h			\
+	empathy-chandler.h			\
+	empathy-idle.h				\
+	empathy-log-manager.h
 
 %-marshal.h: %-marshal.list Makefile.am
 	$(GLIB_GENMARSHAL) --header --prefix=$(subst -,_,$*)_marshal $< > $*-marshal.h
@@ -57,6 +77,9 @@ dtd_DATA = 					\
 stylesheetdir = $(datadir)/empathy
 stylesheet_DATA =		\
 	empathy-log-manager.xsl
+
+pkgconfigdir = $(libdir)/pkgconfig
+pkgconfig_DATA = libempathy.pc
 
 EXTRA_DIST = 			\
 	empathy-marshal.list	\

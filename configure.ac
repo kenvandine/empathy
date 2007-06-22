@@ -134,7 +134,9 @@ AC_OUTPUT([
   data/scalable/Makefile
   po/Makefile.in
   libempathy/Makefile
+  libempathy/libempathy.pc
   libempathy-gtk/Makefile
+  libempathy-gtk/libempathy-gtk.pc
   src/Makefile
 ])
 
