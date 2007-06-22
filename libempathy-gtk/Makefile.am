@@ -14,33 +14,33 @@ libempathy_gtk_la_SOURCES =             					\
 	empathy-status-icon.c			empathy-status-icon.h		\
 	empathy-contact-widget.c		empathy-contact-widget.h	\
 	empathy-contact-dialogs.c		empathy-contact-dialogs.h	\
-	gossip-accounts-dialog.c		gossip-accounts-dialog.h	\
-	gossip-account-widget-generic.c		gossip-account-widget-generic.h	\
-	gossip-account-widget-jabber.c		gossip-account-widget-jabber.h	\
-	gossip-profile-chooser.c		gossip-profile-chooser.h	\
-	gossip-cell-renderer-expander.c		gossip-cell-renderer-expander.h	\
-	gossip-cell-renderer-text.c		gossip-cell-renderer-text.h	\
-	gossip-spell.c				gossip-spell.h			\
-	gossip-spell-dialog.c			gossip-spell-dialog.h		\
-	gossip-contact-groups.c			gossip-contact-groups.h		\
-	gossip-contact-list-store.c		gossip-contact-list-store.h	\
-	gossip-contact-list-view.c		gossip-contact-list-view.h	\
-	gossip-preferences.c			gossip-preferences.h		\
-	gossip-theme-manager.c			gossip-theme-manager.h		\
-	gossip-chat-window.c			gossip-chat-window.h		\
-	gossip-chat.c				gossip-chat.h			\
-	gossip-chat-view.c			gossip-chat-view.h		\
-	gossip-private-chat.c			gossip-private-chat.h		\
-	gossip-group-chat.c			gossip-group-chat.h		\
-	gossip-geometry.c			gossip-geometry.h		\
-	gossip-status-presets.c			gossip-status-presets.h		\
-	gossip-presence-chooser.c		gossip-presence-chooser.h	\
-	gossip-about-dialog.c			gossip-about-dialog.h		\
-	gossip-account-chooser.c		gossip-account-chooser.h	\
-	gossip-new-chatroom-dialog.c		gossip-new-chatroom-dialog.h	\
-	gossip-chatrooms-window.c		gossip-chatrooms-window.h	\
-	gossip-log-window.c			gossip-log-window.h		\
-	gossip-ui-utils.c			gossip-ui-utils.h
+	empathy-accounts-dialog.c		empathy-accounts-dialog.h	\
+	empathy-account-widget-generic.c		empathy-account-widget-generic.h	\
+	empathy-account-widget-jabber.c		empathy-account-widget-jabber.h	\
+	empathy-profile-chooser.c		empathy-profile-chooser.h	\
+	empathy-cell-renderer-expander.c		empathy-cell-renderer-expander.h	\
+	empathy-cell-renderer-text.c		empathy-cell-renderer-text.h	\
+	empathy-spell.c				empathy-spell.h			\
+	empathy-spell-dialog.c			empathy-spell-dialog.h		\
+	empathy-contact-groups.c			empathy-contact-groups.h		\
+	empathy-contact-list-store.c		empathy-contact-list-store.h	\
+	empathy-contact-list-view.c		empathy-contact-list-view.h	\
+	empathy-preferences.c			empathy-preferences.h		\
+	empathy-theme-manager.c			empathy-theme-manager.h		\
+	empathy-chat-window.c			empathy-chat-window.h		\
+	empathy-chat.c				empathy-chat.h			\
+	empathy-chat-view.c			empathy-chat-view.h		\
+	empathy-private-chat.c			empathy-private-chat.h		\
+	empathy-group-chat.c			empathy-group-chat.h		\
+	empathy-geometry.c			empathy-geometry.h		\
+	empathy-status-presets.c			empathy-status-presets.h		\
+	empathy-presence-chooser.c		empathy-presence-chooser.h	\
+	empathy-about-dialog.c			empathy-about-dialog.h		\
+	empathy-account-chooser.c		empathy-account-chooser.h	\
+	empathy-new-chatroom-dialog.c		empathy-new-chatroom-dialog.h	\
+	empathy-chatrooms-window.c		empathy-chatrooms-window.h	\
+	empathy-log-window.c			empathy-log-window.h		\
+	empathy-ui-utils.c			empathy-ui-utils.h
 
 libempathy_gtk_la_LIBADD =				\
 	$(EMPATHY_LIBS)					\
@@ -54,21 +54,21 @@ glade_DATA = 					\
 	empathy-status-icon.glade		\
 	empathy-contact-widget.glade		\
 	empathy-contact-dialogs.glade		\
-	gossip-preferences.glade		\
-	gossip-presence-chooser.glade		\
-	gossip-accounts-dialog.glade		\
-	gossip-account-widget-jabber.glade	\
-	gossip-new-chatroom-dialog.glade	\
-	gossip-group-chat.glade			\
-	gossip-chatrooms-window.glade		\
-	gossip-spell-dialog.glade		\
-	gossip-log-window.glade			\
-	gossip-chat.glade
+	empathy-preferences.glade		\
+	empathy-presence-chooser.glade		\
+	empathy-accounts-dialog.glade		\
+	empathy-account-widget-jabber.glade	\
+	empathy-new-chatroom-dialog.glade	\
+	empathy-group-chat.glade			\
+	empathy-chatrooms-window.glade		\
+	empathy-spell-dialog.glade		\
+	empathy-log-window.glade			\
+	empathy-chat.glade
 
 dtddir = $(datadir)/empathy
 dtd_DATA = 					\
-	gossip-status-presets.dtd		\
-	gossip-contact-groups.dtd
+	empathy-status-presets.dtd		\
+	empathy-contact-groups.dtd
 
 
 EXTRA_DIST =			\

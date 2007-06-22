@@ -25,13 +25,13 @@
 
 #include <gtk/gtk.h>
 
-#include <libempathy/gossip-contact.h>
+#include <libempathy/empathy-contact.h>
 
 G_BEGIN_DECLS
 
-GtkWidget *    empathy_contact_widget_new         (GossipContact *contact,
+GtkWidget *    empathy_contact_widget_new         (EmpathyContact *contact,
 						   gboolean       editable);
-GossipContact *empathy_contact_widget_get_contact (GtkWidget     *widget);
+EmpathyContact *empathy_contact_widget_get_contact (GtkWidget     *widget);
 
 G_END_DECLS
 #endif /*  __EMPATHY_CONTACT_WIDGET_H__ */

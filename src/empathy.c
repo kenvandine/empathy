@@ -37,17 +37,17 @@
 #include <libmissioncontrol/mc-account-monitor.h>
 #include <libmissioncontrol/mission-control.h>
 
-#include <libempathy/gossip-debug.h>
-#include <libempathy/gossip-utils.h>
-#include <libempathy/gossip-presence.h>
-#include <libempathy/gossip-contact.h>
+#include <libempathy/empathy-debug.h>
+#include <libempathy/empathy-utils.h>
+#include <libempathy/empathy-presence.h>
+#include <libempathy/empathy-contact.h>
 #include <libempathy/empathy-chandler.h>
 #include <libempathy/empathy-tp-chat.h>
 #include <libempathy/empathy-idle.h>
 #include <libempathy-gtk/empathy-main-window.h>
 #include <libempathy-gtk/empathy-status-icon.h>
-#include <libempathy-gtk/gossip-private-chat.h>
-#include <libempathy-gtk/gossip-group-chat.h>
+#include <libempathy-gtk/empathy-private-chat.h>
+#include <libempathy-gtk/empathy-group-chat.h>
 
 #define DEBUG_DOMAIN "EmpathyMain"
 
@@ -58,7 +58,7 @@ static void
 service_ended_cb (MissionControl *mc,
 		  gpointer        user_data)
 {
-	gossip_debug (DEBUG_DOMAIN, "Mission Control stopped");
+	empathy_debug (DEBUG_DOMAIN, "Mission Control stopped");
 }
 
 static void
@@ -67,7 +67,7 @@ operation_error_cb (MissionControl *mc,
 		    guint           error_code,
 		    gpointer        user_data)
 {
-	gossip_debug (DEBUG_DOMAIN, "Error code %d during operation %d",
+	empathy_debug (DEBUG_DOMAIN, "Error code %d during operation %d",
 		      error_code,
 		      operation_id);
 }
@@ -92,7 +92,7 @@ account_enabled_cb (McAccountMonitor *monitor,
 		    gchar            *unique_name,
 		    EmpathyIdle      *idle)
 {
-	gossip_debug (DEBUG_DOMAIN, "Account enabled: %s", unique_name);
+	empathy_debug (DEBUG_DOMAIN, "Account enabled: %s", unique_name);
 	start_mission_control (idle);
 }
 
@@ -103,25 +103,25 @@ new_channel_cb (EmpathyChandler *chandler,
 		MissionControl  *mc)
 {
 	McAccount  *account;
-	GossipChat *chat;
+	EmpathyChat *chat;
 	gchar      *id;
 
 	account = mission_control_get_account_for_connection (mc, tp_conn, NULL);
-	id = gossip_get_channel_id (account, tp_chan);
-	chat = gossip_chat_window_find_chat (account, id);
+	id = empathy_get_channel_id (account, tp_chan);
+	chat = empathy_chat_window_find_chat (account, id);
 	g_free (id);
 
 	if (chat) {
 		/* The chat already exists */
-		if (!gossip_chat_is_connected (chat)) {
+		if (!empathy_chat_is_connected (chat)) {
 			EmpathyTpChat *tp_chat;
 
 			/* The chat died, give him the new text channel */
 			tp_chat = empathy_tp_chat_new (account, tp_chan);
-			gossip_chat_set_tp_chat (chat, tp_chat);
+			empathy_chat_set_tp_chat (chat, tp_chat);
 			g_object_unref (tp_chat);
 		}
-		gossip_chat_present (chat);
+		empathy_chat_present (chat);
 
 		g_object_unref (account);
 		return;
@@ -129,14 +129,14 @@ new_channel_cb (EmpathyChandler *chandler,
 
 	if (tp_chan->handle_type == TP_HANDLE_TYPE_CONTACT) {
 		/* We have a new private chat channel */
-		chat = GOSSIP_CHAT (gossip_private_chat_new (account, tp_chan));
+		chat = EMPATHY_CHAT (empathy_private_chat_new (account, tp_chan));
 	}
 	else if (tp_chan->handle_type == TP_HANDLE_TYPE_ROOM) {
 		/* We have a new group chat channel */
-		chat = GOSSIP_CHAT (gossip_group_chat_new (account, tp_chan));
+		chat = EMPATHY_CHAT (empathy_group_chat_new (account, tp_chan));
 	}
 
-	gossip_chat_present (GOSSIP_CHAT (chat));
+	empathy_chat_present (EMPATHY_CHAT (chat));
 
 	g_object_unref (chat);
 	g_object_unref (account);
@@ -186,7 +186,7 @@ main (int argc, char *argv[])
 
 	/* Setting up MC */
 	monitor = mc_account_monitor_new ();
-	mc = gossip_mission_control_new ();
+	mc = empathy_mission_control_new ();
 	idle = empathy_idle_new ();
 	g_signal_connect (monitor, "account-enabled",
 			  G_CALLBACK (account_enabled_cb),

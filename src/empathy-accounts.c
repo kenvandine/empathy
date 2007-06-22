@@ -28,7 +28,7 @@
 #include <glib.h>
 #include <gtk/gtk.h>
 
-#include <libempathy-gtk/gossip-accounts-dialog.h>
+#include <libempathy-gtk/empathy-accounts-dialog.h>
 
 static void
 destroy_cb (GtkWidget *dialog,
@@ -46,7 +46,7 @@ main (int argc, char *argv[])
 
 	gtk_icon_theme_append_search_path (gtk_icon_theme_get_default (),
 					   DATADIR G_DIR_SEPARATOR_S "empathy");
-	dialog = gossip_accounts_dialog_show (NULL);
+	dialog = empathy_accounts_dialog_show (NULL);
 
 	g_signal_connect (dialog, "destroy",
 			  G_CALLBACK (destroy_cb),

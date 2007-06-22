@@ -30,8 +30,8 @@
 #include <libtelepathy/tp-helpers.h>
 
 #include "empathy-idle.h"
-#include "gossip-utils.h" 
-#include "gossip-debug.h"
+#include "empathy-utils.h" 
+#include "empathy-debug.h"
 
 #define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), \
 		       EMPATHY_TYPE_IDLE, EmpathyIdlePriv))
@@ -144,7 +144,7 @@ empathy_idle_init (EmpathyIdle *idle)
 	priv = GET_PRIV (idle);
 
 	priv->is_idle = FALSE;
-	priv->mc = gossip_mission_control_new ();
+	priv->mc = empathy_mission_control_new ();
 	priv->state = mission_control_get_presence_actual (priv->mc, NULL);
 	idle_presence_changed_cb (priv->mc, priv->state, idle);
 
@@ -165,13 +165,13 @@ empathy_idle_init (EmpathyIdle *idle)
 					     G_CALLBACK (idle_session_idle_changed_cb),
 					     idle, NULL);
 	} else {
-		gossip_debug (DEBUG_DOMAIN, "Failed to get gs proxy");
+		empathy_debug (DEBUG_DOMAIN, "Failed to get gs proxy");
 	}
 
 
 	system_bus = dbus_g_bus_get (DBUS_BUS_SYSTEM, &error);
 	if (!system_bus) {
-		gossip_debug (DEBUG_DOMAIN, "Failed to get system bus: %s",
+		empathy_debug (DEBUG_DOMAIN, "Failed to get system bus: %s",
 			      error ? error->message : "No error given");
 	} else {
 		priv->nm_proxy = dbus_g_proxy_new_for_name (system_bus,
@@ -186,7 +186,7 @@ empathy_idle_init (EmpathyIdle *idle)
 					     G_CALLBACK (idle_nm_state_change_cb),
 					     idle, NULL);
 	} else {
-		gossip_debug (DEBUG_DOMAIN, "Failed to get nm proxy");
+		empathy_debug (DEBUG_DOMAIN, "Failed to get nm proxy");
 	}
 	/* FIXME: get value */
 	priv->nm_connected = TRUE;
@@ -310,7 +310,7 @@ empathy_idle_get_status (EmpathyIdle *idle)
 	priv = GET_PRIV (idle);
 
 	if (!priv->status) {
-		return gossip_presence_state_get_default_status (priv->state);
+		return empathy_presence_state_get_default_status (priv->state);
 	}
 
 	return priv->status;
@@ -371,7 +371,7 @@ empathy_idle_set_presence (EmpathyIdle *idle,
 	}
 
 	/* Do not set translated default messages */
-	default_status = gossip_presence_state_get_default_status (state);
+	default_status = empathy_presence_state_get_default_status (state);
 	if (status && strcmp (status, default_status) == 0) {
 		status = NULL;
 	}
@@ -413,7 +413,7 @@ idle_session_idle_changed_cb (DBusGProxy  *gs_proxy,
 
 	priv = GET_PRIV (idle);
 
-	gossip_debug (DEBUG_DOMAIN, "Session idle state changed, %s -> %s",
+	empathy_debug (DEBUG_DOMAIN, "Session idle state changed, %s -> %s",
 		      priv->is_idle ? "yes" : "no",
 		      is_idle ? "yes" : "no");
 
@@ -441,7 +441,7 @@ idle_session_idle_changed_cb (DBusGProxy  *gs_proxy,
 			priv->saved_status = g_strdup (priv->status);
 		}
 
-		gossip_debug (DEBUG_DOMAIN, "Going to autoaway");
+		empathy_debug (DEBUG_DOMAIN, "Going to autoaway");
 		empathy_idle_set_state (idle, new_state);
 
 		idle_ext_away_start (idle);
@@ -449,7 +449,7 @@ idle_session_idle_changed_cb (DBusGProxy  *gs_proxy,
 		/* We are no more idle, restore state */
 		idle_ext_away_stop (idle);
 
-		gossip_debug (DEBUG_DOMAIN, "Restoring state to %d %s",
+		empathy_debug (DEBUG_DOMAIN, "Restoring state to %d %s",
 			      priv->saved_state,
 			      priv->saved_status);
 
@@ -473,7 +473,7 @@ idle_nm_state_change_cb (DBusGProxy  *proxy,
 
 	priv = GET_PRIV (idle);
 
-	gossip_debug (DEBUG_DOMAIN, "New network state (%d)", state);
+	empathy_debug (DEBUG_DOMAIN, "New network state (%d)", state);
 
 	if (state != NM_STATE_CONNECTED &&
 	    priv->state > MC_PRESENCE_OFFLINE) {
@@ -529,7 +529,7 @@ idle_ext_away_cb (EmpathyIdle *idle)
 
 	priv = GET_PRIV (idle);
 
-	gossip_debug (DEBUG_DOMAIN, "Going to extended autoaway");
+	empathy_debug (DEBUG_DOMAIN, "Going to extended autoaway");
 	empathy_idle_set_state (idle, MC_PRESENCE_EXTENDED_AWAY);
 	priv->ext_away_timeout = 0;
 

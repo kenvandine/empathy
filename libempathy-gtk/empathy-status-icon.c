@@ -32,18 +32,18 @@
 
 #include <libempathy/empathy-contact-list.h>
 #include <libempathy/empathy-contact-manager.h>
-#include <libempathy/gossip-contact.h>
-#include <libempathy/gossip-debug.h>
-#include <libempathy/gossip-utils.h>
-#include <libempathy/gossip-conf.h>
+#include <libempathy/empathy-contact.h>
+#include <libempathy/empathy-debug.h>
+#include <libempathy/empathy-utils.h>
+#include <libempathy/empathy-conf.h>
 #include <libempathy/empathy-idle.h>
 
 #include "empathy-status-icon.h"
 #include "empathy-contact-dialogs.h"
-#include "gossip-presence-chooser.h"
-#include "gossip-preferences.h"
-#include "gossip-ui-utils.h"
-#include "gossip-accounts-dialog.h"
+#include "empathy-presence-chooser.h"
+#include "empathy-preferences.h"
+#include "empathy-ui-utils.h"
+#include "empathy-accounts-dialog.h"
 
 
 #define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), \
@@ -106,7 +106,7 @@ static void       status_icon_quit_cb             (GtkWidget              *windo
 static void       status_icon_show_hide_window_cb (GtkWidget              *widget,
 						   EmpathyStatusIcon      *icon);
 static void       status_icon_local_pending_cb    (EmpathyContactManager  *manager,
-						   GossipContact          *contact,
+						   EmpathyContact          *contact,
 						   gchar                  *message,
 						   EmpathyStatusIcon      *icon);
 static void       status_icon_event_subscribe_cb  (StatusIconEvent        *event);
@@ -211,10 +211,10 @@ empathy_status_icon_new (GtkWindow *window)
 			  G_CALLBACK (status_icon_delete_event_cb),
 			  icon);
 
-	gossip_conf_get_bool (gossip_conf_get (),
-			      GOSSIP_PREFS_UI_MAIN_WINDOW_HIDDEN,
+	empathy_conf_get_bool (empathy_conf_get (),
+			      EMPATHY_PREFS_UI_MAIN_WINDOW_HIDDEN,
 			      &should_hide);
-	visible = gossip_window_get_is_visible (window);
+	visible = empathy_window_get_is_visible (window);
 
 	if ((!should_hide && !visible) || (should_hide && visible)) {
 		status_icon_toggle_visibility (icon);
@@ -235,7 +235,7 @@ status_icon_idle_notify_cb (EmpathyStatusIcon *icon)
 	if (flash_state != MC_PRESENCE_UNSET) {
 		const gchar *icon_name;
 
-		icon_name = gossip_icon_name_for_presence_state (flash_state);
+		icon_name = empathy_icon_name_for_presence_state (flash_state);
 		if (!priv->flash_state_event) {
 			/* We are now flashing */
 			priv->flash_state_event = status_icon_event_new (icon, icon_name, NULL);
@@ -293,7 +293,7 @@ status_icon_set_from_state (EmpathyStatusIcon *icon)
 	priv = GET_PRIV (icon);
 
 	state = empathy_idle_get_state (priv->idle);
-	icon_name = gossip_icon_name_for_presence_state (state);
+	icon_name = empathy_icon_name_for_presence_state (state);
 	gtk_status_icon_set_from_icon_name (priv->icon, icon_name);
 }
 
@@ -305,27 +305,27 @@ status_icon_toggle_visibility (EmpathyStatusIcon *icon)
 
 	priv = GET_PRIV (icon);
 
-	visible = gossip_window_get_is_visible (GTK_WINDOW (priv->window));
+	visible = empathy_window_get_is_visible (GTK_WINDOW (priv->window));
 
 	if (visible) {
 		gtk_widget_hide (GTK_WIDGET (priv->window));
-		gossip_conf_set_bool (gossip_conf_get (),
-				      GOSSIP_PREFS_UI_MAIN_WINDOW_HIDDEN, TRUE);
+		empathy_conf_set_bool (empathy_conf_get (),
+				      EMPATHY_PREFS_UI_MAIN_WINDOW_HIDDEN, TRUE);
 	} else {
 		GList *accounts;
 
-		gossip_window_present (GTK_WINDOW (priv->window), TRUE);
-		gossip_conf_set_bool (gossip_conf_get (),
-				      GOSSIP_PREFS_UI_MAIN_WINDOW_HIDDEN, FALSE);
+		empathy_window_present (GTK_WINDOW (priv->window), TRUE);
+		empathy_conf_set_bool (empathy_conf_get (),
+				      EMPATHY_PREFS_UI_MAIN_WINDOW_HIDDEN, FALSE);
 	
 		/* Show the accounts dialog if there is no enabled accounts */
 		accounts = mc_accounts_list_by_enabled (TRUE);
 		if (accounts) {
 			mc_accounts_list_free (accounts);
 		} else {
-			gossip_debug (DEBUG_DOMAIN,
+			empathy_debug (DEBUG_DOMAIN,
 				      "No enabled account, Showing account dialog");
-			gossip_accounts_dialog_show (GTK_WINDOW (priv->window));
+			empathy_accounts_dialog_show (GTK_WINDOW (priv->window));
 		}
 	}
 }
@@ -367,7 +367,7 @@ status_icon_popup_menu_cb (GtkStatusIcon     *status_icon,
 
 	priv = GET_PRIV (icon);
 
-	show = gossip_window_get_is_visible (GTK_WINDOW (priv->window));
+	show = empathy_window_get_is_visible (GTK_WINDOW (priv->window));
 
 	g_signal_handlers_block_by_func (priv->show_window_item,
 					 status_icon_show_hide_window_cb,
@@ -378,7 +378,7 @@ status_icon_popup_menu_cb (GtkStatusIcon     *status_icon,
 					   status_icon_show_hide_window_cb,
 					   icon);
 
-	submenu = gossip_presence_chooser_create_menu ();
+	submenu = empathy_presence_chooser_create_menu ();
 	gtk_menu_item_set_submenu (GTK_MENU_ITEM (priv->status_item),
 				   submenu);
 
@@ -398,7 +398,7 @@ status_icon_create_menu (EmpathyStatusIcon *icon)
 
 	priv = GET_PRIV (icon);
 
-	glade = gossip_glade_get_file ("empathy-status-icon.glade",
+	glade = empathy_glade_get_file ("empathy-status-icon.glade",
 				       "tray_menu",
 				       NULL,
 				       "tray_menu", &priv->popup_menu,
@@ -407,7 +407,7 @@ status_icon_create_menu (EmpathyStatusIcon *icon)
 				       "tray_status", &priv->status_item,
 				       NULL);
 
-	gossip_glade_connect (glade,
+	empathy_glade_connect (glade,
 			      icon,
 			      "tray_new_message", "activate", status_icon_new_message_cb,
 			      "tray_quit", "activate", status_icon_quit_cb,
@@ -428,7 +428,7 @@ status_icon_new_message_cb (GtkWidget         *widget,
 
 	priv = GET_PRIV (icon);
 
-	//gossip_new_message_dialog_show (GTK_WINDOW (priv->window));
+	//empathy_new_message_dialog_show (GTK_WINDOW (priv->window));
 }
 
 static void
@@ -447,7 +447,7 @@ status_icon_show_hide_window_cb (GtkWidget         *widget,
 
 static void
 status_icon_local_pending_cb (EmpathyContactManager *manager,
-			      GossipContact         *contact,
+			      EmpathyContact         *contact,
 			      gchar                 *message,
 			      EmpathyStatusIcon     *icon)
 {
@@ -459,14 +459,14 @@ status_icon_local_pending_cb (EmpathyContactManager *manager,
 	priv = GET_PRIV (icon);
 
 	for (l = priv->events; l; l = l->next) {
-		if (gossip_contact_equal (contact, ((StatusIconEvent*)l->data)->user_data)) {
+		if (empathy_contact_equal (contact, ((StatusIconEvent*)l->data)->user_data)) {
 			return;
 		}
 	}
 
 	str = g_strdup_printf (_("Subscription requested for %s\n"
 				 "Message: %s"),
-			       gossip_contact_get_name (contact),
+			       empathy_contact_get_name (contact),
 			       message);
 
 	event = status_icon_event_new (icon, GTK_STOCK_DIALOG_QUESTION, str);
@@ -479,9 +479,9 @@ status_icon_local_pending_cb (EmpathyContactManager *manager,
 static void
 status_icon_event_subscribe_cb (StatusIconEvent *event)
 {
-	GossipContact *contact;
+	EmpathyContact *contact;
 
-	contact = GOSSIP_CONTACT (event->user_data);
+	contact = EMPATHY_CONTACT (event->user_data);
 
 	empathy_subscription_dialog_show (contact, NULL);
 

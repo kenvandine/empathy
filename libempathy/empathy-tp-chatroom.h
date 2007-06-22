@@ -56,7 +56,7 @@ GType              empathy_tp_chatroom_get_type          (void) G_GNUC_CONST;
 EmpathyTpChatroom *empathy_tp_chatroom_new               (McAccount          *account,
 							  TpChan             *tp_chan);
 gboolean           empathy_tp_chatroom_get_invitation    (EmpathyTpChatroom  *chatroom,
-							  GossipContact     **contact,
+							  EmpathyContact     **contact,
 							  const gchar       **message);
 void               empathy_tp_chatroom_accept_invitation (EmpathyTpChatroom *chatroom);
 void               empathy_tp_chatroom_set_topic         (EmpathyTpChatroom *chatroom,

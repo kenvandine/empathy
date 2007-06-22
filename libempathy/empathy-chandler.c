@@ -29,7 +29,7 @@
 #include <libtelepathy/tp-chan.h>
 
 #include "empathy-chandler.h"
-#include "gossip-debug.h"
+#include "empathy-debug.h"
 #include "empathy-marshal.h"
 
 #define DEBUG_DOMAIN "EmpathyChandler"
@@ -100,7 +100,7 @@ empathy_chandler_new (const gchar *bus_name,
 				G_TYPE_INVALID,
 				G_TYPE_UINT, &result,
 				G_TYPE_INVALID)) {
-		gossip_debug (DEBUG_DOMAIN,
+		empathy_debug (DEBUG_DOMAIN,
 			      "Failed to request name: %s",
 			      error ? error->message : "No error given");
 		g_clear_error (&error);

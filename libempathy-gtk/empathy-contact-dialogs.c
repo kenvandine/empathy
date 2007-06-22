@@ -34,7 +34,7 @@
 
 #include "empathy-contact-dialogs.h"
 #include "empathy-contact-widget.h"
-#include "gossip-ui-utils.h"
+#include "empathy-ui-utils.h"
 
 static GList *subscription_dialogs = NULL;
 static GList *information_dialogs = NULL;
@@ -43,15 +43,15 @@ static GtkWidget *new_contact_dialog = NULL;
 
 static gint
 contact_dialogs_find (GtkDialog     *dialog,
-		      GossipContact *contact)
+		      EmpathyContact *contact)
 {
 	GtkWidget     *contact_widget;
-	GossipContact *this_contact;
+	EmpathyContact *this_contact;
 
 	contact_widget = g_object_get_data (G_OBJECT (dialog), "contact_widget");
 	this_contact = empathy_contact_widget_get_contact (contact_widget);
 
-	return !gossip_contact_equal (contact, this_contact);
+	return !empathy_contact_equal (contact, this_contact);
 }
 
 /*
@@ -64,7 +64,7 @@ subscription_dialog_response_cb (GtkDialog *dialog,
 				 GtkWidget *contact_widget)
 {
 	EmpathyContactManager *manager;
-	GossipContact         *contact;
+	EmpathyContact         *contact;
 
 	manager = empathy_contact_manager_new ();
 	contact = empathy_contact_widget_get_contact (contact_widget);
@@ -84,7 +84,7 @@ subscription_dialog_response_cb (GtkDialog *dialog,
 }
 
 void
-empathy_subscription_dialog_show (GossipContact *contact,
+empathy_subscription_dialog_show (EmpathyContact *contact,
 				  GtkWindow     *parent)
 {
 	GtkWidget *dialog;
@@ -92,7 +92,7 @@ empathy_subscription_dialog_show (GossipContact *contact,
 	GtkWidget *contact_widget;
 	GList     *l;
 
-	g_return_if_fail (GOSSIP_IS_CONTACT (contact));
+	g_return_if_fail (EMPATHY_IS_CONTACT (contact));
 
 	l = g_list_find_custom (subscription_dialogs,
 				contact,
@@ -102,7 +102,7 @@ empathy_subscription_dialog_show (GossipContact *contact,
 		return;
 	}
 
-	gossip_glade_get_file_simple ("empathy-contact-dialogs.glade",
+	empathy_glade_get_file_simple ("empathy-contact-dialogs.glade",
 				      "subscription_request_dialog",
 				      NULL,
 				      "subscription_request_dialog", &dialog,
@@ -143,7 +143,7 @@ contact_information_response_cb (GtkDialog *dialog,
 }
 
 void
-empathy_contact_information_dialog_show (GossipContact *contact,
+empathy_contact_information_dialog_show (EmpathyContact *contact,
 					 GtkWindow     *parent,
 					 gboolean       edit)
 {
@@ -152,7 +152,7 @@ empathy_contact_information_dialog_show (GossipContact *contact,
 	GtkWidget *contact_widget;
 	GList     *l;
 
-	g_return_if_fail (GOSSIP_IS_CONTACT (contact));
+	g_return_if_fail (EMPATHY_IS_CONTACT (contact));
 
 	l = g_list_find_custom (information_dialogs,
 				contact,
@@ -205,7 +205,7 @@ new_contact_response_cb (GtkDialog *dialog,
 			 GtkWidget *contact_widget)
 {
 	EmpathyContactManager *manager;
-	GossipContact         *contact;
+	EmpathyContact         *contact;
 
 	manager = empathy_contact_manager_new ();
 	contact = empathy_contact_widget_get_contact (contact_widget);

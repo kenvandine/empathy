@@ -34,11 +34,11 @@
 #include <libempathy/empathy-contact-manager.h>
 
 #include "empathy-contact-widget.h"
-#include "gossip-account-chooser.h"
-#include "gossip-ui-utils.h"
+#include "empathy-account-chooser.h"
+#include "empathy-ui-utils.h"
 
 typedef struct {
-	GossipContact   *contact;
+	EmpathyContact   *contact;
 	gboolean         is_user;
 	gboolean         editable;
 	gboolean         can_change_contact;
@@ -89,7 +89,7 @@ static void     contact_widget_destroy_cb                 (GtkWidget            
 							   EmpathyContactWidget  *information);
 static void     contact_widget_remove_contact             (EmpathyContactWidget  *information);
 static void     contact_widget_set_contact                (EmpathyContactWidget  *information,
-							   GossipContact         *contact);
+							   EmpathyContact         *contact);
 static void     contact_widget_contact_setup              (EmpathyContactWidget  *information);
 static void     contact_widget_contact_update             (EmpathyContactWidget  *information);
 static gboolean contact_widget_update_contact             (EmpathyContactWidget  *information);
@@ -139,7 +139,7 @@ enum {
 };
 
 GtkWidget *
-empathy_contact_widget_new (GossipContact *contact,
+empathy_contact_widget_new (EmpathyContact *contact,
 			    gboolean       editable)
 {
 	EmpathyContactWidget *information;
@@ -148,14 +148,14 @@ empathy_contact_widget_new (GossipContact *contact,
 	information = g_slice_new0 (EmpathyContactWidget);
 	information->editable = editable;
 	if (contact) {
-		information->is_user = gossip_contact_is_user (contact);
+		information->is_user = empathy_contact_is_user (contact);
 		information->can_change_contact = FALSE;
 	} else {
 		information->is_user = FALSE;
 		information->can_change_contact = TRUE;
 	}
 
-	glade = gossip_glade_get_file ("empathy-contact-widget.glade",
+	glade = empathy_glade_get_file ("empathy-contact-widget.glade",
 				       "vbox_contact_widget",
 				       NULL,
 				       "vbox_contact_widget", &information->vbox_contact_widget,
@@ -178,7 +178,7 @@ empathy_contact_widget_new (GossipContact *contact,
 				       "hbox_client_requested", &information->hbow_client_requested,
 				       NULL);
 
-	gossip_glade_connect (glade,
+	empathy_glade_connect (glade,
 			      information,
 			      "vbox_contact_widget", "destroy", contact_widget_destroy_cb,
 			      "entry_group", "changed", contact_widget_entry_group_changed_cb,
@@ -205,7 +205,7 @@ empathy_contact_widget_new (GossipContact *contact,
 	return information->vbox_contact_widget;
 }
 
-GossipContact *
+EmpathyContact *
 empathy_contact_widget_get_contact (GtkWidget *widget)
 {
 	EmpathyContactWidget *information;
@@ -252,7 +252,7 @@ contact_widget_remove_contact (EmpathyContactWidget *information)
 
 static void
 contact_widget_set_contact (EmpathyContactWidget *information,
-			    GossipContact        *contact)
+			    EmpathyContact        *contact)
 {
 	contact_widget_remove_contact (information);
 	if (contact) {
@@ -269,7 +269,7 @@ contact_widget_set_contact (EmpathyContactWidget *information,
 static void
 contact_widget_contact_setup (EmpathyContactWidget *information)
 {
-	/* FIXME: Use GossipAvatarImage if (editable && is_user)  */
+	/* FIXME: Use EmpathyAvatarImage if (editable && is_user)  */
 	information->widget_avatar = gtk_image_new ();
 	gtk_box_pack_end (GTK_BOX (information->hbox_contact),
 	 		  information->widget_avatar,
@@ -278,7 +278,7 @@ contact_widget_contact_setup (EmpathyContactWidget *information)
 
 	/* Setup account label/chooser */
 	if (information->can_change_contact) {
-		information->widget_account = gossip_account_chooser_new ();
+		information->widget_account = empathy_account_chooser_new ();
 		g_signal_connect (information->widget_account, "changed",
 				  G_CALLBACK (contact_widget_account_changed_cb),
 				  information);
@@ -340,8 +340,8 @@ contact_widget_contact_update (EmpathyContactWidget *information)
 					  G_CALLBACK (contact_widget_avatar_notify_cb),
 					  information);
 
-		account = gossip_contact_get_account (information->contact);
-		id = gossip_contact_get_id (information->contact);
+		account = empathy_contact_get_account (information->contact);
+		id = empathy_contact_get_id (information->contact);
 	}
 
 	/* Update account widget */
@@ -350,7 +350,7 @@ contact_widget_contact_update (EmpathyContactWidget *information)
 			g_signal_handlers_block_by_func (information->widget_account,
 							 contact_widget_account_changed_cb,
 							 information);
-			gossip_account_chooser_set_account (GOSSIP_ACCOUNT_CHOOSER (information->widget_account),
+			empathy_account_chooser_set_account (EMPATHY_ACCOUNT_CHOOSER (information->widget_account),
 							    account);
 			g_signal_handlers_unblock_by_func (information->widget_account,
 							   contact_widget_account_changed_cb,
@@ -396,12 +396,12 @@ contact_widget_update_contact (EmpathyContactWidget *information)
 	McAccount   *account;
 	const gchar *id;
 
-	account = gossip_account_chooser_get_account (GOSSIP_ACCOUNT_CHOOSER (information->widget_account));
+	account = empathy_account_chooser_get_account (EMPATHY_ACCOUNT_CHOOSER (information->widget_account));
 	id = gtk_entry_get_text (GTK_ENTRY (information->widget_id));
 
 	if (account && !G_STR_EMPTY (id)) {
 		EmpathyContactManager *manager;
-		GossipContact         *contact;
+		EmpathyContact         *contact;
 
 		manager = empathy_contact_manager_new ();
 		contact = empathy_contact_manager_create (manager, account, id);
@@ -441,7 +441,7 @@ contact_widget_entry_alias_focus_event_cb (GtkEditable          *editable,
 		const gchar *name;
 
 		name = gtk_entry_get_text (GTK_ENTRY (editable));
-		gossip_contact_set_name (information->contact, name);
+		empathy_contact_set_name (information->contact, name);
 	}
 
 	return FALSE;
@@ -452,10 +452,10 @@ contact_widget_name_notify_cb (EmpathyContactWidget *information)
 {
 	if (information->editable) {
 		gtk_entry_set_text (GTK_ENTRY (information->widget_alias),
-				    gossip_contact_get_name (information->contact));
+				    empathy_contact_get_name (information->contact));
 	} else {
 		gtk_label_set_label (GTK_LABEL (information->widget_alias),
-				     gossip_contact_get_name (information->contact));
+				     empathy_contact_get_name (information->contact));
 	}
 }
 
@@ -463,9 +463,9 @@ static void
 contact_widget_presence_notify_cb (EmpathyContactWidget *information)
 {
 	gtk_label_set_text (GTK_LABEL (information->label_status),
-			    gossip_contact_get_status (information->contact));
+			    empathy_contact_get_status (information->contact));
 	gtk_image_set_from_icon_name (GTK_IMAGE (information->image_state),
-				      gossip_icon_name_for_contact (information->contact),
+				      empathy_icon_name_for_contact (information->contact),
 				      GTK_ICON_SIZE_BUTTON);
 
 }
@@ -475,7 +475,7 @@ contact_widget_avatar_notify_cb (EmpathyContactWidget *information)
 {
 	GdkPixbuf *avatar_pixbuf;
 
-	avatar_pixbuf = gossip_pixbuf_avatar_from_contact_scaled (information->contact,
+	avatar_pixbuf = empathy_pixbuf_avatar_from_contact_scaled (information->contact,
 								  48, 48);
 
 	if (avatar_pixbuf) {
@@ -602,7 +602,7 @@ contact_widget_groups_populate_data (EmpathyContactWidget *information)
 
 	manager = empathy_contact_manager_new ();
 	all_groups = empathy_contact_manager_get_groups (manager);
-	my_groups = gossip_contact_get_groups (information->contact);
+	my_groups = empathy_contact_get_groups (information->contact);
 	g_object_unref (manager);
 
 	for (l = all_groups; l; l = l->next) {
@@ -724,9 +724,9 @@ contact_widget_cell_toggled (GtkCellRendererToggle *cell,
 
 	if (group) {
 		if (enabled) {
-			gossip_contact_remove_group (information->contact, group);
+			empathy_contact_remove_group (information->contact, group);
 		} else {
-			gossip_contact_add_group (information->contact, group);	
+			empathy_contact_add_group (information->contact, group);	
 		}
 
 		g_free (group);
@@ -778,7 +778,7 @@ contact_widget_button_group_clicked_cb (GtkButton             *button,
 			    COL_ENABLED, TRUE,
 			    -1);
 
-	gossip_contact_add_group (information->contact, group);
+	empathy_contact_add_group (information->contact, group);
 }
 
 static void

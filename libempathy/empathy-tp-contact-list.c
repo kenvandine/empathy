@@ -35,9 +35,9 @@
 
 #include "empathy-tp-contact-list.h"
 #include "empathy-contact-list.h"
-#include "gossip-telepathy-group.h"
-#include "gossip-debug.h"
-#include "gossip-utils.h"
+#include "empathy-tp-group.h"
+#include "empathy-debug.h"
+#include "empathy-utils.h"
 
 #define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), \
 		       EMPATHY_TYPE_TP_CONTACT_LIST, EmpathyTpContactListPriv))
@@ -46,25 +46,25 @@
 #define MAX_AVATAR_REQUESTS 10
 
 struct _EmpathyTpContactListPriv {
-	TpConn               *tp_conn;
-	McAccount            *account;
-	MissionControl       *mc;
-	GossipContact        *user_contact;
-	gboolean              setup;
+	TpConn         *tp_conn;
+	McAccount      *account;
+	MissionControl *mc;
+	EmpathyContact *user_contact;
+	gboolean        setup;
 
-	GossipTelepathyGroup *publish;
-	GossipTelepathyGroup *subscribe;
+	EmpathyTpGroup *publish;
+	EmpathyTpGroup *subscribe;
 
-	GHashTable           *groups;
-	GHashTable           *contacts;
-	GList                *members;
-	GList                *local_pending;
+	GHashTable     *groups;
+	GHashTable     *contacts;
+	GList          *members;
+	GList          *local_pending;
 
-	DBusGProxy           *aliasing_iface;
-	DBusGProxy           *avatars_iface;
-	DBusGProxy           *presence_iface;
+	DBusGProxy     *aliasing_iface;
+	DBusGProxy     *avatars_iface;
+	DBusGProxy     *presence_iface;
 
-	GList                *avatar_requests_queue;
+	GList          *avatar_requests_queue;
 };
 
 typedef enum {
@@ -89,129 +89,129 @@ typedef struct {
 	guint                *handles;
 } TpContactListAliasesRequestData;
 
-static void                   empathy_tp_contact_list_class_init       (EmpathyTpContactListClass       *klass);
-static void                   tp_contact_list_iface_init               (EmpathyContactListIface         *iface);
-static void                   empathy_tp_contact_list_init             (EmpathyTpContactList            *list);
-static void                   tp_contact_list_finalize                 (GObject                         *object);
-static void                   tp_contact_list_finalize_proxies         (EmpathyTpContactList            *list);
-static void                   tp_contact_list_setup                    (EmpathyContactList              *list);
-static GossipContact *        tp_contact_list_find                     (EmpathyContactList              *list,
-									const gchar                     *id);
-static void                   tp_contact_list_add                      (EmpathyContactList              *list,
-									GossipContact                   *contact,
-									const gchar                     *message);
-static void                   tp_contact_list_remove                   (EmpathyContactList              *list,
-									GossipContact                   *contact,
-									const gchar                     *message);
-static GList *                tp_contact_list_get_members              (EmpathyContactList              *list);
-static GList *                tp_contact_list_get_local_pending        (EmpathyContactList              *list);
-static void                   tp_contact_list_process_pending          (EmpathyContactList              *list,
-									GossipContact                   *contact,
-									gboolean                         accept);
-static void                   tp_contact_list_remove_local_pending     (EmpathyTpContactList            *list,
-									GossipContact                   *contact);
-static void                   tp_contact_list_contact_removed_foreach  (guint                            handle,
-									GossipContact                   *contact,
-									EmpathyTpContactList            *list);
-static void                   tp_contact_list_destroy_cb               (DBusGProxy                      *proxy,
-									EmpathyTpContactList            *list);
-static gboolean               tp_contact_list_find_foreach             (guint                            handle,
-									GossipContact                   *contact,
-									gchar                           *id);
-static void                   tp_contact_list_newchannel_cb            (DBusGProxy                      *proxy,
-									const gchar                     *object_path,
-									const gchar                     *channel_type,
-									TelepathyHandleType              handle_type,
-									guint                            channel_handle,
-									gboolean                         suppress_handle,
-									EmpathyTpContactList            *list);
-static TpContactListType      tp_contact_list_get_type                 (EmpathyTpContactList            *list,
-									GossipTelepathyGroup            *group);
-static void                   tp_contact_list_added_cb                 (GossipTelepathyGroup            *group,
-									GArray                          *handles,
-									guint                            actor_handle,
-									guint                            reason,
-									const gchar                     *message,
-									EmpathyTpContactList            *list);
-static void                   tp_contact_list_removed_cb               (GossipTelepathyGroup            *group,
-									GArray                          *handles,
-									guint                            actor_handle,
-									guint                            reason,
-									const gchar                     *message,
-									EmpathyTpContactList            *list);
-static void                   tp_contact_list_pending_cb               (GossipTelepathyGroup            *group,
-									GArray                          *handles,
-									guint                            actor_handle,
-									guint                            reason,
-									const gchar                     *message,
-									EmpathyTpContactList            *list);
-static void                   tp_contact_list_groups_updated_cb        (GossipContact                   *contact,
-									GParamSpec                      *param,
-									EmpathyTpContactList            *list);
-static void                   tp_contact_list_name_updated_cb          (GossipContact                   *contact,
-									GParamSpec                      *param,
-									EmpathyTpContactList            *list);
-static void                   tp_contact_list_update_groups_foreach    (gchar                           *object_path,
-									GossipTelepathyGroup            *group,
-									TpContactListData               *data);
-static GossipTelepathyGroup * tp_contact_list_get_group                (EmpathyTpContactList            *list,
-									const gchar                     *name);
-static gboolean               tp_contact_list_find_group               (gchar                           *key,
-									GossipTelepathyGroup            *group,
-									gchar                           *group_name);
-static void                   tp_contact_list_get_groups_foreach       (gchar                           *key,
-									GossipTelepathyGroup            *group,
-									GList                          **groups);
-static void                   tp_contact_list_group_channel_closed_cb  (TpChan                          *channel,
-									EmpathyTpContactList            *list);
-static void                   tp_contact_list_group_members_added_cb   (GossipTelepathyGroup            *group,
-									GArray                          *members,
-									guint                            actor_handle,
-									guint                            reason,
-									const gchar                     *message,
-									EmpathyTpContactList            *list);
-static void                   tp_contact_list_group_members_removed_cb (GossipTelepathyGroup            *group,
-									GArray                          *members,
-									guint                            actor_handle,
-									guint                            reason,
-									const gchar                     *message,
-									EmpathyTpContactList            *list);
-static void                   tp_contact_list_get_info                 (EmpathyTpContactList            *list,
-									GArray                          *handles);
-static void                   tp_contact_list_request_avatar           (EmpathyTpContactList            *list,
-									guint                            handle);
-static void                   tp_contact_list_start_avatar_requests    (EmpathyTpContactList            *list);
-static void                   tp_contact_list_avatar_update_cb         (DBusGProxy                      *proxy,
-									guint                            handle,
-									gchar                           *new_token,
-									EmpathyTpContactList            *list);
-static void                   tp_contact_list_request_avatar_cb        (DBusGProxy                      *proxy,
-									GArray                          *avatar_data,
-									gchar                           *mime_type,
-									GError                          *error,
-									TpContactListAvatarRequestData  *data);
-static void                   tp_contact_list_aliases_update_cb        (DBusGProxy                      *proxy,
-									GPtrArray                       *handlers,
-									EmpathyTpContactList            *list);
-static void                   tp_contact_list_request_aliases_cb       (DBusGProxy                      *proxy,
-									gchar                          **contact_names,
-									GError                          *error,
-									TpContactListAliasesRequestData *data);
-static void                   tp_contact_list_presence_update_cb       (DBusGProxy                      *proxy,
-									GHashTable                      *handle_table,
-									EmpathyTpContactList            *list);
-static void                   tp_contact_list_parse_presence_foreach   (guint                            handle,
-									GValueArray                     *presence_struct,
-									EmpathyTpContactList            *list);
-static void                   tp_contact_list_presences_table_foreach  (const gchar                     *state_str,
-									GHashTable                      *presences_table,
-									GossipPresence                 **presence);
-static void                   tp_contact_list_status_changed_cb        (MissionControl                  *mc,
-									TelepathyConnectionStatus        status,
-									McPresence                       presence,
-									TelepathyConnectionStatusReason  reason,
-									const gchar                     *unique_name,
-									EmpathyTpContactList            *list);
+static void               empathy_tp_contact_list_class_init       (EmpathyTpContactListClass       *klass);
+static void               tp_contact_list_iface_init               (EmpathyContactListIface         *iface);
+static void               empathy_tp_contact_list_init             (EmpathyTpContactList            *list);
+static void               tp_contact_list_finalize                 (GObject                         *object);
+static void               tp_contact_list_finalize_proxies         (EmpathyTpContactList            *list);
+static void               tp_contact_list_setup                    (EmpathyContactList              *list);
+static EmpathyContact *   tp_contact_list_find                     (EmpathyContactList              *list,
+								    const gchar                     *id);
+static void               tp_contact_list_add                      (EmpathyContactList              *list,
+								    EmpathyContact                  *contact,
+								    const gchar                     *message);
+static void               tp_contact_list_remove                   (EmpathyContactList              *list,
+								    EmpathyContact                  *contact,
+								    const gchar                     *message);
+static GList *            tp_contact_list_get_members              (EmpathyContactList              *list);
+static GList *            tp_contact_list_get_local_pending        (EmpathyContactList              *list);
+static void               tp_contact_list_process_pending          (EmpathyContactList              *list,
+								    EmpathyContact                  *contact,
+								    gboolean                         accept);
+static void               tp_contact_list_remove_local_pending     (EmpathyTpContactList            *list,
+								    EmpathyContact                  *contact);
+static void               tp_contact_list_contact_removed_foreach  (guint                            handle,
+								    EmpathyContact                  *contact,
+								    EmpathyTpContactList            *list);
+static void               tp_contact_list_destroy_cb               (DBusGProxy                      *proxy,
+								    EmpathyTpContactList            *list);
+static gboolean           tp_contact_list_find_foreach             (guint                            handle,
+								    EmpathyContact                  *contact,
+								    gchar                           *id);
+static void               tp_contact_list_newchannel_cb            (DBusGProxy                      *proxy,
+								    const gchar                     *object_path,
+								    const gchar                     *channel_type,
+								    TelepathyHandleType              handle_type,
+								    guint                            channel_handle,
+								    gboolean                         suppress_handle,
+								    EmpathyTpContactList            *list);
+static TpContactListType  tp_contact_list_get_type                 (EmpathyTpContactList            *list,
+								    EmpathyTpGroup                  *group);
+static void               tp_contact_list_added_cb                 (EmpathyTpGroup                  *group,
+								    GArray                          *handles,
+								    guint                            actor_handle,
+								    guint                            reason,
+								    const gchar                     *message,
+								    EmpathyTpContactList            *list);
+static void               tp_contact_list_removed_cb               (EmpathyTpGroup                  *group,
+								    GArray                          *handles,
+								    guint                            actor_handle,
+								    guint                            reason,
+								    const gchar                     *message,
+								    EmpathyTpContactList            *list);
+static void               tp_contact_list_pending_cb               (EmpathyTpGroup                  *group,
+								    GArray                          *handles,
+								    guint                            actor_handle,
+								    guint                            reason,
+								    const gchar                     *message,
+								    EmpathyTpContactList            *list);
+static void               tp_contact_list_groups_updated_cb        (EmpathyContact                  *contact,
+								    GParamSpec                      *param,
+								    EmpathyTpContactList            *list);
+static void               tp_contact_list_name_updated_cb          (EmpathyContact                  *contact,
+								    GParamSpec                      *param,
+								    EmpathyTpContactList            *list);
+static void               tp_contact_list_update_groups_foreach    (gchar                           *object_path,
+								    EmpathyTpGroup                  *group,
+								    TpContactListData               *data);
+static EmpathyTpGroup *   tp_contact_list_get_group                (EmpathyTpContactList            *list,
+								    const gchar                     *name);
+static gboolean           tp_contact_list_find_group               (gchar                           *key,
+								    EmpathyTpGroup                  *group,
+								    gchar                           *group_name);
+static void               tp_contact_list_get_groups_foreach       (gchar                           *key,
+								    EmpathyTpGroup                  *group,
+								    GList                          **groups);
+static void               tp_contact_list_group_channel_closed_cb  (TpChan                          *channel,
+								    EmpathyTpContactList            *list);
+static void               tp_contact_list_group_members_added_cb   (EmpathyTpGroup                  *group,
+								    GArray                          *members,
+								    guint                            actor_handle,
+								    guint                            reason,
+								    const gchar                     *message,
+								    EmpathyTpContactList            *list);
+static void               tp_contact_list_group_members_removed_cb (EmpathyTpGroup                  *group,
+								    GArray                          *members,
+								    guint                            actor_handle,
+								    guint                            reason,
+								    const gchar                     *message,
+								    EmpathyTpContactList            *list);
+static void               tp_contact_list_get_info                 (EmpathyTpContactList            *list,
+								    GArray                          *handles);
+static void               tp_contact_list_request_avatar           (EmpathyTpContactList            *list,
+								    guint                            handle);
+static void               tp_contact_list_start_avatar_requests    (EmpathyTpContactList            *list);
+static void               tp_contact_list_avatar_update_cb         (DBusGProxy                      *proxy,
+								    guint                            handle,
+								    gchar                           *new_token,
+								    EmpathyTpContactList            *list);
+static void               tp_contact_list_request_avatar_cb        (DBusGProxy                      *proxy,
+								    GArray                          *avatar_data,
+								    gchar                           *mime_type,
+								    GError                          *error,
+								    TpContactListAvatarRequestData  *data);
+static void               tp_contact_list_aliases_update_cb        (DBusGProxy                      *proxy,
+								    GPtrArray                       *handlers,
+								    EmpathyTpContactList            *list);
+static void               tp_contact_list_request_aliases_cb       (DBusGProxy                      *proxy,
+								    gchar                          **contact_names,
+								    GError                          *error,
+								    TpContactListAliasesRequestData *data);
+static void               tp_contact_list_presence_update_cb       (DBusGProxy                      *proxy,
+								    GHashTable                      *handle_table,
+								    EmpathyTpContactList            *list);
+static void               tp_contact_list_parse_presence_foreach   (guint                            handle,
+								    GValueArray                     *presence_struct,
+								    EmpathyTpContactList            *list);
+static void               tp_contact_list_presences_table_foreach  (const gchar                     *state_str,
+								    GHashTable                      *presences_table,
+								    EmpathyPresence                 **presence);
+static void               tp_contact_list_status_changed_cb        (MissionControl                  *mc,
+								    TelepathyConnectionStatus        status,
+								    McPresence                       presence,
+								    TelepathyConnectionStatusReason  reason,
+								    const gchar                     *unique_name,
+								    EmpathyTpContactList            *list);
 
 enum {
 	DESTROY,
@@ -283,7 +283,7 @@ tp_contact_list_finalize (GObject *object)
 	list = EMPATHY_TP_CONTACT_LIST (object);
 	priv = GET_PRIV (list);
 
-	gossip_debug (DEBUG_DOMAIN, "finalize: %p", object);
+	empathy_debug (DEBUG_DOMAIN, "finalize: %p", object);
 
 	dbus_g_proxy_disconnect_signal (DBUS_G_PROXY (priv->mc),
 					"AccountStatusChanged",
@@ -328,7 +328,7 @@ empathy_tp_contact_list_new (McAccount *account)
 
 	g_return_val_if_fail (MC_IS_ACCOUNT (account), NULL);
 
-	mc = gossip_mission_control_new ();
+	mc = empathy_mission_control_new ();
 
 	if (mission_control_get_connection_status (mc, account, NULL) != 0) {
 		/* The account is not connected, nothing to do. */
@@ -381,12 +381,12 @@ empathy_tp_contact_list_new (McAccount *account)
 	/* Get our own handle and contact */
 	if (!tp_conn_get_self_handle (DBUS_G_PROXY (priv->tp_conn),
 				      &handle, &error)) {
-		gossip_debug (DEBUG_DOMAIN, "GetSelfHandle Error: %s",
+		empathy_debug (DEBUG_DOMAIN, "GetSelfHandle Error: %s",
 			      error ? error->message : "No error given");
 		g_clear_error (&error);
 	} else {
 		priv->user_contact = empathy_tp_contact_list_get_from_handle (list, handle);
-		gossip_contact_set_is_user (priv->user_contact, TRUE);
+		empathy_contact_set_is_user (priv->user_contact, TRUE);
 	}
 
 	return list;
@@ -404,7 +404,7 @@ tp_contact_list_setup (EmpathyContactList *list)
 
 	priv = GET_PRIV (list);
 
-	gossip_debug (DEBUG_DOMAIN, "setup contact list: %p", list);
+	empathy_debug (DEBUG_DOMAIN, "setup contact list: %p", list);
 
 	priv->setup = TRUE;
 	dbus_g_proxy_connect_signal (DBUS_G_PROXY (priv->tp_conn), "NewChannel",
@@ -415,7 +415,7 @@ tp_contact_list_setup (EmpathyContactList *list)
 	if (!tp_conn_list_channels (DBUS_G_PROXY (priv->tp_conn),
 				    &channels,
 				    &error)) {
-		gossip_debug (DEBUG_DOMAIN,
+		empathy_debug (DEBUG_DOMAIN,
 			      "Failed to get list of open channels: %s",
 			      error ? error->message : "No error given");
 		g_clear_error (&error);
@@ -447,7 +447,7 @@ tp_contact_list_setup (EmpathyContactList *list)
 	g_ptr_array_free (channels, TRUE);
 }
 
-static GossipContact *
+static EmpathyContact *
 tp_contact_list_find (EmpathyContactList *list,
 		      const gchar        *id)
 {
@@ -464,7 +464,7 @@ tp_contact_list_find (EmpathyContactList *list,
 
 static void
 tp_contact_list_add (EmpathyContactList *list,
-		     GossipContact      *contact,
+		     EmpathyContact      *contact,
 		     const gchar        *message)
 {
 	EmpathyTpContactListPriv *priv;
@@ -474,13 +474,13 @@ tp_contact_list_add (EmpathyContactList *list,
 
 	priv = GET_PRIV (list);
 
-	handle = gossip_contact_get_handle (contact);
-	gossip_telepathy_group_add_member (priv->subscribe, handle, message);
+	handle = empathy_contact_get_handle (contact);
+	empathy_tp_group_add_member (priv->subscribe, handle, message);
 }
 
 static void
 tp_contact_list_remove (EmpathyContactList *list,
-			GossipContact      *contact,
+			EmpathyContact      *contact,
 			const gchar        *message)
 {
 	EmpathyTpContactListPriv *priv;
@@ -490,8 +490,8 @@ tp_contact_list_remove (EmpathyContactList *list,
 
 	priv = GET_PRIV (list);
 
-	handle = gossip_contact_get_handle (contact);
-	gossip_telepathy_group_remove_member (priv->subscribe, handle, message);
+	handle = empathy_contact_get_handle (contact);
+	empathy_tp_group_remove_member (priv->subscribe, handle, message);
 }
 
 static GList *
@@ -521,22 +521,22 @@ tp_contact_list_get_local_pending (EmpathyContactList *list)
 
 static void
 tp_contact_list_process_pending (EmpathyContactList *list,
-				 GossipContact      *contact,
+				 EmpathyContact      *contact,
 				 gboolean            accept)
 {
 	EmpathyTpContactListPriv *priv;
 	guint                     handle;
 
 	g_return_if_fail (EMPATHY_IS_TP_CONTACT_LIST (list));
-	g_return_if_fail (GOSSIP_IS_CONTACT (contact));
+	g_return_if_fail (EMPATHY_IS_CONTACT (contact));
 
 	priv = GET_PRIV (list);
 
-	handle = gossip_contact_get_handle (contact);
+	handle = empathy_contact_get_handle (contact);
 	if (accept) {
-		gossip_telepathy_group_add_member (priv->publish, handle, NULL);
+		empathy_tp_group_add_member (priv->publish, handle, NULL);
 	} else {
-		gossip_telepathy_group_remove_member (priv->publish, handle, NULL);
+		empathy_tp_group_remove_member (priv->publish, handle, NULL);
 	}
 }
 
@@ -552,7 +552,7 @@ empathy_tp_contact_list_get_account (EmpathyTpContactList *list)
 	return priv->account;
 }
 
-GossipContact *
+EmpathyContact *
 empathy_tp_contact_list_get_user (EmpathyTpContactList *list)
 {
 	EmpathyTpContactListPriv *priv;
@@ -564,12 +564,12 @@ empathy_tp_contact_list_get_user (EmpathyTpContactList *list)
 	return priv->user_contact;
 }
 
-GossipContact *
+EmpathyContact *
 empathy_tp_contact_list_get_from_id (EmpathyTpContactList *list,
 				     const gchar          *id)
 {
 	EmpathyTpContactListPriv *priv;
-	GossipContact            *contact;
+	EmpathyContact            *contact;
 	const gchar              *contact_ids[] = {id, NULL};
 	GArray                   *handles;
 	guint                     handle;
@@ -590,7 +590,7 @@ empathy_tp_contact_list_get_from_id (EmpathyTpContactList *list,
 				      TP_HANDLE_TYPE_CONTACT,
 				      contact_ids,
 				      &handles, &error)) {
-		gossip_debug (DEBUG_DOMAIN, 
+		empathy_debug (DEBUG_DOMAIN, 
 			      "RequestHandle for %s failed: %s", id,
 			      error ? error->message : "No error given");
 		g_clear_error (&error);
@@ -603,11 +603,11 @@ empathy_tp_contact_list_get_from_id (EmpathyTpContactList *list,
 	return empathy_tp_contact_list_get_from_handle (list, handle);
 }
 
-GossipContact *
+EmpathyContact *
 empathy_tp_contact_list_get_from_handle (EmpathyTpContactList *list,
 					 guint                 handle)
 {
-	GossipContact *contact;
+	EmpathyContact *contact;
 	GArray        *handles;
 	GList         *contacts;
 
@@ -649,7 +649,7 @@ empathy_tp_contact_list_get_from_handles (EmpathyTpContactList *list,
 	/* Search all handles we already have */
 	new_handles = g_array_new (FALSE, FALSE, sizeof (guint));
 	for (i = 0; i < handles->len; i++) {
-		GossipContact *contact;
+		EmpathyContact *contact;
 		guint          handle;
 
 		handle = g_array_index (handles, guint, i);
@@ -679,7 +679,7 @@ empathy_tp_contact_list_get_from_handles (EmpathyTpContactList *list,
 	if (!tp_conn_hold_handles (DBUS_G_PROXY (priv->tp_conn),
 				   TP_HANDLE_TYPE_CONTACT,
 				   new_handles, &error)) {
-		gossip_debug (DEBUG_DOMAIN, 
+		empathy_debug (DEBUG_DOMAIN, 
 			      "HoldHandles Error: %s",
 			      error ? error->message : "No error given");
 		g_clear_error (&error);
@@ -693,7 +693,7 @@ empathy_tp_contact_list_get_from_handles (EmpathyTpContactList *list,
 				      new_handles,
 				      &handles_names,
 				      &error)) {
-		gossip_debug (DEBUG_DOMAIN, 
+		empathy_debug (DEBUG_DOMAIN, 
 			      "InspectHandle Error: %s",
 			      error ? error->message : "No error given");
 		g_clear_error (&error);
@@ -703,25 +703,25 @@ empathy_tp_contact_list_get_from_handles (EmpathyTpContactList *list,
 
 	/* Create contact objects */
 	for (i = 0, id = handles_names; *id && i < new_handles->len; id++, i++) {
-		GossipContact *contact;
+		EmpathyContact *contact;
 		guint          handle;
 
 		handle = g_array_index (new_handles, guint, i);
-		contact = g_object_new (GOSSIP_TYPE_CONTACT,
+		contact = g_object_new (EMPATHY_TYPE_CONTACT,
 					"account", priv->account,
 					"id", *id,
 					"handle", handle,
 					NULL);
 
 		if (!priv->presence_iface) {
-			GossipPresence *presence;
+			EmpathyPresence *presence;
 
 			/* We have no presence iface, set default presence
 			 * to available */
-			presence = gossip_presence_new_full (MC_PRESENCE_AVAILABLE,
+			presence = empathy_presence_new_full (MC_PRESENCE_AVAILABLE,
 							     NULL);
 
-			gossip_contact_set_presence (contact, presence);
+			empathy_contact_set_presence (contact, presence);
 			g_object_unref (presence);
 		}
 
@@ -732,7 +732,7 @@ empathy_tp_contact_list_get_from_handles (EmpathyTpContactList *list,
 				  G_CALLBACK (tp_contact_list_name_updated_cb),
 				  list);
 
-		gossip_debug (DEBUG_DOMAIN, "new contact created: %s (%d)",
+		empathy_debug (DEBUG_DOMAIN, "new contact created: %s (%d)",
 			      *id, handle);
 
 		g_hash_table_insert (priv->contacts,
@@ -756,7 +756,7 @@ empathy_tp_contact_list_rename_group (EmpathyTpContactList *list,
 				      const gchar          *new_group)
 {
 	EmpathyTpContactListPriv *priv;
-	GossipTelepathyGroup     *group;
+	EmpathyTpGroup           *group;
 	GArray                   *members;
 
 	g_return_if_fail (EMPATHY_IS_TP_CONTACT_LIST (list));
@@ -773,22 +773,22 @@ empathy_tp_contact_list_rename_group (EmpathyTpContactList *list,
 		return;
 	}
 
-	gossip_debug (DEBUG_DOMAIN, "rename group %s to %s", group, new_group);
+	empathy_debug (DEBUG_DOMAIN, "rename group %s to %s", group, new_group);
 
 	/* Remove all members from the old group */
-	members = gossip_telepathy_group_get_members (group);
-	gossip_telepathy_group_remove_members (group, members, "");
+	members = empathy_tp_group_get_members (group);
+	empathy_tp_group_remove_members (group, members, "");
 	tp_contact_list_group_members_removed_cb (group, members, 
-					       0, 
-					       TP_CHANNEL_GROUP_CHANGE_REASON_NONE, 
-					       NULL, list);
+						  0, 
+						  TP_CHANNEL_GROUP_CHANGE_REASON_NONE, 
+						  NULL, list);
 	g_hash_table_remove (priv->groups,
-			     gossip_telepathy_group_get_object_path (group));
+			     empathy_tp_group_get_object_path (group));
 
 	/* Add all members to the new group */
 	group = tp_contact_list_get_group (list, new_group);
 	if (group) {
-		gossip_telepathy_group_add_members (group, members, "");
+		empathy_tp_group_add_members (group, members, "");
 	}
 }
 
@@ -857,7 +857,7 @@ tp_contact_list_destroy_cb (DBusGProxy           *proxy,
 
 	priv = GET_PRIV (list);
 
-	gossip_debug (DEBUG_DOMAIN, "Connection destroyed... "
+	empathy_debug (DEBUG_DOMAIN, "Connection destroyed... "
 		      "Account disconnected or CM crashed");
 
 	/* DBus proxies should NOT be used anymore */
@@ -879,7 +879,7 @@ tp_contact_list_destroy_cb (DBusGProxy           *proxy,
 
 static void
 tp_contact_list_contact_removed_foreach (guint                 handle,
-					 GossipContact        *contact,
+					 EmpathyContact        *contact,
 					 EmpathyTpContactList *list)
 {
 	g_signal_handlers_disconnect_by_func (contact,
@@ -894,7 +894,7 @@ tp_contact_list_contact_removed_foreach (guint                 handle,
 
 static void
 tp_contact_list_block_contact (EmpathyTpContactList *list,
-			       GossipContact        *contact)
+			       EmpathyContact        *contact)
 {
 	g_signal_handlers_block_by_func (contact,
 					 tp_contact_list_groups_updated_cb,
@@ -906,7 +906,7 @@ tp_contact_list_block_contact (EmpathyTpContactList *list,
 
 static void
 tp_contact_list_unblock_contact (EmpathyTpContactList *list,
-				 GossipContact        *contact)
+				 EmpathyContact        *contact)
 {
 	g_signal_handlers_unblock_by_func (contact,
 					   tp_contact_list_groups_updated_cb,
@@ -918,10 +918,10 @@ tp_contact_list_unblock_contact (EmpathyTpContactList *list,
 
 static gboolean
 tp_contact_list_find_foreach (guint          handle,
-			      GossipContact *contact,
+			      EmpathyContact *contact,
 			      gchar         *id)
 {
-	if (strcmp (gossip_contact_get_id (contact), id) == 0) {
+	if (strcmp (empathy_contact_get_id (contact), id) == 0) {
 		return TRUE;
 	}
 
@@ -938,7 +938,7 @@ tp_contact_list_newchannel_cb (DBusGProxy           *proxy,
 			       EmpathyTpContactList *list)
 {
 	EmpathyTpContactListPriv *priv;
-	GossipTelepathyGroup     *group;
+	EmpathyTpGroup           *group;
 	TpChan                   *new_chan;
 	const gchar              *bus_name;
 	GArray                   *members;
@@ -960,19 +960,19 @@ tp_contact_list_newchannel_cb (DBusGProxy           *proxy,
 	if (handle_type == TP_HANDLE_TYPE_LIST) {
 		TpContactListType list_type;
 
-		group = gossip_telepathy_group_new (new_chan, priv->tp_conn);
+		group = empathy_tp_group_new (new_chan, priv->tp_conn);
 
 		list_type = tp_contact_list_get_type (list, group);
 		if (list_type == TP_CONTACT_LIST_TYPE_UNKNOWN) {
-			gossip_debug (DEBUG_DOMAIN,
+			empathy_debug (DEBUG_DOMAIN,
 				      "Type of contact list channel unknown: %s",
-				      gossip_telepathy_group_get_name (group));
+				      empathy_tp_group_get_name (group));
 
 			g_object_unref (new_chan);
 			g_object_unref (group);
 			return;
 		} else {
-			gossip_debug (DEBUG_DOMAIN,
+			empathy_debug (DEBUG_DOMAIN,
 				      "New contact list channel of type: %d",
 				      list_type);
 		}
@@ -997,13 +997,13 @@ tp_contact_list_newchannel_cb (DBusGProxy           *proxy,
 					  G_CALLBACK (tp_contact_list_pending_cb),
 					  list);
 
-			pendings = gossip_telepathy_group_get_local_pending_members_with_info (group);
+			pendings = empathy_tp_group_get_local_pending_members_with_info (group);
 			if (pendings) {
 				GArray *pending;
 
 				pending = g_array_sized_new (FALSE, FALSE, sizeof (guint), 1);
 				for (l = pendings; l; l = l->next) {
-					GossipTpGroupInfo *info;
+					EmpathyTpGroupInfo *info;
 
 					info = l->data;
 
@@ -1015,7 +1015,7 @@ tp_contact_list_newchannel_cb (DBusGProxy           *proxy,
 								    list);
 				}
 				g_array_free (pending, TRUE);
-				gossip_telepathy_group_info_list_free (pendings);
+				empathy_tp_group_info_list_free (pendings);
 			}
 		}
 		if (list_type == TP_CONTACT_LIST_TYPE_SUBSCRIBE) {
@@ -1030,10 +1030,10 @@ tp_contact_list_newchannel_cb (DBusGProxy           *proxy,
 			g_signal_connect (group, "remote-pending",
 					  G_CALLBACK (tp_contact_list_pending_cb),
 					  list);
-			gossip_telepathy_group_get_all_members (group,
-								&members,
-								NULL,
-								&remote_pendings);
+			empathy_tp_group_get_all_members (group,
+							  &members,
+							  NULL,
+							  &remote_pendings);
 
 			tp_contact_list_pending_cb (group, remote_pendings, 0,
 						    TP_CHANNEL_GROUP_CHANGE_REASON_NONE,
@@ -1041,7 +1041,7 @@ tp_contact_list_newchannel_cb (DBusGProxy           *proxy,
 						    list);
 			g_array_free (remote_pendings, TRUE);
 		} else {
-			members = gossip_telepathy_group_get_members (group);
+			members = empathy_tp_group_get_members (group);
 		}
 
 		tp_contact_list_added_cb (group, members, 0,
@@ -1058,10 +1058,10 @@ tp_contact_list_newchannel_cb (DBusGProxy           *proxy,
 			return;
 		}
 
-		group = gossip_telepathy_group_new (new_chan, priv->tp_conn);
+		group = empathy_tp_group_new (new_chan, priv->tp_conn);
 
-		gossip_debug (DEBUG_DOMAIN, "New server-side group channel: %s",
-			      gossip_telepathy_group_get_name (group));
+		empathy_debug (DEBUG_DOMAIN, "New server-side group channel: %s",
+			      empathy_tp_group_get_name (group));
 
 		dbus_g_proxy_connect_signal (DBUS_G_PROXY (new_chan), "Closed",
 					     G_CALLBACK
@@ -1076,10 +1076,10 @@ tp_contact_list_newchannel_cb (DBusGProxy           *proxy,
 				  G_CALLBACK (tp_contact_list_group_members_removed_cb),
 				  list);
 
-		members = gossip_telepathy_group_get_members (group);
+		members = empathy_tp_group_get_members (group);
 		tp_contact_list_group_members_added_cb (group, members, 0,
-						     TP_CHANNEL_GROUP_CHANGE_REASON_NONE,
-						     NULL, list);
+							TP_CHANNEL_GROUP_CHANGE_REASON_NONE,
+							NULL, list);
 		g_array_free (members, TRUE);
 	}
 
@@ -1088,15 +1088,15 @@ tp_contact_list_newchannel_cb (DBusGProxy           *proxy,
 
 static TpContactListType
 tp_contact_list_get_type (EmpathyTpContactList *list,
-			  GossipTelepathyGroup *group)
+			  EmpathyTpGroup       *group)
 {
-	EmpathyTpContactListPriv  *priv;
-	TpContactListType          list_type;
-	const gchar               *name;
+	EmpathyTpContactListPriv *priv;
+	TpContactListType         list_type;
+	const gchar              *name;
 
 	priv = GET_PRIV (list);
 
-	name = gossip_telepathy_group_get_name (group);
+	name = empathy_tp_group_get_name (group);
 	if (strcmp (name, "subscribe") == 0) {
 		list_type = TP_CONTACT_LIST_TYPE_SUBSCRIBE;
 	} else if (strcmp (name, "publish") == 0) {
@@ -1109,7 +1109,7 @@ tp_contact_list_get_type (EmpathyTpContactList *list,
 }
 
 static void
-tp_contact_list_added_cb (GossipTelepathyGroup *group,
+tp_contact_list_added_cb (EmpathyTpGroup       *group,
 			  GArray               *handles,
 			  guint                 actor_handle,
 			  guint                 reason,
@@ -1126,26 +1126,26 @@ tp_contact_list_added_cb (GossipTelepathyGroup *group,
 
 	added_list = empathy_tp_contact_list_get_from_handles (list, handles);
 	for (l = added_list; l; l = l->next) {
-		GossipContact      *contact;
-		GossipSubscription  subscription;
+		EmpathyContact      *contact;
+		EmpathySubscription  subscription;
 
-		contact = GOSSIP_CONTACT (l->data);
+		contact = EMPATHY_CONTACT (l->data);
 
-		gossip_debug (DEBUG_DOMAIN, "Contact '%s' added to list type %d",
-			      gossip_contact_get_name (contact),
+		empathy_debug (DEBUG_DOMAIN, "Contact '%s' added to list type %d",
+			      empathy_contact_get_name (contact),
 			      list_type);
 
-		subscription = gossip_contact_get_subscription (contact);
+		subscription = empathy_contact_get_subscription (contact);
 		if (list_type == TP_CONTACT_LIST_TYPE_SUBSCRIBE) {
-			subscription |= GOSSIP_SUBSCRIPTION_FROM;
+			subscription |= EMPATHY_SUBSCRIPTION_FROM;
 		}
 		else if (list_type == TP_CONTACT_LIST_TYPE_PUBLISH) {
-			subscription |= GOSSIP_SUBSCRIPTION_TO;
+			subscription |= EMPATHY_SUBSCRIPTION_TO;
 			tp_contact_list_remove_local_pending (list, contact);
 		}
 
 		tp_contact_list_block_contact (list, contact);
-		gossip_contact_set_subscription (contact, subscription);
+		empathy_contact_set_subscription (contact, subscription);
 		tp_contact_list_unblock_contact (list, contact);
 
 		if (list_type == TP_CONTACT_LIST_TYPE_SUBSCRIBE) {
@@ -1163,7 +1163,7 @@ tp_contact_list_added_cb (GossipTelepathyGroup *group,
 }
 
 static void
-tp_contact_list_removed_cb (GossipTelepathyGroup *group,
+tp_contact_list_removed_cb (EmpathyTpGroup       *group,
 			    GArray               *handles,
 			    guint                 actor_handle,
 			    guint                 reason,
@@ -1180,26 +1180,26 @@ tp_contact_list_removed_cb (GossipTelepathyGroup *group,
 
 	removed_list = empathy_tp_contact_list_get_from_handles (list, handles);
 	for (l = removed_list; l; l = l->next) {
-		GossipContact      *contact;
-		GossipSubscription  subscription;
+		EmpathyContact      *contact;
+		EmpathySubscription  subscription;
 
-		contact = GOSSIP_CONTACT (l->data);
+		contact = EMPATHY_CONTACT (l->data);
 
-		gossip_debug (DEBUG_DOMAIN, "Contact '%s' removed from list type %d",
-			      gossip_contact_get_name (contact),
+		empathy_debug (DEBUG_DOMAIN, "Contact '%s' removed from list type %d",
+			      empathy_contact_get_name (contact),
 			      list_type);
 
-		subscription = gossip_contact_get_subscription (contact);
+		subscription = empathy_contact_get_subscription (contact);
 		if (list_type == TP_CONTACT_LIST_TYPE_SUBSCRIBE) {
-			subscription &= !GOSSIP_SUBSCRIPTION_FROM;
+			subscription &= !EMPATHY_SUBSCRIPTION_FROM;
 		}
 		else if (list_type == TP_CONTACT_LIST_TYPE_PUBLISH) {
-			subscription &= !GOSSIP_SUBSCRIPTION_TO;
+			subscription &= !EMPATHY_SUBSCRIPTION_TO;
 			tp_contact_list_remove_local_pending (list, contact);
 		}
 
 		tp_contact_list_block_contact (list, contact);
-		gossip_contact_set_subscription (contact, subscription);
+		empathy_contact_set_subscription (contact, subscription);
 		tp_contact_list_unblock_contact (list, contact);
 
 		if (list_type == TP_CONTACT_LIST_TYPE_SUBSCRIBE) {
@@ -1218,7 +1218,7 @@ tp_contact_list_removed_cb (GossipTelepathyGroup *group,
 }
 
 static void
-tp_contact_list_pending_cb (GossipTelepathyGroup *group,
+tp_contact_list_pending_cb (EmpathyTpGroup       *group,
 			    GArray               *handles,
 			    guint                 actor_handle,
 			    guint                 reason,
@@ -1235,12 +1235,12 @@ tp_contact_list_pending_cb (GossipTelepathyGroup *group,
 
 	pending_list = empathy_tp_contact_list_get_from_handles (list, handles);
 	for (l = pending_list; l; l = l->next) {
-		GossipContact *contact;
+		EmpathyContact *contact;
 
-		contact = GOSSIP_CONTACT (l->data);
+		contact = EMPATHY_CONTACT (l->data);
 
-		gossip_debug (DEBUG_DOMAIN, "Contact '%s' pending in list type %d",
-			      gossip_contact_get_name (contact),
+		empathy_debug (DEBUG_DOMAIN, "Contact '%s' pending in list type %d",
+			      empathy_contact_get_name (contact),
 			      list_type);
 
 		if (list_type == TP_CONTACT_LIST_TYPE_PUBLISH) {
@@ -1269,7 +1269,7 @@ tp_contact_list_pending_cb (GossipTelepathyGroup *group,
 
 static void
 tp_contact_list_remove_local_pending (EmpathyTpContactList *list,
-				      GossipContact        *contact)
+				      EmpathyContact        *contact)
 {
 	EmpathyTpContactListPriv *priv;
 	GList                    *l;
@@ -1280,9 +1280,9 @@ tp_contact_list_remove_local_pending (EmpathyTpContactList *list,
 		EmpathyContactListInfo *info;
 
 		info = l->data;
-		if (gossip_contact_equal (contact, info->contact)) {
-			gossip_debug (DEBUG_DOMAIN, "Contact no more local-pending: %s",
-				      gossip_contact_get_name (contact));
+		if (empathy_contact_equal (contact, info->contact)) {
+			empathy_debug (DEBUG_DOMAIN, "Contact no more local-pending: %s",
+				      empathy_contact_get_name (contact));
 
 			priv->local_pending = g_list_delete_link (priv->local_pending, l);
 			empathy_contact_list_info_free (info);
@@ -1292,7 +1292,7 @@ tp_contact_list_remove_local_pending (EmpathyTpContactList *list,
 }
 
 static void
-tp_contact_list_groups_updated_cb (GossipContact        *contact,
+tp_contact_list_groups_updated_cb (EmpathyContact       *contact,
 				   GParamSpec           *param,
 				   EmpathyTpContactList *list)
 {
@@ -1303,12 +1303,12 @@ tp_contact_list_groups_updated_cb (GossipContact        *contact,
 	priv = GET_PRIV (list);
 
 	/* Make sure all groups are created */
-	groups = gossip_contact_get_groups (contact);
+	groups = empathy_contact_get_groups (contact);
 	for (l = groups; l; l = l->next) {
 		tp_contact_list_get_group (list, l->data);
 	}
 
-	data.handle = gossip_contact_get_handle (contact);
+	data.handle = empathy_contact_get_handle (contact);
 	data.new_groups = groups;
 
 	g_hash_table_foreach (priv->groups,
@@ -1317,7 +1317,7 @@ tp_contact_list_groups_updated_cb (GossipContact        *contact,
 }
 
 static void
-tp_contact_list_name_updated_cb (GossipContact        *contact,
+tp_contact_list_name_updated_cb (EmpathyContact        *contact,
 				 GParamSpec           *param,
 				 EmpathyTpContactList *list)
 {
@@ -1333,10 +1333,10 @@ tp_contact_list_name_updated_cb (GossipContact        *contact,
 		return;
 	}
 
-	handle = gossip_contact_get_handle (contact);
-	new_name = gossip_contact_get_name (contact);
+	handle = empathy_contact_get_handle (contact);
+	new_name = empathy_contact_get_name (contact);
 
-	gossip_debug (DEBUG_DOMAIN, "renaming handle %d to %s",
+	empathy_debug (DEBUG_DOMAIN, "renaming handle %d to %s",
 		      handle, new_name);
 
 	new_alias = g_hash_table_new_full (g_direct_hash,
@@ -1351,7 +1351,7 @@ tp_contact_list_name_updated_cb (GossipContact        *contact,
 	if (!tp_conn_iface_aliasing_set_aliases (priv->aliasing_iface,
 						 new_alias,
 						 &error)) {
-		gossip_debug (DEBUG_DOMAIN, 
+		empathy_debug (DEBUG_DOMAIN, 
 			      "Couldn't rename contact: %s",
 			      error ? error->message : "No error given");
 		g_clear_error (&error);
@@ -1361,17 +1361,17 @@ tp_contact_list_name_updated_cb (GossipContact        *contact,
 }
 
 static void
-tp_contact_list_update_groups_foreach (gchar                *object_path,
-				       GossipTelepathyGroup *group,
-				       TpContactListData    *data)
+tp_contact_list_update_groups_foreach (gchar             *object_path,
+				       EmpathyTpGroup    *group,
+				       TpContactListData *data)
 {
 	gboolean     is_member;
 	gboolean     found = FALSE;
 	const gchar *group_name;
 	GList       *l;
 
-	is_member = gossip_telepathy_group_is_member (group, data->handle);
-	group_name = gossip_telepathy_group_get_name (group);
+	is_member = empathy_tp_group_is_member (group, data->handle);
+	group_name = empathy_tp_group_get_name (group);
 
 	for (l = data->new_groups; l; l = l->next) {
 		if (strcmp (group_name, l->data) == 0) {
@@ -1382,25 +1382,25 @@ tp_contact_list_update_groups_foreach (gchar                *object_path,
 
 	if (is_member && !found) {
 		/* We are no longer member of this group */
-		gossip_debug (DEBUG_DOMAIN, "Contact %d removed from group '%s'",
+		empathy_debug (DEBUG_DOMAIN, "Contact %d removed from group '%s'",
 			      data->handle, group_name);
-		gossip_telepathy_group_remove_member (group, data->handle, "");
+		empathy_tp_group_remove_member (group, data->handle, "");
 	}
 
 	if (!is_member && found) {
 		/* We are now member of this group */
-		gossip_debug (DEBUG_DOMAIN, "Contact %d added to group '%s'",
+		empathy_debug (DEBUG_DOMAIN, "Contact %d added to group '%s'",
 			      data->handle, group_name);
-		gossip_telepathy_group_add_member (group, data->handle, "");
+		empathy_tp_group_add_member (group, data->handle, "");
 	}
 }
 
-static GossipTelepathyGroup *
+static EmpathyTpGroup *
 tp_contact_list_get_group (EmpathyTpContactList *list,
 			   const gchar          *name)
 {
 	EmpathyTpContactListPriv *priv;
-	GossipTelepathyGroup     *group;
+	EmpathyTpGroup           *group;
 	TpChan                   *group_channel;
 	GArray                   *handles;
 	guint                     group_handle;
@@ -1417,14 +1417,14 @@ tp_contact_list_get_group (EmpathyTpContactList *list,
 		return group;
 	}
 
-	gossip_debug (DEBUG_DOMAIN, "creating new group: %s", name);
+	empathy_debug (DEBUG_DOMAIN, "creating new group: %s", name);
 
 	if (!tp_conn_request_handles (DBUS_G_PROXY (priv->tp_conn),
 				      TP_HANDLE_TYPE_GROUP,
 				      names,
 				      &handles,
 				      &error)) {
-		gossip_debug (DEBUG_DOMAIN,
+		empathy_debug (DEBUG_DOMAIN,
 			      "Couldn't request the creation of a new handle for group: %s",
 			      error ? error->message : "No error given");
 		g_clear_error (&error);
@@ -1440,7 +1440,7 @@ tp_contact_list_get_group (EmpathyTpContactList *list,
 				      FALSE,
 				      &group_object_path,
 				      &error)) {
-		gossip_debug (DEBUG_DOMAIN,
+		empathy_debug (DEBUG_DOMAIN,
 			      "Couldn't request the creation of a new group channel: %s",
 			      error ? error->message : "No error given");
 		g_clear_error (&error);
@@ -1461,7 +1461,7 @@ tp_contact_list_get_group (EmpathyTpContactList *list,
 				     list,
 				     NULL);
 
-	group = gossip_telepathy_group_new (group_channel, priv->tp_conn);
+	group = empathy_tp_group_new (group_channel, priv->tp_conn);
 	g_hash_table_insert (priv->groups, group_object_path, group);
 	g_signal_connect (group, "members-added",
 			  G_CALLBACK (tp_contact_list_group_members_added_cb),
@@ -1474,11 +1474,11 @@ tp_contact_list_get_group (EmpathyTpContactList *list,
 }
 
 static gboolean
-tp_contact_list_find_group (gchar                 *key,
-			    GossipTelepathyGroup  *group,
-			    gchar                 *group_name)
+tp_contact_list_find_group (gchar          *key,
+			    EmpathyTpGroup *group,
+			    gchar          *group_name)
 {
-	if (strcmp (group_name, gossip_telepathy_group_get_name (group)) == 0) {
+	if (strcmp (group_name, empathy_tp_group_get_name (group)) == 0) {
 		return TRUE;
 	}
 
@@ -1486,13 +1486,13 @@ tp_contact_list_find_group (gchar                 *key,
 }
 
 static void
-tp_contact_list_get_groups_foreach (gchar                 *key,
-				    GossipTelepathyGroup  *group,
-				    GList                **groups)
+tp_contact_list_get_groups_foreach (gchar          *key,
+				    EmpathyTpGroup *group,
+				    GList          **groups)
 {
 	const gchar *name;
 
-	name = gossip_telepathy_group_get_name (group);
+	name = empathy_tp_group_get_name (group);
 	*groups = g_list_append (*groups, g_strdup (name));
 }
 
@@ -1509,7 +1509,7 @@ tp_contact_list_group_channel_closed_cb (TpChan             *channel,
 }
 
 static void
-tp_contact_list_group_members_added_cb (GossipTelepathyGroup *group,
+tp_contact_list_group_members_added_cb (EmpathyTpGroup       *group,
 					GArray               *members,
 					guint                 actor_handle,
 					guint                 reason,
@@ -1522,16 +1522,16 @@ tp_contact_list_group_members_added_cb (GossipTelepathyGroup *group,
 
 	priv = GET_PRIV (list);
 
-	group_name = gossip_telepathy_group_get_name (group);
+	group_name = empathy_tp_group_get_name (group);
 	added_list = empathy_tp_contact_list_get_from_handles (list, members);
 
 	for (l = added_list; l; l = l->next) {
-		GossipContact *contact;
+		EmpathyContact *contact;
 
-		contact = GOSSIP_CONTACT (l->data);
+		contact = EMPATHY_CONTACT (l->data);
 
 		tp_contact_list_block_contact (list, contact);
-		gossip_contact_add_group (contact, group_name);
+		empathy_contact_add_group (contact, group_name);
 		tp_contact_list_unblock_contact (list, contact);
 
 		g_object_unref (contact);
@@ -1541,7 +1541,7 @@ tp_contact_list_group_members_added_cb (GossipTelepathyGroup *group,
 }
 
 static void
-tp_contact_list_group_members_removed_cb (GossipTelepathyGroup *group,
+tp_contact_list_group_members_removed_cb (EmpathyTpGroup       *group,
 					  GArray               *members,
 					  guint                 actor_handle,
 					  guint                 reason,
@@ -1554,16 +1554,16 @@ tp_contact_list_group_members_removed_cb (GossipTelepathyGroup *group,
 
 	priv = GET_PRIV (list);
 
-	group_name = gossip_telepathy_group_get_name (group);
+	group_name = empathy_tp_group_get_name (group);
 	removed_list = empathy_tp_contact_list_get_from_handles (list, members);
 
 	for (l = removed_list; l; l = l->next) {
-		GossipContact *contact;
+		EmpathyContact *contact;
 
 		contact = l->data;
 
 		tp_contact_list_block_contact (list, contact);
-		gossip_contact_remove_group (contact, group_name);
+		empathy_contact_remove_group (contact, group_name);
 		tp_contact_list_unblock_contact (list, contact);
 
 		g_object_unref (contact);
@@ -1585,7 +1585,7 @@ tp_contact_list_get_info (EmpathyTpContactList *list,
 		/* FIXME: We should use GetPresence instead */
 		if (!tp_conn_iface_presence_request_presence (priv->presence_iface,
 							      handles, &error)) {
-			gossip_debug (DEBUG_DOMAIN, 
+			empathy_debug (DEBUG_DOMAIN, 
 				      "Could not request presences: %s",
 				      error ? error->message : "No error given");
 			g_clear_error (&error);
@@ -1675,7 +1675,7 @@ tp_contact_list_avatar_update_cb (DBusGProxy           *proxy,
 		return;
 	}
 
-	gossip_debug (DEBUG_DOMAIN, "Changing avatar for %d to %s",
+	empathy_debug (DEBUG_DOMAIN, "Changing avatar for %d to %s",
 		      handle, new_token);
 
 	tp_contact_list_request_avatar (list, handle);
@@ -1688,24 +1688,24 @@ tp_contact_list_request_avatar_cb (DBusGProxy                     *proxy,
 				   GError                         *error,
 				   TpContactListAvatarRequestData *data)
 {
-	GossipContact *contact;
+	EmpathyContact *contact;
 
 	contact = empathy_tp_contact_list_get_from_handle (data->list, data->handle);
 
 	if (error) {
-		gossip_debug (DEBUG_DOMAIN, "Error requesting avatar for %s: %s",
-			      gossip_contact_get_name (contact),
+		empathy_debug (DEBUG_DOMAIN, "Error requesting avatar for %s: %s",
+			      empathy_contact_get_name (contact),
 			      error ? error->message : "No error given");
 	} else {
-		GossipAvatar *avatar;
+		EmpathyAvatar *avatar;
 
-		avatar = gossip_avatar_new (avatar_data->data,
+		avatar = empathy_avatar_new (avatar_data->data,
 					    avatar_data->len,
 					    mime_type);
 		tp_contact_list_block_contact (data->list, contact);
-		gossip_contact_set_avatar (contact, avatar);
+		empathy_contact_set_avatar (contact, avatar);
 		tp_contact_list_unblock_contact (data->list, contact);
-		gossip_avatar_unref (avatar);
+		empathy_avatar_unref (avatar);
 	}
 
 	n_avatar_requests--;
@@ -1729,7 +1729,7 @@ tp_contact_list_aliases_update_cb (DBusGProxy           *proxy,
 		guint          handle;
 		const gchar   *alias;
 		GValueArray   *renamed_struct;
-		GossipContact *contact;
+		EmpathyContact *contact;
 
 		renamed_struct = g_ptr_array_index (renamed_handlers, i);
 		handle = g_value_get_uint(g_value_array_get_nth (renamed_struct, 0));
@@ -1746,11 +1746,11 @@ tp_contact_list_aliases_update_cb (DBusGProxy           *proxy,
 
 		contact = empathy_tp_contact_list_get_from_handle (list, handle);
 		tp_contact_list_block_contact (list, contact);
-		gossip_contact_set_name (contact, alias);
+		empathy_contact_set_name (contact, alias);
 		tp_contact_list_unblock_contact (list, contact);
 		g_object_unref (contact);
 
-		gossip_debug (DEBUG_DOMAIN, "contact %d renamed to %s (update cb)",
+		empathy_debug (DEBUG_DOMAIN, "contact %d renamed to %s (update cb)",
 			      handle, alias);
 	}
 }
@@ -1765,21 +1765,21 @@ tp_contact_list_request_aliases_cb (DBusGProxy                       *proxy,
 	gchar **name;
 
 	if (error) {
-		gossip_debug (DEBUG_DOMAIN, "Error requesting aliases: %s",
+		empathy_debug (DEBUG_DOMAIN, "Error requesting aliases: %s",
 			      error->message);
 	}
 
 	for (name = contact_names; *name && !error; name++) {
-		GossipContact *contact;
+		EmpathyContact *contact;
 
 		contact = empathy_tp_contact_list_get_from_handle (data->list,
 								   data->handles[i]);
 		tp_contact_list_block_contact (data->list, contact);
-		gossip_contact_set_name (contact, *name);
+		empathy_contact_set_name (contact, *name);
 		tp_contact_list_unblock_contact (data->list, contact);
 		g_object_unref (contact);
 
-		gossip_debug (DEBUG_DOMAIN, "contact %d renamed to %s (request cb)",
+		empathy_debug (DEBUG_DOMAIN, "contact %d renamed to %s (request cb)",
 			      data->handles[i], *name);
 
 		i++;
@@ -1806,8 +1806,8 @@ tp_contact_list_parse_presence_foreach (guint                 handle,
 {
 	EmpathyTpContactListPriv *priv;
 	GHashTable     *presences_table;
-	GossipContact  *contact;
-	GossipPresence *presence = NULL;
+	EmpathyContact  *contact;
+	EmpathyPresence *presence = NULL;
 
 	priv = GET_PRIV (list);
 
@@ -1823,14 +1823,14 @@ tp_contact_list_parse_presence_foreach (guint                 handle,
 			      (GHFunc) tp_contact_list_presences_table_foreach,
 			      &presence);
 
-	gossip_debug (DEBUG_DOMAIN, "Presence changed for %s (%d) to %s (%d)",
-		      gossip_contact_get_name (contact),
+	empathy_debug (DEBUG_DOMAIN, "Presence changed for %s (%d) to %s (%d)",
+		      empathy_contact_get_name (contact),
 		      handle,
-		      presence ? gossip_presence_get_status (presence) : "unset",
-		      presence ? gossip_presence_get_state (presence) : MC_PRESENCE_UNSET);
+		      presence ? empathy_presence_get_status (presence) : "unset",
+		      presence ? empathy_presence_get_state (presence) : MC_PRESENCE_UNSET);
 
 	tp_contact_list_block_contact (list, contact);
-	gossip_contact_set_presence (contact, presence);
+	empathy_contact_set_presence (contact, presence);
 	tp_contact_list_unblock_contact (list, contact);
 
 	g_object_unref (contact);
@@ -1839,12 +1839,12 @@ tp_contact_list_parse_presence_foreach (guint                 handle,
 static void
 tp_contact_list_presences_table_foreach (const gchar     *state_str,
 					 GHashTable      *presences_table,
-					 GossipPresence **presence)
+					 EmpathyPresence **presence)
 {
 	McPresence    state;
 	const GValue *message;
 
-	state = gossip_presence_state_from_str (state_str);
+	state = empathy_presence_state_from_str (state_str);
 	if ((state == MC_PRESENCE_UNSET) || (state == MC_PRESENCE_OFFLINE)) {
 		return;
 	}
@@ -1854,12 +1854,12 @@ tp_contact_list_presences_table_foreach (const gchar     *state_str,
 		*presence = NULL;
 	}
 
-	*presence = gossip_presence_new ();
-	gossip_presence_set_state (*presence, state);
+	*presence = empathy_presence_new ();
+	empathy_presence_set_state (*presence, state);
 
 	message = g_hash_table_lookup (presences_table, "message");
 	if (message != NULL) {
-		gossip_presence_set_status (*presence,
+		empathy_presence_set_status (*presence,
 					    g_value_get_string (message));
 	}
 }
@@ -1879,7 +1879,7 @@ tp_contact_list_status_changed_cb (MissionControl                  *mc,
 
 	account = mc_account_lookup (unique_name);
 	if (status != TP_CONN_STATUS_DISCONNECTED ||
-	    !gossip_account_equal (account, priv->account) ||
+	    !empathy_account_equal (account, priv->account) ||
 	    !priv->tp_conn) {
 		g_object_unref (account);
 		return;

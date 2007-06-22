@@ -27,7 +27,7 @@
 
 #include <libmissioncontrol/mc-account.h>
 
-#include "gossip-message.h"
+#include "empathy-message.h"
 
 G_BEGIN_DECLS
 
@@ -64,7 +64,7 @@ EmpathyLogManager *empathy_log_manager_new                   (void);
 void               empathy_log_manager_add_message           (EmpathyLogManager *manager,
 							      const gchar       *chat_id,
 							      gboolean           chatroom,
-							      GossipMessage     *message);
+							      EmpathyMessage     *message);
 gboolean           empathy_log_manager_exists                (EmpathyLogManager *manager,
 							      McAccount         *account,
 							      const gchar       *chat_id,

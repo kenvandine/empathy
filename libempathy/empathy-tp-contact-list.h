@@ -27,7 +27,7 @@
 #include <glib.h>
 #include <libmissioncontrol/mc-account.h>
 
-#include "gossip-contact.h"
+#include "empathy-contact.h"
 
 G_BEGIN_DECLS
 
@@ -53,10 +53,10 @@ struct _EmpathyTpContactListClass {
 GType                  empathy_tp_contact_list_get_type         (void) G_GNUC_CONST;
 EmpathyTpContactList * empathy_tp_contact_list_new              (McAccount            *account);
 McAccount *            empathy_tp_contact_list_get_account      (EmpathyTpContactList *list);
-GossipContact *        empathy_tp_contact_list_get_user         (EmpathyTpContactList *list);
-GossipContact *        empathy_tp_contact_list_get_from_id      (EmpathyTpContactList *list,
+EmpathyContact *        empathy_tp_contact_list_get_user         (EmpathyTpContactList *list);
+EmpathyContact *        empathy_tp_contact_list_get_from_id      (EmpathyTpContactList *list,
 								 const gchar          *id);
-GossipContact *        empathy_tp_contact_list_get_from_handle  (EmpathyTpContactList *list,
+EmpathyContact *        empathy_tp_contact_list_get_from_handle  (EmpathyTpContactList *list,
 								 guint                 handle);
 GList *                empathy_tp_contact_list_get_from_handles (EmpathyTpContactList *list,
 								 GArray               *handles);

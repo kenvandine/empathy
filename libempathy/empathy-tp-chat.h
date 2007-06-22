@@ -30,8 +30,8 @@
 
 #include <libmissioncontrol/mc-account.h>
 
-#include "gossip-message.h"
-#include "gossip-contact.h"
+#include "empathy-message.h"
+#include "empathy-contact.h"
 
 
 G_BEGIN_DECLS
@@ -58,10 +58,10 @@ struct _EmpathyTpChatClass {
 GType          empathy_tp_chat_get_type             (void) G_GNUC_CONST;
 EmpathyTpChat *empathy_tp_chat_new                  (McAccount                 *account,
 						     TpChan                    *tp_chan);
-EmpathyTpChat *empathy_tp_chat_new_with_contact     (GossipContact             *contact);
+EmpathyTpChat *empathy_tp_chat_new_with_contact     (EmpathyContact             *contact);
 void           empathy_tp_chat_request_pending      (EmpathyTpChat             *chat);
 void           empathy_tp_chat_send                 (EmpathyTpChat             *chat,
-						     GossipMessage             *message);
+						     EmpathyMessage             *message);
 void           empathy_tp_chat_set_state            (EmpathyTpChat             *chat,
 						     TelepathyChannelChatState  state);
 const gchar *  empathy_tp_chat_get_id               (EmpathyTpChat             *chat);

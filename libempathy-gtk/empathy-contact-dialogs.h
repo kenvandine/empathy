@@ -25,13 +25,13 @@
 
 #include <gtk/gtk.h>
 
-#include <libempathy/gossip-contact.h>
+#include <libempathy/empathy-contact.h>
 
 G_BEGIN_DECLS
 
-void empathy_subscription_dialog_show        (GossipContact *contact,
+void empathy_subscription_dialog_show        (EmpathyContact *contact,
 				              GtkWindow     *parent);
-void empathy_contact_information_dialog_show (GossipContact *contact,
+void empathy_contact_information_dialog_show (EmpathyContact *contact,
 					      GtkWindow     *parent,
 					      gboolean       edit);
 void empathy_new_contact_dialog_show         (GtkWindow     *parent);

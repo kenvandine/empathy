@@ -1,3 +1,11 @@
+2007-06-22 Xavier Claessens  <xclaesse@gmail.com>
+
+	* libempathy/*.[ch]:
+	* libempathy-gtk/*.[ch]:
+	* src/*.[ch]: Rename all filenames starting with "gossip" by "empathy",
+	change namespace of all gossip_*() functions to empathy_*().
+	Fixes bug #444490 (Mario Danic, Xavier Claessens).
+
 2007-06-21 Xavier Claessens  <xclaesse@gmail.com>
 
 	* configure.ac: Bump version to 0.9

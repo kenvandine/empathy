@@ -1,0 +1,17 @@
+<!--
+  DTD for Empathys contact groups.
+  by Martyn Russell <mr@gnome.org>
+-->
+
+<!-- Root element. -->
+<!ELEMENT contacts (account)>
+
+<!ELEMENT account (group)+>
+<!ATTLIST account 
+	name CDATA #REQUIRED>
+
+<!-- Groups in the roster. -->
+<!ELEMENT group EMPTY>
+<!ATTLIST group
+   name CDATA #REQUIRED
+   expanded CDATA #REQUIRED>

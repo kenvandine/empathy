@@ -1,0 +1,17 @@
+<!--
+  DTD for Empathys Chat Rooms.
+  by Martyn Russell <martyn@imendio.com>
+  v0.2
+-->
+
+<!-- Root element. -->
+<!ELEMENT chatrooms (chatroom*)>
+
+<!ELEMENT chatroom 
+    (name,room,account,(auto_connect?))>
+
+<!ELEMENT name (#PCDATA)>
+<!ELEMENT room (#PCDATA)>
+<!ELEMENT auto_connect (#PCDATA)>
+<!ELEMENT account (#PCDATA)>
+

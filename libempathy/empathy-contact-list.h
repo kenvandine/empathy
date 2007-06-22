@@ -25,7 +25,7 @@
 
 #include <glib-object.h>
 
-#include "gossip-contact.h"
+#include "empathy-contact.h"
 
 G_BEGIN_DECLS
 
@@ -38,7 +38,7 @@ typedef struct _EmpathyContactList      EmpathyContactList;
 typedef struct _EmpathyContactListIface EmpathyContactListIface;
 
 typedef struct {
-	GossipContact *contact;
+	EmpathyContact *contact;
 	gchar         *message;
 } EmpathyContactListInfo;
 
@@ -47,38 +47,38 @@ struct _EmpathyContactListIface {
 
 	/* VTabled */
 	void            (*setup)             (EmpathyContactList *list);
-	GossipContact * (*find)              (EmpathyContactList *list,
+	EmpathyContact * (*find)              (EmpathyContactList *list,
 					      const gchar        *id);
 	void            (*add)               (EmpathyContactList *list,
-					      GossipContact      *contact,
+					      EmpathyContact      *contact,
 					      const gchar        *message);
 	void            (*remove)            (EmpathyContactList *list,
-					      GossipContact      *contact,
+					      EmpathyContact      *contact,
 					      const gchar        *message);
 	GList *         (*get_members)       (EmpathyContactList *list);
 	GList *         (*get_local_pending) (EmpathyContactList *list);
 	void            (*process_pending)   (EmpathyContactList *list,
-					      GossipContact      *contact,
+					      EmpathyContact      *contact,
 					      gboolean            accept);
 };
 
 GType                   empathy_contact_list_get_type          (void) G_GNUC_CONST;
-EmpathyContactListInfo *empathy_contact_list_info_new          (GossipContact          *contact,
+EmpathyContactListInfo *empathy_contact_list_info_new          (EmpathyContact          *contact,
 								const gchar            *message);
 void                    empathy_contact_list_info_free         (EmpathyContactListInfo *info);
 void                    empathy_contact_list_setup             (EmpathyContactList     *list);
-GossipContact *         empathy_contact_list_find              (EmpathyContactList     *list,
+EmpathyContact *         empathy_contact_list_find              (EmpathyContactList     *list,
 								const gchar            *id);
 void                    empathy_contact_list_add               (EmpathyContactList     *list,
-								GossipContact          *contact,
+								EmpathyContact          *contact,
 								const gchar            *message);
 void                    empathy_contact_list_remove            (EmpathyContactList     *list,
-								GossipContact          *contact,
+								EmpathyContact          *contact,
 								const gchar            *message);
 GList *                 empathy_contact_list_get_members       (EmpathyContactList     *list);
 GList *                 empathy_contact_list_get_local_pending (EmpathyContactList     *list);
 void                    empathy_contact_list_process_pending   (EmpathyContactList     *list,
-								GossipContact          *contact,
+								EmpathyContact          *contact,
 								gboolean                accept);
 
 G_END_DECLS

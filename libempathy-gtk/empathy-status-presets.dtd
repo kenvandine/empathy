@@ -1,0 +1,14 @@
+<!--
+  DTD for Empathys status presets.
+  by Martyn Russell <martyn@imendio.com>
+-->
+
+<!-- Root element. -->
+<!ELEMENT presets ((default?),status*)>
+
+<!ELEMENT default (#PCDATA)>
+<!ATTLIST default presence CDATA #REQUIRED>
+
+<!ELEMENT status (#PCDATA)>
+<!ATTLIST status presence CDATA #REQUIRED>
+

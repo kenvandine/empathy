@@ -34,9 +34,9 @@
 #include "empathy-contact-manager.h"
 #include "empathy-tp-contact-list.h"
 #include "empathy-marshal.h"
-#include "gossip-debug.h"
-#include "gossip-time.h"
-#include "gossip-utils.h"
+#include "empathy-debug.h"
+#include "empathy-time.h"
+#include "empathy-utils.h"
 
 #define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), \
 		       EMPATHY_TYPE_TP_CHAT, EmpathyTpChatPriv))
@@ -278,7 +278,7 @@ empathy_tp_chat_class_init (EmpathyTpChatClass *klass)
 			      NULL, NULL,
 			      g_cclosure_marshal_VOID__OBJECT,
 			      G_TYPE_NONE,
-			      1, GOSSIP_TYPE_MESSAGE);
+			      1, EMPATHY_TYPE_MESSAGE);
 
 	signals[CHAT_STATE_CHANGED] =
 		g_signal_new ("chat-state-changed",
@@ -288,7 +288,7 @@ empathy_tp_chat_class_init (EmpathyTpChatClass *klass)
 			      NULL, NULL,
 			      empathy_marshal_VOID__OBJECT_UINT,
 			      G_TYPE_NONE,
-			      2, GOSSIP_TYPE_CONTACT, G_TYPE_UINT);
+			      2, EMPATHY_TYPE_CONTACT, G_TYPE_UINT);
 
 	signals[DESTROY] =
 		g_signal_new ("destroy",
@@ -320,14 +320,14 @@ tp_chat_finalize (GObject *object)
 	priv = GET_PRIV (chat);
 
 	if (priv->tp_chan) {
-		gossip_debug (DEBUG_DOMAIN, "Closing channel...");
+		empathy_debug (DEBUG_DOMAIN, "Closing channel...");
 
 		g_signal_handlers_disconnect_by_func (priv->tp_chan,
 						      tp_chat_destroy_cb,
 						      object);
 
 		if (!tp_chan_close (DBUS_G_PROXY (priv->tp_chan), &error)) {
-			gossip_debug (DEBUG_DOMAIN, 
+			empathy_debug (DEBUG_DOMAIN, 
 				      "Error closing text channel: %s",
 				      error ? error->message : "No error given");
 			g_clear_error (&error);
@@ -366,7 +366,7 @@ tp_chat_constructor (GType                  type,
 
 	priv->manager = empathy_contact_manager_new ();
 	priv->list = empathy_contact_manager_get_list (priv->manager, priv->account);
-	priv->mc = gossip_mission_control_new ();
+	priv->mc = empathy_mission_control_new ();
 	g_object_ref (priv->list);
 
 	priv->text_iface = tp_chan_get_interface (priv->tp_chan,
@@ -506,7 +506,7 @@ empathy_tp_chat_new (McAccount *account,
 }
 
 EmpathyTpChat *
-empathy_tp_chat_new_with_contact (GossipContact *contact)
+empathy_tp_chat_new_with_contact (EmpathyContact *contact)
 {
 	EmpathyTpChat  *chat;
 	MissionControl *mc;
@@ -516,10 +516,10 @@ empathy_tp_chat_new_with_contact (GossipContact *contact)
 	const gchar    *bus_name;
 	guint           handle;
 
-	g_return_val_if_fail (GOSSIP_IS_CONTACT (contact), NULL);
+	g_return_val_if_fail (EMPATHY_IS_CONTACT (contact), NULL);
 
-	mc = gossip_mission_control_new ();
-	account = gossip_contact_get_account (contact);
+	mc = empathy_mission_control_new ();
+	account = empathy_contact_get_account (contact);
 
 	if (mission_control_get_connection_status (mc, account, NULL) != 0) {
 		/* The account is not connected, nothing to do. */
@@ -529,7 +529,7 @@ empathy_tp_chat_new_with_contact (GossipContact *contact)
 	tp_conn = mission_control_get_connection (mc, account, NULL);
 	g_return_val_if_fail (tp_conn != NULL, NULL);
 	bus_name = dbus_g_proxy_get_bus_name (DBUS_G_PROXY (tp_conn));
-	handle = gossip_contact_get_handle (contact);
+	handle = empathy_contact_get_handle (contact);
 
 	text_chan = tp_conn_new_channel (tp_get_bus (),
 					 tp_conn,
@@ -566,7 +566,7 @@ empathy_tp_chat_request_pending (EmpathyTpChat *chat)
 						      TRUE,
 						      &messages_list,
 						      &error)) {
-		gossip_debug (DEBUG_DOMAIN, 
+		empathy_debug (DEBUG_DOMAIN, 
 			      "Error retrieving pending messages: %s",
 			      error ? error->message : "No error given");
 		g_clear_error (&error);
@@ -591,7 +591,7 @@ empathy_tp_chat_request_pending (EmpathyTpChat *chat)
 		message_flags = g_value_get_uint (g_value_array_get_nth (message_struct, 4));
 		message_body = g_value_get_string (g_value_array_get_nth (message_struct, 5));
 
-		gossip_debug (DEBUG_DOMAIN, "Message pending: %s", message_body);
+		empathy_debug (DEBUG_DOMAIN, "Message pending: %s", message_body);
 
 		tp_chat_emit_message (chat,
 				      message_type,
@@ -607,27 +607,27 @@ empathy_tp_chat_request_pending (EmpathyTpChat *chat)
 
 void
 empathy_tp_chat_send (EmpathyTpChat *chat,
-		      GossipMessage *message)
+		      EmpathyMessage *message)
 {
 	EmpathyTpChatPriv *priv;
 	const gchar       *message_body;
-	GossipMessageType  message_type;
+	EmpathyMessageType  message_type;
 	GError            *error = NULL;
 
 	g_return_if_fail (EMPATHY_IS_TP_CHAT (chat));
-	g_return_if_fail (GOSSIP_IS_MESSAGE (message));
+	g_return_if_fail (EMPATHY_IS_MESSAGE (message));
 
 	priv = GET_PRIV (chat);
 
-	message_body = gossip_message_get_body (message);
-	message_type = gossip_message_get_type (message);
+	message_body = empathy_message_get_body (message);
+	message_type = empathy_message_get_type (message);
 
-	gossip_debug (DEBUG_DOMAIN, "Sending message: %s", message_body);
+	empathy_debug (DEBUG_DOMAIN, "Sending message: %s", message_body);
 	if (!tp_chan_type_text_send (priv->text_iface,
 				     message_type,
 				     message_body,
 				     &error)) {
-		gossip_debug (DEBUG_DOMAIN, 
+		empathy_debug (DEBUG_DOMAIN, 
 			      "Send Error: %s", 
 			      error ? error->message : "No error given");
 		g_clear_error (&error);
@@ -646,11 +646,11 @@ empathy_tp_chat_set_state (EmpathyTpChat             *chat,
 	priv = GET_PRIV (chat);
 
 	if (priv->chat_state_iface) {
-		gossip_debug (DEBUG_DOMAIN, "Set state: %d", state);
+		empathy_debug (DEBUG_DOMAIN, "Set state: %d", state);
 		if (!tp_chan_iface_chat_state_set_chat_state (priv->chat_state_iface,
 							      state,
 							      &error)) {
-			gossip_debug (DEBUG_DOMAIN,
+			empathy_debug (DEBUG_DOMAIN,
 				      "Set Chat State Error: %s",
 				      error ? error->message : "No error given");
 			g_clear_error (&error);
@@ -671,7 +671,7 @@ empathy_tp_chat_get_id (EmpathyTpChat *chat)
 		return priv->id;
 	}
 
-	priv->id = gossip_get_channel_id (priv->account, priv->tp_chan);
+	priv->id = empathy_get_channel_id (priv->account, priv->tp_chan);
 
 	return priv->id;
 }
@@ -684,7 +684,7 @@ tp_chat_destroy_cb (TpChan        *text_chan,
 
 	priv = GET_PRIV (chat);
 
-	gossip_debug (DEBUG_DOMAIN, "Channel Closed or CM crashed");
+	empathy_debug (DEBUG_DOMAIN, "Channel Closed or CM crashed");
 
 	g_object_unref  (priv->tp_chan);
 	priv->tp_chan = NULL;
@@ -726,7 +726,7 @@ tp_chat_received_cb (DBusGProxy    *text_iface,
 
 	priv = GET_PRIV (chat);
 
-	gossip_debug (DEBUG_DOMAIN, "Message received: %s", message_body);
+	empathy_debug (DEBUG_DOMAIN, "Message received: %s", message_body);
 
 	tp_chat_emit_message (chat,
 			      message_type,
@@ -748,7 +748,7 @@ tp_chat_sent_cb (DBusGProxy    *text_iface,
 		 gchar         *message_body,
 		 EmpathyTpChat *chat)
 {
-	gossip_debug (DEBUG_DOMAIN, "Message sent: %s", message_body);
+	empathy_debug (DEBUG_DOMAIN, "Message sent: %s", message_body);
 
 	tp_chat_emit_message (chat,
 			      message_type,
@@ -764,14 +764,14 @@ tp_chat_state_changed_cb (DBusGProxy                *chat_state_iface,
 			  EmpathyTpChat             *chat)
 {
 	EmpathyTpChatPriv *priv;
-	GossipContact     *contact;
+	EmpathyContact     *contact;
 
 	priv = GET_PRIV (chat);
 
 	contact = empathy_tp_contact_list_get_from_handle (priv->list, handle);
 
-	gossip_debug (DEBUG_DOMAIN, "Chat state changed for %s (%d): %d",
-		      gossip_contact_get_name (contact),
+	empathy_debug (DEBUG_DOMAIN, "Chat state changed for %s (%d): %d",
+		      empathy_contact_get_name (contact),
 		      handle,
 		      state);
 
@@ -788,9 +788,9 @@ tp_chat_emit_message (EmpathyTpChat *chat,
 		      const gchar   *message_body)
 {
 	EmpathyTpChatPriv *priv;
-	GossipMessage     *message;
-	GossipContact     *sender;
-	GossipContact     *receiver;
+	EmpathyMessage     *message;
+	EmpathyContact     *sender;
+	EmpathyContact     *receiver;
 
 	priv = GET_PRIV (chat);
 
@@ -802,11 +802,11 @@ tp_chat_emit_message (EmpathyTpChat *chat,
 								  from_handle);
 	}
 
-	message = gossip_message_new (message_body);
-	gossip_message_set_type (message, type);
-	gossip_message_set_sender (message, sender);
-	gossip_message_set_receiver (message, receiver);
-	gossip_message_set_timestamp (message, (GossipTime) timestamp);
+	message = empathy_message_new (message_body);
+	empathy_message_set_type (message, type);
+	empathy_message_set_sender (message, sender);
+	empathy_message_set_receiver (message, receiver);
+	empathy_message_set_timestamp (message, (EmpathyTime) timestamp);
 
 	g_signal_emit (chat, signals[MESSAGE_RECEIVED], 0, message);
 

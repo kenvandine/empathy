@@ -13,19 +13,19 @@ BUILT_SOURCES = 					\
 noinst_LTLIBRARIES = libempathy.la
 
 libempathy_la_SOURCES =             						\
-	gossip-conf.c			gossip-conf.h				\
-	gossip-contact.c		gossip-contact.h			\
-	gossip-avatar.c			gossip-avatar.h				\
-	gossip-time.c			gossip-time.h				\
-	gossip-presence.c		gossip-presence.h			\
-	gossip-telepathy-group.c	gossip-telepathy-group.h		\
-	gossip-debug.c			gossip-debug.h				\
-	gossip-utils.c			gossip-utils.h				\
-	gossip-message.c		gossip-message.h			\
-	gossip-chatroom-manager.c	gossip-chatroom-manager.h		\
-	gossip-chatroom.c		gossip-chatroom.h			\
+	empathy-conf.c			empathy-conf.h				\
+	empathy-contact.c		empathy-contact.h			\
+	empathy-avatar.c		empathy-avatar.h			\
+	empathy-time.c			empathy-time.h				\
+	empathy-presence.c		empathy-presence.h			\
+	empathy-debug.c			empathy-debug.h				\
+	empathy-utils.c			empathy-utils.h				\
+	empathy-message.c		empathy-message.h			\
+	empathy-chatroom-manager.c	empathy-chatroom-manager.h		\
+	empathy-chatroom.c		empathy-chatroom.h			\
 	empathy-contact-list.c		empathy-contact-list.h			\
 	empathy-contact-manager.c	empathy-contact-manager.h		\
+	empathy-tp-group.c		empathy-tp-group.h			\
 	empathy-tp-contact-list.c	empathy-tp-contact-list.h		\
 	empathy-tp-chat.c		empathy-tp-chat.h			\
 	empathy-tp-chatroom.c		empathy-tp-chatroom.h			\
@@ -52,7 +52,7 @@ empathy-chandler-glue.h: empathy-chandler.xml
 
 dtddir = $(datadir)/empathy
 dtd_DATA = 					\
-	gossip-chatroom-manager.dtd
+	empathy-chatroom-manager.dtd
 
 stylesheetdir = $(datadir)/empathy
 stylesheet_DATA =		\
