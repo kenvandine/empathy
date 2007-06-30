@@ -1,5 +1,10 @@
 2007-06-30 Xavier Claessens  <xclaesse@gmail.com>
 
+	* configure.ac: Bump MC version required to 4.27.
+	* TODO: Updated.
+
+2007-06-30 Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/empathy-account-widget-generic.c: Fix a leaked ref.
 
 	* src/empathy.c: If we get a chatroom we have to create an

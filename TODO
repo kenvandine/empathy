@@ -7,7 +7,7 @@ Things you can do if you want to help:
  - GtkWidget-ify libempathy-gtk. Actually most window/dialog do not inherit from GtkWindow/GtkDialog. Need to create a glade catalog.
  - Remove Quit option everywhere, empathy is a session service and shouldn't be leaved.
  - Add sound events
- - Add register capability in GossipAccountsDialog if the profile says it's supported.
+ - Add register capability in EmpathyAccountsDialog if the profile says it's supported.
  - Write a manual based on gossip's.
  - Testing and Bugfixing.
  - Update translations.
