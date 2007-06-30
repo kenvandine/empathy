@@ -392,7 +392,7 @@ chat_input_text_view_send (EmpathyChat *chat)
 }
 
 static void
-chat_message_received_cb (EmpathyTpChat *tp_chat,
+chat_message_received_cb (EmpathyTpChat  *tp_chat,
 			  EmpathyMessage *message,
 			  EmpathyChat    *chat)
 {
@@ -1288,10 +1288,11 @@ empathy_chat_load_geometry (EmpathyChat *chat,
 }
 
 void
-empathy_chat_set_tp_chat (EmpathyChat    *chat,
-			 EmpathyTpChat *tp_chat)
+empathy_chat_set_tp_chat (EmpathyChat   *chat,
+			  EmpathyTpChat *tp_chat)
 {
 	EmpathyChatPriv *priv;
+	GList           *messages, *l;
 
 	g_return_if_fail (EMPATHY_IS_CHAT (chat));
 	g_return_if_fail (EMPATHY_IS_TP_CHAT (tp_chat));
@@ -1332,7 +1333,14 @@ empathy_chat_set_tp_chat (EmpathyChat    *chat,
 			  G_CALLBACK (chat_destroy_cb),
 			  chat);
 
-	empathy_tp_chat_request_pending (tp_chat);
+	/* Get pending messages */
+	empathy_tp_chat_set_acknowledge (tp_chat, TRUE);
+	messages = empathy_tp_chat_get_pendings (tp_chat);
+	for (l = messages; l; l = l->next) {
+		chat_message_received_cb (tp_chat, l->data, chat);
+		g_object_unref (l->data);
+	}
+	g_list_free (messages);
 
 	if (!priv->sensitive) {
 		gtk_widget_set_sensitive (chat->input_text_view, TRUE);

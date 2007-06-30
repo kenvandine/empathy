@@ -258,6 +258,8 @@ accounts_widget_generic_setup (EmpathyAccountWidgetGeneric *settings)
 			 settings);
 
 	g_slist_free (params);
+	g_object_unref (profile);
+	g_object_unref (protocol);
 }
 
 static void

@@ -75,39 +75,36 @@ struct _EmpathyGroupChatPriv {
 };
 
 static void          group_chat_finalize                 (GObject           *object);
-static void          group_chat_create_ui                (EmpathyGroupChat   *chat);
+static void          group_chat_create_ui                (EmpathyGroupChat  *chat);
 static void          group_chat_widget_destroy_cb        (GtkWidget         *widget,
-							  EmpathyGroupChat   *chat);
+							  EmpathyGroupChat  *chat);
 static void          group_chat_contact_added_cb         (EmpathyTpChatroom *tp_chat,
-							  EmpathyContact     *contact,
-							  EmpathyGroupChat   *chat);
+							  EmpathyContact    *contact,
+							  EmpathyGroupChat  *chat);
 static void          group_chat_contact_removed_cb       (EmpathyTpChatroom *tp_chat,
-							  EmpathyContact     *contact,
-							  EmpathyGroupChat   *chat);
-/*static void          group_chat_topic_changed_cb         (EmpathyTpChatroom *tp_chat,
-							  const gchar       *new_topic,
-							  EmpathyGroupChat   *chat);*/
+							  EmpathyContact    *contact,
+							  EmpathyGroupChat  *chat);
 static void          group_chat_topic_entry_activate_cb  (GtkWidget         *entry,
 							  GtkDialog         *dialog);
 static void          group_chat_topic_response_cb        (GtkWidget         *dialog,
 							  gint               response,			      
-							  EmpathyGroupChat   *chat);
-static const gchar * group_chat_get_name                 (EmpathyChat        *chat);
-static gchar *       group_chat_get_tooltip              (EmpathyChat        *chat);
-static const gchar * group_chat_get_status_icon_name     (EmpathyChat        *chat);
-static GtkWidget *   group_chat_get_widget               (EmpathyChat        *chat);
-static gboolean      group_chat_is_group_chat            (EmpathyChat        *chat);
-static void          group_chat_set_tp_chat              (EmpathyChat        *chat,
+							  EmpathyGroupChat  *chat);
+static const gchar * group_chat_get_name                 (EmpathyChat       *chat);
+static gchar *       group_chat_get_tooltip              (EmpathyChat       *chat);
+static const gchar * group_chat_get_status_icon_name     (EmpathyChat       *chat);
+static GtkWidget *   group_chat_get_widget               (EmpathyChat       *chat);
+static gboolean      group_chat_is_group_chat            (EmpathyChat       *chat);
+static void          group_chat_set_tp_chat              (EmpathyChat       *chat,
 							  EmpathyTpChat     *tp_chat);
 static void          group_chat_subject_notify_cb        (EmpathyTpChat     *tp_chat,
 							  GParamSpec        *param,
-							  EmpathyGroupChat   *chat);
+							  EmpathyGroupChat  *chat);
 static void          group_chat_name_notify_cb           (EmpathyTpChat     *tp_chat,
 							  GParamSpec        *param,
-							  EmpathyGroupChat   *chat);
+							  EmpathyGroupChat  *chat);
 /*static gboolean      group_chat_key_press_event          (GtkWidget         *widget,
 							  GdkEventKey       *event,
-							  EmpathyGroupChat   *chat);*/
+							  EmpathyGroupChat  *chat);*/
 static gint          group_chat_contacts_completion_func (const gchar       *s1,
 							  const gchar       *s2,
 							  gsize              n);
@@ -173,7 +170,7 @@ group_chat_finalize (GObject *object)
 
 EmpathyGroupChat *
 empathy_group_chat_new (McAccount *account,
-		       TpChan    *tp_chan)
+			TpChan    *tp_chan)
 {
 	EmpathyGroupChat     *chat;
 	EmpathyGroupChatPriv *priv;

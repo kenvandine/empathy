@@ -37,7 +37,6 @@
 #include <libempathy/empathy-tp-chat.h>
 #include <libempathy/empathy-tp-contact-list.h>
 #include <libempathy/empathy-contact-manager.h>
-//#include <libempathy/empathy-log.h>
 
 #include "empathy-private-chat.h"
 #include "empathy-chat-view.h"
@@ -53,12 +52,10 @@
 
 struct _EmpathyPrivateChatPriv {   
 	EmpathyContact *contact;
-	gchar         *name;
-
-	gboolean       is_online;
-
-	GtkWidget     *widget;
-	GtkWidget     *text_view_sw;
+	gchar          *name;
+	gboolean        is_online;
+	GtkWidget      *widget;
+	GtkWidget      *text_view_sw;
 };
 
 static void           empathy_private_chat_class_init            (EmpathyPrivateChatClass *klass);
@@ -328,13 +325,13 @@ private_chat_setup (EmpathyPrivateChat *chat,
 
 EmpathyPrivateChat *
 empathy_private_chat_new (McAccount *account,
-			 TpChan    *tp_chan)
+			  TpChan    *tp_chan)
 {
-	EmpathyPrivateChat     *chat;
+	EmpathyPrivateChat    *chat;
 	EmpathyTpChat         *tp_chat;
 	EmpathyContactManager *manager;
 	EmpathyTpContactList  *list;
-	EmpathyContact         *contact;
+	EmpathyContact        *contact;
 
 	g_return_val_if_fail (MC_IS_ACCOUNT (account), NULL);
 	g_return_val_if_fail (TELEPATHY_IS_CHAN (tp_chan), NULL);
@@ -359,7 +356,7 @@ EmpathyPrivateChat *
 empathy_private_chat_new_with_contact (EmpathyContact *contact)
 {
 	EmpathyPrivateChat *chat;
-	EmpathyTpChat     *tp_chat;
+	EmpathyTpChat      *tp_chat;
 
 	g_return_val_if_fail (EMPATHY_IS_CONTACT (contact), NULL);
 

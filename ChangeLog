@@ -1,3 +1,26 @@
+2007-06-30 Xavier Claessens  <xclaesse@gmail.com>
+
+	* libempathy-gtk/empathy-account-widget-generic.c: Fix a leaked ref.
+
+	* src/empathy.c: If we get a chatroom we have to create an
+	EmpathyTpChatroom object.
+
+	* src/Makefile.am: Fix build system, programs links to libempathy-gtk
+	and libempathy.
+
+	* configure.ac: libempathy does not depends on libgnome-vfs.
+
+	* libempathy-gtk/empathy-status-icon.c:
+	* libempathy-gtk/empathy-chat.c:
+	* libempathy/empathy-tp-chat.c:
+	* libempathy/empathy-tp-chat.h:
+	* libempathy/empathy-filter.c:
+	* libempathy/empathy-filter.h:
+	* libempathy/empathy-filter.xml:
+	* libempathy/Makefile.am: Filter incoming text channels and make
+	status icon flash when there we receive a new message. Dispatch the
+	channel only when we get a message and the user click on the icon.
+
 2007-06-22 Xavier Claessens  <xclaesse@gmail.com>
 
 	* libempathy-gtk/libempathy-gtk.pc.in:

@@ -33,10 +33,12 @@
 #include <libempathy/empathy-contact-list.h>
 #include <libempathy/empathy-contact-manager.h>
 #include <libempathy/empathy-contact.h>
+#include <libempathy/empathy-tp-chat.h>
 #include <libempathy/empathy-debug.h>
 #include <libempathy/empathy-utils.h>
 #include <libempathy/empathy-conf.h>
 #include <libempathy/empathy-idle.h>
+#include <libempathy/empathy-filter.h>
 
 #include "empathy-status-icon.h"
 #include "empathy-contact-dialogs.h"
@@ -44,6 +46,7 @@
 #include "empathy-preferences.h"
 #include "empathy-ui-utils.h"
 #include "empathy-accounts-dialog.h"
+#include "empathy-images.h"
 
 
 #define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), \
@@ -59,9 +62,11 @@ typedef struct _StatusIconEvent StatusIconEvent;
 struct _EmpathyStatusIconPriv {
 	GtkStatusIcon         *icon;
 	EmpathyContactManager *manager;
+	EmpathyFilter         *text_filter;
 	EmpathyIdle           *idle;
+	MissionControl        *mc;
 	GList                 *events;
-	GList                 *current_event;
+	gboolean               showing_event_icon;
 	StatusIconEvent       *flash_state_event;
 	guint                  blink_timeout;
 
@@ -85,6 +90,10 @@ struct _StatusIconEvent {
 static void       empathy_status_icon_class_init  (EmpathyStatusIconClass *klass);
 static void       empathy_status_icon_init        (EmpathyStatusIcon      *icon);
 static void       status_icon_finalize            (GObject                *object);
+static void       status_icon_filter_new_channel  (EmpathyFilter          *filter,
+						   TpConn                 *tp_conn,
+						   TpChan                 *tp_chan,
+						   EmpathyStatusIcon      *icon);
 static void       status_icon_idle_notify_cb      (EmpathyStatusIcon      *icon);
 static void       status_icon_update_tooltip      (EmpathyStatusIcon      *icon);
 static void       status_icon_set_from_state      (EmpathyStatusIcon      *icon);
@@ -111,6 +120,7 @@ static void       status_icon_local_pending_cb    (EmpathyContactManager  *manag
 						   EmpathyStatusIcon      *icon);
 static void       status_icon_event_subscribe_cb  (StatusIconEvent        *event);
 static void       status_icon_event_flash_state_cb (StatusIconEvent       *event);
+static void       status_icon_event_msg_cb        (StatusIconEvent        *event);
 static StatusIconEvent * status_icon_event_new    (EmpathyStatusIcon      *icon,
 						   const gchar            *icon_name,
 						   const gchar            *message);
@@ -142,10 +152,19 @@ empathy_status_icon_init (EmpathyStatusIcon *icon)
 	priv->icon = gtk_status_icon_new ();
 	priv->idle = empathy_idle_new ();
 	priv->manager = empathy_contact_manager_new ();
+	priv->mc = empathy_mission_control_new ();
+	priv->text_filter = empathy_filter_new ("org.gnome.Empathy.Chat",
+						"/org/freedesktop/Telepathy/Filter",
+						TP_IFACE_CHANNEL_TYPE_TEXT,
+						MC_FILTER_PRIORITY_DIALOG,
+						MC_FILTER_FLAG_INCOMING);
 
 	status_icon_create_menu (icon);
 	status_icon_idle_notify_cb (icon);
 
+	g_signal_connect (priv->text_filter, "new-channel",
+			  G_CALLBACK (status_icon_filter_new_channel),
+			  icon);
 	g_signal_connect_swapped (priv->idle, "notify",
 				  G_CALLBACK (status_icon_idle_notify_cb),
 				  icon);
@@ -190,6 +209,7 @@ status_icon_finalize (GObject *object)
 	g_object_unref (priv->window);
 	g_object_unref (priv->idle);
 	g_object_unref (priv->manager);
+	g_object_unref (priv->mc);
 }
 
 EmpathyStatusIcon *
@@ -224,6 +244,51 @@ empathy_status_icon_new (GtkWindow *window)
 }
 
 static void
+status_icon_filter_new_channel (EmpathyFilter     *filter,
+				TpConn            *tp_conn,
+				TpChan            *tp_chan,
+				EmpathyStatusIcon *icon)
+{
+	EmpathyStatusIconPriv *priv;
+	McAccount             *account;
+	EmpathyTpChat         *tp_chat;
+	EmpathyContact        *sender;
+	GList                 *messages;
+	gchar                 *msg;
+	StatusIconEvent       *event;
+
+	priv = GET_PRIV (icon);
+
+	empathy_debug (DEBUG_DOMAIN, "New text channel to be filtered");
+
+	account = mission_control_get_account_for_connection (priv->mc, tp_conn, NULL);
+	tp_chat = empathy_tp_chat_new (account, tp_chan);
+	g_object_unref (account);
+
+	messages = empathy_tp_chat_get_pendings (tp_chat);
+	if (!messages) {
+		empathy_debug (DEBUG_DOMAIN, "There is no message pending, "
+					     "don't dispatch the channel");
+		empathy_filter_process (filter, tp_chan, FALSE);
+		g_object_unref (tp_chat);
+		return;
+	}
+
+	sender = empathy_message_get_sender (messages->data);
+	msg = g_strdup_printf (_("New message from %s:\n%s"),
+			       empathy_contact_get_name (sender),
+			       empathy_message_get_body (messages->data));
+
+	g_object_set_data (G_OBJECT (tp_chat), "filter", filter);
+	event = status_icon_event_new (icon, EMPATHY_IMAGE_NEW_MESSAGE, msg);
+	event->func = status_icon_event_msg_cb;
+	event->user_data = tp_chat;
+
+	g_list_foreach (messages, (GFunc) g_object_unref, NULL);
+	g_list_free (messages);
+}
+
+static void
 status_icon_idle_notify_cb (EmpathyStatusIcon *icon)
 {
 	EmpathyStatusIconPriv *priv;
@@ -241,7 +306,6 @@ status_icon_idle_notify_cb (EmpathyStatusIcon *icon)
 			priv->flash_state_event = status_icon_event_new (icon, icon_name, NULL);
 			priv->flash_state_event->user_data = icon;
 			priv->flash_state_event->func = status_icon_event_flash_state_cb;
-
 		} else {
 			/* We are still flashing but with another state */
 			g_free (priv->flash_state_event->icon_name);
@@ -254,7 +318,7 @@ status_icon_idle_notify_cb (EmpathyStatusIcon *icon)
 		priv->flash_state_event = NULL;
 	}
 
-	if (!priv->current_event) {
+	if (!priv->showing_event_icon) {
 		status_icon_set_from_state (icon);
 	}
 
@@ -498,6 +562,21 @@ status_icon_event_flash_state_cb (StatusIconEvent *event)
 	empathy_idle_set_flash_state (priv->idle, MC_PRESENCE_UNSET);
 }
 
+static void
+status_icon_event_msg_cb (StatusIconEvent *event)
+{
+	EmpathyFilter *filter;
+	EmpathyTpChat *tp_chat;
+
+	empathy_debug (DEBUG_DOMAIN, "Dispatching text channel");
+
+	tp_chat = event->user_data;
+	filter = g_object_get_data (G_OBJECT (tp_chat), "filter");
+	empathy_filter_process (filter,
+				empathy_tp_chat_get_channel (tp_chat),
+				TRUE);
+	g_object_unref (tp_chat);
+}
 
 static StatusIconEvent *
 status_icon_event_new (EmpathyStatusIcon *icon,
@@ -515,7 +594,7 @@ status_icon_event_new (EmpathyStatusIcon *icon,
 
 	priv->events = g_list_append (priv->events, event);
 	if (!priv->blink_timeout) {
-		priv->current_event = NULL;
+		priv->showing_event_icon = FALSE;
 		priv->blink_timeout = g_timeout_add (BLINK_TIMEOUT,
 						     (GSourceFunc) status_icon_event_timeout_cb,
 						     icon);
@@ -538,7 +617,7 @@ status_icon_event_remove (EmpathyStatusIcon *icon,
 	}
 	priv->events = g_list_remove (priv->events, event);
 	status_icon_event_free (event);
-	priv->current_event = NULL;
+	priv->showing_event_icon = FALSE;
 	status_icon_update_tooltip (icon);
 	status_icon_set_from_state (icon);
 
@@ -559,18 +638,14 @@ status_icon_event_timeout_cb (EmpathyStatusIcon *icon)
 
 	priv = GET_PRIV (icon);
 
-	if (priv->current_event) {
-		priv->current_event = priv->current_event->next;
-	} else {
-		priv->current_event = priv->events;
-	}
+	priv->showing_event_icon = !priv->showing_event_icon;
 
-	if (!priv->current_event) {
+	if (!priv->showing_event_icon) {
 		status_icon_set_from_state (icon);
 	} else {
 		StatusIconEvent *event;
 
-		event = priv->current_event->data;
+		event = priv->events->data;
 		gtk_status_icon_set_from_icon_name (priv->icon, event->icon_name);
 	}
 	status_icon_update_tooltip (icon);

@@ -56,7 +56,6 @@ PKG_CHECK_MODULES(LIBEMPATHY,
    gobject-2.0
    gconf-2.0 >= $GCONF_REQUIRED
    libxml-2.0
-   gnome-vfs-2.0
    libtelepathy >= $TELEPATHY_REQUIRED
    libmissioncontrol >= $MISSION_CONTROL_REQUIRED
 ])

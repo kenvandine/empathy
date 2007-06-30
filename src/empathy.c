@@ -43,6 +43,7 @@
 #include <libempathy/empathy-contact.h>
 #include <libempathy/empathy-chandler.h>
 #include <libempathy/empathy-tp-chat.h>
+#include <libempathy/empathy-tp-chatroom.h>
 #include <libempathy/empathy-idle.h>
 #include <libempathy-gtk/empathy-main-window.h>
 #include <libempathy-gtk/empathy-status-icon.h>
@@ -117,7 +118,11 @@ new_channel_cb (EmpathyChandler *chandler,
 			EmpathyTpChat *tp_chat;
 
 			/* The chat died, give him the new text channel */
-			tp_chat = empathy_tp_chat_new (account, tp_chan);
+			if (empathy_chat_is_group_chat (chat)) {
+				tp_chat = EMPATHY_TP_CHAT (empathy_tp_chatroom_new (account, tp_chan));
+			} else {
+				tp_chat = empathy_tp_chat_new (account, tp_chan);
+			}
 			empathy_chat_set_tp_chat (chat, tp_chat);
 			g_object_unref (tp_chat);
 		}

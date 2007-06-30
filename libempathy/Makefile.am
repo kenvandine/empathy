@@ -8,6 +8,7 @@ AM_CPPFLAGS =                                           \
 BUILT_SOURCES = 					\
 	empathy-marshal.h				\
 	empathy-marshal.c				\
+	empathy-filter-glue.h				\
 	empathy-chandler-glue.h
 
 lib_LTLIBRARIES = libempathy.la
@@ -30,6 +31,7 @@ libempathy_la_SOURCES =					\
 	empathy-tp-chat.c				\
 	empathy-tp-chatroom.c				\
 	empathy-chandler.c				\
+	empathy-filter.c				\
 	empathy-idle.c					\
 	empathy-log-manager.c				\
 	empathy-marshal-main.c
@@ -56,6 +58,7 @@ libempathy_HEADERS =				\
 	empathy-tp-chat.h			\
 	empathy-tp-chatroom.h			\
 	empathy-chandler.h			\
+	empathy-filter.h			\
 	empathy-idle.h				\
 	empathy-log-manager.h
 
@@ -69,6 +72,8 @@ libempathy_HEADERS =				\
 
 empathy-chandler-glue.h: empathy-chandler.xml
 	$(LIBTOOL) --mode=execute $(DBUS_BINDING_TOOL) --prefix=empathy_chandler --mode=glib-server --output=$@ $<
+empathy-filter-glue.h: empathy-filter.xml
+	$(LIBTOOL) --mode=execute $(DBUS_BINDING_TOOL) --prefix=empathy_filter --mode=glib-server --output=$@ $<
 
 dtddir = $(datadir)/empathy
 dtd_DATA = 					\
@@ -84,6 +89,7 @@ pkgconfig_DATA = libempathy.pc
 EXTRA_DIST = 			\
 	empathy-marshal.list	\
 	empathy-chandler.xml	\
+	empathy-filter.xml	\
 	$(stylesheet_DATA)	\
 	$(dtd_DATA)
 
