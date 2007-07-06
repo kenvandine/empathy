@@ -251,6 +251,17 @@ accounts_widget_generic_setup (EmpathyAccountWidgetGeneric *settings)
 
 	profile = mc_account_get_profile (settings->account);
 	protocol = mc_profile_get_protocol (profile);
+
+	if (!protocol) {
+		/* The CM is not installed, MC shouldn't list them
+		 * see SF bug #1688779
+		 * FIXME: We should display something asking the user to 
+		 * install the CM
+		 */
+		g_object_unref (profile);
+		return;
+	}
+
 	params = mc_protocol_get_params (protocol);
 
 	g_slist_foreach (params,

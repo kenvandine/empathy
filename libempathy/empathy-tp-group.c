@@ -163,6 +163,7 @@ empathy_tp_group_new (TpChan *tp_chan,
 	DBusGProxy         *group_iface;
 
 	g_return_val_if_fail (TELEPATHY_IS_CHAN (tp_chan), NULL);
+	g_return_val_if_fail (TELEPATHY_IS_CONN (tp_conn), NULL);
 
 	group_iface = tp_chan_get_interface (tp_chan,
 					     TELEPATHY_CHAN_IFACE_GROUP_QUARK);
