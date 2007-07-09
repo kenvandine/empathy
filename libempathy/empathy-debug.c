@@ -24,9 +24,15 @@
 
 #include <stdarg.h>
 #include <string.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <errno.h>
 
 #include <glib.h>
 #include <glib/gprintf.h>
+#include <glib/gstdio.h>
 
 /* Set EMPATHY_DEBUG to a colon/comma/space separated list of domains, or "all"
  * to get all debug output.
@@ -87,6 +93,37 @@ empathy_debug_impl (const gchar *domain, const gchar *msg, ...)
 			g_print ("\n");
 			break;
 		}
+	}
+}
+
+void
+empathy_debug_set_log_file_from_env (void)
+{
+	const gchar *output_file;
+	gint         out;
+
+	output_file = g_getenv ("EMPATHY_LOGFILE");
+	if (output_file == NULL) {
+		return;
+	}
+
+	out = g_open (output_file, O_WRONLY | O_CREAT, 0644);
+	if (out == -1) {
+		g_warning ("Can't open logfile '%s': %s", output_file,
+			   g_strerror (errno));
+		return;
+	}
+
+	if (dup2 (out, STDOUT_FILENO) == -1) {
+		g_warning ("Error when duplicating stdout file descriptor: %s",
+			   g_strerror (errno));
+		return;
+	}
+
+	if (dup2 (out, STDERR_FILENO) == -1) {
+		g_warning ("Error when duplicating stderr file descriptor: %s",
+			   g_strerror (errno));
+		return;
 	}
 }
 

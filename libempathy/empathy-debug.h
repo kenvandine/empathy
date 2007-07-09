@@ -45,7 +45,10 @@ G_BEGIN_DECLS
 #  endif
 #endif
 
-void empathy_debug_impl (const gchar *domain, const gchar *msg, ...);
+void empathy_debug_impl                  (const gchar *domain,
+					  const gchar *msg,
+					  ...);
+void empathy_debug_set_log_file_from_env (void);
 
 G_END_DECLS
 

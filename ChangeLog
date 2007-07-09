@@ -1,5 +1,12 @@
 2007-07-09 Xavier Claessens  <xclaesse@gmail.com>
 
+	* src/empathy.c:
+	* libempathy/empathy-debug.c:
+	* libempathy/empathy-debug.h: Add EMPATHY_LOGFILE env variable. Fixes
+	bug #455240 (Guillaume Desmottes).
+
+2007-07-09 Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/empathy-account-widget-msn.glade:
 	* libempathy-gtk/empathy-account-widget-msn.c:
 	* libempathy-gtk/empathy-account-widget-msn.h:
