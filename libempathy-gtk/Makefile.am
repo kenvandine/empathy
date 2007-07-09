@@ -39,7 +39,8 @@ libempathy_gtk_la_SOURCES =             	\
 	empathy-new-chatroom-dialog.c		\
 	empathy-chatrooms-window.c		\
 	empathy-log-window.c			\
-	empathy-ui-utils.c
+	empathy-ui-utils.c                     \
+	empathy-account-widget-msn.c
 
 libempathy_gtk_la_LIBADD =			\
 	$(EMPATHY_LIBS)				\
@@ -95,7 +96,8 @@ glade_DATA = 					\
 	empathy-chatrooms-window.glade		\
 	empathy-spell-dialog.glade		\
 	empathy-log-window.glade		\
-	empathy-chat.glade
+	empathy-chat.glade                     \
+	empathy-account-widget-msn.glade
 
 dtddir = $(datadir)/empathy
 dtd_DATA = 					\

@@ -81,6 +81,7 @@ static gchar *              log_manager_get_timestamp_filename     (void);
 static gchar *              log_manager_get_timestamp_from_message (EmpathyMessage          *message);
 static EmpathyLogSearchHit *log_manager_search_hit_new             (EmpathyLogManager      *manager,
 								    const gchar            *filename);
+static void                 log_manager_search_hit_free            (EmpathyLogSearchHit    *hit);
 
 G_DEFINE_TYPE (EmpathyLogManager, empathy_log_manager, G_TYPE_OBJECT);
 
@@ -270,32 +271,31 @@ empathy_log_manager_get_dates (EmpathyLogManager *manager,
 }
 
 GList *
-empathy_log_manager_get_messages_for_date (EmpathyLogManager *manager,
-					   McAccount         *account,
-					   const gchar       *chat_id,
-					   gboolean           chatroom,
-					   const gchar       *date)
+empathy_log_manager_get_messages_for_file (EmpathyLogManager *manager,
+					   const gchar       *filename)
 {
-	gchar            *filename;
-	GList            *messages = NULL;
-	xmlParserCtxtPtr  ctxt;
-	xmlDocPtr         doc;
-	xmlNodePtr        log_node;
-	xmlNodePtr        node;
+	GList               *messages = NULL;
+	xmlParserCtxtPtr     ctxt;
+	xmlDocPtr            doc;
+	xmlNodePtr           log_node;
+	xmlNodePtr           node;
+	EmpathyLogSearchHit *hit;
+	McAccount           *account;
 
 	g_return_val_if_fail (EMPATHY_IS_LOG_MANAGER (manager), NULL);
-	g_return_val_if_fail (MC_IS_ACCOUNT (account), NULL);
-	g_return_val_if_fail (chat_id != NULL, NULL);
-
-	filename = log_manager_get_filename_for_date (manager, account, chat_id, chatroom, date);
+	g_return_val_if_fail (filename != NULL, NULL);
 
 	empathy_debug (DEBUG_DOMAIN, "Attempting to parse filename:'%s'...", filename);
 
 	if (!g_file_test (filename, G_FILE_TEST_EXISTS)) {
 		empathy_debug (DEBUG_DOMAIN, "Filename:'%s' does not exist", filename);
-		g_free (filename);
 		return NULL;
 	}
+
+	/* Get the account from the filename */
+	hit = log_manager_search_hit_new (manager, filename);
+	account = g_object_ref (hit->account);
+	log_manager_search_hit_free (hit);
 
 	/* Create parser. */
 	ctxt = xmlNewParserCtxt ();
@@ -304,7 +304,6 @@ empathy_log_manager_get_messages_for_date (EmpathyLogManager *manager,
 	doc = xmlCtxtReadFile (ctxt, filename, NULL, 0);
 	if (!doc) {
 		g_warning ("Failed to parse file:'%s'", filename);
-		g_free (filename);
 		xmlFreeParserCtxt (ctxt);
 		return NULL;
 	}
@@ -312,7 +311,6 @@ empathy_log_manager_get_messages_for_date (EmpathyLogManager *manager,
 	/* The root node, presets. */
 	log_node = xmlDocGetRootElement (doc);
 	if (!log_node) {
-		g_free (filename);
 		xmlFreeDoc (doc);
 		xmlFreeParserCtxt (ctxt);
 		return NULL;
@@ -363,9 +361,29 @@ empathy_log_manager_get_messages_for_date (EmpathyLogManager *manager,
 
 	empathy_debug (DEBUG_DOMAIN, "Parsed %d messages", g_list_length (messages));
 
-	g_free (filename);
 	xmlFreeDoc (doc);
 	xmlFreeParserCtxt (ctxt);
+
+	return messages;
+}
+
+GList *
+empathy_log_manager_get_messages_for_date (EmpathyLogManager *manager,
+					   McAccount         *account,
+					   const gchar       *chat_id,
+					   gboolean           chatroom,
+					   const gchar       *date)
+{
+	gchar *filename;
+	GList *messages;
+
+	g_return_val_if_fail (EMPATHY_IS_LOG_MANAGER (manager), NULL);
+	g_return_val_if_fail (MC_IS_ACCOUNT (account), NULL);
+	g_return_val_if_fail (chat_id != NULL, NULL);
+
+	filename = log_manager_get_filename_for_date (manager, account, chat_id, chatroom, date);
+	messages = empathy_log_manager_get_messages_for_file (manager, filename);
+	g_free (filename);
 
 	return messages;
 }
@@ -479,21 +497,10 @@ empathy_log_manager_search_new (EmpathyLogManager *manager,
 void
 empathy_log_manager_search_free (GList *hits)
 {
-	GList               *l;
-	EmpathyLogSearchHit *hit;
+	GList *l;
 
 	for (l = hits; l; l = l->next) {
-		hit = l->data;
-
-		if (hit->account) {
-			g_object_unref (hit->account);
-		}
-
-		g_free (hit->date);
-		g_free (hit->filename);
-		g_free (hit->chat_id);
-
-		g_slice_free (EmpathyLogSearchHit, hit);
+		log_manager_search_hit_free (l->data);
 	}
 	
 	g_list_free (hits);
@@ -741,3 +748,16 @@ log_manager_search_hit_new (EmpathyLogManager *manager,
 	return hit;
 }
 
+static void
+log_manager_search_hit_free (EmpathyLogSearchHit *hit)
+{
+	if (hit->account) {
+		g_object_unref (hit->account);
+	}
+
+	g_free (hit->date);
+	g_free (hit->filename);
+	g_free (hit->chat_id);
+
+	g_slice_free (EmpathyLogSearchHit, hit);
+}

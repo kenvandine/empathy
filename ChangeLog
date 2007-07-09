@@ -1,7 +1,21 @@
+2007-07-09 Xavier Claessens  <xclaesse@gmail.com>
+
+	* libempathy-gtk/empathy-account-widget-msn.glade:
+	* libempathy-gtk/empathy-account-widget-msn.c:
+	* libempathy-gtk/empathy-account-widget-msn.h:
+	* libempathy-gtk/empathy-accounts-dialog.c:
+	* libempathy-gtk/Makefile.am: Add MSN setting UI. Fixes bug #443162
+	(Cosimo Cecchi).
+
+	* libempathy-gtk/empathy-chat-view.c:
+	* libempathy/empathy-log-manager.c:
+	* libempathy/empathy-log-manager.h: Add needed API to show chat logs in
+	Tracker. Fixes bug #452536.
+
 2007-07-07 Xavier Claessens  <xclaesse@gmail.com>
 
 	* libempathy-gtk/empathy-account-widget-generic.c: Workaround to fix a 
-	commonly reported crash.
+	commonly reported crash. Fixes bug #454277
 	* libempathy/empathy-tp-group.c: Add a missing check.
 
 2007-06-30 Xavier Claessens  <xclaesse@gmail.com>

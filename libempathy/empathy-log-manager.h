@@ -73,6 +73,8 @@ GList *            empathy_log_manager_get_dates             (EmpathyLogManager 
 							      McAccount         *account,
 							      const gchar       *chat_id,
 							      gboolean           chatroom);
+GList *            empathy_log_manager_get_messages_for_file (EmpathyLogManager *manager,
+							      const gchar       *filename);
 GList *            empathy_log_manager_get_messages_for_date (EmpathyLogManager *manager,
 							      McAccount         *account,
 							      const gchar       *chat_id,
@@ -82,6 +84,8 @@ GList *            empathy_log_manager_get_last_messages     (EmpathyLogManager 
 							      McAccount         *account,
 							      const gchar       *chat_id,
 							      gboolean           chatroom);
+GList *            empathy_log_manager_get_messages_for_file (EmpathyLogManager *manager,
+							      const gchar       *filename);
 GList *            empathy_log_manager_get_chats             (EmpathyLogManager *manager,
 							      McAccount         *account);
 GList *            empathy_log_manager_search_new            (EmpathyLogManager *manager,

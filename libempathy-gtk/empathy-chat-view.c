@@ -2004,7 +2004,7 @@ empathy_chat_view_find_abilities (EmpathyChatView *view,
 
 void
 empathy_chat_view_highlight (EmpathyChatView *view,
-			    const gchar    *text)
+			     const gchar     *text)
 {
 	GtkTextBuffer *buffer;
 	GtkTextIter    iter;

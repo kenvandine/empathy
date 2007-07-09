@@ -46,6 +46,7 @@
 #include "empathy-profile-chooser.h"
 #include "empathy-account-widget-generic.h"
 #include "empathy-account-widget-jabber.h"
+#include "empathy-account-widget-msn.h"
 
 #define DEBUG_DOMAIN "AccountDialog"
 
@@ -287,7 +288,12 @@ accounts_dialog_update_account (EmpathyAccountsDialog *dialog,
 		if (strcmp (config_ui, "jabber") == 0) {
 			dialog->settings_widget = 
 				empathy_account_widget_jabber_new (account);
-		} else {
+		} 
+		else if (strcmp (config_ui, "msn") == 0) {
+			dialog ->settings_widget =
+				empathy_account_widget_msn_new (account);
+		}
+		else {
 			dialog->settings_widget = 
 				empathy_account_widget_generic_new (account,
 								   dialog->label_name);
