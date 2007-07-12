@@ -1,0 +1,95 @@
+<!-- ##### SECTION Title ##### -->
+empathy-time
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### MACRO EMPATHY_TIME_FORMAT_DISPLAY_SHORT ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO EMPATHY_TIME_FORMAT_DISPLAY_LONG ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### TYPEDEF EmpathyTime ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION empathy_time_get_current ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_time_get_local_time ##### -->
+<para>
+
+</para>
+
+@tm: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_time_parse ##### -->
+<para>
+
+</para>
+
+@str: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_time_parse_format ##### -->
+<para>
+
+</para>
+
+@str: 
+@format: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_time_to_string_utc ##### -->
+<para>
+
+</para>
+
+@t: 
+@format: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_time_to_string_local ##### -->
+<para>
+
+</para>
+
+@t: 
+@format: 
+@Returns: 
+
+

@@ -1,4 +1,4 @@
-SUBDIRS = po data libempathy libempathy-gtk src
+SUBDIRS = po data libempathy libempathy-gtk src doc
 
 DISTCHECK_CONFIGURE_FLAGS =	\
 	--disable-scrollkeeper

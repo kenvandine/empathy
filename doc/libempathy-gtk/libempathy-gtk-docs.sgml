@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" 
+               "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd">
+<book id="index" xmlns:xi="http://www.w3.org/2003/XInclude">
+  <bookinfo>
+    <title>libempathy-gtk Reference Manual</title>
+  </bookinfo>
+
+  <chapter>
+    <title>libempathy-gtk API reference</title>
+    <xi:include href="xml/empathy-about-dialog.xml"/>
+    <xi:include href="xml/empathy-cell-renderer-text.xml"/>
+    <xi:include href="xml/empathy-contact-list-store.xml"/>
+    <xi:include href="xml/empathy-main-window.xml"/>
+    <xi:include href="xml/empathy-spell.xml"/>
+    <xi:include href="xml/empathy-account-chooser.xml"/>
+    <xi:include href="xml/empathy-chat.xml"/>
+    <xi:include href="xml/empathy-contact-list-view.xml"/>
+    <xi:include href="xml/empathy-new-chatroom-dialog.xml"/>
+    <xi:include href="xml/empathy-status-icon.xml"/>
+    <xi:include href="xml/empathy-accounts-dialog.xml"/>
+    <xi:include href="xml/empathy-chatrooms-window.xml"/>
+    <xi:include href="xml/empathy-contact-widget.xml"/>
+    <xi:include href="xml/empathy-preferences.xml"/>
+    <xi:include href="xml/empathy-status-presets.xml"/>
+    <xi:include href="xml/empathy-account-widget-generic.xml"/>
+    <xi:include href="xml/empathy-chat-view.xml"/>
+    <xi:include href="xml/empathy-geometry.xml"/>
+    <xi:include href="xml/empathy-presence-chooser.xml"/>
+    <xi:include href="xml/empathy-theme-manager.xml"/>
+    <xi:include href="xml/empathy-account-widget-jabber.xml"/>
+    <xi:include href="xml/empathy-chat-window.xml"/>
+    <xi:include href="xml/empathy-group-chat.xml"/>
+    <xi:include href="xml/empathy-private-chat.xml"/>
+    <xi:include href="xml/empathy-ui-utils.xml"/>
+    <xi:include href="xml/empathy-account-widget-msn.xml"/>
+    <xi:include href="xml/empathy-contact-dialogs.xml"/>
+    <xi:include href="xml/empathy-images.xml"/>
+    <xi:include href="xml/empathy-profile-chooser.xml"/>
+    <xi:include href="xml/ephy-spinner.xml"/>
+    <xi:include href="xml/empathy-cell-renderer-expander.xml"/>
+    <xi:include href="xml/empathy-contact-groups.xml"/>
+    <xi:include href="xml/empathy-log-window.xml"/>
+    <xi:include href="xml/empathy-spell-dialog.xml"/>
+  </chapter>
+</book>

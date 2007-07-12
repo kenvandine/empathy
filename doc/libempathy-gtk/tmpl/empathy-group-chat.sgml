@@ -1,0 +1,67 @@
+<!-- ##### SECTION Title ##### -->
+EmpathyGroupChat
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT EmpathyGroupChatPriv ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### STRUCT EmpathyGroupChat ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION empathy_group_chat_new ##### -->
+<para>
+
+</para>
+
+@account: 
+@tp_chan: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_group_chat_get_show_contacts ##### -->
+<para>
+
+</para>
+
+@chat: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_group_chat_set_show_contacts ##### -->
+<para>
+
+</para>
+
+@chat: 
+@show: 
+
+
+<!-- ##### FUNCTION empathy_group_chat_set_topic ##### -->
+<para>
+
+</para>
+
+@chat: 
+
+

@@ -1,0 +1,59 @@
+<!-- ##### SECTION Title ##### -->
+EmpathyCellRendererText
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT EmpathyCellRendererTextPriv ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### STRUCT EmpathyCellRendererText ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG EmpathyCellRendererText:is-group ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG EmpathyCellRendererText:name ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG EmpathyCellRendererText:show-status ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG EmpathyCellRendererText:status ##### -->
+<para>
+
+</para>
+
+<!-- ##### FUNCTION empathy_cell_renderer_text_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+

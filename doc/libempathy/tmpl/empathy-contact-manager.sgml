@@ -1,0 +1,89 @@
+<!-- ##### SECTION Title ##### -->
+EmpathyContactManager
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT EmpathyContactManagerPriv ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### STRUCT EmpathyContactManager ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION empathy_contact_manager_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_contact_manager_get_list ##### -->
+<para>
+
+</para>
+
+@manager: 
+@account: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_contact_manager_get_user ##### -->
+<para>
+
+</para>
+
+@manager: 
+@account: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_contact_manager_create ##### -->
+<para>
+
+</para>
+
+@manager: 
+@account: 
+@id: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_contact_manager_rename_group ##### -->
+<para>
+
+</para>
+
+@manager: 
+@old_group: 
+@new_group: 
+
+
+<!-- ##### FUNCTION empathy_contact_manager_get_groups ##### -->
+<para>
+
+</para>
+
+@manager: 
+@Returns: 
+
+

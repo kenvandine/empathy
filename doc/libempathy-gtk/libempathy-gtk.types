@@ -1,0 +1,28 @@
+#include <libempathy-gtk/empathy-cell-renderer-text.h>
+#include <libempathy-gtk/empathy-contact-list-store.h>
+#include <libempathy-gtk/empathy-chat.h>
+#include <libempathy-gtk/empathy-chat-window.h>
+#include <libempathy-gtk/empathy-contact-list-view.h>
+#include <libempathy-gtk/empathy-status-icon.h>
+#include <libempathy-gtk/empathy-chat-view.h>
+#include <libempathy-gtk/empathy-presence-chooser.h>
+#include <libempathy-gtk/empathy-theme-manager.h>
+#include <libempathy-gtk/empathy-group-chat.h>
+#include <libempathy-gtk/empathy-private-chat.h>
+#include <libempathy-gtk/ephy-spinner.h>
+#include <libempathy-gtk/empathy-cell-renderer-expander.h>
+
+empathy_cell_renderer_text_get_type
+empathy_contact_list_store_get_type
+empathy_chat_get_type
+empathy_chat_window_get_type
+empathy_contact_list_view_get_type
+empathy_status_icon_get_type
+empathy_chat_view_get_type
+empathy_presence_chooser_get_type
+empathy_theme_manager_get_type
+empathy_group_chat_get_type
+empathy_private_chat_get_type
+ephy_spinner_get_type
+empathy_cell_renderer_expander_get_type
+

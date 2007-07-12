@@ -1,0 +1,253 @@
+<!-- ##### SECTION Title ##### -->
+EmpathyChatView
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT EmpathyChatViewPriv ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### STRUCT EmpathyChatView ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ENUM EmpathySmiley ##### -->
+<para>
+
+</para>
+
+@EMPATHY_SMILEY_NORMAL: 
+@EMPATHY_SMILEY_WINK: 
+@EMPATHY_SMILEY_BIGEYE: 
+@EMPATHY_SMILEY_NOSE: 
+@EMPATHY_SMILEY_CRY: 
+@EMPATHY_SMILEY_SAD: 
+@EMPATHY_SMILEY_SCEPTICAL: 
+@EMPATHY_SMILEY_BIGSMILE: 
+@EMPATHY_SMILEY_INDIFFERENT: 
+@EMPATHY_SMILEY_TOUNGE: 
+@EMPATHY_SMILEY_SHOCKED: 
+@EMPATHY_SMILEY_COOL: 
+@EMPATHY_SMILEY_SORRY: 
+@EMPATHY_SMILEY_KISS: 
+@EMPATHY_SMILEY_SHUTUP: 
+@EMPATHY_SMILEY_YAWN: 
+@EMPATHY_SMILEY_CONFUSED: 
+@EMPATHY_SMILEY_ANGEL: 
+@EMPATHY_SMILEY_OOOH: 
+@EMPATHY_SMILEY_LOOKAWAY: 
+@EMPATHY_SMILEY_BLUSH: 
+@EMPATHY_SMILEY_COOLBIGSMILE: 
+@EMPATHY_SMILEY_ANGRY: 
+@EMPATHY_SMILEY_BOSS: 
+@EMPATHY_SMILEY_MONKEY: 
+@EMPATHY_SMILEY_SILLY: 
+@EMPATHY_SMILEY_SICK: 
+@EMPATHY_SMILEY_COUNT: 
+
+<!-- ##### FUNCTION empathy_chat_view_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_chat_view_append_message ##### -->
+<para>
+
+</para>
+
+@view: 
+@msg: 
+
+
+<!-- ##### FUNCTION empathy_chat_view_append_event ##### -->
+<para>
+
+</para>
+
+@view: 
+@str: 
+
+
+<!-- ##### FUNCTION empathy_chat_view_append_button ##### -->
+<para>
+
+</para>
+
+@view: 
+@message: 
+@button1: 
+@button2: 
+
+
+<!-- ##### FUNCTION empathy_chat_view_set_margin ##### -->
+<para>
+
+</para>
+
+@view: 
+@margin: 
+
+
+<!-- ##### FUNCTION empathy_chat_view_scroll ##### -->
+<para>
+
+</para>
+
+@view: 
+@allow_scrolling: 
+
+
+<!-- ##### FUNCTION empathy_chat_view_scroll_down ##### -->
+<para>
+
+</para>
+
+@view: 
+
+
+<!-- ##### FUNCTION empathy_chat_view_get_selection_bounds ##### -->
+<para>
+
+</para>
+
+@view: 
+@start: 
+@end: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_chat_view_clear ##### -->
+<para>
+
+</para>
+
+@view: 
+
+
+<!-- ##### FUNCTION empathy_chat_view_find_previous ##### -->
+<para>
+
+</para>
+
+@view: 
+@search_criteria: 
+@new_search: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_chat_view_find_next ##### -->
+<para>
+
+</para>
+
+@view: 
+@search_criteria: 
+@new_search: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_chat_view_find_abilities ##### -->
+<para>
+
+</para>
+
+@view: 
+@search_criteria: 
+@can_do_previous: 
+@can_do_next: 
+
+
+<!-- ##### FUNCTION empathy_chat_view_highlight ##### -->
+<para>
+
+</para>
+
+@view: 
+@text: 
+
+
+<!-- ##### FUNCTION empathy_chat_view_copy_clipboard ##### -->
+<para>
+
+</para>
+
+@view: 
+
+
+<!-- ##### FUNCTION empathy_chat_view_get_irc_style ##### -->
+<para>
+
+</para>
+
+@view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_chat_view_set_irc_style ##### -->
+<para>
+
+</para>
+
+@view: 
+@irc_style: 
+
+
+<!-- ##### FUNCTION empathy_chat_view_get_smiley_image ##### -->
+<para>
+
+</para>
+
+@smiley: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_chat_view_get_smiley_text ##### -->
+<para>
+
+</para>
+
+@smiley: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_chat_view_get_smiley_menu ##### -->
+<para>
+
+</para>
+
+@callback: 
+@user_data: 
+@tooltips: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_chat_view_set_is_group_chat ##### -->
+<para>
+
+</para>
+
+@view: 
+@is_group_chat: 
+
+

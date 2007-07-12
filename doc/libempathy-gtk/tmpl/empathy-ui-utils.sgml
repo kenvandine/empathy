@@ -1,0 +1,243 @@
+<!-- ##### SECTION Title ##### -->
+empathy-ui-utils
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### MACRO G_STR_EMPTY ##### -->
+<para>
+
+</para>
+
+@x: 
+
+
+<!-- ##### FUNCTION empathy_glade_get_file_simple ##### -->
+<para>
+
+</para>
+
+@filename: 
+@root: 
+@domain: 
+@first_required_widget: 
+@Varargs: 
+
+
+<!-- ##### FUNCTION empathy_glade_get_file ##### -->
+<para>
+
+</para>
+
+@filename: 
+@root: 
+@domain: 
+@first_required_widget: 
+@Varargs: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_glade_connect ##### -->
+<para>
+
+</para>
+
+@gui: 
+@user_data: 
+@first_widget: 
+@Varargs: 
+
+
+<!-- ##### FUNCTION empathy_glade_setup_size_group ##### -->
+<para>
+
+</para>
+
+@gui: 
+@mode: 
+@first_widget: 
+@Varargs: 
+
+
+<!-- ##### FUNCTION empathy_pixbuf_from_icon_name ##### -->
+<para>
+
+</para>
+
+@icon_name: 
+@icon_size: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_pixbuf_from_smiley ##### -->
+<para>
+
+</para>
+
+@type: 
+@icon_size: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_icon_name_from_account ##### -->
+<para>
+
+</para>
+
+@account: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_icon_name_for_presence_state ##### -->
+<para>
+
+</para>
+
+@state: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_icon_name_for_presence ##### -->
+<para>
+
+</para>
+
+@presence: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_icon_name_for_contact ##### -->
+<para>
+
+</para>
+
+@contact: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_pixbuf_from_avatar_scaled ##### -->
+<para>
+
+</para>
+
+@avatar: 
+@width: 
+@height: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_pixbuf_avatar_from_contact ##### -->
+<para>
+
+</para>
+
+@contact: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_pixbuf_avatar_from_contact_scaled ##### -->
+<para>
+
+</para>
+
+@contact: 
+@width: 
+@height: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_text_iter_forward_search ##### -->
+<para>
+
+</para>
+
+@iter: 
+@str: 
+@match_start: 
+@match_end: 
+@limit: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_text_iter_backward_search ##### -->
+<para>
+
+</para>
+
+@iter: 
+@str: 
+@match_start: 
+@match_end: 
+@limit: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_window_get_is_visible ##### -->
+<para>
+
+</para>
+
+@window: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_window_present ##### -->
+<para>
+
+</para>
+
+@window: 
+@steal_focus: 
+
+
+<!-- ##### FUNCTION empathy_get_toplevel_window ##### -->
+<para>
+
+</para>
+
+@widget: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_url_show ##### -->
+<para>
+
+</para>
+
+@url: 
+
+
+<!-- ##### FUNCTION empathy_toggle_button_set_state_quietly ##### -->
+<para>
+
+</para>
+
+@widget: 
+@callback: 
+@user_data: 
+@active: 
+
+
+<!-- ##### FUNCTION empathy_link_button_new ##### -->
+<para>
+
+</para>
+
+@url: 
+@title: 
+@Returns: 
+
+

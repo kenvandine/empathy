@@ -1,5 +1,11 @@
 2007-07-12 Xavier Claessens  <xclaesse@gmail.com>
 
+	* configure.ac:
+	* doc/*:
+	* Makefile.am: Adding initial API documentation using gtk-doc.
+
+2007-07-12 Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy/empathy-tp-contact-list.c: Auto-accept to publish presence
 	to contacts that are in our subscribe list. When accepting a pending
 	contact add it to publish and subscribe list.

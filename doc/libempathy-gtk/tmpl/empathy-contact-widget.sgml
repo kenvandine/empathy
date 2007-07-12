@@ -1,0 +1,38 @@
+<!-- ##### SECTION Title ##### -->
+empathy-contact-widget
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### FUNCTION empathy_contact_widget_new ##### -->
+<para>
+
+</para>
+
+@contact: 
+@editable: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_contact_widget_get_contact ##### -->
+<para>
+
+</para>
+
+@widget: 
+@Returns: 
+
+

@@ -1,0 +1,272 @@
+<!-- ##### SECTION Title ##### -->
+EmpathyChat
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT EmpathyChatPriv ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### STRUCT EmpathyChat ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SIGNAL EmpathyChat::composing ##### -->
+<para>
+
+</para>
+
+@empathychat: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL EmpathyChat::name-changed ##### -->
+<para>
+
+</para>
+
+@empathychat: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL EmpathyChat::new-message ##### -->
+<para>
+
+</para>
+
+@empathychat: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### SIGNAL EmpathyChat::status-changed ##### -->
+<para>
+
+</para>
+
+@empathychat: the object which received the signal.
+
+<!-- ##### FUNCTION empathy_chat_get_view ##### -->
+<para>
+
+</para>
+
+@chat: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_chat_get_window ##### -->
+<para>
+
+</para>
+
+@chat: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_chat_set_window ##### -->
+<para>
+
+</para>
+
+@chat: 
+@window: 
+
+
+<!-- ##### FUNCTION empathy_chat_present ##### -->
+<para>
+
+</para>
+
+@chat: 
+
+
+<!-- ##### FUNCTION empathy_chat_clear ##### -->
+<para>
+
+</para>
+
+@chat: 
+
+
+<!-- ##### FUNCTION empathy_chat_scroll_down ##### -->
+<para>
+
+</para>
+
+@chat: 
+
+
+<!-- ##### FUNCTION empathy_chat_cut ##### -->
+<para>
+
+</para>
+
+@chat: 
+
+
+<!-- ##### FUNCTION empathy_chat_copy ##### -->
+<para>
+
+</para>
+
+@chat: 
+
+
+<!-- ##### FUNCTION empathy_chat_paste ##### -->
+<para>
+
+</para>
+
+@chat: 
+
+
+<!-- ##### FUNCTION empathy_chat_get_name ##### -->
+<para>
+
+</para>
+
+@chat: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_chat_get_tooltip ##### -->
+<para>
+
+</para>
+
+@chat: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_chat_get_status_icon_name ##### -->
+<para>
+
+</para>
+
+@chat: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_chat_get_widget ##### -->
+<para>
+
+</para>
+
+@chat: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_chat_is_group_chat ##### -->
+<para>
+
+</para>
+
+@chat: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_chat_is_connected ##### -->
+<para>
+
+</para>
+
+@chat: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_chat_save_geometry ##### -->
+<para>
+
+</para>
+
+@chat: 
+@x: 
+@y: 
+@w: 
+@h: 
+
+
+<!-- ##### FUNCTION empathy_chat_load_geometry ##### -->
+<para>
+
+</para>
+
+@chat: 
+@x: 
+@y: 
+@w: 
+@h: 
+
+
+<!-- ##### FUNCTION empathy_chat_set_tp_chat ##### -->
+<para>
+
+</para>
+
+@chat: 
+@tp_chat: 
+
+
+<!-- ##### FUNCTION empathy_chat_get_id ##### -->
+<para>
+
+</para>
+
+@chat: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_chat_get_is_command ##### -->
+<para>
+
+</para>
+
+@str: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_chat_correct_word ##### -->
+<para>
+
+</para>
+
+@chat: 
+@start: 
+@end: 
+@new_word: 
+
+
+<!-- ##### FUNCTION empathy_chat_should_play_sound ##### -->
+<para>
+
+</para>
+
+@chat: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_chat_should_highlight_nick ##### -->
+<para>
+
+</para>
+
+@message: 
+@Returns: 
+
+

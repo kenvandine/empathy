@@ -1,0 +1,156 @@
+<!-- ##### SECTION Title ##### -->
+empathy-contact-list
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT EmpathyContactList ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SIGNAL EmpathyContactList::contact-added ##### -->
+<para>
+
+</para>
+
+@empathycontactlist: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL EmpathyContactList::contact-removed ##### -->
+<para>
+
+</para>
+
+@empathycontactlist: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL EmpathyContactList::local-pending ##### -->
+<para>
+
+</para>
+
+@empathycontactlist: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### STRUCT EmpathyContactListIface ##### -->
+<para>
+
+</para>
+
+@base_iface: 
+@setup: 
+@find: 
+@add: 
+@remove: 
+@get_members: 
+@get_local_pending: 
+@process_pending: 
+
+<!-- ##### STRUCT EmpathyContactListInfo ##### -->
+<para>
+
+</para>
+
+@contact: 
+@message: 
+
+<!-- ##### FUNCTION empathy_contact_list_info_new ##### -->
+<para>
+
+</para>
+
+@contact: 
+@message: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_contact_list_info_free ##### -->
+<para>
+
+</para>
+
+@info: 
+
+
+<!-- ##### FUNCTION empathy_contact_list_setup ##### -->
+<para>
+
+</para>
+
+@list: 
+
+
+<!-- ##### FUNCTION empathy_contact_list_find ##### -->
+<para>
+
+</para>
+
+@list: 
+@id: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_contact_list_add ##### -->
+<para>
+
+</para>
+
+@list: 
+@contact: 
+@message: 
+
+
+<!-- ##### FUNCTION empathy_contact_list_remove ##### -->
+<para>
+
+</para>
+
+@list: 
+@contact: 
+@message: 
+
+
+<!-- ##### FUNCTION empathy_contact_list_get_members ##### -->
+<para>
+
+</para>
+
+@list: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_contact_list_get_local_pending ##### -->
+<para>
+
+</para>
+
+@list: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_contact_list_process_pending ##### -->
+<para>
+
+</para>
+
+@list: 
+@contact: 
+@accept: 
+
+

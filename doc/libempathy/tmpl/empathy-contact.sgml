@@ -1,0 +1,335 @@
+<!-- ##### SECTION Title ##### -->
+EmpathyContact
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT EmpathyContact ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG EmpathyContact:account ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG EmpathyContact:avatar ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG EmpathyContact:groups ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG EmpathyContact:handle ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG EmpathyContact:id ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG EmpathyContact:is-user ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG EmpathyContact:name ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG EmpathyContact:presence ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG EmpathyContact:subscription ##### -->
+<para>
+
+</para>
+
+<!-- ##### ENUM EmpathySubscription ##### -->
+<para>
+
+</para>
+
+@EMPATHY_SUBSCRIPTION_NONE: 
+@EMPATHY_SUBSCRIPTION_TO: 
+@EMPATHY_SUBSCRIPTION_FROM: 
+@EMPATHY_SUBSCRIPTION_BOTH: 
+
+<!-- ##### FUNCTION empathy_contact_get_gtype ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_contact_new ##### -->
+<para>
+
+</para>
+
+@account: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_contact_new_full ##### -->
+<para>
+
+</para>
+
+@account: 
+@id: 
+@name: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_contact_get_id ##### -->
+<para>
+
+</para>
+
+@contact: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_contact_get_name ##### -->
+<para>
+
+</para>
+
+@contact: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_contact_get_avatar ##### -->
+<para>
+
+</para>
+
+@contact: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_contact_get_account ##### -->
+<para>
+
+</para>
+
+@contact: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_contact_get_presence ##### -->
+<para>
+
+</para>
+
+@contact: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_contact_get_groups ##### -->
+<para>
+
+</para>
+
+@contact: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_contact_get_subscription ##### -->
+<para>
+
+</para>
+
+@contact: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_contact_get_handle ##### -->
+<para>
+
+</para>
+
+@contact: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_contact_is_user ##### -->
+<para>
+
+</para>
+
+@contact: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_contact_set_id ##### -->
+<para>
+
+</para>
+
+@contact: 
+@id: 
+
+
+<!-- ##### FUNCTION empathy_contact_set_name ##### -->
+<para>
+
+</para>
+
+@contact: 
+@name: 
+
+
+<!-- ##### FUNCTION empathy_contact_set_avatar ##### -->
+<para>
+
+</para>
+
+@contact: 
+@avatar: 
+
+
+<!-- ##### FUNCTION empathy_contact_set_account ##### -->
+<para>
+
+</para>
+
+@contact: 
+@account: 
+
+
+<!-- ##### FUNCTION empathy_contact_set_presence ##### -->
+<para>
+
+</para>
+
+@contact: 
+@presence: 
+
+
+<!-- ##### FUNCTION empathy_contact_set_groups ##### -->
+<para>
+
+</para>
+
+@contact: 
+@categories: 
+
+
+<!-- ##### FUNCTION empathy_contact_set_subscription ##### -->
+<para>
+
+</para>
+
+@contact: 
+@subscription: 
+
+
+<!-- ##### FUNCTION empathy_contact_set_handle ##### -->
+<para>
+
+</para>
+
+@contact: 
+@handle: 
+
+
+<!-- ##### FUNCTION empathy_contact_set_is_user ##### -->
+<para>
+
+</para>
+
+@contact: 
+@is_user: 
+
+
+<!-- ##### FUNCTION empathy_contact_add_group ##### -->
+<para>
+
+</para>
+
+@contact: 
+@group: 
+
+
+<!-- ##### FUNCTION empathy_contact_remove_group ##### -->
+<para>
+
+</para>
+
+@contact: 
+@group: 
+
+
+<!-- ##### FUNCTION empathy_contact_is_online ##### -->
+<para>
+
+</para>
+
+@contact: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_contact_is_in_group ##### -->
+<para>
+
+</para>
+
+@contact: 
+@group: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_contact_get_status ##### -->
+<para>
+
+</para>
+
+@contact: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_contact_equal ##### -->
+<para>
+
+</para>
+
+@v1: 
+@v2: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_contact_hash ##### -->
+<para>
+
+</para>
+
+@key: 
+@Returns: 
+
+

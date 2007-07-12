@@ -1,0 +1,72 @@
+<!-- ##### SECTION Title ##### -->
+empathy-avatar
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### MACRO EMPATHY_TYPE_AVATAR ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### STRUCT EmpathyAvatar ##### -->
+<para>
+
+</para>
+
+@data: 
+@len: 
+@format: 
+@refcount: 
+
+<!-- ##### FUNCTION empathy_avatar_get_gtype ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_avatar_new ##### -->
+<para>
+
+</para>
+
+@avatar: 
+@len: 
+@format: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_avatar_ref ##### -->
+<para>
+
+</para>
+
+@avatar: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_avatar_unref ##### -->
+<para>
+
+</para>
+
+@avatar: 
+
+

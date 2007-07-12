@@ -1,0 +1,154 @@
+<!-- ##### SECTION Title ##### -->
+empathy-preferences
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### MACRO EMPATHY_PREFS_PATH ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO EMPATHY_PREFS_SOUNDS_FOR_MESSAGES ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO EMPATHY_PREFS_SOUNDS_WHEN_AWAY ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO EMPATHY_PREFS_SOUNDS_WHEN_BUSY ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO EMPATHY_PREFS_POPUPS_WHEN_AVAILABLE ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO EMPATHY_PREFS_CHAT_SHOW_SMILEYS ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO EMPATHY_PREFS_CHAT_THEME ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO EMPATHY_PREFS_CHAT_THEME_CHAT_ROOM ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO EMPATHY_PREFS_CHAT_SPELL_CHECKER_LANGUAGES ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO EMPATHY_PREFS_CHAT_SPELL_CHECKER_ENABLED ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO EMPATHY_PREFS_UI_SEPARATE_CHAT_WINDOWS ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO EMPATHY_PREFS_UI_MAIN_WINDOW_HIDDEN ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO EMPATHY_PREFS_UI_AVATAR_DIRECTORY ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO EMPATHY_PREFS_UI_SHOW_AVATARS ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO EMPATHY_PREFS_UI_COMPACT_CONTACT_LIST ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO EMPATHY_PREFS_CONTACTS_SHOW_OFFLINE ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO EMPATHY_PREFS_CONTACTS_SORT_CRITERIUM ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO EMPATHY_PREFS_HINTS_CLOSE_MAIN_WINDOW ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### FUNCTION empathy_preferences_show ##### -->
+<para>
+
+</para>
+
+@parent: 
+@Returns: 
+
+

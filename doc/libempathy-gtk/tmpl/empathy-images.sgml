@@ -1,0 +1,96 @@
+<!-- ##### SECTION Title ##### -->
+empathy-images
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### MACRO EMPATHY_IMAGE_OFFLINE ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO EMPATHY_IMAGE_AVAILABLE ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO EMPATHY_IMAGE_BUSY ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO EMPATHY_IMAGE_AWAY ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO EMPATHY_IMAGE_EXT_AWAY ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO EMPATHY_IMAGE_PENDING ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO EMPATHY_IMAGE_MESSAGE ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO EMPATHY_IMAGE_NEW_MESSAGE ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO EMPATHY_IMAGE_TYPING ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO EMPATHY_IMAGE_CONTACT_INFORMATION ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### MACRO EMPATHY_IMAGE_GROUP_MESSAGE ##### -->
+<para>
+
+</para>
+
+
+

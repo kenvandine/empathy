@@ -1,0 +1,29 @@
+<!-- ##### SECTION Title ##### -->
+empathy-account-widget-generic
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### FUNCTION empathy_account_widget_generic_new ##### -->
+<para>
+
+</para>
+
+@account: 
+@label_name: 
+@Returns: 
+
+

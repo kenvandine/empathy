@@ -1,0 +1,41 @@
+<!-- ##### SECTION Title ##### -->
+EmpathyPresenceChooser
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT EmpathyPresenceChooser ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION empathy_presence_chooser_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_presence_chooser_create_menu ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+

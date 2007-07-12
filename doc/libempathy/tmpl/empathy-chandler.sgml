@@ -1,0 +1,44 @@
+<!-- ##### SECTION Title ##### -->
+EmpathyChandler
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT EmpathyChandler ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SIGNAL EmpathyChandler::new-channel ##### -->
+<para>
+
+</para>
+
+@empathychandler: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### FUNCTION empathy_chandler_new ##### -->
+<para>
+
+</para>
+
+@bus_name: 
+@object_path: 
+@Returns: 
+
+

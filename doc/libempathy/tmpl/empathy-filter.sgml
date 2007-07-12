@@ -1,0 +1,72 @@
+<!-- ##### SECTION Title ##### -->
+EmpathyFilter
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT EmpathyFilterPriv ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### STRUCT EmpathyFilter ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SIGNAL EmpathyFilter::new-channel ##### -->
+<para>
+
+</para>
+
+@empathyfilter: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### SIGNAL EmpathyFilter::process ##### -->
+<para>
+
+</para>
+
+@empathyfilter: the object which received the signal.
+@arg1: 
+@arg2: 
+
+<!-- ##### FUNCTION empathy_filter_new ##### -->
+<para>
+
+</para>
+
+@bus_name: 
+@object_path: 
+@channel_type: 
+@priority: 
+@flags: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_filter_process ##### -->
+<para>
+
+</para>
+
+@filter: 
+@tp_chan: 
+@process: 
+
+

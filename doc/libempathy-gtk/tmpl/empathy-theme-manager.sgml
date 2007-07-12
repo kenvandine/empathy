@@ -1,0 +1,77 @@
+<!-- ##### SECTION Title ##### -->
+EmpathyThemeManager
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT EmpathyThemeManager ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SIGNAL EmpathyThemeManager::theme-changed ##### -->
+<para>
+
+</para>
+
+@empathythememanager: the object which received the signal.
+
+<!-- ##### FUNCTION empathy_theme_manager_get ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_theme_manager_get_themes ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_theme_manager_apply ##### -->
+<para>
+
+</para>
+
+@manager: 
+@view: 
+@theme: 
+
+
+<!-- ##### FUNCTION empathy_theme_manager_apply_saved ##### -->
+<para>
+
+</para>
+
+@manager: 
+@view: 
+
+
+<!-- ##### FUNCTION empathy_theme_manager_update_show_avatars ##### -->
+<para>
+
+</para>
+
+@manager: 
+@view: 
+@show: 
+
+

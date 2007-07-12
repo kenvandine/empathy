@@ -1,0 +1,157 @@
+<!-- ##### SECTION Title ##### -->
+EmpathyLogManager
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT EmpathyLogManagerPriv ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### STRUCT EmpathyLogSearchHit ##### -->
+<para>
+
+</para>
+
+@account: 
+@chat_id: 
+@is_chatroom: 
+@filename: 
+@date: 
+
+<!-- ##### STRUCT EmpathyLogManager ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### FUNCTION empathy_log_manager_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_log_manager_add_message ##### -->
+<para>
+
+</para>
+
+@manager: 
+@chat_id: 
+@chatroom: 
+@message: 
+
+
+<!-- ##### FUNCTION empathy_log_manager_exists ##### -->
+<para>
+
+</para>
+
+@manager: 
+@account: 
+@chat_id: 
+@chatroom: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_log_manager_get_dates ##### -->
+<para>
+
+</para>
+
+@manager: 
+@account: 
+@chat_id: 
+@chatroom: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_log_manager_get_messages_for_file ##### -->
+<para>
+
+</para>
+
+@manager: 
+@filename: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_log_manager_get_messages_for_date ##### -->
+<para>
+
+</para>
+
+@manager: 
+@account: 
+@chat_id: 
+@chatroom: 
+@date: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_log_manager_get_last_messages ##### -->
+<para>
+
+</para>
+
+@manager: 
+@account: 
+@chat_id: 
+@chatroom: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_log_manager_get_chats ##### -->
+<para>
+
+</para>
+
+@manager: 
+@account: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_log_manager_search_new ##### -->
+<para>
+
+</para>
+
+@manager: 
+@text: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_log_manager_search_free ##### -->
+<para>
+
+</para>
+
+@hits: 
+
+
+<!-- ##### FUNCTION empathy_log_manager_get_date_readable ##### -->
+<para>
+
+</para>
+
+@date: 
+@Returns: 
+
+

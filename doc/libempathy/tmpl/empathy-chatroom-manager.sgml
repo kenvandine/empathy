@@ -1,0 +1,113 @@
+<!-- ##### SECTION Title ##### -->
+EmpathyChatroomManager
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT EmpathyChatroomManagerPriv ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### STRUCT EmpathyChatroomManager ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SIGNAL EmpathyChatroomManager::chatroom-added ##### -->
+<para>
+
+</para>
+
+@empathychatroommanager: the object which received the signal.
+@arg1: 
+
+<!-- ##### SIGNAL EmpathyChatroomManager::chatroom-removed ##### -->
+<para>
+
+</para>
+
+@empathychatroommanager: the object which received the signal.
+@arg1: 
+
+<!-- ##### FUNCTION empathy_chatroom_manager_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_chatroom_manager_add ##### -->
+<para>
+
+</para>
+
+@manager: 
+@chatroom: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_chatroom_manager_remove ##### -->
+<para>
+
+</para>
+
+@manager: 
+@chatroom: 
+
+
+<!-- ##### FUNCTION empathy_chatroom_manager_find ##### -->
+<para>
+
+</para>
+
+@manager: 
+@account: 
+@room: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_chatroom_manager_get_chatrooms ##### -->
+<para>
+
+</para>
+
+@manager: 
+@account: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_chatroom_manager_get_count ##### -->
+<para>
+
+</para>
+
+@manager: 
+@account: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_chatroom_manager_store ##### -->
+<para>
+
+</para>
+
+@manager: 
+
+

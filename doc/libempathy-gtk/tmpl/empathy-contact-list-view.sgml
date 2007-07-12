@@ -1,0 +1,123 @@
+<!-- ##### SECTION Title ##### -->
+EmpathyContactListView
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT EmpathyContactListViewPriv ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### STRUCT EmpathyContactListView ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### SIGNAL EmpathyContactListView::drag-contact-received ##### -->
+<para>
+
+</para>
+
+@empathycontactlistview: the object which received the signal.
+@arg1: 
+@arg2: 
+@arg3: 
+
+<!-- ##### ARG EmpathyContactListView:filter ##### -->
+<para>
+
+</para>
+
+<!-- ##### USER_FUNCTION EmpathyContactListViewDragReceivedFunc ##### -->
+<para>
+
+</para>
+
+@contact: 
+@action: 
+@old_group: 
+@new_group: 
+@user_data: 
+
+
+<!-- ##### FUNCTION empathy_contact_list_view_new ##### -->
+<para>
+
+</para>
+
+@store: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_contact_list_view_get_selected ##### -->
+<para>
+
+</para>
+
+@view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_contact_list_view_get_selected_group ##### -->
+<para>
+
+</para>
+
+@view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_contact_list_view_get_contact_menu ##### -->
+<para>
+
+</para>
+
+@view: 
+@contact: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_contact_list_view_get_group_menu ##### -->
+<para>
+
+</para>
+
+@view: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_contact_list_view_set_filter ##### -->
+<para>
+
+</para>
+
+@view: 
+@filter: 
+
+
+<!-- ##### FUNCTION empathy_contact_list_view_set_drag_received_func ##### -->
+<para>
+
+</para>
+
+@view: 
+@func: 
+@user_data: 
+
+

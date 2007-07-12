@@ -21,6 +21,8 @@ AM_GCONF_SOURCE_2
 
 IT_PROG_INTLTOOL([0.35.0])
 
+GTK_DOC_CHECK([1.3])
+
 GLIB_REQUIRED=2.12.0
 GTK_REQUIRED=2.10.0
 GCONF_REQUIRED=1.2.0
@@ -137,5 +139,8 @@ AC_OUTPUT([
   libempathy-gtk/Makefile
   libempathy-gtk/libempathy-gtk.pc
   src/Makefile
+  doc/Makefile \
+  doc/libempathy/Makefile \
+  doc/libempathy-gtk/Makefile \
 ])
 

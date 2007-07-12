@@ -1,0 +1,84 @@
+<!-- ##### SECTION Title ##### -->
+empathy-status-presets
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### FUNCTION empathy_status_presets_get_all ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### FUNCTION empathy_status_presets_get ##### -->
+<para>
+
+</para>
+
+@state: 
+@max_number: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_status_presets_set_last ##### -->
+<para>
+
+</para>
+
+@state: 
+@status: 
+
+
+<!-- ##### FUNCTION empathy_status_presets_reset ##### -->
+<para>
+
+</para>
+
+
+
+<!-- ##### FUNCTION empathy_status_presets_get_default_state ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_status_presets_get_default_status ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_status_presets_set_default ##### -->
+<para>
+
+</para>
+
+@state: 
+@status: 
+
+
+<!-- ##### FUNCTION empathy_status_presets_clear_default ##### -->
+<para>
+
+</para>
+
+
+

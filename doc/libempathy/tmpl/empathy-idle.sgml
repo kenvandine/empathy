@@ -1,0 +1,118 @@
+<!-- ##### SECTION Title ##### -->
+EmpathyIdle
+
+<!-- ##### SECTION Short_Description ##### -->
+
+
+<!-- ##### SECTION Long_Description ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION See_Also ##### -->
+<para>
+
+</para>
+
+<!-- ##### SECTION Stability_Level ##### -->
+
+
+<!-- ##### STRUCT EmpathyIdlePriv ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### STRUCT EmpathyIdle ##### -->
+<para>
+
+</para>
+
+
+<!-- ##### ARG EmpathyIdle:flash-state ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG EmpathyIdle:state ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG EmpathyIdle:status ##### -->
+<para>
+
+</para>
+
+<!-- ##### FUNCTION empathy_idle_new ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_idle_get_state ##### -->
+<para>
+
+</para>
+
+@idle: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_idle_set_state ##### -->
+<para>
+
+</para>
+
+@idle: 
+@state: 
+
+
+<!-- ##### FUNCTION empathy_idle_get_status ##### -->
+<para>
+
+</para>
+
+@idle: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_idle_set_status ##### -->
+<para>
+
+</para>
+
+@idle: 
+@status: 
+
+
+<!-- ##### FUNCTION empathy_idle_get_flash_state ##### -->
+<para>
+
+</para>
+
+@idle: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_idle_set_flash_state ##### -->
+<para>
+
+</para>
+
+@idle: 
+@state: 
+
+
+<!-- ##### FUNCTION empathy_idle_set_presence ##### -->
+<para>
+
+</para>
+
+@idle: 
+@state: 
+@status: 
+
+
