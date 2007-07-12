@@ -535,6 +535,7 @@ tp_contact_list_process_pending (EmpathyContactList *list,
 	handle = empathy_contact_get_handle (contact);
 	if (accept) {
 		empathy_tp_group_add_member (priv->publish, handle, NULL);
+		empathy_tp_group_add_member (priv->subscribe, handle, NULL);
 	} else {
 		empathy_tp_group_remove_member (priv->publish, handle, NULL);
 	}
@@ -1244,14 +1245,25 @@ tp_contact_list_pending_cb (EmpathyTpGroup       *group,
 			      list_type);
 
 		if (list_type == TP_CONTACT_LIST_TYPE_PUBLISH) {
-			EmpathyContactListInfo *info;
+			if (!g_list_find (priv->members, contact)) {
+				EmpathyContactListInfo *info;
 
-			info = empathy_contact_list_info_new (contact, message);
-			priv->local_pending = g_list_prepend (priv->local_pending,
-							      info);
+				info = empathy_contact_list_info_new (contact, message);
+				priv->local_pending = g_list_prepend (priv->local_pending,
+								      info);
 
-			g_signal_emit_by_name (list, "local-pending",
-					       contact, message);
+				g_signal_emit_by_name (list, "local-pending",
+						       contact, message);
+			} else {
+				guint handle;
+
+				/* That contact wants our presence and he is
+				 * in our roster. Accept to publish our presence
+				 * without asking the user. */
+				handle = empathy_contact_get_handle (contact);
+				empathy_tp_group_add_member (priv->publish,
+							     handle, "");
+			}
 		}
 		else if (list_type == TP_CONTACT_LIST_TYPE_SUBSCRIBE) {
 			if (!g_list_find (priv->members, contact)) {
