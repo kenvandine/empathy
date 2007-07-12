@@ -39,7 +39,7 @@ libempathy_gtk_la_SOURCES =             	\
 	empathy-new-chatroom-dialog.c		\
 	empathy-chatrooms-window.c		\
 	empathy-log-window.c			\
-	empathy-ui-utils.c                     \
+	empathy-ui-utils.c			\
 	empathy-account-widget-msn.c
 
 libempathy_gtk_la_LIBADD =			\
@@ -79,7 +79,8 @@ libempathy_gtk_HEADERS =			\
 	empathy-new-chatroom-dialog.h		\
 	empathy-chatrooms-window.h		\
 	empathy-log-window.h			\
-	empathy-ui-utils.h
+	empathy-ui-utils.h			\
+	empathy-account-widget-msn.h
 
 gladedir = $(datadir)/empathy
 glade_DATA = 					\

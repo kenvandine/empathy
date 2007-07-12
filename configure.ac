@@ -139,8 +139,8 @@ AC_OUTPUT([
   libempathy-gtk/Makefile
   libempathy-gtk/libempathy-gtk.pc
   src/Makefile
-  doc/Makefile \
-  doc/libempathy/Makefile \
-  doc/libempathy-gtk/Makefile \
+  doc/Makefile
+  doc/libempathy/Makefile
+  doc/libempathy-gtk/Makefile
 ])
 

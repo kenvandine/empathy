@@ -1,5 +1,14 @@
 2007-07-12 Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/Makefile.am: Fix missing header for
+	EmpathyAccountWidgetMSN.
+
+	* configure.ac: Fix useless "\".
+
+	* autogen.sh: run gtkdocize if needed.
+
+2007-07-12 Xavier Claessens  <xclaesse@gmail.com>
+
 	* configure.ac:
 	* doc/*:
 	* Makefile.am: Adding initial API documentation using gtk-doc.
