@@ -166,6 +166,7 @@ empathy_contact_information_dialog_show (EmpathyContact *contact,
 	dialog = gtk_dialog_new ();
 	gtk_dialog_set_has_separator (GTK_DIALOG (dialog), FALSE);
 	gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
+	gtk_window_set_title (GTK_WINDOW (dialog), _("Contact information"));
 
 	/* Close button */
 	button = gtk_button_new_with_label (GTK_STOCK_CLOSE);
@@ -237,6 +238,7 @@ empathy_new_contact_dialog_show (GtkWindow *parent)
 	dialog = gtk_dialog_new ();
 	gtk_dialog_set_has_separator (GTK_DIALOG (dialog), FALSE);
 	gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
+	gtk_window_set_title (GTK_WINDOW (dialog), _("New contact"));
 
 	/* Cancel button */
 	button = gtk_button_new_with_label (GTK_STOCK_CANCEL);

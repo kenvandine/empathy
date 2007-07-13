@@ -1,3 +1,19 @@
+2007-07-13 Xavier Claessens  <xclaesse@gmail.com>
+
+	* libempathy-gtk/empathy-new-chatroom-dialog.c:
+	* libempathy-gtk/empathy-new-chatroom-dialog.glade: Remove unused
+	nickname entry and use a GtkTable for room information. More work is
+	needed here.
+
+	* libempathy-gtk/empathy-contact-widget.glade: Change padding to 6.
+
+	* libempathy-gtk/empathy-contact-dialogs.c: Set a window title.
+
+	* libempathy-gtk/empathy-contact-widget.c: Fix alignment of widgets.
+
+	* libempathy/empathy-tp-contact-list.c: Add more debug msg for avatar
+	handling.
+
 2007-07-12 Xavier Claessens  <xclaesse@gmail.com>
 
 	* libempathy-gtk/Makefile.am: Fix missing header for

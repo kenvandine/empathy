@@ -1654,6 +1654,9 @@ tp_contact_list_start_avatar_requests (EmpathyTpContactList *list)
 
 	priv = GET_PRIV (list);
 
+	empathy_debug (DEBUG_DOMAIN, "Start avatar requests, queue size: %d",
+		       n_avatar_requests);
+
 	while (n_avatar_requests <  MAX_AVATAR_REQUESTS &&
 	       priv->avatar_requests_queue) {
 		data = g_slice_new (TpContactListAvatarRequestData);
@@ -1664,6 +1667,7 @@ tp_contact_list_start_avatar_requests (EmpathyTpContactList *list)
 		priv->avatar_requests_queue = g_list_remove (priv->avatar_requests_queue,
 							     priv->avatar_requests_queue->data);
 
+		empathy_debug (DEBUG_DOMAIN, "Calling RequestAvatar async");
 		tp_conn_iface_avatars_request_avatar_async (priv->avatars_iface,
 							    data->handle,
 							    (tp_conn_iface_avatars_request_avatar_reply)
@@ -1710,6 +1714,10 @@ tp_contact_list_request_avatar_cb (DBusGProxy                     *proxy,
 			      error ? error->message : "No error given");
 	} else {
 		EmpathyAvatar *avatar;
+
+		empathy_debug (DEBUG_DOMAIN, "Avatar received for %s (%d)",
+			       empathy_contact_get_id (contact),
+			       data->handle);
 
 		avatar = empathy_avatar_new (avatar_data->data,
 					    avatar_data->len,

@@ -290,6 +290,7 @@ contact_widget_contact_setup (EmpathyContactWidget *information)
 				   information->widget_account,
 				   1, 2, 0, 1);
 	gtk_widget_show (information->widget_account);
+	gtk_misc_set_alignment (GTK_MISC (information->widget_account), 0, 0.5);
 
 	/* Setup id label/entry */
 	if (information->can_change_contact) {
@@ -305,6 +306,7 @@ contact_widget_contact_setup (EmpathyContactWidget *information)
 				   information->widget_id,
 				   1, 2, 1, 2);
 	gtk_widget_show (information->widget_id);
+	gtk_misc_set_alignment (GTK_MISC (information->widget_id), 0, 0.5);
 
 	/* Setup alias label/entry */
 	if (information->editable) {
@@ -320,6 +322,7 @@ contact_widget_contact_setup (EmpathyContactWidget *information)
 				   information->widget_alias,
 				   1, 2, 2, 3);
 	gtk_widget_show (information->widget_alias);
+	gtk_misc_set_alignment (GTK_MISC (information->widget_alias), 0, 0.5);
 }
 
 static void

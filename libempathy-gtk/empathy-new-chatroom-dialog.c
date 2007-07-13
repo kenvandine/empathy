@@ -41,45 +41,38 @@
 
 #include "empathy-new-chatroom-dialog.h"
 #include "empathy-account-chooser.h"
-//#include "empathy-chatrooms-window.h"
 #include "empathy-ui-utils.h"
 #include "ephy-spinner.h"
 
 #define DEBUG_DOMAIN "NewChatroomDialog"
 
 typedef struct {
-	GtkWidget        *window;
+	GtkWidget    *window;
 
-	GtkWidget        *vbox_widgets;
+	GtkWidget    *vbox_widgets;
+	GtkWidget    *table_info;
 
-	GtkWidget        *hbox_account;
-	GtkWidget        *label_account;
-	GtkWidget        *account_chooser;
+	GtkWidget    *label_account;
+	GtkWidget    *account_chooser;
 
-	GtkWidget        *hbox_server;
-	GtkWidget        *label_server;
-	GtkWidget        *entry_server;
-	GtkWidget        *togglebutton_refresh;
+	GtkWidget    *label_server;
+	GtkWidget    *entry_server;
+	GtkWidget    *togglebutton_refresh;
 	
-	GtkWidget        *hbox_room;
-	GtkWidget        *label_room;
-	GtkWidget        *entry_room;
+	GtkWidget    *label_room;
+	GtkWidget    *entry_room;
 
-	GtkWidget        *hbox_nick;
-	GtkWidget        *label_nick;
-	GtkWidget        *entry_nick;
+	GtkWidget    *vbox_browse;
+	GtkWidget    *image_status;
+	GtkWidget    *label_status;
+	GtkWidget    *hbox_status;
+	GtkWidget    *throbber;
+	GtkWidget    *treeview;
+	GtkTreeModel *model;
+	GtkTreeModel *filter;
 
-	GtkWidget        *vbox_browse;
-	GtkWidget        *image_status;
-	GtkWidget        *label_status;
-	GtkWidget        *hbox_status;
-	GtkWidget        *throbber;
-	GtkWidget        *treeview;
-	GtkTreeModel     *model;
-	GtkTreeModel     *filter;
-
-	GtkWidget        *button_join;
-	GtkWidget        *button_close;
+	GtkWidget    *button_join;
+	GtkWidget    *button_close;
 } EmpathyNewChatroomDialog;
 
 typedef struct {
@@ -103,7 +96,6 @@ static void     new_chatroom_dialog_destroy_cb                      (GtkWidget  
 								     EmpathyNewChatroomDialog *dialog);
 static void     new_chatroom_dialog_model_setup                     (EmpathyNewChatroomDialog *dialog);
 static void     new_chatroom_dialog_model_add_columns               (EmpathyNewChatroomDialog *dialog);
-static void     new_chatroom_dialog_update_buttons                  (EmpathyNewChatroomDialog *dialog);
 static void     new_chatroom_dialog_update_widgets                  (EmpathyNewChatroomDialog *dialog);
 static void     new_chatroom_dialog_account_changed_cb              (GtkComboBox             *combobox,
 								     EmpathyNewChatroomDialog *dialog);
@@ -143,10 +135,8 @@ void
 empathy_new_chatroom_dialog_show (GtkWindow *parent)
 {
 	EmpathyNewChatroomDialog *dialog;
-	GladeXML                *glade;
-	GList                   *accounts;
-	gint                     account_num;
-	GtkSizeGroup            *size_group;
+	GladeXML                 *glade;
+	GtkSizeGroup             *size_group;
 
 	if (dialog_p) {
 		gtk_window_present (GTK_WINDOW (dialog_p->window));
@@ -159,18 +149,12 @@ empathy_new_chatroom_dialog_show (GtkWindow *parent)
 				       "new_chatroom_dialog",
 				       NULL,
 				       "new_chatroom_dialog", &dialog->window,
-				       "hbox_account", &dialog->hbox_account,
+				       "table_info", &dialog->table_info,
 				       "label_account", &dialog->label_account,
-				       "vbox_widgets", &dialog->vbox_widgets,
 				       "label_server", &dialog->label_server,
 				       "label_room", &dialog->label_room,
-				       "label_nick", &dialog->label_nick,
-				       "hbox_server", &dialog->hbox_server,
-				       "hbox_room", &dialog->hbox_room,
-				       "hbox_nick", &dialog->hbox_nick,
 				       "entry_server", &dialog->entry_server,
 				       "entry_room", &dialog->entry_room,
-				       "entry_nick", &dialog->entry_nick,
 				       "togglebutton_refresh", &dialog->togglebutton_refresh,
 				       "vbox_browse", &dialog->vbox_browse,
 				       "image_status", &dialog->image_status,
@@ -184,7 +168,6 @@ empathy_new_chatroom_dialog_show (GtkWindow *parent)
 			      dialog,
 			      "new_chatroom_dialog", "response", new_chatroom_dialog_response_cb,
 			      "new_chatroom_dialog", "destroy", new_chatroom_dialog_destroy_cb,
-			      "entry_nick", "changed", new_chatroom_dialog_entry_changed_cb,
 			      "entry_server", "changed", new_chatroom_dialog_entry_changed_cb,
 			      "entry_server", "activate", new_chatroom_dialog_entry_server_activate_cb,
 			      "entry_room", "changed", new_chatroom_dialog_entry_changed_cb,
@@ -201,34 +184,19 @@ empathy_new_chatroom_dialog_show (GtkWindow *parent)
 	gtk_size_group_add_widget (size_group, dialog->label_account);
 	gtk_size_group_add_widget (size_group, dialog->label_server);
 	gtk_size_group_add_widget (size_group, dialog->label_room);
-	gtk_size_group_add_widget (size_group, dialog->label_nick);
 
 	g_object_unref (size_group);
 
 	/* Account chooser for custom */
 	dialog->account_chooser = empathy_account_chooser_new ();
-	gtk_box_pack_start (GTK_BOX (dialog->hbox_account),
-			    dialog->account_chooser,
-			    TRUE, TRUE, 0);
+	gtk_table_attach_defaults (GTK_TABLE (dialog->table_info),
+				   dialog->account_chooser,
+				   1, 3, 0, 1);
 	gtk_widget_show (dialog->account_chooser);
 
 	g_signal_connect (GTK_COMBO_BOX (dialog->account_chooser), "changed",
 			  G_CALLBACK (new_chatroom_dialog_account_changed_cb),
 			  dialog);
-
-	/* Populate */
-	accounts = mc_accounts_list ();
-	account_num = g_list_length (accounts);
-
-	g_list_foreach (accounts, (GFunc) g_object_unref, NULL);
-	g_list_free (accounts);
-
-	if (account_num > 1) {
-		gtk_widget_show (dialog->hbox_account);
-	} else {
-		/* Show no accounts combo box */
-		gtk_widget_hide (dialog->hbox_account);
-	}
 
 	/* Add throbber */
 	dialog->throbber = ephy_spinner_new ();
@@ -358,96 +326,41 @@ new_chatroom_dialog_model_add_columns (EmpathyNewChatroomDialog *dialog)
 }
 
 static void
-new_chatroom_dialog_update_buttons (EmpathyNewChatroomDialog *dialog)
-{
-	GtkButton            *button;
-	GtkWidget            *image;
-	GtkTreeView          *view;
-	GtkTreeModel         *model;
-	guint                 items;
-	const gchar          *room;
-
-	/* Sort out Join button. */
-	button = GTK_BUTTON (dialog->button_join);
-	
-	image = gtk_button_get_image (button);
-	if (!image) {
-		image = gtk_image_new ();
-		gtk_button_set_image (button, image);
-	}
-	//gtk_button_set_use_stock (button, FALSE);
-
-	room = gtk_entry_get_text (GTK_ENTRY (dialog->entry_room));
-
-	/* Collect necessary information first. */
-	view = GTK_TREE_VIEW (dialog->treeview);
-	model = gtk_tree_view_get_model (view);
-	items = gtk_tree_model_iter_n_children (model, NULL);
-		
-	if (items < 1 && !G_STR_EMPTY (room)) {
-		gtk_button_set_label (button, _("Create"));
-		gtk_image_set_from_stock (GTK_IMAGE (image),
-					  GTK_STOCK_NEW,
-					  GTK_ICON_SIZE_BUTTON);
-	} else {
-		gtk_button_set_label (button, _("Join"));
-		gtk_image_set_from_stock (GTK_IMAGE (image),
-					  GTK_STOCK_EXECUTE,
-					  GTK_ICON_SIZE_BUTTON);
-	}
-
-	gtk_widget_set_sensitive (dialog->button_join, !G_STR_EMPTY (room));
-}
-
-static void
 new_chatroom_dialog_update_widgets (EmpathyNewChatroomDialog *dialog)
 {
 	EmpathyAccountChooser *account_chooser;
-	McAccount            *account;
-	McProfile            *profile;
-	const gchar          *protocol;
+	McAccount             *account;
+	McProfile             *profile;
+	const gchar           *protocol;
+	const gchar           *room;
 	
 	account_chooser = EMPATHY_ACCOUNT_CHOOSER (dialog->account_chooser);
 	account = empathy_account_chooser_get_account (account_chooser);
 	profile = mc_account_get_profile (account);
 	protocol = mc_profile_get_protocol_name (profile);
 
+	gtk_entry_set_text (GTK_ENTRY (dialog->entry_server), "");
+
 	/* hardcode here known protocols */
 	if (strcmp (protocol, "jabber") == 0) {
-		const gchar *server;
-
-		server = mc_profile_get_default_account_domain (profile);
-		if (server) {
-			gchar *conference_server;
-
-			conference_server = g_strconcat ("conference.",
-							 server, NULL);
-			gtk_entry_set_text (GTK_ENTRY (dialog->entry_server),
-						       conference_server);
-			g_free (conference_server);
-		}
-
-		gtk_widget_show (dialog->hbox_server);
-		gtk_widget_show (dialog->hbox_nick);
+		gtk_widget_set_sensitive (dialog->entry_server, TRUE);
 		gtk_widget_show (dialog->vbox_browse);
 
 	}
 	else if (strcmp (protocol, "salut") == 0) {
-		gtk_widget_hide (dialog->hbox_server);
-		gtk_widget_show (dialog->hbox_nick);
+		gtk_widget_set_sensitive (dialog->entry_server, FALSE);
 		gtk_widget_show (dialog->vbox_browse);		
 	}
 	else if (strcmp (protocol, "irc") == 0) {
-		gtk_widget_hide (dialog->hbox_server);
-		gtk_widget_hide (dialog->hbox_nick);
+		gtk_widget_set_sensitive (dialog->entry_server, FALSE);
 		gtk_widget_show (dialog->vbox_browse);		
 	} else {
-		gtk_widget_hide (dialog->hbox_server);
-		gtk_widget_hide (dialog->hbox_nick);
-		gtk_widget_hide (dialog->vbox_browse);
+		gtk_widget_set_sensitive (dialog->entry_server, TRUE);
+		gtk_widget_show (dialog->vbox_browse);
 	}
 
-	new_chatroom_dialog_update_buttons (dialog);
+	room = gtk_entry_get_text (GTK_ENTRY (dialog->entry_room));
+	gtk_widget_set_sensitive (dialog->button_join, !G_STR_EMPTY (room));
 
 	/* Final set up of the dialog */
 	gtk_widget_grab_focus (dialog->entry_room);
@@ -576,7 +489,6 @@ new_chatroom_dialog_model_row_inserted_cb (GtkTreeModel            *model,
 					   GtkTreeIter             *iter,
 					   EmpathyNewChatroomDialog *dialog)
 {
-	new_chatroom_dialog_update_buttons (dialog);
 }
 
 static void
@@ -584,14 +496,12 @@ new_chatroom_dialog_model_row_deleted_cb (GtkTreeModel            *model,
 					  GtkTreePath             *path,
 					  EmpathyNewChatroomDialog *dialog)
 {
-	new_chatroom_dialog_update_buttons (dialog);
 }
 
 static void
 new_chatroom_dialog_model_selection_changed (GtkTreeSelection      *selection,
 					     EmpathyNewChatroomDialog *dialog)
 {
-	new_chatroom_dialog_update_buttons (dialog);
 }
 
 static void
@@ -615,9 +525,8 @@ new_chatroom_dialog_join (EmpathyNewChatroomDialog *dialog)
 	}
 
 	room = gtk_entry_get_text (GTK_ENTRY (dialog->entry_room));
-	if (GTK_WIDGET_VISIBLE (dialog->hbox_server)) {
-		server = gtk_entry_get_text (GTK_ENTRY (dialog->entry_server));
-	}
+	server = gtk_entry_get_text (GTK_ENTRY (dialog->entry_server));
+
 	account_chooser = EMPATHY_ACCOUNT_CHOOSER (dialog->account_chooser);
 	account = empathy_account_chooser_get_account (account_chooser);
 
@@ -641,14 +550,16 @@ new_chatroom_dialog_join (EmpathyNewChatroomDialog *dialog)
 }
 
 static void
-new_chatroom_dialog_entry_changed_cb (GtkWidget               *entry,
+new_chatroom_dialog_entry_changed_cb (GtkWidget                *entry,
 				      EmpathyNewChatroomDialog *dialog)
 {
 	if (entry == dialog->entry_room) {
-		gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (dialog->filter));
-	} 
+		const gchar *room;
 
-	new_chatroom_dialog_update_buttons (dialog);
+		room = gtk_entry_get_text (GTK_ENTRY (dialog->entry_room));
+		gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (dialog->filter));
+		gtk_widget_set_sensitive (dialog->button_join, !G_STR_EMPTY (room));
+	}
 }
 
 static void
