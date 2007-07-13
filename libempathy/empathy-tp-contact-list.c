@@ -63,8 +63,6 @@ struct _EmpathyTpContactListPriv {
 	DBusGProxy     *aliasing_iface;
 	DBusGProxy     *avatars_iface;
 	DBusGProxy     *presence_iface;
-
-	GList          *avatar_requests_queue;
 };
 
 typedef enum {
@@ -180,7 +178,7 @@ static void               tp_contact_list_get_info                 (EmpathyTpCon
 								    GArray                          *handles);
 static void               tp_contact_list_request_avatar           (EmpathyTpContactList            *list,
 								    guint                            handle);
-static void               tp_contact_list_start_avatar_requests    (EmpathyTpContactList            *list);
+static void               tp_contact_list_start_avatar_requests    (void);
 static void               tp_contact_list_avatar_update_cb         (DBusGProxy                      *proxy,
 								    guint                            handle,
 								    gchar                           *new_token,
@@ -218,8 +216,9 @@ enum {
 	LAST_SIGNAL
 };
 
-static guint signals[LAST_SIGNAL];
-static guint n_avatar_requests = 0;
+static guint  signals[LAST_SIGNAL];
+GList        *avatar_requests_queue = NULL;
+guint         n_avatar_requests = 0;
 
 G_DEFINE_TYPE_WITH_CODE (EmpathyTpContactList, empathy_tp_contact_list, G_TYPE_OBJECT,
 			 G_IMPLEMENT_INTERFACE (EMPATHY_TYPE_CONTACT_LIST,
@@ -1634,38 +1633,37 @@ static void
 tp_contact_list_request_avatar (EmpathyTpContactList *list,
 				guint                 handle)
 {
-	EmpathyTpContactListPriv *priv;
+	EmpathyTpContactListPriv       *priv;
+	TpContactListAvatarRequestData *data;
 
 	priv = GET_PRIV (list);
 	
 	/* We queue avatar requests to not send too many dbus async
 	 * calls at once. If we don't we reach the dbus's limit of
 	 * pending calls */
-	priv->avatar_requests_queue = g_list_append (priv->avatar_requests_queue,
-						     GUINT_TO_POINTER (handle));
-	tp_contact_list_start_avatar_requests (list);
+	data = g_slice_new (TpContactListAvatarRequestData);
+	data->list = g_object_ref (list);
+	data->handle = handle;
+	avatar_requests_queue = g_list_append (avatar_requests_queue, data);
+	tp_contact_list_start_avatar_requests ();
 }
 
 static void
-tp_contact_list_start_avatar_requests (EmpathyTpContactList *list)
+tp_contact_list_start_avatar_requests (void)
 {
-	EmpathyTpContactListPriv       *priv;
-	TpContactListAvatarRequestData *data;
-
-	priv = GET_PRIV (list);
-
-	empathy_debug (DEBUG_DOMAIN, "Start avatar requests, queue size: %d",
+	empathy_debug (DEBUG_DOMAIN, "Start avatar requests, pending calls: %d",
 		       n_avatar_requests);
 
-	while (n_avatar_requests <  MAX_AVATAR_REQUESTS &&
-	       priv->avatar_requests_queue) {
-		data = g_slice_new (TpContactListAvatarRequestData);
-		data->list = list;
-		data->handle = GPOINTER_TO_UINT (priv->avatar_requests_queue->data);
+	while (n_avatar_requests <  MAX_AVATAR_REQUESTS && avatar_requests_queue) {
+		EmpathyTpContactListPriv       *priv;
+		TpContactListAvatarRequestData *data;
+
+		data = avatar_requests_queue->data;
+		priv = GET_PRIV (data->list);
 
 		n_avatar_requests++;
-		priv->avatar_requests_queue = g_list_remove (priv->avatar_requests_queue,
-							     priv->avatar_requests_queue->data);
+		avatar_requests_queue = g_list_delete_link (avatar_requests_queue,
+							    avatar_requests_queue);
 
 		empathy_debug (DEBUG_DOMAIN, "Calling RequestAvatar async");
 		tp_conn_iface_avatars_request_avatar_async (priv->avatars_iface,
@@ -1729,9 +1727,10 @@ tp_contact_list_request_avatar_cb (DBusGProxy                     *proxy,
 	}
 
 	n_avatar_requests--;
-	tp_contact_list_start_avatar_requests (data->list);
+	tp_contact_list_start_avatar_requests ();
 
 	g_object_unref (contact);
+	g_object_unref (data->list);
 	g_slice_free (TpContactListAvatarRequestData, data);
 }
 

@@ -1,5 +1,9 @@
 2007-07-13 Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy/empathy-tp-contact-list.c: Fix avatar request queue.
+
+2007-07-13 Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/empathy-new-chatroom-dialog.c:
 	* libempathy-gtk/empathy-new-chatroom-dialog.glade: Remove unused
 	nickname entry and use a GtkTable for room information. More work is
