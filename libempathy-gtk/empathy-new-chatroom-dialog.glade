@@ -177,7 +177,7 @@
 	      </child>
 
 	      <child>
-		<widget class="GtkLabel" id="label80">
+		<widget class="GtkLabel" id="label_server">
 		  <property name="visible">True</property>
 		  <property name="label" translatable="yes">_Server:</property>
 		  <property name="use_underline">True</property>
