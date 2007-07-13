@@ -94,6 +94,9 @@ static void       status_icon_filter_new_channel  (EmpathyFilter          *filte
 						   TpConn                 *tp_conn,
 						   TpChan                 *tp_chan,
 						   EmpathyStatusIcon      *icon);
+static void       status_icon_message_received_cb (EmpathyTpChat          *tp_chat,
+						   EmpathyMessage         *message,
+						   EmpathyStatusIcon      *icon);
 static void       status_icon_idle_notify_cb      (EmpathyStatusIcon      *icon);
 static void       status_icon_update_tooltip      (EmpathyStatusIcon      *icon);
 static void       status_icon_set_from_state      (EmpathyStatusIcon      *icon);
@@ -252,10 +255,7 @@ status_icon_filter_new_channel (EmpathyFilter     *filter,
 	EmpathyStatusIconPriv *priv;
 	McAccount             *account;
 	EmpathyTpChat         *tp_chat;
-	EmpathyContact        *sender;
 	GList                 *messages;
-	gchar                 *msg;
-	StatusIconEvent       *event;
 
 	priv = GET_PRIV (icon);
 
@@ -263,29 +263,47 @@ status_icon_filter_new_channel (EmpathyFilter     *filter,
 
 	account = mission_control_get_account_for_connection (priv->mc, tp_conn, NULL);
 	tp_chat = empathy_tp_chat_new (account, tp_chan);
+	g_object_set_data (G_OBJECT (tp_chat), "filter", filter);
 	g_object_unref (account);
 
 	messages = empathy_tp_chat_get_pendings (tp_chat);
 	if (!messages) {
-		empathy_debug (DEBUG_DOMAIN, "There is no message pending, "
-					     "don't dispatch the channel");
-		empathy_filter_process (filter, tp_chan, FALSE);
-		g_object_unref (tp_chat);
+		empathy_debug (DEBUG_DOMAIN, "No pending msg, waiting...");
+		g_signal_connect (tp_chat, "message-received",
+				  G_CALLBACK (status_icon_message_received_cb),
+				  icon);
 		return;
 	}
 
-	sender = empathy_message_get_sender (messages->data);
-	msg = g_strdup_printf (_("New message from %s:\n%s"),
-			       empathy_contact_get_name (sender),
-			       empathy_message_get_body (messages->data));
-
-	g_object_set_data (G_OBJECT (tp_chat), "filter", filter);
-	event = status_icon_event_new (icon, EMPATHY_IMAGE_NEW_MESSAGE, msg);
-	event->func = status_icon_event_msg_cb;
-	event->user_data = tp_chat;
+	status_icon_message_received_cb (tp_chat, messages->data, icon);
 
 	g_list_foreach (messages, (GFunc) g_object_unref, NULL);
 	g_list_free (messages);
+}
+
+static void
+status_icon_message_received_cb (EmpathyTpChat     *tp_chat,
+				 EmpathyMessage    *message,
+				 EmpathyStatusIcon *icon)
+{
+	EmpathyContact  *sender;
+	gchar           *msg;
+	StatusIconEvent *event;
+
+	empathy_debug (DEBUG_DOMAIN, "Message received, add event");
+
+	g_signal_handlers_disconnect_by_func (tp_chat,
+			  		      status_icon_message_received_cb,
+			  		      icon);
+
+	sender = empathy_message_get_sender (message);
+	msg = g_strdup_printf (_("New message from %s:\n%s"),
+			       empathy_contact_get_name (sender),
+			       empathy_message_get_body (message));
+
+	event = status_icon_event_new (icon, EMPATHY_IMAGE_NEW_MESSAGE, msg);
+	event->func = status_icon_event_msg_cb;
+	event->user_data = tp_chat;
 }
 
 static void

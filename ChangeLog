@@ -1,5 +1,12 @@
 2007-07-13 Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/empathy-status-icon.c: If there is no pending msg
+	when a text channel should be filtered wait for the first message
+	instead of not dispatching the channel which may cause messages to be
+	lost.
+
+2007-07-13 Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy/empathy-tp-contact-list.c: Fix avatar request queue.
 
 2007-07-13 Xavier Claessens  <xclaesse@gmail.com>
