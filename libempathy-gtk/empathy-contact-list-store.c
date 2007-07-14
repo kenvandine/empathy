@@ -233,6 +233,7 @@ empathy_contact_list_store_init (EmpathyContactListStore *store)
 
 	priv = GET_PRIV (store);
 
+	priv->show_avatars = TRUE;
 	priv->inhibit_active = g_timeout_add (ACTIVE_USER_WAIT_TO_ENABLE_TIME,
 					      (GSourceFunc) contact_list_store_inibit_active_cb,
 					      store);

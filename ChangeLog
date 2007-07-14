@@ -1,3 +1,7 @@
+2007-07-14 Xavier Claessens  <xclaesse@gmail.com>
+
+	* libempathy-gtk/empathy-contact-list-store.c: Show avatars by default.
+
 2007-07-13 Xavier Claessens  <xclaesse@gmail.com>
 
 	* libempathy-gtk/empathy-status-icon.c: If there is no pending msg
