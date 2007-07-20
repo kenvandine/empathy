@@ -42,7 +42,7 @@
 #define EXT_AWAY_TIME (30*60)
 
 typedef enum {
-	NM_STATE_UNKNOWN = 0,
+	NM_STATE_UNKNOWN,
 	NM_STATE_ASLEEP,
 	NM_STATE_CONNECTING,
 	NM_STATE_CONNECTED,
@@ -180,16 +180,31 @@ empathy_idle_init (EmpathyIdle *idle)
 							    "org.freedesktop.NetworkManager");
 	}
 	if (priv->nm_proxy) {
+		guint nm_status;
+
 		dbus_g_proxy_add_signal (priv->nm_proxy, "StateChange",
 					 G_TYPE_UINT, G_TYPE_INVALID);
 		dbus_g_proxy_connect_signal (priv->nm_proxy, "StateChange",
 					     G_CALLBACK (idle_nm_state_change_cb),
 					     idle, NULL);
+		dbus_g_proxy_call (priv->nm_proxy, "state",
+				   &error,
+				   G_TYPE_INVALID,
+				   G_TYPE_UINT, &nm_status,
+				   G_TYPE_INVALID);
+		priv->nm_connected = (nm_status == NM_STATE_CONNECTED);
+
+		empathy_debug (DEBUG_DOMAIN, "NetworkManager connected: %s",
+			       priv->nm_connected ? "Yes" : "No");
+
+		if (!priv->nm_connected) {
+			priv->saved_state = priv->state;
+			priv->saved_status = g_strdup (priv->status);
+		}
 	} else {
 		empathy_debug (DEBUG_DOMAIN, "Failed to get nm proxy");
+		priv->nm_connected = TRUE;
 	}
-	/* FIXME: get value */
-	priv->nm_connected = TRUE;
 }
 
 static void
@@ -363,7 +378,13 @@ empathy_idle_set_presence (EmpathyIdle *idle,
 
 	priv = GET_PRIV (idle);
 
+	empathy_debug (DEBUG_DOMAIN, "Changing presence to %s (%d)",
+		       status, state);
+
 	if (!priv->nm_connected) {
+		empathy_debug (DEBUG_DOMAIN,
+			       "NM not connected, saving requested presence");
+
 		g_free (priv->saved_status);
 		priv->saved_state = state;
 		priv->saved_status = g_strdup (status);
@@ -475,8 +496,7 @@ idle_nm_state_change_cb (DBusGProxy  *proxy,
 
 	empathy_debug (DEBUG_DOMAIN, "New network state (%d)", state);
 
-	if (state != NM_STATE_CONNECTED &&
-	    priv->state > MC_PRESENCE_OFFLINE) {
+	if (state != NM_STATE_CONNECTED && priv->nm_connected) {
 		/* We are no more connected */
 		idle_ext_away_stop (idle);
 		g_free (priv->saved_status);
@@ -486,8 +506,7 @@ idle_nm_state_change_cb (DBusGProxy  *proxy,
 		empathy_idle_set_state (idle, MC_PRESENCE_OFFLINE);
 		priv->nm_connected = FALSE;
 	}
-	else if (priv->state <= MC_PRESENCE_OFFLINE &&
-		 state == NM_STATE_CONNECTED) {
+	else if (state == NM_STATE_CONNECTED && !priv->nm_connected) {
 		/* We are now connected */
 		priv->nm_connected = TRUE;
 		empathy_idle_set_presence (idle,

@@ -1,7 +1,8 @@
 SUBDIRS = po data libempathy libempathy-gtk src doc
 
 DISTCHECK_CONFIGURE_FLAGS =	\
-	--disable-scrollkeeper
+	--disable-scrollkeeper  \
+	--enable-gtk-doc
 
 INTLTOOL = 			\
 	intltool-extract.in 	\

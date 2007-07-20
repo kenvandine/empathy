@@ -24,6 +24,7 @@
 #include <config.h>
 
 #include <string.h>
+#include <glib/gi18n.h>
 
 #include <libtelepathy/tp-helpers.h>
 #include <libtelepathy/tp-conn.h>
@@ -51,6 +52,7 @@ struct _EmpathyTpContactListPriv {
 	MissionControl *mc;
 	EmpathyContact *user_contact;
 	gboolean        setup;
+	const gchar    *protocol_group;
 
 	EmpathyTpGroup *publish;
 	EmpathyTpGroup *subscribe;
@@ -322,6 +324,8 @@ empathy_tp_contact_list_new (McAccount *account)
 	EmpathyTpContactListPriv *priv;
 	EmpathyTpContactList     *list;
 	MissionControl           *mc;
+	McProfile                *profile;
+	const gchar              *protocol_name;
 	guint                     handle;
 	GError                   *error = NULL;
 
@@ -340,6 +344,16 @@ empathy_tp_contact_list_new (McAccount *account)
 	priv->tp_conn = mission_control_get_connection (mc, account, NULL);
 	priv->account = g_object_ref (account);
 	priv->mc = mc;
+
+	/* Check for protocols that does not support contact groups. We can
+	 * put all contacts into a special group in that case.
+	 * FIXME: Default group should be an information in the profile */
+	profile = mc_account_get_profile (account);
+	protocol_name = mc_profile_get_protocol_name (profile);
+	if (strcmp (protocol_name, "salut") == 0) {
+		priv->protocol_group = _("Local Network");
+	}
+	g_object_unref (profile);
 
 	g_signal_connect (priv->tp_conn, "destroy",
 			  G_CALLBACK (tp_contact_list_destroy_cb),
@@ -704,7 +718,7 @@ empathy_tp_contact_list_get_from_handles (EmpathyTpContactList *list,
 	/* Create contact objects */
 	for (i = 0, id = handles_names; *id && i < new_handles->len; id++, i++) {
 		EmpathyContact *contact;
-		guint          handle;
+		guint           handle;
 
 		handle = g_array_index (new_handles, guint, i);
 		contact = g_object_new (EMPATHY_TYPE_CONTACT,
@@ -712,6 +726,10 @@ empathy_tp_contact_list_get_from_handles (EmpathyTpContactList *list,
 					"id", *id,
 					"handle", handle,
 					NULL);
+
+		if (priv->protocol_group) {
+			empathy_contact_add_group (contact, priv->protocol_group);
+		}
 
 		if (!priv->presence_iface) {
 			EmpathyPresence *presence;
@@ -960,7 +978,7 @@ tp_contact_list_newchannel_cb (DBusGProxy           *proxy,
 	if (handle_type == TP_HANDLE_TYPE_LIST) {
 		TpContactListType list_type;
 
-		group = empathy_tp_group_new (new_chan, priv->tp_conn);
+		group = empathy_tp_group_new (priv->account, new_chan);
 
 		list_type = tp_contact_list_get_type (list, group);
 		if (list_type == TP_CONTACT_LIST_TYPE_UNKNOWN) {
@@ -1058,7 +1076,7 @@ tp_contact_list_newchannel_cb (DBusGProxy           *proxy,
 			return;
 		}
 
-		group = empathy_tp_group_new (new_chan, priv->tp_conn);
+		group = empathy_tp_group_new (priv->account, new_chan);
 
 		empathy_debug (DEBUG_DOMAIN, "New server-side group channel: %s",
 			      empathy_tp_group_get_name (group));
@@ -1472,7 +1490,7 @@ tp_contact_list_get_group (EmpathyTpContactList *list,
 				     list,
 				     NULL);
 
-	group = empathy_tp_group_new (group_channel, priv->tp_conn);
+	group = empathy_tp_group_new (priv->account, group_channel);
 	g_hash_table_insert (priv->groups, group_object_path, group);
 	g_signal_connect (group, "members-added",
 			  G_CALLBACK (tp_contact_list_group_members_added_cb),

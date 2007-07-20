@@ -1,3 +1,50 @@
+2007-07-20 Xavier Claessens  <xclaesse@gmail.com>
+
+	* libempathy/Makefile.am:
+	* libempathy/empathy-tp-roomlist.h:
+	* libempathy/empathy-tp-roomlist.c:
+	* libempathy-gtk/empathy-chatrooms-window.c:
+	* libempathy-gtk/empathy-new-chatroom-dialog.c: Initial room list
+	support. It does not works yet.
+
+	* libempathy-gtk/empathy-account-widget-generic.c: Add support for all
+	types of integer and float. Fixes bug #457740 (Jamey Hicks).
+
+	* libempathy/empathy-tp-chat.c:
+	* libempathy-gtk/empathy-chat.c: If there is an error sending a message,
+	show an error message to the user.
+
+	* libempathy-gtk/empathy-accounts-dialog.c: Fix a leak, profile should
+	be unrefed after mc_account_get_profile.
+
+	* libempathy/empathy-utils.c:
+	* libempathy/empathy-utils.h:
+	* libempathy/empathy-tp-chatroom.c:
+	* libempathy/empathy-tp-group.h:
+	* libempathy/empathy-tp-group.c:
+	* src/empathy.c: Rename empathy_get_channel_id() to
+	empathy_inspect_channel(). We now have empathy_inspect_handle().
+
+	* po/POTFILES.in:
+	* libempathy/empathy-tp-contact-list.c: Set all contacts from salut
+	protocol to the "Local Network" group.
+
+	* libempathy/empathy-idle.c: Fix NetworkManager support.
+
+	* libempathy/empathy-chatroom.h: Fix indentation.
+
+	* libempathy-gtk/empathy-status-icon.c:
+	* libempathy-gtk/empathy-ui-utils.c:
+	* libempathy-gtk/empathy-ui-utils.h:
+	 - Iconify main window to the status icon like in rhythmbox.
+	   Fixes bug #458106 (Jaap A. Haitsma).
+	 - Rounded avatars. Fixes bug #457992 (Raphael Slinckx)
+
+	* Makefile.am: Fix distcheck for gtkdoc (Vincent Untz)
+
+	* data/empathy.desktop.in.in: Change application description
+	(Jaap A. Haitsma).
+
 2007-07-14 Xavier Claessens  <xclaesse@gmail.com>
 
 	* libempathy-gtk/empathy-contact-list-store.c: Show avatars by default.

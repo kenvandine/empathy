@@ -38,7 +38,6 @@
 
 #include "empathy-account-chooser.h"
 #include "empathy-chatrooms-window.h"
-//#include "empathy-edit-chatroom-dialog.h"
 #include "empathy-new-chatroom-dialog.h"
 #include "empathy-ui-utils.h"
 

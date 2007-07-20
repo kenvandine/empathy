@@ -28,6 +28,7 @@
 
 #include "empathy-debug.h"
 #include "empathy-tp-group.h"
+#include "empathy-utils.h"
 #include "empathy-marshal.h"
 
 #define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), \
@@ -36,8 +37,8 @@
 #define DEBUG_DOMAIN "TpGroup"
 
 struct _EmpathyTpGroupPriv {
+	McAccount  *account;
 	DBusGProxy *group_iface;
-	TpConn     *tp_conn;
 	TpChan     *tp_chan;
 	gchar      *group_name;
 };
@@ -141,8 +142,8 @@ tp_group_finalize (GObject *object)
 		g_object_unref (priv->group_iface);
 	}
 
-	if (priv->tp_conn) {
-		g_object_unref (priv->tp_conn);
+	if (priv->account) {
+		g_object_unref (priv->account);
 	}
 
 	if (priv->tp_chan) {
@@ -155,15 +156,15 @@ tp_group_finalize (GObject *object)
 }
 
 EmpathyTpGroup *
-empathy_tp_group_new (TpChan *tp_chan,
-		      TpConn *tp_conn)
+empathy_tp_group_new (McAccount *account,
+		      TpChan    *tp_chan)
 {
 	EmpathyTpGroup     *group;
 	EmpathyTpGroupPriv *priv;
 	DBusGProxy         *group_iface;
 
 	g_return_val_if_fail (TELEPATHY_IS_CHAN (tp_chan), NULL);
-	g_return_val_if_fail (TELEPATHY_IS_CONN (tp_conn), NULL);
+	g_return_val_if_fail (MC_IS_ACCOUNT (account), NULL);
 
 	group_iface = tp_chan_get_interface (tp_chan,
 					     TELEPATHY_CHAN_IFACE_GROUP_QUARK);
@@ -172,7 +173,7 @@ empathy_tp_group_new (TpChan *tp_chan,
 	group = g_object_new (EMPATHY_TYPE_TP_GROUP, NULL);
 	priv = GET_PRIV (group);
 
-	priv->tp_conn = g_object_ref (tp_conn);
+	priv->account = g_object_ref (account);
 	priv->tp_chan = g_object_ref (tp_chan);
 	priv->group_iface = g_object_ref (group_iface);
 
@@ -393,11 +394,9 @@ tp_group_destroy_cb (DBusGProxy     *proxy,
 	priv = GET_PRIV (group);
 
 	g_object_unref (priv->group_iface);
-	g_object_unref (priv->tp_conn);
 	g_object_unref (priv->tp_chan);
 	priv->group_iface = NULL;
 	priv->tp_chan = NULL;
-	priv->tp_conn = NULL;
 }
 
 static void
@@ -437,12 +436,6 @@ tp_group_members_changed_cb (DBusGProxy     *group_iface,
 const gchar *
 empathy_tp_group_get_name (EmpathyTpGroup *group)
 {
-	TelepathyHandleType  handle_type;
-	guint                channel_handle;
-	GArray              *group_handles;
-	gchar              **group_names;
-	GError              *error = NULL;
-
 	EmpathyTpGroupPriv *priv;
 
 	g_return_val_if_fail (EMPATHY_IS_TP_GROUP (group), NULL);
@@ -454,35 +447,7 @@ empathy_tp_group_get_name (EmpathyTpGroup *group)
 		return priv->group_name;
 	}
 
-	if (!tp_chan_get_handle (DBUS_G_PROXY (priv->tp_chan),
-				 &handle_type,
-				 &channel_handle,
-				 &error)) {
-		empathy_debug (DEBUG_DOMAIN, 
-			      "Couldn't retreive channel handle for group: %s",
-			      error ? error->message : "No error given");
-		g_clear_error (&error);
-		return NULL;
-	}
-
-	group_handles = g_array_new (FALSE, FALSE, sizeof (guint));
-	g_array_append_val (group_handles, channel_handle);
-	if (!tp_conn_inspect_handles (DBUS_G_PROXY (priv->tp_conn),
-				      handle_type,
-				      group_handles,
-				      &group_names,
-				      &error)) {
-		empathy_debug (DEBUG_DOMAIN, 
-			      "Couldn't get group name: %s",
-			      error ? error->message : "No error given");
-		g_clear_error (&error);
-		g_array_free (group_handles, TRUE);
-		return NULL;
-	}
-
-	priv->group_name = *group_names;
-	g_array_free (group_handles, TRUE);
-	g_free (group_names);
+	priv->group_name = empathy_inspect_channel (priv->account, priv->tp_chan);
 
 	return priv->group_name;
 }

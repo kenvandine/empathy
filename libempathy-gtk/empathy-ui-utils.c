@@ -29,7 +29,8 @@
  */
 
 #include <string.h>
-
+#include <X11/Xatom.h>
+#include <gdk/gdkx.h>
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 #include <glade/glade.h>
@@ -395,41 +396,6 @@ empathy_icon_name_for_contact (EmpathyContact *contact)
 	return EMPATHY_IMAGE_OFFLINE;
 }
 
-GdkPixbuf *
-empathy_pixbuf_avatar_from_contact (EmpathyContact *contact)
-{
-	GdkPixbuf	*pixbuf;
-	GdkPixbufLoader	*loader;
-	EmpathyAvatar    *avatar;
-	GError          *error = NULL;
-
-	g_return_val_if_fail (EMPATHY_IS_CONTACT (contact), NULL);
-
-	avatar = empathy_contact_get_avatar (contact);
-	if (!avatar) {
-		return NULL;
-	}
-
-	loader = gdk_pixbuf_loader_new ();
-
-	if (!gdk_pixbuf_loader_write (loader, avatar->data, avatar->len, &error)) {
-		g_warning ("Couldn't write avatar image:%p with "
-			   "length:%" G_GSIZE_FORMAT " to pixbuf loader: %s",
-			   avatar->data, avatar->len, error->message);
-		g_error_free (error);
-		return NULL;
-	}
-
-	gdk_pixbuf_loader_close (loader, NULL);
-
-	pixbuf = gdk_pixbuf_loader_get_pixbuf (loader);
-
-	g_object_ref (pixbuf);
-	g_object_unref (loader);
-
-	return pixbuf;
-}
-
 static void
 pixbuf_from_avatar_size_prepared_cb (GdkPixbufLoader *loader,
 				     int              width,
@@ -471,6 +437,86 @@ pixbuf_from_avatar_size_prepared_cb (GdkPixbufLoader *loader,
 	gdk_pixbuf_loader_set_size (loader, width, height);
 }
 
+static void
+empathy_avatar_pixbuf_roundify (GdkPixbuf *pixbuf)
+{
+	gint width, height, rowstride;
+	guchar *pixels;
+
+	width = gdk_pixbuf_get_width (pixbuf);
+	height = gdk_pixbuf_get_height (pixbuf);
+	rowstride = gdk_pixbuf_get_rowstride (pixbuf);
+	pixels = gdk_pixbuf_get_pixels (pixbuf);
+
+	if (width < 6 || height < 6) {
+		return;
+	}
+
+	/* Top left */
+	pixels[3] = 0;
+	pixels[7] = 0x80;
+	pixels[11] = 0xC0;
+	pixels[rowstride + 3] = 0x80;
+	pixels[rowstride * 2 + 3] = 0xC0;
+
+	/* Top right */
+	pixels[width * 4 - 1] = 0;
+	pixels[width * 4 - 5] = 0x80;
+	pixels[width * 4 - 9] = 0xC0;
+	pixels[rowstride + (width * 4) - 1] = 0x80;
+	pixels[(2 * rowstride) + (width * 4) - 1] = 0xC0;
+
+	/* Bottom left */
+	pixels[(height - 1) * rowstride + 3] = 0;
+	pixels[(height - 1) * rowstride + 7] = 0x80;
+	pixels[(height - 1) * rowstride + 11] = 0xC0;
+	pixels[(height - 2) * rowstride + 3] = 0x80;
+	pixels[(height - 3) * rowstride + 3] = 0xC0;
+
+	/* Bottom right */
+	pixels[height * rowstride - 1] = 0;
+	pixels[(height - 1) * rowstride - 1] = 0x80;
+	pixels[(height - 2) * rowstride - 1] = 0xC0;
+	pixels[height * rowstride - 5] = 0x80;
+	pixels[height * rowstride - 9] = 0xC0;
+}
+
+static gboolean
+empathy_gdk_pixbuf_is_opaque (GdkPixbuf *pixbuf)
+{
+	gint width, height, rowstride, i;
+	guchar *pixels;
+	guchar *row;
+
+	width = gdk_pixbuf_get_width (pixbuf);
+	height = gdk_pixbuf_get_height (pixbuf);
+	rowstride = gdk_pixbuf_get_rowstride (pixbuf);
+	pixels = gdk_pixbuf_get_pixels (pixbuf);
+
+	row = pixels;
+	for (i = 3; i < rowstride; i+=4) {
+		if (row[i] < 0xfe) {
+			return FALSE;
+		}
+	}
+
+	for (i = 1; i < height - 1; i++) {
+		row = pixels + (i*rowstride);
+		if (row[3] < 0xfe || row[rowstride-1] < 0xfe) {
+			return FALSE;
+		}
+	}
+
+	row = pixels + ((height-1) * rowstride);
+	for (i = 3; i < rowstride; i+=4) {
+		if (row[i] < 0xfe) {
+			return FALSE;
+		}
+	}
+
+	return TRUE;
+}
+
 GdkPixbuf *
 empathy_pixbuf_from_avatar_scaled (EmpathyAvatar *avatar,
 				  gint          width,
@@ -506,8 +552,26 @@ empathy_pixbuf_from_avatar_scaled (EmpathyAvatar *avatar,
 	gdk_pixbuf_loader_close (loader, NULL);
 
 	pixbuf = gdk_pixbuf_loader_get_pixbuf (loader);
+	if (!gdk_pixbuf_get_has_alpha (pixbuf)) {
+		GdkPixbuf *rounded_pixbuf;
 
-	g_object_ref (pixbuf);
+		rounded_pixbuf = gdk_pixbuf_new (GDK_COLORSPACE_RGB, TRUE, 8,
+						 gdk_pixbuf_get_width (pixbuf),
+						 gdk_pixbuf_get_height (pixbuf));
+		gdk_pixbuf_copy_area (pixbuf, 0, 0,
+				      gdk_pixbuf_get_width (pixbuf),
+				      gdk_pixbuf_get_height (pixbuf),
+				      rounded_pixbuf,
+				      0, 0);
+		pixbuf = rounded_pixbuf;
+	} else {
+		g_object_ref (pixbuf);
+	}
+
+	if (empathy_gdk_pixbuf_is_opaque (pixbuf)) {
+		empathy_avatar_pixbuf_roundify (pixbuf);
+	}
+
 	g_object_unref (loader);
 
 	return pixbuf;
@@ -526,6 +590,7 @@ empathy_pixbuf_avatar_from_contact_scaled (EmpathyContact *contact,
 
 	return empathy_pixbuf_from_avatar_scaled (avatar, width, height);
 }
+
 /* Stolen from GtkSourceView, hence the weird intendation. Please keep it like
  * that to make it easier to apply changes from the original code.
  */
@@ -1206,15 +1271,39 @@ window_get_is_on_current_workspace (GtkWindow *window)
 gboolean
 empathy_window_get_is_visible (GtkWindow *window)
 {
-	gboolean visible;
+	g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
 
-	g_return_val_if_fail (window != NULL, FALSE);
+	return GTK_WIDGET_VISIBLE (GTK_WIDGET (window)) &&
+	       window_get_is_on_current_workspace (window);
+}
 
-	g_object_get (window,
-		      "visible", &visible,
-		      NULL);
+void 
+empathy_window_iconify (GtkWindow *window, GtkStatusIcon *status_icon)
+{
+	GdkRectangle  icon_location;
+	gulong        data[4];
+	Display      *dpy;
+	GdkWindow    *gdk_window;
 
-	return visible && window_get_is_on_current_workspace (window);
+	gtk_status_icon_get_geometry (status_icon, NULL, &icon_location, NULL);
+	gdk_window = GTK_WIDGET (window)->window;
+	dpy = gdk_x11_drawable_get_xdisplay (gdk_window);
+
+	data[0] = icon_location.x;
+	data[1] = icon_location.y;
+	data[2] = icon_location.width;
+	data[3] = icon_location.height;
+
+	XChangeProperty (dpy,
+			 GDK_WINDOW_XID (gdk_window),
+			 gdk_x11_get_xatom_by_name_for_display (gdk_drawable_get_display (gdk_window),
+								"_NET_WM_ICON_GEOMETRY"),
+			 XA_CARDINAL, 32, PropModeReplace,
+			 (guchar *)&data, 4);
+
+	gtk_window_set_skip_taskbar_hint (window, TRUE);
+	gtk_window_iconify (window);
+
 }
 
 /* Takes care of moving the window to the current workspace. */
@@ -1222,7 +1311,6 @@ void
 empathy_window_present (GtkWindow *window,
 		       gboolean   steal_focus)
 {
-	gboolean visible;
 	gboolean on_current;
 	guint32  timestamp;
 
@@ -1232,16 +1320,14 @@ empathy_window_present (GtkWindow *window,
 	 * workspace.
 	 */
 
-	g_object_get (window,
-		      "visible", &visible,
-		      NULL);
-
 	on_current = window_get_is_on_current_workspace (window);
 
-	if (visible && !on_current) {
+	if ( GTK_WIDGET_VISIBLE (GTK_WIDGET (window)) && !on_current) {
 		/* Hide it so present brings it to the current workspace. */
 		gtk_widget_hide (GTK_WIDGET (window));
 	}
+
+	gtk_window_set_skip_taskbar_hint (window, FALSE);
 
 	timestamp = gtk_get_current_event_time ();
 	if (steal_focus && timestamp != GDK_CURRENT_TIME) {

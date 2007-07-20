@@ -446,8 +446,21 @@ empathy_mission_control_new (void)
 }
 
 gchar *
-empathy_get_channel_id (McAccount *account,
-		       TpChan    *tp_chan)
+empathy_inspect_channel (McAccount *account,
+		         TpChan    *tp_chan)
+{
+	g_return_val_if_fail (MC_IS_ACCOUNT (account), NULL);
+	g_return_val_if_fail (TELEPATHY_IS_CHAN (tp_chan), NULL);
+
+	return empathy_inspect_handle (account,
+				       tp_chan->handle,
+				       tp_chan->handle_type);
+}
+
+gchar *
+empathy_inspect_handle (McAccount *account,
+			guint      handle,
+			guint      handle_type)
 {
 	MissionControl  *mc;
 	TpConn          *tp_conn;
@@ -457,7 +470,8 @@ empathy_get_channel_id (McAccount *account,
 	GError          *error;
 
 	g_return_val_if_fail (MC_IS_ACCOUNT (account), NULL);
-	g_return_val_if_fail (TELEPATHY_IS_CHAN (tp_chan), NULL);
+	g_return_val_if_fail (handle != 0, NULL);
+	g_return_val_if_fail (handle_type != 0, NULL);
 
 	mc = empathy_mission_control_new ();
 	tp_conn = mission_control_get_connection (mc, account, NULL);
@@ -469,9 +483,9 @@ empathy_get_channel_id (McAccount *account,
 
 	/* Get the handle's name */
 	handles = g_array_new (FALSE, FALSE, sizeof (guint));
-	g_array_append_val (handles, tp_chan->handle);
+	g_array_append_val (handles, handle);
 	if (!tp_conn_inspect_handles (DBUS_G_PROXY (tp_conn),
-				      tp_chan->handle_type,
+				      handle_type,
 				      handles,
 				      &names,
 				      &error)) {
@@ -492,4 +506,5 @@ empathy_get_channel_id (McAccount *account,
 
 	return name;
 }
+
 

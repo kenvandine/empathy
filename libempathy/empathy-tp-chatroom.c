@@ -22,8 +22,6 @@
 
 #include <config.h>
 
-#include <libmissioncontrol/mission-control.h>
-
 #include "empathy-tp-chatroom.h"
 #include "empathy-tp-contact-list.h"
 #include "empathy-contact-list.h"
@@ -130,8 +128,6 @@ empathy_tp_chatroom_new (McAccount *account,
 {
 	EmpathyTpChatroomPriv *priv;
 	EmpathyTpChatroom     *chatroom;
-	TpConn                *tp_conn;
-	MissionControl        *mc;
 	GList                 *members, *l;
 	guint                  self_handle;
 
@@ -145,11 +141,9 @@ empathy_tp_chatroom_new (McAccount *account,
 
 	priv = GET_PRIV (chatroom);
 
-	mc = empathy_mission_control_new ();
-	tp_conn = mission_control_get_connection (mc, account, NULL);
 	priv->manager = empathy_contact_manager_new ();
 	priv->list = empathy_contact_manager_get_list (priv->manager, account);
-	priv->group = empathy_tp_group_new (tp_chan, tp_conn);
+	priv->group = empathy_tp_group_new (account, tp_chan);
 
 	g_signal_connect (priv->group, "members-added",
 			  G_CALLBACK (tp_chatroom_members_added_cb),
@@ -181,8 +175,6 @@ empathy_tp_chatroom_new (McAccount *account,
 	}
 
 	empathy_tp_group_info_list_free (members);
-	g_object_unref (mc);
-	g_object_unref (tp_conn);
 
 	return chatroom;
 }

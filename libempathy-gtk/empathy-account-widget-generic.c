@@ -32,9 +32,12 @@
 #include <libmissioncontrol/mc-account.h>
 #include <libmissioncontrol/mc-protocol.h>
 
-#include <libempathy-gtk/empathy-ui-utils.h>
+#include <libempathy/empathy-debug.h>
 
 #include "empathy-account-widget-generic.h"
+#include "empathy-ui-utils.h"
+
+#define DEBUG_DOMAIN "AccountWidgetGeneric"
 
 typedef struct {
 	McAccount     *account;
@@ -178,10 +181,30 @@ account_widget_generic_setup_foreach (McProtocolParam            *param,
 				  GTK_FILL | GTK_EXPAND, 0,
 				  0, 0);
 	}
-	else if (param->signature[0] == 'q' ||
-		 param->signature[0] == 'n') {
-		gchar *str = NULL;
-		gint   value = 0;
+	/* int types: ynqiuxt. double type is 'd' */
+	else if (param->signature[0] == 'y' ||
+		 param->signature[0] == 'n' ||
+		 param->signature[0] == 'q' ||
+		 param->signature[0] == 'i' ||
+		 param->signature[0] == 'u' ||
+		 param->signature[0] == 'x' ||
+		 param->signature[0] == 't' ||
+		 param->signature[0] == 'd') {
+		gchar   *str = NULL;
+		gint     value = 0;
+		gdouble  minint = 0;
+		gdouble  maxint = 0;
+		gdouble  step = 1;
+		switch (param->signature[0]) {
+		case 'y': minint = G_MININT8;  maxint = G_MAXINT8;   break;
+		case 'n': minint = G_MININT16; maxint = G_MAXINT16;  break;
+		case 'q': minint = 0;          maxint = G_MAXUINT16; break;
+		case 'i': minint = G_MININT32; maxint = G_MAXINT32;  break;
+		case 'u': minint = 0;          maxint = G_MAXUINT32; break;
+		case 'x': minint = G_MININT64; maxint = G_MAXINT64;  break;
+		case 't': minint = 0;          maxint = G_MAXUINT64; break;
+		case 'd': minint = G_MININT32; maxint = G_MAXINT32; step = 0.1; break;
+		}
 
 		str = g_strdup_printf (_("%s:"), param_name_formatted);
 		widget = gtk_label_new (str);
@@ -195,7 +218,7 @@ account_widget_generic_setup_foreach (McProtocolParam            *param,
 				  GTK_FILL, 0,
 				  0, 0);
 
-		widget = gtk_spin_button_new_with_range (0, G_MAXINT, 1);
+		widget = gtk_spin_button_new_with_range (minint, maxint, step);
 		mc_account_get_param_int (settings->account,
 					  param->name,
 					  &value);
@@ -233,6 +256,9 @@ account_widget_generic_setup_foreach (McProtocolParam            *param,
 				  GTK_FILL | GTK_EXPAND, 0,
 				  0, 0);
 	} else {
+		empathy_debug (DEBUG_DOMAIN,
+			       "Unknown signature for param %s: %s\n",
+			       param_name_formatted, param->signature);
 		g_assert_not_reached ();
 	}
 

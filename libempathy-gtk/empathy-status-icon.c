@@ -390,7 +390,7 @@ status_icon_toggle_visibility (EmpathyStatusIcon *icon)
 	visible = empathy_window_get_is_visible (GTK_WINDOW (priv->window));
 
 	if (visible) {
-		gtk_widget_hide (GTK_WIDGET (priv->window));
+		empathy_window_iconify (priv->window, priv->icon);
 		empathy_conf_set_bool (empathy_conf_get (),
 				      EMPATHY_PREFS_UI_MAIN_WINDOW_HIDDEN, TRUE);
 	} else {
@@ -419,6 +419,9 @@ status_icon_activate_cb (GtkStatusIcon     *status_icon,
 	EmpathyStatusIconPriv *priv;
 
 	priv = GET_PRIV (icon);
+
+	empathy_debug (DEBUG_DOMAIN, "Activated: %s",
+		       priv->events ? "event" : "toggle");
 
 	if (priv->events) {
 		status_icon_event_remove (icon, priv->events->data);

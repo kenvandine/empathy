@@ -78,7 +78,6 @@ const gchar *   empathy_icon_name_for_contact             (EmpathyContact       
 GdkPixbuf *     empathy_pixbuf_from_avatar_scaled         (EmpathyAvatar        *avatar,
 							  gint                 width,
 							  gint                 height);
-GdkPixbuf *     empathy_pixbuf_avatar_from_contact        (EmpathyContact       *contact);
 GdkPixbuf *     empathy_pixbuf_avatar_from_contact_scaled (EmpathyContact       *contact,
 							  gint                 width,
 							  gint                 height);
@@ -98,6 +97,8 @@ gboolean   empathy_text_iter_backward_search         (const GtkTextIter   *iter,
 gboolean   empathy_window_get_is_visible             (GtkWindow           *window);
 void       empathy_window_present                    (GtkWindow           *window,
 						     gboolean             steal_focus);
+void       empathy_window_iconify                    (GtkWindow           *window,
+						      GtkStatusIcon       *status_icon);
 GtkWindow *empathy_get_toplevel_window               (GtkWidget           *widget);
 void       empathy_url_show                          (const char          *url);
 void       empathy_toggle_button_set_state_quietly   (GtkWidget           *widget,

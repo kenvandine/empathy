@@ -9,6 +9,7 @@ data/empathy.schemas.in
 libempathy/empathy-idle.c
 libempathy/empathy-contact.c
 libempathy/empathy-presence.c
+libempathy/empathy-tp-contact-list.c
 
 libempathy-gtk/empathy-about-dialog.c
 libempathy-gtk/empathy-account-chooser.c

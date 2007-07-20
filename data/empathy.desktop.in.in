@@ -2,7 +2,7 @@
 Version=1.0
 Encoding=UTF-8
 _Name=Empathy Instant Messenger
-_Comment=Instant Messenger
+_Comment=Send and receive instant messages
 Exec=empathy --no-connect
 Icon=empathy
 StartupNotify=false

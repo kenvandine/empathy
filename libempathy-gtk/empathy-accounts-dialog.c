@@ -284,6 +284,7 @@ accounts_dialog_update_account (EmpathyAccountsDialog *dialog,
 
 		profile = mc_account_get_profile (account);
 		config_ui = mc_profile_get_configuration_ui (profile);
+		g_object_unref (profile);
 
 		if (strcmp (config_ui, "jabber") == 0) {
 			dialog->settings_widget = 

@@ -92,8 +92,11 @@ guint        empathy_account_hash                   (gconstpointer    key);
 gboolean     empathy_account_equal                  (gconstpointer    a,
 						    gconstpointer    b);
 MissionControl *empathy_mission_control_new         (void);
-gchar *      empathy_get_channel_id                 (McAccount       *account,
-						    TpChan          *tp_chan);
+gchar *      empathy_inspect_handle                 (McAccount       *account,
+						     guint            handle,
+						     guint            handle_type);
+gchar *      empathy_inspect_channel                (McAccount       *account,
+						     TpChan          *tp_chan);
 
 G_END_DECLS
 

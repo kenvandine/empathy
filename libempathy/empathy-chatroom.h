@@ -50,27 +50,27 @@ struct _EmpathyChatroomClass {
 	GObjectClass parent_class;
 };
 
-GType           empathy_chatroom_get_type         (void) G_GNUC_CONST;
-EmpathyChatroom *empathy_chatroom_new              (McAccount      *account,
-						  const gchar    *room);
+GType            empathy_chatroom_get_type        (void) G_GNUC_CONST;
+EmpathyChatroom *empathy_chatroom_new             (McAccount       *account,
+						   const gchar     *room);
 EmpathyChatroom *empathy_chatroom_new_full         (McAccount      *account,
-						  const gchar    *room,
-						  const gchar    *name,
-						  gboolean        auto_connect);
+						   const gchar     *room,
+						   const gchar     *name,
+						   gboolean         auto_connect);
 McAccount *     empathy_chatroom_get_account      (EmpathyChatroom *chatroom);
 void            empathy_chatroom_set_account      (EmpathyChatroom *chatroom,
-						  McAccount      *account);
+						   McAccount       *account);
 const gchar *   empathy_chatroom_get_room         (EmpathyChatroom *chatroom);
 void            empathy_chatroom_set_room         (EmpathyChatroom *chatroom,
-						  const gchar    *room);
+						   const gchar     *room);
 const gchar *   empathy_chatroom_get_name         (EmpathyChatroom *chatroom);
 void            empathy_chatroom_set_name         (EmpathyChatroom *chatroom,
-						  const gchar    *name);
+						   const gchar     *name);
 gboolean        empathy_chatroom_get_auto_connect (EmpathyChatroom *chatroom);
 void            empathy_chatroom_set_auto_connect (EmpathyChatroom *chatroom,
-						  gboolean        auto_connect);
-gboolean        empathy_chatroom_equal            (gconstpointer   v1,
-						  gconstpointer   v2);
+						   gboolean         auto_connect);
+gboolean        empathy_chatroom_equal            (gconstpointer    v1,
+						   gconstpointer    v2);
 
 
 G_BEGIN_DECLS

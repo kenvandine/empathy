@@ -36,6 +36,8 @@
 #include <libmissioncontrol/mc-account.h>
 #include <libmissioncontrol/mc-profile.h>
 
+#include <libempathy/empathy-tp-roomlist.h>
+#include <libempathy/empathy-chatroom.h>
 #include <libempathy/empathy-utils.h>
 #include <libempathy/empathy-debug.h>
 
@@ -47,45 +49,33 @@
 #define DEBUG_DOMAIN "NewChatroomDialog"
 
 typedef struct {
-	GtkWidget    *window;
+	EmpathyTpRoomlist *room_list;
 
-	GtkWidget    *vbox_widgets;
-	GtkWidget    *table_info;
-
-	GtkWidget    *label_account;
-	GtkWidget    *account_chooser;
-
-	GtkWidget    *label_server;
-	GtkWidget    *entry_server;
-	GtkWidget    *togglebutton_refresh;
-	
-	GtkWidget    *label_room;
-	GtkWidget    *entry_room;
-
-	GtkWidget    *vbox_browse;
-	GtkWidget    *image_status;
-	GtkWidget    *label_status;
-	GtkWidget    *hbox_status;
-	GtkWidget    *throbber;
-	GtkWidget    *treeview;
-	GtkTreeModel *model;
-	GtkTreeModel *filter;
-
-	GtkWidget    *button_join;
-	GtkWidget    *button_close;
+	GtkWidget         *window;
+	GtkWidget         *vbox_widgets;
+	GtkWidget         *table_info;
+	GtkWidget         *label_account;
+	GtkWidget         *account_chooser;
+	GtkWidget         *label_server;
+	GtkWidget         *entry_server;
+	GtkWidget         *togglebutton_refresh;
+	GtkWidget         *label_room;
+	GtkWidget         *entry_room;
+	GtkWidget         *vbox_browse;
+	GtkWidget         *image_status;
+	GtkWidget         *label_status;
+	GtkWidget         *hbox_status;
+	GtkWidget         *throbber;
+	GtkWidget         *treeview;
+	GtkTreeModel      *model;
+	GtkWidget         *button_join;
+	GtkWidget         *button_close;
 } EmpathyNewChatroomDialog;
-
-typedef struct {
-	guint  handle;
-	gchar *channel_type;
-	gchar *name;
-	gchar *id;
-} EmpathyRoomListItem;
 
 enum {
 	COL_IMAGE,
 	COL_NAME,
-	COL_POINTER,
+	COL_ROOM,
 	COL_COUNT
 };
 
@@ -97,25 +87,20 @@ static void     new_chatroom_dialog_destroy_cb                      (GtkWidget  
 static void     new_chatroom_dialog_model_setup                     (EmpathyNewChatroomDialog *dialog);
 static void     new_chatroom_dialog_model_add_columns               (EmpathyNewChatroomDialog *dialog);
 static void     new_chatroom_dialog_update_widgets                  (EmpathyNewChatroomDialog *dialog);
-static void     new_chatroom_dialog_account_changed_cb              (GtkComboBox             *combobox,
+static void     new_chatroom_dialog_account_changed_cb              (GtkComboBox              *combobox,
 								     EmpathyNewChatroomDialog *dialog);
-static void     new_chatroom_dialog_model_add                       (EmpathyNewChatroomDialog *dialog,
-								     EmpathyRoomListItem     *item);
+static void     new_chatroom_dialog_roomlist_destroy_cb             (EmpathyTpRoomlist        *room_list,
+								     EmpathyNewChatroomDialog *dialog);
+static void     new_chatroom_dialog_new_room_cb                     (EmpathyTpRoomlist        *room_list,
+								     EmpathyChatroom          *chatroom,
+								     EmpathyNewChatroomDialog *dialog);
+static void     new_chatroom_dialog_listing_cb                      (EmpathyTpRoomlist        *room_list,
+								     gboolean                  listing,
+								     EmpathyNewChatroomDialog *dialog);
 static void     new_chatroom_dialog_model_clear                     (EmpathyNewChatroomDialog *dialog);
-static GList *  new_chatroom_dialog_model_get_selected              (EmpathyNewChatroomDialog *dialog);
-static gboolean new_chatroom_dialog_model_filter_func               (GtkTreeModel            *model,
-								     GtkTreeIter             *iter,
-								     EmpathyNewChatroomDialog *dialog);
 static void     new_chatroom_dialog_model_row_activated_cb          (GtkTreeView             *tree_view,
 								     GtkTreePath             *path,
 								     GtkTreeViewColumn       *column,
-								     EmpathyNewChatroomDialog *dialog);
-static void     new_chatroom_dialog_model_row_inserted_cb           (GtkTreeModel            *model,
-								     GtkTreePath             *path,
-								     GtkTreeIter             *iter,
-								     EmpathyNewChatroomDialog *dialog);
-static void     new_chatroom_dialog_model_row_deleted_cb            (GtkTreeModel            *model,
-								     GtkTreePath             *path,
 								     EmpathyNewChatroomDialog *dialog);
 static void     new_chatroom_dialog_model_selection_changed         (GtkTreeSelection        *selection,
 								     EmpathyNewChatroomDialog *dialog);
@@ -187,6 +172,17 @@ empathy_new_chatroom_dialog_show (GtkWindow *parent)
 
 	g_object_unref (size_group);
 
+	/* Set up chatrooms treeview */
+	new_chatroom_dialog_model_setup (dialog);
+
+	/* Add throbber */
+	dialog->throbber = ephy_spinner_new ();
+	ephy_spinner_set_size (EPHY_SPINNER (dialog->throbber), GTK_ICON_SIZE_LARGE_TOOLBAR);
+	gtk_widget_show (dialog->throbber);
+
+	gtk_box_pack_start (GTK_BOX (dialog->hbox_status), dialog->throbber, 
+			    FALSE, FALSE, 0);
+
 	/* Account chooser for custom */
 	dialog->account_chooser = empathy_account_chooser_new ();
 	gtk_table_attach_defaults (GTK_TABLE (dialog->table_info),
@@ -197,20 +193,8 @@ empathy_new_chatroom_dialog_show (GtkWindow *parent)
 	g_signal_connect (GTK_COMBO_BOX (dialog->account_chooser), "changed",
 			  G_CALLBACK (new_chatroom_dialog_account_changed_cb),
 			  dialog);
-
-	/* Add throbber */
-	dialog->throbber = ephy_spinner_new ();
-	ephy_spinner_set_size (EPHY_SPINNER (dialog->throbber), GTK_ICON_SIZE_LARGE_TOOLBAR);
-	gtk_widget_show (dialog->throbber);
-
-	gtk_box_pack_start (GTK_BOX (dialog->hbox_status), dialog->throbber, 
-			    FALSE, FALSE, 0);
-
-	/* Set up chatrooms treeview */
-	new_chatroom_dialog_model_setup (dialog);
-
-	/* Set things up according to the account type */
-	new_chatroom_dialog_update_widgets (dialog);
+	new_chatroom_dialog_account_changed_cb (GTK_COMBO_BOX (dialog->account_chooser),
+						dialog);
 
 	if (parent) {
 		gtk_window_set_transient_for (GTK_WINDOW (dialog->window),
@@ -236,8 +220,10 @@ static void
 new_chatroom_dialog_destroy_cb (GtkWidget               *widget,
 				EmpathyNewChatroomDialog *dialog)
 {
+	if (dialog->room_list) {
+		g_object_unref (dialog->room_list);
+	}
   	g_object_unref (dialog->model);  
- 	g_object_unref (dialog->filter); 
 
 	g_free (dialog);
 }
@@ -260,36 +246,19 @@ new_chatroom_dialog_model_setup (EmpathyNewChatroomDialog *dialog)
 	store = gtk_list_store_new (COL_COUNT,
 				    G_TYPE_STRING,       /* Image */
 				    G_TYPE_STRING,       /* Text */
-				    G_TYPE_POINTER);     /* infos */
+				    G_TYPE_STRING);      /* Room */
 
 	dialog->model = GTK_TREE_MODEL (store);
-
-	/* Filter */
-	dialog->filter = gtk_tree_model_filter_new (dialog->model, NULL);
-
-	gtk_tree_model_filter_set_visible_func (GTK_TREE_MODEL_FILTER (dialog->filter),
-						(GtkTreeModelFilterVisibleFunc)
-						new_chatroom_dialog_model_filter_func,
-						dialog,
-						NULL);
-
-	gtk_tree_view_set_model (view, dialog->filter);
-
-	g_signal_connect (dialog->filter, "row-inserted",
-			  G_CALLBACK (new_chatroom_dialog_model_row_inserted_cb),
-			  dialog);
-	g_signal_connect (dialog->filter, "row-deleted",
-			  G_CALLBACK (new_chatroom_dialog_model_row_deleted_cb),
-			  dialog);
+	gtk_tree_view_set_model (view, dialog->model);
 
 	/* Selection */
 	selection = gtk_tree_view_get_selection (view);
-	gtk_tree_selection_set_mode (selection, GTK_SELECTION_MULTIPLE);
 	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (store),
 					      COL_NAME, GTK_SORT_ASCENDING);
 
 	g_signal_connect (selection, "changed",
-			  G_CALLBACK (new_chatroom_dialog_model_selection_changed), dialog);
+			  G_CALLBACK (new_chatroom_dialog_model_selection_changed),
+			  dialog);
 
 	/* Columns */
 	new_chatroom_dialog_model_add_columns (dialog);
@@ -373,17 +342,62 @@ static void
 new_chatroom_dialog_account_changed_cb (GtkComboBox             *combobox,
 					EmpathyNewChatroomDialog *dialog)
 {
+	EmpathyAccountChooser *account_chooser;
+	McAccount             *account;
+	gboolean               listing = FALSE;
+
+	if (dialog->room_list) {
+		g_object_unref (dialog->room_list);
+	}
+
+	ephy_spinner_stop (EPHY_SPINNER (dialog->throbber));
+	new_chatroom_dialog_model_clear (dialog);
+
+	account_chooser = EMPATHY_ACCOUNT_CHOOSER (dialog->account_chooser);
+	account = empathy_account_chooser_get_account (account_chooser);
+	dialog->room_list = empathy_tp_roomlist_new (account);
+
+	if (dialog->room_list)	{
+		g_signal_connect (dialog->room_list, "destroy",
+				  G_CALLBACK (new_chatroom_dialog_roomlist_destroy_cb),
+				  dialog);
+		g_signal_connect (dialog->room_list, "new-room",
+				  G_CALLBACK (new_chatroom_dialog_new_room_cb),
+				  dialog);
+		g_signal_connect (dialog->room_list, "listing",
+				  G_CALLBACK (new_chatroom_dialog_listing_cb),
+				  dialog);
+
+		listing = empathy_tp_roomlist_is_listing (dialog->room_list);
+		if (listing) {
+			ephy_spinner_start (EPHY_SPINNER (dialog->throbber));
+		}
+	}
+
 	new_chatroom_dialog_update_widgets (dialog);
 }
 
 static void
-new_chatroom_dialog_model_add (EmpathyNewChatroomDialog *dialog,
-			       EmpathyRoomListItem     *item)
+new_chatroom_dialog_roomlist_destroy_cb (EmpathyTpRoomlist        *room_list,
+					 EmpathyNewChatroomDialog *dialog)
+{
+	g_object_unref (dialog->room_list);
+	dialog->room_list = NULL;
+}
+
+static void
+new_chatroom_dialog_new_room_cb (EmpathyTpRoomlist        *room_list,
+				 EmpathyChatroom          *chatroom,
+				 EmpathyNewChatroomDialog *dialog)
 {
 	GtkTreeView      *view;
 	GtkTreeSelection *selection;
 	GtkListStore     *store;
 	GtkTreeIter       iter;
+
+	empathy_debug (DEBUG_DOMAIN, "New chatroom listed: %s (%s)",
+		       empathy_chatroom_get_name (chatroom),
+		       empathy_chatroom_get_room (chatroom));
 
 	/* Add to model */
 	view = GTK_TREE_VIEW (dialog->treeview);
@@ -391,11 +405,33 @@ new_chatroom_dialog_model_add (EmpathyNewChatroomDialog *dialog,
 	store = GTK_LIST_STORE (dialog->model);
 
 	gtk_list_store_append (store, &iter);
-
 	gtk_list_store_set (store, &iter,
-			    COL_NAME, item->name,
-			    COL_POINTER, item,
+			    COL_NAME, empathy_chatroom_get_name (chatroom),
+			    COL_ROOM, empathy_chatroom_get_room (chatroom),
 			    -1);
+}
+
+static void
+new_chatroom_dialog_listing_cb (EmpathyTpRoomlist        *room_list,
+				gboolean                  listing,
+				EmpathyNewChatroomDialog *dialog)
+{
+	/* Update the throbber */
+	if (listing) {
+		ephy_spinner_start (EPHY_SPINNER (dialog->throbber));		
+	} else {
+		ephy_spinner_stop (EPHY_SPINNER (dialog->throbber));
+	}
+
+	/* Update the refresh toggle button */
+	g_signal_handlers_block_by_func (dialog->togglebutton_refresh,
+					 new_chatroom_dialog_togglebutton_refresh_toggled_cb,
+					 dialog);
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog->togglebutton_refresh),
+				      listing);
+	g_signal_handlers_unblock_by_func (dialog->togglebutton_refresh,
+					   new_chatroom_dialog_togglebutton_refresh_toggled_cb,
+					   dialog);
 }
 
 static void
@@ -405,73 +441,6 @@ new_chatroom_dialog_model_clear (EmpathyNewChatroomDialog *dialog)
 
 	store = GTK_LIST_STORE (dialog->model);
 	gtk_list_store_clear (store);
-}
-
-static GList *
-new_chatroom_dialog_model_get_selected (EmpathyNewChatroomDialog *dialog)
-{
-	GtkTreeView      *view;
-	GtkTreeModel     *model;
-	GtkTreeSelection *selection;
-	GList            *rows, *l;
-	GList            *chatrooms = NULL;
-
-	view = GTK_TREE_VIEW (dialog->treeview);
-	selection = gtk_tree_view_get_selection (view);
-	model = gtk_tree_view_get_model (view);
-
-	rows = gtk_tree_selection_get_selected_rows (selection, NULL);
-	for (l = rows; l; l = l->next) {
-		GtkTreeIter          iter;
-		EmpathyRoomListItem *chatroom;
-
-		if (!gtk_tree_model_get_iter (model, &iter, l->data)) {
-			continue;
-		}
-
-		gtk_tree_model_get (model, &iter, COL_POINTER, &chatroom, -1);
-		chatrooms = g_list_append (chatrooms, chatroom);
-	}
-
-	g_list_foreach (rows, (GFunc) gtk_tree_path_free, NULL);
-	g_list_free (rows);
-
-	return chatrooms;
-}
-
-static gboolean
-new_chatroom_dialog_model_filter_func (GtkTreeModel            *model,
-				       GtkTreeIter             *iter,
-				       EmpathyNewChatroomDialog *dialog)
-{
-	EmpathyRoomListItem *chatroom;
-	const gchar         *text;
-	gchar               *room_nocase;
-	gchar               *text_nocase;
-	gboolean             found = FALSE;
-
-	gtk_tree_model_get (model, iter, COL_POINTER, &chatroom, -1);
-
-	if (!chatroom) {
-		return TRUE;
-	}
-
-	text = gtk_entry_get_text (GTK_ENTRY (dialog->entry_room));
-
-	/* Casefold */
-	room_nocase = g_utf8_casefold (chatroom->id, -1);
-	text_nocase = g_utf8_casefold (text, -1);
-
-	/* Compare */
-	if (g_utf8_strlen (text_nocase, -1) < 1 ||
-	    strstr (room_nocase, text_nocase)) {
-		found = TRUE;
-	}
-
-	g_free (room_nocase);
-	g_free (text_nocase);
-
-	return found;
 }
 
 static void
@@ -484,24 +453,30 @@ new_chatroom_dialog_model_row_activated_cb (GtkTreeView             *tree_view,
 }
 
 static void
-new_chatroom_dialog_model_row_inserted_cb (GtkTreeModel            *model,
-					   GtkTreePath             *path,
-					   GtkTreeIter             *iter,
-					   EmpathyNewChatroomDialog *dialog)
-{
-}
-
-static void
-new_chatroom_dialog_model_row_deleted_cb (GtkTreeModel            *model,
-					  GtkTreePath             *path,
-					  EmpathyNewChatroomDialog *dialog)
-{
-}
-
-static void
-new_chatroom_dialog_model_selection_changed (GtkTreeSelection      *selection,
+new_chatroom_dialog_model_selection_changed (GtkTreeSelection         *selection,
 					     EmpathyNewChatroomDialog *dialog)
-{
+{	
+	GtkTreeModel *model;
+	GtkTreeIter   iter;
+	gchar        *room = NULL;
+	gchar        *server = NULL;
+
+	if (!gtk_tree_selection_get_selected (selection, &model, &iter)) {
+		return;
+	}
+
+	gtk_tree_model_get (model, &iter, COL_ROOM, &room, -1);
+	server = strstr (room, "@");
+	if (server) {
+		*server = '\0';
+		server++;
+	}
+
+	gtk_entry_set_text (GTK_ENTRY (dialog->entry_server), server ? server : "");
+	gtk_entry_set_text (GTK_ENTRY (dialog->entry_room), room ? room : "");
+
+	g_free (server);
+	g_free (room);
 }
 
 static void
@@ -510,19 +485,9 @@ new_chatroom_dialog_join (EmpathyNewChatroomDialog *dialog)
 	McAccount            *account;
 	EmpathyAccountChooser *account_chooser;
 	MissionControl       *mc;
-	GList                *chatrooms, *l;
 	const gchar          *room;
 	const gchar          *server = NULL;
 	gchar                *room_name = NULL;
-
-	chatrooms = new_chatroom_dialog_model_get_selected (dialog);
-	if (chatrooms) {
-		for (l = chatrooms; l; l = l->next) {
-			/* Join it */
-		}
-		g_list_free (chatrooms);
-		return;
-	}
 
 	room = gtk_entry_get_text (GTK_ENTRY (dialog->entry_room));
 	server = gtk_entry_get_text (GTK_ENTRY (dialog->entry_server));
@@ -557,23 +522,26 @@ new_chatroom_dialog_entry_changed_cb (GtkWidget                *entry,
 		const gchar *room;
 
 		room = gtk_entry_get_text (GTK_ENTRY (dialog->entry_room));
-		gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (dialog->filter));
 		gtk_widget_set_sensitive (dialog->button_join, !G_STR_EMPTY (room));
+		/* FIXME: Select the room in the list */
 	}
 }
 
 static void
 new_chatroom_dialog_browse_start (EmpathyNewChatroomDialog *dialog)
 {
-	if (0) {
-		new_chatroom_dialog_model_clear (dialog);
-		new_chatroom_dialog_model_add (dialog, NULL);
+	new_chatroom_dialog_model_clear (dialog);
+	if (dialog->room_list) {
+		empathy_tp_roomlist_start (dialog->room_list);
 	}
 }
 
 static void
 new_chatroom_dialog_browse_stop (EmpathyNewChatroomDialog *dialog)
 {
+	if (dialog->room_list) {
+		empathy_tp_roomlist_stop (dialog->room_list);
+	}
 }
 
 static void

@@ -88,6 +88,12 @@ static void             tp_chat_sent_cb               (DBusGProxy               
 						       guint                      message_type,
 						       gchar                     *message_body,
 						       EmpathyTpChat             *chat);
+static void             tp_chat_send_error_cb         (DBusGProxy                *text_iface,
+						       guint                      error_code,
+						       guint                      timestamp,
+						       guint                      message_type,
+						       gchar                     *message_body,
+						       EmpathyTpChat             *chat);
 static void             tp_chat_state_changed_cb      (DBusGProxy                *chat_state_iface,
 						       guint                      handle,
 						       TelepathyChannelChatState  state,
@@ -127,6 +133,7 @@ enum {
 
 enum {
 	MESSAGE_RECEIVED,
+	SEND_ERROR,
 	CHAT_STATE_CHANGED,
 	DESTROY,
 	LAST_SIGNAL
@@ -291,6 +298,16 @@ empathy_tp_chat_class_init (EmpathyTpChatClass *klass)
 			      G_TYPE_NONE,
 			      1, EMPATHY_TYPE_MESSAGE);
 
+	signals[SEND_ERROR] =
+		g_signal_new ("send-error",
+			      G_TYPE_FROM_CLASS (klass),
+			      G_SIGNAL_RUN_LAST,
+			      0,
+			      NULL, NULL,
+			      empathy_marshal_VOID__OBJECT_UINT,
+			      G_TYPE_NONE,
+			      2, EMPATHY_TYPE_MESSAGE, G_TYPE_UINT);
+
 	signals[CHAT_STATE_CHANGED] =
 		g_signal_new ("chat-state-changed",
 			      G_TYPE_FROM_CLASS (klass),
@@ -398,6 +415,9 @@ tp_chat_constructor (GType                  type,
 				     chat, NULL);
 	dbus_g_proxy_connect_signal (priv->text_iface, "Sent",
 				     G_CALLBACK (tp_chat_sent_cb),
+				     chat, NULL);
+	dbus_g_proxy_connect_signal (priv->text_iface, "SendError",
+				     G_CALLBACK (tp_chat_send_error_cb),
 				     chat, NULL);
 
 	if (priv->chat_state_iface != NULL) {
@@ -733,7 +753,7 @@ empathy_tp_chat_get_id (EmpathyTpChat *chat)
 		return priv->id;
 	}
 
-	priv->id = empathy_get_channel_id (priv->account, priv->tp_chan);
+	priv->id = empathy_inspect_channel (priv->account, priv->tp_chan);
 
 	return priv->id;
 }
@@ -770,7 +790,6 @@ tp_chat_closed_cb (TpChan        *text_chan,
 					      tp_chat_destroy_cb,
 					      chat);
 	tp_chat_destroy_cb (text_chan, chat);
-
 }
 
 static void
@@ -828,6 +847,29 @@ tp_chat_sent_cb (DBusGProxy    *text_iface,
 					 message_body);
 
 	g_signal_emit (chat, signals[MESSAGE_RECEIVED], 0, message);
+	g_object_unref (message);
+}
+
+static void
+tp_chat_send_error_cb (DBusGProxy    *text_iface,
+		       guint          error_code,
+		       guint          timestamp,
+		       guint          message_type,
+		       gchar         *message_body,
+		       EmpathyTpChat *chat)
+{
+	EmpathyMessage *message;
+
+	empathy_debug (DEBUG_DOMAIN, "Message sent error: %s (%d)",
+		       message_body, error_code);
+
+	message = tp_chat_build_message (chat,
+					 message_type,
+					 timestamp,
+					 0,
+					 message_body);
+
+	g_signal_emit (chat, signals[SEND_ERROR], 0, message, error_code);
 	g_object_unref (message);
 }
 

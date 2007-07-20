@@ -24,6 +24,7 @@
 #include <glib.h>
 
 #include <libtelepathy/tp-chan.h>
+#include <libmissioncontrol/mc-account.h>
 
 G_BEGIN_DECLS
 
@@ -54,8 +55,8 @@ typedef struct {
 } EmpathyTpGroupInfo;
 
 GType            empathy_tp_group_get_type                            (void) G_GNUC_CONST;
-EmpathyTpGroup * empathy_tp_group_new                                 (TpChan          *tp_chan,
-								       TpConn          *tp_conn);
+EmpathyTpGroup * empathy_tp_group_new                                 (McAccount       *account,
+								       TpChan          *tp_chan);
 void             empathy_tp_group_add_members                         (EmpathyTpGroup  *group,
 								       GArray          *handles,
 								       const gchar     *message);

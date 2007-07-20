@@ -108,7 +108,7 @@ new_channel_cb (EmpathyChandler *chandler,
 	gchar      *id;
 
 	account = mission_control_get_account_for_connection (mc, tp_conn, NULL);
-	id = empathy_get_channel_id (account, tp_chan);
+	id = empathy_inspect_channel (account, tp_chan);
 	chat = empathy_chat_window_find_chat (account, id);
 	g_free (id);
 
