@@ -184,13 +184,18 @@ empathy_filter_process (EmpathyFilter *filter,
 	EmpathyFilterPriv *priv;
 	guint              id;
 
+	g_return_if_fail (EMPATHY_IS_FILTER (filter));
+	g_return_if_fail (TELEPATHY_IS_CHAN (tp_chan));
+
 	priv = GET_PRIV (filter);
 
 	id = GPOINTER_TO_UINT (g_hash_table_lookup (priv->table, tp_chan));
-	if (id != 0) {
-		g_signal_emit (filter, signals[PROCESS], 0, id, process);
-		g_hash_table_remove (priv->table, tp_chan);
-	}
+	g_return_if_fail (id != 0);
+
+	empathy_debug (DEBUG_DOMAIN, "Processing channel id %d: %s",
+		       id, process ? "Yes" : "No");
+	g_signal_emit (filter, signals[PROCESS], 0, id, process);
+	g_hash_table_remove (priv->table, tp_chan);
 }
 
 static gboolean
@@ -223,6 +228,7 @@ empathy_filter_filter_channel (EmpathyFilter  *filter,
 
 	g_hash_table_insert (priv->table, tp_chan, GUINT_TO_POINTER (id));
 
+	empathy_debug (DEBUG_DOMAIN, "New channel to be filtred: %d", id);
 	g_signal_emit (filter, signals[NEW_CHANNEL], 0, tp_conn, tp_chan);
 
 	g_object_unref (tp_conn);
