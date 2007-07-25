@@ -974,6 +974,7 @@ tp_contact_list_newchannel_cb (DBusGProxy           *proxy,
 				bus_name,
 				object_path,
 				channel_type, handle_type, channel_handle);
+	g_return_if_fail (TELEPATHY_IS_CHAN (new_chan));
 
 	if (handle_type == TP_HANDLE_TYPE_LIST) {
 		TpContactListType list_type;

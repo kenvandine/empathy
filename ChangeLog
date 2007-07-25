@@ -1,3 +1,8 @@
+2007-07-25 Xavier Claessens  <xclaesse@gmail.com>
+
+	* libempathy/empathy-tp-contact-list.c: Add a check to be sure the
+	new channel is valid in the NewChannel cb. Fixes bug #451564.
+
 2007-07-20 Xavier Claessens  <xclaesse@gmail.com>
 
 	* libempathy/Makefile.am:
