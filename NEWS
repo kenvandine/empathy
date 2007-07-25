@@ -1,3 +1,24 @@
+NEW in 0.9:
+===========
+ - Initial room list support. It doesn't work yet but most of the code is ready.
+ - Tell the user when a message can't be sent.
+ - Set all contacts from salut protocol to the "Local Network" group.
+ - Fix NetworkManager support.
+ - Iconify main window to the status icon like in rhythmbox.
+ - Show avatars in chatrooms.
+ - Fix avatar not being requested when empathy starts.
+ - Remove unused nickname entry and use a GtkTable for room information.
+ - Set a window title and fix alignment of widgets for contact related dialogs
+   (add, edit/view info).
+ - Adding initial API documentation using gtk-doc.
+ - Auto-accept to publish presence to contacts that are in our subscribe list.
+   When accepting a pending contact add it to publish and subscribe list.
+ - Filter incoming text channels and make status icon flash when there we
+   receive a new message. Dispatch the channel only when we get a message and
+   the user click on the icon.
+ - Install libempathy and libempathy-gtk and make their API public. The API is
+   NOT STABLE AT ALL !!!
+
 NEW in 0.8:
 ===========
  - Fixed contact list handling.
