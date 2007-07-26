@@ -50,6 +50,10 @@
 
 	* doc/*: Updated documentation.
 
+2007-07-26 Xavier Claessens  <xclaesse@gmail.com>
+
+	* configure.ac: Bump version to 0.10
+
 2007-07-25 Xavier Claessens  <xclaesse@gmail.com>
 
 	* libempathy/empathy-filter.c: Adding more debug output.
