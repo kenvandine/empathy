@@ -553,6 +553,9 @@ accounts_dialog_model_selection_changed (GtkTreeSelection     *selection,
 	if (account) {
 		g_object_unref (account);
 	}
+
+	/* insure new account frame is hidden when a row is selected*/
+	gtk_widget_hide (dialog->frame_new_account);
 }
 
 static void

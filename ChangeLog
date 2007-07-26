@@ -1,5 +1,10 @@
 2007-07-26 Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/empathy-accounts-dialog.c: add contact frame is not
+	hidden after cancelling. Fixes bug #458997 (Frederic Peters).
+
+2007-07-26 Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy/empathy-idle.c: Fix problems when NM is not running. Fixes
 	bug #460419.
 
