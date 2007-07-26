@@ -1,5 +1,12 @@
 2007-07-26 Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/Makefile.am:
+	* libempathy/Makefile.am:
+	* configure.ac: Use libtool -version-info. Fixes bug #460579
+	(Laurent Bigonville).
+
+2007-07-26 Xavier Claessens  <xclaesse@gmail.com>
+
 	* README:
 	* autogen.sh: Remove the autogen.sh script and use gnome-autogen.sh
 	instead. Fixes bug #460590.

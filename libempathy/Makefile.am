@@ -40,6 +40,9 @@ libempathy_la_SOURCES =					\
 libempathy_la_LIBADD =		\
 	$(LIBEMPATHY_LIBS)
 
+libempathy_la_LDFLAGS =		\
+	-version-info ${LIBEMPATHY_CURRENT}:${LIBEMPATHY_REVISION}:${LIBEMPATHY_AGE}
+
 libempathydir = $(includedir)/libempathy/
 libempathy_HEADERS =				\
 	empathy-conf.h				\
