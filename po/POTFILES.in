@@ -15,6 +15,7 @@ libempathy-gtk/empathy-about-dialog.c
 libempathy-gtk/empathy-account-chooser.c
 libempathy-gtk/empathy-account-widget-generic.c
 libempathy-gtk/empathy-account-widget-jabber.glade
+libempathy-gtk/empathy-account-widget-msn.glade
 libempathy-gtk/empathy-accounts-dialog.c
 libempathy-gtk/empathy-accounts-dialog.glade
 libempathy-gtk/empathy-chat.c

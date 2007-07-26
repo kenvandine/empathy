@@ -1,5 +1,10 @@
 2007-07-26 Xavier Claessens  <xclaesse@gmail.com>
 
+	* po/POTFILES.in: Add missing file
+	libempathy-gtk/empathy-account-widget-msn.glade.
+
+2007-07-26 Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/empathy-account-widget-jabber.glade:
 	* libempathy-gtk/empathy-account-widget-jabber.c: Hide
 	"advanced options" for jabber in a GtkExpander. Fixes bug #459168
