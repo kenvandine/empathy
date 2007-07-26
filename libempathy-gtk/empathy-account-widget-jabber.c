@@ -100,6 +100,18 @@ account_widget_jabber_entry_focus_cb (GtkWidget                 *widget,
 		g_free (value);
 	} else {
 		mc_account_set_param_string (settings->account, param, str);
+
+		if (widget == settings->entry_id) {
+			/* Try to guess the server */
+			gchar *server;
+
+			server = strstr (str, "@");
+			if (server != NULL) {
+				/* skip the leading @ */
+				server++;
+				gtk_entry_set_text (GTK_ENTRY (settings->entry_server), server);
+			}
+		}
 	}
 
 	return FALSE;
@@ -274,8 +286,10 @@ empathy_account_widget_jabber_new (McAccount *account)
 
 	g_object_unref (size_group);
 
+  gtk_editable_select_region (GTK_EDITABLE (settings->entry_id), 0, -1);
+  gtk_widget_grab_focus (settings->entry_id);
+
 	gtk_widget_show (settings->vbox_settings);
 
 	return settings->vbox_settings;
 }
-
