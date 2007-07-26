@@ -2,7 +2,7 @@
 
 	* README:
 	* autogen.sh: Remove the autogen.sh script and use gnome-autogen.sh
-	instead.
+	instead. Fixes bug #460590.
 
 2007-07-26 Xavier Claessens  <xclaesse@gmail.com>
 
