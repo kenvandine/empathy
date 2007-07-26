@@ -32,17 +32,21 @@
 #include <libmissioncontrol/mc-account.h>
 
 #include <libempathy/empathy-contact-manager.h>
+#include <libempathy/empathy-utils.h>
 
 #include "empathy-contact-widget.h"
 #include "empathy-account-chooser.h"
 #include "empathy-ui-utils.h"
 
+/* Delay before updating the widget when the id entry changed (ms) */
+#define ID_CHANGED_TIMEOUT 500
+
 typedef struct {
-	EmpathyContact   *contact;
+	EmpathyContact  *contact;
 	gboolean         is_user;
-	gboolean         editable;
-	gboolean         can_change_contact;
+	EmpathyContactWidgetType type;
 	GtkCellRenderer *renderer;
+	guint            widget_id_timeout;
 
 	GtkWidget       *vbox_contact_widget;
 
@@ -139,20 +143,18 @@ enum {
 };
 
 GtkWidget *
-empathy_contact_widget_new (EmpathyContact *contact,
-			    gboolean       editable)
+empathy_contact_widget_new (EmpathyContact           *contact,
+			    EmpathyContactWidgetType  type)
 {
 	EmpathyContactWidget *information;
 	GladeXML             *glade;
 
 	information = g_slice_new0 (EmpathyContactWidget);
-	information->editable = editable;
+	information->type = type;
 	if (contact) {
 		information->is_user = empathy_contact_is_user (contact);
-		information->can_change_contact = FALSE;
 	} else {
 		information->is_user = FALSE;
-		information->can_change_contact = TRUE;
 	}
 
 	glade = empathy_glade_get_file ("empathy-contact-widget.glade",
@@ -225,6 +227,11 @@ contact_widget_destroy_cb (GtkWidget            *widget,
 			   EmpathyContactWidget *information)
 {
 	contact_widget_remove_contact (information);
+
+	if (information->widget_id_timeout != 0) {
+		g_source_remove (information->widget_id_timeout);
+	}
+
 	g_slice_free (EmpathyContactWidget, information);
 }
 
@@ -266,6 +273,60 @@ contact_widget_set_contact (EmpathyContactWidget *information,
 	contact_widget_client_update (information);
 }
 
+static gboolean
+contact_widget_can_add_contact_to_account (McAccount *account,
+					   gpointer   user_data)
+{
+	MissionControl *mc;
+	TpConn         *tp_conn;
+	McProfile      *profile;
+	const gchar    *protocol_name;
+
+	mc = empathy_mission_control_new ();
+	tp_conn = mission_control_get_connection (mc, account, NULL);
+	g_object_unref (mc);
+	if (tp_conn == NULL) {
+		/* Account is disconnected */
+		return FALSE;
+	}
+	g_object_unref (tp_conn);
+
+	profile = mc_account_get_profile (account);
+	protocol_name = mc_profile_get_protocol_name (profile);
+	if (strcmp (protocol_name, "salut") == 0) {
+		/* We can't add accounts to a XMPP LL connection
+		 * FIXME: We should take that information from the profile
+		 * to not hardcode the protocol name
+		 */
+		g_object_unref (profile);
+		return FALSE;
+	}
+
+	g_object_unref (profile);
+	return TRUE;
+}
+
+static gboolean
+contact_widget_id_activate_timeout (EmpathyContactWidget *self)
+{
+	contact_widget_update_contact (self);
+	return FALSE;
+}
+
+static void
+contact_widget_id_changed_cb (GtkEntry             *entry,
+                              EmpathyContactWidget *self)
+{
+	if (self->widget_id_timeout != 0) {		
+		g_source_remove (self->widget_id_timeout);
+	}
+
+	self->widget_id_timeout =
+		g_timeout_add (ID_CHANGED_TIMEOUT,
+			       (GSourceFunc) contact_widget_id_activate_timeout,
+			       self);
+}
+
 static void
 contact_widget_contact_setup (EmpathyContactWidget *information)
 {
@@ -277,39 +338,47 @@ contact_widget_contact_setup (EmpathyContactWidget *information)
 	 		  6);
 
 	/* Setup account label/chooser */
-	if (information->can_change_contact) {
+	if (information->type == CONTACT_WIDGET_TYPE_ADD) {
 		information->widget_account = empathy_account_chooser_new ();
+		empathy_account_chooser_set_filter (
+			EMPATHY_ACCOUNT_CHOOSER (information->widget_account),
+			contact_widget_can_add_contact_to_account,
+			NULL);
+
 		g_signal_connect (information->widget_account, "changed",
 				  G_CALLBACK (contact_widget_account_changed_cb),
 				  information);
 	} else {
 		information->widget_account = gtk_label_new (NULL);
 		gtk_label_set_selectable (GTK_LABEL (information->widget_account), TRUE);
+		gtk_misc_set_alignment (GTK_MISC (information->widget_account), 0, 0.5);
 	}
 	gtk_table_attach_defaults (GTK_TABLE (information->table_contact),
 				   information->widget_account,
 				   1, 2, 0, 1);
 	gtk_widget_show (information->widget_account);
-	gtk_misc_set_alignment (GTK_MISC (information->widget_account), 0, 0.5);
 
 	/* Setup id label/entry */
-	if (information->can_change_contact) {
+	if (information->type == CONTACT_WIDGET_TYPE_ADD) {
 		information->widget_id = gtk_entry_new ();
 		g_signal_connect (information->widget_id, "focus-out-event",
 				  G_CALLBACK (contact_widget_id_focus_out_cb),
 				  information);
+		g_signal_connect (information->widget_id, "changed",
+				  G_CALLBACK (contact_widget_id_changed_cb),
+				  information);
 	} else {
 		information->widget_id = gtk_label_new (NULL);
 		gtk_label_set_selectable (GTK_LABEL (information->widget_id), TRUE);
+		gtk_misc_set_alignment (GTK_MISC (information->widget_id), 0, 0.5);
 	}
 	gtk_table_attach_defaults (GTK_TABLE (information->table_contact),
 				   information->widget_id,
 				   1, 2, 1, 2);
 	gtk_widget_show (information->widget_id);
-	gtk_misc_set_alignment (GTK_MISC (information->widget_id), 0, 0.5);
 
 	/* Setup alias label/entry */
-	if (information->editable) {
+	if (information->type > CONTACT_WIDGET_TYPE_SHOW) {
 		information->widget_alias = gtk_entry_new ();
 		g_signal_connect (information->widget_alias, "focus-out-event",
 				  G_CALLBACK (contact_widget_entry_alias_focus_event_cb),
@@ -317,12 +386,12 @@ contact_widget_contact_setup (EmpathyContactWidget *information)
 	} else {
 		information->widget_alias = gtk_label_new (NULL);
 		gtk_label_set_selectable (GTK_LABEL (information->widget_alias), TRUE);
+		gtk_misc_set_alignment (GTK_MISC (information->widget_alias), 0, 0.5);
 	}
 	gtk_table_attach_defaults (GTK_TABLE (information->table_contact),
 				   information->widget_alias,
 				   1, 2, 2, 3);
 	gtk_widget_show (information->widget_alias);
-	gtk_misc_set_alignment (GTK_MISC (information->widget_alias), 0, 0.5);
 }
 
 static void
@@ -348,7 +417,7 @@ contact_widget_contact_update (EmpathyContactWidget *information)
 	}
 
 	/* Update account widget */
-	if (information->can_change_contact) {
+	if (information->type == CONTACT_WIDGET_TYPE_ADD) {
 		if (account) {
 			g_signal_handlers_block_by_func (information->widget_account,
 							 contact_widget_account_changed_cb,
@@ -359,20 +428,16 @@ contact_widget_contact_update (EmpathyContactWidget *information)
 							   contact_widget_account_changed_cb,
 							   information);
 		}
-	}
-	else if (account) {
-		const gchar *name;
-
-		name = mc_account_get_display_name (account);
-		gtk_label_set_label (GTK_LABEL (information->widget_account), name);
-	}
-
-	/* Update id widget */
-	if (information->can_change_contact) {
 		if (!G_STR_EMPTY (id)) {
 			gtk_entry_set_text (GTK_ENTRY (information->widget_id), id);
 		}
 	} else {
+		if (account) {
+			const gchar *name;
+
+			name = mc_account_get_display_name (account);
+			gtk_label_set_label (GTK_LABEL (information->widget_account), name);
+		}
 		gtk_label_set_label (GTK_LABEL (information->widget_id), id);
 	}
 
@@ -453,7 +518,7 @@ contact_widget_entry_alias_focus_event_cb (GtkEditable          *editable,
 static void
 contact_widget_name_notify_cb (EmpathyContactWidget *information)
 {
-	if (information->editable) {
+	if (GTK_IS_ENTRY (information->widget_alias)) {
 		gtk_entry_set_text (GTK_ENTRY (information->widget_alias),
 				    empathy_contact_get_name (information->contact));
 	} else {
@@ -494,7 +559,7 @@ contact_widget_avatar_notify_cb (EmpathyContactWidget *information)
 static void
 contact_widget_groups_setup (EmpathyContactWidget *information)
 {
-	if (information->editable) {
+	if (information->type > CONTACT_WIDGET_TYPE_SHOW) {
 		contact_widget_model_setup (information);
 	}
 }
@@ -502,7 +567,8 @@ contact_widget_groups_setup (EmpathyContactWidget *information)
 static void
 contact_widget_groups_update (EmpathyContactWidget *information)
 {
-	if (information->editable && information->contact) {
+	if (information->type > CONTACT_WIDGET_TYPE_SHOW &&
+	    information->contact) {
 		g_signal_connect_swapped (information->contact, "notify::groups",
 					  G_CALLBACK (contact_widget_groups_notify_cb),
 					  information);

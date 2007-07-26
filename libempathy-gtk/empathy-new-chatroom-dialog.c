@@ -185,6 +185,9 @@ empathy_new_chatroom_dialog_show (GtkWindow *parent)
 
 	/* Account chooser for custom */
 	dialog->account_chooser = empathy_account_chooser_new ();
+	empathy_account_chooser_set_filter (EMPATHY_ACCOUNT_CHOOSER (dialog->account_chooser),
+					    empathy_account_chooser_filter_is_connected,
+					    NULL);
 	gtk_table_attach_defaults (GTK_TABLE (dialog->table_info),
 				   dialog->account_chooser,
 				   1, 3, 0, 1);

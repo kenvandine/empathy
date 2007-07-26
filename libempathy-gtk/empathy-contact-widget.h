@@ -29,9 +29,16 @@
 
 G_BEGIN_DECLS
 
-GtkWidget *    empathy_contact_widget_new         (EmpathyContact *contact,
-						   gboolean       editable);
-EmpathyContact *empathy_contact_widget_get_contact (GtkWidget     *widget);
+typedef enum {
+	CONTACT_WIDGET_TYPE_SHOW, /* used to show contact information */
+	CONTACT_WIDGET_TYPE_EDIT, /* used to edit contact information */
+	CONTACT_WIDGET_TYPE_ADD,  /* used to add a new contact */
+	CONTACT_WIDGET_TYPE_SUBSCRIPTION /* used to accepte/reject a new contact */
+} EmpathyContactWidgetType;
+
+GtkWidget *     empathy_contact_widget_new         (EmpathyContact           *contact,
+						    EmpathyContactWidgetType  type);
+EmpathyContact *empathy_contact_widget_get_contact (GtkWidget                *widget);
 
 G_END_DECLS
 #endif /*  __EMPATHY_CONTACT_WIDGET_H__ */

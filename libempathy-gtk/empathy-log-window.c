@@ -239,7 +239,6 @@ empathy_log_window_show (McAccount   *account,
 	/* Account chooser for chats */
 	window->account_chooser_chats = empathy_account_chooser_new ();
 	account_chooser = EMPATHY_ACCOUNT_CHOOSER (window->account_chooser_chats);
-	empathy_account_chooser_set_can_select_all (account_chooser, TRUE);
 
 	gtk_box_pack_start (GTK_BOX (window->vbox_chats),
 			    window->account_chooser_chats,

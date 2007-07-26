@@ -109,7 +109,8 @@ empathy_subscription_dialog_show (EmpathyContact *contact,
 				      "hbox_subscription", &hbox_subscription,
 				      NULL);
 
-	contact_widget = empathy_contact_widget_new (contact, TRUE);
+	contact_widget = empathy_contact_widget_new (contact,
+						     CONTACT_WIDGET_TYPE_SUBSCRIPTION);
 	gtk_box_pack_end (GTK_BOX (hbox_subscription),
 			  contact_widget,
 			  TRUE, TRUE,
@@ -144,13 +145,14 @@ contact_information_response_cb (GtkDialog *dialog,
 
 void
 empathy_contact_information_dialog_show (EmpathyContact *contact,
-					 GtkWindow     *parent,
-					 gboolean       edit)
+					 GtkWindow      *parent,
+					 gboolean        edit)
 {
-	GtkWidget *dialog;
-	GtkWidget *button;
-	GtkWidget *contact_widget;
-	GList     *l;
+	GtkWidget                *dialog;
+	GtkWidget                *button;
+	GtkWidget                *contact_widget;
+	GList                    *l;
+	EmpathyContactWidgetType  type;
 
 	g_return_if_fail (EMPATHY_IS_CONTACT (contact));
 
@@ -161,6 +163,8 @@ empathy_contact_information_dialog_show (EmpathyContact *contact,
 		gtk_window_present (GTK_WINDOW (l->data));
 		return;
 	}
+
+	type = edit ? CONTACT_WIDGET_TYPE_EDIT : CONTACT_WIDGET_TYPE_SHOW;
 
 	/* Create dialog */
 	dialog = gtk_dialog_new ();
@@ -176,8 +180,8 @@ empathy_contact_information_dialog_show (EmpathyContact *contact,
 				      GTK_RESPONSE_CLOSE);
 	gtk_widget_show (button);
 	
-	/* Contact infor widget */
-	contact_widget = empathy_contact_widget_new (contact, edit);
+	/* Contact info widget */
+	contact_widget = empathy_contact_widget_new (contact, type);
 	gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox),
 			    contact_widget,
 			    TRUE, TRUE, 0);
@@ -256,8 +260,8 @@ empathy_new_contact_dialog_show (GtkWindow *parent)
 				      GTK_RESPONSE_OK);
 	gtk_widget_show (button);
 
-	/* Contact infor widget */
-	contact_widget = empathy_contact_widget_new (NULL, TRUE);
+	/* Contact info widget */
+	contact_widget = empathy_contact_widget_new (NULL, CONTACT_WIDGET_TYPE_ADD);
 	gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox),
 			    contact_widget,
 			    TRUE, TRUE, 0);

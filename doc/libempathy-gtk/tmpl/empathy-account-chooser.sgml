@@ -51,24 +51,6 @@ EmpathyAccountChooser
 @Returns: 
 
 
-<!-- ##### FUNCTION empathy_account_chooser_get_can_select_all ##### -->
-<para>
-
-</para>
-
-@chooser: 
-@Returns: 
-
-
-<!-- ##### FUNCTION empathy_account_chooser_set_can_select_all ##### -->
-<para>
-
-</para>
-
-@chooser: 
-@can_select_all: 
-
-
 <!-- ##### FUNCTION empathy_account_chooser_get_has_all_option ##### -->
 <para>
 

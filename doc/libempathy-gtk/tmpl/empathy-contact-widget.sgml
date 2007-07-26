@@ -23,7 +23,7 @@ empathy-contact-widget
 </para>
 
 @contact: 
-@editable: 
+@type: 
 @Returns: 
 
 

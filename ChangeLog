@@ -1,5 +1,19 @@
 2007-07-26 Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/empathy-account-chooser.c:
+	* libempathy-gtk/empathy-new-chatroom-dialog.c:
+	* libempathy-gtk/empathy-account-chooser.h:
+	* libempathy-gtk/empathy-contact-dialogs.c:
+	* libempathy-gtk/empathy-chatrooms-window.c:
+	* libempathy-gtk/empathy-contact-widget.c:
+	* libempathy-gtk/empathy-contact-widget.h:
+	* libempathy-gtk/empathy-log-window.c:
+	* doc/*: Do not show salut accounts in the add contact dialog. Rework
+	a bit EmpathyContactWidget. Fixes bug #459100
+	(Guillaume Desmottes, Xavier Claessens).
+
+2007-07-26 Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/empathy-accounts-dialog.c: add contact frame is not
 	hidden after cancelling. Fixes bug #458997 (Frederic Peters).
 

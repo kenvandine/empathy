@@ -151,9 +151,11 @@ empathy_chatrooms_window_show (GtkWindow *parent)
 
 	/* Account chooser for chat rooms */
 	window->account_chooser = empathy_account_chooser_new ();
+	empathy_account_chooser_set_filter (EMPATHY_ACCOUNT_CHOOSER (window->account_chooser),
+					    empathy_account_chooser_filter_is_connected,
+					    NULL);
 	empathy_account_chooser_set_account (EMPATHY_ACCOUNT_CHOOSER (window->account_chooser), NULL);
 	g_object_set (window->account_chooser, 
-		      "can-select-all", TRUE,
 		      "has-all-option", TRUE,
 		      NULL);
 

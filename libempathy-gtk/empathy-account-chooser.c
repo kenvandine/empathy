@@ -40,18 +40,18 @@
 #define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), EMPATHY_TYPE_ACCOUNT_CHOOSER, EmpathyAccountChooserPriv))
 
 typedef struct {
-	MissionControl   *mc;
-	McAccountMonitor *monitor;
-
-	gboolean          set_active_item;
-	gboolean          can_select_all;
-	gboolean          has_all_option;
+	MissionControl                 *mc;
+	McAccountMonitor               *monitor;
+	gboolean                        set_active_item;
+	gboolean                        has_all_option;
+	EmpathyAccountChooserFilterFunc filter;
+	gpointer                        filter_data;
 } EmpathyAccountChooserPriv;
 
 typedef struct {
 	EmpathyAccountChooser *chooser;
-	McAccount            *account;
-	gboolean              set;
+	McAccount             *account;
+	gboolean               set;
 } SetAccountData;
 
 enum {
@@ -98,14 +98,9 @@ static gboolean account_chooser_set_account_foreach    (GtkTreeModel            
 							GtkTreePath                     *path,
 							GtkTreeIter                     *iter,
 							SetAccountData                  *data);
-static gboolean account_chooser_set_enabled_foreach    (GtkTreeModel                    *model,
-							GtkTreePath                     *path,
-							GtkTreeIter                     *iter,
-							EmpathyAccountChooser            *chooser);
 
 enum {
 	PROP_0,
-	PROP_CAN_SELECT_ALL,
 	PROP_HAS_ALL_OPTION,
 };
 
@@ -121,14 +116,6 @@ empathy_account_chooser_class_init (EmpathyAccountChooserClass *klass)
 	object_class->set_property = account_chooser_set_property;
 
 	g_object_class_install_property (object_class,
-					 PROP_CAN_SELECT_ALL,
-					 g_param_spec_boolean ("can-select-all",
-							       "Can Select All",
-							       "Should the user be able to select offline accounts",
-							       FALSE,
-							       G_PARAM_READWRITE));
-
-	g_object_class_install_property (object_class,
 					 PROP_HAS_ALL_OPTION,
 					 g_param_spec_boolean ("has-all-option",
 							       "Has All Option",
@@ -142,6 +129,11 @@ empathy_account_chooser_class_init (EmpathyAccountChooserClass *klass)
 static void
 empathy_account_chooser_init (EmpathyAccountChooser *chooser)
 {
+	EmpathyAccountChooserPriv *priv = GET_PRIV (chooser);
+
+	priv->set_active_item = FALSE;
+	priv->filter = NULL;
+	priv->filter_data = NULL;
 }
 
 static void
@@ -180,9 +172,6 @@ account_chooser_get_property (GObject    *object,
 	priv = GET_PRIV (object);
 
 	switch (param_id) {
-	case PROP_CAN_SELECT_ALL:
-		g_value_set_boolean (value, priv->can_select_all);
-		break;
 	case PROP_HAS_ALL_OPTION:
 		g_value_set_boolean (value, priv->has_all_option);
 		break;
@@ -203,10 +192,6 @@ account_chooser_set_property (GObject      *object,
 	priv = GET_PRIV (object);
 
 	switch (param_id) {
-	case PROP_CAN_SELECT_ALL:
-		empathy_account_chooser_set_can_select_all (EMPATHY_ACCOUNT_CHOOSER (object),
-							   g_value_get_boolean (value));
-		break;
 	case PROP_HAS_ALL_OPTION:
 		empathy_account_chooser_set_has_all_option (EMPATHY_ACCOUNT_CHOOSER (object),
 							   g_value_get_boolean (value));
@@ -290,46 +275,6 @@ empathy_account_chooser_set_account (EmpathyAccountChooser *chooser,
 				&data);
 
 	return data.set;
-}
-
-gboolean
-empathy_account_chooser_get_can_select_all (EmpathyAccountChooser *chooser)
-{
-	EmpathyAccountChooserPriv *priv;
-
-	g_return_val_if_fail (EMPATHY_IS_ACCOUNT_CHOOSER (chooser), FALSE);
-
-	priv = GET_PRIV (chooser);
-	
-	return priv->can_select_all;
-}
-
-void
-empathy_account_chooser_set_can_select_all (EmpathyAccountChooser *chooser,
-					   gboolean              can_select_all)
-{
-	EmpathyAccountChooserPriv *priv;
-	GtkComboBox              *combobox;
-	GtkTreeModel             *model;
-
-	g_return_if_fail (EMPATHY_IS_ACCOUNT_CHOOSER (chooser));
-
-	priv = GET_PRIV (chooser);
-
-	if (priv->can_select_all == can_select_all) {
-		return;
-	}
-
-	combobox = GTK_COMBO_BOX (chooser);
-	model = gtk_combo_box_get_model (combobox);
-
-	priv->can_select_all = can_select_all;
-
-	gtk_tree_model_foreach (model,
-				(GtkTreeModelForeachFunc) account_chooser_set_enabled_foreach,
-				chooser);
-
-	g_object_notify (G_OBJECT (chooser), "can-select-all");
 }
 
 gboolean
@@ -509,15 +454,14 @@ account_chooser_account_remove_foreach (McAccount            *account,
 
 static void
 account_chooser_update_iter (EmpathyAccountChooser *chooser,
-			     GtkTreeIter          *iter,
-			     McAccount            *account)
+			     GtkTreeIter           *iter,
+			     McAccount             *account)
 {
 	EmpathyAccountChooserPriv *priv;
-	GtkListStore             *store;
-	GtkComboBox              *combobox;
-	TpConn                   *tp_conn;
-	const gchar              *icon_name;
-	gboolean                  is_enabled;
+	GtkListStore              *store;
+	GtkComboBox               *combobox;
+	const gchar               *icon_name;
+	gboolean                   is_enabled = TRUE;
 
 	priv = GET_PRIV (chooser);
 
@@ -525,11 +469,8 @@ account_chooser_update_iter (EmpathyAccountChooser *chooser,
 	store = GTK_LIST_STORE (gtk_combo_box_get_model (combobox));
 
 	icon_name = empathy_icon_name_from_account (account);
-	tp_conn = mission_control_get_connection (priv->mc, account, NULL);
-	is_enabled = (tp_conn != NULL || priv->can_select_all);
-
-	if (tp_conn) {
-		g_object_unref (tp_conn);
+	if (priv->filter) {
+		is_enabled = priv->filter (account, priv->filter_data);
 	}
 
 	gtk_list_store_set (store, iter,
@@ -614,24 +555,76 @@ account_chooser_set_account_foreach (GtkTreeModel   *model,
 }
 
 static gboolean
-account_chooser_set_enabled_foreach (GtkTreeModel         *model,
-				     GtkTreePath          *path,
-				     GtkTreeIter          *iter,
-				     EmpathyAccountChooser *chooser)
+account_chooser_filter_foreach (GtkTreeModel          *model,
+				GtkTreePath           *path,
+				GtkTreeIter           *iter,
+				gpointer               chooser)
 {
 	EmpathyAccountChooserPriv *priv;
-	McAccount                *account;
+	McAccount                 *account;
+	gboolean                   is_enabled = TRUE;
 
 	priv = GET_PRIV (chooser);
 
 	gtk_tree_model_get (model, iter, COL_ACCOUNT_POINTER, &account, -1);
-	if (!account) {
-		return FALSE;
+
+	if (priv->filter) {
+		is_enabled = priv->filter (account, priv->filter_data);
 	}
 
-	account_chooser_update_iter (chooser, iter, account);
+	gtk_list_store_set (GTK_LIST_STORE (model), iter,
+			    COL_ACCOUNT_ENABLED, is_enabled,
+			    -1);
+
+	/* set first connected account as active account */
+	if (!priv->set_active_item && is_enabled) {
+		priv->set_active_item = TRUE;
+		gtk_combo_box_set_active_iter (GTK_COMBO_BOX (chooser), iter);
+	}
+
 	g_object_unref (account);
 
 	return FALSE;
 }
 
+void
+empathy_account_chooser_set_filter (EmpathyAccountChooser           *chooser,
+                                    EmpathyAccountChooserFilterFunc  filter,
+                                    gpointer                         user_data)
+{
+	EmpathyAccountChooserPriv *priv;
+	GtkTreeModel *model;
+
+	g_return_if_fail (EMPATHY_IS_ACCOUNT_CHOOSER (chooser));
+
+	priv = GET_PRIV (chooser);
+
+	priv->filter = filter;
+	priv->filter_data = user_data;
+
+	/* Refilter existing data */
+	priv->set_active_item = FALSE;
+	model = gtk_combo_box_get_model (GTK_COMBO_BOX (chooser));
+	gtk_tree_model_foreach (model, account_chooser_filter_foreach, chooser);
+}
+
+gboolean
+empathy_account_chooser_filter_is_connected (McAccount *account,
+					     gpointer   user_data)
+{
+	MissionControl *mc;
+	TpConn         *tp_conn;
+
+	g_return_val_if_fail (MC_IS_ACCOUNT (account), FALSE);
+
+	mc = empathy_mission_control_new ();
+	tp_conn = mission_control_get_connection (mc, account, NULL);
+	g_object_unref (mc);
+
+	if (tp_conn == NULL) {
+		return FALSE;
+	}
+
+	g_object_unref (tp_conn);
+	return TRUE;
+}
