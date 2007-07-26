@@ -1,3 +1,10 @@
+2007-07-26 Xavier Claessens  <xclaesse@gmail.com>
+
+	* libempathy/empathy-idle.c: Fix problems when NM is not running. Fixes
+	bug #460419.
+
+	* doc/*: Updated documentation.
+
 2007-07-25 Xavier Claessens  <xclaesse@gmail.com>
 
 	* libempathy/empathy-filter.c: Adding more debug output.

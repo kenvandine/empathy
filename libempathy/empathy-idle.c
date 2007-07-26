@@ -192,10 +192,22 @@ empathy_idle_init (EmpathyIdle *idle)
 				   G_TYPE_INVALID,
 				   G_TYPE_UINT, &nm_status,
 				   G_TYPE_INVALID);
-		priv->nm_connected = (nm_status == NM_STATE_CONNECTED);
 
-		empathy_debug (DEBUG_DOMAIN, "NetworkManager connected: %s",
-			       priv->nm_connected ? "Yes" : "No");
+		if (error) {
+			/* Can't get actual status, NM is not working. */
+			empathy_debug (DEBUG_DOMAIN, 
+				       "Couldn't get NM state: %s",
+				       error->message);
+			g_clear_error (&error);
+			g_object_unref (priv->nm_proxy);
+			priv->nm_proxy = NULL;
+			priv->nm_connected = TRUE;
+		} else {
+			priv->nm_connected = (nm_status == NM_STATE_CONNECTED);
+
+			empathy_debug (DEBUG_DOMAIN, "NetworkManager connected: %s",
+				       priv->nm_connected ? "Yes" : "No");
+		}
 
 		if (!priv->nm_connected) {
 			priv->saved_state = priv->state;

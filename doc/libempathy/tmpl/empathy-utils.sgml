@@ -195,13 +195,3 @@ empathy-utils
 @Returns: 
 
 
-<!-- ##### FUNCTION empathy_get_channel_id ##### -->
-<para>
-
-</para>
-
-@account: 
-@tp_chan: 
-@Returns: 
-
-

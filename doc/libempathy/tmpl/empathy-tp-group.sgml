@@ -88,8 +88,8 @@ EmpathyTpGroup
 
 </para>
 
+@account: 
 @tp_chan: 
-@tp_conn: 
 @Returns: 
 
 

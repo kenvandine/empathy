@@ -53,6 +53,15 @@ EmpathyTpChat
 @empathytpchat: the object which received the signal.
 @arg1: 
 
+<!-- ##### SIGNAL EmpathyTpChat::send-error ##### -->
+<para>
+
+</para>
+
+@empathytpchat: the object which received the signal.
+@arg1: 
+@arg2: 
+
 <!-- ##### ARG EmpathyTpChat:account ##### -->
 <para>
 
