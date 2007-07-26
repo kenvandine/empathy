@@ -73,7 +73,6 @@ typedef struct {
 } EmpathyNewChatroomDialog;
 
 enum {
-	COL_IMAGE,
 	COL_NAME,
 	COL_ROOM,
 	COL_COUNT
@@ -277,13 +276,6 @@ new_chatroom_dialog_model_add_columns (EmpathyNewChatroomDialog *dialog)
 	view = GTK_TREE_VIEW (dialog->treeview);
 	gtk_tree_view_set_headers_visible (view, FALSE);
 
-	/* Chatroom pointer */
-	column = gtk_tree_view_column_new ();
-	gtk_tree_view_column_set_title (column, _("Chat Rooms"));
-
-	cell = gtk_cell_renderer_pixbuf_new ();
-	gtk_tree_view_column_pack_start (column, cell, FALSE);
-
 	cell = gtk_cell_renderer_text_new ();
 	g_object_set (cell,
 		      "xpad", (guint) 4,
@@ -291,7 +283,10 @@ new_chatroom_dialog_model_add_columns (EmpathyNewChatroomDialog *dialog)
 		      "ellipsize", PANGO_ELLIPSIZE_END,
 		      NULL);
 
-	gtk_tree_view_column_pack_start (column, cell, TRUE);
+	column = gtk_tree_view_column_new_with_attributes (_("Chat Rooms"),
+		                                           cell,
+		                                           "text", COL_NAME,
+		                                           NULL);
 
 	gtk_tree_view_column_set_expand (column, TRUE);
 	gtk_tree_view_append_column (view, column);
@@ -478,7 +473,6 @@ new_chatroom_dialog_model_selection_changed (GtkTreeSelection         *selection
 	gtk_entry_set_text (GTK_ENTRY (dialog->entry_server), server ? server : "");
 	gtk_entry_set_text (GTK_ENTRY (dialog->entry_room), room ? room : "");
 
-	g_free (server);
 	g_free (room);
 }
 

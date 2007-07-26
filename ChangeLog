@@ -1,5 +1,11 @@
 2007-07-26 Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/empathy-new-chatroom-dialog.c:
+	* libempathy/empathy-tp-roomlist.c: Fix Room listing. Fixes bug #460416
+	(Sjoerd Simons).
+
+2007-07-26 Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/Makefile.am:
 	* libempathy/Makefile.am:
 	* configure.ac: Use libtool -version-info. Fixes bug #460579

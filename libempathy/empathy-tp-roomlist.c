@@ -314,8 +314,6 @@ tp_roomlist_got_rooms_cb (DBusGProxy        *roomlist_iface,
 
 	priv = GET_PRIV (list);
 
-	g_print ("Got negsghgfdhgfdhgfdw room !!!");
-
 	for (i = 0; i < room_list->len; i++) {
 		EmpathyChatroom *chatroom;
 		gchar           *room_id;
@@ -329,9 +327,7 @@ tp_roomlist_got_rooms_cb (DBusGProxy        *roomlist_iface,
 		room_struct = g_ptr_array_index (room_list, i);
 		handle = g_value_get_uint (g_value_array_get_nth (room_struct, 0));
 		channel_type = g_value_get_string (g_value_array_get_nth (room_struct, 1));
-		info = g_value_get_boxed (g_value_array_get_nth (room_struct, 0));
-
-		g_print ("Got new room !!!");
+		info = g_value_get_boxed (g_value_array_get_nth (room_struct, 2));
 
 		/* Create the chatroom */
 		room_name = g_hash_table_lookup (info, "name");
