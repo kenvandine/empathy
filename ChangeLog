@@ -1,5 +1,11 @@
 2007-07-26 Xavier Claessens  <xclaesse@gmail.com>
 
+	* README:
+	* autogen.sh: Remove the autogen.sh script and use gnome-autogen.sh
+	instead.
+
+2007-07-26 Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/empathy-account-chooser.c:
 	* libempathy-gtk/empathy-new-chatroom-dialog.c:
 	* libempathy-gtk/empathy-account-chooser.h:
