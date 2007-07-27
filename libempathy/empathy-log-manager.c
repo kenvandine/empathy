@@ -24,6 +24,7 @@
 
 #include <string.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <glib/gstdio.h>
 
 #include "empathy-log-manager.h"
@@ -142,6 +143,7 @@ empathy_log_manager_add_message (EmpathyLogManager *manager,
 	gchar         *timestamp;
 	gchar         *contact_name;
 	gchar         *contact_id;
+	EmpathyMessageType msg_type;
 
 	g_return_if_fail (EMPATHY_IS_LOG_MANAGER (manager));
 	g_return_if_fail (chat_id != NULL);
@@ -150,6 +152,7 @@ empathy_log_manager_add_message (EmpathyLogManager *manager,
 	sender = empathy_message_get_sender (message);
 	account = empathy_contact_get_account (sender);
 	body_str = empathy_message_get_body (message);
+	msg_type = empathy_message_get_type (message);
 
 	if (G_STR_EMPTY (body_str)) {
 		return;
@@ -190,11 +193,12 @@ empathy_log_manager_add_message (EmpathyLogManager *manager,
 	contact_id = g_markup_escape_text (str, -1);
 
 	g_fprintf (file,
-		   "<message time='%s' id='%s' name='%s' isuser='%s'>%s</message>\n" LOG_FOOTER,
+		   "<message time='%s' id='%s' name='%s' isuser='%s' type='%s'>%s</message>\n" LOG_FOOTER,
 		   timestamp,
 		   contact_id,
 		   contact_name,
 		   empathy_contact_is_user (sender) ? "true" : "false",
+		   empathy_message_type_to_str (msg_type),
 		   body);
 
 	fclose (file);
@@ -318,15 +322,17 @@ empathy_log_manager_get_messages_for_file (EmpathyLogManager *manager,
 
 	/* Now get the messages. */
 	for (node = log_node->children; node; node = node->next) {
-		EmpathyMessage *message;
-		EmpathyContact *sender;
-		gchar         *time;
-		EmpathyTime     t;
-		gchar         *sender_id;
-		gchar         *sender_name;
-		gchar         *body;
-		gchar         *is_user_str;
-		gboolean       is_user = FALSE;
+		EmpathyMessage     *message;
+		EmpathyContact     *sender;
+		gchar              *time;
+		EmpathyTime         t;
+		gchar              *sender_id;
+		gchar              *sender_name;
+		gchar              *body;
+		gchar              *is_user_str;
+		gboolean            is_user = FALSE;
+		gchar              *msg_type_str;
+		EmpathyMessageType  msg_type = EMPATHY_MESSAGE_TYPE_NORMAL;
 
 		if (strcmp (node->name, "message") != 0) {
 			continue;
@@ -337,9 +343,13 @@ empathy_log_manager_get_messages_for_file (EmpathyLogManager *manager,
 		sender_id = xmlGetProp (node, "id");
 		sender_name = xmlGetProp (node, "name");
 		is_user_str = xmlGetProp (node, "isuser");
+		msg_type_str = xmlGetProp (node, "type");
 
 		if (is_user_str) {
 			is_user = strcmp (is_user_str, "true") == 0;
+		}
+		if (msg_type_str) {
+			msg_type = empathy_message_type_from_str (msg_type_str);
 		}
 
 		t = empathy_time_parse (time);
@@ -349,6 +359,7 @@ empathy_log_manager_get_messages_for_file (EmpathyLogManager *manager,
 		message = empathy_message_new (body);
 		empathy_message_set_sender (message, sender);
 		empathy_message_set_timestamp (message, t);
+		empathy_message_set_type (message, msg_type);
 
 		messages = g_list_append (messages, message);
 
@@ -357,6 +368,8 @@ empathy_log_manager_get_messages_for_file (EmpathyLogManager *manager,
 		xmlFree (sender_id);
 		xmlFree (sender_name);
 		xmlFree (body);
+		xmlFree (is_user_str);
+		xmlFree (msg_type_str);
 	}
 
 	empathy_debug (DEBUG_DOMAIN, "Parsed %d messages", g_list_length (messages));

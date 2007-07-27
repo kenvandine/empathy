@@ -22,7 +22,11 @@ EmpathyAccountChooser
 
 </para>
 
-@parent: 
+
+<!-- ##### ARG EmpathyAccountChooser:has-all-option ##### -->
+<para>
+
+</para>
 
 <!-- ##### FUNCTION empathy_account_chooser_new ##### -->
 <para>

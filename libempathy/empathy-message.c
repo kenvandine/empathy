@@ -31,12 +31,11 @@
 typedef struct _EmpathyMessagePriv EmpathyMessagePriv;
 
 struct _EmpathyMessagePriv {
-	EmpathyMessageType     type;
-	EmpathyContact        *sender;
-	EmpathyContact        *receiver;
-	gchar                *body;
-	EmpathyTime            timestamp;
-
+	EmpathyMessageType  type;
+	EmpathyContact     *sender;
+	EmpathyContact     *receiver;
+	gchar              *body;
+	EmpathyTime         timestamp;
 };
 
 static void empathy_message_class_init (EmpathyMessageClass *class);
@@ -414,5 +413,39 @@ empathy_message_set_timestamp (EmpathyMessage *message,
 	}
 
 	g_object_notify (G_OBJECT (message), "timestamp");
+}
+
+EmpathyMessageType
+empathy_message_type_from_str (const gchar *type_str)
+{
+	if (strcmp (type_str, "normal") == 0) {
+		return EMPATHY_MESSAGE_TYPE_NORMAL;
+	}
+	if (strcmp (type_str, "action") == 0) {
+		return EMPATHY_MESSAGE_TYPE_ACTION;
+	}
+	else if (strcmp (type_str, "notice") == 0) {
+		return EMPATHY_MESSAGE_TYPE_NOTICE;
+	}
+	else if (strcmp (type_str, "auto-reply") == 0) {
+		return EMPATHY_MESSAGE_TYPE_AUTO_REPLY;
+	}
+
+	return EMPATHY_MESSAGE_TYPE_NORMAL;
+}
+
+const gchar *
+empathy_message_type_to_str (EmpathyMessageType type)
+{
+	switch (type) {
+	case EMPATHY_MESSAGE_TYPE_ACTION:
+		return "action";
+	case EMPATHY_MESSAGE_TYPE_NOTICE:
+		return "notice";
+	case EMPATHY_MESSAGE_TYPE_AUTO_REPLY:
+		return "auto-reply";
+	default:
+		return "normal";
+	}
 }
 

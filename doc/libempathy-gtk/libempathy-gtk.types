@@ -1,5 +1,6 @@
 #include <libempathy-gtk/empathy-cell-renderer-text.h>
 #include <libempathy-gtk/empathy-contact-list-store.h>
+#include <libempathy-gtk/empathy-account-chooser.h>
 #include <libempathy-gtk/empathy-chat.h>
 #include <libempathy-gtk/empathy-chat-window.h>
 #include <libempathy-gtk/empathy-contact-list-view.h>
@@ -14,6 +15,7 @@
 
 empathy_cell_renderer_text_get_type
 empathy_contact_list_store_get_type
+empathy_account_chooser_get_type
 empathy_chat_get_type
 empathy_chat_window_get_type
 empathy_contact_list_view_get_type
