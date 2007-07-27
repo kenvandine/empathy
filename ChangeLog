@@ -1,5 +1,10 @@
 2007-07-27 Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/empathy-profile-chooser.c: Sort profiles to have
+	free protocols first. Fixes bug #460605.
+
+2007-07-27 Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy/empathy-message.c:
 	* libempathy/empathy-message.h:
 	* libempathy/empathy-log-manager.c: Add message type in log files.

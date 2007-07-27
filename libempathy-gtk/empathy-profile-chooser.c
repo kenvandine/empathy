@@ -25,9 +25,8 @@
 #include <gtk/gtk.h>
 #include <libmissioncontrol/mc-profile.h>
 
-#include <libempathy-gtk/empathy-ui-utils.h>
-
 #include "empathy-profile-chooser.h"
+#include "empathy-ui-utils.h"
 
 enum {
 	COL_ICON,
@@ -51,6 +50,53 @@ empathy_profile_chooser_get_selected (GtkWidget *widget)
 	}
 
 	return profile;
+}
+
+static gint
+profile_chooser_sort_protocol_value (const gchar *protocol_name)
+{
+	if (strcmp (protocol_name, "jabber") == 0) {
+		return 0;
+	}
+	else if (strcmp (protocol_name, "salut") == 0) {
+		return 1;
+	}
+
+	return 2;
+}
+
+static gint
+profile_chooser_sort_func (GtkTreeModel *model,
+			   GtkTreeIter  *iter_a,
+			   GtkTreeIter  *iter_b,
+			   gpointer      user_data)
+{
+	McProfile   *profile_a;
+	McProfile   *profile_b;
+	const gchar *proto_a;
+	const gchar *proto_b;
+	gint         cmp;
+
+	gtk_tree_model_get (model, iter_a,
+			    COL_PROFILE, &profile_a,
+			    -1);
+	gtk_tree_model_get (model, iter_b,
+			    COL_PROFILE, &profile_b,
+			    -1);
+
+	proto_a = mc_profile_get_protocol_name (profile_a);
+	proto_b = mc_profile_get_protocol_name (profile_b);
+	cmp = profile_chooser_sort_protocol_value (proto_a);
+	cmp -= profile_chooser_sort_protocol_value (proto_b);
+	if (cmp == 0) {
+		cmp = strcmp (mc_profile_get_display_name (profile_a),
+			      mc_profile_get_display_name (profile_b));
+	}
+
+	g_object_unref (profile_a);
+	g_object_unref (profile_b);
+
+	return cmp;
 }
 
 GtkWidget *
@@ -83,6 +129,15 @@ empathy_profile_chooser_new (void)
 					"text", COL_LABEL,
 					NULL);
 
+	/* Set the profile sort function */
+	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (store),
+					      COL_PROFILE,
+					      GTK_SORT_ASCENDING);
+	gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (store),
+					 COL_PROFILE,
+					 profile_chooser_sort_func,
+					 NULL, NULL);
+
 	profiles = mc_profiles_list ();
 	for (l = profiles; l; l = l->next) {
 		McProfile *profile;
@@ -95,8 +150,9 @@ empathy_profile_chooser_new (void)
 				    COL_LABEL, mc_profile_get_display_name (profile),
 				    COL_PROFILE, profile,
 				    -1);
-		gtk_combo_box_set_active_iter (GTK_COMBO_BOX (combo_box), &iter);
 	}
+
+	gtk_combo_box_set_active_iter (GTK_COMBO_BOX (combo_box), &iter);
 
 	mc_profiles_free_list (profiles);
 	g_object_unref (store);
