@@ -59,11 +59,12 @@ profile_chooser_sort_profile_value (McProfile *profile)
 	const gchar *profile_name;
 	const gchar *names[] = {"jabber",
 				"salut",
-				"gtalk"};
+				"gtalk",
+				NULL};
 
 	profile_name = mc_profile_get_unique_name (profile);
 
-	for (i = 0 ; i < G_N_ELEMENTS (names); i++) {
+	for (i = 0 ; names[i]; i++) {
 		if (strcmp (profile_name, names[i]) == 0) {
 			return i;
 		}
