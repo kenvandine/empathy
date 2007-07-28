@@ -1,5 +1,10 @@
 2007-07-28 Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/empathy-profile-chooser.c: Makes easier to change to
+	profile order.
+
+2007-07-28 Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/empathy-account-widget-jabber.c: Try to guess the
 	server from the jid only if we are using the jabber profile. When we
 	guessed a server don't forget to set the "server" McAccount param,

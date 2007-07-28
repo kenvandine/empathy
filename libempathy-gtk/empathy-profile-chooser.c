@@ -55,26 +55,21 @@ empathy_profile_chooser_get_selected (GtkWidget *widget)
 static gint
 profile_chooser_sort_profile_value (McProfile *profile)
 {
-	const gchar *name;
+	guint        i;
+	const gchar *profile_name;
+	const gchar *names[] = {"jabber",
+				"salut",
+				"gtalk"};
 
-	name = mc_profile_get_unique_name (profile);
+	profile_name = mc_profile_get_unique_name (profile);
 
-	/* Jabber is the prefered protocol, salut is a free protocol so it
-	 * should be at the begining of the list, and google talk uses the
-	 * free jabber protocol so it gets the 3rd place.
-	 * FIXME: Add other free protocols in this list.
-	 */
-	if (strcmp (name, "jabber") == 0) {
-		return 0;
-	}
-	else if (strcmp (name, "salut") == 0) {
-		return 1;
-	}
-	else if (strcmp (name, "gtalk") == 0) {
-		return 2;
+	for (i = 0 ; i < G_N_ELEMENTS (names); i++) {
+		if (strcmp (profile_name, names[i]) == 0) {
+			return i;
+		}
 	}
 
-	return 3;
+	return i;
 }
 
 static gint
