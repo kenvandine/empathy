@@ -53,16 +53,28 @@ empathy_profile_chooser_get_selected (GtkWidget *widget)
 }
 
 static gint
-profile_chooser_sort_protocol_value (const gchar *protocol_name)
+profile_chooser_sort_profile_value (McProfile *profile)
 {
-	if (strcmp (protocol_name, "jabber") == 0) {
+	const gchar *name;
+
+	name = mc_profile_get_unique_name (profile);
+
+	/* Jabber is the prefered protocol, salut is a free protocol so it
+	 * should be at the begining of the list, and google talk uses the
+	 * free jabber protocol so it gets the 3rd place.
+	 * FIXME: Add other free protocols in this list.
+	 */
+	if (strcmp (name, "jabber") == 0) {
 		return 0;
 	}
-	else if (strcmp (protocol_name, "salut") == 0) {
+	else if (strcmp (name, "salut") == 0) {
 		return 1;
 	}
+	else if (strcmp (name, "gtalk") == 0) {
+		return 2;
+	}
 
-	return 2;
+	return 3;
 }
 
 static gint
@@ -73,8 +85,6 @@ profile_chooser_sort_func (GtkTreeModel *model,
 {
 	McProfile   *profile_a;
 	McProfile   *profile_b;
-	const gchar *proto_a;
-	const gchar *proto_b;
 	gint         cmp;
 
 	gtk_tree_model_get (model, iter_a,
@@ -84,10 +94,8 @@ profile_chooser_sort_func (GtkTreeModel *model,
 			    COL_PROFILE, &profile_b,
 			    -1);
 
-	proto_a = mc_profile_get_protocol_name (profile_a);
-	proto_b = mc_profile_get_protocol_name (profile_b);
-	cmp = profile_chooser_sort_protocol_value (proto_a);
-	cmp -= profile_chooser_sort_protocol_value (proto_b);
+	cmp = profile_chooser_sort_profile_value (profile_a);
+	cmp -= profile_chooser_sort_profile_value (profile_b);
 	if (cmp == 0) {
 		cmp = strcmp (mc_profile_get_display_name (profile_a),
 			      mc_profile_get_display_name (profile_b));

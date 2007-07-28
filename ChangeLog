@@ -1,5 +1,10 @@
 2007-07-28 Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/empathy-profile-chooser.c: Improve the sort function
+	a bit to have Jabber before GTalk.
+
+2007-07-28 Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/empathy-accounts-dialog.glade:
 	* libempathy-gtk/empathy-accounts-dialog.c: Update the Enable/Disable
 	button even if there is no account selected. Set it insensitive if no
