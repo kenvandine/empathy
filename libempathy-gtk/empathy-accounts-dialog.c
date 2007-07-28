@@ -159,15 +159,13 @@ static void       accounts_dialog_destroy_cb                (GtkWidget          
 static void
 accounts_dialog_setup (EmpathyAccountsDialog *dialog)
 {
-	GtkTreeView      *view;
-	GtkListStore     *store;
-	GtkTreeSelection *selection;
-	GtkTreeIter       iter;
-	GList            *accounts, *l;
+	GtkTreeView  *view;
+	GtkListStore *store;
+	GtkTreeIter   iter;
+	GList        *accounts, *l;
 
 	view = GTK_TREE_VIEW (dialog->treeview);
 	store = GTK_LIST_STORE (gtk_tree_view_get_model (view));
-	selection = gtk_tree_view_get_selection (view);
 
 	accounts = mc_accounts_list ();
 
@@ -215,12 +213,9 @@ accounts_dialog_update_connect_button (EmpathyAccountsDialog *dialog)
 
 	account = accounts_dialog_model_get_selected (dialog);
 	
-	if (!account) {
-		gtk_widget_set_sensitive (dialog->button_connect, FALSE);
-		return;
-	}
+	gtk_widget_set_sensitive (dialog->button_connect, account != NULL);
 
-	if (mc_account_is_enabled (account)) {
+	if (account && mc_account_is_enabled (account)) {
 		label = _("Disable");
 		stock_id = GTK_STOCK_DISCONNECT;
 	} else {
