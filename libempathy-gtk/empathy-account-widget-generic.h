@@ -31,8 +31,7 @@
 
 G_BEGIN_DECLS
 
-GtkWidget *empathy_account_widget_generic_new (McAccount *account,
-					      GtkWidget *label_name);
+GtkWidget *empathy_account_widget_generic_new (McAccount *account);
 
 G_END_DECLS
 

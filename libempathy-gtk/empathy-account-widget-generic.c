@@ -146,6 +146,7 @@ account_widget_generic_setup_foreach (McProtocolParam            *param,
 
 		str = g_strdup_printf (_("%s:"), param_name_formatted);
 		widget = gtk_label_new (str);
+		gtk_misc_set_alignment (GTK_MISC (widget), 0, 0.5);
 		g_free (str);
 
 		gtk_size_group_add_widget (settings->size_group, widget);
@@ -208,6 +209,7 @@ account_widget_generic_setup_foreach (McProtocolParam            *param,
 
 		str = g_strdup_printf (_("%s:"), param_name_formatted);
 		widget = gtk_label_new (str);
+		gtk_misc_set_alignment (GTK_MISC (widget), 0, 0.5);
 		g_free (str);
 
 		gtk_size_group_add_widget (settings->size_group, widget);
@@ -310,13 +312,11 @@ account_widget_generic_destroy_cb (GtkWidget                  *widget,
 }
 
 GtkWidget *
-empathy_account_widget_generic_new (McAccount *account,
-				   GtkWidget *label_name)
+empathy_account_widget_generic_new (McAccount *account)
 {
 	EmpathyAccountWidgetGeneric *settings;
 
 	g_return_val_if_fail (MC_IS_ACCOUNT (account), NULL);
-	g_return_val_if_fail (GTK_IS_WIDGET (label_name), NULL);
 
 	settings = g_new0 (EmpathyAccountWidgetGeneric, 1);
 
@@ -331,11 +331,6 @@ empathy_account_widget_generic_new (McAccount *account,
 					GTK_POLICY_AUTOMATIC);
 	gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (settings->sw),
 					       settings->table_settings);
-
-	settings->size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
-	if (label_name) {
-		gtk_size_group_add_widget (settings->size_group, label_name);
-	}
 	
 	accounts_widget_generic_setup (settings);
 

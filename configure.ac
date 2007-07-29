@@ -1,6 +1,9 @@
 AC_INIT(Empathy, 0.10, http://bugzilla.gnome.org/browse.cgi?product=empathy)
 AC_PREREQ(2.59)
-AC_COPYRIGHT([Copyright (C) 2003-2007 Imendio AB])
+AC_COPYRIGHT([
+  Copyright (C) 2003-2007 Imendio AB
+  Copyright (C) 2007 Collabora Ltd.
+])
 
 AM_CONFIG_HEADER(config.h)
 AM_INIT_AUTOMAKE(1.9 dist-bzip2 no-define)

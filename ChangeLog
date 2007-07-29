@@ -1,5 +1,17 @@
 2007-07-28 Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/empathy-account-widget-generic.c:
+	* libempathy-gtk/empathy-account-widget-generic.h: Align param names
+	on the left.
+
+	* libempathy-gtk/empathy-accounts-dialog.glade:
+	* libempathy-gtk/empathy-accounts-dialog.c: Simpler header to describe
+	the selected account. Fixes bug #459169.
+
+	* configure.ac: Set Collabora Ltd. in the Copyright.
+
+2007-07-28 Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/empathy-profile-chooser.c: Makes easier to change to
 	profile order.
 

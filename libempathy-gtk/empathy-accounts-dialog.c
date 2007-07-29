@@ -291,8 +291,7 @@ accounts_dialog_update_account (EmpathyAccountsDialog *dialog,
 		}
 		else {
 			dialog->settings_widget = 
-				empathy_account_widget_generic_new (account,
-								   dialog->label_name);
+				empathy_account_widget_generic_new (account);
 		}
 		
 		gtk_widget_grab_focus (dialog->settings_widget);
@@ -305,17 +304,20 @@ accounts_dialog_update_account (EmpathyAccountsDialog *dialog,
 
 	if (account) {
 		McProfile *profile;
+		gchar     *text;
 
 		profile = mc_account_get_profile (account);
 		gtk_image_set_from_icon_name (GTK_IMAGE (dialog->image_type),
 					      mc_profile_get_icon_name (profile),
 					      GTK_ICON_SIZE_DIALOG);
-		
+		/* FIXME: Uncomment once we depend on GTK+ 2.12
+		gtk_widget_set_tooltip_text (dialog->image_type,
+					     mc_profile_get_display_name (profile));
+		*/
 
-		gtk_label_set_text (GTK_LABEL (dialog->label_type),
-				    mc_profile_get_display_name (profile));
-		gtk_label_set_text (GTK_LABEL (dialog->label_name), 
-				    mc_account_get_display_name (account));
+		text = g_strdup_printf ("<big><b>%s</b></big>", mc_account_get_display_name (account));
+		gtk_label_set_markup (GTK_LABEL (dialog->label_name), text);
+		g_free (text);
 	}
 }
 
@@ -979,7 +981,6 @@ empathy_accounts_dialog_show (GtkWindow *parent)
 				       "button_create", &dialog->button_create,
 				       "button_back", &dialog->button_back,
 				       "image_type", &dialog->image_type,
-				       "label_type", &dialog->label_type,
 				       "label_name", &dialog->label_name,
 				       "button_remove", &dialog->button_remove,
 				       "button_connect", &dialog->button_connect,
