@@ -1,5 +1,10 @@
 2007-07-29 Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/empathy-profile-chooser.c:
+	* libempathy/empathy-message.c: Add missing include string.h.
+
+2007-07-29 Xavier Claessens  <xclaesse@gmail.com>
+
 	* configure.ac: Bump version to 0.11.
 
 2007-07-29 Xavier Claessens  <xclaesse@gmail.com>

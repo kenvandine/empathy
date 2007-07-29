@@ -24,6 +24,8 @@
 
 #include "config.h"
 
+#include <string.h>
+
 #include "empathy-message.h"
 
 #define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), EMPATHY_TYPE_MESSAGE, EmpathyMessagePriv))
