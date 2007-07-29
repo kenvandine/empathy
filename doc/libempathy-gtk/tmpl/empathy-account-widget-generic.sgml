@@ -23,7 +23,6 @@ empathy-account-widget-generic
 </para>
 
 @account: 
-@label_name: 
 @Returns: 
 
 
