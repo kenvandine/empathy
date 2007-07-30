@@ -1,3 +1,7 @@
+2007-07-30 Xavier Claessens  <xclaesse@gmail.com>
+
+	* autogen.sh: Added back, it calls gnome-autogen.sh.
+
 2007-07-29 Xavier Claessens  <xclaesse@gmail.com>
 
 	* libempathy-gtk/empathy-profile-chooser.c:
