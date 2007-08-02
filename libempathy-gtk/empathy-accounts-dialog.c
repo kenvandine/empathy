@@ -70,8 +70,7 @@ typedef struct {
 
 	GtkWidget        *frame_new_account;
 	GtkWidget        *combobox_profile;
-	GtkWidget        *entry_name;
-	GtkWidget        *table_new_account;
+	GtkWidget        *hbox_type;
 	GtkWidget        *button_create;
 	GtkWidget        *button_back;
 
@@ -130,8 +129,6 @@ static void       accounts_dialog_status_changed_cb         (MissionControl     
 							     McPresence                       presence,
 							     TelepathyConnectionStatusReason  reason,
 							     const gchar                     *unique_name,
-							     EmpathyAccountsDialog            *dialog);
-static void       accounts_dialog_entry_name_changed_cb     (GtkWidget                       *widget,
 							     EmpathyAccountsDialog            *dialog);
 static void       accounts_dialog_button_create_clicked_cb  (GtkWidget                       *button,
 							     EmpathyAccountsDialog            *dialog);
@@ -351,6 +348,32 @@ accounts_dialog_model_setup (EmpathyAccountsDialog *dialog)
 }
 
 static void
+accounts_dialog_name_edited_cb (GtkCellRendererText   *renderer,
+				gchar                 *path,
+				gchar                 *new_text,
+				EmpathyAccountsDialog *dialog)
+{
+	McAccount    *account;
+	GtkTreeModel *model;
+	GtkTreePath  *treepath;
+	GtkTreeIter   iter;
+
+	model = gtk_tree_view_get_model (GTK_TREE_VIEW (dialog->treeview));
+	treepath = gtk_tree_path_new_from_string (path);
+	gtk_tree_model_get_iter (model, &iter, treepath);
+	gtk_tree_model_get (model, &iter,
+			    COL_ACCOUNT_POINTER, &account,
+			    -1);
+	gtk_list_store_set (GTK_LIST_STORE (model), &iter,
+			    COL_NAME, new_text,
+			    -1);
+	gtk_tree_path_free (treepath);
+
+	mc_account_set_display_name (account, new_text);
+	g_object_unref (account);
+}
+
+static void
 accounts_dialog_model_add_columns (EmpathyAccountsDialog *dialog)
 {
 	GtkTreeView       *view;
@@ -373,11 +396,17 @@ accounts_dialog_model_add_columns (EmpathyAccountsDialog *dialog)
 						 NULL);
 
 	cell = gtk_cell_renderer_text_new ();
-	g_object_set (cell, "ellipsize", PANGO_ELLIPSIZE_END, NULL);
+	g_object_set (cell,
+		      "ellipsize", PANGO_ELLIPSIZE_END,
+		      "editable", TRUE,
+		      NULL);
 	gtk_tree_view_column_pack_start (column, cell, TRUE);
 	gtk_tree_view_column_add_attribute (column,
 					    cell,
 					    "text", COL_NAME);
+	g_signal_connect (cell, "edited",
+			  G_CALLBACK (accounts_dialog_name_edited_cb),
+			  dialog);
 
 	gtk_tree_view_column_set_expand (column, TRUE);
 	gtk_tree_view_append_column (view, column);
@@ -750,16 +779,6 @@ accounts_dialog_status_changed_cb (MissionControl                  *mc,
 	gtk_widget_show (dialog->window);
 }
 
-static void          
-accounts_dialog_entry_name_changed_cb (GtkWidget             *widget,
-				       EmpathyAccountsDialog  *dialog)
-{
-	const gchar *str;
-	
-	str = gtk_entry_get_text (GTK_ENTRY (widget));
-	gtk_widget_set_sensitive (dialog->button_create, !G_STR_EMPTY (str));
-}
-
 static void
 accounts_dialog_button_create_clicked_cb (GtkWidget             *button,
 					  EmpathyAccountsDialog  *dialog)
@@ -778,7 +797,7 @@ accounts_dialog_button_create_clicked_cb (GtkWidget             *button,
 	/* Create account */
 	account = mc_account_create (profile);
 
-	str = gtk_entry_get_text (GTK_ENTRY (dialog->entry_name));
+	str = mc_account_get_unique_name (account);
 	mc_account_set_display_name (account, str);
 
 	accounts_dialog_add_account (dialog, account);
@@ -826,8 +845,7 @@ accounts_dialog_button_add_clicked_cb (GtkWidget            *button,
 	gtk_widget_show (dialog->frame_new_account);
 
 	gtk_combo_box_set_active (GTK_COMBO_BOX (dialog->combobox_profile), 0);
-	gtk_entry_set_text (GTK_ENTRY (dialog->entry_name), "");
-	gtk_widget_grab_focus (dialog->entry_name);
+	gtk_widget_grab_focus (dialog->combobox_profile);
 }
 
 static void
@@ -976,8 +994,7 @@ empathy_accounts_dialog_show (GtkWindow *parent)
 				       "dialog-action_area", &bbox,
 				       "treeview", &dialog->treeview,
 				       "frame_new_account", &dialog->frame_new_account,
-				       "entry_name", &dialog->entry_name,
-				       "table_new_account", &dialog->table_new_account,
+				       "hbox_type", &dialog->hbox_type,
 				       "button_create", &dialog->button_create,
 				       "button_back", &dialog->button_back,
 				       "image_type", &dialog->image_type,
@@ -993,7 +1010,6 @@ empathy_accounts_dialog_show (GtkWindow *parent)
 			      "accounts_dialog", "response", accounts_dialog_response_cb,
 			      "button_create", "clicked", accounts_dialog_button_create_clicked_cb,
 			      "button_back", "clicked", accounts_dialog_button_back_clicked_cb,
-			      "entry_name", "changed", accounts_dialog_entry_name_changed_cb,
 			      "treeview", "row-activated", accounts_dialog_treeview_row_activated_cb,
 			      "button_connect", "clicked", accounts_dialog_button_connect_clicked_cb,
 			      "button_add", "clicked", accounts_dialog_button_add_clicked_cb,
@@ -1006,10 +1022,9 @@ empathy_accounts_dialog_show (GtkWindow *parent)
 
 	/* Create profile chooser */
 	dialog->combobox_profile = empathy_profile_chooser_new ();
-	gtk_table_attach_defaults (GTK_TABLE (dialog->table_new_account),
-				   dialog->combobox_profile,
-				   1, 2,
-				   0, 1);
+	gtk_box_pack_end (GTK_BOX (dialog->hbox_type),
+			  dialog->combobox_profile,
+			  TRUE, TRUE, 0);
 	gtk_widget_show (dialog->combobox_profile);
 
 	/* Set up signalling */

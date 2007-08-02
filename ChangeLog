@@ -1,5 +1,11 @@
 2007-08-02 Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/empathy-accounts-dialog.glade:
+	* libempathy-gtk/empathy-accounts-dialog.c: Click on the treeview to
+	edit the name of an account. Fixes bug #459166.
+
+2007-08-02 Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/empathy-account-widget-jabber.c: Do not try to guess
 	the Jabber server from the jid, gabble does that for us.
 
