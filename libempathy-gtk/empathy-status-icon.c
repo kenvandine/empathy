@@ -387,7 +387,7 @@ status_icon_toggle_visibility (EmpathyStatusIcon *icon)
 
 	priv = GET_PRIV (icon);
 
-	visible = empathy_window_get_is_visible (GTK_WINDOW (priv->window));
+	visible = gtk_window_has_toplevel_focus (GTK_WINDOW (priv->window));
 
 	if (visible) {
 		empathy_window_iconify (priv->window, priv->icon);

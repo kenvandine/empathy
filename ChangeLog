@@ -1,5 +1,11 @@
 2007-08-02 Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/empathy-status-icon.c: Click on the tray icon shows the
+	window if it's not active and hide if it is. Fixes bug #462057
+	(Olivier Valentin).
+
+2007-08-02 Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/empathy-group-chat.c: don't display
 	"Topic set to: (null)". Fixes bug #460205 (Michael Scherer).
 
