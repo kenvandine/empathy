@@ -281,11 +281,11 @@ accounts_dialog_update_account (EmpathyAccountsDialog *dialog,
 		config_ui = mc_profile_get_configuration_ui (profile);
 		g_object_unref (profile);
 
-		if (strcmp (config_ui, "jabber") == 0) {
+		if (!empathy_strdiff (config_ui, "jabber")) {
 			dialog->settings_widget = 
 				empathy_account_widget_jabber_new (account);
 		} 
-		else if (strcmp (config_ui, "msn") == 0) {
+		else if (!empathy_strdiff (config_ui, "msn")) {
 			dialog ->settings_widget =
 				empathy_account_widget_msn_new (account);
 		}

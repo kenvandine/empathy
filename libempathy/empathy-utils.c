@@ -289,128 +289,6 @@ empathy_xml_node_find_child_prop_value (xmlNodePtr   node,
 	return found;
 }
 
-GType
-empathy_dbus_type_to_g_type (const gchar *dbus_type_string)
-{
-	if (dbus_type_string == NULL)
-		return G_TYPE_NONE;
-
-	if (dbus_type_string[0] == 's') {
-		return G_TYPE_STRING;
-	}
-	else if (dbus_type_string[0] == 'b') {
-		return G_TYPE_BOOLEAN;
-	}
-	else if (dbus_type_string[0] == 'q') {
-		return G_TYPE_UINT;
-	}
-	else if (dbus_type_string[0] == 'n') {
-		return G_TYPE_INT;
-	}
-
-	g_assert_not_reached ();
-	return G_TYPE_NONE;
-}
-
-const gchar *
-empathy_g_type_to_dbus_type (GType g_type)
-{
-	switch (g_type) {
-	case G_TYPE_STRING:
-		return "s";
-	case G_TYPE_BOOLEAN:
-		return "b";
-	case G_TYPE_UINT:
-		return "q";
-	case G_TYPE_INT:
-		return "n";
-	default:
-		g_assert_not_reached ();
-	}
-
-	return NULL;
-}
-
-gchar *
-empathy_g_value_to_string (const GValue *value)
-{
-	gchar  *return_string = NULL;
-	GValue  string_g_value = {0, };
-
-	g_value_init (&string_g_value, G_TYPE_STRING);
-	g_value_transform (value, &string_g_value);
-	return_string = g_value_dup_string (&string_g_value);
-	g_value_unset (&string_g_value);
-
-	return return_string;
-}
-
-GValue *
-empathy_string_to_g_value (const gchar *str, GType type)
-{
-	GValue *g_value;
-
-	g_value = g_new0 (GValue, 1);
-	g_value_init (g_value, type);
-
-	switch (type) {
-	case G_TYPE_STRING:
-		g_value_set_string (g_value, str);
-		break;
-	case G_TYPE_BOOLEAN:
-		g_value_set_boolean (g_value, (str[0] == 'y' || str[0] == 'T'));
-		break;
-	case G_TYPE_UINT:
-		g_value_set_uint (g_value, atoi (str));
-		break;
-	case G_TYPE_INT:
-		g_value_set_int (g_value, atoi (str));
-		break;
-	default:
-		g_assert_not_reached ();
-	}
-
-	return g_value;
-}
-
-gboolean
-empathy_g_value_equal (const GValue *value1,
-		      const GValue *value2)
-{
-	GType type;
-
-	g_return_val_if_fail (value1 != NULL, FALSE);
-	g_return_val_if_fail (value2 != NULL, FALSE);
-
-	type = G_VALUE_TYPE (value1);
-	if (type != G_VALUE_TYPE (value2)) {
-		return FALSE;
-	}
-
-	switch (type)
-	{
-	case G_TYPE_STRING: {
-		const gchar *str1;
-		const gchar *str2;
-
-		str1 = g_value_get_string (value1);
-		str2 = g_value_get_string (value2);
-		return (str1 && str2 && strcmp (str1, str2) == 0) ||
-		       (G_STR_EMPTY (str1) && G_STR_EMPTY (str2));
-	}
-	case G_TYPE_BOOLEAN:
-		return g_value_get_boolean (value1) == g_value_get_boolean (value2);
-	case G_TYPE_UINT:
-		return g_value_get_uint (value1) == g_value_get_uint (value2);
-	case G_TYPE_INT:
-		return g_value_get_int (value1) == g_value_get_int (value2);
-	default:
-		g_warning ("Unsupported GType in value comparaison");
-	}
-
-	return FALSE;
-}
-
 guint
 empathy_account_hash (gconstpointer key)
 {
@@ -507,4 +385,17 @@ empathy_inspect_handle (McAccount *account,
 	return name;
 }
 
+/* Stolen from telepathy-glib */
+gboolean
+empathy_strdiff (const gchar *left, const gchar *right)
+{
+  if ((NULL == left) != (NULL == right))
+    return TRUE;
+
+  else if (left == right)
+    return FALSE;
+
+  else
+    return (0 != strcmp (left, right));
+}
 

@@ -1,5 +1,13 @@
 2007-08-02 Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/empathy-accounts-dialog.c:
+	* libempathy/empathy-utils.c:
+	* libempathy/empathy-utils.h: Adding new empathy_strdiff API stolen from
+	telepathy-glib. It check if strings are != NULL before using strcmp.
+	Using that API to fix bug #461886. Should be used in more places.
+
+2007-08-02 Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/empathy-status-icon.c: Click on the tray icon shows the
 	window if it's not active and hide if it is. Fixes bug #462057
 	(Olivier Valentin).

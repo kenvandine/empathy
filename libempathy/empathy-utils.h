@@ -78,16 +78,7 @@ xmlNodePtr   empathy_xml_node_find_child_prop_value (xmlNodePtr       node,
 						    const gchar     *prop_name,
 						    const gchar     *prop_value);
 
-
-/* GValue/GType */
-GType        empathy_dbus_type_to_g_type            (const gchar     *dbus_type_string);
-const gchar *empathy_g_type_to_dbus_type            (GType            g_type);
-gchar *      empathy_g_value_to_string              (const GValue    *value);
-GValue *     empathy_string_to_g_value              (const gchar     *str,
-						    GType            type);
-gboolean     empathy_g_value_equal                  (const GValue    *value1,
-						    const GValue    *value2);
-
+/* Others */
 guint        empathy_account_hash                   (gconstpointer    key);
 gboolean     empathy_account_equal                  (gconstpointer    a,
 						    gconstpointer    b);
@@ -97,7 +88,8 @@ gchar *      empathy_inspect_handle                 (McAccount       *account,
 						     guint            handle_type);
 gchar *      empathy_inspect_channel                (McAccount       *account,
 						     TpChan          *tp_chan);
-
+gboolean     empathy_strdiff                        (const gchar     *left,
+						     const gchar     *right);
 G_END_DECLS
 
 #endif /*  __EMPATHY_UTILS_H__ */
