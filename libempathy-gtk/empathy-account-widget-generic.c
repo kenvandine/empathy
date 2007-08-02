@@ -44,7 +44,6 @@ typedef struct {
 
 	GtkWidget     *sw;
 	GtkWidget     *table_settings;
-	GtkSizeGroup  *size_group;
 
 	guint          n_rows;
 } EmpathyAccountWidgetGeneric;
@@ -149,7 +148,6 @@ account_widget_generic_setup_foreach (McProtocolParam            *param,
 		gtk_misc_set_alignment (GTK_MISC (widget), 0, 0.5);
 		g_free (str);
 
-		gtk_size_group_add_widget (settings->size_group, widget);
 		gtk_table_attach (GTK_TABLE (settings->table_settings),
 				  widget,
 				  0, 1,
@@ -212,7 +210,6 @@ account_widget_generic_setup_foreach (McProtocolParam            *param,
 		gtk_misc_set_alignment (GTK_MISC (widget), 0, 0.5);
 		g_free (str);
 
-		gtk_size_group_add_widget (settings->size_group, widget);
 		gtk_table_attach (GTK_TABLE (settings->table_settings),
 				  widget,
 				  0, 1,
@@ -306,8 +303,6 @@ account_widget_generic_destroy_cb (GtkWidget                  *widget,
 				   EmpathyAccountWidgetGeneric *settings)
 {
 	g_object_unref (settings->account);
-	g_object_unref (settings->size_group);
-
 	g_free (settings);
 }
 

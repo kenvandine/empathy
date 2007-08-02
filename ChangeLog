@@ -1,5 +1,10 @@
 2007-08-02 Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/empathy-account-widget-generic.c: Remove size_group.
+	Fixes bug #462792.
+
+2007-08-02 Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/empathy-accounts-dialog.c:
 	* libempathy/empathy-utils.c:
 	* libempathy/empathy-utils.h: Adding new empathy_strdiff API stolen from
