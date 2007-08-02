@@ -17,6 +17,16 @@ empathy-contact-widget
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### ENUM EmpathyContactWidgetType ##### -->
+<para>
+
+</para>
+
+@CONTACT_WIDGET_TYPE_SHOW: 
+@CONTACT_WIDGET_TYPE_EDIT: 
+@CONTACT_WIDGET_TYPE_ADD: 
+@CONTACT_WIDGET_TYPE_SUBSCRIPTION: 
+
 <!-- ##### FUNCTION empathy_contact_widget_new ##### -->
 <para>
 

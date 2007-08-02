@@ -194,6 +194,15 @@ empathy-ui-utils
 @steal_focus: 
 
 
+<!-- ##### FUNCTION empathy_window_iconify ##### -->
+<para>
+
+</para>
+
+@window: 
+@status_icon: 
+
+
 <!-- ##### FUNCTION empathy_get_toplevel_window ##### -->
 <para>
 

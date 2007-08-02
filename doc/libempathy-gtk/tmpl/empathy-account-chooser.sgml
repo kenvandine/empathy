@@ -17,6 +17,16 @@ EmpathyAccountChooser
 <!-- ##### SECTION Stability_Level ##### -->
 
 
+<!-- ##### USER_FUNCTION EmpathyAccountChooserFilterFunc ##### -->
+<para>
+
+</para>
+
+@account: 
+@user_data: 
+@Returns: 
+
+
 <!-- ##### STRUCT EmpathyAccountChooser ##### -->
 <para>
 
@@ -71,5 +81,25 @@ EmpathyAccountChooser
 
 @chooser: 
 @has_all_option: 
+
+
+<!-- ##### FUNCTION empathy_account_chooser_set_filter ##### -->
+<para>
+
+</para>
+
+@chooser: 
+@filter: 
+@user_data: 
+
+
+<!-- ##### FUNCTION empathy_account_chooser_filter_is_connected ##### -->
+<para>
+
+</para>
+
+@account: 
+@user_data: 
+@Returns: 
 
 

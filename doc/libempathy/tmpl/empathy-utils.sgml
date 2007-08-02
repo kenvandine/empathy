@@ -121,53 +121,6 @@ empathy-utils
 @Returns: 
 
 
-<!-- ##### FUNCTION empathy_dbus_type_to_g_type ##### -->
-<para>
-
-</para>
-
-@dbus_type_string: 
-@Returns: 
-
-
-<!-- ##### FUNCTION empathy_g_type_to_dbus_type ##### -->
-<para>
-
-</para>
-
-@g_type: 
-@Returns: 
-
-
-<!-- ##### FUNCTION empathy_g_value_to_string ##### -->
-<para>
-
-</para>
-
-@value: 
-@Returns: 
-
-
-<!-- ##### FUNCTION empathy_string_to_g_value ##### -->
-<para>
-
-</para>
-
-@str: 
-@type: 
-@Returns: 
-
-
-<!-- ##### FUNCTION empathy_g_value_equal ##### -->
-<para>
-
-</para>
-
-@value1: 
-@value2: 
-@Returns: 
-
-
 <!-- ##### FUNCTION empathy_account_hash ##### -->
 <para>
 
@@ -192,6 +145,37 @@ empathy-utils
 
 </para>
 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_inspect_handle ##### -->
+<para>
+
+</para>
+
+@account: 
+@handle: 
+@handle_type: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_inspect_channel ##### -->
+<para>
+
+</para>
+
+@account: 
+@tp_chan: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_strdiff ##### -->
+<para>
+
+</para>
+
+@left: 
+@right: 
 @Returns: 
 
 

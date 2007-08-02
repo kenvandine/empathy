@@ -1,5 +1,13 @@
 2007-08-02 Xavier Claessens  <xclaesse@gmail.com>
 
+	* doc/libempathy-gtk/tmpl/empathy-account-chooser.sgml:
+	* doc/libempathy-gtk/tmpl/empathy-ui-utils.sgml:
+	* doc/libempathy-gtk/tmpl/empathy-contact-widget.sgml:
+	* doc/libempathy/tmpl/empathy-message.sgml:
+	* doc/libempathy/tmpl/empathy-utils.sgml: Update doc.
+
+2007-08-02 Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/empathy-profile-chooser.c: Do not list profiles that
 	don't have the corresponding CM installed when creating a new account.
 	This is a workaround for MC bug: SF #1688779.

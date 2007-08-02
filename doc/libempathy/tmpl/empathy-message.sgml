@@ -157,3 +157,21 @@ EmpathyMessage
 @timestamp: 
 
 
+<!-- ##### FUNCTION empathy_message_type_from_str ##### -->
+<para>
+
+</para>
+
+@type_str: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_message_type_to_str ##### -->
+<para>
+
+</para>
+
+@type: 
+@Returns: 
+
+
