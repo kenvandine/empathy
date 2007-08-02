@@ -1,3 +1,8 @@
+2007-08-02 Xavier Claessens  <xclaesse@gmail.com>
+
+	* libempathy-gtk/empathy-group-chat.c: don't display
+	"Topic set to: (null)". Fixes bug #460205 (Michael Scherer).
+
 2007-07-30 Xavier Claessens  <xclaesse@gmail.com>
 
 	* autogen.sh: Added back, it calls gnome-autogen.sh.

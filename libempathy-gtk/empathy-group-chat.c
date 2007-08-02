@@ -569,7 +569,11 @@ group_chat_subject_notify_cb (EmpathyTpChat   *tp_chat,
 	g_object_get (priv->tp_chat, "subject", &priv->topic, NULL);
 	gtk_label_set_text (GTK_LABEL (priv->label_topic), priv->topic);
 
-	str = g_strdup_printf (_("Topic set to: %s"), priv->topic);
+	if (!G_STR_EMPTY (priv->topic)) {
+		str = g_strdup_printf (_("Topic set to: %s"), priv->topic);
+	} else {
+		str = g_strdup (_("No topic defined"));
+	}
 	empathy_chat_view_append_event (EMPATHY_CHAT (chat)->view, str);
 	g_free (str);
 }
