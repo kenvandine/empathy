@@ -100,29 +100,6 @@ account_widget_jabber_entry_focus_cb (GtkWidget                 *widget,
 		g_free (value);
 	} else {
 		mc_account_set_param_string (settings->account, param, str);
-
-		if (widget == settings->entry_id) {
-			McProfile   *profile;
-			const gchar *profile_name;
-
-			/* Try to guess the server if we are using the vanilla
-			 * jabber profile. We don't have to do that with
-			 * gtalk profile. */
-			profile = mc_account_get_profile (settings->account);
-			profile_name = mc_profile_get_unique_name (profile);
-			if (strcmp (profile_name, "jabber") == 0) {
-				gchar *server;
-
-				server = strstr (str, "@");
-				if (server != NULL) {
-					/* skip the leading @ */
-					server++;
-					gtk_entry_set_text (GTK_ENTRY (settings->entry_server), server);
-					mc_account_set_param_string (settings->account, "server", server);
-				}
-			}
-			g_object_unref (profile);
-		}
 	}
 
 	return FALSE;

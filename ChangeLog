@@ -1,5 +1,10 @@
 2007-08-02 Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/empathy-account-widget-jabber.c: Do not try to guess
+	the Jabber server from the jid, gabble does that for us.
+
+2007-08-02 Xavier Claessens  <xclaesse@gmail.com>
+
 	* doc/libempathy-gtk/tmpl/empathy-account-chooser.sgml:
 	* doc/libempathy-gtk/tmpl/empathy-ui-utils.sgml:
 	* doc/libempathy-gtk/tmpl/empathy-contact-widget.sgml:
