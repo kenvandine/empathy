@@ -1,5 +1,11 @@
 2007-08-02 Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/empathy-profile-chooser.c: Do not list profiles that
+	don't have the corresponding CM installed when creating a new account.
+	This is a workaround for MC bug: SF #1688779.
+
+2007-08-02 Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/empathy-account-widget-generic.c: Remove size_group.
 	Fixes bug #462792.
 

@@ -26,6 +26,7 @@
 
 #include <gtk/gtk.h>
 #include <libmissioncontrol/mc-profile.h>
+#include <libmissioncontrol/mc-protocol.h>
 
 #include "empathy-profile-chooser.h"
 #include "empathy-ui-utils.h"
@@ -146,9 +147,18 @@ empathy_profile_chooser_new (void)
 
 	profiles = mc_profiles_list ();
 	for (l = profiles; l; l = l->next) {
-		McProfile *profile;
+		McProfile  *profile;
+		McProtocol *protocol;
 
 		profile = l->data;
+
+		/* Check if the CM is installed, otherwise skip that profile.
+		 * Workaround SF bug #1688779 */
+		protocol = mc_profile_get_protocol (profile);
+		if (!protocol) {
+			continue;
+		}
+		g_object_unref (protocol);
 
 		gtk_list_store_append (store, &iter);
 		gtk_list_store_set (store, &iter,
