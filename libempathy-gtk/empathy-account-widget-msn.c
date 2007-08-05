@@ -166,11 +166,6 @@ empathy_account_widget_msn_new (McAccount *account)
 {
 	EmpathyAccountWidgetMSN *settings;
 	GladeXML                *glade;
-	GtkSizeGroup            *size_group;
-	GtkWidget               *label_id;
-	GtkWidget               *label_password;
-	GtkWidget               *label_server;
-	GtkWidget               *label_port; 
 
 	settings = g_new0 (EmpathyAccountWidgetMSN, 1);
 	settings->account = g_object_ref (account);
@@ -180,10 +175,6 @@ empathy_account_widget_msn_new (McAccount *account)
 				       NULL,
 				       "vbox_msn_settings", &settings->vbox_settings,
 				       "button_forget", &settings->button_forget,
-				       "label_id", &label_id,
-				       "label_password", &label_password,
-				       "label_server", &label_server,
-				       "label_port", &label_port,
 				       "entry_id", &settings->entry_id,
 				       "entry_password", &settings->entry_password,
 				       "entry_server", &settings->entry_server,
@@ -206,16 +197,6 @@ empathy_account_widget_msn_new (McAccount *account)
 			      NULL);
 
 	g_object_unref (glade);
-
-	/* Set up remaining widgets */
-	size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
-
-	gtk_size_group_add_widget (size_group, label_id);
-	gtk_size_group_add_widget (size_group, label_password);
-	gtk_size_group_add_widget (size_group, label_server);
-	gtk_size_group_add_widget (size_group, label_port);
-
-	g_object_unref (size_group);
 
 	gtk_widget_show (settings->vbox_settings);
 

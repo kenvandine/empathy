@@ -1,3 +1,12 @@
+2007-08-06 Xavier Claessens  <xclaesse@gmail.com>
+
+	* libempathy-gtk/empathy-account-widget-msn.glade:
+	* libempathy-gtk/empathy-account-widget-msn.c: Add an Advanced section
+	and remove size_group. 
+	Fixes bug #463759 (Jaap A. Haitsma, Xavier Claessens).
+
+	* README: Use ./autogen.sh instead of gnome-autogen.sh.
+
 2007-08-02 Xavier Claessens  <xclaesse@gmail.com>
 
 	* libempathy-gtk/empathy-accounts-dialog.glade:

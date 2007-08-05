@@ -1,7 +1,7 @@
 How to use empathy ?
 
 1) Install
-$ gnome-autogen.sh
+$ ./autogen.sh
 $ make && make install
 
 2) Start empathy
