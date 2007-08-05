@@ -1,16 +1,14 @@
 # translation of empathy.HEAD.es.po to Español
-# translation of empathy to español
 # Copyright (C) 2003 Free Software Foundation
 # This file is distributed under the same license as the Gossip package.
 #
 # Jorge González <jorgegonz@svn.gnome.org>, 2007.
-# Jorge Gonzalez <jorgegonz@svn.gnome.org>, 2007.
 msgid ""
 msgstr ""
 "Project-Id-Version: empathy.HEAD.es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-07-30 03:42+0100\n"
-"PO-Revision-Date: 2007-08-01 00:40+0200\n"
+"POT-Creation-Date: 2007-08-03 03:38+0100\n"
+"PO-Revision-Date: 2007-08-05 20:27+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -255,8 +253,8 @@ msgstr "Jorge González <jorgegonz@svn.gnome.org>, 2007"
 msgid "All"
 msgstr "Todo"
 
-#: ../libempathy-gtk/empathy-account-widget-generic.c:147
-#: ../libempathy-gtk/empathy-account-widget-generic.c:210
+#: ../libempathy-gtk/empathy-account-widget-generic.c:146
+#: ../libempathy-gtk/empathy-account-widget-generic.c:208
 #, c-format
 msgid "%s:"
 msgstr "%s:"
@@ -307,20 +305,20 @@ msgstr "propiedades de la cuenta jabber"
 msgid "msn account settings"
 msgstr "propiedades de la cuenta msn"
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:219
+#: ../libempathy-gtk/empathy-accounts-dialog.c:216
 msgid "Disable"
 msgstr "Deshabilitar"
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:222
+#: ../libempathy-gtk/empathy-accounts-dialog.c:219
 msgid "Enable"
 msgstr "Activar"
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:256
+#: ../libempathy-gtk/empathy-accounts-dialog.c:253
 #: ../libempathy-gtk/empathy-accounts-dialog.glade.h:2
 msgid "<b>No Account Selected</b>"
 msgstr "<b>Sin cuenta seleccionada</b>"
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:258
+#: ../libempathy-gtk/empathy-accounts-dialog.c:255
 msgid ""
 "To add a new account, you can click on the 'Add' button and a new entry will "
 "be created for you to start configuring.\n"
@@ -334,11 +332,11 @@ msgstr ""
 "Si no quiere añadir una cuenta, simplemente pulse en la cuenta que quiere "
 "configurar en la lista de la izquierda."
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:267
+#: ../libempathy-gtk/empathy-accounts-dialog.c:264
 msgid "<b>No Accounts Configured</b>"
 msgstr "<b>No hay ninguna cuenta configurada</b>"
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:269
+#: ../libempathy-gtk/empathy-accounts-dialog.c:266
 msgid ""
 "To add a new account, you can click on the 'Add' button and a new entry will "
 "be created for you to start configuring."
@@ -346,12 +344,12 @@ msgstr ""
 "Para añadir una cuenta nueva, pulse en el botón 'Añadir' y se creará una "
 "entrada nueva para que la configure."
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:365
-#: ../libempathy-gtk/empathy-accounts-dialog.glade.h:5
+#: ../libempathy-gtk/empathy-accounts-dialog.c:388
+#: ../libempathy-gtk/empathy-accounts-dialog.glade.h:4
 msgid "Accounts"
 msgstr "Cuentas"
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:863
+#: ../libempathy-gtk/empathy-accounts-dialog.c:881
 #, c-format
 msgid ""
 "You are about to remove your %s account!\n"
@@ -360,7 +358,7 @@ msgstr ""
 "Va a eliminar su cuenta %s\n"
 "¿Seguro que quiere continuar?"
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:869
+#: ../libempathy-gtk/empathy-accounts-dialog.c:887
 msgid ""
 "Any associated conversations and chat rooms will NOT be removed if you "
 "decide to proceed.\n"
@@ -381,15 +379,11 @@ msgstr "<b>Nueva cuenta</b>"
 msgid "<b>Settings</b>"
 msgstr "<b>Configuración</b>"
 
-#: ../libempathy-gtk/empathy-accounts-dialog.glade.h:4
-msgid "A unique name for this account to identify it personally to you."
-msgstr "Un nombre único para identificar esta cuenta personalmente con usted."
-
-#: ../libempathy-gtk/empathy-accounts-dialog.glade.h:6
+#: ../libempathy-gtk/empathy-accounts-dialog.glade.h:5
 msgid "Cr_eate"
 msgstr "Cr_ear"
 
-#: ../libempathy-gtk/empathy-accounts-dialog.glade.h:7
+#: ../libempathy-gtk/empathy-accounts-dialog.glade.h:6
 msgid ""
 "To add a new account, you can click on the 'Add' button and a new entry will "
 "be created for you to started configuring.\n"
@@ -403,13 +397,9 @@ msgstr ""
 "Si no quiere añadir una cuenta, simplemente pulse en la cuenta que quiere "
 "configurar en la lista de la izquierda."
 
-#: ../libempathy-gtk/empathy-accounts-dialog.glade.h:10
-msgid "_Name:"
-msgstr "_Nombre:"
-
-#: ../libempathy-gtk/empathy-accounts-dialog.glade.h:11
-msgid "_Type:"
-msgstr "_Tipo:"
+#: ../libempathy-gtk/empathy-accounts-dialog.glade.h:9
+msgid "Type:"
+msgstr "Tipo:"
 
 #: ../libempathy-gtk/empathy-chat.c:335
 msgid "Disconnected"
@@ -844,10 +834,14 @@ msgstr "%s ha dejado la sala"
 msgid "Topic: %s"
 msgstr "Tema: %s"
 
-#: ../libempathy-gtk/empathy-group-chat.c:572
+#: ../libempathy-gtk/empathy-group-chat.c:573
 #, c-format
 msgid "Topic set to: %s"
 msgstr "El tema se ha establecido a: %s"
+
+#: ../libempathy-gtk/empathy-group-chat.c:575
+msgid "No topic defined"
+msgstr "No se ha definido el tema"
 
 #: ../libempathy-gtk/empathy-group-chat.glade.h:1
 msgid "<b>Topic:</b>"
