@@ -1,5 +1,10 @@
 2007-08-06 Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/empathy-main-window.glade: Change main window's title
+	to "Contact list".
+
+2007-08-06 Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy/empathy-tp-chat.c: Don't forget to reverse the glist of
 	pending messages.
 
