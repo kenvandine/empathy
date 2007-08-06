@@ -1,5 +1,13 @@
 2007-08-06 Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy/empathy-tp-chat.c: Don't forget to reverse the glist of
+	pending messages.
+
+	* libempathy/empathy-tp-roomlist.c: Fix wrong room list names when
+	listing them.
+
+2007-08-06 Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/empathy-account-widget-msn.glade:
 	* libempathy-gtk/empathy-account-widget-msn.c: Add an Advanced section
 	and remove size_group. 

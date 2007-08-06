@@ -318,6 +318,7 @@ tp_roomlist_got_rooms_cb (DBusGProxy        *roomlist_iface,
 		EmpathyChatroom *chatroom;
 		gchar           *room_id;
 		const gchar     *room_name;
+		const GValue    *room_name_value;
 		GValueArray     *room_struct;
 		guint            handle;
 		const gchar     *channel_type;
@@ -330,7 +331,8 @@ tp_roomlist_got_rooms_cb (DBusGProxy        *roomlist_iface,
 		info = g_value_get_boxed (g_value_array_get_nth (room_struct, 2));
 
 		/* Create the chatroom */
-		room_name = g_hash_table_lookup (info, "name");
+		room_name_value = g_hash_table_lookup (info, "name");
+		room_name = g_value_get_string (room_name_value);
 		room_id = empathy_inspect_handle (priv->account,
 						  handle,
 						  TP_HANDLE_TYPE_ROOM);

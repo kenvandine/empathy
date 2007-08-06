@@ -681,6 +681,7 @@ empathy_tp_chat_get_pendings (EmpathyTpChat *chat)
 
 		g_value_array_free (message_struct);
 	}
+	messages = g_list_reverse (messages);
 
 	g_ptr_array_free (messages_list, TRUE);
 
