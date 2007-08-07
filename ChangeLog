@@ -1,3 +1,30 @@
+2007-08-07  Marco Barisione  <marco@barisione.org>
+
+	* libempathy/Makefile.am:
+	* libempathy/empathy-marshal-main.c: Remove empathy-marshal-main.c and
+	include empathy-marshal.h from empathy-marshal.c.
+
+	* libempathy/Makefile.am:
+	* libempathy-gtk/Makefile.am: Generate files for enum types with
+	glib-mkenums.
+
+	* libempathy/empathy-contact.c:
+	* libempathy/empathy-idle.c:
+	* libempathy/empathy-message.c:
+	* libempathy/empathy-presence.c:
+	* libempathy-gtk/empathy-main-window.c:
+	* libempathy-gtk/empathy-preferences.c:
+	* doc/libempathy-gtk/libempathy-gtk.types:
+	* doc/libempathy-gtk/tmpl/empathy-contact-list-store.sgml: Use
+	g_param_spec_enum() and g_param_spec_flags() instead of
+	g_param_spec_(u)int.
+	Fixes bug #462465.
+
+	* libempathy-gtk/empathy-contact-list-store.c:
+	* libempathy-gtk/empathy-contact-list-store.h: Remove
+	empathy_contact_list_store_sort_get_type() as it's now auto-generated
+	by glib-mkenums.
+
 2007-08-06 Xavier Claessens  <xclaesse@gmail.com>
 
 	* libempathy-gtk/empathy-main-window.glade: Change main window's title

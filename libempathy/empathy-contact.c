@@ -30,6 +30,7 @@
 #include "empathy-contact.h"
 #include "empathy-utils.h"
 #include "empathy-debug.h"
+#include "empathy-enum-types.h"
 
 #define DEBUG_DOMAIN "Contact"
 
@@ -163,13 +164,12 @@ contact_class_init (EmpathyContactClass *class)
 
 	g_object_class_install_property (object_class,
 					 PROP_SUBSCRIPTION,
-					 g_param_spec_int ("subscription",
-							   "Contact Subscription",
-							   "The subscription status of the contact",
-							   EMPATHY_SUBSCRIPTION_NONE,
-							   EMPATHY_SUBSCRIPTION_BOTH,
-							   EMPATHY_SUBSCRIPTION_NONE,
-							   G_PARAM_READWRITE));
+					 g_param_spec_flags ("subscription",
+							     "Contact Subscription",
+							     "The subscription status of the contact",
+							     EMPATHY_TYPE_SUBSCRIPTION,
+							     EMPATHY_SUBSCRIPTION_NONE,
+							     G_PARAM_READWRITE));
 
 
 	g_object_class_install_property (object_class,
@@ -261,7 +261,7 @@ contact_get_property (GObject    *object,
 		g_value_set_pointer (value, priv->groups);
 		break;
 	case PROP_SUBSCRIPTION:
-		g_value_set_int (value, priv->subscription);
+		g_value_set_flags (value, priv->subscription);
 		break;
 	case PROP_HANDLE:
 		g_value_set_uint (value, priv->handle);
@@ -312,7 +312,7 @@ contact_set_property (GObject      *object,
 		break;
 	case PROP_SUBSCRIPTION:
 		empathy_contact_set_subscription (EMPATHY_CONTACT (object),
-						 g_value_get_int (value));
+						  g_value_get_flags (value));
 		break;
 	case PROP_HANDLE:
 		empathy_contact_set_handle (EMPATHY_CONTACT (object),

@@ -36,14 +36,10 @@ G_BEGIN_DECLS
 /*
  * EmpathyContactListStoreSort
  */ 
-#define EMPATHY_TYPE_CONTACT_LIST_STORE_SORT    (empathy_contact_list_store_sort_get_type ())
-
 typedef enum {
 	EMPATHY_CONTACT_LIST_STORE_SORT_STATE,
 	EMPATHY_CONTACT_LIST_STORE_SORT_NAME
 } EmpathyContactListStoreSort;
-
-GType empathy_contact_list_store_sort_get_type (void) G_GNUC_CONST;
 
 /*
  * EmpathyContactListStore 

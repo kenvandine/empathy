@@ -51,6 +51,7 @@
 #include "empathy-new-chatroom-dialog.h"
 #include "empathy-chatrooms-window.h"
 #include "empathy-log-window.h"
+#include "empathy-gtk-enum-types.h"
 
 #define DEBUG_DOMAIN "MainWindow"
 

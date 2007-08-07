@@ -8,6 +8,8 @@ AM_CPPFLAGS =                                           \
 BUILT_SOURCES = 					\
 	empathy-marshal.h				\
 	empathy-marshal.c				\
+	empathy-enum-types.h				\
+	empathy-enum-types.c				\
 	empathy-filter-glue.h				\
 	empathy-chandler-glue.h
 
@@ -34,8 +36,11 @@ libempathy_la_SOURCES =					\
 	empathy-chandler.c				\
 	empathy-filter.c				\
 	empathy-idle.c					\
-	empathy-log-manager.c				\
-	empathy-marshal-main.c
+	empathy-log-manager.c
+
+# do not distribute generated files
+nodist_libempathy_la_SOURCES =\
+	$(BUILT_SOURCES)
 
 libempathy_la_LIBADD =		\
 	$(LIBEMPATHY_LIBS)
@@ -43,8 +48,7 @@ libempathy_la_LIBADD =		\
 libempathy_la_LDFLAGS =		\
 	-version-info ${LIBEMPATHY_CURRENT}:${LIBEMPATHY_REVISION}:${LIBEMPATHY_AGE}
 
-libempathydir = $(includedir)/libempathy/
-libempathy_HEADERS =				\
+libempathy_headers =				\
 	empathy-conf.h				\
 	empathy-contact.h			\
 	empathy-avatar.h			\
@@ -67,11 +71,17 @@ libempathy_HEADERS =				\
 	empathy-idle.h				\
 	empathy-log-manager.h
 
+libempathy_includedir = $(includedir)/libempathy/
+libempathy_include_HEADERS =			\
+	$(libempathy_headers)			\
+	empathy-enum-types.h
+
 %-marshal.h: %-marshal.list Makefile.am
 	$(GLIB_GENMARSHAL) --header --prefix=$(subst -,_,$*)_marshal $< > $*-marshal.h
 
 %-marshal.c: %-marshal.list Makefile.am
-	$(GLIB_GENMARSHAL) --body --prefix=$(subst -,_,$*)_marshal $< > $*-marshal.c
+	echo "#include \"empathy-marshal.h\"" > $@ && \
+	$(GLIB_GENMARSHAL) --body --prefix=$(subst -,_,$*)_marshal $< >> $*-marshal.c
 
 %-marshal-main.c: %-marshal.c %-marshal.h
 
@@ -79,6 +89,44 @@ empathy-chandler-glue.h: empathy-chandler.xml
 	$(LIBTOOL) --mode=execute $(DBUS_BINDING_TOOL) --prefix=empathy_chandler --mode=glib-server --output=$@ $<
 empathy-filter-glue.h: empathy-filter.xml
 	$(LIBTOOL) --mode=execute $(DBUS_BINDING_TOOL) --prefix=empathy_filter --mode=glib-server --output=$@ $<
+
+empathy-enum-types.h: stamp-empathy-enum-types.h
+	@true
+stamp-empathy-enum-types.h: Makefile $(libempathy_headers)
+	(cd $(srcdir) \
+	&& glib-mkenums \
+			--fhead "#ifndef __LIBEMPATHY_ENUM_TYPES_H__\n" \
+			--fhead "#define __LIBEMPATHY_ENUM_TYPES_H__ 1\n\n" \
+			--fhead "#include <glib-object.h>\n\n" \
+			--fhead "G_BEGIN_DECLS\n\n" \
+			--ftail "G_END_DECLS\n\n" \
+			--ftail "#endif /* __LIBEMPATHY_ENUM_TYPES_H__ */\n" \
+			--fprod "#include <libempathy/@filename@>\n" \
+			--eprod "#define EMPATHY_TYPE_@ENUMSHORT@ @enum_name@_get_type()\n" \
+			--eprod "GType @enum_name@_get_type (void);\n" \
+		$(libempathy_headers) ) > xgen-gth \
+	&& (cmp -s xgen-gth empathy-enum-type.h || cp xgen-gth empathy-enum-types.h) \
+	&& rm -f xgen-gth \
+	&& echo timestamp > $(@F)
+
+empathy-enum-types.c: Makefile $(libempathy_headers)
+	(cd $(srcdir) \
+	&& glib-mkenums \
+			--fhead "#include <config.h>\n" \
+			--fhead "#include <glib-object.h>\n" \
+			--fhead "#include \"empathy-enum-types.h\"\n\n" \
+			--fprod "\n/* enumerations from \"@filename@\" */" \
+			--vhead "static const G@Type@Value _@enum_name@_values[] = {" \
+			--vprod "  { @VALUENAME@, \"@VALUENAME@\", \"@valuenick@\" }," \
+			--vtail "  { 0, NULL, NULL }\n};\n\n" \
+			--vtail "GType\n@enum_name@_get_type (void)\n{\n" \
+			--vtail "  static GType type = 0;\n\n" \
+			--vtail "  if (!type)\n" \
+			--vtail "    type = g_@type@_register_static (\"@EnumName@\", _@enum_name@_values);\n\n" \
+			--vtail "  return type;\n}\n\n" \
+		$(libempathy_headers) ) > xgen-gtc \
+	&& cp xgen-gtc $(@F) \
+	&& rm -f xgen-gtc
 
 dtddir = $(datadir)/empathy
 dtd_DATA = 					\
@@ -98,4 +146,6 @@ EXTRA_DIST = 			\
 	$(stylesheet_DATA)	\
 	$(dtd_DATA)
 
-CLEANFILES = $(BUILT_SOURCES)
+CLEANFILES = 				\
+	$(BUILT_SOURCES)		\
+	stamp-empathy-enum-types.h

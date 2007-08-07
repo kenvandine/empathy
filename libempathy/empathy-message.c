@@ -27,6 +27,7 @@
 #include <string.h>
 
 #include "empathy-message.h"
+#include "empathy-enum-types.h"
 
 #define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), EMPATHY_TYPE_MESSAGE, EmpathyMessagePriv))
 
@@ -103,13 +104,12 @@ empathy_message_class_init (EmpathyMessageClass *class)
 
 	g_object_class_install_property (object_class,
 					 PROP_TYPE,
-					 g_param_spec_int ("type",
-							   "Message Type",
-							   "The type of message",
-							   EMPATHY_MESSAGE_TYPE_NORMAL,
-							   EMPATHY_MESSAGE_TYPE_LAST,
-							   EMPATHY_MESSAGE_TYPE_NORMAL,
-							   G_PARAM_READWRITE));
+					 g_param_spec_enum ("type",
+							    "Message Type",
+							    "The type of message",
+							    EMPATHY_TYPE_MESSAGE_TYPE,
+							    EMPATHY_MESSAGE_TYPE_NORMAL,
+							    G_PARAM_READWRITE));
 	g_object_class_install_property (object_class,
 					 PROP_SENDER,
 					 g_param_spec_object ("sender",
@@ -187,7 +187,7 @@ message_get_property (GObject    *object,
 
 	switch (param_id) {
 	case PROP_TYPE:
-		g_value_set_int (value, priv->type);
+		g_value_set_enum (value, priv->type);
 		break;
 	case PROP_SENDER:
 		g_value_set_object (value, priv->sender);
@@ -217,7 +217,7 @@ message_set_property (GObject      *object,
 	switch (param_id) {
 	case PROP_TYPE:
 		empathy_message_set_type (EMPATHY_MESSAGE (object),
-					 g_value_get_int (value));
+					  g_value_get_enum (value));
 		break;
 	case PROP_SENDER:
 		empathy_message_set_sender (EMPATHY_MESSAGE (object),

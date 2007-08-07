@@ -33,6 +33,14 @@
 #include "empathy-utils.h" 
 #include "empathy-debug.h"
 
+/* FIXME mission-control does not install libmissioncontrol/mc-enum-types.h so
+ * we have to define MC_TYPE_PRESENCE here. See sf.net bug #1768235,
+ * https://sf.net/tracker/?func=detail&atid=932444&aid=1768235&group_id=190214 */
+#ifndef MC_TYPE_PRESENCE
+GType mc_presence_get_type (void) G_GNUC_CONST;
+#define MC_TYPE_PRESENCE (mc_presence_get_type())
+#endif
+
 #define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), \
 		       EMPATHY_TYPE_IDLE, EmpathyIdlePriv))
 
@@ -107,11 +115,10 @@ empathy_idle_class_init (EmpathyIdleClass *klass)
 
 	g_object_class_install_property (object_class,
 					 PROP_STATE,
-					 g_param_spec_uint ("state",
+					 g_param_spec_enum ("state",
 							    "state",
 							    "state",
-							    MC_PRESENCE_UNSET,
-							    LAST_MC_PRESENCE,
+							    MC_TYPE_PRESENCE,
 							    MC_PRESENCE_AVAILABLE,
 							    G_PARAM_READWRITE));
 	g_object_class_install_property (object_class,
@@ -123,11 +130,10 @@ empathy_idle_class_init (EmpathyIdleClass *klass)
 							      G_PARAM_READWRITE));
 	g_object_class_install_property (object_class,
 					 PROP_FLASH_STATE,
-					 g_param_spec_uint ("flash-state",
+					 g_param_spec_enum ("flash-state",
 							    "flash-state",
 							    "flash-state",
-							    MC_PRESENCE_UNSET,
-							    LAST_MC_PRESENCE,
+							    MC_TYPE_PRESENCE,
 							    MC_PRESENCE_UNSET,
 							    G_PARAM_READWRITE));
 
@@ -251,13 +257,13 @@ idle_get_property (GObject    *object,
 
 	switch (param_id) {
 	case PROP_STATE:
-		g_value_set_uint (value, empathy_idle_get_state (idle));
+		g_value_set_enum (value, empathy_idle_get_state (idle));
 		break;
 	case PROP_STATUS:
 		g_value_set_string (value, empathy_idle_get_status (idle));
 		break;
 	case PROP_FLASH_STATE:
-		g_value_set_uint (value, empathy_idle_get_flash_state (idle));
+		g_value_set_enum (value, empathy_idle_get_flash_state (idle));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
@@ -279,13 +285,13 @@ idle_set_property (GObject      *object,
 
 	switch (param_id) {
 	case PROP_STATE:
-		empathy_idle_set_state (idle, g_value_get_uint (value));
+		empathy_idle_set_state (idle, g_value_get_enum (value));
 		break;
 	case PROP_STATUS:
 		empathy_idle_set_status (idle, g_value_get_string (value));
 		break;
 	case PROP_FLASH_STATE:
-		empathy_idle_set_flash_state (idle, g_value_get_uint (value));
+		empathy_idle_set_flash_state (idle, g_value_get_enum (value));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);

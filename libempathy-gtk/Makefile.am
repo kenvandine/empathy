@@ -5,6 +5,10 @@ AM_CPPFLAGS =                                           \
 	$(EMPATHY_CFLAGS)				\
 	$(WARN_CFLAGS)
 
+BUILT_SOURCES = 					\
+	empathy-gtk-enum-types.h			\
+	empathy-gtk-enum-types.c
+
 lib_LTLIBRARIES = libempathy-gtk.la
 
 libempathy_gtk_la_SOURCES =             	\
@@ -42,6 +46,10 @@ libempathy_gtk_la_SOURCES =             	\
 	empathy-ui-utils.c			\
 	empathy-account-widget-msn.c
 
+# do not distribute generated files
+nodist_libempathy_gtk_la_SOURCES =\
+	$(BUILT_SOURCES)
+
 libempathy_gtk_la_LIBADD =			\
 	$(EMPATHY_LIBS)				\
 	$(top_builddir)/libempathy/libempathy.la
@@ -49,8 +57,7 @@ libempathy_gtk_la_LIBADD =			\
 libempathy_gtk_la_LDFLAGS =                \
        -version-info ${LIBEMPATHY_GTK_CURRENT}:${LIBEMPATHY_GTK_REVISION}:${LIBEMPATHY_GTK_AGE}
 
-libempathy_gtkdir = $(includedir)/libempathy-gtk/
-libempathy_gtk_HEADERS =			\
+libempathy_gtk_headers =			\
 	empathy-images.h			\
 	empathy-main-window.h			\
 	empathy-status-icon.h			\
@@ -85,6 +92,11 @@ libempathy_gtk_HEADERS =			\
 	empathy-ui-utils.h			\
 	empathy-account-widget-msn.h
 
+libempathy_gtk_includedir = $(includedir)/libempathy-gtk/
+libempathy_gtk_include_HEADERS =		\
+	$(libempathy_gtk_headers)		\
+	empathy-gtk-enum-types.h
+
 gladedir = $(datadir)/empathy
 glade_DATA = 					\
 	empathy-main-window.glade		\
@@ -103,6 +115,44 @@ glade_DATA = 					\
 	empathy-chat.glade                     \
 	empathy-account-widget-msn.glade
 
+empathy-gtk-enum-types.h: stamp-empathy-gtk-enum-types.h
+	@true
+stamp-empathy-gtk-enum-types.h: Makefile $(libempathy_gtk_headers)
+	(cd $(srcdir) \
+	&& glib-mkenums \
+			--fhead "#ifndef __LIBEMPATHY_GTK_ENUM_TYPES_H__\n" \
+			--fhead "#define __LIBEMPATHY_GTK_ENUM_TYPES_H__ 1\n\n" \
+			--fhead "#include <glib-object.h>\n\n" \
+			--fhead "G_BEGIN_DECLS\n\n" \
+			--ftail "G_END_DECLS\n\n" \
+			--ftail "#endif /* __LIBEMPATHY_GTK_ENUM_TYPES_H__ */\n" \
+			--fprod "#include <libempathy-gtk/@filename@>\n" \
+			--eprod "#define EMPATHY_TYPE_@ENUMSHORT@ @enum_name@_get_type()\n" \
+			--eprod "GType @enum_name@_get_type (void);\n" \
+		$(libempathy_gtk_headers) ) > xgen-gth \
+	&& (cmp -s xgen-gth empathy-gtk-enum-type.h || cp xgen-gth empathy-gtk-enum-types.h) \
+	&& rm -f xgen-gth \
+	&& echo timestamp > $(@F)
+
+empathy-gtk-enum-types.c: Makefile $(libempathy_gtk_headers)
+	(cd $(srcdir) \
+	&& glib-mkenums \
+			--fhead "#include <config.h>\n" \
+			--fhead "#include <glib-object.h>\n" \
+			--fhead "#include \"empathy-gtk-enum-types.h\"\n\n" \
+			--fprod "\n/* enumerations from \"@filename@\" */" \
+			--vhead "static const G@Type@Value _@enum_name@_values[] = {" \
+			--vprod "  { @VALUENAME@, \"@VALUENAME@\", \"@valuenick@\" }," \
+			--vtail "  { 0, NULL, NULL }\n};\n\n" \
+			--vtail "GType\n@enum_name@_get_type (void)\n{\n" \
+			--vtail "  static GType type = 0;\n\n" \
+			--vtail "  if (!type)\n" \
+			--vtail "    type = g_@type@_register_static (\"@EnumName@\", _@enum_name@_values);\n\n" \
+			--vtail "  return type;\n}\n\n" \
+		$(libempathy_gtk_headers) ) > xgen-gtc \
+	&& cp xgen-gtc $(@F) \
+	&& rm -f xgen-gtc
+
 dtddir = $(datadir)/empathy
 dtd_DATA = 					\
 	empathy-status-presets.dtd		\
@@ -115,3 +165,6 @@ EXTRA_DIST =			\
 	$(glade_DATA)		\
 	$(dtd_DATA)
 
+CLEANFILES =				\
+	$(BUILT_SOURCES)		\
+	stamp-empathy-gtk-enum-types.h

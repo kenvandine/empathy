@@ -14,7 +14,6 @@
 #include <libempathy-gtk/empathy-cell-renderer-expander.h>
 
 empathy_cell_renderer_text_get_type
-empathy_contact_list_store_get_type
 empathy_account_chooser_get_type
 empathy_chat_get_type
 empathy_chat_window_get_type

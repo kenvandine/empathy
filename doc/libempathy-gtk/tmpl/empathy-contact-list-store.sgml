@@ -17,13 +17,6 @@ EmpathyContactListStore
 <!-- ##### SECTION Stability_Level ##### -->
 
 
-<!-- ##### MACRO EMPATHY_TYPE_CONTACT_LIST_STORE_SORT ##### -->
-<para>
-
-</para>
-
-
-
 <!-- ##### ENUM EmpathyContactListStoreSort ##### -->
 <para>
 
@@ -43,26 +36,7 @@ EmpathyContactListStore
 
 </para>
 
-
-<!-- ##### ARG EmpathyContactListStore:is-compact ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG EmpathyContactListStore:show-avatars ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG EmpathyContactListStore:show-offline ##### -->
-<para>
-
-</para>
-
-<!-- ##### ARG EmpathyContactListStore:sort-criterium ##### -->
-<para>
-
-</para>
+@parent: 
 
 <!-- ##### USER_FUNCTION EmpathyContactGroupsFunc ##### -->
 <para>
@@ -71,14 +45,6 @@ EmpathyContactListStore
 
 @contact: 
 @user_data: 
-@Returns: 
-
-
-<!-- ##### FUNCTION empathy_contact_list_store_get_type ##### -->
-<para>
-
-</para>
-
 @Returns: 
 
 

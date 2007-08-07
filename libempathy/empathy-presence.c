@@ -29,6 +29,14 @@
 #include "empathy-presence.h"
 #include "empathy-time.h"
 
+/* FIXME mission-control does not install libmissioncontrol/mc-enum-types.h so
+ * we have to define MC_TYPE_PRESENCE here. See sf.net bug #1768235,
+ * https://sf.net/tracker/?func=detail&atid=932444&aid=1768235&group_id=190214 */
+#ifndef MC_TYPE_PRESENCE
+GType mc_presence_get_type (void) G_GNUC_CONST;
+#define MC_TYPE_PRESENCE (mc_presence_get_type())
+#endif
+
 #define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), EMPATHY_TYPE_PRESENCE, EmpathyPresencePriv))
 
 typedef struct _EmpathyPresencePriv EmpathyPresencePriv;
@@ -70,13 +78,12 @@ empathy_presence_class_init (EmpathyPresenceClass *class)
 
 	g_object_class_install_property (object_class,
 					 PROP_STATE,
-					 g_param_spec_int ("state",
-							   "Presence State",
-							   "The current state of the presence",
-							   MC_PRESENCE_UNSET,
-							   LAST_MC_PRESENCE,
-							   MC_PRESENCE_AVAILABLE,
-							   G_PARAM_READWRITE));
+					 g_param_spec_enum ("state",
+							    "Presence State",
+							    "The current state of the presence",
+							    MC_TYPE_PRESENCE,
+							    MC_PRESENCE_AVAILABLE,
+							    G_PARAM_READWRITE));
 	g_object_class_install_property (object_class,
 					 PROP_STATUS,
 					 g_param_spec_string ("status",
@@ -124,7 +131,7 @@ presence_get_property (GObject    *object,
 
 	switch (param_id) {
 	case PROP_STATE:
-		g_value_set_int (value, priv->state);
+		g_value_set_enum (value, priv->state);
 		break;
 	case PROP_STATUS:
 		g_value_set_string (value,
@@ -147,7 +154,7 @@ presence_set_property (GObject      *object,
 
 	switch (param_id) {
 	case PROP_STATE:
-		priv->state = g_value_get_int (value);
+		priv->state = g_value_get_enum (value);
 		break;
 	case PROP_STATUS:
 		empathy_presence_set_status (EMPATHY_PRESENCE (object),

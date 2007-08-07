@@ -35,6 +35,7 @@
 #include "empathy-contact-list-store.h"
 #include "empathy-contact-groups.h"
 #include "empathy-ui-utils.h"
+#include "empathy-gtk-enum-types.h"
 
 #define DEBUG_DOMAIN "ContactListStore"
 
@@ -156,28 +157,6 @@ enum {
 	PROP_IS_COMPACT,
 	PROP_SORT_CRITERIUM
 };
-
-GType
-empathy_contact_list_store_sort_get_type (void)
-{
-	static GType etype = 0;
-
-	if (etype == 0) {
-		static const GEnumValue values[] = {
-			{ EMPATHY_CONTACT_LIST_STORE_SORT_NAME, 
-			  "EMPATHY_CONTACT_LIST_STORE_SORT_NAME", 
-			  "name" },
-			{ EMPATHY_CONTACT_LIST_STORE_SORT_STATE, 
-			  "EMPATHY_CONTACT_LIST_STORE_SORT_STATE", 
-			  "state" },
-			{ 0, NULL, NULL }
-		};
-
-		etype = g_enum_register_static ("EmpathyContactListStoreSort", values);
-	}
-
-	return etype;
-}
 
 G_DEFINE_TYPE (EmpathyContactListStore, empathy_contact_list_store, GTK_TYPE_TREE_STORE);
 

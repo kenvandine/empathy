@@ -37,6 +37,7 @@
 #include "empathy-theme-manager.h"
 #include "empathy-spell.h"
 #include "empathy-contact-list-store.h"
+#include "empathy-gtk-enum-types.h"
 
 typedef struct {
 	GtkWidget *dialog;
