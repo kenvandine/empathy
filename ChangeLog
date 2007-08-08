@@ -1,3 +1,7 @@
+2007-08-08 Xavier Claessens  <xclaesse@gmail.com>
+
+	* MAINTAINERS: Updated the MAINTAINERS file to match new syntax.
+
 2007-08-07  Marco Barisione  <marco@barisione.org>
 
 	* libempathy/Makefile.am:
