@@ -1,5 +1,9 @@
 2007-08-08 Xavier Claessens  <xclaesse@gmail.com>
 
+	* autogen.sh: Requier automake 1.9. Fixes bug #464822 (Cosimo Cecchi).
+
+2007-08-08 Xavier Claessens  <xclaesse@gmail.com>
+
 	* MAINTAINERS: Updated the MAINTAINERS file to match new syntax.
 
 2007-08-07  Marco Barisione  <marco@barisione.org>
