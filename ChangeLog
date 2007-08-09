@@ -1,3 +1,9 @@
+2007-08-09 Xavier Claessens  <xclaesse@gmail.com>
+
+	* libempathy-gtk/empathy-preferences.c:
+	* libempathy-gtk/empathy-preferences.glade: Useless spell checker
+	option. Fixes bug #459164 (Cosimo Cecchi).
+
 2007-08-08 Xavier Claessens  <xclaesse@gmail.com>
 
 	* autogen.sh: Requier automake 1.9. Fixes bug #464822 (Cosimo Cecchi).

@@ -59,7 +59,6 @@ typedef struct {
 	GtkWidget *checkbutton_popups_when_available;
 
 	GtkWidget *treeview_spell_checker;
-	GtkWidget *checkbutton_spell_checker;
 
 	GList     *notify_ids;
 } EmpathyPreferences;
@@ -198,13 +197,6 @@ preferences_setup_widgets (EmpathyPreferences *preferences)
 					  EMPATHY_PREFS_CHAT_THEME_CHAT_ROOM,
 					  preferences->checkbutton_theme_chat_room);
 
-	preferences_hookup_toggle_button (preferences,
-					  EMPATHY_PREFS_CHAT_SPELL_CHECKER_ENABLED,
-					  preferences->checkbutton_spell_checker);
-	preferences_hookup_sensitivity (preferences,
-					EMPATHY_PREFS_CHAT_SPELL_CHECKER_ENABLED,
-					preferences->treeview_spell_checker);
-
 	preferences_hookup_radio_button (preferences,
 					 EMPATHY_PREFS_CONTACTS_SORT_CRITERIUM,
 					 preferences->radiobutton_contact_list_sort_by_name);
@@ -275,6 +267,14 @@ preferences_languages_add (EmpathyPreferences *preferences)
 	store = GTK_LIST_STORE (gtk_tree_view_get_model (view));
 
 	codes = empathy_spell_get_language_codes ();
+
+	empathy_conf_set_bool (empathy_conf_get(),
+			       EMPATHY_PREFS_CHAT_SPELL_CHECKER_ENABLED,
+			       codes != NULL);
+	if (!codes) {
+		gtk_widget_set_sensitive (preferences->treeview_spell_checker, FALSE);
+	}		
+
 	for (l = codes; l; l = l->next) {
 		GtkTreeIter  iter;
 		const gchar *code;
@@ -311,14 +311,14 @@ preferences_languages_save (EmpathyPreferences *preferences)
 				(GtkTreeModelForeachFunc) preferences_languages_save_foreach,
 				&languages);
 
-	if (!languages) {
-		/* Default to english */
-		languages = g_strdup ("en");
-	}
+	/* if user selects no languages, we don't want spell check */
+	empathy_conf_set_bool (empathy_conf_get (),
+			       EMPATHY_PREFS_CHAT_SPELL_CHECKER_ENABLED,
+			       languages != NULL);
 
 	empathy_conf_set_string (empathy_conf_get (),
 				 EMPATHY_PREFS_CHAT_SPELL_CHECKER_LANGUAGES,
-				 languages);
+				 languages ? languages : "");
 
 	g_free (languages);
 }
@@ -946,7 +946,6 @@ empathy_preferences_show (GtkWindow *parent)
 		"checkbutton_sounds_when_away", &preferences->checkbutton_sounds_when_away,
 		"checkbutton_popups_when_available", &preferences->checkbutton_popups_when_available,
 		"treeview_spell_checker", &preferences->treeview_spell_checker,
-		"checkbutton_spell_checker", &preferences->checkbutton_spell_checker,
 		NULL);
 
 	empathy_glade_connect (glade,
