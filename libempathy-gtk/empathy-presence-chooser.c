@@ -30,6 +30,8 @@
 #include <gtk/gtk.h>
 #include <glade/glade.h>
 
+#include <libmissioncontrol/mc-enum-types.h>
+
 #include <libempathy/empathy-idle.h>
 #include <libempathy/empathy-utils.h>
 #include <libempathy/empathy-debug.h>
@@ -68,14 +70,33 @@ typedef struct {
 } EmpathyPresenceChooserPriv;
 
 typedef struct {
+	GtkWidget    *dialog;
+	GtkWidget    *checkbutton_save;
+	GtkWidget    *comboboxentry_message;
+	GtkWidget    *entry_message;
+	GtkWidget    *combobox_status;
+	GtkTreeModel *model_status;
+} CustomMessageDialog;
+
+enum {
+	COL_ICON,
+	COL_LABEL,
+	COL_PRESENCE,
+	COL_COUNT
+};
+
+typedef struct {
 	McPresence   state;
 	const gchar *status;
 } StateAndStatus;
 
-/* States to be listed in the menu */
-static McPresence states[] = {MC_PRESENCE_AVAILABLE,
-			      MC_PRESENCE_DO_NOT_DISTURB,
-			      MC_PRESENCE_AWAY};
+static CustomMessageDialog *message_dialog = NULL;
+/* States to be listed in the menu.
+ * Each state has a boolean telling if it can have custom message */
+static guint states[] = {MC_PRESENCE_AVAILABLE, TRUE,
+			 MC_PRESENCE_DO_NOT_DISTURB, TRUE,
+			 MC_PRESENCE_AWAY, TRUE,
+			 MC_PRESENCE_OFFLINE, FALSE};
 
 static void            empathy_presence_chooser_class_init      (EmpathyPresenceChooserClass *klass);
 static void            empathy_presence_chooser_init            (EmpathyPresenceChooser      *chooser);
@@ -115,24 +136,14 @@ static void            presence_chooser_menu_align_func        (GtkMenu         
 								GtkWidget                  *widget);
 static void            presence_chooser_menu_add_item          (GtkWidget                  *menu,
 								const gchar                *str,
-								McPresence                  state,
-								gboolean                    custom);
-static void            presence_chooser_clear_activate_cb      (GtkWidget                  *item,
-								gpointer                    user_data);
-static void            presence_chooser_clear_response_cb      (GtkWidget                  *widget,
-								gint                        response,
-								gpointer                    user_data);
+								McPresence                  state);
 static void            presence_chooser_noncustom_activate_cb  (GtkWidget                  *item,
 								gpointer                    user_data);
 static void            presence_chooser_set_state              (McPresence                  state,
-								const gchar                *status,
-								gboolean                    save);
+								const gchar                *status);
 static void            presence_chooser_custom_activate_cb     (GtkWidget                  *item,
 								gpointer                    user_data);
-static void            presence_chooser_show_dialog            (McPresence                  state);
-static void            presence_chooser_dialog_response_cb     (GtkWidget                  *dialog,
-								gint                        response,
-								gpointer                    user_data);
+static void            presence_chooser_dialog_show            (void);
 
 G_DEFINE_TYPE (EmpathyPresenceChooser, empathy_presence_chooser, GTK_TYPE_TOGGLE_BUTTON);
 
@@ -385,22 +396,28 @@ presence_chooser_get_presets (EmpathyPresenceChooser *chooser)
 	GList      *list = NULL;
 	guint       i;
 
-	for (i = 0; i < G_N_ELEMENTS (states); i++) {
+	for (i = 0; i < G_N_ELEMENTS (states); i += 2) {
 		GList          *presets, *p;
 		StateAndStatus *sas;
 		const gchar    *status;
 
 		status = empathy_presence_state_get_default_status (states[i]);
 		sas = presence_chooser_state_and_status_new (states[i], status);
-		list = g_list_append (list, sas);
-	
+		list = g_list_prepend (list, sas);
+
+		/* Go to next state if we don't want messages for that state */
+		if (!states[i+1]) {
+			continue;
+		}
+
 		presets = empathy_status_presets_get (states[i], 5);
 		for (p = presets; p; p = p->next) {
 			sas = presence_chooser_state_and_status_new (states[i], p->data);
-			list = g_list_append (list, sas);
+			list = g_list_prepend (list, sas);
 		}
 		g_list_free (presets);
 	}
+	list = g_list_reverse (list);
 
 	return list;
 }
@@ -642,28 +659,24 @@ empathy_presence_chooser_create_menu (void)
 
 	menu = gtk_menu_new ();
 
-	for (i = 0; i < G_N_ELEMENTS (states); i++) {
+	for (i = 0; i < G_N_ELEMENTS (states); i += 2) {
 		GList       *list, *l;
 
 		status = empathy_presence_state_get_default_status (states[i]);
 		presence_chooser_menu_add_item (menu,
 						status,
-						states[i],
-						FALSE);
+						states[i]);
 
-		list = empathy_status_presets_get (states[i], 5);
-		for (l = list; l; l = l->next) {
-			presence_chooser_menu_add_item (menu,
-							l->data,
-							states[i],
-							FALSE);
+		if (states[i+1]) {
+			/* Set custom messages if wanted */
+			list = empathy_status_presets_get (states[i], 5);
+			for (l = list; l; l = l->next) {
+				presence_chooser_menu_add_item (menu,
+								l->data,
+								states[i]);
+			}
+			g_list_free (list);
 		}
-		g_list_free (list);
-
-		presence_chooser_menu_add_item (menu,
-						_("Custom message..."),
-						states[i],
-						TRUE);
 
 		/* Separator. */
 		item = gtk_menu_item_new ();
@@ -671,20 +684,9 @@ empathy_presence_chooser_create_menu (void)
 		gtk_widget_show (item);
 	}
 
-	/* Offline to disconnect */
-	status = empathy_presence_state_get_default_status (MC_PRESENCE_OFFLINE);
-	presence_chooser_menu_add_item (menu,
-					status,
-					MC_PRESENCE_OFFLINE,
-					FALSE);
-	/* Separator. */
-	item = gtk_menu_item_new ();
-	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-	gtk_widget_show (item);
-
-	/* Clear list */
-	item = gtk_image_menu_item_new_with_label (_("Clear List..."));
-	image = gtk_image_new_from_stock (GTK_STOCK_CLEAR, GTK_ICON_SIZE_MENU);
+	/* Custom messages */
+	item = gtk_image_menu_item_new_with_label (_("Custom messages..."));
+	image = gtk_image_new_from_stock (GTK_STOCK_EDIT, GTK_ICON_SIZE_MENU);
 	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
 	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
 	gtk_widget_show (image);
@@ -692,7 +694,7 @@ empathy_presence_chooser_create_menu (void)
 
 	g_signal_connect (item,
 			  "activate",
-			  G_CALLBACK (presence_chooser_clear_activate_cb),
+			  G_CALLBACK (presence_chooser_custom_activate_cb),
 			  NULL);
 
 	return menu;
@@ -701,8 +703,7 @@ empathy_presence_chooser_create_menu (void)
 static void
 presence_chooser_menu_add_item (GtkWidget   *menu,
 				const gchar *str,
-				McPresence   state,
-				gboolean     custom)
+				McPresence   state)
 {
 	GtkWidget   *item;
 	GtkWidget   *image;
@@ -711,15 +712,9 @@ presence_chooser_menu_add_item (GtkWidget   *menu,
 	item = gtk_image_menu_item_new_with_label (str);
 	icon_name = empathy_icon_name_for_presence_state (state);
 
-	if (custom) {
-		g_signal_connect (item, "activate",
-				  G_CALLBACK (presence_chooser_custom_activate_cb),
-				  NULL);
-	} else {
-		g_signal_connect (item, "activate",
-				  G_CALLBACK (presence_chooser_noncustom_activate_cb),
-				  NULL);
-	}
+	g_signal_connect (item, "activate",
+			  G_CALLBACK (presence_chooser_noncustom_activate_cb),
+			  NULL);
 
 	image = gtk_image_new_from_icon_name (icon_name, GTK_ICON_SIZE_MENU);
 	gtk_widget_show (image);
@@ -737,65 +732,6 @@ presence_chooser_menu_add_item (GtkWidget   *menu,
 }
 
 static void
-presence_chooser_clear_activate_cb (GtkWidget *item,
-				    gpointer   user_data)
-{
-	GtkWidget *dialog;
-	GtkWidget *toplevel;
-	GtkWindow *parent = NULL;
-
-	toplevel = gtk_widget_get_toplevel (item);
-	if (GTK_WIDGET_TOPLEVEL (toplevel) &&
-	    GTK_IS_WINDOW (toplevel)) {
-		GtkWindow *window;
-		gboolean   visible;
-
-		window = GTK_WINDOW (toplevel);
-		visible = empathy_window_get_is_visible (window);
-
-		if (visible) {
-			parent = window;
-		}
-	}
-
-	dialog = gtk_message_dialog_new (GTK_WINDOW (parent),
-					 0,
-					 GTK_MESSAGE_QUESTION,
-					 GTK_BUTTONS_NONE,
-					 _("Are you sure you want to clear the list?"));
-
-	gtk_message_dialog_format_secondary_text (
-		GTK_MESSAGE_DIALOG (dialog),
-		_("This will remove any custom messages you have "
-		  "added to the list of preset status messages."));
-
-	gtk_dialog_add_buttons (GTK_DIALOG (dialog),
-				GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-				_("Clear List"), GTK_RESPONSE_OK,
-				NULL);
-
-	gtk_window_set_skip_taskbar_hint (GTK_WINDOW (dialog), FALSE);
-
-	g_signal_connect (dialog, "response",
-			  G_CALLBACK (presence_chooser_clear_response_cb),
-			  NULL);
-
-	gtk_widget_show (dialog);
-}
-
-static void
-presence_chooser_clear_response_cb (GtkWidget *widget,
-				    gint       response,
-				    gpointer   user_data)
-{
-	if (response == GTK_RESPONSE_OK) {
-		empathy_status_presets_reset ();
-	}
-
-	gtk_widget_destroy (widget);
-}
-
-static void
 presence_chooser_noncustom_activate_cb (GtkWidget *item,
 					gpointer   user_data)
 {
@@ -805,25 +741,14 @@ presence_chooser_noncustom_activate_cb (GtkWidget *item,
 	status = g_object_get_data (G_OBJECT (item), "status");
 	state = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (item), "state"));
 
-	presence_chooser_set_state (state, status, FALSE);
+	presence_chooser_set_state (state, status);
 }
 
 static void
 presence_chooser_set_state (McPresence   state,
-			    const gchar *status,
-			    gboolean     save)
+			    const gchar *status)
 {
 	EmpathyIdle *idle;
-
-	if (!G_STR_EMPTY (status)) {
-		const gchar *default_status;
-
-		/* Only store the value if it differs from the default ones. */
-		default_status = empathy_presence_state_get_default_status (state);
-		if (save && strcmp (status, default_status) != 0) {
-			empathy_status_presets_set_last (state, status);
-		}
-	}
 
 	idle = empathy_idle_new ();
 	empathy_idle_set_presence (idle, state, status);
@@ -834,146 +759,200 @@ static void
 presence_chooser_custom_activate_cb (GtkWidget *item,
 				     gpointer   user_data)
 {
-	McPresence state;
+	presence_chooser_dialog_show ();
+}
 
-	state = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (item), "state"));
+static McPresence
+presence_chooser_dialog_get_selected (CustomMessageDialog *dialog)
+{
+	GtkTreeModel *model;
+	GtkTreeIter   iter;
+	McPresence    presence = LAST_MC_PRESENCE;
 
-	presence_chooser_show_dialog (state);
+	model = gtk_combo_box_get_model (GTK_COMBO_BOX (dialog->combobox_status));
+	if (gtk_combo_box_get_active_iter (GTK_COMBO_BOX (dialog->combobox_status), &iter)) {
+		gtk_tree_model_get (model, &iter,
+				    COL_PRESENCE, &presence,
+				    -1);
+	}
+
+	return presence;
 }
 
 static void
-presence_chooser_show_dialog (McPresence state)
+presence_chooser_dialog_status_changed_cb (GtkWidget           *widget,
+					   CustomMessageDialog *dialog)
 {
-	static GtkWidget    *dialog = NULL;
-	static GtkListStore *store[LAST_MC_PRESENCE];
-	GladeXML            *glade;
-	GtkWidget           *image;
-	GtkWidget           *combo;
-	GtkWidget           *entry;
-	GtkWidget           *checkbutton;
-	const gchar         *default_status;
+	GtkListStore *store;
+	GtkTreeIter   iter;
+	McPresence    presence = LAST_MC_PRESENCE;
+	GList        *messages, *l;
 
-	if (dialog) {
-		gtk_widget_destroy (dialog);
-		dialog = NULL;
-	} else {
-		guint i;
+	presence = presence_chooser_dialog_get_selected (dialog);
 
-		for (i = 0; i < LAST_MC_PRESENCE; i++) {
-			store[i] = NULL;
-		}
+	store = gtk_list_store_new (1, G_TYPE_STRING);
+	messages = empathy_status_presets_get (presence, -1);
+	for (l = messages; l; l = l->next) {
+		gtk_list_store_append (store, &iter);
+		gtk_list_store_set (store, &iter, 0, l->data, -1);
 	}
 
+	gtk_entry_set_text (GTK_ENTRY (dialog->entry_message),
+			    messages ? messages->data : "");
+
+	g_list_free (messages);
+
+	gtk_combo_box_set_model (GTK_COMBO_BOX (dialog->comboboxentry_message),
+				 GTK_TREE_MODEL (store));
+}
+
+static void
+presence_chooser_dialog_message_changed_cb (GtkWidget           *widget,
+					    CustomMessageDialog *dialog)
+{
+	McPresence   presence;
+	GList       *messages, *l;
+	const gchar *text;
+	gboolean     found = FALSE;
+
+	presence = presence_chooser_dialog_get_selected (dialog);
+	text = gtk_entry_get_text (GTK_ENTRY (dialog->entry_message));
+
+	messages = empathy_status_presets_get (presence, -1);
+	for (l = messages; l; l = l->next) {
+		if (!empathy_strdiff (text, l->data)) {
+			found = TRUE;
+			break;
+		}
+	}
+	g_list_free (messages);
+
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog->checkbutton_save),
+				      found);
+}
+
+static void
+presence_chooser_dialog_save_toggled_cb (GtkWidget           *widget,
+					 CustomMessageDialog *dialog)
+{
+	gboolean     active;
+	McPresence   state;
+	const gchar *text;
+
+	active = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->checkbutton_save));
+	state = presence_chooser_dialog_get_selected (dialog);
+	text = gtk_entry_get_text (GTK_ENTRY (dialog->entry_message));
+
+	if (active) {
+		empathy_status_presets_set_last (state, text);
+	} else {
+		empathy_status_presets_remove (state, text);
+	}
+}
+
+static void
+presence_chooser_dialog_setup (CustomMessageDialog *dialog)
+{
+	GtkListStore    *store;
+	GtkCellRenderer *renderer;
+	GtkTreeIter      iter;
+	guint            i;
+
+	store = gtk_list_store_new (COL_COUNT,
+				    G_TYPE_STRING,     /* Icon name */
+				    G_TYPE_STRING,     /* Label     */
+				    MC_TYPE_PRESENCE); /* Presence   */
+	gtk_combo_box_set_model (GTK_COMBO_BOX (dialog->combobox_status),
+				 GTK_TREE_MODEL (store));
+
+	renderer = gtk_cell_renderer_pixbuf_new ();
+	gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (dialog->combobox_status), renderer, FALSE);
+	gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (dialog->combobox_status), renderer,
+					"icon-name", COL_ICON,
+					NULL);
+	g_object_set (renderer, "stock-size", GTK_ICON_SIZE_BUTTON, NULL);
+
+	renderer = gtk_cell_renderer_text_new ();
+	gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (dialog->combobox_status), renderer, TRUE);
+	gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (dialog->combobox_status), renderer,
+					"text", COL_LABEL,
+					NULL);
+
+	for (i = 0; i < G_N_ELEMENTS (states); i += 2) {
+		if (!states[i+1]) {
+			continue;
+		}
+
+		gtk_list_store_append (store, &iter);
+		gtk_list_store_set (store, &iter,
+				    COL_ICON, empathy_icon_name_for_presence_state (states[i]),
+				    COL_LABEL, empathy_presence_state_get_default_status (states[i]),
+				    COL_PRESENCE, states[i],
+				    -1);
+	}
+
+	gtk_combo_box_set_active (GTK_COMBO_BOX (dialog->combobox_status), 0);
+}
+
+static void
+presence_chooser_dialog_destroy_cb (GtkWidget           *widget,
+				    CustomMessageDialog *dialog)
+{
+	McPresence   state;
+	const gchar *text;
+
+	state = presence_chooser_dialog_get_selected (dialog);
+	text = gtk_entry_get_text (GTK_ENTRY (dialog->entry_message));
+
+	presence_chooser_set_state (state, text);
+
+	g_free (dialog);
+	message_dialog = NULL;
+}
+
+static void
+presence_chooser_dialog_show (void)
+{
+	GladeXML *glade;
+
+	if (message_dialog) {
+		gtk_window_present (GTK_WINDOW (message_dialog->dialog));
+		return;
+	}
+
+	message_dialog = g_new0 (CustomMessageDialog, 1);
 	glade = empathy_glade_get_file ("empathy-presence-chooser.glade",
-				       "status_message_dialog",
+				       "custom_message_dialog",
 				       NULL,
-				       "status_message_dialog", &dialog,
-				       "comboentry_status", &combo,
-				       "image_status", &image,
-				       "checkbutton_add", &checkbutton,
+				       "custom_message_dialog", &message_dialog->dialog,
+				       "checkbutton_save", &message_dialog->checkbutton_save,
+				       "comboboxentry_message", &message_dialog->comboboxentry_message,
+				       "combobox_status", &message_dialog->combobox_status,
 				       NULL);
+	empathy_glade_connect (glade,
+			       message_dialog,
+			       "custom_message_dialog", "destroy", presence_chooser_dialog_destroy_cb,
+			       "custom_message_dialog", "response", gtk_widget_destroy,
+			       "combobox_status", "changed", presence_chooser_dialog_status_changed_cb,
+			       "checkbutton_save", "toggled", presence_chooser_dialog_save_toggled_cb,
+			       NULL);
 
 	g_object_unref (glade);
 
-	g_signal_connect (dialog, "destroy",
-			  G_CALLBACK (gtk_widget_destroyed),
-			  &dialog);
-	g_signal_connect (dialog, "response",
-			  G_CALLBACK (presence_chooser_dialog_response_cb),
-			  NULL);
+	/* Setup the message combobox */
+	message_dialog->entry_message = GTK_BIN (message_dialog->comboboxentry_message)->child;
+	gtk_entry_set_activates_default (GTK_ENTRY (message_dialog->entry_message), TRUE);
+	gtk_entry_set_width_chars (GTK_ENTRY (message_dialog->entry_message), 25);
+	g_signal_connect (message_dialog->entry_message, "changed",
+			  G_CALLBACK (presence_chooser_dialog_message_changed_cb),
+			  message_dialog);
 
-	gtk_image_set_from_icon_name (GTK_IMAGE (image),
-				      empathy_icon_name_for_presence_state (state),
-				      GTK_ICON_SIZE_MENU);
+	presence_chooser_dialog_setup (message_dialog);
 
-	if (!store[state]) {
-		GList       *presets, *l;
-		GtkTreeIter  iter;
-
-		store[state] = gtk_list_store_new (1, G_TYPE_STRING);
-
-		presets = empathy_status_presets_get (state, -1);
-		for (l = presets; l; l = l->next) {
-			gtk_list_store_append (store[state], &iter);
-			gtk_list_store_set (store[state], &iter, 0, l->data, -1);
-		}
-
-		g_list_free (presets);
-	}
-
-	default_status = empathy_presence_state_get_default_status (state);
-
-	entry = GTK_BIN (combo)->child;
-	gtk_entry_set_text (GTK_ENTRY (entry), default_status);
-	gtk_entry_set_activates_default (GTK_ENTRY (entry), TRUE);
-	gtk_entry_set_width_chars (GTK_ENTRY (entry), 25);
-
-	gtk_combo_box_set_model (GTK_COMBO_BOX (combo), GTK_TREE_MODEL (store[state]));
-	gtk_combo_box_entry_set_text_column (GTK_COMBO_BOX_ENTRY (combo), 0);
+	gtk_combo_box_entry_set_text_column (GTK_COMBO_BOX_ENTRY (message_dialog->comboboxentry_message), 0);
 
 	/* FIXME: Set transian for a window ? */
 
-	g_object_set_data (G_OBJECT (dialog), "store", store[state]);
-	g_object_set_data (G_OBJECT (dialog), "entry", entry);
-	g_object_set_data (G_OBJECT (dialog), "checkbutton", checkbutton);
-	g_object_set_data (G_OBJECT (dialog), "state", GINT_TO_POINTER (state));
-
-	gtk_widget_show_all (dialog);
-}
-
-static void
-presence_chooser_dialog_response_cb (GtkWidget *dialog,
-				     gint       response,
-				     gpointer   user_data)
-{
-	if (response == GTK_RESPONSE_OK) {
-		GtkWidget           *entry;
-		GtkWidget           *checkbutton;
-		GtkListStore        *store;
-		GtkTreeModel        *model;
-		GtkTreeIter          iter;
-		McPresence           state;
-		const gchar         *status;
-		gboolean             save;
-		gboolean             duplicate = FALSE;
-		gboolean             has_next;
-
-		entry = g_object_get_data (G_OBJECT (dialog), "entry");
-		status = gtk_entry_get_text (GTK_ENTRY (entry));
-		store = g_object_get_data (G_OBJECT (dialog), "store");
-		model = GTK_TREE_MODEL (store);
-
-		has_next = gtk_tree_model_get_iter_first (model, &iter);
-		while (has_next) {
-			gchar *str;
-
-			gtk_tree_model_get (model, &iter,
-					    0, &str,
-					    -1);
-
-			if (strcmp (status, str) == 0) {
-				g_free (str);
-				duplicate = TRUE;
-				break;
-			}
-
-			g_free (str);
-
-			has_next = gtk_tree_model_iter_next (model, &iter);
-		}
-
-		if (!duplicate) {
-			gtk_list_store_append (store, &iter);
-			gtk_list_store_set (store, &iter, 0, status, -1);
-		}
-
-		checkbutton = g_object_get_data (G_OBJECT (dialog), "checkbutton");
-		save = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (checkbutton));
-		state = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (dialog), "state"));
-
-		presence_chooser_set_state (state, status, save);
-	}
-
-	gtk_widget_destroy (dialog);
+	gtk_widget_show_all (message_dialog->dialog);
 }
 

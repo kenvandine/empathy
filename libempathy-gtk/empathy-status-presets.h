@@ -29,14 +29,16 @@ G_BEGIN_DECLS
 
 void          empathy_status_presets_get_all            (void);
 GList *       empathy_status_presets_get                (McPresence   state,
-							gint         max_number);
+							 gint         max_number);
 void          empathy_status_presets_set_last           (McPresence   state,
-							const gchar *status);
+							 const gchar *status);
+void          empathy_status_presets_remove             (McPresence   state,
+							 const gchar *status);
 void          empathy_status_presets_reset              (void);
 McPresence    empathy_status_presets_get_default_state  (void);
 const gchar * empathy_status_presets_get_default_status (void);
 void          empathy_status_presets_set_default        (McPresence   state,
-							const gchar *status);
+							 const gchar *status);
 void          empathy_status_presets_clear_default      (void);
 
 G_END_DECLS

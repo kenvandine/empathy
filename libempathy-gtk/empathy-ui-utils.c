@@ -1345,7 +1345,8 @@ empathy_get_toplevel_window (GtkWidget *widget)
 	g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
 	toplevel = gtk_widget_get_toplevel (widget);
-	if (GTK_IS_WINDOW (toplevel)) {
+	if (GTK_IS_WINDOW (toplevel) &&
+	    GTK_WIDGET_TOPLEVEL (toplevel)) {
 		return GTK_WINDOW (toplevel);
 	}
 

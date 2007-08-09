@@ -288,16 +288,13 @@ empathy_status_presets_set_last (McPresence   state,
 	StatusPreset *preset;
 	gint          num;
 
-	/* Remove any duplicate. */
+	/* Check if duplicate */
 	for (l = presets; l; l = l->next) {
 		preset = l->data;
 
-		if (state == preset->state) {
-			if (strcmp (status, preset->status) == 0) {
-				status_preset_free (preset);
-				presets = g_list_delete_link (presets, l);
-				break;
-			}
+		if (state == preset->state &&
+		    !empathy_strdiff (status, preset->status)) {
+			return;
 		}
 	}
 
@@ -322,6 +319,26 @@ empathy_status_presets_set_last (McPresence   state,
 	}
 
 	status_presets_file_save ();
+}
+
+void
+empathy_status_presets_remove (McPresence   state,
+			       const gchar *status)
+{
+	StatusPreset *preset;
+	GList        *l;
+
+	for (l = presets; l; l = l->next) {
+		preset = l->data;
+
+		if (state == preset->state &&
+		    !empathy_strdiff (status, preset->status)) {
+			status_preset_free (preset);
+			presets = g_list_delete_link (presets, l);
+			status_presets_file_save ();
+			break;
+		}
+	}
 }
 
 void

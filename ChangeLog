@@ -1,5 +1,18 @@
 2007-08-09 Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/empathy-presence-chooser.glade:
+	* libempathy-gtk/empathy-presence-chooser.c:
+	* libempathy-gtk/empathy-status-presets.c:
+	* libempathy-gtk/empathy-status-presets.h:
+	* libempathy-gtk/empathy-ui-utils.c: Remove per-state
+	"Custom message..." item and add one on the bottom of the menu. Add
+	a combobox on the custom message dialog to select the state and change
+	the action of the checkbox, now it add/remove the message from saved
+	messages. Make easier to add other states to the list if needed.
+	Fixes bug #460678.
+
+2007-08-09 Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy/empathy-presence.c:
 	* libempathy/empathy-idle.c:
 	* configure.ac: Remove workaround for mc-enum-types.h not being
