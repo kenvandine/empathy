@@ -26,16 +26,10 @@
 
 #include <glib/gi18n.h>
 
+#include <libmissioncontrol/mc-enum-types.h>
+
 #include "empathy-presence.h"
 #include "empathy-time.h"
-
-/* FIXME mission-control does not install libmissioncontrol/mc-enum-types.h so
- * we have to define MC_TYPE_PRESENCE here. See sf.net bug #1768235,
- * https://sf.net/tracker/?func=detail&atid=932444&aid=1768235&group_id=190214 */
-#ifndef MC_TYPE_PRESENCE
-GType mc_presence_get_type (void) G_GNUC_CONST;
-#define MC_TYPE_PRESENCE (mc_presence_get_type())
-#endif
 
 #define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), EMPATHY_TYPE_PRESENCE, EmpathyPresencePriv))
 

@@ -1,5 +1,12 @@
 2007-08-09 Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy/empathy-presence.c:
+	* libempathy/empathy-idle.c:
+	* configure.ac: Remove workaround for mc-enum-types.h not being
+	installed by MC and bump MC minimal version to 4.33.
+
+2007-08-09 Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/empathy-preferences.c:
 	* libempathy-gtk/empathy-preferences.glade: Useless spell checker
 	option. Fixes bug #459164 (Cosimo Cecchi).
