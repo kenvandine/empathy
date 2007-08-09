@@ -259,9 +259,11 @@ status_icon_filter_new_channel (EmpathyFilter     *filter,
 
 	priv = GET_PRIV (icon);
 
-	empathy_debug (DEBUG_DOMAIN, "New text channel to be filtered");
-
 	account = mission_control_get_account_for_connection (priv->mc, tp_conn, NULL);
+
+	empathy_debug (DEBUG_DOMAIN, "New text channel to be filtered for contact %s",
+		       empathy_inspect_channel (account, tp_chan));
+
 	tp_chat = empathy_tp_chat_new (account, tp_chan);
 	g_object_set_data (G_OBJECT (tp_chat), "filter", filter);
 	g_object_unref (account);
