@@ -1,5 +1,10 @@
 2007-08-10 Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/empathy-presence-chooser.glade: add some spacing in
+	"Custom message" dialog. Fixes bug #465360 (Frederic Peters).
+
+2007-08-10 Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/empathy-images.h:
 	* libempathy-gtk/empathy-presence-chooser.c:
 	* libempathy-gtk/empathy-ui-utils.c:
