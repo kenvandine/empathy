@@ -96,6 +96,7 @@ static CustomMessageDialog *message_dialog = NULL;
 static guint states[] = {MC_PRESENCE_AVAILABLE, TRUE,
 			 MC_PRESENCE_DO_NOT_DISTURB, TRUE,
 			 MC_PRESENCE_AWAY, TRUE,
+			 MC_PRESENCE_HIDDEN, FALSE,
 			 MC_PRESENCE_OFFLINE, FALSE};
 
 static void            empathy_presence_chooser_class_init      (EmpathyPresenceChooserClass *klass);
@@ -678,11 +679,12 @@ empathy_presence_chooser_create_menu (void)
 			g_list_free (list);
 		}
 
-		/* Separator. */
-		item = gtk_menu_item_new ();
-		gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
-		gtk_widget_show (item);
 	}
+
+	/* Separator. */
+	item = gtk_menu_item_new ();
+	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+	gtk_widget_show (item);
 
 	/* Custom messages */
 	item = gtk_image_menu_item_new_with_label (_("Custom messages..."));

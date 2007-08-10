@@ -1,3 +1,17 @@
+2007-08-10 Xavier Claessens  <xclaesse@gmail.com>
+
+	* libempathy-gtk/empathy-images.h:
+	* libempathy-gtk/empathy-presence-chooser.c:
+	* libempathy-gtk/empathy-ui-utils.c:
+	* libempathy/empathy-presence.c: Add hidden supprot. Fixes bug #455510
+	(Cosimo Cecchi).
+
+	* data/gtalk.profile:
+	* data/jabber.profile:
+	* data/salut.profile:
+	* data/irc.profile:
+	* data/msn.profile: Updated to use SupportedPresences field.
+
 2007-08-09 Xavier Claessens  <xclaesse@gmail.com>
 
 	* libempathy-gtk/empathy-presence-chooser.glade:

@@ -26,6 +26,7 @@
 G_BEGIN_DECLS
 
 #define EMPATHY_IMAGE_OFFLINE             "empathy-offline"
+#define EMPATHY_IMAGE_HIDDEN              "empathy-offline"
 #define EMPATHY_IMAGE_AVAILABLE           "empathy-available"
 #define EMPATHY_IMAGE_BUSY                "empathy-busy"
 #define EMPATHY_IMAGE_AWAY                "empathy-away"

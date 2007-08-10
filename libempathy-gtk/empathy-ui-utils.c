@@ -351,6 +351,7 @@ empathy_icon_name_for_presence_state (McPresence state)
 	case MC_PRESENCE_EXTENDED_AWAY:
 		return EMPATHY_IMAGE_EXT_AWAY;
 	case MC_PRESENCE_HIDDEN:
+		return EMPATHY_IMAGE_HIDDEN;
 	case MC_PRESENCE_OFFLINE:
 	case MC_PRESENCE_UNSET:
 		return EMPATHY_IMAGE_OFFLINE;

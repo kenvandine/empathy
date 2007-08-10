@@ -279,6 +279,7 @@ empathy_presence_state_get_default_status (McPresence state)
 	case MC_PRESENCE_EXTENDED_AWAY:
 		return _("Away");
 	case MC_PRESENCE_HIDDEN:
+		return _("Hidden");
 	case MC_PRESENCE_OFFLINE:
 	case MC_PRESENCE_UNSET:
 		return _("Offline");
