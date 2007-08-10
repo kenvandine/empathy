@@ -837,9 +837,16 @@ accounts_dialog_button_connect_clicked_cb (GtkWidget            *button,
 }
 
 static void
-accounts_dialog_button_add_clicked_cb (GtkWidget            *button,
+accounts_dialog_button_add_clicked_cb (GtkWidget             *button,
 				       EmpathyAccountsDialog *dialog)
 {
+	GtkTreeView      *view;
+	GtkTreeSelection *selection;
+
+	view = GTK_TREE_VIEW (dialog->treeview);
+	selection = gtk_tree_view_get_selection (view);
+	gtk_tree_selection_unselect_all (selection);
+
 	gtk_widget_hide (dialog->vbox_details);
 	gtk_widget_hide (dialog->frame_no_account);
 	gtk_widget_show (dialog->frame_new_account);
