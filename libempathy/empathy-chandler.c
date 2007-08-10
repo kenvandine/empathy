@@ -141,6 +141,9 @@ empathy_chandler_handle_channel (EmpathyChandler  *chandler,
 			       handle_type,
 			       handle);
 
+	empathy_debug (DEBUG_DOMAIN, "New channel to be handled: "
+				     "type=%s handle=%d",
+				     channel_type, handle);
 	g_signal_emit (chandler, signals[NEW_CHANNEL], 0, tp_conn, tp_chan);
 
 	g_object_unref (tp_chan);

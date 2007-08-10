@@ -228,7 +228,9 @@ empathy_filter_filter_channel (EmpathyFilter  *filter,
 
 	g_hash_table_insert (priv->table, tp_chan, GUINT_TO_POINTER (id));
 
-	empathy_debug (DEBUG_DOMAIN, "New channel to be filtred: %d", id);
+	empathy_debug (DEBUG_DOMAIN, "New channel to be filtred: "
+				     "type=%s handle=%d id=%d",
+				     channel_type, handle, id);
 	g_signal_emit (filter, signals[NEW_CHANNEL], 0, tp_conn, tp_chan);
 
 	g_object_unref (tp_conn);
