@@ -1,5 +1,11 @@
 2007-08-11 Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/empathy-accounts-dialog.c: Make "Add account" button
+	insensitive when we are creating one. Fixes bug #459170
+	(Jaap A. Haitsma).
+
+2007-08-11 Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy/empathy-tp-contact-list.c: s/Local Network/People nearby/
 	(Sjoerd Simons)
 

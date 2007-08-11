@@ -65,6 +65,7 @@ typedef struct {
 
 	GtkWidget        *treeview;
 
+	GtkWidget        *button_add;
 	GtkWidget        *button_remove;
 	GtkWidget        *button_connect;
 
@@ -568,6 +569,7 @@ accounts_dialog_model_selection_changed (GtkTreeSelection     *selection,
 
 	is_selection = gtk_tree_selection_get_selected (selection, &model, &iter);
 
+	gtk_widget_set_sensitive (dialog->button_add, TRUE);
 	gtk_widget_set_sensitive (dialog->button_remove, is_selection);
 	gtk_widget_set_sensitive (dialog->button_connect, is_selection);
 
@@ -817,6 +819,8 @@ accounts_dialog_button_back_clicked_cb (GtkWidget             *button,
 	gtk_widget_hide (dialog->frame_no_account);
 	gtk_widget_hide (dialog->frame_new_account);
 
+	gtk_widget_set_sensitive (dialog->button_add, TRUE);
+
 	account = accounts_dialog_model_get_selected (dialog);
 	accounts_dialog_update_account (dialog, account);
 }
@@ -847,6 +851,7 @@ accounts_dialog_button_add_clicked_cb (GtkWidget             *button,
 	selection = gtk_tree_view_get_selection (view);
 	gtk_tree_selection_unselect_all (selection);
 
+	gtk_widget_set_sensitive (dialog->button_add, FALSE);
 	gtk_widget_hide (dialog->vbox_details);
 	gtk_widget_hide (dialog->frame_no_account);
 	gtk_widget_show (dialog->frame_new_account);
@@ -1006,6 +1011,7 @@ empathy_accounts_dialog_show (GtkWindow *parent)
 				       "button_back", &dialog->button_back,
 				       "image_type", &dialog->image_type,
 				       "label_name", &dialog->label_name,
+				       "button_add", &dialog->button_add,
 				       "button_remove", &dialog->button_remove,
 				       "button_connect", &dialog->button_connect,
 				       "button_close", &button_close,
