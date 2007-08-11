@@ -351,7 +351,7 @@ empathy_tp_contact_list_new (McAccount *account)
 	profile = mc_account_get_profile (account);
 	protocol_name = mc_profile_get_protocol_name (profile);
 	if (strcmp (protocol_name, "salut") == 0) {
-		priv->protocol_group = _("Local Network");
+		priv->protocol_group = _("People nearby");
 	}
 	g_object_unref (profile);
 

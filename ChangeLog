@@ -1,3 +1,8 @@
+2007-08-11 Xavier Claessens  <xclaesse@gmail.com>
+
+	* libempathy/empathy-tp-contact-list.c: s/Local Network/People nearby/
+	(Sjoerd Simons)
+
 2007-08-10 Xavier Claessens  <xclaesse@gmail.com>
 
 	* libempathy-gtk/empathy-accounts-dialog.c: Unselect accounts when
