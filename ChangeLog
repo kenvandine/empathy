@@ -1,5 +1,9 @@
 2007-08-12 Xavier Claessens  <xclaesse@gmail.com>
 
+	* configure.ac: Bump version to 0.12.
+
+2007-08-12 Xavier Claessens  <xclaesse@gmail.com>
+
 	* configure.ac: Update libtool version.
 
 	* doc/libempathy-gtk/tmpl/empathy-images.sgml:
