@@ -43,6 +43,15 @@ empathy-status-presets
 @status: 
 
 
+<!-- ##### FUNCTION empathy_status_presets_remove ##### -->
+<para>
+
+</para>
+
+@state: 
+@status: 
+
+
 <!-- ##### FUNCTION empathy_status_presets_reset ##### -->
 <para>
 

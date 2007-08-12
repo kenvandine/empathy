@@ -1,3 +1,9 @@
+NEW in 0.11:
+===========
+ - Change main window's title to "Contact list".
+ - Do not list profiles that don't have the corresponding CM installed when
+   creating a new account.
+
 NEW in 0.10:
 ===========
  - Align param names on the left in the generic account settings widget.

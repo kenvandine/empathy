@@ -24,6 +24,13 @@ empathy-images
 
 
 
+<!-- ##### MACRO EMPATHY_IMAGE_HIDDEN ##### -->
+<para>
+
+</para>
+
+
+
 <!-- ##### MACRO EMPATHY_IMAGE_AVAILABLE ##### -->
 <para>
 

@@ -1,5 +1,13 @@
 2007-08-12 Xavier Claessens  <xclaesse@gmail.com>
 
+	* configure.ac: Update libtool version.
+
+	* doc/libempathy-gtk/tmpl/empathy-images.sgml:
+	* doc/libempathy-gtk/tmpl/empathy-status-presets.sgml:
+	* NEWS: Updated.
+
+2007-08-12 Xavier Claessens  <xclaesse@gmail.com>
+
 	* data/irc.profile: Removed spaces in the SupportedPresences key to
 	workaround a MC warning SF bug 1772539.
 
