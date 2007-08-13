@@ -199,7 +199,7 @@ msgid ""
 msgstr ""
 "Quel critère utiliser pour le tri de la liste des contacts.  Le "
 "comportement par défaut est de trier selon le nom du contact (valeur: "
-"\"name\").  Une valeur \"state\" triera la liste des contacts selon leur "
+"« name  »).  Une valeur « state » triera la liste des contacts selon leur "
 "état."
 
 #: ../libempathy/empathy-presence.c:185 ../libempathy/empathy-presence.c:285
@@ -220,7 +220,7 @@ msgstr "Absent"
 
 #: ../libempathy/empathy-presence.c:282
 msgid "Hidden"
-msgstr "Caché"
+msgstr "Masqué"
 
 #: ../libempathy/empathy-tp-contact-list.c:354
 msgid "Local Network"
@@ -274,7 +274,10 @@ msgstr ""
 "Audrey Simons <asimons@redhat.com>\n"
 "Quentin Delance <quentin.delance@laposte.net>\n"
 "Claude Paroz <claude@2xlibre.net>\n"
-"Jonathan Ernst <jonathan@ernstfamily.ch>"
+"Jonathan Ernst <jonathan@ernstfamily.ch>\n"
+"Damien Durand <splinux@fedoraproject.org>\n"
+"Robert-André Mauchin <zebob.m@gmail.com>\n"
+"Frederic Peters <fpeters@0d.be>"
 
 #: ../libempathy-gtk/empathy-account-chooser.c:336
 msgid "All"
@@ -440,7 +443,7 @@ msgstr "déconnecté"
 
 #: ../libempathy-gtk/empathy-chat.c:445
 msgid "invalid contact"
-msgstr "contact invalide"
+msgstr "contact non valide"
 
 #: ../libempathy-gtk/empathy-chat.c:448
 msgid "permission denied"
@@ -452,7 +455,7 @@ msgstr "message trop long"
 
 #: ../libempathy-gtk/empathy-chat.c:454
 msgid "not implemented"
-msgstr "pas implémenté"
+msgstr "non implémenté"
 
 #: ../libempathy-gtk/empathy-chat.c:457
 msgid "unknown"
@@ -763,7 +766,7 @@ msgstr "_Envoyer un fichier..."
 
 #: ../libempathy-gtk/empathy-contact-list-view.c:228
 msgid "Send a file"
-msgstr "Envoyer un fichier"
+msgstr "Envoie un fichier"
 
 #: ../libempathy-gtk/empathy-contact-list-view.c:232
 msgid "View previous conversations with this contact"
@@ -812,7 +815,7 @@ msgstr "Client :"
 
 #: ../libempathy-gtk/empathy-contact-widget.glade.h:10
 msgid "Email:"
-msgstr "Courrier électronique :"
+msgstr "Adresse électronique :"
 
 #: ../libempathy-gtk/empathy-contact-widget.glade.h:11
 msgid "Fullname:"
@@ -868,7 +871,7 @@ msgstr "Sujet : %s"
 #: ../libempathy-gtk/empathy-group-chat.c:573
 #, c-format
 msgid "Topic set to: %s"
-msgstr "Sujet placé à : %s"
+msgstr "Sujet défini : %s"
 
 #: ../libempathy-gtk/empathy-group-chat.c:575
 msgid "No topic defined"
@@ -926,7 +929,7 @@ msgid ""
 "Enter the server which hosts the room, or leave it empty if the room is on "
 "the current account's server"
 msgstr ""
-"Entrez le serveur qui héberge la salle ou laissez-le vide si la salle est "
+"Saisissez le serveur qui héberge la salle ou laissez-le vide si la salle est "
 "sur le même serveur que le compte actuel"
 
 #: ../libempathy-gtk/empathy-new-chatroom-dialog.glade.h:5
@@ -1185,7 +1188,9 @@ msgstr ""
 msgid ""
 "Subscription requested for %s\n"
 "Message: %s"
-msgstr "Nouvelle demande d'abonnement de %sMessage : %s"
+msgstr ""
+"Nouvelle demande d'abonnement de %s\n"
+"Message : %s"
 
 #: ../libempathy-gtk/empathy-status-icon.glade.h:1
 msgid "Status"
