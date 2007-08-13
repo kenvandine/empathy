@@ -560,13 +560,18 @@ group_chat_subject_notify_cb (EmpathyTpChat   *tp_chat,
 			      EmpathyGroupChat *chat)
 {
 	EmpathyGroupChatPriv *priv;
-	gchar               *str;
+	gchar                *str = NULL;
 
 	priv = GET_PRIV (chat);
 
-	g_free (priv->topic);
+	g_object_get (priv->tp_chat, "subject", &str, NULL);
+	if (!empathy_strdiff (priv->topic, str)) {
+		g_free (str);
+		return;
+	}
 
-	g_object_get (priv->tp_chat, "subject", &priv->topic, NULL);
+	g_free (priv->topic);
+	priv->topic = str;
 	gtk_label_set_text (GTK_LABEL (priv->label_topic), priv->topic);
 
 	if (!G_STR_EMPTY (priv->topic)) {

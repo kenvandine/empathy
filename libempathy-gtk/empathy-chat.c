@@ -76,7 +76,7 @@ struct _EmpathyChatPriv {
 	GList                 *compositors;
 	guint                  scroll_idle_id;
 	gboolean               first_tp_chat;
-	EmpathyTime             time_joined;
+	EmpathyTime            last_log_timestamp;
 	/* Used to automatically shrink a window that has temporarily
 	 * grown due to long input. 
 	 */
@@ -406,18 +406,26 @@ chat_message_received_cb (EmpathyTpChat  *tp_chat,
 
 	priv = GET_PRIV (chat);
 
+	timestamp = empathy_message_get_timestamp (message);
+	if (timestamp <= priv->last_log_timestamp) {
+		/* Do not take care of messages anterior of the last
+		 * logged message. Some Jabber chatroom sends messages
+		 * received before we joined the room, this avoid
+		 * displaying those messages if we already logged them
+		 * last time we joined that room. */
+		empathy_debug (DEBUG_DOMAIN, "Skipping message because it is "
+			       "anterior of last logged message.");
+		return;
+	}
+
 	sender = empathy_message_get_sender (message);
 	empathy_debug (DEBUG_DOMAIN, "Appending message ('%s')",
 		      empathy_contact_get_name (sender));
 
-	/* Log the message only if it's not backlog */
-	timestamp = empathy_message_get_timestamp (message);
-	if (timestamp >= priv->time_joined) {
-		empathy_log_manager_add_message (priv->log_manager,
-						 empathy_chat_get_id (chat),
-						 empathy_chat_is_group_chat (chat),
-						 message);
-	}
+	empathy_log_manager_add_message (priv->log_manager,
+					 empathy_chat_get_id (chat),
+					 empathy_chat_is_group_chat (chat),
+					 message);
 
 	empathy_chat_view_append_message (chat->view, message);
 
@@ -1137,11 +1145,6 @@ chat_add_logs (EmpathyChat *chat)
 
 	priv = GET_PRIV (chat);
 
-	/* Do not display backlog for chatrooms */
-	if (empathy_chat_is_group_chat (chat)) {
-		return;
-	}
-
 	/* Turn off scrolling temporarily */
 	empathy_chat_view_scroll (chat->view, FALSE);
 
@@ -1163,8 +1166,9 @@ chat_add_logs (EmpathyChat *chat)
 			continue;
 		}
 
-
+		priv->last_log_timestamp = empathy_message_get_timestamp (message);
 		empathy_chat_view_append_message (chat->view, message);
+
 		g_object_unref (message);
 	}
 	g_list_free (messages);
@@ -1360,7 +1364,6 @@ empathy_chat_set_tp_chat (EmpathyChat   *chat,
 	g_free (priv->id);
 	priv->tp_chat = g_object_ref (tp_chat);
 	priv->id = g_strdup (empathy_tp_chat_get_id (tp_chat));
-	priv->time_joined = empathy_time_get_current ();
 
 	if (priv->first_tp_chat) {
 		chat_add_logs (chat);
