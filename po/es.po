@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: empathy.HEAD.es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-08-03 03:38+0100\n"
-"PO-Revision-Date: 2007-08-05 20:27+0200\n"
+"POT-Creation-Date: 2007-08-12 04:05+0100\n"
+"PO-Revision-Date: 2007-08-18 23:15+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -187,25 +187,29 @@ msgstr ""
 "predeterminado es ordenar por el nombre del contacto con el valor «nombre». "
 "Un valor «estado» ordenará la lista por el estado."
 
-#: ../libempathy/empathy-presence.c:184 ../libempathy/empathy-presence.c:283
+#: ../libempathy/empathy-presence.c:185 ../libempathy/empathy-presence.c:285
 msgid "Offline"
 msgstr "Desconectado"
 
-#: ../libempathy/empathy-presence.c:274
+#: ../libempathy/empathy-presence.c:275
 msgid "Available"
 msgstr "Disponible"
 
-#: ../libempathy/empathy-presence.c:276
+#: ../libempathy/empathy-presence.c:277
 msgid "Busy"
 msgstr "Ocupado"
 
-#: ../libempathy/empathy-presence.c:279
+#: ../libempathy/empathy-presence.c:280
 msgid "Away"
 msgstr "Ausente"
 
+#: ../libempathy/empathy-presence.c:282
+msgid "Hidden"
+msgstr "Oculto"
+
 #: ../libempathy/empathy-tp-contact-list.c:354
-msgid "Local Network"
-msgstr "Red local"
+msgid "People nearby"
+msgstr "Gente cerca"
 
 #: ../libempathy-gtk/empathy-about-dialog.c:63
 msgid ""
@@ -260,21 +264,22 @@ msgid "%s:"
 msgstr "%s:"
 
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:1
+#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:1
 msgid "<b>Advanced</b>"
 msgstr "<b>Avanzado</b>"
 
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:2
-#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:1
+#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:2
 msgid "Forget password and clear the entry."
 msgstr "Olvidar la contraseña y limpiar la entrada."
 
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:3
-#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:2
+#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:3
 msgid "Login I_D:"
 msgstr "_ID de sesión:"
 
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:4
-#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:3
+#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:4
 msgid "Pass_word:"
 msgstr "Contra_seña:"
 
@@ -287,12 +292,12 @@ msgid "Use encryption (SS_L)"
 msgstr "Usar encriptado (SS_L)"
 
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:7
-#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:4
+#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:5
 msgid "_Port:"
 msgstr "_Puerto:"
 
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:8
-#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:5
+#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:6
 #: ../libempathy-gtk/empathy-new-chatroom-dialog.glade.h:10
 msgid "_Server:"
 msgstr "_Servidor:"
@@ -301,24 +306,24 @@ msgstr "_Servidor:"
 msgid "jabber account settings"
 msgstr "propiedades de la cuenta jabber"
 
-#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:6
+#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:7
 msgid "msn account settings"
 msgstr "propiedades de la cuenta msn"
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:216
+#: ../libempathy-gtk/empathy-accounts-dialog.c:217
 msgid "Disable"
 msgstr "Deshabilitar"
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:219
+#: ../libempathy-gtk/empathy-accounts-dialog.c:220
 msgid "Enable"
 msgstr "Activar"
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:253
+#: ../libempathy-gtk/empathy-accounts-dialog.c:254
 #: ../libempathy-gtk/empathy-accounts-dialog.glade.h:2
 msgid "<b>No Account Selected</b>"
 msgstr "<b>Sin cuenta seleccionada</b>"
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:255
+#: ../libempathy-gtk/empathy-accounts-dialog.c:256
 msgid ""
 "To add a new account, you can click on the 'Add' button and a new entry will "
 "be created for you to start configuring.\n"
@@ -332,11 +337,11 @@ msgstr ""
 "Si no quiere añadir una cuenta, simplemente pulse en la cuenta que quiere "
 "configurar en la lista de la izquierda."
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:264
+#: ../libempathy-gtk/empathy-accounts-dialog.c:265
 msgid "<b>No Accounts Configured</b>"
 msgstr "<b>No hay ninguna cuenta configurada</b>"
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:266
+#: ../libempathy-gtk/empathy-accounts-dialog.c:267
 msgid ""
 "To add a new account, you can click on the 'Add' button and a new entry will "
 "be created for you to start configuring."
@@ -344,12 +349,12 @@ msgstr ""
 "Para añadir una cuenta nueva, pulse en el botón 'Añadir' y se creará una "
 "entrada nueva para que la configure."
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:388
+#: ../libempathy-gtk/empathy-accounts-dialog.c:389
 #: ../libempathy-gtk/empathy-accounts-dialog.glade.h:4
 msgid "Accounts"
 msgstr "Cuentas"
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:881
+#: ../libempathy-gtk/empathy-accounts-dialog.c:893
 #, c-format
 msgid ""
 "You are about to remove your %s account!\n"
@@ -358,7 +363,7 @@ msgstr ""
 "Va a eliminar su cuenta %s\n"
 "¿Seguro que quiere continuar?"
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:887
+#: ../libempathy-gtk/empathy-accounts-dialog.c:899
 msgid ""
 "Any associated conversations and chat rooms will NOT be removed if you "
 "decide to proceed.\n"
@@ -747,7 +752,7 @@ msgid "Select"
 msgstr "Seleccionar"
 
 #: ../libempathy-gtk/empathy-contact-widget.c:637
-#: ../libempathy-gtk/empathy-main-window.c:612
+#: ../libempathy-gtk/empathy-main-window.c:613
 msgid "Group"
 msgstr "Grupo"
 
@@ -915,17 +920,17 @@ msgstr ""
 "Esta lista representa todas las salas de chat hospedadas en el servidor al "
 "que ha entrado."
 
-#: ../libempathy-gtk/empathy-main-window.c:277
+#: ../libempathy-gtk/empathy-main-window.c:278
 msgid "Show and edit accounts"
 msgstr "Mostrar y editar cuentas"
 
-#: ../libempathy-gtk/empathy-main-window.c:633
+#: ../libempathy-gtk/empathy-main-window.c:634
 msgid "Contact"
 msgstr "Contacto"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:1
-msgid "Contact List - Empathy"
-msgstr "Lista de contactos - Empathy"
+msgid "Contact list"
+msgstr "Lista de contactos"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:2
 msgid "Context"
@@ -977,7 +982,7 @@ msgstr "_Preferencias"
 msgid "_Quit"
 msgstr "_Salir"
 
-#: ../libempathy-gtk/empathy-preferences.c:250
+#: ../libempathy-gtk/empathy-preferences.c:243
 msgid "Language"
 msgstr "Idioma"
 
@@ -998,8 +1003,8 @@ msgid "<b>Contact List</b>"
 msgstr "<b>Lista de contactos</b>"
 
 #: ../libempathy-gtk/empathy-preferences.glade.h:5
-msgid "<b>Languages</b>"
-msgstr "<b>Idiomas</b>"
+msgid "<b>Enable spell checking for languages:</b>"
+msgstr "<b>Activar la revisión ortográfica para idiomas:</b>"
 
 #: ../libempathy-gtk/empathy-preferences.glade.h:6
 msgid "<b>Options</b>"
@@ -1080,57 +1085,37 @@ msgid "Themes"
 msgstr "Temas"
 
 #: ../libempathy-gtk/empathy-preferences.glade.h:24
-msgid "_Enable spell checking"
-msgstr "_Activar revisor ortográfico"
-
-#: ../libempathy-gtk/empathy-preferences.glade.h:25
 msgid "_Open new chats in separate windows"
 msgstr "_Abrir charlas nuevas en ventanas separadas"
 
-#: ../libempathy-gtk/empathy-preferences.glade.h:26
+#: ../libempathy-gtk/empathy-preferences.glade.h:25
 msgid "_Play sound when messages arrive"
 msgstr "_Reproducir sonido cuando lleguen mensajes"
 
-#: ../libempathy-gtk/empathy-preferences.glade.h:27
+#: ../libempathy-gtk/empathy-preferences.glade.h:26
 msgid "_Use for chat rooms"
 msgstr "_Usar para sala de chat"
 
-#: ../libempathy-gtk/empathy-presence-chooser.c:664
-msgid "Custom message..."
-msgstr "Mensaje personalizado…"
-
-#. Clear list
-#: ../libempathy-gtk/empathy-presence-chooser.c:686
-msgid "Clear List..."
-msgstr "Limpiar lista…"
-
-#: ../libempathy-gtk/empathy-presence-chooser.c:765
-msgid "Are you sure you want to clear the list?"
-msgstr "¿Está seguro que quiere vaciar la lista?"
-
-#: ../libempathy-gtk/empathy-presence-chooser.c:769
-msgid ""
-"This will remove any custom messages you have added to the list of preset "
-"status messages."
-msgstr ""
-"Esto eliminará cualquier mensaje personalizado que haya añadido a las lista "
-"de mensajes de estado predeterminada."
-
-#: ../libempathy-gtk/empathy-presence-chooser.c:774
-msgid "Clear List"
-msgstr "Vaciar lista"
+#. Custom messages
+#: ../libempathy-gtk/empathy-presence-chooser.c:690
+msgid "Custom messages..."
+msgstr "Mensajes personalizados…"
 
 #: ../libempathy-gtk/empathy-presence-chooser.glade.h:1
-msgid "Enter status message:"
-msgstr "Introduzca mensaje de estado:"
+msgid "Custom message"
+msgstr "Mensaje personalizado…"
 
 #: ../libempathy-gtk/empathy-presence-chooser.glade.h:2
-msgid "Status Message Presets"
-msgstr "Preconfiguraciones de mensajes de estado"
+msgid "Message:"
+msgstr "Mensaje:"
 
 #: ../libempathy-gtk/empathy-presence-chooser.glade.h:3
-msgid "_Add to status message list"
-msgstr "_Añadir a la lista de mensajes de estado"
+msgid "Save message"
+msgstr "Guardar mensaje"
+
+#: ../libempathy-gtk/empathy-presence-chooser.glade.h:4
+msgid "Status:"
+msgstr "Estado:"
 
 #: ../libempathy-gtk/empathy-private-chat.c:185
 #, c-format
@@ -1158,7 +1143,7 @@ msgstr "Corrector ortográfico"
 msgid "Suggestions for the word:"
 msgstr "Sugerencias para la palabra:"
 
-#: ../libempathy-gtk/empathy-status-icon.c:300
+#: ../libempathy-gtk/empathy-status-icon.c:302
 #, c-format
 msgid ""
 "New message from %s:\n"
@@ -1167,7 +1152,7 @@ msgstr ""
 "Nuevo mensaje de %s:\n"
 "%s"
 
-#: ../libempathy-gtk/empathy-status-icon.c:552
+#: ../libempathy-gtk/empathy-status-icon.c:554
 #, c-format
 msgid ""
 "Subscription requested for %s\n"
