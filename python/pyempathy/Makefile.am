@@ -28,11 +28,16 @@ empathy_la_LDFLAGS =					\
 	-module -avoid-version
 
 pyempathy.c: pyempathy.override pyempathy.defs
-	pygtk-codegen-2.0 --prefix empathy 		\
+	pygtk-codegen-2.0				\
+		--prefix empathy 			\
 		--register $(PYDEFS)/gdk-types.defs 	\
 		--register $(PYDEFS)/gtk-types.defs 	\
 		--override pyempathy.override 		\
 		pyempathy.defs > $@ 
+
+EXTRA_DIST =			\
+	pyempathy.override	\
+	pyempathy.defs
 
 CLEANFILES = $(BUILT_SOURCES)
 

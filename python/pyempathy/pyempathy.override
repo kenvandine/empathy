@@ -14,7 +14,6 @@ headers
 #include "empathy-filter.h"
 #include "empathy-idle.h"
 #include "empathy-log-manager.h"
-#include "empathy-marshal.h"
 #include "empathy-message.h"
 #include "empathy-presence.h"
 #include "empathy-time.h"

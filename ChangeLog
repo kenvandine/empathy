@@ -1,5 +1,12 @@
 2007-08-19 Xavier Claessens  <xclaesse@gmail.com>
 
+	* python/pyempathy/Makefile.am:
+	* python/pyempathy/pyempathy.override:
+	* python/pyempathygtk/Makefile.am: Fix build system, make distcheck now
+	works.
+
+2007-08-19 Xavier Claessens  <xclaesse@gmail.com>
+
 	* python/pyempathy/pyempathy.defs:
 	* python/pyempathy/pyempathymodule.c:
 	* python/pyempathy/Makefile.am:
