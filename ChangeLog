@@ -1,7 +1,7 @@
 2007-08-19 Xavier Claessens  <xclaesse@gmail.com>
 
 	* libempathy-gtk/empathy-main-window.glade: Edit menu should be second
-	from the left. Fixes bug #467827 (Reinout van Schouwen).
+	from the left. Fixes bug #467827 (Cosimo Cecchi).
 
 2007-08-13 Xavier Claessens  <xclaesse@gmail.com>
 
