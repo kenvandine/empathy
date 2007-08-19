@@ -1,5 +1,9 @@
 SUBDIRS = po data libempathy libempathy-gtk src doc
 
+if HAVE_PYTHON
+SUBDIRS += python
+endif
+
 DISTCHECK_CONFIGURE_FLAGS =	\
 	--disable-scrollkeeper  \
 	--enable-gtk-doc

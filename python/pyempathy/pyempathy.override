@@ -1,0 +1,84 @@
+%%
+headers
+#include <Python.h>
+#include <pygobject.h>
+#include "empathy-avatar.h"
+#include "empathy-chandler.h"
+#include "empathy-chatroom-manager.h"
+#include "empathy-chatroom.h"
+#include "empathy-conf.h"
+#include "empathy-contact-list.h"
+#include "empathy-contact-manager.h"
+#include "empathy-contact.h"
+#include "empathy-debug.h"
+#include "empathy-filter.h"
+#include "empathy-idle.h"
+#include "empathy-log-manager.h"
+#include "empathy-marshal.h"
+#include "empathy-message.h"
+#include "empathy-presence.h"
+#include "empathy-time.h"
+#include "empathy-tp-chat.h"
+#include "empathy-tp-chatroom.h"
+#include "empathy-tp-contact-list.h"
+#include "empathy-tp-group.h"
+#include "empathy-utils.h"
+
+
+/* FIXME */
+#define MC_TYPE_PRESENCE 1
+#define EMPATHY_TYPE_SUBSCRIPTION 2
+#define EMPATHY_TYPE_MESSAGE_TYPE 3
+#define EMPATHY_TYPE_REG_EX_TYPE 4
+
+
+void empathy_add_constants(PyObject *module, const gchar *strip_prefix);
+void empathy_register_classes(PyObject *d);
+
+%%
+modulename empathy
+%%
+ignore-glob
+	*_get_type
+%%
+import gobject.GObject as PyGObject_Type
+%%
+override empathy_contact_list_get_members kwargs
+static PyObject *
+_wrap_empathy_contact_list_get_members(PyGObject *self, PyObject *args, PyObject *kwargs)
+{
+
+	PyObject *py_contacts = PyList_New(0);
+	GList *l, *contacts;
+
+	contacts = empathy_contact_list_get_members(EMPATHY_CONTACT_LIST(self->obj));
+
+	for (l = contacts; l; l = l->next) {
+		EmpathyContact *contact;
+		contact = l->data;
+		PyList_Append(py_contacts, pygobject_new((GObject *) contact));
+	}
+
+	return py_contacts;
+
+}
+%%
+override empathy_contact_get_groups kwargs
+static PyObject *
+_wrap_empathy_contact_get_groups(PyGObject *self, PyObject *args, PyObject *kwargs)
+{
+
+	GList *groups = empathy_contact_get_groups(EMPATHY_CONTACT(self->obj));
+	PyObject *py_groups = PyList_New(0);
+	GList *l;
+
+	for(l = groups; l; l = l->next) {
+		const gchar *group;
+		group = l->data;
+		PyList_Append(py_groups, PyString_FromString(group));
+	}
+
+	return py_groups;
+
+}
+%%

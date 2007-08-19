@@ -1,5 +1,20 @@
 2007-08-19 Xavier Claessens  <xclaesse@gmail.com>
 
+	* python/pyempathy/pyempathy.defs:
+	* python/pyempathy/pyempathymodule.c:
+	* python/pyempathy/Makefile.am:
+	* python/pyempathy/pyempathy.override:
+	* python/pyempathygtk/pyempathygtk.override:
+	* python/pyempathygtk/pyempathygtk.defs:
+	* python/pyempathygtk/Makefile.am:
+	* python/pyempathygtk/pyempathygtkmodule.c:
+	* python/Makefile.am:
+	* libempathy/empathy-time.h:
+	* configure.ac:
+	* Makefile.am: Add python binding. Fixes bug #457660 (Michael Sheldon).
+
+2007-08-19 Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/empathy-main-window.glade: Edit menu should be second
 	from the left. Fixes bug #467827 (Cosimo Cecchi).
 

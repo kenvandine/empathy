@@ -21,7 +21,9 @@
 #ifndef __EMPATHY_TIME_H__
 #define __EMPATHY_TIME_H__
 
+#ifndef __USE_XOPEN
 #define __USE_XOPEN
+#endif
 #include <time.h>
 
 #include <glib.h>

@@ -145,7 +145,46 @@ if test "x$enable_aspell" = "xyes" -a "x$have_aspell" != "xyes"; then
    AC_MSG_ERROR([Couldn't find aspell.])
 fi
 
+
 dnl -----------------------------------------------------------
+dnl Python Bindings
+dnl -----------------------------------------------------------
+AC_ARG_ENABLE(python,
+              AS_HELP_STRING([--enable-python=@<:@no/yes/auto@:>@],
+                             [build python bindings to libempathy and libempathy-gtk]), ,
+                             enable_python=auto)
+
+PKG_CHECK_MODULES(PYTHON_BINDING,
+[
+   pygtk-2.0,
+   glib-2.0 >= $GLIB_REQUIRED
+   gobject-2.0
+   gconf-2.0 >= $GCONF_REQUIRED
+   libxml-2.0
+   gnome-vfs-2.0
+   libtelepathy >= $TELEPATHY_REQUIRED
+   libmissioncontrol >= $MISSION_CONTROL_REQUIRED
+   gtk+-2.0 >= $GTK_REQUIRED
+   libglade-2.0 >= $LIBGLADE_REQUIRED
+   libgnomeui-2.0
+], have_python="yes", have_python="no")
+
+if test "x$have_python" = "xno"; then
+	if test "x$enable_python" = "xyes"; then
+		AC_MSG_ERROR([Could not find python dependencies])
+	fi
+	enable_python="no (missing dependencies)"
+else
+	if test "x$enable_python" != "xno"; then
+		enable_python="yes"
+	else
+		enable_python="no (disabled)"
+	fi
+fi
+AM_CONDITIONAL(HAVE_PYTHON, test x$enable_python = xyes)
+
+dnl -----------------------------------------------------------
+
 AC_OUTPUT([
   Makefile
   data/Makefile
@@ -164,5 +203,7 @@ AC_OUTPUT([
   doc/Makefile
   doc/libempathy/Makefile
   doc/libempathy-gtk/Makefile
+  python/Makefile
+  python/pyempathy/Makefile
+  python/pyempathygtk/Makefile
 ])
-

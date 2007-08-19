@@ -1,0 +1,77 @@
+%%
+headers
+#include <Python.h>
+#include <pygobject.h>
+#include "empathy-about-dialog.h"
+#include "empathy-account-chooser.h"
+#include "empathy-accounts-dialog.h"
+#include "empathy-account-widget-generic.h"
+#include "empathy-account-widget-jabber.h"
+#include "empathy-account-widget-msn.h"
+#include "empathy-cell-renderer-expander.h"
+#include "empathy-cell-renderer-text.h"
+#include "empathy-chat.h"
+#include "empathy-chatrooms-window.h"
+#include "empathy-chat-view.h"
+#include "empathy-chat-window.h"
+#include "empathy-contact-dialogs.h"
+#include "empathy-contact-groups.h"
+#include "empathy-contact-list-store.h"
+#include "empathy-contact-list-view.h"
+#include "empathy-contact-widget.h"
+#include "empathy-geometry.h"
+#include "empathy-group-chat.h"
+#include "empathy-images.h"
+#include "empathy-log-window.h"
+#include "empathy-main-window.h"
+#include "empathy-new-chatroom-dialog.h"
+#include "empathy-preferences.h"
+#include "empathy-presence-chooser.h"
+#include "empathy-private-chat.h"
+#include "empathy-profile-chooser.h"
+#include "empathy-spell-dialog.h"
+#include "empathy-spell.h"
+#include "empathy-status-icon.h"
+#include "empathy-status-presets.h"
+#include "empathy-theme-manager.h"
+#include "empathy-ui-utils.h"
+#include "ephy-spinner.h"
+
+/* FIXME */
+#define EMPATHY_TYPE_SMILEY 1
+#define EMPATHY_TYPE_CONTACT_LIST_STORE_COL 2
+#define EMPATHY_TYPE_CONTACT_LIST_STORE_SORT 3
+#define EMPATHY_TYPE_CONTACT_WIDGET_TYPE 4
+
+void empathy_add_constants(PyObject *module, const gchar *strip_prefix);
+void empathy_register_classes(PyObject *d);
+%%
+modulename empathygtk
+%%
+import gobject.GObject as PyGObject_Type
+import gtk.Widget as PyGtkWidget_Type
+import gtk.Window as PyGtkWindow_Type
+import gtk.CellRenderer as PyGtkCellRenderer_Type
+import gtk.CellRendererText as PyGtkCellRendererText_Type
+import gtk.TextView as PyGtkTextView_Type
+import gtk.TreeView as PyGtkTreeView_Type
+import gtk.TreeStore as PyGtkTreeStore_Type
+import gtk.ToggleButton as PyGtkToggleButton_Type
+import gtk.ComboBox as PyGtkComboBox_Type
+import gtk.StatusIcon as PyGtkStatusIcon_Type
+import empathy.Contact as PyEmpathyContact_Type
+import empathy.ContactList as PyEmpathyContactList_Type
+import empathy.TpChat as PyEmpathyTpChat_Type
+import empathy.Presence as PyEmpathyPresence_Type
+import empathy.Message as PyEmpathyMessage_Type
+%%
+ignore-glob
+	*_get_type
+%%
+ignore
+	empathy_chat_correct_word
+	empathy_chat_view_set_margin
+	empathy_chat_get_view
+	empathy_spell_dialog_show
+	empathy_window_iconify
+%%
