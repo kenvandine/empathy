@@ -157,6 +157,76 @@
 	  </child>
 
 	  <child>
+	    <widget class="GtkMenuItem" id="edit">
+	      <property name="visible">True</property>
+	      <property name="label" translatable="yes">_Edit</property>
+	      <property name="use_underline">True</property>
+
+	      <child>
+		<widget class="GtkMenu" id="edit_menu">
+
+		  <child>
+		    <widget class="GtkMenuItem" id="edit_context">
+		      <property name="visible">True</property>
+		      <property name="label" translatable="yes">Context</property>
+		      <property name="use_underline">True</property>
+		    </widget>
+		  </child>
+
+		  <child>
+		    <widget class="GtkSeparatorMenuItem" id="edit_context_separator">
+		      <property name="visible">True</property>
+		    </widget>
+		  </child>
+
+		  <child>
+		    <widget class="GtkMenuItem" id="edit_accounts">
+		      <property name="visible">True</property>
+		      <property name="label" translatable="yes">_Accounts</property>
+		      <property name="use_underline">True</property>
+		      <accelerator key="F4" modifiers="0" signal="activate"/>
+		    </widget>
+		  </child>
+
+		  <child>
+		    <widget class="GtkMenuItem" id="edit_personal_information">
+		      <property name="visible">True</property>
+		      <property name="label" translatable="yes">_Personal Information</property>
+		      <property name="use_underline">True</property>
+		    </widget>
+		  </child>
+
+		  <child>
+		    <widget class="GtkSeparatorMenuItem" id="separator2">
+		      <property name="visible">True</property>
+		    </widget>
+		  </child>
+
+		  <child>
+		    <widget class="GtkImageMenuItem" id="edit_preferences">
+		      <property name="visible">True</property>
+		      <property name="label" translatable="yes">_Preferences</property>
+		      <property name="use_underline">True</property>
+
+		      <child internal-child="image">
+			<widget class="GtkImage" id="image891">
+			  <property name="visible">True</property>
+			  <property name="stock">gtk-preferences</property>
+			  <property name="icon_size">1</property>
+			  <property name="xalign">0.5</property>
+			  <property name="yalign">0.5</property>
+			  <property name="xpad">0</property>
+			  <property name="ypad">0</property>
+			</widget>
+		      </child>
+		    </widget>
+		  </child>
+		</widget>
+	      </child>
+	    </widget>
+	  </child>
+
+	  <child>
 	    <widget class="GtkMenuItem" id="room">
 	      <property name="visible">True</property>
 	      <property name="label" translatable="yes">_Room</property>
@@ -217,76 +287,6 @@
 			  <property name="visible">True</property>
 			  <property name="icon_size">1</property>
 			  <property name="icon_name">empathy-group-message</property>
-			  <property name="xalign">0.5</property>
-			  <property name="yalign">0.5</property>
-			  <property name="xpad">0</property>
-			  <property name="ypad">0</property>
-			</widget>
-		      </child>
-		    </widget>
-		  </child>
-		</widget>
-	      </child>
-	    </widget>
-	  </child>
-
-	  <child>
-	    <widget class="GtkMenuItem" id="edit">
-	      <property name="visible">True</property>
-	      <property name="label" translatable="yes">_Edit</property>
-	      <property name="use_underline">True</property>
-
-	      <child>
-		<widget class="GtkMenu" id="edit_menu">
-
-		  <child>
-		    <widget class="GtkMenuItem" id="edit_context">
-		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">Context</property>
-		      <property name="use_underline">True</property>
-		    </widget>
-		  </child>
-
-		  <child>
-		    <widget class="GtkSeparatorMenuItem" id="edit_context_separator">
-		      <property name="visible">True</property>
-		    </widget>
-		  </child>
-
-		  <child>
-		    <widget class="GtkMenuItem" id="edit_accounts">
-		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">_Accounts</property>
-		      <property name="use_underline">True</property>
-		      <accelerator key="F4" modifiers="0" signal="activate"/>
-		    </widget>
-		  </child>
-
-		  <child>
-		    <widget class="GtkMenuItem" id="edit_personal_information">
-		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">_Personal Information</property>
-		      <property name="use_underline">True</property>
-		    </widget>
-		  </child>
-
-		  <child>
-		    <widget class="GtkSeparatorMenuItem" id="separator2">
-		      <property name="visible">True</property>
-		    </widget>
-		  </child>
-
-		  <child>
-		    <widget class="GtkImageMenuItem" id="edit_preferences">
-		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">_Preferences</property>
-		      <property name="use_underline">True</property>
-
-		      <child internal-child="image">
-			<widget class="GtkImage" id="image891">
-			  <property name="visible">True</property>
-			  <property name="stock">gtk-preferences</property>
-			  <property name="icon_size">1</property>
 			  <property name="xalign">0.5</property>
 			  <property name="yalign">0.5</property>
 			  <property name="xpad">0</property>
