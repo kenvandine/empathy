@@ -8,10 +8,10 @@
 # -=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-
 msgid ""
 msgstr ""
-"Project-Id-Version: Gossip cvs\n"
+"Project-Id-Version: Empathy\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-08-08 00:09+0200\n"
-"PO-Revision-Date: 2007-07-25 14:32+0100\n"
+"POT-Creation-Date: 2007-08-19 14:56+0200\n"
+"PO-Revision-Date: 2007-08-10 21:38+0100\n"
 "Last-Translator: Tomasz Dominikowski <dominikowski@gmail.com>\n"
 "Language-Team: Polish <translation-team-pl@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -188,25 +188,29 @@ msgstr ""
 "Domyślnie jest używane sortowanie wg nazwy kontaktów, wartość \"name\". "
 "Wartość \"state\" spowoduje sortowanie wg stanu kontaktu."
 
-#: ../libempathy/empathy-presence.c:191 ../libempathy/empathy-presence.c:290
+#: ../libempathy/empathy-presence.c:185 ../libempathy/empathy-presence.c:285
 msgid "Offline"
 msgstr "Rozłączony"
 
-#: ../libempathy/empathy-presence.c:281
+#: ../libempathy/empathy-presence.c:275
 msgid "Available"
 msgstr "Dostępny"
 
-#: ../libempathy/empathy-presence.c:283
+#: ../libempathy/empathy-presence.c:277
 msgid "Busy"
 msgstr "Zajęty"
 
-#: ../libempathy/empathy-presence.c:286
+#: ../libempathy/empathy-presence.c:280
 msgid "Away"
 msgstr "Nieobecny"
 
+#: ../libempathy/empathy-presence.c:282
+msgid "Hidden"
+msgstr "Ukryty"
+
 #: ../libempathy/empathy-tp-contact-list.c:354
-msgid "Local Network"
-msgstr "Sieć lokalna"
+msgid "People nearby"
+msgstr "Ludzie w pobliżu"
 
 #: ../libempathy-gtk/empathy-about-dialog.c:63
 msgid ""
@@ -265,9 +269,8 @@ msgstr "%s:"
 
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:1
 #: ../libempathy-gtk/empathy-account-widget-msn.glade.h:1
-#, fuzzy
 msgid "<b>Advanced</b>"
-msgstr "<b>Wygląd</b>"
+msgstr "<b>Zaawansowane</b>"
 
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:2
 #: ../libempathy-gtk/empathy-account-widget-msn.glade.h:2
@@ -308,24 +311,23 @@ msgid "jabber account settings"
 msgstr "Ustawienia konta Jabber"
 
 #: ../libempathy-gtk/empathy-account-widget-msn.glade.h:7
-#, fuzzy
 msgid "msn account settings"
-msgstr "<b>Ustawienia konta</b>"
+msgstr "ustawienia konta msn"
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:216
+#: ../libempathy-gtk/empathy-accounts-dialog.c:217
 msgid "Disable"
 msgstr "Wyłącz"
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:219
+#: ../libempathy-gtk/empathy-accounts-dialog.c:220
 msgid "Enable"
 msgstr "Włącz"
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:253
+#: ../libempathy-gtk/empathy-accounts-dialog.c:254
 #: ../libempathy-gtk/empathy-accounts-dialog.glade.h:2
 msgid "<b>No Account Selected</b>"
 msgstr "<b>Nie zaznaczono żadnego konta</b>"
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:255
+#: ../libempathy-gtk/empathy-accounts-dialog.c:256
 msgid ""
 "To add a new account, you can click on the 'Add' button and a new entry will "
 "be created for you to start configuring.\n"
@@ -339,11 +341,11 @@ msgstr ""
 "Jeśli nie chcesz dodać konta, kliknij na konto, które chcesz skonfigurować "
 "na liście po lewej stronie."
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:264
+#: ../libempathy-gtk/empathy-accounts-dialog.c:265
 msgid "<b>No Accounts Configured</b>"
 msgstr "<b>Brak skonfigurowanych kont</b>"
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:266
+#: ../libempathy-gtk/empathy-accounts-dialog.c:267
 msgid ""
 "To add a new account, you can click on the 'Add' button and a new entry will "
 "be created for you to start configuring."
@@ -351,12 +353,12 @@ msgstr ""
 "Aby dodać nowe konto możesz kliknąć przycisk \"Dodaj\", a zostanie utworzony "
 "nowy wpis, który można skonfigurować."
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:388
+#: ../libempathy-gtk/empathy-accounts-dialog.c:389
 #: ../libempathy-gtk/empathy-accounts-dialog.glade.h:4
 msgid "Accounts"
 msgstr "Konta"
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:881
+#: ../libempathy-gtk/empathy-accounts-dialog.c:893
 #, c-format
 msgid ""
 "You are about to remove your %s account!\n"
@@ -365,7 +367,7 @@ msgstr ""
 "Zamierzasz usunąć konto %s!\n"
 "Czy jesteś tego pewien?"
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:887
+#: ../libempathy-gtk/empathy-accounts-dialog.c:899
 msgid ""
 "Any associated conversations and chat rooms will NOT be removed if you "
 "decide to proceed.\n"
@@ -406,52 +408,51 @@ msgstr ""
 "na liście po lewej stronie."
 
 #: ../libempathy-gtk/empathy-accounts-dialog.glade.h:9
-#, fuzzy
 msgid "Type:"
-msgstr "_Typ:"
+msgstr "Typ:"
 
 #: ../libempathy-gtk/empathy-chat.c:335
 msgid "Disconnected"
 msgstr "Rozłączony"
 
-#: ../libempathy-gtk/empathy-chat.c:442
+#: ../libempathy-gtk/empathy-chat.c:450
 msgid "offline"
 msgstr "rozłączony"
 
-#: ../libempathy-gtk/empathy-chat.c:445
+#: ../libempathy-gtk/empathy-chat.c:453
 msgid "invalid contact"
 msgstr "niepoprawny kontakt"
 
-#: ../libempathy-gtk/empathy-chat.c:448
+#: ../libempathy-gtk/empathy-chat.c:456
 msgid "permission denied"
 msgstr "dostęp zabroniony"
 
-#: ../libempathy-gtk/empathy-chat.c:451
+#: ../libempathy-gtk/empathy-chat.c:459
 msgid "too long message"
 msgstr "zbyt długa wiadomość"
 
-#: ../libempathy-gtk/empathy-chat.c:454
+#: ../libempathy-gtk/empathy-chat.c:462
 msgid "not implemented"
 msgstr "niezaimplementowane"
 
-#: ../libempathy-gtk/empathy-chat.c:457
+#: ../libempathy-gtk/empathy-chat.c:465
 msgid "unknown"
 msgstr "nieznany"
 
-#: ../libempathy-gtk/empathy-chat.c:461
+#: ../libempathy-gtk/empathy-chat.c:469
 #, c-format
 msgid "Error sending message '%s': %s"
 msgstr "Błąd podczas wysyłania wiadomości \"%s\": %s"
 
-#: ../libempathy-gtk/empathy-chat.c:916
+#: ../libempathy-gtk/empathy-chat.c:924
 msgid "Insert Smiley"
 msgstr "Wstaw uśmieszek"
 
-#: ../libempathy-gtk/empathy-chat.c:964
+#: ../libempathy-gtk/empathy-chat.c:972
 msgid "_Check Word Spelling..."
 msgstr "_Sprawdź pisownię..."
 
-#: ../libempathy-gtk/empathy-chat.c:1394
+#: ../libempathy-gtk/empathy-chat.c:1397
 msgid "Connected"
 msgstr "Połączony"
 
@@ -846,14 +847,14 @@ msgstr "Użytkownik %s opuścił pokój"
 msgid "Topic: %s"
 msgstr "Temat: %s"
 
-#: ../libempathy-gtk/empathy-group-chat.c:573
+#: ../libempathy-gtk/empathy-group-chat.c:578
 #, c-format
 msgid "Topic set to: %s"
 msgstr "Temat ustawiony na: %s"
 
-#: ../libempathy-gtk/empathy-group-chat.c:575
+#: ../libempathy-gtk/empathy-group-chat.c:580
 msgid "No topic defined"
-msgstr ""
+msgstr "Temat nie został określony"
 
 #: ../libempathy-gtk/empathy-group-chat.glade.h:1
 msgid "<b>Topic:</b>"
@@ -937,9 +938,8 @@ msgid "Contact"
 msgstr "Kontakt"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:1
-#, fuzzy
 msgid "Contact list"
-msgstr "_Dodaj kontakt..."
+msgstr "Lista kontaktów"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:2
 msgid "Context"
@@ -991,7 +991,7 @@ msgstr "_Preferencje"
 msgid "_Quit"
 msgstr "_Zakończ"
 
-#: ../libempathy-gtk/empathy-preferences.c:251
+#: ../libempathy-gtk/empathy-preferences.c:243
 msgid "Language"
 msgstr "Język"
 
@@ -1012,8 +1012,8 @@ msgid "<b>Contact List</b>"
 msgstr "<b>Lista kontaktów</b>"
 
 #: ../libempathy-gtk/empathy-preferences.glade.h:5
-msgid "<b>Languages</b>"
-msgstr "<b>Języki</b>"
+msgid "<b>Enable spell checking for languages:</b>"
+msgstr "<b>Sprawdzanie pisowni dla języków:</b>"
 
 #: ../libempathy-gtk/empathy-preferences.glade.h:6
 msgid "<b>Options</b>"
@@ -1094,57 +1094,37 @@ msgid "Themes"
 msgstr "Motywy"
 
 #: ../libempathy-gtk/empathy-preferences.glade.h:24
-msgid "_Enable spell checking"
-msgstr "_Włączenie sprawdzania pisowni"
-
-#: ../libempathy-gtk/empathy-preferences.glade.h:25
 msgid "_Open new chats in separate windows"
 msgstr "_Otwieranie nowych rozmów w osobnych oknach"
 
-#: ../libempathy-gtk/empathy-preferences.glade.h:26
+#: ../libempathy-gtk/empathy-preferences.glade.h:25
 msgid "_Play sound when messages arrive"
 msgstr "_Odtwarzanie dźwięku po nadejściu wiadomości"
 
-#: ../libempathy-gtk/empathy-preferences.glade.h:27
+#: ../libempathy-gtk/empathy-preferences.glade.h:26
 msgid "_Use for chat rooms"
 msgstr "_Używanie dla pokojów rozmów"
 
-#: ../libempathy-gtk/empathy-presence-chooser.c:664
-msgid "Custom message..."
-msgstr "Własny komunikat..."
-
-#. Clear list
-#: ../libempathy-gtk/empathy-presence-chooser.c:686
-msgid "Clear List..."
-msgstr "Wyczyść listę..."
-
-#: ../libempathy-gtk/empathy-presence-chooser.c:765
-msgid "Are you sure you want to clear the list?"
-msgstr "Czy na pewno wyczyścić listę?"
-
-#: ../libempathy-gtk/empathy-presence-chooser.c:769
-msgid ""
-"This will remove any custom messages you have added to the list of preset "
-"status messages."
-msgstr ""
-"To usunie wszystkie własne komunikaty dodane do listy własnych komunikatów o "
-"stanie."
-
-#: ../libempathy-gtk/empathy-presence-chooser.c:774
-msgid "Clear List"
-msgstr "Wyczyść listę"
+#. Custom messages
+#: ../libempathy-gtk/empathy-presence-chooser.c:690
+msgid "Custom messages..."
+msgstr "Własne wiadomości..."
 
 #: ../libempathy-gtk/empathy-presence-chooser.glade.h:1
-msgid "Enter status message:"
-msgstr "Wprowadź komunikat stanu:"
+msgid "Custom message"
+msgstr "Własna wiadomość"
 
 #: ../libempathy-gtk/empathy-presence-chooser.glade.h:2
-msgid "Status Message Presets"
-msgstr "Własne komunikaty stanu"
+msgid "Message:"
+msgstr "Wiadomość:"
 
 #: ../libempathy-gtk/empathy-presence-chooser.glade.h:3
-msgid "_Add to status message list"
-msgstr "Dod_aj do listy komunikatów stanu"
+msgid "Save message"
+msgstr "Zapisz wiadomość"
+
+#: ../libempathy-gtk/empathy-presence-chooser.glade.h:4
+msgid "Status:"
+msgstr "Stan:"
 
 #: ../libempathy-gtk/empathy-private-chat.c:185
 #, c-format
@@ -1172,7 +1152,7 @@ msgstr "Sprawdzanie pisowni"
 msgid "Suggestions for the word:"
 msgstr "Sugestie dla słowa"
 
-#: ../libempathy-gtk/empathy-status-icon.c:300
+#: ../libempathy-gtk/empathy-status-icon.c:302
 #, c-format
 msgid ""
 "New message from %s:\n"
@@ -1181,7 +1161,7 @@ msgstr ""
 "Nowa wiadomość od %s:\n"
 "%s"
 
-#: ../libempathy-gtk/empathy-status-icon.c:552
+#: ../libempathy-gtk/empathy-status-icon.c:554
 #, c-format
 msgid ""
 "Subscription requested for %s\n"
@@ -1221,6 +1201,40 @@ msgstr "Bez łączenia przy uruchamianiu"
 #: ../src/empathy.c:176
 msgid "- Empathy Instant Messenger"
 msgstr "- Komunikator internetowy Empathy"
+
+#~ msgid "Local Network"
+#~ msgstr "Sieć lokalna"
+
+#~ msgid "<b>Languages</b>"
+#~ msgstr "<b>Języki</b>"
+
+#~ msgid "_Enable spell checking"
+#~ msgstr "_Włączenie sprawdzania pisowni"
+
+#~ msgid "Clear List..."
+#~ msgstr "Wyczyść listę..."
+
+#~ msgid "Are you sure you want to clear the list?"
+#~ msgstr "Czy na pewno wyczyścić listę?"
+
+#~ msgid ""
+#~ "This will remove any custom messages you have added to the list of preset "
+#~ "status messages."
+#~ msgstr ""
+#~ "To usunie wszystkie własne komunikaty dodane do listy własnych "
+#~ "komunikatów o stanie."
+
+#~ msgid "Clear List"
+#~ msgstr "Wyczyść listę"
+
+#~ msgid "Enter status message:"
+#~ msgstr "Wprowadź komunikat stanu:"
+
+#~ msgid "Status Message Presets"
+#~ msgstr "Własne komunikaty stanu"
+
+#~ msgid "_Add to status message list"
+#~ msgstr "Dod_aj do listy komunikatów stanu"
 
 #~ msgid "<b>Account</b>"
 #~ msgstr "<b>Konto</b>"
@@ -1891,10 +1905,6 @@ msgstr "- Komunikator internetowy Empathy"
 #, fuzzy
 #~ msgid "Requested Information"
 #~ msgstr "_Informacje o koncie"
-
-#, fuzzy
-#~ msgid "Send Message"
-#~ msgstr "Komunikat stanu"
 
 #, fuzzy
 #~ msgid "%s has gone offline"
