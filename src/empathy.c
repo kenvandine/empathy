@@ -30,6 +30,7 @@
 
 #include <libgnome/gnome-program.h>
 #include <libgnomeui/gnome-ui-init.h>
+#include <libebook/e-book.h>
 
 #include <libtelepathy/tp-conn.h>
 #include <libtelepathy/tp-chan.h>
@@ -45,6 +46,8 @@
 #include <libempathy/empathy-tp-chat.h>
 #include <libempathy/empathy-tp-chatroom.h>
 #include <libempathy/empathy-idle.h>
+#include <libempathy/empathy-conf.h>
+#include <libempathy-gtk/empathy-preferences.h>
 #include <libempathy-gtk/empathy-main-window.h>
 #include <libempathy-gtk/empathy-status-icon.h>
 #include <libempathy-gtk/empathy-private-chat.h>
@@ -147,6 +150,85 @@ new_channel_cb (EmpathyChandler *chandler,
 	g_object_unref (account);
 }
 
+static void
+create_salut_account (void)
+{
+	McProfile  *profile;
+	McProtocol *protocol;
+	gboolean    salut_created;
+	McAccount  *account;
+	EBook      *book;
+	EContact   *contact;
+	gchar      *nickname = NULL;
+	gchar      *published_name = NULL;
+	gchar      *first_name = NULL;
+	gchar      *last_name = NULL;
+	gchar      *email = NULL;
+	gchar      *jid = NULL;
+
+	if (!empathy_conf_get_bool (empathy_conf_get(),
+				    EMPATHY_PREFS_SALUT_ACCOUNT_CREATED,
+				    &salut_created)) {
+		return;
+	}
+	if (salut_created) {
+		return;
+	}
+
+	profile = mc_profile_lookup ("salut");
+	protocol = mc_profile_get_protocol (profile);
+	if (!protocol) {
+		g_object_unref (profile);
+		return;
+	}
+	g_object_unref (protocol);
+
+	if (!e_book_get_self (&contact, &book, NULL)) {
+		return;
+	}
+
+	empathy_conf_set_bool (empathy_conf_get (),
+			       EMPATHY_PREFS_SALUT_ACCOUNT_CREATED,
+			       TRUE);
+
+	account = mc_account_create (profile);
+	mc_account_set_display_name (account, _("People nearby"));
+	
+	nickname = e_contact_get (contact, E_CONTACT_NICKNAME);
+	published_name = e_contact_get (contact, E_CONTACT_FULL_NAME);
+	first_name = e_contact_get (contact, E_CONTACT_GIVEN_NAME);
+	last_name = e_contact_get (contact, E_CONTACT_FAMILY_NAME);
+	email = e_contact_get (contact, E_CONTACT_EMAIL_1);
+	jid = e_contact_get (contact, E_CONTACT_IM_JABBER_HOME_1);
+	
+	if (G_STR_EMPTY (nickname) || !empathy_strdiff (nickname, "nickname")) {
+		g_free (nickname);
+		nickname = g_strdup (g_get_user_name ());
+	}
+	if (G_STR_EMPTY (published_name)) {
+		g_free (published_name);
+		published_name = g_strdup (g_get_real_name ());
+	}
+
+	mc_account_set_param_string (account, "nickname", nickname ? nickname : "");
+	mc_account_set_param_string (account, "published-name", published_name ? published_name : "");
+	mc_account_set_param_string (account, "first-name", first_name ? first_name : "");
+	mc_account_set_param_string (account, "last-name", last_name ? last_name : "");
+	mc_account_set_param_string (account, "email", email ? email : "");
+	mc_account_set_param_string (account, "jid", jid ? jid : "");
+
+	g_free (nickname);
+	g_free (published_name);
+	g_free (first_name);
+	g_free (last_name);
+	g_free (email);
+	g_free (jid);
+	g_object_unref (account);
+	g_object_unref (profile);
+	g_object_unref (contact);
+	g_object_unref (book);
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -208,6 +290,8 @@ main (int argc, char *argv[])
 	if (!no_connect) {
 		start_mission_control (idle);
 	}
+	
+	create_salut_account ();
 
 	/* Setting up UI */
 	window = empathy_main_window_show ();

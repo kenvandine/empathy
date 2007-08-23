@@ -245,6 +245,21 @@
       </locale>
     </schema>
 
+    <schema>
+      <key>/schemas/apps/empathy/accounts/salut_created</key>
+      <applyto>/apps/empathy/accounts/salut_created</applyto>
+      <owner>empathy</owner>
+      <type>bool</type>
+      <default>false</default>
+      <locale name="C">
+        <short>Checks if Salut account is created</short>
+	<long>
+	Whether or not the Salut account has been created on the first
+      empathy run.
+        </long>
+      </locale>
+    </schema>
+
   </schemalist>  
 </gconfschemafile>
 

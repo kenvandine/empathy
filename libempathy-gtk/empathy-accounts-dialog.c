@@ -47,6 +47,7 @@
 #include "empathy-account-widget-generic.h"
 #include "empathy-account-widget-jabber.h"
 #include "empathy-account-widget-msn.h"
+#include "empathy-account-widget-salut.h"
 
 #define DEBUG_DOMAIN "AccountDialog"
 
@@ -286,6 +287,10 @@ accounts_dialog_update_account (EmpathyAccountsDialog *dialog,
 		else if (!empathy_strdiff (config_ui, "msn")) {
 			dialog ->settings_widget =
 				empathy_account_widget_msn_new (account);
+		}
+		else if (!empathy_strdiff (config_ui, "salut")) {
+			dialog->settings_widget =
+				empathy_account_widget_salut_new (account);
 		}
 		else {
 			dialog->settings_widget = 

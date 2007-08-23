@@ -96,6 +96,7 @@ PKG_CHECK_MODULES(EMPATHY,
    gtk+-2.0 >= $GTK_REQUIRED
    libglade-2.0 >= $LIBGLADE_REQUIRED
    libgnomeui-2.0
+   libebook-1.2
 ])
 
 dnl -----------------------------------------------------------

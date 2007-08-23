@@ -1,3 +1,18 @@
+2007-08-23 Xavier Claessens  <xclaesse@gmail.com>
+
+	* libempathy-gtk/empathy-account-widget-salut.glade:
+	* libempathy-gtk/empathy-account-widget-salut.c:
+	* libempathy-gtk/empathy-account-widget-salut.h:
+	* libempathy-gtk/empathy-preferences.h:
+	* libempathy-gtk/empathy-accounts-dialog.c:
+	* libempathy-gtk/Makefile.am:
+	* src/empathy.c:
+	* configure.ac:
+	* data/empathy.schemas.in: Add specialised UI for salut settings.
+	Configure a Salut account first time empathy is started with
+	salut CM installed using gnome-about-me information. Fixes bug #447467
+	(Cosimo Cecchi, Xavier Claessens).
+
 2007-08-19 Xavier Claessens  <xclaesse@gmail.com>
 
 	* python/pyempathy/Makefile.am:
