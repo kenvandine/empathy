@@ -192,6 +192,7 @@ AC_OUTPUT([
   data/empathy.desktop.in
   data/16x16/Makefile
   data/22x22/Makefile
+  data/24x24/Makefile
   data/32x32/Makefile
   data/48x48/Makefile
   data/scalable/Makefile

@@ -7,4 +7,6 @@ icon_DATA =					\
 	empathy-proto-gizmo.png			\
 	empathy-proto-irc.png			\
 	empathy-proto-jabber.png
-EXTRA_DIST = $(icon_DATA)
+
+EXTRA_DIST = $(icon_DATA)			\
+	empathy-proto-jabber.svg
