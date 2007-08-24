@@ -1,5 +1,12 @@
 2007-08-24 Xavier Claessens  <xclaesse@gmail.com>
 
+	 * configure.ac:
+	 * doc/libempathy-gtk/tmpl/empathy-preferences.sgml:
+	 * NEWS:
+	 * po/POTFILES.in: Updated.
+
+2007-08-24 Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/empathy-new-chatroom-dialog.c:
 	* libempathy-gtk/empathy-contact-widget.c:
 	* libempathy-gtk/empathy-accounts-dialog.c:
@@ -9,7 +16,7 @@
 
 2007-08-24 Xavier Claessens  <xclaesse@gmail.com>
 
-	* src/empathy.c: Chech if there is already a Salut account before
+	* src/empathy.c: Check if there is already a Salut account before
 	creating a new one and add more debug messages.
 
 2007-08-24 Xavier Claessens  <xclaesse@gmail.com>

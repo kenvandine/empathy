@@ -1,5 +1,13 @@
 NEW in 0.11:
 ===========
+ - Only update the topic of it has really be changed, avoid diplaying many
+   times "Topic set to:" message.
+ - Some Jabber chatroom sends messages received before we joined the room, avoid
+   displaying those messages if we already logged them last time we joined that
+   room. Previous workaround prevented Empathy to log offline messages.
+
+NEW in 0.11:
+===========
  - Change main window's title to "Contact list".
  - Do not list profiles that don't have the corresponding CM installed when
    creating a new account.
