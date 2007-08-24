@@ -1,4 +1,4 @@
-NEW in 0.11:
+NEW in 0.12:
 ===========
  - Only update the topic of it has really be changed, avoid diplaying many
    times "Topic set to:" message.
