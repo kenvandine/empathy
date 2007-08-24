@@ -1,5 +1,14 @@
 2007-08-24 Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/empathy-new-chatroom-dialog.c:
+	* libempathy-gtk/empathy-contact-widget.c:
+	* libempathy-gtk/empathy-accounts-dialog.c:
+	* libempathy/empathy-tp-contact-list.c:
+	* data/salut.profile: Salut's protocol name is going to change to
+	local-xmpp. Fixes bug #469638 (Sjoerd Simons)
+
+2007-08-24 Xavier Claessens  <xclaesse@gmail.com>
+
 	* src/empathy.c: Chech if there is already a Salut account before
 	creating a new one and add more debug messages.
 

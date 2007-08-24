@@ -350,7 +350,7 @@ empathy_tp_contact_list_new (McAccount *account)
 	 * FIXME: Default group should be an information in the profile */
 	profile = mc_account_get_profile (account);
 	protocol_name = mc_profile_get_protocol_name (profile);
-	if (strcmp (protocol_name, "salut") == 0) {
+	if (strcmp (protocol_name, "local-xmpp") == 0) {
 		priv->protocol_group = _("People nearby");
 	}
 	g_object_unref (profile);

@@ -314,7 +314,7 @@ new_chatroom_dialog_update_widgets (EmpathyNewChatroomDialog *dialog)
 		gtk_widget_show (dialog->vbox_browse);
 
 	}
-	else if (strcmp (protocol, "salut") == 0) {
+	else if (strcmp (protocol, "local-xmpp") == 0) {
 		gtk_widget_set_sensitive (dialog->entry_server, FALSE);
 		gtk_widget_show (dialog->vbox_browse);		
 	}

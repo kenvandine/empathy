@@ -293,10 +293,9 @@ contact_widget_can_add_contact_to_account (McAccount *account,
 
 	profile = mc_account_get_profile (account);
 	protocol_name = mc_profile_get_protocol_name (profile);
-	if (strcmp (protocol_name, "salut") == 0) {
+	if (strcmp (protocol_name, "local-xmpp") == 0) {
 		/* We can't add accounts to a XMPP LL connection
-		 * FIXME: We should take that information from the profile
-		 * to not hardcode the protocol name
+		 * FIXME: We should inspect the flags of the contact list group interface
 		 */
 		g_object_unref (profile);
 		return FALSE;

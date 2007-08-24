@@ -288,7 +288,7 @@ accounts_dialog_update_account (EmpathyAccountsDialog *dialog,
 			dialog ->settings_widget =
 				empathy_account_widget_msn_new (account);
 		}
-		else if (!empathy_strdiff (config_ui, "salut")) {
+		else if (!empathy_strdiff (config_ui, "local-xmpp")) {
 			dialog->settings_widget =
 				empathy_account_widget_salut_new (account);
 		}
