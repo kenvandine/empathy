@@ -1,5 +1,10 @@
 2007-08-24 Xavier Claessens  <xclaesse@gmail.com>
 
+	* src/empathy.c: Chech if there is already a Salut account before
+	creating a new one and add more debug messages.
+
+2007-08-24 Xavier Claessens  <xclaesse@gmail.com>
+
 	* configure.ac:
 	* data/22x22/Makefile.am:
 	* data/22x22/empathy-proto-jabber.svg:

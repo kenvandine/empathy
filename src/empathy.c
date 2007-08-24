@@ -157,6 +157,7 @@ create_salut_account (void)
 	McProtocol *protocol;
 	gboolean    salut_created;
 	McAccount  *account;
+	GList      *accounts;
 	EBook      *book;
 	EContact   *contact;
 	gchar      *nickname = NULL;
@@ -166,6 +167,7 @@ create_salut_account (void)
 	gchar      *email = NULL;
 	gchar      *jid = NULL;
 
+	/* Check if we already created a salut account */
 	if (!empathy_conf_get_bool (empathy_conf_get(),
 				    EMPATHY_PREFS_SALUT_ACCOUNT_CREATED,
 				    &salut_created)) {
@@ -175,21 +177,37 @@ create_salut_account (void)
 		return;
 	}
 
+	empathy_debug (DEBUG_DOMAIN, "Try to add a salut account...");
+
+	/* Check if the salut CM is installed */
 	profile = mc_profile_lookup ("salut");
 	protocol = mc_profile_get_protocol (profile);
 	if (!protocol) {
+		empathy_debug (DEBUG_DOMAIN, "Salut not installed");
 		g_object_unref (profile);
 		return;
 	}
 	g_object_unref (protocol);
 
+	/* Get self EContact from EDS */
 	if (!e_book_get_self (&contact, &book, NULL)) {
+		empathy_debug (DEBUG_DOMAIN, "Failed to get self econtact");
+		g_object_unref (profile);
 		return;
 	}
 
 	empathy_conf_set_bool (empathy_conf_get (),
 			       EMPATHY_PREFS_SALUT_ACCOUNT_CREATED,
 			       TRUE);
+
+	/* Check if there is already a salut account */
+	accounts = mc_accounts_list_by_profile (profile);
+	if (accounts) {
+		empathy_debug (DEBUG_DOMAIN, "There is already a salut account");
+		mc_accounts_list_free (accounts);
+		g_object_unref (profile);
+		return;
+	}
 
 	account = mc_account_create (profile);
 	mc_account_set_display_name (account, _("People nearby"));
@@ -209,6 +227,15 @@ create_salut_account (void)
 		g_free (published_name);
 		published_name = g_strdup (g_get_real_name ());
 	}
+
+	empathy_debug (DEBUG_DOMAIN, "Salut account created:\n"
+				     "  nickname=%s\n"
+				     "  published-name=%s\n"
+				     "  first-name=%s\n"
+				     "  last-name=%s\n"
+				     "  email=%s\n"
+				     "  jid=%s\n",
+		       nickname, published_name, first_name, last_name, email, jid);
 
 	mc_account_set_param_string (account, "nickname", nickname ? nickname : "");
 	mc_account_set_param_string (account, "published-name", published_name ? published_name : "");
