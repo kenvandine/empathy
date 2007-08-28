@@ -1,5 +1,12 @@
 2007-08-24 Xavier Claessens  <xclaesse@gmail.com>
 
+	* python/pyempathy/Makefile.am:
+	* python/pyempathygtk/Makefile.am:
+	* configure.ac: Make use of AM_PATH_PYTHON to get python variables.
+	Fixes bug #470642 (Daniel Gryniewicz).
+
+2007-08-24 Xavier Claessens  <xclaesse@gmail.com>
+
 	* configure.ac: Bump version to 0.13.
 	* NEWS: Last NEWS entry is for version 0.12 and not 0.11.
 

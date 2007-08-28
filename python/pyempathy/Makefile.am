@@ -12,7 +12,7 @@ AM_CPPFLAGS =                                           \
 BUILT_SOURCES = 					\
 	pyempathy.c					
 
-pyempathydir = $(prefix)/lib/`pyversions -d`/site-packages
+pyempathydir = $(pyexecdir)
 pyempathy_LTLIBRARIES = empathy.la
 
 empathy_la_SOURCES =					\

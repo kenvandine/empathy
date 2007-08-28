@@ -11,7 +11,7 @@ AM_CPPFLAGS =                                           \
 BUILT_SOURCES = 					\
 	pyempathygtk.c					
 
-pyempathygtkdir = $(prefix)/lib/`pyversions -d`/site-packages
+pyempathygtkdir = $(pyexecdir)
 pyempathygtk_LTLIBRARIES = empathygtk.la
 
 empathygtk_la_SOURCES =					\

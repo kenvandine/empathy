@@ -177,7 +177,12 @@ if test "x$have_python" = "xno"; then
 	enable_python="no (missing dependencies)"
 else
 	if test "x$enable_python" != "xno"; then
-		enable_python="yes"
+		AM_PATH_PYTHON
+		if test -z "$PYTHON" ; then
+			enable_python="no"
+		else
+			enable_python="yes"
+		fi
 	else
 		enable_python="no (disabled)"
 	fi
