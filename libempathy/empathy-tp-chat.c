@@ -31,8 +31,7 @@
 #include <libtelepathy/tp-props-iface.h>
 
 #include "empathy-tp-chat.h"
-#include "empathy-contact-manager.h"
-#include "empathy-tp-contact-list.h"
+#include "empathy-contact-factory.h"
 #include "empathy-marshal.h"
 #include "empathy-debug.h"
 #include "empathy-time.h"
@@ -44,8 +43,8 @@
 #define DEBUG_DOMAIN "TpChat"
 
 struct _EmpathyTpChatPriv {
-	EmpathyTpContactList  *list;
-	EmpathyContactManager *manager;
+	EmpathyContactFactory *factory;
+	EmpathyContact        *user;
 	McAccount             *account;
 	gchar                 *id;
 	MissionControl        *mc;
@@ -363,11 +362,11 @@ tp_chat_finalize (GObject *object)
 		g_object_unref (priv->tp_chan);
 	}
 
-	if (priv->manager) {
-		g_object_unref (priv->manager);
+	if (priv->factory) {
+		g_object_unref (priv->factory);
 	}
-	if (priv->list) {
-		g_object_unref (priv->list);
+	if (priv->user) {
+		g_object_unref (priv->user);
 	}
 	if (priv->account) {
 		g_object_unref (priv->account);
@@ -392,10 +391,9 @@ tp_chat_constructor (GType                  type,
 
 	priv = GET_PRIV (chat);
 
-	priv->manager = empathy_contact_manager_new ();
-	priv->list = empathy_contact_manager_get_list (priv->manager, priv->account);
+	priv->factory = empathy_contact_factory_new ();
+	priv->user = empathy_contact_factory_get_user (priv->factory, priv->account);
 	priv->mc = empathy_mission_control_new ();
-	g_object_ref (priv->list);
 
 	priv->text_iface = tp_chan_get_interface (priv->tp_chan,
 						  TELEPATHY_CHAN_IFACE_TEXT_QUARK);
@@ -750,11 +748,9 @@ empathy_tp_chat_get_id (EmpathyTpChat *chat)
 
 	priv = GET_PRIV (chat);
 
-	if (priv->id) {
-		return priv->id;
+	if (!priv->id) {
+		priv->id = empathy_inspect_channel (priv->account, priv->tp_chan);
 	}
-
-	priv->id = empathy_inspect_channel (priv->account, priv->tp_chan);
 
 	return priv->id;
 }
@@ -885,7 +881,9 @@ tp_chat_state_changed_cb (DBusGProxy                *chat_state_iface,
 
 	priv = GET_PRIV (chat);
 
-	contact = empathy_tp_contact_list_get_from_handle (priv->list, handle);
+	contact = empathy_contact_factory_get_from_handle (priv->factory,
+							   priv->account,
+							   handle);
 
 	empathy_debug (DEBUG_DOMAIN, "Chat state changed for %s (%d): %d",
 		      empathy_contact_get_name (contact),
@@ -906,22 +904,21 @@ tp_chat_build_message (EmpathyTpChat *chat,
 	EmpathyTpChatPriv *priv;
 	EmpathyMessage    *message;
 	EmpathyContact    *sender;
-	EmpathyContact    *receiver;
 
 	priv = GET_PRIV (chat);
 
-	receiver = empathy_tp_contact_list_get_user (priv->list);
 	if (from_handle == 0) {
-		sender = g_object_ref (receiver);
+		sender = g_object_ref (priv->user);
 	} else {
-		sender = empathy_tp_contact_list_get_from_handle (priv->list,
+		sender = empathy_contact_factory_get_from_handle (priv->factory,
+								  priv->account,
 								  from_handle);
 	}
 
 	message = empathy_message_new (message_body);
 	empathy_message_set_type (message, type);
 	empathy_message_set_sender (message, sender);
-	empathy_message_set_receiver (message, receiver);
+	empathy_message_set_receiver (message, priv->user);
 	empathy_message_set_timestamp (message, (EmpathyTime) timestamp);
 
 	g_object_unref (sender);

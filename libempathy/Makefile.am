@@ -17,7 +17,6 @@ lib_LTLIBRARIES = libempathy.la
 
 libempathy_la_SOURCES =					\
 	empathy-conf.c					\
-	empathy-contact.c				\
 	empathy-avatar.c				\
 	empathy-time.c					\
 	empathy-presence.c				\
@@ -26,8 +25,10 @@ libempathy_la_SOURCES =					\
 	empathy-message.c				\
 	empathy-chatroom-manager.c			\
 	empathy-chatroom.c				\
+	empathy-contact.c				\
 	empathy-contact-list.c				\
 	empathy-contact-manager.c			\
+	empathy-contact-factory.c			\
 	empathy-tp-group.c				\
 	empathy-tp-contact-list.c			\
 	empathy-tp-chat.c				\
@@ -50,7 +51,6 @@ libempathy_la_LDFLAGS =		\
 
 libempathy_headers =				\
 	empathy-conf.h				\
-	empathy-contact.h			\
 	empathy-avatar.h			\
 	empathy-time.h				\
 	empathy-presence.h			\
@@ -59,8 +59,10 @@ libempathy_headers =				\
 	empathy-message.h			\
 	empathy-chatroom-manager.h		\
 	empathy-chatroom.h			\
+	empathy-contact.h			\
 	empathy-contact-list.h			\
 	empathy-contact-manager.h		\
+	empathy-contact-factory.h		\
 	empathy-tp-group.h			\
 	empathy-tp-contact-list.h		\
 	empathy-tp-chat.h			\

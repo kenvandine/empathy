@@ -51,19 +51,10 @@ struct _EmpathyContactManagerClass {
 	GObjectClass parent_class;
 };
 
-GType                  empathy_contact_manager_get_type     (void) G_GNUC_CONST;
-EmpathyContactManager *empathy_contact_manager_new          (void);
-EmpathyTpContactList * empathy_contact_manager_get_list     (EmpathyContactManager *manager,
-							     McAccount             *account);
-EmpathyContact *        empathy_contact_manager_get_user     (EmpathyContactManager *manager,
-							     McAccount             *account);
-EmpathyContact *        empathy_contact_manager_create       (EmpathyContactManager *manager,
-							     McAccount             *account,
-							     const gchar           *id);
-void                   empathy_contact_manager_rename_group (EmpathyContactManager *manager,
-							     const gchar           *old_group,
-							     const gchar           *new_group);
-GList *                empathy_contact_manager_get_groups   (EmpathyContactManager *manager);
+GType                  empathy_contact_manager_get_type (void) G_GNUC_CONST;
+EmpathyContactManager *empathy_contact_manager_new      (void);
+EmpathyTpContactList * empathy_contact_manager_get_list (EmpathyContactManager *manager,
+							 McAccount             *account);
 
 G_END_DECLS
 

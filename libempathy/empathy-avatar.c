@@ -28,7 +28,7 @@
 #define DEBUG_DOMAIN "Avatar"
 
 GType
-empathy_avatar_get_gtype (void)
+empathy_avatar_get_type (void)
 {
 	static GType type_id = 0;
 

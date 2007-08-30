@@ -36,7 +36,7 @@
 #include <libempathy/empathy-debug.h>
 #include <libempathy/empathy-tp-chat.h>
 #include <libempathy/empathy-tp-contact-list.h>
-#include <libempathy/empathy-contact-manager.h>
+#include <libempathy/empathy-contact-factory.h>
 
 #include "empathy-private-chat.h"
 #include "empathy-chat-view.h"
@@ -51,11 +51,12 @@
 #define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), EMPATHY_TYPE_PRIVATE_CHAT, EmpathyPrivateChatPriv))
 
 struct _EmpathyPrivateChatPriv {   
-	EmpathyContact *contact;
-	gchar          *name;
-	gboolean        is_online;
-	GtkWidget      *widget;
-	GtkWidget      *text_view_sw;
+	EmpathyContactFactory *factory;
+	EmpathyContact        *contact;
+	gchar                 *name;
+	gboolean               is_online;
+	GtkWidget             *widget;
+	GtkWidget             *text_view_sw;
 };
 
 static void           empathy_private_chat_class_init            (EmpathyPrivateChatClass *klass);
@@ -125,7 +126,9 @@ private_chat_finalize (GObject *object)
 	if (priv->contact) {
 		g_object_unref (priv->contact);
 	}
-
+	if (priv->factory) {
+		g_object_unref (priv->factory);
+	}
 	g_free (priv->name);
 
 	G_OBJECT_CLASS (empathy_private_chat_parent_class)->finalize (object);
@@ -327,27 +330,30 @@ EmpathyPrivateChat *
 empathy_private_chat_new (McAccount *account,
 			  TpChan    *tp_chan)
 {
-	EmpathyPrivateChat    *chat;
-	EmpathyTpChat         *tp_chat;
-	EmpathyContactManager *manager;
-	EmpathyTpContactList  *list;
-	EmpathyContact        *contact;
+	EmpathyPrivateChat     *chat;
+	EmpathyPrivateChatPriv *priv;
+	EmpathyTpChat          *tp_chat;
+	EmpathyContactFactory  *factory;
+	EmpathyContact         *contact;
 
 	g_return_val_if_fail (MC_IS_ACCOUNT (account), NULL);
 	g_return_val_if_fail (TELEPATHY_IS_CHAN (tp_chan), NULL);
 
-	manager = empathy_contact_manager_new ();
-	list = empathy_contact_manager_get_list (manager, account);
-	contact = empathy_tp_contact_list_get_from_handle (list, tp_chan->handle);
+	factory = empathy_contact_factory_new ();
+	contact = empathy_contact_factory_get_from_handle (factory,
+							   account,
+							   tp_chan->handle);
 
 	chat = g_object_new (EMPATHY_TYPE_PRIVATE_CHAT, NULL);
-	tp_chat = empathy_tp_chat_new (account, tp_chan);
+	priv = GET_PRIV (chat);
 
+	priv->factory = factory;
+	tp_chat = empathy_tp_chat_new (account, tp_chan);
 	private_chat_setup (chat, contact, tp_chat);
 
 	g_object_unref (tp_chat);
 	g_object_unref (contact);
-	g_object_unref (manager);
+	g_object_unref (factory);
 
 	return chat;
 }

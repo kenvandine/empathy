@@ -29,6 +29,13 @@ EmpathyTpGroup
 </para>
 
 
+<!-- ##### SIGNAL EmpathyTpGroup::destroy ##### -->
+<para>
+
+</para>
+
+@empathytpgroup: the object which received the signal.
+
 <!-- ##### SIGNAL EmpathyTpGroup::local-pending ##### -->
 <para>
 
@@ -40,7 +47,7 @@ EmpathyTpGroup
 @arg3: 
 @arg4: 
 
-<!-- ##### SIGNAL EmpathyTpGroup::members-added ##### -->
+<!-- ##### SIGNAL EmpathyTpGroup::member-added ##### -->
 <para>
 
 </para>
@@ -51,7 +58,7 @@ EmpathyTpGroup
 @arg3: 
 @arg4: 
 
-<!-- ##### SIGNAL EmpathyTpGroup::members-removed ##### -->
+<!-- ##### SIGNAL EmpathyTpGroup::member-removed ##### -->
 <para>
 
 </para>
@@ -73,16 +80,6 @@ EmpathyTpGroup
 @arg3: 
 @arg4: 
 
-<!-- ##### STRUCT EmpathyTpGroupInfo ##### -->
-<para>
-
-</para>
-
-@member: 
-@actor: 
-@reason: 
-@message: 
-
 <!-- ##### FUNCTION empathy_tp_group_new ##### -->
 <para>
 
@@ -99,7 +96,7 @@ EmpathyTpGroup
 </para>
 
 @group: 
-@handles: 
+@contacts: 
 @message: 
 
 
@@ -109,7 +106,7 @@ EmpathyTpGroup
 </para>
 
 @group: 
-@handle: 
+@contact: 
 @message: 
 
 
@@ -119,7 +116,7 @@ EmpathyTpGroup
 </para>
 
 @group: 
-@handle: 
+@contacts: 
 @message: 
 
 
@@ -129,7 +126,7 @@ EmpathyTpGroup
 </para>
 
 @group: 
-@handle: 
+@contact: 
 @message: 
 
 
@@ -142,44 +139,7 @@ EmpathyTpGroup
 @Returns: 
 
 
-<!-- ##### FUNCTION empathy_tp_group_get_all_members ##### -->
-<para>
-
-</para>
-
-@group: 
-@members: 
-@local_pending: 
-@remote_pending: 
-
-
-<!-- ##### FUNCTION empathy_tp_group_get_local_pending_members_with_info ##### -->
-<para>
-
-</para>
-
-@group: 
-@Returns: 
-
-
-<!-- ##### FUNCTION empathy_tp_group_info_list_free ##### -->
-<para>
-
-</para>
-
-@infos: 
-
-
 <!-- ##### FUNCTION empathy_tp_group_get_name ##### -->
-<para>
-
-</para>
-
-@group: 
-@Returns: 
-
-
-<!-- ##### FUNCTION empathy_tp_group_get_self_handle ##### -->
 <para>
 
 </para>
@@ -203,7 +163,7 @@ EmpathyTpGroup
 </para>
 
 @group: 
-@handle: 
+@contact: 
 @Returns: 
 
 

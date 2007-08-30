@@ -106,11 +106,6 @@ gboolean                   empathy_contact_list_store_search_equal_func  (GtkTre
 									 const gchar                *key,
 									 GtkTreeIter                *iter,
 									 gpointer                    search_data);
-void                       empathy_contact_list_store_set_contact_groups_func (EmpathyContactListStore*store,
-									 EmpathyContactGroupsFunc     func,
-									 gpointer                    user_data);
-void                       empathy_contact_list_store_update_contact_groups (EmpathyContactListStore  *store,
-									 EmpathyContact              *contact);
 
 G_END_DECLS
 

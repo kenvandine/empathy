@@ -155,62 +155,58 @@ AC_ARG_ENABLE(python,
                              [build python bindings to libempathy and libempathy-gtk]), ,
                              enable_python=auto)
 
-PKG_CHECK_MODULES(PYTHON_BINDING,
-[
-   pygtk-2.0,
-   glib-2.0 >= $GLIB_REQUIRED
-   gobject-2.0
-   gconf-2.0 >= $GCONF_REQUIRED
-   libxml-2.0
-   gnome-vfs-2.0
-   libtelepathy >= $TELEPATHY_REQUIRED
-   libmissioncontrol >= $MISSION_CONTROL_REQUIRED
-   gtk+-2.0 >= $GTK_REQUIRED
-   libglade-2.0 >= $LIBGLADE_REQUIRED
-   libgnomeui-2.0
-], have_python="yes", have_python="no")
-
-if test "x$have_python" = "xno"; then
-	if test "x$enable_python" = "xyes"; then
-		AC_MSG_ERROR([Could not find python dependencies])
-	fi
-	enable_python="no (missing dependencies)"
+if test "x$enable_python" != "xno"; then
+   AM_PATH_PYTHON
+   if test -z "$PYTHON" ; then
+      have_python="no"
+   else
+      PKG_CHECK_MODULES(PYTHON_BINDING,
+      [
+         pygtk-2.0,
+         glib-2.0 >= $GLIB_REQUIRED
+         gobject-2.0
+         gconf-2.0 >= $GCONF_REQUIRED
+         libxml-2.0
+         gnome-vfs-2.0
+         libtelepathy >= $TELEPATHY_REQUIRED
+         libmissioncontrol >= $MISSION_CONTROL_REQUIRED
+         gtk+-2.0 >= $GTK_REQUIRED
+         libglade-2.0 >= $LIBGLADE_REQUIRED
+         libgnomeui-2.0
+      ], have_python="yes", have_python="no")
+   fi
 else
-	if test "x$enable_python" != "xno"; then
-		AM_PATH_PYTHON
-		if test -z "$PYTHON" ; then
-			enable_python="no"
-		else
-			enable_python="yes"
-		fi
-	else
-		enable_python="no (disabled)"
-	fi
+   have_python=no
 fi
-AM_CONDITIONAL(HAVE_PYTHON, test x$enable_python = xyes)
+
+if test "x$enable_python" = "xyes" -a "x$have_python" != "xyes"; then
+   AC_MSG_ERROR([Couldn't find python.])
+fi
+
+AM_CONDITIONAL(HAVE_PYTHON, test "x$have_python" = "xyes")
 
 dnl -----------------------------------------------------------
 
 AC_OUTPUT([
-  Makefile
-  data/Makefile
-  data/empathy.desktop.in
-  data/16x16/Makefile
-  data/22x22/Makefile
-  data/24x24/Makefile
-  data/32x32/Makefile
-  data/48x48/Makefile
-  data/scalable/Makefile
-  po/Makefile.in
-  libempathy/Makefile
-  libempathy/libempathy.pc
-  libempathy-gtk/Makefile
-  libempathy-gtk/libempathy-gtk.pc
-  src/Makefile
-  doc/Makefile
-  doc/libempathy/Makefile
-  doc/libempathy-gtk/Makefile
-  python/Makefile
-  python/pyempathy/Makefile
-  python/pyempathygtk/Makefile
+   Makefile
+   data/Makefile
+   data/empathy.desktop.in
+   data/16x16/Makefile
+   data/22x22/Makefile
+   data/24x24/Makefile
+   data/32x32/Makefile
+   data/48x48/Makefile
+   data/scalable/Makefile
+   po/Makefile.in
+   libempathy/Makefile
+   libempathy/libempathy.pc
+   libempathy-gtk/Makefile
+   libempathy-gtk/libempathy-gtk.pc
+   src/Makefile
+   doc/Makefile
+   doc/libempathy/Makefile
+   doc/libempathy-gtk/Makefile
+   python/Makefile
+   python/pyempathy/Makefile
+   python/pyempathygtk/Makefile
 ])

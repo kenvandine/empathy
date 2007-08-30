@@ -173,22 +173,3 @@ EmpathyContactListStore
 @Returns: 
 
 
-<!-- ##### FUNCTION empathy_contact_list_store_set_contact_groups_func ##### -->
-<para>
-
-</para>
-
-@store: 
-@func: 
-@user_data: 
-
-
-<!-- ##### FUNCTION empathy_contact_list_store_update_contact_groups ##### -->
-<para>
-
-</para>
-
-@store: 
-@contact: 
-
-

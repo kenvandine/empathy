@@ -1,6 +1,7 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /*
- * Copyright (C) 2004-2007 Imendio AB
+ * Copyright (C) 2004 Imendio AB
+ * Copyright (C) 2007 Collabora Ltd.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -19,6 +20,7 @@
  *
  * Authors: Mikael Hallendal <micke@imendio.com>
  *          Martyn Russell <martyn@imendio.com>
+ *          Xavier Claessens <xclaesse@gmail.com>
  */
 
 #include "config.h"
@@ -41,26 +43,26 @@ typedef struct _EmpathyContactPriv EmpathyContactPriv;
 struct _EmpathyContactPriv {
 	gchar              *id;
 	gchar              *name;
-	EmpathyAvatar       *avatar;
+	EmpathyAvatar      *avatar;
 	McAccount          *account;
-	EmpathyPresence     *presence;
-	GList              *groups;
-	EmpathySubscription  subscription;
+	EmpathyPresence    *presence;
 	guint               handle;
 	gboolean            is_user;
 };
 
-static void contact_class_init    (EmpathyContactClass *class);
-static void contact_init          (EmpathyContact      *contact);
-static void contact_finalize      (GObject            *object);
-static void contact_get_property  (GObject            *object,
-				   guint               param_id,
-				   GValue             *value,
-				   GParamSpec         *pspec);
-static void contact_set_property  (GObject            *object,
-				   guint               param_id,
-				   const GValue       *value,
-				   GParamSpec         *pspec);
+static void empathy_contact_class_init (EmpathyContactClass *class);
+static void empathy_contact_init       (EmpathyContact      *contact);
+static void contact_finalize           (GObject             *object);
+static void contact_get_property       (GObject             *object,
+				        guint                param_id,
+				        GValue              *value,
+				        GParamSpec          *pspec);
+static void contact_set_property       (GObject             *object,
+				        guint                param_id,
+				        const GValue        *value,
+				        GParamSpec          *pspec);
+
+G_DEFINE_TYPE (EmpathyContact, empathy_contact, G_TYPE_OBJECT);
 
 enum {
 	PROP_0,
@@ -75,41 +77,12 @@ enum {
 	PROP_IS_USER
 };
 
-static gpointer parent_class = NULL;
-
-GType
-empathy_contact_get_gtype (void)
-{
-	static GType type = 0;
-
-	if (!type) {
-		static const GTypeInfo info = {
-			sizeof (EmpathyContactClass),
-			NULL, /* base_init */
-			NULL, /* base_finalize */
-			(GClassInitFunc) contact_class_init,
-			NULL, /* class_finalize */
-			NULL, /* class_data */
-			sizeof (EmpathyContact),
-			0,    /* n_preallocs */
-			(GInstanceInitFunc) contact_init
-		};
-
-		type = g_type_register_static (G_TYPE_OBJECT,
-					       "EmpathyContact",
-					       &info, 0);
-	}
-
-	return type;
-}
-
 static void
-contact_class_init (EmpathyContactClass *class)
+empathy_contact_class_init (EmpathyContactClass *class)
 {
 	GObjectClass *object_class;
 
 	object_class = G_OBJECT_CLASS (class);
-	parent_class = g_type_class_peek_parent (class);
 
 	object_class->finalize     = contact_finalize;
 	object_class->get_property = contact_get_property;
@@ -156,23 +129,6 @@ contact_class_init (EmpathyContactClass *class)
 							      G_PARAM_READWRITE));
 
 	g_object_class_install_property (object_class,
-					 PROP_GROUPS,
-					 g_param_spec_pointer ("groups",
-							       "Contact groups",
-							       "Groups of contact",
-							       G_PARAM_READWRITE));
-
-	g_object_class_install_property (object_class,
-					 PROP_SUBSCRIPTION,
-					 g_param_spec_flags ("subscription",
-							     "Contact Subscription",
-							     "The subscription status of the contact",
-							     EMPATHY_TYPE_SUBSCRIPTION,
-							     EMPATHY_SUBSCRIPTION_NONE,
-							     G_PARAM_READWRITE));
-
-
-	g_object_class_install_property (object_class,
 					 PROP_HANDLE,
 					 g_param_spec_uint ("handle",
 							    "Contact Handle",
@@ -193,7 +149,7 @@ contact_class_init (EmpathyContactClass *class)
 }
 
 static void
-contact_init (EmpathyContact *contact)
+empathy_contact_init (EmpathyContact *contact)
 {
 }
 
@@ -217,16 +173,11 @@ contact_finalize (GObject *object)
 		g_object_unref (priv->presence);
 	}
 
-	if (priv->groups) {
-		g_list_foreach (priv->groups, (GFunc) g_free, NULL);
-		g_list_free (priv->groups);
-	}
-
 	if (priv->account) {
 		g_object_unref (priv->account);
 	}
 
-	(G_OBJECT_CLASS (parent_class)->finalize) (object);
+	G_OBJECT_CLASS (empathy_contact_parent_class)->finalize (object);
 }
 
 static void
@@ -256,12 +207,6 @@ contact_get_property (GObject    *object,
 		break;
 	case PROP_PRESENCE:
 		g_value_set_object (value, priv->presence);
-		break;
-	case PROP_GROUPS:
-		g_value_set_pointer (value, priv->groups);
-		break;
-	case PROP_SUBSCRIPTION:
-		g_value_set_flags (value, priv->subscription);
 		break;
 	case PROP_HANDLE:
 		g_value_set_uint (value, priv->handle);
@@ -306,14 +251,6 @@ contact_set_property (GObject      *object,
 		empathy_contact_set_presence (EMPATHY_CONTACT (object),
 					     EMPATHY_PRESENCE (g_value_get_object (value)));
 		break;
-	case PROP_GROUPS:
-		empathy_contact_set_groups (EMPATHY_CONTACT (object),
-					   g_value_get_pointer (value));
-		break;
-	case PROP_SUBSCRIPTION:
-		empathy_contact_set_subscription (EMPATHY_CONTACT (object),
-						  g_value_get_flags (value));
-		break;
 	case PROP_HANDLE:
 		empathy_contact_set_handle (EMPATHY_CONTACT (object),
 					   g_value_get_uint (value));
@@ -338,8 +275,8 @@ empathy_contact_new (McAccount *account)
 
 EmpathyContact *
 empathy_contact_new_full (McAccount   *account,
-			 const gchar *id,
-			 const gchar *name)
+			  const gchar *id,
+			  const gchar *name)
 {
 	return g_object_new (EMPATHY_TYPE_CONTACT,
 			     "account", account,
@@ -364,107 +301,6 @@ empathy_contact_get_id (EmpathyContact *contact)
 	return "";
 }
 
-const gchar *
-empathy_contact_get_name (EmpathyContact *contact)
-{
-	EmpathyContactPriv *priv;
-
-	g_return_val_if_fail (EMPATHY_IS_CONTACT (contact), "");
-
-	priv = GET_PRIV (contact);
-
-	if (G_STR_EMPTY (priv->name)) {
-		return empathy_contact_get_id (contact);
-	}
-
-	return priv->name;
-}
-
-EmpathyAvatar *
-empathy_contact_get_avatar (EmpathyContact *contact)
-{
-	EmpathyContactPriv *priv;
-
-	g_return_val_if_fail (EMPATHY_IS_CONTACT (contact), NULL);
-
-	priv = GET_PRIV (contact);
-
-	return priv->avatar;
-}
-
-McAccount *
-empathy_contact_get_account (EmpathyContact *contact)
-{
-	EmpathyContactPriv *priv;
-
-	g_return_val_if_fail (EMPATHY_IS_CONTACT (contact), NULL);
-
-	priv = GET_PRIV (contact);
-
-	return priv->account;
-}
-
-EmpathyPresence *
-empathy_contact_get_presence (EmpathyContact *contact)
-{
-	EmpathyContactPriv *priv;
-
-	g_return_val_if_fail (EMPATHY_IS_CONTACT (contact), NULL);
-
-	priv = GET_PRIV (contact);
-
-	return priv->presence;
-}
-
-GList *
-empathy_contact_get_groups (EmpathyContact *contact)
-{
-	EmpathyContactPriv *priv;
-
-	g_return_val_if_fail (EMPATHY_IS_CONTACT (contact), NULL);
-
-	priv = GET_PRIV (contact);
-
-	return priv->groups;
-}
-
-EmpathySubscription
-empathy_contact_get_subscription (EmpathyContact *contact)
-{
-	EmpathyContactPriv *priv;
-
-	g_return_val_if_fail (EMPATHY_IS_CONTACT (contact),
-			      EMPATHY_SUBSCRIPTION_NONE);
-
-	priv = GET_PRIV (contact);
-
-	return priv->subscription;
-}
-
-guint
-empathy_contact_get_handle (EmpathyContact *contact)
-{
-	EmpathyContactPriv *priv;
-
-	g_return_val_if_fail (EMPATHY_IS_CONTACT (contact), 0);
-
-	priv = GET_PRIV (contact);
-
-	return priv->handle;
-}
-
-gboolean
-empathy_contact_is_user (EmpathyContact *contact)
-{
-	EmpathyContactPriv *priv;
-
-	g_return_val_if_fail (EMPATHY_IS_CONTACT (contact), FALSE);
-
-	priv = GET_PRIV (contact);
-
-	return priv->is_user;
-}
-
 void
 empathy_contact_set_id (EmpathyContact *contact,
 		       const gchar   *id)
@@ -486,6 +322,22 @@ empathy_contact_set_id (EmpathyContact *contact,
 	g_object_notify (G_OBJECT (contact), "id");
 }
 
+const gchar *
+empathy_contact_get_name (EmpathyContact *contact)
+{
+	EmpathyContactPriv *priv;
+
+	g_return_val_if_fail (EMPATHY_IS_CONTACT (contact), "");
+
+	priv = GET_PRIV (contact);
+
+	if (G_STR_EMPTY (priv->name)) {
+		return empathy_contact_get_id (contact);
+	}
+
+	return priv->name;
+}
+
 void
 empathy_contact_set_name (EmpathyContact *contact,
 			 const gchar   *name)
@@ -505,6 +357,18 @@ empathy_contact_set_name (EmpathyContact *contact,
 	priv->name = g_strdup (name);
 
 	g_object_notify (G_OBJECT (contact), "name");
+}
+
+EmpathyAvatar *
+empathy_contact_get_avatar (EmpathyContact *contact)
+{
+	EmpathyContactPriv *priv;
+
+	g_return_val_if_fail (EMPATHY_IS_CONTACT (contact), NULL);
+
+	priv = GET_PRIV (contact);
+
+	return priv->avatar;
 }
 
 void
@@ -533,9 +397,21 @@ empathy_contact_set_avatar (EmpathyContact *contact,
 	g_object_notify (G_OBJECT (contact), "avatar");
 }
 
+McAccount *
+empathy_contact_get_account (EmpathyContact *contact)
+{
+	EmpathyContactPriv *priv;
+
+	g_return_val_if_fail (EMPATHY_IS_CONTACT (contact), NULL);
+
+	priv = GET_PRIV (contact);
+
+	return priv->account;
+}
+
 void
 empathy_contact_set_account (EmpathyContact *contact,
-			    McAccount     *account)
+			     McAccount      *account)
 {
 	EmpathyContactPriv *priv;
 
@@ -556,9 +432,21 @@ empathy_contact_set_account (EmpathyContact *contact,
 	g_object_notify (G_OBJECT (contact), "account");
 }
 
+EmpathyPresence *
+empathy_contact_get_presence (EmpathyContact *contact)
+{
+	EmpathyContactPriv *priv;
+
+	g_return_val_if_fail (EMPATHY_IS_CONTACT (contact), NULL);
+
+	priv = GET_PRIV (contact);
+
+	return priv->presence;
+}
+
 void
 empathy_contact_set_presence (EmpathyContact  *contact,
-			     EmpathyPresence *presence)
+			      EmpathyPresence *presence)
 {
 	EmpathyContactPriv *priv;
 
@@ -582,48 +470,16 @@ empathy_contact_set_presence (EmpathyContact  *contact,
 	g_object_notify (G_OBJECT (contact), "presence");
 }
 
-void
-empathy_contact_set_groups (EmpathyContact *contact,
-			   GList         *groups)
-{
-	EmpathyContactPriv *priv;
-	GList             *old_groups, *l;
-
-	g_return_if_fail (EMPATHY_IS_CONTACT (contact));
-
-	priv = GET_PRIV (contact);
-
-	old_groups = priv->groups;
-	priv->groups = NULL;
-
-	for (l = groups; l; l = l->next) {
-		priv->groups = g_list_append (priv->groups,
-					      g_strdup (l->data));
-	}
-
-	g_list_foreach (old_groups, (GFunc) g_free, NULL);
-	g_list_free (old_groups);
-
-	g_object_notify (G_OBJECT (contact), "groups");
-}
-
-void
-empathy_contact_set_subscription (EmpathyContact      *contact,
-				 EmpathySubscription  subscription)
+guint
+empathy_contact_get_handle (EmpathyContact *contact)
 {
 	EmpathyContactPriv *priv;
 
-	g_return_if_fail (EMPATHY_IS_CONTACT (contact));
+	g_return_val_if_fail (EMPATHY_IS_CONTACT (contact), 0);
 
 	priv = GET_PRIV (contact);
 
-	if (priv->subscription == subscription) {
-		return;
-	}
-
-	priv->subscription = subscription;
-
-	g_object_notify (G_OBJECT (contact), "subscription");
+	return priv->handle;
 }
 
 void
@@ -645,6 +501,18 @@ empathy_contact_set_handle (EmpathyContact *contact,
 	g_object_notify (G_OBJECT (contact), "handle");
 }
 
+gboolean
+empathy_contact_is_user (EmpathyContact *contact)
+{
+	EmpathyContactPriv *priv;
+
+	g_return_val_if_fail (EMPATHY_IS_CONTACT (contact), FALSE);
+
+	priv = GET_PRIV (contact);
+
+	return priv->is_user;
+}
+
 void
 empathy_contact_set_is_user (EmpathyContact *contact,
 			    gboolean       is_user)
@@ -664,43 +532,6 @@ empathy_contact_set_is_user (EmpathyContact *contact,
 	g_object_notify (G_OBJECT (contact), "is-user");
 }
 
-void
-empathy_contact_add_group (EmpathyContact *contact,
-			  const gchar   *group)
-{
-	EmpathyContactPriv *priv;
-
-	g_return_if_fail (EMPATHY_IS_CONTACT (contact));
-	g_return_if_fail (group != NULL);
-
-	priv = GET_PRIV (contact);
-
-	if (!g_list_find_custom (priv->groups, group, (GCompareFunc) strcmp)) {
-		priv->groups = g_list_prepend (priv->groups, g_strdup (group));
-		g_object_notify (G_OBJECT (contact), "groups");
-	}
-}
-
-void
-empathy_contact_remove_group (EmpathyContact *contact,
-			     const gchar   *group)
-{
-	EmpathyContactPriv *priv;
-	GList             *l;
-
-	g_return_if_fail (EMPATHY_IS_CONTACT (contact));
-	g_return_if_fail (group != NULL);
-
-	priv = GET_PRIV (contact);
-
-	l = g_list_find_custom (priv->groups, group, (GCompareFunc) strcmp);
-	if (l) {
-		g_free (l->data);
-		priv->groups = g_list_delete_link (priv->groups, l);
-		g_object_notify (G_OBJECT (contact), "groups");
-	}
-}
-
 gboolean
 empathy_contact_is_online (EmpathyContact *contact)
 {
@@ -715,24 +546,6 @@ empathy_contact_is_online (EmpathyContact *contact)
 	}
 
 	return (empathy_presence_get_state (priv->presence) > MC_PRESENCE_OFFLINE);
-}
-
-gboolean
-empathy_contact_is_in_group (EmpathyContact *contact,
-			    const gchar   *group)
-{
-	EmpathyContactPriv *priv;
-
-	g_return_val_if_fail (EMPATHY_IS_CONTACT (contact), FALSE);
-	g_return_val_if_fail (!G_STR_EMPTY (group), FALSE);
-
-	priv = GET_PRIV (contact);
-
-	if (g_list_find_custom (priv->groups, group, (GCompareFunc) strcmp)) {
-		return TRUE;
-	}
-
-	return FALSE;
 }
 
 const gchar *

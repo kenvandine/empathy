@@ -31,7 +31,9 @@
 
 #include <libmissioncontrol/mc-account.h>
 
+#include <libempathy/empathy-contact-factory.h>
 #include <libempathy/empathy-contact-manager.h>
+#include <libempathy/empathy-contact-list.h>
 #include <libempathy/empathy-utils.h>
 
 #include "empathy-contact-widget.h"
@@ -42,44 +44,45 @@
 #define ID_CHANGED_TIMEOUT 500
 
 typedef struct {
-	EmpathyContact  *contact;
-	gboolean         is_user;
-	EmpathyContactWidgetType type;
-	GtkCellRenderer *renderer;
-	guint            widget_id_timeout;
+	EmpathyContactFactory    *factory;
+	EmpathyContactManager    *manager;
+	EmpathyContact           *contact;
+	gboolean                  is_user;
+	EmpathyContactWidgetType  type;
+	GtkCellRenderer          *renderer;
+	guint                     widget_id_timeout;
 
-	GtkWidget       *vbox_contact_widget;
+	GtkWidget                *vbox_contact_widget;
 
 	/* Contact */
-	GtkWidget       *vbox_contact;
-	GtkWidget       *widget_avatar;
-	GtkWidget       *widget_account;
-	GtkWidget       *widget_id;
-	GtkWidget       *widget_alias;
-	GtkWidget       *label_alias;
-	GtkWidget       *entry_alias;
-	GtkWidget       *hbox_presence;
-	GtkWidget       *image_state;
-	GtkWidget       *label_status;
-	GtkWidget       *table_contact;
-	GtkWidget       *hbox_contact;
+	GtkWidget                *vbox_contact;
+	GtkWidget                *widget_avatar;
+	GtkWidget                *widget_account;
+	GtkWidget                *widget_id;
+	GtkWidget                *widget_alias;
+	GtkWidget                *label_alias;
+	GtkWidget                *entry_alias;
+	GtkWidget                *hbox_presence;
+	GtkWidget                *image_state;
+	GtkWidget                *label_status;
+	GtkWidget                *table_contact;
+	GtkWidget                *hbox_contact;
 
 	/* Groups */
-	GtkWidget       *vbox_groups;
-	GtkWidget       *entry_group;
-	GtkWidget       *button_group;
-	GtkWidget       *treeview_groups;
+	GtkWidget                *vbox_groups;
+	GtkWidget                *entry_group;
+	GtkWidget                *button_group;
+	GtkWidget                *treeview_groups;
 
 	/* Details */
-	GtkWidget       *vbox_details;
-	GtkWidget       *table_details;
-	GtkWidget       *hbox_details_requested;
+	GtkWidget                *vbox_details;
+	GtkWidget                *table_details;
+	GtkWidget                *hbox_details_requested;
 
 	/* Client */
-	GtkWidget       *vbox_client;
-	GtkWidget       *table_client;
-	GtkWidget       *hbow_client_requested;
-
+	GtkWidget                *vbox_client;
+	GtkWidget                *table_client;
+	GtkWidget                *hbow_client_requested;
 } EmpathyContactWidget;
 
 typedef struct {
@@ -151,6 +154,7 @@ empathy_contact_widget_new (EmpathyContact           *contact,
 
 	information = g_slice_new0 (EmpathyContactWidget);
 	information->type = type;
+	information->factory = empathy_contact_factory_new ();
 	if (contact) {
 		information->is_user = empathy_contact_is_user (contact);
 	} else {
@@ -231,6 +235,12 @@ contact_widget_destroy_cb (GtkWidget            *widget,
 	if (information->widget_id_timeout != 0) {
 		g_source_remove (information->widget_id_timeout);
 	}
+	if (information->factory) {
+		g_object_unref (information->factory);
+	}		
+	if (information->manager) {
+		g_object_unref (information->manager);
+	}		
 
 	g_slice_free (EmpathyContactWidget, information);
 }
@@ -467,17 +477,15 @@ contact_widget_update_contact (EmpathyContactWidget *information)
 	id = gtk_entry_get_text (GTK_ENTRY (information->widget_id));
 
 	if (account && !G_STR_EMPTY (id)) {
-		EmpathyContactManager *manager;
-		EmpathyContact         *contact;
+		EmpathyContact *contact;
 
-		manager = empathy_contact_manager_new ();
-		contact = empathy_contact_manager_create (manager, account, id);
+		contact = empathy_contact_factory_get_from_id (information->factory,
+							       account, id);
 		contact_widget_set_contact (information, contact);
 
 		if (contact) {
 			g_object_unref (contact);
 		}
-		g_object_unref (manager);
 	}
 
 	return FALSE;
@@ -508,7 +516,9 @@ contact_widget_entry_alias_focus_event_cb (GtkEditable          *editable,
 		const gchar *name;
 
 		name = gtk_entry_get_text (GTK_ENTRY (editable));
-		empathy_contact_set_name (information->contact, name);
+		empathy_contact_factory_set_name (information->factory,
+						  information->contact,
+						  name);
 	}
 
 	return FALSE;
@@ -559,6 +569,7 @@ static void
 contact_widget_groups_setup (EmpathyContactWidget *information)
 {
 	if (information->type > CONTACT_WIDGET_TYPE_SHOW) {
+		information->manager = empathy_contact_manager_new ();
 		contact_widget_model_setup (information);
 	}
 }
@@ -657,21 +668,19 @@ contact_widget_model_populate_columns (EmpathyContactWidget *information)
 static void
 contact_widget_groups_populate_data (EmpathyContactWidget *information)
 {
-	EmpathyContactManager *manager;
-	GtkTreeView           *view;
-	GtkListStore          *store;
-	GtkTreeIter            iter;
-	GList                 *my_groups, *l;
-	GList                 *all_groups;
+	GtkTreeView  *view;
+	GtkListStore *store;
+	GtkTreeIter   iter;
+	GList        *my_groups, *l;
+	GList        *all_groups;
 
 	view = GTK_TREE_VIEW (information->treeview_groups);
 	store = GTK_LIST_STORE (gtk_tree_view_get_model (view));
 	gtk_list_store_clear (store);
 
-	manager = empathy_contact_manager_new ();
-	all_groups = empathy_contact_manager_get_groups (manager);
-	my_groups = empathy_contact_get_groups (information->contact);
-	g_object_unref (manager);
+	all_groups = empathy_contact_list_get_all_groups (EMPATHY_CONTACT_LIST (information->manager));
+	my_groups = empathy_contact_list_get_groups (EMPATHY_CONTACT_LIST (information->manager),
+						     information->contact);
 
 	for (l = all_groups; l; l = l->next) {
 		const gchar *group_str;
@@ -691,7 +700,10 @@ contact_widget_groups_populate_data (EmpathyContactWidget *information)
 				    -1);
 	}
 
+	g_list_foreach (all_groups, (GFunc) g_free, NULL);
+	g_list_foreach (my_groups, (GFunc) g_free, NULL);
 	g_list_free (all_groups);
+	g_list_free (my_groups);
 }
 
 static void
@@ -792,9 +804,13 @@ contact_widget_cell_toggled (GtkCellRendererToggle *cell,
 
 	if (group) {
 		if (enabled) {
-			empathy_contact_remove_group (information->contact, group);
+			empathy_contact_list_remove_from_group (EMPATHY_CONTACT_LIST (information->manager),
+								information->contact,
+								group);
 		} else {
-			empathy_contact_add_group (information->contact, group);	
+			empathy_contact_list_add_to_group (EMPATHY_CONTACT_LIST (information->manager),
+							   information->contact,
+							   group);
 		}
 
 		g_free (group);
@@ -846,7 +862,9 @@ contact_widget_button_group_clicked_cb (GtkButton             *button,
 			    COL_ENABLED, TRUE,
 			    -1);
 
-	empathy_contact_add_group (information->contact, group);
+	empathy_contact_list_add_to_group (EMPATHY_CONTACT_LIST (information->manager),
+					   information->contact,
+					   group);
 }
 
 static void

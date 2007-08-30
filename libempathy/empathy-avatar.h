@@ -25,7 +25,7 @@
 
 G_BEGIN_DECLS
 
-#define EMPATHY_TYPE_AVATAR (empathy_avatar_get_gtype ())
+#define EMPATHY_TYPE_AVATAR (empathy_avatar_get_type ())
 
 typedef struct _EmpathyAvatar EmpathyAvatar;
 
@@ -36,7 +36,7 @@ struct _EmpathyAvatar {
 	guint   refcount;
 };
 
-GType          empathy_avatar_get_gtype (void) G_GNUC_CONST;
+GType          empathy_avatar_get_type (void) G_GNUC_CONST;
 EmpathyAvatar * empathy_avatar_new       (guchar       *avatar,
 					gsize         len,
 					gchar        *format);

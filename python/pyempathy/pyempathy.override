@@ -21,15 +21,10 @@ headers
 #include "empathy-tp-chatroom.h"
 #include "empathy-tp-contact-list.h"
 #include "empathy-tp-group.h"
+#include "empathy-tp-roomlist.h"
 #include "empathy-utils.h"
-
-
-/* FIXME */
-#define MC_TYPE_PRESENCE 1
-#define EMPATHY_TYPE_SUBSCRIPTION 2
-#define EMPATHY_TYPE_MESSAGE_TYPE 3
-#define EMPATHY_TYPE_REG_EX_TYPE 4
-
+#include "empathy-contact-factory.h"
+#include "empathy-enum-types.h"
 
 void empathy_add_constants(PyObject *module, const gchar *strip_prefix);
 void empathy_register_classes(PyObject *d);
@@ -59,25 +54,6 @@ _wrap_empathy_contact_list_get_members(PyGObject *self, PyObject *args, PyObject
 	}
 
 	return py_contacts;
-
-}
-%%
-override empathy_contact_get_groups kwargs
-static PyObject *
-_wrap_empathy_contact_get_groups(PyGObject *self, PyObject *args, PyObject *kwargs)
-{
-
-	GList *groups = empathy_contact_get_groups(EMPATHY_CONTACT(self->obj));
-	PyObject *py_groups = PyList_New(0);
-	GList *l;
-
-	for(l = groups; l; l = l->next) {
-		const gchar *group;
-		group = l->data;
-		PyList_Append(py_groups, PyString_FromString(group));
-	}
-
-	return py_groups;
 
 }
 %%

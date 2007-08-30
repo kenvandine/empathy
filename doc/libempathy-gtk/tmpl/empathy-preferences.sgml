@@ -143,13 +143,6 @@ empathy-preferences
 
 
 
-<!-- ##### MACRO EMPATHY_PREFS_SALUT_ACCOUNT_CREATED ##### -->
-<para>
-
-</para>
-
-
-
 <!-- ##### FUNCTION empathy_preferences_show ##### -->
 <para>
 

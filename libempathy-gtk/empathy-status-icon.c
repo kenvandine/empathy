@@ -117,9 +117,12 @@ static void       status_icon_quit_cb             (GtkWidget              *windo
 						   EmpathyStatusIcon      *icon);
 static void       status_icon_show_hide_window_cb (GtkWidget              *widget,
 						   EmpathyStatusIcon      *icon);
-static void       status_icon_local_pending_cb    (EmpathyContactManager  *manager,
-						   EmpathyContact          *contact,
+static void       status_icon_pendings_changed_cb (EmpathyContactManager  *manager,
+						   EmpathyContact         *contact,
+						   EmpathyContact         *actor,
+						   guint                   reason,
 						   gchar                  *message,
+						   gboolean                is_pending,
 						   EmpathyStatusIcon      *icon);
 static void       status_icon_event_subscribe_cb  (StatusIconEvent        *event);
 static void       status_icon_event_flash_state_cb (StatusIconEvent       *event);
@@ -148,7 +151,7 @@ static void
 empathy_status_icon_init (EmpathyStatusIcon *icon)
 {
 	EmpathyStatusIconPriv *priv;
-	GList                 *pending, *l;
+	GList                 *pendings, *l;
 
 	priv = GET_PRIV (icon);
 
@@ -177,21 +180,25 @@ empathy_status_icon_init (EmpathyStatusIcon *icon)
 	g_signal_connect (priv->icon, "popup-menu",
 			  G_CALLBACK (status_icon_popup_menu_cb),
 			  icon);
-	g_signal_connect (priv->manager, "local-pending",
-			  G_CALLBACK (status_icon_local_pending_cb),
+	g_signal_connect (priv->manager, "pendings-changed",
+			  G_CALLBACK (status_icon_pendings_changed_cb),
 			  icon);
 
-	pending = empathy_contact_list_get_local_pending (EMPATHY_CONTACT_LIST (priv->manager));
-	for (l = pending; l; l = l->next) {
-		EmpathyContactListInfo *info;
+	pendings = empathy_contact_list_get_pendings (EMPATHY_CONTACT_LIST (priv->manager));
+	for (l = pendings; l; l = l->next) {
+		EmpathyPendingInfo *info;
 
 		info = l->data;
-		status_icon_local_pending_cb (priv->manager,
-					      info->contact,
-					      info->message,
-					      icon);
+		status_icon_pendings_changed_cb (priv->manager,
+						 info->member,
+						 info->actor,
+						 0,
+						 info->message,
+						 TRUE,
+						 icon);
+		empathy_pending_info_free (info);
 	}
-	g_list_free (pending);
+	g_list_free (pendings);
 }
 
 static void
@@ -533,10 +540,13 @@ status_icon_show_hide_window_cb (GtkWidget         *widget,
 }
 
 static void
-status_icon_local_pending_cb (EmpathyContactManager *manager,
-			      EmpathyContact         *contact,
-			      gchar                 *message,
-			      EmpathyStatusIcon     *icon)
+status_icon_pendings_changed_cb (EmpathyContactManager *manager,
+				 EmpathyContact        *contact,
+				 EmpathyContact        *actor,
+				 guint                  reason,
+				 gchar                 *message,
+				 gboolean               is_pending,
+				 EmpathyStatusIcon     *icon)
 {
 	EmpathyStatusIconPriv *priv;
 	StatusIconEvent       *event;
@@ -544,6 +554,11 @@ status_icon_local_pending_cb (EmpathyContactManager *manager,
 	GList                 *l;
 
 	priv = GET_PRIV (icon);
+
+	if (!is_pending) {
+		/* FIXME: We should remove the event */
+		return;
+	}
 
 	for (l = priv->events; l; l = l->next) {
 		if (empathy_contact_equal (contact, ((StatusIconEvent*)l->data)->user_data)) {

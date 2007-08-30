@@ -42,7 +42,7 @@ static GtkWidget *new_contact_dialog = NULL;
 
 
 static gint
-contact_dialogs_find (GtkDialog     *dialog,
+contact_dialogs_find (GtkDialog      *dialog,
 		      EmpathyContact *contact)
 {
 	GtkWidget     *contact_widget;
@@ -64,18 +64,18 @@ subscription_dialog_response_cb (GtkDialog *dialog,
 				 GtkWidget *contact_widget)
 {
 	EmpathyContactManager *manager;
-	EmpathyContact         *contact;
+	EmpathyContact        *contact;
 
 	manager = empathy_contact_manager_new ();
 	contact = empathy_contact_widget_get_contact (contact_widget);
 
 	if (response == GTK_RESPONSE_YES) {
-		empathy_contact_list_process_pending (EMPATHY_CONTACT_LIST (manager),
-						      contact, TRUE);
+		empathy_contact_list_add (EMPATHY_CONTACT_LIST (manager),
+					  contact, "");
 	}
 	else if (response == GTK_RESPONSE_NO) {
-		empathy_contact_list_process_pending (EMPATHY_CONTACT_LIST (manager),
-						      contact, FALSE);
+		empathy_contact_list_remove (EMPATHY_CONTACT_LIST (manager),
+					     contact, "");
 	}
 
 	subscription_dialogs = g_list_remove (subscription_dialogs, dialog);

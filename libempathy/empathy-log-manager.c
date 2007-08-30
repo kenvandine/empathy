@@ -634,24 +634,22 @@ log_manager_get_dir (EmpathyLogManager *manager,
 {
 	const gchar *account_id;
 	gchar       *basedir;
-	gchar       *str;
 
 	account_id = mc_account_get_unique_name (account);
-	basedir = 
-	str = g_build_path (G_DIR_SEPARATOR_S,
-			    log_manager_get_basedir (manager),
-			    account_id,
-			    chat_id,
-			    NULL);
 
 	if (chatroom) {
 		basedir = g_build_path (G_DIR_SEPARATOR_S,
-					str,
+					log_manager_get_basedir (manager),
+					account_id,
 					LOG_DIR_CHATROOMS,
+					chat_id,
 					NULL);
-		g_free (str);
 	} else {
-		basedir = str;
+		basedir = g_build_path (G_DIR_SEPARATOR_S,
+					log_manager_get_basedir (manager),
+					account_id,
+					chat_id,
+					NULL);
 	}
 
 	return basedir;

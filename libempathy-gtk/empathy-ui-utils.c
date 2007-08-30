@@ -378,8 +378,7 @@ empathy_icon_name_for_presence (EmpathyPresence *presence)
 const gchar *
 empathy_icon_name_for_contact (EmpathyContact *contact)
 {
-	EmpathyPresence     *presence;
-	EmpathySubscription  subscription;
+	EmpathyPresence *presence;
 
 	g_return_val_if_fail (EMPATHY_IS_CONTACT (contact),
 			      EMPATHY_IMAGE_OFFLINE);
@@ -389,12 +388,7 @@ empathy_icon_name_for_contact (EmpathyContact *contact)
 		return empathy_icon_name_for_presence (presence);
 	}
 
-	subscription = empathy_contact_get_subscription (contact);
-	if (!(subscription & EMPATHY_SUBSCRIPTION_FROM)) {
-		return EMPATHY_IMAGE_PENDING;
-	}
-
-	return EMPATHY_IMAGE_OFFLINE;
+	return EMPATHY_IMAGE_UNKNOWN;
 }
 
 static void

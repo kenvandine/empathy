@@ -31,7 +31,7 @@ G_BEGIN_DECLS
 #define EMPATHY_IMAGE_BUSY                "empathy-busy"
 #define EMPATHY_IMAGE_AWAY                "empathy-away"
 #define EMPATHY_IMAGE_EXT_AWAY            "empathy-extended-away"
-#define EMPATHY_IMAGE_PENDING             "empathy-pending"
+#define EMPATHY_IMAGE_UNKNOWN             "empathy-pending"
 
 #define EMPATHY_IMAGE_MESSAGE             "empathy-message"
 #define EMPATHY_IMAGE_NEW_MESSAGE         "empathy-new-message"

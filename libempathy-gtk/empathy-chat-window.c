@@ -34,7 +34,7 @@
 #include <glade/glade.h>
 #include <glib/gi18n.h>
 
-#include <libempathy/empathy-contact-manager.h>
+#include <libempathy/empathy-contact-factory.h>
 #include <libempathy/empathy-contact-list.h>
 #include <libempathy/empathy-log-manager.h>
 #include <libempathy/empathy-chatroom-manager.h>
@@ -823,17 +823,20 @@ chat_window_update_menu (EmpathyChatWindow *window)
 						   window);
 	} else {
 		EmpathyPrivateChat  *chat;
-		EmpathySubscription  subscription;
 		EmpathyContact      *contact;
+		EmpathyPresence     *presence;
 
 		chat = EMPATHY_PRIVATE_CHAT (priv->current_chat);
 
 		/* Show / Hide widgets */
 		gtk_widget_hide (priv->menu_room);
 
+		/* presence==NULL means this contact refuses to send us his
+		 * presence. By adding the contact we ask the contact to accept
+		 * to send his presence. */
 		contact = empathy_private_chat_get_contact (chat);
-		subscription = empathy_contact_get_subscription (contact);
-		if (!(subscription & EMPATHY_SUBSCRIPTION_FROM)) {
+		presence = empathy_contact_get_presence (contact);
+		if (!presence) {
 			gtk_widget_show (priv->menu_conv_add_contact);
 		} else {
 			gtk_widget_hide (priv->menu_conv_add_contact);
@@ -1583,12 +1586,13 @@ chat_window_drag_data_received (GtkWidget        *widget,
 {
 	/* FIXME: DnD of contact do not seems to work... */
 	if (info == DND_DRAG_TYPE_CONTACT_ID) {
-		EmpathyContactManager *manager;
-		EmpathyContact         *contact;
-		EmpathyChat            *chat;
-		EmpathyChatWindow      *old_window;
+		EmpathyContactFactory *factory;
+		EmpathyContact        *contact = NULL;
+		EmpathyChat           *chat;
+		EmpathyChatWindow     *old_window;
 		McAccount             *account;
 		const gchar           *id = NULL;
+		gchar                **strv;
 
 		if (selection) {
 			id = (const gchar*) selection->data;
@@ -1596,9 +1600,18 @@ chat_window_drag_data_received (GtkWidget        *widget,
 
 		empathy_debug (DEBUG_DOMAIN, "DND contact from roster with id:'%s'", id);
 		
-		manager = empathy_contact_manager_new ();
-		contact = empathy_contact_list_find (EMPATHY_CONTACT_LIST (manager), id);
-		g_object_unref (manager);
+		strv = g_strsplit (id, "/", 2);
+		factory = empathy_contact_factory_new ();
+		account = mc_account_lookup (strv[0]);
+		if (account) {
+			contact = empathy_contact_factory_get_from_id (factory,
+								       account,
+								       strv[1]);
+			g_object_unref (account);
+		}
+		g_object_unref (factory);
+		g_object_unref (account);
+		g_strfreev (strv);
 
 		if (!contact) {
 			empathy_debug (DEBUG_DOMAIN, "DND contact from roster not found");

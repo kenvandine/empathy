@@ -26,6 +26,7 @@
 #include <glib-object.h>
 
 #include "empathy-contact.h"
+#include "empathy-tp-group.h"
 
 G_BEGIN_DECLS
 
@@ -37,49 +38,53 @@ G_BEGIN_DECLS
 typedef struct _EmpathyContactList      EmpathyContactList;
 typedef struct _EmpathyContactListIface EmpathyContactListIface;
 
-typedef struct {
-	EmpathyContact *contact;
-	gchar         *message;
-} EmpathyContactListInfo;
-
 struct _EmpathyContactListIface {
 	GTypeInterface   base_iface;
 
 	/* VTabled */
-	void            (*setup)             (EmpathyContactList *list);
-	EmpathyContact * (*find)              (EmpathyContactList *list,
-					      const gchar        *id);
-	void            (*add)               (EmpathyContactList *list,
-					      EmpathyContact      *contact,
-					      const gchar        *message);
-	void            (*remove)            (EmpathyContactList *list,
-					      EmpathyContact      *contact,
-					      const gchar        *message);
-	GList *         (*get_members)       (EmpathyContactList *list);
-	GList *         (*get_local_pending) (EmpathyContactList *list);
-	void            (*process_pending)   (EmpathyContactList *list,
-					      EmpathyContact      *contact,
-					      gboolean            accept);
+	void             (*add)               (EmpathyContactList *list,
+					       EmpathyContact     *contact,
+					       const gchar        *message);
+	void             (*remove)            (EmpathyContactList *list,
+					       EmpathyContact     *contact,
+					       const gchar        *message);
+	GList *          (*get_members)       (EmpathyContactList *list);
+	GList *          (*get_pendings)      (EmpathyContactList *list);
+	GList *          (*get_all_groups)    (EmpathyContactList *list);
+	GList *          (*get_groups)        (EmpathyContactList *list,
+					       EmpathyContact     *contact);
+	void             (*add_to_group)      (EmpathyContactList *list,
+					       EmpathyContact     *contact,
+					       const gchar        *group);
+	void             (*remove_from_group) (EmpathyContactList *list,
+					       EmpathyContact     *contact,
+					       const gchar        *group);
+	void             (*rename_group)      (EmpathyContactList *list,
+					       const gchar        *old_group,
+					       const gchar        *new_group);
 };
 
-GType                   empathy_contact_list_get_type          (void) G_GNUC_CONST;
-EmpathyContactListInfo *empathy_contact_list_info_new          (EmpathyContact          *contact,
-								const gchar            *message);
-void                    empathy_contact_list_info_free         (EmpathyContactListInfo *info);
-void                    empathy_contact_list_setup             (EmpathyContactList     *list);
-EmpathyContact *         empathy_contact_list_find              (EmpathyContactList     *list,
-								const gchar            *id);
-void                    empathy_contact_list_add               (EmpathyContactList     *list,
-								EmpathyContact          *contact,
-								const gchar            *message);
-void                    empathy_contact_list_remove            (EmpathyContactList     *list,
-								EmpathyContact          *contact,
-								const gchar            *message);
-GList *                 empathy_contact_list_get_members       (EmpathyContactList     *list);
-GList *                 empathy_contact_list_get_local_pending (EmpathyContactList     *list);
-void                    empathy_contact_list_process_pending   (EmpathyContactList     *list,
-								EmpathyContact          *contact,
-								gboolean                accept);
+GType    empathy_contact_list_get_type          (void) G_GNUC_CONST;
+void     empathy_contact_list_add               (EmpathyContactList *list,
+						 EmpathyContact     *contact,
+						 const gchar        *message);
+void     empathy_contact_list_remove            (EmpathyContactList *list,
+						 EmpathyContact     *contact,
+						 const gchar        *message);
+GList *  empathy_contact_list_get_members       (EmpathyContactList *list);
+GList *  empathy_contact_list_get_pendings      (EmpathyContactList *list);
+GList *  empathy_contact_list_get_all_groups    (EmpathyContactList *list);
+GList *  empathy_contact_list_get_groups        (EmpathyContactList *list,
+						 EmpathyContact     *contact);
+void     empathy_contact_list_add_to_group      (EmpathyContactList *list,
+						 EmpathyContact     *contact,
+						 const gchar        *group);
+void     empathy_contact_list_remove_from_group (EmpathyContactList *list,
+						 EmpathyContact     *contact,
+						 const gchar        *group);
+void     empathy_contact_list_rename_group      (EmpathyContactList *list,
+						 const gchar        *old_group,
+						 const gchar        *new_group);
 
 G_END_DECLS
 

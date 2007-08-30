@@ -78,11 +78,12 @@ static void          group_chat_finalize                 (GObject           *obj
 static void          group_chat_create_ui                (EmpathyGroupChat  *chat);
 static void          group_chat_widget_destroy_cb        (GtkWidget         *widget,
 							  EmpathyGroupChat  *chat);
-static void          group_chat_contact_added_cb         (EmpathyTpChatroom *tp_chat,
+static void          group_chat_members_changed_cb       (EmpathyTpChatroom *tp_chat,
 							  EmpathyContact    *contact,
-							  EmpathyGroupChat  *chat);
-static void          group_chat_contact_removed_cb       (EmpathyTpChatroom *tp_chat,
-							  EmpathyContact    *contact,
+							  EmpathyContact    *actor,
+							  guint              reason,
+							  gchar             *message,
+							  gboolean           is_member,
 							  EmpathyGroupChat  *chat);
 static void          group_chat_topic_entry_activate_cb  (GtkWidget         *entry,
 							  GtkDialog         *dialog);
@@ -348,33 +349,26 @@ group_chat_widget_destroy_cb (GtkWidget       *widget,
 }
 
 static void
-group_chat_contact_added_cb (EmpathyTpChatroom *tp_chat,
-			     EmpathyContact     *contact,
-			     EmpathyGroupChat   *chat)
-{
-	EmpathyGroupChatPriv *priv;
-	gchar               *str;
-
-	priv = GET_PRIV (chat);
-
-	str = g_strdup_printf (_("%s has joined the room"),
-			       empathy_contact_get_name (contact));
-	empathy_chat_view_append_event (EMPATHY_CHAT (chat)->view, str);
-	g_free (str);
-}
-
-static void
-group_chat_contact_removed_cb (EmpathyTpChatroom *tp_chat,
+group_chat_members_changed_cb (EmpathyTpChatroom *tp_chat,
 			       EmpathyContact     *contact,
+			       EmpathyContact     *actor,
+			       guint               reason,
+			       gchar              *message,
+			       gboolean            is_member,
 			       EmpathyGroupChat   *chat)
 {
 	EmpathyGroupChatPriv *priv;
-	gchar               *str;
+	gchar                *str;
 
 	priv = GET_PRIV (chat);
 
-	str = g_strdup_printf (_("%s has left the room"),
-			       empathy_contact_get_name (contact));
+	if (is_member) {
+		str = g_strdup_printf (_("%s has joined the room"),
+				       empathy_contact_get_name (contact));
+	} else {
+		str = g_strdup_printf (_("%s has left the room"),
+				       empathy_contact_get_name (contact));
+	}
 	empathy_chat_view_append_event (EMPATHY_CHAT (chat)->view, str);
 	g_free (str);
 }
@@ -540,11 +534,8 @@ group_chat_set_tp_chat (EmpathyChat    *chat,
 	gtk_widget_show (GTK_WIDGET (priv->view));
 
 	/* Connect signals */
-	g_signal_connect (priv->tp_chat, "contact-added",
-			  G_CALLBACK (group_chat_contact_added_cb),
-			  chat);
-	g_signal_connect (priv->tp_chat, "contact-removed",
-			  G_CALLBACK (group_chat_contact_removed_cb),
+	g_signal_connect (priv->tp_chat, "members-changed",
+			  G_CALLBACK (group_chat_members_changed_cb),
 			  chat);
 	g_signal_connect (priv->tp_chat, "notify::subject",
 			  G_CALLBACK (group_chat_subject_notify_cb),

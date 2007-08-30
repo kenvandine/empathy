@@ -1,6 +1,7 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /*
  * Copyright (C) 2004 Imendio AB
+ * Copyright (C) 2007 Collabora Ltd.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -16,6 +17,10 @@
  * License along with this program; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
+ *
+ * Authors: Mikael Hallendal <micke@imendio.com>
+ *          Martyn Russell <martyn@imendio.com>
+ *          Xavier Claessens <xclaesse@gmail.com>
  */
 
 #ifndef __EMPATHY_CONTACT_H__
@@ -30,7 +35,7 @@
 
 G_BEGIN_DECLS
 
-#define EMPATHY_TYPE_CONTACT         (empathy_contact_get_gtype ())
+#define EMPATHY_TYPE_CONTACT         (empathy_contact_get_type ())
 #define EMPATHY_CONTACT(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), EMPATHY_TYPE_CONTACT, EmpathyContact))
 #define EMPATHY_CONTACT_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST ((k), EMPATHY_TYPE_CONTACT, EmpathyContactClass))
 #define EMPATHY_IS_CONTACT(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), EMPATHY_TYPE_CONTACT))
@@ -48,57 +53,37 @@ struct _EmpathyContactClass {
 	GObjectClass parent_class;
 };
 
-typedef enum {
-	EMPATHY_SUBSCRIPTION_NONE = 0,
-	EMPATHY_SUBSCRIPTION_TO   = 1 << 0,	/* We send our presence to that contact */
-	EMPATHY_SUBSCRIPTION_FROM = 1 << 1,	/* That contact sends his presence to us */
-	EMPATHY_SUBSCRIPTION_BOTH = EMPATHY_SUBSCRIPTION_TO | EMPATHY_SUBSCRIPTION_FROM
-} EmpathySubscription;
-
-GType              empathy_contact_get_gtype                 (void) G_GNUC_CONST;
-
-EmpathyContact *    empathy_contact_new                       (McAccount          *account);
-EmpathyContact *    empathy_contact_new_full                  (McAccount          *account,
-							     const gchar        *id,
-							     const gchar        *name);
-const gchar *      empathy_contact_get_id                    (EmpathyContact      *contact);
-const gchar *      empathy_contact_get_name                  (EmpathyContact      *contact);
-EmpathyAvatar *     empathy_contact_get_avatar                (EmpathyContact      *contact);
-McAccount *        empathy_contact_get_account               (EmpathyContact      *contact);
-EmpathyPresence *   empathy_contact_get_presence              (EmpathyContact      *contact);
-GList *            empathy_contact_get_groups                (EmpathyContact      *contact);
-EmpathySubscription empathy_contact_get_subscription          (EmpathyContact      *contact);
-guint              empathy_contact_get_handle                (EmpathyContact      *contact);
-gboolean           empathy_contact_is_user                   (EmpathyContact      *contact);
-void               empathy_contact_set_id                    (EmpathyContact      *contact,
-							     const gchar        *id);
-void               empathy_contact_set_name                  (EmpathyContact      *contact,
-							     const gchar        *name);
-void               empathy_contact_set_avatar                (EmpathyContact      *contact,
-							     EmpathyAvatar       *avatar);
-void               empathy_contact_set_account               (EmpathyContact      *contact,
-							     McAccount          *account);
-void               empathy_contact_set_presence              (EmpathyContact      *contact,
-							     EmpathyPresence     *presence);
-void               empathy_contact_set_groups                (EmpathyContact      *contact,
-							     GList              *categories);
-void               empathy_contact_set_subscription          (EmpathyContact      *contact,
-							     EmpathySubscription  subscription);
-void               empathy_contact_set_handle                (EmpathyContact      *contact,
-							     guint               handle);
-void               empathy_contact_set_is_user               (EmpathyContact      *contact,
-							     gboolean            is_user);
-void               empathy_contact_add_group                 (EmpathyContact      *contact,
-							     const gchar        *group);
-void               empathy_contact_remove_group              (EmpathyContact      *contact,
-							     const gchar        *group);
-gboolean           empathy_contact_is_online                 (EmpathyContact      *contact);
-gboolean           empathy_contact_is_in_group               (EmpathyContact      *contact,
-							     const gchar        *group);
-const gchar *      empathy_contact_get_status                (EmpathyContact      *contact);
-gboolean           empathy_contact_equal                     (gconstpointer       v1,
-							     gconstpointer       v2);
-guint              empathy_contact_hash                      (gconstpointer       key);
+GType             empathy_contact_get_type     (void) G_GNUC_CONST;
+EmpathyContact *  empathy_contact_new          (McAccount       *account);
+EmpathyContact *  empathy_contact_new_full     (McAccount       *account,
+						const gchar     *id,
+						const gchar     *name);
+const gchar *     empathy_contact_get_id       (EmpathyContact  *contact);
+void              empathy_contact_set_id       (EmpathyContact  *contact,
+						const gchar     *id);
+const gchar *     empathy_contact_get_name     (EmpathyContact  *contact);
+void              empathy_contact_set_name     (EmpathyContact  *contact,
+						const gchar     *name);
+EmpathyAvatar *   empathy_contact_get_avatar   (EmpathyContact  *contact);
+void              empathy_contact_set_avatar   (EmpathyContact  *contact,
+						EmpathyAvatar   *avatar);
+McAccount *       empathy_contact_get_account  (EmpathyContact  *contact);
+void              empathy_contact_set_account  (EmpathyContact  *contact,
+						McAccount       *account);
+EmpathyPresence * empathy_contact_get_presence (EmpathyContact  *contact);
+void              empathy_contact_set_presence (EmpathyContact  *contact,
+						EmpathyPresence *presence);
+guint             empathy_contact_get_handle   (EmpathyContact  *contact);
+void              empathy_contact_set_handle   (EmpathyContact  *contact,
+						guint            handle);
+gboolean          empathy_contact_is_user      (EmpathyContact  *contact);
+void              empathy_contact_set_is_user  (EmpathyContact  *contact,
+						gboolean         is_user);
+gboolean          empathy_contact_is_online    (EmpathyContact  *contact);
+const gchar *     empathy_contact_get_status   (EmpathyContact  *contact);
+gboolean          empathy_contact_equal        (gconstpointer    v1,
+						gconstpointer    v2);
+guint             empathy_contact_hash         (gconstpointer    key);
 
 G_END_DECLS
 

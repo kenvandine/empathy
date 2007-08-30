@@ -34,7 +34,7 @@
 #include <libmissioncontrol/mc-account.h>
 #include <libmissioncontrol/mission-control.h>
 
-#include <libempathy/empathy-contact-manager.h>
+#include <libempathy/empathy-contact-factory.h>
 #include <libempathy/empathy-contact-list.h>
 #include <libempathy/empathy-log-manager.h>
 #include <libempathy/empathy-debug.h>
@@ -66,13 +66,8 @@
 
 struct _EmpathyContactListViewPriv {
 	EmpathyContactListStore *store;
-	GtkUIManager           *ui;
-	GtkTreeRowReference    *drag_row;
-	GtkTreeModel           *filter;
-	gchar                  *filter_text;
-
-	EmpathyContactListViewDragReceivedFunc drag_received;
-	gpointer                              drag_received_data;
+	GtkUIManager            *ui;
+	GtkTreeRowReference     *drag_row;
 };
 
 typedef struct {
@@ -103,11 +98,6 @@ static void        contact_list_view_row_has_child_toggled_cb  (GtkTreeModel    
 								GtkTreePath                *path,
 								GtkTreeIter                *iter,
 								EmpathyContactListView      *view);
-static void        contact_list_view_contact_received          (EmpathyContactListView      *view,
-								EmpathyContact              *contact,
-								GdkDragAction               action,
-								const gchar                *old_group,
-								const gchar                *new_group);
 static void        contact_list_view_drag_data_received        (GtkWidget                  *widget,
 								GdkDragContext             *context,
 								gint                        x,
@@ -173,14 +163,6 @@ static void        contact_list_view_row_expand_or_collapse_cb (EmpathyContactLi
 								GtkTreeIter                *iter,
 								GtkTreePath                *path,
 								gpointer                    user_data);
-static gboolean    contact_list_view_filter_show_contact       (EmpathyContact              *contact,
-								const gchar                *filter);
-static gboolean    contact_list_view_filter_show_group         (EmpathyContactListView      *view,
-								const gchar                *group,
-								const gchar                *filter);
-static gboolean    contact_list_view_filter_func               (GtkTreeModel               *model,
-								GtkTreeIter                *iter,
-								EmpathyContactListView      *view);
 static void        contact_list_view_action_cb                 (GtkAction                  *action,
 								EmpathyContactListView      *view);
 static void        contact_list_view_action_activated          (EmpathyContactListView      *view,
@@ -188,7 +170,6 @@ static void        contact_list_view_action_activated          (EmpathyContactLi
 
 enum {
 	PROP_0,
-	PROP_FILTER,
 };
 
 static const GtkActionEntry entries[] = {
@@ -315,14 +296,6 @@ empathy_contact_list_view_class_init (EmpathyContactListViewClass *klass)
 			      G_TYPE_NONE,
 			      3, EMPATHY_TYPE_CONTACT, G_TYPE_STRING, G_TYPE_STRING);
 
-	g_object_class_install_property (object_class,
-					 PROP_FILTER,
-					 g_param_spec_string ("filter",
-							      "Filter",
-							      "The text to use to filter the contact list",
-							      NULL,
-							      G_PARAM_READWRITE));
-
 	g_type_class_add_private (object_class, sizeof (EmpathyContactListViewPriv));
 }
 
@@ -389,10 +362,6 @@ contact_list_view_finalize (GObject *object)
 	if (priv->store) {
 		g_object_unref (priv->store);
 	}
-	if (priv->filter) {
-		g_object_unref (priv->filter);
-	}
-	g_free (priv->filter_text);
 
 	G_OBJECT_CLASS (empathy_contact_list_view_parent_class)->finalize (object);
 }
@@ -408,9 +377,6 @@ contact_list_view_get_property (GObject    *object,
 	priv = GET_PRIV (object);
 
 	switch (param_id) {
-	case PROP_FILTER:
-		g_value_set_string (value, priv->filter_text);
-		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
 		break;
@@ -428,10 +394,6 @@ contact_list_view_set_property (GObject      *object,
 	priv = GET_PRIV (object);
 
 	switch (param_id) {
-	case PROP_FILTER:
-		empathy_contact_list_view_set_filter (EMPATHY_CONTACT_LIST_VIEW (object),
-						g_value_get_string (value));
-		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
 		break;
@@ -547,47 +509,6 @@ empathy_contact_list_view_get_contact_menu (EmpathyContactListView *view,
 						   can_show_log);
 }
 
-void
-empathy_contact_list_view_set_filter (EmpathyContactListView *view,
-				     const gchar           *filter)
-{
-	EmpathyContactListViewPriv *priv;
-
-	g_return_if_fail (EMPATHY_IS_CONTACT_LIST_VIEW (view));
-
-	priv = GET_PRIV (view);
-
-	g_free (priv->filter_text);
-	if (filter) {
-		priv->filter_text = g_utf8_casefold (filter, -1);
-	} else {
-		priv->filter_text = NULL;
-	}
-
-	empathy_debug (DEBUG_DOMAIN, "Refiltering with filter:'%s' (case folded)", filter);
-	gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (priv->filter));
-}
-
-void
-empathy_contact_list_view_set_drag_received_func (EmpathyContactListView                 *view,
-						 EmpathyContactListViewDragReceivedFunc  func,
-						 gpointer                               user_data)
-{
-	EmpathyContactListViewPriv *priv;
-
-	g_return_if_fail (EMPATHY_IS_CONTACT_LIST_VIEW (view));
-
-	priv = GET_PRIV (view);
-
-	if (func) {
-		priv->drag_received = func;
-		priv->drag_received_data = user_data;
-	} else {
-		priv->drag_received = NULL;
-		priv->drag_received_data = NULL;
-	}
-}
-
 static void
 contact_list_view_setup (EmpathyContactListView *view)
 {
@@ -598,21 +519,11 @@ contact_list_view_setup (EmpathyContactListView *view)
 
 	priv = GET_PRIV (view);
 
-	/* Create filter */
-	priv->filter = gtk_tree_model_filter_new (GTK_TREE_MODEL (priv->store), NULL);
-
-	gtk_tree_model_filter_set_visible_func (GTK_TREE_MODEL_FILTER (priv->filter),
-						(GtkTreeModelFilterVisibleFunc)
-						contact_list_view_filter_func,
-						view, NULL);
-	gtk_tree_view_set_search_equal_func (GTK_TREE_VIEW (view),
-					     empathy_contact_list_store_search_equal_func,
-					     view, NULL);
-	g_signal_connect (priv->filter, "row-has-child-toggled",
+	g_signal_connect (priv->store, "row-has-child-toggled",
 			  G_CALLBACK (contact_list_view_row_has_child_toggled_cb),
 			  view);
-	gtk_tree_view_set_model (GTK_TREE_VIEW (view), priv->filter);
-
+	gtk_tree_view_set_model (GTK_TREE_VIEW (view),
+				 GTK_TREE_MODEL (priv->store));
 
 	/* Setup view */
 	g_object_set (view,
@@ -697,13 +608,13 @@ contact_list_view_setup (EmpathyContactListView *view)
 			     GDK_BUTTON1_MASK,
 			     drag_types_source,
 			     G_N_ELEMENTS (drag_types_source),
-			     GDK_ACTION_MOVE);
+			     GDK_ACTION_MOVE | GDK_ACTION_COPY);
 
 	gtk_drag_dest_set (GTK_WIDGET (view),
 			   GTK_DEST_DEFAULT_ALL,
 			   drag_types_dest,
 			   G_N_ELEMENTS (drag_types_dest),
-			   GDK_ACTION_MOVE | GDK_ACTION_LINK);
+			   GDK_ACTION_MOVE | GDK_ACTION_COPY);
 }
 
 static void
@@ -747,46 +658,6 @@ contact_list_view_row_has_child_toggled_cb (GtkTreeModel          *model,
 }
 
 static void
-contact_list_view_contact_received (EmpathyContactListView *view,
-				    EmpathyContact         *contact,
-				    GdkDragAction          action,
-				    const gchar           *old_group,
-				    const gchar           *new_group)
-{
-	EmpathyContactListViewPriv *priv;
-	GList                     *groups, *l;
-	GList                     *new_groups_list = NULL;
-
-	priv = GET_PRIV (view);
-
-	groups = empathy_contact_get_groups (contact);
-	for (l = groups; l; l = l->next) {
-		gchar *str;
-
-		str = l->data;
-
-		if (action == GDK_ACTION_MOVE &&
-		    old_group != NULL &&
-		    strcmp (str, old_group) == 0) {
-			continue;
-		}
-
-		if (new_group && strcmp (str, new_group) == 0) {
-			/* Otherwise we set it twice */
-			continue;
-		}
-
-		new_groups_list = g_list_prepend (new_groups_list, g_strdup (str));
-	}
-
-	if (new_group) {
-		new_groups_list = g_list_prepend (new_groups_list, g_strdup (new_group));
-	}
-
-	empathy_contact_set_groups (contact, new_groups_list);
-}
-
-static void
 contact_list_view_drag_data_received (GtkWidget         *widget,
 				      GdkDragContext    *context,
 				      gint               x,
@@ -796,15 +667,18 @@ contact_list_view_drag_data_received (GtkWidget         *widget,
 				      guint              time)
 {
 	EmpathyContactListViewPriv *priv;
-	EmpathyContactList        *list;
-	GtkTreeModel              *model;
-	GtkTreePath               *path;
-	GtkTreeViewDropPosition    position;
-	EmpathyContact             *contact;
-	const gchar               *id;
-	gchar                     *new_group = NULL;
-	gchar                     *old_group = NULL;
-	gboolean                   is_row;
+	EmpathyContactList         *list;
+	EmpathyContactFactory      *factory;
+	McAccount                  *account;
+	GtkTreeModel               *model;
+	GtkTreePath                *path;
+	GtkTreeViewDropPosition     position;
+	EmpathyContact             *contact = NULL;
+	const gchar                *id;
+	gchar                     **strv;
+	gchar                      *new_group = NULL;
+	gchar                      *old_group = NULL;
+	gboolean                    is_row;
 
 	priv = GET_PRIV (widget);
 
@@ -814,9 +688,18 @@ contact_list_view_drag_data_received (GtkWidget         *widget,
 		      context->action == GDK_ACTION_COPY ? "copy" : "",
 		      id);
 
-	/* FIXME: This is ambigous, an id can come from multiple accounts */
-	list = empathy_contact_list_store_get_list_iface (priv->store);
-	contact = empathy_contact_list_find (list, id);
+	strv = g_strsplit (id, "/", 2);
+	factory = empathy_contact_factory_new ();
+	account = mc_account_lookup (strv[0]);
+	if (account) {
+		contact = empathy_contact_factory_get_from_id (factory,
+							       account,
+							       strv[1]);
+		g_object_unref (account);
+	}
+	g_object_unref (factory);
+	g_object_unref (account);
+	g_strfreev (strv);
 
 	if (!contact) {
 		empathy_debug (DEBUG_DOMAIN, "No contact found associated with drag & drop");
@@ -847,22 +730,17 @@ contact_list_view_drag_data_received (GtkWidget         *widget,
 	}
 
 	empathy_debug (DEBUG_DOMAIN,
-		      "contact '%s' dragged from '%s' to '%s'",
-		      empathy_contact_get_name (contact),
+		      "contact %s (%d) dragged from '%s' to '%s'",
+		      empathy_contact_get_id (contact),
+		      empathy_contact_get_handle (contact),
 		      old_group, new_group);
 
-	if (priv->drag_received) {
-		priv->drag_received (contact,
-				     context->action,
-				     old_group,
-				     new_group,
-				     priv->drag_received_data);
-	} else {
-		contact_list_view_contact_received (EMPATHY_CONTACT_LIST_VIEW (widget),
-						    contact,
-						    context->action,
-						    old_group,
-						    new_group);
+	list = empathy_contact_list_store_get_list_iface (priv->store);
+	if (new_group) {
+		empathy_contact_list_add_to_group (list, contact, new_group);
+	}
+	if (old_group && context->action == GDK_ACTION_MOVE) {	
+		empathy_contact_list_remove_from_group (list, contact, old_group);
 	}
 
 	g_free (old_group);
@@ -976,11 +854,15 @@ contact_list_view_drag_data_get (GtkWidget        *widget,
 				 guint             time)
 {
 	EmpathyContactListViewPriv *priv;
-	GtkTreePath               *src_path;
-	GtkTreeIter                iter;
-	GtkTreeModel              *model;
+	GtkTreePath                *src_path;
+	GtkTreeIter                 iter;
+	GtkTreeModel               *model;
 	EmpathyContact             *contact;
-	const gchar               *id;
+	McAccount                  *account;
+	const gchar                *contact_id;
+	const gchar                *account_id;
+	gchar                      *str;
+	
 
 	priv = GET_PRIV (widget);
 
@@ -1006,18 +888,20 @@ contact_list_view_drag_data_get (GtkWidget        *widget,
 		return;
 	}
 
-	id = empathy_contact_get_id (contact);
+	account = empathy_contact_get_account (contact);
+	account_id = mc_account_get_unique_name (account);
+	contact_id = empathy_contact_get_id (contact);
 	g_object_unref (contact);
+	str = g_strconcat (account_id, "/", contact_id, NULL);
 
 	switch (info) {
 	case DND_DRAG_TYPE_CONTACT_ID:
 		gtk_selection_data_set (selection, drag_atoms_source[info], 8,
-					(guchar*)id, strlen (id) + 1);
+					(guchar*)str, strlen (str) + 1);
 		break;
-
-	default:
-		return;
 	}
+
+	g_free (str);
 }
 
 static void
@@ -1327,124 +1211,6 @@ contact_list_view_row_expand_or_collapse_cb (EmpathyContactListView *view,
 	empathy_contact_group_set_expanded (name, expanded);
 
 	g_free (name);
-}
-
-static gboolean 
-contact_list_view_filter_show_contact (EmpathyContact *contact,
-				       const gchar   *filter)
-{
-	gchar    *str;
-	gboolean  visible;
-
-	/* Check contact id */
-	str = g_utf8_casefold (empathy_contact_get_id (contact), -1);
-	visible = G_STR_EMPTY (str) || strstr (str, filter);
-	g_free (str);
-
-	if (visible) {
-		return TRUE;
-	}
-
-	/* Check contact name */
-	str = g_utf8_casefold (empathy_contact_get_name (contact), -1);
-	visible = G_STR_EMPTY (str) || strstr (str, filter);
-	g_free (str);
-	
-	return visible;
-}
-
-static gboolean
-contact_list_view_filter_show_group (EmpathyContactListView *view,
-				     const gchar           *group,
-				     const gchar           *filter)
-{
-	EmpathyContactListViewPriv *priv;
-	EmpathyContactList        *list;
-	GList                     *contacts, *l;
-	gchar                     *str;
-	gboolean                   show_group = FALSE;
-
-	priv = GET_PRIV (view);
-	
-	str = g_utf8_casefold (group, -1);
-	if (!str) {
-		return FALSE;
-	}
-
-	/* If the filter is the partially the group name, we show the
-	 * whole group.
-	 */
-	if (strstr (str, filter)) {
-		g_free (str);
-		return TRUE;
-	}
-
-	/* At this point, we need to check in advance if this
-	 * group should be shown because a contact we want to
-	 * show exists in it.
-	 */
-	list = empathy_contact_list_store_get_list_iface (priv->store);
-	contacts = empathy_contact_list_get_members (list);
-	for (l = contacts; l && !show_group; l = l->next) {
-		if (!empathy_contact_is_in_group (l->data, group)) {
-			g_object_unref (l->data);
-			continue;
-		}
-
-		if (contact_list_view_filter_show_contact (l->data, filter)) {
-			show_group = TRUE;
-		}
-		g_object_unref (l->data);
-	}
-	g_list_free (contacts);
-	g_free (str);
-
-	return show_group;
-}
-
-static gboolean
-contact_list_view_filter_func (GtkTreeModel          *model,
-			       GtkTreeIter           *iter,
-			       EmpathyContactListView *view)
-{
-	EmpathyContactListViewPriv *priv;
-	gboolean                   is_group;
-	gboolean                   is_separator;
-	gboolean                   visible = TRUE;
-
-	priv = GET_PRIV (view);
-
-	if (G_STR_EMPTY (priv->filter_text)) {
-		return TRUE;
-	}
-	
-	/* Check to see if iter matches any group names */
-	gtk_tree_model_get (model, iter,
-			    COL_IS_GROUP, &is_group,
-			    COL_IS_SEPARATOR, &is_separator,
-			    -1);
-
-	if (is_group) {
-		gchar *name;
-
-		gtk_tree_model_get (model, iter, COL_NAME, &name, -1);
-		visible &= contact_list_view_filter_show_group (view,
-								name,
-								priv->filter_text);
-		g_free (name);
-	} else if (is_separator) {
-		/* Do nothing here */
-	} else {
-		EmpathyContact *contact;
-
-		/* Check contact id */
-		gtk_tree_model_get (model, iter, COL_CONTACT, &contact, -1);
-		visible &= contact_list_view_filter_show_contact (contact, 
-								  priv->filter_text);
-		g_object_unref (contact);
-	}
-
-	return visible;
 }
 
 static void

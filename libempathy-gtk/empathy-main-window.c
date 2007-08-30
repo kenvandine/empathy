@@ -288,7 +288,6 @@ empathy_main_window_show (void)
 	empathy_status_presets_get_all ();
 
 	list_iface = EMPATHY_CONTACT_LIST (empathy_contact_manager_new ());
-	empathy_contact_list_setup (list_iface);
 	window->list_store = empathy_contact_list_store_new (list_iface);
 	window->list_view = empathy_contact_list_view_new (window->list_store);
 	g_object_unref (list_iface);

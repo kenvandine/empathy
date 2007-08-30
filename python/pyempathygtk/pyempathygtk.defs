@@ -306,6 +306,19 @@
 
 
 
+;; From empathy-account-widget-salut.h
+
+(define-function empathy_account_widget_salut_new
+  (c-name "empathy_account_widget_salut_new")
+  (is-constructor-of "EmpathyAccountWidgetSalut")
+  (return-type "GtkWidget*")
+  (parameters
+    '("McAccount*" "account")
+  )
+)
+
+
+
 ;; From empathy-cell-renderer-expander.h
 
 (define-function empathy_cell_renderer_expander_get_type
@@ -957,25 +970,6 @@
   )
 )
 
-(define-method set_contact_groups_func
-  (of-object "EmpathyContactListStore")
-  (c-name "empathy_contact_list_store_set_contact_groups_func")
-  (return-type "none")
-  (parameters
-    '("EmpathyContactGroupsFunc" "func")
-    '("gpointer" "user_data")
-  )
-)
-
-(define-method update_contact_groups
-  (of-object "EmpathyContactListStore")
-  (c-name "empathy_contact_list_store_update_contact_groups")
-  (return-type "none")
-  (parameters
-    '("EmpathyContact*" "contact")
-  )
-)
-
 
 
 ;; From empathy-contact-list-view.h
@@ -1019,25 +1013,6 @@
   (of-object "EmpathyContactListView")
   (c-name "empathy_contact_list_view_get_group_menu")
   (return-type "GtkWidget*")
-)
-
-(define-method set_filter
-  (of-object "EmpathyContactListView")
-  (c-name "empathy_contact_list_view_set_filter")
-  (return-type "none")
-  (parameters
-    '("const-gchar*" "filter")
-  )
-)
-
-(define-method set_drag_received_func
-  (of-object "EmpathyContactListView")
-  (c-name "empathy_contact_list_view_set_drag_received_func")
-  (return-type "none")
-  (parameters
-    '("EmpathyContactListViewDragReceivedFunc" "func")
-    '("gpointer" "user_data")
-  )
 )
 
 

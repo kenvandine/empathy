@@ -53,24 +53,13 @@ struct _EmpathyContactListViewClass {
 	GtkTreeViewClass       parent_class;
 };
 
-typedef void           (*EmpathyContactListViewDragReceivedFunc)        (EmpathyContact *contact,
-									GdkDragAction  action,
-									const gchar   *old_group,
-									const gchar   *new_group,
-									gpointer       user_data);
-
-GType                  empathy_contact_list_view_get_type               (void) G_GNUC_CONST;
-EmpathyContactListView *empathy_contact_list_view_new                    (EmpathyContactListStore                *store);
-EmpathyContact *        empathy_contact_list_view_get_selected           (EmpathyContactListView                 *view);
-gchar *                empathy_contact_list_view_get_selected_group     (EmpathyContactListView                 *view);
-GtkWidget *            empathy_contact_list_view_get_contact_menu       (EmpathyContactListView                 *view,
-									EmpathyContact                         *contact);
-GtkWidget *            empathy_contact_list_view_get_group_menu         (EmpathyContactListView                 *view);
-void                   empathy_contact_list_view_set_filter             (EmpathyContactListView                 *view,
-									const gchar                           *filter);
-void                   empathy_contact_list_view_set_drag_received_func (EmpathyContactListView                 *view,
-									EmpathyContactListViewDragReceivedFunc  func,
-									gpointer                               user_data);
+GType                   empathy_contact_list_view_get_type           (void) G_GNUC_CONST;
+EmpathyContactListView *empathy_contact_list_view_new                (EmpathyContactListStore *store);
+EmpathyContact *        empathy_contact_list_view_get_selected       (EmpathyContactListView  *view);
+gchar *                 empathy_contact_list_view_get_selected_group (EmpathyContactListView  *view);
+GtkWidget *             empathy_contact_list_view_get_contact_menu   (EmpathyContactListView  *view,
+								      EmpathyContact          *contact);
+GtkWidget *             empathy_contact_list_view_get_group_menu     (EmpathyContactListView  *view);
 
 G_END_DECLS
 

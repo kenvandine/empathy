@@ -53,96 +53,46 @@ contact_list_base_init (gpointer klass)
 	static gboolean initialized = FALSE;
 
 	if (!initialized) {
-		g_signal_new ("contact-added",
+		g_signal_new ("members-changed",
 			      G_TYPE_FROM_CLASS (klass),
 			      G_SIGNAL_RUN_LAST,
 			      0,
 			      NULL, NULL,
-			      g_cclosure_marshal_VOID__OBJECT,
+			      empathy_marshal_VOID__OBJECT_OBJECT_UINT_STRING_BOOLEAN,
 			      G_TYPE_NONE,
-			      1, EMPATHY_TYPE_CONTACT);
+			      5, EMPATHY_TYPE_CONTACT, EMPATHY_TYPE_CONTACT,
+			      G_TYPE_UINT, G_TYPE_STRING, G_TYPE_BOOLEAN);
 
-		g_signal_new ("contact-removed",
+		g_signal_new ("pendings-changed",
 			      G_TYPE_FROM_CLASS (klass),
 			      G_SIGNAL_RUN_LAST,
 			      0,
 			      NULL, NULL,
-			      g_cclosure_marshal_VOID__OBJECT,
+			      empathy_marshal_VOID__OBJECT_OBJECT_UINT_STRING_BOOLEAN,
 			      G_TYPE_NONE,
-			      1, EMPATHY_TYPE_CONTACT);
+			      5, EMPATHY_TYPE_CONTACT, EMPATHY_TYPE_CONTACT,
+			      G_TYPE_UINT, G_TYPE_STRING, G_TYPE_BOOLEAN);
 
-		g_signal_new ("local-pending",
+		g_signal_new ("groups-changed",
 			      G_TYPE_FROM_CLASS (klass),
 			      G_SIGNAL_RUN_LAST,
 			      0,
 			      NULL, NULL,
-			      empathy_marshal_VOID__OBJECT_STRING,
+			      empathy_marshal_VOID__OBJECT_STRING_BOOLEAN,
 			      G_TYPE_NONE,
-			      2, EMPATHY_TYPE_CONTACT, G_TYPE_STRING);
+			      3, EMPATHY_TYPE_CONTACT, G_TYPE_STRING, G_TYPE_BOOLEAN);
 
 		initialized = TRUE;
 	}
 }
 
-EmpathyContactListInfo *
-empathy_contact_list_info_new (EmpathyContact *contact,
-			       const gchar   *message)
-{
-	EmpathyContactListInfo *info;
-
-	g_return_val_if_fail (EMPATHY_IS_CONTACT (contact), NULL);
-
-	info = g_slice_new0 (EmpathyContactListInfo);
-	info->contact = g_object_ref (contact);
-	info->message = g_strdup (message);
-
-	return info;
-}			       
-
-void
-empathy_contact_list_info_free (EmpathyContactListInfo *info)
-{
-	if (!info) {
-		return;
-	}
-
-	if (info->contact) {
-		g_object_unref (info->contact);
-	}
-	g_free (info->message);
-
-	g_slice_free (EmpathyContactListInfo, info);
-}
-
-void
-empathy_contact_list_setup (EmpathyContactList *list)
-{
-	g_return_if_fail (EMPATHY_IS_CONTACT_LIST (list));
-
-	if (EMPATHY_CONTACT_LIST_GET_IFACE (list)->setup) {
-		EMPATHY_CONTACT_LIST_GET_IFACE (list)->setup (list);
-	}
-}
-
-EmpathyContact *
-empathy_contact_list_find (EmpathyContactList *list,
-			   const gchar        *id)
-{
-	g_return_val_if_fail (EMPATHY_IS_CONTACT_LIST (list), NULL);
-
-	if (EMPATHY_CONTACT_LIST_GET_IFACE (list)->find) {
-		return EMPATHY_CONTACT_LIST_GET_IFACE (list)->find (list, id);
-	}
-
-	return NULL;
-}
-
 void
 empathy_contact_list_add (EmpathyContactList *list,
-			  EmpathyContact      *contact,
+			  EmpathyContact     *contact,
 			  const gchar        *message)
 {
 	g_return_if_fail (EMPATHY_IS_CONTACT_LIST (list));
+	g_return_if_fail (EMPATHY_IS_CONTACT (contact));
 
 	if (EMPATHY_CONTACT_LIST_GET_IFACE (list)->add) {
 		EMPATHY_CONTACT_LIST_GET_IFACE (list)->add (list, contact, message);
@@ -151,10 +101,11 @@ empathy_contact_list_add (EmpathyContactList *list,
 
 void
 empathy_contact_list_remove (EmpathyContactList *list,
-			     EmpathyContact      *contact,
+			     EmpathyContact     *contact,
 			     const gchar        *message)
 {
 	g_return_if_fail (EMPATHY_IS_CONTACT_LIST (list));
+	g_return_if_fail (EMPATHY_IS_CONTACT (contact));
 
 	if (EMPATHY_CONTACT_LIST_GET_IFACE (list)->remove) {
 		EMPATHY_CONTACT_LIST_GET_IFACE (list)->remove (list, contact, message);
@@ -174,28 +125,82 @@ empathy_contact_list_get_members (EmpathyContactList *list)
 }
 
 GList *
-empathy_contact_list_get_local_pending (EmpathyContactList *list)
+empathy_contact_list_get_pendings (EmpathyContactList *list)
 {
 	g_return_val_if_fail (EMPATHY_IS_CONTACT_LIST (list), NULL);
 
-	if (EMPATHY_CONTACT_LIST_GET_IFACE (list)->get_local_pending) {
-		return EMPATHY_CONTACT_LIST_GET_IFACE (list)->get_local_pending (list);
+	if (EMPATHY_CONTACT_LIST_GET_IFACE (list)->get_pendings) {
+		return EMPATHY_CONTACT_LIST_GET_IFACE (list)->get_pendings (list);
+	}
+
+	return NULL;
+}
+
+GList *
+empathy_contact_list_get_all_groups (EmpathyContactList *list)
+{
+	g_return_val_if_fail (EMPATHY_IS_CONTACT_LIST (list), NULL);
+
+	if (EMPATHY_CONTACT_LIST_GET_IFACE (list)->get_all_groups) {
+		return EMPATHY_CONTACT_LIST_GET_IFACE (list)->get_all_groups (list);
+	}
+
+	return NULL;
+}
+
+GList *
+empathy_contact_list_get_groups (EmpathyContactList *list,
+				 EmpathyContact     *contact)
+{
+	g_return_val_if_fail (EMPATHY_IS_CONTACT_LIST (list), NULL);
+	g_return_val_if_fail (EMPATHY_IS_CONTACT (contact), NULL);
+
+	if (EMPATHY_CONTACT_LIST_GET_IFACE (list)->get_groups) {
+		return EMPATHY_CONTACT_LIST_GET_IFACE (list)->get_groups (list, contact);
 	}
 
 	return NULL;
 }
 
 void
-empathy_contact_list_process_pending (EmpathyContactList *list,
-				      EmpathyContact      *contact,
-				      gboolean            accept)
+empathy_contact_list_add_to_group (EmpathyContactList *list,
+				   EmpathyContact     *contact,
+				   const gchar        *group)
 {
 	g_return_if_fail (EMPATHY_IS_CONTACT_LIST (list));
+	g_return_if_fail (EMPATHY_IS_CONTACT (contact));
+	g_return_if_fail (group != NULL);
 
-	if (EMPATHY_CONTACT_LIST_GET_IFACE (list)->process_pending) {
-		EMPATHY_CONTACT_LIST_GET_IFACE (list)->process_pending (list,
-									contact,
-									accept);
+	if (EMPATHY_CONTACT_LIST_GET_IFACE (list)->add_to_group) {
+		EMPATHY_CONTACT_LIST_GET_IFACE (list)->add_to_group (list, contact, group);
+	}
+}
+
+void
+empathy_contact_list_remove_from_group (EmpathyContactList *list,
+					EmpathyContact     *contact,
+					const gchar        *group)
+{
+	g_return_if_fail (EMPATHY_IS_CONTACT_LIST (list));
+	g_return_if_fail (EMPATHY_IS_CONTACT (contact));
+	g_return_if_fail (group != NULL);
+
+	if (EMPATHY_CONTACT_LIST_GET_IFACE (list)->remove_from_group) {
+		EMPATHY_CONTACT_LIST_GET_IFACE (list)->remove_from_group (list, contact, group);
+	}
+}
+
+void
+empathy_contact_list_rename_group (EmpathyContactList *list,
+				   const gchar        *old_group,
+				   const gchar        *new_group)
+{
+	g_return_if_fail (EMPATHY_IS_CONTACT_LIST (list));
+	g_return_if_fail (old_group != NULL);
+	g_return_if_fail (new_group != NULL);
+
+	if (EMPATHY_CONTACT_LIST_GET_IFACE (list)->rename_group) {
+		EMPATHY_CONTACT_LIST_GET_IFACE (list)->rename_group (list, old_group, new_group);
 	}
 }
 

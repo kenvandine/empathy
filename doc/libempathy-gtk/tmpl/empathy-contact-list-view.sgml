@@ -39,23 +39,6 @@ EmpathyContactListView
 @arg2: 
 @arg3: 
 
-<!-- ##### ARG EmpathyContactListView:filter ##### -->
-<para>
-
-</para>
-
-<!-- ##### USER_FUNCTION EmpathyContactListViewDragReceivedFunc ##### -->
-<para>
-
-</para>
-
-@contact: 
-@action: 
-@old_group: 
-@new_group: 
-@user_data: 
-
-
 <!-- ##### FUNCTION empathy_contact_list_view_new ##### -->
 <para>
 
@@ -100,24 +83,5 @@ EmpathyContactListView
 
 @view: 
 @Returns: 
-
-
-<!-- ##### FUNCTION empathy_contact_list_view_set_filter ##### -->
-<para>
-
-</para>
-
-@view: 
-@filter: 
-
-
-<!-- ##### FUNCTION empathy_contact_list_view_set_drag_received_func ##### -->
-<para>
-
-</para>
-
-@view: 
-@func: 
-@user_data: 
 
 
