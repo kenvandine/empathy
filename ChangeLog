@@ -39,8 +39,11 @@
 	* libempathy/empathy-marshal.list:
 	* libempathy/empathy-tp-group.h:
 	* libempathy/Makefile.am:
-	* configure.ac: Completely reworked ContactList API. Fixes bug #471611,
-	bug #467280, bug #459540 and bug #462907.
+	* configure.ac: Completely reworked ContactList API. Fixes bugs
+	#471611,
+	#467280,
+	#459540,
+	#462907.
 
 	* doc/*: Updated.
 
