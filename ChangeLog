@@ -1,5 +1,10 @@
 2007-08-30  Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy/empathy-contact-factory.c: Don't use deprecated
+	RequestAvatar method.
+
+2007-08-30  Xavier Claessens  <xclaesse@gmail.com>
+
 	* python/pyempathy/pyempathy.defs:
 	* python/pyempathy/pyempathy.override:
 	* python/pyempathygtk/pyempathygtk.defs: Updated for new API.

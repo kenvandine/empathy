@@ -68,11 +68,6 @@ typedef struct {
 	guint                     *handles;
 } RequestAliasesData;
 
-typedef struct {
-	ContactFactoryAccountData *account_data;
-	EmpathyContact            *contact;
-} RequestAvatarData;
-
 static void empathy_contact_factory_class_init (EmpathyContactFactoryClass *klass);
 static void empathy_contact_factory_init       (EmpathyContactFactory      *factory);
 
@@ -336,61 +331,23 @@ contact_factory_request_avatars_cb (DBusGProxy *proxy,
 }
 
 static void
-contact_factory_request_avatar_cb (DBusGProxy *proxy,
-				   GArray     *avatar_data,
-				   gchar      *mime_type,
-				   GError     *error,
-				   gpointer    user_data)
-{
-	RequestAvatarData *data = user_data;
-	EmpathyAvatar     *avatar;
-
-	if (error) {
-		empathy_debug (DEBUG_DOMAIN, "Error requesting avatar: %s",
-			       error->message);
-		goto OUT;
-	}
-
-	empathy_debug (DEBUG_DOMAIN, "Avatar received for %s (%d)",
-		       empathy_contact_get_id (data->contact),
-		       empathy_contact_get_handle (data->contact));
-
-	avatar = empathy_avatar_new (avatar_data->data,
-				     avatar_data->len,
-				     mime_type);
-	empathy_contact_set_avatar (data->contact, avatar);
-	empathy_avatar_unref (avatar);
-
-OUT:
-	g_object_unref (data->contact);
-	contact_factory_account_data_return_call (data->account_data);
-	g_slice_free (RequestAvatarData, data);
-}
-
-static void
 contact_factory_avatar_updated_cb (DBusGProxy *proxy,
 				   guint       handle,
 				   gchar      *new_token,
 				   gpointer    user_data)
 {
 	ContactFactoryAccountData *account_data = user_data;
-	RequestAvatarData         *data;
-	EmpathyContact            *contact;
+	GArray                    *handles;
 
-	contact = contact_factory_account_data_find_by_handle (account_data,
-							       handle);
-	if (!contact) {
-		return;
-	}
+	handles = g_array_sized_new (FALSE, FALSE, sizeof (guint), 1);
+	g_array_insert_val (handles, 0, handle);
 
 	account_data->nb_pending_calls++;
-	data = g_slice_new0 (RequestAvatarData);
-	data->account_data = account_data;
-	data->contact = g_object_ref (contact);
-	tp_conn_iface_avatars_request_avatar_async (account_data->avatars_iface,
-						    handle,
-						    contact_factory_request_avatar_cb,
-						    data);
+	tp_conn_iface_avatars_request_avatars_async (account_data->avatars_iface,
+						     handles,
+						     contact_factory_request_avatars_cb,
+						     account_data);
+	g_array_free (handles, TRUE);
 }
 
 static void
