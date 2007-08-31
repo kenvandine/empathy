@@ -34,6 +34,14 @@ empathy-avatar
 @format: 
 @refcount: 
 
+<!-- ##### FUNCTION empathy_avatar_get_type ##### -->
+<para>
+
+</para>
+
+@Returns: 
+
+
 <!-- ##### FUNCTION empathy_avatar_new ##### -->
 <para>
 

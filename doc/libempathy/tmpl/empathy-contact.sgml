@@ -87,60 +87,6 @@ EmpathyContact
 @Returns: 
 
 
-<!-- ##### FUNCTION empathy_contact_get_name ##### -->
-<para>
-
-</para>
-
-@contact: 
-@Returns: 
-
-
-<!-- ##### FUNCTION empathy_contact_get_avatar ##### -->
-<para>
-
-</para>
-
-@contact: 
-@Returns: 
-
-
-<!-- ##### FUNCTION empathy_contact_get_account ##### -->
-<para>
-
-</para>
-
-@contact: 
-@Returns: 
-
-
-<!-- ##### FUNCTION empathy_contact_get_presence ##### -->
-<para>
-
-</para>
-
-@contact: 
-@Returns: 
-
-
-<!-- ##### FUNCTION empathy_contact_get_handle ##### -->
-<para>
-
-</para>
-
-@contact: 
-@Returns: 
-
-
-<!-- ##### FUNCTION empathy_contact_is_user ##### -->
-<para>
-
-</para>
-
-@contact: 
-@Returns: 
-
-
 <!-- ##### FUNCTION empathy_contact_set_id ##### -->
 <para>
 
@@ -148,6 +94,15 @@ EmpathyContact
 
 @contact: 
 @id: 
+
+
+<!-- ##### FUNCTION empathy_contact_get_name ##### -->
+<para>
+
+</para>
+
+@contact: 
+@Returns: 
 
 
 <!-- ##### FUNCTION empathy_contact_set_name ##### -->
@@ -159,6 +114,15 @@ EmpathyContact
 @name: 
 
 
+<!-- ##### FUNCTION empathy_contact_get_avatar ##### -->
+<para>
+
+</para>
+
+@contact: 
+@Returns: 
+
+
 <!-- ##### FUNCTION empathy_contact_set_avatar ##### -->
 <para>
 
@@ -166,6 +130,15 @@ EmpathyContact
 
 @contact: 
 @avatar: 
+
+
+<!-- ##### FUNCTION empathy_contact_get_account ##### -->
+<para>
+
+</para>
+
+@contact: 
+@Returns: 
 
 
 <!-- ##### FUNCTION empathy_contact_set_account ##### -->
@@ -177,6 +150,15 @@ EmpathyContact
 @account: 
 
 
+<!-- ##### FUNCTION empathy_contact_get_presence ##### -->
+<para>
+
+</para>
+
+@contact: 
+@Returns: 
+
+
 <!-- ##### FUNCTION empathy_contact_set_presence ##### -->
 <para>
 
@@ -186,6 +168,15 @@ EmpathyContact
 @presence: 
 
 
+<!-- ##### FUNCTION empathy_contact_get_handle ##### -->
+<para>
+
+</para>
+
+@contact: 
+@Returns: 
+
+
 <!-- ##### FUNCTION empathy_contact_set_handle ##### -->
 <para>
 
@@ -193,6 +184,15 @@ EmpathyContact
 
 @contact: 
 @handle: 
+
+
+<!-- ##### FUNCTION empathy_contact_is_user ##### -->
+<para>
+
+</para>
+
+@contact: 
+@Returns: 
 
 
 <!-- ##### FUNCTION empathy_contact_set_is_user ##### -->

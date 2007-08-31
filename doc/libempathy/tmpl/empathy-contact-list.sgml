@@ -102,3 +102,61 @@ empathy-contact-list
 @Returns: 
 
 
+<!-- ##### FUNCTION empathy_contact_list_get_pendings ##### -->
+<para>
+
+</para>
+
+@list: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_contact_list_get_all_groups ##### -->
+<para>
+
+</para>
+
+@list: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_contact_list_get_groups ##### -->
+<para>
+
+</para>
+
+@list: 
+@contact: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_contact_list_add_to_group ##### -->
+<para>
+
+</para>
+
+@list: 
+@contact: 
+@group: 
+
+
+<!-- ##### FUNCTION empathy_contact_list_remove_from_group ##### -->
+<para>
+
+</para>
+
+@list: 
+@contact: 
+@group: 
+
+
+<!-- ##### FUNCTION empathy_contact_list_rename_group ##### -->
+<para>
+
+</para>
+
+@list: 
+@old_group: 
+@new_group: 
+
+

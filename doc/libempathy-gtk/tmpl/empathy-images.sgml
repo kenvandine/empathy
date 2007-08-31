@@ -59,6 +59,13 @@ empathy-images
 
 
 
+<!-- ##### MACRO EMPATHY_IMAGE_UNKNOWN ##### -->
+<para>
+
+</para>
+
+
+
 <!-- ##### MACRO EMPATHY_IMAGE_MESSAGE ##### -->
 <para>
 

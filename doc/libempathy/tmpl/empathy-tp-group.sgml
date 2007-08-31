@@ -80,6 +80,16 @@ EmpathyTpGroup
 @arg3: 
 @arg4: 
 
+<!-- ##### STRUCT EmpathyPendingInfo ##### -->
+<para>
+
+</para>
+
+@member: 
+@actor: 
+@message: 
+@reason: 
+
 <!-- ##### FUNCTION empathy_tp_group_new ##### -->
 <para>
 
@@ -88,6 +98,14 @@ EmpathyTpGroup
 @account: 
 @tp_chan: 
 @Returns: 
+
+
+<!-- ##### FUNCTION empathy_tp_group_close ##### -->
+<para>
+
+</para>
+
+@group: 
 
 
 <!-- ##### FUNCTION empathy_tp_group_add_members ##### -->
@@ -139,7 +157,34 @@ EmpathyTpGroup
 @Returns: 
 
 
+<!-- ##### FUNCTION empathy_tp_group_get_local_pendings ##### -->
+<para>
+
+</para>
+
+@group: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_tp_group_get_remote_pendings ##### -->
+<para>
+
+</para>
+
+@group: 
+@Returns: 
+
+
 <!-- ##### FUNCTION empathy_tp_group_get_name ##### -->
+<para>
+
+</para>
+
+@group: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_tp_group_get_self_contact ##### -->
 <para>
 
 </para>
@@ -165,5 +210,24 @@ EmpathyTpGroup
 @group: 
 @contact: 
 @Returns: 
+
+
+<!-- ##### FUNCTION empathy_pending_info_new ##### -->
+<para>
+
+</para>
+
+@member: 
+@actor: 
+@message: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_pending_info_free ##### -->
+<para>
+
+</para>
+
+@info: 
 
 

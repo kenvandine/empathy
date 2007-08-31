@@ -1,3 +1,16 @@
+2007-08-31  Xavier Claessens  <xclaesse@gmail.com>
+
+	* doc/libempathy-gtk/Makefile.am:
+	* doc/libempathy-gtk/tmpl/empathy-preferences.sgml:
+	* doc/libempathy-gtk/tmpl/empathy-images.sgml:
+	* doc/libempathy/libempathy.types:
+	* doc/libempathy/libempathy-docs.sgml:
+	* doc/libempathy/Makefile.am:
+	* doc/libempathy/tmpl/empathy-tp-group.sgml:
+	* doc/libempathy/tmpl/empathy-avatar.sgml:
+	* doc/libempathy/tmpl/empathy-contact.sgml:
+	* doc/libempathy/tmpl/empathy-contact-list.sgml: Updated.
+
 2007-08-30  Xavier Claessens  <xclaesse@gmail.com>
 
 	* libempathy/empathy-contact-factory.c: Don't use deprecated
