@@ -1387,6 +1387,15 @@ static void
 contact_list_view_voip_activated (EmpathyContactListView *view,
 				  EmpathyContact         *contact)
 {
-	/* FIXME: Not implemented */
+	MissionControl *mc;
+
+	mc = empathy_mission_control_new ();
+	mission_control_request_channel (mc,
+					 empathy_contact_get_account (contact),
+					 TP_IFACE_CHANNEL_TYPE_STREAMED_MEDIA,
+					 empathy_contact_get_handle (contact),
+					 TP_HANDLE_TYPE_CONTACT,
+					 NULL, NULL);
+	g_object_unref (mc);
 }
 

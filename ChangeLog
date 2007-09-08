@@ -1,5 +1,11 @@
 2007-09-08  Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/empathy-contact-list-view.c:
+	* libempathy-gtk/empathy-chat-window.c: Request media channel when
+	clicking on call icon.
+
+2007-09-08  Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/empathy-images.h:
 	* libempathy-gtk/empathy-chat.glade:
 	* libempathy-gtk/empathy-cell-renderer-activatable.c:
