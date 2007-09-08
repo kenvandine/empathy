@@ -19,6 +19,7 @@
 	* libempathy-gtk/empathy-chat-window.c:
 	* libempathy-gtk/empathy-chat-view.c: More dynamic smiley managment and
 	more efficient algorithm to detect smileys in messages.
+	Fixes bug #474167.
 
 	* doc/: Updated
 
