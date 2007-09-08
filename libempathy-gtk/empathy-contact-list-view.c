@@ -47,6 +47,7 @@
 #include "empathy-contact-groups.h"
 #include "empathy-cell-renderer-expander.h"
 #include "empathy-cell-renderer-text.h"
+#include "empathy-cell-renderer-activatable.h"
 #include "empathy-ui-utils.h"
 #include "empathy-contact-dialogs.h"
 //#include "empathy-chat-invite.h"
@@ -133,7 +134,12 @@ static void        contact_list_view_pixbuf_cell_data_func     (GtkTreeViewColum
 								GtkCellRenderer            *cell,
 								GtkTreeModel               *model,
 								GtkTreeIter                *iter,
-								EmpathyContactListView      *view);
+								EmpathyContactListView     *view);
+static void        contact_list_view_voip_cell_data_func       (GtkTreeViewColumn          *tree_column,
+								GtkCellRenderer            *cell,
+								GtkTreeModel               *model,
+								GtkTreeIter                *iter,
+								EmpathyContactListView     *view);
 static void        contact_list_view_avatar_cell_data_func     (GtkTreeViewColumn          *tree_column,
 								GtkCellRenderer            *cell,
 								GtkTreeModel               *model,
@@ -151,7 +157,8 @@ static void        contact_list_view_expander_cell_data_func   (GtkTreeViewColum
 								EmpathyContactListView      *view);
 static GtkWidget * contact_list_view_get_contact_menu          (EmpathyContactListView      *view,
 								gboolean                    can_send_file,
-								gboolean                    can_show_log);
+								gboolean                    can_show_log,
+								gboolean                    can_voip);
 static gboolean    contact_list_view_button_press_event_cb     (EmpathyContactListView      *view,
 								GdkEventButton             *event,
 								gpointer                    user_data);
@@ -159,6 +166,9 @@ static void        contact_list_view_row_activated_cb          (EmpathyContactLi
 								GtkTreePath                *path,
 								GtkTreeViewColumn          *col,
 								gpointer                    user_data);
+static void        contact_list_view_voip_activated_cb         (EmpathyCellRendererActivatable *cell,
+								const gchar                *path_string,
+								EmpathyContactListView     *view);
 static void        contact_list_view_row_expand_or_collapse_cb (EmpathyContactListView      *view,
 								GtkTreeIter                *iter,
 								GtkTreePath                *path,
@@ -166,6 +176,8 @@ static void        contact_list_view_row_expand_or_collapse_cb (EmpathyContactLi
 static void        contact_list_view_action_cb                 (GtkAction                  *action,
 								EmpathyContactListView      *view);
 static void        contact_list_view_action_activated          (EmpathyContactListView      *view,
+								EmpathyContact              *contact);
+static void        contact_list_view_voip_activated            (EmpathyContactListView      *view,
 								EmpathyContact              *contact);
 
 enum {
@@ -213,6 +225,10 @@ static const GtkActionEntry entries[] = {
 	  N_("_View Previous Conversations"), NULL, N_("View previous conversations with this contact"),
 	  G_CALLBACK (contact_list_view_action_cb)
 	},
+	{ "Call", EMPATHY_IMAGE_VOIP,
+	  N_("_Call"), NULL, N_("Start a voice or video conversation with this contact"),
+	  G_CALLBACK (contact_list_view_action_cb)
+	},
 };
 
 static guint n_entries = G_N_ELEMENTS (entries);
@@ -221,6 +237,7 @@ static const gchar *ui_info =
 	"<ui>"
 	"  <popup name='Contact'>"
 	"    <menuitem action='Chat'/>"
+	"    <menuitem action='Call'/>"
 	"    <menuitem action='Log'/>"
 	"    <menuitem action='SendFile'/>"
 	"    <separator/>"
@@ -487,11 +504,12 @@ empathy_contact_list_view_get_group_menu (EmpathyContactListView *view)
 
 GtkWidget *
 empathy_contact_list_view_get_contact_menu (EmpathyContactListView *view,
-					   EmpathyContact         *contact)
+					    EmpathyContact         *contact)
 {
 	EmpathyLogManager *log_manager;
 	gboolean           can_show_log;
 	gboolean           can_send_file;
+	gboolean           can_voip;
 
 	g_return_val_if_fail (EMPATHY_IS_CONTACT_LIST_VIEW (view), NULL);
 	g_return_val_if_fail (EMPATHY_IS_CONTACT (contact), NULL);
@@ -501,12 +519,14 @@ empathy_contact_list_view_get_contact_menu (EmpathyContactListView *view,
 						   empathy_contact_get_account (contact),
 						   empathy_contact_get_id (contact),
 						   FALSE);
-	can_send_file = FALSE;
 	g_object_unref (log_manager);
+	can_send_file = FALSE;
+	can_voip = empathy_contact_can_voip (contact);
 
 	return contact_list_view_get_contact_menu (view,
 						   can_send_file,
-						   can_show_log);
+						   can_show_log,
+						   can_voip);
 }
 
 static void
@@ -566,6 +586,22 @@ contact_list_view_setup (EmpathyContactListView *view)
 					    "status", COL_STATUS);
 	gtk_tree_view_column_add_attribute (col, cell,
 					    "is_group", COL_IS_GROUP);
+
+	/* Voip Capability Icon */
+	cell = empathy_cell_renderer_activatable_new ();
+	gtk_tree_view_column_pack_start (col, cell, FALSE);
+	gtk_tree_view_column_set_cell_data_func (
+		col, cell,
+		(GtkTreeCellDataFunc) contact_list_view_voip_cell_data_func,
+		view, NULL);
+
+	g_object_set (cell,
+		      "visible", FALSE,
+		      NULL);
+
+	g_signal_connect (cell, "path-activated",
+			  G_CALLBACK (contact_list_view_voip_activated_cb),
+			  view);
 
 	/* Avatar */
 	cell = gtk_cell_renderer_pixbuf_new ();
@@ -1002,6 +1038,31 @@ contact_list_view_pixbuf_cell_data_func (GtkTreeViewColumn     *tree_column,
 }
 
 static void
+contact_list_view_voip_cell_data_func (GtkTreeViewColumn      *tree_column,
+				       GtkCellRenderer        *cell,
+				       GtkTreeModel           *model,
+				       GtkTreeIter            *iter,
+				       EmpathyContactListView *view)
+{
+	gboolean is_group;
+	gboolean is_active;
+	gboolean can_voip;
+
+	gtk_tree_model_get (model, iter,
+			    COL_IS_GROUP, &is_group,
+			    COL_IS_ACTIVE, &is_active,
+			    COL_CAN_VOIP, &can_voip,
+			    -1);
+
+	g_object_set (cell,
+		      "visible", !is_group && can_voip,
+		      "icon-name", EMPATHY_IMAGE_VOIP,
+		      NULL);
+
+	contact_list_view_cell_set_background (view, cell, is_group, is_active);
+}
+
+static void
 contact_list_view_avatar_cell_data_func (GtkTreeViewColumn     *tree_column,
 					 GtkCellRenderer       *cell,
 					 GtkTreeModel          *model,
@@ -1093,7 +1154,8 @@ contact_list_view_expander_cell_data_func (GtkTreeViewColumn     *column,
 static GtkWidget *
 contact_list_view_get_contact_menu (EmpathyContactListView *view,
 				    gboolean               can_send_file,
-				    gboolean               can_show_log)
+				    gboolean               can_show_log,
+				    gboolean               can_voip)
 {
 	EmpathyContactListViewPriv *priv;
 	GtkAction                 *action;
@@ -1104,6 +1166,9 @@ contact_list_view_get_contact_menu (EmpathyContactListView *view,
 	/* Sort out sensitive items */
 	action = gtk_ui_manager_get_action (priv->ui, "/Contact/Log");
 	gtk_action_set_sensitive (action, can_show_log);
+
+	action = gtk_ui_manager_get_action (priv->ui, "/Contact/Call");
+	gtk_action_set_sensitive (action, can_voip);
 
 	action = gtk_ui_manager_get_action (priv->ui, "/Contact/SendFile");
 	gtk_action_set_visible (action, can_send_file);
@@ -1196,6 +1261,29 @@ contact_list_view_row_activated_cb (EmpathyContactListView *view,
 }
 
 static void
+contact_list_view_voip_activated_cb (EmpathyCellRendererActivatable *cell,
+				     const gchar                    *path_string,
+				     EmpathyContactListView         *view)
+{
+	GtkTreeModel   *model;
+	GtkTreeIter     iter;
+	EmpathyContact *contact;
+
+	model = gtk_tree_view_get_model (GTK_TREE_VIEW (view));
+	if (!gtk_tree_model_get_iter_from_string (model, &iter, path_string)) {
+		return;
+	}
+
+	gtk_tree_model_get (model, &iter, COL_CONTACT, &contact, -1);
+
+	if (contact) {
+		contact_list_view_voip_activated (view, contact);
+		g_object_unref (contact);
+	}
+}
+
+
+static void
 contact_list_view_row_expand_or_collapse_cb (EmpathyContactListView *view,
 					     GtkTreeIter           *iter,
 					     GtkTreePath           *path,
@@ -1242,6 +1330,9 @@ contact_list_view_action_cb (GtkAction             *action,
 
 	if (contact && strcmp (name, "Chat") == 0) {
 		contact_list_view_action_activated (view, contact);
+	}
+	else if (contact && strcmp (name, "Call") == 0) {
+		contact_list_view_voip_activated (view, contact);
 	}
 	else if (contact && strcmp (name, "Information") == 0) {
 		empathy_contact_information_dialog_show (contact, parent, FALSE);
@@ -1290,5 +1381,12 @@ contact_list_view_action_activated (EmpathyContactListView *view,
 					 TP_HANDLE_TYPE_CONTACT,
 					 NULL, NULL);
 	g_object_unref (mc);
+}
+
+static void
+contact_list_view_voip_activated (EmpathyContactListView *view,
+				  EmpathyContact         *contact)
+{
+	/* FIXME: Not implemented */
 }
 

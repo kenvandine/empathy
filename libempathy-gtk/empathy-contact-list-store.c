@@ -613,17 +613,18 @@ static void
 contact_list_store_setup (EmpathyContactListStore *store)
 {
 	EmpathyContactListStorePriv *priv;
-	GType                       types[] = {G_TYPE_STRING,       /* Status icon-name */
-					       GDK_TYPE_PIXBUF,     /* Avatar pixbuf */
-					       G_TYPE_BOOLEAN,      /* Avatar pixbuf visible */
-					       G_TYPE_STRING,       /* Name */
-					       G_TYPE_STRING,       /* Status string */
-					       G_TYPE_BOOLEAN,      /* Show status */
+	GType                       types[] = {G_TYPE_STRING,        /* Status icon-name */
+					       GDK_TYPE_PIXBUF,      /* Avatar pixbuf */
+					       G_TYPE_BOOLEAN,       /* Avatar pixbuf visible */
+					       G_TYPE_STRING,        /* Name */
+					       G_TYPE_STRING,        /* Status string */
+					       G_TYPE_BOOLEAN,       /* Show status */
 					       EMPATHY_TYPE_CONTACT, /* Contact type */
-					       G_TYPE_BOOLEAN,      /* Is group */
-					       G_TYPE_BOOLEAN,      /* Is active */
-					       G_TYPE_BOOLEAN,      /* Is online */
-					       G_TYPE_BOOLEAN};     /* Is separator */
+					       G_TYPE_BOOLEAN,       /* Is group */
+					       G_TYPE_BOOLEAN,       /* Is active */
+					       G_TYPE_BOOLEAN,       /* Is online */
+					       G_TYPE_BOOLEAN,       /* Is separator */
+					       G_TYPE_BOOLEAN};      /* Can VoIP */
 	
 	priv = GET_PRIV (store);
 
@@ -685,7 +686,7 @@ contact_list_store_members_changed_cb (EmpathyContactList      *list_iface,
 		g_signal_connect (contact, "notify::avatar",
 				  G_CALLBACK (contact_list_store_contact_updated_cb),
 				  store);
-		g_signal_connect (contact, "notify::type",
+		g_signal_connect (contact, "notify::capabilities",
 				  G_CALLBACK (contact_list_store_contact_updated_cb),
 				  store);
 
@@ -750,6 +751,7 @@ contact_list_store_add_contact (EmpathyContactListStore *store,
 				    COL_CONTACT, contact,
 				    COL_IS_GROUP, FALSE,
 				    COL_IS_SEPARATOR, FALSE,
+				    COL_CAN_VOIP, empathy_contact_can_voip (contact),
 				    -1);
 	}
 
@@ -766,6 +768,7 @@ contact_list_store_add_contact (EmpathyContactListStore *store,
 				    COL_CONTACT, contact,
 				    COL_IS_GROUP, FALSE,
 				    COL_IS_SEPARATOR, FALSE,
+				    COL_CAN_VOIP, empathy_contact_can_voip (contact),
 				    -1);
 		g_free (l->data);
 	}
@@ -934,6 +937,7 @@ contact_list_store_contact_update (EmpathyContactListStore *store,
 				    COL_IS_GROUP, FALSE,
 				    COL_IS_ONLINE, now_online,
 				    COL_IS_SEPARATOR, FALSE,
+				    COL_CAN_VOIP, empathy_contact_can_voip (contact),
 				    -1);
 	}
 

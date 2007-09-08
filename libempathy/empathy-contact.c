@@ -625,6 +625,19 @@ empathy_contact_get_status (EmpathyContact *contact)
 }
 
 gboolean
+empathy_contact_can_voip (EmpathyContact *contact)
+{
+	EmpathyContactPriv *priv;
+
+	g_return_val_if_fail (EMPATHY_IS_CONTACT (contact), FALSE);
+
+	priv = GET_PRIV (contact);
+
+	return priv->capabilities & (EMPATHY_CAPABILITIES_AUDIO |
+				     EMPATHY_CAPABILITIES_VIDEO);
+}
+
+gboolean
 empathy_contact_equal (gconstpointer v1,
 		      gconstpointer v2)
 {

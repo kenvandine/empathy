@@ -25,6 +25,7 @@ libempathy_gtk_la_SOURCES =             	\
 	empathy-profile-chooser.c		\
 	empathy-cell-renderer-expander.c	\
 	empathy-cell-renderer-text.c		\
+	empathy-cell-renderer-activatable.c	\
 	empathy-spell.c				\
 	empathy-spell-dialog.c			\
 	empathy-contact-groups.c		\
@@ -73,6 +74,7 @@ libempathy_gtk_headers =			\
 	empathy-profile-chooser.h		\
 	empathy-cell-renderer-expander.h	\
 	empathy-cell-renderer-text.h		\
+	empathy-cell-renderer-activatable.h	\
 	empathy-spell.h				\
 	empathy-spell-dialog.h			\
 	empathy-contact-groups.h		\

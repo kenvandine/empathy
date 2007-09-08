@@ -67,6 +67,7 @@ enum {
 	COL_IS_ACTIVE,
 	COL_IS_ONLINE,
 	COL_IS_SEPARATOR,
+	COL_CAN_VOIP,
 	COL_COUNT
 } EmpathyContactListStoreCol;
 

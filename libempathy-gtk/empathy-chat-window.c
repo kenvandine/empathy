@@ -83,6 +83,8 @@ struct _EmpathyChatWindowPriv {
 	/* Menu items. */
 	GtkWidget             *menu_conv_clear;
 	GtkWidget             *menu_conv_insert_smiley;
+	GtkWidget             *menu_conv_call;
+	GtkWidget             *menu_conv_call_separator;
 	GtkWidget             *menu_conv_log;
 	GtkWidget             *menu_conv_separator;
 	GtkWidget             *menu_conv_add_contact;
@@ -137,6 +139,8 @@ static void       chat_window_clear_activate_cb         (GtkWidget             *
 static void       chat_window_info_activate_cb          (GtkWidget             *menuitem,
 							 EmpathyChatWindow      *window);
 static void       chat_window_add_contact_activate_cb   (GtkWidget             *menuitem,
+							 EmpathyChatWindow      *window);
+static void       chat_window_call_activate_cb          (GtkWidget             *menuitem,
 							 EmpathyChatWindow      *window);
 static void       chat_window_log_activate_cb           (GtkWidget             *menuitem,
 							 EmpathyChatWindow      *window);
@@ -287,6 +291,8 @@ empathy_chat_window_init (EmpathyChatWindow *window)
 				       "menu_conv", &menu_conv,
 				       "menu_conv_clear", &priv->menu_conv_clear,
 				       "menu_conv_insert_smiley", &priv->menu_conv_insert_smiley,
+				       "menu_conv_call", &priv->menu_conv_call,
+				       "menu_conv_call_separator", &priv->menu_conv_call_separator,
 				       "menu_conv_log", &priv->menu_conv_log,
 				       "menu_conv_separator", &priv->menu_conv_separator,
 				       "menu_conv_add_contact", &priv->menu_conv_add_contact,
@@ -313,6 +319,7 @@ empathy_chat_window_init (EmpathyChatWindow *window)
 			      "chat_window", "configure-event", chat_window_configure_event_cb,
 			      "menu_conv", "activate", chat_window_conv_activate_cb,
 			      "menu_conv_clear", "activate", chat_window_clear_activate_cb,
+			      "menu_conv_call", "activate", chat_window_call_activate_cb,
 			      "menu_conv_log", "activate", chat_window_log_activate_cb,
 			      "menu_conv_add_contact", "activate", chat_window_add_contact_activate_cb,
 			      "menu_conv_info", "activate", chat_window_info_activate_cb,
@@ -900,6 +907,24 @@ chat_window_add_contact_activate_cb (GtkWidget        *menuitem,
 }
 
 static void
+chat_window_call_activate_cb (GtkWidget         *menuitem,
+			      EmpathyChatWindow *window)
+{
+	EmpathyChatWindowPriv *priv;
+
+	priv = GET_PRIV (window);
+
+	if (!empathy_chat_is_group_chat (priv->current_chat)) {
+		EmpathyPrivateChat *chat;
+		EmpathyContact     *contact;
+
+		chat = EMPATHY_PRIVATE_CHAT (priv->current_chat);
+		contact = empathy_private_chat_get_contact (chat);
+		/* FIXME: Start VoIP */
+	}
+}
+
+static void
 chat_window_log_activate_cb (GtkWidget        *menuitem,
 			     EmpathyChatWindow *window)
 {
@@ -974,12 +999,13 @@ chat_window_configure_event_cb (GtkWidget         *widget,
 }
 
 static void
-chat_window_conv_activate_cb (GtkWidget        *menuitem,
+chat_window_conv_activate_cb (GtkWidget         *menuitem,
 			      EmpathyChatWindow *window)
 {
 	EmpathyChatWindowPriv *priv;
-	EmpathyLogManager    *manager;
+	EmpathyLogManager     *manager;
 	gboolean              log_exists = FALSE;
+	gboolean              can_voip = FALSE;
 
 	priv = GET_PRIV (window);
 
@@ -990,7 +1016,18 @@ chat_window_conv_activate_cb (GtkWidget        *menuitem,
 						 empathy_chat_is_group_chat (priv->current_chat));
 	g_object_unref (manager);
 
+	if (!empathy_chat_is_group_chat (priv->current_chat)) {
+		EmpathyPrivateChat *chat;
+		EmpathyContact     *contact;
+
+		chat = EMPATHY_PRIVATE_CHAT (priv->current_chat);
+		contact = empathy_private_chat_get_contact (chat);
+		can_voip = empathy_contact_can_voip (contact);
+	}
+
 	gtk_widget_set_sensitive (priv->menu_conv_log, log_exists);
+	g_object_set (priv->menu_conv_call, "visible", can_voip, NULL);
+	g_object_set (priv->menu_conv_call_separator, "visible", can_voip, NULL);
 }
 
 static void

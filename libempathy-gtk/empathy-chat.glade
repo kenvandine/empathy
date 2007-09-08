@@ -115,7 +115,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image235">
+			<widget class="GtkImage" id="image262">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-clear</property>
 			  <property name="icon_size">1</property>
@@ -137,7 +137,33 @@
 		  </child>
 
 		  <child>
-		    <widget class="GtkSeparatorMenuItem" id="separator11">
+		    <widget class="GtkSeparatorMenuItem" id="separator13">
+		      <property name="visible">True</property>
+		    </widget>
+		  </child>
+
+		  <child>
+		    <widget class="GtkImageMenuItem" id="menu_conv_call">
+		      <property name="visible">True</property>
+		      <property name="label" translatable="yes">Ca_ll</property>
+		      <property name="use_underline">True</property>
+
+		      <child internal-child="image">
+			<widget class="GtkImage" id="menu_conv_call_image">
+			  <property name="visible">True</property>
+			  <property name="icon_name">gnome-stock-mic</property>
+			  <property name="icon_size">1</property>
+			  <property name="xalign">0.5</property>
+			  <property name="yalign">0.5</property>
+			  <property name="xpad">0</property>
+			  <property name="ypad">0</property>
+			</widget>
+		      </child>
+		    </widget>
+		  </child>
+
+		  <child>
+		    <widget class="GtkSeparatorMenuItem" id="menu_conv_call_separator">
 		      <property name="visible">True</property>
 		    </widget>
 		  </child>
@@ -150,7 +176,7 @@
 		      <accelerator key="F3" modifiers="0" signal="activate"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image236">
+			<widget class="GtkImage" id="image263">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-justify-left</property>
 			  <property name="icon_size">1</property>
@@ -175,7 +201,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image237">
+			<widget class="GtkImage" id="image264">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-add</property>
 			  <property name="icon_size">1</property>
@@ -195,7 +221,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image238">
+			<widget class="GtkImage" id="image265">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-info</property>
 			  <property name="icon_size">1</property>
@@ -222,7 +248,7 @@
 		      <accelerator key="W" modifiers="GDK_CONTROL_MASK" signal="activate"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image239">
+			<widget class="GtkImage" id="image266">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-close</property>
 			  <property name="icon_size">1</property>
@@ -268,7 +294,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image240">
+			<widget class="GtkImage" id="image267">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-new</property>
 			  <property name="icon_size">1</property>
@@ -302,7 +328,7 @@
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image241">
+			<widget class="GtkImage" id="image268">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-add</property>
 			  <property name="icon_size">1</property>
@@ -352,7 +378,7 @@
 		      <accelerator key="X" modifiers="GDK_CONTROL_MASK" signal="activate"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image242">
+			<widget class="GtkImage" id="image269">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-cut</property>
 			  <property name="icon_size">1</property>
@@ -373,7 +399,7 @@
 		      <accelerator key="C" modifiers="GDK_CONTROL_MASK" signal="activate"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image243">
+			<widget class="GtkImage" id="image270">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-copy</property>
 			  <property name="icon_size">1</property>
@@ -394,7 +420,7 @@
 		      <accelerator key="V" modifiers="GDK_CONTROL_MASK" signal="activate"/>
 
 		      <child internal-child="image">
-			<widget class="GtkImage" id="image244">
+			<widget class="GtkImage" id="image271">
 			  <property name="visible">True</property>
 			  <property name="stock">gtk-paste</property>
 			  <property name="icon_size">1</property>

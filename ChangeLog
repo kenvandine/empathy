@@ -1,5 +1,19 @@
 2007-09-08  Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/empathy-images.h:
+	* libempathy-gtk/empathy-chat.glade:
+	* libempathy-gtk/empathy-contact-list-view.c:
+	* libempathy-gtk/empathy-contact-list-store.c:
+	* libempathy-gtk/empathy-contact-list-store.h:
+	* libempathy-gtk/Makefile.am:
+	* libempathy-gtk/empathy-chat-window.c:
+	* libempathy/empathy-contact.c:
+	* libempathy/empathy-contact.h: Adding UI to start a VoIP call. It does
+	nothing yet. Most of the code is ported from Gossip patch
+	(Raphael Slinckx, Xavier Claessens).
+
+2007-09-08  Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy/empathy-contact.c:
 	* libempathy/empathy-contact.h:
 	* libempathy/empathy-contact-factory.c: Adding capabilities contact
