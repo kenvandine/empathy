@@ -12,6 +12,7 @@
 #include <libempathy-gtk/empathy-private-chat.h>
 #include <libempathy-gtk/ephy-spinner.h>
 #include <libempathy-gtk/empathy-cell-renderer-expander.h>
+#include <libempathy-gtk/empathy-smiley-manager.h>
 
 empathy_cell_renderer_text_get_type
 empathy_account_chooser_get_type
@@ -26,4 +27,4 @@ empathy_group_chat_get_type
 empathy_private_chat_get_type
 ephy_spinner_get_type
 empathy_cell_renderer_expander_get_type
-
+empathy_smiley_manager_get_type

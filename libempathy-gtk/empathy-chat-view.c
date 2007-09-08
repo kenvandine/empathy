@@ -50,6 +50,7 @@
 #include "empathy-preferences.h"
 #include "empathy-theme-manager.h"
 #include "empathy-ui-utils.h"
+#include "empathy-smiley-manager.h"
 
 #define DEBUG_DOMAIN "ChatView"
 
@@ -72,6 +73,8 @@ typedef enum {
 } BlockType;
 
 struct _EmpathyChatViewPriv {
+	EmpathySmileyManager *smiley_manager;
+
 	GtkTextBuffer *buffer;
 
 	gboolean       irc_style;
@@ -95,102 +98,6 @@ struct _EmpathyChatViewPriv {
 
 	guint          notify_system_fonts_id;
 	guint          notify_show_avatars_id;
-};
-
-typedef struct {
-	EmpathySmiley  smiley;
-	const gchar  *pattern;
-} EmpathySmileyPattern;
-
-static const EmpathySmileyPattern smileys[] = {
-	/* Forward smileys. */
-	{ EMPATHY_SMILEY_NORMAL,       ":)"  },
-	{ EMPATHY_SMILEY_WINK,         ";)"  },
-	{ EMPATHY_SMILEY_WINK,         ";-)" },
-	{ EMPATHY_SMILEY_BIGEYE,       "=)"  },
-	{ EMPATHY_SMILEY_NOSE,         ":-)" },
-	{ EMPATHY_SMILEY_CRY,          ":'(" },
-	{ EMPATHY_SMILEY_SAD,          ":("  },
-	{ EMPATHY_SMILEY_SAD,          ":-(" },
-	{ EMPATHY_SMILEY_SCEPTICAL,    ":/"  },
-	{ EMPATHY_SMILEY_SCEPTICAL,    ":\\" },
-	{ EMPATHY_SMILEY_BIGSMILE,     ":D"  },
-	{ EMPATHY_SMILEY_BIGSMILE,     ":-D" },
-	{ EMPATHY_SMILEY_INDIFFERENT,  ":|"  },
-	{ EMPATHY_SMILEY_TOUNGE,       ":p"  },
-	{ EMPATHY_SMILEY_TOUNGE,       ":-p" },
-	{ EMPATHY_SMILEY_TOUNGE,       ":P"  },
-	{ EMPATHY_SMILEY_TOUNGE,       ":-P" },
-	{ EMPATHY_SMILEY_TOUNGE,       ";p"  },
-	{ EMPATHY_SMILEY_TOUNGE,       ";-p" },
-	{ EMPATHY_SMILEY_TOUNGE,       ";P"  },
-	{ EMPATHY_SMILEY_TOUNGE,       ";-P" },
-	{ EMPATHY_SMILEY_SHOCKED,      ":o"  },
-	{ EMPATHY_SMILEY_SHOCKED,      ":-o" },
-	{ EMPATHY_SMILEY_SHOCKED,      ":O"  },
-	{ EMPATHY_SMILEY_SHOCKED,      ":-O" },
-	{ EMPATHY_SMILEY_COOL,         "8)"  },
-	{ EMPATHY_SMILEY_COOL,         "B)"  },
-	{ EMPATHY_SMILEY_SORRY,        "*|"  },
-	{ EMPATHY_SMILEY_KISS,         ":*"  },
-	{ EMPATHY_SMILEY_SHUTUP,       ":#"  },
-	{ EMPATHY_SMILEY_SHUTUP,       ":-#" },
-	{ EMPATHY_SMILEY_YAWN,         "|O"  },
-	{ EMPATHY_SMILEY_CONFUSED,     ":S"  },
-	{ EMPATHY_SMILEY_CONFUSED,     ":s"  },
-	{ EMPATHY_SMILEY_ANGEL,        "<)"  },
-	{ EMPATHY_SMILEY_OOOH,         ":x"  },
-	{ EMPATHY_SMILEY_LOOKAWAY,     "*)"  },
-	{ EMPATHY_SMILEY_LOOKAWAY,     "*-)" },
-	{ EMPATHY_SMILEY_BLUSH,        "*S"  },
-	{ EMPATHY_SMILEY_BLUSH,        "*s"  },
-	{ EMPATHY_SMILEY_BLUSH,        "*$"  },
-	{ EMPATHY_SMILEY_COOLBIGSMILE, "8D"  },
-	{ EMPATHY_SMILEY_ANGRY,        ":@"  },
-	{ EMPATHY_SMILEY_BOSS,         "@)"  },
-	{ EMPATHY_SMILEY_MONKEY,       "#)"  },
-	{ EMPATHY_SMILEY_SILLY,        "O)"  },
-	{ EMPATHY_SMILEY_SICK,         "+o(" },
-
-	/* Backward smileys. */
-	{ EMPATHY_SMILEY_NORMAL,       "(:"  },
-	{ EMPATHY_SMILEY_WINK,         "(;"  },
-	{ EMPATHY_SMILEY_WINK,         "(-;" },
-	{ EMPATHY_SMILEY_BIGEYE,       "(="  },
-	{ EMPATHY_SMILEY_NOSE,         "(-:" },
-	{ EMPATHY_SMILEY_CRY,          ")':" },
-	{ EMPATHY_SMILEY_SAD,          "):"  },
-	{ EMPATHY_SMILEY_SAD,          ")-:" },
-	{ EMPATHY_SMILEY_SCEPTICAL,    "/:"  },
-	{ EMPATHY_SMILEY_SCEPTICAL,    "//:" },
-	{ EMPATHY_SMILEY_INDIFFERENT,  "|:"  },
-	{ EMPATHY_SMILEY_TOUNGE,       "d:"  },
-	{ EMPATHY_SMILEY_TOUNGE,       "d-:" },
-	{ EMPATHY_SMILEY_TOUNGE,       "d;"  },
-	{ EMPATHY_SMILEY_TOUNGE,       "d-;" },
-	{ EMPATHY_SMILEY_SHOCKED,      "o:"  },
-	{ EMPATHY_SMILEY_SHOCKED,      "O:"  },
-	{ EMPATHY_SMILEY_COOL,         "(8"  },
-	{ EMPATHY_SMILEY_COOL,         "(B"  },
-	{ EMPATHY_SMILEY_SORRY,        "|*"  },
-	{ EMPATHY_SMILEY_KISS,         "*:"  },
-	{ EMPATHY_SMILEY_SHUTUP,       "#:"  },
-	{ EMPATHY_SMILEY_SHUTUP,       "#-:" },
-	{ EMPATHY_SMILEY_YAWN,         "O|"  },
-	{ EMPATHY_SMILEY_CONFUSED,     "S:"  },
-	{ EMPATHY_SMILEY_CONFUSED,     "s:"  },
-	{ EMPATHY_SMILEY_ANGEL,        "(>"  },
-	{ EMPATHY_SMILEY_OOOH,         "x:"  },
-	{ EMPATHY_SMILEY_LOOKAWAY,     "(*"  },
-	{ EMPATHY_SMILEY_LOOKAWAY,     "(-*" },
-	{ EMPATHY_SMILEY_BLUSH,        "S*"  },
-	{ EMPATHY_SMILEY_BLUSH,        "s*"  },
-	{ EMPATHY_SMILEY_BLUSH,        "$*"  },
-	{ EMPATHY_SMILEY_ANGRY,        "@:"  },
-	{ EMPATHY_SMILEY_BOSS,         "(@"  },
-	{ EMPATHY_SMILEY_MONKEY,       "#)"  },
-	{ EMPATHY_SMILEY_SILLY,        "(O"  },
-	{ EMPATHY_SMILEY_SICK,         ")o+" }
 };
 
 static void     empathy_chat_view_class_init          (EmpathyChatViewClass      *klass);
@@ -228,7 +135,7 @@ static void     chat_view_copy_address_cb            (GtkMenuItem              *
 						      const gchar              *url);
 static void     chat_view_clear_view_cb              (GtkMenuItem              *menuitem,
 						      EmpathyChatView           *view);
-static void     chat_view_insert_text_with_emoticons (GtkTextBuffer            *buf,
+static void     chat_view_insert_text_with_emoticons (EmpathyChatView          *view,
 						      GtkTextIter              *iter,
 						      const gchar              *str);
 static gboolean chat_view_is_scrolled_down           (EmpathyChatView           *view);
@@ -278,6 +185,7 @@ empathy_chat_view_init (EmpathyChatView *view)
 
 	priv = GET_PRIV (view);
 
+	priv->smiley_manager = empathy_smiley_manager_new ();
 	priv->buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
 
 	priv->last_block_type = BLOCK_TYPE_NONE;
@@ -344,6 +252,9 @@ chat_view_finalize (GObject *object)
 	empathy_conf_notify_remove (empathy_conf_get (), priv->notify_system_fonts_id);
 	empathy_conf_notify_remove (empathy_conf_get (), priv->notify_show_avatars_id);
 
+	if (priv->smiley_manager) {
+		g_object_unref (priv->smiley_manager);
+	}
 	if (priv->last_contact) {
 		g_object_unref (priv->last_contact);
 	}
@@ -682,16 +593,14 @@ chat_view_clear_view_cb (GtkMenuItem *menuitem, EmpathyChatView *view)
 }
 
 static void
-chat_view_insert_text_with_emoticons (GtkTextBuffer *buf,
-				      GtkTextIter   *iter,
-				      const gchar   *str)
+chat_view_insert_text_with_emoticons (EmpathyChatView *view,
+				      GtkTextIter     *iter,
+				      const gchar     *str)
 {
-	const gchar *p;
-	gunichar     c, prev_c;
-	gint         i;
-	gint         match;
-	gint         submatch;
-	gboolean     use_smileys = FALSE;
+	EmpathyChatViewPriv *priv = GET_PRIV (view);
+	GtkTextBuffer       *buf = priv->buffer;
+	gboolean             use_smileys = FALSE;
+	GSList              *smileys, *l;
 
 	empathy_conf_get_bool (empathy_conf_get (),
 			       EMPATHY_PREFS_CHAT_SHOW_SMILEYS,
@@ -702,76 +611,19 @@ chat_view_insert_text_with_emoticons (GtkTextBuffer *buf,
 		return;
 	}
 
-	while (*str) {
-		gint         smileys_index[G_N_ELEMENTS (smileys)];
-		GdkPixbuf   *pixbuf;
-		gint         len;
-		const gchar *start;
+	smileys = empathy_smiley_manager_parse (priv->smiley_manager, str);
+	for (l = smileys; l; l = l->next) {
+		EmpathySmiley *smiley;
 
-		memset (smileys_index, 0, sizeof (smileys_index));
-
-		match = -1;
-		submatch = -1;
-		p = str;
-		prev_c = 0;
-
-		while (*p) {
-			c = g_utf8_get_char (p);
-
-			if (match != -1 && g_unichar_isspace (c)) {
-				break;
-			} else {
-				match = -1;
-			}
-
-			if (submatch != -1 || prev_c == 0 || g_unichar_isspace (prev_c)) {
-				submatch = -1;
-
-				for (i = 0; i < G_N_ELEMENTS (smileys); i++) {
-					/* Only try to match if we already have
-					 * a beginning match for the pattern, or
-					 * if it's the first character in the
-					 * pattern, if it's not in the middle of
-					 * a word.
-					 */
-					if (((smileys_index[i] == 0 && (prev_c == 0 || g_unichar_isspace (prev_c))) ||
-					     smileys_index[i] > 0) &&
-					    smileys[i].pattern[smileys_index[i]] == c) {
-						submatch = i;
-
-						smileys_index[i]++;
-						if (!smileys[i].pattern[smileys_index[i]]) {
-							match = i;
-						}
-					} else {
-						smileys_index[i] = 0;
-					}
-				}
-			}
-
-			prev_c = c;
-			p = g_utf8_next_char (p);
+		smiley = l->data;
+		if (smiley->pixbuf) {
+			gtk_text_buffer_insert_pixbuf (buf, iter, smiley->pixbuf);
+		} else {
+			gtk_text_buffer_insert (buf, iter, smiley->str, -1);
 		}
-
-		if (match == -1) {
-			gtk_text_buffer_insert (buf, iter, str, -1);
-			return;
-		}
-
-		start = p - strlen (smileys[match].pattern);
-
-		if (start > str) {
-			len = start - str;
-			gtk_text_buffer_insert (buf, iter, str, len);
-		}
-
-		pixbuf = empathy_chat_view_get_smiley_image (smileys[match].smiley);
-		gtk_text_buffer_insert_pixbuf (buf, iter, pixbuf);
-
-		gtk_text_buffer_insert (buf, iter, " ", 1);
-
-		str = g_utf8_find_next_char (p, NULL);
+		empathy_smiley_free (smiley);
 	}
+	g_slist_free (smileys);
 }
 
 static gboolean
@@ -991,7 +843,7 @@ chat_view_append_text (EmpathyChatView *view,
 
 	if (num_matches == 0) {
 		gtk_text_buffer_get_end_iter (priv->buffer, &iter);
-		chat_view_insert_text_with_emoticons (priv->buffer, &iter, body);
+		chat_view_insert_text_with_emoticons (view, &iter, body);
 	} else {
 		gint   last = 0;
 		gint   s = 0, e = 0;
@@ -1005,7 +857,7 @@ chat_view_append_text (EmpathyChatView *view,
 				tmp = empathy_substring (body, last, s);
 
 				gtk_text_buffer_get_end_iter (priv->buffer, &iter);
-				chat_view_insert_text_with_emoticons (priv->buffer,
+				chat_view_insert_text_with_emoticons (view,
 								      &iter,
 								      tmp);
 				g_free (tmp);
@@ -1031,7 +883,7 @@ chat_view_append_text (EmpathyChatView *view,
 			tmp = empathy_substring (body, e, strlen (body));
 
 			gtk_text_buffer_get_end_iter (priv->buffer, &iter);
-			chat_view_insert_text_with_emoticons (priv->buffer,
+			chat_view_insert_text_with_emoticons (view,
 							      &iter,
 							      tmp);
 			g_free (tmp);
@@ -2104,67 +1956,30 @@ empathy_chat_view_set_margin (EmpathyChatView *view,
 		      NULL);
 }
 
-GdkPixbuf *
-empathy_chat_view_get_smiley_image (EmpathySmiley smiley)
-{
-	static GdkPixbuf *pixbufs[EMPATHY_SMILEY_COUNT];
-	static gboolean   inited = FALSE;
-
-	if (!inited) {
-		gint i;
-
-		for (i = 0; i < EMPATHY_SMILEY_COUNT; i++) {
-			pixbufs[i] = empathy_pixbuf_from_smiley (i, GTK_ICON_SIZE_MENU);
-		}
-
-		inited = TRUE;
-	}
-
-	return pixbufs[smiley];
-}
-
-const gchar *
-empathy_chat_view_get_smiley_text (EmpathySmiley smiley)
-{
-	gint i;
-
-	for (i = 0; i < G_N_ELEMENTS (smileys); i++) {
-		if (smileys[i].smiley != smiley) {
-			continue;
-		}
-
-		return smileys[i].pattern;
-	}
-
-	return NULL;
-}
-
 GtkWidget *
 empathy_chat_view_get_smiley_menu (GCallback    callback,
-				  gpointer     user_data,
-				  GtkTooltips *tooltips)
+				   gpointer     user_data,
+				   GtkTooltips *tooltips)
 {
-	GtkWidget *menu;
-	gint       x;
-	gint       y;
-	gint       i;
+	EmpathySmileyManager *smiley_manager;
+	GSList               *smileys, *l;
+	GtkWidget            *menu;
+	gint                  x = 0;
+	gint                  y = 0;
 
 	g_return_val_if_fail (callback != NULL, NULL);
 
 	menu = gtk_menu_new ();
 
-	for (i = 0, x = 0, y = 0; i < EMPATHY_SMILEY_COUNT; i++) {
-		GtkWidget   *item;
-		GtkWidget   *image;
-		GdkPixbuf   *pixbuf;
-		const gchar *smiley_text;
+	smiley_manager = empathy_smiley_manager_new ();
+	smileys = empathy_smiley_manager_get_all (smiley_manager);
+	for (l = smileys; l; l = l->next) {
+		EmpathySmiley *smiley;
+		GtkWidget     *item;
+		GtkWidget     *image;
 
-		pixbuf = empathy_chat_view_get_smiley_image (i);
-		if (!pixbuf) {
-			continue;
-		}
-
-		image = gtk_image_new_from_pixbuf (pixbuf);
+		smiley = l->data;
+		image = gtk_image_new_from_pixbuf (smiley->pixbuf);
 
 		item = gtk_image_menu_item_new_with_label ("");
 		gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
@@ -2172,14 +1987,12 @@ empathy_chat_view_get_smiley_menu (GCallback    callback,
 		gtk_menu_attach (GTK_MENU (menu), item,
 				 x, x + 1, y, y + 1);
 
-		smiley_text = empathy_chat_view_get_smiley_text (i);
-
 		gtk_tooltips_set_tip (tooltips,
 				      item,
-				      smiley_text,
+				      smiley->str,
 				      NULL);
 
-		g_object_set_data  (G_OBJECT (item), "smiley_text", (gpointer) smiley_text);
+		g_object_set_data  (G_OBJECT (item), "smiley_text", smiley->str);
 		g_signal_connect (item, "activate", callback, user_data);
 
 		if (x > 3) {
@@ -2189,6 +2002,7 @@ empathy_chat_view_get_smiley_menu (GCallback    callback,
 			x++;
 		}
 	}
+	g_object_unref (smiley_manager);
 
 	gtk_widget_show_all (menu);
 

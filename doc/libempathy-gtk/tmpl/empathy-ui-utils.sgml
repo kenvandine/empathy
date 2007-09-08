@@ -82,16 +82,6 @@ empathy-ui-utils
 @Returns: 
 
 
-<!-- ##### FUNCTION empathy_pixbuf_from_smiley ##### -->
-<para>
-
-</para>
-
-@type: 
-@icon_size: 
-@Returns: 
-
-
 <!-- ##### FUNCTION empathy_icon_name_from_account ##### -->
 <para>
 

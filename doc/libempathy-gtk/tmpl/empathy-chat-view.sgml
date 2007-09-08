@@ -29,40 +29,6 @@ EmpathyChatView
 </para>
 
 
-<!-- ##### ENUM EmpathySmiley ##### -->
-<para>
-
-</para>
-
-@EMPATHY_SMILEY_NORMAL: 
-@EMPATHY_SMILEY_WINK: 
-@EMPATHY_SMILEY_BIGEYE: 
-@EMPATHY_SMILEY_NOSE: 
-@EMPATHY_SMILEY_CRY: 
-@EMPATHY_SMILEY_SAD: 
-@EMPATHY_SMILEY_SCEPTICAL: 
-@EMPATHY_SMILEY_BIGSMILE: 
-@EMPATHY_SMILEY_INDIFFERENT: 
-@EMPATHY_SMILEY_TOUNGE: 
-@EMPATHY_SMILEY_SHOCKED: 
-@EMPATHY_SMILEY_COOL: 
-@EMPATHY_SMILEY_SORRY: 
-@EMPATHY_SMILEY_KISS: 
-@EMPATHY_SMILEY_SHUTUP: 
-@EMPATHY_SMILEY_YAWN: 
-@EMPATHY_SMILEY_CONFUSED: 
-@EMPATHY_SMILEY_ANGEL: 
-@EMPATHY_SMILEY_OOOH: 
-@EMPATHY_SMILEY_LOOKAWAY: 
-@EMPATHY_SMILEY_BLUSH: 
-@EMPATHY_SMILEY_COOLBIGSMILE: 
-@EMPATHY_SMILEY_ANGRY: 
-@EMPATHY_SMILEY_BOSS: 
-@EMPATHY_SMILEY_MONKEY: 
-@EMPATHY_SMILEY_SILLY: 
-@EMPATHY_SMILEY_SICK: 
-@EMPATHY_SMILEY_COUNT: 
-
 <!-- ##### FUNCTION empathy_chat_view_new ##### -->
 <para>
 
@@ -211,24 +177,6 @@ EmpathyChatView
 
 @view: 
 @irc_style: 
-
-
-<!-- ##### FUNCTION empathy_chat_view_get_smiley_image ##### -->
-<para>
-
-</para>
-
-@smiley: 
-@Returns: 
-
-
-<!-- ##### FUNCTION empathy_chat_view_get_smiley_text ##### -->
-<para>
-
-</para>
-
-@smiley: 
-@Returns: 
 
 
 <!-- ##### FUNCTION empathy_chat_view_get_smiley_menu ##### -->

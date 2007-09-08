@@ -880,7 +880,7 @@ chat_text_view_realize_cb (GtkWidget  *widget,
 }
 
 static void
-chat_insert_smiley_activate_cb (GtkWidget  *menuitem,
+chat_insert_smiley_activate_cb (GtkWidget   *menuitem,
 				EmpathyChat *chat)
 {
 	GtkTextBuffer *buffer;

@@ -1,3 +1,18 @@
+2007-09-08  Xavier Claessens  <xclaesse@gmail.com>
+
+	* libempathy-gtk/empathy-chat-view.h:
+	* libempathy-gtk/empathy-ui-utils.c:
+	* libempathy-gtk/empathy-ui-utils.h:
+	* libempathy-gtk/empathy-chat.c:
+	* libempathy-gtk/empathy-smiley-manager.c:
+	* libempathy-gtk/empathy-smiley-manager.h:
+	* libempathy-gtk/Makefile.am:
+	* libempathy-gtk/empathy-chat-window.c:
+	* libempathy-gtk/empathy-chat-view.c: More dynamic smiley managment and
+	more efficient algorithm to detect smileys in messages.
+
+	* doc/: Updated
+
 2007-08-31  Xavier Claessens  <xclaesse@gmail.com>
 
 	* doc/libempathy-gtk/Makefile.am:

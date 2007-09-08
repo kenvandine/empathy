@@ -69,8 +69,6 @@ void            empathy_glade_setup_size_group            (GladeXML            *
 /* Pixbufs */
 GdkPixbuf *     empathy_pixbuf_from_icon_name             (const gchar         *icon_name,
 							  GtkIconSize          icon_size);
-GdkPixbuf *     empathy_pixbuf_from_smiley                (EmpathySmiley         type,
-							  GtkIconSize          icon_size);
 const gchar *   empathy_icon_name_from_account            (McAccount           *account);
 const gchar *   empathy_icon_name_for_presence_state      (McPresence           state);
 const gchar *   empathy_icon_name_for_presence            (EmpathyPresence      *presence);

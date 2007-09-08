@@ -853,7 +853,7 @@ chat_window_update_menu (EmpathyChatWindow *window)
 }
 
 static void
-chat_window_insert_smiley_activate_cb (GtkWidget        *menuitem,
+chat_window_insert_smiley_activate_cb (GtkWidget         *menuitem,
 				       EmpathyChatWindow *window)
 {
 	EmpathyChatWindowPriv *priv;

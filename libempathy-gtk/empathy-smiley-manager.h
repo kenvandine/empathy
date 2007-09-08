@@ -1,0 +1,75 @@
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
+/*
+ * Copyright (C) 2007 Collabora Ltd.
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * License along with this program; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ * Boston, MA 02111-1307, USA.
+ * 
+ * Authors: Dafydd Harrie <dafydd.harries@collabora.co.uk>
+ *          Xavier Claessens <xclaesse@gmail.com>
+ */
+
+#ifndef __EMPATHY_SMILEY_MANAGER__H__
+#define __EMPATHY_SMILEY_MANAGER_H__
+
+#include <glib-object.h>
+#include <gtk/gtk.h>
+
+G_BEGIN_DECLS
+
+#define EMPATHY_TYPE_SMILEY_MANAGER         (empathy_smiley_manager_get_type ())
+#define EMPATHY_SMILEY_MANAGER(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), EMPATHY_TYPE_SMILEY_MANAGER, EmpathySmileyManager))
+#define EMPATHY_SMILEY_MANAGER_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST((k), EMPATHY_TYPE_SMILEY_MANAGER, EmpathySmileyManagerClass))
+#define EMPATHY_IS_SMILEY_MANAGER(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), EMPATHY_TYPE_SMILEY_MANAGER))
+#define EMPATHY_IS_SMILEY_MANAGER_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), EMPATHY_TYPE_SMILEY_MANAGER))
+#define EMPATHY_SMILEY_MANAGER_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), EMPATHY_TYPE_SMILEY_MANAGER, EmpathySmileyManagerClass))
+
+typedef struct _EmpathySmileyManager      EmpathySmileyManager;
+typedef struct _EmpathySmileyManagerClass EmpathySmileyManagerClass;
+typedef struct _EmpathySmileyManagerPriv  EmpathySmileyManagerPriv;
+
+struct _EmpathySmileyManager {
+	GObject parent;
+};
+
+struct _EmpathySmileyManagerClass {
+	GObjectClass parent_class;
+};
+
+typedef struct {
+	GdkPixbuf *pixbuf;
+	gchar     *str;
+} EmpathySmiley;
+
+GType                 empathy_smiley_manager_get_type        (void) G_GNUC_CONST;
+EmpathySmileyManager *empathy_smiley_manager_new             (void);
+void                  empathy_smiley_manager_load            (EmpathySmileyManager *manager);
+void                  empathy_smiley_manager_add             (EmpathySmileyManager *manager,
+							      const gchar          *icon_name,
+							      const gchar          *first_str,
+							      ...);
+void                  empathy_smiley_manager_add_from_pixbuf (EmpathySmileyManager *manager,
+							      GdkPixbuf            *smiley,
+							      const gchar          *first_str,
+							      ...);
+GSList *              empathy_smiley_manager_get_all         (EmpathySmileyManager *manager);
+GSList *              empathy_smiley_manager_parse           (EmpathySmileyManager *manager,
+							      const gchar          *text);
+void                  empathy_smiley_free                    (EmpathySmiley        *smiley);
+
+G_END_DECLS
+
+#endif /* __EMPATHY_SMILEY_MANAGER_H__ */
+

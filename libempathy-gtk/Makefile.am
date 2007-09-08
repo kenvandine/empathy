@@ -32,6 +32,7 @@ libempathy_gtk_la_SOURCES =             	\
 	empathy-contact-list-view.c		\
 	empathy-preferences.c			\
 	empathy-theme-manager.c			\
+	empathy-smiley-manager.c		\
 	empathy-chat-window.c			\
 	empathy-chat.c				\
 	empathy-chat-view.c			\
@@ -79,6 +80,7 @@ libempathy_gtk_headers =			\
 	empathy-contact-list-view.h		\
 	empathy-preferences.h			\
 	empathy-theme-manager.h			\
+	empathy-smiley-manager.h		\
 	empathy-chat-window.h			\
 	empathy-chat.h				\
 	empathy-chat-view.h			\
