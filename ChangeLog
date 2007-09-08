@@ -1,5 +1,9 @@
 2007-09-08  Xavier Claessens  <xclaesse@gmail.com>
 
+	* configure.ac: Bump libtelepathy depend to 0.0.57.
+
+2007-09-08  Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/empathy-chat-view.h:
 	* libempathy-gtk/empathy-ui-utils.c:
 	* libempathy-gtk/empathy-ui-utils.h:
