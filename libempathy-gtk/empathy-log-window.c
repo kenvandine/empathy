@@ -72,68 +72,48 @@ typedef struct {
 	EmpathyLogManager *log_manager;
 } EmpathyLogWindow;
 
-static void
-log_window_destroy_cb (GtkWidget       *widget,
-		       EmpathyLogWindow *window);
-static void
-log_window_entry_find_changed_cb (GtkWidget       *entry,
-				  EmpathyLogWindow *window);
-static void
-log_window_find_changed_cb (GtkTreeSelection *selection,
-			    EmpathyLogWindow  *window);
-static void
-log_window_find_populate (EmpathyLogWindow *window,
-			  const gchar     *search_criteria);
-static void
-log_window_find_setup (EmpathyLogWindow *window);
-static void
-log_window_button_find_clicked_cb (GtkWidget       *widget,
-				   EmpathyLogWindow *window);
-static void
-log_window_button_next_clicked_cb (GtkWidget       *widget,
-				   EmpathyLogWindow *window);
-static void
-log_window_button_previous_clicked_cb (GtkWidget       *widget,
-				       EmpathyLogWindow *window);
-static void
-log_window_chats_changed_cb (GtkTreeSelection *selection,
-			     EmpathyLogWindow  *window);
-static void
-log_window_chats_populate (EmpathyLogWindow *window);
-static void
-log_window_chats_setup (EmpathyLogWindow *window);
-static void
-log_window_chats_accounts_changed_cb (GtkWidget       *combobox,
-				      EmpathyLogWindow *window);
-static void
-log_window_chats_new_message_cb (EmpathyContact   *own_contact,
-				 EmpathyMessage   *message,
-				 EmpathyLogWindow *window);
-static void
-log_window_chats_set_selected  (EmpathyLogWindow *window,
-				McAccount       *account,
-				const gchar     *chat_id,
-				gboolean         is_chatroom);
-static gboolean
-log_window_chats_get_selected (EmpathyLogWindow  *window,
-			       McAccount       **account,
-			       gchar           **chat_id,
-			       gboolean         *is_chatroom);
-static void
-log_window_chats_get_messages (EmpathyLogWindow *window,
-			       const gchar     *date_to_show);
-static void
-log_window_calendar_chats_day_selected_cb (GtkWidget       *calendar,
-					   EmpathyLogWindow *window);
-static void
-log_window_calendar_chats_month_changed_cb (GtkWidget       *calendar,
-					    EmpathyLogWindow *window);
-static void
-log_window_entry_chats_changed_cb (GtkWidget       *entry,
-				   EmpathyLogWindow *window);
-static void
-log_window_entry_chats_activate_cb (GtkWidget       *entry,
-				    EmpathyLogWindow *window);
+static void     log_window_destroy_cb                      (GtkWidget        *widget,
+							    EmpathyLogWindow *window);
+static void     log_window_entry_find_changed_cb           (GtkWidget        *entry,
+							    EmpathyLogWindow *window);
+static void     log_window_find_changed_cb                 (GtkTreeSelection *selection,
+							    EmpathyLogWindow *window);
+static void     log_window_find_populate                   (EmpathyLogWindow *window,
+							    const gchar      *search_criteria);
+static void     log_window_find_setup                      (EmpathyLogWindow *window);
+static void     log_window_button_find_clicked_cb          (GtkWidget        *widget,
+							    EmpathyLogWindow *window);
+static void     log_window_button_next_clicked_cb          (GtkWidget        *widget,
+							    EmpathyLogWindow *window);
+static void     log_window_button_previous_clicked_cb      (GtkWidget        *widget,
+							    EmpathyLogWindow *window);
+static void     log_window_chats_changed_cb                (GtkTreeSelection *selection,
+							    EmpathyLogWindow *window);
+static void     log_window_chats_populate                  (EmpathyLogWindow *window);
+static void     log_window_chats_setup                     (EmpathyLogWindow *window);
+static void     log_window_chats_accounts_changed_cb       (GtkWidget        *combobox,
+							    EmpathyLogWindow *window);
+static void     log_window_chats_new_message_cb            (EmpathyContact   *own_contact,
+							    EmpathyMessage   *message,
+							    EmpathyLogWindow *window);
+static void     log_window_chats_set_selected              (EmpathyLogWindow *window,
+							    McAccount        *account,
+							    const gchar      *chat_id,
+							    gboolean          is_chatroom);
+static gboolean log_window_chats_get_selected              (EmpathyLogWindow *window,
+							    McAccount       **account,
+							    gchar           **chat_id,
+							    gboolean         *is_chatroom);
+static void     log_window_chats_get_messages              (EmpathyLogWindow *window,
+							    const gchar      *date_to_show);
+static void     log_window_calendar_chats_day_selected_cb  (GtkWidget        *calendar,
+							    EmpathyLogWindow *window);
+static void     log_window_calendar_chats_month_changed_cb (GtkWidget        *calendar,
+							    EmpathyLogWindow *window);
+static void     log_window_entry_chats_changed_cb          (GtkWidget        *entry,
+							    EmpathyLogWindow *window);
+static void     log_window_entry_chats_activate_cb         (GtkWidget        *entry,
+							    EmpathyLogWindow *window);
 
 enum {
 	COL_FIND_ACCOUNT_ICON,
@@ -957,9 +937,14 @@ log_window_chats_get_messages (EmpathyLogWindow *window,
 
 		gtk_calendar_select_day (GTK_CALENDAR (window->calendar_chats), day);
 	}
+
 	g_signal_handlers_unblock_by_func (window->calendar_chats,
 					   log_window_calendar_chats_day_selected_cb,
 					   window);
+
+	if (!date) {
+		goto OUT;
+	}
 
 	/* Clear all current messages shown in the textview */
 	empathy_chat_view_clear (window->chatview_chats);
@@ -982,12 +967,6 @@ log_window_chats_get_messages (EmpathyLogWindow *window,
 	}
 	g_list_free (messages);
 
-	g_list_foreach (dates, (GFunc) g_free, NULL);
-	g_list_free (dates);
-
-	g_object_unref (account);
-	g_free (chat_id);
-
 	/* Turn back on scrolling */
 	empathy_chat_view_scroll (window->chatview_find, TRUE);
 
@@ -996,6 +975,12 @@ log_window_chats_get_messages (EmpathyLogWindow *window,
 
 	/* Give the search entry main focus */
 	gtk_widget_grab_focus (window->entry_chats);
+
+OUT:
+	g_list_foreach (dates, (GFunc) g_free, NULL);
+	g_list_free (dates);
+	g_object_unref (account);
+	g_free (chat_id);
 }
 
 static void
