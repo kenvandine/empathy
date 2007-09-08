@@ -1,5 +1,12 @@
 2007-09-08  Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy/empathy-contact.c:
+	* libempathy/empathy-contact.h:
+	* libempathy/empathy-contact-factory.c: Adding capabilities contact
+	property.
+
+2007-09-08  Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/empathy-contact-list-view.c:
 	* libempathy-gtk/empathy-contact-list-store.c: Make use of the search
 	function to correctly find when typing in the contact list view.

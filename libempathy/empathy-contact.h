@@ -53,37 +53,45 @@ struct _EmpathyContactClass {
 	GObjectClass parent_class;
 };
 
-GType             empathy_contact_get_type     (void) G_GNUC_CONST;
-EmpathyContact *  empathy_contact_new          (McAccount       *account);
-EmpathyContact *  empathy_contact_new_full     (McAccount       *account,
-						const gchar     *id,
-						const gchar     *name);
-const gchar *     empathy_contact_get_id       (EmpathyContact  *contact);
-void              empathy_contact_set_id       (EmpathyContact  *contact,
-						const gchar     *id);
-const gchar *     empathy_contact_get_name     (EmpathyContact  *contact);
-void              empathy_contact_set_name     (EmpathyContact  *contact,
-						const gchar     *name);
-EmpathyAvatar *   empathy_contact_get_avatar   (EmpathyContact  *contact);
-void              empathy_contact_set_avatar   (EmpathyContact  *contact,
-						EmpathyAvatar   *avatar);
-McAccount *       empathy_contact_get_account  (EmpathyContact  *contact);
-void              empathy_contact_set_account  (EmpathyContact  *contact,
-						McAccount       *account);
-EmpathyPresence * empathy_contact_get_presence (EmpathyContact  *contact);
-void              empathy_contact_set_presence (EmpathyContact  *contact,
-						EmpathyPresence *presence);
-guint             empathy_contact_get_handle   (EmpathyContact  *contact);
-void              empathy_contact_set_handle   (EmpathyContact  *contact,
-						guint            handle);
-gboolean          empathy_contact_is_user      (EmpathyContact  *contact);
-void              empathy_contact_set_is_user  (EmpathyContact  *contact,
-						gboolean         is_user);
-gboolean          empathy_contact_is_online    (EmpathyContact  *contact);
-const gchar *     empathy_contact_get_status   (EmpathyContact  *contact);
-gboolean          empathy_contact_equal        (gconstpointer    v1,
-						gconstpointer    v2);
-guint             empathy_contact_hash         (gconstpointer    key);
+typedef enum {
+	EMPATHY_CAPABILITIES_AUDIO = 1 << 0,
+	EMPATHY_CAPABILITIES_VIDEO = 1 << 1,
+} EmpathyCapabilities;
+
+GType               empathy_contact_get_type           (void) G_GNUC_CONST;
+EmpathyContact *    empathy_contact_new                (McAccount           *account);
+EmpathyContact *    empathy_contact_new_full           (McAccount           *account,
+							const gchar         *id,
+							const gchar         *name);
+const gchar *       empathy_contact_get_id             (EmpathyContact      *contact);
+void                empathy_contact_set_id             (EmpathyContact      *contact,
+							const gchar         *id);
+const gchar *       empathy_contact_get_name           (EmpathyContact      *contact);
+void                empathy_contact_set_name           (EmpathyContact      *contact,
+							const gchar         *name);
+EmpathyAvatar *     empathy_contact_get_avatar         (EmpathyContact      *contact);
+void                empathy_contact_set_avatar         (EmpathyContact      *contact,
+							EmpathyAvatar       *avatar);
+McAccount *         empathy_contact_get_account        (EmpathyContact      *contact);
+void                empathy_contact_set_account        (EmpathyContact      *contact,
+							McAccount           *account);
+EmpathyPresence *   empathy_contact_get_presence       (EmpathyContact      *contact);
+void                empathy_contact_set_presence       (EmpathyContact      *contact,
+							EmpathyPresence     *presence);
+guint               empathy_contact_get_handle         (EmpathyContact      *contact);
+void                empathy_contact_set_handle         (EmpathyContact      *contact,
+							guint                handle);
+EmpathyCapabilities empathy_contact_get_capabilities   (EmpathyContact      *contact);
+void                empathy_contact_set_capabilities   (EmpathyContact      *contact,
+							EmpathyCapabilities  capabilities);
+gboolean            empathy_contact_is_user            (EmpathyContact      *contact);
+void                empathy_contact_set_is_user        (EmpathyContact      *contact,
+							gboolean             is_user);
+gboolean            empathy_contact_is_online          (EmpathyContact      *contact);
+const gchar *       empathy_contact_get_status         (EmpathyContact      *contact);
+gboolean            empathy_contact_equal              (gconstpointer        v1,
+							gconstpointer        v2);
+guint               empathy_contact_hash               (gconstpointer        key);
 
 G_END_DECLS
 

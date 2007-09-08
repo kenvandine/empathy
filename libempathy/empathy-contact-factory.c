@@ -28,6 +28,7 @@
 #include <libtelepathy/tp-conn-iface-aliasing-gen.h>
 #include <libtelepathy/tp-conn-iface-presence-gen.h>
 #include <libtelepathy/tp-conn-iface-avatars-gen.h>
+#include <libtelepathy/tp-conn-iface-capabilities-gen.h>
 #include <libmissioncontrol/mission-control.h>
 
 #include "empathy-contact-factory.h"
@@ -53,6 +54,7 @@ typedef struct {
 	DBusGProxy            *aliasing_iface;
 	DBusGProxy            *avatars_iface;
 	DBusGProxy            *presence_iface;
+	DBusGProxy            *capabilities_iface;
 
 	GList                 *contacts;
 	guint                  self_handle;
@@ -376,6 +378,112 @@ contact_factory_avatar_retrieved_cb (DBusGProxy *proxy,
 }
 
 static void
+contact_factory_update_capabilities (ContactFactoryAccountData *account_data,
+				     guint                      handle,
+				     const gchar               *channel_type,
+				     guint                      generic,
+				     guint                      specific)
+{
+	EmpathyContact      *contact;
+	EmpathyCapabilities  capabilities;
+
+	contact = contact_factory_account_data_find_by_handle (account_data,
+							       handle);
+	if (!contact) {
+		return;
+	}
+
+	capabilities = empathy_contact_get_capabilities (contact);
+
+	if (strcmp (channel_type, TP_IFACE_CHANNEL_TYPE_STREAMED_MEDIA) == 0) {
+		capabilities &= !(EMPATHY_CAPABILITIES_AUDIO);
+		capabilities &= !(EMPATHY_CAPABILITIES_VIDEO);
+		if (specific & TP_CHANNEL_MEDIA_CAPABILITY_AUDIO) {
+			capabilities |= EMPATHY_CAPABILITIES_AUDIO;
+		}
+		if (specific & TP_CHANNEL_MEDIA_CAPABILITY_VIDEO) {
+			capabilities |= EMPATHY_CAPABILITIES_VIDEO;
+		}
+	}
+
+	empathy_debug (DEBUG_DOMAIN, "Changing capabilities for contact %s (%d) to %d",
+		       empathy_contact_get_id (contact),
+		       empathy_contact_get_handle (contact),
+		       capabilities);
+
+	empathy_contact_set_capabilities (contact, capabilities);
+}
+
+static void
+contact_factory_get_capabilities_cb (DBusGProxy *proxy,
+				     GPtrArray  *capabilities,
+				     GError     *error,
+				     gpointer    user_data)
+{
+	ContactFactoryAccountData *account_data = user_data;
+	guint                      i;
+
+	if (error) {
+		empathy_debug (DEBUG_DOMAIN, "Error getting capabilities: %s",
+			       error->message);
+		goto OUT;
+	}
+
+	for (i = 0; i < capabilities->len; i++)	{
+		GValueArray *values;
+		guint        handle;
+		const gchar *channel_type;
+		guint        generic;
+		guint        specific;
+
+		values = g_ptr_array_index (capabilities, i);
+		handle = g_value_get_uint (g_value_array_get_nth (values, 0));
+		channel_type = g_value_get_string (g_value_array_get_nth (values, 1));
+		generic = g_value_get_uint (g_value_array_get_nth (values, 2));
+		specific = g_value_get_uint (g_value_array_get_nth (values, 3));
+
+		contact_factory_update_capabilities (account_data,
+						     handle,
+						     channel_type,
+						     generic,
+						     specific);
+	}
+
+
+OUT:
+	contact_factory_account_data_return_call (account_data);
+}
+
+static void
+contact_factory_capabilities_changed_cb (DBusGProxy *proxy,
+					 GPtrArray  *capabilities,
+					 gpointer    user_data)
+{
+	ContactFactoryAccountData *account_data = user_data;
+	guint                      i;
+
+	for (i = 0; i < capabilities->len; i++)	{
+		GValueArray *values;
+		guint        handle;
+		const gchar *channel_type;
+		guint        generic;
+		guint        specific;
+
+		values = g_ptr_array_index (capabilities, i);
+		handle = g_value_get_uint (g_value_array_get_nth (values, 0));
+		channel_type = g_value_get_string (g_value_array_get_nth (values, 1));
+		generic = g_value_get_uint (g_value_array_get_nth (values, 3));
+		specific = g_value_get_uint (g_value_array_get_nth (values, 5));
+
+		contact_factory_update_capabilities (account_data,
+						     handle,
+						     channel_type,
+						     generic,
+						     specific);
+	}
+}
+
+static void
 contact_factory_request_everything (ContactFactoryAccountData *account_data,
 				    GArray                    *handles)
 {
@@ -407,6 +515,14 @@ contact_factory_request_everything (ContactFactoryAccountData *account_data,
 							     handles,
 							     contact_factory_request_avatars_cb,
 							     account_data);
+	}
+
+	if (account_data->capabilities_iface) {
+		account_data->nb_pending_calls++;
+		tp_conn_iface_capabilities_get_capabilities_async (account_data->capabilities_iface,
+								   handles,
+								   contact_factory_get_capabilities_cb,
+								   account_data);
 	}
 }
 
@@ -468,6 +584,7 @@ contact_factory_destroy_cb (TpConn                    *tp_conn,
 	account_data->aliasing_iface = NULL;
 	account_data->avatars_iface = NULL;
 	account_data->presence_iface = NULL;
+	account_data->capabilities_iface = NULL;
 
 	g_list_foreach (account_data->contacts,
 			contact_factory_disconnect_contact_foreach,
@@ -497,6 +614,12 @@ contact_factory_account_data_disconnect (ContactFactoryAccountData *account_data
 		dbus_g_proxy_disconnect_signal (account_data->presence_iface,
 						"PresenceUpdate",
 						G_CALLBACK (contact_factory_presence_update_cb),
+						account_data);
+	}
+	if (account_data->capabilities_iface) {
+		dbus_g_proxy_disconnect_signal (account_data->capabilities_iface,
+						"CapabilitiesChanged",
+						G_CALLBACK (contact_factory_capabilities_changed_cb),
 						account_data);
 	}
 	if (account_data->tp_conn) {
@@ -555,6 +678,8 @@ contact_factory_account_data_update (ContactFactoryAccountData *account_data)
 							     TELEPATHY_CONN_IFACE_AVATARS_QUARK);
 	account_data->presence_iface = tp_conn_get_interface (tp_conn,
 							      TELEPATHY_CONN_IFACE_PRESENCE_QUARK);
+	account_data->capabilities_iface = tp_conn_get_interface (tp_conn,
+							          TELEPATHY_CONN_IFACE_CAPABILITIES_QUARK);
 
 	/* Connect signals */
 	if (account_data->aliasing_iface) {
@@ -577,6 +702,12 @@ contact_factory_account_data_update (ContactFactoryAccountData *account_data)
 		dbus_g_proxy_connect_signal (account_data->presence_iface,
 					     "PresenceUpdate",
 					     G_CALLBACK (contact_factory_presence_update_cb),
+					     account_data, NULL);
+	}
+	if (account_data->capabilities_iface) {
+		dbus_g_proxy_connect_signal (account_data->capabilities_iface,
+					     "CapabilitiesChanged",
+					     G_CALLBACK (contact_factory_capabilities_changed_cb),
 					     account_data, NULL);
 	}
 	g_signal_connect (tp_conn, "destroy",
@@ -690,6 +821,7 @@ contact_factory_account_data_free (gpointer data)
 		account_data->aliasing_iface = NULL;
 		account_data->avatars_iface = NULL;
 		account_data->presence_iface = NULL;
+		account_data->capabilities_iface = NULL;
 	}
 
 	/* Keep the struct alive if we have calls in flight, it will be

@@ -47,6 +47,7 @@ struct _EmpathyContactPriv {
 	McAccount          *account;
 	EmpathyPresence    *presence;
 	guint               handle;
+	EmpathyCapabilities capabilities;
 	gboolean            is_user;
 };
 
@@ -74,6 +75,7 @@ enum {
 	PROP_GROUPS,
 	PROP_SUBSCRIPTION,
 	PROP_HANDLE,
+	PROP_CAPABILITIES,
 	PROP_IS_USER
 };
 
@@ -137,6 +139,16 @@ empathy_contact_class_init (EmpathyContactClass *class)
 							    G_MAXUINT,
 							    0,
 							    G_PARAM_READWRITE));
+
+	g_object_class_install_property (object_class,
+					 PROP_CAPABILITIES,
+					 g_param_spec_flags ("capabilities",
+							     "Contact Capabilities",
+							     "Capabilities of the contact",
+							     EMPATHY_TYPE_CAPABILITIES,
+							     0,
+							     G_PARAM_READWRITE));
+
 	g_object_class_install_property (object_class,
 					 PROP_IS_USER,
 					 g_param_spec_boolean ("is-user",
@@ -211,6 +223,9 @@ contact_get_property (GObject    *object,
 	case PROP_HANDLE:
 		g_value_set_uint (value, priv->handle);
 		break;
+	case PROP_CAPABILITIES:
+		g_value_set_flags (value, priv->capabilities);
+		break;
 	case PROP_IS_USER:
 		g_value_set_boolean (value, priv->is_user);
 		break;
@@ -254,6 +269,10 @@ contact_set_property (GObject      *object,
 	case PROP_HANDLE:
 		empathy_contact_set_handle (EMPATHY_CONTACT (object),
 					   g_value_get_uint (value));
+		break;
+	case PROP_CAPABILITIES:
+		empathy_contact_set_capabilities (EMPATHY_CONTACT (object),
+						  g_value_get_flags (value));
 		break;
 	case PROP_IS_USER:
 		empathy_contact_set_is_user (EMPATHY_CONTACT (object),
@@ -499,6 +518,37 @@ empathy_contact_set_handle (EmpathyContact *contact,
 	priv->handle = handle;
 
 	g_object_notify (G_OBJECT (contact), "handle");
+}
+
+EmpathyCapabilities
+empathy_contact_get_capabilities (EmpathyContact *contact)
+{
+	EmpathyContactPriv *priv;
+
+	g_return_val_if_fail (EMPATHY_IS_CONTACT (contact), 0);
+
+	priv = GET_PRIV (contact);
+
+	return priv->capabilities;
+}
+
+void
+empathy_contact_set_capabilities (EmpathyContact      *contact,
+				  EmpathyCapabilities  capabilities)
+{
+	EmpathyContactPriv *priv;
+
+	g_return_if_fail (EMPATHY_IS_CONTACT (contact));
+
+	priv = GET_PRIV (contact);
+
+	if (priv->capabilities == capabilities) {
+		return;
+	}
+
+	priv->capabilities = capabilities;
+
+	g_object_notify (G_OBJECT (contact), "capabilities");
 }
 
 gboolean
