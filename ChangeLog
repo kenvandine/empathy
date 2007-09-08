@@ -2,6 +2,8 @@
 
 	* libempathy-gtk/empathy-images.h:
 	* libempathy-gtk/empathy-chat.glade:
+	* libempathy-gtk/empathy-cell-renderer-activatable.c:
+	* libempathy-gtk/empathy-cell-renderer-activatable.h:
 	* libempathy-gtk/empathy-contact-list-view.c:
 	* libempathy-gtk/empathy-contact-list-store.c:
 	* libempathy-gtk/empathy-contact-list-store.h:
