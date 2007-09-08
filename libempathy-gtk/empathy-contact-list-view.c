@@ -519,6 +519,10 @@ contact_list_view_setup (EmpathyContactListView *view)
 
 	priv = GET_PRIV (view);
 
+	gtk_tree_view_set_search_equal_func (GTK_TREE_VIEW (view),
+					     empathy_contact_list_store_search_equal_func,
+					     NULL, NULL);
+
 	g_signal_connect (priv->store, "row-has-child-toggled",
 			  G_CALLBACK (contact_list_view_row_has_child_toggled_cb),
 			  view);

@@ -1,5 +1,12 @@
 2007-09-08  Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/empathy-contact-list-view.c:
+	* libempathy-gtk/empathy-contact-list-store.c: Make use of the search
+	function to correctly find when typing in the contact list view.
+	Fixes bug #472309 (Will Thompson, Xavier Claessens).
+
+2007-09-08  Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/empathy-log-window.c: Fix crash if there is no date 
 	for a conversation. Fixes bug #473510.
 

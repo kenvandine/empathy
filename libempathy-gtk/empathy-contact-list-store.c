@@ -571,10 +571,10 @@ empathy_contact_list_store_get_parent_group (GtkTreeModel *model,
 
 gboolean
 empathy_contact_list_store_search_equal_func (GtkTreeModel *model,
-					     gint          column,
-					     const gchar  *key,
-					     GtkTreeIter  *iter,
-					     gpointer      search_data)
+					      gint          column,
+					      const gchar  *key,
+					      GtkTreeIter  *iter,
+					      gpointer      search_data)
 {
 	gchar    *name, *name_folded;
 	gchar    *key_folded;
@@ -583,13 +583,13 @@ empathy_contact_list_store_search_equal_func (GtkTreeModel *model,
 	g_return_val_if_fail (GTK_IS_TREE_MODEL (model), FALSE);
 
 	if (!key) {
-		return FALSE;
+		return TRUE;
 	}
 
 	gtk_tree_model_get (model, iter, COL_NAME, &name, -1);
 
 	if (!name) {
-		return FALSE;
+		return TRUE;
 	}
 
 	name_folded = g_utf8_casefold (name, -1);
