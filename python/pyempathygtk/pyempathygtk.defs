@@ -77,6 +77,13 @@
   (gtype-id "EMPATHY_TYPE_PRIVATE_CHAT")
 )
 
+(define-object SmileyManager
+  (in-module "Empathy")
+  (parent "GObject")
+  (c-name "EmpathySmileyManager")
+  (gtype-id "EMPATHY_TYPE_SMILEY_MANAGER")
+)
+
 (define-object StatusIcon
   (in-module "Empathy")
   (parent "GObject")
@@ -99,42 +106,6 @@
 )
 
 ;; Enumerations and flags ...
-
-(define-enum Smiley
-  (in-module "Empathy")
-  (c-name "EmpathySmiley")
-  (gtype-id "EMPATHY_TYPE_SMILEY")
-  (values
-    '("normal" "EMPATHY_SMILEY_NORMAL")
-    '("wink" "EMPATHY_SMILEY_WINK")
-    '("bigeye" "EMPATHY_SMILEY_BIGEYE")
-    '("nose" "EMPATHY_SMILEY_NOSE")
-    '("cry" "EMPATHY_SMILEY_CRY")
-    '("sad" "EMPATHY_SMILEY_SAD")
-    '("sceptical" "EMPATHY_SMILEY_SCEPTICAL")
-    '("bigsmile" "EMPATHY_SMILEY_BIGSMILE")
-    '("indifferent" "EMPATHY_SMILEY_INDIFFERENT")
-    '("tounge" "EMPATHY_SMILEY_TOUNGE")
-    '("shocked" "EMPATHY_SMILEY_SHOCKED")
-    '("cool" "EMPATHY_SMILEY_COOL")
-    '("sorry" "EMPATHY_SMILEY_SORRY")
-    '("kiss" "EMPATHY_SMILEY_KISS")
-    '("shutup" "EMPATHY_SMILEY_SHUTUP")
-    '("yawn" "EMPATHY_SMILEY_YAWN")
-    '("confused" "EMPATHY_SMILEY_CONFUSED")
-    '("angel" "EMPATHY_SMILEY_ANGEL")
-    '("oooh" "EMPATHY_SMILEY_OOOH")
-    '("lookaway" "EMPATHY_SMILEY_LOOKAWAY")
-    '("blush" "EMPATHY_SMILEY_BLUSH")
-    '("coolbigsmile" "EMPATHY_SMILEY_COOLBIGSMILE")
-    '("angry" "EMPATHY_SMILEY_ANGRY")
-    '("boss" "EMPATHY_SMILEY_BOSS")
-    '("monkey" "EMPATHY_SMILEY_MONKEY")
-    '("silly" "EMPATHY_SMILEY_SILLY")
-    '("sick" "EMPATHY_SMILEY_SICK")
-    '("count" "EMPATHY_SMILEY_COUNT")
-  )
-)
 
 (define-enum ContactListStoreSort
   (in-module "Empathy")
@@ -687,22 +658,6 @@
   )
 )
 
-(define-function empathy_chat_view_get_smiley_image
-  (c-name "empathy_chat_view_get_smiley_image")
-  (return-type "GdkPixbuf*")
-  (parameters
-    '("EmpathySmiley" "smiley")
-  )
-)
-
-(define-function empathy_chat_view_get_smiley_text
-  (c-name "empathy_chat_view_get_smiley_text")
-  (return-type "const-gchar*")
-  (parameters
-    '("EmpathySmiley" "smiley")
-  )
-)
-
 (define-function empathy_chat_view_get_smiley_menu
   (c-name "empathy_chat_view_get_smiley_menu")
   (return-type "GtkWidget*")
@@ -1229,6 +1184,70 @@
 
 
 
+;; From empathy-smiley-manager.h
+
+(define-function empathy_smiley_manager_get_type
+  (c-name "empathy_smiley_manager_get_type")
+  (return-type "GType")
+)
+
+(define-function empathy_smiley_manager_new
+  (c-name "empathy_smiley_manager_new")
+  (is-constructor-of "EmpathySmileyManager")
+  (return-type "EmpathySmileyManager*")
+)
+
+(define-method load
+  (of-object "EmpathySmileyManager")
+  (c-name "empathy_smiley_manager_load")
+  (return-type "none")
+)
+
+(define-method add
+  (of-object "EmpathySmileyManager")
+  (c-name "empathy_smiley_manager_add")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "icon_name")
+    '("const-gchar*" "first_str")
+  )
+  (varargs #t)
+)
+
+(define-method add_from_pixbuf
+  (of-object "EmpathySmileyManager")
+  (c-name "empathy_smiley_manager_add_from_pixbuf")
+  (return-type "none")
+  (parameters
+    '("GdkPixbuf*" "smiley")
+    '("const-gchar*" "first_str")
+  )
+  (varargs #t)
+)
+
+(define-method get_all
+  (of-object "EmpathySmileyManager")
+  (c-name "empathy_smiley_manager_get_all")
+  (return-type "GSList*")
+)
+
+(define-method parse
+  (of-object "EmpathySmileyManager")
+  (c-name "empathy_smiley_manager_parse")
+  (return-type "GSList*")
+  (parameters
+    '("const-gchar*" "text")
+  )
+)
+
+(define-method free
+  (of-object "EmpathySmiley")
+  (c-name "empathy_smiley_free")
+  (return-type "none")
+)
+
+
+
 ;; From empathy-spell-dialog.h
 
 (define-function empathy_spell_dialog_show
@@ -1482,15 +1501,6 @@
   (return-type "GdkPixbuf*")
   (parameters
     '("const-gchar*" "icon_name")
-    '("GtkIconSize" "icon_size")
-  )
-)
-
-(define-function empathy_pixbuf_from_smiley
-  (c-name "empathy_pixbuf_from_smiley")
-  (return-type "GdkPixbuf*")
-  (parameters
-    '("EmpathySmiley" "type")
     '("GtkIconSize" "icon_size")
   )
 )

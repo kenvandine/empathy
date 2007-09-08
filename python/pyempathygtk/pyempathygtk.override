@@ -36,9 +36,9 @@ headers
 #include "empathy-theme-manager.h"
 #include "empathy-ui-utils.h"
 #include "ephy-spinner.h"
+#include "empathy-smiley-manager.h"
 
 /* FIXME */
-#define EMPATHY_TYPE_SMILEY 1
 #define EMPATHY_TYPE_CONTACT_LIST_STORE_COL 2
 #define EMPATHY_TYPE_CONTACT_LIST_STORE_SORT 3
 #define EMPATHY_TYPE_CONTACT_WIDGET_TYPE 4
