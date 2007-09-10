@@ -57,9 +57,6 @@ IDT_COMPILE_WARNINGS
 GLIB_GENMARSHAL=`$PKG_CONFIG glib-2.0 --variable=glib_genmarshal`
 AC_SUBST(GLIB_GENMARSHAL)
 
-pluginlibdir=`$PKG_CONFIG mission-control --variable=pluginlibdir`
-AC_SUBST(pluginlibdir)
-
 dnl -----------------------------------------------------------
 dnl Language Support
 dnl -----------------------------------------------------------

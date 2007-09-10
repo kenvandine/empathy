@@ -85,8 +85,6 @@ libempathy_include_HEADERS =			\
 	echo "#include \"empathy-marshal.h\"" > $@ && \
 	$(GLIB_GENMARSHAL) --body --prefix=$(subst -,_,$*)_marshal $< >> $*-marshal.c
 
-%-marshal-main.c: %-marshal.c %-marshal.h
-
 empathy-chandler-glue.h: empathy-chandler.xml
 	$(LIBTOOL) --mode=execute $(DBUS_BINDING_TOOL) --prefix=empathy_chandler --mode=glib-server --output=$@ $<
 empathy-filter-glue.h: empathy-filter.xml

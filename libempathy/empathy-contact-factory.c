@@ -204,7 +204,7 @@ contact_factory_get_presence_cb (DBusGProxy *proxy,
 	ContactFactoryAccountData *account_data = user_data;
 
 	if (error) {
-		empathy_debug (DEBUG_DOMAIN, "Error requesting aliases: %s",
+		empathy_debug (DEBUG_DOMAIN, "Error getting presence: %s",
 			      error->message);
 		goto OUT;
 	}
