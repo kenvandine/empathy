@@ -1,3 +1,13 @@
+2007-09-11  Xavier Claessens  <xclaesse@gmail.com>
+
+	* libempathy-gtk/empathy-main-window.c:
+	* libempathy-gtk/empathy-group-chat.c:
+	* libempathy-gtk/empathy-contact-list-view.c:
+	* libempathy-gtk/empathy-contact-list-view.h:
+	* doc/libempathy-gtk/tmpl/empathy-contact-list-view.sgml: "interactive"
+	property on EmpathyContactListView to enable/disable contect menu and
+	action when double-click on a contact.
+
 2007-09-10  Xavier Claessens  <xclaesse@gmail.com>
 
 	* libempathy/empathy-contact-factory.c: Fix debug message.
