@@ -69,6 +69,7 @@ struct _EmpathyContactListViewPriv {
 	EmpathyContactListStore *store;
 	GtkUIManager            *ui;
 	GtkTreeRowReference     *drag_row;
+	gboolean                 interactive;
 };
 
 typedef struct {
@@ -182,6 +183,7 @@ static void        contact_list_view_voip_activated            (EmpathyContactLi
 
 enum {
 	PROP_0,
+	PROP_INTERACTIVE
 };
 
 static const GtkActionEntry entries[] = {
@@ -313,6 +315,14 @@ empathy_contact_list_view_class_init (EmpathyContactListViewClass *klass)
 			      G_TYPE_NONE,
 			      3, EMPATHY_TYPE_CONTACT, G_TYPE_STRING, G_TYPE_STRING);
 
+	g_object_class_install_property (object_class,
+					 PROP_INTERACTIVE,
+					 g_param_spec_boolean ("interactive",
+							       "View is interactive",
+							       "Is the view interactive",
+							       FALSE,
+							       G_PARAM_READWRITE));
+
 	g_type_class_add_private (object_class, sizeof (EmpathyContactListViewPriv));
 }
 
@@ -394,6 +404,9 @@ contact_list_view_get_property (GObject    *object,
 	priv = GET_PRIV (object);
 
 	switch (param_id) {
+	case PROP_INTERACTIVE:
+		g_value_set_boolean (value, priv->interactive);
+		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
 		break;
@@ -406,11 +419,15 @@ contact_list_view_set_property (GObject      *object,
 				const GValue *value,
 				GParamSpec   *pspec)
 {
+	EmpathyContactListView     *view = EMPATHY_CONTACT_LIST_VIEW (object);
 	EmpathyContactListViewPriv *priv;
 
 	priv = GET_PRIV (object);
 
 	switch (param_id) {
+	case PROP_INTERACTIVE:
+		empathy_contact_list_view_set_interactive (view, g_value_get_boolean (value));
+		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
 		break;
@@ -430,6 +447,28 @@ empathy_contact_list_view_new (EmpathyContactListStore *store)
 	contact_list_view_setup (view);
 
 	return view;
+}
+
+void
+empathy_contact_list_view_set_interactive (EmpathyContactListView  *view,
+					   gboolean                 interactive)
+{
+	EmpathyContactListViewPriv *priv = GET_PRIV (view);
+
+	g_return_if_fail (EMPATHY_IS_CONTACT_LIST_VIEW (view));
+
+	priv->interactive = interactive;
+	g_object_notify (G_OBJECT (view), "interactive");
+}
+
+gboolean
+empathy_contact_list_view_get_interactive (EmpathyContactListView  *view)
+{
+	EmpathyContactListViewPriv *priv = GET_PRIV (view);
+
+	g_return_val_if_fail (EMPATHY_IS_CONTACT_LIST_VIEW (view), FALSE);
+
+	return priv->interactive;
 }
 
 EmpathyContact *
@@ -1192,11 +1231,11 @@ contact_list_view_button_press_event_cb (EmpathyContactListView *view,
 	gboolean                   row_exists;
 	GtkWidget                 *menu;
 
-	if (event->button != 3) {
+	priv = GET_PRIV (view);
+
+	if (!priv->interactive || event->button != 3) {
 		return FALSE;
 	}
-
-	priv = GET_PRIV (view);
 
 	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (view));
 	model = gtk_tree_view_get_model (GTK_TREE_VIEW (view));
@@ -1241,13 +1280,18 @@ contact_list_view_button_press_event_cb (EmpathyContactListView *view,
 
 static void
 contact_list_view_row_activated_cb (EmpathyContactListView *view,
-				    GtkTreePath           *path,
-				    GtkTreeViewColumn     *col,
-				    gpointer               user_data)
+				    GtkTreePath            *path,
+				    GtkTreeViewColumn      *col,
+				    gpointer                user_data)
 {
-	EmpathyContact *contact;
-	GtkTreeModel  *model;
-	GtkTreeIter    iter;
+	EmpathyContactListViewPriv *priv = GET_PRIV (view);
+	EmpathyContact             *contact;
+	GtkTreeModel               *model;
+	GtkTreeIter                 iter;
+
+	if (!priv->interactive) {
+		return;
+	}
 
 	model = gtk_tree_view_get_model (GTK_TREE_VIEW (view));
 
@@ -1265,9 +1309,14 @@ contact_list_view_voip_activated_cb (EmpathyCellRendererActivatable *cell,
 				     const gchar                    *path_string,
 				     EmpathyContactListView         *view)
 {
-	GtkTreeModel   *model;
-	GtkTreeIter     iter;
-	EmpathyContact *contact;
+	EmpathyContactListViewPriv *priv = GET_PRIV (view);
+	GtkTreeModel               *model;
+	GtkTreeIter                 iter;
+	EmpathyContact             *contact;
+
+	if (!priv->interactive) {
+		return;
+	}
 
 	model = gtk_tree_view_get_model (GTK_TREE_VIEW (view));
 	if (!gtk_tree_model_get_iter_from_string (model, &iter, path_string)) {

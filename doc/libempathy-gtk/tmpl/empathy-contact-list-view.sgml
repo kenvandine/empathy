@@ -39,6 +39,11 @@ EmpathyContactListView
 @arg2: 
 @arg3: 
 
+<!-- ##### ARG EmpathyContactListView:interactive ##### -->
+<para>
+
+</para>
+
 <!-- ##### FUNCTION empathy_contact_list_view_new ##### -->
 <para>
 

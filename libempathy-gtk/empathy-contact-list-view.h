@@ -55,6 +55,9 @@ struct _EmpathyContactListViewClass {
 
 GType                   empathy_contact_list_view_get_type           (void) G_GNUC_CONST;
 EmpathyContactListView *empathy_contact_list_view_new                (EmpathyContactListStore *store);
+void                    empathy_contact_list_view_set_interactive    (EmpathyContactListView  *view,
+								      gboolean                 interactive);
+gboolean                empathy_contact_list_view_get_interactive    (EmpathyContactListView  *view);
 EmpathyContact *        empathy_contact_list_view_get_selected       (EmpathyContactListView  *view);
 gchar *                 empathy_contact_list_view_get_selected_group (EmpathyContactListView  *view);
 GtkWidget *             empathy_contact_list_view_get_contact_menu   (EmpathyContactListView  *view,
