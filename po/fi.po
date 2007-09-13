@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gossip\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-09-01 18:32+0300\n"
+"POT-Creation-Date: 2007-09-13 11:06+0300\n"
 "PO-Revision-Date: 2006-10-17 20:50+0300\n"
 "Last-Translator: Samuli Seppänen & Henna Nykänen <sjsepp@utu.fi>\n"
 "Language-Team:  <en@li.org>\n"
@@ -124,8 +124,7 @@ msgstr "Käytä teemaa keskusteluhuoneille"
 #: ../data/empathy.schemas.in.h:24
 msgid ""
 "Whether or not the Salut account has been created on the first empathy run."
-msgstr ""
-"Onko salut-tili luotu suoritettaessa empathyä ensimmäistä kertaa."
+msgstr "Onko salut-tili luotu suoritettaessa empathyä ensimmäistä kertaa."
 
 #: ../data/empathy.schemas.in.h:25
 msgid ""
@@ -494,153 +493,157 @@ msgid "C_lear"
 msgstr "_Tyhjennä"
 
 #: ../libempathy-gtk/empathy-chat.glade.h:2
+msgid "Ca_ll"
+msgstr "_Soita"
+
+#: ../libempathy-gtk/empathy-chat.glade.h:3
 msgid "Change _Topic..."
 msgstr "Muuta _aihetta..."
 
-#: ../libempathy-gtk/empathy-chat.glade.h:3
+#: ../libempathy-gtk/empathy-chat.glade.h:4
 msgid "Chat"
 msgstr "Keskustelu"
 
-#: ../libempathy-gtk/empathy-chat.glade.h:4
+#: ../libempathy-gtk/empathy-chat.glade.h:5
 msgid "Contact Infor_mation"
 msgstr "_Yhteystiedot"
 
-#: ../libempathy-gtk/empathy-chat.glade.h:5
+#: ../libempathy-gtk/empathy-chat.glade.h:6
 msgid "Cu_t"
 msgstr "_Leikkaa"
 
-#: ../libempathy-gtk/empathy-chat.glade.h:6
+#: ../libempathy-gtk/empathy-chat.glade.h:7
 msgid "In_vite..."
 msgstr "_Kutsu..."
 
-#: ../libempathy-gtk/empathy-chat.glade.h:7
+#: ../libempathy-gtk/empathy-chat.glade.h:8
 msgid "Insert _Smiley"
 msgstr "Lisää _hymiö"
 
-#: ../libempathy-gtk/empathy-chat.glade.h:8
+#: ../libempathy-gtk/empathy-chat.glade.h:9
 msgid "Invitation _message:"
 msgstr "Kutsu_viesti:"
 
-#: ../libempathy-gtk/empathy-chat.glade.h:9
+#: ../libempathy-gtk/empathy-chat.glade.h:10
 msgid "Invite"
 msgstr "Kutsu"
 
-#: ../libempathy-gtk/empathy-chat.glade.h:10
+#: ../libempathy-gtk/empathy-chat.glade.h:11
 #: ../libempathy-gtk/empathy-main-window.glade.h:4
 msgid "Join _New..."
 msgstr "Liity _uuteen..."
 
-#: ../libempathy-gtk/empathy-chat.glade.h:11
+#: ../libempathy-gtk/empathy-chat.glade.h:12
 msgid "Move Tab _Left"
 msgstr "Siirrä välilehti _vasemmalle"
 
-#: ../libempathy-gtk/empathy-chat.glade.h:12
+#: ../libempathy-gtk/empathy-chat.glade.h:13
 msgid "Move Tab _Right"
 msgstr "Siirrä välilehti _oikealle"
 
-#: ../libempathy-gtk/empathy-chat.glade.h:13
+#: ../libempathy-gtk/empathy-chat.glade.h:14
 msgid "Select who would you like to invite:"
 msgstr "Valitse ketkä haluat kutsua:"
 
-#: ../libempathy-gtk/empathy-chat.glade.h:14
+#: ../libempathy-gtk/empathy-chat.glade.h:15
 msgid "You have been invited to join a chat conference."
 msgstr "Olet saanut kutsun ryhmäkeskusteluun."
 
-#: ../libempathy-gtk/empathy-chat.glade.h:15
+#: ../libempathy-gtk/empathy-chat.glade.h:16
 #: ../libempathy-gtk/empathy-main-window.glade.h:9
 msgid "_Add Contact..."
 msgstr "Lisää _tuttava..."
 
-#: ../libempathy-gtk/empathy-chat.glade.h:16
+#: ../libempathy-gtk/empathy-chat.glade.h:17
 msgid "_Add To Favorites"
 msgstr "Lisää _suosikkeihin"
 
-#: ../libempathy-gtk/empathy-chat.glade.h:17
+#: ../libempathy-gtk/empathy-chat.glade.h:18
 msgid "_Close"
 msgstr "_Sulje"
 
-#: ../libempathy-gtk/empathy-chat.glade.h:18
+#: ../libempathy-gtk/empathy-chat.glade.h:19
 msgid "_Conversation"
 msgstr "_Keskustelu"
 
-#: ../libempathy-gtk/empathy-chat.glade.h:19
+#: ../libempathy-gtk/empathy-chat.glade.h:20
 msgid "_Copy"
 msgstr "_Kopioi"
 
-#: ../libempathy-gtk/empathy-chat.glade.h:20
+#: ../libempathy-gtk/empathy-chat.glade.h:21
 msgid "_Detach Tab"
 msgstr "_Irrota välilehti"
 
-#: ../libempathy-gtk/empathy-chat.glade.h:21
-#: ../libempathy-gtk/empathy-contact-list-view.c:197
+#: ../libempathy-gtk/empathy-chat.glade.h:22
+#: ../libempathy-gtk/empathy-contact-list-view.c:211
 #: ../libempathy-gtk/empathy-main-window.glade.h:12
 msgid "_Edit"
 msgstr "_Muokkaa"
 
-#: ../libempathy-gtk/empathy-chat.glade.h:22
+#: ../libempathy-gtk/empathy-chat.glade.h:23
 msgid "_Next Tab"
 msgstr "_Seuraava välilehti"
 
-#: ../libempathy-gtk/empathy-chat.glade.h:23
+#: ../libempathy-gtk/empathy-chat.glade.h:24
 msgid "_Paste"
 msgstr "_Liitä"
 
-#: ../libempathy-gtk/empathy-chat.glade.h:24
+#: ../libempathy-gtk/empathy-chat.glade.h:25
 msgid "_Previous Tab"
 msgstr "_Edellinen välilehti"
 
-#: ../libempathy-gtk/empathy-chat.glade.h:25
+#: ../libempathy-gtk/empathy-chat.glade.h:26
 #: ../libempathy-gtk/empathy-main-window.glade.h:18
 msgid "_Room"
 msgstr "_Huone"
 
-#: ../libempathy-gtk/empathy-chat.glade.h:26
+#: ../libempathy-gtk/empathy-chat.glade.h:27
 msgid "_Show Contacts"
 msgstr "_Näytä tuttavat"
 
-#: ../libempathy-gtk/empathy-chat.glade.h:27
+#: ../libempathy-gtk/empathy-chat.glade.h:28
 msgid "_Tabs"
 msgstr "V_älilehdet"
 
-#: ../libempathy-gtk/empathy-chat.glade.h:28
-#: ../libempathy-gtk/empathy-contact-list-view.c:213
+#: ../libempathy-gtk/empathy-chat.glade.h:29
+#: ../libempathy-gtk/empathy-contact-list-view.c:227
 #: ../libempathy-gtk/empathy-main-window.glade.h:19
 msgid "_View Previous Conversations"
 msgstr "_Näytä edelliset keskustelut"
 
-#: ../libempathy-gtk/empathy-chat-view.c:557
+#: ../libempathy-gtk/empathy-chat-view.c:468
 msgid "_Copy Link Address"
 msgstr "_Kopioi linkin osoite"
 
-#: ../libempathy-gtk/empathy-chat-view.c:565
+#: ../libempathy-gtk/empathy-chat-view.c:476
 msgid "_Open Link"
 msgstr "_Avaa linkki"
 
-#: ../libempathy-gtk/empathy-chat-view.c:902
+#: ../libempathy-gtk/empathy-chat-view.c:754
 msgid "%A %d %B %Y"
 msgstr "%A %d. %Bta %Y"
 
-#: ../libempathy-gtk/empathy-chat-window.c:703
-#: ../libempathy-gtk/empathy-chat-window.c:733
+#: ../libempathy-gtk/empathy-chat-window.c:710
+#: ../libempathy-gtk/empathy-chat-window.c:740
 msgid "New Message"
 msgid_plural "New Messages"
 msgstr[0] "Uusi viesti"
 msgstr[1] "Uusia viestejä"
 
-#: ../libempathy-gtk/empathy-chat-window.c:709
+#: ../libempathy-gtk/empathy-chat-window.c:716
 msgid "Chat Room"
 msgstr "Keskusteluhuone"
 
-#: ../libempathy-gtk/empathy-chat-window.c:714
-#: ../libempathy-gtk/empathy-chat-window.c:737
-#: ../libempathy-gtk/empathy-log-window.c:524
+#: ../libempathy-gtk/empathy-chat-window.c:721
+#: ../libempathy-gtk/empathy-chat-window.c:744
+#: ../libempathy-gtk/empathy-log-window.c:504
 #, c-format
 msgid "Conversation"
 msgid_plural "Conversations (%d)"
 msgstr[0] "_Keskustelu"
 msgstr[1] "_Keskusteluja (%d)"
 
-#: ../libempathy-gtk/empathy-chat-window.c:1291
+#: ../libempathy-gtk/empathy-chat-window.c:1337
 msgid "Typing a message."
 msgstr "Kirjoittaa viestiä."
 
@@ -712,72 +715,80 @@ msgstr "_Päätä myöhemmin"
 msgid "Subscription Request"
 msgstr "Liittymispyyntö"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:177
+#: ../libempathy-gtk/empathy-contact-list-view.c:191
 msgid "_Contact"
 msgstr "_Tuttavat"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:181
+#: ../libempathy-gtk/empathy-contact-list-view.c:195
 msgid "_Group"
 msgstr "_Ryhmä"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:185
+#: ../libempathy-gtk/empathy-contact-list-view.c:199
 #: ../libempathy-gtk/empathy-main-window.glade.h:10
 msgid "_Chat"
 msgstr "_Keskustele"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:185
+#: ../libempathy-gtk/empathy-contact-list-view.c:199
 msgid "Chat with contact"
 msgstr "Keskustele tuttavan kanssa"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:189
+#: ../libempathy-gtk/empathy-contact-list-view.c:203
 msgid "Infor_mation"
 msgstr "_Tietoja"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:189
+#: ../libempathy-gtk/empathy-contact-list-view.c:203
 msgid "View contact information"
 msgstr "Näytä yhteystiedot"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:193
+#: ../libempathy-gtk/empathy-contact-list-view.c:207
 msgid "Re_name"
 msgstr "Nimeä _uudelleen"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:193
+#: ../libempathy-gtk/empathy-contact-list-view.c:207
 msgid "Rename"
 msgstr "Nimeä uudelleen"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:197
+#: ../libempathy-gtk/empathy-contact-list-view.c:211
 msgid "Edit the groups and name for this contact"
 msgstr "Muokkaa yhteystiedon ryhmiä ja nimeä"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:201
+#: ../libempathy-gtk/empathy-contact-list-view.c:215
 msgid "_Remove"
 msgstr "_Poista"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:201
+#: ../libempathy-gtk/empathy-contact-list-view.c:215
 msgid "Remove contact"
 msgstr "_Poista tuttavan yhteystiedot"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:205
+#: ../libempathy-gtk/empathy-contact-list-view.c:219
 msgid "_Invite to Chat Room"
 msgstr "K_utsu keskusteluhuoneeseen"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:205
+#: ../libempathy-gtk/empathy-contact-list-view.c:219
 msgid "Invite to a currently open chat room"
 msgstr "Kutsu avoinna olevaan keskusteluhuoneeseen"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:209
+#: ../libempathy-gtk/empathy-contact-list-view.c:223
 msgid "_Send File..."
 msgstr "_Lähetä tiedosto..."
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:209
+#: ../libempathy-gtk/empathy-contact-list-view.c:223
 msgid "Send a file"
 msgstr "Lähetä tiedosto"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:213
+#: ../libempathy-gtk/empathy-contact-list-view.c:227
 msgid "View previous conversations with this contact"
 msgstr "Näytä edelliset keskustelut tämän tuttavan kanssa"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1254
+#: ../libempathy-gtk/empathy-contact-list-view.c:231
+msgid "_Call"
+msgstr "_Soita"
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:231
+msgid "Start a voice or video conversation with this contact"
+msgstr "Aloita puhelu tai videoneuvottelu tämän tuttavan kanssa"
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:1398
 msgid "Sorry, I don't want you in my contact list anymore."
 msgstr "Anteeksi mutta en halua sinua enää tuttavaluettelooni."
 
@@ -786,7 +797,7 @@ msgid "Select"
 msgstr "Valitse"
 
 #: ../libempathy-gtk/empathy-contact-widget.c:647
-#: ../libempathy-gtk/empathy-main-window.c:612
+#: ../libempathy-gtk/empathy-main-window.c:613
 msgid "Group"
 msgstr "Ryhmä"
 
@@ -873,12 +884,12 @@ msgstr "%s on poistunut huoneesta"
 msgid "Topic: %s"
 msgstr "Aihe: %s"
 
-#: ../libempathy-gtk/empathy-group-chat.c:569
+#: ../libempathy-gtk/empathy-group-chat.c:570
 #, c-format
 msgid "Topic set to: %s"
 msgstr "Aihe asetettu: %s"
 
-#: ../libempathy-gtk/empathy-group-chat.c:571
+#: ../libempathy-gtk/empathy-group-chat.c:572
 msgid "No topic defined"
 msgstr "Aihetta ei ole annettu"
 
@@ -890,11 +901,11 @@ msgstr "<b>Aihe:</b>"
 msgid "Group Chat"
 msgstr "Ryhmäkeskustelu"
 
-#: ../libempathy-gtk/empathy-log-window.c:517
+#: ../libempathy-gtk/empathy-log-window.c:497
 msgid "Account"
 msgstr "Käyttäjätili"
 
-#: ../libempathy-gtk/empathy-log-window.c:534
+#: ../libempathy-gtk/empathy-log-window.c:514
 msgid "Date"
 msgstr "Päivämäärä"
 
@@ -959,7 +970,7 @@ msgstr ""
 msgid "Show and edit accounts"
 msgstr "Näytä ja muokkaa tilejä"
 
-#: ../libempathy-gtk/empathy-main-window.c:633
+#: ../libempathy-gtk/empathy-main-window.c:634
 msgid "Contact"
 msgstr "Tuttava"
 
