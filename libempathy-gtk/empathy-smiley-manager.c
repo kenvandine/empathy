@@ -108,6 +108,7 @@ empathy_smiley_free (EmpathySmiley *smiley)
 		g_object_unref (smiley->pixbuf);
 	}
 	g_free (smiley->str);
+	g_slice_free (EmpathySmiley, smiley);
 }
 
 static void
@@ -211,7 +212,7 @@ smiley_manager_add_valist (EmpathySmileyManager *manager,
 			   va_list               var_args)
 {
 	EmpathySmileyManagerPriv *priv = GET_PRIV (manager);
-	const gchar *str;
+	const gchar              *str;
 
 	for (str = first_str; str; str = va_arg (var_args, gchar*)) {
 		smiley_manager_tree_insert (priv->tree, smiley, str);
