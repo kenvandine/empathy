@@ -29,6 +29,16 @@ EmpathyIdle
 </para>
 
 
+<!-- ##### ARG EmpathyIdle:auto-away ##### -->
+<para>
+
+</para>
+
+<!-- ##### ARG EmpathyIdle:auto-disconnect ##### -->
+<para>
+
+</para>
+
 <!-- ##### ARG EmpathyIdle:flash-state ##### -->
 <para>
 

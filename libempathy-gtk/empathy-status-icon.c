@@ -157,6 +157,8 @@ empathy_status_icon_init (EmpathyStatusIcon *icon)
 
 	priv->icon = gtk_status_icon_new ();
 	priv->idle = empathy_idle_new ();
+	empathy_idle_set_auto_away (priv->idle, TRUE);
+	empathy_idle_set_auto_disconnect (priv->idle, TRUE);
 	priv->manager = empathy_contact_manager_new ();
 	priv->mc = empathy_mission_control_new ();
 	priv->text_filter = empathy_filter_new ("org.gnome.Empathy.Chat",

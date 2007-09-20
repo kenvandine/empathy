@@ -54,13 +54,15 @@ struct _EmpathyIdlePriv {
 	MissionControl *mc;
 	DBusGProxy     *gs_proxy;
 	DBusGProxy     *nm_proxy;
-	gboolean        is_idle;
 	McPresence      state;
 	McPresence      flash_state;
 	gchar          *status;
 	McPresence      saved_state;
 	gchar          *saved_status;
+	gboolean        is_idle;
 	gboolean        nm_connected;
+	gboolean        auto_away;
+	gboolean        auto_disconnect;
 	guint           ext_away_timeout;
 };
 
@@ -92,7 +94,9 @@ enum {
 	PROP_0,
 	PROP_STATE,
 	PROP_STATUS,
-	PROP_FLASH_STATE
+	PROP_FLASH_STATE,
+	PROP_AUTO_AWAY,
+	PROP_AUTO_DISCONNECT
 };
 
 G_DEFINE_TYPE (EmpathyIdle, empathy_idle, G_TYPE_OBJECT)
@@ -129,6 +133,22 @@ empathy_idle_class_init (EmpathyIdleClass *klass)
 							    MC_TYPE_PRESENCE,
 							    MC_PRESENCE_UNSET,
 							    G_PARAM_READWRITE));
+
+	 g_object_class_install_property (object_class,
+					  PROP_AUTO_AWAY,
+					  g_param_spec_boolean ("auto-away",
+								"Automatic set presence to away",
+								"Should it set presence to away if inactive",
+								FALSE,
+								G_PARAM_READWRITE));
+
+	 g_object_class_install_property (object_class,
+					  PROP_AUTO_DISCONNECT,
+					  g_param_spec_boolean ("auto-disconnect",
+								"Automatic set presence to offline",
+								"Should it set presence to offline if NM is disconnected",
+								FALSE,
+								G_PARAM_READWRITE));
 
 	g_type_class_add_private (object_class, sizeof (EmpathyIdlePriv));
 }
@@ -258,6 +278,12 @@ idle_get_property (GObject    *object,
 	case PROP_FLASH_STATE:
 		g_value_set_enum (value, empathy_idle_get_flash_state (idle));
 		break;
+	case PROP_AUTO_AWAY:
+		g_value_set_boolean (value, empathy_idle_get_auto_away (idle));
+		break;
+	case PROP_AUTO_DISCONNECT:
+		g_value_set_boolean (value, empathy_idle_get_auto_disconnect (idle));
+		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
 		break;
@@ -285,6 +311,9 @@ idle_set_property (GObject      *object,
 		break;
 	case PROP_FLASH_STATE:
 		empathy_idle_set_flash_state (idle, g_value_get_enum (value));
+		break;
+	case PROP_AUTO_AWAY:
+		empathy_idle_set_auto_away (idle, g_value_get_boolean (value));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
@@ -414,6 +443,44 @@ empathy_idle_set_presence (EmpathyIdle *idle,
 				      NULL, NULL);
 }
 
+gboolean
+empathy_idle_get_auto_away (EmpathyIdle *idle)
+{
+	EmpathyIdlePriv *priv = GET_PRIV (idle);
+
+	return priv->auto_away;
+}
+
+void
+empathy_idle_set_auto_away (EmpathyIdle *idle,
+			    gboolean     auto_away)
+{
+	EmpathyIdlePriv *priv = GET_PRIV (idle);
+
+	priv->auto_away = auto_away;
+
+	g_object_notify (G_OBJECT (idle), "auto-away");
+}
+
+gboolean
+empathy_idle_get_auto_disconnect (EmpathyIdle *idle)
+{
+	EmpathyIdlePriv *priv = GET_PRIV (idle);
+
+	return priv->auto_disconnect;
+}
+
+void
+empathy_idle_set_auto_disconnect (EmpathyIdle *idle,
+				  gboolean     auto_disconnect)
+{
+	EmpathyIdlePriv *priv = GET_PRIV (idle);
+
+	priv->auto_disconnect = auto_disconnect;
+
+	g_object_notify (G_OBJECT (idle), "auto-disconnect");
+}
+
 static void
 idle_presence_changed_cb (MissionControl *mc,
 			  McPresence      state,
@@ -450,8 +517,10 @@ idle_session_idle_changed_cb (DBusGProxy  *gs_proxy,
 		      is_idle ? "yes" : "no");
 
 	if (priv->state <= MC_PRESENCE_OFFLINE ||
-	    priv->state == MC_PRESENCE_HIDDEN) {
-		/* We are not online so nothing to do here */
+	    priv->state == MC_PRESENCE_HIDDEN ||
+	    !priv->auto_away) {
+		/* We are not online or we don't want to go auto away,
+		 * nothing to do here */
 		priv->is_idle = is_idle;
 		return;
 	}
@@ -506,6 +575,10 @@ idle_nm_state_change_cb (DBusGProxy  *proxy,
 	priv = GET_PRIV (idle);
 
 	empathy_debug (DEBUG_DOMAIN, "New network state (%d)", state);
+
+	if (!priv->auto_disconnect) {
+		return;
+	}
 
 	if (state != NM_STATE_CONNECTED && priv->nm_connected) {
 		/* We are no more connected */

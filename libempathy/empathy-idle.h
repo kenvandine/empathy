@@ -48,20 +48,26 @@ struct _EmpathyIdleClass {
 	GObjectClass parent_class;
 };
 
-GType        empathy_idle_get_type        (void) G_GNUC_CONST;
-EmpathyIdle *empathy_idle_new             (void);
-McPresence   empathy_idle_get_state       (EmpathyIdle *idle);
-void         empathy_idle_set_state       (EmpathyIdle *idle,
-					   McPresence   state);
-const gchar *empathy_idle_get_status      (EmpathyIdle *idle);
-void         empathy_idle_set_status      (EmpathyIdle *idle,
-					   const gchar *status);
-McPresence   empathy_idle_get_flash_state (EmpathyIdle *idle);
-void         empathy_idle_set_flash_state (EmpathyIdle *idle,
-					   McPresence   state);
-void         empathy_idle_set_presence    (EmpathyIdle *idle,
-					   McPresence   state,
-					   const gchar *status);
+GType        empathy_idle_get_type            (void) G_GNUC_CONST;
+EmpathyIdle *empathy_idle_new                 (void);
+McPresence   empathy_idle_get_state           (EmpathyIdle *idle);
+void         empathy_idle_set_state           (EmpathyIdle *idle,
+					       McPresence   state);
+const gchar *empathy_idle_get_status          (EmpathyIdle *idle);
+void         empathy_idle_set_status          (EmpathyIdle *idle,
+					       const gchar *status);
+McPresence   empathy_idle_get_flash_state     (EmpathyIdle *idle);
+void         empathy_idle_set_flash_state     (EmpathyIdle *idle,
+					       McPresence   state);
+void         empathy_idle_set_presence        (EmpathyIdle *idle,
+					       McPresence   state,
+					       const gchar *status);
+gboolean     empathy_idle_get_auto_away       (EmpathyIdle *idle);
+void         empathy_idle_set_auto_away       (EmpathyIdle *idle,
+					       gboolean     auto_away);
+gboolean     empathy_idle_get_auto_disconnect (EmpathyIdle *idle);
+void         empathy_idle_set_auto_disconnect (EmpathyIdle *idle,
+					       gboolean     auto_disconnect);
 
 G_END_DECLS
 

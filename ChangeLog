@@ -1,3 +1,14 @@
+2007-09-20  Xavier Claessens  <xclaesse@gmail.com>
+
+	* libempathy-gtk/empathy-status-icon.c:
+	* libempathy/empathy-idle.c:
+	* libempathy/empathy-idle.h:
+	* doc/libempathy/tmpl/empathy-idle.sgml: Add 2 properties to EmpathyIdle
+	to activate auto-away and auto-disconnect, default to off. Only empathy
+	main client will turn them on, like that if other processes are
+	running with an EmpathyIdle instance they won't change presence in the
+	same time than Empathy client.
+
 2007-09-19  Xavier Claessens  <xclaesse@gmail.com>
 
 	* libempathy-gtk/empathy-smiley-manager.c: Fix a leak.
