@@ -1103,6 +1103,7 @@ chat_state_changed_cb (EmpathyTpChat             *tp_chat,
 	switch (state) {
 	case TP_CHANNEL_CHAT_STATE_GONE:
 	case TP_CHANNEL_CHAT_STATE_INACTIVE:
+	case TP_CHANNEL_CHAT_STATE_PAUSED:
 	case TP_CHANNEL_CHAT_STATE_ACTIVE:
 		/* Contact is not composing */
 		if (l) {
@@ -1111,7 +1112,6 @@ chat_state_changed_cb (EmpathyTpChat             *tp_chat,
 			g_list_free1 (l);
 		}
 		break;
-	case TP_CHANNEL_CHAT_STATE_PAUSED:
 	case TP_CHANNEL_CHAT_STATE_COMPOSING:
 		/* Contact is composing */
 		if (!l) {
