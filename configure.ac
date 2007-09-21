@@ -205,6 +205,16 @@ fi
 AM_CONDITIONAL(HAVE_NOTHERE, test "x$have_nothere" = "xyes")
 
 dnl -----------------------------------------------------------
+dnl Tests
+dnl -----------------------------------------------------------
+AC_ARG_ENABLE(tests,
+              AS_HELP_STRING([--enable-tests=@<:@no/yes@:>@],
+                             [build tests]), ,
+                             enable_tests=no)
+
+AM_CONDITIONAL(HAVE_TESTS, test "x$enable_tests" = "xyes")
+
+dnl -----------------------------------------------------------
 dnl Python Bindings
 dnl -----------------------------------------------------------
 AC_ARG_ENABLE(python,
@@ -271,4 +281,5 @@ AC_OUTPUT([
    python/Makefile
    python/pyempathy/Makefile
    python/pyempathygtk/Makefile
+   tests/Makefile
 ])

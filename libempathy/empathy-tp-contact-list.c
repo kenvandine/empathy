@@ -492,11 +492,19 @@ tp_contact_list_newchannel_cb (DBusGProxy           *proxy,
 }
 
 static void
-tp_contact_list_remove_all (EmpathyTpContactList *list)
+tp_contact_list_destroy_cb (TpConn               *tp_conn,
+			    EmpathyTpContactList *list)
 {
 	EmpathyTpContactListPriv *priv = GET_PRIV (list);
 	GList                    *l;
 
+	empathy_debug (DEBUG_DOMAIN, "Account disconnected or CM crashed");
+
+	/* DBus proxie should NOT be used anymore */
+	g_object_unref (priv->tp_conn);
+	priv->tp_conn = NULL;
+
+	/* Remove all contacts */
 	for (l = priv->members; l; l = l->next) {
 		g_signal_emit_by_name (list, "members-changed", l->data,
 				       NULL, 0, NULL,
@@ -509,26 +517,10 @@ tp_contact_list_remove_all (EmpathyTpContactList *list)
 				       FALSE);
 		g_object_unref (l->data);
 	}
-
 	g_list_free (priv->members);
 	g_list_free (priv->pendings);
 	priv->members = NULL;
 	priv->pendings = NULL;
-}
-
-static void
-tp_contact_list_destroy_cb (TpConn               *tp_conn,
-			    EmpathyTpContactList *list)
-{
-	EmpathyTpContactListPriv *priv = GET_PRIV (list);
-
-	empathy_debug (DEBUG_DOMAIN, "Account disconnected or CM crashed");
-
-	/* DBus proxie should NOT be used anymore */
-	g_object_unref (priv->tp_conn);
-	priv->tp_conn = NULL;
-
-	tp_contact_list_remove_all (list);
 
 	/* Tell the world to not use us anymore */
 	g_signal_emit (list, signals[DESTROY], 0);
@@ -591,7 +583,6 @@ tp_contact_list_finalize (GObject *object)
 	empathy_debug (DEBUG_DOMAIN, "finalize: %p", object);
 
 	tp_contact_list_disconnect (list);
-	tp_contact_list_remove_all (list);
 
 	if (priv->mc) {
 		dbus_g_proxy_disconnect_signal (DBUS_G_PROXY (priv->mc),
@@ -617,6 +608,10 @@ tp_contact_list_finalize (GObject *object)
 	g_hash_table_destroy (priv->contacts_groups);
 	g_list_foreach (priv->groups, (GFunc) g_object_unref, NULL);
 	g_list_free (priv->groups);
+	g_list_foreach (priv->members, (GFunc) g_object_unref, NULL);
+	g_list_free (priv->members);
+	g_list_foreach (priv->pendings, (GFunc) g_object_unref, NULL);
+	g_list_free (priv->pendings);
 
 	G_OBJECT_CLASS (empathy_tp_contact_list_parent_class)->finalize (object);
 }

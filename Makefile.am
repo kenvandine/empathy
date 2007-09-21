@@ -12,6 +12,10 @@ if HAVE_PYTHON
 SUBDIRS += python
 endif
 
+if HAVE_TESTS
+SUBDIRS += tests
+endif
+
 DISTCHECK_CONFIGURE_FLAGS =	\
 	--disable-scrollkeeper  \
 	--enable-gtk-doc

@@ -1,5 +1,14 @@
 2007-09-21  Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy/empathy-tp-contact-list.c: Fix warnings when finalizing.
+
+	* tests/contact-manager.c:
+	* tests/Makefile.am:
+	* configure.ac:
+	* Makefile.am: Add a test program to track leaks.
+
+2007-09-21  Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/empathy-contact-list-view.c: Fix ref count error for
 	account objects.
 
