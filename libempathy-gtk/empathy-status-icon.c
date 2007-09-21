@@ -552,7 +552,7 @@ status_icon_pendings_changed_cb (EmpathyContactManager *manager,
 {
 	EmpathyStatusIconPriv *priv;
 	StatusIconEvent       *event;
-	gchar                 *str;
+	GString               *str;
 	GList                 *l;
 
 	priv = GET_PRIV (icon);
@@ -568,16 +568,18 @@ status_icon_pendings_changed_cb (EmpathyContactManager *manager,
 		}
 	}
 
-	str = g_strdup_printf (_("Subscription requested for %s\n"
-				 "Message: %s"),
-			       empathy_contact_get_name (contact),
-			       message);
+	str = g_string_new (NULL);
+	g_string_printf (str, _("Subscription requested by %s"),
+			 empathy_contact_get_name (contact));	
+	if (!G_STR_EMPTY (message)) {
+		g_string_append_printf (str, _("\nMessage: %s"), message);
+	}
 
-	event = status_icon_event_new (icon, GTK_STOCK_DIALOG_QUESTION, str);
+	event = status_icon_event_new (icon, GTK_STOCK_DIALOG_QUESTION, str->str);
 	event->user_data = g_object_ref (contact);
 	event->func = status_icon_event_subscribe_cb;
 
-	g_free (str);
+	g_string_free (str, TRUE);
 }
 
 static void
@@ -639,6 +641,7 @@ status_icon_event_new (EmpathyStatusIcon *icon,
 						     (GSourceFunc) status_icon_event_timeout_cb,
 						     icon);
 		status_icon_event_timeout_cb (icon);
+		status_icon_update_tooltip (icon);
 	}
 
 	return event;
@@ -688,7 +691,6 @@ status_icon_event_timeout_cb (EmpathyStatusIcon *icon)
 		event = priv->events->data;
 		gtk_status_icon_set_from_icon_name (priv->icon, event->icon_name);
 	}
-	status_icon_update_tooltip (icon);
 
 	return TRUE;
 }
