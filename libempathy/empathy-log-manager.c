@@ -263,6 +263,10 @@ empathy_log_manager_get_dates (EmpathyLogManager *manager,
 			continue;
 		}
 
+		if (!g_regex_match_simple ("\\d{8}", date, 0, 0)) {
+			continue;
+		}
+
 		dates = g_list_insert_sorted (dates, date, (GCompareFunc) strcmp);
 	}
 
