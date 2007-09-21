@@ -189,6 +189,11 @@ contact_manager_finalize (GObject *object)
 {
 	EmpathyContactManagerPriv *priv = GET_PRIV (object);
 
+	dbus_g_proxy_disconnect_signal (DBUS_G_PROXY (priv->mc),
+					"AccountStatusChanged",
+					G_CALLBACK (contact_manager_status_changed_cb),
+					object);
+
 	g_hash_table_foreach (priv->lists,
 			      contact_manager_disconnect_foreach,
 			      object);

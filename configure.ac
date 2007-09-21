@@ -46,9 +46,10 @@ IT_PROG_INTLTOOL([0.35.0])
 GTK_DOC_CHECK([1.3])
 
 GLIB_REQUIRED=2.12.0
-GTK_REQUIRED=2.10.0
+GTK_REQUIRED=2.12.0
 GCONF_REQUIRED=1.2.0
 LIBGLADE_REQUIRED=2.0.0
+LIBPANELAPPLET_REQUIRED=2.10.0
 TELEPATHY_REQUIRED=0.0.57
 MISSION_CONTROL_REQUIRED=4.33
 
@@ -145,6 +146,65 @@ fi
 
 
 dnl -----------------------------------------------------------
+dnl Megaphone
+dnl -----------------------------------------------------------
+AC_ARG_ENABLE(megaphone,
+              AS_HELP_STRING([--enable-megaphone=@<:@no/yes/auto@:>@],
+                             [build megaphone applet]), ,
+                             enable_megaphone=auto)
+
+if test "x$enable_megaphone" != "xno"; then
+   PKG_CHECK_MODULES(MEGAPHONE, 
+   [
+      libpanelapplet-2.0 >= $LIBPANELAPPLET_REQUIRED
+      glib-2.0 >= $GLIB_REQUIRED
+      gtk+-2.0 >= $GTK_REQUIRED
+      gconf-2.0 >= $GCONF_REQUIRED
+      libglade-2.0 >= $LIBGLADE_REQUIRED 
+      gnome-vfs-2.0
+      libtelepathy >= $TELEPATHY_REQUIRED
+      libmissioncontrol >= $MISSION_CONTROL_REQUIRED
+   ], have_megaphone="yes", have_megaphone="no")
+else
+   have_megaphone=no
+fi
+
+if test "x$enable_megaphone" = "xyes" -a "x$have_megaphone" != "xyes"; then
+   AC_MSG_ERROR([Couldn't find megaphone dependencies.])
+fi
+
+AM_CONDITIONAL(HAVE_MEGAPHONE, test "x$have_megaphone" = "xyes")
+
+dnl -----------------------------------------------------------
+dnl Nothere
+dnl -----------------------------------------------------------
+AC_ARG_ENABLE(nothere,
+              AS_HELP_STRING([--enable-nothere=@<:@no/yes/auto@:>@],
+                             [build nothere applet]), ,
+                             enable_nothere=no)
+
+if test "x$enable_nothere" != "xno"; then
+   PKG_CHECK_MODULES(NOTHERE, 
+   [
+      libpanelapplet-2.0 >= $LIBPANELAPPLET_REQUIRED
+      glib-2.0 >= $GLIB_REQUIRED
+      gtk+-2.0 >= $GTK_REQUIRED
+      gconf-2.0 >= $GCONF_REQUIRED
+      libglade-2.0 >= $LIBGLADE_REQUIRED 
+      libtelepathy >= $TELEPATHY_REQUIRED
+      libmissioncontrol >= $MISSION_CONTROL_REQUIRED
+   ], have_nothere="yes", have_nothere="no")
+else
+   have_nothere=no
+fi
+
+if test "x$enable_nothere" = "xyes" -a "x$have_nothere" != "xyes"; then
+   AC_MSG_ERROR([Couldn't find nothere dependencies.])
+fi
+
+AM_CONDITIONAL(HAVE_NOTHERE, test "x$have_nothere" = "xyes")
+
+dnl -----------------------------------------------------------
 dnl Python Bindings
 dnl -----------------------------------------------------------
 AC_ARG_ENABLE(python,
@@ -200,7 +260,12 @@ AC_OUTPUT([
    libempathy-gtk/Makefile
    libempathy-gtk/libempathy-gtk.pc
    src/Makefile
-   doc/Makefile
+   megaphone/Makefile
+   megaphone/src/Makefile
+   megaphone/data/Makefile
+   nothere/Makefile
+   nothere/src/Makefile
+   nothere/data/Makefile   doc/Makefile
    doc/libempathy/Makefile
    doc/libempathy-gtk/Makefile
    python/Makefile

@@ -1,8 +1,6 @@
 # List of source files containing translatable strings.
 # Please keep this file sorted alphabetically.
 
-
-
 data/empathy.desktop.in.in
 data/empathy.schemas.in
 
@@ -48,5 +46,14 @@ libempathy-gtk/empathy-spell-dialog.glade
 libempathy-gtk/empathy-status-icon.c
 libempathy-gtk/empathy-status-icon.glade
 libempathy-gtk/empathy-theme-manager.c
+
+megaphone/data/GNOME_Megaphone_Applet.schemas.in
+megaphone/data/GNOME_Megaphone_Applet.server.in.in
+megaphone/data/GNOME_Megaphone_Applet.xml
+megaphone/src/megaphone-applet.c
+
+nothere/data/GNOME_NotHere_Applet.server.in.in
+nothere/data/GNOME_NotHere_Applet.xml
+nothere/src/nothere-applet.c
 
 src/empathy.c

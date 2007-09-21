@@ -1,0 +1,20 @@
+<gconfschemafile>
+	<schemalist>
+
+		<schema>
+			<key>/schemas/apps/megaphone-applet/prefs/contact_id</key>
+			<applyto>/apps/megaphone-applet/prefs/contact_id</applyto>
+			<owner>megaphone</owner>
+			<type>string</type>
+			<default></default>
+			<locale name="C">
+				<short>The contact to display in the applet. Empty means no contact is displayed.</short>
+			</locale>
+		</schema>
+	
+	</schemalist>  
+</gconfschemafile>
+
+
+
+

@@ -777,7 +777,6 @@ contact_list_view_drag_data_received (GtkWidget         *widget,
 		g_object_unref (account);
 	}
 	g_object_unref (factory);
-	g_object_unref (account);
 	g_strfreev (strv);
 
 	if (!contact) {

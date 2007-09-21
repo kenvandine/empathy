@@ -1,5 +1,13 @@
 SUBDIRS = po data libempathy libempathy-gtk src doc
 
+if HAVE_MEGAPHONE
+SUBDIRS += megaphone
+endif
+
+if HAVE_NOTHERE
+SUBDIRS += nothere
+endif
+
 if HAVE_PYTHON
 SUBDIRS += python
 endif

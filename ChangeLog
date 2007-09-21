@@ -1,3 +1,32 @@
+2007-09-21  Xavier Claessens  <xclaesse@gmail.com>
+
+	* libempathy-gtk/empathy-contact-list-view.c: Fix ref count error for
+	account objects.
+
+	* libempathy/empathy-contact-manager.c: Disconnect signals from
+	MissionControl object when finalising the contact manager.
+
+	* configure.ac:
+	* megaphone/src/megaphone-applet.c:
+	* megaphone/src/Makefile.am:
+	* megaphone/src/megaphone-applet.h:
+	* megaphone/data/GNOME_Megaphone_Applet.schemas.in:
+	* megaphone/data/Makefile.am:
+	* megaphone/data/GNOME_Megaphone_Applet.server.in.in:
+	* megaphone/data/GNOME_Megaphone_Applet.xml:
+	* megaphone/Makefile.am:
+	* nothere/src/nothere-applet.c:
+	* nothere/src/Makefile.am:
+	* nothere/src/nothere-applet.h:
+	* nothere/data/Makefile.am:
+	* nothere/data/GNOME_NotHere_Applet.server.in.in:
+	* nothere/data/GNOME_NotHere_Applet.xml:
+	* nothere/Makefile.am:
+	* Makefile.am:
+	* po/POTFILES.in:
+	* po/POTFILES.skip: Add Megaphone and Nothere applets. Fixes bug
+	#464954 (Raphael Slinckx, Xavier Claessens).
+
 2007-09-20  Xavier Claessens  <xclaesse@gmail.com>
 
 	* libempathy-gtk/empathy-status-icon.c:
