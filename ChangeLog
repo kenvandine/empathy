@@ -1,5 +1,10 @@
 2007-09-21  Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/empathy-chat-window.c: Do not set "new message" in
+	the title of conversation windows, it's useless. Fixes bug #459523.
+
+2007-09-21  Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy/empathy-tp-contact-list.c: Fix warnings when finalizing.
 
 	* tests/contact-manager.c:

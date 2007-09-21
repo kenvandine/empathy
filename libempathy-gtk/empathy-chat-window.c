@@ -694,60 +694,22 @@ static void
 chat_window_update_title (EmpathyChatWindow *window,
 			  EmpathyChat       *chat)
 {
-	EmpathyChatWindowPriv	*priv;
-	const gchar             *str;
-	gchar			*title;
-	gint  			 n_chats;
+	EmpathyChatWindowPriv *priv;
+	gint                   n_chats;
 	
 	priv = GET_PRIV (window);
 	
 	n_chats = g_list_length (priv->chats);
 	if (n_chats == 1) {
-		if (priv->chats_new_msg) {
-			title = g_strdup_printf (
-				"%s - %s",
-				empathy_chat_get_name (priv->current_chat),
-				_("New Message"));
-		}
-		else if (empathy_chat_is_group_chat (priv->current_chat)) {
-			title = g_strdup_printf (
-				"%s - %s", 
-				empathy_chat_get_name (priv->current_chat),
-				_("Chat Room"));
-		} else {
-			title = g_strdup_printf (
-				"%s - %s", 
-				empathy_chat_get_name (priv->current_chat),
-				_("Conversation"));
-		}
+		gtk_window_set_title (GTK_WINDOW (priv->dialog),
+				      empathy_chat_get_name (priv->current_chat));
 	} else {
-		if (priv->chats_new_msg) {
-			GString *names;
-			GList   *l;
-			gint     n_messages = 0;
+		gchar *title;
 
-			names = g_string_new (NULL);
-
-			for (l = priv->chats_new_msg; l; l = l->next) {
-				n_messages++;
-				g_string_append (names,
-						 empathy_chat_get_name (l->data));
-				if (l->next) {
-					g_string_append (names, ", ");
-				}
-			}
-			
-			str = ngettext ("New Message", "New Messages", n_messages);
-			title = g_strdup_printf ("%s - %s", names->str, str);
-			g_string_free (names, TRUE);
-		} else {
-			str = ngettext ("Conversation", "Conversations (%d)", n_chats);
-			title = g_strdup_printf (str, n_chats);
-		}
+		title = g_strdup_printf (_("Conversations (%d)"), n_chats);
+		gtk_window_set_title (GTK_WINDOW (priv->dialog), title);
+		g_free (title);
 	}
-
-	gtk_window_set_title (GTK_WINDOW (priv->dialog), title);
-	g_free (title);
 
 	if (priv->chats_new_msg) {
 		gtk_window_set_icon_name (GTK_WINDOW (priv->dialog),
