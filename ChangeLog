@@ -4,7 +4,8 @@
 	* libempathy/empathy-utils.h:
 	* libempathy/empathy-avatar.c:
 	* libempathy/empathy-avatar.h:
-	* libempathy/empathy-contact-factory.c:
+	* libempathy/empathy-contact-factory.c: Cache avatars and RequestAvatars
+	only when needed.
 
 2007-09-26  Xavier Claessens  <xclaesse@gmail.com>
 
