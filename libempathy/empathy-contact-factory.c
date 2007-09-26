@@ -396,8 +396,8 @@ contact_factory_update_capabilities (ContactFactoryAccountData *account_data,
 	capabilities = empathy_contact_get_capabilities (contact);
 
 	if (strcmp (channel_type, TP_IFACE_CHANNEL_TYPE_STREAMED_MEDIA) == 0) {
-		capabilities &= !(EMPATHY_CAPABILITIES_AUDIO);
-		capabilities &= !(EMPATHY_CAPABILITIES_VIDEO);
+		capabilities &= ~EMPATHY_CAPABILITIES_AUDIO;
+		capabilities &= ~EMPATHY_CAPABILITIES_VIDEO;
 		if (specific & TP_CHANNEL_MEDIA_CAPABILITY_AUDIO) {
 			capabilities |= EMPATHY_CAPABILITIES_AUDIO;
 		}

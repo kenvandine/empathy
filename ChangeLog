@@ -1,5 +1,10 @@
 2007-09-26  Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy/empathy-contact-factory.c: Fix capabilities update, the NOT
+	operator is ~ and not !
+
+2007-09-26  Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/empathy-profile-chooser.c:
 	* libempathy-gtk/empathy-main-window.c: Fix warning when sort criterium
 	is NULL and when there is no profile. Fixes bug #479786
