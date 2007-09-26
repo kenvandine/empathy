@@ -897,13 +897,13 @@ main_window_notify_compact_contact_list_cb (EmpathyConf        *conf,
 }
 
 static void
-main_window_notify_sort_criterium_cb (EmpathyConf        *conf,
+main_window_notify_sort_criterium_cb (EmpathyConf       *conf,
 				      const gchar       *key,
 				      EmpathyMainWindow *window)
 {
 	gchar *str = NULL;
 
-	if (empathy_conf_get_string (conf, key, &str)) {
+	if (empathy_conf_get_string (conf, key, &str) && str) {
 		GType       type;
 		GEnumClass *enum_class;
 		GEnumValue *enum_value;
@@ -915,7 +915,7 @@ main_window_notify_sort_criterium_cb (EmpathyConf        *conf,
 
 		if (enum_value) {
 			empathy_contact_list_store_set_sort_criterium (window->list_store, 
-								      enum_value->value);
+								       enum_value->value);
 		}
 	}
 }

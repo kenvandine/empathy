@@ -1,3 +1,10 @@
+2007-09-26  Xavier Claessens  <xclaesse@gmail.com>
+
+	* libempathy-gtk/empathy-profile-chooser.c:
+	* libempathy-gtk/empathy-main-window.c: Fix warning when sort criterium
+	is NULL and when there is no profile. Fixes bug #479786
+	(Christian Persch, Xavier Claessens).
+
 2007-09-21  Xavier Claessens  <xclaesse@gmail.com>
 
 	* libempathy/empathy-log-manager.c: Ignore log files that don't have a

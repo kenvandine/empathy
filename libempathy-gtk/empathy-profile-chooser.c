@@ -114,6 +114,7 @@ empathy_profile_chooser_new (void)
 	GtkCellRenderer *renderer;
 	GtkWidget       *combo_box;
 	GtkTreeIter      iter;
+	gboolean         iter_set = FALSE;
 
 	/* set up combo box with new store */
 	store = gtk_list_store_new (COL_COUNT,
@@ -136,15 +137,6 @@ empathy_profile_chooser_new (void)
 					"text", COL_LABEL,
 					NULL);
 
-	/* Set the profile sort function */
-	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (store),
-					      COL_PROFILE,
-					      GTK_SORT_ASCENDING);
-	gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (store),
-					 COL_PROFILE,
-					 profile_chooser_sort_func,
-					 NULL, NULL);
-
 	profiles = mc_profiles_list ();
 	for (l = profiles; l; l = l->next) {
 		McProfile  *profile;
@@ -160,15 +152,26 @@ empathy_profile_chooser_new (void)
 		}
 		g_object_unref (protocol);
 
-		gtk_list_store_append (store, &iter);
-		gtk_list_store_set (store, &iter,
-				    COL_ICON, mc_profile_get_icon_name (profile),
-				    COL_LABEL, mc_profile_get_display_name (profile),
-				    COL_PROFILE, profile,
-				    -1);
+		gtk_list_store_insert_with_values (store, &iter, 0,
+						   COL_ICON, mc_profile_get_icon_name (profile),
+						   COL_LABEL, mc_profile_get_display_name (profile),
+						   COL_PROFILE, profile,
+						   -1);
+                iter_set = TRUE;
 	}
 
-	gtk_combo_box_set_active_iter (GTK_COMBO_BOX (combo_box), &iter);
+	/* Set the profile sort function */
+	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (store),
+					      COL_PROFILE,
+					      GTK_SORT_ASCENDING);
+	gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (store),
+					 COL_PROFILE,
+					 profile_chooser_sort_func,
+					 NULL, NULL);
+
+        if (iter_set) {
+		gtk_combo_box_set_active_iter (GTK_COMBO_BOX (combo_box), &iter);
+        }
 
 	mc_profiles_free_list (profiles);
 	g_object_unref (store);
