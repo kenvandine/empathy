@@ -1,5 +1,13 @@
 2007-09-26  Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy/empathy-utils.c:
+	* libempathy/empathy-utils.h:
+	* libempathy/empathy-avatar.c:
+	* libempathy/empathy-avatar.h:
+	* libempathy/empathy-contact-factory.c:
+
+2007-09-26  Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy/empathy-contact-factory.c: Fix capabilities update, the NOT
 	operator is ~ and not !
 

@@ -33,15 +33,18 @@ struct _EmpathyAvatar {
 	guchar *data;
 	gsize   len;
 	gchar  *format;
+	gchar  *token;
 	guint   refcount;
 };
 
-GType          empathy_avatar_get_type (void) G_GNUC_CONST;
-EmpathyAvatar * empathy_avatar_new       (guchar       *avatar,
-					gsize         len,
-					gchar        *format);
-EmpathyAvatar * empathy_avatar_ref       (EmpathyAvatar *avatar);
-void           empathy_avatar_unref     (EmpathyAvatar *avatar);
+GType           empathy_avatar_get_type       (void) G_GNUC_CONST;
+EmpathyAvatar * empathy_avatar_new            (const guchar  *avatar,
+					       const gsize    len,
+					       const gchar   *format,
+					       const gchar   *token);
+EmpathyAvatar * empathy_avatar_new_from_cache (const gchar   *token);
+EmpathyAvatar * empathy_avatar_ref            (EmpathyAvatar *avatar);
+void            empathy_avatar_unref          (EmpathyAvatar *avatar);
 
 G_END_DECLS
 

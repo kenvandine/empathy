@@ -198,6 +198,82 @@ empathy_strncasecmp (const gchar *s1,
 	return ret_val;
 }
 
+/* Stolen from telepathy-glib */
+gboolean
+empathy_strdiff (const gchar *left, const gchar *right)
+{
+  if ((NULL == left) != (NULL == right))
+    return TRUE;
+
+  else if (left == right)
+    return FALSE;
+
+  else
+    return (0 != strcmp (left, right));
+}
+
+/* Stolen from telepathy-glib */
+static inline gboolean
+_esc_ident_bad (gchar c, gboolean is_first)
+{
+  return ((c < 'a' || c > 'z') &&
+          (c < 'A' || c > 'Z') &&
+          (c < '0' || c > '9' || is_first));
+}
+
+/* Stolen from telepathy-glib */
+gchar *
+empathy_escape_as_identifier (const gchar *name)
+{
+  gboolean bad = FALSE;
+  size_t len = 0;
+  GString *op;
+  const gchar *ptr, *first_ok;
+
+  g_return_val_if_fail (name != NULL, NULL);
+
+  for (ptr = name; *ptr; ptr++)
+    {
+      if (_esc_ident_bad (*ptr, ptr == name))
+        {
+          bad = TRUE;
+          len += 3;
+        }
+      else
+        len++;
+    }
+
+  /* fast path if it's clean */
+  if (!bad)
+    return g_strdup (name);
+
+  /* If strictly less than ptr, first_ok is the first uncopied safe character.
+   */
+  first_ok = name;
+  op = g_string_sized_new (len);
+  for (ptr = name; *ptr; ptr++)
+    {
+      if (_esc_ident_bad (*ptr, ptr == name))
+        {
+          /* copy preceding safe characters if any */
+          if (first_ok < ptr)
+            {
+              g_string_append_len (op, first_ok, ptr - first_ok);
+            }
+          /* escape the unsafe character */
+          g_string_append_printf (op, "_%02x", (unsigned char)(*ptr));
+          /* restart after it */
+          first_ok = ptr + 1;
+        }
+    }
+  /* copy trailing safe characters if any */
+  if (first_ok < ptr)
+    {
+      g_string_append_len (op, first_ok, ptr - first_ok);
+    }
+  return g_string_free (op, FALSE);
+}
+
 gboolean
 empathy_xml_validate (xmlDoc      *doc,
 		     const gchar *dtd_filename)
@@ -383,19 +459,5 @@ empathy_inspect_handle (McAccount *account,
 	g_object_unref (tp_conn);
 
 	return name;
-}
-
-/* Stolen from telepathy-glib */
-gboolean
-empathy_strdiff (const gchar *left, const gchar *right)
-{
-  if ((NULL == left) != (NULL == right))
-    return TRUE;
-
-  else if (left == right)
-    return FALSE;
-
-  else
-    return (0 != strcmp (left, right));
 }
 

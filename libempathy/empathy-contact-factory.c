@@ -318,41 +318,6 @@ contact_factory_aliases_changed_cb (DBusGProxy *proxy,
 }
 
 static void
-contact_factory_request_avatars_cb (DBusGProxy *proxy,
-				    GError     *error,
-				    gpointer    user_data)
-{
-	ContactFactoryAccountData *account_data = user_data;
-
-	if (error) {
-		empathy_debug (DEBUG_DOMAIN, "Error requesting avatars: %s",
-			       error->message);
-	}
-
-	contact_factory_account_data_return_call (account_data);
-}
-
-static void
-contact_factory_avatar_updated_cb (DBusGProxy *proxy,
-				   guint       handle,
-				   gchar      *new_token,
-				   gpointer    user_data)
-{
-	ContactFactoryAccountData *account_data = user_data;
-	GArray                    *handles;
-
-	handles = g_array_sized_new (FALSE, FALSE, sizeof (guint), 1);
-	g_array_insert_val (handles, 0, handle);
-
-	account_data->nb_pending_calls++;
-	tp_conn_iface_avatars_request_avatars_async (account_data->avatars_iface,
-						     handles,
-						     contact_factory_request_avatars_cb,
-						     account_data);
-	g_array_free (handles, TRUE);
-}
-
-static void
 contact_factory_avatar_retrieved_cb (DBusGProxy *proxy,
 				     guint       handle,
 				     gchar      *token,
@@ -372,9 +337,154 @@ contact_factory_avatar_retrieved_cb (DBusGProxy *proxy,
 
 	avatar = empathy_avatar_new (avatar_data->data,
 				     avatar_data->len,
-				     mime_type);
+				     mime_type,
+				     token);
+
 	empathy_contact_set_avatar (contact, avatar);
 	empathy_avatar_unref (avatar);
+}
+
+static void
+contact_factory_request_avatars_cb (DBusGProxy *proxy,
+				    GError     *error,
+				    gpointer    user_data)
+{
+	ContactFactoryAccountData *account_data = user_data;
+
+	if (error) {
+		empathy_debug (DEBUG_DOMAIN, "Error requesting avatars: %s",
+			       error->message);
+	}
+
+	contact_factory_account_data_return_call (account_data);
+}
+
+typedef struct {
+	ContactFactoryAccountData *account_data;
+	GArray                    *handles;
+} TokensData;
+
+static gboolean
+contact_factory_avatar_maybe_update (ContactFactoryAccountData *account_data,
+				     guint                      handle,
+				     const gchar               *token)
+{
+	EmpathyContact *contact;
+	EmpathyAvatar  *avatar;
+
+	contact = contact_factory_account_data_find_by_handle (account_data,
+							       handle);
+	if (!contact) {
+		return TRUE;
+	}
+
+	/* Check if the avatar changed */
+	avatar = empathy_contact_get_avatar (contact);
+	if (avatar && !empathy_strdiff (avatar->token, token)) {
+		return TRUE;
+	}
+
+	/* Check if we have an avatar */
+	if (G_STR_EMPTY (token)) {
+		empathy_contact_set_avatar (contact, NULL);
+		return TRUE;
+	}
+
+	/* The avatar changed, search the new one in the cache */
+	avatar = empathy_avatar_new_from_cache (token);
+	if (avatar) {
+		/* Got from cache, use it */
+		empathy_contact_set_avatar (contact, avatar);
+		empathy_avatar_unref (avatar);
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
+static void
+contact_factory_get_known_avatar_tokens_cb (DBusGProxy *proxy,
+					    GHashTable *tokens,
+					    GError     *error,
+					    gpointer    user_data)
+{
+	TokensData *data = user_data;
+	gint        i;
+
+	if (error) {
+		empathy_debug (DEBUG_DOMAIN,
+			       "Error getting known avatars tokens: %s",
+			       error->message);
+		goto OUT;
+	}
+
+	/* Remove handles for which we have an avatar */
+	for (i = 0; i < data->handles->len; i++) {
+		const gchar *token;
+		guint        handle;
+
+		handle = g_array_index (data->handles, guint, i);
+		token = g_hash_table_lookup (tokens, GUINT_TO_POINTER (handle));
+
+		/* If we have no token it means CM does not know what's the
+		 * avatar for that contact, we need to request it. */
+		if (!token) {
+			continue;
+		}
+
+		/* If avatar is not updated it means we don't have it in
+		 * the cache so we need to request it */
+		if (!contact_factory_avatar_maybe_update (data->account_data,
+							  handle, token)) {
+			continue;
+		}
+
+		/* We don't need to request the avatar for this handle,
+		 * remove it from the handles array. We need to check the handle
+		 * that takes the place of the current index we are removing,
+		 * so i-- is needed. */
+		g_array_remove_index_fast (data->handles, i);
+		i--;
+	}
+
+	/* Request needed avatars */
+	if (data->handles->len > 0) {
+		data->account_data->nb_pending_calls++;
+		tp_conn_iface_avatars_request_avatars_async (data->account_data->avatars_iface,
+							     data->handles,
+							     contact_factory_request_avatars_cb,
+							     data->account_data);
+	}
+
+OUT:
+	contact_factory_account_data_return_call (data->account_data);
+	g_array_free (data->handles, TRUE);
+	g_slice_free (TokensData, data);
+}
+
+static void
+contact_factory_avatar_updated_cb (DBusGProxy *proxy,
+				   guint       handle,
+				   gchar      *new_token,
+				   gpointer    user_data)
+{
+	ContactFactoryAccountData *account_data = user_data;
+	GArray                    *handles;
+
+	if (contact_factory_avatar_maybe_update (account_data, handle, new_token)) {
+		/* Avatar was cached, nothing to do */
+		return;
+	}
+
+	handles = g_array_new (FALSE, FALSE, sizeof (guint));
+	g_array_append_val (handles, handle);
+
+	account_data->nb_pending_calls++;
+	tp_conn_iface_avatars_request_avatars_async (account_data->avatars_iface,
+						     handles,
+						     contact_factory_request_avatars_cb,
+						     account_data);
+	g_array_free (handles, TRUE);
 }
 
 static void
@@ -510,11 +620,18 @@ contact_factory_request_everything (ContactFactoryAccountData *account_data,
 	}
 
 	if (account_data->avatars_iface) {
+		TokensData *data;
+
 		account_data->nb_pending_calls++;
-		tp_conn_iface_avatars_request_avatars_async (account_data->avatars_iface,
-							     handles,
-							     contact_factory_request_avatars_cb,
-							     account_data);
+		data = g_slice_new (TokensData);
+		data->account_data = account_data;
+		data->handles = g_array_new (FALSE, FALSE, sizeof (guint));
+		g_array_append_vals (data->handles, handles->data, handles->len);
+
+		tp_conn_iface_avatars_get_known_avatar_tokens_async (account_data->avatars_iface,
+								     handles,
+								     contact_factory_get_known_avatar_tokens_cb,
+								     data);
 	}
 
 	if (account_data->capabilities_iface) {

@@ -66,6 +66,9 @@ gint         empathy_strcasecmp                     (const gchar     *s1,
 gint         empathy_strncasecmp                    (const gchar     *s1,
 						    const gchar     *s2,
 						    gsize            n);
+gboolean     empathy_strdiff                        (const gchar     *left,
+						     const gchar     *right);
+gchar *      empathy_escape_as_identifier           (const gchar     *name);
 
 /* XML */
 gboolean     empathy_xml_validate                   (xmlDoc          *doc,
@@ -88,8 +91,6 @@ gchar *      empathy_inspect_handle                 (McAccount       *account,
 						     guint            handle_type);
 gchar *      empathy_inspect_channel                (McAccount       *account,
 						     TpChan          *tp_chan);
-gboolean     empathy_strdiff                        (const gchar     *left,
-						     const gchar     *right);
 G_END_DECLS
 
 #endif /*  __EMPATHY_UTILS_H__ */
