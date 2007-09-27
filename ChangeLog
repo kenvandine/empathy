@@ -1,3 +1,8 @@
+2007-09-27  Xavier Claessens  <xclaesse@gmail.com>
+
+	* libempathy-gtk/empathy-profile-chooser.c: Set the sort function before
+	begin to sort otherwise we get warnings.
+
 2007-09-26  Xavier Claessens  <xclaesse@gmail.com>
 
 	* libempathy/empathy-utils.c:

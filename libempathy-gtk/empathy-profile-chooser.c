@@ -161,13 +161,13 @@ empathy_profile_chooser_new (void)
 	}
 
 	/* Set the profile sort function */
-	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (store),
-					      COL_PROFILE,
-					      GTK_SORT_ASCENDING);
 	gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (store),
 					 COL_PROFILE,
 					 profile_chooser_sort_func,
 					 NULL, NULL);
+	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (store),
+					      COL_PROFILE,
+					      GTK_SORT_ASCENDING);
 
         if (iter_set) {
 		gtk_combo_box_set_active_iter (GTK_COMBO_BOX (combo_box), &iter);
