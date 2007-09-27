@@ -1,5 +1,11 @@
 2007-09-27  Xavier Claessens  <xclaesse@gmail.com>
 
+	* tests/contact-manager.c:
+	* tests/Makefile.am: No need to init gtk, GMainLoop is enough and makes
+	easier to run valgrind.
+
+2007-09-27  Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy/empathy-avatar.c: Fix leak when loading avatar from cache.
 	* libempathy/empathy-contact-factory.c: Do not request avatar for
 	unknown tokens, wait for AvatarUpdate signal.
