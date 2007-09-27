@@ -193,6 +193,7 @@ contact_factory_parse_presence_foreach (guint                      handle,
 		      presence ? empathy_presence_get_state (presence) : MC_PRESENCE_UNSET);
 
 	empathy_contact_set_presence (contact, presence);
+	g_object_unref (presence);
 }
 
 static void

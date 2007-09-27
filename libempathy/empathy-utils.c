@@ -454,6 +454,7 @@ empathy_inspect_handle (McAccount *account,
 		return NULL;
 	}
 
+	g_array_free (handles, TRUE);
 	name = *names;
 	g_free (names);
 	g_object_unref (tp_conn);
