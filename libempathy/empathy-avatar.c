@@ -67,18 +67,18 @@ avatar_get_filename (const gchar *token)
 }
 
 static EmpathyAvatar *
-avatar_new (const guchar *data,
-	    const gsize   len,
-	    const gchar  *format,
-	    const gchar  *token)
+avatar_new (guchar *data,
+	    gsize   len,
+	    gchar  *format,
+	    gchar  *token)
 {
 	EmpathyAvatar *avatar;
 
 	avatar = g_slice_new0 (EmpathyAvatar);
-	avatar->data = g_memdup (data, len);
+	avatar->data = data;
 	avatar->len = len;
-	avatar->format = g_strdup (format);
-	avatar->token = g_strdup (token);
+	avatar->format = format;
+	avatar->token = token;
 	avatar->refcount = 1;
 
 	return avatar;
@@ -99,7 +99,10 @@ empathy_avatar_new (const guchar *data,
 	g_return_val_if_fail (format != NULL, NULL);
 	g_return_val_if_fail (!G_STR_EMPTY (token), NULL);
 
-	avatar = avatar_new (data, len, format, token);
+	avatar = avatar_new (g_memdup (data, len),
+			     len,
+			     g_strdup (format),
+			     g_strdup (token));
 
 	/* Save to cache if not yet in it */
 	filename = avatar_get_filename (token);
@@ -142,7 +145,7 @@ empathy_avatar_new_from_cache (const gchar *token)
 
 	if (data) {
 		empathy_debug (DEBUG_DOMAIN, "Avatar loaded from %s", filename);
-		avatar = avatar_new (data, len, NULL, token);
+		avatar = avatar_new (data, len, NULL, g_strdup (token));
 	}
 
 	g_free (filename);
