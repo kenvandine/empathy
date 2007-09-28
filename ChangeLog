@@ -1,5 +1,10 @@
 2007-09-28  Xavier Claessens  <xclaesse@gmail.com>
 
+	* configure.ac: Bump version to 0.14.
+	* doc/*: Updated.
+
+2007-09-28  Xavier Claessens  <xclaesse@gmail.com>
+
 	* ChangeLog:
 	* configure.ac:
 	* NEWS: Updated for 0.13 release.

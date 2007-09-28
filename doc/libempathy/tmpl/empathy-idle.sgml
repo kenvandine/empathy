@@ -126,3 +126,39 @@ EmpathyIdle
 @status: 
 
 
+<!-- ##### FUNCTION empathy_idle_get_auto_away ##### -->
+<para>
+
+</para>
+
+@idle: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_idle_set_auto_away ##### -->
+<para>
+
+</para>
+
+@idle: 
+@auto_away: 
+
+
+<!-- ##### FUNCTION empathy_idle_get_auto_disconnect ##### -->
+<para>
+
+</para>
+
+@idle: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_idle_set_auto_disconnect ##### -->
+<para>
+
+</para>
+
+@idle: 
+@auto_disconnect: 
+
+

@@ -32,6 +32,7 @@ empathy-avatar
 @data: 
 @len: 
 @format: 
+@token: 
 @refcount: 
 
 <!-- ##### FUNCTION empathy_avatar_get_type ##### -->
@@ -50,6 +51,16 @@ empathy-avatar
 @avatar: 
 @len: 
 @format: 
+@token: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_avatar_new_from_cache ##### -->
+<para>
+
+</para>
+
+@token: 
 @Returns: 
 
 

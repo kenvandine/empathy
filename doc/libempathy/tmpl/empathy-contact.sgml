@@ -63,6 +63,14 @@ EmpathyContact
 
 </para>
 
+<!-- ##### ENUM EmpathyCapabilities ##### -->
+<para>
+
+</para>
+
+@EMPATHY_CAPABILITIES_AUDIO: 
+@EMPATHY_CAPABILITIES_VIDEO: 
+
 <!-- ##### FUNCTION empathy_contact_new ##### -->
 <para>
 
@@ -191,6 +199,24 @@ EmpathyContact
 @handle: 
 
 
+<!-- ##### FUNCTION empathy_contact_get_capabilities ##### -->
+<para>
+
+</para>
+
+@contact: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_contact_set_capabilities ##### -->
+<para>
+
+</para>
+
+@contact: 
+@capabilities: 
+
+
 <!-- ##### FUNCTION empathy_contact_is_user ##### -->
 <para>
 
@@ -219,6 +245,15 @@ EmpathyContact
 
 
 <!-- ##### FUNCTION empathy_contact_get_status ##### -->
+<para>
+
+</para>
+
+@contact: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_contact_can_voip ##### -->
 <para>
 
 </para>

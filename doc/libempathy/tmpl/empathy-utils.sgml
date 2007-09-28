@@ -80,6 +80,25 @@ empathy-utils
 @Returns: 
 
 
+<!-- ##### FUNCTION empathy_strdiff ##### -->
+<para>
+
+</para>
+
+@left: 
+@right: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_escape_as_identifier ##### -->
+<para>
+
+</para>
+
+@name: 
+@Returns: 
+
+
 <!-- ##### FUNCTION empathy_xml_validate ##### -->
 <para>
 
@@ -166,16 +185,6 @@ empathy-utils
 
 @account: 
 @tp_chan: 
-@Returns: 
-
-
-<!-- ##### FUNCTION empathy_strdiff ##### -->
-<para>
-
-</para>
-
-@left: 
-@right: 
 @Returns: 
 
 

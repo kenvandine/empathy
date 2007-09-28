@@ -53,6 +53,24 @@ EmpathyContactListView
 @Returns: 
 
 
+<!-- ##### FUNCTION empathy_contact_list_view_set_interactive ##### -->
+<para>
+
+</para>
+
+@view: 
+@interactive: 
+
+
+<!-- ##### FUNCTION empathy_contact_list_view_get_interactive ##### -->
+<para>
+
+</para>
+
+@view: 
+@Returns: 
+
+
 <!-- ##### FUNCTION empathy_contact_list_view_get_selected ##### -->
 <para>
 
