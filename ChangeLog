@@ -1,5 +1,13 @@
 2007-09-28  Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/empathy-contact-list-view.c:
+	* libempathy-gtk/empathy-chat-window.c:
+	* src/Makefile.am:
+	* libempathy/empathy-tp-group.c:
+	* libempathy/Makefile.am: Ported from VOIP branch.
+
+2007-09-28  Xavier Claessens  <xclaesse@gmail.com>
+
 	* configure.ac: Bump version to 0.14.
 	* doc/*: Updated.
 

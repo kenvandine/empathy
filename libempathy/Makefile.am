@@ -78,21 +78,21 @@ libempathy_include_HEADERS =			\
 	$(libempathy_headers)			\
 	empathy-enum-types.h
 
-%-marshal.h: %-marshal.list Makefile.am
+%-marshal.h: %-marshal.list Makefile
 	$(GLIB_GENMARSHAL) --header --prefix=$(subst -,_,$*)_marshal $< > $*-marshal.h
 
-%-marshal.c: %-marshal.list Makefile.am
+%-marshal.c: %-marshal.list Makefile
 	echo "#include \"empathy-marshal.h\"" > $@ && \
 	$(GLIB_GENMARSHAL) --body --prefix=$(subst -,_,$*)_marshal $< >> $*-marshal.c
 
-empathy-chandler-glue.h: empathy-chandler.xml
+empathy-chandler-glue.h: empathy-chandler.xml Makefile
 	$(LIBTOOL) --mode=execute $(DBUS_BINDING_TOOL) --prefix=empathy_chandler --mode=glib-server --output=$@ $<
-empathy-filter-glue.h: empathy-filter.xml
+empathy-filter-glue.h: empathy-filter.xml Makefile
 	$(LIBTOOL) --mode=execute $(DBUS_BINDING_TOOL) --prefix=empathy_filter --mode=glib-server --output=$@ $<
 
 empathy-enum-types.h: stamp-empathy-enum-types.h
 	@true
-stamp-empathy-enum-types.h: Makefile $(libempathy_headers)
+stamp-empathy-enum-types.h: $(libempathy_headers) Makefile
 	(cd $(srcdir) \
 	&& glib-mkenums \
 			--fhead "#ifndef __LIBEMPATHY_ENUM_TYPES_H__\n" \
@@ -109,7 +109,7 @@ stamp-empathy-enum-types.h: Makefile $(libempathy_headers)
 	&& rm -f xgen-gth \
 	&& echo timestamp > $(@F)
 
-empathy-enum-types.c: Makefile $(libempathy_headers)
+empathy-enum-types.c: $(libempathy_headers) Makefile
 	(cd $(srcdir) \
 	&& glib-mkenums \
 			--fhead "#include <config.h>\n" \

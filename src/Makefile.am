@@ -22,15 +22,14 @@ empathy_accounts_SOURCES = empathy-accounts.c
 
 # Dbus service file
 servicedir = $(datadir)/dbus-1/services
-service_in_files = org.gnome.Empathy.Chat.service.in
-service_DATA = $(service_in_files:.service.in=.service)
-
-# Rule to make the service file with bindir expanded
-$(service_DATA): $(service_in_files) Makefile
+service_DATA =							\
+	org.gnome.Empathy.Chat.service
+%.service: %.service.in Makefile
 	@sed -e "s|\@bindir\@|$(bindir)|" $< > $@
 
 chandlerdir = $(datadir)/telepathy/managers
-chandler_DATA = empathy-chat.chandler
+chandler_DATA =							\
+	empathy-chat.chandler
 
 BUILT_SOURCES =							\
 	org.gnome.Empathy.Chat.service

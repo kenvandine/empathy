@@ -777,7 +777,7 @@ empathy_tp_group_get_name (EmpathyTpGroup *group)
 	priv = GET_PRIV (group);
 
 	/* Lazy initialisation */
-	if (!priv->group_name) {
+	if (!priv->group_name && priv->tp_chan->handle != 0) {
 		priv->group_name = empathy_inspect_channel (priv->account, priv->tp_chan);
 	}
 

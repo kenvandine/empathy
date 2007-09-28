@@ -877,21 +877,15 @@ chat_window_call_activate_cb (GtkWidget         *menuitem,
 	priv = GET_PRIV (window);
 
 	if (!empathy_chat_is_group_chat (priv->current_chat)) {
-		MissionControl     *mc;
 		EmpathyPrivateChat *chat;
 		EmpathyContact     *contact;
 
 		chat = EMPATHY_PRIVATE_CHAT (priv->current_chat);
 		contact = empathy_private_chat_get_contact (chat);
 
-		mc = empathy_mission_control_new ();
-		mission_control_request_channel (mc,
-						 empathy_contact_get_account (contact),
-						 TP_IFACE_CHANNEL_TYPE_STREAMED_MEDIA,
-						 empathy_contact_get_handle (contact),
-						 TP_HANDLE_TYPE_CONTACT,
-						 NULL, NULL);
-		g_object_unref (mc);
+		/* FIXME: See contact_list_view_voip_activated() to know how to
+		 * call a contact. We need a function to call a contact and use
+		 * it here and in EmpathyContactListView. */
 	}
 }
 
