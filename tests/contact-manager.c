@@ -21,11 +21,11 @@ main (int argc, char **argv)
 
 	main_loop = g_main_loop_new (NULL, FALSE);
 	manager = empathy_contact_manager_new ();
-	
+
 	g_timeout_add (5000, time_out, main_loop);
 
 	g_main_loop_run (main_loop);
-	
+
 	g_object_unref (manager);
 	g_main_loop_unref (main_loop);
 

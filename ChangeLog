@@ -1,3 +1,9 @@
+2007-09-28  Xavier Claessens  <xclaesse@gmail.com>
+
+	* libempathy/empathy-tp-group.c: Look in the local_pendings list if a
+	contact is already local pending.
+	* tests/contact-manager.c: Fix white space typo.
+
 2007-09-27  Xavier Claessens  <xclaesse@gmail.com>
 
 	* libempathy/empathy-utils.c:

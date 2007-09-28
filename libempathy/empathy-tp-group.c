@@ -256,7 +256,7 @@ tp_group_members_changed_cb (DBusGProxy     *group_iface,
 	contacts = tp_group_get_contacts (group, local_pending);
 	for (l = contacts; l; l = l->next) {
 		/* If the contact is not yet local-pending, add it and emit signal */
-		if (!g_list_find_custom (priv->members, l->data,
+		if (!g_list_find_custom (priv->local_pendings, l->data,
 					 tp_group_local_pending_find)) {
 			EmpathyPendingInfo *info;
 
