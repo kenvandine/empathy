@@ -1,5 +1,19 @@
 2007-09-28  Xavier Claessens  <xclaesse@gmail.com>
 
+	* configure.ac:
+	* src/empathy.c: Remove GnomeProgram, not useful anymore, drop libgnome
+	dependency. Fixes bug #442079
+
+	* libempathy/empathy-avatar.c:
+	* libempathy/empathy-avatar.h: Fix Copyright header.
+
+	* libempathy/empathy-contact-factory.c:
+	* libempathy/empathy-tp-group.c: Free return value for async DBus calls,
+	they are not owned by dbus-glib. This fix big leaks, thanks again to
+	valgrind.
+
+2007-09-28  Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy/empathy-tp-group.c: Look in the local_pendings list if a
 	contact is already local pending.
 	* tests/contact-manager.c: Fix white space typo.

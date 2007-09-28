@@ -213,6 +213,8 @@ contact_factory_get_presence_cb (DBusGProxy *proxy,
 	g_hash_table_foreach (handle_table,
 			      (GHFunc) contact_factory_parse_presence_foreach,
 			      account_data);
+
+	g_hash_table_destroy (handle_table);
 OUT:
 	contact_factory_account_data_return_call (account_data);
 }
@@ -229,8 +231,8 @@ contact_factory_presence_update_cb (DBusGProxy                *proxy,
 
 static void
 contact_factory_set_aliases_cb (DBusGProxy *proxy,
-				GError *error,
-				gpointer user_data)
+				GError     *error,
+				gpointer    user_data)
 {
 	ContactFactoryAccountData *account_data = user_data;
 
@@ -276,6 +278,7 @@ contact_factory_request_aliases_cb (DBusGProxy  *proxy,
 		i++;
 	}
 
+	g_strfreev (contact_names);
 OUT:
 	contact_factory_account_data_return_call (data->account_data);
 	g_free (data->handles);
@@ -458,6 +461,7 @@ contact_factory_get_known_avatar_tokens_cb (DBusGProxy *proxy,
 							     account_data);
 	}
 
+	g_hash_table_destroy (tokens);
 	g_array_free (data.handles, TRUE);
 OUT:
 	contact_factory_account_data_return_call (account_data);
@@ -560,9 +564,11 @@ contact_factory_get_capabilities_cb (DBusGProxy *proxy,
 						     channel_type,
 						     generic,
 						     specific);
+
+		g_value_array_free (values);
 	}
 
-
+	g_ptr_array_free (capabilities, TRUE);
 OUT:
 	contact_factory_account_data_return_call (account_data);
 }
@@ -668,6 +674,7 @@ contact_factory_request_handles_cb (DBusGProxy *proxy,
 	}
 
 	contact_factory_request_everything (data->account_data, handles);
+	g_array_free (handles, TRUE);
 
 OUT:
 	g_list_foreach (data->contacts, (GFunc) g_object_unref, NULL);

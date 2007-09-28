@@ -370,6 +370,8 @@ tp_group_get_members_cb (DBusGProxy *proxy,
 				     0,       /* actor */
 				     0,       /* reason */
 				     group);
+
+	g_array_free (handles, TRUE);
 }
 
 static void
@@ -413,7 +415,10 @@ tp_group_get_local_pending_cb (DBusGProxy *proxy,
 					     actor_handle, /* actor */
 					     reason,       /* reason */
 					     group);
+
+		g_value_array_free (pending_struct);
 	}
+	g_ptr_array_free (array, TRUE);
 	g_array_free (handles, TRUE);
 }
 
@@ -441,6 +446,8 @@ tp_group_get_remote_pending_cb (DBusGProxy *proxy,
 				     0,       /* actor */
 				     0,       /* reason */
 				     group);
+
+	g_array_free (handles, TRUE);
 }
 
 static void

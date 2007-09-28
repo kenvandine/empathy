@@ -28,8 +28,6 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
-#include <libgnome/gnome-program.h>
-#include <libgnomeui/gnome-ui-init.h>
 #include <libebook/e-book.h>
 
 #include <libtelepathy/tp-conn.h>
@@ -265,7 +263,6 @@ main (int argc, char *argv[])
 	McAccountMonitor  *monitor;
 	EmpathyIdle       *idle;
 	EmpathyChandler   *chandler;
-	GnomeProgram      *program;
 	gboolean           no_connect = FALSE;
 	GOptionContext    *context;
 	GOptionEntry       options[] = {
@@ -287,15 +284,7 @@ main (int argc, char *argv[])
 
 	g_set_application_name (PACKAGE_NAME);
 
-	program = gnome_program_init ("empathy",
-				      PACKAGE_VERSION,
-				      LIBGNOMEUI_MODULE,
-				      argc, argv,
-				      GNOME_PROGRAM_STANDARD_PROPERTIES,
-				      "goption-context", context,
-				      GNOME_PARAM_HUMAN_READABLE_NAME, PACKAGE_NAME,
-				      NULL);
-
+	gtk_init (&argc, &argv);
 	gtk_window_set_default_icon_name ("empathy");
 	gtk_icon_theme_append_search_path (gtk_icon_theme_get_default (),
 					   DATADIR G_DIR_SEPARATOR_S "empathy");
@@ -339,7 +328,6 @@ main (int argc, char *argv[])
 	g_object_unref (mc);
 	g_object_unref (idle);
 	g_object_unref (icon);
-	g_object_unref (program);
 
 	return EXIT_SUCCESS;
 }

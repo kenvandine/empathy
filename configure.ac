@@ -93,7 +93,6 @@ PKG_CHECK_MODULES(EMPATHY,
    libmissioncontrol >= $MISSION_CONTROL_REQUIRED
    gtk+-2.0 >= $GTK_REQUIRED
    libglade-2.0 >= $LIBGLADE_REQUIRED
-   libgnomeui-2.0
    libebook-1.2
 ])
 
@@ -239,7 +238,6 @@ if test "x$enable_python" != "xno"; then
          libmissioncontrol >= $MISSION_CONTROL_REQUIRED
          gtk+-2.0 >= $GTK_REQUIRED
          libglade-2.0 >= $LIBGLADE_REQUIRED
-         libgnomeui-2.0
       ], have_python="yes", have_python="no")
    fi
 else
