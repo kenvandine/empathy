@@ -1,5 +1,11 @@
 2007-09-28  Xavier Claessens  <xclaesse@gmail.com>
 
+	* ChangeLog:
+	* configure.ac:
+	* NEWS: Updated for 0.13 release.
+
+2007-09-28  Xavier Claessens  <xclaesse@gmail.com>
+
 	* configure.ac:
 	* src/empathy.c: Remove GnomeProgram, not useful anymore, drop libgnome
 	dependency. Fixes bug #442079
@@ -149,7 +155,7 @@
 	* libempathy-gtk/empathy-contact-list-view.c:
 	* libempathy-gtk/empathy-contact-list-view.h:
 	* doc/libempathy-gtk/tmpl/empathy-contact-list-view.sgml: "interactive"
-	property on EmpathyContactListView to enable/disable contect menu and
+	property on EmpathyContactListView to enable/disable context menu and
 	action when double-click on a contact.
 
 2007-09-10  Xavier Claessens  <xclaesse@gmail.com>

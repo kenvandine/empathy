@@ -1,3 +1,24 @@
+NEW in 0.13:
+===========
+ - Completely reworked ContactList API, new EmpathyContactFactory class.
+ - Update to new Telepathy avatar spec.
+ - Dynamic smiley managment and more efficient algorithm to detect smileys in
+   messages. New EmpathySmileyManager class.
+ - Adding capabilities contact property for Audio/Video.
+ - Adding UI to start a VoIP call. Atm it only shows a microphone icon for
+   contacts supporting voice or video but does not make the call. See
+   EMPATHY_VOIP branch for more complete support.
+ - "interactive" property on EmpathyContactListView to enable/disable context
+   menu and action when double-click on a contact.
+ - Add 2 properties to EmpathyIdle to activate auto-away and auto-disconnect,
+   default to off. Only empathy main client will turn them on, like that if
+   other processes are running with an EmpathyIdle instance they won't change
+   presence in the same time than Empathy client.
+ - Cache avatars in ~/.gnome2/Empathy/avatars.
+ - Adding a test program, useful to use with valgrind.
+ - Free return value for async DBus calls, they are not owned by dbus-glib.
+   This fix big leaks.
+
 NEW in 0.12:
 ===========
  - Only update the topic of it has really be changed, avoid diplaying many
