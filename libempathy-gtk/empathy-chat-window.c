@@ -883,9 +883,7 @@ chat_window_call_activate_cb (GtkWidget         *menuitem,
 		chat = EMPATHY_PRIVATE_CHAT (priv->current_chat);
 		contact = empathy_private_chat_get_contact (chat);
 
-		/* FIXME: See contact_list_view_voip_activated() to know how to
-		 * call a contact. We need a function to call a contact and use
-		 * it here and in EmpathyContactListView. */
+		empathy_call_contact (contact);
 	}
 }
 

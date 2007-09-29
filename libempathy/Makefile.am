@@ -34,6 +34,7 @@ libempathy_la_SOURCES =					\
 	empathy-tp-chat.c				\
 	empathy-tp-chatroom.c				\
 	empathy-tp-roomlist.c				\
+	empathy-tp-call.c				\
 	empathy-chandler.c				\
 	empathy-filter.c				\
 	empathy-idle.c					\
@@ -68,10 +69,12 @@ libempathy_headers =				\
 	empathy-tp-chat.h			\
 	empathy-tp-chatroom.h			\
 	empathy-tp-roomlist.h			\
+	empathy-tp-call.h			\
 	empathy-chandler.h			\
 	empathy-filter.h			\
 	empathy-idle.h				\
-	empathy-log-manager.h
+	empathy-log-manager.h			\
+	tp-stream-engine-gen.h
 
 libempathy_includedir = $(includedir)/libempathy/
 libempathy_include_HEADERS =			\
@@ -89,6 +92,10 @@ empathy-chandler-glue.h: empathy-chandler.xml Makefile
 	$(LIBTOOL) --mode=execute $(DBUS_BINDING_TOOL) --prefix=empathy_chandler --mode=glib-server --output=$@ $<
 empathy-filter-glue.h: empathy-filter.xml Makefile
 	$(LIBTOOL) --mode=execute $(DBUS_BINDING_TOOL) --prefix=empathy_filter --mode=glib-server --output=$@ $<
+
+tp-stream-engine-gen.h: tp-stream-engine.xml Makefile.am
+	$(LIBTOOL) --mode=execute $(DBUS_BINDING_TOOL) --prefix=tp_stream_engine --mode=glib-client --output=$@ $<
+
 
 empathy-enum-types.h: stamp-empathy-enum-types.h
 	@true

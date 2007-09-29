@@ -43,7 +43,11 @@ CFILE_GLOB=$(top_srcdir)/libempathy/*.c
 
 # Header files to ignore when scanning.
 # e.g. IGNORE_HFILES=gtkdebug.h gtkintl.h
-IGNORE_HFILES=empathy-filter-glue.h empathy-debug.h empathy-marshal.h
+IGNORE_HFILES=			\
+	empathy-filter-glue.h	\
+	empathy-debug.h		\
+	empathy-marshal.h	\
+	tp-stream-engine-gen.h
 
 # Images to copy into HTML directory.
 # e.g. HTML_IMAGES=$(top_srcdir)/gtk/stock-icons/stock_about_24.png

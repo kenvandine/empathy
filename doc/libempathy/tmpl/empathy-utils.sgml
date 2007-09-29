@@ -188,3 +188,11 @@ empathy-utils
 @Returns: 
 
 
+<!-- ##### FUNCTION empathy_call_contact ##### -->
+<para>
+
+</para>
+
+@contact: 
+
+

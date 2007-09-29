@@ -19,6 +19,7 @@
     <xi:include href="xml/empathy-tp-contact-list.xml"/>
     <xi:include href="xml/empathy-tp-chat.xml"/>
     <xi:include href="xml/empathy-tp-chatroom.xml"/>
+    <xi:include href="xml/empathy-tp-call.xml"/>
     <xi:include href="xml/empathy-contact-factory.xml"/>
     <xi:include href="xml/empathy-chatroom.xml"/>
     <xi:include href="xml/empathy-chatroom-manager.xml"/>

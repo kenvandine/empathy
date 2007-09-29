@@ -47,6 +47,7 @@ libempathy_gtk_la_SOURCES =             	\
 	empathy-new-chatroom-dialog.c		\
 	empathy-chatrooms-window.c		\
 	empathy-log-window.c			\
+	empathy-call-window.c			\
 	empathy-ui-utils.c
 
 # do not distribute generated files
@@ -96,6 +97,7 @@ libempathy_gtk_headers =			\
 	empathy-new-chatroom-dialog.h		\
 	empathy-chatrooms-window.h		\
 	empathy-log-window.h			\
+	empathy-call-window.h			\
 	empathy-ui-utils.h
 
 libempathy_gtk_includedir = $(includedir)/libempathy-gtk/
@@ -120,6 +122,7 @@ glade_DATA = 					\
 	empathy-chatrooms-window.glade		\
 	empathy-spell-dialog.glade		\
 	empathy-log-window.glade		\
+	empathy-call-window.glade		\
 	empathy-chat.glade
 
 empathy-gtk-enum-types.h: stamp-empathy-gtk-enum-types.h

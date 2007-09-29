@@ -91,6 +91,7 @@ gchar *      empathy_inspect_handle                 (McAccount       *account,
 						     guint            handle_type);
 gchar *      empathy_inspect_channel                (McAccount       *account,
 						     TpChan          *tp_chan);
+void         empathy_call_contact                   (EmpathyContact  *contact);
 G_END_DECLS
 
 #endif /*  __EMPATHY_UTILS_H__ */

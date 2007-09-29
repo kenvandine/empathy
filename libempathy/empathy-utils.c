@@ -38,6 +38,7 @@
 #include "empathy-debug.h"
 #include "empathy-utils.h"
 #include "empathy-contact-manager.h"
+#include "empathy-tp-group.h"
 
 #define DEBUG_DOMAIN "Utils"
 
@@ -460,5 +461,66 @@ empathy_inspect_handle (McAccount *account,
 	g_object_unref (tp_conn);
 
 	return name;
+}
+
+void
+empathy_call_contact (EmpathyContact *contact)
+{
+#ifdef HAVE_VOIP
+	MissionControl *mc;
+	McAccount      *account;
+	TpConn         *tp_conn;
+	gchar          *object_path;
+	const gchar    *bus_name;
+	TpChan         *new_chan;
+	EmpathyTpGroup *group;
+	GError         *error;
+
+	/* StreamedMedia channels must have handle=0 and handle_type=none.
+	 * To call a contact we have to add him in the group interface of the
+	 * channel. MissionControl will detect the channel creation and 
+	 * dispatch it to the VoIP chandler automatically. */
+
+	mc = empathy_mission_control_new ();
+	account = empathy_contact_get_account (contact);
+	tp_conn = mission_control_get_connection (mc, account, NULL);
+	/* FIXME: Should be async */
+	if (!tp_conn_request_channel (DBUS_G_PROXY (tp_conn),
+				      TP_IFACE_CHANNEL_TYPE_STREAMED_MEDIA,
+				      TP_HANDLE_TYPE_NONE,
+				      0,
+				      FALSE,
+				      &object_path,
+				      &error)) {
+		empathy_debug (DEBUG_DOMAIN, 
+			      "Couldn't request channel: %s",
+			      error ? error->message : "No error given");
+		g_clear_error (&error);
+		g_object_unref (mc);
+		g_object_unref (tp_conn);
+		return;
+	}
+
+	bus_name = dbus_g_proxy_get_bus_name (DBUS_G_PROXY (tp_conn));
+	new_chan = tp_chan_new (tp_get_bus (),
+				bus_name,
+				object_path,
+				TP_IFACE_CHANNEL_TYPE_STREAMED_MEDIA,
+				TP_HANDLE_TYPE_NONE,
+				0);
+
+	/* FIXME: group is leaked, we can't unref it directly because
+	 * _add_member is async so we have to wait for it to return before
+	 * finalizing the group. I think EmpathyTpGroup should ref itself
+	 * when it does async calls to avoid finalizing when there is calls
+	 * in fligth like that we could unref it here. */
+	group = empathy_tp_group_new (account, new_chan);
+	empathy_tp_group_add_member (group, contact, "");
+
+	g_object_unref (mc);
+	g_object_unref (tp_conn);
+	g_object_unref (new_chan);
+	g_free (object_path);
+#endif
 }
 

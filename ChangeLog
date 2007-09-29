@@ -1,10 +1,28 @@
-2007-09-28  Xavier Claessens  <xclaesse@gmail.com>
+2007-09-29  Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/empathy-call-window.c:
+	* libempathy-gtk/empathy-call-window.h:
 	* libempathy-gtk/empathy-contact-list-view.c:
+	* libempathy-gtk/empathy-call-window.glade:
+	* libempathy-gtk/Makefile.am:
 	* libempathy-gtk/empathy-chat-window.c:
+	* src/empathy-call-chandler.c:
+	* src/empathy-call.chandler:
+	* src/org.gnome.Empathy.Call.service.in:
 	* src/Makefile.am:
-	* libempathy/empathy-tp-group.c:
-	* libempathy/Makefile.am: Ported from VOIP branch.
+	* libempathy/empathy-utils.c:
+	* libempathy/empathy-utils.h:
+	* libempathy/empathy-tp-call.c:
+	* libempathy/empathy-tp-call.h:
+	* libempathy/Makefile.am:
+	* libempathy/tp-stream-engine.xml:
+	* configure.ac:
+	* doc/libempathy-gtk/libempathy-gtk-docs.sgml:
+	* doc/libempathy/libempathy.types:
+	* doc/libempathy/libempathy-docs.sgml:
+	* doc/libempathy/Makefile.am:
+	* doc/libempathy/tmpl/empathy-utils.sgml: Initial Voice+Video support
+	Fixes bug #468204 (Elliot Fairweather, Xavier Claessens).
 
 2007-09-28  Xavier Claessens  <xclaesse@gmail.com>
 
@@ -30,6 +48,10 @@
 	* libempathy/empathy-tp-group.c: Free return value for async DBus calls,
 	they are not owned by dbus-glib. This fix big leaks, thanks again to
 	valgrind.
+
+2007-09-28  Xavier Claessens  <xclaesse@gmail.com>
+
+	* src/Makefile.am: Correctly modify service.in files to expand bindir.
 
 2007-09-28  Xavier Claessens  <xclaesse@gmail.com>
 
@@ -1674,4 +1696,9 @@
 2007-03-16  Xavier Claessens  <xclaesse@gmail.com>
 
 	* Initial version
+2007-09-28  Xavier Claessens  <xclaesse@gmail.com>
+
+	* libempathy/empathy-tp-group.c: Look in the local_pendings list if a
+	contact is already local pending.
+	* tests/contact-manager.c: Fix white space typo.
 

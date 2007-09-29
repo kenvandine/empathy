@@ -1,0 +1,5 @@
+[ChannelHandler]
+BusName = org.gnome.Empathy.Call
+ObjectPath = /org/freedesktop/Telepathy/ChannelHandler
+ChannelType = org.freedesktop.Telepathy.Channel.Type.StreamedMedia
+TypeSpecificCapabilities = 15

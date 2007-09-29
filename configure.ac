@@ -251,6 +251,20 @@ fi
 AM_CONDITIONAL(HAVE_PYTHON, test "x$have_python" = "xyes")
 
 dnl -----------------------------------------------------------
+dnl VoIP support
+dnl -----------------------------------------------------------
+AC_ARG_ENABLE(voip,
+              AS_HELP_STRING([--enable-voip=@<:@no/yes@:>@],
+                             [Add support for Voice and Video call]), ,
+                             enable_voip=no)
+
+if test "x$enable_voip" = "xyes"; then
+   AC_DEFINE(HAVE_VOIP, 1, [Define if we have voip])
+fi
+
+AM_CONDITIONAL(HAVE_VOIP, test "x$enable_voip" = "xyes")
+
+dnl -----------------------------------------------------------
 
 AC_OUTPUT([
    Makefile
@@ -273,7 +287,8 @@ AC_OUTPUT([
    megaphone/data/Makefile
    nothere/Makefile
    nothere/src/Makefile
-   nothere/data/Makefile   doc/Makefile
+   nothere/data/Makefile
+   doc/Makefile
    doc/libempathy/Makefile
    doc/libempathy-gtk/Makefile
    python/Makefile

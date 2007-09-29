@@ -43,5 +43,6 @@
     <xi:include href="xml/empathy-contact-groups.xml"/>
     <xi:include href="xml/empathy-log-window.xml"/>
     <xi:include href="xml/empathy-spell-dialog.xml"/>
+    <xi:include href="xml/empathy-call-window.xml"/>
   </chapter>
 </book>
