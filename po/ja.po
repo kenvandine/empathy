@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: empathy trunk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-08-26 10:51+0900\n"
-"PO-Revision-Date: 2007-08-26 10:50+0900\n"
+"POT-Creation-Date: 2007-09-29 13:20+0900\n"
+"PO-Revision-Date: 2007-09-29 13:19+0900\n"
 "Last-Translator: Takeshi AIHANA <takeshi.aihana@gmail.com>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "MIME-Version: 1.0\n"
@@ -26,7 +26,7 @@ msgstr "インスタント・メッセージを送受信します"
 
 #: ../data/empathy.schemas.in.h:1
 msgid "Always open a separate chat window for new chats."
-msgstr "新しい仲間と会話する度に別のウィンドウを開きます。"
+msgstr "新しい仲間と会話する度に別のウィンドウを開くかどうかです。"
 
 #: ../data/empathy.schemas.in.h:2
 msgid "Chat window theme"
@@ -76,7 +76,7 @@ msgstr "メイン・ウィンドウを隠す"
 
 #: ../data/empathy.schemas.in.h:13
 msgid "Hide the main window."
-msgstr "メイン・ウィンドウを隠します。"
+msgstr "メイン・ウィンドウを隠すかどうかです。"
 
 #: ../data/empathy.schemas.in.h:14
 msgid "Open new chats in separate windows"
@@ -206,7 +206,7 @@ msgstr "離席中"
 msgid "Hidden"
 msgstr "隠れる"
 
-#: ../libempathy/empathy-tp-contact-list.c:354 ../src/empathy.c:213
+#: ../libempathy/empathy-tp-contact-list.c:730 ../src/empathy.c:211
 msgid "People nearby"
 msgstr "すぐ近くにいる人達"
 
@@ -484,153 +484,142 @@ msgid "C_lear"
 msgstr "クリア(_L)"
 
 #: ../libempathy-gtk/empathy-chat.glade.h:2
+msgid "Ca_ll"
+msgstr "呼び出す(_L)"
+
+#: ../libempathy-gtk/empathy-chat.glade.h:3
 msgid "Change _Topic..."
 msgstr "トピックの変更(_T)..."
 
-#: ../libempathy-gtk/empathy-chat.glade.h:3
+#: ../libempathy-gtk/empathy-chat.glade.h:4
 msgid "Chat"
 msgstr "チャット"
 
-#: ../libempathy-gtk/empathy-chat.glade.h:4
+#: ../libempathy-gtk/empathy-chat.glade.h:5
 msgid "Contact Infor_mation"
 msgstr "仲間の情報(_M)"
 
-#: ../libempathy-gtk/empathy-chat.glade.h:5
+#: ../libempathy-gtk/empathy-chat.glade.h:6
 msgid "Cu_t"
 msgstr "切り取り(_T)"
 
-#: ../libempathy-gtk/empathy-chat.glade.h:6
+#: ../libempathy-gtk/empathy-chat.glade.h:7
 msgid "In_vite..."
 msgstr "招待する(_V)..."
 
-#: ../libempathy-gtk/empathy-chat.glade.h:7
+#: ../libempathy-gtk/empathy-chat.glade.h:8
 msgid "Insert _Smiley"
 msgstr "スマイリーの挿入(_S)"
 
-#: ../libempathy-gtk/empathy-chat.glade.h:8
+#: ../libempathy-gtk/empathy-chat.glade.h:9
 msgid "Invitation _message:"
 msgstr "招待メッセージ(_M):"
 
-#: ../libempathy-gtk/empathy-chat.glade.h:9
+#: ../libempathy-gtk/empathy-chat.glade.h:10
 msgid "Invite"
 msgstr "招待する"
 
-#: ../libempathy-gtk/empathy-chat.glade.h:10
+#: ../libempathy-gtk/empathy-chat.glade.h:11
 #: ../libempathy-gtk/empathy-main-window.glade.h:4
 msgid "Join _New..."
 msgstr "新規(N)..."
 
-#: ../libempathy-gtk/empathy-chat.glade.h:11
+#: ../libempathy-gtk/empathy-chat.glade.h:12
 msgid "Move Tab _Left"
 msgstr "タブを左へ移動(_L)"
 
-#: ../libempathy-gtk/empathy-chat.glade.h:12
+#: ../libempathy-gtk/empathy-chat.glade.h:13
 msgid "Move Tab _Right"
 msgstr "タブを右へ移動(_R)"
 
-#: ../libempathy-gtk/empathy-chat.glade.h:13
+#: ../libempathy-gtk/empathy-chat.glade.h:14
 msgid "Select who would you like to invite:"
 msgstr "招待する仲間を選択して下さい:"
 
-#: ../libempathy-gtk/empathy-chat.glade.h:14
+#: ../libempathy-gtk/empathy-chat.glade.h:15
 msgid "You have been invited to join a chat conference."
 msgstr "あなたはチャット会議に参加するために招待されました。"
 
-#: ../libempathy-gtk/empathy-chat.glade.h:15
+#: ../libempathy-gtk/empathy-chat.glade.h:16
 #: ../libempathy-gtk/empathy-main-window.glade.h:9
 msgid "_Add Contact..."
 msgstr "仲間の追加(_A)..."
 
-#: ../libempathy-gtk/empathy-chat.glade.h:16
+#: ../libempathy-gtk/empathy-chat.glade.h:17
 msgid "_Add To Favorites"
 msgstr "お気に入りに追加する(_A)"
 
-#: ../libempathy-gtk/empathy-chat.glade.h:17
+#: ../libempathy-gtk/empathy-chat.glade.h:18
 msgid "_Close"
 msgstr "閉じる(_C)"
 
-#: ../libempathy-gtk/empathy-chat.glade.h:18
+#: ../libempathy-gtk/empathy-chat.glade.h:19
 msgid "_Conversation"
 msgstr "会話(_C)"
 
-#: ../libempathy-gtk/empathy-chat.glade.h:19
+#: ../libempathy-gtk/empathy-chat.glade.h:20
 msgid "_Copy"
 msgstr "コピー(_C)"
 
-#: ../libempathy-gtk/empathy-chat.glade.h:20
+#: ../libempathy-gtk/empathy-chat.glade.h:21
 msgid "_Detach Tab"
 msgstr "タブの取り外し(_D)"
 
-#: ../libempathy-gtk/empathy-chat.glade.h:21
-#: ../libempathy-gtk/empathy-contact-list-view.c:216
+#: ../libempathy-gtk/empathy-chat.glade.h:22
+#: ../libempathy-gtk/empathy-contact-list-view.c:214
 #: ../libempathy-gtk/empathy-main-window.glade.h:12
 msgid "_Edit"
 msgstr "編集(_E)"
 
-#: ../libempathy-gtk/empathy-chat.glade.h:22
+#: ../libempathy-gtk/empathy-chat.glade.h:23
 msgid "_Next Tab"
 msgstr "次のタブへ(_N)"
 
-#: ../libempathy-gtk/empathy-chat.glade.h:23
+#: ../libempathy-gtk/empathy-chat.glade.h:24
 msgid "_Paste"
 msgstr "貼り付け(_P)"
 
-#: ../libempathy-gtk/empathy-chat.glade.h:24
+#: ../libempathy-gtk/empathy-chat.glade.h:25
 msgid "_Previous Tab"
 msgstr "前のタブへ(_P)"
 
-#: ../libempathy-gtk/empathy-chat.glade.h:25
+#: ../libempathy-gtk/empathy-chat.glade.h:26
 #: ../libempathy-gtk/empathy-main-window.glade.h:18
 msgid "_Room"
 msgstr "部屋(_R)"
 
-#: ../libempathy-gtk/empathy-chat.glade.h:26
+#: ../libempathy-gtk/empathy-chat.glade.h:27
 msgid "_Show Contacts"
 msgstr "仲間の表示(_S)"
 
-#: ../libempathy-gtk/empathy-chat.glade.h:27
+#: ../libempathy-gtk/empathy-chat.glade.h:28
 msgid "_Tabs"
 msgstr "タブ(_T)"
 
-#: ../libempathy-gtk/empathy-chat.glade.h:28
-#: ../libempathy-gtk/empathy-contact-list-view.c:232
+#: ../libempathy-gtk/empathy-chat.glade.h:29
+#: ../libempathy-gtk/empathy-contact-list-view.c:230
 #: ../libempathy-gtk/empathy-main-window.glade.h:19
 msgid "_View Previous Conversations"
 msgstr "会話の履歴を表示する(_V)"
 
-#: ../libempathy-gtk/empathy-chat-view.c:557
+#: ../libempathy-gtk/empathy-chat-view.c:468
 msgid "_Copy Link Address"
 msgstr "リンク先のコピー(_C)"
 
-#: ../libempathy-gtk/empathy-chat-view.c:565
+#: ../libempathy-gtk/empathy-chat-view.c:476
 msgid "_Open Link"
 msgstr "リンクを開く(_O)"
 
-#: ../libempathy-gtk/empathy-chat-view.c:902
+#: ../libempathy-gtk/empathy-chat-view.c:754
 msgid "%A %d %B %Y"
 msgstr "%Y年%B%e日 %A"
 
-#: ../libempathy-gtk/empathy-chat-window.c:703
-#: ../libempathy-gtk/empathy-chat-window.c:733
-msgid "New Message"
-msgid_plural "New Messages"
-msgstr[0] "新しいメッセージ"
-msgstr[1] "複数の新しいメッセージ"
-
 #: ../libempathy-gtk/empathy-chat-window.c:709
-msgid "Chat Room"
-msgstr "チャット部屋"
-
-#: ../libempathy-gtk/empathy-chat-window.c:714
-#: ../libempathy-gtk/empathy-chat-window.c:737
-#: ../libempathy-gtk/empathy-log-window.c:524
 #, c-format
-msgid "Conversation"
-msgid_plural "Conversations (%d)"
-msgstr[0] "会話"
-msgstr[1] "会話 (%d 個)"
+msgid "Conversations (%d)"
+msgstr "会話 (%d)"
 
-#: ../libempathy-gtk/empathy-chat-window.c:1288
+#: ../libempathy-gtk/empathy-chat-window.c:1293
 msgid "Typing a message."
 msgstr "メッセージを入力しています"
 
@@ -702,80 +691,88 @@ msgstr "あとで決める(_L)"
 msgid "Subscription Request"
 msgstr "登録のリクエスト"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:196
+#: ../libempathy-gtk/empathy-contact-list-view.c:194
 msgid "_Contact"
 msgstr "仲間(_C)"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:200
+#: ../libempathy-gtk/empathy-contact-list-view.c:198
 msgid "_Group"
 msgstr "グループ(_G)"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:204
+#: ../libempathy-gtk/empathy-contact-list-view.c:202
 #: ../libempathy-gtk/empathy-main-window.glade.h:10
 msgid "_Chat"
 msgstr "会話(_C)"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:204
+#: ../libempathy-gtk/empathy-contact-list-view.c:202
 msgid "Chat with contact"
 msgstr "仲間とチャットする"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:208
+#: ../libempathy-gtk/empathy-contact-list-view.c:206
 msgid "Infor_mation"
 msgstr "情報(_M)"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:208
+#: ../libempathy-gtk/empathy-contact-list-view.c:206
 msgid "View contact information"
 msgstr "仲間の情報を表示します"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:212
+#: ../libempathy-gtk/empathy-contact-list-view.c:210
 msgid "Re_name"
 msgstr "名前の変更(_N)"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:212
+#: ../libempathy-gtk/empathy-contact-list-view.c:210
 msgid "Rename"
 msgstr "名前の変更"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:216
+#: ../libempathy-gtk/empathy-contact-list-view.c:214
 msgid "Edit the groups and name for this contact"
 msgstr "この仲間のグループと名前を編集します"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:220
+#: ../libempathy-gtk/empathy-contact-list-view.c:218
 msgid "_Remove"
 msgstr "削除(_R)"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:220
+#: ../libempathy-gtk/empathy-contact-list-view.c:218
 msgid "Remove contact"
 msgstr "仲間を削除します"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:224
+#: ../libempathy-gtk/empathy-contact-list-view.c:222
 msgid "_Invite to Chat Room"
 msgstr "チャット部屋へ招待する(_I)"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:224
+#: ../libempathy-gtk/empathy-contact-list-view.c:222
 msgid "Invite to a currently open chat room"
 msgstr "現在開いているチャット部屋へ招待します"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:228
+#: ../libempathy-gtk/empathy-contact-list-view.c:226
 msgid "_Send File..."
 msgstr "ファイルの転送(_S)..."
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:228
+#: ../libempathy-gtk/empathy-contact-list-view.c:226
 msgid "Send a file"
 msgstr "ファイルを送信します"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:232
+#: ../libempathy-gtk/empathy-contact-list-view.c:230
 msgid "View previous conversations with this contact"
 msgstr "この仲間と以前会話した時の内容を表示します"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1488
+#: ../libempathy-gtk/empathy-contact-list-view.c:234
+msgid "_Call"
+msgstr "呼び出す(_C)"
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:234
+msgid "Start a voice or video conversation with this contact"
+msgstr "この仲間と音声または映像を使って会話を始めます"
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:1400
 msgid "Sorry, I don't want you in my contact list anymore."
 msgstr "すみませんが、あなたを私の仲間一覧に登録したくありません"
 
-#: ../libempathy-gtk/empathy-contact-widget.c:626
+#: ../libempathy-gtk/empathy-contact-widget.c:637
 msgid "Select"
 msgstr "選択"
 
-#: ../libempathy-gtk/empathy-contact-widget.c:636
+#: ../libempathy-gtk/empathy-contact-widget.c:647
 #: ../libempathy-gtk/empathy-main-window.c:613
 msgid "Group"
 msgstr "グループ"
@@ -844,31 +841,31 @@ msgstr "バージョン:"
 msgid "Web site:"
 msgstr "ホームページ:"
 
-#: ../libempathy-gtk/empathy-group-chat.c:252
+#: ../libempathy-gtk/empathy-group-chat.c:253
 msgid "Enter the new topic you want to set for this room:"
 msgstr "この部屋にセットしたい新しいトピックを入力して下さい:"
 
-#: ../libempathy-gtk/empathy-group-chat.c:360
+#: ../libempathy-gtk/empathy-group-chat.c:366
 #, c-format
 msgid "%s has joined the room"
 msgstr "%s さんが部屋に入室しました"
 
-#: ../libempathy-gtk/empathy-group-chat.c:376
+#: ../libempathy-gtk/empathy-group-chat.c:369
 #, c-format
 msgid "%s has left the room"
 msgstr "%s さんが部屋から退室しました"
 
-#: ../libempathy-gtk/empathy-group-chat.c:455
+#: ../libempathy-gtk/empathy-group-chat.c:449
 #, c-format
 msgid "Topic: %s"
 msgstr "トピック: %s"
 
-#: ../libempathy-gtk/empathy-group-chat.c:578
+#: ../libempathy-gtk/empathy-group-chat.c:570
 #, c-format
 msgid "Topic set to: %s"
 msgstr "新しいトピック: %s"
 
-#: ../libempathy-gtk/empathy-group-chat.c:580
+#: ../libempathy-gtk/empathy-group-chat.c:572
 msgid "No topic defined"
 msgstr "トピックはありません"
 
@@ -880,11 +877,15 @@ msgstr "<b>トピック:</b>"
 msgid "Group Chat"
 msgstr "グループ・チャット"
 
-#: ../libempathy-gtk/empathy-log-window.c:517
+#: ../libempathy-gtk/empathy-log-window.c:497
 msgid "Account"
 msgstr "アカウント"
 
-#: ../libempathy-gtk/empathy-log-window.c:534
+#: ../libempathy-gtk/empathy-log-window.c:504
+msgid "Conversation"
+msgstr "会話"
+
+#: ../libempathy-gtk/empathy-log-window.c:514
 msgid "Date"
 msgstr "日付"
 
@@ -974,6 +975,8 @@ msgid "Show _Offline Contacts"
 msgstr "オフラインの仲間を表示する(_O)"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:7
+#: ../megaphone/data/GNOME_Megaphone_Applet.xml.h:1
+#: ../nothere/data/GNOME_NotHere_Applet.xml.h:1
 msgid "_About"
 msgstr "情報(_A)"
 
@@ -999,6 +1002,7 @@ msgid "_Personal Information"
 msgstr "個人情報(_P)"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:16
+#: ../megaphone/data/GNOME_Megaphone_Applet.xml.h:3
 msgid "_Preferences"
 msgstr "設定(_P)"
 
@@ -1140,12 +1144,12 @@ msgstr "このメッセージを保存する"
 msgid "Status:"
 msgstr "状態:"
 
-#: ../libempathy-gtk/empathy-private-chat.c:185
+#: ../libempathy-gtk/empathy-private-chat.c:188
 #, c-format
 msgid "%s went offline"
 msgstr "%s さんがオフラインになりました"
 
-#: ../libempathy-gtk/empathy-private-chat.c:199
+#: ../libempathy-gtk/empathy-private-chat.c:202
 #, c-format
 msgid "%s has come online"
 msgstr "%s さんがオンラインになりました"
@@ -1166,7 +1170,7 @@ msgstr "スペルのチェック"
 msgid "Suggestions for the word:"
 msgstr "推奨する単語:"
 
-#: ../libempathy-gtk/empathy-status-icon.c:302
+#: ../libempathy-gtk/empathy-status-icon.c:311
 #, c-format
 msgid ""
 "New message from %s:\n"
@@ -1175,13 +1179,18 @@ msgstr ""
 "%s さんからの新着メッセージ:\n"
 "%s"
 
-#: ../libempathy-gtk/empathy-status-icon.c:554
+#: ../libempathy-gtk/empathy-status-icon.c:572
+#, c-format
+msgid "Subscription requested by %s"
+msgstr "%s さんからのリクエスト"
+
+#: ../libempathy-gtk/empathy-status-icon.c:575
 #, c-format
 msgid ""
-"Subscription requested for %s\n"
+"\n"
 "Message: %s"
 msgstr ""
-"%s さんの登録リクエスト\n"
+"\n"
 "メッセージ: %s"
 
 #: ../libempathy-gtk/empathy-status-icon.glade.h:1
@@ -1208,10 +1217,37 @@ msgstr "クリーン"
 msgid "Blue"
 msgstr "ブルー"
 
-#: ../src/empathy.c:274
+#: ../megaphone/data/GNOME_Megaphone_Applet.schemas.in.h:1
+msgid ""
+"The contact to display in the applet. Empty means no contact is displayed."
+msgstr "アプレットの中に表示する連絡先"
+
+#: ../megaphone/data/GNOME_Megaphone_Applet.server.in.in.h:1
+msgid "Megaphone"
+msgstr "メガホン"
+
+#: ../megaphone/data/GNOME_Megaphone_Applet.server.in.in.h:2
+#: ../megaphone/src/megaphone-applet.c:432
+msgid "Talk!"
+msgstr "仲間と話しをしよう！"
+
+#: ../megaphone/data/GNOME_Megaphone_Applet.xml.h:2
+msgid "_Information"
+msgstr "情報(_I)"
+
+#: ../nothere/data/GNOME_NotHere_Applet.server.in.in.h:1
+msgid "Presence"
+msgstr "在席"
+
+#: ../nothere/data/GNOME_NotHere_Applet.server.in.in.h:2
+#: ../nothere/src/nothere-applet.c:89
+msgid "Set your own presence"
+msgstr "あなたの在席情報をセットします"
+
+#: ../src/empathy.c:271
 msgid "Don't connect on startup"
 msgstr "起動時にサインインしない"
 
-#: ../src/empathy.c:285
+#: ../src/empathy.c:282
 msgid "- Empathy Instant Messenger"
 msgstr "- Empathy インスタント・メッセンジャー"
