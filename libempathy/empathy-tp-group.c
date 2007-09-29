@@ -358,6 +358,7 @@ tp_group_get_members_cb (DBusGProxy *proxy,
 	if (error) {
 		empathy_debug (DEBUG_DOMAIN, "Failed to get members: %s",
 			       error->message);
+		g_object_unref (group);
 		return;
 	}
 
@@ -372,6 +373,7 @@ tp_group_get_members_cb (DBusGProxy *proxy,
 				     group);
 
 	g_array_free (handles, TRUE);
+	g_object_unref (group);
 }
 
 static void
@@ -388,6 +390,7 @@ tp_group_get_local_pending_cb (DBusGProxy *proxy,
 	if (error) {
 		empathy_debug (DEBUG_DOMAIN, "Failed to get local pendings: %s",
 			       error->message);
+		g_object_unref (group);
 		return;
 	}
 
@@ -420,6 +423,7 @@ tp_group_get_local_pending_cb (DBusGProxy *proxy,
 	}
 	g_ptr_array_free (array, TRUE);
 	g_array_free (handles, TRUE);
+	g_object_unref (group);
 }
 
 static void
@@ -434,6 +438,7 @@ tp_group_get_remote_pending_cb (DBusGProxy *proxy,
 	if (error) {
 		empathy_debug (DEBUG_DOMAIN, "Failed to get remote pendings: %s",
 			       error->message);
+		g_object_unref (group);
 		return;
 	}
 
@@ -448,12 +453,15 @@ tp_group_get_remote_pending_cb (DBusGProxy *proxy,
 				     group);
 
 	g_array_free (handles, TRUE);
+	g_object_unref (group);
 }
 
 static void
 tp_group_finalize (GObject *object)
 {
 	EmpathyTpGroupPriv *priv = GET_PRIV (object);
+
+	empathy_debug (DEBUG_DOMAIN, "finalize: %p");
 
 	tp_group_disconnect (EMPATHY_TP_GROUP (object));
 
@@ -590,13 +598,13 @@ empathy_tp_group_new (McAccount *account,
 
 	tp_chan_iface_group_get_members_async (priv->group_iface,
 					       tp_group_get_members_cb,
-					       group);
+					       g_object_ref (group));
 	tp_chan_iface_group_get_local_pending_members_with_info_async (priv->group_iface,
 								       tp_group_get_local_pending_cb,
-								       group);
+								       g_object_ref (group));
 	tp_chan_iface_group_get_remote_pending_members_async (priv->group_iface,
 							      tp_group_get_remote_pending_cb,
-							      group);
+							      g_object_ref (group));
 
 	return group;
 }

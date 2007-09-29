@@ -509,14 +509,10 @@ empathy_call_contact (EmpathyContact *contact)
 				TP_HANDLE_TYPE_NONE,
 				0);
 
-	/* FIXME: group is leaked, we can't unref it directly because
-	 * _add_member is async so we have to wait for it to return before
-	 * finalizing the group. I think EmpathyTpGroup should ref itself
-	 * when it does async calls to avoid finalizing when there is calls
-	 * in fligth like that we could unref it here. */
 	group = empathy_tp_group_new (account, new_chan);
 	empathy_tp_group_add_member (group, contact, "");
 
+	g_object_unref (group);
 	g_object_unref (mc);
 	g_object_unref (tp_conn);
 	g_object_unref (new_chan);

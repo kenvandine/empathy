@@ -1,5 +1,11 @@
 2007-09-29  Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy/empathy-tp-group.c: ref group when async calls are in
+	flight to avoid destroying the object before receiving the reply.
+	* libempathy/empathy-utils.c: Unref the group to not leak it.
+
+2007-09-29  Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy/empathy-contact-factory.c: Refcount
 	ContactFactoryAccountData struct.
 
