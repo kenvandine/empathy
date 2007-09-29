@@ -48,7 +48,7 @@ struct _EmpathyContactFactoryPriv {
 typedef struct {
 	EmpathyContactFactory *factory;
 	McAccount             *account;
-	guint                  nb_pending_calls;
+	guint                  refcount;
 
 	TpConn                *tp_conn;
 	DBusGProxy            *aliasing_iface;
@@ -126,15 +126,76 @@ contact_factory_account_data_find_by_id (ContactFactoryAccountData *account_data
 	return l ? l->data : NULL;
 }
 
-static void contact_factory_account_data_free (gpointer data);
+static void contact_factory_account_data_disconnect (ContactFactoryAccountData *account_data);
 
 static void
-contact_factory_account_data_return_call (ContactFactoryAccountData *account_data)
+contact_factory_weak_notify (gpointer data,
+			     GObject *where_the_object_was)
 {
-	if (--account_data->nb_pending_calls == 0 &&
-	    account_data->contacts == NULL) {
-		contact_factory_account_data_free (account_data);
+	ContactFactoryAccountData *account_data = data;
+
+	empathy_debug (DEBUG_DOMAIN, "Remove finalized contact %p",
+		       where_the_object_was);
+
+	account_data->contacts = g_list_remove (account_data->contacts,
+						where_the_object_was);
+	if (!account_data->contacts) {
+		EmpathyContactFactoryPriv *priv = GET_PRIV (account_data->factory);
+
+		g_hash_table_remove (priv->accounts, account_data->account);
 	}
+}
+
+static void
+contact_factory_remove_foreach (gpointer data,
+				gpointer user_data)
+{
+	ContactFactoryAccountData *account_data = user_data;
+	EmpathyContact            *contact = data;
+
+	g_object_weak_unref (G_OBJECT (contact),
+			     contact_factory_weak_notify,
+			     account_data);
+}
+
+static ContactFactoryAccountData *
+contact_factory_account_data_ref (ContactFactoryAccountData *account_data)
+{
+	account_data->refcount++;
+
+	return account_data;
+}
+
+static void
+contact_factory_account_data_unref (ContactFactoryAccountData *account_data)
+{
+	account_data->refcount--;
+	if (account_data->refcount > 0) {
+		return;
+	}
+
+	empathy_debug (DEBUG_DOMAIN, "Account data finalized: %p (%s)",
+		       account_data,
+		       mc_account_get_normalized_name (account_data->account));
+
+	contact_factory_account_data_disconnect (account_data);
+
+	if (account_data->contacts) {
+		g_list_foreach (account_data->contacts,
+				contact_factory_remove_foreach,
+				account_data);
+		g_list_free (account_data->contacts);
+	}
+
+	if (account_data->account) {
+		g_object_unref (account_data->account);
+	}
+
+	if (account_data->tp_conn) {
+		g_object_unref (account_data->tp_conn);
+	}
+
+	g_slice_free (ContactFactoryAccountData, account_data);
 }
 
 static void
@@ -216,7 +277,7 @@ contact_factory_get_presence_cb (DBusGProxy *proxy,
 
 	g_hash_table_destroy (handle_table);
 OUT:
-	contact_factory_account_data_return_call (account_data);
+	contact_factory_account_data_unref (account_data);
 }
 
 static void
@@ -241,7 +302,7 @@ contact_factory_set_aliases_cb (DBusGProxy *proxy,
 			       error->message);
 	}
 
-	contact_factory_account_data_return_call (account_data);
+	contact_factory_account_data_unref (account_data);
 }
 
 static void
@@ -280,7 +341,7 @@ contact_factory_request_aliases_cb (DBusGProxy  *proxy,
 
 	g_strfreev (contact_names);
 OUT:
-	contact_factory_account_data_return_call (data->account_data);
+	contact_factory_account_data_unref (data->account_data);
 	g_free (data->handles);
 	g_slice_free (RequestAliasesData, data);
 }
@@ -364,7 +425,7 @@ contact_factory_request_avatars_cb (DBusGProxy *proxy,
 			       error->message);
 	}
 
-	contact_factory_account_data_return_call (account_data);
+	contact_factory_account_data_unref (account_data);
 }
 
 typedef struct {
@@ -454,17 +515,16 @@ contact_factory_get_known_avatar_tokens_cb (DBusGProxy *proxy,
 
 	/* Request needed avatars */
 	if (data.handles->len > 0) {
-		account_data->nb_pending_calls++;
 		tp_conn_iface_avatars_request_avatars_async (account_data->avatars_iface,
 							     data.handles,
 							     contact_factory_request_avatars_cb,
-							     account_data);
+							     contact_factory_account_data_ref (account_data));
 	}
 
 	g_hash_table_destroy (tokens);
 	g_array_free (data.handles, TRUE);
 OUT:
-	contact_factory_account_data_return_call (account_data);
+	contact_factory_account_data_unref (account_data);
 }
 
 static void
@@ -486,11 +546,10 @@ contact_factory_avatar_updated_cb (DBusGProxy *proxy,
 	handles = g_array_new (FALSE, FALSE, sizeof (guint));
 	g_array_append_val (handles, handle);
 
-	account_data->nb_pending_calls++;
 	tp_conn_iface_avatars_request_avatars_async (account_data->avatars_iface,
 						     handles,
 						     contact_factory_request_avatars_cb,
-						     account_data);
+						     contact_factory_account_data_ref (account_data));
 	g_array_free (handles, TRUE);
 }
 
@@ -570,7 +629,7 @@ contact_factory_get_capabilities_cb (DBusGProxy *proxy,
 
 	g_ptr_array_free (capabilities, TRUE);
 OUT:
-	contact_factory_account_data_return_call (account_data);
+	contact_factory_account_data_unref (account_data);
 }
 
 static void
@@ -607,19 +666,17 @@ contact_factory_request_everything (ContactFactoryAccountData *account_data,
 				    GArray                    *handles)
 {
 	if (account_data->presence_iface) {
-		account_data->nb_pending_calls++;
 		tp_conn_iface_presence_get_presence_async (account_data->presence_iface,
 							   handles,
 							   contact_factory_get_presence_cb,
-							   account_data);
+							   contact_factory_account_data_ref (account_data));
 	}
 
 	if (account_data->aliasing_iface) {
 		RequestAliasesData *data;
 
-		account_data->nb_pending_calls++;
 		data = g_slice_new (RequestAliasesData);
-		data->account_data = account_data;
+		data->account_data = contact_factory_account_data_ref (account_data);
 		data->handles = g_memdup (handles->data, handles->len * sizeof (guint));
 
 		tp_conn_iface_aliasing_request_aliases_async (account_data->aliasing_iface,
@@ -629,19 +686,17 @@ contact_factory_request_everything (ContactFactoryAccountData *account_data,
 	}
 
 	if (account_data->avatars_iface) {
-		account_data->nb_pending_calls++;
 		tp_conn_iface_avatars_get_known_avatar_tokens_async (account_data->avatars_iface,
 								     handles,
 								     contact_factory_get_known_avatar_tokens_cb,
-								     account_data);
+								     contact_factory_account_data_ref (account_data));
 	}
 
 	if (account_data->capabilities_iface) {
-		account_data->nb_pending_calls++;
 		tp_conn_iface_capabilities_get_capabilities_async (account_data->capabilities_iface,
 								   handles,
 								   contact_factory_get_capabilities_cb,
-								   account_data);
+								   contact_factory_account_data_ref (account_data));
 	}
 }
 
@@ -679,7 +734,7 @@ contact_factory_request_handles_cb (DBusGProxy *proxy,
 OUT:
 	g_list_foreach (data->contacts, (GFunc) g_object_unref, NULL);
 	g_list_free (data->contacts);
-	contact_factory_account_data_return_call (data->account_data);
+	contact_factory_account_data_unref (data->account_data);
 	g_slice_free (RequestHandlesData, data);
 }
 
@@ -846,7 +901,7 @@ contact_factory_account_data_update (ContactFactoryAccountData *account_data)
 	/* Request new handles for all contacts */
 	if (account_data->contacts) {
 		data = g_slice_new (RequestHandlesData);
-		data->account_data = account_data;
+		data->account_data = contact_factory_account_data_ref (account_data);
 		data->contacts = g_list_copy (account_data->contacts);
 		g_list_foreach (data->contacts, (GFunc) g_object_ref, NULL);
 
@@ -858,7 +913,6 @@ contact_factory_account_data_update (ContactFactoryAccountData *account_data)
 			i++;
 		}
 
-		account_data->nb_pending_calls++;
 		tp_conn_request_handles_async (DBUS_G_PROXY (account_data->tp_conn),
 					       TP_HANDLE_TYPE_CONTACT,
 					       contact_ids,
@@ -866,38 +920,6 @@ contact_factory_account_data_update (ContactFactoryAccountData *account_data)
 					       data);
 		g_free (contact_ids);
 	}
-}
-
-static void
-contact_factory_weak_notify (gpointer data,
-			     GObject *where_the_object_was)
-{
-	ContactFactoryAccountData *account_data = data;
-
-	empathy_debug (DEBUG_DOMAIN, "Remove finalized contact %p",
-		       where_the_object_was);
-
-	account_data->contacts = g_list_remove (account_data->contacts,
-						where_the_object_was);
-	if (!account_data->contacts) {
-		EmpathyContactFactoryPriv *priv;
-
-		priv = GET_PRIV (account_data->factory);
-
-		g_hash_table_remove (priv->accounts, account_data->account);
-	}
-}
-
-static void
-contact_factory_remove_foreach (gpointer data,
-				gpointer user_data)
-{
-	ContactFactoryAccountData *account_data = user_data;
-	EmpathyContact            *contact = data;
-
-	g_object_weak_unref (G_OBJECT (contact),
-			     contact_factory_weak_notify,
-			     account_data);
 }
 
 static ContactFactoryAccountData *
@@ -909,46 +931,11 @@ contact_factory_account_data_new (EmpathyContactFactory *factory,
 	account_data = g_slice_new0 (ContactFactoryAccountData);
 	account_data->factory = factory;
 	account_data->account = g_object_ref (account);
+	account_data->refcount = 1;
 
 	contact_factory_account_data_update (account_data);
 
 	return account_data;
-}
-
-static void
-contact_factory_account_data_free (gpointer data)
-{
-	ContactFactoryAccountData *account_data = data;
-
-	contact_factory_account_data_disconnect (account_data);
-
-	if (account_data->contacts) {
-		g_list_foreach (account_data->contacts,
-				contact_factory_remove_foreach,
-				account_data);
-		g_list_free (account_data->contacts);
-		account_data->contacts = NULL;
-	}
-
-	if (account_data->account) {
-		g_object_unref (account_data->account);
-		account_data->account = NULL;
-	}
-
-	if (account_data->tp_conn) {
-		g_object_unref (account_data->tp_conn);
-		account_data->tp_conn = NULL;
-		account_data->aliasing_iface = NULL;
-		account_data->avatars_iface = NULL;
-		account_data->presence_iface = NULL;
-		account_data->capabilities_iface = NULL;
-	}
-
-	/* Keep the struct alive if we have calls in flight, it will be
-	 * destroyed once all calls returned. */
-	if (account_data->nb_pending_calls == 0) {
-		g_slice_free (ContactFactoryAccountData, account_data);
-	}
 }
 
 static void
@@ -1072,9 +1059,8 @@ empathy_contact_factory_get_from_id (EmpathyContactFactory *factory,
 		RequestHandlesData *data;
 		const gchar        *contact_ids[] = {id, NULL};
 		
-		account_data->nb_pending_calls++;
 		data = g_slice_new (RequestHandlesData);
-		data->account_data = account_data;
+		data->account_data = contact_factory_account_data_ref (account_data);
 		data->contacts = g_list_prepend (NULL, g_object_ref (contact));
 		tp_conn_request_handles_async (DBUS_G_PROXY (account_data->tp_conn),
 					       TP_HANDLE_TYPE_CONTACT,
@@ -1238,11 +1224,10 @@ empathy_contact_factory_set_name (EmpathyContactFactory *factory,
 			     GUINT_TO_POINTER (handle),
 			     g_strdup (name));
 
-	account_data->nb_pending_calls++;
 	tp_conn_iface_aliasing_set_aliases_async (account_data->aliasing_iface,
 						  new_alias,
 						  contact_factory_set_aliases_cb,
-						  account_data);
+						  contact_factory_account_data_ref (account_data));
 
 	g_hash_table_destroy (new_alias);
 }
@@ -1286,7 +1271,7 @@ empathy_contact_factory_init (EmpathyContactFactory *factory)
 	priv->accounts = g_hash_table_new_full (empathy_account_hash,
 						empathy_account_equal,
 						g_object_unref,
-						contact_factory_account_data_free);
+						(GDestroyNotify) contact_factory_account_data_unref);
 
 	dbus_g_proxy_connect_signal (DBUS_G_PROXY (priv->mc),
 				     "AccountStatusChanged",

@@ -1,5 +1,10 @@
 2007-09-29  Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy/empathy-contact-factory.c: Refcount
+	ContactFactoryAccountData struct.
+
+2007-09-29  Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/empathy-call-window.c:
 	* libempathy-gtk/empathy-call-window.h:
 	* libempathy-gtk/empathy-contact-list-view.c:
