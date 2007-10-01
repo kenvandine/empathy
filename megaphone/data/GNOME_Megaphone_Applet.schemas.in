@@ -11,6 +11,16 @@
 				<short>The contact to display in the applet. Empty means no contact is displayed.</short>
 			</locale>
 		</schema>
+		<schema>
+			<key>/schemas/apps/megaphone-applet/prefs/avatar_token</key>
+			<applyto>/apps/megaphone-applet/prefs/avatar_token</applyto>
+			<owner>megaphone</owner>
+			<type>string</type>
+			<default></default>
+			<locale name="C">
+				<short>The contact's avatar token. Empty means contact has no avatar.</short>
+			</locale>
+		</schema>
 	
 	</schemalist>  
 </gconfschemafile>

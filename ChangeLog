@@ -1,3 +1,9 @@
+2007-10-01  Xavier Claessens  <xclaesse@gmail.com>
+
+	* megaphone/src/megaphone-applet.c:
+	* megaphone/data/GNOME_Megaphone_Applet.schemas.in: Updated to use new
+	avatar cache.
+
 2007-09-29  Xavier Claessens  <xclaesse@gmail.com>
 
 	* libempathy/empathy-tp-group.c: ref group when async calls are in

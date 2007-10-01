@@ -154,77 +154,52 @@ megaphone_applet_finalize (GObject *object)
 	G_OBJECT_CLASS (megaphone_applet_parent_class)->finalize (object);
 }
 
-static gchar *
-megaphone_applet_get_avatar_file (MegaphoneApplet *applet)
-{
-	MegaphoneAppletPriv *priv = GET_PRIV (applet);
-	const gchar         *id;
-	gchar               *escaped_avatar;
-	gchar               *avatar_path;
-	gchar               *avatar_file;
-
-	id = empathy_contact_get_id (priv->contact);
-	escaped_avatar = gnome_vfs_escape_slashes (id);
-
-	avatar_path = g_build_filename (g_get_home_dir (),
-					".gnome2",
-					PACKAGE_NAME,
-					"megaphone",
-					NULL);
-	g_mkdir_with_parents (avatar_path, 0700);
-	
-	avatar_file = g_build_filename (avatar_path, escaped_avatar, NULL);
-
-	g_free (avatar_path);
-	g_free (escaped_avatar);
-
-	return avatar_file;
-}
-
 static void
-megaphone_applet_update_avatar (MegaphoneApplet *applet)
+megaphone_applet_update_icon (MegaphoneApplet *applet)
 {
 	MegaphoneAppletPriv *priv = GET_PRIV (applet);
-	GdkPixbuf           *avatar;
-	gchar               *avatar_file;
+	EmpathyAvatar       *avatar = NULL;
+	GdkPixbuf           *avatar_pixbuf;
 
-	if (priv->contact == NULL) {
-		empathy_debug (DEBUG_DOMAIN, "Update image size: %i",
-			       priv->image_size - 2);
-		gtk_image_set_pixel_size (GTK_IMAGE (priv->image),
-					  priv->image_size - 2);
+	if (priv->contact) {
+		avatar = empathy_contact_get_avatar (priv->contact);
+	} else {
+		gtk_image_set_from_icon_name (GTK_IMAGE (priv->image),
+					      GTK_STOCK_PREFERENCES,
+					      GTK_ICON_SIZE_MENU);
 		return;
 	}
 
-	empathy_debug (DEBUG_DOMAIN, "Update avatar: %s %i",
-		       empathy_contact_get_id (priv->contact),
-		       priv->image_size - 2);
+	if (!avatar) {
+		gchar *avatar_token;
 
-	/* Compute the avatar cache file name */
-	avatar_file = megaphone_applet_get_avatar_file (applet);
-
-	/* Fetch existing avatar */
-	avatar = empathy_pixbuf_avatar_from_contact_scaled (priv->contact,
-							    priv->image_size - 2,
-							    priv->image_size - 2);
-	if (avatar == NULL) {
-		/* Try to load a cached avatar */
-		avatar = gdk_pixbuf_new_from_file (avatar_file, NULL);
-		if (avatar == NULL) {
-			GtkIconTheme *icon_theme;
-
-			/* Load the default icon when no avatar is found */
-			icon_theme = gtk_icon_theme_get_default ();
-			avatar = gtk_icon_theme_load_icon (icon_theme,
-							   "stock_contact",
-							   priv->image_size - 2,
-							   0, NULL);
+		/* Try to take avatar from cache */
+		avatar_token = panel_applet_gconf_get_string (PANEL_APPLET (applet),
+							      "avatar_token",
+							      NULL);
+		if (!G_STR_EMPTY (avatar_token)) {
+			avatar = empathy_avatar_new_from_cache (avatar_token);
 		}
+		g_free (avatar_token);
 	} else {
-		/* Cache avatar */
-		gdk_pixbuf_save (avatar, avatar_file, "png", NULL, NULL);
+		empathy_avatar_ref (avatar);
 	}
-	g_free (avatar_file);
+
+	if (avatar) {
+		avatar_pixbuf = empathy_pixbuf_from_avatar_scaled (avatar,
+								   priv->image_size - 2,
+								   priv->image_size - 2);
+		empathy_avatar_unref (avatar);
+	} else {
+		GtkIconTheme *icon_theme;
+
+		/* Load the default icon when no avatar is found */
+		icon_theme = gtk_icon_theme_get_default ();
+		avatar_pixbuf = gtk_icon_theme_load_icon (icon_theme,
+							  "stock_contact",
+							  priv->image_size - 2,
+							  0, NULL);
+	}
 
 	/* Now some desaturation if the contact is offline */
 	if (!empathy_contact_is_online (priv->contact)) {
@@ -232,18 +207,18 @@ megaphone_applet_update_avatar (MegaphoneApplet *applet)
 
 		offline_avatar = gdk_pixbuf_new (GDK_COLORSPACE_RGB, TRUE,
 						 8,
-						 gdk_pixbuf_get_height (avatar),
-						 gdk_pixbuf_get_width (avatar));
-		gdk_pixbuf_saturate_and_pixelate (avatar,
+						 gdk_pixbuf_get_height (avatar_pixbuf),
+						 gdk_pixbuf_get_width (avatar_pixbuf));
+		gdk_pixbuf_saturate_and_pixelate (avatar_pixbuf,
 						  offline_avatar,
 						  0.0,
 						  TRUE);
-		g_object_unref (avatar);
-		avatar = offline_avatar;
+		g_object_unref (avatar_pixbuf);
+		avatar_pixbuf = offline_avatar;
 	}
 
-	gtk_image_set_from_pixbuf (GTK_IMAGE (priv->image), avatar);
-	g_object_unref (avatar);
+	gtk_image_set_from_pixbuf (GTK_IMAGE (priv->image), avatar_pixbuf);
+	g_object_unref (avatar_pixbuf);
 }
 
 static void
@@ -253,22 +228,36 @@ megaphone_applet_update_contact (MegaphoneApplet *applet)
 	const gchar         *name;
 	const gchar         *status;
 	gchar               *tip;
+	const gchar         *avatar_token = NULL;
 
-	if (priv->contact == NULL) {
-		return;
+	if (priv->contact) {
+		EmpathyAvatar *avatar;
+
+		avatar = empathy_contact_get_avatar (priv->contact);
+		if (avatar) {
+			avatar_token = avatar->token;
+		}
 	}
 
-	empathy_debug (DEBUG_DOMAIN, "Update contact: %s",
-		       empathy_contact_get_id (priv->contact));
+	if (avatar_token) {
+		panel_applet_gconf_set_string (PANEL_APPLET (applet),
+					       "avatar_token", avatar_token,
+					       NULL);
+	}
 
-	megaphone_applet_update_avatar (applet);
+	megaphone_applet_update_icon (applet);
 
-	name = empathy_contact_get_name (priv->contact);
-	status = empathy_contact_get_status (priv->contact);
-	tip = g_strdup_printf ("<b>%s</b>: %s", name, status);
+	if (priv->contact ) {
+		name = empathy_contact_get_name (priv->contact);
+		status = empathy_contact_get_status (priv->contact);
+		tip = g_strdup_printf ("<b>%s</b>: %s", name, status);
+		gtk_widget_set_tooltip_markup (GTK_WIDGET (applet), tip);
+		g_free (tip);
+	} else {
+		gtk_widget_set_tooltip_markup (GTK_WIDGET (applet),
+					       "Please configure a contact.");
+	}
 
-	gtk_widget_set_tooltip_markup (GTK_WIDGET (applet), tip);
-	g_free (tip);
 }
 
 static void
@@ -309,14 +298,9 @@ megaphone_applet_set_contact (MegaphoneApplet *applet,
 		g_signal_connect_swapped (priv->contact, "notify",
 					  G_CALLBACK (megaphone_applet_update_contact),
 					  applet);
-		megaphone_applet_update_contact (applet);
-	} else {
-		gtk_image_set_from_icon_name (GTK_IMAGE (priv->image),
-					      GTK_STOCK_PREFERENCES,
-					      GTK_ICON_SIZE_MENU);
-		gtk_widget_set_tooltip_markup (GTK_WIDGET (applet),
-					       "Please configure a contact.");
 	}
+
+	megaphone_applet_update_contact (applet);
 }
 
 static void
@@ -343,6 +327,9 @@ megaphone_applet_preferences_response_cb (GtkWidget       *dialog,
 			contact_id = empathy_contact_get_id (contact);
 
 			str = g_strconcat (account_id, "/", contact_id, NULL);
+			panel_applet_gconf_set_string (PANEL_APPLET (applet),
+						       "avatar_token", "",
+						       NULL);
 			panel_applet_gconf_set_string (PANEL_APPLET (applet),
 						       "contact_id", str,
 						       NULL);
@@ -489,7 +476,7 @@ megaphone_applet_size_allocate_cb (GtkWidget       *widget,
 
 	if (size != priv->image_size) {
 		priv->image_size = size;
-		megaphone_applet_update_avatar (applet);
+		megaphone_applet_update_icon (applet);
 	}
 }
 
