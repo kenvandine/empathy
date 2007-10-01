@@ -1758,11 +1758,14 @@ empathy_chat_window_get_dialog (EmpathyChatWindow *window)
 
 void
 empathy_chat_window_add_chat (EmpathyChatWindow *window,
-			     EmpathyChat	      *chat)
+			      EmpathyChat	*chat)
 {
 	EmpathyChatWindowPriv *priv;
 	GtkWidget            *label;
 	GtkWidget            *child;
+
+	g_return_if_fail (window != NULL);
+	g_return_if_fail (EMPATHY_IS_CHAT (chat));
 
 	priv = GET_PRIV (window);
 
@@ -1808,10 +1811,13 @@ empathy_chat_window_add_chat (EmpathyChatWindow *window,
 
 void
 empathy_chat_window_remove_chat (EmpathyChatWindow *window,
-				EmpathyChat	 *chat)
+				 EmpathyChat	   *chat)
 {
 	EmpathyChatWindowPriv *priv;
 	gint                  position;
+
+	g_return_if_fail (window != NULL);
+	g_return_if_fail (EMPATHY_IS_CHAT (chat));
 
 	priv = GET_PRIV (window);
 
@@ -1828,8 +1834,8 @@ empathy_chat_window_remove_chat (EmpathyChatWindow *window,
 
 void
 empathy_chat_window_move_chat (EmpathyChatWindow *old_window,
-			      EmpathyChatWindow *new_window,
-			      EmpathyChat       *chat)
+			       EmpathyChatWindow *new_window,
+			       EmpathyChat       *chat)
 {
 	GtkWidget *widget;
 
@@ -1859,10 +1865,13 @@ empathy_chat_window_move_chat (EmpathyChatWindow *old_window,
 
 void
 empathy_chat_window_switch_to_chat (EmpathyChatWindow *window,
-				   EmpathyChat	    *chat)
+				    EmpathyChat	      *chat)
 {
 	EmpathyChatWindowPriv *priv;
 	gint                  page_num;
+
+	g_return_if_fail (window != NULL);
+	g_return_if_fail (EMPATHY_IS_CHAT (chat));
 
 	priv = GET_PRIV (window);
 
@@ -1889,9 +1898,12 @@ empathy_chat_window_has_focus (EmpathyChatWindow *window)
 
 EmpathyChat *
 empathy_chat_window_find_chat (McAccount   *account,
-			      const gchar *id)
+			       const gchar *id)
 {
 	GList *l;
+
+	g_return_val_if_fail (MC_IS_ACCOUNT (account), NULL);
+	g_return_val_if_fail (!G_STR_EMPTY (id), NULL);
 
 	for (l = chat_windows; l; l = l->next) {
 		EmpathyChatWindowPriv *priv;
