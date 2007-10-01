@@ -369,15 +369,20 @@ empathy_xml_node_find_child_prop_value (xmlNodePtr   node,
 guint
 empathy_account_hash (gconstpointer key)
 {
+	g_return_val_if_fail (MC_IS_ACCOUNT (key), 0);
+
 	return g_str_hash (mc_account_get_unique_name (MC_ACCOUNT (key)));
 }
 
 gboolean
 empathy_account_equal (gconstpointer a,
-		      gconstpointer b)
+		       gconstpointer b)
 {
 	const gchar *name_a;
 	const gchar *name_b;
+
+	g_return_val_if_fail (MC_IS_ACCOUNT (a), FALSE);
+	g_return_val_if_fail (MC_IS_ACCOUNT (b), FALSE);
 
 	name_a = mc_account_get_unique_name (MC_ACCOUNT (a));
 	name_b = mc_account_get_unique_name (MC_ACCOUNT (b));
@@ -475,6 +480,8 @@ empathy_call_contact (EmpathyContact *contact)
 	TpChan         *new_chan;
 	EmpathyTpGroup *group;
 	GError         *error;
+
+	g_return_if_fail (EMPATHY_IS_CONTACT (contact));
 
 	/* StreamedMedia channels must have handle=0 and handle_type=none.
 	 * To call a contact we have to add him in the group interface of the

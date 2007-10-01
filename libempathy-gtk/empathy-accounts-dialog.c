@@ -700,7 +700,7 @@ accounts_dialog_status_changed_cb (MissionControl                  *mc,
 				   McPresence                       presence,
 				   TelepathyConnectionStatusReason  reason,
 				   const gchar                     *unique_name,
-				   EmpathyAccountsDialog            *dialog)
+				   EmpathyAccountsDialog           *dialog)
 {
 	GtkTreeView      *view;
 	GtkTreeSelection *selection;

@@ -1,5 +1,10 @@
 2007-10-01  Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/empathy-accounts-dialog.c:
+	* libempathy/empathy-utils.c: Add some sanity checks. Fixes bug #463051.
+
+2007-10-01  Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy/empathy-tp-chat.c: Disconnect all signals in finalize.
 	Fixes bug #462815.
 
