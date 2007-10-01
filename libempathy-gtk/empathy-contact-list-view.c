@@ -1220,8 +1220,10 @@ contact_list_view_get_contact_menu (EmpathyContactListView *view,
 	action = gtk_ui_manager_get_action (priv->ui, "/Contact/Log");
 	gtk_action_set_sensitive (action, can_show_log);
 
+#ifdef HAVE_VOIP
 	action = gtk_ui_manager_get_action (priv->ui, "/Contact/Call");
 	gtk_action_set_sensitive (action, can_voip);
+#endif
 
 	action = gtk_ui_manager_get_action (priv->ui, "/Contact/SendFile");
 	gtk_action_set_visible (action, can_send_file);

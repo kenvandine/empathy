@@ -1,5 +1,10 @@
 2007-10-01  Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/empathy-contact-list-view.c: Add a #ifdef HAVE_VOIP.
+	Fixes bug #482190 (Marco Barisione).
+
+2007-10-01  Xavier Claessens  <xclaesse@gmail.com>
+
 	* data/Makefile.am:
 	* data/empathy.desktop.in.in: Use fd.o standard location for autostart
 	desktop files. Fixes bug #481860 (Stephane Loeuillet).
