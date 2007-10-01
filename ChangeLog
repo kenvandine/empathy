@@ -1,5 +1,10 @@
 2007-10-01  Xavier Claessens  <xclaesse@gmail.com>
 
+	* configure.ac:
+	* NEWS: Update before release.
+
+2007-10-01  Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/empathy-private-chat.c: Fix refcounting of
 	priv->factory. Fixes bug #473116.
 

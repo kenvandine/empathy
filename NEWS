@@ -1,3 +1,7 @@
+NEW in 0.14:
+===========
+ - Megaphone applet now uses avatar cache.
+
 NEW in 0.13:
 ===========
  - Completely reworked ContactList API, new EmpathyContactFactory class.
