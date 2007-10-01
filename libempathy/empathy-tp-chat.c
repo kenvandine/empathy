@@ -346,10 +346,31 @@ tp_chat_finalize (GObject *object)
 	chat = EMPATHY_TP_CHAT (object);
 	priv = GET_PRIV (chat);
 
+	if (priv->text_iface) {
+		dbus_g_proxy_disconnect_signal (priv->text_iface, "Received",
+						G_CALLBACK (tp_chat_received_cb),
+						chat);
+		dbus_g_proxy_disconnect_signal (priv->text_iface, "Sent",
+						G_CALLBACK (tp_chat_sent_cb),
+						chat);
+		dbus_g_proxy_disconnect_signal (priv->text_iface, "SendError",
+						G_CALLBACK (tp_chat_send_error_cb),
+						chat);
+	}
+
+	if (priv->chat_state_iface) {
+		dbus_g_proxy_disconnect_signal (priv->chat_state_iface, "ChatStateChanged",
+						G_CALLBACK (tp_chat_state_changed_cb),
+						chat);
+	}
+
 	if (priv->tp_chan) {
 		g_signal_handlers_disconnect_by_func (priv->tp_chan,
 						      tp_chat_destroy_cb,
 						      object);
+		dbus_g_proxy_disconnect_signal (DBUS_G_PROXY (priv->tp_chan), "Closed",
+						G_CALLBACK (tp_chat_closed_cb),
+						chat);
 		if (priv->acknowledge) {
 			empathy_debug (DEBUG_DOMAIN, "Closing channel...");
 			if (!tp_chan_close (DBUS_G_PROXY (priv->tp_chan), &error)) {

@@ -1,5 +1,10 @@
 2007-10-01  Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy/empathy-tp-chat.c: Disconnect all signals in finalize.
+	Fixes bug #462815.
+
+2007-10-01  Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/empathy-chatrooms-window.c: Disconnect signals on
 	chatroom manager. Fixes bug #456619.
 
