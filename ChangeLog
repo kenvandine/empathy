@@ -1,5 +1,10 @@
 2007-10-01  Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/empathy-contact-list-store.c: Disconnect signals on
+	list and contacts when finalizing the store.
+
+2007-10-01  Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/empathy-contact-list-view.c:
 	* libempathy-gtk/empathy-chat-window.c: Hide VOIP stuff if empathy is
 	not compiled with --enable-voip=yes. Fixes bug #482111

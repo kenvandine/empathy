@@ -93,6 +93,10 @@ static void             contact_list_store_set_property              (GObject   
 								      guint                          param_id,
 								      const GValue                  *value,
 								      GParamSpec                    *pspec);
+static gboolean         contact_list_store_finalize_foreach          (GtkTreeModel                  *model,
+								      GtkTreePath                   *path,
+								      GtkTreeIter                   *iter,
+								      gpointer                       user_data);
 static void             contact_list_store_setup                     (EmpathyContactListStore       *store);
 static gboolean         contact_list_store_inibit_active_cb          (EmpathyContactListStore       *store);
 static void             contact_list_store_members_changed_cb        (EmpathyContactList            *list_iface,
@@ -228,9 +232,17 @@ contact_list_store_finalize (GObject *object)
 
 	priv = GET_PRIV (object);
 
-	/* FIXME: disconnect all signals on the list and contacts */
+	gtk_tree_model_foreach (GTK_TREE_MODEL (object),
+				(GtkTreeModelForeachFunc) contact_list_store_finalize_foreach,
+				object);
 
 	if (priv->list) {
+		g_signal_handlers_disconnect_by_func (priv->list,
+						      G_CALLBACK (contact_list_store_members_changed_cb),
+						      object);
+		g_signal_handlers_disconnect_by_func (priv->list,
+						      G_CALLBACK (contact_list_store_groups_changed_cb),
+						      object);
 		g_object_unref (priv->list);
 	}
 
@@ -607,6 +619,28 @@ empathy_contact_list_store_search_equal_func (GtkTreeModel *model,
 	g_free (key_folded);
 
 	return ret;
+}
+
+static gboolean
+contact_list_store_finalize_foreach (GtkTreeModel *model,
+				     GtkTreePath  *path,
+				     GtkTreeIter  *iter,
+				     gpointer      user_data)
+{
+	EmpathyContactListStore *store = user_data;
+	EmpathyContact          *contact = NULL;
+
+	gtk_tree_model_get (GTK_TREE_MODEL (store), iter,
+			    COL_CONTACT, &contact,
+			    -1);
+
+	if (contact) {
+		g_signal_handlers_disconnect_by_func (contact,
+						      G_CALLBACK (contact_list_store_contact_updated_cb),
+						      store);
+	}
+
+	return FALSE;
 }
 
 static void
