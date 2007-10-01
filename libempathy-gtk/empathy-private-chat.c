@@ -333,27 +333,24 @@ empathy_private_chat_new (McAccount *account,
 	EmpathyPrivateChat     *chat;
 	EmpathyPrivateChatPriv *priv;
 	EmpathyTpChat          *tp_chat;
-	EmpathyContactFactory  *factory;
 	EmpathyContact         *contact;
 
 	g_return_val_if_fail (MC_IS_ACCOUNT (account), NULL);
 	g_return_val_if_fail (TELEPATHY_IS_CHAN (tp_chan), NULL);
 
-	factory = empathy_contact_factory_new ();
-	contact = empathy_contact_factory_get_from_handle (factory,
-							   account,
-							   tp_chan->handle);
-
 	chat = g_object_new (EMPATHY_TYPE_PRIVATE_CHAT, NULL);
 	priv = GET_PRIV (chat);
 
-	priv->factory = factory;
+	priv->factory = empathy_contact_factory_new ();
+	contact = empathy_contact_factory_get_from_handle (priv->factory,
+							   account,
+							   tp_chan->handle);
+
 	tp_chat = empathy_tp_chat_new (account, tp_chan);
 	private_chat_setup (chat, contact, tp_chat);
 
 	g_object_unref (tp_chat);
 	g_object_unref (contact);
-	g_object_unref (factory);
 
 	return chat;
 }
@@ -361,14 +358,18 @@ empathy_private_chat_new (McAccount *account,
 EmpathyPrivateChat *
 empathy_private_chat_new_with_contact (EmpathyContact *contact)
 {
-	EmpathyPrivateChat *chat;
-	EmpathyTpChat      *tp_chat;
+	EmpathyPrivateChat     *chat;
+	EmpathyPrivateChatPriv *priv;
+	EmpathyTpChat          *tp_chat;
 
 	g_return_val_if_fail (EMPATHY_IS_CONTACT (contact), NULL);
 
 	chat = g_object_new (EMPATHY_TYPE_PRIVATE_CHAT, NULL);
-	tp_chat = empathy_tp_chat_new_with_contact (contact);
 
+	priv = GET_PRIV (chat);
+	priv->factory = empathy_contact_factory_new ();
+
+	tp_chat = empathy_tp_chat_new_with_contact (contact);
 	private_chat_setup (chat, contact, tp_chat);
 	g_object_unref (tp_chat);
 

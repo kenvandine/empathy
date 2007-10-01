@@ -1,5 +1,10 @@
 2007-10-01  Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/empathy-private-chat.c: Fix refcounting of
+	priv->factory. Fixes bug #473116.
+
+2007-10-01  Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/empathy-chat-window.c: Adding sanity checks to public
 	functions.
 
