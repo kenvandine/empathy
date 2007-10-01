@@ -1,5 +1,11 @@
 2007-10-01  Xavier Claessens  <xclaesse@gmail.com>
 
+	* data/Makefile.am:
+	* data/empathy.desktop.in.in: Use fd.o standard location for autostart
+	desktop files. Fixes bug #481860 (Stephane Loeuillet).
+
+2007-10-01  Xavier Claessens  <xclaesse@gmail.com>
+
 	* configure.ac: Bump version to 0.15.
 
 2007-10-01  Xavier Claessens  <xclaesse@gmail.com>
