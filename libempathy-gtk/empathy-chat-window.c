@@ -989,8 +989,12 @@ chat_window_conv_activate_cb (GtkWidget         *menuitem,
 	}
 
 	gtk_widget_set_sensitive (priv->menu_conv_log, log_exists);
-	g_object_set (priv->menu_conv_call, "visible", can_voip, NULL);
-	g_object_set (priv->menu_conv_call_separator, "visible", can_voip, NULL);
+#ifdef HAVE_VOIP
+	gtk_widget_set_sensitive (priv->menu_conv_call, can_voip);
+#else 
+	g_object_set (priv->menu_conv_call, "visible", FALSE, NULL);
+	g_object_set (priv->menu_conv_call_separator, "visible", FALSE, NULL);
+#endif
 }
 
 static void

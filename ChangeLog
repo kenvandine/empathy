@@ -1,5 +1,12 @@
 2007-10-01  Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/empathy-contact-list-view.c:
+	* libempathy-gtk/empathy-chat-window.c: Hide VOIP stuff if empathy is
+	not compiled with --enable-voip=yes. Fixes bug #482111
+	(Sjoerd Simons, Xavier Claessens).
+
+2007-10-01  Xavier Claessens  <xclaesse@gmail.com>
+
 	* megaphone/src/megaphone-applet.c:
 	* megaphone/data/GNOME_Megaphone_Applet.schemas.in: Updated to use new
 	avatar cache.
