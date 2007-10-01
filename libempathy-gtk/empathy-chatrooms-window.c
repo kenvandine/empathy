@@ -188,6 +188,12 @@ static void
 chatrooms_window_destroy_cb (GtkWidget             *widget,
 			     EmpathyChatroomsWindow *window)
 {
+	g_signal_handlers_disconnect_by_func (window->manager,
+					      chatrooms_window_chatroom_added_cb,
+					      window);
+	g_signal_handlers_disconnect_by_func (window->manager,
+					      chatrooms_window_chatroom_removed_cb,
+					      window);
 	g_object_unref (window->manager);
 	g_free (window);
 }

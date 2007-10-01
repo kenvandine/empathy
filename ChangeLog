@@ -1,5 +1,10 @@
 2007-10-01  Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/empathy-chatrooms-window.c: Disconnect signals on
+	chatroom manager. Fixes bug #456619.
+
+2007-10-01  Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/empathy-contact-list-store.c: Disconnect signals on
 	list and contacts when finalizing the store.
 
