@@ -17,6 +17,7 @@ libempathy-gtk/empathy-account-widget-msn.glade
 libempathy-gtk/empathy-account-widget-salut.glade
 libempathy-gtk/empathy-accounts-dialog.c
 libempathy-gtk/empathy-accounts-dialog.glade
+libempathy-gtk/empathy-call-window.glade
 libempathy-gtk/empathy-chat.c
 libempathy-gtk/empathy-chat.glade
 libempathy-gtk/empathy-chat-view.c

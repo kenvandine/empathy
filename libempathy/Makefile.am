@@ -150,6 +150,7 @@ EXTRA_DIST = 			\
 	empathy-marshal.list	\
 	empathy-chandler.xml	\
 	empathy-filter.xml	\
+	tp-stream-engine.xml	\
 	$(stylesheet_DATA)	\
 	$(dtd_DATA)
 
