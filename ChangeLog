@@ -1,5 +1,9 @@
 2007-10-01  Xavier Claessens  <xclaesse@gmail.com>
 
+	* configure.ac: Bump version to 0.15.
+
+2007-10-01  Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy/Makefile.am: Add tp-stream-engine.xml to EXTRA_DIST.
 	* po/POTFILES.in: Add empathy-call-window.glade.
 
