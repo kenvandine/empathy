@@ -729,7 +729,6 @@ empathy_tp_contact_list_new (McAccount *account)
 	if (strcmp (protocol_name, "local-xmpp") == 0) {
 		priv->protocol_group = _("People nearby");
 	}
-g_print ("******%s\n", priv->protocol_group);
 	g_object_unref (profile);
 
 	/* Connect signals */
