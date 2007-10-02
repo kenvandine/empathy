@@ -729,6 +729,7 @@ empathy_tp_contact_list_new (McAccount *account)
 	if (strcmp (protocol_name, "local-xmpp") == 0) {
 		priv->protocol_group = _("People nearby");
 	}
+g_print ("******%s\n", priv->protocol_group);
 	g_object_unref (profile);
 
 	/* Connect signals */
@@ -818,15 +819,15 @@ tp_contact_list_get_all_groups (EmpathyContactList *list)
 
 	g_return_val_if_fail (EMPATHY_IS_TP_CONTACT_LIST (list), NULL);
 
+	if (priv->protocol_group) {
+		groups = g_list_prepend (groups, g_strdup (priv->protocol_group));
+	}
+
 	for (l = priv->groups; l; l = l->next) {
 		const gchar *name;
 
 		name = empathy_tp_group_get_name (l->data);
 		groups = g_list_prepend (groups, g_strdup (name));
-	}
-
-	if (priv->protocol_group) {
-		groups = g_list_prepend (groups, g_strdup (priv->protocol_group));
 	}
 
 	return groups;
@@ -842,18 +843,19 @@ tp_contact_list_get_groups (EmpathyContactList *list,
 
 	g_return_val_if_fail (EMPATHY_IS_TP_CONTACT_LIST (list), NULL);
 
+	if (priv->protocol_group) {
+		ret = g_list_prepend (ret, g_strdup (priv->protocol_group));
+	}
+
 	groups = g_hash_table_lookup (priv->contacts_groups, contact);
 	if (!groups) {
-		return NULL;
+		return ret;
 	}
 
 	for (l = *groups; l; l = l->next) {
 		ret = g_list_prepend (ret, g_strdup (l->data));
 	}
 
-	if (priv->protocol_group) {
-		ret = g_list_prepend (ret, g_strdup (priv->protocol_group));
-	}
 
 	return ret;
 }
