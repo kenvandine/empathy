@@ -825,6 +825,10 @@ tp_contact_list_get_all_groups (EmpathyContactList *list)
 		groups = g_list_prepend (groups, g_strdup (name));
 	}
 
+	if (priv->protocol_group) {
+		groups = g_list_prepend (groups, g_strdup (priv->protocol_group));
+	}
+
 	return groups;
 }
 
@@ -845,6 +849,10 @@ tp_contact_list_get_groups (EmpathyContactList *list,
 
 	for (l = *groups; l; l = l->next) {
 		ret = g_list_prepend (ret, g_strdup (l->data));
+	}
+
+	if (priv->protocol_group) {
+		ret = g_list_prepend (ret, g_strdup (priv->protocol_group));
 	}
 
 	return ret;

@@ -1,3 +1,7 @@
+2007-10-02  Xavier Claessens  <xclaesse@gmail.com>
+
+	* libempathy/empathy-tp-contact-list.c: Add back protocol group.
+
 2007-10-01  Xavier Claessens  <xclaesse@gmail.com>
 
 	* libempathy-gtk/empathy-contact-list-view.c: Add a #ifdef HAVE_VOIP.
