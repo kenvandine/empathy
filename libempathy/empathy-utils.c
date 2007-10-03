@@ -427,7 +427,7 @@ empathy_inspect_handle (McAccount *account,
 	GArray          *handles;
 	gchar          **names;
 	gchar           *name;
-	GError          *error;
+	GError          *error = NULL;
 
 	g_return_val_if_fail (MC_IS_ACCOUNT (account), NULL);
 	g_return_val_if_fail (handle != 0, NULL);
@@ -479,7 +479,7 @@ empathy_call_contact (EmpathyContact *contact)
 	const gchar    *bus_name;
 	TpChan         *new_chan;
 	EmpathyTpGroup *group;
-	GError         *error;
+	GError         *error = NULL;
 
 	g_return_if_fail (EMPATHY_IS_CONTACT (contact));
 

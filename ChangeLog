@@ -1,3 +1,11 @@
+2007-10-03  Marco Barisione  <marco@barisione.org>
+
+	* libempathy/empathy-contact-factory.c:
+	* libempathy/empathy-tp-call.c:
+	* libempathy/empathy-tp-group.c:
+	* libempathy/empathy-utils.c: Initialize every GError to NULL. Fixes
+	bug #482889.
+
 2007-10-02  Xavier Claessens  <xclaesse@gmail.com>
 
 	* libempathy/empathy-tp-contact-list.c: Add back protocol group.

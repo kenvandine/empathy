@@ -560,7 +560,7 @@ empathy_tp_group_new (McAccount *account,
 	EmpathyTpGroup     *group;
 	EmpathyTpGroupPriv *priv;
 	DBusGProxy         *group_iface;
-	GError             *error;
+	GError             *error = NULL;
 
 	g_return_val_if_fail (TELEPATHY_IS_CHAN (tp_chan), NULL);
 	g_return_val_if_fail (MC_IS_ACCOUNT (account), NULL);

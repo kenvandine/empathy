@@ -815,7 +815,7 @@ contact_factory_account_data_update (ContactFactoryAccountData *account_data)
 	const gchar              **contact_ids;
 	guint                      i;
 	GList                     *l;
-	GError                    *error;
+	GError                    *error = NULL;
 
 	if (account_data->account) {
 		guint status;

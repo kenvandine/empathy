@@ -379,7 +379,7 @@ tp_call_finalize (GObject *object)
 	empathy_debug (DEBUG_DOMAIN, "Finalizing: %p", object);
 
 	if (priv->tp_chan) {
-		GError *error;
+		GError *error = NULL;
 
 		g_signal_handlers_disconnect_by_func (priv->tp_chan,
 						      tp_call_destroy_cb,
