@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: empathy.HEAD.es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-09-21 14:21+0100\n"
-"PO-Revision-Date: 2007-09-26 11:27+0200\n"
+"POT-Creation-Date: 2007-10-01 14:24+0100\n"
+"PO-Revision-Date: 2007-10-07 14:55+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -217,7 +217,7 @@ msgstr "Ausente"
 msgid "Hidden"
 msgstr "Oculto"
 
-#: ../libempathy/empathy-tp-contact-list.c:730 ../src/empathy.c:213
+#: ../libempathy/empathy-tp-contact-list.c:730 ../src/empathy.c:211
 msgid "People nearby"
 msgstr "Gente cerca"
 
@@ -446,6 +446,30 @@ msgstr ""
 msgid "Type:"
 msgstr "Tipo:"
 
+#: ../libempathy-gtk/empathy-call-window.glade.h:1
+msgid "Call"
+msgstr "Llamar"
+
+#: ../libempathy-gtk/empathy-call-window.glade.h:2
+msgid "Input"
+msgstr "Entrada"
+
+#: ../libempathy-gtk/empathy-call-window.glade.h:3
+msgid "Mute"
+msgstr "Silenciar"
+
+#: ../libempathy-gtk/empathy-call-window.glade.h:4
+msgid "Output"
+msgstr "Salida"
+
+#: ../libempathy-gtk/empathy-call-window.glade.h:5
+msgid "Send Video"
+msgstr "Envía vídeo"
+
+#: ../libempathy-gtk/empathy-call-window.glade.h:6
+msgid "Volume"
+msgstr "Volumen"
+
 #: ../libempathy-gtk/empathy-chat.c:335
 msgid "Disconnected"
 msgstr "Desconectado"
@@ -578,7 +602,7 @@ msgid "_Detach Tab"
 msgstr "_Desacoplar solapa"
 
 #: ../libempathy-gtk/empathy-chat.glade.h:22
-#: ../libempathy-gtk/empathy-contact-list-view.c:211
+#: ../libempathy-gtk/empathy-contact-list-view.c:218
 #: ../libempathy-gtk/empathy-main-window.glade.h:12
 msgid "_Edit"
 msgstr "_Editar"
@@ -609,7 +633,7 @@ msgid "_Tabs"
 msgstr "_Solapas"
 
 #: ../libempathy-gtk/empathy-chat.glade.h:29
-#: ../libempathy-gtk/empathy-contact-list-view.c:227
+#: ../libempathy-gtk/empathy-contact-list-view.c:234
 #: ../libempathy-gtk/empathy-main-window.glade.h:19
 msgid "_View Previous Conversations"
 msgstr "_Ver conversaciones previas"
@@ -631,19 +655,19 @@ msgstr "%A %d %B %Y"
 msgid "Conversations (%d)"
 msgstr "Conversaciones (%d)"
 
-#: ../libempathy-gtk/empathy-chat-window.c:1299
+#: ../libempathy-gtk/empathy-chat-window.c:1295
 msgid "Typing a message."
 msgstr "Tecleando un mensaje."
 
-#: ../libempathy-gtk/empathy-chatrooms-window.c:252
+#: ../libempathy-gtk/empathy-chatrooms-window.c:258
 msgid "Name"
 msgstr "Nombre"
 
-#: ../libempathy-gtk/empathy-chatrooms-window.c:270
+#: ../libempathy-gtk/empathy-chatrooms-window.c:276
 msgid "Room"
 msgstr "Sala"
 
-#: ../libempathy-gtk/empathy-chatrooms-window.c:279
+#: ../libempathy-gtk/empathy-chatrooms-window.c:285
 msgid "Auto Connect"
 msgstr "Autoconectar"
 
@@ -703,80 +727,80 @@ msgstr "Decidir _luego"
 msgid "Subscription Request"
 msgstr "Petición de suscripción"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:191
+#: ../libempathy-gtk/empathy-contact-list-view.c:198
 msgid "_Contact"
 msgstr "Con_tacto"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:195
+#: ../libempathy-gtk/empathy-contact-list-view.c:202
 msgid "_Group"
 msgstr "_Grupo"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:199
+#: ../libempathy-gtk/empathy-contact-list-view.c:206
 #: ../libempathy-gtk/empathy-main-window.glade.h:10
 msgid "_Chat"
 msgstr "_Chat"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:199
+#: ../libempathy-gtk/empathy-contact-list-view.c:206
 msgid "Chat with contact"
 msgstr "Chat con un contacto"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:203
+#: ../libempathy-gtk/empathy-contact-list-view.c:210
 msgid "Infor_mation"
 msgstr "Informa_ción"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:203
+#: ../libempathy-gtk/empathy-contact-list-view.c:210
 msgid "View contact information"
 msgstr "Ver información del contacto"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:207
+#: ../libempathy-gtk/empathy-contact-list-view.c:214
 msgid "Re_name"
 msgstr "Re_nombrar"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:207
+#: ../libempathy-gtk/empathy-contact-list-view.c:214
 msgid "Rename"
 msgstr "Renombrar"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:211
+#: ../libempathy-gtk/empathy-contact-list-view.c:218
 msgid "Edit the groups and name for this contact"
 msgstr "Editar grupos y nombre para este contacto"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:215
+#: ../libempathy-gtk/empathy-contact-list-view.c:222
 msgid "_Remove"
 msgstr "_Quitar"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:215
+#: ../libempathy-gtk/empathy-contact-list-view.c:222
 msgid "Remove contact"
 msgstr "Quita el contacto"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:219
+#: ../libempathy-gtk/empathy-contact-list-view.c:226
 msgid "_Invite to Chat Room"
 msgstr "_Invitar a sala de chat"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:219
+#: ../libempathy-gtk/empathy-contact-list-view.c:226
 msgid "Invite to a currently open chat room"
 msgstr "Invita a una sala de chat ya abierta"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:223
+#: ../libempathy-gtk/empathy-contact-list-view.c:230
 msgid "_Send File..."
 msgstr "_Enviar archivo…"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:223
+#: ../libempathy-gtk/empathy-contact-list-view.c:230
 msgid "Send a file"
 msgstr "Envía un archivo"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:227
+#: ../libempathy-gtk/empathy-contact-list-view.c:234
 msgid "View previous conversations with this contact"
 msgstr "Ver conversaciones anteriores con este contacto"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:231
+#: ../libempathy-gtk/empathy-contact-list-view.c:239
 msgid "_Call"
 msgstr "_Llamar"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:231
+#: ../libempathy-gtk/empathy-contact-list-view.c:239
 msgid "Start a voice or video conversation with this contact"
 msgstr "Iniciar una conversación de voz o vídeo con este contacto"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1397
+#: ../libempathy-gtk/empathy-contact-list-view.c:1414
 msgid "Sorry, I don't want you in my contact list anymore."
 msgstr "Lo siento, no te quiero en mi lista de contactos."
 
@@ -1232,14 +1256,20 @@ msgstr "Azul"
 
 #: ../megaphone/data/GNOME_Megaphone_Applet.schemas.in.h:1
 msgid "The contact to display in the applet. Empty means no contact is displayed."
-msgstr "El contacto que mostrar en la miniaplicación. Si se deja vacío no se mostrará ningún contacto."
+msgstr ""
+"El contacto que mostrar en la miniaplicación. Si se deja vacío no se "
+"mostrará ningún contacto."
+
+#: ../megaphone/data/GNOME_Megaphone_Applet.schemas.in.h:2
+msgid "The contact's avatar token. Empty means contact has no avatar."
+msgstr "El avatar del contacto. Si se deja vacío no se mostrará ningún avatar."
 
 #: ../megaphone/data/GNOME_Megaphone_Applet.server.in.in.h:1
 msgid "Megaphone"
 msgstr "Megáfono"
 
 #: ../megaphone/data/GNOME_Megaphone_Applet.server.in.in.h:2
-#: ../megaphone/src/megaphone-applet.c:432
+#: ../megaphone/src/megaphone-applet.c:419
 msgid "Talk!"
 msgstr "Hablar"
 
@@ -1256,11 +1286,11 @@ msgstr "Presencia"
 msgid "Set your own presence"
 msgstr "Establezca su propia presencia"
 
-#: ../src/empathy.c:274
+#: ../src/empathy.c:271
 msgid "Don't connect on startup"
 msgstr "No conectarse al inicio"
 
-#: ../src/empathy.c:285
+#: ../src/empathy.c:282
 msgid "- Empathy Instant Messenger"
 msgstr "- Mensajería instantánea Empathy"
 
