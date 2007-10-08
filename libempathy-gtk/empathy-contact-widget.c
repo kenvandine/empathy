@@ -38,6 +38,8 @@
 
 #include "empathy-contact-widget.h"
 #include "empathy-account-chooser.h"
+#include "empathy-avatar-chooser.h"
+#include "empathy-avatar-image.h"
 #include "empathy-ui-utils.h"
 
 /* Delay before updating the widget when the id entry changed (ms) */
@@ -47,7 +49,6 @@ typedef struct {
 	EmpathyContactFactory    *factory;
 	EmpathyContactManager    *manager;
 	EmpathyContact           *contact;
-	gboolean                  is_user;
 	EmpathyContactWidgetType  type;
 	GtkCellRenderer          *renderer;
 	guint                     widget_id_timeout;
@@ -100,6 +101,8 @@ static void     contact_widget_set_contact                (EmpathyContactWidget 
 static void     contact_widget_contact_setup              (EmpathyContactWidget  *information);
 static void     contact_widget_contact_update             (EmpathyContactWidget  *information);
 static gboolean contact_widget_update_contact             (EmpathyContactWidget  *information);
+static void     contact_widget_avatar_changed_cb          (EmpathyAvatarChooser  *chooser,
+							   EmpathyContactWidget  *information);
 static void     contact_widget_account_changed_cb         (GtkComboBox           *widget,
 							   EmpathyContactWidget  *information);
 static gboolean contact_widget_id_focus_out_cb            (GtkWidget             *widget,
@@ -153,13 +156,11 @@ empathy_contact_widget_new (EmpathyContact           *contact,
 	GladeXML             *glade;
 
 	information = g_slice_new0 (EmpathyContactWidget);
+	if (type == CONTACT_WIDGET_TYPE_EDIT && empathy_contact_is_user (contact)) {
+		type = CONTACT_WIDGET_TYPE_EDIT_USER;
+	}
 	information->type = type;
 	information->factory = empathy_contact_factory_new ();
-	if (contact) {
-		information->is_user = empathy_contact_is_user (contact);
-	} else {
-		information->is_user = FALSE;
-	}
 
 	glade = empathy_glade_get_file ("empathy-contact-widget.glade",
 				       "vbox_contact_widget",
@@ -339,12 +340,19 @@ contact_widget_id_changed_cb (GtkEntry             *entry,
 static void
 contact_widget_contact_setup (EmpathyContactWidget *information)
 {
-	/* FIXME: Use EmpathyAvatarImage if (editable && is_user)  */
-	information->widget_avatar = gtk_image_new ();
+	if (information->type == CONTACT_WIDGET_TYPE_EDIT_USER) {
+		information->widget_avatar = empathy_avatar_chooser_new ();
+		g_signal_connect (information->widget_avatar, "changed",
+				  G_CALLBACK (contact_widget_avatar_changed_cb),
+				  information);
+	} else {
+		information->widget_avatar = empathy_avatar_image_new ();
+	}
 	gtk_box_pack_end (GTK_BOX (information->hbox_contact),
 	 		  information->widget_avatar,
 	 		  FALSE, FALSE,
 	 		  6);
+	gtk_widget_show (information->widget_avatar);
 
 	/* Setup account label/chooser */
 	if (information->type == CONTACT_WIDGET_TYPE_ADD) {
@@ -459,6 +467,7 @@ contact_widget_contact_update (EmpathyContactWidget *information)
 		gtk_widget_show (information->label_alias);
 		gtk_widget_show (information->widget_alias);
 		gtk_widget_show (information->hbox_presence);
+		gtk_widget_show (information->widget_avatar);
 	} else {
 		gtk_widget_hide (information->label_alias);
 		gtk_widget_hide (information->widget_alias);
@@ -489,6 +498,20 @@ contact_widget_update_contact (EmpathyContactWidget *information)
 	}
 
 	return FALSE;
+}
+
+static void
+contact_widget_avatar_changed_cb (EmpathyAvatarChooser *chooser,
+				  EmpathyContactWidget *information)
+{
+	McAccount *account;
+	gchar     *data;
+	gsize      size;
+
+	account = empathy_contact_get_account (information->contact);
+	empathy_avatar_chooser_get_image_data (EMPATHY_AVATAR_CHOOSER (information->widget_avatar),
+					       &data, &size);
+	mc_account_set_avatar_from_data (account, data, size, "png");
 }
 
 static void
@@ -550,18 +573,23 @@ contact_widget_presence_notify_cb (EmpathyContactWidget *information)
 static void
 contact_widget_avatar_notify_cb (EmpathyContactWidget *information)
 {
-	GdkPixbuf *avatar_pixbuf;
+	EmpathyAvatar *avatar = NULL;
 
-	avatar_pixbuf = empathy_pixbuf_avatar_from_contact_scaled (information->contact,
-								  48, 48);
-
-	if (avatar_pixbuf) {
-		gtk_image_set_from_pixbuf (GTK_IMAGE (information->widget_avatar),
-					   avatar_pixbuf);
-		gtk_widget_show  (information->widget_avatar);
-		g_object_unref (avatar_pixbuf);
+	if (information->contact) {
+		avatar = empathy_contact_get_avatar (information->contact);
+	}
+	if (information->type == CONTACT_WIDGET_TYPE_EDIT_USER) {
+		g_signal_handlers_block_by_func (information->widget_avatar,
+						 contact_widget_avatar_changed_cb,
+						 information);
+		empathy_avatar_chooser_set (EMPATHY_AVATAR_CHOOSER (information->widget_avatar),
+					    avatar);
+		g_signal_handlers_unblock_by_func (information->widget_avatar,
+						   contact_widget_avatar_changed_cb,
+						   information);
 	} else {
-		gtk_widget_hide  (information->widget_avatar);
+		empathy_avatar_image_set (EMPATHY_AVATAR_IMAGE (information->widget_avatar),
+					  avatar);
 	}
 }
 

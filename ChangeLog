@@ -1,3 +1,19 @@
+2007-10-08  Xavier Claessens  <xclaesse@gmail.com>
+
+	* libempathy-gtk/empathy-ui-utils.c:
+	* libempathy-gtk/empathy-ui-utils.h:
+	* libempathy-gtk/empathy-contact-widget.c:
+	* libempathy-gtk/empathy-contact-widget.h:
+	* libempathy-gtk/empathy-avatar-chooser.c:
+	* libempathy-gtk/empathy-avatar-chooser.h:
+	* libempathy-gtk/empathy-avatar-image.c:
+	* libempathy-gtk/empathy-avatar-image.h:
+	* libempathy-gtk/Makefile.am:
+	* src/empathy.c: Implement EmpathyAvatarChooser and EmpathyAvatarImage
+	and make use of them in contact information windows. That means we can
+	now enlarge avatars when clicking on it and we can set our own avatar if
+	we edit our own contact.
+
 2007-10-03  Marco Barisione  <marco@barisione.org>
 
 	* libempathy/empathy-contact-factory.c:

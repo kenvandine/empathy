@@ -48,63 +48,66 @@ G_BEGIN_DECLS
 #define G_STR_EMPTY(x) ((x) == NULL || (x)[0] == '\0')
 
 /* Glade */
-void            empathy_glade_get_file_simple             (const gchar         *filename,
-							  const gchar         *root,
-							  const gchar         *domain,
-							  const gchar         *first_required_widget,
-							  ...);
-GladeXML *      empathy_glade_get_file                    (const gchar         *filename,
-							  const gchar         *root,
-							  const gchar         *domain,
-							  const gchar         *first_required_widget,
-							  ...);
-void            empathy_glade_connect                     (GladeXML            *gui,
-							  gpointer             user_data,
-							  gchar               *first_widget,
-							  ...);
-void            empathy_glade_setup_size_group            (GladeXML            *gui,
-							  GtkSizeGroupMode     mode,
-							  gchar               *first_widget,
-							  ...);
+void            empathy_glade_get_file_simple           (const gchar      *filename,
+							 const gchar      *root,
+							 const gchar      *domain,
+							 const gchar      *first_required_widget,
+							 ...);
+GladeXML *      empathy_glade_get_file                  (const gchar      *filename,
+							 const gchar      *root,
+							 const gchar      *domain,
+							 const gchar      *first_required_widget,
+							 ...);
+void            empathy_glade_connect                   (GladeXML         *gui,
+							 gpointer          user_data,
+							 gchar            *first_widget,
+							 ...);
+void            empathy_glade_setup_size_group          (GladeXML         *gui,
+							 GtkSizeGroupMode  mode,
+							 gchar            *first_widget,
+							 ...);
 /* Pixbufs */
-GdkPixbuf *     empathy_pixbuf_from_icon_name             (const gchar         *icon_name,
-							  GtkIconSize          icon_size);
-const gchar *   empathy_icon_name_from_account            (McAccount           *account);
-const gchar *   empathy_icon_name_for_presence_state      (McPresence           state);
-const gchar *   empathy_icon_name_for_presence            (EmpathyPresence      *presence);
-const gchar *   empathy_icon_name_for_contact             (EmpathyContact       *contact);
-GdkPixbuf *     empathy_pixbuf_from_avatar_scaled         (EmpathyAvatar        *avatar,
-							  gint                 width,
-							  gint                 height);
-GdkPixbuf *     empathy_pixbuf_avatar_from_contact_scaled (EmpathyContact       *contact,
-							  gint                 width,
-							  gint                 height);
+const gchar * empathy_icon_name_from_account            (McAccount        *account);
+const gchar * empathy_icon_name_for_presence_state      (McPresence        state);
+const gchar * empathy_icon_name_for_presence            (EmpathyPresence  *presence);
+const gchar * empathy_icon_name_for_contact             (EmpathyContact   *contact);
+GdkPixbuf *   empathy_pixbuf_from_data                  (gchar            *data,
+							 gsize             data_size);
+GdkPixbuf *   empathy_pixbuf_from_avatar_scaled         (EmpathyAvatar    *avatar,
+							 gint              width,
+							 gint              height);
+GdkPixbuf *   empathy_pixbuf_avatar_from_contact_scaled (EmpathyContact   *contact,
+							 gint              width,
+							 gint              height);
+GdkPixbuf * empathy_pixbuf_scale_down_if_necessary      (GdkPixbuf        *pixbuf,
+							 gint              max_size);
+GdkPixbuf * empathy_pixbuf_from_icon_name               (const gchar      *icon_name,
+							 GtkIconSize       icon_size);
 /* Text view */
-gboolean   empathy_text_iter_forward_search          (const GtkTextIter   *iter,
-						     const gchar         *str,
-						     GtkTextIter         *match_start,
-						     GtkTextIter         *match_end,
-						     const GtkTextIter   *limit);
-gboolean   empathy_text_iter_backward_search         (const GtkTextIter   *iter,
-						     const gchar         *str,
-						     GtkTextIter         *match_start,
-						     GtkTextIter         *match_end,
-						     const GtkTextIter   *limit);
-
+gboolean    empathy_text_iter_forward_search            (const GtkTextIter*iter,
+							 const gchar      *str,
+							 GtkTextIter      *match_start,
+							 GtkTextIter      *match_end,
+							 const GtkTextIter*limit);
+gboolean    empathy_text_iter_backward_search           (const GtkTextIter*iter,
+							 const gchar      *str,
+							 GtkTextIter      *match_start,
+							 GtkTextIter      *match_end,
+							 const GtkTextIter*limit);
 /* Windows */
-gboolean   empathy_window_get_is_visible             (GtkWindow           *window);
-void       empathy_window_present                    (GtkWindow           *window,
-						     gboolean             steal_focus);
-void       empathy_window_iconify                    (GtkWindow           *window,
-						      GtkStatusIcon       *status_icon);
-GtkWindow *empathy_get_toplevel_window               (GtkWidget           *widget);
-void       empathy_url_show                          (const char          *url);
-void       empathy_toggle_button_set_state_quietly   (GtkWidget           *widget,
-						     GCallback            callback,
-						     gpointer             user_data,
-						     gboolean             active);
-GtkWidget *empathy_link_button_new                   (const gchar         *url,
-						     const gchar         *title);
+gboolean    empathy_window_get_is_visible               (GtkWindow        *window);
+void        empathy_window_present                      (GtkWindow        *window,
+							 gboolean          steal_focus);
+void        empathy_window_iconify                      (GtkWindow        *window,
+							 GtkStatusIcon    *status_icon);
+GtkWindow * empathy_get_toplevel_window                 (GtkWidget        *widget);
+void        empathy_url_show                            (const char       *url);
+void        empathy_toggle_button_set_state_quietly     (GtkWidget        *widget,
+							 GCallback         callback,
+							 gpointer          user_data,
+							 gboolean          active);
+GtkWidget *empathy_link_button_new                      (const gchar      *url,
+							 const gchar      *title);
 
 
 G_END_DECLS

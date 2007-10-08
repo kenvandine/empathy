@@ -12,7 +12,7 @@ BUILT_SOURCES = 					\
 lib_LTLIBRARIES = libempathy-gtk.la
 
 libempathy_gtk_la_SOURCES =             	\
-	ephy-spinner.c	ephy-spinner.h		\
+	ephy-spinner.c ephy-spinner.h		\
 	empathy-main-window.c			\
 	empathy-status-icon.c			\
 	empathy-contact-widget.c		\
@@ -48,6 +48,8 @@ libempathy_gtk_la_SOURCES =             	\
 	empathy-chatrooms-window.c		\
 	empathy-log-window.c			\
 	empathy-call-window.c			\
+	empathy-avatar-chooser.c		\
+	empathy-avatar-image.c			\
 	empathy-ui-utils.c
 
 # do not distribute generated files
@@ -98,6 +100,8 @@ libempathy_gtk_headers =			\
 	empathy-chatrooms-window.h		\
 	empathy-log-window.h			\
 	empathy-call-window.h			\
+	empathy-avatar-chooser.h		\
+	empathy-avatar-image.h			\
 	empathy-ui-utils.h
 
 libempathy_gtk_includedir = $(includedir)/libempathy-gtk/

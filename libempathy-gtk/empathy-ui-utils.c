@@ -201,35 +201,6 @@ empathy_glade_setup_size_group (GladeXML         *gui,
 	va_end (args);
 }
 
-GdkPixbuf *
-empathy_pixbuf_from_icon_name (const gchar *icon_name,
-			      GtkIconSize  icon_size)
-{
-	GtkIconTheme  *theme;
-	GdkPixbuf     *pixbuf = NULL;
-	GError        *error = NULL;
-	gint           w, h;
-	gint           size = 48;
-
-	theme = gtk_icon_theme_get_default ();
-
-	if (gtk_icon_size_lookup (icon_size, &w, &h)) {
-		size = (w + h) / 2;
-	}
-
-	pixbuf = gtk_icon_theme_load_icon (theme,
-					   icon_name,
-					   size,
-					   0,
-					   &error);
-	if (error) {
-		empathy_debug (DEBUG_DOMAIN, "Error loading icon: %s", error->message);
-		g_clear_error (&error);
-	}
-
-	return pixbuf;
-}
-
 const gchar *
 empathy_icon_name_from_account (McAccount *account)
 {
@@ -291,6 +262,44 @@ empathy_icon_name_for_contact (EmpathyContact *contact)
 	}
 
 	return EMPATHY_IMAGE_UNKNOWN;
+}
+
+GdkPixbuf *
+empathy_pixbuf_from_data (gchar *data,
+			  gsize  data_size)
+{
+	GdkPixbufLoader *loader;
+	GdkPixbuf       *pixbuf = NULL;
+	GError          *error = NULL;
+
+	if (!data) {
+		return NULL;
+	}
+
+	loader = gdk_pixbuf_loader_new ();
+	if (!gdk_pixbuf_loader_write (loader, data, data_size, &error)) {
+		empathy_debug (DEBUG_DOMAIN, "Failed to write to pixbuf loader: %s",
+			       error ? error->message : "No error given");
+		g_clear_error (&error);
+		g_object_unref (loader);
+		return NULL;
+	}
+	if (!gdk_pixbuf_loader_close (loader, &error)) {
+		empathy_debug (DEBUG_DOMAIN, "Failed to close pixbuf loader: %s",
+			       error ? error->message : "No error given");
+		g_clear_error (&error);
+		g_object_unref (loader);
+		return NULL;
+	}
+
+	pixbuf = gdk_pixbuf_loader_get_pixbuf (loader);
+	if (pixbuf) {
+		g_object_ref (pixbuf);
+	}
+
+	g_object_unref (loader);
+
+	return pixbuf;
 }
 
 static void
@@ -486,6 +495,58 @@ empathy_pixbuf_avatar_from_contact_scaled (EmpathyContact *contact,
 	avatar = empathy_contact_get_avatar (contact);
 
 	return empathy_pixbuf_from_avatar_scaled (avatar, width, height);
+}
+
+GdkPixbuf *
+empathy_pixbuf_scale_down_if_necessary (GdkPixbuf *pixbuf, gint max_size)
+{
+	gint      width, height;
+	gdouble   factor;
+
+	width = gdk_pixbuf_get_width (pixbuf);
+	height = gdk_pixbuf_get_height (pixbuf);
+
+	if (width > max_size || height > max_size) {
+		factor = (gdouble) max_size / MAX (width, height);
+
+		width = width * factor;
+		height = height * factor;
+
+		return gdk_pixbuf_scale_simple (pixbuf,
+						width, height,
+						GDK_INTERP_HYPER);
+	}
+
+	return g_object_ref (pixbuf);
+}
+
+GdkPixbuf *
+empathy_pixbuf_from_icon_name (const gchar *icon_name,
+			      GtkIconSize  icon_size)
+{
+	GtkIconTheme  *theme;
+	GdkPixbuf     *pixbuf = NULL;
+	GError        *error = NULL;
+	gint           w, h;
+	gint           size = 48;
+
+	theme = gtk_icon_theme_get_default ();
+
+	if (gtk_icon_size_lookup (icon_size, &w, &h)) {
+		size = (w + h) / 2;
+	}
+
+	pixbuf = gtk_icon_theme_load_icon (theme,
+					   icon_name,
+					   size,
+					   0,
+					   &error);
+	if (error) {
+		empathy_debug (DEBUG_DOMAIN, "Error loading icon: %s", error->message);
+		g_clear_error (&error);
+	}
+
+	return pixbuf;
 }
 
 /* Stolen from GtkSourceView, hence the weird intendation. Please keep it like
