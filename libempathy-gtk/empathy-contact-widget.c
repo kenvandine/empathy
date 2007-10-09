@@ -49,7 +49,7 @@ typedef struct {
 	EmpathyContactFactory    *factory;
 	EmpathyContactManager    *manager;
 	EmpathyContact           *contact;
-	EmpathyContactWidgetType  type;
+	EmpathyContactWidgetFlags flags;
 	GtkCellRenderer          *renderer;
 	guint                     widget_id_timeout;
 
@@ -100,7 +100,7 @@ static void     contact_widget_set_contact                (EmpathyContactWidget 
 							   EmpathyContact         *contact);
 static void     contact_widget_contact_setup              (EmpathyContactWidget  *information);
 static void     contact_widget_contact_update             (EmpathyContactWidget  *information);
-static gboolean contact_widget_update_contact             (EmpathyContactWidget  *information);
+static void     contact_widget_change_contact             (EmpathyContactWidget  *information);
 static void     contact_widget_avatar_changed_cb          (EmpathyAvatarChooser  *chooser,
 							   EmpathyContactWidget  *information);
 static void     contact_widget_account_changed_cb         (GtkComboBox           *widget,
@@ -150,16 +150,13 @@ enum {
 
 GtkWidget *
 empathy_contact_widget_new (EmpathyContact           *contact,
-			    EmpathyContactWidgetType  type)
+			    EmpathyContactWidgetFlags flags)
 {
 	EmpathyContactWidget *information;
 	GladeXML             *glade;
 
 	information = g_slice_new0 (EmpathyContactWidget);
-	if (type == CONTACT_WIDGET_TYPE_EDIT && empathy_contact_is_user (contact)) {
-		type = CONTACT_WIDGET_TYPE_EDIT_USER;
-	}
-	information->type = type;
+	information->flags = flags;
 	information->factory = empathy_contact_factory_new ();
 
 	glade = empathy_glade_get_file ("empathy-contact-widget.glade",
@@ -319,7 +316,7 @@ contact_widget_can_add_contact_to_account (McAccount *account,
 static gboolean
 contact_widget_id_activate_timeout (EmpathyContactWidget *self)
 {
-	contact_widget_update_contact (self);
+	contact_widget_change_contact (self);
 	return FALSE;
 }
 
@@ -340,7 +337,7 @@ contact_widget_id_changed_cb (GtkEntry             *entry,
 static void
 contact_widget_contact_setup (EmpathyContactWidget *information)
 {
-	if (information->type == CONTACT_WIDGET_TYPE_EDIT_USER) {
+	if (information->flags & EMPATHY_CONTACT_WIDGET_EDIT_AVATAR) {
 		information->widget_avatar = empathy_avatar_chooser_new ();
 		g_signal_connect (information->widget_avatar, "changed",
 				  G_CALLBACK (contact_widget_avatar_changed_cb),
@@ -355,7 +352,7 @@ contact_widget_contact_setup (EmpathyContactWidget *information)
 	gtk_widget_show (information->widget_avatar);
 
 	/* Setup account label/chooser */
-	if (information->type == CONTACT_WIDGET_TYPE_ADD) {
+	if (information->flags & EMPATHY_CONTACT_WIDGET_EDIT_ACCOUNT) {
 		information->widget_account = empathy_account_chooser_new ();
 		empathy_account_chooser_set_filter (
 			EMPATHY_ACCOUNT_CHOOSER (information->widget_account),
@@ -376,7 +373,7 @@ contact_widget_contact_setup (EmpathyContactWidget *information)
 	gtk_widget_show (information->widget_account);
 
 	/* Setup id label/entry */
-	if (information->type == CONTACT_WIDGET_TYPE_ADD) {
+	if (information->flags & EMPATHY_CONTACT_WIDGET_EDIT_ID) {
 		information->widget_id = gtk_entry_new ();
 		g_signal_connect (information->widget_id, "focus-out-event",
 				  G_CALLBACK (contact_widget_id_focus_out_cb),
@@ -395,7 +392,7 @@ contact_widget_contact_setup (EmpathyContactWidget *information)
 	gtk_widget_show (information->widget_id);
 
 	/* Setup alias label/entry */
-	if (information->type > CONTACT_WIDGET_TYPE_SHOW) {
+	if (information->flags & EMPATHY_CONTACT_WIDGET_EDIT_ALIAS) {
 		information->widget_alias = gtk_entry_new ();
 		g_signal_connect (information->widget_alias, "focus-out-event",
 				  G_CALLBACK (contact_widget_entry_alias_focus_event_cb),
@@ -434,7 +431,7 @@ contact_widget_contact_update (EmpathyContactWidget *information)
 	}
 
 	/* Update account widget */
-	if (information->type == CONTACT_WIDGET_TYPE_ADD) {
+	if (information->flags & EMPATHY_CONTACT_WIDGET_EDIT_ACCOUNT) {
 		if (account) {
 			g_signal_handlers_block_by_func (information->widget_account,
 							 contact_widget_account_changed_cb,
@@ -445,9 +442,6 @@ contact_widget_contact_update (EmpathyContactWidget *information)
 							   contact_widget_account_changed_cb,
 							   information);
 		}
-		if (!G_STR_EMPTY (id)) {
-			gtk_entry_set_text (GTK_ENTRY (information->widget_id), id);
-		}
 	} else {
 		if (account) {
 			const gchar *name;
@@ -455,9 +449,14 @@ contact_widget_contact_update (EmpathyContactWidget *information)
 			name = mc_account_get_display_name (account);
 			gtk_label_set_label (GTK_LABEL (information->widget_account), name);
 		}
-		gtk_label_set_label (GTK_LABEL (information->widget_id), id);
 	}
 
+	/* Update id widget */
+	if (information->flags & EMPATHY_CONTACT_WIDGET_EDIT_ID) {
+		gtk_entry_set_text (GTK_ENTRY (information->widget_id), id ? id : "");
+	} else {
+		gtk_label_set_label (GTK_LABEL (information->widget_id), id ? id : "");
+	}
 	/* Update other widgets */
 	if (information->contact) {
 		contact_widget_name_notify_cb (information);
@@ -476,28 +475,36 @@ contact_widget_contact_update (EmpathyContactWidget *information)
 	}
 }
 
-static gboolean
-contact_widget_update_contact (EmpathyContactWidget *information)
+static void
+contact_widget_change_contact (EmpathyContactWidget *information)
 {
-	McAccount   *account;
-	const gchar *id;
+	EmpathyContact *contact;
+	McAccount      *account;
 
 	account = empathy_account_chooser_get_account (EMPATHY_ACCOUNT_CHOOSER (information->widget_account));
-	id = gtk_entry_get_text (GTK_ENTRY (information->widget_id));
+	if (!account) {
+		return;
+	}
 
-	if (account && !G_STR_EMPTY (id)) {
-		EmpathyContact *contact;
+	if (information->flags & EMPATHY_CONTACT_WIDGET_EDIT_ID) {
+		const gchar *id;
+
+		id = gtk_entry_get_text (GTK_ENTRY (information->widget_id));
+		if (G_STR_EMPTY (id)) {
+			return;
+		}
 
 		contact = empathy_contact_factory_get_from_id (information->factory,
 							       account, id);
-		contact_widget_set_contact (information, contact);
-
-		if (contact) {
-			g_object_unref (contact);
-		}
+	} else {
+		contact = empathy_contact_factory_get_user (information->factory,
+							    account);
 	}
 
-	return FALSE;
+	if (contact) {
+		contact_widget_set_contact (information, contact);
+		g_object_unref (contact);
+	}
 }
 
 static void
@@ -518,7 +525,7 @@ static void
 contact_widget_account_changed_cb (GtkComboBox          *widget,
 				   EmpathyContactWidget *information)
 {
-	contact_widget_update_contact (information);
+	contact_widget_change_contact (information);
 }
 
 static gboolean
@@ -526,7 +533,7 @@ contact_widget_id_focus_out_cb (GtkWidget            *widget,
 				GdkEventFocus        *event,
 				EmpathyContactWidget *information)
 {
-	contact_widget_update_contact (information);
+	contact_widget_change_contact (information);
 	return FALSE;
 }
 
@@ -578,7 +585,7 @@ contact_widget_avatar_notify_cb (EmpathyContactWidget *information)
 	if (information->contact) {
 		avatar = empathy_contact_get_avatar (information->contact);
 	}
-	if (information->type == CONTACT_WIDGET_TYPE_EDIT_USER) {
+	if (information->flags & EMPATHY_CONTACT_WIDGET_EDIT_AVATAR) {
 		g_signal_handlers_block_by_func (information->widget_avatar,
 						 contact_widget_avatar_changed_cb,
 						 information);
@@ -596,7 +603,7 @@ contact_widget_avatar_notify_cb (EmpathyContactWidget *information)
 static void
 contact_widget_groups_setup (EmpathyContactWidget *information)
 {
-	if (information->type > CONTACT_WIDGET_TYPE_SHOW) {
+	if (information->flags & EMPATHY_CONTACT_WIDGET_EDIT_GROUPS) {
 		information->manager = empathy_contact_manager_new ();
 		contact_widget_model_setup (information);
 	}
@@ -605,7 +612,7 @@ contact_widget_groups_setup (EmpathyContactWidget *information)
 static void
 contact_widget_groups_update (EmpathyContactWidget *information)
 {
-	if (information->type > CONTACT_WIDGET_TYPE_SHOW &&
+	if (information->flags & EMPATHY_CONTACT_WIDGET_EDIT_GROUPS &&
 	    information->contact) {
 		g_signal_connect_swapped (information->contact, "notify::groups",
 					  G_CALLBACK (contact_widget_groups_notify_cb),

@@ -914,7 +914,7 @@ chat_window_info_activate_cb (GtkWidget        *menuitem,
 
 	empathy_contact_information_dialog_show (contact,
 						 GTK_WINDOW (priv->dialog),
-						 FALSE);
+						 FALSE, FALSE);
 }
 
 static gboolean

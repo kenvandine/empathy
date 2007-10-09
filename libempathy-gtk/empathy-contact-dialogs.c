@@ -110,7 +110,8 @@ empathy_subscription_dialog_show (EmpathyContact *contact,
 				      NULL);
 
 	contact_widget = empathy_contact_widget_new (contact,
-						     CONTACT_WIDGET_TYPE_SUBSCRIPTION);
+						     EMPATHY_CONTACT_WIDGET_EDIT_ALIAS |
+						     EMPATHY_CONTACT_WIDGET_EDIT_GROUPS);
 	gtk_box_pack_end (GTK_BOX (hbox_subscription),
 			  contact_widget,
 			  TRUE, TRUE,
@@ -146,13 +147,14 @@ contact_information_response_cb (GtkDialog *dialog,
 void
 empathy_contact_information_dialog_show (EmpathyContact *contact,
 					 GtkWindow      *parent,
-					 gboolean        edit)
+					 gboolean        edit,
+					 gboolean        edit_groups)
 {
 	GtkWidget                *dialog;
 	GtkWidget                *button;
 	GtkWidget                *contact_widget;
 	GList                    *l;
-	EmpathyContactWidgetType  type;
+	EmpathyContactWidgetFlags flags = 0;
 
 	g_return_if_fail (EMPATHY_IS_CONTACT (contact));
 
@@ -163,8 +165,6 @@ empathy_contact_information_dialog_show (EmpathyContact *contact,
 		gtk_window_present (GTK_WINDOW (l->data));
 		return;
 	}
-
-	type = edit ? CONTACT_WIDGET_TYPE_EDIT : CONTACT_WIDGET_TYPE_SHOW;
 
 	/* Create dialog */
 	dialog = gtk_dialog_new ();
@@ -179,9 +179,19 @@ empathy_contact_information_dialog_show (EmpathyContact *contact,
 				      button,
 				      GTK_RESPONSE_CLOSE);
 	gtk_widget_show (button);
-	
+
 	/* Contact info widget */
-	contact_widget = empathy_contact_widget_new (contact, type);
+	if (edit) {
+		flags |= EMPATHY_CONTACT_WIDGET_EDIT_ALIAS;
+		if (empathy_contact_is_user (contact)) {
+			flags |= EMPATHY_CONTACT_WIDGET_EDIT_ACCOUNT |
+				 EMPATHY_CONTACT_WIDGET_EDIT_AVATAR;
+		}
+	}
+	if (edit_groups) {
+		flags |= EMPATHY_CONTACT_WIDGET_EDIT_GROUPS;
+	}
+	contact_widget = empathy_contact_widget_new (contact, flags);
 	gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox),
 			    contact_widget,
 			    TRUE, TRUE, 0);
@@ -261,7 +271,11 @@ empathy_new_contact_dialog_show (GtkWindow *parent)
 	gtk_widget_show (button);
 
 	/* Contact info widget */
-	contact_widget = empathy_contact_widget_new (NULL, CONTACT_WIDGET_TYPE_ADD);
+	contact_widget = empathy_contact_widget_new (NULL,
+						     EMPATHY_CONTACT_WIDGET_EDIT_ALIAS |
+						     EMPATHY_CONTACT_WIDGET_EDIT_ACCOUNT |
+						     EMPATHY_CONTACT_WIDGET_EDIT_ID |
+						     EMPATHY_CONTACT_WIDGET_EDIT_GROUPS);
 	gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox),
 			    contact_widget,
 			    TRUE, TRUE, 0);

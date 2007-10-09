@@ -30,16 +30,17 @@
 G_BEGIN_DECLS
 
 typedef enum {
-	CONTACT_WIDGET_TYPE_SHOW,         /* used to show contact information */
-	CONTACT_WIDGET_TYPE_EDIT,         /* used to edit contact information */
-	CONTACT_WIDGET_TYPE_ADD,          /* used to add a new contact */
-	CONTACT_WIDGET_TYPE_SUBSCRIPTION, /* used to accepte/reject a new contact */
-	CONTACT_WIDGET_TYPE_EDIT_USER     /* used to edit our own information */
-} EmpathyContactWidgetType;
+	EMPATHY_CONTACT_WIDGET_EDIT_ALIAS   = 1 << 0,
+	EMPATHY_CONTACT_WIDGET_EDIT_AVATAR  = 1 << 1,
+	EMPATHY_CONTACT_WIDGET_EDIT_ACCOUNT = 1 << 2,
+	EMPATHY_CONTACT_WIDGET_EDIT_ID      = 1 << 3,
+	EMPATHY_CONTACT_WIDGET_EDIT_GROUPS  = 1 << 4,
+} EmpathyContactWidgetFlags;
 
-GtkWidget *     empathy_contact_widget_new         (EmpathyContact           *contact,
-						    EmpathyContactWidgetType  type);
-EmpathyContact *empathy_contact_widget_get_contact (GtkWidget                *widget);
+GtkWidget *     empathy_contact_widget_new         (EmpathyContact            *contact,
+						    EmpathyContactWidgetFlags  flags);
+EmpathyContact *empathy_contact_widget_get_contact (GtkWidget                 *widget);
 
 G_END_DECLS
+
 #endif /*  __EMPATHY_CONTACT_WIDGET_H__ */

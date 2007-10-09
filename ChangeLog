@@ -1,5 +1,18 @@
 2007-10-09  Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/empathy-main-window.c:
+	* libempathy-gtk/empathy-contact-dialogs.c:
+	* libempathy-gtk/empathy-contact-list-view.c:
+	* libempathy-gtk/empathy-contact-dialogs.h:
+	* libempathy-gtk/empathy-contact-widget.c:
+	* libempathy-gtk/empathy-contact-widget.h:
+	* libempathy-gtk/empathy-chat-window.c:
+	* megaphone/src/megaphone-applet.c: More flexible API for
+	EmpathyContactWidget, we now have flags to set editable each fields.
+	Implement personal information menu item in main window.
+
+2007-10-09  Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/empathy-contact-widget.glade:
 	* libempathy-gtk/empathy-contact-widget.c:
 	* libempathy-gtk/empathy-avatar-chooser.c:

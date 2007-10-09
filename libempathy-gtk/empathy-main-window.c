@@ -35,6 +35,7 @@
 #include <libempathy/empathy-chatroom.h>
 #include <libempathy/empathy-contact-list.h>
 #include <libempathy/empathy-contact-manager.h>
+#include <libempathy/empathy-contact-factory.h>
 
 #include "empathy-main-window.h"
 #include "empathy-contact-dialogs.h"
@@ -67,7 +68,7 @@
 typedef struct {
 	EmpathyContactListView  *list_view;
 	EmpathyContactListStore *list_store;
-	MissionControl         *mc;
+	MissionControl          *mc;
 	EmpathyChatroomManager  *chatroom_manager;
 
 	/* Main widgets */
@@ -662,7 +663,24 @@ static void
 main_window_edit_personal_information_cb (GtkWidget         *widget,
 					  EmpathyMainWindow *window)
 {
-	//empathy_vcard_dialog_show (GTK_WINDOW (window->window));
+	GSList *accounts;
+
+	accounts = mission_control_get_online_connections (window->mc, NULL);
+	if (accounts) {
+		EmpathyContactFactory *factory;
+		EmpathyContact        *contact;
+		McAccount             *account;
+
+		account = accounts->data;
+		factory = empathy_contact_factory_new ();
+		contact = empathy_contact_factory_get_user (factory, account);
+		empathy_contact_information_dialog_show (contact,
+							 GTK_WINDOW (window->window),
+							 TRUE, FALSE);
+		g_slist_foreach (accounts, (GFunc) g_object_unref, NULL);
+		g_slist_free (accounts);
+		g_object_unref (factory);
+	}
 }
 
 static void

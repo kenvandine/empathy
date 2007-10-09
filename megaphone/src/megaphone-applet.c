@@ -395,7 +395,7 @@ megaphone_applet_information_cb (BonoboUIComponent *uic,
 
 	/* FIXME: We should grey out the menu item if there are no available contact */
 	if (priv->contact) {
-		empathy_contact_information_dialog_show (priv->contact, NULL, FALSE);
+		empathy_contact_information_dialog_show (priv->contact, NULL, FALSE, FALSE);
 	}
 }
 
