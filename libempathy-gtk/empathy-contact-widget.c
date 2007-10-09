@@ -67,7 +67,7 @@ typedef struct {
 	GtkWidget                *image_state;
 	GtkWidget                *label_status;
 	GtkWidget                *table_contact;
-	GtkWidget                *hbox_contact;
+	GtkWidget                *vbox_avatar;
 
 	/* Groups */
 	GtkWidget                *vbox_groups;
@@ -172,7 +172,7 @@ empathy_contact_widget_new (EmpathyContact           *contact,
 				       "image_state", &information->image_state,
 				       "label_status", &information->label_status,
 				       "table_contact", &information->table_contact,
-				       "hbox_contact", &information->hbox_contact,
+				       "vbox_avatar", &information->vbox_avatar,
 				       "vbox_groups", &information->vbox_groups,
 				       "entry_group", &information->entry_group,
 				       "button_group", &information->button_group,
@@ -348,10 +348,10 @@ contact_widget_contact_setup (EmpathyContactWidget *information)
 	} else {
 		information->widget_avatar = empathy_avatar_image_new ();
 	}
-	gtk_box_pack_end (GTK_BOX (information->hbox_contact),
-	 		  information->widget_avatar,
-	 		  FALSE, FALSE,
-	 		  6);
+	gtk_box_pack_start (GTK_BOX (information->vbox_avatar),
+			    information->widget_avatar,
+			    FALSE, FALSE,
+			    6);
 	gtk_widget_show (information->widget_avatar);
 
 	/* Setup account label/chooser */

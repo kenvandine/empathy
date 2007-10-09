@@ -38,7 +38,7 @@
 
 #define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), EMPATHY_TYPE_AVATAR_IMAGE, EmpathyAvatarImagePriv))
 
-#define MAX_SMALL  48
+#define MAX_SMALL 64
 #define MAX_LARGE 400
 
 typedef struct {

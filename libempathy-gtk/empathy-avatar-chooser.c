@@ -40,13 +40,13 @@
 
 #define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), EMPATHY_AVATAR_CHOOSER_TYPE, EmpathyAvatarChooserPriv))
 
-#define AVATAR_MAX 96
+#define AVATAR_SIZE_SAVE 96
+#define AVATAR_SIZE_VIEW 64
 #define DEFAULT_DIR DATADIR"/pixmaps/faces"
 
 typedef struct {
-	GdkPixbuf *pixbuf;
-	gchar     *image_data;
-	gsize      image_data_size;
+	gchar *image_data;
+	gsize  image_data_size;
 } EmpathyAvatarChooserPriv;
 
 static void       avatar_chooser_finalize              (GObject              *object);
@@ -160,9 +160,6 @@ avatar_chooser_finalize (GObject *object)
 
 	priv = GET_PRIV (object);
 
-	if (priv->pixbuf) {
-		g_object_unref (priv->pixbuf);
-	}
 	g_free (priv->image_data);
 
 	G_OBJECT_CLASS (empathy_avatar_chooser_parent_class)->finalize (object);
@@ -174,22 +171,19 @@ avatar_chooser_set_pixbuf (EmpathyAvatarChooser *chooser,
 {
 	EmpathyAvatarChooserPriv *priv = GET_PRIV (chooser);
 	GtkWidget                *image;
+	GdkPixbuf                *pixbuf_view = NULL;
+	GdkPixbuf                *pixbuf_save = NULL;
 	GError                   *error = NULL;
 
-	if (priv->pixbuf) {
-		g_object_unref (priv->pixbuf);
-		priv->pixbuf = NULL;
-	}
 	g_free (priv->image_data);
 	priv->image_data = NULL;
 	priv->image_data_size = 0;
 
 	if (pixbuf) {
-		priv->pixbuf = empathy_pixbuf_scale_down_if_necessary (pixbuf, AVATAR_MAX);
-	}
+		pixbuf_view = empathy_pixbuf_scale_down_if_necessary (pixbuf, AVATAR_SIZE_VIEW);
+		pixbuf_save = empathy_pixbuf_scale_down_if_necessary (pixbuf, AVATAR_SIZE_SAVE);
 
-	if (priv->pixbuf) {
-		if (!gdk_pixbuf_save_to_buffer (priv->pixbuf,
+		if (!gdk_pixbuf_save_to_buffer (pixbuf_save,
 						&priv->image_data,
 						&priv->image_data_size,
 						"png",
@@ -197,16 +191,14 @@ avatar_chooser_set_pixbuf (EmpathyAvatarChooser *chooser,
 			empathy_debug (DEBUG_DOMAIN, "Failed to save pixbuf: %s",
 				       error ? error->message : "No error given");
 			g_clear_error (&error);
-			g_object_unref (priv->pixbuf);
-			priv->pixbuf = NULL;
 		}
-	}
+		image = gtk_image_new_from_pixbuf (pixbuf_view);
 
-	if (!priv->pixbuf) {
+		g_object_unref (pixbuf_save);
+		g_object_unref (pixbuf_view);
+	} else {
 		image = gtk_image_new_from_icon_name ("stock_person",
 						      GTK_ICON_SIZE_DIALOG);
-	} else {
-		image = gtk_image_new_from_pixbuf (priv->pixbuf);
 	}
 
 	gtk_button_set_image (GTK_BUTTON (chooser), image);
@@ -399,7 +391,7 @@ avatar_chooser_update_preview_cb (GtkFileChooser       *file_chooser,
 		image = gtk_file_chooser_get_preview_widget (file_chooser);
 
 		if (pixbuf) {
-			scaled_pixbuf = empathy_pixbuf_scale_down_if_necessary (pixbuf, AVATAR_MAX);
+			scaled_pixbuf = empathy_pixbuf_scale_down_if_necessary (pixbuf, AVATAR_SIZE_SAVE);
 			gtk_image_set_from_pixbuf (GTK_IMAGE (image), scaled_pixbuf);
 			g_object_unref (scaled_pixbuf);
 			g_object_unref (pixbuf);
@@ -507,7 +499,7 @@ avatar_chooser_clicked_cb (GtkWidget            *button,
 	/* Setup preview image */
 	image = gtk_image_new ();
 	gtk_file_chooser_set_preview_widget (chooser_dialog, image);
-	gtk_widget_set_size_request (image, AVATAR_MAX, AVATAR_MAX);
+	gtk_widget_set_size_request (image, AVATAR_SIZE_SAVE, AVATAR_SIZE_SAVE);
 	gtk_widget_show (image);
 	gtk_file_chooser_set_use_preview_label (chooser_dialog,	FALSE);
 	g_signal_connect (chooser_dialog, "update-preview",

@@ -1,3 +1,11 @@
+2007-10-09  Xavier Claessens  <xclaesse@gmail.com>
+
+	* libempathy-gtk/empathy-contact-widget.glade:
+	* libempathy-gtk/empathy-contact-widget.c:
+	* libempathy-gtk/empathy-avatar-chooser.c:
+	* libempathy-gtk/empathy-avatar-image.c: Makes avatar looks better in
+	information and edit dialogs.
+
 2007-10-08  Xavier Claessens  <xclaesse@gmail.com>
 
 	* libempathy-gtk/empathy-ui-utils.c:
