@@ -1,5 +1,10 @@
 2007-10-09  Xavier Claessens  <xclaesse@gmail.com>
 
+	* configure.ac: Bump MissionControl version to 4.37, we uses new API
+	introduced in that version.
+
+2007-10-09  Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/empathy-main-window.c:
 	* libempathy-gtk/empathy-contact-dialogs.c:
 	* libempathy-gtk/empathy-contact-list-view.c:
