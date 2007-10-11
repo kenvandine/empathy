@@ -1,3 +1,7 @@
+2007-10-11  Xavier Claessens  <xclaesse@gmail.com>
+
+	* po/POTFILES.in: Add missing files.
+
 2007-10-09  Xavier Claessens  <xclaesse@gmail.com>
 
 	* configure.ac: Bump MissionControl version to 4.37, we uses new API
