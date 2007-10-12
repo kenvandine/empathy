@@ -1,5 +1,10 @@
 2007-10-11  Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy/empathy-tp-contact-list.c: Set supress_handler to TRUE when
+	creating new group channel.
+
+2007-10-11  Xavier Claessens  <xclaesse@gmail.com>
+
 	* po/POTFILES.in: Add missing files.
 
 2007-10-09  Xavier Claessens  <xclaesse@gmail.com>

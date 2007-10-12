@@ -348,7 +348,7 @@ tp_contact_list_newchannel_cb (DBusGProxy           *proxy,
 			       const gchar          *channel_type,
 			       TelepathyHandleType   handle_type,
 			       guint                 channel_handle,
-			       gboolean              suppress_handle,
+			       gboolean              suppress_handler,
 			       EmpathyTpContactList *list)
 {
 	EmpathyTpContactListPriv *priv = GET_PRIV (list);
@@ -357,7 +357,7 @@ tp_contact_list_newchannel_cb (DBusGProxy           *proxy,
 	const gchar              *bus_name;
 
 	if (strcmp (channel_type, TP_IFACE_CHANNEL_TYPE_CONTACT_LIST) != 0 ||
-	    suppress_handle) {
+	    suppress_handler) {
 		return;
 	}
 
@@ -896,7 +896,7 @@ tp_contact_list_get_group (EmpathyTpContactList *list,
 				      TP_IFACE_CHANNEL_TYPE_CONTACT_LIST,
 				      TP_HANDLE_TYPE_GROUP,
 				      handle,
-				      FALSE,
+				      TRUE,
 				      &object_path,
 				      &error)) {
 		empathy_debug (DEBUG_DOMAIN,
