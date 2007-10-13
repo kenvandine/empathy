@@ -67,7 +67,6 @@ struct _EmpathyChatPriv {
 	EmpathyLogManager     *log_manager;
 	EmpathyTpChat         *tp_chat;
 	EmpathyChatWindow      *window;
-	GtkTooltips           *tooltips;
 	guint                  composing_stop_timeout_id;
 	gboolean               sensitive;
 	gchar                 *id;
@@ -76,7 +75,7 @@ struct _EmpathyChatPriv {
 	GList                 *compositors;
 	guint                  scroll_idle_id;
 	gboolean               first_tp_chat;
-	EmpathyTime            last_log_timestamp;
+	time_t                 last_log_timestamp;
 	/* Used to automatically shrink a window that has temporarily
 	 * grown due to long input. 
 	 */
@@ -237,7 +236,6 @@ empathy_chat_init (EmpathyChat *chat)
 
 	priv->manager = empathy_contact_manager_new ();
 	priv->log_manager = empathy_log_manager_new ();
-	priv->tooltips = g_object_ref_sink (gtk_tooltips_new ());
 	priv->default_window_height = -1;
 	priv->vscroll_visible = FALSE;
 	priv->sensitive = TRUE;
@@ -303,7 +301,6 @@ chat_finalize (GObject *object)
 	g_object_unref (chat->account);
 	g_object_unref (priv->manager);
 	g_object_unref (priv->log_manager);
-	g_object_unref (priv->tooltips);
 
 	if (priv->tp_chat) {
 		g_object_unref (priv->tp_chat);
@@ -402,7 +399,7 @@ chat_message_received_cb (EmpathyTpChat  *tp_chat,
 {
 	EmpathyChatPriv *priv;
 	EmpathyContact  *sender;
-	EmpathyTime      timestamp;
+	time_t           timestamp;
 
 	priv = GET_PRIV (chat);
 
@@ -927,8 +924,7 @@ chat_text_populate_popup_cb (GtkTextView *view,
 
 	smiley_menu = empathy_chat_view_get_smiley_menu (
 		G_CALLBACK (chat_insert_smiley_activate_cb),
-		chat,
-		priv->tooltips);
+		chat);
 	gtk_menu_item_set_submenu (GTK_MENU_ITEM (item), smiley_menu);
 
 	/* Add the spell check menu item. */

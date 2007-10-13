@@ -31,12 +31,6 @@ empathy-time
 
 
 
-<!-- ##### TYPEDEF EmpathyTime ##### -->
-<para>
-
-</para>
-
-
 <!-- ##### FUNCTION empathy_time_get_current ##### -->
 <para>
 

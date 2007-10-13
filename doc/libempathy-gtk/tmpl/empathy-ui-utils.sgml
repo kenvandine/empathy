@@ -72,16 +72,6 @@ empathy-ui-utils
 @Varargs: 
 
 
-<!-- ##### FUNCTION empathy_pixbuf_from_icon_name ##### -->
-<para>
-
-</para>
-
-@icon_name: 
-@icon_size: 
-@Returns: 
-
-
 <!-- ##### FUNCTION empathy_icon_name_from_account ##### -->
 <para>
 
@@ -118,6 +108,16 @@ empathy-ui-utils
 @Returns: 
 
 
+<!-- ##### FUNCTION empathy_pixbuf_from_data ##### -->
+<para>
+
+</para>
+
+@data: 
+@data_size: 
+@Returns: 
+
+
 <!-- ##### FUNCTION empathy_pixbuf_from_avatar_scaled ##### -->
 <para>
 
@@ -137,6 +137,26 @@ empathy-ui-utils
 @contact: 
 @width: 
 @height: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_pixbuf_scale_down_if_necessary ##### -->
+<para>
+
+</para>
+
+@pixbuf: 
+@max_size: 
+@Returns: 
+
+
+<!-- ##### FUNCTION empathy_pixbuf_from_icon_name ##### -->
+<para>
+
+</para>
+
+@icon_name: 
+@icon_size: 
 @Returns: 
 
 

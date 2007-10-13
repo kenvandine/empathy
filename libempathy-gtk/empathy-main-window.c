@@ -75,9 +75,6 @@ typedef struct {
 	GtkWidget              *window;
 	GtkWidget              *main_vbox;
 
-	/* Tooltips for all widgets */
-	GtkTooltips            *tooltips;
-
 	/* Menu widgets */
 	GtkWidget              *room;
 	GtkWidget              *room_menu;
@@ -187,7 +184,6 @@ empathy_main_window_show (void)
 	GtkWidget                *show_offline_widget;
 	GtkWidget                *ebox;
 	GtkToolItem              *item;
-	gchar                    *str;
 	gboolean                  show_offline;
 	gboolean                  show_avatars;
 	gboolean                  compact_contact_list;
@@ -240,7 +236,6 @@ empathy_main_window_show (void)
 	main_window_connection_items_setup (window, glade);
 	g_object_unref (glade);
 
-	window->tooltips = g_object_ref_sink (gtk_tooltips_new ());
 	window->mc = empathy_mission_control_new ();
 	dbus_g_proxy_connect_signal (DBUS_G_PROXY (window->mc), "AccountStatusChanged",
 				     G_CALLBACK (main_window_status_changed_cb),
@@ -276,9 +271,7 @@ empathy_main_window_show (void)
 
 	gtk_toolbar_insert (GTK_TOOLBAR (window->presence_toolbar), item, -1);
 
-	str = _("Show and edit accounts");
-	gtk_tooltips_set_tip (GTK_TOOLTIPS (window->tooltips),
-			      ebox, str, str);
+	gtk_widget_set_tooltip_text (ebox, _("Show and edit accounts"));
 
 	g_signal_connect (ebox,
 			  "button-press-event",
@@ -386,7 +379,6 @@ main_window_destroy_cb (GtkWidget         *widget,
 	g_list_free (window->widgets_connected);
 	g_list_free (window->widgets_disconnected);
 
-	g_object_unref (window->tooltips);
 	g_object_unref (window->mc);
 	g_object_unref (window->list_store);
 

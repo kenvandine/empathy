@@ -329,7 +329,7 @@ empathy_log_manager_get_messages_for_file (EmpathyLogManager *manager,
 		EmpathyMessage     *message;
 		EmpathyContact     *sender;
 		gchar              *time;
-		EmpathyTime         t;
+		time_t              t;
 		gchar              *sender_id;
 		gchar              *sender_name;
 		gchar              *body;
@@ -527,7 +527,7 @@ empathy_log_manager_search_free (GList *hits)
 gchar *
 empathy_log_manager_get_date_readable (const gchar *date)
 {
-	EmpathyTime t;
+	time_t t;
 
 	t = empathy_time_parse (date);
 
@@ -703,7 +703,7 @@ log_manager_get_filename_for_date (EmpathyLogManager *manager,
 static gchar *
 log_manager_get_timestamp_filename (void)
 {
-	EmpathyTime  t;
+	time_t      t;
 	gchar      *time_str;
 	gchar      *filename;
 
@@ -719,7 +719,7 @@ log_manager_get_timestamp_filename (void)
 static gchar *
 log_manager_get_timestamp_from_message (EmpathyMessage *message)
 {
-	EmpathyTime t;
+	time_t t;
 
 	t = empathy_message_get_timestamp (message);
 

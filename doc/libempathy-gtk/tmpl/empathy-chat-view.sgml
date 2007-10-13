@@ -186,7 +186,6 @@ EmpathyChatView
 
 @callback: 
 @user_data: 
-@tooltips: 
 @Returns: 
 
 

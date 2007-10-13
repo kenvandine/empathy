@@ -30,7 +30,7 @@
 
 /* Note: EmpathyTime is always in UTC. */
 
-EmpathyTime
+time_t
 empathy_time_get_current (void)
 {
 	return time (NULL);
@@ -63,7 +63,7 @@ empathy_time_get_local_time (struct tm *tm)
 /* The format is: "20021209T23:51:30" and is in UTC. 0 is returned on
  * failure. The alternative format "20021209" is also accepted.
  */
-EmpathyTime
+time_t
 empathy_time_parse (const gchar *str)
 {
 	struct tm tm;
@@ -88,8 +88,8 @@ empathy_time_parse (const gchar *str)
 
 /* Converts the UTC timestamp to a string, also in UTC. Returns NULL on failure. */
 gchar *
-empathy_time_to_string_utc (EmpathyTime   t,
-			   const gchar *format)
+empathy_time_to_string_utc (time_t       t,
+			    const gchar *format)
 {
 	gchar      stamp[128];
 	struct tm *tm;
@@ -106,8 +106,8 @@ empathy_time_to_string_utc (EmpathyTime   t,
 
 /* Converts the UTC timestamp to a string, in local time. Returns NULL on failure. */
 gchar *
-empathy_time_to_string_local (EmpathyTime   t,
-			     const gchar *format)
+empathy_time_to_string_local (time_t       t,
+			      const gchar *format)
 {
 	gchar      stamp[128];
 	struct tm *tm;

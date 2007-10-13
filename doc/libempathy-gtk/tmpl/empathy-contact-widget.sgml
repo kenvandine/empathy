@@ -17,15 +17,16 @@ empathy-contact-widget
 <!-- ##### SECTION Stability_Level ##### -->
 
 
-<!-- ##### ENUM EmpathyContactWidgetType ##### -->
+<!-- ##### ENUM EmpathyContactWidgetFlags ##### -->
 <para>
 
 </para>
 
-@CONTACT_WIDGET_TYPE_SHOW: 
-@CONTACT_WIDGET_TYPE_EDIT: 
-@CONTACT_WIDGET_TYPE_ADD: 
-@CONTACT_WIDGET_TYPE_SUBSCRIPTION: 
+@EMPATHY_CONTACT_WIDGET_EDIT_ALIAS: 
+@EMPATHY_CONTACT_WIDGET_EDIT_AVATAR: 
+@EMPATHY_CONTACT_WIDGET_EDIT_ACCOUNT: 
+@EMPATHY_CONTACT_WIDGET_EDIT_ID: 
+@EMPATHY_CONTACT_WIDGET_EDIT_GROUPS: 
 
 <!-- ##### FUNCTION empathy_contact_widget_new ##### -->
 <para>
@@ -33,7 +34,7 @@ empathy-contact-widget
 </para>
 
 @contact: 
-@type: 
+@flags: 
 @Returns: 
 
 

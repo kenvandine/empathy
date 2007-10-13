@@ -72,9 +72,9 @@ void               empathy_message_set_receiver  (EmpathyMessage     *message,
 const gchar *      empathy_message_get_body      (EmpathyMessage     *message);
 void               empathy_message_set_body      (EmpathyMessage     *message,
 						  const gchar        *body);
-EmpathyTime        empathy_message_get_timestamp (EmpathyMessage     *message);
+time_t             empathy_message_get_timestamp (EmpathyMessage     *message);
 void               empathy_message_set_timestamp (EmpathyMessage     *message,
-						  EmpathyTime         timestamp);
+						  time_t              timestamp);
 EmpathyMessageType empathy_message_type_from_str (const gchar        *type_str);
 const gchar *      empathy_message_type_to_str   (EmpathyMessageType  type);
 

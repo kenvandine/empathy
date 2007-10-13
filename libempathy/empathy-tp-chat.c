@@ -940,7 +940,7 @@ tp_chat_build_message (EmpathyTpChat *chat,
 	empathy_message_set_type (message, type);
 	empathy_message_set_sender (message, sender);
 	empathy_message_set_receiver (message, priv->user);
-	empathy_message_set_timestamp (message, (EmpathyTime) timestamp);
+	empathy_message_set_timestamp (message, timestamp);
 
 	g_object_unref (sender);
 

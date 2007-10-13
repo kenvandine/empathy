@@ -38,7 +38,7 @@ struct _EmpathyMessagePriv {
 	EmpathyContact     *sender;
 	EmpathyContact     *receiver;
 	gchar              *body;
-	EmpathyTime         timestamp;
+	time_t              timestamp;
 };
 
 static void empathy_message_class_init (EmpathyMessageClass *class);
@@ -385,7 +385,7 @@ empathy_message_set_body (EmpathyMessage *message,
 	g_object_notify (G_OBJECT (message), "body");
 }
 
-EmpathyTime
+time_t
 empathy_message_get_timestamp (EmpathyMessage *message)
 {
 	EmpathyMessagePriv *priv;
@@ -399,7 +399,7 @@ empathy_message_get_timestamp (EmpathyMessage *message)
 
 void
 empathy_message_set_timestamp (EmpathyMessage *message,
-			      EmpathyTime     timestamp)
+			       time_t          timestamp)
 {
 	EmpathyMessagePriv *priv;
 

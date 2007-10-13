@@ -1,5 +1,25 @@
 2007-10-13  Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/empathy-chat-view.h:
+	* libempathy-gtk/empathy-main-window.c:
+	* libempathy-gtk/empathy-chat.c:
+	* libempathy-gtk/empathy-chat-window.c:
+	* libempathy-gtk/empathy-chat-view.c:
+	* libempathy/empathy-log-manager.c:
+	* libempathy/empathy-time.c:
+	* libempathy/empathy-tp-chat.c:
+	* libempathy/empathy-time.h:
+	* libempathy/empathy-message.c:
+	* libempathy/empathy-message.h:
+	* libempathy/empathy-presence.c:
+	* configure.ac: Don't use deprecated GtkTooltips API. Add commented out
+	lines in configure.ac to disable GLib and GTK deprecated symbols.
+	Replace EmpathyTime by time_t which is more appropriate for timestamps.
+
+	* doc/*: Updated.
+
+2007-10-13  Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/empathy-main-window.c:
 	* libempathy-gtk/empathy-presence-chooser.c:
 	* libempathy-gtk/empathy-contact-list-view.c:

@@ -725,10 +725,10 @@ chat_view_maybe_append_date_and_time (EmpathyChatView *view,
 	}
 
 	date = g_date_new ();
-	g_date_set_time (date, timestamp);
+	g_date_set_time_t (date, timestamp);
 
 	last_date = g_date_new ();
-	g_date_set_time (last_date, priv->last_timestamp);
+	g_date_set_time_t (last_date, priv->last_timestamp);
 
 	append_date = FALSE;
 	append_time = FALSE;
@@ -1958,8 +1958,7 @@ empathy_chat_view_set_margin (EmpathyChatView *view,
 
 GtkWidget *
 empathy_chat_view_get_smiley_menu (GCallback    callback,
-				   gpointer     user_data,
-				   GtkTooltips *tooltips)
+				   gpointer     user_data)
 {
 	EmpathySmileyManager *smiley_manager;
 	GSList               *smileys, *l;
@@ -1987,10 +1986,7 @@ empathy_chat_view_get_smiley_menu (GCallback    callback,
 		gtk_menu_attach (GTK_MENU (menu), item,
 				 x, x + 1, y, y + 1);
 
-		gtk_tooltips_set_tip (tooltips,
-				      item,
-				      smiley->str,
-				      NULL);
+		gtk_widget_set_tooltip_text (item, smiley->str);
 
 		g_object_set_data  (G_OBJECT (item), "smiley_text", smiley->str);
 		g_signal_connect (item, "activate", callback, user_data);

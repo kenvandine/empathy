@@ -55,6 +55,10 @@ MISSION_CONTROL_REQUIRED=4.37
 
 IDT_COMPILE_WARNINGS
 
+dnl Uncomment that to build without deprecated GTK and GLib symbols
+dnl AC_DEFINE(GTK_DISABLE_DEPRECATED, 1, [Disable deprecated GTK symbols])
+dnl AC_DEFINE(G_DISABLE_DEPRECATED, 1, [Disable deprecated GLib symbols])
+
 GLIB_GENMARSHAL=`$PKG_CONFIG glib-2.0 --variable=glib_genmarshal`
 AC_SUBST(GLIB_GENMARSHAL)
 

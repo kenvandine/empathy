@@ -26,7 +26,6 @@
 #define __EMPATHY_CHAT_VIEW_H__
 
 #include <gtk/gtktextview.h>
-#include <gtk/gtktooltips.h>
 
 #include <libempathy/empathy-contact.h>
 #include <libempathy/empathy-message.h>
@@ -90,8 +89,7 @@ void             empathy_chat_view_set_irc_style        (EmpathyChatView *view,
 void             empathy_chat_view_set_margin           (EmpathyChatView *view,
 							 gint             margin);
 GtkWidget *      empathy_chat_view_get_smiley_menu      (GCallback        callback,
-							 gpointer         user_data,
-							 GtkTooltips     *tooltips);
+							 gpointer         user_data);
 void             empathy_chat_view_set_is_group_chat    (EmpathyChatView *view,
 							 gboolean         is_group_chat);
 

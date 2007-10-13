@@ -74,8 +74,6 @@ struct _EmpathyChatWindowPriv {
 	GtkWidget             *dialog;
 	GtkWidget             *notebook;
 
-	GtkTooltips           *tooltips;
-
 	/* Menu items. */
 	GtkWidget             *menu_conv_clear;
 	GtkWidget             *menu_conv_insert_smiley;
@@ -277,8 +275,6 @@ empathy_chat_window_init (EmpathyChatWindow *window)
 
 	priv = GET_PRIV (window);
 
-	priv->tooltips = g_object_ref_sink (gtk_tooltips_new ());
-
 	glade = empathy_glade_get_file ("empathy-chat.glade",
 				       "chat_window",
 				       NULL,
@@ -345,7 +341,7 @@ empathy_chat_window_init (EmpathyChatWindow *window)
 				  window);
 
 	priv->notebook = gtk_notebook_new ();
- 	gtk_notebook_set_group_id (GTK_NOTEBOOK (priv->notebook), 1); 
+ 	gtk_notebook_set_group (GTK_NOTEBOOK (priv->notebook), "EmpathyChatWindow"); 
 	gtk_box_pack_start (GTK_BOX (chat_vbox), priv->notebook, TRUE, TRUE, 0);
 	gtk_widget_show (priv->notebook);
 
@@ -377,8 +373,7 @@ empathy_chat_window_init (EmpathyChatWindow *window)
 	/* Set up smiley menu */
 	menu = empathy_chat_view_get_smiley_menu (
 		G_CALLBACK (chat_window_insert_smiley_activate_cb),
-		window,
-		priv->tooltips);
+		window);
 	gtk_menu_item_set_submenu (GTK_MENU_ITEM (priv->menu_conv_insert_smiley), menu);
 
 	/* Set up signals we can't do with glade since we may need to
@@ -508,7 +503,6 @@ empathy_chat_window_finalize (GObject *object)
 
 	chat_windows = g_list_remove (chat_windows, window);
 	gtk_widget_destroy (priv->dialog);
-	g_object_unref (priv->tooltips);
 
 	g_signal_handlers_disconnect_by_func (priv->chatroom_manager,
 					      chat_window_update_menu,
@@ -1291,10 +1285,7 @@ chat_window_update_tooltip (EmpathyChatWindow *window,
 	}
 
 	widget = g_object_get_data (G_OBJECT (chat), "chat-window-tab-tooltip-widget");
-	gtk_tooltips_set_tip (priv->tooltips,
-			      widget,
-			      str,
-			      NULL);
+	gtk_widget_set_tooltip_text (widget, str);
 
 	g_free (str);
 }

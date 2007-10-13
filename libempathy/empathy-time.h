@@ -33,18 +33,15 @@ G_BEGIN_DECLS
 #define EMPATHY_TIME_FORMAT_DISPLAY_SHORT "%H:%M"
 #define EMPATHY_TIME_FORMAT_DISPLAY_LONG  "%a %d %b %Y"
 
-/* Note: Always in UTC. */
-typedef long EmpathyTime;
-
-EmpathyTime  empathy_time_get_current     (void);
-time_t      empathy_time_get_local_time  (struct tm   *tm);
-EmpathyTime  empathy_time_parse           (const gchar *str);
-EmpathyTime  empathy_time_parse_format    (const gchar *str,
-					 const gchar *format);
-gchar      *empathy_time_to_string_utc   (EmpathyTime   t,
-					 const gchar *format);
-gchar      *empathy_time_to_string_local (EmpathyTime   t,
-					 const gchar *format);
+time_t  empathy_time_get_current     (void);
+time_t  empathy_time_get_local_time  (struct tm   *tm);
+time_t  empathy_time_parse           (const gchar *str);
+time_t  empathy_time_parse_format    (const gchar *str,
+				      const gchar *format);
+gchar  *empathy_time_to_string_utc   (time_t       t,
+				      const gchar *format);
+gchar  *empathy_time_to_string_local (time_t       t,
+				      const gchar *format);
 
 G_END_DECLS
 

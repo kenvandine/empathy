@@ -38,7 +38,7 @@ typedef struct _EmpathyPresencePriv EmpathyPresencePriv;
 struct _EmpathyPresencePriv {
 	McPresence  state;
 	gchar      *status;
-	EmpathyTime  timestamp;
+	time_t      timestamp;
 };
 
 static void         presence_finalize     (GObject      *object);
