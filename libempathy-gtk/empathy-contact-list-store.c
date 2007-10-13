@@ -43,11 +43,11 @@
  * (e.g. online, offline or from normal to a busy state).
  */
 
-/* Time user is shown as active */
-#define ACTIVE_USER_SHOW_TIME 7000
+/* Time in seconds user is shown as active */
+#define ACTIVE_USER_SHOW_TIME 7
 
-/* Time after connecting which we wait before active users are enabled */
-#define ACTIVE_USER_WAIT_TO_ENABLE_TIME 5000
+/* Time in seconds after connecting which we wait before active users are enabled */
+#define ACTIVE_USER_WAIT_TO_ENABLE_TIME 5
 
 #define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), EMPATHY_TYPE_CONTACT_LIST_STORE, EmpathyContactListStorePriv))
 
@@ -220,9 +220,9 @@ empathy_contact_list_store_init (EmpathyContactListStore *store)
 	priv = GET_PRIV (store);
 
 	priv->show_avatars = TRUE;
-	priv->inhibit_active = g_timeout_add (ACTIVE_USER_WAIT_TO_ENABLE_TIME,
-					      (GSourceFunc) contact_list_store_inibit_active_cb,
-					      store);
+	priv->inhibit_active = g_timeout_add_seconds (ACTIVE_USER_WAIT_TO_ENABLE_TIME,
+						      (GSourceFunc) contact_list_store_inibit_active_cb,
+						      store);
 }
 
 static void
@@ -984,9 +984,9 @@ contact_list_store_contact_update (EmpathyContactListStore *store,
 
 		if (do_set_active) {
 			data = contact_list_store_contact_active_new (store, contact, do_remove);
-			g_timeout_add (ACTIVE_USER_SHOW_TIME,
-				       (GSourceFunc) contact_list_store_contact_active_cb,
-				       data);
+			g_timeout_add_seconds (ACTIVE_USER_SHOW_TIME,
+					       (GSourceFunc) contact_list_store_contact_active_cb,
+					       data);
 		}
 	}
 

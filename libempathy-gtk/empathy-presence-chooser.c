@@ -367,9 +367,9 @@ presence_chooser_scroll_event_cb (EmpathyPresenceChooser *chooser,
 		priv->scroll_state = sas->state;
 
 		priv->scroll_timeout_id =
-			g_timeout_add (500,
-				       (GSourceFunc) presence_chooser_scroll_timeout_cb,
-				       chooser);
+			g_timeout_add_seconds (1,
+					       (GSourceFunc) presence_chooser_scroll_timeout_cb,
+					       chooser);
 
 		presence_chooser_flash_stop (chooser, sas->state);
 		gtk_label_set_text (GTK_LABEL (priv->label), sas->status);	

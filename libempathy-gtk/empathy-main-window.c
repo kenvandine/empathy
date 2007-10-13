@@ -868,9 +868,9 @@ main_window_configure_event_cb (GtkWidget         *widget,
 		g_source_remove (window->size_timeout_id);
 	}
 
-	window->size_timeout_id = g_timeout_add (500,
-					       (GSourceFunc) main_window_configure_event_timeout_cb,
-					       window);
+	window->size_timeout_id = g_timeout_add_seconds (1,
+							 (GSourceFunc) main_window_configure_event_timeout_cb,
+							 window);
 
 	return FALSE;
 }

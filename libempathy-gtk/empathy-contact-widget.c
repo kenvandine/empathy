@@ -42,8 +42,8 @@
 #include "empathy-avatar-image.h"
 #include "empathy-ui-utils.h"
 
-/* Delay before updating the widget when the id entry changed (ms) */
-#define ID_CHANGED_TIMEOUT 500
+/* Delay before updating the widget when the id entry changed (seconds) */
+#define ID_CHANGED_TIMEOUT 1
 
 typedef struct {
 	EmpathyContactFactory    *factory;
@@ -329,9 +329,9 @@ contact_widget_id_changed_cb (GtkEntry             *entry,
 	}
 
 	self->widget_id_timeout =
-		g_timeout_add (ID_CHANGED_TIMEOUT,
-			       (GSourceFunc) contact_widget_id_activate_timeout,
-			       self);
+		g_timeout_add_seconds (ID_CHANGED_TIMEOUT,
+				       (GSourceFunc) contact_widget_id_activate_timeout,
+				       self);
 }
 
 static void

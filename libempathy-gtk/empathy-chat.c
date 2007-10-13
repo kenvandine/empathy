@@ -1029,8 +1029,8 @@ chat_composing_start (EmpathyChat *chat)
 					   TP_CHANNEL_CHAT_STATE_COMPOSING);
 	}
 
-	priv->composing_stop_timeout_id = g_timeout_add (
-		1000 * COMPOSING_STOP_TIMEOUT,
+	priv->composing_stop_timeout_id = g_timeout_add_seconds (
+		COMPOSING_STOP_TIMEOUT,
 		(GSourceFunc) chat_composing_stop_timeout_cb,
 		chat);
 }

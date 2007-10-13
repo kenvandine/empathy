@@ -60,8 +60,6 @@
 
 #define DEBUG_DOMAIN "ChatWindow"
 
-#define URGENCY_TIMEOUT 60*1000
-
 struct _EmpathyChatWindowPriv {
 	EmpathyChatroomManager *chatroom_manager;
 	GList                 *chats;
@@ -72,8 +70,6 @@ struct _EmpathyChatWindowPriv {
 
 	gboolean               page_added;
 	gboolean               dnd_same_window;
-
-	guint                  urgency_timeout_id;
 
 	GtkWidget             *dialog;
 	GtkWidget             *notebook;
@@ -508,10 +504,6 @@ empathy_chat_window_finalize (GObject *object)
 
 	if (priv->save_geometry_id != 0) {
 		g_source_remove (priv->save_geometry_id);
-	}
-
-	if (priv->urgency_timeout_id != 0) {
-		g_source_remove (priv->urgency_timeout_id);
 	}
 
 	chat_windows = g_list_remove (chat_windows, window);
@@ -954,9 +946,9 @@ chat_window_configure_event_cb (GtkWidget         *widget,
 	}
 
 	priv->save_geometry_id =
-		g_timeout_add (500,
-			       (GSourceFunc) chat_window_save_geometry_timeout_cb,
-			       window);
+		g_timeout_add_seconds (1,
+				       (GSourceFunc) chat_window_save_geometry_timeout_cb,
+				       window);
 
 	return FALSE;
 }
@@ -1690,21 +1682,6 @@ chat_window_drag_data_received (GtkWidget        *widget,
 	}
 }
 
-static gboolean
-chat_window_urgency_timeout_func (EmpathyChatWindow *window)
-{
-	EmpathyChatWindowPriv *priv;
-
-	priv = GET_PRIV (window);
-
-	empathy_debug (DEBUG_DOMAIN, "Turning off urgency hint");
-	gtk_window_set_urgency_hint (GTK_WINDOW (priv->dialog), FALSE);
-
-	priv->urgency_timeout_id = 0;
-
-	return FALSE;
-}
-
 static void
 chat_window_set_urgency_hint (EmpathyChatWindow *window,
 			      gboolean          urgent)
@@ -1713,29 +1690,9 @@ chat_window_set_urgency_hint (EmpathyChatWindow *window,
 
 	priv = GET_PRIV (window);
 
-	if (!urgent) {
-		/* Remove any existing hint and timeout. */
-		if (priv->urgency_timeout_id) {
-			empathy_debug (DEBUG_DOMAIN, "Turning off urgency hint");
-			gtk_window_set_urgency_hint (GTK_WINDOW (priv->dialog), FALSE);
-			g_source_remove (priv->urgency_timeout_id);
-			priv->urgency_timeout_id = 0;
-		}
-		return;
-	}
-
-	/* Add a new hint and renew any exising timeout or add a new one. */
-	if (priv->urgency_timeout_id) {
-		g_source_remove (priv->urgency_timeout_id);
-	} else {
-		empathy_debug (DEBUG_DOMAIN, "Turning on urgency hint");
-		gtk_window_set_urgency_hint (GTK_WINDOW (priv->dialog), TRUE);
-	}
-
-	priv->urgency_timeout_id = g_timeout_add (
-		URGENCY_TIMEOUT,
-		(GSourceFunc) chat_window_urgency_timeout_func,
-		window);
+	empathy_debug (DEBUG_DOMAIN, "Turning %s urgency hint",
+		       urgent ? "on" : "off");
+	gtk_window_set_urgency_hint (GTK_WINDOW (priv->dialog), urgent);
 }
 
 EmpathyChatWindow *

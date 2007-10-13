@@ -1,3 +1,16 @@
+2007-10-13  Xavier Claessens  <xclaesse@gmail.com>
+
+	* libempathy-gtk/empathy-main-window.c:
+	* libempathy-gtk/empathy-presence-chooser.c:
+	* libempathy-gtk/empathy-contact-list-view.c:
+	* libempathy-gtk/empathy-contact-widget.c:
+	* libempathy-gtk/empathy-chat.c:
+	* libempathy-gtk/empathy-contact-list-store.c:
+	* libempathy-gtk/empathy-chat-window.c:
+	* libempathy/empathy-idle.c:
+	* tests/contact-manager.c: Use g_timeout_add_seconds when appropriated
+	to avoid weaking the process too much.
+
 2007-10-11  Xavier Claessens  <xclaesse@gmail.com>
 
 	* libempathy/empathy-tp-contact-list.c: Set supress_handler to TRUE when

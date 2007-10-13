@@ -607,9 +607,9 @@ idle_ext_away_start (EmpathyIdle *idle)
 	priv = GET_PRIV (idle);
 
 	idle_ext_away_stop (idle);
-	priv->ext_away_timeout = g_timeout_add (EXT_AWAY_TIME * 1000,
-						(GSourceFunc) idle_ext_away_cb,
-						idle);
+	priv->ext_away_timeout = g_timeout_add_seconds (EXT_AWAY_TIME,
+							(GSourceFunc) idle_ext_away_cb,
+							idle);
 }
 
 static void

@@ -891,8 +891,7 @@ contact_list_view_drag_motion (GtkWidget      *widget,
 		dm->view = EMPATHY_CONTACT_LIST_VIEW (widget);
 		dm->path = gtk_tree_path_copy (path);
 
-		dm->timeout_id = g_timeout_add (
-			1500,
+		dm->timeout_id = g_timeout_add_seconds (1,
 			(GSourceFunc) contact_list_view_drag_motion_cb,
 			dm);
 	}
