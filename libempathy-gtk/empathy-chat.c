@@ -430,6 +430,11 @@ chat_message_received_cb (EmpathyTpChat  *tp_chat,
 		// FIXME: empathy_sound_play (EMPATHY_SOUND_CHAT);
 	}
 
+	/* We received a message so the contact is no more composing */
+	chat_state_changed_cb (tp_chat, sender,
+			       TP_CHANNEL_CHAT_STATE_ACTIVE,
+			       chat);
+
 	g_signal_emit (chat, signals[NEW_MESSAGE], 0, message, FALSE);
 }
 

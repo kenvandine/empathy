@@ -1,5 +1,11 @@
 2007-10-13  Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/empathy-chat.c: Set chat state to ACTIVE when receiving
+	a message from a contact, avoid staying in COMPOSING state forever for
+	protocols like MSN that do not notify when contact stoped writing.
+
+2007-10-13  Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/empathy-chat-view.h:
 	* libempathy-gtk/empathy-main-window.c:
 	* libempathy-gtk/empathy-chat.c:
