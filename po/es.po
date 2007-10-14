@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: empathy.HEAD.es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-10-01 14:24+0100\n"
-"PO-Revision-Date: 2007-10-07 14:55+0200\n"
+"POT-Creation-Date: 2007-10-11 12:27+0100\n"
+"PO-Revision-Date: 2007-10-14 15:31+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -217,7 +217,7 @@ msgstr "Ausente"
 msgid "Hidden"
 msgstr "Oculto"
 
-#: ../libempathy/empathy-tp-contact-list.c:730 ../src/empathy.c:211
+#: ../libempathy/empathy-tp-contact-list.c:730 ../src/empathy.c:212
 msgid "People nearby"
 msgstr "Gente cerca"
 
@@ -445,6 +445,26 @@ msgstr ""
 #: ../libempathy-gtk/empathy-accounts-dialog.glade.h:9
 msgid "Type:"
 msgstr "Tipo:"
+
+#: ../libempathy-gtk/empathy-avatar-chooser.c:448
+msgid "Select Your Avatar Image"
+msgstr "Seleccione su imagen de avatar"
+
+#: ../libempathy-gtk/empathy-avatar-chooser.c:451
+msgid "No Image"
+msgstr "Sin imagen"
+
+#: ../libempathy-gtk/empathy-avatar-chooser.c:511
+msgid "Images"
+msgstr "Imágenes"
+
+#: ../libempathy-gtk/empathy-avatar-chooser.c:515
+msgid "All Files"
+msgstr "Todos los archivos"
+
+#: ../libempathy-gtk/empathy-avatar-image.c:298
+msgid "Click to enlarge"
+msgstr "Pulse para agrandar"
 
 #: ../libempathy-gtk/empathy-call-window.glade.h:1
 msgid "Call"
@@ -711,11 +731,11 @@ msgstr "_Sala:"
 msgid "Contact information"
 msgstr "Información del contacto"
 
-#: ../libempathy-gtk/empathy-contact-dialogs.c:221
+#: ../libempathy-gtk/empathy-contact-dialogs.c:231
 msgid "I would like to add you to my contact list."
 msgstr "Me gustaría añadirte a mi lista de contactos."
 
-#: ../libempathy-gtk/empathy-contact-dialogs.c:245
+#: ../libempathy-gtk/empathy-contact-dialogs.c:255
 msgid "New contact"
 msgstr "Contacto nuevo"
 
@@ -800,16 +820,16 @@ msgstr "_Llamar"
 msgid "Start a voice or video conversation with this contact"
 msgstr "Iniciar una conversación de voz o vídeo con este contacto"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1414
+#: ../libempathy-gtk/empathy-contact-list-view.c:1416
 msgid "Sorry, I don't want you in my contact list anymore."
 msgstr "Lo siento, no te quiero en mi lista de contactos."
 
-#: ../libempathy-gtk/empathy-contact-widget.c:637
+#: ../libempathy-gtk/empathy-contact-widget.c:672
 msgid "Select"
 msgstr "Seleccionar"
 
-#: ../libempathy-gtk/empathy-contact-widget.c:647
-#: ../libempathy-gtk/empathy-main-window.c:613
+#: ../libempathy-gtk/empathy-contact-widget.c:682
+#: ../libempathy-gtk/empathy-main-window.c:614
 msgid "Group"
 msgstr "Grupo"
 
@@ -981,11 +1001,11 @@ msgstr ""
 "Esta lista representa todas las salas de chat hospedadas en el servidor al "
 "que ha entrado."
 
-#: ../libempathy-gtk/empathy-main-window.c:278
+#: ../libempathy-gtk/empathy-main-window.c:279
 msgid "Show and edit accounts"
 msgstr "Mostrar y editar cuentas"
 
-#: ../libempathy-gtk/empathy-main-window.c:634
+#: ../libempathy-gtk/empathy-main-window.c:635
 msgid "Contact"
 msgstr "Contacto"
 
@@ -1286,11 +1306,11 @@ msgstr "Presencia"
 msgid "Set your own presence"
 msgstr "Establezca su propia presencia"
 
-#: ../src/empathy.c:271
+#: ../src/empathy.c:272
 msgid "Don't connect on startup"
 msgstr "No conectarse al inicio"
 
-#: ../src/empathy.c:282
+#: ../src/empathy.c:283
 msgid "- Empathy Instant Messenger"
 msgstr "- Mensajería instantánea Empathy"
 
