@@ -1,3 +1,13 @@
+2007-10-15  Xavier Claessens  <xclaesse@gmail.com>
+
+	* libempathy-gtk/empathy-ui-utils.c: Don't warning if we try to load
+	a NULL icon.
+
+	* data/Makefile.am:
+	* data/aim.profile:
+	* data/sofiasip.profile: Add AIM and SIP profiles. Fixes bug #457740
+	(Jamey Hicks).
+
 2007-10-13  Xavier Claessens  <xclaesse@gmail.com>
 
 	* libempathy-gtk/empathy-chat.c: Set chat state to ACTIVE when receiving

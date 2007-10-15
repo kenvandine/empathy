@@ -530,6 +530,10 @@ empathy_pixbuf_from_icon_name (const gchar *icon_name,
 	gint           w, h;
 	gint           size = 48;
 
+	if (!icon_name) {
+		return NULL;
+	}
+
 	theme = gtk_icon_theme_get_default ();
 
 	if (gtk_icon_size_lookup (icon_size, &w, &h)) {
