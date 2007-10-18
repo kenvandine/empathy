@@ -1,3 +1,34 @@
+2007-10-18  Xavier Claessens  <xclaesse@gmail.com>
+
+	* libempathy/empathy-log-manager.c:
+	* libempathy/empathy-log-manager.h:
+	* libempathy/empathy-tp-chat.c:
+	* libempathy/empathy-contact-manager.c:
+	* libempathy/empathy-tp-chat.h:
+	* libempathy/empathy-contact-manager.h:
+	* libempathy/empathy-avatar.c:
+	* libempathy/empathy-chandler.c:
+	* libempathy/empathy-tp-contact-list.c:
+	* libempathy/empathy-chandler.h:
+	* libempathy/empathy-filter.c:
+	* libempathy/empathy-tp-roomlist.c:
+	* libempathy/empathy-tp-contact-list.h:
+	* libempathy/empathy-filter.h:
+	* libempathy/empathy-tp-chatroom.c:
+	* libempathy/empathy-tp-roomlist.h:
+	* libempathy/empathy-contact-factory.c:
+	* libempathy/empathy-tp-chatroom.h:
+	* libempathy/empathy-contact-list.c:
+	* libempathy/empathy-contact-factory.h:
+	* libempathy/empathy-contact-list.h:
+	* libempathy/empathy-chatroom.c:
+	* libempathy/empathy-idle.c:
+	* libempathy/empathy-tp-group.c:
+	* libempathy/empathy-chatroom.h:
+	* libempathy/empathy-idle.h:
+	* libempathy/empathy-tp-group.h: Cleanup licences and copyrights,
+	Modules with 100% collabora code are now relicenced to LGPL.
+
 2007-10-15  Xavier Claessens  <xclaesse@gmail.com>
 
 	* libempathy-gtk/empathy-ui-utils.c: Don't warning if we try to load
