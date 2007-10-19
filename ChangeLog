@@ -1,5 +1,10 @@
 2007-10-19  Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/empathy-status-icon.c: Fix crash when iconifying main
+	window if it's already hiden.
+
+2007-10-19  Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/empathy-group-chat.c:
 	* libempathy/empathy-tp-chatroom.c:Don't accept invitation if we are
 	not invited.

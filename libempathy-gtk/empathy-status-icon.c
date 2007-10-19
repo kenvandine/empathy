@@ -248,7 +248,9 @@ empathy_status_icon_new (GtkWindow *window)
 			      EMPATHY_PREFS_UI_MAIN_WINDOW_HIDDEN,
 			      &should_hide);
 
-	status_icon_set_visibility (icon, !should_hide);
+	if (gtk_window_is_active (priv->window) == should_hide) {
+		status_icon_set_visibility (icon, !should_hide);
+	}
 
 	return icon;
 }
