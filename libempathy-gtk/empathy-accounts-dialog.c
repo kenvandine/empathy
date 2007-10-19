@@ -240,6 +240,8 @@ accounts_dialog_update_account (EmpathyAccountsDialog *dialog,
 	if (!account) {
 		GtkTreeView  *view;
 		GtkTreeModel *model;
+		GString      *string;
+		gchar        *str;
 
 		gtk_widget_show (dialog->frame_no_account);
 		gtk_widget_hide (dialog->vbox_details);
@@ -250,25 +252,32 @@ accounts_dialog_update_account (EmpathyAccountsDialog *dialog,
 		view = GTK_TREE_VIEW (dialog->treeview);
 		model = gtk_tree_view_get_model (view);
 
+		if (empathy_profile_chooser_n_profiles (dialog->combobox_profile) > 0) {
+			string = g_string_new (_("To add a new account, you can click on the "
+						 "'Add' button and a new entry will be created "
+						 "for you to start configuring."));
+		} else {
+			string = g_string_new (_("To add a new account, you first have to "
+						 "install a backend for each protocol "
+						 "you want to use."));
+		}
+
 		if (gtk_tree_model_iter_n_children (model, NULL) > 0) {
 			gtk_label_set_markup (GTK_LABEL (dialog->label_no_account),
 					      _("<b>No Account Selected</b>"));
-			gtk_label_set_markup (GTK_LABEL (dialog->label_no_account_blurb),
-					      _("To add a new account, you can click on the "
-						"'Add' button and a new entry will be created "
-						"for you to start configuring.\n"
-						"\n"
-						"If you do not want to add an account, simply "
-						"click on the account you want to configure in "
-						"the list on the left."));
+			g_string_append (string, _("\n\n"
+					"If you do not want to add an account, simply "
+					"click on the account you want to configure in "
+					"the list on the left."));
 		} else {
 			gtk_label_set_markup (GTK_LABEL (dialog->label_no_account),
 					      _("<b>No Accounts Configured</b>"));
-			gtk_label_set_markup (GTK_LABEL (dialog->label_no_account_blurb),
-					      _("To add a new account, you can click on the "
-						"'Add' button and a new entry will be created "
-						"for you to start configuring."));
 		}
+
+		str = g_string_free (string, FALSE);
+		gtk_label_set_markup (GTK_LABEL (dialog->label_no_account_blurb),
+				      str);
+		g_free (str);
 	} else {
 		McProfile *profile;
 		const gchar *config_ui;
@@ -1044,6 +1053,9 @@ empathy_accounts_dialog_show (GtkWindow *parent)
 			  dialog->combobox_profile,
 			  TRUE, TRUE, 0);
 	gtk_widget_show (dialog->combobox_profile);
+	if (empathy_profile_chooser_n_profiles (dialog->combobox_profile) <= 0) {
+		gtk_widget_set_sensitive (dialog->button_add, FALSE);
+	}
 
 	/* Set up signalling */
 	dialog->mc = empathy_mission_control_new ();

@@ -55,6 +55,16 @@ empathy_profile_chooser_get_selected (GtkWidget *widget)
 	return profile;
 }
 
+gint
+empathy_profile_chooser_n_profiles (GtkWidget *widget)
+{
+	GtkTreeModel *model;
+
+	model = gtk_combo_box_get_model (GTK_COMBO_BOX (widget));
+
+	return gtk_tree_model_iter_n_children (model, NULL);
+}
+
 static gint
 profile_chooser_sort_profile_value (McProfile *profile)
 {

@@ -1,5 +1,15 @@
 2007-10-19  Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/empathy-profile-chooser.c:
+	* libempathy-gtk/empathy-profile-chooser.h:
+	* libempathy-gtk/empathy-accounts-dialog.c: set unsensitive the add
+	button if there is no profile installed and tell the user to install
+	some connection managers.
+
+	* libempathy-gtk/empathy-ui-utils.c: Fix indentation.
+
+2007-10-19  Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/empathy-chat-window.c: If EmpathyChat object does not
 	exist when DnD a contact, create one. Fixes bug #483168.
 
