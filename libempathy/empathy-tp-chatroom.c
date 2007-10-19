@@ -183,10 +183,10 @@ empathy_tp_chatroom_get_invitation (EmpathyTpChatroom  *chatroom,
 
 	priv = GET_PRIV (chatroom);
 
-	if (*contact) {
+	if (contact) {
 		*contact = priv->invitor;
 	}
-	if (*message) {
+	if (message) {
 		*message = priv->invit_message;
 	}
 
@@ -202,6 +202,10 @@ empathy_tp_chatroom_accept_invitation (EmpathyTpChatroom *chatroom)
 	g_return_if_fail (EMPATHY_IS_TP_CHATROOM (chatroom));
 
 	priv = GET_PRIV (chatroom);
+
+	if (!priv->is_invited) {
+		return;
+	}
 
 	/* Clear invitation data */
 	priv->is_invited = FALSE;

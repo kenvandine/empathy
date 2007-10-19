@@ -1,3 +1,12 @@
+2007-10-19  Xavier Claessens  <xclaesse@gmail.com>
+
+	* libempathy-gtk/empathy-group-chat.c:
+	* libempathy/empathy-tp-chatroom.c:Don't accept invitation if we are
+	not invited.
+
+	* libempathy-gtk/empathy-status-icon.c: Correctly toggle visibility
+	with ALT-F4 on the main windows.
+
 2007-10-18  Xavier Claessens  <xclaesse@gmail.com>
 
 	* libempathy/empathy-log-manager.c:

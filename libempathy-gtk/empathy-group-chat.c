@@ -523,8 +523,9 @@ group_chat_set_tp_chat (EmpathyChat    *chat,
 
 	priv->tp_chat = g_object_ref (tp_chat);
 
-	/* FIXME: Ask the user before accepting */
-	empathy_tp_chatroom_accept_invitation (priv->tp_chat);
+	if (empathy_tp_chatroom_get_invitation (priv->tp_chat, NULL, NULL)) {
+		empathy_tp_chatroom_accept_invitation (priv->tp_chat);
+	}
 
 	/* Create contact list */
 	priv->store = empathy_contact_list_store_new (EMPATHY_CONTACT_LIST (priv->tp_chat));

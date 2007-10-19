@@ -100,6 +100,8 @@ static void       status_icon_message_received_cb (EmpathyTpChat          *tp_ch
 static void       status_icon_idle_notify_cb      (EmpathyStatusIcon      *icon);
 static void       status_icon_update_tooltip      (EmpathyStatusIcon      *icon);
 static void       status_icon_set_from_state      (EmpathyStatusIcon      *icon);
+static void       status_icon_set_visibility      (EmpathyStatusIcon      *icon,
+						   gboolean                visible);
 static void       status_icon_toggle_visibility   (EmpathyStatusIcon      *icon);
 static void       status_icon_activate_cb         (GtkStatusIcon          *status_icon,
 						   EmpathyStatusIcon      *icon);
@@ -230,7 +232,6 @@ empathy_status_icon_new (GtkWindow *window)
 	EmpathyStatusIconPriv *priv;
 	EmpathyStatusIcon     *icon;
 	gboolean               should_hide;
-	gboolean               visible;
 
 	g_return_val_if_fail (GTK_IS_WINDOW (window), NULL);
 
@@ -246,11 +247,8 @@ empathy_status_icon_new (GtkWindow *window)
 	empathy_conf_get_bool (empathy_conf_get (),
 			      EMPATHY_PREFS_UI_MAIN_WINDOW_HIDDEN,
 			      &should_hide);
-	visible = empathy_window_get_is_visible (window);
 
-	if ((!should_hide && !visible) || (should_hide && visible)) {
-		status_icon_toggle_visibility (icon);
-	}
+	status_icon_set_visibility (icon, !should_hide);
 
 	return icon;
 }
@@ -391,16 +389,14 @@ status_icon_set_from_state (EmpathyStatusIcon *icon)
 }
 
 static void
-status_icon_toggle_visibility (EmpathyStatusIcon *icon)
+status_icon_set_visibility (EmpathyStatusIcon *icon,
+			    gboolean           visible)
 {
 	EmpathyStatusIconPriv *priv;
-	gboolean               visible;
 
 	priv = GET_PRIV (icon);
 
-	visible = gtk_window_has_toplevel_focus (GTK_WINDOW (priv->window));
-
-	if (visible) {
+	if (!visible) {
 		empathy_window_iconify (priv->window, priv->icon);
 		empathy_conf_set_bool (empathy_conf_get (),
 				      EMPATHY_PREFS_UI_MAIN_WINDOW_HIDDEN, TRUE);
@@ -421,6 +417,16 @@ status_icon_toggle_visibility (EmpathyStatusIcon *icon)
 			empathy_accounts_dialog_show (GTK_WINDOW (priv->window));
 		}
 	}
+}
+
+static void
+status_icon_toggle_visibility (EmpathyStatusIcon *icon)
+{
+	EmpathyStatusIconPriv *priv = GET_PRIV (icon);
+	gboolean               visible;
+
+	visible = gtk_window_is_active (priv->window);
+	status_icon_set_visibility (icon, !visible);
 }
 
 static void
@@ -446,7 +452,7 @@ status_icon_delete_event_cb (GtkWidget         *widget,
 			     GdkEvent          *event,
 			     EmpathyStatusIcon *icon)
 {
-	status_icon_toggle_visibility (icon);
+	status_icon_set_visibility (icon, FALSE);
 
 	return TRUE;
 }
@@ -505,13 +511,10 @@ status_icon_create_menu (EmpathyStatusIcon *icon)
 
 	empathy_glade_connect (glade,
 			      icon,
+			      "tray_show_list", "toggled", status_icon_show_hide_window_cb,
 			      "tray_new_message", "activate", status_icon_new_message_cb,
 			      "tray_quit", "activate", status_icon_quit_cb,
 			      NULL);
-
-	g_signal_connect (priv->show_window_item, "toggled",
-			  G_CALLBACK (status_icon_show_hide_window_cb),
-			  icon);
 
 	g_object_unref (glade);
 }
@@ -538,7 +541,10 @@ static void
 status_icon_show_hide_window_cb (GtkWidget         *widget,
 				 EmpathyStatusIcon *icon)
 {
-	status_icon_toggle_visibility (icon);
+	gboolean visible;
+
+	visible = gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM (widget));
+	status_icon_set_visibility (icon, visible);
 }
 
 static void
