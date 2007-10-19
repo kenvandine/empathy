@@ -322,10 +322,8 @@ accounts_dialog_update_account (EmpathyAccountsDialog *dialog,
 		gtk_image_set_from_icon_name (GTK_IMAGE (dialog->image_type),
 					      mc_profile_get_icon_name (profile),
 					      GTK_ICON_SIZE_DIALOG);
-		/* FIXME: Uncomment once we depend on GTK+ 2.12
 		gtk_widget_set_tooltip_text (dialog->image_type,
 					     mc_profile_get_display_name (profile));
-		*/
 
 		text = g_strdup_printf ("<big><b>%s</b></big>", mc_account_get_display_name (account));
 		gtk_label_set_markup (GTK_LABEL (dialog->label_name), text);
@@ -962,6 +960,9 @@ accounts_dialog_destroy_cb (GtkWidget            *widget,
 	g_signal_handlers_disconnect_by_func (dialog->monitor,
 					      accounts_dialog_account_removed_cb,
 					      dialog);
+	g_signal_handlers_disconnect_by_func (dialog->monitor,
+					      accounts_dialog_update_connect_button,
+					      dialog);
 	dbus_g_proxy_disconnect_signal (DBUS_G_PROXY (dialog->mc),
 					"AccountStatusChanged",
 					G_CALLBACK (accounts_dialog_status_changed_cb),
@@ -1061,13 +1062,18 @@ empathy_accounts_dialog_show (GtkWindow *parent)
 	dialog->mc = empathy_mission_control_new ();
 	dialog->monitor = mc_account_monitor_new ();
 
-	/* FIXME: connect account-enabled/disabled too */
 	g_signal_connect (dialog->monitor, "account-created",
 			  G_CALLBACK (accounts_dialog_account_added_cb),
 			  dialog);
 	g_signal_connect (dialog->monitor, "account-deleted",
 			  G_CALLBACK (accounts_dialog_account_removed_cb),
 			  dialog);
+	g_signal_connect_swapped (dialog->monitor, "account-enabled",
+				  G_CALLBACK (accounts_dialog_update_connect_button),
+				  dialog);
+	g_signal_connect_swapped (dialog->monitor, "account-disabled",
+				  G_CALLBACK (accounts_dialog_update_connect_button),
+				  dialog);
 	dbus_g_proxy_connect_signal (DBUS_G_PROXY (dialog->mc), "AccountStatusChanged",
 				     G_CALLBACK (accounts_dialog_status_changed_cb),
 				     dialog, NULL);

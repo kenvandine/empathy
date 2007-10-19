@@ -1,5 +1,12 @@
 2007-10-19  Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/empathy-accounts-dialog.c: Update Enable/Disable
+	button when "account-enabled" or "account-disabled" are emitted on
+	McAccountMonitor. Set tooltip on protocol icon with the profile's
+	display name.
+
+2007-10-19  Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/empathy-profile-chooser.c:
 	* libempathy-gtk/empathy-profile-chooser.h:
 	* libempathy-gtk/empathy-accounts-dialog.c: set unsensitive the add
