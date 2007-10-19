@@ -1607,11 +1607,17 @@ chat_window_drag_data_received (GtkWidget        *widget,
 		
 		account = empathy_contact_get_account (contact);
 		chat = empathy_chat_window_find_chat (account, id);
+		if (chat) {
+			g_object_ref (chat);
+		} else {
+			chat = EMPATHY_CHAT (empathy_private_chat_new_with_contact (contact));
+		}
 		old_window = empathy_chat_get_window (chat);
 		
 		if (old_window) {
 			if (old_window == window) {
 				gtk_drag_finish (context, TRUE, FALSE, time);
+				g_object_unref (chat);
 				return;
 			}
 			
@@ -1629,6 +1635,7 @@ chat_window_drag_data_received (GtkWidget        *widget,
 		 * anyway with add_chat() and remove_chat().
 		 */
 		gtk_drag_finish (context, TRUE, FALSE, time);
+		g_object_unref (chat);
 	}
 	else if (info == DND_DRAG_TYPE_TAB) {
 		EmpathyChat        *chat = NULL;

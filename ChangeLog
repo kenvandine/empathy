@@ -1,5 +1,10 @@
 2007-10-19  Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/empathy-chat-window.c: If EmpathyChat object does not
+	exist when DnD a contact, create one. Fixes bug #483168.
+
+2007-10-19  Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/empathy-status-icon.c: Fix crash when iconifying main
 	window if it's already hiden.
 
