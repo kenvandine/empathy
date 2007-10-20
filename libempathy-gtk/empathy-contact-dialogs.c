@@ -29,8 +29,11 @@
 #include <glade/glade.h>
 #include <glib/gi18n.h>
 
+#include <libmissioncontrol/mission-control.h>
+
 #include <libempathy/empathy-contact-manager.h>
 #include <libempathy/empathy-contact-list.h>
+#include <libempathy/empathy-utils.h>
 
 #include "empathy-contact-dialogs.h"
 #include "empathy-contact-widget.h"
@@ -195,6 +198,11 @@ empathy_contact_information_dialog_show (EmpathyContact *contact,
 	gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox),
 			    contact_widget,
 			    TRUE, TRUE, 0);
+	if (flags & EMPATHY_CONTACT_WIDGET_EDIT_ACCOUNT) {
+		empathy_contact_widget_set_account_filter (contact_widget,
+							   empathy_account_chooser_filter_is_connected,
+							   NULL);
+	}
 
 	g_object_set_data (G_OBJECT (dialog), "contact_widget", contact_widget);
 	information_dialogs = g_list_prepend (information_dialogs, dialog);
@@ -213,6 +221,37 @@ empathy_contact_information_dialog_show (EmpathyContact *contact,
 /*
  *  New contact dialog
  */
+
+static gboolean
+can_add_contact_to_account (McAccount *account,
+			    gpointer   user_data)
+{
+	MissionControl            *mc;
+	TelepathyConnectionStatus  status;
+	McProfile                 *profile;
+	const gchar               *protocol_name;
+
+	mc = empathy_mission_control_new ();
+	status = mission_control_get_connection_status (mc, account, NULL);
+	g_object_unref (mc);
+	if (status != TP_CONN_STATUS_CONNECTED) {
+		/* Account is disconnected */
+		return FALSE;
+	}
+
+	profile = mc_account_get_profile (account);
+	protocol_name = mc_profile_get_protocol_name (profile);
+	if (strcmp (protocol_name, "local-xmpp") == 0) {
+		/* We can't add accounts to a XMPP LL connection
+		 * FIXME: We should inspect the flags of the contact list group interface
+		 */
+		g_object_unref (profile);
+		return FALSE;
+	}
+
+	g_object_unref (profile);
+	return TRUE;
+}
 
 static void
 new_contact_response_cb (GtkDialog *dialog,
@@ -279,6 +318,9 @@ empathy_new_contact_dialog_show (GtkWindow *parent)
 	gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox),
 			    contact_widget,
 			    TRUE, TRUE, 0);
+	empathy_contact_widget_set_account_filter (contact_widget,
+						   can_add_contact_to_account,
+						   NULL);
 
 	new_contact_dialog = dialog;
 

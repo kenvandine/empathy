@@ -1,3 +1,16 @@
+2007-10-21  Xavier Claessens  <xclaesse@gmail.com>
+
+	* libempathy-gtk/empathy-account-chooser.c:
+	* libempathy-gtk/empathy-contact-dialogs.c:
+	* libempathy-gtk/empathy-contact-widget.c:
+	* libempathy-gtk/empathy-contact-widget.h:
+	* libempathy-gtk/empathy-accounts-dialog.c: To know if an account is
+	connected, use mission_control_get_connection_status() instead of
+	mission_control_get_connection(). Update account chooser if an account's
+	status changes or if it get removed.
+	Move account chooser filter func for add-contact's window from
+	EmpathyContactWidget to EmpathyContactDialogs.
+
 2007-10-19  Xavier Claessens  <xclaesse@gmail.com>
 
 	* libempathy-gtk/empathy-accounts-dialog.c: Update Enable/Disable

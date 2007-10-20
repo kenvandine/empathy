@@ -26,6 +26,7 @@
 #include <gtk/gtk.h>
 
 #include <libempathy/empathy-contact.h>
+#include "empathy-account-chooser.h"
 
 G_BEGIN_DECLS
 
@@ -37,9 +38,12 @@ typedef enum {
 	EMPATHY_CONTACT_WIDGET_EDIT_GROUPS  = 1 << 4,
 } EmpathyContactWidgetFlags;
 
-GtkWidget *     empathy_contact_widget_new         (EmpathyContact            *contact,
-						    EmpathyContactWidgetFlags  flags);
-EmpathyContact *empathy_contact_widget_get_contact (GtkWidget                 *widget);
+GtkWidget *     empathy_contact_widget_new                (EmpathyContact                  *contact,
+							   EmpathyContactWidgetFlags        flags);
+EmpathyContact *empathy_contact_widget_get_contact        (GtkWidget                       *widget);
+void            empathy_contact_widget_set_account_filter (GtkWidget                       *widget,
+							   EmpathyAccountChooserFilterFunc  filter,
+							   gpointer                         user_data);
 
 G_END_DECLS
 

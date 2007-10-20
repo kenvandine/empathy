@@ -223,6 +223,27 @@ empathy_contact_widget_get_contact (GtkWidget *widget)
 
 	return information->contact;
 }
+
+void
+empathy_contact_widget_set_account_filter (GtkWidget                       *widget,
+					   EmpathyAccountChooserFilterFunc  filter,
+					   gpointer                         user_data)
+{
+	EmpathyContactWidget  *information;
+	EmpathyAccountChooser *chooser;
+
+	g_return_if_fail (GTK_IS_WIDGET (widget));
+
+	information = g_object_get_data (G_OBJECT (widget), "EmpathyContactWidget");
+	if (!information) {
+		return;
+	}
+
+	chooser = EMPATHY_ACCOUNT_CHOOSER (information->widget_account);
+	if (chooser) {
+		empathy_account_chooser_set_filter (chooser, filter, user_data);
+	}
+}
 	
 static void
 contact_widget_destroy_cb (GtkWidget            *widget,
@@ -282,38 +303,6 @@ contact_widget_set_contact (EmpathyContactWidget *information,
 }
 
 static gboolean
-contact_widget_can_add_contact_to_account (McAccount *account,
-					   gpointer   user_data)
-{
-	MissionControl *mc;
-	TpConn         *tp_conn;
-	McProfile      *profile;
-	const gchar    *protocol_name;
-
-	mc = empathy_mission_control_new ();
-	tp_conn = mission_control_get_connection (mc, account, NULL);
-	g_object_unref (mc);
-	if (tp_conn == NULL) {
-		/* Account is disconnected */
-		return FALSE;
-	}
-	g_object_unref (tp_conn);
-
-	profile = mc_account_get_profile (account);
-	protocol_name = mc_profile_get_protocol_name (profile);
-	if (strcmp (protocol_name, "local-xmpp") == 0) {
-		/* We can't add accounts to a XMPP LL connection
-		 * FIXME: We should inspect the flags of the contact list group interface
-		 */
-		g_object_unref (profile);
-		return FALSE;
-	}
-
-	g_object_unref (profile);
-	return TRUE;
-}
-
-static gboolean
 contact_widget_id_activate_timeout (EmpathyContactWidget *self)
 {
 	contact_widget_change_contact (self);
@@ -354,10 +343,6 @@ contact_widget_contact_setup (EmpathyContactWidget *information)
 	/* Setup account label/chooser */
 	if (information->flags & EMPATHY_CONTACT_WIDGET_EDIT_ACCOUNT) {
 		information->widget_account = empathy_account_chooser_new ();
-		empathy_account_chooser_set_filter (
-			EMPATHY_ACCOUNT_CHOOSER (information->widget_account),
-			contact_widget_can_add_contact_to_account,
-			NULL);
 
 		g_signal_connect (information->widget_account, "changed",
 				  G_CALLBACK (contact_widget_account_changed_cb),

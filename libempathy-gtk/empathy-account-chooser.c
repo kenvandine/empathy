@@ -83,14 +83,13 @@ static void     account_chooser_account_deleted_cb     (McAccountMonitor        
 static void     account_chooser_account_remove_foreach (McAccount                       *account,
 							EmpathyAccountChooser            *chooser);
 static void     account_chooser_update_iter            (EmpathyAccountChooser            *chooser,
-							GtkTreeIter                     *iter,
-							McAccount                       *account);
+							GtkTreeIter                     *iter);
 static void     account_chooser_status_changed_cb      (MissionControl                  *mc,
 							TelepathyConnectionStatus        status,
 							McPresence                       presence,
 							TelepathyConnectionStatusReason  reason,
 							const gchar                     *unique_name,
-							EmpathyAccountChooser            *chooser);
+							EmpathyAccountChooser           *chooser);
 static gboolean account_chooser_separator_func         (GtkTreeModel                    *model,
 							GtkTreeIter                     *iter,
 							EmpathyAccountChooser            *chooser);
@@ -254,7 +253,7 @@ empathy_account_chooser_get_account (EmpathyAccountChooser *chooser)
 
 gboolean
 empathy_account_chooser_set_account (EmpathyAccountChooser *chooser,
-				    McAccount            *account)
+				     McAccount             *account)
 {
 	GtkComboBox    *combobox;
 	GtkTreeModel   *model;
@@ -371,7 +370,7 @@ account_chooser_setup (EmpathyAccountChooser *chooser)
 	gtk_cell_layout_clear (GTK_CELL_LAYOUT (combobox));
 
 	store = gtk_list_store_new (COL_ACCOUNT_COUNT,
-				    G_TYPE_STRING,
+				    G_TYPE_STRING,    /* Image */
 				    G_TYPE_STRING,    /* Name */
 				    G_TYPE_BOOLEAN,   /* Enabled */
 				    MC_TYPE_ACCOUNT);
@@ -416,21 +415,22 @@ account_chooser_account_created_cb (McAccountMonitor     *monitor,
 }
 
 static void
-account_chooser_account_add_foreach (McAccount            *account,
+account_chooser_account_add_foreach (McAccount             *account,
 				     EmpathyAccountChooser *chooser)
 {
-	EmpathyAccountChooserPriv *priv;
-	GtkListStore             *store;
-	GtkComboBox              *combobox;
-	GtkTreeIter               iter;
-
-	priv = GET_PRIV (chooser);
+	GtkListStore *store;
+	GtkComboBox  *combobox;
+	GtkTreeIter   iter;
+	gint          position;
 
 	combobox = GTK_COMBO_BOX (chooser);
 	store = GTK_LIST_STORE (gtk_combo_box_get_model (combobox));
 
-	gtk_list_store_append (store, &iter);
-	account_chooser_update_iter (chooser, &iter, account);
+	position = gtk_tree_model_iter_n_children (GTK_TREE_MODEL (store), NULL);
+	gtk_list_store_insert_with_values (store, &iter, position,
+					   COL_ACCOUNT_POINTER, account,
+					   -1);
+	account_chooser_update_iter (chooser, &iter);
 }
 
 static void
@@ -445,21 +445,81 @@ account_chooser_account_deleted_cb (McAccountMonitor     *monitor,
 	g_object_unref (account);
 }
 
+typedef struct {
+	McAccount   *account;
+	GtkTreeIter *iter;
+	gboolean     found;
+} FindAccountData;
+
+static gboolean
+account_chooser_find_account_foreach (GtkTreeModel *model,
+				      GtkTreePath  *path,
+				      GtkTreeIter  *iter,
+				      gpointer      user_data)
+{
+	FindAccountData *data = user_data;
+	McAccount       *account;
+
+	gtk_tree_model_get (model, iter, COL_ACCOUNT_POINTER, &account, -1);
+
+	if (empathy_account_equal (account, data->account)) {
+		data->found = TRUE;
+		*(data->iter) = *iter;
+		g_object_unref (account);
+
+		return TRUE;
+	}
+
+	g_object_unref (account);
+
+	return FALSE;
+}
+
+static gboolean
+account_chooser_find_account (EmpathyAccountChooser *chooser,
+			      McAccount             *account,
+			      GtkTreeIter           *iter)
+{
+	GtkListStore    *store;
+	GtkComboBox     *combobox;
+	FindAccountData  data;
+
+	combobox = GTK_COMBO_BOX (chooser);
+	store = GTK_LIST_STORE (gtk_combo_box_get_model (combobox));
+
+	data.account = account;
+	data.iter = iter;
+	gtk_tree_model_foreach (GTK_TREE_MODEL (store),
+				account_chooser_find_account_foreach,
+				&data);
+
+	return data.found;
+}
+
 static void
 account_chooser_account_remove_foreach (McAccount            *account,
 					EmpathyAccountChooser *chooser)
 {
-	/* Fixme: TODO */
+	GtkListStore *store;
+	GtkComboBox  *combobox;
+	GtkTreeIter   iter;
+
+	combobox = GTK_COMBO_BOX (chooser);
+	store = GTK_LIST_STORE (gtk_combo_box_get_model (combobox));
+
+	if (account_chooser_find_account (chooser, account, &iter)) {
+		gtk_list_store_remove (store, &iter);
+	}
 }
 
 static void
 account_chooser_update_iter (EmpathyAccountChooser *chooser,
-			     GtkTreeIter           *iter,
-			     McAccount             *account)
+			     GtkTreeIter           *iter)
 {
 	EmpathyAccountChooserPriv *priv;
 	GtkListStore              *store;
 	GtkComboBox               *combobox;
+	McAccount                 *account;
 	const gchar               *icon_name;
 	gboolean                   is_enabled = TRUE;
 
@@ -467,6 +527,10 @@ account_chooser_update_iter (EmpathyAccountChooser *chooser,
 
 	combobox = GTK_COMBO_BOX (chooser);
 	store = GTK_LIST_STORE (gtk_combo_box_get_model (combobox));
+
+	gtk_tree_model_get (GTK_TREE_MODEL (store), iter,
+			    COL_ACCOUNT_POINTER, &account,
+			    -1);
 
 	icon_name = empathy_icon_name_from_account (account);
 	if (priv->filter) {
@@ -477,7 +541,6 @@ account_chooser_update_iter (EmpathyAccountChooser *chooser,
 			    COL_ACCOUNT_IMAGE, icon_name,
 			    COL_ACCOUNT_TEXT, mc_account_get_display_name (account),
 			    COL_ACCOUNT_ENABLED, is_enabled,
-			    COL_ACCOUNT_POINTER, account,
 			    -1);
 
 	/* set first connected account as active account */
@@ -485,6 +548,8 @@ account_chooser_update_iter (EmpathyAccountChooser *chooser,
 		priv->set_active_item = TRUE;
 		gtk_combo_box_set_active_iter (combobox, iter);
 	}
+
+	g_object_unref (account);
 }
 
 static void
@@ -493,9 +558,16 @@ account_chooser_status_changed_cb (MissionControl                  *mc,
 				   McPresence                       presence,
 				   TelepathyConnectionStatusReason  reason,
 				   const gchar                     *unique_name,
-				   EmpathyAccountChooser            *chooser)
+				   EmpathyAccountChooser           *chooser)
 {
-	/* FIXME: implement */
+	McAccount   *account;
+	GtkTreeIter  iter;
+
+	account = mc_account_lookup (unique_name);
+	if (account_chooser_find_account (chooser, account, &iter)) {
+		account_chooser_update_iter (chooser, &iter);
+	}
+	g_object_unref (account);
 }
 
 static gboolean
@@ -555,35 +627,12 @@ account_chooser_set_account_foreach (GtkTreeModel   *model,
 }
 
 static gboolean
-account_chooser_filter_foreach (GtkTreeModel          *model,
-				GtkTreePath           *path,
-				GtkTreeIter           *iter,
-				gpointer               chooser)
+account_chooser_filter_foreach (GtkTreeModel *model,
+				GtkTreePath  *path,
+				GtkTreeIter  *iter,
+				gpointer      chooser)
 {
-	EmpathyAccountChooserPriv *priv;
-	McAccount                 *account;
-	gboolean                   is_enabled = TRUE;
-
-	priv = GET_PRIV (chooser);
-
-	gtk_tree_model_get (model, iter, COL_ACCOUNT_POINTER, &account, -1);
-
-	if (priv->filter) {
-		is_enabled = priv->filter (account, priv->filter_data);
-	}
-
-	gtk_list_store_set (GTK_LIST_STORE (model), iter,
-			    COL_ACCOUNT_ENABLED, is_enabled,
-			    -1);
-
-	/* set first connected account as active account */
-	if (!priv->set_active_item && is_enabled) {
-		priv->set_active_item = TRUE;
-		gtk_combo_box_set_active_iter (GTK_COMBO_BOX (chooser), iter);
-	}
-
-	g_object_unref (account);
-
+	account_chooser_update_iter (chooser, iter);
 	return FALSE;
 }
 
@@ -612,19 +661,15 @@ gboolean
 empathy_account_chooser_filter_is_connected (McAccount *account,
 					     gpointer   user_data)
 {
-	MissionControl *mc;
-	TpConn         *tp_conn;
+	MissionControl            *mc;
+	TelepathyConnectionStatus  status;
 
 	g_return_val_if_fail (MC_IS_ACCOUNT (account), FALSE);
 
 	mc = empathy_mission_control_new ();
-	tp_conn = mission_control_get_connection (mc, account, NULL);
+	status = mission_control_get_connection_status (mc, account, NULL);
 	g_object_unref (mc);
 
-	if (tp_conn == NULL) {
-		return FALSE;
-	}
-
-	g_object_unref (tp_conn);
-	return TRUE;
+	return status == TP_CONN_STATUS_CONNECTED;
 }
+

@@ -755,28 +755,18 @@ accounts_dialog_status_changed_cb (MissionControl                  *mc,
 			break;
 		}
 	}
-
 	g_object_unref (account);
 
-	/* Start to flash account if status is connecting */
-	if (status == TP_CONN_STATUS_CONNECTING) {
-		if (!dialog->connecting_id) {
-			dialog->connecting_id = g_timeout_add (FLASH_TIMEOUT,
-							       (GSourceFunc) accounts_dialog_flash_connecting_cb,
-							       dialog);
-		}
-
-		return;
-	}
-
-	/* Stop to flash if no account is connecting */
+	/* Check if there is still accounts in CONNECTING state */
 	accounts = mc_accounts_list ();
 	for (l = accounts; l; l = l->next) {
-		McAccount *this_account;
+		McAccount                 *this_account;
+		TelepathyConnectionStatus  status;
 
 		this_account = l->data;
 
-		if (mission_control_get_connection_status (mc, this_account, NULL) == TP_CONN_STATUS_CONNECTING) {
+		status = mission_control_get_connection_status (mc, this_account, NULL);
+		if (status == TP_CONN_STATUS_CONNECTING) {
 			found = TRUE;
 			break;
 		}
@@ -789,8 +779,11 @@ accounts_dialog_status_changed_cb (MissionControl                  *mc,
 		g_source_remove (dialog->connecting_id);
 		dialog->connecting_id = 0;
 	}
-
-	gtk_widget_show (dialog->window);
+	if (found && !dialog->connecting_id) {
+		dialog->connecting_id = g_timeout_add (FLASH_TIMEOUT,
+						       (GSourceFunc) accounts_dialog_flash_connecting_cb,
+						       dialog);
+	}
 }
 
 static void
