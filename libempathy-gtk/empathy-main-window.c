@@ -668,7 +668,7 @@ main_window_edit_personal_information_cb (GtkWidget         *widget,
 		contact = empathy_contact_factory_get_user (factory, account);
 		empathy_contact_information_dialog_show (contact,
 							 GTK_WINDOW (window->window),
-							 TRUE, FALSE);
+							 TRUE, TRUE);
 		g_slist_foreach (accounts, (GFunc) g_object_unref, NULL);
 		g_slist_free (accounts);
 		g_object_unref (factory);

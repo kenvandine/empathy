@@ -34,7 +34,7 @@ void empathy_subscription_dialog_show        (EmpathyContact *contact,
 void empathy_contact_information_dialog_show (EmpathyContact *contact,
 					      GtkWindow     *parent,
 					      gboolean       edit,
-					      gboolean       edit_groups);
+					      gboolean       is_user);
 void empathy_new_contact_dialog_show         (GtkWindow     *parent);
 
 G_END_DECLS

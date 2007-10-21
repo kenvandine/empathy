@@ -151,7 +151,7 @@ void
 empathy_contact_information_dialog_show (EmpathyContact *contact,
 					 GtkWindow      *parent,
 					 gboolean        edit,
-					 gboolean        edit_groups)
+					 gboolean        is_user)
 {
 	GtkWidget                *dialog;
 	GtkWidget                *button;
@@ -186,12 +186,12 @@ empathy_contact_information_dialog_show (EmpathyContact *contact,
 	/* Contact info widget */
 	if (edit) {
 		flags |= EMPATHY_CONTACT_WIDGET_EDIT_ALIAS;
-		if (empathy_contact_is_user (contact)) {
-			flags |= EMPATHY_CONTACT_WIDGET_EDIT_ACCOUNT |
-				 EMPATHY_CONTACT_WIDGET_EDIT_AVATAR;
-		}
 	}
-	if (edit_groups) {
+	if (is_user) {
+		flags |= EMPATHY_CONTACT_WIDGET_EDIT_ACCOUNT;
+		flags |= EMPATHY_CONTACT_WIDGET_EDIT_AVATAR;
+	}
+	if (!is_user && edit) {
 		flags |= EMPATHY_CONTACT_WIDGET_EDIT_GROUPS;
 	}
 	contact_widget = empathy_contact_widget_new (contact, flags);

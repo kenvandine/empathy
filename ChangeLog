@@ -1,5 +1,12 @@
 2007-10-21  Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/empathy-contact-dialogs.h:
+	* libempathy-gtk/empathy-contact-dialogs.c:
+	* libempathy-gtk/empathy-main-window.c:
+	* libempathy-gtk/empathy-contact-list-view.c:
+
+2007-10-21  Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/empathy-account-chooser.c:
 	* libempathy-gtk/empathy-contact-dialogs.c:
 	* libempathy-gtk/empathy-contact-widget.c:

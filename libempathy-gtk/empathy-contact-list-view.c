@@ -1404,7 +1404,7 @@ contact_list_view_action_cb (GtkAction             *action,
 		empathy_contact_information_dialog_show (contact, parent, FALSE, FALSE);
 	}
 	else if (contact && strcmp (name, "Edit") == 0) {
-		empathy_contact_information_dialog_show (contact, parent, TRUE, TRUE);
+		empathy_contact_information_dialog_show (contact, parent, TRUE, FALSE);
 	}
 	else if (contact && strcmp (name, "Remove") == 0) {
 		/* FIXME: Ask for confirmation */
