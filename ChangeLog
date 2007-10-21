@@ -1,5 +1,10 @@
 2007-10-21  Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/empathy-contact-widget.h: Add
+	EMPATHY_CONTACT_WIDGET_EDIT_NONE to EmpathyContactWidgetFlags.
+
+2007-10-21  Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/empathy-contact-dialogs.h:
 	* libempathy-gtk/empathy-contact-dialogs.c:
 	* libempathy-gtk/empathy-main-window.c:
