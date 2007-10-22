@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: empathy\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-10-11 01:00+0200\n"
-"PO-Revision-Date: 2007-10-11 01:07+0100\n"
+"POT-Creation-Date: 2007-10-22 21:09+0200\n"
+"PO-Revision-Date: 2007-10-22 21:10+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "MIME-Version: 1.0\n"
@@ -198,7 +198,7 @@ msgstr "Frånvarande"
 msgid "Hidden"
 msgstr "Dold"
 
-#: ../libempathy/empathy-tp-contact-list.c:730
+#: ../libempathy/empathy-tp-contact-list.c:729
 #: ../src/empathy.c:212
 msgid "People nearby"
 msgstr "Personer i närheten"
@@ -229,7 +229,7 @@ msgstr ""
 "Skicka synpunkter på översättningen till\n"
 "tp-sv@listor.tp-sv.se"
 
-#: ../libempathy-gtk/empathy-account-chooser.c:336
+#: ../libempathy-gtk/empathy-account-chooser.c:335
 msgid "All"
 msgstr "Alla"
 
@@ -324,30 +324,34 @@ msgstr "Inaktivera"
 msgid "Enable"
 msgstr "Aktivera"
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:255
+#: ../libempathy-gtk/empathy-accounts-dialog.c:256
+msgid "To add a new account, you can click on the 'Add' button and a new entry will be created for you to start configuring."
+msgstr "För att lägga till ett nytt konto, klicka på knappen \"Lägg till\" och en ny post kommer att skapas för dig att börja konfigurera."
+
+#: ../libempathy-gtk/empathy-accounts-dialog.c:260
+msgid "To add a new account, you first have to install a backend for each protocol you want to use."
+msgstr "För att lägga till ett nytt konto måste du först installera en bakände för varje protokoll som du vill använda."
+
+#: ../libempathy-gtk/empathy-accounts-dialog.c:267
 #: ../libempathy-gtk/empathy-accounts-dialog.glade.h:2
 msgid "<b>No Account Selected</b>"
 msgstr "<b>Inget konto valt</b>"
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:257
+#: ../libempathy-gtk/empathy-accounts-dialog.c:268
 msgid ""
-"To add a new account, you can click on the 'Add' button and a new entry will be created for you to start configuring.\n"
+"\n"
 "\n"
 "If you do not want to add an account, simply click on the account you want to configure in the list on the left."
 msgstr ""
-"För att lägga till ett nytt konto kan du klicka på knappen \"Lägg till\" och en ny post kommer att skapas för dig att börja konfigurera.\n"
+"\n"
 "\n"
 "Om du inte vill lägga till ett konto, kan du helt enkelt klicka på kontot, i listan till vänster, som du vill konfigurera."
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:266
+#: ../libempathy-gtk/empathy-accounts-dialog.c:274
 msgid "<b>No Accounts Configured</b>"
 msgstr "<b>Inga konton konfigurerade</b>"
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:268
-msgid "To add a new account, you can click on the 'Add' button and a new entry will be created for you to start configuring."
-msgstr "För att lägga till ett nytt konto, klicka på knappen \"Lägg till\" och en ny post kommer att skapas för dig att börja konfigurera."
-
-#: ../libempathy-gtk/empathy-accounts-dialog.c:394
+#: ../libempathy-gtk/empathy-accounts-dialog.c:401
 #: ../libempathy-gtk/empathy-accounts-dialog.glade.h:4
 msgid "Accounts"
 msgstr "Konton"
@@ -397,6 +401,26 @@ msgstr ""
 msgid "Type:"
 msgstr "Typ:"
 
+#: ../libempathy-gtk/empathy-avatar-chooser.c:448
+msgid "Select Your Avatar Image"
+msgstr "Välj din avatarbild"
+
+#: ../libempathy-gtk/empathy-avatar-chooser.c:451
+msgid "No Image"
+msgstr "Ingen bild"
+
+#: ../libempathy-gtk/empathy-avatar-chooser.c:511
+msgid "Images"
+msgstr "Bilder"
+
+#: ../libempathy-gtk/empathy-avatar-chooser.c:515
+msgid "All Files"
+msgstr "Alla filer"
+
+#: ../libempathy-gtk/empathy-avatar-image.c:298
+msgid "Click to enlarge"
+msgstr "Klicka för att förstora"
+
 #: ../libempathy-gtk/empathy-call-window.glade.h:1
 msgid "Call"
 msgstr "Ring"
@@ -422,48 +446,48 @@ msgstr "Skicka video"
 msgid "Volume"
 msgstr "Volym"
 
-#: ../libempathy-gtk/empathy-chat.c:335
+#: ../libempathy-gtk/empathy-chat.c:332
 msgid "Disconnected"
 msgstr "Frånkopplad"
 
-#: ../libempathy-gtk/empathy-chat.c:450
+#: ../libempathy-gtk/empathy-chat.c:452
 msgid "offline"
 msgstr "frånkopplad"
 
-#: ../libempathy-gtk/empathy-chat.c:453
+#: ../libempathy-gtk/empathy-chat.c:455
 msgid "invalid contact"
 msgstr "ogiltig kontakt"
 
-#: ../libempathy-gtk/empathy-chat.c:456
+#: ../libempathy-gtk/empathy-chat.c:458
 msgid "permission denied"
 msgstr "åtkomst nekad"
 
-#: ../libempathy-gtk/empathy-chat.c:459
+#: ../libempathy-gtk/empathy-chat.c:461
 msgid "too long message"
 msgstr "för långt meddelande"
 
-#: ../libempathy-gtk/empathy-chat.c:462
+#: ../libempathy-gtk/empathy-chat.c:464
 msgid "not implemented"
 msgstr "inte implementerat"
 
-#: ../libempathy-gtk/empathy-chat.c:465
+#: ../libempathy-gtk/empathy-chat.c:467
 msgid "unknown"
 msgstr "okänt"
 
-#: ../libempathy-gtk/empathy-chat.c:469
+#: ../libempathy-gtk/empathy-chat.c:471
 #, c-format
 msgid "Error sending message '%s': %s"
 msgstr "Fel vid sändning av meddelandet \"%s\": %s"
 
-#: ../libempathy-gtk/empathy-chat.c:924
+#: ../libempathy-gtk/empathy-chat.c:926
 msgid "Insert Smiley"
 msgstr "Infoga smilis"
 
-#: ../libempathy-gtk/empathy-chat.c:972
+#: ../libempathy-gtk/empathy-chat.c:973
 msgid "_Check Word Spelling..."
 msgstr "_Kontrollera stavning..."
 
-#: ../libempathy-gtk/empathy-chat.c:1397
+#: ../libempathy-gtk/empathy-chat.c:1398
 msgid "Connected"
 msgstr "Ansluten"
 
@@ -602,12 +626,12 @@ msgstr "_Öppna länk"
 msgid "%A %d %B %Y"
 msgstr "%A %d %B %Y"
 
-#: ../libempathy-gtk/empathy-chat-window.c:709
+#: ../libempathy-gtk/empathy-chat-window.c:695
 #, c-format
 msgid "Conversations (%d)"
 msgstr "Samtal (%d)"
 
-#: ../libempathy-gtk/empathy-chat-window.c:1295
+#: ../libempathy-gtk/empathy-chat-window.c:1281
 msgid "Typing a message."
 msgstr "Skriver ett meddelande."
 
@@ -658,16 +682,16 @@ msgstr "S_erver:"
 msgid "_Room:"
 msgstr "_Rum:"
 
-#: ../libempathy-gtk/empathy-contact-dialogs.c:173
+#: ../libempathy-gtk/empathy-contact-dialogs.c:176
 #: ../libempathy-gtk/empathy-contact-widget.glade.h:9
 msgid "Contact information"
 msgstr "Kontaktinformation"
 
-#: ../libempathy-gtk/empathy-contact-dialogs.c:231
+#: ../libempathy-gtk/empathy-contact-dialogs.c:270
 msgid "I would like to add you to my contact list."
 msgstr "Jag vill lägga till dig i min kontaktlista."
 
-#: ../libempathy-gtk/empathy-contact-dialogs.c:255
+#: ../libempathy-gtk/empathy-contact-dialogs.c:294
 msgid "New contact"
 msgstr "Ny kontakt"
 
@@ -752,16 +776,16 @@ msgstr "_Ring"
 msgid "Start a voice or video conversation with this contact"
 msgstr "Starta röst- eller videosamtal med denna kontakt"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1416
+#: ../libempathy-gtk/empathy-contact-list-view.c:1415
 msgid "Sorry, I don't want you in my contact list anymore."
 msgstr "Tyvärr, jag vill inte längre ha dig i min kontaktlista."
 
-#: ../libempathy-gtk/empathy-contact-widget.c:672
+#: ../libempathy-gtk/empathy-contact-widget.c:657
 msgid "Select"
 msgstr "Markera"
 
-#: ../libempathy-gtk/empathy-contact-widget.c:682
-#: ../libempathy-gtk/empathy-main-window.c:614
+#: ../libempathy-gtk/empathy-contact-widget.c:667
+#: ../libempathy-gtk/empathy-main-window.c:606
 msgid "Group"
 msgstr "Grupp"
 
@@ -845,12 +869,12 @@ msgstr "%s har lämnat rummet"
 msgid "Topic: %s"
 msgstr "Ämne: %s"
 
-#: ../libempathy-gtk/empathy-group-chat.c:570
+#: ../libempathy-gtk/empathy-group-chat.c:571
 #, c-format
 msgid "Topic set to: %s"
 msgstr "Ämnet inställt till: %s"
 
-#: ../libempathy-gtk/empathy-group-chat.c:572
+#: ../libempathy-gtk/empathy-group-chat.c:573
 msgid "No topic defined"
 msgstr "Inget ämne definierat"
 
@@ -922,11 +946,11 @@ msgstr "Uppda_tera"
 msgid "This list represents all chat rooms hosted on the server you have entered."
 msgstr "Den här listan representerar alla chattrum som finns på servern som du har gått in på."
 
-#: ../libempathy-gtk/empathy-main-window.c:279
+#: ../libempathy-gtk/empathy-main-window.c:274
 msgid "Show and edit accounts"
 msgstr "Visa och redigera konton"
 
-#: ../libempathy-gtk/empathy-main-window.c:635
+#: ../libempathy-gtk/empathy-main-window.c:627
 msgid "Contact"
 msgstr "Kontakt"
 
@@ -1152,12 +1176,12 @@ msgstr ""
 "Nytt meddelande från %s:\n"
 "%s"
 
-#: ../libempathy-gtk/empathy-status-icon.c:572
+#: ../libempathy-gtk/empathy-status-icon.c:580
 #, c-format
 msgid "Subscription requested by %s"
 msgstr "Prenumeration begärd av %s"
 
-#: ../libempathy-gtk/empathy-status-icon.c:575
+#: ../libempathy-gtk/empathy-status-icon.c:583
 #, c-format
 msgid ""
 "\n"
@@ -1610,8 +1634,6 @@ msgstr "- Empathy snabbmeddelandeklient"
 #~ "när denna åtgärd genomförs såvida du inte avkryssar alternativet nedan."
 #~ msgid "Edit Account _Details"
 #~ msgstr "Redigera konto_detaljer"
-#~ msgid "Click to enlarge"
-#~ msgstr "Klicka för att förstora"
 #~ msgid "Select who would you like to invite to room:"
 #~ msgstr "Välj vilka du vill bjuda in till rummet:"
 #~ msgid "Select which room you would like to invite:"
@@ -1726,10 +1748,6 @@ msgstr "- Empathy snabbmeddelandeklient"
 #~ msgstr "Visa inte det här igen"
 #~ msgid "Could not display the help contents."
 #~ msgstr "Kunde inte visa hjälpinnehållet."
-#~ msgid "Select Your Avatar Image"
-#~ msgstr "Välj din avatarbild"
-#~ msgid "No Image"
-#~ msgstr "Ingen bild"
 #~ msgid "OK"
 #~ msgstr "OK"
 #~ msgid "The server does not seem to be responding."
