@@ -34,3 +34,12 @@ empathy-profile-chooser
 @Returns: 
 
 
+<!-- ##### FUNCTION empathy_profile_chooser_n_profiles ##### -->
+<para>
+
+</para>
+
+@widget: 
+@Returns: 
+
+

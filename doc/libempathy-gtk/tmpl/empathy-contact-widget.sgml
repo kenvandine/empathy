@@ -22,6 +22,7 @@ empathy-contact-widget
 
 </para>
 
+@EMPATHY_CONTACT_WIDGET_EDIT_NONE: 
 @EMPATHY_CONTACT_WIDGET_EDIT_ALIAS: 
 @EMPATHY_CONTACT_WIDGET_EDIT_AVATAR: 
 @EMPATHY_CONTACT_WIDGET_EDIT_ACCOUNT: 
@@ -45,5 +46,15 @@ empathy-contact-widget
 
 @widget: 
 @Returns: 
+
+
+<!-- ##### FUNCTION empathy_contact_widget_set_account_filter ##### -->
+<para>
+
+</para>
+
+@widget: 
+@filter: 
+@user_data: 
 
 

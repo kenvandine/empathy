@@ -34,7 +34,7 @@ empathy-contact-dialogs
 @contact: 
 @parent: 
 @edit: 
-@edit_groups: 
+@is_user: 
 
 
 <!-- ##### FUNCTION empathy_new_contact_dialog_show ##### -->
