@@ -19,6 +19,7 @@
  * Boston, MA 02111-1307, USA.
  * 
  * Authors: Martyn Russell <martyn@imendio.com>
+ *          Xavier Claessens <xclaesse@gmail.com>
  */
 
 #ifndef __EMPATHY_ACCOUNTS_DIALOG_H__

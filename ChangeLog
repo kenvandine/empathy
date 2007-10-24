@@ -1,3 +1,38 @@
+2007-10-24  Xavier Claessens  <xclaesse@gmail.com>
+
+	* libempathy-gtk/empathy-account-chooser.c:
+	* libempathy-gtk/empathy-profile-chooser.c:
+	* libempathy-gtk/empathy-account-chooser.h:
+	* libempathy-gtk/empathy-profile-chooser.h:
+	* libempathy-gtk/empathy-images.h:
+	* libempathy-gtk/empathy-main-window.c:
+	* libempathy-gtk/empathy-main-window.h:
+	* libempathy-gtk/empathy-cell-renderer-activatable.c:
+	* libempathy-gtk/empathy-account-widget-salut.c:
+	* libempathy-gtk/empathy-presence-chooser.c:
+	* libempathy-gtk/empathy-cell-renderer-activatable.h:
+	* libempathy-gtk/empathy-account-widget-salut.h:
+	* libempathy-gtk/empathy-account-widget-msn.c:
+	* libempathy-gtk/empathy-presence-chooser.h:
+	* libempathy-gtk/empathy-status-icon.c:
+	* libempathy-gtk/empathy-contact-dialogs.c:
+	* libempathy-gtk/empathy-account-widget-msn.h:
+	* libempathy-gtk/empathy-status-icon.h:
+	* libempathy-gtk/empathy-contact-dialogs.h:
+	* libempathy-gtk/empathy-account-widget-jabber.c:
+	* libempathy-gtk/empathy-account-widget-jabber.h:
+	* libempathy-gtk/empathy-contact-widget.c:
+	* libempathy-gtk/empathy-contact-widget.h:
+	* libempathy-gtk/empathy-smiley-manager.c:
+	* libempathy-gtk/empathy-about-dialog.h:
+	* libempathy-gtk/empathy-smiley-manager.h:
+	* libempathy-gtk/empathy-accounts-dialog.h:
+	* libempathy/empathy-avatar.h:
+	* libempathy/empathy-debug.h: Cleanup licences and copyrights,
+	Modules with 100% collabora code are now relicenced to LGPL.
+
+	* doc/libempathy-gtk/tmpl/empathy-contact-list-store.sgml: Updated.
+
 2007-10-23  Xavier Claessens  <xclaesse@gmail.com>
 
 	* doc/libempathy-gtk/tmpl/empathy-profile-chooser.sgml:

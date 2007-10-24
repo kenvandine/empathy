@@ -19,6 +19,7 @@
  *
  * Authors: Richard Hult <richard@imendio.com>
  *          Martyn Russell <martyn@imendio.com>
+ *          Xavier Claessens <xclaesse@gmail.com>
  */
 
 #ifndef __EMPATHY_PRESENCE_CHOOSER_H__
