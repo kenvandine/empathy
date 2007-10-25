@@ -1,5 +1,10 @@
 2007-10-25  Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/empathy-log-window.glade: Use the navigation icons in
+	the history dialog. Fixes bug #490077 (Michael Monreal).
+
+2007-10-25  Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/empathy-log-window.glade: Set window title to
 	"Previous Conversations". Fixes bug #490075 (Michael Monreal).
 
