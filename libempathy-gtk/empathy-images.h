@@ -38,6 +38,7 @@ G_BEGIN_DECLS
 #define EMPATHY_IMAGE_CONTACT_INFORMATION "gtk-info"
 #define EMPATHY_IMAGE_GROUP_MESSAGE       "empathy-group-message"
 #define EMPATHY_IMAGE_VOIP                "gnome-stock-mic"
+#define EMPATHY_IMAGE_LOG                 "document-open-recent"
 
 G_END_DECLS
 

@@ -1,5 +1,15 @@
 2007-10-25  Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/empathy-images.h:
+	* libempathy-gtk/empathy-contact-list-view.c:
+	* libempathy-gtk/empathy-chat.glade:
+	* libempathy-gtk/empathy-log-window.glade:
+	* libempathy-gtk/empathy-main-window.glade: Use "document-open-recent"
+	icon instead of gtk-justify-left for history icon.
+	Fixes bug #490080 (Michael Monreal, Xavier Claessens).
+
+2007-10-25  Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/empathy-main-window.glade: Use "user-info" icon for
 	Edit->Personal Information menu item.
 	Fixes bug #490079 (Michael Monreal).

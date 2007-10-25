@@ -230,7 +230,7 @@ static const GtkActionEntry entries[] = {
 	  N_("_Send File..."), NULL, N_("Send a file"),
 	  G_CALLBACK (contact_list_view_action_cb)
 	},
-	{ "Log", GTK_STOCK_JUSTIFY_LEFT,
+	{ "Log", EMPATHY_IMAGE_LOG,
 	  N_("_View Previous Conversations"), NULL, N_("View previous conversations with this contact"),
 	  G_CALLBACK (contact_list_view_action_cb)
 	},
