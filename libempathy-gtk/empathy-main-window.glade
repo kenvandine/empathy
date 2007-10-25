@@ -189,10 +189,22 @@
 		  </child>
 
 		  <child>
-		    <widget class="GtkMenuItem" id="edit_personal_information">
+		    <widget class="GtkImageMenuItem" id="edit_personal_information">
 		      <property name="visible">True</property>
 		      <property name="label" translatable="yes">_Personal Information</property>
 		      <property name="use_underline">True</property>
+		      
+		      <child internal-child="image">
+			<widget class="GtkImage" id="image894">
+			  <property name="visible">True</property>
+			  <property name="icon_name">user-info</property>
+			  <property name="icon_size">1</property>
+			  <property name="xalign">0.5</property>
+			  <property name="yalign">0.5</property>
+			  <property name="xpad">0</property>
+			  <property name="ypad">0</property>
+			</widget>
+		      </child>
 		    </widget>
 		  </child>
 

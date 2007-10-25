@@ -1,5 +1,11 @@
 2007-10-25  Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/empathy-main-window.glade: Use "user-info" icon for
+	Edit->Personal Information menu item.
+	Fixes bug #490079 (Michael Monreal).
+
+2007-10-25  Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/empathy-log-window.glade: Use the navigation icons in
 	the history dialog. Fixes bug #490077 (Michael Monreal).
 
