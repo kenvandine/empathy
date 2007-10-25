@@ -291,7 +291,7 @@
 		  <child>
 		    <widget class="GtkImageMenuItem" id="room_manage_favorites">
 		      <property name="visible">True</property>
-		      <property name="label" translatable="yes">Manage Favorites...</property>
+		      <property name="label" translatable="yes">Manage Favorites</property>
 		      <property name="use_underline">True</property>
 
 		      <child internal-child="image">

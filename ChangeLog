@@ -1,5 +1,10 @@
 2007-10-25  Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/empathy-main-window.glade: Remove "..." from the
+	"Manage Favorites..." menu item. Fixes bug #490086 (Michael Monreal).
+
+2007-10-25  Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/empathy-images.h:
 	* libempathy-gtk/empathy-contact-list-view.c:
 	* libempathy-gtk/empathy-chat.glade:
