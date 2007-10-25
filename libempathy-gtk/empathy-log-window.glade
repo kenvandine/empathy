@@ -4,7 +4,7 @@
 <glade-interface>
 
 <widget class="GtkWindow" id="log_window">
-  <property name="title" translatable="yes">View Previous Conversations</property>
+  <property name="title" translatable="yes">Previous Conversations</property>
   <property name="type">GTK_WINDOW_TOPLEVEL</property>
   <property name="window_position">GTK_WIN_POS_NONE</property>
   <property name="modal">False</property>

@@ -1,3 +1,8 @@
+2007-10-25  Xavier Claessens  <xclaesse@gmail.com>
+
+	* libempathy-gtk/empathy-log-window.glade: Set window title to
+	"Previous Conversations". Fixes bug #490075 (Michael Monreal).
+
 2007-10-24  Xavier Claessens  <xclaesse@gmail.com>
 
 	* libempathy-gtk/empathy-account-chooser.c:
