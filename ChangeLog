@@ -1,5 +1,11 @@
 2007-10-25  Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/empathy-main-window.glade: Change window title to
+	"Contact List", both words should be capitalised according to HIG.
+	Fixes bug #490076 (Michael Monreal).
+
+2007-10-25  Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/empathy-main-window.glade: Remove "..." from the
 	"Manage Favorites..." menu item. Fixes bug #490086 (Michael Monreal).
 
