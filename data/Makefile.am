@@ -1,4 +1,4 @@
-SUBDIRS = 16x16 22x22 24x24 32x32 48x48 scalable
+SUBDIRS = icons
 
 profiledir = $(datadir)/mission-control/profiles
 profile_DATA = 				\
@@ -9,19 +9,6 @@ profile_DATA = 				\
 	msn.profile			\
 	sofiasip.profile		\
 	aim.profile
-
-gtk_update_icon_cache = gtk-update-icon-cache -f -t $(datadir)/icons/hicolor
-
-install-data-hook: update-icon-cache
-uninstall-hook: update-icon-cache
-update-icon-cache:
-	@-if test -z "$(DESTDIR)"; then \
-		echo "Updating Gtk icon cache."; \
-		$(gtk_update_icon_cache); \
-	else \
-		echo "*** Icon cache not updated.  After (un)install, run this:"; \
-		echo "***   $(gtk_update_icon_cache)"; \
-	fi
 
 autostartdir = $(sysconfdir)/xdg/autostart
 autostart_in_files = empathy.desktop.in
@@ -45,7 +32,6 @@ install-data-local:
 endif
 
 EXTRA_DIST = 				\
-	$(image_DATA)			\
 	$(profile_DATA)			\
 	$(autostart_in_files)		\
 	$(autostart_DATA)		\

@@ -1,5 +1,29 @@
 2007-10-28  Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/empathy-status-icon.glade:
+	* libempathy-gtk/empathy-group-chat.glade:
+	* libempathy-gtk/empathy-main-window.glade:
+	* libempathy-gtk/empathy-images.h:
+	* src/empathy.c:
+	* src/Makefile.am:
+	* configure.ac:
+	* data/jabber.profile:
+	* data/salut.profile:
+	* data/msn.profile:
+	* data/gtalk.profile:
+	* data/irc.profile:
+	* data/22x22:
+	* data/32x32:
+	* data/24x24:
+	* data/16x16:
+	* data/48x48:
+	* data/scalable:
+	* data/Makefile.am:
+	* data/icons/*: Rename icons to follow fd.o icon naming spec. Move icons
+	to the right directory. Fixes bug #470418 (Michael Monreal).
+
+2007-10-28  Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/empathy-smiley-manager.c: Update to new icon naming
 	spec for new avatars. Fixes bug #490173 (Michael Monreal).
 

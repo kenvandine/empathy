@@ -32,11 +32,11 @@ G_BEGIN_DECLS
 #define EMPATHY_IMAGE_EXT_AWAY            "empathy-extended-away"
 #define EMPATHY_IMAGE_UNKNOWN             "empathy-pending"
 
-#define EMPATHY_IMAGE_MESSAGE             "empathy-message"
-#define EMPATHY_IMAGE_NEW_MESSAGE         "empathy-new-message"
-#define EMPATHY_IMAGE_TYPING              "empathy-typing"
+#define EMPATHY_IMAGE_MESSAGE             "im-message"
+#define EMPATHY_IMAGE_NEW_MESSAGE         "im-message-new"
+#define EMPATHY_IMAGE_TYPING              "user-typing"
 #define EMPATHY_IMAGE_CONTACT_INFORMATION "gtk-info"
-#define EMPATHY_IMAGE_GROUP_MESSAGE       "empathy-group-message"
+#define EMPATHY_IMAGE_GROUP_MESSAGE       "system-users"
 #define EMPATHY_IMAGE_VOIP                "gnome-stock-mic"
 #define EMPATHY_IMAGE_LOG                 "document-open-recent"
 

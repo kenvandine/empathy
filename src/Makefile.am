@@ -3,6 +3,7 @@ AM_CPPFLAGS =						\
 	-DPREFIX="\"$(prefix)"\"			\
 	-DSYSCONFDIR=\""$(sysconfdir)"\"		\
 	-DDATADIR=\""$(datadir)"\"              	\
+	-DPKGDATADIR=\""$(pkgdatadir)"\"		\
 	-DLIBDIR=\""$(libdir)"\"			\
 	-DLOCALEDIR=\""$(datadir)/locale"\"		\
 	$(EMPATHY_CFLAGS)				\

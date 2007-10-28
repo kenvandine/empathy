@@ -2,7 +2,7 @@
 Manager=gabble
 Protocol=jabber
 DisplayName=Google Talk
-IconName = empathy-proto-google-talk
+IconName = im-google-talk
 ConfigurationUI = jabber
 Capabilities = chat-p2p, chat-room, chat-room-list, voice-p2p, split-account, supports-avatars, supports-alias
 SupportedPresences = offline,available,away,extended-away,do-not-disturb

@@ -288,7 +288,7 @@ main (int argc, char *argv[])
 	gtk_init (&argc, &argv);
 	gtk_window_set_default_icon_name ("empathy");
 	gtk_icon_theme_append_search_path (gtk_icon_theme_get_default (),
-					   DATADIR G_DIR_SEPARATOR_S "empathy");
+					   PKGDATADIR G_DIR_SEPARATOR_S "icons");
 	gnome_vfs_init ();
 
 	/* Setting up MC */
