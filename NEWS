@@ -1,3 +1,22 @@
+NEW in 0.21.1:
+=============
+ - Cleanup licences and copyrights, Modules with 100% collabora code are now
+   relicenced to LGPL.
+ - Hide main window with ALT-F4.
+ - Set chat state to ACTIVE when receiving a message from a contact, avoid
+   staying in COMPOSING state forever for protocols like MSN that do not notify
+   when contact stoped writing.
+ - Don't use deprecated Gtk/GLib API. Mainly replace GtkTooltips by new
+   tooltip API from GTK 2.12.
+ - Use g_timeout_add_seconds when appropriated to avoid weaking the process too
+   much.
+ - Implement EmpathyAvatarChooser and EmpathyAvatarImage and make use of them in
+   contact information windows. That means we can now enlarge avatars when
+   clicking on it and we can set our own avatar if we edit our own contact.
+ - Implement edit personal information window, no vcard supported yet, but it's
+   not possible to set our own alias/avatar.
+ - Bump version to 0.21.1 for GNOME 2.21.1 release.
+
 NEW in 0.14:
 ===========
  - Megaphone applet now uses avatar cache.
