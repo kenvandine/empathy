@@ -51,7 +51,7 @@
 
 #define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), EMPATHY_TYPE_CONTACT_LIST_STORE, EmpathyContactListStorePriv))
 
-struct _EmpathyContactListStorePriv {
+typedef struct {
 	EmpathyContactList         *list;
 	gboolean                    show_offline;
 	gboolean                    show_avatars;
@@ -59,10 +59,7 @@ struct _EmpathyContactListStorePriv {
 	gboolean                    show_active;
 	EmpathyContactListStoreSort sort_criterium;
 	guint                       inhibit_active;
-
-	EmpathyContactGroupsFunc    get_contact_groups;
-	gpointer                    get_contact_groups_data;
-};
+} EmpathyContactListStorePriv;
 
 typedef struct {
 	GtkTreeIter  iter;
@@ -502,13 +499,13 @@ empathy_contact_list_store_set_sort_criterium (EmpathyContactListStore     *stor
 	switch (sort_criterium) {
 	case EMPATHY_CONTACT_LIST_STORE_SORT_STATE:
 		gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (store),
-						      COL_STATUS,
+						      EMPATHY_CONTACT_LIST_STORE_COL_STATUS,
 						      GTK_SORT_ASCENDING);
 		break;
 		
 	case EMPATHY_CONTACT_LIST_STORE_SORT_NAME:
 		gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (store),
-						      COL_NAME,
+						      EMPATHY_CONTACT_LIST_STORE_COL_NAME,
 						      GTK_SORT_ASCENDING);
 		break;
 	}
@@ -524,7 +521,7 @@ empathy_contact_list_store_row_separator_func (GtkTreeModel *model,
 	g_return_val_if_fail (GTK_IS_TREE_MODEL (model), FALSE);
 
 	gtk_tree_model_get (model, iter,
-			    COL_IS_SEPARATOR, &is_separator,
+			    EMPATHY_CONTACT_LIST_STORE_COL_IS_SEPARATOR, &is_separator,
 			    -1);
 
 	return is_separator;
@@ -550,8 +547,8 @@ empathy_contact_list_store_get_parent_group (GtkTreeModel *model,
 	}
 
 	gtk_tree_model_get (model, &iter,
-			    COL_IS_GROUP, &is_group,
-			    COL_NAME, &name,
+			    EMPATHY_CONTACT_LIST_STORE_COL_IS_GROUP, &is_group,
+			    EMPATHY_CONTACT_LIST_STORE_COL_NAME, &name,
 			    -1);
 
 	if (!is_group) {
@@ -565,8 +562,8 @@ empathy_contact_list_store_get_parent_group (GtkTreeModel *model,
 		iter = parent_iter;
 
 		gtk_tree_model_get (model, &iter,
-				    COL_IS_GROUP, &is_group,
-				    COL_NAME, &name,
+				    EMPATHY_CONTACT_LIST_STORE_COL_IS_GROUP, &is_group,
+				    EMPATHY_CONTACT_LIST_STORE_COL_NAME, &name,
 				    -1);
 		if (!is_group) {
 			g_free (name);
@@ -598,7 +595,9 @@ empathy_contact_list_store_search_equal_func (GtkTreeModel *model,
 		return TRUE;
 	}
 
-	gtk_tree_model_get (model, iter, COL_NAME, &name, -1);
+	gtk_tree_model_get (model, iter,
+			    EMPATHY_CONTACT_LIST_STORE_COL_NAME, &name,
+			    -1);
 
 	if (!name) {
 		return TRUE;
@@ -631,7 +630,7 @@ contact_list_store_finalize_foreach (GtkTreeModel *model,
 	EmpathyContact          *contact = NULL;
 
 	gtk_tree_model_get (GTK_TREE_MODEL (store), iter,
-			    COL_CONTACT, &contact,
+			    EMPATHY_CONTACT_LIST_STORE_COL_CONTACT, &contact,
 			    -1);
 
 	if (contact) {
@@ -662,15 +661,17 @@ contact_list_store_setup (EmpathyContactListStore *store)
 	
 	priv = GET_PRIV (store);
 
-	gtk_tree_store_set_column_types (GTK_TREE_STORE (store), COL_COUNT, types);
+	gtk_tree_store_set_column_types (GTK_TREE_STORE (store),
+					 EMPATHY_CONTACT_LIST_STORE_COL_COUNT,
+					 types);
 
 	/* Set up sorting */
 	gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (store),
-					 COL_NAME,
+					 EMPATHY_CONTACT_LIST_STORE_COL_NAME,
 					 contact_list_store_name_sort_func,
 					 store, NULL);
 	gtk_tree_sortable_set_sort_func (GTK_TREE_SORTABLE (store),
-					 COL_STATUS,
+					 EMPATHY_CONTACT_LIST_STORE_COL_STATUS,
 					 contact_list_store_state_sort_func,
 					 store, NULL);
 
@@ -781,11 +782,11 @@ contact_list_store_add_contact (EmpathyContactListStore *store,
 	if (!groups) {
 		gtk_tree_store_append (GTK_TREE_STORE (store), &iter, NULL);
 		gtk_tree_store_set (GTK_TREE_STORE (store), &iter,
-				    COL_NAME, empathy_contact_get_name (contact),
-				    COL_CONTACT, contact,
-				    COL_IS_GROUP, FALSE,
-				    COL_IS_SEPARATOR, FALSE,
-				    COL_CAN_VOIP, empathy_contact_can_voip (contact),
+				    EMPATHY_CONTACT_LIST_STORE_COL_NAME, empathy_contact_get_name (contact),
+				    EMPATHY_CONTACT_LIST_STORE_COL_CONTACT, contact,
+				    EMPATHY_CONTACT_LIST_STORE_COL_IS_GROUP, FALSE,
+				    EMPATHY_CONTACT_LIST_STORE_COL_IS_SEPARATOR, FALSE,
+				    EMPATHY_CONTACT_LIST_STORE_COL_CAN_VOIP, empathy_contact_can_voip (contact),
 				    -1);
 	}
 
@@ -798,11 +799,11 @@ contact_list_store_add_contact (EmpathyContactListStore *store,
 		gtk_tree_store_insert_after (GTK_TREE_STORE (store), &iter,
 					     &iter_group, NULL);
 		gtk_tree_store_set (GTK_TREE_STORE (store), &iter,
-				    COL_NAME, empathy_contact_get_name (contact),
-				    COL_CONTACT, contact,
-				    COL_IS_GROUP, FALSE,
-				    COL_IS_SEPARATOR, FALSE,
-				    COL_CAN_VOIP, empathy_contact_can_voip (contact),
+				    EMPATHY_CONTACT_LIST_STORE_COL_NAME, empathy_contact_get_name (contact),
+				    EMPATHY_CONTACT_LIST_STORE_COL_CONTACT, contact,
+				    EMPATHY_CONTACT_LIST_STORE_COL_IS_GROUP, FALSE,
+				    EMPATHY_CONTACT_LIST_STORE_COL_IS_SEPARATOR, FALSE,
+				    EMPATHY_CONTACT_LIST_STORE_COL_CAN_VOIP, empathy_contact_can_voip (contact),
 				    -1);
 		g_free (l->data);
 	}
@@ -934,7 +935,7 @@ contact_list_store_contact_update (EmpathyContactListStore *store,
 		/* Get online state before. */
 		if (iters && g_list_length (iters) > 0) {
 			gtk_tree_model_get (model, iters->data,
-					    COL_IS_ONLINE, &was_online,
+					    EMPATHY_CONTACT_LIST_STORE_COL_IS_ONLINE, &was_online,
 					    -1);
 		}
 
@@ -962,16 +963,16 @@ contact_list_store_contact_update (EmpathyContactListStore *store,
 	pixbuf_avatar = empathy_pixbuf_avatar_from_contact_scaled (contact, 32, 32);
 	for (l = iters; l && set_model; l = l->next) {
 		gtk_tree_store_set (GTK_TREE_STORE (store), l->data,
-				    COL_ICON_STATUS, empathy_icon_name_for_contact (contact),
-				    COL_PIXBUF_AVATAR, pixbuf_avatar,
-				    COL_PIXBUF_AVATAR_VISIBLE, priv->show_avatars,
-				    COL_NAME, empathy_contact_get_name (contact),
-				    COL_STATUS, empathy_contact_get_status (contact),
-				    COL_STATUS_VISIBLE, !priv->is_compact,
-				    COL_IS_GROUP, FALSE,
-				    COL_IS_ONLINE, now_online,
-				    COL_IS_SEPARATOR, FALSE,
-				    COL_CAN_VOIP, empathy_contact_can_voip (contact),
+				    EMPATHY_CONTACT_LIST_STORE_COL_ICON_STATUS, empathy_icon_name_for_contact (contact),
+				    EMPATHY_CONTACT_LIST_STORE_COL_PIXBUF_AVATAR, pixbuf_avatar,
+				    EMPATHY_CONTACT_LIST_STORE_COL_PIXBUF_AVATAR_VISIBLE, priv->show_avatars,
+				    EMPATHY_CONTACT_LIST_STORE_COL_NAME, empathy_contact_get_name (contact),
+				    EMPATHY_CONTACT_LIST_STORE_COL_STATUS, empathy_contact_get_status (contact),
+				    EMPATHY_CONTACT_LIST_STORE_COL_STATUS_VISIBLE, !priv->is_compact,
+				    EMPATHY_CONTACT_LIST_STORE_COL_IS_GROUP, FALSE,
+				    EMPATHY_CONTACT_LIST_STORE_COL_IS_ONLINE, now_online,
+				    EMPATHY_CONTACT_LIST_STORE_COL_IS_SEPARATOR, FALSE,
+				    EMPATHY_CONTACT_LIST_STORE_COL_CAN_VOIP, empathy_contact_can_voip (contact),
 				    -1);
 	}
 
@@ -1029,7 +1030,7 @@ contact_list_store_contact_set_active (EmpathyContactListStore *store,
 		GtkTreePath *path;
 
 		gtk_tree_store_set (GTK_TREE_STORE (store), l->data,
-				    COL_IS_ACTIVE, active,
+				    EMPATHY_CONTACT_LIST_STORE_COL_IS_ACTIVE, active,
 				    -1);
 
 		empathy_debug (DEBUG_DOMAIN, "Set item %s", active ? "active" : "inactive");
@@ -1121,8 +1122,8 @@ contact_list_store_get_group_foreach (GtkTreeModel *model,
 	}
 
 	gtk_tree_model_get (model, iter,
-			    COL_NAME, &str,
-			    COL_IS_GROUP, &is_group,
+			    EMPATHY_CONTACT_LIST_STORE_COL_NAME, &str,
+			    EMPATHY_CONTACT_LIST_STORE_COL_IS_GROUP, &is_group,
 			    -1);
 
 	if (is_group && strcmp (str, fg->name) == 0) {
@@ -1166,11 +1167,11 @@ contact_list_store_get_group (EmpathyContactListStore *store,
 
 		gtk_tree_store_append (GTK_TREE_STORE (store), &iter_group, NULL);
 		gtk_tree_store_set (GTK_TREE_STORE (store), &iter_group,
-				    COL_ICON_STATUS, NULL,
-				    COL_NAME, name,
-				    COL_IS_GROUP, TRUE,
-				    COL_IS_ACTIVE, FALSE,
-				    COL_IS_SEPARATOR, FALSE,
+				    EMPATHY_CONTACT_LIST_STORE_COL_ICON_STATUS, NULL,
+				    EMPATHY_CONTACT_LIST_STORE_COL_NAME, name,
+				    EMPATHY_CONTACT_LIST_STORE_COL_IS_GROUP, TRUE,
+				    EMPATHY_CONTACT_LIST_STORE_COL_IS_ACTIVE, FALSE,
+				    EMPATHY_CONTACT_LIST_STORE_COL_IS_SEPARATOR, FALSE,
 				    -1);
 
 		if (iter_group_to_set) {
@@ -1181,7 +1182,7 @@ contact_list_store_get_group (EmpathyContactListStore *store,
 				       &iter_separator, 
 				       &iter_group);
 		gtk_tree_store_set (GTK_TREE_STORE (store), &iter_separator,
-				    COL_IS_SEPARATOR, TRUE,
+				    EMPATHY_CONTACT_LIST_STORE_COL_IS_SEPARATOR, TRUE,
 				    -1);
 
 		if (iter_separator_to_set) {
@@ -1202,7 +1203,7 @@ contact_list_store_get_group (EmpathyContactListStore *store,
 			gboolean is_separator;
 
 			gtk_tree_model_get (model, &iter_separator,
-					    COL_IS_SEPARATOR, &is_separator,
+					    EMPATHY_CONTACT_LIST_STORE_COL_IS_SEPARATOR, &is_separator,
 					    -1);
 
 			if (is_separator && iter_separator_to_set) {
@@ -1226,14 +1227,14 @@ contact_list_store_state_sort_func (GtkTreeModel *model,
 	McPresence      state_a, state_b;
 
 	gtk_tree_model_get (model, iter_a,
-			    COL_NAME, &name_a,
-			    COL_CONTACT, &contact_a,
-			    COL_IS_SEPARATOR, &is_separator_a,
+			    EMPATHY_CONTACT_LIST_STORE_COL_NAME, &name_a,
+			    EMPATHY_CONTACT_LIST_STORE_COL_CONTACT, &contact_a,
+			    EMPATHY_CONTACT_LIST_STORE_COL_IS_SEPARATOR, &is_separator_a,
 			    -1);
 	gtk_tree_model_get (model, iter_b,
-			    COL_NAME, &name_b,
-			    COL_CONTACT, &contact_b,
-			    COL_IS_SEPARATOR, &is_separator_b,
+			    EMPATHY_CONTACT_LIST_STORE_COL_NAME, &name_b,
+			    EMPATHY_CONTACT_LIST_STORE_COL_CONTACT, &contact_b,
+			    EMPATHY_CONTACT_LIST_STORE_COL_IS_SEPARATOR, &is_separator_b,
 			    -1);
 
 	/* Separator or group? */
@@ -1310,14 +1311,14 @@ contact_list_store_name_sort_func (GtkTreeModel *model,
 	gint           ret_val;
 
 	gtk_tree_model_get (model, iter_a,
-			    COL_NAME, &name_a,
-			    COL_CONTACT, &contact_a,
-			    COL_IS_SEPARATOR, &is_separator_a,
+			    EMPATHY_CONTACT_LIST_STORE_COL_NAME, &name_a,
+			    EMPATHY_CONTACT_LIST_STORE_COL_CONTACT, &contact_a,
+			    EMPATHY_CONTACT_LIST_STORE_COL_IS_SEPARATOR, &is_separator_a,
 			    -1);
 	gtk_tree_model_get (model, iter_b,
-			    COL_NAME, &name_b,
-			    COL_CONTACT, &contact_b,
-			    COL_IS_SEPARATOR, &is_separator_b,
+			    EMPATHY_CONTACT_LIST_STORE_COL_NAME, &name_b,
+			    EMPATHY_CONTACT_LIST_STORE_COL_CONTACT, &contact_b,
+			    EMPATHY_CONTACT_LIST_STORE_COL_IS_SEPARATOR, &is_separator_b,
 			    -1);
 
 	/* If contact is NULL it means it's a group. */
@@ -1359,7 +1360,7 @@ contact_list_store_find_contact_foreach (GtkTreeModel *model,
 	EmpathyContact *contact;
 
 	gtk_tree_model_get (model, iter,
-			    COL_CONTACT, &contact,
+			    EMPATHY_CONTACT_LIST_STORE_COL_CONTACT, &contact,
 			    -1);
 
 	if (!contact) {
@@ -1418,8 +1419,8 @@ contact_list_store_update_list_mode_foreach (GtkTreeModel           *model,
 	}
 
 	gtk_tree_store_set (GTK_TREE_STORE (store), iter,
-			    COL_PIXBUF_AVATAR_VISIBLE, show_avatar,
-			    COL_STATUS_VISIBLE, !priv->is_compact,
+			    EMPATHY_CONTACT_LIST_STORE_COL_PIXBUF_AVATAR_VISIBLE, show_avatar,
+			    EMPATHY_CONTACT_LIST_STORE_COL_STATUS_VISIBLE, !priv->is_compact,
 			    -1);
 
 	return FALSE;

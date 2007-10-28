@@ -33,17 +33,6 @@
 
 G_BEGIN_DECLS
 
-/*
- * EmpathyContactListStoreSort
- */ 
-typedef enum {
-	EMPATHY_CONTACT_LIST_STORE_SORT_STATE,
-	EMPATHY_CONTACT_LIST_STORE_SORT_NAME
-} EmpathyContactListStoreSort;
-
-/*
- * EmpathyContactListStore 
- */ 
 #define EMPATHY_TYPE_CONTACT_LIST_STORE         (empathy_contact_list_store_get_type ())
 #define EMPATHY_CONTACT_LIST_STORE(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), EMPATHY_TYPE_CONTACT_LIST_STORE, EmpathyContactListStore))
 #define EMPATHY_CONTACT_LIST_STORE_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST((k), EMPATHY_TYPE_CONTACT_LIST_STORE, EmpathyContactListStoreClass))
@@ -53,36 +42,38 @@ typedef enum {
 
 typedef struct _EmpathyContactListStore      EmpathyContactListStore;
 typedef struct _EmpathyContactListStoreClass EmpathyContactListStoreClass;
-typedef struct _EmpathyContactListStorePriv  EmpathyContactListStorePriv;
 
-enum {
-	COL_ICON_STATUS,
-	COL_PIXBUF_AVATAR,
-	COL_PIXBUF_AVATAR_VISIBLE,
-	COL_NAME,
-	COL_STATUS,
-	COL_STATUS_VISIBLE,
-	COL_CONTACT,
-	COL_IS_GROUP,
-	COL_IS_ACTIVE,
-	COL_IS_ONLINE,
-	COL_IS_SEPARATOR,
-	COL_CAN_VOIP,
-	COL_COUNT
+typedef enum {
+	EMPATHY_CONTACT_LIST_STORE_SORT_STATE,
+	EMPATHY_CONTACT_LIST_STORE_SORT_NAME
+} EmpathyContactListStoreSort;
+
+typedef enum {
+	EMPATHY_CONTACT_LIST_STORE_COL_ICON_STATUS,
+	EMPATHY_CONTACT_LIST_STORE_COL_PIXBUF_AVATAR,
+	EMPATHY_CONTACT_LIST_STORE_COL_PIXBUF_AVATAR_VISIBLE,
+	EMPATHY_CONTACT_LIST_STORE_COL_NAME,
+	EMPATHY_CONTACT_LIST_STORE_COL_STATUS,
+	EMPATHY_CONTACT_LIST_STORE_COL_STATUS_VISIBLE,
+	EMPATHY_CONTACT_LIST_STORE_COL_CONTACT,
+	EMPATHY_CONTACT_LIST_STORE_COL_IS_GROUP,
+	EMPATHY_CONTACT_LIST_STORE_COL_IS_ACTIVE,
+	EMPATHY_CONTACT_LIST_STORE_COL_IS_ONLINE,
+	EMPATHY_CONTACT_LIST_STORE_COL_IS_SEPARATOR,
+	EMPATHY_CONTACT_LIST_STORE_COL_CAN_VOIP,
+	EMPATHY_CONTACT_LIST_STORE_COL_COUNT
 } EmpathyContactListStoreCol;
 
 struct _EmpathyContactListStore {
-	GtkTreeStore            parent;
+	GtkTreeStore parent;
 };
 
 struct _EmpathyContactListStoreClass {
-	GtkTreeStoreClass       parent_class;
+	GtkTreeStoreClass parent_class;
 };
-typedef GList *            (*EmpathyContactGroupsFunc)                   (EmpathyContact              *contact,
-									 gpointer                    user_data);
 
 GType                      empathy_contact_list_store_get_type           (void) G_GNUC_CONST;
-EmpathyContactListStore *   empathy_contact_list_store_new                (EmpathyContactList         *list_iface);
+EmpathyContactListStore *  empathy_contact_list_store_new                (EmpathyContactList         *list_iface);
 EmpathyContactList *       empathy_contact_list_store_get_list_iface     (EmpathyContactListStore     *store);
 gboolean                   empathy_contact_list_store_get_show_offline   (EmpathyContactListStore     *store);
 void                       empathy_contact_list_store_set_show_offline   (EmpathyContactListStore     *store,

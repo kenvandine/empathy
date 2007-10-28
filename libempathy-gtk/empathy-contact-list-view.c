@@ -500,7 +500,9 @@ empathy_contact_list_view_get_selected (EmpathyContactListView *view)
 		return NULL;
 	}
 
-	gtk_tree_model_get (model, &iter, COL_CONTACT, &contact, -1);
+	gtk_tree_model_get (model, &iter,
+			    EMPATHY_CONTACT_LIST_STORE_COL_CONTACT, &contact,
+			    -1);
 
 	return contact;
 }
@@ -525,8 +527,8 @@ empathy_contact_list_view_get_selected_group (EmpathyContactListView *view)
 	}
 
 	gtk_tree_model_get (model, &iter,
-			    COL_IS_GROUP, &is_group,
-			    COL_NAME, &name,
+			    EMPATHY_CONTACT_LIST_STORE_COL_IS_GROUP, &is_group,
+			    EMPATHY_CONTACT_LIST_STORE_COL_NAME, &name,
 			    -1);
 
 	if (!is_group) {
@@ -631,11 +633,11 @@ contact_list_view_setup (EmpathyContactListView *view)
 		view, NULL);
 
 	gtk_tree_view_column_add_attribute (col, cell,
-					    "name", COL_NAME);
+					    "name", EMPATHY_CONTACT_LIST_STORE_COL_NAME);
 	gtk_tree_view_column_add_attribute (col, cell,
-					    "status", COL_STATUS);
+					    "status", EMPATHY_CONTACT_LIST_STORE_COL_STATUS);
 	gtk_tree_view_column_add_attribute (col, cell,
-					    "is_group", COL_IS_GROUP);
+					    "is_group", EMPATHY_CONTACT_LIST_STORE_COL_IS_GROUP);
 
 #ifdef HAVE_VOIP
 	/* Voip Capability Icon */
@@ -719,8 +721,8 @@ contact_list_view_row_has_child_toggled_cb (GtkTreeModel          *model,
 	gchar    *name = NULL;
 
 	gtk_tree_model_get (model, iter,
-			    COL_IS_GROUP, &is_group,
-			    COL_NAME, &name,
+			    EMPATHY_CONTACT_LIST_STORE_COL_IS_GROUP, &is_group,
+			    EMPATHY_CONTACT_LIST_STORE_COL_NAME, &name,
 			    -1);
 
 	if (!is_group || G_STR_EMPTY (name)) {
@@ -1072,9 +1074,9 @@ contact_list_view_pixbuf_cell_data_func (GtkTreeViewColumn     *tree_column,
 	gboolean  is_active;
 
 	gtk_tree_model_get (model, iter,
-			    COL_IS_GROUP, &is_group,
-			    COL_IS_ACTIVE, &is_active,
-			    COL_ICON_STATUS, &icon_name,
+			    EMPATHY_CONTACT_LIST_STORE_COL_IS_GROUP, &is_group,
+			    EMPATHY_CONTACT_LIST_STORE_COL_IS_ACTIVE, &is_active,
+			    EMPATHY_CONTACT_LIST_STORE_COL_ICON_STATUS, &icon_name,
 			    -1);
 
 	g_object_set (cell,
@@ -1100,9 +1102,9 @@ contact_list_view_voip_cell_data_func (GtkTreeViewColumn      *tree_column,
 	gboolean can_voip;
 
 	gtk_tree_model_get (model, iter,
-			    COL_IS_GROUP, &is_group,
-			    COL_IS_ACTIVE, &is_active,
-			    COL_CAN_VOIP, &can_voip,
+			    EMPATHY_CONTACT_LIST_STORE_COL_IS_GROUP, &is_group,
+			    EMPATHY_CONTACT_LIST_STORE_COL_IS_ACTIVE, &is_active,
+			    EMPATHY_CONTACT_LIST_STORE_COL_CAN_VOIP, &can_voip,
 			    -1);
 
 	g_object_set (cell,
@@ -1127,10 +1129,10 @@ contact_list_view_avatar_cell_data_func (GtkTreeViewColumn     *tree_column,
 	gboolean   is_active;
 
 	gtk_tree_model_get (model, iter,
-			    COL_PIXBUF_AVATAR, &pixbuf,
-			    COL_PIXBUF_AVATAR_VISIBLE, &show_avatar,
-			    COL_IS_GROUP, &is_group,
-			    COL_IS_ACTIVE, &is_active,
+			    EMPATHY_CONTACT_LIST_STORE_COL_PIXBUF_AVATAR, &pixbuf,
+			    EMPATHY_CONTACT_LIST_STORE_COL_PIXBUF_AVATAR_VISIBLE, &show_avatar,
+			    EMPATHY_CONTACT_LIST_STORE_COL_IS_GROUP, &is_group,
+			    EMPATHY_CONTACT_LIST_STORE_COL_IS_ACTIVE, &is_active,
 			    -1);
 
 	g_object_set (cell,
@@ -1157,9 +1159,9 @@ contact_list_view_text_cell_data_func (GtkTreeViewColumn     *tree_column,
 	gboolean show_status;
 
 	gtk_tree_model_get (model, iter,
-			    COL_IS_GROUP, &is_group,
-			    COL_IS_ACTIVE, &is_active,
-			    COL_STATUS_VISIBLE, &show_status,
+			    EMPATHY_CONTACT_LIST_STORE_COL_IS_GROUP, &is_group,
+			    EMPATHY_CONTACT_LIST_STORE_COL_IS_ACTIVE, &is_active,
+			    EMPATHY_CONTACT_LIST_STORE_COL_STATUS_VISIBLE, &show_status,
 			    -1);
 
 	g_object_set (cell,
@@ -1180,8 +1182,8 @@ contact_list_view_expander_cell_data_func (GtkTreeViewColumn     *column,
 	gboolean is_active;
 
 	gtk_tree_model_get (model, iter,
-			    COL_IS_GROUP, &is_group,
-			    COL_IS_ACTIVE, &is_active,
+			    EMPATHY_CONTACT_LIST_STORE_COL_IS_GROUP, &is_group,
+			    EMPATHY_CONTACT_LIST_STORE_COL_IS_ACTIVE, &is_active,
 			    -1);
 
 	if (gtk_tree_model_iter_has_child (model, iter)) {
@@ -1271,7 +1273,9 @@ contact_list_view_button_press_event_cb (EmpathyContactListView *view,
 	gtk_tree_model_get_iter (model, &iter, path);
 	gtk_tree_path_free (path);
 
-	gtk_tree_model_get (model, &iter, COL_CONTACT, &contact, -1);
+	gtk_tree_model_get (model, &iter,
+			    EMPATHY_CONTACT_LIST_STORE_COL_CONTACT, &contact,
+			    -1);
 
 	if (contact) {
 		menu = empathy_contact_list_view_get_contact_menu (view, contact);
@@ -1311,7 +1315,9 @@ contact_list_view_row_activated_cb (EmpathyContactListView *view,
 	model = gtk_tree_view_get_model (GTK_TREE_VIEW (view));
 
 	gtk_tree_model_get_iter (model, &iter, path);
-	gtk_tree_model_get (model, &iter, COL_CONTACT, &contact, -1);
+	gtk_tree_model_get (model, &iter,
+			    EMPATHY_CONTACT_LIST_STORE_COL_CONTACT, &contact,
+			    -1);
 
 	if (contact) {
 		contact_list_view_action_activated (view, contact);
@@ -1339,7 +1345,9 @@ contact_list_view_voip_activated_cb (EmpathyCellRendererActivatable *cell,
 		return;
 	}
 
-	gtk_tree_model_get (model, &iter, COL_CONTACT, &contact, -1);
+	gtk_tree_model_get (model, &iter,
+			    EMPATHY_CONTACT_LIST_STORE_COL_CONTACT, &contact,
+			    -1);
 
 	if (contact) {
 		contact_list_view_voip_activated (view, contact);
@@ -1362,7 +1370,7 @@ contact_list_view_row_expand_or_collapse_cb (EmpathyContactListView *view,
 	model = gtk_tree_view_get_model (GTK_TREE_VIEW (view));
 
 	gtk_tree_model_get (model, iter,
-			    COL_NAME, &name,
+			    EMPATHY_CONTACT_LIST_STORE_COL_NAME, &name,
 			    -1);
 
 	expanded = GPOINTER_TO_INT (user_data);

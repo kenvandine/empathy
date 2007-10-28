@@ -1,5 +1,15 @@
 2007-10-28  Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/empathy-contact-list-view.c:
+	* libempathy-gtk/empathy-contact-list-store.c:
+	* libempathy-gtk/empathy-contact-list-store.h:
+	* doc/libempathy-gtk/libempathy-gtk.types:
+	* doc/libempathy-gtk/tmpl/empathy-contact-list-store.sgml: Rename
+	COL_XXX to EMPATHY_CONTACT_LIST_STORE_COL_XXX since it's in public API.
+	Fixes bug #470804.
+
+2007-10-28  Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/empathy-status-icon.glade:
 	* libempathy-gtk/empathy-group-chat.glade:
 	* libempathy-gtk/empathy-main-window.glade:
