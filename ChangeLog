@@ -1,5 +1,10 @@
 2007-10-28  Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/empathy-smiley-manager.c: Update to new icon naming
+	spec for new avatars. Fixes bug #490173 (Michael Monreal).
+
+2007-10-28  Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/empathy-contact-dialogs.c: Change edit personal
 	information window title to "Personal Information". Fixes bug #490159.
 	Change add contact window title to "New Contact", need a capitalized
