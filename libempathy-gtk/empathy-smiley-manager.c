@@ -270,7 +270,7 @@ empathy_smiley_manager_load (EmpathySmileyManager *manager)
         empathy_smiley_manager_add (manager, "face-cool",       "B-)",   "B)",   NULL);
 	empathy_smiley_manager_add (manager, "face-crying",     ":'(", NULL);
 	empathy_smiley_manager_add (manager, "face-devilish",   ">:-)",  ">:)",  NULL);
-        empathy_smiley_manager_add (manager, "face-embarrassed",":-[",   ":[",   NULL);
+        empathy_smiley_manager_add (manager, "face-embarrassed",":-[",   ":[",   ":-$", ":$", NULL);
 	empathy_smiley_manager_add (manager, "face-kiss",       ":-*",   ":*",   NULL);
 	empathy_smiley_manager_add (manager, "face-monkey",     ":-(|)", ":(|)", NULL);
 	empathy_smiley_manager_add (manager, "face-plain",      ":-|",   ":|",   NULL);
