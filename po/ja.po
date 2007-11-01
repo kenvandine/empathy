@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: empathy trunk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-10-08 12:37+0900\n"
-"PO-Revision-Date: 2007-10-08 12:36+0900\n"
+"POT-Creation-Date: 2007-11-02 00:51+0900\n"
+"PO-Revision-Date: 2007-11-02 00:50+0900\n"
 "Last-Translator: Takeshi AIHANA <takeshi.aihana@gmail.com>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "MIME-Version: 1.0\n"
@@ -34,7 +34,7 @@ msgstr "会話ウィンドウのテーマ"
 
 #: ../data/empathy.schemas.in.h:3
 msgid "Checks if Salut account is created"
-msgstr "Salut アカウントを生成するかどうか"
+msgstr "Salut のアカウントを生成するかどうか"
 
 #: ../data/empathy.schemas.in.h:4
 msgid ""
@@ -206,7 +206,7 @@ msgstr "離席中"
 msgid "Hidden"
 msgstr "隠れる"
 
-#: ../libempathy/empathy-tp-contact-list.c:730 ../src/empathy.c:211
+#: ../libempathy/empathy-tp-contact-list.c:729 ../src/empathy.c:212
 msgid "People nearby"
 msgstr "すぐ近くにいる人達"
 
@@ -250,7 +250,7 @@ msgstr "GNOME 向けのインスタント・メッセンジャー・クライア
 msgid "translator-credits"
 msgstr "相花 毅 <takeshi.aihana@gmail.com>"
 
-#: ../libempathy-gtk/empathy-account-chooser.c:336
+#: ../libempathy-gtk/empathy-account-chooser.c:337
 msgid "All"
 msgstr "全て"
 
@@ -345,30 +345,7 @@ msgstr "サインアウト"
 msgid "Enable"
 msgstr "サインイン"
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:255
-#: ../libempathy-gtk/empathy-accounts-dialog.glade.h:2
-msgid "<b>No Account Selected</b>"
-msgstr "<b>アカウントが選択されていません</b>"
-
-#: ../libempathy-gtk/empathy-accounts-dialog.c:257
-msgid ""
-"To add a new account, you can click on the 'Add' button and a new entry will "
-"be created for you to start configuring.\n"
-"\n"
-"If you do not want to add an account, simply click on the account you want "
-"to configure in the list on the left."
-msgstr ""
-"新しいアカウントを登録するには [追加] ボタンをクリックして下さい。すると、新"
-"しいアカウントの設定画面が表示されるので必要な情報を入力して下さい。\n"
-"\n"
-"アカウントを編集する場合は、左側の一覧にあるアカウントをクリックして編集して"
-"下さい。"
-
-#: ../libempathy-gtk/empathy-accounts-dialog.c:266
-msgid "<b>No Accounts Configured</b>"
-msgstr "<b>アカウントが登録されていません</b>"
-
-#: ../libempathy-gtk/empathy-accounts-dialog.c:268
+#: ../libempathy-gtk/empathy-accounts-dialog.c:256
 msgid ""
 "To add a new account, you can click on the 'Add' button and a new entry will "
 "be created for you to start configuring."
@@ -376,7 +353,35 @@ msgstr ""
 "新しいアカウントを登録するには [追加] ボタンをクリックして下さい。すると、新"
 "しいアカウントの設定画面が表示されるので必要な情報を入力して下さい。"
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:394
+#: ../libempathy-gtk/empathy-accounts-dialog.c:260
+msgid ""
+"To add a new account, you first have to install a backend for each protocol "
+"you want to use."
+msgstr ""
+"新しいアカウントを登録するには、まず最初に利用するプロトコルのバックエンドを"
+"インストールしておいて下さい。"
+
+#: ../libempathy-gtk/empathy-accounts-dialog.c:267
+#: ../libempathy-gtk/empathy-accounts-dialog.glade.h:2
+msgid "<b>No Account Selected</b>"
+msgstr "<b>アカウントが選択されていません</b>"
+
+#: ../libempathy-gtk/empathy-accounts-dialog.c:268
+msgid ""
+"\n"
+"\n"
+"If you do not want to add an account, simply click on the account you want "
+"to configure in the list on the left."
+msgstr ""
+"\n"
+"\n"
+"アカウントを編集する場合は、左側の一覧にあるアカウントをクリックして下さい。"
+
+#: ../libempathy-gtk/empathy-accounts-dialog.c:274
+msgid "<b>No Accounts Configured</b>"
+msgstr "<b>アカウントが登録されていません</b>"
+
+#: ../libempathy-gtk/empathy-accounts-dialog.c:401
 #: ../libempathy-gtk/empathy-accounts-dialog.glade.h:4
 msgid "Accounts"
 msgstr "アカウント"
@@ -434,6 +439,26 @@ msgstr ""
 msgid "Type:"
 msgstr "種類:"
 
+#: ../libempathy-gtk/empathy-avatar-chooser.c:448
+msgid "Select Your Avatar Image"
+msgstr "アバターに使用する画像の選択"
+
+#: ../libempathy-gtk/empathy-avatar-chooser.c:451
+msgid "No Image"
+msgstr "画像なし"
+
+#: ../libempathy-gtk/empathy-avatar-chooser.c:511
+msgid "Images"
+msgstr "画像ファイル"
+
+#: ../libempathy-gtk/empathy-avatar-chooser.c:515
+msgid "All Files"
+msgstr "全てのファイル"
+
+#: ../libempathy-gtk/empathy-avatar-image.c:298
+msgid "Click to enlarge"
+msgstr "クリックすると大きくなります"
+
 #: ../libempathy-gtk/empathy-call-window.glade.h:1
 msgid "Call"
 msgstr "呼び出し"
@@ -458,48 +483,48 @@ msgstr "動画を送信する"
 msgid "Volume"
 msgstr "音量"
 
-#: ../libempathy-gtk/empathy-chat.c:335
+#: ../libempathy-gtk/empathy-chat.c:332
 msgid "Disconnected"
 msgstr "不通"
 
-#: ../libempathy-gtk/empathy-chat.c:450
+#: ../libempathy-gtk/empathy-chat.c:452
 msgid "offline"
 msgstr "オフライン"
 
-#: ../libempathy-gtk/empathy-chat.c:453
+#: ../libempathy-gtk/empathy-chat.c:455
 msgid "invalid contact"
 msgstr "無効な仲間です"
 
-#: ../libempathy-gtk/empathy-chat.c:456
+#: ../libempathy-gtk/empathy-chat.c:458
 msgid "permission denied"
 msgstr "権限がありません"
 
-#: ../libempathy-gtk/empathy-chat.c:459
+#: ../libempathy-gtk/empathy-chat.c:461
 msgid "too long message"
 msgstr "メッセージが長すぎます"
 
-#: ../libempathy-gtk/empathy-chat.c:462
+#: ../libempathy-gtk/empathy-chat.c:464
 msgid "not implemented"
 msgstr "未実装です"
 
-#: ../libempathy-gtk/empathy-chat.c:465
+#: ../libempathy-gtk/empathy-chat.c:467
 msgid "unknown"
 msgstr "原因不明です"
 
-#: ../libempathy-gtk/empathy-chat.c:469
+#: ../libempathy-gtk/empathy-chat.c:471
 #, c-format
 msgid "Error sending message '%s': %s"
 msgstr "'%s' というメッセージを送信する際にエラー: %s"
 
-#: ../libempathy-gtk/empathy-chat.c:924
+#: ../libempathy-gtk/empathy-chat.c:926
 msgid "Insert Smiley"
 msgstr "スマイリーの挿入"
 
-#: ../libempathy-gtk/empathy-chat.c:972
+#: ../libempathy-gtk/empathy-chat.c:973
 msgid "_Check Word Spelling..."
 msgstr "スペル・チェック(_C)..."
 
-#: ../libempathy-gtk/empathy-chat.c:1397
+#: ../libempathy-gtk/empathy-chat.c:1398
 msgid "Connected"
 msgstr "オンライン"
 
@@ -638,12 +663,12 @@ msgstr "リンクを開く(_O)"
 msgid "%A %d %B %Y"
 msgstr "%Y年%B%e日 %A"
 
-#: ../libempathy-gtk/empathy-chat-window.c:709
+#: ../libempathy-gtk/empathy-chat-window.c:695
 #, c-format
 msgid "Conversations (%d)"
 msgstr "会話 (%d)"
 
-#: ../libempathy-gtk/empathy-chat-window.c:1295
+#: ../libempathy-gtk/empathy-chat-window.c:1281
 msgid "Typing a message."
 msgstr "メッセージを入力しています"
 
@@ -694,17 +719,24 @@ msgstr "サーバ(_E):"
 msgid "_Room:"
 msgstr "部屋(_R):"
 
-#: ../libempathy-gtk/empathy-contact-dialogs.c:173
-#: ../libempathy-gtk/empathy-contact-widget.glade.h:9
-msgid "Contact information"
+#: ../libempathy-gtk/empathy-contact-dialogs.c:176
+msgid "Personal Information"
+msgstr "個人の情報"
+
+#: ../libempathy-gtk/empathy-contact-dialogs.c:179
+msgid "Edit Contact Information"
+msgstr "仲間情報の編集"
+
+#: ../libempathy-gtk/empathy-contact-dialogs.c:182
+msgid "Contact Information"
 msgstr "仲間の情報"
 
-#: ../libempathy-gtk/empathy-contact-dialogs.c:221
+#: ../libempathy-gtk/empathy-contact-dialogs.c:277
 msgid "I would like to add you to my contact list."
 msgstr "あなたを私の仲間一覧に追加したいです"
 
-#: ../libempathy-gtk/empathy-contact-dialogs.c:245
-msgid "New contact"
+#: ../libempathy-gtk/empathy-contact-dialogs.c:301
+msgid "New Contact"
 msgstr "新しい仲間"
 
 #: ../libempathy-gtk/empathy-contact-dialogs.glade.h:1
@@ -788,16 +820,16 @@ msgstr "呼び出す(_C)"
 msgid "Start a voice or video conversation with this contact"
 msgstr "この仲間と音声または映像を使って会話を始めます"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1416
+#: ../libempathy-gtk/empathy-contact-list-view.c:1423
 msgid "Sorry, I don't want you in my contact list anymore."
 msgstr "すみませんが、あなたを私の仲間一覧に登録したくありません"
 
-#: ../libempathy-gtk/empathy-contact-widget.c:637
+#: ../libempathy-gtk/empathy-contact-widget.c:656
 msgid "Select"
 msgstr "選択"
 
-#: ../libempathy-gtk/empathy-contact-widget.c:647
-#: ../libempathy-gtk/empathy-main-window.c:613
+#: ../libempathy-gtk/empathy-contact-widget.c:666
+#: ../libempathy-gtk/empathy-main-window.c:607
 msgid "Group"
 msgstr "グループ"
 
@@ -828,6 +860,10 @@ msgstr "誕生日:"
 #: ../libempathy-gtk/empathy-contact-widget.glade.h:8
 msgid "Client:"
 msgstr "クライアント:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:9
+msgid "Contact information"
+msgstr "仲間の情報"
 
 #: ../libempathy-gtk/empathy-contact-widget.glade.h:10
 msgid "Email:"
@@ -884,12 +920,12 @@ msgstr "%s さんが部屋から退室しました"
 msgid "Topic: %s"
 msgstr "トピック: %s"
 
-#: ../libempathy-gtk/empathy-group-chat.c:570
+#: ../libempathy-gtk/empathy-group-chat.c:571
 #, c-format
 msgid "Topic set to: %s"
 msgstr "新しいトピック: %s"
 
-#: ../libempathy-gtk/empathy-group-chat.c:572
+#: ../libempathy-gtk/empathy-group-chat.c:573
 msgid "No topic defined"
 msgstr "トピックはありません"
 
@@ -918,12 +954,12 @@ msgid "Conversations"
 msgstr "会話"
 
 #: ../libempathy-gtk/empathy-log-window.glade.h:2
-msgid "Search"
-msgstr "検索"
+msgid "Previous Conversations"
+msgstr "会話の履歴"
 
 #: ../libempathy-gtk/empathy-log-window.glade.h:3
-msgid "View Previous Conversations"
-msgstr "会話の履歴を表示する"
+msgid "Search"
+msgstr "検索"
 
 #: ../libempathy-gtk/empathy-log-window.glade.h:4
 msgid "_For:"
@@ -970,16 +1006,16 @@ msgid ""
 msgstr ""
 "この一覧にはサーバで提供しているチャット専用の部屋が全て一覧表示されます"
 
-#: ../libempathy-gtk/empathy-main-window.c:278
+#: ../libempathy-gtk/empathy-main-window.c:275
 msgid "Show and edit accounts"
 msgstr "アカウントの一覧を表示して編集します"
 
-#: ../libempathy-gtk/empathy-main-window.c:634
+#: ../libempathy-gtk/empathy-main-window.c:628
 msgid "Contact"
 msgstr "仲間"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:1
-msgid "Contact list"
+msgid "Contact List"
 msgstr "仲間リスト"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:2
@@ -991,8 +1027,8 @@ msgid "Join _Favorites"
 msgstr "お気に入りに追加(_F)"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:5
-msgid "Manage Favorites..."
-msgstr "お気に入りの管理..."
+msgid "Manage Favorites"
+msgstr "お気に入りの管理"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:6
 msgid "Show _Offline Contacts"
@@ -1148,7 +1184,7 @@ msgid "_Use for chat rooms"
 msgstr "チャット部屋にもテーマを適用する(_U)"
 
 #. Custom messages
-#: ../libempathy-gtk/empathy-presence-chooser.c:690
+#: ../libempathy-gtk/empathy-presence-chooser.c:691
 msgid "Custom messages..."
 msgstr "独自のメッセージ..."
 
@@ -1194,7 +1230,7 @@ msgstr "スペルのチェック"
 msgid "Suggestions for the word:"
 msgstr "推奨する単語:"
 
-#: ../libempathy-gtk/empathy-status-icon.c:311
+#: ../libempathy-gtk/empathy-status-icon.c:310
 #, c-format
 msgid ""
 "New message from %s:\n"
@@ -1203,12 +1239,12 @@ msgstr ""
 "%s さんからの新着メッセージ:\n"
 "%s"
 
-#: ../libempathy-gtk/empathy-status-icon.c:572
+#: ../libempathy-gtk/empathy-status-icon.c:579
 #, c-format
 msgid "Subscription requested by %s"
 msgstr "%s さんからのリクエスト"
 
-#: ../libempathy-gtk/empathy-status-icon.c:575
+#: ../libempathy-gtk/empathy-status-icon.c:582
 #, c-format
 msgid ""
 "\n"
@@ -1272,10 +1308,10 @@ msgstr "在席"
 msgid "Set your own presence"
 msgstr "あなたの在席情報をセットします"
 
-#: ../src/empathy.c:271
+#: ../src/empathy.c:272
 msgid "Don't connect on startup"
 msgstr "起動時にサインインしない"
 
-#: ../src/empathy.c:282
+#: ../src/empathy.c:283
 msgid "- Empathy Instant Messenger"
 msgstr "- Empathy インスタント・メッセンジャー"
