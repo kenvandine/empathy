@@ -6,23 +6,23 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gossip HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-05-15 23:46+0200\n"
-"PO-Revision-Date: 2006-07-18 00:46+0200\n"
-"Last-Translator: Sigurd Gartmann <sigurdga@yahoo-inc.com>\n"
+"POT-Creation-Date: 2007-11-01 19:10+0100\n"
+"PO-Revision-Date: 2007-11-01 19:48+0100\n"
+"Last-Translator: Espen Stefansen <espens@svn.gnome.org>\n"
 "Language-Team: Norwegian <i18n-nb@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../data/empathy.desktop.in.h:1
-#, fuzzy
+#: ../data/empathy.desktop.in.in.h:1
 msgid "Empathy Instant Messenger"
-msgstr "Øyeblikksmelder"
+msgstr "Empathy lynmelder"
 
-#: ../data/empathy.desktop.in.h:2
-msgid "Instant Messenger"
-msgstr "Øyeblikksmelder"
+#: ../data/empathy.desktop.in.in.h:2
+#, fuzzy
+msgid "Send and receive instant messages"
+msgstr "Forhåndsdefinerte statusmeldinger"
 
 #: ../data/empathy.schemas.in.h:1
 msgid "Always open a separate chat window for new chats."
@@ -33,186 +33,937 @@ msgid "Chat window theme"
 msgstr "Tema for samtalevindu"
 
 #: ../data/empathy.schemas.in.h:3
-msgid ""
-"Comma separated list of spell checker languages to use (e.g. en, fr, nl)."
+msgid "Checks if Salut account is created"
 msgstr ""
-"Kommaseparert liste over stavekontrollspråk som skal brukes (f.eks no, en, "
-"fr, nl)."
 
 #: ../data/empathy.schemas.in.h:4
+msgid "Comma separated list of spell checker languages to use (e.g. en, fr, nl)."
+msgstr "Kommaseparert liste over stavekontrollspråk som skal brukes (f.eks no, en, fr, nl)."
+
+#: ../data/empathy.schemas.in.h:5
 #, fuzzy
 msgid "Compact contact list"
 msgstr "Ingen kontakter"
 
-#: ../data/empathy.schemas.in.h:5
+#: ../data/empathy.schemas.in.h:6
 msgid "Contact list sort criterium"
 msgstr ""
 
-#: ../data/empathy.schemas.in.h:6
+#: ../data/empathy.schemas.in.h:7
 msgid "Default directory to select an avatar image from"
 msgstr "Forvalgt mappe for personbilde"
 
-#: ../data/empathy.schemas.in.h:7
+#: ../data/empathy.schemas.in.h:8
 msgid "Enable popup when contact is available"
 msgstr "Vis oppsprettmeldinger for kontakter som blir tilgjengelige"
 
-#: ../data/empathy.schemas.in.h:8
+#: ../data/empathy.schemas.in.h:9
 msgid "Enable sound when away"
 msgstr "Spill av lyd når du er borte"
 
-#: ../data/empathy.schemas.in.h:9
+#: ../data/empathy.schemas.in.h:10
 msgid "Enable sound when busy"
 msgstr "Slå av lyder når du er _opptatt"
 
-#: ../data/empathy.schemas.in.h:10
+#: ../data/empathy.schemas.in.h:11
 #, fuzzy
 msgid "Enable spell checker"
 msgstr "Bruk stavekontroll"
 
-#: ../data/empathy.schemas.in.h:11
+#: ../data/empathy.schemas.in.h:12
 msgid "Hide main window"
 msgstr "Skjul hovedvinduet"
 
-#: ../data/empathy.schemas.in.h:12
+#: ../data/empathy.schemas.in.h:13
 msgid "Hide the main window."
 msgstr "Skjul hovedvinduet."
 
-#: ../data/empathy.schemas.in.h:13
+#: ../data/empathy.schemas.in.h:14
 msgid "Open new chats in separate windows"
 msgstr "Åpne nye samtaler i egne vinduer"
 
-#: ../data/empathy.schemas.in.h:14
+#: ../data/empathy.schemas.in.h:15
 msgid "Show avatars"
 msgstr "Vis personbilder"
 
-#: ../data/empathy.schemas.in.h:15
+#: ../data/empathy.schemas.in.h:16
 #, fuzzy
 msgid "Show hint about closing the main window"
 msgstr "Høyden på hovedvinduet."
 
-#: ../data/empathy.schemas.in.h:16
+#: ../data/empathy.schemas.in.h:17
 msgid "Show offline contacts"
 msgstr "Vis frakoblede kontakter"
 
-#: ../data/empathy.schemas.in.h:17
+#: ../data/empathy.schemas.in.h:18
 msgid "Spell checking languages"
 msgstr "Stavekontrollspråk"
 
-#: ../data/empathy.schemas.in.h:18
+#: ../data/empathy.schemas.in.h:19
 msgid "The last directory that an avatar image was chosen from."
 msgstr "Den forrige mappen et personbilde ble valgt fra."
 
-#: ../data/empathy.schemas.in.h:19
+#: ../data/empathy.schemas.in.h:20
 msgid "The theme that is used to display the conversation in chat windows."
 msgstr "Temaet som brukes til å vise samtaler."
 
-#: ../data/empathy.schemas.in.h:20
+#: ../data/empathy.schemas.in.h:21
 msgid "Use graphical smileys"
 msgstr "Vis smilefjes grafisk"
 
-#: ../data/empathy.schemas.in.h:21
+#: ../data/empathy.schemas.in.h:22
 msgid "Use notification sounds"
 msgstr "Bruk varslingslyder"
 
-#: ../data/empathy.schemas.in.h:22
-#, fuzzy
-msgid "Use theme for chat rooms"
-msgstr "Bli med i samtalerommet"
-
 #: ../data/empathy.schemas.in.h:23
-msgid ""
-"Whether or not to check words typed against the languages you want to check "
-"with."
-msgstr ""
+msgid "Use theme for chat rooms"
+msgstr "Bruk tema for samtalerom"
 
 #: ../data/empathy.schemas.in.h:24
-msgid ""
-"Whether or not to convert smileys into graphical images in conversations."
-msgstr "Om smilefjes skal konverteres til grafikk i samtaler."
+msgid "Whether or not the Salut account has been created on the first empathy run."
+msgstr ""
 
 #: ../data/empathy.schemas.in.h:25
+msgid "Whether or not to check words typed against the languages you want to check with."
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:26
+msgid "Whether or not to convert smileys into graphical images in conversations."
+msgstr "Om smilefjes skal konverteres til grafikk i samtaler."
+
+#: ../data/empathy.schemas.in.h:27
 msgid "Whether or not to play a sound when messages arrive."
 msgstr "Om lyder skal spilles av når meldinger kommer inn."
 
-#: ../data/empathy.schemas.in.h:26
+#: ../data/empathy.schemas.in.h:28
 msgid "Whether or not to play sounds when away."
 msgstr "Om lyder skal spilles av når borte."
 
-#: ../data/empathy.schemas.in.h:27
+#: ../data/empathy.schemas.in.h:29
 msgid "Whether or not to play sounds when busy."
 msgstr "Om lyder skal spilles av når opptatt."
 
-#: ../data/empathy.schemas.in.h:28
+#: ../data/empathy.schemas.in.h:30
 msgid "Whether or not to show a popup when a contact becomes available."
 msgstr "Om det skal informeres om at kontakter blir tilgjengelige."
 
-#: ../data/empathy.schemas.in.h:29
-msgid ""
-"Whether or not to show avatars for contacts in the contact list and chat "
-"windows."
+#: ../data/empathy.schemas.in.h:31
+msgid "Whether or not to show avatars for contacts in the contact list and chat windows."
 msgstr "Om bilder av kontakter skal vises i kontaktlisten og samtalevinduer."
 
-#: ../data/empathy.schemas.in.h:30
+#: ../data/empathy.schemas.in.h:32
 msgid "Whether or not to show contacts that are offline in the contact list."
 msgstr "Om kontakter som er frakoblet skal vises i kontaktlisten."
 
-#: ../data/empathy.schemas.in.h:31
-msgid ""
-"Whether or not to show the message dialog about closing the main window with "
-"the 'x' button in the title bar."
+#: ../data/empathy.schemas.in.h:33
+msgid "Whether or not to show the message dialog about closing the main window with the 'x' button in the title bar."
 msgstr ""
 
-#: ../data/empathy.schemas.in.h:32
+#: ../data/empathy.schemas.in.h:34
 #, fuzzy
 msgid "Whether to show the contact list in compact mode or not."
 msgstr "Om bilder av kontakter skal vises i kontaktlisten og samtalevinduer."
 
-#: ../data/empathy.schemas.in.h:33
+#: ../data/empathy.schemas.in.h:35
 msgid "Whether to use the theme for chat rooms or not."
 msgstr ""
 
-#: ../data/empathy.schemas.in.h:34
-msgid ""
-"Which criterium to use when sorting the contact list. Default is to use sort "
-"by the contact's name with the value \"name\". A value of \"state\" will "
-"sort the contact list by state."
+#: ../data/empathy.schemas.in.h:36
+msgid "Which criterium to use when sorting the contact list. Default is to use sort by the contact's name with the value \"name\". A value of \"state\" will sort the contact list by state."
 msgstr ""
 
-#: ../libempathy/gossip-contact.c:654 ../libempathy/gossip-presence.c:184
-#: ../libempathy/gossip-presence.c:283
+#: ../libempathy/empathy-presence.c:185
+#: ../libempathy/empathy-presence.c:285
 msgid "Offline"
 msgstr "Frakoblet"
 
-#: ../libempathy/gossip-presence.c:274
+#: ../libempathy/empathy-presence.c:275
 msgid "Available"
 msgstr "Tilgjengelig"
 
-#: ../libempathy/gossip-presence.c:276
+#: ../libempathy/empathy-presence.c:277
 msgid "Busy"
 msgstr "Opptatt"
 
-#: ../libempathy/gossip-presence.c:279
+#: ../libempathy/empathy-presence.c:280
 msgid "Away"
 msgstr "Borte"
 
-#: ../libempathy-gtk/empathy-main-window.c:254
+#: ../libempathy/empathy-presence.c:282
+msgid "Hidden"
+msgstr "Skjult"
+
+#: ../libempathy/empathy-tp-contact-list.c:729
+#: ../src/empathy.c:212
+msgid "People nearby"
+msgstr "Personer i nærheten"
+
+#: ../libempathy-gtk/empathy-about-dialog.c:63
+#, fuzzy
+msgid "Empathy is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version."
+msgstr "Gossip er fri programvare. Du kan gi det videre eller endre det, som beskrevet i GNU General Public License utgitt av Free Software Foundation, versjon to eller en senere versjon, etter ditt ønske."
+
+#: ../libempathy-gtk/empathy-about-dialog.c:67
+#, fuzzy
+msgid "Empathy is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details."
+msgstr "Gossip er distribuert i håp om at det bil være nyttig, men UTEN GARANTI, ikke engang forhandlergaranti eller garanti om at det passer en spesiell bruk. Se GNU General Public License for mer informasjon om dette. "
+
+#: ../libempathy-gtk/empathy-about-dialog.c:71
+#, fuzzy
+msgid "You should have received a copy of the GNU General Public License along with Empathy; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-130159 USA"
+msgstr "Du skal ha mottatt en kopi av GNU General Public License sammen med Gossip. Hvis ikke, kontakt Free Software Foundation, Inc., 59 Temple Place, suite 330, Boston, MA  02111-1307  USA"
+
+#: ../libempathy-gtk/empathy-about-dialog.c:99
+msgid "An Instant Messaging client for GNOME"
+msgstr "En meldingsklient for GNOME"
+
+#: ../libempathy-gtk/empathy-about-dialog.c:105
+msgid "translator-credits"
+msgstr ""
+"Kjartan Maraas\n"
+"Sigurd Gartmann\n"
+"Espen Stefansen"
+
+#: ../libempathy-gtk/empathy-account-chooser.c:337
+msgid "All"
+msgstr "Alle"
+
+#: ../libempathy-gtk/empathy-account-widget-generic.c:146
+#: ../libempathy-gtk/empathy-account-widget-generic.c:208
+#, c-format
+msgid "%s:"
+msgstr "%s:"
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:1
+#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:1
+#: ../libempathy-gtk/empathy-account-widget-salut.glade.h:1
+msgid "<b>Advanced</b>"
+msgstr "<b>Avansert</b>"
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:2
+#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:2
+msgid "Forget password and clear the entry."
+msgstr ""
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:3
+#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:3
+msgid "Login I_D:"
+msgstr "InnloggingsI_D:"
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:4
+#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:4
+msgid "Pass_word:"
+msgstr "_Passord:"
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:5
+msgid "Reso_urce:"
+msgstr "_Ressurs:"
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:6
+msgid "Use encryption (SS_L)"
+msgstr "Bruk kryptering (SS_L)"
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:7
+#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:5
+msgid "_Port:"
+msgstr "_Port:"
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:8
+#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:6
+#: ../libempathy-gtk/empathy-new-chatroom-dialog.glade.h:10
+msgid "_Server:"
+msgstr "_Tjener:"
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:9
+msgid "jabber account settings"
+msgstr "innstillinger for jabber-konto"
+
+#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:7
+msgid "msn account settings"
+msgstr "innstillinger for msn-konto"
+
+#: ../libempathy-gtk/empathy-account-widget-salut.glade.h:2
+msgid "_E-mail:"
+msgstr "_E-post:"
+
+#: ../libempathy-gtk/empathy-account-widget-salut.glade.h:3
+msgid "_First Name: "
+msgstr "_Fornavn:"
+
+#: ../libempathy-gtk/empathy-account-widget-salut.glade.h:4
+msgid "_Jabber ID:"
+msgstr "_Jabber-ID:"
+
+#: ../libempathy-gtk/empathy-account-widget-salut.glade.h:5
+msgid "_Last Name:"
+msgstr "_Etternavn:"
+
+#: ../libempathy-gtk/empathy-account-widget-salut.glade.h:6
+#: ../libempathy-gtk/empathy-chatrooms-window.glade.h:8
+msgid "_Nickname:"
+msgstr "Kalle_navn:"
+
+#: ../libempathy-gtk/empathy-account-widget-salut.glade.h:7
+#, fuzzy
+msgid "_Published Name:"
+msgstr "_Navn:"
+
+#: ../libempathy-gtk/empathy-account-widget-salut.glade.h:8
+msgid "salut account settings"
+msgstr "innstillinger for salut-konto"
+
+#: ../libempathy-gtk/empathy-accounts-dialog.c:218
+msgid "Disable"
+msgstr "Slå av"
+
+#: ../libempathy-gtk/empathy-accounts-dialog.c:221
+msgid "Enable"
+msgstr "Slå på"
+
+#: ../libempathy-gtk/empathy-accounts-dialog.c:256
+msgid "To add a new account, you can click on the 'Add' button and a new entry will be created for you to start configuring."
+msgstr ""
+
+#: ../libempathy-gtk/empathy-accounts-dialog.c:260
+msgid "To add a new account, you first have to install a backend for each protocol you want to use."
+msgstr ""
+
+#: ../libempathy-gtk/empathy-accounts-dialog.c:267
+#: ../libempathy-gtk/empathy-accounts-dialog.glade.h:2
+msgid "<b>No Account Selected</b>"
+msgstr "<b>Ingen konto valgt</b>"
+
+#: ../libempathy-gtk/empathy-accounts-dialog.c:268
+msgid ""
+"\n"
+"\n"
+"If you do not want to add an account, simply click on the account you want to configure in the list on the left."
+msgstr ""
+
+#: ../libempathy-gtk/empathy-accounts-dialog.c:274
+msgid "<b>No Accounts Configured</b>"
+msgstr "<b>Ingen kontoer er satt opp</b>"
+
+#: ../libempathy-gtk/empathy-accounts-dialog.c:401
+#: ../libempathy-gtk/empathy-accounts-dialog.glade.h:4
+msgid "Accounts"
+msgstr "Kontoer"
+
+#: ../libempathy-gtk/empathy-accounts-dialog.c:898
+#, c-format
+msgid ""
+"You are about to remove your %s account!\n"
+"Are you sure you want to proceed?"
+msgstr ""
+"Du holder på å fjerne din %s-konto!\n"
+"Er du sikker på at du vil dette?"
+
+#: ../libempathy-gtk/empathy-accounts-dialog.c:904
+msgid ""
+"Any associated conversations and chat rooms will NOT be removed if you decide to proceed.\n"
+"\n"
+"Should you decide to add the account back at a later time, they will still be available."
+msgstr ""
+"Tilknyttede samtaler og samtalegrupper vil IKKE fjernes hvis du velger å fortsette.\n"
+"\n"
+"Skulle du velge å legge til kontoen senere, vil de bli tilgjengelige igjen."
+
+#: ../libempathy-gtk/empathy-accounts-dialog.glade.h:1
+msgid "<b>New Account</b>"
+msgstr "<b>Ny konto</b>"
+
+#: ../libempathy-gtk/empathy-accounts-dialog.glade.h:3
+msgid "<b>Settings</b>"
+msgstr "<b>Innstillinger</b>"
+
+#: ../libempathy-gtk/empathy-accounts-dialog.glade.h:5
+msgid "Cr_eate"
+msgstr "Oppr_ett"
+
+#: ../libempathy-gtk/empathy-accounts-dialog.glade.h:6
+msgid ""
+"To add a new account, you can click on the 'Add' button and a new entry will be created for you to started configuring.\n"
+"\n"
+"If you do not want to add an account, simply click on the account you want to configure in the list on the left."
+msgstr ""
+
+#: ../libempathy-gtk/empathy-accounts-dialog.glade.h:9
+msgid "Type:"
+msgstr "Type:"
+
+#: ../libempathy-gtk/empathy-avatar-chooser.c:448
+msgid "Select Your Avatar Image"
+msgstr "Velg personbilde"
+
+#: ../libempathy-gtk/empathy-avatar-chooser.c:451
+msgid "No Image"
+msgstr "Ingen bilde"
+
+#: ../libempathy-gtk/empathy-avatar-chooser.c:511
+msgid "Images"
+msgstr "Bilder"
+
+#: ../libempathy-gtk/empathy-avatar-chooser.c:515
+msgid "All Files"
+msgstr "Alle filer"
+
+#: ../libempathy-gtk/empathy-avatar-image.c:298
+msgid "Click to enlarge"
+msgstr "Klikk for å forstørre"
+
+#: ../libempathy-gtk/empathy-call-window.glade.h:1
+msgid "Call"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-call-window.glade.h:2
+msgid "Input"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-call-window.glade.h:3
+msgid "Mute"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-call-window.glade.h:4
+msgid "Output"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-call-window.glade.h:5
+msgid "Send Video"
+msgstr "Send video"
+
+#: ../libempathy-gtk/empathy-call-window.glade.h:6
+msgid "Volume"
+msgstr "Volum"
+
+#: ../libempathy-gtk/empathy-chat.c:332
+msgid "Disconnected"
+msgstr "Koblet fra"
+
+#: ../libempathy-gtk/empathy-chat.c:452
+msgid "offline"
+msgstr "frakoblet"
+
+#: ../libempathy-gtk/empathy-chat.c:455
+msgid "invalid contact"
+msgstr "ugyldig kontakt"
+
+#: ../libempathy-gtk/empathy-chat.c:458
+msgid "permission denied"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-chat.c:461
+msgid "too long message"
+msgstr "meldingen er for lang"
+
+#: ../libempathy-gtk/empathy-chat.c:464
+msgid "not implemented"
+msgstr "ikke implementert"
+
+#: ../libempathy-gtk/empathy-chat.c:467
+msgid "unknown"
+msgstr "ukjent"
+
+#: ../libempathy-gtk/empathy-chat.c:471
+#, c-format
+msgid "Error sending message '%s': %s"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-chat.c:926
+msgid "Insert Smiley"
+msgstr "Sett inn smilefjes"
+
+#: ../libempathy-gtk/empathy-chat.c:973
+msgid "_Check Word Spelling..."
+msgstr "_Stavekontroll ..."
+
+#: ../libempathy-gtk/empathy-chat.c:1398
+msgid "Connected"
+msgstr "Koblet til"
+
+#: ../libempathy-gtk/empathy-chat.glade.h:1
+msgid "C_lear"
+msgstr "T_øm"
+
+#: ../libempathy-gtk/empathy-chat.glade.h:2
+msgid "Ca_ll"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-chat.glade.h:3
+msgid "Change _Topic..."
+msgstr "Endre _emne ..."
+
+#: ../libempathy-gtk/empathy-chat.glade.h:4
+msgid "Chat"
+msgstr "Prat"
+
+#: ../libempathy-gtk/empathy-chat.glade.h:5
+msgid "Contact Infor_mation"
+msgstr "Kontakt_informasjon"
+
+#: ../libempathy-gtk/empathy-chat.glade.h:6
+msgid "Cu_t"
+msgstr "Klipp _ut"
+
+#: ../libempathy-gtk/empathy-chat.glade.h:7
+msgid "In_vite..."
+msgstr "In_viter ..."
+
+#: ../libempathy-gtk/empathy-chat.glade.h:8
+msgid "Insert _Smiley"
+msgstr "Sett inn _smilefjes"
+
+#: ../libempathy-gtk/empathy-chat.glade.h:9
+msgid "Invitation _message:"
+msgstr "Invitasjons_melding:"
+
+#: ../libempathy-gtk/empathy-chat.glade.h:10
+msgid "Invite"
+msgstr "Inviter"
+
+#: ../libempathy-gtk/empathy-chat.glade.h:11
+#: ../libempathy-gtk/empathy-main-window.glade.h:4
+msgid "Join _New..."
+msgstr "Bli med i _ny ..."
+
+#: ../libempathy-gtk/empathy-chat.glade.h:12
+msgid "Move Tab _Left"
+msgstr "Flytt fane til _venstre"
+
+#: ../libempathy-gtk/empathy-chat.glade.h:13
+msgid "Move Tab _Right"
+msgstr "Flytt fane til _høyre"
+
+#: ../libempathy-gtk/empathy-chat.glade.h:14
+msgid "Select who would you like to invite:"
+msgstr "Velg de du vil invitere:"
+
+#: ../libempathy-gtk/empathy-chat.glade.h:15
+msgid "You have been invited to join a chat conference."
+msgstr "Du er invitert til en konferansesamtale."
+
+#: ../libempathy-gtk/empathy-chat.glade.h:16
+#: ../libempathy-gtk/empathy-main-window.glade.h:9
+msgid "_Add Contact..."
+msgstr "_Legg til kontakt ..."
+
+#: ../libempathy-gtk/empathy-chat.glade.h:17
+msgid "_Add To Favorites"
+msgstr "_Legg til i favoritter"
+
+#: ../libempathy-gtk/empathy-chat.glade.h:18
+msgid "_Close"
+msgstr "_Lukk"
+
+#: ../libempathy-gtk/empathy-chat.glade.h:19
+msgid "_Conversation"
+msgstr "_Samtale"
+
+#: ../libempathy-gtk/empathy-chat.glade.h:20
+msgid "_Copy"
+msgstr "_Kopier"
+
+#: ../libempathy-gtk/empathy-chat.glade.h:21
+msgid "_Detach Tab"
+msgstr "_Løsne fane"
+
+#: ../libempathy-gtk/empathy-chat.glade.h:22
+#: ../libempathy-gtk/empathy-contact-list-view.c:218
+#: ../libempathy-gtk/empathy-main-window.glade.h:12
+msgid "_Edit"
+msgstr "_Rediger"
+
+#: ../libempathy-gtk/empathy-chat.glade.h:23
+msgid "_Next Tab"
+msgstr "_Neste fane"
+
+#: ../libempathy-gtk/empathy-chat.glade.h:24
+msgid "_Paste"
+msgstr "_Lim inn"
+
+#: ../libempathy-gtk/empathy-chat.glade.h:25
+msgid "_Previous Tab"
+msgstr "_Forrige fane"
+
+#: ../libempathy-gtk/empathy-chat.glade.h:26
+#: ../libempathy-gtk/empathy-main-window.glade.h:18
+msgid "_Room"
+msgstr "_Rom"
+
+#: ../libempathy-gtk/empathy-chat.glade.h:27
+msgid "_Show Contacts"
+msgstr "_Vis kontakter"
+
+#: ../libempathy-gtk/empathy-chat.glade.h:28
+msgid "_Tabs"
+msgstr "_Faner"
+
+#: ../libempathy-gtk/empathy-chat.glade.h:29
+#: ../libempathy-gtk/empathy-contact-list-view.c:234
+#: ../libempathy-gtk/empathy-main-window.glade.h:19
+msgid "_View Previous Conversations"
+msgstr "_Vis tidligere samtaler"
+
+#: ../libempathy-gtk/empathy-chat-view.c:468
+msgid "_Copy Link Address"
+msgstr "_Kopier lenkens adresse"
+
+#: ../libempathy-gtk/empathy-chat-view.c:476
+msgid "_Open Link"
+msgstr "_Åpne lenke"
+
+#: ../libempathy-gtk/empathy-chat-view.c:754
+msgid "%A %d %B %Y"
+msgstr "%A %d %B %Y"
+
+#: ../libempathy-gtk/empathy-chat-window.c:695
+#, c-format
+msgid "Conversations (%d)"
+msgstr "Samtaler (%d)"
+
+#: ../libempathy-gtk/empathy-chat-window.c:1281
+msgid "Typing a message."
+msgstr "Skriver en melding"
+
+#: ../libempathy-gtk/empathy-chatrooms-window.c:258
+msgid "Name"
+msgstr "Navn"
+
+#: ../libempathy-gtk/empathy-chatrooms-window.c:276
+msgid "Room"
+msgstr "Rom"
+
+#: ../libempathy-gtk/empathy-chatrooms-window.c:285
+msgid "Auto Connect"
+msgstr "Automatisk tilkobling"
+
+#: ../libempathy-gtk/empathy-chatrooms-window.glade.h:1
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:5
+#: ../libempathy-gtk/empathy-new-chatroom-dialog.glade.h:1
+msgid "Account:"
+msgstr "Konto:"
+
+#: ../libempathy-gtk/empathy-chatrooms-window.glade.h:2
+msgid "Edit Favorite Room"
+msgstr "Endre favorittrom"
+
+#: ../libempathy-gtk/empathy-chatrooms-window.glade.h:3
+msgid "Join room on start_up"
+msgstr "Bli med i rom ved oppstart"
+
+#: ../libempathy-gtk/empathy-chatrooms-window.glade.h:4
+#, fuzzy
+msgid "Join this chat room when Empathy starts and you are connected"
+msgstr "Bli med i dette samtalerommet når Gossip starter opp og du blir koblet til"
+
+#: ../libempathy-gtk/empathy-chatrooms-window.glade.h:5
+msgid "Manage Favorite Rooms"
+msgstr "Håndter favorittrom"
+
+#: ../libempathy-gtk/empathy-chatrooms-window.glade.h:6
+msgid "N_ame:"
+msgstr "_Navn:"
+
+#: ../libempathy-gtk/empathy-chatrooms-window.glade.h:7
+msgid "S_erver:"
+msgstr "_Tjener:"
+
+#: ../libempathy-gtk/empathy-chatrooms-window.glade.h:9
+#: ../libempathy-gtk/empathy-new-chatroom-dialog.glade.h:9
+msgid "_Room:"
+msgstr "_Rom:"
+
+#: ../libempathy-gtk/empathy-contact-dialogs.c:176
+msgid "Personal Information"
+msgstr "Personlig informasjon"
+
+#: ../libempathy-gtk/empathy-contact-dialogs.c:179
+msgid "Edit Contact Information"
+msgstr "Endre kontaktinformasjon"
+
+#: ../libempathy-gtk/empathy-contact-dialogs.c:182
+msgid "Contact Information"
+msgstr "Kontaktinformasjon"
+
+#: ../libempathy-gtk/empathy-contact-dialogs.c:277
+msgid "I would like to add you to my contact list."
+msgstr "Jeg ønsker å legge deg til i min kontaktliste."
+
+#: ../libempathy-gtk/empathy-contact-dialogs.c:301
+msgid "New Contact"
+msgstr "Ny kontakt"
+
+#: ../libempathy-gtk/empathy-contact-dialogs.glade.h:1
+msgid "Decide _Later"
+msgstr "A_vgjør senere"
+
+#: ../libempathy-gtk/empathy-contact-dialogs.glade.h:2
+msgid "Subscription Request"
+msgstr "Abonnementsforespørsel"
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:198
+msgid "_Contact"
+msgstr "_Kontakt"
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:202
+msgid "_Group"
+msgstr "_Gruppe"
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:206
+#: ../libempathy-gtk/empathy-main-window.glade.h:10
+msgid "_Chat"
+msgstr "_Prat"
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:206
+msgid "Chat with contact"
+msgstr "Snakk med kontakt"
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:210
+msgid "Infor_mation"
+msgstr "Infor_masjon"
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:210
+msgid "View contact information"
+msgstr "Vis kontaktinformasjon"
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:214
+msgid "Re_name"
+msgstr "E_ndre navn"
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:214
+msgid "Rename"
+msgstr "Endre navn"
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:218
+#, fuzzy
+msgid "Edit the groups and name for this contact"
+msgstr "Skriv inn et navn på denne kontoen."
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:222
+msgid "_Remove"
+msgstr "Fje_rn"
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:222
+msgid "Remove contact"
+msgstr "Fjern kontakt"
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:226
+#, fuzzy
+msgid "_Invite to Chat Room"
+msgstr "_Inviter til samtalerom"
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:226
+msgid "Invite to a currently open chat room"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:230
+msgid "_Send File..."
+msgstr "_Send fil ..."
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:230
+msgid "Send a file"
+msgstr "Send en fil"
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:234
+msgid "View previous conversations with this contact"
+msgstr "Vis tidligere samtaler med denne kontakten"
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:239
+msgid "_Call"
+msgstr "_Ring"
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:239
+#, fuzzy
+msgid "Start a voice or video conversation with this contact"
+msgstr "Vis tidligere samtaler"
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:1423
+msgid "Sorry, I don't want you in my contact list anymore."
+msgstr ""
+
+#: ../libempathy-gtk/empathy-contact-widget.c:656
+msgid "Select"
+msgstr "Velg"
+
+#: ../libempathy-gtk/empathy-contact-widget.c:666
+#: ../libempathy-gtk/empathy-main-window.c:607
+msgid "Group"
+msgstr "Gruppe"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:1
+msgid "<b>Client Information</b>"
+msgstr "<b>Klientinformasjon</b>"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:2
+msgid "<b>Contact Details</b>"
+msgstr "<b>Kontaktdetaljer</b>"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:3
+msgid "<b>Contact</b>"
+msgstr "<b>Kontakt</b>"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:4
+msgid "<b>Groups</b>"
+msgstr "<b>Grupper</b>"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:6
+msgid "Alias:"
+msgstr "Alias:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:7
+msgid "Birthday:"
+msgstr "Fødselsdag:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:8
+msgid "Client:"
+msgstr "Klient:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:9
+msgid "Contact information"
+msgstr "Kontaktinformasjon"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:10
+msgid "Email:"
+msgstr "E-post:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:11
+msgid "Fullname:"
+msgstr "Fullt navn:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:12
+msgid "Identifier:"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:13
+msgid "Information requested..."
+msgstr "Informasjon forespurt ..."
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:14
+msgid "OS:"
+msgstr "OS:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:15
+msgid "Select the groups you want this contact to appear in, you can select more than one group or no groups."
+msgstr ""
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:16
+msgid "Version:"
+msgstr "Versjon:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:17
+msgid "Web site:"
+msgstr "Nettsted:"
+
+#: ../libempathy-gtk/empathy-group-chat.c:253
+#, fuzzy
+msgid "Enter the new topic you want to set for this room:"
+msgstr "Hvilket kallenavn vil du bruke for denne kontakten?"
+
+#: ../libempathy-gtk/empathy-group-chat.c:366
+#, c-format
+msgid "%s has joined the room"
+msgstr "%s har blitt med i rommet"
+
+#: ../libempathy-gtk/empathy-group-chat.c:369
+#, c-format
+msgid "%s has left the room"
+msgstr "%s har forlatt rommet"
+
+#: ../libempathy-gtk/empathy-group-chat.c:449
+#, c-format
+msgid "Topic: %s"
+msgstr "Emne: %s"
+
+#: ../libempathy-gtk/empathy-group-chat.c:571
+#, c-format
+msgid "Topic set to: %s"
+msgstr "Emnet er satt til: %s"
+
+#: ../libempathy-gtk/empathy-group-chat.c:573
+msgid "No topic defined"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-group-chat.glade.h:1
+msgid "<b>Topic:</b>"
+msgstr "<b>Emne:</b>"
+
+#: ../libempathy-gtk/empathy-group-chat.glade.h:2
+msgid "Group Chat"
+msgstr "Gruppesamtale"
+
+#: ../libempathy-gtk/empathy-log-window.c:497
+msgid "Account"
+msgstr "Konto"
+
+#: ../libempathy-gtk/empathy-log-window.c:504
+msgid "Conversation"
+msgstr "Samtale"
+
+#: ../libempathy-gtk/empathy-log-window.c:514
+msgid "Date"
+msgstr "Dato"
+
+#: ../libempathy-gtk/empathy-log-window.glade.h:1
+msgid "Conversations"
+msgstr "Samtaler"
+
+#: ../libempathy-gtk/empathy-log-window.glade.h:2
+msgid "Previous Conversations"
+msgstr "Tidligere samtaler"
+
+#: ../libempathy-gtk/empathy-log-window.glade.h:3
+msgid "Search"
+msgstr "Søk"
+
+#: ../libempathy-gtk/empathy-log-window.glade.h:4
+#, fuzzy
+msgid "_For:"
+msgstr "_Port:"
+
+#: ../libempathy-gtk/empathy-new-chatroom-dialog.c:286
+msgid "Chat Rooms"
+msgstr "Samtalerom"
+
+#: ../libempathy-gtk/empathy-new-chatroom-dialog.glade.h:2
+msgid "Browse:"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-new-chatroom-dialog.glade.h:3
+msgid "Enter the room name to join here or click on one or more rooms in the list."
+msgstr ""
+
+#: ../libempathy-gtk/empathy-new-chatroom-dialog.glade.h:4
+msgid "Enter the server which hosts the room, or leave it empty if the room is on the current account's server"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-new-chatroom-dialog.glade.h:5
+msgid "Join"
+msgstr "Bli med"
+
+#: ../libempathy-gtk/empathy-new-chatroom-dialog.glade.h:6
+#, fuzzy
+msgid "Join New"
+msgstr "Bli med i _ny..."
+
+#: ../libempathy-gtk/empathy-new-chatroom-dialog.glade.h:7
+msgid "Re_fresh"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-new-chatroom-dialog.glade.h:8
+msgid "This list represents all chat rooms hosted on the server you have entered."
+msgstr ""
+
+#: ../libempathy-gtk/empathy-main-window.c:275
 #, fuzzy
 msgid "Show and edit accounts"
 msgstr "_Vis kontakter"
 
-#: ../libempathy-gtk/empathy-main-window.c:456
-msgid "Group"
-msgstr "Gruppe"
-
-#: ../libempathy-gtk/empathy-main-window.c:477
-#, fuzzy
+#: ../libempathy-gtk/empathy-main-window.c:628
 msgid "Contact"
-msgstr "Kontakter"
+msgstr "Kontakt"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:1
-#, fuzzy
-msgid "Contact List - Empathy"
-msgstr "S_kjul kontaktliste"
+msgid "Contact List"
+msgstr "Kontaktliste"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:2
 #, fuzzy
@@ -224,21 +975,17 @@ msgstr "_Innhold"
 msgid "Join _Favorites"
 msgstr "Bli med i favorittene"
 
-#: ../libempathy-gtk/empathy-main-window.glade.h:4
-#: ../libempathy-gtk/gossip-chat.glade.h:10
-msgid "Join _New..."
-msgstr "Bli med i _ny..."
-
 #: ../libempathy-gtk/empathy-main-window.glade.h:5
-#, fuzzy
-msgid "Manage Favorites..."
-msgstr "Bli med i favorittene"
+msgid "Manage Favorites"
+msgstr "Håndter favoritter"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:6
 msgid "Show _Offline Contacts"
 msgstr "Vis frak_oblede kontakter"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:7
+#: ../megaphone/data/GNOME_Megaphone_Applet.xml.h:1
+#: ../nothere/data/GNOME_NotHere_Applet.xml.h:1
 msgid "_About"
 msgstr "_Om"
 
@@ -246,25 +993,9 @@ msgstr "_Om"
 msgid "_Accounts"
 msgstr "_Kontoer"
 
-#: ../libempathy-gtk/empathy-main-window.glade.h:9
-#: ../libempathy-gtk/gossip-chat.glade.h:15
-msgid "_Add Contact..."
-msgstr "_Legg til kontakt..."
-
-#: ../libempathy-gtk/empathy-main-window.glade.h:10
-#: ../libempathy-gtk/gossip-contact-list.c:298
-msgid "_Chat"
-msgstr "_Prat"
-
 #: ../libempathy-gtk/empathy-main-window.glade.h:11
 msgid "_Contents"
 msgstr "_Innhold"
-
-#: ../libempathy-gtk/empathy-main-window.glade.h:12
-#: ../libempathy-gtk/gossip-chat.glade.h:21
-#: ../libempathy-gtk/gossip-contact-list.c:310
-msgid "_Edit"
-msgstr "_Rediger"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:13
 msgid "_Help"
@@ -273,13 +1004,14 @@ msgstr "_Hjelp"
 #: ../libempathy-gtk/empathy-main-window.glade.h:14
 #: ../libempathy-gtk/empathy-status-icon.glade.h:2
 msgid "_New Message..."
-msgstr "_Ny melding..."
+msgstr "_Ny melding ..."
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:15
 msgid "_Personal Information"
 msgstr "Personlig _informasjon"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:16
+#: ../megaphone/data/GNOME_Megaphone_Applet.xml.h:3
 msgid "_Preferences"
 msgstr "_Brukervalg"
 
@@ -288,16 +1020,183 @@ msgstr "_Brukervalg"
 msgid "_Quit"
 msgstr "_Avslutt"
 
-#: ../libempathy-gtk/empathy-main-window.glade.h:18
-#: ../libempathy-gtk/gossip-chat.glade.h:25
-msgid "_Room"
-msgstr "_Rom"
+#: ../libempathy-gtk/empathy-preferences.c:243
+msgid "Language"
+msgstr "Språk"
 
-#: ../libempathy-gtk/empathy-main-window.glade.h:19
-#: ../libempathy-gtk/gossip-chat.glade.h:28
-#: ../libempathy-gtk/gossip-contact-list.c:326
-msgid "_View Previous Conversations"
-msgstr "_Vis tidligere samtaler"
+#: ../libempathy-gtk/empathy-preferences.glade.h:1
+msgid "<b>Appearance</b>"
+msgstr "<b>Utseende</b>"
+
+#: ../libempathy-gtk/empathy-preferences.glade.h:2
+msgid "<b>Audio</b>"
+msgstr "<b>Lyd</b>"
+
+#: ../libempathy-gtk/empathy-preferences.glade.h:3
+msgid "<b>Behaviour</b>"
+msgstr "<b>Oppførsel</b>"
+
+#: ../libempathy-gtk/empathy-preferences.glade.h:4
+msgid "<b>Contact List</b>"
+msgstr "<b>Kontaktliste</b>"
+
+#: ../libempathy-gtk/empathy-preferences.glade.h:5
+msgid "<b>Enable spell checking for languages:</b>"
+msgstr "<b>Slå på stavekontroll for språkene:</b>"
+
+#: ../libempathy-gtk/empathy-preferences.glade.h:6
+msgid "<b>Options</b>"
+msgstr "<b>Valg</b>"
+
+#: ../libempathy-gtk/empathy-preferences.glade.h:7
+msgid "<b>Visual</b>"
+msgstr "<b>På skjerm</b>"
+
+#: ../libempathy-gtk/empathy-preferences.glade.h:8
+msgid "<small>The list of languages reflects only the languages for which you have a dictionary installed.</small>"
+msgstr "<small>Denne listen listen viser bare de språkene det er installert ordliste for."
+
+#: ../libempathy-gtk/empathy-preferences.glade.h:9
+msgid "Avatars are user chosen images shown in the contact list"
+msgstr "Personbilder er valgt av brukerne for å vise i kontaktlisten"
+
+#: ../libempathy-gtk/empathy-preferences.glade.h:10
+msgid "Chat Th_eme:"
+msgstr "Samtale_tema:"
+
+#: ../libempathy-gtk/empathy-preferences.glade.h:11
+msgid "Display notifications when contacts come _online"
+msgstr "Si fra når kontakter logger _på"
+
+#: ../libempathy-gtk/empathy-preferences.glade.h:12
+msgid "Enable sounds when _away"
+msgstr "Spill av lyder når du er _borte"
+
+#: ../libempathy-gtk/empathy-preferences.glade.h:13
+msgid "Enable sounds when _busy"
+msgstr "Spill av lyder når du er _opptatt"
+
+#: ../libempathy-gtk/empathy-preferences.glade.h:14
+msgid "General"
+msgstr "Generelt"
+
+#: ../libempathy-gtk/empathy-preferences.glade.h:15
+msgid "Notifications"
+msgstr "Varslinger"
+
+#: ../libempathy-gtk/empathy-preferences.glade.h:16
+msgid "Preferences"
+msgstr "Brukervalg"
+
+#: ../libempathy-gtk/empathy-preferences.glade.h:17
+msgid "Show _avatars"
+msgstr "Vis person_bilder"
+
+#: ../libempathy-gtk/empathy-preferences.glade.h:18
+msgid "Show _smileys as images"
+msgstr "Vis _smilefjes som bilder"
+
+#: ../libempathy-gtk/empathy-preferences.glade.h:19
+msgid "Show co_mpact contact list"
+msgstr "Vis ko_mpakt kontaktliste"
+
+#: ../libempathy-gtk/empathy-preferences.glade.h:20
+msgid "Sort by _name"
+msgstr "Sorter på _navn"
+
+#: ../libempathy-gtk/empathy-preferences.glade.h:21
+msgid "Sort by s_tate"
+msgstr "Sorter på s_tatus"
+
+#: ../libempathy-gtk/empathy-preferences.glade.h:22
+msgid "Spell Checking"
+msgstr "Stavekontroll"
+
+#: ../libempathy-gtk/empathy-preferences.glade.h:23
+msgid "Themes"
+msgstr "Temaer"
+
+#: ../libempathy-gtk/empathy-preferences.glade.h:24
+msgid "_Open new chats in separate windows"
+msgstr "_Åpne nye samtaler i egne vinduer"
+
+#: ../libempathy-gtk/empathy-preferences.glade.h:25
+msgid "_Play sound when messages arrive"
+msgstr "S_pill av lyd når meldinger kommer"
+
+#: ../libempathy-gtk/empathy-preferences.glade.h:26
+msgid "_Use for chat rooms"
+msgstr "_Bruk for samtalerom"
+
+#. Custom messages
+#: ../libempathy-gtk/empathy-presence-chooser.c:691
+msgid "Custom messages..."
+msgstr "Egendefinerte meldinger ..."
+
+#: ../libempathy-gtk/empathy-presence-chooser.glade.h:1
+msgid "Custom message"
+msgstr "Egendefinert melding"
+
+#: ../libempathy-gtk/empathy-presence-chooser.glade.h:2
+msgid "Message:"
+msgstr "Melding:"
+
+#: ../libempathy-gtk/empathy-presence-chooser.glade.h:3
+msgid "Save message"
+msgstr "Lagre melding"
+
+#: ../libempathy-gtk/empathy-presence-chooser.glade.h:4
+msgid "Status:"
+msgstr "Status:"
+
+#: ../libempathy-gtk/empathy-private-chat.c:188
+#, c-format
+msgid "%s went offline"
+msgstr "%s koblet fra"
+
+#: ../libempathy-gtk/empathy-private-chat.c:202
+#, c-format
+msgid "%s has come online"
+msgstr "%s logget på"
+
+#: ../libempathy-gtk/empathy-spell-dialog.c:85
+msgid "Word"
+msgstr "Ord"
+
+#: ../libempathy-gtk/empathy-spell-dialog.c:258
+msgid "Suggestions for the word"
+msgstr "Forslag for ordet"
+
+#: ../libempathy-gtk/empathy-spell-dialog.glade.h:1
+msgid "Spell Checker"
+msgstr "Stavekontroll"
+
+#: ../libempathy-gtk/empathy-spell-dialog.glade.h:2
+msgid "Suggestions for the word:"
+msgstr "Forslag for ordet:"
+
+#: ../libempathy-gtk/empathy-status-icon.c:310
+#, c-format
+msgid ""
+"New message from %s:\n"
+"%s"
+msgstr ""
+"Ny melding fra %s:\n"
+"%s"
+
+#: ../libempathy-gtk/empathy-status-icon.c:579
+#, fuzzy, c-format
+msgid "Subscription requested by %s"
+msgstr "Abonnementsforespørsel"
+
+#: ../libempathy-gtk/empathy-status-icon.c:582
+#, c-format
+msgid ""
+"\n"
+"Message: %s"
+msgstr ""
+"\n"
+"Melding: %s"
 
 #: ../libempathy-gtk/empathy-status-icon.glade.h:1
 msgid "Status"
@@ -307,642 +1206,120 @@ msgstr "Status"
 msgid "_Show Contact List"
 msgstr "Vi_s kontaktliste"
 
-#: ../libempathy-gtk/gossip-about-dialog.c:63
-#, fuzzy
-msgid ""
-"Empathy is free software; you can redistribute it and/or modify it under the "
-"terms of the GNU General Public License as published by the Free Software "
-"Foundation; either version 2 of the License, or (at your option) any later "
-"version."
-msgstr ""
-"Gossip er fri programvare. Du kan gi det videre eller endre det, som "
-"beskrevet i GNU General Public License utgitt av Free Software Foundation, "
-"versjon to eller en senere versjon, etter ditt ønske."
-
-#: ../libempathy-gtk/gossip-about-dialog.c:67
-#, fuzzy
-msgid ""
-"Empathy is distributed in the hope that it will be useful, but WITHOUT ANY "
-"WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS "
-"FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more "
-"details."
-msgstr ""
-"Gossip er distribuert i håp om at det bil være nyttig, men UTEN GARANTI, "
-"ikke engang forhandlergaranti eller garanti om at det passer en spesiell "
-"bruk. Se GNU General Public License for mer informasjon om dette. "
-
-#: ../libempathy-gtk/gossip-about-dialog.c:71
-#, fuzzy
-msgid ""
-"You should have received a copy of the GNU General Public License along with "
-"Empathy; if not, write to the Free Software Foundation, Inc., 51 Franklin "
-"Street, Fifth Floor, Boston, MA 02110-130159 USA"
-msgstr ""
-"Du skal ha mottatt en kopi av GNU General Public License sammen med Gossip. "
-"Hvis ikke, kontakt Free Software Foundation, Inc., 59 Temple Place, suite "
-"330, Boston, MA  02111-1307  USA"
-
-#: ../libempathy-gtk/gossip-about-dialog.c:99
-msgid "An Instant Messaging client for GNOME"
-msgstr "En meldingsklient for GNOME"
-
-#: ../libempathy-gtk/gossip-about-dialog.c:105
-msgid "translator-credits"
-msgstr ""
-"Kjartan Maraas\n"
-"Sigurd Gartmann"
-
-#: ../libempathy-gtk/gossip-accounts-dialog.c:224
-#, fuzzy
-msgid "Disable"
-msgstr "Tilgjengelig"
-
-#: ../libempathy-gtk/gossip-accounts-dialog.c:227
-msgid "Enable"
-msgstr "Slå på"
-
-#: ../libempathy-gtk/gossip-accounts-dialog.c:261
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:3
-#, fuzzy
-msgid "<b>No Account Selected</b>"
-msgstr "<b>Kontoinnstillinger</b>"
-
-#: ../libempathy-gtk/gossip-accounts-dialog.c:263
-msgid ""
-"To add a new account, you can click on the 'Add' button and a new entry will "
-"be created for you to start configuring.\n"
-"\n"
-"If you do not want to add an account, simply click on the account you want "
-"to configure in the list on the left."
-msgstr ""
-
-#: ../libempathy-gtk/gossip-accounts-dialog.c:272
-#, fuzzy
-msgid "<b>No Accounts Configured</b>"
-msgstr "<b>Kontoinnstillinger</b>"
-
-#: ../libempathy-gtk/gossip-accounts-dialog.c:274
-msgid ""
-"To add a new account, you can click on the 'Add' button and a new entry will "
-"be created for you to start configuring."
-msgstr ""
-
-#: ../libempathy-gtk/gossip-accounts-dialog.c:362
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:6
-msgid "Accounts"
-msgstr "Kontoer"
-
-#: ../libempathy-gtk/gossip-accounts-dialog.c:857
-#, c-format
-msgid ""
-"You are about to remove your %s account!\n"
-"Are you sure you want to proceed?"
-msgstr ""
-"Du holder på å fjerne din %s-konto!\n"
-"Er du sikker på at du vil dette?"
-
-#: ../libempathy-gtk/gossip-accounts-dialog.c:863
-msgid ""
-"Any associated conversations and chat rooms will NOT be removed if you "
-"decide to proceed.\n"
-"\n"
-"Should you decide to add the account back at a later time, they will still "
-"be available."
-msgstr ""
-"Tilknyttede samtaler og samtalegrupper vil IKKE fjernes hvis du velger å "
-"fortsette.\n"
-"\n"
-"Skulle du velge å legge til kontoen senere, vil de bli tilgjengelige igjen."
-
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:1
-msgid "<b>Account</b>"
-msgstr "<b>Konto</b>"
-
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:2
-#, fuzzy
-msgid "<b>New Account</b>"
-msgstr "<b>Konto</b>"
-
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:4
-#, fuzzy
-msgid "<b>Settings</b>"
-msgstr "<b>Kontoinnstillinger</b>"
-
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:5
-msgid "A unique name for this account to identify it personally to you."
-msgstr ""
-
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:7
-#, fuzzy
-msgid "Cr_eate"
-msgstr "Prat!"
-
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:8
-#, fuzzy
-msgid "Imendio "
-msgstr "Imendio Gossip"
-
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:9
-msgid "Jabber"
-msgstr "Jabber"
-
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:10
-msgid ""
-"To add a new account, you can click on the 'Add' button and a new entry will "
-"be created for you to started configuring.\n"
-"\n"
-"If you do not want to add an account, simply click on the account you want "
-"to configure in the list on the left."
-msgstr ""
-
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:13
-msgid "_Name:"
-msgstr "_Navn:"
-
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:14
-#, fuzzy
-msgid "_Type:"
-msgstr "_Emne:"
-
-#: ../libempathy-gtk/gossip-account-widget-generic.c:144
-#: ../libempathy-gtk/gossip-account-widget-generic.c:186
-#, c-format
-msgid "%s:"
-msgstr ""
-
-#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:1
-#, fuzzy
-msgid ""
-"<small><b><span foreground=\"#555\">Example: user@jabber.org</span></b></"
-"small>"
-msgstr "<span size=\"smaller\">Eksempel: bruker@jabber.org</span>"
-
-#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:2
-msgid "Forget password and clear the entry."
-msgstr ""
-
-#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:3
-msgid "Login I_D:"
-msgstr "InnloggingsI_D:"
-
-#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:4
-msgid "Pass_word:"
-msgstr "_Passord:"
-
-#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:5
-msgid "Reso_urce:"
-msgstr "_Ressurs:"
-
-#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:6
-#, fuzzy
-msgid "Use encryption (SS_L)"
-msgstr "Bruk _kryptering (SSL)"
-
-#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:7
-msgid "_Port:"
-msgstr "_Port:"
-
-#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:8
-msgid "_Server:"
-msgstr "_Tjener:"
-
-#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:9
-#, fuzzy
-msgid "jabber account settings"
-msgstr "<b>Kontoinnstillinger</b>"
-
-#: ../libempathy-gtk/gossip-chat.c:314
-msgid "Disconnected"
-msgstr "Koblet fra"
-
-#: ../libempathy-gtk/gossip-chat.c:858
-msgid "Insert Smiley"
-msgstr "Sett inn smilefjes"
-
-#: ../libempathy-gtk/gossip-chat.c:906
-msgid "_Check Word Spelling..."
-msgstr "_Stavekontroll..."
-
-#: ../libempathy-gtk/gossip-chat.c:1244
-msgid "Connected"
-msgstr "Koblet til"
-
-#: ../libempathy-gtk/gossip-chat.glade.h:1
-msgid "C_lear"
-msgstr "T_øm"
-
-#: ../libempathy-gtk/gossip-chat.glade.h:2
-msgid "Change _Topic..."
-msgstr ""
-
-#: ../libempathy-gtk/gossip-chat.glade.h:3
-msgid "Chat"
-msgstr "Prat"
-
-#: ../libempathy-gtk/gossip-chat.glade.h:4
-msgid "Contact Infor_mation"
-msgstr "Kontakt_informasjon"
-
-#: ../libempathy-gtk/gossip-chat.glade.h:5
-msgid "Cu_t"
-msgstr "Klipp _ut"
-
-#: ../libempathy-gtk/gossip-chat.glade.h:6
-#, fuzzy
-msgid "In_vite..."
-msgstr "_Inviter"
-
-#: ../libempathy-gtk/gossip-chat.glade.h:7
-msgid "Insert _Smiley"
-msgstr "Sett inn _smilefjes"
-
-#: ../libempathy-gtk/gossip-chat.glade.h:8
-#, fuzzy
-msgid "Invitation _message:"
-msgstr "Skriv inn statusmelding:"
-
-#: ../libempathy-gtk/gossip-chat.glade.h:9
-#, fuzzy
-msgid "Invite"
-msgstr "_Inviter"
-
-#: ../libempathy-gtk/gossip-chat.glade.h:11
-msgid "Move Tab _Left"
-msgstr "Flytt fane til _venstre"
-
-#: ../libempathy-gtk/gossip-chat.glade.h:12
-msgid "Move Tab _Right"
-msgstr "Flytt fane til _høyre"
-
-#: ../libempathy-gtk/gossip-chat.glade.h:13
-msgid "Select who would you like to invite:"
-msgstr ""
-
-#: ../libempathy-gtk/gossip-chat.glade.h:14
-msgid "You have been invited to join a chat conference."
-msgstr "Du er invitert til en konferansesamtale."
-
-#: ../libempathy-gtk/gossip-chat.glade.h:16
-msgid "_Add To Favorites"
-msgstr "_Legg til i favoritter"
-
-#: ../libempathy-gtk/gossip-chat.glade.h:17
-msgid "_Close"
-msgstr "_Lukk"
-
-#: ../libempathy-gtk/gossip-chat.glade.h:18
-msgid "_Conversation"
-msgstr "_Samtale"
-
-#: ../libempathy-gtk/gossip-chat.glade.h:19
-msgid "_Copy"
-msgstr "_Kopier"
-
-#: ../libempathy-gtk/gossip-chat.glade.h:20
-msgid "_Detach Tab"
-msgstr "_Løsne fane"
-
-#: ../libempathy-gtk/gossip-chat.glade.h:22
-msgid "_Next Tab"
-msgstr "_Neste fane"
-
-#: ../libempathy-gtk/gossip-chat.glade.h:23
-msgid "_Paste"
-msgstr "_Lim inn"
-
-#: ../libempathy-gtk/gossip-chat.glade.h:24
-msgid "_Previous Tab"
-msgstr "_Forrige fane"
-
-#: ../libempathy-gtk/gossip-chat.glade.h:26
-msgid "_Show Contacts"
-msgstr "_Vis kontakter"
-
-#: ../libempathy-gtk/gossip-chat.glade.h:27
-msgid "_Tabs"
-msgstr "_Faner"
-
-#: ../libempathy-gtk/gossip-chat-view.c:544
-msgid "_Copy Link Address"
-msgstr "_Kopier lenkens adresse"
-
-#: ../libempathy-gtk/gossip-chat-view.c:552
-msgid "_Open Link"
-msgstr "_Åpne lenke"
-
-#: ../libempathy-gtk/gossip-chat-view.c:889
-msgid "%A %d %B %Y"
-msgstr "%A %d %B %Y"
-
-#: ../libempathy-gtk/gossip-chat-window.c:685
-#: ../libempathy-gtk/gossip-chat-window.c:715
-#, fuzzy
-msgid "New Message"
-msgid_plural "New Messages"
-msgstr[0] "Ny melding"
-msgstr[1] "Ny melding"
-
-#: ../libempathy-gtk/gossip-chat-window.c:691
-msgid "Chat Room"
-msgstr "Samtalerom"
-
-#: ../libempathy-gtk/gossip-chat-window.c:696
-#: ../libempathy-gtk/gossip-chat-window.c:719
-#, fuzzy, c-format
-msgid "Conversation"
-msgid_plural "Conversations (%d)"
-msgstr[0] "_Samtale"
-msgstr[1] "_Samtale"
-
-#: ../libempathy-gtk/gossip-chat-window.c:1295
-msgid "Typing a message."
-msgstr "Skriver en melding"
-
-#: ../libempathy-gtk/gossip-contact-list.c:290
-#, fuzzy
-msgid "_Contact"
-msgstr "Kontakter"
-
-#: ../libempathy-gtk/gossip-contact-list.c:294
-#, fuzzy
-msgid "_Group"
-msgstr "Gruppe"
-
-#: ../libempathy-gtk/gossip-contact-list.c:298
-#, fuzzy
-msgid "Chat with contact"
-msgstr "Legg til kontakt"
-
-#: ../libempathy-gtk/gossip-contact-list.c:302
-#, fuzzy
-msgid "Infor_mation"
-msgstr "Kontakt_informasjon"
-
-#: ../libempathy-gtk/gossip-contact-list.c:302
-#, fuzzy
-msgid "View contact information"
-msgstr "Kontaktinformasjon"
-
-#: ../libempathy-gtk/gossip-contact-list.c:306
-#, fuzzy
-msgid "Re_name"
-msgstr "/E_ndre navn på gruppe"
-
-#: ../libempathy-gtk/gossip-contact-list.c:306
-#, fuzzy
-msgid "Rename"
-msgstr "Filnavn:"
-
-#: ../libempathy-gtk/gossip-contact-list.c:310
-#, fuzzy
-msgid "Edit the groups and name for this contact"
-msgstr "Skriv inn et navn på denne kontoen."
-
-#: ../libempathy-gtk/gossip-contact-list.c:314
-msgid "_Remove"
-msgstr "Fje_rn"
-
-#: ../libempathy-gtk/gossip-contact-list.c:314
-#, fuzzy
-msgid "Remove contact"
-msgstr "/Fje_rn kontakt"
-
-#: ../libempathy-gtk/gossip-contact-list.c:318
-#, fuzzy
-msgid "_Invite to Chat Room"
-msgstr "_Inviter til samtalerom"
-
-#: ../libempathy-gtk/gossip-contact-list.c:318
-msgid "Invite to a currently open chat room"
-msgstr ""
-
-#: ../libempathy-gtk/gossip-contact-list.c:322
-#, fuzzy
-msgid "_Send File..."
-msgstr "/_Send fil..."
-
-#: ../libempathy-gtk/gossip-contact-list.c:322
-#, fuzzy
-msgid "Send a file"
-msgstr "Velg fil"
-
-#: ../libempathy-gtk/gossip-contact-list.c:326
-#, fuzzy
-msgid "View previous conversations with this contact"
-msgstr "Vis tidligere samtaler"
-
-#: ../libempathy-gtk/gossip-preferences.c:250
-msgid "Language"
-msgstr "Språk"
-
-#: ../libempathy-gtk/gossip-preferences.glade.h:1
-msgid "<b>Appearance</b>"
-msgstr "<b>Utseende</b>"
-
-#: ../libempathy-gtk/gossip-preferences.glade.h:2
-msgid "<b>Audio</b>"
-msgstr "<b>Lyd</b>"
-
-#: ../libempathy-gtk/gossip-preferences.glade.h:3
-msgid "<b>Behaviour</b>"
-msgstr "<b>Oppførsel</b>"
-
-#: ../libempathy-gtk/gossip-preferences.glade.h:4
-#, fuzzy
-msgid "<b>Contact List</b>"
-msgstr "<b>Status</b>"
-
-#: ../libempathy-gtk/gossip-preferences.glade.h:5
-msgid "<b>Languages</b>"
-msgstr "<b>Språk</b>"
-
-#: ../libempathy-gtk/gossip-preferences.glade.h:6
-#, fuzzy
-msgid "<b>Options</b>"
-msgstr "<b>Tilkobling</b>"
-
-#: ../libempathy-gtk/gossip-preferences.glade.h:7
-msgid "<b>Visual</b>"
-msgstr "<b>På skjerm</b>"
-
-#: ../libempathy-gtk/gossip-preferences.glade.h:8
-msgid ""
-"<small>The list of languages reflects only the languages for which you have "
-"a dictionary installed.</small>"
-msgstr ""
-"<small>Denne listen listen viser bare de språkene det er installert ordliste "
-"for."
-
-#: ../libempathy-gtk/gossip-preferences.glade.h:9
-msgid "Avatars are user chosen images shown in the contact list"
-msgstr "Personbilder er valgt av brukerne for å vise i kontaktlisten"
-
-#: ../libempathy-gtk/gossip-preferences.glade.h:10
-msgid "Chat Th_eme:"
-msgstr "Samtale_tema:"
-
-#: ../libempathy-gtk/gossip-preferences.glade.h:11
-msgid "Display notifications when contacts come _online"
-msgstr "Si fra når kontakter logger _på"
-
-#: ../libempathy-gtk/gossip-preferences.glade.h:12
-msgid "Enable sounds when _away"
-msgstr "Spill av lyder når du er _borte"
-
-#: ../libempathy-gtk/gossip-preferences.glade.h:13
-msgid "Enable sounds when _busy"
-msgstr "Spill av lyder når du er _opptatt"
-
-#: ../libempathy-gtk/gossip-preferences.glade.h:14
-msgid "General"
-msgstr "Generelt"
-
-#: ../libempathy-gtk/gossip-preferences.glade.h:15
-msgid "Notifications"
-msgstr "Varslinger"
-
-#: ../libempathy-gtk/gossip-preferences.glade.h:16
-msgid "Preferences"
-msgstr "Brukervalg"
-
-#: ../libempathy-gtk/gossip-preferences.glade.h:17
-msgid "Show _avatars"
-msgstr "Vis person_bilder"
-
-#: ../libempathy-gtk/gossip-preferences.glade.h:18
-msgid "Show _smileys as images"
-msgstr "Vis _smilefjes som bilder"
-
-#: ../libempathy-gtk/gossip-preferences.glade.h:19
-#, fuzzy
-msgid "Show co_mpact contact list"
-msgstr "Vi_s kontaktliste"
-
-#: ../libempathy-gtk/gossip-preferences.glade.h:20
-msgid "Sort by _name"
-msgstr ""
-
-#: ../libempathy-gtk/gossip-preferences.glade.h:21
-msgid "Sort by s_tate"
-msgstr ""
-
-#: ../libempathy-gtk/gossip-preferences.glade.h:22
-msgid "Spell Checking"
-msgstr "Stavekontroll"
-
-#: ../libempathy-gtk/gossip-preferences.glade.h:23
-msgid "Themes"
-msgstr ""
-
-#: ../libempathy-gtk/gossip-preferences.glade.h:24
-#, fuzzy
-msgid "_Enable spell checking"
-msgstr "Bruk stavekontroll"
-
-#: ../libempathy-gtk/gossip-preferences.glade.h:25
-msgid "_Open new chats in separate windows"
-msgstr "_Åpne nye samtaler i egne vinduer"
-
-#: ../libempathy-gtk/gossip-preferences.glade.h:26
-msgid "_Play sound when messages arrive"
-msgstr "S_pill av lyd når meldinger kommer"
-
-#: ../libempathy-gtk/gossip-preferences.glade.h:27
-#, fuzzy
-msgid "_Use for chat rooms"
-msgstr "Lagre _dette samtalerommet"
-
-#: ../libempathy-gtk/gossip-presence-chooser.c:702
-msgid "Custom message..."
-msgstr "Egendefinert melding..."
-
-#. Clear list
-#: ../libempathy-gtk/gossip-presence-chooser.c:724
-msgid "Clear List..."
-msgstr "Tøm listen..."
-
-#: ../libempathy-gtk/gossip-presence-chooser.c:803
-#, fuzzy
-msgid "Are you sure you want to clear the list?"
-msgstr "Er du sikker på at du vil tømme listen?"
-
-#: ../libempathy-gtk/gossip-presence-chooser.c:807
-msgid ""
-"This will remove any custom messages you have added to the list of preset "
-"status messages."
-msgstr ""
-"Dette vil fjerne alle egendefinerte meldinger du har lagt til listen over "
-"statusmeldinger."
-
-#: ../libempathy-gtk/gossip-presence-chooser.c:812
-msgid "Clear List"
-msgstr "Tøm"
-
-#: ../libempathy-gtk/gossip-presence-chooser.glade.h:1
-msgid "Enter status message:"
-msgstr "Skriv inn statusmelding:"
-
-#: ../libempathy-gtk/gossip-presence-chooser.glade.h:2
-msgid "Status Message Presets"
-msgstr "Forvalgte statusmeldinger"
-
-#: ../libempathy-gtk/gossip-presence-chooser.glade.h:3
-msgid "_Add to status message list"
-msgstr "_Legg til i statusmeldingslisten"
-
-#: ../libempathy-gtk/gossip-private-chat.c:198
-#, c-format
-msgid "%s went offline"
-msgstr "%s koblet fra"
-
-#: ../libempathy-gtk/gossip-private-chat.c:212
-#, c-format
-msgid "%s has come online"
-msgstr "%s logget på"
-
-#: ../libempathy-gtk/gossip-theme-manager.c:87
+#: ../libempathy-gtk/empathy-theme-manager.c:87
 msgid "Classic"
 msgstr "Klassisk"
 
-#: ../libempathy-gtk/gossip-theme-manager.c:88
+#: ../libempathy-gtk/empathy-theme-manager.c:88
 msgid "Simple"
 msgstr "Enkel"
 
-#: ../libempathy-gtk/gossip-theme-manager.c:89
+#: ../libempathy-gtk/empathy-theme-manager.c:89
 msgid "Clean"
 msgstr "Tøm"
 
-#: ../libempathy-gtk/gossip-theme-manager.c:90
+#: ../libempathy-gtk/empathy-theme-manager.c:90
 msgid "Blue"
 msgstr "Blå"
 
-#: ../src/empathy-main.c:145
+#: ../megaphone/data/GNOME_Megaphone_Applet.schemas.in.h:1
+msgid "The contact to display in the applet. Empty means no contact is displayed."
+msgstr ""
+
+#: ../megaphone/data/GNOME_Megaphone_Applet.schemas.in.h:2
+msgid "The contact's avatar token. Empty means contact has no avatar."
+msgstr ""
+
+#: ../megaphone/data/GNOME_Megaphone_Applet.server.in.in.h:1
+msgid "Megaphone"
+msgstr ""
+
+#: ../megaphone/data/GNOME_Megaphone_Applet.server.in.in.h:2
+#: ../megaphone/src/megaphone-applet.c:419
+msgid "Talk!"
+msgstr "Snakk!"
+
+#: ../megaphone/data/GNOME_Megaphone_Applet.xml.h:2
+msgid "_Information"
+msgstr "_Informasjon"
+
+#: ../nothere/data/GNOME_NotHere_Applet.server.in.in.h:1
+#, fuzzy
+msgid "Presence"
+msgstr "Brukervalg"
+
+#: ../nothere/data/GNOME_NotHere_Applet.server.in.in.h:2
+#: ../nothere/src/nothere-applet.c:89
+#, fuzzy
+msgid "Set your own presence"
+msgstr "Velg fortrukket tjeneste."
+
+#: ../src/empathy.c:272
 msgid "Don't connect on startup"
 msgstr "Ikke koble til ved oppstart"
 
-#: ../src/empathy-main.c:155
-#, fuzzy
+#: ../src/empathy.c:283
 msgid "- Empathy Instant Messenger"
-msgstr "- Gossip meldingsprogram"
+msgstr "- Empathy lynmeldingsprogram"
 
+#~ msgid "Instant Messenger"
+#~ msgstr "Øyeblikksmelder"
+
+#, fuzzy
+#~ msgid "Contact List - Empathy"
+#~ msgstr "S_kjul kontaktliste"
+#~ msgid "<b>Account</b>"
+#~ msgstr "<b>Konto</b>"
+
+#, fuzzy
+#~ msgid "Imendio "
+#~ msgstr "Imendio Gossip"
+#~ msgid "Jabber"
+#~ msgstr "Jabber"
+
+#, fuzzy
+#~ msgid ""
+#~ "<small><b><span foreground=\"#555\">Example: user@jabber.org</span></b></"
+#~ "small>"
+#~ msgstr "<span size=\"smaller\">Eksempel: bruker@jabber.org</span>"
+#~ msgid "Chat Room"
+#~ msgstr "Samtalerom"
+#~ msgid "<b>Languages</b>"
+#~ msgstr "<b>Språk</b>"
+
+#, fuzzy
+#~ msgid "_Enable spell checking"
+#~ msgstr "Bruk stavekontroll"
+#~ msgid "Clear List..."
+#~ msgstr "Tøm listen..."
+
+#, fuzzy
+#~ msgid "Are you sure you want to clear the list?"
+#~ msgstr "Er du sikker på at du vil tømme listen?"
+#~ msgid ""
+#~ "This will remove any custom messages you have added to the list of preset "
+#~ "status messages."
+#~ msgstr ""
+#~ "Dette vil fjerne alle egendefinerte meldinger du har lagt til listen over "
+#~ "statusmeldinger."
+#~ msgid "Clear List"
+#~ msgstr "Tøm"
+#~ msgid "Enter status message:"
+#~ msgstr "Skriv inn statusmelding:"
+#~ msgid "Status Message Presets"
+#~ msgstr "Forvalgte statusmeldinger"
+#~ msgid "_Add to status message list"
+#~ msgstr "_Legg til i statusmeldingslisten"
 #~ msgid "Gossip Instant Messenger"
 #~ msgstr "Gossip øyeblikksmelder"
-
 #~ msgid "Normal"
 #~ msgstr "Normal"
-
 #~ msgid "Joining"
 #~ msgstr "Blir med"
-
 #~ msgid "Active"
 #~ msgstr "Aktiv"
-
 #~ msgid "Inactive"
 #~ msgstr "Inaktiv"
-
-#~ msgid "Unknown"
-#~ msgstr "Ukjent"
-
 #~ msgid "Error"
 #~ msgstr "Problem"
 
@@ -953,19 +1330,14 @@ msgstr "- Gossip meldingsprogram"
 #, fuzzy
 #~ msgid "No affiliation"
 #~ msgstr "Varslinger"
-
 #~ msgid "The nickname you have chosen is already in use."
 #~ msgstr "Kallenavnet du valgte er allerede i bruk."
-
 #~ msgid "The chat room you tried to join requires a password."
 #~ msgstr "Samtalerommet du prøver å bli med i krever passord."
-
 #~ msgid "The remote conference server did not respond in a sensible time."
 #~ msgstr "Konferansetjeneren svarte ikke innen rimelig tid."
-
 #~ msgid "The conference server you tried to join could not be found."
 #~ msgstr "Konferansetjeneren du prøvde å koble til finnes ikke."
-
 #~ msgid "An unknown error occurred, check your details are correct."
 #~ msgstr ""
 #~ "En ukjent feil skjedde, kontroller at innstillingene er rett satt opp."
@@ -973,50 +1345,36 @@ msgstr "- Gossip meldingsprogram"
 #, fuzzy
 #~ msgid "Joining the chatroom was canceled."
 #~ msgstr "Bli med i samtalerommet"
-
 #~ msgid "Unavailable"
 #~ msgstr "Utilgjengelig"
-
 #~ msgid "An unknown error occurred."
 #~ msgstr "En ukjent feil oppstod."
-
 #~ msgid "Connection refused."
 #~ msgstr "Tilkobling nektes."
-
 #~ msgid "Server address could not be resolved."
 #~ msgstr "Tjeneradressen kunne ikke slås opp."
-
 #~ msgid "Connection timed out."
 #~ msgstr "Tidsavbrudd på tilkobling."
-
 #~ msgid "Authentication failed."
 #~ msgstr "Autentisering mislykket."
-
 #~ msgid "The username you are trying already exists."
 #~ msgstr "Brukernavnet du prøver å bruke finnes allerede."
-
 #~ msgid "The username you are trying is not valid."
 #~ msgstr "Brukernavnet du prøver å bruke er ugyldig."
-
 #~ msgid "This feature is unavailable."
 #~ msgstr "Denne funksjonaliteten er utilgjengelig."
-
 #~ msgid "This feature is unauthorized."
 #~ msgstr "Denne funksjonaliteten er ikke godkjent."
-
 #~ msgid "A specific protocol error occurred that was unexpected."
 #~ msgstr "En uventet protokollfeil oppstod."
 
 #, fuzzy
 #~ msgid "new account"
 #~ msgstr "Ny konto"
-
 #~ msgid "Home"
 #~ msgstr "Hjem"
-
 #~ msgid "Couldn't send message!"
 #~ msgstr "Kunne ikke sende melding!"
-
 #~ msgid "Connection could not be opened"
 #~ msgstr "Tilkobling kunne ikke åpnes"
 
@@ -1039,13 +1397,10 @@ msgstr "- Gossip meldingsprogram"
 #, fuzzy
 #~ msgid "The remote service timed out"
 #~ msgstr "Fjerntjener overskred tidsgrensen"
-
 #~ msgid "Stop"
 #~ msgstr "Stopp"
-
 #~ msgid "Disconnect"
 #~ msgstr "Logg av"
-
 #~ msgid "Connect"
 #~ msgstr "Koble til"
 
@@ -1076,24 +1431,12 @@ msgstr "- Gossip meldingsprogram"
 #~ msgstr ""
 #~ "Vennligst skriv inn et nytt navn for gruppen:\n"
 #~ "%s"
-
 #~ msgid "No information is available for this contact."
 #~ msgstr "Ingen informasjon er tilgjengelig for denne kontakten."
-
 #~ msgid "Information requested, please wait..."
 #~ msgstr "Informasjon forespurt. Vennligst vent..."
-
-#~ msgid "I would like to add you to my contact list."
-#~ msgstr "Jeg ønsker å legge deg til i min kontaktliste."
-
 #~ msgid "To summarize:"
 #~ msgstr "Oppsummering:"
-
-#, fuzzy
-#~ msgid "%d new message"
-#~ msgid_plural "%d new messages"
-#~ msgstr[0] "Ny melding"
-#~ msgstr[1] "Ny melding"
 
 #, fuzzy
 #~ msgid "%d subscription request"
@@ -1118,82 +1461,40 @@ msgstr "- Gossip meldingsprogram"
 #~ msgid_plural "%d errors"
 #~ msgstr[0] "Problem"
 #~ msgstr[1] "Problem"
-
 #~ msgid "If you quit, you will lose all unread information."
 #~ msgstr "Hvis du avslutter, vil du miste all ulest informasjon."
-
 #~ msgid "Edit Account _Details"
 #~ msgstr "Rediger _kontoinformasjon"
-
-#~ msgid "Click to enlarge"
-#~ msgstr "Klikk for å forstørre"
-
-#~ msgid "Word"
-#~ msgstr "Ord"
-
-#~ msgid "New message from %s"
-#~ msgstr "Ny melding fra %s"
-
 #~ msgid "Your invitation has been declined"
 #~ msgstr "Din invitasjon har blitt avslått"
-
 #~ msgid "Accept"
 #~ msgstr "Godta"
-
 #~ msgid "Decline"
 #~ msgstr "Avslå"
-
-#, fuzzy
-#~ msgid "Name"
-#~ msgstr "Navn:"
-
-#, fuzzy
-#~ msgid "Room"
-#~ msgstr "_Rom"
-
-#~ msgid "Auto Connect"
-#~ msgstr "Automatisk tilkobling"
-
-#~ msgid "Information requested..."
-#~ msgstr "Informasjon forespurt..."
-
 #~ msgid "Do you want to remove this contact from your roster?"
 #~ msgstr "Vil du fjerne denne kontakten fra listen din?"
-
 #~ msgid ""
 #~ "Please enter a new name for the group:\n"
 #~ "%s"
 #~ msgstr ""
 #~ "Vennligst skriv inn et nytt navn for gruppen:\n"
 #~ "%s"
-
-#~ msgid "Select"
-#~ msgstr "Velg"
-
 #~ msgid "Unsorted"
 #~ msgstr "Usortert"
-
 #~ msgid "New file transfer request from %s"
 #~ msgstr "Ny filoverføringsforespørsel fra %s"
-
 #~ msgid "File transfer is not supported by both parties."
 #~ msgstr "Filoverføring er ikke støttet hos begge parter."
-
 #~ msgid "Your file transfer offer declined."
 #~ msgstr "Din filoverføringsforespørsel ble avslått."
-
 #~ msgid "The other user decided not to continue."
 #~ msgstr "Den andre brukeren vil ikke mer."
-
 #~ msgid "Unknown error occurred during file transfer."
 #~ msgstr "En ukjent feil oppstod under filoverføring."
-
 #~ msgid "%s would like to send you a file."
 #~ msgstr "%s ønsker å sende deg en fil."
-
 #~ msgid "Someone would like to send you a file."
 #~ msgstr "Noen ønsker å sende deg en fil."
-
 #~ msgid "Select a file"
 #~ msgstr "Velg fil"
 
@@ -1204,247 +1505,112 @@ msgstr "- Gossip meldingsprogram"
 #, fuzzy
 #~ msgid "Retry connection"
 #~ msgstr "Avbryt pålogging"
-
 #~ msgid "Invited %s to join this chat conference."
 #~ msgstr "Inviterte %s til å bli med i denne konferansesamtalen."
 
 #, fuzzy
 #~ msgid "%s has set the topic: %s"
 #~ msgstr "%s har satt emnet"
-
-#, fuzzy
-#~ msgid "Enter the new topic you want to set for this room:"
-#~ msgstr "Hvilket kallenavn vil du bruke for denne kontakten?"
-
-#, fuzzy
-#~ msgid "%s has joined the room"
-#~ msgstr "%s har satt emnet"
-
-#, fuzzy
-#~ msgid "%s has left the room"
-#~ msgstr "%s har satt emnet"
-
-#, fuzzy
-#~ msgid "Topic: %s"
-#~ msgstr "_Emne:"
-
-#~ msgid "Account"
-#~ msgstr "Konto"
-
 #~ msgid "Conversation With"
 #~ msgstr "Samtale med"
-
-#~ msgid "Date"
-#~ msgstr "Dato"
-
 #~ msgid "Allow multiple instances of the application to run at the same time"
 #~ msgstr "Tillat flere kjøringer av programmet på samme tid"
-
 #~ msgid "List the available accounts"
 #~ msgstr "List tilgjengelige kontoer"
-
 #~ msgid "Which account to connect to on startup"
 #~ msgstr "Konto som skal brukes ved oppstart"
-
 #~ msgid "ACCOUNT-NAME"
 #~ msgstr "KONTONAVN"
-
 #~ msgid "You can not use --no-connect together with --account"
 #~ msgstr "Du kan ikke bruke --no-connect sammen med --account"
-
 #~ msgid "No accounts available."
 #~ msgstr "Ingen tilgjengelige kontoer."
-
 #~ msgid "Available accounts:"
 #~ msgstr "Tilgjengelige kontoer:"
-
 #~ msgid "[default]"
 #~ msgstr "[forvalg]"
-
 #~ msgid "There is no account with the name '%s'."
 #~ msgstr "Det finnes ingen konto med navnet «%s»."
-
-#~ msgid "Join"
-#~ msgstr "Bli med"
 
 #, fuzzy
 #~ msgid "Create"
 #~ msgstr "Dato"
 
-#~ msgid "Chat Rooms"
-#~ msgstr "Samtalerom"
-
 #, fuzzy
 #~ msgid "Browsing for conference rooms, please wait..."
 #~ msgstr "Prøver å gå inn i praterom. Vennligst vent..."
-
 #~ msgid "Default"
 #~ msgstr "Forvalgt"
-
 #~ msgid "Chat!"
 #~ msgstr "Prat!"
-
 #~ msgid "%s wants to be added to your contact list."
 #~ msgstr "%s vil bli lagt til i din kontaktliste."
-
 #~ msgid "Someone wants to be added to your contact list."
 #~ msgstr "Noen vil bli lagt til i din kontaktliste."
-
-#, fuzzy
-#~ msgid "Subscription request"
-#~ msgstr "Abonnementsforespørsel"
-
 #~ msgid "Show"
 #~ msgstr "Vis"
-
-#~ msgid "Contact Information"
-#~ msgstr "Kontaktinformasjon"
-
 #~ msgid "Subject: %s"
 #~ msgstr "Emne: %s"
-
-#~ msgid "Suggestions for the word"
-#~ msgstr "Forslag for ordet"
-
 #~ msgid "New subscription request from %s"
 #~ msgstr "Ny abonnementsforespørsel fra %s"
-
 #~ msgid "Do you want to add this person to your contact list?"
 #~ msgstr "Vil du legge denne personen til din kontaktliste?"
-
 #~ msgid "Do you want to add %s to your contact list?"
 #~ msgstr "Vil du legge til %s i din kontaktliste?"
-
 #~ msgid "Please enter your %s account password"
 #~ msgstr "Skriv inn passordet til %s-kontoen"
 
 #, fuzzy
 #~ msgid "Logging in to account '%s'"
 #~ msgstr "Logger på med: %s"
-
 #~ msgid "Remember Password?"
 #~ msgstr "Husk passordet?"
-
 #~ msgid "Could not display the help contents."
 #~ msgstr "Kunne ikke vise innholdslisten for hjelp."
-
-#~ msgid "Select Your Avatar Image"
-#~ msgstr "Velg personbilde"
-
-#~ msgid "No Image"
-#~ msgstr "Ingen bilde"
-
 #~ msgid "The server does not seem to be responding."
 #~ msgstr "Tjeneren ser ikke ut til å svare."
-
 #~ msgid "Try again later."
 #~ msgstr "Prøv igjen senere."
 
 #, fuzzy
 #~ msgid "Change"
 #~ msgstr "Prat"
-
 #~ msgid "Contact goes offline"
 #~ msgstr "Kontakt kobler av"
-
 #~ msgid "Contact goes online"
 #~ msgstr "Kontakt kobler til"
-
 #~ msgid "Contact ID:"
 #~ msgstr "KontaktID:"
-
 #~ msgid "Do you want to accept this file?"
 #~ msgstr "Vil du motta denne filen?"
-
 #~ msgid "File Transfer Request"
 #~ msgstr "Forespørsel om filoverføring"
-
 #~ msgid "File name:"
 #~ msgstr "Filnavn:"
-
 #~ msgid "File size:"
 #~ msgstr "Filstørrelse:"
-
 #~ msgid "Not supported yet"
 #~ msgstr "Ennå ikke støttet"
-
 #~ msgid "This person wishes to send you this file:"
 #~ msgstr "Personen ønsker å sende deg denne filen:"
-
-#~ msgid "Web site:"
-#~ msgstr "Nettsted:"
-
 #~ msgid "_Accept"
 #~ msgstr "Godt_a"
-
 #~ msgid "_Deny"
 #~ msgstr "_Nekt"
-
-#, fuzzy
-#~ msgid "<b>Topic:</b>"
-#~ msgstr "<b>Om</b>"
-
-#~ msgid "Account:"
-#~ msgstr "Konto:"
-
-#, fuzzy
-#~ msgid "Edit Favorite Room"
-#~ msgstr "Rediger samtalerom"
-
-#~ msgid "Group Chat"
-#~ msgstr "Gruppesamtale"
-
-#, fuzzy
-#~ msgid "Join New"
-#~ msgstr "Bli med i _ny..."
-
-#~ msgid "Join room on start_up"
-#~ msgstr "Bli med i rom ved oppstart"
-
-#~ msgid "Join this chat room when Gossip starts and you are connected"
-#~ msgstr ""
-#~ "Bli med i dette samtalerommet når Gossip starter opp og du blir koblet til"
-
-#, fuzzy
-#~ msgid "Manage Favorite Rooms"
-#~ msgstr "Behandl samtalerom"
-
-#~ msgid "N_ame:"
-#~ msgstr "_Navn:"
-
-#~ msgid "S_erver:"
-#~ msgstr "_Tjener:"
-
-#~ msgid "_Nickname:"
-#~ msgstr "Kalle_navn:"
-
-#~ msgid "_Room:"
-#~ msgstr "_Rom:"
-
 #~ msgid "-"
 #~ msgstr "-"
-
 #~ msgid "<b>About</b>"
-#~ msgstr "<b>Om</b>"
-
-#~ msgid "<b>Client Information</b>"
-#~ msgstr "<b>Klientinformasjon</b>"
-
-#, fuzzy
-#~ msgid "<b>Groups</b>"
 #~ msgstr "<b>Om</b>"
 
 #, fuzzy
 #~ msgid "<b>Name</b>"
 #~ msgstr "<b>Språk</b>"
-
 #~ msgid "<b>Personal Details</b>"
 #~ msgstr "<b>Personlig informasjon</b>"
 
 #, fuzzy
 #~ msgid "<b>Subscription</b>"
 #~ msgstr "Abonnement"
-
 #~ msgid "<span size=\"smaller\">Example: Mikael or user@server.org</span>"
 #~ msgstr ""
 #~ "<span size=\"smaller\">Eksempel: Mikael eller bruker@jabber.org</span>"
@@ -1452,83 +1618,43 @@ msgstr "- Gossip meldingsprogram"
 #, fuzzy
 #~ msgid "Accou_nt:"
 #~ msgstr "Konto:"
-
 #~ msgid "Add Contact"
 #~ msgstr "Legg til kontakt"
-
-#, fuzzy
-#~ msgid "Alia_s:"
-#~ msgstr "Alias:"
-
 #~ msgid "Avatar:"
 #~ msgstr "Bilde:"
-
 #~ msgid "Ch_at"
 #~ msgstr "Pr_at"
-
-#~ msgid "Client:"
-#~ msgstr "Klient:"
 
 #, fuzzy
 #~ msgid "Con_tact:"
 #~ msgstr "Kontakter"
-
 #~ msgid "Connect on S_tartup"
 #~ msgstr "Koble til ved _oppstart"
-
 #~ msgid "Contacts"
 #~ msgstr "Kontakter"
-
 #~ msgid "Country:"
 #~ msgstr "Land:"
-
-#~ msgid "Decide _Later"
-#~ msgstr "A_vgjør senere"
 
 #, fuzzy
 #~ msgid "Edit Contact"
 #~ msgstr "Legg til kontakt"
-
 #~ msgid "Edit Groups"
 #~ msgstr "Rediger grupper"
-
-#~ msgid "Email:"
-#~ msgstr "E-post:"
-
 #~ msgid "ID:"
 #~ msgstr "ID:"
-
 #~ msgid ""
 #~ "If you chose to decide later you will be asked the next time you log on."
 #~ msgstr ""
 #~ "Dersom du velger å avgjøre dette senere, vil du bli spurt om dette neste "
 #~ "gang du logger på."
-
 #~ msgid "Name:"
 #~ msgstr "Navn:"
-
-#~ msgid "OS:"
-#~ msgstr "OS:"
-
 #~ msgid "Personal Details"
 #~ msgstr "Personlig informasjon"
 
 #, fuzzy
 #~ msgid "R_egister"
 #~ msgstr "Re_gistrer..."
-
-#~ msgid "Search"
-#~ msgstr "Søk"
-
-#~ msgid "Spell Checker"
-#~ msgstr "Stavekontroll"
-
-#~ msgid "Subscription Request"
-#~ msgstr "Abonnementsforespørsel"
-
-#~ msgid "Suggestions for the word:"
-#~ msgstr "Forslag for ordet:"
-
 #~ msgid ""
 #~ "This acts as a filter to the contact list below. You can use segments of "
 #~ "contact's name or ID, for example, \"jabber.org\" will list everyone "
@@ -1537,48 +1663,30 @@ msgstr "- Gossip meldingsprogram"
 #~ "Dette fungerer som et filter for kontaktlisten under. Du kan bruke deler "
 #~ "av kontaktens navn eller ID. For eksempel vil «jabber.org» vise alle som "
 #~ "bruker den tjeneren."
-
 #~ msgid "This is the name that will be used on your roster for this contact"
 #~ msgstr "Dette er navnet som vil bli brukt om personen i kontaktlisten din"
-
 #~ msgid "This name will be used to identify you in chat windows"
 #~ msgstr "Dette navnet vil være ditt navn i samtalevinduer"
-
 #~ msgid ""
 #~ "This name will be used to identify you when new contacts lookup your "
 #~ "details"
 #~ msgstr ""
 #~ "Dette navnet vil bli brukt for å identifisere deg når kontakter etterspør "
 #~ "detaljert informasjon om deg"
-
 #~ msgid "Use system pro_xy"
 #~ msgstr "Bruk systemets pro_xy"
-
-#~ msgid "Version:"
-#~ msgstr "Versjon:"
-
-#~ msgid "View Previous Conversations"
-#~ msgstr "Vis tidligere samtaler"
-
 #~ msgid "Which account do you want to use?"
 #~ msgstr "Hvilken konto vil du bruke?"
-
 #~ msgid "You are not subscribed to this contact."
 #~ msgstr "Du abonnerer ikke på statusinformasjon for denne kontakten."
-
 #~ msgid "_Connect"
 #~ msgstr "_Koble til"
 
 #, fuzzy
 #~ msgid "_Description:"
 #~ msgstr "Beskrivelse:"
-
 #~ msgid "_Disconnect"
 #~ msgstr "Koble _fra"
-
-#, fuzzy
-#~ msgid "_Email:"
-#~ msgstr "E-post:"
 
 #, fuzzy
 #~ msgid ""
@@ -1587,32 +1695,18 @@ msgstr "- Gossip meldingsprogram"
 #~ "Skriv inn navnet eller kontaktID til personen du vil snakke med under:"
 
 #, fuzzy
-#~ msgid "_For:"
-#~ msgstr "_Port:"
-
-#, fuzzy
-#~ msgid "_Full Name:"
-#~ msgstr "_Navn:"
-
-#, fuzzy
 #~ msgid "_Group:"
 #~ msgstr "Gruppe:"
 
 #, fuzzy
 #~ msgid "_Nick Name:"
 #~ msgstr "Kalle_navn:"
-
 #~ msgid "_Password:"
 #~ msgstr "_Passord:"
 
 #, fuzzy
-#~ msgid "_Quit Message:"
-#~ msgstr "_Statusmeldinger"
-
-#, fuzzy
 #~ msgid "_Retrieve"
 #~ msgstr "Fje_rn"
-
 #~ msgid "_Subscribe"
 #~ msgstr "_Abonner"
 
@@ -1623,166 +1717,114 @@ msgstr "- Gossip meldingsprogram"
 #, fuzzy
 #~ msgid "irc account settings"
 #~ msgstr "<b>Kontoinnstillinger</b>"
-
-#, fuzzy
-#~ msgid "msn account settings"
-#~ msgstr "<b>Kontoinnstillinger</b>"
-
-#~ msgid "Preset status messages"
-#~ msgstr "Forhåndsdefinerte statusmeldinger"
-
 #~ msgid "Preset status messages."
 #~ msgstr "Forhåndsdefinerte statusmeldinger."
-
 #~ msgid "Edit"
 #~ msgstr "Rediger"
-
 #~ msgid "Connecting"
 #~ msgstr "Logger på"
-
 #~ msgid "Perhaps you are trying to connect to the wrong port?"
 #~ msgstr "Kanskje du prøver å koble til feil port?"
-
 #~ msgid "Perhaps the service is not currently running?"
 #~ msgstr "Kanskje tjenesten ikke kjører for øyeblikket?"
-
 #~ msgid "Check your connection details."
 #~ msgstr "Sjekk tilkoblingen din."
-
 #~ msgid "Perhaps the server is not running this service."
 #~ msgstr "Kanskje tjeneren ikke kjører denne tjenesten."
-
 #~ msgid "Check your username and password are correct."
 #~ msgstr "Kontroller at brukernavn og passord er korrekt."
-
 #~ msgid "%s will be added to your contact list."
 #~ msgstr "%s vil bli lagt til i din kontaktliste."
-
 #~ msgid "%s ID of new contact:"
 #~ msgstr "%s-ID for den nye kontakten:"
-
 #~ msgid "Example: %s"
 #~ msgstr "Eksempel: %s"
-
 #~ msgid "Show accounts and pending connections"
 #~ msgstr "Vis kontoer og utestående tilkoblinger"
-
 #~ msgid "You have no Instant Messaging accounts configured!"
 #~ msgstr "Du har ikke satt opp noen meldingskontoer!"
-
 #~ msgid ""
 #~ "Next you will be presented with the Account Information dialog to set "
 #~ "your details up."
 #~ msgstr ""
 #~ "Du vil nå få opp kontoinformasjon så du kan skrive inn dine innstillinger."
-
 #~ msgid ""
 #~ "Please enter your invitation message to:\n"
 #~ "%s"
 #~ msgstr ""
 #~ "Vennligst skriv inn invitasjonsmelding til:\n"
 #~ "%s"
-
 #~ msgid "Favourite"
 #~ msgstr "Favoritt"
-
 #~ msgid "/Contact Infor_mation"
 #~ msgstr "/Kontakt_informasjon"
-
 #~ msgid "/Re_name Contact"
 #~ msgstr "/E_ndre navn på kontakt"
-
 #~ msgid "/_Edit Groups"
 #~ msgstr "/R_ediger grupper"
-
 #~ msgid "/_View Previous Conversations"
 #~ msgstr "/_Vis tidligere samtaler"
-
 #~ msgid ""
 #~ "Please enter a new nickname for the contact\n"
 #~ "%s"
 #~ msgstr ""
 #~ "Vennligst skriv inn et kallenavn for kontakten\n"
 #~ "%s"
-
 #~ msgid "Edit groups for %s"
 #~ msgstr "Rediger grupper for %s"
-
 #~ msgid "Conversation Log"
 #~ msgstr "Samtalelogg"
-
 #~ msgid "Registering account"
 #~ msgstr "Registrerer konto"
-
 #~ msgid "Example"
 #~ msgstr "Eksempel"
-
 #~ msgid "Add to _favourites"
 #~ msgstr "Legg til i _favoritter"
-
 #~ msgid ""
 #~ "Customize your own nickname, the server and chatroom which you wish to "
 #~ "join."
 #~ msgstr "Endre eget kallenavn, tjeneren og samtalerommet du vil delta i."
-
 #~ msgid "Edit your chat room details:"
 #~ msgstr "Rediger innstillingene for samtalerommet:"
-
 #~ msgid "Na_me:"
 #~ msgstr "_Navn:"
-
 #~ msgid "New Chat Room"
 #~ msgstr "Nytt samtalerom"
-
 #~ msgid ""
 #~ "Pick a saved chat room from the presets available below and click Join to "
 #~ "start chatting."
 #~ msgstr ""
 #~ "Velg et lagret samtalerom fra listen under og velg \"Bli med\" for å bli "
 #~ "med i en gruppesamtale."
-
 #~ msgid "    "
 #~ msgstr "    "
-
 #~ msgid "<b>Information requested, please wait...</b>"
 #~ msgstr "<b>Informasjon forespurt. Vennligst vent...</b>"
-
 #~ msgid "<span size=\"smaller\">Example:</span>"
 #~ msgstr "<span size=\"smaller\">Eksempel:</span>"
-
 #~ msgid "Account Name"
 #~ msgstr "Kontonavn"
-
 #~ msgid "Connection Details"
 #~ msgstr "Tilkoblingsinformasjon"
-
 #~ msgid "Do you already have an account set up on a server?"
 #~ msgstr "Har du allerede en konto på en Jabber-tjener?"
-
 #~ msgid "Enter the port used in the connection for this account"
 #~ msgstr ""
 #~ "Skriv inn portnummeret som skal brukes ved tilkobling av denne kontoen."
-
 #~ msgid "Enter the server used in the connection for this account"
 #~ msgstr ""
 #~ "Skriv inn navnet på tjeneren som skal brukes ved tilkobling av denne "
 #~ "kontoen."
-
 #~ msgid "Enter the user's contact ID:"
 #~ msgstr "Oppgi  brukerens kontaktID:"
-
 #~ msgid "Enter your real name here"
 #~ msgstr "Skriv navnet ditt her"
-
 #~ msgid "Finished"
 #~ msgstr "Fullført"
-
 #~ msgid "For increased security, enable this option"
 #~ msgstr "For økt sikkerhet, velg dette alternativet"
-
 #~ msgid "Gossip"
 #~ msgstr "Gossip"
-
 #~ msgid ""
 #~ "Gossip is a modern client for the Jabber Instant Messaging system.\n"
 #~ "\n"
@@ -1797,21 +1839,18 @@ msgstr "- Gossip meldingsprogram"
 #~ "til din foretrukne Jabber-tjener.\n"
 #~ "\n"
 #~ "Klikk «Fremover» for å starte."
-
 #~ msgid ""
 #~ "If you have another machine on your network which 'proxies' the "
 #~ "connection to the internet and you want to use it, enable this option"
 #~ msgstr ""
 #~ "Velg dette valget dersom du har en mellomtjener mot internett, og du vil "
 #~ "bruke denne."
-
 #~ msgid ""
 #~ "If you need to set specific connection details, like a different server "
 #~ "or port, you can configure that here:"
 #~ msgstr ""
 #~ "Hvis du må oppgi flere detaljer om tilkoblingen din, som f.eks en annen "
 #~ "tjener eller port, kan du skrive inn disse her:"
-
 #~ msgid ""
 #~ "In order to subscribe to presence notifications from the user, a request "
 #~ "will be sent. Until this request is approved, the user will always be "
@@ -1820,13 +1859,10 @@ msgstr "- Gossip meldingsprogram"
 #~ "For å kunne motta statusinformasjon fra brukeren, sendes det en "
 #~ "forespørsel. Til denne forespørselen er godkjent, vil brukeren alltid "
 #~ "vises som «avlogget» i kontaktlisten."
-
 #~ msgid "In which group do you want to place this contact?"
 #~ msgstr "Hvilken gruppe vil du plassere denne kontakten?"
-
 #~ msgid "Jabber ID:"
 #~ msgstr "Jabber-ID:"
-
 #~ msgid ""
 #~ "Leave this blank if you don't want your password stored on a public "
 #~ "machine. If you decide to do this, you will be prompted each time you "
@@ -1834,40 +1870,28 @@ msgstr "- Gossip meldingsprogram"
 #~ msgstr ""
 #~ "La dette så blankt hvis du ikke vil lagre passordet på en offentlig "
 #~ "maskin. Du vil da bli spurt om passord hver gang du kobler til"
-
 #~ msgid "Nickname:"
 #~ msgstr "Kallenavn:"
-
 #~ msgid "Port:"
 #~ msgstr "Port:"
-
 #~ msgid "Press Subscribe to request to receive their status"
 #~ msgstr "Trykk Abonner for å be om statusinformasjon"
-
 #~ msgid "Registering Account"
 #~ msgstr "Registrerer konto"
-
 #~ msgid "Resource:"
 #~ msgstr "Ressurs:"
-
 #~ msgid "Sending request"
 #~ msgstr "Sender forespørsel"
-
 #~ msgid "Server:"
 #~ msgstr "Tjener:"
-
 #~ msgid "Web Site:"
 #~ msgstr "Nettsted:"
-
 #~ msgid "Welcome to Gossip"
 #~ msgstr "Velkommen til Gossip"
-
 #~ msgid "What instant messaging system does the contact use?"
 #~ msgstr "Hvilket system for øyeblikksmeldinger bruker kontakten?"
-
 #~ msgid "What is your name?"
 #~ msgstr "Hva heter du?"
-
 #~ msgid ""
 #~ "What name do you want to use to identify this account?\n"
 #~ "\n"
@@ -1878,56 +1902,41 @@ msgstr "- Gossip meldingsprogram"
 #~ "\n"
 #~ "Dette kan være noe som forbinder du forbinder med tjenesteleverandøren, "
 #~ "for eksempel <b>Google</b>."
-
 #~ msgid "What password do you want to use?"
 #~ msgstr "Hvilket passord vil du bruke?"
-
 #~ msgid "What username do you use?"
 #~ msgstr "Hvilket brukernavn bruker du?"
-
 #~ msgid "What username do you want to use?"
 #~ msgstr "Hvilket brukernavn vil du bruke?"
-
 #~ msgid "Which account do you want to add this contact to?"
 #~ msgstr "Hvilken konto vil du plassere denne kontakten i?"
-
 #~ msgid ""
 #~ "You can change your account settings later by selecting the Edit-"
 #~ ">Accounts menu item."
 #~ msgstr ""
 #~ "Du kan endre kontoinnstillingene senere via menyen Rediger -> Kontoer."
-
 #~ msgid ""
 #~ "You need to set a name for the connection, for example, <b>Home</b> or "
 #~ "<b>Laptop</b>."
 #~ msgstr ""
 #~ "Du må finne på et navn for tilkoblingen. For eksempel <b>Hjemme</b> eller "
 #~ "<b>Bærbar</b>."
-
 #~ msgid "Your Account"
 #~ msgstr "Din konto"
-
 #~ msgid "Your Identity"
 #~ msgstr "Din identitet"
-
 #~ msgid "Your new account has now been set up."
 #~ msgstr "Din nye konto har nå blitt satt opp."
-
 #~ msgid "_Forget"
 #~ msgstr "_Glem"
-
 #~ msgid "_Group Chat"
 #~ msgstr "_Gruppesamtale"
-
 #~ msgid "_No"
 #~ msgstr "_Nei"
-
 #~ msgid "_Search..."
 #~ msgstr "_Søk..."
-
 #~ msgid "_Yes"
 #~ msgstr "_Ja"
-
 #~ msgid "Contact Information for %s"
 #~ msgstr "Kontaktinformasjon for %s"
 
@@ -1938,37 +1947,26 @@ msgstr "- Gossip meldingsprogram"
 #, fuzzy
 #~ msgid "Chat Rooms..."
 #~ msgstr "Gossip - Samtalerom"
-
 #~ msgid "Be silent when away"
 #~ msgstr "Vær stille når borte"
-
 #~ msgid "Be silent when busy"
 #~ msgstr "Vær stille når opptatt"
-
 #~ msgid "Height of main window"
 #~ msgstr "Høyde på hovedvinduet"
-
 #~ msgid "The X position of the main window."
 #~ msgstr "X-posisjon for hovedvinduet."
-
 #~ msgid "The Y position of the main window."
 #~ msgstr "Y-posisjon for hovedvinduet."
-
 #~ msgid "The width of the main window."
 #~ msgstr "Bredden på hovedvinduet."
-
 #~ msgid "Whether spell checking should be turned on."
 #~ msgstr "Om stavekontroll skal være slått på."
-
 #~ msgid "Width of the main window"
 #~ msgstr "Bredde på hovedvinduet"
-
 #~ msgid "X position of main window"
 #~ msgstr "X-posisjon for hovedvinduet"
-
 #~ msgid "Y position of main window"
 #~ msgstr "Y-posisjon for hovedvinduet"
-
 #~ msgid "Gossip, Instant Messaging Client"
 #~ msgstr "Gossip, klient for øyeblikksmeldinger"
 
@@ -1983,304 +1981,202 @@ msgstr "- Gossip meldingsprogram"
 #, fuzzy
 #~ msgid "/_Invite to Chat Conference"
 #~ msgstr "/In_viter til konferansesamtale"
-
-#, fuzzy
-#~ msgid "Send Message"
-#~ msgstr "Statusmelding"
-
 #~ msgid "%s has gone offline"
 #~ msgstr "%s logget av"
-
 #~ msgid "Available..."
 #~ msgstr "Tilgjengelig..."
-
 #~ msgid "Busy..."
 #~ msgstr "Opptatt..."
-
 #~ msgid "Away..."
 #~ msgstr "Borte..."
-
 #~ msgid "Contact _Information"
 #~ msgstr "Kontakt_informasjon"
-
 #~ msgid "<b>Sound</b>"
 #~ msgstr "<b>Lyd</b>"
-
 #~ msgid "Check spelling while I _type"
 #~ msgstr "Sjekk staving mens jeg _skriver"
-
 #~ msgid "Gossip - Accounts"
 #~ msgstr "Gossip - Kontoer"
 
 #, fuzzy
 #~ msgid "Join _Group Chat..."
 #~ msgstr "Bl_i med i gruppesamtale..."
-
 #~ msgid "Por_t:"
 #~ msgstr "P_ort"
 
 #, fuzzy
 #~ msgid "Requested information."
 #~ msgstr "Klientinformasjon"
-
 #~ msgid "Requesting contact information, please wait..."
 #~ msgstr "Spør etter personlige detaljer. Vennligst vent..."
-
 #~ msgid "Written by:"
 #~ msgstr "Skrevet av:"
-
 #~ msgid "Artwork by:"
 #~ msgstr "Grafikk av:"
-
 #~ msgid "Translated by:"
 #~ msgstr "Oversatt av:"
-
 #~ msgid "%sChat - %s"
 #~ msgstr "%sPrat - %s"
-
 #~ msgid "/Show _Log"
 #~ msgstr "/Vis _logg"
-
 #~ msgid "Afrikaans"
 #~ msgstr "Afrikaans"
-
 #~ msgid "Arabic"
 #~ msgstr "Arabisk"
-
 #~ msgid "Belarusian"
 #~ msgstr "Hviterussisk"
-
 #~ msgid "Bulgarian"
 #~ msgstr "Bulgarsk"
-
 #~ msgid "Bosnian"
 #~ msgstr "Bosnisk"
-
 #~ msgid "Catalan"
 #~ msgstr "Katalansk"
-
 #~ msgid "Czech"
 #~ msgstr "Tsjekkisk"
-
 #~ msgid "Welsh"
 #~ msgstr "Walisisk"
-
 #~ msgid "Danish"
 #~ msgstr "Dansk"
-
 #~ msgid "German"
 #~ msgstr "Tysk"
-
 #~ msgid "German (Austria)"
 #~ msgstr "Tysk (Østerrike)"
-
 #~ msgid "German (Germany)"
 #~ msgstr "Tysk (Tyskland)"
-
 #~ msgid "German (Swiss)"
 #~ msgstr "Tysk (Sveits)"
-
 #~ msgid "Greek"
 #~ msgstr "Gresk"
-
 #~ msgid "English"
 #~ msgstr "Engelsk"
-
 #~ msgid "English (Canadian)"
 #~ msgstr "Engelsk (Canadisk)"
-
 #~ msgid "English (British)"
 #~ msgstr "Engelsk (Britisk)"
-
 #~ msgid "English (American)"
 #~ msgstr "Engelsk (Amerikansk)"
-
 #~ msgid "Esperanto"
 #~ msgstr "Esperanto"
-
 #~ msgid "Spanish"
 #~ msgstr "Spansk"
-
 #~ msgid "Estonian"
 #~ msgstr "Estisk"
-
 #~ msgid "Basque"
 #~ msgstr "Baskisk"
-
 #~ msgid "Persian"
 #~ msgstr "Persisk"
-
 #~ msgid "Finnish"
 #~ msgstr "Finsk"
-
 #~ msgid "French"
 #~ msgstr "Fransk"
-
 #~ msgid "French (France)"
 #~ msgstr "Fransk (Frankrike)"
-
 #~ msgid "French (Swiss)"
 #~ msgstr "Fransk (Sveits)"
-
 #~ msgid "Irish Gaelic"
 #~ msgstr "Irsk Gælisk"
-
 #~ msgid "Scots Gaelic"
 #~ msgstr "Skotsk Gælisk"
-
 #~ msgid "Hebrew"
 #~ msgstr "Hebraisk"
-
 #~ msgid "Croatian"
 #~ msgstr "Kroatisk"
-
 #~ msgid "Hungarian"
 #~ msgstr "Ungarsk"
-
 #~ msgid "Indonesian"
 #~ msgstr "Indonesisk"
-
 #~ msgid "Icelandic"
 #~ msgstr "Islandsk"
-
 #~ msgid "Italian"
 #~ msgstr "Italiensk"
-
 #~ msgid "Japanese"
 #~ msgstr "Japansk"
-
 #~ msgid "Georgian"
 #~ msgstr "Georgisk"
-
 #~ msgid "Korean"
 #~ msgstr "Koreansk"
-
 #~ msgid "Kurdish"
 #~ msgstr "Kurdisk"
-
 #~ msgid "Latvian"
 #~ msgstr "Latvisk"
-
 #~ msgid "Macedonian"
 #~ msgstr "Makedonsk"
-
 #~ msgid "Mongolian"
 #~ msgstr "Mongolsk"
-
 #~ msgid "Norwegian (Bokmal)"
 #~ msgstr "Norsk (Bokmål)"
-
 #~ msgid "Nepali"
 #~ msgstr "Nepalsk"
-
 #~ msgid "Dutch"
 #~ msgstr "Nederlandsk"
-
 #~ msgid "Norwegian"
 #~ msgstr "Norsk"
-
 #~ msgid "Norwegian (Nynorsk)"
 #~ msgstr "Norsk (Nynorsk)"
-
 #~ msgid "Punjabi"
 #~ msgstr "Punjabi"
-
 #~ msgid "Polish"
 #~ msgstr "Polsk"
-
 #~ msgid "Portuguese"
 #~ msgstr "Portugisisk"
-
 #~ msgid "Portuguese (Portugal)"
 #~ msgstr "Portugisisk (Portugal)"
-
 #~ msgid "Portuguese (Brazil)"
 #~ msgstr "Portugisisk (Brasil)"
-
 #~ msgid "Romanian"
 #~ msgstr "Rumensk"
-
 #~ msgid "Russian"
 #~ msgstr "Russisk"
-
 #~ msgid "Slovak"
 #~ msgstr "Slovakisk"
-
 #~ msgid "Slovenian"
 #~ msgstr "Slovensk"
-
 #~ msgid "Albanian"
 #~ msgstr "Albansk"
-
 #~ msgid "Serbian"
 #~ msgstr "Serbisk"
-
 #~ msgid "Swedish"
 #~ msgstr "Svensk"
-
 #~ msgid "Turkish"
 #~ msgstr "Tyrkisk"
-
 #~ msgid "Ukrainian"
 #~ msgstr "Ukrainsk"
-
 #~ msgid "Vietnamese"
 #~ msgstr "Vietnamesisk"
-
 #~ msgid "Yiddish"
 #~ msgstr "Yiddisk"
-
 #~ msgid "Chinese Simplified"
 #~ msgstr "Kinesisk (Forenklet)"
-
 #~ msgid "Chinese Traditional"
 #~ msgstr "Kinesisk (Tradisjonell)"
-
 #~ msgid "View Lo_g"
 #~ msgstr "Vis lo_gg"
-
 #~ msgid "Gossip - Group Chat"
 #~ msgstr "Gossip - Gruppesamtale"
-
 #~ msgid "Gossip - New Chatroom"
 #~ msgstr "Gossip - Nytt samtalerom"
-
-#~ msgid "Status:"
-#~ msgstr "Status:"
-
 #~ msgid "Gossip - Add contact"
 #~ msgstr "Gossip - Legg til kontakt"
-
 #~ msgid "Gossip - Contact Information"
 #~ msgstr "Gossip - Kontaktinformasjon"
-
 #~ msgid "Gossip - Edit Groups"
 #~ msgstr "Gossip - Rediger grupper"
-
 #~ msgid "Gossip - New Account"
 #~ msgstr "Gossip - Ny konto"
-
 #~ msgid "Gossip - New Message"
 #~ msgstr "Gossip - Ny melding"
-
 #~ msgid "Gossip - Personal Details"
 #~ msgstr "Gossip - Personlig informasjon"
-
 #~ msgid "Gossip - Preferences"
 #~ msgstr "Gossip - Brukervalg"
-
 #~ msgid "Gossip - Spell Checker"
 #~ msgstr "Gossip - Stavekontroll"
-
 #~ msgid "Gossip - Status Message"
 #~ msgstr "Gossip - Statusmelding"
-
 #~ msgid "Personal Details Saved!"
 #~ msgstr "Personlig informasjon lagret!"
-
 #~ msgid "Waiting for server to respond, please wait..."
 #~ msgstr "Venter på svar fra tjener..."
-
 #~ msgid ""
 #~ "You can identify this account with a name, for example, <b>Home</b> or "
 #~ "<b>Work</b>. Choose a name for this account:"
@@ -2299,364 +2195,250 @@ msgstr "- Gossip meldingsprogram"
 #, fuzzy
 #~ msgid "Account ID"
 #~ msgstr "Legg til konto"
-
 #~ msgid "Redirect"
 #~ msgstr "Videresend"
-
 #~ msgid "Bad Request"
 #~ msgstr "Feil i forespørsel"
-
 #~ msgid "Not Authorized"
 #~ msgstr "Ikke godkjent"
-
 #~ msgid "Payment Required"
 #~ msgstr "Betaling kreves"
-
-#~ msgid "Forbidden"
-#~ msgstr "Forbudt"
-
 #~ msgid "Not Found"
 #~ msgstr "Ikke funnet"
-
 #~ msgid "Not Allowed"
 #~ msgstr "Ikke tillatt"
-
 #~ msgid "Not Acceptable"
 #~ msgstr "Ikke akseptert"
-
 #~ msgid "Request Timeout"
 #~ msgstr "Forespørsel overskred tidsgrensen"
-
 #~ msgid "Conflict"
 #~ msgstr "Konflikt"
-
-#~ msgid "Not Implemented"
-#~ msgstr "Ikke implementert"
-
 #~ msgid "Remote Server Error"
 #~ msgstr "Fjerntjenerfeil"
-
 #~ msgid "Service Unavailable"
 #~ msgstr "Tjeneste utilgjengelig"
-
 #~ msgid "Edit List..."
 #~ msgstr "Rediger liste..."
-
 #~ msgid "Custom"
 #~ msgstr "Egendefinert"
-
 #~ msgid "Gossip will now try to use your account:"
 #~ msgstr "Gossip vil prøve å bruke kontoen:"
-
 #~ msgid "Gossip will now try to register the account:"
 #~ msgstr "Gossip vil prøve å registrere kontoen:"
-
 #~ msgid ""
 #~ "If you continue, you will not be able to talk to the 1 contact you are "
 #~ "using this account for!"
 #~ msgstr ""
 #~ "Dersom du velger å fortsette, vil du ikke kunne snakke med den ene "
 #~ "kontakten du bruker denne kontoen til å snakke med."
-
 #~ msgid ""
 #~ "If you continue, you will not be able to add or talk to contacts using "
 #~ "this transport!"
 #~ msgstr ""
 #~ "Dersom du velger å fortsette, vil du ikke kunne legge til eller snakke "
 #~ "med kontakter med denne transporten."
-
 #~ msgid ""
 #~ "If you continue, you will not be able to talk to the %d contacts you are "
 #~ "using this account for!"
 #~ msgstr ""
 #~ "Dersom du velger å fortsette, vil du ikke kunne snakke med de %d "
 #~ "kontaktene du bruker denne kontoen til å snakke med."
-
 #~ msgid "Searching Local Services..."
 #~ msgstr "Søker gjennom lokale tjenester..."
-
 #~ msgid "Searching Local Services (%d of %d)"
 #~ msgstr "Søker gjennom lokale tjenester (%d av %d)"
-
 #~ msgid "Talking to available services..."
 #~ msgstr "Snakker med tilgjengelige tjenester..."
-
 #~ msgid "Searching 3rd Party Services..."
 #~ msgstr "Søker gjennom tredjepartstjenester..."
-
 #~ msgid "Searching 3rd Party Services (%d of %d)"
 #~ msgstr "Søker gjennom tredjepartstjenester (%d av %d)"
-
 #~ msgid "Sorry, no services found at this time."
 #~ msgstr "Beklager, ingen tjenester funnet denne gang."
-
 #~ msgid ""
 #~ "Currently no providers are available for the account type you are trying "
 #~ "to configure. Please try again later."
 #~ msgstr ""
 #~ "Det er ingen tjenestetilbydere tilgjengelig for den kontoen du prøver å "
 #~ "sette opp akkurat nå. Prøv igjen senere."
-
-#~ msgid "Select your preferred service."
-#~ msgstr "Velg fortrukket tjeneste."
-
 #~ msgid "This will be used to configure your account details."
 #~ msgstr "Dette vil bli brukt til å sette opp din kontoinformasjon."
-
 #~ msgid "Unable to Register"
 #~ msgstr "Klarte ikke å registrere"
-
 #~ msgid "The service confirmed the user '%s' is already registered."
 #~ msgstr "Tjenesten sa at brukeren «%s» allerede er registrert."
-
 #~ msgid ""
 #~ "When registering a token is provided by the service to register with, in "
 #~ "this case, the token has not been sent."
 #~ msgstr ""
 #~ "Ved registrering sendes det et signal fra tjenesten du registrerer mot, "
 #~ "men i dette tilfellet ble det ikke sendt noe signal."
-
 #~ msgid "Please try again, or perhaps another service."
 #~ msgstr "Prøv igjen, kanskje med en annen tjeneste."
-
 #~ msgid "Configuring Roster"
 #~ msgstr "Setter opp kontaktliste"
-
 #~ msgid "Registration Successful!"
 #~ msgstr "Registrering gikk bra!"
-
 #~ msgid "You are now able to add contacts using this transport."
 #~ msgstr "Du kan nå legge til kontakter med denne transporten."
-
 #~ msgid "Service"
 #~ msgstr "Tjeneste"
-
 #~ msgid "Checking your local service first..."
 #~ msgstr "Sjekker din lokale tjeneste først..."
-
 #~ msgid ""
 #~ "<b>Configuring your new service...</b>\n"
 #~ "This will take a few moments, please wait."
 #~ msgstr ""
 #~ "<b>Sette opp dine nye tjenester...</b>\n"
 #~ "Dette vil ta litt tid. Vennligst vent."
-
 #~ msgid "Registering With Service"
 #~ msgstr "Registrerer deg hos tjeneste"
-
 #~ msgid "Saving personal details, please wait..."
 #~ msgstr "Lagrer personlige innstillinger. Vennligst vent..."
-
 #~ msgid "*"
 #~ msgstr "*"
-
 #~ msgid "From:"
 #~ msgstr "Fra:"
-
 #~ msgid "Gossip - Received Message"
 #~ msgstr "Gossip - Mottatt melding"
-
 #~ msgid "In reply to:"
 #~ msgstr "I svar til:"
-
 #~ msgid "To:"
 #~ msgstr "Til:"
-
 #~ msgid "_Reply..."
 #~ msgstr "Sva_r..."
-
 #~ msgid "_Send"
 #~ msgstr "_Send"
-
 #~ msgid "<b>Connect to server</b>"
 #~ msgstr "<b>Koble til tjener</b>"
-
 #~ msgid "C_onnect"
 #~ msgstr "K_oble til"
-
 #~ msgid "Connect _Server:"
 #~ msgstr "Koble til _tjener:"
-
-#~ msgid "_Jabber ID:"
-#~ msgstr "_Jabber-ID:"
-
 #~ msgid "Edit or Delete this favorite."
 #~ msgstr "Redigér eller slett denne favoritten."
-
 #~ msgid "Gossip - Edit Favorite"
 #~ msgstr "Gossip - rediger favoritt"
-
 #~ msgid "Imendio Gossip - Group Chat"
 #~ msgstr "Imendio Gossip - gruppesamtale"
-
 #~ msgid " "
 #~ msgstr " "
-
 #~ msgid "<b>Personal information</b>"
 #~ msgstr "<b>Personlig informasjon</b>"
-
 #~ msgid "<b>Preferred Service</b>"
 #~ msgstr "<b>Foretrukket tjeneste</b>"
-
 #~ msgid "<b>Recommended Services</b>"
 #~ msgstr "<b>Anbefalte tjenester</b>"
-
 #~ msgid ""
 #~ "<b>Requested service requirements...</b>\n"
 #~ "This will take a few moments, please wait."
 #~ msgstr ""
 #~ "<b>Tjenestekrav forespurt...</b>\n"
 #~ "Dette vil ta litt tid. Vennligst vent."
-
 #~ msgid "<b>Spell Checking</b>"
 #~ msgstr "<b>Stavekontroll</b>"
-
 #~ msgid "<i>Information not available</i>"
 #~ msgstr "<i>Informasjon ikke tilgjengelig</i>"
-
 #~ msgid "Add Another Account"
 #~ msgstr "Legg til ny konto"
-
 #~ msgid "Choose a Server"
 #~ msgstr "Velg en tjener"
-
 #~ msgid "Choose from list:"
 #~ msgstr "Velg fra listen:"
-
 #~ msgid "Configure Transport"
 #~ msgstr "Sett opp transport"
-
 #~ msgid "Configure Transports"
 #~ msgstr "Sett opp transporter"
-
 #~ msgid "Configuring Service"
 #~ msgstr "Setter opp tjeneste"
-
 #~ msgid "If you prefer, you can specify your own service:"
 #~ msgstr "Dersom du foretrekker det, kan du spesifisere din egen tjeneste:"
-
 #~ msgid "Information about ..."
 #~ msgstr "Informasjon om..."
-
 #~ msgid "Jabber Account"
 #~ msgstr "Jabber-konto"
-
 #~ msgid "Jabber.com"
 #~ msgstr "Jabber.com"
-
 #~ msgid "Jabber.org"
 #~ msgstr "Jabber.org"
-
 #~ msgid "Nick name:"
 #~ msgstr "Kallenavn:"
-
 #~ msgid "On what server do you have a Jabber account?"
 #~ msgstr "På hvilken tjener har du din Jabber-konto?"
-
 #~ msgid "Please complete the details below to set up your account:  "
 #~ msgstr "Fyll inn informasjonen under for å sette opp en konto: "
-
 #~ msgid "Populating services..."
 #~ msgstr "Får informasjon om tjenester..."
-
 #~ msgid "Remove Account"
 #~ msgstr "Slett konto"
-
 #~ msgid "Service Details"
 #~ msgstr "Tjenesteinformasjon"
-
 #~ msgid "Service:"
 #~ msgstr "Tjeneste:"
-
 #~ msgid ""
 #~ "This wizard will allow you to configure your account settings for another "
 #~ "protocol. "
 #~ msgstr ""
 #~ "Denne veiviseren vil la deg sette opp kontoinnstillinger for en annen "
 #~ "protokoll."
-
 #~ msgid "Transport Accounts"
 #~ msgstr "Transportkontoer"
-
 #~ msgid "Use a different server"
 #~ msgstr "Bruk en annen tjener"
-
 #~ msgid "Which protocol would you like to set up? "
 #~ msgstr "Hvilken protokoll ønsker du å sette opp?"
-
 #~ msgid ""
 #~ "You can set the status presets which appear in the presence menu on the "
 #~ "main window here."
 #~ msgstr ""
 #~ "Du kan sette forhåndsdefinerte statusmeldinger som vises i statusmenyen i "
 #~ "hovedvinduet."
-
 #~ msgid "You currently have the following accounts set up:"
 #~ msgstr "Du har nå følgende kontoer satt opp:"
-
 #~ msgid "_Jabber ID of new contact:"
 #~ msgstr "_Jabber-ID for den nye kontakten:"
-
 #~ msgid "What request message do you want to send to %s?"
 #~ msgstr "Hvilken forespørsel vil du sende til %s?"
-
 #~ msgid "Make sure that your account information is correct."
 #~ msgstr "Sjekk at din kontoinformasjon er korrekt."
-
 #~ msgid "%s wants to be notified of your status."
 #~ msgstr "%s ønsker å få melding om din status."
-
 #~ msgid "You were disconnected from the server. Do you want to reconnect?"
 #~ msgstr "Du har blitt koblet fra tjeneren. Vil du koble til på nytt?"
-
 #~ msgid ""
 #~ "Make sure that your account information is correct. The server may also "
 #~ "currently be unavailable."
 #~ msgstr ""
 #~ "Sjekk at din kontoinformasjon er korrekt. Det er også mulig at tjeneren "
 #~ "ikke er tilgjengelig for øyeblikket."
-
 #~ msgid "An error occurred when chatting in the group chat %s."
 #~ msgstr "En feil oppsto under prat i gruppeprat %s."
-
 #~ msgid "Details:"
 #~ msgstr "Detaljer:"
-
 #~ msgid "Unable to enter the group chat %s."
 #~ msgstr "Kan ikke gå inn i gruppeprat %s."
-
 #~ msgid "An error occurred when chatting with %s."
 #~ msgstr "En feil oppsto mens du pratet med %s."
-
 #~ msgid "        "
 #~ msgstr "        "
-
 #~ msgid "<b>Available chat rooms</b>"
 #~ msgstr "<b>Tilgjengelige praterom</b>"
-
 #~ msgid "<b>Chat room information</b>"
 #~ msgstr "<b>Informasjon om praterom</b>"
-
 #~ msgid "N_ickname:"
 #~ msgstr "_Kallenavn:"
-
 #~ msgid "R_emove"
 #~ msgstr "Fje_rn"
-
 #~ msgid "_Add"
 #~ msgstr "_Legg til"
-
 #~ msgid "<b>Preset status messages</b>"
 #~ msgstr "<b>Forhåndssatte statusmeldinger</b>"
-
 #~ msgid "Add to your contact list"
 #~ msgstr "Legg til i kontaktlisten"
-
 #~ msgid "Discover Services"
 #~ msgstr "Finn tjenester"
-
 #~ msgid "Sound"
 #~ msgstr "Lyd"
-
 #~ msgid "What request message do you want to send to ...?"
 #~ msgstr "Hvilken forespørselsmelding vil du sende til ...?"
+
