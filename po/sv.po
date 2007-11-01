@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: empathy\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-10-22 21:09+0200\n"
-"PO-Revision-Date: 2007-10-22 21:10+0100\n"
+"POT-Creation-Date: 2007-11-01 17:40+0100\n"
+"PO-Revision-Date: 2007-11-01 17:40+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "MIME-Version: 1.0\n"
@@ -229,7 +229,7 @@ msgstr ""
 "Skicka synpunkter på översättningen till\n"
 "tp-sv@listor.tp-sv.se"
 
-#: ../libempathy-gtk/empathy-account-chooser.c:335
+#: ../libempathy-gtk/empathy-account-chooser.c:337
 msgid "All"
 msgstr "Alla"
 
@@ -683,16 +683,23 @@ msgid "_Room:"
 msgstr "_Rum:"
 
 #: ../libempathy-gtk/empathy-contact-dialogs.c:176
-#: ../libempathy-gtk/empathy-contact-widget.glade.h:9
-msgid "Contact information"
+msgid "Personal Information"
+msgstr "Personlig information"
+
+#: ../libempathy-gtk/empathy-contact-dialogs.c:179
+msgid "Edit Contact Information"
+msgstr "Redigera kontaktinformation"
+
+#: ../libempathy-gtk/empathy-contact-dialogs.c:182
+msgid "Contact Information"
 msgstr "Kontaktinformation"
 
-#: ../libempathy-gtk/empathy-contact-dialogs.c:270
+#: ../libempathy-gtk/empathy-contact-dialogs.c:277
 msgid "I would like to add you to my contact list."
 msgstr "Jag vill lägga till dig i min kontaktlista."
 
-#: ../libempathy-gtk/empathy-contact-dialogs.c:294
-msgid "New contact"
+#: ../libempathy-gtk/empathy-contact-dialogs.c:301
+msgid "New Contact"
 msgstr "Ny kontakt"
 
 #: ../libempathy-gtk/empathy-contact-dialogs.glade.h:1
@@ -776,16 +783,16 @@ msgstr "_Ring"
 msgid "Start a voice or video conversation with this contact"
 msgstr "Starta röst- eller videosamtal med denna kontakt"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1415
+#: ../libempathy-gtk/empathy-contact-list-view.c:1423
 msgid "Sorry, I don't want you in my contact list anymore."
 msgstr "Tyvärr, jag vill inte längre ha dig i min kontaktlista."
 
-#: ../libempathy-gtk/empathy-contact-widget.c:657
+#: ../libempathy-gtk/empathy-contact-widget.c:656
 msgid "Select"
 msgstr "Markera"
 
-#: ../libempathy-gtk/empathy-contact-widget.c:667
-#: ../libempathy-gtk/empathy-main-window.c:606
+#: ../libempathy-gtk/empathy-contact-widget.c:666
+#: ../libempathy-gtk/empathy-main-window.c:607
 msgid "Group"
 msgstr "Grupp"
 
@@ -816,6 +823,10 @@ msgstr "Födelsedag:"
 #: ../libempathy-gtk/empathy-contact-widget.glade.h:8
 msgid "Client:"
 msgstr "Klient:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:9
+msgid "Contact information"
+msgstr "Kontaktinformation"
 
 #: ../libempathy-gtk/empathy-contact-widget.glade.h:10
 msgid "Email:"
@@ -903,12 +914,12 @@ msgid "Conversations"
 msgstr "Samtal"
 
 #: ../libempathy-gtk/empathy-log-window.glade.h:2
-msgid "Search"
-msgstr "Sök"
+msgid "Previous Conversations"
+msgstr "Tidigare samtal"
 
 #: ../libempathy-gtk/empathy-log-window.glade.h:3
-msgid "View Previous Conversations"
-msgstr "Visa tidigare samtal"
+msgid "Search"
+msgstr "Sök"
 
 #: ../libempathy-gtk/empathy-log-window.glade.h:4
 msgid "_For:"
@@ -946,16 +957,16 @@ msgstr "Uppda_tera"
 msgid "This list represents all chat rooms hosted on the server you have entered."
 msgstr "Den här listan representerar alla chattrum som finns på servern som du har gått in på."
 
-#: ../libempathy-gtk/empathy-main-window.c:274
+#: ../libempathy-gtk/empathy-main-window.c:275
 msgid "Show and edit accounts"
 msgstr "Visa och redigera konton"
 
-#: ../libempathy-gtk/empathy-main-window.c:627
+#: ../libempathy-gtk/empathy-main-window.c:628
 msgid "Contact"
 msgstr "Kontakt"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:1
-msgid "Contact list"
+msgid "Contact List"
 msgstr "Kontaktlista"
 
 # Hm?
@@ -968,8 +979,8 @@ msgid "Join _Favorites"
 msgstr "Gå in i _favoriter"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:5
-msgid "Manage Favorites..."
-msgstr "Hantera favoriter..."
+msgid "Manage Favorites"
+msgstr "Hantera favoriter"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:6
 msgid "Show _Offline Contacts"
@@ -1121,7 +1132,7 @@ msgid "_Use for chat rooms"
 msgstr "Använd för _chattrum"
 
 #. Custom messages
-#: ../libempathy-gtk/empathy-presence-chooser.c:690
+#: ../libempathy-gtk/empathy-presence-chooser.c:691
 msgid "Custom messages..."
 msgstr "Anpassade meddelanden..."
 
@@ -1167,7 +1178,7 @@ msgstr "Stavningskontroll"
 msgid "Suggestions for the word:"
 msgstr "Förslag för ordet:"
 
-#: ../libempathy-gtk/empathy-status-icon.c:311
+#: ../libempathy-gtk/empathy-status-icon.c:310
 #, c-format
 msgid ""
 "New message from %s:\n"
@@ -1176,12 +1187,12 @@ msgstr ""
 "Nytt meddelande från %s:\n"
 "%s"
 
-#: ../libempathy-gtk/empathy-status-icon.c:580
+#: ../libempathy-gtk/empathy-status-icon.c:579
 #, c-format
 msgid "Subscription requested by %s"
 msgstr "Prenumeration begärd av %s"
 
-#: ../libempathy-gtk/empathy-status-icon.c:583
+#: ../libempathy-gtk/empathy-status-icon.c:582
 #, c-format
 msgid ""
 "\n"
@@ -1728,8 +1739,6 @@ msgstr "- Empathy snabbmeddelandeklient"
 #~ msgstr "Någon vill bli tillagd till din kontaktlista."
 #~ msgid "Show"
 #~ msgstr "Visa"
-#~ msgid "Contact Information"
-#~ msgstr "Kontaktinformation"
 #~ msgid "Contact has been removed"
 #~ msgstr "Kontakten har tagits bort"
 #~ msgid "Subject: %s"
