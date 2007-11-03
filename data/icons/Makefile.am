@@ -60,18 +60,18 @@ private_icons = \
 	hicolor_status_16x16_empathy-offline.png \
 	hicolor_status_16x16_empathy-pending.png \
 	hicolor_status_16x16_user-typing.png \
+	hicolor_status_scalable_empathy-available.svg \
+	hicolor_status_scalable_empathy-away.svg \
+	hicolor_status_scalable_empathy-busy.svg \
+	hicolor_status_scalable_empathy-extended-away.svg \
+	hicolor_status_scalable_empathy-offline.svg \
+	hicolor_status_scalable_empathy-pending.svg \
 	$(NULL)
 
 noinst_DATA = \
 	hicolor_apps_16x16_im-xmpp.svg \
 	hicolor_apps_22x22_im-xmpp.svg \
 	hicolor_apps_32x32_im-xmpp.svg \
-	hicolor_status_16x16_empathy-available.svg \
-	hicolor_status_16x16_empathy-away.svg \
-	hicolor_status_16x16_empathy-busy.svg \
-	hicolor_status_16x16_empathy-extended-away.svg \
-	hicolor_status_16x16_empathy-offline.svg \
-	hicolor_status_16x16_empathy-pending.svg \
 	$(NULL)
 
 EXTRA_DIST = \

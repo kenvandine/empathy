@@ -1,3 +1,20 @@
+2007-11-03  Xavier Claessens  <xclaesse@gmail.com>
+
+	* data/icons/hicolor_status_scalable_empathy-pending.svg:
+	* data/icons/hicolor_status_16x16_empathy-pending.svg:
+	* data/icons/hicolor_status_scalable_empathy-extended-away.svg:
+	* data/icons/hicolor_status_16x16_empathy-extended-away.svg:
+	* data/icons/hicolor_status_scalable_empathy-away.svg:
+	* data/icons/hicolor_status_16x16_empathy-away.svg:
+	* data/icons/hicolor_status_scalable_empathy-offline.svg:
+	* data/icons/hicolor_status_16x16_empathy-offline.svg:
+	* data/icons/hicolor_status_scalable_empathy-busy.svg:
+	* data/icons/hicolor_status_16x16_empathy-busy.svg:
+	* data/icons/hicolor_status_scalable_empathy-available.svg:
+	* data/icons/hicolor_status_16x16_empathy-available.svg:
+	* data/icons/Makefile.am: Install SVG status images as scalable.
+	Fixes bug #492984.
+
 2007-10-28  Xavier Claessens  <xclaesse@gmail.com>
 
 	* libempathy-gtk/empathy-contact-list-view.c:
