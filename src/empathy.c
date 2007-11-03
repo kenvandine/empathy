@@ -265,7 +265,7 @@ main (int argc, char *argv[])
 	EmpathyIdle       *idle;
 	EmpathyChandler   *chandler;
 	gboolean           no_connect = FALSE;
-	GOptionContext    *context;
+	GError            *error = NULL;
 	GOptionEntry       options[] = {
 		{ "no-connect", 'n',
 		  0, G_OPTION_ARG_NONE, &no_connect,
@@ -280,12 +280,15 @@ main (int argc, char *argv[])
 	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
 	textdomain (GETTEXT_PACKAGE);
 
-	context = g_option_context_new (_("- Empathy Instant Messenger"));
-	g_option_context_add_main_entries (context, options, GETTEXT_PACKAGE);
+	if (!gtk_init_with_args (&argc, &argv,
+				 _("- Empathy Instant Messenger"),
+				 options, GETTEXT_PACKAGE, &error)) {
+		empathy_debug (DEBUG_DOMAIN, error->message);
+		return EXIT_FAILURE;
+	}
 
 	g_set_application_name (PACKAGE_NAME);
 
-	gtk_init (&argc, &argv);
 	gtk_window_set_default_icon_name ("empathy");
 	gtk_icon_theme_append_search_path (gtk_icon_theme_get_default (),
 					   PKGDATADIR G_DIR_SEPARATOR_S "icons");
