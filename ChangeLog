@@ -1,5 +1,10 @@
 2007-11-03  Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy/empathy-contact-factory.c: Call ClearAvatar if the data
+	is NULL or size <= 0 in empathy_contact_factory_set_avatar().
+
+2007-11-03  Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/empathy-contact-widget.c:
 	* libempathy-gtk/empathy-avatar-chooser.c:
 	* libempathy-gtk/empathy-avatar-chooser.h:

@@ -399,6 +399,21 @@ contact_factory_set_avatar_cb (DBusGProxy *proxy,
 }
 
 static void
+contact_factory_clear_avatar_cb (DBusGProxy *proxy,
+				 GError     *error,
+				 gpointer    user_data)
+{
+	ContactFactoryAccountData *account_data = user_data;
+
+	if (error) {
+		empathy_debug (DEBUG_DOMAIN, "Error clearing avatar: %s",
+			       error->message);
+	}
+
+	contact_factory_account_data_unref (account_data);
+}
+
+static void
 contact_factory_avatar_retrieved_cb (DBusGProxy *proxy,
 				     guint       handle,
 				     gchar      *token,
@@ -1256,7 +1271,6 @@ empathy_contact_factory_set_avatar (EmpathyContactFactory *factory,
 				    const gchar           *mime_type)
 {
 	ContactFactoryAccountData *account_data;
-	GArray                     avatar;
 
 	g_return_if_fail (EMPATHY_IS_CONTACT_FACTORY (factory));
 	g_return_if_fail (MC_IS_ACCOUNT (account));
@@ -1270,13 +1284,21 @@ empathy_contact_factory_set_avatar (EmpathyContactFactory *factory,
 	empathy_debug (DEBUG_DOMAIN, "Setting avatar on account %s",
 		       mc_account_get_unique_name (account));
 
-	avatar.data = (gchar*) data;
-	avatar.len = size;
-	tp_conn_iface_avatars_set_avatar_async (account_data->avatars_iface,
-						&avatar,
-						mime_type,
-						contact_factory_set_avatar_cb,
-						contact_factory_account_data_ref (account_data));
+	if (data && size > 0 && size < G_MAXUINT) {
+		GArray avatar;
+
+		avatar.data = (gchar*) data;
+		avatar.len = size;
+		tp_conn_iface_avatars_set_avatar_async (account_data->avatars_iface,
+							&avatar,
+							mime_type,
+							contact_factory_set_avatar_cb,
+							contact_factory_account_data_ref (account_data));
+	} else {
+		tp_conn_iface_avatars_clear_avatar_async (account_data->avatars_iface,
+							  contact_factory_clear_avatar_cb,
+							  contact_factory_account_data_ref (account_data));
+	}
 }
 
 static void
