@@ -673,6 +673,7 @@ main_window_edit_personal_information_cb (GtkWidget         *widget,
 		g_slist_foreach (accounts, (GFunc) g_object_unref, NULL);
 		g_slist_free (accounts);
 		g_object_unref (factory);
+		g_object_unref (contact);
 	}
 }
 

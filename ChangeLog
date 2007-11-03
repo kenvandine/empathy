@@ -1,5 +1,10 @@
 2007-11-03  Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/empathy-main-window.c: Unref contact returned by
+	empathy_contact_factory_get_user().
+
+2007-11-03  Xavier Claessens  <xclaesse@gmail.com>
+
 	* src/empathy.c: Make use of gtk_init_with_args for command line
 	parsing. Fixes bug #491985 (Basilio Kublik).
 
