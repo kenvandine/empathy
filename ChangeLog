@@ -1,5 +1,17 @@
 2007-11-03  Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/empathy-contact-widget.c:
+	* libempathy-gtk/empathy-avatar-chooser.c:
+	* libempathy-gtk/empathy-avatar-chooser.h:
+	* python/pyempathy/pyempathy.defs:
+	* libempathy/empathy-contact-factory.c:
+	* libempathy/empathy-contact-factory.h: Rename
+	empathy_contact_factory_set_name() to _set_alias(). Implements
+	empathy_contact_factory_set_avatar(). Return the mime_type in
+	empathy_avatar_chooser_get_image_data().
+
+2007-11-03  Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/empathy-main-window.c: Unref contact returned by
 	empathy_contact_factory_get_user().
 

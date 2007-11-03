@@ -53,7 +53,8 @@ GtkWidget *empathy_avatar_chooser_new            (void);
 void       empathy_avatar_chooser_set            (EmpathyAvatarChooser *chooser,
 						  EmpathyAvatar        *avatar);
 void       empathy_avatar_chooser_get_image_data (EmpathyAvatarChooser *chooser,
-						  gchar               **data,
-						  gsize                *data_size);
+						  const gchar         **data,
+						  gsize                *data_size,
+						  const gchar         **mime_type);
 
 #endif /* __EMPATHY_AVATAR_CHOOSER_H__ */

@@ -547,9 +547,9 @@
   )
 )
 
-(define-method set_name
+(define-method set_alias
   (of-object "EmpathyContactFactory")
-  (c-name "empathy_contact_factory_set_name")
+  (c-name "empathy_contact_factory_set_alias")
   (return-type "none")
   (parameters
     '("EmpathyContact*" "contact")

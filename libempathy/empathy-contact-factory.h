@@ -62,9 +62,14 @@ EmpathyContact *       empathy_contact_factory_get_from_handle  (EmpathyContactF
 GList *                empathy_contact_factory_get_from_handles (EmpathyContactFactory *factory,
 								 McAccount             *account,
 								 GArray                *handles);
-void                   empathy_contact_factory_set_name         (EmpathyContactFactory *factory,
+void                   empathy_contact_factory_set_alias        (EmpathyContactFactory *factory,
 								 EmpathyContact        *contact,
-								 const gchar           *name);
+								 const gchar           *alias);
+void                   empathy_contact_factory_set_avatar       (EmpathyContactFactory *factory,
+								 McAccount             *account,
+								 const gchar           *data,
+								 gsize                  size,
+								 const gchar           *mime_type);
 
 G_END_DECLS
 

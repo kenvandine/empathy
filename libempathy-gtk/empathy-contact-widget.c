@@ -495,14 +495,20 @@ static void
 contact_widget_avatar_changed_cb (EmpathyAvatarChooser *chooser,
 				  EmpathyContactWidget *information)
 {
-	McAccount *account;
-	gchar     *data;
-	gsize      size;
+	if (information->contact &&
+	    empathy_contact_is_user (information->contact)) {
+		McAccount   *account;
+		const gchar *data;
+		gsize        size;
+		const gchar *mime_type;
 
-	account = empathy_contact_get_account (information->contact);
-	empathy_avatar_chooser_get_image_data (EMPATHY_AVATAR_CHOOSER (information->widget_avatar),
-					       &data, &size);
-	mc_account_set_avatar_from_data (account, data, size, "png");
+		account = empathy_contact_get_account (information->contact);
+		empathy_avatar_chooser_get_image_data (EMPATHY_AVATAR_CHOOSER (information->widget_avatar),
+						       &data, &size, &mime_type);
+		empathy_contact_factory_set_avatar (information->factory,
+						    account,
+						    data, size, mime_type);
+	}
 }
 
 static void
@@ -527,12 +533,12 @@ contact_widget_entry_alias_focus_event_cb (GtkEditable          *editable,
 					   EmpathyContactWidget *information)
 {
 	if (information->contact) {
-		const gchar *name;
+		const gchar *alias;
 
-		name = gtk_entry_get_text (GTK_ENTRY (editable));
-		empathy_contact_factory_set_name (information->factory,
+		alias = gtk_entry_get_text (GTK_ENTRY (editable));
+		empathy_contact_factory_set_alias (information->factory,
 						  information->contact,
-						  name);
+						  alias);
 	}
 
 	return FALSE;

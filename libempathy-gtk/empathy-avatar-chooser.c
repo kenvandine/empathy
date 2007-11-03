@@ -545,8 +545,9 @@ empathy_avatar_chooser_set (EmpathyAvatarChooser *chooser,
 
 void
 empathy_avatar_chooser_get_image_data (EmpathyAvatarChooser  *chooser,
-				       gchar                **data,
-				       gsize                 *data_size)
+				       const gchar          **data,
+				       gsize                 *data_size,
+				       const gchar          **mime_type)
 {
 	EmpathyAvatarChooserPriv *priv;
 
@@ -559,6 +560,9 @@ empathy_avatar_chooser_get_image_data (EmpathyAvatarChooser  *chooser,
 	}
 	if (*data_size) {
 		*data_size = priv->image_data_size;
+	}
+	if (mime_type) {
+		*mime_type = "png";
 	}
 }
 

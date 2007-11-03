@@ -382,6 +382,23 @@ contact_factory_aliases_changed_cb (DBusGProxy *proxy,
 }
 
 static void
+contact_factory_set_avatar_cb (DBusGProxy *proxy,
+			       gchar      *token,
+			       GError     *error,
+			       gpointer    user_data)
+{
+	ContactFactoryAccountData *account_data = user_data;
+
+	if (error) {
+		empathy_debug (DEBUG_DOMAIN, "Error setting avatar: %s",
+			       error->message);
+	}
+
+	contact_factory_account_data_unref (account_data);
+	g_free (token);
+}
+
+static void
 contact_factory_avatar_retrieved_cb (DBusGProxy *proxy,
 				     guint       handle,
 				     gchar      *token,
@@ -1189,9 +1206,9 @@ empathy_contact_factory_get_from_handles (EmpathyContactFactory *factory,
 }
 
 void
-empathy_contact_factory_set_name (EmpathyContactFactory *factory,
-				  EmpathyContact        *contact,
-				  const gchar           *name)
+empathy_contact_factory_set_alias (EmpathyContactFactory *factory,
+				   EmpathyContact        *contact,
+				   const gchar           *alias)
 {
 	ContactFactoryAccountData *account_data;
 	McAccount                 *account;
@@ -1212,7 +1229,7 @@ empathy_contact_factory_set_name (EmpathyContactFactory *factory,
 
 	empathy_debug (DEBUG_DOMAIN, "Setting alias for contact %s (%d) to %s",
 		       empathy_contact_get_id (contact),
-		       handle, name);
+		       handle, alias);
 
 	new_alias = g_hash_table_new_full (g_direct_hash,
 					   g_direct_equal,
@@ -1221,7 +1238,7 @@ empathy_contact_factory_set_name (EmpathyContactFactory *factory,
 
 	g_hash_table_insert (new_alias,
 			     GUINT_TO_POINTER (handle),
-			     g_strdup (name));
+			     g_strdup (alias));
 
 	tp_conn_iface_aliasing_set_aliases_async (account_data->aliasing_iface,
 						  new_alias,
@@ -1229,6 +1246,37 @@ empathy_contact_factory_set_name (EmpathyContactFactory *factory,
 						  contact_factory_account_data_ref (account_data));
 
 	g_hash_table_destroy (new_alias);
+}
+
+void
+empathy_contact_factory_set_avatar (EmpathyContactFactory *factory,
+				    McAccount             *account,
+				    const gchar           *data,
+				    gsize                  size,
+				    const gchar           *mime_type)
+{
+	ContactFactoryAccountData *account_data;
+	GArray                     avatar;
+
+	g_return_if_fail (EMPATHY_IS_CONTACT_FACTORY (factory));
+	g_return_if_fail (MC_IS_ACCOUNT (account));
+
+	account_data = contact_factory_account_data_get (factory, account);
+
+	if (!account_data->avatars_iface) {
+		return;
+	}
+
+	empathy_debug (DEBUG_DOMAIN, "Setting avatar on account %s",
+		       mc_account_get_unique_name (account));
+
+	avatar.data = (gchar*) data;
+	avatar.len = size;
+	tp_conn_iface_avatars_set_avatar_async (account_data->avatars_iface,
+						&avatar,
+						mime_type,
+						contact_factory_set_avatar_cb,
+						contact_factory_account_data_ref (account_data));
 }
 
 static void
