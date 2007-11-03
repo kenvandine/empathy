@@ -572,7 +572,8 @@ contact_factory_avatar_updated_cb (DBusGProxy *proxy,
 		return;
 	}
 
-	empathy_debug (DEBUG_DOMAIN, "Need to request one avatar");
+	empathy_debug (DEBUG_DOMAIN, "Need to request avatar for token %s",
+		       new_token);
 
 	handles = g_array_new (FALSE, FALSE, sizeof (guint));
 	g_array_append_val (handles, handle);
@@ -1281,20 +1282,23 @@ empathy_contact_factory_set_avatar (EmpathyContactFactory *factory,
 		return;
 	}
 
-	empathy_debug (DEBUG_DOMAIN, "Setting avatar on account %s",
-		       mc_account_get_unique_name (account));
-
 	if (data && size > 0 && size < G_MAXUINT) {
 		GArray avatar;
 
 		avatar.data = (gchar*) data;
 		avatar.len = size;
+
+		empathy_debug (DEBUG_DOMAIN, "Setting avatar on account %s",
+			       mc_account_get_unique_name (account));
+
 		tp_conn_iface_avatars_set_avatar_async (account_data->avatars_iface,
 							&avatar,
 							mime_type,
 							contact_factory_set_avatar_cb,
 							contact_factory_account_data_ref (account_data));
 	} else {
+		empathy_debug (DEBUG_DOMAIN, "Clearing avatar on account %s",
+			       mc_account_get_unique_name (account));
 		tp_conn_iface_avatars_clear_avatar_async (account_data->avatars_iface,
 							  contact_factory_clear_avatar_cb,
 							  contact_factory_account_data_ref (account_data));
