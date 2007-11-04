@@ -72,11 +72,13 @@ typedef struct {
 	MissionControl          *mc;
 	EmpathyChatroomManager  *chatroom_manager;
 
-	/* Main widgets */
 	GtkWidget              *window;
 	GtkWidget              *main_vbox;
+	GtkWidget              *throbber;
+	GtkWidget              *presence_toolbar;
+	GtkWidget              *presence_chooser;
+	GtkWidget              *errors_vbox;
 
-	/* Menu widgets */
 	GtkWidget              *room;
 	GtkWidget              *room_menu;
 	GtkWidget              *room_sep;
@@ -84,19 +86,12 @@ typedef struct {
 	GtkWidget              *edit_context;
 	GtkWidget              *edit_context_separator;
 
-	/* Throbber */
-	GtkWidget              *throbber;
+	guint                   size_timeout_id;
+	GHashTable             *errors;
 
 	/* Widgets that are enabled when there is... */
 	GList                  *widgets_connected;	/* ... connected accounts */
 	GList                  *widgets_disconnected;	/* ... disconnected accounts */
-
-	/* Status popup */
-	GtkWidget              *presence_toolbar;
-	GtkWidget              *presence_chooser;
-
-	/* Misc */
-	guint                   size_timeout_id;
 } EmpathyMainWindow;
 
 static void     main_window_destroy_cb                         (GtkWidget                       *widget,
@@ -203,6 +198,7 @@ empathy_main_window_show (void)
 				       NULL,
 				       "main_window", &window->window,
 				       "main_vbox", &window->main_vbox,
+				       "errors_vbox", &window->errors_vbox,
 				       "chat_show_offline", &show_offline_widget,
 				       "room", &window->room,
 				       "room_sep", &window->room_sep,
@@ -242,6 +238,11 @@ empathy_main_window_show (void)
 				     G_CALLBACK (main_window_status_changed_cb),
 				     window, NULL);
 
+	window->errors = g_hash_table_new_full (empathy_account_hash,
+						empathy_account_equal,
+						g_object_unref,
+						NULL);
+
 	/* Set up menu */
 	main_window_favorite_chatroom_menu_setup (window);
 
@@ -261,23 +262,22 @@ empathy_main_window_show (void)
 	/* Set up the throbber */
 	ebox = gtk_event_box_new ();
 	gtk_event_box_set_visible_window (GTK_EVENT_BOX (ebox), FALSE);
-
-	window->throbber = ephy_spinner_new ();
-	ephy_spinner_set_size (EPHY_SPINNER (window->throbber), GTK_ICON_SIZE_LARGE_TOOLBAR);
-	gtk_container_add (GTK_CONTAINER (ebox), window->throbber);
-
-	item = gtk_tool_item_new ();
-	gtk_container_add (GTK_CONTAINER (item), ebox);
-	gtk_widget_show_all (GTK_WIDGET (item));
-
-	gtk_toolbar_insert (GTK_TOOLBAR (window->presence_toolbar), item, -1);
-
 	gtk_widget_set_tooltip_text (ebox, _("Show and edit accounts"));
-
 	g_signal_connect (ebox,
 			  "button-press-event",
 			  G_CALLBACK (main_window_throbber_button_press_event_cb),
 			  window);
+	gtk_widget_show (ebox);
+
+	window->throbber = ephy_spinner_new ();
+	ephy_spinner_set_size (EPHY_SPINNER (window->throbber), GTK_ICON_SIZE_LARGE_TOOLBAR);
+	gtk_container_add (GTK_CONTAINER (ebox), window->throbber);
+	gtk_widget_show (window->throbber);
+
+	item = gtk_tool_item_new ();
+	gtk_container_add (GTK_CONTAINER (item), ebox);
+	gtk_toolbar_insert (GTK_TOOLBAR (window->presence_toolbar), item, -1);
+	gtk_widget_show (GTK_WIDGET (item));
 
 	/* Set up contact list. */
 	empathy_status_presets_get_all ();
@@ -382,6 +382,7 @@ main_window_destroy_cb (GtkWidget         *widget,
 
 	g_object_unref (window->mc);
 	g_object_unref (window->list_store);
+	g_hash_table_destroy (window->errors);
 
 	g_free (window);
 }
@@ -714,6 +715,164 @@ main_window_throbber_button_press_event_cb (GtkWidget         *throbber_ebox,
 }
 
 static void
+main_window_error_edit_clicked_cb (GtkButton         *button,
+				   EmpathyMainWindow *window)
+{
+	McAccount *account;
+	GtkWidget *error_widget;
+
+	empathy_accounts_dialog_show (GTK_WINDOW (window->window));
+
+	account = g_object_get_data (G_OBJECT (button), "account");
+	error_widget = g_hash_table_lookup (window->errors, account);
+	gtk_widget_destroy (error_widget);
+	g_hash_table_remove (window->errors, account);
+}
+
+static void
+main_window_error_clear_clicked_cb (GtkButton         *button,
+				    EmpathyMainWindow *window)
+{
+	McAccount *account;
+	GtkWidget *error_widget;
+
+	account = g_object_get_data (G_OBJECT (button), "account");
+	error_widget = g_hash_table_lookup (window->errors, account);
+	gtk_widget_destroy (error_widget);
+	g_hash_table_remove (window->errors, account);
+}
+
+static void
+main_window_error_display (EmpathyMainWindow *window,
+			   McAccount         *account,
+			   const gchar       *message)
+{
+	GtkWidget *child;
+	GtkWidget *table;
+	GtkWidget *image;
+	GtkWidget *button_edit;
+	GtkWidget *alignment;
+	GtkWidget *hbox;
+	GtkWidget *label;
+	GtkWidget *fixed;
+	GtkWidget *vbox;
+	GtkWidget *button_close;
+	gchar     *str;
+
+	child = g_hash_table_lookup (window->errors, account);
+	if (child) {
+		label = g_object_get_data (G_OBJECT (child), "label");
+
+		/* Just set the latest error and return */
+		str = g_markup_printf_escaped ("<b>%s</b>\n%s",
+					       mc_account_get_display_name (account),
+					       message);
+		gtk_label_set_markup (GTK_LABEL (label), str);
+		g_free (str);
+
+		return;
+	}
+
+	child = gtk_vbox_new (FALSE, 0);
+	gtk_box_pack_start (GTK_BOX (window->errors_vbox), child, FALSE, TRUE, 0);
+	gtk_container_set_border_width (GTK_CONTAINER (child), 6);
+	gtk_widget_show (child);
+
+	table = gtk_table_new (2, 4, FALSE);
+	gtk_widget_show (table);
+	gtk_box_pack_start (GTK_BOX (child), table, TRUE, TRUE, 0);
+	gtk_table_set_row_spacings (GTK_TABLE (table), 12);
+	gtk_table_set_col_spacings (GTK_TABLE (table), 6);
+
+	image = gtk_image_new_from_stock (GTK_STOCK_DISCONNECT, GTK_ICON_SIZE_MENU);
+	gtk_widget_show (image);
+	gtk_table_attach (GTK_TABLE (table), image, 0, 1, 0, 2,
+			  (GtkAttachOptions) (GTK_FILL),
+			  (GtkAttachOptions) (GTK_FILL), 0, 0);
+	gtk_misc_set_alignment (GTK_MISC (image), 0.5, 0);
+
+	button_edit = gtk_button_new ();
+	gtk_widget_show (button_edit);
+	gtk_table_attach (GTK_TABLE (table), button_edit, 1, 2, 1, 2,
+			  (GtkAttachOptions) (GTK_FILL),
+			  (GtkAttachOptions) (0), 0, 0);
+
+	alignment = gtk_alignment_new (0.5, 0.5, 0, 0);
+	gtk_widget_show (alignment);
+	gtk_container_add (GTK_CONTAINER (button_edit), alignment);
+
+	hbox = gtk_hbox_new (FALSE, 2);
+	gtk_widget_show (hbox);
+	gtk_container_add (GTK_CONTAINER (alignment), hbox);
+
+	image = gtk_image_new_from_stock (GTK_STOCK_EDIT, GTK_ICON_SIZE_BUTTON);
+	gtk_widget_show (image);
+	gtk_box_pack_start (GTK_BOX (hbox), image, FALSE, FALSE, 0);
+
+	label = gtk_label_new_with_mnemonic (_("Edit Account _Details"));
+	gtk_widget_show (label);
+	gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
+
+	fixed = gtk_fixed_new ();
+	gtk_widget_show (fixed);
+	gtk_table_attach (GTK_TABLE (table), fixed, 2, 3, 1, 2,
+			  (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
+			  (GtkAttachOptions) (GTK_FILL), 0, 0);
+
+	vbox = gtk_vbox_new (FALSE, 6);
+	gtk_widget_show (vbox);
+	gtk_table_attach (GTK_TABLE (table), vbox, 3, 4, 0, 2,
+			  (GtkAttachOptions) (GTK_FILL),
+			  (GtkAttachOptions) (GTK_FILL), 0, 0);
+
+	button_close = gtk_button_new ();
+	gtk_widget_show (button_close);
+	gtk_box_pack_start (GTK_BOX (vbox), button_close, FALSE, FALSE, 0);
+	gtk_button_set_relief (GTK_BUTTON (button_close), GTK_RELIEF_NONE);
+
+
+	image = gtk_image_new_from_stock ("gtk-close", GTK_ICON_SIZE_MENU);
+	gtk_widget_show (image);
+	gtk_container_add (GTK_CONTAINER (button_close), image);
+
+	label = gtk_label_new ("");
+	gtk_widget_show (label);
+	gtk_table_attach (GTK_TABLE (table), label, 1, 3, 0, 1,
+			  (GtkAttachOptions) (GTK_EXPAND | GTK_SHRINK | GTK_FILL),
+			  (GtkAttachOptions) (GTK_EXPAND | GTK_SHRINK | GTK_FILL), 0, 0);
+	gtk_widget_set_size_request (label, 175, -1);
+	gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
+	gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+	gtk_misc_set_alignment (GTK_MISC (label), 0, 0);
+
+	str = g_markup_printf_escaped ("<b>%s</b>\n%s",
+				       mc_account_get_display_name (account),
+				       message);
+	gtk_label_set_markup (GTK_LABEL (label), str);
+	g_free (str);
+
+	g_object_set_data (G_OBJECT (child), "label", label);
+	g_object_set_data_full (G_OBJECT (button_edit),
+				"account", g_object_ref (account),
+				g_object_unref);
+	g_object_set_data_full (G_OBJECT (button_close),
+				"account", g_object_ref (account),
+				g_object_unref);
+
+	g_signal_connect (button_edit, "clicked",
+			  G_CALLBACK (main_window_error_edit_clicked_cb),
+			  window);
+
+	g_signal_connect (button_close, "clicked",
+			  G_CALLBACK (main_window_error_clear_clicked_cb),
+			  window);
+
+	gtk_widget_show (window->errors_vbox);
+
+	g_hash_table_insert (window->errors, g_object_ref (account), child);
+}
+
+static void
 main_window_status_changed_cb (MissionControl                  *mc,
 			       TelepathyConnectionStatus        status,
 			       McPresence                       presence,
@@ -721,7 +880,73 @@ main_window_status_changed_cb (MissionControl                  *mc,
 			       const gchar                     *unique_name,
 			       EmpathyMainWindow               *window)
 {
+	McAccount *account;
+
 	main_window_update_status (window);
+
+	account = mc_account_lookup (unique_name);
+
+	if (status == TP_CONN_STATUS_DISCONNECTED &&
+	    reason > TP_CONN_STATUS_REASON_REQUESTED) {
+		const gchar *message;
+
+		switch (reason) {
+		case TP_CONN_STATUS_REASON_NETWORK_ERROR:
+			message = _("Network error");
+			break;
+		case TP_CONN_STATUS_REASON_AUTHENTICATION_FAILED:
+			message = _("Authentication failed");
+			break;
+		case TP_CONN_STATUS_REASON_ENCRYPTION_ERROR:
+			message = _("Encryption error");
+			break;
+		case TP_CONN_STATUS_REASON_NAME_IN_USE:
+			message = _("Name in use");
+			break;
+		case TP_CONN_STATUS_REASON_CERT_NOT_PROVIDED:
+			message = _("Certificate not provided");
+			break;
+		case TP_CONN_STATUS_REASON_CERT_UNTRUSTED:
+			message = _("Certificate untrusted");
+			break;
+		case TP_CONN_STATUS_REASON_CERT_EXPIRED:
+			message = _("Certificate expired");
+			break;
+		case TP_CONN_STATUS_REASON_CERT_NOT_ACTIVATED:
+			message = _("Certificate not activated");
+			break;
+		case TP_CONN_STATUS_REASON_CERT_HOSTNAME_MISMATCH:
+			message = _("Certificate hostname mismatch");
+			break;
+		case TP_CONN_STATUS_REASON_CERT_FINGERPRINT_MISMATCH:
+			message = _("Certificate fingerprint mismatch");
+			break;
+		case TP_CONN_STATUS_REASON_CERT_SELF_SIGNED:
+			message = _("Certificate self signed");
+			break;
+		case TP_CONN_STATUS_REASON_CERT_OTHER_ERROR:
+			message = _("Certificate error");
+			break;
+		default:
+			message = _("Unknown error");
+			break;
+		}
+
+		main_window_error_display (window, account, message);
+	}
+
+	if (status == TP_CONN_STATUS_CONNECTED) {
+		GtkWidget *error_widget;
+
+		/* Account connected without error, remove error message if any */
+		error_widget = g_hash_table_lookup (window->errors, account);
+		if (error_widget) {
+			gtk_widget_destroy (error_widget);
+			g_hash_table_remove (window->errors, account);
+		}
+	}
+
+	g_object_unref (account);
 }
 
 static void
