@@ -1,7 +1,7 @@
 2007-11-04  Xavier Claessens  <xclaesse@gmail.com>
 
 	* libempathy-gtk/empathy-main-window.c: Display error message when an
-	account failed to connect
+	account failed to connect. Based on Gossip's code.
 
 2007-11-03  Xavier Claessens  <xclaesse@gmail.com>
 
