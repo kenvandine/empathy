@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: empathy.HEAD.es\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-10-28 12:07+0000\n"
-"PO-Revision-Date: 2007-11-01 14:45+0100\n"
+"POT-Creation-Date: 2007-11-04 11:24+0000\n"
+"PO-Revision-Date: 2007-11-04 19:51+0100\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Spanish <traductores@es.gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -833,16 +833,16 @@ msgstr "_Llamar"
 msgid "Start a voice or video conversation with this contact"
 msgstr "Iniciar una conversación de voz o vídeo con este contacto"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1415
+#: ../libempathy-gtk/empathy-contact-list-view.c:1423
 msgid "Sorry, I don't want you in my contact list anymore."
 msgstr "Lo siento, no te quiero en mi lista de contactos."
 
-#: ../libempathy-gtk/empathy-contact-widget.c:656
+#: ../libempathy-gtk/empathy-contact-widget.c:662
 msgid "Select"
 msgstr "Seleccionar"
 
-#: ../libempathy-gtk/empathy-contact-widget.c:666
-#: ../libempathy-gtk/empathy-main-window.c:607
+#: ../libempathy-gtk/empathy-contact-widget.c:672
+#: ../libempathy-gtk/empathy-main-window.c:608
 msgid "Group"
 msgstr "Grupo"
 
@@ -1018,13 +1018,69 @@ msgstr ""
 "Esta lista representa todas las salas de chat hospedadas en el servidor al "
 "que ha entrado."
 
-#: ../libempathy-gtk/empathy-main-window.c:275
+#: ../libempathy-gtk/empathy-main-window.c:265
 msgid "Show and edit accounts"
 msgstr "Mostrar y editar cuentas"
 
-#: ../libempathy-gtk/empathy-main-window.c:628
+#: ../libempathy-gtk/empathy-main-window.c:629
 msgid "Contact"
 msgstr "Contacto"
+
+#: ../libempathy-gtk/empathy-main-window.c:812
+msgid "Edit Account _Details"
+msgstr "Editar los _detalles de la cuenta"
+
+#: ../libempathy-gtk/empathy-main-window.c:895
+msgid "Network error"
+msgstr "Error de red"
+
+#: ../libempathy-gtk/empathy-main-window.c:898
+msgid "Authentication failed"
+msgstr "Falló la autenticación"
+
+#: ../libempathy-gtk/empathy-main-window.c:901
+msgid "Encryption error"
+msgstr "Error de cifrado"
+
+#: ../libempathy-gtk/empathy-main-window.c:904
+msgid "Name in use"
+msgstr "Nombre en uso"
+
+#: ../libempathy-gtk/empathy-main-window.c:907
+msgid "Certificate not provided"
+msgstr "No se proporcionó el certificado"
+
+#: ../libempathy-gtk/empathy-main-window.c:910
+msgid "Certificate untrusted"
+msgstr "Certificado sin confianza"
+
+#: ../libempathy-gtk/empathy-main-window.c:913
+msgid "Certificate expired"
+msgstr "El certificado ha expirado"
+
+#: ../libempathy-gtk/empathy-main-window.c:916
+msgid "Certificate not activated"
+msgstr "El certificado no está activado"
+
+#: ../libempathy-gtk/empathy-main-window.c:919
+msgid "Certificate hostname mismatch"
+msgstr "El nombre del equipo del certificado no coincide"
+
+#: ../libempathy-gtk/empathy-main-window.c:922
+msgid "Certificate fingerprint mismatch"
+msgstr "La huella del certificado no coincide"
+
+#: ../libempathy-gtk/empathy-main-window.c:925
+msgid "Certificate self signed"
+msgstr "El certificado está firmado consigo mismo"
+
+#: ../libempathy-gtk/empathy-main-window.c:928
+msgid "Certificate error"
+msgstr "Error del certificado"
+
+#: ../libempathy-gtk/empathy-main-window.c:931
+msgid "Unknown error"
+msgstr "Error desconocido"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:1
 msgid "Contact List"
@@ -1327,7 +1383,7 @@ msgstr "Establezca su propia presencia"
 msgid "Don't connect on startup"
 msgstr "No conectarse al inicio"
 
-#: ../src/empathy.c:283
+#: ../src/empathy.c:284
 msgid "- Empathy Instant Messenger"
 msgstr "- Mensajería instantánea Empathy"
 
