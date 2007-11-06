@@ -49,6 +49,7 @@ typedef struct {
 	GtkWidget *entry_resource;
 	GtkWidget *entry_server;
 	GtkWidget *spinbutton_port;
+	GtkWidget *spinbutton_priority;
 	GtkWidget *checkbutton_ssl;
 } EmpathyAccountWidgetJabber;
 
@@ -147,11 +148,15 @@ static void
 account_widget_jabber_value_changed_cb (GtkWidget                 *spinbutton,
 					EmpathyAccountWidgetJabber *settings)
 {
-	if (spinbutton == settings->spinbutton_port) {
-		gdouble value;
+	gdouble value;
 
-		value = gtk_spin_button_get_value (GTK_SPIN_BUTTON (spinbutton));
+	value = gtk_spin_button_get_value (GTK_SPIN_BUTTON (spinbutton));
+
+	if (spinbutton == settings->spinbutton_port) {
 		mc_account_set_param_int (settings->account, "port", (gint) value);
+	}
+	else if (spinbutton == settings->spinbutton_priority) {
+		mc_account_set_param_int (settings->account, "priority", (gint) value);
 	}
 }
 
@@ -175,6 +180,7 @@ static void
 account_widget_jabber_setup (EmpathyAccountWidgetJabber *settings)
 {
 	gint      port = 0;
+	gint      priority = 0;
 	gchar    *id = NULL;
 	gchar    *resource = NULL;
 	gchar    *server = NULL;
@@ -182,6 +188,7 @@ account_widget_jabber_setup (EmpathyAccountWidgetJabber *settings)
 	gboolean  old_ssl = FALSE;
 
 	mc_account_get_param_int (settings->account, "port", &port);
+	mc_account_get_param_int (settings->account, "priority", &priority);
 	mc_account_get_param_string (settings->account, "account", &id);
 	mc_account_get_param_string (settings->account, "resource", &resource);
 	mc_account_get_param_string (settings->account, "server", &server);
@@ -206,6 +213,7 @@ account_widget_jabber_setup (EmpathyAccountWidgetJabber *settings)
 	gtk_entry_set_text (GTK_ENTRY (settings->entry_resource), resource ? resource : "");
 	gtk_entry_set_text (GTK_ENTRY (settings->entry_server), server ? server : "");
 	gtk_spin_button_set_value (GTK_SPIN_BUTTON (settings->spinbutton_port), port);
+	gtk_spin_button_set_value (GTK_SPIN_BUTTON (settings->spinbutton_priority), priority);
 
 	gtk_widget_set_sensitive (settings->button_forget, !G_STR_EMPTY (password));
 
@@ -222,7 +230,8 @@ empathy_account_widget_jabber_new (McAccount *account)
 	GladeXML                  *glade;
 	GtkSizeGroup              *size_group;
 	GtkWidget                 *label_id, *label_password;
-	GtkWidget                 *label_server, *label_resource, *label_port; 
+	GtkWidget                 *label_server, *label_resource;
+	GtkWidget                 *label_port, *label_priority; 
 
 	settings = g_new0 (EmpathyAccountWidgetJabber, 1);
 	settings->account = g_object_ref (account);
@@ -235,6 +244,7 @@ empathy_account_widget_jabber_new (McAccount *account)
 				       "label_id", &label_id,
 				       "label_password", &label_password,
 				       "label_resource", &label_resource,
+				       "label_priority", &label_priority,
 				       "label_server", &label_server,
 				       "label_port", &label_port,
 				       "entry_id", &settings->entry_id,
@@ -242,6 +252,7 @@ empathy_account_widget_jabber_new (McAccount *account)
 				       "entry_resource", &settings->entry_resource,
 				       "entry_server", &settings->entry_server,
 				       "spinbutton_port", &settings->spinbutton_port,
+				       "spinbutton_priority", &settings->spinbutton_priority,
 				       "checkbutton_ssl", &settings->checkbutton_ssl,
 				       NULL);
 
@@ -253,6 +264,7 @@ empathy_account_widget_jabber_new (McAccount *account)
 			      "button_forget", "clicked", account_widget_jabber_button_forget_clicked_cb,
 			      "entry_password", "changed", account_widget_jabber_entry_changed_cb,
 			      "spinbutton_port", "value-changed", account_widget_jabber_value_changed_cb,
+			      "spinbutton_priority", "value-changed", account_widget_jabber_value_changed_cb,
 			      "entry_id", "focus-out-event", account_widget_jabber_entry_focus_cb,
 			      "entry_password", "focus-out-event", account_widget_jabber_entry_focus_cb,
 			      "entry_resource", "focus-out-event", account_widget_jabber_entry_focus_cb,
@@ -270,11 +282,12 @@ empathy_account_widget_jabber_new (McAccount *account)
 	gtk_size_group_add_widget (size_group, label_resource);
 	gtk_size_group_add_widget (size_group, label_server);
 	gtk_size_group_add_widget (size_group, label_port);
+	gtk_size_group_add_widget (size_group, label_priority);
 
 	g_object_unref (size_group);
 
-  gtk_editable_select_region (GTK_EDITABLE (settings->entry_id), 0, -1);
-  gtk_widget_grab_focus (settings->entry_id);
+	gtk_editable_select_region (GTK_EDITABLE (settings->entry_id), 0, -1);
+	gtk_widget_grab_focus (settings->entry_id);
 
 	gtk_widget_show (settings->vbox_settings);
 

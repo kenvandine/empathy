@@ -1,3 +1,9 @@
+2007-11-06  Xavier Claessens  <xclaesse@gmail.com>
+
+	* libempathy-gtk/empathy-account-widget-jabber.glade:
+	* libempathy-gtk/empathy-account-widget-jabber.c: Allow to change jabber
+	priority. Fixes bug #493992 (Laurent Bigonville).
+
 2007-11-04  Xavier Claessens  <xclaesse@gmail.com>
 
 	* libempathy-gtk/empathy-main-window.c: Display error message when an
