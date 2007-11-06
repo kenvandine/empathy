@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-10-28 22:06+0100\n"
-"PO-Revision-Date: 2007-10-28 22:07+0100\n"
+"POT-Creation-Date: 2007-11-06 14:58+0100\n"
+"PO-Revision-Date: 2007-11-06 14:59+0100\n"
 "Last-Translator: Ignacio Casal Quinteiro <icq@svn.gnome.org>\n"
 "Language-Team: Galego <proxecto@trasno.net>\n"
 "MIME-Version: 1.0\n"
@@ -293,25 +293,29 @@ msgid "Pass_word:"
 msgstr "_Contrasinal:"
 
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:5
+msgid "Priority:"
+msgstr "Prioridade:"
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:6
 msgid "Reso_urce:"
 msgstr "Rec_urso:"
 
-#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:6
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:7
 msgid "Use encryption (SS_L)"
 msgstr "Usar cifrado (SS_L)"
 
-#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:7
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:8
 #: ../libempathy-gtk/empathy-account-widget-msn.glade.h:5
 msgid "_Port:"
 msgstr "_Porto:"
 
-#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:8
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:9
 #: ../libempathy-gtk/empathy-account-widget-msn.glade.h:6
 #: ../libempathy-gtk/empathy-new-chatroom-dialog.glade.h:10
 msgid "_Server:"
 msgstr "_Servidor:"
 
-#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:9
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:10
 msgid "jabber account settings"
 msgstr "axustes da conta jabber"
 
@@ -835,12 +839,12 @@ msgstr "Inicia unha conversa de voz ou vídeo con este contacto"
 msgid "Sorry, I don't want you in my contact list anymore."
 msgstr "Síntoo, non te quero na miña lista de contactos máis."
 
-#: ../libempathy-gtk/empathy-contact-widget.c:656
+#: ../libempathy-gtk/empathy-contact-widget.c:662
 msgid "Select"
 msgstr "Seleccionar"
 
-#: ../libempathy-gtk/empathy-contact-widget.c:666
-#: ../libempathy-gtk/empathy-main-window.c:607
+#: ../libempathy-gtk/empathy-contact-widget.c:672
+#: ../libempathy-gtk/empathy-main-window.c:608
 msgid "Group"
 msgstr "Grupo"
 
@@ -1016,13 +1020,69 @@ msgstr ""
 "Esta lista representa todas as salas de conversas que están no servidor no "
 "que entrou."
 
-#: ../libempathy-gtk/empathy-main-window.c:275
+#: ../libempathy-gtk/empathy-main-window.c:265
 msgid "Show and edit accounts"
 msgstr "Mostrar e editar contas"
 
-#: ../libempathy-gtk/empathy-main-window.c:628
+#: ../libempathy-gtk/empathy-main-window.c:629
 msgid "Contact"
 msgstr "Contacto"
+
+#: ../libempathy-gtk/empathy-main-window.c:812
+msgid "Edit Account _Details"
+msgstr "Editar _detalles da conta"
+
+#: ../libempathy-gtk/empathy-main-window.c:895
+msgid "Network error"
+msgstr "Erro da rede"
+
+#: ../libempathy-gtk/empathy-main-window.c:898
+msgid "Authentication failed"
+msgstr "Fallou a autenticación"
+
+#: ../libempathy-gtk/empathy-main-window.c:901
+msgid "Encryption error"
+msgstr "Erro de cifrado"
+
+#: ../libempathy-gtk/empathy-main-window.c:904
+msgid "Name in use"
+msgstr "Nome en uso"
+
+#: ../libempathy-gtk/empathy-main-window.c:907
+msgid "Certificate not provided"
+msgstr "Non se proporcionou ningún certificado"
+
+#: ../libempathy-gtk/empathy-main-window.c:910
+msgid "Certificate untrusted"
+msgstr "Certificado non fiable"
+
+#: ../libempathy-gtk/empathy-main-window.c:913
+msgid "Certificate expired"
+msgstr "Certificado caducado"
+
+#: ../libempathy-gtk/empathy-main-window.c:916
+msgid "Certificate not activated"
+msgstr "Certificado non activado"
+
+#: ../libempathy-gtk/empathy-main-window.c:919
+msgid "Certificate hostname mismatch"
+msgstr "O nome do host do certificado non coincide"
+
+#: ../libempathy-gtk/empathy-main-window.c:922
+msgid "Certificate fingerprint mismatch"
+msgstr "A pegada do certificado non coincide"
+
+#: ../libempathy-gtk/empathy-main-window.c:925
+msgid "Certificate self signed"
+msgstr "O certificado está asinado por si mesmo"
+
+#: ../libempathy-gtk/empathy-main-window.c:928
+msgid "Certificate error"
+msgstr "Erro de certificado"
+
+#: ../libempathy-gtk/empathy-main-window.c:931
+msgid "Unknown error"
+msgstr "Erro descoñecido"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:1
 msgid "Contact List"
@@ -1325,7 +1385,7 @@ msgstr "Establecer a súa presencia"
 msgid "Don't connect on startup"
 msgstr "Non contectar ao iniciar"
 
-#: ../src/empathy.c:283
+#: ../src/empathy.c:284
 msgid "- Empathy Instant Messenger"
 msgstr "- Mensaxería instantánea de Empathy"
 
