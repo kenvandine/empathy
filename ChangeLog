@@ -1,3 +1,8 @@
+2007-11-07  Xavier Claessens  <xclaesse@gmail.com>
+
+	* src/org.gnome.Empathy.Call.service.in:
+	* src/Makefile.am: Install empathy-call-chandler to $libexecdir.
+
 2007-11-06  Xavier Claessens  <xclaesse@gmail.com>
 
 	* libempathy-gtk/empathy-account-widget-jabber.glade:
@@ -2169,6 +2174,7 @@
 2007-03-16  Xavier Claessens  <xclaesse@gmail.com>
 
 	* Initial version
+
 2007-09-28  Xavier Claessens  <xclaesse@gmail.com>
 
 	* libempathy/empathy-tp-group.c: Look in the local_pendings list if a

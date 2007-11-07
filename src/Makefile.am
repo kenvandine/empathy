@@ -16,7 +16,8 @@ LDADD =								\
 
 bin_PROGRAMS =			\
 	empathy			\
-	empathy-accounts	\
+	empathy-accounts
+libexec_PROGRAMS =		\
 	empathy-call-chandler
 
 empathy_SOURCES = empathy.c
@@ -29,7 +30,7 @@ service_DATA =							\
 	org.gnome.Empathy.Chat.service				\
 	org.gnome.Empathy.Call.service
 %.service: %.service.in Makefile
-	@sed -e "s|\@bindir\@|$(bindir)|" $< > $@
+	@sed -e "s|\@libexecdir\@|$(libexecdir)|" $< > $@
 
 chandlerdir = $(datadir)/telepathy/managers
 chandler_DATA =							\

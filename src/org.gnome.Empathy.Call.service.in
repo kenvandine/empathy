@@ -1,3 +1,3 @@
 [D-BUS Service]
 Name=org.gnome.Empathy.Call
-Exec=@bindir@/empathy-call-chandler
+Exec=@libexecdir@/empathy-call-chandler
