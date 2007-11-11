@@ -31,31 +31,20 @@
 #include <libebook/e-book.h>
 #include <libgnomevfs/gnome-vfs.h>
 
-#include <libtelepathy/tp-conn.h>
-#include <libtelepathy/tp-chan.h>
 #include <libmissioncontrol/mc-account.h>
 #include <libmissioncontrol/mc-account-monitor.h>
 #include <libmissioncontrol/mission-control.h>
 
-#include <libempathy/empathy-debug.h>
-#include <libempathy/empathy-utils.h>
-#include <libempathy/empathy-presence.h>
-#include <libempathy/empathy-contact.h>
-#include <libempathy/empathy-chandler.h>
-#include <libempathy/empathy-tp-chat.h>
-#include <libempathy/empathy-tp-chatroom.h>
 #include <libempathy/empathy-idle.h>
 #include <libempathy/empathy-conf.h>
+#include <libempathy/empathy-utils.h>
+#include <libempathy/empathy-debug.h>
+
 #include <libempathy-gtk/empathy-preferences.h>
 #include <libempathy-gtk/empathy-main-window.h>
 #include <libempathy-gtk/empathy-status-icon.h>
-#include <libempathy-gtk/empathy-private-chat.h>
-#include <libempathy-gtk/empathy-group-chat.h>
 
 #define DEBUG_DOMAIN "EmpathyMain"
-
-#define BUS_NAME "org.gnome.Empathy.Chat"
-#define OBJECT_PATH "/org/freedesktop/Telepathy/ChannelHandler"
 
 static void
 service_ended_cb (MissionControl *mc,
@@ -97,56 +86,6 @@ account_enabled_cb (McAccountMonitor *monitor,
 {
 	empathy_debug (DEBUG_DOMAIN, "Account enabled: %s", unique_name);
 	start_mission_control (idle);
-}
-
-static void
-new_channel_cb (EmpathyChandler *chandler,
-		TpConn          *tp_conn,
-		TpChan          *tp_chan,
-		MissionControl  *mc)
-{
-	McAccount  *account;
-	EmpathyChat *chat;
-	gchar      *id;
-
-	account = mission_control_get_account_for_connection (mc, tp_conn, NULL);
-	id = empathy_inspect_channel (account, tp_chan);
-	chat = empathy_chat_window_find_chat (account, id);
-	g_free (id);
-
-	if (chat) {
-		/* The chat already exists */
-		if (!empathy_chat_is_connected (chat)) {
-			EmpathyTpChat *tp_chat;
-
-			/* The chat died, give him the new text channel */
-			if (empathy_chat_is_group_chat (chat)) {
-				tp_chat = EMPATHY_TP_CHAT (empathy_tp_chatroom_new (account, tp_chan));
-			} else {
-				tp_chat = empathy_tp_chat_new (account, tp_chan);
-			}
-			empathy_chat_set_tp_chat (chat, tp_chat);
-			g_object_unref (tp_chat);
-		}
-		empathy_chat_present (chat);
-
-		g_object_unref (account);
-		return;
-	}
-
-	if (tp_chan->handle_type == TP_HANDLE_TYPE_CONTACT) {
-		/* We have a new private chat channel */
-		chat = EMPATHY_CHAT (empathy_private_chat_new (account, tp_chan));
-	}
-	else if (tp_chan->handle_type == TP_HANDLE_TYPE_ROOM) {
-		/* We have a new group chat channel */
-		chat = EMPATHY_CHAT (empathy_group_chat_new (account, tp_chan));
-	}
-
-	empathy_chat_present (EMPATHY_CHAT (chat));
-
-	g_object_unref (chat);
-	g_object_unref (account);
 }
 
 static void
@@ -263,7 +202,6 @@ main (int argc, char *argv[])
 	MissionControl    *mc;
 	McAccountMonitor  *monitor;
 	EmpathyIdle       *idle;
-	EmpathyChandler   *chandler;
 	gboolean           no_connect = FALSE;
 	GError            *error = NULL;
 	GOptionEntry       options[] = {
@@ -318,17 +256,10 @@ main (int argc, char *argv[])
 	window = empathy_main_window_show ();
 	icon = empathy_status_icon_new (GTK_WINDOW (window));
 
-	/* Setting up channel handler  */
-	chandler = empathy_chandler_new (BUS_NAME, OBJECT_PATH);
-	g_signal_connect (chandler, "new-channel",
-			  G_CALLBACK (new_channel_cb),
-			  mc);
-
 	gtk_main ();
 
 	empathy_idle_set_state (idle, MC_PRESENCE_OFFLINE);
 
-	g_object_unref (chandler);
 	g_object_unref (monitor);
 	g_object_unref (mc);
 	g_object_unref (idle);

@@ -17,12 +17,15 @@ LDADD =								\
 bin_PROGRAMS =			\
 	empathy			\
 	empathy-accounts
+
 libexec_PROGRAMS =		\
-	empathy-call-chandler
+	empathy-call-chandler	\
+	empathy-chat-chandler
 
 empathy_SOURCES = empathy.c
 empathy_accounts_SOURCES = empathy-accounts.c
 empathy_call_chandler_SOURCES = empathy-call-chandler.c
+empathy_chat_chandler_SOURCES = empathy-chat-chandler.c
 
 # Dbus service files
 servicedir = $(datadir)/dbus-1/services

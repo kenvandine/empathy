@@ -18,9 +18,15 @@
  *  Authors: Elliot Fairweather <elliot.fairweather@collabora.co.uk>
  */
 
+#include <config.h>
+
 #include <stdlib.h>
 
+#include <glib.h>
+#include <glib/gi18n.h>
 #include <gtk/gtk.h>
+
+#include <libgnomevfs/gnome-vfs.h>
 
 #include <libmissioncontrol/mission-control.h>
 
@@ -59,7 +65,17 @@ main (int argc, char *argv[])
 	EmpathyChandler *chandler;
 	MissionControl  *mc;
 
+	empathy_debug_set_log_file_from_env ();
+
+	bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
+	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
+	textdomain (GETTEXT_PACKAGE);
+
 	gtk_init (&argc, &argv);
+
+	gtk_window_set_default_icon_name ("empathy");
+	gtk_icon_theme_append_search_path (gtk_icon_theme_get_default (),
+					   PKGDATADIR G_DIR_SEPARATOR_S "icons");
 
 	mc = empathy_mission_control_new ();
 	chandler = empathy_chandler_new (BUS_NAME, OBJECT_PATH);

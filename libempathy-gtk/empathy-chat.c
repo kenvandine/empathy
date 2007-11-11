@@ -63,7 +63,6 @@
 #define COMPOSING_STOP_TIMEOUT 5
 
 struct _EmpathyChatPriv {
-	EmpathyContactManager *manager;
 	EmpathyLogManager     *log_manager;
 	EmpathyTpChat         *tp_chat;
 	EmpathyChatWindow      *window;
@@ -234,7 +233,6 @@ empathy_chat_init (EmpathyChat *chat)
 
 	priv = GET_PRIV (chat);
 
-	priv->manager = empathy_contact_manager_new ();
 	priv->log_manager = empathy_log_manager_new ();
 	priv->default_window_height = -1;
 	priv->vscroll_visible = FALSE;
@@ -299,7 +297,6 @@ chat_finalize (GObject *object)
 
 	chat_composing_remove_timeout (chat);
 	g_object_unref (chat->account);
-	g_object_unref (priv->manager);
 	g_object_unref (priv->log_manager);
 
 	if (priv->tp_chat) {

@@ -1,3 +1,12 @@
+2007-11-11  Xavier Claessens  <xclaesse@gmail.com>
+
+	* libempathy-gtk/empathy-chat.c:
+	* src/empathy-call-chandler.c:
+	* src/org.gnome.Empathy.Chat.service.in:
+	* src/empathy-chat-chandler.c:
+	* src/empathy.c:
+	* src/Makefile.am: Move chats to its own process.
+
 2007-11-07  Xavier Claessens  <xclaesse@gmail.com>
 
 	* src/org.gnome.Empathy.Call.service.in:
