@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: empathy\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-11-01 17:40+0100\n"
-"PO-Revision-Date: 2007-11-01 17:40+0100\n"
+"POT-Creation-Date: 2007-11-11 11:39+0100\n"
+"PO-Revision-Date: 2007-11-11 11:41+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "MIME-Version: 1.0\n"
@@ -261,25 +261,29 @@ msgid "Pass_word:"
 msgstr "L_ösenord:"
 
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:5
+msgid "Priority:"
+msgstr "Prioritet:"
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:6
 msgid "Reso_urce:"
 msgstr "_Resurs:"
 
-#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:6
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:7
 msgid "Use encryption (SS_L)"
 msgstr "Använd _kryptering (SSL)"
 
-#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:7
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:8
 #: ../libempathy-gtk/empathy-account-widget-msn.glade.h:5
 msgid "_Port:"
 msgstr "_Port:"
 
-#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:8
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:9
 #: ../libempathy-gtk/empathy-account-widget-msn.glade.h:6
 #: ../libempathy-gtk/empathy-new-chatroom-dialog.glade.h:10
 msgid "_Server:"
 msgstr "_Server:"
 
-#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:9
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:10
 msgid "jabber account settings"
 msgstr "inställningar för jabberkonto"
 
@@ -787,12 +791,12 @@ msgstr "Starta röst- eller videosamtal med denna kontakt"
 msgid "Sorry, I don't want you in my contact list anymore."
 msgstr "Tyvärr, jag vill inte längre ha dig i min kontaktlista."
 
-#: ../libempathy-gtk/empathy-contact-widget.c:656
+#: ../libempathy-gtk/empathy-contact-widget.c:662
 msgid "Select"
 msgstr "Markera"
 
-#: ../libempathy-gtk/empathy-contact-widget.c:666
-#: ../libempathy-gtk/empathy-main-window.c:607
+#: ../libempathy-gtk/empathy-contact-widget.c:672
+#: ../libempathy-gtk/empathy-main-window.c:608
 msgid "Group"
 msgstr "Grupp"
 
@@ -957,13 +961,69 @@ msgstr "Uppda_tera"
 msgid "This list represents all chat rooms hosted on the server you have entered."
 msgstr "Den här listan representerar alla chattrum som finns på servern som du har gått in på."
 
-#: ../libempathy-gtk/empathy-main-window.c:275
+#: ../libempathy-gtk/empathy-main-window.c:265
 msgid "Show and edit accounts"
 msgstr "Visa och redigera konton"
 
-#: ../libempathy-gtk/empathy-main-window.c:628
+#: ../libempathy-gtk/empathy-main-window.c:629
 msgid "Contact"
 msgstr "Kontakt"
+
+#: ../libempathy-gtk/empathy-main-window.c:812
+msgid "Edit Account _Details"
+msgstr "Redigera konto_detaljer"
+
+#: ../libempathy-gtk/empathy-main-window.c:895
+msgid "Network error"
+msgstr "Nätverksfel"
+
+#: ../libempathy-gtk/empathy-main-window.c:898
+msgid "Authentication failed"
+msgstr "Autentisering misslyckades"
+
+#: ../libempathy-gtk/empathy-main-window.c:901
+msgid "Encryption error"
+msgstr "Krypteringsfel"
+
+#: ../libempathy-gtk/empathy-main-window.c:904
+msgid "Name in use"
+msgstr "Namnet används"
+
+#: ../libempathy-gtk/empathy-main-window.c:907
+msgid "Certificate not provided"
+msgstr "Certifikat inte tillhandahållet"
+
+#: ../libempathy-gtk/empathy-main-window.c:910
+msgid "Certificate untrusted"
+msgstr "Certifikatet är inte betrott"
+
+#: ../libempathy-gtk/empathy-main-window.c:913
+msgid "Certificate expired"
+msgstr "Certifikatet har gått ut"
+
+#: ../libempathy-gtk/empathy-main-window.c:916
+msgid "Certificate not activated"
+msgstr "Certifikatet är inte aktiverat"
+
+#: ../libempathy-gtk/empathy-main-window.c:919
+msgid "Certificate hostname mismatch"
+msgstr "Värdnamnet i certifikatet stämmer inte"
+
+#: ../libempathy-gtk/empathy-main-window.c:922
+msgid "Certificate fingerprint mismatch"
+msgstr "Certifikatets fingeravtryck stämmer inte"
+
+#: ../libempathy-gtk/empathy-main-window.c:925
+msgid "Certificate self signed"
+msgstr "Certifikatet är självsignerat"
+
+#: ../libempathy-gtk/empathy-main-window.c:928
+msgid "Certificate error"
+msgstr "Certifikatfel"
+
+#: ../libempathy-gtk/empathy-main-window.c:931
+msgid "Unknown error"
+msgstr "Okänt fel"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:1
 msgid "Contact List"
@@ -1259,7 +1319,7 @@ msgstr "Ställ in din egna närvaro"
 msgid "Don't connect on startup"
 msgstr "Anslut inte vid uppstart"
 
-#: ../src/empathy.c:283
+#: ../src/empathy.c:284
 msgid "- Empathy Instant Messenger"
 msgstr "- Empathy snabbmeddelandeklient"
 
@@ -1643,8 +1703,6 @@ msgstr "- Empathy snabbmeddelandeklient"
 #~ "\n"
 #~ "Detta är bara en påminnelse, från och med nu kommer Gossip att avslutas "
 #~ "när denna åtgärd genomförs såvida du inte avkryssar alternativet nedan."
-#~ msgid "Edit Account _Details"
-#~ msgstr "Redigera konto_detaljer"
 #~ msgid "Select who would you like to invite to room:"
 #~ msgstr "Välj vilka du vill bjuda in till rummet:"
 #~ msgid "Select which room you would like to invite:"
@@ -1909,8 +1967,6 @@ msgstr "- Empathy snabbmeddelandeklient"
 #~ "Lämna denna blank om du inte vill lagra ditt lösenord på en publik dator. "
 #~ "Om du väljer att göra det, kommer du att frågas efter ett lösenord varje "
 #~ "gång du ansluter"
-#~ msgid "Port:"
-#~ msgstr "Port:"
 #~ msgid "Registering Account"
 #~ msgstr "Registrerar konto"
 #~ msgid "Resource:"
@@ -2169,8 +2225,6 @@ msgstr "- Empathy snabbmeddelandeklient"
 #~ msgstr "Kunde inte hitta servern du ville använda"
 #~ msgid "Connection to the server failed."
 #~ msgstr "Anslutningen till servern misslyckades."
-#~ msgid "Authentication failed"
-#~ msgstr "Autentisering misslyckades"
 #~ msgid "Connection could not be created"
 #~ msgstr "Anslutning kunde inte skapas"
 #~ msgid "Bad Request"
@@ -2191,8 +2245,6 @@ msgstr "- Empathy snabbmeddelandeklient"
 #~ msgstr "Fjärrserverfel"
 #~ msgid "Service Unavailable"
 #~ msgstr "Tjänst otillgänglig"
-#~ msgid "Unknown error."
-#~ msgstr "Okänt fel."
 #~ msgid "Custom"
 #~ msgstr "Anpassad"
 #~ msgid "Check the server host name is correct and is available."
