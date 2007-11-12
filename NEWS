@@ -1,5 +1,13 @@
 NEW in 0.21.1:
 =============
+
+ - Display error message when an account failed to connect.
+ - Move chats to its own process.
+ - Move chandlers in $libexecdir
+ - Don't use the same bus name for filter and chandler programs. 
+
+NEW in 0.21.1:
+=============
  - Cleanup licences and copyrights, Modules with 100% collabora code are now
    relicenced to LGPL.
  - Hide main window with ALT-F4.
