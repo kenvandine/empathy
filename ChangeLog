@@ -1,5 +1,16 @@
 2007-11-12  Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/empathy-status-icon.c:
+	* src/empathy-call-chandler.c:
+	* src/empathy-call.chandler:
+	* src/org.gnome.Empathy.Call.service.in:
+	* src/empathy-chat.chandler:
+	* src/org.gnome.Empathy.Chat.service.in:
+	* src/empathy-chat-chandler.c: Don't use the same bus name for filter
+	and chandler programs.
+
+2007-11-12  Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/empathy-account-widget-jabber.glade: Jabber priority is
 	in the range -128 127 (Laurent Bigonville).
 

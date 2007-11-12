@@ -45,8 +45,8 @@
 
 #define DEBUG_DOMAIN "EmpathyChat"
 
-#define BUS_NAME "org.gnome.Empathy.Chat"
-#define OBJECT_PATH "/org/freedesktop/Telepathy/ChannelHandler"
+#define BUS_NAME "org.gnome.Empathy.ChatChandler"
+#define OBJECT_PATH "/org/gnome/Empathy/ChatChandler"
 
 static void
 chat_chandler_new_channel_cb (EmpathyChandler *chandler,

@@ -39,8 +39,8 @@
 
 #define DEBUG_DOMAIN "EmpathyCall"
 
-#define BUS_NAME "org.gnome.Empathy.Call"
-#define OBJECT_PATH "/org/freedesktop/Telepathy/ChannelHandler"
+#define BUS_NAME "org.gnome.Empathy.CallChandler"
+#define OBJECT_PATH "/org/gnome/Empathy/CallChandler"
 
 static void
 call_chandler_new_channel_cb (EmpathyChandler *chandler,

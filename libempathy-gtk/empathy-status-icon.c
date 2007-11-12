@@ -162,8 +162,8 @@ empathy_status_icon_init (EmpathyStatusIcon *icon)
 	empathy_idle_set_auto_disconnect (priv->idle, TRUE);
 	priv->manager = empathy_contact_manager_new ();
 	priv->mc = empathy_mission_control_new ();
-	priv->text_filter = empathy_filter_new ("org.gnome.Empathy.Chat",
-						"/org/freedesktop/Telepathy/Filter",
+	priv->text_filter = empathy_filter_new ("org.gnome.Empathy.ChatFilter",
+						"/org/gnome/Empathy/ChatFilter",
 						TP_IFACE_CHANNEL_TYPE_TEXT,
 						MC_FILTER_PRIORITY_DIALOG,
 						MC_FILTER_FLAG_INCOMING);
