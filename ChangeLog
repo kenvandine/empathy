@@ -1,3 +1,8 @@
+2007-11-12  Xavier Claessens  <xclaesse@gmail.com>
+
+	* libempathy-gtk/empathy-account-widget-jabber.glade: Jabber priority is
+	in the range -128 127 (Laurent Bigonville).
+
 2007-11-11  Xavier Claessens  <xclaesse@gmail.com>
 
 	* libempathy-gtk/empathy-chat.c:
