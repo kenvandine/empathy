@@ -1,5 +1,9 @@
 2007-11-12  Xavier Claessens  <xclaesse@gmail.com>
 
+	* configure.ac: Bump version to 0.21.3.
+
+2007-11-12  Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/empathy-status-icon.c:
 	* src/empathy-call-chandler.c:
 	* src/empathy-call.chandler:
