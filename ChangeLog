@@ -1,3 +1,9 @@
+2007-11-13  Xavier Claessens  <xclaesse@gmail.com>
+
+	* libempathy/empathy-chandler.c:
+	* libempathy/empathy-filter.c: Do not use deprecated tp_conn_new(), use
+	tp_conn_new_without_connect() instead.
+
 2007-11-12  Xavier Claessens  <xclaesse@gmail.com>
 
 	* configure.ac: Bump version to 0.21.3.

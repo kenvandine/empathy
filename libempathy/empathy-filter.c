@@ -214,9 +214,15 @@ empathy_filter_filter_channel (EmpathyFilter  *filter,
 
 	priv = GET_PRIV (filter);
 
-	tp_conn = tp_conn_new (tp_get_bus (),
-			       bus_name,
-			       connection);
+	tp_conn = tp_conn_new_without_connect (tp_get_bus (),
+					       bus_name,
+					       connection,
+					       NULL,
+					       error);
+	if (!tp_conn) {
+		return FALSE;
+	}
+
 
 	tp_chan = tp_chan_new (tp_get_bus(),
 			       bus_name,
