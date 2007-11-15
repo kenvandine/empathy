@@ -1,3 +1,8 @@
+2007-11-15  Xavier Claessens  <xclaesse@gmail.com>
+
+	* src/Makefile.am: Do not build voip chandler if building without voip
+	support. Fixes bug #496861.
+
 2007-11-13  Xavier Claessens  <xclaesse@gmail.com>
 
 	* libempathy/empathy-chandler.c:

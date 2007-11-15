@@ -19,19 +19,17 @@ bin_PROGRAMS =			\
 	empathy-accounts
 
 libexec_PROGRAMS =		\
-	empathy-call-chandler	\
 	empathy-chat-chandler
 
 empathy_SOURCES = empathy.c
 empathy_accounts_SOURCES = empathy-accounts.c
-empathy_call_chandler_SOURCES = empathy-call-chandler.c
 empathy_chat_chandler_SOURCES = empathy-chat-chandler.c
 
 # Dbus service files
 servicedir = $(datadir)/dbus-1/services
 service_DATA =							\
-	org.gnome.Empathy.Chat.service				\
-	org.gnome.Empathy.Call.service
+	org.gnome.Empathy.Chat.service
+
 %.service: %.service.in Makefile
 	@sed -e "s|\@libexecdir\@|$(libexecdir)|" $< > $@
 
@@ -39,13 +37,8 @@ chandlerdir = $(datadir)/telepathy/managers
 chandler_DATA =							\
 	empathy-chat.chandler
 
-if HAVE_VOIP
-chandler_DATA += empathy-call.chandler
-endif
-
 BUILT_SOURCES =							\
-	org.gnome.Empathy.Chat.service				\
-	org.gnome.Empathy.Call.service
+	$(service_DATA)
 
 EXTRA_DIST =							\
 	org.gnome.Empathy.Chat.service.in			\
@@ -54,4 +47,11 @@ EXTRA_DIST =							\
 	$(chandler_DATA)
 
 CLEANFILES = $(BUILT_SOURCES)
+
+if HAVE_VOIP
+libexec_PROGRAMS += empathy-call-chandler
+empathy_call_chandler_SOURCES = empathy-call-chandler.c
+service_DATA +=	org.gnome.Empathy.Call.service
+chandler_DATA += empathy-call.chandler
+endif
 
