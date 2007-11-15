@@ -287,9 +287,11 @@ AC_OUTPUT([
    nothere/Makefile
    nothere/src/Makefile
    nothere/data/Makefile
-   doc/Makefile
-   doc/libempathy/Makefile
-   doc/libempathy-gtk/Makefile
+   docs/Makefile
+   docs/libempathy/Makefile
+   docs/libempathy/version.xml
+   docs/libempathy-gtk/Makefile
+   docs/libempathy-gtk/version.xml
    python/Makefile
    python/pyempathy/Makefile
    python/pyempathygtk/Makefile

@@ -1,5 +1,13 @@
 2007-11-15  Xavier Claessens  <xclaesse@gmail.com>
 
+	* docs/*:
+	* doc/*:
+	* configure.ac:
+	* Makefile.am: Remove doc directory and replace it with a better gtk-doc
+	in docs. More files are auto-generated, we have less files on SVN.
+
+2007-11-15  Xavier Claessens  <xclaesse@gmail.com>
+
 	* src/Makefile.am: Do not build voip chandler if building without voip
 	support. Fixes bug #496861.
 
