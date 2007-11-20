@@ -1,21 +1,24 @@
+# translation of oc.po to Occitan
 # Occitan translation of empathy.
 # Copyright (C) 2003-2007 The Free Software Foundation, Inc.
 # This file is distributed under the same license as the empathy package.
 #
 # Yannig MARCHEGAY (yannig@marchegay.org) - 2006-2007
 #
+# Yannig Marchegay (Kokoyaya) <yannig@marchegay.org>, 2007.
 msgid ""
 msgstr ""
-"Project-Id-Version: empathy 0.11\n"
+"Project-Id-Version: oc\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-10-14 12:12+0100\n"
-"PO-Revision-Date: 2007-10-14 13:11+0200\n"
+"PO-Revision-Date: 2007-11-20 14:29+0100\n"
 "Last-Translator: Yannig Marchegay (Kokoyaya) <yannig@marchegay.org>\n"
-"Language-Team: Occitan (post 1500) <ubuntu-l10n-oci@lists.ubuntu.com>\n"
+"Language-Team: Occitan <ubuntu-l10n-oci@lists.ubuntu.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: KBabel 1.11.4\n"
 
 #: ../data/empathy.desktop.in.in.h:1
 msgid "Empathy Instant Messenger"
@@ -38,8 +41,7 @@ msgid "Checks if Salut account is created"
 msgstr ""
 
 #: ../data/empathy.schemas.in.h:4
-msgid ""
-"Comma separated list of spell checker languages to use (e.g. en, fr, nl)."
+msgid "Comma separated list of spell checker languages to use (e.g. en, fr, nl)."
 msgstr ""
 
 #: ../data/empathy.schemas.in.h:5
@@ -119,8 +121,7 @@ msgid "Use theme for chat rooms"
 msgstr ""
 
 #: ../data/empathy.schemas.in.h:24
-msgid ""
-"Whether or not the Salut account has been created on the first empathy run."
+msgid "Whether or not the Salut account has been created on the first empathy run."
 msgstr ""
 
 #: ../data/empathy.schemas.in.h:25
@@ -130,8 +131,7 @@ msgid ""
 msgstr ""
 
 #: ../data/empathy.schemas.in.h:26
-msgid ""
-"Whether or not to convert smileys into graphical images in conversations."
+msgid "Whether or not to convert smileys into graphical images in conversations."
 msgstr ""
 
 #: ../data/empathy.schemas.in.h:27
@@ -407,15 +407,15 @@ msgstr ""
 
 #: ../libempathy-gtk/empathy-avatar-chooser.c:451
 msgid "No Image"
-msgstr ""
+msgstr "Pas cap d'imatge"
 
 #: ../libempathy-gtk/empathy-avatar-chooser.c:511
 msgid "Images"
-msgstr ""
+msgstr "Imatges"
 
 #: ../libempathy-gtk/empathy-avatar-chooser.c:515
 msgid "All Files"
-msgstr ""
+msgstr "Totes los fichièrs"
 
 #: ../libempathy-gtk/empathy-avatar-image.c:298
 msgid "Click to enlarge"
@@ -427,15 +427,15 @@ msgstr ""
 
 #: ../libempathy-gtk/empathy-call-window.glade.h:2
 msgid "Input"
-msgstr ""
+msgstr "Entrada"
 
 #: ../libempathy-gtk/empathy-call-window.glade.h:3
 msgid "Mute"
-msgstr ""
+msgstr "Mut"
 
 #: ../libempathy-gtk/empathy-call-window.glade.h:4
 msgid "Output"
-msgstr ""
+msgstr "Sortida"
 
 #: ../libempathy-gtk/empathy-call-window.glade.h:5
 msgid "Send Video"
@@ -443,7 +443,7 @@ msgstr ""
 
 #: ../libempathy-gtk/empathy-call-window.glade.h:6
 msgid "Volume"
-msgstr ""
+msgstr "Volum"
 
 #: ../libempathy-gtk/empathy-chat.c:332
 msgid "Disconnected"
@@ -923,8 +923,7 @@ msgid "Browse:"
 msgstr ""
 
 #: ../libempathy-gtk/empathy-new-chatroom-dialog.glade.h:3
-msgid ""
-"Enter the room name to join here or click on one or more rooms in the list."
+msgid "Enter the room name to join here or click on one or more rooms in the list."
 msgstr ""
 
 #: ../libempathy-gtk/empathy-new-chatroom-dialog.glade.h:4
@@ -946,8 +945,7 @@ msgid "Re_fresh"
 msgstr ""
 
 #: ../libempathy-gtk/empathy-new-chatroom-dialog.glade.h:8
-msgid ""
-"This list represents all chat rooms hosted on the server you have entered."
+msgid "This list represents all chat rooms hosted on the server you have entered."
 msgstr ""
 
 #: ../libempathy-gtk/empathy-main-window.c:274
@@ -1218,8 +1216,7 @@ msgid "Blue"
 msgstr "Blau"
 
 #: ../megaphone/data/GNOME_Megaphone_Applet.schemas.in.h:1
-msgid ""
-"The contact to display in the applet. Empty means no contact is displayed."
+msgid "The contact to display in the applet. Empty means no contact is displayed."
 msgstr ""
 
 #: ../megaphone/data/GNOME_Megaphone_Applet.schemas.in.h:2
@@ -1237,7 +1234,7 @@ msgstr ""
 
 #: ../megaphone/data/GNOME_Megaphone_Applet.xml.h:2
 msgid "_Information"
-msgstr ""
+msgstr "_Informacions"
 
 #: ../nothere/data/GNOME_NotHere_Applet.server.in.in.h:1
 msgid "Presence"
@@ -1255,7 +1252,4 @@ msgstr ""
 #: ../src/empathy.c:283
 msgid "- Empathy Instant Messenger"
 msgstr ""
-
-#~ msgid "New Message"
-#~ msgstr "Messatge novèl"
 
