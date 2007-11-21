@@ -852,7 +852,7 @@ msgstr "Affiche les conversations précédentes avec ce contact"
 
 #: ../libempathy-gtk/empathy-contact-list-view.c:239
 msgid "_Call"
-msgstr "_Apeller"
+msgstr "_appeler"
 
 #: ../libempathy-gtk/empathy-contact-list-view.c:239
 msgid "Start a voice or video conversation with this contact"
