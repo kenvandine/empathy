@@ -566,7 +566,7 @@ chat_sent_message_get_last (EmpathyChat *chat)
 static gboolean
 chat_input_key_press_event_cb (GtkWidget   *widget,
 			       GdkEventKey *event,
-			       EmpathyChat  *chat)
+			       EmpathyChat *chat)
 {
 	EmpathyChatPriv *priv;
 	GtkAdjustment  *adj;
@@ -574,10 +574,6 @@ chat_input_key_press_event_cb (GtkWidget   *widget,
 	GtkWidget      *text_view_sw;
 
 	priv = GET_PRIV (chat);
-
-	if (event->keyval == GDK_Tab && !(event->state & GDK_CONTROL_MASK)) {
-		return TRUE;
-	}
 
 	/* Catch ctrl+up/down so we can traverse messages we sent */
 	if ((event->state & GDK_CONTROL_MASK) && 
@@ -606,7 +602,8 @@ chat_input_key_press_event_cb (GtkWidget   *widget,
 	}
 
 	/* Catch enter but not ctrl/shift-enter */
-	if (IS_ENTER (event->keyval) && !(event->state & (GDK_SHIFT_MASK | GDK_CONTROL_MASK))) {
+	if (IS_ENTER (event->keyval) &&
+	    !(event->state & (GDK_SHIFT_MASK | GDK_CONTROL_MASK))) {
 		GtkTextView *view;
 
 		/* This is to make sure that kinput2 gets the enter. And if
@@ -627,11 +624,12 @@ chat_input_key_press_event_cb (GtkWidget   *widget,
 
 	text_view_sw = gtk_widget_get_parent (GTK_WIDGET (chat->view));
 
-	if (IS_ENTER (event->keyval) && (event->state & (GDK_SHIFT_MASK | GDK_CONTROL_MASK))) {
-		/* Newline for shift-enter. */
+	if (IS_ENTER (event->keyval) &&
+	    (event->state & (GDK_SHIFT_MASK | GDK_CONTROL_MASK))) {
+		/* Newline for shift/control-enter. */
 		return FALSE;
 	}
-	else if ((event->state & GDK_CONTROL_MASK) != GDK_CONTROL_MASK &&
+	else if (!(event->state & GDK_CONTROL_MASK) &&
 		 event->keyval == GDK_Page_Up) {
 		adj = gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (text_view_sw));
 		gtk_adjustment_set_value (adj, adj->value - adj->page_size);
@@ -645,6 +643,10 @@ chat_input_key_press_event_cb (GtkWidget   *widget,
 		gtk_adjustment_set_value (adj, val);
 
 		return TRUE;
+	}
+
+	if (EMPATHY_CHAT_GET_CLASS (chat)->key_press_event) {
+		return EMPATHY_CHAT_GET_CLASS (chat)->key_press_event (chat, event);
 	}
 
 	return FALSE;
@@ -1399,7 +1401,6 @@ empathy_chat_set_tp_chat (EmpathyChat   *chat,
 	if (EMPATHY_CHAT_GET_CLASS (chat)->set_tp_chat) {
 		EMPATHY_CHAT_GET_CLASS (chat)->set_tp_chat (chat, tp_chat);
 	}
-
 }
 
 const gchar *

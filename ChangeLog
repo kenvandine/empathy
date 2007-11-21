@@ -1,3 +1,10 @@
+2007-11-21  Xavier Claessens  <xclaesse@gmail.com>
+
+	* libempathy-gtk/empathy-group-chat.c:
+	* libempathy-gtk/empathy-chat.c:
+	* libempathy-gtk/empathy-chat.h: Add nick completion for MUCs.
+	Fixes bug #453418.
+
 2007-11-15  Xavier Claessens  <xclaesse@gmail.com>
 
 	* docs/*:

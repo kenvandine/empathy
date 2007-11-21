@@ -28,6 +28,7 @@
 
 #include <string.h>
 
+#include <gdk/gdkkeysyms.h>
 #include <gtk/gtk.h>
 #include <glade/glade.h>
 #include <glib/gi18n.h>
@@ -103,9 +104,8 @@ static void          group_chat_subject_notify_cb        (EmpathyTpChat     *tp_
 static void          group_chat_name_notify_cb           (EmpathyTpChat     *tp_chat,
 							  GParamSpec        *param,
 							  EmpathyGroupChat  *chat);
-/*static gboolean      group_chat_key_press_event          (GtkWidget         *widget,
-							  GdkEventKey       *event,
-							  EmpathyGroupChat  *chat);*/
+static gboolean      group_chat_key_press_event          (EmpathyChat       *chat,
+							  GdkEventKey       *event);
 static gint          group_chat_contacts_completion_func (const gchar       *s1,
 							  const gchar       *s2,
 							  gsize              n);
@@ -129,6 +129,7 @@ empathy_group_chat_class_init (EmpathyGroupChatClass *klass)
 	chat_class->get_widget           = group_chat_get_widget;
 	chat_class->is_group_chat        = group_chat_is_group_chat;
 	chat_class->set_tp_chat          = group_chat_set_tp_chat;
+	chat_class->key_press_event      = group_chat_key_press_event;
 
 	g_type_class_add_private (object_class, sizeof (EmpathyGroupChatPriv));
 }
@@ -319,7 +320,7 @@ group_chat_create_ui (EmpathyGroupChat *chat)
 	gtk_widget_show (EMPATHY_CHAT (chat)->input_text_view);
 
 	/* Add nick name completion */
-	priv->completion = g_completion_new (NULL);
+	priv->completion = g_completion_new ((GCompletionFunc) empathy_contact_get_name);
 	g_completion_set_compare (priv->completion,
 				  group_chat_contacts_completion_func);
 
@@ -589,26 +590,21 @@ group_chat_name_notify_cb (EmpathyTpChat   *tp_chat,
 	g_object_get (priv->tp_chat, "name", &priv->name, NULL);
 }
 
-#if 0
 static gboolean
-group_chat_key_press_event (GtkWidget       *widget,
-			    GdkEventKey     *event,
-			    EmpathyGroupChat *chat)
+group_chat_key_press_event (EmpathyChat *chat,
+			    GdkEventKey *event)
 {
 	EmpathyGroupChatPriv *priv;
-	GtkAdjustment       *adj;
-	gdouble              val;
-	GtkTextBuffer       *buffer;
-	GtkTextIter          start, current;
-	gchar               *nick, *completed;
-	gint                 len;
-	GList               *list, *l, *completed_list;
-	gboolean             is_start_of_buffer;
+	GtkTextBuffer        *buffer;
+	GtkTextIter           start, current;
+	gchar                *nick, *completed;
+	gint                  len;
+	GList                *list, *completed_list;
+	gboolean              is_start_of_buffer;
 
 	priv = GET_PRIV (chat);
 
-	if ((event->state & GDK_CONTROL_MASK) != GDK_CONTROL_MASK &&
-	    (event->state & GDK_SHIFT_MASK) != GDK_SHIFT_MASK &&
+	if (!(event->state & (GDK_CONTROL_MASK | GDK_SHIFT_MASK)) &&
 	    event->keyval == GDK_Tab) {
 		buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (EMPATHY_CHAT (chat)->input_text_view));
 		gtk_text_buffer_get_iter_at_mark (buffer, &current, gtk_text_buffer_get_insert (buffer));
@@ -620,11 +616,9 @@ group_chat_key_press_event (GtkWidget       *widget,
 
 		nick = gtk_text_buffer_get_text (buffer, &start, &current, FALSE);
 
-		g_completion_clear_items (priv->completion);
-
 		len = strlen (nick);
 
-		list = group_chat_get_nick_list (chat);
+		list = empathy_contact_list_get_members (EMPATHY_CONTACT_LIST (priv->tp_chat));
 
 		g_completion_add_items (priv->completion, list);
 
@@ -635,8 +629,8 @@ group_chat_key_press_event (GtkWidget       *widget,
 		g_free (nick);
 
 		if (completed) {
-			int       len;
-			gchar    *text;
+			int          len;
+			const gchar *text;
 
 			gtk_text_buffer_delete (buffer, &start, &current);
 
@@ -649,7 +643,7 @@ group_chat_key_press_event (GtkWidget       *widget,
 				 * which might be cased all wrong.
 				 * Fixes #120876
 				 * */
-				text = (gchar *) completed_list->data;
+				text = empathy_contact_get_name (completed_list->data);
 			} else {
 				text = completed;
 			}
@@ -667,10 +661,7 @@ group_chat_key_press_event (GtkWidget       *widget,
 
 		g_completion_clear_items (priv->completion);
 
-		for (l = list; l; l = l->next) {
-			g_free (l->data);
-		}
-
+		g_list_foreach (list, (GFunc) g_object_unref, NULL);
 		g_list_free (list);
 
 		return TRUE;
@@ -678,7 +669,6 @@ group_chat_key_press_event (GtkWidget       *widget,
 
 	return FALSE;
 }
-#endif
 
 static gint
 group_chat_contacts_completion_func (const gchar *s1,
