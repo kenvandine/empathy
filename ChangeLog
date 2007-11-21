@@ -1,5 +1,9 @@
 2007-11-21  Xavier Claessens  <xclaesse@gmail.com>
 
+	* configure.ac: Add x11 to build deps.
+
+2007-11-21  Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/empathy-group-chat.c:
 	* libempathy-gtk/empathy-chat.c:
 	* libempathy-gtk/empathy-chat.h: Add nick completion for MUCs.

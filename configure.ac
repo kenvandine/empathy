@@ -96,6 +96,7 @@ PKG_CHECK_MODULES(EMPATHY,
    libtelepathy >= $TELEPATHY_REQUIRED
    libmissioncontrol >= $MISSION_CONTROL_REQUIRED
    gtk+-2.0 >= $GTK_REQUIRED
+   x11
    libglade-2.0 >= $LIBGLADE_REQUIRED
    libebook-1.2
 ])
