@@ -1,21 +1,31 @@
 Things you can do if you want to help:
 
- - Porting gossip-account-widget-*.{c,h} from gossip project (Guillaume is already working on IRC widget).
+ - Specialised UI for configuring IRC accounts. (Guillaume is already working
+   on IRC widget).
  - UI for inviting a contact in a chatroom.
- - UI for accept/refuse invitation to join a chatroom.
+ - UI for accept/refuse invitation to join a chatroom and VoIP calls.
  - UI to send a message directly to a contact.
- - GtkWidget-ify libempathy-gtk. Actually most window/dialog do not inherit from GtkWindow/GtkDialog. Need to create a glade catalog.
- - Remove Quit option everywhere, empathy is a session service and shouldn't be leaved.
+ - GtkWidget-ify libempathy-gtk. Actually most window/dialog do not inherit from
+   GtkWindow/GtkDialog. Need to create a glade catalog, it seems to not be
+   that easy.
+ - Remove Quit option everywhere, empathy is a session service and shouldn't be
+   leaved.
  - Add sound events
- - Add register capability in EmpathyAccountsDialog if the profile says it's supported.
+ - Add register capability in EmpathyAccountsDialog if the profile says
+   it's supported.
+ - Import gossip's new chat theme system.
  - Write a manual based on gossip's.
+ - Reviewing File Transfer patch, see bug #462172.
+ - Drop libtelepathy and use telepathy-glib instead when it gets client-side
+   functions.
+ - Drop Nokia's MissionControl and use the standardized MC spec instead.
+ - Replace GnomeVFS by Gio.
+ - Improve VoIP support once stream-engine gets cleaned and moved into tp-glib.
+ - Split MUC out of Empathy's main program and create a xchat-gnome-like
+   program for MUCs.
+ - See with Gnome Online Desktop project how to implement meta-contacts and
+   merge information from multiple contacts.
  - Testing and Bugfixing.
- - Update translations.
- - Fix indentation and alignment broken since namespace changed from gossip_ to empathy_
-
-SoC projects:
- - Adding VoIP support based on the patch proposed for gossip.
- - Adding FileTransfer support.
  
 If you want to contribute you can ask for information at
  - #telepathy on freenode
