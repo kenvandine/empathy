@@ -11,14 +11,13 @@ msgstr ""
 "Project-Id-Version: oc\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-10-14 12:12+0100\n"
-"PO-Revision-Date: 2007-11-20 14:29+0100\n"
+"PO-Revision-Date: 2007-11-21 19:28+0100\n"
 "Last-Translator: Yannig Marchegay (Kokoyaya) <yannig@marchegay.org>\n"
 "Language-Team: Occitan <ubuntu-l10n-oci@lists.ubuntu.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: KBabel 1.11.4\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);"
 
 #: ../data/empathy.desktop.in.in.h:1
 msgid "Empathy Instant Messenger"
@@ -250,7 +249,7 @@ msgstr "%s :"
 #: ../libempathy-gtk/empathy-account-widget-msn.glade.h:1
 #: ../libempathy-gtk/empathy-account-widget-salut.glade.h:1
 msgid "<b>Advanced</b>"
-msgstr ""
+msgstr "<b>Avançat</b>"
 
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:2
 #: ../libempathy-gtk/empathy-account-widget-msn.glade.h:2
@@ -313,7 +312,7 @@ msgstr ""
 #: ../libempathy-gtk/empathy-account-widget-salut.glade.h:6
 #: ../libempathy-gtk/empathy-chatrooms-window.glade.h:8
 msgid "_Nickname:"
-msgstr ""
+msgstr "_Escais :"
 
 #: ../libempathy-gtk/empathy-account-widget-salut.glade.h:7
 msgid "_Published Name:"
@@ -378,15 +377,15 @@ msgstr ""
 
 #: ../libempathy-gtk/empathy-accounts-dialog.glade.h:1
 msgid "<b>New Account</b>"
-msgstr ""
+msgstr "<b>Compte novèl</b>"
 
 #: ../libempathy-gtk/empathy-accounts-dialog.glade.h:3
 msgid "<b>Settings</b>"
-msgstr ""
+msgstr "<b>Paramètres</b>"
 
 #: ../libempathy-gtk/empathy-accounts-dialog.glade.h:5
 msgid "Cr_eate"
-msgstr ""
+msgstr "Cr_ear"
 
 #: ../libempathy-gtk/empathy-accounts-dialog.glade.h:6
 msgid ""
@@ -451,7 +450,7 @@ msgstr "Desconnectat"
 
 #: ../libempathy-gtk/empathy-chat.c:452
 msgid "offline"
-msgstr ""
+msgstr "desconnectat"
 
 #: ../libempathy-gtk/empathy-chat.c:455
 msgid "invalid contact"
@@ -597,7 +596,7 @@ msgstr "Onglet _precedent"
 #: ../libempathy-gtk/empathy-chat.glade.h:26
 #: ../libempathy-gtk/empathy-main-window.glade.h:18
 msgid "_Room"
-msgstr ""
+msgstr "_Sala"
 
 #: ../libempathy-gtk/empathy-chat.glade.h:27
 msgid "_Show Contacts"
@@ -640,7 +639,7 @@ msgstr "Nom"
 
 #: ../libempathy-gtk/empathy-chatrooms-window.c:276
 msgid "Room"
-msgstr ""
+msgstr "Sala"
 
 #: ../libempathy-gtk/empathy-chatrooms-window.c:285
 msgid "Auto Connect"
@@ -670,7 +669,7 @@ msgstr ""
 
 #: ../libempathy-gtk/empathy-chatrooms-window.glade.h:6
 msgid "N_ame:"
-msgstr ""
+msgstr "_Nom :"
 
 #: ../libempathy-gtk/empathy-chatrooms-window.glade.h:7
 msgid "S_erver:"
@@ -679,7 +678,7 @@ msgstr "S_ervidor :"
 #: ../libempathy-gtk/empathy-chatrooms-window.glade.h:9
 #: ../libempathy-gtk/empathy-new-chatroom-dialog.glade.h:9
 msgid "_Room:"
-msgstr ""
+msgstr "_Sala :"
 
 #: ../libempathy-gtk/empathy-contact-dialogs.c:173
 #: ../libempathy-gtk/empathy-contact-widget.glade.h:9
@@ -692,7 +691,7 @@ msgstr ""
 
 #: ../libempathy-gtk/empathy-contact-dialogs.c:255
 msgid "New contact"
-msgstr ""
+msgstr "Contacte novèl"
 
 #: ../libempathy-gtk/empathy-contact-dialogs.glade.h:1
 msgid "Decide _Later"
@@ -757,11 +756,11 @@ msgstr ""
 
 #: ../libempathy-gtk/empathy-contact-list-view.c:230
 msgid "_Send File..."
-msgstr ""
+msgstr "_Enviar lo fichièr..."
 
 #: ../libempathy-gtk/empathy-contact-list-view.c:230
 msgid "Send a file"
-msgstr ""
+msgstr "Enviar un fichièr"
 
 #: ../libempathy-gtk/empathy-contact-list-view.c:234
 msgid "View previous conversations with this contact"
@@ -802,7 +801,7 @@ msgstr ""
 
 #: ../libempathy-gtk/empathy-contact-widget.glade.h:4
 msgid "<b>Groups</b>"
-msgstr ""
+msgstr "<b>Grops</b>"
 
 #: ../libempathy-gtk/empathy-contact-widget.glade.h:6
 msgid "Alias:"
@@ -810,11 +809,11 @@ msgstr "Aliàs :"
 
 #: ../libempathy-gtk/empathy-contact-widget.glade.h:7
 msgid "Birthday:"
-msgstr ""
+msgstr "Aniversari :"
 
 #: ../libempathy-gtk/empathy-contact-widget.glade.h:8
 msgid "Client:"
-msgstr ""
+msgstr "Client :"
 
 #: ../libempathy-gtk/empathy-contact-widget.glade.h:10
 msgid "Email:"
@@ -848,7 +847,7 @@ msgstr "Version :"
 
 #: ../libempathy-gtk/empathy-contact-widget.glade.h:17
 msgid "Web site:"
-msgstr ""
+msgstr "Sit web :"
 
 #: ../libempathy-gtk/empathy-group-chat.c:253
 msgid "Enter the new topic you want to set for this room:"
@@ -1001,7 +1000,7 @@ msgstr ""
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:15
 msgid "_Personal Information"
-msgstr ""
+msgstr "Informacions _personalas"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:16
 #: ../megaphone/data/GNOME_Megaphone_Applet.xml.h:3
@@ -1027,11 +1026,11 @@ msgstr ""
 
 #: ../libempathy-gtk/empathy-preferences.glade.h:3
 msgid "<b>Behaviour</b>"
-msgstr ""
+msgstr "<b>Comportament</b>"
 
 #: ../libempathy-gtk/empathy-preferences.glade.h:4
 msgid "<b>Contact List</b>"
-msgstr ""
+msgstr "<b>Tièra de contactes</b>"
 
 #: ../libempathy-gtk/empathy-preferences.glade.h:5
 msgid "<b>Enable spell checking for languages:</b>"
@@ -1126,11 +1125,11 @@ msgstr ""
 #. Custom messages
 #: ../libempathy-gtk/empathy-presence-chooser.c:690
 msgid "Custom messages..."
-msgstr ""
+msgstr "Messatges personalizats..."
 
 #: ../libempathy-gtk/empathy-presence-chooser.glade.h:1
 msgid "Custom message"
-msgstr ""
+msgstr "Messatge personalizat"
 
 #: ../libempathy-gtk/empathy-presence-chooser.glade.h:2
 msgid "Message:"
