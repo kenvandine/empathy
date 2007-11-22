@@ -652,7 +652,7 @@ group_chat_key_press_event (EmpathyChat *chat,
 
 			if (len == 1) {
 				if (is_start_of_buffer) {
-					gtk_text_buffer_insert_at_cursor (buffer, ", ", 2);
+					gtk_text_buffer_insert_at_cursor (buffer, ": ", 2);
 				}
 			}
 

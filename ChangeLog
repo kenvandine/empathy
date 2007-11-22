@@ -1,3 +1,8 @@
+2007-11-22  Xavier Claessens  <xclaesse@gmail.com>
+
+	* libempathy-gtk/empathy-group-chat.c: use ":" instead of "," for nick
+	completion.
+
 2007-11-21  Xavier Claessens  <xclaesse@gmail.com>
 
 	* TODO: Updated.
