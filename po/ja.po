@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: empathy trunk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-11-02 00:51+0900\n"
-"PO-Revision-Date: 2007-11-02 00:50+0900\n"
+"POT-Creation-Date: 2007-11-23 14:43+0900\n"
+"PO-Revision-Date: 2007-11-23 14:33+0900\n"
 "Last-Translator: Takeshi AIHANA <takeshi.aihana@gmail.com>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "MIME-Version: 1.0\n"
@@ -206,7 +206,7 @@ msgstr "離席中"
 msgid "Hidden"
 msgstr "隠れる"
 
-#: ../libempathy/empathy-tp-contact-list.c:729 ../src/empathy.c:212
+#: ../libempathy/empathy-tp-contact-list.c:729 ../src/empathy.c:151
 msgid "People nearby"
 msgstr "すぐ近くにいる人達"
 
@@ -282,25 +282,29 @@ msgid "Pass_word:"
 msgstr "パスワード(_W):"
 
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:5
+msgid "Priority:"
+msgstr "優先度:"
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:6
 msgid "Reso_urce:"
 msgstr "リソース(_U):"
 
-#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:6
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:7
 msgid "Use encryption (SS_L)"
 msgstr "暗号化 (SSL) を有効にする(_L)"
 
-#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:7
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:8
 #: ../libempathy-gtk/empathy-account-widget-msn.glade.h:5
 msgid "_Port:"
 msgstr "ポート番号(_P):"
 
-#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:8
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:9
 #: ../libempathy-gtk/empathy-account-widget-msn.glade.h:6
 #: ../libempathy-gtk/empathy-new-chatroom-dialog.glade.h:10
 msgid "_Server:"
 msgstr "サーバ(_S):"
 
-#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:9
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:10
 msgid "jabber account settings"
 msgstr "Jabber アカウントの設定"
 
@@ -483,48 +487,48 @@ msgstr "動画を送信する"
 msgid "Volume"
 msgstr "音量"
 
-#: ../libempathy-gtk/empathy-chat.c:332
+#: ../libempathy-gtk/empathy-chat.c:329
 msgid "Disconnected"
 msgstr "不通"
 
-#: ../libempathy-gtk/empathy-chat.c:452
+#: ../libempathy-gtk/empathy-chat.c:449
 msgid "offline"
 msgstr "オフライン"
 
-#: ../libempathy-gtk/empathy-chat.c:455
+#: ../libempathy-gtk/empathy-chat.c:452
 msgid "invalid contact"
 msgstr "無効な仲間です"
 
-#: ../libempathy-gtk/empathy-chat.c:458
+#: ../libempathy-gtk/empathy-chat.c:455
 msgid "permission denied"
 msgstr "権限がありません"
 
-#: ../libempathy-gtk/empathy-chat.c:461
+#: ../libempathy-gtk/empathy-chat.c:458
 msgid "too long message"
 msgstr "メッセージが長すぎます"
 
-#: ../libempathy-gtk/empathy-chat.c:464
+#: ../libempathy-gtk/empathy-chat.c:461
 msgid "not implemented"
 msgstr "未実装です"
 
-#: ../libempathy-gtk/empathy-chat.c:467
+#: ../libempathy-gtk/empathy-chat.c:464
 msgid "unknown"
 msgstr "原因不明です"
 
-#: ../libempathy-gtk/empathy-chat.c:471
+#: ../libempathy-gtk/empathy-chat.c:468
 #, c-format
 msgid "Error sending message '%s': %s"
 msgstr "'%s' というメッセージを送信する際にエラー: %s"
 
-#: ../libempathy-gtk/empathy-chat.c:926
+#: ../libempathy-gtk/empathy-chat.c:925
 msgid "Insert Smiley"
 msgstr "スマイリーの挿入"
 
-#: ../libempathy-gtk/empathy-chat.c:973
+#: ../libempathy-gtk/empathy-chat.c:972
 msgid "_Check Word Spelling..."
 msgstr "スペル・チェック(_C)..."
 
-#: ../libempathy-gtk/empathy-chat.c:1398
+#: ../libempathy-gtk/empathy-chat.c:1397
 msgid "Connected"
 msgstr "オンライン"
 
@@ -824,12 +828,12 @@ msgstr "この仲間と音声または映像を使って会話を始めます"
 msgid "Sorry, I don't want you in my contact list anymore."
 msgstr "すみませんが、あなたを私の仲間一覧に登録したくありません"
 
-#: ../libempathy-gtk/empathy-contact-widget.c:656
+#: ../libempathy-gtk/empathy-contact-widget.c:662
 msgid "Select"
 msgstr "選択"
 
-#: ../libempathy-gtk/empathy-contact-widget.c:666
-#: ../libempathy-gtk/empathy-main-window.c:607
+#: ../libempathy-gtk/empathy-contact-widget.c:672
+#: ../libempathy-gtk/empathy-main-window.c:608
 msgid "Group"
 msgstr "グループ"
 
@@ -901,31 +905,31 @@ msgstr "バージョン:"
 msgid "Web site:"
 msgstr "ホームページ:"
 
-#: ../libempathy-gtk/empathy-group-chat.c:253
+#: ../libempathy-gtk/empathy-group-chat.c:254
 msgid "Enter the new topic you want to set for this room:"
 msgstr "この部屋にセットしたい新しいトピックを入力して下さい:"
 
-#: ../libempathy-gtk/empathy-group-chat.c:366
+#: ../libempathy-gtk/empathy-group-chat.c:367
 #, c-format
 msgid "%s has joined the room"
 msgstr "%s さんが部屋に入室しました"
 
-#: ../libempathy-gtk/empathy-group-chat.c:369
+#: ../libempathy-gtk/empathy-group-chat.c:370
 #, c-format
 msgid "%s has left the room"
 msgstr "%s さんが部屋から退室しました"
 
-#: ../libempathy-gtk/empathy-group-chat.c:449
+#: ../libempathy-gtk/empathy-group-chat.c:450
 #, c-format
 msgid "Topic: %s"
 msgstr "トピック: %s"
 
-#: ../libempathy-gtk/empathy-group-chat.c:571
+#: ../libempathy-gtk/empathy-group-chat.c:572
 #, c-format
 msgid "Topic set to: %s"
 msgstr "新しいトピック: %s"
 
-#: ../libempathy-gtk/empathy-group-chat.c:573
+#: ../libempathy-gtk/empathy-group-chat.c:574
 msgid "No topic defined"
 msgstr "トピックはありません"
 
@@ -1006,13 +1010,69 @@ msgid ""
 msgstr ""
 "この一覧にはサーバで提供しているチャット専用の部屋が全て一覧表示されます"
 
-#: ../libempathy-gtk/empathy-main-window.c:275
+#: ../libempathy-gtk/empathy-main-window.c:265
 msgid "Show and edit accounts"
 msgstr "アカウントの一覧を表示して編集します"
 
-#: ../libempathy-gtk/empathy-main-window.c:628
+#: ../libempathy-gtk/empathy-main-window.c:629
 msgid "Contact"
 msgstr "仲間"
+
+#: ../libempathy-gtk/empathy-main-window.c:812
+msgid "Edit Account _Details"
+msgstr "アカウントの詳細(_D)"
+
+#: ../libempathy-gtk/empathy-main-window.c:895
+msgid "Network error"
+msgstr "ネットワークのエラーです"
+
+#: ../libempathy-gtk/empathy-main-window.c:898
+msgid "Authentication failed"
+msgstr "認証に失敗しました"
+
+#: ../libempathy-gtk/empathy-main-window.c:901
+msgid "Encryption error"
+msgstr "暗号化のエラーです"
+
+#: ../libempathy-gtk/empathy-main-window.c:904
+msgid "Name in use"
+msgstr "使用中の名前"
+
+#: ../libempathy-gtk/empathy-main-window.c:907
+msgid "Certificate not provided"
+msgstr "証明書がありません"
+
+#: ../libempathy-gtk/empathy-main-window.c:910
+msgid "Certificate untrusted"
+msgstr "信用のない証明書です"
+
+#: ../libempathy-gtk/empathy-main-window.c:913
+msgid "Certificate expired"
+msgstr "証明書の有効期限が切れています"
+
+#: ../libempathy-gtk/empathy-main-window.c:916
+msgid "Certificate not activated"
+msgstr "証明書は利用できません"
+
+#: ../libempathy-gtk/empathy-main-window.c:919
+msgid "Certificate hostname mismatch"
+msgstr "証明書のホスト名が一致しません"
+
+#: ../libempathy-gtk/empathy-main-window.c:922
+msgid "Certificate fingerprint mismatch"
+msgstr "証明書の指紋が一致しません"
+
+#: ../libempathy-gtk/empathy-main-window.c:925
+msgid "Certificate self signed"
+msgstr "証明書自身の署名です"
+
+#: ../libempathy-gtk/empathy-main-window.c:928
+msgid "Certificate error"
+msgstr "証明書に関連するエラーです"
+
+#: ../libempathy-gtk/empathy-main-window.c:931
+msgid "Unknown error"
+msgstr "原因不明のエラーです"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:1
 msgid "Contact List"
@@ -1308,10 +1368,10 @@ msgstr "在席"
 msgid "Set your own presence"
 msgstr "あなたの在席情報をセットします"
 
-#: ../src/empathy.c:272
+#: ../src/empathy.c:210
 msgid "Don't connect on startup"
 msgstr "起動時にサインインしない"
 
-#: ../src/empathy.c:283
+#: ../src/empathy.c:222
 msgid "- Empathy Instant Messenger"
 msgstr "- Empathy インスタント・メッセンジャー"
