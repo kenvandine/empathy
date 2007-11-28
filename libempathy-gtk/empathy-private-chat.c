@@ -33,10 +33,13 @@
 #include <glade/glade.h>
 #include <glib/gi18n.h>
 
+#include <libmissioncontrol/mission-control.h>
+
 #include <libempathy/empathy-debug.h>
 #include <libempathy/empathy-tp-chat.h>
 #include <libempathy/empathy-tp-contact-list.h>
 #include <libempathy/empathy-contact-factory.h>
+#include <libempathy/empathy-utils.h>
 
 #include "empathy-private-chat.h"
 #include "empathy-chat-view.h"
@@ -171,7 +174,7 @@ private_chat_create_ui (EmpathyPrivateChat *chat)
 
 static void
 private_chat_contact_presence_updated_cb (EmpathyContact     *contact,
-					  GParamSpec        *param,
+					  GParamSpec         *param,
 					  EmpathyPrivateChat *chat)
 {
 	EmpathyPrivateChatPriv *priv;
@@ -206,6 +209,21 @@ private_chat_contact_presence_updated_cb (EmpathyContact     *contact,
 		}
 
 		priv->is_online = TRUE;
+
+		/* If offline message is not supported by CM we need to
+		 * request a new Text Channel. */
+		if (!empathy_chat_is_connected (EMPATHY_CHAT (chat))) {
+			MissionControl *mc;
+
+			mc = empathy_mission_control_new ();
+			mission_control_request_channel (mc,
+							 empathy_contact_get_account (contact),
+							 TP_IFACE_CHANNEL_TYPE_TEXT,
+							 empathy_contact_get_handle (contact),
+							 TP_HANDLE_TYPE_CONTACT,
+							 NULL, NULL);
+			g_object_unref (mc);
+		}
 	}
 
 	g_signal_emit_by_name (chat, "status-changed");
