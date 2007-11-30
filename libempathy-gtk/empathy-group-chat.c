@@ -38,6 +38,7 @@
 #include <libempathy/empathy-contact.h>
 #include <libempathy/empathy-utils.h>
 #include <libempathy/empathy-debug.h>
+#include <libempathy/empathy-conf.h>
 
 #include "empathy-group-chat.h"
 #include "empathy-chat.h"
@@ -48,6 +49,7 @@
 //#include "empathy-sound.h"
 #include "empathy-images.h"
 #include "empathy-ui-utils.h"
+#include "empathy-preferences.h"
 
 #define DEBUG_DOMAIN "GroupChat"
 
@@ -594,18 +596,16 @@ static gboolean
 group_chat_key_press_event (EmpathyChat *chat,
 			    GdkEventKey *event)
 {
-	EmpathyGroupChatPriv *priv;
-	GtkTextBuffer        *buffer;
-	GtkTextIter           start, current;
-	gchar                *nick, *completed;
-	gint                  len;
-	GList                *list, *completed_list;
-	gboolean              is_start_of_buffer;
-
-	priv = GET_PRIV (chat);
+	EmpathyGroupChatPriv *priv = GET_PRIV (chat);
 
 	if (!(event->state & (GDK_CONTROL_MASK | GDK_SHIFT_MASK)) &&
 	    event->keyval == GDK_Tab) {
+		GtkTextBuffer *buffer;
+		GtkTextIter    start, current;
+		gchar         *nick, *completed;
+		GList         *list, *completed_list;
+		gboolean       is_start_of_buffer;
+
 		buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (EMPATHY_CHAT (chat)->input_text_view));
 		gtk_text_buffer_get_iter_at_mark (buffer, &current, gtk_text_buffer_get_insert (buffer));
 
@@ -614,14 +614,10 @@ group_chat_key_press_event (EmpathyChat *chat,
 		gtk_text_iter_backward_word_start (&start);
 		is_start_of_buffer = gtk_text_iter_is_start (&start);
 
-		nick = gtk_text_buffer_get_text (buffer, &start, &current, FALSE);
-
-		len = strlen (nick);
-
 		list = empathy_contact_list_get_members (EMPATHY_CONTACT_LIST (priv->tp_chat));
-
 		g_completion_add_items (priv->completion, list);
 
+		nick = gtk_text_buffer_get_text (buffer, &start, &current, FALSE);
 		completed_list = g_completion_complete (priv->completion,
 							nick,
 							&completed);
@@ -629,8 +625,9 @@ group_chat_key_press_event (EmpathyChat *chat,
 		g_free (nick);
 
 		if (completed) {
-			int          len;
+			guint        len;
 			const gchar *text;
+			gchar       *complete_char = NULL;
 
 			gtk_text_buffer_delete (buffer, &start, &current);
 
@@ -650,10 +647,16 @@ group_chat_key_press_event (EmpathyChat *chat,
 
 			gtk_text_buffer_insert_at_cursor (buffer, text, strlen (text));
 
-			if (len == 1) {
-				if (is_start_of_buffer) {
-					gtk_text_buffer_insert_at_cursor (buffer, ": ", 2);
-				}
+			if (len == 1 && is_start_of_buffer &&
+			    empathy_conf_get_string (empathy_conf_get (),
+						     EMPATHY_PREFS_CHAT_NICK_COMPLETION_CHAR,
+						     &complete_char) &&
+			    complete_char != NULL) {
+				gtk_text_buffer_insert_at_cursor (buffer,
+								  complete_char,
+								  strlen (complete_char));
+				gtk_text_buffer_insert_at_cursor (buffer, " ", 1);
+				g_free (complete_char);
 			}
 
 			g_free (completed);

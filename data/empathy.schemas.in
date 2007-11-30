@@ -231,6 +231,22 @@
     </schema>
 
     <schema>
+      <key>/schemas/apps/empathy/conversation/nick_completion_char</key>
+      <applyto>/apps/empathy/conversation/nick_completion_char</applyto>
+      <owner>empathy</owner>
+      <type>string</type>
+      <default>:</default>
+      <locale name="C">
+        <short>Nick completed character</short>
+	<long>
+	Character to add after nickname when using nick completion (tab)
+        in group chat.
+	</long>
+	
+      </locale>
+    </schema>
+
+    <schema>
       <key>/schemas/apps/empathy/hints/close_main_window</key>
       <applyto>/apps/empathy/hints/close_main_window</applyto>
       <owner>empathy</owner>

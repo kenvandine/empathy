@@ -40,6 +40,7 @@ G_BEGIN_DECLS
 #define EMPATHY_PREFS_CHAT_THEME_CHAT_ROOM         EMPATHY_PREFS_PATH "/conversation/theme_chat_room"
 #define EMPATHY_PREFS_CHAT_SPELL_CHECKER_LANGUAGES EMPATHY_PREFS_PATH "/conversation/spell_checker_languages"
 #define EMPATHY_PREFS_CHAT_SPELL_CHECKER_ENABLED   EMPATHY_PREFS_PATH "/conversation/spell_checker_enabled"
+#define EMPATHY_PREFS_CHAT_NICK_COMPLETION_CHAR    EMPATHY_PREFS_PATH "/conversation/nick_completion_char"
 #define EMPATHY_PREFS_UI_SEPARATE_CHAT_WINDOWS     EMPATHY_PREFS_PATH "/ui/separate_chat_windows"
 #define EMPATHY_PREFS_UI_MAIN_WINDOW_HIDDEN        EMPATHY_PREFS_PATH "/ui/main_window_hidden"
 #define EMPATHY_PREFS_UI_AVATAR_DIRECTORY          EMPATHY_PREFS_PATH "/ui/avatar_directory"

@@ -1,3 +1,11 @@
+2007-11-30  Xavier Claessens  <xclaesse@gmail.com>
+
+	* data/empathy.schemas.in:
+	* libempathy-gtk/empathy-group-chat.c:
+	* libempathy-gtk/empathy-preferences.h: Add a gconf key to define the 
+	char to be added for tab completion.
+	Fixes bug #453418 (Matej Cepl, Xavier Claessens).
+
 2007-11-28  Xavier Claessens  <xclaesse@gmail.com>
 
 	* libempathy-gtk/empathy-private-chat.c: Request new Text Channel if
