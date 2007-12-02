@@ -95,80 +95,80 @@ typedef struct {
 	GList                  *widgets_disconnected;	/* ... disconnected accounts */
 } EmpathyMainWindow;
 
-static void     main_window_destroy_cb                         (GtkWidget                       *widget,
-								EmpathyMainWindow               *window);
-static void     main_window_favorite_chatroom_menu_setup       (EmpathyMainWindow               *window);
-static void     main_window_favorite_chatroom_menu_added_cb    (EmpathyChatroomManager           *manager,
-								EmpathyChatroom                  *chatroom,
-								EmpathyMainWindow               *window);
-static void     main_window_favorite_chatroom_menu_removed_cb  (EmpathyChatroomManager           *manager,
-								EmpathyChatroom                  *chatroom,
-								EmpathyMainWindow               *window);
-static void     main_window_favorite_chatroom_menu_activate_cb (GtkMenuItem                     *menu_item,
-								EmpathyChatroom                  *chatroom);
-static void     main_window_favorite_chatroom_menu_update      (EmpathyMainWindow               *window);
-static void     main_window_favorite_chatroom_menu_add         (EmpathyMainWindow               *window,
-								EmpathyChatroom                  *chatroom);
-static void     main_window_favorite_chatroom_join             (EmpathyChatroom                  *chatroom);
-static void     main_window_chat_quit_cb                       (GtkWidget                       *widget,
-								EmpathyMainWindow               *window);
-static void     main_window_chat_new_message_cb                (GtkWidget                       *widget,
-								EmpathyMainWindow               *window);
-static void     main_window_chat_history_cb                    (GtkWidget                       *widget,
-								EmpathyMainWindow               *window);
-static void     main_window_room_join_new_cb                   (GtkWidget                       *widget,
-								EmpathyMainWindow               *window);
-static void     main_window_room_join_favorites_cb             (GtkWidget                       *widget,
-								EmpathyMainWindow               *window);
-static void     main_window_room_manage_favorites_cb           (GtkWidget                       *widget,
-								EmpathyMainWindow               *window);
-static void     main_window_chat_add_contact_cb                (GtkWidget                       *widget,
-								EmpathyMainWindow               *window);
-static void     main_window_chat_show_offline_cb               (GtkCheckMenuItem                *item,
-								EmpathyMainWindow               *window);
-static gboolean main_window_edit_button_press_event_cb         (GtkWidget                       *widget,
-								GdkEventButton                  *event,
-								EmpathyMainWindow               *window);
-static void     main_window_edit_accounts_cb                   (GtkWidget                       *widget,
-								EmpathyMainWindow               *window);
-static void     main_window_edit_personal_information_cb       (GtkWidget                       *widget,
-								EmpathyMainWindow               *window);
-static void     main_window_edit_preferences_cb                (GtkWidget                       *widget,
-								EmpathyMainWindow               *window);
-static void     main_window_help_about_cb                      (GtkWidget                       *widget,
-								EmpathyMainWindow               *window);
-static void     main_window_help_contents_cb                   (GtkWidget                       *widget,
-								EmpathyMainWindow               *window);
-static gboolean main_window_throbber_button_press_event_cb     (GtkWidget                       *throbber_ebox,
-								GdkEventButton                  *event,
-								EmpathyMainWindow               *window);
-static void     main_window_status_changed_cb                  (MissionControl                  *mc,
-								TelepathyConnectionStatus        status,
-								McPresence                       presence,
-								TelepathyConnectionStatusReason  reason,
-								const gchar                     *unique_name,
-								EmpathyMainWindow               *window);
-static void     main_window_update_status                      (EmpathyMainWindow               *window);
+static void     main_window_destroy_cb                         (GtkWidget                *widget,
+								EmpathyMainWindow        *window);
+static void     main_window_favorite_chatroom_menu_setup       (EmpathyMainWindow        *window);
+static void     main_window_favorite_chatroom_menu_added_cb    (EmpathyChatroomManager   *manager,
+								EmpathyChatroom          *chatroom,
+								EmpathyMainWindow        *window);
+static void     main_window_favorite_chatroom_menu_removed_cb  (EmpathyChatroomManager   *manager,
+								EmpathyChatroom          *chatroom,
+								EmpathyMainWindow        *window);
+static void     main_window_favorite_chatroom_menu_activate_cb (GtkMenuItem              *menu_item,
+								EmpathyChatroom          *chatroom);
+static void     main_window_favorite_chatroom_menu_update      (EmpathyMainWindow        *window);
+static void     main_window_favorite_chatroom_menu_add         (EmpathyMainWindow        *window,
+								EmpathyChatroom          *chatroom);
+static void     main_window_favorite_chatroom_join             (EmpathyChatroom          *chatroom);
+static void     main_window_chat_quit_cb                       (GtkWidget                *widget,
+								EmpathyMainWindow        *window);
+static void     main_window_chat_new_message_cb                (GtkWidget                *widget,
+								EmpathyMainWindow        *window);
+static void     main_window_chat_history_cb                    (GtkWidget                *widget,
+								EmpathyMainWindow        *window);
+static void     main_window_room_join_new_cb                   (GtkWidget                *widget,
+								EmpathyMainWindow        *window);
+static void     main_window_room_join_favorites_cb             (GtkWidget                *widget,
+								EmpathyMainWindow        *window);
+static void     main_window_room_manage_favorites_cb           (GtkWidget                *widget,
+								EmpathyMainWindow        *window);
+static void     main_window_chat_add_contact_cb                (GtkWidget                *widget,
+								EmpathyMainWindow        *window);
+static void     main_window_chat_show_offline_cb               (GtkCheckMenuItem         *item,
+								EmpathyMainWindow        *window);
+static gboolean main_window_edit_button_press_event_cb         (GtkWidget                *widget,
+								GdkEventButton           *event,
+								EmpathyMainWindow        *window);
+static void     main_window_edit_accounts_cb                   (GtkWidget                *widget,
+								EmpathyMainWindow        *window);
+static void     main_window_edit_personal_information_cb       (GtkWidget                *widget,
+								EmpathyMainWindow        *window);
+static void     main_window_edit_preferences_cb                (GtkWidget                *widget,
+								EmpathyMainWindow        *window);
+static void     main_window_help_about_cb                      (GtkWidget                *widget,
+								EmpathyMainWindow        *window);
+static void     main_window_help_contents_cb                   (GtkWidget                *widget,
+								EmpathyMainWindow        *window);
+static gboolean main_window_throbber_button_press_event_cb     (GtkWidget                *throbber_ebox,
+								GdkEventButton           *event,
+								EmpathyMainWindow        *window);
+static void     main_window_status_changed_cb                  (MissionControl           *mc,
+								TpConnectionStatus        status,
+								McPresence                presence,
+								TpConnectionStatusReason  reason,
+								const gchar              *unique_name,
+								EmpathyMainWindow        *window);
+static void     main_window_update_status                      (EmpathyMainWindow        *window);
 static void     main_window_accels_load                        (void);
 static void     main_window_accels_save                        (void);
-static void     main_window_connection_items_setup             (EmpathyMainWindow               *window,
-								GladeXML                        *glade);
-static gboolean main_window_configure_event_timeout_cb         (EmpathyMainWindow               *window);
-static gboolean main_window_configure_event_cb                 (GtkWidget                       *widget,
-								GdkEventConfigure               *event,
-								EmpathyMainWindow               *window);
-static void     main_window_notify_show_offline_cb             (EmpathyConf                      *conf,
-								const gchar                     *key,
-								gpointer                         check_menu_item);
-static void     main_window_notify_show_avatars_cb             (EmpathyConf                      *conf,
-								const gchar                     *key,
-								EmpathyMainWindow               *window);
-static void     main_window_notify_compact_contact_list_cb     (EmpathyConf                      *conf,
-								const gchar                     *key,
-								EmpathyMainWindow               *window);
-static void     main_window_notify_sort_criterium_cb           (EmpathyConf                      *conf,
-								const gchar                     *key,
-								EmpathyMainWindow               *window);
+static void     main_window_connection_items_setup             (EmpathyMainWindow        *window,
+								GladeXML                 *glade);
+static gboolean main_window_configure_event_timeout_cb         (EmpathyMainWindow        *window);
+static gboolean main_window_configure_event_cb                 (GtkWidget                *widget,
+								GdkEventConfigure        *event,
+								EmpathyMainWindow        *window);
+static void     main_window_notify_show_offline_cb             (EmpathyConf              *conf,
+								const gchar              *key,
+								gpointer                  check_menu_item);
+static void     main_window_notify_show_avatars_cb             (EmpathyConf              *conf,
+								const gchar              *key,
+								EmpathyMainWindow        *window);
+static void     main_window_notify_compact_contact_list_cb     (EmpathyConf              *conf,
+								const gchar              *key,
+								EmpathyMainWindow        *window);
+static void     main_window_notify_sort_criterium_cb           (EmpathyConf              *conf,
+								const gchar              *key,
+								EmpathyMainWindow        *window);
 
 GtkWidget *
 empathy_main_window_show (void)
@@ -874,12 +874,12 @@ main_window_error_display (EmpathyMainWindow *window,
 }
 
 static void
-main_window_status_changed_cb (MissionControl                  *mc,
-			       TelepathyConnectionStatus        status,
-			       McPresence                       presence,
-			       TelepathyConnectionStatusReason  reason,
-			       const gchar                     *unique_name,
-			       EmpathyMainWindow               *window)
+main_window_status_changed_cb (MissionControl           *mc,
+			       TpConnectionStatus        status,
+			       McPresence                presence,
+			       TpConnectionStatusReason  reason,
+			       const gchar              *unique_name,
+			       EmpathyMainWindow        *window)
 {
 	McAccount *account;
 
@@ -887,45 +887,45 @@ main_window_status_changed_cb (MissionControl                  *mc,
 
 	account = mc_account_lookup (unique_name);
 
-	if (status == TP_CONN_STATUS_DISCONNECTED &&
-	    reason > TP_CONN_STATUS_REASON_REQUESTED) {
+	if (status == TP_CONNECTION_STATUS_DISCONNECTED &&
+	    reason > TP_CONNECTION_STATUS_REASON_REQUESTED) {
 		const gchar *message;
 
 		switch (reason) {
-		case TP_CONN_STATUS_REASON_NETWORK_ERROR:
+		case TP_CONNECTION_STATUS_REASON_NETWORK_ERROR:
 			message = _("Network error");
 			break;
-		case TP_CONN_STATUS_REASON_AUTHENTICATION_FAILED:
+		case TP_CONNECTION_STATUS_REASON_AUTHENTICATION_FAILED:
 			message = _("Authentication failed");
 			break;
-		case TP_CONN_STATUS_REASON_ENCRYPTION_ERROR:
+		case TP_CONNECTION_STATUS_REASON_ENCRYPTION_ERROR:
 			message = _("Encryption error");
 			break;
-		case TP_CONN_STATUS_REASON_NAME_IN_USE:
+		case TP_CONNECTION_STATUS_REASON_NAME_IN_USE:
 			message = _("Name in use");
 			break;
-		case TP_CONN_STATUS_REASON_CERT_NOT_PROVIDED:
+		case TP_CONNECTION_STATUS_REASON_CERT_NOT_PROVIDED:
 			message = _("Certificate not provided");
 			break;
-		case TP_CONN_STATUS_REASON_CERT_UNTRUSTED:
+		case TP_CONNECTION_STATUS_REASON_CERT_UNTRUSTED:
 			message = _("Certificate untrusted");
 			break;
-		case TP_CONN_STATUS_REASON_CERT_EXPIRED:
+		case TP_CONNECTION_STATUS_REASON_CERT_EXPIRED:
 			message = _("Certificate expired");
 			break;
-		case TP_CONN_STATUS_REASON_CERT_NOT_ACTIVATED:
+		case TP_CONNECTION_STATUS_REASON_CERT_NOT_ACTIVATED:
 			message = _("Certificate not activated");
 			break;
-		case TP_CONN_STATUS_REASON_CERT_HOSTNAME_MISMATCH:
+		case TP_CONNECTION_STATUS_REASON_CERT_HOSTNAME_MISMATCH:
 			message = _("Certificate hostname mismatch");
 			break;
-		case TP_CONN_STATUS_REASON_CERT_FINGERPRINT_MISMATCH:
+		case TP_CONNECTION_STATUS_REASON_CERT_FINGERPRINT_MISMATCH:
 			message = _("Certificate fingerprint mismatch");
 			break;
-		case TP_CONN_STATUS_REASON_CERT_SELF_SIGNED:
+		case TP_CONNECTION_STATUS_REASON_CERT_SELF_SIGNED:
 			message = _("Certificate self signed");
 			break;
-		case TP_CONN_STATUS_REASON_CERT_OTHER_ERROR:
+		case TP_CONNECTION_STATUS_REASON_CERT_OTHER_ERROR:
 			message = _("Certificate error");
 			break;
 		default:
@@ -936,7 +936,7 @@ main_window_status_changed_cb (MissionControl                  *mc,
 		main_window_error_display (window, account, message);
 	}
 
-	if (status == TP_CONN_STATUS_CONNECTED) {
+	if (status == TP_CONNECTION_STATUS_CONNECTED) {
 		GtkWidget *error_widget;
 
 		/* Account connected without error, remove error message if any */

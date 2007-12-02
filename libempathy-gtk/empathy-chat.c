@@ -92,60 +92,60 @@ typedef struct {
 	GtkTextIter  end;
 } EmpathyChatSpell;
 
-static void             empathy_chat_class_init           (EmpathyChatClass              *klass);
-static void             empathy_chat_init                 (EmpathyChat                   *chat);
-static void             chat_finalize                     (GObject                       *object);
-static void             chat_destroy_cb                   (EmpathyTpChat                 *tp_chat,
-							   EmpathyChat                   *chat);
-static void             chat_send                         (EmpathyChat                   *chat,
-							   const gchar                   *msg);
-static void             chat_input_text_view_send         (EmpathyChat                   *chat);
-static void             chat_message_received_cb          (EmpathyTpChat                 *tp_chat,
-							   EmpathyMessage                *message,
-							   EmpathyChat                   *chat);
-static void             chat_send_error_cb                (EmpathyTpChat                 *tp_chat,
-							   EmpathyMessage                *message,
-							   TelepathyChannelTextSendError  error_code,
-							   EmpathyChat                   *chat);
-void                    chat_sent_message_add             (EmpathyChat                   *chat,
-							   const gchar                   *str);
-const gchar *           chat_sent_message_get_next        (EmpathyChat                   *chat);
-const gchar *           chat_sent_message_get_last        (EmpathyChat                   *chat);
-static gboolean         chat_input_key_press_event_cb     (GtkWidget                     *widget,
-							   GdkEventKey                   *event,
-							   EmpathyChat                   *chat);
-static void             chat_input_text_buffer_changed_cb (GtkTextBuffer                 *buffer,
-							   EmpathyChat                   *chat);
-static gboolean         chat_text_view_focus_in_event_cb  (GtkWidget                     *widget,
-							   GdkEvent                      *event,
-							   EmpathyChat                   *chat);
-static void             chat_text_view_scroll_hide_cb     (GtkWidget                     *widget,
-							   EmpathyChat                   *chat);
-static void             chat_text_view_size_allocate_cb   (GtkWidget                     *widget,
-							   GtkAllocation                 *allocation,
-							   EmpathyChat                   *chat);
-static void             chat_text_view_realize_cb         (GtkWidget                     *widget,
-							   EmpathyChat                   *chat);
-static void             chat_text_populate_popup_cb       (GtkTextView                   *view,
-							   GtkMenu                       *menu,
-							   EmpathyChat                   *chat);
-static void             chat_text_check_word_spelling_cb  (GtkMenuItem                   *menuitem,
-							   EmpathyChatSpell              *chat_spell);
-static EmpathyChatSpell *chat_spell_new                   (EmpathyChat                   *chat,
-							   const gchar                   *word,
-							   GtkTextIter                    start,
-							   GtkTextIter                    end);
-static void             chat_spell_free                   (EmpathyChatSpell              *chat_spell);
-static void             chat_composing_start              (EmpathyChat                   *chat);
-static void             chat_composing_stop               (EmpathyChat                   *chat);
-static void             chat_composing_remove_timeout     (EmpathyChat                   *chat);
-static gboolean         chat_composing_stop_timeout_cb    (EmpathyChat                   *chat);
-static void             chat_state_changed_cb             (EmpathyTpChat                 *tp_chat,
-							   EmpathyContact                *contact,
-							   TelepathyChannelChatState      state,
-							   EmpathyChat                   *chat);
-static void             chat_add_logs                     (EmpathyChat                   *chat);
-static gboolean         chat_scroll_down_idle_func        (EmpathyChat                   *chat);
+static void             empathy_chat_class_init           (EmpathyChatClass       *klass);
+static void             empathy_chat_init                 (EmpathyChat            *chat);
+static void             chat_finalize                     (GObject                *object);
+static void             chat_destroy_cb                   (EmpathyTpChat          *tp_chat,
+							   EmpathyChat            *chat);
+static void             chat_send                         (EmpathyChat            *chat,
+							   const gchar            *msg);
+static void             chat_input_text_view_send         (EmpathyChat            *chat);
+static void             chat_message_received_cb          (EmpathyTpChat          *tp_chat,
+							   EmpathyMessage         *message,
+							   EmpathyChat            *chat);
+static void             chat_send_error_cb                (EmpathyTpChat          *tp_chat,
+							   EmpathyMessage         *message,
+							   TpChannelTextSendError  error_code,
+							   EmpathyChat            *chat);
+void                    chat_sent_message_add             (EmpathyChat            *chat,
+							   const gchar            *str);
+const gchar *           chat_sent_message_get_next        (EmpathyChat            *chat);
+const gchar *           chat_sent_message_get_last        (EmpathyChat            *chat);
+static gboolean         chat_input_key_press_event_cb     (GtkWidget              *widget,
+							   GdkEventKey            *event,
+							   EmpathyChat            *chat);
+static void             chat_input_text_buffer_changed_cb (GtkTextBuffer          *buffer,
+							   EmpathyChat            *chat);
+static gboolean         chat_text_view_focus_in_event_cb  (GtkWidget              *widget,
+							   GdkEvent               *event,
+							   EmpathyChat            *chat);
+static void             chat_text_view_scroll_hide_cb     (GtkWidget              *widget,
+							   EmpathyChat            *chat);
+static void             chat_text_view_size_allocate_cb   (GtkWidget              *widget,
+							   GtkAllocation          *allocation,
+							   EmpathyChat            *chat);
+static void             chat_text_view_realize_cb         (GtkWidget              *widget,
+							   EmpathyChat            *chat);
+static void             chat_text_populate_popup_cb       (GtkTextView            *view,
+							   GtkMenu                *menu,
+							   EmpathyChat            *chat);
+static void             chat_text_check_word_spelling_cb  (GtkMenuItem            *menuitem,
+							   EmpathyChatSpell       *chat_spell);
+static EmpathyChatSpell *chat_spell_new                   (EmpathyChat            *chat,
+							   const gchar            *word,
+							   GtkTextIter             start,
+							   GtkTextIter             end);
+static void             chat_spell_free                   (EmpathyChatSpell       *chat_spell);
+static void             chat_composing_start              (EmpathyChat            *chat);
+static void             chat_composing_stop               (EmpathyChat            *chat);
+static void             chat_composing_remove_timeout     (EmpathyChat            *chat);
+static gboolean         chat_composing_stop_timeout_cb    (EmpathyChat            *chat);
+static void             chat_state_changed_cb             (EmpathyTpChat          *tp_chat,
+							   EmpathyContact         *contact,
+							   TpChannelChatState      state,
+							   EmpathyChat            *chat);
+static void             chat_add_logs                     (EmpathyChat            *chat);
+static gboolean         chat_scroll_down_idle_func        (EmpathyChat            *chat);
 
 enum {
 	COMPOSING,
@@ -436,10 +436,10 @@ chat_message_received_cb (EmpathyTpChat  *tp_chat,
 }
 
 static void
-chat_send_error_cb (EmpathyTpChat                 *tp_chat,
-		    EmpathyMessage                *message,
-		    TelepathyChannelTextSendError  error_code,
-		    EmpathyChat                   *chat)
+chat_send_error_cb (EmpathyTpChat          *tp_chat,
+		    EmpathyMessage         *message,
+		    TpChannelTextSendError  error_code,
+		    EmpathyChat            *chat)
 {
 	const gchar *error;
 	gchar       *str;
@@ -1075,10 +1075,10 @@ chat_composing_stop_timeout_cb (EmpathyChat *chat)
 }
 
 static void
-chat_state_changed_cb (EmpathyTpChat             *tp_chat,
-		       EmpathyContact             *contact,
-		       TelepathyChannelChatState  state,
-		       EmpathyChat                *chat)
+chat_state_changed_cb (EmpathyTpChat      *tp_chat,
+		       EmpathyContact     *contact,
+		       TpChannelChatState  state,
+		       EmpathyChat        *chat)
 {
 	EmpathyChatPriv *priv;
 	GList          *l;

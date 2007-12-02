@@ -31,6 +31,7 @@
 #include <libebook/e-book.h>
 #include <libgnomevfs/gnome-vfs.h>
 
+#include <telepathy-glib/util.h>
 #include <libmissioncontrol/mc-account.h>
 #include <libmissioncontrol/mc-account-monitor.h>
 #include <libmissioncontrol/mission-control.h>
@@ -157,7 +158,7 @@ create_salut_account (void)
 	email = e_contact_get (contact, E_CONTACT_EMAIL_1);
 	jid = e_contact_get (contact, E_CONTACT_IM_JABBER_HOME_1);
 	
-	if (G_STR_EMPTY (nickname) || !empathy_strdiff (nickname, "nickname")) {
+	if (G_STR_EMPTY (nickname) || !tp_strdiff (nickname, "nickname")) {
 		g_free (nickname);
 		nickname = g_strdup (g_get_user_name ());
 	}

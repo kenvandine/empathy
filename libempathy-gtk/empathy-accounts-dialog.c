@@ -36,6 +36,7 @@
 #include <libmissioncontrol/mc-profile.h>
 #include <libmissioncontrol/mission-control.h>
 #include <libmissioncontrol/mc-account-monitor.h>
+#include <telepathy-glib/util.h>
 #include <libtelepathy/tp-constants.h>
 
 #include <libempathy/empathy-debug.h>
@@ -96,64 +97,64 @@ enum {
 	COL_COUNT
 };
 
-static void       accounts_dialog_setup                     (EmpathyAccountsDialog            *dialog);
-static void       accounts_dialog_update_account            (EmpathyAccountsDialog            *dialog,
-							     McAccount                       *account);
-static void       accounts_dialog_model_setup               (EmpathyAccountsDialog            *dialog);
-static void       accounts_dialog_model_add_columns         (EmpathyAccountsDialog            *dialog);
-static void       accounts_dialog_model_select_first        (EmpathyAccountsDialog            *dialog);
-static void       accounts_dialog_model_pixbuf_data_func    (GtkTreeViewColumn               *tree_column,
-							     GtkCellRenderer                 *cell,
-							     GtkTreeModel                    *model,
-							     GtkTreeIter                     *iter,
-							     EmpathyAccountsDialog            *dialog);
-static McAccount *accounts_dialog_model_get_selected        (EmpathyAccountsDialog            *dialog);
-static void       accounts_dialog_model_set_selected        (EmpathyAccountsDialog            *dialog,
-							     McAccount                       *account);
-static gboolean   accounts_dialog_model_remove_selected     (EmpathyAccountsDialog            *dialog);
-static void       accounts_dialog_model_selection_changed   (GtkTreeSelection                *selection,
-							     EmpathyAccountsDialog            *dialog);
-static void       accounts_dialog_add_account               (EmpathyAccountsDialog            *dialog,
-							     McAccount                       *account);
-static void       accounts_dialog_account_added_cb          (McAccountMonitor                *monitor,
-							     gchar                           *unique_name,
-							     EmpathyAccountsDialog            *dialog);
-static void       accounts_dialog_account_removed_cb        (McAccountMonitor                *monitor,
-							     gchar                           *unique_name,
-							     EmpathyAccountsDialog            *dialog);
-static gboolean   accounts_dialog_row_changed_foreach       (GtkTreeModel                    *model,
-							     GtkTreePath                     *path,
-							     GtkTreeIter                     *iter,
-							     gpointer                         user_data);
-static gboolean   accounts_dialog_flash_connecting_cb       (EmpathyAccountsDialog            *dialog);
-static void       accounts_dialog_status_changed_cb         (MissionControl                  *mc,
-							     TelepathyConnectionStatus        status,
-							     McPresence                       presence,
-							     TelepathyConnectionStatusReason  reason,
-							     const gchar                     *unique_name,
-							     EmpathyAccountsDialog            *dialog);
-static void       accounts_dialog_button_create_clicked_cb  (GtkWidget                       *button,
-							     EmpathyAccountsDialog            *dialog);
-static void       accounts_dialog_button_back_clicked_cb    (GtkWidget                       *button,
-							     EmpathyAccountsDialog            *dialog);
-static void       accounts_dialog_button_connect_clicked_cb (GtkWidget                       *button,
-							     EmpathyAccountsDialog            *dialog);
-static void       accounts_dialog_button_add_clicked_cb     (GtkWidget                       *button,
-							     EmpathyAccountsDialog            *dialog);
-static void       accounts_dialog_remove_response_cb        (GtkWidget                       *dialog,
-							     gint                             response,
-							     McAccount                       *account);
-static void       accounts_dialog_button_remove_clicked_cb  (GtkWidget                       *button,
-							     EmpathyAccountsDialog            *dialog);
-static void       accounts_dialog_treeview_row_activated_cb (GtkTreeView                     *tree_view,
-							     GtkTreePath                     *path,
-							     GtkTreeViewColumn               *column,
-							     EmpathyAccountsDialog            *dialog);
-static void       accounts_dialog_response_cb               (GtkWidget                       *widget,
-							     gint                             response,
-							     EmpathyAccountsDialog            *dialog);
-static void       accounts_dialog_destroy_cb                (GtkWidget                       *widget,
-							     EmpathyAccountsDialog            *dialog);
+static void       accounts_dialog_setup                     (EmpathyAccountsDialog    *dialog);
+static void       accounts_dialog_update_account            (EmpathyAccountsDialog    *dialog,
+							     McAccount                *account);
+static void       accounts_dialog_model_setup               (EmpathyAccountsDialog    *dialog);
+static void       accounts_dialog_model_add_columns         (EmpathyAccountsDialog    *dialog);
+static void       accounts_dialog_model_select_first        (EmpathyAccountsDialog    *dialog);
+static void       accounts_dialog_model_pixbuf_data_func    (GtkTreeViewColumn        *tree_column,
+							     GtkCellRenderer          *cell,
+							     GtkTreeModel             *model,
+							     GtkTreeIter              *iter,
+							     EmpathyAccountsDialog    *dialog);
+static McAccount *accounts_dialog_model_get_selected        (EmpathyAccountsDialog    *dialog);
+static void       accounts_dialog_model_set_selected        (EmpathyAccountsDialog    *dialog,
+							     McAccount                *account);
+static gboolean   accounts_dialog_model_remove_selected     (EmpathyAccountsDialog    *dialog);
+static void       accounts_dialog_model_selection_changed   (GtkTreeSelection         *selection,
+							     EmpathyAccountsDialog    *dialog);
+static void       accounts_dialog_add_account               (EmpathyAccountsDialog    *dialog,
+							     McAccount                *account);
+static void       accounts_dialog_account_added_cb          (McAccountMonitor         *monitor,
+							     gchar                    *unique_name,
+							     EmpathyAccountsDialog    *dialog);
+static void       accounts_dialog_account_removed_cb        (McAccountMonitor         *monitor,
+							     gchar                    *unique_name,
+							     EmpathyAccountsDialog    *dialog);
+static gboolean   accounts_dialog_row_changed_foreach       (GtkTreeModel             *model,
+							     GtkTreePath              *path,
+							     GtkTreeIter              *iter,
+							     gpointer                  user_data);
+static gboolean   accounts_dialog_flash_connecting_cb       (EmpathyAccountsDialog    *dialog);
+static void       accounts_dialog_status_changed_cb         (MissionControl           *mc,
+							     TpConnectionStatus        status,
+							     McPresence                presence,
+							     TpConnectionStatusReason  reason,
+							     const gchar              *unique_name,
+							     EmpathyAccountsDialog    *dialog);
+static void       accounts_dialog_button_create_clicked_cb  (GtkWidget                *button,
+							     EmpathyAccountsDialog    *dialog);
+static void       accounts_dialog_button_back_clicked_cb    (GtkWidget                *button,
+							     EmpathyAccountsDialog    *dialog);
+static void       accounts_dialog_button_connect_clicked_cb (GtkWidget                *button,
+							     EmpathyAccountsDialog    *dialog);
+static void       accounts_dialog_button_add_clicked_cb     (GtkWidget                *button,
+							     EmpathyAccountsDialog    *dialog);
+static void       accounts_dialog_remove_response_cb        (GtkWidget                *dialog,
+							     gint                      response,
+							     McAccount                *account);
+static void       accounts_dialog_button_remove_clicked_cb  (GtkWidget                *button,
+							     EmpathyAccountsDialog    *dialog);
+static void       accounts_dialog_treeview_row_activated_cb (GtkTreeView              *tree_view,
+							     GtkTreePath              *path,
+							     GtkTreeViewColumn        *column,
+							     EmpathyAccountsDialog    *dialog);
+static void       accounts_dialog_response_cb               (GtkWidget                *widget,
+							     gint                      response,
+							     EmpathyAccountsDialog    *dialog);
+static void       accounts_dialog_destroy_cb                (GtkWidget                *widget,
+							     EmpathyAccountsDialog    *dialog);
 
 static void
 accounts_dialog_setup (EmpathyAccountsDialog *dialog)
@@ -169,9 +170,9 @@ accounts_dialog_setup (EmpathyAccountsDialog *dialog)
 	accounts = mc_accounts_list ();
 
 	for (l = accounts; l; l = l->next) {
-		McAccount                 *account;
-		const gchar               *name;
-		TelepathyConnectionStatus  status;
+		McAccount          *account;
+		const gchar        *name;
+		TpConnectionStatus  status;
 
 		account = l->data;
 
@@ -192,7 +193,7 @@ accounts_dialog_setup (EmpathyAccountsDialog *dialog)
 		accounts_dialog_status_changed_cb (dialog->mc,
 						   status,
 						   MC_PRESENCE_UNSET,
-						   TP_CONN_STATUS_REASON_NONE_SPECIFIED,
+						   TP_CONNECTION_STATUS_REASON_NONE_SPECIFIED,
 						   mc_account_get_unique_name (account),
 						   dialog);
 
@@ -289,15 +290,15 @@ accounts_dialog_update_account (EmpathyAccountsDialog *dialog,
 		config_ui = mc_profile_get_configuration_ui (profile);
 		g_object_unref (profile);
 
-		if (!empathy_strdiff (config_ui, "jabber")) {
+		if (!tp_strdiff (config_ui, "jabber")) {
 			dialog->settings_widget = 
 				empathy_account_widget_jabber_new (account);
 		} 
-		else if (!empathy_strdiff (config_ui, "msn")) {
+		else if (!tp_strdiff (config_ui, "msn")) {
 			dialog ->settings_widget =
 				empathy_account_widget_msn_new (account);
 		}
-		else if (!empathy_strdiff (config_ui, "local-xmpp")) {
+		else if (!tp_strdiff (config_ui, "local-xmpp")) {
 			dialog->settings_widget =
 				empathy_account_widget_salut_new (account);
 		}
@@ -452,10 +453,10 @@ accounts_dialog_model_pixbuf_data_func (GtkTreeViewColumn    *tree_column,
 					GtkTreeIter          *iter,
 					EmpathyAccountsDialog *dialog)
 {
-	McAccount                 *account;
-	const gchar               *icon_name;
-	GdkPixbuf                 *pixbuf;
-	TelepathyConnectionStatus  status;
+	McAccount          *account;
+	const gchar        *icon_name;
+	GdkPixbuf          *pixbuf;
+	TpConnectionStatus  status;
 
 	gtk_tree_model_get (model, iter,
 			    COL_STATUS, &status,
@@ -466,8 +467,8 @@ accounts_dialog_model_pixbuf_data_func (GtkTreeViewColumn    *tree_column,
 	pixbuf = empathy_pixbuf_from_icon_name (icon_name, GTK_ICON_SIZE_BUTTON);
 
 	if (pixbuf) {
-		if (status == TP_CONN_STATUS_DISCONNECTED ||
-		    (status == TP_CONN_STATUS_CONNECTING && 
+		if (status == TP_CONNECTION_STATUS_DISCONNECTED ||
+		    (status == TP_CONNECTION_STATUS_CONNECTING && 
 		     !dialog->connecting_show)) {
 			GdkPixbuf *modded_pixbuf;
 
@@ -602,13 +603,13 @@ static void
 accounts_dialog_add_account (EmpathyAccountsDialog *dialog,
 			     McAccount            *account)
 {
-	TelepathyConnectionStatus  status;
-	const gchar               *name;
-	GtkTreeView               *view;
-	GtkTreeModel              *model;
-	GtkListStore              *store;
-	GtkTreeIter                iter;
-	gboolean                   ok;
+	TpConnectionStatus  status;
+	const gchar        *name;
+	GtkTreeView        *view;
+	GtkTreeModel       *model;
+	GtkListStore       *store;
+	GtkTreeIter         iter;
+	gboolean            ok;
 
 	view = GTK_TREE_VIEW (dialog->treeview);
 	model = gtk_tree_view_get_model (view);
@@ -702,12 +703,12 @@ accounts_dialog_flash_connecting_cb (EmpathyAccountsDialog *dialog)
 }
 
 static void
-accounts_dialog_status_changed_cb (MissionControl                  *mc,
-				   TelepathyConnectionStatus        status,
-				   McPresence                       presence,
-				   TelepathyConnectionStatusReason  reason,
-				   const gchar                     *unique_name,
-				   EmpathyAccountsDialog           *dialog)
+accounts_dialog_status_changed_cb (MissionControl           *mc,
+				   TpConnectionStatus        status,
+				   McPresence                presence,
+				   TpConnectionStatusReason  reason,
+				   const gchar              *unique_name,
+				   EmpathyAccountsDialog    *dialog)
 {
 	GtkTreeView      *view;
 	GtkTreeSelection *selection;
@@ -760,13 +761,13 @@ accounts_dialog_status_changed_cb (MissionControl                  *mc,
 	/* Check if there is still accounts in CONNECTING state */
 	accounts = mc_accounts_list ();
 	for (l = accounts; l; l = l->next) {
-		McAccount                 *this_account;
-		TelepathyConnectionStatus  status;
+		McAccount          *this_account;
+		TpConnectionStatus  status;
 
 		this_account = l->data;
 
 		status = mission_control_get_connection_status (mc, this_account, NULL);
-		if (status == TP_CONN_STATUS_CONNECTING) {
+		if (status == TP_CONNECTION_STATUS_CONNECTING) {
 			found = TRUE;
 			break;
 		}

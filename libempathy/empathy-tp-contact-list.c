@@ -345,7 +345,7 @@ static void
 tp_contact_list_newchannel_cb (DBusGProxy           *proxy,
 			       const gchar          *object_path,
 			       const gchar          *channel_type,
-			       TelepathyHandleType   handle_type,
+			       TpHandleType          handle_type,
 			       guint                 channel_handle,
 			       gboolean              suppress_handler,
 			       EmpathyTpContactList *list)
@@ -541,18 +541,18 @@ tp_contact_list_disconnect (EmpathyTpContactList *list)
 }
 
 static void
-tp_contact_list_status_changed_cb (MissionControl                  *mc,
-				   TelepathyConnectionStatus        status,
-				   McPresence                       presence,
-				   TelepathyConnectionStatusReason  reason,
-				   const gchar                     *unique_name,
-				   EmpathyTpContactList            *list)
+tp_contact_list_status_changed_cb (MissionControl           *mc,
+				   TpConnectionStatus        status,
+				   McPresence                presence,
+				   TpConnectionStatusReason  reason,
+				   const gchar              *unique_name,
+				   EmpathyTpContactList     *list)
 {
 	EmpathyTpContactListPriv *priv = GET_PRIV (list);
 	McAccount                *account;
 
 	account = mc_account_lookup (unique_name);
-	if (status != TP_CONN_STATUS_CONNECTED &&
+	if (status != TP_CONNECTION_STATUS_CONNECTED &&
 	    empathy_account_equal (account, priv->account)) {
 		/* We are disconnected */
 		tp_contact_list_disconnect (list);
@@ -662,11 +662,11 @@ tp_contact_list_setup (EmpathyTpContactList *list)
 	}
 
 	for (i = 0; i < channels->len; i++) {
-		GValueArray         *chan_struct;
-		const gchar         *object_path;
-		const gchar         *chan_iface;
-		TelepathyHandleType  handle_type;
-		guint                handle;
+		GValueArray  *chan_struct;
+		const gchar  *object_path;
+		const gchar  *chan_iface;
+		TpHandleType  handle_type;
+		guint         handle;
 
 		chan_struct = g_ptr_array_index (channels, i);
 		object_path = g_value_get_boxed (g_value_array_get_nth (chan_struct, 0));

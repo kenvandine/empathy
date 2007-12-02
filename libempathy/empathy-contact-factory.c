@@ -23,6 +23,7 @@
 
 #include <string.h>
 
+#include <telepathy-glib/util.h>
 #include <libtelepathy/tp-conn.h>
 #include <libtelepathy/tp-conn-iface-aliasing-gen.h>
 #include <libtelepathy/tp-conn-iface-presence-gen.h>
@@ -486,7 +487,7 @@ contact_factory_avatar_maybe_update (ContactFactoryAccountData *account_data,
 
 	/* Check if the avatar changed */
 	avatar = empathy_contact_get_avatar (contact);
-	if (avatar && !empathy_strdiff (avatar->token, token)) {
+	if (avatar && !tp_strdiff (avatar->token, token)) {
 		return TRUE;
 	}
 
@@ -880,13 +881,13 @@ contact_factory_account_data_update (ContactFactoryAccountData *account_data)
 	/* We got a new connection */
 	account_data->tp_conn = tp_conn;
 	account_data->aliasing_iface = tp_conn_get_interface (tp_conn,
-							      TELEPATHY_CONN_IFACE_ALIASING_QUARK);
+							      TP_IFACE_QUARK_CONNECTION_INTERFACE_ALIASING);
 	account_data->avatars_iface = tp_conn_get_interface (tp_conn,
-							     TELEPATHY_CONN_IFACE_AVATARS_QUARK);
+							      TP_IFACE_QUARK_CONNECTION_INTERFACE_AVATARS);
 	account_data->presence_iface = tp_conn_get_interface (tp_conn,
-							      TELEPATHY_CONN_IFACE_PRESENCE_QUARK);
+							      TP_IFACE_QUARK_CONNECTION_INTERFACE_PRESENCE);
 	account_data->capabilities_iface = tp_conn_get_interface (tp_conn,
-							          TELEPATHY_CONN_IFACE_CAPABILITIES_QUARK);
+							          TP_IFACE_QUARK_CONNECTION_INTERFACE_CAPABILITIES);
 
 	/* Connect signals */
 	if (account_data->aliasing_iface) {
@@ -971,12 +972,12 @@ contact_factory_account_data_new (EmpathyContactFactory *factory,
 }
 
 static void
-contact_factory_status_changed_cb (MissionControl                  *mc,
-				   TelepathyConnectionStatus        status,
-				   McPresence                       presence,
-				   TelepathyConnectionStatusReason  reason,
-				   const gchar                     *unique_name,
-				   EmpathyContactFactory           *factory)
+contact_factory_status_changed_cb (MissionControl           *mc,
+				   TpConnectionStatus        status,
+				   McPresence                presence,
+				   TpConnectionStatusReason  reason,
+				   const gchar              *unique_name,
+				   EmpathyContactFactory    *factory)
 {
 	EmpathyContactFactoryPriv *priv = GET_PRIV (factory);
 	ContactFactoryAccountData *account_data;

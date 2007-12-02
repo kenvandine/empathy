@@ -33,6 +33,8 @@
 #include <glade/glade.h>
 #include <glib/gi18n.h>
 
+#include <telepathy-glib/util.h>
+
 #include <libempathy/empathy-tp-chat.h>
 #include <libempathy/empathy-tp-chatroom.h>
 #include <libempathy/empathy-contact.h>
@@ -561,7 +563,7 @@ group_chat_subject_notify_cb (EmpathyTpChat   *tp_chat,
 	priv = GET_PRIV (chat);
 
 	g_object_get (priv->tp_chat, "subject", &str, NULL);
-	if (!empathy_strdiff (priv->topic, str)) {
+	if (!tp_strdiff (priv->topic, str)) {
 		g_free (str);
 		return;
 	}

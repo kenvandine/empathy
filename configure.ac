@@ -50,14 +50,16 @@ GTK_REQUIRED=2.12.0
 GCONF_REQUIRED=1.2.0
 LIBGLADE_REQUIRED=2.0.0
 LIBPANELAPPLET_REQUIRED=2.10.0
-TELEPATHY_REQUIRED=0.0.57
+TELEPATHY_REQUIRED=0.3.1
+TELEPATHY_GLIB_REQUIRED=0.7.0
 MISSION_CONTROL_REQUIRED=4.37
 
 IDT_COMPILE_WARNINGS
 
-dnl Uncomment that to build without deprecated GTK and GLib symbols
+dnl Uncomment that to build without deprecated symbols
 dnl AC_DEFINE(GTK_DISABLE_DEPRECATED, 1, [Disable deprecated GTK symbols])
 dnl AC_DEFINE(G_DISABLE_DEPRECATED, 1, [Disable deprecated GLib symbols])
+dnl AC_DEFINE(LIBTELEPATHY_DISABLE_DEPRECATED, 1, [Disable deprecated libtelepathy symbols])
 
 GLIB_GENMARSHAL=`$PKG_CONFIG glib-2.0 --variable=glib_genmarshal`
 AC_SUBST(GLIB_GENMARSHAL)
@@ -83,6 +85,7 @@ PKG_CHECK_MODULES(LIBEMPATHY,
    gconf-2.0 >= $GCONF_REQUIRED
    libxml-2.0
    libtelepathy >= $TELEPATHY_REQUIRED
+   telepathy-glib >= $TELEPATHY_GLIB_REQUIRED
    libmissioncontrol >= $MISSION_CONTROL_REQUIRED
 ])
 
@@ -92,9 +95,10 @@ PKG_CHECK_MODULES(EMPATHY,
    gobject-2.0
    gconf-2.0 >= $GCONF_REQUIRED
    libxml-2.0
-   gnome-vfs-2.0
    libtelepathy >= $TELEPATHY_REQUIRED
+   telepathy-glib >= $TELEPATHY_GLIB_REQUIRED
    libmissioncontrol >= $MISSION_CONTROL_REQUIRED
+   gnome-vfs-2.0
    gtk+-2.0 >= $GTK_REQUIRED
    x11
    libglade-2.0 >= $LIBGLADE_REQUIRED

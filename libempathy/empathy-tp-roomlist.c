@@ -182,7 +182,7 @@ empathy_tp_roomlist_new (McAccount *account)
 
 	priv->account = g_object_ref (account);
 	priv->roomlist_iface = tp_chan_get_interface (priv->tp_chan,
-						      TELEPATHY_CHAN_IFACE_ROOMLIST_QUARK);
+						      TP_IFACE_QUARK_CHANNEL_TYPE_ROOM_LIST);
 
 	g_signal_connect (priv->tp_chan, "destroy",
 			  G_CALLBACK (tp_roomlist_destroy_cb),

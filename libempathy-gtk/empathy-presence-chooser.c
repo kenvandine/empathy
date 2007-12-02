@@ -31,6 +31,7 @@
 #include <gtk/gtk.h>
 #include <glade/glade.h>
 
+#include <telepathy-glib/util.h>
 #include <libmissioncontrol/mc-enum-types.h>
 
 #include <libempathy/empathy-idle.h>
@@ -823,7 +824,7 @@ presence_chooser_dialog_message_changed_cb (GtkWidget           *widget,
 
 	messages = empathy_status_presets_get (presence, -1);
 	for (l = messages; l; l = l->next) {
-		if (!empathy_strdiff (text, l->data)) {
+		if (!tp_strdiff (text, l->data)) {
 			found = TRUE;
 			break;
 		}

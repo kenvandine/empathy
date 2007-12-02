@@ -318,7 +318,7 @@ tp_call_constructor (GType                  type,
 
 	priv->group = empathy_tp_group_new (priv->account, priv->tp_chan);
 	priv->streamed_iface = tp_chan_get_interface (priv->tp_chan,
-						      TELEPATHY_CHAN_IFACE_STREAMED_QUARK);
+						      TP_IFACE_QUARK_CHANNEL_TYPE_STREAMED_MEDIA);
 
 	/* Connect signals */
 	dbus_g_proxy_connect_signal (priv->streamed_iface, "StreamAdded",

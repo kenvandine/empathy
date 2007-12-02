@@ -66,9 +66,6 @@ gint         empathy_strcasecmp                     (const gchar     *s1,
 gint         empathy_strncasecmp                    (const gchar     *s1,
 						    const gchar     *s2,
 						    gsize            n);
-gboolean     empathy_strdiff                        (const gchar     *left,
-						     const gchar     *right);
-gchar *      empathy_escape_as_identifier           (const gchar     *name);
 
 /* XML */
 gboolean     empathy_xml_validate                   (xmlDoc          *doc,

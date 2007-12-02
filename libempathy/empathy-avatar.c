@@ -22,6 +22,8 @@
 
 #include "config.h"
 
+#include <telepathy-glib/util.h>
+
 #include "empathy-avatar.h"
 #include "empathy-utils.h"
 #include "empathy-debug.h"
@@ -56,7 +58,7 @@ avatar_get_filename (const gchar *token)
 					NULL);
 	g_mkdir_with_parents (avatar_path, 0700);
 
-	token_escaped = empathy_escape_as_identifier (token);
+	token_escaped = tp_escape_as_identifier (token);
 	avatar_file = g_build_filename (avatar_path, token_escaped, NULL);
 
 	g_free (token_escaped);

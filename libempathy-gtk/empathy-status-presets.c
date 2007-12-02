@@ -32,6 +32,8 @@
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 
+#include <telepathy-glib/util.h>
+
 #include <libempathy/empathy-debug.h>
 #include <libempathy/empathy-utils.h>
 
@@ -293,7 +295,7 @@ empathy_status_presets_set_last (McPresence   state,
 		preset = l->data;
 
 		if (state == preset->state &&
-		    !empathy_strdiff (status, preset->status)) {
+		    !tp_strdiff (status, preset->status)) {
 			return;
 		}
 	}
@@ -332,7 +334,7 @@ empathy_status_presets_remove (McPresence   state,
 		preset = l->data;
 
 		if (state == preset->state &&
-		    !empathy_strdiff (status, preset->status)) {
+		    !tp_strdiff (status, preset->status)) {
 			status_preset_free (preset);
 			presets = g_list_delete_link (presets, l);
 			status_presets_file_save ();

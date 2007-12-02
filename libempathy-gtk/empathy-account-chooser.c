@@ -64,41 +64,41 @@ enum {
 	COL_ACCOUNT_COUNT
 };
 
-static void     account_chooser_finalize               (GObject                         *object);
-static void     account_chooser_get_property           (GObject                         *object,
-							guint                            param_id,
-							GValue                          *value,
-							GParamSpec                      *pspec);
-static void     account_chooser_set_property           (GObject                         *object,
-							guint                            param_id,
-							const GValue                    *value,
-							GParamSpec                      *pspec);
-static void     account_chooser_setup                  (EmpathyAccountChooser            *chooser);
-static void     account_chooser_account_created_cb     (McAccountMonitor                *monitor,
-							const gchar                     *unique_name,
-							EmpathyAccountChooser            *chooser);
-static void     account_chooser_account_add_foreach    (McAccount                       *account,
-							EmpathyAccountChooser            *chooser);
-static void     account_chooser_account_deleted_cb     (McAccountMonitor                *monitor,
-							const gchar                     *unique_name,
-							EmpathyAccountChooser            *chooser);
-static void     account_chooser_account_remove_foreach (McAccount                       *account,
-							EmpathyAccountChooser            *chooser);
-static void     account_chooser_update_iter            (EmpathyAccountChooser            *chooser,
-							GtkTreeIter                     *iter);
-static void     account_chooser_status_changed_cb      (MissionControl                  *mc,
-							TelepathyConnectionStatus        status,
-							McPresence                       presence,
-							TelepathyConnectionStatusReason  reason,
-							const gchar                     *unique_name,
-							EmpathyAccountChooser           *chooser);
-static gboolean account_chooser_separator_func         (GtkTreeModel                    *model,
-							GtkTreeIter                     *iter,
-							EmpathyAccountChooser            *chooser);
-static gboolean account_chooser_set_account_foreach    (GtkTreeModel                    *model,
-							GtkTreePath                     *path,
-							GtkTreeIter                     *iter,
-							SetAccountData                  *data);
+static void     account_chooser_finalize               (GObject                  *object);
+static void     account_chooser_get_property           (GObject                  *object,
+							guint                     param_id,
+							GValue                   *value,
+							GParamSpec               *pspec);
+static void     account_chooser_set_property           (GObject                  *object,
+							guint                     param_id,
+							const GValue             *value,
+							GParamSpec               *pspec);
+static void     account_chooser_setup                  (EmpathyAccountChooser    *chooser);
+static void     account_chooser_account_created_cb     (McAccountMonitor         *monitor,
+							const gchar              *unique_name,
+							EmpathyAccountChooser    *chooser);
+static void     account_chooser_account_add_foreach    (McAccount                *account,
+							EmpathyAccountChooser    *chooser);
+static void     account_chooser_account_deleted_cb     (McAccountMonitor         *monitor,
+							const gchar              *unique_name,
+							EmpathyAccountChooser    *chooser);
+static void     account_chooser_account_remove_foreach (McAccount                *account,
+							EmpathyAccountChooser    *chooser);
+static void     account_chooser_update_iter            (EmpathyAccountChooser    *chooser,
+							GtkTreeIter              *iter);
+static void     account_chooser_status_changed_cb      (MissionControl           *mc,
+							TpConnectionStatus        status,
+							McPresence                presence,
+							TpConnectionStatusReason  reason,
+							const gchar              *unique_name,
+							EmpathyAccountChooser    *chooser);
+static gboolean account_chooser_separator_func         (GtkTreeModel             *model,
+							GtkTreeIter              *iter,
+							EmpathyAccountChooser    *chooser);
+static gboolean account_chooser_set_account_foreach    (GtkTreeModel             *model,
+							GtkTreePath              *path,
+							GtkTreeIter              *iter,
+							SetAccountData           *data);
 
 enum {
 	PROP_0,
@@ -555,12 +555,12 @@ account_chooser_update_iter (EmpathyAccountChooser *chooser,
 }
 
 static void
-account_chooser_status_changed_cb (MissionControl                  *mc,
-				   TelepathyConnectionStatus        status,
-				   McPresence                       presence,
-				   TelepathyConnectionStatusReason  reason,
-				   const gchar                     *unique_name,
-				   EmpathyAccountChooser           *chooser)
+account_chooser_status_changed_cb (MissionControl           *mc,
+				   TpConnectionStatus        status,
+				   McPresence                presence,
+				   TpConnectionStatusReason  reason,
+				   const gchar              *unique_name,
+				   EmpathyAccountChooser    *chooser)
 {
 	McAccount   *account;
 	GtkTreeIter  iter;
@@ -663,8 +663,8 @@ gboolean
 empathy_account_chooser_filter_is_connected (McAccount *account,
 					     gpointer   user_data)
 {
-	MissionControl            *mc;
-	TelepathyConnectionStatus  status;
+	MissionControl     *mc;
+	TpConnectionStatus  status;
 
 	g_return_val_if_fail (MC_IS_ACCOUNT (account), FALSE);
 
@@ -672,6 +672,6 @@ empathy_account_chooser_filter_is_connected (McAccount *account,
 	status = mission_control_get_connection_status (mc, account, NULL);
 	g_object_unref (mc);
 
-	return status == TP_CONN_STATUS_CONNECTED;
+	return status == TP_CONNECTION_STATUS_CONNECTED;
 }
 

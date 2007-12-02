@@ -164,16 +164,16 @@ contact_manager_add_account (EmpathyContactManager *manager,
 }
 
 static void
-contact_manager_status_changed_cb (MissionControl                  *mc,
-				   TelepathyConnectionStatus        status,
-				   McPresence                       presence,
-				   TelepathyConnectionStatusReason  reason,
-				   const gchar                     *unique_name,
-				   EmpathyContactManager           *manager)
+contact_manager_status_changed_cb (MissionControl           *mc,
+				   TpConnectionStatus        status,
+				   McPresence                presence,
+				   TpConnectionStatusReason  reason,
+				   const gchar              *unique_name,
+				   EmpathyContactManager    *manager)
 {
 	McAccount *account;
 
-	if (status != TP_CONN_STATUS_CONNECTED) {
+	if (status != TP_CONNECTION_STATUS_CONNECTED) {
 		/* We only care about newly connected accounts */
 		return;
 	}

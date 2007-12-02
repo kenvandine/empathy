@@ -565,7 +565,7 @@ empathy_tp_group_new (McAccount *account,
 	g_return_val_if_fail (MC_IS_ACCOUNT (account), NULL);
 
 	group_iface = tp_chan_get_interface (tp_chan,
-					     TELEPATHY_CHAN_IFACE_GROUP_QUARK);
+					     TP_IFACE_QUARK_CHANNEL_INTERFACE_GROUP);
 	g_return_val_if_fail (group_iface != NULL, NULL);
 
 	group = g_object_new (EMPATHY_TYPE_TP_GROUP, NULL);

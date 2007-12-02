@@ -1,5 +1,33 @@
 2007-12-02  Xavier Claessens  <xclaesse@gmail.com>
 
+	 * configure.ac:
+	 * libempathy-gtk/empathy-account-chooser.c:
+	 * libempathy-gtk/empathy-accounts-dialog.c:
+	 * libempathy-gtk/empathy-chat.c:
+	 * libempathy-gtk/empathy-contact-dialogs.c:
+	 * libempathy-gtk/empathy-group-chat.c:
+	 * libempathy-gtk/empathy-main-window.c:
+	 * libempathy-gtk/empathy-presence-chooser.c:
+	 * libempathy-gtk/empathy-status-presets.c:
+	 * libempathy/empathy-avatar.c:
+	 * libempathy/empathy-contact-factory.c:
+	 * libempathy/empathy-contact-manager.c:
+	 * libempathy/empathy-tp-call.c:
+	 * libempathy/empathy-tp-chat.c:
+	 * libempathy/empathy-tp-chat.h:
+	 * libempathy/empathy-tp-contact-list.c:
+	 * libempathy/empathy-tp-group.c:
+	 * libempathy/empathy-tp-roomlist.c:
+	 * libempathy/empathy-utils.c:
+	 * libempathy/empathy-utils.h:
+	 * python/pyempathy/pyempathy.defs:
+	 * src/empathy.c: Do not use deprecated symbols from libtelepathy. We
+	 now link on telepathy-glib, make use of tp_strdiff and
+	 tp_escape_as_identifier instead of using our own copy of those
+	 functions.
+
+2007-12-02  Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/Makefile.am:
 	* libempathy-gtk/empathy-main-window.c:
 	* libempathy-gtk/empathy-new-message-dialog.c:

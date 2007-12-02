@@ -1751,13 +1751,4 @@
   )
 )
 
-(define-function empathy_strdiff
-  (c-name "empathy_strdiff")
-  (return-type "gboolean")
-  (parameters
-    '("const-gchar*" "left")
-    '("const-gchar*" "right")
-  )
-)
-
 

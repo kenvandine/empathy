@@ -233,15 +233,15 @@ static gboolean
 can_add_contact_to_account (McAccount *account,
 			    gpointer   user_data)
 {
-	MissionControl            *mc;
-	TelepathyConnectionStatus  status;
-	McProfile                 *profile;
-	const gchar               *protocol_name;
+	MissionControl     *mc;
+	TpConnectionStatus  status;
+	McProfile          *profile;
+	const gchar        *protocol_name;
 
 	mc = empathy_mission_control_new ();
 	status = mission_control_get_connection_status (mc, account, NULL);
 	g_object_unref (mc);
-	if (status != TP_CONN_STATUS_CONNECTED) {
+	if (status != TP_CONNECTION_STATUS_CONNECTED) {
 		/* Account is disconnected */
 		return FALSE;
 	}

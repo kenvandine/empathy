@@ -55,58 +55,58 @@ struct _EmpathyTpChatPriv {
 	DBusGProxy	      *chat_state_iface;
 };
 
-static void             empathy_tp_chat_class_init    (EmpathyTpChatClass        *klass);
-static void             empathy_tp_chat_init          (EmpathyTpChat             *chat);
-static void             tp_chat_finalize              (GObject                   *object);
-static GObject *        tp_chat_constructor           (GType                      type,
-						       guint                      n_props,
-						       GObjectConstructParam     *props);
-static void             tp_chat_get_property          (GObject                   *object,
-						       guint                      param_id,
-						       GValue                    *value,
-						       GParamSpec                *pspec);
-static void             tp_chat_set_property          (GObject                   *object,
-						       guint                      param_id,
-						       const GValue              *value,
-						       GParamSpec                *pspec);
-static void             tp_chat_destroy_cb            (TpChan                    *text_chan,
-						       EmpathyTpChat             *chat);
-static void             tp_chat_closed_cb             (TpChan                    *text_chan,
-						       EmpathyTpChat             *chat);
-static void             tp_chat_received_cb           (DBusGProxy                *text_iface,
-						       guint                      message_id,
-						       guint                      timestamp,
-						       guint                      from_handle,
-						       guint                      message_type,
-						       guint                      message_flags,
-						       gchar                     *message_body,
-						       EmpathyTpChat             *chat);
-static void             tp_chat_sent_cb               (DBusGProxy                *text_iface,
-						       guint                      timestamp,
-						       guint                      message_type,
-						       gchar                     *message_body,
-						       EmpathyTpChat             *chat);
-static void             tp_chat_send_error_cb         (DBusGProxy                *text_iface,
-						       guint                      error_code,
-						       guint                      timestamp,
-						       guint                      message_type,
-						       gchar                     *message_body,
-						       EmpathyTpChat             *chat);
-static void             tp_chat_state_changed_cb      (DBusGProxy                *chat_state_iface,
-						       guint                      handle,
-						       TelepathyChannelChatState  state,
-						       EmpathyTpChat             *chat);
-static EmpathyMessage * tp_chat_build_message         (EmpathyTpChat             *chat,
-						       guint                      type,
-						       guint                      timestamp,
-						       guint                      from_handle,
-						       const gchar               *message_body);
-static void             tp_chat_properties_ready_cb   (TpPropsIface              *props_iface,
-						       EmpathyTpChat             *chat);
-static void             tp_chat_properties_changed_cb (TpPropsIface              *props_iface,
-						       guint                      prop_id,
-						       TpPropsChanged             flag,
-						       EmpathyTpChat             *chat);
+static void             empathy_tp_chat_class_init    (EmpathyTpChatClass    *klass);
+static void             empathy_tp_chat_init          (EmpathyTpChat         *chat);
+static void             tp_chat_finalize              (GObject               *object);
+static GObject *        tp_chat_constructor           (GType                  type,
+						       guint                  n_props,
+						       GObjectConstructParam *props);
+static void             tp_chat_get_property          (GObject               *object,
+						       guint                  param_id,
+						       GValue                *value,
+						       GParamSpec            *pspec);
+static void             tp_chat_set_property          (GObject               *object,
+						       guint                  param_id,
+						       const GValue          *value,
+						       GParamSpec            *pspec);
+static void             tp_chat_destroy_cb            (TpChan                *text_chan,
+						       EmpathyTpChat         *chat);
+static void             tp_chat_closed_cb             (TpChan                *text_chan,
+						       EmpathyTpChat         *chat);
+static void             tp_chat_received_cb           (DBusGProxy            *text_iface,
+						       guint                  message_id,
+						       guint                  timestamp,
+						       guint                  from_handle,
+						       guint                  message_type,
+						       guint                  message_flags,
+						       gchar                 *message_body,
+						       EmpathyTpChat         *chat);
+static void             tp_chat_sent_cb               (DBusGProxy            *text_iface,
+						       guint                  timestamp,
+						       guint                  message_type,
+						       gchar                 *message_body,
+						       EmpathyTpChat         *chat);
+static void             tp_chat_send_error_cb         (DBusGProxy            *text_iface,
+						       guint                  error_code,
+						       guint                  timestamp,
+						       guint                  message_type,
+						       gchar                 *message_body,
+						       EmpathyTpChat         *chat);
+static void             tp_chat_state_changed_cb      (DBusGProxy            *chat_state_iface,
+						       guint                  handle,
+						       TpChannelChatState     state,
+						       EmpathyTpChat         *chat);
+static EmpathyMessage * tp_chat_build_message         (EmpathyTpChat         *chat,
+						       guint                  type,
+						       guint                  timestamp,
+						       guint                  from_handle,
+						       const gchar           *message_body);
+static void             tp_chat_properties_ready_cb   (TpPropsIface          *props_iface,
+						       EmpathyTpChat         *chat);
+static void             tp_chat_properties_changed_cb (TpPropsIface          *props_iface,
+						       guint                  prop_id,
+						       TpPropsChanged         flag,
+						       EmpathyTpChat         *chat);
 enum {
 	PROP_0,
 	PROP_ACCOUNT,
@@ -416,11 +416,11 @@ tp_chat_constructor (GType                  type,
 	priv->mc = empathy_mission_control_new ();
 
 	priv->text_iface = tp_chan_get_interface (priv->tp_chan,
-						  TELEPATHY_CHAN_IFACE_TEXT_QUARK);
+						  TP_IFACE_QUARK_CHANNEL_TYPE_TEXT);
 	priv->chat_state_iface = tp_chan_get_interface (priv->tp_chan,
-							TELEPATHY_CHAN_IFACE_CHAT_STATE_QUARK);
+							TP_IFACE_QUARK_CHANNEL_INTERFACE_CHAT_STATE);
 	priv->props_iface = tp_chan_get_interface (priv->tp_chan,
-						   TELEPATHY_PROPS_IFACE_QUARK);
+						   TP_IFACE_QUARK_PROPERTIES_INTERFACE);
 
 	g_signal_connect (priv->tp_chan, "destroy",
 			  G_CALLBACK (tp_chat_destroy_cb),
@@ -736,8 +736,8 @@ empathy_tp_chat_send (EmpathyTpChat *chat,
 }
 
 void
-empathy_tp_chat_set_state (EmpathyTpChat             *chat,
-			   TelepathyChannelChatState  state)
+empathy_tp_chat_set_state (EmpathyTpChat      *chat,
+			   TpChannelChatState  state)
 {
 	EmpathyTpChatPriv *priv;
 	GError            *error = NULL;
@@ -891,10 +891,10 @@ tp_chat_send_error_cb (DBusGProxy    *text_iface,
 }
 
 static void
-tp_chat_state_changed_cb (DBusGProxy                *chat_state_iface,
-			  guint                      handle,
-			  TelepathyChannelChatState  state,
-			  EmpathyTpChat             *chat)
+tp_chat_state_changed_cb (DBusGProxy         *chat_state_iface,
+			  guint               handle,
+			  TpChannelChatState  state,
+			  EmpathyTpChat      *chat)
 {
 	EmpathyTpChatPriv *priv;
 	EmpathyContact     *contact;
