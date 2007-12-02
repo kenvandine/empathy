@@ -50,7 +50,8 @@ libempathy_gtk_la_SOURCES =             	\
 	empathy-call-window.c			\
 	empathy-avatar-chooser.c		\
 	empathy-avatar-image.c			\
-	empathy-ui-utils.c
+	empathy-ui-utils.c			\
+	empathy-new-message-dialog.c
 
 # do not distribute generated files
 nodist_libempathy_gtk_la_SOURCES =\
@@ -102,7 +103,8 @@ libempathy_gtk_headers =			\
 	empathy-call-window.h			\
 	empathy-avatar-chooser.h		\
 	empathy-avatar-image.h			\
-	empathy-ui-utils.h
+	empathy-ui-utils.h			\
+	empathy-new-message-dialog.h
 
 libempathy_gtk_includedir = $(includedir)/libempathy-gtk/
 libempathy_gtk_include_HEADERS =		\
@@ -127,7 +129,8 @@ glade_DATA = 					\
 	empathy-spell-dialog.glade		\
 	empathy-log-window.glade		\
 	empathy-call-window.glade		\
-	empathy-chat.glade
+	empathy-chat.glade			\
+	empathy-new-message-dialog.glade
 
 empathy-gtk-enum-types.h: stamp-empathy-gtk-enum-types.h
 	@true

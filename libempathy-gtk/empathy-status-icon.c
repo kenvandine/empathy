@@ -46,6 +46,7 @@
 #include "empathy-ui-utils.h"
 #include "empathy-accounts-dialog.h"
 #include "empathy-images.h"
+#include "empathy-new-message-dialog.h"
 
 
 #define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), \
@@ -528,7 +529,7 @@ status_icon_new_message_cb (GtkWidget         *widget,
 
 	priv = GET_PRIV (icon);
 
-	//empathy_new_message_dialog_show (GTK_WINDOW (priv->window));
+	empathy_new_message_dialog_show (GTK_WINDOW (priv->window));
 }
 
 static void

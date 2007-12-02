@@ -53,6 +53,7 @@
 #include "empathy-new-chatroom-dialog.h"
 #include "empathy-chatrooms-window.h"
 #include "empathy-log-window.h"
+#include "empathy-new-message-dialog.h"
 #include "empathy-gtk-enum-types.h"
 
 #define DEBUG_DOMAIN "MainWindow"
@@ -523,7 +524,7 @@ static void
 main_window_chat_new_message_cb (GtkWidget         *widget,
 				 EmpathyMainWindow *window)
 {
-	//empathy_new_message_dialog_show (GTK_WINDOW (window->window));
+	empathy_new_message_dialog_show (GTK_WINDOW (window->window));
 }
 
 static void
