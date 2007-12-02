@@ -1,3 +1,13 @@
+2007-12-02  Xavier Claessens  <xclaesse@gmail.com>
+
+	* libempathy-gtk/Makefile.am:
+	* libempathy-gtk/empathy-main-window.c:
+	* libempathy-gtk/empathy-new-message-dialog.c:
+	* libempathy-gtk/empathy-new-message-dialog.glade:
+	* libempathy-gtk/empathy-new-message-dialog.h:
+	* libempathy-gtk/empathy-status-icon.c: Implement New Message menu
+	entry. Fixes bug #489979.
+
 2007-11-30  Xavier Claessens  <xclaesse@gmail.com>
 
 	* data/empathy.schemas.in:
