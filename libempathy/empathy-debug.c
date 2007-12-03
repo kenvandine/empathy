@@ -34,6 +34,8 @@
 #include <glib/gprintf.h>
 #include <glib/gstdio.h>
 
+#include <telepathy-glib/debug.h>
+
 /* Set EMPATHY_DEBUG to a colon/comma/space separated list of domains, or "all"
  * to get all debug output.
  */
@@ -53,6 +55,7 @@ debug_init (void)
 		gint         i;
 
 		env = g_getenv ("EMPATHY_DEBUG");
+		tp_debug_set_flags (env);
 
 		if (env) {
 			debug_strv = g_strsplit_set (env, ":, ", 0);
