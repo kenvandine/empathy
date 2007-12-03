@@ -1,3 +1,8 @@
+2007-12-03  Xavier Claessens  <xclaesse@gmail.com>
+
+	* libempathy/empathy-debug.c: Call tp_debug_set_flags to get tp-glib
+	debug output.
+
 2007-12-02  Xavier Claessens  <xclaesse@gmail.com>
 
 	 * configure.ac:
