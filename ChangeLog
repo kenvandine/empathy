@@ -1,5 +1,9 @@
 2007-12-03  Xavier Claessens  <xclaesse@gmail.com>
 
+	* configure.ac: Bump version to 0.21.4.
+
+2007-12-03  Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy-gtk/empathy-chat-window.c:
 	* libempathy-gtk/empathy-chat.c:
 	* libempathy-gtk/empathy-chat.h:
