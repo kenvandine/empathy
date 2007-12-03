@@ -1,6 +1,13 @@
+NEW in 0.21.3:
+=============
+ - Request new Text Channel if the contact is online again and CM don't support
+   offline message or if account gets reconnected.
+ - Depend on telepathy-glib and make use of his new API. Don't use deprecated
+   functions of libtelepathy.
+ - Better gtkdoc generator.
+
 NEW in 0.21.2:
 =============
-
  - Display error message when an account failed to connect.
  - Move chats to its own process.
  - Move chandlers in $libexecdir
