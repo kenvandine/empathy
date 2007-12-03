@@ -34,6 +34,8 @@
 #include <glade/glade.h>
 #include <glib/gi18n.h>
 
+#include <libmissioncontrol/mission-control.h>
+
 #include <libempathy/empathy-contact-factory.h>
 #include <libempathy/empathy-contact-list.h>
 #include <libempathy/empathy-log-manager.h>
@@ -749,8 +751,8 @@ chat_window_update_menu (EmpathyChatWindow *window)
 		 * connected to the room?
 		 */
 		chatroom = empathy_chatroom_manager_find (priv->chatroom_manager,
-							 priv->current_chat->account,
-							 empathy_chat_get_id (priv->current_chat));
+							  empathy_chat_get_account (priv->current_chat),
+							  empathy_chat_get_id (priv->current_chat));
 
 		gtk_widget_set_sensitive (priv->menu_room_add, chatroom == NULL);
 		gtk_widget_set_sensitive (priv->menu_conv_insert_smiley, is_connected);
@@ -881,10 +883,10 @@ chat_window_log_activate_cb (GtkWidget        *menuitem,
 
 	priv = GET_PRIV (window);
 
-	empathy_log_window_show (priv->current_chat->account,
-				empathy_chat_get_id (priv->current_chat),
-				empathy_chat_is_group_chat (priv->current_chat),
-				GTK_WINDOW (priv->dialog));
+	empathy_log_window_show (empathy_chat_get_account (priv->current_chat),
+				 empathy_chat_get_id (priv->current_chat),
+				 empathy_chat_is_group_chat (priv->current_chat),
+				 GTK_WINDOW (priv->dialog));
 }
 
 static void
@@ -960,7 +962,7 @@ chat_window_conv_activate_cb (GtkWidget         *menuitem,
 
 	manager = empathy_log_manager_new ();
 	log_exists = empathy_log_manager_exists (manager,
-						 priv->current_chat->account,
+						 empathy_chat_get_account (priv->current_chat),
 						 empathy_chat_get_id (priv->current_chat),
 						 empathy_chat_is_group_chat (priv->current_chat));
 	g_object_unref (manager);
@@ -1077,10 +1079,10 @@ chat_window_room_add_activate_cb (GtkWidget        *menuitem,
 		return;
 	}
 
-	chatroom = empathy_chatroom_new_full (priv->current_chat->account,
-					     empathy_chat_get_id (priv->current_chat),
-					     empathy_chat_get_name (priv->current_chat),
-					     FALSE);
+	chatroom = empathy_chatroom_new_full (empathy_chat_get_account (priv->current_chat),
+					      empathy_chat_get_id (priv->current_chat),
+					      empathy_chat_get_name (priv->current_chat),
+					      FALSE);
 
 	manager = empathy_chatroom_manager_new ();
 	empathy_chatroom_manager_add (manager, chatroom);
@@ -1571,7 +1573,6 @@ chat_window_drag_data_received (GtkWidget        *widget,
 				guint             time,
 				EmpathyChatWindow *window)
 {
-	/* FIXME: DnD of contact do not seems to work... */
 	if (info == DND_DRAG_TYPE_CONTACT_ID) {
 		EmpathyContactFactory *factory;
 		EmpathyContact        *contact = NULL;
@@ -1607,17 +1608,25 @@ chat_window_drag_data_received (GtkWidget        *widget,
 		
 		account = empathy_contact_get_account (contact);
 		chat = empathy_chat_window_find_chat (account, id);
-		if (chat) {
-			g_object_ref (chat);
-		} else {
-			chat = EMPATHY_CHAT (empathy_private_chat_new_with_contact (contact));
+
+		if (!chat) {
+			MissionControl *mc;
+
+			mc = empathy_mission_control_new ();
+			mission_control_request_channel (mc,
+							 empathy_contact_get_account (contact),
+							 TP_IFACE_CHANNEL_TYPE_TEXT,
+							 empathy_contact_get_handle (contact),
+							 TP_HANDLE_TYPE_CONTACT,
+							 NULL, NULL);
+			g_object_unref (mc);
+			return;
 		}
-		old_window = empathy_chat_get_window (chat);
-		
+
+		old_window = empathy_chat_get_window (chat);		
 		if (old_window) {
 			if (old_window == window) {
 				gtk_drag_finish (context, TRUE, FALSE, time);
-				g_object_unref (chat);
 				return;
 			}
 			
@@ -1635,7 +1644,6 @@ chat_window_drag_data_received (GtkWidget        *widget,
 		 * anyway with add_chat() and remove_chat().
 		 */
 		gtk_drag_finish (context, TRUE, FALSE, time);
-		g_object_unref (chat);
 	}
 	else if (info == DND_DRAG_TYPE_TAB) {
 		EmpathyChat        *chat = NULL;
@@ -1873,7 +1881,7 @@ empathy_chat_window_find_chat (McAccount   *account,
 
 			chat = ll->data;
 
-			if (empathy_account_equal (account, chat->account) &&
+			if (empathy_account_equal (account, empathy_chat_get_account (chat)) &&
 			    strcmp (id, empathy_chat_get_id (chat)) == 0) {
 				return chat;
 			}

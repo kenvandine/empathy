@@ -57,10 +57,10 @@ struct _EmpathyTpChatClass {
 GType          empathy_tp_chat_get_type             (void) G_GNUC_CONST;
 EmpathyTpChat *empathy_tp_chat_new                  (McAccount          *account,
 						     TpChan             *tp_chan);
-EmpathyTpChat *empathy_tp_chat_new_with_contact     (EmpathyContact     *contact);
 gboolean       empathy_tp_chat_get_acknowledge      (EmpathyTpChat      *chat);
 void           empathy_tp_chat_set_acknowledge      (EmpathyTpChat      *chat,
 						     gboolean            acknowledge);
+McAccount *    empathy_tp_chat_get_account          (EmpathyTpChat      *chat);
 TpChan *       empathy_tp_chat_get_channel          (EmpathyTpChat      *chat);
 GList *        empathy_tp_chat_get_pendings         (EmpathyTpChat      *chat);
 void           empathy_tp_chat_send                 (EmpathyTpChat      *chat,

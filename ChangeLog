@@ -1,5 +1,21 @@
 2007-12-03  Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/empathy-chat-window.c:
+	* libempathy-gtk/empathy-chat.c:
+	* libempathy-gtk/empathy-chat.h:
+	* libempathy-gtk/empathy-group-chat.c:
+	* libempathy-gtk/empathy-group-chat.h:
+	* libempathy-gtk/empathy-private-chat.c:
+	* libempathy-gtk/empathy-private-chat.h:
+	* libempathy/empathy-tp-chat.c:
+	* libempathy/empathy-tp-chat.h:
+	* python/pyempathy/pyempathy.defs:
+	* python/pyempathygtk/pyempathygtk.defs:
+	* src/empathy-chat-chandler.c: Cleanup chat objects API and request a
+	new Text channel if account gets reconnected.
+
+2007-12-03  Xavier Claessens  <xclaesse@gmail.com>
+
 	* libempathy/empathy-debug.c: Call tp_debug_set_flags to get tp-glib
 	debug output.
 

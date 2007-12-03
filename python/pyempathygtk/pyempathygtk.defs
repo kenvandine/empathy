@@ -1150,14 +1150,6 @@
   )
 )
 
-(define-function empathy_private_chat_new_with_contact
-  (c-name "empathy_private_chat_new_with_contact")
-  (return-type "EmpathyPrivateChat*")
-  (parameters
-    '("EmpathyContact*" "contact")
-  )
-)
-
 (define-method get_contact
   (of-object "EmpathyPrivateChat")
   (c-name "empathy_private_chat_get_contact")

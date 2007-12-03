@@ -54,9 +54,10 @@ chat_chandler_new_channel_cb (EmpathyChandler *chandler,
 			      TpChan          *tp_chan,
 			      MissionControl  *mc)
 {
-	McAccount   *account;
-	EmpathyChat *chat;
-	gchar       *id;
+	EmpathyTpChat *tp_chat;
+	McAccount     *account;
+	EmpathyChat   *chat;
+	gchar         *id;
 
 	account = mission_control_get_account_for_connection (mc, tp_conn, NULL);
 	id = empathy_inspect_channel (account, tp_chan);
@@ -66,8 +67,6 @@ chat_chandler_new_channel_cb (EmpathyChandler *chandler,
 	if (chat) {
 		/* The chat already exists */
 		if (!empathy_chat_is_connected (chat)) {
-			EmpathyTpChat *tp_chat;
-
 			/* The chat died, give him the new text channel */
 			if (empathy_chat_is_group_chat (chat)) {
 				tp_chat = EMPATHY_TP_CHAT (empathy_tp_chatroom_new (account, tp_chan));
@@ -85,17 +84,26 @@ chat_chandler_new_channel_cb (EmpathyChandler *chandler,
 
 	if (tp_chan->handle_type == TP_HANDLE_TYPE_CONTACT) {
 		/* We have a new private chat channel */
-		chat = EMPATHY_CHAT (empathy_private_chat_new (account, tp_chan));
+		tp_chat = empathy_tp_chat_new (account, tp_chan);
+		chat = EMPATHY_CHAT (empathy_private_chat_new (tp_chat));
 	}
 	else if (tp_chan->handle_type == TP_HANDLE_TYPE_ROOM) {
 		/* We have a new group chat channel */
-		chat = EMPATHY_CHAT (empathy_group_chat_new (account, tp_chan));
+		tp_chat = EMPATHY_TP_CHAT (empathy_tp_chatroom_new (account, tp_chan));
+		chat = EMPATHY_CHAT (empathy_group_chat_new (EMPATHY_TP_CHATROOM (tp_chat)));
+	} else {
+		empathy_debug (DEBUG_DOMAIN,
+			       "Unknown handle type (%d) for Text channel",
+			       tp_chan->handle_type);
+		g_object_unref (account);
+		return;
 	}
 
-	empathy_chat_present (EMPATHY_CHAT (chat));
+	empathy_chat_present (chat);
 
 	g_object_unref (chat);
 	g_object_unref (account);
+	g_object_unref (tp_chat);
 }
 
 int

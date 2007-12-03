@@ -1338,14 +1338,6 @@
   )
 )
 
-(define-function empathy_tp_chat_new_with_contact
-  (c-name "empathy_tp_chat_new_with_contact")
-  (return-type "EmpathyTpChat*")
-  (parameters
-    '("EmpathyContact*" "contact")
-  )
-)
-
 (define-method get_acknowledge
   (of-object "EmpathyTpChat")
   (c-name "empathy_tp_chat_get_acknowledge")

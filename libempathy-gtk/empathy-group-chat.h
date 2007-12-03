@@ -29,9 +29,8 @@
 
 G_BEGIN_DECLS
 
-#include <libtelepathy/tp-chan.h>
-
-#include <libmissioncontrol/mc-account.h>
+#include <libempathy/empathy-tp-chatroom.h>
+#include <libempathy/empathy-contact.h>
 
 #define EMPATHY_TYPE_GROUP_CHAT         (empathy_group_chat_get_type ())
 #define EMPATHY_GROUP_CHAT(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), EMPATHY_TYPE_GROUP_CHAT, EmpathyGroupChat))
@@ -56,13 +55,12 @@ struct _EmpathyGroupChatClass {
 	EmpathyChatClass parent_class;
 };
 
-GType            empathy_group_chat_get_type          (void) G_GNUC_CONST;
-EmpathyGroupChat *empathy_group_chat_new               (McAccount       *account,
-						      TpChan          *tp_chan);
-gboolean         empathy_group_chat_get_show_contacts (EmpathyGroupChat *chat);
-void             empathy_group_chat_set_show_contacts (EmpathyGroupChat *chat,
-						      gboolean         show);
-void             empathy_group_chat_set_topic         (EmpathyGroupChat *chat);
+GType             empathy_group_chat_get_type          (void) G_GNUC_CONST;
+EmpathyGroupChat *empathy_group_chat_new               (EmpathyTpChatroom *tp_chat);
+gboolean          empathy_group_chat_get_show_contacts (EmpathyGroupChat  *chat);
+void              empathy_group_chat_set_show_contacts (EmpathyGroupChat  *chat,
+							gboolean           show);
+void              empathy_group_chat_set_topic         (EmpathyGroupChat  *chat);
 
 G_END_DECLS
 

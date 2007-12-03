@@ -175,22 +175,15 @@ group_chat_finalize (GObject *object)
 }
 
 EmpathyGroupChat *
-empathy_group_chat_new (McAccount *account,
-			TpChan    *tp_chan)
+empathy_group_chat_new (EmpathyTpChatroom *tp_chat)
 {
-	EmpathyGroupChat     *chat;
-	EmpathyGroupChatPriv *priv;
+	EmpathyGroupChat *chat;
 
-	g_return_val_if_fail (MC_IS_ACCOUNT (account), NULL);
-	g_return_val_if_fail (TELEPATHY_IS_CHAN (tp_chan), NULL);
+	g_return_val_if_fail (EMPATHY_IS_TP_CHAT (tp_chat), NULL);
 
-	chat = g_object_new (EMPATHY_TYPE_GROUP_CHAT, NULL);
-
-	priv = GET_PRIV (chat);
-
-	EMPATHY_CHAT (chat)->account = g_object_ref (account);
-	priv->tp_chat = empathy_tp_chatroom_new (account, tp_chan);
-	empathy_chat_set_tp_chat (EMPATHY_CHAT (chat), EMPATHY_TP_CHAT (priv->tp_chat));
+	chat = g_object_new (EMPATHY_TYPE_GROUP_CHAT,
+			     "tp-chat", tp_chat,
+			     NULL);
 
 	return chat;
 }

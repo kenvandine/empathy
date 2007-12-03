@@ -56,11 +56,8 @@ struct _EmpathyChat {
 	GObject          parent;
 
 	/* Protected */
-	EmpathyChatView  *view;
-	EmpathyTpChat   *tp_chat;
+	EmpathyChatView *view;
 	GtkWidget       *input_text_view;
-	gboolean         is_first_char;
-	McAccount       *account;
 };
 
 struct _EmpathyChatClass {
@@ -78,47 +75,47 @@ struct _EmpathyChatClass {
 						 GdkEventKey   *event);
 };
 
-GType             empathy_chat_get_type              (void);
+GType              empathy_chat_get_type              (void);
 
 EmpathyChatView *  empathy_chat_get_view              (EmpathyChat       *chat);
 EmpathyChatWindow *empathy_chat_get_window            (EmpathyChat       *chat);
-void              empathy_chat_set_window            (EmpathyChat       *chat,
-						     EmpathyChatWindow *window);
-void              empathy_chat_present               (EmpathyChat       *chat);
-void              empathy_chat_clear                 (EmpathyChat       *chat);
-void              empathy_chat_scroll_down           (EmpathyChat       *chat);
-void              empathy_chat_cut                   (EmpathyChat       *chat);
-void              empathy_chat_copy                  (EmpathyChat       *chat);
-void              empathy_chat_paste                 (EmpathyChat       *chat);
-const gchar *     empathy_chat_get_name              (EmpathyChat       *chat);
-gchar *           empathy_chat_get_tooltip           (EmpathyChat       *chat);
-const gchar *     empathy_chat_get_status_icon_name  (EmpathyChat       *chat);
-GtkWidget *       empathy_chat_get_widget            (EmpathyChat       *chat);
-gboolean          empathy_chat_is_group_chat         (EmpathyChat       *chat);
-gboolean          empathy_chat_is_connected          (EmpathyChat       *chat);
-
-void              empathy_chat_save_geometry         (EmpathyChat       *chat,
-						     gint              x,
-						     gint              y,
-						     gint              w,
-						     gint              h);
-void              empathy_chat_load_geometry         (EmpathyChat       *chat,
-						     gint             *x,
-						     gint             *y,
-						     gint             *w,
-						     gint             *h);
-void              empathy_chat_set_tp_chat           (EmpathyChat       *chat,
-						     EmpathyTpChat    *tp_chat);
-const gchar *     empathy_chat_get_id                (EmpathyChat       *chat);
+void               empathy_chat_set_window            (EmpathyChat       *chat,
+						       EmpathyChatWindow *window);
+void               empathy_chat_present               (EmpathyChat       *chat);
+void               empathy_chat_clear                 (EmpathyChat       *chat);
+void               empathy_chat_scroll_down           (EmpathyChat       *chat);
+void               empathy_chat_cut                   (EmpathyChat       *chat);
+void               empathy_chat_copy                  (EmpathyChat       *chat);
+void               empathy_chat_paste                 (EmpathyChat       *chat);
+const gchar *      empathy_chat_get_name              (EmpathyChat       *chat);
+gchar *            empathy_chat_get_tooltip           (EmpathyChat       *chat);
+const gchar *      empathy_chat_get_status_icon_name  (EmpathyChat       *chat);
+GtkWidget *        empathy_chat_get_widget            (EmpathyChat       *chat);
+gboolean           empathy_chat_is_group_chat         (EmpathyChat       *chat);
+gboolean           empathy_chat_is_connected          (EmpathyChat       *chat);
+void               empathy_chat_save_geometry         (EmpathyChat       *chat,
+						       gint               x,
+						       gint               y,
+						       gint               w,
+						       gint               h);
+void               empathy_chat_load_geometry         (EmpathyChat       *chat,
+						       gint              *x,
+						       gint              *y,
+						       gint              *w,
+						       gint              *h);
+void               empathy_chat_set_tp_chat           (EmpathyChat       *chat,
+						       EmpathyTpChat     *tp_chat);
+const gchar *      empathy_chat_get_id                (EmpathyChat       *chat);
+McAccount *        empathy_chat_get_account           (EmpathyChat       *chat);
 
 /* For spell checker dialog to correct the misspelled word. */
-gboolean          empathy_chat_get_is_command        (const gchar      *str);
-void              empathy_chat_correct_word          (EmpathyChat       *chat,
-						     GtkTextIter       start,
-						     GtkTextIter       end,
-						     const gchar      *new_word);
-gboolean          empathy_chat_should_play_sound     (EmpathyChat       *chat);
-gboolean          empathy_chat_should_highlight_nick (EmpathyMessage    *message);
+gboolean           empathy_chat_get_is_command        (const gchar      *str);
+void               empathy_chat_correct_word          (EmpathyChat       *chat,
+						       GtkTextIter       start,
+						       GtkTextIter       end,
+						       const gchar      *new_word);
+gboolean           empathy_chat_should_play_sound     (EmpathyChat       *chat);
+gboolean           empathy_chat_should_highlight_nick (EmpathyMessage    *message);
 
 G_END_DECLS
 

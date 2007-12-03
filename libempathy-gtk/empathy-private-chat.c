@@ -81,6 +81,49 @@ static GtkWidget *    private_chat_get_widget                   (EmpathyChat    
 
 G_DEFINE_TYPE (EmpathyPrivateChat, empathy_private_chat, EMPATHY_TYPE_CHAT);
 
+
+static GObject *
+private_chat_constructor (GType                  type,
+			  guint                  n_props,
+			  GObjectConstructParam *props)
+{
+	GObject                *chat;
+	EmpathyPrivateChatPriv *priv;
+	EmpathyTpChat          *tp_chat;
+	TpChan                 *tp_chan;
+	McAccount              *account;
+
+	chat = G_OBJECT_CLASS (empathy_private_chat_parent_class)->constructor (type, n_props, props);
+
+	priv = GET_PRIV (chat);
+
+	g_object_get (chat, "tp-chat", &tp_chat, NULL);
+	tp_chan = empathy_tp_chat_get_channel (tp_chat);
+	account = empathy_tp_chat_get_account (tp_chat);
+
+	priv->factory = empathy_contact_factory_new ();
+	priv->contact = empathy_contact_factory_get_from_handle (priv->factory,
+								 account,
+								 tp_chan->handle);
+
+	priv->name = g_strdup (empathy_contact_get_name (priv->contact));
+
+	g_signal_connect (priv->contact, 
+			  "notify::name",
+			  G_CALLBACK (private_chat_contact_updated_cb),
+			  chat);
+	g_signal_connect (priv->contact, 
+			  "notify::presence",
+			  G_CALLBACK (private_chat_contact_presence_updated_cb),
+			  chat);
+
+	priv->is_online = empathy_contact_is_online (priv->contact);
+
+	g_object_unref (tp_chat);
+
+	return chat;
+}
+
 static void
 empathy_private_chat_class_init (EmpathyPrivateChatClass *klass)
 {
@@ -88,6 +131,7 @@ empathy_private_chat_class_init (EmpathyPrivateChatClass *klass)
 	EmpathyChatClass *chat_class = EMPATHY_CHAT_CLASS (klass);
 
 	object_class->finalize = private_chat_finalize;
+	object_class->constructor = private_chat_constructor;
 
 	chat_class->get_name             = private_chat_get_name;
 	chat_class->get_tooltip          = private_chat_get_tooltip;
@@ -101,12 +145,6 @@ empathy_private_chat_class_init (EmpathyPrivateChatClass *klass)
 static void
 empathy_private_chat_init (EmpathyPrivateChat *chat)
 {
-	EmpathyPrivateChatPriv *priv;
-
-	priv = GET_PRIV (chat);
-
-	priv->is_online = FALSE;
-
 	private_chat_create_ui (chat);
 }
 
@@ -317,79 +355,16 @@ private_chat_get_widget (EmpathyChat *chat)
 	return priv->widget;
 }
 
-static void
-private_chat_setup (EmpathyPrivateChat *chat,
-		    EmpathyContact     *contact,
-		    EmpathyTpChat     *tp_chat)
-{
-	EmpathyPrivateChatPriv *priv;
-
-	priv = GET_PRIV (chat);
-
-	EMPATHY_CHAT (chat)->account = g_object_ref (empathy_contact_get_account (contact));
-	priv->contact = g_object_ref (contact);
-	priv->name = g_strdup (empathy_contact_get_name (contact));
-
-	empathy_chat_set_tp_chat (EMPATHY_CHAT (chat), tp_chat);
-
-	g_signal_connect (priv->contact, 
-			  "notify::name",
-			  G_CALLBACK (private_chat_contact_updated_cb),
-			  chat);
-	g_signal_connect (priv->contact, 
-			  "notify::presence",
-			  G_CALLBACK (private_chat_contact_presence_updated_cb),
-			  chat);
-
-	priv->is_online = empathy_contact_is_online (priv->contact);
-}
-
 EmpathyPrivateChat *
-empathy_private_chat_new (McAccount *account,
-			  TpChan    *tp_chan)
+empathy_private_chat_new (EmpathyTpChat *tp_chat)
 {
-	EmpathyPrivateChat     *chat;
-	EmpathyPrivateChatPriv *priv;
-	EmpathyTpChat          *tp_chat;
-	EmpathyContact         *contact;
+	EmpathyPrivateChat *chat;
 
-	g_return_val_if_fail (MC_IS_ACCOUNT (account), NULL);
-	g_return_val_if_fail (TELEPATHY_IS_CHAN (tp_chan), NULL);
+	g_return_val_if_fail (EMPATHY_IS_TP_CHAT (tp_chat), NULL);
 
-	chat = g_object_new (EMPATHY_TYPE_PRIVATE_CHAT, NULL);
-	priv = GET_PRIV (chat);
-
-	priv->factory = empathy_contact_factory_new ();
-	contact = empathy_contact_factory_get_from_handle (priv->factory,
-							   account,
-							   tp_chan->handle);
-
-	tp_chat = empathy_tp_chat_new (account, tp_chan);
-	private_chat_setup (chat, contact, tp_chat);
-
-	g_object_unref (tp_chat);
-	g_object_unref (contact);
-
-	return chat;
-}
-
-EmpathyPrivateChat *
-empathy_private_chat_new_with_contact (EmpathyContact *contact)
-{
-	EmpathyPrivateChat     *chat;
-	EmpathyPrivateChatPriv *priv;
-	EmpathyTpChat          *tp_chat;
-
-	g_return_val_if_fail (EMPATHY_IS_CONTACT (contact), NULL);
-
-	chat = g_object_new (EMPATHY_TYPE_PRIVATE_CHAT, NULL);
-
-	priv = GET_PRIV (chat);
-	priv->factory = empathy_contact_factory_new ();
-
-	tp_chat = empathy_tp_chat_new_with_contact (contact);
-	private_chat_setup (chat, contact, tp_chat);
-	g_object_unref (tp_chat);
+	chat = g_object_new (EMPATHY_TYPE_PRIVATE_CHAT,
+			     "tp-chat", tp_chat,
+			     NULL);
 
 	return chat;
 }

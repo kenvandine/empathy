@@ -34,6 +34,8 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
+#include <libmissioncontrol/mission-control.h>
+
 #include <libempathy/empathy-contact-manager.h>
 #include <libempathy/empathy-log-manager.h>
 #include <libempathy/empathy-debug.h>
@@ -65,7 +67,9 @@
 struct _EmpathyChatPriv {
 	EmpathyLogManager     *log_manager;
 	EmpathyTpChat         *tp_chat;
-	EmpathyChatWindow      *window;
+	EmpathyChatWindow     *window;
+	McAccount             *account;
+	MissionControl        *mc;
 	guint                  composing_stop_timeout_id;
 	gboolean               sensitive;
 	gchar                 *id;
@@ -75,6 +79,7 @@ struct _EmpathyChatPriv {
 	guint                  scroll_idle_id;
 	gboolean               first_tp_chat;
 	time_t                 last_log_timestamp;
+	gboolean               is_first_char;
 	/* Used to automatically shrink a window that has temporarily
 	 * grown due to long input. 
 	 */
@@ -155,9 +160,88 @@ enum {
 	LAST_SIGNAL
 };
 
+enum {
+	PROP_0,
+	PROP_TP_CHAT
+};
+
 static guint signals[LAST_SIGNAL] = { 0 };
 
 G_DEFINE_TYPE (EmpathyChat, empathy_chat, G_TYPE_OBJECT);
+
+static void
+chat_get_property (GObject    *object,
+		   guint       param_id,
+		   GValue     *value,
+		   GParamSpec *pspec)
+{
+	EmpathyChatPriv *priv = GET_PRIV (object);
+
+	switch (param_id) {
+	case PROP_TP_CHAT:
+		g_value_set_object (value, priv->tp_chat);
+		break;
+	default:
+		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
+		break;
+	};
+}
+
+static void
+chat_set_property (GObject      *object,
+		   guint         param_id,
+		   const GValue *value,
+		   GParamSpec   *pspec)
+{
+	EmpathyChat *chat = EMPATHY_CHAT (object);
+
+	switch (param_id) {
+	case PROP_TP_CHAT:
+		empathy_chat_set_tp_chat (chat,
+					  EMPATHY_TP_CHAT (g_value_get_object (value)));
+		break;
+	default:
+		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
+		break;
+	};
+}
+
+static void
+chat_status_changed_cb (MissionControl           *mc,
+			TpConnectionStatus        status,
+			McPresence                presence,
+			TpConnectionStatusReason  reason,
+			const gchar              *unique_name,
+			EmpathyChat              *chat)
+{
+	EmpathyChatPriv *priv = GET_PRIV (chat);
+	McAccount       *account;
+
+	account = mc_account_lookup (unique_name);
+
+	if (status == TP_CONNECTION_STATUS_CONNECTED && !priv->tp_chat &&
+	    empathy_account_equal (account, priv->account)) {
+		TpHandleType handle_type;
+
+		empathy_debug (DEBUG_DOMAIN,
+			       "Account reconnected, request a new Text channel");
+
+		if (empathy_chat_is_group_chat (chat)) {
+			handle_type = TP_HANDLE_TYPE_ROOM;
+		} else {
+			handle_type = TP_HANDLE_TYPE_CONTACT;
+		}
+
+		mission_control_request_channel_with_string_handle (mc,
+								    priv->account,
+								    TP_IFACE_CHANNEL_TYPE_TEXT,
+								    priv->id,
+								    handle_type,
+								    NULL, NULL);
+	}
+
+	g_object_unref (account);
+}
 
 static void
 empathy_chat_class_init (EmpathyChatClass *klass)
@@ -167,6 +251,17 @@ empathy_chat_class_init (EmpathyChatClass *klass)
 	object_class = G_OBJECT_CLASS (klass);
 
 	object_class->finalize = chat_finalize;
+	object_class->get_property = chat_get_property;
+	object_class->set_property = chat_set_property;
+
+	g_object_class_install_property (object_class,
+					 PROP_TP_CHAT,
+					 g_param_spec_object ("tp-chat",
+							      "Empathy tp chat",
+							      "The tp chat object",
+							      EMPATHY_TYPE_TP_CHAT,
+							      G_PARAM_CONSTRUCT |
+							      G_PARAM_READWRITE));
 
 	signals[COMPOSING] =
 		g_signal_new ("composing",
@@ -214,13 +309,13 @@ empathy_chat_class_init (EmpathyChatClass *klass)
 static void
 empathy_chat_init (EmpathyChat *chat)
 {
-	EmpathyChatPriv *priv;
+	EmpathyChatPriv *priv = GET_PRIV (chat);
 	GtkTextBuffer  *buffer;
 
 	chat->view = empathy_chat_view_new ();
 	chat->input_text_view = gtk_text_view_new ();
 
-	chat->is_first_char = TRUE;
+	priv->is_first_char = TRUE;
 
 	g_object_set (chat->input_text_view,
 		      "pixels-above-lines", 2,
@@ -231,8 +326,6 @@ empathy_chat_init (EmpathyChat *chat)
 		      "wrap-mode", GTK_WRAP_WORD_CHAR,
 		      NULL);
 
-	priv = GET_PRIV (chat);
-
 	priv->log_manager = empathy_log_manager_new ();
 	priv->default_window_height = -1;
 	priv->vscroll_visible = FALSE;
@@ -240,6 +333,11 @@ empathy_chat_init (EmpathyChat *chat)
 	priv->sent_messages = NULL;
 	priv->sent_messages_index = -1;
 	priv->first_tp_chat = TRUE;
+	priv->mc = empathy_mission_control_new ();
+
+	dbus_g_proxy_connect_signal (DBUS_G_PROXY (priv->mc), "AccountStatusChanged",
+				     G_CALLBACK (chat_status_changed_cb),
+				     chat, NULL);
 
 	g_signal_connect (chat->input_text_view,
 			  "key_press_event",
@@ -296,11 +394,20 @@ chat_finalize (GObject *object)
 	g_list_free (priv->compositors);
 
 	chat_composing_remove_timeout (chat);
-	g_object_unref (chat->account);
 	g_object_unref (priv->log_manager);
+
+	dbus_g_proxy_disconnect_signal (DBUS_G_PROXY (priv->mc), "AccountStatusChanged",
+					G_CALLBACK (chat_status_changed_cb),
+					chat);
+	g_object_unref (priv->mc);
+
 
 	if (priv->tp_chat) {
 		g_object_unref (priv->tp_chat);
+	}
+
+	if (priv->account) {
+		g_object_unref (priv->account);
 	}
 
 	if (priv->scroll_idle_id) {
@@ -386,7 +493,7 @@ chat_input_text_view_send (EmpathyChat *chat)
 
 	g_free (msg);
 
-	chat->is_first_char = TRUE;
+	priv->is_first_char = TRUE;
 }
 
 static void
@@ -683,7 +790,7 @@ chat_input_text_buffer_changed_cb (GtkTextBuffer *buffer,
 			      EMPATHY_PREFS_CHAT_SPELL_CHECKER_ENABLED,
 			      &spell_checker);
 
-	if (chat->is_first_char) {
+	if (priv->is_first_char) {
 		GtkRequisition  req;
 		gint            window_height;
 		GtkWidget      *dialog;
@@ -702,7 +809,7 @@ chat_input_text_buffer_changed_cb (GtkTextBuffer *buffer,
 		priv->last_input_height = req.height;
 		priv->padding_height = window_height - req.height - allocation->height;
 
-		chat->is_first_char = FALSE;
+		priv->is_first_char = FALSE;
 	}
 
 	gtk_text_buffer_get_start_iter (buffer, &start);
@@ -1150,7 +1257,7 @@ chat_add_logs (EmpathyChat *chat)
 
 	/* Add messages from last conversation */
 	messages = empathy_log_manager_get_last_messages (priv->log_manager,
-							  chat->account,
+							  priv->account,
 							  empathy_chat_get_id (chat),
 							  empathy_chat_is_group_chat (chat));
 	num_messages  = g_list_length (messages);
@@ -1360,10 +1467,14 @@ empathy_chat_set_tp_chat (EmpathyChat   *chat,
 						      chat);
 		g_object_unref (priv->tp_chat);
 	}
+	if (priv->account) {
+		g_object_unref (priv->account);
+	}
 
 	g_free (priv->id);
 	priv->tp_chat = g_object_ref (tp_chat);
 	priv->id = g_strdup (empathy_tp_chat_get_id (tp_chat));
+	priv->account = g_object_ref (empathy_tp_chat_get_account (tp_chat));
 
 	if (priv->first_tp_chat) {
 		chat_add_logs (chat);
@@ -1401,6 +1512,8 @@ empathy_chat_set_tp_chat (EmpathyChat   *chat,
 	if (EMPATHY_CHAT_GET_CLASS (chat)->set_tp_chat) {
 		EMPATHY_CHAT_GET_CLASS (chat)->set_tp_chat (chat, tp_chat);
 	}
+
+	g_object_notify (G_OBJECT (chat), "tp-chat");
 }
 
 const gchar *
@@ -1411,6 +1524,14 @@ empathy_chat_get_id (EmpathyChat *chat)
 	priv = GET_PRIV (chat);
 
 	return priv->id;
+}
+
+McAccount *
+empathy_chat_get_account (EmpathyChat *chat)
+{
+	EmpathyChatPriv *priv = GET_PRIV (chat);
+
+	return priv->account;
 }
 
 void

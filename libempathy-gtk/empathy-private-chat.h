@@ -28,10 +28,7 @@
 #ifndef __EMPATHY_PRIVATE_CHAT_H__
 #define __EMPATHY_PRIVATE_CHAT_H__
 
-#include <libtelepathy/tp-chan.h>
-
-#include <libmissioncontrol/mc-account.h>
-
+#include <libempathy/empathy-tp-chat.h>
 #include <libempathy/empathy-contact.h>
 
 G_BEGIN_DECLS
@@ -57,11 +54,9 @@ struct _EmpathyPrivateChatClass {
 	EmpathyChatClass parent;
 };
 
-GType               empathy_private_chat_get_type         (void);
-EmpathyPrivateChat * empathy_private_chat_new              (McAccount         *account,
-							  TpChan            *tp_chan);
-EmpathyPrivateChat * empathy_private_chat_new_with_contact (EmpathyContact     *contact);
-EmpathyContact *     empathy_private_chat_get_contact      (EmpathyPrivateChat *chat);
+GType                empathy_private_chat_get_type    (void);
+EmpathyPrivateChat * empathy_private_chat_new         (EmpathyTpChat      *tp_chat);
+EmpathyContact *     empathy_private_chat_get_contact (EmpathyPrivateChat *chat);
 
 G_END_DECLS
 
