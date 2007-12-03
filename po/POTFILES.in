@@ -39,6 +39,7 @@ libempathy-gtk/empathy-new-chatroom-dialog.c
 libempathy-gtk/empathy-new-chatroom-dialog.glade
 libempathy-gtk/empathy-main-window.c
 libempathy-gtk/empathy-main-window.glade
+libempathy-gtk/empathy-new-message-dialog.glade
 libempathy-gtk/empathy-preferences.c
 libempathy-gtk/empathy-preferences.glade
 libempathy-gtk/empathy-presence-chooser.c
