@@ -53,5 +53,7 @@ libexec_PROGRAMS += empathy-call-chandler
 empathy_call_chandler_SOURCES = empathy-call-chandler.c
 service_DATA +=	org.gnome.Empathy.Call.service
 chandler_DATA += empathy-call.chandler
+else
+EXTRA_DIST += empathy-call.chandler
 endif
 

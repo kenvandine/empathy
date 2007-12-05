@@ -1,3 +1,9 @@
+2007-12-05  Xavier Claessens  <xclaesse@gmail.com>
+
+	* libempathy-gtk/empathy-contact-list-view.c:
+	* src/Makefile.am: Ship empathy-call.chandler as extra_dist if not
+	compiled with VoIP support. Fixes bug #501486.
+
 2007-12-03  Xavier Claessens  <xclaesse@gmail.com>
 
 	* configure.ac: Bump version to 0.21.4.
