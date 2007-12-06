@@ -276,6 +276,21 @@
       </locale>
     </schema>
 
+    <schema>
+      <key>/schemas/apps/empathy/use_nm</key>
+      <applyto>/apps/empathy/use_nm</applyto>
+      <owner>empathy</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+        <short>Checks if NetworkManager should be used</short>
+	<long>
+	Whether or not the network manager should be used to automatically
+	disconnect/reconnect.
+        </long>
+      </locale>
+    </schema>
+
   </schemalist>  
 </gconfschemafile>
 

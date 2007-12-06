@@ -140,6 +140,19 @@ static void       status_icon_event_free          (StatusIconEvent        *event
 G_DEFINE_TYPE (EmpathyStatusIcon, empathy_status_icon, G_TYPE_OBJECT);
 
 static void
+status_icon_notify_use_nm_cb (EmpathyConf  *conf,
+			      const gchar *key,
+			      gpointer     user_data)
+{
+	EmpathyStatusIconPriv *priv = GET_PRIV (user_data);
+	gboolean               use_nm;
+
+	if (empathy_conf_get_bool (conf, key, &use_nm)) {
+		empathy_idle_set_use_nm (priv->idle, use_nm);
+	}
+}
+
+static void
 empathy_status_icon_class_init (EmpathyStatusIconClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -154,13 +167,11 @@ empathy_status_icon_init (EmpathyStatusIcon *icon)
 {
 	EmpathyStatusIconPriv *priv;
 	GList                 *pendings, *l;
+	gboolean               use_nm;
 
 	priv = GET_PRIV (icon);
 
 	priv->icon = gtk_status_icon_new ();
-	priv->idle = empathy_idle_new ();
-	empathy_idle_set_auto_away (priv->idle, TRUE);
-	empathy_idle_set_auto_disconnect (priv->idle, TRUE);
 	priv->manager = empathy_contact_manager_new ();
 	priv->mc = empathy_mission_control_new ();
 	priv->text_filter = empathy_filter_new ("org.gnome.Empathy.ChatFilter",
@@ -168,6 +179,19 @@ empathy_status_icon_init (EmpathyStatusIcon *icon)
 						TP_IFACE_CHANNEL_TYPE_TEXT,
 						MC_FILTER_PRIORITY_DIALOG,
 						MC_FILTER_FLAG_INCOMING);
+
+	/* Setup EmpathyIdle */
+	priv->idle = empathy_idle_new ();
+	empathy_conf_get_bool (empathy_conf_get (),
+			       EMPATHY_PREFS_USE_NM,
+			       &use_nm);
+	empathy_conf_notify_add (empathy_conf_get (),
+				 EMPATHY_PREFS_USE_NM,
+				 status_icon_notify_use_nm_cb,
+				 icon);
+	empathy_idle_set_auto_away (priv->idle, TRUE);
+	empathy_idle_set_use_nm (priv->idle, use_nm);
+
 
 	status_icon_create_menu (icon);
 	status_icon_idle_notify_cb (icon);
