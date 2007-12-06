@@ -1,5 +1,14 @@
 2007-12-06  Xavier Claessens  <xclaesse@gmail.com>
 
+	* libempathy-gtk/empathy-preferences.c:
+	* libempathy-gtk/empathy-preferences.glade:
+	* libempathy/empathy-idle.c: When NM is in sleeping (=disabled) state,
+	do just like if it was connected. Remove option from preference dialog
+	to disabled NM support because NM can be disabled using nm-applet, but
+	let the option in gconf, it can be useful in case of buggy NM.
+
+2007-12-06  Xavier Claessens  <xclaesse@gmail.com>
+
 	* data/empathy.schemas.in:
 	* libempathy-gtk/empathy-preferences.c:
 	* libempathy-gtk/empathy-preferences.glade:

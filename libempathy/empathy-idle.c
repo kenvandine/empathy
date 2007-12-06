@@ -208,8 +208,9 @@ empathy_idle_init (EmpathyIdle *idle)
 					     idle, NULL);
 	} else {
 		empathy_debug (DEBUG_DOMAIN, "Failed to get nm proxy");
-		priv->nm_connected = TRUE;
 	}
+
+	priv->nm_connected = TRUE;
 }
 
 static void
@@ -468,7 +469,7 @@ empathy_idle_set_use_nm (EmpathyIdle *idle,
 				       "Couldn't get NM state: %s",
 				       error->message);
 			g_clear_error (&error);
-			nm_status = NM_STATE_CONNECTED;
+			nm_status = NM_STATE_ASLEEP;
 		}
 		
 		idle_nm_state_change_cb (priv->nm_proxy, nm_status, idle);
@@ -573,6 +574,7 @@ idle_nm_state_change_cb (DBusGProxy  *proxy,
 			 EmpathyIdle *idle)
 {
 	EmpathyIdlePriv *priv;
+	gboolean         nm_connected;
 
 	priv = GET_PRIV (idle);
 
@@ -583,20 +585,23 @@ idle_nm_state_change_cb (DBusGProxy  *proxy,
 		return;
 	}
 
-	if (state != NM_STATE_CONNECTED && priv->nm_connected) {
+	nm_connected = !(state == NM_STATE_CONNECTING ||
+			 state == NM_STATE_DISCONNECTED);
+
+	if (priv->nm_connected && !nm_connected) {
 		/* We are no more connected */
 		idle_ext_away_stop (idle);
-		priv->nm_saved_state = priv->state;
 
+		priv->nm_saved_state = priv->state;
 		empathy_idle_set_state (idle, MC_PRESENCE_OFFLINE);
-		priv->nm_connected = FALSE;
 	}
-	else if (state == NM_STATE_CONNECTED && !priv->nm_connected) {
+	else if (!priv->nm_connected && nm_connected) {
 		/* We are now connected */
-		priv->nm_connected = TRUE;
-		empathy_idle_set_state (idle, priv->nm_saved_state);
 		priv->nm_saved_state = MC_PRESENCE_UNSET;
+		empathy_idle_set_state (idle, priv->nm_saved_state);
 	}
+
+	priv->nm_connected = nm_connected;
 }
 
 static void

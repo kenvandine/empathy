@@ -50,7 +50,6 @@ typedef struct {
 	GtkWidget *combobox_chat_theme;
 	GtkWidget *checkbutton_theme_chat_room;
 	GtkWidget *checkbutton_separate_chat_windows;
-	GtkWidget *checkbutton_use_nm;
 	GtkWidget *radiobutton_contact_list_sort_by_name;
 	GtkWidget *radiobutton_contact_list_sort_by_state;
 
@@ -177,10 +176,6 @@ preferences_setup_widgets (EmpathyPreferences *preferences)
 	preferences_hookup_toggle_button (preferences,
 					  EMPATHY_PREFS_UI_SEPARATE_CHAT_WINDOWS,
 					  preferences->checkbutton_separate_chat_windows);
-
-	preferences_hookup_toggle_button (preferences,
-					  EMPATHY_PREFS_USE_NM,
-					  preferences->checkbutton_use_nm);
 
 	preferences_hookup_toggle_button (preferences,
 					  EMPATHY_PREFS_UI_SHOW_AVATARS,
@@ -944,7 +939,6 @@ empathy_preferences_show (GtkWindow *parent)
 		"combobox_chat_theme", &preferences->combobox_chat_theme,
 		"checkbutton_theme_chat_room", &preferences->checkbutton_theme_chat_room,
 		"checkbutton_separate_chat_windows", &preferences->checkbutton_separate_chat_windows,
-		"checkbutton_use_nm", &preferences->checkbutton_use_nm,
 		"radiobutton_contact_list_sort_by_name", &preferences->radiobutton_contact_list_sort_by_name,
 		"radiobutton_contact_list_sort_by_state", &preferences->radiobutton_contact_list_sort_by_state,
 		"checkbutton_sounds_for_messages", &preferences->checkbutton_sounds_for_messages,
