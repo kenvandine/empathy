@@ -57,6 +57,7 @@
 #include "empathy-group-chat.h"
 //#include "empathy-sound.h"
 #include "empathy-ui-utils.h"
+#include "empathy-about-dialog.h"
 
 #define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), EMPATHY_TYPE_CHAT_WINDOW, EmpathyChatWindowPriv))
 
@@ -103,6 +104,9 @@ struct _EmpathyChatWindowPriv {
 	GtkWidget             *menu_tabs_left;
 	GtkWidget             *menu_tabs_right;
 	GtkWidget             *menu_tabs_detach;
+	
+	GtkWidget             *menu_help_contents;
+	GtkWidget             *menu_help_about;
 
 	guint                  save_geometry_id;
 };
@@ -167,6 +171,10 @@ static void       chat_window_tabs_left_activate_cb     (GtkWidget             *
 static void       chat_window_tabs_right_activate_cb    (GtkWidget             *menuitem,
 							 EmpathyChatWindow      *window);
 static void       chat_window_detach_activate_cb        (GtkWidget             *menuitem,
+							 EmpathyChatWindow      *window);
+static void       chat_window_help_contents_cb          (GtkWidget             *menuitem,
+							 EmpathyChatWindow      *window);
+static void       chat_window_help_about_cb             (GtkWidget             *menuitem,
 							 EmpathyChatWindow      *window);
 static gboolean   chat_window_delete_event_cb           (GtkWidget             *dialog,
 							 GdkEvent              *event,
@@ -306,6 +314,8 @@ empathy_chat_window_init (EmpathyChatWindow *window)
 				       "menu_tabs_left", &priv->menu_tabs_left,
 				       "menu_tabs_right", &priv->menu_tabs_right,
 				       "menu_tabs_detach", &priv->menu_tabs_detach,
+				       "menu_help_contents", &priv->menu_help_contents,
+				       "menu_help_about", &priv->menu_help_about,
 				       NULL);
 
 	empathy_glade_connect (glade,
@@ -329,6 +339,8 @@ empathy_chat_window_init (EmpathyChatWindow *window)
 			      "menu_tabs_left", "activate", chat_window_tabs_left_activate_cb,
 			      "menu_tabs_right", "activate", chat_window_tabs_right_activate_cb,
 			      "menu_tabs_detach", "activate", chat_window_detach_activate_cb,
+			      "menu_help_contents", "activate", chat_window_help_contents_cb,
+			      "menu_help_about", "activate", chat_window_help_about_cb,
 			      NULL);
 
 	g_object_unref (glade);
@@ -1232,6 +1244,20 @@ chat_window_detach_activate_cb (GtkWidget        *menuitem,
 
 	priv = GET_PRIV (new_window);
 	gtk_widget_show (priv->dialog);
+}
+
+static void
+chat_window_help_contents_cb (GtkWidget         *menuitem,
+			      EmpathyChatWindow *window)
+{
+	//empathy_help_show ();
+}
+
+static void
+chat_window_help_about_cb (GtkWidget         *menuitem,
+			   EmpathyChatWindow *window)
+{
+	empathy_about_dialog_new (GTK_WINDOW (window));
 }
 
 static gboolean
