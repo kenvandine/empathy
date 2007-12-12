@@ -574,7 +574,8 @@ idle_nm_state_change_cb (DBusGProxy  *proxy,
 			 EmpathyIdle *idle)
 {
 	EmpathyIdlePriv *priv;
-	gboolean         nm_connected;
+	gboolean         old_nm_connected;
+	gboolean         new_nm_connected;
 
 	priv = GET_PRIV (idle);
 
@@ -585,23 +586,25 @@ idle_nm_state_change_cb (DBusGProxy  *proxy,
 		return;
 	}
 
-	nm_connected = !(state == NM_STATE_CONNECTING ||
-			 state == NM_STATE_DISCONNECTED);
+	old_nm_connected = priv->nm_connected;
+	new_nm_connected = !(state == NM_STATE_CONNECTING ||
+			     state == NM_STATE_DISCONNECTED);
+	priv->nm_connected = TRUE; /* To be sure _set_state will work */
 
-	if (priv->nm_connected && !nm_connected) {
+	if (old_nm_connected && !new_nm_connected) {
 		/* We are no more connected */
 		idle_ext_away_stop (idle);
 
 		priv->nm_saved_state = priv->state;
 		empathy_idle_set_state (idle, MC_PRESENCE_OFFLINE);
 	}
-	else if (!priv->nm_connected && nm_connected) {
+	else if (!old_nm_connected && new_nm_connected) {
 		/* We are now connected */
-		priv->nm_saved_state = MC_PRESENCE_UNSET;
 		empathy_idle_set_state (idle, priv->nm_saved_state);
+		priv->nm_saved_state = MC_PRESENCE_UNSET;
 	}
 
-	priv->nm_connected = nm_connected;
+	priv->nm_connected = new_nm_connected;
 }
 
 static void
