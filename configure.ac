@@ -65,6 +65,14 @@ GLIB_GENMARSHAL=`$PKG_CONFIG glib-2.0 --variable=glib_genmarshal`
 AC_SUBST(GLIB_GENMARSHAL)
 
 dnl -----------------------------------------------------------
+dnl SVN for ChangeLog generation
+dnl -----------------------------------------------------------
+
+AC_SUBST([SVN_ROOT],[http://svn.gnome.org/svn])
+AC_SUBST([SVN_MODULE],[empathy])
+AC_SUBST([SVN_BRANCH],["trunk"])
+
+dnl -----------------------------------------------------------
 dnl Language Support
 dnl -----------------------------------------------------------
 
