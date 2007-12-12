@@ -29,6 +29,7 @@ libempathy_la_SOURCES =					\
 	empathy-contact-list.c				\
 	empathy-contact-manager.c			\
 	empathy-contact-factory.c			\
+	empathy-tp-contact-factory.c			\
 	empathy-tp-group.c				\
 	empathy-tp-contact-list.c			\
 	empathy-tp-chat.c				\
@@ -64,6 +65,7 @@ libempathy_headers =				\
 	empathy-contact-list.h			\
 	empathy-contact-manager.h		\
 	empathy-contact-factory.h		\
+	empathy-tp-contact-factory.h		\
 	empathy-tp-group.h			\
 	empathy-tp-contact-list.h		\
 	empathy-tp-chat.h			\
