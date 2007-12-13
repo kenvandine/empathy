@@ -384,7 +384,7 @@ tp_group_get_local_pending_cb (DBusGProxy *proxy,
 	EmpathyTpGroup     *group = user_data;
 	EmpathyTpGroupPriv *priv = GET_PRIV (group);
 	GArray             *handles;
-	guint               i;
+	guint               i = 0;
 	
 	if (error) {
 		empathy_debug (DEBUG_DOMAIN, "Failed to get local pendings: %s",
@@ -394,6 +394,7 @@ tp_group_get_local_pending_cb (DBusGProxy *proxy,
 	}
 
 	handles = g_array_sized_new (FALSE, FALSE, sizeof (guint), 1);
+	g_array_append_val (handles, i);
 	for (i = 0; array->len > i; i++) {
 		GValueArray        *pending_struct;
 		const gchar        *message;
