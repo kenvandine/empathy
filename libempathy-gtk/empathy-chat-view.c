@@ -39,6 +39,7 @@
 #include <gtk/gtksizegroup.h>
 #include <glade/glade.h>
 
+#include <telepathy-glib/util.h>
 #include <libmissioncontrol/mc-account.h>
 
 #include <libempathy/empathy-utils.h>
@@ -908,6 +909,73 @@ chat_view_append_text (EmpathyChatView *view,
 	gtk_text_buffer_delete_mark (priv->buffer, mark);
 }
 
+typedef struct {
+	GdkPixbuf *pixbuf;
+	gchar     *token;
+} AvatarData;
+
+static void
+chat_view_avatar_cache_data_free (gpointer ptr)
+{
+	AvatarData *data = ptr;
+
+	g_object_unref (data->pixbuf);
+	g_free (data->token);
+	g_slice_free (AvatarData, data);
+}
+
+static GdkPixbuf *
+chat_view_get_avatar_pixbuf_with_cache (EmpathyContact *contact)
+{
+	static GHashTable *avatar_cache = NULL;
+	AvatarData        *data;
+	EmpathyAvatar     *avatar;
+	GdkPixbuf         *tmp_pixbuf;
+	GdkPixbuf         *pixbuf = NULL;
+
+	/* Init avatar cache */
+	if (!avatar_cache) {
+		avatar_cache = g_hash_table_new_full (empathy_contact_hash,
+						      empathy_contact_equal,
+						      g_object_unref,
+						      chat_view_avatar_cache_data_free);
+	}
+
+	/* Check if avatar is in cache and if it's up to date */
+	avatar = empathy_contact_get_avatar (contact);
+	data = g_hash_table_lookup (avatar_cache, contact);
+	if (data) {
+		if (avatar && !tp_strdiff (avatar->token, data->token)) {
+			/* We have the avatar in cache */
+			return data->pixbuf;
+		}
+
+		/* The cache is outdate */
+		g_hash_table_remove (avatar_cache, contact);
+	}
+
+	/* Avatar not in cache, create pixbuf */
+	tmp_pixbuf = empathy_pixbuf_avatar_from_contact_scaled (contact, 32, 32);
+	if (tmp_pixbuf) {
+		pixbuf = chat_view_pad_to_size (tmp_pixbuf, 32, 32, 6);
+		g_object_unref (tmp_pixbuf);
+	}
+	if (!pixbuf) {
+		return NULL;
+	}
+
+	/* Insert new pixbuf in cache */
+	data = g_slice_new0 (AvatarData);
+	data->token = g_strdup (avatar->token);
+	data->pixbuf = pixbuf;
+
+	g_hash_table_insert (avatar_cache,
+			     g_object_ref (contact),
+			     data);
+
+	return data->pixbuf;
+}
+
 static void
 chat_view_maybe_append_fancy_header (EmpathyChatView *view,
 				     EmpathyMessage  *msg)
@@ -923,7 +991,6 @@ chat_view_maybe_append_fancy_header (EmpathyChatView *view,
 	const gchar        *line_top_tag;
 	const gchar        *line_bottom_tag;
 	gboolean            from_self;
-	GdkPixbuf          *pixbuf = NULL;
 	GdkPixbuf          *avatar = NULL;
 
 	priv = GET_PRIV (view);
@@ -978,14 +1045,7 @@ chat_view_maybe_append_fancy_header (EmpathyChatView *view,
 						  -1,
 						  line_top_tag,
 						  NULL);
-
-	/* FIXME: we should have a cash of avatar pixbufs */
-	pixbuf = empathy_pixbuf_avatar_from_contact_scaled (sender, 32, 32);
-	if (pixbuf) {
-		avatar = chat_view_pad_to_size (pixbuf, 32, 32, 6);
-		g_object_unref (pixbuf);
-	}
-
+	avatar = chat_view_get_avatar_pixbuf_with_cache (sender);
 	if (avatar) {
 		GtkTextIter start;
 
@@ -1007,8 +1067,6 @@ chat_view_maybe_append_fancy_header (EmpathyChatView *view,
 							   &start, &iter);
 			avatar_tag = "fancy-header-other-avatar";
 		}
-
-		g_object_unref (avatar);
 	} else {
 		avatar_tag = NULL;
 	}
