@@ -407,7 +407,7 @@ tp_group_get_local_pending_cb (DBusGProxy *proxy,
 		reason = g_value_get_uint (g_value_array_get_nth (pending_struct, 2));
 		message = g_value_get_string (g_value_array_get_nth (pending_struct, 3));
 
-		g_array_insert_val (handles, 0, member_handle);
+		g_array_index (handles, guint, 0) = member_handle;
 		tp_group_members_changed_cb (priv->group_iface,
 					     message,      /* message */
 					     NULL,         /* added */
