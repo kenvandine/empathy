@@ -131,7 +131,7 @@ static void
 account_widget_generic_setup_foreach (McProtocolParam            *param,
 				      EmpathyAccountWidgetGeneric *settings)
 {
-	GtkWidget *widget;
+	GtkWidget *widget = NULL;
 	gchar     *param_name_formatted;
 
 	param_name_formatted = account_widget_generic_format_param_name (param->name);
@@ -258,13 +258,14 @@ account_widget_generic_setup_foreach (McProtocolParam            *param,
 		empathy_debug (DEBUG_DOMAIN,
 			       "Unknown signature for param %s: %s\n",
 			       param_name_formatted, param->signature);
-		g_assert_not_reached ();
+	}
+
+	if (widget) {
+		g_object_set_data_full (G_OBJECT (widget), "param_name", 
+					g_strdup (param->name), g_free);
 	}
 
 	g_free (param_name_formatted);
-
-	g_object_set_data_full (G_OBJECT (widget), "param_name", 
-				g_strdup (param->name), g_free);
 }
 
 static void
