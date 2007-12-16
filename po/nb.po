@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gossip HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-11-01 19:10+0100\n"
-"PO-Revision-Date: 2007-11-01 19:48+0100\n"
+"POT-Creation-Date: 2007-12-16 14:43+0100\n"
+"PO-Revision-Date: 2007-12-16 14:54+0100\n"
 "Last-Translator: Espen Stefansen <espens@svn.gnome.org>\n"
 "Language-Team: Norwegian <i18n-nb@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
@@ -20,155 +20,170 @@ msgid "Empathy Instant Messenger"
 msgstr "Empathy lynmelder"
 
 #: ../data/empathy.desktop.in.in.h:2
-#, fuzzy
 msgid "Send and receive instant messages"
-msgstr "Forhåndsdefinerte statusmeldinger"
+msgstr "Send og motta lynmeldinger"
 
 #: ../data/empathy.schemas.in.h:1
 msgid "Always open a separate chat window for new chats."
 msgstr "Alltid åpne et eget vindu til nye samtaler."
 
 #: ../data/empathy.schemas.in.h:2
+msgid "Character to add after nickname when using nick completion (tab) in group chat."
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:3
 msgid "Chat window theme"
 msgstr "Tema for samtalevindu"
 
-#: ../data/empathy.schemas.in.h:3
+#: ../data/empathy.schemas.in.h:4
+msgid "Checks if NetworkManager should be used"
+msgstr "Sjekker om NetworkManager skal brukes"
+
+#: ../data/empathy.schemas.in.h:5
 msgid "Checks if Salut account is created"
 msgstr ""
 
-#: ../data/empathy.schemas.in.h:4
+#: ../data/empathy.schemas.in.h:6
 msgid "Comma separated list of spell checker languages to use (e.g. en, fr, nl)."
 msgstr "Kommaseparert liste over stavekontrollspråk som skal brukes (f.eks no, en, fr, nl)."
 
-#: ../data/empathy.schemas.in.h:5
+#: ../data/empathy.schemas.in.h:7
 #, fuzzy
 msgid "Compact contact list"
 msgstr "Ingen kontakter"
 
-#: ../data/empathy.schemas.in.h:6
+#: ../data/empathy.schemas.in.h:8
 msgid "Contact list sort criterium"
 msgstr ""
 
-#: ../data/empathy.schemas.in.h:7
+#: ../data/empathy.schemas.in.h:9
 msgid "Default directory to select an avatar image from"
 msgstr "Forvalgt mappe for personbilde"
 
-#: ../data/empathy.schemas.in.h:8
+#: ../data/empathy.schemas.in.h:10
 msgid "Enable popup when contact is available"
 msgstr "Vis oppsprettmeldinger for kontakter som blir tilgjengelige"
 
-#: ../data/empathy.schemas.in.h:9
+#: ../data/empathy.schemas.in.h:11
 msgid "Enable sound when away"
 msgstr "Spill av lyd når du er borte"
 
-#: ../data/empathy.schemas.in.h:10
+#: ../data/empathy.schemas.in.h:12
 msgid "Enable sound when busy"
 msgstr "Slå av lyder når du er _opptatt"
 
-#: ../data/empathy.schemas.in.h:11
+#: ../data/empathy.schemas.in.h:13
 #, fuzzy
 msgid "Enable spell checker"
 msgstr "Bruk stavekontroll"
 
-#: ../data/empathy.schemas.in.h:12
+#: ../data/empathy.schemas.in.h:14
 msgid "Hide main window"
 msgstr "Skjul hovedvinduet"
 
-#: ../data/empathy.schemas.in.h:13
+#: ../data/empathy.schemas.in.h:15
 msgid "Hide the main window."
 msgstr "Skjul hovedvinduet."
 
-#: ../data/empathy.schemas.in.h:14
+#: ../data/empathy.schemas.in.h:16
+msgid "Nick completed character"
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:17
 msgid "Open new chats in separate windows"
 msgstr "Åpne nye samtaler i egne vinduer"
 
-#: ../data/empathy.schemas.in.h:15
+#: ../data/empathy.schemas.in.h:18
 msgid "Show avatars"
 msgstr "Vis personbilder"
 
-#: ../data/empathy.schemas.in.h:16
+#: ../data/empathy.schemas.in.h:19
 #, fuzzy
 msgid "Show hint about closing the main window"
 msgstr "Høyden på hovedvinduet."
 
-#: ../data/empathy.schemas.in.h:17
+#: ../data/empathy.schemas.in.h:20
 msgid "Show offline contacts"
 msgstr "Vis frakoblede kontakter"
 
-#: ../data/empathy.schemas.in.h:18
+#: ../data/empathy.schemas.in.h:21
 msgid "Spell checking languages"
 msgstr "Stavekontrollspråk"
 
-#: ../data/empathy.schemas.in.h:19
+#: ../data/empathy.schemas.in.h:22
 msgid "The last directory that an avatar image was chosen from."
 msgstr "Den forrige mappen et personbilde ble valgt fra."
 
-#: ../data/empathy.schemas.in.h:20
+#: ../data/empathy.schemas.in.h:23
 msgid "The theme that is used to display the conversation in chat windows."
 msgstr "Temaet som brukes til å vise samtaler."
 
-#: ../data/empathy.schemas.in.h:21
+#: ../data/empathy.schemas.in.h:24
 msgid "Use graphical smileys"
 msgstr "Vis smilefjes grafisk"
 
-#: ../data/empathy.schemas.in.h:22
+#: ../data/empathy.schemas.in.h:25
 msgid "Use notification sounds"
 msgstr "Bruk varslingslyder"
 
-#: ../data/empathy.schemas.in.h:23
+#: ../data/empathy.schemas.in.h:26
 msgid "Use theme for chat rooms"
 msgstr "Bruk tema for samtalerom"
 
-#: ../data/empathy.schemas.in.h:24
+#: ../data/empathy.schemas.in.h:27
 msgid "Whether or not the Salut account has been created on the first empathy run."
 msgstr ""
 
-#: ../data/empathy.schemas.in.h:25
+#: ../data/empathy.schemas.in.h:28
+msgid "Whether or not the network manager should be used to automatically disconnect/reconnect."
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:29
 msgid "Whether or not to check words typed against the languages you want to check with."
 msgstr ""
 
-#: ../data/empathy.schemas.in.h:26
+#: ../data/empathy.schemas.in.h:30
 msgid "Whether or not to convert smileys into graphical images in conversations."
 msgstr "Om smilefjes skal konverteres til grafikk i samtaler."
 
-#: ../data/empathy.schemas.in.h:27
+#: ../data/empathy.schemas.in.h:31
 msgid "Whether or not to play a sound when messages arrive."
 msgstr "Om lyder skal spilles av når meldinger kommer inn."
 
-#: ../data/empathy.schemas.in.h:28
+#: ../data/empathy.schemas.in.h:32
 msgid "Whether or not to play sounds when away."
 msgstr "Om lyder skal spilles av når borte."
 
-#: ../data/empathy.schemas.in.h:29
+#: ../data/empathy.schemas.in.h:33
 msgid "Whether or not to play sounds when busy."
 msgstr "Om lyder skal spilles av når opptatt."
 
-#: ../data/empathy.schemas.in.h:30
+#: ../data/empathy.schemas.in.h:34
 msgid "Whether or not to show a popup when a contact becomes available."
 msgstr "Om det skal informeres om at kontakter blir tilgjengelige."
 
-#: ../data/empathy.schemas.in.h:31
+#: ../data/empathy.schemas.in.h:35
 msgid "Whether or not to show avatars for contacts in the contact list and chat windows."
 msgstr "Om bilder av kontakter skal vises i kontaktlisten og samtalevinduer."
 
-#: ../data/empathy.schemas.in.h:32
+#: ../data/empathy.schemas.in.h:36
 msgid "Whether or not to show contacts that are offline in the contact list."
 msgstr "Om kontakter som er frakoblet skal vises i kontaktlisten."
 
-#: ../data/empathy.schemas.in.h:33
+#: ../data/empathy.schemas.in.h:37
 msgid "Whether or not to show the message dialog about closing the main window with the 'x' button in the title bar."
 msgstr ""
 
-#: ../data/empathy.schemas.in.h:34
+#: ../data/empathy.schemas.in.h:38
 #, fuzzy
 msgid "Whether to show the contact list in compact mode or not."
 msgstr "Om bilder av kontakter skal vises i kontaktlisten og samtalevinduer."
 
-#: ../data/empathy.schemas.in.h:35
+#: ../data/empathy.schemas.in.h:39
 msgid "Whether to use the theme for chat rooms or not."
 msgstr ""
 
-#: ../data/empathy.schemas.in.h:36
+#: ../data/empathy.schemas.in.h:40
 msgid "Which criterium to use when sorting the contact list. Default is to use sort by the contact's name with the value \"name\". A value of \"state\" will sort the contact list by state."
 msgstr ""
 
@@ -194,24 +209,21 @@ msgid "Hidden"
 msgstr "Skjult"
 
 #: ../libempathy/empathy-tp-contact-list.c:729
-#: ../src/empathy.c:212
+#: ../src/empathy.c:152
 msgid "People nearby"
 msgstr "Personer i nærheten"
 
 #: ../libempathy-gtk/empathy-about-dialog.c:63
-#, fuzzy
 msgid "Empathy is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version."
-msgstr "Gossip er fri programvare. Du kan gi det videre eller endre det, som beskrevet i GNU General Public License utgitt av Free Software Foundation, versjon to eller en senere versjon, etter ditt ønske."
+msgstr "Empathy er fri programvare. Du kan redistribuere og/eller endre programmet under betingelsene gitt i GNU General Public License som utgitt av Free Software Foundation; enten versjon 2 av lisensen, eller (hvis du ønsker det) enhver senere versjon."
 
 #: ../libempathy-gtk/empathy-about-dialog.c:67
-#, fuzzy
 msgid "Empathy is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details."
-msgstr "Gossip er distribuert i håp om at det bil være nyttig, men UTEN GARANTI, ikke engang forhandlergaranti eller garanti om at det passer en spesiell bruk. Se GNU General Public License for mer informasjon om dette. "
+msgstr "Empathy distribueres i håp om at programmet er nyttig, men UTEN NOEN GARANTI, ikke engang implisitt garanti om at det er SALGBART eller PASSER ET BESTEMT FORMÅL. Se GNU General Public License for detaljer."
 
 #: ../libempathy-gtk/empathy-about-dialog.c:71
-#, fuzzy
 msgid "You should have received a copy of the GNU General Public License along with Empathy; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-130159 USA"
-msgstr "Du skal ha mottatt en kopi av GNU General Public License sammen med Gossip. Hvis ikke, kontakt Free Software Foundation, Inc., 59 Temple Place, suite 330, Boston, MA  02111-1307  USA"
+msgstr "Du skal ha mottatt en kopi av GNU General Public License sammen med Empathy. Hvis ikke så skriv til Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301159, USA."
 
 #: ../libempathy-gtk/empathy-about-dialog.c:99
 msgid "An Instant Messaging client for GNOME"
@@ -256,25 +268,29 @@ msgid "Pass_word:"
 msgstr "_Passord:"
 
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:5
+msgid "Priority:"
+msgstr "Prioritet:"
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:6
 msgid "Reso_urce:"
 msgstr "_Ressurs:"
 
-#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:6
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:7
 msgid "Use encryption (SS_L)"
 msgstr "Bruk kryptering (SS_L)"
 
-#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:7
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:8
 #: ../libempathy-gtk/empathy-account-widget-msn.glade.h:5
 msgid "_Port:"
 msgstr "_Port:"
 
-#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:8
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:9
 #: ../libempathy-gtk/empathy-account-widget-msn.glade.h:6
 #: ../libempathy-gtk/empathy-new-chatroom-dialog.glade.h:10
 msgid "_Server:"
 msgstr "_Tjener:"
 
-#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:9
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:10
 msgid "jabber account settings"
 msgstr "innstillinger for jabber-konto"
 
@@ -312,44 +328,44 @@ msgstr "_Navn:"
 msgid "salut account settings"
 msgstr "innstillinger for salut-konto"
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:218
+#: ../libempathy-gtk/empathy-accounts-dialog.c:219
 msgid "Disable"
 msgstr "Slå av"
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:221
+#: ../libempathy-gtk/empathy-accounts-dialog.c:222
 msgid "Enable"
 msgstr "Slå på"
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:256
+#: ../libempathy-gtk/empathy-accounts-dialog.c:257
 msgid "To add a new account, you can click on the 'Add' button and a new entry will be created for you to start configuring."
 msgstr ""
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:260
+#: ../libempathy-gtk/empathy-accounts-dialog.c:261
 msgid "To add a new account, you first have to install a backend for each protocol you want to use."
 msgstr ""
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:267
+#: ../libempathy-gtk/empathy-accounts-dialog.c:268
 #: ../libempathy-gtk/empathy-accounts-dialog.glade.h:2
 msgid "<b>No Account Selected</b>"
 msgstr "<b>Ingen konto valgt</b>"
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:268
+#: ../libempathy-gtk/empathy-accounts-dialog.c:269
 msgid ""
 "\n"
 "\n"
 "If you do not want to add an account, simply click on the account you want to configure in the list on the left."
 msgstr ""
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:274
+#: ../libempathy-gtk/empathy-accounts-dialog.c:275
 msgid "<b>No Accounts Configured</b>"
 msgstr "<b>Ingen kontoer er satt opp</b>"
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:401
+#: ../libempathy-gtk/empathy-accounts-dialog.c:402
 #: ../libempathy-gtk/empathy-accounts-dialog.glade.h:4
 msgid "Accounts"
 msgstr "Kontoer"
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:898
+#: ../libempathy-gtk/empathy-accounts-dialog.c:899
 #, c-format
 msgid ""
 "You are about to remove your %s account!\n"
@@ -358,7 +374,7 @@ msgstr ""
 "Du holder på å fjerne din %s-konto!\n"
 "Er du sikker på at du vil dette?"
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:904
+#: ../libempathy-gtk/empathy-accounts-dialog.c:905
 msgid ""
 "Any associated conversations and chat rooms will NOT be removed if you decide to proceed.\n"
 "\n"
@@ -435,48 +451,48 @@ msgstr "Send video"
 msgid "Volume"
 msgstr "Volum"
 
-#: ../libempathy-gtk/empathy-chat.c:332
+#: ../libempathy-gtk/empathy-chat.c:436
 msgid "Disconnected"
 msgstr "Koblet fra"
 
-#: ../libempathy-gtk/empathy-chat.c:452
+#: ../libempathy-gtk/empathy-chat.c:556
 msgid "offline"
 msgstr "frakoblet"
 
-#: ../libempathy-gtk/empathy-chat.c:455
+#: ../libempathy-gtk/empathy-chat.c:559
 msgid "invalid contact"
 msgstr "ugyldig kontakt"
 
-#: ../libempathy-gtk/empathy-chat.c:458
+#: ../libempathy-gtk/empathy-chat.c:562
 msgid "permission denied"
 msgstr ""
 
-#: ../libempathy-gtk/empathy-chat.c:461
+#: ../libempathy-gtk/empathy-chat.c:565
 msgid "too long message"
 msgstr "meldingen er for lang"
 
-#: ../libempathy-gtk/empathy-chat.c:464
+#: ../libempathy-gtk/empathy-chat.c:568
 msgid "not implemented"
 msgstr "ikke implementert"
 
-#: ../libempathy-gtk/empathy-chat.c:467
+#: ../libempathy-gtk/empathy-chat.c:571
 msgid "unknown"
 msgstr "ukjent"
 
-#: ../libempathy-gtk/empathy-chat.c:471
+#: ../libempathy-gtk/empathy-chat.c:575
 #, c-format
 msgid "Error sending message '%s': %s"
 msgstr ""
 
-#: ../libempathy-gtk/empathy-chat.c:926
+#: ../libempathy-gtk/empathy-chat.c:1032
 msgid "Insert Smiley"
 msgstr "Sett inn smilefjes"
 
-#: ../libempathy-gtk/empathy-chat.c:973
+#: ../libempathy-gtk/empathy-chat.c:1079
 msgid "_Check Word Spelling..."
 msgstr "_Stavekontroll ..."
 
-#: ../libempathy-gtk/empathy-chat.c:1398
+#: ../libempathy-gtk/empathy-chat.c:1508
 msgid "Connected"
 msgstr "Koblet til"
 
@@ -555,72 +571,82 @@ msgid "_Close"
 msgstr "_Lukk"
 
 #: ../libempathy-gtk/empathy-chat.glade.h:19
+#: ../libempathy-gtk/empathy-main-window.glade.h:11
+msgid "_Contents"
+msgstr "_Innhold"
+
+#: ../libempathy-gtk/empathy-chat.glade.h:20
 msgid "_Conversation"
 msgstr "_Samtale"
 
-#: ../libempathy-gtk/empathy-chat.glade.h:20
+#: ../libempathy-gtk/empathy-chat.glade.h:21
 msgid "_Copy"
 msgstr "_Kopier"
 
-#: ../libempathy-gtk/empathy-chat.glade.h:21
+#: ../libempathy-gtk/empathy-chat.glade.h:22
 msgid "_Detach Tab"
 msgstr "_Løsne fane"
 
-#: ../libempathy-gtk/empathy-chat.glade.h:22
+#: ../libempathy-gtk/empathy-chat.glade.h:23
 #: ../libempathy-gtk/empathy-contact-list-view.c:218
 #: ../libempathy-gtk/empathy-main-window.glade.h:12
 msgid "_Edit"
 msgstr "_Rediger"
 
-#: ../libempathy-gtk/empathy-chat.glade.h:23
+#: ../libempathy-gtk/empathy-chat.glade.h:24
+#: ../libempathy-gtk/empathy-main-window.glade.h:13
+msgid "_Help"
+msgstr "_Hjelp"
+
+#: ../libempathy-gtk/empathy-chat.glade.h:25
 msgid "_Next Tab"
 msgstr "_Neste fane"
 
-#: ../libempathy-gtk/empathy-chat.glade.h:24
+#: ../libempathy-gtk/empathy-chat.glade.h:26
 msgid "_Paste"
 msgstr "_Lim inn"
 
-#: ../libempathy-gtk/empathy-chat.glade.h:25
+#: ../libempathy-gtk/empathy-chat.glade.h:27
 msgid "_Previous Tab"
 msgstr "_Forrige fane"
 
-#: ../libempathy-gtk/empathy-chat.glade.h:26
+#: ../libempathy-gtk/empathy-chat.glade.h:28
 #: ../libempathy-gtk/empathy-main-window.glade.h:18
 msgid "_Room"
 msgstr "_Rom"
 
-#: ../libempathy-gtk/empathy-chat.glade.h:27
+#: ../libempathy-gtk/empathy-chat.glade.h:29
 msgid "_Show Contacts"
 msgstr "_Vis kontakter"
 
-#: ../libempathy-gtk/empathy-chat.glade.h:28
+#: ../libempathy-gtk/empathy-chat.glade.h:30
 msgid "_Tabs"
 msgstr "_Faner"
 
-#: ../libempathy-gtk/empathy-chat.glade.h:29
+#: ../libempathy-gtk/empathy-chat.glade.h:31
 #: ../libempathy-gtk/empathy-contact-list-view.c:234
 #: ../libempathy-gtk/empathy-main-window.glade.h:19
 msgid "_View Previous Conversations"
 msgstr "_Vis tidligere samtaler"
 
-#: ../libempathy-gtk/empathy-chat-view.c:468
+#: ../libempathy-gtk/empathy-chat-view.c:469
 msgid "_Copy Link Address"
 msgstr "_Kopier lenkens adresse"
 
-#: ../libempathy-gtk/empathy-chat-view.c:476
+#: ../libempathy-gtk/empathy-chat-view.c:477
 msgid "_Open Link"
 msgstr "_Åpne lenke"
 
-#: ../libempathy-gtk/empathy-chat-view.c:754
+#: ../libempathy-gtk/empathy-chat-view.c:755
 msgid "%A %d %B %Y"
 msgstr "%A %d %B %Y"
 
-#: ../libempathy-gtk/empathy-chat-window.c:695
+#: ../libempathy-gtk/empathy-chat-window.c:709
 #, c-format
 msgid "Conversations (%d)"
 msgstr "Samtaler (%d)"
 
-#: ../libempathy-gtk/empathy-chat-window.c:1281
+#: ../libempathy-gtk/empathy-chat-window.c:1309
 msgid "Typing a message."
 msgstr "Skriver en melding"
 
@@ -639,6 +665,7 @@ msgstr "Automatisk tilkobling"
 #: ../libempathy-gtk/empathy-chatrooms-window.glade.h:1
 #: ../libempathy-gtk/empathy-contact-widget.glade.h:5
 #: ../libempathy-gtk/empathy-new-chatroom-dialog.glade.h:1
+#: ../libempathy-gtk/empathy-new-message-dialog.glade.h:1
 msgid "Account:"
 msgstr "Konto:"
 
@@ -747,7 +774,6 @@ msgid "Remove contact"
 msgstr "Fjern kontakt"
 
 #: ../libempathy-gtk/empathy-contact-list-view.c:226
-#, fuzzy
 msgid "_Invite to Chat Room"
 msgstr "_Inviter til samtalerom"
 
@@ -778,14 +804,14 @@ msgstr "Vis tidligere samtaler"
 
 #: ../libempathy-gtk/empathy-contact-list-view.c:1423
 msgid "Sorry, I don't want you in my contact list anymore."
-msgstr ""
+msgstr "Beklager, men jeg vil ikke ha deg på kontaktlisten min lenger."
 
-#: ../libempathy-gtk/empathy-contact-widget.c:656
+#: ../libempathy-gtk/empathy-contact-widget.c:662
 msgid "Select"
 msgstr "Velg"
 
-#: ../libempathy-gtk/empathy-contact-widget.c:666
-#: ../libempathy-gtk/empathy-main-window.c:607
+#: ../libempathy-gtk/empathy-contact-widget.c:672
+#: ../libempathy-gtk/empathy-main-window.c:609
 msgid "Group"
 msgstr "Gruppe"
 
@@ -853,32 +879,32 @@ msgstr "Versjon:"
 msgid "Web site:"
 msgstr "Nettsted:"
 
-#: ../libempathy-gtk/empathy-group-chat.c:253
+#: ../libempathy-gtk/empathy-group-chat.c:251
 #, fuzzy
 msgid "Enter the new topic you want to set for this room:"
 msgstr "Hvilket kallenavn vil du bruke for denne kontakten?"
 
-#: ../libempathy-gtk/empathy-group-chat.c:366
+#: ../libempathy-gtk/empathy-group-chat.c:364
 #, c-format
 msgid "%s has joined the room"
 msgstr "%s har blitt med i rommet"
 
-#: ../libempathy-gtk/empathy-group-chat.c:369
+#: ../libempathy-gtk/empathy-group-chat.c:367
 #, c-format
 msgid "%s has left the room"
 msgstr "%s har forlatt rommet"
 
-#: ../libempathy-gtk/empathy-group-chat.c:449
+#: ../libempathy-gtk/empathy-group-chat.c:447
 #, c-format
 msgid "Topic: %s"
 msgstr "Emne: %s"
 
-#: ../libempathy-gtk/empathy-group-chat.c:571
+#: ../libempathy-gtk/empathy-group-chat.c:569
 #, c-format
 msgid "Topic set to: %s"
 msgstr "Emnet er satt til: %s"
 
-#: ../libempathy-gtk/empathy-group-chat.c:573
+#: ../libempathy-gtk/empathy-group-chat.c:571
 msgid "No topic defined"
 msgstr ""
 
@@ -940,9 +966,8 @@ msgid "Join"
 msgstr "Bli med"
 
 #: ../libempathy-gtk/empathy-new-chatroom-dialog.glade.h:6
-#, fuzzy
 msgid "Join New"
-msgstr "Bli med i _ny..."
+msgstr "Bli med i ny"
 
 #: ../libempathy-gtk/empathy-new-chatroom-dialog.glade.h:7
 msgid "Re_fresh"
@@ -952,14 +977,69 @@ msgstr ""
 msgid "This list represents all chat rooms hosted on the server you have entered."
 msgstr ""
 
-#: ../libempathy-gtk/empathy-main-window.c:275
-#, fuzzy
+#: ../libempathy-gtk/empathy-main-window.c:266
 msgid "Show and edit accounts"
-msgstr "_Vis kontakter"
+msgstr "Vis og rediger kontoer"
 
-#: ../libempathy-gtk/empathy-main-window.c:628
+#: ../libempathy-gtk/empathy-main-window.c:630
 msgid "Contact"
 msgstr "Kontakt"
+
+#: ../libempathy-gtk/empathy-main-window.c:813
+msgid "Edit Account _Details"
+msgstr "Rediger _kontoinformasjon"
+
+#: ../libempathy-gtk/empathy-main-window.c:896
+msgid "Network error"
+msgstr "Nettverksfeil"
+
+#: ../libempathy-gtk/empathy-main-window.c:899
+msgid "Authentication failed"
+msgstr "Autentiseringen feilet"
+
+#: ../libempathy-gtk/empathy-main-window.c:902
+msgid "Encryption error"
+msgstr "Krypteringsfeil"
+
+#: ../libempathy-gtk/empathy-main-window.c:905
+msgid "Name in use"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-main-window.c:908
+msgid "Certificate not provided"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-main-window.c:911
+msgid "Certificate untrusted"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-main-window.c:914
+msgid "Certificate expired"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-main-window.c:917
+msgid "Certificate not activated"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-main-window.c:920
+msgid "Certificate hostname mismatch"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-main-window.c:923
+msgid "Certificate fingerprint mismatch"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-main-window.c:926
+msgid "Certificate self signed"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-main-window.c:929
+msgid "Certificate error"
+msgstr "Sertifikatsfeil"
+
+#: ../libempathy-gtk/empathy-main-window.c:932
+msgid "Unknown error"
+msgstr "Ukjent feil"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:1
 msgid "Contact List"
@@ -993,14 +1073,6 @@ msgstr "_Om"
 msgid "_Accounts"
 msgstr "_Kontoer"
 
-#: ../libempathy-gtk/empathy-main-window.glade.h:11
-msgid "_Contents"
-msgstr "_Innhold"
-
-#: ../libempathy-gtk/empathy-main-window.glade.h:13
-msgid "_Help"
-msgstr "_Hjelp"
-
 #: ../libempathy-gtk/empathy-main-window.glade.h:14
 #: ../libempathy-gtk/empathy-status-icon.glade.h:2
 msgid "_New Message..."
@@ -1019,6 +1091,22 @@ msgstr "_Brukervalg"
 #: ../libempathy-gtk/empathy-status-icon.glade.h:3
 msgid "_Quit"
 msgstr "_Avslutt"
+
+#: ../libempathy-gtk/empathy-new-message-dialog.glade.h:2
+msgid "Contact ID:"
+msgstr "KontaktID:"
+
+#: ../libempathy-gtk/empathy-new-message-dialog.glade.h:3
+msgid "New message"
+msgstr "Ny melding"
+
+#: ../libempathy-gtk/empathy-new-message-dialog.glade.h:4
+msgid "gtk-cancel"
+msgstr "gtk-cancel"
+
+#: ../libempathy-gtk/empathy-new-message-dialog.glade.h:5
+msgid "gtk-ok"
+msgstr "gtk-ok"
 
 #: ../libempathy-gtk/empathy-preferences.c:243
 msgid "Language"
@@ -1129,7 +1217,7 @@ msgid "_Use for chat rooms"
 msgstr "_Bruk for samtalerom"
 
 #. Custom messages
-#: ../libempathy-gtk/empathy-presence-chooser.c:691
+#: ../libempathy-gtk/empathy-presence-chooser.c:692
 msgid "Custom messages..."
 msgstr "Egendefinerte meldinger ..."
 
@@ -1149,12 +1237,12 @@ msgstr "Lagre melding"
 msgid "Status:"
 msgstr "Status:"
 
-#: ../libempathy-gtk/empathy-private-chat.c:188
+#: ../libempathy-gtk/empathy-private-chat.c:229
 #, c-format
 msgid "%s went offline"
 msgstr "%s koblet fra"
 
-#: ../libempathy-gtk/empathy-private-chat.c:202
+#: ../libempathy-gtk/empathy-private-chat.c:243
 #, c-format
 msgid "%s has come online"
 msgstr "%s logget på"
@@ -1175,7 +1263,7 @@ msgstr "Stavekontroll"
 msgid "Suggestions for the word:"
 msgstr "Forslag for ordet:"
 
-#: ../libempathy-gtk/empathy-status-icon.c:310
+#: ../libempathy-gtk/empathy-status-icon.c:335
 #, c-format
 msgid ""
 "New message from %s:\n"
@@ -1184,12 +1272,12 @@ msgstr ""
 "Ny melding fra %s:\n"
 "%s"
 
-#: ../libempathy-gtk/empathy-status-icon.c:579
+#: ../libempathy-gtk/empathy-status-icon.c:604
 #, fuzzy, c-format
 msgid "Subscription requested by %s"
 msgstr "Abonnementsforespørsel"
 
-#: ../libempathy-gtk/empathy-status-icon.c:582
+#: ../libempathy-gtk/empathy-status-icon.c:607
 #, c-format
 msgid ""
 "\n"
@@ -1244,21 +1332,19 @@ msgid "_Information"
 msgstr "_Informasjon"
 
 #: ../nothere/data/GNOME_NotHere_Applet.server.in.in.h:1
-#, fuzzy
 msgid "Presence"
-msgstr "Brukervalg"
+msgstr "Tilstedeværelse"
 
 #: ../nothere/data/GNOME_NotHere_Applet.server.in.in.h:2
 #: ../nothere/src/nothere-applet.c:89
-#, fuzzy
 msgid "Set your own presence"
-msgstr "Velg fortrukket tjeneste."
+msgstr "Velg din egen tilstedeværelse"
 
-#: ../src/empathy.c:272
+#: ../src/empathy.c:211
 msgid "Don't connect on startup"
 msgstr "Ikke koble til ved oppstart"
 
-#: ../src/empathy.c:283
+#: ../src/empathy.c:223
 msgid "- Empathy Instant Messenger"
 msgstr "- Empathy lynmeldingsprogram"
 
@@ -1347,16 +1433,12 @@ msgstr "- Empathy lynmeldingsprogram"
 #~ msgstr "Bli med i samtalerommet"
 #~ msgid "Unavailable"
 #~ msgstr "Utilgjengelig"
-#~ msgid "An unknown error occurred."
-#~ msgstr "En ukjent feil oppstod."
 #~ msgid "Connection refused."
 #~ msgstr "Tilkobling nektes."
 #~ msgid "Server address could not be resolved."
 #~ msgstr "Tjeneradressen kunne ikke slås opp."
 #~ msgid "Connection timed out."
 #~ msgstr "Tidsavbrudd på tilkobling."
-#~ msgid "Authentication failed."
-#~ msgstr "Autentisering mislykket."
 #~ msgid "The username you are trying already exists."
 #~ msgstr "Brukernavnet du prøver å bruke finnes allerede."
 #~ msgid "The username you are trying is not valid."
@@ -1463,8 +1545,6 @@ msgstr "- Empathy lynmeldingsprogram"
 #~ msgstr[1] "Problem"
 #~ msgid "If you quit, you will lose all unread information."
 #~ msgstr "Hvis du avslutter, vil du miste all ulest informasjon."
-#~ msgid "Edit Account _Details"
-#~ msgstr "Rediger _kontoinformasjon"
 #~ msgid "Your invitation has been declined"
 #~ msgstr "Din invitasjon har blitt avslått"
 #~ msgid "Accept"
@@ -1579,8 +1659,6 @@ msgstr "- Empathy lynmeldingsprogram"
 #~ msgstr "Kontakt kobler av"
 #~ msgid "Contact goes online"
 #~ msgstr "Kontakt kobler til"
-#~ msgid "Contact ID:"
-#~ msgstr "KontaktID:"
 #~ msgid "Do you want to accept this file?"
 #~ msgstr "Vil du motta denne filen?"
 #~ msgid "File Transfer Request"
@@ -1872,8 +1950,6 @@ msgstr "- Empathy lynmeldingsprogram"
 #~ "maskin. Du vil da bli spurt om passord hver gang du kobler til"
 #~ msgid "Nickname:"
 #~ msgstr "Kallenavn:"
-#~ msgid "Port:"
-#~ msgstr "Port:"
 #~ msgid "Press Subscribe to request to receive their status"
 #~ msgstr "Trykk Abonner for å be om statusinformasjon"
 #~ msgid "Registering Account"
