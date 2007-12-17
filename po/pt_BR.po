@@ -1,452 +1,126 @@
-# Brazilian Portuguese translation of gossip.
+# Brazilian Portuguese translation of empathy.
 # Copyright (C) 2004 Free Software Foundation, Inc.
-# This file is distributed under the same license as the gossip package.
+# This file is distributed under the same license as the empathy package.
 # Luiz Guaraldo <software.livre@terra.com.br>, 2004.
+# André Filipe de Assunção e Brito <decko@ufpr.br>, 2007.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gossip\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-05-15 23:46+0200\n"
-"PO-Revision-Date: 2004-08-27 18:24-0300\n"
-"Last-Translator: Luiz Guaraldo <software.livre@terra.com.br>\n"
+"Project-Id-Version: empathy\n"
+"Report-Msgid-Bugs-To: decko@ufpr.br\n"
+"POT-Creation-Date: 2007-12-13 17:03-0200\n"
+"PO-Revision-Date: 2007-12-13 19:15-0200\n"
+"Last-Translator: André Filipe de Assunção e Brito <decko@ufpr.br>\n"
 "Language-Team: Gnome-BR <gnome-l10n-br@listas.cipsga.org.br>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../data/empathy.desktop.in.h:1
+#: libempathy-gtk/empathy-account-widget-jabber.glade:8
+msgid "jabber account settings"
+msgstr "Configurações da Conta Jabber"
+
+#: libempathy-gtk/empathy-account-widget-jabber.glade:40
+#: libempathy-gtk/empathy-account-widget-msn.glade:61
+msgid "Login I_D:"
+msgstr ""
+
+#: libempathy-gtk/empathy-account-widget-jabber.glade:69
+#: libempathy-gtk/empathy-account-widget-msn.glade:90
 #, fuzzy
-msgid "Empathy Instant Messenger"
-msgstr "Mensageiro Instantâneo"
+msgid "Pass_word:"
+msgstr "Senha:"
 
-#: ../data/empathy.desktop.in.h:2
-msgid "Instant Messenger"
-msgstr "Mensageiro Instantâneo"
-
-#: ../data/empathy.schemas.in.h:1
-msgid "Always open a separate chat window for new chats."
+#: libempathy-gtk/empathy-account-widget-jabber.glade:98
+#: libempathy-gtk/empathy-account-widget-msn.glade:143
+msgid "Forget password and clear the entry."
 msgstr ""
 
-#: ../data/empathy.schemas.in.h:2
-msgid "Chat window theme"
-msgstr ""
+#: libempathy-gtk/empathy-account-widget-jabber.glade:193
+msgid "Reso_urce:"
+msgstr "Rec_ursos:"
 
-#: ../data/empathy.schemas.in.h:3
-msgid ""
-"Comma separated list of spell checker languages to use (e.g. en, fr, nl)."
-msgstr ""
+#: libempathy-gtk/empathy-account-widget-jabber.glade:244
+msgid "Use encryption (SS_L)"
+msgstr "Usar criptografia (SS_L)"
 
-#: ../data/empathy.schemas.in.h:4
+#: libempathy-gtk/empathy-account-widget-jabber.glade:265
+#: libempathy-gtk/empathy-account-widget-msn.glade:274
+msgid "_Port:"
+msgstr "_Porta:"
+
+#: libempathy-gtk/empathy-account-widget-jabber.glade:315
+#: libempathy-gtk/empathy-account-widget-msn.glade:245
+#: libempathy-gtk/empathy-new-chatroom-dialog.glade:182
+msgid "_Server:"
+msgstr "_Servidor:"
+
+#: libempathy-gtk/empathy-account-widget-jabber.glade:365
+msgid "Priority:"
+msgstr "Prioridade:"
+
+#: libempathy-gtk/empathy-account-widget-jabber.glade:416
+#: libempathy-gtk/empathy-account-widget-msn.glade:305
+#: libempathy-gtk/empathy-account-widget-salut.glade:365
+msgid "<b>Advanced</b>"
+msgstr "<b>Avançado</b>"
+
+#: libempathy-gtk/empathy-account-widget-msn.glade:8
+msgid "msn account settings"
+msgstr "Configurações da Conta MSN"
+
+#: libempathy-gtk/empathy-account-widget-salut.glade:8
+msgid "salut account settings"
+msgstr "Configurações da Conta Salut"
+
+#: libempathy-gtk/empathy-account-widget-salut.glade:40
+msgid "_First Name: "
+msgstr "_Primeiro Nome:"
+
+#: libempathy-gtk/empathy-account-widget-salut.glade:69
+msgid "_Last Name:"
+msgstr "_Ultimo Nome:"
+
+#: libempathy-gtk/empathy-account-widget-salut.glade:163
+msgid "_E-mail:"
+msgstr "_E-mail:"
+
+#: libempathy-gtk/empathy-account-widget-salut.glade:192
+msgid "_Jabber ID:"
+msgstr "ID _Jabber:"
+
+#: libempathy-gtk/empathy-account-widget-salut.glade:263
+#: libempathy-gtk/empathy-chatrooms-window.glade:204
+msgid "_Nickname:"
+msgstr "A_pelido:"
+
+#: libempathy-gtk/empathy-account-widget-salut.glade:292
 #, fuzzy
-msgid "Compact contact list"
-msgstr "Adicionar à sua lista de contatos"
+msgid "_Published Name:"
+msgstr "Nome:"
 
-#: ../data/empathy.schemas.in.h:5
-msgid "Contact list sort criterium"
-msgstr ""
-
-#: ../data/empathy.schemas.in.h:6
-msgid "Default directory to select an avatar image from"
-msgstr ""
-
-#: ../data/empathy.schemas.in.h:7
-msgid "Enable popup when contact is available"
-msgstr ""
-
-#: ../data/empathy.schemas.in.h:8
-#, fuzzy
-msgid "Enable sound when away"
-msgstr "Des_abilitar sons quando longe"
-
-#: ../data/empathy.schemas.in.h:9
-#, fuzzy
-msgid "Enable sound when busy"
-msgstr "Desa_bilitar sons quando ocupado"
-
-#: ../data/empathy.schemas.in.h:10
-#, fuzzy
-msgid "Enable spell checker"
-msgstr "Gossip - Mensagem Enviada"
-
-#: ../data/empathy.schemas.in.h:11
-msgid "Hide main window"
-msgstr "Ocultar janela principal"
-
-#: ../data/empathy.schemas.in.h:12
-msgid "Hide the main window."
-msgstr "Ocultar a janela principal."
-
-#: ../data/empathy.schemas.in.h:13
-msgid "Open new chats in separate windows"
-msgstr ""
-
-#: ../data/empathy.schemas.in.h:14
-#, fuzzy
-msgid "Show avatars"
-msgstr "_Mostrar Lista de Contatos"
-
-#: ../data/empathy.schemas.in.h:15
-#, fuzzy
-msgid "Show hint about closing the main window"
-msgstr "A altura da janela principal."
-
-#: ../data/empathy.schemas.in.h:16
-msgid "Show offline contacts"
-msgstr "Mostrar contatos offline"
-
-#: ../data/empathy.schemas.in.h:17
-msgid "Spell checking languages"
-msgstr ""
-
-#: ../data/empathy.schemas.in.h:18
-msgid "The last directory that an avatar image was chosen from."
-msgstr ""
-
-#: ../data/empathy.schemas.in.h:19
-#, fuzzy
-msgid "The theme that is used to display the conversation in chat windows."
-msgstr "Este nome será utilizado para identificá-lo em janelas de chat."
-
-#: ../data/empathy.schemas.in.h:20
-msgid "Use graphical smileys"
-msgstr "Usar emoticons gráficos"
-
-#: ../data/empathy.schemas.in.h:21
-msgid "Use notification sounds"
-msgstr "Usar sons de notificação"
-
-#: ../data/empathy.schemas.in.h:22
-msgid "Use theme for chat rooms"
-msgstr ""
-
-#: ../data/empathy.schemas.in.h:23
-msgid ""
-"Whether or not to check words typed against the languages you want to check "
-"with."
-msgstr ""
-
-#: ../data/empathy.schemas.in.h:24
-msgid ""
-"Whether or not to convert smileys into graphical images in conversations."
-msgstr ""
-"Se você quer converter ou não emoticons em imagens gráficas durante "
-"conversação."
-
-#: ../data/empathy.schemas.in.h:25
-msgid "Whether or not to play a sound when messages arrive."
-msgstr "Se você quer ou não tocar um som quando chegar mensagens."
-
-#: ../data/empathy.schemas.in.h:26
-msgid "Whether or not to play sounds when away."
-msgstr "Se você quer ou não tocar sons quando longe."
-
-#: ../data/empathy.schemas.in.h:27
-msgid "Whether or not to play sounds when busy."
-msgstr "Se você quer ou não tocar sons quando ocupado."
-
-#: ../data/empathy.schemas.in.h:28
-#, fuzzy
-msgid "Whether or not to show a popup when a contact becomes available."
-msgstr "Se você quer ou não tocar um som quando chegar mensagens."
-
-#: ../data/empathy.schemas.in.h:29
-#, fuzzy
-msgid ""
-"Whether or not to show avatars for contacts in the contact list and chat "
-"windows."
-msgstr ""
-"Se você quer ou não mostrar contatos que estejam offline na lista de "
-"contatos."
-
-#: ../data/empathy.schemas.in.h:30
-msgid "Whether or not to show contacts that are offline in the contact list."
-msgstr ""
-"Se você quer ou não mostrar contatos que estejam offline na lista de "
-"contatos."
-
-#: ../data/empathy.schemas.in.h:31
-msgid ""
-"Whether or not to show the message dialog about closing the main window with "
-"the 'x' button in the title bar."
-msgstr ""
-
-#: ../data/empathy.schemas.in.h:32
-#, fuzzy
-msgid "Whether to show the contact list in compact mode or not."
-msgstr ""
-"Se você quer ou não mostrar contatos que estejam offline na lista de "
-"contatos."
-
-#: ../data/empathy.schemas.in.h:33
-msgid "Whether to use the theme for chat rooms or not."
-msgstr ""
-
-#: ../data/empathy.schemas.in.h:34
-msgid ""
-"Which criterium to use when sorting the contact list. Default is to use sort "
-"by the contact's name with the value \"name\". A value of \"state\" will "
-"sort the contact list by state."
-msgstr ""
-
-#: ../libempathy/gossip-contact.c:654 ../libempathy/gossip-presence.c:184
-#: ../libempathy/gossip-presence.c:283
-msgid "Offline"
-msgstr "Offline"
-
-#: ../libempathy/gossip-presence.c:274
-msgid "Available"
-msgstr "Disponível"
-
-#: ../libempathy/gossip-presence.c:276
-msgid "Busy"
-msgstr "Ocupado"
-
-#: ../libempathy/gossip-presence.c:279
-msgid "Away"
-msgstr "Longe"
-
-#: ../libempathy-gtk/empathy-main-window.c:254
-#, fuzzy
-msgid "Show and edit accounts"
-msgstr "_Mostrar Lista de Contatos"
-
-#: ../libempathy-gtk/empathy-main-window.c:456
-msgid "Group"
-msgstr "Grupo"
-
-#: ../libempathy-gtk/empathy-main-window.c:477
-#, fuzzy
-msgid "Contact"
-msgstr "_Adicionar Contato..."
-
-#: ../libempathy-gtk/empathy-main-window.glade.h:1
-#, fuzzy
-msgid "Contact List - Empathy"
-msgstr "_Ocultar Lista de Contatos"
-
-#: ../libempathy-gtk/empathy-main-window.glade.h:2
-#, fuzzy
-msgid "Context"
-msgstr "Conectar"
-
-#: ../libempathy-gtk/empathy-main-window.glade.h:3
-#, fuzzy
-msgid "Join _Favorites"
-msgstr "_Editar favoritos..."
-
-#: ../libempathy-gtk/empathy-main-window.glade.h:4
-#: ../libempathy-gtk/gossip-chat.glade.h:10
-msgid "Join _New..."
-msgstr ""
-
-#: ../libempathy-gtk/empathy-main-window.glade.h:5
-msgid "Manage Favorites..."
-msgstr ""
-
-#: ../libempathy-gtk/empathy-main-window.glade.h:6
-msgid "Show _Offline Contacts"
-msgstr "Mostrar contatos _Offline"
-
-#: ../libempathy-gtk/empathy-main-window.glade.h:7
-#, fuzzy
-msgid "_About"
-msgstr "_Aceitar"
-
-#: ../libempathy-gtk/empathy-main-window.glade.h:8
-#, fuzzy
-msgid "_Accounts"
-msgstr "_Aceitar"
-
-#: ../libempathy-gtk/empathy-main-window.glade.h:9
-#: ../libempathy-gtk/gossip-chat.glade.h:15
-msgid "_Add Contact..."
-msgstr "_Adicionar Contato..."
-
-#: ../libempathy-gtk/empathy-main-window.glade.h:10
-#: ../libempathy-gtk/gossip-contact-list.c:298
-msgid "_Chat"
-msgstr "_Chat"
-
-#: ../libempathy-gtk/empathy-main-window.glade.h:11
-#, fuzzy
-msgid "_Contents"
-msgstr "Conectar"
-
-#: ../libempathy-gtk/empathy-main-window.glade.h:12
-#: ../libempathy-gtk/gossip-chat.glade.h:21
-#: ../libempathy-gtk/gossip-contact-list.c:310
-msgid "_Edit"
-msgstr ""
-
-#: ../libempathy-gtk/empathy-main-window.glade.h:13
-msgid "_Help"
-msgstr ""
-
-#: ../libempathy-gtk/empathy-main-window.glade.h:14
-#: ../libempathy-gtk/empathy-status-icon.glade.h:2
-msgid "_New Message..."
-msgstr "_Nova Mensagem..."
-
-#: ../libempathy-gtk/empathy-main-window.glade.h:15
-#, fuzzy
-msgid "_Personal Information"
-msgstr "Informação pessoal"
-
-#: ../libempathy-gtk/empathy-main-window.glade.h:16
-msgid "_Preferences"
-msgstr "_Preferências"
-
-#: ../libempathy-gtk/empathy-main-window.glade.h:17
-#: ../libempathy-gtk/empathy-status-icon.glade.h:3
-msgid "_Quit"
-msgstr ""
-
-#: ../libempathy-gtk/empathy-main-window.glade.h:18
-#: ../libempathy-gtk/gossip-chat.glade.h:25
-#, fuzzy
-msgid "_Room"
-msgstr "_Sala:"
-
-#: ../libempathy-gtk/empathy-main-window.glade.h:19
-#: ../libempathy-gtk/gossip-chat.glade.h:28
-#: ../libempathy-gtk/gossip-contact-list.c:326
-#, fuzzy
-msgid "_View Previous Conversations"
-msgstr "_Conversa"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:1
-msgid "Status"
-msgstr "Status"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:4
-msgid "_Show Contact List"
-msgstr "_Mostrar Lista de Contatos"
-
-#: ../libempathy-gtk/gossip-about-dialog.c:63
-msgid ""
-"Empathy is free software; you can redistribute it and/or modify it under the "
-"terms of the GNU General Public License as published by the Free Software "
-"Foundation; either version 2 of the License, or (at your option) any later "
-"version."
-msgstr ""
-
-#: ../libempathy-gtk/gossip-about-dialog.c:67
-msgid ""
-"Empathy is distributed in the hope that it will be useful, but WITHOUT ANY "
-"WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS "
-"FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more "
-"details."
-msgstr ""
-
-#: ../libempathy-gtk/gossip-about-dialog.c:71
-msgid ""
-"You should have received a copy of the GNU General Public License along with "
-"Empathy; if not, write to the Free Software Foundation, Inc., 51 Franklin "
-"Street, Fifth Floor, Boston, MA 02110-130159 USA"
-msgstr ""
-
-#: ../libempathy-gtk/gossip-about-dialog.c:99
-#, fuzzy
-msgid "An Instant Messaging client for GNOME"
-msgstr "Gossip, Cliente de Mensagens Instantâneas"
-
-#: ../libempathy-gtk/gossip-about-dialog.c:105
-#, fuzzy
-msgid "translator-credits"
-msgstr "Luiz Guaraldo <software.livre@terra.com.br>"
-
-#: ../libempathy-gtk/gossip-accounts-dialog.c:224
-#, fuzzy
-msgid "Disable"
-msgstr "Disponível"
-
-#: ../libempathy-gtk/gossip-accounts-dialog.c:227
-msgid "Enable"
-msgstr ""
-
-#: ../libempathy-gtk/gossip-accounts-dialog.c:261
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:3
-#, fuzzy
-msgid "<b>No Account Selected</b>"
-msgstr "<b>Configurações da Conta</b>"
-
-#: ../libempathy-gtk/gossip-accounts-dialog.c:263
-msgid ""
-"To add a new account, you can click on the 'Add' button and a new entry will "
-"be created for you to start configuring.\n"
-"\n"
-"If you do not want to add an account, simply click on the account you want "
-"to configure in the list on the left."
-msgstr ""
-
-#: ../libempathy-gtk/gossip-accounts-dialog.c:272
-#, fuzzy
-msgid "<b>No Accounts Configured</b>"
-msgstr "<b>Configurações da Conta</b>"
-
-#: ../libempathy-gtk/gossip-accounts-dialog.c:274
-msgid ""
-"To add a new account, you can click on the 'Add' button and a new entry will "
-"be created for you to start configuring."
-msgstr ""
-
-#: ../libempathy-gtk/gossip-accounts-dialog.c:362
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:6
-#, fuzzy
+#: libempathy-gtk/empathy-accounts-dialog.glade:8
 msgid "Accounts"
-msgstr "Conta Jabber"
+msgstr "Contas"
 
-#: ../libempathy-gtk/gossip-accounts-dialog.c:857
-#, c-format
-msgid ""
-"You are about to remove your %s account!\n"
-"Are you sure you want to proceed?"
-msgstr ""
-
-#: ../libempathy-gtk/gossip-accounts-dialog.c:863
-msgid ""
-"Any associated conversations and chat rooms will NOT be removed if you "
-"decide to proceed.\n"
-"\n"
-"Should you decide to add the account back at a later time, they will still "
-"be available."
-msgstr ""
-
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:1
-#, fuzzy
-msgid "<b>Account</b>"
-msgstr "<b>Favoritos:</b>"
-
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:2
-#, fuzzy
-msgid "<b>New Account</b>"
-msgstr "<b>Favoritos:</b>"
-
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:4
-#, fuzzy
+#: libempathy-gtk/empathy-accounts-dialog.glade:339
 msgid "<b>Settings</b>"
-msgstr "<b>Configurações da Conta</b>"
+msgstr "<b>Configurações</b>"
 
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:5
-msgid "A unique name for this account to identify it personally to you."
-msgstr ""
-
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:7
+#: libempathy-gtk/empathy-accounts-dialog.glade:406
 #, fuzzy
+msgid "Type:"
+msgstr "_Tópico:"
+
+#: libempathy-gtk/empathy-accounts-dialog.glade:490
 msgid "Cr_eate"
-msgstr "Chat"
+msgstr "Cr_iar"
 
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:8
-#, fuzzy
-msgid "Imendio "
-msgstr "Imendio Gossip"
+#: libempathy-gtk/empathy-accounts-dialog.glade:556
+msgid "<b>New Account</b>"
+msgstr "<b>Nova Conta</b>"
 
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:9
-msgid "Jabber"
-msgstr "Jabber"
-
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:10
+#: libempathy-gtk/empathy-accounts-dialog.glade:604
 msgid ""
 "To add a new account, you can click on the 'Add' button and a new entry will "
 "be created for you to started configuring.\n"
@@ -455,496 +129,801 @@ msgid ""
 "to configure in the list on the left."
 msgstr ""
 
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:13
-#, fuzzy
-msgid "_Name:"
-msgstr "Nome:"
+#: libempathy-gtk/empathy-accounts-dialog.glade:628
+msgid "<b>No Account Selected</b>"
+msgstr "<b>Conta não selecionada</b>"
 
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:14
-#, fuzzy
-msgid "_Type:"
-msgstr "_Tópico:"
-
-#: ../libempathy-gtk/gossip-account-widget-generic.c:144
-#: ../libempathy-gtk/gossip-account-widget-generic.c:186
-#, c-format
-msgid "%s:"
+#: libempathy-gtk/empathy-call-window.glade:8
+msgid "Call"
 msgstr ""
 
-#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:1
-#, fuzzy
-msgid ""
-"<small><b><span foreground=\"#555\">Example: user@jabber.org</span></b></"
-"small>"
-msgstr "<span size=\"small\">Por exemplo: usuario@jabber.org</span>"
-
-#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:2
-msgid "Forget password and clear the entry."
+#: libempathy-gtk/empathy-call-window.glade:62
+msgid "Input"
 msgstr ""
 
-#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:3
-msgid "Login I_D:"
+#: libempathy-gtk/empathy-call-window.glade:108
+#: libempathy-gtk/empathy-call-window.glade:184
+msgid "Mute"
 msgstr ""
 
-#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:4
-#, fuzzy
-msgid "Pass_word:"
-msgstr "Senha:"
-
-#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:5
-#, fuzzy
-msgid "Reso_urce:"
-msgstr "_Recursos:"
-
-#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:6
-#, fuzzy
-msgid "Use encryption (SS_L)"
-msgstr "Usar _encriptação (SSL)"
-
-#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:7
-#, fuzzy
-msgid "_Port:"
-msgstr "P_orta:"
-
-#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:8
-msgid "_Server:"
-msgstr "_Servidor:"
-
-#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:9
-#, fuzzy
-msgid "jabber account settings"
-msgstr "<b>Configurações da Conta</b>"
-
-#: ../libempathy-gtk/gossip-chat.c:314
-msgid "Disconnected"
-msgstr "Desconectado"
-
-#: ../libempathy-gtk/gossip-chat.c:858
-msgid "Insert Smiley"
+#: libempathy-gtk/empathy-call-window.glade:138
+msgid "Output"
 msgstr ""
 
-#: ../libempathy-gtk/gossip-chat.c:906
-msgid "_Check Word Spelling..."
-msgstr ""
+#: libempathy-gtk/empathy-call-window.glade:212
+msgid "Volume"
+msgstr "Volume"
 
-#: ../libempathy-gtk/gossip-chat.c:1244
-msgid "Connected"
-msgstr "Conectado"
+#: libempathy-gtk/empathy-call-window.glade:310
+msgid "Send Video"
+msgstr "Enviar Video"
 
-#: ../libempathy-gtk/gossip-chat.glade.h:1
-msgid "C_lear"
-msgstr "_Limpar"
-
-#: ../libempathy-gtk/gossip-chat.glade.h:2
-msgid "Change _Topic..."
-msgstr ""
-
-#: ../libempathy-gtk/gossip-chat.glade.h:3
+#: libempathy-gtk/empathy-chat.glade:7 libempathy-gtk/empathy-chat.glade:74
 msgid "Chat"
 msgstr "Chat"
 
-#: ../libempathy-gtk/gossip-chat.glade.h:4
-#, fuzzy
-msgid "Contact Infor_mation"
-msgstr "_Informação do Contato"
-
-#: ../libempathy-gtk/gossip-chat.glade.h:5
-#, fuzzy
-msgid "Cu_t"
-msgstr "Chat"
-
-#: ../libempathy-gtk/gossip-chat.glade.h:6
-#, fuzzy
-msgid "In_vite..."
-msgstr "Re_gistrar..."
-
-#: ../libempathy-gtk/gossip-chat.glade.h:7
-msgid "Insert _Smiley"
-msgstr ""
-
-#: ../libempathy-gtk/gossip-chat.glade.h:8
-#, fuzzy
-msgid "Invitation _message:"
-msgstr "Digite mensagem de status:"
-
-#: ../libempathy-gtk/gossip-chat.glade.h:9
-msgid "Invite"
-msgstr ""
-
-#: ../libempathy-gtk/gossip-chat.glade.h:11
-msgid "Move Tab _Left"
-msgstr "Mover Aba à _Esquerda"
-
-#: ../libempathy-gtk/gossip-chat.glade.h:12
-msgid "Move Tab _Right"
-msgstr "Mover Aba à _Direita"
-
-#: ../libempathy-gtk/gossip-chat.glade.h:13
-msgid "Select who would you like to invite:"
-msgstr ""
-
-#: ../libempathy-gtk/gossip-chat.glade.h:14
-msgid "You have been invited to join a chat conference."
-msgstr ""
-
-#: ../libempathy-gtk/gossip-chat.glade.h:16
-#, fuzzy
-msgid "_Add To Favorites"
-msgstr "_Editar favoritos..."
-
-#: ../libempathy-gtk/gossip-chat.glade.h:17
-msgid "_Close"
-msgstr ""
-
-#: ../libempathy-gtk/gossip-chat.glade.h:18
+#: libempathy-gtk/empathy-chat.glade:105
 msgid "_Conversation"
 msgstr "_Conversa"
 
-#: ../libempathy-gtk/gossip-chat.glade.h:19
-msgid "_Copy"
+#: libempathy-gtk/empathy-chat.glade:114
+msgid "C_lear"
+msgstr "_Limpar"
+
+#: libempathy-gtk/empathy-chat.glade:135
+msgid "Insert _Smiley"
 msgstr ""
 
-#: ../libempathy-gtk/gossip-chat.glade.h:20
-msgid "_Detach Tab"
-msgstr "_Destacar Aba"
-
-#: ../libempathy-gtk/gossip-chat.glade.h:22
-msgid "_Next Tab"
-msgstr "_Próxima Aba"
-
-#: ../libempathy-gtk/gossip-chat.glade.h:23
-msgid "_Paste"
+#: libempathy-gtk/empathy-chat.glade:149
+msgid "Ca_ll"
 msgstr ""
 
-#: ../libempathy-gtk/gossip-chat.glade.h:24
-msgid "_Previous Tab"
-msgstr "Aba _Anterior"
+#: libempathy-gtk/empathy-chat.glade:175
+#: libempathy-gtk/empathy-main-window.glade:68
+msgid "_View Previous Conversations"
+msgstr "_Visualizar Conversas Anteriores"
 
-#: ../libempathy-gtk/gossip-chat.glade.h:26
-#, fuzzy
+#: libempathy-gtk/empathy-chat.glade:201
+#: libempathy-gtk/empathy-main-window.glade:95
+msgid "_Add Contact..."
+msgstr "_Adicionar Contato..."
+
+#: libempathy-gtk/empathy-chat.glade:221
+msgid "Contact Infor_mation"
+msgstr "_Informação sobre Contato"
+
+#: libempathy-gtk/empathy-chat.glade:247
+msgid "_Close"
+msgstr ""
+
+#: libempathy-gtk/empathy-chat.glade:271
+#: libempathy-gtk/empathy-main-window.glade:244
+msgid "_Room"
+msgstr "_Sala:"
+
+#: libempathy-gtk/empathy-chat.glade:280
+msgid "Change _Topic..."
+msgstr ""
+
+#: libempathy-gtk/empathy-chat.glade:294
+#: libempathy-gtk/empathy-main-window.glade:253
+msgid "Join _New..."
+msgstr ""
+
+#: libempathy-gtk/empathy-chat.glade:314
+msgid "In_vite..."
+msgstr "Con_vidar..."
+
+#: libempathy-gtk/empathy-chat.glade:328
+msgid "_Add To Favorites"
+msgstr "_Adicionar aos Favoritos"
+
+#: libempathy-gtk/empathy-chat.glade:354
 msgid "_Show Contacts"
 msgstr "_Mostrar Lista de Contatos"
 
-#: ../libempathy-gtk/gossip-chat.glade.h:27
+#: libempathy-gtk/empathy-chat.glade:368
+#: libempathy-gtk/empathy-main-window.glade:162
+msgid "_Edit"
+msgstr ""
+
+#: libempathy-gtk/empathy-chat.glade:377
+msgid "Cu_t"
+msgstr "Recor_tar"
+
+#: libempathy-gtk/empathy-chat.glade:398
+msgid "_Copy"
+msgstr ""
+
+#: libempathy-gtk/empathy-chat.glade:419
+msgid "_Paste"
+msgstr ""
+
+#: libempathy-gtk/empathy-chat.glade:444
 msgid "_Tabs"
 msgstr "_Abas"
 
-#: ../libempathy-gtk/gossip-chat-view.c:544
-msgid "_Copy Link Address"
-msgstr "_Copiar Endereço do Link"
+#: libempathy-gtk/empathy-chat.glade:453
+msgid "_Previous Tab"
+msgstr "Aba _Anterior"
 
-#: ../libempathy-gtk/gossip-chat-view.c:552
-msgid "_Open Link"
-msgstr "Abrir _o Link"
+#: libempathy-gtk/empathy-chat.glade:462
+msgid "_Next Tab"
+msgstr "_Próxima Aba"
 
-#: ../libempathy-gtk/gossip-chat-view.c:889
-msgid "%A %d %B %Y"
-msgstr "%A, %d de %B de %Y"
+#: libempathy-gtk/empathy-chat.glade:477
+msgid "Move Tab _Left"
+msgstr "Mover Aba à _Esquerda"
 
-#: ../libempathy-gtk/gossip-chat-window.c:685
-#: ../libempathy-gtk/gossip-chat-window.c:715
-#, fuzzy
-msgid "New Message"
-msgid_plural "New Messages"
-msgstr[0] "_Nova Mensagem..."
-msgstr[1] "_Nova Mensagem..."
+#: libempathy-gtk/empathy-chat.glade:485
+msgid "Move Tab _Right"
+msgstr "Mover Aba à _Direita"
 
-#: ../libempathy-gtk/gossip-chat-window.c:691
-#, fuzzy
-msgid "Chat Room"
-msgstr "Gossip - Chat"
+#: libempathy-gtk/empathy-chat.glade:493
+msgid "_Detach Tab"
+msgstr "_Destacar Aba"
 
-#: ../libempathy-gtk/gossip-chat-window.c:696
-#: ../libempathy-gtk/gossip-chat-window.c:719
-#, fuzzy, c-format
-msgid "Conversation"
-msgid_plural "Conversations (%d)"
-msgstr[0] "_Conversa"
-msgstr[1] "_Conversa"
-
-#: ../libempathy-gtk/gossip-chat-window.c:1295
-msgid "Typing a message."
-msgstr "Digitando uma mensagem."
-
-#: ../libempathy-gtk/gossip-contact-list.c:290
-#, fuzzy
-msgid "_Contact"
-msgstr "_Adicionar Contato..."
-
-#: ../libempathy-gtk/gossip-contact-list.c:294
-#, fuzzy
-msgid "_Group"
-msgstr "Grupo"
-
-#: ../libempathy-gtk/gossip-contact-list.c:298
-#, fuzzy
-msgid "Chat with contact"
-msgstr "Adicionar um contato"
-
-#: ../libempathy-gtk/gossip-contact-list.c:302
-#, fuzzy
-msgid "Infor_mation"
-msgstr "_Informação do Contato"
-
-#: ../libempathy-gtk/gossip-contact-list.c:302
-#, fuzzy
-msgid "View contact information"
-msgstr "informação do contato"
-
-#: ../libempathy-gtk/gossip-contact-list.c:306
-#, fuzzy
-msgid "Re_name"
-msgstr "/Re_nomear grupo"
-
-#: ../libempathy-gtk/gossip-contact-list.c:306
-#, fuzzy
-msgid "Rename"
-msgstr "Nome de usuário:"
-
-#: ../libempathy-gtk/gossip-contact-list.c:310
-#, fuzzy
-msgid "Edit the groups and name for this contact"
-msgstr ""
-"Por favor, digite o novo apelido para o contato\n"
-"%s"
-
-#: ../libempathy-gtk/gossip-contact-list.c:314
-msgid "_Remove"
-msgstr "_Remover"
-
-#: ../libempathy-gtk/gossip-contact-list.c:314
-#, fuzzy
-msgid "Remove contact"
-msgstr "/_Remover contato"
-
-#: ../libempathy-gtk/gossip-contact-list.c:318
-#, fuzzy
-msgid "_Invite to Chat Room"
-msgstr "Gossip - Editar Grupos de Chats"
-
-#: ../libempathy-gtk/gossip-contact-list.c:318
-msgid "Invite to a currently open chat room"
+#: libempathy-gtk/empathy-chat.glade:505
+#: libempathy-gtk/empathy-main-window.glade:318
+msgid "_Help"
 msgstr ""
 
-#: ../libempathy-gtk/gossip-contact-list.c:322
-msgid "_Send File..."
+#: libempathy-gtk/empathy-chat.glade:514
+#: libempathy-gtk/empathy-main-window.glade:327
+msgid "_Contents"
+msgstr "_Conteudo"
+
+#: libempathy-gtk/empathy-chat.glade:560
+msgid "Invite"
 msgstr ""
 
-#: ../libempathy-gtk/gossip-contact-list.c:322
-#, fuzzy
-msgid "Send a file"
-msgstr "Selecionar"
-
-#: ../libempathy-gtk/gossip-contact-list.c:326
-#, fuzzy
-msgid "View previous conversations with this contact"
-msgstr "_Conversa"
-
-#: ../libempathy-gtk/gossip-preferences.c:250
-msgid "Language"
+#: libempathy-gtk/empathy-chat.glade:640
+msgid "Select who would you like to invite:"
 msgstr ""
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:1
+#: libempathy-gtk/empathy-chat.glade:708
+msgid "Invitation _message:"
+msgstr "Mensage_m de Convite:"
+
+#: libempathy-gtk/empathy-chat.glade:738
+msgid "You have been invited to join a chat conference."
+msgstr ""
+
+#: libempathy-gtk/empathy-chatrooms-window.glade:9
+msgid "Edit Favorite Room"
+msgstr "Editar Sala Favorita"
+
+#: libempathy-gtk/empathy-chatrooms-window.glade:146
+#: libempathy-gtk/empathy-new-chatroom-dialog.glade:211
+msgid "_Room:"
+msgstr "_Sala:"
+
+#: libempathy-gtk/empathy-chatrooms-window.glade:175
+msgid "S_erver:"
+msgstr "S_ervidor:"
+
+#: libempathy-gtk/empathy-chatrooms-window.glade:233
+msgid "N_ame:"
+msgstr "N_ome:"
+
+#: libempathy-gtk/empathy-chatrooms-window.glade:284
+msgid "Join this chat room when Empathy starts and you are connected"
+msgstr ""
+
+#: libempathy-gtk/empathy-chatrooms-window.glade:286
+msgid "Join room on start_up"
+msgstr "Entrar na sala ao inicia_r"
+
+#: libempathy-gtk/empathy-chatrooms-window.glade:317
 #, fuzzy
+msgid "Manage Favorite Rooms"
+msgstr "Gerenciar Salas Favoritas"
+
+#: libempathy-gtk/empathy-chatrooms-window.glade:352
+#: libempathy-gtk/empathy-contact-widget.glade:150
+#: libempathy-gtk/empathy-new-chatroom-dialog.glade:154
+#: libempathy-gtk/empathy-new-message-dialog.glade:57
+msgid "Account:"
+msgstr "Conta:"
+
+#: libempathy-gtk/empathy-contact-dialogs.glade:8
+msgid "Subscription Request"
+msgstr "Pedido de Inscrição"
+
+#: libempathy-gtk/empathy-contact-dialogs.glade:39
+msgid "Decide _Later"
+msgstr "Decidir _Depois"
+
+#: libempathy-gtk/empathy-contact-widget.glade:8
+msgid "Contact information"
+msgstr "Informação sobre o Contato"
+
+#: libempathy-gtk/empathy-contact-widget.glade:36
+msgid "<b>Contact</b>"
+msgstr "<b>Contato</b>"
+
+#: libempathy-gtk/empathy-contact-widget.glade:94
+msgid "Alias:"
+msgstr ""
+
+#: libempathy-gtk/empathy-contact-widget.glade:122
+msgid "Identifier:"
+msgstr ""
+
+#: libempathy-gtk/empathy-contact-widget.glade:284
+msgid "<b>Groups</b>"
+msgstr "<b>Grupos</b>"
+
+#: libempathy-gtk/empathy-contact-widget.glade:327
+msgid ""
+"Select the groups you want this contact to appear in, you can select more "
+"than one group or no groups."
+msgstr ""
+
+#: libempathy-gtk/empathy-contact-widget.glade:453
+msgid "<b>Contact Details</b>"
+msgstr "<b>Detalhes sobre o Contato</b>"
+
+#: libempathy-gtk/empathy-contact-widget.glade:503
+msgid "Birthday:"
+msgstr ""
+
+#: libempathy-gtk/empathy-contact-widget.glade:530
+msgid "Web site:"
+msgstr "Site da Web:"
+
+#: libempathy-gtk/empathy-contact-widget.glade:557
+msgid "Email:"
+msgstr "E-mail:"
+
+#: libempathy-gtk/empathy-contact-widget.glade:584
+msgid "Fullname:"
+msgstr "Nome Completo:"
+
+#: libempathy-gtk/empathy-contact-widget.glade:642
+#: libempathy-gtk/empathy-contact-widget.glade:935
+msgid "Information requested..."
+msgstr "Informação solicitada, por favor, aguarde..."
+
+#: libempathy-gtk/empathy-contact-widget.glade:695
+msgid "<b>Client Information</b>"
+msgstr "<b>Informação sobre o Cliente</b>"
+
+#: libempathy-gtk/empathy-contact-widget.glade:826
+msgid "Client:"
+msgstr "Cliente:"
+
+#: libempathy-gtk/empathy-contact-widget.glade:852
+msgid "Version:"
+msgstr "Versão:"
+
+#: libempathy-gtk/empathy-contact-widget.glade:878
+msgid "OS:"
+msgstr "SO:"
+
+#: libempathy-gtk/empathy-group-chat.glade:8
+msgid "Group Chat"
+msgstr "Chat em Grupo"
+
+#: libempathy-gtk/empathy-group-chat.glade:41
+msgid "<b>Topic:</b>"
+msgstr "<b>Topico:</b>"
+
+#: libempathy-gtk/empathy-log-window.glade:7
+msgid "Previous Conversations"
+msgstr "_Conversas Prévias"
+
+#: libempathy-gtk/empathy-log-window.glade:51
+msgid "_For:"
+msgstr "P_ara:"
+
+#: libempathy-gtk/empathy-log-window.glade:256
+msgid "Search"
+msgstr "Procurar"
+
+#: libempathy-gtk/empathy-log-window.glade:447
+msgid "Conversations"
+msgstr "Conversas"
+
+#: libempathy-gtk/empathy-new-chatroom-dialog.glade:9
+msgid "Join New"
+msgstr "Juntar-se"
+
+#: libempathy-gtk/empathy-new-chatroom-dialog.glade:99
+#, fuzzy
+msgid "Join"
+msgstr "Juntar-se"
+
+#: libempathy-gtk/empathy-new-chatroom-dialog.glade:240
+msgid ""
+"Enter the server which hosts the room, or leave it empty if the room is on "
+"the current account's server"
+msgstr ""
+
+#: libempathy-gtk/empathy-new-chatroom-dialog.glade:264
+msgid "Re_fresh"
+msgstr ""
+
+#: libempathy-gtk/empathy-new-chatroom-dialog.glade:284
+msgid ""
+"Enter the room name to join here or click on one or more rooms in the list."
+msgstr ""
+
+#: libempathy-gtk/empathy-new-chatroom-dialog.glade:349
+msgid "Browse:"
+msgstr ""
+
+#: libempathy-gtk/empathy-new-chatroom-dialog.glade:402
+msgid ""
+"This list represents all chat rooms hosted on the server you have entered."
+msgstr ""
+
+#: libempathy-gtk/empathy-main-window.glade:7
+msgid "Contact List"
+msgstr "Lista de Contatos"
+
+#: libempathy-gtk/empathy-main-window.glade:38
+msgid "_Chat"
+msgstr "_Chat"
+
+#: libempathy-gtk/empathy-main-window.glade:47
+#: libempathy-gtk/empathy-status-icon.glade:26
+msgid "_New Message..."
+msgstr "_Nova Mensagem..."
+
+#: libempathy-gtk/empathy-main-window.glade:121
+msgid "Show _Offline Contacts"
+msgstr "Mostrar contatos _Offline"
+
+#: libempathy-gtk/empathy-main-window.glade:137
+#: libempathy-gtk/empathy-status-icon.glade:60
+msgid "_Quit"
+msgstr ""
+
+#: libempathy-gtk/empathy-main-window.glade:171
+msgid "Context"
+msgstr "Contexto"
+
+#: libempathy-gtk/empathy-main-window.glade:185
+msgid "_Accounts"
+msgstr "Cont_as"
+
+#: libempathy-gtk/empathy-main-window.glade:194
+msgid "_Personal Information"
+msgstr "Informação _Pessoal"
+
+#: libempathy-gtk/empathy-main-window.glade:220
+msgid "_Preferences"
+msgstr "_Preferências"
+
+#: libempathy-gtk/empathy-main-window.glade:273
+#, fuzzy
+msgid "Join _Favorites"
+msgstr "_Editar favoritos..."
+
+#: libempathy-gtk/empathy-main-window.glade:294
+msgid "Manage Favorites"
+msgstr "Gerenciar Favoritos"
+
+#: libempathy-gtk/empathy-main-window.glade:348
+#, fuzzy
+msgid "_About"
+msgstr "_Sobre"
+
+#: libempathy-gtk/empathy-new-message-dialog.glade:8
+#, fuzzy
+msgid "New message"
+msgstr "Nova Mensagem"
+
+#: libempathy-gtk/empathy-new-message-dialog.glade:44
+msgid "Contact ID:"
+msgstr "ID do Contato:"
+
+#: libempathy-gtk/empathy-new-message-dialog.glade:82
+msgid "gtk-cancel"
+msgstr ""
+
+#: libempathy-gtk/empathy-new-message-dialog.glade:93
+msgid "gtk-ok"
+msgstr ""
+
+#: libempathy-gtk/empathy-preferences.glade:9
+msgid "Preferences"
+msgstr "Preferências"
+
+#: libempathy-gtk/empathy-preferences.glade:103
+msgid "Avatars are user chosen images shown in the contact list"
+msgstr ""
+
+#: libempathy-gtk/empathy-preferences.glade:105
+msgid "Show _avatars"
+msgstr ""
+
+#: libempathy-gtk/empathy-preferences.glade:124
+msgid "Show co_mpact contact list"
+msgstr "_Mostrar Lista Compacta de Contatos"
+
+#: libempathy-gtk/empathy-preferences.glade:143
+msgid "Show _smileys as images"
+msgstr "Mostrar _smileys como imagens"
+
+#: libempathy-gtk/empathy-preferences.glade:165
+#: libempathy-gtk/empathy-preferences.glade:914
 msgid "<b>Appearance</b>"
-msgstr "Aparência"
+msgstr "<b>Aparência</b>"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:2
-#, fuzzy
-msgid "<b>Audio</b>"
-msgstr "<b>Favoritos:</b>"
-
-#: ../libempathy-gtk/gossip-preferences.glade.h:3
-#, fuzzy
-msgid "<b>Behaviour</b>"
-msgstr "<b>Favoritos:</b>"
-
-#: ../libempathy-gtk/gossip-preferences.glade.h:4
-#, fuzzy
-msgid "<b>Contact List</b>"
-msgstr "Status"
-
-#: ../libempathy-gtk/gossip-preferences.glade.h:5
-msgid "<b>Languages</b>"
+#: libempathy-gtk/empathy-preferences.glade:221
+msgid "_Open new chats in separate windows"
 msgstr ""
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:6
-#, fuzzy
-msgid "<b>Options</b>"
-msgstr "Conectar"
+#: libempathy-gtk/empathy-preferences.glade:243
+msgid "<b>Behaviour</b>"
+msgstr "<b>Comportamento</b>"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:7
+#: libempathy-gtk/empathy-preferences.glade:299
+msgid "Sort by _name"
+msgstr ""
+
+#: libempathy-gtk/empathy-preferences.glade:318
+msgid "Sort by s_tate"
+msgstr ""
+
+#: libempathy-gtk/empathy-preferences.glade:341
+msgid "<b>Contact List</b>"
+msgstr "<b>Lista de Contatos</b>"
+
+#: libempathy-gtk/empathy-preferences.glade:377
+msgid "General"
+msgstr ""
+
+#: libempathy-gtk/empathy-preferences.glade:433
+msgid "_Play sound when messages arrive"
+msgstr "_Tocar som quando chegarem mensagens"
+
+#: libempathy-gtk/empathy-preferences.glade:452
+msgid "Enable sounds when _busy"
+msgstr "Ha_bilitar sons quando ocupado"
+
+#: libempathy-gtk/empathy-preferences.glade:471
+msgid "Enable sounds when _away"
+msgstr "H_abilitar sons quando longe"
+
+#: libempathy-gtk/empathy-preferences.glade:493
+msgid "<b>Audio</b>"
+msgstr "<b>Audio</b>"
+
+#: libempathy-gtk/empathy-preferences.glade:543
+msgid "Display notifications when contacts come _online"
+msgstr ""
+
+#: libempathy-gtk/empathy-preferences.glade:558
 #, fuzzy
 msgid "<b>Visual</b>"
-msgstr "<b>Descrição</b>"
+msgstr "<b>Visual</b>"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:8
+#: libempathy-gtk/empathy-preferences.glade:594
+msgid "Notifications"
+msgstr "Notificações"
+
+#: libempathy-gtk/empathy-preferences.glade:726
 msgid ""
 "<small>The list of languages reflects only the languages for which you have "
 "a dictionary installed.</small>"
 msgstr ""
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:9
-msgid "Avatars are user chosen images shown in the contact list"
-msgstr ""
+#: libempathy-gtk/empathy-preferences.glade:762
+msgid "<b>Enable spell checking for languages:</b>"
+msgstr "<b>Habilitar verificação ortográfica para as linguas:"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:10
-#, fuzzy
-msgid "Chat Th_eme:"
-msgstr "_Nome de Chat:"
-
-#: ../libempathy-gtk/gossip-preferences.glade.h:11
-msgid "Display notifications when contacts come _online"
-msgstr ""
-
-#: ../libempathy-gtk/gossip-preferences.glade.h:12
-#, fuzzy
-msgid "Enable sounds when _away"
-msgstr "Des_abilitar sons quando longe"
-
-#: ../libempathy-gtk/gossip-preferences.glade.h:13
-#, fuzzy
-msgid "Enable sounds when _busy"
-msgstr "Desa_bilitar sons quando ocupado"
-
-#: ../libempathy-gtk/gossip-preferences.glade.h:14
-msgid "General"
-msgstr ""
-
-#: ../libempathy-gtk/gossip-preferences.glade.h:15
-#, fuzzy
-msgid "Notifications"
-msgstr "Usar sons de notificação"
-
-#: ../libempathy-gtk/gossip-preferences.glade.h:16
-#, fuzzy
-msgid "Preferences"
-msgstr "_Preferências"
-
-#: ../libempathy-gtk/gossip-preferences.glade.h:17
-msgid "Show _avatars"
-msgstr ""
-
-#: ../libempathy-gtk/gossip-preferences.glade.h:18
-#, fuzzy
-msgid "Show _smileys as images"
-msgstr "converter emoticons para imagens gráficas"
-
-#: ../libempathy-gtk/gossip-preferences.glade.h:19
-#, fuzzy
-msgid "Show co_mpact contact list"
-msgstr "_Mostrar Lista de Contatos"
-
-#: ../libempathy-gtk/gossip-preferences.glade.h:20
-msgid "Sort by _name"
-msgstr ""
-
-#: ../libempathy-gtk/gossip-preferences.glade.h:21
-msgid "Sort by s_tate"
-msgstr ""
-
-#: ../libempathy-gtk/gossip-preferences.glade.h:22
+#: libempathy-gtk/empathy-preferences.glade:802
 msgid "Spell Checking"
 msgstr ""
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:23
-msgid "Themes"
-msgstr ""
+#: libempathy-gtk/empathy-preferences.glade:863
+msgid "Chat Th_eme:"
+msgstr "T_ema do Chat:"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:24
-msgid "_Enable spell checking"
-msgstr ""
-
-#: ../libempathy-gtk/gossip-preferences.glade.h:25
-msgid "_Open new chats in separate windows"
-msgstr ""
-
-#: ../libempathy-gtk/gossip-preferences.glade.h:26
-#, fuzzy
-msgid "_Play sound when messages arrive"
-msgstr "tocar som quando chegar mensagens"
-
-#: ../libempathy-gtk/gossip-preferences.glade.h:27
+#: libempathy-gtk/empathy-preferences.glade:964
 #, fuzzy
 msgid "_Use for chat rooms"
 msgstr "Gossip - Editar Grupos de Chats"
 
-#: ../libempathy-gtk/gossip-presence-chooser.c:702
-#, fuzzy
-msgid "Custom message..."
-msgstr "Mensagem de solicitação"
+#: libempathy-gtk/empathy-preferences.glade:979
+msgid "<b>Options</b>"
+msgstr "<b>Opções</b>"
 
-#. Clear list
-#: ../libempathy-gtk/gossip-presence-chooser.c:724
-#, fuzzy
-msgid "Clear List..."
-msgstr "_Limpar"
-
-#: ../libempathy-gtk/gossip-presence-chooser.c:803
-#, fuzzy
-msgid "Are you sure you want to clear the list?"
-msgstr "Você quer aceitar a solicitação"
-
-#: ../libempathy-gtk/gossip-presence-chooser.c:807
-msgid ""
-"This will remove any custom messages you have added to the list of preset "
-"status messages."
+#: libempathy-gtk/empathy-preferences.glade:1015
+msgid "Themes"
 msgstr ""
 
-#: ../libempathy-gtk/gossip-presence-chooser.c:812
-#, fuzzy
-msgid "Clear List"
-msgstr "_Limpar"
+#: libempathy-gtk/empathy-presence-chooser.glade:9
+msgid "Custom message"
+msgstr "Mensagem Personalizada"
 
-#: ../libempathy-gtk/gossip-presence-chooser.glade.h:1
-msgid "Enter status message:"
-msgstr "Digite mensagem de status:"
+#: libempathy-gtk/empathy-presence-chooser.glade:70
+msgid "Status:"
+msgstr "Status:"
 
-#: ../libempathy-gtk/gossip-presence-chooser.glade.h:2
-#, fuzzy
-msgid "Status Message Presets"
-msgstr "mensagens de Status"
+#: libempathy-gtk/empathy-presence-chooser.glade:98
+msgid "Message:"
+msgstr "Mensagem:"
 
-#: ../libempathy-gtk/gossip-presence-chooser.glade.h:3
-#, fuzzy
-msgid "_Add to status message list"
-msgstr "Mensagem de status presente"
+#: libempathy-gtk/empathy-presence-chooser.glade:127
+msgid "Save message"
+msgstr "Salvar Mensagem"
 
-#: ../libempathy-gtk/gossip-private-chat.c:198
-#, c-format
-msgid "%s went offline"
-msgstr "%s desconectou"
+#: libempathy-gtk/empathy-spell-dialog.glade:8
+msgid "Spell Checker"
+msgstr "Corretor Ortográfico"
 
-#: ../libempathy-gtk/gossip-private-chat.c:212
-#, fuzzy, c-format
-msgid "%s has come online"
-msgstr "%s conectou"
-
-#: ../libempathy-gtk/gossip-theme-manager.c:87
-msgid "Classic"
+#: libempathy-gtk/empathy-spell-dialog.glade:143
+msgid "Suggestions for the word:"
 msgstr ""
 
-#: ../libempathy-gtk/gossip-theme-manager.c:88
-msgid "Simple"
-msgstr ""
+#: libempathy-gtk/empathy-status-icon.glade:11
+msgid "_Show Contact List"
+msgstr "_Mostrar Lista de Contatos"
 
-#: ../libempathy-gtk/gossip-theme-manager.c:89
+#: libempathy-gtk/empathy-status-icon.glade:46
+msgid "Status"
+msgstr "Status"
+
 #, fuzzy
-msgid "Clean"
-msgstr "_Limpar"
+#~ msgid "Empathy Instant Messenger"
+#~ msgstr "Mensageiro Instantâneo Empathy"
 
-#: ../libempathy-gtk/gossip-theme-manager.c:90
-msgid "Blue"
-msgstr ""
+#~ msgid "Instant Messenger"
+#~ msgstr "Mensageiro Instantâneo"
 
-#: ../src/empathy-main.c:145
-msgid "Don't connect on startup"
-msgstr "Não conectar ao iniciar"
-
-#: ../src/empathy-main.c:155
 #, fuzzy
-msgid "- Empathy Instant Messenger"
-msgstr "Mensageiro Instantâneo"
+#~ msgid "Compact contact list"
+#~ msgstr "Adicionar à sua lista de contatos"
+
+#, fuzzy
+#~ msgid "Enable sound when away"
+#~ msgstr "Des_abilitar sons quando longe"
+
+#, fuzzy
+#~ msgid "Enable sound when busy"
+#~ msgstr "Desa_bilitar sons quando ocupado"
+
+#~ msgid "Hide main window"
+#~ msgstr "Ocultar janela principal"
+
+#~ msgid "Hide the main window."
+#~ msgstr "Ocultar a janela principal."
+
+#, fuzzy
+#~ msgid "Show avatars"
+#~ msgstr "_Mostrar Lista de Contatos"
+
+#, fuzzy
+#~ msgid "Show hint about closing the main window"
+#~ msgstr "A altura da janela principal."
+
+#~ msgid "Show offline contacts"
+#~ msgstr "Mostrar contatos offline"
+
+#, fuzzy
+#~ msgid "The theme that is used to display the conversation in chat windows."
+#~ msgstr "Este nome será utilizado para identificá-lo em janelas de chat."
+
+#~ msgid "Use graphical smileys"
+#~ msgstr "Usar emoticons gráficos"
+
+#~ msgid "Use notification sounds"
+#~ msgstr "Usar sons de notificação"
+
+#~ msgid ""
+#~ "Whether or not to convert smileys into graphical images in conversations."
+#~ msgstr ""
+#~ "Se você quer converter ou não emoticons em imagens gráficas durante "
+#~ "conversação."
+
+#~ msgid "Whether or not to play a sound when messages arrive."
+#~ msgstr "Se você quer ou não tocar um som quando chegar mensagens."
+
+#~ msgid "Whether or not to play sounds when away."
+#~ msgstr "Se você quer ou não tocar sons quando longe."
+
+#~ msgid "Whether or not to play sounds when busy."
+#~ msgstr "Se você quer ou não tocar sons quando ocupado."
+
+#, fuzzy
+#~ msgid "Whether or not to show a popup when a contact becomes available."
+#~ msgstr "Se você quer ou não tocar um som quando chegar mensagens."
+
+#, fuzzy
+#~ msgid ""
+#~ "Whether or not to show avatars for contacts in the contact list and chat "
+#~ "windows."
+#~ msgstr ""
+#~ "Se você quer ou não mostrar contatos que estejam offline na lista de "
+#~ "contatos."
+
+#~ msgid ""
+#~ "Whether or not to show contacts that are offline in the contact list."
+#~ msgstr ""
+#~ "Se você quer ou não mostrar contatos que estejam offline na lista de "
+#~ "contatos."
+
+#, fuzzy
+#~ msgid "Whether to show the contact list in compact mode or not."
+#~ msgstr ""
+#~ "Se você quer ou não mostrar contatos que estejam offline na lista de "
+#~ "contatos."
+
+#~ msgid "Offline"
+#~ msgstr "Offline"
+
+#~ msgid "Available"
+#~ msgstr "Disponível"
+
+#~ msgid "Busy"
+#~ msgstr "Ocupado"
+
+#~ msgid "Away"
+#~ msgstr "Longe"
+
+#, fuzzy
+#~ msgid "Show and edit accounts"
+#~ msgstr "_Mostrar Lista de Contatos"
+
+#~ msgid "Group"
+#~ msgstr "Grupo"
+
+#, fuzzy
+#~ msgid "Contact"
+#~ msgstr "_Adicionar Contato..."
+
+#, fuzzy
+#~ msgid "Contact List - Empathy"
+#~ msgstr "_Ocultar Lista de Contatos"
+
+#, fuzzy
+#~ msgid "An Instant Messaging client for GNOME"
+#~ msgstr "Gossip, Cliente de Mensagens Instantâneas"
+
+#, fuzzy
+#~ msgid "translator-credits"
+#~ msgstr "Luiz Guaraldo <software.livre@terra.com.br>"
+
+#, fuzzy
+#~ msgid "Disable"
+#~ msgstr "Disponível"
+
+#, fuzzy
+#~ msgid "<b>No Accounts Configured</b>"
+#~ msgstr "<b>Configurações da Conta</b>"
+
+#, fuzzy
+#~ msgid "<b>Account</b>"
+#~ msgstr "<b>Favoritos:</b>"
+
+#, fuzzy
+#~ msgid "Imendio "
+#~ msgstr "Imendio Gossip"
+
+#~ msgid "Jabber"
+#~ msgstr "Jabber"
+
+#, fuzzy
+#~ msgid ""
+#~ "<small><b><span foreground=\"#555\">Example: user@jabber.org</span></b></"
+#~ "small>"
+#~ msgstr "<span size=\"small\">Por exemplo: usuario@jabber.org</span>"
+
+#~ msgid "Disconnected"
+#~ msgstr "Desconectado"
+
+#~ msgid "Connected"
+#~ msgstr "Conectado"
+
+#~ msgid "_Copy Link Address"
+#~ msgstr "_Copiar Endereço do Link"
+
+#~ msgid "_Open Link"
+#~ msgstr "Abrir _o Link"
+
+#~ msgid "%A %d %B %Y"
+#~ msgstr "%A, %d de %B de %Y"
+
+#, fuzzy
+#~ msgid "Chat Room"
+#~ msgstr "Gossip - Chat"
+
+#~ msgid "Typing a message."
+#~ msgstr "Digitando uma mensagem."
+
+#, fuzzy
+#~ msgid "_Contact"
+#~ msgstr "_Adicionar Contato..."
+
+#, fuzzy
+#~ msgid "_Group"
+#~ msgstr "Grupo"
+
+#, fuzzy
+#~ msgid "Chat with contact"
+#~ msgstr "Adicionar um contato"
+
+#, fuzzy
+#~ msgid "Infor_mation"
+#~ msgstr "_Informação do Contato"
+
+#, fuzzy
+#~ msgid "View contact information"
+#~ msgstr "informação do contato"
+
+#, fuzzy
+#~ msgid "Re_name"
+#~ msgstr "/Re_nomear grupo"
+
+#, fuzzy
+#~ msgid "Rename"
+#~ msgstr "Nome de usuário:"
+
+#, fuzzy
+#~ msgid "Edit the groups and name for this contact"
+#~ msgstr ""
+#~ "Por favor, digite o novo apelido para o contato\n"
+#~ "%s"
+
+#~ msgid "_Remove"
+#~ msgstr "_Remover"
+
+#, fuzzy
+#~ msgid "Remove contact"
+#~ msgstr "/_Remover contato"
+
+#, fuzzy
+#~ msgid "_Invite to Chat Room"
+#~ msgstr "Gossip - Editar Grupos de Chats"
+
+#, fuzzy
+#~ msgid "View previous conversations with this contact"
+#~ msgstr "_Conversa"
+
+#, fuzzy
+#~ msgid "Clear List..."
+#~ msgstr "_Limpar"
+
+#, fuzzy
+#~ msgid "Are you sure you want to clear the list?"
+#~ msgstr "Você quer aceitar a solicitação"
+
+#, fuzzy
+#~ msgid "Clear List"
+#~ msgstr "_Limpar"
+
+#~ msgid "Enter status message:"
+#~ msgstr "Digite mensagem de status:"
+
+#, fuzzy
+#~ msgid "Status Message Presets"
+#~ msgstr "mensagens de Status"
+
+#, fuzzy
+#~ msgid "_Add to status message list"
+#~ msgstr "Mensagem de status presente"
+
+#~ msgid "%s went offline"
+#~ msgstr "%s desconectou"
+
+#, fuzzy
+#~ msgid "%s has come online"
+#~ msgstr "%s conectou"
+
+#, fuzzy
+#~ msgid "Clean"
+#~ msgstr "_Limpar"
+
+#~ msgid "Don't connect on startup"
+#~ msgstr "Não conectar ao iniciar"
+
+#, fuzzy
+#~ msgid "- Empathy Instant Messenger"
+#~ msgstr "Mensageiro Instantâneo"
 
 #, fuzzy
 #~ msgid "Gossip Instant Messenger"
@@ -985,9 +964,6 @@ msgstr "Mensageiro Instantâneo"
 #, fuzzy
 #~ msgid "new account"
 #~ msgstr "Conta Jabber"
-
-#~ msgid "Home"
-#~ msgstr "Início"
 
 #, fuzzy
 #~ msgid "Registration is required"
@@ -1065,10 +1041,6 @@ msgstr "Mensageiro Instantâneo"
 #, fuzzy
 #~ msgid "Auto Connect"
 #~ msgstr "Conectar"
-
-#, fuzzy
-#~ msgid "Information requested..."
-#~ msgstr "<b>Informação solicitada, por favor, aguarde...</b>"
 
 #, fuzzy
 #~ msgid "Do you want to remove this contact from your roster?"
@@ -1151,10 +1123,6 @@ msgstr "Mensageiro Instantâneo"
 #~ msgstr "Não existe conta com o nome ' %s'."
 
 #, fuzzy
-#~ msgid "Join"
-#~ msgstr "_Juntar-se"
-
-#, fuzzy
 #~ msgid "Create"
 #~ msgstr "Chat"
 
@@ -1185,10 +1153,6 @@ msgstr "Mensageiro Instantâneo"
 #, fuzzy
 #~ msgid "Subscription request"
 #~ msgstr "Requisição de Inscrição"
-
-#, fuzzy
-#~ msgid "Contact Information"
-#~ msgstr "_Informação do Contato"
 
 #, fuzzy
 #~ msgid "New subscription request from %s"
@@ -1235,9 +1199,6 @@ msgstr "Mensageiro Instantâneo"
 #~ msgid "File size:"
 #~ msgstr "Site da Web:"
 
-#~ msgid "Web site:"
-#~ msgstr "Site da Web:"
-
 #~ msgid "_Accept"
 #~ msgstr "_Aceitar"
 
@@ -1245,53 +1206,7 @@ msgstr "Mensageiro Instantâneo"
 #~ msgstr "_Negar"
 
 #, fuzzy
-#~ msgid "<b>Topic:</b>"
-#~ msgstr "<b>Favoritos:</b>"
-
-#, fuzzy
-#~ msgid "Account:"
-#~ msgstr "Conta Jabber"
-
-#, fuzzy
-#~ msgid "Edit Favorite Room"
-#~ msgstr "Gossip - Editar Grupos de Chats"
-
-#, fuzzy
-#~ msgid "Group Chat"
-#~ msgstr "Gossip - Chat"
-
-#, fuzzy
-#~ msgid "Join New"
-#~ msgstr "_Juntar-se"
-
-#, fuzzy
-#~ msgid "Join room on start_up"
-#~ msgstr "Não conectar ao iniciar"
-
-#, fuzzy
-#~ msgid "N_ame:"
-#~ msgstr "Nome:"
-
-#, fuzzy
-#~ msgid "S_erver:"
-#~ msgstr "Servidor:"
-
-#~ msgid "_Nickname:"
-#~ msgstr "A_pelido:"
-
-#~ msgid "_Room:"
-#~ msgstr "_Sala:"
-
-#, fuzzy
 #~ msgid "<b>About</b>"
-#~ msgstr "<b>Favoritos:</b>"
-
-#, fuzzy
-#~ msgid "<b>Client Information</b>"
-#~ msgstr "Informação do Cliente"
-
-#, fuzzy
-#~ msgid "<b>Groups</b>"
 #~ msgstr "<b>Favoritos:</b>"
 
 #, fuzzy
@@ -1322,13 +1237,6 @@ msgstr "Mensageiro Instantâneo"
 #~ msgid "Ch_at"
 #~ msgstr "Chat"
 
-#~ msgid "Client:"
-#~ msgstr "Cliente:"
-
-#, fuzzy
-#~ msgid "Con_tact:"
-#~ msgstr "_Adicionar Contato..."
-
 #, fuzzy
 #~ msgid "Connect on S_tartup"
 #~ msgstr "Não conectar ao iniciar"
@@ -1340,18 +1248,12 @@ msgstr "Mensageiro Instantâneo"
 #~ msgid "Country:"
 #~ msgstr "País:"
 
-#~ msgid "Decide _Later"
-#~ msgstr "Decidir _Depois"
-
 #, fuzzy
 #~ msgid "Edit Contact"
 #~ msgstr "_Adicionar Contato..."
 
 #~ msgid "Edit Groups"
 #~ msgstr "Editar Grupos"
-
-#~ msgid "Email:"
-#~ msgstr "E-mail:"
 
 #, fuzzy
 #~ msgid "ID:"
@@ -1360,9 +1262,6 @@ msgstr "Mensageiro Instantâneo"
 #~ msgid "Name:"
 #~ msgstr "Nome:"
 
-#~ msgid "OS:"
-#~ msgstr "SO:"
-
 #, fuzzy
 #~ msgid "Personal Details"
 #~ msgstr "_Detalhes pessoais"
@@ -1370,18 +1269,6 @@ msgstr "Mensageiro Instantâneo"
 #, fuzzy
 #~ msgid "R_egister"
 #~ msgstr "Re_gistrar..."
-
-#, fuzzy
-#~ msgid "Search"
-#~ msgstr "_Procurar..."
-
-#, fuzzy
-#~ msgid "Spell Checker"
-#~ msgstr "Gossip - Mensagem Enviada"
-
-#, fuzzy
-#~ msgid "Subscription Request"
-#~ msgstr "Requisição de Inscrição"
 
 #, fuzzy
 #~ msgid "This is the name that will be used on your roster for this contact"
@@ -1396,13 +1283,6 @@ msgstr "Mensageiro Instantâneo"
 #~ "This name will be used to identify you when new contacts lookup your "
 #~ "details"
 #~ msgstr "Este nome será utilizado para identificá-lo em janelas de chat."
-
-#~ msgid "Version:"
-#~ msgstr "Versão:"
-
-#, fuzzy
-#~ msgid "View Previous Conversations"
-#~ msgstr "_Conversa"
 
 #, fuzzy
 #~ msgid "Which account do you want to use?"
@@ -1426,22 +1306,10 @@ msgstr "Mensageiro Instantâneo"
 #~ msgstr "_desconectar"
 
 #, fuzzy
-#~ msgid "_Email:"
-#~ msgstr "E-mail:"
-
-#, fuzzy
 #~ msgid ""
 #~ "_Enter the name or contact ID of the person you want to chat to below:"
 #~ msgstr ""
 #~ "Adicione o ID de usuário da pessoa para quem quer enviar mensagem de chat."
-
-#, fuzzy
-#~ msgid "_For:"
-#~ msgstr "P_orta:"
-
-#, fuzzy
-#~ msgid "_Full Name:"
-#~ msgstr "Nome:"
 
 #, fuzzy
 #~ msgid "_Group:"
@@ -1471,10 +1339,6 @@ msgstr "Mensageiro Instantâneo"
 
 #, fuzzy
 #~ msgid "irc account settings"
-#~ msgstr "<b>Configurações da Conta</b>"
-
-#, fuzzy
-#~ msgid "msn account settings"
 #~ msgstr "<b>Configurações da Conta</b>"
 
 #~ msgid "Preset status messages"
@@ -1628,10 +1492,6 @@ msgstr "Mensageiro Instantâneo"
 #~ msgstr "Apelido:"
 
 #, fuzzy
-#~ msgid "Port:"
-#~ msgstr "P_orta:"
-
-#, fuzzy
 #~ msgid "Press Subscribe to request to receive their status"
 #~ msgstr ""
 #~ "Você não está inscrito para receber o estado deste contato. Pressione "
@@ -1746,10 +1606,6 @@ msgstr "Mensageiro Instantâneo"
 #, fuzzy
 #~ msgid "Requested Information"
 #~ msgstr "Informação da Cont_a"
-
-#, fuzzy
-#~ msgid "Send Message"
-#~ msgstr "Mensagem de Status"
 
 #, fuzzy
 #~ msgid "%s has gone offline"
@@ -1938,9 +1794,6 @@ msgstr "Mensageiro Instantâneo"
 
 #~ msgid "Connect _Server:"
 #~ msgstr "Conectar _Servidor:"
-
-#~ msgid "_Jabber ID:"
-#~ msgstr "ID _Jabber:"
 
 #~ msgid "        "
 #~ msgstr "        "
