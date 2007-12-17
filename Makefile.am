@@ -27,6 +27,7 @@ INTLTOOL = 			\
 
 EXTRA_DIST = 			\
         ChangeLog               \
+        ChangeLog.old           \
         README                  \
 	CONTRIBUTORS		\
 	$(INTLTOOL)
@@ -43,13 +44,12 @@ distuninstallcheck_listfiles = find . -type f -print | grep -v '^\./var/scrollke
 # Build ChangeLog from SVN history (r470 was the first ChangeLog-less checkin).
 # Only build this when in an svn checkout.
 
-ChangeLog: ChangeLog.old
+ChangeLog:
 	@if test -f $(top_srcdir)/.svn/entries; then \
 		svn log -v --xml -r HEAD:470 $(SVN_ROOT)/$(SVN_MODULE) | \
 			xsltproc --stringparam strip-prefix "$(SVN_MODULE)/$(SVN_BRANCH)" \
 				 --stringparam include-rev "yes" $(top_srcdir)/svn2cl.xsl - > $@; \
 	fi
-	@cat $(top_srcdir)/ChangeLog.old >> $@
 
 dist: ChangeLog
 
