@@ -1,3 +1,13 @@
+NEW in 0.21.4:
+=============
+ - Cache avatar pixbuf in EmpathyChatView to avoid having a new pixbuf in memory
+   for each message a contact sends
+ - Generate ChangeLog from svn commits. Copy generator from epiphany.
+ - Correctly store/restore presence when NM state changes.
+ - Split EmpathyContactFactory to have one EmpathyTpContactFactory per account.
+ - When NM is in sleeping (=disabled) state, do just like if it was connected.
+   Add a gconf key to disable NM support completely.
+
 NEW in 0.21.3:
 =============
  - Request new Text Channel if the contact is online again and CM don't support
