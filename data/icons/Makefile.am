@@ -52,14 +52,32 @@ private_icons = \
 	hicolor_apps_scalable_im-xmpp.svg \
 	hicolor_apps_scalable_im-msn.svg \
 	hicolor_apps_scalable_im-local-xmpp.svg \
-	hicolor_status_16x16_im-message.png \
 	hicolor_status_16x16_empathy-available.png \
 	hicolor_status_16x16_empathy-away.png \
 	hicolor_status_16x16_empathy-busy.png \
 	hicolor_status_16x16_empathy-extended-away.png \
 	hicolor_status_16x16_empathy-offline.png \
 	hicolor_status_16x16_empathy-pending.png \
+	hicolor_status_16x16_im-message.png \
 	hicolor_status_16x16_user-typing.png \
+	hicolor_status_22x22_empathy-available.png \
+	hicolor_status_22x22_empathy-away.png \
+	hicolor_status_22x22_empathy-busy.png \
+	hicolor_status_22x22_empathy-extended-away.png \
+	hicolor_status_22x22_empathy-offline.png \
+	hicolor_status_22x22_empathy-pending.png \
+	hicolor_status_24x24_empathy-available.png \
+	hicolor_status_24x24_empathy-away.png \
+	hicolor_status_24x24_empathy-busy.png \
+	hicolor_status_24x24_empathy-extended-away.png \
+	hicolor_status_24x24_empathy-offline.png \
+	hicolor_status_24x24_empathy-pending.png \
+	hicolor_status_48x48_empathy-available.png \
+	hicolor_status_48x48_empathy-away.png \
+	hicolor_status_48x48_empathy-busy.png \
+	hicolor_status_48x48_empathy-extended-away.png \
+	hicolor_status_48x48_empathy-offline.png \
+	hicolor_status_48x48_empathy-pending.png \
 	hicolor_status_scalable_empathy-available.svg \
 	hicolor_status_scalable_empathy-away.svg \
 	hicolor_status_scalable_empathy-busy.svg \
