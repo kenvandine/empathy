@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: empathy trunk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-12-05 00:47+0900\n"
-"PO-Revision-Date: 2007-12-05 00:47+0900\n"
+"POT-Creation-Date: 2007-12-18 23:36+0900\n"
+"PO-Revision-Date: 2007-12-18 23:21+0900\n"
 "Last-Translator: Takeshi AIHANA <takeshi.aihana@gmail.com>\n"
 "Language-Team: Japanese <gnome-translation@gnome.gr.jp>\n"
 "MIME-Version: 1.0\n"
@@ -40,139 +40,150 @@ msgid "Chat window theme"
 msgstr "会話ウィンドウのテーマ"
 
 #: ../data/empathy.schemas.in.h:4
+msgid "Checks if NetworkManager should be used"
+msgstr "NetworkManager を利用できるか確認する"
+
+#: ../data/empathy.schemas.in.h:5
 msgid "Checks if Salut account is created"
 msgstr "Salut のアカウントを生成するかどうか"
 
-#: ../data/empathy.schemas.in.h:5
+#: ../data/empathy.schemas.in.h:6
 msgid ""
 "Comma separated list of spell checker languages to use (e.g. en, fr, nl)."
 msgstr ""
 "スペルをチェックする言語をコンマで区切って指定します (例: en, fr, nl)。"
 
-#: ../data/empathy.schemas.in.h:6
+#: ../data/empathy.schemas.in.h:7
 msgid "Compact contact list"
 msgstr "仲間リストを小さくする"
 
-#: ../data/empathy.schemas.in.h:7
+#: ../data/empathy.schemas.in.h:8
 msgid "Contact list sort criterium"
 msgstr "仲間リストを並び替える際の条件"
 
-#: ../data/empathy.schemas.in.h:8
+#: ../data/empathy.schemas.in.h:9
 msgid "Default directory to select an avatar image from"
 msgstr "アバターの画像が格納されたデフォルトのフォルダ"
 
-#: ../data/empathy.schemas.in.h:9
+#: ../data/empathy.schemas.in.h:10
 msgid "Enable popup when contact is available"
 msgstr "仲間がサインインしたらポップアップする"
 
-#: ../data/empathy.schemas.in.h:10
+#: ../data/empathy.schemas.in.h:11
 msgid "Enable sound when away"
 msgstr "離席中になったらサウンドを演奏する"
 
-#: ../data/empathy.schemas.in.h:11
+#: ../data/empathy.schemas.in.h:12
 msgid "Enable sound when busy"
 msgstr "取り込み中になったらサウンドを演奏する"
 
-#: ../data/empathy.schemas.in.h:12
+#: ../data/empathy.schemas.in.h:13
 msgid "Enable spell checker"
 msgstr "スペルをチェックする"
 
-#: ../data/empathy.schemas.in.h:13
+#: ../data/empathy.schemas.in.h:14
 msgid "Hide main window"
 msgstr "メイン・ウィンドウを隠す"
 
-#: ../data/empathy.schemas.in.h:14
+#: ../data/empathy.schemas.in.h:15
 msgid "Hide the main window."
 msgstr "メイン・ウィンドウを隠すかどうかです。"
 
-#: ../data/empathy.schemas.in.h:15
+#: ../data/empathy.schemas.in.h:16
 msgid "Nick completed character"
 msgstr "あだ名を補完する文字"
 
-#: ../data/empathy.schemas.in.h:16
+#: ../data/empathy.schemas.in.h:17
 msgid "Open new chats in separate windows"
 msgstr "新しい会話毎にウィンドウを開く"
 
-#: ../data/empathy.schemas.in.h:17
+#: ../data/empathy.schemas.in.h:18
 msgid "Show avatars"
 msgstr "アバターを表示する"
 
-#: ../data/empathy.schemas.in.h:18
+#: ../data/empathy.schemas.in.h:19
 msgid "Show hint about closing the main window"
 msgstr "メイン・ウィンドウを閉じる際のヒントを表示する"
 
-#: ../data/empathy.schemas.in.h:19
+#: ../data/empathy.schemas.in.h:20
 msgid "Show offline contacts"
 msgstr "オフラインな仲間を表示する"
 
-#: ../data/empathy.schemas.in.h:20
+#: ../data/empathy.schemas.in.h:21
 msgid "Spell checking languages"
 msgstr "スペルをチェックする言語"
 
-#: ../data/empathy.schemas.in.h:21
+#: ../data/empathy.schemas.in.h:22
 msgid "The last directory that an avatar image was chosen from."
 msgstr "最後にアバターを選択した時に使用したフォルダです。"
 
-#: ../data/empathy.schemas.in.h:22
+#: ../data/empathy.schemas.in.h:23
 msgid "The theme that is used to display the conversation in chat windows."
 msgstr "会話ウィンドウで使用するテーマです。"
 
-#: ../data/empathy.schemas.in.h:23
+#: ../data/empathy.schemas.in.h:24
 msgid "Use graphical smileys"
 msgstr "スマイリー・アイコンを使う"
 
-#: ../data/empathy.schemas.in.h:24
+#: ../data/empathy.schemas.in.h:25
 msgid "Use notification sounds"
 msgstr "状態をサウンドの演奏で通知する"
 
-#: ../data/empathy.schemas.in.h:25
+#: ../data/empathy.schemas.in.h:26
 msgid "Use theme for chat rooms"
 msgstr "会話ウィンドウにテーマを適用する"
 
-#: ../data/empathy.schemas.in.h:26
+#: ../data/empathy.schemas.in.h:27
 msgid ""
 "Whether or not the Salut account has been created on the first empathy run."
 msgstr "Empathy を始めて起動した時に Salut アカウントを生成するかどうかです。"
 
-#: ../data/empathy.schemas.in.h:27
+#: ../data/empathy.schemas.in.h:28
+msgid ""
+"Whether or not the network manager should be used to automatically "
+"disconnect/reconnect."
+msgstr ""
+"NetworkManager 使って自動的にネットワークに接続したり再接続するかどうかです。"
+
+#: ../data/empathy.schemas.in.h:29
 msgid ""
 "Whether or not to check words typed against the languages you want to check "
 "with."
 msgstr ""
 "指定した言語のスペル・チェッカで入力した単語をチェックするかどうかです。"
 
-#: ../data/empathy.schemas.in.h:28
+#: ../data/empathy.schemas.in.h:30
 msgid ""
 "Whether or not to convert smileys into graphical images in conversations."
 msgstr "会話ウィンドウに入力したスマイリーをアイコンに変換するかどうかです。"
 
-#: ../data/empathy.schemas.in.h:29
+#: ../data/empathy.schemas.in.h:31
 msgid "Whether or not to play a sound when messages arrive."
 msgstr "メッセージを受け取ったらサウンドを演奏するかどうかです。"
 
-#: ../data/empathy.schemas.in.h:30
+#: ../data/empathy.schemas.in.h:32
 msgid "Whether or not to play sounds when away."
 msgstr "状態が離席中になったらサウンドを演奏するかどうかです。"
 
-#: ../data/empathy.schemas.in.h:31
+#: ../data/empathy.schemas.in.h:33
 msgid "Whether or not to play sounds when busy."
 msgstr "状態が取り込み中になったらサウンドを演奏するかどうかです。"
 
-#: ../data/empathy.schemas.in.h:32
+#: ../data/empathy.schemas.in.h:34
 msgid "Whether or not to show a popup when a contact becomes available."
 msgstr "仲間がサインインしたらポップアップを表示するかどうかです。"
 
-#: ../data/empathy.schemas.in.h:33
+#: ../data/empathy.schemas.in.h:35
 msgid ""
 "Whether or not to show avatars for contacts in the contact list and chat "
 "windows."
 msgstr "仲間リストと会話ウィンドウの中に仲間のアバターを表示するかどうかです。"
 
-#: ../data/empathy.schemas.in.h:34
+#: ../data/empathy.schemas.in.h:36
 msgid "Whether or not to show contacts that are offline in the contact list."
 msgstr "仲間リストの中でオフラインの仲間を表示するかどうかです。"
 
-#: ../data/empathy.schemas.in.h:35
+#: ../data/empathy.schemas.in.h:37
 msgid ""
 "Whether or not to show the message dialog about closing the main window with "
 "the 'x' button in the title bar."
@@ -180,15 +191,15 @@ msgstr ""
 "タイトルバーにある 'x' ボタンをクリックしてメインウィンドウを閉じたらメッセー"
 "ジ・ダイアログを表示するかどうかです。"
 
-#: ../data/empathy.schemas.in.h:36
+#: ../data/empathy.schemas.in.h:38
 msgid "Whether to show the contact list in compact mode or not."
 msgstr "仲間リストを小さく表示するかどうかです。"
 
-#: ../data/empathy.schemas.in.h:37
+#: ../data/empathy.schemas.in.h:39
 msgid "Whether to use the theme for chat rooms or not."
 msgstr "会話ウィンドウにテーマを適用するかどうかです。"
 
-#: ../data/empathy.schemas.in.h:38
+#: ../data/empathy.schemas.in.h:40
 msgid ""
 "Which criterium to use when sorting the contact list. Default is to use sort "
 "by the contact's name with the value \"name\". A value of \"state\" will "
@@ -618,72 +629,82 @@ msgid "_Close"
 msgstr "閉じる(_C)"
 
 #: ../libempathy-gtk/empathy-chat.glade.h:19
+#: ../libempathy-gtk/empathy-main-window.glade.h:11
+msgid "_Contents"
+msgstr "目次(_C)"
+
+#: ../libempathy-gtk/empathy-chat.glade.h:20
 msgid "_Conversation"
 msgstr "会話(_C)"
 
-#: ../libempathy-gtk/empathy-chat.glade.h:20
+#: ../libempathy-gtk/empathy-chat.glade.h:21
 msgid "_Copy"
 msgstr "コピー(_C)"
 
-#: ../libempathy-gtk/empathy-chat.glade.h:21
+#: ../libempathy-gtk/empathy-chat.glade.h:22
 msgid "_Detach Tab"
 msgstr "タブの取り外し(_D)"
 
-#: ../libempathy-gtk/empathy-chat.glade.h:22
+#: ../libempathy-gtk/empathy-chat.glade.h:23
 #: ../libempathy-gtk/empathy-contact-list-view.c:218
 #: ../libempathy-gtk/empathy-main-window.glade.h:12
 msgid "_Edit"
 msgstr "編集(_E)"
 
-#: ../libempathy-gtk/empathy-chat.glade.h:23
+#: ../libempathy-gtk/empathy-chat.glade.h:24
+#: ../libempathy-gtk/empathy-main-window.glade.h:13
+msgid "_Help"
+msgstr "ヘルプ(_H)"
+
+#: ../libempathy-gtk/empathy-chat.glade.h:25
 msgid "_Next Tab"
 msgstr "次のタブへ(_N)"
 
-#: ../libempathy-gtk/empathy-chat.glade.h:24
+#: ../libempathy-gtk/empathy-chat.glade.h:26
 msgid "_Paste"
 msgstr "貼り付け(_P)"
 
-#: ../libempathy-gtk/empathy-chat.glade.h:25
+#: ../libempathy-gtk/empathy-chat.glade.h:27
 msgid "_Previous Tab"
 msgstr "前のタブへ(_P)"
 
-#: ../libempathy-gtk/empathy-chat.glade.h:26
+#: ../libempathy-gtk/empathy-chat.glade.h:28
 #: ../libempathy-gtk/empathy-main-window.glade.h:18
 msgid "_Room"
 msgstr "部屋(_R)"
 
-#: ../libempathy-gtk/empathy-chat.glade.h:27
+#: ../libempathy-gtk/empathy-chat.glade.h:29
 msgid "_Show Contacts"
 msgstr "仲間の表示(_S)"
 
-#: ../libempathy-gtk/empathy-chat.glade.h:28
+#: ../libempathy-gtk/empathy-chat.glade.h:30
 msgid "_Tabs"
 msgstr "タブ(_T)"
 
-#: ../libempathy-gtk/empathy-chat.glade.h:29
+#: ../libempathy-gtk/empathy-chat.glade.h:31
 #: ../libempathy-gtk/empathy-contact-list-view.c:234
 #: ../libempathy-gtk/empathy-main-window.glade.h:19
 msgid "_View Previous Conversations"
 msgstr "会話の履歴を表示する(_V)"
 
-#: ../libempathy-gtk/empathy-chat-view.c:468
+#: ../libempathy-gtk/empathy-chat-view.c:469
 msgid "_Copy Link Address"
 msgstr "リンク先のコピー(_C)"
 
-#: ../libempathy-gtk/empathy-chat-view.c:476
+#: ../libempathy-gtk/empathy-chat-view.c:477
 msgid "_Open Link"
 msgstr "リンクを開く(_O)"
 
-#: ../libempathy-gtk/empathy-chat-view.c:754
+#: ../libempathy-gtk/empathy-chat-view.c:755
 msgid "%A %d %B %Y"
 msgstr "%Y年%B%e日 %A"
 
-#: ../libempathy-gtk/empathy-chat-window.c:697
+#: ../libempathy-gtk/empathy-chat-window.c:709
 #, c-format
 msgid "Conversations (%d)"
 msgstr "会話 (%d)"
 
-#: ../libempathy-gtk/empathy-chat-window.c:1283
+#: ../libempathy-gtk/empathy-chat-window.c:1309
 msgid "Typing a message."
 msgstr "メッセージを入力しています"
 
@@ -1116,14 +1137,6 @@ msgstr "情報(_A)"
 msgid "_Accounts"
 msgstr "アカウント(_A)"
 
-#: ../libempathy-gtk/empathy-main-window.glade.h:11
-msgid "_Contents"
-msgstr "目次(_C)"
-
-#: ../libempathy-gtk/empathy-main-window.glade.h:13
-msgid "_Help"
-msgstr "ヘルプ(_H)"
-
 #: ../libempathy-gtk/empathy-main-window.glade.h:14
 #: ../libempathy-gtk/empathy-status-icon.glade.h:2
 msgid "_New Message..."
@@ -1318,7 +1331,7 @@ msgstr "スペルのチェック"
 msgid "Suggestions for the word:"
 msgstr "推奨する単語:"
 
-#: ../libempathy-gtk/empathy-status-icon.c:311
+#: ../libempathy-gtk/empathy-status-icon.c:335
 #, c-format
 msgid ""
 "New message from %s:\n"
@@ -1327,12 +1340,12 @@ msgstr ""
 "%s さんからの新着メッセージ:\n"
 "%s"
 
-#: ../libempathy-gtk/empathy-status-icon.c:580
+#: ../libempathy-gtk/empathy-status-icon.c:604
 #, c-format
 msgid "Subscription requested by %s"
 msgstr "%s さんからのリクエスト"
 
-#: ../libempathy-gtk/empathy-status-icon.c:583
+#: ../libempathy-gtk/empathy-status-icon.c:607
 #, c-format
 msgid ""
 "\n"
