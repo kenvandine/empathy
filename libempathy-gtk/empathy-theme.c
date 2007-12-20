@@ -414,6 +414,10 @@ empathy_theme_append_event (EmpathyTheme        *theme,
 			   EmpathyChatView     *view,
 			   const gchar        *str)
 {
+	if (!EMPATHY_THEME_GET_CLASS(theme)->append_event) {
+		return;
+	}
+
 	EMPATHY_THEME_GET_CLASS(theme)->append_event (theme, context, view, str);
 }
 
