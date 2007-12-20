@@ -422,16 +422,15 @@ status_icon_set_visibility (EmpathyStatusIcon *icon,
 
 	priv = GET_PRIV (icon);
 
+	empathy_conf_set_bool (empathy_conf_get (),
+			      EMPATHY_PREFS_UI_MAIN_WINDOW_HIDDEN, !visible);
+
 	if (!visible) {
 		empathy_window_iconify (priv->window, priv->icon);
-		empathy_conf_set_bool (empathy_conf_get (),
-				      EMPATHY_PREFS_UI_MAIN_WINDOW_HIDDEN, TRUE);
 	} else {
 		GList *accounts;
 
 		empathy_window_present (GTK_WINDOW (priv->window), TRUE);
-		empathy_conf_set_bool (empathy_conf_get (),
-				      EMPATHY_PREFS_UI_MAIN_WINDOW_HIDDEN, FALSE);
 	
 		/* Show the accounts dialog if there is no enabled accounts */
 		accounts = mc_accounts_list_by_enabled (TRUE);

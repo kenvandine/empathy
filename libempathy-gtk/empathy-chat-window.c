@@ -476,22 +476,12 @@ empathy_chat_window_get_default (void)
 
 	for (l = chat_windows; l; l = l->next) {
 		EmpathyChatWindow *chat_window;
-		GtkWidget        *dialog;
-		GdkWindow        *window;
-		gboolean          visible;
+		GtkWidget         *dialog;
 
 		chat_window = l->data;
 
 		dialog = empathy_chat_window_get_dialog (chat_window);
-		window = dialog->window;
-
-		g_object_get (dialog,
-			      "visible", &visible,
-			      NULL);
-
-		visible = visible && !(gdk_window_get_state (window) & GDK_WINDOW_STATE_ICONIFIED);
-
-		if (visible) {
+		if (empathy_window_get_is_visible (GTK_WINDOW (GTK_WINDOW (dialog)))) {
 			/* Found a visible window on this desktop */
 			return chat_window;
 		}

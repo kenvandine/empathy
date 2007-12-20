@@ -1215,28 +1215,25 @@ empathy_text_iter_backward_search (const GtkTextIter   *iter,
 	return retval;
 }
 
-static gboolean
-window_get_is_on_current_workspace (GtkWindow *window)
-{
-	GdkWindow *gdk_window;
-
-	gdk_window = GTK_WIDGET (window)->window;
-	if (gdk_window) {
-		return !(gdk_window_get_state (gdk_window) &
-			 GDK_WINDOW_STATE_ICONIFIED);
-	} else {
-		return FALSE;
-	}
-}
-
-/* Checks if the window is visible as in visible on the current workspace. */
 gboolean
 empathy_window_get_is_visible (GtkWindow *window)
 {
+	GdkWindowState  state;
+	GdkWindow      *gdk_window;
+
 	g_return_val_if_fail (GTK_IS_WINDOW (window), FALSE);
 
-	return GTK_WIDGET_VISIBLE (GTK_WIDGET (window)) &&
-	       window_get_is_on_current_workspace (window);
+	gdk_window = GTK_WIDGET (window)->window;
+	if (!gdk_window) {
+		return FALSE;
+	}
+
+	state = gdk_window_get_state (gdk_window);
+	if (state & (GDK_WINDOW_STATE_WITHDRAWN | GDK_WINDOW_STATE_ICONIFIED)) {
+		return FALSE;
+	}
+
+	return TRUE;
 }
 
 void 
@@ -1265,38 +1262,29 @@ empathy_window_iconify (GtkWindow *window, GtkStatusIcon *status_icon)
 
 	gtk_window_set_skip_taskbar_hint (window, TRUE);
 	gtk_window_iconify (window);
-
 }
 
 /* Takes care of moving the window to the current workspace. */
 void
 empathy_window_present (GtkWindow *window,
-		       gboolean   steal_focus)
+			gboolean   steal_focus)
 {
-	gboolean on_current;
-	guint32  timestamp;
+	guint32 timestamp;
 
-	g_return_if_fail (window != NULL);
+	g_return_if_fail (GTK_IS_WINDOW (window));
 
 	/* There are three cases: hidden, visible, visible on another
 	 * workspace.
 	 */
 
-	on_current = window_get_is_on_current_workspace (window);
-
-	if ( GTK_WIDGET_VISIBLE (GTK_WIDGET (window)) && !on_current) {
+	if (!empathy_window_get_is_visible (window)) {
 		/* Hide it so present brings it to the current workspace. */
 		gtk_widget_hide (GTK_WIDGET (window));
 	}
 
-	gtk_window_set_skip_taskbar_hint (window, FALSE);
-
 	timestamp = gtk_get_current_event_time ();
-	if (steal_focus && timestamp != GDK_CURRENT_TIME) {
-		gtk_window_present_with_time (window, timestamp);
-	} else {
-		gtk_window_present (window);
-	}
+	gtk_window_set_skip_taskbar_hint (window, FALSE);
+	gtk_window_present_with_time (window, timestamp);
 }
 
 GtkWindow *

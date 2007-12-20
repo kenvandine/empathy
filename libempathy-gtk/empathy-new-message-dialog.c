@@ -31,6 +31,7 @@
 #include <libmissioncontrol/mc-account.h>
 #include <libmissioncontrol/mission-control.h>
 
+#include <libempathy/empathy-contact-factory.h>
 #include <libempathy/empathy-debug.h>
 #include <libempathy/empathy-utils.h>
 
@@ -46,23 +47,32 @@ typedef struct {
 	GtkWidget *table_contact;
 	GtkWidget *account_chooser;
 	GtkWidget *entry_id;
+	GtkWidget *button_validate;
+	GtkWidget *button_voip;
 } EmpathyNewMessageDialog;
-
 
 static void
 new_message_dialog_response_cb (GtkWidget               *widget,
-				gint                     response,
+				gint                    response,
 				EmpathyNewMessageDialog *dialog)
 {
+	McAccount      *account;
+	const gchar    *id;
+
+	account = empathy_account_chooser_get_account (EMPATHY_ACCOUNT_CHOOSER (dialog->account_chooser));
+	id = gtk_entry_get_text (GTK_ENTRY (dialog->entry_id));
+	if (!account || G_STR_EMPTY (id)) {
+		if (account) {
+			g_object_unref (account);
+		}
+		gtk_widget_destroy (widget);
+		return;
+	}
+
 	if (response == GTK_RESPONSE_OK) {
 		MissionControl *mc;
-		McAccount      *account;
-		const gchar    *id;
 
-		account = empathy_account_chooser_get_account (EMPATHY_ACCOUNT_CHOOSER (dialog->account_chooser));
-		id = gtk_entry_get_text (GTK_ENTRY (dialog->entry_id));
 		mc = empathy_mission_control_new ();
-
 		mission_control_request_channel_with_string_handle (mc,
 								    account,
 								    TP_IFACE_CHANNEL_TYPE_TEXT,
@@ -70,10 +80,43 @@ new_message_dialog_response_cb (GtkWidget               *widget,
 								    TP_HANDLE_TYPE_CONTACT,
 								    NULL, NULL);
 		g_object_unref (mc);
-		g_object_unref (account);
+	}	
+	else if (response == 3) {
+		EmpathyContactFactory *factory;
+		EmpathyContact        *contact = NULL;
+
+		factory = empathy_contact_factory_new ();
+		contact = empathy_contact_factory_get_from_id (factory,
+							       account,
+							       id);
+		if (contact) {
+			empathy_call_contact (contact);
+		} else {
+			empathy_debug (DEBUG_DOMAIN,
+				       "Contact ID %s does not exists",
+				       id);
+		}
+
+		g_object_unref (contact);
+		g_object_unref (factory);
 	}
 
+	g_object_unref (account);
 	gtk_widget_destroy (widget);
+}
+
+static void
+new_message_change_state_button_cb  (GtkEditable             *editable,
+				     EmpathyNewMessageDialog *dialog)  
+{
+	const gchar *id;
+	gboolean     sensitive;
+
+	id = gtk_entry_get_text (GTK_ENTRY (editable));
+	sensitive = !G_STR_EMPTY (id);
+	
+	gtk_widget_set_sensitive(dialog->button_validate, sensitive);
+	gtk_widget_set_sensitive(dialog->button_voip, sensitive);
 }
 
 static void
@@ -102,12 +145,15 @@ empathy_new_message_dialog_show (GtkWindow *parent)
 				       "new_message_dialog", &dialog->dialog,
 				       "table_contact", &dialog->table_contact,
 				       "entry_id", &dialog->entry_id,
+					"button_validate", &dialog->button_validate,
+					"button_voip",&dialog->button_voip,
 				       NULL);
 
 	empathy_glade_connect (glade,
 			      dialog,
 			      "new_message_dialog", "destroy", new_message_dialog_destroy_cb,
 			      "new_message_dialog", "response", new_message_dialog_response_cb,
+			      "entry_id", "changed", new_message_change_state_button_cb,
 			      NULL);
 
 	g_object_add_weak_pointer (G_OBJECT (dialog->dialog), (gpointer) &dialog);
@@ -128,6 +174,9 @@ empathy_new_message_dialog_show (GtkWindow *parent)
 		gtk_window_set_transient_for (GTK_WINDOW (dialog->dialog),
 					      GTK_WINDOW (parent));
 	}
+
+	gtk_widget_set_sensitive(dialog->button_validate, FALSE);
+	gtk_widget_set_sensitive(dialog->button_voip, FALSE);
 
 	gtk_widget_show (dialog->dialog);
 
