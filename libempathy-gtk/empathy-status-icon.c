@@ -553,7 +553,7 @@ status_icon_new_message_cb (GtkWidget         *widget,
 
 	priv = GET_PRIV (icon);
 
-	empathy_new_message_dialog_show (GTK_WINDOW (priv->window));
+	empathy_new_message_dialog_show (NULL);
 }
 
 static void
