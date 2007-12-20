@@ -306,8 +306,6 @@ accounts_dialog_update_account (EmpathyAccountsDialog *dialog,
 			dialog->settings_widget = 
 				empathy_account_widget_generic_new (account);
 		}
-		
-		gtk_widget_grab_focus (dialog->settings_widget);
 	}
 
 	if (dialog->settings_widget) {

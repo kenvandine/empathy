@@ -286,9 +286,6 @@ empathy_account_widget_jabber_new (McAccount *account)
 
 	g_object_unref (size_group);
 
-	gtk_editable_select_region (GTK_EDITABLE (settings->entry_id), 0, -1);
-	gtk_widget_grab_focus (settings->entry_id);
-
 	gtk_widget_show (settings->vbox_settings);
 
 	return settings->vbox_settings;
