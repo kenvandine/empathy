@@ -43,6 +43,8 @@ typedef struct _EmpathyChatView      EmpathyChatView;
 typedef struct _EmpathyChatViewClass EmpathyChatViewClass;
 typedef struct _EmpathyChatViewPriv  EmpathyChatViewPriv;
 
+#include "empathy-theme.h"
+
 struct _EmpathyChatView {
 	GtkTextView parent;
 };
@@ -50,6 +52,15 @@ struct _EmpathyChatView {
 struct _EmpathyChatViewClass {
 	GtkTextViewClass parent_class;
 };
+
+typedef enum {
+	BLOCK_TYPE_NONE,
+	BLOCK_TYPE_SELF,
+	BLOCK_TYPE_OTHER,
+	BLOCK_TYPE_EVENT,
+	BLOCK_TYPE_TIME,
+	BLOCK_TYPE_INVITE
+} BlockType;
 
 GType            empathy_chat_view_get_type             (void) G_GNUC_CONST;
 EmpathyChatView *empathy_chat_view_new                  (void);
@@ -83,15 +94,25 @@ void             empathy_chat_view_find_abilities       (EmpathyChatView *view,
 void             empathy_chat_view_highlight            (EmpathyChatView *view,
 							 const gchar     *text);
 void             empathy_chat_view_copy_clipboard       (EmpathyChatView *view);
-gboolean         empathy_chat_view_get_irc_style        (EmpathyChatView *view);
-void             empathy_chat_view_set_irc_style        (EmpathyChatView *view,
-							 gboolean         irc_style);
+EmpathyTheme *   empathy_chat_view_get_theme            (EmpathyChatView *view);
+void             empathy_chat_view_set_theme            (EmpathyChatView *view,
+							 EmpathyTheme    *theme);
 void             empathy_chat_view_set_margin           (EmpathyChatView *view,
 							 gint             margin);
 GtkWidget *      empathy_chat_view_get_smiley_menu      (GCallback        callback,
 							 gpointer         user_data);
 void             empathy_chat_view_set_is_group_chat    (EmpathyChatView *view,
 							 gboolean         is_group_chat);
+time_t           empathy_chat_view_get_last_timestamp   (EmpathyChatView *view);
+void             empathy_chat_view_set_last_timestamp   (EmpathyChatView *view,
+							 time_t           timestamp);
+BlockType        empathy_chat_view_get_last_block_type  (EmpathyChatView *view);
+void             empathy_chat_view_set_last_block_type  (EmpathyChatView *view, 
+							 BlockType        block_type);
+EmpathyContact * empathy_chat_view_get_last_contact     (EmpathyChatView *view);
+void             empathy_chat_view_set_last_contact     (EmpathyChatView *view,
+							 EmpathyContact  *contact);
+GdkPixbuf *      empathy_chat_view_get_avatar_pixbuf_with_cache (EmpathyContact *contact);
 
 G_END_DECLS
 

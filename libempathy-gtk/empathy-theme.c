@@ -1,0 +1,475 @@
+/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
+/*
+ * Copyright (C) 2007 Imendio AB
+ *
+ * This program is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU General Public License as
+ * published by the Free Software Foundation; either version 2 of the
+ * License, or (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public
+ * License along with this program; if not, write to the
+ * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ * Boston, MA 02111-1307, USA.
+ */
+
+#include <config.h>
+
+#include <string.h>
+#include <glib/gi18n.h>
+#include <gtk/gtk.h>
+
+#include <libempathy/empathy-conf.h>
+#include <libempathy/empathy-debug.h>
+#include <libempathy/empathy-utils.h>
+#include <libempathy/empathy-marshal.h>
+
+#include "empathy-chat.h"
+#include "empathy-preferences.h"
+#include "empathy-theme-utils.h"
+#include "empathy-theme.h"
+#include "empathy-smiley-manager.h"
+
+#define DEBUG_DOMAIN "Theme"
+
+/* Number of seconds between timestamps when using normal mode, 5 minutes. */
+#define TIMESTAMP_INTERVAL 300
+
+#define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), EMPATHY_TYPE_THEME, EmpathyThemePriv))
+
+typedef struct _EmpathyThemePriv EmpathyThemePriv;
+
+struct _EmpathyThemePriv {
+	EmpathySmileyManager *smiley_manager;
+	gboolean show_avatars;
+};
+
+static void         theme_finalize            (GObject            *object);
+static void         theme_get_property        (GObject            *object,
+					       guint               param_id,
+					       GValue             *value,
+					       GParamSpec         *pspec);
+static void         theme_set_property        (GObject            *object,
+					       guint               param_id,
+					       const GValue       *value,
+					       GParamSpec         *pspec);
+
+
+G_DEFINE_TYPE (EmpathyTheme, empathy_theme, G_TYPE_OBJECT);
+
+enum {
+	PROP_0,
+	PROP_SHOW_AVATARS
+};
+
+enum {
+	UPDATED,
+	LAST_SIGNAL
+};
+
+static guint signals[LAST_SIGNAL] = { 0 };
+
+static void
+empathy_theme_class_init (EmpathyThemeClass *class)
+{
+	GObjectClass *object_class;
+
+	object_class = G_OBJECT_CLASS (class);
+
+	object_class->finalize     = theme_finalize;
+	object_class->get_property = theme_get_property;
+	object_class->set_property = theme_set_property;
+
+	class->setup_with_view  = NULL;
+	class->view_cleared     = NULL;
+	class->append_message   = NULL;
+	class->append_event     = NULL;
+	class->append_timestamp = NULL;
+	class->append_spacing   = NULL;
+
+	g_object_class_install_property (object_class,
+					 PROP_SHOW_AVATARS,
+					 g_param_spec_boolean ("show-avatars",
+							       "", "",
+							       TRUE,
+							       G_PARAM_READWRITE));
+
+	signals[UPDATED] =
+		g_signal_new ("updated",
+			      G_TYPE_FROM_CLASS (class),
+			      G_SIGNAL_RUN_LAST,
+			      0,
+			      NULL, NULL,
+			      empathy_marshal_VOID__VOID,
+			      G_TYPE_NONE, 
+			      0);
+
+	g_type_class_add_private (object_class, sizeof (EmpathyThemePriv));
+}
+
+static void
+empathy_theme_init (EmpathyTheme *presence)
+{
+	EmpathyThemePriv *priv;
+
+	priv = GET_PRIV (presence);
+
+	priv->smiley_manager = empathy_smiley_manager_new ();
+}
+
+static void
+theme_finalize (GObject *object)
+{
+	EmpathyThemePriv *priv;
+
+	priv = GET_PRIV (object);
+
+	if (priv->smiley_manager) {
+		g_object_unref (priv->smiley_manager);
+	}
+
+	(G_OBJECT_CLASS (empathy_theme_parent_class)->finalize) (object);
+}
+
+static void
+theme_get_property (GObject    *object,
+		    guint       param_id,
+		    GValue     *value,
+		    GParamSpec *pspec)
+{
+	EmpathyThemePriv *priv;
+
+	priv = GET_PRIV (object);
+
+	switch (param_id) {
+	case PROP_SHOW_AVATARS:
+		g_value_set_boolean (value, priv->show_avatars);
+		break;
+	default:
+		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
+		break;
+	}
+}
+
+static void
+theme_set_property (GObject      *object,
+                    guint         param_id,
+                    const GValue *value,
+                    GParamSpec   *pspec)
+{
+	EmpathyThemePriv *priv;
+
+	priv = GET_PRIV (object);
+
+	switch (param_id) {
+	case PROP_SHOW_AVATARS:
+		priv->show_avatars = g_value_get_boolean (value);
+		break;
+	default:
+		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
+		break;
+	}
+}
+
+void
+empathy_theme_maybe_append_date_and_time (EmpathyTheme        *theme,
+					 EmpathyThemeContext *context,
+					 EmpathyChatView     *view,
+					 EmpathyMessage      *message)
+{
+	time_t    timestamp;
+	GDate    *date, *last_date;
+	gboolean  append_date, append_time;
+
+	date = empathy_message_get_date_and_time (message, &timestamp);
+
+	last_date = g_date_new ();
+	g_date_set_time (last_date, empathy_chat_view_get_last_timestamp (view));
+
+	append_date = FALSE;
+	append_time = FALSE;
+
+	if (g_date_compare (date, last_date) > 0) {
+		append_date = TRUE;
+		append_time = TRUE;
+	}
+	
+	g_date_free (last_date);
+	g_date_free (date);
+
+	if (empathy_chat_view_get_last_timestamp (view) + TIMESTAMP_INTERVAL < timestamp) {
+		append_time = TRUE;
+	}
+
+	if (append_time || append_date) {
+		empathy_theme_append_timestamp (theme, context,
+					       view, message,
+					       append_date, append_time);
+	}
+}
+
+EmpathyTheme *
+empathy_theme_new (void)
+{
+	EmpathyTheme     *theme;
+
+	theme = g_object_new (EMPATHY_TYPE_THEME, NULL);
+
+	return theme;
+}
+
+EmpathyThemeContext *
+empathy_theme_setup_with_view (EmpathyTheme    *theme,
+			      EmpathyChatView *view)
+{
+	if (!EMPATHY_THEME_GET_CLASS(theme)->setup_with_view) {
+		g_error ("Theme must override setup_with_view");
+	}
+
+	return EMPATHY_THEME_GET_CLASS(theme)->setup_with_view (theme, view);
+}
+
+void
+empathy_theme_detach_from_view (EmpathyTheme        *theme,
+			       EmpathyThemeContext *context,
+			       EmpathyChatView     *view)
+{
+	if (!EMPATHY_THEME_GET_CLASS(theme)->detach_from_view) {
+		g_error ("Theme must override detach_from_view");
+	}
+
+	return EMPATHY_THEME_GET_CLASS(theme)->detach_from_view (theme, context,
+								view);
+}
+
+void
+empathy_theme_view_cleared (EmpathyTheme        *theme,
+			   EmpathyThemeContext *context,
+			   EmpathyChatView     *view)
+{
+	if (!EMPATHY_THEME_GET_CLASS(theme)->view_cleared) {
+		return;
+	}
+
+	EMPATHY_THEME_GET_CLASS(theme)->view_cleared (theme, context, view);
+}
+
+void
+empathy_theme_append_message (EmpathyTheme        *theme,
+			     EmpathyThemeContext *context,
+			     EmpathyChatView     *view,
+			     EmpathyMessage      *message)
+{
+	if (!EMPATHY_THEME_GET_CLASS(theme)->append_message) {
+		g_warning ("Theme should override append_message");
+		return;
+	}
+
+	EMPATHY_THEME_GET_CLASS(theme)->append_message (theme, context, view,
+						       message);
+}
+
+static void
+theme_insert_text_with_emoticons (GtkTextBuffer *buf,
+				  GtkTextIter   *iter,
+				  const gchar   *str,
+				  EmpathySmileyManager *smiley_manager)
+{
+	gboolean             use_smileys = FALSE;
+	GSList              *smileys, *l;
+
+	empathy_conf_get_bool (empathy_conf_get (),
+			      EMPATHY_PREFS_CHAT_SHOW_SMILEYS,
+			      &use_smileys);
+
+	if (!use_smileys) {
+		gtk_text_buffer_insert (buf, iter, str, -1);
+		return;
+	}
+
+	smileys = empathy_smiley_manager_parse (smiley_manager, str);
+	for (l = smileys; l; l = l->next) {
+		EmpathySmiley *smiley;
+
+		smiley = l->data;
+		if (smiley->pixbuf) {
+			gtk_text_buffer_insert_pixbuf (buf, iter, smiley->pixbuf);
+		} else {
+			gtk_text_buffer_insert (buf, iter, smiley->str, -1);
+		}
+		empathy_smiley_free (smiley);
+	}
+	g_slist_free (smileys);
+}
+
+void
+empathy_theme_append_text (EmpathyTheme        *theme,
+			  EmpathyThemeContext *context,
+			  EmpathyChatView     *view,
+			  const gchar        *body,
+			  const gchar        *tag,
+			  const gchar        *link_tag)
+{
+	EmpathyThemePriv *priv;
+	GtkTextBuffer   *buffer;
+	GtkTextIter      start_iter, end_iter;
+	GtkTextMark     *mark;
+	GtkTextIter      iter;
+	gint             num_matches, i;
+	GArray          *start, *end;
+
+	priv = GET_PRIV (theme);
+	buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
+
+	gtk_text_buffer_get_end_iter (buffer, &start_iter);
+	mark = gtk_text_buffer_create_mark (buffer, NULL, &start_iter, TRUE);
+
+	start = g_array_new (FALSE, FALSE, sizeof (gint));
+	end = g_array_new (FALSE, FALSE, sizeof (gint));
+
+	num_matches = empathy_regex_match (EMPATHY_REGEX_ALL, body, start, end);
+
+	if (num_matches == 0) {
+		gtk_text_buffer_get_end_iter (buffer, &iter);
+		theme_insert_text_with_emoticons (buffer, &iter, body, priv->smiley_manager);
+	} else {
+		gint   last = 0;
+		gint   s = 0, e = 0;
+		gchar *tmp;
+
+		for (i = 0; i < num_matches; i++) {
+			s = g_array_index (start, gint, i);
+			e = g_array_index (end, gint, i);
+
+			if (s > last) {
+				tmp = empathy_substring (body, last, s);
+
+				gtk_text_buffer_get_end_iter (buffer, &iter);
+				theme_insert_text_with_emoticons (buffer,
+								  &iter,
+								  tmp,
+								  priv->smiley_manager);
+				g_free (tmp);
+			}
+
+			tmp = empathy_substring (body, s, e);
+
+			gtk_text_buffer_get_end_iter (buffer, &iter);
+			if (!link_tag) {
+				gtk_text_buffer_insert (buffer, &iter,
+							tmp, -1);
+			} {
+				gtk_text_buffer_insert_with_tags_by_name (buffer,
+									  &iter,
+									  tmp,
+									  -1,
+									  link_tag,
+									  "link",
+									  NULL);
+			}
+
+			g_free (tmp);
+
+			last = e;
+		}
+
+		if (e < strlen (body)) {
+			tmp = empathy_substring (body, e, strlen (body));
+
+			gtk_text_buffer_get_end_iter (buffer, &iter);
+			theme_insert_text_with_emoticons (buffer,
+							  &iter,
+							  tmp,
+							  priv->smiley_manager);
+			g_free (tmp);
+		}
+	}
+
+	g_array_free (start, TRUE);
+	g_array_free (end, TRUE);
+
+	gtk_text_buffer_get_end_iter (buffer, &iter);
+	gtk_text_buffer_insert (buffer, &iter, "\n", 1);
+
+	/* Apply the style to the inserted text. */
+	gtk_text_buffer_get_iter_at_mark (buffer, &start_iter, mark);
+	gtk_text_buffer_get_end_iter (buffer, &end_iter);
+
+	gtk_text_buffer_apply_tag_by_name (buffer,
+					   tag,
+					   &start_iter,
+					   &end_iter);
+
+	gtk_text_buffer_delete_mark (buffer, mark);
+}
+
+void 
+empathy_theme_append_event (EmpathyTheme        *theme,
+			   EmpathyThemeContext *context,
+			   EmpathyChatView     *view,
+			   const gchar        *str)
+{
+	EMPATHY_THEME_GET_CLASS(theme)->append_event (theme, context, view, str);
+}
+
+void
+empathy_theme_append_spacing (EmpathyTheme        *theme, 
+			     EmpathyThemeContext *context,
+			     EmpathyChatView     *view)
+{
+	if (!EMPATHY_THEME_GET_CLASS(theme)->append_spacing) {
+		return;
+	}
+
+	EMPATHY_THEME_GET_CLASS(theme)->append_spacing (theme, context, view);
+}
+
+
+void 
+empathy_theme_append_timestamp (EmpathyTheme        *theme,
+			       EmpathyThemeContext *context,
+			       EmpathyChatView     *view,
+			       EmpathyMessage      *message,
+			       gboolean            show_date,
+			       gboolean            show_time)
+{
+	if (!EMPATHY_THEME_GET_CLASS(theme)->append_timestamp) {
+		return;
+	}
+
+	EMPATHY_THEME_GET_CLASS(theme)->append_timestamp (theme, context, view,
+							 message, show_date,
+							 show_time);
+}
+
+gboolean
+empathy_theme_get_show_avatars (EmpathyTheme *theme)
+{
+	EmpathyThemePriv *priv;
+
+	g_return_val_if_fail (EMPATHY_IS_THEME (theme), FALSE);
+
+	priv = GET_PRIV (theme);
+
+	return priv->show_avatars;
+}
+
+void
+empathy_theme_set_show_avatars (EmpathyTheme *theme, gboolean show)
+{
+	EmpathyThemePriv *priv;
+
+	g_return_if_fail (EMPATHY_IS_THEME (theme));
+
+	priv = GET_PRIV (theme);
+
+	priv->show_avatars = show;
+
+	g_object_notify (G_OBJECT (theme), "show-avatars");
+}
+

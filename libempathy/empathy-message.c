@@ -417,6 +417,26 @@ empathy_message_set_timestamp (EmpathyMessage *message,
 	g_object_notify (G_OBJECT (message), "timestamp");
 }
 
+GDate *
+empathy_message_get_date_and_time (EmpathyMessage *message, time_t *timestamp)
+{
+	GDate *date;
+
+	*timestamp = 0;
+	if (message) {
+		*timestamp = empathy_message_get_timestamp (message);
+	}
+
+	if (timestamp <= 0) {
+		*timestamp = empathy_time_get_current ();
+	}
+
+	date = g_date_new ();
+	g_date_set_time (date, *timestamp);
+
+	return date;
+}
+
 EmpathyMessageType
 empathy_message_type_from_str (const gchar *type_str)
 {

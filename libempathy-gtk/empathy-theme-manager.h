@@ -16,16 +16,12 @@
  * License along with this program; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
- * 
- * Authors: Richard Hult <richard@imendio.com>
  */
 
 #ifndef __EMPATHY_THEME_MANAGER_H__
 #define __EMPATHY_THEME_MANAGER_H__
 
 #include <glib-object.h>
-
-#include "empathy-chat-view.h"
 
 G_BEGIN_DECLS
 
@@ -55,9 +51,6 @@ void                empathy_theme_manager_apply               (EmpathyThemeManag
 							      const gchar        *theme);
 void                empathy_theme_manager_apply_saved         (EmpathyThemeManager *manager,
 							      EmpathyChatView     *view);
-void                empathy_theme_manager_update_show_avatars (EmpathyThemeManager *manager,
-							      EmpathyChatView     *view,
-							      gboolean            show);
 
 G_END_DECLS
 
