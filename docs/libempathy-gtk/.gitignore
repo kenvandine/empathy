@@ -1,0 +1,6 @@
+libempathy-gtk.args
+libempathy-gtk.hierarchy
+libempathy-gtk.interfaces
+libempathy-gtk.prerequisites
+libempathy-gtk.signals
+

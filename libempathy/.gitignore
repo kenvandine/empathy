@@ -1,0 +1,4 @@
+empathy-chandler-glue.h
+empathy-marshal.*
+empathy-filter-glue.h
+tp-stream-engine-gen.h
