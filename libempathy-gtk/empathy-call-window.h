@@ -28,7 +28,7 @@
 
 G_BEGIN_DECLS
 
-void empathy_call_window_show (EmpathyTpCall *call);
+GtkWidget * empathy_call_window_show (EmpathyTpCall *call);
 
 G_END_DECLS
 

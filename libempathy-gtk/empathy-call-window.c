@@ -142,7 +142,7 @@ call_window_destroy_cb (GtkWidget         *widget,
 	g_slice_free (EmpathyCallWindow, window);
 }
 
-void
+GtkWidget *
 empathy_call_window_show (EmpathyTpCall *call)
 {
 	EmpathyCallWindow *window;
@@ -194,5 +194,7 @@ empathy_call_window_show (EmpathyTpCall *call)
 			  window);
 
 	gtk_widget_show (window->window);
+
+	return window->window;
 }
 
