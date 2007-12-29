@@ -13,7 +13,6 @@ Things you can do if you want to help:
  - Add sound events
  - Add register capability in EmpathyAccountsDialog if the profile says
    it's supported.
- - Import gossip's new chat theme system.
  - Write a manual based on gossip's.
  - Reviewing File Transfer patch, see bug #462172.
  - Drop libtelepathy and use telepathy-glib instead when it gets client-side
