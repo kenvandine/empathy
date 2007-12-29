@@ -68,6 +68,7 @@ struct _EmpathyChatViewPriv {
 	GtkTextBuffer *buffer;
 
 	EmpathyTheme   *theme;
+	gpointer       theme_context;
 
 	time_t         last_timestamp;
 	BlockType      last_block_type;
@@ -129,8 +130,7 @@ static void     chat_view_clear_view_cb              (GtkMenuItem              *
 static gboolean chat_view_is_scrolled_down           (EmpathyChatView           *view);
 static void     chat_view_theme_changed_cb           (EmpathyThemeManager       *manager,
 						      EmpathyChatView           *view);
-static void     chat_view_theme_notify_cb            (EmpathyTheme              *theme,
-						      GParamSpec                *param,
+static void     chat_view_theme_updated_cb           (EmpathyTheme              *theme, 
 						      EmpathyChatView           *view);
 
 G_DEFINE_TYPE (EmpathyChatView, empathy_chat_view, GTK_TYPE_TEXT_VIEW);
@@ -233,8 +233,12 @@ chat_view_finalize (GObject *object)
 
 	if (priv->theme) {
 		g_signal_handlers_disconnect_by_func (priv->theme,
-						      chat_view_theme_notify_cb,
+						      chat_view_theme_updated_cb,
 						      view);
+
+		empathy_theme_detach_from_view (priv->theme, priv->theme_context,
+					       view);
+
 		g_object_unref (priv->theme);
 	}
 
@@ -792,7 +796,8 @@ empathy_chat_view_append_message (EmpathyChatView *view,
 	
 	chat_view_maybe_trim_buffer (view);
 
-	empathy_theme_append_message (priv->theme, view, msg);
+	empathy_theme_append_message (priv->theme, priv->theme_context,
+				      view, msg);
 
 	if (bottom) {
 		empathy_chat_view_scroll_down (view);
@@ -815,7 +820,9 @@ empathy_chat_view_append_event (EmpathyChatView *view,
 
 	chat_view_maybe_trim_buffer (view);
 
-	empathy_theme_append_event (priv->theme, view, str);
+	empathy_theme_append_event (priv->theme, 
+				   priv->theme_context,
+				   view, str);
 
 	if (bottom) {
 		empathy_chat_view_scroll_down (view);
@@ -845,10 +852,13 @@ empathy_chat_view_append_button (EmpathyChatView *view,
 
 	bottom = chat_view_is_scrolled_down (view);
 
-	empathy_theme_append_timestamp (priv->theme, view, NULL, TRUE, TRUE);
+	empathy_theme_append_timestamp (priv->theme, priv->theme_context,
+				       view, NULL,
+				       TRUE, TRUE);
 
 	if (message) {
-		empathy_theme_append_text (priv->theme, view, message, tag, NULL);
+		empathy_theme_append_text (priv->theme, priv->theme_context,
+					  view, message, tag, NULL);
 	}
 
 	gtk_text_buffer_get_end_iter (priv->buffer, &iter);
@@ -995,6 +1005,8 @@ empathy_chat_view_clear (EmpathyChatView *view)
 	 * conversations start.
 	 */
 	priv = GET_PRIV (view);
+
+	empathy_theme_view_cleared (priv->theme, priv->theme_context, view);
 
 	priv->last_block_type = BLOCK_TYPE_NONE;
 	priv->last_timestamp = 0;
@@ -1358,11 +1370,16 @@ empathy_chat_view_get_theme (EmpathyChatView *view)
 }
 
 static void
-chat_view_theme_notify_cb (EmpathyTheme    *theme,
-			   GParamSpec      *param,
-			   EmpathyChatView *view)
+chat_view_theme_updated_cb (EmpathyTheme *theme, EmpathyChatView *view)
 {
-	empathy_theme_update_view (theme, view);
+	EmpathyChatViewPriv *priv;
+
+	priv = GET_PRIV (view);
+	
+	empathy_theme_detach_from_view (priv->theme, priv->theme_context,
+				       view);
+
+	priv->theme_context = empathy_theme_setup_with_view (theme, view);
 }
 
 void
@@ -1377,19 +1394,24 @@ empathy_chat_view_set_theme (EmpathyChatView *view, EmpathyTheme *theme)
 
 	if (priv->theme) {
 		g_signal_handlers_disconnect_by_func (priv->theme,
-						      chat_view_theme_notify_cb,
+						      chat_view_theme_updated_cb,
 						      view);
+		empathy_theme_detach_from_view (priv->theme, priv->theme_context,
+					       view);
+
 		g_object_unref (priv->theme);
 	}
 
 	priv->theme = g_object_ref (theme);
 
-	empathy_theme_update_view (theme, view);
-	g_signal_connect (priv->theme, "notify",
-			  G_CALLBACK (chat_view_theme_notify_cb),
+	g_signal_connect (priv->theme,
+			  "updated",
+			  G_CALLBACK (chat_view_theme_updated_cb),
 			  view);
 
-	/* FIXME: Redraw all messages using the new theme */
+	priv->theme_context = empathy_theme_setup_with_view (theme, view);
+
+	/* FIXME: Possibly redraw the function and make it a property */
 }
 
 void

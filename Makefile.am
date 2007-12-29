@@ -33,7 +33,6 @@ EXTRA_DIST = 			\
 	$(INTLTOOL)
 
 DISTCLEANFILES = 		\
-        ChangeLog               \
 	intltool-extract	\
 	intltool-merge		\
 	intltool-update
@@ -42,9 +41,15 @@ DISTCLEANFILES = 		\
 # uninstall.
 distuninstallcheck_listfiles = find . -type f -print | grep -v '^\./var/scrollkeeper'
 
-ChangeLog: Makefile.am
-	git-log --pretty=short > ChangeLog
-	
+# Build ChangeLog from SVN history (r470 was the first ChangeLog-less checkin).
+# Only build this when in an svn checkout.
+
+ChangeLog:
+	@if test -f $(top_srcdir)/.svn/entries; then \
+		svn log -v --xml -r HEAD:470 $(SVN_ROOT)/$(SVN_MODULE) | \
+			xsltproc --stringparam strip-prefix "$(SVN_MODULE)/$(SVN_BRANCH)" \
+				 --stringparam include-rev "yes" $(top_srcdir)/svn2cl.xsl - > $@; \
+	fi
 
 dist: ChangeLog
 

@@ -50,7 +50,7 @@ typedef struct {
 	EmpathyTheme *blue_theme;
 	EmpathyTheme *classic_theme;
 
-	GtkSettings  *settings;
+	gboolean     irc_style;
 } EmpathyThemeManagerPriv;
 
 static void        theme_manager_finalize                 (GObject            *object);
@@ -83,114 +83,6 @@ static const gchar *themes[] = {
 };
 
 G_DEFINE_TYPE (EmpathyThemeManager, empathy_theme_manager, G_TYPE_OBJECT);
-
-static void
-theme_manager_gdk_color_to_hex (GdkColor *gdk_color, gchar *str_color)
-{
-	g_snprintf (str_color, 10, 
-		    "#%02x%02x%02x", 
-		    gdk_color->red >> 8,
-		    gdk_color->green >> 8,
-		    gdk_color->blue >> 8);
-}
- 
- static void
-theme_manager_color_hash_notify_cb (EmpathyThemeManager *manager)
-{
-	EmpathyThemeManagerPriv *priv;
-	GtkStyle                *style;
-	gchar                    color[10];
-
-	priv = GET_PRIV (manager);
-
-	style = gtk_widget_get_default_style ();
-
-	g_object_freeze_notify (G_OBJECT (priv->simple_theme));
-
-	theme_manager_gdk_color_to_hex (&style->base[GTK_STATE_SELECTED], color);
-	g_object_set (priv->simple_theme,
-		      "action-foreground", color,
-		      "link-foreground", color,
-		      NULL);
- 
-	theme_manager_gdk_color_to_hex (&style->bg[GTK_STATE_SELECTED], color);
-	g_object_set (priv->simple_theme,
-		      "header-background", color,
-		      NULL);
-
-	theme_manager_gdk_color_to_hex (&style->dark[GTK_STATE_SELECTED], color);
-	g_object_set (priv->simple_theme,
-		      "header-line-background", color,
-		      NULL);
-
-	theme_manager_gdk_color_to_hex (&style->fg[GTK_STATE_SELECTED], color);
-	g_object_set (priv->simple_theme,
-		      "header-foreground", color,
-		      NULL);
-
-	g_object_thaw_notify (G_OBJECT (priv->simple_theme));
-
-#if 0
-
-FIXME: Make that work, it should update color when theme changes but it
-       doesnt seems to work with all themes.
-  
-	g_object_get (priv->settings,
-		      "color-hash", &color_hash,
-		      NULL);
-
-	/*
-	 * base_color: #ffffffffffff
-	 * fg_color: #000000000000
-	 * bg_color: #e6e6e7e7e8e8
-	 * text_color: #000000000000
-	 * selected_bg_color: #58589a9adbdb
-	 * selected_fg_color: #ffffffffffff
-	 */
-
-	color = g_hash_table_lookup (color_hash, "base_color");
-	if (color) {
-		theme_manager_gdk_color_to_hex (color, color_str);
-		g_object_set (priv->simple_theme,
-			      "action-foreground", color_str,
-			      "link-foreground", color_str,
-			      NULL);
-	}
-
-	color = g_hash_table_lookup (color_hash, "selected_bg_color");
-	if (color) {
-		theme_manager_gdk_color_to_hex (color, color_str);
-		g_object_set (priv->simple_theme,
-			      "header-background", color_str,
-			      NULL);
-	}
-
-	color = g_hash_table_lookup (color_hash, "bg_color");
-	if (color) {
-		GdkColor tmp;
-
-		tmp = *color;
-		tmp.red /= 2;
-		tmp.green /= 2;
-		tmp.blue /= 2;
-		theme_manager_gdk_color_to_hex (&tmp, color_str);
-		g_object_set (priv->simple_theme,
-			      "header-line-background", color_str,
-			      NULL);
-	}
-
-	color = g_hash_table_lookup (color_hash, "selected_fg_color");
-	if (color) {
-		theme_manager_gdk_color_to_hex (color, color_str);
-		g_object_set (priv->simple_theme,
-			      "header-foreground", color_str,
-			      NULL);
-	}
-
-	g_hash_table_unref (color_hash);
-
-#endif
-}
 
 static void
 empathy_theme_manager_class_init (EmpathyThemeManagerClass *klass)
@@ -246,39 +138,9 @@ empathy_theme_manager_init (EmpathyThemeManager *manager)
 			      EMPATHY_PREFS_UI_SHOW_AVATARS,
 			      &priv->show_avatars);
 
-	priv->settings = gtk_settings_get_default ();
-	g_signal_connect_swapped (priv->settings, "notify::color-hash",
-				  G_CALLBACK (theme_manager_color_hash_notify_cb),
-				  manager);
-
-	priv->simple_theme = g_object_new (EMPATHY_TYPE_THEME_BOXES, NULL);
-	theme_manager_color_hash_notify_cb (manager);
-
-	priv->clean_theme = g_object_new (EMPATHY_TYPE_THEME_BOXES,
-					  "header-foreground", "black",
-					  "header-background", "#efefdf",
-					  "header_line_background", "#e3e3d3",
-					  "action_foreground", "brown4",
-					  "time_foreground", "darkgrey",
-					  "event_foreground", "darkgrey",
-					  "invite_foreground", "sienna",
-					  "link_foreground","#49789e",
-					  NULL);
-
-	priv->blue_theme = g_object_new (EMPATHY_TYPE_THEME_BOXES,
-					 "header_foreground", "black",
-					 "header_background", "#88a2b4",
-					 "header_line_background", "#7f96a4",
-					 "text_foreground", "black",
-					 "text_background", "#adbdc8",
-					 "highlight_foreground", "black",
-					 "action_foreground", "brown4",
-					 "time_foreground", "darkgrey",
-					 "event_foreground", "#7f96a4",
-					 "invite_foreground", "sienna",
-					 "link_foreground", "#49789e",
-					 NULL);
-
+	priv->clean_theme   = empathy_theme_boxes_new ("clean");
+	priv->simple_theme  = empathy_theme_boxes_new ("simple");
+	priv->blue_theme    = empathy_theme_boxes_new ("blue");
 	priv->classic_theme = g_object_new (EMPATHY_TYPE_THEME_IRC, NULL);
 }
 

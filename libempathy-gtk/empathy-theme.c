@@ -31,6 +31,7 @@
 
 #include "empathy-chat.h"
 #include "empathy-preferences.h"
+#include "empathy-theme-utils.h"
 #include "empathy-theme.h"
 #include "empathy-smiley-manager.h"
 
@@ -66,6 +67,13 @@ enum {
 	PROP_SHOW_AVATARS
 };
 
+enum {
+	UPDATED,
+	LAST_SIGNAL
+};
+
+static guint signals[LAST_SIGNAL] = { 0 };
+
 static void
 empathy_theme_class_init (EmpathyThemeClass *class)
 {
@@ -77,7 +85,8 @@ empathy_theme_class_init (EmpathyThemeClass *class)
 	object_class->get_property = theme_get_property;
 	object_class->set_property = theme_set_property;
 
-	class->update_view      = NULL;
+	class->setup_with_view  = NULL;
+	class->view_cleared     = NULL;
 	class->append_message   = NULL;
 	class->append_event     = NULL;
 	class->append_timestamp = NULL;
@@ -89,6 +98,16 @@ empathy_theme_class_init (EmpathyThemeClass *class)
 							       "", "",
 							       TRUE,
 							       G_PARAM_READWRITE));
+
+	signals[UPDATED] =
+		g_signal_new ("updated",
+			      G_TYPE_FROM_CLASS (class),
+			      G_SIGNAL_RUN_LAST,
+			      0,
+			      NULL, NULL,
+			      empathy_marshal_VOID__VOID,
+			      G_TYPE_NONE, 
+			      0);
 
 	g_type_class_add_private (object_class, sizeof (EmpathyThemePriv));
 }
@@ -149,8 +168,7 @@ theme_set_property (GObject      *object,
 
 	switch (param_id) {
 	case PROP_SHOW_AVATARS:
-		empathy_theme_set_show_avatars (EMPATHY_THEME (object),
-						g_value_get_boolean (value));
+		priv->show_avatars = g_value_get_boolean (value);
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
@@ -160,6 +178,7 @@ theme_set_property (GObject      *object,
 
 void
 empathy_theme_maybe_append_date_and_time (EmpathyTheme        *theme,
+					 EmpathyThemeContext *context,
 					 EmpathyChatView     *view,
 					 EmpathyMessage      *message)
 {
@@ -188,24 +207,61 @@ empathy_theme_maybe_append_date_and_time (EmpathyTheme        *theme,
 	}
 
 	if (append_time || append_date) {
-		empathy_theme_append_timestamp (theme, view, message,
+		empathy_theme_append_timestamp (theme, context,
+					       view, message,
 					       append_date, append_time);
 	}
 }
 
-void
-empathy_theme_update_view (EmpathyTheme    *theme,
-			   EmpathyChatView *view)
+EmpathyTheme *
+empathy_theme_new (void)
 {
-	if (!EMPATHY_THEME_GET_CLASS(theme)->update_view) {
-		g_error ("Theme must override update_view");
+	EmpathyTheme     *theme;
+
+	theme = g_object_new (EMPATHY_TYPE_THEME, NULL);
+
+	return theme;
+}
+
+EmpathyThemeContext *
+empathy_theme_setup_with_view (EmpathyTheme    *theme,
+			      EmpathyChatView *view)
+{
+	if (!EMPATHY_THEME_GET_CLASS(theme)->setup_with_view) {
+		g_error ("Theme must override setup_with_view");
 	}
 
-	return EMPATHY_THEME_GET_CLASS(theme)->update_view (theme, view);
+	return EMPATHY_THEME_GET_CLASS(theme)->setup_with_view (theme, view);
+}
+
+void
+empathy_theme_detach_from_view (EmpathyTheme        *theme,
+			       EmpathyThemeContext *context,
+			       EmpathyChatView     *view)
+{
+	if (!EMPATHY_THEME_GET_CLASS(theme)->detach_from_view) {
+		g_error ("Theme must override detach_from_view");
+	}
+
+	return EMPATHY_THEME_GET_CLASS(theme)->detach_from_view (theme, context,
+								view);
+}
+
+void
+empathy_theme_view_cleared (EmpathyTheme        *theme,
+			   EmpathyThemeContext *context,
+			   EmpathyChatView     *view)
+{
+	if (!EMPATHY_THEME_GET_CLASS(theme)->view_cleared) {
+		return;
+	}
+
+	EMPATHY_THEME_GET_CLASS(theme)->view_cleared (theme, context, view);
 }
 
 void
 empathy_theme_append_message (EmpathyTheme        *theme,
+			     EmpathyThemeContext *context,
 			     EmpathyChatView     *view,
 			     EmpathyMessage      *message)
 {
@@ -214,7 +270,8 @@ empathy_theme_append_message (EmpathyTheme        *theme,
 		return;
 	}
 
-	EMPATHY_THEME_GET_CLASS(theme)->append_message (theme, view, message);
+	EMPATHY_THEME_GET_CLASS(theme)->append_message (theme, context, view,
+						       message);
 }
 
 static void
@@ -252,6 +309,7 @@ theme_insert_text_with_emoticons (GtkTextBuffer *buf,
 
 void
 empathy_theme_append_text (EmpathyTheme        *theme,
+			  EmpathyThemeContext *context,
 			  EmpathyChatView     *view,
 			  const gchar        *body,
 			  const gchar        *tag,
@@ -352,6 +410,7 @@ empathy_theme_append_text (EmpathyTheme        *theme,
 
 void 
 empathy_theme_append_event (EmpathyTheme        *theme,
+			   EmpathyThemeContext *context,
 			   EmpathyChatView     *view,
 			   const gchar        *str)
 {
@@ -359,23 +418,25 @@ empathy_theme_append_event (EmpathyTheme        *theme,
 		return;
 	}
 
-	EMPATHY_THEME_GET_CLASS(theme)->append_event (theme, view, str);
+	EMPATHY_THEME_GET_CLASS(theme)->append_event (theme, context, view, str);
 }
 
 void
 empathy_theme_append_spacing (EmpathyTheme        *theme, 
+			     EmpathyThemeContext *context,
 			     EmpathyChatView     *view)
 {
 	if (!EMPATHY_THEME_GET_CLASS(theme)->append_spacing) {
 		return;
 	}
 
-	EMPATHY_THEME_GET_CLASS(theme)->append_spacing (theme, view);
+	EMPATHY_THEME_GET_CLASS(theme)->append_spacing (theme, context, view);
 }
 
 
 void 
 empathy_theme_append_timestamp (EmpathyTheme        *theme,
+			       EmpathyThemeContext *context,
 			       EmpathyChatView     *view,
 			       EmpathyMessage      *message,
 			       gboolean            show_date,
@@ -385,7 +446,7 @@ empathy_theme_append_timestamp (EmpathyTheme        *theme,
 		return;
 	}
 
-	EMPATHY_THEME_GET_CLASS(theme)->append_timestamp (theme, view,
+	EMPATHY_THEME_GET_CLASS(theme)->append_timestamp (theme, context, view,
 							 message, show_date,
 							 show_time);
 }

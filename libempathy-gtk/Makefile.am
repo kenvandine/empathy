@@ -32,10 +32,11 @@ libempathy_gtk_la_SOURCES =             	\
 	empathy-contact-list-store.c		\
 	empathy-contact-list-view.c		\
 	empathy-preferences.c			\
-	empathy-theme.c				\
+	empathy-theme.c					\
 	empathy-theme-boxes.c			\
-	empathy-theme-irc.c			\
+	empathy-theme-irc.c				\
 	empathy-theme-manager.c			\
+	empathy-theme-utils.c			\
 	empathy-smiley-manager.c		\
 	empathy-chat-window.c			\
 	empathy-chat.c				\
@@ -88,10 +89,11 @@ libempathy_gtk_headers =			\
 	empathy-contact-list-store.h		\
 	empathy-contact-list-view.h		\
 	empathy-preferences.h			\
-	empathy-theme.h				\
+	empathy-theme.h					\
 	empathy-theme-boxes.h			\
-	empathy-theme-irc.h			\
+	empathy-theme-irc.h				\
 	empathy-theme-manager.h			\
+	empathy-theme-utils.h			\
 	empathy-smiley-manager.h		\
 	empathy-chat-window.h			\
 	empathy-chat.h				\

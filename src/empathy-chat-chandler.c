@@ -48,19 +48,6 @@
 #define BUS_NAME "org.gnome.Empathy.ChatChandler"
 #define OBJECT_PATH "/org/gnome/Empathy/ChatChandler"
 
-static guint nb_chats = 0;
-
-static void
-chat_chandler_weak_notify (gpointer  data,
-			   GObject  *where_the_object_was)
-{
-	nb_chats--;
-	if (nb_chats == 0) {
-		empathy_debug (DEBUG_DOMAIN, "No more chats, leaving...");
-		gtk_main_quit ();
-	}
-}
-
 static void
 chat_chandler_new_channel_cb (EmpathyChandler *chandler,
 			      TpConn          *tp_conn,
@@ -112,8 +99,6 @@ chat_chandler_new_channel_cb (EmpathyChandler *chandler,
 		return;
 	}
 
-	nb_chats++;
-	g_object_weak_ref (G_OBJECT (chat), chat_chandler_weak_notify, NULL);
 	empathy_chat_present (chat);
 
 	g_object_unref (chat);

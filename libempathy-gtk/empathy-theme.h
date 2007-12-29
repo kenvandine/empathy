@@ -42,54 +42,89 @@ struct _EmpathyTheme {
 	GObject parent;
 };
 
+typedef void EmpathyThemeContext;
+
 struct _EmpathyThemeClass {
 	GObjectClass parent_class;
 
 	/* <vtable> */
-	void (*update_view)         (EmpathyTheme    *theme,
-				     EmpathyChatView *view);
-	void (*append_message)      (EmpathyTheme    *theme,
-				     EmpathyChatView *view,
-				     EmpathyMessage  *message);
-	void (*append_event)        (EmpathyTheme    *theme,
-				     EmpathyChatView *view,
-				     const gchar     *str);
-	void (*append_timestamp)    (EmpathyTheme    *theme,
-				     EmpathyChatView *view,
-				     EmpathyMessage  *message,
-				     gboolean         show_date,
-				     gboolean         show_time);
-	void (*append_spacing)      (EmpathyTheme    *theme,
-				     EmpathyChatView *view);
+	EmpathyThemeContext * (*setup_with_view)  (EmpathyTheme        *theme,
+						  EmpathyChatView     *view);
+	void                 (*detach_from_view) (EmpathyTheme        *theme,
+						  EmpathyThemeContext *context,
+						  EmpathyChatView     *view);
+	void                 (*view_cleared)     (EmpathyTheme        *theme,
+						  EmpathyThemeContext *context,
+						  EmpathyChatView     *view);
+	void                 (*append_message)   (EmpathyTheme        *theme,
+						  EmpathyThemeContext *context,
+						  EmpathyChatView     *view,
+						  EmpathyMessage      *message);
+	void                 (*append_event)     (EmpathyTheme        *theme,
+						  EmpathyThemeContext *context,
+						  EmpathyChatView     *view,
+						  const gchar        *str);
+	void                 (*append_timestamp) (EmpathyTheme        *theme,
+						  EmpathyThemeContext *context,
+						  EmpathyChatView     *view,
+						  EmpathyMessage      *message,
+						  gboolean            show_date,
+						  gboolean            show_time);
+	void                 (*append_spacing)   (EmpathyTheme        *theme,
+						  EmpathyThemeContext *context,
+						  EmpathyChatView     *view);
+	void                 (*update_show_avatars) (EmpathyTheme     *theme,
+						     EmpathyThemeContext *context,
+						     EmpathyChatView  *view,
+						     gboolean         show);
 };
 
-GType          empathy_theme_get_type                   (void) G_GNUC_CONST;
-void           empathy_theme_update_view                (EmpathyTheme    *theme,
-							 EmpathyChatView *view);
-void           empathy_theme_append_message             (EmpathyTheme    *theme,
-							 EmpathyChatView *view,
-							 EmpathyMessage  *msg);
-void           empathy_theme_append_text                (EmpathyTheme    *theme,
-							 EmpathyChatView *view,
-							 const gchar     *body,
-							 const gchar     *tag, 
-							 const gchar     *link_tag);
-void           empathy_theme_append_spacing             (EmpathyTheme    *theme,
-							 EmpathyChatView *view);
-void           empathy_theme_append_event               (EmpathyTheme    *theme,
-							 EmpathyChatView *view,
-							 const gchar     *str);
-void           empathy_theme_append_timestamp           (EmpathyTheme    *theme,
-							 EmpathyChatView *view,
-							 EmpathyMessage  *message,
-							 gboolean         show_date,
-							 gboolean         show_time);
-void           empathy_theme_maybe_append_date_and_time (EmpathyTheme    *theme,
-							 EmpathyChatView *view,
-							 EmpathyMessage  *message);
-gboolean       empathy_theme_get_show_avatars           (EmpathyTheme    *theme);
-void           empathy_theme_set_show_avatars           (EmpathyTheme    *theme,
-							 gboolean         show);
+GType         empathy_theme_get_type             (void) G_GNUC_CONST;
+
+EmpathyTheme * empathy_theme_new                  (void);
+
+EmpathyThemeContext *
+empathy_theme_setup_with_view                    (EmpathyTheme        *theme,
+						 EmpathyChatView     *view);
+void         empathy_theme_detach_from_view      (EmpathyTheme        *theme,
+						 EmpathyThemeContext *context,
+						 EmpathyChatView     *view);
+void         empathy_theme_view_cleared          (EmpathyTheme        *theme,
+						 EmpathyThemeContext *context,
+						 EmpathyChatView     *view);
+
+void         empathy_theme_append_message        (EmpathyTheme        *theme,
+						 EmpathyThemeContext *context,
+						 EmpathyChatView     *view,
+						 EmpathyMessage      *msg);
+void         empathy_theme_append_text           (EmpathyTheme        *theme,
+						 EmpathyThemeContext *context,
+						 EmpathyChatView     *view,
+						 const gchar        *body,
+						 const gchar        *tag, 
+						 const gchar        *link_tag);
+void         empathy_theme_append_spacing        (EmpathyTheme        *theme,
+						 EmpathyThemeContext *context,
+						 EmpathyChatView     *view);
+void         empathy_theme_append_event          (EmpathyTheme        *theme,
+						 EmpathyThemeContext *context,
+						 EmpathyChatView     *view,
+						 const gchar        *str);
+void         empathy_theme_append_timestamp      (EmpathyTheme        *theme,
+						 EmpathyThemeContext *context,
+						 EmpathyChatView     *view,
+						 EmpathyMessage      *message,
+						 gboolean            show_date,
+						 gboolean            show_time);
+
+void      
+empathy_theme_maybe_append_date_and_time         (EmpathyTheme        *theme,
+						 EmpathyThemeContext *context,
+						 EmpathyChatView     *view,
+						 EmpathyMessage      *message);
+gboolean     empathy_theme_get_show_avatars      (EmpathyTheme        *theme);
+void         empathy_theme_set_show_avatars      (EmpathyTheme        *theme,
+						 gboolean            show);
 
 G_END_DECLS
 

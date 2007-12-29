@@ -19,7 +19,6 @@ libempathy-gtk/empathy-accounts-dialog.c
 libempathy-gtk/empathy-accounts-dialog.glade
 libempathy-gtk/empathy-avatar-chooser.c
 libempathy-gtk/empathy-avatar-image.c
-libempathy-gtk/empathy-call-window.c
 libempathy-gtk/empathy-call-window.glade
 libempathy-gtk/empathy-chat.c
 libempathy-gtk/empathy-chat.glade
@@ -50,8 +49,6 @@ libempathy-gtk/empathy-spell-dialog.c
 libempathy-gtk/empathy-spell-dialog.glade
 libempathy-gtk/empathy-status-icon.c
 libempathy-gtk/empathy-status-icon.glade
-libempathy-gtk/empathy-theme-boxes.c
-libempathy-gtk/empathy-theme-irc.c
 libempathy-gtk/empathy-theme-manager.c
 
 megaphone/data/GNOME_Megaphone_Applet.schemas.in
