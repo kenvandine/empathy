@@ -104,6 +104,20 @@ call_window_capabilities_notify_cb (EmpathyContact    *contact,
 }
 
 static void
+call_window_name_notify_cb (EmpathyContact    *contact,
+			    GParamSpec        *param,
+			    EmpathyCallWindow *window)
+{
+	const gchar *name;
+	gchar       *title;
+
+	name = empathy_contact_get_name (contact);
+	title = g_strdup_printf (_("Call from %s"), name);
+	gtk_window_set_title (GTK_WINDOW (window->window), title);
+	g_free (title);
+}
+
+static void
 call_window_status_notify_cb (EmpathyTpCall     *call,
 			      GParamSpec        *param,
 			      EmpathyCallWindow *window)
@@ -124,7 +138,11 @@ call_window_status_notify_cb (EmpathyTpCall     *call,
 			g_signal_connect (contact, "notify::capabilities",
 					  G_CALLBACK (call_window_capabilities_notify_cb),
 					  window);
+			g_signal_connect (contact, "notify::name",
+					  G_CALLBACK (call_window_name_notify_cb),
+					  window);
 			call_window_capabilities_notify_cb (contact, NULL, window);
+			call_window_name_notify_cb (contact, NULL, window);
 		}
 	}
 
