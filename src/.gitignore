@@ -2,3 +2,5 @@ empathy
 empathy-accounts
 empathy-chat-chandler
 org.gnome.Empathy.Chat.service
+empathy-call-chandler
+org.gnome.Empathy.Call.service
