@@ -39,6 +39,7 @@ MISSION_CONTROL_REQUIRED=4.37
 # AC_DEFINE(G_DISABLE_DEPRECATED, 1, [Disable deprecated GLib symbols])
 # AC_DEFINE(LIBTELEPATHY_DISABLE_DEPRECATED, 1, [Disable deprecated libtelepathy symbols])
 
+AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_AUX_DIR(.)
 AM_CONFIG_HEADER(config.h)
 AM_INIT_AUTOMAKE(1.9 dist-bzip2 no-define)
@@ -210,11 +211,24 @@ AM_CONDITIONAL(HAVE_NOTHERE, test "x$have_nothere" = "xyes")
 # Tests
 # -----------------------------------------------------------
 AC_ARG_ENABLE(tests,
-              AS_HELP_STRING([--enable-tests=@<:@no/yes@:>@],
+              AS_HELP_STRING([--enable-tests=@<:@no/yes/auto@:>@],
                              [build tests]), ,
                              enable_tests=no)
 
-AM_CONDITIONAL(HAVE_TESTS, test "x$enable_tests" = "xyes")
+if test "x$enable_tests" != "xno"; then
+   PKG_CHECK_MODULES(CHECK,
+   [
+      check >= 0.9.4
+   ], have_check="yes", have_check="no")
+else
+   have_check=no
+fi
+
+if test "x$enable_tests" = "xyes" -a "x$have_check" != "xyes"; then
+   AC_MSG_ERROR([Couldn't find check dependencies.])
+fi
+
+AM_CONDITIONAL(HAVE_TESTS, test "x$have_check" = "xyes")
 
 # -----------------------------------------------------------
 # Python Bindings
@@ -267,6 +281,12 @@ fi
 
 AM_CONDITIONAL(HAVE_VOIP, test "x$enable_voip" = "xyes")
 
+# Checks for the 'check' unit testing library
+PKG_CHECK_MODULES([CHECK], [check >= 0.9.4], 
+                   [ HAVE_CHECK=yes ],
+                   [ HAVE_CHECK=no ] )
+AM_CONDITIONAL(HAVE_CHECK, test "x$HAVE_CHECK" = "xyes")
+
 # -----------------------------------------------------------
 
 AC_OUTPUT([
@@ -280,6 +300,7 @@ AC_OUTPUT([
    libempathy-gtk/Makefile
    libempathy-gtk/libempathy-gtk.pc
    src/Makefile
+   m4/Makefile
    megaphone/Makefile
    megaphone/src/Makefile
    megaphone/data/Makefile
