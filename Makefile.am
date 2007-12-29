@@ -33,6 +33,7 @@ EXTRA_DIST = 			\
 	$(INTLTOOL)
 
 DISTCLEANFILES = 		\
+        ChangeLog               \
 	intltool-extract	\
 	intltool-merge		\
 	intltool-update
