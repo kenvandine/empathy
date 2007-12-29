@@ -5,13 +5,14 @@ Makefile.in
 Makefile
 .deps
 .libs
-*.swp
+*.sw[po]
 *enum-types*
 *.pc
 *.tar.*
 *.orig
 *.rej
 *.bak
+*~
 
 ChangeLog
 stamp-h1
