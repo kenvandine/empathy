@@ -19,6 +19,7 @@ libempathy-gtk/empathy-accounts-dialog.c
 libempathy-gtk/empathy-accounts-dialog.glade
 libempathy-gtk/empathy-avatar-chooser.c
 libempathy-gtk/empathy-avatar-image.c
+libempathy-gtk/empathy-call-window.c
 libempathy-gtk/empathy-call-window.glade
 libempathy-gtk/empathy-chat.c
 libempathy-gtk/empathy-chat.glade
