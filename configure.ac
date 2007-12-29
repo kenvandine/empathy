@@ -281,12 +281,6 @@ fi
 
 AM_CONDITIONAL(HAVE_VOIP, test "x$enable_voip" = "xyes")
 
-# Checks for the 'check' unit testing library
-PKG_CHECK_MODULES([CHECK], [check >= 0.9.4], 
-                   [ HAVE_CHECK=yes ],
-                   [ HAVE_CHECK=no ] )
-AM_CONDITIONAL(HAVE_CHECK, test "x$HAVE_CHECK" = "xyes")
-
 # -----------------------------------------------------------
 
 AC_OUTPUT([

@@ -19,7 +19,6 @@ bin_PROGRAMS =			\
 
 contact_manager_SOURCES = contact-manager.c
 
-if HAVE_CHECK
 check_PROGRAMS = check-main
 TESTS = check-main
 check_main_SOURCES =                             \
@@ -39,4 +38,3 @@ check_main_CFLAGS = \
     @CHECK_CFLAGS@ \
     $(AM_CFLAGS)
 
-endif
