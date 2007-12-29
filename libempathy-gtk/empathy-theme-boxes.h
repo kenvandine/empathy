@@ -45,9 +45,7 @@ struct _EmpathyThemeBoxesClass {
 	EmpathyThemeClass parent_class;
 };
 
-GType         empathy_theme_boxes_get_type      (void) G_GNUC_CONST;
-
-EmpathyTheme * empathy_theme_boxes_new           (const gchar *name);
+GType empathy_theme_boxes_get_type (void) G_GNUC_CONST;
 
 G_END_DECLS
 

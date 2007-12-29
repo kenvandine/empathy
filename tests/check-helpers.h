@@ -1,6 +1,5 @@
-/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /*
- * Copyright (C) 2007 Elliot Fairweather
+ * check-helpers.c - Source for some check helpers
  * Copyright (C) 2007 Collabora Ltd.
  *
  * This library is free software; you can redistribute it and/or
@@ -16,21 +15,29 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
- *
- * Authors: Elliot Fairweather <elliot.fairweather@collabora.co.uk>
- *          Xavier Claessens <xclaesse@gmail.com>
  */
+#ifndef __CHECK_HELPERS_H__
+#define __CHECK_HELPERS_H__
 
-#ifndef __EMPATHY_CALL_WINDOW_H__
-#define __EMPATHY_CALL_WINDOW_H__
+#include <glib.h>
+#include <check.h>
 
-#include <libempathy/empathy-tp-call.h>
+void
+check_helpers_init (void);
 
-G_BEGIN_DECLS
+void
+expect_critical (gboolean expected);
 
-GtkWidget * empathy_call_window_show (EmpathyTpCall *call);
+gboolean
+got_critical (void);
 
-G_END_DECLS
+#define fail_unless_critical(expr, ...)                          \
+G_STMT_START {                                                    \
+  expect_critical (TRUE);                                         \
+  expr;                                                           \
+  _fail_unless (got_critical (), __FILE__, __LINE__,              \
+      "Expected g_critical, got none", ## __VA_ARGS__, NULL);     \
+  expect_critical (FALSE);                                        \
+} G_STMT_END;
 
-#endif /* __EMPATHY_CALL_WINDOW_H__ */
-
+#endif /* #ifndef __CHECK_HELPERS_H__ */

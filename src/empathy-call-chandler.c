@@ -42,6 +42,19 @@
 #define BUS_NAME "org.gnome.Empathy.CallChandler"
 #define OBJECT_PATH "/org/gnome/Empathy/CallChandler"
 
+static guint nb_calls = 0;
+
+static void
+call_chandler_weak_notify (gpointer  data,
+			   GObject  *where_the_object_was)
+{
+	nb_calls--;
+	if (nb_calls == 0) {
+		empathy_debug (DEBUG_DOMAIN, "No more calls, leaving...");
+		gtk_main_quit ();
+	}
+}
+
 static void
 call_chandler_new_channel_cb (EmpathyChandler *chandler,
 			      TpConn          *tp_conn,
@@ -50,13 +63,17 @@ call_chandler_new_channel_cb (EmpathyChandler *chandler,
 {
 	EmpathyTpCall *call;
 	McAccount     *account;
+	GtkWidget     *window;
 
 	account = mission_control_get_account_for_connection (mc, tp_conn, NULL);
 
 	call = empathy_tp_call_new (account, tp_chan);
-	empathy_call_window_show (call);
+	window = empathy_call_window_show (call);
 	g_object_unref (account);
 	g_object_unref (call);
+
+	nb_calls++;
+	g_object_weak_ref (G_OBJECT (window), call_chandler_weak_notify, NULL);
 }
 
 int

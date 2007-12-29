@@ -5,13 +5,14 @@ Makefile.in
 Makefile
 .deps
 .libs
-*.swp
+*.sw[po]
 *enum-types*
 *.pc
 *.tar.*
 *.orig
 *.rej
 *.bak
+*~
 
 ChangeLog
 stamp-h1
@@ -23,6 +24,7 @@ config.h
 config.h.in
 config.log
 config.status
+config.status.lineno
 config.sub
 configure
 depcomp
@@ -35,3 +37,4 @@ ltmain.sh
 missing
 mkinstalldirs
 omf.make
+compile

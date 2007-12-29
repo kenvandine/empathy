@@ -1034,27 +1034,21 @@ contact_list_view_cell_set_background (EmpathyContactListView *view,
 
 	style = gtk_widget_get_style (GTK_WIDGET (view));
 
-	if (!is_group) {
-		if (is_active) {
-			color = style->bg[GTK_STATE_SELECTED];
+	if (!is_group && is_active) {
+		color = style->bg[GTK_STATE_SELECTED];
 
-			/* Here we take the current theme colour and add it to
-			 * the colour for white and average the two. This
-			 * gives a colour which is inline with the theme but
-			 * slightly whiter.
-			 */
-			color.red = (color.red + (style->white).red) / 2;
-			color.green = (color.green + (style->white).green) / 2;
-			color.blue = (color.blue + (style->white).blue) / 2;
+		/* Here we take the current theme colour and add it to
+		 * the colour for white and average the two. This
+		 * gives a colour which is inline with the theme but
+		 * slightly whiter.
+		 */
+		color.red = (color.red + (style->white).red) / 2;
+		color.green = (color.green + (style->white).green) / 2;
+		color.blue = (color.blue + (style->white).blue) / 2;
 
-			g_object_set (cell,
-				      "cell-background-gdk", &color,
-				      NULL);
-		} else {
-			g_object_set (cell,
-				      "cell-background-gdk", NULL,
-				      NULL);
-		}
+		g_object_set (cell,
+			      "cell-background-gdk", &color,
+			      NULL);
 	} else {
 		g_object_set (cell,
 			      "cell-background-gdk", NULL,

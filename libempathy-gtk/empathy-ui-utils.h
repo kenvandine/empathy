@@ -106,9 +106,12 @@ void        empathy_toggle_button_set_state_quietly     (GtkWidget        *widge
 							 GCallback         callback,
 							 gpointer          user_data,
 							 gboolean          active);
-GtkWidget *empathy_link_button_new                      (const gchar      *url,
+GtkWidget * empathy_link_button_new                     (const gchar      *url,
 							 const gchar      *title);
-
+GtkTextTag *empathy_text_buffer_tag_set                 (GtkTextBuffer *buffer,
+							 const gchar   *tag_name,
+							 const gchar   *first_property_name,
+							 ...);
 
 G_END_DECLS
 
