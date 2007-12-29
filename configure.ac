@@ -90,14 +90,6 @@ PKG_CHECK_MODULES(EMPATHY,
 ])
 
 # -----------------------------------------------------------
-# SVN for ChangeLog generation
-# -----------------------------------------------------------
-
-AC_SUBST([SVN_ROOT],[http://svn.gnome.org/svn])
-AC_SUBST([SVN_MODULE],[empathy])
-AC_SUBST([SVN_BRANCH],["trunk"])
-
-# -----------------------------------------------------------
 # Language Support
 # -----------------------------------------------------------
 
