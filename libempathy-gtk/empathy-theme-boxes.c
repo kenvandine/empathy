@@ -29,7 +29,6 @@
 
 #include "empathy-ui-utils.h"
 #include "empathy-main-window.h"
-#include "empathy-theme-utils.h"
 #include "empathy-theme-boxes.h"
 
 #define DEBUG_DOMAIN "FancyTheme"
@@ -66,32 +65,20 @@ static void     theme_boxes_set_property      (GObject            *object,
 					       GParamSpec         *pspec);
 static void     theme_boxes_define_theme_tags (EmpathyTheme        *theme,
 					       EmpathyChatView     *view);
-static EmpathyThemeContext *
-theme_boxes_setup_with_view                   (EmpathyTheme        *theme,
+static void     theme_boxes_update_view       (EmpathyTheme        *theme,
 					       EmpathyChatView     *view);
-static void     theme_boxes_detach_from_view  (EmpathyTheme        *theme,
-					       EmpathyThemeContext *context,
-					       EmpathyChatView     *view);
-static void     theme_boxes_view_cleared      (EmpathyTheme        *theme,
-					       EmpathyThemeContext *context,
-					       EmpathyChatView     *view);
-
 static void     theme_boxes_append_message    (EmpathyTheme        *theme,
-					       EmpathyThemeContext *context,
 					       EmpathyChatView     *view,
 					       EmpathyMessage      *message);
 static void     theme_boxes_append_event      (EmpathyTheme        *theme,
-					       EmpathyThemeContext *context,
 					       EmpathyChatView     *view,
 					       const gchar        *str);
 static void     theme_boxes_append_timestamp  (EmpathyTheme        *theme,
-					       EmpathyThemeContext *context,
 					       EmpathyChatView     *view,
 					       EmpathyMessage      *message,
 					       gboolean            show_date,
 					       gboolean            show_time);
 static void     theme_boxes_append_spacing    (EmpathyTheme        *theme,
-					       EmpathyThemeContext *context,
 					       EmpathyChatView     *view);
 
 enum {
@@ -129,9 +116,7 @@ empathy_theme_boxes_class_init (EmpathyThemeBoxesClass *class)
 	object_class->get_property   = theme_boxes_get_property;
 	object_class->set_property   = theme_boxes_set_property;
 
-	theme_class->setup_with_view  = theme_boxes_setup_with_view;
-	theme_class->detach_from_view = theme_boxes_detach_from_view;
-	theme_class->view_cleared     = theme_boxes_view_cleared;
+	theme_class->update_view      = theme_boxes_update_view;
 	theme_class->append_message   = theme_boxes_append_message;
 	theme_class->append_event     = theme_boxes_append_event;
 	theme_class->append_timestamp = theme_boxes_append_timestamp;
@@ -310,9 +295,9 @@ theme_boxes_get_property (GObject    *object,
 }
 static void
 theme_boxes_set_property (GObject      *object,
-		    guint         param_id,
-		    const GValue *value,
-		    GParamSpec   *pspec)
+			  guint         param_id,
+			  const GValue *value,
+			  GParamSpec   *pspec)
 {
 	EmpathyThemeBoxesPriv *priv;
 
@@ -322,46 +307,57 @@ theme_boxes_set_property (GObject      *object,
 	case PROP_HEADER_FOREGROUND:
 		g_free (priv->header_foreground);
 		priv->header_foreground = g_value_dup_string (value);
+		g_object_notify (object, "header-foreground");
 		break;
 	case PROP_HEADER_BACKGROUND:
 		g_free (priv->header_background);
 		priv->header_background = g_value_dup_string (value);
+		g_object_notify (object, "header-background");
 		break;
 	case PROP_HEADER_LINE_BACKGROUND:
 		g_free (priv->header_line_background);
 		priv->header_line_background = g_value_dup_string (value);
+		g_object_notify (object, "header-line_background");
 		break;
 	case PROP_TEXT_FOREGROUND:
 		g_free (priv->text_foreground);
 		priv->text_foreground = g_value_dup_string (value);
+		g_object_notify (object, "text-foreground");
 		break;
 	case PROP_TEXT_BACKGROUND:
 		g_free (priv->text_background);
 		priv->text_background = g_value_dup_string (value);
+		g_object_notify (object, "text-background");
 		break;
 	case PROP_ACTION_FOREGROUND:
 		g_free (priv->action_foreground);
 		priv->action_foreground = g_value_dup_string (value);
+		g_object_notify (object, "action-foreground");
 		break;
 	case PROP_HIGHLIGHT_FOREGROUND:
 		g_free (priv->highlight_foreground);
 		priv->highlight_foreground = g_value_dup_string (value);
+		g_object_notify (object, "highlight-foreground");
 		break;
 	case PROP_TIME_FOREGROUND:
 		g_free (priv->time_foreground);
 		priv->time_foreground = g_value_dup_string (value);
+		g_object_notify (object, "time-foreground");
 		break;
 	case PROP_EVENT_FOREGROUND:
 		g_free (priv->event_foreground);
 		priv->event_foreground = g_value_dup_string (value);
+		g_object_notify (object, "event-foreground");
 		break;
 	case PROP_INVITE_FOREGROUND:
 		g_free (priv->invite_foreground);
 		priv->invite_foreground = g_value_dup_string (value);
+		g_object_notify (object, "invite-foreground");
 		break;
 	case PROP_LINK_FOREGROUND:
 		g_free (priv->link_foreground);
 		priv->link_foreground = g_value_dup_string (value);
+		g_object_notify (object, "link-foreground");
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
@@ -373,53 +369,42 @@ static void
 theme_boxes_define_theme_tags (EmpathyTheme *theme, EmpathyChatView *view)
 {
 	EmpathyThemeBoxesPriv *priv;
-	GtkTextBuffer   *buffer;
-	GtkTextTagTable *table;
-	GtkTextTag      *tag;
+	GtkTextBuffer         *buffer;
+	GtkTextTag            *tag;
 
 	priv = GET_PRIV (theme);
 
 	buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
-	table = gtk_text_buffer_get_tag_table (buffer);
 
-	tag = empathy_theme_utils_init_tag_by_name (table, "fancy-spacing");
-	g_object_set (tag,
-		      "size", 3000,
-		      "pixels-above-lines", 8,
-		      NULL);
-	empathy_theme_utils_add_tag (table, tag);
+	empathy_text_buffer_tag_set (buffer, "fancy-spacing",
+				     "size", 3000,
+				     "pixels-above-lines", 8,
+				     NULL);
 
-	tag = empathy_theme_utils_init_tag_by_name (table, 
-						   "fancy-header");
-	g_object_set (tag,
-		      "weight", PANGO_WEIGHT_BOLD,
-		      "pixels-above-lines", HEADER_PADDING,
-		      "pixels-below-lines", HEADER_PADDING,
-		      NULL);
+	tag = empathy_text_buffer_tag_set (buffer, "fancy-header",
+					   "weight", PANGO_WEIGHT_BOLD,
+					   "pixels-above-lines", HEADER_PADDING,
+					   "pixels-below-lines", HEADER_PADDING,
+					   NULL);
 	if (priv->header_foreground) {
 		g_object_set (tag,
 			      "foreground", priv->header_foreground,
 			      "paragraph-background", priv->header_background,
 			      NULL);
 	}
-	empathy_theme_utils_add_tag (table, tag);
 
-	tag = empathy_theme_utils_init_tag_by_name (table, "fancy-header-line");
-	g_object_set (tag,
-		      "size", 1,
-		      NULL);
+	tag = empathy_text_buffer_tag_set (buffer, "fancy-header-line",
+					   "size", 1,
+					   NULL);
 	if (priv->header_line_background) {
 		g_object_set (tag,
 			      "paragraph-background", priv->header_line_background,
 			      NULL);
 	}
 
-	empathy_theme_utils_add_tag (table, tag);
-
-	tag = empathy_theme_utils_init_tag_by_name (table, "fancy-body");
-	g_object_set (tag,
-		      "pixels-above-lines", 4,
-		      NULL);
+	tag = empathy_text_buffer_tag_set (buffer, "fancy-body",
+					   "pixels-above-lines", 4,
+					   NULL);
 	if (priv->text_background) {
 		g_object_set (tag,
 			      "paragraph-background", priv->text_background,
@@ -431,13 +416,11 @@ theme_boxes_define_theme_tags (EmpathyTheme *theme, EmpathyChatView *view)
 			      "foreground", priv->text_foreground,
 			      NULL);
 	}
-	empathy_theme_utils_add_tag (table, tag);
 
-	tag = empathy_theme_utils_init_tag_by_name (table, "fancy-action");
-	g_object_set (tag,
-		      "style", PANGO_STYLE_ITALIC,
-		      "pixels-above-lines", 4,
-		      NULL);
+	tag = empathy_text_buffer_tag_set (buffer, "fancy-action",
+					   "style", PANGO_STYLE_ITALIC,
+					   "pixels-above-lines", 4,
+					   NULL);
 
 	if (priv->text_background) {
 		g_object_set (tag,
@@ -449,16 +432,12 @@ theme_boxes_define_theme_tags (EmpathyTheme *theme, EmpathyChatView *view)
 		g_object_set (tag,
 			      "foreground", priv->action_foreground,
 			      NULL);
-	} 
+	}
 
-	empathy_theme_utils_add_tag (table, tag);
-
-	tag = empathy_theme_utils_init_tag_by_name (table,
-						   "fancy-highlight");
-	g_object_set (tag,
-		      "weight", PANGO_WEIGHT_BOLD,
-		      "pixels-above-lines", 4,
-		      NULL);
+	tag = empathy_text_buffer_tag_set (buffer, "fancy-highlight",
+					   "weight", PANGO_WEIGHT_BOLD,
+					   "pixels-above-lines", 4,
+					   NULL);
 	if (priv->text_background) {
 		g_object_set (tag,
 			      "paragraph-background", priv->text_background,
@@ -471,106 +450,55 @@ theme_boxes_define_theme_tags (EmpathyTheme *theme, EmpathyChatView *view)
 			      "foreground", priv->highlight_foreground,
 			      NULL);
 	}
-	empathy_theme_utils_add_tag (table, tag);
 
-	tag = empathy_theme_utils_init_tag_by_name (table, "fancy-time");
-	g_object_set (tag,
-		      "justification", GTK_JUSTIFY_CENTER,
-		      NULL);
+	tag = empathy_text_buffer_tag_set (buffer, "fancy-time",
+					   "justification", GTK_JUSTIFY_CENTER,
+					   NULL);
 	if (priv->time_foreground) {
 		g_object_set (tag,
 			      "foreground", priv->time_foreground,
 			      NULL);
 	}
-	empathy_theme_utils_add_tag (table, tag);
 
-	tag = empathy_theme_utils_init_tag_by_name (table, "fancy-event");
-	g_object_set (tag,
-		      "justification", GTK_JUSTIFY_LEFT,
-		      NULL);
+	tag = empathy_text_buffer_tag_set (buffer, "fancy-event",
+					   "justification", GTK_JUSTIFY_LEFT,
+					   NULL);
 	if (priv->event_foreground) {
 		g_object_set (tag,
 			      "foreground", priv->event_foreground,
 			      NULL);
 	}
-	empathy_theme_utils_add_tag (table, tag);
 
-	tag = empathy_theme_utils_init_tag_by_name (table, "invite");
+	tag = empathy_text_buffer_tag_set (buffer, "invite", NULL);
 	if (priv->invite_foreground) {
 		g_object_set (tag,
 			      "foreground", priv->invite_foreground,
 			      NULL);
 	}
-	empathy_theme_utils_add_tag (table, tag);
 
-	tag = empathy_theme_utils_init_tag_by_name (table, "fancy-link");
-	g_object_set (tag,
-		      "underline", PANGO_UNDERLINE_SINGLE,
-		      NULL);
+	tag = empathy_text_buffer_tag_set (buffer, "fancy-link",
+					   "underline", PANGO_UNDERLINE_SINGLE,
+					   NULL);
 	if (priv->link_foreground) {
 		g_object_set (tag,
 			      "foreground", priv->link_foreground,
 			      NULL);
 	} 
-	empathy_theme_utils_add_tag (table, tag);
 }
 
 static void
-theme_boxes_fixup_tag_table (EmpathyTheme *theme, EmpathyChatView *view)
-{
-	GtkTextBuffer *buffer;
-
-	buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
-
-	/* "Fancy" style tags. */
-	empathy_theme_utils_ensure_tag_by_name (buffer, "fancy-header");
-	empathy_theme_utils_ensure_tag_by_name (buffer, "fancy-header-line");
-	empathy_theme_utils_ensure_tag_by_name (buffer, "fancy-body");
-	empathy_theme_utils_ensure_tag_by_name (buffer, "fancy-action");
-	empathy_theme_utils_ensure_tag_by_name (buffer, "fancy-highlight");
-	empathy_theme_utils_ensure_tag_by_name (buffer, "fancy-spacing");
-	empathy_theme_utils_ensure_tag_by_name (buffer, "fancy-time");
-	empathy_theme_utils_ensure_tag_by_name (buffer, "fancy-event");
-	empathy_theme_utils_ensure_tag_by_name (buffer, "fancy-link");
-}
-
-typedef struct {
-	BlockType last_block_type;
-	time_t    last_timestamp;
-} FancyContext;
-
-static EmpathyThemeContext *
-theme_boxes_setup_with_view (EmpathyTheme *theme, EmpathyChatView *view)
+theme_boxes_update_view (EmpathyTheme *theme, EmpathyChatView *view)
 {
 	EmpathyThemeBoxesPriv *priv;
 
-	g_return_val_if_fail (EMPATHY_IS_THEME_BOXES (theme), NULL);
+	g_return_if_fail (EMPATHY_IS_THEME_BOXES (theme));
+	g_return_if_fail (EMPATHY_IS_CHAT_VIEW (view));
 
 	priv = GET_PRIV (theme);
-
-	theme_boxes_fixup_tag_table (theme, view);
 
 	theme_boxes_define_theme_tags (theme, view);
 	
 	empathy_chat_view_set_margin (view, MARGIN);
-
-	return NULL;
-}
-
-static void
-theme_boxes_detach_from_view (EmpathyTheme        *theme,
-			      EmpathyThemeContext *context,
-			      EmpathyChatView     *view)
-{
-	/* FIXME: Free the context */
-}
-
-static void 
-theme_boxes_view_cleared (EmpathyTheme        *theme,
-			  EmpathyThemeContext *context,
-			  EmpathyChatView     *view)
-{
-	/* FIXME: clear the context data */
 }
 
 static void
@@ -595,7 +523,6 @@ table_size_allocate_cb (GtkWidget     *view,
 
 static void
 theme_boxes_maybe_append_header (EmpathyTheme        *theme,
-				 EmpathyThemeContext *context,
 				 EmpathyChatView     *view,
 				 EmpathyMessage      *msg)
 {
@@ -654,7 +581,7 @@ theme_boxes_maybe_append_header (EmpathyTheme        *theme,
 		return;
 	}
 
-	empathy_theme_append_spacing (theme, context, view);
+	empathy_theme_append_spacing (theme, view);
 
 	gtk_text_buffer_get_end_iter (buffer, &iter);
 	gtk_text_buffer_insert_with_tags_by_name (buffer,
@@ -693,7 +620,8 @@ theme_boxes_maybe_append_header (EmpathyTheme        *theme,
 			       "xalign", 0.0,
 			       NULL);
 
-	parse_success = gdk_color_parse (priv->header_foreground, &color);
+	parse_success = priv->header_foreground &&
+			gdk_color_parse (priv->header_foreground, &color);
 
 	if (parse_success) {
 		gtk_widget_modify_fg (label1, GTK_STATE_NORMAL, &color);
@@ -757,14 +685,13 @@ theme_boxes_maybe_append_header (EmpathyTheme        *theme,
 
 static void
 theme_boxes_append_message (EmpathyTheme        *theme,
-			    EmpathyThemeContext *context,
 			    EmpathyChatView     *view,
 			    EmpathyMessage      *message)
 {
 	EmpathyContact *sender;
 
-	empathy_theme_maybe_append_date_and_time (theme, context, view, message);
-	theme_boxes_maybe_append_header (theme, context, view, message);
+	empathy_theme_maybe_append_date_and_time (theme, view, message);
+	theme_boxes_maybe_append_header (theme, view, message);
 
 	sender = empathy_message_get_sender (message);
 
@@ -774,10 +701,10 @@ theme_boxes_append_message (EmpathyTheme        *theme,
 		body = g_strdup_printf (" * %s %s", 
 					empathy_contact_get_name (sender),
 					empathy_message_get_body (message));
-		empathy_theme_append_text (theme, context, view, body,
+		empathy_theme_append_text (theme, view, body,
 					   "fancy-action", "fancy-link");
 	} else {
-		empathy_theme_append_text (theme, context, view,
+		empathy_theme_append_text (theme, view,
 					   empathy_message_get_body (message),
 					   "fancy-body", "fancy-link");
 	}
@@ -793,7 +720,6 @@ theme_boxes_append_message (EmpathyTheme        *theme,
 
 static void
 theme_boxes_append_event (EmpathyTheme        *theme,
-			  EmpathyThemeContext *context,
 			  EmpathyChatView     *view,
 			  const gchar        *str)
 {
@@ -803,7 +729,7 @@ theme_boxes_append_event (EmpathyTheme        *theme,
 
 	buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
 
-	empathy_theme_maybe_append_date_and_time (theme, context, view, NULL);
+	empathy_theme_maybe_append_date_and_time (theme, view, NULL);
 
 	gtk_text_buffer_get_end_iter (buffer, &iter);
 
@@ -820,7 +746,6 @@ theme_boxes_append_event (EmpathyTheme        *theme,
 
 static void
 theme_boxes_append_timestamp (EmpathyTheme        *theme,
-			      EmpathyThemeContext *context,
 			      EmpathyChatView     *view,
 			      EmpathyMessage      *message,
 			      gboolean            show_date,
@@ -843,9 +768,7 @@ theme_boxes_append_timestamp (EmpathyTheme        *theme,
 	str = g_string_new (NULL);
 
 	if (show_time || show_date) {
-		empathy_theme_append_spacing (theme, 
-					     context,
-					     view);
+		empathy_theme_append_spacing (theme, view);
 
 		g_string_append (str, "- ");
 	}
@@ -891,7 +814,6 @@ theme_boxes_append_timestamp (EmpathyTheme        *theme,
 
 static void
 theme_boxes_append_spacing (EmpathyTheme        *theme,
-			    EmpathyThemeContext *context,
 			    EmpathyChatView     *view)
 {
 	GtkTextBuffer *buffer;
@@ -911,126 +833,4 @@ theme_boxes_append_spacing (EmpathyTheme        *theme,
 						  "fancy-spacing",
 						  NULL);
 }
-
-static void
-theme_boxes_setup_clean (EmpathyTheme *theme)
-{
-	g_object_set (theme,
-		      "header-foreground", "black",
-		      "header-background", "#efefdf",
-		      "header_line_background", "#e3e3d3",
-		      "action_foreground", "brown4",
-		      "time_foreground", "darkgrey",
-		      "event_foreground", "darkgrey",
-		      "invite_foreground", "sienna",
-		      "link_foreground","#49789e",
-		      NULL);
-}
-
-static void
-theme_boxes_gdk_color_to_hex (GdkColor *gdk_color, gchar *str_color)
-{
-	g_snprintf (str_color, 10, 
-		    "#%02x%02x%02x", 
-		    gdk_color->red >> 8, 
-		    gdk_color->green >> 8, 
-		    gdk_color->blue >> 8);
-}
-
-static void
-theme_boxes_setup_themed (EmpathyTheme *theme)
-{
-	EmpathyThemeBoxesPriv *priv;
-	GtkWidget            *widget;
-	GtkStyle             *style;
-	gchar                 color[10];
-
-	priv = GET_PRIV (theme);
-
-	widget = gtk_entry_new ();
-	style = gtk_widget_get_style (widget);
-	gtk_widget_destroy (widget);
-
-	theme_boxes_gdk_color_to_hex (&style->base[GTK_STATE_SELECTED], color);
-
-	g_object_set (theme,
-		      "action-foreground", color,
-		      "link-foreground", color,
-		      NULL);
-
-	theme_boxes_gdk_color_to_hex (&style->bg[GTK_STATE_SELECTED], color);
-
-	g_object_set (theme,
-		      "header-background", color,
-		      NULL);
-
-	theme_boxes_gdk_color_to_hex (&style->dark[GTK_STATE_SELECTED], color);
-
-	g_object_set (theme,
-		      "header_line-background", color,
-		      NULL);
-
-	theme_boxes_gdk_color_to_hex (&style->fg[GTK_STATE_SELECTED], color);
-
-	g_object_set (theme,
-		      "header-foreground", color,
-		      NULL);
-}
-
-static void
-theme_boxes_theme_changed_cb (GtkWidget *widget,
-			      GtkStyle  *previous_style,
-			      gpointer   user_data)
-{
-	theme_boxes_setup_themed (EMPATHY_THEME (user_data));
-
-	g_signal_emit_by_name (G_OBJECT (user_data), "updated");
-}
-
-static void
-theme_boxes_setup_blue (EmpathyTheme *theme)
-{
-	g_object_set (theme,
-		      "header_foreground", "black",
-		      "header_background", "#88a2b4",
-		      "header_line_background", "#7f96a4",
-		      "text_foreground", "black",
-		      "text_background", "#adbdc8",
-		      "highlight_foreground", "black",
-		      "action_foreground", "brown4",
-		      "time_foreground", "darkgrey",
-		      "event_foreground", "#7f96a4",
-		      "invite_foreground", "sienna",
-		      "link_foreground", "#49789e",
-		      NULL);
-}
-
-EmpathyTheme *
-empathy_theme_boxes_new (const gchar *name)
-{
-	EmpathyTheme          *theme;
-	EmpathyThemeBoxesPriv *priv;
-
-	theme = g_object_new (EMPATHY_TYPE_THEME_BOXES, NULL);
-	priv  = GET_PRIV (theme);
-
-	if (strcmp (name, "clean") == 0) {
-		theme_boxes_setup_clean (theme);
-	}
-	else if (strcmp (name, "simple") == 0) {
-		/* FIXME: Make an actual accessor function */
-		g_signal_connect (empathy_main_window_show (),
-				  "style-set",
-				  G_CALLBACK (theme_boxes_theme_changed_cb),
-				  theme);
-
-		theme_boxes_setup_themed (theme);
-	}
-	else if (strcmp (name, "blue") == 0) {
-		theme_boxes_setup_blue (theme);
-	}
-
-	return theme;
-}
-
 

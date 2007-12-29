@@ -24,7 +24,7 @@
 #include <libempathy/empathy-debug.h>
 
 #include "empathy-chat.h"
-#include "empathy-theme-utils.h"
+#include "empathy-ui-utils.h"
 #include "empathy-theme-irc.h"
 
 #define DEBUG_DOMAIN "Theme"
@@ -37,37 +37,21 @@ struct _EmpathyThemeIrcPriv {
 	gint my_prop;
 };
 
-static void         theme_irc_finalize      (GObject             *object);
-static void         theme_irc_get_property  (GObject             *object,
-					     guint                param_id,
-					     GValue              *value,
-					     GParamSpec          *pspec);
-static void         theme_irc_set_property  (GObject             *object,
-					     guint                param_id,
-					     const GValue        *value,
-					     GParamSpec          *pspec);
-static EmpathyThemeContext *
-theme_irc_setup_with_view                      (EmpathyTheme         *theme,
+static void         theme_irc_finalize         (GObject             *object);
+static void         theme_irc_update_view      (EmpathyTheme         *theme,
 						EmpathyChatView      *view);
-static void         theme_irc_detach_from_view (EmpathyTheme        *theme,
-						EmpathyThemeContext *context,
-						EmpathyChatView     *view);
 static void         theme_irc_append_message   (EmpathyTheme        *theme,
-						EmpathyThemeContext *context,
 						EmpathyChatView     *view,
 						EmpathyMessage      *message);
 static void         theme_irc_append_event     (EmpathyTheme        *theme,
-						EmpathyThemeContext *context,
 						EmpathyChatView     *view,
 						const gchar        *str);
 static void         theme_irc_append_timestamp (EmpathyTheme        *theme,
-						EmpathyThemeContext *context,
 						EmpathyChatView     *view,
 						EmpathyMessage      *message,
 						gboolean            show_date,
 						gboolean            show_time);
 static void         theme_irc_append_spacing   (EmpathyTheme        *theme,
-						EmpathyThemeContext *context,
 						EmpathyChatView     *view);
 
 
@@ -88,24 +72,12 @@ empathy_theme_irc_class_init (EmpathyThemeIrcClass *class)
 	theme_class  = EMPATHY_THEME_CLASS (class);
 
 	object_class->finalize     = theme_irc_finalize;
-	object_class->get_property = theme_irc_get_property;
-	object_class->set_property = theme_irc_set_property;
 
-	theme_class->setup_with_view  = theme_irc_setup_with_view;
-	theme_class->detach_from_view = theme_irc_detach_from_view;
+	theme_class->update_view      = theme_irc_update_view;
 	theme_class->append_message   = theme_irc_append_message;
 	theme_class->append_event     = theme_irc_append_event;
 	theme_class->append_timestamp = theme_irc_append_timestamp;
 	theme_class->append_spacing   = theme_irc_append_spacing;
-
-	g_object_class_install_property (object_class,
-					 PROP_MY_PROP,
-					 g_param_spec_int ("my-prop",
-							   "",
-							   "",
-							   0, 1,
-							   1,
-							   G_PARAM_READWRITE));
 
 	g_type_class_add_private (object_class, sizeof (EmpathyThemeIrcPriv));
 }
@@ -129,183 +101,82 @@ theme_irc_finalize (GObject *object)
 }
 
 static void
-theme_irc_get_property (GObject    *object,
-		    guint       param_id,
-		    GValue     *value,
-		    GParamSpec *pspec)
-{
-	EmpathyThemeIrcPriv *priv;
-
-	priv = GET_PRIV (object);
-
-	switch (param_id) {
-	case PROP_MY_PROP:
-		g_value_set_int (value, priv->my_prop);
-		break;
-	default:
-		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
-		break;
-	}
-}
-static void
-theme_irc_set_property (GObject      *object,
-		    guint         param_id,
-		    const GValue *value,
-		    GParamSpec   *pspec)
-{
-	EmpathyThemeIrcPriv *priv;
-
-	priv = GET_PRIV (object);
-
-	switch (param_id) {
-	case PROP_MY_PROP:
-		priv->my_prop = g_value_get_int (value);
-		break;
-	default:
-		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
-		break;
-	}
-}
-
-static void
-theme_irc_fixup_tag_table (EmpathyTheme *theme, EmpathyChatView *view)
-{
-	GtkTextBuffer *buffer;
-
-	buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
-
-	/* IRC style tags. */
-	empathy_theme_utils_ensure_tag_by_name (buffer, "irc-nick-self");
-	empathy_theme_utils_ensure_tag_by_name (buffer, "irc-body-self");
-	empathy_theme_utils_ensure_tag_by_name (buffer, "irc-action-self");
-
-	empathy_theme_utils_ensure_tag_by_name (buffer, "irc-nick-other");
-	empathy_theme_utils_ensure_tag_by_name (buffer, "irc-body-other");
-	empathy_theme_utils_ensure_tag_by_name (buffer, "irc-action-other");
-
-	empathy_theme_utils_ensure_tag_by_name (buffer, "irc-nick-highlight");
-	empathy_theme_utils_ensure_tag_by_name (buffer, "irc-spacing");
-	empathy_theme_utils_ensure_tag_by_name (buffer, "irc-time");
-	empathy_theme_utils_ensure_tag_by_name (buffer, "irc-event");
-	empathy_theme_utils_ensure_tag_by_name (buffer, "irc-link");
-}
-
-static void
 theme_irc_apply_theme_classic (EmpathyTheme *theme, EmpathyChatView *view)
 {
 	EmpathyThemeIrcPriv *priv;
-	GtkTextBuffer      *buffer;
-	GtkTextTagTable    *table;
-	GtkTextTag         *tag;
+	GtkTextBuffer       *buffer;
 
 	priv = GET_PRIV (theme);
 
 	buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
-	table = gtk_text_buffer_get_tag_table (buffer);
 
-	tag = empathy_theme_utils_init_tag_by_name (table, "irc-spacing");
-	g_object_set (tag,
-		      "size", 2000,
-		      NULL);
-	empathy_theme_utils_add_tag (table, tag);
+	empathy_text_buffer_tag_set (buffer, "irc-spacing",
+				     "size", 2000,
+				     NULL);
 
-	tag = empathy_theme_utils_init_tag_by_name (table, "irc-nick-self");
-	g_object_set (tag,
-		      "foreground", "sea green",
-		      NULL);
-	empathy_theme_utils_add_tag (table, tag);
+	empathy_text_buffer_tag_set (buffer, "irc-nick-self",
+				     "foreground", "sea green",
+				     NULL);
 
-	tag = empathy_theme_utils_init_tag_by_name (table, "irc-body-self");
-	g_object_set (tag,
-		      /* To get the default theme color: */
-		      "foreground-set", FALSE,
-		      NULL);
-	empathy_theme_utils_add_tag (table, tag);
+	empathy_text_buffer_tag_set (buffer, "irc-body-self",
+				     /* To get the default theme color: */
+				     "foreground-set", FALSE,
+				     NULL);
 
-	tag = empathy_theme_utils_init_tag_by_name (table, "irc-action-self");
-	g_object_set (tag,
-		      "foreground", "brown4",
-		      "style", PANGO_STYLE_ITALIC,
-		      NULL);
-	empathy_theme_utils_add_tag (table, tag);
+	empathy_text_buffer_tag_set (buffer, "irc-action-self",
+				     "foreground", "brown4",
+				     "style", PANGO_STYLE_ITALIC,
+				     NULL);
 
-	tag = empathy_theme_utils_init_tag_by_name (table, "irc-nick-highlight");
-	g_object_set (tag,
-		      "foreground", "indian red",
-		      "weight", PANGO_WEIGHT_BOLD,
-		      NULL);
-	empathy_theme_utils_add_tag (table, tag);
+	empathy_text_buffer_tag_set (buffer, "irc-nick-highlight",
+				     "foreground", "indian red",
+				     "weight", PANGO_WEIGHT_BOLD,
+				     NULL);
 
-	tag = empathy_theme_utils_init_tag_by_name (table, "irc-nick-other");
-	g_object_set (tag,
-		      "foreground", "skyblue4",
-		      NULL);
-	empathy_theme_utils_add_tag (table, tag);
+	empathy_text_buffer_tag_set (buffer, "irc-nick-other",
+				     "foreground", "skyblue4",
+				     NULL);
 
-	tag = empathy_theme_utils_init_tag_by_name (table, "irc-body-other");
-	g_object_set (tag,
-		      /* To get the default theme color: */
-		      "foreground-set", FALSE,
-		      NULL);
-	empathy_theme_utils_add_tag (table, tag);
+	empathy_text_buffer_tag_set (buffer, "irc-body-other",
+				     /* To get the default theme color: */
+				     "foreground-set", FALSE,
+				     NULL);
 
-	tag = empathy_theme_utils_init_tag_by_name (table, "irc-action-other");
-	g_object_set (tag,
-		      "foreground", "brown4",
-		      "style", PANGO_STYLE_ITALIC,
-		      NULL);
-	empathy_theme_utils_add_tag (table, tag);
+	empathy_text_buffer_tag_set (buffer, "irc-action-other",
+				     "foreground", "brown4",
+				     "style", PANGO_STYLE_ITALIC,
+				     NULL);
 
-	tag = empathy_theme_utils_init_tag_by_name (table, "irc-time");
-	g_object_set (tag,
-		      "foreground", "darkgrey",
-		      "justification", GTK_JUSTIFY_CENTER,
-		      NULL);
-	empathy_theme_utils_add_tag (table, tag);
+	empathy_text_buffer_tag_set (buffer, "irc-time",
+				     "foreground", "darkgrey",
+				     "justification", GTK_JUSTIFY_CENTER,
+				     NULL);
 
-	tag = empathy_theme_utils_init_tag_by_name (table, "irc-event");
-	g_object_set (tag,
-		      "foreground", "PeachPuff4",
-		      "justification", GTK_JUSTIFY_LEFT,
-		      NULL);
-	empathy_theme_utils_add_tag (table, tag);
+	empathy_text_buffer_tag_set (buffer, "irc-event",
+				     "foreground", "PeachPuff4",
+				     "justification", GTK_JUSTIFY_LEFT,
+				     NULL);
 
-	tag = empathy_theme_utils_init_tag_by_name (table, "invite");
-	g_object_set (tag,
-		      "foreground", "sienna",
-		      NULL);
-	empathy_theme_utils_add_tag (table, tag);
+	empathy_text_buffer_tag_set (buffer, "invite",
+				     "foreground", "sienna",
+				     NULL);
 
-	tag = empathy_theme_utils_init_tag_by_name (table, "irc-link");
-	g_object_set (tag,
-		      "foreground", "steelblue",
-		      "underline", PANGO_UNDERLINE_SINGLE,
-		      NULL);
-	empathy_theme_utils_add_tag (table, tag);
+	empathy_text_buffer_tag_set (buffer, "irc-link",
+				     "foreground", "steelblue",
+				     "underline", PANGO_UNDERLINE_SINGLE,
+				     NULL);
 }
 
-
-static EmpathyThemeContext *
-theme_irc_setup_with_view (EmpathyTheme *theme, EmpathyChatView *view)
-{
-	theme_irc_fixup_tag_table (theme, view);
-	theme_irc_apply_theme_classic (theme, view);
-	empathy_chat_view_set_margin (view, 3);
-
-	return NULL;
-}
 
 static void
-theme_irc_detach_from_view (EmpathyTheme        *theme,
-			    EmpathyThemeContext *context,
-			    EmpathyChatView     *view)
+theme_irc_update_view (EmpathyTheme *theme, EmpathyChatView *view)
 {
-	/* Free the context */
+	theme_irc_apply_theme_classic (theme, view);
+	empathy_chat_view_set_margin (view, 3);
 }
 
 static void
 theme_irc_append_message (EmpathyTheme        *theme,
-			  EmpathyThemeContext *context,
 			  EmpathyChatView     *view,
 			  EmpathyMessage      *message)
 {
@@ -317,7 +188,7 @@ theme_irc_append_message (EmpathyTheme        *theme,
 	gchar         *tmp;
 	EmpathyContact *contact;
 
-	empathy_theme_maybe_append_date_and_time (theme, context, view, message);
+	empathy_theme_maybe_append_date_and_time (theme, view, message);
 
 	buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
 
@@ -334,7 +205,7 @@ theme_irc_append_message (EmpathyTheme        *theme,
 		tmp = g_strdup_printf (" * %s %s", 
 				       empathy_contact_get_name (contact),
 				       empathy_message_get_body (message));
-		empathy_theme_append_text (theme, context, view, tmp,
+		empathy_theme_append_text (theme, view, tmp,
 					   body_tag, "irc-link");
 		g_free (tmp);
 		return;
@@ -367,14 +238,13 @@ theme_irc_append_message (EmpathyTheme        *theme,
 	g_free (tmp);
 
 	/* The text body. */
-	empathy_theme_append_text (theme, context, view, 
+	empathy_theme_append_text (theme, view, 
 				  empathy_message_get_body (message),
 				  body_tag, "irc-link");
 }
 
 static void
 theme_irc_append_event (EmpathyTheme        *theme,
-			EmpathyThemeContext *context,
 		    EmpathyChatView     *view,
 		    const gchar        *str)
 {
@@ -384,7 +254,7 @@ theme_irc_append_event (EmpathyTheme        *theme,
 
 	buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
 	
-	empathy_theme_maybe_append_date_and_time (theme, context, view, NULL);
+	empathy_theme_maybe_append_date_and_time (theme, view, NULL);
 
 	gtk_text_buffer_get_end_iter (buffer, &iter);
 
@@ -398,7 +268,6 @@ theme_irc_append_event (EmpathyTheme        *theme,
 
 static void
 theme_irc_append_timestamp (EmpathyTheme        *theme,
-			    EmpathyThemeContext *context,
 			    EmpathyChatView     *view,
 			    EmpathyMessage      *message,
 			    gboolean            show_date,
@@ -417,9 +286,7 @@ theme_irc_append_timestamp (EmpathyTheme        *theme,
 	str = g_string_new (NULL);
 
 	if (show_time || show_date) {
-		empathy_theme_append_spacing (theme, 
-					     context,
-					     view);
+		empathy_theme_append_spacing (theme, view);
 
 		g_string_append (str, "- ");
 	}
@@ -463,7 +330,6 @@ theme_irc_append_timestamp (EmpathyTheme        *theme,
 
 static void
 theme_irc_append_spacing (EmpathyTheme        *theme,
-			  EmpathyThemeContext *context,
 			  EmpathyChatView     *view)
 {
 	GtkTextBuffer *buffer;
