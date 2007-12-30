@@ -13,7 +13,7 @@ msgstr ""
 "Project-Id-Version: empathy\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-12-30 20:35+0100\n"
-"PO-Revision-Date: 2007-12-30 20:37+0100\n"
+"PO-Revision-Date: 2007-12-30 20:44+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "MIME-Version: 1.0\n"
@@ -753,7 +753,7 @@ msgstr "_Grupp"
 #: ../libempathy-gtk/empathy-contact-list-view.c:206
 #: ../libempathy-gtk/empathy-main-window.glade.h:10
 msgid "_Chat"
-msgstr "_Chatta"
+msgstr "_Chatt"
 
 #: ../libempathy-gtk/empathy-contact-list-view.c:206
 msgid "Chat with contact"
