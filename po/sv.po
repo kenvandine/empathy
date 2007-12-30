@@ -12,8 +12,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: empathy\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-12-16 09:46+0100\n"
-"PO-Revision-Date: 2007-12-16 09:47+0100\n"
+"POT-Creation-Date: 2007-12-30 20:35+0100\n"
+"PO-Revision-Date: 2007-12-30 20:37+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "MIME-Version: 1.0\n"
@@ -371,12 +371,12 @@ msgstr ""
 msgid "<b>No Accounts Configured</b>"
 msgstr "<b>Inga konton konfigurerade</b>"
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:402
+#: ../libempathy-gtk/empathy-accounts-dialog.c:400
 #: ../libempathy-gtk/empathy-accounts-dialog.glade.h:4
 msgid "Accounts"
 msgstr "Konton"
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:899
+#: ../libempathy-gtk/empathy-accounts-dialog.c:897
 #, c-format
 msgid ""
 "You are about to remove your %s account!\n"
@@ -385,7 +385,7 @@ msgstr ""
 "Du håller på att ta bort kontot %s!\n"
 "Är du säker att du vill fortsätta?"
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:905
+#: ../libempathy-gtk/empathy-accounts-dialog.c:903
 msgid ""
 "Any associated conversations and chat rooms will NOT be removed if you decide to proceed.\n"
 "\n"
@@ -440,6 +440,11 @@ msgstr "Alla filer"
 #: ../libempathy-gtk/empathy-avatar-image.c:298
 msgid "Click to enlarge"
 msgstr "Klicka för att förstora"
+
+#: ../libempathy-gtk/empathy-call-window.c:116
+#, c-format
+msgid "Call from %s"
+msgstr "Samtal från %s"
 
 #: ../libempathy-gtk/empathy-call-window.glade.h:1
 msgid "Call"
@@ -606,7 +611,7 @@ msgstr "_Koppla loss flik"
 #: ../libempathy-gtk/empathy-contact-list-view.c:218
 #: ../libempathy-gtk/empathy-main-window.glade.h:12
 msgid "_Edit"
-msgstr "_Redigera"
+msgstr "R_edigera"
 
 #: ../libempathy-gtk/empathy-chat.glade.h:24
 #: ../libempathy-gtk/empathy-main-window.glade.h:13
@@ -644,24 +649,20 @@ msgstr "_Flikar"
 msgid "_View Previous Conversations"
 msgstr "_Visa tidigare samtal"
 
-#: ../libempathy-gtk/empathy-chat-view.c:469
+#: ../libempathy-gtk/empathy-chat-view.c:441
 msgid "_Copy Link Address"
 msgstr "_Kopiera länkadress"
 
-#: ../libempathy-gtk/empathy-chat-view.c:477
+#: ../libempathy-gtk/empathy-chat-view.c:449
 msgid "_Open Link"
 msgstr "_Öppna länk"
 
-#: ../libempathy-gtk/empathy-chat-view.c:755
-msgid "%A %d %B %Y"
-msgstr "%A %d %B %Y"
-
-#: ../libempathy-gtk/empathy-chat-window.c:709
+#: ../libempathy-gtk/empathy-chat-window.c:699
 #, c-format
 msgid "Conversations (%d)"
 msgstr "Samtal (%d)"
 
-#: ../libempathy-gtk/empathy-chat-window.c:1309
+#: ../libempathy-gtk/empathy-chat-window.c:1299
 msgid "Typing a message."
 msgstr "Skriver ett meddelande."
 
@@ -814,7 +815,7 @@ msgstr "_Ring"
 msgid "Start a voice or video conversation with this contact"
 msgstr "Starta röst- eller videosamtal med denna kontakt"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1423
+#: ../libempathy-gtk/empathy-contact-list-view.c:1417
 msgid "Sorry, I don't want you in my contact list anymore."
 msgstr "Tyvärr, jag vill inte längre ha dig i min kontaktlista."
 
@@ -1282,12 +1283,12 @@ msgstr ""
 "Nytt meddelande från %s:\n"
 "%s"
 
-#: ../libempathy-gtk/empathy-status-icon.c:604
+#: ../libempathy-gtk/empathy-status-icon.c:603
 #, c-format
 msgid "Subscription requested by %s"
 msgstr "Prenumeration begärd av %s"
 
-#: ../libempathy-gtk/empathy-status-icon.c:607
+#: ../libempathy-gtk/empathy-status-icon.c:606
 #, c-format
 msgid ""
 "\n"
@@ -1304,19 +1305,24 @@ msgstr "Status"
 msgid "_Show Contact List"
 msgstr "_Visa kontaktlista"
 
-#: ../libempathy-gtk/empathy-theme-manager.c:87
+#: ../libempathy-gtk/empathy-theme-boxes.c:779
+#: ../libempathy-gtk/empathy-theme-irc.c:297
+msgid "%A %d %B %Y"
+msgstr "%A %d %B %Y"
+
+#: ../libempathy-gtk/empathy-theme-manager.c:78
 msgid "Classic"
 msgstr "Klassiskt"
 
-#: ../libempathy-gtk/empathy-theme-manager.c:88
+#: ../libempathy-gtk/empathy-theme-manager.c:79
 msgid "Simple"
 msgstr "Enkelt"
 
-#: ../libempathy-gtk/empathy-theme-manager.c:89
+#: ../libempathy-gtk/empathy-theme-manager.c:80
 msgid "Clean"
 msgstr "Rent"
 
-#: ../libempathy-gtk/empathy-theme-manager.c:90
+#: ../libempathy-gtk/empathy-theme-manager.c:81
 msgid "Blue"
 msgstr "Blått"
 
