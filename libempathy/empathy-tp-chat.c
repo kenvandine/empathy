@@ -561,6 +561,49 @@ empathy_tp_chat_new (McAccount *account,
 			     NULL);
 }
 
+EmpathyTpChat *
+empathy_tp_chat_new_with_contact (EmpathyContact *contact)
+{
+	EmpathyTpChat  *chat;
+	MissionControl *mc;
+	McAccount      *account;
+	TpConn         *tp_conn;
+	TpChan         *text_chan;
+	const gchar    *bus_name;
+	guint           handle;
+
+	g_return_val_if_fail (EMPATHY_IS_CONTACT (contact), NULL);
+
+	mc = empathy_mission_control_new ();
+	account = empathy_contact_get_account (contact);
+
+	if (mission_control_get_connection_status (mc, account, NULL) != 0) {
+		/* The account is not connected. */
+		return NULL;
+	}
+
+	tp_conn = mission_control_get_connection (mc, account, NULL);
+	g_return_val_if_fail (tp_conn != NULL, NULL);
+	bus_name = dbus_g_proxy_get_bus_name (DBUS_G_PROXY (tp_conn));
+	handle = empathy_contact_get_handle (contact);
+
+	text_chan = tp_conn_new_channel (tp_get_bus (),
+					 tp_conn,
+					 bus_name,
+					 TP_IFACE_CHANNEL_TYPE_TEXT,
+					 TP_HANDLE_TYPE_CONTACT,
+					 handle,
+					 TRUE);
+
+	chat = empathy_tp_chat_new (account, text_chan);
+
+	g_object_unref (tp_conn);
+	g_object_unref (text_chan);
+	g_object_unref (mc);
+
+	return chat;
+}
+
 gboolean
 empathy_tp_chat_get_acknowledge (EmpathyTpChat *chat)
 {
