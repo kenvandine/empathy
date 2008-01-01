@@ -251,16 +251,7 @@ private_chat_contact_presence_updated_cb (EmpathyContact     *contact,
 		/* If offline message is not supported by CM we need to
 		 * request a new Text Channel. */
 		if (!empathy_chat_is_connected (EMPATHY_CHAT (chat))) {
-			MissionControl *mc;
-
-			mc = empathy_mission_control_new ();
-			mission_control_request_channel (mc,
-							 empathy_contact_get_account (contact),
-							 TP_IFACE_CHANNEL_TYPE_TEXT,
-							 empathy_contact_get_handle (contact),
-							 TP_HANDLE_TYPE_CONTACT,
-							 NULL, NULL);
-			g_object_unref (mc);
+			empathy_chat_with_contact (contact);
 		}
 	}
 

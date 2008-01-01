@@ -451,3 +451,33 @@ empathy_call_contact (EmpathyContact *contact)
 #endif
 }
 
+void
+empathy_chat_with_contact (EmpathyContact  *contact)
+{
+	MissionControl *mc;
+
+	mc = empathy_mission_control_new ();
+	mission_control_request_channel (mc,
+					 empathy_contact_get_account (contact),
+					 TP_IFACE_CHANNEL_TYPE_TEXT,
+					 empathy_contact_get_handle (contact),
+					 TP_HANDLE_TYPE_CONTACT,
+					 NULL, NULL);
+	g_object_unref (mc);
+}
+
+void
+empathy_chat_with_contact_id (McAccount *account, const gchar *contact_id)
+{
+	MissionControl *mc;
+
+	mc = empathy_mission_control_new ();
+	mission_control_request_channel_with_string_handle (mc,
+							    account,
+							    TP_IFACE_CHANNEL_TYPE_TEXT,
+							    contact_id,
+							    TP_HANDLE_TYPE_CONTACT,
+							    NULL, NULL);
+	g_object_unref (mc);
+}
+

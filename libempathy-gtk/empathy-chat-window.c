@@ -1626,16 +1626,7 @@ chat_window_drag_data_received (GtkWidget        *widget,
 		chat = empathy_chat_window_find_chat (account, id);
 
 		if (!chat) {
-			MissionControl *mc;
-
-			mc = empathy_mission_control_new ();
-			mission_control_request_channel (mc,
-							 empathy_contact_get_account (contact),
-							 TP_IFACE_CHANNEL_TYPE_TEXT,
-							 empathy_contact_get_handle (contact),
-							 TP_HANDLE_TYPE_CONTACT,
-							 NULL, NULL);
-			g_object_unref (mc);
+			empathy_chat_with_contact_id (account, id);
 			return;
 		}
 

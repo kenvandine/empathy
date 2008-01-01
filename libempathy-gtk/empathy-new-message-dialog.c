@@ -56,8 +56,8 @@ new_message_dialog_response_cb (GtkWidget               *widget,
 				gint                    response,
 				EmpathyNewMessageDialog *dialog)
 {
-	McAccount      *account;
-	const gchar    *id;
+	McAccount   *account;
+	const gchar *id;
 
 	account = empathy_account_chooser_get_account (EMPATHY_ACCOUNT_CHOOSER (dialog->account_chooser));
 	id = gtk_entry_get_text (GTK_ENTRY (dialog->entry_id));
@@ -70,16 +70,7 @@ new_message_dialog_response_cb (GtkWidget               *widget,
 	}
 
 	if (response == GTK_RESPONSE_OK) {
-		MissionControl *mc;
-
-		mc = empathy_mission_control_new ();
-		mission_control_request_channel_with_string_handle (mc,
-								    account,
-								    TP_IFACE_CHANNEL_TYPE_TEXT,
-								    id,
-								    TP_HANDLE_TYPE_CONTACT,
-								    NULL, NULL);
-		g_object_unref (mc);
+		empathy_chat_with_contact_id (account, id);
 	}	
 	else if (response == 3) {
 		EmpathyContactFactory *factory;

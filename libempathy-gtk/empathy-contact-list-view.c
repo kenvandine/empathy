@@ -183,8 +183,6 @@ static void        contact_list_view_row_expand_or_collapse_cb (EmpathyContactLi
 								gpointer                    user_data);
 static void        contact_list_view_action_cb                 (GtkAction                  *action,
 								EmpathyContactListView      *view);
-static void        contact_list_view_action_activated          (EmpathyContactListView      *view,
-								EmpathyContact              *contact);
 static void        contact_list_view_voip_activated            (EmpathyContactListView      *view,
 								EmpathyContact              *contact);
 
@@ -1314,7 +1312,7 @@ contact_list_view_row_activated_cb (EmpathyContactListView *view,
 			    -1);
 
 	if (contact) {
-		contact_list_view_action_activated (view, contact);
+		empathy_chat_with_contact (contact);
 		g_object_unref (contact);
 	}
 }
@@ -1397,7 +1395,7 @@ contact_list_view_action_cb (GtkAction             *action,
 	parent = empathy_get_toplevel_window (GTK_WIDGET (view));
 
 	if (contact && strcmp (name, "Chat") == 0) {
-		contact_list_view_action_activated (view, contact);
+		empathy_chat_with_contact (contact);
 	}
 	else if (contact && strcmp (name, "Call") == 0) {
 		contact_list_view_voip_activated (view, contact);
@@ -1433,22 +1431,6 @@ contact_list_view_action_cb (GtkAction             *action,
 	if (contact) {
 		g_object_unref (contact);
 	}
-}
-
-static void
-contact_list_view_action_activated (EmpathyContactListView *view,
-				    EmpathyContact         *contact)
-{
-	MissionControl *mc;
-
-	mc = empathy_mission_control_new ();
-	mission_control_request_channel (mc,
-					 empathy_contact_get_account (contact),
-					 TP_IFACE_CHANNEL_TYPE_TEXT,
-					 empathy_contact_get_handle (contact),
-					 TP_HANDLE_TYPE_CONTACT,
-					 NULL, NULL);
-	g_object_unref (mc);
 }
 
 static void
