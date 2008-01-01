@@ -981,6 +981,33 @@ tp_contact_list_rename_group (EmpathyContactList *list,
 }
 
 static void
+tp_contact_list_remove_group (EmpathyContactList *list,
+			      const gchar *group)
+{
+	EmpathyTpGroup *tp_group;
+	GList	       *members;
+
+	g_return_if_fail (EMPATHY_IS_TP_CONTACT_LIST (list));
+
+	tp_group = tp_contact_list_find_group (EMPATHY_TP_CONTACT_LIST (list),
+					       group);
+	
+	if (!tp_group) {
+		return;
+	}
+
+	empathy_debug (DEBUG_DOMAIN, "remove group %s", group);
+
+	/* Remove all members of the group */
+	members = empathy_tp_group_get_members (tp_group);
+	empathy_tp_group_remove_members (tp_group, members, "");
+	empathy_tp_group_close (tp_group);
+
+	g_list_foreach (members, (GFunc) g_object_unref, NULL);
+	g_list_free (members);
+}
+
+static void
 tp_contact_list_iface_init (EmpathyContactListIface *iface)
 {
 	iface->add               = tp_contact_list_add;
@@ -992,5 +1019,6 @@ tp_contact_list_iface_init (EmpathyContactListIface *iface)
 	iface->add_to_group      = tp_contact_list_add_to_group;
 	iface->remove_from_group = tp_contact_list_remove_from_group;
 	iface->rename_group      = tp_contact_list_rename_group;
+	iface->remove_group	 = tp_contact_list_remove_group;
 }
 

@@ -61,6 +61,8 @@ struct _EmpathyContactListIface {
 	void             (*rename_group)      (EmpathyContactList *list,
 					       const gchar        *old_group,
 					       const gchar        *new_group);
+	void		 (*remove_group)      (EmpathyContactList *list,
+					       const gchar	  *group);
 };
 
 GType    empathy_contact_list_get_type          (void) G_GNUC_CONST;
@@ -84,6 +86,8 @@ void     empathy_contact_list_remove_from_group (EmpathyContactList *list,
 void     empathy_contact_list_rename_group      (EmpathyContactList *list,
 						 const gchar        *old_group,
 						 const gchar        *new_group);
+void	 empathy_contact_list_remove_group	(EmpathyContactList *list,
+						 const gchar	    *group);
 
 G_END_DECLS
 

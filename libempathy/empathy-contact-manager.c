@@ -482,6 +482,27 @@ contact_manager_rename_group (EmpathyContactList *manager,
 			      &data);
 }
 
+static void contact_manager_remove_group_foreach (McAccount	*account,
+						  EmpathyTpContactList *list,
+						  const gchar *group)
+{
+	empathy_contact_list_remove_group (EMPATHY_CONTACT_LIST (list),
+					   group);
+}
+
+static void
+contact_manager_remove_group (EmpathyContactList *manager,
+			      const gchar *group)
+{
+	EmpathyContactManagerPriv *priv = GET_PRIV (manager);
+	
+	g_return_if_fail (EMPATHY_IS_CONTACT_MANAGER (manager));
+
+	g_hash_table_foreach (priv->lists,
+			      (GHFunc) contact_manager_remove_group_foreach,
+			      (gpointer) group);
+}
+
 static void
 contact_manager_iface_init (EmpathyContactListIface *iface)
 {
@@ -494,5 +515,6 @@ contact_manager_iface_init (EmpathyContactListIface *iface)
 	iface->add_to_group      = contact_manager_add_to_group;
 	iface->remove_from_group = contact_manager_remove_from_group;
 	iface->rename_group      = contact_manager_rename_group;
+	iface->remove_group	 = contact_manager_remove_group;
 }
 

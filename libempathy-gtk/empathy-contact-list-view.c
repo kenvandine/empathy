@@ -261,6 +261,7 @@ static const gchar *ui_info =
 	"  </popup>"
 	"  <popup name='Group'>"
 	"    <menuitem action='Rename'/>"
+	"    <menuitem action='Remove'/>"
 	"  </popup>"
 	"</ui>";
 
@@ -1425,6 +1426,12 @@ contact_list_view_action_cb (GtkAction             *action,
 					parent);
 	}
 	else if (group && strcmp (name, "Rename") == 0) {
+	}
+	else if (group && strcmp (name, "Remove") == 0) {
+		EmpathyContactList *list;
+
+		list = empathy_contact_list_store_get_list_iface (priv->store);
+		empathy_contact_list_remove_group (list, group);
 	}
 
 	g_free (group);

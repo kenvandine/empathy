@@ -203,3 +203,15 @@ empathy_contact_list_rename_group (EmpathyContactList *list,
 	}
 }
 
+void
+empathy_contact_list_remove_group (EmpathyContactList *list,
+				   const gchar *group)
+{
+	g_return_if_fail (EMPATHY_IS_CONTACT_LIST (list));
+	g_return_if_fail (group != NULL);
+
+	if (EMPATHY_CONTACT_LIST_GET_IFACE (list)->remove_group) {
+		EMPATHY_CONTACT_LIST_GET_IFACE (list)->remove_group (list, group);
+	}
+}
+
