@@ -558,7 +558,7 @@ empathy_avatar_chooser_get_image_data (EmpathyAvatarChooser  *chooser,
 	if (data) {
 		*data = priv->image_data;
 	}
-	if (*data_size) {
+	if (data_size) {
 		*data_size = priv->image_data_size;
 	}
 	if (mime_type) {
