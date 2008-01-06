@@ -1,0 +1,347 @@
+2008-01-03  Kjartan Maraas  <kmaraas@gnome.org>
+
+	* nb.po: Updated Norwegian bokmål translation.
+
+2007-12-31  Yannig Marchegay <yannig@marchegay.org>
+
+	* oc.po: Updated Occitan translation.
+
+2007-12-30  Claude Paroz  <claude@2xlibre.net>
+
+	* fr.po: Updated French translation.
+
+2007-12-30  Daniel Nylander <po@danielnylander.se>
+
+	* sv.po: Updated Swedish translation.
+
+2007-12-30  Jorge Gonzalez  <jorgegonz@svn.gnome.org>  
+
+	* es.po: Updated Spanish translation 
+
+2007-12-27  Leonardo Ferreira Fontenelle  <leonardof@svn.gnome.org>
+
+	* pt_BR.po: Brazilian Portuguese translation updated by Og Maciel.
+
+2007-12-27  Inaki Larranaga Murgoitio  <dooteo@euskalgnu.org>
+
+        * eu.po: Updated Basque translation.
+
+2007-12-23  Djihed Afifi <djihed@gmail.com> 
+
+	* ar.po: Updated Arabic Translation by Djihed Afifi.
+
+2007-12-19  Kjartan Maraas  <kmaraas@gnome.org>
+
+	* nb.po: Updated Norwegian bokmål translation.
+
+2007-12-18  Takeshi AIHANA <takeshi.aihana@gmail.com>
+
+	* ja.po: Updated Japanese translation.
+
+2007-12-17  Xavier Claessens  <xclaesse@gmail.com>
+
+        * pt_BR.po: Updated pt_BR translation (André Filipe de Assunção e Brito).
+
+2007-12-17  Luca Ferretti  <elle.uca@libero.it>
+
+	* it.po: Updated Italian translation by Milo Casagrande.
+
+2007-12-16  Espen Stefansen  <espens@svn.gnome.org>
+
+	* nb.po: Updated Norwegian Bokmål translation.
+
+2007-12-16  Daniel Nylander <po@danielnylander.se>
+
+	* sv.po: Updated Swedish translation.
+
+2007-12-06  Jorge Gonzalez  <jorgegonz@svn.gnome.org>
+
+        * es.po: Updated Spanish translation
+
+2007-12-05  Takeshi AIHANA <takeshi.aihana@gmail.com>
+
+	* ja.po: Updated Japanese translation.
+
+2007-12-03  Ignacio Casal Quinteiro  <nacho.resa@gmail.com>
+
+	* gl.po: Updated Galician Translation.
+	* POTFILES.in: Updated.
+
+2007-12-03  Matej Urbančič  <mateju@svn.gnome.org>
+
+        * sl.po: Updated Slovenian translation
+
+2007-11-30  Jorge Gonzalez  <jorgegonz@svn.gnome.org>
+
+        * es.po: Updated Spanish translation
+
+2007-11-27  Luca Ferretti  <elle.uca@libero.it>
+
+	* it.po: Updated Italian translation by Milo Casagrande.
+
+2007-11-26  Alexander Shopov  <ash@contact.bg>
+
+	* bg.po: Updated Bulgarian translation
+
+2007-11-23  Takeshi AIHANA <takeshi.aihana@gmail.com>
+
+	* ja.po: Updated Japanese translation.
+
+2007-11-21  Yannig Marchegay <yannig@marchegay.org> 
+
+	* oc.po: Updated Occitan translation
+
+2007-11-14  Andre Klapper  <a9016009@gmx.de>
+
+	* de.po: Updated German translation.
+
+2007-11-11  Daniel Nylander <po@danielnylander.se>
+
+	* sv.po: Updated Swedish translation.
+
+2007-11-09  Ilkka Tuohela  <hile@iki.fi>
+
+	* fi.po: Updated Finnish translation.
+
+2007-11-06  Ignacio Casal Quinteiro  <nacho.resa@gmail.com>
+
+	* gl.po: Updated Galician Translation.
+
+2007-11-06  Jorge Gonzalez <jorgegonz@svn.gnome.org>   
+
+        * es.po: Updated Spanish translation
+
+2007-11-04  Jorge Gonzalez  <jorgegonz@svn.gnome.org>
+
+        * es.po: Updated Spanish translation
+
+2007-11-01  Espen Stefansen <espens@svn.gnome.org>
+
+	* nb.po: Updated Norwegian Bokmål translation.
+
+2007-11-01  Daniel Nylander <po@danielnylander.se>
+
+	* sv.po: Updated Swedish translation.
+
+2007-11-01  Takeshi AIHANA <takeshi.aihana@gmail.com>
+
+	* ja.po: Updated Japanese translation.
+
+2007-11-01  Jorge Gonzalez  <jorgegonz@svn.gnome.org>
+
+        * es.po: Updated Spanish translation
+
+2007-10-30  Gabor Kelemen  <kelemeng@gnome.hu>
+
+	* hu.po: Translation updated
+
+2007-10-28  Ignacio Casal Quinteiro  <nacho.resa@gmail.com>
+
+	* gl.po: Added Galician Translation.
+	* LINGUAS: Added 'gl'
+
+2007-10-25  Jorge Gonzalez  <jorgegonz@svn.gnome.org>
+
+        * es.po: Updated Spanish translation.                     
+
+2007-10-24  Claude Paroz  <claude@2xlibre.net>
+
+	* fr.po: Updated French translation.
+
+2007-10-23  Djihed Afifi <djihed@gmail.com> 
+
+	* ar.po: Updated Arabic Translation by Djihed Afifi.
+
+2007-10-22  Daniel Nylander <po@danielnylander.se>
+
+	* sv.po: Updated Swedish translation.
+
+2007-10-19  Jorge Gonzalez  <jorgegonz@svn.gnome.org>
+
+        * es.po: Updated Spanish translation.
+
+2007-10-14  Jorge Gonzalez  <jorgegonz@svn.gnome.org>
+
+        * es.po: Updated Spanish translation.
+
+2007-10-11  Daniel Nylander <po@danielnylander.se>
+
+	* sv.po: Updated Swedish translation.
+
+2007-10-08  Takeshi AIHANA <takeshi.aihana@gmail.com>
+
+	* ja.po: Updated Japanese translation.
+
+2007-10-07  Jorge Gonzalez  <jorgegonz@svn.gnome.org>
+
+        * es.po: Updated Spanish translation.
+
+2007-09-29  Takeshi AIHANA <takeshi.aihana@gmail.com>
+
+	* ja.po: Updated Japanese translation.
+
+2007-09-26  Jorge Gonzalez  <jorgegonz@svn.gnome.org>
+
+	* es.po: Updated Spanish translation
+
+2007-09-20  Jorge Gonzalez  <jorgegonz@svn.gnome.org>
+
+        * es.po: Updated Spanish translation
+
+2007-09-13  Ilkka Tuohela  <hile@iki.fi>
+
+	* fi.po: Updated Finnish translation.
+
+2007-09-10  Jordi Mallach  <jordi@sindominio.net>
+
+	* ca.po: Updated Catalan translation.
+
+2007-09-01  Ilkka Tuohela  <hile@iki.fi>
+
+	* fi.po: Updated Finnish translation.
+
+2007-08-30  Stéphane Raimbault  <stephane.raimbault@gmail.com>
+
+	* fr.po: Updated French translation by Laurent Bigonville and
+	Stéphane Raimbault.
+
+2007-08-26  Xavier Claessens  <xclaesse@gmail.com>
+
+	* hr.po: Updated Croatian translation (Senko Rasic).
+
+2007-08-26  Takeshi AIHANA <takeshi.aihana@gmail.com>
+
+	* ja.po: Updated Japanese translation.
+
+2007-08-25  Jorge Gonzalez <jorgegonz@svn.gnome.org>
+
+	* es.po: Updated Spanish translation
+
+2007-08-19  Artur Flinta  <aflinta@svn.gnome.org>
+
+	* pl.po: Updated Polish translation (GNOME PL Team).
+
+2007-08-18  Jorge Gonzalez  <jorgegonz@svn.gnome.org>
+
+	* es.po: Updated Spanish translation
+
+2007-08-16  Ilkka Tuohela  <hile@iki.fi>
+
+	* fi.po: Updated Finnish translation.
+
+2007-08-16  Ilkka Tuohela  <hile@iki.fi>
+
+	* fi.po: Updated Finnish translation.
+
+2007-08-14  Takeshi AIHANA <takeshi.aihana@gmail.com>
+
+	* ja.po: Updated Japanese translation.
+
+2007-08-13  Stéphane Raimbault  <stephane.raimbault@gmail.com>
+
+	* fr.po: One more fix. Thanks to Claude Paroz.
+
+2007-08-13  Frederic Peters  <fpeters@0d.be>
+
+	* fr.po: Updated French translation with fixes suggested by Stéphane
+	Raimbault.
+
+2007-08-10  Frederic Peters  <fpeters@0d.be>
+
+	* fr.po: Updated French translation.
+
+2007-08-09  Inaki Larranaga Murgoitio  <dooteo@zundan.com>
+
+	* eu.po: Updated Basque translation.
+
+2007-08-08  Artur Flinta  <aflinta@svn.gnome.org>
+
+	* pl.po: Updated Polish translation by GNOME PL Team.
+
+2007-08-05  Jorge Gonzalez <jorgegonz@svn.gnome.org>
+
+	* es.po: Updated Spanish translation
+
+2007-08-01  Jorge Gonzalez  <jorgegonz@svn.gnome.org>                         
+
+	* es.po: Updated Spanish translation
+
+2007-07-31  Takeshi AIHANA <takeshi.aihana@gmail.com>
+
+	* ja.po: Updated Japanese translation.
+
+2007-07-30  Daniel Nylander <po@danielnylander.se>
+
+	* sv.po: Updated Swedish translation.
+
+2007-07-15  Jorge Gonzalez <jorgegonz@svn.gnome.org>
+
+        * es.po: Updated Spanish translation
+
+2007-06-30  Jorge Gonzalez <jorgegonz@svn.gnome.org>
+
+	* pl.po: Updated Polish translation (Tomasz Dominikowski).
+
+2007-06-28  Jorge Gonzalez <jorgegonz@svn.gnome.org>
+
+        * es.po: Updated Spanish translation
+
+2007-06-24  Takeshi AIHANA <takeshi.aihana@gmail.com>
+
+	* ja.po: Updated Japanese translation.
+
+2007-06-21  Daniel Nylander <po@danielnylander.se>
+
+	* sv.po: Updated Swedish translation.
+
+2007-06-21  Pema Geyleg <pema.geyleg@gmail.com>
+
+	* dz.po: Updated dzongkha translation
+
+2007-06-18  Gabor Kelemen  <kelemeng@gnome.hu>
+
+	* hu.po: Translation updated.
+
+2007-06-15  Jorge Gonzalez <jorgegonz@svn.gnome.org>
+
+        * es.po: Updated Spanish translation
+
+2007-06-15  Gabor Kelemen  <kelemeng@gnome.hu>
+
+	* hu.po: Translation updated - this time really :).
+
+2007-06-11  Gabor Kelemen  <kelemeng@gnome.hu>
+
+	* hu.po: Translation updated.
+
+2007-06-10  Xavier Claessens  <xclaesse@gmail.com>
+
+	* pl.po: Updated Polish translation (Tomasz Dominikowski).
+
+2007-06-10  Takeshi AIHANA <takeshi.aihana@gmail.com>
+
+	* ja.po: Updated Japanese translation.
+
+2007-06-07  Jorge Gonzalez <jorgegonz@svn.gnome.org>
+
+        * es.po: Updated Spanish translation 
+
+2007-06-03  Daniel Nylander <po@danielnylander.se>
+
+	* sv.po: Updated Swedish translation.
+
+2007-05-26  Takeshi AIHANA <takeshi.aihana@gmail.com>
+
+	* ja.po, LINGUAS: Added Japanese translation.
+
+2007-05-15  David Lodge <dave@cirt.net>
+
+	* en_GB.po: Added British English translation
+
+2007-05-14  Daniel Nylander <po@danielnylander.se>
+
+	* sv.po: Added Swedish translation.
+
+2007-05-14  Xavier Claessens  <xclaesse@gmail.com>
+
+	* Initial version imported from gossip
