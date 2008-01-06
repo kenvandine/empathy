@@ -59,6 +59,8 @@ AM_GCONF_SOURCE_2
 GLIB_GENMARSHAL=`$PKG_CONFIG glib-2.0 --variable=glib_genmarshal`
 AC_SUBST(GLIB_GENMARSHAL)
 
+EMPATHY_ARG_VALGRIND
+
 # -----------------------------------------------------------
 # Pkg-Config dependency checks
 # -----------------------------------------------------------
@@ -294,6 +296,7 @@ AC_OUTPUT([
    libempathy-gtk/Makefile
    libempathy-gtk/libempathy-gtk.pc
    src/Makefile
+   m4/Makefile
    megaphone/Makefile
    megaphone/src/Makefile
    megaphone/data/Makefile
