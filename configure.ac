@@ -213,7 +213,7 @@ AM_CONDITIONAL(HAVE_NOTHERE, test "x$have_nothere" = "xyes")
 AC_ARG_ENABLE(tests,
               AS_HELP_STRING([--enable-tests=@<:@no/yes/auto@:>@],
                              [build tests]), ,
-                             enable_tests=no)
+                             enable_tests=auto)
 
 if test "x$enable_tests" != "xno"; then
    PKG_CHECK_MODULES(CHECK,
