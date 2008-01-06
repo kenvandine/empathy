@@ -13,6 +13,7 @@ Makefile
 *.rej
 *.bak
 *~
+*.pyc
 
 ChangeLog
 stamp-h1
