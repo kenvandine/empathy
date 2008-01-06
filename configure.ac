@@ -296,7 +296,6 @@ AC_OUTPUT([
    libempathy-gtk/Makefile
    libempathy-gtk/libempathy-gtk.pc
    src/Makefile
-   m4/Makefile
    megaphone/Makefile
    megaphone/src/Makefile
    megaphone/data/Makefile
