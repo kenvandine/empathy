@@ -1,10 +1,11 @@
 [Profile]
 Manager=haze
-Protocol=aim
-IconName = im-aim
-DisplayName=AIM
+Protocol=yahoo
+DisplayName=Yahoo
+IconName = im-yahoo
 ConfigurationUI = haze
 Capabilities = chat-p2p, supports-alias, supports-avatars, supports-roster
 VCardDefault = 1
-VCardField = X-AIM
+VCardField = X-YAHOO
 SupportedPresences = away,hidden,do-not-disturb
+

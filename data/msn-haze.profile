@@ -1,10 +1,12 @@
 [Profile]
 Manager=haze
-Protocol=aim
-IconName = im-aim
-DisplayName=AIM
+Protocol=msn
+DisplayName=MSN (Haze)
+IconName = im-msn
 ConfigurationUI = haze
+SupportsInvisible = 0
 Capabilities = chat-p2p, supports-alias, supports-avatars, supports-roster
 VCardDefault = 1
-VCardField = X-AIM
+VCardField = X-MSN
 SupportedPresences = away,hidden,do-not-disturb
+

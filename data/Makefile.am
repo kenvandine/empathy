@@ -2,13 +2,16 @@ SUBDIRS = icons
 
 profiledir = $(datadir)/mission-control/profiles
 profile_DATA = 				\
+	aim.profile			\
+	icq.profile			\
 	jabber.profile			\
-	gtalk.profile			\
 	salut.profile			\
+	yahoo.profile			\
+	gtalk.profile			\
 	irc.profile			\
 	msn.profile			\
-	sofiasip.profile		\
-	aim.profile
+	msn-haze.profile		\
+	sofiasip.profile
 
 autostartdir = $(sysconfdir)/xdg/autostart
 autostart_in_files = empathy.desktop.in

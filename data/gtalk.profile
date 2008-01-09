@@ -1,19 +1,15 @@
 [Profile]
-Manager=gabble
-Protocol=jabber
-DisplayName=Google Talk
+Manager = gabble
+Protocol = jabber
+DisplayName = Google Talk
 IconName = im-google-talk
 ConfigurationUI = jabber
-Capabilities = chat-p2p, chat-room, chat-room-list, voice-p2p, split-account, supports-avatars, supports-alias
-SupportedPresences = offline,available,away,extended-away,do-not-disturb
-VCardField = X-Jabber
-
-
-DefaultAccountDomain = gmail.com
+VCardDefault = 0
+VCardField = X-JABBER
+Capabilities = chat-p2p, voice-p2p, split-account, chat-room, chat-room-list, registration-ui, supports-avatars, supports-alias, supports-roster
+DefaultAccountDomain = gmail.com, googlemail.com
 Default-server = talk.google.com
 Default-port = 5223
 Default-old-ssl = 1
 Default-fallback-conference-server = conference.jabber.org
-Default-randomize-resource = 1
-Default-ignore-ssl-errors = 1
-
+SupportedPresences = away,extended-away,do-not-disturb
