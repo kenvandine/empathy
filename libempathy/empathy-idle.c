@@ -60,7 +60,9 @@ struct _EmpathyIdlePriv {
 	gboolean        auto_away;
 	gboolean        use_nm;
 
+	gboolean        away_reset_status;
 	McPresence      away_saved_state;
+	gboolean        nm_reset_status;
 	McPresence      nm_saved_state;
 
 	gboolean        is_idle;
@@ -538,9 +540,11 @@ idle_session_idle_changed_cb (DBusGProxy  *gs_proxy,
 			 * default presence. */
 			new_state = priv->state;
 			priv->away_saved_state = MC_PRESENCE_AVAILABLE;
+			priv->away_reset_status = TRUE;
 		} else {
 			new_state = MC_PRESENCE_AWAY;
 			priv->away_saved_state = priv->state;
+			priv->away_reset_status = FALSE;
 		}
 
 		empathy_debug (DEBUG_DOMAIN, "Going to autoaway");
@@ -551,18 +555,23 @@ idle_session_idle_changed_cb (DBusGProxy  *gs_proxy,
 		/* We are no more idle, restore state */
 		idle_ext_away_stop (idle);
 
-		empathy_debug (DEBUG_DOMAIN, "Restoring state to %d",
-			      priv->away_saved_state);
+		empathy_debug (DEBUG_DOMAIN, "Restoring state to %d, reset status: %s",
+			      priv->away_saved_state,
+			      priv->away_reset_status ? "Yes" : "No");
 
 		if (priv->nm_connected) {
-			empathy_idle_set_state (idle, priv->away_saved_state);
+			empathy_idle_set_presence (idle,
+						   priv->away_saved_state,
+						   priv->away_reset_status ? NULL : priv->status);
 		} else {
 			/* We can't restore state now, will do when NM gets
 			 * connected. */
 			priv->nm_saved_state = priv->away_saved_state;
+			priv->nm_reset_status = priv->away_reset_status;
 		}
 
 		priv->away_saved_state = MC_PRESENCE_UNSET;
+		priv->away_reset_status = FALSE;
 	}
 
 	priv->is_idle = is_idle;
@@ -600,8 +609,11 @@ idle_nm_state_change_cb (DBusGProxy  *proxy,
 	}
 	else if (!old_nm_connected && new_nm_connected) {
 		/* We are now connected */
-		empathy_idle_set_state (idle, priv->nm_saved_state);
+		empathy_idle_set_presence (idle,
+					   priv->nm_saved_state,
+					   priv->nm_reset_status ? NULL : priv->status);
 		priv->nm_saved_state = MC_PRESENCE_UNSET;
+		priv->nm_reset_status = FALSE;
 	}
 
 	priv->nm_connected = new_nm_connected;
