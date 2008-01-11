@@ -138,6 +138,8 @@ empathy_log_manager_add_message (EmpathyLogManager *manager,
 	EmpathyContact *sender;
 	const gchar   *body_str;
 	const gchar   *str;
+	EmpathyAvatar *avatar;
+	gchar         *avatar_token = NULL;
 	gchar         *filename;
 	gchar         *basedir;
 	gchar         *body;
@@ -193,11 +195,17 @@ empathy_log_manager_add_message (EmpathyLogManager *manager,
 	str = empathy_contact_get_id (sender);
 	contact_id = g_markup_escape_text (str, -1);
 
+	avatar = empathy_contact_get_avatar (sender);
+	if (avatar) {
+		avatar_token = g_markup_escape_text (avatar->token, -1);		
+	}
+
 	g_fprintf (file,
-		   "<message time='%s' id='%s' name='%s' isuser='%s' type='%s'>%s</message>\n" LOG_FOOTER,
+		   "<message time='%s' id='%s' name='%s' token='%s' isuser='%s' type='%s'>%s</message>\n" LOG_FOOTER,
 		   timestamp,
 		   contact_id,
 		   contact_name,
+		   avatar_token ? avatar_token : "",
 		   empathy_contact_is_user (sender) ? "true" : "false",
 		   empathy_message_type_to_str (msg_type),
 		   body);
@@ -208,6 +216,7 @@ empathy_log_manager_add_message (EmpathyLogManager *manager,
 	g_free (contact_name);
 	g_free (timestamp);
 	g_free (body);
+	g_free (avatar_token);
 }
 
 gboolean
@@ -329,10 +338,12 @@ empathy_log_manager_get_messages_for_file (EmpathyLogManager *manager,
 	for (node = log_node->children; node; node = node->next) {
 		EmpathyMessage     *message;
 		EmpathyContact     *sender;
+		EmpathyAvatar      *avatar = NULL;
 		gchar              *time;
 		time_t              t;
 		gchar              *sender_id;
 		gchar              *sender_name;
+		gchar              *sender_avatar_token;
 		gchar              *body;
 		gchar              *is_user_str;
 		gboolean            is_user = FALSE;
@@ -347,9 +358,13 @@ empathy_log_manager_get_messages_for_file (EmpathyLogManager *manager,
 		time = xmlGetProp (node, "time");
 		sender_id = xmlGetProp (node, "id");
 		sender_name = xmlGetProp (node, "name");
+		sender_avatar_token = xmlGetProp (node, "token");
 		is_user_str = xmlGetProp (node, "isuser");
 		msg_type_str = xmlGetProp (node, "type");
 
+		if (sender_avatar_token) {
+			avatar = empathy_avatar_new_from_cache (sender_avatar_token);
+		}
 		if (is_user_str) {
 			is_user = strcmp (is_user_str, "true") == 0;
 		}
@@ -361,6 +376,11 @@ empathy_log_manager_get_messages_for_file (EmpathyLogManager *manager,
 
 		sender = empathy_contact_new_full (account, sender_id, sender_name);
 		empathy_contact_set_is_user (sender, is_user);
+		if (avatar) {
+			empathy_contact_set_avatar (sender, avatar);
+			empathy_avatar_unref (avatar);
+		}
+
 		message = empathy_message_new (body);
 		empathy_message_set_sender (message, sender);
 		empathy_message_set_timestamp (message, t);
