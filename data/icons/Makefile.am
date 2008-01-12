@@ -25,6 +25,7 @@ private_icons = \
 	hicolor_apps_16x16_im-irc.png \
 	hicolor_apps_16x16_im-xmpp.png \
 	hicolor_apps_16x16_im-msn.png \
+	hicolor_apps_16x16_im-sip.png \
 	hicolor_apps_16x16_im-local-xmpp.png \
 	hicolor_apps_22x22_im-ekiga.png \
 	hicolor_apps_22x22_im-gizmo.png \
@@ -32,6 +33,7 @@ private_icons = \
 	hicolor_apps_22x22_im-irc.png \
 	hicolor_apps_22x22_im-xmpp.png \
 	hicolor_apps_22x22_im-msn.png \
+	hicolor_apps_22x22_im-sip.png \
 	hicolor_apps_22x22_im-local-xmpp.png \
 	hicolor_apps_24x24_im-ekiga.png \
 	hicolor_apps_24x24_im-gizmo.png \
@@ -39,6 +41,7 @@ private_icons = \
 	hicolor_apps_24x24_im-irc.png \
 	hicolor_apps_24x24_im-xmpp.png \
 	hicolor_apps_24x24_im-msn.png \
+	hicolor_apps_24x24_im-sip.png \
 	hicolor_apps_24x24_im-local-xmpp.png \
 	hicolor_apps_32x32_im-ekiga.png \
 	hicolor_apps_32x32_im-gizmo.png \
@@ -46,6 +49,7 @@ private_icons = \
 	hicolor_apps_32x32_im-irc.png \
 	hicolor_apps_32x32_im-xmpp.png \
 	hicolor_apps_32x32_im-msn.png \
+	hicolor_apps_32x32_im-sip.png \
 	hicolor_apps_32x32_im-local-xmpp.png \
 	hicolor_apps_48x48_im-ekiga.png \
 	hicolor_apps_48x48_im-gizmo.png \
@@ -53,6 +57,7 @@ private_icons = \
 	hicolor_apps_48x48_im-irc.png \
 	hicolor_apps_48x48_im-xmpp.png \
 	hicolor_apps_48x48_im-msn.png \
+	hicolor_apps_48x48_im-sip.png \
 	hicolor_apps_48x48_im-local-xmpp.png \
 	hicolor_apps_scalable_im-ekiga.svg \
 	hicolor_apps_scalable_im-gizmo.svg \
@@ -60,6 +65,7 @@ private_icons = \
 	hicolor_apps_scalable_im-irc.svg \
 	hicolor_apps_scalable_im-xmpp.svg \
 	hicolor_apps_scalable_im-msn.svg \
+	hicolor_apps_scalable_im-sip.png \
 	hicolor_apps_scalable_im-local-xmpp.svg \
 	hicolor_status_16x16_empathy-available.png \
 	hicolor_status_16x16_empathy-away.png \
