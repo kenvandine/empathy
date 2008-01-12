@@ -562,8 +562,8 @@ empathy_tp_group_new (McAccount *account,
 	DBusGProxy         *group_iface;
 	GError             *error = NULL;
 
-	g_return_val_if_fail (TELEPATHY_IS_CHAN (tp_chan), NULL);
 	g_return_val_if_fail (MC_IS_ACCOUNT (account), NULL);
+	g_return_val_if_fail (TELEPATHY_IS_CHAN (tp_chan), NULL);
 
 	group_iface = tp_chan_get_interface (tp_chan,
 					     TP_IFACE_QUARK_CHANNEL_INTERFACE_GROUP);
@@ -620,9 +620,11 @@ tp_group_async_cb (DBusGProxy *proxy, GError *error, gpointer user_data)
 }
 
 void
-empathy_tp_group_close  (EmpathyTpGroup *group)
+empathy_tp_group_close (EmpathyTpGroup *group)
 {
 	EmpathyTpGroupPriv *priv = GET_PRIV (group);
+
+	g_return_if_fail (EMPATHY_IS_TP_GROUP (group));
 
 	tp_chan_close_async (DBUS_G_PROXY (priv->tp_chan),
 			     tp_group_async_cb,
@@ -679,6 +681,9 @@ empathy_tp_group_add_member (EmpathyTpGroup *group,
 	GArray             *handles;
 	guint               handle;
 
+	g_return_if_fail (EMPATHY_IS_TP_GROUP (group));
+	g_return_if_fail (EMPATHY_IS_CONTACT (contact));
+
 	handle = empathy_contact_get_handle (contact);
 	handles = g_array_new (FALSE, FALSE, sizeof (guint));
 	g_array_append_val (handles, handle);
@@ -722,6 +727,9 @@ empathy_tp_group_remove_member (EmpathyTpGroup *group,
 	GArray             *handles;
 	guint               handle;
 
+	g_return_if_fail (EMPATHY_IS_TP_GROUP (group));
+	g_return_if_fail (EMPATHY_IS_CONTACT (contact));
+
 	handle = empathy_contact_get_handle (contact);
 	handles = g_array_new (FALSE, FALSE, sizeof (guint));
 	g_array_append_val (handles, handle);
@@ -740,6 +748,8 @@ empathy_tp_group_get_members (EmpathyTpGroup *group)
 {
 	EmpathyTpGroupPriv *priv = GET_PRIV (group);
 
+	g_return_val_if_fail (EMPATHY_IS_TP_GROUP (group), NULL);
+
 	g_list_foreach (priv->members, (GFunc) g_object_ref, NULL);
 
 	return g_list_copy (priv->members);
@@ -750,6 +760,8 @@ empathy_tp_group_get_local_pendings (EmpathyTpGroup *group)
 {
 	EmpathyTpGroupPriv *priv = GET_PRIV (group);
 	GList              *pendings = NULL, *l;
+
+	g_return_val_if_fail (EMPATHY_IS_TP_GROUP (group), NULL);
 
 	for (l = priv->local_pendings; l; l = l->next) {
 		EmpathyPendingInfo *info;
@@ -769,6 +781,8 @@ GList *
 empathy_tp_group_get_remote_pendings (EmpathyTpGroup *group)
 {
 	EmpathyTpGroupPriv *priv = GET_PRIV (group);
+
+	g_return_val_if_fail (EMPATHY_IS_TP_GROUP (group), NULL);
 
 	g_list_foreach (priv->remote_pendings, (GFunc) g_object_ref, NULL);
 
@@ -819,6 +833,9 @@ empathy_tp_group_is_member (EmpathyTpGroup *group,
 			    EmpathyContact *contact)
 {
 	EmpathyTpGroupPriv *priv = GET_PRIV (group);
+
+	g_return_val_if_fail (EMPATHY_IS_TP_GROUP (group), FALSE);
+	g_return_val_if_fail (EMPATHY_IS_CONTACT (contact), FALSE);
 
 	return g_list_find (priv->members, contact) != NULL;
 }
