@@ -290,10 +290,20 @@
         </long>
       </locale>
     </schema>
+    
+    <schema>
+      <key>/schemas/apps/empathy/autoconnect</key>
+      <applyto>/apps/empathy/autoconnect</applyto>
+      <owner>empathy</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+        <short>Checks if Empathy should autoconnect on startup</short>
+	<long>
+	Whether or not Empathy should automatically login to your accounts on startup.
+        </long>
+      </locale>
+    </schema>
 
   </schemalist>  
 </gconfschemafile>
-
-
-
-

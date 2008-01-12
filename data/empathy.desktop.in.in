@@ -2,7 +2,7 @@
 Version=1.0
 _Name=Empathy Instant Messenger
 _Comment=Send and receive instant messages
-Exec=empathy --no-connect
+Exec=empathy
 Icon=empathy
 StartupNotify=false
 Terminal=false

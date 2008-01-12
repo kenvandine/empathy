@@ -203,15 +203,8 @@ main (int argc, char *argv[])
 	MissionControl    *mc;
 	McAccountMonitor  *monitor;
 	EmpathyIdle       *idle;
-	gboolean           no_connect = FALSE;
+	gboolean           autoconnect = TRUE;
 	GError            *error = NULL;
-	GOptionEntry       options[] = {
-		{ "no-connect", 'n',
-		  0, G_OPTION_ARG_NONE, &no_connect,
-		  N_("Don't connect on startup"),
-		  NULL },
-		{ NULL }
-	};
 
 	empathy_debug_set_log_file_from_env ();
 
@@ -221,7 +214,7 @@ main (int argc, char *argv[])
 
 	if (!gtk_init_with_args (&argc, &argv,
 				 _("- Empathy Instant Messenger"),
-				 options, GETTEXT_PACKAGE, &error)) {
+				 NULL, GETTEXT_PACKAGE, &error)) {
 		empathy_debug (DEBUG_DOMAIN, error->message);
 		return EXIT_FAILURE;
 	}
@@ -247,7 +240,11 @@ main (int argc, char *argv[])
 			  G_CALLBACK (operation_error_cb),
 			  NULL);
 
-	if (!no_connect) {
+	empathy_conf_get_bool (empathy_conf_get(),
+			       EMPATHY_PREFS_AUTOCONNECT,
+			       &autoconnect);
+			       
+	if (autoconnect) {
 		start_mission_control (idle);
 	}
 	

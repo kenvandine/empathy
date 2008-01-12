@@ -51,6 +51,7 @@ G_BEGIN_DECLS
 #define EMPATHY_PREFS_HINTS_CLOSE_MAIN_WINDOW      EMPATHY_PREFS_PATH "/hints/close_main_window"
 #define EMPATHY_PREFS_SALUT_ACCOUNT_CREATED        EMPATHY_PREFS_PATH "/accounts/salut_created"
 #define EMPATHY_PREFS_USE_NM                       EMPATHY_PREFS_PATH "/use_nm"
+#define EMPATHY_PREFS_AUTOCONNECT                  EMPATHY_PREFS_PATH "/autoconnect"
 
 GtkWidget * empathy_preferences_show (GtkWindow *parent);
 
