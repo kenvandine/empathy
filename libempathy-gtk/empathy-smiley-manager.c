@@ -266,7 +266,7 @@ empathy_smiley_manager_load (EmpathySmileyManager *manager)
 	g_return_if_fail (EMPATHY_IS_SMILEY_MANAGER (manager));
 
 	/* From fd.o icon-naming spec */
-	empathy_smiley_manager_add (manager, "face-angel",      "0:-)",  "0:)",  NULL);
+	empathy_smiley_manager_add (manager, "face-angel",      "O:-)",  "O:)",  NULL);
         empathy_smiley_manager_add (manager, "face-cool",       "B-)",   "B)",   NULL);
 	empathy_smiley_manager_add (manager, "face-crying",     ":'(", NULL);
 	empathy_smiley_manager_add (manager, "face-devilish",   ">:-)",  ">:)",  NULL);
@@ -279,7 +279,7 @@ empathy_smiley_manager_load (EmpathySmileyManager *manager)
 	empathy_smiley_manager_add (manager, "face-smile",      ":-)",   ":)",   NULL);
 	empathy_smiley_manager_add (manager, "face-smile-big",  ":-D",   ":D",   ":-d", ":d", NULL);
 	empathy_smiley_manager_add (manager, "face-smirk",      ":-!",   ":!",   NULL);
-	empathy_smiley_manager_add (manager, "face-surprise",   ":-0",   ":0",   NULL);
+	empathy_smiley_manager_add (manager, "face-surprise",   ":-O",   ":O",   NULL);
 	empathy_smiley_manager_add (manager, "face-wink",       ";-)",   ";)",   NULL);
 }
 
