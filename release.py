@@ -280,4 +280,4 @@ class Project:
 		self.exec_cmd(cmd)
 
 project = Project()
-print project.get_release_notes()
+project.write_news()

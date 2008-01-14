@@ -1,3 +1,44 @@
+NEW in 0.21.5
+==============
+- Adding a release.py script that uses git.
+- Add SIP icon picked from pidgin.
+- Cleanup icons: Regenerate icons from SVG at 16, 22, 24, 32 and 48 size.
+  Change xmpp-link-local icon from apple's to the avahi icon. Still missing SVG
+  for im-message, im-message-new and user-typing.
+- Add avatar token in logs and load avatar from cache when getting logs messages.
+- Reset status message when coming back from away and the status was manually
+  set to away.
+- Update profiles based on N810's.
+- Remove ChangeLog and po/ChangeLog, new release script uses git logs and
+  generates ChangeLog file from git.
+- Add .gitignore files.
+- Chandlers leaves when there is no more channels to handle.
+- Set call window title to contact name
+- Import Gossip's chat theme system and simplify it a bit.
+
+Bugs fixed:
+- Fixed #466960, status icon tooltip doesn't change when status changes (xclaesse)
+- Fixed #508520, :0 smiley conversion shouldn't happen for times (xclaesse)
+- Fixed #499885, Automatically connect at session start (xclaesse)
+- Fixed #507656, "make valgrind" broken (xclaesse)
+- Fixed #459520, Can't remove a group (xclaesse)
+- Fixed #447851, Wider list of participants in group chat/IRC channel (xclaesse)
+- Fixed #505622, add "check" framework support (xclaesse)
+- Fixed #490153, Join _New... icon (xclaesse)
+- Fixed #502932, Text selection in Accounts window (xclaesse)
+
+Translations:
+- Updated Spanish Translation (jorgegonz).
+- Updated Norwegian bokmål Translation (kmaraas).
+- Updated Occitan Translation (ymarcheg).
+- Updated French Translation (claudep).
+- Updated Swedish Translation (dnylande).
+- Updated Spanish Translation (jorgegonz).
+- Updated Brazilian Portuguese Translation (leonardof).
+- Updated Basque Translation (dooteo).
+- Updated Arabic Translation (djihed).
+- Updated Norwegian bokmål Translation (kmaraas).
+
 NEW in 0.21.4:
 =============
  - Cache avatar pixbuf in EmpathyChatView to avoid having a new pixbuf in memory
