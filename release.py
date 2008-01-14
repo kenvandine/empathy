@@ -280,4 +280,3 @@ class Project:
 		self.exec_cmd(cmd)
 
 project = Project()
-project.write_news()
