@@ -276,7 +276,14 @@ class Project:
 		cmd = 'scp %s %s@%s:' % (tarball, username, upload_server)
 		self.exec_cmd(cmd)
                 
-		cmd = 'ssh %s@%s install-module %s' % (username, upload_server, tarball)
+		cmd = 'ssh %s@%s install-module -u %s' % (username, upload_server, tarball)
 		self.exec_cmd(cmd)
 
+	def release(self):
+		self.make_tag()
+		self.upload_tarball()
+		print self.get_release_notes()
+
+
 project = Project()
+print project.get_release_notes()
