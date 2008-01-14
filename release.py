@@ -35,13 +35,13 @@ class Commit:
 	date = ''
 	message = ''
 	bug = ''
-	summary = ''
 	translation = False
 
 	def parse(self):
-		if self.message[len(self.message) - 1] == ')':
-			p1 = self.message.rfind('(')
-			self.author = self.message[p1+1:len(self.message) - 1]
+		p1 = self.message.rfind('(')
+		p2 = self.message.rfind (')')
+		if len(self.message) - p2 <= 2:
+			self.author = self.message[p1+1:p2]
 			self.message = self.message[:p1]
 
 		p1 = self.message.find('#')
@@ -58,10 +58,9 @@ class Commit:
 	                match = lang_re.match(self.message)
 			if match:
 				lang = match.group('name').strip()				
-				self.summary = "Updated " + lang + " Translation"
-			else:
-				self.summary = self.message
-			self.summary += ' (' + self.author + ').'
+				self.message = "Updated " + lang + " Translation"
+
+		self.message += ' (' + self.author + ').'
 
 		return self.bug
 
@@ -233,7 +232,7 @@ class Project:
 
 			for co in commits:
 				if co.bug == bug_number:
-					co.summary = 'Fixed #%s, %s (%s)' % (co.bug, description, co.author)
+					co.message = 'Fixed #%s, %s (%s)' % (co.bug, description, co.author)
 					break
 		return commits
 
@@ -253,12 +252,13 @@ class Project:
 		others = ''
 		commits = self.get_commits()
 		for co in commits:
-			if co.summary == '':
-				others += '- ' + co.message + '\n'
-			elif co.translation == False:
-				bugs += '- ' + co.summary + '\n'
-			else :
-				translations += '- ' + co.summary + '\n'
+
+			if co.translation == True:
+				translations += ' - ' + co.message + '\n'
+			elif co.bug != '':
+				bugs += ' - ' + co.message + '\n'
+			else:
+				others += ' - ' + co.message + '\n'
 				
 		news = 'NEW in '+ self.package_version + '\n==============\n' 
 		news += others + '\nBugs fixed:\n' + bugs + '\nTranslations:\n' + translations + '\n'
@@ -272,10 +272,10 @@ class Project:
 
 	def upload_tarball(self):
 		tarball = '%s-%s.tar.gz' % (self.package_name.lower(), self.package_version)
-                
+
 		cmd = 'scp %s %s@%s:' % (tarball, username, upload_server)
 		self.exec_cmd(cmd)
-                
+
 		cmd = 'ssh %s@%s install-module -u %s' % (username, upload_server, tarball)
 		self.exec_cmd(cmd)
 
@@ -284,6 +284,6 @@ class Project:
 		self.upload_tarball()
 		print self.get_release_notes()
 
-
-project = Project()
-print project.get_release_notes()
+p = Project()
+#p.write_news()
+#p.release()
