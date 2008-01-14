@@ -65,7 +65,7 @@ private_icons = \
 	hicolor_apps_scalable_im-irc.svg \
 	hicolor_apps_scalable_im-xmpp.svg \
 	hicolor_apps_scalable_im-msn.svg \
-	hicolor_apps_scalable_im-sip.png \
+	hicolor_apps_scalable_im-sip.svg \
 	hicolor_apps_scalable_im-local-xmpp.svg \
 	hicolor_status_16x16_empathy-available.png \
 	hicolor_status_16x16_empathy-away.png \
