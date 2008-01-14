@@ -83,6 +83,7 @@ static void     idle_set_property            (GObject          *object,
 					      GParamSpec       *pspec);
 static void     idle_presence_changed_cb     (MissionControl   *mc,
 					      McPresence        state,
+					      gchar            *status,
 					      EmpathyIdle      *idle);
 static void     idle_session_idle_changed_cb (DBusGProxy       *gs_proxy,
 					      gboolean          is_idle,
@@ -169,10 +170,10 @@ empathy_idle_init (EmpathyIdle *idle)
 	priv->is_idle = FALSE;
 	priv->mc = empathy_mission_control_new ();
 	priv->state = mission_control_get_presence_actual (priv->mc, NULL);
-	idle_presence_changed_cb (priv->mc, priv->state, idle);
+	priv->status = mission_control_get_presence_message_actual (priv->mc, NULL);
 
 	dbus_g_proxy_connect_signal (DBUS_G_PROXY (priv->mc),
-				     "PresenceStatusActual",
+				     "PresenceChanged",
 				     G_CALLBACK (idle_presence_changed_cb),
 				     idle, NULL);
 
@@ -489,19 +490,21 @@ empathy_idle_set_use_nm (EmpathyIdle *idle,
 static void
 idle_presence_changed_cb (MissionControl *mc,
 			  McPresence      state,
+			  gchar          *status,
 			  EmpathyIdle    *idle)
 {
 	EmpathyIdlePriv *priv;
 
 	priv = GET_PRIV (idle);
 
+	empathy_debug (DEBUG_DOMAIN, "Presence changed to '%s' (%d)",
+		       status, state);
+
 	g_free (priv->status);
 	priv->state = state;
-	priv->status = mission_control_get_presence_message_actual (priv->mc, NULL);
-
-	if (G_STR_EMPTY (priv->status)) {
-		g_free (priv->status);
-		priv->status = NULL;
+	priv->status = NULL;
+	if (!G_STR_EMPTY (status)) {
+		priv->status = g_strdup (status);
 	}
 
 	g_object_notify (G_OBJECT (idle), "state");
