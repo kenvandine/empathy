@@ -11,5 +11,6 @@ DefaultAccountDomain = gmail.com, googlemail.com
 Default-server = talk.google.com
 Default-port = 5223
 Default-old-ssl = 1
+Default-ignore-ssl-errors = 1
 Default-fallback-conference-server = conference.jabber.org
 SupportedPresences = away,extended-away,do-not-disturb
