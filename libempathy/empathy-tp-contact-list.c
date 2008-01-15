@@ -29,6 +29,7 @@
 #include <libtelepathy/tp-conn.h>
 #include <libtelepathy/tp-chan.h>
 #include <libtelepathy/tp-chan-type-contact-list-gen.h>
+#include <telepathy-glib/util.h>
 
 #include "empathy-tp-contact-list.h"
 #include "empathy-contact-list.h"
