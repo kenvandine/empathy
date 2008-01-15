@@ -634,21 +634,6 @@
   (return-type "none")
 )
 
-(define-method get_irc_style
-  (of-object "EmpathyChatView")
-  (c-name "empathy_chat_view_get_irc_style")
-  (return-type "gboolean")
-)
-
-(define-method set_irc_style
-  (of-object "EmpathyChatView")
-  (c-name "empathy_chat_view_set_irc_style")
-  (return-type "none")
-  (parameters
-    '("gboolean" "irc_style")
-  )
-)
-
 (define-method set_margin
   (of-object "EmpathyChatView")
   (c-name "empathy_chat_view_set_margin")
