@@ -1,3 +1,18 @@
+NEW in 0.21.5.2
+==============
+ - Update API documentation generator. (xclaesse).
+ - Update python binding for new API. (xclaesse).
+ - Rename BlockType to EMPATHY_CHAT_VIEW_BLOCK to respect namespace (xclaesse).
+ - Change EMPATHY_AVATAR_CHOOSER_TYPE to EMPATHY_TYPE_AVATAR_CHOOSER (xclaesse).
+ - Ignore ssl errors for gtalk profile by default otherwise it won't connect. (xclaesse).
+
+Bugs fixed:
+ - Fixed #509656, crash in Empathy Instant Messenger: Nothing. I was viewing s... (xclaesse)
+
+Translations:
+ - Updated ja Translation (Takeshi AIHANA).
+ - Updated sv Translation (Daniel Nylander).
+
 NEW in 0.21.5.1
 ==============
  - Fix release.py script to give correct author of fixed bug.

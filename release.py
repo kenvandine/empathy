@@ -7,7 +7,7 @@ import csv
 import datetime
 from string import Template
 
-prev_tag = 'EMPATHY_0_21_4'
+prev_tag = 'EMPATHY_0_21_5_1'
 username = 'xclaesse'
 upload_server = 'master.gnome.org'
 template = '''\
