@@ -30,11 +30,11 @@
 
 G_BEGIN_DECLS
 
-#define EMPATHY_AVATAR_CHOOSER_TYPE	       (empathy_avatar_chooser_get_type ())
-#define EMPATHY_AVATAR_CHOOSER(obj)	       (G_TYPE_CHECK_INSTANCE_CAST ((obj), EMPATHY_AVATAR_CHOOSER_TYPE, EmpathyAvatarChooser))
-#define EMPATHY_AVATAR_CHOOSER_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), EMPATHY_AVATAR_CHOOSER_TYPE, EmpathyAvatarChooserClass))
-#define EMPATHY_IS_AVATAR_CHOOSER(obj)	       (G_TYPE_CHECK_INSTANCE_TYPE ((obj), EMPATHY_AVATAR_CHOOSER_TYPE))
-#define EMPATHY_IS_AVATAR_CHOOSER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((obj), EMPATHY_AVATAR_CHOOSER_TYPE))
+#define EMPATHY_TYPE_AVATAR_CHOOSER	       (empathy_avatar_chooser_get_type ())
+#define EMPATHY_AVATAR_CHOOSER(obj)	       (G_TYPE_CHECK_INSTANCE_CAST ((obj), EMPATHY_TYPE_AVATAR_CHOOSER, EmpathyAvatarChooser))
+#define EMPATHY_AVATAR_CHOOSER_CLASS(klass)    (G_TYPE_CHECK_CLASS_CAST ((klass), EMPATHY_TYPE_AVATAR_CHOOSER, EmpathyAvatarChooserClass))
+#define EMPATHY_IS_AVATAR_CHOOSER(obj)	       (G_TYPE_CHECK_INSTANCE_TYPE ((obj), EMPATHY_TYPE_AVATAR_CHOOSER))
+#define EMPATHY_IS_AVATAR_CHOOSER_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((obj), EMPATHY_TYPE_AVATAR_CHOOSER))
 
 typedef struct _EmpathyAvatarChooser        EmpathyAvatarChooser;
 typedef struct _EmpathyAvatarChooserClass   EmpathyAvatarChooserClass;
