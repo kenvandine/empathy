@@ -14,7 +14,7 @@ LDADD =								\
 	$(top_builddir)/libempathy/libempathy.la		\
 	$(EMPATHY_LIBS)
 
-bin_PROGRAMS =			\
+noinst_PROGRAMS =			\
 	contact-manager
 
 contact_manager_SOURCES = contact-manager.c
