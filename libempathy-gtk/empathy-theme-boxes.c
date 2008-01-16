@@ -559,16 +559,16 @@ theme_boxes_maybe_append_header (EmpathyTheme        *theme,
 	/* Only insert a header if the previously inserted block is not the same
 	 * as this one. This catches all the different cases:
 	 */
-	if (empathy_chat_view_get_last_block_type (view) != BLOCK_TYPE_SELF &&
-	    empathy_chat_view_get_last_block_type (view) != BLOCK_TYPE_OTHER) {
+	if (empathy_chat_view_get_last_block_type (view) != EMPATHY_CHAT_VIEW_BLOCK_SELF &&
+	    empathy_chat_view_get_last_block_type (view) != EMPATHY_CHAT_VIEW_BLOCK_OTHER) {
 		header = TRUE;
 	}
 	else if (from_self &&
-		 empathy_chat_view_get_last_block_type (view) == BLOCK_TYPE_OTHER) {
+		 empathy_chat_view_get_last_block_type (view) == EMPATHY_CHAT_VIEW_BLOCK_OTHER) {
 		header = TRUE;
 	}
 	else if (!from_self && 
-		 empathy_chat_view_get_last_block_type (view) == BLOCK_TYPE_SELF) {
+		 empathy_chat_view_get_last_block_type (view) == EMPATHY_CHAT_VIEW_BLOCK_SELF) {
 		header = TRUE;
 	}
 	else if (!from_self &&
@@ -710,10 +710,10 @@ theme_boxes_append_message (EmpathyTheme        *theme,
 	}
 	
 	if (empathy_contact_is_user (sender)) {
-		empathy_chat_view_set_last_block_type (view, BLOCK_TYPE_SELF);
+		empathy_chat_view_set_last_block_type (view, EMPATHY_CHAT_VIEW_BLOCK_SELF);
 		empathy_chat_view_set_last_contact (view, NULL);
 	} else {
-		empathy_chat_view_set_last_block_type (view, BLOCK_TYPE_OTHER);
+		empathy_chat_view_set_last_block_type (view, EMPATHY_CHAT_VIEW_BLOCK_OTHER);
 		empathy_chat_view_set_last_contact (view, sender);
 	}
 }
@@ -741,7 +741,7 @@ theme_boxes_append_event (EmpathyTheme        *theme,
 						  NULL);
 	g_free (msg);
 
-	empathy_chat_view_set_last_block_type (view, BLOCK_TYPE_EVENT);
+	empathy_chat_view_set_last_block_type (view, EMPATHY_CHAT_VIEW_BLOCK_EVENT);
 }
 
 static void
@@ -804,7 +804,7 @@ theme_boxes_append_timestamp (EmpathyTheme        *theme,
 							  "fancy-time",
 							  NULL);
 
-		empathy_chat_view_set_last_block_type (view, BLOCK_TYPE_TIME);
+		empathy_chat_view_set_last_block_type (view, EMPATHY_CHAT_VIEW_BLOCK_TIME);
 		empathy_chat_view_set_last_timestamp (view, timestamp);
 	}
 

@@ -70,7 +70,7 @@ struct _EmpathyChatViewPriv {
 	EmpathyTheme   *theme;
 
 	time_t         last_timestamp;
-	BlockType      last_block_type;
+	EmpathyChatViewBlock last_block_type;
 
 	gboolean       allow_scrolling;
 	guint          scroll_timeout;
@@ -158,7 +158,7 @@ empathy_chat_view_init (EmpathyChatView *view)
 
 	priv->buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
 
-	priv->last_block_type = BLOCK_TYPE_NONE;
+	priv->last_block_type = EMPATHY_CHAT_VIEW_BLOCK_NONE;
 	priv->last_timestamp = 0;
 
 	priv->allow_scrolling = TRUE;
@@ -638,7 +638,7 @@ chat_view_theme_changed_cb (EmpathyThemeManager *manager,
 
 	priv = GET_PRIV (view);
 
-	priv->last_block_type = BLOCK_TYPE_NONE;
+	priv->last_block_type = EMPATHY_CHAT_VIEW_BLOCK_NONE;
 
 	empathy_conf_get_bool (empathy_conf_get (),
 			      EMPATHY_PREFS_CHAT_THEME_CHAT_ROOM,
@@ -821,7 +821,7 @@ empathy_chat_view_append_event (EmpathyChatView *view,
 		empathy_chat_view_scroll_down (view);
 	}
 
-	priv->last_block_type = BLOCK_TYPE_EVENT;
+	priv->last_block_type = EMPATHY_CHAT_VIEW_BLOCK_EVENT;
 }
 
 void
@@ -891,7 +891,7 @@ empathy_chat_view_append_button (EmpathyChatView *view,
 		empathy_chat_view_scroll_down (view);
 	}
 
-	priv->last_block_type = BLOCK_TYPE_INVITE;
+	priv->last_block_type = EMPATHY_CHAT_VIEW_BLOCK_INVITE;
 }
 
 void
@@ -996,7 +996,7 @@ empathy_chat_view_clear (EmpathyChatView *view)
 	 */
 	priv = GET_PRIV (view);
 
-	priv->last_block_type = BLOCK_TYPE_NONE;
+	priv->last_block_type = EMPATHY_CHAT_VIEW_BLOCK_NONE;
 	priv->last_timestamp = 0;
 }
 
@@ -1512,7 +1512,7 @@ empathy_chat_view_set_last_timestamp (EmpathyChatView *view,
 	priv->last_timestamp = timestamp;
 }
 
-BlockType
+EmpathyChatViewBlock
 empathy_chat_view_get_last_block_type (EmpathyChatView *view)
 {
 	EmpathyChatViewPriv *priv;
@@ -1525,8 +1525,8 @@ empathy_chat_view_get_last_block_type (EmpathyChatView *view)
 }
 
 void
-empathy_chat_view_set_last_block_type (EmpathyChatView *view, 
-				      BlockType       block_type)
+empathy_chat_view_set_last_block_type (EmpathyChatView      *view, 
+				       EmpathyChatViewBlock  block_type)
 {
 	EmpathyChatViewPriv *priv;
 

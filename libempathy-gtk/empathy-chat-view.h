@@ -54,13 +54,13 @@ struct _EmpathyChatViewClass {
 };
 
 typedef enum {
-	BLOCK_TYPE_NONE,
-	BLOCK_TYPE_SELF,
-	BLOCK_TYPE_OTHER,
-	BLOCK_TYPE_EVENT,
-	BLOCK_TYPE_TIME,
-	BLOCK_TYPE_INVITE
-} BlockType;
+	EMPATHY_CHAT_VIEW_BLOCK_NONE,
+	EMPATHY_CHAT_VIEW_BLOCK_SELF,
+	EMPATHY_CHAT_VIEW_BLOCK_OTHER,
+	EMPATHY_CHAT_VIEW_BLOCK_EVENT,
+	EMPATHY_CHAT_VIEW_BLOCK_TIME,
+	EMPATHY_CHAT_VIEW_BLOCK_INVITE
+} EmpathyChatViewBlock;
 
 GType            empathy_chat_view_get_type             (void) G_GNUC_CONST;
 EmpathyChatView *empathy_chat_view_new                  (void);
@@ -106,9 +106,9 @@ void             empathy_chat_view_set_is_group_chat    (EmpathyChatView *view,
 time_t           empathy_chat_view_get_last_timestamp   (EmpathyChatView *view);
 void             empathy_chat_view_set_last_timestamp   (EmpathyChatView *view,
 							 time_t           timestamp);
-BlockType        empathy_chat_view_get_last_block_type  (EmpathyChatView *view);
+EmpathyChatViewBlock empathy_chat_view_get_last_block_type  (EmpathyChatView *view);
 void             empathy_chat_view_set_last_block_type  (EmpathyChatView *view, 
-							 BlockType        block_type);
+							 EmpathyChatViewBlock block_type);
 EmpathyContact * empathy_chat_view_get_last_contact     (EmpathyChatView *view);
 void             empathy_chat_view_set_last_contact     (EmpathyChatView *view,
 							 EmpathyContact  *contact);
