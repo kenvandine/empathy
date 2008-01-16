@@ -1,12 +1,4 @@
 ;; -*- scheme -*-
-; interfaces
-
-(define-interface ContactList
-  (in-module "Empathy")
-  (c-name "EmpathyContactList")
-  (gtype-id "EMPATHY_TYPE_CONTACT_LIST")
-)
-
 ; object definitions ...
 (define-object Chandler
   (in-module "Empathy")
@@ -50,12 +42,18 @@
   (gtype-id "EMPATHY_TYPE_CONTACT_FACTORY")
 )
 
+(define-interface ContactList
+  (in-module "Empathy")
+  (c-name "EmpathyContactList")
+  (gtype-id "EMPATHY_TYPE_CONTACT_LIST")
+)
+
 (define-object ContactManager
   (in-module "Empathy")
   (parent "GObject")
+  (implements "EmpathyContactList")
   (c-name "EmpathyContactManager")
   (gtype-id "EMPATHY_TYPE_CONTACT_MANAGER")
-  (implements "EmpathyContactList")
 )
 
 (define-object Filter
@@ -93,6 +91,13 @@
   (gtype-id "EMPATHY_TYPE_PRESENCE")
 )
 
+(define-object TpCall
+  (in-module "Empathy")
+  (parent "GObject")
+  (c-name "EmpathyTpCall")
+  (gtype-id "EMPATHY_TYPE_TP_CALL")
+)
+
 (define-object TpChat
   (in-module "Empathy")
   (parent "GObject")
@@ -103,17 +108,24 @@
 (define-object TpChatroom
   (in-module "Empathy")
   (parent "EmpathyTpChat")
+  (implements "EmpathyContactList")
   (c-name "EmpathyTpChatroom")
   (gtype-id "EMPATHY_TYPE_TP_CHATROOM")
-  (implements "EmpathyContactList")
+)
+
+(define-object TpContactFactory
+  (in-module "Empathy")
+  (parent "GObject")
+  (c-name "EmpathyTpContactFactory")
+  (gtype-id "EMPATHY_TYPE_TP_CONTACT_FACTORY")
 )
 
 (define-object TpContactList
   (in-module "Empathy")
   (parent "GObject")
+  (implements "EmpathyContactList")
   (c-name "EmpathyTpContactList")
   (gtype-id "EMPATHY_TYPE_TP_CONTACT_LIST")
-  (implements "EmpathyContactList")
 )
 
 (define-object TpGroup
@@ -132,6 +144,16 @@
 
 ;; Enumerations and flags ...
 
+(define-flags Capabilities
+  (in-module "Empathy")
+  (c-name "EmpathyCapabilities")
+  (gtype-id "EMPATHY_TYPE_CAPABILITIES")
+  (values
+    '("audio" "EMPATHY_CAPABILITIES_AUDIO")
+    '("video" "EMPATHY_CAPABILITIES_VIDEO")
+  )
+)
+
 (define-enum MessageType
   (in-module "Empathy")
   (c-name "EmpathyMessageType")
@@ -142,6 +164,17 @@
     '("notice" "EMPATHY_MESSAGE_TYPE_NOTICE")
     '("auto-reply" "EMPATHY_MESSAGE_TYPE_AUTO_REPLY")
     '("last" "EMPATHY_MESSAGE_TYPE_LAST")
+  )
+)
+
+(define-enum TpCallStatus
+  (in-module "Empathy")
+  (c-name "EmpathyTpCallStatus")
+  (gtype-id "EMPATHY_TYPE_TP_CALL_STATUS")
+  (values
+    '("preparing" "EMPATHY_TP_CALL_STATUS_PREPARING")
+    '("ringing" "EMPATHY_TP_CALL_STATUS_RINGING")
+    '("running" "EMPATHY_TP_CALL_STATUS_RUNNING")
   )
 )
 
@@ -171,9 +204,18 @@
   (is-constructor-of "EmpathyAvatar")
   (return-type "EmpathyAvatar*")
   (parameters
-    '("guchar*" "avatar")
-    '("gsize" "len")
-    '("gchar*" "format")
+    '("const-guchar*" "avatar")
+    '("const-gsize" "len")
+    '("const-gchar*" "format")
+    '("const-gchar*" "token")
+  )
+)
+
+(define-function empathy_avatar_new_from_cache
+  (c-name "empathy_avatar_new_from_cache")
+  (return-type "EmpathyAvatar*")
+  (parameters
+    '("const-gchar*" "token")
   )
 )
 
@@ -553,7 +595,19 @@
   (return-type "none")
   (parameters
     '("EmpathyContact*" "contact")
-    '("const-gchar*" "name")
+    '("const-gchar*" "alias")
+  )
+)
+
+(define-method set_avatar
+  (of-object "EmpathyContactFactory")
+  (c-name "empathy_contact_factory_set_avatar")
+  (return-type "none")
+  (parameters
+    '("McAccount*" "account")
+    '("const-gchar*" "data")
+    '("gsize" "size")
+    '("const-gchar*" "mime_type")
   )
 )
 
@@ -675,6 +729,21 @@
   )
 )
 
+(define-method get_capabilities
+  (of-object "EmpathyContact")
+  (c-name "empathy_contact_get_capabilities")
+  (return-type "EmpathyCapabilities")
+)
+
+(define-method set_capabilities
+  (of-object "EmpathyContact")
+  (c-name "empathy_contact_set_capabilities")
+  (return-type "none")
+  (parameters
+    '("EmpathyCapabilities" "capabilities")
+  )
+)
+
 (define-method is_user
   (of-object "EmpathyContact")
   (c-name "empathy_contact_is_user")
@@ -700,6 +769,12 @@
   (of-object "EmpathyContact")
   (c-name "empathy_contact_get_status")
   (return-type "const-gchar*")
+)
+
+(define-method can_voip
+  (of-object "EmpathyContact")
+  (c-name "empathy_contact_can_voip")
+  (return-type "gboolean")
 )
 
 (define-function empathy_contact_equal
@@ -802,6 +877,15 @@
   (parameters
     '("const-gchar*" "old_group")
     '("const-gchar*" "new_group")
+  )
+)
+
+(define-method remove_group
+  (of-object "EmpathyContactList")
+  (c-name "empathy_contact_list_remove_group")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "group")
   )
 )
 
@@ -947,6 +1031,36 @@
   (parameters
     '("McPresence" "state")
     '("const-gchar*" "status")
+  )
+)
+
+(define-method get_auto_away
+  (of-object "EmpathyIdle")
+  (c-name "empathy_idle_get_auto_away")
+  (return-type "gboolean")
+)
+
+(define-method set_auto_away
+  (of-object "EmpathyIdle")
+  (c-name "empathy_idle_set_auto_away")
+  (return-type "none")
+  (parameters
+    '("gboolean" "auto_away")
+  )
+)
+
+(define-method get_use_nm
+  (of-object "EmpathyIdle")
+  (c-name "empathy_idle_get_use_nm")
+  (return-type "gboolean")
+)
+
+(define-method set_use_nm
+  (of-object "EmpathyIdle")
+  (c-name "empathy_idle_set_use_nm")
+  (return-type "none")
+  (parameters
+    '("gboolean" "use_nm")
   )
 )
 
@@ -1154,7 +1268,7 @@
 (define-method get_timestamp
   (of-object "EmpathyMessage")
   (c-name "empathy_message_get_timestamp")
-  (return-type "EmpathyTime")
+  (return-type "time_t")
 )
 
 (define-method set_timestamp
@@ -1162,7 +1276,16 @@
   (c-name "empathy_message_set_timestamp")
   (return-type "none")
   (parameters
-    '("EmpathyTime" "timestamp")
+    '("time_t" "timestamp")
+  )
+)
+
+(define-method get_date_and_time
+  (of-object "EmpathyMessage")
+  (c-name "empathy_message_get_date_and_time")
+  (return-type "GDate*")
+  (parameters
+    '("time_t*" "timestamp")
   )
 )
 
@@ -1273,7 +1396,7 @@
 
 (define-function empathy_time_get_current
   (c-name "empathy_time_get_current")
-  (return-type "EmpathyTime")
+  (return-type "time_t")
 )
 
 (define-function empathy_time_get_local_time
@@ -1286,7 +1409,7 @@
 
 (define-function empathy_time_parse
   (c-name "empathy_time_parse")
-  (return-type "EmpathyTime")
+  (return-type "time_t")
   (parameters
     '("const-gchar*" "str")
   )
@@ -1294,28 +1417,153 @@
 
 (define-function empathy_time_parse_format
   (c-name "empathy_time_parse_format")
-  (return-type "EmpathyTime")
+  (return-type "time_t")
   (parameters
     '("const-gchar*" "str")
     '("const-gchar*" "format")
   )
 )
 
-(define-method to_string_utc
-  (of-object "EmpathyTime")
+(define-function empathy_time_to_string_utc
   (c-name "empathy_time_to_string_utc")
   (return-type "gchar*")
   (parameters
+    '("time_t" "t")
     '("const-gchar*" "format")
   )
 )
 
-(define-method to_string_local
-  (of-object "EmpathyTime")
+(define-function empathy_time_to_string_local
   (c-name "empathy_time_to_string_local")
   (return-type "gchar*")
   (parameters
+    '("time_t" "t")
     '("const-gchar*" "format")
+  )
+)
+
+
+
+;; From empathy-tp-call.h
+
+(define-function empathy_tp_call_get_type
+  (c-name "empathy_tp_call_get_type")
+  (return-type "GType")
+)
+
+(define-function empathy_tp_call_new
+  (c-name "empathy_tp_call_new")
+  (is-constructor-of "EmpathyTpCall")
+  (return-type "EmpathyTpCall*")
+  (parameters
+    '("McAccount*" "account")
+    '("TpChan*" "tp_chan")
+  )
+)
+
+(define-method is_incoming
+  (of-object "EmpathyTpCall")
+  (c-name "empathy_tp_call_is_incoming")
+  (return-type "gboolean")
+)
+
+(define-method get_status
+  (of-object "EmpathyTpCall")
+  (c-name "empathy_tp_call_get_status")
+  (return-type "EmpathyTpCallStatus")
+)
+
+(define-method get_contact
+  (of-object "EmpathyTpCall")
+  (c-name "empathy_tp_call_get_contact")
+  (return-type "EmpathyContact*")
+)
+
+(define-method accept
+  (of-object "EmpathyTpCall")
+  (c-name "empathy_tp_call_accept")
+  (return-type "none")
+)
+
+(define-method invite
+  (of-object "EmpathyTpCall")
+  (c-name "empathy_tp_call_invite")
+  (return-type "none")
+  (parameters
+    '("EmpathyContact*" "contact")
+  )
+)
+
+(define-method request_streams
+  (of-object "EmpathyTpCall")
+  (c-name "empathy_tp_call_request_streams")
+  (return-type "none")
+  (parameters
+    '("gboolean" "audio")
+    '("gboolean" "video")
+  )
+)
+
+(define-method send_video
+  (of-object "EmpathyTpCall")
+  (c-name "empathy_tp_call_send_video")
+  (return-type "none")
+  (parameters
+    '("gboolean" "send")
+  )
+)
+
+(define-method add_preview_window
+  (of-object "EmpathyTpCall")
+  (c-name "empathy_tp_call_add_preview_window")
+  (return-type "none")
+  (parameters
+    '("guint" "socket_id")
+  )
+)
+
+(define-method remove_preview_window
+  (of-object "EmpathyTpCall")
+  (c-name "empathy_tp_call_remove_preview_window")
+  (return-type "none")
+  (parameters
+    '("guint" "socket_id")
+  )
+)
+
+(define-method set_output_window
+  (of-object "EmpathyTpCall")
+  (c-name "empathy_tp_call_set_output_window")
+  (return-type "none")
+  (parameters
+    '("guint" "socket_id")
+  )
+)
+
+(define-method set_output_volume
+  (of-object "EmpathyTpCall")
+  (c-name "empathy_tp_call_set_output_volume")
+  (return-type "none")
+  (parameters
+    '("guint" "volume")
+  )
+)
+
+(define-method mute_output
+  (of-object "EmpathyTpCall")
+  (c-name "empathy_tp_call_mute_output")
+  (return-type "none")
+  (parameters
+    '("gboolean" "is_muted")
+  )
+)
+
+(define-method mute_input
+  (of-object "EmpathyTpCall")
+  (c-name "empathy_tp_call_mute_input")
+  (return-type "none")
+  (parameters
+    '("gboolean" "is_muted")
   )
 )
 
@@ -1338,6 +1586,14 @@
   )
 )
 
+(define-function empathy_tp_chat_new_with_contact
+  (c-name "empathy_tp_chat_new_with_contact")
+  (return-type "EmpathyTpChat*")
+  (parameters
+    '("EmpathyContact*" "contact")
+  )
+)
+
 (define-method get_acknowledge
   (of-object "EmpathyTpChat")
   (c-name "empathy_tp_chat_get_acknowledge")
@@ -1351,6 +1607,12 @@
   (parameters
     '("gboolean" "acknowledge")
   )
+)
+
+(define-method get_account
+  (of-object "EmpathyTpChat")
+  (c-name "empathy_tp_chat_get_account")
+  (return-type "McAccount*")
 )
 
 (define-method get_channel
@@ -1379,7 +1641,7 @@
   (c-name "empathy_tp_chat_set_state")
   (return-type "none")
   (parameters
-    '("TelepathyChannelChatState" "state")
+    '("TpChannelChatState" "state")
   )
 )
 
@@ -1430,6 +1692,78 @@
   (return-type "none")
   (parameters
     '("const-gchar*" "topic")
+  )
+)
+
+
+
+;; From empathy-tp-contact-factory.h
+
+(define-function empathy_tp_contact_factory_get_type
+  (c-name "empathy_tp_contact_factory_get_type")
+  (return-type "GType")
+)
+
+(define-function empathy_tp_contact_factory_new
+  (c-name "empathy_tp_contact_factory_new")
+  (is-constructor-of "EmpathyTpContactFactory")
+  (return-type "EmpathyTpContactFactory*")
+  (parameters
+    '("McAccount*" "account")
+  )
+)
+
+(define-method get_user
+  (of-object "EmpathyTpContactFactory")
+  (c-name "empathy_tp_contact_factory_get_user")
+  (return-type "EmpathyContact*")
+)
+
+(define-method get_from_id
+  (of-object "EmpathyTpContactFactory")
+  (c-name "empathy_tp_contact_factory_get_from_id")
+  (return-type "EmpathyContact*")
+  (parameters
+    '("const-gchar*" "id")
+  )
+)
+
+(define-method get_from_handle
+  (of-object "EmpathyTpContactFactory")
+  (c-name "empathy_tp_contact_factory_get_from_handle")
+  (return-type "EmpathyContact*")
+  (parameters
+    '("guint" "handle")
+  )
+)
+
+(define-method get_from_handles
+  (of-object "EmpathyTpContactFactory")
+  (c-name "empathy_tp_contact_factory_get_from_handles")
+  (return-type "GList*")
+  (parameters
+    '("GArray*" "handles")
+  )
+)
+
+(define-method set_alias
+  (of-object "EmpathyTpContactFactory")
+  (c-name "empathy_tp_contact_factory_set_alias")
+  (return-type "none")
+  (parameters
+    '("EmpathyContact*" "contact")
+    '("const-gchar*" "alias")
+  )
+)
+
+(define-method set_avatar
+  (of-object "EmpathyTpContactFactory")
+  (c-name "empathy_tp_contact_factory_set_avatar")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "data")
+    '("gsize" "size")
+    '("const-gchar*" "mime_type")
   )
 )
 
@@ -1740,6 +2074,91 @@
   (parameters
     '("McAccount*" "account")
     '("TpChan*" "tp_chan")
+  )
+)
+
+(define-function empathy_call_contact
+  (c-name "empathy_call_contact")
+  (return-type "none")
+  (parameters
+    '("EmpathyContact*" "contact")
+  )
+)
+
+(define-function empathy_chat_with_contact
+  (c-name "empathy_chat_with_contact")
+  (return-type "none")
+  (parameters
+    '("EmpathyContact*" "contact")
+  )
+)
+
+(define-function empathy_chat_with_contact_id
+  (c-name "empathy_chat_with_contact_id")
+  (return-type "none")
+  (parameters
+    '("McAccount*" "account")
+    '("const-gchar*" "contact_id")
+  )
+)
+
+
+
+;; From tp-stream-engine-gen.h
+
+(define-function dbus_g_proxy_begin_call
+  (c-name "dbus_g_proxy_begin_call")
+  (return-type "return")
+  (parameters
+  )
+)
+
+(define-function dbus_g_proxy_begin_call
+  (c-name "dbus_g_proxy_begin_call")
+  (return-type "return")
+  (parameters
+  )
+)
+
+(define-function dbus_g_proxy_begin_call
+  (c-name "dbus_g_proxy_begin_call")
+  (return-type "return")
+  (parameters
+  )
+)
+
+(define-function dbus_g_proxy_begin_call
+  (c-name "dbus_g_proxy_begin_call")
+  (return-type "return")
+  (parameters
+  )
+)
+
+(define-function dbus_g_proxy_begin_call
+  (c-name "dbus_g_proxy_begin_call")
+  (return-type "return")
+  (parameters
+  )
+)
+
+(define-function dbus_g_proxy_begin_call
+  (c-name "dbus_g_proxy_begin_call")
+  (return-type "return")
+  (parameters
+  )
+)
+
+(define-function dbus_g_proxy_begin_call
+  (c-name "dbus_g_proxy_begin_call")
+  (return-type "return")
+  (parameters
+  )
+)
+
+(define-function dbus_g_proxy_begin_call
+  (c-name "dbus_g_proxy_begin_call")
+  (return-type "return")
+  (parameters
   )
 )
 
