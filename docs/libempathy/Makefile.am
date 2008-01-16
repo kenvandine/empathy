@@ -18,11 +18,13 @@ HFILE_GLOB=$(top_srcdir)/libempathy/*.h
 CFILE_GLOB=$(top_srcdir)/libempathy/*.c
 
 # Headers to ignore
-IGNORE_HFILES=			\
-	empathy-filter-glue.h	\
-	empathy-debug.h		\
-	empathy-marshal.h	\
-	tp-stream-engine-gen.h	\
+IGNORE_HFILES=				\
+	empathy-filter-glue.h		\
+	empathy-debug.h			\
+	empathy-marshal.h		\
+	tp-stream-engine-gen.h		\
+	stamp-empathy-enum-types.h	\
+	empathy-chandler-glue.h		\
 	$(NULL)
 
 # CFLAGS and LDFLAGS for compiling scan program. Only needed

@@ -18,7 +18,9 @@ HFILE_GLOB=$(top_srcdir)/libempathy-gtk/*.h
 CFILE_GLOB=$(top_srcdir)/libempathy-gtk/*.c
 
 # Headers to ignore
-IGNORE_HFILES=			\
+IGNORE_HFILES=				\
+	empathy-gtk-enum-types.h	\
+	stamp-empathy-gtk-enum-types.h	\
 	$(NULL)
 
 # CFLAGS and LDFLAGS for compiling scan program. Only needed
