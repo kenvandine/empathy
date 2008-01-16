@@ -1415,15 +1415,6 @@
   )
 )
 
-(define-function empathy_time_parse_format
-  (c-name "empathy_time_parse_format")
-  (return-type "time_t")
-  (parameters
-    '("const-gchar*" "str")
-    '("const-gchar*" "format")
-  )
-)
-
 (define-function empathy_time_to_string_utc
   (c-name "empathy_time_to_string_utc")
   (return-type "gchar*")

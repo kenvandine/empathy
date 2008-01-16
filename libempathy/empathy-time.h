@@ -36,8 +36,6 @@ G_BEGIN_DECLS
 time_t  empathy_time_get_current     (void);
 time_t  empathy_time_get_local_time  (struct tm   *tm);
 time_t  empathy_time_parse           (const gchar *str);
-time_t  empathy_time_parse_format    (const gchar *str,
-				      const gchar *format);
 gchar  *empathy_time_to_string_utc   (time_t       t,
 				      const gchar *format);
 gchar  *empathy_time_to_string_local (time_t       t,
