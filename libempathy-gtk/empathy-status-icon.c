@@ -154,6 +154,19 @@ status_icon_notify_use_nm_cb (EmpathyConf  *conf,
 }
 
 static void
+status_icon_notify_visibility_cb (EmpathyConf *conf,
+				  const gchar *key,
+				  gpointer     user_data)
+{
+	EmpathyStatusIcon *icon = user_data;
+	gboolean           hidden = FALSE;
+
+	if (empathy_conf_get_bool (conf, key, &hidden)) {
+		status_icon_set_visibility (icon, !hidden, FALSE);
+	}
+}
+
+static void
 empathy_status_icon_class_init (EmpathyStatusIconClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
@@ -193,6 +206,11 @@ empathy_status_icon_init (EmpathyStatusIcon *icon)
 	empathy_idle_set_auto_away (priv->idle, TRUE);
 	empathy_idle_set_use_nm (priv->idle, use_nm);
 
+	/* make icon listen and respond to MAIN_WINDOW_HIDDEN changes */
+	empathy_conf_notify_add (empathy_conf_get (),
+				 EMPATHY_PREFS_UI_MAIN_WINDOW_HIDDEN,
+				 status_icon_notify_visibility_cb,
+				 icon);
 
 	status_icon_create_menu (icon);
 	status_icon_idle_notify_cb (icon);
