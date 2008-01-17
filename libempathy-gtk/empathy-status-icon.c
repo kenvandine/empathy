@@ -101,7 +101,8 @@ static void       status_icon_idle_notify_cb      (EmpathyStatusIcon      *icon)
 static void       status_icon_update_tooltip      (EmpathyStatusIcon      *icon);
 static void       status_icon_set_from_state      (EmpathyStatusIcon      *icon);
 static void       status_icon_set_visibility      (EmpathyStatusIcon      *icon,
-						   gboolean                visible);
+						   gboolean                visible,
+						   gboolean                store);
 static void       status_icon_toggle_visibility   (EmpathyStatusIcon      *icon);
 static void       status_icon_activate_cb         (GtkStatusIcon          *status_icon,
 						   EmpathyStatusIcon      *icon);
@@ -273,7 +274,7 @@ empathy_status_icon_new (GtkWindow *window)
 			      &should_hide);
 
 	if (gtk_window_is_active (priv->window) == should_hide) {
-		status_icon_set_visibility (icon, !should_hide);
+		status_icon_set_visibility (icon, !should_hide, FALSE);
 	}
 
 	return icon;
@@ -416,14 +417,17 @@ status_icon_set_from_state (EmpathyStatusIcon *icon)
 
 static void
 status_icon_set_visibility (EmpathyStatusIcon *icon,
-			    gboolean           visible)
+			    gboolean           visible,
+			    gboolean           store)
 {
 	EmpathyStatusIconPriv *priv;
 
 	priv = GET_PRIV (icon);
 
-	empathy_conf_set_bool (empathy_conf_get (),
-			      EMPATHY_PREFS_UI_MAIN_WINDOW_HIDDEN, !visible);
+	if (store) {
+		empathy_conf_set_bool (empathy_conf_get (),
+				       EMPATHY_PREFS_UI_MAIN_WINDOW_HIDDEN, !visible);
+	}
 
 	if (!visible) {
 		empathy_window_iconify (priv->window, priv->icon);
@@ -451,7 +455,7 @@ status_icon_toggle_visibility (EmpathyStatusIcon *icon)
 	gboolean               visible;
 
 	visible = gtk_window_is_active (priv->window);
-	status_icon_set_visibility (icon, !visible);
+	status_icon_set_visibility (icon, !visible, TRUE);
 }
 
 static void
@@ -477,7 +481,7 @@ status_icon_delete_event_cb (GtkWidget         *widget,
 			     GdkEvent          *event,
 			     EmpathyStatusIcon *icon)
 {
-	status_icon_set_visibility (icon, FALSE);
+	status_icon_set_visibility (icon, FALSE, TRUE);
 
 	return TRUE;
 }
@@ -569,7 +573,7 @@ status_icon_show_hide_window_cb (GtkWidget         *widget,
 	gboolean visible;
 
 	visible = gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM (widget));
-	status_icon_set_visibility (icon, visible);
+	status_icon_set_visibility (icon, visible, TRUE);
 }
 
 static void
