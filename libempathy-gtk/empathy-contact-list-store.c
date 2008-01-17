@@ -1213,6 +1213,28 @@ contact_list_store_get_group (EmpathyContactListStore *store,
 	}
 }
 
+static guint
+contact_list_store_ordered_presence (McPresence state)
+{
+	switch (state) {
+	case MC_PRESENCE_UNSET:
+	case MC_PRESENCE_OFFLINE:
+		return 5;
+	case MC_PRESENCE_AVAILABLE:
+		return 0;
+	case MC_PRESENCE_AWAY:
+		return 2;
+	case MC_PRESENCE_EXTENDED_AWAY:
+		return 3;
+	case MC_PRESENCE_HIDDEN:
+		return 4;
+	case MC_PRESENCE_DO_NOT_DISTURB:
+		return 1;
+	default:
+		g_return_val_if_reached (6);
+	}
+}
+
 static gint
 contact_list_store_state_sort_func (GtkTreeModel *model,
 				    GtkTreeIter  *iter_a,
@@ -1224,7 +1246,6 @@ contact_list_store_state_sort_func (GtkTreeModel *model,
 	gboolean        is_separator_a, is_separator_b;
 	EmpathyContact  *contact_a, *contact_b;
 	EmpathyPresence *presence_a, *presence_b;
-	McPresence      state_a, state_b;
 
 	gtk_tree_model_get (model, iter_a,
 			    EMPATHY_CONTACT_LIST_STORE_COL_NAME, &name_a,
@@ -1271,8 +1292,13 @@ contact_list_store_state_sort_func (GtkTreeModel *model,
 		/* Both offline, sort by name */
 		ret_val = g_utf8_collate (name_a, name_b);
 	} else {
+		guint state_a, state_b;
+
 		state_a = empathy_presence_get_state (presence_a);
 		state_b = empathy_presence_get_state (presence_b);
+
+		state_a = contact_list_store_ordered_presence (state_a);
+		state_b = contact_list_store_ordered_presence (state_b);
 
 		if (state_a < state_b) {
 			ret_val = -1;
