@@ -32,9 +32,12 @@
 #include <libmissioncontrol/mc-profile.h>
 
 #include <libempathy/empathy-utils.h>
+#include <libempathy/empathy-debug.h>
 
 #include "empathy-account-widget-jabber.h"
 #include "empathy-ui-utils.h"
+
+#define DEBUG_DOMAIN "AccountWidgetJabber"
 
 #define PORT_WITHOUT_SSL 5222
 #define PORT_WITH_SSL 5223
@@ -51,6 +54,8 @@ typedef struct {
 	GtkWidget *spinbutton_port;
 	GtkWidget *spinbutton_priority;
 	GtkWidget *checkbutton_ssl;
+	GtkWidget *checkbutton_ignore_ssl_errors;
+	GtkWidget *checkbutton_encryption;
 } EmpathyAccountWidgetJabber;
 
 static gboolean account_widget_jabber_entry_focus_cb           (GtkWidget                 *widget,
@@ -95,10 +100,13 @@ account_widget_jabber_entry_focus_cb (GtkWidget                 *widget,
 	if (G_STR_EMPTY (str)) {
 		gchar *value = NULL;
 
+		mc_account_unset_param (settings->account, param);
 		mc_account_get_param_string (settings->account, param, &value);
+		empathy_debug (DEBUG_DOMAIN, "Unset %s and restore to %s", param, value);
 		gtk_entry_set_text (GTK_ENTRY (widget), value ? value : "");
 		g_free (value);
 	} else {
+		empathy_debug (DEBUG_DOMAIN, "Setting %s to %s", param, str);
 		mc_account_set_param_string (settings->account, param, str);
 	}
 
@@ -121,26 +129,50 @@ static void
 account_widget_jabber_checkbutton_toggled_cb (GtkWidget                 *widget,
 					      EmpathyAccountWidgetJabber *settings)
 {
+	gboolean     value;
+	gboolean     default_value;
+	const gchar *param;
+
+	value = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
+
 	if (widget == settings->checkbutton_ssl) {
-		gint     port = 0;
-		gboolean old_ssl;
+		gint port = 0;
 
 		mc_account_get_param_int (settings->account, "port", &port);
-		old_ssl = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
 
-		if (old_ssl) {
-			if (port == PORT_WITHOUT_SSL) {
+		if (value) {
+			if (port == PORT_WITHOUT_SSL || port == 0) {
 				port = PORT_WITH_SSL;
 			}
 		} else {
-			if (port == PORT_WITH_SSL) {
+			if (port == PORT_WITH_SSL || port == 0) {
 				port = PORT_WITHOUT_SSL;
 			}
 		}
-		
-		mc_account_set_param_int (settings->account, "port", port);
-		mc_account_set_param_boolean (settings->account, "old-ssl", old_ssl);
+
 		gtk_spin_button_set_value (GTK_SPIN_BUTTON (settings->spinbutton_port), port);
+		param = "old-ssl";
+	}
+	else if (widget == settings->checkbutton_ignore_ssl_errors) {
+		param = "ignore-ssl-errors";
+	}
+	else if (widget == settings->checkbutton_encryption) {
+		param = "require-encryption";
+	} else {
+		return;
+	}
+
+	/* FIXME: This is ugly! checkbox don't have a "not-set" value so we
+	 * always unset the param and set the value if different from the
+	 * default value. */
+	mc_account_unset_param (settings->account, param);
+	mc_account_get_param_boolean (settings->account, param, &default_value);
+
+	if (default_value != value) {
+		empathy_debug (DEBUG_DOMAIN, "Setting %s to %d", param, value);
+		mc_account_set_param_boolean (settings->account, param, value);
+	} else {
+		empathy_debug (DEBUG_DOMAIN, "Unset %s", param, value);
 	}
 }
 
@@ -148,15 +180,30 @@ static void
 account_widget_jabber_value_changed_cb (GtkWidget                 *spinbutton,
 					EmpathyAccountWidgetJabber *settings)
 {
-	gdouble value;
+	gdouble      value;
+	const gchar *param;
 
 	value = gtk_spin_button_get_value (GTK_SPIN_BUTTON (spinbutton));
 
 	if (spinbutton == settings->spinbutton_port) {
-		mc_account_set_param_int (settings->account, "port", (gint) value);
+		param = "port";
 	}
 	else if (spinbutton == settings->spinbutton_priority) {
-		mc_account_set_param_int (settings->account, "priority", (gint) value);
+		param = "priority";
+	} else {
+		return;
+	}
+
+	if (value != 0) {
+		empathy_debug (DEBUG_DOMAIN, "Setting %s to %d", param, (gint) value);
+		mc_account_set_param_int (settings->account, param, (gint) value);
+	} else {
+		gint val;
+
+		mc_account_unset_param (settings->account, param);
+		mc_account_get_param_int (settings->account, param, &val);
+		empathy_debug (DEBUG_DOMAIN, "Unset %s and restore to %d", param, val);
+		gtk_spin_button_set_value (GTK_SPIN_BUTTON (spinbutton), val);
 	}
 }
 
@@ -164,7 +211,8 @@ static void
 account_widget_jabber_button_forget_clicked_cb (GtkWidget                 *button,
 						EmpathyAccountWidgetJabber *settings)
 {
-	mc_account_set_param_string (settings->account, "password", "");
+	empathy_debug (DEBUG_DOMAIN, "Unset password");
+	mc_account_unset_param (settings->account, "password");
 	gtk_entry_set_text (GTK_ENTRY (settings->entry_password), "");
 }
 
@@ -186,6 +234,8 @@ account_widget_jabber_setup (EmpathyAccountWidgetJabber *settings)
 	gchar    *server = NULL;
 	gchar    *password = NULL;
 	gboolean  old_ssl = FALSE;
+	gboolean  ignore_ssl_errors = FALSE;
+	gboolean  encryption = FALSE;
 
 	mc_account_get_param_int (settings->account, "port", &port);
 	mc_account_get_param_int (settings->account, "priority", &priority);
@@ -194,6 +244,8 @@ account_widget_jabber_setup (EmpathyAccountWidgetJabber *settings)
 	mc_account_get_param_string (settings->account, "server", &server);
 	mc_account_get_param_string (settings->account, "password", &password);
 	mc_account_get_param_boolean (settings->account, "old-ssl", &old_ssl);
+	mc_account_get_param_boolean (settings->account, "ignore-ssl-errors", &ignore_ssl_errors);
+	mc_account_get_param_boolean (settings->account, "require-encryption", &encryption);
 
 	if (!id) {
 		McProfile   *profile;
@@ -207,13 +259,15 @@ account_widget_jabber_setup (EmpathyAccountWidgetJabber *settings)
 		g_object_unref (profile);
 	}
 
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (settings->checkbutton_ssl), old_ssl);
-	gtk_entry_set_text (GTK_ENTRY (settings->entry_id), id ? id : "");
-	gtk_entry_set_text (GTK_ENTRY (settings->entry_password), password ? password : "");
-	gtk_entry_set_text (GTK_ENTRY (settings->entry_resource), resource ? resource : "");
-	gtk_entry_set_text (GTK_ENTRY (settings->entry_server), server ? server : "");
 	gtk_spin_button_set_value (GTK_SPIN_BUTTON (settings->spinbutton_port), port);
 	gtk_spin_button_set_value (GTK_SPIN_BUTTON (settings->spinbutton_priority), priority);
+	gtk_entry_set_text (GTK_ENTRY (settings->entry_id), id ? id : "");
+	gtk_entry_set_text (GTK_ENTRY (settings->entry_resource), resource ? resource : "");
+	gtk_entry_set_text (GTK_ENTRY (settings->entry_server), server ? server : "");
+	gtk_entry_set_text (GTK_ENTRY (settings->entry_password), password ? password : "");
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (settings->checkbutton_ssl), old_ssl);
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (settings->checkbutton_ignore_ssl_errors), ignore_ssl_errors);
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (settings->checkbutton_encryption), encryption);
 
 	gtk_widget_set_sensitive (settings->button_forget, !G_STR_EMPTY (password));
 
@@ -254,6 +308,8 @@ empathy_account_widget_jabber_new (McAccount *account)
 				       "spinbutton_port", &settings->spinbutton_port,
 				       "spinbutton_priority", &settings->spinbutton_priority,
 				       "checkbutton_ssl", &settings->checkbutton_ssl,
+				       "checkbutton_ignore_ssl_errors", &settings->checkbutton_ignore_ssl_errors,
+				       "checkbutton_encryption", &settings->checkbutton_encryption,
 				       NULL);
 
 	account_widget_jabber_setup (settings);
@@ -270,6 +326,8 @@ empathy_account_widget_jabber_new (McAccount *account)
 			      "entry_resource", "focus-out-event", account_widget_jabber_entry_focus_cb,
 			      "entry_server", "focus-out-event", account_widget_jabber_entry_focus_cb,
 			      "checkbutton_ssl", "toggled", account_widget_jabber_checkbutton_toggled_cb,
+			      "checkbutton_ignore_ssl_errors", "toggled", account_widget_jabber_checkbutton_toggled_cb,
+			      "checkbutton_encryption", "toggled", account_widget_jabber_checkbutton_toggled_cb,
 			      NULL);
 
 	g_object_unref (glade);
