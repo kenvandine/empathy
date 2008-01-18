@@ -16,6 +16,8 @@ if HAVE_TESTS
 SUBDIRS += tests
 endif
 
+ACLOCAL_AMFLAGS = -I m4
+
 DISTCHECK_CONFIGURE_FLAGS =	\
 	--disable-scrollkeeper  \
 	--enable-gtk-doc
@@ -30,6 +32,7 @@ EXTRA_DIST = 			\
         ChangeLog.old           \
         README                  \
 	CONTRIBUTORS		\
+	autogen.sh		\
 	$(INTLTOOL)
 
 DISTCLEANFILES = 		\
