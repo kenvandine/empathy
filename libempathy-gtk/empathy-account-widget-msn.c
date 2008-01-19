@@ -33,9 +33,12 @@
 #include <libmissioncontrol/mc-profile.h>
 
 #include <libempathy/empathy-utils.h>
+#include <libempathy/empathy-debug.h>
 
 #include "empathy-account-widget-msn.h"
 #include "empathy-ui-utils.h"
+
+#define DEBUG_DOMAIN "AccountWidgetMSN"
 
 typedef struct {
 	McAccount *account;
@@ -69,14 +72,16 @@ account_widget_msn_entry_focus_cb (GtkWidget               *widget,
 	}
 	
 	str = gtk_entry_get_text (GTK_ENTRY (widget));
-	
 	if (G_STR_EMPTY (str)) {
 		gchar *value = NULL;
 
+		mc_account_unset_param (settings->account, param);
 		mc_account_get_param_string (settings->account, param, &value);
+		empathy_debug (DEBUG_DOMAIN, "Unset %s and restore to %s", param, value);
 		gtk_entry_set_text (GTK_ENTRY (widget), value ? value : "");
 		g_free (value);
 	} else {
+		empathy_debug (DEBUG_DOMAIN, "Setting %s to %s", param, str);
 		mc_account_set_param_string (settings->account, param, str);
 	}
 
@@ -99,11 +104,28 @@ static void
 account_widget_msn_value_changed_cb (GtkWidget			*spinbutton,
 				     EmpathyAccountWidgetMSN	*settings)
 {
-	if (spinbutton == settings->spinbutton_port) {
-		gdouble value;
+	gdouble      value;
+	const gchar *param;
 
-		value = gtk_spin_button_get_value (GTK_SPIN_BUTTON (spinbutton));
-		mc_account_set_param_int (settings->account, "port", (gint) value);
+	value = gtk_spin_button_get_value (GTK_SPIN_BUTTON (spinbutton));
+
+	if (spinbutton == settings->spinbutton_port) {
+		param = "port";
+	} else {
+		return;
+	}
+
+	if (value != 0) {
+		empathy_debug (DEBUG_DOMAIN, "Setting %s to %d", param, (gint) value);
+		mc_account_set_param_int (settings->account, param, (gint) value);
+	} else {
+		gint val;
+
+		mc_account_unset_param (settings->account, param);
+		mc_account_get_param_int (settings->account, param, &val);
+		empathy_debug (DEBUG_DOMAIN, "Unset %s and restore to %d", param, val);
+
+		gtk_spin_button_set_value (GTK_SPIN_BUTTON (spinbutton), val);
 	}
 }
 
@@ -111,7 +133,8 @@ static void
 account_widget_msn_button_forget_clicked_cb (GtkWidget               *button,
 					     EmpathyAccountWidgetMSN *settings)
 {
-	mc_account_set_param_string (settings->account, "password", "");
+	empathy_debug (DEBUG_DOMAIN, "Unset password");
+	mc_account_unset_param (settings->account, "password");
 	gtk_entry_set_text (GTK_ENTRY (settings->entry_password), "");
 }
 
@@ -136,10 +159,10 @@ account_widget_msn_setup (EmpathyAccountWidgetMSN *settings)
 	mc_account_get_param_string (settings->account, "server", &server);
 	mc_account_get_param_string (settings->account, "password", &password);
 
-	gtk_entry_set_text (GTK_ENTRY (settings->entry_id), id ? id : "");
-	gtk_entry_set_text (GTK_ENTRY (settings->entry_password), password ? password : "");
-	gtk_entry_set_text (GTK_ENTRY (settings->entry_server), server ? server : "");
 	gtk_spin_button_set_value (GTK_SPIN_BUTTON (settings->spinbutton_port), port);
+	gtk_entry_set_text (GTK_ENTRY (settings->entry_id), id ? id : "");
+	gtk_entry_set_text (GTK_ENTRY (settings->entry_server), server ? server : "");
+	gtk_entry_set_text (GTK_ENTRY (settings->entry_password), password ? password : "");
 
 	gtk_widget_set_sensitive (settings->button_forget, !G_STR_EMPTY (password));
 
