@@ -48,19 +48,6 @@ typedef struct {
 	GtkWidget *spinbutton_port;
 } EmpathyAccountWidgetMSN;
 
-static gboolean account_widget_msn_entry_focus_cb            (GtkWidget               *widget,
-							      GdkEventFocus           *event,
-							      EmpathyAccountWidgetMSN *settings);
-static void     account_widget_msn_entry_changed_cb          (GtkWidget               *widget,
-							      EmpathyAccountWidgetMSN *settings);
-static void	account_widget_msn_value_changed_cb 	     (GtkWidget		      *spinbutton,
-							      EmpathyAccountWidgetMSN *settings);
-static void     account_widget_msn_button_forget_clicked_cb  (GtkWidget               *button,
-							      EmpathyAccountWidgetMSN *settings);
-static void     account_widget_msn_destroy_cb                (GtkWidget               *widget,
-							      EmpathyAccountWidgetMSN *settings);
-static void     account_widget_msn_setup                     (EmpathyAccountWidgetMSN *settings);
-
 static gboolean
 account_widget_msn_entry_focus_cb (GtkWidget               *widget,
 				   GdkEventFocus           *event,

@@ -47,15 +47,6 @@ typedef struct {
 	GtkWidget *entry_jid;
 } EmpathyAccountWidgetSalut;
 
-static gboolean	account_widget_salut_entry_focus_cb (GtkWidget                 *widget,
-						     GdkEventFocus             *event,
-						     EmpathyAccountWidgetSalut *settings);
-static void	account_widget_salut_destroy_cb	    (GtkWidget                 *widget,
-						     EmpathyAccountWidgetSalut *settings);
-static void	account_widget_salut_setup          (EmpathyAccountWidgetSalut *settings);
-
-
-
 static gboolean
 account_widget_salut_entry_focus_cb (GtkWidget               *widget,
 				     GdkEventFocus           *event,

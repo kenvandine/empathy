@@ -58,21 +58,6 @@ typedef struct {
 	GtkWidget *checkbutton_encryption;
 } EmpathyAccountWidgetJabber;
 
-static gboolean account_widget_jabber_entry_focus_cb           (GtkWidget                 *widget,
-								GdkEventFocus             *event,
-								EmpathyAccountWidgetJabber *settings);
-static void     account_widget_jabber_entry_changed_cb         (GtkWidget                 *widget,
-								EmpathyAccountWidgetJabber *settings);
-static void     account_widget_jabber_checkbutton_toggled_cb   (GtkWidget                 *widget,
-								EmpathyAccountWidgetJabber *settings);
-static void     account_widget_jabber_value_changed_cb         (GtkWidget                 *spinbutton,
-								EmpathyAccountWidgetJabber *settings);
-static void     account_widget_jabber_button_forget_clicked_cb (GtkWidget                 *button,
-								EmpathyAccountWidgetJabber *settings);
-static void     account_widget_jabber_destroy_cb               (GtkWidget                 *widget,
-								EmpathyAccountWidgetJabber *settings);
-static void     account_widget_jabber_setup                    (EmpathyAccountWidgetJabber *settings);
-
 static gboolean
 account_widget_jabber_entry_focus_cb (GtkWidget                 *widget,
 				      GdkEventFocus             *event,

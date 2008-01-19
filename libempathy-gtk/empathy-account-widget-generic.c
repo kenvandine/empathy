@@ -48,19 +48,6 @@ typedef struct {
 	guint          n_rows;
 } EmpathyAccountWidgetGeneric;
 
-static gboolean account_widget_generic_entry_focus_cb         (GtkWidget                  *widget,
-							       GdkEventFocus              *event,
-							       EmpathyAccountWidgetGeneric *settings);
-static void     account_widget_generic_int_changed_cb         (GtkWidget                  *widget,
-							       EmpathyAccountWidgetGeneric *settings);
-static void     account_widget_generic_checkbutton_toggled_cb (GtkWidget                  *widget,
-							       EmpathyAccountWidgetGeneric *settings);
-static gchar *  account_widget_generic_format_param_name      (const gchar                *param_name);
-static void     account_widget_generic_setup_foreach          (McProtocolParam            *param,
-							       EmpathyAccountWidgetGeneric *settings);
-static void     account_widget_generic_destroy_cb             (GtkWidget                  *widget,
-							       EmpathyAccountWidgetGeneric *settings);
-
 static gboolean 
 account_widget_generic_entry_focus_cb (GtkWidget                  *widget,
 				       GdkEventFocus              *event,
