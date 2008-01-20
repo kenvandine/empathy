@@ -526,7 +526,7 @@ group_chat_set_tp_chat (EmpathyChat    *chat,
 	}
 
 	/* Create contact list */
-	priv->store = empathy_contact_list_store_new (EMPATHY_CONTACT_LIST (priv->tp_chat));
+	priv->store = empathy_contact_list_store_new (EMPATHY_CONTACT_LIST (priv->tp_chat), TRUE);
 	priv->view = empathy_contact_list_view_new (priv->store,
 						    EMPATHY_CONTACT_LIST_FEATURE_CONTACT_CHAT |
 						    EMPATHY_CONTACT_LIST_FEATURE_CONTACT_CALL |

@@ -54,6 +54,7 @@ typedef struct {
 	EmpathyContactList         *list;
 	gboolean                    show_offline;
 	gboolean                    show_avatars;
+	gboolean                    show_groups;
 	gboolean                    is_compact;
 	gboolean                    show_active;
 	EmpathyContactListStoreSort sort_criterium;
@@ -155,13 +156,62 @@ static gboolean         contact_list_store_update_list_mode_foreach  (GtkTreeMod
 
 enum {
 	PROP_0,
+	PROP_CONTACT_LIST,
 	PROP_SHOW_OFFLINE,
 	PROP_SHOW_AVATARS,
+	PROP_SHOW_GROUPS,
 	PROP_IS_COMPACT,
 	PROP_SORT_CRITERIUM
 };
 
 G_DEFINE_TYPE (EmpathyContactListStore, empathy_contact_list_store, GTK_TYPE_TREE_STORE);
+
+
+static gboolean
+contact_list_store_iface_setup (gpointer user_data)
+{
+	EmpathyContactListStore     *store = user_data;
+	EmpathyContactListStorePriv *priv = GET_PRIV (store);
+	GList                       *contacts, *l;
+
+	/* Signal connection. */
+	g_signal_connect (priv->list,
+			  "members-changed",
+			  G_CALLBACK (contact_list_store_members_changed_cb),
+			  store);
+	g_signal_connect (priv->list,
+			  "groups-changed",
+			  G_CALLBACK (contact_list_store_groups_changed_cb),
+			  store);
+
+	/* Add contacts already created. */
+	contacts = empathy_contact_list_get_members (priv->list);
+	for (l = contacts; l; l = l->next) {
+		contact_list_store_members_changed_cb (priv->list, l->data,
+						       NULL, 0, NULL,
+						       TRUE,
+						       store);
+
+		g_object_unref (l->data);
+	}
+	g_list_free (contacts);
+
+	return FALSE;
+}
+
+
+static void
+contact_list_store_set_contact_list (EmpathyContactListStore *store,
+				     EmpathyContactList      *list_iface)
+{
+	EmpathyContactListStorePriv *priv = GET_PRIV (store);
+
+	priv->list = g_object_ref (list_iface);
+
+	/* Let a chance to have all properties set before populating */
+	g_idle_add (contact_list_store_iface_setup,
+		    store);
+}
 
 static void
 empathy_contact_list_store_class_init (EmpathyContactListStoreClass *klass)
@@ -172,6 +222,14 @@ empathy_contact_list_store_class_init (EmpathyContactListStoreClass *klass)
 	object_class->get_property = contact_list_store_get_property;
 	object_class->set_property = contact_list_store_set_property;
 
+	g_object_class_install_property (object_class,
+					 PROP_CONTACT_LIST,
+					 g_param_spec_object ("contact-list",
+							      "The contact list iface",
+							      "The contact list iface",
+							      EMPATHY_TYPE_CONTACT_LIST,
+							      G_PARAM_CONSTRUCT_ONLY |
+							      G_PARAM_READWRITE));
 	g_object_class_install_property (object_class,
 					 PROP_SHOW_OFFLINE,
 					 g_param_spec_boolean ("show-offline",
@@ -186,6 +244,14 @@ empathy_contact_list_store_class_init (EmpathyContactListStoreClass *klass)
 								"Show Avatars",
 								"Whether contact list should display "
 								"avatars for contacts",
+								TRUE,
+								G_PARAM_READWRITE));
+	 g_object_class_install_property (object_class,
+					  PROP_SHOW_GROUPS,
+					  g_param_spec_boolean ("show-groups",
+								"Show Groups",
+								"Whether contact list should display "
+								"contact groups",
 								TRUE,
 								G_PARAM_READWRITE));
 	g_object_class_install_property (object_class,
@@ -216,9 +282,11 @@ empathy_contact_list_store_init (EmpathyContactListStore *store)
 	priv = GET_PRIV (store);
 
 	priv->show_avatars = TRUE;
+	priv->show_groups = TRUE;
 	priv->inhibit_active = g_timeout_add_seconds (ACTIVE_USER_WAIT_TO_ENABLE_TIME,
 						      (GSourceFunc) contact_list_store_inibit_active_cb,
 						      store);
+	contact_list_store_setup (store);
 }
 
 static void
@@ -260,11 +328,17 @@ contact_list_store_get_property (GObject    *object,
 	priv = GET_PRIV (object);
 
 	switch (param_id) {
+	case PROP_CONTACT_LIST:
+		g_value_set_object (value, priv->list);
+		break;
 	case PROP_SHOW_OFFLINE:
 		g_value_set_boolean (value, priv->show_offline);
 		break;
 	case PROP_SHOW_AVATARS:
 		g_value_set_boolean (value, priv->show_avatars);
+		break;
+	case PROP_SHOW_GROUPS:
+		g_value_set_boolean (value, priv->show_groups);
 		break;
 	case PROP_IS_COMPACT:
 		g_value_set_boolean (value, priv->is_compact);
@@ -289,12 +363,20 @@ contact_list_store_set_property (GObject      *object,
 	priv = GET_PRIV (object);
 
 	switch (param_id) {
+	case PROP_CONTACT_LIST:
+		contact_list_store_set_contact_list (EMPATHY_CONTACT_LIST_STORE (object),
+						     g_value_get_object (value));
+		break;
 	case PROP_SHOW_OFFLINE:
 		empathy_contact_list_store_set_show_offline (EMPATHY_CONTACT_LIST_STORE (object),
 							    g_value_get_boolean (value));
 		break;
 	case PROP_SHOW_AVATARS:
 		empathy_contact_list_store_set_show_avatars (EMPATHY_CONTACT_LIST_STORE (object),
+							    g_value_get_boolean (value));
+		break;
+	case PROP_SHOW_GROUPS:
+		empathy_contact_list_store_set_show_groups (EMPATHY_CONTACT_LIST_STORE (object),
 							    g_value_get_boolean (value));
 		break;
 	case PROP_IS_COMPACT:
@@ -312,43 +394,15 @@ contact_list_store_set_property (GObject      *object,
 }
 
 EmpathyContactListStore *
-empathy_contact_list_store_new (EmpathyContactList *list_iface)
+empathy_contact_list_store_new (EmpathyContactList *list_iface,
+				gboolean            show_groups)
 {
-	EmpathyContactListStore     *store;
-	EmpathyContactListStorePriv *priv;
-	GList                      *contacts, *l;
-
 	g_return_val_if_fail (EMPATHY_IS_CONTACT_LIST (list_iface), NULL);
 
-	store = g_object_new (EMPATHY_TYPE_CONTACT_LIST_STORE, NULL);
-	priv = GET_PRIV (store);
-
-	contact_list_store_setup (store);
-	priv->list = g_object_ref (list_iface);
-
-	/* Signal connection. */
-	g_signal_connect (priv->list,
-			  "members-changed",
-			  G_CALLBACK (contact_list_store_members_changed_cb),
-			  store);
-	g_signal_connect (priv->list,
-			  "groups-changed",
-			  G_CALLBACK (contact_list_store_groups_changed_cb),
-			  store);
-
-	/* Add contacts already created. */
-	contacts = empathy_contact_list_get_members (priv->list);
-	for (l = contacts; l; l = l->next) {
-		contact_list_store_members_changed_cb (priv->list, l->data,
-						       NULL, 0, NULL,
-						       TRUE,
-						       store);
-
-		g_object_unref (l->data);
-	}
-	g_list_free (contacts);
-
-	return store;
+	return g_object_new (EMPATHY_TYPE_CONTACT_LIST_STORE,
+			     "contact-list", list_iface,
+			     "show-groups", show_groups,
+			     NULL);
 }
 
 EmpathyContactList *
@@ -403,6 +457,8 @@ empathy_contact_list_store_set_show_offline (EmpathyContactListStore *store,
 
 	/* Restore to original setting. */
 	priv->show_active = show_active;
+
+	g_object_notify (G_OBJECT (store), "show-offline");
 }
 
 gboolean
@@ -436,6 +492,54 @@ empathy_contact_list_store_set_show_avatars (EmpathyContactListStore *store,
 				(GtkTreeModelForeachFunc)
 				contact_list_store_update_list_mode_foreach,
 				store);
+
+	g_object_notify (G_OBJECT (store), "show-avatars");
+}
+
+gboolean
+empathy_contact_list_store_get_show_groups (EmpathyContactListStore *store)
+{
+	EmpathyContactListStorePriv *priv;
+
+	g_return_val_if_fail (EMPATHY_IS_CONTACT_LIST_STORE (store), TRUE);
+
+	priv = GET_PRIV (store);
+
+	return priv->show_groups;
+}
+
+void
+empathy_contact_list_store_set_show_groups (EmpathyContactListStore *store,
+					    gboolean                 show_groups)
+{
+	EmpathyContactListStorePriv *priv;
+	GList                       *contacts, *l;
+
+	g_return_if_fail (EMPATHY_IS_CONTACT_LIST_STORE (store));
+
+	priv = GET_PRIV (store);
+
+	if (priv->show_groups == show_groups) {
+		return;
+	}
+
+	priv->show_groups = show_groups;
+
+	/* Remove all contacts and add them back, not optimized but that's the
+	 * easy way :) */
+	gtk_tree_store_clear (GTK_TREE_STORE (store));
+	contacts = empathy_contact_list_get_members (priv->list);
+	for (l = contacts; l; l = l->next) {
+		contact_list_store_members_changed_cb (priv->list, l->data,
+						       NULL, 0, NULL,
+						       TRUE,
+						       store);
+
+		g_object_unref (l->data);
+	}
+	g_list_free (contacts);
+
+	g_object_notify (G_OBJECT (store), "show-groups");
 }
 
 gboolean
@@ -469,6 +573,8 @@ empathy_contact_list_store_set_is_compact (EmpathyContactListStore *store,
 				(GtkTreeModelForeachFunc)
 				contact_list_store_update_list_mode_foreach,
 				store);
+
+	g_object_notify (G_OBJECT (store), "is-compact");
 }
 
 EmpathyContactListStoreSort
@@ -508,6 +614,8 @@ empathy_contact_list_store_set_sort_criterium (EmpathyContactListStore     *stor
 						      GTK_SORT_ASCENDING);
 		break;
 	}
+
+	g_object_notify (G_OBJECT (store), "sort-criterium");
 }
 
 gboolean
@@ -767,7 +875,7 @@ contact_list_store_add_contact (EmpathyContactListStore *store,
 {
 	EmpathyContactListStorePriv *priv;
 	GtkTreeIter                 iter;
-	GList                      *groups, *l;
+	GList                      *groups = NULL, *l;
 
 	priv = GET_PRIV (store);
 	
@@ -775,7 +883,9 @@ contact_list_store_add_contact (EmpathyContactListStore *store,
 		return;
 	}
 
-	groups = empathy_contact_list_get_groups (priv->list, contact);
+	if (priv->show_groups) {
+		groups = empathy_contact_list_get_groups (priv->list, contact);
+	}
 
 	/* If no groups just add it at the top level. */
 	if (!groups) {

@@ -199,8 +199,10 @@
   (c-name "EmpathyContactListFeatures")
   (gtype-id "EMPATHY_TYPE_CONTACT_LIST_FEATURES")
   (values
-    '("groups-show" "EMPATHY_CONTACT_LIST_FEATURE_GROUPS_SHOW")
-    '("groups-modify" "EMPATHY_CONTACT_LIST_FEATURE_GROUPS_MODIFY")
+    '("none" "EMPATHY_CONTACT_LIST_FEATURE_NONE")
+    '("groups-save" "EMPATHY_CONTACT_LIST_FEATURE_GROUPS_SAVE")
+    '("groups-rename" "EMPATHY_CONTACT_LIST_FEATURE_GROUPS_RENAME")
+    '("groups-remove" "EMPATHY_CONTACT_LIST_FEATURE_GROUPS_REMOVE")
     '("contact-chat" "EMPATHY_CONTACT_LIST_FEATURE_CONTACT_CHAT")
     '("contact-call" "EMPATHY_CONTACT_LIST_FEATURE_CONTACT_CALL")
     '("contact-log" "EMPATHY_CONTACT_LIST_FEATURE_CONTACT_LOG")
@@ -209,6 +211,9 @@
     '("contact-edit" "EMPATHY_CONTACT_LIST_FEATURE_CONTACT_EDIT")
     '("contact-info" "EMPATHY_CONTACT_LIST_FEATURE_CONTACT_INFO")
     '("contact-remove" "EMPATHY_CONTACT_LIST_FEATURE_CONTACT_REMOVE")
+    '("contact-drop" "EMPATHY_CONTACT_LIST_FEATURE_CONTACT_DROP")
+    '("contact-drag" "EMPATHY_CONTACT_LIST_FEATURE_CONTACT_DRAG")
+    '("all" "EMPATHY_CONTACT_LIST_FEATURE_ALL")
   )
 )
 
@@ -1047,6 +1052,9 @@
   (of-object "EmpathyContactList")
   (c-name "empathy_contact_list_store_new")
   (return-type "EmpathyContactListStore*")
+  (parameters
+    '("gboolean" "show_groups")
+  )
 )
 
 (define-method get_list_iface
@@ -1082,6 +1090,21 @@
   (return-type "none")
   (parameters
     '("gboolean" "show_avatars")
+  )
+)
+
+(define-method get_show_groups
+  (of-object "EmpathyContactListStore")
+  (c-name "empathy_contact_list_store_get_show_groups")
+  (return-type "gboolean")
+)
+
+(define-method set_show_groups
+  (of-object "EmpathyContactListStore")
+  (c-name "empathy_contact_list_store_set_show_groups")
+  (return-type "none")
+  (parameters
+    '("gboolean" "show_groups")
   )
 )
 

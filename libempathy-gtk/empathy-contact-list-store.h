@@ -73,7 +73,8 @@ struct _EmpathyContactListStoreClass {
 };
 
 GType                      empathy_contact_list_store_get_type           (void) G_GNUC_CONST;
-EmpathyContactListStore *  empathy_contact_list_store_new                (EmpathyContactList         *list_iface);
+EmpathyContactListStore *  empathy_contact_list_store_new                (EmpathyContactList         *list_iface,
+									  gboolean                    show_groups);
 EmpathyContactList *       empathy_contact_list_store_get_list_iface     (EmpathyContactListStore     *store);
 gboolean                   empathy_contact_list_store_get_show_offline   (EmpathyContactListStore     *store);
 void                       empathy_contact_list_store_set_show_offline   (EmpathyContactListStore     *store,
@@ -81,6 +82,9 @@ void                       empathy_contact_list_store_set_show_offline   (Empath
 gboolean                   empathy_contact_list_store_get_show_avatars   (EmpathyContactListStore     *store);
 void                       empathy_contact_list_store_set_show_avatars   (EmpathyContactListStore     *store,
 									 gboolean                    show_avatars);
+gboolean                   empathy_contact_list_store_get_show_groups   (EmpathyContactListStore     *store);
+void                       empathy_contact_list_store_set_show_groups   (EmpathyContactListStore     *store,
+									 gboolean                    show_groups);
 gboolean                   empathy_contact_list_store_get_is_compact     (EmpathyContactListStore     *store);
 void                       empathy_contact_list_store_set_is_compact     (EmpathyContactListStore     *store,
 									 gboolean                    is_compact);
