@@ -901,16 +901,27 @@ presence_chooser_dialog_setup (CustomMessageDialog *dialog)
 }
 
 static void
+presence_chooser_dialog_response_cb (GtkWidget           *widget,
+				     gint                 response,
+				     CustomMessageDialog *dialog)
+{
+	if (response == GTK_RESPONSE_APPLY) {
+		McPresence   state;
+		const gchar *text;
+
+		state = presence_chooser_dialog_get_selected (dialog);
+		text = gtk_entry_get_text (GTK_ENTRY (dialog->entry_message));
+
+		presence_chooser_set_state (state, text);
+	}
+
+	gtk_widget_destroy (widget);
+}
+
+static void
 presence_chooser_dialog_destroy_cb (GtkWidget           *widget,
 				    CustomMessageDialog *dialog)
 {
-	McPresence   state;
-	const gchar *text;
-
-	state = presence_chooser_dialog_get_selected (dialog);
-	text = gtk_entry_get_text (GTK_ENTRY (dialog->entry_message));
-
-	presence_chooser_set_state (state, text);
 
 	g_free (dialog);
 	message_dialog = NULL;
@@ -938,7 +949,7 @@ presence_chooser_dialog_show (void)
 	empathy_glade_connect (glade,
 			       message_dialog,
 			       "custom_message_dialog", "destroy", presence_chooser_dialog_destroy_cb,
-			       "custom_message_dialog", "response", gtk_widget_destroy,
+			       "custom_message_dialog", "response", presence_chooser_dialog_response_cb,
 			       "combobox_status", "changed", presence_chooser_dialog_status_changed_cb,
 			       "checkbutton_save", "toggled", presence_chooser_dialog_save_toggled_cb,
 			       NULL);
