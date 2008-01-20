@@ -808,6 +808,8 @@ presence_chooser_dialog_status_changed_cb (GtkWidget           *widget,
 
 	gtk_combo_box_set_model (GTK_COMBO_BOX (dialog->comboboxentry_message),
 				 GTK_TREE_MODEL (store));
+
+	g_object_unref (store);
 }
 
 static void
