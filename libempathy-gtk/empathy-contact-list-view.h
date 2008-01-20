@@ -43,7 +43,24 @@ G_BEGIN_DECLS
 
 typedef struct _EmpathyContactListView      EmpathyContactListView;
 typedef struct _EmpathyContactListViewClass EmpathyContactListViewClass;
-typedef struct _EmpathyContactListViewPriv  EmpathyContactListViewPriv;
+
+typedef enum {
+	EMPATHY_CONTACT_LIST_FEATURE_NONE = 0,
+	EMPATHY_CONTACT_LIST_FEATURE_GROUPS_SAVE = 1 << 0,
+	EMPATHY_CONTACT_LIST_FEATURE_GROUPS_RENAME = 1 << 1,
+	EMPATHY_CONTACT_LIST_FEATURE_GROUPS_REMOVE = 1 << 2,
+	EMPATHY_CONTACT_LIST_FEATURE_CONTACT_CHAT = 1 << 3,
+	EMPATHY_CONTACT_LIST_FEATURE_CONTACT_CALL = 1 << 4,
+	EMPATHY_CONTACT_LIST_FEATURE_CONTACT_LOG = 1 << 5,
+	EMPATHY_CONTACT_LIST_FEATURE_CONTACT_FT = 1 << 6,
+	EMPATHY_CONTACT_LIST_FEATURE_CONTACT_INVITE = 1 << 7,
+	EMPATHY_CONTACT_LIST_FEATURE_CONTACT_EDIT = 1 << 8,
+	EMPATHY_CONTACT_LIST_FEATURE_CONTACT_INFO = 1 << 9,
+	EMPATHY_CONTACT_LIST_FEATURE_CONTACT_REMOVE = 1 << 10,
+	EMPATHY_CONTACT_LIST_FEATURE_CONTACT_DROP = 1 << 11,
+	EMPATHY_CONTACT_LIST_FEATURE_CONTACT_DRAG = 1 << 12,
+	EMPATHY_CONTACT_LIST_FEATURE_ALL = (1 << 13) - 1,
+} EmpathyContactListFeatures;
 
 struct _EmpathyContactListView {
 	GtkTreeView            parent;
@@ -53,16 +70,17 @@ struct _EmpathyContactListViewClass {
 	GtkTreeViewClass       parent_class;
 };
 
-GType                   empathy_contact_list_view_get_type           (void) G_GNUC_CONST;
-EmpathyContactListView *empathy_contact_list_view_new                (EmpathyContactListStore *store);
-void                    empathy_contact_list_view_set_interactive    (EmpathyContactListView  *view,
-								      gboolean                 interactive);
-gboolean                empathy_contact_list_view_get_interactive    (EmpathyContactListView  *view);
-EmpathyContact *        empathy_contact_list_view_get_selected       (EmpathyContactListView  *view);
-gchar *                 empathy_contact_list_view_get_selected_group (EmpathyContactListView  *view);
-GtkWidget *             empathy_contact_list_view_get_contact_menu   (EmpathyContactListView  *view,
-								      EmpathyContact          *contact);
-GtkWidget *             empathy_contact_list_view_get_group_menu     (EmpathyContactListView  *view);
+GType                      empathy_contact_list_view_get_type           (void) G_GNUC_CONST;
+EmpathyContactListView *   empathy_contact_list_view_new                (EmpathyContactListStore    *store,
+								         EmpathyContactListFeatures  features);
+void                       empathy_contact_list_view_set_features       (EmpathyContactListView     *view,
+								         EmpathyContactListFeatures  features);
+EmpathyContactListFeatures empathy_contact_list_view_get_features       (EmpathyContactListView     *view);
+EmpathyContact *           empathy_contact_list_view_get_selected       (EmpathyContactListView     *view);
+gchar *                    empathy_contact_list_view_get_selected_group (EmpathyContactListView     *view);
+GtkWidget *                empathy_contact_list_view_get_contact_menu   (EmpathyContactListView     *view,
+								         EmpathyContact             *contact);
+GtkWidget *                empathy_contact_list_view_get_group_menu     (EmpathyContactListView     *view);
 
 G_END_DECLS
 

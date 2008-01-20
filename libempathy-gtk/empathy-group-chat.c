@@ -527,8 +527,14 @@ group_chat_set_tp_chat (EmpathyChat    *chat,
 
 	/* Create contact list */
 	priv->store = empathy_contact_list_store_new (EMPATHY_CONTACT_LIST (priv->tp_chat));
-	priv->view = empathy_contact_list_view_new (priv->store);
-	empathy_contact_list_view_set_interactive (priv->view, TRUE);
+	priv->view = empathy_contact_list_view_new (priv->store,
+						    EMPATHY_CONTACT_LIST_FEATURE_CONTACT_CHAT |
+						    EMPATHY_CONTACT_LIST_FEATURE_CONTACT_CALL |
+						    EMPATHY_CONTACT_LIST_FEATURE_CONTACT_LOG |
+						    EMPATHY_CONTACT_LIST_FEATURE_CONTACT_FT |
+						    EMPATHY_CONTACT_LIST_FEATURE_CONTACT_INVITE |
+						    EMPATHY_CONTACT_LIST_FEATURE_CONTACT_INFO);
+
 	gtk_container_add (GTK_CONTAINER (priv->scrolled_window_contacts),
 			   GTK_WIDGET (priv->view));
 	gtk_widget_show (GTK_WIDGET (priv->view));

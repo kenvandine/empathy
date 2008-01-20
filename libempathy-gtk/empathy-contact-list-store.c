@@ -33,7 +33,6 @@
 #include <libempathy/empathy-debug.h>
 
 #include "empathy-contact-list-store.h"
-#include "empathy-contact-groups.h"
 #include "empathy-ui-utils.h"
 #include "empathy-gtk-enum-types.h"
 

@@ -365,8 +365,8 @@ megaphone_applet_show_preferences (MegaphoneApplet *applet)
 		      "show-offline", TRUE,
 		      "sort-criterium", EMPATHY_CONTACT_LIST_STORE_SORT_NAME,
 		      NULL);
-	contact_list = empathy_contact_list_view_new (contact_store);
-	gtk_tree_view_expand_all (GTK_TREE_VIEW (contact_list));
+	contact_list = empathy_contact_list_view_new (contact_store,
+						      EMPATHY_CONTACT_LIST_FEATURE_NONE);
 	g_object_unref (contact_manager);
 	g_object_unref (contact_store);
 	gtk_widget_show (GTK_WIDGET (contact_list));

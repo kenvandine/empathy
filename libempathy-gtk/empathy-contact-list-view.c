@@ -56,6 +56,7 @@
 //#include "empathy-chat-invite.h"
 //#include "empathy-ft-window.h"
 #include "empathy-log-window.h"
+#include "empathy-gtk-enum-types.h"
 
 #define DEBUG_DOMAIN "ContactListView"
 
@@ -68,12 +69,12 @@
 
 #define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), EMPATHY_TYPE_CONTACT_LIST_VIEW, EmpathyContactListViewPriv))
 
-struct _EmpathyContactListViewPriv {
-	EmpathyContactListStore *store;
-	GtkUIManager            *ui;
-	GtkTreeRowReference     *drag_row;
-	gboolean                 interactive;
-};
+typedef struct {
+	EmpathyContactListStore    *store;
+	GtkUIManager               *ui;
+	GtkTreeRowReference        *drag_row;
+	EmpathyContactListFeatures  features;
+} EmpathyContactListViewPriv;
 
 typedef struct {
 	EmpathyContactListView *view;
@@ -188,7 +189,7 @@ static void        contact_list_view_voip_activated            (EmpathyContactLi
 
 enum {
 	PROP_0,
-	PROP_INTERACTIVE
+	PROP_FEATURES
 };
 
 static const GtkActionEntry entries[] = {
@@ -326,12 +327,13 @@ empathy_contact_list_view_class_init (EmpathyContactListViewClass *klass)
 			      3, EMPATHY_TYPE_CONTACT, G_TYPE_STRING, G_TYPE_STRING);
 
 	g_object_class_install_property (object_class,
-					 PROP_INTERACTIVE,
-					 g_param_spec_boolean ("interactive",
-							       "View is interactive",
-							       "Is the view interactive",
-							       FALSE,
-							       G_PARAM_READWRITE));
+					 PROP_FEATURES,
+					 g_param_spec_flags ("features",
+							     "Features of the view",
+							     "Falgs for all enabled features",
+							      EMPATHY_TYPE_CONTACT_LIST_FEATURES,
+							      0,
+							      G_PARAM_READWRITE));
 
 	g_type_class_add_private (object_class, sizeof (EmpathyContactListViewPriv));
 }
@@ -414,8 +416,8 @@ contact_list_view_get_property (GObject    *object,
 	priv = GET_PRIV (object);
 
 	switch (param_id) {
-	case PROP_INTERACTIVE:
-		g_value_set_boolean (value, priv->interactive);
+	case PROP_FEATURES:
+		g_value_set_flags (value, priv->features);
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
@@ -435,8 +437,8 @@ contact_list_view_set_property (GObject      *object,
 	priv = GET_PRIV (object);
 
 	switch (param_id) {
-	case PROP_INTERACTIVE:
-		empathy_contact_list_view_set_interactive (view, g_value_get_boolean (value));
+	case PROP_FEATURES:
+		empathy_contact_list_view_set_features (view, g_value_get_flags (value));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
@@ -445,40 +447,69 @@ contact_list_view_set_property (GObject      *object,
 }
 
 EmpathyContactListView *
-empathy_contact_list_view_new (EmpathyContactListStore *store)
+empathy_contact_list_view_new (EmpathyContactListStore    *store,
+			       EmpathyContactListFeatures  features)
 {
-	EmpathyContactListViewPriv *priv;
 	EmpathyContactListView     *view;
-	
-	view = g_object_new (EMPATHY_TYPE_CONTACT_LIST_VIEW, NULL);
-	priv = GET_PRIV (view);
+	EmpathyContactListViewPriv *priv;
 
+	g_return_val_if_fail (EMPATHY_IS_CONTACT_LIST_STORE (store), NULL);
+	
+	view = g_object_new (EMPATHY_TYPE_CONTACT_LIST_VIEW,
+			    "features", features,
+			    NULL);
+
+	priv = GET_PRIV (view);
 	priv->store = g_object_ref (store);
-	contact_list_view_setup (view);
+	contact_list_view_setup (EMPATHY_CONTACT_LIST_VIEW (view));
 
 	return view;
 }
 
 void
-empathy_contact_list_view_set_interactive (EmpathyContactListView  *view,
-					   gboolean                 interactive)
+empathy_contact_list_view_set_features (EmpathyContactListView     *view,
+					EmpathyContactListFeatures  features)
 {
 	EmpathyContactListViewPriv *priv = GET_PRIV (view);
 
 	g_return_if_fail (EMPATHY_IS_CONTACT_LIST_VIEW (view));
 
-	priv->interactive = interactive;
-	g_object_notify (G_OBJECT (view), "interactive");
+	priv->features = features;
+
+	/* Update DnD source/dest */
+	if (features & EMPATHY_CONTACT_LIST_FEATURE_CONTACT_DRAG) {
+		gtk_drag_source_set (GTK_WIDGET (view),
+				     GDK_BUTTON1_MASK,
+				     drag_types_source,
+				     G_N_ELEMENTS (drag_types_source),
+				     GDK_ACTION_MOVE | GDK_ACTION_COPY);
+	} else {
+		gtk_drag_source_unset (GTK_WIDGET (view));
+
+	}
+
+	if (features & EMPATHY_CONTACT_LIST_FEATURE_CONTACT_DROP) {
+		gtk_drag_dest_set (GTK_WIDGET (view),
+				   GTK_DEST_DEFAULT_ALL,
+				   drag_types_dest,
+				   G_N_ELEMENTS (drag_types_dest),
+				   GDK_ACTION_MOVE | GDK_ACTION_COPY);
+	} else {
+		/* FIXME: URI could still be  droped depending on FT feature */
+		gtk_drag_dest_unset (GTK_WIDGET (view));
+	}
+
+	g_object_notify (G_OBJECT (view), "features");
 }
 
-gboolean
-empathy_contact_list_view_get_interactive (EmpathyContactListView  *view)
+EmpathyContactListFeatures
+empathy_contact_list_view_get_features (EmpathyContactListView  *view)
 {
 	EmpathyContactListViewPriv *priv = GET_PRIV (view);
 
 	g_return_val_if_fail (EMPATHY_IS_CONTACT_LIST_VIEW (view), FALSE);
 
-	return priv->interactive;
+	return priv->features;
 }
 
 EmpathyContact *
@@ -536,48 +567,6 @@ empathy_contact_list_view_get_selected_group (EmpathyContactListView *view)
 	}
 
 	return name;
-}
-
-GtkWidget *
-empathy_contact_list_view_get_group_menu (EmpathyContactListView *view)
-{
-	EmpathyContactListViewPriv *priv;
-	GtkWidget                 *widget;
-
-	g_return_val_if_fail (EMPATHY_IS_CONTACT_LIST_VIEW (view), NULL);
-
-	priv = GET_PRIV (view);
-
-	widget = gtk_ui_manager_get_widget (priv->ui, "/Group");
-
-	return widget;
-}
-
-GtkWidget *
-empathy_contact_list_view_get_contact_menu (EmpathyContactListView *view,
-					    EmpathyContact         *contact)
-{
-	EmpathyLogManager *log_manager;
-	gboolean           can_show_log;
-	gboolean           can_send_file;
-	gboolean           can_voip;
-
-	g_return_val_if_fail (EMPATHY_IS_CONTACT_LIST_VIEW (view), NULL);
-	g_return_val_if_fail (EMPATHY_IS_CONTACT (contact), NULL);
-
-	log_manager = empathy_log_manager_new ();
-	can_show_log = empathy_log_manager_exists (log_manager,
-						   empathy_contact_get_account (contact),
-						   empathy_contact_get_id (contact),
-						   FALSE);
-	g_object_unref (log_manager);
-	can_send_file = FALSE;
-	can_voip = empathy_contact_can_voip (contact);
-
-	return contact_list_view_get_contact_menu (view,
-						   can_send_file,
-						   can_show_log,
-						   can_voip);
 }
 
 static void
@@ -693,21 +682,6 @@ contact_list_view_setup (EmpathyContactListView *view)
 		drag_atoms_source[i] = gdk_atom_intern (drag_types_source[i].target,
 							FALSE);
 	}
-
-	/* Note: We support the COPY action too, but need to make the
-	 * MOVE action the default.
-	 */
-	gtk_drag_source_set (GTK_WIDGET (view),
-			     GDK_BUTTON1_MASK,
-			     drag_types_source,
-			     G_N_ELEMENTS (drag_types_source),
-			     GDK_ACTION_MOVE | GDK_ACTION_COPY);
-
-	gtk_drag_dest_set (GTK_WIDGET (view),
-			   GTK_DEST_DEFAULT_ALL,
-			   drag_types_dest,
-			   G_N_ELEMENTS (drag_types_dest),
-			   GDK_ACTION_MOVE | GDK_ACTION_COPY);
 }
 
 static void
@@ -716,6 +690,7 @@ contact_list_view_row_has_child_toggled_cb (GtkTreeModel          *model,
 					    GtkTreeIter           *iter,
 					    EmpathyContactListView *view)
 {
+	EmpathyContactListViewPriv *priv = GET_PRIV (view);
 	gboolean  is_group = FALSE;
 	gchar    *name = NULL;
 
@@ -729,7 +704,8 @@ contact_list_view_row_has_child_toggled_cb (GtkTreeModel          *model,
 		return;
 	}
 
-	if (empathy_contact_group_get_expanded (name)) {
+	if (!(priv->features & EMPATHY_CONTACT_LIST_FEATURE_GROUPS_SAVE) ||
+	    empathy_contact_group_get_expanded (name)) {
 		g_signal_handlers_block_by_func (view,
 						 contact_list_view_row_expand_or_collapse_cb,
 						 GINT_TO_POINTER (TRUE));
@@ -953,7 +929,6 @@ contact_list_view_drag_data_get (GtkWidget        *widget,
 	const gchar                *contact_id;
 	const gchar                *account_id;
 	gchar                      *str;
-	
 
 	priv = GET_PRIV (widget);
 
@@ -1204,27 +1179,100 @@ contact_list_view_get_contact_menu (EmpathyContactListView *view,
 				    gboolean               can_show_log,
 				    gboolean               can_voip)
 {
-	EmpathyContactListViewPriv *priv;
-	GtkAction                 *action;
-	GtkWidget                 *widget;
+	EmpathyContactListViewPriv *priv = GET_PRIV (view);
+	GtkAction                  *action;
 
-	priv = GET_PRIV (view);
+	if (!(priv->features & (EMPATHY_CONTACT_LIST_FEATURE_CONTACT_CHAT |
+				EMPATHY_CONTACT_LIST_FEATURE_CONTACT_CALL |
+				EMPATHY_CONTACT_LIST_FEATURE_CONTACT_LOG |
+				EMPATHY_CONTACT_LIST_FEATURE_CONTACT_FT |
+				EMPATHY_CONTACT_LIST_FEATURE_CONTACT_INVITE |
+				EMPATHY_CONTACT_LIST_FEATURE_CONTACT_EDIT |
+				EMPATHY_CONTACT_LIST_FEATURE_CONTACT_INFO |
+				EMPATHY_CONTACT_LIST_FEATURE_CONTACT_REMOVE))) {
+		return NULL;
+	}
 
-	/* Sort out sensitive items */
-	action = gtk_ui_manager_get_action (priv->ui, "/Contact/Log");
-	gtk_action_set_sensitive (action, can_show_log);
+	/* Sort out sensitive/visible items */
+	action = gtk_ui_manager_get_action (priv->ui, "/Contact/Chat");
+	gtk_action_set_visible (action, priv->features & EMPATHY_CONTACT_LIST_FEATURE_CONTACT_CHAT);
 
 #ifdef HAVE_VOIP
 	action = gtk_ui_manager_get_action (priv->ui, "/Contact/Call");
 	gtk_action_set_sensitive (action, can_voip);
+	gtk_action_set_visible (action, priv->features & EMPATHY_CONTACT_LIST_FEATURE_CONTACT_CALL);
 #endif
 
+	action = gtk_ui_manager_get_action (priv->ui, "/Contact/Log");
+	gtk_action_set_sensitive (action, can_show_log);
+	gtk_action_set_visible (action, priv->features & EMPATHY_CONTACT_LIST_FEATURE_CONTACT_LOG);
+
+
 	action = gtk_ui_manager_get_action (priv->ui, "/Contact/SendFile");
-	gtk_action_set_visible (action, can_send_file);
+	gtk_action_set_visible (action, can_send_file && (priv->features & EMPATHY_CONTACT_LIST_FEATURE_CONTACT_FT));
 
-	widget = gtk_ui_manager_get_widget (priv->ui, "/Contact");
+	action = gtk_ui_manager_get_action (priv->ui, "/Contact/Invite");
+	gtk_action_set_visible (action, priv->features & EMPATHY_CONTACT_LIST_FEATURE_CONTACT_INVITE);
 
-	return widget;
+	action = gtk_ui_manager_get_action (priv->ui, "/Contact/Edit");
+	gtk_action_set_visible (action, priv->features & EMPATHY_CONTACT_LIST_FEATURE_CONTACT_EDIT);
+
+	action = gtk_ui_manager_get_action (priv->ui, "/Contact/Information");
+	gtk_action_set_visible (action, priv->features & EMPATHY_CONTACT_LIST_FEATURE_CONTACT_INFO);
+
+	action = gtk_ui_manager_get_action (priv->ui, "/Contact/Remove");
+	gtk_action_set_visible (action, priv->features & EMPATHY_CONTACT_LIST_FEATURE_CONTACT_REMOVE);
+
+	return gtk_ui_manager_get_widget (priv->ui, "/Contact");
+}
+
+GtkWidget *
+empathy_contact_list_view_get_group_menu (EmpathyContactListView *view)
+{
+	EmpathyContactListViewPriv *priv = GET_PRIV (view);
+	GtkAction                  *action;
+
+	g_return_val_if_fail (EMPATHY_IS_CONTACT_LIST_VIEW (view), NULL);
+
+	if (!(priv->features & (EMPATHY_CONTACT_LIST_FEATURE_GROUPS_RENAME |
+				EMPATHY_CONTACT_LIST_FEATURE_GROUPS_REMOVE))) {
+		return NULL;
+	}
+
+	action = gtk_ui_manager_get_action (priv->ui, "/Group/Rename");
+	gtk_action_set_visible (action, priv->features & EMPATHY_CONTACT_LIST_FEATURE_GROUPS_RENAME);
+
+	action = gtk_ui_manager_get_action (priv->ui, "/Group/Remove");
+	gtk_action_set_visible (action, priv->features & EMPATHY_CONTACT_LIST_FEATURE_GROUPS_REMOVE);
+
+	return gtk_ui_manager_get_widget (priv->ui, "/Group");
+}
+
+GtkWidget *
+empathy_contact_list_view_get_contact_menu (EmpathyContactListView *view,
+					    EmpathyContact         *contact)
+{
+	EmpathyLogManager *log_manager;
+	gboolean           can_show_log;
+	gboolean           can_send_file;
+	gboolean           can_voip;
+
+	g_return_val_if_fail (EMPATHY_IS_CONTACT_LIST_VIEW (view), NULL);
+	g_return_val_if_fail (EMPATHY_IS_CONTACT (contact), NULL);
+
+	log_manager = empathy_log_manager_new ();
+	can_show_log = empathy_log_manager_exists (log_manager,
+						   empathy_contact_get_account (contact),
+						   empathy_contact_get_id (contact),
+						   FALSE);
+	g_object_unref (log_manager);
+	can_send_file = FALSE;
+	can_voip = empathy_contact_can_voip (contact);
+
+	return contact_list_view_get_contact_menu (view,
+						   can_send_file,
+						   can_show_log,
+						   can_voip);
 }
 
 static gboolean
@@ -1243,7 +1291,7 @@ contact_list_view_button_press_event_cb (EmpathyContactListView *view,
 
 	priv = GET_PRIV (view);
 
-	if (!priv->interactive || event->button != 3) {
+	if (event->button != 3) {
 		return FALSE;
 	}
 
@@ -1301,7 +1349,7 @@ contact_list_view_row_activated_cb (EmpathyContactListView *view,
 	GtkTreeModel               *model;
 	GtkTreeIter                 iter;
 
-	if (!priv->interactive) {
+	if (!(priv->features & EMPATHY_CONTACT_LIST_FEATURE_CONTACT_CHAT)) {
 		return;
 	}
 
@@ -1329,10 +1377,6 @@ contact_list_view_voip_activated_cb (EmpathyCellRendererActivatable *cell,
 	GtkTreeIter                 iter;
 	EmpathyContact             *contact;
 
-	if (!priv->interactive) {
-		return;
-	}
-
 	model = gtk_tree_view_get_model (GTK_TREE_VIEW (view));
 	if (!gtk_tree_model_get_iter_from_string (model, &iter, path_string)) {
 		return;
@@ -1356,9 +1400,14 @@ contact_list_view_row_expand_or_collapse_cb (EmpathyContactListView *view,
 					     GtkTreePath           *path,
 					     gpointer               user_data)
 {
-	GtkTreeModel *model;
-	gchar        *name;
-	gboolean      expanded;
+	EmpathyContactListViewPriv *priv = GET_PRIV (view);
+	GtkTreeModel               *model;
+	gchar                      *name;
+	gboolean                    expanded;
+
+	if (!(priv->features & EMPATHY_CONTACT_LIST_FEATURE_GROUPS_SAVE)) {
+		return;
+	}
 
 	model = gtk_tree_view_get_model (GTK_TREE_VIEW (view));
 

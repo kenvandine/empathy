@@ -194,6 +194,24 @@
   )
 )
 
+(define-flags ContactListFeatures
+  (in-module "Empathy")
+  (c-name "EmpathyContactListFeatures")
+  (gtype-id "EMPATHY_TYPE_CONTACT_LIST_FEATURES")
+  (values
+    '("groups-show" "EMPATHY_CONTACT_LIST_FEATURE_GROUPS_SHOW")
+    '("groups-modify" "EMPATHY_CONTACT_LIST_FEATURE_GROUPS_MODIFY")
+    '("contact-chat" "EMPATHY_CONTACT_LIST_FEATURE_CONTACT_CHAT")
+    '("contact-call" "EMPATHY_CONTACT_LIST_FEATURE_CONTACT_CALL")
+    '("contact-log" "EMPATHY_CONTACT_LIST_FEATURE_CONTACT_LOG")
+    '("contact-ft" "EMPATHY_CONTACT_LIST_FEATURE_CONTACT_FT")
+    '("contact-invite" "EMPATHY_CONTACT_LIST_FEATURE_CONTACT_INVITE")
+    '("contact-edit" "EMPATHY_CONTACT_LIST_FEATURE_CONTACT_EDIT")
+    '("contact-info" "EMPATHY_CONTACT_LIST_FEATURE_CONTACT_INFO")
+    '("contact-remove" "EMPATHY_CONTACT_LIST_FEATURE_CONTACT_REMOVE")
+  )
+)
+
 (define-flags ContactWidgetFlags
   (in-module "Empathy")
   (c-name "EmpathyContactWidgetFlags")
@@ -1144,22 +1162,23 @@
   (return-type "EmpathyContactListView*")
   (parameters
     '("EmpathyContactListStore*" "store")
+    '("EmpathyContactListFeatures" "features")
   )
 )
 
-(define-method set_interactive
+(define-method set_features
   (of-object "EmpathyContactListView")
-  (c-name "empathy_contact_list_view_set_interactive")
+  (c-name "empathy_contact_list_view_set_features")
   (return-type "none")
   (parameters
-    '("gboolean" "interactive")
+    '("EmpathyContactListFeatures" "features")
   )
 )
 
-(define-method get_interactive
+(define-method get_features
   (of-object "EmpathyContactListView")
-  (c-name "empathy_contact_list_view_get_interactive")
-  (return-type "gboolean")
+  (c-name "empathy_contact_list_view_get_features")
+  (return-type "EmpathyContactListFeatures")
 )
 
 (define-method get_selected
@@ -1306,6 +1325,11 @@
   (return-type "GType")
 )
 
+(define-function empathy_contact_list_features_get_type
+  (c-name "empathy_contact_list_features_get_type")
+  (return-type "GType")
+)
+
 (define-function empathy_chat_view_block_get_type
   (c-name "empathy_chat_view_block_get_type")
   (return-type "GType")
@@ -1321,7 +1345,7 @@
 
 (define-function empathy_log_window_show
   (c-name "empathy_log_window_show")
-  (return-type "none")
+  (return-type "GtkWidget*")
   (parameters
     '("McAccount*" "account")
     '("const-gchar*" "chat_id")
