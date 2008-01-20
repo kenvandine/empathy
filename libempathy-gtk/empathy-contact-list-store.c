@@ -394,14 +394,12 @@ contact_list_store_set_property (GObject      *object,
 }
 
 EmpathyContactListStore *
-empathy_contact_list_store_new (EmpathyContactList *list_iface,
-				gboolean            show_groups)
+empathy_contact_list_store_new (EmpathyContactList *list_iface)
 {
 	g_return_val_if_fail (EMPATHY_IS_CONTACT_LIST (list_iface), NULL);
 
 	return g_object_new (EMPATHY_TYPE_CONTACT_LIST_STORE,
 			     "contact-list", list_iface,
-			     "show-groups", show_groups,
 			     NULL);
 }
 

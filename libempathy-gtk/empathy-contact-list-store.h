@@ -73,8 +73,7 @@ struct _EmpathyContactListStoreClass {
 };
 
 GType                      empathy_contact_list_store_get_type           (void) G_GNUC_CONST;
-EmpathyContactListStore *  empathy_contact_list_store_new                (EmpathyContactList         *list_iface,
-									  gboolean                    show_groups);
+EmpathyContactListStore *  empathy_contact_list_store_new                (EmpathyContactList         *list_iface);
 EmpathyContactList *       empathy_contact_list_store_get_list_iface     (EmpathyContactListStore     *store);
 gboolean                   empathy_contact_list_store_get_show_offline   (EmpathyContactListStore     *store);
 void                       empathy_contact_list_store_set_show_offline   (EmpathyContactListStore     *store,

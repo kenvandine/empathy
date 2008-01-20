@@ -1052,9 +1052,6 @@
   (of-object "EmpathyContactList")
   (c-name "empathy_contact_list_store_new")
   (return-type "EmpathyContactListStore*")
-  (parameters
-    '("gboolean" "show_groups")
-  )
 )
 
 (define-method get_list_iface

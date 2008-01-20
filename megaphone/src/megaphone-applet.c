@@ -358,7 +358,7 @@ megaphone_applet_show_preferences (MegaphoneApplet *applet)
 
 	/* Show all contacts, even offline and sort alphabetically */
 	contact_manager = empathy_contact_manager_new ();
-	contact_store = empathy_contact_list_store_new (EMPATHY_CONTACT_LIST (contact_manager), TRUE);
+	contact_store = empathy_contact_list_store_new (EMPATHY_CONTACT_LIST (contact_manager));
 	g_object_set (contact_store,
 		      "is-compact", TRUE,
 		      "show-avatars", TRUE,
