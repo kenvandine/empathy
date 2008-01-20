@@ -267,7 +267,6 @@ empathy_account_widget_jabber_new (McAccount *account)
 {
 	EmpathyAccountWidgetJabber *settings;
 	GladeXML                  *glade;
-	GtkSizeGroup              *size_group;
 	GtkWidget                 *label_id, *label_password;
 	GtkWidget                 *label_server, *label_resource;
 	GtkWidget                 *label_port, *label_priority; 
@@ -316,18 +315,6 @@ empathy_account_widget_jabber_new (McAccount *account)
 			      NULL);
 
 	g_object_unref (glade);
-
-	/* Set up remaining widgets */
-	size_group = gtk_size_group_new (GTK_SIZE_GROUP_HORIZONTAL);
-
-	gtk_size_group_add_widget (size_group, label_id);
-	gtk_size_group_add_widget (size_group, label_password);
-	gtk_size_group_add_widget (size_group, label_resource);
-	gtk_size_group_add_widget (size_group, label_server);
-	gtk_size_group_add_widget (size_group, label_port);
-	gtk_size_group_add_widget (size_group, label_priority);
-
-	g_object_unref (size_group);
 
 	gtk_widget_show (settings->vbox_settings);
 
