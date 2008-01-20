@@ -136,7 +136,7 @@ enum {
 	COL_CHAT_COUNT
 };
 
-void
+GtkWidget *
 empathy_log_window_show (McAccount   *account,
 			const gchar *chat_id,
 			gboolean     is_chatroom,
@@ -157,7 +157,7 @@ empathy_log_window_show (McAccount   *account,
 						       chat_id, is_chatroom);
 		}
 
-		return;
+		return window->window;
 	}
 
 	window = g_new0 (EmpathyLogWindow, 1);
@@ -261,6 +261,8 @@ empathy_log_window_show (McAccount   *account,
 	}
 
 	gtk_widget_show (window->window);
+
+	return window->window;
 }
 
 static void

@@ -1,7 +1,6 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /*
- * Copyright (C) 2006-2007 Imendio AB
- * Copyright (C) 2007 Collabora Ltd.
+ * Copyright (C) 2008 Collabora Ltd.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -18,22 +17,43 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  * 
- * Authors: Martyn Russell <martyn@imendio.com>
- *          Xavier Claessens <xclaesse@gmail.com>
+ * Authors: Xavier Claessens <xclaesse@gmail.com>
  */
 
-#ifndef __EMPATHY_LOG_WINDOW_H__
-#define __EMPATHY_LOG_WINDOW_H__
+#include <config.h>
 
-#include <libmissioncontrol/mc-account.h>
+#include <string.h>
+#include <stdlib.h>
 
-G_BEGIN_DECLS
+#include <glib.h>
+#include <gtk/gtk.h>
 
-GtkWidget * empathy_log_window_show (McAccount   *account,
-				     const gchar *chat_id,
-				     gboolean     chatroom,
-				     GtkWindow   *parent);
+#include <libempathy-gtk/empathy-log-window.h>
 
-G_END_DECLS
+static void
+destroy_cb (GtkWidget *dialog,
+	    gpointer   user_data)
+{
+	gtk_main_quit ();
+}
 
-#endif /* __EMPATHY_LOG_WINDOW_H__ */
+int
+main (int argc, char *argv[])
+{
+	GtkWidget *window;
+
+	gtk_init (&argc, &argv);
+
+	gtk_icon_theme_append_search_path (gtk_icon_theme_get_default (),
+					   PKGDATADIR G_DIR_SEPARATOR_S "icons");
+	window = empathy_log_window_show (NULL, NULL, FALSE, NULL);
+
+	g_signal_connect (window, "destroy",
+			  G_CALLBACK (destroy_cb),
+			  NULL);
+
+	gtk_main ();
+
+	return EXIT_SUCCESS;
+}
+
