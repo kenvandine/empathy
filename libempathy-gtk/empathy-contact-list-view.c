@@ -1377,6 +1377,10 @@ contact_list_view_voip_activated_cb (EmpathyCellRendererActivatable *cell,
 	GtkTreeIter                 iter;
 	EmpathyContact             *contact;
 
+	if (!(priv->features & EMPATHY_CONTACT_LIST_FEATURE_CONTACT_CALL)) {
+		return;
+	}
+
 	model = gtk_tree_view_get_model (GTK_TREE_VIEW (view));
 	if (!gtk_tree_model_get_iter_from_string (model, &iter, path_string)) {
 		return;
