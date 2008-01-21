@@ -28,7 +28,6 @@ libempathy_gtk_la_SOURCES =             	\
 	empathy-cell-renderer-activatable.c	\
 	empathy-spell.c				\
 	empathy-spell-dialog.c			\
-	empathy-contact-groups.c		\
 	empathy-contact-list-store.c		\
 	empathy-contact-list-view.c		\
 	empathy-preferences.c			\
@@ -83,7 +82,6 @@ libempathy_gtk_headers =			\
 	empathy-cell-renderer-activatable.h	\
 	empathy-spell.h				\
 	empathy-spell-dialog.h			\
-	empathy-contact-groups.h		\
 	empathy-contact-list-store.h		\
 	empathy-contact-list-view.h		\
 	empathy-preferences.h			\
@@ -174,16 +172,11 @@ empathy-gtk-enum-types.c: Makefile $(libempathy_gtk_headers)
 	&& cp xgen-gtc $(@F) \
 	&& rm -f xgen-gtc
 
-dtddir = $(datadir)/empathy
-dtd_DATA = 					\
-	empathy-contact-groups.dtd
-
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = libempathy-gtk.pc
 
 EXTRA_DIST =			\
-	$(glade_DATA)		\
-	$(dtd_DATA)
+	$(glade_DATA)
 
 CLEANFILES =				\
 	$(BUILT_SOURCES)		\

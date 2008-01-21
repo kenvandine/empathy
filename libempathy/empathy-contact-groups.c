@@ -32,9 +32,8 @@
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 
-#include <libempathy/empathy-debug.h>
-#include <libempathy/empathy-utils.h>
-
+#include "empathy-debug.h"
+#include "empathy-utils.h"
 #include "empathy-contact-groups.h"
 
 #define DEBUG_DOMAIN "ContactGroups"

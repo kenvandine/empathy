@@ -40,6 +40,7 @@
 #include <libempathy/empathy-contact-list.h>
 #include <libempathy/empathy-log-manager.h>
 #include <libempathy/empathy-tp-group.h>
+#include <libempathy/empathy-contact-groups.h>
 #include <libempathy/empathy-debug.h>
 #include <libempathy/empathy-utils.h>
 #include <libempathy/empathy-marshal.h>
@@ -47,7 +48,6 @@
 #include "empathy-contact-list-view.h"
 #include "empathy-contact-list-store.h"
 #include "empathy-images.h"
-#include "empathy-contact-groups.h"
 #include "empathy-cell-renderer-expander.h"
 #include "empathy-cell-renderer-text.h"
 #include "empathy-cell-renderer-activatable.h"

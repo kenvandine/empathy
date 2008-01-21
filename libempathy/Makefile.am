@@ -20,13 +20,14 @@ libempathy_la_SOURCES =					\
 	empathy-avatar.c				\
 	empathy-time.c					\
 	empathy-presence.c				\
-	empathy-status-presets.c		\
+	empathy-status-presets.c			\
 	empathy-debug.c					\
 	empathy-utils.c					\
 	empathy-message.c				\
 	empathy-chatroom-manager.c			\
 	empathy-chatroom.c				\
 	empathy-contact.c				\
+	empathy-contact-groups.c			\
 	empathy-contact-list.c				\
 	empathy-contact-manager.c			\
 	empathy-contact-factory.c			\
@@ -64,6 +65,7 @@ libempathy_headers =				\
 	empathy-chatroom-manager.h		\
 	empathy-chatroom.h			\
 	empathy-contact.h			\
+	empathy-contact-groups.h		\
 	empathy-contact-list.h			\
 	empathy-contact-manager.h		\
 	empathy-contact-factory.h		\
@@ -142,6 +144,7 @@ empathy-enum-types.c: $(libempathy_headers) Makefile
 dtddir = $(datadir)/empathy
 dtd_DATA = 					\
 	empathy-status-presets.dtd		\
+	empathy-contact-groups.dtd		\
 	empathy-chatroom-manager.dtd
 
 stylesheetdir = $(datadir)/empathy
