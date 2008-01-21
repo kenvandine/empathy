@@ -7,7 +7,6 @@ import csv
 import datetime
 from string import Template
 
-prev_tag = 'EMPATHY_0_21_5_1'
 username = 'xclaesse'
 upload_server = 'master.gnome.org'
 template = '''\
@@ -159,12 +158,19 @@ class Project:
 		t = Template(template)
 		return t.substitute(locals())
 	
+	def get_last_tag(self):
+		tags_str = self.exec_cmd('git-tag')
+		tags = tags_str.splitlines()
+
+		return tags[len(tags)-1]
+
 	def get_commits(self):
 		bugs = ''
 		co = None
 		commits = []
+		last_tag = self.get_last_tag()
 
-		changes = self.exec_cmd ("git-log " + prev_tag + "..")
+		changes = self.exec_cmd ("git-log " + last_tag + "..")
         	for line in changes.splitlines(1):
         		if line.startswith('commit'):
         			if co != None:
@@ -246,7 +252,7 @@ class Project:
 
 		self.exec_cmd('git-tag -m "Tagged for release %s." %s' % ( self.package_version, new_tag))
 
-	def write_news(self):
+	def generate_news(self):
 		bugs = ''
 		translations = ''
 		others = ''
@@ -262,6 +268,11 @@ class Project:
 				
 		news = 'NEW in '+ self.package_version + '\n==============\n' 
 		news += others + '\nBugs fixed:\n' + bugs + '\nTranslations:\n' + translations + '\n'
+
+		return news
+
+	def write_news(self):
+		news = self.generate_news()
 
 		f = open ('/tmp/NEWS', 'w')
 		s = f.write(news)
@@ -285,5 +296,6 @@ class Project:
 		print self.get_release_notes()
 
 p = Project()
+#print p.generate_news()
 #p.write_news()
 #p.release()
