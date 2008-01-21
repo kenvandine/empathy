@@ -233,6 +233,23 @@
 
 
 
+;; From empathy-chandler-glue.h
+
+(define-function dbus_glib_marshal_empathy_chandler_BOOLEAN__STRING_BOXED_STRING_BOXED_UINT_UINT_POINTER
+  (c-name "dbus_glib_marshal_empathy_chandler_BOOLEAN__STRING_BOXED_STRING_BOXED_UINT_UINT_POINTER")
+  (return-type "none")
+  (parameters
+    '("GClosure*" "closure")
+    '("GValue*-return_value" "G_GNUC_UNUSED")
+    '("guint" "n_param_values")
+    '("const-GValue*" "param_values")
+    '("gpointer-invocation_hint" "G_GNUC_UNUSED")
+    '("gpointer" "marshal_data")
+  )
+)
+
+
+
 ;; From empathy-chandler.h
 
 (define-function empathy_chandler_get_type
@@ -613,6 +630,32 @@
 
 
 
+;; From empathy-contact-groups.h
+
+(define-function empathy_contact_groups_get_all
+  (c-name "empathy_contact_groups_get_all")
+  (return-type "none")
+)
+
+(define-function empathy_contact_group_get_expanded
+  (c-name "empathy_contact_group_get_expanded")
+  (return-type "gboolean")
+  (parameters
+    '("const-gchar*" "group")
+  )
+)
+
+(define-function empathy_contact_group_set_expanded
+  (c-name "empathy_contact_group_set_expanded")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "group")
+    '("gboolean" "expanded")
+  )
+)
+
+
+
 ;; From empathy-contact.h
 
 (define-function empathy_contact_get_type
@@ -934,6 +977,47 @@
 
 
 
+;; From empathy-enum-types.h
+
+(define-function empathy_reg_ex_type_get_type
+  (c-name "empathy_reg_ex_type_get_type")
+  (return-type "GType")
+)
+
+(define-function empathy_message_type_get_type
+  (c-name "empathy_message_type_get_type")
+  (return-type "GType")
+)
+
+(define-function empathy_capabilities_get_type
+  (c-name "empathy_capabilities_get_type")
+  (return-type "GType")
+)
+
+(define-function empathy_tp_call_status_get_type
+  (c-name "empathy_tp_call_status_get_type")
+  (return-type "GType")
+)
+
+
+
+;; From empathy-filter-glue.h
+
+(define-function dbus_glib_marshal_empathy_filter_BOOLEAN__STRING_BOXED_STRING_BOXED_UINT_UINT_UINT_POINTER
+  (c-name "dbus_glib_marshal_empathy_filter_BOOLEAN__STRING_BOXED_STRING_BOXED_UINT_UINT_UINT_POINTER")
+  (return-type "none")
+  (parameters
+    '("GClosure*" "closure")
+    '("GValue*-return_value" "G_GNUC_UNUSED")
+    '("guint" "n_param_values")
+    '("const-GValue*" "param_values")
+    '("gpointer-invocation_hint" "G_GNUC_UNUSED")
+    '("gpointer" "marshal_data")
+  )
+)
+
+
+
 ;; From empathy-filter.h
 
 (define-function empathy_filter_get_type
@@ -1189,6 +1273,10 @@
 
 
 
+;; From empathy-marshal.h
+
+
+
 ;; From empathy-message.h
 
 (define-function empathy_message_get_gtype
@@ -1388,6 +1476,71 @@
   (parameters
     '("const-gchar*" "str")
   )
+)
+
+
+
+;; From empathy-status-presets.h
+
+(define-function empathy_status_presets_get_all
+  (c-name "empathy_status_presets_get_all")
+  (return-type "none")
+)
+
+(define-function empathy_status_presets_get
+  (c-name "empathy_status_presets_get")
+  (return-type "GList*")
+  (parameters
+    '("McPresence" "state")
+    '("gint" "max_number")
+  )
+)
+
+(define-function empathy_status_presets_set_last
+  (c-name "empathy_status_presets_set_last")
+  (return-type "none")
+  (parameters
+    '("McPresence" "state")
+    '("const-gchar*" "status")
+  )
+)
+
+(define-function empathy_status_presets_remove
+  (c-name "empathy_status_presets_remove")
+  (return-type "none")
+  (parameters
+    '("McPresence" "state")
+    '("const-gchar*" "status")
+  )
+)
+
+(define-function empathy_status_presets_reset
+  (c-name "empathy_status_presets_reset")
+  (return-type "none")
+)
+
+(define-function empathy_status_presets_get_default_state
+  (c-name "empathy_status_presets_get_default_state")
+  (return-type "McPresence")
+)
+
+(define-function empathy_status_presets_get_default_status
+  (c-name "empathy_status_presets_get_default_status")
+  (return-type "const-gchar*")
+)
+
+(define-function empathy_status_presets_set_default
+  (c-name "empathy_status_presets_set_default")
+  (return-type "none")
+  (parameters
+    '("McPresence" "state")
+    '("const-gchar*" "status")
+  )
+)
+
+(define-function empathy_status_presets_clear_default
+  (c-name "empathy_status_presets_clear_default")
+  (return-type "none")
 )
 
 
@@ -2092,6 +2245,10 @@
     '("const-gchar*" "contact_id")
   )
 )
+
+
+
+;; From stamp-empathy-enum-types.h
 
 
 

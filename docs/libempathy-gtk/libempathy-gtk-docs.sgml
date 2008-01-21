@@ -34,7 +34,6 @@
     <xi:include href="xml/empathy-chat-view.xml"/>
     <xi:include href="xml/empathy-chat-window.xml"/>
     <xi:include href="xml/empathy-contact-dialogs.xml"/>
-    <xi:include href="xml/empathy-contact-groups.xml"/>
     <xi:include href="xml/empathy-contact-list-store.xml"/>
     <xi:include href="xml/empathy-contact-list-view.xml"/>
     <xi:include href="xml/empathy-contact-widget.xml"/>
@@ -53,7 +52,6 @@
     <xi:include href="xml/empathy-spell-dialog.xml"/>
     <xi:include href="xml/empathy-spell.xml"/>
     <xi:include href="xml/empathy-status-icon.xml"/>
-    <xi:include href="xml/empathy-status-presets.xml"/>
     <xi:include href="xml/empathy-theme-manager.xml"/>
     <xi:include href="xml/empathy-ui-utils.xml"/>
     <xi:include href="xml/ephy-spinner.xml"/>

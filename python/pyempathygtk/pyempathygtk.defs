@@ -1015,32 +1015,6 @@
 
 
 
-;; From empathy-contact-groups.h
-
-(define-function empathy_contact_groups_get_all
-  (c-name "empathy_contact_groups_get_all")
-  (return-type "none")
-)
-
-(define-function empathy_contact_group_get_expanded
-  (c-name "empathy_contact_group_get_expanded")
-  (return-type "gboolean")
-  (parameters
-    '("const-gchar*" "group")
-  )
-)
-
-(define-function empathy_contact_group_set_expanded
-  (c-name "empathy_contact_group_set_expanded")
-  (return-type "none")
-  (parameters
-    '("const-gchar*" "group")
-    '("gboolean" "expanded")
-  )
-)
-
-
-
 ;; From empathy-contact-list-store.h
 
 (define-function empathy_contact_list_store_get_type
@@ -1638,71 +1612,6 @@
   (parameters
     '("GtkWindow*" "window")
   )
-)
-
-
-
-;; From empathy-status-presets.h
-
-(define-function empathy_status_presets_get_all
-  (c-name "empathy_status_presets_get_all")
-  (return-type "none")
-)
-
-(define-function empathy_status_presets_get
-  (c-name "empathy_status_presets_get")
-  (return-type "GList*")
-  (parameters
-    '("McPresence" "state")
-    '("gint" "max_number")
-  )
-)
-
-(define-function empathy_status_presets_set_last
-  (c-name "empathy_status_presets_set_last")
-  (return-type "none")
-  (parameters
-    '("McPresence" "state")
-    '("const-gchar*" "status")
-  )
-)
-
-(define-function empathy_status_presets_remove
-  (c-name "empathy_status_presets_remove")
-  (return-type "none")
-  (parameters
-    '("McPresence" "state")
-    '("const-gchar*" "status")
-  )
-)
-
-(define-function empathy_status_presets_reset
-  (c-name "empathy_status_presets_reset")
-  (return-type "none")
-)
-
-(define-function empathy_status_presets_get_default_state
-  (c-name "empathy_status_presets_get_default_state")
-  (return-type "McPresence")
-)
-
-(define-function empathy_status_presets_get_default_status
-  (c-name "empathy_status_presets_get_default_status")
-  (return-type "const-gchar*")
-)
-
-(define-function empathy_status_presets_set_default
-  (c-name "empathy_status_presets_set_default")
-  (return-type "none")
-  (parameters
-    '("McPresence" "state")
-    '("const-gchar*" "status")
-  )
-)
-
-(define-function empathy_status_presets_clear_default
-  (c-name "empathy_status_presets_clear_default")
-  (return-type "none")
 )
 
 
