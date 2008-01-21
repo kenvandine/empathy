@@ -85,7 +85,6 @@ PKG_CHECK_MODULES(EMPATHY,
    glib-2.0 >= $GLIB_REQUIRED
    gobject-2.0
    gconf-2.0 >= $GCONF_REQUIRED
-   libxml-2.0
    libtelepathy >= $TELEPATHY_REQUIRED
    telepathy-glib >= $TELEPATHY_GLIB_REQUIRED
    libmissioncontrol >= $MISSION_CONTROL_REQUIRED
