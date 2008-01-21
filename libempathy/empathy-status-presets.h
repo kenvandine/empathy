@@ -23,7 +23,7 @@
 #ifndef __EMPATHY_STATUS_PRESETS_H__
 #define __EMPATHY_STATUS_PRESETS_H__
 
-#include <libempathy/empathy-presence.h>
+#include "empathy-presence.h"
 
 G_BEGIN_DECLS
 

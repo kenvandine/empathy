@@ -37,6 +37,7 @@
 #include <libempathy/empathy-contact-list.h>
 #include <libempathy/empathy-contact-manager.h>
 #include <libempathy/empathy-contact-factory.h>
+#include <libempathy/empathy-status-presets.h>
 
 #include "empathy-main-window.h"
 #include "empathy-contact-dialogs.h"
@@ -45,7 +46,6 @@
 #include "empathy-contact-list-view.h"
 #include "empathy-presence-chooser.h"
 #include "empathy-ui-utils.h"
-#include "empathy-status-presets.h"
 #include "empathy-geometry.h"
 #include "empathy-preferences.h"
 #include "empathy-accounts-dialog.h"

@@ -43,7 +43,6 @@ libempathy_gtk_la_SOURCES =             	\
 	empathy-private-chat.c			\
 	empathy-group-chat.c			\
 	empathy-geometry.c			\
-	empathy-status-presets.c		\
 	empathy-presence-chooser.c		\
 	empathy-about-dialog.c			\
 	empathy-account-chooser.c		\
@@ -99,7 +98,6 @@ libempathy_gtk_headers =			\
 	empathy-private-chat.h			\
 	empathy-group-chat.h			\
 	empathy-geometry.h			\
-	empathy-status-presets.h		\
 	empathy-presence-chooser.h		\
 	empathy-about-dialog.h			\
 	empathy-account-chooser.h		\
@@ -178,7 +176,6 @@ empathy-gtk-enum-types.c: Makefile $(libempathy_gtk_headers)
 
 dtddir = $(datadir)/empathy
 dtd_DATA = 					\
-	empathy-status-presets.dtd		\
 	empathy-contact-groups.dtd
 
 pkgconfigdir = $(libdir)/pkgconfig

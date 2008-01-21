@@ -34,9 +34,8 @@
 
 #include <telepathy-glib/util.h>
 
-#include <libempathy/empathy-debug.h>
-#include <libempathy/empathy-utils.h>
-
+#include "empathy-debug.h"
+#include "empathy-utils.h"
 #include "empathy-status-presets.h"
 
 #define DEBUG_DOMAIN "StatusPresets"

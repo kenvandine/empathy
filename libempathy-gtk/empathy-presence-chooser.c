@@ -38,11 +38,11 @@
 #include <libempathy/empathy-utils.h>
 #include <libempathy/empathy-debug.h>
 #include <libempathy/empathy-marshal.h>
+#include <libempathy/empathy-status-presets.h>
 
 #include "empathy-ui-utils.h"
 #include "empathy-images.h"
 #include "empathy-presence-chooser.h"
-#include "empathy-status-presets.h"
 
 #define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), EMPATHY_TYPE_PRESENCE_CHOOSER, EmpathyPresenceChooserPriv))
 
