@@ -69,7 +69,6 @@ typedef struct {
 
 	GtkWidget        *button_add;
 	GtkWidget        *button_remove;
-	GtkWidget        *button_connect;
 
 	GtkWidget        *frame_new_account;
 	GtkWidget        *combobox_profile;
@@ -91,6 +90,7 @@ typedef struct {
 } EmpathyAccountsDialog;
 
 enum {
+	COL_ENABLED,
 	COL_NAME,
 	COL_STATUS,
 	COL_ACCOUNT_POINTER,
@@ -137,18 +137,12 @@ static void       accounts_dialog_button_create_clicked_cb  (GtkWidget          
 							     EmpathyAccountsDialog    *dialog);
 static void       accounts_dialog_button_back_clicked_cb    (GtkWidget                *button,
 							     EmpathyAccountsDialog    *dialog);
-static void       accounts_dialog_button_connect_clicked_cb (GtkWidget                *button,
-							     EmpathyAccountsDialog    *dialog);
 static void       accounts_dialog_button_add_clicked_cb     (GtkWidget                *button,
 							     EmpathyAccountsDialog    *dialog);
 static void       accounts_dialog_remove_response_cb        (GtkWidget                *dialog,
 							     gint                      response,
 							     McAccount                *account);
 static void       accounts_dialog_button_remove_clicked_cb  (GtkWidget                *button,
-							     EmpathyAccountsDialog    *dialog);
-static void       accounts_dialog_treeview_row_activated_cb (GtkTreeView              *tree_view,
-							     GtkTreePath              *path,
-							     GtkTreeViewColumn        *column,
 							     EmpathyAccountsDialog    *dialog);
 static void       accounts_dialog_response_cb               (GtkWidget                *widget,
 							     gint                      response,
@@ -173,6 +167,7 @@ accounts_dialog_setup (EmpathyAccountsDialog *dialog)
 		McAccount          *account;
 		const gchar        *name;
 		TpConnectionStatus  status;
+		gboolean            enabled;
 
 		account = l->data;
 
@@ -182,9 +177,11 @@ accounts_dialog_setup (EmpathyAccountsDialog *dialog)
 		}
 
 		status = mission_control_get_connection_status (dialog->mc, account, NULL);
+		enabled = mc_account_is_enabled (account);
 
 		gtk_list_store_insert_with_values (store, &iter,
 						   -1,
+						   COL_ENABLED, enabled,
 						   COL_NAME, name,
 						   COL_STATUS, status,
 						   COL_ACCOUNT_POINTER, account,
@@ -201,32 +198,6 @@ accounts_dialog_setup (EmpathyAccountsDialog *dialog)
 	}
 
 	g_list_free (accounts);
-}
-
-static void
-accounts_dialog_update_connect_button (EmpathyAccountsDialog *dialog)
-{
-	McAccount   *account;
-	GtkWidget   *image;
-	const gchar *stock_id;
-	const gchar *label;
-
-	account = accounts_dialog_model_get_selected (dialog);
-	
-	gtk_widget_set_sensitive (dialog->button_connect, account != NULL);
-
-	if (account && mc_account_is_enabled (account)) {
-		label = _("Disable");
-		stock_id = GTK_STOCK_DISCONNECT;
-	} else {
-		label = _("Enable");
-		stock_id = GTK_STOCK_CONNECT;
-	}
-
-	image = gtk_image_new_from_stock (stock_id, GTK_ICON_SIZE_BUTTON);
-
-	gtk_button_set_label (GTK_BUTTON (dialog->button_connect), label);
-	gtk_button_set_image (GTK_BUTTON (dialog->button_connect), image);
 }
 
 static void
@@ -247,7 +218,6 @@ accounts_dialog_update_account (EmpathyAccountsDialog *dialog,
 		gtk_widget_show (dialog->frame_no_account);
 		gtk_widget_hide (dialog->vbox_details);
 
-		gtk_widget_set_sensitive (dialog->button_connect, FALSE);
 		gtk_widget_set_sensitive (dialog->button_remove, FALSE);
 
 		view = GTK_TREE_VIEW (dialog->treeview);
@@ -337,6 +307,7 @@ accounts_dialog_model_setup (EmpathyAccountsDialog *dialog)
 	GtkTreeSelection *selection;
 
 	store = gtk_list_store_new (COL_COUNT,
+				    G_TYPE_BOOLEAN,    /* enabled */
 				    G_TYPE_STRING,     /* name */
 				    G_TYPE_UINT,       /* status */
 				    MC_TYPE_ACCOUNT);  /* account */
@@ -386,6 +357,35 @@ accounts_dialog_name_edited_cb (GtkCellRendererText   *renderer,
 }
 
 static void
+accounts_dialog_enable_toggled_cb (GtkCellRendererToggle *cell_renderer,
+				   gchar                 *path,
+				   EmpathyAccountsDialog *dialog)
+{
+	McAccount    *account;
+	GtkTreeModel *model;
+	GtkTreePath  *treepath;
+	GtkTreeIter   iter;
+	gboolean      enabled;
+
+	model = gtk_tree_view_get_model (GTK_TREE_VIEW (dialog->treeview));
+	treepath = gtk_tree_path_new_from_string (path);
+	gtk_tree_model_get_iter (model, &iter, treepath);
+	gtk_tree_model_get (model, &iter,
+			    COL_ACCOUNT_POINTER, &account,
+			    -1);
+	gtk_tree_path_free (treepath);
+
+	enabled = mc_account_is_enabled (account);
+	mc_account_set_enabled (account, !enabled);
+
+	empathy_debug (DEBUG_DOMAIN, "%s account %s",
+		       enabled ? "Disabled" : "Enable",
+		       mc_account_get_display_name(account));
+
+	g_object_unref (account);
+}
+
+static void
 accounts_dialog_model_add_columns (EmpathyAccountsDialog *dialog)
 {
 	GtkTreeView       *view;
@@ -395,10 +395,18 @@ accounts_dialog_model_add_columns (EmpathyAccountsDialog *dialog)
 	view = GTK_TREE_VIEW (dialog->treeview);
 	gtk_tree_view_set_headers_visible (view, TRUE);
 
-	/* account name/status */
 	column = gtk_tree_view_column_new ();
 	gtk_tree_view_column_set_title (column, _("Accounts"));
 
+	/* Enabled */
+	cell = gtk_cell_renderer_toggle_new ();
+	gtk_tree_view_column_pack_start (column, cell, FALSE);
+	gtk_tree_view_column_add_attribute (column, cell, "active", COL_ENABLED);
+	g_signal_connect (cell, "toggled",
+			  G_CALLBACK (accounts_dialog_enable_toggled_cb),
+			  dialog);
+
+	/* Icon */
 	cell = gtk_cell_renderer_pixbuf_new ();
 	gtk_tree_view_column_pack_start (column, cell, FALSE);
 	gtk_tree_view_column_set_cell_data_func (column, cell,
@@ -407,15 +415,14 @@ accounts_dialog_model_add_columns (EmpathyAccountsDialog *dialog)
 						 dialog,
 						 NULL);
 
+	/* Name */
 	cell = gtk_cell_renderer_text_new ();
 	g_object_set (cell,
 		      "ellipsize", PANGO_ELLIPSIZE_END,
 		      "editable", TRUE,
 		      NULL);
 	gtk_tree_view_column_pack_start (column, cell, TRUE);
-	gtk_tree_view_column_add_attribute (column,
-					    cell,
-					    "text", COL_NAME);
+	gtk_tree_view_column_add_attribute (column, cell, "text", COL_NAME);
 	g_signal_connect (cell, "edited",
 			  G_CALLBACK (accounts_dialog_name_edited_cb),
 			  dialog);
@@ -496,6 +503,42 @@ accounts_dialog_model_pixbuf_data_func (GtkTreeViewColumn    *tree_column,
 	}
 }
 
+static gboolean
+accounts_dialog_get_account_iter (EmpathyAccountsDialog *dialog,
+				 McAccount             *account,
+				 GtkTreeIter           *iter)
+{
+	GtkTreeView      *view;
+	GtkTreeSelection *selection;
+	GtkTreeModel     *model;
+	gboolean          ok;
+	
+	/* Update the status in the model */
+	view = GTK_TREE_VIEW (dialog->treeview);
+	selection = gtk_tree_view_get_selection (view);
+	model = gtk_tree_view_get_model (view);
+
+	for (ok = gtk_tree_model_get_iter_first (model, iter);
+	     ok;
+	     ok = gtk_tree_model_iter_next (model, iter)) {
+		McAccount *this_account;
+		gboolean   equal;
+
+		gtk_tree_model_get (model, iter,
+				    COL_ACCOUNT_POINTER, &this_account,
+				    -1);
+
+		equal = empathy_account_equal (this_account, account);
+		g_object_unref (this_account);
+
+		if (equal) {
+			return TRUE;
+		}
+	}
+
+	return FALSE;
+}
+
 static McAccount *
 accounts_dialog_model_get_selected (EmpathyAccountsDialog *dialog)
 {
@@ -519,35 +562,14 @@ accounts_dialog_model_get_selected (EmpathyAccountsDialog *dialog)
 
 static void
 accounts_dialog_model_set_selected (EmpathyAccountsDialog *dialog,
-				    McAccount            *account)
+				    McAccount             *account)
 {
-	GtkTreeView      *view;
 	GtkTreeSelection *selection;
-	GtkTreeModel     *model;
 	GtkTreeIter       iter;
-	gboolean          ok;
 
-	view = GTK_TREE_VIEW (dialog->treeview);
-	model = gtk_tree_view_get_model (view);
-	selection = gtk_tree_view_get_selection (view);
-
-	for (ok = gtk_tree_model_get_iter_first (model, &iter);
-	     ok;
-	     ok = gtk_tree_model_iter_next (model, &iter)) {
-		McAccount *this_account;
-		gboolean   equal;
-
-		gtk_tree_model_get (model, &iter,
-				    COL_ACCOUNT_POINTER, &this_account,
-				    -1);
-
-		equal = empathy_account_equal (this_account, account);
-		g_object_unref (this_account);
-
-		if (equal) {
-			gtk_tree_selection_select_iter (selection, &iter);
-			break;
-		}
+	selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (dialog->treeview));
+	if (accounts_dialog_get_account_iter (dialog, account, &iter)) {
+		gtk_tree_selection_select_iter (selection, &iter);
 	}
 }
 
@@ -582,9 +604,6 @@ accounts_dialog_model_selection_changed (GtkTreeSelection     *selection,
 
 	gtk_widget_set_sensitive (dialog->button_add, TRUE);
 	gtk_widget_set_sensitive (dialog->button_remove, is_selection);
-	gtk_widget_set_sensitive (dialog->button_connect, is_selection);
-
-	accounts_dialog_update_connect_button (dialog);
 
 	account = accounts_dialog_model_get_selected (dialog);
 	accounts_dialog_update_account (dialog, account);
@@ -599,47 +618,30 @@ accounts_dialog_model_selection_changed (GtkTreeSelection     *selection,
 
 static void
 accounts_dialog_add_account (EmpathyAccountsDialog *dialog,
-			     McAccount            *account)
+			     McAccount             *account)
 {
+	GtkTreeModel       *model;
+	GtkTreeIter         iter;
 	TpConnectionStatus  status;
 	const gchar        *name;
-	GtkTreeView        *view;
-	GtkTreeModel       *model;
-	GtkListStore       *store;
-	GtkTreeIter         iter;
-	gboolean            ok;
+	gboolean            enabled;
 
-	view = GTK_TREE_VIEW (dialog->treeview);
-	model = gtk_tree_view_get_model (view);
-	store = GTK_LIST_STORE (model);
-
-	for (ok = gtk_tree_model_get_iter_first (model, &iter);
-	     ok;
-	     ok = gtk_tree_model_iter_next (model, &iter)) {
-		McAccount *this_account;
-		gboolean   equal;
-
-		gtk_tree_model_get (model, &iter,
-				    COL_ACCOUNT_POINTER, &this_account,
-				    -1);
-
-		equal =  empathy_account_equal (this_account, account);
-		g_object_unref (this_account);
-
-		if (equal) {
-			return;
-		}
+	if (accounts_dialog_get_account_iter (dialog, account, &iter)) {
+		return;
 	}
 
 	status = mission_control_get_connection_status (dialog->mc, account, NULL);
 	name = mc_account_get_display_name (account);
+	enabled = mc_account_is_enabled (account);
 
 	g_return_if_fail (name != NULL);
 
 	empathy_debug (DEBUG_DOMAIN, "Adding new account: %s", name);
 
-	gtk_list_store_insert_with_values (store, &iter,
+	model = gtk_tree_view_get_model (GTK_TREE_VIEW (dialog->treeview));
+	gtk_list_store_insert_with_values (GTK_LIST_STORE (model), &iter,
 					   -1,
+					   COL_ENABLED, enabled,
 					   COL_NAME, name,
 					   COL_STATUS, status,
 					   COL_ACCOUNT_POINTER, account,
@@ -708,51 +710,30 @@ accounts_dialog_status_changed_cb (MissionControl           *mc,
 				   const gchar              *unique_name,
 				   EmpathyAccountsDialog    *dialog)
 {
-	GtkTreeView      *view;
-	GtkTreeSelection *selection;
-	GtkTreeModel     *model;
-	GtkTreeIter       iter;
-	gboolean          ok;
-	McAccount        *account;
-	GList            *accounts, *l;
-	gboolean          found = FALSE;
+	GtkTreeModel *model;
+	GtkTreeIter   iter;
+	McAccount    *account;
+	GList        *accounts, *l;
+	gboolean      found = FALSE;
 	
 	/* Update the status in the model */
-	view = GTK_TREE_VIEW (dialog->treeview);
-	selection = gtk_tree_view_get_selection (view);
-	model = gtk_tree_view_get_model (view);
+	model = gtk_tree_view_get_model (GTK_TREE_VIEW (dialog->treeview));
 	account = mc_account_lookup (unique_name);
 
 	empathy_debug (DEBUG_DOMAIN, "Status changed for account %s: "
 		      "status=%d presence=%d",
 		      unique_name, status, presence);
 
-	for (ok = gtk_tree_model_get_iter_first (model, &iter);
-	     ok;
-	     ok = gtk_tree_model_iter_next (model, &iter)) {
-		McAccount *this_account;
-		gboolean   equal;
+	if (accounts_dialog_get_account_iter (dialog, account, &iter)) {
+		GtkTreePath *path;
 
-		gtk_tree_model_get (model, &iter,
-				    COL_ACCOUNT_POINTER, &this_account,
+		gtk_list_store_set (GTK_LIST_STORE (model), &iter,
+				    COL_STATUS, status,
 				    -1);
 
-		equal = empathy_account_equal (this_account, account);
-		g_object_unref (this_account);
-
-		if (equal) {
-			GtkTreePath *path;
-
-			gtk_list_store_set (GTK_LIST_STORE (model), &iter,
-					    COL_STATUS, status,
-					    -1);
-
-			path = gtk_tree_model_get_path (model, &iter);
-			gtk_tree_model_row_changed (model, path, &iter);
-			gtk_tree_path_free (path);
-
-			break;
-		}
+		path = gtk_tree_model_get_path (model, &iter);
+		gtk_tree_model_row_changed (model, path, &iter);
+		gtk_tree_path_free (path);
 	}
 	g_object_unref (account);
 
@@ -783,6 +764,34 @@ accounts_dialog_status_changed_cb (MissionControl           *mc,
 						       (GSourceFunc) accounts_dialog_flash_connecting_cb,
 						       dialog);
 	}
+}
+
+static void
+accounts_dialog_account_enabled_cb (McAccountMonitor      *monitor,
+				    gchar                 *unique_name,
+				    EmpathyAccountsDialog *dialog)
+{
+	GtkTreeModel *model;
+	GtkTreeIter   iter;
+	McAccount    *account;
+	gboolean      enabled;
+
+	/* Update the status in the model */
+	model = gtk_tree_view_get_model (GTK_TREE_VIEW (dialog->treeview));
+	account = mc_account_lookup (unique_name);
+	enabled = mc_account_is_enabled (account);
+
+	empathy_debug (DEBUG_DOMAIN, "Account %s is now %s",
+		       mc_account_get_display_name (account),
+		       enabled ? "enabled" : "disabled");
+
+	if (accounts_dialog_get_account_iter (dialog, account, &iter)) {
+		gtk_list_store_set (GTK_LIST_STORE (model), &iter,
+				    COL_ENABLED, enabled,
+				    -1);
+	}
+
+	g_object_unref (account);
 }
 
 static void
@@ -827,21 +836,6 @@ accounts_dialog_button_back_clicked_cb (GtkWidget             *button,
 
 	account = accounts_dialog_model_get_selected (dialog);
 	accounts_dialog_update_account (dialog, account);
-}
-
-static void
-accounts_dialog_button_connect_clicked_cb (GtkWidget            *button,
-					   EmpathyAccountsDialog *dialog)
-{
-	McAccount *account;
-	gboolean   enable;
-
-	account = accounts_dialog_model_get_selected (dialog);
-	enable = (!mc_account_is_enabled (account));
-	mc_account_set_enabled (account, enable);
-	accounts_dialog_update_connect_button (dialog);
-
-	g_object_unref (account);
 }
 
 static void
@@ -921,17 +915,6 @@ accounts_dialog_button_remove_clicked_cb (GtkWidget            *button,
 }
 
 static void
-accounts_dialog_treeview_row_activated_cb (GtkTreeView          *tree_view,
-					   GtkTreePath          *path,
-					   GtkTreeViewColumn    *column,
-					   EmpathyAccountsDialog *dialog)
-{
-
-	accounts_dialog_button_connect_clicked_cb (dialog->button_connect,
-						   dialog);
-}
-
-static void
 accounts_dialog_response_cb (GtkWidget            *widget,
 			     gint                  response,
 			     EmpathyAccountsDialog *dialog)
@@ -953,7 +936,7 @@ accounts_dialog_destroy_cb (GtkWidget            *widget,
 					      accounts_dialog_account_removed_cb,
 					      dialog);
 	g_signal_handlers_disconnect_by_func (dialog->monitor,
-					      accounts_dialog_update_connect_button,
+					      accounts_dialog_account_enabled_cb,
 					      dialog);
 	dbus_g_proxy_disconnect_signal (DBUS_G_PROXY (dialog->mc),
 					"AccountStatusChanged",
@@ -1020,7 +1003,6 @@ empathy_accounts_dialog_show (GtkWindow *parent)
 				       "label_name", &dialog->label_name,
 				       "button_add", &dialog->button_add,
 				       "button_remove", &dialog->button_remove,
-				       "button_connect", &dialog->button_connect,
 				       "button_close", &button_close,
 				       NULL);
 
@@ -1030,8 +1012,6 @@ empathy_accounts_dialog_show (GtkWindow *parent)
 			      "accounts_dialog", "response", accounts_dialog_response_cb,
 			      "button_create", "clicked", accounts_dialog_button_create_clicked_cb,
 			      "button_back", "clicked", accounts_dialog_button_back_clicked_cb,
-			      "treeview", "row-activated", accounts_dialog_treeview_row_activated_cb,
-			      "button_connect", "clicked", accounts_dialog_button_connect_clicked_cb,
 			      "button_add", "clicked", accounts_dialog_button_add_clicked_cb,
 			      "button_remove", "clicked", accounts_dialog_button_remove_clicked_cb,
 			      NULL);
@@ -1060,12 +1040,12 @@ empathy_accounts_dialog_show (GtkWindow *parent)
 	g_signal_connect (dialog->monitor, "account-deleted",
 			  G_CALLBACK (accounts_dialog_account_removed_cb),
 			  dialog);
-	g_signal_connect_swapped (dialog->monitor, "account-enabled",
-				  G_CALLBACK (accounts_dialog_update_connect_button),
-				  dialog);
-	g_signal_connect_swapped (dialog->monitor, "account-disabled",
-				  G_CALLBACK (accounts_dialog_update_connect_button),
-				  dialog);
+	g_signal_connect (dialog->monitor, "account-enabled",
+			  G_CALLBACK (accounts_dialog_account_enabled_cb),
+			  dialog);
+	g_signal_connect (dialog->monitor, "account-disabled",
+			  G_CALLBACK (accounts_dialog_account_enabled_cb),
+			  dialog);
 	dbus_g_proxy_connect_signal (DBUS_G_PROXY (dialog->mc), "AccountStatusChanged",
 				     G_CALLBACK (accounts_dialog_status_changed_cb),
 				     dialog, NULL);
