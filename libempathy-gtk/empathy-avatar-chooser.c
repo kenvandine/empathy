@@ -30,9 +30,10 @@
 #include <libgnomevfs/gnome-vfs-ops.h>
 
 #include <libempathy/empathy-debug.h>
-#include <libempathy/empathy-conf.h>
+
 
 #include "empathy-avatar-chooser.h"
+#include "empathy-conf.h"
 #include "empathy-preferences.h"
 #include "empathy-ui-utils.h"
 

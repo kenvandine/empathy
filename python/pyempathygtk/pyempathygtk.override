@@ -17,6 +17,7 @@ headers
 #include "empathy-chatrooms-window.h"
 #include "empathy-chat-view.h"
 #include "empathy-chat-window.h"
+#include "empathy-conf.h"
 #include "empathy-contact-dialogs.h"
 #include "empathy-contact-list-store.h"
 #include "empathy-contact-list-view.h"

@@ -63,6 +63,13 @@
   (gtype-id "EMPATHY_TYPE_CHAT_WINDOW")
 )
 
+(define-object Conf
+  (in-module "Empathy")
+  (parent "GObject")
+  (c-name "EmpathyConf")
+  (gtype-id "EMPATHY_TYPE_CONF")
+)
+
 (define-object ContactListStore
   (in-module "Empathy")
   (parent "GtkTreeStore")
@@ -983,6 +990,125 @@
 
 
 
+;; From empathy-conf.h
+
+(define-function empathy_conf_get_type
+  (c-name "empathy_conf_get_type")
+  (return-type "GType")
+)
+
+(define-function empathy_conf_get
+  (c-name "empathy_conf_get")
+  (return-type "EmpathyConf*")
+)
+
+(define-function empathy_conf_shutdown
+  (c-name "empathy_conf_shutdown")
+  (return-type "none")
+)
+
+(define-method notify_add
+  (of-object "EmpathyConf")
+  (c-name "empathy_conf_notify_add")
+  (return-type "guint")
+  (parameters
+    '("const-gchar*" "key")
+    '("EmpathyConfNotifyFunc" "func")
+    '("gpointer" "data")
+  )
+)
+
+(define-method notify_remove
+  (of-object "EmpathyConf")
+  (c-name "empathy_conf_notify_remove")
+  (return-type "gboolean")
+  (parameters
+    '("guint" "id")
+  )
+)
+
+(define-method set_int
+  (of-object "EmpathyConf")
+  (c-name "empathy_conf_set_int")
+  (return-type "gboolean")
+  (parameters
+    '("const-gchar*" "key")
+    '("gint" "value")
+  )
+)
+
+(define-method get_int
+  (of-object "EmpathyConf")
+  (c-name "empathy_conf_get_int")
+  (return-type "gboolean")
+  (parameters
+    '("const-gchar*" "key")
+    '("gint*" "value")
+  )
+)
+
+(define-method set_bool
+  (of-object "EmpathyConf")
+  (c-name "empathy_conf_set_bool")
+  (return-type "gboolean")
+  (parameters
+    '("const-gchar*" "key")
+    '("gboolean" "value")
+  )
+)
+
+(define-method get_bool
+  (of-object "EmpathyConf")
+  (c-name "empathy_conf_get_bool")
+  (return-type "gboolean")
+  (parameters
+    '("const-gchar*" "key")
+    '("gboolean*" "value")
+  )
+)
+
+(define-method set_string
+  (of-object "EmpathyConf")
+  (c-name "empathy_conf_set_string")
+  (return-type "gboolean")
+  (parameters
+    '("const-gchar*" "key")
+    '("const-gchar*" "value")
+  )
+)
+
+(define-method get_string
+  (of-object "EmpathyConf")
+  (c-name "empathy_conf_get_string")
+  (return-type "gboolean")
+  (parameters
+    '("const-gchar*" "key")
+    '("gchar**" "value")
+  )
+)
+
+(define-method set_string_list
+  (of-object "EmpathyConf")
+  (c-name "empathy_conf_set_string_list")
+  (return-type "gboolean")
+  (parameters
+    '("const-gchar*" "key")
+    '("GSList*" "value")
+  )
+)
+
+(define-method get_string_list
+  (of-object "EmpathyConf")
+  (c-name "empathy_conf_get_string_list")
+  (return-type "gboolean")
+  (parameters
+    '("const-gchar*" "key")
+    '("GSList**" "value")
+  )
+)
+
+
+
 ;; From empathy-contact-dialogs.h
 
 (define-function empathy_subscription_dialog_show
@@ -1298,35 +1424,6 @@
   (of-object "EmpathyGroupChat")
   (c-name "empathy_group_chat_set_topic")
   (return-type "none")
-)
-
-
-
-;; From empathy-gtk-enum-types.h
-
-(define-function empathy_contact_widget_flags_get_type
-  (c-name "empathy_contact_widget_flags_get_type")
-  (return-type "GType")
-)
-
-(define-function empathy_contact_list_store_sort_get_type
-  (c-name "empathy_contact_list_store_sort_get_type")
-  (return-type "GType")
-)
-
-(define-function empathy_contact_list_store_col_get_type
-  (c-name "empathy_contact_list_store_col_get_type")
-  (return-type "GType")
-)
-
-(define-function empathy_contact_list_features_get_type
-  (c-name "empathy_contact_list_features_get_type")
-  (return-type "GType")
-)
-
-(define-function empathy_chat_view_block_get_type
-  (c-name "empathy_chat_view_block_get_type")
-  (return-type "GType")
 )
 
 
@@ -2028,9 +2125,5 @@
     '("GtkIconSize" "size")
   )
 )
-
-
-
-;; From stamp-empathy-gtk-enum-types.h
 
 

@@ -33,9 +33,9 @@
 #endif
 
 #include <libempathy/empathy-debug.h>
-#include <libempathy/empathy-conf.h>
 
 #include "empathy-spell.h"
+#include "empathy-conf.h"
 #include "empathy-preferences.h"
 
 #define DEBUG_DOMAIN "Spell"

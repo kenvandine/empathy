@@ -28,7 +28,6 @@
 #include <glade/glade.h>
 #include <glib/gi18n.h>
 
-#include <libempathy/empathy-conf.h>
 #include <libempathy/empathy-contact.h>
 #include <libempathy/empathy-debug.h>
 #include <libempathy/empathy-utils.h>
@@ -47,6 +46,7 @@
 #include "empathy-presence-chooser.h"
 #include "empathy-ui-utils.h"
 #include "empathy-geometry.h"
+#include "empathy-conf.h"
 #include "empathy-preferences.h"
 #include "empathy-accounts-dialog.h"
 #include "empathy-about-dialog.h"

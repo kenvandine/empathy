@@ -6,7 +6,6 @@ headers
 #include "empathy-chandler.h"
 #include "empathy-chatroom-manager.h"
 #include "empathy-chatroom.h"
-#include "empathy-conf.h"
 #include "empathy-contact-groups.h"
 #include "empathy-contact-list.h"
 #include "empathy-contact-manager.h"

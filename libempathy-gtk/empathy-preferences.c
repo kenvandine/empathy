@@ -30,8 +30,7 @@
 #include <glade/glade.h>
 #include <glib/gi18n.h>
 
-#include <libempathy/empathy-conf.h>
-
+#include "empathy-conf.h"
 #include "empathy-preferences.h"
 #include "empathy-ui-utils.h"
 #include "empathy-theme-manager.h"

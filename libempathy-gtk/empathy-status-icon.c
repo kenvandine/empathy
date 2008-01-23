@@ -35,13 +35,13 @@
 #include <libempathy/empathy-tp-chat.h>
 #include <libempathy/empathy-debug.h>
 #include <libempathy/empathy-utils.h>
-#include <libempathy/empathy-conf.h>
 #include <libempathy/empathy-idle.h>
 #include <libempathy/empathy-filter.h>
 
 #include "empathy-status-icon.h"
 #include "empathy-contact-dialogs.h"
 #include "empathy-presence-chooser.h"
+#include "empathy-conf.h"
 #include "empathy-preferences.h"
 #include "empathy-ui-utils.h"
 #include "empathy-accounts-dialog.h"

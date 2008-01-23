@@ -21,13 +21,6 @@
   (gtype-id "EMPATHY_TYPE_CHATROOM_MANAGER")
 )
 
-(define-object Conf
-  (in-module "Empathy")
-  (parent "GObject")
-  (c-name "EmpathyConf")
-  (gtype-id "EMPATHY_TYPE_CONF")
-)
-
 (define-object Contact
   (in-module "Empathy")
   (parent "GObject")
@@ -233,23 +226,6 @@
 
 
 
-;; From empathy-chandler-glue.h
-
-(define-function dbus_glib_marshal_empathy_chandler_BOOLEAN__STRING_BOXED_STRING_BOXED_UINT_UINT_POINTER
-  (c-name "dbus_glib_marshal_empathy_chandler_BOOLEAN__STRING_BOXED_STRING_BOXED_UINT_UINT_POINTER")
-  (return-type "none")
-  (parameters
-    '("GClosure*" "closure")
-    '("GValue*-return_value" "G_GNUC_UNUSED")
-    '("guint" "n_param_values")
-    '("const-GValue*" "param_values")
-    '("gpointer-invocation_hint" "G_GNUC_UNUSED")
-    '("gpointer" "marshal_data")
-  )
-)
-
-
-
 ;; From empathy-chandler.h
 
 (define-function empathy_chandler_get_type
@@ -431,125 +407,6 @@
   (of-object "EmpathyChatroomManager")
   (c-name "empathy_chatroom_manager_store")
   (return-type "none")
-)
-
-
-
-;; From empathy-conf.h
-
-(define-function empathy_conf_get_type
-  (c-name "empathy_conf_get_type")
-  (return-type "GType")
-)
-
-(define-function empathy_conf_get
-  (c-name "empathy_conf_get")
-  (return-type "EmpathyConf*")
-)
-
-(define-function empathy_conf_shutdown
-  (c-name "empathy_conf_shutdown")
-  (return-type "none")
-)
-
-(define-method notify_add
-  (of-object "EmpathyConf")
-  (c-name "empathy_conf_notify_add")
-  (return-type "guint")
-  (parameters
-    '("const-gchar*" "key")
-    '("EmpathyConfNotifyFunc" "func")
-    '("gpointer" "data")
-  )
-)
-
-(define-method notify_remove
-  (of-object "EmpathyConf")
-  (c-name "empathy_conf_notify_remove")
-  (return-type "gboolean")
-  (parameters
-    '("guint" "id")
-  )
-)
-
-(define-method set_int
-  (of-object "EmpathyConf")
-  (c-name "empathy_conf_set_int")
-  (return-type "gboolean")
-  (parameters
-    '("const-gchar*" "key")
-    '("gint" "value")
-  )
-)
-
-(define-method get_int
-  (of-object "EmpathyConf")
-  (c-name "empathy_conf_get_int")
-  (return-type "gboolean")
-  (parameters
-    '("const-gchar*" "key")
-    '("gint*" "value")
-  )
-)
-
-(define-method set_bool
-  (of-object "EmpathyConf")
-  (c-name "empathy_conf_set_bool")
-  (return-type "gboolean")
-  (parameters
-    '("const-gchar*" "key")
-    '("gboolean" "value")
-  )
-)
-
-(define-method get_bool
-  (of-object "EmpathyConf")
-  (c-name "empathy_conf_get_bool")
-  (return-type "gboolean")
-  (parameters
-    '("const-gchar*" "key")
-    '("gboolean*" "value")
-  )
-)
-
-(define-method set_string
-  (of-object "EmpathyConf")
-  (c-name "empathy_conf_set_string")
-  (return-type "gboolean")
-  (parameters
-    '("const-gchar*" "key")
-    '("const-gchar*" "value")
-  )
-)
-
-(define-method get_string
-  (of-object "EmpathyConf")
-  (c-name "empathy_conf_get_string")
-  (return-type "gboolean")
-  (parameters
-    '("const-gchar*" "key")
-    '("gchar**" "value")
-  )
-)
-
-(define-method set_string_list
-  (of-object "EmpathyConf")
-  (c-name "empathy_conf_set_string_list")
-  (return-type "gboolean")
-  (parameters
-    '("const-gchar*" "key")
-    '("GSList*" "value")
-  )
-)
-
-(define-method get_string_list
-  (of-object "EmpathyConf")
-  (c-name "empathy_conf_get_string_list")
-  (return-type "gboolean")
-  (parameters
-    '("const-gchar*" "key")
-    '("GSList**" "value")
-  )
 )
 
 
@@ -977,47 +834,6 @@
 
 
 
-;; From empathy-enum-types.h
-
-(define-function empathy_reg_ex_type_get_type
-  (c-name "empathy_reg_ex_type_get_type")
-  (return-type "GType")
-)
-
-(define-function empathy_message_type_get_type
-  (c-name "empathy_message_type_get_type")
-  (return-type "GType")
-)
-
-(define-function empathy_capabilities_get_type
-  (c-name "empathy_capabilities_get_type")
-  (return-type "GType")
-)
-
-(define-function empathy_tp_call_status_get_type
-  (c-name "empathy_tp_call_status_get_type")
-  (return-type "GType")
-)
-
-
-
-;; From empathy-filter-glue.h
-
-(define-function dbus_glib_marshal_empathy_filter_BOOLEAN__STRING_BOXED_STRING_BOXED_UINT_UINT_UINT_POINTER
-  (c-name "dbus_glib_marshal_empathy_filter_BOOLEAN__STRING_BOXED_STRING_BOXED_UINT_UINT_UINT_POINTER")
-  (return-type "none")
-  (parameters
-    '("GClosure*" "closure")
-    '("GValue*-return_value" "G_GNUC_UNUSED")
-    '("guint" "n_param_values")
-    '("const-GValue*" "param_values")
-    '("gpointer-invocation_hint" "G_GNUC_UNUSED")
-    '("gpointer" "marshal_data")
-  )
-)
-
-
-
 ;; From empathy-filter.h
 
 (define-function empathy_filter_get_type
@@ -1270,10 +1086,6 @@
     '("const-gchar*" "date")
   )
 )
-
-
-
-;; From empathy-marshal.h
 
 
 
@@ -2245,10 +2057,6 @@
     '("const-gchar*" "contact_id")
   )
 )
-
-
-
-;; From stamp-empathy-enum-types.h
 
 
 

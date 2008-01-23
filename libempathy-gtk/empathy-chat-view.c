@@ -44,10 +44,10 @@
 
 #include <libempathy/empathy-utils.h>
 #include <libempathy/empathy-debug.h>
-#include <libempathy/empathy-conf.h>
 
 #include "empathy-chat-view.h"
 #include "empathy-chat.h"
+#include "empathy-conf.h"
 #include "empathy-preferences.h"
 #include "empathy-theme-manager.h"
 #include "empathy-ui-utils.h"

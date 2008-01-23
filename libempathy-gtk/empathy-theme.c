@@ -24,12 +24,12 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
-#include <libempathy/empathy-conf.h>
 #include <libempathy/empathy-debug.h>
 #include <libempathy/empathy-utils.h>
 #include <libempathy/empathy-marshal.h>
 
 #include "empathy-chat.h"
+#include "empathy-conf.h"
 #include "empathy-preferences.h"
 #include "empathy-theme.h"
 #include "empathy-smiley-manager.h"

@@ -40,12 +40,12 @@
 #include <libempathy/empathy-log-manager.h>
 #include <libempathy/empathy-debug.h>
 #include <libempathy/empathy-utils.h>
-#include <libempathy/empathy-conf.h>
 #include <libempathy/empathy-marshal.h>
 
 #include "empathy-chat.h"
 #include "empathy-chat-window.h"
 #include "empathy-geometry.h"
+#include "empathy-conf.h"
 #include "empathy-preferences.h"
 #include "empathy-spell.h"
 #include "empathy-spell-dialog.h"

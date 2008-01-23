@@ -33,6 +33,7 @@
     <xi:include href="xml/empathy-chat.xml"/>
     <xi:include href="xml/empathy-chat-view.xml"/>
     <xi:include href="xml/empathy-chat-window.xml"/>
+    <xi:include href="xml/empathy-conf.xml"/>
     <xi:include href="xml/empathy-contact-dialogs.xml"/>
     <xi:include href="xml/empathy-contact-list-store.xml"/>
     <xi:include href="xml/empathy-contact-list-view.xml"/>

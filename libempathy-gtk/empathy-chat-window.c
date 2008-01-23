@@ -43,7 +43,6 @@
 #include <libempathy/empathy-contact.h>
 #include <libempathy/empathy-debug.h>
 #include <libempathy/empathy-message.h>
-#include <libempathy/empathy-conf.h>
 #include <libempathy/empathy-utils.h>
 
 #include "empathy-chat-window.h"
@@ -52,6 +51,7 @@
 #include "empathy-contact-dialogs.h"
 #include "empathy-log-window.h"
 #include "empathy-new-chatroom-dialog.h"
+#include "empathy-conf.h"
 #include "empathy-preferences.h"
 #include "empathy-private-chat.h"
 #include "empathy-group-chat.h"

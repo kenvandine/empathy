@@ -20,7 +20,6 @@
       <xi:include href="xml/empathy-chandler.xml"/>
       <xi:include href="xml/empathy-chatroom-manager.xml"/>
       <xi:include href="xml/empathy-chatroom.xml"/>
-      <xi:include href="xml/empathy-conf.xml"/>
       <xi:include href="xml/empathy-contact-factory.xml"/>
       <xi:include href="xml/empathy-contact-groups.xml"/>
       <xi:include href="xml/empathy-contact-list.xml"/>

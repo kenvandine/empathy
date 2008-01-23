@@ -16,7 +16,6 @@ BUILT_SOURCES = 					\
 lib_LTLIBRARIES = libempathy.la
 
 libempathy_la_SOURCES =					\
-	empathy-conf.c					\
 	empathy-avatar.c				\
 	empathy-time.c					\
 	empathy-presence.c				\
@@ -54,7 +53,6 @@ libempathy_la_LDFLAGS =		\
 	-version-info ${LIBEMPATHY_CURRENT}:${LIBEMPATHY_REVISION}:${LIBEMPATHY_AGE}
 
 libempathy_headers =				\
-	empathy-conf.h				\
 	empathy-avatar.h			\
 	empathy-time.h				\
 	empathy-presence.h			\

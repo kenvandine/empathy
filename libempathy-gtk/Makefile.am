@@ -15,6 +15,7 @@ libempathy_gtk_la_SOURCES =             	\
 	ephy-spinner.c ephy-spinner.h		\
 	empathy-main-window.c			\
 	empathy-status-icon.c			\
+	empathy-conf.c				\
 	empathy-contact-widget.c		\
 	empathy-contact-dialogs.c		\
 	empathy-accounts-dialog.c		\
@@ -69,6 +70,7 @@ libempathy_gtk_headers =			\
 	empathy-images.h			\
 	empathy-main-window.h			\
 	empathy-status-icon.h			\
+	empathy-conf.h				\
 	empathy-contact-widget.h		\
 	empathy-contact-dialogs.h		\
 	empathy-accounts-dialog.h		\

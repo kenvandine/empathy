@@ -40,7 +40,6 @@
 #include <libempathy/empathy-contact.h>
 #include <libempathy/empathy-utils.h>
 #include <libempathy/empathy-debug.h>
-#include <libempathy/empathy-conf.h>
 
 #include "empathy-group-chat.h"
 #include "empathy-chat.h"
@@ -51,6 +50,7 @@
 //#include "empathy-sound.h"
 #include "empathy-images.h"
 #include "empathy-ui-utils.h"
+#include "empathy-conf.h"
 #include "empathy-preferences.h"
 
 #define DEBUG_DOMAIN "GroupChat"

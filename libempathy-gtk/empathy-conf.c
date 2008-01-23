@@ -26,13 +26,14 @@
 
 #include <gconf/gconf-client.h>
 
+#include <libempathy/empathy-debug.h>
+
 #include "empathy-conf.h"
-#include "empathy-debug.h"
 
 #define DEBUG_DOMAIN "Config"
 
 #define EMPATHY_CONF_ROOT       "/apps/empathy"
-#define DESKTOP_INTERFACE_ROOT "/desktop/gnome/interface"
+#define DESKTOP_INTERFACE_ROOT  "/desktop/gnome/interface"
 
 #define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), EMPATHY_TYPE_CONF, EmpathyConfPriv))
 
