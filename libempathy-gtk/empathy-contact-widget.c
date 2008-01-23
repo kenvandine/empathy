@@ -224,6 +224,23 @@ empathy_contact_widget_get_contact (GtkWidget *widget)
 }
 
 void
+empathy_contact_widget_set_contact (GtkWidget      *widget,
+				    EmpathyContact *contact)
+{
+	EmpathyContactWidget *information;
+
+	g_return_if_fail (GTK_IS_WIDGET (widget));
+	g_return_if_fail (EMPATHY_IS_CONTACT (contact));
+
+	information = g_object_get_data (G_OBJECT (widget), "EmpathyContactWidget");
+	if (!information) {
+		return;
+	}
+
+	contact_widget_set_contact (information, contact);
+}
+
+void
 empathy_contact_widget_set_account_filter (GtkWidget                       *widget,
 					   EmpathyAccountChooserFilterFunc  filter,
 					   gpointer                         user_data)
@@ -289,6 +306,12 @@ static void
 contact_widget_set_contact (EmpathyContactWidget *information,
 			    EmpathyContact        *contact)
 {
+	if (contact == information->contact ||
+	    (contact && information->contact &&
+	     empathy_contact_equal (contact, information->contact))) {
+		return;
+	}
+
 	contact_widget_remove_contact (information);
 	if (contact) {
 		information->contact = g_object_ref (contact);

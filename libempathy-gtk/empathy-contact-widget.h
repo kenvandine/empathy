@@ -41,6 +41,8 @@ typedef enum {
 GtkWidget *     empathy_contact_widget_new                (EmpathyContact                  *contact,
 							   EmpathyContactWidgetFlags        flags);
 EmpathyContact *empathy_contact_widget_get_contact        (GtkWidget                       *widget);
+void            empathy_contact_widget_set_contact        (GtkWidget                       *widget,
+							   EmpathyContact                  *contact);
 void            empathy_contact_widget_set_account_filter (GtkWidget                       *widget,
 							   EmpathyAccountChooserFilterFunc  filter,
 							   gpointer                         user_data);
