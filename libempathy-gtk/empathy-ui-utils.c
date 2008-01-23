@@ -28,6 +28,8 @@
  *          Jeroen Zwartepoorte
  */
 
+#include <config.h>
+
 #include <string.h>
 #include <X11/Xatom.h>
 #include <gdk/gdkx.h>
@@ -63,7 +65,13 @@ get_glade_file (const gchar *filename,
 	const char *name;
 	GtkWidget **widget_ptr;
 
-	path = g_build_filename (DATADIR, "empathy", filename, NULL);
+	path = g_build_filename (UNINSTALLED_GLADE_DIR, filename, NULL);
+	if (!g_file_test (path, G_FILE_TEST_EXISTS)) {
+		g_free (path);
+		path = g_build_filename (DATADIR, "empathy", filename, NULL);
+	}
+	empathy_debug (DEBUG_DOMAIN, "Loading glade file %s", path);
+
 	gui = glade_xml_new (path, root, domain);
 	g_free (path);
 

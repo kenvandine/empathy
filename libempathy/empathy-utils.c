@@ -208,11 +208,15 @@ empathy_xml_validate (xmlDoc      *doc,
 	xmlDtd       *dtd;
 	gboolean      ret;
 
-	path = g_build_filename (DATADIR, "empathy", dtd_filename, NULL);
+	path = g_build_filename (UNINSTALLED_DTD_DIR, dtd_filename, NULL);
+	if (!g_file_test (path, G_FILE_TEST_EXISTS)) {
+		g_free (path);
+		path = g_build_filename (DATADIR, "empathy", dtd_filename, NULL);
+	}
+	empathy_debug (DEBUG_DOMAIN, "Loading dtd file %s", path);
 
 	/* The list of valid chars is taken from libxml. */
 	escaped = xmlURIEscapeStr (path, ":@&=+$,/?;");
-
 	g_free (path);
 
 	memset (&cvp, 0, sizeof (cvp));
