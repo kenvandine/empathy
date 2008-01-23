@@ -810,7 +810,7 @@ main_window_error_display (EmpathyMainWindow *window,
 	gtk_widget_show (image);
 	gtk_box_pack_start (GTK_BOX (hbox), image, FALSE, FALSE, 0);
 
-	label = gtk_label_new_with_mnemonic (_("Edit Account _Details"));
+	label = gtk_label_new_with_mnemonic (_("_Edit account"));
 	gtk_widget_show (label);
 	gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
 
