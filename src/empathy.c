@@ -37,10 +37,10 @@
 #include <libmissioncontrol/mission-control.h>
 
 #include <libempathy/empathy-idle.h>
-#include <libempathy/empathy-conf.h>
 #include <libempathy/empathy-utils.h>
 #include <libempathy/empathy-debug.h>
 
+#include <libempathy-gtk/empathy-conf.h>
 #include <libempathy-gtk/empathy-preferences.h>
 #include <libempathy-gtk/empathy-main-window.h>
 #include <libempathy-gtk/empathy-status-icon.h>
