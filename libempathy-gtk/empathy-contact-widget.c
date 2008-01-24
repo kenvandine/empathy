@@ -429,6 +429,9 @@ contact_widget_contact_update (EmpathyContactWidget *information)
 		g_signal_connect_swapped (information->contact, "notify::presence",
 					  G_CALLBACK (contact_widget_presence_notify_cb),
 					  information);
+		g_signal_connect_swapped (information->contact, "notify::presence-message",
+					  G_CALLBACK (contact_widget_presence_notify_cb),
+					  information);
 		g_signal_connect_swapped (information->contact, "notify::avatar",
 					  G_CALLBACK (contact_widget_avatar_notify_cb),
 					  information);

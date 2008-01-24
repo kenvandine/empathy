@@ -485,3 +485,74 @@ empathy_chat_with_contact_id (McAccount *account, const gchar *contact_id)
 	g_object_unref (mc);
 }
 
+
+const gchar *
+empathy_presence_get_default_message (McPresence presence)
+{
+	switch (presence) {
+	case MC_PRESENCE_AVAILABLE:
+		return _("Available");
+	case MC_PRESENCE_DO_NOT_DISTURB:
+		return _("Busy");
+	case MC_PRESENCE_AWAY:
+	case MC_PRESENCE_EXTENDED_AWAY:
+		return _("Away");
+	case MC_PRESENCE_HIDDEN:
+		return _("Hidden");
+	case MC_PRESENCE_OFFLINE:
+	case MC_PRESENCE_UNSET:
+		return _("Offline");
+	default:
+		g_assert_not_reached ();
+	}
+
+	return NULL;
+}
+
+const gchar *
+empathy_presence_to_str (McPresence presence)
+{
+	switch (presence) {
+	case MC_PRESENCE_AVAILABLE:
+		return "available";
+	case MC_PRESENCE_DO_NOT_DISTURB:
+		return "busy";
+	case MC_PRESENCE_AWAY:
+		return "away";
+	case MC_PRESENCE_EXTENDED_AWAY:
+		return "ext_away";
+	case MC_PRESENCE_HIDDEN:
+		return "hidden";
+	case MC_PRESENCE_OFFLINE:
+		return "offline";
+	case MC_PRESENCE_UNSET:
+		return "unset";
+	default:
+		g_assert_not_reached ();
+	}
+
+	return NULL;
+}
+
+McPresence
+empathy_presence_from_str (const gchar *str)
+{
+	if (strcmp (str, "available") == 0) {
+		return MC_PRESENCE_AVAILABLE;
+	} else if ((strcmp (str, "dnd") == 0) || (strcmp (str, "busy") == 0)) {
+		return MC_PRESENCE_DO_NOT_DISTURB;
+	} else if ((strcmp (str, "away") == 0) || (strcmp (str, "brb") == 0)) {
+		return MC_PRESENCE_AWAY;
+	} else if ((strcmp (str, "xa") == 0) || (strcmp (str, "ext_away") == 0)) {
+		return MC_PRESENCE_EXTENDED_AWAY;
+	} else if (strcmp (str, "hidden") == 0) {
+		return MC_PRESENCE_HIDDEN;
+	} else if (strcmp (str, "offline") == 0) {
+		return MC_PRESENCE_OFFLINE;
+	} else if (strcmp (str, "unset") == 0) {
+		return MC_PRESENCE_UNSET;
+	}
+
+	return MC_PRESENCE_AVAILABLE;
+}
+

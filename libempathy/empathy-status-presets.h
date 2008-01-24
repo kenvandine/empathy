@@ -23,7 +23,7 @@
 #ifndef __EMPATHY_STATUS_PRESETS_H__
 #define __EMPATHY_STATUS_PRESETS_H__
 
-#include "empathy-presence.h"
+#include <libmissioncontrol/mission-control.h>
 
 G_BEGIN_DECLS
 

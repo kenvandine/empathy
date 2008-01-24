@@ -381,7 +381,7 @@ presence_chooser_scroll_event_cb (EmpathyPresenceChooser *chooser,
 		/* If we didn't get any match at all, it means the last state
 		 * was a custom one. Just switch to the first one.
 		 */
-		status = empathy_presence_state_get_default_status (states[0]);
+		status = empathy_presence_get_default_message (states[0]);
 
 		presence_chooser_reset_scroll_timeout (chooser);
 		empathy_idle_set_presence (priv->idle, states[0], status);
@@ -404,7 +404,7 @@ presence_chooser_get_presets (EmpathyPresenceChooser *chooser)
 		StateAndStatus *sas;
 		const gchar    *status;
 
-		status = empathy_presence_state_get_default_status (states[i]);
+		status = empathy_presence_get_default_message (states[i]);
 		sas = presence_chooser_state_and_status_new (states[i], status);
 		list = g_list_prepend (list, sas);
 
@@ -455,7 +455,7 @@ presence_chooser_flash_timeout_cb (EmpathyPresenceChooser *chooser)
 	}
 
 	gtk_image_set_from_icon_name (GTK_IMAGE (priv->image),
-				      empathy_icon_name_for_presence_state (state),
+				      empathy_icon_name_for_presence (state),
 				      GTK_ICON_SIZE_MENU);
 
 	on = !on;
@@ -500,7 +500,7 @@ presence_chooser_flash_stop (EmpathyPresenceChooser *chooser,
 	}
 
 	gtk_image_set_from_icon_name (GTK_IMAGE (priv->image),
-				      empathy_icon_name_for_presence_state (state),
+				      empathy_icon_name_for_presence (state),
 				      GTK_ICON_SIZE_MENU);
 
 	priv->last_state = state;
@@ -665,7 +665,7 @@ empathy_presence_chooser_create_menu (void)
 	for (i = 0; i < G_N_ELEMENTS (states); i += 2) {
 		GList       *list, *l;
 
-		status = empathy_presence_state_get_default_status (states[i]);
+		status = empathy_presence_get_default_message (states[i]);
 		presence_chooser_menu_add_item (menu,
 						status,
 						states[i]);
@@ -714,7 +714,7 @@ presence_chooser_menu_add_item (GtkWidget   *menu,
 	const gchar *icon_name;
 
 	item = gtk_image_menu_item_new_with_label (str);
-	icon_name = empathy_icon_name_for_presence_state (state);
+	icon_name = empathy_icon_name_for_presence (state);
 
 	g_signal_connect (item, "activate",
 			  G_CALLBACK (presence_chooser_noncustom_activate_cb),
@@ -891,8 +891,8 @@ presence_chooser_dialog_setup (CustomMessageDialog *dialog)
 
 		gtk_list_store_append (store, &iter);
 		gtk_list_store_set (store, &iter,
-				    COL_ICON, empathy_icon_name_for_presence_state (states[i]),
-				    COL_LABEL, empathy_presence_state_get_default_status (states[i]),
+				    COL_ICON, empathy_icon_name_for_presence (states[i]),
+				    COL_LABEL, empathy_presence_get_default_message (states[i]),
 				    COL_PRESENCE, states[i],
 				    -1);
 	}

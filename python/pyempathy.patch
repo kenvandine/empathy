@@ -1,0 +1,35 @@
+--- pyempathy.defs	2008-01-24 16:03:39.000000000 +0100
++++ pyempathy/pyempathy.defs	2008-01-24 16:04:34.000000000 +0100
+@@ -35,7 +35,7 @@
+   (gtype-id "EMPATHY_TYPE_CONTACT_FACTORY")
+ )
+ 
+-(define-object ContactList
++(define-interface ContactList
+   (in-module "Empathy")
+   (c-name "EmpathyContactList")
+   (gtype-id "EMPATHY_TYPE_CONTACT_LIST")
+@@ -44,6 +44,7 @@
+ (define-object ContactManager
+   (in-module "Empathy")
+   (parent "GObject")
++  (implements "EmpathyContactList")
+   (c-name "EmpathyContactManager")
+   (gtype-id "EMPATHY_TYPE_CONTACT_MANAGER")
+ )
+@@ -93,6 +94,7 @@
+ (define-object TpChatroom
+   (in-module "Empathy")
+   (parent "EmpathyTpChat")
++  (implements "EmpathyContactList")
+   (c-name "EmpathyTpChatroom")
+   (gtype-id "EMPATHY_TYPE_TP_CHATROOM")
+ )
+@@ -107,6 +109,7 @@
+ (define-object TpContactList
+   (in-module "Empathy")
+   (parent "GObject")
++  (implements "EmpathyContactList")
+   (c-name "EmpathyTpContactList")
+   (gtype-id "EMPATHY_TYPE_TP_CONTACT_LIST")
+ )

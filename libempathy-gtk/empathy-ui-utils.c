@@ -220,9 +220,9 @@ empathy_icon_name_from_account (McAccount *account)
 }
 
 const gchar *
-empathy_icon_name_for_presence_state (McPresence state)
+empathy_icon_name_for_presence (McPresence presence)
 {
-	switch (state) {
+	switch (presence) {
 	case MC_PRESENCE_AVAILABLE:
 		return EMPATHY_IMAGE_AVAILABLE;
 	case MC_PRESENCE_DO_NOT_DISTURB:
@@ -244,32 +244,15 @@ empathy_icon_name_for_presence_state (McPresence state)
 }
 
 const gchar *
-empathy_icon_name_for_presence (EmpathyPresence *presence)
-{
-	McPresence state;
-
-	g_return_val_if_fail (EMPATHY_IS_PRESENCE (presence),
-			      EMPATHY_IMAGE_OFFLINE);
-
-	state = empathy_presence_get_state (presence);
-
-	return empathy_icon_name_for_presence_state (state);
-}
-
-const gchar *
 empathy_icon_name_for_contact (EmpathyContact *contact)
 {
-	EmpathyPresence *presence;
+	McPresence presence;
 
 	g_return_val_if_fail (EMPATHY_IS_CONTACT (contact),
 			      EMPATHY_IMAGE_OFFLINE);
 
 	presence = empathy_contact_get_presence (contact);
-	if (presence) {
-		return empathy_icon_name_for_presence (presence);
-	}
-
-	return EMPATHY_IMAGE_UNKNOWN;
+	return empathy_icon_name_for_presence (presence);
 }
 
 GdkPixbuf *

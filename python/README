@@ -15,5 +15,7 @@ Manually modify pyempathy.defs, ContactList is not an object but an interface:
 ContactManager, TpChatroom and TpContactList implements ContactList interface:
   (implements "EmpathyContactList")
 
+That can be done by applying pyempathy.patch
+
 3)
 Manually update headers in pyempathy.override and pyempathygtk.override.

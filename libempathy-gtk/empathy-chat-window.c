@@ -781,21 +781,21 @@ chat_window_update_menu (EmpathyChatWindow *window)
 						   chat_window_show_contacts_toggled_cb,
 						   window);
 	} else {
-		EmpathyPrivateChat  *chat;
-		EmpathyContact      *contact;
-		EmpathyPresence     *presence;
+		EmpathyPrivateChat *chat;
+		EmpathyContact     *contact;
+		McPresence          presence;
 
 		chat = EMPATHY_PRIVATE_CHAT (priv->current_chat);
 
 		/* Show / Hide widgets */
 		gtk_widget_hide (priv->menu_room);
 
-		/* presence==NULL means this contact refuses to send us his
+		/* Unset presence means this contact refuses to send us his
 		 * presence. By adding the contact we ask the contact to accept
 		 * to send his presence. */
 		contact = empathy_private_chat_get_contact (chat);
 		presence = empathy_contact_get_presence (contact);
-		if (!presence) {
+		if (presence == MC_PRESENCE_UNSET) {
 			gtk_widget_show (priv->menu_conv_add_contact);
 		} else {
 			gtk_widget_hide (priv->menu_conv_add_contact);

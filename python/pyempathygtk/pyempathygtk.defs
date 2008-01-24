@@ -1349,6 +1349,15 @@
   )
 )
 
+(define-function empathy_contact_widget_set_contact
+  (c-name "empathy_contact_widget_set_contact")
+  (return-type "none")
+  (parameters
+    '("GtkWidget*" "widget")
+    '("EmpathyContact*" "contact")
+  )
+)
+
 (define-function empathy_contact_widget_set_account_filter
   (c-name "empathy_contact_widget_set_account_filter")
   (return-type "none")
@@ -1921,19 +1930,11 @@
   )
 )
 
-(define-function empathy_icon_name_for_presence_state
-  (c-name "empathy_icon_name_for_presence_state")
-  (return-type "const-gchar*")
-  (parameters
-    '("McPresence" "state")
-  )
-)
-
 (define-function empathy_icon_name_for_presence
   (c-name "empathy_icon_name_for_presence")
   (return-type "const-gchar*")
   (parameters
-    '("EmpathyPresence*" "presence")
+    '("McPresence" "presence")
   )
 )
 

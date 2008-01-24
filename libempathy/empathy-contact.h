@@ -29,9 +29,9 @@
 #include <glib-object.h>
 
 #include <libmissioncontrol/mc-account.h>
+#include <libmissioncontrol/mission-control.h>
 
 #include "empathy-avatar.h"
-#include "empathy-presence.h"
 
 G_BEGIN_DECLS
 
@@ -75,9 +75,12 @@ void                empathy_contact_set_avatar         (EmpathyContact      *con
 McAccount *         empathy_contact_get_account        (EmpathyContact      *contact);
 void                empathy_contact_set_account        (EmpathyContact      *contact,
 							McAccount           *account);
-EmpathyPresence *   empathy_contact_get_presence       (EmpathyContact      *contact);
+McPresence          empathy_contact_get_presence       (EmpathyContact      *contact);
 void                empathy_contact_set_presence       (EmpathyContact      *contact,
-							EmpathyPresence     *presence);
+							McPresence           presence);
+const gchar *       empathy_contact_get_presence_message (EmpathyContact    *contact);
+void                empathy_contact_set_presence_message (EmpathyContact    *contact,
+							const gchar         *message);
 guint               empathy_contact_get_handle         (EmpathyContact      *contact);
 void                empathy_contact_set_handle         (EmpathyContact      *contact,
 							guint                handle);

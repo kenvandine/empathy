@@ -27,8 +27,6 @@
 
 #include <gtk/gtk.h>
 
-#include <libempathy/empathy-presence.h>
-
 G_BEGIN_DECLS
 
 #define EMPATHY_TYPE_PRESENCE_CHOOSER         (empathy_presence_chooser_get_type ())

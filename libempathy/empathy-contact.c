@@ -29,6 +29,8 @@
 
 #include <glib/gi18n.h>
 
+#include <telepathy-glib/util.h>
+
 #include "empathy-contact.h"
 #include "empathy-utils.h"
 #include "empathy-debug.h"
@@ -45,7 +47,8 @@ struct _EmpathyContactPriv {
 	gchar              *name;
 	EmpathyAvatar      *avatar;
 	McAccount          *account;
-	EmpathyPresence    *presence;
+	McPresence          presence;
+	gchar              *presence_message;
 	guint               handle;
 	EmpathyCapabilities capabilities;
 	gboolean            is_user;
@@ -72,6 +75,7 @@ enum {
 	PROP_AVATAR,
 	PROP_ACCOUNT,
 	PROP_PRESENCE,
+	PROP_PRESENCE_MESSAGE,
 	PROP_GROUPS,
 	PROP_SUBSCRIPTION,
 	PROP_HANDLE,
@@ -124,12 +128,21 @@ empathy_contact_class_init (EmpathyContactClass *class)
 
 	g_object_class_install_property (object_class,
 					 PROP_PRESENCE,
-					 g_param_spec_object ("presence",
-							      "Contact presence",
-							      "Presence of contact",
-							      EMPATHY_TYPE_PRESENCE,
-							      G_PARAM_READWRITE));
+					 g_param_spec_uint ("presence",
+							    "Contact presence",
+							    "Presence of contact",
+							    MC_PRESENCE_UNSET,
+							    LAST_MC_PRESENCE,
+							    MC_PRESENCE_UNSET,
+							    G_PARAM_READWRITE));
 
+	g_object_class_install_property (object_class,
+					 PROP_PRESENCE_MESSAGE,
+					 g_param_spec_string ("presence-message",
+							      "Contact presence message",
+							      "Presence message of contact",
+							      NULL,
+							      G_PARAM_READWRITE));
 	g_object_class_install_property (object_class,
 					 PROP_HANDLE,
 					 g_param_spec_uint ("handle",
@@ -176,13 +189,10 @@ contact_finalize (GObject *object)
 
 	g_free (priv->name);
 	g_free (priv->id);
+	g_free (priv->presence_message);
 
 	if (priv->avatar) {
 		empathy_avatar_unref (priv->avatar);
-	}
-
-	if (priv->presence) {
-		g_object_unref (priv->presence);
 	}
 
 	if (priv->account) {
@@ -218,7 +228,10 @@ contact_get_property (GObject    *object,
 		g_value_set_object (value, priv->account);
 		break;
 	case PROP_PRESENCE:
-		g_value_set_object (value, priv->presence);
+		g_value_set_uint (value, priv->presence);
+		break;
+	case PROP_PRESENCE_MESSAGE:
+		g_value_set_string (value, priv->presence_message);
 		break;
 	case PROP_HANDLE:
 		g_value_set_uint (value, priv->handle);
@@ -264,7 +277,11 @@ contact_set_property (GObject      *object,
 		break;
 	case PROP_PRESENCE:
 		empathy_contact_set_presence (EMPATHY_CONTACT (object),
-					     EMPATHY_PRESENCE (g_value_get_object (value)));
+					      g_value_get_uint (value));
+		break;
+	case PROP_PRESENCE_MESSAGE:
+		empathy_contact_set_presence_message (EMPATHY_CONTACT (object),
+						      g_value_get_string (value));
 		break;
 	case PROP_HANDLE:
 		empathy_contact_set_handle (EMPATHY_CONTACT (object),
@@ -451,12 +468,12 @@ empathy_contact_set_account (EmpathyContact *contact,
 	g_object_notify (G_OBJECT (contact), "account");
 }
 
-EmpathyPresence *
+McPresence
 empathy_contact_get_presence (EmpathyContact *contact)
 {
 	EmpathyContactPriv *priv;
 
-	g_return_val_if_fail (EMPATHY_IS_CONTACT (contact), NULL);
+	g_return_val_if_fail (EMPATHY_IS_CONTACT (contact), MC_PRESENCE_UNSET);
 
 	priv = GET_PRIV (contact);
 
@@ -464,8 +481,8 @@ empathy_contact_get_presence (EmpathyContact *contact)
 }
 
 void
-empathy_contact_set_presence (EmpathyContact  *contact,
-			      EmpathyPresence *presence)
+empathy_contact_set_presence (EmpathyContact *contact,
+			      McPresence      presence)
 {
 	EmpathyContactPriv *priv;
 
@@ -477,16 +494,39 @@ empathy_contact_set_presence (EmpathyContact  *contact,
 		return;
 	}
 
-	if (priv->presence) {
-		g_object_unref (priv->presence);
-		priv->presence = NULL;
-	}
-
-	if (presence) {
-		priv->presence = g_object_ref (presence);
-	}
+	priv->presence = presence;
 
 	g_object_notify (G_OBJECT (contact), "presence");
+}
+
+const gchar *
+empathy_contact_get_presence_message (EmpathyContact *contact)
+{
+	EmpathyContactPriv *priv;
+
+	g_return_val_if_fail (EMPATHY_IS_CONTACT (contact), NULL);
+
+	priv = GET_PRIV (contact);
+
+	return priv->presence_message;
+}
+
+void
+empathy_contact_set_presence_message (EmpathyContact *contact,
+				      const gchar    *message)
+{
+	EmpathyContactPriv *priv = GET_PRIV (contact);
+
+	g_return_if_fail (EMPATHY_IS_CONTACT (contact));
+
+	if (!tp_strdiff (message, priv->presence_message)) {
+		return;
+	}
+
+	g_free (priv->presence_message);
+	priv->presence_message = g_strdup (message);
+
+	g_object_notify (G_OBJECT (contact), "presence-message");
 }
 
 guint
@@ -591,11 +631,7 @@ empathy_contact_is_online (EmpathyContact *contact)
 
 	priv = GET_PRIV (contact);
 
-	if (!priv->presence) {
-		return FALSE;
-	}
-
-	return (empathy_presence_get_state (priv->presence) > MC_PRESENCE_OFFLINE);
+	return (priv->presence > MC_PRESENCE_OFFLINE);
 }
 
 const gchar *
@@ -607,21 +643,11 @@ empathy_contact_get_status (EmpathyContact *contact)
 
 	priv = GET_PRIV (contact);
 
-	if (priv->presence) {
-		const gchar *status;
-
-		status = empathy_presence_get_status (priv->presence);
-		if (!status) {
-			McPresence state;
-
-			state = empathy_presence_get_state (priv->presence);
-			status = empathy_presence_state_get_default_status (state);
-		}
-
-		return status;
+	if (priv->presence_message) {
+		return priv->presence_message;
 	}
 
-	return empathy_presence_state_get_default_status (MC_PRESENCE_OFFLINE);
+	return empathy_presence_get_default_message (priv->presence);
 }
 
 gboolean

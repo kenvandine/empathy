@@ -109,30 +109,19 @@ tp_contact_factory_weak_notify (gpointer data,
 }
 
 static void
-tp_contact_factory_presences_table_foreach (const gchar      *state_str,
-					    GHashTable       *presences_table,
-					    EmpathyPresence **presence)
+tp_contact_factory_presences_table_foreach (const gchar    *state_str,
+					    GHashTable     *presences_table,
+					    EmpathyContact *contact)
 {
-	McPresence    state;
 	const GValue *message;
 
-	state = empathy_presence_state_from_str (state_str);
-	if (state == MC_PRESENCE_UNSET) {
-		return;
-	}
-
-	if (*presence) {
-		g_object_unref (*presence);
-		*presence = NULL;
-	}
-
-	*presence = empathy_presence_new ();
-	empathy_presence_set_state (*presence, state);
-
+	empathy_contact_set_presence (contact,
+				      empathy_presence_from_str (state_str));
+	
 	message = g_hash_table_lookup (presences_table, "message");
 	if (message != NULL) {
-		empathy_presence_set_status (*presence,
-					     g_value_get_string (message));
+		empathy_contact_set_presence_message (contact,
+						      g_value_get_string (message));
 	}
 }
 
@@ -143,7 +132,6 @@ tp_contact_factory_parse_presence_foreach (guint                    handle,
 {
 	GHashTable      *presences_table;
 	EmpathyContact  *contact;
-	EmpathyPresence *presence = NULL;
 
 	contact = tp_contact_factory_find_by_handle (tp_factory, handle);
 	if (!contact) {
@@ -154,16 +142,13 @@ tp_contact_factory_parse_presence_foreach (guint                    handle,
 
 	g_hash_table_foreach (presences_table,
 			      (GHFunc) tp_contact_factory_presences_table_foreach,
-			      &presence);
+			      contact);
 
 	empathy_debug (DEBUG_DOMAIN, "Changing presence for contact %s (%d) to %s (%d)",
 		      empathy_contact_get_id (contact),
 		      handle,
-		      presence ? empathy_presence_get_status (presence) : "unset",
-		      presence ? empathy_presence_get_state (presence) : MC_PRESENCE_UNSET);
-
-	empathy_contact_set_presence (contact, presence);
-	g_object_unref (presence);
+		      empathy_contact_get_presence_message (contact),
+		      empathy_contact_get_presence (contact));
 }
 
 static void
@@ -699,7 +684,7 @@ tp_contact_factory_disconnect_contact_foreach (gpointer data,
 {
 	EmpathyContact *contact = data;
 	
-	empathy_contact_set_presence (contact, NULL);
+	empathy_contact_set_presence (contact, MC_PRESENCE_UNSET);
 	empathy_contact_set_handle (contact, 0);
 }
 
@@ -910,15 +895,9 @@ tp_contact_factory_add_contact (EmpathyTpContactFactory *tp_factory,
 	priv->contacts = g_list_prepend (priv->contacts, contact);
 
 	if (!priv->presence_iface) {
-		EmpathyPresence *presence;
-
 		/* We have no presence iface, set default presence
 		 * to available */
-		presence = empathy_presence_new_full (MC_PRESENCE_AVAILABLE,
-						     NULL);
-
-		empathy_contact_set_presence (contact, presence);
-		g_object_unref (presence);
+		empathy_contact_set_presence (contact, MC_PRESENCE_AVAILABLE);
 	}
 
 	empathy_debug (DEBUG_DOMAIN, "Contact added: %s (%d)",

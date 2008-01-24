@@ -372,7 +372,7 @@ status_icon_idle_notify_cb (EmpathyStatusIcon *icon)
 	if (flash_state != MC_PRESENCE_UNSET) {
 		const gchar *icon_name;
 
-		icon_name = empathy_icon_name_for_presence_state (flash_state);
+		icon_name = empathy_icon_name_for_presence (flash_state);
 		if (!priv->flash_state_event) {
 			/* We are now flashing */
 			priv->flash_state_event = status_icon_event_new (icon, icon_name, NULL);
@@ -429,7 +429,7 @@ status_icon_set_from_state (EmpathyStatusIcon *icon)
 	priv = GET_PRIV (icon);
 
 	state = empathy_idle_get_state (priv->idle);
-	icon_name = empathy_icon_name_for_presence_state (state);
+	icon_name = empathy_icon_name_for_presence (state);
 	gtk_status_icon_set_from_icon_name (priv->icon, icon_name);
 }
 

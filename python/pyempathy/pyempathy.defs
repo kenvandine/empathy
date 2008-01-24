@@ -77,13 +77,6 @@
   (gtype-id "EMPATHY_TYPE_MESSAGE")
 )
 
-(define-object Presence
-  (in-module "Empathy")
-  (parent "GObject")
-  (c-name "EmpathyPresence")
-  (gtype-id "EMPATHY_TYPE_PRESENCE")
-)
-
 (define-object TpCall
   (in-module "Empathy")
   (parent "GObject")
@@ -602,7 +595,7 @@
 (define-method get_presence
   (of-object "EmpathyContact")
   (c-name "empathy_contact_get_presence")
-  (return-type "EmpathyPresence*")
+  (return-type "McPresence")
 )
 
 (define-method set_presence
@@ -610,7 +603,22 @@
   (c-name "empathy_contact_set_presence")
   (return-type "none")
   (parameters
-    '("EmpathyPresence*" "presence")
+    '("McPresence" "presence")
+  )
+)
+
+(define-method get_presence_message
+  (of-object "EmpathyContact")
+  (c-name "empathy_contact_get_presence_message")
+  (return-type "const-gchar*")
+)
+
+(define-method set_presence_message
+  (of-object "EmpathyContact")
+  (c-name "empathy_contact_set_presence_message")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "message")
   )
 )
 
@@ -1201,93 +1209,6 @@
   (of-object "EmpathyMessageType")
   (c-name "empathy_message_type_to_str")
   (return-type "const-gchar*")
-)
-
-
-
-;; From empathy-presence.h
-
-(define-function empathy_presence_get_type
-  (c-name "empathy_presence_get_type")
-  (return-type "GType")
-)
-
-(define-function empathy_presence_new
-  (c-name "empathy_presence_new")
-  (is-constructor-of "EmpathyPresence")
-  (return-type "EmpathyPresence*")
-)
-
-(define-function empathy_presence_new_full
-  (c-name "empathy_presence_new_full")
-  (return-type "EmpathyPresence*")
-  (parameters
-    '("McPresence" "state")
-    '("const-gchar*" "status")
-  )
-)
-
-(define-method get_state
-  (of-object "EmpathyPresence")
-  (c-name "empathy_presence_get_state")
-  (return-type "McPresence")
-)
-
-(define-method get_status
-  (of-object "EmpathyPresence")
-  (c-name "empathy_presence_get_status")
-  (return-type "const-gchar*")
-)
-
-(define-method set_state
-  (of-object "EmpathyPresence")
-  (c-name "empathy_presence_set_state")
-  (return-type "none")
-  (parameters
-    '("McPresence" "state")
-  )
-)
-
-(define-method set_status
-  (of-object "EmpathyPresence")
-  (c-name "empathy_presence_set_status")
-  (return-type "none")
-  (parameters
-    '("const-gchar*" "status")
-  )
-)
-
-(define-function empathy_presence_sort_func
-  (c-name "empathy_presence_sort_func")
-  (return-type "gint")
-  (parameters
-    '("gconstpointer" "a")
-    '("gconstpointer" "b")
-  )
-)
-
-(define-function empathy_presence_state_get_default_status
-  (c-name "empathy_presence_state_get_default_status")
-  (return-type "const-gchar*")
-  (parameters
-    '("McPresence" "state")
-  )
-)
-
-(define-function empathy_presence_state_to_str
-  (c-name "empathy_presence_state_to_str")
-  (return-type "const-gchar*")
-  (parameters
-    '("McPresence" "state")
-  )
-)
-
-(define-function empathy_presence_state_from_str
-  (c-name "empathy_presence_state_from_str")
-  (return-type "McPresence")
-  (parameters
-    '("const-gchar*" "str")
-  )
 )
 
 
@@ -2055,6 +1976,30 @@
   (parameters
     '("McAccount*" "account")
     '("const-gchar*" "contact_id")
+  )
+)
+
+(define-function empathy_presence_get_default_message
+  (c-name "empathy_presence_get_default_message")
+  (return-type "const-gchar*")
+  (parameters
+    '("McPresence" "presence")
+  )
+)
+
+(define-function empathy_presence_to_str
+  (c-name "empathy_presence_to_str")
+  (return-type "const-gchar*")
+  (parameters
+    '("McPresence" "presence")
+  )
+)
+
+(define-function empathy_presence_from_str
+  (c-name "empathy_presence_from_str")
+  (return-type "McPresence")
+  (parameters
+    '("const-gchar*" "str")
   )
 )
 

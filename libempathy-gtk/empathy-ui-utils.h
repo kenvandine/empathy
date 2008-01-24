@@ -37,7 +37,6 @@
 #include <libmissioncontrol/mc-account.h>
 #include <libmissioncontrol/mc-profile.h>
 
-#include <libempathy/empathy-presence.h>
 #include <libempathy/empathy-contact.h>
 #include <libempathy/empathy-avatar.h>
 
@@ -68,8 +67,7 @@ void            empathy_glade_setup_size_group          (GladeXML         *gui,
 							 ...);
 /* Pixbufs */
 const gchar * empathy_icon_name_from_account            (McAccount        *account);
-const gchar * empathy_icon_name_for_presence_state      (McPresence        state);
-const gchar * empathy_icon_name_for_presence            (EmpathyPresence  *presence);
+const gchar * empathy_icon_name_for_presence            (McPresence        presence);
 const gchar * empathy_icon_name_for_contact             (EmpathyContact   *contact);
 GdkPixbuf *   empathy_pixbuf_from_data                  (gchar            *data,
 							 gsize             data_size);

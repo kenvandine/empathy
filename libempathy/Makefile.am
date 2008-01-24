@@ -18,7 +18,6 @@ lib_LTLIBRARIES = libempathy.la
 libempathy_la_SOURCES =					\
 	empathy-avatar.c				\
 	empathy-time.c					\
-	empathy-presence.c				\
 	empathy-status-presets.c			\
 	empathy-debug.c					\
 	empathy-utils.c					\
@@ -55,7 +54,6 @@ libempathy_la_LDFLAGS =		\
 libempathy_headers =				\
 	empathy-avatar.h			\
 	empathy-time.h				\
-	empathy-presence.h			\
 	empathy-status-presets.h		\
 	empathy-debug.h				\
 	empathy-utils.h				\

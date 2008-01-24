@@ -345,7 +345,7 @@ empathy_idle_get_status (EmpathyIdle *idle)
 	priv = GET_PRIV (idle);
 
 	if (!priv->status) {
-		return empathy_presence_state_get_default_status (priv->state);
+		return empathy_presence_get_default_message (priv->state);
 	}
 
 	return priv->status;
@@ -407,7 +407,7 @@ empathy_idle_set_presence (EmpathyIdle *idle,
 	}
 
 	/* Do not set translated default messages */
-	default_status = empathy_presence_state_get_default_status (state);
+	default_status = empathy_presence_get_default_message (state);
 	if (status && strcmp (status, default_status) == 0) {
 		status = NULL;
 	}
