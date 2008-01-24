@@ -14,6 +14,7 @@ Makefile
 *.bak
 *~
 *.pyc
+*.loT
 
 ChangeLog
 stamp-h1
