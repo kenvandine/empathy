@@ -1,3 +1,7 @@
+2008-01-31  Djihed Afifi <djihed@gmail.com> 
+
+	* ar.po: Updated Arabic Translation by Djihed Afifi.
+
 ChangeLog is now generated from SVN logs. Simply commit with a message like that:
 
 Updated <lang> translation (<name>).
