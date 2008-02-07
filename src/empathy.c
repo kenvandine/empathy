@@ -100,7 +100,6 @@ create_salut_account (void)
 	EBook      *book;
 	EContact   *contact;
 	gchar      *nickname = NULL;
-	gchar      *published_name = NULL;
 	gchar      *first_name = NULL;
 	gchar      *last_name = NULL;
 	gchar      *email = NULL;
@@ -152,39 +151,31 @@ create_salut_account (void)
 	mc_account_set_display_name (account, _("People nearby"));
 	
 	nickname = e_contact_get (contact, E_CONTACT_NICKNAME);
-	published_name = e_contact_get (contact, E_CONTACT_FULL_NAME);
 	first_name = e_contact_get (contact, E_CONTACT_GIVEN_NAME);
 	last_name = e_contact_get (contact, E_CONTACT_FAMILY_NAME);
 	email = e_contact_get (contact, E_CONTACT_EMAIL_1);
 	jid = e_contact_get (contact, E_CONTACT_IM_JABBER_HOME_1);
 	
-	if (G_STR_EMPTY (nickname) || !tp_strdiff (nickname, "nickname")) {
+	if (!tp_strdiff (nickname, "nickname")) {
 		g_free (nickname);
-		nickname = g_strdup (g_get_user_name ());
-	}
-	if (G_STR_EMPTY (published_name)) {
-		g_free (published_name);
-		published_name = g_strdup (g_get_real_name ());
+		nickname = NULL;
 	}
 
 	empathy_debug (DEBUG_DOMAIN, "Salut account created:\n"
 				     "  nickname=%s\n"
-				     "  published-name=%s\n"
 				     "  first-name=%s\n"
 				     "  last-name=%s\n"
 				     "  email=%s\n"
 				     "  jid=%s\n",
-		       nickname, published_name, first_name, last_name, email, jid);
+		       nickname, first_name, last_name, email, jid);
 
 	mc_account_set_param_string (account, "nickname", nickname ? nickname : "");
-	mc_account_set_param_string (account, "published-name", published_name ? published_name : "");
 	mc_account_set_param_string (account, "first-name", first_name ? first_name : "");
 	mc_account_set_param_string (account, "last-name", last_name ? last_name : "");
 	mc_account_set_param_string (account, "email", email ? email : "");
 	mc_account_set_param_string (account, "jid", jid ? jid : "");
 
 	g_free (nickname);
-	g_free (published_name);
 	g_free (first_name);
 	g_free (last_name);
 	g_free (email);
