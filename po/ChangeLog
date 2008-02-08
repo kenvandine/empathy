@@ -1,12 +1,11 @@
-2008-01-31  Djihed Afifi <djihed@gmail.com> 
+=== DO NOT EDIT ===
 
-	* ar.po: Updated Arabic Translation by Djihed Afifi.
 
-ChangeLog is now generated from SVN logs. Simply commit with a message like that:
+ChangeLog is now generated from SVN logs. Simply commit with a message in that format:
 
 Updated <lang> translation (<name>).
 
-replace <lang> with the language you are commiting as in the name of the po file,
+Replace <lang> with the language you are commiting as in the name of the po file,
 and replace <name> by the name of the author if different from the name of the committer.
 For example:
 
