@@ -873,7 +873,7 @@ chat_window_call_activate_cb (GtkWidget         *menuitem,
 		chat = EMPATHY_PRIVATE_CHAT (priv->current_chat);
 		contact = empathy_private_chat_get_contact (chat);
 
-		empathy_call_contact (contact);
+		empathy_call_with_contact (contact);
 	}
 }
 

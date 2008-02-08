@@ -1497,6 +1497,6 @@ static void
 contact_list_view_voip_activated (EmpathyContactListView *view,
 				  EmpathyContact         *contact)
 {
-	empathy_call_contact (contact);
+	empathy_call_with_contact (contact);
 }
 

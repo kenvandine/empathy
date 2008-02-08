@@ -88,7 +88,9 @@ gchar *      empathy_inspect_handle                 (McAccount       *account,
 						     guint            handle_type);
 gchar *      empathy_inspect_channel                (McAccount       *account,
 						     TpChan          *tp_chan);
-void         empathy_call_contact                   (EmpathyContact  *contact);
+void         empathy_call_with_contact              (EmpathyContact  *contact);
+void         empathy_call_with_contact_id           (McAccount       *account,
+						     const gchar     *contact_id);
 void         empathy_chat_with_contact              (EmpathyContact  *contact);
 void         empathy_chat_with_contact_id           (McAccount       *account,
 						     const gchar     *contact_id);

@@ -397,61 +397,36 @@ empathy_inspect_handle (McAccount *account,
 }
 
 void
-empathy_call_contact (EmpathyContact *contact)
+empathy_call_with_contact (EmpathyContact  *contact)
 {
 #ifdef HAVE_VOIP
 	MissionControl *mc;
-	McAccount      *account;
-	TpConn         *tp_conn;
-	gchar          *object_path;
-	const gchar    *bus_name;
-	TpChan         *new_chan;
-	EmpathyTpGroup *group;
-	GError         *error = NULL;
-
-	g_return_if_fail (EMPATHY_IS_CONTACT (contact));
-
-	/* StreamedMedia channels must have handle=0 and handle_type=none.
-	 * To call a contact we have to add him in the group interface of the
-	 * channel. MissionControl will detect the channel creation and 
-	 * dispatch it to the VoIP chandler automatically. */
 
 	mc = empathy_mission_control_new ();
-	account = empathy_contact_get_account (contact);
-	tp_conn = mission_control_get_connection (mc, account, NULL);
-	/* FIXME: Should be async */
-	if (!tp_conn_request_channel (DBUS_G_PROXY (tp_conn),
-				      TP_IFACE_CHANNEL_TYPE_STREAMED_MEDIA,
-				      TP_HANDLE_TYPE_NONE,
-				      0,
-				      FALSE,
-				      &object_path,
-				      &error)) {
-		empathy_debug (DEBUG_DOMAIN, 
-			      "Couldn't request channel: %s",
-			      error ? error->message : "No error given");
-		g_clear_error (&error);
-		g_object_unref (mc);
-		g_object_unref (tp_conn);
-		return;
-	}
-
-	bus_name = dbus_g_proxy_get_bus_name (DBUS_G_PROXY (tp_conn));
-	new_chan = tp_chan_new (tp_get_bus (),
-				bus_name,
-				object_path,
-				TP_IFACE_CHANNEL_TYPE_STREAMED_MEDIA,
-				TP_HANDLE_TYPE_NONE,
-				0);
-
-	group = empathy_tp_group_new (account, new_chan);
-	empathy_tp_group_add_member (group, contact, "");
-
-	g_object_unref (group);
+	mission_control_request_channel (mc,
+					 empathy_contact_get_account (contact),
+					 TP_IFACE_CHANNEL_TYPE_STREAMED_MEDIA,
+					 empathy_contact_get_handle (contact),
+					 TP_HANDLE_TYPE_CONTACT,
+					 NULL, NULL);
 	g_object_unref (mc);
-	g_object_unref (tp_conn);
-	g_object_unref (new_chan);
-	g_free (object_path);
+#endif
+}
+
+void
+empathy_call_with_contact_id (McAccount *account, const gchar *contact_id)
+{
+#ifdef HAVE_VOIP
+	MissionControl *mc;
+
+	mc = empathy_mission_control_new ();
+	mission_control_request_channel_with_string_handle (mc,
+							    account,
+							    TP_IFACE_CHANNEL_TYPE_STREAMED_MEDIA,
+							    contact_id,
+							    TP_HANDLE_TYPE_CONTACT,
+							    NULL, NULL);
+	g_object_unref (mc);
 #endif
 }
 
@@ -484,7 +459,6 @@ empathy_chat_with_contact_id (McAccount *account, const gchar *contact_id)
 							    NULL, NULL);
 	g_object_unref (mc);
 }
-
 
 const gchar *
 empathy_presence_get_default_message (McPresence presence)

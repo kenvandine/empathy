@@ -47,8 +47,8 @@ typedef struct {
 	GtkWidget *table_contact;
 	GtkWidget *account_chooser;
 	GtkWidget *entry_id;
-	GtkWidget *button_validate;
-	GtkWidget *button_voip;
+	GtkWidget *button_chat;
+	GtkWidget *button_call;
 } EmpathyNewMessageDialog;
 
 static void
@@ -69,27 +69,11 @@ new_message_dialog_response_cb (GtkWidget               *widget,
 		return;
 	}
 
-	if (response == GTK_RESPONSE_OK) {
-		empathy_chat_with_contact_id (account, id);
+	if (response == 1) {
+		empathy_call_with_contact_id (account, id);
 	}	
-	else if (response == 3) {
-		EmpathyContactFactory *factory;
-		EmpathyContact        *contact = NULL;
-
-		factory = empathy_contact_factory_new ();
-		contact = empathy_contact_factory_get_from_id (factory,
-							       account,
-							       id);
-		if (contact) {
-			empathy_call_contact (contact);
-		} else {
-			empathy_debug (DEBUG_DOMAIN,
-				       "Contact ID %s does not exists",
-				       id);
-		}
-
-		g_object_unref (contact);
-		g_object_unref (factory);
+	else if (response == 2) {
+		empathy_chat_with_contact_id (account, id);
 	}
 
 	g_object_unref (account);
@@ -106,8 +90,8 @@ new_message_change_state_button_cb  (GtkEditable             *editable,
 	id = gtk_entry_get_text (GTK_ENTRY (editable));
 	sensitive = !G_STR_EMPTY (id);
 	
-	gtk_widget_set_sensitive(dialog->button_validate, sensitive);
-	gtk_widget_set_sensitive(dialog->button_voip, sensitive);
+	gtk_widget_set_sensitive (dialog->button_chat, sensitive);
+	gtk_widget_set_sensitive (dialog->button_call, sensitive);
 }
 
 static void
@@ -131,21 +115,21 @@ empathy_new_message_dialog_show (GtkWindow *parent)
 	dialog = g_new0 (EmpathyNewMessageDialog, 1);
 
 	glade = empathy_glade_get_file ("empathy-new-message-dialog.glade",
-				       "new_message_dialog",
-				       NULL,
-				       "new_message_dialog", &dialog->dialog,
-				       "table_contact", &dialog->table_contact,
-				       "entry_id", &dialog->entry_id,
-					"button_validate", &dialog->button_validate,
-					"button_voip",&dialog->button_voip,
-				       NULL);
+				        "new_message_dialog",
+				        NULL,
+				        "new_message_dialog", &dialog->dialog,
+				        "table_contact", &dialog->table_contact,
+				        "entry_id", &dialog->entry_id,
+					"button_chat", &dialog->button_chat,
+					"button_call",&dialog->button_call,
+				        NULL);
 
 	empathy_glade_connect (glade,
-			      dialog,
-			      "new_message_dialog", "destroy", new_message_dialog_destroy_cb,
-			      "new_message_dialog", "response", new_message_dialog_response_cb,
-			      "entry_id", "changed", new_message_change_state_button_cb,
-			      NULL);
+			       dialog,
+			       "new_message_dialog", "destroy", new_message_dialog_destroy_cb,
+			       "new_message_dialog", "response", new_message_dialog_response_cb,
+			       "entry_id", "changed", new_message_change_state_button_cb,
+			       NULL);
 
 	g_object_add_weak_pointer (G_OBJECT (dialog->dialog), (gpointer) &dialog);
 
@@ -166,8 +150,12 @@ empathy_new_message_dialog_show (GtkWindow *parent)
 					      GTK_WINDOW (parent));
 	}
 
-	gtk_widget_set_sensitive(dialog->button_validate, FALSE);
-	gtk_widget_set_sensitive(dialog->button_voip, FALSE);
+	gtk_widget_set_sensitive (dialog->button_chat, FALSE);
+	gtk_widget_set_sensitive (dialog->button_call, FALSE);
+
+#ifndef HAVE_VOIP
+	gtk_widget_hide (dialog->button_call);
+#endif
 
 	gtk_widget_show (dialog->dialog);
 

@@ -1954,8 +1954,8 @@
   )
 )
 
-(define-function empathy_call_contact
-  (c-name "empathy_call_contact")
+(define-function empathy_call_with_contact
+  (c-name "empathy_call_with_contact")
   (return-type "none")
   (parameters
     '("EmpathyContact*" "contact")
