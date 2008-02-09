@@ -17,5 +17,7 @@ ContactManager, TpChatroom and TpContactList implements ContactList interface:
 
 That can be done by applying pyempathy.patch
 
+remove all ephy stuff
+
 3)
 Manually update headers in pyempathy.override and pyempathygtk.override.

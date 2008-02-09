@@ -40,7 +40,6 @@ headers
 #include "empathy-theme-boxes.h"
 #include "empathy-theme-irc.h"
 #include "empathy-ui-utils.h"
-#include "ephy-spinner.h"
 #include "empathy-smiley-manager.h"
 #include "empathy-new-message-dialog.h"
 #include "empathy-call-window.h"
