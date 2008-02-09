@@ -395,20 +395,24 @@ accounts_dialog_model_add_columns (EmpathyAccountsDialog *dialog)
 	view = GTK_TREE_VIEW (dialog->treeview);
 	gtk_tree_view_set_headers_visible (view, TRUE);
 
-	/* Enabled */
+	/* Enabled column */
 	cell = gtk_cell_renderer_toggle_new ();
 	gtk_tree_view_insert_column_with_attributes (view, -1,
-						     NULL, cell,
+						     _("Enabled"),
+						     cell,
 						     "active", COL_ENABLED,
 						     NULL);
 	g_signal_connect (cell, "toggled",
 			  G_CALLBACK (accounts_dialog_enable_toggled_cb),
 			  dialog);
 	
+	/* Account column */
 	column = gtk_tree_view_column_new ();
 	gtk_tree_view_column_set_title (column, _("Accounts"));
+	gtk_tree_view_column_set_expand (column, TRUE);
+	gtk_tree_view_append_column (view, column);
 
-	/* Icon */
+	/* Icon renderer */
 	cell = gtk_cell_renderer_pixbuf_new ();
 	gtk_tree_view_column_pack_start (column, cell, FALSE);
 	gtk_tree_view_column_set_cell_data_func (column, cell,
@@ -417,7 +421,7 @@ accounts_dialog_model_add_columns (EmpathyAccountsDialog *dialog)
 						 dialog,
 						 NULL);
 
-	/* Name */
+	/* Name renderer */
 	cell = gtk_cell_renderer_text_new ();
 	g_object_set (cell,
 		      "ellipsize", PANGO_ELLIPSIZE_END,
@@ -428,9 +432,6 @@ accounts_dialog_model_add_columns (EmpathyAccountsDialog *dialog)
 	g_signal_connect (cell, "edited",
 			  G_CALLBACK (accounts_dialog_name_edited_cb),
 			  dialog);
-
-	gtk_tree_view_column_set_expand (column, TRUE);
-	gtk_tree_view_append_column (view, column);
 }
 
 static void
