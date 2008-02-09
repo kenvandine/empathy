@@ -8,6 +8,7 @@ AM_CPPFLAGS =                                           \
 BUILT_SOURCES = 					\
 	empathy-marshal.h				\
 	empathy-marshal.c				\
+	empathy-marshal.list				\
 	empathy-enum-types.h				\
 	empathy-enum-types.c				\
 	empathy-filter-glue.h				\
@@ -83,6 +84,17 @@ libempathy_includedir = $(includedir)/libempathy/
 libempathy_include_HEADERS =			\
 	$(libempathy_headers)			\
 	empathy-enum-types.h
+
+empathy-marshal.list: $(libempathy_la_SOURCES) Makefile.am
+	( cd $(srcdir) && \
+	sed -n -e 's/.*empathy_marshal_\([[:upper:]]*__[[:upper:]_]*\).*/\1/p' \
+	$(libempathy_la_SOURCES) ) \
+	| sed -e 's/__/:/' -e 'y/_/,/' | sort -u > $@.tmp
+	if cmp -s $@.tmp $@; then \
+		rm $@.tmp; \
+	else \
+		mv $@.tmp $@; \
+	fi
 
 %-marshal.h: %-marshal.list Makefile
 	$(GLIB_GENMARSHAL) --header --prefix=_$(subst -,_,$*)_marshal $< > $*-marshal.h

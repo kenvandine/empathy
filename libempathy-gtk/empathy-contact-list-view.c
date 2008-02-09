@@ -43,7 +43,6 @@
 #include <libempathy/empathy-contact-groups.h>
 #include <libempathy/empathy-debug.h>
 #include <libempathy/empathy-utils.h>
-#include <libempathy/empathy-marshal.h>
 
 #include "empathy-contact-list-view.h"
 #include "empathy-contact-list-store.h"
@@ -57,6 +56,7 @@
 //#include "empathy-ft-window.h"
 #include "empathy-log-window.h"
 #include "empathy-gtk-enum-types.h"
+#include "empathy-gtk-marshal.h"
 
 #define DEBUG_DOMAIN "ContactListView"
 
@@ -322,7 +322,7 @@ empathy_contact_list_view_class_init (EmpathyContactListViewClass *klass)
 			      G_SIGNAL_RUN_LAST,
 			      0,
 			      NULL, NULL,
-			      _empathy_marshal_VOID__OBJECT_STRING_STRING,
+			      _empathy_gtk_marshal_VOID__OBJECT_STRING_STRING,
 			      G_TYPE_NONE,
 			      3, EMPATHY_TYPE_CONTACT, G_TYPE_STRING, G_TYPE_STRING);
 

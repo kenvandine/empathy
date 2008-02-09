@@ -40,7 +40,6 @@
 #include <libempathy/empathy-log-manager.h>
 #include <libempathy/empathy-debug.h>
 #include <libempathy/empathy-utils.h>
-#include <libempathy/empathy-marshal.h>
 
 #include "empathy-chat.h"
 #include "empathy-chat-window.h"
@@ -50,6 +49,7 @@
 #include "empathy-spell.h"
 #include "empathy-spell-dialog.h"
 #include "empathy-ui-utils.h"
+#include "empathy-gtk-marshal.h"
 
 #define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), EMPATHY_TYPE_CHAT, EmpathyChatPriv))
 
@@ -279,7 +279,7 @@ empathy_chat_class_init (EmpathyChatClass *klass)
 			      G_SIGNAL_RUN_LAST,
 			      0,
 			      NULL, NULL,
-			      _empathy_marshal_VOID__OBJECT_BOOLEAN,
+			      _empathy_gtk_marshal_VOID__OBJECT_BOOLEAN,
 			      G_TYPE_NONE,
 			      2, EMPATHY_TYPE_MESSAGE, G_TYPE_BOOLEAN);
 
