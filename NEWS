@@ -1,3 +1,30 @@
+NEW in 0.21.90
+==============
+ - Change "new message" dialog to "new conversation" and make possible to do voip call. (xclaesse).
+ - Try to load dtd and glade files from the srcdir. (xclaesse).
+ - Add a property to have or not groups on EmpathyContactListStore (xclaesse).
+ - Add a features property on EmpathyContactListView to enable/disable each action. (xclaesse).
+ - Add a program to show chat logs (xclaesse).
+ - Add a cancel button on the custom message diaog (xclaesse).
+ - Unset account parameter if user gives an empthy value. (xclaesse).
+ - Show/Hide main window when changing corresponding gcong key. (xclaesse).
+
+Bugs fixed:
+ - Fixed #501467, improve accounts dialog (xclaesse)
+ - Fixed #507840, New UI for Jabber accounts (xclaesse)
+ - Fixed #509906, empathy is showing off-line contacts before on-line ones (xclaesse)
+ - Fixed #511048, Ellipsize error button (xclaesse)
+ - Fixed #511841, account has to be selected to (un)check its checkbox (Carl-Anton Ingmarsson)
+ - Fixed #515008, Nickname should be in the main section of the preferences for salut accounts (Marco Barisione)
+ - Fixed #515010, Do not be automatically set published name for new salut accounts (Marco Barisione)
+ - Fixed #511679, Empathy HEAD doesn't build (Guillaume Desmottes)
+
+Translations:
+ - Updated eu translation (Inaki Larranaga Murgoitio).
+ - Updated Arabic Translation (Djihed Afifi).
+ - Updated Galician Translation. (icq).
+ - Updated Spanish translation (Jorge Gonzalez).
+
 NEW in 0.21.5.2
 ==============
  - Update API documentation generator. (xclaesse).
