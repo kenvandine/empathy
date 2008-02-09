@@ -37,7 +37,6 @@
 #include <libempathy/empathy-idle.h>
 #include <libempathy/empathy-utils.h>
 #include <libempathy/empathy-debug.h>
-#include <libempathy/empathy-marshal.h>
 #include <libempathy/empathy-status-presets.h>
 
 #include "empathy-ui-utils.h"

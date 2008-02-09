@@ -26,7 +26,6 @@
 
 #include <libempathy/empathy-debug.h>
 #include <libempathy/empathy-utils.h>
-#include <libempathy/empathy-marshal.h>
 
 #include "empathy-chat.h"
 #include "empathy-conf.h"

@@ -64,7 +64,8 @@ libempathy_gtk_la_LIBADD =			\
 	$(top_builddir)/libempathy/libempathy.la
 
 libempathy_gtk_la_LDFLAGS =                \
-       -version-info ${LIBEMPATHY_GTK_CURRENT}:${LIBEMPATHY_GTK_REVISION}:${LIBEMPATHY_GTK_AGE}
+       -version-info ${LIBEMPATHY_GTK_CURRENT}:${LIBEMPATHY_GTK_REVISION}:${LIBEMPATHY_GTK_AGE} \
+       -export-symbols-regex ^empathy_
 
 libempathy_gtk_headers =			\
 	empathy-images.h			\

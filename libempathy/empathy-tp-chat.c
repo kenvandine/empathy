@@ -302,7 +302,7 @@ empathy_tp_chat_class_init (EmpathyTpChatClass *klass)
 			      G_SIGNAL_RUN_LAST,
 			      0,
 			      NULL, NULL,
-			      empathy_marshal_VOID__OBJECT_UINT,
+			      _empathy_marshal_VOID__OBJECT_UINT,
 			      G_TYPE_NONE,
 			      2, EMPATHY_TYPE_MESSAGE, G_TYPE_UINT);
 
@@ -312,7 +312,7 @@ empathy_tp_chat_class_init (EmpathyTpChatClass *klass)
 			      G_SIGNAL_RUN_LAST,
 			      0,
 			      NULL, NULL,
-			      empathy_marshal_VOID__OBJECT_UINT,
+			      _empathy_marshal_VOID__OBJECT_UINT,
 			      G_TYPE_NONE,
 			      2, EMPATHY_TYPE_CONTACT, G_TYPE_UINT);
 

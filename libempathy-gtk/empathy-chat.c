@@ -279,7 +279,7 @@ empathy_chat_class_init (EmpathyChatClass *klass)
 			      G_SIGNAL_RUN_LAST,
 			      0,
 			      NULL, NULL,
-			      empathy_marshal_VOID__OBJECT_BOOLEAN,
+			      _empathy_marshal_VOID__OBJECT_BOOLEAN,
 			      G_TYPE_NONE,
 			      2, EMPATHY_TYPE_MESSAGE, G_TYPE_BOOLEAN);
 

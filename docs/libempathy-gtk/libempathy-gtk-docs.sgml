@@ -55,7 +55,6 @@
     <xi:include href="xml/empathy-status-icon.xml"/>
     <xi:include href="xml/empathy-theme-manager.xml"/>
     <xi:include href="xml/empathy-ui-utils.xml"/>
-    <xi:include href="xml/ephy-spinner.xml"/>
     </chapter>
   </part>
 

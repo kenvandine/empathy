@@ -322,7 +322,7 @@ empathy_contact_list_view_class_init (EmpathyContactListViewClass *klass)
 			      G_SIGNAL_RUN_LAST,
 			      0,
 			      NULL, NULL,
-			      empathy_marshal_VOID__OBJECT_STRING_STRING,
+			      _empathy_marshal_VOID__OBJECT_STRING_STRING,
 			      G_TYPE_NONE,
 			      3, EMPATHY_TYPE_CONTACT, G_TYPE_STRING, G_TYPE_STRING);
 

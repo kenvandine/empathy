@@ -21,6 +21,7 @@ CFILE_GLOB=$(top_srcdir)/libempathy-gtk/*.c
 IGNORE_HFILES=				\
 	empathy-gtk-enum-types.h	\
 	stamp-empathy-gtk-enum-types.h	\
+	ephy-spinner.h			\
 	$(NULL)
 
 # CFLAGS and LDFLAGS for compiling scan program. Only needed

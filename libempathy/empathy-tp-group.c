@@ -501,7 +501,7 @@ empathy_tp_group_class_init (EmpathyTpGroupClass *klass)
 			      G_SIGNAL_RUN_LAST,
 			      0,
 			      NULL, NULL,
-			      empathy_marshal_VOID__OBJECT_OBJECT_UINT_STRING,
+			      _empathy_marshal_VOID__OBJECT_OBJECT_UINT_STRING,
 			      G_TYPE_NONE,
 			      4, EMPATHY_TYPE_CONTACT, EMPATHY_TYPE_CONTACT, G_TYPE_UINT, G_TYPE_STRING);
 
@@ -511,7 +511,7 @@ empathy_tp_group_class_init (EmpathyTpGroupClass *klass)
 			      G_SIGNAL_RUN_LAST,
 			      0,
 			      NULL, NULL,
-			      empathy_marshal_VOID__OBJECT_OBJECT_UINT_STRING,
+			      _empathy_marshal_VOID__OBJECT_OBJECT_UINT_STRING,
 			      G_TYPE_NONE,
 			      4, EMPATHY_TYPE_CONTACT, EMPATHY_TYPE_CONTACT, G_TYPE_UINT, G_TYPE_STRING);
 
@@ -521,7 +521,7 @@ empathy_tp_group_class_init (EmpathyTpGroupClass *klass)
 			      G_SIGNAL_RUN_LAST,
 			      0,
 			      NULL, NULL,
-			      empathy_marshal_VOID__OBJECT_OBJECT_UINT_STRING,
+			      _empathy_marshal_VOID__OBJECT_OBJECT_UINT_STRING,
 			      G_TYPE_NONE,
 			      4, EMPATHY_TYPE_CONTACT, EMPATHY_TYPE_CONTACT, G_TYPE_UINT, G_TYPE_STRING);
 
@@ -531,7 +531,7 @@ empathy_tp_group_class_init (EmpathyTpGroupClass *klass)
 			      G_SIGNAL_RUN_LAST,
 			      0,
 			      NULL, NULL,
-			      empathy_marshal_VOID__OBJECT_OBJECT_UINT_STRING,
+			      _empathy_marshal_VOID__OBJECT_OBJECT_UINT_STRING,
 			      G_TYPE_NONE,
 			      4, EMPATHY_TYPE_CONTACT, EMPATHY_TYPE_CONTACT, G_TYPE_UINT, G_TYPE_STRING);
 

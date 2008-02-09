@@ -11,7 +11,8 @@ BUILT_SOURCES = 					\
 	empathy-enum-types.h				\
 	empathy-enum-types.c				\
 	empathy-filter-glue.h				\
-	empathy-chandler-glue.h
+	empathy-chandler-glue.h				\
+	tp-stream-engine-gen.h
 
 lib_LTLIBRARIES = libempathy.la
 
@@ -49,7 +50,8 @@ libempathy_la_LIBADD =		\
 	$(LIBEMPATHY_LIBS)
 
 libempathy_la_LDFLAGS =		\
-	-version-info ${LIBEMPATHY_CURRENT}:${LIBEMPATHY_REVISION}:${LIBEMPATHY_AGE}
+       -version-info ${LIBEMPATHY_CURRENT}:${LIBEMPATHY_REVISION}:${LIBEMPATHY_AGE} \
+       -export-symbols-regex ^empathy_
 
 libempathy_headers =				\
 	empathy-avatar.h			\
@@ -75,8 +77,7 @@ libempathy_headers =				\
 	empathy-chandler.h			\
 	empathy-filter.h			\
 	empathy-idle.h				\
-	empathy-log-manager.h			\
-	tp-stream-engine-gen.h
+	empathy-log-manager.h
 
 libempathy_includedir = $(includedir)/libempathy/
 libempathy_include_HEADERS =			\
@@ -84,11 +85,11 @@ libempathy_include_HEADERS =			\
 	empathy-enum-types.h
 
 %-marshal.h: %-marshal.list Makefile
-	$(GLIB_GENMARSHAL) --header --prefix=$(subst -,_,$*)_marshal $< > $*-marshal.h
+	$(GLIB_GENMARSHAL) --header --prefix=_$(subst -,_,$*)_marshal $< > $*-marshal.h
 
 %-marshal.c: %-marshal.list Makefile
 	echo "#include \"empathy-marshal.h\"" > $@ && \
-	$(GLIB_GENMARSHAL) --body --prefix=$(subst -,_,$*)_marshal $< >> $*-marshal.c
+	$(GLIB_GENMARSHAL) --body --prefix=_$(subst -,_,$*)_marshal $< >> $*-marshal.c
 
 empathy-chandler-glue.h: empathy-chandler.xml Makefile
 	$(LIBTOOL) --mode=execute $(DBUS_BINDING_TOOL) --prefix=empathy_chandler --mode=glib-server --output=$@ $<

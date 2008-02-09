@@ -22,5 +22,4 @@ empathy_theme_boxes_get_type
 empathy_theme_get_type
 empathy_theme_irc_get_type
 empathy_theme_manager_get_type
-ephy_spinner_get_type
 

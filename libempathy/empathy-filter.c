@@ -78,7 +78,7 @@ empathy_filter_class_init (EmpathyFilterClass *klass)
 			      G_SIGNAL_RUN_LAST,
 			      0,
 			      NULL, NULL,
-			      empathy_marshal_VOID__OBJECT_OBJECT,
+			      _empathy_marshal_VOID__OBJECT_OBJECT,
 			      G_TYPE_NONE,
 			      2, TELEPATHY_CONN_TYPE, TELEPATHY_CHAN_TYPE);
 
@@ -88,7 +88,7 @@ empathy_filter_class_init (EmpathyFilterClass *klass)
 			      G_SIGNAL_RUN_LAST,
 			      0,
 			      NULL, NULL,
-			      empathy_marshal_VOID__UINT_BOOLEAN,
+			      _empathy_marshal_VOID__UINT_BOOLEAN,
 			      G_TYPE_NONE,
 			      2, G_TYPE_UINT, G_TYPE_BOOLEAN);
 
