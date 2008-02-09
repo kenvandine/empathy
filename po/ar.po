@@ -7,13 +7,15 @@
 # Arafat Medini <lumina@silverpen.de>, 2004.
 # Abdulaziz Al-Arfaj <alarfaj0@yahoo.com>, 2004.
 # Khaled Hosny <khaledhosny@eglug.org>, 2006.
+# Abou Manal <aboumanal@gmail.com>, 2008.
+# Djihed Afifi<djihed@gmail.com, 2008.
 msgid ""
 msgstr ""
 "Project-Id-Version: gossip.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-01-31 08:06+0000\n"
-"PO-Revision-Date: 2007-12-23 13:25+0100\n"
-"Last-Translator: Djihed Afifi <djihed@gmail.com>\n"
+"POT-Creation-Date: 2008-02-09 22:44+0000\n"
+"PO-Revision-Date: 2008-02-09 22:41+0100\n"
+"Last-Translator: Abou Manal <aboumanal@gmail.com>\n"
 "Language-Team: Arabic <support@eglug.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -32,22 +34,21 @@ msgstr "ارسل و استقبل رسائل فورية"
 
 #: ../data/empathy.schemas.in.h:1
 msgid "Always open a separate chat window for new chats."
-msgstr ""
+msgstr "افتح دائما نافذة دردشة منفصلة للدردشات الجديدة."
 
 #: ../data/empathy.schemas.in.h:2
 msgid ""
 "Character to add after nickname when using nick completion (tab) in group "
 "chat."
-msgstr ""
+msgstr "المِحرف المضاف للكنية عند استعمال (tab) تكملة الكنية في مجموعة الدردشة."
 
 #: ../data/empathy.schemas.in.h:3
 msgid "Chat window theme"
 msgstr "تيمة نافذة الدردشة"
 
 #: ../data/empathy.schemas.in.h:4
-#, fuzzy
 msgid "Checks if Empathy should autoconnect on startup"
-msgstr "أي حساب سيوصل به عند بدء التَّشغيل"
+msgstr "تحقَّق إذا كان على أمبثي الاتصال آليا عند بدء التَّشغيل"
 
 #: ../data/empathy.schemas.in.h:5
 msgid "Checks if NetworkManager should be used"
@@ -55,12 +56,14 @@ msgstr "تحقق من وجوب استخدام NetworkManager"
 
 #: ../data/empathy.schemas.in.h:6
 msgid "Checks if Salut account is created"
-msgstr ""
+msgstr "تحقق إذا كان حساب Salut قد أنشىء"
 
 #: ../data/empathy.schemas.in.h:7
 msgid ""
 "Comma separated list of spell checker languages to use (e.g. en, fr, nl)."
 msgstr ""
+"لائحة عناصرها مُفرقة بالفاصلة للغات المدقق الاملائي قصد الاستخدام (مثال  en, "
+"fr, nl)."
 
 #: ../data/empathy.schemas.in.h:8
 msgid "Compact contact list"
@@ -72,11 +75,11 @@ msgstr "معيار ترتيب قائمة المراسلين"
 
 #: ../data/empathy.schemas.in.h:10
 msgid "Default directory to select an avatar image from"
-msgstr ""
+msgstr "المجلد الافتراضي الذي سيُختار منه صورة الأفاتار"
 
 #: ../data/empathy.schemas.in.h:11
 msgid "Enable popup when contact is available"
-msgstr ""
+msgstr "تمكين النافذة المنبثقة حين تواجد المرَاسل"
 
 #: ../data/empathy.schemas.in.h:12
 msgid "Enable sound when away"
@@ -99,13 +102,12 @@ msgid "Hide the main window."
 msgstr "إخفاء النَّافذة الرَّئيسيَّة."
 
 #: ../data/empathy.schemas.in.h:17
-#, fuzzy
 msgid "Nick completed character"
-msgstr "ترمي_ز المحارف الافتراضي:"
+msgstr "مِحرف الكنية التام"
 
 #: ../data/empathy.schemas.in.h:18
 msgid "Open new chats in separate windows"
-msgstr ""
+msgstr "افتح الدردشات الجديدة في نوافذ منفصلة"
 
 #: ../data/empathy.schemas.in.h:19
 msgid "Show avatars"
@@ -113,7 +115,7 @@ msgstr "أعرض الأفاتارات"
 
 #: ../data/empathy.schemas.in.h:20
 msgid "Show hint about closing the main window"
-msgstr ""
+msgstr "أظهر التلميحة حول إغلاق النافذة الرئيسية"
 
 #: ../data/empathy.schemas.in.h:21
 msgid "Show offline contacts"
@@ -125,11 +127,11 @@ msgstr "لغات التدقيق الهجائي"
 
 #: ../data/empathy.schemas.in.h:23
 msgid "The last directory that an avatar image was chosen from."
-msgstr ""
+msgstr "آخر مجلد الذي اخْتِير منه صورة الأفاتار."
 
 #: ../data/empathy.schemas.in.h:24
 msgid "The theme that is used to display the conversation in chat windows."
-msgstr ""
+msgstr "السِمة المستخدمة لعرض المحادثة في نوافذ الدردشة."
 
 #: ../data/empathy.schemas.in.h:25
 msgid "Use graphical smileys"
@@ -148,23 +150,27 @@ msgid ""
 "Whether or not Empathy should automatically login to your accounts on "
 "startup."
 msgstr ""
+"فيما إذا كان ينبغي على أمبثي الولوج آليا إلى حساباتك عند بدء التشغيل أم لا."
 
 #: ../data/empathy.schemas.in.h:29
 msgid ""
 "Whether or not the Salut account has been created on the first empathy run."
-msgstr ""
+msgstr "فيما إذا كان حساب Salut قد أُنشِئ عند أول تشغيل لِأمبثي. "
 
 #: ../data/empathy.schemas.in.h:30
 msgid ""
 "Whether or not the network manager should be used to automatically "
 "disconnect/reconnect."
 msgstr ""
+"فيما إذا كان مدير الشبكة سيُستخدم آليا لقطع الاتصال/إعادة الاتصال أم لا."
 
 #: ../data/empathy.schemas.in.h:31
 msgid ""
 "Whether or not to check words typed against the languages you want to check "
 "with."
 msgstr ""
+"فيما ينبغي أم لا التأكد من الكلمات المكتوبة مقابل اللغات التي ترغب التأكد "
+"بواسطتها. "
 
 #: ../data/empathy.schemas.in.h:32
 msgid ""
@@ -184,16 +190,16 @@ msgid "Whether or not to play sounds when busy."
 msgstr "فيما إذا سيصدر صوت عندما أكون مشغولاً."
 
 #: ../data/empathy.schemas.in.h:36
-#, fuzzy
 msgid "Whether or not to show a popup when a contact becomes available."
-msgstr "فيما إذا سيصدر صوت عند وصول الرَّسائل."
+msgstr "فيما إذا ستعرض نافذة منبثقة أم لا عندما يتوفر مراسل."
 
 #: ../data/empathy.schemas.in.h:37
-#, fuzzy
 msgid ""
 "Whether or not to show avatars for contacts in the contact list and chat "
 "windows."
-msgstr "فيما إذا سيظهر المراسلين الغير متَّصلين في قائمة المراسَلين."
+msgstr ""
+"فيما إذا سيظهر أم لا أفاتارات للمراسلين الموجودين في قائمة المراسَلين ونوافذ "
+"الدردشة."
 
 #: ../data/empathy.schemas.in.h:38
 msgid "Whether or not to show contacts that are offline in the contact list."
@@ -204,15 +210,16 @@ msgid ""
 "Whether or not to show the message dialog about closing the main window with "
 "the 'x' button in the title bar."
 msgstr ""
+"فيما إذا كان ينبغي إظهار حوار الرسالة حول إغلاق النافذة الرئيسية بزر 'x' من "
+"على شريط العنوان أم لا."
 
 #: ../data/empathy.schemas.in.h:40
-#, fuzzy
 msgid "Whether to show the contact list in compact mode or not."
-msgstr "فيما إذا سيظهر المراسلين الغير متَّصلين في قائمة المراسَلين."
+msgstr "فيما إذا سيظهر قائمة المراسَلين في وضع مدمج أم لا."
 
 #: ../data/empathy.schemas.in.h:41
 msgid "Whether to use the theme for chat rooms or not."
-msgstr ""
+msgstr "أتُستخدم السِمة لغرف الدردشة أم لا."
 
 #: ../data/empathy.schemas.in.h:42
 msgid ""
@@ -220,28 +227,30 @@ msgid ""
 "by the contact's name with the value \"name\". A value of \"state\" will "
 "sort the contact list by state."
 msgstr ""
+"أي معيار سيُستخدم لفرز لائحة المراسلين. المفترض استخدام الفرز بواسطة اسم "
+"المراسل بقيمة \"name\". أما قيمة \"state\" فستُفرز الائحة بواسطة الولاية."
 
-#: ../libempathy/empathy-tp-contact-list.c:724 ../src/empathy.c:152
+#: ../libempathy/empathy-tp-contact-list.c:724 ../src/empathy.c:151
 msgid "People nearby"
 msgstr "الأشخاص القريبون"
 
-#: ../libempathy/empathy-utils.c:494
+#: ../libempathy/empathy-utils.c:468
 msgid "Available"
 msgstr "متوفّر"
 
-#: ../libempathy/empathy-utils.c:496
+#: ../libempathy/empathy-utils.c:470
 msgid "Busy"
 msgstr "مشغول"
 
-#: ../libempathy/empathy-utils.c:499
+#: ../libempathy/empathy-utils.c:473
 msgid "Away"
 msgstr "غائب"
 
-#: ../libempathy/empathy-utils.c:501
+#: ../libempathy/empathy-utils.c:475
 msgid "Hidden"
 msgstr "مخفي"
 
-#: ../libempathy/empathy-utils.c:504
+#: ../libempathy/empathy-utils.c:478
 msgid "Offline"
 msgstr "غير متصل"
 
@@ -306,12 +315,12 @@ msgstr "<b>متقدم</b>"
 
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:2
 msgid "<b>Override  server settings</b>"
-msgstr ""
+msgstr "<b>تجاوز إعدادات الخادم</b>"
 
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:3
 #: ../libempathy-gtk/empathy-account-widget-msn.glade.h:2
 msgid "Forget password and clear the entry."
-msgstr ""
+msgstr "انسَ كلمة المرور وامْحُ المدخلة."
 
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:4
 #: ../libempathy-gtk/empathy-account-widget-msn.glade.h:3
@@ -324,27 +333,24 @@ msgid "Pass_word:"
 msgstr "كلمة الم_رور:"
 
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:6
-#, fuzzy
 msgid "Pri_ority:"
-msgstr "الأولويّة:"
+msgstr "الأو_لويّة:"
 
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:7
 msgid "Reso_urce:"
 msgstr "الم_ورد:"
 
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:8
-#, fuzzy
 msgid "Use old SS_L"
-msgstr "إستعمل ال_تشفير  (SSL)"
+msgstr "إستعمل التشفير القديم SS_L"
 
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:9
 msgid "_Encryption required (TLS/SSL)"
-msgstr ""
+msgstr "مطلوب ال_تشفير (TLS/SSL )"
 
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:10
-#, fuzzy
 msgid "_Ignore SSL certificate errors"
-msgstr "خطأ في الشهادة"
+msgstr "_تجاهل أخطاء شهادة SSL"
 
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:11
 #: ../libempathy-gtk/empathy-account-widget-msn.glade.h:5
@@ -399,12 +405,14 @@ msgid ""
 "To add a new account, you can click on the 'Add' button and a new entry will "
 "be created for you to start configuring."
 msgstr ""
+"لإظافة حساب جديد، يمكنك النقر على زر ‘أظف‘ فتُنشأ مُدخلة جديدة لتبدأ بتشكيلها."
 
 #: ../libempathy-gtk/empathy-accounts-dialog.c:231
 msgid ""
 "To add a new account, you first have to install a backend for each protocol "
 "you want to use."
 msgstr ""
+"لإظافة حساب جديد، عليك أولا بتثبيت منتهى خلفي لكل بروتوكول تود استعماله."
 
 #: ../libempathy-gtk/empathy-accounts-dialog.c:238
 #: ../libempathy-gtk/empathy-accounts-dialog.glade.h:2
@@ -418,24 +426,34 @@ msgid ""
 "If you do not want to add an account, simply click on the account you want "
 "to configure in the list on the left."
 msgstr ""
+"\n"
+"\n"
+"إذا لم تكن ترغب في إظافة حساب، فانقر فقط على الحساب الذي ترغب في تشكيله من "
+"الائحة على اليسار."
 
 #: ../libempathy-gtk/empathy-accounts-dialog.c:245
 msgid "<b>No Accounts Configured</b>"
 msgstr "<b>لم تتم تهيئة أيّ حساب</b>"
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:399
+#: ../libempathy-gtk/empathy-accounts-dialog.c:401
+msgid "Enabled"
+msgstr "مفعّل"
+
+#: ../libempathy-gtk/empathy-accounts-dialog.c:411
 #: ../libempathy-gtk/empathy-accounts-dialog.glade.h:4
 msgid "Accounts"
 msgstr "حسابات"
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:891
+#: ../libempathy-gtk/empathy-accounts-dialog.c:894
 #, c-format
 msgid ""
 "You are about to remove your %s account!\n"
 "Are you sure you want to proceed?"
 msgstr ""
+"إنك علة وشك إزالة حسابك %s!\n"
+"أمُتأكد أنك ترغب في إتمام العملية؟"
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:897
+#: ../libempathy-gtk/empathy-accounts-dialog.c:900
 msgid ""
 "Any associated conversations and chat rooms will NOT be removed if you "
 "decide to proceed.\n"
@@ -443,6 +461,9 @@ msgid ""
 "Should you decide to add the account back at a later time, they will still "
 "be available."
 msgstr ""
+"لن تُزال أي محادثات أو غرف دردشة إذا قررت إتمام العملية.\n"
+"\n"
+"إذا ما قررت إظافة الحساب لاحقا، سيبقون متوفرين. "
 
 #: ../libempathy-gtk/empathy-accounts-dialog.glade.h:1
 msgid "<b>New Account</b>"
@@ -464,6 +485,11 @@ msgid ""
 "If you do not want to add an account, simply click on the account you want "
 "to configure in the list on the left."
 msgstr ""
+"لإظافة حساب جديد، يمكنك النقر على زر ‘أظف‘ فتُنشأ مُدخلة جديدة لتبدأ "
+"بتشكيلها.\n"
+"\n"
+"إذا لم تكن ترغب في إظافة حساب، فانقر فقط على الحساب الذي ترغب في تشكيله من "
+"الائحة على اليسار. "
 
 #: ../libempathy-gtk/empathy-accounts-dialog.glade.h:9
 msgid "Type:"
@@ -492,9 +518,10 @@ msgstr "انقر للتكبير"
 #: ../libempathy-gtk/empathy-call-window.c:116
 #, c-format
 msgid "Call from %s"
-msgstr ""
+msgstr "مكالمة من %s"
 
 #: ../libempathy-gtk/empathy-call-window.glade.h:1
+#: ../libempathy-gtk/empathy-new-message-dialog.glade.h:2
 msgid "Call"
 msgstr "اتصال"
 
@@ -576,6 +603,7 @@ msgid "Change _Topic..."
 msgstr "_موضوع جديد..."
 
 #: ../libempathy-gtk/empathy-chat.glade.h:4
+#: ../libempathy-gtk/empathy-new-message-dialog.glade.h:3
 msgid "Chat"
 msgstr "دردشة"
 
@@ -622,7 +650,7 @@ msgstr "اختر من تريد دعوته"
 
 #: ../libempathy-gtk/empathy-chat.glade.h:15
 msgid "You have been invited to join a chat conference."
-msgstr ""
+msgstr "لقد استُدعيت للانضمام إلى اجتماع دردشة. "
 
 #: ../libempathy-gtk/empathy-chat.glade.h:16
 #: ../libempathy-gtk/empathy-main-window.glade.h:9
@@ -742,7 +770,7 @@ msgstr "انضم للغرفة عند بدء التشغيل"
 
 #: ../libempathy-gtk/empathy-chatrooms-window.glade.h:4
 msgid "Join this chat room when Empathy starts and you are connected"
-msgstr ""
+msgstr "انضم إلى غرفة الدردشة هاته حين يبدأ أومبثي وها أنت متصَل"
 
 #: ../libempathy-gtk/empathy-chatrooms-window.glade.h:5
 msgid "Manage Favorite Rooms"
@@ -823,11 +851,8 @@ msgid "Rename"
 msgstr "أعِد التسمية"
 
 #: ../libempathy-gtk/empathy-contact-list-view.c:217
-#, fuzzy
 msgid "Edit the groups and name for this contact"
-msgstr ""
-"الرجاء إدخال كنية جديدة للمراسَل\n"
-"%s"
+msgstr "حرر المجموعات والاسم لهذا المرَاسل"
 
 #: ../libempathy-gtk/empathy-contact-list-view.c:221
 msgid "_Remove"
@@ -843,7 +868,7 @@ msgstr "ادعو الى غرفة المحادثة"
 
 #: ../libempathy-gtk/empathy-contact-list-view.c:225
 msgid "Invite to a currently open chat room"
-msgstr ""
+msgstr "استدعِ إلى غرفة دردشة مفتوحة حاليا"
 
 #: ../libempathy-gtk/empathy-contact-list-view.c:229
 msgid "_Send File..."
@@ -862,13 +887,12 @@ msgid "_Call"
 msgstr "_اتصال"
 
 #: ../libempathy-gtk/empathy-contact-list-view.c:238
-#, fuzzy
 msgid "Start a voice or video conversation with this contact"
-msgstr "ّم_حادثَة"
+msgstr "ابدأ محادثة صوتية أو فيديوية مع هذا المراسل"
 
 #: ../libempathy-gtk/empathy-contact-list-view.c:1469
 msgid "Sorry, I don't want you in my contact list anymore."
-msgstr ""
+msgstr "آسف، ولكن لا أرغب بك في لائحة مراسليَّ بعد الآن."
 
 #: ../libempathy-gtk/empathy-contact-widget.c:688
 msgid "Select"
@@ -936,6 +960,8 @@ msgid ""
 "Select the groups you want this contact to appear in, you can select more "
 "than one group or no groups."
 msgstr ""
+"انْتقِ المجموعات التي تود أن يظهر فيها هذا المراسَل، يمكنك انتقاء أكثر من "
+"مجموعة أو لا مجموعة."
 
 #: ../libempathy-gtk/empathy-contact-widget.glade.h:16
 msgid "Version:"
@@ -1021,12 +1047,16 @@ msgstr "تصفّح:"
 msgid ""
 "Enter the room name to join here or click on one or more rooms in the list."
 msgstr ""
+"أدخِل هنا اسم الغرفة التي تود الانضمام إليها أو انقر غرفة واحدة أو أكثر في "
+"الائحة."
 
 #: ../libempathy-gtk/empathy-new-chatroom-dialog.glade.h:4
 msgid ""
 "Enter the server which hosts the room, or leave it empty if the room is on "
 "the current account's server"
 msgstr ""
+"أدخِل الخادم الذي يستضيف الغرفة، أو اتركه فارغا إذا كانت الغرفة على خادم "
+"الحساب الحالي"
 
 #: ../libempathy-gtk/empathy-new-chatroom-dialog.glade.h:5
 msgid "Join"
@@ -1043,7 +1073,7 @@ msgstr "تح_ديث"
 #: ../libempathy-gtk/empathy-new-chatroom-dialog.glade.h:8
 msgid ""
 "This list represents all chat rooms hosted on the server you have entered."
-msgstr ""
+msgstr "هذه الائحة تمثل كل الغرف المُستضافة على الخادم الذي أدخلت اسمه."
 
 #: ../libempathy-gtk/empathy-main-window.c:266
 msgid "Show and edit accounts"
@@ -1054,9 +1084,8 @@ msgid "Contact"
 msgstr "مراسَل"
 
 #: ../libempathy-gtk/empathy-main-window.c:813
-#, fuzzy
 msgid "_Edit account"
-msgstr "إسم الحساب:"
+msgstr "_حرِّرْ الحساب"
 
 #: ../libempathy-gtk/empathy-main-window.c:896
 msgid "Network error"
@@ -1142,8 +1171,8 @@ msgstr "_حسابات"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:14
 #: ../libempathy-gtk/empathy-status-icon.glade.h:2
-msgid "_New Message..."
-msgstr "_رسالة جديدة..."
+msgid "_New Conversation..."
+msgstr "م_حادثة جديدة..."
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:15
 msgid "_Personal Information"
@@ -1159,13 +1188,13 @@ msgstr "ال_تَّفضيلات"
 msgid "_Quit"
 msgstr "أ_نه"
 
-#: ../libempathy-gtk/empathy-new-message-dialog.glade.h:2
+#: ../libempathy-gtk/empathy-new-message-dialog.glade.h:4
 msgid "Contact ID:"
 msgstr "هويّة المراسَل:"
 
-#: ../libempathy-gtk/empathy-new-message-dialog.glade.h:3
-msgid "New message"
-msgstr "رسالة جديدة"
+#: ../libempathy-gtk/empathy-new-message-dialog.glade.h:5
+msgid "New Conversation"
+msgstr "محادثة جديدة"
 
 #: ../libempathy-gtk/empathy-preferences.c:247
 msgid "Language"
@@ -1200,20 +1229,20 @@ msgid "<b>Visual</b>"
 msgstr "<b>مرئي</b>"
 
 #: ../libempathy-gtk/empathy-preferences.glade.h:8
-#, fuzzy
 msgid ""
 "<small>The list of languages reflects only the languages for which you have "
 "a dictionary installed.</small>"
-msgstr "قائمة اللغات الموجودة هنا لا تعكس إلا اللغات التي يوجد لها قاموس مركب."
+msgstr ""
+"<small>قائمة اللغات الموجودة هنا لا تظهر إلا اللغات التي يوجد لها قاموس مركب."
+"</small>"
 
 #: ../libempathy-gtk/empathy-preferences.glade.h:9
-#, fuzzy
 msgid "Automatically _connect on startup "
-msgstr "لا تتَّصل عند بدء التَّشغيل"
+msgstr "_اتَّصل آليا عند بدء التَّشغيل"
 
 #: ../libempathy-gtk/empathy-preferences.glade.h:10
 msgid "Avatars are user chosen images shown in the contact list"
-msgstr ""
+msgstr "الأفاتارات هي الصور التي اختار المستخدم والظاهرة في لائحة المراسَل"
 
 #: ../libempathy-gtk/empathy-preferences.glade.h:11
 msgid "Chat Th_eme:"
@@ -1221,7 +1250,7 @@ msgstr "_سمة المحادثة:"
 
 #: ../libempathy-gtk/empathy-preferences.glade.h:12
 msgid "Display notifications when contacts come _online"
-msgstr ""
+msgstr "اعرض الاشعارات عندما يصبح المراسَلون متصلين "
 
 #: ../libempathy-gtk/empathy-preferences.glade.h:13
 msgid "Enable sounds when _away"
@@ -1273,7 +1302,7 @@ msgstr "السِمات"
 
 #: ../libempathy-gtk/empathy-preferences.glade.h:25
 msgid "_Open new chats in separate windows"
-msgstr ""
+msgstr "_افتح غرف الدردشة الجديدة في نوافذ منفصلة"
 
 #: ../libempathy-gtk/empathy-preferences.glade.h:26
 msgid "_Play sound when messages arrive"
@@ -1284,7 +1313,7 @@ msgid "_Use for chat rooms"
 msgstr "ا_ستعمال لغرف المحادثة"
 
 #. Custom messages
-#: ../libempathy-gtk/empathy-presence-chooser.c:692
+#: ../libempathy-gtk/empathy-presence-chooser.c:691
 msgid "Custom messages..."
 msgstr "الرسائل المخصصة..."
 
@@ -1385,11 +1414,11 @@ msgstr "أزرق"
 #: ../megaphone/data/GNOME_Megaphone_Applet.schemas.in.h:1
 msgid ""
 "The contact to display in the applet. Empty means no contact is displayed."
-msgstr ""
+msgstr "المراسَل الذي سيعرض في البريمج. فارغ يعني لم يتم عرض أي مراسَل. "
 
 #: ../megaphone/data/GNOME_Megaphone_Applet.schemas.in.h:2
 msgid "The contact's avatar token. Empty means contact has no avatar."
-msgstr ""
+msgstr "أمارة أفاتار المراسَل. إذا كانت فارغة فهذا يعني أن المراسَل بدون أفاتار."
 
 #: ../megaphone/data/GNOME_Megaphone_Applet.server.in.in.h:1
 msgid "Megaphone"
@@ -1413,15 +1442,18 @@ msgstr "الوجود"
 msgid "Set your own presence"
 msgstr "اضبط وجودك"
 
-#: ../src/empathy.c:216
+#: ../src/empathy.c:207
 msgid "- Empathy Instant Messenger"
 msgstr "- مرسال أمبثي"
 
+#~ msgid "_New Message..."
+#~ msgstr "_رسالة جديدة..."
+
+#~ msgid "New message"
+#~ msgstr "رسالة جديدة"
+
 #~ msgid "Disable"
 #~ msgstr "عطّل"
-
-#~ msgid "Enable"
-#~ msgstr "فعّل"
 
 #~ msgid "Edit Account _Details"
 #~ msgstr "حرّر تفاصيل الحساب"
