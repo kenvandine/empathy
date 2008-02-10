@@ -122,6 +122,8 @@ tp_contact_factory_presences_table_foreach (const gchar    *state_str,
 	if (message != NULL) {
 		empathy_contact_set_presence_message (contact,
 						      g_value_get_string (message));
+	} else {
+		empathy_contact_set_presence_message (contact, NULL);
 	}
 }
 
