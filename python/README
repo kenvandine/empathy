@@ -5,19 +5,7 @@ To update python binding:
   $ python /usr/share/pygtk/2.0/codegen/h2def.py libempathy-gtk/*.h > python/pyempathygtk/pyempathygtk.defs
 
 2)
-Manually modify pyempathy.defs, ContactList is not an object but an interface:
-(define-interface ContactList
-  (in-module "Empathy")
-  (c-name "EmpathyContactList")
-  (gtype-id "EMPATHY_TYPE_CONTACT_LIST")
-)
-
-ContactManager, TpChatroom and TpContactList implements ContactList interface:
-  (implements "EmpathyContactList")
-
-That can be done by applying pyempathy.patch
-
-remove all ephy stuff
+Apply pyempathy.patch and pyempathygtk.patch
 
 3)
 Manually update headers in pyempathy.override and pyempathygtk.override.
