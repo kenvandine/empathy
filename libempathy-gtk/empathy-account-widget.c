@@ -77,15 +77,13 @@ account_widget_int_changed_cb (GtkWidget *widget,
 	param_name = g_object_get_data (G_OBJECT (widget), "param_name");
 
 	if (value == 0) {
-		gint val;
-
 		mc_account_unset_param (account, param_name);
-		mc_account_get_param_int (account, param_name, &val);
-		empathy_debug (DEBUG_DOMAIN, "Unset %s and restore to %d", param_name, val);
-		gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), val);
+		mc_account_get_param_int (account, param_name, &value);
+		empathy_debug (DEBUG_DOMAIN, "Unset %s and restore to %d", param_name, value);
+		gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), value);
 	} else {
 		empathy_debug (DEBUG_DOMAIN, "Setting %s to %d", param_name, value);
-		mc_account_set_param_int (account, param_name, (gint) value);
+		mc_account_set_param_int (account, param_name, value);
 	}
 }
 
