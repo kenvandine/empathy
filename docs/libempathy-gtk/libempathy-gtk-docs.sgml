@@ -19,10 +19,7 @@
     <xi:include href="xml/empathy-about-dialog.xml"/>
     <xi:include href="xml/empathy-account-chooser.xml"/>
     <xi:include href="xml/empathy-accounts-dialog.xml"/>
-    <xi:include href="xml/empathy-account-widget-generic.xml"/>
-    <xi:include href="xml/empathy-account-widget-jabber.xml"/>
-    <xi:include href="xml/empathy-account-widget-msn.xml"/>
-    <xi:include href="xml/empathy-account-widget-salut.xml"/>
+    <xi:include href="xml/empathy-account-widget.xml"/>
     <xi:include href="xml/empathy-avatar-chooser.xml"/>
     <xi:include href="xml/empathy-avatar-image.xml"/>
     <xi:include href="xml/empathy-call-window.xml"/>

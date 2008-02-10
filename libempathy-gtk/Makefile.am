@@ -22,10 +22,7 @@ libempathy_gtk_la_SOURCES =             	\
 	empathy-contact-widget.c		\
 	empathy-contact-dialogs.c		\
 	empathy-accounts-dialog.c		\
-	empathy-account-widget-generic.c	\
-	empathy-account-widget-jabber.c		\
-	empathy-account-widget-msn.c		\
-	empathy-account-widget-salut.c		\
+	empathy-account-widget.c		\
 	empathy-profile-chooser.c		\
 	empathy-cell-renderer-expander.c	\
 	empathy-cell-renderer-text.c		\
@@ -78,10 +75,7 @@ libempathy_gtk_headers =			\
 	empathy-contact-widget.h		\
 	empathy-contact-dialogs.h		\
 	empathy-accounts-dialog.h		\
-	empathy-account-widget-generic.h	\
-	empathy-account-widget-jabber.h		\
-	empathy-account-widget-msn.h		\
-	empathy-account-widget-salut.h		\
+	empathy-account-widget.h		\
 	empathy-profile-chooser.h		\
 	empathy-cell-renderer-expander.h	\
 	empathy-cell-renderer-text.h		\

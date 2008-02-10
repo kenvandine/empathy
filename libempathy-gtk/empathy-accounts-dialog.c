@@ -45,10 +45,7 @@
 
 #include "empathy-accounts-dialog.h"
 #include "empathy-profile-chooser.h"
-#include "empathy-account-widget-generic.h"
-#include "empathy-account-widget-jabber.h"
-#include "empathy-account-widget-msn.h"
-#include "empathy-account-widget-salut.h"
+#include "empathy-account-widget.h"
 
 #define DEBUG_DOMAIN "AccountDialog"
 

@@ -1962,6 +1962,15 @@
   )
 )
 
+(define-function empathy_call_with_contact_id
+  (c-name "empathy_call_with_contact_id")
+  (return-type "none")
+  (parameters
+    '("McAccount*" "account")
+    '("const-gchar*" "contact_id")
+  )
+)
+
 (define-function empathy_chat_with_contact
   (c-name "empathy_chat_with_contact")
   (return-type "none")
@@ -2000,66 +2009,6 @@
   (return-type "McPresence")
   (parameters
     '("const-gchar*" "str")
-  )
-)
-
-
-
-;; From tp-stream-engine-gen.h
-
-(define-function dbus_g_proxy_begin_call
-  (c-name "dbus_g_proxy_begin_call")
-  (return-type "return")
-  (parameters
-  )
-)
-
-(define-function dbus_g_proxy_begin_call
-  (c-name "dbus_g_proxy_begin_call")
-  (return-type "return")
-  (parameters
-  )
-)
-
-(define-function dbus_g_proxy_begin_call
-  (c-name "dbus_g_proxy_begin_call")
-  (return-type "return")
-  (parameters
-  )
-)
-
-(define-function dbus_g_proxy_begin_call
-  (c-name "dbus_g_proxy_begin_call")
-  (return-type "return")
-  (parameters
-  )
-)
-
-(define-function dbus_g_proxy_begin_call
-  (c-name "dbus_g_proxy_begin_call")
-  (return-type "return")
-  (parameters
-  )
-)
-
-(define-function dbus_g_proxy_begin_call
-  (c-name "dbus_g_proxy_begin_call")
-  (return-type "return")
-  (parameters
-  )
-)
-
-(define-function dbus_g_proxy_begin_call
-  (c-name "dbus_g_proxy_begin_call")
-  (return-type "return")
-  (parameters
-  )
-)
-
-(define-function dbus_g_proxy_begin_call
-  (c-name "dbus_g_proxy_begin_call")
-  (return-type "return")
-  (parameters
   )
 )
 
