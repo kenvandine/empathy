@@ -53,13 +53,17 @@ struct SizeData {
 	gboolean preserve_aspect_ratio;
 };
 
-GladeXML *
-empathy_glade_get (const gchar *filename,
-		   const gchar *root,
-		   const gchar *domain)
+static GladeXML *
+get_glade_file (const gchar *filename,
+		const gchar *root,
+		const gchar *domain,
+		const gchar *first_required_widget,
+		va_list      args)
 {
-	GladeXML *gui;
-	gchar    *path;
+	GladeXML   *gui;
+	gchar      *path;
+	const char *name;
+	GtkWidget **widget_ptr;
 
 	path = g_build_filename (UNINSTALLED_GLADE_DIR, filename, NULL);
 	if (!g_file_test (path, G_FILE_TEST_EXISTS)) {
@@ -74,22 +78,6 @@ empathy_glade_get (const gchar *filename,
 	if (!gui) {
 		g_warning ("Couldn't find necessary glade file '%s'", filename);
 	}
-
-	return gui;
-}
-
-static GladeXML *
-get_glade_file (const gchar *filename,
-		const gchar *root,
-		const gchar *domain,
-		const gchar *first_required_widget,
-		va_list      args)
-{
-	GladeXML   *gui;
-	const char *name;
-	GtkWidget **widget_ptr;
-
-	gui = empathy_glade_get (filename, root, domain);
 
 	for (name = first_required_widget; name; name = va_arg (args, char *)) {
 		widget_ptr = va_arg (args, void *);

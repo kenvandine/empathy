@@ -73,7 +73,7 @@ account_widget_int_changed_cb (GtkWidget *widget,
 	const gchar *param_name;
 	gint         value;
 
-	value = gtk_spin_button_get_value (GTK_SPIN_BUTTON (widget));
+	value = gtk_spin_button_get_value_as_int (GTK_SPIN_BUTTON (widget));
 	param_name = g_object_get_data (G_OBJECT (widget), "param_name");
 
 	if (value == 0) {
@@ -84,7 +84,7 @@ account_widget_int_changed_cb (GtkWidget *widget,
 		empathy_debug (DEBUG_DOMAIN, "Unset %s and restore to %d", param_name, val);
 		gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), val);
 	} else {
-		empathy_debug (DEBUG_DOMAIN, "Setting %s to %d", param_name, (gint) value);
+		empathy_debug (DEBUG_DOMAIN, "Setting %s to %d", param_name, value);
 		mc_account_set_param_int (account, param_name, (gint) value);
 	}
 }
@@ -165,20 +165,14 @@ account_widget_jabber_ssl_toggled_cb (GtkWidget *checkbutton_ssl,
 }
 
 static void
-account_widget_destroy_cb (GtkWidget *widget,
-			   McAccount *account)
-{
-	empathy_debug (DEBUG_DOMAIN, "destroyed!");
-	g_object_unref (account);
-}
-
-static void
 account_widget_setup_widget (GtkWidget   *widget,
 			     McAccount   *account,
 			     const gchar *param_name)
 {
 	g_object_set_data_full (G_OBJECT (widget), "param_name", 
 				g_strdup (param_name), g_free);
+	g_object_set_data_full (G_OBJECT (widget), "account", 
+				g_object_ref (account), g_object_unref);
 
 	if (GTK_IS_SPIN_BUTTON (widget)) {
 		gint value = 0;
@@ -372,12 +366,11 @@ accounts_widget_generic_setup (McAccount *account,
 	g_object_unref (protocol);
 }
 
-static GtkWidget *
-account_widget_new_valist (McAccount   *account,
-			   GladeXML    *gui,
-			   const gchar *root,
-			   const gchar *first_widget_name,
-			   va_list      args)
+static void
+account_widget_handle_params_valist (McAccount   *account,
+				     GladeXML    *gui,
+				     const gchar *first_widget_name,
+				     va_list      args)
 {
 	GtkWidget   *widget;
 	const gchar *widget_name;
@@ -396,34 +389,23 @@ account_widget_new_valist (McAccount   *account,
 
 		account_widget_setup_widget (widget, account, param_name);
 	}
-
-	widget = glade_xml_get_widget (gui, root);
-	g_signal_connect (widget, "destroy",
-			  G_CALLBACK (account_widget_destroy_cb),
-			  g_object_ref (account));
-
-	return widget;
 }
 
-GtkWidget *
-empathy_account_widget_new_with_glade (McAccount   *account,
-				       GladeXML    *gui,
-				       const gchar *root,
-				       const gchar *first_widget_name,
-				       ...)
+void
+empathy_account_widget_handle_params (McAccount   *account,
+				      GladeXML    *gui,
+				      const gchar *first_widget_name,
+				      ...)
 {
-	GtkWidget *widget;
-	va_list    args;
+	va_list args;
 
-	g_return_val_if_fail (MC_IS_ACCOUNT (account), NULL);
+	g_return_if_fail (MC_IS_ACCOUNT (account));
 
 	va_start (args, first_widget_name);
-	widget = account_widget_new_valist (account, gui, root,
-					    first_widget_name,
-					    args);
+	account_widget_handle_params_valist (account, gui,
+					     first_widget_name,
+					     args);
 	va_end (args);
-
-	return widget;
 }
 
 void
@@ -449,10 +431,6 @@ emapthy_account_widget_add_forget_button (McAccount   *account,
 	g_signal_connect (entry_password, "changed",
 			  G_CALLBACK (account_widget_password_changed_cb),
 			  button_forget);
-
-	g_object_set_data_full (G_OBJECT (entry_password), "account",
-				g_object_ref (account),
-				g_object_unref);
 }
 
 GtkWidget *
@@ -475,10 +453,6 @@ empathy_account_widget_generic_new (McAccount *account)
 	
 	accounts_widget_generic_setup (account, table_settings);
 
-	g_signal_connect (sw, "destroy",
-			  G_CALLBACK (account_widget_destroy_cb),
-			  g_object_ref (account));
-
 	gtk_widget_show_all (sw);
 
 	return sw;
@@ -490,12 +464,13 @@ empathy_account_widget_salut_new (McAccount *account)
 	GladeXML  *glade;
 	GtkWidget *widget;
 
-	glade = empathy_glade_get ("empathy-account-widget-salut.glade",
-				   "vbox_salut_settings",
-				   NULL);
+	glade = empathy_glade_get_file ("empathy-account-widget-salut.glade",
+					"vbox_salut_settings",
+					NULL,
+					"vbox_salut_settings", &widget,
+					NULL);
 
-	widget = empathy_account_widget_new_with_glade (account, glade,
-			"vbox_salut_settings",
+	empathy_account_widget_handle_params (account, glade,
 			"entry_published", "published-name",
 			"entry_nickname", "nickname",
 			"entry_first_name", "first-name",
@@ -517,12 +492,13 @@ empathy_account_widget_msn_new (McAccount *account)
 	GladeXML  *glade;
 	GtkWidget *widget;
 
-	glade = empathy_glade_get ("empathy-account-widget-msn.glade",
-				   "vbox_msn_settings",
-				   NULL);
+	glade = empathy_glade_get_file ("empathy-account-widget-msn.glade",
+					"vbox_msn_settings",
+					NULL,
+					"vbox_msn_settings", &widget,
+					NULL);
 
-	widget = empathy_account_widget_new_with_glade (account, glade,
-			"vbox_msn_settings",
+	empathy_account_widget_handle_params (account, glade,
 			"entry_id", "account",
 			"entry_password", "password",
 			"entry_server", "server",
@@ -551,12 +527,12 @@ empathy_account_widget_jabber_new (McAccount *account)
 	glade = empathy_glade_get_file ("empathy-account-widget-jabber.glade",
 				        "vbox_jabber_settings",
 				        NULL,
+				        "vbox_jabber_settings", &widget,
 				        "spinbutton_port", &spinbutton_port,
 				        "checkbutton_ssl", &checkbutton_ssl,
 				        NULL);
 
-	widget = empathy_account_widget_new_with_glade (account, glade,
-			"vbox_jabber_settings",
+	empathy_account_widget_handle_params (account, glade,
 			"entry_id", "account",
 			"entry_password", "password",
 			"entry_resource", "resource",
@@ -575,10 +551,6 @@ empathy_account_widget_jabber_new (McAccount *account)
 	g_signal_connect (checkbutton_ssl, "toggled",
 			  G_CALLBACK (account_widget_jabber_ssl_toggled_cb),
 			  spinbutton_port);
-
-	g_object_set_data_full (G_OBJECT (spinbutton_port), "account",
-				g_object_ref (account),
-				g_object_unref);
 
 	g_object_unref (glade);
 

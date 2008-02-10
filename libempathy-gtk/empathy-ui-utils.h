@@ -47,9 +47,6 @@ G_BEGIN_DECLS
 #define G_STR_EMPTY(x) ((x) == NULL || (x)[0] == '\0')
 
 /* Glade */
-GladeXML *      empathy_glade_get                       (const gchar      *filename,
-							 const gchar      *root,
-							 const gchar      *domain);
 void            empathy_glade_get_file_simple           (const gchar      *filename,
 							 const gchar      *root,
 							 const gchar      *domain,

@@ -322,13 +322,12 @@
 
 ;; From empathy-account-widget.h
 
-(define-function empathy_account_widget_new_with_glade
-  (c-name "empathy_account_widget_new_with_glade")
-  (return-type "GtkWidget*")
+(define-function empathy_account_widget_handle_params
+  (c-name "empathy_account_widget_handle_params")
+  (return-type "none")
   (parameters
     '("McAccount*" "account")
     '("GladeXML*" "glade")
-    '("const-gchar*" "root")
     '("const-gchar*" "first_widget_name")
   )
   (varargs #t)
@@ -1879,16 +1878,6 @@
 
 
 ;; From empathy-ui-utils.h
-
-(define-function empathy_glade_get
-  (c-name "empathy_glade_get")
-  (return-type "GladeXML*")
-  (parameters
-    '("const-gchar*" "filename")
-    '("const-gchar*" "root")
-    '("const-gchar*" "domain")
-  )
-)
 
 (define-function empathy_glade_get_file_simple
   (c-name "empathy_glade_get_file_simple")

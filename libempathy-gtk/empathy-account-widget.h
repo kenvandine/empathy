@@ -32,9 +32,8 @@
 
 G_BEGIN_DECLS
 
-GtkWidget *empathy_account_widget_new_with_glade    (McAccount   *account,
+void       empathy_account_widget_handle_params     (McAccount   *account,
 						     GladeXML    *glade,
-						     const gchar *root,
 						     const gchar *first_widget_name,
 						     ...);
 void       emapthy_account_widget_add_forget_button (McAccount   *account,
