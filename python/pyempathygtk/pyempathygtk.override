@@ -62,7 +62,7 @@ import gtk.StatusIcon as PyGtkStatusIcon_Type
 import gtk.Button as PyGtkButton_Type
 import gtk.EventBox as PyGtkEventBox_Type
 import gtk.CellRendererPixbuf as PyGtkCellRendererPixbuf_Type
-import gdk.Pixbuf as PyGdkPixbuf_Type
+import gtk.gdk.Pixbuf as PyGdkPixbuf_Type
 import empathy.Contact as PyEmpathyContact_Type
 import empathy.ContactList as PyEmpathyContactList_Type
 import empathy.TpChat as PyEmpathyTpChat_Type
