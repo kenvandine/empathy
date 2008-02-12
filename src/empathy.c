@@ -94,7 +94,7 @@ create_salut_account (void)
 {
 	McProfile  *profile;
 	McProtocol *protocol;
-	gboolean    salut_created;
+	gboolean    salut_created = FALSE;
 	McAccount  *account;
 	GList      *accounts;
 	EBook      *book;
@@ -106,11 +106,9 @@ create_salut_account (void)
 	gchar      *jid = NULL;
 
 	/* Check if we already created a salut account */
-	if (!empathy_conf_get_bool (empathy_conf_get(),
-				    EMPATHY_PREFS_SALUT_ACCOUNT_CREATED,
-				    &salut_created)) {
-		return;
-	}
+	empathy_conf_get_bool (empathy_conf_get(),
+			       EMPATHY_PREFS_SALUT_ACCOUNT_CREATED,
+			       &salut_created);
 	if (salut_created) {
 		return;
 	}
