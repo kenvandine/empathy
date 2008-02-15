@@ -129,6 +129,7 @@ tp_call_identify_streams (EmpathyTpCall *call)
       empathy_debug (DEBUG_DOMAIN, "Couldn't list audio/video streams: %s",
           error->message);
       g_clear_error (&error);
+      return;
     }
 
   for (i = 0; i < stream_infos->len; i++)
