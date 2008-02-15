@@ -159,7 +159,7 @@ empathy_contact_class_init (EmpathyContactClass *class)
 							     "Contact Capabilities",
 							     "Capabilities of the contact",
 							     EMPATHY_TYPE_CAPABILITIES,
-							     0,
+							     EMPATHY_CAPABILITIES_UNKNOWN,
 							     G_PARAM_READWRITE));
 
 	g_object_class_install_property (object_class,
@@ -176,10 +176,6 @@ empathy_contact_class_init (EmpathyContactClass *class)
 static void
 empathy_contact_init (EmpathyContact *contact)
 {
-	EmpathyContactPriv *priv;
-
-	priv = GET_PRIV (contact);
-	priv->capabilities = EMPATHY_CAPABILITIES_UNKNOWN;
 }
 
 static void

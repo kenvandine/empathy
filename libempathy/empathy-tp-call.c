@@ -327,13 +327,14 @@ tp_call_request_streams_for_capabilities (EmpathyTpCall *call,
 
 static void
 tp_call_request_streams_capabilities_cb (EmpathyContact *contact,
-  GParamSpec *property, gpointer user_data)
+                                         GParamSpec *property,
+                                         gpointer user_data)
 {
   EmpathyTpCall *call = EMPATHY_TP_CALL (user_data);
 
   g_signal_handlers_disconnect_by_func (contact,
-        tp_call_request_streams_capabilities_cb,
-        user_data);
+      tp_call_request_streams_capabilities_cb,
+      user_data);
 
   tp_call_request_streams_for_capabilities (call,
      empathy_contact_get_capabilities (contact));
@@ -361,11 +362,12 @@ tp_call_request_streams (EmpathyTpCall *call)
   else
     {
       capabilities = empathy_contact_get_capabilities (priv->contact);
-      if (capabilities == EMPATHY_CAPABILITIES_UNKNOWN) {
-        g_signal_connect (G_OBJECT (priv->contact), "notify::capabilities",
-          G_CALLBACK (tp_call_request_streams_capabilities_cb), call);
-        return;
-      }
+      if (capabilities == EMPATHY_CAPABILITIES_UNKNOWN)
+        {
+          g_signal_connect (priv->contact, "notify::capabilities",
+              G_CALLBACK (tp_call_request_streams_capabilities_cb), call);
+          return;
+        }
     }
 
   tp_call_request_streams_for_capabilities (call, capabilities);
