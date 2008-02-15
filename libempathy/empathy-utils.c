@@ -463,6 +463,28 @@ empathy_call_with_contact (EmpathyContact *contact)
 #endif
 }
 
+#ifdef HAVE_VOIP
+struct empathy_call_cb_user_data {
+	guint handler;
+	GObject *factory;
+};
+
+static void
+empathy_call_with_contact_id_got_handle_cb (EmpathyContact *contact, 
+  GParamSpec *property, gpointer user_data) {
+
+	struct empathy_call_cb_user_data *ud =
+		(struct empathy_call_cb_user_data *) user_data;
+
+	g_signal_handler_disconnect (contact, ud->handler);
+
+	empathy_call_with_contact (contact);
+	g_object_unref (ud->factory);
+	g_object_unref (contact);
+	g_free (ud);
+}
+#endif
+
 void
 empathy_call_with_contact_id (McAccount *account, const gchar *contact_id)
 {
@@ -472,9 +494,19 @@ empathy_call_with_contact_id (McAccount *account, const gchar *contact_id)
 
 	factory = empathy_contact_factory_new ();
 	contact = empathy_contact_factory_get_from_id (factory, account, contact_id);
-	empathy_call_with_contact (contact);
-	g_object_unref (contact);
-	g_object_unref (factory);
+
+	if (empathy_contact_get_handle (contact) != 0) {
+		empathy_call_with_contact (contact);
+		g_object_unref (contact);
+		g_object_unref (factory);
+	} else {
+		struct empathy_call_cb_user_data *ud;
+		ud = g_malloc0 (sizeof (struct empathy_call_cb_user_data));
+		ud->factory = G_OBJECT (factory);
+		ud->handler = g_signal_connect (G_OBJECT (contact), "notify::handle",
+			G_CALLBACK (empathy_call_with_contact_id_got_handle_cb), ud);
+	}
+
 #endif
 }
 

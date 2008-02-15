@@ -542,6 +542,13 @@ tp_call_finalize (GObject *object)
   g_slice_free (EmpathyTpCallStream, priv->audio);
   g_slice_free (EmpathyTpCallStream, priv->video);
   g_object_unref (priv->group);
+
+  if (priv->connection != NULL)
+    g_object_unref (priv->connection);
+
+  if (priv->channel != NULL)
+    g_object_unref (priv->channel);
+
   if (priv->contact)
     {
       g_object_unref (priv->contact);
@@ -561,13 +568,15 @@ tp_call_set_property (GObject *object,
   switch (prop_id)
     {
     case PROP_CONNECTION:
-      priv->connection = g_value_get_object (value);
+      priv->connection = g_value_dup_object (value);
       break;
     case PROP_CHANNEL:
-      priv->channel = g_value_get_object (value);
+      priv->channel = g_value_dup_object (value);
       break;
     case PROP_CONTACT:
-      priv->contact = g_value_get_object (value);
+      /* FIXME should this one be writable in the first place ? */
+      g_assert (priv->contact == NULL);
+      priv->contact = g_value_dup_object (value);
       break;
     case PROP_IS_INCOMING:
       priv->is_incoming = g_value_get_boolean (value);
@@ -653,12 +662,12 @@ empathy_tp_call_class_init (EmpathyTpCallClass *klass)
   g_object_class_install_property (object_class, PROP_CONNECTION,
       g_param_spec_object ("connection", "connection", "connection",
       TELEPATHY_CONN_TYPE,
-      G_PARAM_CONSTRUCT | G_PARAM_READWRITE |
+      G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE |
       G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
   g_object_class_install_property (object_class, PROP_CHANNEL,
       g_param_spec_object ("channel", "channel", "channel",
       TELEPATHY_CHAN_TYPE,
-      G_PARAM_CONSTRUCT | G_PARAM_READWRITE |
+      G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE |
       G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
   g_object_class_install_property (object_class, PROP_CONTACT,
       g_param_spec_object ("contact", "Call contact", "Call contact",
