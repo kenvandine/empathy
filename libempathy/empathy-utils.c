@@ -401,14 +401,16 @@ void
 empathy_call_with_contact (EmpathyContact *contact)
 {
 #ifdef HAVE_VOIP
-	MissionControl *mc;
-	McAccount      *account;
-	TpConn         *tp_conn;
-	gchar          *object_path;
-	const gchar    *bus_name;
-	TpChan         *new_chan;
-	EmpathyTpGroup *group;
-	GError         *error = NULL;
+	MissionControl        *mc;
+	McAccount             *account;
+	TpConn                *tp_conn;
+	gchar                 *object_path;
+	const gchar           *bus_name;
+	TpChan                *new_chan;
+	EmpathyContactFactory *factory;
+	EmpathyTpGroup        *group;
+	EmpathyContact        *self_contact;
+	GError                *error = NULL;
 
 	g_return_if_fail (EMPATHY_IS_CONTACT (contact));
 
@@ -446,8 +448,13 @@ empathy_call_with_contact (EmpathyContact *contact)
 				0);
 
 	group = empathy_tp_group_new (account, new_chan);
+	factory = empathy_contact_factory_new ();
+	self_contact = empathy_contact_factory_get_user (factory, account);
 	empathy_tp_group_add_member (group, contact, "");
+	empathy_tp_group_add_member (group, self_contact, "");	
 
+	g_object_unref (factory);
+	g_object_unref (self_contact);
 	g_object_unref (group);
 	g_object_unref (mc);
 	g_object_unref (tp_conn);
