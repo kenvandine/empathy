@@ -1273,6 +1273,9 @@ empathy_window_present (GtkWindow *window,
 	timestamp = gtk_get_current_event_time ();
 	gtk_window_set_skip_taskbar_hint (window, FALSE);
 	gtk_window_present_with_time (window, timestamp);
+	/* FIXME: This shouldn't be required as gtk_window_present's doc says
+	 *        it deiconify automatically. */
+	gtk_window_deiconify (window);
 }
 
 GtkWindow *
