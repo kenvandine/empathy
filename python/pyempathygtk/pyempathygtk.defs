@@ -443,8 +443,9 @@
 
 ;; From empathy-call-window.h
 
-(define-function empathy_call_window_show
-  (c-name "empathy_call_window_show")
+(define-function empathy_call_window_new
+  (c-name "empathy_call_window_new")
+  (is-constructor-of "EmpathyCallWindow")
   (return-type "GtkWidget*")
   (parameters
     '("EmpathyTpCall*" "call")

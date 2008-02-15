@@ -18,95 +18,70 @@
  *  Authors: Elliot Fairweather <elliot.fairweather@collabora.co.uk>
  */
 
-#include <config.h>
-
-#include <stdlib.h>
-
-#include <glib.h>
-#include <glib/gi18n.h>
 #include <gtk/gtk.h>
-
-#include <libgnomevfs/gnome-vfs.h>
 
 #include <libmissioncontrol/mission-control.h>
 
-#include <libempathy/empathy-chandler.h>
-#include <libempathy/empathy-utils.h>
 #include <libempathy/empathy-tp-call.h>
+#include <libempathy/empathy-chandler.h>
 #include <libempathy/empathy-debug.h>
+#include <libempathy/empathy-utils.h>
 
 #include <libempathy-gtk/empathy-call-window.h>
 
-#define DEBUG_DOMAIN "EmpathyCall"
-
-#define BUS_NAME "org.gnome.Empathy.CallChandler"
-#define OBJECT_PATH "/org/gnome/Empathy/CallChandler"
+#define DEBUG_DOMAIN "CallChandler"
 
 static guint nb_calls = 0;
 
 static void
-call_chandler_weak_notify (gpointer  data,
-			   GObject  *where_the_object_was)
+weak_notify (gpointer data,
+             GObject *where_the_object_was)
 {
-	nb_calls--;
-	if (nb_calls == 0) {
-		empathy_debug (DEBUG_DOMAIN, "No more calls, leaving...");
-		gtk_main_quit ();
-	}
+  nb_calls--;
+  if (nb_calls == 0)
+    {
+      empathy_debug (DEBUG_DOMAIN, "No more calls, leaving...");
+      gtk_main_quit ();
+    }
 }
 
 static void
-call_chandler_new_channel_cb (EmpathyChandler *chandler,
-			      TpConn          *tp_conn,
-			      TpChan          *tp_chan,
-			      MissionControl  *mc)
+new_channel_cb (EmpathyChandler *chandler,
+                TpConn *connection,
+                TpChan *channel,
+                MissionControl *mc)
 {
-	EmpathyTpCall *call;
-	McAccount     *account;
-	GtkWidget     *window;
+  EmpathyTpCall *call;
 
-	account = mission_control_get_account_for_connection (mc, tp_conn, NULL);
+  call = empathy_tp_call_new (connection, channel);
+  empathy_call_window_new (call);
+  g_object_unref (call);
 
-	call = empathy_tp_call_new (account, tp_chan);
-	window = empathy_call_window_show (call);
-	g_object_unref (account);
-	g_object_unref (call);
-
-	nb_calls++;
-	g_object_weak_ref (G_OBJECT (window), call_chandler_weak_notify, NULL);
+  nb_calls++;
+  g_object_weak_ref (G_OBJECT (call), weak_notify, NULL);
 }
 
 int
 main (int argc, char *argv[])
 {
-	EmpathyChandler *chandler;
-	MissionControl  *mc;
+  MissionControl *mc;
+  EmpathyChandler *chandler;
 
-	empathy_debug_set_log_file_from_env ();
+  gtk_init (&argc, &argv);
 
-	bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
-	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
-	textdomain (GETTEXT_PACKAGE);
+  mc = empathy_mission_control_new ();
 
-	gtk_init (&argc, &argv);
+  chandler = empathy_chandler_new ("org.gnome.Empathy.CallChandler",
+      "/org/gnome/Empathy/CallChandler");
+  g_signal_connect (chandler, "new-channel",
+      G_CALLBACK (new_channel_cb), mc);
 
-	gtk_window_set_default_icon_name ("empathy");
-	gtk_icon_theme_append_search_path (gtk_icon_theme_get_default (),
-					   PKGDATADIR G_DIR_SEPARATOR_S "icons");
+  empathy_debug (DEBUG_DOMAIN, "Ready to handle new streamed media channels");
 
-	mc = empathy_mission_control_new ();
-	chandler = empathy_chandler_new (BUS_NAME, OBJECT_PATH);
-	g_signal_connect (chandler, "new-channel",
-			  G_CALLBACK (call_chandler_new_channel_cb),
-			  mc);
+  gtk_main ();
 
-	empathy_debug (DEBUG_DOMAIN, "Ready to handle new streamed media channels");
+  g_object_unref (chandler);
+  g_object_unref (mc);
 
-	gtk_main ();
-
-	g_object_unref (chandler);
-	g_object_unref (mc);
-
-	return EXIT_SUCCESS;
+  return EXIT_SUCCESS;
 }
-
