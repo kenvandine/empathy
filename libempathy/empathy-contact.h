@@ -54,8 +54,10 @@ struct _EmpathyContactClass {
 };
 
 typedef enum {
+	EMPATHY_CAPABILITIES_NONE = 0,
 	EMPATHY_CAPABILITIES_AUDIO = 1 << 0,
 	EMPATHY_CAPABILITIES_VIDEO = 1 << 1,
+	EMPATHY_CAPABILITIES_UNKNOWN = 1 << 7
 } EmpathyCapabilities;
 
 GType               empathy_contact_get_type           (void) G_GNUC_CONST;

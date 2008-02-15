@@ -176,6 +176,10 @@ empathy_contact_class_init (EmpathyContactClass *class)
 static void
 empathy_contact_init (EmpathyContact *contact)
 {
+	EmpathyContactPriv *priv;
+
+	priv = GET_PRIV (contact);
+	priv->capabilities = EMPATHY_CAPABILITIES_UNKNOWN;
 }
 
 static void

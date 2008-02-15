@@ -505,8 +505,7 @@ tp_contact_factory_update_capabilities (EmpathyTpContactFactory *tp_factory,
 	capabilities = empathy_contact_get_capabilities (contact);
 
 	if (strcmp (channel_type, TP_IFACE_CHANNEL_TYPE_STREAMED_MEDIA) == 0) {
-		capabilities &= ~EMPATHY_CAPABILITIES_AUDIO;
-		capabilities &= ~EMPATHY_CAPABILITIES_VIDEO;
+		capabilities = EMPATHY_CAPABILITIES_NONE;
 		if (specific & TP_CHANNEL_MEDIA_CAPABILITY_AUDIO) {
 			capabilities |= EMPATHY_CAPABILITIES_AUDIO;
 		}
@@ -534,7 +533,9 @@ tp_contact_factory_get_capabilities_cb (DBusGProxy *proxy,
 
 	if (error) {
 		empathy_debug (DEBUG_DOMAIN, "Error getting capabilities: %s",
-			       error->message);
+		       error->message);
+		/* FIXME Should set the capabilities of the contacts for which this request
+		 * originated to NONE */
 		goto OUT;
 	}
 
