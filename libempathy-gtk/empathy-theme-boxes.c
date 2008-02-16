@@ -597,15 +597,16 @@ theme_boxes_maybe_append_header (EmpathyTheme        *theme,
 	box = gtk_hbox_new (FALSE, 0);
 
 
-	avatar = empathy_chat_view_get_avatar_pixbuf_with_cache (contact);
-	if (avatar && empathy_theme_get_show_avatars (theme)) {
-		GtkWidget *image;
+	if (empathy_theme_get_show_avatars (theme)) {
+		avatar = empathy_chat_view_get_avatar_pixbuf_with_cache (contact);
+		if (avatar) {
+			GtkWidget *image;
 
-		image = gtk_image_new_from_pixbuf (avatar);
+			image = gtk_image_new_from_pixbuf (avatar);
 
-		gtk_box_pack_start (GTK_BOX (box), image,
-				    FALSE, TRUE, 2);
-
+			gtk_box_pack_start (GTK_BOX (box), image,
+					    FALSE, TRUE, 2);
+		}
 	}
 
 	g_signal_connect_object (view, "size-allocate",
