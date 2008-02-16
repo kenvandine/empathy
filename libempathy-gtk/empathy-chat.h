@@ -58,6 +58,7 @@ struct _EmpathyChat {
 	/* Protected */
 	EmpathyChatView *view;
 	GtkWidget       *input_text_view;
+	gboolean         block_events;
 };
 
 struct _EmpathyChatClass {

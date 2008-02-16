@@ -355,20 +355,18 @@ group_chat_members_changed_cb (EmpathyTpChatroom *tp_chat,
 			       gboolean            is_member,
 			       EmpathyGroupChat   *chat)
 {
-	EmpathyGroupChatPriv *priv;
-	gchar                *str;
-
-	priv = GET_PRIV (chat);
-
-	if (is_member) {
-		str = g_strdup_printf (_("%s has joined the room"),
-				       empathy_contact_get_name (contact));
-	} else {
-		str = g_strdup_printf (_("%s has left the room"),
-				       empathy_contact_get_name (contact));
+	if (!EMPATHY_CHAT (chat)->block_events) {
+		gchar *str;
+		if (is_member) {
+			str = g_strdup_printf (_("%s has joined the room"),
+					       empathy_contact_get_name (contact));
+		} else {
+			str = g_strdup_printf (_("%s has left the room"),
+					       empathy_contact_get_name (contact));
+		}
+		empathy_chat_view_append_event (EMPATHY_CHAT (chat)->view, str);
+		g_free (str);
 	}
-	empathy_chat_view_append_event (EMPATHY_CHAT (chat)->view, str);
-	g_free (str);
 }
 
 static void
@@ -571,13 +569,15 @@ group_chat_subject_notify_cb (EmpathyTpChat   *tp_chat,
 	priv->topic = str;
 	gtk_label_set_text (GTK_LABEL (priv->label_topic), priv->topic);
 
-	if (!G_STR_EMPTY (priv->topic)) {
-		str = g_strdup_printf (_("Topic set to: %s"), priv->topic);
-	} else {
-		str = g_strdup (_("No topic defined"));
+	if (!EMPATHY_CHAT (chat)->block_events) {
+		if (!G_STR_EMPTY (priv->topic)) {
+			str = g_strdup_printf (_("Topic set to: %s"), priv->topic);
+		} else {
+			str = g_strdup (_("No topic defined"));
+		}
+		empathy_chat_view_append_event (EMPATHY_CHAT (chat)->view, str);
+		g_free (str);
 	}
-	empathy_chat_view_append_event (EMPATHY_CHAT (chat)->view, str);
-	g_free (str);
 }
 
 static void

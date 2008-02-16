@@ -80,6 +80,7 @@ struct _EmpathyChatPriv {
 	gboolean               first_tp_chat;
 	time_t                 last_log_timestamp;
 	gboolean               is_first_char;
+	guint                  block_events_timeout_id;
 	/* Used to automatically shrink a window that has temporarily
 	 * grown due to long input. 
 	 */
@@ -412,6 +413,10 @@ chat_finalize (GObject *object)
 
 	if (priv->scroll_idle_id) {
 		g_source_remove (priv->scroll_idle_id);
+	}
+
+	if (priv->block_events_timeout_id) {
+		g_source_remove (priv->block_events_timeout_id);
 	}
 
 	g_free (priv->id);
@@ -1439,6 +1444,18 @@ empathy_chat_load_geometry (EmpathyChat *chat,
 	empathy_geometry_load (empathy_chat_get_id (chat), x, y, w, h);
 }
 
+static gboolean
+chat_block_events_timeout_cb (gpointer data)
+{
+	EmpathyChat     *chat = EMPATHY_CHAT (data);
+	EmpathyChatPriv *priv = GET_PRIV (chat);
+
+	chat->block_events = FALSE;
+	priv->block_events_timeout_id = 0;
+
+	return FALSE;
+}
+
 void
 empathy_chat_set_tp_chat (EmpathyChat   *chat,
 			  EmpathyTpChat *tp_chat)
@@ -1454,6 +1471,15 @@ empathy_chat_set_tp_chat (EmpathyChat   *chat,
 	if (tp_chat == priv->tp_chat) {
 		return;
 	}
+
+	/* Block events for some time to avoid having "has come online" or
+	 * "joined" messages. */
+	chat->block_events = TRUE;
+	if (priv->block_events_timeout_id != 0) {
+		g_source_remove (priv->block_events_timeout_id);
+	}
+	priv->block_events_timeout_id =
+		g_timeout_add_seconds (1, chat_block_events_timeout_cb, chat);
 
 	if (priv->tp_chat) {
 		g_signal_handlers_disconnect_by_func (priv->tp_chat,

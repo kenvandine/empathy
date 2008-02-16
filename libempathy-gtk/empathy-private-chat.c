@@ -223,7 +223,7 @@ private_chat_contact_presence_updated_cb (EmpathyContact     *contact,
 		      empathy_contact_get_id (contact));
 
 	if (!empathy_contact_is_online (contact)) {
-		if (priv->is_online) {
+		if (priv->is_online && !EMPATHY_CHAT (chat)->block_events) {
 			gchar *msg;
 
 			msg = g_strdup_printf (_("%s went offline"),
@@ -237,7 +237,7 @@ private_chat_contact_presence_updated_cb (EmpathyContact     *contact,
 		g_signal_emit_by_name (chat, "composing", FALSE);
 
 	} else {
-		if (!priv->is_online) {
+		if (!priv->is_online && !EMPATHY_CHAT (chat)->block_events) {
 			gchar *msg;
 
 			msg = g_strdup_printf (_("%s has come online"),
