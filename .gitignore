@@ -40,3 +40,5 @@ missing
 mkinstalldirs
 omf.make
 compile
+tags
+TAGS
