@@ -187,21 +187,6 @@
                                 <property name="visible">True</property>
                                 <property name="spacing">6</property>
                                 <child>
-                                  <widget class="GtkButton" id="button_back">
-                                    <property name="visible">True</property>
-                                    <property name="can_focus">True</property>
-                                    <property name="label">gtk-go-back</property>
-                                    <property name="use_stock">True</property>
-                                    <property name="response_id">0</property>
-                                  </widget>
-                                  <packing>
-                                    <property name="expand">False</property>
-                                    <property name="fill">False</property>
-                                    <property name="pack_type">GTK_PACK_END</property>
-                                    <property name="position">1</property>
-                                  </packing>
-                                </child>
-                                <child>
                                   <widget class="GtkButton" id="button_create">
                                     <property name="visible">True</property>
                                     <property name="can_focus">True</property>
@@ -241,6 +226,21 @@
                                         </child>
                                       </widget>
                                     </child>
+                                  </widget>
+                                  <packing>
+                                    <property name="expand">False</property>
+                                    <property name="fill">False</property>
+                                    <property name="pack_type">GTK_PACK_END</property>
+                                    <property name="position">1</property>
+                                  </packing>
+                                </child>
+                                <child>
+                                  <widget class="GtkButton" id="button_back">
+                                    <property name="visible">True</property>
+                                    <property name="can_focus">True</property>
+                                    <property name="label">gtk-go-back</property>
+                                    <property name="use_stock">True</property>
+                                    <property name="response_id">0</property>
                                   </widget>
                                   <packing>
                                     <property name="expand">False</property>
