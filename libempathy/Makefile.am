@@ -41,7 +41,10 @@ libempathy_la_SOURCES =					\
 	empathy-chandler.c				\
 	empathy-filter.c				\
 	empathy-idle.c					\
-	empathy-log-manager.c
+	empathy-log-manager.c				\
+	empathy-irc-network-manager.c			\
+	empathy-irc-network.c				\
+	empathy-irc-server.c
 
 # do not distribute generated files
 nodist_libempathy_la_SOURCES =\
@@ -78,7 +81,10 @@ libempathy_headers =				\
 	empathy-chandler.h			\
 	empathy-filter.h			\
 	empathy-idle.h				\
-	empathy-log-manager.h
+	empathy-log-manager.h			\
+	empathy-irc-network-manager.h		\
+	empathy-irc-network.h			\
+	empathy-irc-server.h
 
 libempathy_includedir = $(includedir)/libempathy/
 libempathy_include_HEADERS =			\
@@ -154,11 +160,16 @@ dtddir = $(datadir)/empathy
 dtd_DATA = 					\
 	empathy-status-presets.dtd		\
 	empathy-contact-groups.dtd		\
-	empathy-chatroom-manager.dtd
+	empathy-chatroom-manager.dtd		\
+	empathy-irc-networks.dtd
 
 stylesheetdir = $(datadir)/empathy
 stylesheet_DATA =		\
 	empathy-log-manager.xsl
+
+ircnetworksdir = $(datadir)/empathy
+ircnetworks_DATA =		\
+	irc-networks.xml
 
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = libempathy.pc
@@ -169,7 +180,8 @@ EXTRA_DIST = 			\
 	empathy-filter.xml	\
 	tp-stream-engine.xml	\
 	$(stylesheet_DATA)	\
-	$(dtd_DATA)
+	$(dtd_DATA)		\
+	$(ircnetworks_DATA)
 
 CLEANFILES = 				\
 	$(BUILT_SOURCES)		\

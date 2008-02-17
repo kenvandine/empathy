@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<networks>
+  <network id="freenode" name="Freenode">
+    <servers>
+      <server address="irc.freenode.net" port="6667" ssl="FALSE" />
+      <server address="irc.eu.freenode.net" port="6667" ssl="FALSE" />
+    </servers>
+  </network>
+
+  <network id="gimpnet" name="GIMPNet">
+    <servers>
+      <server address="irc.gimp.org" port="6667" ssl="FALSE" />
+      <server address="irc.us.gimp.org" port="6667" ssl="FALSE" />
+    </servers>
+  </network>
+
+  <network id="testsrv" name="Test Server" network_charset="ISO-8859-1">
+    <servers>
+      <server address="irc.test.org" port="6669" ssl="TRUE" />
+    </servers>
+  </network>
+
+  <network id="undernet" name="Undernet">
+    <servers>
+      <server address="eu.undernet.org" port="6667" ssl="FALSE" />
+    </servers>
+  </network>
+
+</networks>

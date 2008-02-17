@@ -1,0 +1,18 @@
+<!--
+  DTD for Empathys irc networks.
+  by Xavier Claessens <xclaesse@gmail.com>
+-->
+
+
+<!ELEMENT networks (network*)>
+<!ELEMENT network (servers*)>
+<!ATTLIST network id ID #REQUIRED>
+<!ATTLIST network name CDATA #IMPLIED>
+<!ATTLIST network network_charset CDATA #IMPLIED>
+<!ATTLIST network dropped CDATA #IMPLIED>
+
+<!ELEMENT servers (server*)>
+<!ELEMENT server EMPTY>
+<!ATTLIST server address CDATA #REQUIRED>
+<!ATTLIST server port CDATA #REQUIRED>
+<!ATTLIST server ssl CDATA #REQUIRED>

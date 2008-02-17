@@ -1,7 +1,5 @@
 Things you can do if you want to help:
 
- - Specialised UI for configuring IRC accounts. (Guillaume is already working
-   on IRC widget).
  - UI for inviting a contact in a chatroom.
  - UI for accept/refuse invitation to join a chatroom and VoIP calls.
  - UI to send a message directly to a contact.
@@ -25,7 +23,7 @@ Things you can do if you want to help:
  - See with Gnome Online Desktop project how to implement meta-contacts and
    merge information from multiple contacts.
  - Testing and Bugfixing.
- 
+
 If you want to contribute you can ask for information at
  - #telepathy on freenode
  - Telepathy's mailing list: telepathy@lists.freedesktop.org

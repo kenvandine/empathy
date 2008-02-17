@@ -46,6 +46,7 @@
 #include "empathy-accounts-dialog.h"
 #include "empathy-profile-chooser.h"
 #include "empathy-account-widget.h"
+#include "empathy-account-widget-irc.h"
 
 #define DEBUG_DOMAIN "AccountDialog"
 
@@ -268,6 +269,10 @@ accounts_dialog_update_account (EmpathyAccountsDialog *dialog,
 		else if (!tp_strdiff (config_ui, "local-xmpp")) {
 			dialog->settings_widget =
 				empathy_account_widget_salut_new (account);
+		}
+		else if (!tp_strdiff (config_ui, "irc")) {
+			dialog->settings_widget =
+				empathy_account_widget_irc_new (account);
 		}
 		else {
 			dialog->settings_widget = 

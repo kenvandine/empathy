@@ -53,6 +53,10 @@ libempathy-gtk/empathy-status-icon.glade
 libempathy-gtk/empathy-theme-boxes.c
 libempathy-gtk/empathy-theme-irc.c
 libempathy-gtk/empathy-theme-manager.c
+libempathy-gtk/empathy-account-widget-irc.c
+libempathy-gtk/empathy-account-widget-irc.glade
+libempathy-gtk/empathy-irc-network-dialog.c
+libempathy-gtk/totem-subtitle-encoding.c
 
 megaphone/data/GNOME_Megaphone_Applet.schemas.in
 megaphone/data/GNOME_Megaphone_Applet.server.in.in
