@@ -93,7 +93,7 @@ libempathy_include_HEADERS =			\
 
 empathy-marshal.list: $(libempathy_la_SOURCES) Makefile.am
 	( cd $(srcdir) && \
-	sed -n -e 's/.*empathy_marshal_\([[:upper:]]*__[[:upper:]_]*\).*/\1/p' \
+	sed -n -e 's/.*empathy_marshal_\([[:upper:][:digit:]]*__[[:upper:][:digit:]_]*\).*/\1/p' \
 	$(libempathy_la_SOURCES) ) \
 	| sed -e 's/__/:/' -e 'y/_/,/' | sort -u > $@.tmp
 	if cmp -s $@.tmp $@; then \
