@@ -362,7 +362,7 @@ empathy_log_manager_get_messages_for_file (EmpathyLogManager *manager,
 		is_user_str = xmlGetProp (node, "isuser");
 		msg_type_str = xmlGetProp (node, "type");
 
-		if (sender_avatar_token) {
+		if (!G_STR_EMPTY (sender_avatar_token)) {
 			avatar = empathy_avatar_new_from_cache (sender_avatar_token);
 		}
 		if (is_user_str) {
