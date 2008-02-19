@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gossip\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-02-14 08:05+0300\n"
+"POT-Creation-Date: 2008-02-19 08:28+0300\n"
 "PO-Revision-Date: 2006-10-17 20:50+0300\n"
 "Last-Translator: Samuli Seppänen & Henna Nykänen <sjsepp@utu.fi>\n"
 "Language-Team: Finnish <gnome-fi-laatu@lists.sourceforge.net>\n"
@@ -146,8 +146,8 @@ msgid ""
 "Whether or not Empathy should automatically login to your accounts on "
 "startup."
 msgstr ""
-"Tulisiko empathyn ottaa yhteyttä tileihin automaattisesti, kun "
-"kirjaudut sisään."
+"Tulisiko empathyn ottaa yhteyttä tileihin automaattisesti, kun kirjaudut "
+"sisään."
 
 #: ../data/empathy.schemas.in.h:29
 msgid ""
@@ -229,23 +229,23 @@ msgstr ""
 msgid "People nearby"
 msgstr "Lähellä olevat ihmiset"
 
-#: ../libempathy/empathy-utils.c:468
+#: ../libempathy/empathy-utils.c:539
 msgid "Available"
 msgstr "Tavoitettavissa"
 
-#: ../libempathy/empathy-utils.c:470
+#: ../libempathy/empathy-utils.c:541
 msgid "Busy"
 msgstr "Varattu"
 
-#: ../libempathy/empathy-utils.c:473
+#: ../libempathy/empathy-utils.c:544
 msgid "Away"
 msgstr "Poissa"
 
-#: ../libempathy/empathy-utils.c:475
+#: ../libempathy/empathy-utils.c:546
 msgid "Hidden"
 msgstr "Piilotettu"
 
-#: ../libempathy/empathy-utils.c:478
+#: ../libempathy/empathy-utils.c:549
 msgid "Offline"
 msgstr "Poissa linjoilta"
 
@@ -398,7 +398,7 @@ msgstr "_Julkaistu nimi:"
 msgid "salut account settings"
 msgstr "salut-tilin asetukset"
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:224
+#: ../libempathy-gtk/empathy-accounts-dialog.c:225
 msgid ""
 "To add a new account, you can click on the 'Add' button and a new entry will "
 "be created for you to start configuring."
@@ -406,7 +406,7 @@ msgstr ""
 "Jos haluat lisätä uuden tilin, voit napsauttaa \"Lisää\"-painiketta ja uusi "
 "kohta lisätään, josta voit määritellä tilin asetukset."
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:228
+#: ../libempathy-gtk/empathy-accounts-dialog.c:229
 msgid ""
 "To add a new account, you first have to install a backend for each protocol "
 "you want to use."
@@ -414,12 +414,12 @@ msgstr ""
 "Ennen kuin voit lisätä tilin, sinun täytyy asentaa kullekin käytettävälle "
 "protokollalle tarvittava taustajärjestelmä."
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:235
+#: ../libempathy-gtk/empathy-accounts-dialog.c:236
 #: ../libempathy-gtk/empathy-accounts-dialog.glade.h:2
 msgid "<b>No Account Selected</b>"
 msgstr "<b>Tiliä ei ole valittu</b>"
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:236
+#: ../libempathy-gtk/empathy-accounts-dialog.c:237
 msgid ""
 "\n"
 "\n"
@@ -431,20 +431,20 @@ msgstr ""
 "Jos et halua lisätä uutta tiliä, valitse vasemmalla olevasta luettelosta "
 "tili, jonka asetuksia haluat muuttaa."
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:242
+#: ../libempathy-gtk/empathy-accounts-dialog.c:243
 msgid "<b>No Accounts Configured</b>"
 msgstr "<b>Tilejä ei ole määritelty</b>"
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:398
+#: ../libempathy-gtk/empathy-accounts-dialog.c:403
 msgid "Enabled"
 msgstr "Käytössä"
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:408
+#: ../libempathy-gtk/empathy-accounts-dialog.c:413
 #: ../libempathy-gtk/empathy-accounts-dialog.glade.h:4
 msgid "Accounts"
 msgstr "Käyttäjätilit"
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:891
+#: ../libempathy-gtk/empathy-accounts-dialog.c:896
 #, c-format
 msgid ""
 "You are about to remove your %s account!\n"
@@ -453,7 +453,7 @@ msgstr ""
 "Olet poistamassa %s-tilisi!\n"
 "Haluatko varmasti jatkaa?"
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:897
+#: ../libempathy-gtk/empathy-accounts-dialog.c:902
 msgid ""
 "Any associated conversations and chat rooms will NOT be removed if you "
 "decide to proceed.\n"
@@ -517,15 +517,9 @@ msgstr "Kaikki tiedostot"
 msgid "Click to enlarge"
 msgstr "Suurenna napsauttamalla"
 
-#: ../libempathy-gtk/empathy-call-window.c:116
-#, c-format
-msgid "Call from %s"
-msgstr "Puhelu (%s)"
-
 #: ../libempathy-gtk/empathy-call-window.glade.h:1
-#: ../libempathy-gtk/empathy-new-message-dialog.glade.h:2
-msgid "Call"
-msgstr "Soita"
+msgid "End Call"
+msgstr "Lopeta puhelu"
 
 #: ../libempathy-gtk/empathy-call-window.glade.h:2
 msgid "Input"
@@ -544,51 +538,55 @@ msgid "Send Video"
 msgstr "Lähetä videota"
 
 #: ../libempathy-gtk/empathy-call-window.glade.h:6
+msgid "Start Call"
+msgstr "Aloita puhelu"
+
+#: ../libempathy-gtk/empathy-call-window.glade.h:7
 msgid "Volume"
 msgstr "Äänenvoimakkuus"
 
-#: ../libempathy-gtk/empathy-chat.c:436
+#: ../libempathy-gtk/empathy-chat.c:445
 msgid "Disconnected"
 msgstr "Ei yhteyttä"
 
-#: ../libempathy-gtk/empathy-chat.c:556
+#: ../libempathy-gtk/empathy-chat.c:580
 msgid "offline"
 msgstr "poissa linjoilta"
 
-#: ../libempathy-gtk/empathy-chat.c:559
+#: ../libempathy-gtk/empathy-chat.c:583
 msgid "invalid contact"
 msgstr "virheellinen yhteystieto"
 
-#: ../libempathy-gtk/empathy-chat.c:562
+#: ../libempathy-gtk/empathy-chat.c:586
 msgid "permission denied"
 msgstr "lupa evätty"
 
-#: ../libempathy-gtk/empathy-chat.c:565
+#: ../libempathy-gtk/empathy-chat.c:589
 msgid "too long message"
 msgstr "liian pitkä viesti"
 
-#: ../libempathy-gtk/empathy-chat.c:568
+#: ../libempathy-gtk/empathy-chat.c:592
 msgid "not implemented"
 msgstr "ei toteutettu"
 
-#: ../libempathy-gtk/empathy-chat.c:571
+#: ../libempathy-gtk/empathy-chat.c:595
 msgid "unknown"
 msgstr "tuntematon"
 
-#: ../libempathy-gtk/empathy-chat.c:575
+#: ../libempathy-gtk/empathy-chat.c:599
 #, c-format
 msgid "Error sending message '%s': %s"
 msgstr "Virhe lähetettäessä viestiä \"%s\": %s"
 
-#: ../libempathy-gtk/empathy-chat.c:1032
+#: ../libempathy-gtk/empathy-chat.c:1056
 msgid "Insert Smiley"
 msgstr "Lisää hymiö"
 
-#: ../libempathy-gtk/empathy-chat.c:1079
+#: ../libempathy-gtk/empathy-chat.c:1103
 msgid "_Check Word Spelling..."
 msgstr "_Tarkasta oikeinkirjoitus..."
 
-#: ../libempathy-gtk/empathy-chat.c:1508
+#: ../libempathy-gtk/empathy-chat.c:1558
 msgid "Connected"
 msgstr "Yhdistetty"
 
@@ -977,27 +975,27 @@ msgstr "WWW-sivusto:"
 msgid "Enter the new topic you want to set for this room:"
 msgstr "Anna tälle ryhmälle asetettava uusi aihe:"
 
-#: ../libempathy-gtk/empathy-group-chat.c:364
+#: ../libempathy-gtk/empathy-group-chat.c:361
 #, c-format
 msgid "%s has joined the room"
 msgstr "%s on saapunut huoneeseen"
 
-#: ../libempathy-gtk/empathy-group-chat.c:367
+#: ../libempathy-gtk/empathy-group-chat.c:364
 #, c-format
 msgid "%s has left the room"
 msgstr "%s on poistunut huoneesta"
 
-#: ../libempathy-gtk/empathy-group-chat.c:447
+#: ../libempathy-gtk/empathy-group-chat.c:445
 #, c-format
 msgid "Topic: %s"
 msgstr "Aihe: %s"
 
-#: ../libempathy-gtk/empathy-group-chat.c:575
+#: ../libempathy-gtk/empathy-group-chat.c:574
 #, c-format
 msgid "Topic set to: %s"
 msgstr "Aihe asetettu: %s"
 
-#: ../libempathy-gtk/empathy-group-chat.c:577
+#: ../libempathy-gtk/empathy-group-chat.c:576
 msgid "No topic defined"
 msgstr "Aihetta ei ole annettu"
 
@@ -1190,6 +1188,10 @@ msgstr "_Asetukset"
 #: ../libempathy-gtk/empathy-status-icon.glade.h:3
 msgid "_Quit"
 msgstr "_Lopeta"
+
+#: ../libempathy-gtk/empathy-new-message-dialog.glade.h:2
+msgid "Call"
+msgstr "Soita"
 
 #: ../libempathy-gtk/empathy-new-message-dialog.glade.h:4
 msgid "Contact ID:"
@@ -1393,7 +1395,7 @@ msgstr "Tila"
 msgid "_Show Contact List"
 msgstr "_Näytä tuttavaluettelo"
 
-#: ../libempathy-gtk/empathy-theme-boxes.c:779
+#: ../libempathy-gtk/empathy-theme-boxes.c:780
 #: ../libempathy-gtk/empathy-theme-irc.c:297
 msgid "%A %d %B %Y"
 msgstr "%A %d. %Bta %Y"
@@ -1414,6 +1416,248 @@ msgstr "Siisti"
 msgid "Blue"
 msgstr "Sininen"
 
+#: ../libempathy-gtk/empathy-account-widget-irc.c:246
+msgid "New Network"
+msgstr "Uusi verkko"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:1
+msgid "<b>Network</b>"
+msgstr "<b>Verkko</b>"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:2
+msgid "<b>Servers</b>"
+msgstr "<b>Palvelimet</b>"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:3
+msgid "Charset:"
+msgstr "Merkistö:"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:4
+msgid "Create a new IRC network"
+msgstr "Luo uusi IRC-verkko"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:5
+msgid "Edit the selected IRC network"
+msgstr "Muokkaa valittua IRC-verkkoa"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:6
+msgid "Network"
+msgstr "Verkko"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:7
+msgid "Network:"
+msgstr "Verkko:"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:8
+msgid "Nickname:"
+msgstr "Nimimerkki:"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:9
+msgid "Password:"
+msgstr "Salasana:"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:10
+msgid "Quit message:"
+msgstr "Lopetusviesti:"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:11
+msgid "Real name:"
+msgstr "Oikea nimi:"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:12
+msgid "Remove the selected IRC network"
+msgstr "Poista valittu IRC-verkko"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:13
+msgid "irc account settings"
+msgstr "irc-tilin asetukset"
+
+#: ../libempathy-gtk/empathy-irc-network-dialog.c:287
+msgid "new server"
+msgstr "uusi palvelin"
+
+#: ../libempathy-gtk/empathy-irc-network-dialog.c:512
+msgid "Server"
+msgstr "Palvelin:"
+
+#: ../libempathy-gtk/empathy-irc-network-dialog.c:527
+msgid "Port"
+msgstr "Portti:"
+
+#: ../libempathy-gtk/empathy-irc-network-dialog.c:540
+msgid "SSL"
+msgstr "SSL"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:158
+msgid "Current Locale"
+msgstr "Nykyinen maa-asetusto"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:161
+#: ../libempathy-gtk/totem-subtitle-encoding.c:163
+#: ../libempathy-gtk/totem-subtitle-encoding.c:165
+#: ../libempathy-gtk/totem-subtitle-encoding.c:167
+msgid "Arabic"
+msgstr "arabia"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:170
+msgid "Armenian"
+msgstr "armenia"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:173
+#: ../libempathy-gtk/totem-subtitle-encoding.c:175
+#: ../libempathy-gtk/totem-subtitle-encoding.c:177
+msgid "Baltic"
+msgstr "baltti"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:180
+msgid "Celtic"
+msgstr "keltti"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:183
+#: ../libempathy-gtk/totem-subtitle-encoding.c:185
+#: ../libempathy-gtk/totem-subtitle-encoding.c:187
+#: ../libempathy-gtk/totem-subtitle-encoding.c:189
+msgid "Central European"
+msgstr "keskieurooppalainen"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:192
+#: ../libempathy-gtk/totem-subtitle-encoding.c:194
+#: ../libempathy-gtk/totem-subtitle-encoding.c:196
+#: ../libempathy-gtk/totem-subtitle-encoding.c:198
+msgid "Chinese Simplified"
+msgstr "kiina, yksinkertaistettu"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:201
+#: ../libempathy-gtk/totem-subtitle-encoding.c:203
+#: ../libempathy-gtk/totem-subtitle-encoding.c:205
+msgid "Chinese Traditional"
+msgstr "kiina, perinteinen"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:208
+msgid "Croatian"
+msgstr "kroatia"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:211
+#: ../libempathy-gtk/totem-subtitle-encoding.c:213
+#: ../libempathy-gtk/totem-subtitle-encoding.c:215
+#: ../libempathy-gtk/totem-subtitle-encoding.c:217
+#: ../libempathy-gtk/totem-subtitle-encoding.c:219
+#: ../libempathy-gtk/totem-subtitle-encoding.c:221
+msgid "Cyrillic"
+msgstr "kyrillinen"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:224
+msgid "Cyrillic/Russian"
+msgstr "kyrillinen, Venäjä"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:227
+#: ../libempathy-gtk/totem-subtitle-encoding.c:229
+msgid "Cyrillic/Ukrainian"
+msgstr "kyrillinen, Ukraina"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:232
+msgid "Georgian"
+msgstr "georgia"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:235
+#: ../libempathy-gtk/totem-subtitle-encoding.c:237
+#: ../libempathy-gtk/totem-subtitle-encoding.c:239
+msgid "Greek"
+msgstr "kreikka"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:242
+msgid "Gujarati"
+msgstr "gujarati"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:245
+msgid "Gurmukhi"
+msgstr "gurmukhi"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:248
+#: ../libempathy-gtk/totem-subtitle-encoding.c:250
+#: ../libempathy-gtk/totem-subtitle-encoding.c:252
+#: ../libempathy-gtk/totem-subtitle-encoding.c:254
+msgid "Hebrew"
+msgstr "heprea"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:257
+msgid "Hebrew Visual"
+msgstr "heprea, visuaalinen"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:260
+msgid "Hindi"
+msgstr "hindi"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:263
+msgid "Icelandic"
+msgstr "islanti"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:266
+#: ../libempathy-gtk/totem-subtitle-encoding.c:268
+#: ../libempathy-gtk/totem-subtitle-encoding.c:270
+msgid "Japanese"
+msgstr "japani"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:273
+#: ../libempathy-gtk/totem-subtitle-encoding.c:275
+#: ../libempathy-gtk/totem-subtitle-encoding.c:277
+#: ../libempathy-gtk/totem-subtitle-encoding.c:279
+msgid "Korean"
+msgstr "korea"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:282
+msgid "Nordic"
+msgstr "pohjoismainen"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:285
+msgid "Persian"
+msgstr "farsi"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:288
+#: ../libempathy-gtk/totem-subtitle-encoding.c:290
+msgid "Romanian"
+msgstr "romania"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:293
+msgid "South European"
+msgstr "etelä-eurooppa"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:296
+msgid "Thai"
+msgstr "thai"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:299
+#: ../libempathy-gtk/totem-subtitle-encoding.c:301
+#: ../libempathy-gtk/totem-subtitle-encoding.c:303
+#: ../libempathy-gtk/totem-subtitle-encoding.c:305
+msgid "Turkish"
+msgstr "turkki"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:308
+#: ../libempathy-gtk/totem-subtitle-encoding.c:310
+#: ../libempathy-gtk/totem-subtitle-encoding.c:312
+#: ../libempathy-gtk/totem-subtitle-encoding.c:314
+#: ../libempathy-gtk/totem-subtitle-encoding.c:316
+msgid "Unicode"
+msgstr "unicode"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:319
+#: ../libempathy-gtk/totem-subtitle-encoding.c:321
+#: ../libempathy-gtk/totem-subtitle-encoding.c:323
+#: ../libempathy-gtk/totem-subtitle-encoding.c:325
+#: ../libempathy-gtk/totem-subtitle-encoding.c:327
+msgid "Western"
+msgstr "länsimaalainen"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:330
+#: ../libempathy-gtk/totem-subtitle-encoding.c:332
+#: ../libempathy-gtk/totem-subtitle-encoding.c:334
+msgid "Vietnamese"
+msgstr "vietnam"
+
+#.
+#. * vim: sw=2 ts=8 cindent noai bs=2
+#.
 #: ../megaphone/data/GNOME_Megaphone_Applet.schemas.in.h:1
 msgid ""
 "The contact to display in the applet. Empty means no contact is displayed."
@@ -1450,6 +1694,9 @@ msgstr "Aseta läsnäolosi tila"
 #: ../src/empathy.c:205
 msgid "- Empathy Instant Messenger"
 msgstr "- Empathy-pikaviestiohjelma"
+
+#~ msgid "Call from %s"
+#~ msgstr "Puhelu (%s)"
 
 #~ msgid "Disable"
 #~ msgstr "Poista käytöstä"
