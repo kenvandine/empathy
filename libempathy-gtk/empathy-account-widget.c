@@ -407,7 +407,7 @@ empathy_account_widget_handle_params (McAccount   *account,
 }
 
 void
-emapthy_account_widget_add_forget_button (McAccount   *account,
+empathy_account_widget_add_forget_button (McAccount   *account,
 					  GladeXML    *glade,
 					  const gchar *button,
 					  const gchar *entry)
@@ -503,7 +503,7 @@ empathy_account_widget_msn_new (McAccount *account)
 			"spinbutton_port", "port",
 			NULL);
 
-	emapthy_account_widget_add_forget_button (account, glade,
+	empathy_account_widget_add_forget_button (account, glade,
 						  "button_forget",
 						  "entry_password");
 
@@ -542,7 +542,7 @@ empathy_account_widget_jabber_new (McAccount *account)
 			"checkbutton_encryption", "require-encryption",
 			NULL);
 
-	emapthy_account_widget_add_forget_button (account, glade,
+	empathy_account_widget_add_forget_button (account, glade,
 						  "button_forget",
 						  "entry_password");
 
@@ -579,7 +579,7 @@ empathy_account_widget_icq_new (McAccount *account)
 			"entry_charset", "charset",
 			NULL);
 
-	emapthy_account_widget_add_forget_button (account, glade,
+	empathy_account_widget_add_forget_button (account, glade,
 						  "button_forget",
 						  "entry_password");
 
@@ -614,7 +614,7 @@ empathy_account_widget_yahoo_new (McAccount *account)
 			"checkbutton_ignore_invites", "ignore-invites",
 			NULL);
 
-	emapthy_account_widget_add_forget_button (account, glade,
+	empathy_account_widget_add_forget_button (account, glade,
 						  "button_forget",
 						  "entry_password");
 

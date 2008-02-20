@@ -36,7 +36,7 @@ void       empathy_account_widget_handle_params     (McAccount   *account,
 						     GladeXML    *glade,
 						     const gchar *first_widget_name,
 						     ...);
-void       emapthy_account_widget_add_forget_button (McAccount   *account,
+void       empathy_account_widget_add_forget_button (McAccount   *account,
 						     GladeXML    *glade,
 						     const gchar *button,
 						     const gchar *entry);
