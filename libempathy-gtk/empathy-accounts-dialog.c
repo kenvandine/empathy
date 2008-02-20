@@ -274,6 +274,10 @@ accounts_dialog_update_account (EmpathyAccountsDialog *dialog,
 			dialog->settings_widget =
 				empathy_account_widget_irc_new (account);
 		}
+		else if (!tp_strdiff(config_ui, "icq")) {
+			dialog->settings_widget =
+				empathy_account_widget_icq_new (account);
+		}
 		else {
 			dialog->settings_widget = 
 				empathy_account_widget_generic_new (account);

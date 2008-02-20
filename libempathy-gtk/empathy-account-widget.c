@@ -557,3 +557,36 @@ empathy_account_widget_jabber_new (McAccount *account)
 	return widget;
 }
 
+GtkWidget *
+empathy_account_widget_icq_new (McAccount *account)
+{
+	GladeXML  *glade;
+	GtkWidget *widget;
+	GtkWidget *spinbutton_port;
+
+	glade = empathy_glade_get_file ("empathy-account-widget-icq.glade",
+				        "vbox_icq_settings",
+				        NULL,
+				        "vbox_icq_settings", &widget,
+				        "spinbutton_port", &spinbutton_port,
+				        NULL);
+
+	empathy_account_widget_handle_params (account, glade,
+			"entry_uin", "account",
+			"entry_password", "password",
+			"entry_server", "server",
+			"spinbutton_port", "port",
+			"entry_charset", "charset",
+			NULL);
+
+	emapthy_account_widget_add_forget_button (account, glade,
+						  "button_forget",
+						  "entry_password");
+
+	g_object_unref (glade);
+
+	gtk_widget_show (widget);
+
+	return widget;
+}
+
