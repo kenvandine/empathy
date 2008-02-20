@@ -590,3 +590,38 @@ empathy_account_widget_icq_new (McAccount *account)
 	return widget;
 }
 
+GtkWidget *
+empathy_account_widget_yahoo_new (McAccount *account)
+{
+	GladeXML  *glade;
+	GtkWidget *widget;
+
+	glade = empathy_glade_get_file ("empathy-account-widget-yahoo.glade",
+					"vbox_yahoo_settings",
+					NULL,
+					"vbox_yahoo_settings", &widget,
+					NULL);
+
+	empathy_account_widget_handle_params (account, glade,
+			"entry_id", "account",
+			"entry_password", "password",
+			"entry_server", "server",
+			"entry_serverjp", "serverjp",
+			"entry_locale", "room-list-locale",
+			"entry_charset", "charset",
+			"spinbutton_port", "port",
+			"checkbutton_yahoojp", "yahoojp",
+			"checkbutton_ignore_invites", "ignore-invites",
+			NULL);
+
+	emapthy_account_widget_add_forget_button (account, glade,
+						  "button_forget",
+						  "entry_password");
+
+	g_object_unref (glade);
+
+	gtk_widget_show (widget);
+
+	return widget;
+}
+
