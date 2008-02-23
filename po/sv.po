@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: empathy\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-01-15 01:43+0100\n"
-"PO-Revision-Date: 2008-01-15 01:44+0100\n"
+"POT-Creation-Date: 2008-02-22 12:45+0100\n"
+"PO-Revision-Date: 2008-02-22 12:51+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "MIME-Version: 1.0\n"
@@ -199,31 +199,30 @@ msgstr "Huruvida tema ska användas för chattrum eller inte."
 msgid "Which criterium to use when sorting the contact list. Default is to use sort by the contact's name with the value \"name\". A value of \"state\" will sort the contact list by state."
 msgstr "Vilket kriteria som ska användas när kontaktlistan sorteras. Standard är att sortera efter kontaktens namn med värdet \"name\". Värdet \"state\" kommer att sortera kontaktlistan efter tillstånd."
 
-#: ../libempathy/empathy-presence.c:185
-#: ../libempathy/empathy-presence.c:285
-msgid "Offline"
-msgstr "Frånkopplad"
+#: ../libempathy/empathy-tp-contact-list.c:724
+#: ../src/empathy.c:149
+msgid "People nearby"
+msgstr "Personer i närheten"
 
-#: ../libempathy/empathy-presence.c:275
+#: ../libempathy/empathy-utils.c:539
 msgid "Available"
 msgstr "Tillgänglig"
 
-#: ../libempathy/empathy-presence.c:277
+#: ../libempathy/empathy-utils.c:541
 msgid "Busy"
 msgstr "Upptagen"
 
-#: ../libempathy/empathy-presence.c:280
+#: ../libempathy/empathy-utils.c:544
 msgid "Away"
 msgstr "Frånvarande"
 
-#: ../libempathy/empathy-presence.c:282
+#: ../libempathy/empathy-utils.c:546
 msgid "Hidden"
 msgstr "Dold"
 
-#: ../libempathy/empathy-tp-contact-list.c:729
-#: ../src/empathy.c:152
-msgid "People nearby"
-msgstr "Personer i närheten"
+#: ../libempathy/empathy-utils.c:549
+msgid "Offline"
+msgstr "Frånkopplad"
 
 #: ../libempathy-gtk/empathy-about-dialog.c:63
 msgid "Empathy is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version."
@@ -255,8 +254,8 @@ msgstr ""
 msgid "All"
 msgstr "Alla"
 
-#: ../libempathy-gtk/empathy-account-widget-generic.c:146
-#: ../libempathy-gtk/empathy-account-widget-generic.c:208
+#: ../libempathy-gtk/empathy-account-widget.c:276
+#: ../libempathy-gtk/empathy-account-widget.c:321
 #, c-format
 msgid "%s:"
 msgstr "%s:"
@@ -268,44 +267,56 @@ msgid "<b>Advanced</b>"
 msgstr "<b>Avancerat</b>"
 
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:2
+msgid "<b>Override  server settings</b>"
+msgstr "<b>Åsidosätt serverinställningar</b>"
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:3
 #: ../libempathy-gtk/empathy-account-widget-msn.glade.h:2
 msgid "Forget password and clear the entry."
 msgstr "Glöm lösenordet och töm inmatningen."
 
-#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:3
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:4
 #: ../libempathy-gtk/empathy-account-widget-msn.glade.h:3
 msgid "Login I_D:"
 msgstr "Inloggningsid:"
 
-#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:4
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:5
 #: ../libempathy-gtk/empathy-account-widget-msn.glade.h:4
 msgid "Pass_word:"
 msgstr "L_ösenord:"
 
-#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:5
-msgid "Priority:"
-msgstr "Prioritet:"
-
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:6
+msgid "Pri_ority:"
+msgstr "Pri_oritet:"
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:7
 msgid "Reso_urce:"
 msgstr "_Resurs:"
 
-#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:7
-msgid "Use encryption (SS_L)"
-msgstr "Använd _kryptering (SSL)"
-
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:8
+msgid "Use old SS_L"
+msgstr "Använd gammal SS_L"
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:9
+msgid "_Encryption required (TLS/SSL)"
+msgstr "_Kryptering krävs (TLS/SSL)"
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:10
+msgid "_Ignore SSL certificate errors"
+msgstr "_Ignorera SSL-certifikatfel"
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:11
 #: ../libempathy-gtk/empathy-account-widget-msn.glade.h:5
 msgid "_Port:"
 msgstr "_Port:"
 
-#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:9
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:12
 #: ../libempathy-gtk/empathy-account-widget-msn.glade.h:6
 #: ../libempathy-gtk/empathy-new-chatroom-dialog.glade.h:10
 msgid "_Server:"
 msgstr "_Server:"
 
-#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:10
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:13
 msgid "jabber account settings"
 msgstr "inställningar för jabberkonto"
 
@@ -342,28 +353,20 @@ msgstr "_Publikt namn:"
 msgid "salut account settings"
 msgstr "inställningar för salut-konto"
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:219
-msgid "Disable"
-msgstr "Inaktivera"
-
-#: ../libempathy-gtk/empathy-accounts-dialog.c:222
-msgid "Enable"
-msgstr "Aktivera"
-
-#: ../libempathy-gtk/empathy-accounts-dialog.c:257
+#: ../libempathy-gtk/empathy-accounts-dialog.c:225
 msgid "To add a new account, you can click on the 'Add' button and a new entry will be created for you to start configuring."
 msgstr "För att lägga till ett nytt konto, klicka på knappen \"Lägg till\" och en ny post kommer att skapas för dig att börja konfigurera."
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:261
+#: ../libempathy-gtk/empathy-accounts-dialog.c:229
 msgid "To add a new account, you first have to install a backend for each protocol you want to use."
 msgstr "För att lägga till ett nytt konto måste du först installera en bakände för varje protokoll som du vill använda."
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:268
+#: ../libempathy-gtk/empathy-accounts-dialog.c:236
 #: ../libempathy-gtk/empathy-accounts-dialog.glade.h:2
 msgid "<b>No Account Selected</b>"
 msgstr "<b>Inget konto valt</b>"
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:269
+#: ../libempathy-gtk/empathy-accounts-dialog.c:237
 msgid ""
 "\n"
 "\n"
@@ -373,16 +376,20 @@ msgstr ""
 "\n"
 "Om du inte vill lägga till ett konto, kan du helt enkelt klicka på kontot, i listan till vänster, som du vill konfigurera."
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:275
+#: ../libempathy-gtk/empathy-accounts-dialog.c:243
 msgid "<b>No Accounts Configured</b>"
 msgstr "<b>Inga konton konfigurerade</b>"
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:400
+#: ../libempathy-gtk/empathy-accounts-dialog.c:411
+msgid "Enabled"
+msgstr "Aktiverad"
+
+#: ../libempathy-gtk/empathy-accounts-dialog.c:421
 #: ../libempathy-gtk/empathy-accounts-dialog.glade.h:4
 msgid "Accounts"
 msgstr "Konton"
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:897
+#: ../libempathy-gtk/empathy-accounts-dialog.c:904
 #, c-format
 msgid ""
 "You are about to remove your %s account!\n"
@@ -391,7 +398,7 @@ msgstr ""
 "Du håller på att ta bort kontot %s!\n"
 "Är du säker att du vill fortsätta?"
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:903
+#: ../libempathy-gtk/empathy-accounts-dialog.c:910
 msgid ""
 "Any associated conversations and chat rooms will NOT be removed if you decide to proceed.\n"
 "\n"
@@ -427,19 +434,19 @@ msgstr ""
 msgid "Type:"
 msgstr "Typ:"
 
-#: ../libempathy-gtk/empathy-avatar-chooser.c:448
+#: ../libempathy-gtk/empathy-avatar-chooser.c:449
 msgid "Select Your Avatar Image"
 msgstr "Välj din avatarbild"
 
-#: ../libempathy-gtk/empathy-avatar-chooser.c:451
+#: ../libempathy-gtk/empathy-avatar-chooser.c:452
 msgid "No Image"
 msgstr "Ingen bild"
 
-#: ../libempathy-gtk/empathy-avatar-chooser.c:511
+#: ../libempathy-gtk/empathy-avatar-chooser.c:512
 msgid "Images"
 msgstr "Bilder"
 
-#: ../libempathy-gtk/empathy-avatar-chooser.c:515
+#: ../libempathy-gtk/empathy-avatar-chooser.c:516
 msgid "All Files"
 msgstr "Alla filer"
 
@@ -447,14 +454,9 @@ msgstr "Alla filer"
 msgid "Click to enlarge"
 msgstr "Klicka för att förstora"
 
-#: ../libempathy-gtk/empathy-call-window.c:116
-#, c-format
-msgid "Call from %s"
-msgstr "Samtal från %s"
-
 #: ../libempathy-gtk/empathy-call-window.glade.h:1
-msgid "Call"
-msgstr "Ring"
+msgid "End Call"
+msgstr "Avsluta samtal"
 
 #: ../libempathy-gtk/empathy-call-window.glade.h:2
 msgid "Input"
@@ -474,51 +476,55 @@ msgid "Send Video"
 msgstr "Skicka video"
 
 #: ../libempathy-gtk/empathy-call-window.glade.h:6
+msgid "Start Call"
+msgstr "Påbörja samtal"
+
+#: ../libempathy-gtk/empathy-call-window.glade.h:7
 msgid "Volume"
 msgstr "Volym"
 
-#: ../libempathy-gtk/empathy-chat.c:436
+#: ../libempathy-gtk/empathy-chat.c:445
 msgid "Disconnected"
 msgstr "Frånkopplad"
 
-#: ../libempathy-gtk/empathy-chat.c:556
+#: ../libempathy-gtk/empathy-chat.c:580
 msgid "offline"
 msgstr "frånkopplad"
 
-#: ../libempathy-gtk/empathy-chat.c:559
+#: ../libempathy-gtk/empathy-chat.c:583
 msgid "invalid contact"
 msgstr "ogiltig kontakt"
 
-#: ../libempathy-gtk/empathy-chat.c:562
+#: ../libempathy-gtk/empathy-chat.c:586
 msgid "permission denied"
 msgstr "åtkomst nekad"
 
-#: ../libempathy-gtk/empathy-chat.c:565
+#: ../libempathy-gtk/empathy-chat.c:589
 msgid "too long message"
 msgstr "för långt meddelande"
 
-#: ../libempathy-gtk/empathy-chat.c:568
+#: ../libempathy-gtk/empathy-chat.c:592
 msgid "not implemented"
 msgstr "inte implementerat"
 
-#: ../libempathy-gtk/empathy-chat.c:571
+#: ../libempathy-gtk/empathy-chat.c:595
 msgid "unknown"
 msgstr "okänt"
 
-#: ../libempathy-gtk/empathy-chat.c:575
+#: ../libempathy-gtk/empathy-chat.c:599
 #, c-format
 msgid "Error sending message '%s': %s"
 msgstr "Fel vid sändning av meddelandet \"%s\": %s"
 
-#: ../libempathy-gtk/empathy-chat.c:1032
+#: ../libempathy-gtk/empathy-chat.c:1056
 msgid "Insert Smiley"
 msgstr "Infoga smilis"
 
-#: ../libempathy-gtk/empathy-chat.c:1079
+#: ../libempathy-gtk/empathy-chat.c:1103
 msgid "_Check Word Spelling..."
 msgstr "_Kontrollera stavning..."
 
-#: ../libempathy-gtk/empathy-chat.c:1508
+#: ../libempathy-gtk/empathy-chat.c:1558
 msgid "Connected"
 msgstr "Ansluten"
 
@@ -535,6 +541,7 @@ msgid "Change _Topic..."
 msgstr "Ändra _ämne..."
 
 #: ../libempathy-gtk/empathy-chat.glade.h:4
+#: ../libempathy-gtk/empathy-new-message-dialog.glade.h:3
 msgid "Chat"
 msgstr "Chatta"
 
@@ -614,7 +621,7 @@ msgid "_Detach Tab"
 msgstr "_Koppla loss flik"
 
 #: ../libempathy-gtk/empathy-chat.glade.h:23
-#: ../libempathy-gtk/empathy-contact-list-view.c:216
+#: ../libempathy-gtk/empathy-contact-list-view.c:217
 #: ../libempathy-gtk/empathy-main-window.glade.h:12
 msgid "_Edit"
 msgstr "R_edigera"
@@ -650,7 +657,7 @@ msgid "_Tabs"
 msgstr "_Flikar"
 
 #: ../libempathy-gtk/empathy-chat.glade.h:31
-#: ../libempathy-gtk/empathy-contact-list-view.c:232
+#: ../libempathy-gtk/empathy-contact-list-view.c:233
 #: ../libempathy-gtk/empathy-main-window.glade.h:19
 msgid "_View Previous Conversations"
 msgstr "_Visa tidigare samtal"
@@ -748,88 +755,88 @@ msgstr "Bestäm _senare"
 msgid "Subscription Request"
 msgstr "Prenumerationsförfrågan"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:196
+#: ../libempathy-gtk/empathy-contact-list-view.c:197
 msgid "_Contact"
 msgstr "_Kontakt"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:200
+#: ../libempathy-gtk/empathy-contact-list-view.c:201
 msgid "_Group"
 msgstr "_Grupp"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:204
+#: ../libempathy-gtk/empathy-contact-list-view.c:205
 #: ../libempathy-gtk/empathy-main-window.glade.h:10
 msgid "_Chat"
 msgstr "_Chatt"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:204
+#: ../libempathy-gtk/empathy-contact-list-view.c:205
 msgid "Chat with contact"
 msgstr "Chatta med kontakten"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:208
+#: ../libempathy-gtk/empathy-contact-list-view.c:209
 msgid "Infor_mation"
 msgstr "Infor_mation"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:208
+#: ../libempathy-gtk/empathy-contact-list-view.c:209
 msgid "View contact information"
 msgstr "Visa kontaktinformation"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:212
+#: ../libempathy-gtk/empathy-contact-list-view.c:213
 msgid "Re_name"
 msgstr "Byt _namn"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:212
+#: ../libempathy-gtk/empathy-contact-list-view.c:213
 msgid "Rename"
 msgstr "Byt namn"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:216
+#: ../libempathy-gtk/empathy-contact-list-view.c:217
 msgid "Edit the groups and name for this contact"
 msgstr "Redigera grupper och namn för kontakten"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:220
+#: ../libempathy-gtk/empathy-contact-list-view.c:221
 msgid "_Remove"
 msgstr "_Ta bort"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:220
+#: ../libempathy-gtk/empathy-contact-list-view.c:221
 msgid "Remove contact"
 msgstr "Ta bort kontakt"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:224
+#: ../libempathy-gtk/empathy-contact-list-view.c:225
 msgid "_Invite to Chat Room"
 msgstr "_Bjud in till chattrum"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:224
+#: ../libempathy-gtk/empathy-contact-list-view.c:225
 msgid "Invite to a currently open chat room"
 msgstr "Bjud in till ett för tillfället öppet chattrum"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:228
+#: ../libempathy-gtk/empathy-contact-list-view.c:229
 msgid "_Send File..."
 msgstr "_Skicka fil..."
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:228
+#: ../libempathy-gtk/empathy-contact-list-view.c:229
 msgid "Send a file"
 msgstr "Skicka en fil"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:232
+#: ../libempathy-gtk/empathy-contact-list-view.c:233
 msgid "View previous conversations with this contact"
 msgstr "Visa tidigare samtal med denna kontakt"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:237
+#: ../libempathy-gtk/empathy-contact-list-view.c:238
 msgid "_Call"
 msgstr "_Ring"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:237
+#: ../libempathy-gtk/empathy-contact-list-view.c:238
 msgid "Start a voice or video conversation with this contact"
 msgstr "Starta röst- eller videosamtal med denna kontakt"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1416
+#: ../libempathy-gtk/empathy-contact-list-view.c:1469
 msgid "Sorry, I don't want you in my contact list anymore."
 msgstr "Tyvärr, jag vill inte längre ha dig i min kontaktlista."
 
-#: ../libempathy-gtk/empathy-contact-widget.c:662
+#: ../libempathy-gtk/empathy-contact-widget.c:688
 msgid "Select"
 msgstr "Markera"
 
-#: ../libempathy-gtk/empathy-contact-widget.c:672
+#: ../libempathy-gtk/empathy-contact-widget.c:698
 #: ../libempathy-gtk/empathy-main-window.c:609
 msgid "Group"
 msgstr "Grupp"
@@ -903,27 +910,27 @@ msgstr "Webbplats:"
 msgid "Enter the new topic you want to set for this room:"
 msgstr "Ange det nya ämnet som du vill ställa in för det här rummet:"
 
-#: ../libempathy-gtk/empathy-group-chat.c:364
+#: ../libempathy-gtk/empathy-group-chat.c:361
 #, c-format
 msgid "%s has joined the room"
 msgstr "%s har gått in i rummet"
 
-#: ../libempathy-gtk/empathy-group-chat.c:367
+#: ../libempathy-gtk/empathy-group-chat.c:364
 #, c-format
 msgid "%s has left the room"
 msgstr "%s har lämnat rummet"
 
-#: ../libempathy-gtk/empathy-group-chat.c:447
+#: ../libempathy-gtk/empathy-group-chat.c:445
 #, c-format
 msgid "Topic: %s"
 msgstr "Ämne: %s"
 
-#: ../libempathy-gtk/empathy-group-chat.c:569
+#: ../libempathy-gtk/empathy-group-chat.c:574
 #, c-format
 msgid "Topic set to: %s"
 msgstr "Ämnet inställt till: %s"
 
-#: ../libempathy-gtk/empathy-group-chat.c:571
+#: ../libempathy-gtk/empathy-group-chat.c:576
 msgid "No topic defined"
 msgstr "Inget ämne definierat"
 
@@ -935,15 +942,15 @@ msgstr "<b>Ämne:</b>"
 msgid "Group Chat"
 msgstr "Gruppchatt"
 
-#: ../libempathy-gtk/empathy-log-window.c:497
+#: ../libempathy-gtk/empathy-log-window.c:499
 msgid "Account"
 msgstr "Konto"
 
-#: ../libempathy-gtk/empathy-log-window.c:504
+#: ../libempathy-gtk/empathy-log-window.c:506
 msgid "Conversation"
 msgstr "Samtal"
 
-#: ../libempathy-gtk/empathy-log-window.c:514
+#: ../libempathy-gtk/empathy-log-window.c:516
 msgid "Date"
 msgstr "Datum"
 
@@ -1004,8 +1011,8 @@ msgid "Contact"
 msgstr "Kontakt"
 
 #: ../libempathy-gtk/empathy-main-window.c:813
-msgid "Edit Account _Details"
-msgstr "Redigera konto_detaljer"
+msgid "_Edit account"
+msgstr "_Redigera konto"
 
 #: ../libempathy-gtk/empathy-main-window.c:896
 msgid "Network error"
@@ -1092,8 +1099,8 @@ msgstr "_Konton"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:14
 #: ../libempathy-gtk/empathy-status-icon.glade.h:2
-msgid "_New Message..."
-msgstr "_Nytt meddelande..."
+msgid "_New Conversation..."
+msgstr "_Nytt samtal..."
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:15
 msgid "_Personal Information"
@@ -1110,14 +1117,18 @@ msgid "_Quit"
 msgstr "_Avsluta"
 
 #: ../libempathy-gtk/empathy-new-message-dialog.glade.h:2
+msgid "Call"
+msgstr "Ring"
+
+#: ../libempathy-gtk/empathy-new-message-dialog.glade.h:4
 msgid "Contact ID:"
 msgstr "Kontakt-id:"
 
-#: ../libempathy-gtk/empathy-new-message-dialog.glade.h:3
-msgid "New message"
-msgstr "Nytt meddelande"
+#: ../libempathy-gtk/empathy-new-message-dialog.glade.h:5
+msgid "New Conversation"
+msgstr "Nytt samtal"
 
-#: ../libempathy-gtk/empathy-preferences.c:248
+#: ../libempathy-gtk/empathy-preferences.c:247
 msgid "Language"
 msgstr "Språk"
 
@@ -1230,7 +1241,7 @@ msgid "_Use for chat rooms"
 msgstr "Använd för _chattrum"
 
 #. Custom messages
-#: ../libempathy-gtk/empathy-presence-chooser.c:692
+#: ../libempathy-gtk/empathy-presence-chooser.c:691
 msgid "Custom messages..."
 msgstr "Anpassade meddelanden..."
 
@@ -1276,7 +1287,7 @@ msgstr "Stavningskontroll"
 msgid "Suggestions for the word:"
 msgstr "Förslag för ordet:"
 
-#: ../libempathy-gtk/empathy-status-icon.c:335
+#: ../libempathy-gtk/empathy-status-icon.c:354
 #, c-format
 msgid ""
 "New message from %s:\n"
@@ -1285,12 +1296,12 @@ msgstr ""
 "Nytt meddelande från %s:\n"
 "%s"
 
-#: ../libempathy-gtk/empathy-status-icon.c:603
+#: ../libempathy-gtk/empathy-status-icon.c:625
 #, c-format
 msgid "Subscription requested by %s"
 msgstr "Prenumeration begärd av %s"
 
-#: ../libempathy-gtk/empathy-status-icon.c:606
+#: ../libempathy-gtk/empathy-status-icon.c:628
 #, c-format
 msgid ""
 "\n"
@@ -1307,7 +1318,7 @@ msgstr "Status"
 msgid "_Show Contact List"
 msgstr "_Visa kontaktlista"
 
-#: ../libempathy-gtk/empathy-theme-boxes.c:779
+#: ../libempathy-gtk/empathy-theme-boxes.c:780
 #: ../libempathy-gtk/empathy-theme-irc.c:297
 msgid "%A %d %B %Y"
 msgstr "%A %d %B %Y"
@@ -1328,6 +1339,249 @@ msgstr "Rent"
 msgid "Blue"
 msgstr "Blått"
 
+#: ../libempathy-gtk/empathy-account-widget-irc.c:246
+msgid "New Network"
+msgstr "Nytt nätverk"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:1
+msgid "<b>Network</b>"
+msgstr "<b>Nätverk</b>"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:2
+msgid "<b>Servers</b>"
+msgstr "<b>Servrar</b>"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:3
+msgid "Charset:"
+msgstr "Teckenuppsättning:"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:4
+msgid "Create a new IRC network"
+msgstr "Skapa ett nytt irc-nätverk"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:5
+msgid "Edit the selected IRC network"
+msgstr "Redigera markerat irc-nätverk"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:6
+msgid "Network"
+msgstr "Nätverk"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:7
+msgid "Network:"
+msgstr "Nätverk:"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:8
+msgid "Nickname:"
+msgstr "Smeknamn:"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:9
+msgid "Password:"
+msgstr "Lösenord:"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:10
+msgid "Quit message:"
+msgstr "Avslutningsmeddelande:"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:11
+msgid "Real name:"
+msgstr "Verkligt namn:"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:12
+msgid "Remove the selected IRC network"
+msgstr "Ta bort markerat irc-nätverk"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:13
+msgid "irc account settings"
+msgstr "inställningar för irc-konto"
+
+#: ../libempathy-gtk/empathy-irc-network-dialog.c:287
+msgid "new server"
+msgstr "ny server"
+
+#: ../libempathy-gtk/empathy-irc-network-dialog.c:512
+msgid "Server"
+msgstr "Server"
+
+#: ../libempathy-gtk/empathy-irc-network-dialog.c:527
+msgid "Port"
+msgstr "Port"
+
+#: ../libempathy-gtk/empathy-irc-network-dialog.c:540
+msgid "SSL"
+msgstr "SSL"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:158
+msgid "Current Locale"
+msgstr "Aktuell lokal"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:161
+#: ../libempathy-gtk/totem-subtitle-encoding.c:163
+#: ../libempathy-gtk/totem-subtitle-encoding.c:165
+#: ../libempathy-gtk/totem-subtitle-encoding.c:167
+msgid "Arabic"
+msgstr "Arabisk"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:170
+msgid "Armenian"
+msgstr "Armenisk"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:173
+#: ../libempathy-gtk/totem-subtitle-encoding.c:175
+#: ../libempathy-gtk/totem-subtitle-encoding.c:177
+msgid "Baltic"
+msgstr "Baltisk"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:180
+msgid "Celtic"
+msgstr "Kymrisk"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:183
+#: ../libempathy-gtk/totem-subtitle-encoding.c:185
+#: ../libempathy-gtk/totem-subtitle-encoding.c:187
+#: ../libempathy-gtk/totem-subtitle-encoding.c:189
+msgid "Central European"
+msgstr "Centraleuropeisk"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:192
+#: ../libempathy-gtk/totem-subtitle-encoding.c:194
+#: ../libempathy-gtk/totem-subtitle-encoding.c:196
+#: ../libempathy-gtk/totem-subtitle-encoding.c:198
+msgid "Chinese Simplified"
+msgstr "Kinesisk (förenklad)"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:201
+#: ../libempathy-gtk/totem-subtitle-encoding.c:203
+#: ../libempathy-gtk/totem-subtitle-encoding.c:205
+msgid "Chinese Traditional"
+msgstr "Kinesisk (traditionell)"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:208
+msgid "Croatian"
+msgstr "Kroatisk"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:211
+#: ../libempathy-gtk/totem-subtitle-encoding.c:213
+#: ../libempathy-gtk/totem-subtitle-encoding.c:215
+#: ../libempathy-gtk/totem-subtitle-encoding.c:217
+#: ../libempathy-gtk/totem-subtitle-encoding.c:219
+#: ../libempathy-gtk/totem-subtitle-encoding.c:221
+msgid "Cyrillic"
+msgstr "Kyrillisk"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:224
+msgid "Cyrillic/Russian"
+msgstr "Kyrillisk/Rysk"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:227
+#: ../libempathy-gtk/totem-subtitle-encoding.c:229
+msgid "Cyrillic/Ukrainian"
+msgstr "Kyrillisk/Ukrainsk"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:232
+msgid "Georgian"
+msgstr "Georgisk"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:235
+#: ../libempathy-gtk/totem-subtitle-encoding.c:237
+#: ../libempathy-gtk/totem-subtitle-encoding.c:239
+msgid "Greek"
+msgstr "Grekisk"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:242
+msgid "Gujarati"
+msgstr "Gujarati"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:245
+msgid "Gurmukhi"
+msgstr "Gurmukhi"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:248
+#: ../libempathy-gtk/totem-subtitle-encoding.c:250
+#: ../libempathy-gtk/totem-subtitle-encoding.c:252
+#: ../libempathy-gtk/totem-subtitle-encoding.c:254
+msgid "Hebrew"
+msgstr "Hebreisk"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:257
+msgid "Hebrew Visual"
+msgstr "Hebreisk (visuell)"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:260
+msgid "Hindi"
+msgstr "Hindi"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:263
+msgid "Icelandic"
+msgstr "Isländsk"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:266
+#: ../libempathy-gtk/totem-subtitle-encoding.c:268
+#: ../libempathy-gtk/totem-subtitle-encoding.c:270
+msgid "Japanese"
+msgstr "Japansk"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:273
+#: ../libempathy-gtk/totem-subtitle-encoding.c:275
+#: ../libempathy-gtk/totem-subtitle-encoding.c:277
+#: ../libempathy-gtk/totem-subtitle-encoding.c:279
+msgid "Korean"
+msgstr "Koreansk"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:282
+msgid "Nordic"
+msgstr "Nordisk"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:285
+msgid "Persian"
+msgstr "Persisk"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:288
+#: ../libempathy-gtk/totem-subtitle-encoding.c:290
+msgid "Romanian"
+msgstr "Rumänsk"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:293
+msgid "South European"
+msgstr "Sydeuropeisk"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:296
+msgid "Thai"
+msgstr "Thailändsk"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:299
+#: ../libempathy-gtk/totem-subtitle-encoding.c:301
+#: ../libempathy-gtk/totem-subtitle-encoding.c:303
+#: ../libempathy-gtk/totem-subtitle-encoding.c:305
+msgid "Turkish"
+msgstr "Turkisk"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:308
+#: ../libempathy-gtk/totem-subtitle-encoding.c:310
+#: ../libempathy-gtk/totem-subtitle-encoding.c:312
+#: ../libempathy-gtk/totem-subtitle-encoding.c:314
+#: ../libempathy-gtk/totem-subtitle-encoding.c:316
+msgid "Unicode"
+msgstr "Unicode"
+
+# "Web site" är "webbplats". "Web page" är "webbsida".
+#: ../libempathy-gtk/totem-subtitle-encoding.c:319
+#: ../libempathy-gtk/totem-subtitle-encoding.c:321
+#: ../libempathy-gtk/totem-subtitle-encoding.c:323
+#: ../libempathy-gtk/totem-subtitle-encoding.c:325
+#: ../libempathy-gtk/totem-subtitle-encoding.c:327
+msgid "Western"
+msgstr "Västlig"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:330
+#: ../libempathy-gtk/totem-subtitle-encoding.c:332
+#: ../libempathy-gtk/totem-subtitle-encoding.c:334
+msgid "Vietnamese"
+msgstr "Vietnamesisk"
+
+#.
+#. * vim: sw=2 ts=8 cindent noai bs=2
+#.
 #: ../megaphone/data/GNOME_Megaphone_Applet.schemas.in.h:1
 msgid "The contact to display in the applet. Empty means no contact is displayed."
 msgstr "Kontakten att visa i panelprogrammet. Tom betyder att ingen kontakt visas."
@@ -1358,16 +1612,24 @@ msgstr "Närvaro"
 msgid "Set your own presence"
 msgstr "Ställ in din egna närvaro"
 
-#: ../src/empathy.c:216
+#: ../src/empathy.c:205
 msgid "- Empathy Instant Messenger"
 msgstr "- Empathy snabbmeddelandeklient"
 
+#~ msgid "Disable"
+#~ msgstr "Inaktivera"
+#~ msgid "Call from %s"
+#~ msgstr "Samtal från %s"
+#~ msgid "Edit Account _Details"
+#~ msgstr "Redigera konto_detaljer"
+#~ msgid "_New Message..."
+#~ msgstr "_Nytt meddelande..."
+#~ msgid "New message"
+#~ msgstr "Nytt meddelande"
 #~ msgid "gtk-cancel"
 #~ msgstr "Avbryt"
 #~ msgid "gtk-ok"
 #~ msgstr "OK"
-#~ msgid "Local Network"
-#~ msgstr "Lokalt nätverk"
 #~ msgid "A unique name for this account to identify it personally to you."
 #~ msgstr ""
 #~ "Ett unikt namn på kontot för att personligen identifiera det till dig."
@@ -1429,8 +1691,6 @@ msgstr "- Empathy snabbmeddelandeklient"
 #~ msgstr "-"
 #~ msgid "<b>About</b>"
 #~ msgstr "<b>Om</b>"
-#~ msgid "<b>Name</b>"
-#~ msgstr "<b>Namn</b>"
 #~ msgid "<b>Personal Details</b>"
 #~ msgstr "<b>Personliga detaljer</b>"
 #~ msgid "<b>Status</b>"
@@ -1565,8 +1825,6 @@ msgstr "- Empathy snabbmeddelandeklient"
 # "Web site" är "webbplats". "Web page" är "webbsida".
 #~ msgid "_Web site:"
 #~ msgstr "_Webbplats:"
-#~ msgid "irc account settings"
-#~ msgstr "inställningar för irc-konto"
 #~ msgid "Gossip Instant Messenger"
 #~ msgstr "Snabbmeddelandeklienten Gossip"
 #~ msgid "Normal"
@@ -1642,8 +1900,6 @@ msgstr "- Empathy snabbmeddelandeklient"
 #~ msgstr "Denna funktion är inte auktoriserad."
 #~ msgid "A specific protocol error occurred that was unexpected."
 #~ msgstr "Ett oväntat specifikt protokollfel inträffade."
-#~ msgid "new account"
-#~ msgstr "nytt konto"
 #~ msgid "Home"
 #~ msgstr "Hemma"
 #~ msgid "Couldn't send message!"
@@ -1756,8 +2012,6 @@ msgstr "- Empathy snabbmeddelandeklient"
 #~ msgstr "Acceptera"
 #~ msgid "Decline"
 #~ msgstr "Neka"
-#~ msgid "Server"
-#~ msgstr "Server"
 #~ msgid "Do you want to remove this contact from your roster?"
 #~ msgstr "Vill du ta bort denna kontakt från din kontaktlista?"
 #~ msgid ""
@@ -1935,8 +2189,6 @@ msgstr "- Empathy snabbmeddelandeklient"
 #~ "Välj ett sparat chattrum nedan och tryck Gå in för att börja chatta."
 #~ msgid "Save _this chat room"
 #~ msgstr "Spara detta chattrum"
-#~ msgid "Nickname:"
-#~ msgstr "Smeknamn:"
 #~ msgid "Press Subscribe to request to receive their status"
 #~ msgstr "Tryck på Prenumerera för att ta emot kontaktens status"
 #~ msgid "_Group Chat"
