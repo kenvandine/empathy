@@ -9,13 +9,13 @@ msgstr ""
 "Project-Id-Version: oc\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-02-19 20:18+0100\n"
-"PO-Revision-Date: 2007-12-28 10:28+0100\n"
+"PO-Revision-Date: 2008-02-20 00:12+0100\n"
 "Last-Translator: Yannig Marchegay (Kokoyaya) <yannig@marchegay.org>\n"
 "Language-Team: Occitan <ubuntu-l10n-oci@lists.ubuntu.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);"
 
 #: ../data/empathy.desktop.in.in.h:1
 msgid "Empathy Instant Messenger"
@@ -1147,7 +1147,7 @@ msgstr "Contacte"
 #: ../libempathy-gtk/empathy-new-message-dialog.glade.h:5
 #
 msgid "New Conversation"
-msgstr ""
+msgstr "Contacte novèl"
 
 #: ../libempathy-gtk/empathy-preferences.c:247
 msgid "Language"
@@ -1342,7 +1342,7 @@ msgstr ""
 #: ../libempathy-gtk/empathy-theme-boxes.c:780
 #: ../libempathy-gtk/empathy-theme-irc.c:297
 msgid "%A %d %B %Y"
-msgstr ""
+msgstr "%A %d %B %Y"
 
 #: ../libempathy-gtk/empathy-theme-manager.c:78
 msgid "Classic"
@@ -1362,7 +1362,7 @@ msgstr "Blau"
 
 #: ../libempathy-gtk/empathy-account-widget-irc.c:246
 msgid "New Network"
-msgstr ""
+msgstr "Ret novèla"
 
 #: ../libempathy-gtk/empathy-account-widget-irc.glade.h:1
 #
@@ -1377,7 +1377,7 @@ msgstr "<b>Servidors</b>"
 #: ../libempathy-gtk/empathy-account-widget-irc.glade.h:3
 #
 msgid "Charset:"
-msgstr ""
+msgstr "Chad"
 
 #: ../libempathy-gtk/empathy-account-widget-irc.glade.h:4
 msgid "Create a new IRC network"
@@ -1389,11 +1389,11 @@ msgstr ""
 
 #: ../libempathy-gtk/empathy-account-widget-irc.glade.h:6
 msgid "Network"
-msgstr ""
+msgstr "Ret"
 
 #: ../libempathy-gtk/empathy-account-widget-irc.glade.h:7
 msgid "Network:"
-msgstr ""
+msgstr "Ret"
 
 #: ../libempathy-gtk/empathy-account-widget-irc.glade.h:8
 #
@@ -1450,17 +1450,17 @@ msgstr ""
 #: ../libempathy-gtk/totem-subtitle-encoding.c:165
 #: ../libempathy-gtk/totem-subtitle-encoding.c:167
 msgid "Arabic"
-msgstr ""
+msgstr "Arab"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:170
 msgid "Armenian"
-msgstr ""
+msgstr "Armenian"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:173
 #: ../libempathy-gtk/totem-subtitle-encoding.c:175
 #: ../libempathy-gtk/totem-subtitle-encoding.c:177
 msgid "Baltic"
-msgstr ""
+msgstr "Baltic"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:180
 #
@@ -1472,24 +1472,24 @@ msgstr "Celtic"
 #: ../libempathy-gtk/totem-subtitle-encoding.c:187
 #: ../libempathy-gtk/totem-subtitle-encoding.c:189
 msgid "Central European"
-msgstr ""
+msgstr "European central"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:192
 #: ../libempathy-gtk/totem-subtitle-encoding.c:194
 #: ../libempathy-gtk/totem-subtitle-encoding.c:196
 #: ../libempathy-gtk/totem-subtitle-encoding.c:198
 msgid "Chinese Simplified"
-msgstr ""
+msgstr "Chinés simplificat"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:201
 #: ../libempathy-gtk/totem-subtitle-encoding.c:203
 #: ../libempathy-gtk/totem-subtitle-encoding.c:205
 msgid "Chinese Traditional"
-msgstr ""
+msgstr "Chinés tradicional"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:208
 msgid "Croatian"
-msgstr ""
+msgstr "Croat"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:211
 #: ../libempathy-gtk/totem-subtitle-encoding.c:213
@@ -1498,66 +1498,66 @@ msgstr ""
 #: ../libempathy-gtk/totem-subtitle-encoding.c:219
 #: ../libempathy-gtk/totem-subtitle-encoding.c:221
 msgid "Cyrillic"
-msgstr ""
+msgstr "Cirillic"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:224
 msgid "Cyrillic/Russian"
-msgstr ""
+msgstr "Cirillic/Rus"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:227
 #: ../libempathy-gtk/totem-subtitle-encoding.c:229
 msgid "Cyrillic/Ukrainian"
-msgstr ""
+msgstr "Cirillic/Ucraïnian"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:232
 msgid "Georgian"
-msgstr ""
+msgstr "Georgian"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:235
 #: ../libempathy-gtk/totem-subtitle-encoding.c:237
 #: ../libempathy-gtk/totem-subtitle-encoding.c:239
 msgid "Greek"
-msgstr ""
+msgstr "Grèc"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:242
 msgid "Gujarati"
-msgstr ""
+msgstr "Gujarati"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:245
 msgid "Gurmukhi"
-msgstr ""
+msgstr "Gurmukhi"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:248
 #: ../libempathy-gtk/totem-subtitle-encoding.c:250
 #: ../libempathy-gtk/totem-subtitle-encoding.c:252
 #: ../libempathy-gtk/totem-subtitle-encoding.c:254
 msgid "Hebrew"
-msgstr ""
+msgstr "Ebrèu"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:257
 msgid "Hebrew Visual"
-msgstr ""
+msgstr "Ebrèu visual"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:260
 msgid "Hindi"
-msgstr ""
+msgstr "Indi"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:263
 msgid "Icelandic"
-msgstr ""
+msgstr "Islandés"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:266
 #: ../libempathy-gtk/totem-subtitle-encoding.c:268
 #: ../libempathy-gtk/totem-subtitle-encoding.c:270
 msgid "Japanese"
-msgstr ""
+msgstr "Japonés"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:273
 #: ../libempathy-gtk/totem-subtitle-encoding.c:275
 #: ../libempathy-gtk/totem-subtitle-encoding.c:277
 #: ../libempathy-gtk/totem-subtitle-encoding.c:279
 msgid "Korean"
-msgstr ""
+msgstr "Corean"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:282
 #
@@ -1567,27 +1567,27 @@ msgstr "Nordic"
 #: ../libempathy-gtk/totem-subtitle-encoding.c:285
 #
 msgid "Persian"
-msgstr ""
+msgstr "Persian"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:288
 #: ../libempathy-gtk/totem-subtitle-encoding.c:290
 msgid "Romanian"
-msgstr ""
+msgstr "Romanian"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:293
 msgid "South European"
-msgstr ""
+msgstr "European del Sud"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:296
 msgid "Thai"
-msgstr ""
+msgstr "Tailandés"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:299
 #: ../libempathy-gtk/totem-subtitle-encoding.c:301
 #: ../libempathy-gtk/totem-subtitle-encoding.c:303
 #: ../libempathy-gtk/totem-subtitle-encoding.c:305
 msgid "Turkish"
-msgstr ""
+msgstr "Turc"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:308
 #: ../libempathy-gtk/totem-subtitle-encoding.c:310
@@ -1611,7 +1611,7 @@ msgstr "Occidental"
 #: ../libempathy-gtk/totem-subtitle-encoding.c:334
 #
 msgid "Vietnamese"
-msgstr ""
+msgstr "Vietnamés"
 
 #.
 #. * vim: sw=2 ts=8 cindent noai bs=2
