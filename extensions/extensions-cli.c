@@ -12,8 +12,14 @@ static void _emp_ext_register_dbus_glib_marshallers (void);
 void
 emp_cli_init (void)
 {
-  _emp_ext_register_dbus_glib_marshallers ();
+  static gboolean initilized = FALSE;
 
-  tp_proxy_or_subclass_hook_on_interface_add (TP_TYPE_PROXY,
-      emp_cli_misc_add_signals);
+  if (!initialized)
+    {
+      _emp_ext_register_dbus_glib_marshallers ();
+
+      tp_proxy_or_subclass_hook_on_interface_add (TP_TYPE_PROXY,
+          emp_cli_misc_add_signals);
+      initialized = TRUE;
+    }
 }
