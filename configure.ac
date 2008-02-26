@@ -46,7 +46,7 @@ AC_CONFIG_AUX_DIR(.)
 
 GNOME_COMMON_INIT
 
-AM_INIT_AUTOMAKE(1.9 dist-bzip2 no-define)
+AM_INIT_AUTOMAKE(1.9 dist-bzip2 no-define -Wno-portability)
 AM_MAINTAINER_MODE
 AC_ISC_POSIX
 AC_PROG_CC
