@@ -537,6 +537,7 @@ tp_call_start_stream_engine (EmpathyTpCall *call)
       G_CALLBACK (tp_call_invalidated_cb),
       call);
   
+  /* FIXME: dbus daemon should be unique */
   priv->dbus_daemon = tp_dbus_daemon_new (tp_get_bus ());
   tp_dbus_daemon_watch_name_owner (priv->dbus_daemon, STREAM_ENGINE_BUS_NAME,
       tp_call_watch_name_owner_cb,
@@ -631,7 +632,13 @@ tp_call_finalize (GObject *object)
       g_object_unref (priv->contact);
 
   if (priv->dbus_daemon != NULL)
+    {
+      tp_dbus_daemon_cancel_name_owner_watch (priv->dbus_daemon,
+          STREAM_ENGINE_BUS_NAME,
+          tp_call_watch_name_owner_cb,
+          object);
       g_object_unref (priv->dbus_daemon);
+    }
 
   (G_OBJECT_CLASS (empathy_tp_call_parent_class)->finalize) (object);
 }
