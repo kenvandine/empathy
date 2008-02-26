@@ -25,6 +25,7 @@
 #include <libtelepathy/tp-connmgr.h>
 #include <libtelepathy/tp-helpers.h>
 #include <telepathy-glib/proxy-subclass.h>
+#include <telepathy-glib/dbus.h>
 
 #include <libmissioncontrol/mc-account.h>
 
@@ -51,6 +52,7 @@ struct _EmpathyTpCallPriv
   TpConn *connection;
   TpChan *channel;
   TpProxy *stream_engine;
+  TpDBusDaemon *dbus_daemon;
   EmpathyTpGroup *group;
   EmpathyContact *contact;
   gboolean is_incoming;
@@ -503,6 +505,19 @@ tp_call_invalidated_cb (TpProxy       *stream_engine,
 }
 
 static void
+tp_call_watch_name_owner_cb (TpDBusDaemon *daemon,
+                             const gchar *name,
+                             const gchar *new_owner,
+                             gpointer call)
+{
+  if (G_STR_EMPTY (new_owner))
+    {
+      empathy_debug (DEBUG_DOMAIN, "Stream engine falled off the bus");
+      empathy_tp_call_close_channel (call);
+    }
+}
+
+static void
 tp_call_start_stream_engine (EmpathyTpCall *call)
 {
   EmpathyTpCallPriv *priv = GET_PRIV (call);
@@ -521,6 +536,11 @@ tp_call_start_stream_engine (EmpathyTpCall *call)
   g_signal_connect (priv->stream_engine, "invalidated",
       G_CALLBACK (tp_call_invalidated_cb),
       call);
+  
+  priv->dbus_daemon = tp_dbus_daemon_new (tp_get_bus ());
+  tp_dbus_daemon_watch_name_owner (priv->dbus_daemon, STREAM_ENGINE_BUS_NAME,
+      tp_call_watch_name_owner_cb,
+      call, NULL);
 
   emp_cli_channel_handler_call_handle_channel (priv->stream_engine, -1,
         dbus_g_proxy_get_bus_name (DBUS_G_PROXY (priv->connection)),
@@ -607,8 +627,11 @@ tp_call_finalize (GObject *object)
   if (priv->stream_engine != NULL)
     g_object_unref (priv->stream_engine);
 
-  if (priv->contact)
+  if (priv->contact != NULL)
       g_object_unref (priv->contact);
+
+  if (priv->dbus_daemon != NULL)
+      g_object_unref (priv->dbus_daemon);
 
   (G_OBJECT_CLASS (empathy_tp_call_parent_class)->finalize) (object);
 }
