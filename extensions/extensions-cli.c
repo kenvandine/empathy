@@ -12,7 +12,7 @@ static void _emp_ext_register_dbus_glib_marshallers (void);
 void
 emp_cli_init (void)
 {
-  static gboolean initilized = FALSE;
+  static gboolean initialized = FALSE;
 
   if (!initialized)
     {
