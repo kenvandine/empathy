@@ -3,7 +3,7 @@ exec_prefix=@exec_prefix@
 libdir=@libdir@
 includedir=@includedir@
 
-Name: libempathy
+Name: libempathy-gtk
 Description:  Empathy interface library
 Requires: glib-2.0, gobject-2.0, gtk+-2.0, libglade-2.0, libmissioncontrol, libtelepathy, libempathy
 Version: @VERSION@
