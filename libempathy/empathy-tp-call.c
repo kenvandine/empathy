@@ -481,13 +481,32 @@ static void
 tp_call_async_cb (TpProxy *proxy,
                   const GError *error,
                   gpointer user_data,
-                  GObject *weak_object)
+                  GObject *call)
 {
+  EmpathyTpCallPriv *priv = GET_PRIV (call);
+
   if (error)
     {
       empathy_debug (DEBUG_DOMAIN, "Error %s: %s",
           user_data, error->message);
+      priv->status = EMPATHY_TP_CALL_STATUS_CLOSED;
+      g_signal_emit_by_name (call, "status-changed");
     }
+}
+
+static void
+tp_call_invalidated_cb (TpProxy       *stream_engine,
+                        GQuark         domain,
+                        gint           code,
+                        gchar         *message,
+                        EmpathyTpCall *call)
+{
+  EmpathyTpCallPriv *priv = GET_PRIV (call);
+
+  empathy_debug (DEBUG_DOMAIN, "Stream engine proxy invalidated: %s",
+      message);
+  priv->status = EMPATHY_TP_CALL_STATUS_CLOSED;
+  g_signal_emit_by_name (call, "status-changed");
 }
 
 static void
@@ -505,6 +524,10 @@ tp_call_start_stream_engine (EmpathyTpCall *call)
       EMP_IFACE_QUARK_STREAM_ENGINE);
   tp_proxy_add_interface_by_id (priv->stream_engine,
       EMP_IFACE_QUARK_CHANNEL_HANDLER);
+
+  g_signal_connect (priv->stream_engine, "invalidated",
+      G_CALLBACK (tp_call_invalidated_cb),
+      call);
 
   emp_cli_channel_handler_call_handle_channel (priv->stream_engine, -1,
         dbus_g_proxy_get_bus_name (DBUS_G_PROXY (priv->connection)),
