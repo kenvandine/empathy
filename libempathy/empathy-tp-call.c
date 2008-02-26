@@ -588,10 +588,11 @@ tp_call_finalize (GObject *object)
   if (priv->channel != NULL)
     g_object_unref (priv->channel);
 
+  if (priv->stream_engine != NULL)
+    g_object_unref (priv->stream_engine);
+
   if (priv->contact)
-    {
       g_object_unref (priv->contact);
-    }
 
   (G_OBJECT_CLASS (empathy_tp_call_parent_class)->finalize) (object);
 }
