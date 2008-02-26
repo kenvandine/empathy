@@ -833,6 +833,9 @@ empathy_tp_call_close_channel (EmpathyTpCall *call)
   EmpathyTpCallPriv *priv = GET_PRIV (call);
   GError *error = NULL;
 
+  if (priv->status == EMPATHY_TP_CALL_STATUS_CLOSED)
+      return;
+
   empathy_debug (DEBUG_DOMAIN, "Closing channel");
 
   if (!tp_chan_close (DBUS_G_PROXY (priv->channel), &error))
@@ -841,6 +844,8 @@ empathy_tp_call_close_channel (EmpathyTpCall *call)
           error ? error->message : "No error given");
       g_clear_error (&error);
     }
+  else
+        priv->status = EMPATHY_TP_CALL_STATUS_CLOSED;
 }
 
 void
