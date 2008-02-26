@@ -1,6 +1,7 @@
 AM_CPPFLAGS =                                           \
 	-I.                                             \
 	-I$(top_srcdir)                                 \
+	-I$(top_builddir)                               \
 	-DDATADIR=\""$(datadir)"\"              	\
 	$(LIBEMPATHY_CFLAGS)				\
 	$(WARN_CFLAGS)
@@ -51,6 +52,7 @@ nodist_libempathy_la_SOURCES =\
 	$(BUILT_SOURCES)
 
 libempathy_la_LIBADD =		\
+	$(top_builddir)/extensions/libemp-extensions.la \
 	$(LIBEMPATHY_LIBS)
 
 libempathy_la_LDFLAGS =		\

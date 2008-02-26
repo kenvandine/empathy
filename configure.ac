@@ -31,7 +31,7 @@ GCONF_REQUIRED=1.2.0
 LIBGLADE_REQUIRED=2.0.0
 LIBPANELAPPLET_REQUIRED=2.10.0
 TELEPATHY_REQUIRED=0.3.1
-TELEPATHY_GLIB_REQUIRED=0.7.0
+TELEPATHY_GLIB_REQUIRED=0.7.3
 MISSION_CONTROL_REQUIRED=4.53
 
 # Uncomment that to build without deprecated symbols
@@ -52,6 +52,7 @@ AC_ISC_POSIX
 AC_PROG_CC
 AC_HEADER_STDC
 AM_PROG_LIBTOOL
+AM_PROG_MKDIR_P
 AM_PATH_GLIB_2_0
 AC_PATH_XTRA
 IT_PROG_INTLTOOL([0.35.0])
@@ -62,6 +63,15 @@ AC_PATH_PROG(GCONFTOOL, gconftool-2)
 AM_GCONF_SOURCE_2
 GLIB_GENMARSHAL=`$PKG_CONFIG glib-2.0 --variable=glib_genmarshal`
 AC_SUBST(GLIB_GENMARSHAL)
+
+AC_CHECK_PROGS([XSLTPROC], [xsltproc])
+if test -z "$XSLTPROC"; then
+  AC_MSG_ERROR([xsltproc (from libxslt) is required])
+fi
+AC_CHECK_PROGS([PYTHON], [python2.3 python2.4 python2.5 python])
+if test -z "$PYTHON"; then
+  AC_MSG_ERROR([Python is required])
+fi
 
 EMPATHY_ARG_VALGRIND
 
@@ -300,6 +310,7 @@ AC_OUTPUT([
    data/Makefile
    data/empathy.desktop.in
    data/icons/Makefile
+   extensions/Makefile
    po/Makefile.in
    libempathy/Makefile
    libempathy/libempathy.pc
@@ -321,4 +332,5 @@ AC_OUTPUT([
    python/pyempathy/Makefile
    python/pyempathygtk/Makefile
    tests/Makefile
+   tools/Makefile
 ])
