@@ -12,6 +12,7 @@ AM_CPPFLAGS =						\
 LDADD =								\
 	$(top_builddir)/libempathy-gtk/libempathy-gtk.la	\
 	$(top_builddir)/libempathy/libempathy.la		\
+	$(top_builddir)/extensions/libemp-extensions.la		\
 	$(EMPATHY_LIBS)
 
 bin_PROGRAMS =			\

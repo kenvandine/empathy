@@ -22,6 +22,7 @@
 
 #include <libmissioncontrol/mission-control.h>
 
+#include <extensions/extensions.h>
 #include <libempathy/empathy-tp-call.h>
 #include <libempathy/empathy-chandler.h>
 #include <libempathy/empathy-debug.h>
@@ -68,6 +69,7 @@ main (int argc, char *argv[])
   EmpathyChandler *chandler;
 
   gtk_init (&argc, &argv);
+  emp_cli_init ();
 
   mc = empathy_mission_control_new ();
 

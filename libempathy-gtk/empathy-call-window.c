@@ -196,8 +196,8 @@ call_window_delete_event_cb (GtkWidget *widget,
           call_window_stop_timeout (window);
           call_window_set_output_video_is_drawing (window, FALSE);
           empathy_tp_call_close_channel (window->call);
-          empathy_tp_call_remove_preview_video (gtk_socket_get_id (GTK_SOCKET
-              (window->preview_video_socket)));
+          empathy_tp_call_remove_preview_video (window->call,
+              gtk_socket_get_id (GTK_SOCKET (window->preview_video_socket)));
           return FALSE;
         default:
           return TRUE;
@@ -205,8 +205,8 @@ call_window_delete_event_cb (GtkWidget *widget,
     }
   else
     {
-      empathy_tp_call_remove_preview_video (gtk_socket_get_id (GTK_SOCKET
-          (window->preview_video_socket)));
+      empathy_tp_call_remove_preview_video (window->call,
+          gtk_socket_get_id (GTK_SOCKET (window->preview_video_socket)));
       return FALSE;
     }
 }
@@ -344,8 +344,8 @@ call_window_socket_realized_cb (GtkWidget *widget,
   if (widget == window->preview_video_socket)
     {
       empathy_debug (DEBUG_DOMAIN, "Preview socket realized");
-      empathy_tp_call_add_preview_video (gtk_socket_get_id (GTK_SOCKET
-          (window->preview_video_socket)));
+      empathy_tp_call_add_preview_video (window->call,
+          gtk_socket_get_id (GTK_SOCKET (window->preview_video_socket)));
     }
   else
     {

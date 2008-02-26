@@ -78,8 +78,10 @@ void empathy_tp_call_accept_incoming_call (EmpathyTpCall *call);
 void empathy_tp_call_close_channel (EmpathyTpCall *call);
 void empathy_tp_call_request_video_stream_direction (EmpathyTpCall *call,
     gboolean is_sending);
-void empathy_tp_call_add_preview_video (guint preview_video_socket_id);
-void empathy_tp_call_remove_preview_video (guint preview_video_socket_id);
+void empathy_tp_call_add_preview_video (EmpathyTpCall *call,
+    guint preview_video_socket_id);
+void empathy_tp_call_remove_preview_video (EmpathyTpCall *call,
+    guint preview_video_socket_id);
 void empathy_tp_call_add_output_video (EmpathyTpCall *call,
     guint output_video_socket_id);
 void empathy_tp_call_set_output_volume (EmpathyTpCall *call, guint volume);

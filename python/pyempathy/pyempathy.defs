@@ -1360,7 +1360,8 @@
   )
 )
 
-(define-function empathy_tp_call_add_preview_video
+(define-method add_preview_video
+  (of-object "EmpathyTpCall")
   (c-name "empathy_tp_call_add_preview_video")
   (return-type "none")
   (parameters
@@ -1368,7 +1369,8 @@
   )
 )
 
-(define-function empathy_tp_call_remove_preview_video
+(define-method remove_preview_video
+  (of-object "EmpathyTpCall")
   (c-name "empathy_tp_call_remove_preview_video")
   (return-type "none")
   (parameters

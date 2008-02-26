@@ -24,15 +24,15 @@
 #include <libtelepathy/tp-chan-type-streamed-media-gen.h>
 #include <libtelepathy/tp-connmgr.h>
 #include <libtelepathy/tp-helpers.h>
+#include <telepathy-glib/proxy-subclass.h>
 
 #include <libmissioncontrol/mc-account.h>
 
+#include <extensions/extensions.h>
 #include <libempathy/empathy-contact-factory.h>
 #include <libempathy/empathy-debug.h>
 #include <libempathy/empathy-tp-group.h>
 #include <libempathy/empathy-utils.h>
-
-#include "tp-stream-engine-gen.h"
 
 #include "empathy-tp-call.h"
 
@@ -43,8 +43,6 @@
 
 #define STREAM_ENGINE_BUS_NAME "org.freedesktop.Telepathy.StreamEngine"
 #define STREAM_ENGINE_OBJECT_PATH "/org/freedesktop/Telepathy/StreamEngine"
-#define STREAM_ENGINE_INTERFACE "org.freedesktop.Telepathy.StreamEngine"
-#define CHANNEL_HANDLER_INTERFACE "org.freedesktop.Telepathy.ChannelHandler"
 
 typedef struct _EmpathyTpCallPriv EmpathyTpCallPriv;
 
@@ -52,6 +50,7 @@ struct _EmpathyTpCallPriv
 {
   TpConn *connection;
   TpChan *channel;
+  TpProxy *stream_engine;
   EmpathyTpGroup *group;
   EmpathyContact *contact;
   gboolean is_incoming;
@@ -479,28 +478,43 @@ tp_call_remote_pending_cb (EmpathyTpGroup *group,
 }
 
 static void
+tp_call_async_cb (TpProxy *proxy,
+                  const GError *error,
+                  gpointer user_data,
+                  GObject *weak_object)
+{
+  if (error)
+    {
+      empathy_debug (DEBUG_DOMAIN, "Error %s: %s",
+          user_data, error->message);
+    }
+}
+
+static void
 tp_call_start_stream_engine (EmpathyTpCall *call)
 {
   EmpathyTpCallPriv *priv = GET_PRIV (call);
-  DBusGProxy *ch_proxy;
-  GError *error = NULL;
 
   empathy_debug (DEBUG_DOMAIN, "Revving up the stream engine");
 
-  ch_proxy = dbus_g_proxy_new_for_name (tp_get_bus (), STREAM_ENGINE_BUS_NAME,
-      STREAM_ENGINE_OBJECT_PATH, CHANNEL_HANDLER_INTERFACE);
+  priv->stream_engine = g_object_new (TP_TYPE_PROXY,
+      "bus-name", STREAM_ENGINE_BUS_NAME,
+      "dbus-connection", tp_get_bus (),
+      "object-path", STREAM_ENGINE_OBJECT_PATH);
+  tp_proxy_add_interface_by_id (priv->stream_engine,
+      EMP_IFACE_QUARK_STREAM_ENGINE);
+  tp_proxy_add_interface_by_id (priv->stream_engine,
+      EMP_IFACE_QUARK_CHANNEL_HANDLER);
 
-  if (!org_freedesktop_Telepathy_ChannelHandler_handle_channel (ch_proxy,
+  emp_cli_channel_handler_call_handle_channel (priv->stream_engine, -1,
         dbus_g_proxy_get_bus_name (DBUS_G_PROXY (priv->connection)),
         dbus_g_proxy_get_path (DBUS_G_PROXY (priv->connection)),
         priv->channel->type,
         dbus_g_proxy_get_path (DBUS_G_PROXY (priv->channel)),
-        priv->channel->handle_type, priv->channel->handle, &error))
-    {
-      empathy_debug (DEBUG_DOMAIN, "Couldn't start stream engine: %s",
-          error->message);
-      g_clear_error (&error);
-    }
+        priv->channel->handle_type, priv->channel->handle,
+        tp_call_async_cb,
+        "calling handle channel", NULL,
+        G_OBJECT (call));
 }
 
 static GObject *
@@ -541,6 +555,7 @@ tp_call_constructor (GType type,
   account = mission_control_get_account_for_connection (mc, priv->connection,
       NULL);
   priv->group = empathy_tp_group_new (account, priv->channel);
+  g_object_unref (mc);
 
   g_signal_connect (G_OBJECT (priv->group), "member-added",
       G_CALLBACK (tp_call_member_added_cb), (gpointer) call);
@@ -810,43 +825,33 @@ empathy_tp_call_close_channel (EmpathyTpCall *call)
 }
 
 void
-empathy_tp_call_add_preview_video (guint preview_video_socket_id)
+empathy_tp_call_add_preview_video (EmpathyTpCall *call,
+                                   guint preview_video_socket_id)
 {
-  GError *error = NULL;
-  DBusGProxy *ch_proxy;
+  EmpathyTpCallPriv *priv = GET_PRIV (call);
 
   empathy_debug (DEBUG_DOMAIN, "Adding preview video");
 
-  ch_proxy = dbus_g_proxy_new_for_name (tp_get_bus (), STREAM_ENGINE_BUS_NAME,
-      STREAM_ENGINE_OBJECT_PATH, STREAM_ENGINE_INTERFACE);
-
-  if (!org_freedesktop_Telepathy_StreamEngine_add_preview_window (ch_proxy,
-        preview_video_socket_id, &error))
-    {
-      empathy_debug (DEBUG_DOMAIN, "Couldn't set video preview: %s",
-          error->message);
-      g_clear_error (&error);
-    }
+  emp_cli_stream_engine_call_add_preview_window (priv->stream_engine, -1,
+      preview_video_socket_id,
+      tp_call_async_cb,
+      "adding preview window", NULL,
+      G_OBJECT (call));
 }
 
 void
-empathy_tp_call_remove_preview_video (guint preview_video_socket_id)
+empathy_tp_call_remove_preview_video (EmpathyTpCall *call,
+                                      guint preview_video_socket_id)
 {
-  GError *error = NULL;
-  DBusGProxy *ch_proxy;
+  EmpathyTpCallPriv *priv = GET_PRIV (call);
 
   empathy_debug (DEBUG_DOMAIN, "Removing preview video");
 
-  ch_proxy = dbus_g_proxy_new_for_name (tp_get_bus (), STREAM_ENGINE_BUS_NAME,
-      STREAM_ENGINE_OBJECT_PATH, STREAM_ENGINE_INTERFACE);
-
-  if (!org_freedesktop_Telepathy_StreamEngine_remove_preview_window (ch_proxy,
-        preview_video_socket_id, &error))
-    {
-      empathy_debug (DEBUG_DOMAIN, "Couldn't set video preview: %s",
-          error->message);
-      g_clear_error (&error);
-    }
+  emp_cli_stream_engine_call_remove_preview_window (priv->stream_engine, -1,
+      preview_video_socket_id,
+      tp_call_async_cb,
+      "removing preview window", NULL,
+      G_OBJECT (call));
 }
 
 void
@@ -854,24 +859,16 @@ empathy_tp_call_add_output_video (EmpathyTpCall *call,
                                   guint output_video_socket_id)
 {
   EmpathyTpCallPriv *priv = GET_PRIV (call);
-  const gchar *object_path;
-  DBusGProxy *ch_proxy;
-  GError *error = NULL;
 
   empathy_debug (DEBUG_DOMAIN, "Adding output video - socket: %d",
       output_video_socket_id);
 
-  object_path = dbus_g_proxy_get_path (DBUS_G_PROXY (priv->channel));
-  ch_proxy = dbus_g_proxy_new_for_name (tp_get_bus (), STREAM_ENGINE_BUS_NAME,
-      STREAM_ENGINE_OBJECT_PATH, STREAM_ENGINE_INTERFACE);
-
-  if (!org_freedesktop_Telepathy_StreamEngine_set_output_window (ch_proxy,
-        object_path, priv->video->id, output_video_socket_id, &error))
-    {
-      empathy_debug (DEBUG_DOMAIN, "Couldn't set video output: %s",
-          error->message);
-      g_clear_error (&error);
-    }
+  emp_cli_stream_engine_call_set_output_window (priv->stream_engine, -1,
+      dbus_g_proxy_get_path (DBUS_G_PROXY (priv->channel)),
+      priv->video->id, output_video_socket_id,
+      tp_call_async_cb,
+      "setting output window", NULL,
+      G_OBJECT (call));
 }
 
 void
@@ -879,52 +876,37 @@ empathy_tp_call_set_output_volume (EmpathyTpCall *call,
                                    guint volume)
 {
   EmpathyTpCallPriv *priv = GET_PRIV (call);
-  const gchar *object_path;
-  DBusGProxy *ch_proxy;
-  GError *error = NULL;
 
   if (priv->status == EMPATHY_TP_CALL_STATUS_CLOSED)
     return;
 
   empathy_debug (DEBUG_DOMAIN, "Setting output volume: %d", volume);
 
-  object_path = dbus_g_proxy_get_path (DBUS_G_PROXY (priv->channel));
-  ch_proxy = dbus_g_proxy_new_for_name (tp_get_bus (), STREAM_ENGINE_BUS_NAME,
-      STREAM_ENGINE_OBJECT_PATH, STREAM_ENGINE_INTERFACE);
-
-  if (!org_freedesktop_Telepathy_StreamEngine_set_output_volume (ch_proxy,
-        object_path, priv->audio->id, volume, &error))
-    {
-      empathy_debug (DEBUG_DOMAIN, "Couldn't set volume: %s", error->message);
-      g_clear_error (&error);
-    }
+  emp_cli_stream_engine_call_set_output_volume (priv->stream_engine, -1,
+      dbus_g_proxy_get_path (DBUS_G_PROXY (priv->channel)),
+      priv->audio->id, volume,
+      tp_call_async_cb,
+      "setting output volume", NULL,
+      G_OBJECT (call));
 }
-
 
 void
 empathy_tp_call_mute_output (EmpathyTpCall *call,
                              gboolean is_muted)
 {
   EmpathyTpCallPriv *priv = GET_PRIV (call);
-  const gchar *object_path;
-  DBusGProxy *ch_proxy;
-  GError *error = NULL;
 
   if (priv->status == EMPATHY_TP_CALL_STATUS_CLOSED)
     return;
 
   empathy_debug (DEBUG_DOMAIN, "Setting output mute: %d", is_muted);
 
-  object_path = dbus_g_proxy_get_path (DBUS_G_PROXY (priv->channel));
-  ch_proxy = dbus_g_proxy_new_for_name (tp_get_bus (), STREAM_ENGINE_BUS_NAME,
-      STREAM_ENGINE_OBJECT_PATH, STREAM_ENGINE_INTERFACE);
-
-  if (!org_freedesktop_Telepathy_StreamEngine_mute_output (ch_proxy,
-        object_path, priv->audio->id, is_muted, &error))
-    {
-      empathy_debug (DEBUG_DOMAIN, "Couldn't mute output: %s", error->message);
-      g_clear_error (&error);
-    }
+  emp_cli_stream_engine_call_mute_output (priv->stream_engine, -1,
+      dbus_g_proxy_get_path (DBUS_G_PROXY (priv->channel)),
+      priv->audio->id, is_muted,
+      tp_call_async_cb,
+      "muting output", NULL,
+      G_OBJECT (call));
 }
 
 void
@@ -932,24 +914,17 @@ empathy_tp_call_mute_input (EmpathyTpCall *call,
                             gboolean is_muted)
 {
   EmpathyTpCallPriv *priv = GET_PRIV (call);
-  const gchar *object_path;
-  DBusGProxy *ch_proxy;
-  GError *error = NULL;
 
   if (priv->status == EMPATHY_TP_CALL_STATUS_CLOSED)
     return;
 
   empathy_debug (DEBUG_DOMAIN, "Setting input mute: %d", is_muted);
 
-  object_path = dbus_g_proxy_get_path (DBUS_G_PROXY (priv->channel));
-  ch_proxy = dbus_g_proxy_new_for_name (tp_get_bus (), STREAM_ENGINE_BUS_NAME,
-      STREAM_ENGINE_OBJECT_PATH, STREAM_ENGINE_INTERFACE);
-
-  if (!org_freedesktop_Telepathy_StreamEngine_mute_input (ch_proxy,
-        object_path, priv->audio->id, is_muted, &error))
-    {
-      empathy_debug (DEBUG_DOMAIN, "Couldn't mute input: %s", error->message);
-      g_clear_error (&error);
-    }
+  emp_cli_stream_engine_call_mute_input (priv->stream_engine, -1,
+      dbus_g_proxy_get_path (DBUS_G_PROXY (priv->channel)),
+      priv->audio->id, is_muted,
+      tp_call_async_cb,
+      "muting input", NULL,
+      G_OBJECT (call));
 }
 
