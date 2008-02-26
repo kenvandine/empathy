@@ -483,14 +483,10 @@ tp_call_async_cb (TpProxy *proxy,
                   gpointer user_data,
                   GObject *call)
 {
-  EmpathyTpCallPriv *priv = GET_PRIV (call);
-
   if (error)
     {
       empathy_debug (DEBUG_DOMAIN, "Error %s: %s",
           user_data, error->message);
-      priv->status = EMPATHY_TP_CALL_STATUS_CLOSED;
-      g_signal_emit_by_name (call, "status-changed");
     }
 }
 
@@ -501,12 +497,9 @@ tp_call_invalidated_cb (TpProxy       *stream_engine,
                         gchar         *message,
                         EmpathyTpCall *call)
 {
-  EmpathyTpCallPriv *priv = GET_PRIV (call);
-
   empathy_debug (DEBUG_DOMAIN, "Stream engine proxy invalidated: %s",
       message);
-  priv->status = EMPATHY_TP_CALL_STATUS_CLOSED;
-  g_signal_emit_by_name (call, "status-changed");
+  empathy_tp_call_close_channel (call);
 }
 
 static void
