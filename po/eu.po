@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-02-21 18:35+0100\n"
-"PO-Revision-Date: 2008-02-21 18:43+0100\n"
+"POT-Creation-Date: 2008-02-27 13:01+0100\n"
+"PO-Revision-Date: 2008-02-27 13:02+0100\n"
 "Last-Translator: Iñaki Larrañaga Murgoitio <dooteo@euskalgnu.org>\n"
 "Language-Team: Basque <itzulpena@euskalgnu.org>\n"
 "MIME-Version: 1.0\n"
@@ -1364,7 +1364,7 @@ msgstr "Zuzentzailea"
 msgid "Suggestions for the word:"
 msgstr "Hitzaren iradokizuna:"
 
-#: ../libempathy-gtk/empathy-status-icon.c:354
+#: ../libempathy-gtk/empathy-status-icon.c:369
 #, c-format
 msgid ""
 "New message from %s:\n"
@@ -1373,12 +1373,21 @@ msgstr ""
 "%s-(r)en mezu berria:\n"
 "%s"
 
-#: ../libempathy-gtk/empathy-status-icon.c:625
+#: ../libempathy-gtk/empathy-status-icon.c:434
+#, c-format
+msgid ""
+"Incoming call from %s:\n"
+"%s"
+msgstr ""
+"Sarrerako deia %s-(e)ndik:\n"
+"%s"
+
+#: ../libempathy-gtk/empathy-status-icon.c:738
 #, c-format
 msgid "Subscription requested by %s"
 msgstr "%s-(e)k harpidetzea eskatu du"
 
-#: ../libempathy-gtk/empathy-status-icon.c:628
+#: ../libempathy-gtk/empathy-status-icon.c:741
 #, c-format
 msgid ""
 "\n"
@@ -1661,8 +1670,8 @@ msgstr "Vietnamera"
 #: ../megaphone/data/GNOME_Megaphone_Applet.schemas.in.h:1
 msgid "The contact to display in the applet. Empty means no contact is displayed."
 msgstr ""
-"Kontaktua applet-ean bistaratzeko. Hutsik utziz gero, ez da "
-"kontakturik bistaratuko."
+"Kontaktua applet-ean bistaratzeko. Hutsik utziz gero, ez da kontakturik "
+"bistaratuko."
 
 #: ../megaphone/data/GNOME_Megaphone_Applet.schemas.in.h:2
 msgid "The contact's avatar token. Empty means contact has no avatar."
