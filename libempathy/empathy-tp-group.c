@@ -828,6 +828,18 @@ empathy_tp_group_get_object_path (EmpathyTpGroup *group)
 	return dbus_g_proxy_get_path (DBUS_G_PROXY (priv->tp_chan));
 }
 
+TpChan *
+empathy_tp_group_get_channel (EmpathyTpGroup *group)
+{
+	EmpathyTpGroupPriv *priv;
+
+	g_return_val_if_fail (EMPATHY_IS_TP_GROUP (group), NULL);
+
+	priv = GET_PRIV (group);
+
+	return priv->tp_chan;
+}
+
 gboolean
 empathy_tp_group_is_member (EmpathyTpGroup *group,
 			    EmpathyContact *contact)

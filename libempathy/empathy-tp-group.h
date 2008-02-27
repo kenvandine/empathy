@@ -81,6 +81,7 @@ GList *             empathy_tp_group_get_remote_pendings (EmpathyTpGroup     *gr
 const gchar *       empathy_tp_group_get_name            (EmpathyTpGroup     *group);
 EmpathyContact *    empathy_tp_group_get_self_contact    (EmpathyTpGroup     *group);
 const gchar *       empathy_tp_group_get_object_path     (EmpathyTpGroup     *group);
+TpChan *            empathy_tp_group_get_channel         (EmpathyTpGroup     *group);
 gboolean            empathy_tp_group_is_member           (EmpathyTpGroup     *group,
 							  EmpathyContact     *contact);
 EmpathyPendingInfo *empathy_pending_info_new             (EmpathyContact     *member,

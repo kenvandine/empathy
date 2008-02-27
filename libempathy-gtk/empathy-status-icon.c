@@ -63,6 +63,7 @@ struct _EmpathyStatusIconPriv {
 	GtkStatusIcon         *icon;
 	EmpathyContactManager *manager;
 	EmpathyFilter         *text_filter;
+	EmpathyFilter         *call_filter;
 	EmpathyIdle           *idle;
 	MissionControl        *mc;
 	GList                 *events;
@@ -90,7 +91,11 @@ struct _StatusIconEvent {
 static void       empathy_status_icon_class_init  (EmpathyStatusIconClass *klass);
 static void       empathy_status_icon_init        (EmpathyStatusIcon      *icon);
 static void       status_icon_finalize            (GObject                *object);
-static void       status_icon_filter_new_channel  (EmpathyFilter          *filter,
+static void       status_icon_text_filter_new_channel (EmpathyFilter          *filter,
+						   TpConn                 *tp_conn,
+						   TpChan                 *tp_chan,
+						   EmpathyStatusIcon      *icon);
+static void       status_icon_call_filter_new_channel (EmpathyFilter          *filter,
 						   TpConn                 *tp_conn,
 						   TpChan                 *tp_chan,
 						   EmpathyStatusIcon      *icon);
@@ -193,6 +198,11 @@ empathy_status_icon_init (EmpathyStatusIcon *icon)
 						TP_IFACE_CHANNEL_TYPE_TEXT,
 						MC_FILTER_PRIORITY_DIALOG,
 						MC_FILTER_FLAG_INCOMING);
+	priv->call_filter = empathy_filter_new ("org.gnome.Empathy.CallFilter",
+						"/org/gnome/Empathy/CallFilter",
+						TP_IFACE_CHANNEL_TYPE_STREAMED_MEDIA,
+						MC_FILTER_PRIORITY_DIALOG,
+						MC_FILTER_FLAG_INCOMING);
 
 	/* Setup EmpathyIdle */
 	priv->idle = empathy_idle_new ();
@@ -216,7 +226,10 @@ empathy_status_icon_init (EmpathyStatusIcon *icon)
 	status_icon_idle_notify_cb (icon);
 
 	g_signal_connect (priv->text_filter, "new-channel",
-			  G_CALLBACK (status_icon_filter_new_channel),
+			  G_CALLBACK (status_icon_text_filter_new_channel),
+			  icon);
+	g_signal_connect (priv->call_filter, "new-channel",
+			  G_CALLBACK (status_icon_call_filter_new_channel),
 			  icon);
 	g_signal_connect_swapped (priv->idle, "notify",
 				  G_CALLBACK (status_icon_idle_notify_cb),
@@ -267,6 +280,8 @@ status_icon_finalize (GObject *object)
 	g_object_unref (priv->idle);
 	g_object_unref (priv->manager);
 	g_object_unref (priv->mc);
+	g_object_unref (priv->text_filter);
+	g_object_unref (priv->call_filter);
 }
 
 EmpathyStatusIcon *
@@ -299,10 +314,10 @@ empathy_status_icon_new (GtkWindow *window)
 }
 
 static void
-status_icon_filter_new_channel (EmpathyFilter     *filter,
-				TpConn            *tp_conn,
-				TpChan            *tp_chan,
-				EmpathyStatusIcon *icon)
+status_icon_text_filter_new_channel (EmpathyFilter     *filter,
+				     TpConn            *tp_conn,
+				     TpChan            *tp_chan,
+				     EmpathyStatusIcon *icon)
 {
 	EmpathyStatusIconPriv *priv;
 	McAccount             *account;
@@ -358,6 +373,104 @@ status_icon_message_received_cb (EmpathyTpChat     *tp_chat,
 	event = status_icon_event_new (icon, EMPATHY_IMAGE_NEW_MESSAGE, msg);
 	event->func = status_icon_event_msg_cb;
 	event->user_data = tp_chat;
+	g_free (msg);
+}
+
+static void
+status_icon_call_member_added_cb (EmpathyTpGroup    *group,
+				  EmpathyContact    *member,
+				  EmpathyContact    *actor,
+				  guint              reason,
+				  const gchar       *message,
+				  EmpathyStatusIcon *icon)
+{
+	EmpathyFilter *filter;
+
+	if (empathy_contact_is_user (member)) {
+		/* We are member, it's an outgoing call, we can dispatch
+		 * the channel without asking the user */
+		empathy_debug (DEBUG_DOMAIN, "Process OUTGOING call channel");
+		filter = g_object_get_data (G_OBJECT (group), "filter");
+		empathy_filter_process (filter,
+					empathy_tp_group_get_channel (group),
+					TRUE);
+		g_object_unref (group);
+	}
+}
+
+static void
+status_icon_event_call_cb (StatusIconEvent *event)
+{
+	EmpathyFilter  *filter;
+	EmpathyTpGroup *group;
+
+	empathy_debug (DEBUG_DOMAIN, "Dispatching call channel");
+
+	group = event->user_data;
+	filter = g_object_get_data (G_OBJECT (group), "filter");
+	empathy_filter_process (filter,
+				empathy_tp_group_get_channel (group),
+				TRUE);
+	g_object_unref (group);
+}
+
+static void
+status_icon_call_local_pending_cb (EmpathyTpGroup    *group,
+				   EmpathyContact    *member,
+				   EmpathyContact    *actor,
+				   guint              reason,
+				   const gchar       *message,
+				   EmpathyStatusIcon *icon)
+{
+	StatusIconEvent *event;
+
+	if (empathy_contact_is_user (member)) {
+		gchar *msg;
+
+		/* We are local pending, it's an incoming call, we need to ask
+		 * the user if he wants to accept the call. */
+		empathy_debug (DEBUG_DOMAIN, "INCOMING call, add event");
+
+		msg = g_strdup_printf (_("Incoming call from %s:\n%s"),
+				       empathy_contact_get_name (member),
+				       message);
+
+		event = status_icon_event_new (icon, EMPATHY_IMAGE_VOIP, msg);
+		event->func = status_icon_event_call_cb;
+		event->user_data = group;
+		g_free (msg);
+	}
+}
+
+static void
+status_icon_call_filter_new_channel (EmpathyFilter     *filter,
+				     TpConn            *tp_conn,
+				     TpChan            *tp_chan,
+				     EmpathyStatusIcon *icon)
+{
+	EmpathyStatusIconPriv *priv;
+	McAccount             *account;
+	EmpathyTpGroup        *group;
+
+	priv = GET_PRIV (icon);
+
+	account = mission_control_get_account_for_connection (priv->mc, tp_conn, NULL);
+
+	empathy_debug (DEBUG_DOMAIN, "New media channel to be filtered");
+
+	/* FIXME: We have to check if the user is member or local-pending to
+	 * know if it's an incoming or outgoing call because of the way we
+	 * request media channels MC can't know if it's incoming or outgoing */
+	group = empathy_tp_group_new (account, tp_chan);
+	g_object_set_data (G_OBJECT (group), "filter", filter);
+	g_object_unref (account);
+
+	g_signal_connect (group, "member-added",
+			  G_CALLBACK (status_icon_call_member_added_cb),
+			  icon);
+	g_signal_connect (group, "local-pending",
+			  G_CALLBACK (status_icon_call_local_pending_cb),
+			  icon);
 }
 
 static void
