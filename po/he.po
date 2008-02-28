@@ -1,0 +1,1679 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+msgid ""
+msgstr ""
+"Project-Id-Version: empathy\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-02-23 15:03+0000\n"
+"PO-Revision-Date: 2008-02-23 19:56+0200\n"
+"Last-Translator: Mark Krapivner <mark125@gmail.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Poedit-Language: Hebrew\n"
+
+#: ../data/empathy.desktop.in.in.h:1
+msgid "Empathy Instant Messenger"
+msgstr ""
+"‏Empathy - מסרים מיידיים"
+
+#: ../data/empathy.desktop.in.in.h:2
+msgid "Send and receive instant messages"
+msgstr "שלח וקבל מסרים מיידיים"
+
+#: ../data/empathy.schemas.in.h:1
+msgid "Always open a separate chat window for new chats."
+msgstr "Always open a separate chat window for new chats."
+
+#: ../data/empathy.schemas.in.h:2
+msgid ""
+"Character to add after nickname when using nick completion (tab) in group "
+"chat."
+msgstr ""
+"Character to add after nickname when using nick completion (tab) in group "
+"chat."
+
+#: ../data/empathy.schemas.in.h:3
+msgid "Chat window theme"
+msgstr "Chat window theme"
+
+#: ../data/empathy.schemas.in.h:4
+msgid "Checks if Empathy should autoconnect on startup"
+msgstr "Checks if Empathy should autoconnect on startup"
+
+#: ../data/empathy.schemas.in.h:5
+msgid "Checks if NetworkManager should be used"
+msgstr "Checks if NetworkManager should be used"
+
+#: ../data/empathy.schemas.in.h:6
+msgid "Checks if Salut account is created"
+msgstr "Checks if Salut account is created"
+
+#: ../data/empathy.schemas.in.h:7
+msgid ""
+"Comma separated list of spell checker languages to use (e.g. en, fr, nl)."
+msgstr ""
+"Comma separated list of spell checker languages to use (e.g. en, fr, nl)."
+
+#: ../data/empathy.schemas.in.h:8
+msgid "Compact contact list"
+msgstr "Compact contact list"
+
+#: ../data/empathy.schemas.in.h:9
+msgid "Contact list sort criterium"
+msgstr "Contact list sort criterium"
+
+#: ../data/empathy.schemas.in.h:10
+msgid "Default directory to select an avatar image from"
+msgstr "Default directory to select an avatar image from"
+
+#: ../data/empathy.schemas.in.h:11
+msgid "Enable popup when contact is available"
+msgstr "Enable popup when contact is available"
+
+#: ../data/empathy.schemas.in.h:12
+msgid "Enable sound when away"
+msgstr "Enable sound when away"
+
+#: ../data/empathy.schemas.in.h:13
+msgid "Enable sound when busy"
+msgstr "Enable sound when busy"
+
+#: ../data/empathy.schemas.in.h:14
+msgid "Enable spell checker"
+msgstr "Enable spell checker"
+
+#: ../data/empathy.schemas.in.h:15
+msgid "Hide main window"
+msgstr "Hide main window"
+
+#: ../data/empathy.schemas.in.h:16
+msgid "Hide the main window."
+msgstr "Hide the main window."
+
+#: ../data/empathy.schemas.in.h:17
+msgid "Nick completed character"
+msgstr "Nick completed character"
+
+#: ../data/empathy.schemas.in.h:18
+msgid "Open new chats in separate windows"
+msgstr "Open new chats in separate windows"
+
+#: ../data/empathy.schemas.in.h:19
+msgid "Show avatars"
+msgstr "Show avatars"
+
+#: ../data/empathy.schemas.in.h:20
+msgid "Show hint about closing the main window"
+msgstr "Show hint about closing the main window"
+
+#: ../data/empathy.schemas.in.h:21
+msgid "Show offline contacts"
+msgstr "Show offline contacts"
+
+#: ../data/empathy.schemas.in.h:22
+msgid "Spell checking languages"
+msgstr "Spell checking languages"
+
+#: ../data/empathy.schemas.in.h:23
+msgid "The last directory that an avatar image was chosen from."
+msgstr "The last directory that an avatar image was chosen from."
+
+#: ../data/empathy.schemas.in.h:24
+msgid "The theme that is used to display the conversation in chat windows."
+msgstr "The theme that is used to display the conversation in chat windows."
+
+#: ../data/empathy.schemas.in.h:25
+msgid "Use graphical smileys"
+msgstr "Use graphical smileys"
+
+#: ../data/empathy.schemas.in.h:26
+msgid "Use notification sounds"
+msgstr "Use notification sounds"
+
+#: ../data/empathy.schemas.in.h:27
+msgid "Use theme for chat rooms"
+msgstr "Use theme for chat rooms"
+
+#: ../data/empathy.schemas.in.h:28
+msgid ""
+"Whether or not Empathy should automatically login to your accounts on "
+"startup."
+msgstr ""
+"Whether or not Empathy should automatically login to your accounts on "
+"startup."
+
+#: ../data/empathy.schemas.in.h:29
+msgid ""
+"Whether or not the Salut account has been created on the first empathy run."
+msgstr ""
+"Whether or not the Salut account has been created on the first empathy run."
+
+#: ../data/empathy.schemas.in.h:30
+msgid ""
+"Whether or not the network manager should be used to automatically "
+"disconnect/reconnect."
+msgstr ""
+"Whether or not the network manager should be used to automatically "
+"disconnect/reconnect."
+
+#: ../data/empathy.schemas.in.h:31
+msgid ""
+"Whether or not to check words typed against the languages you want to check "
+"with."
+msgstr ""
+"Whether or not to check words typed against the languages you want to check "
+"with."
+
+#: ../data/empathy.schemas.in.h:32
+msgid ""
+"Whether or not to convert smileys into graphical images in conversations."
+msgstr ""
+"Whether or not to convert smileys into graphical images in conversations."
+
+#: ../data/empathy.schemas.in.h:33
+msgid "Whether or not to play a sound when messages arrive."
+msgstr "Whether or not to play a sound when messages arrive."
+
+#: ../data/empathy.schemas.in.h:34
+msgid "Whether or not to play sounds when away."
+msgstr "Whether or not to play sounds when away."
+
+#: ../data/empathy.schemas.in.h:35
+msgid "Whether or not to play sounds when busy."
+msgstr "Whether or not to play sounds when busy."
+
+#: ../data/empathy.schemas.in.h:36
+msgid "Whether or not to show a popup when a contact becomes available."
+msgstr "Whether or not to show a popup when a contact becomes available."
+
+#: ../data/empathy.schemas.in.h:37
+msgid ""
+"Whether or not to show avatars for contacts in the contact list and chat "
+"windows."
+msgstr ""
+"Whether or not to show avatars for contacts in the contact list and chat "
+"windows."
+
+#: ../data/empathy.schemas.in.h:38
+msgid "Whether or not to show contacts that are offline in the contact list."
+msgstr "Whether or not to show contacts that are offline in the contact list."
+
+#: ../data/empathy.schemas.in.h:39
+msgid ""
+"Whether or not to show the message dialog about closing the main window with "
+"the 'x' button in the title bar."
+msgstr ""
+"Whether or not to show the message dialog about closing the main window with "
+"the 'x' button in the title bar."
+
+#: ../data/empathy.schemas.in.h:40
+msgid "Whether to show the contact list in compact mode or not."
+msgstr "Whether to show the contact list in compact mode or not."
+
+#: ../data/empathy.schemas.in.h:41
+msgid "Whether to use the theme for chat rooms or not."
+msgstr "Whether to use the theme for chat rooms or not."
+
+#: ../data/empathy.schemas.in.h:42
+msgid ""
+"Which criterium to use when sorting the contact list. Default is to use sort "
+"by the contact's name with the value \"name\". A value of \"state\" will "
+"sort the contact list by state."
+msgstr ""
+"Which criterium to use when sorting the contact list. Default is to use sort "
+"by the contact's name with the value \"name\". A value of \"state\" will "
+"sort the contact list by state."
+
+#: ../libempathy/empathy-tp-contact-list.c:724 ../src/empathy.c:149
+msgid "People nearby"
+msgstr ""
+
+#: ../libempathy/empathy-utils.c:539
+msgid "Available"
+msgstr "זמין"
+
+#: ../libempathy/empathy-utils.c:541
+msgid "Busy"
+msgstr "עסוק"
+
+#: ../libempathy/empathy-utils.c:544
+msgid "Away"
+msgstr "מרוחק"
+
+#: ../libempathy/empathy-utils.c:546
+msgid "Hidden"
+msgstr "מוסתר"
+
+#: ../libempathy/empathy-utils.c:549
+msgid "Offline"
+msgstr "מנותק"
+
+#: ../libempathy-gtk/empathy-about-dialog.c:63
+msgid ""
+"Empathy is free software; you can redistribute it and/or modify it under the "
+"terms of the GNU General Public License as published by the Free Software "
+"Foundation; either version 2 of the License, or (at your option) any later "
+"version."
+msgstr ""
+"Empathy is free software; you can redistribute it and/or modify it under the "
+"terms of the GNU General Public License as published by the Free Software "
+"Foundation; either version 2 of the License, or (at your option) any later "
+"version."
+
+#: ../libempathy-gtk/empathy-about-dialog.c:67
+msgid ""
+"Empathy is distributed in the hope that it will be useful, but WITHOUT ANY "
+"WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS "
+"FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more "
+"details."
+msgstr ""
+"Empathy is distributed in the hope that it will be useful, but WITHOUT ANY "
+"WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS "
+"FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more "
+"details."
+
+#: ../libempathy-gtk/empathy-about-dialog.c:71
+msgid ""
+"You should have received a copy of the GNU General Public License along with "
+"Empathy; if not, write to the Free Software Foundation, Inc., 51 Franklin "
+"Street, Fifth Floor, Boston, MA 02110-130159 USA"
+msgstr ""
+"You should have received a copy of the GNU General Public License along with "
+"Empathy; if not, write to the Free Software Foundation, Inc., 51 Franklin "
+"Street, Fifth Floor, Boston, MA 02110-130159 USA"
+
+#: ../libempathy-gtk/empathy-about-dialog.c:99
+msgid "An Instant Messaging client for GNOME"
+msgstr "לקוח מסרים מיידיים עבור GNOME"
+
+#: ../libempathy-gtk/empathy-about-dialog.c:105
+msgid "translator-credits"
+msgstr ""
+"מארק קרפיבנר <mark125@gmail.com>\n"
+"\n"
+"פרוייקט תרגום GNOME לעברית:\n"
+"‏http://gnome-il.berlios.de"
+
+#: ../libempathy-gtk/empathy-account-chooser.c:337
+msgid "All"
+msgstr "הכל"
+
+#: ../libempathy-gtk/empathy-account-widget.c:276
+#: ../libempathy-gtk/empathy-account-widget.c:321
+#, c-format
+msgid "%s:"
+msgstr "%s:"
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:1
+#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:1
+#: ../libempathy-gtk/empathy-account-widget-salut.glade.h:1
+msgid "<b>Advanced</b>"
+msgstr "<b>מתקדם</b>"
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:2
+msgid "<b>Override  server settings</b>"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:3
+#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:2
+msgid "Forget password and clear the entry."
+msgstr ""
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:4
+#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:3
+msgid "Login I_D:"
+msgstr "מזהה משת_מש:"
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:5
+#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:4
+msgid "Pass_word:"
+msgstr "סיסמ_ה:"
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:6
+msgid "Pri_ority:"
+msgstr "עדי_פות:"
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:7
+msgid "Reso_urce:"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:8
+msgid "Use old SS_L"
+msgstr "השתמש ב-SS_L ישן"
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:9
+msgid "_Encryption required (TLS/SSL)"
+msgstr "_נדרשת הצפנה (TLS/SSL)"
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:10
+msgid "_Ignore SSL certificate errors"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:11
+#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:5
+msgid "_Port:"
+msgstr "_שער:"
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:12
+#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:6
+#: ../libempathy-gtk/empathy-new-chatroom-dialog.glade.h:10
+msgid "_Server:"
+msgstr "_שרת:"
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:13
+msgid "jabber account settings"
+msgstr "הגדרות חשבון jabber"
+
+#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:7
+msgid "msn account settings"
+msgstr "הגדרות חשבון msn"
+
+#: ../libempathy-gtk/empathy-account-widget-salut.glade.h:2
+msgid "_E-mail:"
+msgstr "דוא\"ל:"
+
+#: ../libempathy-gtk/empathy-account-widget-salut.glade.h:3
+msgid "_First Name: "
+msgstr "שם _פרטי:"
+
+#: ../libempathy-gtk/empathy-account-widget-salut.glade.h:4
+msgid "_Jabber ID:"
+msgstr "מזהה Jabber:"
+
+#: ../libempathy-gtk/empathy-account-widget-salut.glade.h:5
+msgid "_Last Name:"
+msgstr "שם _משפחה"
+
+#: ../libempathy-gtk/empathy-account-widget-salut.glade.h:6
+#: ../libempathy-gtk/empathy-chatrooms-window.glade.h:8
+msgid "_Nickname:"
+msgstr "_כינוי"
+
+#: ../libempathy-gtk/empathy-account-widget-salut.glade.h:7
+msgid "_Published Name:"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-account-widget-salut.glade.h:8
+msgid "salut account settings"
+msgstr "הגדרות חשבון salut"
+
+#: ../libempathy-gtk/empathy-accounts-dialog.c:225
+msgid ""
+"To add a new account, you can click on the 'Add' button and a new entry will "
+"be created for you to start configuring."
+msgstr ""
+
+#: ../libempathy-gtk/empathy-accounts-dialog.c:229
+msgid ""
+"To add a new account, you first have to install a backend for each protocol "
+"you want to use."
+msgstr ""
+
+#: ../libempathy-gtk/empathy-accounts-dialog.c:236
+#: ../libempathy-gtk/empathy-accounts-dialog.glade.h:2
+msgid "<b>No Account Selected</b>"
+msgstr "<b>לא נבחרו חשבונות</b>"
+
+#: ../libempathy-gtk/empathy-accounts-dialog.c:237
+msgid ""
+"\n"
+"\n"
+"If you do not want to add an account, simply click on the account you want "
+"to configure in the list on the left."
+msgstr ""
+
+#: ../libempathy-gtk/empathy-accounts-dialog.c:243
+msgid "<b>No Accounts Configured</b>"
+msgstr "<b>לא הוגדרו חשבונות</b>"
+
+#: ../libempathy-gtk/empathy-accounts-dialog.c:411
+msgid "Enabled"
+msgstr "מופעל"
+
+#: ../libempathy-gtk/empathy-accounts-dialog.c:421
+#: ../libempathy-gtk/empathy-accounts-dialog.glade.h:4
+msgid "Accounts"
+msgstr "חשבונות"
+
+#: ../libempathy-gtk/empathy-accounts-dialog.c:904
+#, c-format
+msgid ""
+"You are about to remove your %s account!\n"
+"Are you sure you want to proceed?"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-accounts-dialog.c:910
+msgid ""
+"Any associated conversations and chat rooms will NOT be removed if you "
+"decide to proceed.\n"
+"\n"
+"Should you decide to add the account back at a later time, they will still "
+"be available."
+msgstr ""
+
+#: ../libempathy-gtk/empathy-accounts-dialog.glade.h:1
+msgid "<b>New Account</b>"
+msgstr "<b>חשבון חדש</b>"
+
+#: ../libempathy-gtk/empathy-accounts-dialog.glade.h:3
+msgid "<b>Settings</b>"
+msgstr "<b>הגדרות</b>"
+
+#: ../libempathy-gtk/empathy-accounts-dialog.glade.h:5
+msgid "Cr_eate"
+msgstr "_צור"
+
+#: ../libempathy-gtk/empathy-accounts-dialog.glade.h:6
+msgid ""
+"To add a new account, you can click on the 'Add' button and a new entry will "
+"be created for you to started configuring.\n"
+"\n"
+"If you do not want to add an account, simply click on the account you want "
+"to configure in the list on the left."
+msgstr ""
+
+#: ../libempathy-gtk/empathy-accounts-dialog.glade.h:9
+msgid "Type:"
+msgstr "סוג:"
+
+#: ../libempathy-gtk/empathy-avatar-chooser.c:449
+msgid "Select Your Avatar Image"
+msgstr "בחר את התמונה האישית שלך"
+
+#: ../libempathy-gtk/empathy-avatar-chooser.c:452
+msgid "No Image"
+msgstr "ללא תמונה"
+
+#: ../libempathy-gtk/empathy-avatar-chooser.c:512
+msgid "Images"
+msgstr "תמונות"
+
+#: ../libempathy-gtk/empathy-avatar-chooser.c:516
+msgid "All Files"
+msgstr "כל הקבצים"
+
+#: ../libempathy-gtk/empathy-avatar-image.c:298
+msgid "Click to enlarge"
+msgstr "לחץ כדי להגדיל"
+
+#: ../libempathy-gtk/empathy-call-window.glade.h:1
+msgid "End Call"
+msgstr "סיים שיחה"
+
+#: ../libempathy-gtk/empathy-call-window.glade.h:2
+msgid "Input"
+msgstr "קלט"
+
+#: ../libempathy-gtk/empathy-call-window.glade.h:3
+msgid "Mute"
+msgstr "השתק"
+
+#: ../libempathy-gtk/empathy-call-window.glade.h:4
+msgid "Output"
+msgstr "פלט"
+
+#: ../libempathy-gtk/empathy-call-window.glade.h:5
+msgid "Send Video"
+msgstr "שלח וידאו"
+
+#: ../libempathy-gtk/empathy-call-window.glade.h:6
+msgid "Start Call"
+msgstr "התחל שיחה"
+
+#: ../libempathy-gtk/empathy-call-window.glade.h:7
+msgid "Volume"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-chat.c:445
+msgid "Disconnected"
+msgstr "מנותק"
+
+#: ../libempathy-gtk/empathy-chat.c:580
+msgid "offline"
+msgstr "מנותק"
+
+#: ../libempathy-gtk/empathy-chat.c:583
+msgid "invalid contact"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-chat.c:586
+msgid "permission denied"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-chat.c:589
+msgid "too long message"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-chat.c:592
+msgid "not implemented"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-chat.c:595
+msgid "unknown"
+msgstr "לא ידוע"
+
+#: ../libempathy-gtk/empathy-chat.c:599
+#, c-format
+msgid "Error sending message '%s': %s"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-chat.c:1056
+msgid "Insert Smiley"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-chat.c:1103
+msgid "_Check Word Spelling..."
+msgstr ""
+
+#: ../libempathy-gtk/empathy-chat.c:1558
+msgid "Connected"
+msgstr "מחובר"
+
+#: ../libempathy-gtk/empathy-chat.glade.h:1
+msgid "C_lear"
+msgstr "נ_קה"
+
+#: ../libempathy-gtk/empathy-chat.glade.h:2
+msgid "Ca_ll"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-chat.glade.h:3
+msgid "Change _Topic..."
+msgstr ""
+
+#: ../libempathy-gtk/empathy-chat.glade.h:4
+#: ../libempathy-gtk/empathy-new-message-dialog.glade.h:3
+msgid "Chat"
+msgstr "שיחה"
+
+#: ../libempathy-gtk/empathy-chat.glade.h:5
+msgid "Contact Infor_mation"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-chat.glade.h:6
+msgid "Cu_t"
+msgstr "ג_זור"
+
+#: ../libempathy-gtk/empathy-chat.glade.h:7
+msgid "In_vite..."
+msgstr "הז_מן..."
+
+#: ../libempathy-gtk/empathy-chat.glade.h:8
+msgid "Insert _Smiley"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-chat.glade.h:9
+msgid "Invitation _message:"
+msgstr "הודעת הזמ_נה:"
+
+#: ../libempathy-gtk/empathy-chat.glade.h:10
+msgid "Invite"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-chat.glade.h:11
+#: ../libempathy-gtk/empathy-main-window.glade.h:4
+msgid "Join _New..."
+msgstr ""
+
+#: ../libempathy-gtk/empathy-chat.glade.h:12
+msgid "Move Tab _Left"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-chat.glade.h:13
+msgid "Move Tab _Right"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-chat.glade.h:14
+msgid "Select who would you like to invite:"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-chat.glade.h:15
+msgid "You have been invited to join a chat conference."
+msgstr ""
+
+#: ../libempathy-gtk/empathy-chat.glade.h:16
+#: ../libempathy-gtk/empathy-main-window.glade.h:9
+msgid "_Add Contact..."
+msgstr "_הוסף איש קשר..."
+
+#: ../libempathy-gtk/empathy-chat.glade.h:17
+msgid "_Add To Favorites"
+msgstr "_הוסף למועדפים"
+
+#: ../libempathy-gtk/empathy-chat.glade.h:18
+msgid "_Close"
+msgstr "_סגור"
+
+#: ../libempathy-gtk/empathy-chat.glade.h:19
+#: ../libempathy-gtk/empathy-main-window.glade.h:11
+msgid "_Contents"
+msgstr "_תכנים"
+
+#: ../libempathy-gtk/empathy-chat.glade.h:20
+msgid "_Conversation"
+msgstr "_שיחה"
+
+#: ../libempathy-gtk/empathy-chat.glade.h:21
+msgid "_Copy"
+msgstr "_העתק"
+
+#: ../libempathy-gtk/empathy-chat.glade.h:22
+msgid "_Detach Tab"
+msgstr "_נתק לשונית"
+
+#: ../libempathy-gtk/empathy-chat.glade.h:23
+#: ../libempathy-gtk/empathy-contact-list-view.c:217
+#: ../libempathy-gtk/empathy-main-window.glade.h:12
+msgid "_Edit"
+msgstr "_עריכה"
+
+#: ../libempathy-gtk/empathy-chat.glade.h:24
+#: ../libempathy-gtk/empathy-main-window.glade.h:13
+msgid "_Help"
+msgstr "_עזרה"
+
+#: ../libempathy-gtk/empathy-chat.glade.h:25
+msgid "_Next Tab"
+msgstr "_לשונית הבאה"
+
+#: ../libempathy-gtk/empathy-chat.glade.h:26
+msgid "_Paste"
+msgstr "_הדבק"
+
+#: ../libempathy-gtk/empathy-chat.glade.h:27
+msgid "_Previous Tab"
+msgstr "_לשונית קודמת"
+
+#: ../libempathy-gtk/empathy-chat.glade.h:28
+#: ../libempathy-gtk/empathy-main-window.glade.h:18
+msgid "_Room"
+msgstr "_חדר"
+
+#: ../libempathy-gtk/empathy-chat.glade.h:29
+msgid "_Show Contacts"
+msgstr "_הצג אנשי קשר"
+
+#: ../libempathy-gtk/empathy-chat.glade.h:30
+msgid "_Tabs"
+msgstr "_לשוניות"
+
+#: ../libempathy-gtk/empathy-chat.glade.h:31
+#: ../libempathy-gtk/empathy-contact-list-view.c:233
+#: ../libempathy-gtk/empathy-main-window.glade.h:19
+msgid "_View Previous Conversations"
+msgstr "_צפייה בשיחות קודמות"
+
+#: ../libempathy-gtk/empathy-chat-view.c:441
+msgid "_Copy Link Address"
+msgstr "העתק _מיקום קישור"
+
+#: ../libempathy-gtk/empathy-chat-view.c:449
+msgid "_Open Link"
+msgstr "_פתח קישור"
+
+#: ../libempathy-gtk/empathy-chat-window.c:699
+#, c-format
+msgid "Conversations (%d)"
+msgstr "שיחות (%d)"
+
+#: ../libempathy-gtk/empathy-chat-window.c:1299
+msgid "Typing a message."
+msgstr "מקליד הודעה."
+
+#: ../libempathy-gtk/empathy-chatrooms-window.c:258
+msgid "Name"
+msgstr "שם"
+
+#: ../libempathy-gtk/empathy-chatrooms-window.c:276
+msgid "Room"
+msgstr "חדר"
+
+#: ../libempathy-gtk/empathy-chatrooms-window.c:285
+msgid "Auto Connect"
+msgstr "חיבור אוטומטי"
+
+#: ../libempathy-gtk/empathy-chatrooms-window.glade.h:1
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:5
+#: ../libempathy-gtk/empathy-new-chatroom-dialog.glade.h:1
+#: ../libempathy-gtk/empathy-new-message-dialog.glade.h:1
+msgid "Account:"
+msgstr "חשבון:"
+
+#: ../libempathy-gtk/empathy-chatrooms-window.glade.h:2
+msgid "Edit Favorite Room"
+msgstr "ערוך חדר מועדף"
+
+#: ../libempathy-gtk/empathy-chatrooms-window.glade.h:3
+msgid "Join room on start_up"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-chatrooms-window.glade.h:4
+msgid "Join this chat room when Empathy starts and you are connected"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-chatrooms-window.glade.h:5
+msgid "Manage Favorite Rooms"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-chatrooms-window.glade.h:6
+msgid "N_ame:"
+msgstr "ש_ם:"
+
+#: ../libempathy-gtk/empathy-chatrooms-window.glade.h:7
+msgid "S_erver:"
+msgstr "ש_רת:"
+
+#: ../libempathy-gtk/empathy-chatrooms-window.glade.h:9
+#: ../libempathy-gtk/empathy-new-chatroom-dialog.glade.h:9
+msgid "_Room:"
+msgstr "_חדר:"
+
+#: ../libempathy-gtk/empathy-contact-dialogs.c:176
+msgid "Personal Information"
+msgstr "מידע אישי"
+
+#: ../libempathy-gtk/empathy-contact-dialogs.c:179
+msgid "Edit Contact Information"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-contact-dialogs.c:182
+msgid "Contact Information"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-contact-dialogs.c:277
+msgid "I would like to add you to my contact list."
+msgstr "הייתי רוצה להוסיף אותך לרשימת אנשי הקשר שלי."
+
+#: ../libempathy-gtk/empathy-contact-dialogs.c:301
+msgid "New Contact"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-contact-dialogs.glade.h:1
+msgid "Decide _Later"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-contact-dialogs.glade.h:2
+msgid "Subscription Request"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:197
+msgid "_Contact"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:201
+msgid "_Group"
+msgstr "_קבוצה"
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:205
+#: ../libempathy-gtk/empathy-main-window.glade.h:10
+msgid "_Chat"
+msgstr "_שיחה"
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:205
+msgid "Chat with contact"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:209
+msgid "Infor_mation"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:209
+msgid "View contact information"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:213
+msgid "Re_name"
+msgstr "שנה _שם"
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:213
+msgid "Rename"
+msgstr "שנה שם"
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:217
+msgid "Edit the groups and name for this contact"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:221
+msgid "_Remove"
+msgstr "_הסר"
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:221
+msgid "Remove contact"
+msgstr "הסר איש קשר"
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:225
+msgid "_Invite to Chat Room"
+msgstr "_הזמן לחדר שיחה"
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:225
+msgid "Invite to a currently open chat room"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:229
+msgid "_Send File..."
+msgstr "_שלח קובץ..."
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:229
+msgid "Send a file"
+msgstr "שלח קובץ"
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:233
+msgid "View previous conversations with this contact"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:238
+msgid "_Call"
+msgstr "_שיחה"
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:238
+msgid "Start a voice or video conversation with this contact"
+msgstr "התחל שיחת קול או וידאו עם איש קשר הזה"
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:1469
+msgid "Sorry, I don't want you in my contact list anymore."
+msgstr "מצטער, אני יותר לא רוצה אותך ברשימת אנשי הקשר שלי."
+
+#: ../libempathy-gtk/empathy-contact-widget.c:688
+msgid "Select"
+msgstr "בחר"
+
+#: ../libempathy-gtk/empathy-contact-widget.c:698
+#: ../libempathy-gtk/empathy-main-window.c:609
+msgid "Group"
+msgstr "קבוצה"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:1
+msgid "<b>Client Information</b>"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:2
+msgid "<b>Contact Details</b>"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:3
+msgid "<b>Contact</b>"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:4
+msgid "<b>Groups</b>"
+msgstr "<b>קבוצות</b>"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:6
+msgid "Alias:"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:7
+msgid "Birthday:"
+msgstr "יום הולדת:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:8
+msgid "Client:"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:9
+msgid "Contact information"
+msgstr "נתוני איש קשר"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:10
+msgid "Email:"
+msgstr "דוא\"ל:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:11
+msgid "Fullname:"
+msgstr "שם מלא:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:12
+msgid "Identifier:"
+msgstr "מזהה:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:13
+msgid "Information requested..."
+msgstr ""
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:14
+msgid "OS:"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:15
+msgid ""
+"Select the groups you want this contact to appear in, you can select more "
+"than one group or no groups."
+msgstr ""
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:16
+msgid "Version:"
+msgstr "גרסה:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:17
+msgid "Web site:"
+msgstr "אתר אינטרנט:"
+
+#: ../libempathy-gtk/empathy-group-chat.c:251
+msgid "Enter the new topic you want to set for this room:"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-group-chat.c:361
+#, c-format
+msgid "%s has joined the room"
+msgstr ""
+"‏%s הצטרף לחדר"
+
+#: ../libempathy-gtk/empathy-group-chat.c:364
+#, c-format
+msgid "%s has left the room"
+msgstr ""
+"‏%s עזב את החדר"
+
+#: ../libempathy-gtk/empathy-group-chat.c:445
+#, c-format
+msgid "Topic: %s"
+msgstr "נושא: %s"
+
+#: ../libempathy-gtk/empathy-group-chat.c:574
+#, c-format
+msgid "Topic set to: %s"
+msgstr "הנושא נקבע ל: %s"
+
+#: ../libempathy-gtk/empathy-group-chat.c:576
+msgid "No topic defined"
+msgstr "לא נקבע נושא"
+
+#: ../libempathy-gtk/empathy-group-chat.glade.h:1
+msgid "<b>Topic:</b>"
+msgstr "<b>נושא:</b>"
+
+#: ../libempathy-gtk/empathy-group-chat.glade.h:2
+msgid "Group Chat"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-log-window.c:499
+msgid "Account"
+msgstr "חשבון"
+
+#: ../libempathy-gtk/empathy-log-window.c:506
+msgid "Conversation"
+msgstr "שיחה"
+
+#: ../libempathy-gtk/empathy-log-window.c:516
+msgid "Date"
+msgstr "תאריך"
+
+#: ../libempathy-gtk/empathy-log-window.glade.h:1
+msgid "Conversations"
+msgstr "שיחות"
+
+#: ../libempathy-gtk/empathy-log-window.glade.h:2
+msgid "Previous Conversations"
+msgstr "שיחות קודמות"
+
+#: ../libempathy-gtk/empathy-log-window.glade.h:3
+msgid "Search"
+msgstr "חיפוש"
+
+#: ../libempathy-gtk/empathy-log-window.glade.h:4
+msgid "_For:"
+msgstr "_ערך:"
+
+#: ../libempathy-gtk/empathy-new-chatroom-dialog.c:286
+msgid "Chat Rooms"
+msgstr "חדרי שיחה"
+
+#: ../libempathy-gtk/empathy-new-chatroom-dialog.glade.h:2
+msgid "Browse:"
+msgstr "עיין:"
+
+#: ../libempathy-gtk/empathy-new-chatroom-dialog.glade.h:3
+msgid ""
+"Enter the room name to join here or click on one or more rooms in the list."
+msgstr ""
+
+#: ../libempathy-gtk/empathy-new-chatroom-dialog.glade.h:4
+msgid ""
+"Enter the server which hosts the room, or leave it empty if the room is on "
+"the current account's server"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-new-chatroom-dialog.glade.h:5
+msgid "Join"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-new-chatroom-dialog.glade.h:6
+msgid "Join New"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-new-chatroom-dialog.glade.h:7
+msgid "Re_fresh"
+msgstr "רע_נן"
+
+#: ../libempathy-gtk/empathy-new-chatroom-dialog.glade.h:8
+msgid ""
+"This list represents all chat rooms hosted on the server you have entered."
+msgstr ""
+
+#: ../libempathy-gtk/empathy-main-window.c:266
+msgid "Show and edit accounts"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-main-window.c:630
+msgid "Contact"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-main-window.c:813
+msgid "_Edit account"
+msgstr "_ערוך חשבון"
+
+#: ../libempathy-gtk/empathy-main-window.c:896
+msgid "Network error"
+msgstr "שגיאת רשת"
+
+#: ../libempathy-gtk/empathy-main-window.c:899
+msgid "Authentication failed"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-main-window.c:902
+msgid "Encryption error"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-main-window.c:905
+msgid "Name in use"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-main-window.c:908
+msgid "Certificate not provided"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-main-window.c:911
+msgid "Certificate untrusted"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-main-window.c:914
+msgid "Certificate expired"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-main-window.c:917
+msgid "Certificate not activated"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-main-window.c:920
+msgid "Certificate hostname mismatch"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-main-window.c:923
+msgid "Certificate fingerprint mismatch"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-main-window.c:926
+msgid "Certificate self signed"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-main-window.c:929
+msgid "Certificate error"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-main-window.c:932
+msgid "Unknown error"
+msgstr "שגיאה לא ידועה"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:1
+msgid "Contact List"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:2
+msgid "Context"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:3
+msgid "Join _Favorites"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:5
+msgid "Manage Favorites"
+msgstr "נהל מועדפים"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:6
+msgid "Show _Offline Contacts"
+msgstr "הצג אנשי קשר _מנותקים"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:7
+#: ../megaphone/data/GNOME_Megaphone_Applet.xml.h:1
+#: ../nothere/data/GNOME_NotHere_Applet.xml.h:1
+msgid "_About"
+msgstr "_אודות"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:8
+msgid "_Accounts"
+msgstr "_חשבונות"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:14
+#: ../libempathy-gtk/empathy-status-icon.glade.h:2
+msgid "_New Conversation..."
+msgstr "_שיחה חדשה..."
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:15
+msgid "_Personal Information"
+msgstr "מידע _אישי"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:16
+#: ../megaphone/data/GNOME_Megaphone_Applet.xml.h:3
+msgid "_Preferences"
+msgstr "_העדפות"
+
+#: ../libempathy-gtk/empathy-main-window.glade.h:17
+#: ../libempathy-gtk/empathy-status-icon.glade.h:3
+msgid "_Quit"
+msgstr "יצי_אה"
+
+#: ../libempathy-gtk/empathy-new-message-dialog.glade.h:2
+msgid "Call"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-new-message-dialog.glade.h:4
+msgid "Contact ID:"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-new-message-dialog.glade.h:5
+msgid "New Conversation"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-preferences.c:247
+msgid "Language"
+msgstr "שפה"
+
+#: ../libempathy-gtk/empathy-preferences.glade.h:1
+msgid "<b>Appearance</b>"
+msgstr "<b>מראה</b>"
+
+#: ../libempathy-gtk/empathy-preferences.glade.h:2
+msgid "<b>Audio</b>"
+msgstr "<b>צליל</b>"
+
+#: ../libempathy-gtk/empathy-preferences.glade.h:3
+msgid "<b>Behaviour</b>"
+msgstr "<b>התנהגות</b>"
+
+#: ../libempathy-gtk/empathy-preferences.glade.h:4
+msgid "<b>Contact List</b>"
+msgstr "<b>רשימת אנשי קשר</b>"
+
+#: ../libempathy-gtk/empathy-preferences.glade.h:5
+msgid "<b>Enable spell checking for languages:</b>"
+msgstr "<b>הפעל בדיקת איות עבור השפות:</b>"
+
+#: ../libempathy-gtk/empathy-preferences.glade.h:6
+msgid "<b>Options</b>"
+msgstr "<b>אפשרויות</b>"
+
+#: ../libempathy-gtk/empathy-preferences.glade.h:7
+msgid "<b>Visual</b>"
+msgstr "<b>חזותי</b>"
+
+#: ../libempathy-gtk/empathy-preferences.glade.h:8
+msgid ""
+"<small>The list of languages reflects only the languages for which you have "
+"a dictionary installed.</small>"
+msgstr "<small>ברשימת השפות מוצגות שפות שעבורן מותקנים אצלך מילונים.</small>"
+
+#: ../libempathy-gtk/empathy-preferences.glade.h:9
+msgid "Automatically _connect on startup "
+msgstr ""
+
+#: ../libempathy-gtk/empathy-preferences.glade.h:10
+msgid "Avatars are user chosen images shown in the contact list"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-preferences.glade.h:11
+msgid "Chat Th_eme:"
+msgstr "ער_כת נושא לשיחה:"
+
+#: ../libempathy-gtk/empathy-preferences.glade.h:12
+msgid "Display notifications when contacts come _online"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-preferences.glade.h:13
+msgid "Enable sounds when _away"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-preferences.glade.h:14
+msgid "Enable sounds when _busy"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-preferences.glade.h:15
+msgid "General"
+msgstr "כללי"
+
+#: ../libempathy-gtk/empathy-preferences.glade.h:16
+msgid "Notifications"
+msgstr "התרעות"
+
+#: ../libempathy-gtk/empathy-preferences.glade.h:17
+msgid "Preferences"
+msgstr "העדפות"
+
+#: ../libempathy-gtk/empathy-preferences.glade.h:18
+msgid "Show _avatars"
+msgstr "הצג _תמנות אישיות"
+
+#: ../libempathy-gtk/empathy-preferences.glade.h:19
+msgid "Show _smileys as images"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-preferences.glade.h:20
+msgid "Show co_mpact contact list"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-preferences.glade.h:21
+msgid "Sort by _name"
+msgstr "מיין לפי _שם"
+
+#: ../libempathy-gtk/empathy-preferences.glade.h:22
+msgid "Sort by s_tate"
+msgstr "מיין לפי מצ_ב"
+
+#: ../libempathy-gtk/empathy-preferences.glade.h:23
+msgid "Spell Checking"
+msgstr "בדיקת איות"
+
+#: ../libempathy-gtk/empathy-preferences.glade.h:24
+msgid "Themes"
+msgstr "ערכות נושא"
+
+#: ../libempathy-gtk/empathy-preferences.glade.h:25
+msgid "_Open new chats in separate windows"
+msgstr "_פתח שיחות חדשות בחלונות נפרדים"
+
+#: ../libempathy-gtk/empathy-preferences.glade.h:26
+msgid "_Play sound when messages arrive"
+msgstr "_נגן צליל כשמתקבלת הודעה"
+
+#: ../libempathy-gtk/empathy-preferences.glade.h:27
+msgid "_Use for chat rooms"
+msgstr "_שימוש בחדרי שיחה"
+
+#. Custom messages
+#: ../libempathy-gtk/empathy-presence-chooser.c:691
+msgid "Custom messages..."
+msgstr "הודעות מותאמות אישית..."
+
+#: ../libempathy-gtk/empathy-presence-chooser.glade.h:1
+msgid "Custom message"
+msgstr "הודעה מותאמת אישית"
+
+#: ../libempathy-gtk/empathy-presence-chooser.glade.h:2
+msgid "Message:"
+msgstr "הודעה:"
+
+#: ../libempathy-gtk/empathy-presence-chooser.glade.h:3
+msgid "Save message"
+msgstr "שמור הודעה"
+
+#: ../libempathy-gtk/empathy-presence-chooser.glade.h:4
+msgid "Status:"
+msgstr "מצב:"
+
+#: ../libempathy-gtk/empathy-private-chat.c:229
+#, c-format
+msgid "%s went offline"
+msgstr ""
+"‏%s התנתק"
+
+#: ../libempathy-gtk/empathy-private-chat.c:243
+#, c-format
+msgid "%s has come online"
+msgstr ""
+"‏%s התחבר"
+
+#: ../libempathy-gtk/empathy-spell-dialog.c:85
+msgid "Word"
+msgstr "מילה"
+
+#: ../libempathy-gtk/empathy-spell-dialog.c:258
+msgid "Suggestions for the word"
+msgstr "הצעות עבור המילה"
+
+#: ../libempathy-gtk/empathy-spell-dialog.glade.h:1
+msgid "Spell Checker"
+msgstr "בודק איות"
+
+#: ../libempathy-gtk/empathy-spell-dialog.glade.h:2
+msgid "Suggestions for the word:"
+msgstr "הצעות עבור המילה:"
+
+#: ../libempathy-gtk/empathy-status-icon.c:369
+#, c-format
+msgid ""
+"New message from %s:\n"
+"%s"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-status-icon.c:434
+#, c-format
+msgid ""
+"Incoming call from %s:\n"
+"%s"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-status-icon.c:738
+#, c-format
+msgid "Subscription requested by %s"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-status-icon.c:741
+#, c-format
+msgid ""
+"\n"
+"Message: %s"
+msgstr ""
+"\n"
+"הודעה: %s"
+
+#: ../libempathy-gtk/empathy-status-icon.glade.h:1
+msgid "Status"
+msgstr "מצב"
+
+#: ../libempathy-gtk/empathy-status-icon.glade.h:4
+msgid "_Show Contact List"
+msgstr "_הצג רשימת אנשי קשר"
+
+#: ../libempathy-gtk/empathy-theme-boxes.c:780
+#: ../libempathy-gtk/empathy-theme-irc.c:297
+msgid "%A %d %B %Y"
+msgstr "%A %d %B %Y"
+
+#: ../libempathy-gtk/empathy-theme-manager.c:78
+msgid "Classic"
+msgstr "קלאסי"
+
+#: ../libempathy-gtk/empathy-theme-manager.c:79
+msgid "Simple"
+msgstr "פשוט"
+
+#: ../libempathy-gtk/empathy-theme-manager.c:80
+msgid "Clean"
+msgstr "נקי"
+
+#: ../libempathy-gtk/empathy-theme-manager.c:81
+msgid "Blue"
+msgstr "כחול"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.c:246
+msgid "New Network"
+msgstr "רשת חדשה"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:1
+msgid "<b>Network</b>"
+msgstr "<b>רשת</b>"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:2
+msgid "<b>Servers</b>"
+msgstr "<b>שרתים</b>"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:3
+msgid "Charset:"
+msgstr "קידוד תוים:"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:4
+msgid "Create a new IRC network"
+msgstr "צור רשת IRC חדשה"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:5
+msgid "Edit the selected IRC network"
+msgstr "ערוך רשת IRC מסומנת"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:6
+msgid "Network"
+msgstr "רשת"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:7
+msgid "Network:"
+msgstr "רשת:"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:8
+msgid "Nickname:"
+msgstr "כינוי:"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:9
+msgid "Password:"
+msgstr "סיסמה:"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:10
+msgid "Quit message:"
+msgstr "הודאת יציאה:"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:11
+msgid "Real name:"
+msgstr "שם אמיתי:"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:12
+msgid "Remove the selected IRC network"
+msgstr "הסר רשת IRC מסומנת"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:13
+msgid "irc account settings"
+msgstr "הגדרות חשבון irc"
+
+#: ../libempathy-gtk/empathy-irc-network-dialog.c:287
+msgid "new server"
+msgstr "שרת חדש"
+
+#: ../libempathy-gtk/empathy-irc-network-dialog.c:512
+msgid "Server"
+msgstr "שרת"
+
+#: ../libempathy-gtk/empathy-irc-network-dialog.c:527
+msgid "Port"
+msgstr "שער"
+
+#: ../libempathy-gtk/empathy-irc-network-dialog.c:540
+msgid "SSL"
+msgstr "SSL"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:158
+msgid "Current Locale"
+msgstr "מיקום נוכחי"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:161
+#: ../libempathy-gtk/totem-subtitle-encoding.c:163
+#: ../libempathy-gtk/totem-subtitle-encoding.c:165
+#: ../libempathy-gtk/totem-subtitle-encoding.c:167
+msgid "Arabic"
+msgstr "ערבית"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:170
+msgid "Armenian"
+msgstr "ארמנית"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:173
+#: ../libempathy-gtk/totem-subtitle-encoding.c:175
+#: ../libempathy-gtk/totem-subtitle-encoding.c:177
+msgid "Baltic"
+msgstr "בלטית"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:180
+msgid "Celtic"
+msgstr ""
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:183
+#: ../libempathy-gtk/totem-subtitle-encoding.c:185
+#: ../libempathy-gtk/totem-subtitle-encoding.c:187
+#: ../libempathy-gtk/totem-subtitle-encoding.c:189
+msgid "Central European"
+msgstr "מרכז אירופאי"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:192
+#: ../libempathy-gtk/totem-subtitle-encoding.c:194
+#: ../libempathy-gtk/totem-subtitle-encoding.c:196
+#: ../libempathy-gtk/totem-subtitle-encoding.c:198
+msgid "Chinese Simplified"
+msgstr "סינית מפושטת"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:201
+#: ../libempathy-gtk/totem-subtitle-encoding.c:203
+#: ../libempathy-gtk/totem-subtitle-encoding.c:205
+msgid "Chinese Traditional"
+msgstr "סינית מסורתית"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:208
+msgid "Croatian"
+msgstr "קרואטית"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:211
+#: ../libempathy-gtk/totem-subtitle-encoding.c:213
+#: ../libempathy-gtk/totem-subtitle-encoding.c:215
+#: ../libempathy-gtk/totem-subtitle-encoding.c:217
+#: ../libempathy-gtk/totem-subtitle-encoding.c:219
+#: ../libempathy-gtk/totem-subtitle-encoding.c:221
+msgid "Cyrillic"
+msgstr "קירילי"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:224
+msgid "Cyrillic/Russian"
+msgstr "קירילי/רוסי"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:227
+#: ../libempathy-gtk/totem-subtitle-encoding.c:229
+msgid "Cyrillic/Ukrainian"
+msgstr "קרילי/אוקראיני"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:232
+msgid "Georgian"
+msgstr "גאורגית"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:235
+#: ../libempathy-gtk/totem-subtitle-encoding.c:237
+#: ../libempathy-gtk/totem-subtitle-encoding.c:239
+msgid "Greek"
+msgstr "יוונית"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:242
+msgid "Gujarati"
+msgstr "גוג'אראטית"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:245
+msgid "Gurmukhi"
+msgstr "גורמוקית"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:248
+#: ../libempathy-gtk/totem-subtitle-encoding.c:250
+#: ../libempathy-gtk/totem-subtitle-encoding.c:252
+#: ../libempathy-gtk/totem-subtitle-encoding.c:254
+msgid "Hebrew"
+msgstr "עברית"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:257
+msgid "Hebrew Visual"
+msgstr "עברית ויזואלית"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:260
+msgid "Hindi"
+msgstr "הינדית"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:263
+msgid "Icelandic"
+msgstr "איסלנדית"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:266
+#: ../libempathy-gtk/totem-subtitle-encoding.c:268
+#: ../libempathy-gtk/totem-subtitle-encoding.c:270
+msgid "Japanese"
+msgstr "יפנית"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:273
+#: ../libempathy-gtk/totem-subtitle-encoding.c:275
+#: ../libempathy-gtk/totem-subtitle-encoding.c:277
+#: ../libempathy-gtk/totem-subtitle-encoding.c:279
+msgid "Korean"
+msgstr "קוראנית"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:282
+msgid "Nordic"
+msgstr "נורדי"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:285
+msgid "Persian"
+msgstr "פרסית"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:288
+#: ../libempathy-gtk/totem-subtitle-encoding.c:290
+msgid "Romanian"
+msgstr "רומנית"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:293
+msgid "South European"
+msgstr "דרום אירופאית"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:296
+msgid "Thai"
+msgstr "תאילנדית"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:299
+#: ../libempathy-gtk/totem-subtitle-encoding.c:301
+#: ../libempathy-gtk/totem-subtitle-encoding.c:303
+#: ../libempathy-gtk/totem-subtitle-encoding.c:305
+msgid "Turkish"
+msgstr "טורקית"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:308
+#: ../libempathy-gtk/totem-subtitle-encoding.c:310
+#: ../libempathy-gtk/totem-subtitle-encoding.c:312
+#: ../libempathy-gtk/totem-subtitle-encoding.c:314
+#: ../libempathy-gtk/totem-subtitle-encoding.c:316
+msgid "Unicode"
+msgstr "יוניקוד"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:319
+#: ../libempathy-gtk/totem-subtitle-encoding.c:321
+#: ../libempathy-gtk/totem-subtitle-encoding.c:323
+#: ../libempathy-gtk/totem-subtitle-encoding.c:325
+#: ../libempathy-gtk/totem-subtitle-encoding.c:327
+msgid "Western"
+msgstr "מערבי"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:330
+#: ../libempathy-gtk/totem-subtitle-encoding.c:332
+#: ../libempathy-gtk/totem-subtitle-encoding.c:334
+msgid "Vietnamese"
+msgstr "ויאטנמית"
+
+#.
+#. * vim: sw=2 ts=8 cindent noai bs=2
+#.
+#: ../megaphone/data/GNOME_Megaphone_Applet.schemas.in.h:1
+msgid ""
+"The contact to display in the applet. Empty means no contact is displayed."
+msgstr ""
+"The contact to display in the applet. Empty means no contact is displayed."
+
+#: ../megaphone/data/GNOME_Megaphone_Applet.schemas.in.h:2
+msgid "The contact's avatar token. Empty means contact has no avatar."
+msgstr "The contact's avatar token. Empty means contact has no avatar."
+
+#: ../megaphone/data/GNOME_Megaphone_Applet.server.in.in.h:1
+msgid "Megaphone"
+msgstr "Megaphone"
+
+#: ../megaphone/data/GNOME_Megaphone_Applet.server.in.in.h:2
+#: ../megaphone/src/megaphone-applet.c:419
+msgid "Talk!"
+msgstr "דבר!"
+
+#: ../megaphone/data/GNOME_Megaphone_Applet.xml.h:2
+msgid "_Information"
+msgstr ""
+
+#: ../nothere/data/GNOME_NotHere_Applet.server.in.in.h:1
+msgid "Presence"
+msgstr "Presence"
+
+#: ../nothere/data/GNOME_NotHere_Applet.server.in.in.h:2
+#: ../nothere/src/nothere-applet.c:89
+msgid "Set your own presence"
+msgstr ""
+
+#: ../src/empathy.c:205
+msgid "- Empathy Instant Messenger"
+msgstr "- Empathy Instant Messenger"
