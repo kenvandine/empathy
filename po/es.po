@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: empathy.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-02-17 23:38+0000\n"
-"PO-Revision-Date: 2008-02-18 12:33+0100\n"
+"POT-Creation-Date: 2008-02-27 11:33+0000\n"
+"PO-Revision-Date: 2008-02-29 12:29+0100\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -287,7 +287,7 @@ msgid ""
 msgstr ""
 "Debería haber recibido una copia de la Licencia Pública General GNU junto "
 "con Gossip ; si no, escriba a la Free Software Foundation, Inc., 51 Franklin "
-"Street, Fifth Floor, Boston, MA 02110-130159 EE.UU."
+"Street, Fifth Floor, Boston, MA 02110-130159 EE. UU."
 
 #: ../libempathy-gtk/empathy-about-dialog.c:99
 msgid "An Instant Messaging client for GNOME"
@@ -437,16 +437,16 @@ msgstr ""
 msgid "<b>No Accounts Configured</b>"
 msgstr "<b>No hay ninguna cuenta configurada</b>"
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:403
+#: ../libempathy-gtk/empathy-accounts-dialog.c:411
 msgid "Enabled"
 msgstr "Activado"
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:413
+#: ../libempathy-gtk/empathy-accounts-dialog.c:421
 #: ../libempathy-gtk/empathy-accounts-dialog.glade.h:4
 msgid "Accounts"
 msgstr "Cuentas"
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:896
+#: ../libempathy-gtk/empathy-accounts-dialog.c:904
 #, c-format
 msgid ""
 "You are about to remove your %s account!\n"
@@ -455,7 +455,7 @@ msgstr ""
 "Va a eliminar su cuenta %s\n"
 "¿Seguro que quiere continuar?"
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:902
+#: ../libempathy-gtk/empathy-accounts-dialog.c:910
 msgid ""
 "Any associated conversations and chat rooms will NOT be removed if you "
 "decide to proceed.\n"
@@ -1056,7 +1056,7 @@ msgid ""
 "the current account's server"
 msgstr ""
 "Introduzca el servidor que aloja la sala o déjelo vacío si la sala está en "
-"la cuenta del servidor actual."
+"la cuenta del servidor actual"
 
 #: ../libempathy-gtk/empathy-new-chatroom-dialog.glade.h:5
 msgid "Join"
@@ -1366,7 +1366,7 @@ msgstr "Corrector ortográfico"
 msgid "Suggestions for the word:"
 msgstr "Sugerencias para la palabra:"
 
-#: ../libempathy-gtk/empathy-status-icon.c:354
+#: ../libempathy-gtk/empathy-status-icon.c:369
 #, c-format
 msgid ""
 "New message from %s:\n"
@@ -1375,12 +1375,21 @@ msgstr ""
 "Nuevo mensaje de %s:\n"
 "%s"
 
-#: ../libempathy-gtk/empathy-status-icon.c:625
+#: ../libempathy-gtk/empathy-status-icon.c:434
+#, c-format
+msgid ""
+"Incoming call from %s:\n"
+"%s"
+msgstr ""
+"Llamada entrante de %s:\n"
+"%s"
+
+#: ../libempathy-gtk/empathy-status-icon.c:738
 #, c-format
 msgid "Subscription requested by %s"
 msgstr "Petición de suscripción de %s"
 
-#: ../libempathy-gtk/empathy-status-icon.c:628
+#: ../libempathy-gtk/empathy-status-icon.c:741
 #, c-format
 msgid ""
 "\n"
