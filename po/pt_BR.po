@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Empathy\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-02-27 23:06-0300\n"
-"PO-Revision-Date: 2008-01-23 18:09-0500\n"
+"POT-Creation-Date: 2008-03-01 19:41-0300\n"
+"PO-Revision-Date: 2008-03-01 20:06-0300\n"
 "Last-Translator: Og Maciel <ogmaciel@gnome.org>\n"
 "Language-Team: Gnome-BR <gnome-l10n-br@listas.cipsga.org.br>\n"
 "MIME-Version: 1.0\n"
@@ -231,23 +231,23 @@ msgstr ""
 msgid "People nearby"
 msgstr "Pessoas por perto"
 
-#: ../libempathy/empathy-utils.c:539
+#: ../libempathy/empathy-utils.c:540
 msgid "Available"
 msgstr "Disponível"
 
-#: ../libempathy/empathy-utils.c:541
+#: ../libempathy/empathy-utils.c:542
 msgid "Busy"
 msgstr "Ocupado"
 
-#: ../libempathy/empathy-utils.c:544
+#: ../libempathy/empathy-utils.c:545
 msgid "Away"
 msgstr "Longe"
 
-#: ../libempathy/empathy-utils.c:546
+#: ../libempathy/empathy-utils.c:547
 msgid "Hidden"
 msgstr "Oculto"
 
-#: ../libempathy/empathy-utils.c:549
+#: ../libempathy/empathy-utils.c:550
 msgid "Offline"
 msgstr "Desconectado"
 
@@ -258,7 +258,7 @@ msgid ""
 "Foundation; either version 2 of the License, or (at your option) any later "
 "version."
 msgstr ""
-"Empathy é um software livre; você pode redistribui-lo e/ou modifica-lo "
+"Empathy é um software livre; você pode redistribuí-lo e/ou modificá-lo "
 "dentro dos termos da Licença Pública Geral GNU como publicada pela Fundação "
 "do Software Livre (FSF); na versão 2 da Licença, ou (na sua opinião) "
 "qualquer versão."
@@ -315,10 +315,11 @@ msgstr "<b>Avançado</b>"
 msgid "<b>Override  server settings</b>"
 msgstr "<b>Sobrescrever configurações do servidor</b>"
 
+# Tooltip.
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:3
 #: ../libempathy-gtk/empathy-account-widget-msn.glade.h:2
 msgid "Forget password and clear the entry."
-msgstr "Esquecer a senha e apagar a entrada."
+msgstr "Esquece a senha e apaga a entrada."
 
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:4
 #: ../libempathy-gtk/empathy-account-widget-msn.glade.h:3
@@ -373,6 +374,7 @@ msgstr "configurações da conta msn"
 msgid "_E-mail:"
 msgstr "_E-mail:"
 
+# A mensagem original termina em espaço, mas suas análogas não.
 #: ../libempathy-gtk/empathy-account-widget-salut.glade.h:3
 msgid "_First Name: "
 msgstr "_Nome:"
@@ -388,7 +390,7 @@ msgstr "_Sobrenome:"
 #: ../libempathy-gtk/empathy-account-widget-salut.glade.h:6
 #: ../libempathy-gtk/empathy-chatrooms-window.glade.h:8
 msgid "_Nickname:"
-msgstr "A_pelido:"
+msgstr "_Apelido:"
 
 #: ../libempathy-gtk/empathy-account-widget-salut.glade.h:7
 msgid "_Published Name:"
@@ -436,9 +438,8 @@ msgid "<b>No Accounts Configured</b>"
 msgstr "<b>Nenhuma Conta Configurada</b>"
 
 #: ../libempathy-gtk/empathy-accounts-dialog.c:411
-#, fuzzy
 msgid "Enabled"
-msgstr "Habilitar"
+msgstr "Habilitado"
 
 #: ../libempathy-gtk/empathy-accounts-dialog.c:421
 #: ../libempathy-gtk/empathy-accounts-dialog.glade.h:4
@@ -519,9 +520,8 @@ msgid "Click to enlarge"
 msgstr "Clique para ampliar"
 
 #: ../libempathy-gtk/empathy-call-window.glade.h:1
-#, fuzzy
 msgid "End Call"
-msgstr "Chamar"
+msgstr "Desligar"
 
 #: ../libempathy-gtk/empathy-call-window.glade.h:2
 msgid "Input"
@@ -541,7 +541,7 @@ msgstr "Enviar Vídeo"
 
 #: ../libempathy-gtk/empathy-call-window.glade.h:6
 msgid "Start Call"
-msgstr ""
+msgstr "Iniciar Chamada"
 
 #: ../libempathy-gtk/empathy-call-window.glade.h:7
 msgid "Volume"
@@ -768,12 +768,13 @@ msgstr "Editar Sala Favorita"
 
 #: ../libempathy-gtk/empathy-chatrooms-window.glade.h:3
 msgid "Join room on start_up"
-msgstr "Entrar na sala ao iniciar"
+msgstr "Entrar na sala ao _iniciar"
 
+# Tooltip.
 #: ../libempathy-gtk/empathy-chatrooms-window.glade.h:4
 msgid "Join this chat room when Empathy starts and you are connected"
 msgstr ""
-"Entrar nesta sala de bate-papo quando o Empathy iniciar e você estiver "
+"Entra nesta sala de bate-papo quando o Empathy iniciar e você estiver "
 "conectado"
 
 #: ../libempathy-gtk/empathy-chatrooms-window.glade.h:5
@@ -782,16 +783,17 @@ msgstr "Gerenciar Salas Favoritas"
 
 #: ../libempathy-gtk/empathy-chatrooms-window.glade.h:6
 msgid "N_ame:"
-msgstr "N_ome:"
+msgstr "_Nome:"
 
 #: ../libempathy-gtk/empathy-chatrooms-window.glade.h:7
 msgid "S_erver:"
 msgstr "S_ervidor:"
 
+# Evitar colisão com _Salvar
 #: ../libempathy-gtk/empathy-chatrooms-window.glade.h:9
 #: ../libempathy-gtk/empathy-new-chatroom-dialog.glade.h:9
 msgid "_Room:"
-msgstr "_Sala:"
+msgstr "Sa_la:"
 
 #: ../libempathy-gtk/empathy-contact-dialogs.c:176
 msgid "Personal Information"
@@ -1047,6 +1049,7 @@ msgstr "Salas de Bate-Papo"
 msgid "Browse:"
 msgstr "Navegar:"
 
+# Tooltip, but imperative sentence is correct.
 #: ../libempathy-gtk/empathy-new-chatroom-dialog.glade.h:3
 msgid ""
 "Enter the room name to join here or click on one or more rooms in the list."
@@ -1054,6 +1057,7 @@ msgstr ""
 "Digite o nome da sala em que você deseja entrar aqui ou clique em uma sala "
 "ou mais na lista."
 
+# Tooltip, but imperative sentence is correct.
 #: ../libempathy-gtk/empathy-new-chatroom-dialog.glade.h:4
 msgid ""
 "Enter the server which hosts the room, or leave it empty if the room is on "
@@ -1074,6 +1078,7 @@ msgstr "Entrar em Nova"
 msgid "Re_fresh"
 msgstr "Atualiza_r"
 
+# Tooltip.
 #: ../libempathy-gtk/empathy-new-chatroom-dialog.glade.h:8
 msgid ""
 "This list represents all chat rooms hosted on the server you have entered."
@@ -1177,9 +1182,8 @@ msgstr "Cont_as"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:14
 #: ../libempathy-gtk/empathy-status-icon.glade.h:2
-#, fuzzy
 msgid "_New Conversation..."
-msgstr "_Conversação"
+msgstr "_Nova Conversação..."
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:15
 msgid "_Personal Information"
@@ -1204,9 +1208,8 @@ msgid "Contact ID:"
 msgstr "ID do Contato:"
 
 #: ../libempathy-gtk/empathy-new-message-dialog.glade.h:5
-#, fuzzy
 msgid "New Conversation"
-msgstr "Conversação"
+msgstr "Nova Conversação"
 
 #: ../libempathy-gtk/empathy-preferences.c:247
 msgid "Language"
@@ -1252,6 +1255,7 @@ msgstr ""
 msgid "Automatically _connect on startup "
 msgstr "Conectar automati_camente ao iniciar "
 
+# Tooltip.
 #: ../libempathy-gtk/empathy-preferences.glade.h:10
 msgid "Avatars are user chosen images shown in the contact list"
 msgstr ""
@@ -1387,6 +1391,8 @@ msgid ""
 "Incoming call from %s:\n"
 "%s"
 msgstr ""
+"Chamada recebida de %s:\n"
+"%s"
 
 #: ../libempathy-gtk/empathy-status-icon.c:738
 #, c-format
@@ -1433,138 +1439,128 @@ msgstr "Azul"
 
 #: ../libempathy-gtk/empathy-account-widget-irc.c:246
 msgid "New Network"
-msgstr ""
+msgstr "Nova rede"
 
 #: ../libempathy-gtk/empathy-account-widget-irc.glade.h:1
-#, fuzzy
 msgid "<b>Network</b>"
-msgstr "Status"
+msgstr "<b>Rede</b>"
 
 #: ../libempathy-gtk/empathy-account-widget-irc.glade.h:2
-#, fuzzy
 msgid "<b>Servers</b>"
-msgstr "<b>Configurações</b>"
+msgstr "<b>Servidores</b>"
 
+# Changed from Og's "conjunto de caracteres because of little room.
 #: ../libempathy-gtk/empathy-account-widget-irc.glade.h:3
-#, fuzzy
 msgid "Charset:"
-msgstr "Bate-Papo"
+msgstr "Codificação:"
 
+# Tooltip.
 #: ../libempathy-gtk/empathy-account-widget-irc.glade.h:4
 msgid "Create a new IRC network"
-msgstr ""
+msgstr "Cria uma nova rede de IRC"
 
+# Tooltip.
 #: ../libempathy-gtk/empathy-account-widget-irc.glade.h:5
 msgid "Edit the selected IRC network"
-msgstr ""
+msgstr "Edita a rede de IRC selecionada"
 
 #: ../libempathy-gtk/empathy-account-widget-irc.glade.h:6
-#, fuzzy
 msgid "Network"
-msgstr "Erro de rede"
+msgstr "Rede"
 
 #: ../libempathy-gtk/empathy-account-widget-irc.glade.h:7
-#, fuzzy
 msgid "Network:"
-msgstr "Erro de rede"
+msgstr "Rede:"
 
 #: ../libempathy-gtk/empathy-account-widget-irc.glade.h:8
 msgid "Nickname:"
 msgstr "Apelido:"
 
 #: ../libempathy-gtk/empathy-account-widget-irc.glade.h:9
-#, fuzzy
 msgid "Password:"
-msgstr "Se_nha:"
+msgstr "Senha:"
 
 #: ../libempathy-gtk/empathy-account-widget-irc.glade.h:10
-#, fuzzy
 msgid "Quit message:"
-msgstr "Mensagem personalizada"
+msgstr "Mensagem de saída:"
 
 #: ../libempathy-gtk/empathy-account-widget-irc.glade.h:11
-#, fuzzy
 msgid "Real name:"
-msgstr "Renomear"
+msgstr "Nome verdadeiro:"
 
+# Tooltip.
 #: ../libempathy-gtk/empathy-account-widget-irc.glade.h:12
 msgid "Remove the selected IRC network"
-msgstr ""
+msgstr "Remove a rede de IRC selecionada"
 
 #: ../libempathy-gtk/empathy-account-widget-irc.glade.h:13
-#, fuzzy
 msgid "irc account settings"
-msgstr "<b>Configurações da Conta</b>"
+msgstr "configurações da conta de irc"
 
 #: ../libempathy-gtk/empathy-irc-network-dialog.c:287
-#, fuzzy
 msgid "new server"
-msgstr "Conectar _Servidor:"
+msgstr "novo servidor"
 
 #: ../libempathy-gtk/empathy-irc-network-dialog.c:512
-#, fuzzy
 msgid "Server"
-msgstr "Servidor:"
+msgstr "Servidor"
 
 #: ../libempathy-gtk/empathy-irc-network-dialog.c:527
-#, fuzzy
 msgid "Port"
-msgstr "_Porta:"
+msgstr "Porta"
 
 #: ../libempathy-gtk/empathy-irc-network-dialog.c:540
 msgid "SSL"
-msgstr ""
+msgstr "SSL"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:158
 msgid "Current Locale"
-msgstr ""
+msgstr "Localidade atual"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:161
 #: ../libempathy-gtk/totem-subtitle-encoding.c:163
 #: ../libempathy-gtk/totem-subtitle-encoding.c:165
 #: ../libempathy-gtk/totem-subtitle-encoding.c:167
 msgid "Arabic"
-msgstr ""
+msgstr "Árabe"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:170
 msgid "Armenian"
-msgstr ""
+msgstr "Armênio"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:173
 #: ../libempathy-gtk/totem-subtitle-encoding.c:175
 #: ../libempathy-gtk/totem-subtitle-encoding.c:177
 msgid "Baltic"
-msgstr ""
+msgstr "Báltico"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:180
-#, fuzzy
 msgid "Celtic"
-msgstr "Clássico"
+msgstr "Celta"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:183
 #: ../libempathy-gtk/totem-subtitle-encoding.c:185
 #: ../libempathy-gtk/totem-subtitle-encoding.c:187
 #: ../libempathy-gtk/totem-subtitle-encoding.c:189
 msgid "Central European"
-msgstr ""
+msgstr "Europeu Central"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:192
 #: ../libempathy-gtk/totem-subtitle-encoding.c:194
 #: ../libempathy-gtk/totem-subtitle-encoding.c:196
 #: ../libempathy-gtk/totem-subtitle-encoding.c:198
 msgid "Chinese Simplified"
-msgstr ""
+msgstr "Chinês Simplificado"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:201
 #: ../libempathy-gtk/totem-subtitle-encoding.c:203
 #: ../libempathy-gtk/totem-subtitle-encoding.c:205
 msgid "Chinese Traditional"
-msgstr ""
+msgstr "Chinês Tradicional"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:208
-#, fuzzy
 msgid "Croatian"
-msgstr "Conversação"
+msgstr "Croata"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:211
 #: ../libempathy-gtk/totem-subtitle-encoding.c:213
@@ -1573,97 +1569,94 @@ msgstr "Conversação"
 #: ../libempathy-gtk/totem-subtitle-encoding.c:219
 #: ../libempathy-gtk/totem-subtitle-encoding.c:221
 msgid "Cyrillic"
-msgstr ""
+msgstr "Cirílico"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:224
 msgid "Cyrillic/Russian"
-msgstr ""
+msgstr "Cirílico/Russo"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:227
 #: ../libempathy-gtk/totem-subtitle-encoding.c:229
 msgid "Cyrillic/Ukrainian"
-msgstr ""
+msgstr "Cirílico/Ucraniano"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:232
-#, fuzzy
 msgid "Georgian"
-msgstr "Versão:"
+msgstr "Georgiano"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:235
 #: ../libempathy-gtk/totem-subtitle-encoding.c:237
 #: ../libempathy-gtk/totem-subtitle-encoding.c:239
 msgid "Greek"
-msgstr ""
+msgstr "Grego"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:242
 msgid "Gujarati"
-msgstr ""
+msgstr "Guzerate"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:245
 msgid "Gurmukhi"
-msgstr ""
+msgstr "Gurmukhi"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:248
 #: ../libempathy-gtk/totem-subtitle-encoding.c:250
 #: ../libempathy-gtk/totem-subtitle-encoding.c:252
 #: ../libempathy-gtk/totem-subtitle-encoding.c:254
 msgid "Hebrew"
-msgstr ""
+msgstr "Hebraico"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:257
 msgid "Hebrew Visual"
-msgstr ""
+msgstr "Hebraico Visual"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:260
 msgid "Hindi"
-msgstr ""
+msgstr "Hindi"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:263
 msgid "Icelandic"
-msgstr ""
+msgstr "Islandês"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:266
 #: ../libempathy-gtk/totem-subtitle-encoding.c:268
 #: ../libempathy-gtk/totem-subtitle-encoding.c:270
 msgid "Japanese"
-msgstr ""
+msgstr "Japonês"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:273
 #: ../libempathy-gtk/totem-subtitle-encoding.c:275
 #: ../libempathy-gtk/totem-subtitle-encoding.c:277
 #: ../libempathy-gtk/totem-subtitle-encoding.c:279
 msgid "Korean"
-msgstr ""
+msgstr "Coreano"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:282
-#, fuzzy
 msgid "Nordic"
-msgstr "Palavra"
+msgstr "Nórdico"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:285
-#, fuzzy
 msgid "Persian"
-msgstr "Versão:"
+msgstr "Persa"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:288
 #: ../libempathy-gtk/totem-subtitle-encoding.c:290
 msgid "Romanian"
-msgstr ""
+msgstr "Romeno"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:293
 msgid "South European"
-msgstr ""
+msgstr "Europeu do Sul"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:296
 msgid "Thai"
-msgstr ""
+msgstr "Tailandês"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:299
 #: ../libempathy-gtk/totem-subtitle-encoding.c:301
 #: ../libempathy-gtk/totem-subtitle-encoding.c:303
 #: ../libempathy-gtk/totem-subtitle-encoding.c:305
 msgid "Turkish"
-msgstr ""
+msgstr "Turco"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:308
 #: ../libempathy-gtk/totem-subtitle-encoding.c:310
@@ -1671,23 +1664,21 @@ msgstr ""
 #: ../libempathy-gtk/totem-subtitle-encoding.c:314
 #: ../libempathy-gtk/totem-subtitle-encoding.c:316
 msgid "Unicode"
-msgstr ""
+msgstr "Unicode"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:319
 #: ../libempathy-gtk/totem-subtitle-encoding.c:321
 #: ../libempathy-gtk/totem-subtitle-encoding.c:323
 #: ../libempathy-gtk/totem-subtitle-encoding.c:325
 #: ../libempathy-gtk/totem-subtitle-encoding.c:327
-#, fuzzy
 msgid "Western"
-msgstr "Site da Web:"
+msgstr "Ocidental"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:330
 #: ../libempathy-gtk/totem-subtitle-encoding.c:332
 #: ../libempathy-gtk/totem-subtitle-encoding.c:334
-#, fuzzy
 msgid "Vietnamese"
-msgstr "Renomear"
+msgstr "Vietnamita"
 
 #.
 #. * vim: sw=2 ts=8 cindent noai bs=2
@@ -1712,7 +1703,7 @@ msgstr "Megafone"
 #: ../megaphone/data/GNOME_Megaphone_Applet.server.in.in.h:2
 #: ../megaphone/src/megaphone-applet.c:419
 msgid "Talk!"
-msgstr "Falar!"
+msgstr "Fale!"
 
 #: ../megaphone/data/GNOME_Megaphone_Applet.xml.h:2
 msgid "_Information"
@@ -1725,7 +1716,7 @@ msgstr "Presença"
 #: ../nothere/data/GNOME_NotHere_Applet.server.in.in.h:2
 #: ../nothere/src/nothere-applet.c:89
 msgid "Set your own presence"
-msgstr "Configurar sua própria presença"
+msgstr "Configure sua própria presença"
 
 #: ../src/empathy.c:205
 msgid "- Empathy Instant Messenger"
