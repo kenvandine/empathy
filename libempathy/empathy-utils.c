@@ -34,6 +34,7 @@
 
 #include <libxml/uri.h>
 #include <libtelepathy/tp-helpers.h>
+#include <libtelepathy/tp-conn.h>
 
 #include "empathy-debug.h"
 #include "empathy-utils.h"
