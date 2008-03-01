@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: empathy\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-02-22 12:45+0100\n"
-"PO-Revision-Date: 2008-02-22 12:51+0100\n"
+"POT-Creation-Date: 2008-03-02 00:04+0100\n"
+"PO-Revision-Date: 2008-03-02 00:04+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "MIME-Version: 1.0\n"
@@ -204,23 +204,23 @@ msgstr "Vilket kriteria som ska användas när kontaktlistan sorteras. Standard 
 msgid "People nearby"
 msgstr "Personer i närheten"
 
-#: ../libempathy/empathy-utils.c:539
+#: ../libempathy/empathy-utils.c:540
 msgid "Available"
 msgstr "Tillgänglig"
 
-#: ../libempathy/empathy-utils.c:541
+#: ../libempathy/empathy-utils.c:542
 msgid "Busy"
 msgstr "Upptagen"
 
-#: ../libempathy/empathy-utils.c:544
+#: ../libempathy/empathy-utils.c:545
 msgid "Away"
 msgstr "Frånvarande"
 
-#: ../libempathy/empathy-utils.c:546
+#: ../libempathy/empathy-utils.c:547
 msgid "Hidden"
 msgstr "Dold"
 
-#: ../libempathy/empathy-utils.c:549
+#: ../libempathy/empathy-utils.c:550
 msgid "Offline"
 msgstr "Frånkopplad"
 
@@ -1287,7 +1287,7 @@ msgstr "Stavningskontroll"
 msgid "Suggestions for the word:"
 msgstr "Förslag för ordet:"
 
-#: ../libempathy-gtk/empathy-status-icon.c:354
+#: ../libempathy-gtk/empathy-status-icon.c:369
 #, c-format
 msgid ""
 "New message from %s:\n"
@@ -1296,12 +1296,21 @@ msgstr ""
 "Nytt meddelande från %s:\n"
 "%s"
 
-#: ../libempathy-gtk/empathy-status-icon.c:625
+#: ../libempathy-gtk/empathy-status-icon.c:434
+#, c-format
+msgid ""
+"Incoming call from %s:\n"
+"%s"
+msgstr ""
+"Inkommande samtal från %s:\n"
+"%s"
+
+#: ../libempathy-gtk/empathy-status-icon.c:738
 #, c-format
 msgid "Subscription requested by %s"
 msgstr "Prenumeration begärd av %s"
 
-#: ../libempathy-gtk/empathy-status-icon.c:628
+#: ../libempathy-gtk/empathy-status-icon.c:741
 #, c-format
 msgid ""
 "\n"
