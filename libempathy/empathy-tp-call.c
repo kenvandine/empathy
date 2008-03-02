@@ -527,7 +527,8 @@ tp_call_start_stream_engine (EmpathyTpCall *call)
   priv->stream_engine = g_object_new (TP_TYPE_PROXY,
       "bus-name", STREAM_ENGINE_BUS_NAME,
       "dbus-connection", tp_get_bus (),
-      "object-path", STREAM_ENGINE_OBJECT_PATH);
+      "object-path", STREAM_ENGINE_OBJECT_PATH,
+       NULL);
   tp_proxy_add_interface_by_id (priv->stream_engine,
       EMP_IFACE_QUARK_STREAM_ENGINE);
   tp_proxy_add_interface_by_id (priv->stream_engine,
