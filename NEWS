@@ -1,19 +1,59 @@
-NEW in 0.21.90
+NEW in 0.21.91
 ==============
- - Change "new message" dialog to "new conversation" and make possible to do voip call. (xclaesse).
- - Try to load dtd and glade files from the srcdir. (xclaesse).
- - Add a property to have or not groups on EmpathyContactListStore (xclaesse).
- - Add a features property on EmpathyContactListView to enable/disable each action. (xclaesse).
- - Add a program to show chat logs (xclaesse).
- - Add a cancel button on the custom message diaog (xclaesse).
- - Unset account parameter if user gives an empthy value. (xclaesse).
- - Show/Hide main window when changing corresponding gcong key. (xclaesse).
+ - Blink the status icon for new incoming calls. (Xavier Claessens).
+ - Close the media channel if stream engine crashes. (Xavier Claessens).
+ - Change status to closed if stream engine dies or if a call fails. (Xavier Claessens).
+ - Make use of generated code for using stream engine. (Xavier Claessens).
+ - Add a GUI to configure IRC accounts (Guillaume Desmottes).
+ - accounts-dialog: swap the create and previous button (Guillaume Desmottes).
+ - save when adding/removing networks (Guillaume Desmottes).
+ - check if network !=  NULL before trying to set its charset (Guillaume Desmottes).
+ - New call code, should be more usable (Elliot Fairweather).
+ - Try to create salut account if getting the gconf key fails. (Xavier Claessens).
+ - Add a generic UI to make easy building UI for protocol specific settings. (Xavier Claessens).
+ - Fix setting avatar on salut.  (Sjoerd Simons).
 
 Bugs fixed:
- - Fixed #501467, improve accounts dialog (xclaesse)
- - Fixed #507840, New UI for Jabber accounts (xclaesse)
- - Fixed #509906, empathy is showing off-line contacts before on-line ones (xclaesse)
- - Fixed #511048, Ellipsize error button (xclaesse)
+ - Fixed #505585, Improve .gitignore (Guillaume Desmottes)
+ - Fixed #505622, add "check" framework support (Guillaume Desmottes)
+ - Fixed #507515, "has come online" is printed even if peer has been online the whole time (Xavier Claessens)
+ - Fixed #507656, "make valgrind" broken (Guillaume Desmottes)
+ - Fixed #513673, Need a GUI to configure ICQ accounts (Andreas Henriksson)
+ - Fixed #513674, Need a GUI to configure Yahoo! accounts (Susana)
+ - Fixed #516198, Thinks contacts come online each time a chat dialog is opened (Xavier Claessens)
+ - Fixed #517098, Critical warnings viewing previous conversations (Xavier Claessens)
+
+Translations:
+ - Updated pt_BR translation  (Og Maciel).
+ - Updated sv translation (Daniel Nylander).
+ - Updated Spanish translation  (Jorge Gonzalez).
+ - Updated Arabic Translation (Abou Manal).
+ - Updated eu translation  (Inaki Larranaga Murgoitio).
+ - Updated Occitan translation (ymarcheg).
+ - Updated Basque translation. (dooteo).
+ - Updated Finnish translation (ituohela).
+ - Updated ja translation  (Takeshi AIHANA).
+ - Updated Nepali Translation (pachimho).
+ - Updated Finnish translation (ituohela).
+ - Updated Galician Translation. (icq).
+ - Added Hebrew translation (yairhr).
+
+NEW in 0.21.90
+==============
+ - Change "new message" dialog to "new conversation" and make possible to do voip call. (Xavier Claessens).
+ - Try to load dtd and glade files from the srcdir. (Xavier Claessens).
+ - Add a property to have or not groups on EmpathyContactListStore (Xavier Claessens).
+ - Add a features property on EmpathyContactListView to enable/disable each action. (Xavier Claessens).
+ - Add a program to show chat logs (Xavier Claessens).
+ - Add a cancel button on the custom message diaog (Xavier Claessens).
+ - Unset account parameter if user gives an empthy value. (Xavier Claessens).
+ - Show/Hide main window when changing corresponding gcong key. (Xavier Claessens).
+
+Bugs fixed:
+ - Fixed #501467, improve accounts dialog (Xavier Claessens)
+ - Fixed #507840, New UI for Jabber accounts (Xavier Claessens)
+ - Fixed #509906, empathy is showing off-line contacts before on-line ones (Xavier Claessens)
+ - Fixed #511048, Ellipsize error button (Xavier Claessens)
  - Fixed #511841, account has to be selected to (un)check its checkbox (Carl-Anton Ingmarsson)
  - Fixed #515008, Nickname should be in the main section of the preferences for salut accounts (Marco Barisione)
  - Fixed #515010, Do not be automatically set published name for new salut accounts (Marco Barisione)
@@ -27,14 +67,14 @@ Translations:
 
 NEW in 0.21.5.2
 ==============
- - Update API documentation generator. (xclaesse).
- - Update python binding for new API. (xclaesse).
- - Rename BlockType to EMPATHY_CHAT_VIEW_BLOCK to respect namespace (xclaesse).
- - Change EMPATHY_AVATAR_CHOOSER_TYPE to EMPATHY_TYPE_AVATAR_CHOOSER (xclaesse).
- - Ignore ssl errors for gtalk profile by default otherwise it won't connect. (xclaesse).
+ - Update API documentation generator. (Xavier Claessens).
+ - Update python binding for new API. (Xavier Claessens).
+ - Rename BlockType to EMPATHY_CHAT_VIEW_BLOCK to respect namespace (Xavier Claessens).
+ - Change EMPATHY_AVATAR_CHOOSER_TYPE to EMPATHY_TYPE_AVATAR_CHOOSER (Xavier Claessens).
+ - Ignore ssl errors for gtalk profile by default otherwise it won't connect. (Xavier Claessens).
 
 Bugs fixed:
- - Fixed #509656, crash in Empathy Instant Messenger: Nothing. I was viewing s... (xclaesse)
+ - Fixed #509656, crash in Empathy Instant Messenger: Nothing. I was viewing s... (Xavier Claessens)
 
 Translations:
  - Updated ja Translation (Takeshi AIHANA).
@@ -65,15 +105,15 @@ NEW in 0.21.5
  - Import Gossip's chat theme system and simplify it a bit.
 
 Bugs fixed:
- - Fixed #466960, status icon tooltip doesn't change when status changes (xclaesse)
- - Fixed #508520, :0 smiley conversion shouldn't happen for times (xclaesse)
+ - Fixed #466960, status icon tooltip doesn't change when status changes (Xavier Claessens)
+ - Fixed #508520, :0 smiley conversion shouldn't happen for times (Xavier Claessens)
  - Fixed #499885, Automatically connect at session start (Carl-Anton Ingmarsson)
  - Fixed #507656, "make valgrind" broken (Guillaume Desmottes)
  - Fixed #459520, Can't remove a group (David Turner)
  - Fixed #447851, Wider list of participants in group chat/IRC channel (Rohit Agrawal)
  - Fixed #505622, add "check" framework support (Guillaume Desmottes)
  - Fixed #490153, Join _New... icon (Michael Monreal)
- - Fixed #502932, Text selection in Accounts window (xclaesse)
+ - Fixed #502932, Text selection in Accounts window (Xavier Claessens)
 
 Translations:
  - Updated Spanish Translation (jorgegonz).
