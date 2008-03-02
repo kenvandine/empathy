@@ -332,5 +332,6 @@ AC_OUTPUT([
    python/pyempathy/Makefile
    python/pyempathygtk/Makefile
    tests/Makefile
+   tests/xml/Makefile
    tools/Makefile
 ])

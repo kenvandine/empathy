@@ -1,3 +1,5 @@
+SUBDIRS = xml
+
 CLEANFILES=
 
 include $(top_srcdir)/rules/check.mak
