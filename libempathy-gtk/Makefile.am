@@ -131,6 +131,8 @@ glade_DATA = 					\
 	empathy-account-widget-msn.glade	\
 	empathy-account-widget-salut.glade	\
 	empathy-account-widget-irc.glade	\
+	empathy-account-widget-icq.glade	\
+	empathy-account-widget-yahoo.glade	\
 	empathy-new-chatroom-dialog.glade	\
 	empathy-group-chat.glade		\
 	empathy-chatrooms-window.glade		\
