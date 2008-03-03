@@ -442,8 +442,8 @@ empathy_account_widget_irc_new (McAccount *account)
   user_file_with_path = g_build_filename (dir, IRC_NETWORKS_FILENAME, NULL);
   g_free (dir);
 
-  global_file_with_path = g_build_filename (UNINSTALLED_IRC_DIR,
-      IRC_NETWORKS_FILENAME, NULL);
+  global_file_with_path = g_build_filename (g_getenv ("EMPATHY_SRCDIR"),
+      "libempathy-gtk", IRC_NETWORKS_FILENAME, NULL);
   if (!g_file_test (global_file_with_path, G_FILE_TEST_EXISTS))
     {
       g_free (global_file_with_path);

@@ -210,7 +210,8 @@ empathy_xml_validate (xmlDoc      *doc,
 	xmlDtd       *dtd;
 	gboolean      ret;
 
-	path = g_build_filename (UNINSTALLED_DTD_DIR, dtd_filename, NULL);
+	path = g_build_filename (g_getenv ("EMPATHY_SRCDIR"), "libempathy",
+				 dtd_filename, NULL);
 	if (!g_file_test (path, G_FILE_TEST_EXISTS)) {
 		g_free (path);
 		path = g_build_filename (DATADIR, "empathy", dtd_filename, NULL);

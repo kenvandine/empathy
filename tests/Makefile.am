@@ -45,3 +45,4 @@ check_main_CFLAGS = \
     @CHECK_CFLAGS@ \
     $(AM_CFLAGS)
 
+TESTS_ENVIRONMENT = EMPATHY_SRCDIR=@abs_top_srcdir@

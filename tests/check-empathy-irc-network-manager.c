@@ -10,9 +10,21 @@
 
 #include <libempathy/empathy-irc-network-manager.h>
 
-#define GLOBAL_SAMPLE "xml/default-irc-networks-sample.xml"
-#define USER_SAMPLE "xml/user-irc-networks-sample.xml"
-#define USER_FILE "xml/user-irc-networks.xml"
+#define GLOBAL_SAMPLE "default-irc-networks-sample.xml"
+#define USER_SAMPLE "user-irc-networks-sample.xml"
+#define USER_FILE "user-irc-networks.xml"
+
+static gchar *
+get_xml_file (const gchar *filename)
+{
+  return g_build_filename (g_getenv ("EMPATHY_SRCDIR"), "tests", "xml", filename, NULL);
+}
+
+static gchar *
+get_user_xml_file (const gchar *filename)
+{
+  return g_build_filename (g_get_tmp_dir (), filename, NULL);
+}
 
 START_TEST (test_empathy_irc_network_manager_add)
 {
@@ -78,16 +90,19 @@ START_TEST (test_load_global_file)
   struct server_t undernet_servers[] = {
     { "eu.undernet.org", 6667, FALSE }};
   gboolean network_checked[4];
+  gchar *global_file_orig;
 
-  mgr = empathy_irc_network_manager_new (GLOBAL_SAMPLE, NULL);
+  global_file_orig = get_xml_file (GLOBAL_SAMPLE);
+  mgr = empathy_irc_network_manager_new (global_file_orig, NULL);
 
   g_object_get (mgr,
       "global-file", &global_file,
       "user-file", &user_file,
       NULL);
-  fail_if (global_file == NULL || strcmp (global_file, GLOBAL_SAMPLE) != 0);
+  fail_if (global_file == NULL || strcmp (global_file, global_file_orig) != 0);
   fail_if (user_file != NULL);
   g_free (global_file);
+  g_free (global_file_orig);
   g_free (user_file);
 
   networks = empathy_irc_network_manager_get_networks (mgr);
@@ -185,8 +200,11 @@ START_TEST (test_empathy_irc_network_manager_remove)
     { "eu.undernet.org", 6667, FALSE }};
   gboolean network_checked[3];
   gboolean result;
+  gchar *global_file_orig;
 
-  mgr = empathy_irc_network_manager_new (GLOBAL_SAMPLE, NULL);
+  global_file_orig = get_xml_file (GLOBAL_SAMPLE);
+  mgr = empathy_irc_network_manager_new (global_file_orig, NULL);
+  g_free (global_file_orig);
 
   result = remove_network_named (mgr, "GIMPNet");
   fail_if (!result);
@@ -239,13 +257,19 @@ copy_user_file (void)
   gboolean result;
   gchar *buffer;
   gsize length;
+  gchar *user_sample;
+  gchar *user_file;
 
-  result = g_file_get_contents (USER_SAMPLE, &buffer, &length, NULL);
+  user_sample = get_xml_file (USER_SAMPLE);
+  result = g_file_get_contents (user_sample, &buffer, &length, NULL);
   fail_if (!result);
 
-  result = g_file_set_contents (USER_FILE, buffer, length, NULL);
+  user_file = get_user_xml_file (USER_FILE);
+  result = g_file_set_contents (user_file, buffer, length, NULL);
   fail_if (!result);
 
+  g_free (user_sample);
+  g_free (user_file);
   g_free (buffer);
 }
 
@@ -263,18 +287,21 @@ START_TEST (test_load_user_file)
   struct server_t another_server[] = {
     { "irc.anothersrv.be", 6660, FALSE }};
   gboolean network_checked[3];
+  gchar *user_file_orig;
 
   copy_user_file ();
-  mgr = empathy_irc_network_manager_new (NULL, USER_FILE);
+  user_file_orig = get_user_xml_file (USER_FILE);
+  mgr = empathy_irc_network_manager_new (NULL, user_file_orig);
 
   g_object_get (mgr,
       "global-file", &global_file,
       "user-file", &user_file,
       NULL);
   fail_if (global_file != NULL);
-  fail_if (user_file == NULL || strcmp (user_file, USER_FILE) != 0);
+  fail_if (user_file == NULL || strcmp (user_file, user_file_orig) != 0);
   g_free (global_file);
   g_free (user_file);
+  g_free (user_file_orig);
 
   networks = empathy_irc_network_manager_get_networks (mgr);
   fail_if (g_slist_length (networks) != 3);
@@ -337,17 +364,22 @@ START_TEST (test_load_both_files)
   struct server_t undernet_servers[] = {
     { "eu.undernet.org", 6667, FALSE }};
   gboolean network_checked[5];
+  gchar *global_file_orig, *user_file_orig;
 
-  mgr = empathy_irc_network_manager_new (GLOBAL_SAMPLE, USER_FILE);
+  global_file_orig = get_xml_file (GLOBAL_SAMPLE);
+  user_file_orig = get_user_xml_file (USER_FILE);
+  mgr = empathy_irc_network_manager_new (global_file_orig, user_file_orig);
 
   g_object_get (mgr,
       "global-file", &global_file,
       "user-file", &user_file,
       NULL);
-  fail_if (global_file == NULL || strcmp (global_file, GLOBAL_SAMPLE) != 0);
-  fail_if (user_file == NULL || strcmp (user_file, USER_FILE) != 0);
+  fail_if (global_file == NULL || strcmp (global_file, global_file_orig) != 0);
+  fail_if (user_file == NULL || strcmp (user_file, user_file_orig) != 0);
   g_free (global_file);
+  g_free (global_file_orig);
   g_free (user_file);
+  g_free (user_file_orig);
 
   networks = empathy_irc_network_manager_get_networks (mgr);
   fail_if (g_slist_length (networks) != 5);
@@ -419,16 +451,18 @@ START_TEST (test_modify_user_file)
     { "irc.anothersrv.be", 6660, FALSE }};
   gboolean network_modified[2];
   gboolean network_checked[3];
+  gchar *user_file_orig;
 
   copy_user_file ();
-  mgr = empathy_irc_network_manager_new (NULL, USER_FILE);
+  user_file_orig = get_user_xml_file (USER_FILE);
+  mgr = empathy_irc_network_manager_new (NULL, user_file_orig);
 
   g_object_get (mgr,
       "global-file", &global_file,
       "user-file", &user_file,
       NULL);
   fail_if (global_file != NULL);
-  fail_if (user_file == NULL || strcmp (user_file, USER_FILE) != 0);
+  fail_if (user_file == NULL || strcmp (user_file, user_file_orig) != 0);
   g_free (global_file);
   g_free (user_file);
 
@@ -522,7 +556,8 @@ START_TEST (test_modify_user_file)
 
 
   /* Now let's reload the file and check its contain */
-  mgr = empathy_irc_network_manager_new (NULL, USER_FILE);
+  mgr = empathy_irc_network_manager_new (NULL, user_file_orig);
+  g_free (user_file_orig);
 
   networks = empathy_irc_network_manager_get_networks (mgr);
   fail_if (g_slist_length (networks) != 3);
@@ -585,18 +620,23 @@ START_TEST (test_modify_both_files)
     { "us.undernet.org", 6667, FALSE }};
   gboolean network_modified[4];
   gboolean network_checked[4];
+  gchar *global_file_orig, *user_file_orig;
 
   copy_user_file ();
-  mgr = empathy_irc_network_manager_new (GLOBAL_SAMPLE, USER_FILE);
+  global_file_orig = get_xml_file (GLOBAL_SAMPLE);
+  user_file_orig = get_user_xml_file (USER_FILE);
+  mgr = empathy_irc_network_manager_new (global_file_orig, user_file_orig);
 
   g_object_get (mgr,
       "global-file", &global_file,
       "user-file", &user_file,
       NULL);
-  fail_if (global_file == NULL || strcmp (global_file, GLOBAL_SAMPLE) != 0);
-  fail_if (user_file == NULL || strcmp (user_file, USER_FILE) != 0);
+  fail_if (global_file == NULL || strcmp (global_file, global_file_orig) != 0);
+  fail_if (user_file == NULL || strcmp (user_file, user_file_orig) != 0);
   g_free (global_file);
+  g_free (global_file_orig);
   g_free (user_file);
+  g_free (user_file_orig);
 
   networks = empathy_irc_network_manager_get_networks (mgr);
   fail_if (g_slist_length (networks) != 5);
@@ -705,7 +745,11 @@ START_TEST (test_modify_both_files)
 
 
   /* Now let's reload the file and check its contain */
-  mgr = empathy_irc_network_manager_new (GLOBAL_SAMPLE, USER_FILE);
+  global_file_orig = get_xml_file (GLOBAL_SAMPLE);
+  user_file_orig = get_user_xml_file (USER_FILE);
+  mgr = empathy_irc_network_manager_new (global_file_orig, user_file_orig);
+  g_free (global_file_orig);
+  g_free (user_file_orig);
 
   networks = empathy_irc_network_manager_get_networks (mgr);
   fail_if (g_slist_length (networks) != 4);
@@ -763,8 +807,11 @@ START_TEST (test_empathy_irc_network_manager_find_network_by_address)
   struct server_t freenode_servers[] = {
     { "irc.freenode.net", 6667, FALSE },
     { "irc.eu.freenode.net", 6667, FALSE }};
+  gchar *global_file_orig;
 
-  mgr = empathy_irc_network_manager_new (GLOBAL_SAMPLE, NULL);
+  global_file_orig = get_xml_file (GLOBAL_SAMPLE);
+  mgr = empathy_irc_network_manager_new (global_file_orig, NULL);
+  g_free (global_file_orig);
 
   network = empathy_irc_network_manager_find_network_by_address (mgr,
       "irc.freenode.net");
@@ -788,15 +835,21 @@ START_TEST (test_no_modify_with_empty_user_file)
 {
   EmpathyIrcNetworkManager *mgr;
   GSList *networks;
+  gchar *global_file_orig;
+  gchar *user_file_orig;
 
   /* user don't have a networks file yet */
-  g_unlink (USER_FILE);
+  user_file_orig = get_user_xml_file (USER_FILE);
+  g_unlink (user_file_orig);
 
-  mgr = empathy_irc_network_manager_new (GLOBAL_SAMPLE, USER_FILE);
+  global_file_orig = get_xml_file (GLOBAL_SAMPLE);
+  mgr = empathy_irc_network_manager_new (global_file_orig, user_file_orig);
+  g_free (global_file_orig);
   g_object_unref (mgr);
 
   /* We didn't modify anything so USER_FILE should be empty */
-  mgr = empathy_irc_network_manager_new (NULL, USER_FILE);
+  mgr = empathy_irc_network_manager_new (NULL, user_file_orig);
+  g_free (user_file_orig);
 
   networks = empathy_irc_network_manager_get_networks (mgr);
   fail_if (g_slist_length (networks) != 0);

@@ -295,14 +295,6 @@ fi
 
 AM_CONDITIONAL(HAVE_VOIP, test "x$enable_voip" = "xyes")
 
-
-# -----------------------------------------------------------
-# Misc
-# -----------------------------------------------------------
-AC_DEFINE_UNQUOTED([UNINSTALLED_GLADE_DIR], ["`pwd`/libempathy-gtk"], [path to glade files])
-AC_DEFINE_UNQUOTED([UNINSTALLED_DTD_DIR], ["`pwd`/libempathy"], [path to dtd files])
-AC_DEFINE_UNQUOTED([UNINSTALLED_IRC_DIR], ["`pwd`/libempathy"], [path to IRC network file])
-
 # -----------------------------------------------------------
 
 AC_OUTPUT([

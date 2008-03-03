@@ -65,7 +65,8 @@ get_glade_file (const gchar *filename,
 	const char *name;
 	GtkWidget **widget_ptr;
 
-	path = g_build_filename (UNINSTALLED_GLADE_DIR, filename, NULL);
+	path = g_build_filename (g_getenv ("EMPATHY_SRCDIR"), "libempathy-gtk",
+				 filename, NULL);
 	if (!g_file_test (path, G_FILE_TEST_EXISTS)) {
 		g_free (path);
 		path = g_build_filename (DATADIR, "empathy", filename, NULL);
