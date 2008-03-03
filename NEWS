@@ -12,6 +12,7 @@ NEW in 0.21.91
  - Try to create salut account if getting the gconf key fails. (Xavier Claessens).
  - Add a generic UI to make easy building UI for protocol specific settings. (Xavier Claessens).
  - Fix setting avatar on salut.  (Sjoerd Simons).
+ - Use EMPATHY_SRCDIR environment variable to load uninstalled glade/xml/dtd files (Xavier Claessens).
 
 Bugs fixed:
  - Fixed #505585, Improve .gitignore (Guillaume Desmottes)
