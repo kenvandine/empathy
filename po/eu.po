@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-02-27 13:01+0100\n"
-"PO-Revision-Date: 2008-02-27 13:02+0100\n"
+"POT-Creation-Date: 2008-03-03 10:46+0100\n"
+"PO-Revision-Date: 2008-03-03 10:50+0100\n"
 "Last-Translator: Iñaki Larrañaga Murgoitio <dooteo@euskalgnu.org>\n"
 "Language-Team: Basque <itzulpena@euskalgnu.org>\n"
 "MIME-Version: 1.0\n"
@@ -233,23 +233,23 @@ msgstr ""
 msgid "People nearby"
 msgstr "Inguruko jendea"
 
-#: ../libempathy/empathy-utils.c:539
+#: ../libempathy/empathy-utils.c:540
 msgid "Available"
 msgstr "Prest"
 
-#: ../libempathy/empathy-utils.c:541
+#: ../libempathy/empathy-utils.c:542
 msgid "Busy"
 msgstr "Lanpetuta"
 
-#: ../libempathy/empathy-utils.c:544
+#: ../libempathy/empathy-utils.c:545
 msgid "Away"
 msgstr "Aldendua"
 
-#: ../libempathy/empathy-utils.c:546
+#: ../libempathy/empathy-utils.c:547
 msgid "Hidden"
 msgstr "Ezkutatua"
 
-#: ../libempathy/empathy-utils.c:549
+#: ../libempathy/empathy-utils.c:550
 msgid "Offline"
 msgstr "Deskonektatuta"
 
@@ -306,30 +306,121 @@ msgstr "Denak"
 msgid "%s:"
 msgstr "%s:"
 
+#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:1
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:1
 #: ../libempathy-gtk/empathy-account-widget-msn.glade.h:1
 #: ../libempathy-gtk/empathy-account-widget-salut.glade.h:1
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:1
 msgid "<b>Advanced</b>"
 msgstr "<b>Aurreratua</b>"
+
+#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:2
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:3
+#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:2
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:2
+msgid "Forget password and clear the entry."
+msgstr "Ahaztu pasahitza eta garbitu sarrera."
+
+#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:3
+msgid "ICQ _UIN:"
+msgstr "ICQ _UIN:"
+
+#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:4
+msgid "ICQ account settings"
+msgstr "ICQ kontuaren ezarpenak"
+
+#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:5
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:5
+#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:4
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:5
+msgid "Pass_word:"
+msgstr "_Pasahitza:"
+
+#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:6
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:8
+msgid "_Charset:"
+msgstr "_Karaktere-jokoa:"
+
+#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:7
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:11
+#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:5
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:10
+msgid "_Port:"
+msgstr "_Ataka:"
+
+#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:8
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:12
+#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:6
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:12
+#: ../libempathy-gtk/empathy-new-chatroom-dialog.glade.h:10
+msgid "_Server:"
+msgstr "_Zerbitzaria:"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.c:246
+msgid "New Network"
+msgstr "Sare berria"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:1
+msgid "<b>Network</b>"
+msgstr "<b>Sarea</b>"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:2
+msgid "<b>Servers</b>"
+msgstr "<b>Zerbitzariak</b>"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:3
+msgid "Charset:"
+msgstr "Karaktere-jokoa:"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:4
+msgid "Create a new IRC network"
+msgstr "Sortu IRC sare berria"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:5
+msgid "Edit the selected IRC network"
+msgstr "Editatu hautatutako IRC sarea"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:6
+msgid "Network"
+msgstr "Sarea"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:7
+msgid "Network:"
+msgstr "Sarea:"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:8
+msgid "Nickname:"
+msgstr "Goitizena:"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:9
+msgid "Password:"
+msgstr "Pasahitza:"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:10
+msgid "Quit message:"
+msgstr "Irteerako mezua:"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:11
+msgid "Real name:"
+msgstr "Benetako izena:"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:12
+msgid "Remove the selected IRC network"
+msgstr "Kendu hautatutako IRC sarea"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:13
+msgid "irc account settings"
+msgstr "irc kontuaren ezarpenak"
 
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:2
 msgid "<b>Override  server settings</b>"
 msgstr "<b>Gainidatzi zerbitzariaren ezarpena</b>"
 
-#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:3
-#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:2
-msgid "Forget password and clear the entry."
-msgstr "Ahaztu pasahitza eta garbitu sarrera."
-
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:4
 #: ../libempathy-gtk/empathy-account-widget-msn.glade.h:3
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:4
 msgid "Login I_D:"
 msgstr "Saioko _IDa:"
-
-#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:5
-#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:4
-msgid "Pass_word:"
-msgstr "_Pasahitza:"
 
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:6
 msgid "Pri_ority:"
@@ -350,17 +441,6 @@ msgstr "_Enkritatzea behar da (TLS/SSL)"
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:10
 msgid "_Ignore SSL certificate errors"
 msgstr "_Ez ikusi egin SSL ziurtagirien erroreei"
-
-#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:11
-#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:5
-msgid "_Port:"
-msgstr "_Ataka:"
-
-#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:12
-#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:6
-#: ../libempathy-gtk/empathy-new-chatroom-dialog.glade.h:10
-msgid "_Server:"
-msgstr "_Zerbitzaria:"
 
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:13
 msgid "jabber account settings"
@@ -398,6 +478,26 @@ msgstr "A_rgitaratutako izena:"
 #: ../libempathy-gtk/empathy-account-widget-salut.glade.h:8
 msgid "salut account settings"
 msgstr "salut kontuaren ezarpenak"
+
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:3
+msgid "J_apan server:"
+msgstr "_Japoniako zerbitzaria:"
+
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:6
+msgid "Use _Yahoo Japan"
+msgstr "Erabili japoniako _Yahoo"
+
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:7
+msgid "Yahoo! account settings"
+msgstr "Yahoo! kontuaren ezarpenak"
+
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:9
+msgid "_Ignore conference and chatroom invitations"
+msgstr "_Ez ikusi egin konferentzi eta berriketa-gelen gonbiteei"
+
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:11
+msgid "_Room List locale:"
+msgstr "_Gelen zerrenda lokala:"
 
 #: ../libempathy-gtk/empathy-accounts-dialog.c:225
 msgid ""
@@ -1008,6 +1108,22 @@ msgstr "<b>Gaia:</b>"
 msgid "Group Chat"
 msgstr "Berriketa-gela"
 
+#: ../libempathy-gtk/empathy-irc-network-dialog.c:287
+msgid "new server"
+msgstr "zerbitzari berria"
+
+#: ../libempathy-gtk/empathy-irc-network-dialog.c:512
+msgid "Server"
+msgstr "Zerbitzaria"
+
+#: ../libempathy-gtk/empathy-irc-network-dialog.c:527
+msgid "Port"
+msgstr "Ataka"
+
+#: ../libempathy-gtk/empathy-irc-network-dialog.c:540
+msgid "SSL"
+msgstr "SSL"
+
 #: ../libempathy-gtk/empathy-log-window.c:499
 msgid "Account"
 msgstr "Kontua"
@@ -1424,78 +1540,6 @@ msgstr "Garbia"
 #: ../libempathy-gtk/empathy-theme-manager.c:81
 msgid "Blue"
 msgstr "Urdina"
-
-#: ../libempathy-gtk/empathy-account-widget-irc.c:246
-msgid "New Network"
-msgstr "Sare berria"
-
-#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:1
-msgid "<b>Network</b>"
-msgstr "<b>Sarea</b>"
-
-#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:2
-msgid "<b>Servers</b>"
-msgstr "<b>Zerbitzariak</b>"
-
-#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:3
-msgid "Charset:"
-msgstr "Karaktere-jokoa:"
-
-#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:4
-msgid "Create a new IRC network"
-msgstr "Sortu IRC sare berria"
-
-#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:5
-msgid "Edit the selected IRC network"
-msgstr "Editatu hautatutako IRC sarea"
-
-#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:6
-msgid "Network"
-msgstr "Sarea"
-
-#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:7
-msgid "Network:"
-msgstr "Sarea:"
-
-#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:8
-msgid "Nickname:"
-msgstr "Goitizena:"
-
-#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:9
-msgid "Password:"
-msgstr "Pasahitza:"
-
-#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:10
-msgid "Quit message:"
-msgstr "Irteerako mezua:"
-
-#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:11
-msgid "Real name:"
-msgstr "Benetako izena:"
-
-#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:12
-msgid "Remove the selected IRC network"
-msgstr "Kendu hautatutako IRC sarea"
-
-#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:13
-msgid "irc account settings"
-msgstr "irc kontuaren ezarpenak"
-
-#: ../libempathy-gtk/empathy-irc-network-dialog.c:287
-msgid "new server"
-msgstr "zerbitzari berria"
-
-#: ../libempathy-gtk/empathy-irc-network-dialog.c:512
-msgid "Server"
-msgstr "Zerbitzaria"
-
-#: ../libempathy-gtk/empathy-irc-network-dialog.c:527
-msgid "Port"
-msgstr "Ataka"
-
-#: ../libempathy-gtk/empathy-irc-network-dialog.c:540
-msgid "SSL"
-msgstr "SSL"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:158
 msgid "Current Locale"
