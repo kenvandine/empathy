@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: empathy.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-02-27 11:33+0000\n"
-"PO-Revision-Date: 2008-02-29 12:29+0100\n"
+"POT-Creation-Date: 2008-03-02 18:53+0000\n"
+"PO-Revision-Date: 2008-03-04 18:53+0100\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -235,23 +235,23 @@ msgstr ""
 msgid "People nearby"
 msgstr "Gente cerca"
 
-#: ../libempathy/empathy-utils.c:539
+#: ../libempathy/empathy-utils.c:540
 msgid "Available"
 msgstr "Disponible"
 
-#: ../libempathy/empathy-utils.c:541
+#: ../libempathy/empathy-utils.c:542
 msgid "Busy"
 msgstr "Ocupado"
 
-#: ../libempathy/empathy-utils.c:544
+#: ../libempathy/empathy-utils.c:545
 msgid "Away"
 msgstr "Ausente"
 
-#: ../libempathy/empathy-utils.c:546
+#: ../libempathy/empathy-utils.c:547
 msgid "Hidden"
 msgstr "Oculto"
 
-#: ../libempathy/empathy-utils.c:549
+#: ../libempathy/empathy-utils.c:550
 msgid "Offline"
 msgstr "Desconectado"
 
@@ -307,30 +307,65 @@ msgstr "Todo"
 msgid "%s:"
 msgstr "%s:"
 
+#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:1
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:1
 #: ../libempathy-gtk/empathy-account-widget-msn.glade.h:1
 #: ../libempathy-gtk/empathy-account-widget-salut.glade.h:1
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:1
 msgid "<b>Advanced</b>"
 msgstr "<b>Avanzado</b>"
+
+#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:2
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:3
+#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:2
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:2
+msgid "Forget password and clear the entry."
+msgstr "Olvidar la contraseña y limpiar la entrada."
+
+#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:3
+msgid "ICQ _UIN:"
+msgstr "_UIN ICQ:"
+
+#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:4
+msgid "ICQ account settings"
+msgstr "Ajustes de la cuenta ICQ"
+
+#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:5
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:5
+#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:4
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:5
+msgid "Pass_word:"
+msgstr "Contra_seña:"
+
+#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:6
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:8
+msgid "_Charset:"
+msgstr "Conjunto de _caracteres:"
+
+#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:7
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:11
+#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:5
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:10
+msgid "_Port:"
+msgstr "_Puerto:"
+
+#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:8
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:12
+#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:6
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:12
+#: ../libempathy-gtk/empathy-new-chatroom-dialog.glade.h:10
+msgid "_Server:"
+msgstr "_Servidor:"
 
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:2
 msgid "<b>Override  server settings</b>"
 msgstr "<b>Sobreescribir la configuración del servidor</b>"
 
-#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:3
-#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:2
-msgid "Forget password and clear the entry."
-msgstr "Olvidar la contraseña y limpiar la entrada."
-
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:4
 #: ../libempathy-gtk/empathy-account-widget-msn.glade.h:3
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:4
 msgid "Login I_D:"
 msgstr "_ID de sesión:"
-
-#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:5
-#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:4
-msgid "Pass_word:"
-msgstr "Contra_seña:"
 
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:6
 msgid "Pri_ority:"
@@ -352,24 +387,13 @@ msgstr "Se requiere ci_frado (TLS/SSL)"
 msgid "_Ignore SSL certificate errors"
 msgstr "_Ignorar los errores de certificados SSL"
 
-#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:11
-#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:5
-msgid "_Port:"
-msgstr "_Puerto:"
-
-#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:12
-#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:6
-#: ../libempathy-gtk/empathy-new-chatroom-dialog.glade.h:10
-msgid "_Server:"
-msgstr "_Servidor:"
-
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:13
 msgid "jabber account settings"
-msgstr "ajustes de la cuenta Jabber"
+msgstr "Ajustes de la cuenta Jabber"
 
 #: ../libempathy-gtk/empathy-account-widget-msn.glade.h:7
 msgid "msn account settings"
-msgstr "ajustes de la cuenta MSN"
+msgstr "Ajustes de la cuenta MSN"
 
 #: ../libempathy-gtk/empathy-account-widget-salut.glade.h:2
 msgid "_E-mail:"
@@ -398,7 +422,27 @@ msgstr "Nombre _publicado:"
 
 #: ../libempathy-gtk/empathy-account-widget-salut.glade.h:8
 msgid "salut account settings"
-msgstr "ajustes de la cuenta Salut"
+msgstr "Ajustes de la cuenta Salut"
+
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:3
+msgid "J_apan server:"
+msgstr "servidor j_aponés:"
+
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:6
+msgid "Use _Yahoo Japan"
+msgstr "User _Yahoo Japan"
+
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:7
+msgid "Yahoo! account settings"
+msgstr "Ajustes de la cuenta Yahoo!"
+
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:9
+msgid "_Ignore conference and chatroom invitations"
+msgstr "_Ignorar invitaciones a conferencias y salas de chat"
+
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:11
+msgid "_Room List locale:"
+msgstr "Configuración de la lista de _salas:"
 
 #: ../libempathy-gtk/empathy-accounts-dialog.c:225
 msgid ""
@@ -1481,7 +1525,7 @@ msgstr "Quitar la red IRC seleccionada"
 
 #: ../libempathy-gtk/empathy-account-widget-irc.glade.h:13
 msgid "irc account settings"
-msgstr "ajustes de la cuenta IRC"
+msgstr "Ajustes de la cuenta IRC"
 
 #: ../libempathy-gtk/empathy-irc-network-dialog.c:287
 msgid "new server"
