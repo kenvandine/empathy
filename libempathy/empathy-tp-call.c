@@ -105,6 +105,19 @@ tp_call_stream_state_changed_cb (DBusGProxy *channel,
   else if (stream_id == priv->video->id)
     {
       priv->video->state = stream_state;
+      if (stream_state == TP_MEDIA_STREAM_STATE_CONNECTED)
+      {
+        if (priv->video->direction & TP_MEDIA_STREAM_DIRECTION_RECEIVE)
+          {
+            empathy_debug (DEBUG_DOMAIN, "RECEIVING");
+            g_signal_emit_by_name (call, "receiving-video", TRUE);
+          }
+        if (priv->video->direction & TP_MEDIA_STREAM_DIRECTION_SEND)
+          {
+            empathy_debug (DEBUG_DOMAIN, "SENDING");
+            g_signal_emit_by_name (call, "sending-video", TRUE);
+          }
+      }
     }
 
   g_signal_emit_by_name (call, "status-changed");
