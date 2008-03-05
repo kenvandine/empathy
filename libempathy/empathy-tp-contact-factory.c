@@ -503,6 +503,7 @@ tp_contact_factory_update_capabilities (EmpathyTpContactFactory *tp_factory,
 	}
 
 	capabilities = empathy_contact_get_capabilities (contact);
+	capabilities &= ~EMPATHY_CAPABILITIES_UNKNOWN;
 
 	if (strcmp (channel_type, TP_IFACE_CHANNEL_TYPE_STREAMED_MEDIA) == 0) {
 		capabilities &= ~EMPATHY_CAPABILITIES_AUDIO;
