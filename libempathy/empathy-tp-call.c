@@ -110,17 +110,17 @@ tp_call_stream_state_changed_cb (DBusGProxy *channel,
         if (priv->video->direction & TP_MEDIA_STREAM_DIRECTION_RECEIVE)
           {
             empathy_debug (DEBUG_DOMAIN, "RECEIVING");
-            g_signal_emit_by_name (call, "receiving-video", TRUE);
+            g_signal_emit (call, signals[RECEIVING_VIDEO_SIGNAL], 0, TRUE);
           }
         if (priv->video->direction & TP_MEDIA_STREAM_DIRECTION_SEND)
           {
             empathy_debug (DEBUG_DOMAIN, "SENDING");
-            g_signal_emit_by_name (call, "sending-video", TRUE);
+            g_signal_emit (call, signals[SENDING_VIDEO_SIGNAL], 0, TRUE);
           }
       }
     }
 
-  g_signal_emit_by_name (call, "status-changed");
+  g_signal_emit (call, signals[STATUS_CHANGED_SIGNAL], 0);
 }
 
 static void
@@ -236,7 +236,7 @@ tp_call_channel_closed_cb (TpChan *channel,
   empathy_debug (DEBUG_DOMAIN, "Channel closed");
 
   priv->status = EMPATHY_TP_CALL_STATUS_CLOSED;
-  g_signal_emit_by_name (call, "status-changed");
+  g_signal_emit (call, signals[STATUS_CHANGED_SIGNAL], 0);
 
   streamed_iface = tp_chan_get_interface (priv->channel,
       TELEPATHY_CHAN_IFACE_STREAMED_QUARK);
@@ -277,23 +277,23 @@ tp_call_stream_direction_changed_cb (DBusGProxy *channel,
       if (stream_direction & TP_MEDIA_STREAM_DIRECTION_RECEIVE)
         {
           empathy_debug (DEBUG_DOMAIN, "RECEIVING");
-          g_signal_emit_by_name (call, "receiving-video", TRUE);
+          g_signal_emit (call, signals[RECEIVING_VIDEO_SIGNAL], 0, TRUE);
         }
       else
         {
           empathy_debug (DEBUG_DOMAIN, "NOT RECEIVING");
-          g_signal_emit_by_name (call, "receiving-video", FALSE);
+          g_signal_emit (call, signals[RECEIVING_VIDEO_SIGNAL], 0, FALSE);
         }
 
       if (stream_direction & TP_MEDIA_STREAM_DIRECTION_SEND)
         {
           empathy_debug (DEBUG_DOMAIN, "SENDING");
-          g_signal_emit_by_name (call, "sending-video", TRUE);
+          g_signal_emit (call, signals[SENDING_VIDEO_SIGNAL], 0, TRUE);
         }
       else
         {
           empathy_debug (DEBUG_DOMAIN, "NOT SENDING");
-          g_signal_emit_by_name (call, "sending-video", FALSE);
+          g_signal_emit (call, signals[SENDING_VIDEO_SIGNAL], 0, FALSE);
         }
     }
 }
