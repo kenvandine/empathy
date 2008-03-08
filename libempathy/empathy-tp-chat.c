@@ -55,58 +55,9 @@ struct _EmpathyTpChatPriv {
 	DBusGProxy	      *chat_state_iface;
 };
 
-static void             empathy_tp_chat_class_init    (EmpathyTpChatClass    *klass);
-static void             empathy_tp_chat_init          (EmpathyTpChat         *chat);
-static void             tp_chat_finalize              (GObject               *object);
-static GObject *        tp_chat_constructor           (GType                  type,
-						       guint                  n_props,
-						       GObjectConstructParam *props);
-static void             tp_chat_get_property          (GObject               *object,
-						       guint                  param_id,
-						       GValue                *value,
-						       GParamSpec            *pspec);
-static void             tp_chat_set_property          (GObject               *object,
-						       guint                  param_id,
-						       const GValue          *value,
-						       GParamSpec            *pspec);
-static void             tp_chat_destroy_cb            (TpChan                *text_chan,
-						       EmpathyTpChat         *chat);
-static void             tp_chat_closed_cb             (TpChan                *text_chan,
-						       EmpathyTpChat         *chat);
-static void             tp_chat_received_cb           (DBusGProxy            *text_iface,
-						       guint                  message_id,
-						       guint                  timestamp,
-						       guint                  from_handle,
-						       guint                  message_type,
-						       guint                  message_flags,
-						       gchar                 *message_body,
-						       EmpathyTpChat         *chat);
-static void             tp_chat_sent_cb               (DBusGProxy            *text_iface,
-						       guint                  timestamp,
-						       guint                  message_type,
-						       gchar                 *message_body,
-						       EmpathyTpChat         *chat);
-static void             tp_chat_send_error_cb         (DBusGProxy            *text_iface,
-						       guint                  error_code,
-						       guint                  timestamp,
-						       guint                  message_type,
-						       gchar                 *message_body,
-						       EmpathyTpChat         *chat);
-static void             tp_chat_state_changed_cb      (DBusGProxy            *chat_state_iface,
-						       guint                  handle,
-						       TpChannelChatState     state,
-						       EmpathyTpChat         *chat);
-static EmpathyMessage * tp_chat_build_message         (EmpathyTpChat         *chat,
-						       guint                  type,
-						       guint                  timestamp,
-						       guint                  from_handle,
-						       const gchar           *message_body);
-static void             tp_chat_properties_ready_cb   (TpPropsIface          *props_iface,
-						       EmpathyTpChat         *chat);
-static void             tp_chat_properties_changed_cb (TpPropsIface          *props_iface,
-						       guint                  prop_id,
-						       TpPropsChanged         flag,
-						       EmpathyTpChat         *chat);
+static void empathy_tp_chat_class_init (EmpathyTpChatClass *klass);
+static void empathy_tp_chat_init       (EmpathyTpChat      *chat);
+
 enum {
 	PROP_0,
 	PROP_ACCOUNT,
@@ -142,198 +93,247 @@ static guint signals[LAST_SIGNAL];
 G_DEFINE_TYPE (EmpathyTpChat, empathy_tp_chat, G_TYPE_OBJECT);
 
 static void
-empathy_tp_chat_class_init (EmpathyTpChatClass *klass)
+tp_chat_destroy_cb (TpChan        *text_chan,
+		    EmpathyTpChat *chat)
 {
-	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+	EmpathyTpChatPriv *priv;
 
-	object_class->finalize = tp_chat_finalize;
-	object_class->constructor = tp_chat_constructor;
-	object_class->get_property = tp_chat_get_property;
-	object_class->set_property = tp_chat_set_property;
+	priv = GET_PRIV (chat);
 
-	/* Construct-only properties */
-	g_object_class_install_property (object_class,
-					 PROP_ACCOUNT,
-					 g_param_spec_object ("account",
-							      "channel Account",
-							      "The account associated with the channel",
-							      MC_TYPE_ACCOUNT,
-							      G_PARAM_READWRITE |
-							      G_PARAM_CONSTRUCT_ONLY));
-	g_object_class_install_property (object_class,
-					 PROP_TP_CHAN,
-					 g_param_spec_object ("tp-chan",
-							      "telepathy channel",
-							      "The text channel for the chat",
-							      TELEPATHY_CHAN_TYPE,
-							      G_PARAM_READWRITE |
-							      G_PARAM_CONSTRUCT_ONLY));
+	empathy_debug (DEBUG_DOMAIN, "Channel Closed or CM crashed");
 
-	/* Normal properties */
-	g_object_class_install_property (object_class,
-					 PROP_ACKNOWLEDGE,
-					 g_param_spec_boolean ("acknowledge",
-							       "acknowledge",
-							       "acknowledge",
-							       FALSE,
-							       G_PARAM_READWRITE));
+	g_object_unref  (priv->tp_chan);
+	priv->tp_chan = NULL;
+	priv->text_iface = NULL;
+	priv->chat_state_iface = NULL;
+	priv->props_iface = NULL;
 
-	/* Properties of Text Channel */
-	g_object_class_install_property (object_class,
-					 PROP_ANONYMOUS,
-					 g_param_spec_boolean ("anonymous",
-							       "anonymous",
-							       "anonymous",
-							       FALSE,
-							       G_PARAM_READWRITE));
-	g_object_class_install_property (object_class,
-					 PROP_INVITE_ONLY,
-					 g_param_spec_boolean ("invite-only",
-							       "invite-only",
-							       "invite-only",
-							       FALSE,
-							       G_PARAM_READWRITE));
-	g_object_class_install_property (object_class,
-					 PROP_LIMIT,
-					 g_param_spec_uint ("limit",
-							    "limit",
-							    "limit",
-							    0,
-							    G_MAXUINT,
-							    0,
-							    G_PARAM_READWRITE));
-	g_object_class_install_property (object_class,
-					 PROP_LIMITED,
-					 g_param_spec_boolean ("limited",
-							       "limited",
-							       "limited",
-							       FALSE,
-							       G_PARAM_READWRITE));
-	g_object_class_install_property (object_class,
-					 PROP_MODERATED,
-					 g_param_spec_boolean ("moderated",
-							       "moderated",
-							       "moderated",
-							       FALSE,
-							       G_PARAM_READWRITE));
-	g_object_class_install_property (object_class,
-					 PROP_NAME,
-					 g_param_spec_string ("name",
-							      "name",
-							      "name",
-							      NULL,
-							      G_PARAM_READWRITE));
-	g_object_class_install_property (object_class,
-					 PROP_DESCRIPTION,
-					 g_param_spec_string ("description",
-							      "description",
-							      "description",
-							      NULL,
-							      G_PARAM_READWRITE));
-	g_object_class_install_property (object_class,
-					 PROP_PASSWORD,
-					 g_param_spec_string ("password",
-							      "password",
-							      "password",
-							      NULL,
-							      G_PARAM_READWRITE));
-	g_object_class_install_property (object_class,
-					 PROP_PASSWORD_REQUIRED,
-					 g_param_spec_boolean ("password-required",
-							       "password-required",
-							       "password-required",
-							       FALSE,
-							       G_PARAM_READWRITE));
-	g_object_class_install_property (object_class,
-					 PROP_PERSISTENT,
-					 g_param_spec_boolean ("persistent",
-							       "persistent",
-							       "persistent",
-							       FALSE,
-							       G_PARAM_READWRITE));
-	g_object_class_install_property (object_class,
-					 PROP_PRIVATE,
-					 g_param_spec_boolean ("private",
-							       "private",
-							       "private"
-							       "private",
-							       FALSE,
-							       G_PARAM_READWRITE));
-	g_object_class_install_property (object_class,
-					 PROP_SUBJECT,
-					 g_param_spec_string ("subject",
-							      "subject",
-							      "subject",
-							      NULL,
-							      G_PARAM_READWRITE));
-	g_object_class_install_property (object_class,
-					 PROP_SUBJECT_CONTACT,
-					 g_param_spec_uint ("subject-contact",
-							    "subject-contact",
-							    "subject-contact",
-							    0,
-							    G_MAXUINT,
-							    0,
-							    G_PARAM_READWRITE));
-	g_object_class_install_property (object_class,
-					 PROP_SUBJECT_TIMESTAMP,
-					 g_param_spec_uint ("subject-timestamp",
-							    "subject-timestamp",
-							    "subject-timestamp",
-							    0,
-							    G_MAXUINT,
-							    0,
-							    G_PARAM_READWRITE));
-
-	/* Signals */
-	signals[MESSAGE_RECEIVED] =
-		g_signal_new ("message-received",
-			      G_TYPE_FROM_CLASS (klass),
-			      G_SIGNAL_RUN_LAST,
-			      0,
-			      NULL, NULL,
-			      g_cclosure_marshal_VOID__OBJECT,
-			      G_TYPE_NONE,
-			      1, EMPATHY_TYPE_MESSAGE);
-
-	signals[SEND_ERROR] =
-		g_signal_new ("send-error",
-			      G_TYPE_FROM_CLASS (klass),
-			      G_SIGNAL_RUN_LAST,
-			      0,
-			      NULL, NULL,
-			      _empathy_marshal_VOID__OBJECT_UINT,
-			      G_TYPE_NONE,
-			      2, EMPATHY_TYPE_MESSAGE, G_TYPE_UINT);
-
-	signals[CHAT_STATE_CHANGED] =
-		g_signal_new ("chat-state-changed",
-			      G_TYPE_FROM_CLASS (klass),
-			      G_SIGNAL_RUN_LAST,
-			      0,
-			      NULL, NULL,
-			      _empathy_marshal_VOID__OBJECT_UINT,
-			      G_TYPE_NONE,
-			      2, EMPATHY_TYPE_CONTACT, G_TYPE_UINT);
-
-	signals[DESTROY] =
-		g_signal_new ("destroy",
-			      G_TYPE_FROM_CLASS (klass),
-			      G_SIGNAL_RUN_LAST,
-			      0,
-			      NULL, NULL,
-			      g_cclosure_marshal_VOID__VOID,
-			      G_TYPE_NONE,
-			      0);
-
-	g_type_class_add_private (object_class, sizeof (EmpathyTpChatPriv));
+	g_signal_emit (chat, signals[DESTROY], 0);
 }
 
 static void
-empathy_tp_chat_init (EmpathyTpChat *chat)
+tp_chat_closed_cb (TpChan        *text_chan,
+		   EmpathyTpChat *chat)
 {
+	EmpathyTpChatPriv *priv;
+
+	priv = GET_PRIV (chat);
+
+	/* The channel is closed, do just like if the proxy was destroyed */
+	g_signal_handlers_disconnect_by_func (priv->tp_chan,
+					      tp_chat_destroy_cb,
+					      chat);
+	tp_chat_destroy_cb (text_chan, chat);
 }
 
+static EmpathyMessage *
+tp_chat_build_message (EmpathyTpChat *chat,
+		       guint          type,
+		       guint          timestamp,
+		       guint          from_handle,
+		       const gchar   *message_body)
+{
+	EmpathyTpChatPriv *priv;
+	EmpathyMessage    *message;
+	EmpathyContact    *sender;
+
+	priv = GET_PRIV (chat);
+
+	if (from_handle == 0) {
+		sender = g_object_ref (priv->user);
+	} else {
+		sender = empathy_contact_factory_get_from_handle (priv->factory,
+								  priv->account,
+								  from_handle);
+	}
+
+	message = empathy_message_new (message_body);
+	empathy_message_set_type (message, type);
+	empathy_message_set_sender (message, sender);
+	empathy_message_set_receiver (message, priv->user);
+	empathy_message_set_timestamp (message, timestamp);
+
+	g_object_unref (sender);
+
+	return message;
+}
+
+static void
+tp_chat_received_cb (DBusGProxy    *text_iface,
+		     guint          message_id,
+		     guint          timestamp,
+		     guint          from_handle,
+		     guint          message_type,
+		     guint          message_flags,
+		     gchar         *message_body,
+		     EmpathyTpChat *chat)
+{
+	EmpathyTpChatPriv *priv;
+	EmpathyMessage    *message;
+
+	priv = GET_PRIV (chat);
+
+	empathy_debug (DEBUG_DOMAIN, "Message received: %s", message_body);
+
+	message = tp_chat_build_message (chat,
+					 message_type,
+					 timestamp,
+					 from_handle,
+					 message_body);
+
+	g_signal_emit (chat, signals[MESSAGE_RECEIVED], 0, message);
+	g_object_unref (message);
+
+	if (priv->acknowledge) {
+		GArray *message_ids;
+
+		message_ids = g_array_new (FALSE, FALSE, sizeof (guint));
+		g_array_append_val (message_ids, message_id);
+		tp_chan_type_text_acknowledge_pending_messages (priv->text_iface,
+								message_ids, NULL);
+		g_array_free (message_ids, TRUE);
+	}
+}
+
+static void
+tp_chat_sent_cb (DBusGProxy    *text_iface,
+		 guint          timestamp,
+		 guint          message_type,
+		 gchar         *message_body,
+		 EmpathyTpChat *chat)
+{
+	EmpathyMessage *message;
+
+	empathy_debug (DEBUG_DOMAIN, "Message sent: %s", message_body);
+
+	message = tp_chat_build_message (chat,
+					 message_type,
+					 timestamp,
+					 0,
+					 message_body);
+
+	g_signal_emit (chat, signals[MESSAGE_RECEIVED], 0, message);
+	g_object_unref (message);
+}
+
+static void
+tp_chat_send_error_cb (DBusGProxy    *text_iface,
+		       guint          error_code,
+		       guint          timestamp,
+		       guint          message_type,
+		       gchar         *message_body,
+		       EmpathyTpChat *chat)
+{
+	EmpathyMessage *message;
+
+	empathy_debug (DEBUG_DOMAIN, "Message sent error: %s (%d)",
+		       message_body, error_code);
+
+	message = tp_chat_build_message (chat,
+					 message_type,
+					 timestamp,
+					 0,
+					 message_body);
+
+	g_signal_emit (chat, signals[SEND_ERROR], 0, message, error_code);
+	g_object_unref (message);
+}
+
+static void
+tp_chat_state_changed_cb (DBusGProxy         *chat_state_iface,
+			  guint               handle,
+			  TpChannelChatState  state,
+			  EmpathyTpChat      *chat)
+{
+	EmpathyTpChatPriv *priv;
+	EmpathyContact     *contact;
+
+	priv = GET_PRIV (chat);
+
+	contact = empathy_contact_factory_get_from_handle (priv->factory,
+							   priv->account,
+							   handle);
+
+	empathy_debug (DEBUG_DOMAIN, "Chat state changed for %s (%d): %d",
+		      empathy_contact_get_name (contact),
+		      handle,
+		      state);
+
+	g_signal_emit (chat, signals[CHAT_STATE_CHANGED], 0, contact, state);
+	g_object_unref (contact);
+}
+
+static void
+tp_chat_properties_ready_cb (TpPropsIface  *props_iface,
+			     EmpathyTpChat *chat)
+{
+	g_object_notify (G_OBJECT (chat), "anonymous");
+	g_object_notify (G_OBJECT (chat), "invite-only");
+	g_object_notify (G_OBJECT (chat), "limit");
+	g_object_notify (G_OBJECT (chat), "limited");
+	g_object_notify (G_OBJECT (chat), "moderated");
+	g_object_notify (G_OBJECT (chat), "name");
+	g_object_notify (G_OBJECT (chat), "description");
+	g_object_notify (G_OBJECT (chat), "password");
+	g_object_notify (G_OBJECT (chat), "password-required");
+	g_object_notify (G_OBJECT (chat), "persistent");
+	g_object_notify (G_OBJECT (chat), "private");
+	g_object_notify (G_OBJECT (chat), "subject");
+	g_object_notify (G_OBJECT (chat), "subject-contact");
+	g_object_notify (G_OBJECT (chat), "subject-timestamp");
+}
+
+static void
+tp_chat_properties_changed_cb (TpPropsIface   *props_iface,
+			       guint           prop_id,
+			       TpPropsChanged  flag,
+			       EmpathyTpChat  *chat)
+{
+	switch (prop_id) {
+	case PROP_ANONYMOUS:
+		g_object_notify (G_OBJECT (chat), "anonymous");
+		break;
+	case PROP_INVITE_ONLY:
+		g_object_notify (G_OBJECT (chat), "invite-only");
+		break;
+	case PROP_LIMIT:
+		g_object_notify (G_OBJECT (chat), "limit");
+		break;
+	case PROP_LIMITED:
+		g_object_notify (G_OBJECT (chat), "limited");
+		break;
+	case PROP_MODERATED:
+		g_object_notify (G_OBJECT (chat), "moderated");
+		break;
+	case PROP_NAME:
+		g_object_notify (G_OBJECT (chat), "name");
+		break;
+	case PROP_DESCRIPTION:
+		g_object_notify (G_OBJECT (chat), "description");
+		break;
+	case PROP_PASSWORD:
+		g_object_notify (G_OBJECT (chat), "password");
+		break;
+	case PROP_PASSWORD_REQUIRED:
+		g_object_notify (G_OBJECT (chat), "password-required");
+		break;
+	case PROP_PERSISTENT:
+		g_object_notify (G_OBJECT (chat), "persistent");
+		break;
+	case PROP_PRIVATE:
+		g_object_notify (G_OBJECT (chat), "private");
+		break;
+	case PROP_SUBJECT:
+		g_object_notify (G_OBJECT (chat), "subject");
+		break;
+	case PROP_SUBJECT_CONTACT:
+		g_object_notify (G_OBJECT (chat), "subject-contact");
+		break;
+	case PROP_SUBJECT_TIMESTAMP:
+		g_object_notify (G_OBJECT (chat), "subject-timestamp");
+		break;
+	}
+}
 
 static void
 tp_chat_finalize (GObject *object)
@@ -549,6 +549,199 @@ tp_chat_set_property (GObject      *object,
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
 		break;
 	};
+}
+
+static void
+empathy_tp_chat_class_init (EmpathyTpChatClass *klass)
+{
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+	object_class->finalize = tp_chat_finalize;
+	object_class->constructor = tp_chat_constructor;
+	object_class->get_property = tp_chat_get_property;
+	object_class->set_property = tp_chat_set_property;
+
+	/* Construct-only properties */
+	g_object_class_install_property (object_class,
+					 PROP_ACCOUNT,
+					 g_param_spec_object ("account",
+							      "channel Account",
+							      "The account associated with the channel",
+							      MC_TYPE_ACCOUNT,
+							      G_PARAM_READWRITE |
+							      G_PARAM_CONSTRUCT_ONLY));
+	g_object_class_install_property (object_class,
+					 PROP_TP_CHAN,
+					 g_param_spec_object ("tp-chan",
+							      "telepathy channel",
+							      "The text channel for the chat",
+							      TELEPATHY_CHAN_TYPE,
+							      G_PARAM_READWRITE |
+							      G_PARAM_CONSTRUCT_ONLY));
+
+	/* Normal properties */
+	g_object_class_install_property (object_class,
+					 PROP_ACKNOWLEDGE,
+					 g_param_spec_boolean ("acknowledge",
+							       "acknowledge",
+							       "acknowledge",
+							       FALSE,
+							       G_PARAM_READWRITE));
+
+	/* Properties of Text Channel */
+	g_object_class_install_property (object_class,
+					 PROP_ANONYMOUS,
+					 g_param_spec_boolean ("anonymous",
+							       "anonymous",
+							       "anonymous",
+							       FALSE,
+							       G_PARAM_READWRITE));
+	g_object_class_install_property (object_class,
+					 PROP_INVITE_ONLY,
+					 g_param_spec_boolean ("invite-only",
+							       "invite-only",
+							       "invite-only",
+							       FALSE,
+							       G_PARAM_READWRITE));
+	g_object_class_install_property (object_class,
+					 PROP_LIMIT,
+					 g_param_spec_uint ("limit",
+							    "limit",
+							    "limit",
+							    0,
+							    G_MAXUINT,
+							    0,
+							    G_PARAM_READWRITE));
+	g_object_class_install_property (object_class,
+					 PROP_LIMITED,
+					 g_param_spec_boolean ("limited",
+							       "limited",
+							       "limited",
+							       FALSE,
+							       G_PARAM_READWRITE));
+	g_object_class_install_property (object_class,
+					 PROP_MODERATED,
+					 g_param_spec_boolean ("moderated",
+							       "moderated",
+							       "moderated",
+							       FALSE,
+							       G_PARAM_READWRITE));
+	g_object_class_install_property (object_class,
+					 PROP_NAME,
+					 g_param_spec_string ("name",
+							      "name",
+							      "name",
+							      NULL,
+							      G_PARAM_READWRITE));
+	g_object_class_install_property (object_class,
+					 PROP_DESCRIPTION,
+					 g_param_spec_string ("description",
+							      "description",
+							      "description",
+							      NULL,
+							      G_PARAM_READWRITE));
+	g_object_class_install_property (object_class,
+					 PROP_PASSWORD,
+					 g_param_spec_string ("password",
+							      "password",
+							      "password",
+							      NULL,
+							      G_PARAM_READWRITE));
+	g_object_class_install_property (object_class,
+					 PROP_PASSWORD_REQUIRED,
+					 g_param_spec_boolean ("password-required",
+							       "password-required",
+							       "password-required",
+							       FALSE,
+							       G_PARAM_READWRITE));
+	g_object_class_install_property (object_class,
+					 PROP_PERSISTENT,
+					 g_param_spec_boolean ("persistent",
+							       "persistent",
+							       "persistent",
+							       FALSE,
+							       G_PARAM_READWRITE));
+	g_object_class_install_property (object_class,
+					 PROP_PRIVATE,
+					 g_param_spec_boolean ("private",
+							       "private",
+							       "private"
+							       "private",
+							       FALSE,
+							       G_PARAM_READWRITE));
+	g_object_class_install_property (object_class,
+					 PROP_SUBJECT,
+					 g_param_spec_string ("subject",
+							      "subject",
+							      "subject",
+							      NULL,
+							      G_PARAM_READWRITE));
+	g_object_class_install_property (object_class,
+					 PROP_SUBJECT_CONTACT,
+					 g_param_spec_uint ("subject-contact",
+							    "subject-contact",
+							    "subject-contact",
+							    0,
+							    G_MAXUINT,
+							    0,
+							    G_PARAM_READWRITE));
+	g_object_class_install_property (object_class,
+					 PROP_SUBJECT_TIMESTAMP,
+					 g_param_spec_uint ("subject-timestamp",
+							    "subject-timestamp",
+							    "subject-timestamp",
+							    0,
+							    G_MAXUINT,
+							    0,
+							    G_PARAM_READWRITE));
+
+	/* Signals */
+	signals[MESSAGE_RECEIVED] =
+		g_signal_new ("message-received",
+			      G_TYPE_FROM_CLASS (klass),
+			      G_SIGNAL_RUN_LAST,
+			      0,
+			      NULL, NULL,
+			      g_cclosure_marshal_VOID__OBJECT,
+			      G_TYPE_NONE,
+			      1, EMPATHY_TYPE_MESSAGE);
+
+	signals[SEND_ERROR] =
+		g_signal_new ("send-error",
+			      G_TYPE_FROM_CLASS (klass),
+			      G_SIGNAL_RUN_LAST,
+			      0,
+			      NULL, NULL,
+			      _empathy_marshal_VOID__OBJECT_UINT,
+			      G_TYPE_NONE,
+			      2, EMPATHY_TYPE_MESSAGE, G_TYPE_UINT);
+
+	signals[CHAT_STATE_CHANGED] =
+		g_signal_new ("chat-state-changed",
+			      G_TYPE_FROM_CLASS (klass),
+			      G_SIGNAL_RUN_LAST,
+			      0,
+			      NULL, NULL,
+			      _empathy_marshal_VOID__OBJECT_UINT,
+			      G_TYPE_NONE,
+			      2, EMPATHY_TYPE_CONTACT, G_TYPE_UINT);
+
+	signals[DESTROY] =
+		g_signal_new ("destroy",
+			      G_TYPE_FROM_CLASS (klass),
+			      G_SIGNAL_RUN_LAST,
+			      0,
+			      NULL, NULL,
+			      g_cclosure_marshal_VOID__VOID,
+			      G_TYPE_NONE,
+			      0);
+
+	g_type_class_add_private (object_class, sizeof (EmpathyTpChatPriv));
+}
+
+static void
+empathy_tp_chat_init (EmpathyTpChat *chat)
+{
 }
 
 EmpathyTpChat *
@@ -785,248 +978,5 @@ empathy_tp_chat_get_id (EmpathyTpChat *chat)
 	}
 
 	return priv->id;
-}
-
-static void
-tp_chat_destroy_cb (TpChan        *text_chan,
-		    EmpathyTpChat *chat)
-{
-	EmpathyTpChatPriv *priv;
-
-	priv = GET_PRIV (chat);
-
-	empathy_debug (DEBUG_DOMAIN, "Channel Closed or CM crashed");
-
-	g_object_unref  (priv->tp_chan);
-	priv->tp_chan = NULL;
-	priv->text_iface = NULL;
-	priv->chat_state_iface = NULL;
-	priv->props_iface = NULL;
-
-	g_signal_emit (chat, signals[DESTROY], 0);
-}
-
-static void
-tp_chat_closed_cb (TpChan        *text_chan,
-		   EmpathyTpChat *chat)
-{
-	EmpathyTpChatPriv *priv;
-
-	priv = GET_PRIV (chat);
-
-	/* The channel is closed, do just like if the proxy was destroyed */
-	g_signal_handlers_disconnect_by_func (priv->tp_chan,
-					      tp_chat_destroy_cb,
-					      chat);
-	tp_chat_destroy_cb (text_chan, chat);
-}
-
-static void
-tp_chat_received_cb (DBusGProxy    *text_iface,
-		     guint          message_id,
-		     guint          timestamp,
-		     guint          from_handle,
-		     guint          message_type,
-		     guint          message_flags,
-		     gchar         *message_body,
-		     EmpathyTpChat *chat)
-{
-	EmpathyTpChatPriv *priv;
-	EmpathyMessage    *message;
-
-	priv = GET_PRIV (chat);
-
-	empathy_debug (DEBUG_DOMAIN, "Message received: %s", message_body);
-
-	message = tp_chat_build_message (chat,
-					 message_type,
-					 timestamp,
-					 from_handle,
-					 message_body);
-
-	g_signal_emit (chat, signals[MESSAGE_RECEIVED], 0, message);
-	g_object_unref (message);
-
-	if (priv->acknowledge) {
-		GArray *message_ids;
-
-		message_ids = g_array_new (FALSE, FALSE, sizeof (guint));
-		g_array_append_val (message_ids, message_id);
-		tp_chan_type_text_acknowledge_pending_messages (priv->text_iface,
-								message_ids, NULL);
-		g_array_free (message_ids, TRUE);
-	}
-}
-
-static void
-tp_chat_sent_cb (DBusGProxy    *text_iface,
-		 guint          timestamp,
-		 guint          message_type,
-		 gchar         *message_body,
-		 EmpathyTpChat *chat)
-{
-	EmpathyMessage *message;
-
-	empathy_debug (DEBUG_DOMAIN, "Message sent: %s", message_body);
-
-	message = tp_chat_build_message (chat,
-					 message_type,
-					 timestamp,
-					 0,
-					 message_body);
-
-	g_signal_emit (chat, signals[MESSAGE_RECEIVED], 0, message);
-	g_object_unref (message);
-}
-
-static void
-tp_chat_send_error_cb (DBusGProxy    *text_iface,
-		       guint          error_code,
-		       guint          timestamp,
-		       guint          message_type,
-		       gchar         *message_body,
-		       EmpathyTpChat *chat)
-{
-	EmpathyMessage *message;
-
-	empathy_debug (DEBUG_DOMAIN, "Message sent error: %s (%d)",
-		       message_body, error_code);
-
-	message = tp_chat_build_message (chat,
-					 message_type,
-					 timestamp,
-					 0,
-					 message_body);
-
-	g_signal_emit (chat, signals[SEND_ERROR], 0, message, error_code);
-	g_object_unref (message);
-}
-
-static void
-tp_chat_state_changed_cb (DBusGProxy         *chat_state_iface,
-			  guint               handle,
-			  TpChannelChatState  state,
-			  EmpathyTpChat      *chat)
-{
-	EmpathyTpChatPriv *priv;
-	EmpathyContact     *contact;
-
-	priv = GET_PRIV (chat);
-
-	contact = empathy_contact_factory_get_from_handle (priv->factory,
-							   priv->account,
-							   handle);
-
-	empathy_debug (DEBUG_DOMAIN, "Chat state changed for %s (%d): %d",
-		      empathy_contact_get_name (contact),
-		      handle,
-		      state);
-
-	g_signal_emit (chat, signals[CHAT_STATE_CHANGED], 0, contact, state);
-	g_object_unref (contact);
-}
-
-static EmpathyMessage *
-tp_chat_build_message (EmpathyTpChat *chat,
-		       guint          type,
-		       guint          timestamp,
-		       guint          from_handle,
-		       const gchar   *message_body)
-{
-	EmpathyTpChatPriv *priv;
-	EmpathyMessage    *message;
-	EmpathyContact    *sender;
-
-	priv = GET_PRIV (chat);
-
-	if (from_handle == 0) {
-		sender = g_object_ref (priv->user);
-	} else {
-		sender = empathy_contact_factory_get_from_handle (priv->factory,
-								  priv->account,
-								  from_handle);
-	}
-
-	message = empathy_message_new (message_body);
-	empathy_message_set_type (message, type);
-	empathy_message_set_sender (message, sender);
-	empathy_message_set_receiver (message, priv->user);
-	empathy_message_set_timestamp (message, timestamp);
-
-	g_object_unref (sender);
-
-	return message;
-}
-
-static void
-tp_chat_properties_ready_cb (TpPropsIface  *props_iface,
-			     EmpathyTpChat *chat)
-{
-	g_object_notify (G_OBJECT (chat), "anonymous");
-	g_object_notify (G_OBJECT (chat), "invite-only");
-	g_object_notify (G_OBJECT (chat), "limit");
-	g_object_notify (G_OBJECT (chat), "limited");
-	g_object_notify (G_OBJECT (chat), "moderated");
-	g_object_notify (G_OBJECT (chat), "name");
-	g_object_notify (G_OBJECT (chat), "description");
-	g_object_notify (G_OBJECT (chat), "password");
-	g_object_notify (G_OBJECT (chat), "password-required");
-	g_object_notify (G_OBJECT (chat), "persistent");
-	g_object_notify (G_OBJECT (chat), "private");
-	g_object_notify (G_OBJECT (chat), "subject");
-	g_object_notify (G_OBJECT (chat), "subject-contact");
-	g_object_notify (G_OBJECT (chat), "subject-timestamp");
-}
-
-static void
-tp_chat_properties_changed_cb (TpPropsIface   *props_iface,
-			       guint           prop_id,
-			       TpPropsChanged  flag,
-			       EmpathyTpChat  *chat)
-{
-	switch (prop_id) {
-	case PROP_ANONYMOUS:
-		g_object_notify (G_OBJECT (chat), "anonymous");
-		break;
-	case PROP_INVITE_ONLY:
-		g_object_notify (G_OBJECT (chat), "invite-only");
-		break;
-	case PROP_LIMIT:
-		g_object_notify (G_OBJECT (chat), "limit");
-		break;
-	case PROP_LIMITED:
-		g_object_notify (G_OBJECT (chat), "limited");
-		break;
-	case PROP_MODERATED:
-		g_object_notify (G_OBJECT (chat), "moderated");
-		break;
-	case PROP_NAME:
-		g_object_notify (G_OBJECT (chat), "name");
-		break;
-	case PROP_DESCRIPTION:
-		g_object_notify (G_OBJECT (chat), "description");
-		break;
-	case PROP_PASSWORD:
-		g_object_notify (G_OBJECT (chat), "password");
-		break;
-	case PROP_PASSWORD_REQUIRED:
-		g_object_notify (G_OBJECT (chat), "password-required");
-		break;
-	case PROP_PERSISTENT:
-		g_object_notify (G_OBJECT (chat), "persistent");
-		break;
-	case PROP_PRIVATE:
-		g_object_notify (G_OBJECT (chat), "private");
-		break;
-	case PROP_SUBJECT:
-		g_object_notify (G_OBJECT (chat), "subject");
-		break;
-	case PROP_SUBJECT_CONTACT:
-		g_object_notify (G_OBJECT (chat), "subject-contact");
-		break;
-	case PROP_SUBJECT_TIMESTAMP:
-		g_object_notify (G_OBJECT (chat), "subject-timestamp");
-		break;
-	}
 }
 
