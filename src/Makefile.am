@@ -22,7 +22,10 @@ bin_PROGRAMS =			\
 libexec_PROGRAMS =		\
 	empathy-chat-chandler
 
-empathy_SOURCES = empathy.c
+empathy_SOURCES =			\
+	empathy.c			\
+	bacon-message-connection.c	\
+	bacon-message-connection.h
 empathy_accounts_SOURCES = empathy-accounts.c
 empathy_logs_SOURCES = empathy-logs.c
 empathy_chat_chandler_SOURCES = empathy-chat-chandler.c
