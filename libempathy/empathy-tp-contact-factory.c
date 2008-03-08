@@ -271,10 +271,6 @@ tp_contact_factory_aliases_changed_cb (DBusGProxy *proxy,
 			continue;
 		}
 
-		if (G_STR_EMPTY (alias)) {
-			alias = NULL;
-		}
-
 		empathy_debug (DEBUG_DOMAIN, "Renaming contact %s (%d) to %s (changed cb)",
 			       empathy_contact_get_id (contact),
 			       handle, alias);

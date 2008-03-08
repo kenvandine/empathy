@@ -1504,7 +1504,6 @@ empathy_chat_set_tp_chat (EmpathyChat   *chat,
 			  EmpathyTpChat *tp_chat)
 {
 	EmpathyChatPriv *priv;
-	GList           *messages;
 
 	g_return_if_fail (EMPATHY_IS_CHAT (chat));
 	g_return_if_fail (EMPATHY_IS_TP_CHAT (tp_chat));
@@ -1544,6 +1543,7 @@ empathy_chat_set_tp_chat (EmpathyChat   *chat,
 	priv->tp_chat = g_object_ref (tp_chat);
 	priv->id = g_strdup (empathy_tp_chat_get_id (tp_chat));
 	priv->account = g_object_ref (empathy_tp_chat_get_account (tp_chat));
+	empathy_tp_chat_set_acknowledge (tp_chat, TRUE);
 
 	if (priv->first_tp_chat) {
 		chat_add_logs (chat);
@@ -1562,12 +1562,6 @@ empathy_chat_set_tp_chat (EmpathyChat   *chat,
 	g_signal_connect (tp_chat, "destroy",
 			  G_CALLBACK (chat_destroy_cb),
 			  chat);
-
-	/* Get pending messages, wait until block_events cb before displaying
-	 * them to have to chance to get alias/avatar of sender. */
-	empathy_tp_chat_set_acknowledge (tp_chat, TRUE);
-	messages = empathy_tp_chat_get_pendings (tp_chat);
-	priv->pending_messages = g_list_concat (priv->pending_messages, messages);
 
 	if (!priv->sensitive) {
 		gtk_widget_set_sensitive (chat->input_text_view, TRUE);

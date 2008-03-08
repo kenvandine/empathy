@@ -322,7 +322,6 @@ status_icon_text_filter_new_channel (EmpathyFilter     *filter,
 	EmpathyStatusIconPriv *priv;
 	McAccount             *account;
 	EmpathyTpChat         *tp_chat;
-	GList                 *messages;
 
 	priv = GET_PRIV (icon);
 
@@ -335,19 +334,9 @@ status_icon_text_filter_new_channel (EmpathyFilter     *filter,
 	g_object_set_data (G_OBJECT (tp_chat), "filter", filter);
 	g_object_unref (account);
 
-	messages = empathy_tp_chat_get_pendings (tp_chat);
-	if (!messages) {
-		empathy_debug (DEBUG_DOMAIN, "No pending msg, waiting...");
-		g_signal_connect (tp_chat, "message-received",
-				  G_CALLBACK (status_icon_message_received_cb),
-				  icon);
-		return;
-	}
-
-	status_icon_message_received_cb (tp_chat, messages->data, icon);
-
-	g_list_foreach (messages, (GFunc) g_object_unref, NULL);
-	g_list_free (messages);
+	g_signal_connect (tp_chat, "message-received",
+			  G_CALLBACK (status_icon_message_received_cb),
+			  icon);
 }
 
 static void
@@ -783,6 +772,7 @@ status_icon_event_msg_cb (StatusIconEvent *event)
 	empathy_filter_process (filter,
 				empathy_tp_chat_get_channel (tp_chat),
 				TRUE);
+
 	g_object_unref (tp_chat);
 }
 

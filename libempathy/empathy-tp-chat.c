@@ -28,6 +28,7 @@
 #include <libtelepathy/tp-conn.h>
 #include <libtelepathy/tp-helpers.h>
 #include <libtelepathy/tp-props-iface.h>
+#include <telepathy-glib/util.h>
 
 #include "empathy-tp-chat.h"
 #include "empathy-contact-factory.h"
@@ -48,7 +49,8 @@ struct _EmpathyTpChatPriv {
 	gchar                 *id;
 	MissionControl        *mc;
 	gboolean               acknowledge;
-
+	gboolean               had_pending_messages;
+	GSList                *message_queue;
 	TpChan                *tp_chan;
 	DBusGProxy	      *props_iface;
 	DBusGProxy            *text_iface;
@@ -159,6 +161,84 @@ tp_chat_build_message (EmpathyTpChat *chat,
 }
 
 static void
+tp_chat_sender_ready_notify_cb (EmpathyContact *contact,
+				GParamSpec     *param_spec,
+				EmpathyTpChat  *chat)
+{
+	EmpathyTpChatPriv *priv = GET_PRIV (chat);
+	EmpathyMessage    *message;
+	EmpathyContact    *sender;
+	gboolean           removed = FALSE;
+	const gchar       *name, *id;
+
+	/* Emit all messages queued until we find a message with not
+	 * ready sender. When leaving this loop, sender is the first not ready
+	 * contact queued and removed tells if at least one message got removed
+	 * from the queue. */
+	while (priv->message_queue) {
+		message = priv->message_queue->data;
+		sender = empathy_message_get_sender (message);
+		name = empathy_contact_get_name (sender);
+		id = empathy_contact_get_id (sender);
+
+		if (!tp_strdiff (name, id)) {
+			break;
+		}
+
+		empathy_debug (DEBUG_DOMAIN, "Queued message ready");
+		g_signal_emit (chat, signals[MESSAGE_RECEIVED], 0, message);
+		priv->message_queue = g_slist_remove (priv->message_queue,
+						      message);
+		g_object_unref (message);
+		removed = TRUE;
+	}
+
+	if (removed) {
+		g_signal_handlers_disconnect_by_func (contact,
+						      tp_chat_sender_ready_notify_cb,
+						      chat);
+
+		if (priv->message_queue) {
+			g_signal_connect (sender, "notify::name",
+					  G_CALLBACK (tp_chat_sender_ready_notify_cb),
+					  chat);
+		}
+	}
+}
+
+static void
+tp_chat_emit_or_queue_message (EmpathyTpChat  *chat,
+			       EmpathyMessage *message)
+{
+	EmpathyTpChatPriv   *priv = GET_PRIV (chat);
+	EmpathyContact      *sender;
+	const gchar         *name, *id;
+
+	if (priv->message_queue != NULL) {
+		empathy_debug (DEBUG_DOMAIN, "Message queue not empty");
+		priv->message_queue = g_slist_append (priv->message_queue,
+						      g_object_ref (message));
+		return;
+	}
+
+	sender = empathy_message_get_sender (message);
+	name = empathy_contact_get_name (sender);
+	id = empathy_contact_get_id (sender);
+	if (tp_strdiff (name, id)) {
+		empathy_debug (DEBUG_DOMAIN, "Message queue empty and sender ready");
+		g_signal_emit (chat, signals[MESSAGE_RECEIVED], 0, message);
+		return;
+	}
+
+	empathy_debug (DEBUG_DOMAIN, "Sender not ready");
+	priv->message_queue = g_slist_append (priv->message_queue, 
+					      g_object_ref (message));
+	g_signal_connect (sender, "notify::name",
+			  G_CALLBACK (tp_chat_sender_ready_notify_cb),
+			  chat);
+}
+
+static void
 tp_chat_received_cb (DBusGProxy    *text_iface,
 		     guint          message_id,
 		     guint          timestamp,
@@ -173,7 +253,11 @@ tp_chat_received_cb (DBusGProxy    *text_iface,
 
 	priv = GET_PRIV (chat);
 
-	empathy_debug (DEBUG_DOMAIN, "Message received: %s", message_body);
+	if (!priv->had_pending_messages) {
+		return;
+	}
+ 
+ 	empathy_debug (DEBUG_DOMAIN, "Message received: %s", message_body);
 
 	message = tp_chat_build_message (chat,
 					 message_type,
@@ -181,7 +265,7 @@ tp_chat_received_cb (DBusGProxy    *text_iface,
 					 from_handle,
 					 message_body);
 
-	g_signal_emit (chat, signals[MESSAGE_RECEIVED], 0, message);
+	tp_chat_emit_or_queue_message (EMPATHY_TP_CHAT (chat), message);
 	g_object_unref (message);
 
 	if (priv->acknowledge) {
@@ -212,7 +296,7 @@ tp_chat_sent_cb (DBusGProxy    *text_iface,
 					 0,
 					 message_body);
 
-	g_signal_emit (chat, signals[MESSAGE_RECEIVED], 0, message);
+	tp_chat_emit_or_queue_message (EMPATHY_TP_CHAT (chat), message);
 	g_object_unref (message);
 }
 
@@ -261,6 +345,53 @@ tp_chat_state_changed_cb (DBusGProxy         *chat_state_iface,
 
 	g_signal_emit (chat, signals[CHAT_STATE_CHANGED], 0, contact, state);
 	g_object_unref (contact);
+}
+
+static void
+tp_chat_list_pending_messages_cb (DBusGProxy *proxy,
+				  GPtrArray *messages_list,
+				  GError *error,
+				  gpointer chat)
+{
+	EmpathyTpChatPriv *priv = GET_PRIV (chat);
+	guint              i;
+
+	priv->had_pending_messages = TRUE;
+
+	for (i = 0; i < messages_list->len; i++) {
+		EmpathyMessage *message;
+		GValueArray    *message_struct;
+		const gchar    *message_body;
+		guint           message_id;
+		guint           timestamp;
+		guint           from_handle;
+		guint           message_type;
+		guint           message_flags;
+
+		message_struct = g_ptr_array_index (messages_list, i);
+
+		message_id = g_value_get_uint (g_value_array_get_nth (message_struct, 0));
+		timestamp = g_value_get_uint (g_value_array_get_nth (message_struct, 1));
+		from_handle = g_value_get_uint (g_value_array_get_nth (message_struct, 2));
+		message_type = g_value_get_uint (g_value_array_get_nth (message_struct, 3));
+		message_flags = g_value_get_uint (g_value_array_get_nth (message_struct, 4));
+		message_body = g_value_get_string (g_value_array_get_nth (message_struct, 5));
+
+		empathy_debug (DEBUG_DOMAIN, "Message pending: %s", message_body);
+
+		message = tp_chat_build_message (chat,
+						 message_type,
+						 timestamp,
+						 from_handle,
+						 message_body);
+
+		tp_chat_emit_or_queue_message (chat, message);
+		g_object_unref (message);
+
+		g_value_array_free (message_struct);
+	}
+
+	g_ptr_array_free (messages_list, TRUE);
 }
 
 static void
@@ -382,18 +513,10 @@ tp_chat_finalize (GObject *object)
 		g_object_unref (priv->tp_chan);
 	}
 
-	if (priv->factory) {
-		g_object_unref (priv->factory);
-	}
-	if (priv->user) {
-		g_object_unref (priv->user);
-	}
-	if (priv->account) {
-		g_object_unref (priv->account);
-	}
-	if (priv->mc) {
-		g_object_unref (priv->mc);
-	}
+	g_object_unref (priv->factory);
+	g_object_unref (priv->user);
+	g_object_unref (priv->account);
+	g_object_unref (priv->mc);
 	g_free (priv->id);
 
 	G_OBJECT_CLASS (empathy_tp_chat_parent_class)->finalize (object);
@@ -468,6 +591,10 @@ tp_chat_constructor (GType                  type,
 				  G_CALLBACK (tp_chat_properties_changed_cb),
 				  chat);
 	}
+
+	/* FIXME: We do that in a cb to let time to set the acknowledge
+	 * property, this property should be required for construct. */
+	g_idle_add ((GSourceFunc) empathy_tp_chat_get_pendings, chat);
 
 	return chat;
 }
@@ -851,64 +978,17 @@ GList *
 empathy_tp_chat_get_pendings (EmpathyTpChat *chat)
 {
 	EmpathyTpChatPriv *priv;
-	GPtrArray         *messages_list;
-	guint              i;
-	GList             *messages = NULL;
-	GError            *error = NULL;
 
 	g_return_val_if_fail (EMPATHY_IS_TP_CHAT (chat), NULL);
 
 	priv = GET_PRIV (chat);
 
-	/* If we do this call async, don't forget to ignore Received signal
-	 * until we get the answer */
-	if (!tp_chan_type_text_list_pending_messages (priv->text_iface,
-						      priv->acknowledge,
-						      &messages_list,
-						      &error)) {
-		empathy_debug (DEBUG_DOMAIN, 
-			      "Error retrieving pending messages: %s",
-			      error ? error->message : "No error given");
-		g_clear_error (&error);
-		return NULL;
-	}
+	tp_chan_type_text_list_pending_messages_async (priv->text_iface,
+						       priv->acknowledge,
+						       tp_chat_list_pending_messages_cb,
+						       chat);
 
-	for (i = 0; i < messages_list->len; i++) {
-		EmpathyMessage *message;
-		GValueArray    *message_struct;
-		const gchar    *message_body;
-		guint           message_id;
-		guint           timestamp;
-		guint           from_handle;
-		guint           message_type;
-		guint           message_flags;
-
-		message_struct = g_ptr_array_index (messages_list, i);
-
-		message_id = g_value_get_uint (g_value_array_get_nth (message_struct, 0));
-		timestamp = g_value_get_uint (g_value_array_get_nth (message_struct, 1));
-		from_handle = g_value_get_uint (g_value_array_get_nth (message_struct, 2));
-		message_type = g_value_get_uint (g_value_array_get_nth (message_struct, 3));
-		message_flags = g_value_get_uint (g_value_array_get_nth (message_struct, 4));
-		message_body = g_value_get_string (g_value_array_get_nth (message_struct, 5));
-
-		empathy_debug (DEBUG_DOMAIN, "Message pending: %s", message_body);
-
-		message = tp_chat_build_message (chat,
-						 message_type,
-						 timestamp,
-						 from_handle,
-						 message_body);
-
-		messages = g_list_prepend (messages, message);
-
-		g_value_array_free (message_struct);
-	}
-	messages = g_list_reverse (messages);
-
-	g_ptr_array_free (messages_list, TRUE);
-
-	return messages;
+	return NULL;
 }
 
 void

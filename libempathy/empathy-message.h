@@ -76,7 +76,7 @@ time_t             empathy_message_get_timestamp (EmpathyMessage     *message);
 void               empathy_message_set_timestamp (EmpathyMessage     *message,
 						  time_t              timestamp);
 GDate *            empathy_message_get_date_and_time (EmpathyMessage *message,
-		                  time_t             *timestamp);
+						      time_t         *timestamp);
 EmpathyMessageType empathy_message_type_from_str (const gchar        *type_str);
 const gchar *      empathy_message_type_to_str   (EmpathyMessageType  type);
 
