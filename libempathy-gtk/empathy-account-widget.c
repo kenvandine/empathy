@@ -239,12 +239,12 @@ account_widget_generic_format_param_name (const gchar *param_name)
 
 static void
 accounts_widget_generic_setup (McAccount *account,
-			       GtkWidget *table_settings)
+			       GtkWidget *table_common_settings,
+			       GtkWidget *table_advanced_settings)
 {
 	McProtocol *protocol;
 	McProfile  *profile;
 	GSList     *params, *l;
-	guint       n_rows = 0;
 
 	profile = mc_account_get_profile (account);
 	protocol = mc_profile_get_protocol (profile);
@@ -263,11 +263,19 @@ accounts_widget_generic_setup (McAccount *account,
 
 	for (l = params; l; l = l->next) {
 		McProtocolParam *param;
+		GtkWidget       *table_settings;
+		guint            n_rows = 0;
 		GtkWidget       *widget = NULL;
 		gchar           *param_name_formatted;
 
 		param = l->data;
+		if (param->flags & MC_PROTOCOL_PARAM_REQUIRED) {
+			table_settings = table_common_settings;
+		} else {
+			table_settings = table_advanced_settings;
+		}
 		param_name_formatted = account_widget_generic_format_param_name (param->name);
+		g_object_get (table_settings, "n-rows", &n_rows, NULL);
 		gtk_table_resize (GTK_TABLE (table_settings), ++n_rows, 2);
 
 		if (param->signature[0] == 's') {
@@ -434,26 +442,28 @@ empathy_account_widget_add_forget_button (McAccount   *account,
 GtkWidget *
 empathy_account_widget_generic_new (McAccount *account)
 {
-	GtkWidget *table_settings;
-	GtkWidget *sw;
+	GladeXML  *glade;
+	GtkWidget *widget;
+	GtkWidget *table_common_settings;
+	GtkWidget *table_advanced_settings;
 
 	g_return_val_if_fail (MC_IS_ACCOUNT (account), NULL);
 
-	table_settings = gtk_table_new (0, 2, FALSE);
-	gtk_table_set_row_spacings (GTK_TABLE (table_settings), 6);
-	gtk_table_set_col_spacings (GTK_TABLE (table_settings), 6);
-	sw = gtk_scrolled_window_new (NULL, NULL);
-	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
-					GTK_POLICY_AUTOMATIC,
-					GTK_POLICY_AUTOMATIC);
-	gtk_scrolled_window_add_with_viewport (GTK_SCROLLED_WINDOW (sw),
-					       table_settings);
-	
-	accounts_widget_generic_setup (account, table_settings);
+	glade = empathy_glade_get_file ("empathy-account-widget-generic.glade",
+					"vbox_generic_settings",
+					NULL,
+					"vbox_generic_settings", &widget,
+					"table_common_settings", &table_common_settings,
+					"table_advanced_settings", &table_advanced_settings,
+					NULL);
 
-	gtk_widget_show_all (sw);
+	accounts_widget_generic_setup (account, table_common_settings, table_advanced_settings);
 
-	return sw;
+	g_object_unref (glade);
+
+	gtk_widget_show_all (widget);
+
+	return widget;
 }
 
 GtkWidget *

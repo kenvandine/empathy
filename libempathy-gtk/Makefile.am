@@ -127,6 +127,7 @@ glade_DATA = 					\
 	empathy-preferences.glade		\
 	empathy-presence-chooser.glade		\
 	empathy-accounts-dialog.glade		\
+	empathy-account-widget-generic.glade	\
 	empathy-account-widget-jabber.glade	\
 	empathy-account-widget-msn.glade	\
 	empathy-account-widget-salut.glade	\
