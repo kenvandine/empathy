@@ -187,7 +187,7 @@ empathy_main_window_show (void)
 	gint                      x, y, w, h;
 
 	if (window) {
-		gtk_window_present (GTK_WINDOW (window->window));
+		empathy_window_present (GTK_WINDOW (window->window), TRUE);
 		return window->window;
 	}
 
