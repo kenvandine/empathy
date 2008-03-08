@@ -1443,6 +1443,22 @@ empathy_chat_is_connected (EmpathyChat *chat)
 	return (priv->tp_chat != NULL);
 }
 
+static const gchar *
+chat_get_window_id_for_geometry (EmpathyChat *chat)
+{
+	gboolean separate_windows;
+
+	empathy_conf_get_bool (empathy_conf_get (),
+			       EMPATHY_PREFS_UI_SEPARATE_CHAT_WINDOWS,
+			       &separate_windows);
+
+	if (separate_windows) {
+		return empathy_chat_get_id (chat);
+	} else {
+		return "chat-window";
+	}
+}
+
 void
 empathy_chat_save_geometry (EmpathyChat *chat,
 			   gint        x,
@@ -1450,7 +1466,7 @@ empathy_chat_save_geometry (EmpathyChat *chat,
 			   gint        w,
 			   gint        h)
 {
-	empathy_geometry_save (empathy_chat_get_id (chat), x, y, w, h);
+	empathy_geometry_save (chat_get_window_id_for_geometry (chat), x, y, w, h);
 }
 
 void
@@ -1460,7 +1476,7 @@ empathy_chat_load_geometry (EmpathyChat *chat,
 			   gint       *w,
 			   gint       *h)
 {
-	empathy_geometry_load (empathy_chat_get_id (chat), x, y, w, h);
+	empathy_geometry_load (chat_get_window_id_for_geometry (chat), x, y, w, h);
 }
 
 static gboolean

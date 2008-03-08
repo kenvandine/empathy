@@ -934,11 +934,6 @@ chat_window_configure_event_cb (GtkWidget         *widget,
 
 	priv = GET_PRIV (window);
 
-	/* Only save geometry information if there is ONE chat visible. */
-	if (g_list_length (priv->chats) > 1) {
-		return FALSE;
-	}
-
 	if (priv->save_geometry_id != 0) {
 		g_source_remove (priv->save_geometry_id);
 	}
@@ -1731,8 +1726,9 @@ empathy_chat_window_add_chat (EmpathyChatWindow *window,
 			      EmpathyChat	*chat)
 {
 	EmpathyChatWindowPriv *priv;
-	GtkWidget            *label;
-	GtkWidget            *child;
+	GtkWidget             *label;
+	GtkWidget             *child;
+	gint                   x, y, w, h;
 
 	g_return_if_fail (window != NULL);
 	g_return_if_fail (EMPATHY_IS_CHAT (chat));
@@ -1745,24 +1741,20 @@ empathy_chat_window_add_chat (EmpathyChatWindow *window,
 	/* Set the chat window */
 	empathy_chat_set_window (chat, window);
 
-	if (g_list_length (priv->chats) == 0) {
-		gint x, y, w, h;
+	empathy_chat_load_geometry (chat, &x, &y, &w, &h);
 
-		empathy_chat_load_geometry (chat, &x, &y, &w, &h);
+	if (x >= 0 && y >= 0) {
+		/* Let the window manager position it if we don't have
+		 * good x, y coordinates.
+		 */
+		gtk_window_move (GTK_WINDOW (priv->dialog), x, y);
+	}
 
-		if (x >= 0 && y >= 0) {
-			/* Let the window manager position it if we don't have
-			 * good x, y coordinates.
-			 */
-			gtk_window_move (GTK_WINDOW (priv->dialog), x, y);
-		}
-
-		if (w > 0 && h > 0) {
-			/* Use the defaults from the glade file if we don't have
-			 * good w, h geometry.
-			 */
-			gtk_window_resize (GTK_WINDOW (priv->dialog), w, h);
-		}
+	if (w > 0 && h > 0) {
+		/* Use the defaults from the glade file if we don't have
+		 * good w, h geometry.
+		 */
+		gtk_window_resize (GTK_WINDOW (priv->dialog), w, h);
 	}
 
 	child = empathy_chat_get_widget (chat);
