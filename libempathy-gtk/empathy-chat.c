@@ -1498,7 +1498,7 @@ empathy_chat_set_tp_chat (EmpathyChat   *chat,
 		g_source_remove (priv->block_events_timeout_id);
 	}
 	priv->block_events_timeout_id =
-		g_timeout_add (200, chat_block_events_timeout_cb, chat);
+		g_timeout_add_seconds (1, chat_block_events_timeout_cb, chat);
 
 	if (priv->tp_chat) {
 		g_signal_handlers_disconnect_by_func (priv->tp_chat,
