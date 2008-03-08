@@ -59,7 +59,7 @@ empathy_substring (const gchar *str,
  */
 #define USERCHARS "-A-Za-z0-9"
 #define PASSCHARS "-A-Za-z0-9,?;.:/!%$^*&~\"#'"
-#define HOSTCHARS "-A-Za-z0-9"
+#define HOSTCHARS "-A-Za-z0-9_"
 #define PATHCHARS "-A-Za-z0-9_$.+!*(),;:@&=?/~#%"
 #define SCHEME    "(news:|telnet:|nntp:|file:/|https?:|ftps?:|webcal:)"
 #define USER      "[" USERCHARS "]+(:["PASSCHARS "]+)?"
