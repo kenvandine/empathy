@@ -81,7 +81,6 @@ struct _EmpathyChatPriv {
 	time_t                 last_log_timestamp;
 	gboolean               is_first_char;
 	guint                  block_events_timeout_id;
-	GList                 *pending_messages;
 	/* Used to automatically shrink a window that has temporarily
 	 * grown due to long input. 
 	 */
@@ -398,9 +397,6 @@ chat_finalize (GObject *object)
 	chat_composing_remove_timeout (chat);
 	g_object_unref (priv->log_manager);
 
-	g_list_foreach (priv->pending_messages, (GFunc) g_object_unref, NULL);
-	g_list_free (priv->pending_messages);
-
 	dbus_g_proxy_disconnect_signal (DBUS_G_PROXY (priv->mc), "AccountStatusChanged",
 					G_CALLBACK (chat_status_changed_cb),
 					chat);
@@ -448,9 +444,6 @@ chat_destroy_cb (EmpathyTpChat *tp_chat,
 	if (priv->block_events_timeout_id != 0) {
 		g_source_remove (priv->block_events_timeout_id);
 	}
-
-	g_list_foreach (priv->pending_messages, (GFunc) g_object_unref, NULL);
-	g_list_free (priv->pending_messages);
 
 	if (EMPATHY_CHAT_GET_CLASS (chat)->set_tp_chat) {
 		EMPATHY_CHAT_GET_CLASS (chat)->set_tp_chat (chat, NULL);
@@ -532,14 +525,6 @@ chat_message_received_cb (EmpathyTpChat  *tp_chat,
 		 * last time we joined that room. */
 		empathy_debug (DEBUG_DOMAIN, "Skipping message because it is "
 			       "anterior of last logged message.");
-		return;
-	}
-
-	if (chat->block_events) {
-		/* Wait until block_events cb before displaying
-		 * them to have to chance to get alias/avatar of sender. */
-		priv->pending_messages = g_list_append (priv->pending_messages,
-							g_object_ref (message));
 		return;
 	}
 
@@ -1484,17 +1469,9 @@ chat_block_events_timeout_cb (gpointer data)
 {
 	EmpathyChat     *chat = EMPATHY_CHAT (data);
 	EmpathyChatPriv *priv = GET_PRIV (chat);
-	GList           *l;
 
 	chat->block_events = FALSE;
 	priv->block_events_timeout_id = 0;
-
-	for (l = priv->pending_messages; l; l = l->next) {
-		chat_message_received_cb (priv->tp_chat, l->data, chat);
-		g_object_unref (l->data);
-	}
-	g_list_free (priv->pending_messages);
-	priv->pending_messages = NULL;
 
 	return FALSE;
 }
