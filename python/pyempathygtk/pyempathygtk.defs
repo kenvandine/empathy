@@ -333,8 +333,8 @@
   (varargs #t)
 )
 
-(define-function emapthy_account_widget_add_forget_button
-  (c-name "emapthy_account_widget_add_forget_button")
+(define-function empathy_account_widget_add_forget_button
+  (c-name "empathy_account_widget_add_forget_button")
   (return-type "none")
   (parameters
     '("McAccount*" "account")
@@ -374,6 +374,37 @@
 (define-function empathy_account_widget_jabber_new
   (c-name "empathy_account_widget_jabber_new")
   (is-constructor-of "EmpathyAccountWidgetJabber")
+  (return-type "GtkWidget*")
+  (parameters
+    '("McAccount*" "account")
+  )
+)
+
+(define-function empathy_account_widget_icq_new
+  (c-name "empathy_account_widget_icq_new")
+  (is-constructor-of "EmpathyAccountWidgetIcq")
+  (return-type "GtkWidget*")
+  (parameters
+    '("McAccount*" "account")
+  )
+)
+
+(define-function empathy_account_widget_yahoo_new
+  (c-name "empathy_account_widget_yahoo_new")
+  (is-constructor-of "EmpathyAccountWidgetYahoo")
+  (return-type "GtkWidget*")
+  (parameters
+    '("McAccount*" "account")
+  )
+)
+
+
+
+;; From empathy-account-widget-irc.h
+
+(define-function empathy_account_widget_irc_new
+  (c-name "empathy_account_widget_irc_new")
+  (is-constructor-of "EmpathyAccountWidgetIrc")
   (return-type "GtkWidget*")
   (parameters
     '("McAccount*" "account")
@@ -1442,6 +1473,19 @@
 
 
 ;; From empathy-images.h
+
+
+
+;; From empathy-irc-network-dialog.h
+
+(define-method dialog_show
+  (of-object "EmpathyIrcNetwork")
+  (c-name "empathy_irc_network_dialog_show")
+  (return-type "GtkWidget*")
+  (parameters
+    '("GtkWidget*" "parent")
+  )
+)
 
 
 

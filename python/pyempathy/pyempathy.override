@@ -4,15 +4,20 @@ headers
 #include <pygobject.h>
 #include "empathy-avatar.h"
 #include "empathy-chandler.h"
-#include "empathy-chatroom-manager.h"
 #include "empathy-chatroom.h"
+#include "empathy-chatroom-manager.h"
+#include "empathy-contact.h"
+#include "empathy-contact-factory.h"
 #include "empathy-contact-groups.h"
 #include "empathy-contact-list.h"
 #include "empathy-contact-manager.h"
-#include "empathy-contact.h"
 #include "empathy-debug.h"
+#include "empathy-enum-types.h"
 #include "empathy-filter.h"
 #include "empathy-idle.h"
+#include "empathy-irc-network.h"
+#include "empathy-irc-network-manager.h"
+#include "empathy-irc-server.h"
 #include "empathy-log-manager.h"
 #include "empathy-message.h"
 #include "empathy-status-presets.h"
@@ -25,8 +30,6 @@ headers
 #include "empathy-tp-group.h"
 #include "empathy-tp-roomlist.h"
 #include "empathy-utils.h"
-#include "empathy-contact-factory.h"
-#include "empathy-enum-types.h"
 
 void empathy_add_constants(PyObject *module, const gchar *strip_prefix);
 void empathy_register_classes(PyObject *d);

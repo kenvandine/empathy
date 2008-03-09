@@ -63,6 +63,27 @@
   (gtype-id "EMPATHY_TYPE_IDLE")
 )
 
+(define-object IrcNetwork
+  (in-module "Empathy")
+  (parent "GObject")
+  (c-name "EmpathyIrcNetwork")
+  (gtype-id "EMPATHY_TYPE_IRC_NETWORK")
+)
+
+(define-object IrcNetworkManager
+  (in-module "Empathy")
+  (parent "GObject")
+  (c-name "EmpathyIrcNetworkManager")
+  (gtype-id "EMPATHY_TYPE_IRC_NETWORK_MANAGER")
+)
+
+(define-object IrcServer
+  (in-module "Empathy")
+  (parent "GObject")
+  (c-name "EmpathyIrcServer")
+  (gtype-id "EMPATHY_TYPE_IRC_SERVER")
+)
+
 (define-object LogManager
   (in-module "Empathy")
   (parent "GObject")
@@ -135,8 +156,10 @@
   (c-name "EmpathyCapabilities")
   (gtype-id "EMPATHY_TYPE_CAPABILITIES")
   (values
+    '("none" "EMPATHY_CAPABILITIES_NONE")
     '("audio" "EMPATHY_CAPABILITIES_AUDIO")
     '("video" "EMPATHY_CAPABILITIES_VIDEO")
+    '("unknown" "EMPATHY_CAPABILITIES_UNKNOWN")
   )
 )
 
@@ -975,6 +998,130 @@
 
 
 
+;; From empathy-irc-network.h
+
+(define-function empathy_irc_network_get_type
+  (c-name "empathy_irc_network_get_type")
+  (return-type "GType")
+)
+
+(define-function empathy_irc_network_new
+  (c-name "empathy_irc_network_new")
+  (is-constructor-of "EmpathyIrcNetwork")
+  (return-type "EmpathyIrcNetwork*")
+  (parameters
+    '("const-gchar*" "name")
+  )
+)
+
+(define-method get_servers
+  (of-object "EmpathyIrcNetwork")
+  (c-name "empathy_irc_network_get_servers")
+  (return-type "GSList*")
+)
+
+(define-method append_server
+  (of-object "EmpathyIrcNetwork")
+  (c-name "empathy_irc_network_append_server")
+  (return-type "none")
+  (parameters
+    '("EmpathyIrcServer*" "server")
+  )
+)
+
+(define-method remove_server
+  (of-object "EmpathyIrcNetwork")
+  (c-name "empathy_irc_network_remove_server")
+  (return-type "none")
+  (parameters
+    '("EmpathyIrcServer*" "server")
+  )
+)
+
+(define-method set_server_position
+  (of-object "EmpathyIrcNetwork")
+  (c-name "empathy_irc_network_set_server_position")
+  (return-type "none")
+  (parameters
+    '("EmpathyIrcServer*" "server")
+    '("gint" "pos")
+  )
+)
+
+
+
+;; From empathy-irc-network-manager.h
+
+(define-function empathy_irc_network_manager_get_type
+  (c-name "empathy_irc_network_manager_get_type")
+  (return-type "GType")
+)
+
+(define-function empathy_irc_network_manager_new
+  (c-name "empathy_irc_network_manager_new")
+  (is-constructor-of "EmpathyIrcNetworkManager")
+  (return-type "EmpathyIrcNetworkManager*")
+  (parameters
+    '("const-gchar*" "global_file")
+    '("const-gchar*" "user_file")
+  )
+)
+
+(define-method add
+  (of-object "EmpathyIrcNetworkManager")
+  (c-name "empathy_irc_network_manager_add")
+  (return-type "none")
+  (parameters
+    '("EmpathyIrcNetwork*" "network")
+  )
+)
+
+(define-method remove
+  (of-object "EmpathyIrcNetworkManager")
+  (c-name "empathy_irc_network_manager_remove")
+  (return-type "none")
+  (parameters
+    '("EmpathyIrcNetwork*" "network")
+  )
+)
+
+(define-method get_networks
+  (of-object "EmpathyIrcNetworkManager")
+  (c-name "empathy_irc_network_manager_get_networks")
+  (return-type "GSList*")
+)
+
+(define-method find_network_by_address
+  (of-object "EmpathyIrcNetworkManager")
+  (c-name "empathy_irc_network_manager_find_network_by_address")
+  (return-type "EmpathyIrcNetwork*")
+  (parameters
+    '("const-gchar*" "address")
+  )
+)
+
+
+
+;; From empathy-irc-server.h
+
+(define-function empathy_irc_server_get_type
+  (c-name "empathy_irc_server_get_type")
+  (return-type "GType")
+)
+
+(define-function empathy_irc_server_new
+  (c-name "empathy_irc_server_new")
+  (is-constructor-of "EmpathyIrcServer")
+  (return-type "EmpathyIrcServer*")
+  (parameters
+    '("const-gchar*" "address")
+    '("guint" "port")
+    '("gboolean" "ssl")
+  )
+)
+
+
+
 ;; From empathy-log-manager.h
 
 (define-function empathy_log_manager_get_type
@@ -1737,6 +1884,12 @@
   (of-object "EmpathyTpGroup")
   (c-name "empathy_tp_group_get_object_path")
   (return-type "const-gchar*")
+)
+
+(define-method get_channel
+  (of-object "EmpathyTpGroup")
+  (c-name "empathy_tp_group_get_channel")
+  (return-type "TpChan*")
 )
 
 (define-method is_member
