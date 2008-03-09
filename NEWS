@@ -1,3 +1,23 @@
+NEW in 0.22.0
+==============
+ - Queue received messages until the sender got his alias. (Xavier Claessens).
+
+Bugs fixed:
+ - Fixed #466521, Add an advanced expander in the generic setting widget (Marco Barisione)
+ - Fixed #479534, remember conversation window sizes (Marco Barisione)
+ - Fixed #501805, empathy should prevent to run multiple instances (Marco Barisione)
+ - Fixed #505616, linkability of URL broken on _ (Marco Barisione)
+ - Fixed #520788, Wrong button order in the favourite rooms dialog (Marco Barisione)
+ - Fixed #521051, empathy_main_window_show() should use empathy_window_present() (Marco Barisione)
+
+Translations:
+ - Updated Finnish translation (ituohela).
+ - Updated en_GB translation  (Philip Withnall).
+ - Updated sv translation  (Daniel Nylander).
+ - Updated it translation  (Milo Casagrande).
+ - Updated Spanish translation  (Jorge Gonzalez).
+ - Updated fr translation  (Robert-André Mauchin).
+
 NEW in 0.21.91
 ==============
  - Blink the status icon for new incoming calls. (Xavier Claessens).
