@@ -22,6 +22,7 @@ IGNORE_HFILES=				\
 	empathy-gtk-enum-types.h	\
 	stamp-empathy-gtk-enum-types.h	\
 	ephy-spinner.h			\
+	totem-subtitle-encoding.h	\
 	$(NULL)
 
 # CFLAGS and LDFLAGS for compiling scan program. Only needed
