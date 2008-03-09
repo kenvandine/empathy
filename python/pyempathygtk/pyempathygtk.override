@@ -25,7 +25,6 @@ headers
 #include "empathy-geometry.h"
 #include "empathy-group-chat.h"
 #include "empathy-gtk-enum-types.h"
-#include "empathy-gtk-marshal.h"
 #include "empathy-images.h"
 #include "empathy-irc-network-dialog.h"
 #include "empathy-log-window.h"
