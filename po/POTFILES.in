@@ -12,6 +12,7 @@ libempathy/empathy-utils.c
 libempathy-gtk/empathy-about-dialog.c
 libempathy-gtk/empathy-account-chooser.c
 libempathy-gtk/empathy-account-widget.c
+libempathy-gtk/empathy-account-widget-generic.glade
 libempathy-gtk/empathy-account-widget-icq.glade
 libempathy-gtk/empathy-account-widget-irc.c
 libempathy-gtk/empathy-account-widget-irc.glade
