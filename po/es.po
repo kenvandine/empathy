@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: empathy.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-03-02 18:53+0000\n"
-"PO-Revision-Date: 2008-03-04 18:53+0100\n"
+"POT-Creation-Date: 2008-03-09 14:30+0000\n"
+"PO-Revision-Date: 2008-03-10 10:56+0100\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -231,27 +231,27 @@ msgstr ""
 "predeterminado es ordenar por el nombre del contacto con el valor «nombre». "
 "Un valor «estado» ordenará la lista por el estado."
 
-#: ../libempathy/empathy-tp-contact-list.c:724 ../src/empathy.c:149
+#: ../libempathy/empathy-tp-contact-list.c:724 ../src/empathy.c:155
 msgid "People nearby"
 msgstr "Gente cerca"
 
-#: ../libempathy/empathy-utils.c:540
+#: ../libempathy/empathy-utils.c:541
 msgid "Available"
 msgstr "Disponible"
 
-#: ../libempathy/empathy-utils.c:542
+#: ../libempathy/empathy-utils.c:543
 msgid "Busy"
 msgstr "Ocupado"
 
-#: ../libempathy/empathy-utils.c:545
+#: ../libempathy/empathy-utils.c:546
 msgid "Away"
 msgstr "Ausente"
 
-#: ../libempathy/empathy-utils.c:547
+#: ../libempathy/empathy-utils.c:548
 msgid "Hidden"
 msgstr "Oculto"
 
-#: ../libempathy/empathy-utils.c:550
+#: ../libempathy/empathy-utils.c:551
 msgid "Offline"
 msgstr "Desconectado"
 
@@ -301,12 +301,13 @@ msgstr "Jorge González <jorgegonz@svn.gnome.org>, 2007-2008."
 msgid "All"
 msgstr "Todo"
 
-#: ../libempathy-gtk/empathy-account-widget.c:276
-#: ../libempathy-gtk/empathy-account-widget.c:321
+#: ../libempathy-gtk/empathy-account-widget.c:284
+#: ../libempathy-gtk/empathy-account-widget.c:329
 #, c-format
 msgid "%s:"
 msgstr "%s:"
 
+#: ../libempathy-gtk/empathy-account-widget-generic.glade.h:1
 #: ../libempathy-gtk/empathy-account-widget-icq.glade.h:1
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:1
 #: ../libempathy-gtk/empathy-account-widget-msn.glade.h:1
@@ -314,6 +315,10 @@ msgstr "%s:"
 #: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:1
 msgid "<b>Advanced</b>"
 msgstr "<b>Avanzado</b>"
+
+#: ../libempathy-gtk/empathy-account-widget-generic.glade.h:2
+msgid "generic account settings"
+msgstr "Ajustes de la cuenta genérica"
 
 #: ../libempathy-gtk/empathy-account-widget-icq.glade.h:2
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:3
@@ -356,6 +361,62 @@ msgstr "_Puerto:"
 #: ../libempathy-gtk/empathy-new-chatroom-dialog.glade.h:10
 msgid "_Server:"
 msgstr "_Servidor:"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.c:246
+msgid "New Network"
+msgstr "Red nueva"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:1
+msgid "<b>Network</b>"
+msgstr "<b>Red</b>"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:2
+msgid "<b>Servers</b>"
+msgstr "<b>Servidores</b>"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:3
+msgid "Charset:"
+msgstr "Conjunto de caracteres:"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:4
+msgid "Create a new IRC network"
+msgstr "Crear una red IRC nueva"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:5
+msgid "Edit the selected IRC network"
+msgstr "Editar la red IRC seleccionada"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:6
+msgid "Network"
+msgstr "Red"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:7
+msgid "Network:"
+msgstr "Red:"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:8
+msgid "Nickname:"
+msgstr "Apodo:"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:9
+msgid "Password:"
+msgstr "Contraseña:"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:10
+msgid "Quit message:"
+msgstr "Mensaje de salida:"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:11
+msgid "Real name:"
+msgstr "Nombre real:"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:12
+msgid "Remove the selected IRC network"
+msgstr "Quitar la red IRC seleccionada"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:13
+msgid "irc account settings"
+msgstr "Ajustes de la cuenta IRC"
 
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:2
 msgid "<b>Override  server settings</b>"
@@ -590,48 +651,48 @@ msgstr "Iniciar llamada"
 msgid "Volume"
 msgstr "Volumen"
 
-#: ../libempathy-gtk/empathy-chat.c:445
+#: ../libempathy-gtk/empathy-chat.c:441
 msgid "Disconnected"
 msgstr "Desconectado"
 
-#: ../libempathy-gtk/empathy-chat.c:580
+#: ../libempathy-gtk/empathy-chat.c:565
 msgid "offline"
 msgstr "desconectado"
 
-#: ../libempathy-gtk/empathy-chat.c:583
+#: ../libempathy-gtk/empathy-chat.c:568
 msgid "invalid contact"
 msgstr "contacto no válido"
 
-#: ../libempathy-gtk/empathy-chat.c:586
+#: ../libempathy-gtk/empathy-chat.c:571
 msgid "permission denied"
 msgstr "permiso denegado"
 
-#: ../libempathy-gtk/empathy-chat.c:589
+#: ../libempathy-gtk/empathy-chat.c:574
 msgid "too long message"
 msgstr "mensaje demasiado largo"
 
-#: ../libempathy-gtk/empathy-chat.c:592
+#: ../libempathy-gtk/empathy-chat.c:577
 msgid "not implemented"
 msgstr "no implementado"
 
-#: ../libempathy-gtk/empathy-chat.c:595
+#: ../libempathy-gtk/empathy-chat.c:580
 msgid "unknown"
 msgstr "desconocido"
 
-#: ../libempathy-gtk/empathy-chat.c:599
+#: ../libempathy-gtk/empathy-chat.c:584
 #, c-format
 msgid "Error sending message '%s': %s"
 msgstr "Error al enviar el mensaje «%s»: %s"
 
-#: ../libempathy-gtk/empathy-chat.c:1056
+#: ../libempathy-gtk/empathy-chat.c:1041
 msgid "Insert Smiley"
 msgstr "Insertar emoticono"
 
-#: ../libempathy-gtk/empathy-chat.c:1103
+#: ../libempathy-gtk/empathy-chat.c:1088
 msgid "_Check Word Spelling..."
 msgstr "_Comprobar ortografía…"
 
-#: ../libempathy-gtk/empathy-chat.c:1558
+#: ../libempathy-gtk/empathy-chat.c:1545
 msgid "Connected"
 msgstr "Conectado"
 
@@ -782,7 +843,7 @@ msgstr "_Abrir enlace"
 msgid "Conversations (%d)"
 msgstr "Conversaciones (%d)"
 
-#: ../libempathy-gtk/empathy-chat-window.c:1299
+#: ../libempathy-gtk/empathy-chat-window.c:1294
 msgid "Typing a message."
 msgstr "Tecleando un mensaje."
 
@@ -1051,6 +1112,22 @@ msgstr "<b>Tema:</b>"
 #: ../libempathy-gtk/empathy-group-chat.glade.h:2
 msgid "Group Chat"
 msgstr "Grupo de chat"
+
+#: ../libempathy-gtk/empathy-irc-network-dialog.c:287
+msgid "new server"
+msgstr "servidor nuevo"
+
+#: ../libempathy-gtk/empathy-irc-network-dialog.c:512
+msgid "Server"
+msgstr "Servidor"
+
+#: ../libempathy-gtk/empathy-irc-network-dialog.c:527
+msgid "Port"
+msgstr "Puerto"
+
+#: ../libempathy-gtk/empathy-irc-network-dialog.c:540
+msgid "SSL"
+msgstr "SSL"
 
 #: ../libempathy-gtk/empathy-log-window.c:499
 msgid "Account"
@@ -1410,7 +1487,7 @@ msgstr "Corrector ortográfico"
 msgid "Suggestions for the word:"
 msgstr "Sugerencias para la palabra:"
 
-#: ../libempathy-gtk/empathy-status-icon.c:369
+#: ../libempathy-gtk/empathy-status-icon.c:358
 #, c-format
 msgid ""
 "New message from %s:\n"
@@ -1419,7 +1496,7 @@ msgstr ""
 "Nuevo mensaje de %s:\n"
 "%s"
 
-#: ../libempathy-gtk/empathy-status-icon.c:434
+#: ../libempathy-gtk/empathy-status-icon.c:423
 #, c-format
 msgid ""
 "Incoming call from %s:\n"
@@ -1428,12 +1505,12 @@ msgstr ""
 "Llamada entrante de %s:\n"
 "%s"
 
-#: ../libempathy-gtk/empathy-status-icon.c:738
+#: ../libempathy-gtk/empathy-status-icon.c:727
 #, c-format
 msgid "Subscription requested by %s"
 msgstr "Petición de suscripción de %s"
 
-#: ../libempathy-gtk/empathy-status-icon.c:741
+#: ../libempathy-gtk/empathy-status-icon.c:730
 #, c-format
 msgid ""
 "\n"
@@ -1470,78 +1547,6 @@ msgstr "Limpiar"
 #: ../libempathy-gtk/empathy-theme-manager.c:81
 msgid "Blue"
 msgstr "Azul"
-
-#: ../libempathy-gtk/empathy-account-widget-irc.c:246
-msgid "New Network"
-msgstr "Red nueva"
-
-#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:1
-msgid "<b>Network</b>"
-msgstr "<b>Red</b>"
-
-#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:2
-msgid "<b>Servers</b>"
-msgstr "<b>Servidores</b>"
-
-#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:3
-msgid "Charset:"
-msgstr "Conjunto de caracteres:"
-
-#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:4
-msgid "Create a new IRC network"
-msgstr "Crear una red IRC nueva"
-
-#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:5
-msgid "Edit the selected IRC network"
-msgstr "Editar la red IRC seleccionada"
-
-#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:6
-msgid "Network"
-msgstr "Red"
-
-#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:7
-msgid "Network:"
-msgstr "Red:"
-
-#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:8
-msgid "Nickname:"
-msgstr "Apodo:"
-
-#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:9
-msgid "Password:"
-msgstr "Contraseña:"
-
-#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:10
-msgid "Quit message:"
-msgstr "Mensaje de salida:"
-
-#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:11
-msgid "Real name:"
-msgstr "Nombre real:"
-
-#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:12
-msgid "Remove the selected IRC network"
-msgstr "Quitar la red IRC seleccionada"
-
-#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:13
-msgid "irc account settings"
-msgstr "Ajustes de la cuenta IRC"
-
-#: ../libempathy-gtk/empathy-irc-network-dialog.c:287
-msgid "new server"
-msgstr "servidor nuevo"
-
-#: ../libempathy-gtk/empathy-irc-network-dialog.c:512
-msgid "Server"
-msgstr "Servidor"
-
-#: ../libempathy-gtk/empathy-irc-network-dialog.c:527
-msgid "Port"
-msgstr "Puerto"
-
-#: ../libempathy-gtk/empathy-irc-network-dialog.c:540
-msgid "SSL"
-msgstr "SSL"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:158
 msgid "Current Locale"
@@ -1745,7 +1750,7 @@ msgstr "Presencia"
 msgid "Set your own presence"
 msgstr "Establezca su propia presencia"
 
-#: ../src/empathy.c:205
+#: ../src/empathy.c:291
 msgid "- Empathy Instant Messenger"
 msgstr "- Mensajería instantánea Empathy"
 
