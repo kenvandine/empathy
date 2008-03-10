@@ -2,7 +2,6 @@ Things you can do if you want to help:
 
  - UI for inviting a contact in a chatroom.
  - UI for accept/refuse invitation to join a chatroom and VoIP calls.
- - UI to send a message directly to a contact.
  - GtkWidget-ify libempathy-gtk. Actually most window/dialog do not inherit from
    GtkWindow/GtkDialog. Need to create a glade catalog, it seems to not be
    that easy.
@@ -16,7 +15,6 @@ Things you can do if you want to help:
  - Drop libtelepathy and use telepathy-glib instead when it gets client-side
    functions.
  - Drop Nokia's MissionControl and use the standardized MC spec instead.
- - Replace GnomeVFS by Gio.
  - Improve VoIP support once stream-engine gets cleaned and moved into tp-glib.
  - Split MUC out of Empathy's main program and create a xchat-gnome-like
    program for MUCs.
