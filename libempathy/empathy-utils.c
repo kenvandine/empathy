@@ -465,22 +465,6 @@ empathy_call_with_contact (EmpathyContact *contact)
 #endif
 }
 
-#ifdef HAVE_VOIP
-static void
-got_handle_cb (EmpathyContact        *contact, 
-	       GParamSpec            *property,
-	       EmpathyContactFactory *factory)
-{
-	g_signal_handlers_disconnect_by_func (contact,
-					      got_handle_cb,
-					      factory);
-
-	empathy_call_with_contact (contact);
-	g_object_unref (factory);
-	g_object_unref (contact);
-}
-#endif
-
 void
 empathy_call_with_contact_id (McAccount *account, const gchar *contact_id)
 {
@@ -490,16 +474,12 @@ empathy_call_with_contact_id (McAccount *account, const gchar *contact_id)
 
 	factory = empathy_contact_factory_new ();
 	contact = empathy_contact_factory_get_from_id (factory, account, contact_id);
+	empathy_contact_run_until_ready (contact, EMPATHY_CONTACT_READY_HANDLE, NULL);
 
-	if (empathy_contact_get_handle (contact) != 0) {
-		empathy_call_with_contact (contact);
-		g_object_unref (contact);
-		g_object_unref (factory);
-	} else {
-		g_signal_connect (contact, "notify::handle",
-				  G_CALLBACK (got_handle_cb),
-				  factory);
-	}
+	empathy_call_with_contact (contact);
+
+	g_object_unref (contact);
+	g_object_unref (factory);
 #endif
 }
 
