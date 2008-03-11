@@ -64,7 +64,7 @@ typedef enum {
 	EMPATHY_CONTACT_READY_NONE = 0,
 	EMPATHY_CONTACT_READY_ID = 1 << 0,
 	EMPATHY_CONTACT_READY_HANDLE = 1 << 1,
-	EMPATHY_CONTACT_READY_ALIAS = 1 << 2,
+	EMPATHY_CONTACT_READY_NAME = 1 << 2,
 	EMPATHY_CONTACT_READY_ALL = (1 << 3) - 1,
 } EmpathyContactReady;
 
@@ -107,6 +107,9 @@ gboolean            empathy_contact_can_voip           (EmpathyContact      *con
 gboolean            empathy_contact_equal              (gconstpointer        v1,
 							gconstpointer        v2);
 guint               empathy_contact_hash               (gconstpointer        key);
+void                empathy_contact_run_until_ready    (EmpathyContact      *contact,
+							EmpathyContactReady  ready,
+							GMainLoop          **loop);
 
 G_END_DECLS
 

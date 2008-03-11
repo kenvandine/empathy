@@ -313,6 +313,25 @@ contact_set_property (GObject      *object,
 	};
 }
 
+static void
+contact_set_ready_flag (EmpathyContact      *contact,
+			EmpathyContactReady  flag,
+			gboolean             set)
+{
+	EmpathyContactPriv *priv = GET_PRIV (contact);
+	EmpathyContactReady ready_old = priv->ready;
+
+	if (set) {
+		priv->ready |= flag;
+	} else {
+		priv->ready &= ~flag;
+	}
+
+	if (priv->ready != ready_old) {
+		g_object_notify (G_OBJECT (contact), "ready");
+	}
+}
+
 EmpathyContact *
 empathy_contact_new (McAccount *account)
 {
@@ -362,6 +381,8 @@ empathy_contact_set_id (EmpathyContact *contact,
 
 	g_free (priv->id);
 	priv->id = g_strdup (id);
+	contact_set_ready_flag (contact, EMPATHY_CONTACT_READY_ID,
+				!G_STR_EMPTY (id));
 
 	g_object_notify (G_OBJECT (contact), "id");
 	if (G_STR_EMPTY (priv->name)) {
@@ -401,6 +422,8 @@ empathy_contact_set_name (EmpathyContact *contact,
 
 	g_free (priv->name);
 	priv->name = g_strdup (name);
+	contact_set_ready_flag (contact, EMPATHY_CONTACT_READY_NAME,
+				!G_STR_EMPTY (name));
 
 	g_object_notify (G_OBJECT (contact), "name");
 }
@@ -553,7 +576,7 @@ empathy_contact_get_handle (EmpathyContact *contact)
 
 void
 empathy_contact_set_handle (EmpathyContact *contact,
-			   guint          handle)
+			    guint           handle)
 {
 	EmpathyContactPriv *priv;
 
@@ -566,6 +589,8 @@ empathy_contact_set_handle (EmpathyContact *contact,
 	}
 
 	priv->handle = handle;
+	contact_set_ready_flag (contact, EMPATHY_CONTACT_READY_HANDLE,
+				handle != 0);
 
 	g_object_notify (G_OBJECT (contact), "handle");
 }
@@ -720,5 +745,56 @@ empathy_contact_hash (gconstpointer key)
 	}
 
 	return priv->hash;
+}
+
+typedef struct {
+	EmpathyContactReady  ready;
+	GMainLoop           *loop;
+} RunUntilReadyData;
+
+static void
+contact_ready_notify_cb (EmpathyContact    *contact,
+			 GParamSpec        *param,
+			 RunUntilReadyData *data)
+{
+	EmpathyContactPriv *priv = GET_PRIV (contact);
+
+	if ((priv->ready & data->ready) == data->ready) {
+		g_main_loop_quit (data->loop);
+	}
+}
+
+void
+empathy_contact_run_until_ready (EmpathyContact      *contact,
+				 EmpathyContactReady  ready,
+				 GMainLoop          **loop)
+{
+	EmpathyContactPriv *priv = GET_PRIV (contact);
+	RunUntilReadyData   data;
+	gulong              signal_id;
+
+	g_return_if_fail (EMPATHY_IS_CONTACT (contact));
+
+	if ((priv->ready & ready) == ready) {
+		return;
+	}
+
+	data.loop = g_main_loop_new (NULL, FALSE);
+
+	signal_id = g_signal_connect (contact, "notify::ready",
+				      G_CALLBACK (contact_ready_notify_cb),
+				      &data);
+	if (loop != NULL) {
+		*loop = data.loop;
+	}
+
+	g_main_loop_run (data.loop);
+
+	if (loop != NULL) {
+		*loop = NULL;
+	}
+
+	g_signal_handler_disconnect (contact, signal_id);
+	g_main_loop_unref (data.loop);
 }
 
