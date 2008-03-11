@@ -260,8 +260,8 @@ tp_contact_factory_aliases_changed_cb (TpConnection    *connection,
 		EmpathyContact *contact;
 
 		renamed_struct = g_ptr_array_index (renamed_handlers, i);
-		handle = g_value_get_uint(g_value_array_get_nth (renamed_struct, 0));
-		alias = g_value_get_string(g_value_array_get_nth (renamed_struct, 1));
+		handle = g_value_get_uint (g_value_array_get_nth (renamed_struct, 0));
+		alias = g_value_get_string (g_value_array_get_nth (renamed_struct, 1));
 		contact = tp_contact_factory_find_by_handle (tp_factory, handle);
 
 		if (!contact) {
