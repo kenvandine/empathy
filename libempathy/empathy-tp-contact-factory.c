@@ -43,7 +43,7 @@ struct _EmpathyTpContactFactoryPriv {
 	gboolean        ready;
 
 	GList          *contacts;
-	guint           self_handle;
+	EmpathyContact *user;
 };
 
 static void empathy_tp_contact_factory_class_init (EmpathyTpContactFactoryClass *klass);
@@ -155,6 +155,27 @@ tp_contact_factory_get_presence_cb (TpConnection *connection,
 	if (error) {
 		empathy_debug (DEBUG_DOMAIN, "Error getting presence: %s",
 			      error->message);
+		if (error->domain == TP_DBUS_ERRORS &&
+		    error->code == TP_DBUS_ERROR_NO_INTERFACE) {
+			guint *handles = user_data;
+
+			/* We have no presence iface, set default presence
+			 * to available */
+			while (*handles != 0) {
+				EmpathyContact *contact;
+
+				contact = tp_contact_factory_find_by_handle (
+					(EmpathyTpContactFactory*) tp_factory,
+					*handles);
+				if (contact) {
+					empathy_contact_set_presence (contact,
+								      MC_PRESENCE_AVAILABLE);
+				}
+
+				handles++;
+			}
+		}
+
 		return;
 	}
 
@@ -564,11 +585,17 @@ tp_contact_factory_request_everything (EmpathyTpContactFactory *tp_factory,
 	EmpathyTpContactFactoryPriv *priv = GET_PRIV (tp_factory);
 	guint                       *dup_handles;
 
+	if (!priv->ready) {
+		return;
+	}
+
+	dup_handles = g_malloc0 ((handles->len + 1) * sizeof (guint));
+	g_memmove (dup_handles, handles->data, handles->len * sizeof (guint));
 	tp_cli_connection_interface_presence_call_get_presence (priv->connection,
 								-1,
 								handles,
 								tp_contact_factory_get_presence_cb,
-								NULL, NULL,
+								dup_handles, g_free,
 								G_OBJECT (tp_factory));
 
 	dup_handles = g_memdup (handles->data, handles->len * sizeof (guint));
@@ -610,10 +637,9 @@ tp_contact_factory_request_handles_cb (TpConnection *connection,
 				       gpointer      user_data,
 				       GObject      *tp_factory)
 {
-	EmpathyTpContactFactoryPriv *priv = GET_PRIV (tp_factory);
-	GList                       *contacts = user_data;
-	GList                       *l;
-	guint                        i = 0;
+	GList *contacts = user_data;
+	GList *l;
+	guint  i = 0;
 
 	if (error) {
 		empathy_debug (DEBUG_DOMAIN, "Failed to request handles: %s",
@@ -626,15 +652,36 @@ tp_contact_factory_request_handles_cb (TpConnection *connection,
 
 		handle = g_array_index (handles, guint, i);
 		empathy_contact_set_handle (l->data, handle);
-		if (handle == priv->self_handle) {
-			empathy_contact_set_is_user (l->data, TRUE);
-		}
 
 		i++;
 	}
 
 	tp_contact_factory_request_everything (EMPATHY_TP_CONTACT_FACTORY (tp_factory),
 					       handles);
+}
+
+static void
+tp_contact_factory_inspect_handles_cb (TpConnection  *connection,
+				       const gchar  **ids,
+				       const GError  *error,
+				       gpointer       user_data,
+				       GObject       *tp_factory)
+{
+	const gchar **id;
+	GList        *contacts = user_data;
+	GList        *l;
+
+	if (error) {
+		empathy_debug (DEBUG_DOMAIN, "Failed to inspect handles: %s",
+			       error->message);
+		return;
+	}
+
+	id = ids;
+	for (l = contacts; l; l = l->next) {
+		empathy_contact_set_id (l->data, *id);
+		id++;
+	}
 }
 
 static void
@@ -657,7 +704,6 @@ tp_contact_factory_connection_invalidated_cb (EmpathyTpContactFactory *tp_factor
 	g_object_unref (priv->connection);
 	priv->connection = NULL;
 	priv->ready = FALSE;
-	priv->self_handle = 0;
 
 	g_list_foreach (priv->contacts,
 			tp_contact_factory_disconnect_contact_foreach,
@@ -673,9 +719,11 @@ tp_contact_factory_got_self_handle_cb (TpConnection *proxy,
 				       GObject      *tp_factory)
 {
 	EmpathyTpContactFactoryPriv *priv = GET_PRIV (tp_factory);
-	const gchar                **contact_ids;
-	guint                        i;
 	GList                       *l;
+	GArray                      *handle_needed;
+	GArray                      *id_needed;
+	GList                       *handle_needed_contacts = NULL;
+	GList                       *id_needed_contacts = NULL;
 
 	if (error) {
 		empathy_debug (DEBUG_DOMAIN, "Failed to get self handles: %s",
@@ -683,7 +731,7 @@ tp_contact_factory_got_self_handle_cb (TpConnection *proxy,
 		return;
 	}
 
-	priv->self_handle = handle;
+	empathy_contact_set_handle (priv->user, handle);
 	priv->ready = TRUE;
 
 	/* Connect signals */
@@ -713,30 +761,52 @@ tp_contact_factory_got_self_handle_cb (TpConnection *proxy,
 										  G_OBJECT (tp_factory),
 										  NULL);
 
-	/* Request new handles for all contacts */
-	if (priv->contacts) {
-		GList *contacts;
+	/* Request needed info for all existing contacts */
+	handle_needed = g_array_new (TRUE, FALSE, sizeof (gchar*));
+	id_needed = g_array_new (FALSE, FALSE, sizeof (guint));
+	for (l = priv->contacts; l; l = l->next) {
+		EmpathyContact *contact;
+		guint           handle;
+		const gchar    *id;
 
-		contacts = g_list_copy (priv->contacts);
-		g_list_foreach (contacts, (GFunc) g_object_ref, NULL);
-
-		i = g_list_length (contacts);
-		contact_ids = g_new0 (const gchar*, i + 1);
-		i = 0;
-		for (l = contacts; l; l = l->next) {
-			contact_ids[i] = empathy_contact_get_id (l->data);
-			i++;
+		contact = l->data;
+		handle = empathy_contact_get_handle (contact);
+		id = empathy_contact_get_id (contact);
+		if (handle == 0) {
+			g_assert (!G_STR_EMPTY (id));
+			g_array_append_val (handle_needed, id);
+			handle_needed_contacts = g_list_prepend (handle_needed_contacts,
+								 g_object_ref (contact));
 		}
-
-		tp_cli_connection_call_request_handles (priv->connection,
-							-1,
-							TP_HANDLE_TYPE_CONTACT,
-							contact_ids,
-							tp_contact_factory_request_handles_cb,
-							contacts, tp_contact_factory_list_free,
-							G_OBJECT (tp_factory));
-		g_free (contact_ids);
+		if (G_STR_EMPTY (id)) {
+			g_array_append_val (id_needed, handle);
+			id_needed_contacts = g_list_prepend (id_needed_contacts,
+							     g_object_ref (contact));
+		}
 	}
+	handle_needed_contacts = g_list_reverse (handle_needed_contacts);
+	id_needed_contacts = g_list_reverse (id_needed_contacts);
+
+	tp_cli_connection_call_request_handles (priv->connection,
+						-1,
+						TP_HANDLE_TYPE_CONTACT,
+						(const gchar**) handle_needed->data,
+						tp_contact_factory_request_handles_cb,
+						handle_needed_contacts, tp_contact_factory_list_free,
+						G_OBJECT (tp_factory));
+
+	tp_contact_factory_request_everything ((EmpathyTpContactFactory*) tp_factory,
+					       id_needed);
+	tp_cli_connection_call_inspect_handles (priv->connection,
+						-1,
+						TP_HANDLE_TYPE_CONTACT,
+						id_needed,
+						tp_contact_factory_inspect_handles_cb,
+						id_needed_contacts, tp_contact_factory_list_free,
+						G_OBJECT (tp_factory));
+
+	g_array_free (handle_needed, TRUE);
+	g_array_free (id_needed, TRUE);
 }
 
 static void
@@ -809,44 +879,9 @@ tp_contact_factory_add_contact (EmpathyTpContactFactory *tp_factory,
 			   tp_factory);
 	priv->contacts = g_list_prepend (priv->contacts, contact);
 
-	if (!tp_proxy_has_interface_by_id (priv->connection,
-					   TP_IFACE_QUARK_CONNECTION_INTERFACE_PRESENCE)) {
-		/* We have no presence iface, set default presence
-		 * to available */
-		empathy_contact_set_presence (contact, MC_PRESENCE_AVAILABLE);
-	}
-
 	empathy_debug (DEBUG_DOMAIN, "Contact added: %s (%d)",
 		       empathy_contact_get_id (contact),
 		       empathy_contact_get_handle (contact));
-}
-
-static void
-tp_contact_factory_inspect_handles_cb (TpConnection  *connection,
-				       const gchar  **ids,
-				       const GError  *error,
-				       gpointer       user_data,
-				       GObject       *tp_factory)
-{
-	guint *handles = user_data;
-	guint  i;
-	const gchar **id;
-
-	if (error) {
-		empathy_debug (DEBUG_DOMAIN, "Failed to inspect handles: %s",
-			       error->message);
-	}
-
-	i = 0;
-	for (id = ids; *id; id++) {
-		EmpathyContact *contact;
-
-		contact = tp_contact_factory_find_by_handle (EMPATHY_TP_CONTACT_FACTORY (tp_factory),
-							     handles[i]);
-		empathy_contact_set_id (contact, *id);
-
-		i++;
-	}
 }
 
 static void
@@ -868,8 +903,7 @@ empathy_tp_contact_factory_get_user (EmpathyTpContactFactory *tp_factory)
 
 	g_return_val_if_fail (EMPATHY_IS_TP_CONTACT_FACTORY (tp_factory), NULL);
 
-	return empathy_tp_contact_factory_get_from_handle (tp_factory,
-							   priv->self_handle);
+	return g_object_ref (priv->user);
 }
 
 EmpathyContact *
@@ -895,8 +929,7 @@ empathy_tp_contact_factory_get_from_id (EmpathyTpContactFactory *tp_factory,
 				NULL);
 	tp_contact_factory_add_contact (tp_factory, contact);
 
-	/* If the account is connected, request contact's handle */
-	if (priv->connection) {
+	if (priv->ready) {
 		const gchar *contact_ids[] = {id, NULL};
 		GList       *contacts;
 		
@@ -942,7 +975,7 @@ empathy_tp_contact_factory_get_from_handles (EmpathyTpContactFactory *tp_factory
 	EmpathyTpContactFactoryPriv *priv = GET_PRIV (tp_factory);
 	GList                       *contacts = NULL;
 	GArray                      *new_handles;
-	guint                       *dup_handles;
+	GList                       *new_contacts = NULL;
 	guint                        i;
 
 	g_return_val_if_fail (EMPATHY_IS_TP_CONTACT_FACTORY (tp_factory), NULL);
@@ -976,41 +1009,41 @@ empathy_tp_contact_factory_get_from_handles (EmpathyTpContactFactory *tp_factory
 	for (i = 0; i < new_handles->len; i++) {
 		EmpathyContact *contact;
 		guint           handle;
-		gboolean        is_user;
 
 		handle = g_array_index (new_handles, guint, i);
 
-		is_user = (handle == priv->self_handle);
 		contact = g_object_new (EMPATHY_TYPE_CONTACT,
 					"account", priv->account,
 					"handle", handle,
-					"is-user", is_user,
 					NULL);
 		tp_contact_factory_add_contact (tp_factory, contact);
 		contacts = g_list_prepend (contacts, contact);
+		new_contacts = g_list_prepend (new_contacts, g_object_ref (contact));
 	}
+	new_contacts = g_list_reverse (new_contacts);
 
-	tp_contact_factory_request_everything (tp_factory, new_handles);
+	if (priv->ready) {
+		/* Get the IDs of all new handles */
+		tp_cli_connection_call_inspect_handles (priv->connection,
+							-1,
+							TP_HANDLE_TYPE_CONTACT,
+							new_handles,
+							tp_contact_factory_inspect_handles_cb,
+							new_contacts, tp_contact_factory_list_free,
+							G_OBJECT (tp_factory));
 
-	/* Get the IDs of all new handles */
-	dup_handles = g_memdup (new_handles->data, new_handles->len * sizeof (guint));
-	tp_cli_connection_call_inspect_handles (priv->connection,
-						-1,
-						TP_HANDLE_TYPE_CONTACT,
-						new_handles,
-						tp_contact_factory_inspect_handles_cb,
-						dup_handles, g_free,
-						G_OBJECT (tp_factory));
+		/* Hold all new handles. */
+		/* FIXME: Should be unholded when removed from the factory */
+		tp_cli_connection_call_hold_handles (priv->connection,
+						     -1,
+						     TP_HANDLE_TYPE_CONTACT,
+						     new_handles,
+						     tp_contact_factory_hold_handles_cb,
+						     NULL, NULL,
+						     G_OBJECT (tp_factory));
 
-	/* Hold all new handles. */
-	/* FIXME: Should be unholded when removed from the factory */
-	tp_cli_connection_call_hold_handles (priv->connection,
-					     -1,
-					     TP_HANDLE_TYPE_CONTACT,
-					     new_handles,
-					     tp_contact_factory_hold_handles_cb,
-					     NULL, NULL,
-					     G_OBJECT (tp_factory));
+		tp_contact_factory_request_everything (tp_factory, new_handles);
+	}
 
 	return contacts;
 }
@@ -1028,6 +1061,10 @@ empathy_tp_contact_factory_set_alias (EmpathyTpContactFactory *tp_factory,
 	g_return_if_fail (EMPATHY_IS_CONTACT (contact));
 	g_return_if_fail (empathy_account_equal (empathy_contact_get_account (contact),
 						 priv->account));
+
+	if (!priv->ready) {
+		return;
+	}
 
 	handle = empathy_contact_get_handle (contact);
 
@@ -1063,6 +1100,10 @@ empathy_tp_contact_factory_set_avatar (EmpathyTpContactFactory *tp_factory,
 	EmpathyTpContactFactoryPriv *priv = GET_PRIV (tp_factory);
 
 	g_return_if_fail (EMPATHY_IS_TP_CONTACT_FACTORY (tp_factory));
+
+	if (!priv->ready) {
+		return;
+	}
 
 	if (data && size > 0 && size < G_MAXUINT) {
 		GArray avatar;
@@ -1172,11 +1213,13 @@ tp_contact_factory_constructor (GType                  type,
 	priv = GET_PRIV (tp_factory);
 
 	priv->ready = FALSE;
+	priv->user = empathy_contact_new (priv->account);
+	empathy_contact_set_is_user (priv->user, TRUE);
+	tp_contact_factory_add_contact ((EmpathyTpContactFactory*) tp_factory, priv->user);
 	tp_contact_factory_status_updated (EMPATHY_TP_CONTACT_FACTORY (tp_factory));
 
 	return tp_factory;
 }
-
 
 static void
 empathy_tp_contact_factory_class_init (EmpathyTpContactFactoryClass *klass)
