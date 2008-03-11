@@ -57,6 +57,7 @@ struct _EmpathyTpCallPriv
   EmpathyContact *contact;
   gboolean is_incoming;
   guint status;
+  gboolean stream_engine_started;
 
   EmpathyTpCallStream *audio;
   EmpathyTpCallStream *video;
@@ -83,7 +84,6 @@ enum
 };
 
 static guint signals[LAST_SIGNAL];
-static gchar *stream_engine_owner = NULL;
 
 G_DEFINE_TYPE (EmpathyTpCall, empathy_tp_call, G_TYPE_OBJECT)
 
@@ -524,20 +524,21 @@ tp_call_watch_name_owner_cb (TpDBusDaemon *daemon,
                              const gchar *new_owner,
                              gpointer call)
 {
+  EmpathyTpCallPriv *priv = GET_PRIV (call);
+
   /* G_STR_EMPTY(new_owner) means either stream-engine has not started yet or
    * has crashed. We want to close the channel if stream-engine has crashed.
    * */
-  empathy_debug (DEBUG_DOMAIN, "Watch SE: name='%s' old_owner='%s' new_owner='%s'",
-                 name, stream_engine_owner ? stream_engine_owner : "none",
+  empathy_debug (DEBUG_DOMAIN,
+                 "Watch SE: name='%s' SE started='%s' new_owner='%s'",
+                 name, priv->stream_engine_started ? "yes" : "no",
                  new_owner ? new_owner : "none");
-  if (! G_STR_EMPTY(stream_engine_owner) &&
-      G_STR_EMPTY (new_owner))
+  if (priv->stream_engine_started && G_STR_EMPTY (new_owner))
     {
       empathy_debug (DEBUG_DOMAIN, "Stream engine falled off the bus");
       empathy_tp_call_close_channel (call);
     }
-  g_free(stream_engine_owner);
-  stream_engine_owner = g_strdup(new_owner);
+  priv->stream_engine_started = ! G_STR_EMPTY (new_owner);
 }
 
 static void
@@ -663,8 +664,6 @@ tp_call_finalize (GObject *object)
           object);
       g_object_unref (priv->dbus_daemon);
     }
-
-  g_free(stream_engine_owner);
 
   (G_OBJECT_CLASS (empathy_tp_call_parent_class)->finalize) (object);
 }
@@ -812,6 +811,7 @@ empathy_tp_call_init (EmpathyTpCall *call)
 
   priv->status = EMPATHY_TP_CALL_STATUS_READYING;
   priv->contact = NULL;
+  priv->stream_engine_started = FALSE;
   priv->audio = g_slice_new0 (EmpathyTpCallStream);
   priv->video = g_slice_new0 (EmpathyTpCallStream);
   priv->audio->exists = FALSE;
