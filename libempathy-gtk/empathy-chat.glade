@@ -273,20 +273,6 @@
                         <accelerator key="V" modifiers="GDK_CONTROL_MASK" signal="activate"/>
                       </widget>
                     </child>
-                    <child>
-                      <widget class="GtkSeparatorMenuItem" id="edit_separator1">
-                        <property name="visible">True</property>
-                      </widget>
-                    </child>
-                    <child>
-                      <widget class="GtkImageMenuItem" id="menu_edit_selectall">
-                        <property name="visible">True</property>
-                        <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                        <property name="label" translatable="yes">gtk-select-all</property>
-                        <property name="use_underline">True</property>
-                        <property name="use_stock">True</property>
-                      </widget>
-                    </child>
                   </widget>
                 </child>
               </widget>
