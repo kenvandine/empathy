@@ -60,6 +60,14 @@ typedef enum {
 	EMPATHY_CAPABILITIES_UNKNOWN = 1 << 7
 } EmpathyCapabilities;
 
+typedef enum {
+	EMPATHY_CONTACT_READY_NONE = 0,
+	EMPATHY_CONTACT_READY_ID = 1 << 0,
+	EMPATHY_CONTACT_READY_HANDLE = 1 << 1,
+	EMPATHY_CONTACT_READY_ALIAS = 1 << 2,
+	EMPATHY_CONTACT_READY_ALL = (1 << 3) - 1,
+} EmpathyContactReady;
+
 GType               empathy_contact_get_type           (void) G_GNUC_CONST;
 EmpathyContact *    empathy_contact_new                (McAccount           *account);
 EmpathyContact *    empathy_contact_new_full           (McAccount           *account,
@@ -89,13 +97,13 @@ void                empathy_contact_set_handle         (EmpathyContact      *con
 EmpathyCapabilities empathy_contact_get_capabilities   (EmpathyContact      *contact);
 void                empathy_contact_set_capabilities   (EmpathyContact      *contact,
 							EmpathyCapabilities  capabilities);
+EmpathyContactReady empathy_contact_get_ready          (EmpathyContact      *contact);
 gboolean            empathy_contact_is_user            (EmpathyContact      *contact);
 void                empathy_contact_set_is_user        (EmpathyContact      *contact,
 							gboolean             is_user);
 gboolean            empathy_contact_is_online          (EmpathyContact      *contact);
 const gchar *       empathy_contact_get_status         (EmpathyContact      *contact);
 gboolean            empathy_contact_can_voip           (EmpathyContact      *contact);
-gboolean            empathy_contact_is_ready           (EmpathyContact      *contact);
 gboolean            empathy_contact_equal              (gconstpointer        v1,
 							gconstpointer        v2);
 guint               empathy_contact_hash               (gconstpointer        key);

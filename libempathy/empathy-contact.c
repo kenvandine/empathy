@@ -53,7 +53,7 @@ struct _EmpathyContactPriv {
 	EmpathyCapabilities capabilities;
 	gboolean            is_user;
 	guint               hash;
-	gboolean            ready;
+	EmpathyContactReady ready;
 };
 
 static void empathy_contact_class_init (EmpathyContactClass *class);
@@ -173,11 +173,12 @@ empathy_contact_class_init (EmpathyContactClass *class)
 
 	g_object_class_install_property (object_class,
 					 PROP_READY,
-					 g_param_spec_boolean ("ready",
-							       "Contact ready",
-							       "Is contact ready",
-							       FALSE,
-							       G_PARAM_READABLE));
+					 g_param_spec_flags ("ready",
+							     "Contact ready flags",
+							     "Flags for ready properties",
+							     EMPATHY_TYPE_CONTACT_READY,
+							     EMPATHY_CONTACT_READY_NONE,
+							     G_PARAM_READABLE));
 
 	g_type_class_add_private (object_class, sizeof (EmpathyContactPriv));
 }
@@ -251,7 +252,7 @@ contact_get_property (GObject    *object,
 		g_value_set_boolean (value, priv->is_user);
 		break;
 	case PROP_READY:
-		g_value_set_boolean (value, priv->ready);
+		g_value_set_flags (value, priv->ready);
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
@@ -672,8 +673,8 @@ empathy_contact_can_voip (EmpathyContact *contact)
 				     EMPATHY_CAPABILITIES_VIDEO);
 }
 
-gboolean
-empathy_contact_is_ready (EmpathyContact *contact)
+EmpathyContactReady
+empathy_contact_get_ready (EmpathyContact *contact)
 {
 	EmpathyContactPriv *priv;
 
