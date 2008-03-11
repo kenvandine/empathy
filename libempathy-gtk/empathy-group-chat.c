@@ -161,8 +161,12 @@ group_chat_finalize (GObject *object)
 	
 	g_free (priv->name);
 	g_free (priv->topic);
-	g_object_unref (priv->store);
-	g_object_unref (priv->tp_chat);	
+	if (priv->store) {
+		g_object_unref (priv->store);
+	}
+	if (priv->tp_chat) {
+		g_object_unref (priv->tp_chat);	
+	}
 	g_completion_free (priv->completion);
 
 	G_OBJECT_CLASS (empathy_group_chat_parent_class)->finalize (object);
