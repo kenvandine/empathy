@@ -391,7 +391,7 @@ group_chat_topic_response_cb (GtkWidget       *dialog,
 			g_value_init (&value, G_TYPE_STRING);
 			g_value_set_string (&value, topic);
 			empathy_tp_chat_set_property (EMPATHY_TP_CHAT (priv->tp_chat),
-						      &value);
+						      "subject", &value);
 			g_value_unset (&value);
 		}
 	}

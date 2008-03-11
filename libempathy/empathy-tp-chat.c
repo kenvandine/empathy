@@ -25,6 +25,7 @@
 
 #include <telepathy-glib/channel.h>
 #include <telepathy-glib/dbus.h>
+#include <telepathy-glib/util.h>
 
 #include "empathy-tp-chat.h"
 #include "empathy-contact-factory.h"
@@ -395,6 +396,10 @@ tp_chat_properties_changed_cb (TpProxy         *proxy,
 	EmpathyTpChatPriv *priv = GET_PRIV (chat);
 	guint              i, j;
 
+	if (!priv->had_properties_list || !properties) {
+		return;
+	}
+
 	for (i = 0; i < properties->len; i++) {
 		GValueArray    *prop_struct;
 		TpChatProperty *property;
@@ -492,9 +497,44 @@ tp_chat_list_properties_cb (TpProxy         *proxy,
 
 void
 empathy_tp_chat_set_property (EmpathyTpChat *chat,
+			      const gchar   *name,
 			      const GValue  *value)
 {
-	/* FIXME: not implemented */
+	EmpathyTpChatPriv *priv = GET_PRIV (chat);
+	TpChatProperty    *property;
+	guint              i;
+
+	for (i = 0; i < priv->properties->len; i++) {
+		property = g_ptr_array_index (priv->properties, i);
+		if (!tp_strdiff (property->name, name)) {
+			GPtrArray   *properties;
+			GValueArray *prop;
+			GValue       id = {0, };
+			GValue       dest_value = {0, };
+
+			g_value_init (&id, G_TYPE_UINT);
+			g_value_init (&dest_value, G_TYPE_VALUE);
+			g_value_set_uint (&id, property->id);
+			g_value_set_boxed (&dest_value, value);
+
+			prop = g_value_array_new (2);
+			g_value_array_append (prop, &id);
+			g_value_array_append (prop, &dest_value);
+
+			properties = g_ptr_array_sized_new (1);
+			g_ptr_array_add (properties, prop);
+
+			empathy_debug (DEBUG_DOMAIN, "Set property %s", name);
+			tp_cli_properties_interface_call_set_properties (priv->channel, -1,
+									 properties,
+									 (tp_cli_properties_interface_callback_for_set_properties)
+									 tp_chat_async_cb,
+									 "Seting property", NULL,
+									 G_OBJECT (chat));
+
+			break;
+		}
+	}
 }
 
 static gboolean
