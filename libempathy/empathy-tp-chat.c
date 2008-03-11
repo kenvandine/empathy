@@ -467,7 +467,7 @@ tp_chat_finalize (GObject *object)
 {
 	EmpathyTpChatPriv *priv = GET_PRIV (object);
 
-	if (priv->acknowledge) {
+	if (priv->acknowledge && priv->channel) {
 		empathy_debug (DEBUG_DOMAIN, "Closing channel...");
 		tp_cli_channel_call_close (priv->channel, -1,
 					   tp_chat_async_cb,
