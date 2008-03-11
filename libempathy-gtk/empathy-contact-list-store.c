@@ -976,6 +976,7 @@ contact_list_store_contact_update (EmpathyContactListStore *store,
 	gboolean                    do_remove = FALSE;
 	gboolean                    do_set_active = FALSE;
 	gboolean                    do_set_refresh = FALSE;
+	gboolean                    show_avatar = FALSE;
 	GdkPixbuf                  *pixbuf_avatar;
 
 	priv = GET_PRIV (store);
@@ -1070,12 +1071,15 @@ contact_list_store_contact_update (EmpathyContactListStore *store,
 		set_model = TRUE;
 	}
 
+	if (priv->show_avatars && !priv->is_compact) {
+		show_avatar = TRUE;
+	}
 	pixbuf_avatar = empathy_pixbuf_avatar_from_contact_scaled (contact, 32, 32);
 	for (l = iters; l && set_model; l = l->next) {
 		gtk_tree_store_set (GTK_TREE_STORE (store), l->data,
 				    EMPATHY_CONTACT_LIST_STORE_COL_ICON_STATUS, empathy_icon_name_for_contact (contact),
 				    EMPATHY_CONTACT_LIST_STORE_COL_PIXBUF_AVATAR, pixbuf_avatar,
-				    EMPATHY_CONTACT_LIST_STORE_COL_PIXBUF_AVATAR_VISIBLE, priv->show_avatars,
+				    EMPATHY_CONTACT_LIST_STORE_COL_PIXBUF_AVATAR_VISIBLE, show_avatar,
 				    EMPATHY_CONTACT_LIST_STORE_COL_NAME, empathy_contact_get_name (contact),
 				    EMPATHY_CONTACT_LIST_STORE_COL_STATUS, empathy_contact_get_status (contact),
 				    EMPATHY_CONTACT_LIST_STORE_COL_STATUS_VISIBLE, !priv->is_compact,
