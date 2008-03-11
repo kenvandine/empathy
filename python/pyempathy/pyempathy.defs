@@ -1680,17 +1680,6 @@
   (return-type "none")
 )
 
-(define-method set_topic
-  (of-object "EmpathyTpChatroom")
-  (c-name "empathy_tp_chatroom_set_topic")
-  (return-type "none")
-  (parameters
-    '("const-gchar*" "topic")
-  )
-)
-
-
-
 ;; From empathy-tp-contact-factory.h
 
 (define-function empathy_tp_contact_factory_get_type
