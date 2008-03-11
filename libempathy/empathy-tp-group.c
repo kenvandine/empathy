@@ -82,7 +82,7 @@ tp_group_get_contact (EmpathyTpGroup *group,
 								   handle);
 	}
 
-	if (contact && empathy_contact_get_handle (contact) == priv->self_handle) {
+	if (contact && handle == priv->self_handle) {
 		empathy_contact_set_is_user (contact, TRUE);
 	}
 
