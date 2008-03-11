@@ -450,12 +450,10 @@ tp_chat_properties_changed_cb (TpProxy         *proxy,
 			property = g_ptr_array_index (priv->properties, j);
 			if (property->id == id) {
 				if (property->value) {
-					g_value_unset (property->value);
+					g_value_copy (src_value, property->value);
 				} else {
-					property->value = g_slice_new0 (GValue);
+					property->value = tp_g_value_slice_dup (src_value);
 				}
-				g_value_init (property->value, G_VALUE_TYPE (src_value));
-				g_value_copy (src_value, property->value);
 
 				empathy_debug (DEBUG_DOMAIN, "property %s changed",
 					       property->name);
@@ -661,8 +659,7 @@ tp_chat_finalize (GObject *object)
 			property = g_ptr_array_index (priv->properties, i);
 			g_free (property->name);
 			if (property->value) {
-				g_value_unset (property->value);
-				g_slice_free (GValue, property->value);
+				tp_g_value_slice_free (property->value);
 			}
 			g_slice_free (TpChatProperty, property);
 		}
