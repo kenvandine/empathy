@@ -64,6 +64,7 @@ static void empathy_tp_chat_init       (EmpathyTpChat      *chat);
 enum {
 	PROP_0,
 	PROP_ACCOUNT,
+	PROP_TP_CHAN,
 	PROP_CHANNEL,
 	PROP_ACKNOWLEDGE,
 };
@@ -608,6 +609,9 @@ tp_chat_get_property (GObject    *object,
 	case PROP_ACCOUNT:
 		g_value_set_object (value, priv->account);
 		break;
+	case PROP_TP_CHAN:
+		g_value_set_object (value, priv->tp_chan);
+		break;
 	case PROP_CHANNEL:
 		g_value_set_object (value, priv->channel);
 		break;
@@ -631,6 +635,9 @@ tp_chat_set_property (GObject      *object,
 	switch (param_id) {
 	case PROP_ACCOUNT:
 		priv->account = g_object_ref (g_value_get_object (value));
+		break;
+	case PROP_TP_CHAN:
+		priv->tp_chan = g_object_ref (g_value_get_object (value));
 		break;
 	case PROP_CHANNEL:
 		priv->channel = g_object_ref (g_value_get_object (value));
@@ -664,6 +671,15 @@ empathy_tp_chat_class_init (EmpathyTpChatClass *klass)
 							      MC_TYPE_ACCOUNT,
 							      G_PARAM_READWRITE |
 							      G_PARAM_CONSTRUCT_ONLY));
+	g_object_class_install_property (object_class,
+					 PROP_TP_CHAN,
+					 g_param_spec_object ("tp-chan",
+							      "telepathy channel",
+							      "The text channel for the chat",
+							      TELEPATHY_CHAN_TYPE,
+							      G_PARAM_READWRITE |
+							      G_PARAM_CONSTRUCT_ONLY));
+
 	g_object_class_install_property (object_class,
 					 PROP_CHANNEL,
 					 g_param_spec_object ("channel",
@@ -745,12 +761,11 @@ EmpathyTpChat *
 empathy_tp_chat_new (McAccount *account,
 		     TpChan    *tp_chan)
 {
-	EmpathyTpChat     *chat;
-	EmpathyTpChatPriv *priv;
-	TpChannel         *channel;
-	TpConnection      *connection;
-	MissionControl    *mc;
-	TpConn            *tp_conn;
+	EmpathyTpChat  *chat;
+	TpChannel      *channel;
+	TpConnection   *connection;
+	MissionControl *mc;
+	TpConn         *tp_conn;
 
 	mc = empathy_mission_control_new ();
 	tp_conn = mission_control_get_connection (mc, account, NULL);
@@ -760,10 +775,8 @@ empathy_tp_chat_new (McAccount *account,
 	chat = g_object_new (EMPATHY_TYPE_TP_CHAT, 
 			     "account", account,
 			     "channel", channel,
+			     "tp-chan", tp_chan,
 			     NULL);
-
-	priv = GET_PRIV (chat);
-	priv->tp_chan = g_object_ref (tp_chan);
 
 	g_object_unref (channel);
 	g_object_unref (tp_conn);

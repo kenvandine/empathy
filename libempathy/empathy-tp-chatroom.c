@@ -202,6 +202,7 @@ empathy_tp_chatroom_new (McAccount *account,
 	chatroom = g_object_new (EMPATHY_TYPE_TP_CHATROOM,
 				 "account", account,
 				 "channel", channel,
+				 "tp-chan", tp_chan,
 				 NULL);
 
 	priv = GET_PRIV (chatroom);
