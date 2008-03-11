@@ -49,6 +49,7 @@ struct _EmpathyTpChatPriv {
 	TpChan                *tp_chan;
 	gboolean               had_pending_messages;
 	GSList                *message_queue;
+	gboolean               had_properties_list;
 	GPtrArray             *properties;
 };
 
@@ -387,6 +388,10 @@ tp_chat_properties_changed_cb (TpProxy         *proxy,
 	EmpathyTpChatPriv *priv = GET_PRIV (chat);
 	guint              i, j;
 
+	if (!priv->had_properties_list || !properties) {
+		return;
+	}
+
 	for (i = 0; i < properties->len; i++) {
 		GValueArray    *prop_struct;
 		TpChatProperty *property;
@@ -424,6 +429,7 @@ tp_chat_get_properties_cb (TpProxy         *proxy,
 			   gpointer         user_data,
 			   GObject         *chat)
 {
+	empathy_debug (DEBUG_DOMAIN, "Got value of properties");
 	tp_chat_properties_changed_cb (proxy, properties, user_data, chat);
 }
 
@@ -438,6 +444,8 @@ tp_chat_list_properties_cb (TpProxy         *proxy,
 	GArray            *ids;
 	guint              i;
 
+	priv->had_properties_list = TRUE;
+
 	ids = g_array_sized_new (FALSE, FALSE, sizeof (guint), properties->len);
 	priv->properties = g_ptr_array_sized_new (properties->len);
 	for (i = 0; i < properties->len; i++) {
@@ -450,6 +458,7 @@ tp_chat_list_properties_cb (TpProxy         *proxy,
 		id = g_value_get_uint (g_value_array_get_nth (prop_struct, 0));
 		name = g_value_get_string (g_value_array_get_nth (prop_struct, 1));
 
+		empathy_debug (DEBUG_DOMAIN, "Adding property %s", name);
 		property = g_slice_new0 (TpChatProperty);
 		property->id = id;
 		property->name = g_strdup (name);
@@ -543,16 +552,20 @@ tp_chat_finalize (GObject *object)
 		g_object_unref (priv->tp_chan);
 	}
 
-	for (i = 0; i < priv->properties->len; i++) {
-		TpChatProperty *property;
+	if (priv->properties) {
+		for (i = 0; i < priv->properties->len; i++) {
+			TpChatProperty *property;
 
-		property = g_ptr_array_index (priv->properties, i);
-		g_free (property->name);
-		g_value_unset (property->value);
-		g_slice_free (GValue, property->value);
-		g_slice_free (TpChatProperty, property);
+			property = g_ptr_array_index (priv->properties, i);
+			g_free (property->name);
+			if (property->value) {
+				g_value_unset (property->value);
+				g_slice_free (GValue, property->value);
+			}
+			g_slice_free (TpChatProperty, property);
+		}
+		g_ptr_array_free (priv->properties, TRUE);
 	}
-	g_ptr_array_free (priv->properties, TRUE);
 
 	g_object_unref (priv->factory);
 	g_object_unref (priv->user);
