@@ -23,7 +23,7 @@
 
 #include <string.h>
 
-#include <libtelepathy/tp-constants.h>
+#include <telepathy-glib/enums.h>
 
 #include "empathy-contact-manager.h"
 #include "empathy-contact-list.h"

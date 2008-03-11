@@ -23,7 +23,7 @@
 
 #include <dbus/dbus-glib.h>
 
-#include <libtelepathy/tp-helpers.h>
+#include <telepathy-glib/dbus.h>
 #include <libtelepathy/tp-conn.h>
 
 #include "empathy-filter.h"

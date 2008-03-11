@@ -24,9 +24,9 @@
 #include <string.h>
 
 #include <libtelepathy/tp-chan-type-room-list-gen.h>
-#include <libtelepathy/tp-helpers.h>
 #include <libtelepathy/tp-conn.h>
 #include <libtelepathy/tp-chan.h>
+#include <telepathy-glib/dbus.h>
 
 #include <libmissioncontrol/mission-control.h>
 

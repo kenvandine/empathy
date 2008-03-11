@@ -23,7 +23,6 @@
 
 #include <libtelepathy/tp-chan-type-streamed-media-gen.h>
 #include <libtelepathy/tp-connmgr.h>
-#include <libtelepathy/tp-helpers.h>
 #include <telepathy-glib/proxy-subclass.h>
 #include <telepathy-glib/dbus.h>
 

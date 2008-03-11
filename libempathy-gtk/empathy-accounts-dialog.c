@@ -37,7 +37,6 @@
 #include <libmissioncontrol/mission-control.h>
 #include <libmissioncontrol/mc-account-monitor.h>
 #include <telepathy-glib/util.h>
-#include <libtelepathy/tp-constants.h>
 
 #include <libempathy/empathy-debug.h>
 #include <libempathy/empathy-utils.h>

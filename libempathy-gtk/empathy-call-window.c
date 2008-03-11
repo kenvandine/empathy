@@ -21,7 +21,6 @@
 #include <string.h>
 
 #include <libtelepathy/tp-chan.h>
-#include <libtelepathy/tp-helpers.h>
 
 #include <libmissioncontrol/mc-account.h>
 #include <libmissioncontrol/mc-account-monitor.h>

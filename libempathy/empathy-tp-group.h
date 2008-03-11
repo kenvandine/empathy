@@ -26,7 +26,6 @@
 #include <glib.h>
 
 #include <libtelepathy/tp-chan.h>
-#include <libtelepathy/tp-constants.h>
 #include <libmissioncontrol/mc-account.h>
 
 #include "empathy-contact.h"

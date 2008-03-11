@@ -25,7 +25,7 @@
 #include <glib.h>
 
 #include <libtelepathy/tp-chan.h>
-#include <libtelepathy/tp-constants.h>
+#include <telepathy-glib/enums.h>
 
 #include <libmissioncontrol/mc-account.h>
 

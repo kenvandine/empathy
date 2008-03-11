@@ -26,8 +26,8 @@
 #include <libtelepathy/tp-chan.h>
 #include <libtelepathy/tp-chan-gen.h>
 #include <libtelepathy/tp-chan-iface-group-gen.h>
-#include <libtelepathy/tp-constants.h>
 #include <libtelepathy/tp-conn.h>
+#include <telepathy-glib/interfaces.h>
 
 #include "empathy-tp-group.h"
 #include "empathy-contact-factory.h"

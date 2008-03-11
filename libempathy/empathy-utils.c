@@ -33,8 +33,8 @@
 #include <glib/gi18n.h>
 
 #include <libxml/uri.h>
-#include <libtelepathy/tp-helpers.h>
 #include <libtelepathy/tp-conn.h>
+#include <telepathy-glib/dbus.h>
 
 #include "empathy-debug.h"
 #include "empathy-utils.h"

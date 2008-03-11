@@ -26,7 +26,7 @@
 #include <glib/gi18n.h>
 #include <dbus/dbus-glib.h>
 
-#include <libtelepathy/tp-helpers.h>
+#include <telepathy-glib/dbus.h>
 #include <libmissioncontrol/mc-enum-types.h>
 
 #include "empathy-idle.h"

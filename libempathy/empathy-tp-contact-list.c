@@ -25,11 +25,11 @@
 #include <string.h>
 #include <glib/gi18n.h>
 
-#include <libtelepathy/tp-helpers.h>
 #include <libtelepathy/tp-conn.h>
 #include <libtelepathy/tp-chan.h>
 #include <libtelepathy/tp-chan-type-contact-list-gen.h>
 #include <telepathy-glib/util.h>
+#include <telepathy-glib/dbus.h>
 
 #include "empathy-tp-contact-list.h"
 #include "empathy-contact-list.h"

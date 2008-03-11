@@ -31,8 +31,6 @@
 #include <gtk/gtk.h>
 #include <glade/glade.h>
 
-#include <libtelepathy/tp-helpers.h>
-
 #include <libmissioncontrol/mc-account.h>
 #include <libmissioncontrol/mission-control.h>
 
