@@ -52,6 +52,7 @@ struct _EmpathyContactPriv {
 	guint               handle;
 	EmpathyCapabilities capabilities;
 	gboolean            is_user;
+	guint               hash;
 };
 
 static void empathy_contact_class_init (EmpathyContactClass *class);
@@ -689,15 +690,15 @@ guint
 empathy_contact_hash (gconstpointer key)
 {
 	EmpathyContactPriv *priv;
-	guint              hash;
 
 	g_return_val_if_fail (EMPATHY_IS_CONTACT (key), +1);
 
 	priv = GET_PRIV (EMPATHY_CONTACT (key));
 
-	hash = empathy_account_hash (empathy_contact_get_account (EMPATHY_CONTACT (key)));
-	hash += g_str_hash (empathy_contact_get_id (EMPATHY_CONTACT (key)));
+	if (priv->hash == 0) {
+		priv->hash = empathy_account_hash (priv->account) + g_str_hash (priv->id);
+	}
 
-	return hash;
+	return priv->hash;
 }
 
