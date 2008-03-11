@@ -760,6 +760,8 @@ contact_ready_notify_cb (EmpathyContact    *contact,
 	EmpathyContactPriv *priv = GET_PRIV (contact);
 
 	if ((priv->ready & data->ready) == data->ready) {
+		empathy_debug (DEBUG_DOMAIN, "contact %s (%d) ready %d!",
+			       priv->id, priv->handle, priv->ready);
 		g_main_loop_quit (data->loop);
 	}
 }
@@ -778,6 +780,9 @@ empathy_contact_run_until_ready (EmpathyContact      *contact,
 	if ((priv->ready & ready) == ready) {
 		return;
 	}
+
+	empathy_debug (DEBUG_DOMAIN, "Run until ready=%d for contact %s (%d)",
+		       ready, priv->id, priv->handle);
 
 	data.loop = g_main_loop_new (NULL, FALSE);
 
