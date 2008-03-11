@@ -55,9 +55,9 @@ EmpathyContact *         empathy_tp_contact_factory_get_user         (EmpathyTpC
 EmpathyContact *         empathy_tp_contact_factory_get_from_id      (EmpathyTpContactFactory *tp_factory,
 								      const gchar             *id);
 EmpathyContact *         empathy_tp_contact_factory_get_from_handle  (EmpathyTpContactFactory *tp_factory,
-								      guint                     handle);
+								      guint                    handle);
 GList *                  empathy_tp_contact_factory_get_from_handles (EmpathyTpContactFactory *tp_factory,
-								      GArray                  *handles);
+								      const GArray            *handles);
 void                     empathy_tp_contact_factory_set_alias        (EmpathyTpContactFactory *tp_factory,
 								      EmpathyContact          *contact,
 								      const gchar             *alias);
