@@ -1317,7 +1317,7 @@ empathy_url_show (const char *url)
 {
 	gchar    *real_url;
 	gboolean  res;
-	GError   *error;
+	GError   *error = NULL;
 
 	real_url = fixup_url (url);
 	if (real_url) {
@@ -1330,7 +1330,7 @@ empathy_url_show (const char *url)
 	if (!res) {
 		empathy_debug (DEBUG_DOMAIN, "Couldn't show URL %s: %s",
 			       url, error->message);
-		g_clear_error (error);
+		g_clear_error (&error);
 	}
 
 	g_free (real_url);
