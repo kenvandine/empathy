@@ -62,8 +62,7 @@ gboolean       empathy_tp_chat_get_acknowledge      (EmpathyTpChat      *chat);
 void           empathy_tp_chat_set_acknowledge      (EmpathyTpChat      *chat,
 						     gboolean            acknowledge);
 McAccount *    empathy_tp_chat_get_account          (EmpathyTpChat      *chat);
-TpChan *       empathy_tp_chat_get_channel          (EmpathyTpChat      *chat);
-GList *        empathy_tp_chat_get_pendings         (EmpathyTpChat      *chat);
+TpChannel *    empathy_tp_chat_get_channel          (EmpathyTpChat      *chat);
 void           empathy_tp_chat_send                 (EmpathyTpChat      *chat,
 						     EmpathyMessage     *message);
 void           empathy_tp_chat_set_state            (EmpathyTpChat      *chat,
