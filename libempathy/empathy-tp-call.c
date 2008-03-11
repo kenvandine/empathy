@@ -83,6 +83,7 @@ enum
 };
 
 static guint signals[LAST_SIGNAL];
+static gchar *stream_engine_owner = NULL;
 
 G_DEFINE_TYPE (EmpathyTpCall, empathy_tp_call, G_TYPE_OBJECT)
 
@@ -523,11 +524,20 @@ tp_call_watch_name_owner_cb (TpDBusDaemon *daemon,
                              const gchar *new_owner,
                              gpointer call)
 {
-  if (G_STR_EMPTY (new_owner))
+  /* G_STR_EMPTY(new_owner) means either stream-engine has not started yet or
+   * has crashed. We want to close the channel if stream-engine has crashed.
+   * */
+  empathy_debug (DEBUG_DOMAIN, "Watch SE: name='%s' old_owner='%s' new_owner='%s'",
+                 name, stream_engine_owner ? stream_engine_owner : "none",
+                 new_owner ? new_owner : "none");
+  if (! G_STR_EMPTY(stream_engine_owner) &&
+      G_STR_EMPTY (new_owner))
     {
       empathy_debug (DEBUG_DOMAIN, "Stream engine falled off the bus");
       empathy_tp_call_close_channel (call);
     }
+  g_free(stream_engine_owner);
+  stream_engine_owner = g_strdup(new_owner);
 }
 
 static void
@@ -653,6 +663,8 @@ tp_call_finalize (GObject *object)
           object);
       g_object_unref (priv->dbus_daemon);
     }
+
+  g_free(stream_engine_owner);
 
   (G_OBJECT_CLASS (empathy_tp_call_parent_class)->finalize) (object);
 }
