@@ -53,6 +53,7 @@ struct _EmpathyContactPriv {
 	EmpathyCapabilities capabilities;
 	gboolean            is_user;
 	guint               hash;
+	gboolean            ready;
 };
 
 static void empathy_contact_class_init (EmpathyContactClass *class);
@@ -79,7 +80,8 @@ enum {
 	PROP_PRESENCE_MESSAGE,
 	PROP_HANDLE,
 	PROP_CAPABILITIES,
-	PROP_IS_USER
+	PROP_IS_USER,
+	PROP_READY
 };
 
 static void
@@ -169,6 +171,14 @@ empathy_contact_class_init (EmpathyContactClass *class)
 							       FALSE,
 							       G_PARAM_READWRITE));
 
+	g_object_class_install_property (object_class,
+					 PROP_READY,
+					 g_param_spec_boolean ("ready",
+							       "Contact ready",
+							       "Is contact ready",
+							       FALSE,
+							       G_PARAM_READABLE));
+
 	g_type_class_add_private (object_class, sizeof (EmpathyContactPriv));
 }
 
@@ -213,8 +223,7 @@ contact_get_property (GObject    *object,
 
 	switch (param_id) {
 	case PROP_ID:
-		g_value_set_string (value,
-				    empathy_contact_get_id (EMPATHY_CONTACT (object)));
+		g_value_set_string (value, priv->id);
 		break;
 	case PROP_NAME:
 		g_value_set_string (value,
@@ -240,6 +249,9 @@ contact_get_property (GObject    *object,
 		break;
 	case PROP_IS_USER:
 		g_value_set_boolean (value, priv->is_user);
+		break;
+	case PROP_READY:
+		g_value_set_boolean (value, priv->ready);
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
@@ -325,15 +337,11 @@ empathy_contact_get_id (EmpathyContact *contact)
 {
 	EmpathyContactPriv *priv;
 
-	g_return_val_if_fail (EMPATHY_IS_CONTACT (contact), "");
+	g_return_val_if_fail (EMPATHY_IS_CONTACT (contact), NULL);
 
 	priv = GET_PRIV (contact);
 
-	if (priv->id) {
-		return priv->id;
-	}
-
-	return "";
+	return priv->id;
 }
 
 void
@@ -347,7 +355,7 @@ empathy_contact_set_id (EmpathyContact *contact,
 
 	priv = GET_PRIV (contact);
 
-	if (priv->id && strcmp (id, priv->id) == 0) {
+	if (!tp_strdiff (id, priv->id)) {
 		return;
 	}
 
@@ -365,7 +373,7 @@ empathy_contact_get_name (EmpathyContact *contact)
 {
 	EmpathyContactPriv *priv;
 
-	g_return_val_if_fail (EMPATHY_IS_CONTACT (contact), "");
+	g_return_val_if_fail (EMPATHY_IS_CONTACT (contact), NULL);
 
 	priv = GET_PRIV (contact);
 
@@ -383,11 +391,10 @@ empathy_contact_set_name (EmpathyContact *contact,
 	EmpathyContactPriv *priv;
 
 	g_return_if_fail (EMPATHY_IS_CONTACT (contact));
-	g_return_if_fail (name != NULL);
 
 	priv = GET_PRIV (contact);
 
-	if (priv->name && strcmp (name, priv->name) == 0) {
+	if (!tp_strdiff (name, priv->name)) {
 		return;
 	}
 
@@ -663,6 +670,18 @@ empathy_contact_can_voip (EmpathyContact *contact)
 
 	return priv->capabilities & (EMPATHY_CAPABILITIES_AUDIO |
 				     EMPATHY_CAPABILITIES_VIDEO);
+}
+
+gboolean
+empathy_contact_is_ready (EmpathyContact *contact)
+{
+	EmpathyContactPriv *priv;
+
+	g_return_val_if_fail (EMPATHY_IS_CONTACT (contact), FALSE);
+
+	priv = GET_PRIV (contact);
+
+	return priv->ready;
 }
 
 gboolean
