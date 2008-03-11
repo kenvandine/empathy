@@ -31,7 +31,6 @@
 
 #include <libempathy/empathy-debug.h>
 
-
 #include "empathy-avatar-chooser.h"
 #include "empathy-conf.h"
 #include "empathy-preferences.h"
@@ -331,19 +330,22 @@ avatar_chooser_drag_data_received_cb (GtkWidget          *widget,
 	if (!strcmp (target_type, URI_LIST_TYPE)) {
 		GFile            *file;
 		GFileInputStream *input_stream;
-		gchar            *uri;
 		gchar            *nl;
 		gchar            *data = NULL;
 
 		nl = strstr (selection_data->data, "\r\n");
 		if (nl) {
+			gchar *uri;
+
 			uri = g_strndup (selection_data->data,
 					 nl - (gchar*) selection_data->data);
+
+			file = g_file_new_for_uri (uri);
+			g_free (uri);
 		} else {
-			uri = g_strdup (selection_data->data);
+			file = g_file_new_for_uri (selection_data->data);
 		}
-		
-		file = g_file_new_for_uri (uri);
+
 		input_stream = g_file_read (file, NULL, NULL);
 
 		if (input_stream != NULL) {
@@ -362,22 +364,21 @@ avatar_chooser_drag_data_received_cb (GtkWidget          *widget,
 				bytes_read = g_input_stream_read (G_INPUT_STREAM (input_stream),
 								  data, size,
 								  NULL, NULL);
-				g_object_unref (info);
 				if (bytes_read != -1) {
 					avatar_chooser_set_image_from_data (chooser,
 									    data,
 									    (gsize) bytes_read);
 					handled = TRUE;
-				} else {
-					g_free (data);
 				}
+
+				g_free (data);
+				g_object_unref (info);
 			}
 
-			g_input_stream_close (G_INPUT_STREAM (input_stream), NULL, NULL);
+			g_object_unref (input_stream);
 		}
 		
 		g_object_unref (file);
-		g_free (uri);
 	}
 
 	gtk_drag_finish (context, handled, FALSE, time);
