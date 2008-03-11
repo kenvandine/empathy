@@ -829,6 +829,7 @@ tp_contact_factory_status_updated (EmpathyTpContactFactory *tp_factory)
 {
 	EmpathyTpContactFactoryPriv *priv = GET_PRIV (tp_factory);
 	TpConn                      *tp_conn;
+	gboolean                     connection_ready;
 
 	if (priv->connection) {
 		/* We already have our connection object */
@@ -847,9 +848,15 @@ tp_contact_factory_status_updated (EmpathyTpContactFactory *tp_factory)
 	g_signal_connect_swapped (priv->connection, "invalidated",
 				  G_CALLBACK (tp_contact_factory_connection_invalidated_cb),
 				  tp_factory);
-	g_signal_connect_swapped (priv->connection, "notify::connection-ready",
-				  G_CALLBACK (tp_contact_factory_connection_ready_cb),
-				  tp_factory);
+
+	g_object_get (priv->connection, "connection-ready", &connection_ready, NULL);
+	if (connection_ready) {
+		tp_contact_factory_connection_ready_cb (tp_factory);
+	} else {
+		g_signal_connect_swapped (priv->connection, "notify::connection-ready",
+					  G_CALLBACK (tp_contact_factory_connection_ready_cb),
+					  tp_factory);
+	}
 }
 
 static void
@@ -1195,6 +1202,7 @@ tp_contact_factory_finalize (GObject *object)
 	g_list_free (priv->contacts);
 	g_object_unref (priv->mc);
 	g_object_unref (priv->account);
+	g_object_unref (priv->user);
 
 	if (priv->connection) {
 		g_object_unref (priv->connection);
