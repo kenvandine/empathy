@@ -35,8 +35,8 @@
 #include <gdk/gdkx.h>
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
+#include <gio/gio.h>
 #include <glade/glade.h>
-#include <libgnomevfs/gnome-vfs-utils.h>
 
 #include <libmissioncontrol/mc-profile.h>
 
@@ -1320,14 +1320,21 @@ void
 empathy_url_show (const char *url)
 {
 	gchar          *real_url;
-	GnomeVFSResult  res;
+	gboolean        res;
+	GError         *err;
 
 	real_url = fixup_url (url);
-	res = gnome_vfs_url_show (real_url);
-	if (res != GNOME_VFS_OK) {
+	/* FIXME: this does not work for multihead, we should use
+	 * GdkAppLaunchContext for that, when we can depend on GTK+ trunk
+	 */
+	res = g_app_info_launch_default_for_uri (real_url,
+						 NULL,
+						 &err);
+	if (!res) {
 		empathy_debug (DEBUG_DOMAIN, "Couldn't show URL %s: %s",
 			      real_url,
-			      gnome_vfs_result_to_string (res));
+			      err->message);
+		g_error_free (err);
 	}
 
 	g_free (real_url);

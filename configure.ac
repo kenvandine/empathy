@@ -25,7 +25,7 @@ AC_SUBST(LIBEMPATHY_GTK_AGE)
 AC_SUBST(LIBEMPATHY_GTK_REVISION)
 
 # Minimal version required
-GLIB_REQUIRED=2.14.0
+GLIB_REQUIRED=2.15.5
 GTK_REQUIRED=2.12.0
 GCONF_REQUIRED=1.2.0
 LIBGLADE_REQUIRED=2.0.0
@@ -93,11 +93,11 @@ PKG_CHECK_MODULES(EMPATHY,
 [
    glib-2.0 >= $GLIB_REQUIRED
    gobject-2.0
+   gio-2.0 >= $GLIB_REQUIRED
    gconf-2.0 >= $GCONF_REQUIRED
    libtelepathy >= $TELEPATHY_REQUIRED
    telepathy-glib >= $TELEPATHY_GLIB_REQUIRED
    libmissioncontrol >= $MISSION_CONTROL_REQUIRED
-   gnome-vfs-2.0
    gtk+-2.0 >= $GTK_REQUIRED
    x11
    libglade-2.0 >= $LIBGLADE_REQUIRED
@@ -178,7 +178,6 @@ if test "x$enable_megaphone" != "xno"; then
       gtk+-2.0 >= $GTK_REQUIRED
       gconf-2.0 >= $GCONF_REQUIRED
       libglade-2.0 >= $LIBGLADE_REQUIRED 
-      gnome-vfs-2.0
       libtelepathy >= $TELEPATHY_REQUIRED
       libmissioncontrol >= $MISSION_CONTROL_REQUIRED
    ], have_megaphone="yes", have_megaphone="no")
@@ -264,7 +263,6 @@ if test "x$enable_python" != "xno"; then
          gobject-2.0
          gconf-2.0 >= $GCONF_REQUIRED
          libxml-2.0
-         gnome-vfs-2.0
          libtelepathy >= $TELEPATHY_REQUIRED
          libmissioncontrol >= $MISSION_CONTROL_REQUIRED
          gtk+-2.0 >= $GTK_REQUIRED

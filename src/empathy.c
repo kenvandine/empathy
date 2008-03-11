@@ -31,7 +31,6 @@
 #include <gdk/gdkx.h>
 
 #include <libebook/e-book.h>
-#include <libgnomevfs/gnome-vfs.h>
 
 #include <telepathy-glib/util.h>
 #include <libmissioncontrol/mc-account.h>
@@ -299,7 +298,6 @@ main (int argc, char *argv[])
 	gtk_window_set_default_icon_name ("empathy");
 	gtk_icon_theme_append_search_path (gtk_icon_theme_get_default (),
 					   PKGDATADIR G_DIR_SEPARATOR_S "icons");
-	gnome_vfs_init ();
 
         /* Setting up the bacon connection */
 	connection = bacon_message_connection_new ("empathy");

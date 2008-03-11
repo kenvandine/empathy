@@ -28,8 +28,6 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
-#include <libgnomevfs/gnome-vfs.h>
-
 #include <libmissioncontrol/mission-control.h>
 
 #include <libempathy/empathy-chandler.h>
@@ -138,7 +136,6 @@ main (int argc, char *argv[])
 	gtk_window_set_default_icon_name ("empathy");
 	gtk_icon_theme_append_search_path (gtk_icon_theme_get_default (),
 					   PKGDATADIR G_DIR_SEPARATOR_S "icons");
-	gnome_vfs_init ();
 
 	mc = empathy_mission_control_new ();
 	chandler = empathy_chandler_new (BUS_NAME, OBJECT_PATH);

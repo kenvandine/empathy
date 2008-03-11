@@ -27,7 +27,7 @@
 
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
-#include <libgnomevfs/gnome-vfs-ops.h>
+#include <gio/gio.h>
 
 #include <libempathy/empathy-debug.h>
 
@@ -329,9 +329,8 @@ avatar_chooser_drag_data_received_cb (GtkWidget          *widget,
 
 	target_type = gdk_atom_name (selection_data->target);
 	if (!strcmp (target_type, URI_LIST_TYPE)) {
-		GnomeVFSHandle   *handle = NULL;
-		GnomeVFSResult    result;
-		GnomeVFSFileInfo  info;
+		GFile            *file;
+		GFileInputStream *input_stream;
 		gchar            *uri;
 		gchar            *nl;
 		gchar            *data = NULL;
@@ -343,31 +342,41 @@ avatar_chooser_drag_data_received_cb (GtkWidget          *widget,
 		} else {
 			uri = g_strdup (selection_data->data);
 		}
+		
+		file = g_file_new_for_uri (uri);
+		input_stream = g_file_read (file, NULL, NULL);
 
-		result = gnome_vfs_open (&handle, uri, GNOME_VFS_OPEN_READ);
-		if (result == GNOME_VFS_OK) {
-			result = gnome_vfs_get_file_info_from_handle (handle,
-								      &info,
-								      GNOME_VFS_FILE_INFO_DEFAULT);
-			if (result == GNOME_VFS_OK) {
-				GnomeVFSFileSize data_size;
+		if (input_stream != NULL) {
+			GFileInfo *info;
+			
+			info = g_file_query_info (file,
+						  G_FILE_ATTRIBUTE_STANDARD_SIZE,
+						  0, NULL, NULL);
+			if (info != NULL) {
+				goffset size;
+				gssize bytes_read;
+				
+				size = g_file_info_get_size (info);
+				data = g_malloc (size);
 
-				data = g_malloc (info.size);
-
-				result = gnome_vfs_read (handle, data, info.size, &data_size);
-				if (result == GNOME_VFS_OK) {
+				bytes_read = g_input_stream_read (G_INPUT_STREAM (input_stream),
+								  data, size,
+								  NULL, NULL);
+				g_object_unref (info);
+				if (bytes_read != -1) {
 					avatar_chooser_set_image_from_data (chooser,
 									    data,
-									    data_size);
+									    (gsize) bytes_read);
 					handled = TRUE;
 				} else {
 					g_free (data);
 				}
 			}
 
-			gnome_vfs_close (handle);
+			g_input_stream_close (G_INPUT_STREAM (input_stream), NULL, NULL);
 		}
-
+		
+		g_object_unref (file);
 		g_free (uri);
 	}
 
