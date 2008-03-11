@@ -369,6 +369,53 @@ tp_chat_list_pending_messages_cb (TpChannel       *channel,
 	}
 }
 
+static void
+tp_chat_properties_changed_cb (TpProxy         *proxy,
+			       const GPtrArray *properties,
+			       gpointer         user_data,
+			       GObject         *chat)
+{
+}
+
+static void
+tp_chat_get_properties_cb (TpProxy         *proxy,
+			   const GPtrArray *properties,
+			   const GError    *error,
+			   gpointer         user_data,
+			   GObject         *chat)
+{
+	tp_chat_properties_changed_cb (proxy, properties, user_data, chat);
+}
+
+static void
+tp_chat_list_properties_cb (TpProxy         *proxy,
+			    const GPtrArray *properties,
+			    const GError    *error,
+			    gpointer         user_data,
+			    GObject         *chat)
+{
+	GArray *ids;
+	guint   i;
+
+	ids = g_array_sized_new (FALSE, FALSE, sizeof (guint), properties->len);
+	for (i = 0; i < properties->len; i++) {
+		GValueArray *prop_struct;
+		guint        id;
+
+		prop_struct = g_ptr_array_index (properties, i);
+		id = g_value_get_uint (g_value_array_get_nth (prop_struct, 0));
+		g_array_append_val (ids, id);
+	}
+
+	tp_cli_properties_interface_call_get_properties (proxy, -1,
+							 ids,
+							 tp_chat_get_properties_cb,
+							 NULL, NULL,
+							 chat);
+
+	g_array_free (ids, TRUE);
+}
+
 static gboolean
 tp_chat_channel_ready_cb (EmpathyTpChat *chat)
 {
@@ -381,6 +428,11 @@ tp_chat_channel_ready_cb (EmpathyTpChat *chat)
 							     tp_chat_list_pending_messages_cb,
 							     NULL, NULL,
 							     G_OBJECT (chat));
+	tp_cli_properties_interface_call_list_properties (priv->channel, -1,
+							  tp_chat_list_properties_cb,
+							  NULL, NULL,
+							  G_OBJECT (chat));
+
 
 	tp_cli_channel_type_text_connect_to_received (priv->channel,
 						      tp_chat_received_cb,
@@ -398,6 +450,14 @@ tp_chat_channel_ready_cb (EmpathyTpChat *chat)
 									   tp_chat_state_changed_cb,
 									   NULL, NULL,
 									   G_OBJECT (chat), NULL);
+	tp_cli_channel_interface_chat_state_connect_to_chat_state_changed (priv->channel,
+									   tp_chat_state_changed_cb,
+									   NULL, NULL,
+									   G_OBJECT (chat), NULL);
+	tp_cli_properties_interface_connect_to_properties_changed (priv->channel,
+								   tp_chat_properties_changed_cb,
+								   NULL, NULL,
+								   G_OBJECT (chat), NULL);
 
 	return FALSE;
 }
@@ -464,10 +524,6 @@ tp_chat_constructor (GType                  type,
 					  G_CALLBACK (tp_chat_channel_ready_cb),
 					  chat);
 	}
-
-	/* FIXME: We do that in a cb to let time to set the acknowledge
-	 * property, this property should be required for construct. */
-	g_idle_add ((GSourceFunc) empathy_tp_chat_get_pendings, chat);
 
 	return chat;
 }

@@ -58,8 +58,6 @@ gboolean           empathy_tp_chatroom_get_invitation    (EmpathyTpChatroom  *ch
 							  EmpathyContact     **contact,
 							  const gchar       **message);
 void               empathy_tp_chatroom_accept_invitation (EmpathyTpChatroom *chatroom);
-void               empathy_tp_chatroom_set_topic         (EmpathyTpChatroom *chatroom,
-							  const gchar       *topic);
 G_END_DECLS
 
 #endif /* __EMPATHY_TP_CHATROOM_H__ */

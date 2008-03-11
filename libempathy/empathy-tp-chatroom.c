@@ -43,61 +43,10 @@ struct _EmpathyTpChatroomPriv {
 static void            empathy_tp_chatroom_class_init (EmpathyTpChatroomClass  *klass);
 static void            tp_chatroom_iface_init         (EmpathyContactListIface *iface);
 static void            empathy_tp_chatroom_init       (EmpathyTpChatroom       *chatroom);
-static void            tp_chatroom_finalize           (GObject                 *object);
-static void            tp_chatroom_add                (EmpathyContactList      *list,
-						       EmpathyContact           *contact,
-						       const gchar             *message);
-static void            tp_chatroom_remove             (EmpathyContactList      *list,
-						       EmpathyContact           *contact,
-						       const gchar             *message);
-static GList *         tp_chatroom_get_members        (EmpathyContactList      *list);
 
 G_DEFINE_TYPE_WITH_CODE (EmpathyTpChatroom, empathy_tp_chatroom, EMPATHY_TYPE_TP_CHAT,
 			 G_IMPLEMENT_INTERFACE (EMPATHY_TYPE_CONTACT_LIST,
 						tp_chatroom_iface_init));
-
-static void
-empathy_tp_chatroom_class_init (EmpathyTpChatroomClass *klass)
-{
-	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-	object_class->finalize = tp_chatroom_finalize;
-
-	g_type_class_add_private (object_class, sizeof (EmpathyTpChatroomPriv));
-}
-
-static void
-tp_chatroom_iface_init (EmpathyContactListIface *iface)
-{
-	iface->add         = tp_chatroom_add;
-	iface->remove      = tp_chatroom_remove;
-	iface->get_members = tp_chatroom_get_members;
-}
-
-static void
-empathy_tp_chatroom_init (EmpathyTpChatroom *chatroom)
-{
-}
-
-static void
-tp_chatroom_finalize (GObject *object)
-{
-	EmpathyTpChatroomPriv *priv;
-	EmpathyTpChatroom     *chatroom;
-
-	chatroom = EMPATHY_TP_CHATROOM (object);
-	priv = GET_PRIV (chatroom);
-
-	g_object_unref (priv->group);
-
-	if (priv->invitor) {
-		g_object_unref (priv->invitor);
-	}
-
-	g_free (priv->invit_message);
-
-	G_OBJECT_CLASS (empathy_tp_chatroom_parent_class)->finalize (object);
-}
 
 static void
 tp_chatroom_member_added_cb (EmpathyTpGroup    *group,
@@ -146,19 +95,113 @@ tp_chatroom_local_pending_cb  (EmpathyTpGroup    *group,
 	}
 }
 
+static void
+tp_chatroom_add (EmpathyContactList *list,
+		 EmpathyContact     *contact,
+		 const gchar        *message)
+{
+	EmpathyTpChatroomPriv *priv;
+
+	g_return_if_fail (EMPATHY_IS_TP_CHATROOM (list));
+	g_return_if_fail (EMPATHY_IS_CONTACT (contact));
+
+	priv = GET_PRIV (list);
+
+	empathy_tp_group_add_member (priv->group, contact, message);
+}
+
+static void
+tp_chatroom_remove (EmpathyContactList *list,
+		    EmpathyContact     *contact,
+		    const gchar        *message)
+{
+	EmpathyTpChatroomPriv *priv;
+
+	g_return_if_fail (EMPATHY_IS_TP_CHATROOM (list));
+	g_return_if_fail (EMPATHY_IS_CONTACT (contact));
+
+	priv = GET_PRIV (list);
+
+	empathy_tp_group_remove_member (priv->group, contact, message);
+}
+
+static GList *
+tp_chatroom_get_members (EmpathyContactList *list)
+{
+	EmpathyTpChatroomPriv *priv;
+
+	g_return_val_if_fail (EMPATHY_IS_TP_CHATROOM (list), NULL);
+
+	priv = GET_PRIV (list);
+
+	return empathy_tp_group_get_members (priv->group);
+}
+
+static void
+tp_chatroom_finalize (GObject *object)
+{
+	EmpathyTpChatroomPriv *priv;
+	EmpathyTpChatroom     *chatroom;
+
+	chatroom = EMPATHY_TP_CHATROOM (object);
+	priv = GET_PRIV (chatroom);
+
+	g_object_unref (priv->group);
+
+	if (priv->invitor) {
+		g_object_unref (priv->invitor);
+	}
+
+	g_free (priv->invit_message);
+
+	G_OBJECT_CLASS (empathy_tp_chatroom_parent_class)->finalize (object);
+}
+
+static void
+empathy_tp_chatroom_class_init (EmpathyTpChatroomClass *klass)
+{
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+	object_class->finalize = tp_chatroom_finalize;
+
+	g_type_class_add_private (object_class, sizeof (EmpathyTpChatroomPriv));
+}
+
+static void
+tp_chatroom_iface_init (EmpathyContactListIface *iface)
+{
+	iface->add         = tp_chatroom_add;
+	iface->remove      = tp_chatroom_remove;
+	iface->get_members = tp_chatroom_get_members;
+}
+
+static void
+empathy_tp_chatroom_init (EmpathyTpChatroom *chatroom)
+{
+}
+
 EmpathyTpChatroom *
 empathy_tp_chatroom_new (McAccount *account,
 			 TpChan    *tp_chan)
 {
 	EmpathyTpChatroomPriv *priv;
 	EmpathyTpChatroom     *chatroom;
+	TpChannel             *channel;
+	TpConnection          *connection;
+	MissionControl        *mc;
+	TpConn                *tp_conn;
 
 	g_return_val_if_fail (MC_IS_ACCOUNT (account), NULL);
 	g_return_val_if_fail (TELEPATHY_IS_CHAN (tp_chan), NULL);
 
+	mc = empathy_mission_control_new ();
+	tp_conn = mission_control_get_connection (mc, account, NULL);
+	connection = tp_conn_dup_connection (tp_conn);
+	channel = tp_chan_dup_channel (tp_chan, connection, NULL);
+
 	chatroom = g_object_new (EMPATHY_TYPE_TP_CHATROOM,
 				 "account", account,
-				 "tp-chan", tp_chan,
+				 "channel", channel,
 				 NULL);
 
 	priv = GET_PRIV (chatroom);
@@ -174,6 +217,11 @@ empathy_tp_chatroom_new (McAccount *account,
 	g_signal_connect (priv->group, "local-pending",
 			  G_CALLBACK (tp_chatroom_local_pending_cb),
 			  chatroom);
+
+	g_object_unref (channel);
+	g_object_unref (tp_conn);
+	g_object_unref (connection);
+	g_object_unref (mc);
 
 	return chatroom;
 }
@@ -226,54 +274,5 @@ empathy_tp_chatroom_accept_invitation (EmpathyTpChatroom *chatroom)
 	user = empathy_tp_group_get_self_contact (priv->group);
 	empathy_tp_group_add_member (priv->group, user, "");
 	g_object_unref (user);
-}
-
-void
-empathy_tp_chatroom_set_topic (EmpathyTpChatroom *chatroom,
-			       const gchar       *topic)
-{
-	/* FIXME: not implemented */
-}
-
-static void
-tp_chatroom_add (EmpathyContactList *list,
-		 EmpathyContact     *contact,
-		 const gchar        *message)
-{
-	EmpathyTpChatroomPriv *priv;
-
-	g_return_if_fail (EMPATHY_IS_TP_CHATROOM (list));
-	g_return_if_fail (EMPATHY_IS_CONTACT (contact));
-
-	priv = GET_PRIV (list);
-
-	empathy_tp_group_add_member (priv->group, contact, message);
-}
-
-static void
-tp_chatroom_remove (EmpathyContactList *list,
-		    EmpathyContact     *contact,
-		    const gchar        *message)
-{
-	EmpathyTpChatroomPriv *priv;
-
-	g_return_if_fail (EMPATHY_IS_TP_CHATROOM (list));
-	g_return_if_fail (EMPATHY_IS_CONTACT (contact));
-
-	priv = GET_PRIV (list);
-
-	empathy_tp_group_remove_member (priv->group, contact, message);
-}
-
-static GList *
-tp_chatroom_get_members (EmpathyContactList *list)
-{
-	EmpathyTpChatroomPriv *priv;
-
-	g_return_val_if_fail (EMPATHY_IS_TP_CHATROOM (list), NULL);
-
-	priv = GET_PRIV (list);
-
-	return empathy_tp_group_get_members (priv->group);
 }
 
