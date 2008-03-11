@@ -17,9 +17,11 @@ LDADD =								\
 	$(EMPATHY_LIBS)
 
 noinst_PROGRAMS =			\
-	contact-manager
+	contact-manager			\
+	contact-run-until-ready
 
 contact_manager_SOURCES = contact-manager.c
+contact_run_until_ready_SOURCES = contact-run-until-ready.c
 
 check_PROGRAMS = check-main
 TESTS = check-main
