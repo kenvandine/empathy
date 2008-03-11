@@ -388,6 +388,42 @@ tp_chat_list_pending_messages_cb (TpChannel       *channel,
 }
 
 static void
+tp_chat_property_flags_changed_cb (TpProxy         *proxy,
+				   const GPtrArray *properties,
+				   gpointer         user_data,
+				   GObject         *chat)
+{
+	EmpathyTpChatPriv *priv = GET_PRIV (chat);
+	guint              i, j;
+
+	if (!priv->had_properties_list || !properties) {
+		return;
+	}
+
+	for (i = 0; i < properties->len; i++) {
+		GValueArray    *prop_struct;
+		TpChatProperty *property;
+		guint           id;
+		guint           flags;
+
+		prop_struct = g_ptr_array_index (properties, i);
+		id = g_value_get_uint (g_value_array_get_nth (prop_struct, 0));
+		flags = g_value_get_uint (g_value_array_get_nth (prop_struct, 1));
+
+		for (j = 0; j < priv->properties->len; j++) {
+			property = g_ptr_array_index (priv->properties, j);
+			if (property->id == id) {
+				property->flags = flags;
+				empathy_debug (DEBUG_DOMAIN,
+					       "property %s flags changed: %d",
+					       property->name, property->flags);
+				break;
+			}
+		}
+	}
+}
+
+static void
 tp_chat_properties_changed_cb (TpProxy         *proxy,
 			       const GPtrArray *properties,
 			       gpointer         user_data,
@@ -586,6 +622,10 @@ tp_chat_channel_ready_cb (EmpathyTpChat *chat)
 								   tp_chat_properties_changed_cb,
 								   NULL, NULL,
 								   G_OBJECT (chat), NULL);
+	tp_cli_properties_interface_connect_to_property_flags_changed (priv->channel,
+								       tp_chat_property_flags_changed_cb,
+								       NULL, NULL,
+								       G_OBJECT (chat), NULL);
 
 	return FALSE;
 }
