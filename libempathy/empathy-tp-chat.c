@@ -54,9 +54,10 @@ struct _EmpathyTpChatPriv {
 };
 
 typedef struct {
-	gchar  *name;
-	guint   id;
-	GValue *value;
+	gchar          *name;
+	guint           id;
+	TpPropertyFlags flags;
+	GValue         *value;
 } TpChatProperty;
 
 static void empathy_tp_chat_class_init (EmpathyTpChatClass *klass);
@@ -394,10 +395,6 @@ tp_chat_properties_changed_cb (TpProxy         *proxy,
 	EmpathyTpChatPriv *priv = GET_PRIV (chat);
 	guint              i, j;
 
-	if (!priv->had_properties_list || !properties) {
-		return;
-	}
-
 	for (i = 0; i < properties->len; i++) {
 		GValueArray    *prop_struct;
 		TpChatProperty *property;
@@ -406,7 +403,7 @@ tp_chat_properties_changed_cb (TpProxy         *proxy,
 
 		prop_struct = g_ptr_array_index (properties, i);
 		id = g_value_get_uint (g_value_array_get_nth (prop_struct, 0));
-		src_value = g_value_array_get_nth (prop_struct, 1);
+		src_value = g_value_get_boxed (g_value_array_get_nth (prop_struct, 1));
 
 		for (j = 0; j < priv->properties->len; j++) {
 			property = g_ptr_array_index (priv->properties, j);
@@ -416,6 +413,7 @@ tp_chat_properties_changed_cb (TpProxy         *proxy,
 				} else {
 					property->value = g_slice_new0 (GValue);
 				}
+				g_value_init (property->value, G_VALUE_TYPE (src_value));
 				g_value_copy (src_value, property->value);
 
 				empathy_debug (DEBUG_DOMAIN, "property %s changed",
@@ -441,7 +439,6 @@ tp_chat_get_properties_cb (TpProxy         *proxy,
 		return;
 	}
 
-	empathy_debug (DEBUG_DOMAIN, "Got value of properties");
 	tp_chat_properties_changed_cb (proxy, properties, user_data, chat);
 }
 
@@ -469,19 +466,19 @@ tp_chat_list_properties_cb (TpProxy         *proxy,
 	for (i = 0; i < properties->len; i++) {
 		GValueArray    *prop_struct;
 		TpChatProperty *property;
-		guint           id;
-		const gchar    *name;
 
 		prop_struct = g_ptr_array_index (properties, i);
-		id = g_value_get_uint (g_value_array_get_nth (prop_struct, 0));
-		name = g_value_get_string (g_value_array_get_nth (prop_struct, 1));
-
-		empathy_debug (DEBUG_DOMAIN, "Adding property %s", name);
 		property = g_slice_new0 (TpChatProperty);
-		property->id = id;
-		property->name = g_strdup (name);
+		property->id = g_value_get_uint (g_value_array_get_nth (prop_struct, 0));
+		property->name = g_value_dup_string (g_value_array_get_nth (prop_struct, 1));
+		property->flags = g_value_get_uint (g_value_array_get_nth (prop_struct, 3));
+
+		empathy_debug (DEBUG_DOMAIN, "Adding property name=%s id=%d flags=%d",
+			       property->name, property->id, property->flags);
 		g_ptr_array_add (priv->properties, property);
-		g_array_append_val (ids, id);
+		if (property->flags & TP_PROPERTY_FLAG_READ) {
+			g_array_append_val (ids, property->id);
+		}
 	}
 
 	tp_cli_properties_interface_call_get_properties (proxy, -1,

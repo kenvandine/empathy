@@ -102,12 +102,6 @@ static GtkWidget *   group_chat_get_widget               (EmpathyChat       *cha
 static gboolean      group_chat_is_group_chat            (EmpathyChat       *chat);
 static void          group_chat_set_tp_chat              (EmpathyChat       *chat,
 							  EmpathyTpChat     *tp_chat);
-static void          group_chat_subject_notify_cb        (EmpathyTpChat     *tp_chat,
-							  GParamSpec        *param,
-							  EmpathyGroupChat  *chat);
-static void          group_chat_name_notify_cb           (EmpathyTpChat     *tp_chat,
-							  GParamSpec        *param,
-							  EmpathyGroupChat  *chat);
 static gboolean      group_chat_key_press_event          (EmpathyChat       *chat,
 							  GdkEventKey       *event);
 static gint          group_chat_contacts_completion_func (const gchar       *s1,
@@ -486,6 +480,52 @@ group_chat_is_group_chat (EmpathyChat *chat)
 }
 
 static void
+group_chat_property_changed_cb (EmpathyTpChat    *tp_chat,
+				gchar            *name,
+				GValue           *value,
+				EmpathyGroupChat *chat)
+{
+	EmpathyGroupChatPriv *priv;
+	const gchar          *str = NULL;
+
+	priv = GET_PRIV (chat);
+
+	/* FIXME: this is ugly, should use properties on EmpathyChat obj */
+
+	if (!tp_strdiff (name, "name")) {
+		str = g_value_get_string (value);
+		g_free (priv->name);
+		priv->name = g_strdup (str);
+		return;
+	}
+
+	if (tp_strdiff (name, "subject")) {
+		return;
+	}
+
+	str = g_value_get_string (value);
+	if (!tp_strdiff (priv->topic, str)) {
+		return;
+	}
+
+	g_free (priv->topic);
+	priv->topic = g_strdup (str);
+	gtk_label_set_text (GTK_LABEL (priv->label_topic), priv->topic);
+
+	if (!EMPATHY_CHAT (chat)->block_events) {
+		gchar *string;
+
+		if (!G_STR_EMPTY (priv->topic)) {
+			string = g_strdup_printf (_("Topic set to: %s"), priv->topic);
+		} else {
+			string = g_strdup (_("No topic defined"));
+		}
+		empathy_chat_view_append_event (EMPATHY_CHAT (chat)->view, string);
+		g_free (string);
+	}
+}
+
+static void
 group_chat_set_tp_chat (EmpathyChat    *chat,
 			EmpathyTpChat *tp_chat)
 {
@@ -546,56 +586,9 @@ group_chat_set_tp_chat (EmpathyChat    *chat,
 	g_signal_connect (priv->tp_chat, "members-changed",
 			  G_CALLBACK (group_chat_members_changed_cb),
 			  chat);
-	g_signal_connect (priv->tp_chat, "notify::subject",
-			  G_CALLBACK (group_chat_subject_notify_cb),
+	g_signal_connect (priv->tp_chat, "property-changed",
+			  G_CALLBACK (group_chat_property_changed_cb),
 			  chat);
-	g_signal_connect (priv->tp_chat, "notify::name",
-			  G_CALLBACK (group_chat_name_notify_cb),
-			  chat);
-}
-
-static void
-group_chat_subject_notify_cb (EmpathyTpChat   *tp_chat,
-			      GParamSpec      *param,
-			      EmpathyGroupChat *chat)
-{
-	EmpathyGroupChatPriv *priv;
-	gchar                *str = NULL;
-
-	priv = GET_PRIV (chat);
-
-	g_object_get (priv->tp_chat, "subject", &str, NULL);
-	if (!tp_strdiff (priv->topic, str)) {
-		g_free (str);
-		return;
-	}
-
-	g_free (priv->topic);
-	priv->topic = str;
-	gtk_label_set_text (GTK_LABEL (priv->label_topic), priv->topic);
-
-	if (!EMPATHY_CHAT (chat)->block_events) {
-		if (!G_STR_EMPTY (priv->topic)) {
-			str = g_strdup_printf (_("Topic set to: %s"), priv->topic);
-		} else {
-			str = g_strdup (_("No topic defined"));
-		}
-		empathy_chat_view_append_event (EMPATHY_CHAT (chat)->view, str);
-		g_free (str);
-	}
-}
-
-static void
-group_chat_name_notify_cb (EmpathyTpChat   *tp_chat,
-			   GParamSpec      *param,
-			   EmpathyGroupChat *chat)
-{
-	EmpathyGroupChatPriv *priv;
-
-	priv = GET_PRIV (chat);
-
-	g_free (priv->name);
-	g_object_get (priv->tp_chat, "name", &priv->name, NULL);
 }
 
 static gboolean
