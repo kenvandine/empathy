@@ -37,7 +37,6 @@
 #include <libmissioncontrol/mission-control.h>
 
 #include <libempathy/empathy-contact-factory.h>
-#include <libempathy/empathy-contact-list.h>
 #include <libempathy/empathy-log-manager.h>
 #include <libempathy/empathy-chatroom-manager.h>
 #include <libempathy/empathy-contact.h>

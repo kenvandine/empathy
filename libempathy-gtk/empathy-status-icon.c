@@ -418,6 +418,10 @@ status_icon_call_local_pending_cb (EmpathyTpGroup    *group,
 
 		/* We are local pending, it's an incoming call, we need to ask
 		 * the user if he wants to accept the call. */
+		empathy_contact_run_until_ready (member,
+						 EMPATHY_CONTACT_READY_NAME,
+						 NULL);
+
 		empathy_debug (DEBUG_DOMAIN, "INCOMING call, add event");
 
 		msg = g_strdup_printf (_("Incoming call from %s:\n%s"),
@@ -708,7 +712,6 @@ status_icon_pendings_changed_cb (EmpathyContactManager *manager,
 	EmpathyStatusIconPriv *priv;
 	StatusIconEvent       *event;
 	GString               *str;
-	GList                 *l;
 
 	priv = GET_PRIV (icon);
 
@@ -717,11 +720,9 @@ status_icon_pendings_changed_cb (EmpathyContactManager *manager,
 		return;
 	}
 
-	for (l = priv->events; l; l = l->next) {
-		if (empathy_contact_equal (contact, ((StatusIconEvent*)l->data)->user_data)) {
-			return;
-		}
-	}
+	empathy_contact_run_until_ready (contact,
+					 EMPATHY_CONTACT_READY_NAME,
+					 NULL);
 
 	str = g_string_new (NULL);
 	g_string_printf (str, _("Subscription requested by %s"),

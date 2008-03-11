@@ -392,7 +392,6 @@ static void
 tp_call_is_ready (EmpathyTpCall *call)
 {
   EmpathyTpCallPriv *priv = GET_PRIV (call);
-  EmpathyContact *self_contact;
   GList *members;
   GList *local_pendings;
   GList *remote_pendings;
@@ -404,13 +403,11 @@ tp_call_is_ready (EmpathyTpCall *call)
   if (!members)
     return;
 
-  self_contact = empathy_tp_group_get_self_contact (priv->group);
   local_pendings = empathy_tp_group_get_local_pendings (priv->group);
   remote_pendings = empathy_tp_group_get_remote_pendings (priv->group);
 
   if (local_pendings &&
-      empathy_contact_equal (EMPATHY_CONTACT (((EmpathyPendingInfo *)
-            local_pendings->data)->member), self_contact))
+      empathy_contact_is_user (((EmpathyPendingInfo *) local_pendings->data)->member))
     {
       empathy_debug (DEBUG_DOMAIN,
           "Incoming call is ready - %p",
@@ -418,8 +415,7 @@ tp_call_is_ready (EmpathyTpCall *call)
       priv->is_incoming = TRUE;
       priv->contact = g_object_ref (members->data);
     }
-  else if (remote_pendings &&
-      empathy_contact_equal (EMPATHY_CONTACT (members->data), self_contact))
+  else if (remote_pendings && empathy_contact_is_user (members->data))
     {
       empathy_debug (DEBUG_DOMAIN,
           "Outgoing call is ready - %p", remote_pendings->data);
@@ -428,7 +424,6 @@ tp_call_is_ready (EmpathyTpCall *call)
       tp_call_request_streams (call);
     }
 
-  g_object_unref (self_contact);
   g_list_foreach (members, (GFunc) g_object_unref, NULL);
   g_list_free (members);
   g_list_foreach (local_pendings, (GFunc) empathy_pending_info_free, NULL);
@@ -458,10 +453,8 @@ tp_call_member_added_cb (EmpathyTpGroup *group,
 
   if (priv->status == EMPATHY_TP_CALL_STATUS_PENDING)
     {
-      if ((priv->is_incoming &&
-            !empathy_contact_equal (contact, priv->contact))
-          || (!priv->is_incoming &&
-            empathy_contact_equal (contact, priv->contact)))
+      if ((priv->is_incoming && contact != priv->contact) ||
+          (!priv->is_incoming && contact == priv->contact))
         {
           priv->status = EMPATHY_TP_CALL_STATUS_ACCEPTED;
           g_signal_emit (call, signals[STATUS_CHANGED_SIGNAL], 0);
@@ -831,17 +824,13 @@ void
 empathy_tp_call_accept_incoming_call (EmpathyTpCall *call)
 {
   EmpathyTpCallPriv *priv = GET_PRIV (call);
-  GList *local_pendings;
+  EmpathyContact *self_contact;
 
   empathy_debug (DEBUG_DOMAIN, "Accepting incoming call");
 
-  local_pendings = empathy_tp_group_get_local_pendings (priv->group);
-
-  empathy_tp_group_add_member (priv->group, EMPATHY_CONTACT
-      (((EmpathyPendingInfo *) local_pendings->data)->member), NULL);
-
-  g_list_foreach (local_pendings, (GFunc) empathy_pending_info_free, NULL);
-  g_list_free (local_pendings);
+  self_contact = empathy_tp_group_get_self_contact (priv->group);
+  empathy_tp_group_add_member (priv->group, self_contact, NULL);
+  g_object_unref (self_contact);
 }
 
 void

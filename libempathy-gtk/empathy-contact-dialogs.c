@@ -53,7 +53,7 @@ contact_dialogs_find (GtkDialog      *dialog,
 	contact_widget = g_object_get_data (G_OBJECT (dialog), "contact_widget");
 	this_contact = empathy_contact_widget_get_contact (contact_widget);
 
-	return !empathy_contact_equal (contact, this_contact);
+	return contact != this_contact;
 }
 
 /*

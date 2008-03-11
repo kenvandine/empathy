@@ -54,8 +54,10 @@ debug_init (void)
 		const gchar *env;
 		gint         i;
 
-		env = g_getenv ("EMPATHY_DEBUG");
+		env = g_getenv ("TELEPATHY_GLIB_DEBUG");
 		tp_debug_set_flags (env);
+
+		env = g_getenv ("EMPATHY_DEBUG");
 
 		if (env) {
 			debug_strv = g_strsplit_set (env, ":, ", 0);

@@ -774,6 +774,10 @@ contact_list_view_drag_data_received (GtkWidget         *widget,
 		return;
 	}
 
+	empathy_contact_run_until_ready (contact,
+					 EMPATHY_CONTACT_READY_HANDLE,
+					 NULL);
+
 	model = gtk_tree_view_get_model (GTK_TREE_VIEW (widget));
 
 	/* Get source group information. */

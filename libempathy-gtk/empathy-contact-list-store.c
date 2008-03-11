@@ -880,7 +880,8 @@ contact_list_store_add_contact (EmpathyContactListStore *store,
 
 	priv = GET_PRIV (store);
 	
-	if (!priv->show_offline && !empathy_contact_is_online (contact)) {
+	if (!(empathy_contact_get_ready (contact) & EMPATHY_CONTACT_READY_ID) ||
+	    (!priv->show_offline && !empathy_contact_is_online (contact))) {
 		return;
 	}
 
@@ -1488,15 +1489,14 @@ contact_list_store_find_contact_foreach (GtkTreeModel *model,
 			    EMPATHY_CONTACT_LIST_STORE_COL_CONTACT, &contact,
 			    -1);
 
-	if (!contact) {
-		return FALSE;
-	}
-
-	if (empathy_contact_equal (contact, fc->contact)) {
+	if (contact == fc->contact) {
 		fc->found = TRUE;
 		fc->iters = g_list_append (fc->iters, gtk_tree_iter_copy (iter));
 	}
-	g_object_unref (contact);
+
+	if (contact) {
+		g_object_unref (contact);
+	}
 
 	return FALSE;
 }

@@ -731,6 +731,8 @@ tp_contact_factory_got_self_handle_cb (TpConnection *proxy,
 		return;
 	}
 
+	empathy_debug (DEBUG_DOMAIN, "Connection ready");
+
 	empathy_contact_set_handle (priv->user, handle);
 	priv->ready = TRUE;
 

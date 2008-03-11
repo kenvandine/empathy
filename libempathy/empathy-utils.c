@@ -452,6 +452,10 @@ empathy_call_with_contact (EmpathyContact *contact)
 	group = empathy_tp_group_new (account, new_chan);
 	factory = empathy_contact_factory_new ();
 	self_contact = empathy_contact_factory_get_user (factory, account);
+	empathy_contact_run_until_ready (self_contact,
+					 EMPATHY_CONTACT_READY_HANDLE,
+					 NULL);
+
 	empathy_tp_group_add_member (group, contact, "");
 	empathy_tp_group_add_member (group, self_contact, "");	
 

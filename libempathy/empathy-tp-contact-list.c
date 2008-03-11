@@ -710,8 +710,8 @@ empathy_tp_contact_list_new (McAccount *account)
 	priv->tp_conn = tp_conn;
 	priv->account = g_object_ref (account);
 	priv->mc = mc;
-	priv->contacts_groups = g_hash_table_new_full (empathy_contact_hash,
-						       empathy_contact_equal,
+	priv->contacts_groups = g_hash_table_new_full (g_direct_hash,
+						       g_direct_equal,
 						       (GDestroyNotify) g_object_unref,
 						       (GDestroyNotify) tp_contact_list_group_list_free);
 

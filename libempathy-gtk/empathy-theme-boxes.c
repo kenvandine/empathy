@@ -573,7 +573,7 @@ theme_boxes_maybe_append_header (EmpathyTheme        *theme,
 	}
 	else if (!from_self &&
 		 (!empathy_chat_view_get_last_contact (view) ||
-		  !empathy_contact_equal (contact, empathy_chat_view_get_last_contact (view)))) {
+		  !(contact == empathy_chat_view_get_last_contact (view)))) {
 		header = TRUE;
 	}
 

@@ -306,9 +306,7 @@ static void
 contact_widget_set_contact (EmpathyContactWidget *information,
 			    EmpathyContact        *contact)
 {
-	if (contact == information->contact ||
-	    (contact && information->contact &&
-	     empathy_contact_equal (contact, information->contact))) {
+	if (contact == information->contact) {
 		return;
 	}
 
@@ -512,6 +510,10 @@ contact_widget_change_contact (EmpathyContactWidget *information)
 	}
 
 	if (contact) {
+		empathy_contact_run_until_ready (contact,
+						 EMPATHY_CONTACT_READY_HANDLE |
+						 EMPATHY_CONTACT_READY_ID,
+						 NULL);
 		contact_widget_set_contact (information, contact);
 		g_object_unref (contact);
 	}

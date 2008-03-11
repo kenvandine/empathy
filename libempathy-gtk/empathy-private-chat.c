@@ -105,6 +105,10 @@ private_chat_constructor (GType                  type,
 	priv->contact = empathy_contact_factory_get_from_handle (priv->factory,
 								 account,
 								 tp_chan->handle);
+	empathy_contact_run_until_ready (priv->contact,
+					 EMPATHY_CONTACT_READY_ID |
+					 EMPATHY_CONTACT_READY_NAME,
+					 NULL);
 
 	priv->name = g_strdup (empathy_contact_get_name (priv->contact));
 

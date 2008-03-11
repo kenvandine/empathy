@@ -1211,7 +1211,7 @@ chat_state_changed_cb (EmpathyTpChat      *tp_chat,
 
 	/* Find the contact in the list. After that l is the list elem or NULL */
 	for (l = priv->compositors; l; l = l->next) {
-		if (empathy_contact_equal (contact, l->data)) {
+		if (contact == l->data) {
 			break;
 		}
 	}

@@ -715,31 +715,19 @@ chat_view_avatar_cache_data_free (gpointer ptr)
 GdkPixbuf *
 empathy_chat_view_get_avatar_pixbuf_with_cache (EmpathyContact *contact)
 {
-	static GHashTable *avatar_cache = NULL;
 	AvatarData        *data;
 	EmpathyAvatar     *avatar;
 	GdkPixbuf         *tmp_pixbuf;
 	GdkPixbuf         *pixbuf = NULL;
 
-	/* Init avatar cache */
-	if (!avatar_cache) {
-		avatar_cache = g_hash_table_new_full (empathy_contact_hash,
-						      empathy_contact_equal,
-						      g_object_unref,
-						      chat_view_avatar_cache_data_free);
-	}
-
 	/* Check if avatar is in cache and if it's up to date */
 	avatar = empathy_contact_get_avatar (contact);
-	data = g_hash_table_lookup (avatar_cache, contact);
+	data = g_object_get_data (G_OBJECT (contact), "chat-view-avatar-cache");
 	if (data) {
 		if (avatar && !tp_strdiff (avatar->token, data->token)) {
 			/* We have the avatar in cache */
 			return data->pixbuf;
 		}
-
-		/* The cache is outdate */
-		g_hash_table_remove (avatar_cache, contact);
 	}
 
 	/* Avatar not in cache, create pixbuf */
@@ -757,9 +745,8 @@ empathy_chat_view_get_avatar_pixbuf_with_cache (EmpathyContact *contact)
 	data->token = g_strdup (avatar->token);
 	data->pixbuf = pixbuf;
 
-	g_hash_table_insert (avatar_cache,
-			     g_object_ref (contact),
-			     data);
+	g_object_set_data_full (G_OBJECT (contact), "chat-view-avatar-cache",
+				data, chat_view_avatar_cache_data_free);
 
 	return data->pixbuf;
 }

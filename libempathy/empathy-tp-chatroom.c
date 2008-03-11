@@ -46,18 +46,6 @@ static void            empathy_tp_chatroom_class_init (EmpathyTpChatroomClass  *
 static void            tp_chatroom_iface_init         (EmpathyContactListIface *iface);
 static void            empathy_tp_chatroom_init       (EmpathyTpChatroom       *chatroom);
 static void            tp_chatroom_finalize           (GObject                 *object);
-static void            tp_chatroom_member_added_cb    (EmpathyTpGroup          *group,
-						       EmpathyContact          *contact,
-						       EmpathyContact          *actor,
-						       guint                    reason,
-						       const gchar             *message,
-						       EmpathyTpChatroom       *chatroom);
-static void            tp_chatroom_member_removed_cb  (EmpathyTpGroup          *group,
-						       EmpathyContact          *contact,
-						       EmpathyContact          *actor,
-						       guint                    reason,
-						       const gchar             *message,
-						       EmpathyTpChatroom       *chatroom);
 static void            tp_chatroom_add                (EmpathyContactList      *list,
 						       EmpathyContact           *contact,
 						       const gchar             *message);
@@ -114,14 +102,59 @@ tp_chatroom_finalize (GObject *object)
 	G_OBJECT_CLASS (empathy_tp_chatroom_parent_class)->finalize (object);
 }
 
+static void
+tp_chatroom_member_added_cb (EmpathyTpGroup    *group,
+			     EmpathyContact    *contact,
+			     EmpathyContact    *actor,
+			     guint              reason,
+			     const gchar       *message,
+			     EmpathyTpChatroom *chatroom)
+{
+	g_signal_emit_by_name (chatroom, "members-changed",
+			       contact, actor, reason, message,
+			       TRUE);
+}
+
+static void
+tp_chatroom_member_removed_cb (EmpathyTpGroup    *group,
+			       EmpathyContact    *contact,
+			       EmpathyContact    *actor,
+			       guint              reason,
+			       const gchar       *message,
+			       EmpathyTpChatroom *chatroom)
+{
+	g_signal_emit_by_name (chatroom, "members-changed",
+			       contact, actor, reason, message,
+			       FALSE);
+}
+static void
+tp_chatroom_local_pending_cb  (EmpathyTpGroup    *group,
+			       EmpathyContact    *contact,
+			       EmpathyContact    *actor,
+			       guint              reason,
+			       const gchar       *message,
+			       EmpathyTpChatroom *chatroom)
+{
+	EmpathyTpChatroomPriv *priv = GET_PRIV (chatroom);
+
+	if (empathy_contact_is_user (contact)) {
+		priv->invitor = g_object_ref (actor);
+		priv->invit_message = g_strdup (message);
+		priv->is_invited = TRUE;
+
+		empathy_debug (DEBUG_DOMAIN, "We are invited to join by %s (%d): %s",
+			       empathy_contact_get_id (priv->invitor),
+			       empathy_contact_get_handle (priv->invitor),
+			       priv->invit_message);
+	}
+}
+
 EmpathyTpChatroom *
 empathy_tp_chatroom_new (McAccount *account,
 			 TpChan    *tp_chan)
 {
 	EmpathyTpChatroomPriv *priv;
 	EmpathyTpChatroom     *chatroom;
-	GList                 *members, *l;
-	EmpathyContact        *user;
 
 	g_return_val_if_fail (MC_IS_ACCOUNT (account), NULL);
 	g_return_val_if_fail (TELEPATHY_IS_CHAN (tp_chan), NULL);
@@ -142,32 +175,9 @@ empathy_tp_chatroom_new (McAccount *account,
 	g_signal_connect (priv->group, "member-removed",
 			  G_CALLBACK (tp_chatroom_member_removed_cb),
 			  chatroom);
-
-	/* Check if we are invited to join the chat */
-	user = empathy_tp_group_get_self_contact (priv->group);
-	members = empathy_tp_group_get_local_pendings (priv->group);
-	for (l = members; l; l = l->next) {
-		EmpathyPendingInfo *info;
-
-		info = l->data;
-
-		if (!empathy_contact_equal (user, info->member)) {
-			continue;
-		}
-
-		priv->invitor = g_object_ref (info->actor);
-		priv->invit_message = g_strdup (info->message);
-		priv->is_invited = TRUE;
-
-		empathy_debug (DEBUG_DOMAIN, "We are invited to join by %s (%d): %s",
-			       empathy_contact_get_id (priv->invitor),
-			       empathy_contact_get_handle (priv->invitor),
-			       priv->invit_message);
-	}
-
-	g_list_foreach (members, (GFunc) empathy_pending_info_free, NULL);
-	g_list_free (members);
-	g_object_unref (user);
+	g_signal_connect (priv->group, "local-pending",
+			  G_CALLBACK (tp_chatroom_local_pending_cb),
+			  chatroom);
 
 	return chatroom;
 }
@@ -227,32 +237,6 @@ empathy_tp_chatroom_set_topic (EmpathyTpChatroom *chatroom,
 			       const gchar       *topic)
 {
 	/* FIXME: not implemented */
-}
-
-static void
-tp_chatroom_member_added_cb (EmpathyTpGroup    *group,
-			     EmpathyContact    *contact,
-			     EmpathyContact    *actor,
-			     guint              reason,
-			     const gchar       *message,
-			     EmpathyTpChatroom *chatroom)
-{
-	g_signal_emit_by_name (chatroom, "members-changed",
-			       contact, actor, reason, message,
-			       TRUE);
-}
-
-static void
-tp_chatroom_member_removed_cb (EmpathyTpGroup    *group,
-			       EmpathyContact    *contact,
-			       EmpathyContact    *actor,
-			       guint              reason,
-			       const gchar       *message,
-			       EmpathyTpChatroom *chatroom)
-{
-	g_signal_emit_by_name (chatroom, "members-changed",
-			       contact, actor, reason, message,
-			       FALSE);
 }
 
 static void
