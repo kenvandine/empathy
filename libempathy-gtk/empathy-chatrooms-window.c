@@ -154,10 +154,10 @@ empathy_chatrooms_window_show (GtkWindow *parent)
 	empathy_account_chooser_set_filter (EMPATHY_ACCOUNT_CHOOSER (window->account_chooser),
 					    empathy_account_chooser_filter_is_connected,
 					    NULL);
-	empathy_account_chooser_set_account (EMPATHY_ACCOUNT_CHOOSER (window->account_chooser), NULL);
 	g_object_set (window->account_chooser, 
 		      "has-all-option", TRUE,
 		      NULL);
+	empathy_account_chooser_set_account (EMPATHY_ACCOUNT_CHOOSER (window->account_chooser), NULL);
 
 	gtk_box_pack_start (GTK_BOX (window->hbox_account),
 			    window->account_chooser,
