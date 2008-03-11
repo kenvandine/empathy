@@ -657,11 +657,11 @@ tp_contact_factory_connection_invalidated_cb (EmpathyTpContactFactory *tp_factor
 	g_object_unref (priv->connection);
 	priv->connection = NULL;
 	priv->ready = FALSE;
+	priv->self_handle = 0;
 
 	g_list_foreach (priv->contacts,
 			tp_contact_factory_disconnect_contact_foreach,
 			tp_factory);
-
 }
 
 
@@ -760,7 +760,6 @@ tp_contact_factory_status_updated (EmpathyTpContactFactory *tp_factory)
 
 	if (priv->connection) {
 		/* We already have our connection object */
-		g_object_unref (tp_conn);
 		return;
 	}
 
