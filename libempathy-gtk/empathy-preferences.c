@@ -166,7 +166,8 @@ preferences_compact_contact_list_changed_cb (EmpathyConf *conf,
 	gboolean            value;
 
 	if (empathy_conf_get_bool (empathy_conf_get (), key, &value)) {
-		gtk_widget_set_sensitive (preferences->checkbutton_show_avatars, !value);
+		gtk_widget_set_sensitive (preferences->checkbutton_show_avatars,
+					  !value);
 	}
 }
 
