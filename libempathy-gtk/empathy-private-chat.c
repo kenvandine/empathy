@@ -34,6 +34,7 @@
 #include <glib/gi18n.h>
 
 #include <libmissioncontrol/mission-control.h>
+#include <telepathy-glib/util.h>
 
 #include <libempathy/empathy-debug.h>
 #include <libempathy/empathy-tp-chat.h>
@@ -105,10 +106,6 @@ private_chat_constructor (GType                  type,
 	priv->contact = empathy_contact_factory_get_from_handle (priv->factory,
 								 account,
 								 tp_chan->handle);
-	empathy_contact_run_until_ready (priv->contact,
-					 EMPATHY_CONTACT_READY_ID |
-					 EMPATHY_CONTACT_READY_NAME,
-					 NULL);
 
 	priv->name = g_strdup (empathy_contact_get_name (priv->contact));
 
@@ -271,7 +268,7 @@ private_chat_contact_updated_cb (EmpathyContact     *contact,
 
 	priv = GET_PRIV (chat);
 
-	if (strcmp (priv->name, empathy_contact_get_name (contact)) != 0) {
+	if (tp_strdiff (priv->name, empathy_contact_get_name (contact))) {
 		g_free (priv->name);
 		priv->name = g_strdup (empathy_contact_get_name (contact));
 		g_signal_emit_by_name (chat, "name-changed", priv->name);
