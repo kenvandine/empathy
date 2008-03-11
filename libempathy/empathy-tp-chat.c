@@ -49,7 +49,14 @@ struct _EmpathyTpChatPriv {
 	TpChan                *tp_chan;
 	gboolean               had_pending_messages;
 	GSList                *message_queue;
+	GPtrArray             *properties;
 };
+
+typedef struct {
+	gchar  *name;
+	guint   id;
+	GValue *value;
+} TpChatProperty;
 
 static void empathy_tp_chat_class_init (EmpathyTpChatClass *klass);
 static void empathy_tp_chat_init       (EmpathyTpChat      *chat);
@@ -65,6 +72,7 @@ enum {
 	MESSAGE_RECEIVED,
 	SEND_ERROR,
 	CHAT_STATE_CHANGED,
+	PROPERTY_CHANGED,
 	DESTROY,
 	LAST_SIGNAL
 };
@@ -375,6 +383,37 @@ tp_chat_properties_changed_cb (TpProxy         *proxy,
 			       gpointer         user_data,
 			       GObject         *chat)
 {
+	EmpathyTpChatPriv *priv = GET_PRIV (chat);
+	guint              i, j;
+
+	for (i = 0; i < properties->len; i++) {
+		GValueArray    *prop_struct;
+		TpChatProperty *property;
+		guint           id;
+		GValue         *src_value;
+
+		prop_struct = g_ptr_array_index (properties, i);
+		id = g_value_get_uint (g_value_array_get_nth (prop_struct, 0));
+		src_value = g_value_array_get_nth (prop_struct, 1);
+
+		for (j = 0; j < priv->properties->len; j++) {
+			property = g_ptr_array_index (priv->properties, j);
+			if (property->id == id) {
+				if (property->value) {
+					g_value_unset (property->value);
+				} else {
+					property->value = g_slice_new0 (GValue);
+				}
+				g_value_copy (src_value, property->value);
+
+				empathy_debug (DEBUG_DOMAIN, "property %s changed",
+					       property->name);
+				g_signal_emit (chat, signals[PROPERTY_CHANGED], 0,
+					       property->name, property->value);
+				break;
+			}
+		}
+	}
 }
 
 static void
@@ -394,16 +433,26 @@ tp_chat_list_properties_cb (TpProxy         *proxy,
 			    gpointer         user_data,
 			    GObject         *chat)
 {
-	GArray *ids;
-	guint   i;
+	EmpathyTpChatPriv *priv = GET_PRIV (chat);
+	GArray            *ids;
+	guint              i;
 
 	ids = g_array_sized_new (FALSE, FALSE, sizeof (guint), properties->len);
+	priv->properties = g_ptr_array_sized_new (properties->len);
 	for (i = 0; i < properties->len; i++) {
-		GValueArray *prop_struct;
-		guint        id;
+		GValueArray    *prop_struct;
+		TpChatProperty *property;
+		guint           id;
+		const gchar    *name;
 
 		prop_struct = g_ptr_array_index (properties, i);
 		id = g_value_get_uint (g_value_array_get_nth (prop_struct, 0));
+		name = g_value_get_string (g_value_array_get_nth (prop_struct, 1));
+
+		property = g_slice_new0 (TpChatProperty);
+		property->id = id;
+		property->name = g_strdup (name);
+		g_ptr_array_add (priv->properties, property);
 		g_array_append_val (ids, id);
 	}
 
@@ -414,6 +463,13 @@ tp_chat_list_properties_cb (TpProxy         *proxy,
 							 chat);
 
 	g_array_free (ids, TRUE);
+}
+
+void
+empathy_tp_chat_set_property (EmpathyTpChat *chat,
+			      const GValue  *value)
+{
+	/* FIXME: not implemented */
 }
 
 static gboolean
@@ -466,6 +522,7 @@ static void
 tp_chat_finalize (GObject *object)
 {
 	EmpathyTpChatPriv *priv = GET_PRIV (object);
+	guint              i;
 
 	if (priv->acknowledge && priv->channel) {
 		empathy_debug (DEBUG_DOMAIN, "Closing channel...");
@@ -484,6 +541,17 @@ tp_chat_finalize (GObject *object)
 	if (priv->tp_chan) {
 		g_object_unref (priv->tp_chan);
 	}
+
+	for (i = 0; i < priv->properties->len; i++) {
+		TpChatProperty *property;
+
+		property = g_ptr_array_index (priv->properties, i);
+		g_free (property->name);
+		g_value_unset (property->value);
+		g_slice_free (GValue, property->value);
+		g_slice_free (TpChatProperty, property);
+	}
+	g_ptr_array_free (priv->properties, TRUE);
 
 	g_object_unref (priv->factory);
 	g_object_unref (priv->user);
@@ -644,6 +712,16 @@ empathy_tp_chat_class_init (EmpathyTpChatClass *klass)
 			      _empathy_marshal_VOID__OBJECT_UINT,
 			      G_TYPE_NONE,
 			      2, EMPATHY_TYPE_CONTACT, G_TYPE_UINT);
+
+	signals[PROPERTY_CHANGED] =
+		g_signal_new ("property-changed",
+			      G_TYPE_FROM_CLASS (klass),
+			      G_SIGNAL_RUN_LAST,
+			      0,
+			      NULL, NULL,
+			      _empathy_marshal_VOID__STRING_BOXED,
+			      G_TYPE_NONE,
+			      2, G_TYPE_STRING, G_TYPE_VALUE);
 
 	signals[DESTROY] =
 		g_signal_new ("destroy",

@@ -68,6 +68,8 @@ void           empathy_tp_chat_send                 (EmpathyTpChat      *chat,
 void           empathy_tp_chat_set_state            (EmpathyTpChat      *chat,
 						     TpChannelChatState  state);
 const gchar *  empathy_tp_chat_get_id               (EmpathyTpChat      *chat);
+void           empathy_tp_chat_set_property         (EmpathyTpChat      *chat,
+						     const GValue       *value);
 
 G_END_DECLS
 
