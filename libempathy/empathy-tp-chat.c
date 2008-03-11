@@ -347,6 +347,12 @@ tp_chat_list_pending_messages_cb (TpChannel       *channel,
 
 	priv->had_pending_messages = TRUE;
 
+	if (error) {
+		empathy_debug (DEBUG_DOMAIN, "Error listing pending messages: %s",
+			       error->message);
+		return;
+	}
+
 	for (i = 0; i < messages_list->len; i++) {
 		EmpathyMessage *message;
 		GValueArray    *message_struct;
@@ -429,6 +435,12 @@ tp_chat_get_properties_cb (TpProxy         *proxy,
 			   gpointer         user_data,
 			   GObject         *chat)
 {
+	if (error) {
+		empathy_debug (DEBUG_DOMAIN, "Error getting properties: %s",
+			       error->message);
+		return;
+	}
+
 	empathy_debug (DEBUG_DOMAIN, "Got value of properties");
 	tp_chat_properties_changed_cb (proxy, properties, user_data, chat);
 }
@@ -445,6 +457,12 @@ tp_chat_list_properties_cb (TpProxy         *proxy,
 	guint              i;
 
 	priv->had_properties_list = TRUE;
+
+	if (error) {
+		empathy_debug (DEBUG_DOMAIN, "Error listing properties: %s",
+			       error->message);
+		return;
+	}
 
 	ids = g_array_sized_new (FALSE, FALSE, sizeof (guint), properties->len);
 	priv->properties = g_ptr_array_sized_new (properties->len);
