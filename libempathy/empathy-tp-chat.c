@@ -512,6 +512,10 @@ empathy_tp_chat_set_property (EmpathyTpChat *chat,
 			GValue       id = {0, };
 			GValue       dest_value = {0, };
 
+			if (!(property->flags & TP_PROPERTY_FLAG_WRITE)) {
+				break;
+			}
+
 			g_value_init (&id, G_TYPE_UINT);
 			g_value_init (&dest_value, G_TYPE_VALUE);
 			g_value_set_uint (&id, property->id);
@@ -531,6 +535,9 @@ empathy_tp_chat_set_property (EmpathyTpChat *chat,
 									 tp_chat_async_cb,
 									 "Seting property", NULL,
 									 G_OBJECT (chat));
+
+			g_ptr_array_free (properties, TRUE);
+			g_value_array_free (prop);
 
 			break;
 		}
