@@ -78,7 +78,7 @@ _gen/signals-marshal.c: _gen/signals-marshal.list
 	( \
 	echo '#include "signals-marshal.h"' && \
 	$(GLIB_GENMARSHAL) --body --prefix=_emp_ext_marshal $< \
-	) >> $@
+	) > $@
 
 _gen/register-dbus-glib-marshallers-body.h: _gen/all.xml \
 	$(tools_dir)/glib-client-marshaller-gen.py
