@@ -74,14 +74,20 @@ static guint signals[LAST_SIGNAL];
 G_DEFINE_TYPE (EmpathyTpChat, empathy_tp_chat, G_TYPE_OBJECT);
 
 static void
-tp_chat_invalidated_cb (EmpathyTpChat *chat)
+tp_chat_invalidated_cb (TpProxy       *proxy,
+			guint          domain,
+			gint           code,
+			gchar         *message,
+			EmpathyTpChat *chat)
 {
 	EmpathyTpChatPriv *priv = GET_PRIV (chat);
 
-	empathy_debug (DEBUG_DOMAIN, "Channel invalidated");
+	empathy_debug (DEBUG_DOMAIN, "Channel invalidated: %s", message);
 
 	g_object_unref (priv->channel);
+	g_object_unref (priv->tp_chan);
 	priv->channel = NULL;
+	priv->tp_chan = NULL;
 
 	g_signal_emit (chat, signals[DESTROY], 0);
 }
@@ -135,11 +141,11 @@ tp_chat_sender_ready_notify_cb (EmpathyContact *contact,
 				GParamSpec     *param_spec,
 				EmpathyTpChat  *chat)
 {
-	EmpathyTpChatPriv *priv = GET_PRIV (chat);
-	EmpathyMessage    *message;
-	EmpathyContact    *sender;
-	gboolean           removed = FALSE;
-	const gchar       *name, *id;
+	EmpathyTpChatPriv   *priv = GET_PRIV (chat);
+	EmpathyMessage      *message;
+	EmpathyContactReady  ready;
+	EmpathyContact      *sender;
+	gboolean             removed = FALSE;
 
 	/* Emit all messages queued until we find a message with not
 	 * ready sender. When leaving this loop, sender is the first not ready
@@ -148,10 +154,9 @@ tp_chat_sender_ready_notify_cb (EmpathyContact *contact,
 	while (priv->message_queue) {
 		message = priv->message_queue->data;
 		sender = empathy_message_get_sender (message);
-		name = empathy_contact_get_name (sender);
-		id = empathy_contact_get_id (sender);
+		ready = empathy_contact_get_ready (sender);
 
-		if (!tp_strdiff (name, id)) {
+		if (!(ready & EMPATHY_CONTACT_READY_NAME)) {
 			break;
 		}
 
@@ -169,7 +174,7 @@ tp_chat_sender_ready_notify_cb (EmpathyContact *contact,
 						      chat);
 
 		if (priv->message_queue) {
-			g_signal_connect (sender, "notify::name",
+			g_signal_connect (sender, "notify::ready",
 					  G_CALLBACK (tp_chat_sender_ready_notify_cb),
 					  chat);
 		}
@@ -182,7 +187,7 @@ tp_chat_emit_or_queue_message (EmpathyTpChat  *chat,
 {
 	EmpathyTpChatPriv   *priv = GET_PRIV (chat);
 	EmpathyContact      *sender;
-	const gchar         *name, *id;
+	EmpathyContactReady  ready;
 
 	if (priv->message_queue != NULL) {
 		empathy_debug (DEBUG_DOMAIN, "Message queue not empty");
@@ -192,9 +197,8 @@ tp_chat_emit_or_queue_message (EmpathyTpChat  *chat,
 	}
 
 	sender = empathy_message_get_sender (message);
-	name = empathy_contact_get_name (sender);
-	id = empathy_contact_get_id (sender);
-	if (tp_strdiff (name, id)) {
+	ready = empathy_contact_get_ready (sender);
+	if (ready & EMPATHY_CONTACT_READY_NAME) {
 		empathy_debug (DEBUG_DOMAIN, "Message queue empty and sender ready");
 		g_signal_emit (chat, signals[MESSAGE_RECEIVED], 0, message);
 		return;
@@ -203,11 +207,12 @@ tp_chat_emit_or_queue_message (EmpathyTpChat  *chat,
 	empathy_debug (DEBUG_DOMAIN, "Sender not ready");
 	priv->message_queue = g_slist_append (priv->message_queue, 
 					      g_object_ref (message));
-	g_signal_connect (sender, "notify::name",
+	g_signal_connect (sender, "notify::ready",
 			  G_CALLBACK (tp_chat_sender_ready_notify_cb),
 			  chat);
 }
 
+static void
 tp_chat_received_cb (TpChannel   *channel,
 		     guint        message_id,
 		     guint        timestamp,
@@ -359,7 +364,7 @@ tp_chat_list_pending_messages_cb (TpChannel       *channel,
 						 from_handle,
 						 message_body);
 
-		g_signal_emit (chat, signals[MESSAGE_RECEIVED], 0, message);
+		tp_chat_emit_or_queue_message (EMPATHY_TP_CHAT (chat), message);
 		g_object_unref (message);
 	}
 }
@@ -410,7 +415,16 @@ tp_chat_finalize (GObject *object)
 					   NULL);
 	}
 
-	g_object_unref (priv->channel);
+	if (priv->channel) {
+		g_signal_handlers_disconnect_by_func (priv->channel,
+						      tp_chat_invalidated_cb,
+						      object);
+		g_object_unref (priv->channel);
+	}
+	if (priv->tp_chan) {
+		g_object_unref (priv->tp_chan);
+	}
+
 	g_object_unref (priv->factory);
 	g_object_unref (priv->user);
 	g_object_unref (priv->account);
@@ -597,11 +611,12 @@ EmpathyTpChat *
 empathy_tp_chat_new (McAccount *account,
 		     TpChan    *tp_chan)
 {
-	EmpathyTpChat  *chat;
-	TpChannel      *channel;
-	TpConnection   *connection;
-	MissionControl *mc;
-	TpConn         *tp_conn;
+	EmpathyTpChat     *chat;
+	EmpathyTpChatPriv *priv;
+	TpChannel         *channel;
+	TpConnection      *connection;
+	MissionControl    *mc;
+	TpConn            *tp_conn;
 
 	mc = empathy_mission_control_new ();
 	tp_conn = mission_control_get_connection (mc, account, NULL);
@@ -612,6 +627,9 @@ empathy_tp_chat_new (McAccount *account,
 			     "account", account,
 			     "channel", channel,
 			     NULL);
+
+	priv = GET_PRIV (chat);
+	priv->tp_chan = g_object_ref (tp_chan);
 
 	g_object_unref (channel);
 	g_object_unref (tp_conn);
@@ -690,7 +708,7 @@ empathy_tp_chat_set_acknowledge (EmpathyTpChat *chat,
 	g_object_notify (G_OBJECT (chat), "acknowledge");
 }
 
-TpChannel *
+TpChan *
 empathy_tp_chat_get_channel (EmpathyTpChat *chat)
 {
 	EmpathyTpChatPriv *priv;
@@ -699,7 +717,7 @@ empathy_tp_chat_get_channel (EmpathyTpChat *chat)
 
 	priv = GET_PRIV (chat);
 
-	return priv->channel;
+	return priv->tp_chan;
 }
 
 McAccount *
@@ -768,11 +786,7 @@ empathy_tp_chat_get_id (EmpathyTpChat *chat)
 	priv = GET_PRIV (chat);
 
 	if (!priv->id) {
-		TpChan *tp_chan;
-
-		tp_chan = tp_chan_new_from_channel (priv->channel);
-		priv->id = empathy_inspect_channel (priv->account, tp_chan);
-		g_object_unref (tp_chan);
+		priv->id = empathy_inspect_channel (priv->account, priv->tp_chan);
 	}
 
 	return priv->id;

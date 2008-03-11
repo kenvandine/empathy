@@ -1205,6 +1205,9 @@ tp_contact_factory_finalize (GObject *object)
 	g_object_unref (priv->user);
 
 	if (priv->connection) {
+		g_signal_handlers_disconnect_by_func (priv->connection,
+						      tp_contact_factory_connection_invalidated_cb,
+						      object);
 		g_object_unref (priv->connection);
 	}
 
