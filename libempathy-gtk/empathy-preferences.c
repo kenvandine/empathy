@@ -151,8 +151,30 @@ enum {
 };
 
 static void
+preferences_add_id (EmpathyPreferences *preferences, guint id)
+{
+	preferences->notify_ids = g_list_prepend (preferences->notify_ids,
+						  GUINT_TO_POINTER (id));
+}
+
+static void
+preferences_compact_contact_list_changed_cb (EmpathyConf *conf,
+					     const gchar *key,
+					     gpointer     user_data)
+{
+	EmpathyPreferences *preferences = user_data;
+	gboolean            value;
+
+	if (empathy_conf_get_bool (empathy_conf_get (), key, &value)) {
+		gtk_widget_set_sensitive (preferences->checkbutton_show_avatars, !value);
+	}
+}
+
+static void
 preferences_setup_widgets (EmpathyPreferences *preferences)
 {
+	guint id;
+
 	preferences_hookup_toggle_button (preferences,
 					  EMPATHY_PREFS_SOUNDS_FOR_MESSAGES,
 					  preferences->checkbutton_sounds_for_messages);
@@ -204,6 +226,17 @@ preferences_setup_widgets (EmpathyPreferences *preferences)
 	preferences_hookup_toggle_button (preferences,
 					  EMPATHY_PREFS_AUTOCONNECT,
 					  preferences->checkbutton_autoconnect);
+
+	id = empathy_conf_notify_add (empathy_conf_get (),
+				      EMPATHY_PREFS_UI_COMPACT_CONTACT_LIST,
+				      preferences_compact_contact_list_changed_cb,
+				      preferences);
+	if (id) {
+		preferences_add_id (preferences, id);
+	}
+	preferences_compact_contact_list_changed_cb (empathy_conf_get (),
+						     EMPATHY_PREFS_UI_COMPACT_CONTACT_LIST,
+						     preferences);
 }
 
 static void
@@ -621,13 +654,6 @@ preferences_notify_sensitivity_cb (EmpathyConf  *conf,
 	if (empathy_conf_get_bool (conf, key, &value)) {
 		gtk_widget_set_sensitive (GTK_WIDGET (user_data), value);
 	}
-}
-
-static void
-preferences_add_id (EmpathyPreferences *preferences, guint id)
-{
-	preferences->notify_ids = g_list_prepend (preferences->notify_ids,
-						  GUINT_TO_POINTER (id));
 }
 
 static void
