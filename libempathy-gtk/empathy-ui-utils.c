@@ -1303,38 +1303,34 @@ empathy_get_toplevel_window (GtkWidget *widget)
 static gchar *
 fixup_url (const gchar *url)
 {
-	gchar *real_url;
-
 	if (!g_str_has_prefix (url, "http://") &&
 	    !strstr (url, ":/") &&
 	    !strstr (url, "@")) {
-		real_url = g_strdup_printf ("http://%s", url);
+		return g_strdup_printf ("http://%s", url);
 	} else {
-		real_url = g_strdup (url);
+		return NULL;
 	}
-
-	return real_url;
 }
 
 void
 empathy_url_show (const char *url)
 {
-	gchar          *real_url;
-	gboolean        res;
-	GError         *err;
+	gchar    *real_url;
+	gboolean  res;
+	GError   *error;
 
 	real_url = fixup_url (url);
+	if (real_url) {
+		url = real_url;
+	}
 	/* FIXME: this does not work for multihead, we should use
 	 * GdkAppLaunchContext for that, when we can depend on GTK+ trunk
 	 */
-	res = g_app_info_launch_default_for_uri (real_url,
-						 NULL,
-						 &err);
+	res = g_app_info_launch_default_for_uri (url, NULL, &error);
 	if (!res) {
 		empathy_debug (DEBUG_DOMAIN, "Couldn't show URL %s: %s",
-			      real_url,
-			      err->message);
-		g_error_free (err);
+			       url, error->message);
+		g_clear_error (error);
 	}
 
 	g_free (real_url);
