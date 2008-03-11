@@ -23,7 +23,6 @@
 
 #include "empathy-tp-chatroom.h"
 #include "empathy-contact-list.h"
-#include "empathy-contact-factory.h"
 #include "empathy-tp-group.h"
 #include "empathy-utils.h"
 #include "empathy-debug.h"
@@ -34,12 +33,11 @@
 #define DEBUG_DOMAIN "TpChatroom"
 
 struct _EmpathyTpChatroomPriv {
-	EmpathyContactFactory *factory;
-	EmpathyTpGroup        *group;
+	EmpathyTpGroup *group;
 
-	gboolean               is_invited;
-	EmpathyContact        *invitor;
-	gchar                 *invit_message;
+	gboolean        is_invited;
+	EmpathyContact *invitor;
+	gchar          *invit_message;
 };
 
 static void            empathy_tp_chatroom_class_init (EmpathyTpChatroomClass  *klass);
@@ -91,7 +89,6 @@ tp_chatroom_finalize (GObject *object)
 	priv = GET_PRIV (chatroom);
 
 	g_object_unref (priv->group);
-	g_object_unref (priv->factory);
 
 	if (priv->invitor) {
 		g_object_unref (priv->invitor);
@@ -166,7 +163,6 @@ empathy_tp_chatroom_new (McAccount *account,
 
 	priv = GET_PRIV (chatroom);
 
-	priv->factory = empathy_contact_factory_new ();
 	priv->group = empathy_tp_group_new (account, tp_chan);
 
 	g_signal_connect (priv->group, "member-added",
