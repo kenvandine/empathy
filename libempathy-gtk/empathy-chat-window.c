@@ -1585,8 +1585,6 @@ chat_window_drag_data_received (GtkWidget        *widget,
 				EmpathyChatWindow *window)
 {
 	if (info == DND_DRAG_TYPE_CONTACT_ID) {
-		EmpathyContactFactory *factory;
-		EmpathyContact        *contact = NULL;
 		EmpathyChat           *chat;
 		EmpathyChatWindow     *old_window;
 		McAccount             *account;
@@ -1600,30 +1598,17 @@ chat_window_drag_data_received (GtkWidget        *widget,
 		empathy_debug (DEBUG_DOMAIN, "DND contact from roster with id:'%s'", id);
 		
 		strv = g_strsplit (id, "/", 2);
-		factory = empathy_contact_factory_new ();
 		account = mc_account_lookup (strv[0]);
-		if (account) {
-			contact = empathy_contact_factory_get_from_id (factory,
-								       account,
-								       strv[1]);
-			g_object_unref (account);
-		}
-		g_object_unref (factory);
-		g_object_unref (account);
-		g_strfreev (strv);
-
-		if (!contact) {
-			empathy_debug (DEBUG_DOMAIN, "DND contact from roster not found");
-			return;
-		}
-		
-		account = empathy_contact_get_account (contact);
-		chat = empathy_chat_window_find_chat (account, id);
+		chat = empathy_chat_window_find_chat (account, strv[1]);
 
 		if (!chat) {
-			empathy_chat_with_contact_id (account, id);
+			empathy_chat_with_contact_id (account, strv[2]);
+			g_object_unref (account);
+			g_strfreev (strv);
 			return;
 		}
+		g_object_unref (account);
+		g_strfreev (strv);
 
 		old_window = empathy_chat_get_window (chat);		
 		if (old_window) {
