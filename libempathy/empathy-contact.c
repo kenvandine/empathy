@@ -354,6 +354,9 @@ empathy_contact_set_id (EmpathyContact *contact,
 	priv->id = g_strdup (id);
 
 	g_object_notify (G_OBJECT (contact), "id");
+	if (G_STR_EMPTY (priv->name)) {
+		g_object_notify (G_OBJECT (contact), "name");
+	}
 }
 
 const gchar *
