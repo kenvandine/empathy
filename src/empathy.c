@@ -38,6 +38,9 @@
 #include <libmissioncontrol/mission-control.h>
 
 #include <libempathy/empathy-idle.h>
+#include <libempathy/empathy-tp-chat.h>
+#include <libempathy/empathy-tp-chatroom.h>
+#include <libempathy/empathy-chandler.h>
 #include <libempathy/empathy-utils.h>
 #include <libempathy/empathy-debug.h>
 
@@ -45,12 +48,76 @@
 #include <libempathy-gtk/empathy-preferences.h>
 #include <libempathy-gtk/empathy-main-window.h>
 #include <libempathy-gtk/empathy-status-icon.h>
+#include <libempathy-gtk/empathy-chat.h>
+#include <libempathy-gtk/empathy-private-chat.h>
+#include <libempathy-gtk/empathy-group-chat.h>
+#include <libempathy-gtk/empathy-chat-window.h>
 
 #include "bacon-message-connection.h"
 
 #define DEBUG_DOMAIN "EmpathyMain"
+#define BUS_NAME "org.gnome.Empathy.ChatChandler"
+#define OBJECT_PATH "/org/gnome/Empathy/ChatChandler"
 
 static BaconMessageConnection *connection = NULL;
+
+static void
+new_text_channel_cb (EmpathyChandler *chandler,
+		     TpConn          *tp_conn,
+		     TpChan          *tp_chan,
+		     MissionControl  *mc)
+{
+	EmpathyTpChat *tp_chat;
+	McAccount     *account;
+	EmpathyChat   *chat;
+	gchar         *id;
+
+	account = mission_control_get_account_for_connection (mc, tp_conn, NULL);
+	id = empathy_inspect_channel (account, tp_chan);
+	chat = empathy_chat_window_find_chat (account, id);
+	g_free (id);
+
+	if (chat) {
+		/* The chat already exists */
+		if (!empathy_chat_is_connected (chat)) {
+			/* The chat died, give him the new text channel */
+			if (empathy_chat_is_group_chat (chat)) {
+				tp_chat = EMPATHY_TP_CHAT (empathy_tp_chatroom_new (account, tp_chan));
+			} else {
+				tp_chat = empathy_tp_chat_new (account, tp_chan);
+			}
+			empathy_chat_set_tp_chat (chat, tp_chat);
+			g_object_unref (tp_chat);
+		}
+		empathy_chat_present (chat);
+
+		g_object_unref (account);
+		return;
+	}
+
+	if (tp_chan->handle_type == TP_HANDLE_TYPE_CONTACT) {
+		/* We have a new private chat channel */
+		tp_chat = empathy_tp_chat_new (account, tp_chan);
+		chat = EMPATHY_CHAT (empathy_private_chat_new (tp_chat));
+	}
+	else if (tp_chan->handle_type == TP_HANDLE_TYPE_ROOM) {
+		/* We have a new group chat channel */
+		tp_chat = EMPATHY_TP_CHAT (empathy_tp_chatroom_new (account, tp_chan));
+		chat = EMPATHY_CHAT (empathy_group_chat_new (EMPATHY_TP_CHATROOM (tp_chat)));
+	} else {
+		empathy_debug (DEBUG_DOMAIN,
+			       "Unknown handle type (%d) for Text channel",
+			       tp_chan->handle_type);
+		g_object_unref (account);
+		return;
+	}
+
+	empathy_chat_present (chat);
+
+	g_object_unref (chat);
+	g_object_unref (account);
+	g_object_unref (tp_chat);
+}
 
 static void
 service_ended_cb (MissionControl *mc,
@@ -275,6 +342,7 @@ main (int argc, char *argv[])
 	MissionControl    *mc;
 	McAccountMonitor  *monitor;
 	EmpathyIdle       *idle;
+	EmpathyChandler   *chandler;
 	gboolean           autoconnect = TRUE;
 	GError            *error = NULL;
 
@@ -359,10 +427,18 @@ main (int argc, char *argv[])
 						       window);
 	}
 
+	/* Handle text channels */
+	chandler = empathy_chandler_new (BUS_NAME, OBJECT_PATH);
+	g_signal_connect (chandler, "new-channel",
+			  G_CALLBACK (new_text_channel_cb),
+			  mc);
+	empathy_debug (DEBUG_DOMAIN, "Ready to handle new text channels");
+
 	gtk_main ();
 
 	empathy_idle_set_state (idle, MC_PRESENCE_OFFLINE);
 
+	g_object_unref (chandler);
 	g_object_unref (monitor);
 	g_object_unref (mc);
 	g_object_unref (idle);
