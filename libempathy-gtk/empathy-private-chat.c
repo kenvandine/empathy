@@ -45,7 +45,6 @@
 #include "empathy-private-chat.h"
 #include "empathy-chat-view.h"
 #include "empathy-chat.h"
-#include "empathy-preferences.h"
 //#include "empathy-sound.h"
 #include "empathy-images.h"
 #include "empathy-ui-utils.h"

@@ -38,15 +38,16 @@
 #include <libempathy/empathy-idle.h>
 #include <libempathy/empathy-filter.h>
 
+#include <libempathy-gtk/empathy-contact-dialogs.h>
+#include <libempathy-gtk/empathy-presence-chooser.h>
+#include <libempathy-gtk/empathy-conf.h>
+#include <libempathy-gtk/empathy-ui-utils.h>
+#include <libempathy-gtk/empathy-accounts-dialog.h>
+#include <libempathy-gtk/empathy-images.h>
+#include <libempathy-gtk/empathy-new-message-dialog.h>
+
 #include "empathy-status-icon.h"
-#include "empathy-contact-dialogs.h"
-#include "empathy-presence-chooser.h"
-#include "empathy-conf.h"
 #include "empathy-preferences.h"
-#include "empathy-ui-utils.h"
-#include "empathy-accounts-dialog.h"
-#include "empathy-images.h"
-#include "empathy-new-message-dialog.h"
 
 
 #define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), \

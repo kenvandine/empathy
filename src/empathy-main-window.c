@@ -38,23 +38,24 @@
 #include <libempathy/empathy-contact-factory.h>
 #include <libempathy/empathy-status-presets.h>
 
+#include <libempathy-gtk/empathy-contact-dialogs.h>
+#include <libempathy-gtk/empathy-contact-list-store.h>
+#include <libempathy-gtk/empathy-contact-list-view.h>
+#include <libempathy-gtk/empathy-presence-chooser.h>
+#include <libempathy-gtk/empathy-ui-utils.h>
+#include <libempathy-gtk/empathy-geometry.h>
+#include <libempathy-gtk/empathy-conf.h>
+#include <libempathy-gtk/empathy-accounts-dialog.h>
+#include <libempathy-gtk/empathy-log-window.h>
+#include <libempathy-gtk/empathy-new-message-dialog.h>
+#include <libempathy-gtk/empathy-gtk-enum-types.h>
+
 #include "empathy-main-window.h"
-#include "empathy-contact-dialogs.h"
 #include "ephy-spinner.h"
-#include "empathy-contact-list-store.h"
-#include "empathy-contact-list-view.h"
-#include "empathy-presence-chooser.h"
-#include "empathy-ui-utils.h"
-#include "empathy-geometry.h"
-#include "empathy-conf.h"
 #include "empathy-preferences.h"
-#include "empathy-accounts-dialog.h"
 #include "empathy-about-dialog.h"
 #include "empathy-new-chatroom-dialog.h"
 #include "empathy-chatrooms-window.h"
-#include "empathy-log-window.h"
-#include "empathy-new-message-dialog.h"
-#include "empathy-gtk-enum-types.h"
 
 #define DEBUG_DOMAIN "MainWindow"
 

@@ -22,7 +22,7 @@
  *          Xavier Claessens <xclaesse@gmail.com>
  */
 
-#include "config.h"
+#include <config.h>
 
 #include <string.h>
 #include <stdio.h>
@@ -41,9 +41,10 @@
 #include <libempathy/empathy-utils.h>
 #include <libempathy/empathy-debug.h>
 
+#include <libempathy-gtk/empathy-account-chooser.h>
+#include <libempathy-gtk/empathy-ui-utils.h>
+
 #include "empathy-new-chatroom-dialog.h"
-#include "empathy-account-chooser.h"
-#include "empathy-ui-utils.h"
 #include "ephy-spinner.h"
 
 #define DEBUG_DOMAIN "NewChatroomDialog"

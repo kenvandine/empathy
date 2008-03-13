@@ -22,7 +22,7 @@
  *          Xavier Claessens <xclaesse@gmail.com>
  */
 
-#include "config.h"
+#include <config.h>
 
 #include <glib/gi18n.h>
 #include <gtk/gtkaboutdialog.h>
@@ -30,7 +30,7 @@
 #include <glade/glade.h>
 
 #include "empathy-about-dialog.h"
-#include "empathy-ui-utils.h"
+#include <libempathy-gtk/empathy-ui-utils.h>
 
 #define WEB_SITE "http://live.gnome.org/Empathy"
 

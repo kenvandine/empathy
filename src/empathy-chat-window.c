@@ -25,7 +25,7 @@
  *          Xavier Claessens <xclaesse@gmail.com>
  */
 
-#include "config.h"
+#include <config.h>
 
 #include <string.h>
 
@@ -44,18 +44,17 @@
 #include <libempathy/empathy-message.h>
 #include <libempathy/empathy-utils.h>
 
+#include <libempathy-gtk/empathy-images.h>
+#include <libempathy-gtk/empathy-conf.h>
+#include <libempathy-gtk/empathy-private-chat.h>
+#include <libempathy-gtk/empathy-group-chat.h>
+#include <libempathy-gtk/empathy-contact-dialogs.h>
+#include <libempathy-gtk/empathy-log-window.h>
+#include <libempathy-gtk/empathy-ui-utils.h>
+
 #include "empathy-chat-window.h"
-#include "empathy-images.h"
-//#include "empathy-chat-invite.h"
-#include "empathy-contact-dialogs.h"
-#include "empathy-log-window.h"
 #include "empathy-new-chatroom-dialog.h"
-#include "empathy-conf.h"
 #include "empathy-preferences.h"
-#include "empathy-private-chat.h"
-#include "empathy-group-chat.h"
-//#include "empathy-sound.h"
-#include "empathy-ui-utils.h"
 #include "empathy-about-dialog.h"
 
 #define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), EMPATHY_TYPE_CHAT_WINDOW, EmpathyChatWindowPriv))
@@ -540,13 +539,30 @@ chat_window_accel_cb (GtkAccelGroup    *accelgroup,
 	}
 }
 
+static EmpathyChatWindow *
+chat_window_find_chat (EmpathyChat *chat)
+{
+	EmpathyChatWindowPriv *priv;
+	GList                 *l, *ll;
+
+	for (l = chat_windows; l; l = l->next) {
+		priv = GET_PRIV (l->data);
+		ll = g_list_find (priv->chats, chat);
+		if (ll) {
+			return l->data;
+		}
+	}
+
+	return NULL;
+}
+
 static void
 chat_window_close_clicked_cb (GtkWidget  *button,
 			      EmpathyChat *chat)
 {
 	EmpathyChatWindow *window;
 
-	window = empathy_chat_get_window (chat);
+	window = chat_window_find_chat (chat);
 	empathy_chat_window_remove_chat (window, chat);
 }
 
@@ -1013,15 +1029,10 @@ static void
 chat_window_room_set_topic_activate_cb (GtkWidget        *menuitem,
 					EmpathyChatWindow *window)
 {
-	EmpathyChatWindowPriv *priv;
+	EmpathyChatWindowPriv *priv = GET_PRIV (window);
 	
-	priv = GET_PRIV (window);
-
 	if (empathy_chat_is_group_chat (priv->current_chat)) {
-		EmpathyGroupChat *group_chat;
-
-		group_chat = EMPATHY_GROUP_CHAT (priv->current_chat);
-		empathy_group_chat_set_topic (group_chat);
+		empathy_group_chat_set_topic (EMPATHY_GROUP_CHAT (priv->current_chat));
 	}
 }
 
@@ -1387,7 +1398,7 @@ chat_window_detach_hook (GtkNotebook *source,
 	EmpathyChat           *chat;
 
 	chat = g_object_get_data (G_OBJECT (page), "chat");
-	window = empathy_chat_get_window (chat);
+	window = chat_window_find_chat (chat);
 
 	new_window = empathy_chat_window_new ();
 	priv = GET_PRIV (new_window);
@@ -1471,9 +1482,6 @@ chat_window_page_added_cb (GtkNotebook      *notebook,
 	/* Get chat object */
 	chat = g_object_get_data (G_OBJECT (child), "chat");
 
-	/* Set the chat window */
-	empathy_chat_set_window (chat, window);
-
 	/* Connect chat signals for this window */
 	g_signal_connect (chat, "status-changed",
 			  G_CALLBACK (chat_window_status_changed_cb),
@@ -1521,9 +1529,6 @@ chat_window_page_removed_cb (GtkNotebook      *notebook,
 
 	/* Get chat object */
 	chat = g_object_get_data (G_OBJECT (child), "chat");
-
-	/* Unset the window associated with a chat */
-	empathy_chat_set_window (chat, NULL);
 
 	/* Disconnect all signal handlers for this chat and this window */
 	g_signal_handlers_disconnect_by_func (chat,
@@ -1609,7 +1614,7 @@ chat_window_drag_data_received (GtkWidget        *widget,
 		g_object_unref (account);
 		g_strfreev (strv);
 
-		old_window = empathy_chat_get_window (chat);		
+		old_window = chat_window_find_chat (chat);		
 		if (old_window) {
 			if (old_window == window) {
 				gtk_drag_finish (context, TRUE, FALSE, time);
@@ -1622,7 +1627,7 @@ chat_window_drag_data_received (GtkWidget        *widget,
 		}
 		
 		/* Added to take care of any outstanding chat events */
-		empathy_chat_present (chat);
+		empathy_chat_window_present_chat (chat);
 
 		/* We should return TRUE to remove the data when doing
 		 * GDK_ACTION_MOVE, but we don't here otherwise it has
@@ -1646,7 +1651,7 @@ chat_window_drag_data_received (GtkWidget        *widget,
 			chat = g_object_get_data (G_OBJECT (*child), "chat");
 		}
 
-		old_window = empathy_chat_get_window (chat);
+		old_window = chat_window_find_chat (chat);
 		if (old_window) {
 			EmpathyChatWindowPriv *priv;
 
@@ -1721,9 +1726,6 @@ empathy_chat_window_add_chat (EmpathyChatWindow *window,
 
 	/* Reference the chat object */
 	g_object_ref (chat);
-
-	/* Set the chat window */
-	empathy_chat_set_window (chat, window);
 
 	empathy_chat_load_geometry (chat, &x, &y, &w, &h);
 
@@ -1872,5 +1874,32 @@ empathy_chat_window_find_chat (McAccount   *account,
 	}
 
 	return NULL;
+}
+
+void
+empathy_chat_window_present_chat (EmpathyChat *chat)
+{
+	EmpathyChatWindow     *window;
+	EmpathyChatWindowPriv *priv;
+
+	g_return_if_fail (EMPATHY_IS_CHAT (chat));
+
+	window = chat_window_find_chat (chat);
+
+	/* If the chat has no window, create one */
+	if (window == NULL) {
+		window = empathy_chat_window_get_default ();
+		if (!window) {
+			window = empathy_chat_window_new ();
+		}
+
+		empathy_chat_window_add_chat (window, chat);
+	}
+
+	priv = GET_PRIV (window);
+	empathy_chat_window_switch_to_chat (window, chat);
+	empathy_window_present (GTK_WINDOW (priv->dialog), TRUE);
+
+ 	gtk_widget_grab_focus (chat->input_text_view); 
 }
 

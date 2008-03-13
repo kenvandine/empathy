@@ -28,7 +28,6 @@
 #include <libempathy/empathy-debug.h>
 
 #include "empathy-ui-utils.h"
-#include "empathy-main-window.h"
 #include "empathy-theme-boxes.h"
 
 #define DEBUG_DOMAIN "FancyTheme"

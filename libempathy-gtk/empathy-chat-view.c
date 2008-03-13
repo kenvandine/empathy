@@ -48,7 +48,6 @@
 #include "empathy-chat-view.h"
 #include "empathy-chat.h"
 #include "empathy-conf.h"
-#include "empathy-preferences.h"
 #include "empathy-theme-manager.h"
 #include "empathy-ui-utils.h"
 #include "empathy-smiley-manager.h"

@@ -43,6 +43,29 @@ struct _EmpathyConfClass {
 	GObjectClass parent_class;
 };
 
+#define EMPATHY_PREFS_PATH "/apps/empathy"
+#define EMPATHY_PREFS_SOUNDS_FOR_MESSAGES          EMPATHY_PREFS_PATH "/notifications/sounds_for_messages"
+#define EMPATHY_PREFS_SOUNDS_WHEN_AWAY             EMPATHY_PREFS_PATH "/notifications/sounds_when_away"
+#define EMPATHY_PREFS_SOUNDS_WHEN_BUSY             EMPATHY_PREFS_PATH "/notifications/sounds_when_busy"
+#define EMPATHY_PREFS_POPUPS_WHEN_AVAILABLE        EMPATHY_PREFS_PATH "/notifications/popups_when_available"
+#define EMPATHY_PREFS_CHAT_SHOW_SMILEYS            EMPATHY_PREFS_PATH "/conversation/graphical_smileys"
+#define EMPATHY_PREFS_CHAT_THEME                   EMPATHY_PREFS_PATH "/conversation/theme"
+#define EMPATHY_PREFS_CHAT_THEME_CHAT_ROOM         EMPATHY_PREFS_PATH "/conversation/theme_chat_room"
+#define EMPATHY_PREFS_CHAT_SPELL_CHECKER_LANGUAGES EMPATHY_PREFS_PATH "/conversation/spell_checker_languages"
+#define EMPATHY_PREFS_CHAT_SPELL_CHECKER_ENABLED   EMPATHY_PREFS_PATH "/conversation/spell_checker_enabled"
+#define EMPATHY_PREFS_CHAT_NICK_COMPLETION_CHAR    EMPATHY_PREFS_PATH "/conversation/nick_completion_char"
+#define EMPATHY_PREFS_UI_SEPARATE_CHAT_WINDOWS     EMPATHY_PREFS_PATH "/ui/separate_chat_windows"
+#define EMPATHY_PREFS_UI_MAIN_WINDOW_HIDDEN        EMPATHY_PREFS_PATH "/ui/main_window_hidden"
+#define EMPATHY_PREFS_UI_AVATAR_DIRECTORY          EMPATHY_PREFS_PATH "/ui/avatar_directory"
+#define EMPATHY_PREFS_UI_SHOW_AVATARS              EMPATHY_PREFS_PATH "/ui/show_avatars"
+#define EMPATHY_PREFS_UI_COMPACT_CONTACT_LIST      EMPATHY_PREFS_PATH "/ui/compact_contact_list"
+#define EMPATHY_PREFS_CONTACTS_SHOW_OFFLINE        EMPATHY_PREFS_PATH "/contacts/show_offline"
+#define EMPATHY_PREFS_CONTACTS_SORT_CRITERIUM      EMPATHY_PREFS_PATH "/contacts/sort_criterium"
+#define EMPATHY_PREFS_HINTS_CLOSE_MAIN_WINDOW      EMPATHY_PREFS_PATH "/hints/close_main_window"
+#define EMPATHY_PREFS_SALUT_ACCOUNT_CREATED        EMPATHY_PREFS_PATH "/accounts/salut_created"
+#define EMPATHY_PREFS_USE_NM                       EMPATHY_PREFS_PATH "/use_nm"
+#define EMPATHY_PREFS_AUTOCONNECT                  EMPATHY_PREFS_PATH "/autoconnect"
+
 typedef void (*EmpathyConfNotifyFunc) (EmpathyConf  *conf, 
 				      const gchar *key,
 				      gpointer     user_data);

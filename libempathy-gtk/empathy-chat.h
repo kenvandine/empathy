@@ -50,8 +50,6 @@ typedef struct _EmpathyChat       EmpathyChat;
 typedef struct _EmpathyChatClass  EmpathyChatClass;
 typedef struct _EmpathyChatPriv   EmpathyChatPriv;
 
-#include "empathy-chat-window.h"
-
 struct _EmpathyChat {
 	GObject          parent;
 
@@ -79,9 +77,6 @@ struct _EmpathyChatClass {
 GType              empathy_chat_get_type              (void);
 
 EmpathyChatView *  empathy_chat_get_view              (EmpathyChat       *chat);
-EmpathyChatWindow *empathy_chat_get_window            (EmpathyChat       *chat);
-void               empathy_chat_set_window            (EmpathyChat       *chat,
-						       EmpathyChatWindow *window);
 void               empathy_chat_present               (EmpathyChat       *chat);
 void               empathy_chat_clear                 (EmpathyChat       *chat);
 void               empathy_chat_scroll_down           (EmpathyChat       *chat);

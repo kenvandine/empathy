@@ -15,48 +15,39 @@ BUILT_SOURCES = 					\
 lib_LTLIBRARIES = libempathy-gtk.la
 
 libempathy_gtk_la_SOURCES =             	\
-	ephy-spinner.c ephy-spinner.h		\
-	empathy-main-window.c			\
-	empathy-status-icon.c			\
-	empathy-conf.c				\
-	empathy-contact-widget.c		\
-	empathy-contact-dialogs.c		\
+	empathy-account-chooser.c		\
+	empathy-chat.c				\
+	empathy-irc-network-dialog.c		\
+	empathy-spell-dialog.c			\
 	empathy-accounts-dialog.c		\
+	empathy-chat-view.c			\
+	empathy-log-window.c			\
+	empathy-theme-boxes.c			\
 	empathy-account-widget.c		\
+	empathy-conf.c				\
+	empathy-theme.c				\
 	empathy-account-widget-irc.c		\
+	empathy-contact-dialogs.c		\
+	empathy-new-message-dialog.c		\
+	empathy-theme-irc.c			\
+	empathy-avatar-chooser.c		\
+	empathy-contact-list-store.c		\
+	empathy-presence-chooser.c		\
+	empathy-theme-manager.c			\
+	empathy-avatar-image.c			\
+	empathy-contact-list-view.c		\
+	empathy-private-chat.c			\
+	empathy-ui-utils.c			\
+	empathy-cell-renderer-activatable.c	\
+	empathy-contact-widget.c		\
 	empathy-profile-chooser.c		\
 	empathy-cell-renderer-expander.c	\
-	empathy-cell-renderer-text.c		\
-	empathy-cell-renderer-activatable.c	\
-	empathy-spell.c				\
-	empathy-spell-dialog.c			\
-	empathy-contact-list-store.c		\
-	empathy-contact-list-view.c		\
-	empathy-preferences.c			\
-	empathy-theme.c				\
-	empathy-theme-boxes.c			\
-	empathy-theme-irc.c			\
-	empathy-theme-manager.c			\
-	empathy-smiley-manager.c		\
-	empathy-chat-window.c			\
-	empathy-chat.c				\
-	empathy-chat-view.c			\
-	empathy-private-chat.c			\
-	empathy-group-chat.c			\
 	empathy-geometry.c			\
-	empathy-presence-chooser.c		\
-	empathy-about-dialog.c			\
-	empathy-account-chooser.c		\
-	empathy-new-chatroom-dialog.c		\
-	empathy-chatrooms-window.c		\
-	empathy-log-window.c			\
-	empathy-call-window.c			\
-	empathy-avatar-chooser.c		\
-	empathy-avatar-image.c			\
-	empathy-ui-utils.c			\
-	empathy-new-message-dialog.c		\
-	empathy-irc-network-dialog.c		\
-	totem-subtitle-encoding.c  totem-subtitle-encoding.h
+	empathy-smiley-manager.c		\
+	empathy-cell-renderer-text.c		\
+	empathy-group-chat.c			\
+	empathy-spell.c				\
+	totem-subtitle-encoding.c totem-subtitle-encoding.h
 
 # do not distribute generated files
 nodist_libempathy_gtk_la_SOURCES =\
@@ -72,46 +63,38 @@ libempathy_gtk_la_LDFLAGS =                \
 
 libempathy_gtk_headers =			\
 	empathy-images.h			\
-	empathy-main-window.h			\
-	empathy-status-icon.h			\
-	empathy-conf.h				\
-	empathy-contact-widget.h		\
-	empathy-contact-dialogs.h		\
+	empathy-account-chooser.h		\
+	empathy-chat.h				\
+	empathy-irc-network-dialog.h		\
+	empathy-spell-dialog.h			\
 	empathy-accounts-dialog.h		\
+	empathy-chat-view.h			\
+	empathy-log-window.h			\
+	empathy-theme-boxes.h			\
 	empathy-account-widget.h		\
+	empathy-conf.h				\
+	empathy-theme.h				\
 	empathy-account-widget-irc.h		\
+	empathy-contact-dialogs.h		\
+	empathy-new-message-dialog.h		\
+	empathy-theme-irc.h			\
+	empathy-avatar-chooser.h		\
+	empathy-contact-list-store.h		\
+	empathy-presence-chooser.h		\
+	empathy-theme-manager.h			\
+	empathy-avatar-image.h			\
+	empathy-contact-list-view.h		\
+	empathy-private-chat.h			\
+	empathy-ui-utils.h			\
+	empathy-cell-renderer-activatable.h	\
+	empathy-contact-widget.h		\
 	empathy-profile-chooser.h		\
 	empathy-cell-renderer-expander.h	\
-	empathy-cell-renderer-text.h		\
-	empathy-cell-renderer-activatable.h	\
-	empathy-spell.h				\
-	empathy-spell-dialog.h			\
-	empathy-contact-list-store.h		\
-	empathy-contact-list-view.h		\
-	empathy-preferences.h			\
-	empathy-theme.h				\
-	empathy-theme-boxes.h			\
-	empathy-theme-irc.h			\
-	empathy-theme-manager.h			\
-	empathy-smiley-manager.h		\
-	empathy-chat-window.h			\
-	empathy-chat.h				\
-	empathy-chat-view.h			\
-	empathy-private-chat.h			\
-	empathy-group-chat.h			\
 	empathy-geometry.h			\
-	empathy-presence-chooser.h		\
-	empathy-about-dialog.h			\
-	empathy-account-chooser.h		\
-	empathy-new-chatroom-dialog.h		\
-	empathy-chatrooms-window.h		\
-	empathy-log-window.h			\
-	empathy-call-window.h			\
-	empathy-avatar-chooser.h		\
-	empathy-avatar-image.h			\
-	empathy-ui-utils.h			\
-	empathy-new-message-dialog.h		\
-	empathy-irc-network-dialog.h
+	empathy-smiley-manager.h		\
+	empathy-cell-renderer-text.h		\
+	empathy-group-chat.h			\
+	empathy-spell.h
 
 libempathy_gtk_includedir = $(includedir)/libempathy-gtk/
 libempathy_gtk_include_HEADERS =		\
@@ -120,11 +103,8 @@ libempathy_gtk_include_HEADERS =		\
 
 gladedir = $(datadir)/empathy
 glade_DATA = 					\
-	empathy-main-window.glade		\
-	empathy-status-icon.glade		\
 	empathy-contact-widget.glade		\
 	empathy-contact-dialogs.glade		\
-	empathy-preferences.glade		\
 	empathy-presence-chooser.glade		\
 	empathy-accounts-dialog.glade		\
 	empathy-account-widget-generic.glade	\
@@ -134,12 +114,9 @@ glade_DATA = 					\
 	empathy-account-widget-irc.glade	\
 	empathy-account-widget-icq.glade	\
 	empathy-account-widget-yahoo.glade	\
-	empathy-new-chatroom-dialog.glade	\
 	empathy-group-chat.glade		\
-	empathy-chatrooms-window.glade		\
 	empathy-spell-dialog.glade		\
 	empathy-log-window.glade		\
-	empathy-call-window.glade		\
 	empathy-chat.glade			\
 	empathy-new-message-dialog.glade
 

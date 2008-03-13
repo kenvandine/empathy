@@ -24,7 +24,7 @@
  * $Id: ephy-spinner.c 2114 2006-12-25 12:15:00Z mr $
  */
 
-#include "config.h"
+#include <config.h>
 
 #include "ephy-spinner.h"
 

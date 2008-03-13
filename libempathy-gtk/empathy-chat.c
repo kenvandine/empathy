@@ -42,10 +42,8 @@
 #include <libempathy/empathy-utils.h>
 
 #include "empathy-chat.h"
-#include "empathy-chat-window.h"
 #include "empathy-geometry.h"
 #include "empathy-conf.h"
-#include "empathy-preferences.h"
 #include "empathy-spell.h"
 #include "empathy-spell-dialog.h"
 #include "empathy-ui-utils.h"
@@ -67,9 +65,9 @@
 struct _EmpathyChatPriv {
 	EmpathyLogManager     *log_manager;
 	EmpathyTpChat         *tp_chat;
-	EmpathyChatWindow     *window;
 	McAccount             *account;
 	MissionControl        *mc;
+	GtkWidget             *widget;
 	guint                  composing_stop_timeout_id;
 	gboolean               sensitive;
 	gchar                 *id;
@@ -802,21 +800,20 @@ chat_input_text_buffer_changed_cb (GtkTextBuffer *buffer,
 	if (priv->is_first_char) {
 		GtkRequisition  req;
 		gint            window_height;
-		GtkWidget      *dialog;
+		GtkWindow      *dialog;
 		GtkAllocation  *allocation;
 
 		/* Save the window's size */
-		dialog = empathy_chat_window_get_dialog (priv->window);
-		gtk_window_get_size (GTK_WINDOW (dialog),
-				     NULL, &window_height);
+		dialog = empathy_get_toplevel_window (priv->widget);
+		if (dialog) {
+			gtk_window_get_size (GTK_WINDOW (dialog), NULL, &window_height);
+			gtk_widget_size_request (chat->input_text_view, &req);
+			allocation = &GTK_WIDGET (chat->view)->allocation;
 
-		gtk_widget_size_request (chat->input_text_view, &req);
-
-		allocation = &GTK_WIDGET (chat->view)->allocation;
-
-		priv->default_window_height = window_height;
-		priv->last_input_height = req.height;
-		priv->padding_height = window_height - req.height - allocation->height;
+			priv->default_window_height = window_height;
+			priv->last_input_height = req.height;
+			priv->padding_height = window_height - req.height - allocation->height;
+		}
 
 		priv->is_first_char = FALSE;
 	}
@@ -880,7 +877,7 @@ chat_input_text_buffer_changed_cb (GtkTextBuffer *buffer,
 }
 
 typedef struct {
-	GtkWidget *window;
+	GtkWindow *window;
 	gint       width;
 	gint       height;
 } ChangeSizeData;
@@ -888,8 +885,7 @@ typedef struct {
 static gboolean
 chat_change_size_in_idle_cb (ChangeSizeData *data)
 {
-	gtk_window_resize (GTK_WINDOW (data->window),
-			   data->width, data->height);
+	gtk_window_resize (data->window, data->width, data->height);
 
 	return FALSE;
 }
@@ -920,7 +916,7 @@ chat_text_view_size_allocate_cb (GtkWidget     *widget,
 {
 	EmpathyChatPriv *priv;
 	gint            width;
-	GtkWidget      *dialog;
+	GtkWindow      *dialog;
 	ChangeSizeData *data;
 	gint            window_height;
 	gint            new_height;
@@ -960,8 +956,8 @@ chat_text_view_size_allocate_cb (GtkWidget     *widget,
 
 	view_allocation = &GTK_WIDGET (chat->view)->allocation;
 
-	dialog = empathy_chat_window_get_dialog (priv->window);
-	gtk_window_get_size (GTK_WINDOW (dialog), NULL, &current_height);
+	dialog = empathy_get_toplevel_window (priv->widget);
+	gtk_window_get_size (dialog, NULL, &current_height);
 
 	new_height = view_allocation->height + priv->padding_height + allocation->height - diff;
 
@@ -976,7 +972,7 @@ chat_text_view_size_allocate_cb (GtkWidget     *widget,
 	}
 
 	/* Restore the window's size */
-	gtk_window_get_size (GTK_WINDOW (dialog), &width, NULL);
+	gtk_window_get_size (dialog, &width, NULL);
 
 	data = g_new0 (ChangeSizeData, 1);
 	data->window = dialog;
@@ -1395,13 +1391,15 @@ empathy_chat_get_status_icon_name (EmpathyChat *chat)
 GtkWidget *
 empathy_chat_get_widget (EmpathyChat *chat)
 {
+	EmpathyChatPriv *priv = GET_PRIV (chat);
+
 	g_return_val_if_fail (EMPATHY_IS_CHAT (chat), NULL);
 
-	if (EMPATHY_CHAT_GET_CLASS (chat)->get_widget) {
-		return EMPATHY_CHAT_GET_CLASS (chat)->get_widget (chat);
+	if (!priv->widget && EMPATHY_CHAT_GET_CLASS (chat)->get_widget) {
+		priv->widget = EMPATHY_CHAT_GET_CLASS (chat)->get_widget (chat);
 	}
 
-	return NULL;
+	return priv->widget;
 }
 
 gboolean
@@ -1580,26 +1578,6 @@ empathy_chat_clear (EmpathyChat *chat)
 }
 
 void
-empathy_chat_set_window (EmpathyChat       *chat,
-			EmpathyChatWindow *window)
-{
-	EmpathyChatPriv *priv;
-
-	priv = GET_PRIV (chat);
-	priv->window = window;
-}
-
-EmpathyChatWindow *
-empathy_chat_get_window (EmpathyChat *chat)
-{
-	EmpathyChatPriv *priv;
-
-	priv = GET_PRIV (chat);
-
-	return priv->window;
-}
-
-void
 empathy_chat_scroll_down (EmpathyChat *chat)
 {
 	g_return_if_fail (EMPATHY_IS_CHAT (chat));
@@ -1660,50 +1638,21 @@ empathy_chat_paste (EmpathyChat *chat)
 	gtk_text_buffer_paste_clipboard (buffer, clipboard, NULL, TRUE);
 }
 
-void
-empathy_chat_present (EmpathyChat *chat)
-{
-	EmpathyChatPriv *priv;
-
-	g_return_if_fail (EMPATHY_IS_CHAT (chat));
-
-	priv = GET_PRIV (chat);
-
-	if (priv->window == NULL) {
-		EmpathyChatWindow *window;
-
-		window = empathy_chat_window_get_default ();
-		if (!window) {
-			window = empathy_chat_window_new ();
-		}
-
-		empathy_chat_window_add_chat (window, chat);
-	}
-
-	empathy_chat_window_switch_to_chat (priv->window, chat);
-	empathy_window_present (
-		GTK_WINDOW (empathy_chat_window_get_dialog (priv->window)),
-		TRUE);
-
- 	gtk_widget_grab_focus (chat->input_text_view); 
-}
-
 gboolean
 empathy_chat_should_play_sound (EmpathyChat *chat)
 {
-	EmpathyChatWindow *window;
-	gboolean          play = TRUE;
+	EmpathyChatPriv *priv = GET_PRIV (chat);
+	GtkWindow       *window;
+	gboolean         has_focus = FALSE;
 
 	g_return_val_if_fail (EMPATHY_IS_CHAT (chat), FALSE);
 
-	window = empathy_chat_get_window (chat);
-	if (!window) {
-		return TRUE;
+	window = empathy_get_toplevel_window (priv->widget);
+	if (window) {
+		g_object_get (window, "has-toplevel-focus", &has_focus, NULL);
 	}
 
-	play = !empathy_chat_window_has_focus (window);
-
-	return play;
+	return !has_focus;
 }
 
 gboolean

@@ -33,7 +33,6 @@
 
 #include "empathy-avatar-chooser.h"
 #include "empathy-conf.h"
-#include "empathy-preferences.h"
 #include "empathy-ui-utils.h"
 
 #define DEBUG_DOMAIN "AvatarChooser"

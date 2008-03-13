@@ -29,7 +29,6 @@
 
 #include "empathy-chat-view.h"
 #include "empathy-conf.h"
-#include "empathy-preferences.h"
 #include "empathy-theme.h"
 #include "empathy-theme-boxes.h"
 #include "empathy-theme-irc.h"

@@ -22,7 +22,7 @@
  *          Martyn Russell <martyn@imendio.com>
  */
 
-#include "config.h"
+#include <config.h>
 
 #include <string.h>
 
@@ -30,13 +30,14 @@
 #include <glade/glade.h>
 #include <glib/gi18n.h>
 
-#include "empathy-conf.h"
+#include <libempathy-gtk/empathy-conf.h>
+#include <libempathy-gtk/empathy-ui-utils.h>
+#include <libempathy-gtk/empathy-theme-manager.h>
+#include <libempathy-gtk/empathy-spell.h>
+#include <libempathy-gtk/empathy-contact-list-store.h>
+#include <libempathy-gtk/empathy-gtk-enum-types.h>
+
 #include "empathy-preferences.h"
-#include "empathy-ui-utils.h"
-#include "empathy-theme-manager.h"
-#include "empathy-spell.h"
-#include "empathy-contact-list-store.h"
-#include "empathy-gtk-enum-types.h"
 
 typedef struct {
 	GtkWidget *dialog;

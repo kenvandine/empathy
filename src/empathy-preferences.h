@@ -1,7 +1,6 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /*
- * Copyright (C) 2004-2007 Imendio AB
- * Copyright (C) 2007 Collabora Ltd.
+ * Copyright (C) 2003-2007 Imendio AB
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -18,18 +17,22 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  *
- * Authors: Xavier Claessens <xclaesse@gmail.com>
+ * Authors: Mikael Hallendal <micke@imendio.com>
+ *          Richard Hult <richard@imendio.com>
  *          Martyn Russell <martyn@imendio.com>
- *          Mikael Hallendal <micke@imendio.com>
  */
 
-#ifndef __EMPATHY_CHATROOMS_WINDOW_H__
-#define __EMPATHY_CHATROOMS_WINDOW_H__
+#ifndef __EMPATHY_PREFERENCES_H__
+#define __EMPATHY_PREFERENCES_H__
+
+#include <gtk/gtkwindow.h>
 
 G_BEGIN_DECLS
 
-void empathy_chatrooms_window_show (GtkWindow *parent);
+GtkWidget * empathy_preferences_show (GtkWindow *parent);
 
 G_END_DECLS
 
-#endif /* __EMPATHY_CHATROOMS_WINDOW_H__ */
+#endif /* __EMPATHY_PREFERENCES_H__ */
+
+

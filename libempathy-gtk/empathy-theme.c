@@ -29,7 +29,6 @@
 
 #include "empathy-chat.h"
 #include "empathy-conf.h"
-#include "empathy-preferences.h"
 #include "empathy-theme.h"
 #include "empathy-smiley-manager.h"
 

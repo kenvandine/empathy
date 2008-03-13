@@ -51,8 +51,8 @@
 #include <libempathy-gtk/empathy-chat.h>
 #include <libempathy-gtk/empathy-private-chat.h>
 #include <libempathy-gtk/empathy-group-chat.h>
-#include <libempathy-gtk/empathy-chat-window.h>
 
+#include "empathy-chat-window.h"
 #include "bacon-message-connection.h"
 
 #define DEBUG_DOMAIN "EmpathyMain"
@@ -89,7 +89,7 @@ new_text_channel_cb (EmpathyChandler *chandler,
 			empathy_chat_set_tp_chat (chat, tp_chat);
 			g_object_unref (tp_chat);
 		}
-		empathy_chat_present (chat);
+		empathy_chat_window_present_chat (chat);
 
 		g_object_unref (account);
 		return;
@@ -112,7 +112,7 @@ new_text_channel_cb (EmpathyChandler *chandler,
 		return;
 	}
 
-	empathy_chat_present (chat);
+	empathy_chat_window_present_chat (chat);
 
 	g_object_unref (chat);
 	g_object_unref (account);

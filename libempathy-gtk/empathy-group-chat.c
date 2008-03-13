@@ -51,7 +51,6 @@
 #include "empathy-images.h"
 #include "empathy-ui-utils.h"
 #include "empathy-conf.h"
-#include "empathy-preferences.h"
 
 #define DEBUG_DOMAIN "GroupChat"
 
@@ -89,11 +88,6 @@ static void          group_chat_members_changed_cb       (EmpathyTpChatroom *tp_
 							  guint              reason,
 							  gchar             *message,
 							  gboolean           is_member,
-							  EmpathyGroupChat  *chat);
-static void          group_chat_topic_entry_activate_cb  (GtkWidget         *entry,
-							  GtkDialog         *dialog);
-static void          group_chat_topic_response_cb        (GtkWidget         *dialog,
-							  gint               response,			      
 							  EmpathyGroupChat  *chat);
 static const gchar * group_chat_get_name                 (EmpathyChat       *chat);
 static gchar *       group_chat_get_tooltip              (EmpathyChat       *chat);
@@ -224,25 +218,58 @@ empathy_group_chat_set_show_contacts (EmpathyGroupChat *chat,
 	}
 }
 
+static void
+group_chat_topic_response_cb (GtkWidget        *dialog,
+			      gint              response,
+			      EmpathyGroupChat *chat)
+{
+	if (response == GTK_RESPONSE_OK) {
+		GtkWidget   *entry;
+		const gchar *topic;
+
+		entry = g_object_get_data (G_OBJECT (dialog), "entry");
+		topic = gtk_entry_get_text (GTK_ENTRY (entry));
+		
+		if (!G_STR_EMPTY (topic)) {
+			EmpathyGroupChatPriv *priv;
+			GValue                value = {0, };
+
+			priv = GET_PRIV (chat);
+
+			g_value_init (&value, G_TYPE_STRING);
+			g_value_set_string (&value, topic);
+			empathy_tp_chat_set_property (EMPATHY_TP_CHAT (priv->tp_chat),
+						      "subject", &value);
+			g_value_unset (&value);
+		}
+	}
+
+	gtk_widget_destroy (dialog);
+}
+
+static void
+group_chat_topic_entry_activate_cb (GtkWidget *entry,
+				    GtkDialog *dialog)
+{
+	gtk_dialog_response (dialog, GTK_RESPONSE_OK);
+}
+
 void
 empathy_group_chat_set_topic (EmpathyGroupChat *chat)
 {
 	EmpathyGroupChatPriv *priv;
-	EmpathyChatWindow    *chat_window;
-	GtkWidget           *chat_dialog;
-	GtkWidget           *dialog;
-	GtkWidget           *entry;
-	GtkWidget           *hbox;
-	const gchar         *topic;
-
-	g_return_if_fail (EMPATHY_IS_GROUP_CHAT (chat));
+	GtkWindow            *parent;
+	GtkWidget            *dialog;
+	GtkWidget            *entry;
+	GtkWidget            *hbox;
+	const gchar          *topic;
 
 	priv = GET_PRIV (chat);
 
-	chat_window = empathy_chat_get_window (EMPATHY_CHAT (chat));
-	chat_dialog = empathy_chat_window_get_dialog (chat_window);
+	g_return_if_fail (EMPATHY_IS_GROUP_CHAT (chat));
 
-	dialog = gtk_message_dialog_new (GTK_WINDOW (chat_dialog),
+	parent = empathy_get_toplevel_window (empathy_chat_get_widget (EMPATHY_CHAT (chat)));
+	dialog = gtk_message_dialog_new (GTK_WINDOW (parent),
 					 0,
 					 GTK_MESSAGE_QUESTION,
 					 GTK_BUTTONS_OK_CANCEL,
@@ -365,42 +392,6 @@ group_chat_members_changed_cb (EmpathyTpChatroom *tp_chat,
 		empathy_chat_view_append_event (EMPATHY_CHAT (chat)->view, str);
 		g_free (str);
 	}
-}
-
-static void
-group_chat_topic_entry_activate_cb (GtkWidget *entry,
-				    GtkDialog *dialog)
-{
-	gtk_dialog_response (dialog, GTK_RESPONSE_OK);
-}
-
-static void
-group_chat_topic_response_cb (GtkWidget       *dialog,
-			      gint             response,			      
-			      EmpathyGroupChat *chat)
-{
-	if (response == GTK_RESPONSE_OK) {
-		GtkWidget   *entry;
-		const gchar *topic;
-
-		entry = g_object_get_data (G_OBJECT (dialog), "entry");
-		topic = gtk_entry_get_text (GTK_ENTRY (entry));
-		
-		if (!G_STR_EMPTY (topic)) {
-			EmpathyGroupChatPriv *priv;
-			GValue                value = {0, };
-
-			priv = GET_PRIV (chat);
-
-			g_value_init (&value, G_TYPE_STRING);
-			g_value_set_string (&value, topic);
-			empathy_tp_chat_set_property (EMPATHY_TP_CHAT (priv->tp_chat),
-						      "subject", &value);
-			g_value_unset (&value);
-		}
-	}
-
-	gtk_widget_destroy (dialog);
 }
 
 static const gchar *

@@ -31,6 +31,7 @@
 #include <glib-object.h>
 
 #include <libmissioncontrol/mc-account.h>
+#include <libempathy-gtk/empathy-chat.h>
 
 G_BEGIN_DECLS
 
@@ -45,8 +46,6 @@ typedef struct _EmpathyChatWindow      EmpathyChatWindow;
 typedef struct _EmpathyChatWindowClass EmpathyChatWindowClass;
 typedef struct _EmpathyChatWindowPriv  EmpathyChatWindowPriv;
 
-#include "empathy-chat.h"
-
 struct _EmpathyChatWindow {
 	GObject parent;
 };
@@ -55,26 +54,23 @@ struct _EmpathyChatWindowClass {
 	GObjectClass parent_class;
 };
 
-GType             empathy_chat_window_get_type        (void);
-EmpathyChatWindow *empathy_chat_window_get_default     (void);
-
-EmpathyChatWindow *empathy_chat_window_new             (void);
-
-GtkWidget *       empathy_chat_window_get_dialog      (EmpathyChatWindow *window);
-
-void              empathy_chat_window_add_chat        (EmpathyChatWindow *window,
-						      EmpathyChat       *chat);
-void              empathy_chat_window_remove_chat     (EmpathyChatWindow *window,
-						      EmpathyChat       *chat);
-void              empathy_chat_window_move_chat       (EmpathyChatWindow *old_window,
-						      EmpathyChatWindow *new_window,
-						      EmpathyChat       *chat);
-void              empathy_chat_window_switch_to_chat  (EmpathyChatWindow *window,
-						      EmpathyChat       *chat);
-gboolean          empathy_chat_window_has_focus       (EmpathyChatWindow *window);
-EmpathyChat *      empathy_chat_window_find_chat       (McAccount        *account,
-						      const gchar      *id);
-
+GType              empathy_chat_window_get_type       (void);
+EmpathyChatWindow *empathy_chat_window_get_default    (void);
+EmpathyChatWindow *empathy_chat_window_new            (void);
+GtkWidget *        empathy_chat_window_get_dialog     (EmpathyChatWindow *window);
+void               empathy_chat_window_add_chat       (EmpathyChatWindow *window,
+						       EmpathyChat       *chat);
+void               empathy_chat_window_remove_chat    (EmpathyChatWindow *window,
+						       EmpathyChat       *chat);
+void               empathy_chat_window_move_chat      (EmpathyChatWindow *old_window,
+						       EmpathyChatWindow *new_window,
+						       EmpathyChat       *chat);
+void               empathy_chat_window_switch_to_chat (EmpathyChatWindow *window,
+						       EmpathyChat       *chat);
+gboolean           empathy_chat_window_has_focus      (EmpathyChatWindow *window);
+EmpathyChat *      empathy_chat_window_find_chat      (McAccount        *account,
+						       const gchar      *id);
+void               empathy_chat_window_present_chat   (EmpathyChat      *chat);
 G_END_DECLS
 
 #endif /* __EMPATHY_CHAT_WINDOW_H__ */
