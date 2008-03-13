@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: empathy\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-03-12 23:08+0100\n"
-"PO-Revision-Date: 2008-03-12 23:07+0100\n"
+"PO-Revision-Date: 2008-03-13 01:44+0100\n"
 "Last-Translator: Gil Forcada <gilforcada@guifi.net>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "MIME-Version: 1.0\n"
@@ -58,7 +58,7 @@ msgstr "Verifica si es crea el compte del Salut"
 msgid ""
 "Comma separated list of spell checker languages to use (e.g. en, fr, nl)."
 msgstr ""
-"Llista separada per comes de les llengües de corrector ortogràfic a "
+"Llista separada per comes de les llengües del verificador ortogràfic a "
 "utilitzar (p. ex. ca, en, es, fr)."
 
 #: ../data/empathy.schemas.in.h:8
@@ -91,11 +91,11 @@ msgstr "Habilita el verificador ortogràfic"
 
 #: ../data/empathy.schemas.in.h:15
 msgid "Hide main window"
-msgstr "Amaga la finestra principal"
+msgstr "Oculta la finestra principal"
 
 #: ../data/empathy.schemas.in.h:16
 msgid "Hide the main window."
-msgstr "Amaga la finestra principal."
+msgstr "Oculta la finestra principal."
 
 #: ../data/empathy.schemas.in.h:17
 msgid "Nick completed character"
@@ -204,7 +204,7 @@ msgstr ""
 #: ../data/empathy.schemas.in.h:38
 msgid "Whether or not to show contacts that are offline in the contact list."
 msgstr ""
-"Si s'han de mostrar els contactes que estan fora de línia a la llista de "
+"Si s'han de mostrar els contactes que estan desconnectats a la llista de "
 "contactes."
 
 #: ../data/empathy.schemas.in.h:39
@@ -573,7 +573,7 @@ msgid ""
 "Should you decide to add the account back at a later time, they will still "
 "be available."
 msgstr ""
-"Qualsevol conversa i sales de xat associades NO es suprimiran si decidiu "
+"Qualsevol conversa i sales de xat associades NO se suprimiran si decidiu "
 "continuar.\n"
 "\n"
 "Si decidiu tornar a afegir el compte més tard, encara seran disponibles."
@@ -662,7 +662,7 @@ msgstr "Fora de línia"
 
 #: ../libempathy-gtk/empathy-chat.c:565
 msgid "offline"
-msgstr "fora de línia"
+msgstr "desconnectat"
 
 #: ../libempathy-gtk/empathy-chat.c:568
 msgid "invalid contact"
@@ -1287,7 +1287,7 @@ msgstr "Gestiona els preferits"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:6
 msgid "Show _Offline Contacts"
-msgstr "M_ostra els contactes fora de línia"
+msgstr "M_ostra els contactes desconnectats"
 
 #: ../libempathy-gtk/empathy-main-window.glade.h:7
 msgid "_Accounts"
@@ -2049,7 +2049,7 @@ msgstr "- Missatgeria instantània Empathy"
 #~ msgstr "Connecta"
 
 #~ msgid "Successfully registered your new account settings."
-#~ msgstr "S'ha registrat els nous paràmetres del compte."
+#~ msgstr "S'han enregistrat els nous paràmetres del compte."
 
 #~ msgid "You should now be able to connect to your new account."
 #~ msgstr "Ara hauríeu de poder connectar al vostre compte nou."
@@ -2061,7 +2061,7 @@ msgstr "- Missatgeria instantània Empathy"
 #~ msgstr "S'ha canviat la contrasenya correctament."
 
 #~ msgid "You should now be able to connect with your new password."
-#~ msgstr "Ara haurieu de poder connectar amb la vostra contrasenya nova."
+#~ msgstr "Ara hauríeu de poder connectar amb la vostra contrasenya nova."
 
 #~ msgid "Failed to change your account password."
 #~ msgstr "No s'ha pogut canviar la contrasenya del compte."
@@ -2986,7 +2986,7 @@ msgstr "- Missatgeria instantània Empathy"
 #~ msgstr "Sales de xat..."
 
 #~ msgid "_Hide Contact List"
-#~ msgstr "_Amaga la llista de contactes"
+#~ msgstr "_Oculta la llista de contactes"
 
 #~ msgid "Be silent when away"
 #~ msgstr "Sigues silenciós quan s'està absent"
@@ -3327,7 +3327,7 @@ msgstr "- Missatgeria instantània Empathy"
 #~ msgstr "Gossip - Preferències"
 
 #~ msgid "Gossip - Spell Checker"
-#~ msgstr "Gossip - Corrector ortogràfic"
+#~ msgstr "Gossip - Verificador ortogràfic"
 
 #~ msgid "Gossip - Status Message"
 #~ msgstr "Gossip - missatge d'estat"
@@ -3835,7 +3835,7 @@ msgstr "- Missatgeria instantània Empathy"
 #~ msgstr "%sXat"
 
 #~ msgid "Offline "
-#~ msgstr "Desconnectats"
+#~ msgstr "Desconnectat"
 
 #~ msgid "Others"
 #~ msgstr "Altres"
