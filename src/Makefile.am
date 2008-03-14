@@ -46,6 +46,15 @@ chandlerdir = $(datadir)/telepathy/managers
 chandler_DATA =							\
 	empathy-chat.chandler
 
+gladedir = $(datadir)/empathy
+glade_DATA = 					\
+	empathy-call-window.glade		\
+	empathy-main-window.glade		\
+	empathy-preferences.glade		\
+	empathy-chatrooms-window.glade		\
+	empathy-new-chatroom-dialog.glade	\
+	empathy-status-icon.glade
+
 BUILT_SOURCES =							\
 	$(service_DATA)
 
@@ -53,7 +62,8 @@ EXTRA_DIST =							\
 	org.gnome.Empathy.Chat.service.in			\
 	org.gnome.Empathy.Call.service.in			\
 	$(autostart_DATA)					\
-	$(chandler_DATA)
+	$(chandler_DATA)					\
+	$(glade_DATA)
 
 CLEANFILES = $(BUILT_SOURCES)
 
