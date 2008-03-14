@@ -53,15 +53,6 @@ struct _EmpathyChatViewClass {
 	GtkTextViewClass parent_class;
 };
 
-typedef enum {
-	EMPATHY_CHAT_VIEW_BLOCK_NONE,
-	EMPATHY_CHAT_VIEW_BLOCK_SELF,
-	EMPATHY_CHAT_VIEW_BLOCK_OTHER,
-	EMPATHY_CHAT_VIEW_BLOCK_EVENT,
-	EMPATHY_CHAT_VIEW_BLOCK_TIME,
-	EMPATHY_CHAT_VIEW_BLOCK_INVITE
-} EmpathyChatViewBlock;
-
 GType            empathy_chat_view_get_type             (void) G_GNUC_CONST;
 EmpathyChatView *empathy_chat_view_new                  (void);
 void             empathy_chat_view_append_message       (EmpathyChatView *view,
@@ -106,12 +97,7 @@ void             empathy_chat_view_set_is_group_chat    (EmpathyChatView *view,
 time_t           empathy_chat_view_get_last_timestamp   (EmpathyChatView *view);
 void             empathy_chat_view_set_last_timestamp   (EmpathyChatView *view,
 							 time_t           timestamp);
-EmpathyChatViewBlock empathy_chat_view_get_last_block_type  (EmpathyChatView *view);
-void             empathy_chat_view_set_last_block_type  (EmpathyChatView *view, 
-							 EmpathyChatViewBlock block_type);
 EmpathyContact * empathy_chat_view_get_last_contact     (EmpathyChatView *view);
-void             empathy_chat_view_set_last_contact     (EmpathyChatView *view,
-							 EmpathyContact  *contact);
 GdkPixbuf *      empathy_chat_view_get_avatar_pixbuf_with_cache (EmpathyContact *contact);
 
 G_END_DECLS

@@ -69,7 +69,6 @@ struct _EmpathyChatViewPriv {
 	EmpathyTheme   *theme;
 
 	time_t         last_timestamp;
-	EmpathyChatViewBlock last_block_type;
 
 	gboolean       allow_scrolling;
 	guint          scroll_timeout;
@@ -156,12 +155,8 @@ empathy_chat_view_init (EmpathyChatView *view)
 	priv = GET_PRIV (view);
 
 	priv->buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
-
-	priv->last_block_type = EMPATHY_CHAT_VIEW_BLOCK_NONE;
 	priv->last_timestamp = 0;
-
 	priv->allow_scrolling = TRUE;
-
 	priv->is_group_chat = FALSE;
 
 	g_object_set (view,
@@ -637,8 +632,6 @@ chat_view_theme_changed_cb (EmpathyThemeManager *manager,
 
 	priv = GET_PRIV (view);
 
-	priv->last_block_type = EMPATHY_CHAT_VIEW_BLOCK_NONE;
-
 	empathy_conf_get_bool (empathy_conf_get (),
 			      EMPATHY_PREFS_CHAT_THEME_CHAT_ROOM,
 			      &theme_rooms);
@@ -761,9 +754,7 @@ empathy_chat_view_append_message (EmpathyChatView *view,
 				  EmpathyMessage  *msg)
 {
 	EmpathyChatViewPriv *priv = GET_PRIV (view);
-	EmpathyContact      *sender;
 	gboolean             bottom;
-	gboolean             from_self;
 
 	g_return_if_fail (EMPATHY_IS_CHAT_VIEW (view));
 	g_return_if_fail (EMPATHY_IS_MESSAGE (msg));
@@ -773,8 +764,6 @@ empathy_chat_view_append_message (EmpathyChatView *view,
 	}
 
 	bottom = chat_view_is_scrolled_down (view);
-	sender = empathy_message_get_sender (msg);
-	from_self = empathy_contact_is_user (sender);
 	
 	chat_view_maybe_trim_buffer (view);
 
@@ -783,6 +772,11 @@ empathy_chat_view_append_message (EmpathyChatView *view,
 	if (bottom) {
 		empathy_chat_view_scroll_down (view);
 	}
+
+	if (priv->last_contact) {
+		g_object_unref (priv->last_contact);
+	}
+	priv->last_contact = g_object_ref (empathy_message_get_sender (msg));
 }
 
 void
@@ -807,7 +801,10 @@ empathy_chat_view_append_event (EmpathyChatView *view,
 		empathy_chat_view_scroll_down (view);
 	}
 
-	priv->last_block_type = EMPATHY_CHAT_VIEW_BLOCK_EVENT;
+	if (priv->last_contact) {
+		g_object_unref (priv->last_contact);
+		priv->last_contact = NULL;
+	}
 }
 
 void
@@ -877,7 +874,10 @@ empathy_chat_view_append_button (EmpathyChatView *view,
 		empathy_chat_view_scroll_down (view);
 	}
 
-	priv->last_block_type = EMPATHY_CHAT_VIEW_BLOCK_INVITE;
+	if (priv->last_contact) {
+		g_object_unref (priv->last_contact);
+		priv->last_contact = NULL;
+	}
 }
 
 void
@@ -982,7 +982,6 @@ empathy_chat_view_clear (EmpathyChatView *view)
 	 */
 	priv = GET_PRIV (view);
 
-	priv->last_block_type = EMPATHY_CHAT_VIEW_BLOCK_NONE;
 	priv->last_timestamp = 0;
 }
 
@@ -1498,31 +1497,6 @@ empathy_chat_view_set_last_timestamp (EmpathyChatView *view,
 	priv->last_timestamp = timestamp;
 }
 
-EmpathyChatViewBlock
-empathy_chat_view_get_last_block_type (EmpathyChatView *view)
-{
-	EmpathyChatViewPriv *priv;
-
-	g_return_val_if_fail (EMPATHY_IS_CHAT_VIEW (view), 0);
-
-	priv = GET_PRIV (view);
-
-	return priv->last_block_type;
-}
-
-void
-empathy_chat_view_set_last_block_type (EmpathyChatView      *view, 
-				       EmpathyChatViewBlock  block_type)
-{
-	EmpathyChatViewPriv *priv;
-
-	g_return_if_fail (EMPATHY_IS_CHAT_VIEW (view));
-
-	priv = GET_PRIV (view);
-
-	priv->last_block_type = block_type;
-}
-
 EmpathyContact *
 empathy_chat_view_get_last_contact (EmpathyChatView *view)
 {
@@ -1533,24 +1507,5 @@ empathy_chat_view_get_last_contact (EmpathyChatView *view)
 	priv = GET_PRIV (view);
 
 	return priv->last_contact;
-}
-
-void
-empathy_chat_view_set_last_contact (EmpathyChatView *view, EmpathyContact *contact)
-{
-	EmpathyChatViewPriv *priv;
-
-	g_return_if_fail (EMPATHY_IS_CHAT_VIEW (view));
-
-	priv = GET_PRIV (view);
-
-	if (priv->last_contact) {
-		g_object_unref (priv->last_contact);
-		priv->last_contact = NULL;
-	}
-
-	if (contact) {
-		priv->last_contact = g_object_ref (contact);
-	}
 }
 

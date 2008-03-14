@@ -527,10 +527,10 @@ theme_boxes_maybe_append_header (EmpathyTheme        *theme,
 {
 	EmpathyThemeBoxesPriv *priv;
 	EmpathyContact        *contact;
+	EmpathyContact        *last_contact;
 	GdkPixbuf            *avatar = NULL;
 	GtkTextBuffer        *buffer;
 	const gchar          *name;
-	gboolean              header;
 	GtkTextIter           iter;
 	GtkWidget            *label1, *label2;
 	GtkTextChildAnchor   *anchor;
@@ -541,42 +541,20 @@ theme_boxes_maybe_append_header (EmpathyTheme        *theme,
 	GtkTextIter           start;
 	GdkColor              color;
 	gboolean              parse_success;
-	gboolean              from_self;
 
 	priv = GET_PRIV (theme);
 
 	contact = empathy_message_get_sender (msg);
-	from_self = empathy_contact_is_user (contact);
+	name = empathy_contact_get_name (contact);
+	last_contact = empathy_chat_view_get_last_contact (view);
 	buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
 
 	empathy_debug (DEBUG_DOMAIN, "Maybe add fancy header");
 
-	name = empathy_contact_get_name (contact);
-
-	header = FALSE;
-
 	/* Only insert a header if the previously inserted block is not the same
 	 * as this one. This catches all the different cases:
 	 */
-	if (empathy_chat_view_get_last_block_type (view) != EMPATHY_CHAT_VIEW_BLOCK_SELF &&
-	    empathy_chat_view_get_last_block_type (view) != EMPATHY_CHAT_VIEW_BLOCK_OTHER) {
-		header = TRUE;
-	}
-	else if (from_self &&
-		 empathy_chat_view_get_last_block_type (view) == EMPATHY_CHAT_VIEW_BLOCK_OTHER) {
-		header = TRUE;
-	}
-	else if (!from_self && 
-		 empathy_chat_view_get_last_block_type (view) == EMPATHY_CHAT_VIEW_BLOCK_SELF) {
-		header = TRUE;
-	}
-	else if (!from_self &&
-		 (!empathy_chat_view_get_last_contact (view) ||
-		  contact != empathy_chat_view_get_last_contact (view))) {
-		header = TRUE;
-	}
-
-	if (!header) {
+	if (last_contact && empathy_contact_equal (last_contact, contact)) {
 		return;
 	}
 
@@ -708,14 +686,6 @@ theme_boxes_append_message (EmpathyTheme        *theme,
 					   empathy_message_get_body (message),
 					   "fancy-body", "fancy-link");
 	}
-	
-	if (empathy_contact_is_user (sender)) {
-		empathy_chat_view_set_last_block_type (view, EMPATHY_CHAT_VIEW_BLOCK_SELF);
-		empathy_chat_view_set_last_contact (view, NULL);
-	} else {
-		empathy_chat_view_set_last_block_type (view, EMPATHY_CHAT_VIEW_BLOCK_OTHER);
-		empathy_chat_view_set_last_contact (view, sender);
-	}
 }
 
 static void
@@ -740,8 +710,6 @@ theme_boxes_append_event (EmpathyTheme        *theme,
 						  "fancy-event",
 						  NULL);
 	g_free (msg);
-
-	empathy_chat_view_set_last_block_type (view, EMPATHY_CHAT_VIEW_BLOCK_EVENT);
 }
 
 static void
@@ -804,7 +772,6 @@ theme_boxes_append_timestamp (EmpathyTheme        *theme,
 							  "fancy-time",
 							  NULL);
 
-		empathy_chat_view_set_last_block_type (view, EMPATHY_CHAT_VIEW_BLOCK_TIME);
 		empathy_chat_view_set_last_timestamp (view, timestamp);
 	}
 
