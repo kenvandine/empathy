@@ -65,6 +65,7 @@ void                     empathy_tp_contact_factory_set_avatar       (EmpathyTpC
 								      const gchar             *data,
 								      gsize                    size,
 								      const gchar             *mime_type);
+gboolean                 empathy_tp_contact_factory_is_ready         (EmpathyTpContactFactory *tp_factory);
 
 G_END_DECLS
 

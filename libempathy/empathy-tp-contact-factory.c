@@ -54,6 +54,7 @@ G_DEFINE_TYPE (EmpathyTpContactFactory, empathy_tp_contact_factory, G_TYPE_OBJEC
 enum {
 	PROP_0,
 	PROP_ACCOUNT,
+	PROP_READY
 };
 
 static EmpathyContact *
@@ -1142,6 +1143,16 @@ empathy_tp_contact_factory_set_avatar (EmpathyTpContactFactory *tp_factory,
 	}
 }
 
+gboolean
+empathy_tp_contact_factory_is_ready (EmpathyTpContactFactory *tp_factory)
+{
+	EmpathyTpContactFactoryPriv *priv = GET_PRIV (tp_factory);
+
+	g_return_val_if_fail (EMPATHY_IS_TP_CONTACT_FACTORY (tp_factory), FALSE);
+
+	return priv->ready;
+}
+
 static void
 tp_contact_factory_get_property (GObject    *object,
 				 guint       param_id,
@@ -1153,6 +1164,9 @@ tp_contact_factory_get_property (GObject    *object,
 	switch (param_id) {
 	case PROP_ACCOUNT:
 		g_value_set_object (value, priv->account);
+		break;
+	case PROP_READY:
+		g_value_set_boolean (value, priv->ready);
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
@@ -1244,7 +1258,6 @@ empathy_tp_contact_factory_class_init (EmpathyTpContactFactoryClass *klass)
 	object_class->get_property = tp_contact_factory_get_property;
 	object_class->set_property = tp_contact_factory_set_property;
 
-	/* Construct-only properties */
 	g_object_class_install_property (object_class,
 					 PROP_ACCOUNT,
 					 g_param_spec_object ("account",
@@ -1253,6 +1266,13 @@ empathy_tp_contact_factory_class_init (EmpathyTpContactFactoryClass *klass)
 							      MC_TYPE_ACCOUNT,
 							      G_PARAM_READWRITE |
 							      G_PARAM_CONSTRUCT_ONLY));
+	g_object_class_install_property (object_class,
+					 PROP_READY,
+					 g_param_spec_boolean ("ready",
+							       "Wheter the factor is ready",
+							       "Is the factory ready",
+							       FALSE,
+							       G_PARAM_READABLE));
 
 	g_type_class_add_private (object_class, sizeof (EmpathyTpContactFactoryPriv));
 }

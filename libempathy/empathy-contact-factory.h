@@ -27,6 +27,7 @@
 #include <libmissioncontrol/mc-account.h>
 
 #include "empathy-contact.h"
+#include "empathy-tp-contact-factory.h"
 
 G_BEGIN_DECLS
 
@@ -51,6 +52,8 @@ struct _EmpathyContactFactoryClass {
 
 GType                  empathy_contact_factory_get_type         (void) G_GNUC_CONST;
 EmpathyContactFactory *empathy_contact_factory_new              (void);
+EmpathyTpContactFactory *empathy_contact_factory_get_tp_factory (EmpathyContactFactory *factory,
+								 McAccount             *account);
 EmpathyContact *       empathy_contact_factory_get_user         (EmpathyContactFactory *factory,
 								 McAccount             *account);
 EmpathyContact *       empathy_contact_factory_get_from_id      (EmpathyContactFactory *factory,

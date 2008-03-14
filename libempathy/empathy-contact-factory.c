@@ -22,7 +22,6 @@
 #include <config.h>
 
 #include "empathy-contact-factory.h"
-#include "empathy-tp-contact-factory.h"
 #include "empathy-utils.h"
 
 #define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), \
@@ -37,9 +36,9 @@ static void empathy_contact_factory_init       (EmpathyContactFactory      *fact
 
 G_DEFINE_TYPE (EmpathyContactFactory, empathy_contact_factory, G_TYPE_OBJECT);
 
-static EmpathyTpContactFactory *
-contact_factory_get_tp_factory (EmpathyContactFactory *factory,
-				McAccount             *account)
+EmpathyTpContactFactory *
+empathy_contact_factory_get_tp_factory (EmpathyContactFactory *factory,
+					McAccount             *account)
 {
 	EmpathyContactFactoryPriv *priv = GET_PRIV (factory);
 	EmpathyTpContactFactory   *tp_factory;
@@ -61,7 +60,7 @@ empathy_contact_factory_get_user (EmpathyContactFactory *factory,
 {
 	EmpathyTpContactFactory *tp_factory;
 
-	tp_factory = contact_factory_get_tp_factory (factory, account);
+	tp_factory = empathy_contact_factory_get_tp_factory (factory, account);
 
 	return empathy_tp_contact_factory_get_user (tp_factory);
 }
@@ -73,7 +72,7 @@ empathy_contact_factory_get_from_id (EmpathyContactFactory *factory,
 {
 	EmpathyTpContactFactory *tp_factory;
 
-	tp_factory = contact_factory_get_tp_factory (factory, account);
+	tp_factory = empathy_contact_factory_get_tp_factory (factory, account);
 
 	return empathy_tp_contact_factory_get_from_id (tp_factory, id);
 }
@@ -85,7 +84,7 @@ empathy_contact_factory_get_from_handle (EmpathyContactFactory *factory,
 {
 	EmpathyTpContactFactory *tp_factory;
 
-	tp_factory = contact_factory_get_tp_factory (factory, account);
+	tp_factory = empathy_contact_factory_get_tp_factory (factory, account);
 
 	return empathy_tp_contact_factory_get_from_handle (tp_factory, handle);
 }
@@ -97,7 +96,7 @@ empathy_contact_factory_get_from_handles (EmpathyContactFactory *factory,
 {
 	EmpathyTpContactFactory *tp_factory;
 
-	tp_factory = contact_factory_get_tp_factory (factory, account);
+	tp_factory = empathy_contact_factory_get_tp_factory (factory, account);
 
 	return empathy_tp_contact_factory_get_from_handles (tp_factory, handles);
 }
@@ -111,7 +110,7 @@ empathy_contact_factory_set_alias (EmpathyContactFactory *factory,
 	McAccount               *account;
 
 	account = empathy_contact_get_account (contact);
-	tp_factory = contact_factory_get_tp_factory (factory, account);
+	tp_factory = empathy_contact_factory_get_tp_factory (factory, account);
 
 	return empathy_tp_contact_factory_set_alias (tp_factory, contact, alias);
 }
@@ -125,7 +124,7 @@ empathy_contact_factory_set_avatar (EmpathyContactFactory *factory,
 {
 	EmpathyTpContactFactory *tp_factory;
 
-	tp_factory = contact_factory_get_tp_factory (factory, account);
+	tp_factory = empathy_contact_factory_get_tp_factory (factory, account);
 
 	return empathy_tp_contact_factory_set_avatar (tp_factory,
 						      data, size, mime_type);
