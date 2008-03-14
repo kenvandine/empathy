@@ -705,6 +705,8 @@ tp_contact_factory_connection_invalidated_cb (EmpathyTpContactFactory *tp_factor
 	g_object_unref (priv->connection);
 	priv->connection = NULL;
 	priv->ready = FALSE;
+	g_object_notify (G_OBJECT (tp_factory), "ready");
+
 
 	g_list_foreach (priv->contacts,
 			tp_contact_factory_disconnect_contact_foreach,
@@ -736,6 +738,7 @@ tp_contact_factory_got_self_handle_cb (TpConnection *proxy,
 
 	empathy_contact_set_handle (priv->user, handle);
 	priv->ready = TRUE;
+	g_object_notify (tp_factory, "ready");
 
 	/* Connect signals */
 	tp_cli_connection_interface_aliasing_connect_to_aliases_changed (priv->connection,
