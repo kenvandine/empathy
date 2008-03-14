@@ -21,6 +21,7 @@
  * Authors: Mikael Hallendal <micke@imendio.com>
  *          Martyn Russell <martyn@imendio.com>
  *          Xavier Claessens <xclaesse@gmail.com>
+ *          Bruno Dusausoy <bdusauso@beeznest.net>
  */
 
 #include "config.h"
@@ -184,6 +185,9 @@ static void        contact_list_view_action_cb                 (GtkAction       
 								EmpathyContactListView      *view);
 static void        contact_list_view_voip_activated            (EmpathyContactListView      *view,
 								EmpathyContact              *contact);
+static gboolean	   contact_list_view_remove_dialog_show 	(GtkWindow 		    *parent,
+								const gchar		    *window_title, 
+								const gchar 		    *text);
 
 enum {
 	PROP_0,
@@ -1463,12 +1467,20 @@ contact_list_view_action_cb (GtkAction             *action,
 		empathy_contact_information_dialog_show (contact, parent, TRUE, FALSE);
 	}
 	else if (contact && strcmp (name, "Remove") == 0) {
-		/* FIXME: Ask for confirmation */
 		EmpathyContactList *list;
+		gchar *text; 
+		
+		text = g_strdup_printf (_("Do you really want to remove the contact '%s' ?"),
+					empathy_contact_get_name (contact));
+						
+		/* TRUE if user wants to remove the contact. FALSE otherwise.*/
+		if (contact_list_view_remove_dialog_show (parent, _("Removing contact"), text)) {
+			list = empathy_contact_list_store_get_list_iface (priv->store);
+			empathy_contact_list_remove (list, contact, 
+						_("Sorry, I don't want you in my contact list anymore."));
+		}
 
-		list = empathy_contact_list_store_get_list_iface (priv->store);
-		empathy_contact_list_remove (list, contact,
-					     _("Sorry, I don't want you in my contact list anymore."));
+		g_free (text);
 	}
 	else if (contact && strcmp (name, "Invite") == 0) {
 	}
@@ -1484,15 +1496,54 @@ contact_list_view_action_cb (GtkAction             *action,
 	}
 	else if (group && strcmp (name, "Remove") == 0) {
 		EmpathyContactList *list;
+		gchar *text; 
+		
+		text = g_strdup_printf (_("Do you really want to remove the group '%s' ?"), group);
+		
+		if (contact_list_view_remove_dialog_show (parent, _("Removing group"), text)) {
+			list = empathy_contact_list_store_get_list_iface (priv->store);
+			empathy_contact_list_remove_group (list, group);
+		}
 
-		list = empathy_contact_list_store_get_list_iface (priv->store);
-		empathy_contact_list_remove_group (list, group);
+		g_free (text);
 	}
 
 	g_free (group);
 	if (contact) {
 		g_object_unref (contact);
 	}
+}
+
+static gboolean
+contact_list_view_remove_dialog_show (GtkWindow *parent, 
+				      const gchar *window_title, 
+				      const gchar *text)
+{
+	GtkWidget *dialog, *label, *image, *hbox;
+	gboolean res;
+	
+	dialog = gtk_dialog_new_with_buttons (window_title, parent,
+	 					GTK_DIALOG_MODAL,
+	 					GTK_STOCK_DELETE, GTK_RESPONSE_YES,
+	 					GTK_STOCK_CANCEL, GTK_RESPONSE_NO,
+	 					NULL);
+	gtk_dialog_set_has_separator (GTK_DIALOG(dialog), FALSE);
+	 
+	label = gtk_label_new (text);
+	image = gtk_image_new_from_stock (GTK_STOCK_DIALOG_QUESTION, GTK_ICON_SIZE_DIALOG);
+	 
+	hbox = gtk_hbox_new (FALSE, 5);
+	gtk_container_set_border_width (GTK_CONTAINER(hbox), 5);
+	gtk_box_pack_start_defaults (GTK_BOX(hbox), image);
+	gtk_box_pack_start_defaults (GTK_BOX(hbox), label);
+	 
+	gtk_box_pack_start_defaults (GTK_BOX(GTK_DIALOG(dialog)->vbox), hbox);
+	gtk_widget_show_all (dialog);
+	 
+	res = gtk_dialog_run (GTK_DIALOG (dialog));
+
+	gtk_widget_destroy (dialog);
+	return (res == GTK_RESPONSE_YES);
 }
 
 static void
