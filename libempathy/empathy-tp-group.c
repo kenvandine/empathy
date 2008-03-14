@@ -457,13 +457,43 @@ tp_group_get_remote_pending_cb (DBusGProxy *proxy,
 }
 
 static void
+tp_group_ready_cb (EmpathyTpGroup *group)
+{
+	EmpathyTpGroupPriv      *priv = GET_PRIV (group);
+	EmpathyTpContactFactory *tp_factory;
+
+	empathy_debug (DEBUG_DOMAIN, "Factory ready, we can get members %p %p", group, priv);
+
+	tp_factory = empathy_contact_factory_get_tp_factory (priv->factory, priv->account);
+	g_signal_handlers_disconnect_by_func (tp_factory, tp_group_ready_cb, group);
+
+	dbus_g_proxy_connect_signal (priv->group_iface, "MembersChanged",
+				     G_CALLBACK (tp_group_members_changed_cb),
+				     group, NULL);
+
+	tp_chan_iface_group_get_members_async (priv->group_iface,
+					       tp_group_get_members_cb,
+					       g_object_ref (group));
+	tp_chan_iface_group_get_local_pending_members_with_info_async (priv->group_iface,
+								       tp_group_get_local_pending_cb,
+								       g_object_ref (group));
+	tp_chan_iface_group_get_remote_pending_members_async (priv->group_iface,
+							      tp_group_get_remote_pending_cb,
+							      g_object_ref (group));
+}
+
+static void
 tp_group_finalize (GObject *object)
 {
-	EmpathyTpGroupPriv *priv = GET_PRIV (object);
+	EmpathyTpGroupPriv      *priv = GET_PRIV (object);
+	EmpathyTpContactFactory *tp_factory;
 
-	empathy_debug (DEBUG_DOMAIN, "finalize: %p");
+	empathy_debug (DEBUG_DOMAIN, "finalize: %p", object);
 
 	tp_group_disconnect (EMPATHY_TP_GROUP (object));
+
+	tp_factory = empathy_contact_factory_get_tp_factory (priv->factory, priv->account);
+	g_signal_handlers_disconnect_by_func (tp_factory, tp_group_ready_cb, object);
 
 	if (priv->tp_chan) {
 		g_object_unref (priv->tp_chan);
@@ -557,10 +587,11 @@ EmpathyTpGroup *
 empathy_tp_group_new (McAccount *account,
 		      TpChan    *tp_chan)
 {
-	EmpathyTpGroup     *group;
-	EmpathyTpGroupPriv *priv;
-	DBusGProxy         *group_iface;
-	GError             *error = NULL;
+	EmpathyTpGroup          *group;
+	EmpathyTpGroupPriv      *priv;
+	EmpathyTpContactFactory *tp_factory;
+	DBusGProxy              *group_iface;
+	GError                  *error = NULL;
 
 	g_return_val_if_fail (MC_IS_ACCOUNT (account), NULL);
 	g_return_val_if_fail (TELEPATHY_IS_CHAN (tp_chan), NULL);
@@ -586,25 +617,22 @@ empathy_tp_group_new (McAccount *account,
 		g_clear_error (&error);
 	}
 
-	dbus_g_proxy_connect_signal (priv->group_iface, "MembersChanged",
-				     G_CALLBACK (tp_group_members_changed_cb),
-				     group, NULL);
+	tp_factory = empathy_contact_factory_get_tp_factory (priv->factory,
+							     priv->account);
+	if (empathy_tp_contact_factory_is_ready (tp_factory)) {
+		tp_group_ready_cb (group);
+	} else {
+		g_signal_connect_swapped (tp_factory, "notify::ready",
+					  G_CALLBACK (tp_group_ready_cb),
+					  group);
+	}
+
 	dbus_g_proxy_connect_signal (DBUS_G_PROXY (priv->tp_chan), "Closed",
 				     G_CALLBACK (tp_group_closed_cb),
 				     group, NULL);
 	g_signal_connect (priv->tp_chan, "destroy",
 			  G_CALLBACK (tp_group_destroy_cb),
 			  group);
-
-	tp_chan_iface_group_get_members_async (priv->group_iface,
-					       tp_group_get_members_cb,
-					       g_object_ref (group));
-	tp_chan_iface_group_get_local_pending_members_with_info_async (priv->group_iface,
-								       tp_group_get_local_pending_cb,
-								       g_object_ref (group));
-	tp_chan_iface_group_get_remote_pending_members_async (priv->group_iface,
-							      tp_group_get_remote_pending_cb,
-							      g_object_ref (group));
 
 	return group;
 }
