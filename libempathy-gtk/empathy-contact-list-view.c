@@ -21,7 +21,6 @@
  * Authors: Mikael Hallendal <micke@imendio.com>
  *          Martyn Russell <martyn@imendio.com>
  *          Xavier Claessens <xclaesse@gmail.com>
- *          Bruno Dusausoy <bdusauso@beeznest.net>
  */
 
 #include "config.h"
@@ -1468,7 +1467,7 @@ contact_list_view_action_cb (GtkAction             *action,
 	}
 	else if (contact && strcmp (name, "Remove") == 0) {
 		EmpathyContactList *list;
-		gchar *text; 
+		gchar              *text; 
 		
 		text = g_strdup_printf (_("Do you really want to remove the contact '%s' ?"),
 					empathy_contact_get_name (contact));
@@ -1477,7 +1476,7 @@ contact_list_view_action_cb (GtkAction             *action,
 		if (contact_list_view_remove_dialog_show (parent, _("Removing contact"), text)) {
 			list = empathy_contact_list_store_get_list_iface (priv->store);
 			empathy_contact_list_remove (list, contact, 
-						_("Sorry, I don't want you in my contact list anymore."));
+				_("Sorry, I don't want you in my contact list anymore."));
 		}
 
 		g_free (text);
@@ -1496,7 +1495,7 @@ contact_list_view_action_cb (GtkAction             *action,
 	}
 	else if (group && strcmp (name, "Remove") == 0) {
 		EmpathyContactList *list;
-		gchar *text; 
+		gchar              *text; 
 		
 		text = g_strdup_printf (_("Do you really want to remove the group '%s' ?"), group);
 		
@@ -1515,7 +1514,7 @@ contact_list_view_action_cb (GtkAction             *action,
 }
 
 static gboolean
-contact_list_view_remove_dialog_show (GtkWindow *parent, 
+contact_list_view_remove_dialog_show (GtkWindow   *parent, 
 				      const gchar *window_title, 
 				      const gchar *text)
 {
@@ -1523,26 +1522,29 @@ contact_list_view_remove_dialog_show (GtkWindow *parent,
 	gboolean res;
 	
 	dialog = gtk_dialog_new_with_buttons (window_title, parent,
-	 					GTK_DIALOG_MODAL,
-	 					GTK_STOCK_DELETE, GTK_RESPONSE_YES,
-	 					GTK_STOCK_CANCEL, GTK_RESPONSE_NO,
-	 					NULL);
+					      GTK_DIALOG_MODAL,
+					      GTK_STOCK_DELETE, GTK_RESPONSE_YES,
+					      GTK_STOCK_CANCEL, GTK_RESPONSE_NO,
+					      NULL);
 	gtk_dialog_set_has_separator (GTK_DIALOG(dialog), FALSE);
 	 
 	label = gtk_label_new (text);
 	image = gtk_image_new_from_stock (GTK_STOCK_DIALOG_QUESTION, GTK_ICON_SIZE_DIALOG);
 	 
 	hbox = gtk_hbox_new (FALSE, 5);
-	gtk_container_set_border_width (GTK_CONTAINER(hbox), 5);
-	gtk_box_pack_start_defaults (GTK_BOX(hbox), image);
-	gtk_box_pack_start_defaults (GTK_BOX(hbox), label);
-	 
+	gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
+	gtk_box_pack_start_defaults (GTK_BOX (hbox), image);
+	gtk_box_pack_start_defaults (GTK_BOX (hbox), label);	 
 	gtk_box_pack_start_defaults (GTK_BOX(GTK_DIALOG(dialog)->vbox), hbox);
-	gtk_widget_show_all (dialog);
+
+	gtk_widget_show (image);
+	gtk_widget_show (label);
+	gtk_widget_show (hbox);
+	gtk_widget_show (dialog);
 	 
 	res = gtk_dialog_run (GTK_DIALOG (dialog));
-
 	gtk_widget_destroy (dialog);
+
 	return (res == GTK_RESPONSE_YES);
 }
 
