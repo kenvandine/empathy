@@ -1252,7 +1252,9 @@ static void
 chat_window_help_about_cb (GtkWidget         *menuitem,
 			   EmpathyChatWindow *window)
 {
-	empathy_about_dialog_new (GTK_WINDOW (window));
+	EmpathyChatWindowPriv *priv = GET_PRIV (window);
+
+	empathy_about_dialog_new (GTK_WINDOW (priv->dialog));
 }
 
 static gboolean
