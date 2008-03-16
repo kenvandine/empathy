@@ -233,7 +233,7 @@ tp_contact_factory_request_aliases_cb (TpConnection *connection,
 		while (handles[size] != 0) {
 			size++;
 		}
-		handles = g_memdup (handles, size * sizeof (guint));
+		handles = g_memdup (handles, (size + 1) * sizeof (guint));
 		handles_array.len = size;
 		handles_array.data = (gchar*) handles;
 		
