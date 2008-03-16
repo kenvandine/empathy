@@ -45,13 +45,12 @@
 #include <libempathy/empathy-debug.h>
 
 #include <libempathy-gtk/empathy-conf.h>
-#include <libempathy-gtk/empathy-preferences.h>
-#include <libempathy-gtk/empathy-main-window.h>
-#include <libempathy-gtk/empathy-status-icon.h>
 #include <libempathy-gtk/empathy-chat.h>
 #include <libempathy-gtk/empathy-private-chat.h>
 #include <libempathy-gtk/empathy-group-chat.h>
 
+#include "empathy-main-window.h"
+#include "empathy-status-icon.h"
 #include "empathy-chat-window.h"
 #include "bacon-message-connection.h"
 

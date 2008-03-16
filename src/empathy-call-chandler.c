@@ -27,7 +27,7 @@
 #include <libempathy/empathy-debug.h>
 #include <libempathy/empathy-utils.h>
 
-#include <libempathy-gtk/empathy-call-window.h>
+#include "empathy-call-window.h"
 
 #define DEBUG_DOMAIN "CallChandler"
 
