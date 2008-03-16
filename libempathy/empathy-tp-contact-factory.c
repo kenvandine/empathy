@@ -215,13 +215,35 @@ tp_contact_factory_request_aliases_cb (TpConnection *connection,
 				       gpointer       user_data,
 				       GObject       *tp_factory)
 {
-	guint        *handles = user_data;
-	guint         i = 0;
-	const gchar **name;
+	EmpathyTpContactFactoryPriv *priv = GET_PRIV (tp_factory);
+	guint                       *handles = user_data;
+	guint                        i = 0;
+	const gchar                **name;
 
 	if (error) {
+		GArray handles_array;
+		guint  size = 0;
+
 		empathy_debug (DEBUG_DOMAIN, "Error requesting aliases: %s",
 			      error->message);
+
+		/* FIXME: Sometimes the dbus call timesout because CM takes
+		 * too much time to request all aliases from the server,
+		 * that's why we retry. */
+		while (handles[size] != 0) {
+			size++;
+		}
+		handles = g_memdup (handles, size * sizeof (guint));
+		handles_array.len = size;
+		handles_array.data = (gchar*) handles;
+		
+		tp_cli_connection_interface_aliasing_call_request_aliases (priv->connection,
+									   -1,
+									   &handles_array,
+									   tp_contact_factory_request_aliases_cb,
+									   handles, g_free,
+									   G_OBJECT (tp_factory));
+
 		return;
 	}
 

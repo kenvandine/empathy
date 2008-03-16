@@ -423,7 +423,7 @@ empathy_contact_set_name (EmpathyContact *contact,
 	g_free (priv->name);
 	priv->name = g_strdup (name);
 	contact_set_ready_flag (contact, EMPATHY_CONTACT_READY_NAME,
-				!G_STR_EMPTY (name));
+				name != NULL);
 
 	g_object_notify (G_OBJECT (contact), "name");
 }
