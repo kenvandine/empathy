@@ -151,15 +151,16 @@
 
 ;; Enumerations and flags ...
 
-(define-flags Capabilities
+(define-enum RegExType
   (in-module "Empathy")
-  (c-name "EmpathyCapabilities")
-  (gtype-id "EMPATHY_TYPE_CAPABILITIES")
+  (c-name "EmpathyRegExType")
+  (gtype-id "EMPATHY_TYPE_REG_EX_TYPE")
   (values
-    '("none" "EMPATHY_CAPABILITIES_NONE")
-    '("audio" "EMPATHY_CAPABILITIES_AUDIO")
-    '("video" "EMPATHY_CAPABILITIES_VIDEO")
-    '("unknown" "EMPATHY_CAPABILITIES_UNKNOWN")
+    '("as-is" "EMPATHY_REGEX_AS_IS")
+    '("browser" "EMPATHY_REGEX_BROWSER")
+    '("email" "EMPATHY_REGEX_EMAIL")
+    '("other" "EMPATHY_REGEX_OTHER")
+    '("all" "EMPATHY_REGEX_ALL")
   )
 )
 
@@ -176,6 +177,31 @@
   )
 )
 
+(define-flags Capabilities
+  (in-module "Empathy")
+  (c-name "EmpathyCapabilities")
+  (gtype-id "EMPATHY_TYPE_CAPABILITIES")
+  (values
+    '("none" "EMPATHY_CAPABILITIES_NONE")
+    '("audio" "EMPATHY_CAPABILITIES_AUDIO")
+    '("video" "EMPATHY_CAPABILITIES_VIDEO")
+    '("unknown" "EMPATHY_CAPABILITIES_UNKNOWN")
+  )
+)
+
+(define-flags ContactReady
+  (in-module "Empathy")
+  (c-name "EmpathyContactReady")
+  (gtype-id "EMPATHY_TYPE_CONTACT_READY")
+  (values
+    '("none" "EMPATHY_CONTACT_READY_NONE")
+    '("id" "EMPATHY_CONTACT_READY_ID")
+    '("handle" "EMPATHY_CONTACT_READY_HANDLE")
+    '("name" "EMPATHY_CONTACT_READY_NAME")
+    '("all" "EMPATHY_CONTACT_READY_ALL")
+  )
+)
+
 (define-enum TpCallStatus
   (in-module "Empathy")
   (c-name "EmpathyTpCallStatus")
@@ -185,19 +211,6 @@
     '("pending" "EMPATHY_TP_CALL_STATUS_PENDING")
     '("accepted" "EMPATHY_TP_CALL_STATUS_ACCEPTED")
     '("closed" "EMPATHY_TP_CALL_STATUS_CLOSED")
-  )
-)
-
-(define-enum RegExType
-  (in-module "Empathy")
-  (c-name "EmpathyRegExType")
-  (gtype-id "EMPATHY_TYPE_REG_EX_TYPE")
-  (values
-    '("as-is" "EMPATHY_REGEX_AS_IS")
-    '("browser" "EMPATHY_REGEX_BROWSER")
-    '("email" "EMPATHY_REGEX_EMAIL")
-    '("other" "EMPATHY_REGEX_OTHER")
-    '("all" "EMPATHY_REGEX_ALL")
   )
 )
 
@@ -243,1120 +256,45 @@
 
 
 
-;; From empathy-chandler.h
+;; From empathy-time.h
 
-(define-function empathy_chandler_get_type
-  (c-name "empathy_chandler_get_type")
-  (return-type "GType")
-)
-
-(define-function empathy_chandler_new
-  (c-name "empathy_chandler_new")
-  (is-constructor-of "EmpathyChandler")
-  (return-type "EmpathyChandler*")
-  (parameters
-    '("const-gchar*" "bus_name")
-    '("const-gchar*" "object_path")
-  )
-)
-
-
-
-;; From empathy-chatroom.h
-
-(define-function empathy_chatroom_get_type
-  (c-name "empathy_chatroom_get_type")
-  (return-type "GType")
-)
-
-(define-function empathy_chatroom_new
-  (c-name "empathy_chatroom_new")
-  (is-constructor-of "EmpathyChatroom")
-  (return-type "EmpathyChatroom*")
-  (parameters
-    '("McAccount*" "account")
-    '("const-gchar*" "room")
-  )
-)
-
-(define-function empathy_chatroom_new_full
-  (c-name "empathy_chatroom_new_full")
-  (return-type "EmpathyChatroom*")
-  (parameters
-    '("McAccount*" "account")
-    '("const-gchar*" "room")
-    '("const-gchar*" "name")
-    '("gboolean" "auto_connect")
-  )
-)
-
-(define-method get_account
-  (of-object "EmpathyChatroom")
-  (c-name "empathy_chatroom_get_account")
-  (return-type "McAccount*")
-)
-
-(define-method set_account
-  (of-object "EmpathyChatroom")
-  (c-name "empathy_chatroom_set_account")
-  (return-type "none")
-  (parameters
-    '("McAccount*" "account")
-  )
-)
-
-(define-method get_room
-  (of-object "EmpathyChatroom")
-  (c-name "empathy_chatroom_get_room")
-  (return-type "const-gchar*")
-)
-
-(define-method set_room
-  (of-object "EmpathyChatroom")
-  (c-name "empathy_chatroom_set_room")
-  (return-type "none")
-  (parameters
-    '("const-gchar*" "room")
-  )
-)
-
-(define-method get_name
-  (of-object "EmpathyChatroom")
-  (c-name "empathy_chatroom_get_name")
-  (return-type "const-gchar*")
-)
-
-(define-method set_name
-  (of-object "EmpathyChatroom")
-  (c-name "empathy_chatroom_set_name")
-  (return-type "none")
-  (parameters
-    '("const-gchar*" "name")
-  )
-)
-
-(define-method get_auto_connect
-  (of-object "EmpathyChatroom")
-  (c-name "empathy_chatroom_get_auto_connect")
-  (return-type "gboolean")
-)
-
-(define-method set_auto_connect
-  (of-object "EmpathyChatroom")
-  (c-name "empathy_chatroom_set_auto_connect")
-  (return-type "none")
-  (parameters
-    '("gboolean" "auto_connect")
-  )
-)
-
-(define-function empathy_chatroom_equal
-  (c-name "empathy_chatroom_equal")
-  (return-type "gboolean")
-  (parameters
-    '("gconstpointer" "v1")
-    '("gconstpointer" "v2")
-  )
-)
-
-
-
-;; From empathy-chatroom-manager.h
-
-(define-function empathy_chatroom_manager_get_type
-  (c-name "empathy_chatroom_manager_get_type")
-  (return-type "GType")
-)
-
-(define-function empathy_chatroom_manager_new
-  (c-name "empathy_chatroom_manager_new")
-  (is-constructor-of "EmpathyChatroomManager")
-  (return-type "EmpathyChatroomManager*")
-)
-
-(define-method add
-  (of-object "EmpathyChatroomManager")
-  (c-name "empathy_chatroom_manager_add")
-  (return-type "gboolean")
-  (parameters
-    '("EmpathyChatroom*" "chatroom")
-  )
-)
-
-(define-method remove
-  (of-object "EmpathyChatroomManager")
-  (c-name "empathy_chatroom_manager_remove")
-  (return-type "none")
-  (parameters
-    '("EmpathyChatroom*" "chatroom")
-  )
-)
-
-(define-method find
-  (of-object "EmpathyChatroomManager")
-  (c-name "empathy_chatroom_manager_find")
-  (return-type "EmpathyChatroom*")
-  (parameters
-    '("McAccount*" "account")
-    '("const-gchar*" "room")
-  )
-)
-
-(define-method get_chatrooms
-  (of-object "EmpathyChatroomManager")
-  (c-name "empathy_chatroom_manager_get_chatrooms")
-  (return-type "GList*")
-  (parameters
-    '("McAccount*" "account")
-  )
-)
-
-(define-method get_count
-  (of-object "EmpathyChatroomManager")
-  (c-name "empathy_chatroom_manager_get_count")
-  (return-type "guint")
-  (parameters
-    '("McAccount*" "account")
-  )
-)
-
-(define-method store
-  (of-object "EmpathyChatroomManager")
-  (c-name "empathy_chatroom_manager_store")
-  (return-type "none")
-)
-
-
-
-;; From empathy-contact-factory.h
-
-(define-function empathy_contact_factory_get_type
-  (c-name "empathy_contact_factory_get_type")
-  (return-type "GType")
-)
-
-(define-function empathy_contact_factory_new
-  (c-name "empathy_contact_factory_new")
-  (is-constructor-of "EmpathyContactFactory")
-  (return-type "EmpathyContactFactory*")
-)
-
-(define-method get_user
-  (of-object "EmpathyContactFactory")
-  (c-name "empathy_contact_factory_get_user")
-  (return-type "EmpathyContact*")
-  (parameters
-    '("McAccount*" "account")
-  )
-)
-
-(define-method get_from_id
-  (of-object "EmpathyContactFactory")
-  (c-name "empathy_contact_factory_get_from_id")
-  (return-type "EmpathyContact*")
-  (parameters
-    '("McAccount*" "account")
-    '("const-gchar*" "id")
-  )
-)
-
-(define-method get_from_handle
-  (of-object "EmpathyContactFactory")
-  (c-name "empathy_contact_factory_get_from_handle")
-  (return-type "EmpathyContact*")
-  (parameters
-    '("McAccount*" "account")
-    '("guint" "handle")
-  )
-)
-
-(define-method get_from_handles
-  (of-object "EmpathyContactFactory")
-  (c-name "empathy_contact_factory_get_from_handles")
-  (return-type "GList*")
-  (parameters
-    '("McAccount*" "account")
-    '("GArray*" "handles")
-  )
-)
-
-(define-method set_alias
-  (of-object "EmpathyContactFactory")
-  (c-name "empathy_contact_factory_set_alias")
-  (return-type "none")
-  (parameters
-    '("EmpathyContact*" "contact")
-    '("const-gchar*" "alias")
-  )
-)
-
-(define-method set_avatar
-  (of-object "EmpathyContactFactory")
-  (c-name "empathy_contact_factory_set_avatar")
-  (return-type "none")
-  (parameters
-    '("McAccount*" "account")
-    '("const-gchar*" "data")
-    '("gsize" "size")
-    '("const-gchar*" "mime_type")
-  )
-)
-
-
-
-;; From empathy-contact-groups.h
-
-(define-function empathy_contact_groups_get_all
-  (c-name "empathy_contact_groups_get_all")
-  (return-type "none")
-)
-
-(define-function empathy_contact_group_get_expanded
-  (c-name "empathy_contact_group_get_expanded")
-  (return-type "gboolean")
-  (parameters
-    '("const-gchar*" "group")
-  )
-)
-
-(define-function empathy_contact_group_set_expanded
-  (c-name "empathy_contact_group_set_expanded")
-  (return-type "none")
-  (parameters
-    '("const-gchar*" "group")
-    '("gboolean" "expanded")
-  )
-)
-
-
-
-;; From empathy-contact.h
-
-(define-function empathy_contact_get_type
-  (c-name "empathy_contact_get_type")
-  (return-type "GType")
-)
-
-(define-function empathy_contact_new
-  (c-name "empathy_contact_new")
-  (is-constructor-of "EmpathyContact")
-  (return-type "EmpathyContact*")
-  (parameters
-    '("McAccount*" "account")
-  )
-)
-
-(define-function empathy_contact_new_full
-  (c-name "empathy_contact_new_full")
-  (return-type "EmpathyContact*")
-  (parameters
-    '("McAccount*" "account")
-    '("const-gchar*" "id")
-    '("const-gchar*" "name")
-  )
-)
-
-(define-method get_id
-  (of-object "EmpathyContact")
-  (c-name "empathy_contact_get_id")
-  (return-type "const-gchar*")
-)
-
-(define-method set_id
-  (of-object "EmpathyContact")
-  (c-name "empathy_contact_set_id")
-  (return-type "none")
-  (parameters
-    '("const-gchar*" "id")
-  )
-)
-
-(define-method get_name
-  (of-object "EmpathyContact")
-  (c-name "empathy_contact_get_name")
-  (return-type "const-gchar*")
-)
-
-(define-method set_name
-  (of-object "EmpathyContact")
-  (c-name "empathy_contact_set_name")
-  (return-type "none")
-  (parameters
-    '("const-gchar*" "name")
-  )
-)
-
-(define-method get_avatar
-  (of-object "EmpathyContact")
-  (c-name "empathy_contact_get_avatar")
-  (return-type "EmpathyAvatar*")
-)
-
-(define-method set_avatar
-  (of-object "EmpathyContact")
-  (c-name "empathy_contact_set_avatar")
-  (return-type "none")
-  (parameters
-    '("EmpathyAvatar*" "avatar")
-  )
-)
-
-(define-method get_account
-  (of-object "EmpathyContact")
-  (c-name "empathy_contact_get_account")
-  (return-type "McAccount*")
-)
-
-(define-method set_account
-  (of-object "EmpathyContact")
-  (c-name "empathy_contact_set_account")
-  (return-type "none")
-  (parameters
-    '("McAccount*" "account")
-  )
-)
-
-(define-method get_presence
-  (of-object "EmpathyContact")
-  (c-name "empathy_contact_get_presence")
-  (return-type "McPresence")
-)
-
-(define-method set_presence
-  (of-object "EmpathyContact")
-  (c-name "empathy_contact_set_presence")
-  (return-type "none")
-  (parameters
-    '("McPresence" "presence")
-  )
-)
-
-(define-method get_presence_message
-  (of-object "EmpathyContact")
-  (c-name "empathy_contact_get_presence_message")
-  (return-type "const-gchar*")
-)
-
-(define-method set_presence_message
-  (of-object "EmpathyContact")
-  (c-name "empathy_contact_set_presence_message")
-  (return-type "none")
-  (parameters
-    '("const-gchar*" "message")
-  )
-)
-
-(define-method get_handle
-  (of-object "EmpathyContact")
-  (c-name "empathy_contact_get_handle")
-  (return-type "guint")
-)
-
-(define-method set_handle
-  (of-object "EmpathyContact")
-  (c-name "empathy_contact_set_handle")
-  (return-type "none")
-  (parameters
-    '("guint" "handle")
-  )
-)
-
-(define-method get_capabilities
-  (of-object "EmpathyContact")
-  (c-name "empathy_contact_get_capabilities")
-  (return-type "EmpathyCapabilities")
-)
-
-(define-method set_capabilities
-  (of-object "EmpathyContact")
-  (c-name "empathy_contact_set_capabilities")
-  (return-type "none")
-  (parameters
-    '("EmpathyCapabilities" "capabilities")
-  )
-)
-
-(define-method is_user
-  (of-object "EmpathyContact")
-  (c-name "empathy_contact_is_user")
-  (return-type "gboolean")
-)
-
-(define-method set_is_user
-  (of-object "EmpathyContact")
-  (c-name "empathy_contact_set_is_user")
-  (return-type "none")
-  (parameters
-    '("gboolean" "is_user")
-  )
-)
-
-(define-method is_online
-  (of-object "EmpathyContact")
-  (c-name "empathy_contact_is_online")
-  (return-type "gboolean")
-)
-
-(define-method get_status
-  (of-object "EmpathyContact")
-  (c-name "empathy_contact_get_status")
-  (return-type "const-gchar*")
-)
-
-(define-method can_voip
-  (of-object "EmpathyContact")
-  (c-name "empathy_contact_can_voip")
-  (return-type "gboolean")
-)
-
-(define-function empathy_contact_equal
-  (c-name "empathy_contact_equal")
-  (return-type "gboolean")
-  (parameters
-    '("gconstpointer" "v1")
-    '("gconstpointer" "v2")
-  )
-)
-
-(define-function empathy_contact_hash
-  (c-name "empathy_contact_hash")
-  (return-type "guint")
-  (parameters
-    '("gconstpointer" "key")
-  )
-)
-
-
-
-;; From empathy-contact-list.h
-
-(define-function empathy_contact_list_get_type
-  (c-name "empathy_contact_list_get_type")
-  (return-type "GType")
-)
-
-(define-method add
-  (of-object "EmpathyContactList")
-  (c-name "empathy_contact_list_add")
-  (return-type "none")
-  (parameters
-    '("EmpathyContact*" "contact")
-    '("const-gchar*" "message")
-  )
-)
-
-(define-method remove
-  (of-object "EmpathyContactList")
-  (c-name "empathy_contact_list_remove")
-  (return-type "none")
-  (parameters
-    '("EmpathyContact*" "contact")
-    '("const-gchar*" "message")
-  )
-)
-
-(define-method get_members
-  (of-object "EmpathyContactList")
-  (c-name "empathy_contact_list_get_members")
-  (return-type "GList*")
-)
-
-(define-method get_pendings
-  (of-object "EmpathyContactList")
-  (c-name "empathy_contact_list_get_pendings")
-  (return-type "GList*")
-)
-
-(define-method get_all_groups
-  (of-object "EmpathyContactList")
-  (c-name "empathy_contact_list_get_all_groups")
-  (return-type "GList*")
-)
-
-(define-method get_groups
-  (of-object "EmpathyContactList")
-  (c-name "empathy_contact_list_get_groups")
-  (return-type "GList*")
-  (parameters
-    '("EmpathyContact*" "contact")
-  )
-)
-
-(define-method add_to_group
-  (of-object "EmpathyContactList")
-  (c-name "empathy_contact_list_add_to_group")
-  (return-type "none")
-  (parameters
-    '("EmpathyContact*" "contact")
-    '("const-gchar*" "group")
-  )
-)
-
-(define-method remove_from_group
-  (of-object "EmpathyContactList")
-  (c-name "empathy_contact_list_remove_from_group")
-  (return-type "none")
-  (parameters
-    '("EmpathyContact*" "contact")
-    '("const-gchar*" "group")
-  )
-)
-
-(define-method rename_group
-  (of-object "EmpathyContactList")
-  (c-name "empathy_contact_list_rename_group")
-  (return-type "none")
-  (parameters
-    '("const-gchar*" "old_group")
-    '("const-gchar*" "new_group")
-  )
-)
-
-(define-method remove_group
-  (of-object "EmpathyContactList")
-  (c-name "empathy_contact_list_remove_group")
-  (return-type "none")
-  (parameters
-    '("const-gchar*" "group")
-  )
-)
-
-
-
-;; From empathy-contact-manager.h
-
-(define-function empathy_contact_manager_get_type
-  (c-name "empathy_contact_manager_get_type")
-  (return-type "GType")
-)
-
-(define-function empathy_contact_manager_new
-  (c-name "empathy_contact_manager_new")
-  (is-constructor-of "EmpathyContactManager")
-  (return-type "EmpathyContactManager*")
-)
-
-(define-method get_list
-  (of-object "EmpathyContactManager")
-  (c-name "empathy_contact_manager_get_list")
-  (return-type "EmpathyTpContactList*")
-  (parameters
-    '("McAccount*" "account")
-  )
-)
-
-
-
-;; From empathy-debug.h
-
-(define-function empathy_debug_impl
-  (c-name "empathy_debug_impl")
-  (return-type "none")
-  (parameters
-    '("const-gchar*" "domain")
-    '("const-gchar*" "msg")
-  )
-  (varargs #t)
-)
-
-(define-function empathy_debug_set_log_file_from_env
-  (c-name "empathy_debug_set_log_file_from_env")
-  (return-type "none")
-)
-
-
-
-;; From empathy-filter.h
-
-(define-function empathy_filter_get_type
-  (c-name "empathy_filter_get_type")
-  (return-type "GType")
-)
-
-(define-function empathy_filter_new
-  (c-name "empathy_filter_new")
-  (is-constructor-of "EmpathyFilter")
-  (return-type "EmpathyFilter*")
-  (parameters
-    '("const-gchar*" "bus_name")
-    '("const-gchar*" "object_path")
-    '("const-gchar*" "channel_type")
-    '("guint" "priority")
-    '("guint" "flags")
-  )
-)
-
-(define-method process
-  (of-object "EmpathyFilter")
-  (c-name "empathy_filter_process")
-  (return-type "none")
-  (parameters
-    '("TpChan*" "tp_chan")
-    '("gboolean" "process")
-  )
-)
-
-
-
-;; From empathy-idle.h
-
-(define-function empathy_idle_get_type
-  (c-name "empathy_idle_get_type")
-  (return-type "GType")
-)
-
-(define-function empathy_idle_new
-  (c-name "empathy_idle_new")
-  (is-constructor-of "EmpathyIdle")
-  (return-type "EmpathyIdle*")
-)
-
-(define-method get_state
-  (of-object "EmpathyIdle")
-  (c-name "empathy_idle_get_state")
-  (return-type "McPresence")
-)
-
-(define-method set_state
-  (of-object "EmpathyIdle")
-  (c-name "empathy_idle_set_state")
-  (return-type "none")
-  (parameters
-    '("McPresence" "state")
-  )
-)
-
-(define-method get_status
-  (of-object "EmpathyIdle")
-  (c-name "empathy_idle_get_status")
-  (return-type "const-gchar*")
-)
-
-(define-method set_status
-  (of-object "EmpathyIdle")
-  (c-name "empathy_idle_set_status")
-  (return-type "none")
-  (parameters
-    '("const-gchar*" "status")
-  )
-)
-
-(define-method get_flash_state
-  (of-object "EmpathyIdle")
-  (c-name "empathy_idle_get_flash_state")
-  (return-type "McPresence")
-)
-
-(define-method set_flash_state
-  (of-object "EmpathyIdle")
-  (c-name "empathy_idle_set_flash_state")
-  (return-type "none")
-  (parameters
-    '("McPresence" "state")
-  )
-)
-
-(define-method set_presence
-  (of-object "EmpathyIdle")
-  (c-name "empathy_idle_set_presence")
-  (return-type "none")
-  (parameters
-    '("McPresence" "state")
-    '("const-gchar*" "status")
-  )
-)
-
-(define-method get_auto_away
-  (of-object "EmpathyIdle")
-  (c-name "empathy_idle_get_auto_away")
-  (return-type "gboolean")
-)
-
-(define-method set_auto_away
-  (of-object "EmpathyIdle")
-  (c-name "empathy_idle_set_auto_away")
-  (return-type "none")
-  (parameters
-    '("gboolean" "auto_away")
-  )
-)
-
-(define-method get_use_nm
-  (of-object "EmpathyIdle")
-  (c-name "empathy_idle_get_use_nm")
-  (return-type "gboolean")
-)
-
-(define-method set_use_nm
-  (of-object "EmpathyIdle")
-  (c-name "empathy_idle_set_use_nm")
-  (return-type "none")
-  (parameters
-    '("gboolean" "use_nm")
-  )
-)
-
-
-
-;; From empathy-irc-network.h
-
-(define-function empathy_irc_network_get_type
-  (c-name "empathy_irc_network_get_type")
-  (return-type "GType")
-)
-
-(define-function empathy_irc_network_new
-  (c-name "empathy_irc_network_new")
-  (is-constructor-of "EmpathyIrcNetwork")
-  (return-type "EmpathyIrcNetwork*")
-  (parameters
-    '("const-gchar*" "name")
-  )
-)
-
-(define-method get_servers
-  (of-object "EmpathyIrcNetwork")
-  (c-name "empathy_irc_network_get_servers")
-  (return-type "GSList*")
-)
-
-(define-method append_server
-  (of-object "EmpathyIrcNetwork")
-  (c-name "empathy_irc_network_append_server")
-  (return-type "none")
-  (parameters
-    '("EmpathyIrcServer*" "server")
-  )
-)
-
-(define-method remove_server
-  (of-object "EmpathyIrcNetwork")
-  (c-name "empathy_irc_network_remove_server")
-  (return-type "none")
-  (parameters
-    '("EmpathyIrcServer*" "server")
-  )
-)
-
-(define-method set_server_position
-  (of-object "EmpathyIrcNetwork")
-  (c-name "empathy_irc_network_set_server_position")
-  (return-type "none")
-  (parameters
-    '("EmpathyIrcServer*" "server")
-    '("gint" "pos")
-  )
-)
-
-
-
-;; From empathy-irc-network-manager.h
-
-(define-function empathy_irc_network_manager_get_type
-  (c-name "empathy_irc_network_manager_get_type")
-  (return-type "GType")
-)
-
-(define-function empathy_irc_network_manager_new
-  (c-name "empathy_irc_network_manager_new")
-  (is-constructor-of "EmpathyIrcNetworkManager")
-  (return-type "EmpathyIrcNetworkManager*")
-  (parameters
-    '("const-gchar*" "global_file")
-    '("const-gchar*" "user_file")
-  )
-)
-
-(define-method add
-  (of-object "EmpathyIrcNetworkManager")
-  (c-name "empathy_irc_network_manager_add")
-  (return-type "none")
-  (parameters
-    '("EmpathyIrcNetwork*" "network")
-  )
-)
-
-(define-method remove
-  (of-object "EmpathyIrcNetworkManager")
-  (c-name "empathy_irc_network_manager_remove")
-  (return-type "none")
-  (parameters
-    '("EmpathyIrcNetwork*" "network")
-  )
-)
-
-(define-method get_networks
-  (of-object "EmpathyIrcNetworkManager")
-  (c-name "empathy_irc_network_manager_get_networks")
-  (return-type "GSList*")
-)
-
-(define-method find_network_by_address
-  (of-object "EmpathyIrcNetworkManager")
-  (c-name "empathy_irc_network_manager_find_network_by_address")
-  (return-type "EmpathyIrcNetwork*")
-  (parameters
-    '("const-gchar*" "address")
-  )
-)
-
-
-
-;; From empathy-irc-server.h
-
-(define-function empathy_irc_server_get_type
-  (c-name "empathy_irc_server_get_type")
-  (return-type "GType")
-)
-
-(define-function empathy_irc_server_new
-  (c-name "empathy_irc_server_new")
-  (is-constructor-of "EmpathyIrcServer")
-  (return-type "EmpathyIrcServer*")
-  (parameters
-    '("const-gchar*" "address")
-    '("guint" "port")
-    '("gboolean" "ssl")
-  )
-)
-
-
-
-;; From empathy-log-manager.h
-
-(define-function empathy_log_manager_get_type
-  (c-name "empathy_log_manager_get_type")
-  (return-type "GType")
-)
-
-(define-function empathy_log_manager_new
-  (c-name "empathy_log_manager_new")
-  (is-constructor-of "EmpathyLogManager")
-  (return-type "EmpathyLogManager*")
-)
-
-(define-method add_message
-  (of-object "EmpathyLogManager")
-  (c-name "empathy_log_manager_add_message")
-  (return-type "none")
-  (parameters
-    '("const-gchar*" "chat_id")
-    '("gboolean" "chatroom")
-    '("EmpathyMessage*" "message")
-  )
-)
-
-(define-method exists
-  (of-object "EmpathyLogManager")
-  (c-name "empathy_log_manager_exists")
-  (return-type "gboolean")
-  (parameters
-    '("McAccount*" "account")
-    '("const-gchar*" "chat_id")
-    '("gboolean" "chatroom")
-  )
-)
-
-(define-method get_dates
-  (of-object "EmpathyLogManager")
-  (c-name "empathy_log_manager_get_dates")
-  (return-type "GList*")
-  (parameters
-    '("McAccount*" "account")
-    '("const-gchar*" "chat_id")
-    '("gboolean" "chatroom")
-  )
-)
-
-(define-method get_messages_for_file
-  (of-object "EmpathyLogManager")
-  (c-name "empathy_log_manager_get_messages_for_file")
-  (return-type "GList*")
-  (parameters
-    '("const-gchar*" "filename")
-  )
-)
-
-(define-method get_messages_for_date
-  (of-object "EmpathyLogManager")
-  (c-name "empathy_log_manager_get_messages_for_date")
-  (return-type "GList*")
-  (parameters
-    '("McAccount*" "account")
-    '("const-gchar*" "chat_id")
-    '("gboolean" "chatroom")
-    '("const-gchar*" "date")
-  )
-)
-
-(define-method get_last_messages
-  (of-object "EmpathyLogManager")
-  (c-name "empathy_log_manager_get_last_messages")
-  (return-type "GList*")
-  (parameters
-    '("McAccount*" "account")
-    '("const-gchar*" "chat_id")
-    '("gboolean" "chatroom")
-  )
-)
-
-(define-method get_messages_for_file
-  (of-object "EmpathyLogManager")
-  (c-name "empathy_log_manager_get_messages_for_file")
-  (return-type "GList*")
-  (parameters
-    '("const-gchar*" "filename")
-  )
-)
-
-(define-method get_chats
-  (of-object "EmpathyLogManager")
-  (c-name "empathy_log_manager_get_chats")
-  (return-type "GList*")
-  (parameters
-    '("McAccount*" "account")
-  )
-)
-
-(define-method search_new
-  (of-object "EmpathyLogManager")
-  (c-name "empathy_log_manager_search_new")
-  (return-type "GList*")
-  (parameters
-    '("const-gchar*" "text")
-  )
-)
-
-(define-function empathy_log_manager_search_free
-  (c-name "empathy_log_manager_search_free")
-  (return-type "none")
-  (parameters
-    '("GList*" "hits")
-  )
-)
-
-(define-function empathy_log_manager_get_date_readable
-  (c-name "empathy_log_manager_get_date_readable")
-  (return-type "gchar*")
-  (parameters
-    '("const-gchar*" "date")
-  )
-)
-
-
-
-;; From empathy-message.h
-
-(define-function empathy_message_get_gtype
-  (c-name "empathy_message_get_gtype")
-  (return-type "GType")
-)
-
-(define-function empathy_message_new
-  (c-name "empathy_message_new")
-  (is-constructor-of "EmpathyMessage")
-  (return-type "EmpathyMessage*")
-  (parameters
-    '("const-gchar*" "body")
-  )
-)
-
-(define-method get_type
-  (of-object "EmpathyMessage")
-  (c-name "empathy_message_get_type")
-  (return-type "EmpathyMessageType")
-)
-
-(define-method set_type
-  (of-object "EmpathyMessage")
-  (c-name "empathy_message_set_type")
-  (return-type "none")
-  (parameters
-    '("EmpathyMessageType" "type")
-  )
-)
-
-(define-method get_sender
-  (of-object "EmpathyMessage")
-  (c-name "empathy_message_get_sender")
-  (return-type "EmpathyContact*")
-)
-
-(define-method set_sender
-  (of-object "EmpathyMessage")
-  (c-name "empathy_message_set_sender")
-  (return-type "none")
-  (parameters
-    '("EmpathyContact*" "contact")
-  )
-)
-
-(define-method get_receiver
-  (of-object "EmpathyMessage")
-  (c-name "empathy_message_get_receiver")
-  (return-type "EmpathyContact*")
-)
-
-(define-method set_receiver
-  (of-object "EmpathyMessage")
-  (c-name "empathy_message_set_receiver")
-  (return-type "none")
-  (parameters
-    '("EmpathyContact*" "contact")
-  )
-)
-
-(define-method get_body
-  (of-object "EmpathyMessage")
-  (c-name "empathy_message_get_body")
-  (return-type "const-gchar*")
-)
-
-(define-method set_body
-  (of-object "EmpathyMessage")
-  (c-name "empathy_message_set_body")
-  (return-type "none")
-  (parameters
-    '("const-gchar*" "body")
-  )
-)
-
-(define-method get_timestamp
-  (of-object "EmpathyMessage")
-  (c-name "empathy_message_get_timestamp")
+(define-function empathy_time_get_current
+  (c-name "empathy_time_get_current")
   (return-type "time_t")
 )
 
-(define-method set_timestamp
-  (of-object "EmpathyMessage")
-  (c-name "empathy_message_set_timestamp")
-  (return-type "none")
+(define-function empathy_time_get_local_time
+  (c-name "empathy_time_get_local_time")
+  (return-type "time_t")
   (parameters
-    '("time_t" "timestamp")
+    '("struct-tm*" "tm")
   )
 )
 
-(define-method get_date_and_time
-  (of-object "EmpathyMessage")
-  (c-name "empathy_message_get_date_and_time")
-  (return-type "GDate*")
+(define-function empathy_time_parse
+  (c-name "empathy_time_parse")
+  (return-type "time_t")
   (parameters
-    '("time_t*" "timestamp")
+    '("const-gchar*" "str")
   )
 )
 
-(define-function empathy_message_type_from_str
-  (c-name "empathy_message_type_from_str")
-  (return-type "EmpathyMessageType")
+(define-function empathy_time_to_string_utc
+  (c-name "empathy_time_to_string_utc")
+  (return-type "gchar*")
   (parameters
-    '("const-gchar*" "type_str")
+    '("time_t" "t")
+    '("const-gchar*" "format")
   )
 )
 
-(define-method to_str
-  (of-object "EmpathyMessageType")
-  (c-name "empathy_message_type_to_str")
-  (return-type "const-gchar*")
+(define-function empathy_time_to_string_local
+  (c-name "empathy_time_to_string_local")
+  (return-type "gchar*")
+  (parameters
+    '("time_t" "t")
+    '("const-gchar*" "format")
+  )
 )
 
 
@@ -1426,520 +364,20 @@
 
 
 
-;; From empathy-time.h
+;; From empathy-debug.h
 
-(define-function empathy_time_get_current
-  (c-name "empathy_time_get_current")
-  (return-type "time_t")
-)
-
-(define-function empathy_time_get_local_time
-  (c-name "empathy_time_get_local_time")
-  (return-type "time_t")
-  (parameters
-    '("struct-tm*" "tm")
-  )
-)
-
-(define-function empathy_time_parse
-  (c-name "empathy_time_parse")
-  (return-type "time_t")
-  (parameters
-    '("const-gchar*" "str")
-  )
-)
-
-(define-function empathy_time_to_string_utc
-  (c-name "empathy_time_to_string_utc")
-  (return-type "gchar*")
-  (parameters
-    '("time_t" "t")
-    '("const-gchar*" "format")
-  )
-)
-
-(define-function empathy_time_to_string_local
-  (c-name "empathy_time_to_string_local")
-  (return-type "gchar*")
-  (parameters
-    '("time_t" "t")
-    '("const-gchar*" "format")
-  )
-)
-
-
-
-;; From empathy-tp-call.h
-
-(define-function empathy_tp_call_get_type
-  (c-name "empathy_tp_call_get_type")
-  (return-type "GType")
-)
-
-(define-function empathy_tp_call_new
-  (c-name "empathy_tp_call_new")
-  (is-constructor-of "EmpathyTpCall")
-  (return-type "EmpathyTpCall*")
-  (parameters
-    '("TpConn*" "connection")
-    '("TpChan*" "channel")
-  )
-)
-
-(define-method accept_incoming_call
-  (of-object "EmpathyTpCall")
-  (c-name "empathy_tp_call_accept_incoming_call")
-  (return-type "none")
-)
-
-(define-method close_channel
-  (of-object "EmpathyTpCall")
-  (c-name "empathy_tp_call_close_channel")
-  (return-type "none")
-)
-
-(define-method request_video_stream_direction
-  (of-object "EmpathyTpCall")
-  (c-name "empathy_tp_call_request_video_stream_direction")
+(define-function empathy_debug_impl
+  (c-name "empathy_debug_impl")
   (return-type "none")
   (parameters
-    '("gboolean" "is_sending")
+    '("const-gchar*" "domain")
+    '("const-gchar*" "msg")
   )
+  (varargs #t)
 )
 
-(define-method add_preview_video
-  (of-object "EmpathyTpCall")
-  (c-name "empathy_tp_call_add_preview_video")
-  (return-type "none")
-  (parameters
-    '("guint" "preview_video_socket_id")
-  )
-)
-
-(define-method remove_preview_video
-  (of-object "EmpathyTpCall")
-  (c-name "empathy_tp_call_remove_preview_video")
-  (return-type "none")
-  (parameters
-    '("guint" "preview_video_socket_id")
-  )
-)
-
-(define-method add_output_video
-  (of-object "EmpathyTpCall")
-  (c-name "empathy_tp_call_add_output_video")
-  (return-type "none")
-  (parameters
-    '("guint" "output_video_socket_id")
-  )
-)
-
-(define-method set_output_volume
-  (of-object "EmpathyTpCall")
-  (c-name "empathy_tp_call_set_output_volume")
-  (return-type "none")
-  (parameters
-    '("guint" "volume")
-  )
-)
-
-(define-method mute_output
-  (of-object "EmpathyTpCall")
-  (c-name "empathy_tp_call_mute_output")
-  (return-type "none")
-  (parameters
-    '("gboolean" "is_muted")
-  )
-)
-
-(define-method mute_input
-  (of-object "EmpathyTpCall")
-  (c-name "empathy_tp_call_mute_input")
-  (return-type "none")
-  (parameters
-    '("gboolean" "is_muted")
-  )
-)
-
-
-
-;; From empathy-tp-chat.h
-
-(define-function empathy_tp_chat_get_type
-  (c-name "empathy_tp_chat_get_type")
-  (return-type "GType")
-)
-
-(define-function empathy_tp_chat_new
-  (c-name "empathy_tp_chat_new")
-  (is-constructor-of "EmpathyTpChat")
-  (return-type "EmpathyTpChat*")
-  (parameters
-    '("McAccount*" "account")
-    '("TpChan*" "tp_chan")
-  )
-)
-
-(define-function empathy_tp_chat_new_with_contact
-  (c-name "empathy_tp_chat_new_with_contact")
-  (return-type "EmpathyTpChat*")
-  (parameters
-    '("EmpathyContact*" "contact")
-  )
-)
-
-(define-method get_acknowledge
-  (of-object "EmpathyTpChat")
-  (c-name "empathy_tp_chat_get_acknowledge")
-  (return-type "gboolean")
-)
-
-(define-method set_acknowledge
-  (of-object "EmpathyTpChat")
-  (c-name "empathy_tp_chat_set_acknowledge")
-  (return-type "none")
-  (parameters
-    '("gboolean" "acknowledge")
-  )
-)
-
-(define-method get_account
-  (of-object "EmpathyTpChat")
-  (c-name "empathy_tp_chat_get_account")
-  (return-type "McAccount*")
-)
-
-(define-method get_channel
-  (of-object "EmpathyTpChat")
-  (c-name "empathy_tp_chat_get_channel")
-  (return-type "TpChan*")
-)
-
-(define-method get_pendings
-  (of-object "EmpathyTpChat")
-  (c-name "empathy_tp_chat_get_pendings")
-  (return-type "GList*")
-)
-
-(define-method send
-  (of-object "EmpathyTpChat")
-  (c-name "empathy_tp_chat_send")
-  (return-type "none")
-  (parameters
-    '("EmpathyMessage*" "message")
-  )
-)
-
-(define-method set_state
-  (of-object "EmpathyTpChat")
-  (c-name "empathy_tp_chat_set_state")
-  (return-type "none")
-  (parameters
-    '("TpChannelChatState" "state")
-  )
-)
-
-(define-method get_id
-  (of-object "EmpathyTpChat")
-  (c-name "empathy_tp_chat_get_id")
-  (return-type "const-gchar*")
-)
-
-
-
-;; From empathy-tp-chatroom.h
-
-(define-function empathy_tp_chatroom_get_type
-  (c-name "empathy_tp_chatroom_get_type")
-  (return-type "GType")
-)
-
-(define-function empathy_tp_chatroom_new
-  (c-name "empathy_tp_chatroom_new")
-  (is-constructor-of "EmpathyTpChatroom")
-  (return-type "EmpathyTpChatroom*")
-  (parameters
-    '("McAccount*" "account")
-    '("TpChan*" "tp_chan")
-  )
-)
-
-(define-method get_invitation
-  (of-object "EmpathyTpChatroom")
-  (c-name "empathy_tp_chatroom_get_invitation")
-  (return-type "gboolean")
-  (parameters
-    '("EmpathyContact**" "contact")
-    '("const-gchar**" "message")
-  )
-)
-
-(define-method accept_invitation
-  (of-object "EmpathyTpChatroom")
-  (c-name "empathy_tp_chatroom_accept_invitation")
-  (return-type "none")
-)
-
-;; From empathy-tp-contact-factory.h
-
-(define-function empathy_tp_contact_factory_get_type
-  (c-name "empathy_tp_contact_factory_get_type")
-  (return-type "GType")
-)
-
-(define-function empathy_tp_contact_factory_new
-  (c-name "empathy_tp_contact_factory_new")
-  (is-constructor-of "EmpathyTpContactFactory")
-  (return-type "EmpathyTpContactFactory*")
-  (parameters
-    '("McAccount*" "account")
-  )
-)
-
-(define-method get_user
-  (of-object "EmpathyTpContactFactory")
-  (c-name "empathy_tp_contact_factory_get_user")
-  (return-type "EmpathyContact*")
-)
-
-(define-method get_from_id
-  (of-object "EmpathyTpContactFactory")
-  (c-name "empathy_tp_contact_factory_get_from_id")
-  (return-type "EmpathyContact*")
-  (parameters
-    '("const-gchar*" "id")
-  )
-)
-
-(define-method get_from_handle
-  (of-object "EmpathyTpContactFactory")
-  (c-name "empathy_tp_contact_factory_get_from_handle")
-  (return-type "EmpathyContact*")
-  (parameters
-    '("guint" "handle")
-  )
-)
-
-(define-method get_from_handles
-  (of-object "EmpathyTpContactFactory")
-  (c-name "empathy_tp_contact_factory_get_from_handles")
-  (return-type "GList*")
-  (parameters
-    '("GArray*" "handles")
-  )
-)
-
-(define-method set_alias
-  (of-object "EmpathyTpContactFactory")
-  (c-name "empathy_tp_contact_factory_set_alias")
-  (return-type "none")
-  (parameters
-    '("EmpathyContact*" "contact")
-    '("const-gchar*" "alias")
-  )
-)
-
-(define-method set_avatar
-  (of-object "EmpathyTpContactFactory")
-  (c-name "empathy_tp_contact_factory_set_avatar")
-  (return-type "none")
-  (parameters
-    '("const-gchar*" "data")
-    '("gsize" "size")
-    '("const-gchar*" "mime_type")
-  )
-)
-
-
-
-;; From empathy-tp-contact-list.h
-
-(define-function empathy_tp_contact_list_get_type
-  (c-name "empathy_tp_contact_list_get_type")
-  (return-type "GType")
-)
-
-(define-function empathy_tp_contact_list_new
-  (c-name "empathy_tp_contact_list_new")
-  (is-constructor-of "EmpathyTpContactList")
-  (return-type "EmpathyTpContactList*")
-  (parameters
-    '("McAccount*" "account")
-  )
-)
-
-(define-method get_account
-  (of-object "EmpathyTpContactList")
-  (c-name "empathy_tp_contact_list_get_account")
-  (return-type "McAccount*")
-)
-
-
-
-;; From empathy-tp-group.h
-
-(define-function empathy_tp_group_get_type
-  (c-name "empathy_tp_group_get_type")
-  (return-type "GType")
-)
-
-(define-function empathy_tp_group_new
-  (c-name "empathy_tp_group_new")
-  (is-constructor-of "EmpathyTpGroup")
-  (return-type "EmpathyTpGroup*")
-  (parameters
-    '("McAccount*" "account")
-    '("TpChan*" "tp_chan")
-  )
-)
-
-(define-method close
-  (of-object "EmpathyTpGroup")
-  (c-name "empathy_tp_group_close")
-  (return-type "none")
-)
-
-(define-method add_members
-  (of-object "EmpathyTpGroup")
-  (c-name "empathy_tp_group_add_members")
-  (return-type "none")
-  (parameters
-    '("GList*" "contacts")
-    '("const-gchar*" "message")
-  )
-)
-
-(define-method add_member
-  (of-object "EmpathyTpGroup")
-  (c-name "empathy_tp_group_add_member")
-  (return-type "none")
-  (parameters
-    '("EmpathyContact*" "contact")
-    '("const-gchar*" "message")
-  )
-)
-
-(define-method remove_members
-  (of-object "EmpathyTpGroup")
-  (c-name "empathy_tp_group_remove_members")
-  (return-type "none")
-  (parameters
-    '("GList*" "contacts")
-    '("const-gchar*" "message")
-  )
-)
-
-(define-method remove_member
-  (of-object "EmpathyTpGroup")
-  (c-name "empathy_tp_group_remove_member")
-  (return-type "none")
-  (parameters
-    '("EmpathyContact*" "contact")
-    '("const-gchar*" "message")
-  )
-)
-
-(define-method get_members
-  (of-object "EmpathyTpGroup")
-  (c-name "empathy_tp_group_get_members")
-  (return-type "GList*")
-)
-
-(define-method get_local_pendings
-  (of-object "EmpathyTpGroup")
-  (c-name "empathy_tp_group_get_local_pendings")
-  (return-type "GList*")
-)
-
-(define-method get_remote_pendings
-  (of-object "EmpathyTpGroup")
-  (c-name "empathy_tp_group_get_remote_pendings")
-  (return-type "GList*")
-)
-
-(define-method get_name
-  (of-object "EmpathyTpGroup")
-  (c-name "empathy_tp_group_get_name")
-  (return-type "const-gchar*")
-)
-
-(define-method get_self_contact
-  (of-object "EmpathyTpGroup")
-  (c-name "empathy_tp_group_get_self_contact")
-  (return-type "EmpathyContact*")
-)
-
-(define-method get_object_path
-  (of-object "EmpathyTpGroup")
-  (c-name "empathy_tp_group_get_object_path")
-  (return-type "const-gchar*")
-)
-
-(define-method get_channel
-  (of-object "EmpathyTpGroup")
-  (c-name "empathy_tp_group_get_channel")
-  (return-type "TpChan*")
-)
-
-(define-method is_member
-  (of-object "EmpathyTpGroup")
-  (c-name "empathy_tp_group_is_member")
-  (return-type "gboolean")
-  (parameters
-    '("EmpathyContact*" "contact")
-  )
-)
-
-(define-function empathy_pending_info_new
-  (c-name "empathy_pending_info_new")
-  (is-constructor-of "EmpathyPendingInfo")
-  (return-type "EmpathyPendingInfo*")
-  (parameters
-    '("EmpathyContact*" "member")
-    '("EmpathyContact*" "actor")
-    '("const-gchar*" "message")
-  )
-)
-
-(define-method free
-  (of-object "EmpathyPendingInfo")
-  (c-name "empathy_pending_info_free")
-  (return-type "none")
-)
-
-
-
-;; From empathy-tp-roomlist.h
-
-(define-function empathy_tp_roomlist_get_type
-  (c-name "empathy_tp_roomlist_get_type")
-  (return-type "GType")
-)
-
-(define-function empathy_tp_roomlist_new
-  (c-name "empathy_tp_roomlist_new")
-  (is-constructor-of "EmpathyTpRoomlist")
-  (return-type "EmpathyTpRoomlist*")
-  (parameters
-    '("McAccount*" "account")
-  )
-)
-
-(define-method is_listing
-  (of-object "EmpathyTpRoomlist")
-  (c-name "empathy_tp_roomlist_is_listing")
-  (return-type "gboolean")
-)
-
-(define-method start
-  (of-object "EmpathyTpRoomlist")
-  (c-name "empathy_tp_roomlist_start")
-  (return-type "none")
-)
-
-(define-method stop
-  (of-object "EmpathyTpRoomlist")
-  (c-name "empathy_tp_roomlist_stop")
+(define-function empathy_debug_set_log_file_from_env
+  (c-name "empathy_debug_set_log_file_from_env")
   (return-type "none")
 )
 
@@ -2121,6 +559,1618 @@
   (return-type "McPresence")
   (parameters
     '("const-gchar*" "str")
+  )
+)
+
+
+
+;; From empathy-message.h
+
+(define-function empathy_message_get_gtype
+  (c-name "empathy_message_get_gtype")
+  (return-type "GType")
+)
+
+(define-function empathy_message_new
+  (c-name "empathy_message_new")
+  (is-constructor-of "EmpathyMessage")
+  (return-type "EmpathyMessage*")
+  (parameters
+    '("const-gchar*" "body")
+  )
+)
+
+(define-method get_type
+  (of-object "EmpathyMessage")
+  (c-name "empathy_message_get_type")
+  (return-type "EmpathyMessageType")
+)
+
+(define-method set_type
+  (of-object "EmpathyMessage")
+  (c-name "empathy_message_set_type")
+  (return-type "none")
+  (parameters
+    '("EmpathyMessageType" "type")
+  )
+)
+
+(define-method get_sender
+  (of-object "EmpathyMessage")
+  (c-name "empathy_message_get_sender")
+  (return-type "EmpathyContact*")
+)
+
+(define-method set_sender
+  (of-object "EmpathyMessage")
+  (c-name "empathy_message_set_sender")
+  (return-type "none")
+  (parameters
+    '("EmpathyContact*" "contact")
+  )
+)
+
+(define-method get_receiver
+  (of-object "EmpathyMessage")
+  (c-name "empathy_message_get_receiver")
+  (return-type "EmpathyContact*")
+)
+
+(define-method set_receiver
+  (of-object "EmpathyMessage")
+  (c-name "empathy_message_set_receiver")
+  (return-type "none")
+  (parameters
+    '("EmpathyContact*" "contact")
+  )
+)
+
+(define-method get_body
+  (of-object "EmpathyMessage")
+  (c-name "empathy_message_get_body")
+  (return-type "const-gchar*")
+)
+
+(define-method set_body
+  (of-object "EmpathyMessage")
+  (c-name "empathy_message_set_body")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "body")
+  )
+)
+
+(define-method get_timestamp
+  (of-object "EmpathyMessage")
+  (c-name "empathy_message_get_timestamp")
+  (return-type "time_t")
+)
+
+(define-method set_timestamp
+  (of-object "EmpathyMessage")
+  (c-name "empathy_message_set_timestamp")
+  (return-type "none")
+  (parameters
+    '("time_t" "timestamp")
+  )
+)
+
+(define-method get_date_and_time
+  (of-object "EmpathyMessage")
+  (c-name "empathy_message_get_date_and_time")
+  (return-type "GDate*")
+  (parameters
+    '("time_t*" "timestamp")
+  )
+)
+
+(define-function empathy_message_type_from_str
+  (c-name "empathy_message_type_from_str")
+  (return-type "EmpathyMessageType")
+  (parameters
+    '("const-gchar*" "type_str")
+  )
+)
+
+(define-method to_str
+  (of-object "EmpathyMessageType")
+  (c-name "empathy_message_type_to_str")
+  (return-type "const-gchar*")
+)
+
+
+
+;; From empathy-chatroom-manager.h
+
+(define-function empathy_chatroom_manager_get_type
+  (c-name "empathy_chatroom_manager_get_type")
+  (return-type "GType")
+)
+
+(define-function empathy_chatroom_manager_new
+  (c-name "empathy_chatroom_manager_new")
+  (is-constructor-of "EmpathyChatroomManager")
+  (return-type "EmpathyChatroomManager*")
+)
+
+(define-method add
+  (of-object "EmpathyChatroomManager")
+  (c-name "empathy_chatroom_manager_add")
+  (return-type "gboolean")
+  (parameters
+    '("EmpathyChatroom*" "chatroom")
+  )
+)
+
+(define-method remove
+  (of-object "EmpathyChatroomManager")
+  (c-name "empathy_chatroom_manager_remove")
+  (return-type "none")
+  (parameters
+    '("EmpathyChatroom*" "chatroom")
+  )
+)
+
+(define-method find
+  (of-object "EmpathyChatroomManager")
+  (c-name "empathy_chatroom_manager_find")
+  (return-type "EmpathyChatroom*")
+  (parameters
+    '("McAccount*" "account")
+    '("const-gchar*" "room")
+  )
+)
+
+(define-method get_chatrooms
+  (of-object "EmpathyChatroomManager")
+  (c-name "empathy_chatroom_manager_get_chatrooms")
+  (return-type "GList*")
+  (parameters
+    '("McAccount*" "account")
+  )
+)
+
+(define-method get_count
+  (of-object "EmpathyChatroomManager")
+  (c-name "empathy_chatroom_manager_get_count")
+  (return-type "guint")
+  (parameters
+    '("McAccount*" "account")
+  )
+)
+
+(define-method store
+  (of-object "EmpathyChatroomManager")
+  (c-name "empathy_chatroom_manager_store")
+  (return-type "none")
+)
+
+
+
+;; From empathy-chatroom.h
+
+(define-function empathy_chatroom_get_type
+  (c-name "empathy_chatroom_get_type")
+  (return-type "GType")
+)
+
+(define-function empathy_chatroom_new
+  (c-name "empathy_chatroom_new")
+  (is-constructor-of "EmpathyChatroom")
+  (return-type "EmpathyChatroom*")
+  (parameters
+    '("McAccount*" "account")
+    '("const-gchar*" "room")
+  )
+)
+
+(define-function empathy_chatroom_new_full
+  (c-name "empathy_chatroom_new_full")
+  (return-type "EmpathyChatroom*")
+  (parameters
+    '("McAccount*" "account")
+    '("const-gchar*" "room")
+    '("const-gchar*" "name")
+    '("gboolean" "auto_connect")
+  )
+)
+
+(define-method get_account
+  (of-object "EmpathyChatroom")
+  (c-name "empathy_chatroom_get_account")
+  (return-type "McAccount*")
+)
+
+(define-method set_account
+  (of-object "EmpathyChatroom")
+  (c-name "empathy_chatroom_set_account")
+  (return-type "none")
+  (parameters
+    '("McAccount*" "account")
+  )
+)
+
+(define-method get_room
+  (of-object "EmpathyChatroom")
+  (c-name "empathy_chatroom_get_room")
+  (return-type "const-gchar*")
+)
+
+(define-method set_room
+  (of-object "EmpathyChatroom")
+  (c-name "empathy_chatroom_set_room")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "room")
+  )
+)
+
+(define-method get_name
+  (of-object "EmpathyChatroom")
+  (c-name "empathy_chatroom_get_name")
+  (return-type "const-gchar*")
+)
+
+(define-method set_name
+  (of-object "EmpathyChatroom")
+  (c-name "empathy_chatroom_set_name")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "name")
+  )
+)
+
+(define-method get_auto_connect
+  (of-object "EmpathyChatroom")
+  (c-name "empathy_chatroom_get_auto_connect")
+  (return-type "gboolean")
+)
+
+(define-method set_auto_connect
+  (of-object "EmpathyChatroom")
+  (c-name "empathy_chatroom_set_auto_connect")
+  (return-type "none")
+  (parameters
+    '("gboolean" "auto_connect")
+  )
+)
+
+(define-function empathy_chatroom_equal
+  (c-name "empathy_chatroom_equal")
+  (return-type "gboolean")
+  (parameters
+    '("gconstpointer" "v1")
+    '("gconstpointer" "v2")
+  )
+)
+
+
+
+;; From empathy-contact.h
+
+(define-function empathy_contact_get_type
+  (c-name "empathy_contact_get_type")
+  (return-type "GType")
+)
+
+(define-function empathy_contact_new
+  (c-name "empathy_contact_new")
+  (is-constructor-of "EmpathyContact")
+  (return-type "EmpathyContact*")
+  (parameters
+    '("McAccount*" "account")
+  )
+)
+
+(define-function empathy_contact_new_full
+  (c-name "empathy_contact_new_full")
+  (return-type "EmpathyContact*")
+  (parameters
+    '("McAccount*" "account")
+    '("const-gchar*" "id")
+    '("const-gchar*" "name")
+  )
+)
+
+(define-method get_id
+  (of-object "EmpathyContact")
+  (c-name "empathy_contact_get_id")
+  (return-type "const-gchar*")
+)
+
+(define-method set_id
+  (of-object "EmpathyContact")
+  (c-name "empathy_contact_set_id")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "id")
+  )
+)
+
+(define-method get_name
+  (of-object "EmpathyContact")
+  (c-name "empathy_contact_get_name")
+  (return-type "const-gchar*")
+)
+
+(define-method set_name
+  (of-object "EmpathyContact")
+  (c-name "empathy_contact_set_name")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "name")
+  )
+)
+
+(define-method get_avatar
+  (of-object "EmpathyContact")
+  (c-name "empathy_contact_get_avatar")
+  (return-type "EmpathyAvatar*")
+)
+
+(define-method set_avatar
+  (of-object "EmpathyContact")
+  (c-name "empathy_contact_set_avatar")
+  (return-type "none")
+  (parameters
+    '("EmpathyAvatar*" "avatar")
+  )
+)
+
+(define-method get_account
+  (of-object "EmpathyContact")
+  (c-name "empathy_contact_get_account")
+  (return-type "McAccount*")
+)
+
+(define-method set_account
+  (of-object "EmpathyContact")
+  (c-name "empathy_contact_set_account")
+  (return-type "none")
+  (parameters
+    '("McAccount*" "account")
+  )
+)
+
+(define-method get_presence
+  (of-object "EmpathyContact")
+  (c-name "empathy_contact_get_presence")
+  (return-type "McPresence")
+)
+
+(define-method set_presence
+  (of-object "EmpathyContact")
+  (c-name "empathy_contact_set_presence")
+  (return-type "none")
+  (parameters
+    '("McPresence" "presence")
+  )
+)
+
+(define-method get_presence_message
+  (of-object "EmpathyContact")
+  (c-name "empathy_contact_get_presence_message")
+  (return-type "const-gchar*")
+)
+
+(define-method set_presence_message
+  (of-object "EmpathyContact")
+  (c-name "empathy_contact_set_presence_message")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "message")
+  )
+)
+
+(define-method get_handle
+  (of-object "EmpathyContact")
+  (c-name "empathy_contact_get_handle")
+  (return-type "guint")
+)
+
+(define-method set_handle
+  (of-object "EmpathyContact")
+  (c-name "empathy_contact_set_handle")
+  (return-type "none")
+  (parameters
+    '("guint" "handle")
+  )
+)
+
+(define-method get_capabilities
+  (of-object "EmpathyContact")
+  (c-name "empathy_contact_get_capabilities")
+  (return-type "EmpathyCapabilities")
+)
+
+(define-method set_capabilities
+  (of-object "EmpathyContact")
+  (c-name "empathy_contact_set_capabilities")
+  (return-type "none")
+  (parameters
+    '("EmpathyCapabilities" "capabilities")
+  )
+)
+
+(define-method get_ready
+  (of-object "EmpathyContact")
+  (c-name "empathy_contact_get_ready")
+  (return-type "EmpathyContactReady")
+)
+
+(define-method is_user
+  (of-object "EmpathyContact")
+  (c-name "empathy_contact_is_user")
+  (return-type "gboolean")
+)
+
+(define-method set_is_user
+  (of-object "EmpathyContact")
+  (c-name "empathy_contact_set_is_user")
+  (return-type "none")
+  (parameters
+    '("gboolean" "is_user")
+  )
+)
+
+(define-method is_online
+  (of-object "EmpathyContact")
+  (c-name "empathy_contact_is_online")
+  (return-type "gboolean")
+)
+
+(define-method get_status
+  (of-object "EmpathyContact")
+  (c-name "empathy_contact_get_status")
+  (return-type "const-gchar*")
+)
+
+(define-method can_voip
+  (of-object "EmpathyContact")
+  (c-name "empathy_contact_can_voip")
+  (return-type "gboolean")
+)
+
+(define-function empathy_contact_equal
+  (c-name "empathy_contact_equal")
+  (return-type "gboolean")
+  (parameters
+    '("gconstpointer" "v1")
+    '("gconstpointer" "v2")
+  )
+)
+
+(define-function empathy_contact_hash
+  (c-name "empathy_contact_hash")
+  (return-type "guint")
+  (parameters
+    '("gconstpointer" "key")
+  )
+)
+
+(define-method run_until_ready
+  (of-object "EmpathyContact")
+  (c-name "empathy_contact_run_until_ready")
+  (return-type "none")
+  (parameters
+    '("EmpathyContactReady" "ready")
+    '("GMainLoop**" "loop")
+  )
+)
+
+
+
+;; From empathy-contact-groups.h
+
+(define-function empathy_contact_groups_get_all
+  (c-name "empathy_contact_groups_get_all")
+  (return-type "none")
+)
+
+(define-function empathy_contact_group_get_expanded
+  (c-name "empathy_contact_group_get_expanded")
+  (return-type "gboolean")
+  (parameters
+    '("const-gchar*" "group")
+  )
+)
+
+(define-function empathy_contact_group_set_expanded
+  (c-name "empathy_contact_group_set_expanded")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "group")
+    '("gboolean" "expanded")
+  )
+)
+
+
+
+;; From empathy-contact-list.h
+
+(define-function empathy_contact_list_get_type
+  (c-name "empathy_contact_list_get_type")
+  (return-type "GType")
+)
+
+(define-method add
+  (of-object "EmpathyContactList")
+  (c-name "empathy_contact_list_add")
+  (return-type "none")
+  (parameters
+    '("EmpathyContact*" "contact")
+    '("const-gchar*" "message")
+  )
+)
+
+(define-method remove
+  (of-object "EmpathyContactList")
+  (c-name "empathy_contact_list_remove")
+  (return-type "none")
+  (parameters
+    '("EmpathyContact*" "contact")
+    '("const-gchar*" "message")
+  )
+)
+
+(define-method get_members
+  (of-object "EmpathyContactList")
+  (c-name "empathy_contact_list_get_members")
+  (return-type "GList*")
+)
+
+(define-method get_pendings
+  (of-object "EmpathyContactList")
+  (c-name "empathy_contact_list_get_pendings")
+  (return-type "GList*")
+)
+
+(define-method get_all_groups
+  (of-object "EmpathyContactList")
+  (c-name "empathy_contact_list_get_all_groups")
+  (return-type "GList*")
+)
+
+(define-method get_groups
+  (of-object "EmpathyContactList")
+  (c-name "empathy_contact_list_get_groups")
+  (return-type "GList*")
+  (parameters
+    '("EmpathyContact*" "contact")
+  )
+)
+
+(define-method add_to_group
+  (of-object "EmpathyContactList")
+  (c-name "empathy_contact_list_add_to_group")
+  (return-type "none")
+  (parameters
+    '("EmpathyContact*" "contact")
+    '("const-gchar*" "group")
+  )
+)
+
+(define-method remove_from_group
+  (of-object "EmpathyContactList")
+  (c-name "empathy_contact_list_remove_from_group")
+  (return-type "none")
+  (parameters
+    '("EmpathyContact*" "contact")
+    '("const-gchar*" "group")
+  )
+)
+
+(define-method rename_group
+  (of-object "EmpathyContactList")
+  (c-name "empathy_contact_list_rename_group")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "old_group")
+    '("const-gchar*" "new_group")
+  )
+)
+
+(define-method remove_group
+  (of-object "EmpathyContactList")
+  (c-name "empathy_contact_list_remove_group")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "group")
+  )
+)
+
+
+
+;; From empathy-contact-manager.h
+
+(define-function empathy_contact_manager_get_type
+  (c-name "empathy_contact_manager_get_type")
+  (return-type "GType")
+)
+
+(define-function empathy_contact_manager_new
+  (c-name "empathy_contact_manager_new")
+  (is-constructor-of "EmpathyContactManager")
+  (return-type "EmpathyContactManager*")
+)
+
+(define-method get_list
+  (of-object "EmpathyContactManager")
+  (c-name "empathy_contact_manager_get_list")
+  (return-type "EmpathyTpContactList*")
+  (parameters
+    '("McAccount*" "account")
+  )
+)
+
+
+
+;; From empathy-contact-factory.h
+
+(define-function empathy_contact_factory_get_type
+  (c-name "empathy_contact_factory_get_type")
+  (return-type "GType")
+)
+
+(define-function empathy_contact_factory_new
+  (c-name "empathy_contact_factory_new")
+  (is-constructor-of "EmpathyContactFactory")
+  (return-type "EmpathyContactFactory*")
+)
+
+(define-method get_tp_factory
+  (of-object "EmpathyContactFactory")
+  (c-name "empathy_contact_factory_get_tp_factory")
+  (return-type "EmpathyTpContactFactory*")
+  (parameters
+    '("McAccount*" "account")
+  )
+)
+
+(define-method get_user
+  (of-object "EmpathyContactFactory")
+  (c-name "empathy_contact_factory_get_user")
+  (return-type "EmpathyContact*")
+  (parameters
+    '("McAccount*" "account")
+  )
+)
+
+(define-method get_from_id
+  (of-object "EmpathyContactFactory")
+  (c-name "empathy_contact_factory_get_from_id")
+  (return-type "EmpathyContact*")
+  (parameters
+    '("McAccount*" "account")
+    '("const-gchar*" "id")
+  )
+)
+
+(define-method get_from_handle
+  (of-object "EmpathyContactFactory")
+  (c-name "empathy_contact_factory_get_from_handle")
+  (return-type "EmpathyContact*")
+  (parameters
+    '("McAccount*" "account")
+    '("guint" "handle")
+  )
+)
+
+(define-method get_from_handles
+  (of-object "EmpathyContactFactory")
+  (c-name "empathy_contact_factory_get_from_handles")
+  (return-type "GList*")
+  (parameters
+    '("McAccount*" "account")
+    '("GArray*" "handles")
+  )
+)
+
+(define-method set_alias
+  (of-object "EmpathyContactFactory")
+  (c-name "empathy_contact_factory_set_alias")
+  (return-type "none")
+  (parameters
+    '("EmpathyContact*" "contact")
+    '("const-gchar*" "alias")
+  )
+)
+
+(define-method set_avatar
+  (of-object "EmpathyContactFactory")
+  (c-name "empathy_contact_factory_set_avatar")
+  (return-type "none")
+  (parameters
+    '("McAccount*" "account")
+    '("const-gchar*" "data")
+    '("gsize" "size")
+    '("const-gchar*" "mime_type")
+  )
+)
+
+
+
+;; From empathy-tp-contact-factory.h
+
+(define-function empathy_tp_contact_factory_get_type
+  (c-name "empathy_tp_contact_factory_get_type")
+  (return-type "GType")
+)
+
+(define-function empathy_tp_contact_factory_new
+  (c-name "empathy_tp_contact_factory_new")
+  (is-constructor-of "EmpathyTpContactFactory")
+  (return-type "EmpathyTpContactFactory*")
+  (parameters
+    '("McAccount*" "account")
+  )
+)
+
+(define-method get_user
+  (of-object "EmpathyTpContactFactory")
+  (c-name "empathy_tp_contact_factory_get_user")
+  (return-type "EmpathyContact*")
+)
+
+(define-method get_from_id
+  (of-object "EmpathyTpContactFactory")
+  (c-name "empathy_tp_contact_factory_get_from_id")
+  (return-type "EmpathyContact*")
+  (parameters
+    '("const-gchar*" "id")
+  )
+)
+
+(define-method get_from_handle
+  (of-object "EmpathyTpContactFactory")
+  (c-name "empathy_tp_contact_factory_get_from_handle")
+  (return-type "EmpathyContact*")
+  (parameters
+    '("guint" "handle")
+  )
+)
+
+(define-method get_from_handles
+  (of-object "EmpathyTpContactFactory")
+  (c-name "empathy_tp_contact_factory_get_from_handles")
+  (return-type "GList*")
+  (parameters
+    '("const-GArray*" "handles")
+  )
+)
+
+(define-method set_alias
+  (of-object "EmpathyTpContactFactory")
+  (c-name "empathy_tp_contact_factory_set_alias")
+  (return-type "none")
+  (parameters
+    '("EmpathyContact*" "contact")
+    '("const-gchar*" "alias")
+  )
+)
+
+(define-method set_avatar
+  (of-object "EmpathyTpContactFactory")
+  (c-name "empathy_tp_contact_factory_set_avatar")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "data")
+    '("gsize" "size")
+    '("const-gchar*" "mime_type")
+  )
+)
+
+(define-method is_ready
+  (of-object "EmpathyTpContactFactory")
+  (c-name "empathy_tp_contact_factory_is_ready")
+  (return-type "gboolean")
+)
+
+
+
+;; From empathy-tp-group.h
+
+(define-function empathy_tp_group_get_type
+  (c-name "empathy_tp_group_get_type")
+  (return-type "GType")
+)
+
+(define-function empathy_tp_group_new
+  (c-name "empathy_tp_group_new")
+  (is-constructor-of "EmpathyTpGroup")
+  (return-type "EmpathyTpGroup*")
+  (parameters
+    '("McAccount*" "account")
+    '("TpChan*" "tp_chan")
+  )
+)
+
+(define-method close
+  (of-object "EmpathyTpGroup")
+  (c-name "empathy_tp_group_close")
+  (return-type "none")
+)
+
+(define-method add_members
+  (of-object "EmpathyTpGroup")
+  (c-name "empathy_tp_group_add_members")
+  (return-type "none")
+  (parameters
+    '("GList*" "contacts")
+    '("const-gchar*" "message")
+  )
+)
+
+(define-method add_member
+  (of-object "EmpathyTpGroup")
+  (c-name "empathy_tp_group_add_member")
+  (return-type "none")
+  (parameters
+    '("EmpathyContact*" "contact")
+    '("const-gchar*" "message")
+  )
+)
+
+(define-method remove_members
+  (of-object "EmpathyTpGroup")
+  (c-name "empathy_tp_group_remove_members")
+  (return-type "none")
+  (parameters
+    '("GList*" "contacts")
+    '("const-gchar*" "message")
+  )
+)
+
+(define-method remove_member
+  (of-object "EmpathyTpGroup")
+  (c-name "empathy_tp_group_remove_member")
+  (return-type "none")
+  (parameters
+    '("EmpathyContact*" "contact")
+    '("const-gchar*" "message")
+  )
+)
+
+(define-method get_members
+  (of-object "EmpathyTpGroup")
+  (c-name "empathy_tp_group_get_members")
+  (return-type "GList*")
+)
+
+(define-method get_local_pendings
+  (of-object "EmpathyTpGroup")
+  (c-name "empathy_tp_group_get_local_pendings")
+  (return-type "GList*")
+)
+
+(define-method get_remote_pendings
+  (of-object "EmpathyTpGroup")
+  (c-name "empathy_tp_group_get_remote_pendings")
+  (return-type "GList*")
+)
+
+(define-method get_name
+  (of-object "EmpathyTpGroup")
+  (c-name "empathy_tp_group_get_name")
+  (return-type "const-gchar*")
+)
+
+(define-method get_self_contact
+  (of-object "EmpathyTpGroup")
+  (c-name "empathy_tp_group_get_self_contact")
+  (return-type "EmpathyContact*")
+)
+
+(define-method get_object_path
+  (of-object "EmpathyTpGroup")
+  (c-name "empathy_tp_group_get_object_path")
+  (return-type "const-gchar*")
+)
+
+(define-method get_channel
+  (of-object "EmpathyTpGroup")
+  (c-name "empathy_tp_group_get_channel")
+  (return-type "TpChan*")
+)
+
+(define-method is_member
+  (of-object "EmpathyTpGroup")
+  (c-name "empathy_tp_group_is_member")
+  (return-type "gboolean")
+  (parameters
+    '("EmpathyContact*" "contact")
+  )
+)
+
+(define-function empathy_pending_info_new
+  (c-name "empathy_pending_info_new")
+  (is-constructor-of "EmpathyPendingInfo")
+  (return-type "EmpathyPendingInfo*")
+  (parameters
+    '("EmpathyContact*" "member")
+    '("EmpathyContact*" "actor")
+    '("const-gchar*" "message")
+  )
+)
+
+(define-method free
+  (of-object "EmpathyPendingInfo")
+  (c-name "empathy_pending_info_free")
+  (return-type "none")
+)
+
+
+
+;; From empathy-tp-contact-list.h
+
+(define-function empathy_tp_contact_list_get_type
+  (c-name "empathy_tp_contact_list_get_type")
+  (return-type "GType")
+)
+
+(define-function empathy_tp_contact_list_new
+  (c-name "empathy_tp_contact_list_new")
+  (is-constructor-of "EmpathyTpContactList")
+  (return-type "EmpathyTpContactList*")
+  (parameters
+    '("McAccount*" "account")
+  )
+)
+
+(define-method get_account
+  (of-object "EmpathyTpContactList")
+  (c-name "empathy_tp_contact_list_get_account")
+  (return-type "McAccount*")
+)
+
+
+
+;; From empathy-tp-chat.h
+
+(define-function empathy_tp_chat_get_type
+  (c-name "empathy_tp_chat_get_type")
+  (return-type "GType")
+)
+
+(define-function empathy_tp_chat_new
+  (c-name "empathy_tp_chat_new")
+  (is-constructor-of "EmpathyTpChat")
+  (return-type "EmpathyTpChat*")
+  (parameters
+    '("McAccount*" "account")
+    '("TpChan*" "tp_chan")
+  )
+)
+
+(define-function empathy_tp_chat_new_with_contact
+  (c-name "empathy_tp_chat_new_with_contact")
+  (return-type "EmpathyTpChat*")
+  (parameters
+    '("EmpathyContact*" "contact")
+  )
+)
+
+(define-method get_acknowledge
+  (of-object "EmpathyTpChat")
+  (c-name "empathy_tp_chat_get_acknowledge")
+  (return-type "gboolean")
+)
+
+(define-method set_acknowledge
+  (of-object "EmpathyTpChat")
+  (c-name "empathy_tp_chat_set_acknowledge")
+  (return-type "none")
+  (parameters
+    '("gboolean" "acknowledge")
+  )
+)
+
+(define-method get_account
+  (of-object "EmpathyTpChat")
+  (c-name "empathy_tp_chat_get_account")
+  (return-type "McAccount*")
+)
+
+(define-method get_channel
+  (of-object "EmpathyTpChat")
+  (c-name "empathy_tp_chat_get_channel")
+  (return-type "TpChan*")
+)
+
+(define-method send
+  (of-object "EmpathyTpChat")
+  (c-name "empathy_tp_chat_send")
+  (return-type "none")
+  (parameters
+    '("EmpathyMessage*" "message")
+  )
+)
+
+(define-method set_state
+  (of-object "EmpathyTpChat")
+  (c-name "empathy_tp_chat_set_state")
+  (return-type "none")
+  (parameters
+    '("TpChannelChatState" "state")
+  )
+)
+
+(define-method get_id
+  (of-object "EmpathyTpChat")
+  (c-name "empathy_tp_chat_get_id")
+  (return-type "const-gchar*")
+)
+
+(define-method set_property
+  (of-object "EmpathyTpChat")
+  (c-name "empathy_tp_chat_set_property")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "name")
+    '("const-GValue*" "value")
+  )
+)
+
+
+
+;; From empathy-tp-chatroom.h
+
+(define-function empathy_tp_chatroom_get_type
+  (c-name "empathy_tp_chatroom_get_type")
+  (return-type "GType")
+)
+
+(define-function empathy_tp_chatroom_new
+  (c-name "empathy_tp_chatroom_new")
+  (is-constructor-of "EmpathyTpChatroom")
+  (return-type "EmpathyTpChatroom*")
+  (parameters
+    '("McAccount*" "account")
+    '("TpChan*" "tp_chan")
+  )
+)
+
+(define-method get_invitation
+  (of-object "EmpathyTpChatroom")
+  (c-name "empathy_tp_chatroom_get_invitation")
+  (return-type "gboolean")
+  (parameters
+    '("EmpathyContact**" "contact")
+    '("const-gchar**" "message")
+  )
+)
+
+(define-method accept_invitation
+  (of-object "EmpathyTpChatroom")
+  (c-name "empathy_tp_chatroom_accept_invitation")
+  (return-type "none")
+)
+
+
+
+;; From empathy-tp-roomlist.h
+
+(define-function empathy_tp_roomlist_get_type
+  (c-name "empathy_tp_roomlist_get_type")
+  (return-type "GType")
+)
+
+(define-function empathy_tp_roomlist_new
+  (c-name "empathy_tp_roomlist_new")
+  (is-constructor-of "EmpathyTpRoomlist")
+  (return-type "EmpathyTpRoomlist*")
+  (parameters
+    '("McAccount*" "account")
+  )
+)
+
+(define-method is_listing
+  (of-object "EmpathyTpRoomlist")
+  (c-name "empathy_tp_roomlist_is_listing")
+  (return-type "gboolean")
+)
+
+(define-method start
+  (of-object "EmpathyTpRoomlist")
+  (c-name "empathy_tp_roomlist_start")
+  (return-type "none")
+)
+
+(define-method stop
+  (of-object "EmpathyTpRoomlist")
+  (c-name "empathy_tp_roomlist_stop")
+  (return-type "none")
+)
+
+
+
+;; From empathy-tp-call.h
+
+(define-function empathy_tp_call_get_type
+  (c-name "empathy_tp_call_get_type")
+  (return-type "GType")
+)
+
+(define-function empathy_tp_call_new
+  (c-name "empathy_tp_call_new")
+  (is-constructor-of "EmpathyTpCall")
+  (return-type "EmpathyTpCall*")
+  (parameters
+    '("TpConn*" "connection")
+    '("TpChan*" "channel")
+  )
+)
+
+(define-method accept_incoming_call
+  (of-object "EmpathyTpCall")
+  (c-name "empathy_tp_call_accept_incoming_call")
+  (return-type "none")
+)
+
+(define-method close_channel
+  (of-object "EmpathyTpCall")
+  (c-name "empathy_tp_call_close_channel")
+  (return-type "none")
+)
+
+(define-method request_video_stream_direction
+  (of-object "EmpathyTpCall")
+  (c-name "empathy_tp_call_request_video_stream_direction")
+  (return-type "none")
+  (parameters
+    '("gboolean" "is_sending")
+  )
+)
+
+(define-method add_preview_video
+  (of-object "EmpathyTpCall")
+  (c-name "empathy_tp_call_add_preview_video")
+  (return-type "none")
+  (parameters
+    '("guint" "preview_video_socket_id")
+  )
+)
+
+(define-method remove_preview_video
+  (of-object "EmpathyTpCall")
+  (c-name "empathy_tp_call_remove_preview_video")
+  (return-type "none")
+  (parameters
+    '("guint" "preview_video_socket_id")
+  )
+)
+
+(define-method add_output_video
+  (of-object "EmpathyTpCall")
+  (c-name "empathy_tp_call_add_output_video")
+  (return-type "none")
+  (parameters
+    '("guint" "output_video_socket_id")
+  )
+)
+
+(define-method set_output_volume
+  (of-object "EmpathyTpCall")
+  (c-name "empathy_tp_call_set_output_volume")
+  (return-type "none")
+  (parameters
+    '("guint" "volume")
+  )
+)
+
+(define-method mute_output
+  (of-object "EmpathyTpCall")
+  (c-name "empathy_tp_call_mute_output")
+  (return-type "none")
+  (parameters
+    '("gboolean" "is_muted")
+  )
+)
+
+(define-method mute_input
+  (of-object "EmpathyTpCall")
+  (c-name "empathy_tp_call_mute_input")
+  (return-type "none")
+  (parameters
+    '("gboolean" "is_muted")
+  )
+)
+
+
+
+;; From empathy-chandler.h
+
+(define-function empathy_chandler_get_type
+  (c-name "empathy_chandler_get_type")
+  (return-type "GType")
+)
+
+(define-function empathy_chandler_new
+  (c-name "empathy_chandler_new")
+  (is-constructor-of "EmpathyChandler")
+  (return-type "EmpathyChandler*")
+  (parameters
+    '("const-gchar*" "bus_name")
+    '("const-gchar*" "object_path")
+  )
+)
+
+
+
+;; From empathy-filter.h
+
+(define-function empathy_filter_get_type
+  (c-name "empathy_filter_get_type")
+  (return-type "GType")
+)
+
+(define-function empathy_filter_new
+  (c-name "empathy_filter_new")
+  (is-constructor-of "EmpathyFilter")
+  (return-type "EmpathyFilter*")
+  (parameters
+    '("const-gchar*" "bus_name")
+    '("const-gchar*" "object_path")
+    '("const-gchar*" "channel_type")
+    '("guint" "priority")
+    '("guint" "flags")
+  )
+)
+
+(define-method process
+  (of-object "EmpathyFilter")
+  (c-name "empathy_filter_process")
+  (return-type "none")
+  (parameters
+    '("TpChan*" "tp_chan")
+    '("gboolean" "process")
+  )
+)
+
+
+
+;; From empathy-idle.h
+
+(define-function empathy_idle_get_type
+  (c-name "empathy_idle_get_type")
+  (return-type "GType")
+)
+
+(define-function empathy_idle_new
+  (c-name "empathy_idle_new")
+  (is-constructor-of "EmpathyIdle")
+  (return-type "EmpathyIdle*")
+)
+
+(define-method get_state
+  (of-object "EmpathyIdle")
+  (c-name "empathy_idle_get_state")
+  (return-type "McPresence")
+)
+
+(define-method set_state
+  (of-object "EmpathyIdle")
+  (c-name "empathy_idle_set_state")
+  (return-type "none")
+  (parameters
+    '("McPresence" "state")
+  )
+)
+
+(define-method get_status
+  (of-object "EmpathyIdle")
+  (c-name "empathy_idle_get_status")
+  (return-type "const-gchar*")
+)
+
+(define-method set_status
+  (of-object "EmpathyIdle")
+  (c-name "empathy_idle_set_status")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "status")
+  )
+)
+
+(define-method get_flash_state
+  (of-object "EmpathyIdle")
+  (c-name "empathy_idle_get_flash_state")
+  (return-type "McPresence")
+)
+
+(define-method set_flash_state
+  (of-object "EmpathyIdle")
+  (c-name "empathy_idle_set_flash_state")
+  (return-type "none")
+  (parameters
+    '("McPresence" "state")
+  )
+)
+
+(define-method set_presence
+  (of-object "EmpathyIdle")
+  (c-name "empathy_idle_set_presence")
+  (return-type "none")
+  (parameters
+    '("McPresence" "state")
+    '("const-gchar*" "status")
+  )
+)
+
+(define-method get_auto_away
+  (of-object "EmpathyIdle")
+  (c-name "empathy_idle_get_auto_away")
+  (return-type "gboolean")
+)
+
+(define-method set_auto_away
+  (of-object "EmpathyIdle")
+  (c-name "empathy_idle_set_auto_away")
+  (return-type "none")
+  (parameters
+    '("gboolean" "auto_away")
+  )
+)
+
+(define-method get_use_nm
+  (of-object "EmpathyIdle")
+  (c-name "empathy_idle_get_use_nm")
+  (return-type "gboolean")
+)
+
+(define-method set_use_nm
+  (of-object "EmpathyIdle")
+  (c-name "empathy_idle_set_use_nm")
+  (return-type "none")
+  (parameters
+    '("gboolean" "use_nm")
+  )
+)
+
+
+
+;; From empathy-log-manager.h
+
+(define-function empathy_log_manager_get_type
+  (c-name "empathy_log_manager_get_type")
+  (return-type "GType")
+)
+
+(define-function empathy_log_manager_new
+  (c-name "empathy_log_manager_new")
+  (is-constructor-of "EmpathyLogManager")
+  (return-type "EmpathyLogManager*")
+)
+
+(define-method add_message
+  (of-object "EmpathyLogManager")
+  (c-name "empathy_log_manager_add_message")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "chat_id")
+    '("gboolean" "chatroom")
+    '("EmpathyMessage*" "message")
+  )
+)
+
+(define-method exists
+  (of-object "EmpathyLogManager")
+  (c-name "empathy_log_manager_exists")
+  (return-type "gboolean")
+  (parameters
+    '("McAccount*" "account")
+    '("const-gchar*" "chat_id")
+    '("gboolean" "chatroom")
+  )
+)
+
+(define-method get_dates
+  (of-object "EmpathyLogManager")
+  (c-name "empathy_log_manager_get_dates")
+  (return-type "GList*")
+  (parameters
+    '("McAccount*" "account")
+    '("const-gchar*" "chat_id")
+    '("gboolean" "chatroom")
+  )
+)
+
+(define-method get_messages_for_file
+  (of-object "EmpathyLogManager")
+  (c-name "empathy_log_manager_get_messages_for_file")
+  (return-type "GList*")
+  (parameters
+    '("const-gchar*" "filename")
+  )
+)
+
+(define-method get_messages_for_date
+  (of-object "EmpathyLogManager")
+  (c-name "empathy_log_manager_get_messages_for_date")
+  (return-type "GList*")
+  (parameters
+    '("McAccount*" "account")
+    '("const-gchar*" "chat_id")
+    '("gboolean" "chatroom")
+    '("const-gchar*" "date")
+  )
+)
+
+(define-method get_last_messages
+  (of-object "EmpathyLogManager")
+  (c-name "empathy_log_manager_get_last_messages")
+  (return-type "GList*")
+  (parameters
+    '("McAccount*" "account")
+    '("const-gchar*" "chat_id")
+    '("gboolean" "chatroom")
+  )
+)
+
+(define-method get_messages_for_file
+  (of-object "EmpathyLogManager")
+  (c-name "empathy_log_manager_get_messages_for_file")
+  (return-type "GList*")
+  (parameters
+    '("const-gchar*" "filename")
+  )
+)
+
+(define-method get_chats
+  (of-object "EmpathyLogManager")
+  (c-name "empathy_log_manager_get_chats")
+  (return-type "GList*")
+  (parameters
+    '("McAccount*" "account")
+  )
+)
+
+(define-method search_new
+  (of-object "EmpathyLogManager")
+  (c-name "empathy_log_manager_search_new")
+  (return-type "GList*")
+  (parameters
+    '("const-gchar*" "text")
+  )
+)
+
+(define-function empathy_log_manager_search_free
+  (c-name "empathy_log_manager_search_free")
+  (return-type "none")
+  (parameters
+    '("GList*" "hits")
+  )
+)
+
+(define-function empathy_log_manager_get_date_readable
+  (c-name "empathy_log_manager_get_date_readable")
+  (return-type "gchar*")
+  (parameters
+    '("const-gchar*" "date")
+  )
+)
+
+
+
+;; From empathy-irc-network-manager.h
+
+(define-function empathy_irc_network_manager_get_type
+  (c-name "empathy_irc_network_manager_get_type")
+  (return-type "GType")
+)
+
+(define-function empathy_irc_network_manager_new
+  (c-name "empathy_irc_network_manager_new")
+  (is-constructor-of "EmpathyIrcNetworkManager")
+  (return-type "EmpathyIrcNetworkManager*")
+  (parameters
+    '("const-gchar*" "global_file")
+    '("const-gchar*" "user_file")
+  )
+)
+
+(define-method add
+  (of-object "EmpathyIrcNetworkManager")
+  (c-name "empathy_irc_network_manager_add")
+  (return-type "none")
+  (parameters
+    '("EmpathyIrcNetwork*" "network")
+  )
+)
+
+(define-method remove
+  (of-object "EmpathyIrcNetworkManager")
+  (c-name "empathy_irc_network_manager_remove")
+  (return-type "none")
+  (parameters
+    '("EmpathyIrcNetwork*" "network")
+  )
+)
+
+(define-method get_networks
+  (of-object "EmpathyIrcNetworkManager")
+  (c-name "empathy_irc_network_manager_get_networks")
+  (return-type "GSList*")
+)
+
+(define-method find_network_by_address
+  (of-object "EmpathyIrcNetworkManager")
+  (c-name "empathy_irc_network_manager_find_network_by_address")
+  (return-type "EmpathyIrcNetwork*")
+  (parameters
+    '("const-gchar*" "address")
+  )
+)
+
+
+
+;; From empathy-irc-network.h
+
+(define-function empathy_irc_network_get_type
+  (c-name "empathy_irc_network_get_type")
+  (return-type "GType")
+)
+
+(define-function empathy_irc_network_new
+  (c-name "empathy_irc_network_new")
+  (is-constructor-of "EmpathyIrcNetwork")
+  (return-type "EmpathyIrcNetwork*")
+  (parameters
+    '("const-gchar*" "name")
+  )
+)
+
+(define-method get_servers
+  (of-object "EmpathyIrcNetwork")
+  (c-name "empathy_irc_network_get_servers")
+  (return-type "GSList*")
+)
+
+(define-method append_server
+  (of-object "EmpathyIrcNetwork")
+  (c-name "empathy_irc_network_append_server")
+  (return-type "none")
+  (parameters
+    '("EmpathyIrcServer*" "server")
+  )
+)
+
+(define-method remove_server
+  (of-object "EmpathyIrcNetwork")
+  (c-name "empathy_irc_network_remove_server")
+  (return-type "none")
+  (parameters
+    '("EmpathyIrcServer*" "server")
+  )
+)
+
+(define-method set_server_position
+  (of-object "EmpathyIrcNetwork")
+  (c-name "empathy_irc_network_set_server_position")
+  (return-type "none")
+  (parameters
+    '("EmpathyIrcServer*" "server")
+    '("gint" "pos")
+  )
+)
+
+
+
+;; From empathy-irc-server.h
+
+(define-function empathy_irc_server_get_type
+  (c-name "empathy_irc_server_get_type")
+  (return-type "GType")
+)
+
+(define-function empathy_irc_server_new
+  (c-name "empathy_irc_server_new")
+  (is-constructor-of "EmpathyIrcServer")
+  (return-type "EmpathyIrcServer*")
+  (parameters
+    '("const-gchar*" "address")
+    '("guint" "port")
+    '("gboolean" "ssl")
   )
 )
 
