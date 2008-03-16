@@ -621,7 +621,9 @@ tp_contact_factory_request_everything (EmpathyTpContactFactory *tp_factory,
 								dup_handles, g_free,
 								G_OBJECT (tp_factory));
 
-	dup_handles = g_memdup (handles->data, handles->len * sizeof (guint));
+	dup_handles = g_new (guint, handles->len + 1);
+	g_memmove (dup_handles, handles->data, handles->len * sizeof (guint));
+	dup_handles[handles->len] = 0;
 	tp_cli_connection_interface_aliasing_call_request_aliases (priv->connection,
 								   -1,
 								   handles,
