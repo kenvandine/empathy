@@ -285,12 +285,6 @@
   (return-type "EmpathyChatView*")
 )
 
-(define-method present
-  (of-object "EmpathyChat")
-  (c-name "empathy_chat_present")
-  (return-type "none")
-)
-
 (define-method clear
   (of-object "EmpathyChat")
   (c-name "empathy_chat_clear")
