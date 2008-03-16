@@ -11,7 +11,8 @@ profile_DATA = 				\
 	irc.profile			\
 	msn.profile			\
 	msn-haze.profile		\
-	sofiasip.profile
+	sofiasip.profile		\
+	groupwise.profile
 
 autostartdir = $(sysconfdir)/xdg/autostart
 autostart_in_files = empathy.desktop.in
