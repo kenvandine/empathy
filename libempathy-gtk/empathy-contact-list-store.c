@@ -209,8 +209,7 @@ contact_list_store_set_contact_list (EmpathyContactListStore *store,
 	priv->list = g_object_ref (list_iface);
 
 	/* Let a chance to have all properties set before populating */
-	g_idle_add (contact_list_store_iface_setup,
-		    store);
+	g_idle_add (contact_list_store_iface_setup, store);
 }
 
 static void
