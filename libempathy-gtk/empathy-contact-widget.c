@@ -153,12 +153,15 @@ empathy_contact_widget_new (EmpathyContact           *contact,
 {
 	EmpathyContactWidget *information;
 	GladeXML             *glade;
+	gchar                *filename;
 
 	information = g_slice_new0 (EmpathyContactWidget);
 	information->flags = flags;
 	information->factory = empathy_contact_factory_new ();
 
-	glade = empathy_glade_get_file ("empathy-contact-widget.glade",
+	filename = empathy_file_lookup ("empathy-contact-widget.glade",
+					"libempathy-gtk");
+	glade = empathy_glade_get_file (filename,
 				       "vbox_contact_widget",
 				       NULL,
 				       "vbox_contact_widget", &information->vbox_contact_widget,
@@ -180,6 +183,7 @@ empathy_contact_widget_new (EmpathyContact           *contact,
 				       "table_client", &information->table_client,
 				       "hbox_client_requested", &information->hbow_client_requested,
 				       NULL);
+	g_free (filename);
 
 	empathy_glade_connect (glade,
 			      information,

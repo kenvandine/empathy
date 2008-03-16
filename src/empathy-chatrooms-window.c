@@ -108,6 +108,7 @@ empathy_chatrooms_window_show (GtkWindow *parent)
 {
 	static EmpathyChatroomsWindow *window = NULL;
 	GladeXML                     *glade;
+	gchar                        *filename;
 
 	if (window) {
 		gtk_window_present (GTK_WINDOW (window->window));
@@ -116,7 +117,8 @@ empathy_chatrooms_window_show (GtkWindow *parent)
 
 	window = g_new0 (EmpathyChatroomsWindow, 1);
 
-	glade = empathy_glade_get_file ("empathy-chatrooms-window.glade",
+	filename = empathy_file_lookup ("empathy-chatrooms-window.glade", "src");
+	glade = empathy_glade_get_file (filename,
 				       "chatrooms_window",
 				       NULL,
 				       "chatrooms_window", &window->window,
@@ -127,6 +129,7 @@ empathy_chatrooms_window_show (GtkWindow *parent)
 				       "button_remove", &window->button_remove,
 				       "button_close", &window->button_close,
 				       NULL);
+	g_free (filename);
 
 	empathy_glade_connect (glade,
 			      window,

@@ -587,3 +587,22 @@ empathy_presence_from_str (const gchar *str)
 	return MC_PRESENCE_AVAILABLE;
 }
 
+gchar *
+empathy_file_lookup (const gchar *filename, const gchar *subdir)
+{
+	gchar *path;
+
+	if (!subdir) {
+		subdir = ".";
+	}
+
+	path = g_build_filename (g_getenv ("EMPATHY_SRCDIR"), subdir, filename, NULL);
+	if (!g_file_test (path, G_FILE_TEST_EXISTS)) {
+		g_free (path);
+		path = g_build_filename (DATADIR, "empathy", filename, NULL);
+	}
+
+	return path;
+}
+
+

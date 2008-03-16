@@ -186,6 +186,7 @@ empathy_main_window_show (void)
 	gboolean                  show_avatars;
 	gboolean                  compact_contact_list;
 	gint                      x, y, w, h;
+	gchar                    *filename;
 
 	if (window) {
 		empathy_window_present (GTK_WINDOW (window->window), TRUE);
@@ -195,7 +196,8 @@ empathy_main_window_show (void)
 	window = g_new0 (EmpathyMainWindow, 1);
 
 	/* Set up interface */
-	glade = empathy_glade_get_file ("empathy-main-window.glade",
+	filename = empathy_file_lookup ("empathy-main-window.glade", "src");
+	glade = empathy_glade_get_file (filename,
 				       "main_window",
 				       NULL,
 				       "main_window", &window->window,
@@ -210,6 +212,7 @@ empathy_main_window_show (void)
 				       "presence_toolbar", &window->presence_toolbar,
 				       "roster_scrolledwindow", &sw,
 				       NULL);
+	g_free (filename);
 
 	empathy_glade_connect (glade,
 			      window,

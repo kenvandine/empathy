@@ -106,6 +106,7 @@ empathy_new_message_dialog_show (GtkWindow *parent)
 {
 	static EmpathyNewMessageDialog *dialog = NULL;
 	GladeXML                       *glade;
+	gchar                          *filename;
 
 	if (dialog) {
 		gtk_window_present (GTK_WINDOW (dialog->dialog));
@@ -114,7 +115,9 @@ empathy_new_message_dialog_show (GtkWindow *parent)
 
 	dialog = g_new0 (EmpathyNewMessageDialog, 1);
 
-	glade = empathy_glade_get_file ("empathy-new-message-dialog.glade",
+	filename = empathy_file_lookup ("empathy-new-message-dialog.glade",
+					"libempathy-gtk");
+	glade = empathy_glade_get_file (filename,
 				        "new_message_dialog",
 				        NULL,
 				        "new_message_dialog", &dialog->dialog,
@@ -123,6 +126,7 @@ empathy_new_message_dialog_show (GtkWindow *parent)
 					"button_chat", &dialog->button_chat,
 					"button_call",&dialog->button_call,
 				        NULL);
+	g_free (filename);
 
 	empathy_glade_connect (glade,
 			       dialog,

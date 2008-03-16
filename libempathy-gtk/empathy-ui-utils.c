@@ -61,20 +61,12 @@ get_glade_file (const gchar *filename,
 		va_list      args)
 {
 	GladeXML   *gui;
-	gchar      *path;
 	const char *name;
 	GtkWidget **widget_ptr;
 
-	path = g_build_filename (g_getenv ("EMPATHY_SRCDIR"), "libempathy-gtk",
-				 filename, NULL);
-	if (!g_file_test (path, G_FILE_TEST_EXISTS)) {
-		g_free (path);
-		path = g_build_filename (DATADIR, "empathy", filename, NULL);
-	}
-	empathy_debug (DEBUG_DOMAIN, "Loading glade file %s", path);
+	empathy_debug (DEBUG_DOMAIN, "Loading glade file %s", filename);
 
-	gui = glade_xml_new (path, root, domain);
-	g_free (path);
+	gui = glade_xml_new (filename, root, domain);
 
 	if (!gui) {
 		g_warning ("Couldn't find necessary glade file '%s'", filename);

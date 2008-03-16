@@ -930,6 +930,7 @@ static void
 presence_chooser_dialog_show (void)
 {
 	GladeXML *glade;
+	gchar    *filename;
 
 	if (message_dialog) {
 		gtk_window_present (GTK_WINDOW (message_dialog->dialog));
@@ -937,7 +938,10 @@ presence_chooser_dialog_show (void)
 	}
 
 	message_dialog = g_new0 (CustomMessageDialog, 1);
-	glade = empathy_glade_get_file ("empathy-presence-chooser.glade",
+
+	filename = empathy_file_lookup ("empathy-presence-chooser.glade",
+					"libempathy-gtk");
+	glade = empathy_glade_get_file (filename,
 				       "custom_message_dialog",
 				       NULL,
 				       "custom_message_dialog", &message_dialog->dialog,
@@ -945,6 +949,8 @@ presence_chooser_dialog_show (void)
 				       "comboboxentry_message", &message_dialog->comboboxentry_message,
 				       "combobox_status", &message_dialog->combobox_status,
 				       NULL);
+	g_free (filename);
+
 	empathy_glade_connect (glade,
 			       message_dialog,
 			       "custom_message_dialog", "destroy", presence_chooser_dialog_destroy_cb,

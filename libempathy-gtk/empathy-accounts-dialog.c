@@ -986,6 +986,7 @@ empathy_accounts_dialog_show (GtkWindow *parent)
 {
 	static EmpathyAccountsDialog *dialog = NULL;
 	GladeXML                    *glade;
+	gchar                       *filename;
 	GtkWidget                   *bbox;
 	GtkWidget                   *button_close;
 
@@ -996,7 +997,9 @@ empathy_accounts_dialog_show (GtkWindow *parent)
 
 	dialog = g_new0 (EmpathyAccountsDialog, 1);
 
-	glade = empathy_glade_get_file ("empathy-accounts-dialog.glade",
+	filename = empathy_file_lookup ("empathy-accounts-dialog.glade",
+					"libempathy-gtk");
+	glade = empathy_glade_get_file (filename,
 				       "accounts_dialog",
 				       NULL,
 				       "accounts_dialog", &dialog->window,
@@ -1017,6 +1020,7 @@ empathy_accounts_dialog_show (GtkWindow *parent)
 				       "button_remove", &dialog->button_remove,
 				       "button_close", &button_close,
 				       NULL);
+	g_free (filename);
 
 	empathy_glade_connect (glade,
 			      dialog,

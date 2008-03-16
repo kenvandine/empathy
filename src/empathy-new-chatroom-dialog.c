@@ -122,6 +122,7 @@ empathy_new_chatroom_dialog_show (GtkWindow *parent)
 	EmpathyNewChatroomDialog *dialog;
 	GladeXML                 *glade;
 	GtkSizeGroup             *size_group;
+	gchar                    *filename;
 
 	if (dialog_p) {
 		gtk_window_present (GTK_WINDOW (dialog_p->window));
@@ -130,7 +131,8 @@ empathy_new_chatroom_dialog_show (GtkWindow *parent)
 
 	dialog_p = dialog = g_new0 (EmpathyNewChatroomDialog, 1);
 
-	glade = empathy_glade_get_file ("empathy-new-chatroom-dialog.glade",
+	filename = empathy_file_lookup ("empathy-new-chatroom-dialog.glade", "src");
+	glade = empathy_glade_get_file (filename,
 				       "new_chatroom_dialog",
 				       NULL,
 				       "new_chatroom_dialog", &dialog->window,
@@ -148,6 +150,7 @@ empathy_new_chatroom_dialog_show (GtkWindow *parent)
 				       "treeview", &dialog->treeview,
 				       "button_join", &dialog->button_join,
 				       NULL);
+	g_free (filename);
 
 	empathy_glade_connect (glade,
 			      dialog,

@@ -33,6 +33,7 @@
 #include <libmissioncontrol/mc-protocol.h>
 
 #include <libempathy/empathy-debug.h>
+#include <libempathy/empathy-utils.h>
 
 #include "empathy-account-widget.h"
 #include "empathy-ui-utils.h"
@@ -446,16 +447,20 @@ empathy_account_widget_generic_new (McAccount *account)
 	GtkWidget *widget;
 	GtkWidget *table_common_settings;
 	GtkWidget *table_advanced_settings;
+	gchar     *filename;
 
 	g_return_val_if_fail (MC_IS_ACCOUNT (account), NULL);
 
-	glade = empathy_glade_get_file ("empathy-account-widget-generic.glade",
+	filename = empathy_file_lookup ("empathy-account-widget-generic.glade",
+					"libempathy-gtk");
+	glade = empathy_glade_get_file (filename,
 					"vbox_generic_settings",
 					NULL,
 					"vbox_generic_settings", &widget,
 					"table_common_settings", &table_common_settings,
 					"table_advanced_settings", &table_advanced_settings,
 					NULL);
+	g_free (filename);
 
 	accounts_widget_generic_setup (account, table_common_settings, table_advanced_settings);
 
@@ -471,12 +476,16 @@ empathy_account_widget_salut_new (McAccount *account)
 {
 	GladeXML  *glade;
 	GtkWidget *widget;
+	gchar     *filename;
 
-	glade = empathy_glade_get_file ("empathy-account-widget-salut.glade",
+	filename = empathy_file_lookup ("empathy-account-widget-salut.glade",
+					"libempathy-gtk");
+	glade = empathy_glade_get_file (filename,
 					"vbox_salut_settings",
 					NULL,
 					"vbox_salut_settings", &widget,
 					NULL);
+	g_free (filename);
 
 	empathy_account_widget_handle_params (account, glade,
 			"entry_published", "published-name",
@@ -499,12 +508,16 @@ empathy_account_widget_msn_new (McAccount *account)
 {
 	GladeXML  *glade;
 	GtkWidget *widget;
+	gchar     *filename;
 
-	glade = empathy_glade_get_file ("empathy-account-widget-msn.glade",
+	filename = empathy_file_lookup ("empathy-account-widget-msn.glade",
+					"libempathy-gtk");
+	glade = empathy_glade_get_file (filename,
 					"vbox_msn_settings",
 					NULL,
 					"vbox_msn_settings", &widget,
 					NULL);
+	g_free (filename);
 
 	empathy_account_widget_handle_params (account, glade,
 			"entry_id", "account",
@@ -531,14 +544,18 @@ empathy_account_widget_jabber_new (McAccount *account)
 	GtkWidget *widget;
 	GtkWidget *spinbutton_port;
 	GtkWidget *checkbutton_ssl;
+	gchar     *filename;
 
-	glade = empathy_glade_get_file ("empathy-account-widget-jabber.glade",
+	filename = empathy_file_lookup ("empathy-account-widget-jabber.glade",
+					"libempathy-gtk");
+	glade = empathy_glade_get_file (filename,
 				        "vbox_jabber_settings",
 				        NULL,
 				        "vbox_jabber_settings", &widget,
 				        "spinbutton_port", &spinbutton_port,
 				        "checkbutton_ssl", &checkbutton_ssl,
 				        NULL);
+	g_free (filename);
 
 	empathy_account_widget_handle_params (account, glade,
 			"entry_id", "account",
@@ -573,13 +590,17 @@ empathy_account_widget_icq_new (McAccount *account)
 	GladeXML  *glade;
 	GtkWidget *widget;
 	GtkWidget *spinbutton_port;
+	gchar     *filename;
 
-	glade = empathy_glade_get_file ("empathy-account-widget-icq.glade",
+	filename = empathy_file_lookup ("empathy-account-widget-icq.glade",
+					"libempathy-gtk");
+	glade = empathy_glade_get_file (filename,
 				        "vbox_icq_settings",
 				        NULL,
 				        "vbox_icq_settings", &widget,
 				        "spinbutton_port", &spinbutton_port,
 				        NULL);
+	g_free (filename);
 
 	empathy_account_widget_handle_params (account, glade,
 			"entry_uin", "account",
@@ -605,12 +626,16 @@ empathy_account_widget_yahoo_new (McAccount *account)
 {
 	GladeXML  *glade;
 	GtkWidget *widget;
+	gchar     *filename;
 
-	glade = empathy_glade_get_file ("empathy-account-widget-yahoo.glade",
+	filename = empathy_file_lookup ("empathy-account-widget-yahoo.glade",
+					"libempathy-gtk");
+	glade = empathy_glade_get_file (filename,
 					"vbox_yahoo_settings",
 					NULL,
 					"vbox_yahoo_settings", &widget,
 					NULL);
+	g_free (filename);
 
 	empathy_account_widget_handle_params (account, glade,
 			"entry_id", "account",

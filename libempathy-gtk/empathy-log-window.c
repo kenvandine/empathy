@@ -147,6 +147,7 @@ empathy_log_window_show (McAccount   *account,
 	GList                  *accounts;
 	gint                    account_num;
 	GladeXML               *glade;
+	gchar                  *filename;
 
 	if (window) {
 		gtk_window_present (GTK_WINDOW (window->window));
@@ -163,7 +164,9 @@ empathy_log_window_show (McAccount   *account,
 	window = g_new0 (EmpathyLogWindow, 1);
 	window->log_manager = empathy_log_manager_new ();
 
-	glade = empathy_glade_get_file ("empathy-log-window.glade",
+	filename = empathy_file_lookup ("empathy-log-window.glade",
+					"libempathy-gtk");
+	glade = empathy_glade_get_file (filename,
 				       "log_window",
 				       NULL,
 				       "log_window", &window->window,
@@ -180,6 +183,8 @@ empathy_log_window_show (McAccount   *account,
 				       "treeview_chats", &window->treeview_chats,
 				       "scrolledwindow_chats", &window->scrolledwindow_chats,
 				       NULL);
+	g_free (filename);
+
 	empathy_glade_connect (glade,
 			      window,
 			      "log_window", "destroy", log_window_destroy_cb,

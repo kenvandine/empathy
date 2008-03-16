@@ -93,6 +93,7 @@ empathy_subscription_dialog_show (EmpathyContact *contact,
 	GtkWidget *hbox_subscription;
 	GtkWidget *contact_widget;
 	GList     *l;
+	gchar     *filename;
 
 	g_return_if_fail (EMPATHY_IS_CONTACT (contact));
 
@@ -104,12 +105,15 @@ empathy_subscription_dialog_show (EmpathyContact *contact,
 		return;
 	}
 
-	empathy_glade_get_file_simple ("empathy-contact-dialogs.glade",
+	filename = empathy_file_lookup ("empathy-contact-dialogs.glade",
+					"libempathy-gtk");
+	empathy_glade_get_file_simple (filename,
 				      "subscription_request_dialog",
 				      NULL,
 				      "subscription_request_dialog", &dialog,
 				      "hbox_subscription", &hbox_subscription,
 				      NULL);
+	g_free (filename);
 
 	contact_widget = empathy_contact_widget_new (contact,
 						     EMPATHY_CONTACT_WIDGET_EDIT_ALIAS |

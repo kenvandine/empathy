@@ -450,13 +450,15 @@ empathy_call_window_new (EmpathyTpCall *call)
   EmpathyCallWindow *window;
   GladeXML *glade;
   guint status;
+  gchar *filename;
 
   g_return_val_if_fail (EMPATHY_IS_TP_CALL (call), NULL);
 
   window = g_slice_new0 (EmpathyCallWindow);
   window->call = g_object_ref (call);
 
-  glade = empathy_glade_get_file ("empathy-call-window.glade",
+  filename = empathy_file_lookup ("empathy-call-window.glade", "src");
+  glade = empathy_glade_get_file (filename,
       "window",
       NULL,
       "window", &window->window,
@@ -471,6 +473,7 @@ empathy_call_window_new (EmpathyTpCall *call)
       "output_video_frame", &window->output_video_frame,
       "video_button", &window->video_button,
       NULL);
+  g_free (filename);
 
   empathy_glade_connect (glade,
       window,

@@ -651,10 +651,12 @@ status_icon_create_menu (EmpathyStatusIcon *icon)
 {
 	EmpathyStatusIconPriv *priv;
 	GladeXML              *glade;
+	gchar                 *filename;
 
 	priv = GET_PRIV (icon);
 
-	glade = empathy_glade_get_file ("empathy-status-icon.glade",
+	filename = empathy_file_lookup ("empathy-status-icon.glade", "src");
+	glade = empathy_glade_get_file (filename,
 				       "tray_menu",
 				       NULL,
 				       "tray_menu", &priv->popup_menu,
@@ -662,6 +664,7 @@ status_icon_create_menu (EmpathyStatusIcon *icon)
 				       "tray_new_message", &priv->message_item,
 				       "tray_status", &priv->status_item,
 				       NULL);
+	g_free (filename);
 
 	empathy_glade_connect (glade,
 			      icon,

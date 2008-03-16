@@ -466,6 +466,7 @@ empathy_irc_network_dialog_show (EmpathyIrcNetwork *network,
   GtkAdjustment *adjustment;
   GtkTreeSelection *selection;
   GtkTreeViewColumn *column;
+  gchar *filename;
 
   g_return_val_if_fail (network != NULL, NULL);
 
@@ -482,7 +483,9 @@ empathy_irc_network_dialog_show (EmpathyIrcNetwork *network,
   dialog->network = network;
   g_object_ref (dialog->network);
 
-  glade = empathy_glade_get_file ("empathy-account-widget-irc.glade",
+  filename = empathy_file_lookup ("empathy-account-widget-irc.glade",
+      "libempathy-gtk");
+  glade = empathy_glade_get_file (filename,
       "irc_network_dialog",
       NULL,
       "irc_network_dialog", &dialog->dialog,
@@ -495,6 +498,7 @@ empathy_irc_network_dialog_show (EmpathyIrcNetwork *network,
       "button_up", &dialog->button_up,
       "button_down", &dialog->button_down,
       NULL);
+  g_free (filename);
 
   store = gtk_list_store_new (4, G_TYPE_OBJECT, G_TYPE_STRING,
       G_TYPE_UINT, G_TYPE_BOOLEAN);

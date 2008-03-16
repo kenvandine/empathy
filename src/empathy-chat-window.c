@@ -280,10 +280,12 @@ empathy_chat_window_init (EmpathyChatWindow *window)
 	GtkWidget            *menu;
 	gint                  i;
 	GtkWidget            *chat_vbox;
+	gchar                *filename;
 
 	priv = GET_PRIV (window);
 
-	glade = empathy_glade_get_file ("empathy-chat.glade",
+	filename = empathy_file_lookup ("empathy-chat.glade", "libempathy-gtk");
+	glade = empathy_glade_get_file (filename,
 				       "chat_window",
 				       NULL,
 				       "chat_window", &priv->dialog,
@@ -315,6 +317,7 @@ empathy_chat_window_init (EmpathyChatWindow *window)
 				       "menu_help_contents", &priv->menu_help_contents,
 				       "menu_help_about", &priv->menu_help_about,
 				       NULL);
+	g_free (filename);
 
 	empathy_glade_connect (glade,
 			      window,

@@ -181,16 +181,19 @@ private_chat_create_ui (EmpathyPrivateChat *chat)
 	GladeXML              *glade;
 	EmpathyPrivateChatPriv *priv;
 	GtkWidget             *input_text_view_sw;
+	gchar                 *filename;
 
 	priv = GET_PRIV (chat);
 
-	glade = empathy_glade_get_file ("empathy-chat.glade",
+	filename = empathy_file_lookup ("empathy-chat.glade", "libempathy-gtk");
+	glade = empathy_glade_get_file (filename,
 				       "chat_widget",
 				       NULL,
 				      "chat_widget", &priv->widget,
 				      "chat_view_sw", &priv->text_view_sw,
 				      "input_text_view_sw", &input_text_view_sw,
 				       NULL);
+	g_free (filename);
 
 	empathy_glade_connect (glade,
 			      chat,

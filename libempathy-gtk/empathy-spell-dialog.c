@@ -32,6 +32,8 @@
 #include <gtk/gtksizegroup.h>
 #include <glade/glade.h>
 
+#include <libempathy/empathy-utils.h>
+
 #include "empathy-chat.h"
 #include "empathy-spell-dialog.h"
 #include "empathy-ui-utils.h"
@@ -224,6 +226,7 @@ empathy_spell_dialog_show (EmpathyChat  *chat,
 	EmpathySpellDialog *dialog;
 	GladeXML          *gui;
 	gchar             *str;
+	gchar             *filename;
 
 	g_return_if_fail (chat != NULL);
 	g_return_if_fail (word != NULL);
@@ -237,7 +240,9 @@ empathy_spell_dialog_show (EmpathyChat  *chat,
 	dialog->start = start;
 	dialog->end = end;
 
-	gui = empathy_glade_get_file ("empathy-spell-dialog.glade",
+	filename = empathy_file_lookup ("empathy-spell-dialog.glade",
+					"libempathy-gtk");
+	gui = empathy_glade_get_file (filename,
 				     "spell_dialog",
 				     NULL,
 				     "spell_dialog", &dialog->window,
@@ -245,6 +250,7 @@ empathy_spell_dialog_show (EmpathyChat  *chat,
 				     "label_word", &dialog->label_word,
 				     "treeview_words", &dialog->treeview_words,
 				     NULL);
+	g_free (filename);
 
 	empathy_glade_connect (gui,
 			      dialog,

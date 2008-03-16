@@ -433,6 +433,7 @@ empathy_account_widget_irc_new (McAccount *account)
   GladeXML *glade;
   GtkListStore *store;
   GtkCellRenderer *renderer;
+  gchar *filename;
 
   settings = g_slice_new0 (EmpathyAccountWidgetIrc);
   settings->account = g_object_ref (account);
@@ -458,7 +459,9 @@ empathy_account_widget_irc_new (McAccount *account)
   g_free (global_file_with_path);
   g_free (user_file_with_path);
 
-  glade = empathy_glade_get_file ("empathy-account-widget-irc.glade",
+  filename = empathy_file_lookup ("empathy-account-widget-irc.glade",
+      "libempathy-gtk");
+  glade = empathy_glade_get_file (filename,
       "vbox_irc_settings",
       NULL,
       "vbox_irc_settings", &settings->vbox_settings,
@@ -467,6 +470,7 @@ empathy_account_widget_irc_new (McAccount *account)
       "button_add_network", &settings->button_add_network,
       "button_remove", &settings->button_remove,
       NULL);
+  g_free (filename);
 
   /* Fill the networks combobox */
   store = gtk_list_store_new (2, G_TYPE_OBJECT, G_TYPE_STRING);

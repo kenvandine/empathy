@@ -306,10 +306,13 @@ group_chat_create_ui (EmpathyGroupChat *chat)
 	EmpathyGroupChatPriv *priv;
 	GladeXML            *glade;
  	GList               *list = NULL; 
+	gchar               *filename;
 
 	priv = GET_PRIV (chat);
 
-	glade = empathy_glade_get_file ("empathy-group-chat.glade",
+	filename = empathy_file_lookup ("empathy-group-chat.glade",
+					"libempathy-gtk");
+	glade = empathy_glade_get_file (filename,
 				       "group_chat_widget",
 				       NULL,
 				       "group_chat_widget", &priv->widget,
@@ -321,6 +324,7 @@ group_chat_create_ui (EmpathyGroupChat *chat)
 				       "label_topic", &priv->label_topic,
 				       "scrolled_window_contacts", &priv->scrolled_window_contacts,
 				       NULL);
+	g_free (filename);
 
 	empathy_glade_connect (glade,
 			      chat,
