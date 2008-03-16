@@ -60,7 +60,6 @@ import gtk.gdk.Pixbuf as PyGdkPixbuf_Type
 import empathy.Contact as PyEmpathyContact_Type
 import empathy.ContactList as PyEmpathyContactList_Type
 import empathy.TpChat as PyEmpathyTpChat_Type
-import empathy.Presence as PyEmpathyPresence_Type
 import empathy.Message as PyEmpathyMessage_Type
 import empathy.TpChatroom as PyEmpathyTpChatroom_Type
 import empathy.TpCall as PyEmpathyTpCall_Type
