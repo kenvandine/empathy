@@ -215,35 +215,13 @@ tp_contact_factory_request_aliases_cb (TpConnection *connection,
 				       gpointer       user_data,
 				       GObject       *tp_factory)
 {
-	EmpathyTpContactFactoryPriv *priv = GET_PRIV (tp_factory);
-	guint                       *handles = user_data;
-	guint                        i = 0;
-	const gchar                **name;
+	guint        *handles = user_data;
+	guint         i = 0;
+	const gchar **name;
 
 	if (error) {
-		GArray handles_array;
-		guint  size = 0;
-
 		empathy_debug (DEBUG_DOMAIN, "Error requesting aliases: %s",
 			      error->message);
-
-		/* FIXME: Sometimes the dbus call timesout because CM takes
-		 * too much time to request all aliases from the server,
-		 * that's why we retry. */
-		while (handles[size] != 0) {
-			size++;
-		}
-		handles = g_memdup (handles, (size + 1) * sizeof (guint));
-		handles_array.len = size;
-		handles_array.data = (gchar*) handles;
-		
-		tp_cli_connection_interface_aliasing_call_request_aliases (priv->connection,
-									   -1,
-									   &handles_array,
-									   tp_contact_factory_request_aliases_cb,
-									   handles, g_free,
-									   G_OBJECT (tp_factory));
-
 		return;
 	}
 
@@ -621,11 +599,12 @@ tp_contact_factory_request_everything (EmpathyTpContactFactory *tp_factory,
 								dup_handles, g_free,
 								G_OBJECT (tp_factory));
 
-	dup_handles = g_new (guint, handles->len + 1);
-	g_memmove (dup_handles, handles->data, handles->len * sizeof (guint));
-	dup_handles[handles->len] = 0;
+	/* FIXME: Sometimes the dbus call timesout because CM takes
+	 * too much time to request all aliases from the server,
+	 * that's why we increase the timeout here. See fd.o bug #14795 */
+	dup_handles = g_memdup (handles->data, handles->len * sizeof (guint));
 	tp_cli_connection_interface_aliasing_call_request_aliases (priv->connection,
-								   -1,
+								   5*60*1000,
 								   handles,
 								   tp_contact_factory_request_aliases_cb,
 								   dup_handles, g_free,
