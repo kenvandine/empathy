@@ -77,7 +77,6 @@ struct _EmpathyChatClass {
 GType              empathy_chat_get_type              (void);
 
 EmpathyChatView *  empathy_chat_get_view              (EmpathyChat       *chat);
-void               empathy_chat_present               (EmpathyChat       *chat);
 void               empathy_chat_clear                 (EmpathyChat       *chat);
 void               empathy_chat_scroll_down           (EmpathyChat       *chat);
 void               empathy_chat_cut                   (EmpathyChat       *chat);
