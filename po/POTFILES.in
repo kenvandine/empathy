@@ -9,7 +9,6 @@ libempathy/empathy-contact.c
 libempathy/empathy-tp-contact-list.c
 libempathy/empathy-utils.c
 
-libempathy-gtk/empathy-about-dialog.c
 libempathy-gtk/empathy-account-chooser.c
 libempathy-gtk/empathy-account-widget.c
 libempathy-gtk/empathy-account-widget-generic.glade
@@ -24,14 +23,9 @@ libempathy-gtk/empathy-accounts-dialog.c
 libempathy-gtk/empathy-accounts-dialog.glade
 libempathy-gtk/empathy-avatar-chooser.c
 libempathy-gtk/empathy-avatar-image.c
-libempathy-gtk/empathy-call-window.c
-libempathy-gtk/empathy-call-window.glade
 libempathy-gtk/empathy-chat.c
 libempathy-gtk/empathy-chat.glade
 libempathy-gtk/empathy-chat-view.c
-libempathy-gtk/empathy-chat-window.c
-libempathy-gtk/empathy-chatrooms-window.c
-libempathy-gtk/empathy-chatrooms-window.glade
 libempathy-gtk/empathy-contact-dialogs.c
 libempathy-gtk/empathy-contact-dialogs.glade
 libempathy-gtk/empathy-contact-list-view.c
@@ -42,20 +36,12 @@ libempathy-gtk/empathy-group-chat.glade
 libempathy-gtk/empathy-irc-network-dialog.c
 libempathy-gtk/empathy-log-window.c
 libempathy-gtk/empathy-log-window.glade
-libempathy-gtk/empathy-new-chatroom-dialog.c
-libempathy-gtk/empathy-new-chatroom-dialog.glade
-libempathy-gtk/empathy-main-window.c
-libempathy-gtk/empathy-main-window.glade
 libempathy-gtk/empathy-new-message-dialog.glade
-libempathy-gtk/empathy-preferences.c
-libempathy-gtk/empathy-preferences.glade
 libempathy-gtk/empathy-presence-chooser.c
 libempathy-gtk/empathy-presence-chooser.glade
 libempathy-gtk/empathy-private-chat.c
 libempathy-gtk/empathy-spell-dialog.c
 libempathy-gtk/empathy-spell-dialog.glade
-libempathy-gtk/empathy-status-icon.c
-libempathy-gtk/empathy-status-icon.glade
 libempathy-gtk/empathy-theme-boxes.c
 libempathy-gtk/empathy-theme-irc.c
 libempathy-gtk/empathy-theme-manager.c
@@ -71,3 +57,17 @@ nothere/data/GNOME_NotHere_Applet.xml
 nothere/src/nothere-applet.c
 
 src/empathy.c
+src/empathy-about-dialog.c
+src/empathy-call-window.glade
+src/empathy-chat-window.c
+src/empathy-chatrooms-window.c
+src/empathy-chatrooms-window.glade
+src/empathy-main-window.c
+src/empathy-main-window.glade
+src/empathy-new-chatroom-dialog.c
+src/empathy-new-chatroom-dialog.glade
+src/empathy-preferences.c
+src/empathy-preferences.glade
+src/empathy-status-icon.c
+src/empathy-status-icon.glade
+                        
