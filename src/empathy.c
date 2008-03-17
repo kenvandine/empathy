@@ -34,7 +34,6 @@
 
 #include <telepathy-glib/util.h>
 #include <libmissioncontrol/mc-account.h>
-#include <libmissioncontrol/mc-account-monitor.h>
 #include <libmissioncontrol/mission-control.h>
 
 #include <libempathy/empathy-idle.h>
@@ -131,33 +130,67 @@ operation_error_cb (MissionControl *mc,
 		    guint           error_code,
 		    gpointer        user_data)
 {
-	empathy_debug (DEBUG_DOMAIN, "Error code %d during operation %d",
-		      error_code,
-		      operation_id);
-}
+	const gchar *message;
 
-static void
-start_mission_control (EmpathyIdle *idle)
-{
-	McPresence presence;
-
-	presence = empathy_idle_get_state (idle);
-
-	if (presence > MC_PRESENCE_OFFLINE) {
-		/* MC is already running and online, nothing to do */
-		return;
+	switch (error_code) {
+	case MC_DISCONNECTED_ERROR:
+		message = _("Disconnected");
+		break;
+	case MC_INVALID_HANDLE_ERROR:
+		message = _("Invalid handle");
+		break;
+	case MC_NO_MATCHING_CONNECTION_ERROR:
+		message = _("No matching connection");
+		break;
+	case MC_INVALID_ACCOUNT_ERROR:
+		message = _("Invalid account");
+		break;
+	case MC_PRESENCE_FAILURE_ERROR:
+		message = _("Presence failure");
+		break;
+	case MC_NO_ACCOUNTS_ERROR:
+		message = _("No accounts");
+		break;
+	case MC_NETWORK_ERROR:
+		message = _("Network error");
+		break;
+	case MC_CONTACT_DOES_NOT_SUPPORT_VOICE_ERROR:
+		message = _("Contact does not support voice");
+		break;
+	case MC_LOWMEM_ERROR:
+		message = _("Lowmem");
+		break;
+	case MC_CHANNEL_REQUEST_GENERIC_ERROR:
+		message = _("Channel request generic error");
+		break;
+	case MC_CHANNEL_BANNED_ERROR:
+		message = _("Channel banned");
+		break;
+	case MC_CHANNEL_FULL_ERROR:
+		message = _("Channel full");
+		break;
+	case MC_CHANNEL_INVITE_ONLY_ERROR:
+		message = _("Channel invite only");
+		break;
+	default:
+		message = _("Unknown error code");
 	}
 
-	empathy_idle_set_state (idle, MC_PRESENCE_AVAILABLE);
+	empathy_debug (DEBUG_DOMAIN, "Error during operation %d: %s",
+		       operation_id, message);
 }
 
 static void
-account_enabled_cb (McAccountMonitor *monitor,
-		    gchar            *unique_name,
-		    EmpathyIdle      *idle)
+use_nm_notify_cb (EmpathyConf *conf,
+		  const gchar *key,
+		  gpointer     user_data)
 {
-	empathy_debug (DEBUG_DOMAIN, "Account enabled: %s", unique_name);
-	start_mission_control (idle);
+	EmpathyIdle *idle = user_data;
+	gboolean     use_nm;
+
+	if (empathy_conf_get_bool (conf, key, &use_nm)) {
+		empathy_idle_set_use_nm (idle, use_nm);
+	}
 }
 
 static void
@@ -339,7 +372,6 @@ main (int argc, char *argv[])
 	EmpathyStatusIcon *icon;
 	GtkWidget         *window;
 	MissionControl    *mc;
-	McAccountMonitor  *monitor;
 	EmpathyIdle       *idle;
 	EmpathyChandler   *chandler;
 	gboolean           autoconnect = TRUE;
@@ -392,12 +424,7 @@ main (int argc, char *argv[])
 	}
 
 	/* Setting up MC */
-	monitor = mc_account_monitor_new ();
 	mc = empathy_mission_control_new ();
-	idle = empathy_idle_new ();
-	g_signal_connect (monitor, "account-enabled",
-			  G_CALLBACK (account_enabled_cb),
-			  idle);
 	g_signal_connect (mc, "ServiceEnded",
 			  G_CALLBACK (service_ended_cb),
 			  NULL);
@@ -405,12 +432,20 @@ main (int argc, char *argv[])
 			  G_CALLBACK (operation_error_cb),
 			  NULL);
 
+	/* Setting up Idle */
+	idle = empathy_idle_new ();
+	empathy_idle_set_auto_away (idle, TRUE);
+	use_nm_notify_cb (empathy_conf_get (), EMPATHY_PREFS_USE_NM, idle);
+	empathy_conf_notify_add (empathy_conf_get (), EMPATHY_PREFS_USE_NM,
+				 use_nm_notify_cb, idle);
+
+	/* Autoconnect */
 	empathy_conf_get_bool (empathy_conf_get(),
 			       EMPATHY_PREFS_AUTOCONNECT,
 			       &autoconnect);
-			       
-	if (autoconnect) {
-		start_mission_control (idle);
+	if (autoconnect &&
+	    empathy_idle_get_state (idle) <= MC_PRESENCE_OFFLINE) {
+		empathy_idle_set_state (idle, MC_PRESENCE_AVAILABLE);
 	}
 	
 	create_salut_account ();
@@ -438,7 +473,6 @@ main (int argc, char *argv[])
 	empathy_idle_set_state (idle, MC_PRESENCE_OFFLINE);
 
 	g_object_unref (chandler);
-	g_object_unref (monitor);
 	g_object_unref (mc);
 	g_object_unref (idle);
 	g_object_unref (icon);
