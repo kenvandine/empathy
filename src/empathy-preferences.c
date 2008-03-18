@@ -85,15 +85,10 @@ static void     preferences_languages_cell_toggled_cb    (GtkCellRendererToggle 
 static void     preferences_themes_setup                 (EmpathyPreferences      *preferences);
 static void     preferences_widget_sync_bool             (const gchar            *key,
 							  GtkWidget              *widget);
-static void     preferences_widget_sync_int              (const gchar            *key,
-							  GtkWidget              *widget);
 static void     preferences_widget_sync_string           (const gchar            *key,
 							  GtkWidget              *widget);
 static void     preferences_widget_sync_string_combo     (const gchar            *key,
 							  GtkWidget              *widget);
-static void     preferences_notify_int_cb                (EmpathyConf             *conf,
-							  const gchar            *key,
-							  gpointer                user_data);
 static void     preferences_notify_string_cb             (EmpathyConf             *conf,
 							  const gchar            *key,
 							  gpointer                user_data);
@@ -106,12 +101,6 @@ static void     preferences_notify_bool_cb               (EmpathyConf           
 static void     preferences_notify_sensitivity_cb        (EmpathyConf             *conf,
 							  const gchar            *key,
 							  gpointer                user_data);
-static void     preferences_hookup_spin_button           (EmpathyPreferences      *preferences,
-							  const gchar            *key,
-							  GtkWidget              *widget);
-static void     preferences_hookup_entry                 (EmpathyPreferences      *preferences,
-							  const gchar            *key,
-							  GtkWidget              *widget);
 static void     preferences_hookup_toggle_button         (EmpathyPreferences      *preferences,
 							  const gchar            *key,
 							  GtkWidget              *widget);
@@ -124,10 +113,6 @@ static void     preferences_hookup_string_combo          (EmpathyPreferences    
 static void     preferences_hookup_sensitivity           (EmpathyPreferences      *preferences,
 							  const gchar            *key,
 							  GtkWidget              *widget);
-static void     preferences_spin_button_value_changed_cb (GtkWidget              *button,
-							  gpointer                user_data);
-static void     preferences_entry_value_changed_cb       (GtkWidget              *entry,
-							  gpointer                user_data);
 static void     preferences_toggle_button_toggled_cb     (GtkWidget              *button,
 							  gpointer                user_data);
 static void     preferences_radio_button_toggled_cb      (GtkWidget              *button,
@@ -525,18 +510,6 @@ preferences_widget_sync_bool (const gchar *key, GtkWidget *widget)
 }
 
 static void
-preferences_widget_sync_int (const gchar *key, GtkWidget *widget)
-{
-	gint value;
-
-	if (empathy_conf_get_int (empathy_conf_get (), key, &value)) {
-		if (GTK_IS_SPIN_BUTTON (widget)) {
-			gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), value);
-		}
-	}
-}
-
-static void
 preferences_widget_sync_string (const gchar *key, GtkWidget *widget)
 {
 	gchar *value;
@@ -617,14 +590,6 @@ preferences_widget_sync_string_combo (const gchar *key, GtkWidget *widget)
 }
 
 static void
-preferences_notify_int_cb (EmpathyConf  *conf,
-			   const gchar *key,
-			   gpointer     user_data)
-{
-	preferences_widget_sync_int (key, user_data);	
-}
-
-static void
 preferences_notify_string_cb (EmpathyConf  *conf,
 			      const gchar *key,
 			      gpointer     user_data)
@@ -660,17 +625,33 @@ preferences_notify_sensitivity_cb (EmpathyConf  *conf,
 	}
 }
 
+#if 0
+static void
+preferences_widget_sync_int (const gchar *key, GtkWidget *widget)
+{
+	gint value;
+
+	if (empathy_conf_get_int (empathy_conf_get (), key, &value)) {
+		if (GTK_IS_SPIN_BUTTON (widget)) {
+			gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), value);
+		}
+	}
+}
+
+static void
+preferences_notify_int_cb (EmpathyConf  *conf,
+			   const gchar *key,
+			   gpointer     user_data)
+{
+	preferences_widget_sync_int (key, user_data);	
+}
+
 static void
 preferences_hookup_spin_button (EmpathyPreferences *preferences,
 				const gchar       *key,
 				GtkWidget         *widget)
 {
 	guint id;
-
-	/* Silence warning. */
-	if (0) {
-		preferences_hookup_spin_button (preferences, key, widget);
-	}
 
 	preferences_widget_sync_int (key, widget);
 
@@ -698,10 +679,6 @@ preferences_hookup_entry (EmpathyPreferences *preferences,
 {
 	guint id;
 
-	if (0) {  /* Silent warning before we use this function. */
-		preferences_hookup_entry (preferences, key, widget);
-	}
-
 	preferences_widget_sync_string (key, widget);
 
 	g_object_set_data_full (G_OBJECT (widget), "key",
@@ -720,6 +697,33 @@ preferences_hookup_entry (EmpathyPreferences *preferences,
 		preferences_add_id (preferences, id);
 	}
 }
+
+static void
+preferences_spin_button_value_changed_cb (GtkWidget *button,
+					  gpointer   user_data)
+{
+	const gchar *key;
+
+	key = g_object_get_data (G_OBJECT (button), "key");
+
+	empathy_conf_set_int (empathy_conf_get (),
+			      key,
+			      gtk_spin_button_get_value (GTK_SPIN_BUTTON (button)));
+}
+
+static void
+preferences_entry_value_changed_cb (GtkWidget *entry,
+				    gpointer   user_data)
+{
+	const gchar *key;
+
+	key = g_object_get_data (G_OBJECT (entry), "key");
+
+	empathy_conf_set_string (empathy_conf_get (),
+				 key,
+				 gtk_entry_get_text (GTK_ENTRY (entry)));
+}
+#endif
 
 static void
 preferences_hookup_toggle_button (EmpathyPreferences *preferences,
@@ -822,32 +826,6 @@ preferences_hookup_sensitivity (EmpathyPreferences *preferences,
 	if (id) {
 		preferences_add_id (preferences, id);
 	}
-}
-
-static void
-preferences_spin_button_value_changed_cb (GtkWidget *button,
-					  gpointer   user_data)
-{
-	const gchar *key;
-
-	key = g_object_get_data (G_OBJECT (button), "key");
-
-	empathy_conf_set_int (empathy_conf_get (),
-			      key,
-			      gtk_spin_button_get_value (GTK_SPIN_BUTTON (button)));
-}
-
-static void
-preferences_entry_value_changed_cb (GtkWidget *entry,
-				    gpointer   user_data)
-{
-	const gchar *key;
-
-	key = g_object_get_data (G_OBJECT (entry), "key");
-
-	empathy_conf_set_string (empathy_conf_get (),
-				 key,
-				 gtk_entry_get_text (GTK_ENTRY (entry)));
 }
 
 static void
