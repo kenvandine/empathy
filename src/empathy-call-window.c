@@ -31,9 +31,9 @@
 #include <libempathy/empathy-chandler.h>
 #include <libempathy/empathy-debug.h>
 #include <libempathy/empathy-utils.h>
-
-#include <libempathy-gtk/empathy-call-window.h>
 #include <libempathy-gtk/empathy-ui-utils.h>
+
+#include "empathy-call-window.h"
 
 #define DEBUG_DOMAIN "CallWindow"
 

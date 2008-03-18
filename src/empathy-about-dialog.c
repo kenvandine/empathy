@@ -29,8 +29,9 @@
 #include <gtk/gtksizegroup.h>
 #include <glade/glade.h>
 
-#include "empathy-about-dialog.h"
 #include <libempathy-gtk/empathy-ui-utils.h>
+
+#include "empathy-about-dialog.h"
 
 #define WEB_SITE "http://live.gnome.org/Empathy"
 
