@@ -226,6 +226,18 @@ tp_call_stream_removed_cb (DBusGProxy *channel,
 }
 
 static void
+tp_call_invalidated_cb (TpProxy       *stream_engine,
+                        GQuark         domain,
+                        gint           code,
+                        gchar         *message,
+                        EmpathyTpCall *call)
+{
+  empathy_debug (DEBUG_DOMAIN, "Stream engine proxy invalidated: %s",
+      message);
+  empathy_tp_call_close_channel (call);
+}
+
+static void
 tp_call_channel_closed_cb (TpChan *channel,
                            EmpathyTpCall *call)
 {
@@ -251,6 +263,14 @@ tp_call_channel_closed_cb (TpChan *channel,
       G_CALLBACK (tp_call_stream_added_cb), call);
   dbus_g_proxy_disconnect_signal (streamed_iface, "StreamRemoved",
       G_CALLBACK (tp_call_stream_removed_cb), call);
+
+  if (priv->stream_engine)
+    {
+      g_signal_handlers_disconnect_by_func (priv->stream_engine,
+          tp_call_invalidated_cb, call);
+      g_object_unref (priv->stream_engine);
+      priv->stream_engine = NULL;
+    }
 }
 
 static void
@@ -496,18 +516,6 @@ tp_call_async_cb (TpProxy *proxy,
       empathy_debug (DEBUG_DOMAIN, "Error %s: %s",
           user_data, error->message);
     }
-}
-
-static void
-tp_call_invalidated_cb (TpProxy       *stream_engine,
-                        GQuark         domain,
-                        gint           code,
-                        gchar         *message,
-                        EmpathyTpCall *call)
-{
-  empathy_debug (DEBUG_DOMAIN, "Stream engine proxy invalidated: %s",
-      message);
-  empathy_tp_call_close_channel (call);
 }
 
 static void
