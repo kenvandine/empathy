@@ -235,26 +235,22 @@ call_window_status_changed_cb (EmpathyTpCall *call,
   gboolean is_incoming;
   gchar *title;
 
-  g_object_get (G_OBJECT (window->call), "status", &status, NULL);
-  g_object_get (G_OBJECT (window->call), "audio-stream", &audio_stream, NULL);
-  g_object_get (G_OBJECT (window->call), "video-stream", &video_stream, NULL);
+  g_object_get (window->call,
+      "status", &status,
+      "audio-stream", &audio_stream,
+      "video-stream", &video_stream,
+      NULL);
 
   if (video_stream->state > audio_stream->state)
-    {
       stream_state = video_stream->state;
-    }
   else
-    {
       stream_state = audio_stream->state;
-    }
 
   empathy_debug (DEBUG_DOMAIN, "Status changed - status: %d, stream state: %d",
       status, stream_state);
 
   if (window->timeout_event_id)
-    {
       call_window_stop_timeout (window);
-    }
 
   if (status == EMPATHY_TP_CALL_STATUS_CLOSED)
     {
@@ -265,9 +261,7 @@ call_window_status_changed_cb (EmpathyTpCall *call,
       call_window_set_output_video_is_drawing (window, FALSE);
     }
   else if (stream_state == TP_MEDIA_STREAM_STATE_DISCONNECTED)
-    {
       gtk_label_set_text (GTK_LABEL (window->status_label), "Disconnected");
-    }
   else if (status == EMPATHY_TP_CALL_STATUS_PENDING)
     {
       g_object_get (G_OBJECT (window->call), "contact", &contact, NULL);
@@ -282,28 +276,20 @@ call_window_status_changed_cb (EmpathyTpCall *call,
 
       g_object_get (G_OBJECT (window->call), "is-incoming", &is_incoming, NULL);
       if (is_incoming)
-        {
           gtk_widget_set_sensitive (window->start_call_button, TRUE);
-        }
       else
-        {
           g_signal_connect (GTK_OBJECT (window->video_button), "toggled",
               G_CALLBACK (call_window_video_button_toggled_cb),
               window);
-        }
     }
   else if (status == EMPATHY_TP_CALL_STATUS_ACCEPTED)
     {
       if (stream_state == TP_MEDIA_STREAM_STATE_CONNECTING)
-        {
           gtk_label_set_text (GTK_LABEL (window->status_label), "Connecting");
-        }
       else if (stream_state == TP_MEDIA_STREAM_STATE_CONNECTED)
         {
           if ((window->start_time).tv_sec == 0)
-            {
               g_get_current_time (&(window->start_time));
-            }
           window->timeout_event_id = g_timeout_add (1000,
               call_window_update_timer, window);
           empathy_debug (DEBUG_DOMAIN, "Timer started");
