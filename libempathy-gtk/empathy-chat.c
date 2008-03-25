@@ -36,6 +36,8 @@
 
 #include <libmissioncontrol/mission-control.h>
 
+#include <telepathy-glib/util.h>
+
 #include <libempathy/empathy-contact-manager.h>
 #include <libempathy/empathy-log-manager.h>
 #include <libempathy/empathy-debug.h>
@@ -76,7 +78,7 @@ struct _EmpathyChatPriv {
 	GList                 *compositors;
 	guint                  scroll_idle_id;
 	gboolean               first_tp_chat;
-	time_t                 last_log_timestamp;
+	GList                 *backlog_messages;
 	gboolean               is_first_char;
 	guint                  block_events_timeout_id;
 	/* Used to automatically shrink a window that has temporarily
@@ -510,25 +512,41 @@ chat_message_received_cb (EmpathyTpChat  *tp_chat,
 {
 	EmpathyChatPriv *priv;
 	EmpathyContact  *sender;
-	time_t           timestamp;
+	const gchar     *body;
 
 	priv = GET_PRIV (chat);
 
-	timestamp = empathy_message_get_timestamp (message);
-	if (timestamp <= priv->last_log_timestamp) {
-		/* Do not take care of messages anterior of the last
-		 * logged message. Some Jabber chatroom sends messages
-		 * received before we joined the room, this avoid
-		 * displaying those messages if we already logged them
-		 * last time we joined that room. */
-		empathy_debug (DEBUG_DOMAIN, "Skipping message because it is "
-			       "anterior of last logged message.");
-		return;
+	sender = empathy_message_get_sender (message);
+	body = empathy_message_get_body (message);
+	while (priv->backlog_messages) {
+		EmpathyMessage *log_message;
+		EmpathyContact *log_sender;
+		const gchar    *log_body;
+
+		log_message = priv->backlog_messages->data;
+		log_sender = empathy_message_get_sender (log_message);
+		log_body = empathy_message_get_body (log_message);
+
+		priv->backlog_messages = g_list_remove (priv->backlog_messages,
+							log_message);
+
+		if (empathy_contact_equal (sender, log_sender) &&
+		    !tp_strdiff (body, log_body)) {
+			/* The message we received is already displayed because
+			 * some jabber chatrooms sends us back logs and we
+			 * already displayed it from localy logged messages. */
+			empathy_debug (DEBUG_DOMAIN, "Skipping message because "
+				       "it is already displayed from logged "
+				       "messages");
+			g_object_unref (log_message);
+			return;
+		}
+		g_object_unref (log_message);
 	}
 
-	sender = empathy_message_get_sender (message);
-	empathy_debug (DEBUG_DOMAIN, "Appending message ('%s')",
-		      empathy_contact_get_name (sender));
+	empathy_debug (DEBUG_DOMAIN, "Appending new message from %s (%d)",
+		       empathy_contact_get_name (sender),
+		       empathy_contact_get_handle (sender));
 
 	empathy_log_manager_add_message (priv->log_manager,
 					 empathy_chat_get_id (chat),
@@ -1267,23 +1285,19 @@ chat_add_logs (EmpathyChat *chat)
 							  empathy_chat_is_group_chat (chat));
 	num_messages  = g_list_length (messages);
 
-	for (l = messages, i = 0; l; l = l->next, i++) {
+	/* Only keep the 10 last messages */
+	for (i = 0; num_messages - i > 10; i++) {
 		EmpathyMessage *message;
 
-		message = l->data;
-
-		/* Only add 10 last messages */
-		if (num_messages - i > 10) {
-			g_object_unref (message);
-			continue;
-		}
-
-		priv->last_log_timestamp = empathy_message_get_timestamp (message);
-		empathy_chat_view_append_message (chat->view, message);
-
+		message = messages->data;
+		messages = g_list_remove (messages, message);
 		g_object_unref (message);
 	}
-	g_list_free (messages);
+
+	for (l = messages; l; l = l->next) {
+		empathy_chat_view_append_message (chat->view, l->data);
+	}
+	priv->backlog_messages = messages;
 
 	/* Turn back on scrolling */
 	empathy_chat_view_scroll (chat->view, TRUE);
