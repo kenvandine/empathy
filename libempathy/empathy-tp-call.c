@@ -232,9 +232,13 @@ tp_call_invalidated_cb (TpProxy       *stream_engine,
                         gchar         *message,
                         EmpathyTpCall *call)
 {
+  EmpathyTpCallPriv *priv = GET_PRIV (call);
+
   empathy_debug (DEBUG_DOMAIN, "Stream engine proxy invalidated: %s",
       message);
   empathy_tp_call_close_channel (call);
+  g_object_unref (priv->stream_engine);
+  priv->stream_engine = NULL;
 }
 
 static void
@@ -263,14 +267,6 @@ tp_call_channel_closed_cb (TpChan *channel,
       G_CALLBACK (tp_call_stream_added_cb), call);
   dbus_g_proxy_disconnect_signal (streamed_iface, "StreamRemoved",
       G_CALLBACK (tp_call_stream_removed_cb), call);
-
-  if (priv->stream_engine)
-    {
-      g_signal_handlers_disconnect_by_func (priv->stream_engine,
-          tp_call_invalidated_cb, call);
-      g_object_unref (priv->stream_engine);
-      priv->stream_engine = NULL;
-    }
 }
 
 static void
@@ -651,7 +647,11 @@ tp_call_finalize (GObject *object)
     g_object_unref (priv->channel);
 
   if (priv->stream_engine != NULL)
-    g_object_unref (priv->stream_engine);
+    {
+      g_signal_handlers_disconnect_by_func (priv->stream_engine,
+          tp_call_invalidated_cb, object);
+      g_object_unref (priv->stream_engine);
+    }
 
   if (priv->contact != NULL)
       g_object_unref (priv->contact);
