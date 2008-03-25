@@ -110,6 +110,7 @@ glade_DATA = 					\
 	empathy-account-widget-generic.glade	\
 	empathy-account-widget-jabber.glade	\
 	empathy-account-widget-msn.glade	\
+	empathy-account-widget-sip.glade	\
 	empathy-account-widget-salut.glade	\
 	empathy-account-widget-irc.glade	\
 	empathy-account-widget-icq.glade	\

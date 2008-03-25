@@ -538,6 +538,55 @@ empathy_account_widget_msn_new (McAccount *account)
 }
 
 GtkWidget *
+empathy_account_widget_sip_new (McAccount *account)
+{
+	GladeXML    *glade;
+	GtkWidget   *widget;
+	gchar	    *filename;
+
+	filename = empathy_file_lookup ("empathy-account-widget-sip.glade",
+					"libempathy-gtk");
+
+	glade = empathy_glade_get_file (filename,
+					"vbox_sip_settings",
+					NULL,
+					"vbox_sip_settings", &widget,
+					NULL);
+	
+	g_free (filename);
+
+	empathy_account_widget_handle_params (account, glade,
+		"entry_userid", "account",
+		"entry_password", "password",
+		"entry_registar", "registar",
+		"entry_proxy","proxy-host",
+		"spinbutton_port", "port",
+		"entry_transport", "transport",
+		"checkbutton_discover-binding","discover-binding",
+		"entry_keepalive-mechanism", "keepalive-mechanism",
+		"entry_keepalive-interval", "keepalive-interval",
+		"checkbutton_discover-stun", "discover-stun",
+		"entry_stun-server", "stun-server",
+		"spinbutton_stun-port", "stun-port",
+		"entry_local-ip", "local-ip-address",
+		"spinbutton_local-port", "local-port",
+		"entry_extra-auth-user", "extra-auth-user",
+		"entry_extra-auth-password", "extra-auth-password",
+		"checkbutton_avoid-difficult", "avoid-difficult",
+		NULL);
+
+	empathy_account_widget_add_forget_button (account, glade,
+						  "button_forget",
+						  "entry_password");
+
+	g_object_unref (glade);
+
+	gtk_widget_show (widget);
+
+	return widget;
+}
+
+GtkWidget *
 empathy_account_widget_jabber_new (McAccount *account)
 {
 	GladeXML  *glade;
