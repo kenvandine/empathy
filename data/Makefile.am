@@ -12,6 +12,9 @@ profile_DATA = 				\
 	msn.profile			\
 	msn-haze.profile		\
 	sofiasip.profile		\
+	ekiga.profile			\
+	fwd.profile			\
+	sipphone.profile		\
 	groupwise.profile
 
 autostartdir = $(sysconfdir)/xdg/autostart
