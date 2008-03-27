@@ -709,3 +709,37 @@ empathy_account_widget_yahoo_new (McAccount *account)
 	return widget;
 }
 
+GtkWidget *
+empathy_account_widget_groupwise_new (McAccount *account)
+{
+	GladeXML  *glade;
+	GtkWidget *widget;
+	gchar     *filename;
+
+	filename = empathy_file_lookup ("empathy-account-widget-groupwise.glade",
+					"libempathy-gtk");
+	glade = empathy_glade_get_file (filename,
+					"vbox_groupwise_settings",
+					NULL,
+					"vbox_groupwise_settings", &widget,
+					NULL);
+	g_free (filename);
+
+	empathy_account_widget_handle_params (account, glade,
+			"entry_id", "account",
+			"entry_password", "password",
+			"entry_server", "server",
+			"spinbutton_port", "port",
+			NULL);
+
+	empathy_account_widget_add_forget_button (account, glade,
+						  "button_forget",
+						  "entry_password");
+
+	g_object_unref (glade);
+
+	gtk_widget_show (widget);
+
+	return widget;
+}
+

@@ -115,6 +115,7 @@ glade_DATA = 					\
 	empathy-account-widget-irc.glade	\
 	empathy-account-widget-icq.glade	\
 	empathy-account-widget-yahoo.glade	\
+	empathy-account-widget-groupwise.glade	\
 	empathy-group-chat.glade		\
 	empathy-spell-dialog.glade		\
 	empathy-log-window.glade		\
