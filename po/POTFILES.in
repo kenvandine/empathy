@@ -12,12 +12,14 @@ libempathy/empathy-utils.c
 libempathy-gtk/empathy-account-chooser.c
 libempathy-gtk/empathy-account-widget.c
 libempathy-gtk/empathy-account-widget-generic.glade
+libempathy-gtk/empathy-account-widget-groupwise.glade
 libempathy-gtk/empathy-account-widget-icq.glade
 libempathy-gtk/empathy-account-widget-irc.c
 libempathy-gtk/empathy-account-widget-irc.glade
 libempathy-gtk/empathy-account-widget-jabber.glade
 libempathy-gtk/empathy-account-widget-msn.glade
 libempathy-gtk/empathy-account-widget-salut.glade
+libempathy-gtk/empathy-account-widget-sip.glade
 libempathy-gtk/empathy-account-widget-yahoo.glade
 libempathy-gtk/empathy-accounts-dialog.c
 libempathy-gtk/empathy-accounts-dialog.glade
