@@ -381,13 +381,14 @@ empathy_contact_set_id (EmpathyContact *contact,
 
 	g_free (priv->id);
 	priv->id = g_strdup (id);
+	g_object_ref (contact);
 	contact_set_ready_flag (contact, EMPATHY_CONTACT_READY_ID,
 				!G_STR_EMPTY (id));
-
 	g_object_notify (G_OBJECT (contact), "id");
 	if (G_STR_EMPTY (priv->name)) {
 		g_object_notify (G_OBJECT (contact), "name");
 	}
+	g_object_unref (contact);
 }
 
 const gchar *
@@ -422,10 +423,12 @@ empathy_contact_set_name (EmpathyContact *contact,
 
 	g_free (priv->name);
 	priv->name = g_strdup (name);
+
+	g_object_ref (contact);
 	contact_set_ready_flag (contact, EMPATHY_CONTACT_READY_NAME,
 				name != NULL);
-
 	g_object_notify (G_OBJECT (contact), "name");
+	g_object_unref (contact);
 }
 
 EmpathyAvatar *
@@ -589,10 +592,12 @@ empathy_contact_set_handle (EmpathyContact *contact,
 	}
 
 	priv->handle = handle;
+
+	g_object_ref (contact);
 	contact_set_ready_flag (contact, EMPATHY_CONTACT_READY_HANDLE,
 				handle != 0);
-
 	g_object_notify (G_OBJECT (contact), "handle");
+	g_object_unref (contact);
 }
 
 EmpathyCapabilities
