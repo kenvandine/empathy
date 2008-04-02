@@ -290,26 +290,37 @@ chat_window_update_menu (EmpathyChatWindow *window)
 	gtk_widget_set_sensitive (priv->menu_conv_insert_smiley, is_connected);
 }
 
+static const gchar *
+chat_window_get_chat_name (EmpathyChat *chat)
+{
+	EmpathyTpChat  *tp_chat;
+	EmpathyContact *remote_contact = NULL;
+	const gchar    *name = NULL;
+
+	name = empathy_chat_get_name (chat);
+	if (!name) {
+		tp_chat = empathy_chat_get_tp_chat (chat);
+		if (tp_chat) {
+			remote_contact = empathy_tp_chat_get_remote_contact (tp_chat);
+		}
+		if (remote_contact) {
+			name = empathy_contact_get_name (remote_contact);
+		} else {
+			name = _("Conversation");
+		}
+	}
+
+	return name;
+}
+
 static void
 chat_window_update_title (EmpathyChatWindow *window)
 {
 	EmpathyChatWindowPriv *priv = GET_PRIV (window);
-	EmpathyTpChat         *tp_chat;
-	EmpathyContact        *remote_contact;
 	const gchar           *name;
 	guint                  n_chats;
 
-	/* Get chat's name */
-	name = empathy_chat_get_name (priv->current_chat);
-	tp_chat = empathy_chat_get_tp_chat (priv->current_chat);
-	if (!name && tp_chat) {
-		remote_contact = empathy_tp_chat_get_remote_contact (tp_chat);
-		if (remote_contact) {
-			name = empathy_contact_get_name (remote_contact);
-		}
-	}
-
-	/* Update window title */
+	name = chat_window_get_chat_name (priv->current_chat);
 	n_chats = g_list_length (priv->chats);
 	if (n_chats == 1) {
 		gtk_window_set_title (GTK_WINDOW (priv->dialog), name);
@@ -346,14 +357,11 @@ chat_window_update_chat (EmpathyChat *chat)
 	priv = GET_PRIV (window);
 
 	/* Get information */
-	name = empathy_chat_get_name (chat);
+	name = chat_window_get_chat_name (chat);
 	subject = empathy_chat_get_subject (chat);
 	tp_chat = empathy_chat_get_tp_chat (chat);
 	if (tp_chat) {
 		remote_contact = empathy_tp_chat_get_remote_contact (tp_chat);
-	}
-	if (!name && remote_contact) {
-		name = empathy_contact_get_name (remote_contact);
 	}
 
 	/* Update tab image */
@@ -377,7 +385,8 @@ chat_window_update_chat (EmpathyChat *chat)
 		g_string_append_printf (tooltip, "%s\n%s",
 					empathy_contact_get_id (remote_contact),
 					empathy_contact_get_status (remote_contact));
-	} else {
+	}
+	else {
 		g_string_append (tooltip, name);
 	}
 	if (subject) {
@@ -1391,15 +1400,15 @@ empathy_chat_window_add_chat (EmpathyChatWindow *window,
 	child = GTK_WIDGET (chat);
 	label = chat_window_create_label (window, chat); 
 
-	g_signal_connect_swapped (chat, "notify::name",
-				  G_CALLBACK (chat_window_chat_notify_cb),
-				  window);
-	g_signal_connect_swapped (chat, "notify::subject",
-				  G_CALLBACK (chat_window_chat_notify_cb),
-				  window);
-	g_signal_connect_swapped (chat, "notify::tp-chat",
-				  G_CALLBACK (chat_window_chat_notify_cb),
-				  window);
+	g_signal_connect (chat, "notify::name",
+			  G_CALLBACK (chat_window_chat_notify_cb),
+			  NULL);
+	g_signal_connect (chat, "notify::subject",
+			  G_CALLBACK (chat_window_chat_notify_cb),
+			  NULL);
+	g_signal_connect (chat, "notify::tp-chat",
+			  G_CALLBACK (chat_window_chat_notify_cb),
+			  NULL);
 	chat_window_chat_notify_cb (chat);
 
 	gtk_notebook_append_page (GTK_NOTEBOOK (priv->notebook), child, label);
@@ -1426,13 +1435,13 @@ empathy_chat_window_remove_chat (EmpathyChatWindow *window,
 
 	priv = GET_PRIV (window);
 
+	g_signal_handlers_disconnect_by_func (chat,
+					      chat_window_chat_notify_cb,
+					      NULL);
+
 	position = gtk_notebook_page_num (GTK_NOTEBOOK (priv->notebook),
 					  GTK_WIDGET (chat));
 	gtk_notebook_remove_page (GTK_NOTEBOOK (priv->notebook), position);
-
-	g_signal_handlers_disconnect_by_func (chat,
-					      chat_window_chat_notify_cb,
-					      window);
 
 	empathy_debug (DEBUG_DOMAIN, 
 		      "Chat removed (%d references)", 

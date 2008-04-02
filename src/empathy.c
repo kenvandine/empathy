@@ -91,7 +91,6 @@ new_text_channel_cb (EmpathyChandler *chandler,
 	chat = empathy_chat_new (tp_chat);
 	empathy_chat_window_present_chat (chat);
 
-	g_object_unref (chat);
 	g_object_unref (account);
 	g_object_unref (tp_chat);
 }
