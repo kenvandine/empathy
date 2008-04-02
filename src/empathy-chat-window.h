@@ -71,16 +71,6 @@ gboolean           empathy_chat_window_has_focus      (EmpathyChatWindow *window
 EmpathyChat *      empathy_chat_window_find_chat      (McAccount        *account,
 						       const gchar      *id);
 void               empathy_chat_window_present_chat   (EmpathyChat      *chat);
-void               empathy_chat_save_geometry         (EmpathyChat       *chat,
-						       gint               x,
-						       gint               y,
-						       gint               w,
-						       gint               h);
-void               empathy_chat_load_geometry         (EmpathyChat       *chat,
-						       gint              *x,
-						       gint              *y,
-						       gint              *w,
-						       gint              *h);
 
 
 G_END_DECLS

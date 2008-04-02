@@ -558,6 +558,22 @@ chat_window_info_activate_cb (GtkWidget        *menuitem,
 						 FALSE, FALSE);
 }
 
+static const gchar *
+chat_get_window_id_for_geometry (EmpathyChat *chat)
+{
+	gboolean separate_windows;
+
+	empathy_conf_get_bool (empathy_conf_get (),
+			       EMPATHY_PREFS_UI_SEPARATE_CHAT_WINDOWS,
+			       &separate_windows);
+
+	if (separate_windows) {
+		return empathy_chat_get_id (chat);
+	} else {
+		return "chat-window";
+	}
+}
+
 static gboolean
 chat_window_save_geometry_timeout_cb (EmpathyChatWindow *window)
 {
@@ -569,7 +585,8 @@ chat_window_save_geometry_timeout_cb (EmpathyChatWindow *window)
 	gtk_window_get_size (GTK_WINDOW (priv->dialog), &w, &h);
 	gtk_window_get_position (GTK_WINDOW (priv->dialog), &x, &y);
 
-	empathy_chat_save_geometry (priv->current_chat, x, y, w, h);
+	empathy_geometry_save (chat_get_window_id_for_geometry (priv->current_chat),
+			       x, y, w, h);
 
 	priv->save_geometry_id = 0;
 
@@ -1597,7 +1614,7 @@ empathy_chat_window_add_chat (EmpathyChatWindow *window,
 	/* Reference the chat object */
 	g_object_ref (chat);
 
-	empathy_chat_load_geometry (chat, &x, &y, &w, &h);
+	empathy_geometry_load (chat_get_window_id_for_geometry (chat), x, y, w, h);
 
 	if (x >= 0 && y >= 0) {
 		/* Let the window manager position it if we don't have
@@ -1790,40 +1807,4 @@ chat_should_play_sound (EmpathyChat *chat)
 
 	return !has_focus;
 }
-static const gchar *
-chat_get_window_id_for_geometry (EmpathyChat *chat)
-{
-	gboolean separate_windows;
-
-	empathy_conf_get_bool (empathy_conf_get (),
-			       EMPATHY_PREFS_UI_SEPARATE_CHAT_WINDOWS,
-			       &separate_windows);
-
-	if (separate_windows) {
-		return empathy_chat_get_id (chat);
-	} else {
-		return "chat-window";
-	}
-}
-
-void
-empathy_chat_save_geometry (EmpathyChat *chat,
-			   gint        x,
-			   gint        y,
-			   gint        w,
-			   gint        h)
-{
-	empathy_geometry_save (chat_get_window_id_for_geometry (chat), x, y, w, h);
-}
-
-void
-empathy_chat_load_geometry (EmpathyChat *chat,
-			   gint       *x,
-			   gint       *y,
-			   gint       *w,
-			   gint       *h)
-{
-	empathy_geometry_load (chat_get_window_id_for_geometry (chat), x, y, w, h);
-}
-
 
