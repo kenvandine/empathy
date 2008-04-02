@@ -46,6 +46,8 @@
 #include "empathy-conf.h"
 #include "empathy-spell.h"
 #include "empathy-spell-dialog.h"
+#include "empathy-contact-list-store.h"
+#include "empathy-contact-list-view.h"
 #include "empathy-ui-utils.h"
 
 #define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), EMPATHY_TYPE_CHAT, EmpathyChatPriv))
@@ -1242,6 +1244,8 @@ chat_create_ui (EmpathyChat *chat)
 			   chat->input_text_view);
 	gtk_widget_show (chat->input_text_view);
 
+	/* Add contact list */
+
 	/* Add nick name completion */
 	priv->completion = g_completion_new ((GCompletionFunc) empathy_contact_get_name);
 	g_completion_set_compare (priv->completion,
@@ -1356,6 +1360,47 @@ chat_finalize (GObject *object)
 static void
 chat_constructed (GObject *object)
 {
+	EmpathyChat   *chat = EMPATHY_CHAT (object);
+	GtkTextBuffer *buffer;
+
+	chat_create_ui (chat);
+
+	g_signal_connect (chat->input_text_view,
+			  "key_press_event",
+			  G_CALLBACK (chat_input_key_press_event_cb),
+			  chat);
+
+	buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (chat->input_text_view));
+	g_signal_connect (buffer,
+			  "changed",
+			  G_CALLBACK (chat_input_text_buffer_changed_cb),
+			  chat);
+	g_signal_connect (chat->view,
+			  "focus_in_event",
+			  G_CALLBACK (chat_text_view_focus_in_event_cb),
+			  chat);
+
+	g_signal_connect (chat->input_text_view,
+			  "size_allocate",
+			  G_CALLBACK (chat_text_view_size_allocate_cb),
+			  chat);
+
+	g_signal_connect (chat->input_text_view,
+			  "realize",
+			  G_CALLBACK (chat_text_view_realize_cb),
+			  chat);
+
+	g_signal_connect (GTK_TEXT_VIEW (chat->input_text_view),
+			  "populate_popup",
+			  G_CALLBACK (chat_text_populate_popup_cb),
+			  chat);
+
+	/* create misspelt words identification tag */
+	gtk_text_buffer_create_tag (buffer,
+				    "misspelled",
+				    "underline", PANGO_UNDERLINE_ERROR,
+				    NULL);
+
 	chat_add_logs (EMPATHY_CHAT (object));
 }
 
@@ -1447,7 +1492,6 @@ static void
 empathy_chat_init (EmpathyChat *chat)
 {
 	EmpathyChatPriv *priv = GET_PRIV (chat);
-	GtkTextBuffer   *buffer;
 
 	chat_create_ui (chat);
 
@@ -1467,42 +1511,6 @@ empathy_chat_init (EmpathyChat *chat)
 	dbus_g_proxy_connect_signal (DBUS_G_PROXY (priv->mc), "AccountStatusChanged",
 				     G_CALLBACK (chat_status_changed_cb),
 				     chat, NULL);
-
-	g_signal_connect (chat->input_text_view,
-			  "key_press_event",
-			  G_CALLBACK (chat_input_key_press_event_cb),
-			  chat);
-
-	buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (chat->input_text_view));
-	g_signal_connect (buffer,
-			  "changed",
-			  G_CALLBACK (chat_input_text_buffer_changed_cb),
-			  chat);
-	g_signal_connect (chat->view,
-			  "focus_in_event",
-			  G_CALLBACK (chat_text_view_focus_in_event_cb),
-			  chat);
-
-	g_signal_connect (chat->input_text_view,
-			  "size_allocate",
-			  G_CALLBACK (chat_text_view_size_allocate_cb),
-			  chat);
-
-	g_signal_connect (chat->input_text_view,
-			  "realize",
-			  G_CALLBACK (chat_text_view_realize_cb),
-			  chat);
-
-	g_signal_connect (GTK_TEXT_VIEW (chat->input_text_view),
-			  "populate_popup",
-			  G_CALLBACK (chat_text_populate_popup_cb),
-			  chat);
-
-	/* create misspelt words identification tag */
-	gtk_text_buffer_create_tag (buffer,
-				    "misspelled",
-				    "underline", PANGO_UNDERLINE_ERROR,
-				    NULL);
 }
 
 EmpathyChat *
