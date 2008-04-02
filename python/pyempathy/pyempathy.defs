@@ -112,14 +112,6 @@
   (gtype-id "EMPATHY_TYPE_TP_CHAT")
 )
 
-(define-object TpChatroom
-  (in-module "Empathy")
-  (parent "EmpathyTpChat")
-  (implements "EmpathyContactList")
-  (c-name "EmpathyTpChatroom")
-  (gtype-id "EMPATHY_TYPE_TP_CHATROOM")
-)
-
 (define-object TpContactFactory
   (in-module "Empathy")
   (parent "GObject")
@@ -562,6 +554,15 @@
   )
 )
 
+(define-function empathy_file_lookup
+  (c-name "empathy_file_lookup")
+  (return-type "gchar*")
+  (parameters
+    '("const-gchar*" "filename")
+    '("const-gchar*" "subdir")
+  )
+)
+
 
 
 ;; From empathy-message.h
@@ -662,6 +663,12 @@
   (parameters
     '("time_t*" "timestamp")
   )
+)
+
+(define-method should_highlight
+  (of-object "EmpathyMessage")
+  (c-name "empathy_message_should_highlight")
+  (return-type "gboolean")
 )
 
 (define-function empathy_message_type_from_str
@@ -1539,6 +1546,7 @@
   (parameters
     '("McAccount*" "account")
     '("TpChan*" "tp_chan")
+    '("gboolean" "acknowledge")
   )
 )
 
@@ -1547,21 +1555,6 @@
   (return-type "EmpathyTpChat*")
   (parameters
     '("EmpathyContact*" "contact")
-  )
-)
-
-(define-method get_acknowledge
-  (of-object "EmpathyTpChat")
-  (c-name "empathy_tp_chat_get_acknowledge")
-  (return-type "gboolean")
-)
-
-(define-method set_acknowledge
-  (of-object "EmpathyTpChat")
-  (c-name "empathy_tp_chat_set_acknowledge")
-  (return-type "none")
-  (parameters
-    '("gboolean" "acknowledge")
   )
 )
 
@@ -1575,6 +1568,18 @@
   (of-object "EmpathyTpChat")
   (c-name "empathy_tp_chat_get_channel")
   (return-type "TpChan*")
+)
+
+(define-method get_id
+  (of-object "EmpathyTpChat")
+  (c-name "empathy_tp_chat_get_id")
+  (return-type "const-gchar*")
+)
+
+(define-method get_remote_contact
+  (of-object "EmpathyTpChat")
+  (c-name "empathy_tp_chat_get_remote_contact")
+  (return-type "EmpathyContact*")
 )
 
 (define-method send
@@ -1595,12 +1600,6 @@
   )
 )
 
-(define-method get_id
-  (of-object "EmpathyTpChat")
-  (c-name "empathy_tp_chat_get_id")
-  (return-type "const-gchar*")
-)
-
 (define-method set_property
   (of-object "EmpathyTpChat")
   (c-name "empathy_tp_chat_set_property")
@@ -1609,41 +1608,6 @@
     '("const-gchar*" "name")
     '("const-GValue*" "value")
   )
-)
-
-
-
-;; From empathy-tp-chatroom.h
-
-(define-function empathy_tp_chatroom_get_type
-  (c-name "empathy_tp_chatroom_get_type")
-  (return-type "GType")
-)
-
-(define-function empathy_tp_chatroom_new
-  (c-name "empathy_tp_chatroom_new")
-  (is-constructor-of "EmpathyTpChatroom")
-  (return-type "EmpathyTpChatroom*")
-  (parameters
-    '("McAccount*" "account")
-    '("TpChan*" "tp_chan")
-  )
-)
-
-(define-method get_invitation
-  (of-object "EmpathyTpChatroom")
-  (c-name "empathy_tp_chatroom_get_invitation")
-  (return-type "gboolean")
-  (parameters
-    '("EmpathyContact**" "contact")
-    '("const-gchar**" "message")
-  )
-)
-
-(define-method accept_invitation
-  (of-object "EmpathyTpChatroom")
-  (c-name "empathy_tp_chatroom_accept_invitation")
-  (return-type "none")
 )
 
 

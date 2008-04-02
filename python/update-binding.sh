@@ -21,7 +21,6 @@ python /usr/share/pygtk/2.0/codegen/h2def.py	\
 	empathy-tp-group.h			\
 	empathy-tp-contact-list.h		\
 	empathy-tp-chat.h			\
-	empathy-tp-chatroom.h			\
 	empathy-tp-roomlist.h			\
 	empathy-tp-call.h			\
 	empathy-chandler.h			\
@@ -58,7 +57,6 @@ python /usr/share/pygtk/2.0/codegen/h2def.py	\
 	empathy-theme-manager.h			\
 	empathy-avatar-image.h			\
 	empathy-contact-list-view.h		\
-	empathy-private-chat.h			\
 	empathy-ui-utils.h			\
 	empathy-cell-renderer-activatable.h	\
 	empathy-contact-widget.h		\
@@ -67,10 +65,19 @@ python /usr/share/pygtk/2.0/codegen/h2def.py	\
 	empathy-geometry.h			\
 	empathy-smiley-manager.h		\
 	empathy-cell-renderer-text.h		\
-	empathy-group-chat.h			\
 	empathy-spell.h				\
  > ../python/pyempathygtk/pyempathygtk.defs
 
+# Keep original version
 cd ../python
+cp pyempathy/pyempathy.defs /tmp
+cp pyempathygtk/pyempathygtk.defs /tmp
+
+# Apply patches
 patch -p0 < pyempathy.patch
+patch -p0 < pyempathygtk.patch
+
+# Make modification then run that:
+#diff -up /tmp/pyempathy.defs pyempathy/pyempathy.defs > pyempathy.patch
+#diff -up /tmp/pyempathygtk.defs pyempathygtk/pyempathygtk.defs > pyempathygtk.patch
 

@@ -19,14 +19,12 @@ headers
 #include "empathy-contact-list-view.h"
 #include "empathy-contact-widget.h"
 #include "empathy-geometry.h"
-#include "empathy-group-chat.h"
 #include "empathy-gtk-enum-types.h"
 #include "empathy-images.h"
 #include "empathy-irc-network-dialog.h"
 #include "empathy-log-window.h"
 #include "empathy-new-message-dialog.h"
 #include "empathy-presence-chooser.h"
-#include "empathy-private-chat.h"
 #include "empathy-profile-chooser.h"
 #include "empathy-smiley-manager.h"
 #include "empathy-spell-dialog.h"
@@ -57,11 +55,11 @@ import gtk.Button as PyGtkButton_Type
 import gtk.EventBox as PyGtkEventBox_Type
 import gtk.CellRendererPixbuf as PyGtkCellRendererPixbuf_Type
 import gtk.gdk.Pixbuf as PyGdkPixbuf_Type
+import gtk.Bin as PyGtkBin_Type
 import empathy.Contact as PyEmpathyContact_Type
 import empathy.ContactList as PyEmpathyContactList_Type
 import empathy.TpChat as PyEmpathyTpChat_Type
 import empathy.Message as PyEmpathyMessage_Type
-import empathy.TpChatroom as PyEmpathyTpChatroom_Type
 import empathy.TpCall as PyEmpathyTpCall_Type
 %%
 ignore-glob
