@@ -354,6 +354,9 @@ chat_window_update_chat (EmpathyChat *chat)
 	const gchar           *icon_name;
 
 	window = chat_window_find_chat (chat);
+	if (!window) {
+		return;
+	}
 	priv = GET_PRIV (window);
 
 	/* Get information */
