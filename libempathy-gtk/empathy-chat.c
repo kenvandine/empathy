@@ -1616,9 +1616,11 @@ empathy_chat_set_tp_chat (EmpathyChat   *chat,
 			  G_CALLBACK (chat_destroy_cb),
 			  chat);
 
-	gtk_widget_set_sensitive (chat->input_text_view, TRUE);
-	if (priv->block_events_timeout_id == 0) {
-		empathy_chat_view_append_event (chat->view, _("Connected"));
+	if (chat->input_text_view) {
+		gtk_widget_set_sensitive (chat->input_text_view, TRUE);
+		if (priv->block_events_timeout_id == 0) {
+			empathy_chat_view_append_event (chat->view, _("Connected"));
+		}
 	}
 
 	g_object_notify (G_OBJECT (chat), "tp-chat");
