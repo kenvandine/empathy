@@ -355,7 +355,7 @@ tp_chat_received_cb (TpChannel   *channel,
 									    -1,
 									    message_ids,
 									    tp_chat_async_cb,
-									    "acknowledging pending messages",
+									    "acknowledging received message",
 									    NULL,
 									    chat);
 		g_array_free (message_ids, TRUE);
@@ -439,6 +439,7 @@ tp_chat_list_pending_messages_cb (TpChannel       *channel,
 {
 	EmpathyTpChatPriv *priv = GET_PRIV (chat);
 	guint              i;
+	GArray            *message_ids = NULL;
 
 	priv->had_pending_messages = TRUE;
 
@@ -446,6 +447,11 @@ tp_chat_list_pending_messages_cb (TpChannel       *channel,
 		empathy_debug (DEBUG_DOMAIN, "Error listing pending messages: %s",
 			       error->message);
 		return;
+	}
+
+	if (priv->acknowledge) {
+		message_ids = g_array_sized_new (FALSE, FALSE, sizeof (guint),
+						 messages_list->len);
 	}
 
 	for (i = 0; i < messages_list->len; i++) {
@@ -469,6 +475,10 @@ tp_chat_list_pending_messages_cb (TpChannel       *channel,
 
 		empathy_debug (DEBUG_DOMAIN, "Message pending: %s", message_body);
 
+		if (message_ids) {
+			g_array_append_val (message_ids, message_id);
+		}
+
 		message = tp_chat_build_message (EMPATHY_TP_CHAT (chat),
 						 message_type,
 						 timestamp,
@@ -477,6 +487,17 @@ tp_chat_list_pending_messages_cb (TpChannel       *channel,
 
 		tp_chat_emit_or_queue_message (EMPATHY_TP_CHAT (chat), message);
 		g_object_unref (message);
+	}
+
+	if (message_ids) {
+		tp_cli_channel_type_text_call_acknowledge_pending_messages (priv->channel,
+									    -1,
+									    message_ids,
+									    tp_chat_async_cb,
+									    "acknowledging pending messages",
+									    NULL,
+									    chat);
+		g_array_free (message_ids, TRUE);
 	}
 }
 
