@@ -1267,6 +1267,46 @@ chat_create_ui (EmpathyChat *chat)
 }
 
 static void
+chat_size_request (GtkWidget      *widget,
+		   GtkRequisition *requisition)
+{
+  GtkBin *bin = GTK_BIN (widget);
+
+  requisition->width = GTK_CONTAINER (widget)->border_width * 2;
+  requisition->height = GTK_CONTAINER (widget)->border_width * 2;
+
+  if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
+    {
+      GtkRequisition child_requisition;
+      
+      gtk_widget_size_request (bin->child, &child_requisition);
+
+      requisition->width += child_requisition.width;
+      requisition->height += child_requisition.height;
+    }
+}
+
+static void
+chat_size_allocate (GtkWidget     *widget,
+		    GtkAllocation *allocation)
+{
+  GtkBin *bin = GTK_BIN (widget);
+  GtkAllocation child_allocation;
+  
+  widget->allocation = *allocation;
+
+  if (bin->child && GTK_WIDGET_VISIBLE (bin->child))
+    {
+      child_allocation.x = allocation->x + GTK_CONTAINER (widget)->border_width;
+      child_allocation.y = allocation->y + GTK_CONTAINER (widget)->border_width;
+      child_allocation.width = MAX (allocation->width - GTK_CONTAINER (widget)->border_width * 2, 0);
+      child_allocation.height = MAX (allocation->height - GTK_CONTAINER (widget)->border_width * 2, 0);
+
+      gtk_widget_size_allocate (bin->child, &child_allocation);
+    }
+}
+
+static void
 chat_finalize (GObject *object)
 {
 	EmpathyChat     *chat;
@@ -1293,7 +1333,6 @@ chat_finalize (GObject *object)
 					chat);
 	g_object_unref (priv->mc);
 	g_object_unref (priv->log_manager);
-
 
 	if (priv->tp_chat) {
 		g_object_unref (priv->tp_chat);
@@ -1323,14 +1362,16 @@ chat_constructed (GObject *object)
 static void
 empathy_chat_class_init (EmpathyChatClass *klass)
 {
-	GObjectClass *object_class;
-
-	object_class = G_OBJECT_CLASS (klass);
+	GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+	GObjectClass   *object_class = G_OBJECT_CLASS (klass);
 
 	object_class->finalize = chat_finalize;
 	object_class->get_property = chat_get_property;
 	object_class->set_property = chat_set_property;
 	object_class->constructed = chat_constructed;
+
+	widget_class->size_request = chat_size_request;
+	widget_class->size_allocate = chat_size_allocate;
 
 	g_object_class_install_property (object_class,
 					 PROP_TP_CHAT,
@@ -1396,7 +1437,7 @@ static void
 empathy_chat_init (EmpathyChat *chat)
 {
 	EmpathyChatPriv *priv = GET_PRIV (chat);
-	GtkTextBuffer  *buffer;
+	GtkTextBuffer   *buffer;
 
 	chat_create_ui (chat);
 

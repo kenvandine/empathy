@@ -3,6 +3,7 @@
 <!--*- mode: xml -*-->
 <glade-interface>
   <widget class="GtkWindow" id="chat_window">
+    <property name="visible">True</property>
     <property name="border_width">6</property>
     <property name="title" translatable="yes">Group Chat</property>
     <property name="icon_name">system-users</property>

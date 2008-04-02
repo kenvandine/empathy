@@ -1399,6 +1399,7 @@ empathy_chat_window_add_chat (EmpathyChatWindow *window,
 
 	child = GTK_WIDGET (chat);
 	label = chat_window_create_label (window, chat); 
+	gtk_widget_show (child);
 
 	g_signal_connect (chat, "notify::name",
 			  G_CALLBACK (chat_window_chat_notify_cb),
@@ -1416,7 +1417,6 @@ empathy_chat_window_add_chat (EmpathyChatWindow *window,
 	gtk_notebook_set_tab_detachable (GTK_NOTEBOOK (priv->notebook), child, TRUE);
 	gtk_notebook_set_tab_label_packing (GTK_NOTEBOOK (priv->notebook), child,
 					    TRUE, TRUE, GTK_PACK_START); 
-	gtk_widget_show (child);
 
 	empathy_debug (DEBUG_DOMAIN, 
 		      "Chat added (%d references)",
