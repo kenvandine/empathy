@@ -63,6 +63,7 @@ McAccount *    empathy_tp_chat_get_account          (EmpathyTpChat      *chat);
 TpChan *       empathy_tp_chat_get_channel          (EmpathyTpChat      *chat);
 const gchar *  empathy_tp_chat_get_id               (EmpathyTpChat      *chat);
 EmpathyContact*empathy_tp_chat_get_remote_contact   (EmpathyTpChat      *chat);
+gboolean       empathy_tp_chat_is_ready             (EmpathyTpChat      *chat);
 void           empathy_tp_chat_send                 (EmpathyTpChat      *chat,
 						     EmpathyMessage     *message);
 void           empathy_tp_chat_set_state            (EmpathyTpChat      *chat,

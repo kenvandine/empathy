@@ -55,6 +55,7 @@ struct _EmpathyTpChatPriv {
 	GSList                *message_queue;
 	gboolean               had_properties_list;
 	GPtrArray             *properties;
+	gboolean               ready;
 };
 
 typedef struct {
@@ -75,6 +76,7 @@ enum {
 	PROP_CHANNEL,
 	PROP_ACKNOWLEDGE,
 	PROP_REMOTE_CONTACT,
+	PROP_READY,
 };
 
 enum {
@@ -652,6 +654,8 @@ empathy_tp_chat_set_property (EmpathyTpChat *chat,
 	TpChatProperty    *property;
 	guint              i;
 
+	g_return_if_fail (priv->ready);
+
 	for (i = 0; i < priv->properties->len; i++) {
 		property = g_ptr_array_index (priv->properties, i);
 		if (!tp_strdiff (property->name, name)) {
@@ -699,6 +703,7 @@ tp_chat_channel_ready_cb (EmpathyTpChat *chat)
 
 	empathy_debug (DEBUG_DOMAIN, "Channel ready");
 
+	priv->ready = TRUE;
 	if (tp_proxy_has_interface_by_id (priv->channel,
 					  TP_IFACE_QUARK_CHANNEL_INTERFACE_GROUP)) {
 		priv->group = empathy_tp_group_new (priv->account, priv->tp_chan);
@@ -956,6 +961,13 @@ empathy_tp_chat_class_init (EmpathyTpChatClass *klass)
 							      "The remote contact if there is no group iface on the channel",
 							      EMPATHY_TYPE_CONTACT,
 							      G_PARAM_READABLE));
+	g_object_class_install_property (object_class,
+					 PROP_READY,
+					 g_param_spec_boolean ("ready",
+							       "Is the object ready",
+							       "This object is can't be used until this becomes true",
+							       FALSE,
+							       G_PARAM_READABLE));
 
 	/* Signals */
 	signals[MESSAGE_RECEIVED] =
@@ -1126,14 +1138,13 @@ void
 empathy_tp_chat_send (EmpathyTpChat *chat,
 		      EmpathyMessage *message)
 {
-	EmpathyTpChatPriv  *priv;
+	EmpathyTpChatPriv  *priv = GET_PRIV (chat);
 	const gchar        *message_body;
 	EmpathyMessageType  message_type;
 
 	g_return_if_fail (EMPATHY_IS_TP_CHAT (chat));
 	g_return_if_fail (EMPATHY_IS_MESSAGE (message));
-
-	priv = GET_PRIV (chat);
+	g_return_if_fail (priv->ready);
 
 	message_body = empathy_message_get_body (message);
 	message_type = empathy_message_get_type (message);
@@ -1151,11 +1162,10 @@ void
 empathy_tp_chat_set_state (EmpathyTpChat      *chat,
 			   TpChannelChatState  state)
 {
-	EmpathyTpChatPriv *priv;
+	EmpathyTpChatPriv *priv = GET_PRIV (chat);
 
 	g_return_if_fail (EMPATHY_IS_TP_CHAT (chat));
-
-	priv = GET_PRIV (chat);
+	g_return_if_fail (priv->ready);
 
 	empathy_debug (DEBUG_DOMAIN, "Set state: %d", state);
 	tp_cli_channel_interface_chat_state_call_set_chat_state (priv->channel, -1,
@@ -1190,5 +1200,15 @@ empathy_tp_chat_get_remote_contact (EmpathyTpChat *chat)
 	g_return_val_if_fail (EMPATHY_IS_TP_CHAT (chat), NULL);
 
 	return priv->remote_contact;
+}
+
+gboolean
+empathy_tp_chat_is_ready (EmpathyTpChat *chat)
+{
+	EmpathyTpChatPriv *priv = GET_PRIV (chat);
+
+	g_return_val_if_fail (EMPATHY_IS_TP_CHAT (chat), FALSE);
+
+	return priv->ready;
 }
 
