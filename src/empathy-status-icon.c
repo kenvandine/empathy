@@ -307,7 +307,7 @@ status_icon_text_filter_new_channel (EmpathyFilter     *filter,
 	empathy_debug (DEBUG_DOMAIN, "New text channel to be filtered for contact %s",
 		       empathy_inspect_channel (account, tp_chan));
 
-	tp_chat = empathy_tp_chat_new (account, tp_chan);
+	tp_chat = empathy_tp_chat_new (account, tp_chan, FALSE);
 	g_object_set_data (G_OBJECT (tp_chat), "filter", filter);
 	g_object_unref (account);
 
