@@ -1433,6 +1433,16 @@ empathy_chat_class_init (EmpathyChatClass *klass)
 	g_type_class_add_private (object_class, sizeof (EmpathyChatPriv));
 }
 
+static gboolean
+chat_block_events_timeout_cb (gpointer data)
+{
+	EmpathyChatPriv *priv = GET_PRIV (data);
+
+	priv->block_events_timeout_id = 0;
+
+	return FALSE;
+}
+
 static void
 empathy_chat_init (EmpathyChat *chat)
 {
@@ -1448,6 +1458,11 @@ empathy_chat_init (EmpathyChat *chat)
 	priv->sent_messages = NULL;
 	priv->sent_messages_index = -1;
 	priv->mc = empathy_mission_control_new ();
+
+	/* Block events for some time to avoid having "has come online" or
+	 * "joined" messages. */
+	priv->block_events_timeout_id =
+		g_timeout_add_seconds (1, chat_block_events_timeout_cb, chat);
 
 	dbus_g_proxy_connect_signal (DBUS_G_PROXY (priv->mc), "AccountStatusChanged",
 				     G_CALLBACK (chat_status_changed_cb),
@@ -1506,16 +1521,6 @@ empathy_chat_get_tp_chat (EmpathyChat *chat)
 	return priv->tp_chat;
 }
 
-static gboolean
-chat_block_events_timeout_cb (gpointer data)
-{
-	EmpathyChatPriv *priv = GET_PRIV (data);
-
-	priv->block_events_timeout_id = 0;
-
-	return FALSE;
-}
-
 void
 empathy_chat_set_tp_chat (EmpathyChat   *chat,
 			  EmpathyTpChat *tp_chat)
@@ -1562,15 +1567,10 @@ empathy_chat_set_tp_chat (EmpathyChat   *chat,
 			  G_CALLBACK (chat_destroy_cb),
 			  chat);
 
-	/* Block events for some time to avoid having "has come online" or
-	 * "joined" messages. */
-	if (priv->block_events_timeout_id == 0) {
-		priv->block_events_timeout_id =
-			g_timeout_add_seconds (1, chat_block_events_timeout_cb, chat);
-	}
-
 	gtk_widget_set_sensitive (chat->input_text_view, TRUE);
-	empathy_chat_view_append_event (chat->view, _("Connected"));
+	if (priv->block_events_timeout_id == 0) {
+		empathy_chat_view_append_event (chat->view, _("Connected"));
+	}
 
 	g_object_notify (G_OBJECT (chat), "tp-chat");
 	g_object_notify (G_OBJECT (chat), "id");
