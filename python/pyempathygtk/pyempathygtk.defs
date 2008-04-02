@@ -690,6 +690,15 @@
   )
 )
 
+(define-function empathy_account_widget_aim_new
+  (c-name "empathy_account_widget_aim_new")
+  (is-constructor-of "EmpathyAccountWidgetAim")
+  (return-type "GtkWidget*")
+  (parameters
+    '("McAccount*" "account")
+  )
+)
+
 (define-function empathy_account_widget_yahoo_new
   (c-name "empathy_account_widget_yahoo_new")
   (is-constructor-of "EmpathyAccountWidgetYahoo")

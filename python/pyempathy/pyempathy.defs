@@ -1582,6 +1582,12 @@
   (return-type "EmpathyContact*")
 )
 
+(define-method is_ready
+  (of-object "EmpathyTpChat")
+  (c-name "empathy_tp_chat_is_ready")
+  (return-type "gboolean")
+)
+
 (define-method send
   (of-object "EmpathyTpChat")
   (c-name "empathy_tp_chat_send")
