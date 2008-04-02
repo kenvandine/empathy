@@ -671,6 +671,42 @@ empathy_account_widget_icq_new (McAccount *account)
 }
 
 GtkWidget *
+empathy_account_widget_aim_new (McAccount *account)
+{
+	GladeXML  *glade;
+	GtkWidget *widget;
+	GtkWidget *spinbutton_port;
+	gchar     *filename;
+
+	filename = empathy_file_lookup ("empathy-account-widget-aim.glade",
+					"libempathy-gtk");
+	glade = empathy_glade_get_file (filename,
+				        "vbox_aim_settings",
+				        NULL,
+				        "vbox_aim_settings", &widget,
+				        "spinbutton_port", &spinbutton_port,
+				        NULL);
+	g_free (filename);
+
+	empathy_account_widget_handle_params (account, glade,
+			"entry_screenname", "account",
+			"entry_password", "password",
+			"entry_server", "server",
+			"spinbutton_port", "port",
+			NULL);
+
+	empathy_account_widget_add_forget_button (account, glade,
+						  "button_forget",
+						  "entry_password");
+
+	g_object_unref (glade);
+
+	gtk_widget_show (widget);
+
+	return widget;
+}
+
+GtkWidget *
 empathy_account_widget_yahoo_new (McAccount *account)
 {
 	GladeXML  *glade;

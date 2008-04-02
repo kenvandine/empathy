@@ -112,6 +112,7 @@ glade_DATA = 					\
 	empathy-account-widget-icq.glade	\
 	empathy-account-widget-yahoo.glade	\
 	empathy-account-widget-groupwise.glade	\
+	empathy-account-widget-aim.glade	\
 	empathy-spell-dialog.glade		\
 	empathy-log-window.glade		\
 	empathy-chat.glade			\

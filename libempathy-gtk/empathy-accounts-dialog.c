@@ -277,6 +277,10 @@ accounts_dialog_update_account (EmpathyAccountsDialog *dialog,
 			dialog->settings_widget =
 				empathy_account_widget_icq_new (account);
 		}
+		else if (!tp_strdiff(config_ui, "aim")) {
+			dialog->settings_widget =
+				empathy_account_widget_aim_new (account);
+		}
 		else if (!tp_strdiff (config_ui, "yahoo")) {
 			dialog->settings_widget =
 				empathy_account_widget_yahoo_new (account);
