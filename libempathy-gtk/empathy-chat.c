@@ -1281,6 +1281,12 @@ empathy_chat_init (EmpathyChat *chat)
 				    NULL);
 }
 
+EmpathyChat *
+empathy_chat_new (EmpathyTpChat *tp_chat)
+{
+	return g_object_new (EMPATHY_TYPE_CHAT, "tp-chat", tp_chat, NULL);
+}
+
 gboolean
 empathy_chat_get_is_command (const gchar *str)
 {

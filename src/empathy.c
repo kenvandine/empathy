@@ -45,8 +45,6 @@
 
 #include <libempathy-gtk/empathy-conf.h>
 #include <libempathy-gtk/empathy-chat.h>
-#include <libempathy-gtk/empathy-private-chat.h>
-#include <libempathy-gtk/empathy-group-chat.h>
 
 #include "empathy-main-window.h"
 #include "empathy-status-icon.h"
@@ -79,11 +77,7 @@ new_text_channel_cb (EmpathyChandler *chandler,
 		/* The chat already exists */
 		if (!empathy_chat_is_connected (chat)) {
 			/* The chat died, give him the new text channel */
-			if (empathy_chat_is_group_chat (chat)) {
-				tp_chat = EMPATHY_TP_CHAT (empathy_tp_chatroom_new (account, tp_chan));
-			} else {
-				tp_chat = empathy_tp_chat_new (account, tp_chan);
-			}
+			tp_chat = empathy_tp_chat_new (account, tp_chan, TRUE);
 			empathy_chat_set_tp_chat (chat, tp_chat);
 			g_object_unref (tp_chat);
 		}
@@ -93,23 +87,8 @@ new_text_channel_cb (EmpathyChandler *chandler,
 		return;
 	}
 
-	if (tp_chan->handle_type == TP_HANDLE_TYPE_CONTACT) {
-		/* We have a new private chat channel */
-		tp_chat = empathy_tp_chat_new (account, tp_chan);
-		chat = EMPATHY_CHAT (empathy_private_chat_new (tp_chat));
-	}
-	else if (tp_chan->handle_type == TP_HANDLE_TYPE_ROOM) {
-		/* We have a new group chat channel */
-		tp_chat = EMPATHY_TP_CHAT (empathy_tp_chatroom_new (account, tp_chan));
-		chat = EMPATHY_CHAT (empathy_group_chat_new (EMPATHY_TP_CHATROOM (tp_chat)));
-	} else {
-		empathy_debug (DEBUG_DOMAIN,
-			       "Unknown handle type (%d) for Text channel",
-			       tp_chan->handle_type);
-		g_object_unref (account);
-		return;
-	}
-
+	tp_chat = empathy_tp_chat_new (account, tp_chan, TRUE);
+	chat = empathy_chat_new (tp_chat);
 	empathy_chat_window_present_chat (chat);
 
 	g_object_unref (chat);
