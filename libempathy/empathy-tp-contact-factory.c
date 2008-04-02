@@ -586,9 +586,7 @@ tp_contact_factory_request_everything (EmpathyTpContactFactory *tp_factory,
 	EmpathyTpContactFactoryPriv *priv = GET_PRIV (tp_factory);
 	guint                       *dup_handles;
 
-	if (!priv->ready) {
-		return;
-	}
+	g_return_if_fail (priv->ready);
 
 	dup_handles = g_malloc0 ((handles->len + 1) * sizeof (guint));
 	g_memmove (dup_handles, handles->data, handles->len * sizeof (guint));
@@ -1075,12 +1073,9 @@ empathy_tp_contact_factory_set_alias (EmpathyTpContactFactory *tp_factory,
 
 	g_return_if_fail (EMPATHY_IS_TP_CONTACT_FACTORY (tp_factory));
 	g_return_if_fail (EMPATHY_IS_CONTACT (contact));
+	g_return_if_fail (priv->ready);
 	g_return_if_fail (empathy_account_equal (empathy_contact_get_account (contact),
 						 priv->account));
-
-	if (!priv->ready) {
-		return;
-	}
 
 	handle = empathy_contact_get_handle (contact);
 
@@ -1116,10 +1111,7 @@ empathy_tp_contact_factory_set_avatar (EmpathyTpContactFactory *tp_factory,
 	EmpathyTpContactFactoryPriv *priv = GET_PRIV (tp_factory);
 
 	g_return_if_fail (EMPATHY_IS_TP_CONTACT_FACTORY (tp_factory));
-
-	if (!priv->ready) {
-		return;
-	}
+	g_return_if_fail (priv->ready);
 
 	if (data && size > 0 && size < G_MAXUINT) {
 		GArray avatar;
