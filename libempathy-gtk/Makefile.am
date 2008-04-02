@@ -36,7 +36,6 @@ libempathy_gtk_la_SOURCES =             	\
 	empathy-theme-manager.c			\
 	empathy-avatar-image.c			\
 	empathy-contact-list-view.c		\
-	empathy-private-chat.c			\
 	empathy-ui-utils.c			\
 	empathy-cell-renderer-activatable.c	\
 	empathy-contact-widget.c		\
@@ -45,7 +44,6 @@ libempathy_gtk_la_SOURCES =             	\
 	empathy-geometry.c			\
 	empathy-smiley-manager.c		\
 	empathy-cell-renderer-text.c		\
-	empathy-group-chat.c			\
 	empathy-spell.c				\
 	totem-subtitle-encoding.c totem-subtitle-encoding.h
 
@@ -84,7 +82,6 @@ libempathy_gtk_headers =			\
 	empathy-theme-manager.h			\
 	empathy-avatar-image.h			\
 	empathy-contact-list-view.h		\
-	empathy-private-chat.h			\
 	empathy-ui-utils.h			\
 	empathy-cell-renderer-activatable.h	\
 	empathy-contact-widget.h		\
@@ -93,7 +90,6 @@ libempathy_gtk_headers =			\
 	empathy-geometry.h			\
 	empathy-smiley-manager.h		\
 	empathy-cell-renderer-text.h		\
-	empathy-group-chat.h			\
 	empathy-spell.h
 
 libempathy_gtk_includedir = $(includedir)/libempathy-gtk/
@@ -116,7 +112,6 @@ glade_DATA = 					\
 	empathy-account-widget-icq.glade	\
 	empathy-account-widget-yahoo.glade	\
 	empathy-account-widget-groupwise.glade	\
-	empathy-group-chat.glade		\
 	empathy-spell-dialog.glade		\
 	empathy-log-window.glade		\
 	empathy-chat.glade			\
