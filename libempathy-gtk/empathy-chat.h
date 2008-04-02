@@ -28,14 +28,13 @@
 #ifndef __EMPATHY_CHAT_H__
 #define __EMPATHY_CHAT_H__
 
-#include <glib-object.h>
+#include <gtk/gtkbin.h>
 
 #include <libempathy/empathy-contact.h>
 #include <libempathy/empathy-message.h>
 #include <libempathy/empathy-tp-chat.h>
 
 #include "empathy-chat-view.h"
-#include "empathy-spell.h" 
 
 G_BEGIN_DECLS
 
@@ -51,53 +50,36 @@ typedef struct _EmpathyChatClass  EmpathyChatClass;
 typedef struct _EmpathyChatPriv   EmpathyChatPriv;
 
 struct _EmpathyChat {
-	GObject          parent;
+	GtkBin parent;
 
 	/* Protected */
 	EmpathyChatView *view;
 	GtkWidget       *input_text_view;
-	gboolean         block_events;
 };
 
 struct _EmpathyChatClass {
-	GObjectClass parent;
+	GtkBinClass parent;
 };
 
-GType              empathy_chat_get_type              (void);
-EmpathyChat *      empathy_chat_new                   (EmpathyTpChat     *tp_chat);
-void               empathy_chat_clear                 (EmpathyChat       *chat);
-void               empathy_chat_scroll_down           (EmpathyChat       *chat);
-void               empathy_chat_cut                   (EmpathyChat       *chat);
-void               empathy_chat_copy                  (EmpathyChat       *chat);
-void               empathy_chat_paste                 (EmpathyChat       *chat);
-const gchar *      empathy_chat_get_name              (EmpathyChat       *chat);
-const gchar *      empathy_chat_get_tooltip           (EmpathyChat       *chat);
-const gchar *      empathy_chat_get_status_icon_name  (EmpathyChat       *chat);
-GtkWidget *        empathy_chat_get_widget            (EmpathyChat       *chat);
-gboolean           empathy_chat_is_connected          (EmpathyChat       *chat);
-void               empathy_chat_save_geometry         (EmpathyChat       *chat,
-						       gint               x,
-						       gint               y,
-						       gint               w,
-						       gint               h);
-void               empathy_chat_load_geometry         (EmpathyChat       *chat,
-						       gint              *x,
-						       gint              *y,
-						       gint              *w,
-						       gint              *h);
-void               empathy_chat_set_tp_chat           (EmpathyChat       *chat,
-						       EmpathyTpChat     *tp_chat);
-const gchar *      empathy_chat_get_id                (EmpathyChat       *chat);
-McAccount *        empathy_chat_get_account           (EmpathyChat       *chat);
-
-/* For spell checker dialog to correct the misspelled word. */
-gboolean           empathy_chat_get_is_command        (const gchar      *str);
-void               empathy_chat_correct_word          (EmpathyChat       *chat,
-						       GtkTextIter       start,
-						       GtkTextIter       end,
-						       const gchar      *new_word);
-gboolean           empathy_chat_should_play_sound     (EmpathyChat       *chat);
-gboolean           empathy_chat_should_highlight_nick (EmpathyMessage    *message);
+GType              empathy_chat_get_type             (void);
+EmpathyChat *      empathy_chat_new                  (EmpathyTpChat *tp_chat);
+EmpathyTpChat *    empathy_chat_get_tp_chat          (EmpathyChat   *chat);
+void               empathy_chat_set_tp_chat          (EmpathyChat   *chat,
+						      EmpathyTpChat *tp_chat);
+McAccount *        empathy_chat_get_account          (EmpathyChat   *chat);
+const gchar *      empathy_chat_get_name             (EmpathyChat   *chat);
+const gchar *      empathy_chat_get_subject          (EmpathyChat   *chat);
+EmpathyContact *   empathy_chat_get_selected_contact (EmpathyChat   *chat);
+const gchar *      empathy_chat_get_id               (EmpathyChat   *chat);
+void               empathy_chat_clear                (EmpathyChat   *chat);
+void               empathy_chat_scroll_down          (EmpathyChat   *chat);
+void               empathy_chat_cut                  (EmpathyChat   *chat);
+void               empathy_chat_copy                 (EmpathyChat   *chat);
+void               empathy_chat_paste                (EmpathyChat   *chat);
+void               empathy_chat_correct_word         (EmpathyChat   *chat,
+						      GtkTextIter    start,
+						      GtkTextIter    end,
+						      const gchar   *new_word);
 
 G_END_DECLS
 

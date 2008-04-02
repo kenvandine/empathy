@@ -437,6 +437,67 @@ empathy_message_get_date_and_time (EmpathyMessage *message, time_t *timestamp)
 	return date;
 }
 
+#define IS_SEPARATOR(ch) (ch == ' ' || ch == ',' || ch == '.' || ch == ':')
+gboolean
+empathy_message_should_highlight (EmpathyMessage *message)
+{
+	EmpathyContact *contact;
+	const gchar   *msg, *to;
+	gchar         *cf_msg, *cf_to;
+	gchar         *ch;
+	gboolean       ret_val;
+
+	g_return_val_if_fail (EMPATHY_IS_MESSAGE (message), FALSE);
+
+	ret_val = FALSE;
+
+	msg = empathy_message_get_body (message);
+	if (!msg) {
+		return FALSE;
+	}
+
+	contact = empathy_message_get_receiver (message);
+	if (!contact || !empathy_contact_is_user (contact)) {
+		return FALSE;
+	}
+
+	to = empathy_contact_get_name (contact);
+	if (!to) {
+		return FALSE;
+	}
+
+	cf_msg = g_utf8_casefold (msg, -1);
+	cf_to = g_utf8_casefold (to, -1);
+
+	ch = strstr (cf_msg, cf_to);
+	if (ch == NULL) {
+		goto finished;
+	}
+	if (ch != cf_msg) {
+		/* Not first in the message */
+		if (!IS_SEPARATOR (*(ch - 1))) {
+			goto finished;
+		}
+	}
+
+	ch = ch + strlen (cf_to);
+	if (ch >= cf_msg + strlen (cf_msg)) {
+		ret_val = TRUE;
+		goto finished;
+	}
+
+	if (IS_SEPARATOR (*ch)) {
+		ret_val = TRUE;
+		goto finished;
+	}
+
+finished:
+	g_free (cf_msg);
+	g_free (cf_to);
+
+	return ret_val;
+}
+
 EmpathyMessageType
 empathy_message_type_from_str (const gchar *type_str)
 {

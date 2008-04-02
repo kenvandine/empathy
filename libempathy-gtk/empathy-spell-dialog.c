@@ -35,6 +35,7 @@
 #include <libempathy/empathy-utils.h>
 
 #include "empathy-chat.h"
+#include "empathy-spell.h"
 #include "empathy-spell-dialog.h"
 #include "empathy-ui-utils.h"
 

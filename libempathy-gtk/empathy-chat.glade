@@ -7,7 +7,7 @@
     <property name="title" translatable="yes">Group Chat</property>
     <property name="icon_name">system-users</property>
     <child>
-      <widget class="GtkVBox" id="group_chat_widget">
+      <widget class="GtkVBox" id="chat_widget">
         <property name="visible">True</property>
         <property name="border_width">4</property>
         <property name="spacing">6</property>

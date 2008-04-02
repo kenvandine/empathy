@@ -215,7 +215,7 @@ theme_irc_append_message (EmpathyTheme        *theme,
 		nick_tag = "irc-nick-self";
 		body_tag = "irc-body-self";
 	} else {
-		if (empathy_chat_should_highlight_nick (message)) {
+		if (empathy_message_should_highlight (message)) {
 			nick_tag = "irc-nick-highlight";
 		} else {
 			nick_tag = "irc-nick-other";

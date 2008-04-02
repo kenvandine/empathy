@@ -93,9 +93,6 @@ static void     log_window_chats_populate                  (EmpathyLogWindow *wi
 static void     log_window_chats_setup                     (EmpathyLogWindow *window);
 static void     log_window_chats_accounts_changed_cb       (GtkWidget        *combobox,
 							    EmpathyLogWindow *window);
-static void     log_window_chats_new_message_cb            (EmpathyContact   *own_contact,
-							    EmpathyMessage   *message,
-							    EmpathyLogWindow *window);
 static void     log_window_chats_set_selected              (EmpathyLogWindow *window,
 							    McAccount        *account,
 							    const gchar      *chat_id,
@@ -274,10 +271,6 @@ static void
 log_window_destroy_cb (GtkWidget       *widget,
 		       EmpathyLogWindow *window)
 {
-	g_signal_handlers_disconnect_by_func (window->log_manager,
-					      log_window_chats_new_message_cb,
-					      window);
-
 	g_free (window->last_find);
 	g_object_unref (window->log_manager);
 
@@ -743,17 +736,6 @@ log_window_chats_accounts_changed_cb (GtkWidget       *combobox,
 }
 
 static void
-log_window_chats_new_message_cb (EmpathyContact   *own_contact,
-				 EmpathyMessage   *message,
-				 EmpathyLogWindow *window)
-{
-	empathy_chat_view_append_message (window->chatview_chats, message);
-
-	/* Scroll to the most recent messages */
-	empathy_chat_view_scroll_down (window->chatview_chats);
-}
-
-static void
 log_window_chats_set_selected  (EmpathyLogWindow *window,
 				McAccount       *account,
 				const gchar     *chat_id,
@@ -976,9 +958,6 @@ log_window_chats_get_messages (EmpathyLogWindow *window,
 
 	/* Turn back on scrolling */
 	empathy_chat_view_scroll (window->chatview_find, TRUE);
-
-	/* Scroll to the most recent messages */
-	empathy_chat_view_scroll_down (window->chatview_chats);
 
 	/* Give the search entry main focus */
 	gtk_widget_grab_focus (window->entry_chats);

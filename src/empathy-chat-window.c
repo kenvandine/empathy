@@ -958,8 +958,7 @@ chat_window_composing_cb (EmpathyChat       *chat,
 static void
 chat_window_new_message_cb (EmpathyChat       *chat,
 			    EmpathyMessage    *message,
-			    gboolean          is_backlog,
-			    EmpathyChatWindow *window)
+s			    EmpathyChatWindow *window)
 {
 	EmpathyChatWindowPriv *priv;
 	gboolean              has_focus;
@@ -970,29 +969,17 @@ chat_window_new_message_cb (EmpathyChat       *chat,
 	has_focus = empathy_chat_window_has_focus (window);
 	
 	if (has_focus && priv->current_chat == chat) {
-		empathy_debug (DEBUG_DOMAIN, "New message, we have focus");
 		return;
 	}
 	
-	empathy_debug (DEBUG_DOMAIN, "New message, no focus");
-
-	needs_urgency = FALSE;
-	if (empathy_chat_is_group_chat (chat)) {		
-		if (!is_backlog && 
-		    empathy_chat_should_highlight_nick (message)) {
-			empathy_debug (DEBUG_DOMAIN, "Highlight this nick");
-			needs_urgency = TRUE;
-		}
-	} else {
-		needs_urgency = TRUE;
-	}
+	needs_urgency = (empathy_chat_is_group_chat (chat) &&
+			 empathy_message_should_highlight (message));
 
 	if (needs_urgency && !has_focus) {
 		chat_window_set_urgency_hint (window, TRUE);
 	}
 
-	if (!is_backlog && 
-	    !g_list_find (priv->chats_new_msg, chat)) {
+	if (!g_list_find (priv->chats_new_msg, chat)) {
 		priv->chats_new_msg = g_list_prepend (priv->chats_new_msg, chat);
 		chat_window_update_status (window, chat);
 	}
@@ -1785,4 +1772,58 @@ empathy_chat_window_present_chat (EmpathyChat *chat)
 
  	gtk_widget_grab_focus (chat->input_text_view); 
 }
+
+
+static gboolean
+chat_should_play_sound (EmpathyChat *chat)
+{
+	EmpathyChatPriv *priv = GET_PRIV (chat);
+	GtkWindow       *window;
+	gboolean         has_focus = FALSE;
+
+	g_return_val_if_fail (EMPATHY_IS_CHAT (chat), FALSE);
+
+	window = empathy_get_toplevel_window (priv->widget);
+	if (window) {
+		g_object_get (window, "has-toplevel-focus", &has_focus, NULL);
+	}
+
+	return !has_focus;
+}
+static const gchar *
+chat_get_window_id_for_geometry (EmpathyChat *chat)
+{
+	gboolean separate_windows;
+
+	empathy_conf_get_bool (empathy_conf_get (),
+			       EMPATHY_PREFS_UI_SEPARATE_CHAT_WINDOWS,
+			       &separate_windows);
+
+	if (separate_windows) {
+		return empathy_chat_get_id (chat);
+	} else {
+		return "chat-window";
+	}
+}
+
+void
+empathy_chat_save_geometry (EmpathyChat *chat,
+			   gint        x,
+			   gint        y,
+			   gint        w,
+			   gint        h)
+{
+	empathy_geometry_save (chat_get_window_id_for_geometry (chat), x, y, w, h);
+}
+
+void
+empathy_chat_load_geometry (EmpathyChat *chat,
+			   gint       *x,
+			   gint       *y,
+			   gint       *w,
+			   gint       *h)
+{
+	empathy_geometry_load (chat_get_window_id_for_geometry (chat), x, y, w, h);
+}
+
 

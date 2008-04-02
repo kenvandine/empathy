@@ -58,27 +58,28 @@ typedef enum {
 	EMPATHY_MESSAGE_TYPE_LAST
 } EmpathyMessageType;
 
-GType              empathy_message_get_gtype     (void) G_GNUC_CONST;
-EmpathyMessage *   empathy_message_new           (const gchar        *body);
-EmpathyMessageType empathy_message_get_type      (EmpathyMessage     *message);
-void               empathy_message_set_type      (EmpathyMessage     *message,
-						  EmpathyMessageType  type);
-EmpathyContact *   empathy_message_get_sender    (EmpathyMessage     *message);
-void               empathy_message_set_sender    (EmpathyMessage     *message,
-						  EmpathyContact     *contact);
-EmpathyContact *   empathy_message_get_receiver  (EmpathyMessage     *message);
-void               empathy_message_set_receiver  (EmpathyMessage     *message,
-						  EmpathyContact     *contact);
-const gchar *      empathy_message_get_body      (EmpathyMessage     *message);
-void               empathy_message_set_body      (EmpathyMessage     *message,
-						  const gchar        *body);
-time_t             empathy_message_get_timestamp (EmpathyMessage     *message);
-void               empathy_message_set_timestamp (EmpathyMessage     *message,
-						  time_t              timestamp);
-GDate *            empathy_message_get_date_and_time (EmpathyMessage *message,
-						      time_t         *timestamp);
-EmpathyMessageType empathy_message_type_from_str (const gchar        *type_str);
-const gchar *      empathy_message_type_to_str   (EmpathyMessageType  type);
+GType              empathy_message_get_gtype         (void) G_GNUC_CONST;
+EmpathyMessage *   empathy_message_new               (const gchar        *body);
+EmpathyMessageType empathy_message_get_type          (EmpathyMessage     *message);
+void               empathy_message_set_type          (EmpathyMessage     *message,
+						      EmpathyMessageType  type);
+EmpathyContact *   empathy_message_get_sender        (EmpathyMessage     *message);
+void               empathy_message_set_sender        (EmpathyMessage     *message,
+						      EmpathyContact     *contact);
+EmpathyContact *   empathy_message_get_receiver      (EmpathyMessage     *message);
+void               empathy_message_set_receiver      (EmpathyMessage     *message,
+						      EmpathyContact     *contact);
+const gchar *      empathy_message_get_body          (EmpathyMessage     *message);
+void               empathy_message_set_body          (EmpathyMessage     *message,
+						      const gchar        *body);
+time_t             empathy_message_get_timestamp     (EmpathyMessage     *message);
+void               empathy_message_set_timestamp     (EmpathyMessage     *message,
+						      time_t              timestamp);
+GDate *            empathy_message_get_date_and_time (EmpathyMessage     *message,
+						      time_t             *timestamp);
+gboolean           empathy_message_should_highlight  (EmpathyMessage     *message);
+EmpathyMessageType empathy_message_type_from_str     (const gchar        *type_str);
+const gchar *      empathy_message_type_to_str       (EmpathyMessageType  type);
 
 G_END_DECLS
 

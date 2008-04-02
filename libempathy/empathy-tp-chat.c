@@ -43,7 +43,7 @@
 struct _EmpathyTpChatPriv {
 	EmpathyContactFactory *factory;
 	EmpathyContact        *user;
-	EmpathyContact        *initiator;
+	EmpathyContact        *remote_contact;
 	EmpathyTpGroup        *group;
 	McAccount             *account;
 	TpChannel             *channel;
@@ -74,6 +74,7 @@ enum {
 	PROP_TP_CHAN,
 	PROP_CHANNEL,
 	PROP_ACKNOWLEDGE,
+	PROP_REMOTE_CONTACT,
 };
 
 enum {
@@ -202,7 +203,7 @@ tp_chat_get_members (EmpathyContactList *list)
 		members = empathy_tp_group_get_members (priv->group);
 	} else {
 		members = g_list_prepend (members, g_object_ref (priv->user));
-		members = g_list_prepend (members, g_object_ref (priv->initiator));
+		members = g_list_prepend (members, g_object_ref (priv->remote_contact));
 	}
 
 	return members;
@@ -670,23 +671,54 @@ empathy_tp_chat_set_property (EmpathyTpChat *chat,
 	}
 }
 
-static gboolean
+static void
 tp_chat_channel_ready_cb (EmpathyTpChat *chat)
 {
 	EmpathyTpChatPriv *priv = GET_PRIV (chat);
 
 	empathy_debug (DEBUG_DOMAIN, "Channel ready");
 
+	if (tp_proxy_has_interface_by_id (priv->channel,
+					  TP_IFACE_QUARK_CHANNEL_INTERFACE_GROUP)) {
+		priv->group = empathy_tp_group_new (priv->account, priv->tp_chan);
+
+		g_signal_connect (priv->group, "member-added",
+				  G_CALLBACK (tp_chat_member_added_cb),
+				  chat);
+		g_signal_connect (priv->group, "member-removed",
+				  G_CALLBACK (tp_chat_member_removed_cb),
+				  chat);
+		g_signal_connect (priv->group, "local-pending",
+				  G_CALLBACK (tp_chat_local_pending_cb),
+				  chat);
+	} else {
+		priv->remote_contact = empathy_contact_factory_get_from_handle (priv->factory,
+										priv->account,
+										priv->tp_chan->handle);
+		g_object_notify (G_OBJECT (chat), "remote-contact");
+	}
+	
+	if (tp_proxy_has_interface_by_id (priv->channel,
+					  TP_IFACE_QUARK_PROPERTIES_INTERFACE)) {
+		tp_cli_properties_interface_call_list_properties (priv->channel, -1,
+								  tp_chat_list_properties_cb,
+								  NULL, NULL,
+								  G_OBJECT (chat));
+		tp_cli_properties_interface_connect_to_properties_changed (priv->channel,
+									   tp_chat_properties_changed_cb,
+									   NULL, NULL,
+									   G_OBJECT (chat), NULL);
+		tp_cli_properties_interface_connect_to_property_flags_changed (priv->channel,
+									       tp_chat_property_flags_changed_cb,
+									       NULL, NULL,
+									       G_OBJECT (chat), NULL);
+	}
+
 	tp_cli_channel_type_text_call_list_pending_messages (priv->channel, -1,
 							     priv->acknowledge,
 							     tp_chat_list_pending_messages_cb,
 							     NULL, NULL,
 							     G_OBJECT (chat));
-	tp_cli_properties_interface_call_list_properties (priv->channel, -1,
-							  tp_chat_list_properties_cb,
-							  NULL, NULL,
-							  G_OBJECT (chat));
-
 
 	tp_cli_channel_type_text_connect_to_received (priv->channel,
 						      tp_chat_received_cb,
@@ -708,16 +740,6 @@ tp_chat_channel_ready_cb (EmpathyTpChat *chat)
 									   tp_chat_state_changed_cb,
 									   NULL, NULL,
 									   G_OBJECT (chat), NULL);
-	tp_cli_properties_interface_connect_to_properties_changed (priv->channel,
-								   tp_chat_properties_changed_cb,
-								   NULL, NULL,
-								   G_OBJECT (chat), NULL);
-	tp_cli_properties_interface_connect_to_property_flags_changed (priv->channel,
-								       tp_chat_property_flags_changed_cb,
-								       NULL, NULL,
-								       G_OBJECT (chat), NULL);
-
-	return FALSE;
 }
 
 static void
@@ -758,8 +780,8 @@ tp_chat_finalize (GObject *object)
 		g_ptr_array_free (priv->properties, TRUE);
 	}
 
-	if (priv->initiator) {
-		g_object_unref (priv->initiator);
+	if (priv->remote_contact) {
+		g_object_unref (priv->remote_contact);
 	}
 	if (priv->group) {
 		g_object_unref (priv->group);
@@ -803,25 +825,6 @@ tp_chat_constructor (GType                  type,
 					  chat);
 	}
 
-	if (tp_proxy_has_interface_by_id (priv->channel,
-					  TP_IFACE_QUARK_CHANNEL_INTERFACE_GROUP)) {
-		priv->group = empathy_tp_group_new (priv->account, priv->tp_chan);
-
-		g_signal_connect (priv->group, "member-added",
-				  G_CALLBACK (tp_chat_member_added_cb),
-				  chat);
-		g_signal_connect (priv->group, "member-removed",
-				  G_CALLBACK (tp_chat_member_removed_cb),
-				  chat);
-		g_signal_connect (priv->group, "local-pending",
-				  G_CALLBACK (tp_chat_local_pending_cb),
-				  chat);
-	} else {
-		priv->initiator = empathy_contact_factory_get_from_handle (priv->factory,
-									   priv->account,
-									   priv->tp_chan->handle);
-	}
-
 	return chat;
 }
 
@@ -845,6 +848,9 @@ tp_chat_get_property (GObject    *object,
 		break;
 	case PROP_ACKNOWLEDGE:
 		g_value_set_boolean (value, priv->acknowledge);
+		break;
+	case PROP_REMOTE_CONTACT:
+		g_value_set_object (value, priv->remote_contact);
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
@@ -906,7 +912,6 @@ empathy_tp_chat_class_init (EmpathyTpChatClass *klass)
 							      TELEPATHY_CHAN_TYPE,
 							      G_PARAM_READWRITE |
 							      G_PARAM_CONSTRUCT_ONLY));
-
 	g_object_class_install_property (object_class,
 					 PROP_CHANNEL,
 					 g_param_spec_object ("channel",
@@ -915,7 +920,6 @@ empathy_tp_chat_class_init (EmpathyTpChatClass *klass)
 							      TP_TYPE_CHANNEL,
 							      G_PARAM_READWRITE |
 							      G_PARAM_CONSTRUCT_ONLY));
-
 	g_object_class_install_property (object_class,
 					 PROP_ACKNOWLEDGE,
 					 g_param_spec_boolean ("acknowledge",
@@ -923,7 +927,14 @@ empathy_tp_chat_class_init (EmpathyTpChatClass *klass)
 							       "Wheter or not received messages should be acknowledged",
 							       FALSE,
 							       G_PARAM_READWRITE |
-							       G_PARAM_CONSTRUCT_ONLY));
+							       G_PARAM_CONSTRUCT));
+	g_object_class_install_property (object_class,
+					 PROP_REMOTE_CONTACT,
+					 g_param_spec_object ("remote-contact",
+							      "The remote contact",
+							      "The remote contact if there is no group iface on the channel",
+							      EMPATHY_TYPE_CONTACT,
+							      G_PARAM_READABLE));
 
 	/* Signals */
 	signals[MESSAGE_RECEIVED] =
@@ -1148,5 +1159,15 @@ empathy_tp_chat_get_id (EmpathyTpChat *chat)
 	}
 
 	return priv->id;
+}
+
+EmpathyContact *
+empathy_tp_chat_get_remote_contact (EmpathyTpChat *chat)
+{
+	EmpathyTpChatPriv *priv = GET_PRIV (chat);
+
+	g_return_val_if_fail (EMPATHY_IS_TP_CHAT (chat), NULL);
+
+	return priv->remote_contact;
 }
 

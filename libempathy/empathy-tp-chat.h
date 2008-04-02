@@ -61,11 +61,12 @@ EmpathyTpChat *empathy_tp_chat_new                  (McAccount          *account
 EmpathyTpChat *empathy_tp_chat_new_with_contact     (EmpathyContact     *contact);
 McAccount *    empathy_tp_chat_get_account          (EmpathyTpChat      *chat);
 TpChan *       empathy_tp_chat_get_channel          (EmpathyTpChat      *chat);
+const gchar *  empathy_tp_chat_get_id               (EmpathyTpChat      *chat);
+EmpathyContact*empathy_tp_chat_get_remote_contact   (EmpathyTpChat      *chat);
 void           empathy_tp_chat_send                 (EmpathyTpChat      *chat,
 						     EmpathyMessage     *message);
 void           empathy_tp_chat_set_state            (EmpathyTpChat      *chat,
 						     TpChannelChatState  state);
-const gchar *  empathy_tp_chat_get_id               (EmpathyTpChat      *chat);
 void           empathy_tp_chat_set_property         (EmpathyTpChat      *chat,
 						     const gchar        *name,
 						     const GValue       *value);

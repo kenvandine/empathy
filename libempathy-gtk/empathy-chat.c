@@ -25,7 +25,7 @@
  *          Xavier Claessens <xclaesse@gmail.com>
  */
 
-#include "config.h"
+#include <config.h>
 
 #include <string.h>
 #include <stdlib.h>
@@ -35,21 +35,17 @@
 #include <gtk/gtk.h>
 
 #include <libmissioncontrol/mission-control.h>
-
 #include <telepathy-glib/util.h>
 
-#include <libempathy/empathy-contact-manager.h>
 #include <libempathy/empathy-log-manager.h>
 #include <libempathy/empathy-debug.h>
 #include <libempathy/empathy-utils.h>
 
 #include "empathy-chat.h"
-#include "empathy-geometry.h"
 #include "empathy-conf.h"
 #include "empathy-spell.h"
 #include "empathy-spell-dialog.h"
 #include "empathy-ui-utils.h"
-#include "empathy-gtk-marshal.h"
 
 #define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), EMPATHY_TYPE_CHAT, EmpathyChatPriv))
 
@@ -57,33 +53,25 @@
 
 #define CHAT_DIR_CREATE_MODE  (S_IRUSR | S_IWUSR | S_IXUSR)
 #define CHAT_FILE_CREATE_MODE (S_IRUSR | S_IWUSR)
-
 #define IS_ENTER(v) (v == GDK_Return || v == GDK_ISO_Enter || v == GDK_KP_Enter)
-
 #define MAX_INPUT_HEIGHT 150
-
 #define COMPOSING_STOP_TIMEOUT 5
 
 struct _EmpathyChatPriv {
 	EmpathyTpChat     *tp_chat;
+	McAccount         *account;
 	gchar             *name;
-	gchar             *tooltip;
-	const gchar       *icon_name;
-	GtkWidget         *widget;
+	gchar             *subject;
+	EmpathyContact    *selected_contact;
+	gchar             *id;
 
 	EmpathyLogManager *log_manager;
-	McAccount         *account;
 	MissionControl    *mc;
-	guint              composing_stop_timeout_id;
-	gboolean           sensitive;
-	gchar             *id;
 	GSList            *sent_messages;
 	gint               sent_messages_index;
 	GList             *compositors;
-	guint              scroll_idle_id;
-	gboolean           first_tp_chat;
 	GList             *backlog_messages;
-	gboolean           is_first_char;
+	guint              composing_stop_timeout_id;
 	guint              block_events_timeout_id;
 	TpHandleType       handle_type;
 	/* Used to automatically shrink a window that has temporarily
@@ -93,6 +81,7 @@ struct _EmpathyChatPriv {
 	gint               default_window_height;
 	gint               last_input_height;
 	gboolean           vscroll_visible;
+	gboolean           is_first_char;
 };
 
 static void empathy_chat_class_init (EmpathyChatClass *klass);
@@ -107,15 +96,16 @@ enum {
 enum {
 	PROP_0,
 	PROP_TP_CHAT,
+	PROP_ACCOUNT,
 	PROP_NAME,
-	PROP_TOOLTIP,
-	PROP_ICON_NAME,
-	PROP_WIDGET
+	PROP_SUBJECT,
+	PROP_SELECTED_CONTACT,
+	PROP_ID
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
 
-G_DEFINE_TYPE (EmpathyChat, empathy_chat, G_TYPE_OBJECT);
+G_DEFINE_TYPE (EmpathyChat, empathy_chat, GTK_TYPE_BIN);
 
 static void
 chat_get_property (GObject    *object,
@@ -129,17 +119,20 @@ chat_get_property (GObject    *object,
 	case PROP_TP_CHAT:
 		g_value_set_object (value, priv->tp_chat);
 		break;
+	case PROP_ACCOUNT:
+		g_value_set_object (value, priv->account);
+		break;
 	case PROP_NAME:
 		g_value_set_string (value, priv->name);
 		break;
-	case PROP_TOOLTIP:
-		g_value_set_string (value, priv->tooltip);
+	case PROP_SUBJECT:
+		g_value_set_string (value, priv->subject);
 		break;
-	case PROP_ICON_NAME:
-		g_value_set_string (value, priv->icon_name);
+	case PROP_SELECTED_CONTACT:
+		g_value_set_object (value, priv->selected_contact);
 		break;
-	case PROP_WIDGET:
-		g_value_set_object (value, priv->widget);
+	case PROP_ID:
+		g_value_set_string (value, priv->id);
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
@@ -157,8 +150,7 @@ chat_set_property (GObject      *object,
 
 	switch (param_id) {
 	case PROP_TP_CHAT:
-		empathy_chat_set_tp_chat (chat,
-					  EMPATHY_TP_CHAT (g_value_get_object (value)));
+		empathy_chat_set_tp_chat (chat, EMPATHY_TP_CHAT (g_value_get_object (value)));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
@@ -272,13 +264,16 @@ chat_finalize (GObject *object)
 	g_list_foreach (priv->compositors, (GFunc) g_object_unref, NULL);
 	g_list_free (priv->compositors);
 
+	g_list_foreach (priv->backlog_messages, (GFunc) g_object_unref, NULL);
+	g_list_free (priv->backlog_messages);
+
 	chat_composing_remove_timeout (chat);
-	g_object_unref (priv->log_manager);
 
 	dbus_g_proxy_disconnect_signal (DBUS_G_PROXY (priv->mc), "AccountStatusChanged",
 					G_CALLBACK (chat_status_changed_cb),
 					chat);
 	g_object_unref (priv->mc);
+	g_object_unref (priv->log_manager);
 
 
 	if (priv->tp_chat) {
@@ -289,8 +284,8 @@ chat_finalize (GObject *object)
 		g_object_unref (priv->account);
 	}
 
-	if (priv->scroll_idle_id) {
-		g_source_remove (priv->scroll_idle_id);
+	if (priv->selected_contact) {
+		g_object_unref (priv->selected_contact);
 	}
 
 	if (priv->block_events_timeout_id) {
@@ -299,7 +294,7 @@ chat_finalize (GObject *object)
 
 	g_free (priv->id);
 	g_free (priv->name);
-	g_free (priv->tooltip);
+	g_free (priv->subject);
 
 	G_OBJECT_CLASS (empathy_chat_parent_class)->finalize (object);
 }
@@ -316,14 +311,9 @@ chat_destroy_cb (EmpathyTpChat *tp_chat,
 		g_object_unref (priv->tp_chat);
 		priv->tp_chat = NULL;
 	}
-	priv->sensitive = FALSE;
 
 	empathy_chat_view_append_event (chat->view, _("Disconnected"));
 	gtk_widget_set_sensitive (chat->input_text_view, FALSE);
-
-	if (priv->block_events_timeout_id != 0) {
-		g_source_remove (priv->block_events_timeout_id);
-	}
 }
 
 static void 
@@ -463,7 +453,6 @@ chat_input_text_view_send (EmpathyChat *chat)
 	gtk_text_buffer_set_text (buffer, "", -1);
 
 	chat_send (chat, msg);
-
 	g_free (msg);
 
 	priv->is_first_char = TRUE;
@@ -580,16 +569,12 @@ chat_message_received_cb (EmpathyTpChat  *tp_chat,
 
 	empathy_chat_view_append_message (chat->view, message);
 
-	if (empathy_chat_should_play_sound (chat)) {
-		// FIXME: empathy_sound_play (EMPATHY_SOUND_CHAT);
-	}
-
 	/* We received a message so the contact is no more composing */
 	chat_state_changed_cb (tp_chat, sender,
 			       TP_CHANNEL_CHAT_STATE_ACTIVE,
 			       chat);
 
-	g_signal_emit (chat, signals[NEW_MESSAGE], 0, message, FALSE);
+	g_signal_emit (chat, signals[NEW_MESSAGE], 0, message);
 }
 
 static void
@@ -630,6 +615,74 @@ chat_send_error_cb (EmpathyTpChat          *tp_chat,
 }
 
 static void
+chat_property_changed_cb (EmpathyTpChat *tp_chat,
+			  const gchar   *name,
+			  GValue        *value,
+			  EmpathyChat   *chat)
+{
+	EmpathyChatPriv *priv = GET_PRIV (chat);
+
+	if (!tp_strdiff (name, "subject")) {
+		g_free (priv->subject);
+		priv->subject = g_value_dup_string (value);
+		g_object_notify (G_OBJECT (chat), "subject");
+	}
+	else if (!tp_strdiff (name, "name")) {
+		g_free (priv->name);
+		priv->name = g_value_dup_string (value);
+		g_object_notify (G_OBJECT (chat), "name");
+	}
+}
+
+static void
+chat_remote_contact_notify_cb (EmpathyChat *chat)
+{
+	EmpathyChatPriv *priv = GET_PRIV (chat);
+	EmpathyContact  *contact;
+
+	contact = empathy_tp_chat_get_remote_contact (priv->tp_chat);
+	if (contact == priv->selected_contact) {
+		return;
+	}
+
+	if (priv->selected_contact) {
+		g_object_unref (priv->selected_contact);
+		priv->selected_contact = NULL;
+	}
+
+	if (contact) {
+		g_free (priv->name);
+		priv->selected_contact = g_object_ref (contact);
+		priv->name = g_strdup (empathy_contact_get_name (contact));
+		g_object_notify (G_OBJECT (chat), "name");		
+	}
+
+	g_object_notify (G_OBJECT (chat), "selected-contact");
+}
+
+static gboolean
+chat_get_is_command (const gchar *str)
+{
+	g_return_val_if_fail (str != NULL, FALSE);
+
+	if (str[0] != '/') {
+		return FALSE;
+	}
+
+	if (g_str_has_prefix (str, "/me")) {
+		return TRUE;
+	}
+	else if (g_str_has_prefix (str, "/nick")) {
+		return TRUE;
+	}
+	else if (g_str_has_prefix (str, "/topic")) {
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
+static void
 chat_input_text_buffer_changed_cb (GtkTextBuffer *buffer,
 				   EmpathyChat    *chat)
 {
@@ -657,7 +710,7 @@ chat_input_text_buffer_changed_cb (GtkTextBuffer *buffer,
 		GtkAllocation  *allocation;
 
 		/* Save the window's size */
-		dialog = empathy_get_toplevel_window (priv->widget);
+		dialog = empathy_get_toplevel_window (GTK_WIDGET (chat));
 		if (dialog) {
 			gtk_window_get_size (GTK_WINDOW (dialog), NULL, &window_height);
 			gtk_widget_size_request (chat->input_text_view, &req);
@@ -710,7 +763,7 @@ chat_input_text_buffer_changed_cb (GtkTextBuffer *buffer,
 		str = gtk_text_buffer_get_text (buffer, &start, &end, FALSE);
 
 		/* spell check string */
-		if (!empathy_chat_get_is_command (str)) {
+		if (!chat_get_is_command (str)) {
 			correct = empathy_spell_check (str);
 		} else {
 			correct = TRUE;
@@ -848,7 +901,9 @@ chat_text_view_scroll_hide_cb (GtkWidget  *widget,
 	priv = GET_PRIV (chat);
 
 	priv->vscroll_visible = FALSE;
-	g_signal_handlers_disconnect_by_func (widget, chat_text_view_scroll_hide_cb, chat);
+	g_signal_handlers_disconnect_by_func (widget,
+					      chat_text_view_scroll_hide_cb,
+					      chat);
 
 	sw = gtk_widget_get_parent (chat->input_text_view);
 	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
@@ -904,7 +959,7 @@ chat_text_view_size_allocate_cb (GtkWidget     *widget,
 
 	view_allocation = &GTK_WIDGET (chat->view)->allocation;
 
-	dialog = empathy_get_toplevel_window (priv->widget);
+	dialog = empathy_get_toplevel_window (GTK_WIDGET (widget));
 	gtk_window_get_size (dialog, NULL, &current_height);
 
 	new_height = view_allocation->height + priv->padding_height + allocation->height - diff;
@@ -1082,21 +1137,6 @@ chat_text_populate_popup_cb (GtkTextView *view,
 	gtk_widget_show (item);
 }
 
-static gboolean
-chat_scroll_down_idle_func (EmpathyChat *chat)
-{
-	EmpathyChatPriv *priv;
-
-	priv = GET_PRIV (chat);
-
-	empathy_chat_scroll_down (chat);
-	g_object_unref (chat);
-
-	priv->scroll_idle_id = 0;
-
-	return FALSE;
-}
-
 static void
 chat_add_logs (EmpathyChat *chat)
 {
@@ -1133,12 +1173,12 @@ chat_add_logs (EmpathyChat *chat)
 
 	/* Turn back on scrolling */
 	empathy_chat_view_scroll (chat->view, TRUE);
+}
 
-	/* Scroll to the most recent messages, we reference the chat
-	 * for the duration of the scroll func.
-	 */
-	priv->scroll_idle_id = g_idle_add ((GSourceFunc) chat_scroll_down_idle_func, 
-					   g_object_ref (chat));
+static void
+chat_constructed (GObject *object)
+{
+	chat_add_logs (EMPATHY_CHAT (object));
 }
 
 static void
@@ -1151,6 +1191,7 @@ empathy_chat_class_init (EmpathyChatClass *klass)
 	object_class->finalize = chat_finalize;
 	object_class->get_property = chat_get_property;
 	object_class->set_property = chat_set_property;
+	object_class->constructed = chat_constructed;
 
 	g_object_class_install_property (object_class,
 					 PROP_TP_CHAT,
@@ -1161,6 +1202,13 @@ empathy_chat_class_init (EmpathyChatClass *klass)
 							      G_PARAM_CONSTRUCT |
 							      G_PARAM_READWRITE));
 	g_object_class_install_property (object_class,
+					 PROP_ACCOUNT,
+					 g_param_spec_object ("account",
+							      "Account of the chat",
+							      "The account of the chat",
+							      MC_TYPE_ACCOUNT,
+							      G_PARAM_READABLE));
+	g_object_class_install_property (object_class,
 					 PROP_NAME,
 					 g_param_spec_string ("name",
 							      "Chat's name",
@@ -1168,25 +1216,27 @@ empathy_chat_class_init (EmpathyChatClass *klass)
 							      NULL,
 							      G_PARAM_READABLE));
 	g_object_class_install_property (object_class,
-					 PROP_TOOLTIP,
-					 g_param_spec_string ("tooltip",
-							      "Chat's tooltip",
-							      "The tooltip of the chat",
+					 PROP_SUBJECT,
+					 g_param_spec_string ("subject",
+							      "Chat's subject",
+							      "The subject or topic of the chat",
 							      NULL,
 							      G_PARAM_READABLE));
 	g_object_class_install_property (object_class,
-					 PROP_ICON_NAME,
-					 g_param_spec_string ("icon-name",
-							      "Chat's icon name",
-							      "The icon name of the chat",
-							      NULL,
+					 PROP_SELECTED_CONTACT,
+					 g_param_spec_object ("selected-contact",
+							      "The selected contact",
+							      "The selected contact, "
+							      "either the remote contact or "
+							      "the one selected on the contact list",
+							      EMPATHY_TYPE_CONTACT,
 							      G_PARAM_READABLE));
 	g_object_class_install_property (object_class,
-					 PROP_WIDGET,
-					 g_param_spec_object ("widget",
-							      "Chat's widget",
-							      "The widget of the chat",
-							      GTK_TYPE_WIDGET,
+					 PROP_ID,
+					 g_param_spec_string ("id",
+							      "Chat's id",
+							      "The id of the chat",
+							      NULL,
 							      G_PARAM_READABLE));
 
 	signals[COMPOSING] =
@@ -1205,9 +1255,9 @@ empathy_chat_class_init (EmpathyChatClass *klass)
 			      G_SIGNAL_RUN_LAST,
 			      0,
 			      NULL, NULL,
-			      _empathy_gtk_marshal_VOID__OBJECT_BOOLEAN,
+			      g_cclosure_marshal_VOID__OBJECT,
 			      G_TYPE_NONE,
-			      2, EMPATHY_TYPE_MESSAGE, G_TYPE_BOOLEAN);
+			      1, EMPATHY_TYPE_MESSAGE);
 
 	g_type_class_add_private (object_class, sizeof (EmpathyChatPriv));
 }
@@ -1234,10 +1284,8 @@ empathy_chat_init (EmpathyChat *chat)
 	priv->log_manager = empathy_log_manager_new ();
 	priv->default_window_height = -1;
 	priv->vscroll_visible = FALSE;
-	priv->sensitive = TRUE;
 	priv->sent_messages = NULL;
 	priv->sent_messages_index = -1;
-	priv->first_tp_chat = TRUE;
 	priv->mc = empathy_mission_control_new ();
 
 	dbus_g_proxy_connect_signal (DBUS_G_PROXY (priv->mc), "AccountStatusChanged",
@@ -1287,142 +1335,21 @@ empathy_chat_new (EmpathyTpChat *tp_chat)
 	return g_object_new (EMPATHY_TYPE_CHAT, "tp-chat", tp_chat, NULL);
 }
 
-gboolean
-empathy_chat_get_is_command (const gchar *str)
-{
-	g_return_val_if_fail (str != NULL, FALSE);
-
-	if (str[0] != '/') {
-		return FALSE;
-	}
-
-	if (g_str_has_prefix (str, "/me")) {
-		return TRUE;
-	}
-	else if (g_str_has_prefix (str, "/nick")) {
-		return TRUE;
-	}
-	else if (g_str_has_prefix (str, "/topic")) {
-		return TRUE;
-	}
-
-	return FALSE;
-}
-
-void
-empathy_chat_correct_word (EmpathyChat  *chat,
-			  GtkTextIter  start,
-			  GtkTextIter  end,
-			  const gchar *new_word)
-{
-	GtkTextBuffer *buffer;
-
-	g_return_if_fail (chat != NULL);
-	g_return_if_fail (new_word != NULL);
-
-	buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (chat->input_text_view));
-
-	gtk_text_buffer_delete (buffer, &start, &end);
-	gtk_text_buffer_insert (buffer, &start,
-				new_word,
-				-1);
-}
-
-const gchar *
-empathy_chat_get_name (EmpathyChat *chat)
+EmpathyTpChat *
+empathy_chat_get_tp_chat (EmpathyChat *chat)
 {
 	EmpathyChatPriv *priv = GET_PRIV (chat);
 
 	g_return_val_if_fail (EMPATHY_IS_CHAT (chat), NULL);
 
-	return priv->name;
-}
-
-const gchar *
-empathy_chat_get_tooltip (EmpathyChat *chat)
-{
-	EmpathyChatPriv *priv = GET_PRIV (chat);
-
-	g_return_val_if_fail (EMPATHY_IS_CHAT (chat), NULL);
-
-	return priv->tooltip;
-}
-
-const gchar *
-empathy_chat_get_status_icon_name (EmpathyChat *chat)
-{
-	EmpathyChatPriv *priv = GET_PRIV (chat);
-
-	g_return_val_if_fail (EMPATHY_IS_CHAT (chat), NULL);
-
-	return priv->icon_name;
-}
-
-GtkWidget *
-empathy_chat_get_widget (EmpathyChat *chat)
-{
-	EmpathyChatPriv *priv = GET_PRIV (chat);
-
-	g_return_val_if_fail (EMPATHY_IS_CHAT (chat), NULL);
-
-	return priv->widget;
-}
-
-gboolean 
-empathy_chat_is_connected (EmpathyChat *chat)
-{
-	EmpathyChatPriv *priv;
-
-	g_return_val_if_fail (EMPATHY_IS_CHAT (chat), FALSE);
-
-	priv = GET_PRIV (chat);
-
-	return (priv->tp_chat != NULL);
-}
-
-static const gchar *
-chat_get_window_id_for_geometry (EmpathyChat *chat)
-{
-	gboolean separate_windows;
-
-	empathy_conf_get_bool (empathy_conf_get (),
-			       EMPATHY_PREFS_UI_SEPARATE_CHAT_WINDOWS,
-			       &separate_windows);
-
-	if (separate_windows) {
-		return empathy_chat_get_id (chat);
-	} else {
-		return "chat-window";
-	}
-}
-
-void
-empathy_chat_save_geometry (EmpathyChat *chat,
-			   gint        x,
-			   gint        y,
-			   gint        w,
-			   gint        h)
-{
-	empathy_geometry_save (chat_get_window_id_for_geometry (chat), x, y, w, h);
-}
-
-void
-empathy_chat_load_geometry (EmpathyChat *chat,
-			   gint       *x,
-			   gint       *y,
-			   gint       *w,
-			   gint       *h)
-{
-	empathy_geometry_load (chat_get_window_id_for_geometry (chat), x, y, w, h);
+	return priv->tp_chat;
 }
 
 static gboolean
 chat_block_events_timeout_cb (gpointer data)
 {
-	EmpathyChat     *chat = EMPATHY_CHAT (data);
-	EmpathyChatPriv *priv = GET_PRIV (chat);
+	EmpathyChatPriv *priv = GET_PRIV (data);
 
-	chat->block_events = FALSE;
 	priv->block_events_timeout_id = 0;
 
 	return FALSE;
@@ -1444,42 +1371,20 @@ empathy_chat_set_tp_chat (EmpathyChat   *chat,
 		return;
 	}
 
-	/* Block events for some time to avoid having "has come online" or
-	 * "joined" messages. */
-	chat->block_events = TRUE;
-	if (priv->block_events_timeout_id != 0) {
-		g_source_remove (priv->block_events_timeout_id);
-	}
-	priv->block_events_timeout_id =
-		g_timeout_add_seconds (1, chat_block_events_timeout_cb, chat);
-
 	if (priv->tp_chat) {
-		g_signal_handlers_disconnect_by_func (priv->tp_chat,
-						      chat_message_received_cb,
-						      chat);
-		g_signal_handlers_disconnect_by_func (priv->tp_chat,
-						      chat_send_error_cb,
-						      chat);
-		g_signal_handlers_disconnect_by_func (priv->tp_chat,
-						      chat_destroy_cb,
-						      chat);
 		g_object_unref (priv->tp_chat);
 	}
 	if (priv->account) {
 		g_object_unref (priv->account);
 	}
-
 	g_free (priv->id);
+
 	priv->tp_chat = g_object_ref (tp_chat);
 	priv->id = g_strdup (empathy_tp_chat_get_id (tp_chat));
 	priv->account = g_object_ref (empathy_tp_chat_get_account (tp_chat));
 	tp_chan = empathy_tp_chat_get_channel (tp_chat);
 	priv->handle_type = tp_chan->handle_type;
-
-	if (priv->first_tp_chat) {
-		chat_add_logs (chat);
-		priv->first_tp_chat = FALSE;
-	}
+	chat_remote_contact_notify_cb (chat);
 
 	g_signal_connect (tp_chat, "message-received",
 			  G_CALLBACK (chat_message_received_cb),
@@ -1490,27 +1395,29 @@ empathy_chat_set_tp_chat (EmpathyChat   *chat,
 	g_signal_connect (tp_chat, "chat-state-changed",
 			  G_CALLBACK (chat_state_changed_cb),
 			  chat);
+	g_signal_connect (tp_chat, "property-changed",
+			  G_CALLBACK (chat_property_changed_cb),
+			  chat);
+	g_signal_connect_swapped (tp_chat, "notify::remote-contact",
+				  G_CALLBACK (chat_remote_contact_notify_cb),
+				  chat);
 	g_signal_connect (tp_chat, "destroy",
 			  G_CALLBACK (chat_destroy_cb),
 			  chat);
 
-	if (!priv->sensitive) {
-		gtk_widget_set_sensitive (chat->input_text_view, TRUE);
-		empathy_chat_view_append_event (chat->view, _("Connected"));
-		priv->sensitive = TRUE;
+	/* Block events for some time to avoid having "has come online" or
+	 * "joined" messages. */
+	if (priv->block_events_timeout_id == 0) {
+		priv->block_events_timeout_id =
+			g_timeout_add_seconds (1, chat_block_events_timeout_cb, chat);
 	}
 
+	gtk_widget_set_sensitive (chat->input_text_view, TRUE);
+	empathy_chat_view_append_event (chat->view, _("Connected"));
+
 	g_object_notify (G_OBJECT (chat), "tp-chat");
-}
-
-const gchar *
-empathy_chat_get_id (EmpathyChat *chat)
-{
-	EmpathyChatPriv *priv;
-
-	priv = GET_PRIV (chat);
-
-	return priv->id;
+	g_object_notify (G_OBJECT (chat), "id");
+	g_object_notify (G_OBJECT (chat), "account");
 }
 
 McAccount *
@@ -1518,7 +1425,49 @@ empathy_chat_get_account (EmpathyChat *chat)
 {
 	EmpathyChatPriv *priv = GET_PRIV (chat);
 
+	g_return_val_if_fail (EMPATHY_IS_CHAT (chat), NULL);
+
 	return priv->account;
+}
+
+const gchar *
+empathy_chat_get_name (EmpathyChat *chat)
+{
+	EmpathyChatPriv *priv = GET_PRIV (chat);
+
+	g_return_val_if_fail (EMPATHY_IS_CHAT (chat), NULL);
+
+	return priv->name;
+}
+
+const gchar *
+empathy_chat_get_subject (EmpathyChat *chat)
+{
+	EmpathyChatPriv *priv = GET_PRIV (chat);
+
+	g_return_val_if_fail (EMPATHY_IS_CHAT (chat), NULL);
+
+	return priv->subject;
+}
+
+EmpathyContact *
+empathy_chat_get_selected_contact (EmpathyChat *chat)
+{
+	EmpathyChatPriv *priv = GET_PRIV (chat);
+
+	g_return_val_if_fail (EMPATHY_IS_CHAT (chat), NULL);
+
+	return priv->selected_contact;
+}
+
+const gchar *
+empathy_chat_get_id (EmpathyChat *chat)
+{
+	EmpathyChatPriv *priv = GET_PRIV (chat);
+
+	g_return_val_if_fail (EMPATHY_IS_CHAT (chat), NULL);
+
+	return priv->id;
 }
 
 void
@@ -1590,88 +1539,22 @@ empathy_chat_paste (EmpathyChat *chat)
 	gtk_text_buffer_paste_clipboard (buffer, clipboard, NULL, TRUE);
 }
 
-gboolean
-empathy_chat_should_play_sound (EmpathyChat *chat)
+void
+empathy_chat_correct_word (EmpathyChat  *chat,
+			  GtkTextIter  start,
+			  GtkTextIter  end,
+			  const gchar *new_word)
 {
-	EmpathyChatPriv *priv = GET_PRIV (chat);
-	GtkWindow       *window;
-	gboolean         has_focus = FALSE;
+	GtkTextBuffer *buffer;
 
-	g_return_val_if_fail (EMPATHY_IS_CHAT (chat), FALSE);
+	g_return_if_fail (chat != NULL);
+	g_return_if_fail (new_word != NULL);
 
-	window = empathy_get_toplevel_window (priv->widget);
-	if (window) {
-		g_object_get (window, "has-toplevel-focus", &has_focus, NULL);
-	}
+	buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (chat->input_text_view));
 
-	return !has_focus;
-}
-
-gboolean
-empathy_chat_should_highlight_nick (EmpathyMessage *message)
-{
-	EmpathyContact *contact;
-	const gchar   *msg, *to;
-	gchar         *cf_msg, *cf_to;
-	gchar         *ch;
-	gboolean       ret_val;
-
-	g_return_val_if_fail (EMPATHY_IS_MESSAGE (message), FALSE);
-
-	empathy_debug (DEBUG_DOMAIN, "Highlighting nickname");
-
-	ret_val = FALSE;
-
-	msg = empathy_message_get_body (message);
-	if (!msg) {
-		return FALSE;
-	}
-
-	contact = empathy_message_get_receiver (message);
-	if (!contact || !empathy_contact_is_user (contact)) {
-		return FALSE;
-	}
-
-	to = empathy_contact_get_name (contact);
-	if (!to) {
-		return FALSE;
-	}
-
-	cf_msg = g_utf8_casefold (msg, -1);
-	cf_to = g_utf8_casefold (to, -1);
-
-	ch = strstr (cf_msg, cf_to);
-	if (ch == NULL) {
-		goto finished;
-	}
-
-	if (ch != cf_msg) {
-		/* Not first in the message */
-		if ((*(ch - 1) != ' ') &&
-		    (*(ch - 1) != ',') &&
-		    (*(ch - 1) != '.')) {
-			goto finished;
-		}
-	}
-
-	ch = ch + strlen (cf_to);
-	if (ch >= cf_msg + strlen (cf_msg)) {
-		ret_val = TRUE;
-		goto finished;
-	}
-
-	if ((*ch == ' ') ||
-	    (*ch == ',') ||
-	    (*ch == '.') ||
-	    (*ch == ':')) {
-		ret_val = TRUE;
-		goto finished;
-	}
-
-finished:
-	g_free (cf_msg);
-	g_free (cf_to);
-
-	return ret_val;
+	gtk_text_buffer_delete (buffer, &start, &end);
+	gtk_text_buffer_insert (buffer, &start,
+				new_word,
+				-1);
 }
 

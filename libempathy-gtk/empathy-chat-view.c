@@ -749,6 +749,61 @@ empathy_chat_view_new (void)
 	return g_object_new (EMPATHY_TYPE_CHAT_VIEW, NULL);
 }
 
+/* Code stolen from pidgin/gtkimhtml.c */
+static gboolean
+chat_view_scroll_cb (EmpathyChatView *view)
+{
+	EmpathyChatViewPriv *priv;
+	GtkAdjustment      *adj;
+	gdouble             max_val;
+
+	priv = GET_PRIV (view);
+	adj = GTK_TEXT_VIEW (view)->vadjustment;
+	max_val = adj->upper - adj->page_size;
+
+	g_return_val_if_fail (priv->scroll_time != NULL, FALSE);
+
+	if (g_timer_elapsed (priv->scroll_time, NULL) > MAX_SCROLL_TIME) {
+		/* time's up. jump to the end and kill the timer */
+		gtk_adjustment_set_value (adj, max_val);
+		g_timer_destroy (priv->scroll_time);
+		priv->scroll_time = NULL;
+		priv->scroll_timeout = 0;
+		return FALSE;
+	}
+
+	/* scroll by 1/3rd the remaining distance */
+	gtk_adjustment_set_value (adj, gtk_adjustment_get_value (adj) + ((max_val - gtk_adjustment_get_value (adj)) / 3));
+	return TRUE;
+}
+
+void
+empathy_chat_view_scroll_down (EmpathyChatView *view)
+{
+	EmpathyChatViewPriv *priv;
+
+	g_return_if_fail (EMPATHY_IS_CHAT_VIEW (view));
+
+	priv = GET_PRIV (view);
+
+	if (!priv->allow_scrolling) {
+		return;
+	}
+
+	empathy_debug (DEBUG_DOMAIN, "Scrolling down");
+
+	if (priv->scroll_time) {
+		g_timer_reset (priv->scroll_time);
+	} else {
+		priv->scroll_time = g_timer_new();
+	}
+	if (!priv->scroll_timeout) {
+		priv->scroll_timeout = g_timeout_add (SCROLL_DELAY,
+						      (GSourceFunc) chat_view_scroll_cb,
+						      view);
+	}
+}
+
 void
 empathy_chat_view_append_message (EmpathyChatView *view,
 				  EmpathyMessage  *msg)
@@ -884,70 +939,16 @@ void
 empathy_chat_view_scroll (EmpathyChatView *view,
 			 gboolean        allow_scrolling)
 {
-	EmpathyChatViewPriv *priv;
+	EmpathyChatViewPriv *priv = GET_PRIV (view);
 
 	g_return_if_fail (EMPATHY_IS_CHAT_VIEW (view));
-
-	priv = GET_PRIV (view);
-
-	priv->allow_scrolling = allow_scrolling;
 
 	empathy_debug (DEBUG_DOMAIN, "Scrolling %s",
 		      allow_scrolling ? "enabled" : "disabled");
-}
 
-/* Code stolen from pidgin/gtkimhtml.c */
-static gboolean
-chat_view_scroll_cb (EmpathyChatView *view)
-{
-	EmpathyChatViewPriv *priv;
-	GtkAdjustment      *adj;
-	gdouble             max_val;
-
-	priv = GET_PRIV (view);
-	adj = GTK_TEXT_VIEW (view)->vadjustment;
-	max_val = adj->upper - adj->page_size;
-
-	g_return_val_if_fail (priv->scroll_time != NULL, FALSE);
-
-	if (g_timer_elapsed (priv->scroll_time, NULL) > MAX_SCROLL_TIME) {
-		/* time's up. jump to the end and kill the timer */
-		gtk_adjustment_set_value (adj, max_val);
-		g_timer_destroy (priv->scroll_time);
-		priv->scroll_time = NULL;
-		priv->scroll_timeout = 0;
-		return FALSE;
-	}
-
-	/* scroll by 1/3rd the remaining distance */
-	gtk_adjustment_set_value (adj, gtk_adjustment_get_value (adj) + ((max_val - gtk_adjustment_get_value (adj)) / 3));
-	return TRUE;
-}
-
-void
-empathy_chat_view_scroll_down (EmpathyChatView *view)
-{
-	EmpathyChatViewPriv *priv;
-
-	g_return_if_fail (EMPATHY_IS_CHAT_VIEW (view));
-
-	priv = GET_PRIV (view);
-
-	if (!priv->allow_scrolling) {
-		return;
-	}
-
-	empathy_debug (DEBUG_DOMAIN, "Scrolling down");
-
-	if (priv->scroll_time) {
-		g_timer_reset (priv->scroll_time);
-	} else {
-		priv->scroll_time = g_timer_new();
-	}
-	if (!priv->scroll_timeout) {
-		priv->scroll_timeout = g_timeout_add (SCROLL_DELAY,
-						      (GSourceFunc) chat_view_scroll_cb,
-						      view);
+	priv->allow_scrolling = allow_scrolling;
+	if (allow_scrolling) {
+		empathy_chat_view_scroll_down (view);
 	}
 }
 
