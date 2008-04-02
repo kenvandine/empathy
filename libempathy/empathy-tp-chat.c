@@ -758,6 +758,13 @@ tp_chat_finalize (GObject *object)
 		g_ptr_array_free (priv->properties, TRUE);
 	}
 
+	if (priv->initiator) {
+		g_object_unref (priv->initiator);
+	}
+	if (priv->group) {
+		g_object_unref (priv->group);
+	}
+
 	g_object_unref (priv->factory);
 	g_object_unref (priv->user);
 	g_object_unref (priv->account);
