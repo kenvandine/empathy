@@ -75,7 +75,7 @@ new_text_channel_cb (EmpathyChandler *chandler,
 
 	if (chat) {
 		/* The chat already exists */
-		if (!empathy_chat_is_connected (chat)) {
+		if (!empathy_chat_get_tp_chat (chat)) {
 			/* The chat died, give him the new text channel */
 			tp_chat = empathy_tp_chat_new (account, tp_chan, TRUE);
 			empathy_chat_set_tp_chat (chat, tp_chat);
