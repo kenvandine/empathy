@@ -61,17 +61,6 @@ struct _EmpathyChat {
 
 struct _EmpathyChatClass {
 	GObjectClass parent;
-
-	/* VTable */
-	const gchar *    (*get_name)            (EmpathyChat   *chat);
-	gchar *          (*get_tooltip)         (EmpathyChat   *chat);
-	const gchar *    (*get_status_icon_name)(EmpathyChat   *chat);
-	GtkWidget *      (*get_widget)          (EmpathyChat   *chat);
-	gboolean         (*is_group_chat)       (EmpathyChat   *chat);
-	void             (*set_tp_chat)         (EmpathyChat   *chat,
-						 EmpathyTpChat *tp_chat);
-	gboolean         (*key_press_event)     (EmpathyChat   *chat,
-						 GdkEventKey   *event);
 };
 
 GType              empathy_chat_get_type              (void);
@@ -83,10 +72,9 @@ void               empathy_chat_cut                   (EmpathyChat       *chat);
 void               empathy_chat_copy                  (EmpathyChat       *chat);
 void               empathy_chat_paste                 (EmpathyChat       *chat);
 const gchar *      empathy_chat_get_name              (EmpathyChat       *chat);
-gchar *            empathy_chat_get_tooltip           (EmpathyChat       *chat);
+const gchar *      empathy_chat_get_tooltip           (EmpathyChat       *chat);
 const gchar *      empathy_chat_get_status_icon_name  (EmpathyChat       *chat);
 GtkWidget *        empathy_chat_get_widget            (EmpathyChat       *chat);
-gboolean           empathy_chat_is_group_chat         (EmpathyChat       *chat);
 gboolean           empathy_chat_is_connected          (EmpathyChat       *chat);
 void               empathy_chat_save_geometry         (EmpathyChat       *chat,
 						       gint               x,

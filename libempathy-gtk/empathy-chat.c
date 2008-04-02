@@ -81,6 +81,10 @@ struct _EmpathyChatPriv {
 	GList                 *backlog_messages;
 	gboolean               is_first_char;
 	guint                  block_events_timeout_id;
+	TpHandleType           handle_type;
+	gchar                 *name;
+	gchar                 *tooltip;
+	const gchar           *icon_name;
 	/* Used to automatically shrink a window that has temporarily
 	 * grown due to long input. 
 	 */
@@ -90,80 +94,22 @@ struct _EmpathyChatPriv {
 	gboolean               vscroll_visible;
 };
 
-typedef struct {
-	EmpathyChat  *chat;
-	gchar       *word;
-
-	GtkTextIter  start;
-	GtkTextIter  end;
-} EmpathyChatSpell;
-
-static void             empathy_chat_class_init           (EmpathyChatClass       *klass);
-static void             empathy_chat_init                 (EmpathyChat            *chat);
-static void             chat_finalize                     (GObject                *object);
-static void             chat_destroy_cb                   (EmpathyTpChat          *tp_chat,
-							   EmpathyChat            *chat);
-static void             chat_send                         (EmpathyChat            *chat,
-							   const gchar            *msg);
-static void             chat_input_text_view_send         (EmpathyChat            *chat);
-static void             chat_message_received_cb          (EmpathyTpChat          *tp_chat,
-							   EmpathyMessage         *message,
-							   EmpathyChat            *chat);
-static void             chat_send_error_cb                (EmpathyTpChat          *tp_chat,
-							   EmpathyMessage         *message,
-							   TpChannelTextSendError  error_code,
-							   EmpathyChat            *chat);
-static void             chat_sent_message_add             (EmpathyChat            *chat,
-							   const gchar            *str);
-static const gchar *    chat_sent_message_get_next        (EmpathyChat            *chat);
-static const gchar *    chat_sent_message_get_last        (EmpathyChat            *chat);
-static gboolean         chat_input_key_press_event_cb     (GtkWidget              *widget,
-							   GdkEventKey            *event,
-							   EmpathyChat            *chat);
-static void             chat_input_text_buffer_changed_cb (GtkTextBuffer          *buffer,
-							   EmpathyChat            *chat);
-static gboolean         chat_text_view_focus_in_event_cb  (GtkWidget              *widget,
-							   GdkEvent               *event,
-							   EmpathyChat            *chat);
-static void             chat_text_view_scroll_hide_cb     (GtkWidget              *widget,
-							   EmpathyChat            *chat);
-static void             chat_text_view_size_allocate_cb   (GtkWidget              *widget,
-							   GtkAllocation          *allocation,
-							   EmpathyChat            *chat);
-static void             chat_text_view_realize_cb         (GtkWidget              *widget,
-							   EmpathyChat            *chat);
-static void             chat_text_populate_popup_cb       (GtkTextView            *view,
-							   GtkMenu                *menu,
-							   EmpathyChat            *chat);
-static void             chat_text_check_word_spelling_cb  (GtkMenuItem            *menuitem,
-							   EmpathyChatSpell       *chat_spell);
-static EmpathyChatSpell *chat_spell_new                   (EmpathyChat            *chat,
-							   const gchar            *word,
-							   GtkTextIter             start,
-							   GtkTextIter             end);
-static void             chat_spell_free                   (EmpathyChatSpell       *chat_spell);
-static void             chat_composing_start              (EmpathyChat            *chat);
-static void             chat_composing_stop               (EmpathyChat            *chat);
-static void             chat_composing_remove_timeout     (EmpathyChat            *chat);
-static gboolean         chat_composing_stop_timeout_cb    (EmpathyChat            *chat);
-static void             chat_state_changed_cb             (EmpathyTpChat          *tp_chat,
-							   EmpathyContact         *contact,
-							   TpChannelChatState      state,
-							   EmpathyChat            *chat);
-static void             chat_add_logs                     (EmpathyChat            *chat);
-static gboolean         chat_scroll_down_idle_func        (EmpathyChat            *chat);
+static void empathy_chat_class_init (EmpathyChatClass *klass);
+static void empathy_chat_init       (EmpathyChat      *chat);
 
 enum {
 	COMPOSING,
 	NEW_MESSAGE,
-	NAME_CHANGED,
-	STATUS_CHANGED,
 	LAST_SIGNAL
 };
 
 enum {
 	PROP_0,
-	PROP_TP_CHAT
+	PROP_TP_CHAT,
+	PROP_NAME,
+	PROP_TOOLTIP,
+	PROP_ICON_NAME,
+	PROP_WIDGET
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -181,6 +127,18 @@ chat_get_property (GObject    *object,
 	switch (param_id) {
 	case PROP_TP_CHAT:
 		g_value_set_object (value, priv->tp_chat);
+		break;
+	case PROP_NAME:
+		g_value_set_string (value, priv->name);
+		break;
+	case PROP_TOOLTIP:
+		g_value_set_string (value, priv->tooltip);
+		break;
+	case PROP_ICON_NAME:
+		g_value_set_string (value, priv->icon_name);
+		break;
+	case PROP_WIDGET:
+		g_value_set_object (value, priv->widget);
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
@@ -221,23 +179,15 @@ chat_status_changed_cb (MissionControl           *mc,
 	account = mc_account_lookup (unique_name);
 
 	if (status == TP_CONNECTION_STATUS_CONNECTED && !priv->tp_chat &&
-	    empathy_account_equal (account, priv->account)) {
-		TpHandleType handle_type;
-
+	    empathy_account_equal (account, priv->account) &&
+	    priv->handle_type != 0) {
 		empathy_debug (DEBUG_DOMAIN,
 			       "Account reconnected, request a new Text channel");
-
-		if (empathy_chat_is_group_chat (chat)) {
-			handle_type = TP_HANDLE_TYPE_ROOM;
-		} else {
-			handle_type = TP_HANDLE_TYPE_CONTACT;
-		}
-
 		mission_control_request_channel_with_string_handle (mc,
 								    priv->account,
 								    TP_IFACE_CHANNEL_TYPE_TEXT,
 								    priv->id,
-								    handle_type,
+								    priv->handle_type,
 								    NULL, NULL);
 	}
 
@@ -245,136 +195,63 @@ chat_status_changed_cb (MissionControl           *mc,
 }
 
 static void
-empathy_chat_class_init (EmpathyChatClass *klass)
+chat_composing_remove_timeout (EmpathyChat *chat)
 {
-	GObjectClass *object_class;
+	EmpathyChatPriv *priv;
 
-	object_class = G_OBJECT_CLASS (klass);
+	priv = GET_PRIV (chat);
 
-	object_class->finalize = chat_finalize;
-	object_class->get_property = chat_get_property;
-	object_class->set_property = chat_set_property;
+	if (priv->composing_stop_timeout_id) {
+		g_source_remove (priv->composing_stop_timeout_id);
+		priv->composing_stop_timeout_id = 0;
+	}
+}
 
-	g_object_class_install_property (object_class,
-					 PROP_TP_CHAT,
-					 g_param_spec_object ("tp-chat",
-							      "Empathy tp chat",
-							      "The tp chat object",
-							      EMPATHY_TYPE_TP_CHAT,
-							      G_PARAM_CONSTRUCT |
-							      G_PARAM_READWRITE));
+static gboolean
+chat_composing_stop_timeout_cb (EmpathyChat *chat)
+{
+	EmpathyChatPriv *priv;
 
-	signals[COMPOSING] =
-		g_signal_new ("composing",
-			      G_OBJECT_CLASS_TYPE (object_class),
-			      G_SIGNAL_RUN_LAST,
-			      0,
-			      NULL, NULL,
-			      g_cclosure_marshal_VOID__BOOLEAN,
-			      G_TYPE_NONE,
-			      1, G_TYPE_BOOLEAN);
+	priv = GET_PRIV (chat);
 
-	signals[NEW_MESSAGE] =
-		g_signal_new ("new-message",
-			      G_OBJECT_CLASS_TYPE (object_class),
-			      G_SIGNAL_RUN_LAST,
-			      0,
-			      NULL, NULL,
-			      _empathy_gtk_marshal_VOID__OBJECT_BOOLEAN,
-			      G_TYPE_NONE,
-			      2, EMPATHY_TYPE_MESSAGE, G_TYPE_BOOLEAN);
+	priv->composing_stop_timeout_id = 0;
+	empathy_tp_chat_set_state (priv->tp_chat,
+				   TP_CHANNEL_CHAT_STATE_PAUSED);
 
-	signals[NAME_CHANGED] =
-		g_signal_new ("name-changed",
-			      G_OBJECT_CLASS_TYPE (object_class),
-			      G_SIGNAL_RUN_LAST,
-			      0,
-			      NULL, NULL,
-			      g_cclosure_marshal_VOID__POINTER,
-			      G_TYPE_NONE,
-			      1, G_TYPE_POINTER);
-
-	signals[STATUS_CHANGED] =
-		g_signal_new ("status-changed",
-			      G_OBJECT_CLASS_TYPE (object_class),
-			      G_SIGNAL_RUN_LAST,
-			      0,
-			      NULL, NULL,
-			      g_cclosure_marshal_VOID__VOID,
-			      G_TYPE_NONE,
-			      0);
-
-	g_type_class_add_private (object_class, sizeof (EmpathyChatPriv));
+	return FALSE;
 }
 
 static void
-empathy_chat_init (EmpathyChat *chat)
+chat_composing_start (EmpathyChat *chat)
 {
-	EmpathyChatPriv *priv = GET_PRIV (chat);
-	GtkTextBuffer  *buffer;
+	EmpathyChatPriv *priv;
 
-	chat->view = empathy_chat_view_new ();
-	chat->input_text_view = gtk_text_view_new ();
+	priv = GET_PRIV (chat);
 
-	priv->is_first_char = TRUE;
+	if (priv->composing_stop_timeout_id) {
+		/* Just restart the timeout */
+		chat_composing_remove_timeout (chat);
+	} else {
+		empathy_tp_chat_set_state (priv->tp_chat,
+					   TP_CHANNEL_CHAT_STATE_COMPOSING);
+	}
 
-	g_object_set (chat->input_text_view,
-		      "pixels-above-lines", 2,
-		      "pixels-below-lines", 2,
-		      "pixels-inside-wrap", 1,
-		      "right-margin", 2,
-		      "left-margin", 2,
-		      "wrap-mode", GTK_WRAP_WORD_CHAR,
-		      NULL);
+	priv->composing_stop_timeout_id = g_timeout_add_seconds (
+		COMPOSING_STOP_TIMEOUT,
+		(GSourceFunc) chat_composing_stop_timeout_cb,
+		chat);
+}
 
-	priv->log_manager = empathy_log_manager_new ();
-	priv->default_window_height = -1;
-	priv->vscroll_visible = FALSE;
-	priv->sensitive = TRUE;
-	priv->sent_messages = NULL;
-	priv->sent_messages_index = -1;
-	priv->first_tp_chat = TRUE;
-	priv->mc = empathy_mission_control_new ();
+static void
+chat_composing_stop (EmpathyChat *chat)
+{
+	EmpathyChatPriv *priv;
 
-	dbus_g_proxy_connect_signal (DBUS_G_PROXY (priv->mc), "AccountStatusChanged",
-				     G_CALLBACK (chat_status_changed_cb),
-				     chat, NULL);
+	priv = GET_PRIV (chat);
 
-	g_signal_connect (chat->input_text_view,
-			  "key_press_event",
-			  G_CALLBACK (chat_input_key_press_event_cb),
-			  chat);
-
-	buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (chat->input_text_view));
-	g_signal_connect (buffer,
-			  "changed",
-			  G_CALLBACK (chat_input_text_buffer_changed_cb),
-			  chat);
-	g_signal_connect (chat->view,
-			  "focus_in_event",
-			  G_CALLBACK (chat_text_view_focus_in_event_cb),
-			  chat);
-
-	g_signal_connect (chat->input_text_view,
-			  "size_allocate",
-			  G_CALLBACK (chat_text_view_size_allocate_cb),
-			  chat);
-
-	g_signal_connect (chat->input_text_view,
-			  "realize",
-			  G_CALLBACK (chat_text_view_realize_cb),
-			  chat);
-
-	g_signal_connect (GTK_TEXT_VIEW (chat->input_text_view),
-			  "populate_popup",
-			  G_CALLBACK (chat_text_populate_popup_cb),
-			  chat);
-
-	/* create misspelt words identification tag */
-	gtk_text_buffer_create_tag (buffer,
-				    "misspelled",
-				    "underline", PANGO_UNDERLINE_ERROR,
-				    NULL);
+	chat_composing_remove_timeout (chat);
+	empathy_tp_chat_set_state (priv->tp_chat,
+				   TP_CHANNEL_CHAT_STATE_ACTIVE);
 }
 
 static void
@@ -420,6 +297,8 @@ chat_finalize (GObject *object)
 	}
 
 	g_free (priv->id);
+	g_free (priv->name);
+	g_free (priv->tooltip);
 
 	G_OBJECT_CLASS (empathy_chat_parent_class)->finalize (object);
 }
@@ -444,164 +323,6 @@ chat_destroy_cb (EmpathyTpChat *tp_chat,
 	if (priv->block_events_timeout_id != 0) {
 		g_source_remove (priv->block_events_timeout_id);
 	}
-
-	if (EMPATHY_CHAT_GET_CLASS (chat)->set_tp_chat) {
-		EMPATHY_CHAT_GET_CLASS (chat)->set_tp_chat (chat, NULL);
-	}
-}
-
-static void
-chat_send (EmpathyChat  *chat,
-	   const gchar *msg)
-{
-	EmpathyChatPriv *priv;
-	EmpathyMessage  *message;
-
-	priv = GET_PRIV (chat);
-
-	if (G_STR_EMPTY (msg)) {
-		return;
-	}
-
-	chat_sent_message_add (chat, msg);
-
-	if (g_str_has_prefix (msg, "/clear")) {
-		empathy_chat_view_clear (chat->view);
-		return;
-	}
-
-	/* FIXME: add here something to let group/privrate chat handle
-	 *        some special messages */
-
-	message = empathy_message_new (msg);
-
-	empathy_tp_chat_send (priv->tp_chat, message);
-
-	g_object_unref (message);
-}
-
-static void
-chat_input_text_view_send (EmpathyChat *chat)
-{
-	EmpathyChatPriv *priv;
-	GtkTextBuffer  *buffer;
-	GtkTextIter     start, end;
-	gchar	       *msg;
-
-	priv = GET_PRIV (chat);
-
-	buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (chat->input_text_view));
-
-	gtk_text_buffer_get_bounds (buffer, &start, &end);
-	msg = gtk_text_buffer_get_text (buffer, &start, &end, FALSE);
-
-	/* clear the input field */
-	gtk_text_buffer_set_text (buffer, "", -1);
-
-	chat_send (chat, msg);
-
-	g_free (msg);
-
-	priv->is_first_char = TRUE;
-}
-
-static void
-chat_message_received_cb (EmpathyTpChat  *tp_chat,
-			  EmpathyMessage *message,
-			  EmpathyChat    *chat)
-{
-	EmpathyChatPriv *priv;
-	EmpathyContact  *sender;
-	const gchar     *body;
-
-	priv = GET_PRIV (chat);
-
-	sender = empathy_message_get_sender (message);
-	body = empathy_message_get_body (message);
-	while (priv->backlog_messages) {
-		EmpathyMessage *log_message;
-		EmpathyContact *log_sender;
-		const gchar    *log_body;
-
-		log_message = priv->backlog_messages->data;
-		log_sender = empathy_message_get_sender (log_message);
-		log_body = empathy_message_get_body (log_message);
-
-		priv->backlog_messages = g_list_remove (priv->backlog_messages,
-							log_message);
-
-		if (empathy_contact_equal (sender, log_sender) &&
-		    !tp_strdiff (body, log_body)) {
-			/* The message we received is already displayed because
-			 * some jabber chatrooms sends us back logs and we
-			 * already displayed it from localy logged messages. */
-			empathy_debug (DEBUG_DOMAIN, "Skipping message because "
-				       "it is already displayed from logged "
-				       "messages");
-			g_object_unref (log_message);
-			return;
-		}
-		g_object_unref (log_message);
-	}
-
-	empathy_debug (DEBUG_DOMAIN, "Appending new message from %s (%d)",
-		       empathy_contact_get_name (sender),
-		       empathy_contact_get_handle (sender));
-
-	empathy_log_manager_add_message (priv->log_manager,
-					 empathy_chat_get_id (chat),
-					 empathy_chat_is_group_chat (chat),
-					 message);
-
-	empathy_chat_view_append_message (chat->view, message);
-
-	if (empathy_chat_should_play_sound (chat)) {
-		// FIXME: empathy_sound_play (EMPATHY_SOUND_CHAT);
-	}
-
-	/* We received a message so the contact is no more composing */
-	chat_state_changed_cb (tp_chat, sender,
-			       TP_CHANNEL_CHAT_STATE_ACTIVE,
-			       chat);
-
-	g_signal_emit (chat, signals[NEW_MESSAGE], 0, message, FALSE);
-}
-
-static void
-chat_send_error_cb (EmpathyTpChat          *tp_chat,
-		    EmpathyMessage         *message,
-		    TpChannelTextSendError  error_code,
-		    EmpathyChat            *chat)
-{
-	const gchar *error;
-	gchar       *str;
-
-	switch (error_code) {
-	case TP_CHANNEL_TEXT_SEND_ERROR_OFFLINE:
-		error = _("offline");
-		break;
-	case TP_CHANNEL_TEXT_SEND_ERROR_INVALID_CONTACT:
-		error = _("invalid contact");
-		break;
-	case TP_CHANNEL_TEXT_SEND_ERROR_PERMISSION_DENIED:
-		error = _("permission denied");
-		break;
-	case TP_CHANNEL_TEXT_SEND_ERROR_TOO_LONG:
-		error = _("too long message");
-		break;
-	case TP_CHANNEL_TEXT_SEND_ERROR_NOT_IMPLEMENTED:
-		error = _("not implemented");
-		break;
-	default:
-		error = _("unknown");
-		break;
-	}
-
-	str = g_strdup_printf (_("Error sending message '%s': %s"),
-			       empathy_message_get_body (message),
-			       error);
-	empathy_chat_view_append_event (chat->view, str);
-	g_free (str);
 }
 
 static void 
@@ -695,103 +416,216 @@ chat_sent_message_get_last (EmpathyChat *chat)
 	return g_slist_nth_data (priv->sent_messages, priv->sent_messages_index);
 }
 
-static gboolean
-chat_input_key_press_event_cb (GtkWidget   *widget,
-			       GdkEventKey *event,
-			       EmpathyChat *chat)
+static void
+chat_send (EmpathyChat  *chat,
+	   const gchar *msg)
 {
 	EmpathyChatPriv *priv;
-	GtkAdjustment  *adj;
-	gdouble         val;
-	GtkWidget      *text_view_sw;
+	EmpathyMessage  *message;
 
 	priv = GET_PRIV (chat);
 
-	/* Catch ctrl+up/down so we can traverse messages we sent */
-	if ((event->state & GDK_CONTROL_MASK) && 
-	    (event->keyval == GDK_Up || 
-	     event->keyval == GDK_Down)) {
-		GtkTextBuffer *buffer;
-		const gchar   *str;
-
-		buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (chat->input_text_view));
-
-		if (event->keyval == GDK_Up) {
-			str = chat_sent_message_get_next (chat);
-		} else {
-			str = chat_sent_message_get_last (chat);
-		}
-
-		g_signal_handlers_block_by_func (buffer, 
-						 chat_input_text_buffer_changed_cb,
-						 chat);
-		gtk_text_buffer_set_text (buffer, str ? str : "", -1);
-		g_signal_handlers_unblock_by_func (buffer, 
-						   chat_input_text_buffer_changed_cb,
-						   chat);
-
-		return TRUE;    
+	if (G_STR_EMPTY (msg)) {
+		return;
 	}
 
-	/* Catch enter but not ctrl/shift-enter */
-	if (IS_ENTER (event->keyval) &&
-	    !(event->state & (GDK_SHIFT_MASK | GDK_CONTROL_MASK))) {
-		GtkTextView *view;
+	chat_sent_message_add (chat, msg);
 
-		/* This is to make sure that kinput2 gets the enter. And if
-		 * it's handled there we shouldn't send on it. This is because
-		 * kinput2 uses Enter to commit letters. See:
-		 * http://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=104299
-		 */
-
-		view = GTK_TEXT_VIEW (chat->input_text_view);
-		if (gtk_im_context_filter_keypress (view->im_context, event)) {
-			GTK_TEXT_VIEW (chat->input_text_view)->need_im_reset = TRUE;
-			return TRUE;
-		}
-
-		chat_input_text_view_send (chat);
-		return TRUE;
+	if (g_str_has_prefix (msg, "/clear")) {
+		empathy_chat_view_clear (chat->view);
+		return;
 	}
 
-	text_view_sw = gtk_widget_get_parent (GTK_WIDGET (chat->view));
+	message = empathy_message_new (msg);
 
-	if (IS_ENTER (event->keyval) &&
-	    (event->state & (GDK_SHIFT_MASK | GDK_CONTROL_MASK))) {
-		/* Newline for shift/control-enter. */
-		return FALSE;
-	}
-	else if (!(event->state & GDK_CONTROL_MASK) &&
-		 event->keyval == GDK_Page_Up) {
-		adj = gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (text_view_sw));
-		gtk_adjustment_set_value (adj, adj->value - adj->page_size);
+	empathy_tp_chat_send (priv->tp_chat, message);
 
-		return TRUE;
-	}
-	else if ((event->state & GDK_CONTROL_MASK) != GDK_CONTROL_MASK &&
-		 event->keyval == GDK_Page_Down) {
-		adj = gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (text_view_sw));
-		val = MIN (adj->value + adj->page_size, adj->upper - adj->page_size);
-		gtk_adjustment_set_value (adj, val);
-
-		return TRUE;
-	}
-
-	if (EMPATHY_CHAT_GET_CLASS (chat)->key_press_event) {
-		return EMPATHY_CHAT_GET_CLASS (chat)->key_press_event (chat, event);
-	}
-
-	return FALSE;
+	g_object_unref (message);
 }
 
-static gboolean
-chat_text_view_focus_in_event_cb (GtkWidget  *widget,
-				  GdkEvent   *event,
-				  EmpathyChat *chat)
+static void
+chat_input_text_view_send (EmpathyChat *chat)
 {
-	gtk_widget_grab_focus (chat->input_text_view);
+	EmpathyChatPriv *priv;
+	GtkTextBuffer  *buffer;
+	GtkTextIter     start, end;
+	gchar	       *msg;
 
-	return TRUE;
+	priv = GET_PRIV (chat);
+
+	buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (chat->input_text_view));
+
+	gtk_text_buffer_get_bounds (buffer, &start, &end);
+	msg = gtk_text_buffer_get_text (buffer, &start, &end, FALSE);
+
+	/* clear the input field */
+	gtk_text_buffer_set_text (buffer, "", -1);
+
+	chat_send (chat, msg);
+
+	g_free (msg);
+
+	priv->is_first_char = TRUE;
+}
+
+static void
+chat_state_changed_cb (EmpathyTpChat      *tp_chat,
+		       EmpathyContact     *contact,
+		       TpChannelChatState  state,
+		       EmpathyChat        *chat)
+{
+	EmpathyChatPriv *priv;
+	GList          *l;
+	gboolean        was_composing;
+
+	priv = GET_PRIV (chat);
+
+	if (empathy_contact_is_user (contact)) {
+		/* We don't care about our own chat state */
+		return;
+	}
+
+	was_composing = (priv->compositors != NULL);
+
+	/* Find the contact in the list. After that l is the list elem or NULL */
+	for (l = priv->compositors; l; l = l->next) {
+		if (contact == l->data) {
+			break;
+		}
+	}
+
+	switch (state) {
+	case TP_CHANNEL_CHAT_STATE_GONE:
+	case TP_CHANNEL_CHAT_STATE_INACTIVE:
+	case TP_CHANNEL_CHAT_STATE_PAUSED:
+	case TP_CHANNEL_CHAT_STATE_ACTIVE:
+		/* Contact is not composing */
+		if (l) {
+			priv->compositors = g_list_remove_link (priv->compositors, l);
+			g_object_unref (l->data);
+			g_list_free1 (l);
+		}
+		break;
+	case TP_CHANNEL_CHAT_STATE_COMPOSING:
+		/* Contact is composing */
+		if (!l) {
+			priv->compositors = g_list_prepend (priv->compositors,
+							    g_object_ref (contact));
+		}
+		break;
+	default:
+		g_assert_not_reached ();
+	}
+
+	empathy_debug (DEBUG_DOMAIN, "Was composing: %s now composing: %s",
+		      was_composing ? "yes" : "no",
+		      priv->compositors ? "yes" : "no");
+
+	if ((was_composing && !priv->compositors) ||
+	    (!was_composing && priv->compositors)) {
+		/* Composing state changed */
+		g_signal_emit (chat, signals[COMPOSING], 0,
+			       priv->compositors != NULL);
+	}
+}
+
+static void
+chat_message_received_cb (EmpathyTpChat  *tp_chat,
+			  EmpathyMessage *message,
+			  EmpathyChat    *chat)
+{
+	EmpathyChatPriv *priv;
+	EmpathyContact  *sender;
+	const gchar     *body;
+
+	priv = GET_PRIV (chat);
+
+	sender = empathy_message_get_sender (message);
+	body = empathy_message_get_body (message);
+	while (priv->backlog_messages) {
+		EmpathyMessage *log_message;
+		EmpathyContact *log_sender;
+		const gchar    *log_body;
+
+		log_message = priv->backlog_messages->data;
+		log_sender = empathy_message_get_sender (log_message);
+		log_body = empathy_message_get_body (log_message);
+
+		priv->backlog_messages = g_list_remove (priv->backlog_messages,
+							log_message);
+
+		if (empathy_contact_equal (sender, log_sender) &&
+		    !tp_strdiff (body, log_body)) {
+			/* The message we received is already displayed because
+			 * some jabber chatrooms sends us back logs and we
+			 * already displayed it from localy logged messages. */
+			empathy_debug (DEBUG_DOMAIN, "Skipping message because "
+				       "it is already displayed from logged "
+				       "messages");
+			g_object_unref (log_message);
+			return;
+		}
+		g_object_unref (log_message);
+	}
+
+	empathy_debug (DEBUG_DOMAIN, "Appending new message from %s (%d)",
+		       empathy_contact_get_name (sender),
+		       empathy_contact_get_handle (sender));
+
+	empathy_log_manager_add_message (priv->log_manager,
+					 empathy_chat_get_id (chat),
+					 FALSE,
+					 message);
+
+	empathy_chat_view_append_message (chat->view, message);
+
+	if (empathy_chat_should_play_sound (chat)) {
+		// FIXME: empathy_sound_play (EMPATHY_SOUND_CHAT);
+	}
+
+	/* We received a message so the contact is no more composing */
+	chat_state_changed_cb (tp_chat, sender,
+			       TP_CHANNEL_CHAT_STATE_ACTIVE,
+			       chat);
+
+	g_signal_emit (chat, signals[NEW_MESSAGE], 0, message, FALSE);
+}
+
+static void
+chat_send_error_cb (EmpathyTpChat          *tp_chat,
+		    EmpathyMessage         *message,
+		    TpChannelTextSendError  error_code,
+		    EmpathyChat            *chat)
+{
+	const gchar *error;
+	gchar       *str;
+
+	switch (error_code) {
+	case TP_CHANNEL_TEXT_SEND_ERROR_OFFLINE:
+		error = _("offline");
+		break;
+	case TP_CHANNEL_TEXT_SEND_ERROR_INVALID_CONTACT:
+		error = _("invalid contact");
+		break;
+	case TP_CHANNEL_TEXT_SEND_ERROR_PERMISSION_DENIED:
+		error = _("permission denied");
+		break;
+	case TP_CHANNEL_TEXT_SEND_ERROR_TOO_LONG:
+		error = _("too long message");
+		break;
+	case TP_CHANNEL_TEXT_SEND_ERROR_NOT_IMPLEMENTED:
+		error = _("not implemented");
+		break;
+	default:
+		error = _("unknown");
+		break;
+	}
+
+	str = g_strdup_printf (_("Error sending message '%s': %s"),
+			       empathy_message_get_body (message),
+			       error);
+	empathy_chat_view_append_event (chat->view, str);
+	g_free (str);
 }
 
 static void
@@ -892,6 +726,101 @@ chat_input_text_buffer_changed_cb (GtkTextBuffer *buffer,
 		/* set start iter to the end iters position */
 		start = end;
 	}
+}
+
+static gboolean
+chat_input_key_press_event_cb (GtkWidget   *widget,
+			       GdkEventKey *event,
+			       EmpathyChat *chat)
+{
+	EmpathyChatPriv *priv;
+	GtkAdjustment  *adj;
+	gdouble         val;
+	GtkWidget      *text_view_sw;
+
+	priv = GET_PRIV (chat);
+
+	/* Catch ctrl+up/down so we can traverse messages we sent */
+	if ((event->state & GDK_CONTROL_MASK) && 
+	    (event->keyval == GDK_Up || 
+	     event->keyval == GDK_Down)) {
+		GtkTextBuffer *buffer;
+		const gchar   *str;
+
+		buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (chat->input_text_view));
+
+		if (event->keyval == GDK_Up) {
+			str = chat_sent_message_get_next (chat);
+		} else {
+			str = chat_sent_message_get_last (chat);
+		}
+
+		g_signal_handlers_block_by_func (buffer, 
+						 chat_input_text_buffer_changed_cb,
+						 chat);
+		gtk_text_buffer_set_text (buffer, str ? str : "", -1);
+		g_signal_handlers_unblock_by_func (buffer, 
+						   chat_input_text_buffer_changed_cb,
+						   chat);
+
+		return TRUE;    
+	}
+
+	/* Catch enter but not ctrl/shift-enter */
+	if (IS_ENTER (event->keyval) &&
+	    !(event->state & (GDK_SHIFT_MASK | GDK_CONTROL_MASK))) {
+		GtkTextView *view;
+
+		/* This is to make sure that kinput2 gets the enter. And if
+		 * it's handled there we shouldn't send on it. This is because
+		 * kinput2 uses Enter to commit letters. See:
+		 * http://bugzilla.redhat.com/bugzilla/show_bug.cgi?id=104299
+		 */
+
+		view = GTK_TEXT_VIEW (chat->input_text_view);
+		if (gtk_im_context_filter_keypress (view->im_context, event)) {
+			GTK_TEXT_VIEW (chat->input_text_view)->need_im_reset = TRUE;
+			return TRUE;
+		}
+
+		chat_input_text_view_send (chat);
+		return TRUE;
+	}
+
+	text_view_sw = gtk_widget_get_parent (GTK_WIDGET (chat->view));
+
+	if (IS_ENTER (event->keyval) &&
+	    (event->state & (GDK_SHIFT_MASK | GDK_CONTROL_MASK))) {
+		/* Newline for shift/control-enter. */
+		return FALSE;
+	}
+	else if (!(event->state & GDK_CONTROL_MASK) &&
+		 event->keyval == GDK_Page_Up) {
+		adj = gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (text_view_sw));
+		gtk_adjustment_set_value (adj, adj->value - adj->page_size);
+
+		return TRUE;
+	}
+	else if ((event->state & GDK_CONTROL_MASK) != GDK_CONTROL_MASK &&
+		 event->keyval == GDK_Page_Down) {
+		adj = gtk_scrolled_window_get_vadjustment (GTK_SCROLLED_WINDOW (text_view_sw));
+		val = MIN (adj->value + adj->page_size, adj->upper - adj->page_size);
+		gtk_adjustment_set_value (adj, val);
+
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
+static gboolean
+chat_text_view_focus_in_event_cb (GtkWidget  *widget,
+				  GdkEvent   *event,
+				  EmpathyChat *chat)
+{
+	gtk_widget_grab_focus (chat->input_text_view);
+
+	return TRUE;
 }
 
 typedef struct {
@@ -1029,6 +958,50 @@ chat_insert_smiley_activate_cb (GtkWidget   *menuitem,
 	gtk_text_buffer_insert (buffer, &iter, " ", -1);
 }
 
+typedef struct {
+	EmpathyChat  *chat;
+	gchar       *word;
+
+	GtkTextIter  start;
+	GtkTextIter  end;
+} EmpathyChatSpell;
+
+static EmpathyChatSpell *
+chat_spell_new (EmpathyChat  *chat,
+		const gchar *word,
+		GtkTextIter  start,
+		GtkTextIter  end)
+{
+	EmpathyChatSpell *chat_spell;
+
+	chat_spell = g_slice_new0 (EmpathyChatSpell);
+
+	chat_spell->chat = g_object_ref (chat);
+	chat_spell->word = g_strdup (word);
+	chat_spell->start = start;
+	chat_spell->end = end;
+
+	return chat_spell;
+}
+
+static void
+chat_spell_free (EmpathyChatSpell *chat_spell)
+{
+	g_object_unref (chat_spell->chat);
+	g_free (chat_spell->word);
+	g_slice_free (EmpathyChatSpell, chat_spell);
+}
+
+static void
+chat_text_check_word_spelling_cb (GtkMenuItem     *menuitem,
+				  EmpathyChatSpell *chat_spell)
+{
+	empathy_spell_dialog_show (chat_spell->chat,
+				  chat_spell->start,
+				  chat_spell->end,
+				  chat_spell->word);
+}
+
 static void
 chat_text_populate_popup_cb (GtkTextView *view,
 			     GtkMenu     *menu,
@@ -1108,161 +1081,19 @@ chat_text_populate_popup_cb (GtkTextView *view,
 	gtk_widget_show (item);
 }
 
-static void
-chat_text_check_word_spelling_cb (GtkMenuItem     *menuitem,
-				  EmpathyChatSpell *chat_spell)
-{
-	empathy_spell_dialog_show (chat_spell->chat,
-				  chat_spell->start,
-				  chat_spell->end,
-				  chat_spell->word);
-}
-
-static EmpathyChatSpell *
-chat_spell_new (EmpathyChat  *chat,
-		const gchar *word,
-		GtkTextIter  start,
-		GtkTextIter  end)
-{
-	EmpathyChatSpell *chat_spell;
-
-	chat_spell = g_new0 (EmpathyChatSpell, 1);
-
-	chat_spell->chat = g_object_ref (chat);
-	chat_spell->word = g_strdup (word);
-	chat_spell->start = start;
-	chat_spell->end = end;
-
-	return chat_spell;
-}
-
-static void
-chat_spell_free (EmpathyChatSpell *chat_spell)
-{
-	g_object_unref (chat_spell->chat);
-	g_free (chat_spell->word);
-	g_free (chat_spell);
-}
-
-static void
-chat_composing_start (EmpathyChat *chat)
-{
-	EmpathyChatPriv *priv;
-
-	priv = GET_PRIV (chat);
-
-	if (priv->composing_stop_timeout_id) {
-		/* Just restart the timeout */
-		chat_composing_remove_timeout (chat);
-	} else {
-		empathy_tp_chat_set_state (priv->tp_chat,
-					   TP_CHANNEL_CHAT_STATE_COMPOSING);
-	}
-
-	priv->composing_stop_timeout_id = g_timeout_add_seconds (
-		COMPOSING_STOP_TIMEOUT,
-		(GSourceFunc) chat_composing_stop_timeout_cb,
-		chat);
-}
-
-static void
-chat_composing_stop (EmpathyChat *chat)
-{
-	EmpathyChatPriv *priv;
-
-	priv = GET_PRIV (chat);
-
-	chat_composing_remove_timeout (chat);
-	empathy_tp_chat_set_state (priv->tp_chat,
-				   TP_CHANNEL_CHAT_STATE_ACTIVE);
-}
-
-static void
-chat_composing_remove_timeout (EmpathyChat *chat)
-{
-	EmpathyChatPriv *priv;
-
-	priv = GET_PRIV (chat);
-
-	if (priv->composing_stop_timeout_id) {
-		g_source_remove (priv->composing_stop_timeout_id);
-		priv->composing_stop_timeout_id = 0;
-	}
-}
-
 static gboolean
-chat_composing_stop_timeout_cb (EmpathyChat *chat)
+chat_scroll_down_idle_func (EmpathyChat *chat)
 {
 	EmpathyChatPriv *priv;
 
 	priv = GET_PRIV (chat);
 
-	priv->composing_stop_timeout_id = 0;
-	empathy_tp_chat_set_state (priv->tp_chat,
-				   TP_CHANNEL_CHAT_STATE_PAUSED);
+	empathy_chat_scroll_down (chat);
+	g_object_unref (chat);
+
+	priv->scroll_idle_id = 0;
 
 	return FALSE;
-}
-
-static void
-chat_state_changed_cb (EmpathyTpChat      *tp_chat,
-		       EmpathyContact     *contact,
-		       TpChannelChatState  state,
-		       EmpathyChat        *chat)
-{
-	EmpathyChatPriv *priv;
-	GList          *l;
-	gboolean        was_composing;
-
-	priv = GET_PRIV (chat);
-
-	if (empathy_contact_is_user (contact)) {
-		/* We don't care about our own chat state */
-		return;
-	}
-
-	was_composing = (priv->compositors != NULL);
-
-	/* Find the contact in the list. After that l is the list elem or NULL */
-	for (l = priv->compositors; l; l = l->next) {
-		if (contact == l->data) {
-			break;
-		}
-	}
-
-	switch (state) {
-	case TP_CHANNEL_CHAT_STATE_GONE:
-	case TP_CHANNEL_CHAT_STATE_INACTIVE:
-	case TP_CHANNEL_CHAT_STATE_PAUSED:
-	case TP_CHANNEL_CHAT_STATE_ACTIVE:
-		/* Contact is not composing */
-		if (l) {
-			priv->compositors = g_list_remove_link (priv->compositors, l);
-			g_object_unref (l->data);
-			g_list_free1 (l);
-		}
-		break;
-	case TP_CHANNEL_CHAT_STATE_COMPOSING:
-		/* Contact is composing */
-		if (!l) {
-			priv->compositors = g_list_prepend (priv->compositors,
-							    g_object_ref (contact));
-		}
-		break;
-	default:
-		g_assert_not_reached ();
-	}
-
-	empathy_debug (DEBUG_DOMAIN, "Was composing: %s now composing: %s",
-		      was_composing ? "yes" : "no",
-		      priv->compositors ? "yes" : "no");
-
-	if ((was_composing && !priv->compositors) ||
-	    (!was_composing && priv->compositors)) {
-		/* Composing state changed */
-		g_signal_emit (chat, signals[COMPOSING], 0,
-			       priv->compositors != NULL);
-	}
 }
 
 static void
@@ -1282,7 +1113,7 @@ chat_add_logs (EmpathyChat *chat)
 	messages = empathy_log_manager_get_last_messages (priv->log_manager,
 							  priv->account,
 							  empathy_chat_get_id (chat),
-							  empathy_chat_is_group_chat (chat));
+							  FALSE);
 	num_messages  = g_list_length (messages);
 
 	/* Only keep the 10 last messages */
@@ -1309,20 +1140,145 @@ chat_add_logs (EmpathyChat *chat)
 					   g_object_ref (chat));
 }
 
-/* Scroll down after the back-log has been received. */
-static gboolean
-chat_scroll_down_idle_func (EmpathyChat *chat)
+static void
+empathy_chat_class_init (EmpathyChatClass *klass)
 {
-	EmpathyChatPriv *priv;
+	GObjectClass *object_class;
 
-	priv = GET_PRIV (chat);
+	object_class = G_OBJECT_CLASS (klass);
 
-	empathy_chat_scroll_down (chat);
-	g_object_unref (chat);
+	object_class->finalize = chat_finalize;
+	object_class->get_property = chat_get_property;
+	object_class->set_property = chat_set_property;
 
-	priv->scroll_idle_id = 0;
+	g_object_class_install_property (object_class,
+					 PROP_TP_CHAT,
+					 g_param_spec_object ("tp-chat",
+							      "Empathy tp chat",
+							      "The tp chat object",
+							      EMPATHY_TYPE_TP_CHAT,
+							      G_PARAM_CONSTRUCT |
+							      G_PARAM_READWRITE));
+	g_object_class_install_property (object_class,
+					 PROP_NAME,
+					 g_param_spec_string ("name",
+							      "Chat's name",
+							      "The name of the chat",
+							      NULL,
+							      G_PARAM_READABLE));
+	g_object_class_install_property (object_class,
+					 PROP_TOOLTIP,
+					 g_param_spec_string ("tooltip",
+							      "Chat's tooltip",
+							      "The tooltip of the chat",
+							      NULL,
+							      G_PARAM_READABLE));
+	g_object_class_install_property (object_class,
+					 PROP_ICON_NAME,
+					 g_param_spec_string ("icon-name",
+							      "Chat's icon name",
+							      "The icon name of the chat",
+							      NULL,
+							      G_PARAM_READABLE));
+	g_object_class_install_property (object_class,
+					 PROP_WIDGET,
+					 g_param_spec_object ("widget",
+							      "Chat's widget",
+							      "The widget of the chat",
+							      GTK_TYPE_WIDGET,
+							      G_PARAM_READABLE));
 
-	return FALSE;
+	signals[COMPOSING] =
+		g_signal_new ("composing",
+			      G_OBJECT_CLASS_TYPE (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      0,
+			      NULL, NULL,
+			      g_cclosure_marshal_VOID__BOOLEAN,
+			      G_TYPE_NONE,
+			      1, G_TYPE_BOOLEAN);
+
+	signals[NEW_MESSAGE] =
+		g_signal_new ("new-message",
+			      G_OBJECT_CLASS_TYPE (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      0,
+			      NULL, NULL,
+			      _empathy_gtk_marshal_VOID__OBJECT_BOOLEAN,
+			      G_TYPE_NONE,
+			      2, EMPATHY_TYPE_MESSAGE, G_TYPE_BOOLEAN);
+
+	g_type_class_add_private (object_class, sizeof (EmpathyChatPriv));
+}
+
+static void
+empathy_chat_init (EmpathyChat *chat)
+{
+	EmpathyChatPriv *priv = GET_PRIV (chat);
+	GtkTextBuffer  *buffer;
+
+	chat->view = empathy_chat_view_new ();
+	chat->input_text_view = gtk_text_view_new ();
+
+	priv->is_first_char = TRUE;
+
+	g_object_set (chat->input_text_view,
+		      "pixels-above-lines", 2,
+		      "pixels-below-lines", 2,
+		      "pixels-inside-wrap", 1,
+		      "right-margin", 2,
+		      "left-margin", 2,
+		      "wrap-mode", GTK_WRAP_WORD_CHAR,
+		      NULL);
+
+	priv->log_manager = empathy_log_manager_new ();
+	priv->default_window_height = -1;
+	priv->vscroll_visible = FALSE;
+	priv->sensitive = TRUE;
+	priv->sent_messages = NULL;
+	priv->sent_messages_index = -1;
+	priv->first_tp_chat = TRUE;
+	priv->mc = empathy_mission_control_new ();
+
+	dbus_g_proxy_connect_signal (DBUS_G_PROXY (priv->mc), "AccountStatusChanged",
+				     G_CALLBACK (chat_status_changed_cb),
+				     chat, NULL);
+
+	g_signal_connect (chat->input_text_view,
+			  "key_press_event",
+			  G_CALLBACK (chat_input_key_press_event_cb),
+			  chat);
+
+	buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (chat->input_text_view));
+	g_signal_connect (buffer,
+			  "changed",
+			  G_CALLBACK (chat_input_text_buffer_changed_cb),
+			  chat);
+	g_signal_connect (chat->view,
+			  "focus_in_event",
+			  G_CALLBACK (chat_text_view_focus_in_event_cb),
+			  chat);
+
+	g_signal_connect (chat->input_text_view,
+			  "size_allocate",
+			  G_CALLBACK (chat_text_view_size_allocate_cb),
+			  chat);
+
+	g_signal_connect (chat->input_text_view,
+			  "realize",
+			  G_CALLBACK (chat_text_view_realize_cb),
+			  chat);
+
+	g_signal_connect (GTK_TEXT_VIEW (chat->input_text_view),
+			  "populate_popup",
+			  G_CALLBACK (chat_text_populate_popup_cb),
+			  chat);
+
+	/* create misspelt words identification tag */
+	gtk_text_buffer_create_tag (buffer,
+				    "misspelled",
+				    "underline", PANGO_UNDERLINE_ERROR,
+				    NULL);
 }
 
 gboolean
@@ -1369,37 +1325,31 @@ empathy_chat_correct_word (EmpathyChat  *chat,
 const gchar *
 empathy_chat_get_name (EmpathyChat *chat)
 {
+	EmpathyChatPriv *priv = GET_PRIV (chat);
+
 	g_return_val_if_fail (EMPATHY_IS_CHAT (chat), NULL);
 
-	if (EMPATHY_CHAT_GET_CLASS (chat)->get_name) {
-		return EMPATHY_CHAT_GET_CLASS (chat)->get_name (chat);
-	}
-
-	return NULL;
+	return priv->name;
 }
 
-gchar *
+const gchar *
 empathy_chat_get_tooltip (EmpathyChat *chat)
 {
+	EmpathyChatPriv *priv = GET_PRIV (chat);
+
 	g_return_val_if_fail (EMPATHY_IS_CHAT (chat), NULL);
 
-	if (EMPATHY_CHAT_GET_CLASS (chat)->get_tooltip) {
-		return EMPATHY_CHAT_GET_CLASS (chat)->get_tooltip (chat);
-	}
-
-	return NULL;
+	return priv->tooltip;
 }
 
 const gchar *
 empathy_chat_get_status_icon_name (EmpathyChat *chat)
 {
+	EmpathyChatPriv *priv = GET_PRIV (chat);
+
 	g_return_val_if_fail (EMPATHY_IS_CHAT (chat), NULL);
 
-	if (EMPATHY_CHAT_GET_CLASS (chat)->get_status_icon_name) {
-		return EMPATHY_CHAT_GET_CLASS (chat)->get_status_icon_name (chat);
-	}
-
-	return NULL;
+	return priv->icon_name;
 }
 
 GtkWidget *
@@ -1409,23 +1359,7 @@ empathy_chat_get_widget (EmpathyChat *chat)
 
 	g_return_val_if_fail (EMPATHY_IS_CHAT (chat), NULL);
 
-	if (!priv->widget && EMPATHY_CHAT_GET_CLASS (chat)->get_widget) {
-		priv->widget = EMPATHY_CHAT_GET_CLASS (chat)->get_widget (chat);
-	}
-
 	return priv->widget;
-}
-
-gboolean
-empathy_chat_is_group_chat (EmpathyChat *chat)
-{
-	g_return_val_if_fail (EMPATHY_IS_CHAT (chat), FALSE);
-
-	if (EMPATHY_CHAT_GET_CLASS (chat)->is_group_chat) {
-		return EMPATHY_CHAT_GET_CLASS (chat)->is_group_chat (chat);
-	}
-
-	return FALSE;
 }
 
 gboolean 
@@ -1493,6 +1427,7 @@ empathy_chat_set_tp_chat (EmpathyChat   *chat,
 			  EmpathyTpChat *tp_chat)
 {
 	EmpathyChatPriv *priv;
+	TpChan          *tp_chan;
 
 	g_return_if_fail (EMPATHY_IS_CHAT (chat));
 	g_return_if_fail (EMPATHY_IS_TP_CHAT (tp_chat));
@@ -1532,7 +1467,8 @@ empathy_chat_set_tp_chat (EmpathyChat   *chat,
 	priv->tp_chat = g_object_ref (tp_chat);
 	priv->id = g_strdup (empathy_tp_chat_get_id (tp_chat));
 	priv->account = g_object_ref (empathy_tp_chat_get_account (tp_chat));
-	empathy_tp_chat_set_acknowledge (tp_chat, TRUE);
+	tp_chan = empathy_tp_chat_get_channel (tp_chat);
+	priv->handle_type = tp_chan->handle_type;
 
 	if (priv->first_tp_chat) {
 		chat_add_logs (chat);
@@ -1556,10 +1492,6 @@ empathy_chat_set_tp_chat (EmpathyChat   *chat,
 		gtk_widget_set_sensitive (chat->input_text_view, TRUE);
 		empathy_chat_view_append_event (chat->view, _("Connected"));
 		priv->sensitive = TRUE;
-	}
-
-	if (EMPATHY_CHAT_GET_CLASS (chat)->set_tp_chat) {
-		EMPATHY_CHAT_GET_CLASS (chat)->set_tp_chat (chat, tp_chat);
 	}
 
 	g_object_notify (G_OBJECT (chat), "tp-chat");
