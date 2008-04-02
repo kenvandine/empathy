@@ -1,0 +1,18 @@
+--- /home/zdra/Desktop/pyempathygtk.defs	2008-04-02 11:19:27.000000000 +0200
++++ pyempathygtk/pyempathygtk.defs	2008-04-02 11:29:23.000000000 +0200
+@@ -1042,10 +1042,13 @@
+   (return-type "GType")
+ )
+ 
+-(define-method store_new
+-  (of-object "EmpathyContactList")
++(define-function empathy_contact_list_store_new
++  (is-constructor-of "EmpathyContactListStore")
+   (c-name "empathy_contact_list_store_new")
+   (return-type "EmpathyContactListStore*")
++  (parameters
++    '("EmpathyContactList*" "list_iface")
++  )
+ )
+ 
+ (define-method get_list_iface
