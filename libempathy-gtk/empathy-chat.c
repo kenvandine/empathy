@@ -61,11 +61,9 @@
 struct _EmpathyChatPriv {
 	EmpathyTpChat     *tp_chat;
 	McAccount         *account;
+	gchar             *id;
 	gchar             *name;
 	gchar             *subject;
-	gchar             *tooltip;
-	EmpathyContact    *selected_contact;
-	gchar             *id;
 
 	EmpathyLogManager *log_manager;
 	MissionControl    *mc;
@@ -110,11 +108,9 @@ enum {
 	PROP_0,
 	PROP_TP_CHAT,
 	PROP_ACCOUNT,
+	PROP_ID,
 	PROP_NAME,
 	PROP_SUBJECT,
-	PROP_TOOLTIP,
-	PROP_SELECTED_CONTACT,
-	PROP_ID
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -139,17 +135,11 @@ chat_get_property (GObject    *object,
 	case PROP_NAME:
 		g_value_set_string (value, priv->name);
 		break;
-	case PROP_SUBJECT:
-		g_value_set_string (value, priv->subject);
-		break;
-	case PROP_TOOLTIP:
-		g_value_set_string (value, priv->tooltip);
-		break;
-	case PROP_SELECTED_CONTACT:
-		g_value_set_object (value, priv->selected_contact);
-		break;
 	case PROP_ID:
 		g_value_set_string (value, priv->id);
+		break;
+	case PROP_SUBJECT:
+		g_value_set_string (value, priv->subject);
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
@@ -596,61 +586,7 @@ chat_property_changed_cb (EmpathyTpChat *tp_chat,
 		g_free (priv->name);
 		priv->name = g_value_dup_string (value);
 		g_object_notify (G_OBJECT (chat), "name");
-	} else {
-		return;
 	}
-
-	g_free (priv->tooltip);
-	priv->tooltip = g_strconcat (priv->name, "\n",
-				     _("Topic: "), priv->subject, NULL);
-	g_object_notify (G_OBJECT (chat), "tooltip");
-}
-
-static void
-chat_selected_contact_notify_cb (EmpathyChat *chat)
-{
-	EmpathyChatPriv *priv = GET_PRIV (chat);
-
-	g_free (priv->name);
-	priv->name = g_strdup (empathy_contact_get_name (priv->selected_contact));
-	g_object_notify (G_OBJECT (chat), "name");		
-
-	g_free (priv->tooltip);
-	priv->tooltip = g_strconcat (empathy_contact_get_id (priv->selected_contact),
-				     "\n",
-				     empathy_contact_get_status (priv->selected_contact),
-				     NULL);
-	g_object_notify (G_OBJECT (chat), "tooltip");
-}
-
-static void
-chat_remote_contact_notify_cb (EmpathyChat *chat)
-{
-	EmpathyChatPriv *priv = GET_PRIV (chat);
-	EmpathyContact  *contact;
-
-	contact = empathy_tp_chat_get_remote_contact (priv->tp_chat);
-	if (contact == priv->selected_contact) {
-		return;
-	}
-
-	if (priv->selected_contact) {
-		g_signal_handlers_disconnect_by_func (contact,
-						      chat_selected_contact_notify_cb,
-						      chat);
-		g_object_unref (priv->selected_contact);
-		priv->selected_contact = NULL;
-	}
-
-	if (contact) {
-		priv->selected_contact = g_object_ref (contact);
-		g_signal_connect_swapped (contact, "notify",
-					  G_CALLBACK (chat_selected_contact_notify_cb),
-					  chat);
-		chat_selected_contact_notify_cb (chat);
-	}
-
-	g_object_notify (G_OBJECT (chat), "selected-contact");
 }
 
 static gboolean
@@ -1367,13 +1303,6 @@ chat_finalize (GObject *object)
 		g_object_unref (priv->account);
 	}
 
-	if (priv->selected_contact) {
-		g_signal_handlers_disconnect_by_func (priv->selected_contact,
-						      chat_selected_contact_notify_cb,
-						      chat);
-		g_object_unref (priv->selected_contact);
-	}
-
 	if (priv->block_events_timeout_id) {
 		g_source_remove (priv->block_events_timeout_id);
 	}
@@ -1381,7 +1310,6 @@ chat_finalize (GObject *object)
 	g_free (priv->id);
 	g_free (priv->name);
 	g_free (priv->subject);
-	g_free (priv->tooltip);
 
 	G_OBJECT_CLASS (empathy_chat_parent_class)->finalize (object);
 }
@@ -1420,6 +1348,13 @@ empathy_chat_class_init (EmpathyChatClass *klass)
 							      MC_TYPE_ACCOUNT,
 							      G_PARAM_READABLE));
 	g_object_class_install_property (object_class,
+					 PROP_ID,
+					 g_param_spec_string ("id",
+							      "Chat's id",
+							      "The id of the chat",
+							      NULL,
+							      G_PARAM_READABLE));
+	g_object_class_install_property (object_class,
 					 PROP_NAME,
 					 g_param_spec_string ("name",
 							      "Chat's name",
@@ -1431,29 +1366,6 @@ empathy_chat_class_init (EmpathyChatClass *klass)
 					 g_param_spec_string ("subject",
 							      "Chat's subject",
 							      "The subject or topic of the chat",
-							      NULL,
-							      G_PARAM_READABLE));
-	g_object_class_install_property (object_class,
-					 PROP_TOOLTIP,
-					 g_param_spec_string ("tooltip",
-							      "Chat's tooltip",
-							      "The tooltip of the chat",
-							      NULL,
-							      G_PARAM_READABLE));
-	g_object_class_install_property (object_class,
-					 PROP_SELECTED_CONTACT,
-					 g_param_spec_object ("selected-contact",
-							      "The selected contact",
-							      "The selected contact, "
-							      "either the remote contact or "
-							      "the one selected on the contact list",
-							      EMPATHY_TYPE_CONTACT,
-							      G_PARAM_READABLE));
-	g_object_class_install_property (object_class,
-					 PROP_ID,
-					 g_param_spec_string ("id",
-							      "Chat's id",
-							      "The id of the chat",
 							      NULL,
 							      G_PARAM_READABLE));
 
@@ -1592,7 +1504,6 @@ empathy_chat_set_tp_chat (EmpathyChat   *chat,
 	priv->account = g_object_ref (empathy_tp_chat_get_account (tp_chat));
 	tp_chan = empathy_tp_chat_get_channel (tp_chat);
 	priv->handle_type = tp_chan->handle_type;
-	chat_remote_contact_notify_cb (chat);
 
 	g_signal_connect (tp_chat, "message-received",
 			  G_CALLBACK (chat_message_received_cb),
@@ -1606,9 +1517,6 @@ empathy_chat_set_tp_chat (EmpathyChat   *chat,
 	g_signal_connect (tp_chat, "property-changed",
 			  G_CALLBACK (chat_property_changed_cb),
 			  chat);
-	g_signal_connect_swapped (tp_chat, "notify::remote-contact",
-				  G_CALLBACK (chat_remote_contact_notify_cb),
-				  chat);
 	g_signal_connect (tp_chat, "destroy",
 			  G_CALLBACK (chat_destroy_cb),
 			  chat);
@@ -1639,6 +1547,16 @@ empathy_chat_get_account (EmpathyChat *chat)
 }
 
 const gchar *
+empathy_chat_get_id (EmpathyChat *chat)
+{
+	EmpathyChatPriv *priv = GET_PRIV (chat);
+
+	g_return_val_if_fail (EMPATHY_IS_CHAT (chat), NULL);
+
+	return priv->id;
+}
+
+const gchar *
 empathy_chat_get_name (EmpathyChat *chat)
 {
 	EmpathyChatPriv *priv = GET_PRIV (chat);
@@ -1656,36 +1574,6 @@ empathy_chat_get_subject (EmpathyChat *chat)
 	g_return_val_if_fail (EMPATHY_IS_CHAT (chat), NULL);
 
 	return priv->subject;
-}
-
-const gchar *
-empathy_chat_get_tooltip (EmpathyChat *chat)
-{
-	EmpathyChatPriv *priv = GET_PRIV (chat);
-
-	g_return_val_if_fail (EMPATHY_IS_CHAT (chat), NULL);
-
-	return priv->tooltip;
-}
-
-EmpathyContact *
-empathy_chat_get_selected_contact (EmpathyChat *chat)
-{
-	EmpathyChatPriv *priv = GET_PRIV (chat);
-
-	g_return_val_if_fail (EMPATHY_IS_CHAT (chat), NULL);
-
-	return priv->selected_contact;
-}
-
-const gchar *
-empathy_chat_get_id (EmpathyChat *chat)
-{
-	EmpathyChatPriv *priv = GET_PRIV (chat);
-
-	g_return_val_if_fail (EMPATHY_IS_CHAT (chat), NULL);
-
-	return priv->id;
 }
 
 void

@@ -42,56 +42,22 @@
                       </widget>
                     </child>
                     <child>
-                      <widget class="GtkSeparatorMenuItem" id="menu_conv_contact_separator">
-                        <property name="visible">True</property>
-                      </widget>
-                    </child>
-                    <child>
-                      <widget class="GtkImageMenuItem" id="menu_conv_call">
-                        <property name="visible">True</property>
-                        <property name="label" translatable="yes">Ca_ll</property>
-                        <property name="use_underline">True</property>
-                        <child internal-child="image">
-                          <widget class="GtkImage" id="menu_conv_call_image">
-                            <property name="visible">True</property>
-                            <property name="icon_size">1</property>
-                            <property name="icon_name">gnome-stock-mic</property>
-                          </widget>
-                        </child>
-                      </widget>
-                    </child>
-                    <child>
-                      <widget class="GtkImageMenuItem" id="menu_conv_log">
-                        <property name="visible">True</property>
-                        <property name="label" translatable="yes">_View Previous Conversations</property>
-                        <property name="use_underline">True</property>
-                        <accelerator key="F3" modifiers="" signal="activate"/>
-                        <child internal-child="image">
-                          <widget class="GtkImage" id="image263">
-                            <property name="visible">True</property>
-                            <property name="icon_size">1</property>
-                            <property name="icon_name">document-open-recent</property>
-                          </widget>
-                        </child>
-                      </widget>
-                    </child>
-                    <child>
-                      <widget class="GtkImageMenuItem" id="menu_conv_info">
-                        <property name="visible">True</property>
-                        <property name="label" translatable="yes">Contact Infor_mation</property>
-                        <property name="use_underline">True</property>
-                        <child internal-child="image">
-                          <widget class="GtkImage" id="image265">
-                            <property name="visible">True</property>
-                            <property name="stock">gtk-info</property>
-                            <property name="icon_size">1</property>
-                          </widget>
-                        </child>
-                      </widget>
-                    </child>
-                    <child>
                       <widget class="GtkSeparatorMenuItem" id="separator7">
                         <property name="visible">True</property>
+                      </widget>
+                    </child>
+                    <child>
+                      <widget class="GtkMenuItem" id="menu_conv_contact">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">_Contact</property>
+                        <property name="use_underline">True</property>
+                      </widget>
+                    </child>
+                    <child>
+                      <widget class="GtkSeparatorMenuItem" id="menuitem1">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">menuitem1</property>
+                        <property name="use_underline">True</property>
                       </widget>
                     </child>
                     <child>

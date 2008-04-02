@@ -37,22 +37,19 @@
 #include <libmissioncontrol/mission-control.h>
 
 #include <libempathy/empathy-contact-factory.h>
-#include <libempathy/empathy-log-manager.h>
-#include <libempathy/empathy-chatroom-manager.h>
 #include <libempathy/empathy-contact.h>
-#include <libempathy/empathy-debug.h>
 #include <libempathy/empathy-message.h>
+#include <libempathy/empathy-debug.h>
 #include <libempathy/empathy-utils.h>
 
 #include <libempathy-gtk/empathy-images.h>
 #include <libempathy-gtk/empathy-conf.h>
 #include <libempathy-gtk/empathy-contact-dialogs.h>
 #include <libempathy-gtk/empathy-log-window.h>
+#include <libempathy-gtk/empathy-geometry.h>
 #include <libempathy-gtk/empathy-ui-utils.h>
 
 #include "empathy-chat-window.h"
-#include "empathy-new-chatroom-dialog.h"
-#include "empathy-preferences.h"
 #include "empathy-about-dialog.h"
 
 #define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), EMPATHY_TYPE_CHAT_WINDOW, EmpathyChatWindowPriv))
@@ -60,47 +57,34 @@
 #define DEBUG_DOMAIN "ChatWindow"
 
 struct _EmpathyChatWindowPriv {
-	EmpathyChatroomManager *chatroom_manager;
-	GList                  *chats;
-	GList                  *chats_new_msg;
-	GList                  *chats_composing;
-	EmpathyChat            *current_chat;
-	gboolean                page_added;
-	gboolean                dnd_same_window;
-	guint                   save_geometry_id;
-	GtkWidget              *dialog;
-	GtkWidget              *notebook;
+	EmpathyChat *current_chat;
+	GList       *chats;
+	GList       *chats_new_msg;
+	GList       *chats_composing;
+	gboolean     page_added;
+	gboolean     dnd_same_window;
+	guint        save_geometry_id;
+	GtkWidget   *dialog;
+	GtkWidget   *notebook;
 
 	/* Menu items. */
-	GtkWidget             *menu_conv_clear;
-	GtkWidget             *menu_conv_insert_smiley;
-	GtkWidget             *menu_conv_call;
-	GtkWidget             *menu_conv_call_separator;
-	GtkWidget             *menu_conv_log;
-	GtkWidget             *menu_conv_separator;
-	GtkWidget             *menu_conv_add_contact;
-	GtkWidget             *menu_conv_info;
-	GtkWidget             *menu_conv_close;
+	GtkWidget   *menu_conv_clear;
+	GtkWidget   *menu_conv_insert_smiley;
+	GtkWidget   *menu_conv_contact;
+	GtkWidget   *menu_conv_close;
 
-	GtkWidget             *menu_room;
-	GtkWidget             *menu_room_set_topic;
-	GtkWidget             *menu_room_join_new;
-	GtkWidget             *menu_room_invite;
-	GtkWidget             *menu_room_add;
-	GtkWidget             *menu_room_show_contacts;
+	GtkWidget   *menu_edit_cut;
+	GtkWidget   *menu_edit_copy;
+	GtkWidget   *menu_edit_paste;
 
-	GtkWidget             *menu_edit_cut;
-	GtkWidget             *menu_edit_copy;
-	GtkWidget             *menu_edit_paste;
-
-	GtkWidget             *menu_tabs_next;
-	GtkWidget             *menu_tabs_prev;
-	GtkWidget             *menu_tabs_left;
-	GtkWidget             *menu_tabs_right;
-	GtkWidget             *menu_tabs_detach;
+	GtkWidget   *menu_tabs_next;
+	GtkWidget   *menu_tabs_prev;
+	GtkWidget   *menu_tabs_left;
+	GtkWidget   *menu_tabs_right;
+	GtkWidget   *menu_tabs_detach;
 	
-	GtkWidget             *menu_help_contents;
-	GtkWidget             *menu_help_about;
+	GtkWidget   *menu_help_contents;
+	GtkWidget   *menu_help_about;
 };
 
 static void       empathy_chat_window_class_init (EmpathyChatWindowClass *klass);
@@ -191,30 +175,6 @@ chat_window_close_button_style_set_cb (GtkWidget *button,
 	gtk_widget_set_size_request (button, w, h);
 }
 
-static void
-chat_window_update_tooltip (EmpathyChatWindow *window,
-			    EmpathyChat       *chat)
-{
-	EmpathyChatWindowPriv *priv;
-	GtkWidget             *widget;
-	const gchar           *tooltip;
-	gchar                 *str = NULL;
-
-	priv = GET_PRIV (window);
-
-	tooltip = empathy_chat_get_tooltip (chat);
-
-	if (g_list_find (priv->chats_composing, chat)) {
-		str = g_strconcat (tooltip, "\n", _("Typing a message."), NULL);
-		tooltip = str;
-	}
-
-	widget = g_object_get_data (G_OBJECT (chat), "chat-window-tab-tooltip-widget");
-	gtk_widget_set_tooltip_text (widget, tooltip);
-
-	g_free (str);
-}
-
 static GtkWidget *
 chat_window_create_label (EmpathyChatWindow *window,
 			  EmpathyChat       *chat)
@@ -238,7 +198,7 @@ chat_window_create_label (EmpathyChatWindow *window,
 	event_box = gtk_event_box_new ();
 	gtk_event_box_set_visible_window (GTK_EVENT_BOX (event_box), FALSE);
 
-	name_label = gtk_label_new (empathy_chat_get_name (chat));
+	name_label = gtk_label_new (NULL);
 	gtk_label_set_ellipsize (GTK_LABEL (name_label), PANGO_ELLIPSIZE_END);
 
 	attr_list = pango_attr_list_new ();
@@ -297,67 +257,9 @@ chat_window_create_label (EmpathyChatWindow *window,
 			  G_CALLBACK (chat_window_close_clicked_cb),
 			  chat);
 
-	/* Set up tooltip */
-	chat_window_update_tooltip (window, chat);
-
 	gtk_widget_show_all (hbox);
 
 	return hbox;
-}
-
-static void
-chat_window_update_title (EmpathyChatWindow *window,
-			  EmpathyChat       *chat)
-{
-	EmpathyChatWindowPriv *priv;
-	gint                   n_chats;
-	
-	priv = GET_PRIV (window);
-	
-	n_chats = g_list_length (priv->chats);
-	if (n_chats == 1) {
-		gtk_window_set_title (GTK_WINDOW (priv->dialog),
-				      empathy_chat_get_name (priv->current_chat));
-	} else {
-		gchar *title;
-
-		title = g_strdup_printf (_("Conversations (%d)"), n_chats);
-		gtk_window_set_title (GTK_WINDOW (priv->dialog), title);
-		g_free (title);
-	}
-
-	if (priv->chats_new_msg) {
-		gtk_window_set_icon_name (GTK_WINDOW (priv->dialog),
-					  EMPATHY_IMAGE_MESSAGE);
-	} else {
-		gtk_window_set_icon_name (GTK_WINDOW (priv->dialog), NULL);
-	}
-}
-
-static void
-chat_window_update_status (EmpathyChatWindow *window,
-			   EmpathyChat       *chat)
-{
-	EmpathyChatWindowPriv *priv;
-	GtkImage             *image;
-	const gchar          *icon_name = NULL;
-
-	priv = GET_PRIV (window);
-
-	if (g_list_find (priv->chats_new_msg, chat)) {
-		icon_name = EMPATHY_IMAGE_MESSAGE;
-	}
-	else if (g_list_find (priv->chats_composing, chat)) {
-		icon_name = EMPATHY_IMAGE_TYPING;
-	}
-	else {
-		icon_name = empathy_chat_get_status_icon_name (chat);
-	}
-	image = g_object_get_data (G_OBJECT (chat), "chat-window-tab-image");
-	gtk_image_set_from_icon_name (image, icon_name, GTK_ICON_SIZE_MENU);
-
-	chat_window_update_title (window, chat);
-	chat_window_update_tooltip (window, chat);
 }
 
 static void
@@ -384,82 +286,213 @@ chat_window_update_menu (EmpathyChatWindow *window)
 	gtk_widget_set_sensitive (priv->menu_tabs_left, !first_page);
 	gtk_widget_set_sensitive (priv->menu_tabs_right, !last_page);
 
-	is_connected = empathy_chat_is_connected (priv->current_chat);
+	is_connected = empathy_chat_get_tp_chat (priv->current_chat) != NULL;
+	gtk_widget_set_sensitive (priv->menu_conv_insert_smiley, is_connected);
+}
 
-	if (empathy_chat_is_group_chat (priv->current_chat)) {
-		EmpathyGroupChat *group_chat;
-		EmpathyChatroom  *chatroom;
-		gboolean         show_contacts;
+static void
+chat_window_update_title (EmpathyChatWindow *window)
+{
+	EmpathyChatWindowPriv *priv = GET_PRIV (window);
+	EmpathyTpChat         *tp_chat;
+	EmpathyContact        *remote_contact;
+	const gchar           *name;
+	guint                  n_chats;
 
-		group_chat = EMPATHY_GROUP_CHAT (priv->current_chat);
+	/* Get chat's name */
+	name = empathy_chat_get_name (priv->current_chat);
+	tp_chat = empathy_chat_get_tp_chat (priv->current_chat);
+	if (!name && tp_chat) {
+		remote_contact = empathy_tp_chat_get_remote_contact (tp_chat);
+		if (remote_contact) {
+			name = empathy_contact_get_name (remote_contact);
+		}
+	}
 
-		/* Show / Hide widgets */
-		gtk_widget_show (priv->menu_room);
-
-		gtk_widget_hide (priv->menu_conv_add_contact);
-		gtk_widget_hide (priv->menu_conv_info);
-		gtk_widget_hide (priv->menu_conv_separator);
-
-		/* Can we add this room to our favourites and are we
-		 * connected to the room?
-		 */
-		chatroom = empathy_chatroom_manager_find (priv->chatroom_manager,
-							  empathy_chat_get_account (priv->current_chat),
-							  empathy_chat_get_id (priv->current_chat));
-
-		gtk_widget_set_sensitive (priv->menu_room_add, chatroom == NULL);
-		gtk_widget_set_sensitive (priv->menu_conv_insert_smiley, is_connected);
-		gtk_widget_set_sensitive (priv->menu_room_join_new, is_connected);
-		gtk_widget_set_sensitive (priv->menu_room_invite, is_connected);
-
-		/* We need to block the signal here because all we are
-		 * really trying to do is check or uncheck the menu
-		 * item. If we don't do this we get funny behaviour
-		 * with 2 or more group chat windows where showing
-		 * contacts doesn't do anything.
-		 */
-		show_contacts = empathy_group_chat_get_show_contacts (group_chat);
-
-		g_signal_handlers_block_by_func (priv->menu_room_show_contacts,
-						 chat_window_show_contacts_toggled_cb,
-						 window);
-
-		g_object_set (priv->menu_room_show_contacts,
-			      "active", show_contacts,
-			      NULL);
-
-		g_signal_handlers_unblock_by_func (priv->menu_room_show_contacts,
-						   chat_window_show_contacts_toggled_cb,
-						   window);
+	/* Update window title */
+	n_chats = g_list_length (priv->chats);
+	if (n_chats == 1) {
+		gtk_window_set_title (GTK_WINDOW (priv->dialog), name);
 	} else {
-		EmpathyPrivateChat *chat;
-		EmpathyContact     *contact;
-		McPresence          presence;
+		gchar *title;
 
-		chat = EMPATHY_PRIVATE_CHAT (priv->current_chat);
+		title = g_strdup_printf (_("Conversations (%d)"), n_chats);
+		gtk_window_set_title (GTK_WINDOW (priv->dialog), title);
+		g_free (title);
+	}
+	if (priv->chats_new_msg) {
+		gtk_window_set_icon_name (GTK_WINDOW (priv->dialog),
+					  EMPATHY_IMAGE_MESSAGE);
+	} else {
+		gtk_window_set_icon_name (GTK_WINDOW (priv->dialog), NULL);
+	}
+}
 
-		/* Show / Hide widgets */
-		gtk_widget_hide (priv->menu_room);
+static void
+chat_window_update_chat (EmpathyChat *chat)
+{
+	EmpathyChatWindow     *window;
+	EmpathyChatWindowPriv *priv;
+	EmpathyTpChat         *tp_chat;
+	EmpathyContact        *remote_contact = NULL;
+	const gchar           *name;
+	const gchar           *subject;
+	GtkWidget             *widget;
+	GString               *tooltip;
+	gchar                 *str;
+	const gchar           *icon_name;
 
-		/* Unset presence means this contact refuses to send us his
-		 * presence. By adding the contact we ask the contact to accept
-		 * to send his presence. */
-		contact = empathy_private_chat_get_contact (chat);
-		presence = empathy_contact_get_presence (contact);
-		if (presence == MC_PRESENCE_UNSET) {
-			gtk_widget_show (priv->menu_conv_add_contact);
-		} else {
-			gtk_widget_hide (priv->menu_conv_add_contact);
+	window = chat_window_find_chat (chat);
+	priv = GET_PRIV (window);
+
+	/* Get information */
+	name = empathy_chat_get_name (chat);
+	subject = empathy_chat_get_subject (chat);
+	tp_chat = empathy_chat_get_tp_chat (chat);
+	if (tp_chat) {
+		remote_contact = empathy_tp_chat_get_remote_contact (tp_chat);
+	}
+	if (!name && remote_contact) {
+		name = empathy_contact_get_name (remote_contact);
+	}
+
+	/* Update tab image */
+	if (g_list_find (priv->chats_new_msg, chat)) {
+		icon_name = EMPATHY_IMAGE_MESSAGE;
+	}
+	else if (g_list_find (priv->chats_composing, chat)) {
+		icon_name = EMPATHY_IMAGE_TYPING;
+	}
+	else if (remote_contact) {
+		icon_name = empathy_icon_name_for_contact (remote_contact);
+	} else {
+		icon_name = EMPATHY_IMAGE_GROUP_MESSAGE;
+	}
+	widget = g_object_get_data (G_OBJECT (chat), "chat-window-tab-image");
+	gtk_image_set_from_icon_name (GTK_IMAGE (widget), icon_name, GTK_ICON_SIZE_MENU);
+
+	/* Update tab tooltip */
+	tooltip = g_string_new (NULL);
+	if (remote_contact) {
+		g_string_append_printf (tooltip, "%s\n%s",
+					empathy_contact_get_id (remote_contact),
+					empathy_contact_get_status (remote_contact));
+	} else {
+		g_string_append (tooltip, name);
+	}
+	if (subject) {
+		g_string_append_printf (tooltip, "\n%s %s", _("Topic:"), subject);
+	}
+	if (g_list_find (priv->chats_composing, chat)) {
+		g_string_append_printf (tooltip, "\n%s", _("Typing a message."));
+	}
+	str = g_string_free (tooltip, FALSE);
+	widget = g_object_get_data (G_OBJECT (chat), "chat-window-tab-tooltip-widget");
+	gtk_widget_set_tooltip_text (widget, str);
+	g_free (str);
+
+	/* Update tab label */
+	widget = g_object_get_data (G_OBJECT (chat), "chat-window-tab-label");
+	gtk_label_set_text (GTK_LABEL (widget), name);
+
+	/* Update window title? */
+	if (priv->current_chat == chat) {
+		chat_window_update_title (window);
+	}
+}
+
+static void
+chat_window_remote_contact_notify_cb (EmpathyChat *chat)
+{
+	EmpathyTpChat  *tp_chat;
+	EmpathyContact *old_remote_contact;
+	EmpathyContact *remote_contact = NULL;
+
+	old_remote_contact = g_object_get_data (G_OBJECT (chat), "chat-window-remote-contact");
+	tp_chat = empathy_chat_get_tp_chat (chat);
+	if (tp_chat) {
+		remote_contact = empathy_tp_chat_get_remote_contact (tp_chat);
+	}
+
+	if (old_remote_contact != remote_contact) {
+		/* The remote-contact associated with the chat changed, we need
+		 * to keep track of any change of that contact and update the
+		 * window each time. */
+		if (remote_contact) {
+			g_signal_connect_swapped (remote_contact, "notify",
+						  G_CALLBACK (chat_window_update_chat),
+						  chat);
+		}
+		if (old_remote_contact) {
+			g_signal_handlers_disconnect_by_func (old_remote_contact,
+							      chat_window_update_chat,
+							      chat);
 		}
 
-		gtk_widget_show (priv->menu_conv_separator);
-		gtk_widget_show (priv->menu_conv_info);
+		g_object_set_data (G_OBJECT (chat), "chat-window-remote-contact",
+				   remote_contact);
 
-		/* Are we connected? */
-		gtk_widget_set_sensitive (priv->menu_conv_insert_smiley, is_connected);
-		gtk_widget_set_sensitive (priv->menu_conv_add_contact, is_connected);
-		gtk_widget_set_sensitive (priv->menu_conv_info, is_connected);
+		chat_window_update_chat (chat);
 	}
+}
+
+static void
+chat_window_weak_ref_cb (gpointer  data,
+			 GObject  *chat)
+{
+	EmpathyTpChat  *tp_chat;
+	EmpathyContact *remote_contact;
+
+	tp_chat = g_object_get_data (chat, "chat-window-tp-chat");
+	if (tp_chat) {
+		g_signal_handlers_disconnect_by_func (tp_chat,
+						      chat_window_remote_contact_notify_cb,
+						      chat);
+	}
+
+	remote_contact = g_object_get_data (chat, "chat-window-remote-contact");
+	if (remote_contact) {
+		g_signal_handlers_disconnect_by_func (remote_contact,
+						      chat_window_update_chat,
+						      chat);
+	}
+}
+
+static void
+chat_window_chat_notify_cb (EmpathyChat *chat)
+{
+	EmpathyTpChat *tp_chat;
+	EmpathyTpChat *old_tp_chat;
+
+	old_tp_chat = g_object_get_data (G_OBJECT (chat), "chat-window-tp-chat");
+	tp_chat = empathy_chat_get_tp_chat (chat);
+
+	if (old_tp_chat != tp_chat) {
+		/* The TpChat associated with the chat has changed, we need to
+		 * keep track of it's remote-contact if there is one. */
+		if (tp_chat) {
+			g_signal_connect_swapped (tp_chat, "notify::remote-contact",
+						  G_CALLBACK (chat_window_remote_contact_notify_cb),
+						  chat);
+			g_object_weak_ref (G_OBJECT (chat),
+					   chat_window_weak_ref_cb,
+					   NULL);
+		}
+		if (old_tp_chat) {
+			g_signal_handlers_disconnect_by_func (old_tp_chat,
+							      chat_window_remote_contact_notify_cb,
+							      chat);
+		}
+		g_object_set_data (G_OBJECT (chat), "chat-window-tp-chat", tp_chat);
+
+		/* This will call chat_window_update_chat() if the remote-contact
+		 * changed, so we don't have to call it again. That's why we
+		 * return here. */
+		chat_window_remote_contact_notify_cb (chat);
+		return;
+	}
+
+	chat_window_update_chat (chat);
 }
 
 static void
@@ -493,69 +526,6 @@ chat_window_clear_activate_cb (GtkWidget        *menuitem,
 	priv = GET_PRIV (window);
 
 	empathy_chat_clear (priv->current_chat);
-}
-
-static void
-chat_window_add_contact_activate_cb (GtkWidget        *menuitem,
-				     EmpathyChatWindow *window)
-{
-	EmpathyChatWindowPriv *priv;
-	//EmpathyContact        *contact;
-
-	priv = GET_PRIV (window);
-
-	//contact = empathy_chat_get_contact (priv->current_chat);
-
-	// FIXME: empathy_add_contact_dialog_show (NULL, contact);
-}
-
-static void
-chat_window_call_activate_cb (GtkWidget         *menuitem,
-			      EmpathyChatWindow *window)
-{
-	EmpathyChatWindowPriv *priv;
-
-	priv = GET_PRIV (window);
-
-	if (!empathy_chat_is_group_chat (priv->current_chat)) {
-		EmpathyPrivateChat *chat;
-		EmpathyContact     *contact;
-
-		chat = EMPATHY_PRIVATE_CHAT (priv->current_chat);
-		contact = empathy_private_chat_get_contact (chat);
-
-		empathy_call_with_contact (contact);
-	}
-}
-
-static void
-chat_window_log_activate_cb (GtkWidget        *menuitem,
-			     EmpathyChatWindow *window)
-{
-	EmpathyChatWindowPriv *priv;
-
-	priv = GET_PRIV (window);
-
-	empathy_log_window_show (empathy_chat_get_account (priv->current_chat),
-				 empathy_chat_get_id (priv->current_chat),
-				 empathy_chat_is_group_chat (priv->current_chat),
-				 GTK_WINDOW (priv->dialog));
-}
-
-static void
-chat_window_info_activate_cb (GtkWidget        *menuitem,
-			      EmpathyChatWindow *window)
-{
-	EmpathyChatWindowPriv *priv;
-	EmpathyContact        *contact;
-
-	priv = GET_PRIV (window);
-
-	contact = empathy_private_chat_get_contact (EMPATHY_PRIVATE_CHAT (priv->current_chat));
-
-	empathy_contact_information_dialog_show (contact,
-						 GTK_WINDOW (priv->dialog),
-						 FALSE, FALSE);
 }
 
 static const gchar *
@@ -615,57 +585,6 @@ chat_window_configure_event_cb (GtkWidget         *widget,
 }
 
 static void
-chat_window_conv_activate_cb (GtkWidget         *menuitem,
-			      EmpathyChatWindow *window)
-{
-	EmpathyChatWindowPriv *priv;
-	EmpathyLogManager     *manager;
-	gboolean              log_exists = FALSE;
-	gboolean              can_voip = FALSE;
-
-	priv = GET_PRIV (window);
-
-	manager = empathy_log_manager_new ();
-	log_exists = empathy_log_manager_exists (manager,
-						 empathy_chat_get_account (priv->current_chat),
-						 empathy_chat_get_id (priv->current_chat),
-						 empathy_chat_is_group_chat (priv->current_chat));
-	g_object_unref (manager);
-
-	if (!empathy_chat_is_group_chat (priv->current_chat)) {
-		EmpathyPrivateChat *chat;
-		EmpathyContact     *contact;
-
-		chat = EMPATHY_PRIVATE_CHAT (priv->current_chat);
-		contact = empathy_private_chat_get_contact (chat);
-		can_voip = empathy_contact_can_voip (contact);
-	}
-
-	gtk_widget_set_sensitive (priv->menu_conv_log, log_exists);
-#ifdef HAVE_VOIP
-	gtk_widget_set_sensitive (priv->menu_conv_call, can_voip);
-#else 
-	g_object_set (priv->menu_conv_call, "visible", FALSE, NULL);
-	g_object_set (priv->menu_conv_call_separator, "visible", FALSE, NULL);
-#endif
-}
-
-static void
-chat_window_show_contacts_toggled_cb (GtkWidget        *menuitem,
-				      EmpathyChatWindow *window)
-{
-	EmpathyChatWindowPriv *priv;
-	gboolean              show;
-
-	priv = GET_PRIV (window);
-
-	g_return_if_fail (priv->current_chat != NULL);
-
-	show = gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM (priv->menu_room_show_contacts));
-	empathy_group_chat_set_show_contacts (EMPATHY_GROUP_CHAT (priv->current_chat), show);
-}
-
-static void
 chat_window_close_activate_cb (GtkWidget        *menuitem,
 			       EmpathyChatWindow *window)
 {
@@ -676,80 +595,6 @@ chat_window_close_activate_cb (GtkWidget        *menuitem,
 	g_return_if_fail (priv->current_chat != NULL);
 
 	empathy_chat_window_remove_chat (window, priv->current_chat);
-}
-
-static void
-chat_window_room_set_topic_activate_cb (GtkWidget        *menuitem,
-					EmpathyChatWindow *window)
-{
-	EmpathyChatWindowPriv *priv = GET_PRIV (window);
-	
-	if (empathy_chat_is_group_chat (priv->current_chat)) {
-		empathy_group_chat_set_topic (EMPATHY_GROUP_CHAT (priv->current_chat));
-	}
-}
-
-static void
-chat_window_room_join_new_activate_cb (GtkWidget        *menuitem,
-				       EmpathyChatWindow *window)
-{
-	EmpathyChatWindowPriv *priv;
-
-	priv = GET_PRIV (window);
-
-	empathy_new_chatroom_dialog_show (GTK_WINDOW (priv->dialog));
-}
-
-static void
-chat_window_room_invite_activate_cb (GtkWidget        *menuitem,
-				     EmpathyChatWindow *window)
-{
-/* FIXME:
-	EmpathyChatWindowPriv *priv;
-	EmpathyContact        *own_contact;
-	EmpathyChatroomId      id = 0;
-
-	priv = GET_PRIV (window);
-	own_contact = empathy_chat_get_own_contact (priv->current_chat);
-
-	if (empathy_chat_is_group_chat (priv->current_chat)) {
-		EmpathyGroupChat *group_chat;
-
-		group_chat = EMPATHY_GROUP_CHAT (priv->current_chat);
-		id = empathy_group_chat_get_chatroom_id (group_chat);
-	}
-
-	empathy_chat_invite_dialog_show (own_contact, id);
-*/
-}
-
-static void
-chat_window_room_add_activate_cb (GtkWidget        *menuitem,
-				  EmpathyChatWindow *window)
-{
-	EmpathyChatWindowPriv  *priv;
-	EmpathyChatroomManager *manager;
-	EmpathyChatroom        *chatroom;
-
-	priv = GET_PRIV (window);
-
-	g_return_if_fail (priv->current_chat != NULL);
-
-	if (!empathy_chat_is_group_chat (priv->current_chat)) {
-		return;
-	}
-
-	chatroom = empathy_chatroom_new_full (empathy_chat_get_account (priv->current_chat),
-					      empathy_chat_get_id (priv->current_chat),
-					      empathy_chat_get_name (priv->current_chat),
-					      FALSE);
-
-	manager = empathy_chatroom_manager_new ();
-	empathy_chatroom_manager_add (manager, chatroom);
-	chat_window_update_menu (window);
-
-	g_object_unref (chatroom);
-	g_object_unref (manager);
 }
 
 static void
@@ -765,7 +610,7 @@ chat_window_edit_activate_cb (GtkWidget        *menuitem,
 
 	g_return_if_fail (priv->current_chat != NULL);
 
-	if (!empathy_chat_is_connected (priv->current_chat)) {
+	if (!empathy_chat_get_tp_chat (priv->current_chat)) {
 		gtk_widget_set_sensitive (priv->menu_edit_copy, FALSE);
 		gtk_widget_set_sensitive (priv->menu_edit_cut, FALSE);
 		gtk_widget_set_sensitive (priv->menu_edit_paste, FALSE);
@@ -847,11 +692,8 @@ chat_window_tabs_left_activate_cb (GtkWidget        *menuitem,
 	}
 
 	gtk_notebook_reorder_child (GTK_NOTEBOOK (priv->notebook),
-				    empathy_chat_get_widget (chat),
+				    GTK_WIDGET (chat),
 				    index - 1);
-
-	chat_window_update_menu (window);
-	chat_window_update_status (window, chat);
 }
 
 static void
@@ -868,11 +710,8 @@ chat_window_tabs_right_activate_cb (GtkWidget        *menuitem,
 	index = gtk_notebook_get_current_page (GTK_NOTEBOOK (priv->notebook));
 
 	gtk_notebook_reorder_child (GTK_NOTEBOOK (priv->notebook),
-				    empathy_chat_get_widget (chat),
+				    GTK_WIDGET (chat),
 				    index + 1);
-
-	chat_window_update_menu (window);
-	chat_window_update_status (window, chat);
 }
 
 static void
@@ -935,26 +774,6 @@ chat_window_delete_event_cb (GtkWidget        *dialog,
 }
 
 static void
-chat_window_status_changed_cb (EmpathyChat       *chat,
-			       EmpathyChatWindow *window)
-{
-	chat_window_update_menu (window);
-	chat_window_update_status (window, chat);
-}
-
-static void
-chat_window_name_changed_cb (EmpathyChat       *chat,
-			     const gchar      *name,
-			     EmpathyChatWindow *window)
-{
-	GtkLabel *label;
-
-	label = g_object_get_data (G_OBJECT (chat), "chat-window-tab-label");
-
-	gtk_label_set_text (label, name);
-}
-
-static void
 chat_window_composing_cb (EmpathyChat       *chat,
 			  gboolean          is_composing,
 			  EmpathyChatWindow *window)
@@ -969,13 +788,26 @@ chat_window_composing_cb (EmpathyChat       *chat,
 		priv->chats_composing = g_list_remove (priv->chats_composing, chat);
 	}
 
-	chat_window_update_status (window, chat);
+	chat_window_update_chat (chat);
+}
+
+static void
+chat_window_set_urgency_hint (EmpathyChatWindow *window,
+			      gboolean          urgent)
+{
+	EmpathyChatWindowPriv *priv;
+
+	priv = GET_PRIV (window);
+
+	empathy_debug (DEBUG_DOMAIN, "Turning %s urgency hint",
+		       urgent ? "on" : "off");
+	gtk_window_set_urgency_hint (GTK_WINDOW (priv->dialog), urgent);
 }
 
 static void
 chat_window_new_message_cb (EmpathyChat       *chat,
 			    EmpathyMessage    *message,
-s			    EmpathyChatWindow *window)
+			    EmpathyChatWindow *window)
 {
 	EmpathyChatWindowPriv *priv;
 	gboolean              has_focus;
@@ -989,8 +821,7 @@ s			    EmpathyChatWindow *window)
 		return;
 	}
 	
-	needs_urgency = (empathy_chat_is_group_chat (chat) &&
-			 empathy_message_should_highlight (message));
+	needs_urgency = empathy_message_should_highlight (message);
 
 	if (needs_urgency && !has_focus) {
 		chat_window_set_urgency_hint (window, TRUE);
@@ -998,7 +829,7 @@ s			    EmpathyChatWindow *window)
 
 	if (!g_list_find (priv->chats_new_msg, chat)) {
 		priv->chats_new_msg = g_list_prepend (priv->chats_new_msg, chat);
-		chat_window_update_status (window, chat);
+		chat_window_update_chat (chat);
 	}
 }
 
@@ -1013,7 +844,7 @@ chat_window_detach_hook (GtkNotebook *source,
 	EmpathyChatWindow     *window, *new_window;
 	EmpathyChat           *chat;
 
-	chat = g_object_get_data (G_OBJECT (page), "chat");
+	chat = EMPATHY_CHAT (page);
 	window = chat_window_find_chat (chat);
 
 	new_window = empathy_chat_window_new ();
@@ -1044,7 +875,7 @@ chat_window_page_switched_cb (GtkNotebook      *notebook,
 	priv = GET_PRIV (window);
 
 	child = gtk_notebook_get_nth_page (notebook, page_num);
-	chat = g_object_get_data (G_OBJECT (child), "chat");
+	chat = EMPATHY_CHAT (child);
 
 	if (priv->page_added) {
 		priv->page_added = FALSE;
@@ -1058,7 +889,7 @@ chat_window_page_switched_cb (GtkNotebook      *notebook,
 	priv->chats_new_msg = g_list_remove (priv->chats_new_msg, chat);
 
 	chat_window_update_menu (window);
-	chat_window_update_status (window, chat);
+	chat_window_update_title (window);
 }
 
 static void
@@ -1070,6 +901,7 @@ chat_window_page_reordered_cb (GtkNotebook      *notebook,
 	empathy_debug (DEBUG_DOMAIN, "Page reordered");
 	
 	chat_window_update_menu (window);
+	chat_window_update_title (window);
 }
 
 static void
@@ -1096,15 +928,9 @@ chat_window_page_added_cb (GtkNotebook      *notebook,
 	empathy_debug (DEBUG_DOMAIN, "Page added");
 
 	/* Get chat object */
-	chat = g_object_get_data (G_OBJECT (child), "chat");
+	chat = EMPATHY_CHAT (child);
 
 	/* Connect chat signals for this window */
-	g_signal_connect (chat, "status-changed",
-			  G_CALLBACK (chat_window_status_changed_cb),
-			  window);
-	g_signal_connect (chat, "name-changed",
-			  G_CALLBACK (chat_window_name_changed_cb),
-			  window);
 	g_signal_connect (chat, "composing",
 			  G_CALLBACK (chat_window_composing_cb),
 			  window);
@@ -1144,15 +970,9 @@ chat_window_page_removed_cb (GtkNotebook      *notebook,
 	empathy_debug (DEBUG_DOMAIN, "Page removed");
 
 	/* Get chat object */
-	chat = g_object_get_data (G_OBJECT (child), "chat");
+	chat = EMPATHY_CHAT (child);
 
 	/* Disconnect all signal handlers for this chat and this window */
-	g_signal_handlers_disconnect_by_func (chat,
-					      G_CALLBACK (chat_window_status_changed_cb),
-					      window);
-	g_signal_handlers_disconnect_by_func (chat,
-					      G_CALLBACK (chat_window_name_changed_cb),
-					      window);
 	g_signal_handlers_disconnect_by_func (chat,
 					      G_CALLBACK (chat_window_composing_cb),
 					      window);
@@ -1168,8 +988,7 @@ chat_window_page_removed_cb (GtkNotebook      *notebook,
 	if (priv->chats == NULL) {
 		g_object_unref (window);
 	} else {
-		chat_window_update_menu (window);
-		chat_window_update_title (window, NULL);
+		chat_window_update_chat (chat);
 	}
 }
 
@@ -1189,7 +1008,7 @@ chat_window_focus_in_event_cb (GtkWidget        *widget,
 	chat_window_set_urgency_hint (window, FALSE);
 	
 	/* Update the title, since we now mark all unread messages as read. */
-	chat_window_update_status (window, priv->current_chat);
+	chat_window_update_chat (priv->current_chat);
 
 	return FALSE;
 }
@@ -1264,7 +1083,7 @@ chat_window_drag_data_received (GtkWidget        *widget,
 		}
 
 		if (child) {
-			chat = g_object_get_data (G_OBJECT (*child), "chat");
+			chat = EMPATHY_CHAT (child);
 		}
 
 		old_window = chat_window_find_chat (chat);
@@ -1296,19 +1115,6 @@ chat_window_drag_data_received (GtkWidget        *widget,
 }
 
 static void
-chat_window_set_urgency_hint (EmpathyChatWindow *window,
-			      gboolean          urgent)
-{
-	EmpathyChatWindowPriv *priv;
-
-	priv = GET_PRIV (window);
-
-	empathy_debug (DEBUG_DOMAIN, "Turning %s urgency hint",
-		       urgent ? "on" : "off");
-	gtk_window_set_urgency_hint (GTK_WINDOW (priv->dialog), urgent);
-}
-
-static void
 chat_window_finalize (GObject *object)
 {
 	EmpathyChatWindow     *window;
@@ -1326,11 +1132,6 @@ chat_window_finalize (GObject *object)
 	chat_windows = g_list_remove (chat_windows, window);
 	gtk_widget_destroy (priv->dialog);
 
-	g_signal_handlers_disconnect_by_func (priv->chatroom_manager,
-					      chat_window_update_menu,
-					      window);
-	g_object_unref (priv->chatroom_manager);
-
 	G_OBJECT_CLASS (empathy_chat_window_parent_class)->finalize (object);
 }
 
@@ -1339,7 +1140,7 @@ empathy_chat_window_class_init (EmpathyChatWindowClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-	object_class->finalize = empathy_chat_window_finalize;
+	object_class->finalize = chat_window_finalize;
 
 	g_type_class_add_private (object_class, sizeof (EmpathyChatWindowPriv));
 
@@ -1362,7 +1163,6 @@ empathy_chat_window_init (EmpathyChatWindow *window)
 	EmpathyChatWindowPriv *priv;
 	GladeXML             *glade;
 	GtkAccelGroup        *accel_group;
-	GtkWidget            *image;
 	GClosure             *closure;
 	GtkWidget            *menu_conv;
 	GtkWidget            *menu;
@@ -1381,19 +1181,8 @@ empathy_chat_window_init (EmpathyChatWindow *window)
 				       "menu_conv", &menu_conv,
 				       "menu_conv_clear", &priv->menu_conv_clear,
 				       "menu_conv_insert_smiley", &priv->menu_conv_insert_smiley,
-				       "menu_conv_call", &priv->menu_conv_call,
-				       "menu_conv_call_separator", &priv->menu_conv_call_separator,
-				       "menu_conv_log", &priv->menu_conv_log,
-				       "menu_conv_separator", &priv->menu_conv_separator,
-				       "menu_conv_add_contact", &priv->menu_conv_add_contact,
-				       "menu_conv_info", &priv->menu_conv_info,
+				       "menu_conv_contact", &priv->menu_conv_contact,
 				       "menu_conv_close", &priv->menu_conv_close,
-				       "menu_room", &priv->menu_room,
-				       "menu_room_set_topic", &priv->menu_room_set_topic,
-				       "menu_room_join_new", &priv->menu_room_join_new,
-				       "menu_room_invite", &priv->menu_room_invite,
-				       "menu_room_add", &priv->menu_room_add,
-				       "menu_room_show_contacts", &priv->menu_room_show_contacts,
 				       "menu_edit_cut", &priv->menu_edit_cut,
 				       "menu_edit_copy", &priv->menu_edit_copy,
 				       "menu_edit_paste", &priv->menu_edit_paste,
@@ -1410,17 +1199,8 @@ empathy_chat_window_init (EmpathyChatWindow *window)
 	empathy_glade_connect (glade,
 			      window,
 			      "chat_window", "configure-event", chat_window_configure_event_cb,
-			      "menu_conv", "activate", chat_window_conv_activate_cb,
 			      "menu_conv_clear", "activate", chat_window_clear_activate_cb,
-			      "menu_conv_call", "activate", chat_window_call_activate_cb,
-			      "menu_conv_log", "activate", chat_window_log_activate_cb,
-			      "menu_conv_add_contact", "activate", chat_window_add_contact_activate_cb,
-			      "menu_conv_info", "activate", chat_window_info_activate_cb,
 			      "menu_conv_close", "activate", chat_window_close_activate_cb,
-			      "menu_room_set_topic", "activate", chat_window_room_set_topic_activate_cb,
-			      "menu_room_join_new", "activate", chat_window_room_join_new_activate_cb,
-			      "menu_room_invite", "activate", chat_window_room_invite_activate_cb,
-			      "menu_room_add", "activate", chat_window_room_add_activate_cb,
 			      "menu_edit", "activate", chat_window_edit_activate_cb,
 			      "menu_edit_cut", "activate", chat_window_cut_activate_cb,
 			      "menu_edit_copy", "activate", chat_window_copy_activate_cb,
@@ -1433,15 +1213,6 @@ empathy_chat_window_init (EmpathyChatWindow *window)
 			      NULL);
 
 	g_object_unref (glade);
-
-	/* Set up chatroom manager */
-	priv->chatroom_manager = empathy_chatroom_manager_new ();
-	g_signal_connect_swapped (priv->chatroom_manager, "chatroom-added",
-				  G_CALLBACK (chat_window_update_menu),
-				  window);
-	g_signal_connect_swapped (priv->chatroom_manager, "chatroom-removed",
-				  G_CALLBACK (chat_window_update_menu),
-				  window);
 
 	priv->notebook = gtk_notebook_new ();
  	gtk_notebook_set_group (GTK_NOTEBOOK (priv->notebook), "EmpathyChatWindow"); 
@@ -1465,14 +1236,6 @@ empathy_chat_window_init (EmpathyChatWindow *window)
 
 	g_object_unref (accel_group);
 
-	/* Set the contact information menu item image to the Empathy
-	 * stock image
-	 */
-	image = gtk_image_menu_item_get_image (GTK_IMAGE_MENU_ITEM (priv->menu_conv_info));
-	gtk_image_set_from_icon_name (GTK_IMAGE (image),
-				      EMPATHY_IMAGE_CONTACT_INFORMATION,
-				      GTK_ICON_SIZE_MENU);
-
 	/* Set up smiley menu */
 	menu = empathy_chat_view_get_smiley_menu (
 		G_CALLBACK (chat_window_insert_smiley_activate_cb),
@@ -1486,11 +1249,6 @@ empathy_chat_window_init (EmpathyChatWindow *window)
 	g_signal_connect (priv->dialog,
 			  "delete_event",
 			  G_CALLBACK (chat_window_delete_event_cb),
-			  window);
-
-	g_signal_connect (priv->menu_room_show_contacts,
-			  "toggled",
-			  G_CALLBACK (chat_window_show_contacts_toggled_cb),
 			  window);
 
 	g_signal_connect_swapped (priv->menu_tabs_prev,
@@ -1614,7 +1372,7 @@ empathy_chat_window_add_chat (EmpathyChatWindow *window,
 	/* Reference the chat object */
 	g_object_ref (chat);
 
-	empathy_geometry_load (chat_get_window_id_for_geometry (chat), x, y, w, h);
+	empathy_geometry_load (chat_get_window_id_for_geometry (chat), &x, &y, &w, &h);
 
 	if (x >= 0 && y >= 0) {
 		/* Let the window manager position it if we don't have
@@ -1630,8 +1388,19 @@ empathy_chat_window_add_chat (EmpathyChatWindow *window,
 		gtk_window_resize (GTK_WINDOW (priv->dialog), w, h);
 	}
 
-	child = empathy_chat_get_widget (chat);
+	child = GTK_WIDGET (chat);
 	label = chat_window_create_label (window, chat); 
+
+	g_signal_connect_swapped (chat, "notify::name",
+				  G_CALLBACK (chat_window_chat_notify_cb),
+				  window);
+	g_signal_connect_swapped (chat, "notify::subject",
+				  G_CALLBACK (chat_window_chat_notify_cb),
+				  window);
+	g_signal_connect_swapped (chat, "notify::tp-chat",
+				  G_CALLBACK (chat_window_chat_notify_cb),
+				  window);
+	chat_window_chat_notify_cb (chat);
 
 	gtk_notebook_append_page (GTK_NOTEBOOK (priv->notebook), child, label);
 	gtk_notebook_set_tab_reorderable (GTK_NOTEBOOK (priv->notebook), child, TRUE);
@@ -1657,8 +1426,12 @@ empathy_chat_window_remove_chat (EmpathyChatWindow *window,
 	priv = GET_PRIV (window);
 
 	position = gtk_notebook_page_num (GTK_NOTEBOOK (priv->notebook),
-					  empathy_chat_get_widget (chat));
+					  GTK_WIDGET (chat));
 	gtk_notebook_remove_page (GTK_NOTEBOOK (priv->notebook), position);
+
+	g_signal_handlers_disconnect_by_func (chat,
+					      chat_window_chat_notify_cb,
+					      window);
 
 	empathy_debug (DEBUG_DOMAIN, 
 		      "Chat removed (%d references)", 
@@ -1678,7 +1451,7 @@ empathy_chat_window_move_chat (EmpathyChatWindow *old_window,
 	g_return_if_fail (EMPATHY_IS_CHAT_WINDOW (new_window));
 	g_return_if_fail (EMPATHY_IS_CHAT (chat));
 
-	widget = empathy_chat_get_widget (chat);
+	widget = GTK_WIDGET (chat);
 
 	empathy_debug (DEBUG_DOMAIN,
 		      "Chat moving with widget:%p (%d references)", 
@@ -1711,7 +1484,7 @@ empathy_chat_window_switch_to_chat (EmpathyChatWindow *window,
 	priv = GET_PRIV (window);
 
 	page_num = gtk_notebook_page_num (GTK_NOTEBOOK (priv->notebook),
-					  empathy_chat_get_widget (chat));
+					  GTK_WIDGET (chat));
 	gtk_notebook_set_current_page (GTK_NOTEBOOK (priv->notebook),
 				       page_num);
 }
@@ -1790,21 +1563,17 @@ empathy_chat_window_present_chat (EmpathyChat *chat)
  	gtk_widget_grab_focus (chat->input_text_view); 
 }
 
-
+#if 0
 static gboolean
-chat_should_play_sound (EmpathyChat *chat)
+chat_window_should_play_sound (EmpathyChatWindow *window)
 {
-	EmpathyChatPriv *priv = GET_PRIV (chat);
-	GtkWindow       *window;
-	gboolean         has_focus = FALSE;
+	EmpathyChatWindowPriv *priv = GET_PRIV (window);
+	gboolean               has_focus = FALSE;
 
-	g_return_val_if_fail (EMPATHY_IS_CHAT (chat), FALSE);
+	g_return_val_if_fail (EMPATHY_IS_CHAT_WINDOW (window), FALSE);
 
-	window = empathy_get_toplevel_window (priv->widget);
-	if (window) {
-		g_object_get (window, "has-toplevel-focus", &has_focus, NULL);
-	}
+	g_object_get (priv->dialog, "has-toplevel-focus", &has_focus, NULL);
 
 	return !has_focus;
 }
-
+#endif
