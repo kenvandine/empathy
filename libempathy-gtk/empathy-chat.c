@@ -86,6 +86,8 @@ struct _EmpathyChatPriv {
 	GtkWidget         *scrolled_window_contacts;
 	GtkWidget         *hbox_topic;
 	GtkWidget         *label_topic;
+	EmpathyContactListView *view;
+	EmpathyContactListStore *store;
 
 	/* Used to automatically shrink a window that has temporarily
 	 * grown due to long input. 
@@ -583,6 +585,19 @@ chat_property_changed_cb (EmpathyTpChat *tp_chat,
 		g_free (priv->subject);
 		priv->subject = g_value_dup_string (value);
 		g_object_notify (G_OBJECT (chat), "subject");
+
+		gtk_label_set_text (GTK_LABEL (priv->label_topic), priv->subject);
+		if (priv->block_events_timeout_id == 0) {
+			gchar *str;
+
+			if (!G_STR_EMPTY (priv->subject)) {
+				str = g_strdup_printf (_("Topic set to: %s"), priv->subject);
+			} else {
+				str = g_strdup (_("No topic defined"));
+			}
+			empathy_chat_view_append_event (EMPATHY_CHAT (chat)->view, str);
+			g_free (str);
+		}
 	}
 	else if (!tp_strdiff (name, "name")) {
 		g_free (priv->name);
@@ -1200,12 +1215,43 @@ chat_contacts_completion_func (const gchar *s1,
 }
 
 static void
+chat_members_changed_cb (EmpathyTpChat  *tp_chat,
+			 EmpathyContact *contact,
+			 EmpathyContact *actor,
+			 guint           reason,
+			 gchar          *message,
+			 gboolean        is_member,
+			 EmpathyChat    *chat)
+{
+	EmpathyChatPriv *priv = GET_PRIV (chat);
+
+	if (priv->block_events_timeout_id == 0) {
+		gchar *str;
+
+		empathy_contact_run_until_ready (contact,
+						 EMPATHY_CONTACT_READY_NAME,
+						 NULL);
+
+		if (is_member) {
+			str = g_strdup_printf (_("%s has joined the room"),
+					       empathy_contact_get_name (contact));
+		} else {
+			str = g_strdup_printf (_("%s has left the room"),
+					       empathy_contact_get_name (contact));
+		}
+		empathy_chat_view_append_event (chat->view, str);
+		g_free (str);
+	}
+}
+
+static void
 chat_create_ui (EmpathyChat *chat)
 {
 	EmpathyChatPriv *priv = GET_PRIV (chat);
 	GladeXML        *glade;
  	GList           *list = NULL; 
 	gchar           *filename;
+	GtkTextBuffer   *buffer;
 
 	filename = empathy_file_lookup ("empathy-chat.glade",
 					"libempathy-gtk");
@@ -1226,30 +1272,57 @@ chat_create_ui (EmpathyChat *chat)
 
 	/* Add message GtkTextView. */
 	chat->view = empathy_chat_view_new ();
+	g_signal_connect (chat->view, "focus_in_event",
+			  G_CALLBACK (chat_text_view_focus_in_event_cb),
+			  chat);
 	gtk_container_add (GTK_CONTAINER (priv->scrolled_window_chat),
 			   GTK_WIDGET (chat->view));
 	gtk_widget_show (GTK_WIDGET (chat->view));
 
 	/* Add input GtkTextView */
-	chat->input_text_view = gtk_text_view_new ();
-	g_object_set (chat->input_text_view,
-		      "pixels-above-lines", 2,
-		      "pixels-below-lines", 2,
-		      "pixels-inside-wrap", 1,
-		      "right-margin", 2,
-		      "left-margin", 2,
-		      "wrap-mode", GTK_WRAP_WORD_CHAR,
-		      NULL);
+	chat->input_text_view = g_object_new (GTK_TYPE_TEXT_VIEW,
+					      "pixels-above-lines", 2,
+					      "pixels-below-lines", 2,
+					      "pixels-inside-wrap", 1,
+					      "right-margin", 2,
+					      "left-margin", 2,
+					      "wrap-mode", GTK_WRAP_WORD_CHAR,
+					      NULL);
+	g_signal_connect (chat->input_text_view, "key_press_event",
+			  G_CALLBACK (chat_input_key_press_event_cb),
+			  chat);
+	g_signal_connect (chat->input_text_view, "size_allocate",
+			  G_CALLBACK (chat_text_view_size_allocate_cb),
+			  chat);
+	g_signal_connect (chat->input_text_view, "realize",
+			  G_CALLBACK (chat_text_view_realize_cb),
+			  chat);
+	g_signal_connect (chat->input_text_view, "populate_popup",
+			  G_CALLBACK (chat_text_populate_popup_cb),
+			  chat);
+	buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (chat->input_text_view));
+	g_signal_connect (buffer, "changed",
+			  G_CALLBACK (chat_input_text_buffer_changed_cb),
+			  chat);
+	gtk_text_buffer_create_tag (buffer, "misspelled",
+				    "underline", PANGO_UNDERLINE_ERROR,
+				    NULL);
 	gtk_container_add (GTK_CONTAINER (priv->scrolled_window_input),
 			   chat->input_text_view);
 	gtk_widget_show (chat->input_text_view);
 
-	/* Add contact list */
-
-	/* Add nick name completion */
-	priv->completion = g_completion_new ((GCompletionFunc) empathy_contact_get_name);
-	g_completion_set_compare (priv->completion,
-				  chat_contacts_completion_func);
+	/* Create contact list */
+	priv->store = empathy_contact_list_store_new (EMPATHY_CONTACT_LIST (priv->tp_chat));
+	priv->view = empathy_contact_list_view_new (priv->store,
+						    EMPATHY_CONTACT_LIST_FEATURE_CONTACT_CHAT |
+						    EMPATHY_CONTACT_LIST_FEATURE_CONTACT_CALL |
+						    EMPATHY_CONTACT_LIST_FEATURE_CONTACT_LOG |
+						    EMPATHY_CONTACT_LIST_FEATURE_CONTACT_FT |
+						    EMPATHY_CONTACT_LIST_FEATURE_CONTACT_INVITE |
+						    EMPATHY_CONTACT_LIST_FEATURE_CONTACT_INFO);
+	gtk_container_add (GTK_CONTAINER (priv->scrolled_window_contacts),
+			   GTK_WIDGET (priv->view));
+	gtk_widget_show (GTK_WIDGET (priv->view));
 
 	/* Set widget focus order */
 	list = g_list_append (NULL, priv->scrolled_window_input);
@@ -1337,6 +1410,7 @@ chat_finalize (GObject *object)
 					chat);
 	g_object_unref (priv->mc);
 	g_object_unref (priv->log_manager);
+	g_object_unref (priv->store);
 
 	if (priv->tp_chat) {
 		g_object_unref (priv->tp_chat);
@@ -1360,48 +1434,10 @@ chat_finalize (GObject *object)
 static void
 chat_constructed (GObject *object)
 {
-	EmpathyChat   *chat = EMPATHY_CHAT (object);
-	GtkTextBuffer *buffer;
+	EmpathyChat *chat = EMPATHY_CHAT (object);
 
 	chat_create_ui (chat);
-
-	g_signal_connect (chat->input_text_view,
-			  "key_press_event",
-			  G_CALLBACK (chat_input_key_press_event_cb),
-			  chat);
-
-	buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (chat->input_text_view));
-	g_signal_connect (buffer,
-			  "changed",
-			  G_CALLBACK (chat_input_text_buffer_changed_cb),
-			  chat);
-	g_signal_connect (chat->view,
-			  "focus_in_event",
-			  G_CALLBACK (chat_text_view_focus_in_event_cb),
-			  chat);
-
-	g_signal_connect (chat->input_text_view,
-			  "size_allocate",
-			  G_CALLBACK (chat_text_view_size_allocate_cb),
-			  chat);
-
-	g_signal_connect (chat->input_text_view,
-			  "realize",
-			  G_CALLBACK (chat_text_view_realize_cb),
-			  chat);
-
-	g_signal_connect (GTK_TEXT_VIEW (chat->input_text_view),
-			  "populate_popup",
-			  G_CALLBACK (chat_text_populate_popup_cb),
-			  chat);
-
-	/* create misspelt words identification tag */
-	gtk_text_buffer_create_tag (buffer,
-				    "misspelled",
-				    "underline", PANGO_UNDERLINE_ERROR,
-				    NULL);
-
-	chat_add_logs (EMPATHY_CHAT (object));
+	chat_add_logs (chat);
 }
 
 static void
@@ -1493,8 +1529,6 @@ empathy_chat_init (EmpathyChat *chat)
 {
 	EmpathyChatPriv *priv = GET_PRIV (chat);
 
-	chat_create_ui (chat);
-
 	priv->is_first_char = TRUE;
 	priv->log_manager = empathy_log_manager_new ();
 	priv->default_window_height = -1;
@@ -1503,14 +1537,18 @@ empathy_chat_init (EmpathyChat *chat)
 	priv->sent_messages_index = -1;
 	priv->mc = empathy_mission_control_new ();
 
+	dbus_g_proxy_connect_signal (DBUS_G_PROXY (priv->mc), "AccountStatusChanged",
+				     G_CALLBACK (chat_status_changed_cb),
+				     chat, NULL);
+
 	/* Block events for some time to avoid having "has come online" or
 	 * "joined" messages. */
 	priv->block_events_timeout_id =
 		g_timeout_add_seconds (1, chat_block_events_timeout_cb, chat);
 
-	dbus_g_proxy_connect_signal (DBUS_G_PROXY (priv->mc), "AccountStatusChanged",
-				     G_CALLBACK (chat_status_changed_cb),
-				     chat, NULL);
+	/* Add nick name completion */
+	priv->completion = g_completion_new ((GCompletionFunc) empathy_contact_get_name);
+	g_completion_set_compare (priv->completion, chat_contacts_completion_func);
 }
 
 EmpathyChat *
@@ -1570,6 +1608,9 @@ empathy_chat_set_tp_chat (EmpathyChat   *chat,
 			  chat);
 	g_signal_connect (tp_chat, "property-changed",
 			  G_CALLBACK (chat_property_changed_cb),
+			  chat);
+	g_signal_connect (tp_chat, "members-changed",
+			  G_CALLBACK (chat_members_changed_cb),
 			  chat);
 	g_signal_connect (tp_chat, "destroy",
 			  G_CALLBACK (chat_destroy_cb),
