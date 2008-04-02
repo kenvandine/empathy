@@ -63,6 +63,7 @@ struct _EmpathyChatPriv {
 	McAccount         *account;
 	gchar             *name;
 	gchar             *subject;
+	gchar             *tooltip;
 	EmpathyContact    *selected_contact;
 	gchar             *id;
 
@@ -111,6 +112,7 @@ enum {
 	PROP_ACCOUNT,
 	PROP_NAME,
 	PROP_SUBJECT,
+	PROP_TOOLTIP,
 	PROP_SELECTED_CONTACT,
 	PROP_ID
 };
@@ -139,6 +141,9 @@ chat_get_property (GObject    *object,
 		break;
 	case PROP_SUBJECT:
 		g_value_set_string (value, priv->subject);
+		break;
+	case PROP_TOOLTIP:
+		g_value_set_string (value, priv->tooltip);
 		break;
 	case PROP_SELECTED_CONTACT:
 		g_value_set_object (value, priv->selected_contact);
@@ -257,58 +262,6 @@ chat_composing_stop (EmpathyChat *chat)
 	chat_composing_remove_timeout (chat);
 	empathy_tp_chat_set_state (priv->tp_chat,
 				   TP_CHANNEL_CHAT_STATE_ACTIVE);
-}
-
-static void
-chat_finalize (GObject *object)
-{
-	EmpathyChat     *chat;
-	EmpathyChatPriv *priv;
-
-	chat = EMPATHY_CHAT (object);
-	priv = GET_PRIV (chat);
-
-	empathy_debug (DEBUG_DOMAIN, "Finalized: %p", object);
-
-	g_slist_foreach (priv->sent_messages, (GFunc) g_free, NULL);
-	g_slist_free (priv->sent_messages);
-
-	g_list_foreach (priv->compositors, (GFunc) g_object_unref, NULL);
-	g_list_free (priv->compositors);
-
-	g_list_foreach (priv->backlog_messages, (GFunc) g_object_unref, NULL);
-	g_list_free (priv->backlog_messages);
-
-	chat_composing_remove_timeout (chat);
-
-	dbus_g_proxy_disconnect_signal (DBUS_G_PROXY (priv->mc), "AccountStatusChanged",
-					G_CALLBACK (chat_status_changed_cb),
-					chat);
-	g_object_unref (priv->mc);
-	g_object_unref (priv->log_manager);
-
-
-	if (priv->tp_chat) {
-		g_object_unref (priv->tp_chat);
-	}
-
-	if (priv->account) {
-		g_object_unref (priv->account);
-	}
-
-	if (priv->selected_contact) {
-		g_object_unref (priv->selected_contact);
-	}
-
-	if (priv->block_events_timeout_id) {
-		g_source_remove (priv->block_events_timeout_id);
-	}
-
-	g_free (priv->id);
-	g_free (priv->name);
-	g_free (priv->subject);
-
-	G_OBJECT_CLASS (empathy_chat_parent_class)->finalize (object);
 }
 
 static void
@@ -643,7 +596,31 @@ chat_property_changed_cb (EmpathyTpChat *tp_chat,
 		g_free (priv->name);
 		priv->name = g_value_dup_string (value);
 		g_object_notify (G_OBJECT (chat), "name");
+	} else {
+		return;
 	}
+
+	g_free (priv->tooltip);
+	priv->tooltip = g_strconcat (priv->name, "\n",
+				     _("Topic: "), priv->subject, NULL);
+	g_object_notify (G_OBJECT (chat), "tooltip");
+}
+
+static void
+chat_selected_contact_notify_cb (EmpathyChat *chat)
+{
+	EmpathyChatPriv *priv = GET_PRIV (chat);
+
+	g_free (priv->name);
+	priv->name = g_strdup (empathy_contact_get_name (priv->selected_contact));
+	g_object_notify (G_OBJECT (chat), "name");		
+
+	g_free (priv->tooltip);
+	priv->tooltip = g_strconcat (empathy_contact_get_id (priv->selected_contact),
+				     "\n",
+				     empathy_contact_get_status (priv->selected_contact),
+				     NULL);
+	g_object_notify (G_OBJECT (chat), "tooltip");
 }
 
 static void
@@ -658,15 +635,19 @@ chat_remote_contact_notify_cb (EmpathyChat *chat)
 	}
 
 	if (priv->selected_contact) {
+		g_signal_handlers_disconnect_by_func (contact,
+						      chat_selected_contact_notify_cb,
+						      chat);
 		g_object_unref (priv->selected_contact);
 		priv->selected_contact = NULL;
 	}
 
 	if (contact) {
-		g_free (priv->name);
 		priv->selected_contact = g_object_ref (contact);
-		priv->name = g_strdup (empathy_contact_get_name (contact));
-		g_object_notify (G_OBJECT (chat), "name");		
+		g_signal_connect_swapped (contact, "notify",
+					  G_CALLBACK (chat_selected_contact_notify_cb),
+					  chat);
+		chat_selected_contact_notify_cb (chat);
 	}
 
 	g_object_notify (G_OBJECT (chat), "selected-contact");
@@ -1350,6 +1331,62 @@ chat_create_ui (EmpathyChat *chat)
 }
 
 static void
+chat_finalize (GObject *object)
+{
+	EmpathyChat     *chat;
+	EmpathyChatPriv *priv;
+
+	chat = EMPATHY_CHAT (object);
+	priv = GET_PRIV (chat);
+
+	empathy_debug (DEBUG_DOMAIN, "Finalized: %p", object);
+
+	g_slist_foreach (priv->sent_messages, (GFunc) g_free, NULL);
+	g_slist_free (priv->sent_messages);
+
+	g_list_foreach (priv->compositors, (GFunc) g_object_unref, NULL);
+	g_list_free (priv->compositors);
+
+	g_list_foreach (priv->backlog_messages, (GFunc) g_object_unref, NULL);
+	g_list_free (priv->backlog_messages);
+
+	chat_composing_remove_timeout (chat);
+
+	dbus_g_proxy_disconnect_signal (DBUS_G_PROXY (priv->mc), "AccountStatusChanged",
+					G_CALLBACK (chat_status_changed_cb),
+					chat);
+	g_object_unref (priv->mc);
+	g_object_unref (priv->log_manager);
+
+
+	if (priv->tp_chat) {
+		g_object_unref (priv->tp_chat);
+	}
+
+	if (priv->account) {
+		g_object_unref (priv->account);
+	}
+
+	if (priv->selected_contact) {
+		g_signal_handlers_disconnect_by_func (priv->selected_contact,
+						      chat_selected_contact_notify_cb,
+						      chat);
+		g_object_unref (priv->selected_contact);
+	}
+
+	if (priv->block_events_timeout_id) {
+		g_source_remove (priv->block_events_timeout_id);
+	}
+
+	g_free (priv->id);
+	g_free (priv->name);
+	g_free (priv->subject);
+	g_free (priv->tooltip);
+
+	G_OBJECT_CLASS (empathy_chat_parent_class)->finalize (object);
+}
+
+static void
 chat_constructed (GObject *object)
 {
 	chat_add_logs (EMPATHY_CHAT (object));
@@ -1394,6 +1431,13 @@ empathy_chat_class_init (EmpathyChatClass *klass)
 					 g_param_spec_string ("subject",
 							      "Chat's subject",
 							      "The subject or topic of the chat",
+							      NULL,
+							      G_PARAM_READABLE));
+	g_object_class_install_property (object_class,
+					 PROP_TOOLTIP,
+					 g_param_spec_string ("tooltip",
+							      "Chat's tooltip",
+							      "The tooltip of the chat",
 							      NULL,
 							      G_PARAM_READABLE));
 	g_object_class_install_property (object_class,
@@ -1612,6 +1656,16 @@ empathy_chat_get_subject (EmpathyChat *chat)
 	g_return_val_if_fail (EMPATHY_IS_CHAT (chat), NULL);
 
 	return priv->subject;
+}
+
+const gchar *
+empathy_chat_get_tooltip (EmpathyChat *chat)
+{
+	EmpathyChatPriv *priv = GET_PRIV (chat);
+
+	g_return_val_if_fail (EMPATHY_IS_CHAT (chat), NULL);
+
+	return priv->tooltip;
 }
 
 EmpathyContact *
