@@ -33,13 +33,11 @@
     <xi:include href="xml/empathy-contact-list-view.xml"/>
     <xi:include href="xml/empathy-contact-widget.xml"/>
     <xi:include href="xml/empathy-geometry.xml"/>
-    <xi:include href="xml/empathy-group-chat.xml"/>
     <xi:include href="xml/empathy-images.xml"/>
     <xi:include href="xml/empathy-irc-network-dialog.xml"/>
     <xi:include href="xml/empathy-log-window.xml"/>
     <xi:include href="xml/empathy-new-message-dialog.xml"/>
     <xi:include href="xml/empathy-presence-chooser.xml"/>
-    <xi:include href="xml/empathy-private-chat.xml"/>
     <xi:include href="xml/empathy-profile-chooser.xml"/>
     <xi:include href="xml/empathy-smiley-manager.xml"/>
     <xi:include href="xml/empathy-spell-dialog.xml"/>
