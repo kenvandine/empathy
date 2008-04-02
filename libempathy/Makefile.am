@@ -35,7 +35,6 @@ libempathy_la_SOURCES =					\
 	empathy-tp-group.c				\
 	empathy-tp-contact-list.c			\
 	empathy-tp-chat.c				\
-	empathy-tp-chatroom.c				\
 	empathy-tp-roomlist.c				\
 	empathy-tp-call.c				\
 	empathy-chandler.c				\
@@ -76,7 +75,6 @@ libempathy_headers =				\
 	empathy-tp-group.h			\
 	empathy-tp-contact-list.h		\
 	empathy-tp-chat.h			\
-	empathy-tp-chatroom.h			\
 	empathy-tp-roomlist.h			\
 	empathy-tp-call.h			\
 	empathy-chandler.h			\

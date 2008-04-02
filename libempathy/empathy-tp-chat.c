@@ -29,6 +29,7 @@
 
 #include "empathy-tp-chat.h"
 #include "empathy-contact-factory.h"
+#include "empathy-contact-list.h"
 #include "empathy-marshal.h"
 #include "empathy-debug.h"
 #include "empathy-time.h"
@@ -42,6 +43,8 @@
 struct _EmpathyTpChatPriv {
 	EmpathyContactFactory *factory;
 	EmpathyContact        *user;
+	EmpathyContact        *initiator;
+	EmpathyTpGroup        *group;
 	McAccount             *account;
 	TpChannel             *channel;
 	gchar                 *id;
@@ -61,8 +64,9 @@ typedef struct {
 	GValue         *value;
 } TpChatProperty;
 
-static void empathy_tp_chat_class_init (EmpathyTpChatClass *klass);
-static void empathy_tp_chat_init       (EmpathyTpChat      *chat);
+static void empathy_tp_chat_class_init (EmpathyTpChatClass      *klass);
+static void empathy_tp_chat_init       (EmpathyTpChat           *chat);
+static void tp_chat_iface_init         (EmpathyContactListIface *iface);
 
 enum {
 	PROP_0,
@@ -83,7 +87,9 @@ enum {
 
 static guint signals[LAST_SIGNAL];
 
-G_DEFINE_TYPE (EmpathyTpChat, empathy_tp_chat, G_TYPE_OBJECT);
+G_DEFINE_TYPE_WITH_CODE (EmpathyTpChat, empathy_tp_chat, G_TYPE_OBJECT,
+			 G_IMPLEMENT_INTERFACE (EMPATHY_TYPE_CONTACT_LIST,
+						tp_chat_iface_init));
 
 static void
 tp_chat_invalidated_cb (TpProxy       *proxy,
@@ -114,6 +120,92 @@ tp_chat_async_cb (TpChannel *proxy,
 		empathy_debug (DEBUG_DOMAIN, "Error %s: %s",
 			       user_data, error->message);
 	}
+}
+
+static void
+tp_chat_member_added_cb (EmpathyTpGroup *group,
+			 EmpathyContact *contact,
+			 EmpathyContact *actor,
+			 guint           reason,
+			 const gchar    *message,
+			 EmpathyTpChat  *chat)
+{
+	g_signal_emit_by_name (chat, "members-changed",
+			       contact, actor, reason, message,
+			       TRUE);
+}
+
+static void
+tp_chat_member_removed_cb (EmpathyTpGroup *group,
+			   EmpathyContact *contact,
+			   EmpathyContact *actor,
+			   guint           reason,
+			   const gchar    *message,
+			   EmpathyTpChat  *chat)
+{
+	g_signal_emit_by_name (chat, "members-changed",
+			       contact, actor, reason, message,
+			       FALSE);
+}
+static void
+tp_chat_local_pending_cb  (EmpathyTpGroup *group,
+			   EmpathyContact *contact,
+			   EmpathyContact *actor,
+			   guint           reason,
+			   const gchar    *message,
+			   EmpathyTpChat  *chat)
+{
+	g_signal_emit_by_name (chat, "pendings-changed",
+			       contact, actor, reason, message,
+			       TRUE);
+}
+
+static void
+tp_chat_add (EmpathyContactList *list,
+	     EmpathyContact     *contact,
+	     const gchar        *message)
+{
+	EmpathyTpChatPriv *priv = GET_PRIV (list);
+
+	g_return_if_fail (EMPATHY_IS_TP_CHAT (list));
+	g_return_if_fail (EMPATHY_IS_CONTACT (contact));
+
+	if (priv->group) {
+		empathy_tp_group_add_member (priv->group, contact, message);
+	}
+}
+
+static void
+tp_chat_remove (EmpathyContactList *list,
+		EmpathyContact     *contact,
+		const gchar        *message)
+{
+	EmpathyTpChatPriv *priv = GET_PRIV (list);
+
+	g_return_if_fail (EMPATHY_IS_TP_CHAT (list));
+	g_return_if_fail (EMPATHY_IS_CONTACT (contact));
+
+	if (priv->group) {
+		empathy_tp_group_remove_member (priv->group, contact, message);
+	}
+}
+
+static GList *
+tp_chat_get_members (EmpathyContactList *list)
+{
+	EmpathyTpChatPriv *priv = GET_PRIV (list);
+	GList             *members = NULL;
+
+	g_return_val_if_fail (EMPATHY_IS_TP_CHAT (list), NULL);
+
+	if (priv->group) {
+		members = empathy_tp_group_get_members (priv->group);
+	} else {
+		members = g_list_prepend (members, g_object_ref (priv->user));
+		members = g_list_prepend (members, g_object_ref (priv->initiator));
+	}
+
+	return members;
 }
 
 static EmpathyMessage *
@@ -697,13 +789,30 @@ tp_chat_constructor (GType                  type,
 
 	g_object_get (priv->channel, "channel-ready", &channel_ready, NULL);
 	if (channel_ready) {
-		/* FIXME: We do that in a cb to let time to set the acknowledge
-		 * property, this property should be required for construct. */
-		g_idle_add ((GSourceFunc) tp_chat_channel_ready_cb, chat);
+		tp_chat_channel_ready_cb (EMPATHY_TP_CHAT (chat));
 	} else {
 		g_signal_connect_swapped (priv->channel, "notify::channel-ready",
 					  G_CALLBACK (tp_chat_channel_ready_cb),
 					  chat);
+	}
+
+	if (tp_proxy_has_interface_by_id (priv->channel,
+					  TP_IFACE_QUARK_CHANNEL_INTERFACE_GROUP)) {
+		priv->group = empathy_tp_group_new (priv->account, priv->tp_chan);
+
+		g_signal_connect (priv->group, "member-added",
+				  G_CALLBACK (tp_chat_member_added_cb),
+				  chat);
+		g_signal_connect (priv->group, "member-removed",
+				  G_CALLBACK (tp_chat_member_removed_cb),
+				  chat);
+		g_signal_connect (priv->group, "local-pending",
+				  G_CALLBACK (tp_chat_local_pending_cb),
+				  chat);
+	} else {
+		priv->initiator = empathy_contact_factory_get_from_handle (priv->factory,
+									   priv->account,
+									   priv->tp_chan->handle);
 	}
 
 	return chat;
@@ -755,8 +864,7 @@ tp_chat_set_property (GObject      *object,
 		priv->channel = g_object_ref (g_value_get_object (value));
 		break;
 	case PROP_ACKNOWLEDGE:
-		empathy_tp_chat_set_acknowledge (EMPATHY_TP_CHAT (object),
-						 g_value_get_boolean (value));
+		priv->acknowledge = g_value_get_boolean (value);
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
@@ -808,7 +916,7 @@ empathy_tp_chat_class_init (EmpathyTpChatClass *klass)
 							       "Wheter or not received messages should be acknowledged",
 							       FALSE,
 							       G_PARAM_READWRITE |
-							       G_PARAM_CONSTRUCT));
+							       G_PARAM_CONSTRUCT_ONLY));
 
 	/* Signals */
 	signals[MESSAGE_RECEIVED] =
@@ -869,9 +977,18 @@ empathy_tp_chat_init (EmpathyTpChat *chat)
 {
 }
 
+static void
+tp_chat_iface_init (EmpathyContactListIface *iface)
+{
+	iface->add         = tp_chat_add;
+	iface->remove      = tp_chat_remove;
+	iface->get_members = tp_chat_get_members;
+}
+
 EmpathyTpChat *
 empathy_tp_chat_new (McAccount *account,
-		     TpChan    *tp_chan)
+		     TpChan    *tp_chan,
+		     gboolean   acknowledge)
 {
 	EmpathyTpChat  *chat;
 	TpChannel      *channel;
@@ -888,6 +1005,7 @@ empathy_tp_chat_new (McAccount *account,
 			     "account", account,
 			     "channel", channel,
 			     "tp-chan", tp_chan,
+			     "acknowledge", acknowledge,
 			     NULL);
 
 	g_object_unref (channel);
@@ -932,39 +1050,13 @@ empathy_tp_chat_new_with_contact (EmpathyContact *contact)
 					 handle,
 					 TRUE);
 
-	chat = empathy_tp_chat_new (account, text_chan);
+	chat = empathy_tp_chat_new (account, text_chan, TRUE);
 
 	g_object_unref (tp_conn);
 	g_object_unref (text_chan);
 	g_object_unref (mc);
 
 	return chat;
-}
-
-gboolean
-empathy_tp_chat_get_acknowledge (EmpathyTpChat *chat)
-{
-	EmpathyTpChatPriv *priv;
-
-	g_return_val_if_fail (EMPATHY_IS_TP_CHAT (chat), FALSE);
-
-	priv = GET_PRIV (chat);
-
-	return priv->acknowledge;
-}
-
-void
-empathy_tp_chat_set_acknowledge (EmpathyTpChat *chat,
-				 gboolean       acknowledge)
-{
-	EmpathyTpChatPriv *priv;
-
-	g_return_if_fail (EMPATHY_IS_TP_CHAT (chat));
-
-	priv = GET_PRIV (chat);
-
-	priv->acknowledge = acknowledge;
-	g_object_notify (G_OBJECT (chat), "acknowledge");
 }
 
 TpChan *
