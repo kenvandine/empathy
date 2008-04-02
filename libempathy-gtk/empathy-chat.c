@@ -65,33 +65,34 @@
 #define COMPOSING_STOP_TIMEOUT 5
 
 struct _EmpathyChatPriv {
-	EmpathyLogManager     *log_manager;
-	EmpathyTpChat         *tp_chat;
-	McAccount             *account;
-	MissionControl        *mc;
-	GtkWidget             *widget;
-	guint                  composing_stop_timeout_id;
-	gboolean               sensitive;
-	gchar                 *id;
-	GSList                *sent_messages;
-	gint                   sent_messages_index;
-	GList                 *compositors;
-	guint                  scroll_idle_id;
-	gboolean               first_tp_chat;
-	GList                 *backlog_messages;
-	gboolean               is_first_char;
-	guint                  block_events_timeout_id;
-	TpHandleType           handle_type;
-	gchar                 *name;
-	gchar                 *tooltip;
-	const gchar           *icon_name;
+	EmpathyTpChat     *tp_chat;
+	gchar             *name;
+	gchar             *tooltip;
+	const gchar       *icon_name;
+	GtkWidget         *widget;
+
+	EmpathyLogManager *log_manager;
+	McAccount         *account;
+	MissionControl    *mc;
+	guint              composing_stop_timeout_id;
+	gboolean           sensitive;
+	gchar             *id;
+	GSList            *sent_messages;
+	gint               sent_messages_index;
+	GList             *compositors;
+	guint              scroll_idle_id;
+	gboolean           first_tp_chat;
+	GList             *backlog_messages;
+	gboolean           is_first_char;
+	guint              block_events_timeout_id;
+	TpHandleType       handle_type;
 	/* Used to automatically shrink a window that has temporarily
 	 * grown due to long input. 
 	 */
-	gint                   padding_height;
-	gint                   default_window_height;
-	gint                   last_input_height;
-	gboolean               vscroll_visible;
+	gint               padding_height;
+	gint               default_window_height;
+	gint               last_input_height;
+	gboolean           vscroll_visible;
 };
 
 static void empathy_chat_class_init (EmpathyChatClass *klass);
@@ -1220,8 +1221,6 @@ empathy_chat_init (EmpathyChat *chat)
 	chat->view = empathy_chat_view_new ();
 	chat->input_text_view = gtk_text_view_new ();
 
-	priv->is_first_char = TRUE;
-
 	g_object_set (chat->input_text_view,
 		      "pixels-above-lines", 2,
 		      "pixels-below-lines", 2,
@@ -1231,6 +1230,7 @@ empathy_chat_init (EmpathyChat *chat)
 		      "wrap-mode", GTK_WRAP_WORD_CHAR,
 		      NULL);
 
+	priv->is_first_char = TRUE;
 	priv->log_manager = empathy_log_manager_new ();
 	priv->default_window_height = -1;
 	priv->vscroll_visible = FALSE;
