@@ -54,10 +54,8 @@
                       </widget>
                     </child>
                     <child>
-                      <widget class="GtkSeparatorMenuItem" id="menuitem1">
+                      <widget class="GtkSeparatorMenuItem" id="separator1">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">menuitem1</property>
-                        <property name="use_underline">True</property>
                       </widget>
                     </child>
                     <child>
