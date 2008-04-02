@@ -42,7 +42,7 @@
                       </widget>
                     </child>
                     <child>
-                      <widget class="GtkSeparatorMenuItem" id="separator13">
+                      <widget class="GtkSeparatorMenuItem" id="menu_conv_contact_separator">
                         <property name="visible">True</property>
                       </widget>
                     </child>
@@ -61,11 +61,6 @@
                       </widget>
                     </child>
                     <child>
-                      <widget class="GtkSeparatorMenuItem" id="menu_conv_call_separator">
-                        <property name="visible">True</property>
-                      </widget>
-                    </child>
-                    <child>
                       <widget class="GtkImageMenuItem" id="menu_conv_log">
                         <property name="visible">True</property>
                         <property name="label" translatable="yes">_View Previous Conversations</property>
@@ -76,24 +71,6 @@
                             <property name="visible">True</property>
                             <property name="icon_size">1</property>
                             <property name="icon_name">document-open-recent</property>
-                          </widget>
-                        </child>
-                      </widget>
-                    </child>
-                    <child>
-                      <widget class="GtkSeparatorMenuItem" id="menu_conv_separator">
-                        <property name="visible">True</property>
-                      </widget>
-                    </child>
-                    <child>
-                      <widget class="GtkImageMenuItem" id="menu_conv_add_contact">
-                        <property name="label" translatable="yes">_Add Contact...</property>
-                        <property name="use_underline">True</property>
-                        <child internal-child="image">
-                          <widget class="GtkImage" id="image264">
-                            <property name="visible">True</property>
-                            <property name="stock">gtk-add</property>
-                            <property name="icon_size">1</property>
                           </widget>
                         </child>
                       </widget>
@@ -124,75 +101,6 @@
                         <property name="use_underline">True</property>
                         <property name="use_stock">True</property>
                         <accelerator key="W" modifiers="GDK_CONTROL_MASK" signal="activate"/>
-                      </widget>
-                    </child>
-                  </widget>
-                </child>
-              </widget>
-            </child>
-            <child>
-              <widget class="GtkMenuItem" id="menu_room">
-                <property name="label" translatable="yes">_Room</property>
-                <property name="use_underline">True</property>
-                <child>
-                  <widget class="GtkMenu" id="menu_room_menu">
-                    <child>
-                      <widget class="GtkMenuItem" id="menu_room_set_topic">
-                        <property name="visible">True</property>
-                        <property name="label" translatable="yes">Change _Topic...</property>
-                        <property name="use_underline">True</property>
-                      </widget>
-                    </child>
-                    <child>
-                      <widget class="GtkSeparatorMenuItem" id="separator12">
-                        <property name="visible">True</property>
-                      </widget>
-                    </child>
-                    <child>
-                      <widget class="GtkMenuItem" id="menu_room_join_new">
-                        <property name="visible">True</property>
-                        <property name="label" translatable="yes">Join _New...</property>
-                        <property name="use_underline">True</property>
-                      </widget>
-                    </child>
-                    <child>
-                      <widget class="GtkMenuItem" id="menu_room_invite">
-                        <property name="visible">True</property>
-                        <property name="label" translatable="yes">In_vite...</property>
-                        <property name="use_underline">True</property>
-                      </widget>
-                    </child>
-                    <child>
-                      <widget class="GtkSeparatorMenuItem" id="separator7">
-                        <property name="visible">True</property>
-                      </widget>
-                    </child>
-                    <child>
-                      <widget class="GtkImageMenuItem" id="menu_room_add">
-                        <property name="visible">True</property>
-                        <property name="label" translatable="yes">_Add To Favorites</property>
-                        <property name="use_underline">True</property>
-                        <child internal-child="image">
-                          <widget class="GtkImage" id="image268">
-                            <property name="visible">True</property>
-                            <property name="stock">gtk-add</property>
-                            <property name="icon_size">1</property>
-                          </widget>
-                        </child>
-                      </widget>
-                    </child>
-                    <child>
-                      <widget class="GtkSeparatorMenuItem" id="separator10">
-                        <property name="visible">True</property>
-                      </widget>
-                    </child>
-                    <child>
-                      <widget class="GtkCheckMenuItem" id="menu_room_show_contacts">
-                        <property name="visible">True</property>
-                        <property name="label" translatable="yes">_Show Contacts</property>
-                        <property name="use_underline">True</property>
-                        <property name="active">True</property>
-                        <accelerator key="F11" modifiers="" signal="activate"/>
                       </widget>
                     </child>
                   </widget>
