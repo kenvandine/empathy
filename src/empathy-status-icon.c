@@ -700,10 +700,11 @@ status_icon_pendings_changed_cb (EmpathyContactManager *manager,
 		return;
 	}
 
+	/* FIXME: This never return, why?
 	empathy_contact_run_until_ready (contact,
 					 EMPATHY_CONTACT_READY_NAME,
 					 NULL);
-
+	*/
 	str = g_string_new (NULL);
 	g_string_printf (str, _("Subscription requested by %s"),
 			 empathy_contact_get_name (contact));	
