@@ -38,7 +38,6 @@
 
 #include <libempathy/empathy-idle.h>
 #include <libempathy/empathy-tp-chat.h>
-#include <libempathy/empathy-tp-chatroom.h>
 #include <libempathy/empathy-chandler.h>
 #include <libempathy/empathy-utils.h>
 #include <libempathy/empathy-debug.h>
