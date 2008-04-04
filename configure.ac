@@ -285,7 +285,7 @@ AM_CONDITIONAL(HAVE_PYTHON, test "x$have_python" = "xyes")
 AC_ARG_ENABLE(voip,
               AS_HELP_STRING([--enable-voip=@<:@no/yes@:>@],
                              [Add support for Voice and Video call]), ,
-                             enable_voip=no)
+                             enable_voip=yes)
 
 if test "x$enable_voip" = "xyes"; then
    AC_DEFINE(HAVE_VOIP, 1, [Define if we have voip])
