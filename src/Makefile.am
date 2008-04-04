@@ -52,6 +52,7 @@ glade_DATA = 					\
 	empathy-main-window.glade		\
 	empathy-preferences.glade		\
 	empathy-chatrooms-window.glade		\
+	empathy-chat-window.glade		\
 	empathy-new-chatroom-dialog.glade	\
 	empathy-status-icon.glade
 
