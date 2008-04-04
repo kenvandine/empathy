@@ -38,7 +38,6 @@
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="has_focus">True</property>
-                    <property name="invisible_char">*</property>
                     <property name="activates_default">True</property>
                   </widget>
                   <packing>
@@ -275,7 +274,6 @@
                   <widget class="GtkEntry" id="entry_chats">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="invisible_char">*</property>
                     <property name="activates_default">True</property>
                   </widget>
                   <packing>

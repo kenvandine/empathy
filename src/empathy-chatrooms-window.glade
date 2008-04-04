@@ -48,7 +48,6 @@
               <widget class="GtkEntry" id="entry_name">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="invisible_char">*</property>
                 <property name="width_chars">25</property>
               </widget>
               <packing>
@@ -119,7 +118,6 @@
               <widget class="GtkEntry" id="entry_nickname">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="invisible_char">*</property>
               </widget>
               <packing>
                 <property name="left_attach">1</property>
@@ -133,7 +131,6 @@
               <widget class="GtkEntry" id="entry_server">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="invisible_char">*</property>
               </widget>
               <packing>
                 <property name="left_attach">1</property>
@@ -147,7 +144,6 @@
               <widget class="GtkEntry" id="entry_room">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="invisible_char">*</property>
               </widget>
               <packing>
                 <property name="left_attach">1</property>

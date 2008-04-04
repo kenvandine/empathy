@@ -196,7 +196,6 @@
                           <widget class="GtkEntry" id="entry_group">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
-                            <property name="invisible_char">*</property>
                           </widget>
                         </child>
                         <child>

@@ -56,7 +56,6 @@
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="visibility">False</property>
-            <property name="invisible_char">*</property>
           </widget>
           <packing>
             <property name="left_attach">1</property>
@@ -96,7 +95,6 @@
           <widget class="GtkEntry" id="entry_nick">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
-            <property name="invisible_char">*</property>
           </widget>
           <packing>
             <property name="left_attach">1</property>

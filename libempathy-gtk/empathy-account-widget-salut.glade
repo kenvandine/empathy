@@ -21,7 +21,6 @@
               <widget class="GtkEntry" id="entry_nickname">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="invisible_char">*</property>
               </widget>
               <packing>
                 <property name="left_attach">1</property>
@@ -35,7 +34,6 @@
               <widget class="GtkEntry" id="entry_last_name">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="invisible_char">*</property>
               </widget>
               <packing>
                 <property name="left_attach">1</property>
@@ -49,7 +47,6 @@
               <widget class="GtkEntry" id="entry_first_name">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-                <property name="invisible_char">*</property>
               </widget>
               <packing>
                 <property name="left_attach">1</property>
@@ -121,7 +118,6 @@
                   <widget class="GtkEntry" id="entry_published">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="invisible_char">*</property>
                   </widget>
                   <packing>
                     <property name="left_attach">1</property>
@@ -146,7 +142,6 @@
                   <widget class="GtkEntry" id="entry_jid">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="invisible_char">*</property>
                   </widget>
                   <packing>
                     <property name="left_attach">1</property>
@@ -160,7 +155,6 @@
                   <widget class="GtkEntry" id="entry_email">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="invisible_char">*</property>
                   </widget>
                   <packing>
                     <property name="left_attach">1</property>
