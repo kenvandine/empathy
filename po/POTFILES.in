@@ -11,6 +11,7 @@ libempathy/empathy-utils.c
 
 libempathy-gtk/empathy-account-chooser.c
 libempathy-gtk/empathy-account-widget.c
+libempathy-gtk/empathy-account-widget-aim.glade
 libempathy-gtk/empathy-account-widget-generic.glade
 libempathy-gtk/empathy-account-widget-groupwise.glade
 libempathy-gtk/empathy-account-widget-icq.glade
@@ -33,15 +34,12 @@ libempathy-gtk/empathy-contact-dialogs.glade
 libempathy-gtk/empathy-contact-list-view.c
 libempathy-gtk/empathy-contact-widget.c
 libempathy-gtk/empathy-contact-widget.glade
-libempathy-gtk/empathy-group-chat.c
-libempathy-gtk/empathy-group-chat.glade
 libempathy-gtk/empathy-irc-network-dialog.c
 libempathy-gtk/empathy-log-window.c
 libempathy-gtk/empathy-log-window.glade
 libempathy-gtk/empathy-new-message-dialog.glade
 libempathy-gtk/empathy-presence-chooser.c
 libempathy-gtk/empathy-presence-chooser.glade
-libempathy-gtk/empathy-private-chat.c
 libempathy-gtk/empathy-spell-dialog.c
 libempathy-gtk/empathy-spell-dialog.glade
 libempathy-gtk/empathy-theme-boxes.c
@@ -62,6 +60,7 @@ src/empathy.c
 src/empathy-about-dialog.c
 src/empathy-call-window.glade
 src/empathy-chat-window.c
+src/empathy-chat-window.glade
 src/empathy-chatrooms-window.c
 src/empathy-chatrooms-window.glade
 src/empathy-main-window.c
