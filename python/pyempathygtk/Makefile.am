@@ -6,7 +6,7 @@ AM_CPPFLAGS =                                           \
 	-I$(top_srcdir)                                 \
 	-DDATADIR=\""$(datadir)"\"              	\
 	$(PYTHON_BINDING_CFLAGS)			\
-	`python-config --cflags`			
+	$(PYTHON_INCLUDES)
 
 BUILT_SOURCES = 					\
 	pyempathygtk.c					
@@ -24,7 +24,6 @@ empathygtk_la_LIBADD =					\
 	$(top_builddir)/libempathy-gtk/libempathy-gtk.la
 
 empathygtk_la_LDFLAGS =					\
-	`python-config --libs`				\
 	-module -avoid-version
 
 pyempathygtk.c: pyempathygtk.override pyempathygtk.defs

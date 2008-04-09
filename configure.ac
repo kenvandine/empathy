@@ -68,7 +68,7 @@ AC_CHECK_PROGS([XSLTPROC], [xsltproc])
 if test -z "$XSLTPROC"; then
   AC_MSG_ERROR([xsltproc (from libxslt) is required])
 fi
-AC_CHECK_PROGS([PYTHON], [python2.3 python2.4 python2.5 python])
+AC_CHECK_PROGS([PYTHON], [python python2.3 python2.4 python2.5])
 if test -z "$PYTHON"; then
   AC_MSG_ERROR([Python is required])
 fi
@@ -268,6 +268,9 @@ if test "x$enable_python" != "xno"; then
          gtk+-2.0 >= $GTK_REQUIRED
          libglade-2.0 >= $LIBGLADE_REQUIRED
       ], have_python="yes", have_python="no")
+      if test "x$have_python" = "xyes" ; then
+         AM_CHECK_PYTHON_HEADERS(,have_python="no")
+      fi
    fi
 else
    have_python=no

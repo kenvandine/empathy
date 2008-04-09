@@ -6,7 +6,7 @@ AM_CPPFLAGS =                                           \
 	-I$(top_srcdir)                                 \
 	-DDATADIR=\""$(datadir)"\"              	\
 	$(PYTHON_BINDING_CFLAGS)			\
-	`python-config --cflags`			\
+	$(PYTHON_INCLUDES)				\
 	$(WARN_CFLAGS)
 
 BUILT_SOURCES = 					\
@@ -24,7 +24,6 @@ empathy_la_LIBADD =					\
 	$(top_builddir)/libempathy/libempathy.la
 
 empathy_la_LDFLAGS =					\
-	`python-config --libs`				\
 	-module -avoid-version
 
 pyempathy.c: pyempathy.override pyempathy.defs
