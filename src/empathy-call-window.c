@@ -179,7 +179,7 @@ call_window_delete_event_cb (GtkWidget *widget,
 
   g_object_get (G_OBJECT (window->call), "status", &status, NULL);
 
-  if (status != EMPATHY_TP_CALL_STATUS_CLOSED)
+  if (status == EMPATHY_TP_CALL_STATUS_ACCEPTED)
     {
       dialog = gtk_message_dialog_new (GTK_WINDOW (window->window),
           GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
