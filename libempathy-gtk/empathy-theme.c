@@ -168,7 +168,7 @@ empathy_theme_maybe_append_date_and_time (EmpathyTheme        *theme,
 	date = empathy_message_get_date_and_time (message, &timestamp);
 
 	last_date = g_date_new ();
-	g_date_set_time (last_date, empathy_chat_view_get_last_timestamp (view));
+	g_date_set_time_t (last_date, empathy_chat_view_get_last_timestamp (view));
 
 	append_date = FALSE;
 	append_time = FALSE;
