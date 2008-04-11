@@ -3,7 +3,7 @@
 <!--Generated with glade3 3.4.1 on Wed Mar  5 15:39:45 2008 -->
 <glade-interface>
   <widget class="GtkWindow" id="account_irc_settings">
-    <property name="title" translatable="yes">irc account settings</property>
+    <property name="title">irc account settings</property>
     <property name="resizable">False</property>
     <child>
       <widget class="GtkTable" id="vbox_irc_settings">

@@ -4,7 +4,7 @@
 <glade-interface>
   <widget class="GtkWindow" id="account_groupwise_settings">
     <property name="visible">True</property>
-    <property name="title" translatable="yes">groupwise account settings</property>
+    <property name="title">groupwise account settings</property>
     <property name="resizable">False</property>
     <child>
       <widget class="GtkVBox" id="vbox_groupwise_settings">

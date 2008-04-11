@@ -4,7 +4,7 @@
 <glade-interface>
   <widget class="GtkWindow" id="account_salut_settings">
     <property name="visible">True</property>
-    <property name="title" translatable="yes">salut account settings</property>
+    <property name="title">salut account settings</property>
     <property name="resizable">False</property>
     <child>
       <widget class="GtkVBox" id="vbox_salut_settings">
@@ -183,7 +183,7 @@
                   <widget class="GtkLabel" id="label_email">
                     <property name="visible">True</property>
                     <property name="xalign">0</property>
-                    <property name="label" translatable="yes">_E-mail:</property>
+                    <property name="label" translatable="yes">_Email:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">entry_email</property>
                   </widget>

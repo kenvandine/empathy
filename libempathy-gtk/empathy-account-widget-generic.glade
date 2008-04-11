@@ -4,7 +4,7 @@
 <glade-interface>
   <widget class="GtkWindow" id="account_generic_settings">
     <property name="visible">True</property>
-    <property name="title" translatable="yes">generic account settings</property>
+    <property name="title">generic account settings</property>
     <property name="resizable">False</property>
     <child>
       <widget class="GtkVBox" id="vbox_generic_settings">
