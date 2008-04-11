@@ -11,9 +11,7 @@ BUILT_SOURCES = 					\
 	empathy-marshal.c				\
 	empathy-marshal.list				\
 	empathy-enum-types.h				\
-	empathy-enum-types.c				\
-	empathy-filter-glue.h				\
-	empathy-chandler-glue.h
+	empathy-enum-types.c
 
 lib_LTLIBRARIES = libempathy.la
 
