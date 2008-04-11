@@ -95,7 +95,7 @@
                         <child>
                           <widget class="GtkImage" id="image1">
                             <property name="visible">True</property>
-                            <property name="icon_name">gnome-stock-mic</property>
+                            <property name="icon_name">audio-input-microphone</property>
                           </widget>
                           <packing>
                             <property name="expand">False</property>

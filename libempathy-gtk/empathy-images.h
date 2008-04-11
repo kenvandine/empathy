@@ -37,7 +37,7 @@ G_BEGIN_DECLS
 #define EMPATHY_IMAGE_TYPING              "user-typing"
 #define EMPATHY_IMAGE_CONTACT_INFORMATION "gtk-info"
 #define EMPATHY_IMAGE_GROUP_MESSAGE       "system-users"
-#define EMPATHY_IMAGE_VOIP                "gnome-stock-mic"
+#define EMPATHY_IMAGE_VOIP                "audio-input-microphone"
 #define EMPATHY_IMAGE_LOG                 "document-open-recent"
 
 G_END_DECLS
