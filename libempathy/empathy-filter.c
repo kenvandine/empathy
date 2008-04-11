@@ -53,6 +53,56 @@ G_DEFINE_TYPE_WITH_CODE (EmpathyFilter, empathy_filter, G_TYPE_OBJECT,
 			 G_IMPLEMENT_INTERFACE (EMP_TYPE_SVC_FILTER,
 						filter_iface_init));
 
+typedef struct {
+	EmpathyFilter *filter;
+	gchar         *bus_name;
+	gchar         *connection;
+	gchar         *channel_type;
+	gchar         *channel;
+	guint          handle_type;
+	guint          handle;
+	guint          id;
+} IdleData;
+
+static gboolean
+filter_channel_idle_cb (gpointer data)
+{
+	IdleData            *idle_data = data;
+	EmpathyFilterPriv   *priv = GET_PRIV (idle_data->filter);
+	TpChannel           *chan;
+	TpConnection        *conn;
+	static TpDBusDaemon *daemon = NULL;
+
+	if (!daemon) {
+		daemon = tp_dbus_daemon_new (tp_get_bus ());
+	}
+
+	conn = tp_connection_new (daemon, idle_data->bus_name,
+				  idle_data->connection, NULL);
+	tp_connection_run_until_ready (conn, FALSE, NULL, NULL);
+	chan = tp_channel_new (conn, idle_data->channel, idle_data->channel_type,
+			       idle_data->handle_type, idle_data->handle, NULL);
+	tp_channel_run_until_ready (chan, NULL, NULL);
+
+	g_hash_table_insert (priv->table, chan, GUINT_TO_POINTER (idle_data->id));
+
+	empathy_debug (DEBUG_DOMAIN, "New channel to be filtred: "
+				     "type=%s handle=%d id=%d",
+				     idle_data->channel_type, idle_data->handle,
+				     idle_data->id);
+
+	g_signal_emit (idle_data->filter, signals[NEW_CHANNEL], 0, chan);
+
+	g_object_unref (conn);
+	g_free (idle_data->bus_name);
+	g_free (idle_data->connection);
+	g_free (idle_data->channel_type);
+	g_free (idle_data->channel);
+	g_slice_free (IdleData, idle_data);
+
+	return FALSE;
+}
+
 static void
 my_filter_channel (EmpSvcFilter          *self,
 		   const gchar           *bus_name,
@@ -64,29 +114,21 @@ my_filter_channel (EmpSvcFilter          *self,
 		   guint                  id,
 		   DBusGMethodInvocation *context)
 {
-	EmpathyFilter       *filter = EMPATHY_FILTER (self);
-	EmpathyFilterPriv   *priv = GET_PRIV (filter);
-	TpChannel           *chan;
-	TpConnection        *conn;
-	static TpDBusDaemon *daemon = NULL;
+	EmpathyFilter *filter = EMPATHY_FILTER (self);
+	IdleData      *data;
 
-	if (!daemon) {
-		daemon = tp_dbus_daemon_new (tp_get_bus ());
-	}
-
-	conn = tp_connection_new (daemon, bus_name, connection, NULL);
-	chan = tp_channel_new (conn, channel, channel_type, handle_type, handle, NULL);
-	tp_channel_run_until_ready (chan, NULL, NULL);
-
-	g_hash_table_insert (priv->table, chan, GUINT_TO_POINTER (id));
-
-	empathy_debug (DEBUG_DOMAIN, "New channel to be filtred: "
-				     "type=%s handle=%d id=%d",
-				     channel_type, handle, id);
-
-	g_signal_emit (filter, signals[NEW_CHANNEL], 0, chan);
-
-	g_object_unref (conn);
+	data = g_slice_new (IdleData);
+	data->filter = filter;
+	data->bus_name = g_strdup (bus_name);
+	data->connection = g_strdup (connection);
+	data->channel_type = g_strdup (channel_type);
+	data->channel = g_strdup (channel);
+	data->handle_type = handle_type;
+	data->handle = handle;
+	data->id = id;
+	g_idle_add_full (G_PRIORITY_HIGH,
+			 filter_channel_idle_cb,
+			 data, NULL);
 
 	emp_svc_filter_return_from_filter_channel (context);
 }
@@ -181,6 +223,7 @@ empathy_filter_new (const gchar *bus_name,
 					     G_OBJECT (filter));
 
 	mc = empathy_mission_control_new ();
+
 	mission_control_register_filter (mc,
 					 bus_name,
 					 object_path,

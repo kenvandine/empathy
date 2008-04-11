@@ -239,9 +239,9 @@ empathy_main_window_show (void)
 	g_object_unref (glade);
 
 	window->mc = empathy_mission_control_new ();
-	dbus_g_proxy_connect_signal (DBUS_G_PROXY (window->mc), "AccountStatusChanged",
-				     G_CALLBACK (main_window_status_changed_cb),
-				     window, NULL);
+	empathy_connect_to_account_status_changed (window->mc,
+						   G_CALLBACK (main_window_status_changed_cb),
+						   window, NULL);
 
 	window->errors = g_hash_table_new_full (empathy_account_hash,
 						empathy_account_equal,

@@ -1537,9 +1537,9 @@ empathy_chat_init (EmpathyChat *chat)
 	priv->sent_messages_index = -1;
 	priv->mc = empathy_mission_control_new ();
 
-	dbus_g_proxy_connect_signal (DBUS_G_PROXY (priv->mc), "AccountStatusChanged",
-				     G_CALLBACK (chat_status_changed_cb),
-				     chat, NULL);
+	empathy_connect_to_account_status_changed (priv->mc,
+						   G_CALLBACK (chat_status_changed_cb),
+						   chat, NULL);
 
 	/* Block events for some time to avoid having "has come online" or
 	 * "joined" messages. */

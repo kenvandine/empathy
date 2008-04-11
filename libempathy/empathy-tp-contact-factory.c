@@ -1277,10 +1277,9 @@ empathy_tp_contact_factory_init (EmpathyTpContactFactory *tp_factory)
 	EmpathyTpContactFactoryPriv *priv = GET_PRIV (tp_factory);
 
 	priv->mc = empathy_mission_control_new ();
-	dbus_g_proxy_connect_signal (DBUS_G_PROXY (priv->mc),
-				     "AccountStatusChanged",
-				     G_CALLBACK (tp_contact_factory_status_changed_cb),
-				     tp_factory, NULL);
+	empathy_connect_to_account_status_changed (priv->mc,
+						   G_CALLBACK (tp_contact_factory_status_changed_cb),
+						   tp_factory, NULL);
 }
 
 EmpathyTpContactFactory *

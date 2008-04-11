@@ -633,3 +633,99 @@ empathy_channel_get_account (TpChannel *channel)
 
 	return account;
 }
+
+typedef void (*AccountStatusChangedFunc) (MissionControl           *mc,
+					  TpConnectionStatus        status,
+					  McPresence                presence,
+					  TpConnectionStatusReason  reason,
+					  const gchar              *unique_name,
+					  gpointer                 *user_data);
+
+typedef struct {
+	AccountStatusChangedFunc handler;
+	gpointer                 user_data;
+	GClosureNotify           free_func;
+} AccountStatusChangedData;
+
+typedef struct {
+	MissionControl           *mc;
+	TpConnectionStatus        status;
+	McPresence                presence;
+	TpConnectionStatusReason  reason;
+	gchar                    *unique_name;
+	AccountStatusChangedData *data;
+} InvocationData;
+
+static void
+account_status_changed_data_free (gpointer ptr,
+				  GClosure *closure)
+{
+	AccountStatusChangedData *data = ptr;
+
+	if (data->free_func) {
+		data->free_func (data->user_data, closure);
+	}
+	g_slice_free (AccountStatusChangedData, data);
+}
+
+static gboolean
+account_status_changed_invoke_callback (gpointer data)
+{
+	InvocationData *invocation_data = data;
+
+	invocation_data->data->handler (invocation_data->mc,
+					invocation_data->status,
+					invocation_data->presence,
+					invocation_data->reason,
+					invocation_data->unique_name,
+					invocation_data->data->user_data);
+
+	g_free (invocation_data->unique_name);
+	g_slice_free (InvocationData, invocation_data);
+
+	return FALSE;
+}
+
+static void
+account_status_changed_cb (MissionControl           *mc,
+			   TpConnectionStatus        status,
+			   McPresence                presence,
+			   TpConnectionStatusReason  reason,
+			   const gchar              *unique_name,
+			   AccountStatusChangedData *data)
+{
+	InvocationData *invocation_data;
+
+	invocation_data = g_slice_new (InvocationData);
+	invocation_data->mc = mc;
+	invocation_data->status = status;
+	invocation_data->presence = presence;
+	invocation_data->reason = reason;
+	invocation_data->unique_name = g_strdup (unique_name);
+	invocation_data->data = data;
+	g_idle_add_full (G_PRIORITY_HIGH,
+			 account_status_changed_invoke_callback,
+			 invocation_data, NULL);
+}
+
+void
+empathy_connect_to_account_status_changed (MissionControl *mc,
+					   GCallback       handler,
+					   gpointer        user_data,
+					   GClosureNotify  free_func)
+{
+	AccountStatusChangedData *data;
+
+	g_return_if_fail (IS_MISSIONCONTROL (mc));
+	g_return_if_fail (handler != NULL);
+	
+	data = g_slice_new (AccountStatusChangedData);
+
+	data->handler = (AccountStatusChangedFunc) handler;
+	data->user_data = user_data;
+	data->free_func = free_func;
+	dbus_g_proxy_connect_signal (DBUS_G_PROXY (mc), "AccountStatusChanged",
+				     G_CALLBACK (account_status_changed_cb),
+				     data, account_status_changed_data_free);
+}
+

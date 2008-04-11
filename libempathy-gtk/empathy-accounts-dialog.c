@@ -1074,9 +1074,9 @@ empathy_accounts_dialog_show (GtkWindow *parent)
 	g_signal_connect (dialog->monitor, "account-disabled",
 			  G_CALLBACK (accounts_dialog_account_enabled_cb),
 			  dialog);
-	dbus_g_proxy_connect_signal (DBUS_G_PROXY (dialog->mc), "AccountStatusChanged",
-				     G_CALLBACK (accounts_dialog_status_changed_cb),
-				     dialog, NULL);
+	empathy_connect_to_account_status_changed (dialog->mc,
+						   G_CALLBACK (accounts_dialog_status_changed_cb),
+						   dialog, NULL);
 
 	accounts_dialog_model_setup (dialog);
 	accounts_dialog_setup (dialog);

@@ -225,10 +225,9 @@ empathy_contact_manager_init (EmpathyContactManager *manager)
 
 	priv->mc = empathy_mission_control_new ();
 
-	dbus_g_proxy_connect_signal (DBUS_G_PROXY (priv->mc),
-				     "AccountStatusChanged",
-				     G_CALLBACK (contact_manager_status_changed_cb),
-				     manager, NULL);
+	empathy_connect_to_account_status_changed (priv->mc,
+						   G_CALLBACK (contact_manager_status_changed_cb),
+						   manager, NULL);
 
 	/* Get ContactList for existing connections */
 	accounts = mission_control_get_online_connections (priv->mc, NULL);

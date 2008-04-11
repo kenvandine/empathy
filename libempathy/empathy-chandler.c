@@ -44,6 +44,50 @@ G_DEFINE_TYPE_WITH_CODE (EmpathyChandler, empathy_chandler, G_TYPE_OBJECT,
 			 G_IMPLEMENT_INTERFACE (EMP_TYPE_SVC_CHANDLER,
 						chandler_iface_init));
 
+typedef struct {
+	EmpathyChandler *chandler;
+	gchar           *bus_name;
+	gchar           *connection;
+	gchar           *channel_type;
+	gchar           *channel;
+	guint            handle_type;
+	guint            handle;
+} IdleData;
+
+static gboolean
+handle_channel_idle_cb (gpointer data)
+{
+	IdleData            *idle_data = data;
+	TpChannel           *chan;
+	TpConnection        *conn;
+	static TpDBusDaemon *daemon = NULL;
+
+	if (!daemon) {
+		daemon = tp_dbus_daemon_new (tp_get_bus ());
+	}
+
+	conn = tp_connection_new (daemon, idle_data->bus_name,
+				  idle_data->connection, NULL);
+	chan = tp_channel_new (conn, idle_data->channel, idle_data->channel_type,
+			       idle_data->handle_type, idle_data->handle, NULL);
+	tp_channel_run_until_ready (chan, NULL, NULL);
+
+	empathy_debug (DEBUG_DOMAIN, "New channel to be handled: "
+				     "type=%s handle=%d",
+				     idle_data->channel_type, idle_data->handle);
+	g_signal_emit (idle_data->chandler, signals[NEW_CHANNEL], 0, chan);
+
+	g_object_unref (chan);
+	g_object_unref (conn);
+	g_free (idle_data->bus_name);
+	g_free (idle_data->connection);
+	g_free (idle_data->channel_type);
+	g_free (idle_data->channel);
+	g_slice_free (IdleData, idle_data);
+
+	return FALSE;
+}
+
 static void
 my_handle_channel (EmpSvcChandler        *self,
 		   const gchar           *bus_name,
@@ -54,26 +98,20 @@ my_handle_channel (EmpSvcChandler        *self,
 		   guint                  handle,
 		   DBusGMethodInvocation *context)
 {
-	EmpathyChandler     *chandler = EMPATHY_CHANDLER (self);
-	TpChannel           *chan;
-	TpConnection        *conn;
-	static TpDBusDaemon *daemon = NULL;
+	EmpathyChandler *chandler = EMPATHY_CHANDLER (self);
+	IdleData        *data;
 
-	if (!daemon) {
-		daemon = tp_dbus_daemon_new (tp_get_bus ());
-	}
-
-	conn = tp_connection_new (daemon, bus_name, connection, NULL);
-	chan = tp_channel_new (conn, channel, channel_type, handle_type, handle, NULL);
-	tp_channel_run_until_ready (chan, NULL, NULL);
-
-	empathy_debug (DEBUG_DOMAIN, "New channel to be handled: "
-				     "type=%s handle=%d",
-				     channel_type, handle);
-	g_signal_emit (chandler, signals[NEW_CHANNEL], 0, chan);
-
-	g_object_unref (chan);
-	g_object_unref (conn);
+	data = g_slice_new (IdleData);
+	data->chandler = chandler;
+	data->bus_name = g_strdup (bus_name);
+	data->connection = g_strdup (connection);
+	data->channel_type = g_strdup (channel_type);
+	data->channel = g_strdup (channel);
+	data->handle_type = handle_type;
+	data->handle = handle;
+	g_idle_add_full (G_PRIORITY_HIGH,
+			 handle_channel_idle_cb,
+			 data, NULL);
 
 	emp_svc_chandler_return_from_handle_channel (context);
 }
