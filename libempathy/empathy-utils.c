@@ -33,7 +33,6 @@
 #include <glib/gi18n.h>
 
 #include <libxml/uri.h>
-#include <libtelepathy/tp-conn.h>
 #include <telepathy-glib/connection.h>
 #include <telepathy-glib/channel.h>
 #include <telepathy-glib/dbus.h>

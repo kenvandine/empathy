@@ -32,8 +32,6 @@
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 
-#include <libtelepathy/tp-chan.h>
-
 #include <libmissioncontrol/mc-account.h>
 #include <libmissioncontrol/mission-control.h>
 

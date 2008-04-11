@@ -30,7 +30,6 @@
 #include <gtk/gtk.h>
 #include <glade/glade.h>
 
-#include <libtelepathy/tp-conn.h>
 #include <libmissioncontrol/mc-account-monitor.h>
 #include <libmissioncontrol/mission-control.h>
 
