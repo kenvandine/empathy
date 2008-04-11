@@ -21,28 +21,17 @@
 
 #include <config.h>
 
-#include <dbus/dbus-glib.h>
-
 #include <telepathy-glib/dbus.h>
 #include <telepathy-glib/connection.h>
 #include <telepathy-glib/channel.h>
 
+#include <extensions/extensions.h>
 #include "empathy-chandler.h"
 #include "empathy-debug.h"
-#include "empathy-marshal.h"
 
 #define DEBUG_DOMAIN "EmpathyChandler"
 
-static gboolean empathy_chandler_handle_channel (EmpathyChandler *chandler,
-						 const gchar     *bus_name,
-						 const gchar     *connection,
-						 const gchar     *channel_type,
-						 const gchar     *channel,
-						 guint            handle_type,
-						 guint            handle,
-						 GError         **error);
-
-#include "empathy-chandler-glue.h"
+static void chandler_iface_init (EmpSvcChandlerClass *klass);
 
 enum {
 	NEW_CHANNEL,
@@ -51,7 +40,43 @@ enum {
 
 static guint signals[LAST_SIGNAL];
 
-G_DEFINE_TYPE (EmpathyChandler, empathy_chandler, G_TYPE_OBJECT)
+G_DEFINE_TYPE_WITH_CODE (EmpathyChandler, empathy_chandler, G_TYPE_OBJECT,
+			 G_IMPLEMENT_INTERFACE (EMP_TYPE_SVC_CHANDLER,
+						chandler_iface_init));
+
+static void
+my_handle_channel (EmpSvcChandler        *self,
+		   const gchar           *bus_name,
+		   const gchar           *connection,
+		   const gchar           *channel_type,
+		   const gchar           *channel,
+		   guint                  handle_type,
+		   guint                  handle,
+		   DBusGMethodInvocation *context)
+{
+	EmpathyChandler     *chandler = EMPATHY_CHANDLER (self);
+	TpChannel           *chan;
+	TpConnection        *conn;
+	static TpDBusDaemon *daemon = NULL;
+
+	if (!daemon) {
+		daemon = tp_dbus_daemon_new (tp_get_bus ());
+	}
+
+	conn = tp_connection_new (daemon, bus_name, connection, NULL);
+	chan = tp_channel_new (conn, channel, channel_type, handle_type, handle, NULL);
+	tp_channel_run_until_ready (chan, NULL, NULL);
+
+	empathy_debug (DEBUG_DOMAIN, "New channel to be handled: "
+				     "type=%s handle=%d",
+				     channel_type, handle);
+	g_signal_emit (chandler, signals[NEW_CHANNEL], 0, chan);
+
+	g_object_unref (chan);
+	g_object_unref (conn);
+
+	emp_svc_chandler_return_from_handle_channel (context);
+}
 
 static void
 empathy_chandler_class_init (EmpathyChandlerClass *klass)
@@ -68,6 +93,15 @@ empathy_chandler_class_init (EmpathyChandlerClass *klass)
 }
 
 static void
+chandler_iface_init (EmpSvcChandlerClass *klass)
+{
+#define IMPLEMENT(x) emp_svc_chandler_implement_##x \
+    (klass, my_##x)
+  IMPLEMENT (handle_channel);
+#undef IMPLEMENT
+}
+
+static void
 empathy_chandler_init (EmpathyChandler *chandler)
 {
 }
@@ -76,17 +110,10 @@ EmpathyChandler *
 empathy_chandler_new (const gchar *bus_name,
 		      const gchar *object_path)
 {
-	static gboolean  initialized = FALSE;
 	EmpathyChandler *chandler;
 	DBusGProxy      *proxy;
 	guint            result;
 	GError          *error = NULL;
-
-	if (!initialized) {
-		dbus_g_object_type_install_info (EMPATHY_TYPE_CHANDLER,
-						 &dbus_glib_empathy_chandler_object_info);
-		initialized = TRUE;
-	}
 
 	proxy = dbus_g_proxy_new_for_name (tp_get_bus (),
 					   DBUS_SERVICE_DBUS,
@@ -114,38 +141,5 @@ empathy_chandler_new (const gchar *bus_name,
 					     G_OBJECT (chandler));
 
 	return chandler;
-}
-
-static gboolean
-empathy_chandler_handle_channel (EmpathyChandler  *chandler,
-				 const gchar      *bus_name,
-				 const gchar      *connection,
-				 const gchar      *channel_type,
-				 const gchar      *channel,
-				 guint             handle_type,
-				 guint             handle,
-				 GError          **error)
-{
-	TpChannel           *chan;
-	TpConnection        *conn;
-	static TpDBusDaemon *daemon = NULL;
-
-	if (!daemon) {
-		daemon = tp_dbus_daemon_new (tp_get_bus ());
-	}
-
-	conn = tp_connection_new (daemon, bus_name, connection, NULL);
-	chan = tp_channel_new (conn, channel, channel_type, handle_type, handle, NULL);
-	tp_channel_run_until_ready (chan, NULL, NULL);
-
-	empathy_debug (DEBUG_DOMAIN, "New channel to be handled: "
-				     "type=%s handle=%d",
-				     channel_type, handle);
-	g_signal_emit (chandler, signals[NEW_CHANNEL], 0, chan);
-
-	g_object_unref (chan);
-	g_object_unref (conn);
-
-	return TRUE;
 }
 

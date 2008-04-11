@@ -41,7 +41,7 @@ struct _EmpathyFilterPriv {
 
 static void empathy_filter_class_init (EmpathyFilterClass *klass);
 static void empathy_filter_init       (EmpathyFilter      *filter);
-static void filter_iface_init         (EmpSvcFilterClass  *iface);
+static void filter_iface_init         (EmpSvcFilterClass  *klass);
 
 enum {
 	PROCESS,
@@ -56,14 +56,14 @@ G_DEFINE_TYPE_WITH_CODE (EmpathyFilter, empathy_filter, G_TYPE_OBJECT,
 						filter_iface_init));
 
 static void
-my_filter_channel (EmpSvcFilter *self,
-		   const gchar *bus_name,
-		   const gchar *connection,
-		   const gchar *channel_type,
-		   const gchar *channel,
-		   guint handle_type,
-		   guint handle,
-		   guint id,
+my_filter_channel (EmpSvcFilter          *self,
+		   const gchar           *bus_name,
+		   const gchar           *connection,
+		   const gchar           *channel_type,
+		   const gchar           *channel,
+		   guint                  handle_type,
+		   guint                  handle,
+		   guint                  id,
 		   DBusGMethodInvocation *context)
 {
 	EmpathyFilter       *filter = EMPATHY_FILTER (self);
