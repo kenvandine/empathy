@@ -39,13 +39,12 @@
 
 struct _EmpathyTpGroupPriv {
 	McAccount             *account;
-	TpChan                *tp_chan;
 	TpChannel             *channel;
+	gboolean               ready;
 
 	EmpathyContactFactory *factory;
 	gchar                 *group_name;
 	guint                  self_handle;
-	gboolean               ready;
 	GList                 *members;
 	GList                 *local_pendings;
 	GList                 *remote_pendings;
@@ -66,7 +65,6 @@ enum {
 enum {
 	PROP_0,
 	PROP_ACCOUNT,
-	PROP_TP_CHAN,
 	PROP_CHANNEL,
 	PROP_READY
 };
@@ -552,9 +550,6 @@ tp_group_finalize (GObject *object)
 	tp_factory = empathy_contact_factory_get_tp_factory (priv->factory, priv->account);
 	g_signal_handlers_disconnect_by_func (tp_factory, tp_group_factory_ready_cb, object);
 
-	if (priv->tp_chan) {
-		g_object_unref (priv->tp_chan);
-	}
 	if (priv->channel) {
 		g_signal_handlers_disconnect_by_func (priv->channel,
 						      tp_group_invalidated_cb,
@@ -615,9 +610,6 @@ tp_group_get_property (GObject    *object,
 	case PROP_ACCOUNT:
 		g_value_set_object (value, priv->account);
 		break;
-	case PROP_TP_CHAN:
-		g_value_set_object (value, priv->tp_chan);
-		break;
 	case PROP_CHANNEL:
 		g_value_set_object (value, priv->channel);
 		break;
@@ -641,9 +633,6 @@ tp_group_set_property (GObject      *object,
 	switch (param_id) {
 	case PROP_ACCOUNT:
 		priv->account = g_object_ref (g_value_get_object (value));
-		break;
-	case PROP_TP_CHAN:
-		priv->tp_chan = g_object_ref (g_value_get_object (value));
 		break;
 	case PROP_CHANNEL:
 		priv->channel = g_object_ref (g_value_get_object (value));
@@ -670,14 +659,6 @@ empathy_tp_group_class_init (EmpathyTpGroupClass *klass)
 							      "channel Account",
 							      "The account associated with the channel",
 							      MC_TYPE_ACCOUNT,
-							      G_PARAM_READWRITE |
-							      G_PARAM_CONSTRUCT_ONLY));
-	g_object_class_install_property (object_class,
-					 PROP_TP_CHAN,
-					 g_param_spec_object ("tp-chan",
-							      "telepathy channel",
-							      "The old TpChan",
-							      TELEPATHY_CHAN_TYPE,
 							      G_PARAM_READWRITE |
 							      G_PARAM_CONSTRUCT_ONLY));
 	g_object_class_install_property (object_class,
@@ -756,31 +737,16 @@ empathy_tp_group_init (EmpathyTpGroup *group)
 
 EmpathyTpGroup *
 empathy_tp_group_new (McAccount *account,
-		      TpChan    *tp_chan)
+		      TpChannel *channel)
 {
-	EmpathyTpGroup  *group;
-	TpChannel       *channel;
-	TpConnection    *connection;
-	MissionControl  *mc;
-
 	g_return_val_if_fail (MC_IS_ACCOUNT (account), NULL);
-	g_return_val_if_fail (TELEPATHY_IS_CHAN (tp_chan), NULL);
+	g_return_val_if_fail (TP_IS_CHANNEL (channel), NULL);
 
-	mc = empathy_mission_control_new ();
-	connection = mission_control_get_tpconnection (mc, account, NULL);
-	channel = tp_chan_dup_channel (tp_chan, connection, NULL);
 
-	group = g_object_new (EMPATHY_TYPE_TP_GROUP, 
-			      "account", account,
-			      "channel", channel,
-			      "tp-chan", tp_chan,
-			      NULL);
-
-	g_object_unref (channel);
-	g_object_unref (connection);
-	g_object_unref (mc);
-
-	return group;
+	return g_object_new (EMPATHY_TYPE_TP_GROUP, 
+			     "account", account,
+			     "channel", channel,
+			     NULL);
 }
 
 static void
@@ -964,18 +930,6 @@ empathy_tp_group_get_self_contact (EmpathyTpGroup *group)
 	g_return_val_if_fail (priv->ready, NULL);
 
 	return tp_group_get_contact (group, priv->self_handle);
-}
-
-TpChan *
-empathy_tp_group_get_channel (EmpathyTpGroup *group)
-{
-	EmpathyTpGroupPriv *priv;
-
-	g_return_val_if_fail (EMPATHY_IS_TP_GROUP (group), NULL);
-
-	priv = GET_PRIV (group);
-
-	return priv->tp_chan;
 }
 
 gboolean
