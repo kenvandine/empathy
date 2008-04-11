@@ -403,7 +403,7 @@ tp_contact_list_add_channel (EmpathyTpContactList *list,
 				  object_path, channel_type,
 				  handle_type, handle, NULL);
 
-	group = empathy_tp_group_new (priv->account, channel);
+	group = empathy_tp_group_new (channel);
 	empathy_run_until_ready (group);
 	g_object_unref (channel);
 

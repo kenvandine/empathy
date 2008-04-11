@@ -1572,10 +1572,10 @@ empathy_chat_set_tp_chat (EmpathyChat   *chat,
 			  EmpathyTpChat *tp_chat)
 {
 	EmpathyChatPriv *priv;
-	TpChan          *tp_chan;
 
 	g_return_if_fail (EMPATHY_IS_CHAT (chat));
 	g_return_if_fail (EMPATHY_IS_TP_CHAT (tp_chat));
+	g_return_if_fail (empathy_tp_chat_is_ready (tp_chat));
 
 	priv = GET_PRIV (chat);
 
@@ -1594,8 +1594,6 @@ empathy_chat_set_tp_chat (EmpathyChat   *chat,
 	priv->tp_chat = g_object_ref (tp_chat);
 	priv->id = g_strdup (empathy_tp_chat_get_id (tp_chat));
 	priv->account = g_object_ref (empathy_tp_chat_get_account (tp_chat));
-	tp_chan = empathy_tp_chat_get_channel (tp_chat);
-	priv->handle_type = tp_chan->handle_type;
 
 	g_signal_connect (tp_chat, "message-received",
 			  G_CALLBACK (chat_message_received_cb),

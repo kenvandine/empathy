@@ -47,13 +47,12 @@ weak_notify (gpointer data,
 
 static void
 new_channel_cb (EmpathyChandler *chandler,
-                TpConn *connection,
-                TpChan *channel,
+                TpChannel *channel,
                 MissionControl *mc)
 {
   EmpathyTpCall *call;
 
-  call = empathy_tp_call_new (connection, channel);
+  call = empathy_tp_call_new (channel);
   empathy_call_window_new (call);
   g_object_unref (call);
 

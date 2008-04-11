@@ -33,6 +33,8 @@
 #include <libebook/e-book.h>
 
 #include <telepathy-glib/util.h>
+#include <telepathy-glib/channel.h>
+#include <telepathy-glib/connection.h>
 #include <libmissioncontrol/mc-account.h>
 #include <libmissioncontrol/mission-control.h>
 
@@ -58,17 +60,36 @@ static BaconMessageConnection *connection = NULL;
 
 static void
 new_text_channel_cb (EmpathyChandler *chandler,
-		     TpConn          *tp_conn,
-		     TpChan          *tp_chan,
+		     TpChannel       *channel,
 		     MissionControl  *mc)
 {
 	EmpathyTpChat *tp_chat;
+	TpConnection  *connection;
+	guint          handle_type;
+	guint          handle;
+	gchar        **names;
 	McAccount     *account;
 	EmpathyChat   *chat;
 	gchar         *id;
+	GArray        *handles;
 
-	account = mission_control_get_account_for_connection (mc, tp_conn, NULL);
-	id = empathy_inspect_channel (account, tp_chan);
+	g_object_get (channel,
+		      "connection", &connection,
+		      "handle-type", &handle_type,
+		      "handle", &handle,
+		      NULL);
+	handles = g_array_new (FALSE, FALSE, sizeof (guint));
+	g_array_append_val (handles, handle);
+	tp_cli_connection_run_inspect_handles (connection, -1,
+					       handle_type, handles,
+					       &names,
+					       NULL, NULL);
+	id = *names;
+	g_free (names);
+	g_object_unref (connection);
+	g_array_free (handles, TRUE);
+
+	account = empathy_channel_get_account (channel);
 	chat = empathy_chat_window_find_chat (account, id);
 	g_free (id);
 
@@ -76,7 +97,8 @@ new_text_channel_cb (EmpathyChandler *chandler,
 		/* The chat already exists */
 		if (!empathy_chat_get_tp_chat (chat)) {
 			/* The chat died, give him the new text channel */
-			tp_chat = empathy_tp_chat_new (account, tp_chan, TRUE);
+			tp_chat = empathy_tp_chat_new (channel, TRUE);
+			empathy_run_until_ready (tp_chat);
 			empathy_chat_set_tp_chat (chat, tp_chat);
 			g_object_unref (tp_chat);
 		}
@@ -86,7 +108,9 @@ new_text_channel_cb (EmpathyChandler *chandler,
 		return;
 	}
 
-	tp_chat = empathy_tp_chat_new (account, tp_chan, TRUE);
+	tp_chat = empathy_tp_chat_new (channel, TRUE);
+	empathy_run_until_ready (tp_chat);
+
 	chat = empathy_chat_new (tp_chat);
 	empathy_chat_window_present_chat (chat);
 
