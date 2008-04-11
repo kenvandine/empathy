@@ -1,18 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<node name="/">
-  <interface name="org.freedesktop.Telepathy.MissionControl.Filter">
-    <method name="FilterChannel">
+<node name="/Chandler">
+  <interface name="org.freedesktop.Telepathy.ChannelHandler">
+    <method name="HandleChannel">
       <arg direction="in" type="s" name="bus_name" />
       <arg direction="in" type="o" name="connection" />
       <arg direction="in" type="s" name="channel_type" />
       <arg direction="in" type="o" name="channel" />
       <arg direction="in" type="u" name="handle_type" />
       <arg direction="in" type="u" name="handle" />
-      <arg direction="in" type="u" name="id" />
     </method>
-    <signal name="Process">
-      <arg type="u" name="id"/>
-      <arg type="b" name="process"/>
-    </signal>
   </interface>
 </node>
