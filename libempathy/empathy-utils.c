@@ -605,4 +605,80 @@ empathy_file_lookup (const gchar *filename, const gchar *subdir)
 	return path;
 }
 
+typedef struct {
+	EmpathyRunUntilReadyFunc  func;
+	gpointer                  user_data;
+	GObject                  *object;
+	GMainLoop                *loop;
+} RunUntilReadyData;
+
+static void
+run_until_ready_cb (RunUntilReadyData *data)
+{
+	if (!data->func || data->func (data->object, data->user_data)) {
+		empathy_debug (DEBUG_DOMAIN, "Object %p is ready", data->object);
+		g_main_loop_quit (data->loop);
+	}
+}
+
+static gboolean
+object_is_ready (GObject *object,
+		 gpointer user_data)
+{
+	gboolean ready;
+
+	g_object_get (object, "ready", &ready, NULL);
+
+	return ready;
+}
+
+void
+empathy_run_until_ready_full (gpointer                  object,
+			      const gchar              *signal,
+			      EmpathyRunUntilReadyFunc  func,
+			      gpointer                  user_data,
+			      GMainLoop               **loop)
+{
+	RunUntilReadyData  data;
+	gulong             signal_id;
+
+	g_return_if_fail (G_IS_OBJECT (object));
+	g_return_if_fail (signal != NULL);
+
+	if (func && func (object, user_data)) {
+		return;
+	}
+
+	empathy_debug (DEBUG_DOMAIN, "Starting run until ready for object %p",
+		       object);
+
+	data.func = func;
+	data.user_data = user_data;
+	data.object = object;
+	data.loop = g_main_loop_new (NULL, FALSE);
+
+	signal_id = g_signal_connect_swapped (object, signal,
+					      G_CALLBACK (run_until_ready_cb),
+					      &data);
+	if (loop != NULL) {
+		*loop = data.loop;
+	}
+
+	g_main_loop_run (data.loop);
+
+	if (loop != NULL) {
+		*loop = NULL;
+	}
+
+	g_signal_handler_disconnect (object, signal_id);
+	g_main_loop_unref (data.loop);
+}
+
+void
+empathy_run_until_ready (gpointer object)
+{
+	empathy_run_until_ready_full (object, "notify::ready", object_is_ready,
+				      NULL, NULL);
+}
+
 

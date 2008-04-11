@@ -99,6 +99,16 @@ const gchar * empathy_presence_to_str               (McPresence       presence);
 McPresence    empathy_presence_from_str             (const gchar     *str);
 gchar *       empathy_file_lookup                   (const gchar     *filename,
 						     const gchar     *subdir);
+
+typedef gboolean (*EmpathyRunUntilReadyFunc)        (GObject         *object,
+						     gpointer         user_data);
+void          empathy_run_until_ready               (gpointer         object);
+void          empathy_run_until_ready_full          (gpointer         object,
+						     const gchar     *signal,
+						     EmpathyRunUntilReadyFunc  func,
+						     gpointer         user_data,
+						     GMainLoop      **loop);
+
 G_END_DECLS
 
 #endif /*  __EMPATHY_UTILS_H__ */
