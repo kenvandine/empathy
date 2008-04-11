@@ -833,7 +833,6 @@ static void
 tp_contact_factory_status_updated (EmpathyTpContactFactory *tp_factory)
 {
 	EmpathyTpContactFactoryPriv *priv = GET_PRIV (tp_factory);
-	TpConn                      *tp_conn;
 	gboolean                     connection_ready;
 
 	if (priv->connection) {
@@ -841,15 +840,12 @@ tp_contact_factory_status_updated (EmpathyTpContactFactory *tp_factory)
 		return;
 	}
 
-	tp_conn = mission_control_get_connection (priv->mc, priv->account, NULL);
-	if (!tp_conn) {
+	priv->connection = mission_control_get_tpconnection (priv->mc, priv->account, NULL);
+	if (!priv->connection) {
 		return;
 	}
 
 	/* We got a new connection, wait for it to be ready */
-	priv->connection = tp_conn_dup_connection (tp_conn);
-	g_object_unref (tp_conn);
-
 	g_signal_connect_swapped (priv->connection, "invalidated",
 				  G_CALLBACK (tp_contact_factory_connection_invalidated_cb),
 				  tp_factory);

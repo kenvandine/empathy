@@ -101,15 +101,7 @@ tp_chat_invalidated_cb (TpProxy       *proxy,
 			gchar         *message,
 			EmpathyTpChat *chat)
 {
-	EmpathyTpChatPriv *priv = GET_PRIV (chat);
-
 	empathy_debug (DEBUG_DOMAIN, "Channel invalidated: %s", message);
-
-	g_object_unref (priv->channel);
-	g_object_unref (priv->tp_chan);
-	priv->channel = NULL;
-	priv->tp_chan = NULL;
-
 	g_signal_emit (chat, signals[DESTROY], 0);
 }
 
@@ -921,7 +913,6 @@ empathy_tp_chat_class_init (EmpathyTpChatClass *klass)
 	object_class->get_property = tp_chat_get_property;
 	object_class->set_property = tp_chat_set_property;
 
-	/* Construct properties */
 	g_object_class_install_property (object_class,
 					 PROP_ACCOUNT,
 					 g_param_spec_object ("account",
@@ -954,6 +945,7 @@ empathy_tp_chat_class_init (EmpathyTpChatClass *klass)
 							       FALSE,
 							       G_PARAM_READWRITE |
 							       G_PARAM_CONSTRUCT));
+
 	g_object_class_install_property (object_class,
 					 PROP_REMOTE_CONTACT,
 					 g_param_spec_object ("remote-contact",
@@ -965,7 +957,7 @@ empathy_tp_chat_class_init (EmpathyTpChatClass *klass)
 					 PROP_READY,
 					 g_param_spec_boolean ("ready",
 							       "Is the object ready",
-							       "This object is can't be used until this becomes true",
+							       "This object can't be used until this becomes true",
 							       FALSE,
 							       G_PARAM_READABLE));
 
@@ -1045,11 +1037,9 @@ empathy_tp_chat_new (McAccount *account,
 	TpChannel      *channel;
 	TpConnection   *connection;
 	MissionControl *mc;
-	TpConn         *tp_conn;
 
 	mc = empathy_mission_control_new ();
-	tp_conn = mission_control_get_connection (mc, account, NULL);
-	connection = tp_conn_dup_connection (tp_conn);
+	connection = mission_control_get_tpconnection (mc, account, NULL);
 	channel = tp_chan_dup_channel (tp_chan, connection, NULL);
 
 	chat = g_object_new (EMPATHY_TYPE_TP_CHAT, 
@@ -1060,7 +1050,6 @@ empathy_tp_chat_new (McAccount *account,
 			     NULL);
 
 	g_object_unref (channel);
-	g_object_unref (tp_conn);
 	g_object_unref (connection);
 	g_object_unref (mc);
 
