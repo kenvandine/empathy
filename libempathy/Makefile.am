@@ -108,12 +108,6 @@ empathy-marshal.list: $(libempathy_la_SOURCES) Makefile.am
 	echo "#include \"empathy-marshal.h\"" > $@ && \
 	$(GLIB_GENMARSHAL) --body --prefix=_$(subst -,_,$*)_marshal $< >> $*-marshal.c
 
-empathy-chandler-glue.h: empathy-chandler.xml Makefile
-	$(LIBTOOL) --mode=execute $(DBUS_BINDING_TOOL) --prefix=empathy_chandler --mode=glib-server --output=$@ $<
-empathy-filter-glue.h: empathy-filter.xml Makefile
-	$(LIBTOOL) --mode=execute $(DBUS_BINDING_TOOL) --prefix=empathy_filter --mode=glib-server --output=$@ $<
-
-
 empathy-enum-types.h: stamp-empathy-enum-types.h
 	@true
 stamp-empathy-enum-types.h: $(libempathy_headers) Makefile
@@ -172,8 +166,6 @@ pkgconfig_DATA = libempathy.pc
 
 EXTRA_DIST = 			\
 	empathy-marshal.list	\
-	empathy-chandler.xml	\
-	empathy-filter.xml	\
 	$(stylesheet_DATA)	\
 	$(dtd_DATA)		\
 	$(ircnetworks_DATA)
