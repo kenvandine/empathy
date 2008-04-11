@@ -21,14 +21,10 @@
 #ifndef __EMPATHY_TP_CALL_H__
 #define __EMPATHY_TP_CALL_H__
 
-#include <libtelepathy/tp-chan.h>
-#include <libtelepathy/tp-conn.h>
+#include <telepathy-glib/connection.h>
+#include <telepathy-glib/channel.h>
 
 #include <libmissioncontrol/mission-control.h>
-
-#include <libempathy/empathy-chandler.h>
-#include <libempathy/empathy-contact.h>
-#include <libempathy/empathy-tp-group.h>
 
 G_BEGIN_DECLS
 
@@ -72,10 +68,9 @@ typedef struct
 } EmpathyTpCallStream;
 
 GType empathy_tp_call_get_type (void) G_GNUC_CONST;
-EmpathyTpCall *empathy_tp_call_new (TpConn *connection, TpChan *channel);
+EmpathyTpCall *empathy_tp_call_new (TpConnection *connection, TpChannel *channel);
 
 void empathy_tp_call_accept_incoming_call (EmpathyTpCall *call);
-void empathy_tp_call_close_channel (EmpathyTpCall *call);
 void empathy_tp_call_request_video_stream_direction (EmpathyTpCall *call,
     gboolean is_sending);
 void empathy_tp_call_add_preview_video (EmpathyTpCall *call,
