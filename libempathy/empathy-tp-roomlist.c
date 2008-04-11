@@ -23,9 +23,7 @@
 
 #include <string.h>
 
-#include <libtelepathy/tp-chan-type-room-list-gen.h>
-#include <libtelepathy/tp-conn.h>
-#include <libtelepathy/tp-chan.h>
+#include <telepathy-glib/channel.h>
 #include <telepathy-glib/dbus.h>
 
 #include <libmissioncontrol/mission-control.h>
@@ -41,30 +39,25 @@
 #define DEBUG_DOMAIN "TpRoomlist"
 
 struct _EmpathyTpRoomlistPriv {
-	McAccount  *account;
-	TpChan     *tp_chan;
-	DBusGProxy *roomlist_iface;
+	TpConnection *connection;
+	TpChannel    *channel;
+	McAccount    *account;
+	gboolean      is_listing;
 };
 
 static void empathy_tp_roomlist_class_init (EmpathyTpRoomlistClass *klass);
 static void empathy_tp_roomlist_init       (EmpathyTpRoomlist      *chat);
-static void tp_roomlist_finalize           (GObject                *object);
-static void tp_roomlist_destroy_cb         (TpChan                 *tp_chan,
-					    EmpathyTpRoomlist      *list);
-static void tp_roomlist_closed_cb          (TpChan                 *tp_chan,
-					    EmpathyTpRoomlist      *list);
-static void tp_roomlist_listing_cb         (DBusGProxy             *roomlist_iface,
-					    gboolean                listing,
-					    EmpathyTpRoomlist      *list);
-static void tp_roomlist_got_rooms_cb       (DBusGProxy             *roomlist_iface,
-					    GPtrArray              *room_list,
-					    EmpathyTpRoomlist      *list);
 
 enum {
 	NEW_ROOM,
-	LISTING,
 	DESTROY,
 	LAST_SIGNAL
+};
+
+enum {
+	PROP_0,
+	PROP_CONNECTION,
+	PROP_IS_LISTING,
 };
 
 static guint signals[LAST_SIGNAL];
@@ -72,11 +65,253 @@ static guint signals[LAST_SIGNAL];
 G_DEFINE_TYPE (EmpathyTpRoomlist, empathy_tp_roomlist, G_TYPE_OBJECT);
 
 static void
+tp_roomlist_listing_cb (TpChannel *channel,
+			gboolean   listing,
+			gpointer   user_data,
+			GObject   *list)
+{
+	EmpathyTpRoomlistPriv *priv = GET_PRIV (list);
+
+	empathy_debug (DEBUG_DOMAIN, "Listing: %s", listing ? "Yes" : "No");
+	priv->is_listing = listing;
+	g_object_notify (list, "is-listing");
+}
+
+static void
+tp_roomlist_got_rooms_cb (TpChannel       *channel,
+			  const GPtrArray *rooms,
+			  gpointer         user_data,
+			  GObject         *list)
+{
+	EmpathyTpRoomlistPriv *priv = GET_PRIV (list);
+	guint                  i;
+	const gchar          **names;
+	gchar                **room_ids;
+	GArray                *handles;
+
+	names = g_new0 (const gchar*, rooms->len + 1);
+	handles = g_array_sized_new (FALSE, FALSE, sizeof (guint), rooms->len);
+	for (i = 0; i < rooms->len; i++) {
+		const GValue *room_name_value;
+		GValueArray  *room_struct;
+		guint         handle;
+		GHashTable   *info;
+
+		/* Get information */
+		room_struct = g_ptr_array_index (rooms, i);
+		handle = g_value_get_uint (g_value_array_get_nth (room_struct, 0));
+		info = g_value_get_boxed (g_value_array_get_nth (room_struct, 2));
+		room_name_value = g_hash_table_lookup (info, "name");
+
+		names[i] = g_value_get_string (room_name_value);
+		g_array_append_val (handles, handle);
+	}
+		
+	tp_cli_connection_run_inspect_handles (priv->connection, -1,
+					       TP_HANDLE_TYPE_ROOM,
+					       handles,
+					       &room_ids,
+					       NULL, NULL);
+	for (i = 0; i < handles->len; i++) {
+		EmpathyChatroom *chatroom;
+
+		chatroom = empathy_chatroom_new_full (priv->account,
+						      room_ids[i],
+						      names[i],
+						      FALSE);
+		g_signal_emit (list, signals[NEW_ROOM], 0, chatroom);
+		g_object_unref (chatroom);
+		g_free (room_ids[i]);
+	}
+
+	g_free (names);
+	g_free (room_ids);
+	g_array_free (handles, TRUE);
+}
+
+static void
+tp_roomlist_get_listing_rooms_cb (TpChannel    *channel,
+				  gboolean      is_listing,
+				  const GError *error,
+				  gpointer      user_data,
+				  GObject      *list)
+{
+	EmpathyTpRoomlistPriv *priv = GET_PRIV (list);
+
+	if (error) {
+		empathy_debug (DEBUG_DOMAIN, "Error geting listing rooms: %s",
+			       error->message);
+		return;
+	}
+
+	priv->is_listing = is_listing;
+	g_object_notify (list, "is-listing");
+}
+
+static void
+tp_roomlist_invalidated_cb (TpChannel         *channel,
+			    guint              domain,
+			    gint               code,
+			    gchar             *message,
+			    EmpathyTpRoomlist *list)
+{
+	empathy_debug (DEBUG_DOMAIN, "Channel invalidated: %s", message);
+	g_signal_emit (list, signals[DESTROY], 0);
+}
+
+static void
+tp_roomlist_request_channel_cb (TpConnection *connection,
+				const gchar  *object_path,
+				const GError *error,
+				gpointer      user_data,
+				GObject      *list)
+{
+	EmpathyTpRoomlistPriv *priv = GET_PRIV (list);
+
+	if (error) {
+		empathy_debug (DEBUG_DOMAIN, "Error requesting channel: %s",
+			       error->message);
+		return;
+	}
+
+	priv->channel = tp_channel_new (priv->connection, object_path,
+					TP_IFACE_CHANNEL_TYPE_ROOM_LIST,
+					TP_HANDLE_TYPE_NONE,
+					0, NULL);
+	tp_channel_run_until_ready (priv->channel, NULL, NULL);
+
+	g_signal_connect (priv->channel, "invalidated",
+			  G_CALLBACK (tp_roomlist_invalidated_cb),
+			  list);
+
+	tp_cli_channel_type_room_list_connect_to_listing_rooms (priv->channel,
+								tp_roomlist_listing_cb,
+								NULL, NULL,
+								G_OBJECT (list),
+								NULL);
+	tp_cli_channel_type_room_list_connect_to_got_rooms (priv->channel,
+							    tp_roomlist_got_rooms_cb,
+							    NULL, NULL,
+							    G_OBJECT (list),
+							    NULL);
+
+	tp_cli_channel_type_room_list_call_get_listing_rooms (priv->channel, -1,
+							      tp_roomlist_get_listing_rooms_cb,
+							      NULL, NULL,
+							      G_OBJECT (list));
+}
+
+static void
+tp_roomlist_finalize (GObject *object)
+{
+	EmpathyTpRoomlistPriv *priv = GET_PRIV (object);
+
+	if (priv->channel) {
+		empathy_debug (DEBUG_DOMAIN, "Closing channel...");
+		g_signal_handlers_disconnect_by_func (priv->channel,
+						      tp_roomlist_invalidated_cb,
+						      object);
+		tp_cli_channel_call_close (priv->channel, -1,
+					   NULL, NULL, NULL, NULL);
+		g_object_unref (priv->channel);
+	}
+
+	if (priv->account) {
+		g_object_unref (priv->account);
+	}
+	if (priv->connection) {
+		g_object_unref (priv->connection);
+	}
+
+	G_OBJECT_CLASS (empathy_tp_roomlist_parent_class)->finalize (object);
+}
+
+static void
+tp_roomlist_constructed (GObject *list)
+{
+	EmpathyTpRoomlistPriv *priv = GET_PRIV (list);
+	MissionControl        *mc;
+
+	mc = empathy_mission_control_new ();
+	priv->account = mission_control_get_account_for_tpconnection (mc,
+								      priv->connection,
+								      NULL);
+	g_object_unref (mc);
+
+	tp_cli_connection_call_request_channel (priv->connection, -1,
+						TP_IFACE_CHANNEL_TYPE_ROOM_LIST,
+						TP_HANDLE_TYPE_NONE,
+						0,
+						TRUE,
+						tp_roomlist_request_channel_cb,
+						NULL, NULL,
+						list);
+}
+
+static void
+tp_roomlist_get_property (GObject    *object,
+			  guint       param_id,
+			  GValue     *value,
+			  GParamSpec *pspec)
+{
+	EmpathyTpRoomlistPriv *priv = GET_PRIV (object);
+
+	switch (param_id) {
+	case PROP_CONNECTION:
+		g_value_set_object (value, priv->connection);
+		break;
+	case PROP_IS_LISTING:
+		g_value_set_boolean (value, priv->is_listing);
+		break;
+	default:
+		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
+		break;
+	};
+}
+
+static void
+tp_roomlist_set_property (GObject      *object,
+			  guint         param_id,
+			  const GValue *value,
+			  GParamSpec   *pspec)
+{
+	EmpathyTpRoomlistPriv *priv = GET_PRIV (object);
+
+	switch (param_id) {
+	case PROP_CONNECTION:
+		priv->connection = g_object_ref (g_value_get_object (value));
+		break;
+	default:
+		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
+		break;
+	};
+}
+
+static void
 empathy_tp_roomlist_class_init (EmpathyTpRoomlistClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
 	object_class->finalize = tp_roomlist_finalize;
+	object_class->constructed = tp_roomlist_constructed;
+	object_class->get_property = tp_roomlist_get_property;
+	object_class->set_property = tp_roomlist_set_property;
+
+	g_object_class_install_property (object_class,
+					 PROP_CONNECTION,
+					 g_param_spec_object ("connection",
+							      "The Connection",
+							      "The connection on which it lists rooms",
+							      TP_TYPE_CONNECTION,
+							      G_PARAM_READWRITE |
+							      G_PARAM_CONSTRUCT_ONLY));
+	g_object_class_install_property (object_class,
+					 PROP_IS_LISTING,
+					 g_param_spec_boolean ("is-listing",
+							       "Is listing",
+							       "Are we listing rooms",
+							       FALSE,
+							       G_PARAM_READABLE));
 
 	signals[NEW_ROOM] =
 		g_signal_new ("new-room",
@@ -87,16 +322,6 @@ empathy_tp_roomlist_class_init (EmpathyTpRoomlistClass *klass)
 			      g_cclosure_marshal_VOID__OBJECT,
 			      G_TYPE_NONE,
 			      1, EMPATHY_TYPE_CHATROOM);
-
-	signals[LISTING] =
-		g_signal_new ("listing",
-			      G_TYPE_FROM_CLASS (klass),
-			      G_SIGNAL_RUN_LAST,
-			      0,
-			      NULL, NULL,
-			      g_cclosure_marshal_VOID__BOOLEAN,
-			      G_TYPE_NONE,
-			      1, G_TYPE_BOOLEAN);
 
 	signals[DESTROY] =
 		g_signal_new ("destroy",
@@ -116,234 +341,56 @@ empathy_tp_roomlist_init (EmpathyTpRoomlist *list)
 {
 }
 
-static void
-tp_roomlist_finalize (GObject *object)
-{
-	EmpathyTpRoomlistPriv *priv;
-	GError                *error = NULL;
-
-	priv = GET_PRIV (object);
-
-	if (priv->tp_chan) {
-		g_signal_handlers_disconnect_by_func (priv->tp_chan,
-						      tp_roomlist_destroy_cb,
-						      object);
-
-		empathy_debug (DEBUG_DOMAIN, "Closing channel...");
-		if (!tp_chan_close (DBUS_G_PROXY (priv->tp_chan), &error)) {
-			empathy_debug (DEBUG_DOMAIN, 
-				      "Error closing roomlist channel: %s",
-				      error ? error->message : "No error given");
-			g_clear_error (&error);
-		}
-		g_object_unref (priv->tp_chan);
-	}
-
-	if (priv->account) {
-		g_object_unref (priv->account);
-	}
-
-	G_OBJECT_CLASS (empathy_tp_roomlist_parent_class)->finalize (object);
-}
-
 EmpathyTpRoomlist *
 empathy_tp_roomlist_new (McAccount *account)
 {
-	EmpathyTpRoomlist     *list;
-	EmpathyTpRoomlistPriv *priv;
-	TpConn                *tp_conn;
-	MissionControl        *mc;
-	const gchar           *bus_name;
+	MissionControl *mc;
+	TpConnection   *connection;
 
 	g_return_val_if_fail (MC_IS_ACCOUNT (account), NULL);
 
-	list = g_object_new (EMPATHY_TYPE_TP_ROOMLIST, NULL);
-	priv = GET_PRIV (list);
-
 	mc = empathy_mission_control_new ();
-	tp_conn = mission_control_get_connection (mc, account, NULL);
+	connection = mission_control_get_tpconnection (mc, account, NULL);
+
+	return g_object_new (EMPATHY_TYPE_TP_ROOMLIST,
+			     "connection", connection,
+			     NULL);
+
 	g_object_unref (mc);
-
-	bus_name = dbus_g_proxy_get_bus_name (DBUS_G_PROXY (tp_conn));
-	priv->tp_chan = tp_conn_new_channel (tp_get_bus (),
-					     tp_conn,
-					     bus_name,
-					     TP_IFACE_CHANNEL_TYPE_ROOM_LIST,
-					     TP_HANDLE_TYPE_NONE,
-					     0,
-					     TRUE);
-	g_object_unref (tp_conn);
-
-	if (!priv->tp_chan) {
-		empathy_debug (DEBUG_DOMAIN, "Failed to get roomlist channel");
-		g_object_unref (list);
-		return NULL;
-	}
-
-	priv->account = g_object_ref (account);
-	priv->roomlist_iface = tp_chan_get_interface (priv->tp_chan,
-						      TP_IFACE_QUARK_CHANNEL_TYPE_ROOM_LIST);
-
-	g_signal_connect (priv->tp_chan, "destroy",
-			  G_CALLBACK (tp_roomlist_destroy_cb),
-			  list);
-	dbus_g_proxy_connect_signal (DBUS_G_PROXY (priv->tp_chan), "Closed",
-				     G_CALLBACK (tp_roomlist_closed_cb),
-				     list, NULL);
-	dbus_g_proxy_connect_signal (DBUS_G_PROXY (priv->roomlist_iface), "ListingRooms",
-				     G_CALLBACK (tp_roomlist_listing_cb),
-				     list, NULL);
-	dbus_g_proxy_connect_signal (DBUS_G_PROXY (priv->roomlist_iface), "GotRooms",
-				     G_CALLBACK (tp_roomlist_got_rooms_cb),
-				     list, NULL);
-
-	return list;
+	g_object_unref (connection);
 }
 
 gboolean
 empathy_tp_roomlist_is_listing (EmpathyTpRoomlist *list)
 {
-	EmpathyTpRoomlistPriv *priv;
-	GError                *error = NULL;
-	gboolean               listing = FALSE;
+	EmpathyTpRoomlistPriv *priv = GET_PRIV (list);
 
 	g_return_val_if_fail (EMPATHY_IS_TP_ROOMLIST (list), FALSE);
 
-	priv = GET_PRIV (list);
-
-	if (!tp_chan_type_room_list_get_listing_rooms (priv->roomlist_iface,
-						       &listing,
-						       &error)) {
-		empathy_debug (DEBUG_DOMAIN, 
-			      "Error GetListingRooms: %s",
-			      error ? error->message : "No error given");
-		g_clear_error (&error);
-		return FALSE;
-	}
-
-	return listing;
+	return priv->is_listing;
 }
 
 void
 empathy_tp_roomlist_start (EmpathyTpRoomlist *list)
 {
-	EmpathyTpRoomlistPriv *priv;
-	GError                *error = NULL;
+	EmpathyTpRoomlistPriv *priv = GET_PRIV (list);
 
 	g_return_if_fail (EMPATHY_IS_TP_ROOMLIST (list));
 
-	priv = GET_PRIV (list);
-
-	if (!tp_chan_type_room_list_list_rooms (priv->roomlist_iface, &error)) {
-		empathy_debug (DEBUG_DOMAIN, 
-			      "Error ListRooms: %s",
-			      error ? error->message : "No error given");
-		g_clear_error (&error);
-	}
+	tp_cli_channel_type_room_list_call_list_rooms (priv->channel, -1,
+						       NULL, NULL, NULL,
+						       G_OBJECT (list));
 }
 
 void
 empathy_tp_roomlist_stop (EmpathyTpRoomlist *list)
 {
-	EmpathyTpRoomlistPriv *priv;
-	GError                *error = NULL;
+	EmpathyTpRoomlistPriv *priv = GET_PRIV (list);
 
 	g_return_if_fail (EMPATHY_IS_TP_ROOMLIST (list));
 
-	priv = GET_PRIV (list);
-
-	if (!tp_chan_type_room_list_stop_listing (priv->roomlist_iface, &error)) {
-		empathy_debug (DEBUG_DOMAIN, 
-			      "Error StopListing: %s",
-			      error ? error->message : "No error given");
-		g_clear_error (&error);
-	}
-}
-
-static void
-tp_roomlist_destroy_cb (TpChan            *tp_chan,
-			EmpathyTpRoomlist *list)
-{
-	EmpathyTpRoomlistPriv *priv;
-
-	priv = GET_PRIV (list);
-
-	empathy_debug (DEBUG_DOMAIN, "Channel Closed or CM crashed");
-
-	tp_roomlist_listing_cb (priv->roomlist_iface, FALSE, list);
-
-	g_object_unref  (priv->tp_chan);
-	priv->tp_chan = NULL;
-	priv->roomlist_iface = NULL;
-
-	g_signal_emit (list, signals[DESTROY], 0);
-}
-
-static void
-tp_roomlist_closed_cb (TpChan            *tp_chan,
-		       EmpathyTpRoomlist *list)
-{
-	EmpathyTpRoomlistPriv *priv;
-
-	priv = GET_PRIV (list);
-
-	/* The channel is closed, do just like if the proxy was destroyed */
-	g_signal_handlers_disconnect_by_func (priv->tp_chan,
-					      tp_roomlist_destroy_cb,
-					      list);
-	tp_roomlist_destroy_cb (priv->tp_chan, list);
-}
-
-static void
-tp_roomlist_listing_cb (DBusGProxy        *roomlist_iface,
-			gboolean           listing,
-			EmpathyTpRoomlist *list)
-{
-	empathy_debug (DEBUG_DOMAIN, "Listing: %s", listing ? "Yes" : "No");
-	g_signal_emit (list, signals[LISTING], 0, listing);
-}
-
-static void
-tp_roomlist_got_rooms_cb (DBusGProxy        *roomlist_iface,
-			  GPtrArray         *room_list,
-			  EmpathyTpRoomlist *list)
-{
-	EmpathyTpRoomlistPriv *priv;
-	guint                  i;
-
-	priv = GET_PRIV (list);
-
-	for (i = 0; i < room_list->len; i++) {
-		EmpathyChatroom *chatroom;
-		gchar           *room_id;
-		const gchar     *room_name;
-		const GValue    *room_name_value;
-		GValueArray     *room_struct;
-		guint            handle;
-		const gchar     *channel_type;
-		GHashTable      *info;
-
-		/* Get information */
-		room_struct = g_ptr_array_index (room_list, i);
-		handle = g_value_get_uint (g_value_array_get_nth (room_struct, 0));
-		channel_type = g_value_get_string (g_value_array_get_nth (room_struct, 1));
-		info = g_value_get_boxed (g_value_array_get_nth (room_struct, 2));
-
-		/* Create the chatroom */
-		room_name_value = g_hash_table_lookup (info, "name");
-		room_name = g_value_get_string (room_name_value);
-		room_id = empathy_inspect_handle (priv->account,
-						  handle,
-						  TP_HANDLE_TYPE_ROOM);
-		chatroom = empathy_chatroom_new_full (priv->account,
-						      room_id,
-						      room_name,
-						      FALSE);
-
-		/* Tells the world */
-		g_signal_emit (list, signals[NEW_ROOM], 0, chatroom);
-
-		g_object_unref (chatroom);
-	}
+	tp_cli_channel_type_room_list_call_stop_listing (priv->channel, -1,
+							 NULL, NULL, NULL,
+							 G_OBJECT (list));
 }
 
