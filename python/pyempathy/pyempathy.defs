@@ -477,25 +477,6 @@
   (return-type "MissionControl*")
 )
 
-(define-function empathy_inspect_handle
-  (c-name "empathy_inspect_handle")
-  (return-type "gchar*")
-  (parameters
-    '("McAccount*" "account")
-    '("guint" "handle")
-    '("guint" "handle_type")
-  )
-)
-
-(define-function empathy_inspect_channel
-  (c-name "empathy_inspect_channel")
-  (return-type "gchar*")
-  (parameters
-    '("McAccount*" "account")
-    '("TpChan*" "tp_chan")
-  )
-)
-
 (define-function empathy_call_with_contact
   (c-name "empathy_call_with_contact")
   (return-type "none")
@@ -560,6 +541,34 @@
   (parameters
     '("const-gchar*" "filename")
     '("const-gchar*" "subdir")
+  )
+)
+
+(define-function empathy_run_until_ready
+  (c-name "empathy_run_until_ready")
+  (return-type "none")
+  (parameters
+    '("gpointer" "object")
+  )
+)
+
+(define-function empathy_run_until_ready_full
+  (c-name "empathy_run_until_ready_full")
+  (return-type "none")
+  (parameters
+    '("gpointer" "object")
+    '("const-gchar*" "signal")
+    '("EmpathyRunUntilReadyFunc" "func")
+    '("gpointer" "user_data")
+    '("GMainLoop**" "loop")
+  )
+)
+
+(define-function empathy_channel_get_account
+  (c-name "empathy_channel_get_account")
+  (return-type "McAccount*")
+  (parameters
+    '("TpChannel*" "channel")
   )
 )
 
@@ -1269,7 +1278,7 @@
   (return-type "GList*")
   (parameters
     '("McAccount*" "account")
-    '("GArray*" "handles")
+    '("const-GArray*" "handles")
   )
 )
 
@@ -1387,8 +1396,7 @@
   (is-constructor-of "EmpathyTpGroup")
   (return-type "EmpathyTpGroup*")
   (parameters
-    '("McAccount*" "account")
-    '("TpChan*" "tp_chan")
+    '("TpChannel*" "channel")
   )
 )
 
@@ -1468,24 +1476,27 @@
   (return-type "EmpathyContact*")
 )
 
-(define-method get_object_path
-  (of-object "EmpathyTpGroup")
-  (c-name "empathy_tp_group_get_object_path")
-  (return-type "const-gchar*")
-)
-
-(define-method get_channel
-  (of-object "EmpathyTpGroup")
-  (c-name "empathy_tp_group_get_channel")
-  (return-type "TpChan*")
-)
-
 (define-method is_member
   (of-object "EmpathyTpGroup")
   (c-name "empathy_tp_group_is_member")
   (return-type "gboolean")
   (parameters
     '("EmpathyContact*" "contact")
+  )
+)
+
+(define-method is_ready
+  (of-object "EmpathyTpGroup")
+  (c-name "empathy_tp_group_is_ready")
+  (return-type "gboolean")
+)
+
+(define-method get_invitation
+  (of-object "EmpathyTpGroup")
+  (c-name "empathy_tp_group_get_invitation")
+  (return-type "EmpathyPendingInfo*")
+  (parameters
+    '("EmpathyContact**" "remote_contact")
   )
 )
 
@@ -1544,30 +1555,9 @@
   (is-constructor-of "EmpathyTpChat")
   (return-type "EmpathyTpChat*")
   (parameters
-    '("McAccount*" "account")
-    '("TpChan*" "tp_chan")
+    '("TpChannel*" "channel")
     '("gboolean" "acknowledge")
   )
-)
-
-(define-function empathy_tp_chat_new_with_contact
-  (c-name "empathy_tp_chat_new_with_contact")
-  (return-type "EmpathyTpChat*")
-  (parameters
-    '("EmpathyContact*" "contact")
-  )
-)
-
-(define-method get_account
-  (of-object "EmpathyTpChat")
-  (c-name "empathy_tp_chat_get_account")
-  (return-type "McAccount*")
-)
-
-(define-method get_channel
-  (of-object "EmpathyTpChat")
-  (c-name "empathy_tp_chat_get_channel")
-  (return-type "TpChan*")
 )
 
 (define-method get_id
@@ -1580,6 +1570,12 @@
   (of-object "EmpathyTpChat")
   (c-name "empathy_tp_chat_get_remote_contact")
   (return-type "EmpathyContact*")
+)
+
+(define-method get_account
+  (of-object "EmpathyTpChat")
+  (c-name "empathy_tp_chat_get_account")
+  (return-type "McAccount*")
 )
 
 (define-method is_ready
@@ -1666,20 +1662,13 @@
   (is-constructor-of "EmpathyTpCall")
   (return-type "EmpathyTpCall*")
   (parameters
-    '("TpConn*" "connection")
-    '("TpChan*" "channel")
+    '("TpChannel*" "channel")
   )
 )
 
 (define-method accept_incoming_call
   (of-object "EmpathyTpCall")
   (c-name "empathy_tp_call_accept_incoming_call")
-  (return-type "none")
-)
-
-(define-method close_channel
-  (of-object "EmpathyTpCall")
-  (c-name "empathy_tp_call_close_channel")
   (return-type "none")
 )
 
@@ -1792,7 +1781,7 @@
   (c-name "empathy_filter_process")
   (return-type "none")
   (parameters
-    '("TpChan*" "tp_chan")
+    '("TpChannel*" "channel")
     '("gboolean" "process")
   )
 )
