@@ -1,23 +1,21 @@
 #include <stdlib.h>
 
 #include <glib.h>
+#include <gtk/gtk.h>
 #include <libempathy/empathy-contact-factory.h>
 #include <libmissioncontrol/mc-account.h>
 
-int
-main (int argc, char **argv)
+static gboolean
+callback (gpointer data)
 {
 	EmpathyContactFactory *factory;
 	McAccount             *account;
 	EmpathyContact        *contact;
 	EmpathyContactReady    ready_flags;
 
-	g_type_init ();
-
 	factory = empathy_contact_factory_new ();
-	account = mc_account_lookup ("jabber4");
-	contact = empathy_contact_factory_get_from_id (factory, account,
-						       "testman@jabber.belnet.be");
+	account = mc_account_lookup ("jabber0");
+	contact = empathy_contact_factory_get_from_handle (factory, account, 2);
 
 	g_print ("Contact handle=%d alias=%s\n",
 		 empathy_contact_get_handle (contact),
@@ -35,6 +33,20 @@ main (int argc, char **argv)
 	g_object_unref (factory);
 	g_object_unref (account);
 	g_object_unref (contact);
+
+	gtk_main_quit ();
+
+	return FALSE;
+}
+
+int
+main (int argc, char **argv)
+{
+	gtk_init (&argc, &argv);
+
+	g_idle_add (callback, NULL);
+
+	gtk_main ();
 
 	return EXIT_SUCCESS;
 }
