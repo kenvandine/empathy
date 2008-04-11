@@ -28,7 +28,6 @@
 #include "empathy-filter.h"
 #include "empathy-debug.h"
 #include "empathy-utils.h"
-#include "empathy-marshal.h"
 
 #define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), \
 		       EMPATHY_TYPE_FILTER, EmpathyFilterPriv))
@@ -44,7 +43,6 @@ static void empathy_filter_init       (EmpathyFilter      *filter);
 static void filter_iface_init         (EmpSvcFilterClass  *klass);
 
 enum {
-	PROCESS,
 	NEW_CHANNEL,
 	LAST_SIGNAL
 };
@@ -119,16 +117,6 @@ empathy_filter_class_init (EmpathyFilterClass *klass)
 			      g_cclosure_marshal_VOID__OBJECT,
 			      G_TYPE_NONE,
 			      1, TP_TYPE_CHANNEL);
-
-	signals[PROCESS] =
-		g_signal_new ("process",
-			      G_OBJECT_CLASS_TYPE (klass),
-			      G_SIGNAL_RUN_LAST,
-			      0,
-			      NULL, NULL,
-			      _empathy_marshal_VOID__UINT_BOOLEAN,
-			      G_TYPE_NONE,
-			      2, G_TYPE_UINT, G_TYPE_BOOLEAN);
 
 	g_type_class_add_private (object_class, sizeof (EmpathyFilterPriv));
 }
