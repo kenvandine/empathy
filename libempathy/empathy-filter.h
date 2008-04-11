@@ -24,7 +24,7 @@
 
 #include <glib.h>
 
-#include <libtelepathy/tp-chan.h>
+#include <telepathy-glib/channel.h>
 
 G_BEGIN_DECLS
 
@@ -54,7 +54,7 @@ EmpathyFilter *empathy_filter_new      (const gchar   *bus_name,
 					guint          priority,
 					guint          flags);
 void           empathy_filter_process  (EmpathyFilter *filter,
-					TpChan        *tp_chan,
+					TpChannel     *channel,
 					gboolean       process);
 
 G_END_DECLS

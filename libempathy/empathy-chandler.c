@@ -24,8 +24,8 @@
 #include <dbus/dbus-glib.h>
 
 #include <telepathy-glib/dbus.h>
-#include <libtelepathy/tp-conn.h>
-#include <libtelepathy/tp-chan.h>
+#include <telepathy-glib/connection.h>
+#include <telepathy-glib/channel.h>
 
 #include "empathy-chandler.h"
 #include "empathy-debug.h"
@@ -62,9 +62,9 @@ empathy_chandler_class_init (EmpathyChandlerClass *klass)
 			      G_SIGNAL_RUN_LAST,
 			      0,
 			      NULL, NULL,
-			      _empathy_marshal_VOID__OBJECT_OBJECT,
+			      g_cclosure_marshal_VOID__OBJECT,
 			      G_TYPE_NONE,
-			      2, TELEPATHY_CONN_TYPE, TELEPATHY_CHAN_TYPE);
+			      1, TP_TYPE_CHANNEL);
 }
 
 static void
@@ -126,32 +126,25 @@ empathy_chandler_handle_channel (EmpathyChandler  *chandler,
 				 guint             handle,
 				 GError          **error)
 {
-	TpChan *tp_chan;
-	TpConn *tp_conn;
+	TpChannel           *chan;
+	TpConnection        *conn;
+	static TpDBusDaemon *daemon = NULL;
 
-	tp_conn = tp_conn_new_without_connect (tp_get_bus (),
-					       bus_name,
-					       connection,
-					       NULL,
-					       error);
-	if (!tp_conn) {
-		return FALSE;
+	if (!daemon) {
+		daemon = tp_dbus_daemon_new (tp_get_bus ());
 	}
 
-	tp_chan = tp_chan_new (tp_get_bus(),
-			       bus_name,
-			       channel,
-			       channel_type,
-			       handle_type,
-			       handle);
+	conn = tp_connection_new (daemon, bus_name, connection, NULL);
+	chan = tp_channel_new (conn, channel, channel_type, handle_type, handle, NULL);
+	tp_channel_run_until_ready (chan, NULL, NULL);
 
 	empathy_debug (DEBUG_DOMAIN, "New channel to be handled: "
 				     "type=%s handle=%d",
 				     channel_type, handle);
-	g_signal_emit (chandler, signals[NEW_CHANNEL], 0, tp_conn, tp_chan);
+	g_signal_emit (chandler, signals[NEW_CHANNEL], 0, chan);
 
-	g_object_unref (tp_chan);
-	g_object_unref (tp_conn);
+	g_object_unref (chan);
+	g_object_unref (conn);
 
 	return TRUE;
 }

@@ -21,10 +21,8 @@
 
 #include <config.h>
 
-#include <dbus/dbus-glib.h>
-
 #include <telepathy-glib/dbus.h>
-#include <libtelepathy/tp-conn.h>
+#include <telepathy-glib/connection.h>
 
 #include "empathy-filter.h"
 #include "empathy-debug.h"
@@ -78,9 +76,9 @@ empathy_filter_class_init (EmpathyFilterClass *klass)
 			      G_SIGNAL_RUN_LAST,
 			      0,
 			      NULL, NULL,
-			      _empathy_marshal_VOID__OBJECT_OBJECT,
+			      g_cclosure_marshal_VOID__OBJECT,
 			      G_TYPE_NONE,
-			      2, TELEPATHY_CONN_TYPE, TELEPATHY_CHAN_TYPE);
+			      1, TP_TYPE_CHANNEL);
 
 	signals[PROCESS] =
 		g_signal_new ("process",
@@ -177,24 +175,24 @@ empathy_filter_new (const gchar *bus_name,
 
 void
 empathy_filter_process (EmpathyFilter *filter,
-			TpChan        *tp_chan,
+			TpChannel     *channel,
 			gboolean       process)
 {
 	EmpathyFilterPriv *priv;
 	guint              id;
 
 	g_return_if_fail (EMPATHY_IS_FILTER (filter));
-	g_return_if_fail (TELEPATHY_IS_CHAN (tp_chan));
+	g_return_if_fail (TP_IS_CHANNEL (channel));
 
 	priv = GET_PRIV (filter);
 
-	id = GPOINTER_TO_UINT (g_hash_table_lookup (priv->table, tp_chan));
+	id = GPOINTER_TO_UINT (g_hash_table_lookup (priv->table, channel));
 	g_return_if_fail (id != 0);
 
 	empathy_debug (DEBUG_DOMAIN, "Processing channel id %d: %s",
 		       id, process ? "Yes" : "No");
 	g_signal_emit (filter, signals[PROCESS], 0, id, process);
-	g_hash_table_remove (priv->table, tp_chan);
+	g_hash_table_remove (priv->table, channel);
 }
 
 static gboolean
@@ -208,37 +206,30 @@ empathy_filter_filter_channel (EmpathyFilter  *filter,
 			       guint           id,
 			       GError        **error)
 {
-	EmpathyFilterPriv *priv;
-	TpChan            *tp_chan;
-	TpConn            *tp_conn;
+	EmpathyFilterPriv   *priv;
+	TpChannel           *chan;
+	TpConnection        *conn;
+	static TpDBusDaemon *daemon = NULL;
 
 	priv = GET_PRIV (filter);
 
-	tp_conn = tp_conn_new_without_connect (tp_get_bus (),
-					       bus_name,
-					       connection,
-					       NULL,
-					       error);
-	if (!tp_conn) {
-		return FALSE;
+	if (!daemon) {
+		daemon = tp_dbus_daemon_new (tp_get_bus ());
 	}
 
+	conn = tp_connection_new (daemon, bus_name, connection, NULL);
+	chan = tp_channel_new (conn, channel, channel_type, handle_type, handle, NULL);
+	tp_channel_run_until_ready (chan, NULL, NULL);
 
-	tp_chan = tp_chan_new (tp_get_bus(),
-			       bus_name,
-			       channel,
-			       channel_type,
-			       handle_type,
-			       handle);
-
-	g_hash_table_insert (priv->table, tp_chan, GUINT_TO_POINTER (id));
+	g_hash_table_insert (priv->table, chan, GUINT_TO_POINTER (id));
 
 	empathy_debug (DEBUG_DOMAIN, "New channel to be filtred: "
 				     "type=%s handle=%d id=%d",
 				     channel_type, handle, id);
-	g_signal_emit (filter, signals[NEW_CHANNEL], 0, tp_conn, tp_chan);
 
-	g_object_unref (tp_conn);
+	g_signal_emit (filter, signals[NEW_CHANNEL], 0, chan);
+
+	g_object_unref (conn);
 
 	return TRUE;
 }
