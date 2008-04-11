@@ -966,18 +966,6 @@ empathy_tp_group_get_self_contact (EmpathyTpGroup *group)
 	return tp_group_get_contact (group, priv->self_handle);
 }
 
-const gchar *
-empathy_tp_group_get_object_path (EmpathyTpGroup *group)
-{
-	EmpathyTpGroupPriv *priv;
-
-	g_return_val_if_fail (EMPATHY_IS_TP_GROUP (group), NULL);
-
-	priv = GET_PRIV (group);
-
-	return TP_PROXY (priv->channel)->object_path;
-}
-
 TpChan *
 empathy_tp_group_get_channel (EmpathyTpGroup *group)
 {
