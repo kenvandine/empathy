@@ -1,4 +1,5 @@
 check-main
 contact-manager
 contact-run-until-ready
+contact-run-until-ready-2
 *.log
