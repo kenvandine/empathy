@@ -46,6 +46,8 @@ class Generator(object):
         self.basename = basename
         self.group = opts.get('--group', None)
         self.iface_quark_prefix = opts.get('--iface-quark-prefix', None)
+        self.tp_proxy_api = tuple(map(int,
+                opts.get('--tp-proxy-api', '0').split('.')))
         self.proxy_cls = opts.get('--subclass', 'TpProxy') + ' *'
         self.proxy_arg = opts.get('--subclass', 'void') + ' *'
         self.proxy_assert = opts.get('--subclass-assert', 'TP_IS_PROXY')
@@ -142,7 +144,7 @@ class Generator(object):
 
         if args:
             self.b('static void')
-            self.b('%s (DBusGProxy *proxy,' % collect_name)
+            self.b('%s (DBusGProxy *proxy G_GNUC_UNUSED,' % collect_name)
 
             for arg in args:
                 name, info, tp_type, elt = arg
@@ -208,7 +210,7 @@ class Generator(object):
 
         self.b('static void')
         self.b('%s (TpProxy *tpproxy,' % invoke_name)
-        self.b('    GError *error,')
+        self.b('    GError *error G_GNUC_UNUSED,')
         self.b('    GValueArray *args,')
         self.b('    GCallback generic_callback,')
         self.b('    gpointer user_data,')
@@ -721,6 +723,7 @@ class Generator(object):
                 self.b('            0,')
 
         self.b('            error, user_data, weak_object);')
+        self.b('      g_error_free (error);')
         self.b('      return NULL;')
         self.b('    }')
         self.b('')
@@ -801,12 +804,12 @@ class Generator(object):
                                                          member_lc)
 
         self.b('static void')
-        self.b('%s (TpProxy *self,' % reentrant_invoke)
+        self.b('%s (TpProxy *self G_GNUC_UNUSED,' % reentrant_invoke)
         self.b('    GError *error,')
         self.b('    GValueArray *args,')
-        self.b('    GCallback unused,')
-        self.b('    gpointer user_data,')
-        self.b('    GObject *unused2)')
+        self.b('    GCallback unused G_GNUC_UNUSED,')
+        self.b('    gpointer user_data G_GNUC_UNUSED,')
+        self.b('    GObject *unused2 G_GNUC_UNUSED)')
         self.b('{')
         self.b('  _%s_%s_run_state_%s *state = user_data;'
                % (self.prefix_lc, iface_lc, member_lc))
@@ -1026,17 +1029,23 @@ class Generator(object):
         signals = node.getElementsByTagName('signal')
         methods = node.getElementsByTagName('method')
 
-        self.b('static inline void')
-        self.b('%s_add_signals_for_%s (DBusGProxy *proxy)'
-                % (self.prefix_lc, name.lower()))
-        self.b('{')
+        if signals:
+            self.b('static inline void')
+            self.b('%s_add_signals_for_%s (DBusGProxy *proxy)'
+                    % (self.prefix_lc, name.lower()))
+            self.b('{')
 
-        for signal in signals:
-            self.do_signal_add(signal)
+            if self.tp_proxy_api >= (0, 7, 6):
+                self.b('  if (!tp_proxy_dbus_g_proxy_claim_for_signal_adding '
+                       '(proxy))')
+                self.b('    return;')
 
-        self.b('}')
-        self.b('')
-        self.b('')
+            for signal in signals:
+                self.do_signal_add(signal)
+
+            self.b('}')
+            self.b('')
+            self.b('')
 
         for signal in signals:
             self.do_signal(name, signal)
@@ -1080,17 +1089,20 @@ class Generator(object):
             self.b(' * #TpProxy::interface-added.')
             self.b(' */')
             self.b('static void')
-            self.b('%s_%s_add_signals (TpProxy *self,'
+            self.b('%s_%s_add_signals (TpProxy *self G_GNUC_UNUSED,'
                     % (self.prefix_lc, self.group))
             self.b('    guint quark,')
             self.b('    DBusGProxy *proxy,')
-            self.b('    gpointer unused)')
+            self.b('    gpointer unused G_GNUC_UNUSED)')
 
             self.b('{')
 
             for node in nodes:
                 iface = node.getElementsByTagName('interface')[0]
                 self.iface_dbus = iface.getAttribute('name')
+                signals = node.getElementsByTagName('signal')
+                if not signals:
+                    continue
                 name = node.getAttribute('name').replace('/', '').lower()
                 self.iface_uc = name.upper()
                 self.b('  if (quark == %s)' % self.get_iface_quark())
@@ -1114,7 +1126,7 @@ def types_to_gtypes(types):
 if __name__ == '__main__':
     options, argv = gnu_getopt(sys.argv[1:], '',
                                ['group=', 'subclass=', 'subclass-assert=',
-                                'iface-quark-prefix='])
+                                'iface-quark-prefix=', 'tp-proxy-api='])
 
     opts = {}
 
