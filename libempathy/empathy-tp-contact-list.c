@@ -337,35 +337,16 @@ tp_contact_list_pending_cb (EmpathyTpGroup       *group,
 }
 
 static void
-tp_contact_list_newchannel_cb (DBusGProxy           *proxy,
-			       const gchar          *object_path,
-			       const gchar          *channel_type,
-			       TpHandleType          handle_type,
-			       guint                 channel_handle,
-			       gboolean              suppress_handler,
-			       EmpathyTpContactList *list)
+tp_contact_list_group_ready_cb (EmpathyTpGroup       *group,
+				gpointer              unused,
+				EmpathyTpContactList *list)
 {
 	EmpathyTpContactListPriv *priv = GET_PRIV (list);
-	EmpathyTpGroup           *group;
-	TpChan                   *new_chan;
-	const gchar              *bus_name;
+	guint                     handle_type;
+	TpChan                   *tp_chan;
 
-	if (strcmp (channel_type, TP_IFACE_CHANNEL_TYPE_CONTACT_LIST) != 0 ||
-	    suppress_handler) {
-		return;
-	}
-
-	bus_name = dbus_g_proxy_get_bus_name (DBUS_G_PROXY (priv->tp_conn));
-	new_chan = tp_chan_new (tp_get_bus (),
-				bus_name,
-				object_path,
-				channel_type,
-				handle_type,
-				channel_handle);
-	g_return_if_fail (TELEPATHY_IS_CHAN (new_chan));
-
-	group = empathy_tp_group_new (priv->account, new_chan);
-	g_object_unref (new_chan);
+	tp_chan = empathy_tp_group_get_channel (group);
+	handle_type = tp_chan->handle_type;
 
 	if (handle_type == TP_HANDLE_TYPE_LIST) {
 		TpContactListType  list_type;
@@ -373,7 +354,7 @@ tp_contact_list_newchannel_cb (DBusGProxy           *proxy,
 
 		list_type = tp_contact_list_get_type (list, group);
 		if (list_type == TP_CONTACT_LIST_TYPE_PUBLISH && !priv->publish) {
-			priv->publish = group;
+			priv->publish = g_object_ref (group);
 
 			/* Publish is the list of contacts to who we send our
 			 * presence. Makes no sense to be in remote-pending */
@@ -396,7 +377,7 @@ tp_contact_list_newchannel_cb (DBusGProxy           *proxy,
 			g_list_free (contacts);
 		}
 		else if (list_type == TP_CONTACT_LIST_TYPE_SUBSCRIBE && !priv->subscribe) {
-			priv->subscribe = group;
+			priv->subscribe = g_object_ref (group);
 
 			/* Subscribe is the list of contacts from who we
 			 * receive presence. Makes no sense to be in
@@ -419,8 +400,7 @@ tp_contact_list_newchannel_cb (DBusGProxy           *proxy,
 				      "Type of contact list channel unknown "
 				      "or aleady have that list: %s",
 				      empathy_tp_group_get_name (group));
-			g_object_unref (group);
-			return;
+			goto OUT;
 		}
 		empathy_debug (DEBUG_DOMAIN,
 			       "New contact list channel of type: %d",
@@ -450,14 +430,13 @@ tp_contact_list_newchannel_cb (DBusGProxy           *proxy,
 		/* Check if already exists */
 		group_name = empathy_tp_group_get_name (group);
 		if (tp_contact_list_find_group (list, group_name)) {
-			g_object_unref (group);
-			return;
+			goto OUT;
 		}
 
 		empathy_debug (DEBUG_DOMAIN, "New server-side group channel: %s",
 			       group_name);
 
-		priv->groups = g_list_prepend (priv->groups, group);
+		priv->groups = g_list_prepend (priv->groups, g_object_ref (group));
 
 		g_signal_connect (group, "member-added",
 				  G_CALLBACK (tp_contact_list_group_member_added_cb),
@@ -481,7 +460,53 @@ tp_contact_list_newchannel_cb (DBusGProxy           *proxy,
 		empathy_debug (DEBUG_DOMAIN,
 			       "Unknown handle type (%d) for contact list channel",
 			       handle_type);
-		g_object_unref (group);
+	}
+
+OUT:
+	g_object_unref (group);
+	g_object_unref (list);
+}
+
+static void
+tp_contact_list_newchannel_cb (DBusGProxy           *proxy,
+			       const gchar          *object_path,
+			       const gchar          *channel_type,
+			       TpHandleType          handle_type,
+			       guint                 channel_handle,
+			       gboolean              suppress_handler,
+			       EmpathyTpContactList *list)
+{
+	EmpathyTpContactListPriv *priv = GET_PRIV (list);
+	EmpathyTpGroup           *group;
+	TpChan                   *new_chan;
+	const gchar              *bus_name;
+
+	if (strcmp (channel_type, TP_IFACE_CHANNEL_TYPE_CONTACT_LIST) != 0 ||
+	    suppress_handler ||
+	    (handle_type != TP_HANDLE_TYPE_LIST &&
+	     handle_type != TP_HANDLE_TYPE_GROUP)) {
+		return;
+	}
+
+	bus_name = dbus_g_proxy_get_bus_name (DBUS_G_PROXY (priv->tp_conn));
+	new_chan = tp_chan_new (tp_get_bus (),
+				bus_name,
+				object_path,
+				channel_type,
+				handle_type,
+				channel_handle);
+	g_return_if_fail (TELEPATHY_IS_CHAN (new_chan));
+
+	group = empathy_tp_group_new (priv->account, new_chan);
+	g_object_unref (new_chan);
+
+	/* We give a ref of group and list to the callback */
+	if (empathy_tp_group_is_ready (group)) {
+		tp_contact_list_group_ready_cb (group, NULL, g_object_ref (list));
+	} else {
+		g_signal_connect (group, "notify::ready",
+				  G_CALLBACK (tp_contact_list_group_ready_cb),
+				  g_object_ref (list));
 	}
 }
 
