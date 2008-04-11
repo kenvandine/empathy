@@ -247,7 +247,7 @@
                 <property name="spacing">18</property>
                 <child>
                   <widget class="GtkFrame" id="frame5">
-                    <property name="visible">True</property>
+                    <property name="visible">False</property>
                     <property name="label_xalign">0</property>
                     <property name="shadow_type">GTK_SHADOW_NONE</property>
                     <child>
