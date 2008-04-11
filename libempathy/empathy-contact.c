@@ -752,23 +752,16 @@ empathy_contact_hash (gconstpointer key)
 	return priv->hash;
 }
 
-typedef struct {
-	EmpathyContactReady  ready;
-	GMainLoop           *loop;
-} RunUntilReadyData;
-
-static void
-contact_ready_notify_cb (EmpathyContact    *contact,
-			 GParamSpec        *param,
-			 RunUntilReadyData *data)
+static gboolean
+contact_is_ready_func (GObject  *contact,
+		       gpointer  user_data)
 {
 	EmpathyContactPriv *priv = GET_PRIV (contact);
+	EmpathyContactReady ready;
 
-	if ((priv->ready & data->ready) == data->ready) {
-		empathy_debug (DEBUG_DOMAIN, "contact %s (%d) ready %d",
-			       priv->id, priv->handle, priv->ready);
-		g_main_loop_quit (data->loop);
-	}
+	ready = GPOINTER_TO_UINT (user_data);
+
+	return (priv->ready & ready) == ready;
 }
 
 void
@@ -776,36 +769,8 @@ empathy_contact_run_until_ready (EmpathyContact      *contact,
 				 EmpathyContactReady  ready,
 				 GMainLoop          **loop)
 {
-	EmpathyContactPriv *priv = GET_PRIV (contact);
-	RunUntilReadyData   data;
-	gulong              signal_id;
-
-	g_return_if_fail (EMPATHY_IS_CONTACT (contact));
-
-	if ((priv->ready & ready) == ready) {
-		return;
-	}
-
-	empathy_debug (DEBUG_DOMAIN, "Run until ready=%d for contact %s (%d)",
-		       ready, priv->id, priv->handle);
-
-	data.ready = ready;
-	data.loop = g_main_loop_new (NULL, FALSE);
-
-	signal_id = g_signal_connect (contact, "notify::ready",
-				      G_CALLBACK (contact_ready_notify_cb),
-				      &data);
-	if (loop != NULL) {
-		*loop = data.loop;
-	}
-
-	g_main_loop_run (data.loop);
-
-	if (loop != NULL) {
-		*loop = NULL;
-	}
-
-	g_signal_handler_disconnect (contact, signal_id);
-	g_main_loop_unref (data.loop);
+	empathy_run_until_ready_full (contact, "notify::ready",
+				      contact_is_ready_func, GUINT_TO_POINTER (ready),
+				      loop);
 }
 
