@@ -498,7 +498,7 @@ tp_call_constructor (GType type,
   if (empathy_tp_group_is_ready (priv->group))
       tp_call_group_ready_cb (call);
   else
-      g_signal_connect_swapped (priv->group, "ready",
+      g_signal_connect_swapped (priv->group, "notify::ready",
           G_CALLBACK (tp_call_group_ready_cb), call);
 
   /* Start stream engine */
@@ -616,7 +616,7 @@ empathy_tp_call_class_init (EmpathyTpCallClass *klass)
 
   g_object_class_install_property (object_class, PROP_CHANNEL,
       g_param_spec_object ("channel", "channel", "channel",
-      TELEPATHY_CHAN_TYPE,
+      TP_TYPE_CHANNEL,
       G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE |
       G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
   g_object_class_install_property (object_class, PROP_CONTACT,

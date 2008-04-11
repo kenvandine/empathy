@@ -967,7 +967,7 @@ empathy_tp_group_get_invitation (EmpathyTpGroup  *group,
 	}
 
 	if (remote_contact) {
-		*remote_contact = contact;
+		*remote_contact = g_object_ref (contact);
 	}
 
 	return invitation;

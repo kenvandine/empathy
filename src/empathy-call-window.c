@@ -386,8 +386,8 @@ call_window_update (EmpathyCallWindow *window)
 
       call_window_finalize (window);
     }
-
-  g_object_unref (contact);
+  if (contact)
+      g_object_unref (contact);
 }
 
 GtkWidget *

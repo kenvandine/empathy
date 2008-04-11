@@ -393,6 +393,10 @@ status_icon_call_filter_new_channel (EmpathyFilter     *filter,
 		event->user_data = group;
 		g_free (msg);
 	}
+
+	if (contact) {
+		g_object_unref (contact);
+	}
 }
 
 static void
