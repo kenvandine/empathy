@@ -15,7 +15,7 @@ EXTRA_DIST = \
 noinst_LTLIBRARIES = libemp-extensions.la
 
 libemp_extensions_la_LIBADD = \
-    $(TELEPATHY_GLIB_LIBS)
+    $(TP_GLIB_LIBS)
 
 # The client-specific parts are built into a separate .o file, so the linker
 # can discard them when linking services. The service-specific parts are
@@ -52,7 +52,7 @@ XSLTPROCFLAGS = --nonet --novalid
 
 # Generated files which can be generated for all categories simultaneously
 
-_gen/%.xml: %.xml $(wildcard *.xml)
+_gen/all.xml: all.xml $(wildcard *.xml)
 	$(mkdir_p) _gen
 	$(XSLTPROC) $(XSLTPROCFLAGS) --xinclude $(tools_dir)/identity.xsl \
 		$< > $@
@@ -71,14 +71,12 @@ _gen/signals-marshal.list: _gen/all.xml \
 	$(tools_dir)/glib-signals-marshal-gen.py
 	$(PYTHON) $(tools_dir)/glib-signals-marshal-gen.py $< > $@
 
-_gen/signals-marshal.h: _gen/signals-marshal.list
+_gen/signals-marshal.h: _gen/signals-marshal.list Makefile.am
 	$(GLIB_GENMARSHAL) --header --prefix=_emp_ext_marshal $< > $@
 
-_gen/signals-marshal.c: _gen/signals-marshal.list
-	( \
-	echo '#include "signals-marshal.h"' && \
-	$(GLIB_GENMARSHAL) --body --prefix=_emp_ext_marshal $< \
-	) > $@
+_gen/signals-marshal.c: _gen/signals-marshal.list Makefile.am
+	{ echo '#include "_gen/signals-marshal.h"' && \
+	$(GLIB_GENMARSHAL) --body --prefix=_emp_ext_marshal $< ; } > $@
 
 _gen/register-dbus-glib-marshallers-body.h: _gen/all.xml \
 	$(tools_dir)/glib-client-marshaller-gen.py
@@ -111,11 +109,19 @@ _gen/interfaces-body.h: _gen/all.xml \
 # subclass you want to use with --subclass will need to have its own category,
 # although you can subdivide further if you want.
 
+_gen/misc.xml: misc.xml $(wildcard *.xml)
+	$(mkdir_p) _gen
+	$(XSLTPROC) $(XSLTPROCFLAGS) --xinclude $(tools_dir)/identity.xsl \
+		$< > $@
+
 _gen/cli-misc-body.h _gen/cli-misc.h: _gen/misc.xml \
 	$(tools_dir)/glib-client-gen.py
 	$(PYTHON) $(tools_dir)/glib-client-gen.py \
 		--group=misc \
+		--subclass=TpProxy \
+		--subclass-assert=TP_IS_PROXY \
 		--iface-quark-prefix=EMP_IFACE_QUARK \
+		--tp-proxy-api=0.7.6 \
 		$< Emp_Cli _gen/cli-misc
 
 _gen/svc-misc.c _gen/svc-misc.h: _gen/misc.xml \

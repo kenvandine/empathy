@@ -2,12 +2,20 @@
   xmlns:tp="http://telepathy.freedesktop.org/wiki/DbusSpec#extensions-v0"
   xmlns:xi="http://www.w3.org/2001/XInclude">
 
-<tp:title>Extensions for Empathy</tp:title>
+<tp:title>Extensions for empathy</tp:title>
 
 <xi:include href="misc.xml"/>
 
 <tp:generic-types>
   <tp:external-type name="Contact_Handle" type="u"
+    from="Telepathy specification"/>
+  <tp:external-type name="DBus_Bus_Name" type="s"
+    from="Telepathy specification"/>
+  <tp:external-type name="DBus_Interface" type="s"
+    from="Telepathy specification"/>
+  <tp:external-type name="Handle_Type" type="u"
+    from="Telepathy specification"/>
+  <tp:external-type name="Handle" type="u"
     from="Telepathy specification"/>
 </tp:generic-types>
 

@@ -2,7 +2,7 @@
   xmlns:tp="http://telepathy.freedesktop.org/wiki/DbusSpec#extensions-v0"
   xmlns:xi="http://www.w3.org/2001/XInclude">
 
-<tp:title>Channel extensions for Empathy</tp:title>
+<tp:title>Misc extensions for Empathy</tp:title>
 
 <xi:include href="Stream_Engine.xml"/>
 <xi:include href="Channel_Handler.xml"/>
