@@ -81,6 +81,8 @@ EmpathyContact *    empathy_tp_group_get_self_contact    (EmpathyTpGroup     *gr
 gboolean            empathy_tp_group_is_member           (EmpathyTpGroup     *group,
 							  EmpathyContact     *contact);
 gboolean            empathy_tp_group_is_ready            (EmpathyTpGroup     *group);
+EmpathyPendingInfo *empathy_tp_group_get_invitation      (EmpathyTpGroup     *group,
+							  EmpathyContact    **remote_contact);
 EmpathyPendingInfo *empathy_pending_info_new             (EmpathyContact     *member,
 							  EmpathyContact     *actor,
 							  const gchar        *message);

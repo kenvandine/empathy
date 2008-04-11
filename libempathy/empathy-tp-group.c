@@ -954,4 +954,38 @@ empathy_tp_group_is_ready (EmpathyTpGroup *group)
 	return priv->ready;
 }
 
+EmpathyPendingInfo *
+empathy_tp_group_get_invitation (EmpathyTpGroup  *group,
+				 EmpathyContact **remote_contact)
+{
+	EmpathyTpGroupPriv *priv = GET_PRIV (group);
+	EmpathyContact     *contact = NULL;
+	EmpathyPendingInfo *invitation = NULL;
+	GList              *l;
+
+	g_return_val_if_fail (EMPATHY_IS_TP_GROUP (group), FALSE);
+	g_return_val_if_fail (priv->ready, NULL);
+
+	for (l = priv->local_pendings; l; l = l->next) {
+		EmpathyPendingInfo *info = l->data;
+
+		if (empathy_contact_is_user (info->member)) {
+			invitation = info;
+			break;
+		}
+	}
+
+	if (invitation && priv->members && !priv->members->next) {
+		contact = priv->members->data;
+	}
+	if (!invitation && priv->remote_pendings && !priv->remote_pendings->next) {
+		contact = priv->remote_pendings->data;
+	}
+
+	if (remote_contact) {
+		*remote_contact = contact;
+	}
+
+	return invitation;
+}
 
