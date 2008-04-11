@@ -24,8 +24,6 @@
 #include <telepathy-glib/proxy-subclass.h>
 #include <telepathy-glib/dbus.h>
 
-#include <libmissioncontrol/mc-account.h>
-
 #include <extensions/extensions.h>
 #include <libempathy/empathy-contact-factory.h>
 #include <libempathy/empathy-debug.h>
@@ -46,7 +44,6 @@ typedef struct _EmpathyTpCallPriv EmpathyTpCallPriv;
 
 struct _EmpathyTpCallPriv
 {
-  TpConnection *connection;
   TpChannel *channel;
   TpProxy *stream_engine;
   TpDBusDaemon *dbus_daemon;
@@ -63,7 +60,6 @@ struct _EmpathyTpCallPriv
 enum
 {
   PROP_0,
-  PROP_CONNECTION,
   PROP_CHANNEL,
   PROP_CONTACT,
   PROP_IS_INCOMING,
@@ -276,59 +272,36 @@ tp_call_request_streams (EmpathyTpCall *call)
 {
   EmpathyTpCallPriv *priv = GET_PRIV (call);
   EmpathyCapabilities capabilities;
+  TpConnection *connection;
 
   empathy_debug (DEBUG_DOMAIN,
       "Requesting appropriate audio/video streams from contact");
 
   /* FIXME: SIP don't have capabilities interface but we know it supports
    *        only audio and not video. */
-  if (!tp_proxy_has_interface_by_id (priv->connection,
+  g_object_get (priv->channel, "connection", &connection, NULL);
+  if (!tp_proxy_has_interface_by_id (connection,
            TP_IFACE_QUARK_CONNECTION_INTERFACE_CAPABILITIES))
       capabilities = EMPATHY_CAPABILITIES_AUDIO;
   else
       capabilities = empathy_contact_get_capabilities (priv->contact);
 
   tp_call_request_streams_for_capabilities (call, capabilities);
+  g_object_unref (connection);
 }
 
 static void
 tp_call_group_ready_cb (EmpathyTpCall *call)
 {
-  EmpathyTpCallPriv *priv = GET_PRIV (call);
-  GList *members;
-  GList *local_pendings;
-  GList *remote_pendings;
+  EmpathyTpCallPriv  *priv = GET_PRIV (call);
+  EmpathyPendingInfo *invitation;
 
+  invitation = empathy_tp_group_get_invitation (priv->group, &priv->contact);
+  priv->is_incoming = (invitation != NULL);
   priv->status = EMPATHY_TP_CALL_STATUS_PENDING;
 
-  members = empathy_tp_group_get_members (priv->group);
-  local_pendings = empathy_tp_group_get_local_pendings (priv->group);
-  remote_pendings = empathy_tp_group_get_remote_pendings (priv->group);
-
-  if (local_pendings &&
-      empathy_contact_is_user (((EmpathyPendingInfo *) local_pendings->data)->member))
-    {
-      empathy_debug (DEBUG_DOMAIN,
-          "Incoming call is ready - %p",
-          ((EmpathyPendingInfo *) local_pendings->data)->member);
-      priv->is_incoming = TRUE;
-      priv->contact = g_object_ref (members->data);
-    }
-  else if (remote_pendings && empathy_contact_is_user (members->data))
-    {
-      empathy_debug (DEBUG_DOMAIN,
-          "Outgoing call is ready - %p", remote_pendings->data);
-      priv->is_incoming = FALSE;
-      priv->contact = g_object_ref (remote_pendings->data);
+  if (!priv->is_incoming)
       tp_call_request_streams (call);
-    }
-
-  g_list_foreach (members, (GFunc) g_object_unref, NULL);
-  g_list_free (members);
-  g_list_foreach (local_pendings, (GFunc) empathy_pending_info_free, NULL);
-  g_list_free (local_pendings);
-  g_list_foreach (remote_pendings, (GFunc) g_object_unref, NULL);
-  g_list_free (remote_pendings);
 
   g_object_notify (G_OBJECT (call), "is-incoming");
   g_object_notify (G_OBJECT (call), "contact");
@@ -440,10 +413,11 @@ static void
 tp_call_stream_engine_handle_channel (EmpathyTpCall *call)
 {
   EmpathyTpCallPriv *priv = GET_PRIV (call);
-  const gchar *channel_type;
-  const gchar *object_path;
+  gchar *channel_type;
+  gchar *object_path;
   guint handle_type;
   guint handle;
+  TpProxy *connection;
 
   empathy_debug (DEBUG_DOMAIN, "Revving up the stream engine");
 
@@ -468,6 +442,7 @@ tp_call_stream_engine_handle_channel (EmpathyTpCall *call)
       call, NULL);
 
   g_object_get (priv->channel,
+      "connection", &connection,
       "channel-type", &channel_type,
       "object-path", &object_path,
       "handle_type", &handle_type,
@@ -475,11 +450,15 @@ tp_call_stream_engine_handle_channel (EmpathyTpCall *call)
       NULL);
 
   emp_cli_channel_handler_call_handle_channel (priv->stream_engine, -1,
-        TP_PROXY (priv->connection)->bus_name,
-        TP_PROXY (priv->connection)->object_path,
+        connection->bus_name,
+        connection->object_path,
         channel_type, object_path, handle_type, handle,
         tp_call_async_cb, "calling handle channel", NULL,
         G_OBJECT (call));
+
+  g_object_unref (connection);
+  g_free (channel_type);
+  g_free (object_path);
 }
 
 static GObject *
@@ -490,8 +469,6 @@ tp_call_constructor (GType type,
   GObject *object;
   EmpathyTpCall *call;
   EmpathyTpCallPriv *priv;
-  MissionControl *mc;
-  McAccount *account;
 
   object = G_OBJECT_CLASS (empathy_tp_call_parent_class)->constructor (type,
       n_construct_params, construct_params);
@@ -514,10 +491,7 @@ tp_call_constructor (GType type,
       tp_call_request_streams_cb, NULL, NULL, G_OBJECT (call));
 
   /* Setup group interface */
-  mc = empathy_mission_control_new ();
-  account = mission_control_get_account_for_tpconnection (mc, priv->connection, NULL);
-  priv->group = empathy_tp_group_new (account, priv->channel);
-  g_object_unref (mc);
+  priv->group = empathy_tp_group_new (priv->channel);
 
   g_signal_connect (G_OBJECT (priv->group), "member-added",
       G_CALLBACK (tp_call_member_added_cb), call);
@@ -544,9 +518,6 @@ tp_call_finalize (GObject *object)
   g_slice_free (EmpathyTpCallStream, priv->audio);
   g_slice_free (EmpathyTpCallStream, priv->video);
   g_object_unref (priv->group);
-
-  if (priv->connection != NULL)
-      g_object_unref (priv->connection);
 
   if (priv->channel != NULL)
     {
@@ -587,9 +558,6 @@ tp_call_set_property (GObject *object,
 
   switch (prop_id)
     {
-    case PROP_CONNECTION:
-      priv->connection = g_value_dup_object (value);
-      break;
     case PROP_CHANNEL:
       priv->channel = g_value_dup_object (value);
       break;
@@ -609,9 +577,6 @@ tp_call_get_property (GObject *object,
 
   switch (prop_id)
     {
-    case PROP_CONNECTION:
-      g_value_set_object (value, priv->connection);
-      break;
     case PROP_CHANNEL:
       g_value_set_object (value, priv->channel);
       break;
@@ -650,11 +615,6 @@ empathy_tp_call_class_init (EmpathyTpCallClass *klass)
 
   g_type_class_add_private (klass, sizeof (EmpathyTpCallPriv));
 
-  g_object_class_install_property (object_class, PROP_CONNECTION,
-      g_param_spec_object ("connection", "connection", "connection",
-      TELEPATHY_CONN_TYPE,
-      G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE |
-      G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
   g_object_class_install_property (object_class, PROP_CHANNEL,
       g_param_spec_object ("channel", "channel", "channel",
       TELEPATHY_CHAN_TYPE,
@@ -697,13 +657,11 @@ empathy_tp_call_init (EmpathyTpCall *call)
 }
 
 EmpathyTpCall *
-empathy_tp_call_new (TpConnection *connection, TpChannel *channel)
+empathy_tp_call_new (TpChannel *channel)
 {
-  g_return_val_if_fail (TP_IS_CONNECTION (connection), NULL);
   g_return_val_if_fail (TP_IS_CHANNEL (channel), NULL);
 
   return g_object_new (EMPATHY_TYPE_TP_CALL,
-      "connection", connection,
       "channel", channel,
       NULL);
 }

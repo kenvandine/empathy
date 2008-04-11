@@ -22,6 +22,8 @@
 
 #include <config.h>
 
+#include <libmissioncontrol/mc-account.h>
+
 #include <telepathy-glib/channel.h>
 #include <telepathy-glib/util.h>
 #include <telepathy-glib/interfaces.h>
@@ -38,11 +40,11 @@
 #define DEBUG_DOMAIN "TpGroup"
 
 struct _EmpathyTpGroupPriv {
-	McAccount             *account;
 	TpChannel             *channel;
 	gboolean               ready;
 
 	EmpathyContactFactory *factory;
+	McAccount             *account;
 	gchar                 *group_name;
 	guint                  self_handle;
 	GList                 *members;
@@ -64,7 +66,6 @@ enum {
 
 enum {
 	PROP_0,
-	PROP_ACCOUNT,
 	PROP_CHANNEL,
 	PROP_READY
 };
@@ -583,6 +584,7 @@ tp_group_constructed (GObject *group)
 	gboolean            channel_ready;
 
 	priv->factory = empathy_contact_factory_new ();
+	priv->account = empathy_channel_get_account (priv->channel);
 
 	g_signal_connect (priv->channel, "invalidated",
 			  G_CALLBACK (tp_group_invalidated_cb),
@@ -607,9 +609,6 @@ tp_group_get_property (GObject    *object,
 	EmpathyTpGroupPriv *priv = GET_PRIV (object);
 
 	switch (param_id) {
-	case PROP_ACCOUNT:
-		g_value_set_object (value, priv->account);
-		break;
 	case PROP_CHANNEL:
 		g_value_set_object (value, priv->channel);
 		break;
@@ -631,9 +630,6 @@ tp_group_set_property (GObject      *object,
 	EmpathyTpGroupPriv *priv = GET_PRIV (object);
 
 	switch (param_id) {
-	case PROP_ACCOUNT:
-		priv->account = g_object_ref (g_value_get_object (value));
-		break;
 	case PROP_CHANNEL:
 		priv->channel = g_object_ref (g_value_get_object (value));
 		break;
@@ -653,14 +649,6 @@ empathy_tp_group_class_init (EmpathyTpGroupClass *klass)
 	object_class->get_property = tp_group_get_property;
 	object_class->set_property = tp_group_set_property;
 
-	g_object_class_install_property (object_class,
-					 PROP_ACCOUNT,
-					 g_param_spec_object ("account",
-							      "channel Account",
-							      "The account associated with the channel",
-							      MC_TYPE_ACCOUNT,
-							      G_PARAM_READWRITE |
-							      G_PARAM_CONSTRUCT_ONLY));
 	g_object_class_install_property (object_class,
 					 PROP_CHANNEL,
 					 g_param_spec_object ("channel",
@@ -736,15 +724,11 @@ empathy_tp_group_init (EmpathyTpGroup *group)
 }
 
 EmpathyTpGroup *
-empathy_tp_group_new (McAccount *account,
-		      TpChannel *channel)
+empathy_tp_group_new (TpChannel *channel)
 {
-	g_return_val_if_fail (MC_IS_ACCOUNT (account), NULL);
 	g_return_val_if_fail (TP_IS_CHANNEL (channel), NULL);
 
-
 	return g_object_new (EMPATHY_TYPE_TP_GROUP, 
-			     "account", account,
 			     "channel", channel,
 			     NULL);
 }

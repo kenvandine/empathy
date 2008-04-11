@@ -25,7 +25,7 @@
 
 #include <glib.h>
 
-#include <libmissioncontrol/mc-account.h>
+#include <telepathy-glib/channel.h>
 
 #include "empathy-contact.h"
 
@@ -58,8 +58,7 @@ typedef struct {
 } EmpathyPendingInfo;
 
 GType               empathy_tp_group_get_type            (void) G_GNUC_CONST;
-EmpathyTpGroup *    empathy_tp_group_new                 (McAccount          *account,
-							  TpChannel          *channel);
+EmpathyTpGroup *    empathy_tp_group_new                 (TpChannel          *channel);
 void                empathy_tp_group_close               (EmpathyTpGroup     *group);
 void                empathy_tp_group_add_members         (EmpathyTpGroup     *group,
 							  GList              *contacts,

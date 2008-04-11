@@ -48,9 +48,7 @@ struct _EmpathyTpChatPriv {
 	McAccount             *account;
 	TpChannel             *channel;
 	gchar                 *id;
-	MissionControl        *mc;
 	gboolean               acknowledge;
-	TpChan                *tp_chan;
 	gboolean               had_pending_messages;
 	GSList                *message_queue;
 	gboolean               had_properties_list;
@@ -71,8 +69,6 @@ static void tp_chat_iface_init         (EmpathyContactListIface *iface);
 
 enum {
 	PROP_0,
-	PROP_ACCOUNT,
-	PROP_TP_CHAN,
 	PROP_CHANNEL,
 	PROP_ACKNOWLEDGE,
 	PROP_REMOTE_CONTACT,
@@ -692,13 +688,35 @@ static void
 tp_chat_channel_ready_cb (EmpathyTpChat *chat)
 {
 	EmpathyTpChatPriv *priv = GET_PRIV (chat);
+	TpConnection      *connection;
+	guint              handle, handle_type;
+	GArray            *handles;
+	gchar            **names;
 
 	empathy_debug (DEBUG_DOMAIN, "Channel ready");
 
+	g_object_get (priv->channel,
+		      "connection", &connection,
+		      "handle", &handle,
+		      "handle_type", &handle_type,
+		      NULL);
+
+	handles = g_array_new (FALSE, FALSE, sizeof (guint));
+	g_array_append_val (handles, handle);
+	tp_cli_connection_run_inspect_handles (connection, -1,
+					       handle_type, handles,
+					       &names, NULL, NULL);
+	g_array_free (handles, TRUE);
+
+	priv->id = *names;
+	g_free (names);
+
 	priv->ready = TRUE;
+	g_object_notify (G_OBJECT (chat), "ready");
+
 	if (tp_proxy_has_interface_by_id (priv->channel,
 					  TP_IFACE_QUARK_CHANNEL_INTERFACE_GROUP)) {
-		priv->group = empathy_tp_group_new (priv->account, priv->channel);
+		priv->group = empathy_tp_group_new (priv->channel);
 
 		g_signal_connect (priv->group, "member-added",
 				  G_CALLBACK (tp_chat_member_added_cb),
@@ -712,7 +730,7 @@ tp_chat_channel_ready_cb (EmpathyTpChat *chat)
 	} else {
 		priv->remote_contact = empathy_contact_factory_get_from_handle (priv->factory,
 										priv->account,
-										priv->tp_chan->handle);
+										handle);
 		g_object_notify (G_OBJECT (chat), "remote-contact");
 	}
 	
@@ -780,9 +798,6 @@ tp_chat_finalize (GObject *object)
 						      object);
 		g_object_unref (priv->channel);
 	}
-	if (priv->tp_chan) {
-		g_object_unref (priv->tp_chan);
-	}
 
 	if (priv->properties) {
 		for (i = 0; i < priv->properties->len; i++) {
@@ -808,7 +823,6 @@ tp_chat_finalize (GObject *object)
 	g_object_unref (priv->factory);
 	g_object_unref (priv->user);
 	g_object_unref (priv->account);
-	g_object_unref (priv->mc);
 	g_free (priv->id);
 
 	G_OBJECT_CLASS (empathy_tp_chat_parent_class)->finalize (object);
@@ -826,9 +840,9 @@ tp_chat_constructor (GType                  type,
 	chat = G_OBJECT_CLASS (empathy_tp_chat_parent_class)->constructor (type, n_props, props);
 
 	priv = GET_PRIV (chat);
+	priv->account = empathy_channel_get_account (priv->channel);
 	priv->factory = empathy_contact_factory_new ();
 	priv->user = empathy_contact_factory_get_user (priv->factory, priv->account);
-	priv->mc = empathy_mission_control_new ();
 
 	g_signal_connect (priv->channel, "invalidated",
 			  G_CALLBACK (tp_chat_invalidated_cb),
@@ -855,12 +869,6 @@ tp_chat_get_property (GObject    *object,
 	EmpathyTpChatPriv *priv = GET_PRIV (object);
 
 	switch (param_id) {
-	case PROP_ACCOUNT:
-		g_value_set_object (value, priv->account);
-		break;
-	case PROP_TP_CHAN:
-		g_value_set_object (value, priv->tp_chan);
-		break;
 	case PROP_CHANNEL:
 		g_value_set_object (value, priv->channel);
 		break;
@@ -888,12 +896,6 @@ tp_chat_set_property (GObject      *object,
 	EmpathyTpChatPriv *priv = GET_PRIV (object);
 
 	switch (param_id) {
-	case PROP_ACCOUNT:
-		priv->account = g_object_ref (g_value_get_object (value));
-		break;
-	case PROP_TP_CHAN:
-		priv->tp_chan = g_object_ref (g_value_get_object (value));
-		break;
 	case PROP_CHANNEL:
 		priv->channel = g_object_ref (g_value_get_object (value));
 		break;
@@ -916,22 +918,6 @@ empathy_tp_chat_class_init (EmpathyTpChatClass *klass)
 	object_class->get_property = tp_chat_get_property;
 	object_class->set_property = tp_chat_set_property;
 
-	g_object_class_install_property (object_class,
-					 PROP_ACCOUNT,
-					 g_param_spec_object ("account",
-							      "channel Account",
-							      "The account associated with the channel",
-							      MC_TYPE_ACCOUNT,
-							      G_PARAM_READWRITE |
-							      G_PARAM_CONSTRUCT_ONLY));
-	g_object_class_install_property (object_class,
-					 PROP_TP_CHAN,
-					 g_param_spec_object ("tp-chan",
-							      "telepathy channel",
-							      "The text channel for the chat",
-							      TELEPATHY_CHAN_TYPE,
-							      G_PARAM_READWRITE |
-							      G_PARAM_CONSTRUCT_ONLY));
 	g_object_class_install_property (object_class,
 					 PROP_CHANNEL,
 					 g_param_spec_object ("channel",
@@ -1032,98 +1018,13 @@ tp_chat_iface_init (EmpathyContactListIface *iface)
 }
 
 EmpathyTpChat *
-empathy_tp_chat_new (McAccount *account,
-		     TpChan    *tp_chan,
+empathy_tp_chat_new (TpChannel *channel,
 		     gboolean   acknowledge)
 {
-	EmpathyTpChat  *chat;
-	TpChannel      *channel;
-	TpConnection   *connection;
-	MissionControl *mc;
-
-	mc = empathy_mission_control_new ();
-	connection = mission_control_get_tpconnection (mc, account, NULL);
-	channel = tp_chan_dup_channel (tp_chan, connection, NULL);
-
-	chat = g_object_new (EMPATHY_TYPE_TP_CHAT, 
-			     "account", account,
+	return g_object_new (EMPATHY_TYPE_TP_CHAT, 
 			     "channel", channel,
-			     "tp-chan", tp_chan,
 			     "acknowledge", acknowledge,
 			     NULL);
-
-	g_object_unref (channel);
-	g_object_unref (connection);
-	g_object_unref (mc);
-
-	return chat;
-}
-
-EmpathyTpChat *
-empathy_tp_chat_new_with_contact (EmpathyContact *contact)
-{
-	EmpathyTpChat  *chat;
-	MissionControl *mc;
-	McAccount      *account;
-	TpConn         *tp_conn;
-	TpChan         *text_chan;
-	const gchar    *bus_name;
-	guint           handle;
-
-	g_return_val_if_fail (EMPATHY_IS_CONTACT (contact), NULL);
-
-	mc = empathy_mission_control_new ();
-	account = empathy_contact_get_account (contact);
-
-	if (mission_control_get_connection_status (mc, account, NULL) != 0) {
-		/* The account is not connected. */
-		return NULL;
-	}
-
-	tp_conn = mission_control_get_connection (mc, account, NULL);
-	g_return_val_if_fail (tp_conn != NULL, NULL);
-	bus_name = dbus_g_proxy_get_bus_name (DBUS_G_PROXY (tp_conn));
-	handle = empathy_contact_get_handle (contact);
-
-	text_chan = tp_conn_new_channel (tp_get_bus (),
-					 tp_conn,
-					 bus_name,
-					 TP_IFACE_CHANNEL_TYPE_TEXT,
-					 TP_HANDLE_TYPE_CONTACT,
-					 handle,
-					 TRUE);
-
-	chat = empathy_tp_chat_new (account, text_chan, TRUE);
-
-	g_object_unref (tp_conn);
-	g_object_unref (text_chan);
-	g_object_unref (mc);
-
-	return chat;
-}
-
-TpChan *
-empathy_tp_chat_get_channel (EmpathyTpChat *chat)
-{
-	EmpathyTpChatPriv *priv;
-
-	g_return_val_if_fail (EMPATHY_IS_TP_CHAT (chat), NULL);
-
-	priv = GET_PRIV (chat);
-
-	return priv->tp_chan;
-}
-
-McAccount *
-empathy_tp_chat_get_account (EmpathyTpChat *chat)
-{
-	EmpathyTpChatPriv *priv;
-
-	g_return_val_if_fail (EMPATHY_IS_TP_CHAT (chat), NULL);
-
-	priv = GET_PRIV (chat);
-
-	return priv->account;
 }
 
 void
@@ -1171,15 +1072,10 @@ empathy_tp_chat_set_state (EmpathyTpChat      *chat,
 const gchar *
 empathy_tp_chat_get_id (EmpathyTpChat *chat)
 {
-	EmpathyTpChatPriv *priv;
+	EmpathyTpChatPriv *priv = GET_PRIV (chat);
 
 	g_return_val_if_fail (EMPATHY_IS_TP_CHAT (chat), NULL);
-
-	priv = GET_PRIV (chat);
-
-	if (!priv->id) {
-		priv->id = empathy_inspect_channel (priv->account, priv->tp_chan);
-	}
+	g_return_val_if_fail (priv->ready, NULL);
 
 	return priv->id;
 }
@@ -1202,5 +1098,15 @@ empathy_tp_chat_is_ready (EmpathyTpChat *chat)
 	g_return_val_if_fail (EMPATHY_IS_TP_CHAT (chat), FALSE);
 
 	return priv->ready;
+}
+
+McAccount *
+empathy_tp_chat_get_account (EmpathyTpChat *chat)
+{
+	EmpathyTpChatPriv *priv = GET_PRIV (chat);
+
+	g_return_val_if_fail (EMPATHY_IS_TP_CHAT (chat), FALSE);
+
+	return priv->account;
 }
 

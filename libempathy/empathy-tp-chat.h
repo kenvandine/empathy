@@ -24,10 +24,8 @@
 
 #include <glib.h>
 
-#include <libtelepathy/tp-chan.h>
+#include <telepathy-glib/channel.h>
 #include <telepathy-glib/enums.h>
-
-#include <libmissioncontrol/mc-account.h>
 
 #include "empathy-message.h"
 #include "empathy-contact.h"
@@ -55,14 +53,11 @@ struct _EmpathyTpChatClass {
 };
 
 GType          empathy_tp_chat_get_type             (void) G_GNUC_CONST;
-EmpathyTpChat *empathy_tp_chat_new                  (McAccount          *account,
-						     TpChan             *tp_chan,
+EmpathyTpChat *empathy_tp_chat_new                  (TpChannel          *channel,
 						     gboolean            acknowledge);
-EmpathyTpChat *empathy_tp_chat_new_with_contact     (EmpathyContact     *contact);
-McAccount *    empathy_tp_chat_get_account          (EmpathyTpChat      *chat);
-TpChan *       empathy_tp_chat_get_channel          (EmpathyTpChat      *chat);
 const gchar *  empathy_tp_chat_get_id               (EmpathyTpChat      *chat);
 EmpathyContact*empathy_tp_chat_get_remote_contact   (EmpathyTpChat      *chat);
+McAccount *    empathy_tp_chat_get_account          (EmpathyTpChat      *chat);
 gboolean       empathy_tp_chat_is_ready             (EmpathyTpChat      *chat);
 void           empathy_tp_chat_send                 (EmpathyTpChat      *chat,
 						     EmpathyMessage     *message);
