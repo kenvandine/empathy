@@ -64,7 +64,7 @@ EmpathyContact *       empathy_contact_factory_get_from_handle  (EmpathyContactF
 								 guint                  handle);
 GList *                empathy_contact_factory_get_from_handles (EmpathyContactFactory *factory,
 								 McAccount             *account,
-								 GArray                *handles);
+								 const GArray          *handles);
 void                   empathy_contact_factory_set_alias        (EmpathyContactFactory *factory,
 								 EmpathyContact        *contact,
 								 const gchar           *alias);

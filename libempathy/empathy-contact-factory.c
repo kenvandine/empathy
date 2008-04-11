@@ -92,7 +92,7 @@ empathy_contact_factory_get_from_handle (EmpathyContactFactory *factory,
 GList *
 empathy_contact_factory_get_from_handles (EmpathyContactFactory *factory,
 					  McAccount             *account,
-					  GArray                *handles)
+					  const GArray          *handles)
 {
 	EmpathyTpContactFactory *tp_factory;
 

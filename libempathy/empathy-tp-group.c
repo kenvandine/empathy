@@ -22,11 +22,8 @@
 
 #include <config.h>
 
-#include <dbus/dbus-glib.h>
-#include <libtelepathy/tp-chan.h>
-#include <libtelepathy/tp-chan-gen.h>
-#include <libtelepathy/tp-chan-iface-group-gen.h>
-#include <libtelepathy/tp-conn.h>
+#include <telepathy-glib/channel.h>
+#include <telepathy-glib/util.h>
 #include <telepathy-glib/interfaces.h>
 
 #include "empathy-tp-group.h"
@@ -41,13 +38,14 @@
 #define DEBUG_DOMAIN "TpGroup"
 
 struct _EmpathyTpGroupPriv {
-	EmpathyContactFactory *factory;
 	McAccount             *account;
-	DBusGProxy            *group_iface;
 	TpChan                *tp_chan;
+	TpChannel             *channel;
+
+	EmpathyContactFactory *factory;
 	gchar                 *group_name;
 	guint                  self_handle;
-
+	gboolean               ready;
 	GList                 *members;
 	GList                 *local_pendings;
 	GList                 *remote_pendings;
@@ -63,6 +61,14 @@ enum {
 	REMOTE_PENDING,
 	DESTROY,
 	LAST_SIGNAL
+};
+
+enum {
+	PROP_0,
+	PROP_ACCOUNT,
+	PROP_TP_CHAN,
+	PROP_CHANNEL,
+	PROP_READY
 };
 
 static guint signals[LAST_SIGNAL];
@@ -91,7 +97,7 @@ tp_group_get_contact (EmpathyTpGroup *group,
 
 static GList *
 tp_group_get_contacts (EmpathyTpGroup *group,
-		       GArray         *handles)
+		       const GArray   *handles)
 {
 	EmpathyTpGroupPriv *priv = GET_PRIV (group);
 	GList              *contacts,  *l;
@@ -190,15 +196,14 @@ tp_group_remove_from_pendings (EmpathyTpGroup *group,
 }
 
 static void
-tp_group_members_changed_cb (DBusGProxy     *group_iface,
-			     const gchar    *message,
-			     GArray         *added,
-			     GArray         *removed,
-			     GArray         *local_pending,
-			     GArray         *remote_pending,
-			     guint           actor,
-			     guint           reason,
-			     EmpathyTpGroup *group)
+tp_group_update_members (EmpathyTpGroup *group,
+			 const gchar    *message,
+			 const GArray   *added,
+			 const GArray   *removed,
+			 const GArray   *local_pending,
+			 const GArray   *remote_pending,
+			 guint           actor,
+			 guint           reason)
 {
 	EmpathyTpGroupPriv *priv = GET_PRIV (group);
 	EmpathyContact     *actor_contact = NULL;
@@ -300,107 +305,80 @@ tp_group_members_changed_cb (DBusGProxy     *group_iface,
 }
 
 static void
-tp_group_destroy_cb (TpChan         *tp_chan,
-		     EmpathyTpGroup *group)
+tp_group_members_changed_cb (TpChannel    *channel,
+			     const gchar  *message,
+			     const GArray *added,
+			     const GArray *removed,
+			     const GArray *local_pending,
+			     const GArray *remote_pending,
+			     guint         actor,
+			     guint         reason,
+			     gpointer      user_data,
+			     GObject      *group)
 {
 	EmpathyTpGroupPriv *priv = GET_PRIV (group);
 
-	empathy_debug (DEBUG_DOMAIN, "Account disconnected or CM crashed");
-
-	g_object_unref (priv->tp_chan);
-	priv->group_iface = NULL;
-	priv->tp_chan = NULL;
-
-	g_signal_emit (group, signals[DESTROY], 0);
-}
-
-static void tp_group_closed_cb (DBusGProxy     *proxy,
-				EmpathyTpGroup *group);
-
-static void
-tp_group_disconnect (EmpathyTpGroup *group)
-{
-	EmpathyTpGroupPriv *priv = GET_PRIV (group);
-
-	if (priv->group_iface) {
-		dbus_g_proxy_disconnect_signal (priv->group_iface, "MembersChanged",
-						G_CALLBACK (tp_group_members_changed_cb),
-						group);
-	}
-	if (priv->tp_chan) {
-		g_signal_handlers_disconnect_by_func (priv->tp_chan,
-						      tp_group_destroy_cb,
-						      group);
-		dbus_g_proxy_disconnect_signal (DBUS_G_PROXY (priv->tp_chan), "Closed",
-						G_CALLBACK (tp_group_closed_cb),
-						group);
+	if (priv->ready) {
+		tp_group_update_members (EMPATHY_TP_GROUP (group), message,
+					 added, removed,
+					 local_pending, remote_pending,
+					 actor, reason);
 	}
 }
 
 static void
-tp_group_closed_cb (DBusGProxy     *proxy,
-		    EmpathyTpGroup *group)
+tp_group_get_members_cb (TpChannel    *channel,
+			 const GArray *handles,
+			 const GError *error,
+			 gpointer      user_data,
+			 GObject      *group)
 {
-	tp_group_disconnect (group);
-	tp_group_destroy_cb (TELEPATHY_CHAN (proxy), group);
-}
-
-static void
-tp_group_get_members_cb (DBusGProxy *proxy,
-			 GArray     *handles,
-			 GError     *error,
-			 gpointer    user_data)
-{
-	EmpathyTpGroup     *group = user_data;
 	EmpathyTpGroupPriv *priv = GET_PRIV (group);
 
 	if (error) {
 		empathy_debug (DEBUG_DOMAIN, "Failed to get members: %s",
 			       error->message);
-		g_object_unref (group);
 		return;
 	}
 
-	tp_group_members_changed_cb (priv->group_iface,
-				     NULL,    /* message */
-				     handles, /* added */
-				     NULL,    /* removed */
-				     NULL,    /* local_pending */
-				     NULL,    /* remote_pending */
-				     0,       /* actor */
-				     0,       /* reason */
-				     group);
+	tp_group_update_members (EMPATHY_TP_GROUP (group),
+				 NULL,    /* message */
+				 handles, /* added */
+				 NULL,    /* removed */
+				 NULL,    /* local_pending */
+				 NULL,    /* remote_pending */
+				 0,       /* actor */
+				 0);      /* reason */
 
-	g_array_free (handles, TRUE);
-	g_object_unref (group);
+	empathy_debug (DEBUG_DOMAIN, "Ready");
+	priv->ready = TRUE;
+	g_object_notify (group, "ready");
 }
 
 static void
-tp_group_get_local_pending_cb (DBusGProxy *proxy,
-			       GPtrArray  *array,
-			       GError     *error,
-			       gpointer    user_data)
+tp_group_get_local_pending_cb (TpChannel        *channel,
+			       const GPtrArray  *array,
+			       const GError     *error,
+			       gpointer          user_data,
+			       GObject          *group)
 {
-	EmpathyTpGroup     *group = user_data;
-	EmpathyTpGroupPriv *priv = GET_PRIV (group);
-	GArray             *handles;
-	guint               i = 0;
+	GArray *handles;
+	guint   i = 0;
 	
 	if (error) {
 		empathy_debug (DEBUG_DOMAIN, "Failed to get local pendings: %s",
 			       error->message);
-		g_object_unref (group);
 		return;
 	}
 
 	handles = g_array_sized_new (FALSE, FALSE, sizeof (guint), 1);
 	g_array_append_val (handles, i);
 	for (i = 0; array->len > i; i++) {
-		GValueArray        *pending_struct;
-		const gchar        *message;
-		guint               member_handle;
-		guint               actor_handle;
-		guint               reason;
+		GValueArray *pending_struct;
+		const gchar *message;
+		guint        member_handle;
+		guint        actor_handle;
+		guint        reason;
 
 		pending_struct = g_ptr_array_index (array, i);
 		member_handle = g_value_get_uint (g_value_array_get_nth (pending_struct, 0));
@@ -409,77 +387,120 @@ tp_group_get_local_pending_cb (DBusGProxy *proxy,
 		message = g_value_get_string (g_value_array_get_nth (pending_struct, 3));
 
 		g_array_index (handles, guint, 0) = member_handle;
-		tp_group_members_changed_cb (priv->group_iface,
-					     message,      /* message */
-					     NULL,         /* added */
-					     NULL,         /* removed */
-					     handles,      /* local_pending */
-					     NULL,         /* remote_pending */
-					     actor_handle, /* actor */
-					     reason,       /* reason */
-					     group);
 
-		g_value_array_free (pending_struct);
+		tp_group_update_members (EMPATHY_TP_GROUP (group),
+					 message,      /* message */
+					 NULL,         /* added */
+					 NULL,         /* removed */
+					 handles,      /* local_pending */
+					 NULL,         /* remote_pending */
+					 actor_handle, /* actor */
+					 reason);      /* reason */
 	}
-	g_ptr_array_free (array, TRUE);
 	g_array_free (handles, TRUE);
-	g_object_unref (group);
 }
 
 static void
-tp_group_get_remote_pending_cb (DBusGProxy *proxy,
-				GArray     *handles,
-				GError     *error,
-				gpointer    user_data)
+tp_group_get_remote_pending_cb (TpChannel    *channel,
+				const GArray *handles,
+				const GError *error,
+				gpointer      user_data,
+				GObject      *group)
 {
-	EmpathyTpGroup     *group = user_data;
-	EmpathyTpGroupPriv *priv = GET_PRIV (group);
-	
 	if (error) {
 		empathy_debug (DEBUG_DOMAIN, "Failed to get remote pendings: %s",
 			       error->message);
-		g_object_unref (group);
 		return;
 	}
 
-	tp_group_members_changed_cb (priv->group_iface,
-				     NULL,    /* message */
-				     NULL,    /* added */
-				     NULL,    /* removed */
-				     NULL,    /* local_pending */
-				     handles, /* remote_pending */
-				     0,       /* actor */
-				     0,       /* reason */
-				     group);
-
-	g_array_free (handles, TRUE);
-	g_object_unref (group);
+	tp_group_update_members (EMPATHY_TP_GROUP (group),
+				 NULL,    /* message */
+				 NULL,    /* added */
+				 NULL,    /* removed */
+				 NULL,    /* local_pending */
+				 handles, /* remote_pending */
+				 0,       /* actor */
+				 0);      /* reason */
 }
 
 static void
-tp_group_ready_cb (EmpathyTpGroup *group)
+tp_group_invalidated_cb (TpProxy        *proxy,
+			 guint           domain,
+			 gint            code,
+			 gchar          *message,
+			 EmpathyTpGroup *group)
+{
+	empathy_debug (DEBUG_DOMAIN, "Channel invalidated: %s", message);
+	g_signal_emit (group, signals[DESTROY], 0);
+}
+
+static void
+tp_group_get_self_handle_cb (TpChannel    *proxy,
+			     guint         handle,
+			     const GError *error,
+			     gpointer      user_data,
+			     GObject      *group)
+{
+	EmpathyTpGroupPriv *priv = GET_PRIV (group);
+
+	if (error) {
+		empathy_debug (DEBUG_DOMAIN, "Failed to get self handle: %s",
+			       error->message);
+		return;
+	}
+
+	/* GetMembers is called last, so it will be the last to get the reply,
+	 * so we'll be ready once that call return. */
+	priv->self_handle = handle;
+	tp_cli_channel_interface_group_connect_to_members_changed (priv->channel,
+								   tp_group_members_changed_cb,
+								   NULL, NULL,
+								   group, NULL);
+	tp_cli_channel_interface_group_call_get_local_pending_members_with_info
+							(priv->channel, -1,
+							 tp_group_get_local_pending_cb,
+							 NULL, NULL, 
+							 group);
+	tp_cli_channel_interface_group_call_get_remote_pending_members
+							(priv->channel, -1,
+							 tp_group_get_remote_pending_cb,
+							 NULL, NULL, 
+							 group);
+	tp_cli_channel_interface_group_call_get_members (priv->channel, -1,
+							 tp_group_get_members_cb,
+							 NULL, NULL, 
+							 group);
+}
+
+static void
+tp_group_factory_ready_cb (EmpathyTpGroup *group)
 {
 	EmpathyTpGroupPriv      *priv = GET_PRIV (group);
 	EmpathyTpContactFactory *tp_factory;
 
-	empathy_debug (DEBUG_DOMAIN, "Factory ready, we can get members %p %p", group, priv);
-
 	tp_factory = empathy_contact_factory_get_tp_factory (priv->factory, priv->account);
-	g_signal_handlers_disconnect_by_func (tp_factory, tp_group_ready_cb, group);
+	g_signal_handlers_disconnect_by_func (tp_factory, tp_group_factory_ready_cb, group);
+	tp_cli_channel_interface_group_call_get_self_handle (priv->channel, -1,
+							     tp_group_get_self_handle_cb,
+							     NULL, NULL,
+							     G_OBJECT (group));
+}
 
-	dbus_g_proxy_connect_signal (priv->group_iface, "MembersChanged",
-				     G_CALLBACK (tp_group_members_changed_cb),
-				     group, NULL);
+static void
+tp_group_channel_ready_cb (EmpathyTpGroup *group)
+{
+	EmpathyTpGroupPriv      *priv = GET_PRIV (group);
+	EmpathyTpContactFactory *tp_factory;
 
-	tp_chan_iface_group_get_members_async (priv->group_iface,
-					       tp_group_get_members_cb,
-					       g_object_ref (group));
-	tp_chan_iface_group_get_local_pending_members_with_info_async (priv->group_iface,
-								       tp_group_get_local_pending_cb,
-								       g_object_ref (group));
-	tp_chan_iface_group_get_remote_pending_members_async (priv->group_iface,
-							      tp_group_get_remote_pending_cb,
-							      g_object_ref (group));
+	tp_factory = empathy_contact_factory_get_tp_factory (priv->factory,
+							     priv->account);
+	if (empathy_tp_contact_factory_is_ready (tp_factory)) {
+		tp_group_factory_ready_cb (group);
+	} else {
+		g_signal_connect_swapped (tp_factory, "notify::ready",
+					  G_CALLBACK (tp_group_factory_ready_cb),
+					  group);
+	}
 }
 
 static void
@@ -490,13 +511,17 @@ tp_group_finalize (GObject *object)
 
 	empathy_debug (DEBUG_DOMAIN, "finalize: %p", object);
 
-	tp_group_disconnect (EMPATHY_TP_GROUP (object));
-
 	tp_factory = empathy_contact_factory_get_tp_factory (priv->factory, priv->account);
-	g_signal_handlers_disconnect_by_func (tp_factory, tp_group_ready_cb, object);
+	g_signal_handlers_disconnect_by_func (tp_factory, tp_group_factory_ready_cb, object);
 
 	if (priv->tp_chan) {
 		g_object_unref (priv->tp_chan);
+	}
+	if (priv->channel) {
+		g_signal_handlers_disconnect_by_func (priv->channel,
+						      tp_group_invalidated_cb,
+						      object);
+		g_object_unref (priv->channel);
 	}
 	if (priv->account) {
 		g_object_unref (priv->account);
@@ -519,11 +544,118 @@ tp_group_finalize (GObject *object)
 }
 
 static void
+tp_group_constructed (GObject *group)
+{
+	EmpathyTpGroupPriv      *priv = GET_PRIV (group);
+	gboolean                 channel_ready;
+
+	G_OBJECT_CLASS (empathy_tp_group_parent_class)->constructed (group);
+
+	priv->factory = empathy_contact_factory_new ();
+
+	g_signal_connect (priv->channel, "invalidated",
+			  G_CALLBACK (tp_group_invalidated_cb),
+			  group);
+
+	g_object_get (priv->channel, "channel-ready", &channel_ready, NULL);
+	if (channel_ready) {
+		tp_group_channel_ready_cb (EMPATHY_TP_GROUP (group));
+	} else {
+		g_signal_connect_swapped (priv->channel, "notify::channel-ready",
+					  G_CALLBACK (tp_group_channel_ready_cb),
+					  group);
+	}
+}
+
+static void
+tp_group_get_property (GObject    *object,
+		       guint       param_id,
+		       GValue     *value,
+		       GParamSpec *pspec)
+{
+	EmpathyTpGroupPriv *priv = GET_PRIV (object);
+
+	switch (param_id) {
+	case PROP_ACCOUNT:
+		g_value_set_object (value, priv->account);
+		break;
+	case PROP_TP_CHAN:
+		g_value_set_object (value, priv->tp_chan);
+		break;
+	case PROP_CHANNEL:
+		g_value_set_object (value, priv->channel);
+		break;
+	default:
+		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
+		break;
+	};
+}
+
+static void
+tp_group_set_property (GObject      *object,
+		       guint         param_id,
+		       const GValue *value,
+		       GParamSpec   *pspec)
+{
+	EmpathyTpGroupPriv *priv = GET_PRIV (object);
+
+	switch (param_id) {
+	case PROP_ACCOUNT:
+		priv->account = g_object_ref (g_value_get_object (value));
+		break;
+	case PROP_TP_CHAN:
+		priv->tp_chan = g_object_ref (g_value_get_object (value));
+		break;
+	case PROP_CHANNEL:
+		priv->channel = g_object_ref (g_value_get_object (value));
+		break;
+	default:
+		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
+		break;
+	};
+}
+
+static void
 empathy_tp_group_class_init (EmpathyTpGroupClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
 	object_class->finalize = tp_group_finalize;
+	object_class->constructed = tp_group_constructed;
+	object_class->get_property = tp_group_get_property;
+	object_class->set_property = tp_group_set_property;
+
+	g_object_class_install_property (object_class,
+					 PROP_ACCOUNT,
+					 g_param_spec_object ("account",
+							      "channel Account",
+							      "The account associated with the channel",
+							      MC_TYPE_ACCOUNT,
+							      G_PARAM_READWRITE |
+							      G_PARAM_CONSTRUCT_ONLY));
+	g_object_class_install_property (object_class,
+					 PROP_TP_CHAN,
+					 g_param_spec_object ("tp-chan",
+							      "telepathy channel",
+							      "The old TpChan",
+							      TELEPATHY_CHAN_TYPE,
+							      G_PARAM_READWRITE |
+							      G_PARAM_CONSTRUCT_ONLY));
+	g_object_class_install_property (object_class,
+					 PROP_CHANNEL,
+					 g_param_spec_object ("channel",
+							      "telepathy channel",
+							      "The channel for the group",
+							      TP_TYPE_CHANNEL,
+							      G_PARAM_READWRITE |
+							      G_PARAM_CONSTRUCT_ONLY));
+	g_object_class_install_property (object_class,
+					 PROP_READY,
+					 g_param_spec_boolean ("ready",
+							       "Is the object ready",
+							       "This object can't be used until this becomes true",
+							       FALSE,
+							       G_PARAM_READABLE));
 
 	signals[MEMBER_ADDED] =
 		g_signal_new ("member-added",
@@ -587,58 +719,36 @@ EmpathyTpGroup *
 empathy_tp_group_new (McAccount *account,
 		      TpChan    *tp_chan)
 {
-	EmpathyTpGroup          *group;
-	EmpathyTpGroupPriv      *priv;
-	EmpathyTpContactFactory *tp_factory;
-	DBusGProxy              *group_iface;
-	GError                  *error = NULL;
+	EmpathyTpGroup  *group;
+	TpChannel       *channel;
+	TpConnection    *connection;
+	MissionControl  *mc;
 
 	g_return_val_if_fail (MC_IS_ACCOUNT (account), NULL);
 	g_return_val_if_fail (TELEPATHY_IS_CHAN (tp_chan), NULL);
 
-	group_iface = tp_chan_get_interface (tp_chan,
-					     TP_IFACE_QUARK_CHANNEL_INTERFACE_GROUP);
-	g_return_val_if_fail (group_iface != NULL, NULL);
+	mc = empathy_mission_control_new ();
+	connection = mission_control_get_tpconnection (mc, account, NULL);
+	channel = tp_chan_dup_channel (tp_chan, connection, NULL);
 
-	group = g_object_new (EMPATHY_TYPE_TP_GROUP, NULL);
-	priv = GET_PRIV (group);
+	group = g_object_new (EMPATHY_TYPE_TP_GROUP, 
+			      "account", account,
+			      "channel", channel,
+			      "tp-chan", tp_chan,
+			      NULL);
 
-	priv->account = g_object_ref (account);
-	priv->tp_chan = g_object_ref (tp_chan);
-	priv->group_iface = group_iface;
-	priv->factory = empathy_contact_factory_new ();
-
-	if (!tp_chan_iface_group_get_self_handle (priv->group_iface,
-						  &priv->self_handle,
-						  &error)) {
-		empathy_debug (DEBUG_DOMAIN, 
-			      "Failed to get self handle: %s",
-			      error ? error->message : "No error given");
-		g_clear_error (&error);
-	}
-
-	tp_factory = empathy_contact_factory_get_tp_factory (priv->factory,
-							     priv->account);
-	if (empathy_tp_contact_factory_is_ready (tp_factory)) {
-		tp_group_ready_cb (group);
-	} else {
-		g_signal_connect_swapped (tp_factory, "notify::ready",
-					  G_CALLBACK (tp_group_ready_cb),
-					  group);
-	}
-
-	dbus_g_proxy_connect_signal (DBUS_G_PROXY (priv->tp_chan), "Closed",
-				     G_CALLBACK (tp_group_closed_cb),
-				     group, NULL);
-	g_signal_connect (priv->tp_chan, "destroy",
-			  G_CALLBACK (tp_group_destroy_cb),
-			  group);
+	g_object_unref (channel);
+	g_object_unref (connection);
+	g_object_unref (mc);
 
 	return group;
 }
 
 static void
-tp_group_async_cb (DBusGProxy *proxy, GError *error, gpointer user_data)
+tp_group_async_cb (TpChannel    *channel,
+		   const GError *error,
+		   gpointer      user_data,
+		   GObject      *weak_object)
 {
 	const gchar *msg = user_data;
 
@@ -653,10 +763,12 @@ empathy_tp_group_close (EmpathyTpGroup *group)
 	EmpathyTpGroupPriv *priv = GET_PRIV (group);
 
 	g_return_if_fail (EMPATHY_IS_TP_GROUP (group));
+	g_return_if_fail (priv->ready);
 
-	tp_chan_close_async (DBUS_G_PROXY (priv->tp_chan),
-			     tp_group_async_cb,
-			     "Failed to close");
+	tp_cli_channel_call_close (priv->channel, -1,
+				   tp_group_async_cb,
+				   "Failed to close", NULL,
+				   G_OBJECT (group));
 }
 
 static GArray *
@@ -689,39 +801,15 @@ empathy_tp_group_add_members (EmpathyTpGroup *group,
 
 	g_return_if_fail (EMPATHY_IS_TP_GROUP (group));
 	g_return_if_fail (contacts != NULL);
+	g_return_if_fail (priv->ready);
 
 	handles = tp_group_get_handles (contacts);
-	tp_chan_iface_group_add_members_async (priv->group_iface,
-					       handles,
-					       message,
-					       tp_group_async_cb,
-					       "Failed to add members");
-
-	g_array_free (handles, TRUE);
-}
-
-void
-empathy_tp_group_add_member (EmpathyTpGroup *group,
-			     EmpathyContact *contact,
-			     const gchar    *message)
-{
-	EmpathyTpGroupPriv *priv = GET_PRIV (group);
-	GArray             *handles;
-	guint               handle;
-
-	g_return_if_fail (EMPATHY_IS_TP_GROUP (group));
-	g_return_if_fail (EMPATHY_IS_CONTACT (contact));
-
-	handle = empathy_contact_get_handle (contact);
-	handles = g_array_new (FALSE, FALSE, sizeof (guint));
-	g_array_append_val (handles, handle);
-
-	tp_chan_iface_group_add_members_async (priv->group_iface,
-					       handles,
-					       message,
-					       tp_group_async_cb,
-					       "Failed to add member");
-
+	tp_cli_channel_interface_group_call_add_members (priv->channel, -1,
+							 handles,
+							 message,
+							 tp_group_async_cb,
+							 "Failed to add members", NULL,
+							 G_OBJECT (group));
 	g_array_free (handles, TRUE);
 }
 
@@ -735,15 +823,28 @@ empathy_tp_group_remove_members (EmpathyTpGroup *group,
 
 	g_return_if_fail (EMPATHY_IS_TP_GROUP (group));
 	g_return_if_fail (contacts != NULL);
+	g_return_if_fail (priv->ready);
 
 	handles = tp_group_get_handles (contacts);
-	tp_chan_iface_group_remove_members_async (priv->group_iface,
-						  handles,
-						  message,
-						  tp_group_async_cb,
-						  "Failed to remove members");
-
+	tp_cli_channel_interface_group_call_remove_members (priv->channel, -1,
+							    handles,
+							    message,
+							    tp_group_async_cb,
+							    "Failed to remove members", NULL,
+							    G_OBJECT (group));
 	g_array_free (handles, TRUE);
+}
+
+void
+empathy_tp_group_add_member (EmpathyTpGroup *group,
+			     EmpathyContact *contact,
+			     const gchar    *message)
+{
+	GList *contacts;
+
+	contacts = g_list_prepend (NULL, contact);
+	empathy_tp_group_add_members (group, contacts, message);
+	g_list_free (contacts);
 }
 
 void
@@ -751,24 +852,11 @@ empathy_tp_group_remove_member (EmpathyTpGroup *group,
 				EmpathyContact *contact,
 				const gchar    *message)
 {
-	EmpathyTpGroupPriv *priv = GET_PRIV (group);
-	GArray             *handles;
-	guint               handle;
+	GList *contacts;
 
-	g_return_if_fail (EMPATHY_IS_TP_GROUP (group));
-	g_return_if_fail (EMPATHY_IS_CONTACT (contact));
-
-	handle = empathy_contact_get_handle (contact);
-	handles = g_array_new (FALSE, FALSE, sizeof (guint));
-	g_array_append_val (handles, handle);
-
-	tp_chan_iface_group_remove_members_async (priv->group_iface,
-						  handles,
-						  message,
-						  tp_group_async_cb,
-						  "Failed to remove member");
-
-	g_array_free (handles, TRUE);
+	contacts = g_list_prepend (NULL, contact);
+	empathy_tp_group_remove_members (group, contacts, message);
+	g_list_free (contacts);
 }
 
 GList *
@@ -840,6 +928,7 @@ empathy_tp_group_get_self_contact (EmpathyTpGroup *group)
 	EmpathyTpGroupPriv *priv = GET_PRIV (group);
 
 	g_return_val_if_fail (EMPATHY_IS_TP_GROUP (group), NULL);
+	g_return_val_if_fail (priv->ready, NULL);
 
 	return tp_group_get_contact (group, priv->self_handle);
 }
@@ -853,7 +942,7 @@ empathy_tp_group_get_object_path (EmpathyTpGroup *group)
 
 	priv = GET_PRIV (group);
 
-	return dbus_g_proxy_get_path (DBUS_G_PROXY (priv->tp_chan));
+	return TP_PROXY (priv->channel)->object_path;
 }
 
 TpChan *
