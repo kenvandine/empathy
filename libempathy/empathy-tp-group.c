@@ -216,7 +216,7 @@ tp_group_update_members (EmpathyTpGroup *group,
 				     "  removed-len=%d\n"
 				     "  local-pending-len=%d, current-len=%d\n"
 				     "  remote-pending-len=%d, current-len=%d",
-		       empathy_tp_group_get_name (group),
+		       priv->group_name,
 		       added ? added->len : 0, g_list_length (priv->members),
 		       removed ? removed->len : 0,
 		       local_pending ? local_pending->len : 0,
@@ -298,7 +298,7 @@ tp_group_update_members (EmpathyTpGroup *group,
 				     "  members-len=%d\n"
 				     "  local-pendings-len=%d\n"
 				     "  remote-pendings-len=%d",
-		       empathy_tp_group_get_name (group),
+		       priv->group_name,
 		       g_list_length (priv->members),
 		       g_list_length (priv->local_pendings),
 		       g_list_length (priv->remote_pendings));
@@ -424,6 +424,24 @@ tp_group_get_remote_pending_cb (TpChannel    *channel,
 }
 
 static void
+tp_group_inspect_handles_cb (TpConnection  *connection,
+			     const gchar  **names,
+			     const GError  *error,
+			     gpointer       user_data,
+			     GObject       *group)
+{
+	EmpathyTpGroupPriv *priv = GET_PRIV (group);
+
+	if (error) {
+		empathy_debug (DEBUG_DOMAIN, "Failed to inspect channel handle: %s",
+			       error->message);
+		return;
+	}
+
+	priv->group_name = g_strdup (*names);
+}
+
+static void
 tp_group_invalidated_cb (TpProxy        *proxy,
 			 guint           domain,
 			 gint            code,
@@ -442,6 +460,10 @@ tp_group_get_self_handle_cb (TpChannel    *proxy,
 			     GObject      *group)
 {
 	EmpathyTpGroupPriv *priv = GET_PRIV (group);
+	TpConnection       *connection;
+	guint               channel_handle;
+	guint               channel_handle_type;
+	GArray             *handles;
 
 	if (error) {
 		empathy_debug (DEBUG_DOMAIN, "Failed to get self handle: %s",
@@ -449,13 +471,29 @@ tp_group_get_self_handle_cb (TpChannel    *proxy,
 		return;
 	}
 
-	/* GetMembers is called last, so it will be the last to get the reply,
-	 * so we'll be ready once that call return. */
 	priv->self_handle = handle;
 	tp_cli_channel_interface_group_connect_to_members_changed (priv->channel,
 								   tp_group_members_changed_cb,
 								   NULL, NULL,
 								   group, NULL);
+
+	/* GetMembers is called last, so it will be the last to get the reply,
+	 * so we'll be ready once that call return. */
+	g_object_get (priv->channel,
+		      "connection", &connection,
+		      "handle-type", &channel_handle_type,
+		      "handle", &channel_handle,
+		      NULL);
+	handles = g_array_sized_new (FALSE, FALSE, sizeof (guint), 1);
+	g_array_prepend_val (handles, channel_handle);
+	tp_cli_connection_call_inspect_handles (connection, -1,
+						channel_handle_type,
+						handles,
+						tp_group_inspect_handles_cb,
+						NULL, NULL,
+						group);
+	g_array_free (handles, TRUE);
+
 	tp_cli_channel_interface_group_call_get_local_pending_members_with_info
 							(priv->channel, -1,
 							 tp_group_get_local_pending_cb,
@@ -546,10 +584,8 @@ tp_group_finalize (GObject *object)
 static void
 tp_group_constructed (GObject *group)
 {
-	EmpathyTpGroupPriv      *priv = GET_PRIV (group);
-	gboolean                 channel_ready;
-
-	G_OBJECT_CLASS (empathy_tp_group_parent_class)->constructed (group);
+	EmpathyTpGroupPriv *priv = GET_PRIV (group);
+	gboolean            channel_ready;
 
 	priv->factory = empathy_contact_factory_new ();
 
@@ -908,16 +944,10 @@ empathy_tp_group_get_remote_pendings (EmpathyTpGroup *group)
 const gchar *
 empathy_tp_group_get_name (EmpathyTpGroup *group)
 {
-	EmpathyTpGroupPriv *priv;
+	EmpathyTpGroupPriv *priv = GET_PRIV (group);
 
 	g_return_val_if_fail (EMPATHY_IS_TP_GROUP (group), NULL);
-
-	priv = GET_PRIV (group);
-
-	/* Lazy initialisation */
-	if (!priv->group_name && priv->tp_chan->handle != 0) {
-		priv->group_name = empathy_inspect_channel (priv->account, priv->tp_chan);
-	}
+	g_return_val_if_fail (priv->ready, NULL);
 
 	return priv->group_name;
 }
@@ -968,4 +998,15 @@ empathy_tp_group_is_member (EmpathyTpGroup *group,
 
 	return g_list_find (priv->members, contact) != NULL;
 }
+
+gboolean
+empathy_tp_group_is_ready (EmpathyTpGroup *group)
+{
+	EmpathyTpGroupPriv *priv = GET_PRIV (group);
+
+	g_return_val_if_fail (EMPATHY_IS_TP_GROUP (group), FALSE);
+
+	return priv->ready;
+}
+
 

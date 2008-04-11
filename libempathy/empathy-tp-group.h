@@ -83,6 +83,7 @@ const gchar *       empathy_tp_group_get_object_path     (EmpathyTpGroup     *gr
 TpChan *            empathy_tp_group_get_channel         (EmpathyTpGroup     *group);
 gboolean            empathy_tp_group_is_member           (EmpathyTpGroup     *group,
 							  EmpathyContact     *contact);
+gboolean            empathy_tp_group_is_ready            (EmpathyTpGroup     *group);
 EmpathyPendingInfo *empathy_pending_info_new             (EmpathyContact     *member,
 							  EmpathyContact     *actor,
 							  const gchar        *message);
