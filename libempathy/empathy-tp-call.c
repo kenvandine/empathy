@@ -19,7 +19,6 @@
  */
 
 #include <string.h>
-#include <dbus/dbus-glib.h>
 
 #include <telepathy-glib/proxy-subclass.h>
 #include <telepathy-glib/dbus.h>
@@ -761,7 +760,7 @@ empathy_tp_call_add_output_video (EmpathyTpCall *call,
       output_video_socket_id);
 
   emp_cli_stream_engine_call_set_output_window (priv->stream_engine, -1,
-      dbus_g_proxy_get_path (DBUS_G_PROXY (priv->channel)),
+      TP_PROXY (priv->channel)->object_path,
       priv->video->id, output_video_socket_id,
       tp_call_async_cb,
       "setting output window", NULL,
@@ -780,7 +779,7 @@ empathy_tp_call_set_output_volume (EmpathyTpCall *call,
   empathy_debug (DEBUG_DOMAIN, "Setting output volume: %d", volume);
 
   emp_cli_stream_engine_call_set_output_volume (priv->stream_engine, -1,
-      dbus_g_proxy_get_path (DBUS_G_PROXY (priv->channel)),
+      TP_PROXY (priv->channel)->object_path,
       priv->audio->id, volume,
       tp_call_async_cb,
       "setting output volume", NULL,
@@ -799,7 +798,7 @@ empathy_tp_call_mute_output (EmpathyTpCall *call,
   empathy_debug (DEBUG_DOMAIN, "Setting output mute: %d", is_muted);
 
   emp_cli_stream_engine_call_mute_output (priv->stream_engine, -1,
-      dbus_g_proxy_get_path (DBUS_G_PROXY (priv->channel)),
+      TP_PROXY (priv->channel)->object_path,
       priv->audio->id, is_muted,
       tp_call_async_cb,
       "muting output", NULL,
@@ -818,7 +817,7 @@ empathy_tp_call_mute_input (EmpathyTpCall *call,
   empathy_debug (DEBUG_DOMAIN, "Setting input mute: %d", is_muted);
 
   emp_cli_stream_engine_call_mute_input (priv->stream_engine, -1,
-      dbus_g_proxy_get_path (DBUS_G_PROXY (priv->channel)),
+      TP_PROXY (priv->channel)->object_path,
       priv->audio->id, is_muted,
       tp_call_async_cb,
       "muting input", NULL,
