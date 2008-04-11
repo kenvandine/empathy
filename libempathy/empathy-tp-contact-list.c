@@ -603,6 +603,9 @@ tp_contact_list_finalize (GObject *object)
 		g_object_unref (priv->account);
 	}
 	if (priv->connection) {
+		g_signal_handlers_disconnect_by_func (priv->connection,
+						      tp_contact_list_invalidated_cb,
+						      object);
 		g_object_unref (priv->connection);
 	}
 
