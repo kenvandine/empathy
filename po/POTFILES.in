@@ -58,6 +58,7 @@ nothere/src/nothere-applet.c
 
 src/empathy.c
 src/empathy-about-dialog.c
+src/empathy-call-window.c
 src/empathy-call-window.glade
 src/empathy-chat-window.c
 src/empathy-chat-window.glade
@@ -71,4 +72,4 @@ src/empathy-preferences.c
 src/empathy-preferences.glade
 src/empathy-status-icon.c
 src/empathy-status-icon.glade
-                        
+
