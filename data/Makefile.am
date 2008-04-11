@@ -17,9 +17,9 @@ profile_DATA = 				\
 	sipphone.profile		\
 	groupwise.profile
 
-autostartdir = $(sysconfdir)/xdg/autostart
-autostart_in_files = empathy.desktop.in
-autostart_DATA = $(autostart_in_files:.desktop.in=.desktop)
+desktopdir = $(datadir)/applications
+desktop_in_files = empathy.desktop.in
+desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
 @INTLTOOL_DESKTOP_RULE@
 
 schemasdir	 = $(GCONF_SCHEMA_FILE_DIR)
@@ -40,12 +40,12 @@ endif
 
 EXTRA_DIST = 				\
 	$(profile_DATA)			\
-	$(autostart_in_files)		\
-	$(autostart_DATA)		\
+	$(desktop_in_files)		\
+	$(desktop_DATA)		\
 	$(schemas_in_files)		\
 	$(schemas_DATA)
 
 DISTCLEANFILES = 			\
-	$(autostart_DATA)		\
+	$(desktop_DATA)		\
 	$(schemas_DATA)
 
