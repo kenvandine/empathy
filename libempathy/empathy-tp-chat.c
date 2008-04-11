@@ -698,7 +698,7 @@ tp_chat_channel_ready_cb (EmpathyTpChat *chat)
 	priv->ready = TRUE;
 	if (tp_proxy_has_interface_by_id (priv->channel,
 					  TP_IFACE_QUARK_CHANNEL_INTERFACE_GROUP)) {
-		priv->group = empathy_tp_group_new (priv->account, priv->tp_chan);
+		priv->group = empathy_tp_group_new (priv->account, priv->channel);
 
 		g_signal_connect (priv->group, "member-added",
 				  G_CALLBACK (tp_chat_member_added_cb),
