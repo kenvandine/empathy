@@ -83,11 +83,6 @@ guint        empathy_account_hash                   (gconstpointer    key);
 gboolean     empathy_account_equal                  (gconstpointer    a,
 						    gconstpointer    b);
 MissionControl *empathy_mission_control_new         (void);
-gchar *      empathy_inspect_handle                 (McAccount       *account,
-						     guint            handle,
-						     guint            handle_type);
-gchar *      empathy_inspect_channel                (McAccount       *account,
-						     TpChan          *tp_chan);
 void         empathy_call_with_contact              (EmpathyContact  *contact);
 void         empathy_call_with_contact_id           (McAccount       *account,
 						     const gchar     *contact_id);
@@ -108,6 +103,7 @@ void          empathy_run_until_ready_full          (gpointer         object,
 						     EmpathyRunUntilReadyFunc  func,
 						     gpointer         user_data,
 						     GMainLoop      **loop);
+McAccount *  empathy_channel_get_account            (TpChannel       *channel);
 
 G_END_DECLS
 

@@ -338,69 +338,6 @@ empathy_mission_control_new (void)
 	return mc;
 }
 
-gchar *
-empathy_inspect_channel (McAccount *account,
-		         TpChan    *tp_chan)
-{
-	g_return_val_if_fail (MC_IS_ACCOUNT (account), NULL);
-	g_return_val_if_fail (TELEPATHY_IS_CHAN (tp_chan), NULL);
-
-	return empathy_inspect_handle (account,
-				       tp_chan->handle,
-				       tp_chan->handle_type);
-}
-
-gchar *
-empathy_inspect_handle (McAccount *account,
-			guint      handle,
-			guint      handle_type)
-{
-	MissionControl  *mc;
-	TpConn          *tp_conn;
-	GArray          *handles;
-	gchar          **names;
-	gchar           *name;
-	GError          *error = NULL;
-
-	g_return_val_if_fail (MC_IS_ACCOUNT (account), NULL);
-	g_return_val_if_fail (handle != 0, NULL);
-	g_return_val_if_fail (handle_type != 0, NULL);
-
-	mc = empathy_mission_control_new ();
-	tp_conn = mission_control_get_connection (mc, account, NULL);
-	g_object_unref (mc);
-
-	if (!tp_conn) {
-		return NULL;
-	}
-
-	/* Get the handle's name */
-	handles = g_array_new (FALSE, FALSE, sizeof (guint));
-	g_array_append_val (handles, handle);
-	if (!tp_conn_inspect_handles (DBUS_G_PROXY (tp_conn),
-				      handle_type,
-				      handles,
-				      &names,
-				      &error)) {
-		empathy_debug (DEBUG_DOMAIN, 
-			      "Couldn't get id: %s",
-			      error ? error->message : "No error given");
-
-		g_clear_error (&error);
-		g_array_free (handles, TRUE);
-		g_object_unref (tp_conn);
-		
-		return NULL;
-	}
-
-	g_array_free (handles, TRUE);
-	name = *names;
-	g_free (names);
-	g_object_unref (tp_conn);
-
-	return name;
-}
-
 void
 empathy_call_with_contact (EmpathyContact *contact)
 {
@@ -448,7 +385,7 @@ empathy_call_with_contact (EmpathyContact *contact)
 				  object_path, TP_IFACE_CHANNEL_TYPE_STREAMED_MEDIA,
 				  TP_HANDLE_TYPE_NONE, 0, NULL);
 
-	group = empathy_tp_group_new (account, channel);
+	group = empathy_tp_group_new (channel);
 	empathy_run_until_ready (group);
 
 	factory = empathy_contact_factory_new ();
@@ -682,4 +619,18 @@ empathy_run_until_ready (gpointer object)
 				      NULL, NULL);
 }
 
+McAccount *
+empathy_channel_get_account (TpChannel *channel)
+{
+	TpConnection   *connection;
+	McAccount      *account;
+	MissionControl *mc;
 
+	g_object_get (channel, "connection", &connection, NULL);
+	mc = empathy_mission_control_new ();
+	account = mission_control_get_account_for_tpconnection (mc, connection, NULL);
+	g_object_unref (connection);
+	g_object_unref (mc);
+
+	return account;
+}
