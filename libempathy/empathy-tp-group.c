@@ -621,6 +621,9 @@ tp_group_get_property (GObject    *object,
 	case PROP_CHANNEL:
 		g_value_set_object (value, priv->channel);
 		break;
+	case PROP_READY:
+		g_value_set_boolean (value, priv->ready);
+		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
 		break;

@@ -870,6 +870,9 @@ tp_chat_get_property (GObject    *object,
 	case PROP_REMOTE_CONTACT:
 		g_value_set_object (value, priv->remote_contact);
 		break;
+	case PROP_READY:
+		g_value_set_boolean (value, priv->ready);
+		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
 		break;
