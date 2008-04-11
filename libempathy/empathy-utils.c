@@ -34,6 +34,8 @@
 
 #include <libxml/uri.h>
 #include <libtelepathy/tp-conn.h>
+#include <telepathy-glib/connection.h>
+#include <telepathy-glib/channel.h>
 #include <telepathy-glib/dbus.h>
 
 #include "empathy-debug.h"
@@ -405,10 +407,9 @@ empathy_call_with_contact (EmpathyContact *contact)
 #ifdef HAVE_VOIP
 	MissionControl        *mc;
 	McAccount             *account;
-	TpConn                *tp_conn;
+	TpConnection          *connection;
 	gchar                 *object_path;
-	const gchar           *bus_name;
-	TpChan                *new_chan;
+	TpChannel             *channel;
 	EmpathyContactFactory *factory;
 	EmpathyTpGroup        *group;
 	EmpathyContact        *self_contact;
@@ -423,33 +424,33 @@ empathy_call_with_contact (EmpathyContact *contact)
 
 	mc = empathy_mission_control_new ();
 	account = empathy_contact_get_account (contact);
-	tp_conn = mission_control_get_connection (mc, account, NULL);
-	/* FIXME: Should be async */
-	if (!tp_conn_request_channel (DBUS_G_PROXY (tp_conn),
-				      TP_IFACE_CHANNEL_TYPE_STREAMED_MEDIA,
-				      TP_HANDLE_TYPE_NONE,
-				      0,
-				      FALSE,
-				      &object_path,
-				      &error)) {
+	connection = mission_control_get_tpconnection (mc, account, NULL);
+	tp_connection_run_until_ready (connection, FALSE, NULL, NULL);
+
+	if (!tp_cli_connection_run_request_channel (connection, -1,
+						    TP_IFACE_CHANNEL_TYPE_STREAMED_MEDIA,
+						    TP_HANDLE_TYPE_NONE,
+						    0,
+						    FALSE,
+						    &object_path,
+						    &error,
+						    NULL)) {
 		empathy_debug (DEBUG_DOMAIN, 
 			      "Couldn't request channel: %s",
 			      error ? error->message : "No error given");
 		g_clear_error (&error);
 		g_object_unref (mc);
-		g_object_unref (tp_conn);
+		g_object_unref (connection);
 		return;
 	}
 
-	bus_name = dbus_g_proxy_get_bus_name (DBUS_G_PROXY (tp_conn));
-	new_chan = tp_chan_new (tp_get_bus (),
-				bus_name,
-				object_path,
-				TP_IFACE_CHANNEL_TYPE_STREAMED_MEDIA,
-				TP_HANDLE_TYPE_NONE,
-				0);
+	channel = tp_channel_new (connection,
+				  object_path, TP_IFACE_CHANNEL_TYPE_STREAMED_MEDIA,
+				  TP_HANDLE_TYPE_NONE, 0, NULL);
 
-	group = empathy_tp_group_new (account, new_chan);
+	group = empathy_tp_group_new (account, channel);
+	empathy_run_until_ready (group);
+
 	factory = empathy_contact_factory_new ();
 	self_contact = empathy_contact_factory_get_user (factory, account);
 	empathy_contact_run_until_ready (self_contact,
@@ -463,8 +464,8 @@ empathy_call_with_contact (EmpathyContact *contact)
 	g_object_unref (self_contact);
 	g_object_unref (group);
 	g_object_unref (mc);
-	g_object_unref (tp_conn);
-	g_object_unref (new_chan);
+	g_object_unref (connection);
+	g_object_unref (channel);
 	g_free (object_path);
 #endif
 }
