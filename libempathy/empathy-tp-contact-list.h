@@ -26,7 +26,6 @@
 #include <glib.h>
 #include <libmissioncontrol/mc-account.h>
 
-#include "empathy-contact.h"
 
 G_BEGIN_DECLS
 
