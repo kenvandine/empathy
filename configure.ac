@@ -30,14 +30,12 @@ GTK_REQUIRED=2.12.0
 GCONF_REQUIRED=1.2.0
 LIBGLADE_REQUIRED=2.0.0
 LIBPANELAPPLET_REQUIRED=2.10.0
-TELEPATHY_REQUIRED=0.3.2
 TELEPATHY_GLIB_REQUIRED=0.7.3
 MISSION_CONTROL_REQUIRED=4.61
 
 # Uncomment that to build without deprecated symbols
 # AC_DEFINE(GTK_DISABLE_DEPRECATED, 1, [Disable deprecated GTK symbols])
 # AC_DEFINE(G_DISABLE_DEPRECATED, 1, [Disable deprecated GLib symbols])
-# AC_DEFINE(LIBTELEPATHY_DISABLE_DEPRECATED, 1, [Disable deprecated libtelepathy symbols])
 
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_HEADERS([config.h])
@@ -84,7 +82,6 @@ PKG_CHECK_MODULES(LIBEMPATHY,
    glib-2.0 >= $GLIB_REQUIRED
    gobject-2.0
    libxml-2.0
-   libtelepathy >= $TELEPATHY_REQUIRED
    telepathy-glib >= $TELEPATHY_GLIB_REQUIRED
    libmissioncontrol >= $MISSION_CONTROL_REQUIRED
 ])
@@ -95,7 +92,6 @@ PKG_CHECK_MODULES(EMPATHY,
    gobject-2.0
    gio-2.0 >= $GLIB_REQUIRED
    gconf-2.0 >= $GCONF_REQUIRED
-   libtelepathy >= $TELEPATHY_REQUIRED
    telepathy-glib >= $TELEPATHY_GLIB_REQUIRED
    libmissioncontrol >= $MISSION_CONTROL_REQUIRED
    gtk+-2.0 >= $GTK_REQUIRED
@@ -178,7 +174,6 @@ if test "x$enable_megaphone" != "xno"; then
       gtk+-2.0 >= $GTK_REQUIRED
       gconf-2.0 >= $GCONF_REQUIRED
       libglade-2.0 >= $LIBGLADE_REQUIRED 
-      libtelepathy >= $TELEPATHY_REQUIRED
       libmissioncontrol >= $MISSION_CONTROL_REQUIRED
    ], have_megaphone="yes", have_megaphone="no")
 else
@@ -207,7 +202,6 @@ if test "x$enable_nothere" != "xno"; then
       gtk+-2.0 >= $GTK_REQUIRED
       gconf-2.0 >= $GCONF_REQUIRED
       libglade-2.0 >= $LIBGLADE_REQUIRED 
-      libtelepathy >= $TELEPATHY_REQUIRED
       libmissioncontrol >= $MISSION_CONTROL_REQUIRED
    ], have_nothere="yes", have_nothere="no")
 else
@@ -263,7 +257,6 @@ if test "x$enable_python" != "xno"; then
          gobject-2.0
          gconf-2.0 >= $GCONF_REQUIRED
          libxml-2.0
-         libtelepathy >= $TELEPATHY_REQUIRED
          libmissioncontrol >= $MISSION_CONTROL_REQUIRED
          gtk+-2.0 >= $GTK_REQUIRED
          libglade-2.0 >= $LIBGLADE_REQUIRED
