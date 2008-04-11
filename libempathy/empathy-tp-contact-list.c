@@ -662,7 +662,7 @@ tp_contact_list_constructed (GObject *list)
 	if (ready) {
 		tp_contact_list_ready_cb (EMPATHY_TP_CONTACT_LIST (list));
 	} else {
-		g_signal_connect_swapped (priv->connection, "connection-ready",
+		g_signal_connect_swapped (priv->connection, "notify::connection-ready",
 					  G_CALLBACK (tp_contact_list_ready_cb),
 					  list);
 	}
