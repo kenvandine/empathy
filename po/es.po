@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: empathy.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-04-10 00:11+0100\n"
-"PO-Revision-Date: 2008-04-10 23:45+0200\n"
+"POT-Creation-Date: 2008-04-11 17:13+0100\n"
+"PO-Revision-Date: 2008-04-12 16:03+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -231,31 +231,31 @@ msgstr ""
 "predeterminado es ordenar por el nombre del contacto con el valor «nombre». "
 "Un valor «estado» ordenará la lista por el estado."
 
-#: ../libempathy/empathy-tp-contact-list.c:724 ../src/empathy.c:230
+#: ../libempathy/empathy-tp-contact-list.c:676 ../src/empathy.c:254
 msgid "People nearby"
 msgstr "Gente cerca"
 
-#: ../libempathy/empathy-utils.c:525
+#: ../libempathy/empathy-utils.c:462
 msgid "Available"
 msgstr "Disponible"
 
-#: ../libempathy/empathy-utils.c:527
+#: ../libempathy/empathy-utils.c:464
 msgid "Busy"
 msgstr "Ocupado"
 
-#: ../libempathy/empathy-utils.c:530
+#: ../libempathy/empathy-utils.c:467
 msgid "Away"
 msgstr "Ausente"
 
-#: ../libempathy/empathy-utils.c:532
+#: ../libempathy/empathy-utils.c:469
 msgid "Hidden"
 msgstr "Oculto"
 
-#: ../libempathy/empathy-utils.c:535
+#: ../libempathy/empathy-utils.c:472
 msgid "Offline"
 msgstr "Desconectado"
 
-#: ../libempathy-gtk/empathy-account-chooser.c:337
+#: ../libempathy-gtk/empathy-account-chooser.c:336
 msgid "All"
 msgstr "Todo"
 
@@ -288,13 +288,8 @@ msgid "Forget password and clear the entry."
 msgstr "Olvidar la contraseña y limpiar la entrada."
 
 #: ../libempathy-gtk/empathy-account-widget-aim.glade.h:3
-#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:4
-msgid "ICQ account settings"
-msgstr "Ajustes de la cuenta ICQ"
-
-#: ../libempathy-gtk/empathy-account-widget-aim.glade.h:4
 #: ../libempathy-gtk/empathy-account-widget-groupwise.glade.h:4
-#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:5
+#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:4
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:5
 #: ../libempathy-gtk/empathy-account-widget-msn.glade.h:4
 #: ../libempathy-gtk/empathy-account-widget-sip.glade.h:12
@@ -302,32 +297,28 @@ msgstr "Ajustes de la cuenta ICQ"
 msgid "Pass_word:"
 msgstr "Contra_seña:"
 
-#: ../libempathy-gtk/empathy-account-widget-aim.glade.h:5
+#: ../libempathy-gtk/empathy-account-widget-aim.glade.h:4
 msgid "Screen _Name:"
 msgstr "_Nombre en pantalla:"
 
-#: ../libempathy-gtk/empathy-account-widget-aim.glade.h:6
+#: ../libempathy-gtk/empathy-account-widget-aim.glade.h:5
 #: ../libempathy-gtk/empathy-account-widget-groupwise.glade.h:5
-#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:7
+#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:6
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:11
 #: ../libempathy-gtk/empathy-account-widget-msn.glade.h:5
-#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:10
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:9
 msgid "_Port:"
 msgstr "_Puerto:"
 
-#: ../libempathy-gtk/empathy-account-widget-aim.glade.h:7
+#: ../libempathy-gtk/empathy-account-widget-aim.glade.h:6
 #: ../libempathy-gtk/empathy-account-widget-groupwise.glade.h:6
-#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:8
+#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:7
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:12
 #: ../libempathy-gtk/empathy-account-widget-msn.glade.h:6
-#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:12
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:11
 #: ../src/empathy-new-chatroom-dialog.glade.h:10
 msgid "_Server:"
 msgstr "_Servidor:"
-
-#: ../libempathy-gtk/empathy-account-widget-generic.glade.h:2
-msgid "generic account settings"
-msgstr "Ajustes de la cuenta genérica"
 
 #: ../libempathy-gtk/empathy-account-widget-groupwise.glade.h:3
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:4
@@ -336,16 +327,12 @@ msgstr "Ajustes de la cuenta genérica"
 msgid "Login I_D:"
 msgstr "_ID de sesión:"
 
-#: ../libempathy-gtk/empathy-account-widget-groupwise.glade.h:7
-msgid "groupwise account settings"
-msgstr "Ajustes de la cuenta Groupwise"
-
 #: ../libempathy-gtk/empathy-account-widget-icq.glade.h:3
 msgid "ICQ _UIN:"
 msgstr "_UIN ICQ:"
 
-#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:6
-#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:8
+#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:5
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:7
 msgid "_Charset:"
 msgstr "Conjunto de _caracteres:"
 
@@ -401,10 +388,6 @@ msgstr "Nombre real:"
 msgid "Remove the selected IRC network"
 msgstr "Quitar la red IRC seleccionada"
 
-#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:13
-msgid "irc account settings"
-msgstr "Ajustes de la cuenta IRC"
-
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:2
 msgid "<b>Override  server settings</b>"
 msgstr "<b>Sobreescribir la configuración del servidor</b>"
@@ -429,17 +412,9 @@ msgstr "Se requiere ci_frado (TLS/SSL)"
 msgid "_Ignore SSL certificate errors"
 msgstr "_Ignorar los errores de certificados SSL"
 
-#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:13
-msgid "jabber account settings"
-msgstr "Ajustes de la cuenta Jabber"
-
-#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:7
-msgid "msn account settings"
-msgstr "Ajustes de la cuenta MSN"
-
 #: ../libempathy-gtk/empathy-account-widget-salut.glade.h:2
-msgid "_E-mail:"
-msgstr "Correo-e:"
+msgid "_Email:"
+msgstr "Correo-_e:"
 
 #: ../libempathy-gtk/empathy-account-widget-salut.glade.h:3
 msgid "_First Name: "
@@ -461,10 +436,6 @@ msgstr "_Apodo:"
 #: ../libempathy-gtk/empathy-account-widget-salut.glade.h:7
 msgid "_Published Name:"
 msgstr "Nombre _publicado:"
-
-#: ../libempathy-gtk/empathy-account-widget-salut.glade.h:8
-msgid "salut account settings"
-msgstr "Ajustes de la cuenta Salut"
 
 #: ../libempathy-gtk/empathy-account-widget-sip.glade.h:2
 msgid "Avoid Difficult"
@@ -538,15 +509,11 @@ msgstr "servidor j_aponés:"
 msgid "Use _Yahoo Japan"
 msgstr "User _Yahoo Japan"
 
-#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:7
-msgid "Yahoo! account settings"
-msgstr "Ajustes de la cuenta Yahoo!"
-
-#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:9
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:8
 msgid "_Ignore conference and chatroom invitations"
 msgstr "_Ignorar invitaciones a conferencias y salas de chat"
 
-#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:11
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:10
 msgid "_Room List locale:"
 msgstr "Configuración de la lista de _salas:"
 
@@ -668,7 +635,7 @@ msgstr "Todos los archivos"
 msgid "Click to enlarge"
 msgstr "Pulse para agrandar"
 
-#: ../libempathy-gtk/empathy-chat.c:274 ../src/empathy.c:114
+#: ../libempathy-gtk/empathy-chat.c:274 ../src/empathy.c:138
 msgid "Disconnected"
 msgstr "Desconectado"
 
@@ -728,7 +695,7 @@ msgstr "%s ha entrado en la sala"
 msgid "%s has left the room"
 msgstr "%s ha dejado la sala"
 
-#: ../libempathy-gtk/empathy-chat.c:1622
+#: ../libempathy-gtk/empathy-chat.c:1620
 msgid "Connected"
 msgstr "Conectado"
 
@@ -939,19 +906,20 @@ msgstr "Correo-e:"
 msgid "Fullname:"
 msgstr "Nombre completo:"
 
-#: ../libempathy-gtk/empathy-contact-widget.glade.h:12
+#. Identifier to connect to Instant Messaging network
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:13
 msgid "Identifier:"
 msgstr "Identificador:"
 
-#: ../libempathy-gtk/empathy-contact-widget.glade.h:13
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:14
 msgid "Information requested..."
 msgstr "Información solicitada…"
 
-#: ../libempathy-gtk/empathy-contact-widget.glade.h:14
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:15
 msgid "OS:"
 msgstr "SO:"
 
-#: ../libempathy-gtk/empathy-contact-widget.glade.h:15
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:16
 msgid ""
 "Select the groups you want this contact to appear in, you can select more "
 "than one group or no groups."
@@ -959,11 +927,11 @@ msgstr ""
 "Seleccione los grupos en los que quiere que este contacto aparezca, puede "
 "seleccionar más de un grupo o ningún grupo."
 
-#: ../libempathy-gtk/empathy-contact-widget.glade.h:16
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:17
 msgid "Version:"
 msgstr "Versión:"
 
-#: ../libempathy-gtk/empathy-contact-widget.glade.h:17
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:18
 msgid "Web site:"
 msgstr "Página web:"
 
@@ -995,19 +963,20 @@ msgstr "Conversación"
 msgid "Date"
 msgstr "Fecha"
 
-#: ../libempathy-gtk/empathy-log-window.glade.h:1
+#. Tab Label
+#: ../libempathy-gtk/empathy-log-window.glade.h:2
 msgid "Conversations"
 msgstr "Conversaciones"
 
-#: ../libempathy-gtk/empathy-log-window.glade.h:2
+#: ../libempathy-gtk/empathy-log-window.glade.h:3
 msgid "Previous Conversations"
 msgstr "Conversaciones anteriores"
 
-#: ../libempathy-gtk/empathy-log-window.glade.h:3
+#: ../libempathy-gtk/empathy-log-window.glade.h:4
 msgid "Search"
 msgstr "Buscar"
 
-#: ../libempathy-gtk/empathy-log-window.glade.h:4
+#: ../libempathy-gtk/empathy-log-window.glade.h:5
 msgid "_For:"
 msgstr "_Para:"
 
@@ -1298,59 +1267,59 @@ msgstr "Presencia"
 msgid "Set your own presence"
 msgstr "Establezca su propia presencia"
 
-#: ../src/empathy.c:117
+#: ../src/empathy.c:141
 msgid "Invalid handle"
 msgstr "Manejador no válido"
 
-#: ../src/empathy.c:120
+#: ../src/empathy.c:144
 msgid "No matching connection"
 msgstr "No hay una conexión coincidente"
 
-#: ../src/empathy.c:123
+#: ../src/empathy.c:147
 msgid "Invalid account"
 msgstr "Cuenta no válida"
 
-#: ../src/empathy.c:126
+#: ../src/empathy.c:150
 msgid "Presence failure"
 msgstr "Fallo de presencia"
 
-#: ../src/empathy.c:129
+#: ../src/empathy.c:153
 msgid "No accounts"
 msgstr "Sin cuentas"
 
-#: ../src/empathy.c:132 ../src/empathy-main-window.c:906
+#: ../src/empathy.c:156 ../src/empathy-main-window.c:906
 msgid "Network error"
 msgstr "Error de red"
 
-#: ../src/empathy.c:135
+#: ../src/empathy.c:159
 msgid "Contact does not support voice"
 msgstr "El contacto no soporta voz"
 
-#: ../src/empathy.c:138
+#: ../src/empathy.c:162
 msgid "Lowmem"
 msgstr "Memoria baja"
 
-#: ../src/empathy.c:141
+#: ../src/empathy.c:165
 msgid "Channel request generic error"
 msgstr "Error genérico en la petición del canal"
 
-#: ../src/empathy.c:144
+#: ../src/empathy.c:168
 msgid "Channel banned"
 msgstr "Expulsado del canal"
 
-#: ../src/empathy.c:147
+#: ../src/empathy.c:171
 msgid "Channel full"
 msgstr "Canal lleno"
 
-#: ../src/empathy.c:150
+#: ../src/empathy.c:174
 msgid "Channel invite only"
 msgstr "El canal es de sólo invitación"
 
-#: ../src/empathy.c:153
+#: ../src/empathy.c:177
 msgid "Unknown error code"
 msgstr "Error de código desconocido"
 
-#: ../src/empathy.c:366
+#: ../src/empathy.c:390
 msgid "- Empathy Instant Messenger"
 msgstr "- Mensajería instantánea Empathy"
 
@@ -1396,33 +1365,38 @@ msgstr "Un cliente de mensajería instantánea para GNOME"
 msgid "translator-credits"
 msgstr "Jorge González <jorgegonz@svn.gnome.org>, 2007-2008."
 
+#: ../src/empathy-call-window.c:321
+msgid "Empathy Call"
+msgstr "Llamada de Empathy"
+
+#: ../src/empathy-call-window.c:322
+msgid "Readying"
+msgstr "Preparándose"
+
+#: ../src/empathy-call-window.c:333
+#, c-format
+msgid "%s - Empathy Call"
+msgstr "Llamada de Empathy - %s"
+
+#: ../src/empathy-call-window.c:337
+msgid "Ringing"
+msgstr "Sonando"
+
 #: ../src/empathy-call-window.glade.h:1
+msgid "<b>Volume</b>"
+msgstr "<b>Volumen</b>"
+
+#: ../src/empathy-call-window.glade.h:2
 msgid "End Call"
 msgstr "Finalizar llamada"
 
-#: ../src/empathy-call-window.glade.h:2
-msgid "Input"
-msgstr "Entrada"
-
 #: ../src/empathy-call-window.glade.h:3
-msgid "Mute"
-msgstr "Silenciar"
-
-#: ../src/empathy-call-window.glade.h:4
-msgid "Output"
-msgstr "Salida"
-
-#: ../src/empathy-call-window.glade.h:5
 msgid "Send Video"
 msgstr "Envía vídeo"
 
-#: ../src/empathy-call-window.glade.h:6
+#: ../src/empathy-call-window.glade.h:4
 msgid "Start Call"
 msgstr "Iniciar llamada"
-
-#: ../src/empathy-call-window.glade.h:7
-msgid "Volume"
-msgstr "Volumen"
 
 #: ../src/empathy-chat-window.c:330
 #, c-format
@@ -1824,7 +1798,7 @@ msgstr "_Reproducir sonido cuando lleguen mensajes"
 msgid "_Use for chat rooms"
 msgstr "_Usar para sala de chat"
 
-#: ../src/empathy-status-icon.c:335
+#: ../src/empathy-status-icon.c:326
 #, c-format
 msgid ""
 "New message from %s:\n"
@@ -1833,7 +1807,7 @@ msgstr ""
 "Nuevo mensaje de %s:\n"
 "%s"
 
-#: ../src/empathy-status-icon.c:404
+#: ../src/empathy-status-icon.c:385
 #, c-format
 msgid ""
 "Incoming call from %s:\n"
@@ -1842,12 +1816,12 @@ msgstr ""
 "Llamada entrante de %s:\n"
 "%s"
 
-#: ../src/empathy-status-icon.c:709
+#: ../src/empathy-status-icon.c:664
 #, c-format
 msgid "Subscription requested by %s"
 msgstr "Petición de suscripción de %s"
 
-#: ../src/empathy-status-icon.c:712
+#: ../src/empathy-status-icon.c:667
 #, c-format
 msgid ""
 "\n"
