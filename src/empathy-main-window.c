@@ -73,6 +73,7 @@ typedef struct {
 	EmpathyContactListStore *list_store;
 	MissionControl          *mc;
 	EmpathyChatroomManager  *chatroom_manager;
+	gpointer                 token;
 
 	GtkWidget              *window;
 	GtkWidget              *main_vbox;
@@ -239,7 +240,7 @@ empathy_main_window_show (void)
 	g_object_unref (glade);
 
 	window->mc = empathy_mission_control_new ();
-	empathy_connect_to_account_status_changed (window->mc,
+	window->token = empathy_connect_to_account_status_changed (window->mc,
 						   G_CALLBACK (main_window_status_changed_cb),
 						   window, NULL);
 
@@ -374,9 +375,7 @@ main_window_destroy_cb (GtkWidget         *widget,
 	/* Save user-defined accelerators. */
 	main_window_accels_save ();
 
-	dbus_g_proxy_disconnect_signal (DBUS_G_PROXY (window->mc), "AccountStatusChanged",
-					G_CALLBACK (main_window_status_changed_cb),
-					window);
+	empathy_disconnect_account_status_changed (window->token);
 
 	if (window->size_timeout_id) {
 		g_source_remove (window->size_timeout_id);

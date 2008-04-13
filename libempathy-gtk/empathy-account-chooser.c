@@ -47,6 +47,7 @@ typedef struct {
 	gboolean                        has_all_option;
 	EmpathyAccountChooserFilterFunc filter;
 	gpointer                        filter_data;
+	gpointer                        token;
 } EmpathyAccountChooserPriv;
 
 typedef struct {
@@ -151,10 +152,7 @@ account_chooser_finalize (GObject *object)
 	g_signal_handlers_disconnect_by_func (priv->monitor,
 					      account_chooser_account_deleted_cb,
 					      chooser);
-	dbus_g_proxy_disconnect_signal (DBUS_G_PROXY (priv->mc),
-					"AccountStatusChanged",
-					G_CALLBACK (account_chooser_status_changed_cb),
-					chooser);
+	empathy_disconnect_account_status_changed (priv->token);
 	g_object_unref (priv->mc);
 	g_object_unref (priv->monitor);
 
@@ -223,7 +221,7 @@ empathy_account_chooser_new (void)
 	g_signal_connect (priv->monitor, "account-deleted",
 			  G_CALLBACK (account_chooser_account_deleted_cb),
 			  chooser);
-	empathy_connect_to_account_status_changed (priv->mc,
+	priv->token = empathy_connect_to_account_status_changed (priv->mc,
 						   G_CALLBACK (account_chooser_status_changed_cb),
 						   chooser, NULL);
 

@@ -639,16 +639,16 @@ typedef void (*AccountStatusChangedFunc) (MissionControl           *mc,
 					  McPresence                presence,
 					  TpConnectionStatusReason  reason,
 					  const gchar              *unique_name,
-					  gpointer                 *user_data);
+					  gpointer                  user_data);
 
 typedef struct {
 	AccountStatusChangedFunc handler;
 	gpointer                 user_data;
 	GClosureNotify           free_func;
+	MissionControl          *mc;
 } AccountStatusChangedData;
 
 typedef struct {
-	MissionControl           *mc;
 	TpConnectionStatus        status;
 	McPresence                presence;
 	TpConnectionStatusReason  reason;
@@ -665,6 +665,7 @@ account_status_changed_data_free (gpointer ptr,
 	if (data->free_func) {
 		data->free_func (data->user_data, closure);
 	}
+	g_object_unref (data->mc);
 	g_slice_free (AccountStatusChangedData, data);
 }
 
@@ -673,7 +674,7 @@ account_status_changed_invoke_callback (gpointer data)
 {
 	InvocationData *invocation_data = data;
 
-	invocation_data->data->handler (invocation_data->mc,
+	invocation_data->data->handler (invocation_data->data->mc,
 					invocation_data->status,
 					invocation_data->presence,
 					invocation_data->reason,
@@ -697,18 +698,18 @@ account_status_changed_cb (MissionControl           *mc,
 	InvocationData *invocation_data;
 
 	invocation_data = g_slice_new (InvocationData);
-	invocation_data->mc = mc;
 	invocation_data->status = status;
 	invocation_data->presence = presence;
 	invocation_data->reason = reason;
 	invocation_data->unique_name = g_strdup (unique_name);
 	invocation_data->data = data;
+
 	g_idle_add_full (G_PRIORITY_HIGH,
 			 account_status_changed_invoke_callback,
 			 invocation_data, NULL);
 }
 
-void
+gpointer
 empathy_connect_to_account_status_changed (MissionControl *mc,
 					   GCallback       handler,
 					   gpointer        user_data,
@@ -716,16 +717,30 @@ empathy_connect_to_account_status_changed (MissionControl *mc,
 {
 	AccountStatusChangedData *data;
 
-	g_return_if_fail (IS_MISSIONCONTROL (mc));
-	g_return_if_fail (handler != NULL);
+	g_return_val_if_fail (IS_MISSIONCONTROL (mc), NULL);
+	g_return_val_if_fail (handler != NULL, NULL);
 	
 	data = g_slice_new (AccountStatusChangedData);
-
 	data->handler = (AccountStatusChangedFunc) handler;
 	data->user_data = user_data;
 	data->free_func = free_func;
+	data->mc = g_object_ref (mc);
+
 	dbus_g_proxy_connect_signal (DBUS_G_PROXY (mc), "AccountStatusChanged",
 				     G_CALLBACK (account_status_changed_cb),
 				     data, account_status_changed_data_free);
+
+	return data;
+}
+
+void
+empathy_disconnect_account_status_changed (gpointer token)
+{
+	AccountStatusChangedData *data = token;
+
+	dbus_g_proxy_disconnect_signal (DBUS_G_PROXY (data->mc),
+					"AccountStatusChanged",
+					G_CALLBACK (account_status_changed_cb),
+					data);
 }
 

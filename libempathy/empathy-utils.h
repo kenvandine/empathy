@@ -102,10 +102,11 @@ void          empathy_run_until_ready_full          (gpointer         object,
 						     gpointer         user_data,
 						     GMainLoop      **loop);
 McAccount *  empathy_channel_get_account            (TpChannel       *channel);
-void          empathy_connect_to_account_status_changed (MissionControl *mc,
+gpointer      empathy_connect_to_account_status_changed (MissionControl *mc,
 							 GCallback       handler,
 							 gpointer        user_data,
 							 GClosureNotify  free_func);
+void          empathy_disconnect_account_status_changed (gpointer        token);
 
 G_END_DECLS
 

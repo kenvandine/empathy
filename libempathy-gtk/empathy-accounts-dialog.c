@@ -84,6 +84,7 @@ typedef struct {
 
 	MissionControl   *mc;
 	McAccountMonitor *monitor;
+	gpointer          token;
 } EmpathyAccountsDialog;
 
 enum {
@@ -962,10 +963,7 @@ accounts_dialog_destroy_cb (GtkWidget            *widget,
 	g_signal_handlers_disconnect_by_func (dialog->monitor,
 					      accounts_dialog_account_enabled_cb,
 					      dialog);
-	dbus_g_proxy_disconnect_signal (DBUS_G_PROXY (dialog->mc),
-					"AccountStatusChanged",
-					G_CALLBACK (accounts_dialog_status_changed_cb),
-					dialog);
+	empathy_disconnect_account_status_changed (dialog->token);
 
 	/* Delete incomplete accounts */
 	accounts = mc_accounts_list ();
@@ -1074,7 +1072,7 @@ empathy_accounts_dialog_show (GtkWindow *parent)
 	g_signal_connect (dialog->monitor, "account-disabled",
 			  G_CALLBACK (accounts_dialog_account_enabled_cb),
 			  dialog);
-	empathy_connect_to_account_status_changed (dialog->mc,
+	dialog->token = empathy_connect_to_account_status_changed (dialog->mc,
 						   G_CALLBACK (accounts_dialog_status_changed_cb),
 						   dialog, NULL);
 

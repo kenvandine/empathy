@@ -77,6 +77,7 @@ struct _EmpathyChatPriv {
 	guint              composing_stop_timeout_id;
 	guint              block_events_timeout_id;
 	TpHandleType       handle_type;
+	gpointer           token;
 
 	GtkWidget         *widget;
 	GtkWidget         *hpaned;
@@ -1405,9 +1406,7 @@ chat_finalize (GObject *object)
 
 	chat_composing_remove_timeout (chat);
 
-	dbus_g_proxy_disconnect_signal (DBUS_G_PROXY (priv->mc), "AccountStatusChanged",
-					G_CALLBACK (chat_status_changed_cb),
-					chat);
+	empathy_disconnect_account_status_changed (priv->token);
 	g_object_unref (priv->mc);
 	g_object_unref (priv->log_manager);
 	g_object_unref (priv->store);
@@ -1537,7 +1536,7 @@ empathy_chat_init (EmpathyChat *chat)
 	priv->sent_messages_index = -1;
 	priv->mc = empathy_mission_control_new ();
 
-	empathy_connect_to_account_status_changed (priv->mc,
+	priv->token = empathy_connect_to_account_status_changed (priv->mc,
 						   G_CALLBACK (chat_status_changed_cb),
 						   chat, NULL);
 

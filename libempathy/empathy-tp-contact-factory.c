@@ -44,6 +44,7 @@ struct _EmpathyTpContactFactoryPriv {
 
 	GList          *contacts;
 	EmpathyContact *user;
+	gpointer        token;
 };
 
 static void empathy_tp_contact_factory_class_init (EmpathyTpContactFactoryClass *klass);
@@ -1196,10 +1197,7 @@ tp_contact_factory_finalize (GObject *object)
 		       object,
 		       mc_account_get_normalized_name (priv->account));
 
-	dbus_g_proxy_disconnect_signal (DBUS_G_PROXY (priv->mc),
-					"AccountStatusChanged",
-					G_CALLBACK (tp_contact_factory_status_changed_cb),
-					object);
+	empathy_disconnect_account_status_changed (priv->token);
 
 	for (l = priv->contacts; l; l = l->next) {
 		g_object_weak_unref (G_OBJECT (l->data),
@@ -1277,7 +1275,7 @@ empathy_tp_contact_factory_init (EmpathyTpContactFactory *tp_factory)
 	EmpathyTpContactFactoryPriv *priv = GET_PRIV (tp_factory);
 
 	priv->mc = empathy_mission_control_new ();
-	empathy_connect_to_account_status_changed (priv->mc,
+	priv->token = empathy_connect_to_account_status_changed (priv->mc,
 						   G_CALLBACK (tp_contact_factory_status_changed_cb),
 						   tp_factory, NULL);
 }

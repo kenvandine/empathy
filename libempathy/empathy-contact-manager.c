@@ -38,6 +38,7 @@
 struct _EmpathyContactManagerPriv {
 	GHashTable     *lists;
 	MissionControl *mc;
+	gpointer        token;
 };
 
 static void empathy_contact_manager_class_init (EmpathyContactManagerClass *klass);
@@ -188,11 +189,7 @@ contact_manager_finalize (GObject *object)
 {
 	EmpathyContactManagerPriv *priv = GET_PRIV (object);
 
-	dbus_g_proxy_disconnect_signal (DBUS_G_PROXY (priv->mc),
-					"AccountStatusChanged",
-					G_CALLBACK (contact_manager_status_changed_cb),
-					object);
-
+	empathy_disconnect_account_status_changed (priv->token);
 	g_hash_table_foreach (priv->lists,
 			      contact_manager_disconnect_foreach,
 			      object);
@@ -224,10 +221,9 @@ empathy_contact_manager_init (EmpathyContactManager *manager)
 					     (GDestroyNotify) g_object_unref);
 
 	priv->mc = empathy_mission_control_new ();
-
-	empathy_connect_to_account_status_changed (priv->mc,
-						   G_CALLBACK (contact_manager_status_changed_cb),
-						   manager, NULL);
+	priv->token = empathy_connect_to_account_status_changed (priv->mc,
+		G_CALLBACK (contact_manager_status_changed_cb),
+		manager, NULL);
 
 	/* Get ContactList for existing connections */
 	accounts = mission_control_get_online_connections (priv->mc, NULL);
