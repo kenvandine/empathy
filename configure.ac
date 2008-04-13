@@ -192,7 +192,7 @@ AM_CONDITIONAL(HAVE_MEGAPHONE, test "x$have_megaphone" = "xyes")
 AC_ARG_ENABLE(nothere,
               AS_HELP_STRING([--enable-nothere=@<:@no/yes/auto@:>@],
                              [build nothere applet]), ,
-                             enable_nothere=no)
+                             enable_nothere=auto)
 
 if test "x$enable_nothere" != "xno"; then
    PKG_CHECK_MODULES(NOTHERE, 

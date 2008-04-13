@@ -55,10 +55,24 @@ nothere_applet_class_init (NotHereAppletClass *class)
 	GTK_OBJECT_CLASS (class)->destroy = nothere_applet_destroy;
 }
 
+static gboolean
+do_not_eat_button_press (GtkWidget      *widget,
+                         GdkEventButton *event)
+{
+        if (event->button != 1) {
+                g_signal_stop_emission_by_name (widget, "button_press_event");
+        }
+
+        return FALSE;
+}
+
 static void
 nothere_applet_init (NotHereApplet *applet)
 {
 	applet->presence_chooser = empathy_presence_chooser_new ();
+	g_signal_connect (G_OBJECT (applet->presence_chooser), "button_press_event",
+                          G_CALLBACK (do_not_eat_button_press), NULL);
+
 	gtk_widget_show (applet->presence_chooser);
 
 	gtk_container_add (GTK_CONTAINER (applet), applet->presence_chooser);
