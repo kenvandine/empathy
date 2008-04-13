@@ -97,7 +97,7 @@ cell_renderer_activatable_activate (GtkCellRenderer      *cell,
 
 	activatable = EMPATHY_CELL_RENDERER_ACTIVATABLE (cell);
 
-	if (!GTK_IS_TREE_VIEW (widget) ||
+	if (!GTK_IS_TREE_VIEW (widget) || event == NULL || 
 	    event->type != GDK_BUTTON_PRESS) {
 		return FALSE;
 	}
