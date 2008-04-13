@@ -53,6 +53,9 @@ static void
 nothere_applet_class_init (NotHereAppletClass *class)
 {
 	GTK_OBJECT_CLASS (class)->destroy = nothere_applet_destroy;
+
+	gtk_icon_theme_append_search_path (gtk_icon_theme_get_default (),
+			PKGDATADIR G_DIR_SEPARATOR_S "icons");
 }
 
 static gboolean
