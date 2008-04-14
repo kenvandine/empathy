@@ -1211,6 +1211,13 @@ chat_contacts_completion_func (const gchar *s1,
 	gchar *tmp, *nick1, *nick2;
 	gint   ret;
 
+	if (s1 == s2) {
+		return 0;
+	}
+	if (!s1 || !s2) {
+		return s1 ? -1 : +1;
+	}
+
 	tmp = g_utf8_normalize (s1, -1, G_NORMALIZE_DEFAULT);
 	nick1 = g_utf8_casefold (tmp, -1);
 	g_free (tmp);
