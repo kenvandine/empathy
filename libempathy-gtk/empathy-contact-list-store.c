@@ -91,10 +91,6 @@ static void             contact_list_store_set_property              (GObject   
 								      guint                          param_id,
 								      const GValue                  *value,
 								      GParamSpec                    *pspec);
-static gboolean         contact_list_store_finalize_foreach          (GtkTreeModel                  *model,
-								      GtkTreePath                   *path,
-								      GtkTreeIter                   *iter,
-								      gpointer                       user_data);
 static void             contact_list_store_setup                     (EmpathyContactListStore       *store);
 static gboolean         contact_list_store_inibit_active_cb          (EmpathyContactListStore       *store);
 static void             contact_list_store_members_changed_cb        (EmpathyContactList            *list_iface,
@@ -292,23 +288,26 @@ empathy_contact_list_store_init (EmpathyContactListStore *store)
 static void
 contact_list_store_finalize (GObject *object)
 {
-	EmpathyContactListStorePriv *priv;
+	EmpathyContactListStorePriv *priv = GET_PRIV (object);
+	GList                       *contacts, *l;
 
-	priv = GET_PRIV (object);
-
-	gtk_tree_model_foreach (GTK_TREE_MODEL (object),
-				(GtkTreeModelForeachFunc) contact_list_store_finalize_foreach,
-				object);
-
-	if (priv->list) {
-		g_signal_handlers_disconnect_by_func (priv->list,
-						      G_CALLBACK (contact_list_store_members_changed_cb),
+	contacts = empathy_contact_list_get_members (priv->list);
+	for (l = contacts; l; l = l->next) {
+		g_signal_handlers_disconnect_by_func (l->data,
+						      G_CALLBACK (contact_list_store_contact_updated_cb),
 						      object);
-		g_signal_handlers_disconnect_by_func (priv->list,
-						      G_CALLBACK (contact_list_store_groups_changed_cb),
-						      object);
-		g_object_unref (priv->list);
+
+		g_object_unref (l->data);
 	}
+	g_list_free (contacts);
+
+	g_signal_handlers_disconnect_by_func (priv->list,
+					      G_CALLBACK (contact_list_store_members_changed_cb),
+					      object);
+	g_signal_handlers_disconnect_by_func (priv->list,
+					      G_CALLBACK (contact_list_store_groups_changed_cb),
+					      object);
+	g_object_unref (priv->list);
 
 	if (priv->inhibit_active) {
 		g_source_remove (priv->inhibit_active);
@@ -723,28 +722,6 @@ empathy_contact_list_store_search_equal_func (GtkTreeModel *model,
 	g_free (key_folded);
 
 	return ret;
-}
-
-static gboolean
-contact_list_store_finalize_foreach (GtkTreeModel *model,
-				     GtkTreePath  *path,
-				     GtkTreeIter  *iter,
-				     gpointer      user_data)
-{
-	EmpathyContactListStore *store = user_data;
-	EmpathyContact          *contact = NULL;
-
-	gtk_tree_model_get (GTK_TREE_MODEL (store), iter,
-			    EMPATHY_CONTACT_LIST_STORE_COL_CONTACT, &contact,
-			    -1);
-
-	if (contact) {
-		g_signal_handlers_disconnect_by_func (contact,
-						      G_CALLBACK (contact_list_store_contact_updated_cb),
-						      store);
-	}
-
-	return FALSE;
 }
 
 static void
