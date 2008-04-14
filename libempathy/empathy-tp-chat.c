@@ -54,6 +54,7 @@ struct _EmpathyTpChatPriv {
 	gboolean               had_properties_list;
 	GPtrArray             *properties;
 	gboolean               ready;
+	guint                  nb_members;
 };
 
 typedef struct {
@@ -121,6 +122,27 @@ tp_chat_member_added_cb (EmpathyTpGroup *group,
 			 const gchar    *message,
 			 EmpathyTpChat  *chat)
 {
+	EmpathyTpChatPriv *priv = GET_PRIV (chat);
+
+	priv->nb_members++;
+	if (priv->nb_members > 2 && priv->remote_contact) {
+		/* We now have more than 2 members, this is not a p2p chat
+		 * anymore. Remove the remote-contact as it makes no sense, the
+		 * EmpathyContactList interface must be used now. */
+		g_object_unref (priv->remote_contact);
+		priv->remote_contact = NULL;
+		g_object_notify (G_OBJECT (chat), "remote-contact");
+	}
+	if (priv->nb_members <= 2 && !priv->remote_contact &&
+	    !empathy_contact_is_user (contact)) {
+		/* This is a p2p chat, if it's not ourself that means this is
+		 * the remote contact with who we are chatting. This is to
+		 * avoid forcing the usage of the EmpathyContactList interface
+		 * for p2p chats. */
+		priv->remote_contact = g_object_ref (contact);
+		g_object_notify (G_OBJECT (chat), "remote-contact");
+	}
+
 	g_signal_emit_by_name (chat, "members-changed",
 			       contact, actor, reason, message,
 			       TRUE);
@@ -134,6 +156,25 @@ tp_chat_member_removed_cb (EmpathyTpGroup *group,
 			   const gchar    *message,
 			   EmpathyTpChat  *chat)
 {
+	EmpathyTpChatPriv *priv = GET_PRIV (chat);
+
+	priv->nb_members--;
+	if (priv->nb_members <= 2 && !priv->remote_contact) {
+		GList *members, *l;
+
+		/* We are not a MUC anymore, get the remote contact back */
+		members = empathy_tp_group_get_members (group);
+		for (l = members; l; l = l->next) {
+			if (!empathy_contact_is_user (l->data)) {
+				priv->remote_contact = g_object_ref (l->data);
+				g_object_notify (G_OBJECT (chat), "remote-contact");
+				break;
+			}
+		}
+		g_list_foreach (members, (GFunc) g_object_unref, NULL);
+		g_list_free (members);
+	}
+
 	g_signal_emit_by_name (chat, "members-changed",
 			       contact, actor, reason, message,
 			       FALSE);
