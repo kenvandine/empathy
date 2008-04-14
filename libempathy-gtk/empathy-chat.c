@@ -79,6 +79,7 @@ struct _EmpathyChatPriv {
 	guint              block_events_timeout_id;
 	TpHandleType       handle_type;
 	gpointer           token;
+	gint               contacts_width;
 
 	GtkWidget         *widget;
 	GtkWidget         *hpaned;
@@ -275,6 +276,7 @@ chat_destroy_cb (EmpathyTpChat *tp_chat,
 	if (priv->tp_chat) {
 		g_object_unref (priv->tp_chat);
 		priv->tp_chat = NULL;
+		g_object_notify (G_OBJECT (chat), "tp-chat");
 	}
 
 	empathy_chat_view_append_event (chat->view, _("Disconnected"));
@@ -1256,6 +1258,26 @@ chat_members_changed_cb (EmpathyTpChat  *tp_chat,
 }
 
 static void
+chat_set_show_contacts (EmpathyChat *chat, gboolean show)
+{
+	EmpathyChatPriv *priv = GET_PRIV (chat);
+
+	if (!priv->scrolled_window_contacts ||
+	    GTK_WIDGET_VISIBLE (priv->scrolled_window_contacts) == show) {
+		return;
+	}
+
+	if (show) {
+		gtk_widget_show (priv->scrolled_window_contacts);
+		gtk_paned_set_position (GTK_PANED (priv->hpaned),
+					priv->contacts_width);
+	} else {
+		priv->contacts_width = gtk_paned_get_position (GTK_PANED (priv->hpaned));
+		gtk_widget_hide (priv->scrolled_window_contacts);
+	}
+}
+
+static void
 chat_remote_contact_changed_cb (EmpathyChat *chat)
 {
 	EmpathyChatPriv *priv = GET_PRIV (chat);
@@ -1269,6 +1291,8 @@ chat_remote_contact_changed_cb (EmpathyChat *chat)
 	if (priv->remote_contact) {
 		g_object_ref (priv->remote_contact);
 	}
+
+	chat_set_show_contacts (chat, priv->remote_contact == NULL);
 
 	g_object_notify (G_OBJECT (chat), "remote-contact");
 }
@@ -1355,6 +1379,9 @@ chat_create_ui (EmpathyChat *chat)
 
 	/* Initialy hide the topic, will be shown if not empty */
 	gtk_widget_hide (priv->hbox_topic);
+
+	/* Show/Hide contact list */
+	chat_set_show_contacts (chat, priv->remote_contact == NULL);
 
 	/* Set widget focus order */
 	list = g_list_append (NULL, priv->scrolled_window_input);
