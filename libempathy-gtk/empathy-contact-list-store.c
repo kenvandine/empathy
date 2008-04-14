@@ -30,6 +30,7 @@
 #include <glib.h>
 #include <gtk/gtk.h>
 
+#include <telepathy-glib/util.h>
 #include <libempathy/empathy-debug.h>
 
 #include "empathy-contact-list-store.h"
@@ -1240,7 +1241,7 @@ contact_list_store_get_group_foreach (GtkTreeModel *model,
 			    EMPATHY_CONTACT_LIST_STORE_COL_IS_GROUP, &is_group,
 			    -1);
 
-	if (is_group && strcmp (str, fg->name) == 0) {
+	if (is_group && !tp_strdiff (str, fg->name)) {
 		fg->found = TRUE;
 		fg->iter = *iter;
 	}
