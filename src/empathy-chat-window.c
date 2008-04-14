@@ -293,16 +293,12 @@ chat_window_update_menu (EmpathyChatWindow *window)
 static const gchar *
 chat_window_get_chat_name (EmpathyChat *chat)
 {
-	EmpathyTpChat  *tp_chat;
 	EmpathyContact *remote_contact = NULL;
 	const gchar    *name = NULL;
 
 	name = empathy_chat_get_name (chat);
 	if (!name) {
-		tp_chat = empathy_chat_get_tp_chat (chat);
-		if (tp_chat) {
-			remote_contact = empathy_tp_chat_get_remote_contact (tp_chat);
-		}
+		remote_contact = empathy_chat_get_remote_contact (chat);
 		if (remote_contact) {
 			name = empathy_contact_get_name (remote_contact);
 		} else {
@@ -344,8 +340,7 @@ chat_window_update_chat (EmpathyChat *chat)
 {
 	EmpathyChatWindow     *window;
 	EmpathyChatWindowPriv *priv;
-	EmpathyTpChat         *tp_chat;
-	EmpathyContact        *remote_contact = NULL;
+	EmpathyContact        *remote_contact;
 	const gchar           *name;
 	const gchar           *subject;
 	GtkWidget             *widget;
@@ -362,10 +357,10 @@ chat_window_update_chat (EmpathyChat *chat)
 	/* Get information */
 	name = chat_window_get_chat_name (chat);
 	subject = empathy_chat_get_subject (chat);
-	tp_chat = empathy_chat_get_tp_chat (chat);
-	if (tp_chat) {
-		remote_contact = empathy_tp_chat_get_remote_contact (tp_chat);
-	}
+	remote_contact = empathy_chat_get_remote_contact (chat);
+
+	empathy_debug (DEBUG_DOMAIN, "Updating chat window, name=%s, subject=%s, "
+		       "remote_contact=%p", name, subject, remote_contact);
 
 	/* Update tab image */
 	if (g_list_find (priv->chats_new_msg, chat)) {
@@ -414,17 +409,13 @@ chat_window_update_chat (EmpathyChat *chat)
 }
 
 static void
-chat_window_remote_contact_notify_cb (EmpathyChat *chat)
+chat_window_chat_notify_cb (EmpathyChat *chat)
 {
-	EmpathyTpChat  *tp_chat;
 	EmpathyContact *old_remote_contact;
 	EmpathyContact *remote_contact = NULL;
 
 	old_remote_contact = g_object_get_data (G_OBJECT (chat), "chat-window-remote-contact");
-	tp_chat = empathy_chat_get_tp_chat (chat);
-	if (tp_chat) {
-		remote_contact = empathy_tp_chat_get_remote_contact (tp_chat);
-	}
+	remote_contact = empathy_chat_get_remote_contact (chat);
 
 	if (old_remote_contact != remote_contact) {
 		/* The remote-contact associated with the chat changed, we need
@@ -443,65 +434,6 @@ chat_window_remote_contact_notify_cb (EmpathyChat *chat)
 
 		g_object_set_data (G_OBJECT (chat), "chat-window-remote-contact",
 				   remote_contact);
-
-		chat_window_update_chat (chat);
-	}
-}
-
-static void
-chat_window_weak_ref_cb (gpointer  data,
-			 GObject  *chat)
-{
-	EmpathyTpChat  *tp_chat;
-	EmpathyContact *remote_contact;
-
-	tp_chat = g_object_get_data (chat, "chat-window-tp-chat");
-	if (tp_chat) {
-		g_signal_handlers_disconnect_by_func (tp_chat,
-						      chat_window_remote_contact_notify_cb,
-						      chat);
-	}
-
-	remote_contact = g_object_get_data (chat, "chat-window-remote-contact");
-	if (remote_contact) {
-		g_signal_handlers_disconnect_by_func (remote_contact,
-						      chat_window_update_chat,
-						      chat);
-	}
-}
-
-static void
-chat_window_chat_notify_cb (EmpathyChat *chat)
-{
-	EmpathyTpChat *tp_chat;
-	EmpathyTpChat *old_tp_chat;
-
-	old_tp_chat = g_object_get_data (G_OBJECT (chat), "chat-window-tp-chat");
-	tp_chat = empathy_chat_get_tp_chat (chat);
-
-	if (old_tp_chat != tp_chat) {
-		/* The TpChat associated with the chat has changed, we need to
-		 * keep track of it's remote-contact if there is one. */
-		if (tp_chat) {
-			g_signal_connect_swapped (tp_chat, "notify::remote-contact",
-						  G_CALLBACK (chat_window_remote_contact_notify_cb),
-						  chat);
-			g_object_weak_ref (G_OBJECT (chat),
-					   chat_window_weak_ref_cb,
-					   NULL);
-		}
-		if (old_tp_chat) {
-			g_signal_handlers_disconnect_by_func (old_tp_chat,
-							      chat_window_remote_contact_notify_cb,
-							      chat);
-		}
-		g_object_set_data (G_OBJECT (chat), "chat-window-tp-chat", tp_chat);
-
-		/* This will call chat_window_update_chat() if the remote-contact
-		 * changed, so we don't have to call it again. That's why we
-		 * return here. */
-		chat_window_remote_contact_notify_cb (chat);
-		return;
 	}
 
 	chat_window_update_chat (chat);
@@ -1000,7 +932,7 @@ chat_window_page_removed_cb (GtkNotebook      *notebook,
 	if (priv->chats == NULL) {
 		g_object_unref (window);
 	} else {
-		chat_window_update_chat (chat);
+		chat_window_update_title (window);
 	}
 }
 
@@ -1410,7 +1342,7 @@ empathy_chat_window_add_chat (EmpathyChatWindow *window,
 	g_signal_connect (chat, "notify::subject",
 			  G_CALLBACK (chat_window_chat_notify_cb),
 			  NULL);
-	g_signal_connect (chat, "notify::tp-chat",
+	g_signal_connect (chat, "notify::remote-contact",
 			  G_CALLBACK (chat_window_chat_notify_cb),
 			  NULL);
 	chat_window_chat_notify_cb (chat);
@@ -1431,7 +1363,8 @@ empathy_chat_window_remove_chat (EmpathyChatWindow *window,
 				 EmpathyChat	   *chat)
 {
 	EmpathyChatWindowPriv *priv;
-	gint                  position;
+	gint                   position;
+	EmpathyContact        *remote_contact;
 
 	g_return_if_fail (window != NULL);
 	g_return_if_fail (EMPATHY_IS_CHAT (chat));
@@ -1441,6 +1374,13 @@ empathy_chat_window_remove_chat (EmpathyChatWindow *window,
 	g_signal_handlers_disconnect_by_func (chat,
 					      chat_window_chat_notify_cb,
 					      NULL);
+	remote_contact = g_object_get_data (G_OBJECT (chat),
+					    "chat-window-remote-contact");
+	if (remote_contact) {
+		g_signal_handlers_disconnect_by_func (remote_contact,
+						      chat_window_update_chat,
+						      chat);
+	}
 
 	position = gtk_notebook_page_num (GTK_NOTEBOOK (priv->notebook),
 					  GTK_WIDGET (chat));

@@ -66,6 +66,7 @@ struct _EmpathyChatPriv {
 	gchar             *id;
 	gchar             *name;
 	gchar             *subject;
+	EmpathyContact    *remote_contact;
 
 	EmpathyLogManager *log_manager;
 	MissionControl    *mc;
@@ -116,6 +117,7 @@ enum {
 	PROP_ID,
 	PROP_NAME,
 	PROP_SUBJECT,
+	PROP_REMOTE_CONTACT,
 };
 
 static guint signals[LAST_SIGNAL] = { 0 };
@@ -145,6 +147,9 @@ chat_get_property (GObject    *object,
 		break;
 	case PROP_SUBJECT:
 		g_value_set_string (value, priv->subject);
+		break;
+	case PROP_REMOTE_CONTACT:
+		g_value_set_object (value, priv->remote_contact);
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
@@ -587,7 +592,12 @@ chat_property_changed_cb (EmpathyTpChat *tp_chat,
 		priv->subject = g_value_dup_string (value);
 		g_object_notify (G_OBJECT (chat), "subject");
 
-		gtk_label_set_text (GTK_LABEL (priv->label_topic), priv->subject);
+		if (G_STR_EMPTY (priv->subject)) {
+			gtk_widget_hide (priv->hbox_topic);
+		} else {
+			gtk_label_set_text (GTK_LABEL (priv->label_topic), priv->subject);
+			gtk_widget_show (priv->hbox_topic);
+		}
 		if (priv->block_events_timeout_id == 0) {
 			gchar *str;
 
@@ -1246,6 +1256,24 @@ chat_members_changed_cb (EmpathyTpChat  *tp_chat,
 }
 
 static void
+chat_remote_contact_changed_cb (EmpathyChat *chat)
+{
+	EmpathyChatPriv *priv = GET_PRIV (chat);
+
+	if (priv->remote_contact) {
+		g_object_unref (priv->remote_contact);
+		priv->remote_contact = NULL;
+	}
+
+	priv->remote_contact = empathy_tp_chat_get_remote_contact (priv->tp_chat);
+	if (priv->remote_contact) {
+		g_object_ref (priv->remote_contact);
+	}
+
+	g_object_notify (G_OBJECT (chat), "remote-contact");
+}
+
+static void
 chat_create_ui (EmpathyChat *chat)
 {
 	EmpathyChatPriv *priv = GET_PRIV (chat);
@@ -1324,6 +1352,9 @@ chat_create_ui (EmpathyChat *chat)
 	gtk_container_add (GTK_CONTAINER (priv->scrolled_window_contacts),
 			   GTK_WIDGET (priv->view));
 	gtk_widget_show (GTK_WIDGET (priv->view));
+
+	/* Initialy hide the topic, will be shown if not empty */
+	gtk_widget_hide (priv->hbox_topic);
 
 	/* Set widget focus order */
 	list = g_list_append (NULL, priv->scrolled_window_input);
@@ -1414,9 +1445,11 @@ chat_finalize (GObject *object)
 	if (priv->tp_chat) {
 		g_object_unref (priv->tp_chat);
 	}
-
 	if (priv->account) {
 		g_object_unref (priv->account);
+	}
+	if (priv->remote_contact) {
+		g_object_unref (priv->remote_contact);
 	}
 
 	if (priv->block_events_timeout_id) {
@@ -1488,6 +1521,13 @@ empathy_chat_class_init (EmpathyChatClass *klass)
 							      "Chat's subject",
 							      "The subject or topic of the chat",
 							      NULL,
+							      G_PARAM_READABLE));
+	g_object_class_install_property (object_class,
+					 PROP_REMOTE_CONTACT,
+					 g_param_spec_object ("remote-contact",
+							      "The remote contact",
+							      "The remote contact is any",
+							      EMPATHY_TYPE_CONTACT,
 							      G_PARAM_READABLE));
 
 	signals[COMPOSING] =
@@ -1609,9 +1649,14 @@ empathy_chat_set_tp_chat (EmpathyChat   *chat,
 	g_signal_connect (tp_chat, "members-changed",
 			  G_CALLBACK (chat_members_changed_cb),
 			  chat);
+	g_signal_connect_swapped (tp_chat, "notify::remote-contact",
+				  G_CALLBACK (chat_remote_contact_changed_cb),
+				  chat);
 	g_signal_connect (tp_chat, "destroy",
 			  G_CALLBACK (chat_destroy_cb),
 			  chat);
+
+	chat_remote_contact_changed_cb (chat);
 
 	if (chat->input_text_view) {
 		gtk_widget_set_sensitive (chat->input_text_view, TRUE);
@@ -1663,6 +1708,16 @@ empathy_chat_get_subject (EmpathyChat *chat)
 	g_return_val_if_fail (EMPATHY_IS_CHAT (chat), NULL);
 
 	return priv->subject;
+}
+
+EmpathyContact *
+empathy_chat_get_remote_contact (EmpathyChat *chat)
+{
+	EmpathyChatPriv *priv = GET_PRIV (chat);
+
+	g_return_val_if_fail (EMPATHY_IS_CHAT (chat), NULL);
+
+	return priv->remote_contact;
 }
 
 void

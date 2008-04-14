@@ -752,9 +752,6 @@ tp_chat_channel_ready_cb (EmpathyTpChat *chat)
 	priv->id = *names;
 	g_free (names);
 
-	priv->ready = TRUE;
-	g_object_notify (G_OBJECT (chat), "ready");
-
 	if (tp_proxy_has_interface_by_id (priv->channel,
 					  TP_IFACE_QUARK_CHANNEL_INTERFACE_GROUP)) {
 		priv->group = empathy_tp_group_new (priv->channel);
@@ -768,6 +765,7 @@ tp_chat_channel_ready_cb (EmpathyTpChat *chat)
 		g_signal_connect (priv->group, "local-pending",
 				  G_CALLBACK (tp_chat_local_pending_cb),
 				  chat);
+		empathy_run_until_ready (priv->group);
 	} else {
 		priv->remote_contact = empathy_contact_factory_get_from_handle (priv->factory,
 										priv->account,
@@ -817,6 +815,9 @@ tp_chat_channel_ready_cb (EmpathyTpChat *chat)
 									   tp_chat_state_changed_cb,
 									   NULL, NULL,
 									   G_OBJECT (chat), NULL);
+
+	priv->ready = TRUE;
+	g_object_notify (G_OBJECT (chat), "ready");
 }
 
 static void
