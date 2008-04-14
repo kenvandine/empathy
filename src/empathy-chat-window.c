@@ -262,34 +262,6 @@ chat_window_create_label (EmpathyChatWindow *window,
 	return hbox;
 }
 
-static void
-chat_window_update_menu (EmpathyChatWindow *window)
-{
-	EmpathyChatWindowPriv *priv;
-	gboolean              first_page;
-	gboolean              last_page;
-	gboolean              is_connected;
-	gint                  num_pages;
-	gint                  page_num;
-
-	priv = GET_PRIV (window);
-
-	/* Notebook pages */
-	page_num = gtk_notebook_get_current_page (GTK_NOTEBOOK (priv->notebook));
-	num_pages = gtk_notebook_get_n_pages (GTK_NOTEBOOK (priv->notebook));
-	first_page = (page_num == 0);
-	last_page = (page_num == (num_pages - 1));
-
-	gtk_widget_set_sensitive (priv->menu_tabs_next, !last_page);
-	gtk_widget_set_sensitive (priv->menu_tabs_prev, !first_page);
-	gtk_widget_set_sensitive (priv->menu_tabs_detach, num_pages > 1);
-	gtk_widget_set_sensitive (priv->menu_tabs_left, !first_page);
-	gtk_widget_set_sensitive (priv->menu_tabs_right, !last_page);
-
-	is_connected = empathy_chat_get_tp_chat (priv->current_chat) != NULL;
-	gtk_widget_set_sensitive (priv->menu_conv_insert_smiley, is_connected);
-}
-
 static const gchar *
 chat_window_get_chat_name (EmpathyChat *chat)
 {
@@ -310,14 +282,37 @@ chat_window_get_chat_name (EmpathyChat *chat)
 }
 
 static void
-chat_window_update_title (EmpathyChatWindow *window)
+chat_window_update (EmpathyChatWindow *window)
 {
 	EmpathyChatWindowPriv *priv = GET_PRIV (window);
+	gboolean               first_page;
+	gboolean               last_page;
+	gboolean               is_connected;
+	gint                   num_pages;
+	gint                   page_num;
 	const gchar           *name;
 	guint                  n_chats;
 
+	/* Get information */
+	page_num = gtk_notebook_get_current_page (GTK_NOTEBOOK (priv->notebook));
+	num_pages = gtk_notebook_get_n_pages (GTK_NOTEBOOK (priv->notebook));
+	first_page = (page_num == 0);
+	last_page = (page_num == (num_pages - 1));
+	is_connected = empathy_chat_get_tp_chat (priv->current_chat) != NULL;
 	name = chat_window_get_chat_name (priv->current_chat);
 	n_chats = g_list_length (priv->chats);
+
+	empathy_debug (DEBUG_DOMAIN, "Update window");
+
+	/* Update menu */
+	gtk_widget_set_sensitive (priv->menu_tabs_next, !last_page);
+	gtk_widget_set_sensitive (priv->menu_tabs_prev, !first_page);
+	gtk_widget_set_sensitive (priv->menu_tabs_detach, num_pages > 1);
+	gtk_widget_set_sensitive (priv->menu_tabs_left, !first_page);
+	gtk_widget_set_sensitive (priv->menu_tabs_right, !last_page);
+	gtk_widget_set_sensitive (priv->menu_conv_insert_smiley, is_connected);
+
+	/* Update window title */
 	if (n_chats == 1) {
 		gtk_window_set_title (GTK_WINDOW (priv->dialog), name);
 	} else {
@@ -327,6 +322,8 @@ chat_window_update_title (EmpathyChatWindow *window)
 		gtk_window_set_title (GTK_WINDOW (priv->dialog), title);
 		g_free (title);
 	}
+
+	/* Update window icon */
 	if (priv->chats_new_msg) {
 		gtk_window_set_icon_name (GTK_WINDOW (priv->dialog),
 					  EMPATHY_IMAGE_MESSAGE);
@@ -336,7 +333,7 @@ chat_window_update_title (EmpathyChatWindow *window)
 }
 
 static void
-chat_window_update_chat (EmpathyChat *chat)
+chat_window_update_chat_tab (EmpathyChat *chat)
 {
 	EmpathyChatWindow     *window;
 	EmpathyChatWindowPriv *priv;
@@ -359,7 +356,7 @@ chat_window_update_chat (EmpathyChat *chat)
 	subject = empathy_chat_get_subject (chat);
 	remote_contact = empathy_chat_get_remote_contact (chat);
 
-	empathy_debug (DEBUG_DOMAIN, "Updating chat window, name=%s, subject=%s, "
+	empathy_debug (DEBUG_DOMAIN, "Updating chat tab, name=%s, subject=%s, "
 		       "remote_contact=%p", name, subject, remote_contact);
 
 	/* Update tab image */
@@ -402,9 +399,9 @@ chat_window_update_chat (EmpathyChat *chat)
 	widget = g_object_get_data (G_OBJECT (chat), "chat-window-tab-label");
 	gtk_label_set_text (GTK_LABEL (widget), name);
 
-	/* Update window title? */
+	/* Update the window if it's the current chat */
 	if (priv->current_chat == chat) {
-		chat_window_update_title (window);
+		chat_window_update (window);
 	}
 }
 
@@ -423,12 +420,12 @@ chat_window_chat_notify_cb (EmpathyChat *chat)
 		 * window each time. */
 		if (remote_contact) {
 			g_signal_connect_swapped (remote_contact, "notify",
-						  G_CALLBACK (chat_window_update_chat),
+						  G_CALLBACK (chat_window_update_chat_tab),
 						  chat);
 		}
 		if (old_remote_contact) {
 			g_signal_handlers_disconnect_by_func (old_remote_contact,
-							      chat_window_update_chat,
+							      chat_window_update_chat_tab,
 							      chat);
 		}
 
@@ -436,7 +433,7 @@ chat_window_chat_notify_cb (EmpathyChat *chat)
 				   remote_contact);
 	}
 
-	chat_window_update_chat (chat);
+	chat_window_update_chat_tab (chat);
 }
 
 static void
@@ -732,7 +729,7 @@ chat_window_composing_cb (EmpathyChat       *chat,
 		priv->chats_composing = g_list_remove (priv->chats_composing, chat);
 	}
 
-	chat_window_update_chat (chat);
+	chat_window_update_chat_tab (chat);
 }
 
 static void
@@ -773,7 +770,7 @@ chat_window_new_message_cb (EmpathyChat       *chat,
 
 	if (!g_list_find (priv->chats_new_msg, chat)) {
 		priv->chats_new_msg = g_list_prepend (priv->chats_new_msg, chat);
-		chat_window_update_chat (chat);
+		chat_window_update_chat_tab (chat);
 	}
 }
 
@@ -832,20 +829,7 @@ chat_window_page_switched_cb (GtkNotebook      *notebook,
 	priv->current_chat = chat;
 	priv->chats_new_msg = g_list_remove (priv->chats_new_msg, chat);
 
-	chat_window_update_menu (window);
-	chat_window_update_title (window);
-}
-
-static void
-chat_window_page_reordered_cb (GtkNotebook      *notebook,
-			       GtkWidget        *widget,
-			       guint             page_num,
-			       EmpathyChatWindow *window)
-{
-	empathy_debug (DEBUG_DOMAIN, "Page reordered");
-	
-	chat_window_update_menu (window);
-	chat_window_update_title (window);
+	chat_window_update_chat_tab (chat);
 }
 
 static void
@@ -889,6 +873,8 @@ chat_window_page_added_cb (GtkNotebook      *notebook,
 
 	/* Get list of chats up to date */
 	priv->chats = g_list_append (priv->chats, chat);
+
+	chat_window_update_chat_tab (chat);
 }
 
 static void
@@ -932,7 +918,7 @@ chat_window_page_removed_cb (GtkNotebook      *notebook,
 	if (priv->chats == NULL) {
 		g_object_unref (window);
 	} else {
-		chat_window_update_title (window);
+		chat_window_update (window);
 	}
 }
 
@@ -952,7 +938,7 @@ chat_window_focus_in_event_cb (GtkWidget        *widget,
 	chat_window_set_urgency_hint (window, FALSE);
 	
 	/* Update the title, since we now mark all unread messages as read. */
-	chat_window_update_chat (priv->current_chat);
+	chat_window_update_chat_tab (priv->current_chat);
 
 	return FALSE;
 }
@@ -1213,10 +1199,6 @@ empathy_chat_window_init (EmpathyChatWindow *window)
 				G_CALLBACK (chat_window_page_switched_cb),
 				window);
 	g_signal_connect (priv->notebook,
-			  "page_reordered",
-			  G_CALLBACK (chat_window_page_reordered_cb),
-			  window);
-	g_signal_connect (priv->notebook,
 			  "page_added",
 			  G_CALLBACK (chat_window_page_added_cb),
 			  window);
@@ -1378,7 +1360,7 @@ empathy_chat_window_remove_chat (EmpathyChatWindow *window,
 					    "chat-window-remote-contact");
 	if (remote_contact) {
 		g_signal_handlers_disconnect_by_func (remote_contact,
-						      chat_window_update_chat,
+						      chat_window_update_chat_tab,
 						      chat);
 	}
 
