@@ -242,6 +242,9 @@ tp_call_request_streams_for_capabilities (EmpathyTpCall *call,
   guint handle;
   guint stream_type;
 
+  if (capabilities == EMPATHY_CAPABILITIES_UNKNOWN)
+      capabilities = EMPATHY_CAPABILITIES_AUDIO | EMPATHY_CAPABILITIES_VIDEO;
+
   empathy_debug (DEBUG_DOMAIN, "Requesting new stream for capabilities %d",
       capabilities);
 
@@ -270,23 +273,9 @@ static void
 tp_call_request_streams (EmpathyTpCall *call)
 {
   EmpathyTpCallPriv *priv = GET_PRIV (call);
-  EmpathyCapabilities capabilities;
-  TpConnection *connection;
 
-  empathy_debug (DEBUG_DOMAIN,
-      "Requesting appropriate audio/video streams from contact");
-
-  /* FIXME: SIP don't have capabilities interface but we know it supports
-   *        only audio and not video. */
-  g_object_get (priv->channel, "connection", &connection, NULL);
-  if (!tp_proxy_has_interface_by_id (connection,
-           TP_IFACE_QUARK_CONNECTION_INTERFACE_CAPABILITIES))
-      capabilities = EMPATHY_CAPABILITIES_AUDIO;
-  else
-      capabilities = empathy_contact_get_capabilities (priv->contact);
-
-  tp_call_request_streams_for_capabilities (call, capabilities);
-  g_object_unref (connection);
+  tp_call_request_streams_for_capabilities (call,
+      empathy_contact_get_capabilities (priv->contact));
 }
 
 static void
@@ -696,7 +685,9 @@ empathy_tp_call_request_video_stream_direction (EmpathyTpCall *call,
 
   if (!priv->video->exists)
     {
-      tp_call_request_streams_for_capabilities (call, EMPATHY_CAPABILITIES_VIDEO);
+      if (is_sending)
+          tp_call_request_streams_for_capabilities (call,
+              EMPATHY_CAPABILITIES_VIDEO);
       return;
     }
 
