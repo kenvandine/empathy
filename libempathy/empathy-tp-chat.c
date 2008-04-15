@@ -731,8 +731,6 @@ tp_chat_channel_ready_cb (EmpathyTpChat *chat)
 	EmpathyTpChatPriv *priv = GET_PRIV (chat);
 	TpConnection      *connection;
 	guint              handle, handle_type;
-	GArray            *handles;
-	gchar            **names;
 
 	empathy_debug (DEBUG_DOMAIN, "Channel ready");
 
@@ -742,15 +740,26 @@ tp_chat_channel_ready_cb (EmpathyTpChat *chat)
 		      "handle_type", &handle_type,
 		      NULL);
 
-	handles = g_array_new (FALSE, FALSE, sizeof (guint));
-	g_array_append_val (handles, handle);
-	tp_cli_connection_run_inspect_handles (connection, -1,
-					       handle_type, handles,
-					       &names, NULL, NULL);
-	g_array_free (handles, TRUE);
+	if (handle_type != TP_HANDLE_TYPE_NONE && handle != 0) {
+		GArray *handles;
+		gchar **names;
 
-	priv->id = *names;
-	g_free (names);
+		handles = g_array_new (FALSE, FALSE, sizeof (guint));
+		g_array_append_val (handles, handle);
+		tp_cli_connection_run_inspect_handles (connection, -1,
+						       handle_type, handles,
+						       &names, NULL, NULL);
+		priv->id = *names;
+		g_array_free (handles, TRUE);
+		g_free (names);
+	}
+
+	if (handle_type == TP_HANDLE_TYPE_CONTACT && handle != 0) {
+		priv->remote_contact = empathy_contact_factory_get_from_handle (priv->factory,
+										priv->account,
+										handle);
+		g_object_notify (G_OBJECT (chat), "remote-contact");
+	}
 
 	if (tp_proxy_has_interface_by_id (priv->channel,
 					  TP_IFACE_QUARK_CHANNEL_INTERFACE_GROUP)) {
@@ -766,11 +775,6 @@ tp_chat_channel_ready_cb (EmpathyTpChat *chat)
 				  G_CALLBACK (tp_chat_local_pending_cb),
 				  chat);
 		empathy_run_until_ready (priv->group);
-	} else {
-		priv->remote_contact = empathy_contact_factory_get_from_handle (priv->factory,
-										priv->account,
-										handle);
-		g_object_notify (G_OBJECT (chat), "remote-contact");
 	}
 	
 	if (tp_proxy_has_interface_by_id (priv->channel,
