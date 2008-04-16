@@ -27,6 +27,7 @@ libempathy_gtk_la_SOURCES =             	\
 	empathy-conf.c				\
 	empathy-theme.c				\
 	empathy-account-widget-irc.c		\
+	empathy-account-widget-sip.c		\
 	empathy-contact-dialogs.c		\
 	empathy-new-message-dialog.c		\
 	empathy-theme-irc.c			\
@@ -73,6 +74,7 @@ libempathy_gtk_headers =			\
 	empathy-conf.h				\
 	empathy-theme.h				\
 	empathy-account-widget-irc.h		\
+	empathy-account-widget-sip.h		\
 	empathy-contact-dialogs.h		\
 	empathy-new-message-dialog.h		\
 	empathy-theme-irc.h			\

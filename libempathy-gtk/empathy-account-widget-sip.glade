@@ -10,38 +10,10 @@
         <child>
           <widget class="GtkTable" id="table1">
             <property name="visible">True</property>
-            <property name="n_rows">3</property>
+            <property name="n_rows">2</property>
             <property name="n_columns">2</property>
             <property name="column_spacing">12</property>
             <property name="row_spacing">6</property>
-            <child>
-              <widget class="GtkEntry" id="entry_registar">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-              </widget>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="right_attach">2</property>
-                <property name="top_attach">2</property>
-                <property name="bottom_attach">3</property>
-                <property name="y_options"></property>
-              </packing>
-            </child>
-            <child>
-              <widget class="GtkLabel" id="label_registar">
-                <property name="visible">True</property>
-                <property name="xalign">0</property>
-                <property name="label" translatable="yes">_Registrar:</property>
-                <property name="use_underline">True</property>
-                <property name="mnemonic_widget">entry_registar</property>
-              </widget>
-              <packing>
-                <property name="top_attach">2</property>
-                <property name="bottom_attach">3</property>
-                <property name="x_options">GTK_FILL</property>
-                <property name="y_options"></property>
-              </packing>
-            </child>
             <child>
               <widget class="GtkLabel" id="label_password">
                 <property name="visible">True</property>
@@ -136,7 +108,7 @@
                 <child>
                   <widget class="GtkTable" id="table_advanced_sip_settings">
                     <property name="visible">True</property>
-                    <property name="n_rows">14</property>
+                    <property name="n_rows">13</property>
                     <property name="n_columns">2</property>
                     <property name="column_spacing">6</property>
                     <property name="row_spacing">6</property>
@@ -352,7 +324,7 @@
                       <widget class="GtkCheckButton" id="checkbutton_discover-binding">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="label" translatable="yes">Discover Binding</property>
+                        <property name="label" translatable="yes" comments="update our user agent's IP address, as in the Contact header URI, based on information reflected by the proxy as per RFC 3581.">Discover Binding</property>
                         <property name="use_underline">True</property>
                         <property name="response_id">0</property>
                         <property name="draw_indicator">True</property>
@@ -369,7 +341,7 @@
                       <widget class="GtkCheckButton" id="checkbutton_discover-stun">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="label" translatable="yes">Discover Stun</property>
+                        <property name="label" translatable="yes" comments="look up the DNS SRV record at the service's domain for the host name of a STUN server.">Discover STUN</property>
                         <property name="use_underline">True</property>
                         <property name="response_id">0</property>
                         <property name="draw_indicator">True</property>
@@ -424,24 +396,7 @@
                         <property name="y_options"></property>
                       </packing>
                     </child>
-                    <child>
-                      <widget class="GtkCheckButton" id="checkbutton_avoid-difficult">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="label" translatable="yes">Avoid Difficult</property>
-                        <property name="use_underline">True</property>
-                        <property name="response_id">0</property>
-                        <property name="draw_indicator">True</property>
-                      </widget>
-                      <packing>
-                        <property name="right_attach">2</property>
-                        <property name="top_attach">13</property>
-                        <property name="bottom_attach">14</property>
-                        <property name="x_options">GTK_FILL</property>
-                        <property name="y_options"></property>
-                      </packing>
-                    </child>
-                    <child>
+		    <child>
                       <widget class="GtkSpinButton" id="spinbutton_local-port">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>

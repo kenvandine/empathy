@@ -46,6 +46,7 @@
 #include "empathy-profile-chooser.h"
 #include "empathy-account-widget.h"
 #include "empathy-account-widget-irc.h"
+#include "empathy-account-widget-sip.h"
 
 #define DEBUG_DOMAIN "AccountDialog"
 

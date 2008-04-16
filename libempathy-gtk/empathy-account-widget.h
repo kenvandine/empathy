@@ -47,7 +47,6 @@ GtkWidget *empathy_account_widget_jabber_new        (McAccount   *account);
 GtkWidget *empathy_account_widget_icq_new           (McAccount   *account);
 GtkWidget *empathy_account_widget_aim_new           (McAccount   *account);
 GtkWidget *empathy_account_widget_yahoo_new         (McAccount   *account);
-GtkWidget *empathy_account_widget_sip_new	    (McAccount   *account);
 GtkWidget *empathy_account_widget_groupwise_new     (McAccount   *account);
 
 G_END_DECLS
