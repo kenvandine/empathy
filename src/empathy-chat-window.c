@@ -957,12 +957,10 @@ chat_window_drag_data_received (GtkWidget        *widget,
 		EmpathyChat           *chat;
 		EmpathyChatWindow     *old_window;
 		McAccount             *account;
-		const gchar           *id = NULL;
+		const gchar           *id;
 		gchar                **strv;
 
-		if (selection) {
-			id = (const gchar*) selection->data;
-		}
+		id = (const gchar*) selection->data;
 
 		empathy_debug (DEBUG_DOMAIN, "DND contact from roster with id:'%s'", id);
 		
@@ -1002,21 +1000,14 @@ chat_window_drag_data_received (GtkWidget        *widget,
 		gtk_drag_finish (context, TRUE, FALSE, time);
 	}
 	else if (info == DND_DRAG_TYPE_TAB) {
-		EmpathyChat        *chat = NULL;
-		EmpathyChatWindow  *old_window;
-		GtkWidget        **child = NULL;
+		EmpathyChat        **chat;
+		EmpathyChatWindow   *old_window = NULL;
 
 		empathy_debug (DEBUG_DOMAIN, "DND tab");
 
-		if (selection) {
-			child = (void*) selection->data;
-		}
+		chat = (void*) selection->data;
+		old_window = chat_window_find_chat (*chat);
 
-		if (child) {
-			chat = EMPATHY_CHAT (child);
-		}
-
-		old_window = chat_window_find_chat (chat);
 		if (old_window) {
 			EmpathyChatWindowPriv *priv;
 
