@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.2 on Fri Apr 11 16:39:53 2008 -->
+<!--Generated with glade3 3.4.2 on Wed Apr 16 12:43:00 2008 -->
 <glade-interface>
   <widget class="GtkWindow" id="window">
     <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
@@ -85,22 +85,29 @@
                     <property name="column_spacing">5</property>
                     <property name="row_spacing">5</property>
                     <child>
-                      <widget class="GtkToggleButton" id="output_mute_button">
+                      <widget class="GtkHScale" id="output_volume_scale">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="receives_default">True</property>
-                        <property name="response_id">0</property>
-                        <property name="active">True</property>
-                        <child>
-                          <widget class="GtkImage" id="image1">
-                            <property name="visible">True</property>
-                            <property name="icon_name">audio-volume-high</property>
-                          </widget>
-                        </child>
+                        <property name="adjustment">90 0 100 1 10 10</property>
+                        <property name="draw_value">False</property>
                       </widget>
                       <packing>
+                        <property name="left_attach">1</property>
+                        <property name="right_attach">2</property>
                         <property name="top_attach">1</property>
                         <property name="bottom_attach">2</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkHScale" id="input_volume_scale">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="adjustment">90 0 100 1 10 10</property>
+                        <property name="draw_value">False</property>
+                      </widget>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="right_attach">2</property>
                       </packing>
                     </child>
                     <child>
@@ -117,31 +124,28 @@
                           </widget>
                         </child>
                       </widget>
-                    </child>
-                    <child>
-                      <widget class="GtkHScale" id="input_volume_scale">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="adjustment">90 0 100 1 10 10</property>
-                        <property name="draw_value">False</property>
-                      </widget>
                       <packing>
-                        <property name="left_attach">1</property>
-                        <property name="right_attach">2</property>
+                        <property name="x_options"></property>
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkHScale" id="output_volume_scale">
+                      <widget class="GtkToggleButton" id="output_mute_button">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="adjustment">90 0 100 1 10 10</property>
-                        <property name="draw_value">False</property>
+                        <property name="receives_default">True</property>
+                        <property name="response_id">0</property>
+                        <property name="active">True</property>
+                        <child>
+                          <widget class="GtkImage" id="image1">
+                            <property name="visible">True</property>
+                            <property name="icon_name">audio-volume-high</property>
+                          </widget>
+                        </child>
                       </widget>
                       <packing>
-                        <property name="left_attach">1</property>
-                        <property name="right_attach">2</property>
                         <property name="top_attach">1</property>
                         <property name="bottom_attach">2</property>
+                        <property name="x_options"></property>
                       </packing>
                     </child>
                   </widget>
