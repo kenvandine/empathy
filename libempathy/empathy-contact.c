@@ -315,19 +315,12 @@ contact_set_property (GObject      *object,
 
 static void
 contact_set_ready_flag (EmpathyContact      *contact,
-			EmpathyContactReady  flag,
-			gboolean             set)
+			EmpathyContactReady  flag)
 {
 	EmpathyContactPriv *priv = GET_PRIV (contact);
-	EmpathyContactReady ready_old = priv->ready;
 
-	if (set) {
+	if (!(priv->ready & flag)) {
 		priv->ready |= flag;
-	} else {
-		priv->ready &= ~flag;
-	}
-
-	if (priv->ready != ready_old) {
 		g_object_notify (G_OBJECT (contact), "ready");
 	}
 }
@@ -375,19 +368,20 @@ empathy_contact_set_id (EmpathyContact *contact,
 
 	priv = GET_PRIV (contact);
 
-	if (!tp_strdiff (id, priv->id)) {
-		return;
+	/* We temporally ref the contact because it could be destroyed
+	 * during the signal emition */
+	g_object_ref (contact);
+	contact_set_ready_flag (contact, EMPATHY_CONTACT_READY_ID);
+	if (tp_strdiff (id, priv->id)) {
+		g_free (priv->id);
+		priv->id = g_strdup (id);
+
+		g_object_notify (G_OBJECT (contact), "id");
+		if (G_STR_EMPTY (priv->name)) {
+			g_object_notify (G_OBJECT (contact), "name");
+		}
 	}
 
-	g_free (priv->id);
-	priv->id = g_strdup (id);
-	g_object_ref (contact);
-	contact_set_ready_flag (contact, EMPATHY_CONTACT_READY_ID,
-				!G_STR_EMPTY (id));
-	g_object_notify (G_OBJECT (contact), "id");
-	if (G_STR_EMPTY (priv->name)) {
-		g_object_notify (G_OBJECT (contact), "name");
-	}
 	g_object_unref (contact);
 }
 
@@ -417,17 +411,13 @@ empathy_contact_set_name (EmpathyContact *contact,
 
 	priv = GET_PRIV (contact);
 
-	if (!tp_strdiff (name, priv->name)) {
-		return;
-	}
-
-	g_free (priv->name);
-	priv->name = g_strdup (name);
-
 	g_object_ref (contact);
-	contact_set_ready_flag (contact, EMPATHY_CONTACT_READY_NAME,
-				name != NULL);
-	g_object_notify (G_OBJECT (contact), "name");
+	contact_set_ready_flag (contact, EMPATHY_CONTACT_READY_NAME);
+	if (tp_strdiff (name, priv->name)) {
+		g_free (priv->name);
+		priv->name = g_strdup (name);
+		g_object_notify (G_OBJECT (contact), "name");
+	}
 	g_object_unref (contact);
 }
 
@@ -587,16 +577,12 @@ empathy_contact_set_handle (EmpathyContact *contact,
 
 	priv = GET_PRIV (contact);
 
-	if (priv->handle == handle) {
-		return;
-	}
-
-	priv->handle = handle;
-
 	g_object_ref (contact);
-	contact_set_ready_flag (contact, EMPATHY_CONTACT_READY_HANDLE,
-				handle != 0);
-	g_object_notify (G_OBJECT (contact), "handle");
+	contact_set_ready_flag (contact, EMPATHY_CONTACT_READY_HANDLE);
+	if (handle != priv->handle) {
+		priv->handle = handle;
+		g_object_notify (G_OBJECT (contact), "handle");
+	}
 	g_object_unref (contact);
 }
 

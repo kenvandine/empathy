@@ -223,6 +223,22 @@ tp_contact_factory_request_aliases_cb (TpConnection *connection,
 	if (error) {
 		empathy_debug (DEBUG_DOMAIN, "Error requesting aliases: %s",
 			      error->message);
+
+		/* If we failed to get alias set it to NULL, like that if
+		 * someone is waiting for the name to be ready it won't wait
+		 * infinitely */
+		while (*handles != 0) {
+			EmpathyContact *contact;
+
+			contact = tp_contact_factory_find_by_handle (
+				(EmpathyTpContactFactory*) tp_factory,
+				*handles);
+			if (contact) {
+				empathy_contact_set_name (contact, NULL);
+			}
+
+			handles++;
+		}
 		return;
 	}
 
@@ -601,7 +617,8 @@ tp_contact_factory_request_everything (EmpathyTpContactFactory *tp_factory,
 	/* FIXME: Sometimes the dbus call timesout because CM takes
 	 * too much time to request all aliases from the server,
 	 * that's why we increase the timeout here. See fd.o bug #14795 */
-	dup_handles = g_memdup (handles->data, handles->len * sizeof (guint));
+	dup_handles = g_malloc0 ((handles->len + 1) * sizeof (guint));
+	g_memmove (dup_handles, handles->data, handles->len * sizeof (guint));
 	tp_cli_connection_interface_aliasing_call_request_aliases (priv->connection,
 								   5*60*1000,
 								   handles,
