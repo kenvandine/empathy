@@ -857,7 +857,7 @@ contact_list_store_add_contact (EmpathyContactListStore *store,
 
 	priv = GET_PRIV (store);
 	
-	if (!(empathy_contact_get_ready (contact) & EMPATHY_CONTACT_READY_ID) ||
+	if (G_STR_EMPTY (empathy_contact_get_name (contact)) ||
 	    (!priv->show_offline && !empathy_contact_is_online (contact))) {
 		return;
 	}
