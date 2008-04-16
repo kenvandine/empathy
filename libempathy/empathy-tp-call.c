@@ -712,7 +712,6 @@ empathy_tp_call_add_preview_video (EmpathyTpCall *call,
   EmpathyTpCallPriv *priv = GET_PRIV (call);
 
   g_return_if_fail (EMPATHY_IS_TP_CALL (call));
-  g_return_if_fail (priv->status != EMPATHY_TP_CALL_STATUS_CLOSED);
 
   empathy_debug (DEBUG_DOMAIN, "Adding preview video");
 
@@ -730,7 +729,6 @@ empathy_tp_call_remove_preview_video (EmpathyTpCall *call,
   EmpathyTpCallPriv *priv = GET_PRIV (call);
 
   g_return_if_fail (EMPATHY_IS_TP_CALL (call));
-  g_return_if_fail (priv->status != EMPATHY_TP_CALL_STATUS_CLOSED);
 
   empathy_debug (DEBUG_DOMAIN, "Removing preview video");
 
