@@ -226,7 +226,7 @@ call_window_output_mute_button_toggled_cb (GtkWidget *button,
 {
   gboolean is_muted;
 
-  is_muted = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button));
+  is_muted = !gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button));
 
   empathy_debug (DEBUG_DOMAIN, "Mute output toggled - %d", is_muted);
 
@@ -239,7 +239,7 @@ call_window_input_mute_button_toggled_cb (GtkWidget *button,
 {
   gboolean is_muted;
 
-  is_muted = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button));
+  is_muted = !gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button));
 
   empathy_debug (DEBUG_DOMAIN, "Mute input toggled - %d", is_muted);
 
