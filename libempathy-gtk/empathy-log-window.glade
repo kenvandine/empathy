@@ -24,7 +24,7 @@
                 <child>
                   <widget class="GtkLabel" id="label628">
                     <property name="visible">True</property>
-                    <property name="label" translatable="yes" comment="Searching *for* something">_For:</property>
+                    <property name="label" translatable="yes" comments="Searching *for* something">_For:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">entry_find</property>
                   </widget>
@@ -172,7 +172,7 @@
         <child>
           <widget class="GtkLabel" id="label595">
             <property name="visible">True</property>
-            <property name="label" translatable="yes" comment="Tab Label">Search</property>
+            <property name="label" translatable="yes" comments="Tab Label">Search</property>
           </widget>
           <packing>
             <property name="type">tab</property>
