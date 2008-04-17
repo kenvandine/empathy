@@ -54,7 +54,7 @@ struct _EmpathyTpChatPriv {
 	gboolean               had_properties_list;
 	GPtrArray             *properties;
 	gboolean               ready;
-	guint                  nb_members;
+	guint                  members_count;
 };
 
 typedef struct {
@@ -124,8 +124,8 @@ tp_chat_member_added_cb (EmpathyTpGroup *group,
 {
 	EmpathyTpChatPriv *priv = GET_PRIV (chat);
 
-	priv->nb_members++;
-	if (priv->nb_members > 2 && priv->remote_contact) {
+	priv->members_count++;
+	if (priv->members_count > 2 && priv->remote_contact) {
 		/* We now have more than 2 members, this is not a p2p chat
 		 * anymore. Remove the remote-contact as it makes no sense, the
 		 * EmpathyContactList interface must be used now. */
@@ -133,7 +133,7 @@ tp_chat_member_added_cb (EmpathyTpGroup *group,
 		priv->remote_contact = NULL;
 		g_object_notify (G_OBJECT (chat), "remote-contact");
 	}
-	if (priv->nb_members <= 2 && !priv->remote_contact &&
+	if (priv->members_count <= 2 && !priv->remote_contact &&
 	    !empathy_contact_is_user (contact)) {
 		/* This is a p2p chat, if it's not ourself that means this is
 		 * the remote contact with who we are chatting. This is to
@@ -158,8 +158,8 @@ tp_chat_member_removed_cb (EmpathyTpGroup *group,
 {
 	EmpathyTpChatPriv *priv = GET_PRIV (chat);
 
-	priv->nb_members--;
-	if (priv->nb_members <= 2 && !priv->remote_contact) {
+	priv->members_count--;
+	if (priv->members_count <= 2 && !priv->remote_contact) {
 		GList *members, *l;
 
 		/* We are not a MUC anymore, get the remote contact back */
@@ -775,6 +775,8 @@ tp_chat_channel_ready_cb (EmpathyTpChat *chat)
 				  G_CALLBACK (tp_chat_local_pending_cb),
 				  chat);
 		empathy_run_until_ready (priv->group);
+	} else {
+		priv->members_count = 2;
 	}
 	
 	if (tp_proxy_has_interface_by_id (priv->channel,
@@ -1144,6 +1146,16 @@ empathy_tp_chat_is_ready (EmpathyTpChat *chat)
 	g_return_val_if_fail (EMPATHY_IS_TP_CHAT (chat), FALSE);
 
 	return priv->ready;
+}
+
+guint
+empathy_tp_chat_get_members_count (EmpathyTpChat *chat)
+{
+	EmpathyTpChatPriv *priv = GET_PRIV (chat);
+
+	g_return_val_if_fail (EMPATHY_IS_TP_CHAT (chat), 0);
+
+	return priv->members_count;
 }
 
 McAccount *

@@ -1754,6 +1754,20 @@ empathy_chat_get_remote_contact (EmpathyChat *chat)
 	return priv->remote_contact;
 }
 
+guint
+empathy_chat_get_members_count (EmpathyChat *chat)
+{
+	EmpathyChatPriv *priv = GET_PRIV (chat);
+
+	g_return_val_if_fail (EMPATHY_IS_CHAT (chat), 0);
+
+	if (priv->tp_chat) {
+		return empathy_tp_chat_get_members_count (priv->tp_chat);
+	}
+
+	return 0;
+}
+
 void
 empathy_chat_clear (EmpathyChat *chat)
 {

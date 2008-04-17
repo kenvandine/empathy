@@ -71,6 +71,7 @@ const gchar *      empathy_chat_get_id               (EmpathyChat   *chat);
 const gchar *      empathy_chat_get_name             (EmpathyChat   *chat);
 const gchar *      empathy_chat_get_subject          (EmpathyChat   *chat);
 EmpathyContact *   empathy_chat_get_remote_contact   (EmpathyChat   *chat);
+guint              empathy_chat_get_members_count    (EmpathyChat   *chat);
 void               empathy_chat_clear                (EmpathyChat   *chat);
 void               empathy_chat_scroll_down          (EmpathyChat   *chat);
 void               empathy_chat_cut                  (EmpathyChat   *chat);

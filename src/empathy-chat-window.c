@@ -757,12 +757,16 @@ chat_window_new_message_cb (EmpathyChat       *chat,
 	priv = GET_PRIV (window);
 
 	has_focus = empathy_chat_window_has_focus (window);
-	
+
 	if (has_focus && priv->current_chat == chat) {
 		return;
 	}
 	
-	needs_urgency = empathy_message_should_highlight (message);
+	if (empathy_chat_get_members_count (chat) > 2) {
+		needs_urgency = empathy_message_should_highlight (message);
+	} else {
+		needs_urgency = TRUE;
+	}
 
 	if (needs_urgency && !has_focus) {
 		chat_window_set_urgency_hint (window, TRUE);
