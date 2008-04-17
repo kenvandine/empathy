@@ -261,7 +261,7 @@ empathy_spell_dialog_show (EmpathyChat  *chat,
 
 	g_object_unref (gui);
 
-	str = g_strdup_printf ("%s:\n<b>%s</b>",
+	str = g_markup_printf_escaped ("%s:\n<b>%s</b>",
 			       _("Suggestions for the word"),
 			       word);
 

@@ -317,7 +317,8 @@ accounts_dialog_update_account (EmpathyAccountsDialog *dialog,
 		gtk_widget_set_tooltip_text (dialog->image_type,
 					     mc_profile_get_display_name (profile));
 
-		text = g_strdup_printf ("<big><b>%s</b></big>", mc_account_get_display_name (account));
+		text = g_markup_printf_escaped ("<big><b>%s</b></big>",
+				mc_account_get_display_name (account));
 		gtk_label_set_markup (GTK_LABEL (dialog->label_name), text);
 		g_free (text);
 	}

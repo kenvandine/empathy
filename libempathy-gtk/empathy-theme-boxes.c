@@ -590,7 +590,7 @@ theme_boxes_maybe_append_header (EmpathyTheme        *theme,
 				 G_CALLBACK (table_size_allocate_cb),
 				 box, 0);
 
-	str = g_strdup_printf ("<b>%s</b>", name);
+	str = g_markup_printf_escaped ("<b>%s</b>", name);
 
 	label1 = g_object_new (GTK_TYPE_LABEL,
 			       "label", str,
