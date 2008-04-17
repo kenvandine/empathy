@@ -378,8 +378,6 @@ main (int argc, char *argv[])
 	gboolean           autoconnect = TRUE;
 	GError            *error = NULL;
 
-	empathy_debug_set_log_file_from_env ();
-
 	bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
 	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
 	textdomain (GETTEXT_PACKAGE);
@@ -392,6 +390,8 @@ main (int argc, char *argv[])
 		empathy_debug (DEBUG_DOMAIN, error->message);
 		return EXIT_FAILURE;
 	}
+
+	empathy_debug_set_log_file_from_env ();
 
 	g_set_application_name (PACKAGE_NAME);
 
