@@ -347,9 +347,9 @@ call_window_update (EmpathyCallWindow *window)
       gboolean sending_video;
 
       if (stream_state == TP_MEDIA_STREAM_STATE_DISCONNECTED)
-          gtk_label_set_text (GTK_LABEL (window->status_label), "Disconnected");
+          gtk_label_set_text (GTK_LABEL (window->status_label), _("Disconnected"));
       if (stream_state == TP_MEDIA_STREAM_STATE_CONNECTING)
-          gtk_label_set_text (GTK_LABEL (window->status_label), "Connecting");
+          gtk_label_set_text (GTK_LABEL (window->status_label), _("Connecting"));
       else if (stream_state == TP_MEDIA_STREAM_STATE_CONNECTED &&
                window->timeout_event_id == 0)
         {
@@ -378,7 +378,7 @@ call_window_update (EmpathyCallWindow *window)
     }
   else if (status == EMPATHY_TP_CALL_STATUS_CLOSED)
     {
-      gtk_label_set_text (GTK_LABEL (window->status_label), "Closed");
+      gtk_label_set_text (GTK_LABEL (window->status_label), _("Closed"));
       gtk_widget_set_sensitive (window->start_call_button, FALSE);
       gtk_widget_set_sensitive (window->end_call_button, FALSE);
       gtk_widget_set_sensitive (window->video_button, FALSE);
@@ -438,7 +438,7 @@ empathy_call_window_new (EmpathyTpCall *call)
   g_object_unref (glade);
 
   /* Output video label */
-  window->output_video_label = g_object_ref (gtk_label_new ("No video output"));
+  window->output_video_label = g_object_ref (gtk_label_new (_("No video output")));
   gtk_container_add (GTK_CONTAINER (window->output_video_frame),
       window->output_video_label);
   gtk_widget_show (window->output_video_label);
