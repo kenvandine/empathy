@@ -60,7 +60,8 @@ account_widget_entry_focus_cb (GtkWidget     *widget,
 		gtk_entry_set_text (GTK_ENTRY (widget), value ? value : "");
 		g_free (value);
 	} else {
-		empathy_debug (DEBUG_DOMAIN, "Setting %s to %s", param_name, str);
+		empathy_debug (DEBUG_DOMAIN, "Setting %s to %s", param_name,
+			       strstr (param_name, "password") ? "***" : str);
 		mc_account_set_param_string (account, param_name, str);
 	}
 
