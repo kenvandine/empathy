@@ -6,6 +6,7 @@ import urllib
 import csv
 import datetime
 from string import Template
+from optparse import OptionParser
 
 username = 'xclaesse'
 upload_server = 'master.gnome.org'
@@ -274,8 +275,25 @@ class Project:
 		self.upload_tarball()
 		print self.get_release_notes()
 
-p = Project()
-#print p.generate_news()
-#p.write_news()
-#p.release()
-#print p.get_release_notes()
+if __name__ == '__main__':
+	p = Project()
+	parser = OptionParser()
+	parser.add_option("-n", "--print-news", action="store_true",\
+		dest="print_news", help="Generate and print news")
+	parser.add_option("-p", "--print-notes", action="store_true",\
+		dest="print_notes", help="Generate and print the release notes")
+	parser.add_option("-w", "--write-news", action="store_true",\
+		dest="write_news", help="Generate and write news into the NEWS file")
+	parser.add_option("-r", "--release", action="store_true",\
+		dest="release", help="Release the tarball")
+
+	(options, args) = parser.parse_args ()
+	if (options.print_news):
+		print p.generate_news ()
+	if (options.print_notes):
+		print p.get_release_notes ()
+	if (options.write_news):
+		p.write_news ()
+	if (options.release):
+		p.release ()
+
