@@ -243,6 +243,7 @@ filter_chat_handle_channel (EmpathyFilter *filter,
 	}
 }
 
+#ifdef HAVE_VOIP
 static void
 filter_call_dispatch (EmpathyFilter *filter,
 		      gpointer       user_data)
@@ -299,6 +300,7 @@ filter_call_handle_channel (EmpathyFilter *filter,
 				  filter);	
 	}
 }
+#endif
 
 static void
 filter_contact_list_subscribe (EmpathyFilter *filter,
@@ -654,9 +656,11 @@ filter_conection_new_channel_cb (TpConnection *connection,
 	if (!tp_strdiff (channel_type, TP_IFACE_CHANNEL_TYPE_TEXT)) {
 		func = filter_chat_handle_channel;
 	}
+#ifdef HAVE_VOIP
 	else if (!tp_strdiff (channel_type, TP_IFACE_CHANNEL_TYPE_STREAMED_MEDIA)) {
 		func = filter_call_handle_channel;
 	}
+#endif
 	else if (!tp_strdiff (channel_type, TP_IFACE_CHANNEL_TYPE_CONTACT_LIST)) {
 		func = filter_contact_list_handle_channel;
 	}
@@ -703,11 +707,33 @@ filter_connection_list_channels_cb (TpConnection    *connection,
 	}
 }
 
+#ifdef HAVE_VOIP
+static void
+filter_connection_advertise_capabilities_cb (TpConnection    *connection,
+					     const GPtrArray *capabilities,
+					     const GError    *error,
+					     gpointer         user_data,
+					     GObject         *filter)
+{
+	if (error) {
+		empathy_debug (DEBUG_DOMAIN, "Error advertising capabilities: %s",
+			       error->message);
+	}
+}
+#endif
+
 static void
 filter_connection_ready_cb (TpConnection  *connection,
 			    gpointer       unused,
 			    EmpathyFilter *filter)
 {
+#ifdef HAVE_VOIP
+	GPtrArray   *capabilities;
+	GType        cap_type;
+	GValue       cap;
+	const gchar *remove = NULL;
+#endif
+
 	empathy_debug (DEBUG_DOMAIN, "Connection ready, accepting new channels");
 
 	tp_cli_connection_connect_to_new_channel (connection,
@@ -718,6 +744,29 @@ filter_connection_ready_cb (TpConnection  *connection,
 					      filter_connection_list_channels_cb,
 					      NULL, NULL,
 					      G_OBJECT (filter));
+
+#ifdef HAVE_VOIP
+	/* Advertise VoIP capabilities */
+	capabilities = g_ptr_array_sized_new (1);
+	cap_type = dbus_g_type_get_struct ("GValueArray", G_TYPE_STRING,
+					   G_TYPE_UINT, G_TYPE_INVALID);
+	g_value_init (&cap, cap_type);
+	g_value_take_boxed (&cap, dbus_g_type_specialized_construct (cap_type));
+	dbus_g_type_struct_set (&cap,
+				0, TP_IFACE_CHANNEL_TYPE_STREAMED_MEDIA,
+				1, TP_CHANNEL_MEDIA_CAPABILITY_AUDIO |
+				   TP_CHANNEL_MEDIA_CAPABILITY_VIDEO |
+				   TP_CHANNEL_MEDIA_CAPABILITY_NAT_TRAVERSAL_STUN  |
+				   TP_CHANNEL_MEDIA_CAPABILITY_NAT_TRAVERSAL_GTALK_P2P,
+				G_MAXUINT);
+	g_ptr_array_add (capabilities, g_value_get_boxed (&cap));
+
+	tp_cli_connection_interface_capabilities_call_advertise_capabilities (
+		connection, -1,
+		capabilities, &remove,
+		filter_connection_advertise_capabilities_cb,
+		NULL, NULL, G_OBJECT (filter));
+#endif
 }
 
 static void
