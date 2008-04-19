@@ -459,7 +459,7 @@ filter_connection_list_channels_cb (TpConnection    *connection,
 			g_value_get_string (g_value_array_get_nth (values, 1)),
 			g_value_get_uint (g_value_array_get_nth (values, 2)),
 			g_value_get_uint (g_value_array_get_nth (values, 3)),
-			FALSE, user_data, filter);
+			TRUE, user_data, filter);
 	}
 }
 
