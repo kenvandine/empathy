@@ -3,7 +3,6 @@ headers
 #include <Python.h>
 #include <pygobject.h>
 #include "empathy-avatar.h"
-#include "empathy-chandler.h"
 #include "empathy-chatroom.h"
 #include "empathy-chatroom-manager.h"
 #include "empathy-contact.h"
@@ -13,7 +12,6 @@ headers
 #include "empathy-contact-manager.h"
 #include "empathy-debug.h"
 #include "empathy-enum-types.h"
-#include "empathy-filter.h"
 #include "empathy-idle.h"
 #include "empathy-irc-network.h"
 #include "empathy-irc-network-manager.h"
