@@ -33,8 +33,9 @@
 #include "empathy-tube-handler.h"
 #include "empathy-tubes.h"
 
-#define DEBUG_DOMAIN "EmpathyTubeHandler"
+#define DEBUG_DOMAIN "TubeHandler"
 
+static void empathy_tube_handler_iface_init (EmpSvcTubeHandlerClass *klass);
 
 enum
 {
@@ -42,7 +43,6 @@ enum
   LAST_SIGNAL
 };
 
-static void empathy_tube_handler_iface_init (EmpSvcTubeHandlerClass *klass);
 static guint signals[LAST_SIGNAL];
 
 G_DEFINE_TYPE_WITH_CODE (EmpathyTubeHandler, empathy_tube_handler,
@@ -99,7 +99,6 @@ empathy_tube_handler_handle_tube_idle_cb (gpointer data)
   return FALSE;
 }
 
-
 static void
 empathy_tube_handler_handle_tube (EmpSvcTubeHandler *self,
                                   const gchar *bus_name,
@@ -111,8 +110,9 @@ empathy_tube_handler_handle_tube (EmpSvcTubeHandler *self,
                                   DBusGMethodInvocation *context)
 {
   EmpathyTubeHandler *thandler = EMPATHY_TUBE_HANDLER (self);
-  IdleData *data = g_slice_new (IdleData);
+  IdleData *data;
 
+  data = g_slice_new (IdleData);
   data->thandler = thandler;
   data->bus_name = g_strdup (bus_name);
   data->connection = g_strdup (connection);
@@ -127,7 +127,6 @@ empathy_tube_handler_handle_tube (EmpSvcTubeHandler *self,
   emp_svc_tube_handler_return_from_handle_tube (context);
 }
 
-
 static void
 empathy_tube_handler_class_init (EmpathyTubeHandlerClass *klass)
 {
@@ -137,7 +136,6 @@ empathy_tube_handler_class_init (EmpathyTubeHandlerClass *klass)
       G_TYPE_NONE, 1, EMPATHY_TYPE_TUBE);
 }
 
-
 static void
 empathy_tube_handler_iface_init (EmpSvcTubeHandlerClass *klass)
 {
@@ -145,12 +143,10 @@ empathy_tube_handler_iface_init (EmpSvcTubeHandlerClass *klass)
       empathy_tube_handler_handle_tube);
 }
 
-
 static void
 empathy_tube_handler_init (EmpathyTubeHandler *thandler)
 {
 }
-
 
 EmpathyTubeHandler *
 empathy_tube_handler_new (const gchar *bus_name,
@@ -182,3 +178,4 @@ empathy_tube_handler_new (const gchar *bus_name,
 
   return thandler;
 }
+
