@@ -1644,21 +1644,16 @@ void
 empathy_chat_set_tp_chat (EmpathyChat   *chat,
 			  EmpathyTpChat *tp_chat)
 {
-	EmpathyChatPriv *priv;
+	EmpathyChatPriv *priv = GET_PRIV (chat);
 
 	g_return_if_fail (EMPATHY_IS_CHAT (chat));
 	g_return_if_fail (EMPATHY_IS_TP_CHAT (tp_chat));
 	g_return_if_fail (empathy_tp_chat_is_ready (tp_chat));
 
-	priv = GET_PRIV (chat);
-
-	if (tp_chat == priv->tp_chat) {
+	if (priv->tp_chat) {
 		return;
 	}
 
-	if (priv->tp_chat) {
-		g_object_unref (priv->tp_chat);
-	}
 	if (priv->account) {
 		g_object_unref (priv->account);
 	}
@@ -1698,6 +1693,9 @@ empathy_chat_set_tp_chat (EmpathyChat   *chat,
 			empathy_chat_view_append_event (chat->view, _("Connected"));
 		}
 	}
+
+	empathy_tp_chat_set_acknowledge (priv->tp_chat, TRUE);
+	empathy_tp_chat_emit_pendings (priv->tp_chat);
 
 	g_object_notify (G_OBJECT (chat), "tp-chat");
 	g_object_notify (G_OBJECT (chat), "id");

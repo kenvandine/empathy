@@ -796,7 +796,7 @@ tp_chat_channel_ready_cb (EmpathyTpChat *chat)
 	}
 
 	tp_cli_channel_type_text_call_list_pending_messages (priv->channel, -1,
-							     priv->acknowledge,
+							     FALSE,
 							     tp_chat_list_pending_messages_cb,
 							     NULL, NULL,
 							     G_OBJECT (chat));
@@ -1075,6 +1075,84 @@ empathy_tp_chat_new (TpChannel *channel,
 			     NULL);
 }
 
+const gchar *
+empathy_tp_chat_get_id (EmpathyTpChat *chat)
+{
+	EmpathyTpChatPriv *priv = GET_PRIV (chat);
+
+	g_return_val_if_fail (EMPATHY_IS_TP_CHAT (chat), NULL);
+	g_return_val_if_fail (priv->ready, NULL);
+
+	return priv->id;
+}
+
+EmpathyContact *
+empathy_tp_chat_get_remote_contact (EmpathyTpChat *chat)
+{
+	EmpathyTpChatPriv *priv = GET_PRIV (chat);
+
+	g_return_val_if_fail (EMPATHY_IS_TP_CHAT (chat), NULL);
+
+	return priv->remote_contact;
+}
+
+McAccount *
+empathy_tp_chat_get_account (EmpathyTpChat *chat)
+{
+	EmpathyTpChatPriv *priv = GET_PRIV (chat);
+
+	g_return_val_if_fail (EMPATHY_IS_TP_CHAT (chat), FALSE);
+
+	return priv->account;
+}
+
+gboolean
+empathy_tp_chat_is_ready (EmpathyTpChat *chat)
+{
+	EmpathyTpChatPriv *priv = GET_PRIV (chat);
+
+	g_return_val_if_fail (EMPATHY_IS_TP_CHAT (chat), FALSE);
+
+	return priv->ready;
+}
+
+guint
+empathy_tp_chat_get_members_count (EmpathyTpChat *chat)
+{
+	EmpathyTpChatPriv *priv = GET_PRIV (chat);
+
+	g_return_val_if_fail (EMPATHY_IS_TP_CHAT (chat), 0);
+
+	return priv->members_count;
+}
+
+void
+empathy_tp_chat_set_acknowledge (EmpathyTpChat *chat,
+				  gboolean      acknowledge)
+{
+	EmpathyTpChatPriv *priv = GET_PRIV (chat);
+
+	g_return_if_fail (EMPATHY_IS_TP_CHAT (chat));
+
+	priv->acknowledge = acknowledge;
+	g_object_notify (G_OBJECT (chat), "acknowledge");
+}
+
+void
+empathy_tp_chat_emit_pendings (EmpathyTpChat *chat)
+{
+	EmpathyTpChatPriv  *priv = GET_PRIV (chat);
+
+	g_return_if_fail (EMPATHY_IS_TP_CHAT (chat));
+	g_return_if_fail (priv->ready);
+
+	tp_cli_channel_type_text_call_list_pending_messages (priv->channel, -1,
+							     FALSE,
+							     tp_chat_list_pending_messages_cb,
+							     NULL, NULL,
+							     G_OBJECT (chat));
+}
+
 void
 empathy_tp_chat_send (EmpathyTpChat *chat,
 		      EmpathyMessage *message)
@@ -1115,56 +1193,5 @@ empathy_tp_chat_set_state (EmpathyTpChat      *chat,
 								 "setting chat state",
 								 NULL,
 								 G_OBJECT (chat));
-}
-
-const gchar *
-empathy_tp_chat_get_id (EmpathyTpChat *chat)
-{
-	EmpathyTpChatPriv *priv = GET_PRIV (chat);
-
-	g_return_val_if_fail (EMPATHY_IS_TP_CHAT (chat), NULL);
-	g_return_val_if_fail (priv->ready, NULL);
-
-	return priv->id;
-}
-
-EmpathyContact *
-empathy_tp_chat_get_remote_contact (EmpathyTpChat *chat)
-{
-	EmpathyTpChatPriv *priv = GET_PRIV (chat);
-
-	g_return_val_if_fail (EMPATHY_IS_TP_CHAT (chat), NULL);
-
-	return priv->remote_contact;
-}
-
-gboolean
-empathy_tp_chat_is_ready (EmpathyTpChat *chat)
-{
-	EmpathyTpChatPriv *priv = GET_PRIV (chat);
-
-	g_return_val_if_fail (EMPATHY_IS_TP_CHAT (chat), FALSE);
-
-	return priv->ready;
-}
-
-guint
-empathy_tp_chat_get_members_count (EmpathyTpChat *chat)
-{
-	EmpathyTpChatPriv *priv = GET_PRIV (chat);
-
-	g_return_val_if_fail (EMPATHY_IS_TP_CHAT (chat), 0);
-
-	return priv->members_count;
-}
-
-McAccount *
-empathy_tp_chat_get_account (EmpathyTpChat *chat)
-{
-	EmpathyTpChatPriv *priv = GET_PRIV (chat);
-
-	g_return_val_if_fail (EMPATHY_IS_TP_CHAT (chat), FALSE);
-
-	return priv->account;
 }
 
