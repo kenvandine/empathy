@@ -33,6 +33,9 @@
 
 #define DEBUG_DOMAIN "TubesChandler"
 
+static GMainLoop *loop = NULL;
+
+
 static void
 async_cb (TpProxy *channel,
           const GError *error,
@@ -166,6 +169,8 @@ channel_invalidated_cb (TpProxy *proxy,
 {
   empathy_debug (DEBUG_DOMAIN, "Channel invalidated: %p", proxy);
   g_hash_table_remove (channels, proxy);
+  if (g_hash_table_size (channels) == 0)
+      g_main_loop_quit (loop);
 }
 
 static void
@@ -245,7 +250,6 @@ int
 main (int argc, char *argv[])
 {
   EmpathyChandler *chandler;
-  GMainLoop *loop;
   GHashTable *channels;
 
   g_type_init ();
