@@ -659,7 +659,8 @@ filter_conection_new_channel_cb (TpConnection *connection,
 	}
 	else if (!tp_strdiff (channel_type, TP_IFACE_CHANNEL_TYPE_CONTACT_LIST)) {
 		func = filter_contact_list_handle_channel;
-	} if (!tp_strdiff (channel_type, TP_IFACE_CHANNEL_TYPE_TUBES)) {
+	}
+	else if (!tp_strdiff (channel_type, TP_IFACE_CHANNEL_TYPE_TUBES)) {
 		func = filter_tubes_handle_channel;
 	} else {
 		empathy_debug (DEBUG_DOMAIN, "Unknown channel type %s",
