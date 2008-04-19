@@ -19,6 +19,8 @@
  *          Elliot Fairweather <elliot.fairweather@collabora.co.uk>
  */
 
+#include <config.h>
+
 #include <dbus/dbus-glib.h>
 
 #include <telepathy-glib/dbus.h>
@@ -29,9 +31,8 @@
 #include <extensions/extensions.h>
 
 #include "empathy-debug.h"
-#include "empathy-tube.h"
+#include "empathy-tp-tube.h"
 #include "empathy-tube-handler.h"
-#include "empathy-tubes.h"
 
 #define DEBUG_DOMAIN "TubeHandler"
 
@@ -61,14 +62,15 @@ typedef struct
 } IdleData;
 
 static gboolean
-empathy_tube_handler_handle_tube_idle_cb (gpointer data)
+tube_handler_handle_tube_idle_cb (gpointer data)
 {
   IdleData *idle_data = data;
   TpConnection *connection;
   TpChannel *channel;
-  EmpathyTubes *tubes;
-  EmpathyTube *tube;
+  EmpathyTpTube *tube;
   static TpDBusDaemon *daemon = NULL;
+
+  empathy_debug (DEBUG_DOMAIN, "New tube to be handled");
 
   if (!daemon)
     daemon = tp_dbus_daemon_new (tp_get_bus ());
@@ -80,15 +82,10 @@ empathy_tube_handler_handle_tube_idle_cb (gpointer data)
       idle_data->handle, NULL);
   tp_channel_run_until_ready (channel, NULL, NULL);
 
-  tubes = empathy_tubes_new (channel);
-  tube = empathy_tubes_get_tube (tubes, idle_data->id);
-
-  empathy_debug (DEBUG_DOMAIN, "New tube to be handled");
-
+  tube = empathy_tp_tube_new (channel, idle_data->id);
   g_signal_emit (idle_data->thandler, signals[NEW_TUBE], 0, tube);
 
   g_object_unref (tube);
-  g_object_unref (tubes);
   g_object_unref (channel);
   g_object_unref (connection);
   g_free (idle_data->bus_name);
@@ -100,14 +97,14 @@ empathy_tube_handler_handle_tube_idle_cb (gpointer data)
 }
 
 static void
-empathy_tube_handler_handle_tube (EmpSvcTubeHandler *self,
-                                  const gchar *bus_name,
-                                  const gchar *connection,
-                                  const gchar *channel,
-                                  guint handle_type,
-                                  guint handle,
-                                  guint id,
-                                  DBusGMethodInvocation *context)
+tube_handler_handle_tube (EmpSvcTubeHandler *self,
+                          const gchar *bus_name,
+                          const gchar *connection,
+                          const gchar *channel,
+                          guint handle_type,
+                          guint handle,
+                          guint id,
+                          DBusGMethodInvocation *context)
 {
   EmpathyTubeHandler *thandler = EMPATHY_TUBE_HANDLER (self);
   IdleData *data;
@@ -121,7 +118,7 @@ empathy_tube_handler_handle_tube (EmpSvcTubeHandler *self,
   data->handle = handle;
   data->id = id;
 
-  g_idle_add_full (G_PRIORITY_HIGH, empathy_tube_handler_handle_tube_idle_cb,
+  g_idle_add_full (G_PRIORITY_HIGH, tube_handler_handle_tube_idle_cb,
       data, NULL);
 
   emp_svc_tube_handler_return_from_handle_tube (context);
@@ -133,14 +130,14 @@ empathy_tube_handler_class_init (EmpathyTubeHandlerClass *klass)
   signals[NEW_TUBE] =
       g_signal_new ("new-tube", G_OBJECT_CLASS_TYPE (klass),
       G_SIGNAL_RUN_LAST, 0, NULL, NULL, g_cclosure_marshal_VOID__OBJECT,
-      G_TYPE_NONE, 1, EMPATHY_TYPE_TUBE);
+      G_TYPE_NONE, 1, EMPATHY_TYPE_TP_TUBE);
 }
 
 static void
 empathy_tube_handler_iface_init (EmpSvcTubeHandlerClass *klass)
 {
   emp_svc_tube_handler_implement_handle_tube (klass,
-      empathy_tube_handler_handle_tube);
+      tube_handler_handle_tube);
 }
 
 static void

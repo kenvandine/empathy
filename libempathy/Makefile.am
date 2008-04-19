@@ -35,13 +35,12 @@ libempathy_la_SOURCES =					\
 	empathy-tp-chat.c				\
 	empathy-tp-roomlist.c				\
 	empathy-tp-call.c				\
+	empathy-tp-tube.c				\
 	empathy-idle.c					\
 	empathy-log-manager.c				\
 	empathy-irc-network-manager.c			\
 	empathy-irc-network.c				\
 	empathy-irc-server.c				\
-	empathy-tubes.c					\
-	empathy-tube.c					\
 	empathy-tube-handler.c
 
 # do not distribute generated files
@@ -76,13 +75,12 @@ libempathy_headers =				\
 	empathy-tp-chat.h			\
 	empathy-tp-roomlist.h			\
 	empathy-tp-call.h			\
+	empathy-tp-tube.h			\
 	empathy-idle.h				\
 	empathy-log-manager.h			\
 	empathy-irc-network-manager.h		\
 	empathy-irc-network.h			\
 	empathy-irc-server.h			\
-	empathy-tubes.h				\
-	empathy-tube.h				\
 	empathy-tube-handler.h
 
 libempathy_includedir = $(includedir)/libempathy/

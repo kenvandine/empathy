@@ -18,6 +18,7 @@
  *  Authors: Elliot Fairweather <elliot.fairweather@collabora.co.uk>
  */
 
+#include <config.h>
 
 #include <telepathy-glib/channel.h>
 #include <telepathy-glib/connection.h>
@@ -32,7 +33,7 @@
 #include <libempathy/empathy-tubes.h>
 #include <libempathy/empathy-utils.h>
 
-#define DEBUG_DOMAIN "EmpathyTubesChandler"
+#define DEBUG_DOMAIN "TubesChandler"
 
 static void
 empathy_tubes_chandler_async_cb (TpProxy *proxy,
