@@ -273,12 +273,10 @@ chat_window_get_chat_name (EmpathyChat *chat)
 		remote_contact = empathy_chat_get_remote_contact (chat);
 		if (remote_contact) {
 			name = empathy_contact_get_name (remote_contact);
-		} else {
-			name = _("Conversation");
 		}
 	}
 
-	return name;
+	return name ? name : _("Conversation");
 }
 
 static void
