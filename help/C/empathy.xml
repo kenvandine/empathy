@@ -3,7 +3,7 @@
 "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
 <!ENTITY legal SYSTEM "legal.xml">
 <!ENTITY appversion "2.24">
-<!ENTITY manrevision "1.0">
+<!ENTITY manrevision "2.0">
 <!ENTITY date "April 2008">
 <!ENTITY app "<application>Empathy</application>">
 <!ENTITY appname "Empathy">
@@ -55,7 +55,19 @@
 	</affiliation> 
       </author> 
     </authorgroup>
-    
+
+<!-- According to GNU FDL, revision history is mandatory if you are -->
+<!-- modifying/reusing someone else's document.  If not, you can omit it. -->
+<!-- Remember to remove the &manrevision; entity from the revision -->
+<!-- entries other than the current revision. -->
+<!-- The revision numbering system for GNOME manuals is as follows: -->
+<!-- * the revision number consists of two components -->
+<!-- * the first component of the revision number reflects the release version of the GNOME desktop. -->
+<!-- * the second component of the revision number is a decimal unit that is incremented with each revision of the manual. -->
+<!-- For example, if the GNOME desktop release is V2.x, the first version of the manual that -->
+<!-- is written in that desktop timeframe is V2.0, the second version of the manual is V2.1, etc. -->
+<!-- When the desktop release version changes to V3.x, the revision number of the manual changes -->
+<!-- to V3.0, and so on. -->
     <revhistory>
       <revision> 
 	<revnumber>Empathy Manual V&manrevision;</revnumber> 
@@ -106,13 +118,180 @@
   <sect1 id="empathy-intro">
     <title>Introduction</title>
     <para>
+      &app; is a multi-protocol instant messaging program for the
+      GNOME Desktop that allows you to keep in touch with your friends
+      over a network.
+    </para>
+    <para>
+      It supports the following protocols:
+      <itemizedlist>
+	<listitem>
+	  <para>
+	    <acronym>AIM</acronym>
+	  </para>
+	</listitem>
+	<listitem>
+	  <para>
+	    Google Talk
+	  </para>
+	</listitem>
+	<listitem>
+	  <para>
+	    ICQ
+	  </para>
+	</listitem>
+	<listitem>
+	  <para>
+	    <acronym>IRC</acronym>
+	  </para>
+	</listitem>
+	<listitem>
+	  <para>
+	    Jabber
+	  </para>
+	</listitem>
+	<listitem>
+	  <para>
+	    <acronym>MSN</acronym>
+	  </para>
+	</listitem>
+	<listitem>
+	  <para>
+	    Salut
+	  </para>
+	</listitem>
+	<listitem>
+	  <para>
+	    Yahoo
+	  </para>
+	</listitem>
+      </itemizedlist>
     </para>
   </sect1>
 
   <sect1 id="empathy-getting-started">
     <title>Getting Started</title>
-    <para>
-    </para>
+
+    <sect2 id="empathy-starting">
+      <title>To Start &appname;</title>
+      <para>You can start &app; in the following ways:
+      </para> 
+      <variablelist>
+    	<varlistentry>
+	  <term><guimenu>Applications</guimenu> menu</term>
+	  <listitem>
+	    <para>Choose 
+	      <menuchoice>
+		<guisubmenu>Internet</guisubmenu>
+		<guimenuitem>Empathy Instant Messenger</guimenuitem>
+	      </menuchoice>.
+	    </para>
+	  </listitem>
+    	</varlistentry>
+    	<varlistentry>
+	  <term>Command line</term>
+	  <listitem>
+	    <para>Type <command>empathy</command> and then press
+	      <keycap>Return</keycap>.
+	    </para>
+	  </listitem>
+    	</varlistentry>
+      </variablelist>
+    </sect2>
+
+    <sect2 id="emphaty-when-start">
+      <title>When you start &appname;</title>
+      <para>
+	When you start &app; the following window is displayed.
+	<!-- Figure -->
+	<!-- 
+	Commented out, need to find a solution on how to
+	structure this section.
+	<figure id="empathy-mainwindow"> 
+	  <title>&app; Main Window</title> 
+	  <screenshot> 
+	    <mediaobject> 
+	      <imageobject>
+		<imagedata fileref="figures/empathy-main-window.png" format="PNG"/> 
+	      </imageobject>
+	      <textobject> 
+		<phrase>
+		  Shows &app; main window. Contains the	titlebar, the
+		  menubar, contact list, status icon and status arrow
+		  button list.
+		</phrase> 
+	      </textobject> 
+	    </mediaobject> 
+	  </screenshot> 
+	</figure>
+	-->
+	<!-- End of Figure -->
+      </para>
+      <para>
+	<xref linkend="empathy-TBL-1"/> describes the components of a browser window.
+	<table frame="topbot" id="empathy-TBL-1">
+	  <title>&app; Main Components</title>
+	  <tgroup cols="2" colsep="0" rowsep="0">
+	    <colspec colname="colspec0" colwidth="29.39*"/>
+	    <colspec colname="colspec1" colwidth="70.61*"/>
+	    <thead>
+	      <row rowsep="1">
+		<entry valign="top">
+		  <para>Component</para>
+		</entry>
+		<entry valign="top">
+		  <para>Description</para>
+		</entry>
+	      </row>
+	    </thead>
+	    <tbody>
+	      <row>
+		<entry valign="top">
+		  <para>Menubar</para>
+		</entry>
+		<entry valign="top">
+		  <para>
+		    Contains menus used to perform actions in &app;.
+		  </para>
+		</entry>
+	      </row>
+	      <row>
+		<entry valign="top">
+		  <para>Status Drop-Down List</para>
+		</entry>
+		<entry valign="top">
+		  <para>
+		    Allows to update the user's status.
+		  </para>
+		</entry>
+	      </row>
+	      <row>
+		<entry valign="top">
+		  <para>Account Button</para>
+		</entry>
+		<entry valign="top">
+		  <para>
+		    Opens the <guilabel>Accounts</guilabel> dialog.
+		  </para>
+		</entry>
+	      </row>
+	      <row>
+		<entry valign="top">
+		  <para>Contact List</para>
+		</entry>
+		<entry valign="top">
+		  <para>
+		    Shows all the available contacts and their
+		    associated status.
+		  </para>
+		</entry>
+	      </row>
+	    </tbody>
+	  </tgroup>
+	</table>
+      </para>
+    </sect2>
+
   </sect1>
 
 </article>
