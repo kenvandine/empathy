@@ -376,7 +376,15 @@ main (int argc, char *argv[])
 	EmpathyIdle       *idle;
 	EmpathyChandler   *chandler;
 	gboolean           autoconnect = TRUE;
+	gboolean           no_connect = FALSE; 
 	GError            *error = NULL;
+	GOptionEntry       options[] = {
+		{ "no-connect", 'n',
+		  0, G_OPTION_ARG_NONE, &no_connect,
+		  N_("Don't connect on startup"),
+		  NULL },
+		{ NULL }
+	};
 
 	bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
 	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
@@ -386,7 +394,7 @@ main (int argc, char *argv[])
 
 	if (!gtk_init_with_args (&argc, &argv,
 				 _("- Empathy Instant Messenger"),
-				 NULL, GETTEXT_PACKAGE, &error)) {
+				 options, GETTEXT_PACKAGE, &error)) {
 		empathy_debug (DEBUG_DOMAIN, error->message);
 		return EXIT_FAILURE;
 	}
@@ -444,7 +452,7 @@ main (int argc, char *argv[])
 	empathy_conf_get_bool (empathy_conf_get(),
 			       EMPATHY_PREFS_AUTOCONNECT,
 			       &autoconnect);
-	if (autoconnect &&
+	if (autoconnect && ! no_connect &&
 	    empathy_idle_get_state (idle) <= MC_PRESENCE_OFFLINE) {
 		empathy_idle_set_state (idle, MC_PRESENCE_AVAILABLE);
 	}
