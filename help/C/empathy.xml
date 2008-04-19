@@ -30,7 +30,7 @@
     &legal;
     
     <authorgroup> 
-      <author> 
+      <author role="maintainer"> 
 	<firstname>Milo</firstname> 
 	<surname>Casagrande</surname> 
 	<affiliation> 
