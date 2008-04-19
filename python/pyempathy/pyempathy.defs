@@ -1,12 +1,5 @@
 ;; -*- scheme -*-
 ; object definitions ...
-(define-object Chandler
-  (in-module "Empathy")
-  (parent "GObject")
-  (c-name "EmpathyChandler")
-  (gtype-id "EMPATHY_TYPE_CHANDLER")
-)
-
 (define-object Chatroom
   (in-module "Empathy")
   (parent "GObject")
@@ -47,13 +40,6 @@
   (implements "EmpathyContactList")
   (c-name "EmpathyContactManager")
   (gtype-id "EMPATHY_TYPE_CONTACT_MANAGER")
-)
-
-(define-object Filter
-  (in-module "Empathy")
-  (parent "GObject")
-  (c-name "EmpathyFilter")
-  (gtype-id "EMPATHY_TYPE_FILTER")
 )
 
 (define-object Idle
@@ -1623,6 +1609,21 @@
   (return-type "guint")
 )
 
+(define-method set_acknowledge
+  (of-object "EmpathyTpChat")
+  (c-name "empathy_tp_chat_set_acknowledge")
+  (return-type "none")
+  (parameters
+    '("gboolean" "acknowledge")
+  )
+)
+
+(define-method emit_pendings
+  (of-object "EmpathyTpChat")
+  (c-name "empathy_tp_chat_emit_pendings")
+  (return-type "none")
+)
+
 (define-method send
   (of-object "EmpathyTpChat")
   (c-name "empathy_tp_chat_send")
@@ -1821,57 +1822,6 @@
   (parameters
     '("gchar**" "hostname")
     '("guint*" "port")
-  )
-)
-
-
-
-;; From empathy-chandler.h
-
-(define-function empathy_chandler_get_type
-  (c-name "empathy_chandler_get_type")
-  (return-type "GType")
-)
-
-(define-function empathy_chandler_new
-  (c-name "empathy_chandler_new")
-  (is-constructor-of "EmpathyChandler")
-  (return-type "EmpathyChandler*")
-  (parameters
-    '("const-gchar*" "bus_name")
-    '("const-gchar*" "object_path")
-  )
-)
-
-
-
-;; From empathy-filter.h
-
-(define-function empathy_filter_get_type
-  (c-name "empathy_filter_get_type")
-  (return-type "GType")
-)
-
-(define-function empathy_filter_new
-  (c-name "empathy_filter_new")
-  (is-constructor-of "EmpathyFilter")
-  (return-type "EmpathyFilter*")
-  (parameters
-    '("const-gchar*" "bus_name")
-    '("const-gchar*" "object_path")
-    '("const-gchar*" "channel_type")
-    '("guint" "priority")
-    '("guint" "flags")
-  )
-)
-
-(define-method process
-  (of-object "EmpathyFilter")
-  (c-name "empathy_filter_process")
-  (return-type "none")
-  (parameters
-    '("TpChannel*" "channel")
-    '("gboolean" "process")
   )
 )
 

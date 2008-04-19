@@ -24,8 +24,6 @@ python /usr/share/pygtk/2.0/codegen/h2def.py	\
 	empathy-tp-roomlist.h			\
 	empathy-tp-call.h			\
 	empathy-tp-tube.h			\
-	empathy-chandler.h			\
-	empathy-filter.h			\
 	empathy-idle.h				\
 	empathy-log-manager.h			\
 	empathy-irc-network-manager.h		\
