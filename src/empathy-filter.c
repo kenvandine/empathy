@@ -730,7 +730,7 @@ filter_connection_ready_cb (TpConnection  *connection,
 #ifdef HAVE_VOIP
 	GPtrArray   *capabilities;
 	GType        cap_type;
-	GValue       cap;
+	GValue       cap = {0, };
 	const gchar *remove = NULL;
 #endif
 
