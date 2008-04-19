@@ -15,6 +15,7 @@ Makefile
 *~
 *.pyc
 *.loT
+.semanticache
 
 ChangeLog
 stamp-h1
