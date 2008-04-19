@@ -6,7 +6,5 @@
 
 <xi:include href="Stream_Engine.xml"/>
 <xi:include href="Channel_Handler.xml"/>
-<xi:include href="Chandler.xml"/>
-<xi:include href="Filter.xml"/>
 
 </tp:spec>

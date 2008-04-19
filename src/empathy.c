@@ -33,90 +33,22 @@
 #include <libebook/e-book.h>
 
 #include <telepathy-glib/util.h>
-#include <telepathy-glib/channel.h>
-#include <telepathy-glib/connection.h>
 #include <libmissioncontrol/mc-account.h>
 #include <libmissioncontrol/mission-control.h>
 
 #include <libempathy/empathy-idle.h>
-#include <libempathy/empathy-tp-chat.h>
-#include <libempathy/empathy-chandler.h>
 #include <libempathy/empathy-utils.h>
 #include <libempathy/empathy-debug.h>
 
 #include <libempathy-gtk/empathy-conf.h>
-#include <libempathy-gtk/empathy-chat.h>
 
 #include "empathy-main-window.h"
 #include "empathy-status-icon.h"
-#include "empathy-chat-window.h"
 #include "bacon-message-connection.h"
 
 #define DEBUG_DOMAIN "EmpathyMain"
-#define BUS_NAME "org.gnome.Empathy.ChatChandler"
-#define OBJECT_PATH "/org/gnome/Empathy/ChatChandler"
 
 static BaconMessageConnection *connection = NULL;
-
-static void
-new_text_channel_cb (EmpathyChandler *chandler,
-		     TpChannel       *channel,
-		     MissionControl  *mc)
-{
-	EmpathyTpChat *tp_chat;
-	TpConnection  *connection;
-	guint          handle_type;
-	guint          handle;
-	gchar        **names;
-	McAccount     *account;
-	EmpathyChat   *chat;
-	gchar         *id;
-	GArray        *handles;
-
-	g_object_get (channel,
-		      "connection", &connection,
-		      "handle-type", &handle_type,
-		      "handle", &handle,
-		      NULL);
-	handles = g_array_new (FALSE, FALSE, sizeof (guint));
-	g_array_append_val (handles, handle);
-	tp_cli_connection_run_inspect_handles (connection, -1,
-					       handle_type, handles,
-					       &names,
-					       NULL, NULL);
-	id = *names;
-	g_free (names);
-	g_object_unref (connection);
-	g_array_free (handles, TRUE);
-
-	account = empathy_channel_get_account (channel);
-	chat = empathy_chat_window_find_chat (account, id);
-	g_free (id);
-
-	if (chat) {
-		/* The chat already exists */
-		if (!empathy_chat_get_tp_chat (chat)) {
-			/* The chat died, give him the new text channel */
-			tp_chat = empathy_tp_chat_new (channel, TRUE);
-			empathy_run_until_ready (tp_chat);
-			empathy_chat_set_tp_chat (chat, tp_chat);
-			g_object_unref (tp_chat);
-		}
-		empathy_chat_window_present_chat (chat);
-
-		g_object_unref (account);
-		return;
-	}
-
-	tp_chat = empathy_tp_chat_new (channel, TRUE);
-	empathy_run_until_ready (tp_chat);
-
-	chat = empathy_chat_new (tp_chat);
-	empathy_chat_window_present_chat (chat);
-
-	g_object_unref (account);
-	g_object_unref (tp_chat);
-}
 
 static void
 service_ended_cb (MissionControl *mc,
@@ -374,7 +306,6 @@ main (int argc, char *argv[])
 	GtkWidget         *window;
 	MissionControl    *mc;
 	EmpathyIdle       *idle;
-	EmpathyChandler   *chandler;
 	gboolean           autoconnect = TRUE;
 	gboolean           no_connect = FALSE; 
 	GError            *error = NULL;
@@ -470,18 +401,10 @@ main (int argc, char *argv[])
 						       window);
 	}
 
-	/* Handle text channels */
-	chandler = empathy_chandler_new (BUS_NAME, OBJECT_PATH);
-	g_signal_connect (chandler, "new-channel",
-			  G_CALLBACK (new_text_channel_cb),
-			  mc);
-	empathy_debug (DEBUG_DOMAIN, "Ready to handle new text channels");
-
 	gtk_main ();
 
 	empathy_idle_set_state (idle, MC_PRESENCE_OFFLINE);
 
-	g_object_unref (chandler);
 	g_object_unref (mc);
 	g_object_unref (idle);
 	g_object_unref (icon);

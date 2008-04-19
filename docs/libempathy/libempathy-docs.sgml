@@ -26,7 +26,6 @@
       <xi:include href="xml/empathy-contact-manager.xml"/>
       <xi:include href="xml/empathy-contact.xml"/>
       <xi:include href="xml/empathy-enum-types.xml"/>
-      <xi:include href="xml/empathy-filter.xml"/>
       <xi:include href="xml/empathy-idle.xml"/>
       <xi:include href="xml/empathy-irc-server.xml"/>
       <xi:include href="xml/empathy-irc-network.xml"/>

@@ -353,21 +353,19 @@ empathy_call_with_contact (EmpathyContact *contact)
 
 	g_return_if_fail (EMPATHY_IS_CONTACT (contact));
 
-	/* StreamedMedia channels must have handle=0 and handle_type=none.
-	 * To call a contact we have to add him in the group interface of the
-	 * channel. MissionControl will detect the channel creation and 
-	 * dispatch it to the VoIP chandler automatically. */
-
 	mc = empathy_mission_control_new ();
 	account = empathy_contact_get_account (contact);
 	connection = mission_control_get_tpconnection (mc, account, NULL);
 	tp_connection_run_until_ready (connection, FALSE, NULL, NULL);
+	g_object_unref (mc);
 
+	/* We abuse of suppress_handler, TRUE means OUTGOING. The channel
+	 * will be catched in EmpathyFilter */
 	if (!tp_cli_connection_run_request_channel (connection, -1,
 						    TP_IFACE_CHANNEL_TYPE_STREAMED_MEDIA,
 						    TP_HANDLE_TYPE_NONE,
 						    0,
-						    FALSE,
+						    TRUE,
 						    &object_path,
 						    &error,
 						    NULL)) {
@@ -375,7 +373,6 @@ empathy_call_with_contact (EmpathyContact *contact)
 			      "Couldn't request channel: %s",
 			      error ? error->message : "No error given");
 		g_clear_error (&error);
-		g_object_unref (mc);
 		g_object_unref (connection);
 		return;
 	}
@@ -399,7 +396,6 @@ empathy_call_with_contact (EmpathyContact *contact)
 	g_object_unref (factory);
 	g_object_unref (self_contact);
 	g_object_unref (group);
-	g_object_unref (mc);
 	g_object_unref (connection);
 	g_object_unref (channel);
 	g_free (object_path);
@@ -427,31 +423,43 @@ empathy_call_with_contact_id (McAccount *account, const gchar *contact_id)
 void
 empathy_chat_with_contact (EmpathyContact  *contact)
 {
-	MissionControl *mc;
+	MissionControl        *mc;
+	McAccount             *account;
+	TpConnection          *connection;
+
+	g_return_if_fail (EMPATHY_IS_CONTACT (contact));
 
 	mc = empathy_mission_control_new ();
-	mission_control_request_channel (mc,
-					 empathy_contact_get_account (contact),
-					 TP_IFACE_CHANNEL_TYPE_TEXT,
-					 empathy_contact_get_handle (contact),
-					 TP_HANDLE_TYPE_CONTACT,
-					 NULL, NULL);
+	account = empathy_contact_get_account (contact);
+	connection = mission_control_get_tpconnection (mc, account, NULL);
+	tp_connection_run_until_ready (connection, FALSE, NULL, NULL);
 	g_object_unref (mc);
+
+	/* We abuse of suppress_handler, TRUE means OUTGOING. The channel
+	 * will be catched in EmpathyFilter */
+	tp_cli_connection_call_request_channel (connection, -1,
+						TP_IFACE_CHANNEL_TYPE_TEXT,
+						TP_HANDLE_TYPE_CONTACT,
+						empathy_contact_get_handle (contact),
+						TRUE,
+						NULL, NULL, NULL, NULL);
+	g_object_unref (connection);
 }
 
 void
 empathy_chat_with_contact_id (McAccount *account, const gchar *contact_id)
 {
-	MissionControl *mc;
+	EmpathyContactFactory *factory;
+	EmpathyContact        *contact;
 
-	mc = empathy_mission_control_new ();
-	mission_control_request_channel_with_string_handle (mc,
-							    account,
-							    TP_IFACE_CHANNEL_TYPE_TEXT,
-							    contact_id,
-							    TP_HANDLE_TYPE_CONTACT,
-							    NULL, NULL);
-	g_object_unref (mc);
+	factory = empathy_contact_factory_new ();
+	contact = empathy_contact_factory_get_from_id (factory, account, contact_id);
+	empathy_contact_run_until_ready (contact, EMPATHY_CONTACT_READY_HANDLE, NULL);
+
+	empathy_chat_with_contact (contact);
+
+	g_object_unref (contact);
+	g_object_unref (factory);
 }
 
 const gchar *

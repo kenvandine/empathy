@@ -10,9 +10,7 @@ EXTRA_DIST = \
     all.xml \
     misc.xml \
     Channel_Handler.xml \
-    Stream_Engine.xml \
-    Chandler.xml \
-    Filter.xml
+    Stream_Engine.xml
 
 noinst_LTLIBRARIES = libemp-extensions.la
 

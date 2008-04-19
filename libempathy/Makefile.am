@@ -35,8 +35,6 @@ libempathy_la_SOURCES =					\
 	empathy-tp-chat.c				\
 	empathy-tp-roomlist.c				\
 	empathy-tp-call.c				\
-	empathy-chandler.c				\
-	empathy-filter.c				\
 	empathy-idle.c					\
 	empathy-log-manager.c				\
 	empathy-irc-network-manager.c			\
@@ -75,8 +73,6 @@ libempathy_headers =				\
 	empathy-tp-chat.h			\
 	empathy-tp-roomlist.h			\
 	empathy-tp-call.h			\
-	empathy-chandler.h			\
-	empathy-filter.h			\
 	empathy-idle.h				\
 	empathy-log-manager.h			\
 	empathy-irc-network-manager.h		\
