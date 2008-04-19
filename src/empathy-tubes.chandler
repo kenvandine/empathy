@@ -1,0 +1,4 @@
+[ChannelHandler]
+BusName = org.gnome.Empathy.TubesChandler
+ObjectPath = /org/gnome/Empathy/TubesChandler
+ChannelType = org.freedesktop.Telepathy.Channel.Type.Tubes
