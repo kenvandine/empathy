@@ -29,15 +29,20 @@
 #include <telepathy-glib/channel.h>
 #include <telepathy-glib/connection.h>
 #include <telepathy-glib/util.h>
+#include <telepathy-glib/dbus.h>
+#include <telepathy-glib/proxy-subclass.h>
 
 #include <libmissioncontrol/mission-control.h>
 #include <libmissioncontrol/mc-account.h>
+
+#include <extensions/extensions.h>
 
 #include <libempathy/empathy-tp-chat.h>
 #include <libempathy/empathy-tp-call.h>
 #include <libempathy/empathy-tp-group.h>
 #include <libempathy/empathy-utils.h>
 #include <libempathy/empathy-debug.h>
+#include <libempathy/empathy-tube-handler.h>
 
 #include <libempathy-gtk/empathy-chat.h>
 #include <libempathy-gtk/empathy-images.h>
@@ -57,6 +62,7 @@ struct _EmpathyFilterPriv {
 	GHashTable     *accounts;
 	gpointer        token;
 	MissionControl *mc;
+	GHashTable     *tubes;
 };
 
 static void empathy_filter_class_init (EmpathyFilterClass *klass);
@@ -77,6 +83,24 @@ typedef struct {
 	FilterFunc         func;
 	gpointer           user_data;
 } EmpathyFilterEventExt;
+
+static guint
+filter_channel_hash (gconstpointer key)
+{
+	TpProxy *channel = TP_PROXY (key);
+
+	return g_str_hash (channel->object_path);
+}
+
+static gboolean
+filter_channel_equal (gconstpointer a,
+		      gconstpointer b)
+{
+	TpProxy *channel_a = TP_PROXY (a);
+	TpProxy *channel_b = TP_PROXY (b);
+
+	return g_str_equal (channel_a->object_path, channel_b->object_path);
+}
 
 static void
 filter_event_free (EmpathyFilterEventExt *event)
@@ -347,6 +371,219 @@ filter_contact_list_ready_cb (EmpathyTpGroup *group,
 }
 
 static void
+filter_tubes_async_cb (TpProxy      *channel,
+		       const GError *error,
+		       gpointer      user_data,
+		       GObject      *filter)
+{
+	if (error) {
+		empathy_debug (DEBUG_DOMAIN, "Error %s: %s",
+			       user_data, error->message);
+	}
+}
+
+typedef struct {
+	TpChannel *channel;
+	gchar     *service;
+	guint      type;
+	guint      id;
+} FilterTubeData;
+
+static void
+filter_tubes_dispatch (EmpathyFilter *filter,
+		       gpointer       user_data)
+{
+	FilterTubeData *data = user_data;
+	TpProxy        *connection;
+	gchar          *object_path;
+	guint           handle_type;
+	guint           handle;
+	TpProxy        *thandler;
+	gchar          *thandler_bus_name;
+	gchar          *thandler_object_path;
+
+	thandler_bus_name = empathy_tube_handler_build_bus_name (data->type, data->service);
+	thandler_object_path = empathy_tube_handler_build_object_path (data->type, data->service);
+
+	/* Create the proxy for the tube handler */
+	thandler = g_object_new (TP_TYPE_PROXY,
+				 "dbus-connection", tp_get_bus (),
+				 "bus-name", thandler_bus_name,
+				 "object-path", thandler_object_path,
+				 NULL);
+	tp_proxy_add_interface_by_id (thandler, EMP_IFACE_QUARK_TUBE_HANDLER);
+
+	/* Give the tube to the handler */
+	g_object_get (data->channel,
+		      "connection", &connection,
+		      "object-path", &object_path,
+		      "handle_type", &handle_type,
+		      "handle", &handle,
+		      NULL);
+
+	emp_cli_tube_handler_call_handle_tube (thandler, -1,
+					       connection->bus_name,
+					       connection->object_path,
+					       object_path, handle_type, handle,
+					       data->id,
+					       filter_tubes_async_cb,
+					       "handling tube", NULL,
+					       G_OBJECT (filter));
+
+	g_free (thandler_bus_name);
+	g_free (thandler_object_path);
+	g_object_unref (thandler);
+	g_object_unref (connection);
+	g_free (object_path);
+
+	g_free (data->service);
+	g_object_unref (data->channel);
+	g_slice_free (FilterTubeData, data);
+
+}
+
+static void
+filter_tubes_new_tube_cb (TpChannel   *channel,
+			  guint        id,
+			  guint        initiator,
+			  guint        type,
+			  const gchar *service,
+			  GHashTable  *parameters,
+			  guint        state,
+			  gpointer     user_data,
+			  GObject     *filter)
+{
+	EmpathyFilterPriv *priv = GET_PRIV (filter);
+	guint              number;
+	gchar             *msg;
+	FilterTubeData    *data;
+
+	/* Increase tube count */
+	number = GPOINTER_TO_UINT (g_hash_table_lookup (priv->tubes, channel));
+	g_hash_table_replace (priv->tubes, g_object_ref (channel),
+			      GUINT_TO_POINTER (++number));
+	empathy_debug (DEBUG_DOMAIN, "Increased tube count for channel %p: %d",
+		       channel, number);
+
+	/* We dispatch only local pending tubes */
+	if (state != TP_TUBE_STATE_LOCAL_PENDING) {
+		return;
+	}
+
+	data = g_slice_new (FilterTubeData);
+	data->channel = g_object_ref (channel);
+	data->service = g_strdup (service);
+	data->type = type;
+	data->id = id;
+	msg = g_strdup_printf (_("Incoming tube for application %s"), service);
+	filter_emit_event (EMPATHY_FILTER (filter), GTK_STOCK_EXECUTE, msg,
+			   filter_tubes_dispatch,
+			   data);
+	g_free (msg);
+}
+
+static void
+filter_tubes_list_tubes_cb (TpChannel       *channel,
+			    const GPtrArray *tubes,
+			    const GError    *error,
+			    gpointer         user_data,
+			    GObject         *filter)
+{
+	guint i;
+
+	if (error) {
+		empathy_debug (DEBUG_DOMAIN, "Error listing tubes: %s",
+			       error->message);
+		return;
+	}
+
+	for (i = 0; i < tubes->len; i++) {
+		GValueArray *values;
+
+		values = g_ptr_array_index (tubes, i);
+		filter_tubes_new_tube_cb (channel,
+					  g_value_get_uint (g_value_array_get_nth (values, 0)),
+					  g_value_get_uint (g_value_array_get_nth (values, 1)),
+					  g_value_get_uint (g_value_array_get_nth (values, 2)),
+					  g_value_get_string (g_value_array_get_nth (values, 3)),
+					  g_value_get_boxed (g_value_array_get_nth (values, 4)),
+					  g_value_get_uint (g_value_array_get_nth (values, 5)),
+					  user_data, filter);
+	}
+}
+
+static void
+filter_tubes_channel_invalidated_cb (TpProxy       *proxy,
+				     guint          domain,
+				     gint           code,
+				     gchar         *message,
+				     EmpathyFilter *filter)
+{
+	EmpathyFilterPriv *priv = GET_PRIV (filter);
+
+	empathy_debug (DEBUG_DOMAIN, "Channel %p invalidated: %s", proxy, message);
+
+	g_hash_table_remove (priv->tubes, proxy);
+}
+
+static void
+filter_tubes_tube_closed_cb (TpChannel *channel,
+			     guint      id,
+			     gpointer   user_data,
+			     GObject   *filter)
+{
+	EmpathyFilterPriv *priv = GET_PRIV (filter);
+	guint              number;
+
+	number = GPOINTER_TO_UINT (g_hash_table_lookup (priv->tubes, channel));
+	if (number == 1) {
+		empathy_debug (DEBUG_DOMAIN, "Ended tube count for channel %p, "
+			       "closing channel", channel);
+		tp_cli_channel_call_close (channel, -1, NULL, NULL, NULL, NULL);
+	}
+	else if (number > 1) {
+		empathy_debug (DEBUG_DOMAIN, "Decrease tube count for channel %p: %d",
+			       channel, number);
+		g_hash_table_replace (priv->tubes, g_object_ref (channel),
+				      GUINT_TO_POINTER (--number));
+	}
+}
+
+static void
+filter_tubes_handle_channel (EmpathyFilter *filter,
+			     TpChannel     *channel,
+			     gboolean       is_incoming)
+{
+	EmpathyFilterPriv *priv = GET_PRIV (filter);
+
+	if (g_hash_table_lookup (priv->tubes, channel)) {
+		return;
+	}
+
+	empathy_debug (DEBUG_DOMAIN, "Handling new channel");
+
+	g_hash_table_insert (priv->tubes, g_object_ref (channel),
+			     GUINT_TO_POINTER (0));
+
+	g_signal_connect (channel, "invalidated",
+			  G_CALLBACK (filter_tubes_channel_invalidated_cb),
+			  filter);
+
+	tp_cli_channel_type_tubes_connect_to_tube_closed (channel,
+							  filter_tubes_tube_closed_cb,
+							  NULL, NULL,
+							  G_OBJECT (filter), NULL);
+	tp_cli_channel_type_tubes_connect_to_new_tube (channel,
+						       filter_tubes_new_tube_cb,
+						       NULL, NULL,
+						       G_OBJECT (filter), NULL);
+	tp_cli_channel_type_tubes_call_list_tubes (channel, -1,
+						   filter_tubes_list_tubes_cb,
+						   NULL, NULL,
+						   G_OBJECT (filter));
+}
+
+static void
 filter_contact_list_destroy_cb (EmpathyTpGroup *group,
 				EmpathyFilter  *filter)
 {
@@ -422,6 +659,8 @@ filter_conection_new_channel_cb (TpConnection *connection,
 	}
 	else if (!tp_strdiff (channel_type, TP_IFACE_CHANNEL_TYPE_CONTACT_LIST)) {
 		func = filter_contact_list_handle_channel;
+	} if (!tp_strdiff (channel_type, TP_IFACE_CHANNEL_TYPE_TUBES)) {
+		func = filter_tubes_handle_channel;
 	} else {
 		empathy_debug (DEBUG_DOMAIN, "Unknown channel type %s",
 			       channel_type);
@@ -540,6 +779,7 @@ filter_finalize (GObject *object)
 	g_slist_free (priv->events);
 
 	g_hash_table_destroy (priv->accounts);
+	g_hash_table_destroy (priv->tubes);
 }
 
 static void
@@ -583,6 +823,10 @@ empathy_filter_init (EmpathyFilter *filter)
 {
 	EmpathyFilterPriv *priv = GET_PRIV (filter);
 	GList             *accounts, *l;
+
+	priv->tubes = g_hash_table_new_full (filter_channel_hash,
+					     filter_channel_equal,
+					     g_object_unref, NULL);
 
 	priv->mc = empathy_mission_control_new ();
 	priv->token = empathy_connect_to_account_status_changed (priv->mc,
