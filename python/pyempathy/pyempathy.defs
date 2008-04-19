@@ -141,6 +141,20 @@
   (gtype-id "EMPATHY_TYPE_TP_ROOMLIST")
 )
 
+(define-object TpTube
+  (in-module "Empathy")
+  (parent "GObject")
+  (c-name "EmpathyTpTube")
+  (gtype-id "EMPATHY_TYPE_TP_TUBE")
+)
+
+(define-object TubeHandler
+  (in-module "Empathy")
+  (parent "GObject")
+  (c-name "EmpathyTubeHandler")
+  (gtype-id "EMPATHY_TYPE_TUBE_HANDLER")
+)
+
 ;; Enumerations and flags ...
 
 (define-enum RegExType
@@ -569,6 +583,25 @@
   (return-type "McAccount*")
   (parameters
     '("TpChannel*" "channel")
+  )
+)
+
+(define-function empathy_connect_to_account_status_changed
+  (c-name "empathy_connect_to_account_status_changed")
+  (return-type "gpointer")
+  (parameters
+    '("MissionControl*" "mc")
+    '("GCallback" "handler")
+    '("gpointer" "user_data")
+    '("GClosureNotify" "free_func")
+  )
+)
+
+(define-function empathy_disconnect_account_status_changed
+  (c-name "empathy_disconnect_account_status_changed")
+  (return-type "none")
+  (parameters
+    '("gpointer" "token")
   )
 )
 
@@ -1584,6 +1617,12 @@
   (return-type "gboolean")
 )
 
+(define-method get_members_count
+  (of-object "EmpathyTpChat")
+  (c-name "empathy_tp_chat_get_members_count")
+  (return-type "guint")
+)
+
 (define-method send
   (of-object "EmpathyTpChat")
   (c-name "empathy_tp_chat_send")
@@ -1732,6 +1771,56 @@
   (return-type "none")
   (parameters
     '("gboolean" "is_muted")
+  )
+)
+
+
+
+;; From empathy-tp-tube.h
+
+(define-function empathy_tp_tube_get_type
+  (c-name "empathy_tp_tube_get_type")
+  (return-type "GType")
+)
+
+(define-function empathy_tp_tube_new
+  (c-name "empathy_tp_tube_new")
+  (is-constructor-of "EmpathyTpTube")
+  (return-type "EmpathyTpTube*")
+  (parameters
+    '("TpChannel*" "channel")
+    '("guint" "tube_id")
+  )
+)
+
+(define-function empathy_tp_tube_new_stream_tube
+  (c-name "empathy_tp_tube_new_stream_tube")
+  (return-type "EmpathyTpTube*")
+  (parameters
+    '("EmpathyContact*" "contact")
+    '("TpSocketAddressType" "type")
+    '("const-gchar*" "hostname")
+    '("guint" "port")
+    '("const-gchar*" "service")
+  )
+)
+
+(define-method accept_stream_tube
+  (of-object "EmpathyTpTube")
+  (c-name "empathy_tp_tube_accept_stream_tube")
+  (return-type "none")
+  (parameters
+    '("TpSocketAddressType" "type")
+  )
+)
+
+(define-method get_socket
+  (of-object "EmpathyTpTube")
+  (c-name "empathy_tp_tube_get_socket")
+  (return-type "none")
+  (parameters
+    '("gchar**" "hostname")
+    '("guint*" "port")
   )
 )
 
@@ -2130,6 +2219,43 @@
     '("const-gchar*" "address")
     '("guint" "port")
     '("gboolean" "ssl")
+  )
+)
+
+
+
+;; From empathy-tube-handler.h
+
+(define-function empathy_tube_handler_get_type
+  (c-name "empathy_tube_handler_get_type")
+  (return-type "GType")
+)
+
+(define-function empathy_tube_handler_new
+  (c-name "empathy_tube_handler_new")
+  (is-constructor-of "EmpathyTubeHandler")
+  (return-type "EmpathyTubeHandler*")
+  (parameters
+    '("TpTubeType" "type")
+    '("const-gchar*" "service")
+  )
+)
+
+(define-function empathy_tube_handler_build_bus_name
+  (c-name "empathy_tube_handler_build_bus_name")
+  (return-type "gchar*")
+  (parameters
+    '("TpTubeType" "type")
+    '("const-gchar*" "service")
+  )
+)
+
+(define-function empathy_tube_handler_build_object_path
+  (c-name "empathy_tube_handler_build_object_path")
+  (return-type "gchar*")
+  (parameters
+    '("TpTubeType" "type")
+    '("const-gchar*" "service")
   )
 )
 

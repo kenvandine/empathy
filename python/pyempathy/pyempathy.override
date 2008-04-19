@@ -28,6 +28,8 @@ headers
 #include "empathy-tp-contact-list.h"
 #include "empathy-tp-group.h"
 #include "empathy-tp-roomlist.h"
+#include "empathy-tp-tube.h"
+#include "empathy-tube-handler.h"
 #include "empathy-utils.h"
 
 void empathy_add_constants(PyObject *module, const gchar *strip_prefix);

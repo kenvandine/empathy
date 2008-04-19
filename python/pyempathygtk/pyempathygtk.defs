@@ -313,6 +313,18 @@
   (return-type "const-gchar*")
 )
 
+(define-method get_remote_contact
+  (of-object "EmpathyChat")
+  (c-name "empathy_chat_get_remote_contact")
+  (return-type "EmpathyContact*")
+)
+
+(define-method get_members_count
+  (of-object "EmpathyChat")
+  (c-name "empathy_chat_get_members_count")
+  (return-type "guint")
+)
+
 (define-method clear
   (of-object "EmpathyChat")
   (c-name "empathy_chat_clear")
@@ -708,15 +720,6 @@
   )
 )
 
-(define-function empathy_account_widget_sip_new
-  (c-name "empathy_account_widget_sip_new")
-  (is-constructor-of "EmpathyAccountWidgetSip")
-  (return-type "GtkWidget*")
-  (parameters
-    '("McAccount*" "account")
-  )
-)
-
 (define-function empathy_account_widget_groupwise_new
   (c-name "empathy_account_widget_groupwise_new")
   (is-constructor-of "EmpathyAccountWidgetGroupwise")
@@ -948,6 +951,19 @@
 (define-function empathy_account_widget_irc_new
   (c-name "empathy_account_widget_irc_new")
   (is-constructor-of "EmpathyAccountWidgetIrc")
+  (return-type "GtkWidget*")
+  (parameters
+    '("McAccount*" "account")
+  )
+)
+
+
+
+;; From empathy-account-widget-sip.h
+
+(define-function empathy_account_widget_sip_new
+  (c-name "empathy_account_widget_sip_new")
+  (is-constructor-of "EmpathyAccountWidgetSip")
   (return-type "GtkWidget*")
   (parameters
     '("McAccount*" "account")

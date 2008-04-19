@@ -23,6 +23,7 @@ python /usr/share/pygtk/2.0/codegen/h2def.py	\
 	empathy-tp-chat.h			\
 	empathy-tp-roomlist.h			\
 	empathy-tp-call.h			\
+	empathy-tp-tube.h			\
 	empathy-chandler.h			\
 	empathy-filter.h			\
 	empathy-idle.h				\
@@ -30,6 +31,7 @@ python /usr/share/pygtk/2.0/codegen/h2def.py	\
 	empathy-irc-network-manager.h		\
 	empathy-irc-network.h			\
 	empathy-irc-server.h			\
+	empathy-tube-handler.h			\
  > ../python/pyempathy/pyempathy.defs
 
 # Update the list of headers from Makefile.am
@@ -48,6 +50,7 @@ python /usr/share/pygtk/2.0/codegen/h2def.py	\
 	empathy-conf.h				\
 	empathy-theme.h				\
 	empathy-account-widget-irc.h		\
+	empathy-account-widget-sip.h		\
 	empathy-contact-dialogs.h		\
 	empathy-new-message-dialog.h		\
 	empathy-theme-irc.h			\
