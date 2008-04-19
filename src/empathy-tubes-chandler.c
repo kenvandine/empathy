@@ -84,7 +84,7 @@ new_tube_cb (TpChannel *channel,
   thandler_bus_name = empathy_tube_handler_build_bus_name (type, service);
   thandler_object_path = empathy_tube_handler_build_object_path (type, service);
 
-  empathy_debug (DEBUG_DOMAIN, "Dispatching channel %p id=%d to tube handler: ",
+  empathy_debug (DEBUG_DOMAIN, "Dispatching channel %p id=%d to tube handler: "
       "object_path=%s bus_name=%s", channel, id, thandler_object_path,
       thandler_bus_name);
 
@@ -157,7 +157,10 @@ channel_invalidated_cb (TpProxy *proxy,
   empathy_debug (DEBUG_DOMAIN, "Channel invalidated: %p", proxy);
   g_hash_table_remove (channels, proxy);
   if (g_hash_table_size (channels) == 0)
+    {
+      empathy_debug (DEBUG_DOMAIN, "All channels are closed, leaving");
       g_main_loop_quit (loop);
+    }
 }
 
 static void

@@ -22,6 +22,7 @@
 #include <config.h>
 
 #include <telepathy-glib/connection.h>
+#include <telepathy-glib/util.h>
 
 #include "empathy-contact-factory.h"
 #include "empathy-debug.h"
@@ -380,7 +381,7 @@ empathy_tp_tube_new_stream_tube (EmpathyContact *contact,
   GHashTable *params;
   GValue *address;
   GValue *control_param;
-  EmpathyTpTube *tube;
+  EmpathyTpTube *tube = NULL;
   GError *error = NULL;
 
   g_return_val_if_fail (EMPATHY_IS_CONTACT (contact), NULL);
@@ -390,14 +391,15 @@ empathy_tp_tube_new_stream_tube (EmpathyContact *contact,
   mc = empathy_mission_control_new ();
   account = empathy_contact_get_account (contact);
   connection = mission_control_get_tpconnection (mc, account, NULL);
+  g_object_unref (account);
+  g_object_unref (mc);
 
   if (!tp_cli_connection_run_request_channel (connection, -1,
       TP_IFACE_CHANNEL_TYPE_TUBES, TP_HANDLE_TYPE_CONTACT,
       empathy_contact_get_handle (contact), FALSE, &object_path, &error, NULL))
     {
+      empathy_debug (DEBUG_DOMAIN, "Error requesting channel: %s", error->message);
       g_clear_error (&error);
-      g_object_unref (mc);
-      g_object_unref (account);
       g_object_unref (connection);
       return NULL;
     }
@@ -408,19 +410,13 @@ empathy_tp_tube_new_stream_tube (EmpathyContact *contact,
       TP_IFACE_CHANNEL_TYPE_TUBES, TP_HANDLE_TYPE_CONTACT,
       empathy_contact_get_handle (contact), NULL);
 
+  #define ADDRESS_TYPE dbus_g_type_get_struct ("GValueArray",\
+      G_TYPE_STRING, G_TYPE_UINT, G_TYPE_INVALID)
   params = g_hash_table_new (g_str_hash, g_str_equal);
-  address = g_new0 (GValue, 1);
-  g_value_init (address,
-      dbus_g_type_get_struct ("GValueArray", G_TYPE_STRING, G_TYPE_UINT,
-      G_TYPE_INVALID));
-  g_value_take_boxed (address,
-      dbus_g_type_specialized_construct (dbus_g_type_get_struct ("GValueArray",
-        G_TYPE_STRING, G_TYPE_UINT, G_TYPE_INVALID)));
+  address = tp_g_value_slice_new (ADDRESS_TYPE);
+  g_value_take_boxed (address, dbus_g_type_specialized_construct (ADDRESS_TYPE));
   dbus_g_type_struct_set (address, 0, hostname, 1, port, G_MAXUINT);
-
-  /* localhost access control, variant is ignored */
-  control_param = g_new0 (GValue, 1);
-  g_value_init (control_param, G_TYPE_STRING);
+  control_param = tp_g_value_slice_new (G_TYPE_STRING);
 
   if (!tp_cli_channel_type_tubes_run_offer_stream_tube (channel, -1,
         service, params, type, address,
@@ -428,21 +424,19 @@ empathy_tp_tube_new_stream_tube (EmpathyContact *contact,
     {
       empathy_debug (DEBUG_DOMAIN, "Couldn't offer tube: %s", error->message);
       g_clear_error (&error);
+      goto OUT;
     }
 
   empathy_debug (DEBUG_DOMAIN, "Stream tube id=%d offered", id);
 
   tube = empathy_tp_tube_new (channel, id);
 
+OUT:
   g_object_unref (channel);
   g_free (object_path);
   g_hash_table_destroy (params);
-  g_value_reset (address);
-  g_value_reset (control_param);
-  g_free (address);
-  g_free (control_param);
-  g_object_unref (mc);
-  g_object_unref (account);
+  tp_g_value_slice_free (address);
+  tp_g_value_slice_free (control_param);
   g_object_unref (connection);
 
   return tube;
@@ -464,17 +458,18 @@ empathy_tp_tube_accept_stream_tube (EmpathyTpTube *tube,
                                     TpSocketAddressType type)
 {
   EmpathyTpTubePriv *priv = GET_PRIV (tube);
-  GValue control_param = {0, };
+  GValue *control_param;
 
   g_return_if_fail (EMPATHY_IS_TP_TUBE (tube));
 
   empathy_debug (DEBUG_DOMAIN, "Accepting stream tube - id: %d", priv->id);
 
+  control_param = tp_g_value_slice_new (G_TYPE_STRING);
   tp_cli_channel_type_tubes_call_accept_stream_tube (priv->channel, -1, priv->id,
-      type, TP_SOCKET_ACCESS_CONTROL_LOCALHOST, &control_param,
+      type, TP_SOCKET_ACCESS_CONTROL_LOCALHOST, control_param,
       tp_tube_accept_stream_cb, NULL, NULL, G_OBJECT (tube));
 
-  g_value_reset (&control_param);
+  tp_g_value_slice_free (control_param);
 }
 
 void
@@ -483,7 +478,7 @@ empathy_tp_tube_get_socket (EmpathyTpTube *tube,
                             guint *port)
 {
   EmpathyTpTubePriv *priv = GET_PRIV (tube);
-  GValue *address = g_new0 (GValue, 1);
+  GValue *address;
   guint address_type;
   GError *error = NULL;
 
@@ -491,6 +486,7 @@ empathy_tp_tube_get_socket (EmpathyTpTube *tube,
 
   empathy_debug (DEBUG_DOMAIN, "Getting stream tube socket address");
 
+  address = g_slice_new0 (GValue);
   if (!tp_cli_channel_type_tubes_run_get_stream_tube_socket_address (priv->channel,
       -1, priv->id, &address_type, &address, &error, NULL))
     {
@@ -512,7 +508,6 @@ empathy_tp_tube_get_socket (EmpathyTpTube *tube,
         break;
     }
 
-  g_value_reset (address);
-  g_free (address);
+  tp_g_value_slice_free (address);
 }
 
