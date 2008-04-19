@@ -706,7 +706,7 @@ static void
 main_window_help_contents_cb (GtkWidget         *widget,
 			      EmpathyMainWindow *window)
 {
-	//empathy_help_show ();
+	empathy_url_show ("ghelp:empathy");
 }
 
 static gboolean

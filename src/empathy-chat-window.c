@@ -676,7 +676,7 @@ static void
 chat_window_help_contents_cb (GtkWidget         *menuitem,
 			      EmpathyChatWindow *window)
 {
-	//empathy_help_show ();
+	empathy_url_show ("ghelp:empathy?chat");
 }
 
 static void

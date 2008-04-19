@@ -1295,7 +1295,7 @@ empathy_get_toplevel_window (GtkWidget *widget)
 static gchar *
 fixup_url (const gchar *url)
 {
-	if (!g_str_has_prefix (url, "http://") &&
+	if (!g_str_has_prefix (url, "ghelp:") &&
 	    !strstr (url, ":/") &&
 	    !strstr (url, "@")) {
 		return g_strdup_printf ("http://%s", url);
@@ -1307,21 +1307,32 @@ fixup_url (const gchar *url)
 void
 empathy_url_show (const char *url)
 {
-	gchar    *real_url;
-	gboolean  res;
-	GError   *error = NULL;
+	gchar  *real_url;
+	GError *error = NULL;
 
 	real_url = fixup_url (url);
 	if (real_url) {
 		url = real_url;
 	}
+
 	/* FIXME: this does not work for multihead, we should use
-	 * GdkAppLaunchContext for that, when we can depend on GTK+ trunk
+	 * GdkAppLaunchContext or gtk_show_url, see bug #514396.
 	 */
-	res = g_app_info_launch_default_for_uri (url, NULL, &error);
-	if (!res) {
-		empathy_debug (DEBUG_DOMAIN, "Couldn't show URL %s: %s",
-			       url, error->message);
+	g_app_info_launch_default_for_uri (url, NULL, &error);
+	if (error) {
+		GtkWidget *dialog;
+
+		dialog = gtk_message_dialog_new (NULL, 0,
+						 GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, 
+						 _("Unable to open uri"));
+		gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
+							  error->message);
+
+		g_signal_connect (dialog, "response",
+				  G_CALLBACK (gtk_widget_destroy),
+				  NULL);
+		gtk_window_present (GTK_WINDOW (dialog));
+
 		g_clear_error (&error);
 	}
 
