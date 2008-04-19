@@ -27,6 +27,7 @@
 
 #include <extensions/extensions.h>
 
+#include <libempathy/empathy-tube-handler.h>
 #include <libempathy/empathy-chandler.h>
 #include <libempathy/empathy-debug.h>
 #include <libempathy/empathy-utils.h>
@@ -80,26 +81,12 @@ new_tube_cb (TpChannel *channel,
   if (state != TP_TUBE_STATE_LOCAL_PENDING)
       return;
 
-  /* Build the bus-name and object-path of the tube handler */
-  if (type == TP_TUBE_TYPE_DBUS)
-    {
-      thandler_bus_name =
-          g_strdup_printf ("org.gnome.Empathy.DTube.%s", service);
-      thandler_object_path =
-          g_strdup_printf ("/org/gnome/Empathy/DTube/%s", service);
-    }
-  else if (type == TP_TUBE_TYPE_STREAM)
-    {
-      thandler_bus_name =
-          g_strdup_printf ("org.gnome.Empathy.StreamTube.%s", service);
-      thandler_object_path =
-          g_strdup_printf ("/org/gnome/Empathy/StreamTube/%s", service);
-    }
-  else
-      return;
+  thandler_bus_name = empathy_tube_handler_build_bus_name (type, service);
+  thandler_object_path = empathy_tube_handler_build_object_path (type, service);
 
-  empathy_debug (DEBUG_DOMAIN, "Dispatching channel %p id=%d",
-      channel, id);
+  empathy_debug (DEBUG_DOMAIN, "Dispatching channel %p id=%d to tube handler: ",
+      "object_path=%s bus_name=%s", channel, id, thandler_object_path,
+      thandler_bus_name);
 
   /* Create the proxy for the tube handler */
   thandler = g_object_new (TP_TYPE_PROXY,

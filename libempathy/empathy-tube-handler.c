@@ -27,6 +27,7 @@
 #include <telepathy-glib/connection.h>
 #include <telepathy-glib/channel.h>
 #include <telepathy-glib/interfaces.h>
+#include <telepathy-glib/util.h>
 
 #include <extensions/extensions.h>
 
@@ -146,13 +147,20 @@ empathy_tube_handler_init (EmpathyTubeHandler *thandler)
 }
 
 EmpathyTubeHandler *
-empathy_tube_handler_new (const gchar *bus_name,
-                          const gchar *object_path)
+empathy_tube_handler_new (TpTubeType type, const gchar *service)
 {
-  EmpathyTubeHandler *thandler;
+  EmpathyTubeHandler *thandler = NULL;
   DBusGProxy *proxy;
   guint result;
+  gchar *bus_name;
+  gchar *object_path;
   GError *error = NULL;
+
+  g_return_val_if_fail (type <= TP_TUBE_TYPE_STREAM, NULL);
+  g_return_val_if_fail (service != NULL, NULL);
+
+  bus_name = empathy_tube_handler_build_bus_name (type, service);
+  object_path = empathy_tube_handler_build_object_path (type, service);
 
   proxy = dbus_g_proxy_new_for_name (tp_get_bus (), DBUS_SERVICE_DBUS,
       DBUS_PATH_DBUS, DBUS_INTERFACE_DBUS);
@@ -164,15 +172,58 @@ empathy_tube_handler_new (const gchar *bus_name,
       empathy_debug (DEBUG_DOMAIN, "Failed to request name: %s",
           error ? error->message : "No error given");
       g_clear_error (&error);
-      return NULL;
+      goto OUT;
     }
-
-  g_object_unref (proxy);
 
   thandler = g_object_new (EMPATHY_TYPE_TUBE_HANDLER, NULL);
   dbus_g_connection_register_g_object (tp_get_bus (), object_path,
       G_OBJECT (thandler));
 
+OUT:
+  g_object_unref (proxy);
+  g_free (bus_name);
+  g_free (object_path);
+
   return thandler;
+}
+
+gchar *
+empathy_tube_handler_build_bus_name (TpTubeType type, const gchar *service)
+{
+  gchar *service_escaped;
+  gchar *str = NULL;
+
+  g_return_val_if_fail (type <= TP_TUBE_TYPE_STREAM, NULL);
+  g_return_val_if_fail (service != NULL, NULL);
+
+  service_escaped = tp_escape_as_identifier (service);
+  if (type == TP_TUBE_TYPE_DBUS)
+      str = g_strdup_printf ("org.gnome.Empathy.DTubeHandler.%s", service);
+  else if (type == TP_TUBE_TYPE_STREAM)
+      str = g_strdup_printf ("org.gnome.Empathy.StreamTubeHandler.%s", service);
+
+  g_free (service_escaped);
+
+  return str;
+}
+
+gchar *
+empathy_tube_handler_build_object_path (TpTubeType type, const gchar *service)
+{
+  gchar *service_escaped;
+  gchar *str = NULL;
+
+  g_return_val_if_fail (type <= TP_TUBE_TYPE_STREAM, NULL);
+  g_return_val_if_fail (service != NULL, NULL);
+
+  service_escaped = tp_escape_as_identifier (service);
+  if (type == TP_TUBE_TYPE_DBUS)
+      str = g_strdup_printf ("/org/gnome/Empathy/DTubeHandler/%s", service);
+  else if (type == TP_TUBE_TYPE_STREAM)
+      str = g_strdup_printf ("/org/gnome/Empathy/StreamTubeHandler/%s", service);
+
+  g_free (service_escaped);
+
+  return str;
 }
 

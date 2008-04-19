@@ -24,6 +24,8 @@
 
 #include <glib.h>
 
+#include <telepathy-glib/enums.h>
+
 G_BEGIN_DECLS
 
 #define EMPATHY_TYPE_TUBE_HANDLER (empathy_tube_handler_get_type ())
@@ -50,8 +52,12 @@ struct _EmpathyTubeHandlerClass {
 };
 
 GType empathy_tube_handler_get_type (void) G_GNUC_CONST;
-EmpathyTubeHandler *empathy_tube_handler_new (const gchar *bus_name,
-    const gchar *object_path);
+EmpathyTubeHandler *empathy_tube_handler_new (TpTubeType type,
+    const gchar *service);
+gchar *empathy_tube_handler_build_bus_name (TpTubeType type,
+    const gchar *service);
+gchar *empathy_tube_handler_build_object_path (TpTubeType type,
+    const gchar *service);
 
 G_END_DECLS
 
