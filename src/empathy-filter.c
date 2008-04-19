@@ -35,11 +35,13 @@
 
 #include <libempathy/empathy-tp-chat.h>
 #include <libempathy/empathy-tp-call.h>
+#include <libempathy/empathy-tp-group.h>
 #include <libempathy/empathy-utils.h>
 #include <libempathy/empathy-debug.h>
 
 #include <libempathy-gtk/empathy-chat.h>
 #include <libempathy-gtk/empathy-images.h>
+#include <libempathy-gtk/empathy-contact-dialogs.h>
 
 #include "empathy-filter.h"
 #include "empathy-chat-window.h"
@@ -274,26 +276,27 @@ filter_call_handle_channel (EmpathyFilter *filter,
 	}
 }
 
-#if 0
 static void
-status_icon_pendings_changed_cb (EmpathyContactManager *manager,
-				 EmpathyContact        *contact,
-				 EmpathyContact        *actor,
-				 guint                  reason,
-				 gchar                 *message,
-				 gboolean               is_pending,
-				 EmpathyStatusIcon     *icon)
+filter_contact_list_subscribe (EmpathyFilter *filter,
+			       gpointer       user_data)
 {
-	EmpathyStatusIconPriv *priv;
-	StatusIconEvent       *event;
-	GString               *str;
+	EmpathyContact *contact = EMPATHY_CONTACT (user_data);
 
-	priv = GET_PRIV (icon);
+	empathy_subscription_dialog_show (contact, NULL);
+	g_object_unref (contact);
+}
 
-	if (!is_pending) {
-		/* FIXME: We should remove the event */
-		return;
-	}
+static void
+filter_contact_list_local_pending_cb (EmpathyTpGroup *group,
+				      EmpathyContact *contact,
+				      EmpathyContact *actor,
+				      guint           reason,
+				      gchar          *message,
+				      EmpathyFilter  *filter)
+{
+	GString *str;
+
+	empathy_debug (DEBUG_DOMAIN, "New local pending contact");
 
 	empathy_contact_run_until_ready (contact,
 					 EMPATHY_CONTACT_READY_NAME,
@@ -306,44 +309,65 @@ status_icon_pendings_changed_cb (EmpathyContactManager *manager,
 		g_string_append_printf (str, _("\nMessage: %s"), message);
 	}
 
-	event = status_icon_event_new (icon, GTK_STOCK_DIALOG_QUESTION, str->str);
-	event->user_data = g_object_ref (contact);
-	event->func = status_icon_event_subscribe_cb;
+	filter_emit_event (filter, GTK_STOCK_DIALOG_QUESTION, str->str,
+			   filter_contact_list_subscribe,
+			   g_object_ref (contact));
 
 	g_string_free (str, TRUE);
 }
 
 static void
-status_icon_event_subscribe_cb (StatusIconEvent *event)
+filter_contact_list_ready_cb (EmpathyTpGroup *group,
+			      gpointer        unused,
+			      EmpathyFilter  *filter)
 {
-	EmpathyContact *contact;
+	GList *pendings, *l;
 
-	contact = EMPATHY_CONTACT (event->user_data);
+	if (tp_strdiff ("publish", empathy_tp_group_get_name (group))) {
+		g_object_unref (group);
+		return;
+	}
 
-	empathy_subscription_dialog_show (contact, NULL);
+	empathy_debug (DEBUG_DOMAIN, "Publish contact list ready");
 
-	g_object_unref (contact);
-}
-	g_signal_connect (priv->manager, "pendings-changed",
-			  G_CALLBACK (status_icon_pendings_changed_cb),
-			  icon);
+	g_signal_connect (group, "local-pending",
+			  G_CALLBACK (filter_contact_list_local_pending_cb),
+			  filter);
 
-	pendings = empathy_contact_list_get_pendings (EMPATHY_CONTACT_LIST (priv->manager));
+	pendings = empathy_tp_group_get_local_pendings (group);
 	for (l = pendings; l; l = l->next) {
-		EmpathyPendingInfo *info;
+		EmpathyPendingInfo *info = l->data;
 
-		info = l->data;
-		status_icon_pendings_changed_cb (priv->manager,
-						 info->member,
-						 info->actor,
-						 0,
-						 info->message,
-						 TRUE,
-						 icon);
+		filter_contact_list_local_pending_cb (group, info->member,
+						      info->actor, info->reason,
+						      info->message, filter);
 		empathy_pending_info_free (info);
 	}
 	g_list_free (pendings);
-#endif
+}
+
+static void
+filter_contact_list_destroy_cb (EmpathyTpGroup *group,
+				EmpathyFilter  *filter)
+{
+	g_object_unref (group);
+}
+
+static void
+filter_contact_list_handle_channel (EmpathyFilter *filter,
+				    TpChannel     *channel,
+				    gboolean       is_incoming)
+{
+	EmpathyTpGroup *group;
+
+	group = empathy_tp_group_new (channel);
+	g_signal_connect (group, "notify::ready",
+			  G_CALLBACK (filter_contact_list_ready_cb),
+			  filter);	
+	g_signal_connect (group, "destroy",
+			  G_CALLBACK (filter_contact_list_destroy_cb),
+			  filter);
+}
 
 static void
 filter_connection_invalidated_cb (TpConnection  *connection,
@@ -383,12 +407,21 @@ filter_conection_new_channel_cb (TpConnection *connection,
 {
 	HandleChannelFunc  func = NULL;
 	TpChannel         *channel;
+	gpointer           had_channels;
 	
+	had_channels = g_object_get_data (G_OBJECT (connection), "had-channels");
+	if (had_channels == NULL) {
+		return;
+	}
+
 	if (!tp_strdiff (channel_type, TP_IFACE_CHANNEL_TYPE_TEXT)) {
 		func = filter_chat_handle_channel;
 	}
 	else if (!tp_strdiff (channel_type, TP_IFACE_CHANNEL_TYPE_STREAMED_MEDIA)) {
 		func = filter_call_handle_channel;
+	}
+	else if (!tp_strdiff (channel_type, TP_IFACE_CHANNEL_TYPE_CONTACT_LIST)) {
+		func = filter_contact_list_handle_channel;
 	} else {
 		empathy_debug (DEBUG_DOMAIN, "Unknown channel type %s",
 			       channel_type);
@@ -406,15 +439,45 @@ filter_conection_new_channel_cb (TpConnection *connection,
 }
 
 static void
+filter_connection_list_channels_cb (TpConnection    *connection,
+				    const GPtrArray *channels,
+				    const GError    *error,
+				    gpointer         user_data,
+				    GObject         *filter)
+{
+	guint i;
+
+	g_object_set_data (G_OBJECT (connection), "had-channels",
+			   GUINT_TO_POINTER (1));
+
+	for (i = 0; i < channels->len; i++) {
+		GValueArray *values;
+
+		values = g_ptr_array_index (channels, i);
+		filter_conection_new_channel_cb (connection,
+			g_value_get_boxed (g_value_array_get_nth (values, 0)),
+			g_value_get_string (g_value_array_get_nth (values, 1)),
+			g_value_get_uint (g_value_array_get_nth (values, 2)),
+			g_value_get_uint (g_value_array_get_nth (values, 3)),
+			FALSE, user_data, filter);
+	}
+}
+
+static void
 filter_connection_ready_cb (TpConnection  *connection,
 			    gpointer       unused,
 			    EmpathyFilter *filter)
 {
 	empathy_debug (DEBUG_DOMAIN, "Connection ready, accepting new channels");
+
 	tp_cli_connection_connect_to_new_channel (connection,
 						  filter_conection_new_channel_cb,
 						  NULL, NULL,
 						  G_OBJECT (filter), NULL);
+	tp_cli_connection_call_list_channels (connection, -1,
+					      filter_connection_list_channels_cb,
+					      NULL, NULL,
+					      G_OBJECT (filter));
 }
 
 static void
