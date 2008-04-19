@@ -70,7 +70,7 @@ tube_handler_handle_tube_idle_cb (gpointer data)
   EmpathyTpTube *tube;
   static TpDBusDaemon *daemon = NULL;
 
-  empathy_debug (DEBUG_DOMAIN, "New tube to be handled");
+  empathy_debug (DEBUG_DOMAIN, "New tube to be handled id=%d", idle_data->id);
 
   if (!daemon)
     daemon = tp_dbus_daemon_new (tp_get_bus ());

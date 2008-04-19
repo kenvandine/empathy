@@ -26,6 +26,8 @@
 
 #include <telepathy-glib/channel.h>
 
+#include "empathy-contact.h"
+
 G_BEGIN_DECLS
 
 #define EMPATHY_TYPE_TP_TUBE (empathy_tp_tube_get_type ())
@@ -58,6 +60,9 @@ void empathy_tp_tube_accept_unix_stream_tube (EmpathyTpTube *tube);
 void empathy_tp_tube_get_ipv4_socket (EmpathyTpTube *tube, gchar **hostname,
     guint *port);
 gchar * empathy_tp_tube_get_unix_socket (EmpathyTpTube *tube);
+
+void empathy_offer_ipv4_stream_tube (EmpathyContact *contact,
+    const gchar *hostname, guint port, const gchar *service);
 
 G_END_DECLS
 
