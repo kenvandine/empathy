@@ -385,10 +385,11 @@ empathy_tp_tube_new (TpChannel *channel, guint tube_id)
 }
 
 EmpathyTpTube *
-empathy_tp_tube_new_ipv4_stream_tube (EmpathyContact *contact,
-                                      const gchar *hostname,
-                                      guint port,
-                                      const gchar *service)
+empathy_tp_tube_new_stream_tube (EmpathyContact *contact,
+                                 TpSocketAddressType type,
+                                 const gchar *hostname,
+                                 guint port,
+                                 const gchar *service)
 {
   MissionControl *mc;
   McAccount *account;
@@ -442,7 +443,7 @@ empathy_tp_tube_new_ipv4_stream_tube (EmpathyContact *contact,
   g_value_init (control_param, G_TYPE_STRING);
 
   if (!tp_cli_channel_type_tubes_run_offer_stream_tube (channel, -1,
-        service, params, TP_SOCKET_ADDRESS_TYPE_IPV4, address,
+        service, params, type, address,
         TP_SOCKET_ACCESS_CONTROL_LOCALHOST, control_param, &id, &error, NULL))
     {
       empathy_debug (DEBUG_DOMAIN, "Couldn't offer tube: %s", error->message);
@@ -451,11 +452,12 @@ empathy_tp_tube_new_ipv4_stream_tube (EmpathyContact *contact,
 
   empathy_debug (DEBUG_DOMAIN, "Stream tube id=%d offered", id);
 
+  /* FIXME: We shouldn't assume state is remote-pending */
   tube = g_object_new (EMPATHY_TYPE_TP_TUBE,
       "channel", channel,
       "id", id,
       "initiator", empathy_contact_get_handle (contact),
-      "type", TP_SOCKET_ADDRESS_TYPE_IPV4,
+      "type", type,
       "service", service,
       "parameters", control_param,
       "state", TP_TUBE_STATE_REMOTE_PENDING,
@@ -486,87 +488,28 @@ tp_tube_accept_stream_cb (TpChannel *proxy,
       empathy_debug (DEBUG_DOMAIN, "Error accepting tube: %s", error->message);
 }
 
-static void
-tp_tube_accept_stream_tube (EmpathyTpTube *tube,
-                            TpSocketAddressType address_type,
-                            TpSocketAccessControl access_type,
-                            GValue *control_param)
+void
+empathy_tp_tube_accept_stream_tube (EmpathyTpTube *tube,
+                                    TpSocketAddressType type)
 {
   EmpathyTpTubePriv *priv = GET_PRIV (tube);
+  GValue control_param = {0, };
+
+  g_return_if_fail (EMPATHY_IS_TP_TUBE (tube));
 
   empathy_debug (DEBUG_DOMAIN, "Accepting stream tube - id: %d", priv->id);
 
   tp_cli_channel_type_tubes_call_accept_stream_tube (priv->channel, -1, priv->id,
-      address_type, access_type, control_param,
+      type, TP_SOCKET_ACCESS_CONTROL_LOCALHOST, &control_param,
       tp_tube_accept_stream_cb, NULL, NULL, G_OBJECT (tube));
-}
-
-void
-empathy_tp_tube_accept_unix_stream_tube (EmpathyTpTube *tube)
-{
-  GValue control_param = {0, };
-
-  g_return_if_fail (EMPATHY_IS_TP_TUBE (tube));
-
-  g_value_init (&control_param, G_TYPE_STRING);
-  tp_tube_accept_stream_tube (tube, TP_SOCKET_ADDRESS_TYPE_UNIX,
-      TP_SOCKET_ACCESS_CONTROL_LOCALHOST, &control_param);
 
   g_value_reset (&control_param);
 }
 
 void
-empathy_tp_tube_accept_ipv4_stream_tube (EmpathyTpTube *tube)
-{
-  GValue control_param = {0, };
-
-  g_return_if_fail (EMPATHY_IS_TP_TUBE (tube));
-
-  g_value_init (&control_param, G_TYPE_STRING);
-  tp_tube_accept_stream_tube (tube, TP_SOCKET_ADDRESS_TYPE_IPV4,
-      TP_SOCKET_ACCESS_CONTROL_LOCALHOST, &control_param);
-
-  g_value_reset (&control_param);
-}
-
-gchar *
-empathy_tp_tube_get_unix_socket (EmpathyTpTube *tube)
-{
-  EmpathyTpTubePriv *priv = GET_PRIV (tube);
-  GValue *address = g_new0 (GValue, 1);;
-  guint address_type;
-  gchar *address_name = NULL;
-  GError *error = NULL;
-
-  g_return_val_if_fail (EMPATHY_IS_TP_TUBE (tube), NULL);
-
-  empathy_debug (DEBUG_DOMAIN, "Getting stream tube socket address");
-
-  /* FIXME: We shouldn't use _run_ here because the user may not expect to
-   * reenter the mainloop.
-   * FIXME: Do we have to give an initialised GValue for address? Are we
-   * freeing it correctly? */
-  if (!tp_cli_channel_type_tubes_run_get_stream_tube_socket_address (priv->channel,
-      -1, priv->id, &address_type, &address, &error, NULL))
-    {
-      empathy_debug (DEBUG_DOMAIN, "Couldn't get socket address: %s",
-          error->message);
-      g_clear_error (&error);
-      return NULL;
-    }
-
-  dbus_g_type_struct_get (address, 0, &address_name, G_MAXUINT);
-  g_free (address);
-
-  empathy_debug (DEBUG_DOMAIN, "UNIX Socket - %s", address_name);
-
-  return address_name;
-}
-
-void
-empathy_tp_tube_get_ipv4_socket (EmpathyTpTube *tube,
-                                 gchar **hostname,
-                                 guint *port)
+empathy_tp_tube_get_socket (EmpathyTpTube *tube,
+                            gchar **hostname,
+                            guint *port)
 {
   EmpathyTpTubePriv *priv = GET_PRIV (tube);
   GValue *address = g_new0 (GValue, 1);
@@ -577,7 +520,6 @@ empathy_tp_tube_get_ipv4_socket (EmpathyTpTube *tube,
 
   empathy_debug (DEBUG_DOMAIN, "Getting stream tube socket address");
 
-  /* FIXME: Same than for empathy_tp_tube_get_unix_socket() */
   if (!tp_cli_channel_type_tubes_run_get_stream_tube_socket_address (priv->channel,
       -1, priv->id, &address_type, &address, &error, NULL))
     {
@@ -587,8 +529,19 @@ empathy_tp_tube_get_ipv4_socket (EmpathyTpTube *tube,
       return;
     }
 
-  dbus_g_type_struct_get (address, 0, hostname, 1, port, G_MAXUINT);
+  switch (address_type)
+    {
+    case TP_SOCKET_ADDRESS_TYPE_UNIX:
+    case TP_SOCKET_ADDRESS_TYPE_ABSTRACT_UNIX:
+        dbus_g_type_struct_get (address, 0, hostname, G_MAXUINT);
+        break;
+    case TP_SOCKET_ADDRESS_TYPE_IPV4:
+    case TP_SOCKET_ADDRESS_TYPE_IPV6:
+        dbus_g_type_struct_get (address, 0, hostname, 1, port, G_MAXUINT);    
+        break;
+    }
 
+  g_value_reset (address);
   g_free (address);
 }
 

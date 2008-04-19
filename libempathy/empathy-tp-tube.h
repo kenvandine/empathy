@@ -55,13 +55,13 @@ struct _EmpathyTpTubeClass {
 
 GType empathy_tp_tube_get_type (void) G_GNUC_CONST;
 EmpathyTpTube *empathy_tp_tube_new (TpChannel *channel, guint tube_id);
-EmpathyTpTube *empathy_tp_tube_new_ipv4_stream_tube (EmpathyContact *contact,
-    const gchar *hostname, guint port, const gchar *service);
-void empathy_tp_tube_accept_ipv4_stream_tube (EmpathyTpTube *tube);
-void empathy_tp_tube_accept_unix_stream_tube (EmpathyTpTube *tube);
-void empathy_tp_tube_get_ipv4_socket (EmpathyTpTube *tube, gchar **hostname,
+EmpathyTpTube *empathy_tp_tube_new_stream_tube (EmpathyContact *contact,
+    TpSocketAddressType type, const gchar *hostname, guint port,
+    const gchar *service);
+void empathy_tp_tube_accept_stream_tube (EmpathyTpTube *tube,
+    TpSocketAddressType type);
+void empathy_tp_tube_get_socket (EmpathyTpTube *tube, gchar **hostname,
     guint *port);
-gchar * empathy_tp_tube_get_unix_socket (EmpathyTpTube *tube);
 
 G_END_DECLS
 
