@@ -384,6 +384,97 @@ empathy_tp_tube_new (TpChannel *channel, guint tube_id)
   return tube;
 }
 
+EmpathyTpTube *
+empathy_tp_tube_new_ipv4_stream_tube (EmpathyContact *contact,
+                                      const gchar *hostname,
+                                      guint port,
+                                      const gchar *service)
+{
+  MissionControl *mc;
+  McAccount *account;
+  TpConnection *connection;
+  TpChannel *channel;
+  gchar *object_path;
+  guint id;
+  GHashTable *params;
+  GValue *address;
+  GValue *control_param;
+  EmpathyTpTube *tube;
+  GError *error = NULL;
+
+  g_return_val_if_fail (EMPATHY_IS_CONTACT (contact), NULL);
+  g_return_val_if_fail (hostname != NULL, NULL);
+  g_return_val_if_fail (service != NULL, NULL);
+
+  mc = empathy_mission_control_new ();
+  account = empathy_contact_get_account (contact);
+  connection = mission_control_get_tpconnection (mc, account, NULL);
+
+  if (!tp_cli_connection_run_request_channel (connection, -1,
+      TP_IFACE_CHANNEL_TYPE_TUBES, TP_HANDLE_TYPE_CONTACT,
+      empathy_contact_get_handle (contact), FALSE, &object_path, &error, NULL))
+    {
+      g_clear_error (&error);
+      g_object_unref (mc);
+      g_object_unref (account);
+      g_object_unref (connection);
+      return NULL;
+    }
+
+  empathy_debug (DEBUG_DOMAIN, "Offering a new stream tube");
+
+  channel = tp_channel_new (connection, object_path,
+      TP_IFACE_CHANNEL_TYPE_TUBES, TP_HANDLE_TYPE_CONTACT,
+      empathy_contact_get_handle (contact), NULL);
+
+  params = g_hash_table_new (g_str_hash, g_str_equal);
+  address = g_new0 (GValue, 1);
+  g_value_init (address,
+      dbus_g_type_get_struct ("GValueArray", G_TYPE_STRING, G_TYPE_UINT,
+      G_TYPE_INVALID));
+  g_value_take_boxed (address,
+      dbus_g_type_specialized_construct (dbus_g_type_get_struct ("GValueArray",
+        G_TYPE_STRING, G_TYPE_UINT, G_TYPE_INVALID)));
+  dbus_g_type_struct_set (address, 0, hostname, 1, port, G_MAXUINT);
+
+  /* localhost access control, variant is ignored */
+  control_param = g_new0 (GValue, 1);
+  g_value_init (control_param, G_TYPE_STRING);
+
+  if (!tp_cli_channel_type_tubes_run_offer_stream_tube (channel, -1,
+        service, params, TP_SOCKET_ADDRESS_TYPE_IPV4, address,
+        TP_SOCKET_ACCESS_CONTROL_LOCALHOST, control_param, &id, &error, NULL))
+    {
+      empathy_debug (DEBUG_DOMAIN, "Couldn't offer tube: %s", error->message);
+      g_clear_error (&error);
+    }
+
+  empathy_debug (DEBUG_DOMAIN, "Stream tube id=%d offered", id);
+
+  tube = g_object_new (EMPATHY_TYPE_TP_TUBE,
+      "channel", channel,
+      "id", id,
+      "initiator", empathy_contact_get_handle (contact),
+      "type", TP_SOCKET_ADDRESS_TYPE_IPV4,
+      "service", service,
+      "parameters", control_param,
+      "state", TP_TUBE_STATE_REMOTE_PENDING,
+      NULL);
+
+  g_object_unref (channel);
+  g_free (object_path);
+  g_hash_table_destroy (params);
+  g_value_reset (address);
+  g_value_reset (control_param);
+  g_free (address);
+  g_free (control_param);
+  g_object_unref (mc);
+  g_object_unref (account);
+  g_object_unref (connection);
+
+  return tube;
+}
+
 static void
 tp_tube_accept_stream_cb (TpChannel *proxy,
                           const GValue *address,
@@ -499,79 +590,5 @@ empathy_tp_tube_get_ipv4_socket (EmpathyTpTube *tube,
   dbus_g_type_struct_get (address, 0, hostname, 1, port, G_MAXUINT);
 
   g_free (address);
-}
-
-void
-empathy_offer_ipv4_stream_tube (EmpathyContact *contact,
-                                const gchar *hostname,
-                                guint port,
-                                const gchar *service)
-{
-  MissionControl *mc;
-  McAccount *account;
-  TpConnection *connection;
-  TpChannel *channel;
-  gchar *object_path;
-  guint id;
-  GHashTable *params;
-  GValue *address;
-  GValue *control_param;
-  GError *error = NULL;
-
-  mc = empathy_mission_control_new ();
-  account = empathy_contact_get_account (contact);
-  connection = mission_control_get_tpconnection (mc, account, NULL);
-
-  if (!tp_cli_connection_run_request_channel (connection, -1,
-      TP_IFACE_CHANNEL_TYPE_TUBES, TP_HANDLE_TYPE_CONTACT,
-      empathy_contact_get_handle (contact), FALSE, &object_path, &error, NULL))
-    {
-      g_clear_error (&error);
-      g_object_unref (mc);
-      g_object_unref (account);
-      g_object_unref (connection);
-      return;
-    }
-
-  empathy_debug (DEBUG_DOMAIN, "Offering a new stream tube");
-
-  channel = tp_channel_new (connection, object_path,
-      TP_IFACE_CHANNEL_TYPE_TUBES, TP_HANDLE_TYPE_CONTACT,
-      empathy_contact_get_handle (contact), NULL);
-
-  params = g_hash_table_new (g_str_hash, g_str_equal);
-  address = g_new0 (GValue, 1);
-  g_value_init (address,
-      dbus_g_type_get_struct ("GValueArray", G_TYPE_STRING, G_TYPE_UINT,
-      G_TYPE_INVALID));
-  g_value_take_boxed (address,
-      dbus_g_type_specialized_construct (dbus_g_type_get_struct ("GValueArray",
-        G_TYPE_STRING, G_TYPE_UINT, G_TYPE_INVALID)));
-  dbus_g_type_struct_set (address, 0, hostname, 1, port, G_MAXUINT);
-
-  /* localhost access control, variant is ignored */
-  control_param = g_new0 (GValue, 1);
-  g_value_init (control_param, G_TYPE_STRING);
-
-  if (!tp_cli_channel_type_tubes_run_offer_stream_tube (channel, -1,
-        service, params, TP_SOCKET_ADDRESS_TYPE_IPV4, address,
-        TP_SOCKET_ACCESS_CONTROL_LOCALHOST, control_param, &id, &error, NULL))
-    {
-      empathy_debug (DEBUG_DOMAIN, "Couldn't offer tube: %s", error->message);
-      g_clear_error (&error);
-    }
-
-  empathy_debug (DEBUG_DOMAIN, "Stream tube id=%d offered", id);
-
-  g_object_unref (channel);
-  g_free (object_path);
-  g_hash_table_destroy (params);
-  g_value_reset (address);
-  g_value_reset (control_param);
-  g_free (address);
-  g_free (control_param);
-  g_object_unref (mc);
-  g_object_unref (account);
-  g_object_unref (connection);
 }
 
