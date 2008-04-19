@@ -126,16 +126,19 @@ empathy_tubes_tube_state_changed_cb (TpChannel *channel,
 
 
 static void
-empathy_tubes_channel_closed_cb (TpChannel *channel,
-                                 gpointer data)
+empathy_tubes_channel_invalidated_cb (TpChannel *channel,
+                                      guint domain,
+                                      gint code,
+                                      gchar *message,
+                                      gpointer data)
 {
   EmpathyTubes *tubes = EMPATHY_TUBES (data);
   EmpathyTubesPriv *priv = GET_PRIV (tubes);
 
-  empathy_debug (DEBUG_DOMAIN, "Channel closed");
+  empathy_debug (DEBUG_DOMAIN, "Channel invalidated");
 
   g_signal_handlers_disconnect_by_func (priv->channel,
-      empathy_tubes_channel_closed_cb, tubes);
+      empathy_tubes_channel_invalidated_cb, tubes);
 
   // disconnect tubes interface signals?
 }
@@ -152,7 +155,7 @@ empathy_tubes_dispose (GObject *object)
   if (priv->channel)
     {
       g_signal_handlers_disconnect_by_func (priv->channel,
-          empathy_tubes_channel_closed_cb, object);
+          empathy_tubes_channel_invalidated_cb, object);
       g_object_unref (priv->channel);
       priv->channel = NULL;
     }
@@ -213,8 +216,8 @@ empathy_tubes_constructor (GType type,
   EmpathyTubes *tubes = EMPATHY_TUBES (object);
   EmpathyTubesPriv *priv = GET_PRIV (tubes);
 
-  g_signal_connect (priv->channel, "closed",
-      G_CALLBACK (empathy_tubes_channel_closed_cb), tubes);
+  g_signal_connect (priv->channel, "invalidated",
+      G_CALLBACK (empathy_tubes_channel_invalidated_cb), tubes);
 
   tp_cli_channel_type_tubes_connect_to_new_tube (priv->channel,
       empathy_tubes_new_tube_cb, NULL, NULL, G_OBJECT (tubes), NULL);
