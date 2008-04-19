@@ -43,3 +43,4 @@ omf.make
 compile
 tags
 TAGS
+gnome-doc-utils.make

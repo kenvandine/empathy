@@ -55,6 +55,7 @@ AM_PATH_GLIB_2_0
 AC_PATH_XTRA
 IT_PROG_INTLTOOL([0.35.0])
 GTK_DOC_CHECK([1.3])
+GNOME_DOC_INIT
 IDT_COMPILE_WARNINGS
 AC_PATH_PROG(DBUS_BINDING_TOOL, dbus-binding-tool)
 AC_PATH_PROG(GCONFTOOL, gconftool-2)
@@ -314,6 +315,7 @@ AC_OUTPUT([
    docs/libempathy/version.xml
    docs/libempathy-gtk/Makefile
    docs/libempathy-gtk/version.xml
+   help/Makefile
    python/Makefile
    python/pyempathy/Makefile
    python/pyempathygtk/Makefile
