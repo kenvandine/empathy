@@ -24,10 +24,6 @@
 #include <glib-object.h>
 
 #include <telepathy-glib/channel.h>
-//#include <libtelepathy/tp-chan.h>
-//#include <libtelepathy/tp-conn.h>
-
-//#include "empathy-tubes-types.h"
 #include "empathy-tube.h"
 
 G_BEGIN_DECLS
@@ -56,7 +52,6 @@ struct _EmpathyTubesClass {
 };
 
 GType empathy_tubes_get_type (void) G_GNUC_CONST;
-//EmpathyTubes *empathy_tubes_new (TpConn *connection, TpChan *channel);
 EmpathyTubes *empathy_tubes_new (TpChannel *channel);
 
 guint empathy_tubes_offer_stream_tube_ipv4 (EmpathyTubes *tubes, gchar *host,
