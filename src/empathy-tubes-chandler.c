@@ -29,83 +29,55 @@
 
 #include <libempathy/empathy-chandler.h>
 #include <libempathy/empathy-debug.h>
-#include <libempathy/empathy-tube.h>
-#include <libempathy/empathy-tubes.h>
 #include <libempathy/empathy-utils.h>
 
 #define DEBUG_DOMAIN "TubesChandler"
 
 static void
-empathy_tubes_chandler_async_cb (TpProxy *proxy,
-                                 const GError *error,
-                                 gpointer data,
-                                 GObject *weak_object)
+async_cb (TpProxy *channel,
+          const GError *error,
+          gpointer user_data,
+          GObject *weak_object)
 {
   if (error)
-    empathy_debug (DEBUG_DOMAIN, "Error %s: %s", data, error->message);
+      empathy_debug (DEBUG_DOMAIN, "Error %s: %s", user_data, error->message);
 }
 
-
 static void
-empathy_tubes_chandler_new_tube_cb (EmpathyTubes *tubes,
-                                    EmpathyTube *tube,
-                                    gpointer data)
+new_tube_cb (TpChannel *channel,
+             guint id,
+             guint initiator,
+             guint type,
+             const gchar *service,
+             GHashTable *parameters,
+             guint state,
+             gpointer user_data,
+             GObject *weak_object)
 {
-  GHashTable *channels = (GHashTable *) data;
-  TpChannel *channel;
-  TpConnection *connection;
-  gchar *channel_path;
-  gchar *connection_name;
-  gchar *connection_path;
+  GHashTable *channels = (GHashTable *) user_data;
+  TpProxy *connection;
+  gchar *object_path;
   guint handle_type;
   guint handle;
   gpointer value;
   guint number;
-
   TpProxy *thandler;
   gchar *thandler_bus_name;
   gchar *thandler_object_path;
 
-  guint id;
-  guint type;
-  gchar *service;
-  guint state;
+  /* Increase tube count */
+  value = g_hash_table_lookup (channels, channel);
+  number = GPOINTER_TO_UINT (value);
+  g_hash_table_replace (channels, g_object_ref (channel),
+      GUINT_TO_POINTER (++number));
+  empathy_debug (DEBUG_DOMAIN, "Increased tube count for channel %p: %d",
+      channel, number);
 
-  g_object_get (G_OBJECT (tubes), "channel", &channel, NULL);
-  g_object_get (G_OBJECT (channel), "connection", &connection, "object-path",
-      &channel_path, NULL);
-
-  value = g_hash_table_lookup (channels, channel_path);
-
-  if (!value)
-    {
-      g_hash_table_insert (channels, g_strdup (channel_path),
-          (GUINT_TO_POINTER (1)));
-      empathy_debug (DEBUG_DOMAIN,
-          "Started tube count for channel %s - total: 1", channel_path);
-    }
-  else
-    {
-      number = GPOINTER_TO_UINT (value);
-      g_hash_table_replace (channels, g_strdup (channel_path),
-          GUINT_TO_POINTER (++number));
-      empathy_debug (DEBUG_DOMAIN,
-          "Increased tube count for channel %s - total: %d",
-          channel_path, number);
-    }
-
-  g_object_get (G_OBJECT (tube), "state", &state, NULL);
-
+  /* We dispatch only local pending tubes */
   if (state != TP_TUBE_STATE_LOCAL_PENDING)
-    {
-      g_free (channel_path);
-      g_object_unref (channel);
-      g_object_unref (connection);
       return;
-    }
 
-  g_object_get (G_OBJECT (tube), "service", &service, "type", &type, NULL);
-
+  /* Build the bus-name and object-path of the tube handler */
   if (type == TP_TUBE_TYPE_DBUS)
     {
       thandler_bus_name =
@@ -121,60 +93,92 @@ empathy_tubes_chandler_new_tube_cb (EmpathyTubes *tubes,
           g_strdup_printf ("/org/gnome/Empathy/StreamTube/%s", service);
     }
   else
-    {
-      g_free (channel_path);
-      g_object_unref (channel);
-      g_object_unref (connection);
       return;
-    }
 
-  thandler = g_object_new (TP_TYPE_PROXY, "bus-name", thandler_bus_name,
-      "dbus-connection", tp_get_bus (), "object-path", thandler_object_path,
+  empathy_debug (DEBUG_DOMAIN, "Dispatching channel %p id=%d",
+      channel, id);
+
+  /* Create the proxy for the tube handler */
+  thandler = g_object_new (TP_TYPE_PROXY,
+      "dbus-connection", tp_get_bus (),
+      "bus-name", thandler_bus_name,
+      "object-path", thandler_object_path,
       NULL);
   tp_proxy_add_interface_by_id (thandler, EMP_IFACE_QUARK_TUBE_HANDLER);
 
-  g_object_get (G_OBJECT (tube), "id", &id, NULL);
-  g_object_get (G_OBJECT (channel), "handle-type", &handle_type,
-      "handle", &handle, NULL);
-  g_object_get (G_OBJECT (connection), "bus-name", &connection_name,
-      "object-path", &connection_path, NULL);
-
-  empathy_debug (DEBUG_DOMAIN, "Dispatching new tube to %s",
-      thandler_bus_name);
-
-  emp_cli_tube_handler_call_handle_tube (thandler, -1, connection_name,
-      connection_path, channel_path, handle_type, handle, id,
-      empathy_tubes_chandler_async_cb, "handling tube", NULL, NULL);
-
-  g_free (connection_path);
-  g_free (connection_name);
-  g_free (service);
+  /* Give the tube to the handler */
+  g_object_get (channel,
+      "connection", &connection,
+      "object-path", &object_path,
+      "handle_type", &handle_type,
+      "handle", &handle,
+      NULL);
+  emp_cli_tube_handler_call_handle_tube (thandler, -1,
+      connection->bus_name,
+      connection->object_path,
+      object_path, handle_type, handle, id,
+      async_cb, "handling tube", NULL, NULL);
 
   g_free (thandler_bus_name);
   g_free (thandler_object_path);
   g_object_unref (thandler);
-
-  g_free (channel_path);
-  g_object_unref (channel);
   g_object_unref (connection);
+  g_free (object_path);
 }
 
+static void
+list_tubes_cb (TpChannel *channel,
+               const GPtrArray *tubes,
+               const GError *error,
+               gpointer user_data,
+               GObject *weak_object)
+{
+  guint i;
+
+  if (error)
+    {
+      empathy_debug (DEBUG_DOMAIN, "Error listing tubes: %s", error->message);
+      return;
+    }
+
+  for (i = 0; i < tubes->len; i++)
+    {
+      GValueArray *values;
+
+      values = g_ptr_array_index (tubes, i);
+      new_tube_cb (channel,
+          g_value_get_uint (g_value_array_get_nth (values, 0)),
+          g_value_get_uint (g_value_array_get_nth (values, 1)),
+          g_value_get_uint (g_value_array_get_nth (values, 2)),
+          g_value_get_string (g_value_array_get_nth (values, 3)),
+          g_value_get_boxed (g_value_array_get_nth (values, 4)),
+          g_value_get_uint (g_value_array_get_nth (values, 5)),
+          user_data, weak_object);
+    }
+}
 
 static void
-empathy_tubes_chandler_tube_closed_cb (EmpathyTubes *tubes,
-                                       guint tube_id,
-                                       gpointer data)
+channel_invalidated_cb (TpProxy *proxy,
+                        guint domain,
+                        gint code,
+                        gchar *message,
+                        GHashTable *channels)
 {
-  TpChannel *channel;
-  gchar *channel_path;
+  empathy_debug (DEBUG_DOMAIN, "Channel invalidated: %p", proxy);
+  g_hash_table_remove (channels, proxy);
+}
+
+static void
+tube_closed_cb (TpChannel *channel,
+                guint id,
+                gpointer user_data,
+                GObject *weak_object)
+{
   gpointer value;
   guint number;
-  GHashTable *channels = (GHashTable *) data;
+  GHashTable *channels = (GHashTable *) user_data;
 
-  g_object_get (G_OBJECT (tubes), "channel", &channel, NULL);
-  g_object_get (G_OBJECT (channel), "object-path", &channel_path, NULL);
-
-  value = g_hash_table_lookup (channels, channel_path);
+  value = g_hash_table_lookup (channels, channel);
 
   if (value)
     {
@@ -182,57 +186,63 @@ empathy_tubes_chandler_tube_closed_cb (EmpathyTubes *tubes,
 
       if (number == 1)
         {
-          g_hash_table_remove (channels, channel_path);
-          empathy_tubes_close (tubes);
-          empathy_debug (DEBUG_DOMAIN,
-              "Ended tube count for channel %s - total: 0", channel_path);
-          empathy_debug (DEBUG_DOMAIN, "Closing channel");
+          empathy_debug (DEBUG_DOMAIN, "Ended tube count for channel %p, "
+              "closing channel", channel);
+          tp_cli_channel_call_close (channel, -1, NULL, NULL, NULL, NULL);
         }
       else if (number > 1)
         {
-          g_hash_table_replace (channels, channel_path,
-              GUINT_TO_POINTER (--number));
-          empathy_debug (DEBUG_DOMAIN,
-              "Decreased tube count for channel %s - total: %d",
-              channel_path, number);
+          g_hash_table_replace (channels, channel, GUINT_TO_POINTER (--number));
+          empathy_debug (DEBUG_DOMAIN, "Decreased tube count for channel %p: %d",
+              channel, number);
         }
     }
-
-  g_free (channel_path);
-  g_object_unref (channel);
 }
 
-
 static void
-empathy_tubes_new_channel_cb (EmpathyChandler *chandler,
-                              TpChannel *channel,
-                              gpointer data)
+new_channel_cb (EmpathyChandler *chandler,
+                TpChannel *channel,
+                GHashTable *channels)
 {
-  EmpathyTubes *tubes = empathy_tubes_new (channel);
-  GHashTable *channels = (GHashTable *) data;
-  GSList *tube_list, *list;
+  if (g_hash_table_lookup (channels, channel))
+      return;
 
   empathy_debug (DEBUG_DOMAIN, "Handling new channel");
 
-  g_signal_connect (G_OBJECT (tubes), "new-tube",
-      G_CALLBACK (empathy_tubes_chandler_new_tube_cb), (gpointer) channels);
-  g_signal_connect (G_OBJECT (tubes), "tube-closed",
-      G_CALLBACK (empathy_tubes_chandler_tube_closed_cb), (gpointer) channels);
+  g_hash_table_insert (channels, g_object_ref (channel), GUINT_TO_POINTER (0));
 
-  tube_list = empathy_tubes_list_tubes (tubes);
+  g_signal_connect (channel, "invalidated",
+      G_CALLBACK (channel_invalidated_cb),
+      channels);
 
-  for (list = tube_list; list != NULL; list = g_slist_next (list))
-    {
-      EmpathyTube *tube = EMPATHY_TUBE (list->data);
-      empathy_tubes_chandler_new_tube_cb (tubes, tube, (gpointer) channels);
-      g_object_unref (tube);
-    }
-
-  g_slist_free (tube_list);
+  tp_cli_channel_type_tubes_connect_to_tube_closed (channel,
+      tube_closed_cb, channels, NULL, NULL, NULL);
+  tp_cli_channel_type_tubes_connect_to_new_tube (channel,
+      new_tube_cb, channels, NULL, NULL, NULL);
+  tp_cli_channel_type_tubes_call_list_tubes (channel, -1,
+      list_tubes_cb, channels, NULL, NULL);
 }
 
+static guint
+channel_hash (gconstpointer key)
+{
+  TpProxy *channel = TP_PROXY (key);
 
-int main (int argc, char *argv[])
+  return g_str_hash (channel->object_path);
+}
+
+static gboolean
+channel_equal (gconstpointer a,
+               gconstpointer b)
+{
+  TpProxy *channel_a = TP_PROXY (a);
+  TpProxy *channel_b = TP_PROXY (b);
+
+  return g_str_equal (channel_a->object_path, channel_b->object_path);
+}
+
+int
+main (int argc, char *argv[])
 {
   EmpathyChandler *chandler;
   GMainLoop *loop;
@@ -241,20 +251,23 @@ int main (int argc, char *argv[])
   g_type_init ();
   emp_cli_init ();
 
-  channels = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+  channels = g_hash_table_new_full (channel_hash, channel_equal,
+      g_object_unref, NULL);
 
   chandler = empathy_chandler_new ("org.gnome.Empathy.TubesChandler",
       "/org/gnome/Empathy/TubesChandler");
   g_signal_connect (chandler, "new-channel",
-      G_CALLBACK (empathy_tubes_new_channel_cb), (gpointer) channels);
+      G_CALLBACK (new_channel_cb), channels);
 
   empathy_debug (DEBUG_DOMAIN, "Ready to handle new tubes channels");
 
   loop = g_main_loop_new (NULL, FALSE);
   g_main_loop_run (loop);
 
-  g_hash_table_unref (channels);
+  g_main_loop_unref (loop);
+  g_hash_table_destroy (channels);
   g_object_unref (chandler);
 
-  return 0;
+  return EXIT_SUCCESS;
 }
+
