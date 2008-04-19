@@ -2,6 +2,8 @@ empathy
 empathy-accounts
 empathy-logs
 empathy-chat-chandler
-org.gnome.Empathy.Chat.service
 empathy-call-chandler
+empathy-tubes-chandler
+org.gnome.Empathy.Chat.service
 org.gnome.Empathy.Call.service
+org.gnome.Empathy.Tubes.service

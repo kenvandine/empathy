@@ -46,8 +46,8 @@ glade_DATA = 					\
 	empathy-new-chatroom-dialog.glade	\
 	empathy-status-icon.glade
 
-EXTRA_DIST =							\
-	$(autostart_DATA)					\
+EXTRA_DIST =			\
+	$(autostart_DATA)	\
 	$(glade_DATA)
 
 CLEANFILES = $(BUILT_SOURCES)
