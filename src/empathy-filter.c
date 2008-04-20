@@ -389,55 +389,19 @@ typedef struct {
 	EmpathyContactFactory *factory;
 	EmpathyContact        *initiator;
 	TpChannel             *channel;
-	gchar                 *service;
-	guint                  type;
 	guint                  id;
+	gchar                 *bus_name;
+	gchar                 *object_path;
+	gboolean               activatable;
 } FilterTubesData;
 
 static void
 filter_tubes_dispatch (EmpathyFilter *filter,
 		       gpointer       user_data)
 {
-	static TpDBusDaemon *daemon = NULL;
-	FilterTubesData     *data = user_data;
-	gchar               *thandler_bus_name;
-	gchar               *thandler_object_path;
-	gboolean             activatable = FALSE;
-	gchar              **names = NULL;
-	GError              *error = NULL;
+	FilterTubesData *data = user_data;
 
-	/* Build the bus-name and object-path where the handler for this tube
-	 * is supposed to be. */
-	thandler_bus_name = empathy_tube_handler_build_bus_name (data->type,
-								 data->service);
-	thandler_object_path = empathy_tube_handler_build_object_path (data->type,
-								       data->service);
-
-	/* Check if that bus-name is activatable, if not that means the
-	 * application needed to handle this tube isn't installed. */
-	if (!daemon) {
-		daemon = tp_dbus_daemon_new (tp_get_bus ());
-	}
-
-	if (!tp_cli_dbus_daemon_run_list_activatable_names (daemon, -1,
-							    &names, &error,
-							    NULL)) {
-		empathy_debug (DEBUG_DOMAIN, "Error listing activatable names: %s",
-			       error->message);
-		g_clear_error (&error);
-	} else {
-		gchar **name;
-
-		for (name = names; *name; name++) {
-			if (!tp_strdiff (*name, thandler_bus_name)) {
-				activatable = TRUE;
-				break;
-			}
-		}
-		g_strfreev (names);
-	}
-
-	if (activatable) {
+	if (data->activatable) {
 		TpProxy *connection;
 		TpProxy *thandler;
 		gchar   *object_path;
@@ -447,8 +411,8 @@ filter_tubes_dispatch (EmpathyFilter *filter,
 		/* Create the proxy for the tube handler */
 		thandler = g_object_new (TP_TYPE_PROXY,
 					 "dbus-connection", tp_get_bus (),
-					 "bus-name", thandler_bus_name,
-					 "object-path", thandler_object_path,
+					 "bus-name", data->bus_name,
+					 "object-path", data->object_path,
 					 NULL);
 		tp_proxy_add_interface_by_id (thandler, EMP_IFACE_QUARK_TUBE_HANDLER);
 
@@ -478,19 +442,20 @@ filter_tubes_dispatch (EmpathyFilter *filter,
 		gchar     *str;
 
 		/* Tell the user that the tube can't be handled */
-		str = g_strdup_printf (_("%s invited you to play %s but you don't "
-					 "have it installed."),
-				       empathy_contact_get_name (data->initiator),
-				       data->service);
+		str = g_strdup_printf (_("%s offered you an invitation, but "
+					 "you don't have the needed external "
+					 "application to handle it."),
+				       empathy_contact_get_name (data->initiator));
+
 		dialog = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL,
 						 GTK_MESSAGE_ERROR,
 						 GTK_BUTTONS_OK, str);
-		g_free (str);
-		str = g_strdup_printf (_("%s Invitation"), data->service);
-		gtk_window_set_title (GTK_WINDOW (dialog), str);
+		gtk_window_set_title (GTK_WINDOW (dialog),
+				      _("Invitation Error"));
 		g_free (str);
 
-		g_signal_connect (dialog, "destroy",
+		gtk_widget_show (dialog);
+		g_signal_connect (dialog, "response",
 				  G_CALLBACK (gtk_widget_destroy),
 				  NULL);
 
@@ -501,9 +466,8 @@ filter_tubes_dispatch (EmpathyFilter *filter,
 							   NULL);
 	}
 
-	g_free (thandler_bus_name);
-	g_free (thandler_object_path);
-	g_free (data->service);
+	g_free (data->bus_name);
+	g_free (data->object_path);
 	g_object_unref (data->channel);
 	g_object_unref (data->initiator);
 	g_object_unref (data->factory);
@@ -522,10 +486,15 @@ filter_tubes_new_tube_cb (TpChannel   *channel,
 			  GObject     *filter)
 {
 	EmpathyFilterPriv *priv = GET_PRIV (filter);
+	static TpDBusDaemon *daemon = NULL;
 	FilterTubesData   *data;
 	McAccount         *account;
 	guint              number;
 	gchar             *msg;
+	gchar            **names;
+	gboolean           running = FALSE;
+	const gchar       *icon_name;
+	GError            *error = NULL;
 
 	/* Increase tube count */
 	number = GPOINTER_TO_UINT (g_hash_table_lookup (priv->tubes, channel));
@@ -539,29 +508,74 @@ filter_tubes_new_tube_cb (TpChannel   *channel,
 		return;
 	}
 
+	if (!daemon) {
+		daemon = tp_dbus_daemon_new (tp_get_bus ());
+	}
+
 	account = empathy_channel_get_account (channel);
 	data = g_slice_new (FilterTubesData);
-	data->type = type;
+	data->activatable = FALSE;
 	data->id = id;
-	data->service = g_strdup (service);
 	data->channel = g_object_ref (channel);
 	data->factory = empathy_contact_factory_new ();
 	data->initiator = empathy_contact_factory_get_from_handle (data->factory,
 								   account,
 								   initiator);
+	data->bus_name = empathy_tube_handler_build_bus_name (type, service);
+	data->object_path = empathy_tube_handler_build_object_path (type, service);
+	g_object_unref (account);
+
+	/* Check if that bus-name has an owner, if it has one that means the
+	 * app is already running and we can directly give the channel. */
+	tp_cli_dbus_daemon_run_name_has_owner (daemon, -1, data->bus_name,
+					       &running, NULL, NULL);
+	if (running) {
+		empathy_debug (DEBUG_DOMAIN, "Tube handler running");
+		data->activatable = TRUE;
+		filter_tubes_dispatch (EMPATHY_FILTER (filter), data);
+		return;
+	}
+
+	/* Check if that bus-name is activatable, if not that means the
+	 * application needed to handle this tube isn't installed. */
+	if (!tp_cli_dbus_daemon_run_list_activatable_names (daemon, -1,
+							    &names, &error,
+							    NULL)) {
+		empathy_debug (DEBUG_DOMAIN, "Error listing activatable names: %s",
+			       error->message);
+		g_clear_error (&error);
+	} else {
+		gchar **name;
+
+		for (name = names; *name; name++) {
+			if (!tp_strdiff (*name, data->bus_name)) {
+				data->activatable = TRUE;
+				break;
+			}
+		}
+		g_strfreev (names);
+	}
 
 	empathy_contact_run_until_ready (data->initiator,
 					 EMPATHY_CONTACT_READY_NAME, NULL);
 
-	msg = g_strdup_printf (_("%s is offering you a tube for application %s"),
-			       empathy_contact_get_name (data->initiator),
-			       service);
+	if (data->activatable) {
+		icon_name = GTK_STOCK_EXECUTE;
+		msg = g_strdup_printf (_("%s is offering you an invitation. An external "
+					 "application will be started to handle it."),
+				       empathy_contact_get_name (data->initiator));
+	} else {
+		icon_name = GTK_STOCK_DIALOG_ERROR;
+		msg = g_strdup_printf (_("%s is offering you an invitation, but "
+					 "you don't have the needed external "
+					 "application to handle it."),
+				       empathy_contact_get_name (data->initiator));
+	}
 
-	filter_emit_event (EMPATHY_FILTER (filter), GTK_STOCK_DIALOG_QUESTION,
-			   msg, filter_tubes_dispatch, data);
+	filter_emit_event (EMPATHY_FILTER (filter), icon_name, msg,
+			   filter_tubes_dispatch, data);
 
 	g_free (msg);
-	g_object_unref (account);
 }
 
 static void
