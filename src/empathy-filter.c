@@ -406,6 +406,7 @@ filter_tubes_dispatch (EmpathyFilter *filter,
 	gchar              **names = NULL;
 	GtkWidget           *dialog;
 	GtkButtonsType       buttons_type;
+	GtkMessageType       message_type;
 	gchar               *str;
 	gint                 res;
 	GError              *error = NULL;
@@ -443,11 +444,13 @@ filter_tubes_dispatch (EmpathyFilter *filter,
 
 	/* Ask confirmation to the user */
 	if (activatable) {
+		message_type = GTK_MESSAGE_QUESTION;
 		buttons_type = GTK_BUTTONS_YES_NO;
 		str = g_strdup_printf (_("Accept invitation to play %s from %s?"),
 				       data->service,
 				       empathy_contact_get_name (data->initiator));
 	} else {
+		message_type = GTK_MESSAGE_ERROR;
 		buttons_type = GTK_BUTTONS_OK;
 		str = g_strdup_printf (_("%s invited you to play %s but you don't "
 					 "have it installed."),
@@ -455,9 +458,7 @@ filter_tubes_dispatch (EmpathyFilter *filter,
 				       data->service);
 	}
 	dialog = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL,
-					 GTK_MESSAGE_QUESTION,
-					 buttons_type,
-					 str);
+					 message_type, buttons_type, str);
 	g_free (str);
 	str = g_strdup_printf (_("%s Invitation"), data->service);
 	gtk_window_set_title (GTK_WINDOW (dialog), str);
