@@ -63,8 +63,6 @@ void             empathy_chat_view_append_button        (EmpathyChatView *view,
 							 const gchar     *message,
 							 GtkWidget       *button1,
 							 GtkWidget       *button2);
-void             empathy_chat_view_set_margin           (EmpathyChatView *view,
-							 gint             margin);
 void             empathy_chat_view_scroll               (EmpathyChatView *view,
 							 gboolean         allow_scrolling);
 void             empathy_chat_view_scroll_down          (EmpathyChatView *view);
