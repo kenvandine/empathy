@@ -1283,15 +1283,19 @@ chat_set_show_contacts (EmpathyChat *chat, gboolean show)
 	}
 
 	if (show) {
-		if (priv->contacts_width <= 0) {
-			/* It's the first time we show the contact list, make
-			 * sure the chat view don't get resized. Relax the
-			 * size request once it's done. */
-			gtk_widget_set_size_request (priv->vbox_left,
-						     priv->vbox_left->allocation.width,
-						     -1);
-			g_idle_add (chat_reset_size_request, priv->vbox_left);
-		} else {
+		gint min_width;
+
+		/* We are adding the contact list to the chat, we don't want the
+		 * chat view to become too small. If the chat view is already
+		 * smaller than 250 make sure that size won't change. If the
+		 * chat view is bigger the contact list will take some space on
+		 * it but we make sure the chat view don't become smaller than
+		 * 250. Relax the size request once the resize is done */
+		min_width = MIN (priv->vbox_left->allocation.width, 250);
+		gtk_widget_set_size_request (priv->vbox_left, min_width, -1);
+		g_idle_add (chat_reset_size_request, priv->vbox_left);
+
+		if (priv->contacts_width > 0) {
 			gtk_paned_set_position (GTK_PANED (priv->hpaned),
 						priv->contacts_width);
 		}
