@@ -55,10 +55,12 @@ typedef struct _StatusIconEvent StatusIconEvent;
 struct _EmpathyStatusIconPriv {
 	GtkStatusIcon      *icon;
 	EmpathyIdle        *idle;
+	MissionControl     *mc;
 	EmpathyFilter      *filter;
 	EmpathyFilterEvent *event;
 	gboolean            showing_event_icon;
 	guint               blink_timeout;
+	gpointer            token;
 
 	GtkWindow          *window;
 	GtkWidget          *popup_menu;
@@ -320,9 +322,12 @@ status_icon_finalize (GObject *object)
 		g_source_remove (priv->blink_timeout);
 	}
 
+	empathy_disconnect_account_status_changed (priv->token);
+
 	g_object_unref (priv->icon);
 	g_object_unref (priv->idle);
 	g_object_unref (priv->filter);
+	g_object_unref (priv->mc);
 }
 
 static void
@@ -336,13 +341,45 @@ empathy_status_icon_class_init (EmpathyStatusIconClass *klass)
 }
 
 static void
+status_icon_status_changed_cb (MissionControl           *mc,
+			       TpConnectionStatus        status,
+			       McPresence                presence,
+			       TpConnectionStatusReason  reason,
+			       const gchar              *unique_name,
+			       EmpathyStatusIcon        *icon)
+{
+	GList                 *accounts, *l;
+	guint                  connection_status;
+	EmpathyStatusIconPriv *priv;
+
+	priv = GET_PRIV (icon);
+
+	/* Check for a connected account */
+	accounts = mc_accounts_list_by_enabled (TRUE);
+	for (l = accounts; l; l = l->next) {
+		connection_status = mission_control_get_connection_status (priv->mc,
+									   l->data,
+									   NULL);
+		if (connection_status == 0)
+			break;
+	}
+	mc_accounts_list_free (accounts);
+
+	gtk_widget_set_sensitive (priv->message_item, connection_status == 0);
+}
+
+static void
 empathy_status_icon_init (EmpathyStatusIcon *icon)
 {
 	EmpathyStatusIconPriv *priv = GET_PRIV (icon);
 
 	priv->icon = gtk_status_icon_new ();
+	priv->mc = empathy_mission_control_new ();
 	priv->idle = empathy_idle_new ();
 	priv->filter = empathy_filter_new ();
+	priv->token = empathy_connect_to_account_status_changed (priv->mc,
+			G_CALLBACK (status_icon_status_changed_cb),
+			icon, NULL);
 
 	/* make icon listen and respond to MAIN_WINDOW_HIDDEN changes */
 	empathy_conf_notify_add (empathy_conf_get (),
