@@ -1,3 +1,60 @@
+NEW in 0.23.1
+==============
+ - Show contact list when a chat becomes a chatroom. (Xavier Claessens).
+ - Dispatch each Tube to the application handling its service. (Elliot Fairweather, Xavier Claessens).
+ - Added introduction and started the Getting Started section of help manual (Milo Casagrande).
+ - Add build system for help manual (Xavier Claessens).
+ - Some code cleanup (Xavier Claessens).
+ - Already open channels are considered OUTGOING. (Xavier Claessens).
+ - Drop Chandler and Filter, do not use MC for dispatching channels, do it ourself. Everything is now in the same process. (Xavier Claessens).
+ - Remove libtelepathy dep and use telepathy-glib instead. (Xavier Claessens).
+ - Remove Room menu, chatrooms will be handled in a dedicated program. (Xavier Claessens).
+ - Unify EmpathyPrivateChat and EmpathyGroupChat. (Xavier Claessens).
+ - Unify EmpathyTpChatroom and EmpathyTpChat. (Xavier Claessens).
+ - Do not autoconnect if networkmanager says we are not connected at startup. (Xavier Claessens).
+ - Move modules that make no sense to be used in other applicaton from libempathy-gtk/ to src/ (Xavier Claessens).
+ - Convert all files to glade3 (Laurent Bigonville).
+
+Bugs fixed:
+ - Fixed #526145, crash in Empathy Instant Messenger: Tryint to persuade Zdra,... (Xavier Claessens)
+ - Fixed #475789, Compact mode + avatars = bad padding (Marco Barisione)
+ - Fixed #479697, no sounds (Frederic Peters)
+ - Fixed #489978, Removing NotHere applet from panel (Frederic Peters)
+ - Fixed #496309, empathy translation issues (Andre Klapper)
+ - Fixed #513676, Need a widget to configure AIM accounts (Andreas Henriksson)
+ - Fixed #513679, Need a widget to configure SIP accounts (Baptiste Mille-Mathias)
+ - Fixed #514380, Drop gnome-vfs dependency (Cosimo Cecchi)
+ - Fixed #517776, Groupwise profile (Vincent Untz)
+ - Fixed #519946, Confirmation dialog on remove contact/group (Bruno Dusausoy)
+ - Fixed #521554, Diplay all the favourite rooms in the favourite room dialog (Marco Barisione)
+ - Fixed #521570, Set to unsensitive the 'show avatars' option when using compact mode (Marco Barisione)
+ - Fixed #522297, libempathy-gtk Python binding: cannot create a ContactListStore (Juan Pizarro)
+ - Fixed #522528, Missing files in POTFILES.in (nshmyrev)
+ - Fixed #522780, Couldn't build latest Empathy trunk (rev. 807) (Xavier Claessens)
+ - Fixed #522862, Need a GUI to configure groupwise account (Vincent Untz)
+ - Fixed #523703, Deprecated glib symbols used. (Frederic Peters)
+ - Fixed #525039, Should not be started automatically via /etc/xdg/autostart (Frederic Peters)
+ - Fixed #525084, Crash at GNOME startup (Xavier Claessens)
+ - Fixed #525562, Empathy should not require python-config (Frederic Peters)
+ - Fixed #526374, Crash in EmpathyContactListStore (Xavier Claessens)
+ - Fixed #526927, "This call will be ended. Continue?" has no purpose when call status is disconnected (Frederic Peters)
+ - Fixed #527452, Too difficult SIP configure UI (Frederic Peters)
+ - Fixed #527454, Better call dialog (Naba Kumar)
+ - Fixed #527713, crash when opening a chat with the keyboard (Frederic Peters)
+ - Fixed #527876, "registrar" misspelled (Frederic Peters)
+ - Fixed #527924, NotHere applet doesn't find icons (Frederic Peters)
+ - Fixed #528229, chat dialogs way too large (Xavier Claessens)
+ - Fixed #528287, Contact not shown in the contact list when he comes online (Xavier Claessens)
+ - Fixed #528529, escaping text in strings using Pango markup (Frederic Peters)
+ - Fixed #528542, Help is displayed on stderr, but stderr may go to log file (Frederic Peters)
+ - Fixed #528596, Missing l10n for strings in call window (Frederic Peters)
+
+Translations:
+ - Updated es translation (Jorge Gonzalez).
+ - Updated el translation (Giannis Katsampirhs).
+ - Updated ca translation (Gil Forcada).
+ - Updated Basque translation (Inaki Larranaga Murgoitio).
+
 NEW in 0.22.0
 ==============
  - Queue received messages until the sender got his alias. (Xavier Claessens).
