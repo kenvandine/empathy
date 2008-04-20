@@ -43,6 +43,7 @@
 #include <libempathy/empathy-utils.h>
 #include <libempathy/empathy-debug.h>
 #include <libempathy/empathy-tube-handler.h>
+#include <libempathy/empathy-contact-factory.h>
 
 #include <libempathy-gtk/empathy-chat.h>
 #include <libempathy-gtk/empathy-images.h>
@@ -153,15 +154,15 @@ empathy_filter_activate_event (EmpathyFilter      *filter,
 
 	empathy_debug (DEBUG_DOMAIN, "Activating event");
 
-	event_ext = (EmpathyFilterEventExt*) event;
-	if (event_ext->func) {
-		event_ext->func (filter, event_ext->user_data);
-	}
-
 	is_top = (l == priv->events);
 	priv->events = g_slist_delete_link (priv->events, l);
 	if (is_top) {
 		g_object_notify (G_OBJECT (filter), "top-event");
+	}
+
+	event_ext = (EmpathyFilterEventExt*) event;
+	if (event_ext->func) {
+		event_ext->func (filter, event_ext->user_data);
 	}
 
 	filter_event_free (event_ext);
@@ -385,63 +386,139 @@ filter_tubes_async_cb (TpProxy      *channel,
 }
 
 typedef struct {
-	TpChannel *channel;
-	gchar     *service;
-	guint      type;
-	guint      id;
-} FilterTubeData;
+	EmpathyContactFactory *factory;
+	EmpathyContact        *initiator;
+	TpChannel             *channel;
+	gchar                 *service;
+	guint                  type;
+	guint                  id;
+} FilterTubesData;
 
 static void
 filter_tubes_dispatch (EmpathyFilter *filter,
 		       gpointer       user_data)
 {
-	FilterTubeData *data = user_data;
-	TpProxy        *connection;
-	gchar          *object_path;
-	guint           handle_type;
-	guint           handle;
-	TpProxy        *thandler;
-	gchar          *thandler_bus_name;
-	gchar          *thandler_object_path;
+	static TpDBusDaemon *daemon = NULL;
+	FilterTubesData     *data = user_data;
+	gchar               *thandler_bus_name;
+	gchar               *thandler_object_path;
+	gboolean             activatable = FALSE;
+	gchar              **names = NULL;
+	GtkWidget           *dialog;
+	GtkButtonsType       buttons_type;
+	gchar               *str;
+	gint                 res;
+	GError              *error = NULL;
 
-	thandler_bus_name = empathy_tube_handler_build_bus_name (data->type, data->service);
-	thandler_object_path = empathy_tube_handler_build_object_path (data->type, data->service);
+	/* Build the bus-name and object-path where the handler for this tube
+	 * is supposed to be. */
+	thandler_bus_name = empathy_tube_handler_build_bus_name (data->type,
+								 data->service);
+	thandler_object_path = empathy_tube_handler_build_object_path (data->type,
+								       data->service);
 
-	/* Create the proxy for the tube handler */
-	thandler = g_object_new (TP_TYPE_PROXY,
-				 "dbus-connection", tp_get_bus (),
-				 "bus-name", thandler_bus_name,
-				 "object-path", thandler_object_path,
-				 NULL);
-	tp_proxy_add_interface_by_id (thandler, EMP_IFACE_QUARK_TUBE_HANDLER);
+	/* Check if that bus-name is activatable, if not that means the
+	 * application needed to handle this tube isn't installed. */
+	if (!daemon) {
+		daemon = tp_dbus_daemon_new (tp_get_bus ());
+	}
 
-	/* Give the tube to the handler */
-	g_object_get (data->channel,
-		      "connection", &connection,
-		      "object-path", &object_path,
-		      "handle_type", &handle_type,
-		      "handle", &handle,
-		      NULL);
+	if (!tp_cli_dbus_daemon_run_list_activatable_names (daemon, -1,
+							    &names, &error,
+							    NULL)) {
+		empathy_debug (DEBUG_DOMAIN, "Error listing activatable names: %s",
+			       error->message);
+		g_clear_error (&error);
+	} else {
+		gchar **name;
 
-	emp_cli_tube_handler_call_handle_tube (thandler, -1,
-					       connection->bus_name,
-					       connection->object_path,
-					       object_path, handle_type, handle,
-					       data->id,
-					       filter_tubes_async_cb,
-					       "handling tube", NULL,
-					       G_OBJECT (filter));
+		for (name = names; *name; name++) {
+			if (!tp_strdiff (*name, thandler_bus_name)) {
+				activatable = TRUE;
+				break;
+			}
+		}
+		g_strfreev (names);
+	}
+
+	/* Ask confirmation to the user */
+	if (activatable) {
+		buttons_type = GTK_BUTTONS_YES_NO;
+		str = g_strdup_printf (_("Accept invitation to play %s from %s?"),
+				       data->service,
+				       empathy_contact_get_name (data->initiator));
+	} else {
+		buttons_type = GTK_BUTTONS_OK;
+		str = g_strdup_printf (_("%s invited you to play %s but you don't "
+					 "have it installed."),
+				       empathy_contact_get_name (data->initiator),
+				       data->service);
+	}
+	dialog = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL,
+					 GTK_MESSAGE_QUESTION,
+					 buttons_type,
+					 str);
+	g_free (str);
+	str = g_strdup_printf (_("%s Invitation"), data->service);
+	gtk_window_set_title (GTK_WINDOW (dialog), str);
+	g_free (str);
+
+	res = gtk_dialog_run (GTK_DIALOG (dialog));
+	gtk_widget_destroy (dialog);
+
+	/* Dispatch the tube if accepted by the user */
+	if (res == GTK_RESPONSE_YES) {
+		TpProxy *connection;
+		TpProxy *thandler;
+		gchar   *object_path;
+		guint    handle_type;
+		guint    handle;
+
+		empathy_debug (DEBUG_DOMAIN, "Tube accepted, dispatching");
+
+		/* Create the proxy for the tube handler */
+		thandler = g_object_new (TP_TYPE_PROXY,
+					 "dbus-connection", tp_get_bus (),
+					 "bus-name", thandler_bus_name,
+					 "object-path", thandler_object_path,
+					 NULL);
+		tp_proxy_add_interface_by_id (thandler, EMP_IFACE_QUARK_TUBE_HANDLER);
+
+		/* Give the tube to the handler */
+		g_object_get (data->channel,
+			      "connection", &connection,
+			      "object-path", &object_path,
+			      "handle_type", &handle_type,
+			      "handle", &handle,
+			      NULL);
+
+		emp_cli_tube_handler_call_handle_tube (thandler, -1,
+						       connection->bus_name,
+						       connection->object_path,
+						       object_path, handle_type,
+						       handle, data->id,
+						       filter_tubes_async_cb,
+						       "handling tube", NULL,
+						       G_OBJECT (filter));
+
+		g_object_unref (thandler);
+		g_object_unref (connection);
+		g_free (object_path);
+	} else {
+		empathy_debug (DEBUG_DOMAIN, "Tube rejected, closing");
+		tp_cli_channel_type_tubes_call_close_tube (data->channel, -1,
+							   data->id,
+							   NULL, NULL, NULL,
+							   NULL);
+	}
 
 	g_free (thandler_bus_name);
 	g_free (thandler_object_path);
-	g_object_unref (thandler);
-	g_object_unref (connection);
-	g_free (object_path);
-
 	g_free (data->service);
 	g_object_unref (data->channel);
-	g_slice_free (FilterTubeData, data);
-
+	g_object_unref (data->initiator);
+	g_object_unref (data->factory);
+	g_slice_free (FilterTubesData, data);
 }
 
 static void
@@ -456,9 +533,10 @@ filter_tubes_new_tube_cb (TpChannel   *channel,
 			  GObject     *filter)
 {
 	EmpathyFilterPriv *priv = GET_PRIV (filter);
+	FilterTubesData   *data;
+	McAccount         *account;
 	guint              number;
 	gchar             *msg;
-	FilterTubeData    *data;
 
 	/* Increase tube count */
 	number = GPOINTER_TO_UINT (g_hash_table_lookup (priv->tubes, channel));
@@ -472,16 +550,29 @@ filter_tubes_new_tube_cb (TpChannel   *channel,
 		return;
 	}
 
-	data = g_slice_new (FilterTubeData);
-	data->channel = g_object_ref (channel);
-	data->service = g_strdup (service);
+	account = empathy_channel_get_account (channel);
+	data = g_slice_new (FilterTubesData);
 	data->type = type;
 	data->id = id;
-	msg = g_strdup_printf (_("Incoming tube for application %s"), service);
-	filter_emit_event (EMPATHY_FILTER (filter), GTK_STOCK_EXECUTE, msg,
-			   filter_tubes_dispatch,
-			   data);
+	data->service = g_strdup (service);
+	data->channel = g_object_ref (channel);
+	data->factory = empathy_contact_factory_new ();
+	data->initiator = empathy_contact_factory_get_from_handle (data->factory,
+								   account,
+								   initiator);
+
+	empathy_contact_run_until_ready (data->initiator,
+					 EMPATHY_CONTACT_READY_NAME, NULL);
+
+	msg = g_strdup_printf (_("%s is offering you a tube for application %s"),
+			       empathy_contact_get_name (data->initiator),
+			       service);
+
+	filter_emit_event (EMPATHY_FILTER (filter), GTK_STOCK_DIALOG_QUESTION,
+			   msg, filter_tubes_dispatch, data);
+
 	g_free (msg);
+	g_object_unref (account);
 }
 
 static void
