@@ -57,8 +57,6 @@
             <property name="can_focus">True</property>
             <child>
               <widget class="GtkVBox" id="vbox_left">
-                <property name="width_request">600</property>
-                <property name="height_request">500</property>
                 <property name="visible">True</property>
                 <property name="spacing">6</property>
                 <child>
@@ -107,7 +105,7 @@
                 </child>
               </widget>
               <packing>
-                <property name="resize">True</property>
+                <property name="resize">False</property>
                 <property name="shrink">True</property>
               </packing>
             </child>

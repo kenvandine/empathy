@@ -1264,6 +1264,14 @@ chat_members_changed_cb (EmpathyTpChat  *tp_chat,
 	}
 }
 
+static gboolean
+chat_reset_size_request (gpointer widget)
+{
+	gtk_widget_set_size_request (widget, -1, -1);
+
+	return FALSE;
+}
+
 static void
 chat_set_show_contacts (EmpathyChat *chat, gboolean show)
 {
@@ -1275,9 +1283,19 @@ chat_set_show_contacts (EmpathyChat *chat, gboolean show)
 	}
 
 	if (show) {
+		if (priv->contacts_width <= 0) {
+			/* It's the first time we show the contact list, make
+			 * sure the chat view don't get resized. Relax the
+			 * size request once it's done. */
+			gtk_widget_set_size_request (priv->vbox_left,
+						     priv->vbox_left->allocation.width,
+						     -1);
+			g_idle_add (chat_reset_size_request, priv->vbox_left);
+		} else {
+			gtk_paned_set_position (GTK_PANED (priv->hpaned),
+						priv->contacts_width);
+		}
 		gtk_widget_show (priv->scrolled_window_contacts);
-		gtk_paned_set_position (GTK_PANED (priv->hpaned),
-					priv->contacts_width);
 	} else {
 		priv->contacts_width = gtk_paned_get_position (GTK_PANED (priv->hpaned));
 		gtk_widget_hide (priv->scrolled_window_contacts);
@@ -1383,12 +1401,10 @@ chat_create_ui (EmpathyChat *chat)
 	gtk_container_add (GTK_CONTAINER (priv->scrolled_window_contacts),
 			   GTK_WIDGET (priv->view));
 	gtk_widget_show (GTK_WIDGET (priv->view));
+	chat_set_show_contacts (chat, priv->remote_contact == NULL);
 
 	/* Initialy hide the topic, will be shown if not empty */
 	gtk_widget_hide (priv->hbox_topic);
-
-	/* Show/Hide contact list */
-	chat_set_show_contacts (chat, priv->remote_contact == NULL);
 
 	/* Set widget focus order */
 	list = g_list_append (NULL, priv->scrolled_window_input);
@@ -1605,6 +1621,7 @@ empathy_chat_init (EmpathyChat *chat)
 	priv->is_first_char = TRUE;
 	priv->log_manager = empathy_log_manager_new ();
 	priv->default_window_height = -1;
+	priv->contacts_width = -1;
 	priv->vscroll_visible = FALSE;
 	priv->sent_messages = NULL;
 	priv->sent_messages_index = -1;
