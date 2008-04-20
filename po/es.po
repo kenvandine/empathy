@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: empathy.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-04-17 17:02+0100\n"
-"PO-Revision-Date: 2008-04-17 20:35+0200\n"
+"POT-Creation-Date: 2008-04-20 10:09+0000\n"
+"PO-Revision-Date: 2008-04-20 14:07+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -231,27 +231,27 @@ msgstr ""
 "predeterminado es ordenar por el nombre del contacto con el valor «nombre». "
 "Un valor «estado» ordenará la lista por el estado."
 
-#: ../libempathy/empathy-tp-contact-list.c:676 ../src/empathy.c:254
+#: ../libempathy/empathy-tp-contact-list.c:676 ../src/empathy.c:189
 msgid "People nearby"
 msgstr "Gente cerca"
 
-#: ../libempathy/empathy-utils.c:462
+#: ../libempathy/empathy-utils.c:470
 msgid "Available"
 msgstr "Disponible"
 
-#: ../libempathy/empathy-utils.c:464
+#: ../libempathy/empathy-utils.c:472
 msgid "Busy"
 msgstr "Ocupado"
 
-#: ../libempathy/empathy-utils.c:467
+#: ../libempathy/empathy-utils.c:475
 msgid "Away"
 msgstr "Ausente"
 
-#: ../libempathy/empathy-utils.c:469
+#: ../libempathy/empathy-utils.c:477
 msgid "Hidden"
 msgstr "Oculto"
 
-#: ../libempathy/empathy-utils.c:472
+#: ../libempathy/empathy-utils.c:480
 msgid "Offline"
 msgstr "Desconectado"
 
@@ -259,8 +259,8 @@ msgstr "Desconectado"
 msgid "All"
 msgstr "Todo"
 
-#: ../libempathy-gtk/empathy-account-widget.c:285
-#: ../libempathy-gtk/empathy-account-widget.c:330
+#: ../libempathy-gtk/empathy-account-widget.c:286
+#: ../libempathy-gtk/empathy-account-widget.c:331
 #, c-format
 msgid "%s:"
 msgstr "%s:"
@@ -588,7 +588,7 @@ msgstr "Todos los archivos"
 msgid "Click to enlarge"
 msgstr "Pulse para agrandar"
 
-#: ../libempathy-gtk/empathy-chat.c:282 ../src/empathy.c:138
+#: ../libempathy-gtk/empathy-chat.c:282 ../src/empathy.c:70
 #: ../src/empathy-call-window.c:350
 msgid "Disconnected"
 msgstr "Desconectado"
@@ -649,7 +649,7 @@ msgstr "%s ha entrado en la sala"
 msgid "%s has left the room"
 msgstr "%s ha dejado la sala"
 
-#: ../libempathy-gtk/empathy-chat.c:1698
+#: ../libempathy-gtk/empathy-chat.c:1693
 msgid "Connected"
 msgstr "Conectado"
 
@@ -909,7 +909,7 @@ msgstr "SSL"
 msgid "Account"
 msgstr "Cuenta"
 
-#: ../libempathy-gtk/empathy-log-window.c:504 ../src/empathy-chat-window.c:277
+#: ../libempathy-gtk/empathy-log-window.c:504 ../src/empathy-chat-window.c:279
 msgid "Conversation"
 msgstr "Conversación"
 
@@ -1010,6 +1010,10 @@ msgstr "Limpiar"
 #: ../libempathy-gtk/empathy-theme-manager.c:80
 msgid "Blue"
 msgstr "Azul"
+
+#: ../libempathy-gtk/empathy-ui-utils.c:1327
+msgid "Unable to open uri"
+msgstr "No se pudo abrir el URI"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:158
 msgid "Current Locale"
@@ -1223,59 +1227,63 @@ msgstr "Presencia"
 msgid "Set your own presence"
 msgstr "Establezca su propia presencia"
 
-#: ../src/empathy.c:141
+#: ../src/empathy.c:73
 msgid "Invalid handle"
 msgstr "Manejador no válido"
 
-#: ../src/empathy.c:144
+#: ../src/empathy.c:76
 msgid "No matching connection"
 msgstr "No hay una conexión coincidente"
 
-#: ../src/empathy.c:147
+#: ../src/empathy.c:79
 msgid "Invalid account"
 msgstr "Cuenta no válida"
 
-#: ../src/empathy.c:150
+#: ../src/empathy.c:82
 msgid "Presence failure"
 msgstr "Fallo de presencia"
 
-#: ../src/empathy.c:153
+#: ../src/empathy.c:85
 msgid "No accounts"
 msgstr "Sin cuentas"
 
-#: ../src/empathy.c:156 ../src/empathy-main-window.c:905
+#: ../src/empathy.c:88 ../src/empathy-main-window.c:905
 msgid "Network error"
 msgstr "Error de red"
 
-#: ../src/empathy.c:159
+#: ../src/empathy.c:91
 msgid "Contact does not support voice"
 msgstr "El contacto no soporta voz"
 
-#: ../src/empathy.c:162
+#: ../src/empathy.c:94
 msgid "Lowmem"
 msgstr "Memoria baja"
 
-#: ../src/empathy.c:165
+#: ../src/empathy.c:97
 msgid "Channel request generic error"
 msgstr "Error genérico en la petición del canal"
 
-#: ../src/empathy.c:168
+#: ../src/empathy.c:100
 msgid "Channel banned"
 msgstr "Expulsado del canal"
 
-#: ../src/empathy.c:171
+#: ../src/empathy.c:103
 msgid "Channel full"
 msgstr "Canal lleno"
 
-#: ../src/empathy.c:174
+#: ../src/empathy.c:106
 msgid "Channel invite only"
 msgstr "El canal es de sólo invitación"
 
-#: ../src/empathy.c:177
+#: ../src/empathy.c:109
 msgid "Unknown error code"
 msgstr "Error de código desconocido"
 
-#: ../src/empathy.c:388
+#: ../src/empathy.c:318
+msgid "Don't connect on startup"
+msgstr "No conectarse automáticamente al inicio"
+
+#: ../src/empathy.c:330
 msgid "- Empathy Instant Messenger"
 msgstr "- Mensajería instantánea Empathy"
 
@@ -1367,16 +1375,16 @@ msgstr "Envía vídeo"
 msgid "Start Call"
 msgstr "Iniciar llamada"
 
-#: ../src/empathy-chat-window.c:321
+#: ../src/empathy-chat-window.c:319
 #, c-format
 msgid "Conversations (%d)"
 msgstr "Conversaciones (%d)"
 
-#: ../src/empathy-chat-window.c:388
+#: ../src/empathy-chat-window.c:386
 msgid "Topic:"
 msgstr "Tema:"
 
-#: ../src/empathy-chat-window.c:391
+#: ../src/empathy-chat-window.c:389
 msgid "Typing a message."
 msgstr "Tecleando un mensaje."
 
@@ -1496,6 +1504,54 @@ msgstr "_Servidor:"
 #: ../src/empathy-new-chatroom-dialog.glade.h:9
 msgid "_Room:"
 msgstr "_Sala:"
+
+#: ../src/empathy-filter.c:217
+#, c-format
+msgid ""
+"New message from %s:\n"
+"%s"
+msgstr ""
+"Nuevo mensaje de %s:\n"
+"%s"
+
+#: ../src/empathy-filter.c:275
+#, c-format
+msgid "Incoming call from %s"
+msgstr "Llamada entrante de %s"
+
+#: ../src/empathy-filter.c:333
+#, c-format
+msgid "Subscription requested by %s"
+msgstr "Petición de suscripción de %s"
+
+#: ../src/empathy-filter.c:336
+#, c-format
+msgid ""
+"\n"
+"Message: %s"
+msgstr ""
+"\n"
+"Mensaje: %s"
+
+#: ../src/empathy-filter.c:447
+#, c-format
+msgid "Accept invitation to play %s from %s?"
+msgstr "¿Aceptar la invitación para reproducir %s de %s?"
+
+#: ../src/empathy-filter.c:452
+#, c-format
+msgid "%s invited you to play %s but you don't have it installed."
+msgstr "%s le ha invitado a reproducir %s pero no lo tiene instalado."
+
+#: ../src/empathy-filter.c:462
+#, c-format
+msgid "%s Invitation"
+msgstr "Invitación de %s"
+
+#: ../src/empathy-filter.c:567
+#, c-format
+msgid "%s is offering you a tube for application %s"
+msgstr ""
 
 #: ../src/empathy-main-window.c:271
 msgid "Show and edit accounts"
@@ -1766,38 +1822,6 @@ msgstr "_Reproducir sonido cuando lleguen mensajes"
 #: ../src/empathy-preferences.glade.h:27
 msgid "_Use for chat rooms"
 msgstr "_Usar para sala de chat"
-
-#: ../src/empathy-status-icon.c:326
-#, c-format
-msgid ""
-"New message from %s:\n"
-"%s"
-msgstr ""
-"Nuevo mensaje de %s:\n"
-"%s"
-
-#: ../src/empathy-status-icon.c:385
-#, c-format
-msgid ""
-"Incoming call from %s:\n"
-"%s"
-msgstr ""
-"Llamada entrante de %s:\n"
-"%s"
-
-#: ../src/empathy-status-icon.c:664
-#, c-format
-msgid "Subscription requested by %s"
-msgstr "Petición de suscripción de %s"
-
-#: ../src/empathy-status-icon.c:667
-#, c-format
-msgid ""
-"\n"
-"Message: %s"
-msgstr ""
-"\n"
-"Mensaje: %s"
 
 #: ../src/empathy-status-icon.glade.h:1
 msgid "Status"
