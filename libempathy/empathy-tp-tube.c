@@ -391,7 +391,6 @@ empathy_tp_tube_new_stream_tube (EmpathyContact *contact,
   mc = empathy_mission_control_new ();
   account = empathy_contact_get_account (contact);
   connection = mission_control_get_tpconnection (mc, account, NULL);
-  g_object_unref (account);
   g_object_unref (mc);
 
   if (!tp_cli_connection_run_request_channel (connection, -1,
