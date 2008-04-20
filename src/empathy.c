@@ -141,6 +141,7 @@ create_salut_account (void)
 	gchar      *last_name = NULL;
 	gchar      *email = NULL;
 	gchar      *jid = NULL;
+	GError     *error = NULL;
 
 	/* Check if we already created a salut account */
 	empathy_conf_get_bool (empathy_conf_get(),
@@ -163,8 +164,10 @@ create_salut_account (void)
 	g_object_unref (protocol);
 
 	/* Get self EContact from EDS */
-	if (!e_book_get_self (&contact, &book, NULL)) {
-		empathy_debug (DEBUG_DOMAIN, "Failed to get self econtact");
+	if (!e_book_get_self (&contact, &book, &error)) {
+		empathy_debug (DEBUG_DOMAIN, "Failed to get self econtact: %s",
+			       error ? error->message : "No error given");
+		g_clear_error (&error);
 		g_object_unref (profile);
 		return;
 	}
