@@ -45,6 +45,7 @@ libempathy-gtk/empathy-spell-dialog.glade
 libempathy-gtk/empathy-theme-boxes.c
 libempathy-gtk/empathy-theme-irc.c
 libempathy-gtk/empathy-theme-manager.c
+libempathy-gtk/empathy-ui-utils.c
 libempathy-gtk/totem-subtitle-encoding.c
 
 megaphone/data/GNOME_Megaphone_Applet.schemas.in
