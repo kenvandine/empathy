@@ -123,8 +123,18 @@ tp_chat_member_added_cb (EmpathyTpGroup *group,
 			 EmpathyTpChat  *chat)
 {
 	EmpathyTpChatPriv *priv = GET_PRIV (chat);
+	guint              handle_type = 0;
 
 	priv->members_count++;
+	g_signal_emit_by_name (chat, "members-changed",
+			       contact, actor, reason, message,
+			       TRUE);
+
+	g_object_get (priv->channel, "handle-type", &handle_type, NULL);
+	if (handle_type == TP_HANDLE_TYPE_ROOM) {
+		return;
+	}
+
 	if (priv->members_count > 2 && priv->remote_contact) {
 		/* We now have more than 2 members, this is not a p2p chat
 		 * anymore. Remove the remote-contact as it makes no sense, the
@@ -142,10 +152,6 @@ tp_chat_member_added_cb (EmpathyTpGroup *group,
 		priv->remote_contact = g_object_ref (contact);
 		g_object_notify (G_OBJECT (chat), "remote-contact");
 	}
-
-	g_signal_emit_by_name (chat, "members-changed",
-			       contact, actor, reason, message,
-			       TRUE);
 }
 
 static void
@@ -157,8 +163,18 @@ tp_chat_member_removed_cb (EmpathyTpGroup *group,
 			   EmpathyTpChat  *chat)
 {
 	EmpathyTpChatPriv *priv = GET_PRIV (chat);
+	guint              handle_type = 0;
 
 	priv->members_count--;
+	g_signal_emit_by_name (chat, "members-changed",
+			       contact, actor, reason, message,
+			       FALSE);
+
+	g_object_get (priv->channel, "handle-type", &handle_type, NULL);
+	if (handle_type == TP_HANDLE_TYPE_ROOM) {
+		return;
+	}
+
 	if (priv->members_count <= 2 && !priv->remote_contact) {
 		GList *members, *l;
 
@@ -174,11 +190,8 @@ tp_chat_member_removed_cb (EmpathyTpGroup *group,
 		g_list_foreach (members, (GFunc) g_object_unref, NULL);
 		g_list_free (members);
 	}
-
-	g_signal_emit_by_name (chat, "members-changed",
-			       contact, actor, reason, message,
-			       FALSE);
 }
+
 static void
 tp_chat_local_pending_cb  (EmpathyTpGroup *group,
 			   EmpathyContact *contact,
