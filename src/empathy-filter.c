@@ -785,6 +785,12 @@ filter_connection_list_channels_cb (TpConnection    *connection,
 {
 	guint i;
 
+	if (error) {
+		empathy_debug (DEBUG_DOMAIN, "Error listing channels: %s",
+			       error->message);
+		return;
+	}
+
 	g_object_set_data (G_OBJECT (connection), "had-channels",
 			   GUINT_TO_POINTER (1));
 
