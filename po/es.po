@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: empathy.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-04-20 10:09+0000\n"
-"PO-Revision-Date: 2008-04-20 14:07+0200\n"
+"POT-Creation-Date: 2008-04-20 14:25+0000\n"
+"PO-Revision-Date: 2008-04-20 17:33+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -1533,25 +1533,37 @@ msgstr ""
 "\n"
 "Mensaje: %s"
 
-#: ../src/empathy-filter.c:447
+#. Tell the user that the tube can't be handled
+#: ../src/empathy-filter.c:445
 #, c-format
-msgid "Accept invitation to play %s from %s?"
-msgstr "¿Aceptar la invitación para reproducir %s de %s?"
-
-#: ../src/empathy-filter.c:452
-#, c-format
-msgid "%s invited you to play %s but you don't have it installed."
-msgstr "%s le ha invitado a reproducir %s pero no lo tiene instalado."
-
-#: ../src/empathy-filter.c:462
-#, c-format
-msgid "%s Invitation"
-msgstr "Invitación de %s"
-
-#: ../src/empathy-filter.c:567
-#, c-format
-msgid "%s is offering you a tube for application %s"
+msgid ""
+"%s offered you an invitation, but you don't have the needed external "
+"application to handle it."
 msgstr ""
+"%s le ofreció una invitación pero no tiene la aplicación externa necesaria para "
+"manejarla."
+
+#: ../src/empathy-filter.c:454
+msgid "Invitation Error"
+msgstr "Error en la invitación"
+
+#: ../src/empathy-filter.c:564
+#, c-format
+msgid ""
+"%s is offering you an invitation. An external application will be started to "
+"handle it."
+msgstr ""
+"%s le está ofreciendo una invitación. Se iniciará una aplicación externa para "
+"manejarla."
+
+#: ../src/empathy-filter.c:569
+#, c-format
+msgid ""
+"%s is offering you an invitation, but you don't have the needed external "
+"application to handle it."
+msgstr ""
+"%s le está ofreciendo una invitación pero no tiene la aplicación externa necesaria para "
+"manejarla."
 
 #: ../src/empathy-main-window.c:271
 msgid "Show and edit accounts"
