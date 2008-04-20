@@ -349,7 +349,7 @@ status_icon_status_changed_cb (MissionControl           *mc,
 			       EmpathyStatusIcon        *icon)
 {
 	GList                 *accounts, *l;
-	guint                  connection_status;
+	guint                  connection_status = 1;
 	EmpathyStatusIconPriv *priv;
 
 	priv = GET_PRIV (icon);
