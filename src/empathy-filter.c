@@ -404,11 +404,6 @@ filter_tubes_dispatch (EmpathyFilter *filter,
 	gchar               *thandler_object_path;
 	gboolean             activatable = FALSE;
 	gchar              **names = NULL;
-	GtkWidget           *dialog;
-	GtkButtonsType       buttons_type;
-	GtkMessageType       message_type;
-	gchar               *str;
-	gint                 res;
 	GError              *error = NULL;
 
 	/* Build the bus-name and object-path where the handler for this tube
@@ -442,40 +437,12 @@ filter_tubes_dispatch (EmpathyFilter *filter,
 		g_strfreev (names);
 	}
 
-	/* Ask confirmation to the user */
 	if (activatable) {
-		message_type = GTK_MESSAGE_QUESTION;
-		buttons_type = GTK_BUTTONS_YES_NO;
-		str = g_strdup_printf (_("Accept invitation to play %s from %s?"),
-				       data->service,
-				       empathy_contact_get_name (data->initiator));
-	} else {
-		message_type = GTK_MESSAGE_ERROR;
-		buttons_type = GTK_BUTTONS_OK;
-		str = g_strdup_printf (_("%s invited you to play %s but you don't "
-					 "have it installed."),
-				       empathy_contact_get_name (data->initiator),
-				       data->service);
-	}
-	dialog = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL,
-					 message_type, buttons_type, str);
-	g_free (str);
-	str = g_strdup_printf (_("%s Invitation"), data->service);
-	gtk_window_set_title (GTK_WINDOW (dialog), str);
-	g_free (str);
-
-	res = gtk_dialog_run (GTK_DIALOG (dialog));
-	gtk_widget_destroy (dialog);
-
-	/* Dispatch the tube if accepted by the user */
-	if (res == GTK_RESPONSE_YES) {
 		TpProxy *connection;
 		TpProxy *thandler;
 		gchar   *object_path;
 		guint    handle_type;
 		guint    handle;
-
-		empathy_debug (DEBUG_DOMAIN, "Tube accepted, dispatching");
 
 		/* Create the proxy for the tube handler */
 		thandler = g_object_new (TP_TYPE_PROXY,
@@ -493,6 +460,7 @@ filter_tubes_dispatch (EmpathyFilter *filter,
 			      "handle", &handle,
 			      NULL);
 
+		empathy_debug (DEBUG_DOMAIN, "Dispatching tube");
 		emp_cli_tube_handler_call_handle_tube (thandler, -1,
 						       connection->bus_name,
 						       connection->object_path,
@@ -506,7 +474,27 @@ filter_tubes_dispatch (EmpathyFilter *filter,
 		g_object_unref (connection);
 		g_free (object_path);
 	} else {
-		empathy_debug (DEBUG_DOMAIN, "Tube rejected, closing");
+		GtkWidget *dialog;
+		gchar     *str;
+
+		/* Tell the user that the tube can't be handled */
+		str = g_strdup_printf (_("%s invited you to play %s but you don't "
+					 "have it installed."),
+				       empathy_contact_get_name (data->initiator),
+				       data->service);
+		dialog = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL,
+						 GTK_MESSAGE_ERROR,
+						 GTK_BUTTONS_OK, str);
+		g_free (str);
+		str = g_strdup_printf (_("%s Invitation"), data->service);
+		gtk_window_set_title (GTK_WINDOW (dialog), str);
+		g_free (str);
+
+		g_signal_connect (dialog, "destroy",
+				  G_CALLBACK (gtk_widget_destroy),
+				  NULL);
+
+		empathy_debug (DEBUG_DOMAIN, "Tube can't be handled, closing");
 		tp_cli_channel_type_tubes_call_close_tube (data->channel, -1,
 							   data->id,
 							   NULL, NULL, NULL,
