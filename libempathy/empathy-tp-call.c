@@ -291,33 +291,23 @@ tp_call_member_added_cb (EmpathyTpGroup *group,
 {
   EmpathyTpCallPriv *priv = GET_PRIV (call);
 
+  if (!priv->contact && !empathy_contact_is_user (contact))
+    {
+      priv->contact = g_object_ref (contact);
+      priv->is_incoming = TRUE;
+      priv->status = EMPATHY_TP_CALL_STATUS_PENDING;
+      tp_call_request_streams (call);
+      g_object_notify (G_OBJECT (call), "is-incoming");
+      g_object_notify (G_OBJECT (call), "contact"); 
+      g_object_notify (G_OBJECT (call), "status");	
+    }
+
   if (priv->status == EMPATHY_TP_CALL_STATUS_PENDING &&
       ((priv->is_incoming && contact != priv->contact) ||
        (!priv->is_incoming && contact == priv->contact)))
     {
       priv->status = EMPATHY_TP_CALL_STATUS_ACCEPTED;
       g_object_notify (G_OBJECT (call), "status");
-    }
-}
-
-static void
-tp_call_local_pending_cb (EmpathyTpGroup *group,
-                          EmpathyContact *contact,
-                          EmpathyContact *actor,
-                          guint reason,
-                          const gchar *message,
-                          EmpathyTpCall *call)
-{
-  EmpathyTpCallPriv *priv = GET_PRIV (call);
-
-  if (!priv->contact && !empathy_contact_is_user (contact))
-    {
-      priv->contact = g_object_ref (contact);
-      priv->is_incoming = TRUE;
-      priv->status = EMPATHY_TP_CALL_STATUS_PENDING;
-      g_object_notify (G_OBJECT (call), "is-incoming");
-      g_object_notify (G_OBJECT (call), "contact"); 
-      g_object_notify (G_OBJECT (call), "status");	
     }
 }
 
@@ -510,8 +500,6 @@ tp_call_constructor (GType type,
 
   g_signal_connect (priv->group, "member-added",
       G_CALLBACK (tp_call_member_added_cb), call);
-  g_signal_connect (priv->group, "local-pending",
-      G_CALLBACK (tp_call_local_pending_cb), call);
   g_signal_connect (priv->group, "remote-pending",
       G_CALLBACK (tp_call_remote_pending_cb), call);
 
@@ -769,7 +757,6 @@ empathy_tp_call_add_output_video (EmpathyTpCall *call,
   EmpathyTpCallPriv *priv = GET_PRIV (call);
 
   g_return_if_fail (EMPATHY_IS_TP_CALL (call));
-  g_return_if_fail (priv->status != EMPATHY_TP_CALL_STATUS_CLOSED);
 
   empathy_debug (DEBUG_DOMAIN, "Adding output video - socket: %d",
       output_video_socket_id);
@@ -808,7 +795,6 @@ empathy_tp_call_mute_output (EmpathyTpCall *call,
   EmpathyTpCallPriv *priv = GET_PRIV (call);
 
   g_return_if_fail (EMPATHY_IS_TP_CALL (call));
-  g_return_if_fail (priv->status != EMPATHY_TP_CALL_STATUS_CLOSED);
 
   empathy_debug (DEBUG_DOMAIN, "Setting output mute: %d", is_muted);
 
@@ -827,7 +813,6 @@ empathy_tp_call_mute_input (EmpathyTpCall *call,
   EmpathyTpCallPriv *priv = GET_PRIV (call);
 
   g_return_if_fail (EMPATHY_IS_TP_CALL (call));
-  g_return_if_fail (priv->status != EMPATHY_TP_CALL_STATUS_CLOSED);
 
   empathy_debug (DEBUG_DOMAIN, "Setting input mute: %d", is_muted);
 
