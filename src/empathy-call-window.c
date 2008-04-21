@@ -179,12 +179,15 @@ call_window_video_button_toggled_cb (GtkWidget *button,
                                      EmpathyCallWindow *window)
 {
   gboolean is_sending;
+  guint status;
 
   is_sending = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button));
 
   empathy_debug (DEBUG_DOMAIN, "Send video toggled - %d", is_sending);
 
-  empathy_tp_call_request_video_stream_direction (window->call, is_sending);
+  g_object_get (window->call, "status", &status, NULL);
+  if (status == EMPATHY_TP_CALL_STATUS_ACCEPTED)
+      empathy_tp_call_request_video_stream_direction (window->call, is_sending);
 }
 
 static void
