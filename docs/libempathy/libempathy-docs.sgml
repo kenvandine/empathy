@@ -39,6 +39,8 @@
       <xi:include href="xml/empathy-tp-contact-list.xml"/>
       <xi:include href="xml/empathy-tp-group.xml"/>
       <xi:include href="xml/empathy-tp-roomlist.xml"/>
+      <xi:include href="xml/empathy-tp-tube.xml"/>
+      <xi:include href="xml/empathy-tube-handler.xml"/>
       <xi:include href="xml/empathy-utils.xml"/>
     </chapter>
   </part>
