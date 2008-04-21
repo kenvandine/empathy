@@ -253,11 +253,13 @@ call_window_delete_event_cb (GtkWidget *widget,
 {
   GtkWidget *dialog;
   gint result;
-  guint status;
+  guint status = EMPATHY_TP_CALL_STATUS_CLOSED;
 
   empathy_debug (DEBUG_DOMAIN, "Delete event occurred");
 
-  g_object_get (G_OBJECT (window->call), "status", &status, NULL);
+  if (window->call)
+      g_object_get (window->call, "status", &status, NULL);
+
   if (status == EMPATHY_TP_CALL_STATUS_ACCEPTED)
     {
       dialog = gtk_message_dialog_new (GTK_WINDOW (window->window),
