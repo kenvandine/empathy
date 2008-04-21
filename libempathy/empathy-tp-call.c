@@ -282,24 +282,6 @@ tp_call_request_streams (EmpathyTpCall *call)
 }
 
 static void
-tp_call_group_ready_cb (EmpathyTpCall *call)
-{
-  EmpathyTpCallPriv  *priv = GET_PRIV (call);
-  EmpathyPendingInfo *invitation;
-
-  invitation = empathy_tp_group_get_invitation (priv->group, &priv->contact);
-  priv->is_incoming = (invitation != NULL);
-  priv->status = EMPATHY_TP_CALL_STATUS_PENDING;
-
-  if (!priv->is_incoming)
-      tp_call_request_streams (call);
-
-  g_object_notify (G_OBJECT (call), "is-incoming");
-  g_object_notify (G_OBJECT (call), "contact");
-  g_object_notify (G_OBJECT (call), "status");
-}
-
-static void
 tp_call_member_added_cb (EmpathyTpGroup *group,
                          EmpathyContact *contact,
                          EmpathyContact *actor,
@@ -315,6 +297,49 @@ tp_call_member_added_cb (EmpathyTpGroup *group,
     {
       priv->status = EMPATHY_TP_CALL_STATUS_ACCEPTED;
       g_object_notify (G_OBJECT (call), "status");
+    }
+}
+
+static void
+tp_call_local_pending_cb (EmpathyTpGroup *group,
+                          EmpathyContact *contact,
+                          EmpathyContact *actor,
+                          guint reason,
+                          const gchar *message,
+                          EmpathyTpCall *call)
+{
+  EmpathyTpCallPriv *priv = GET_PRIV (call);
+
+  if (!priv->contact && !empathy_contact_is_user (contact))
+    {
+      priv->contact = g_object_ref (contact);
+      priv->is_incoming = TRUE;
+      priv->status = EMPATHY_TP_CALL_STATUS_PENDING;
+      g_object_notify (G_OBJECT (call), "is-incoming");
+      g_object_notify (G_OBJECT (call), "contact"); 
+      g_object_notify (G_OBJECT (call), "status");	
+    }
+}
+
+static void
+tp_call_remote_pending_cb (EmpathyTpGroup *group,
+                           EmpathyContact *contact,
+                           EmpathyContact *actor,
+                           guint reason,
+                           const gchar *message,
+                           EmpathyTpCall *call)
+{
+  EmpathyTpCallPriv *priv = GET_PRIV (call);
+
+  if (!priv->contact && !empathy_contact_is_user (contact))
+    {
+      priv->contact = g_object_ref (contact);
+      priv->is_incoming = FALSE;
+      priv->status = EMPATHY_TP_CALL_STATUS_PENDING;
+      tp_call_request_streams (call);
+      g_object_notify (G_OBJECT (call), "is-incoming");
+      g_object_notify (G_OBJECT (call), "contact"); 
+      g_object_notify (G_OBJECT (call), "status");	
     }
 }
 
@@ -356,8 +381,7 @@ tp_call_close_channel (EmpathyTpCall *call)
   empathy_debug (DEBUG_DOMAIN, "Closing channel");
 
   tp_cli_channel_call_close (priv->channel, -1,
-      (tp_cli_channel_callback_for_close) tp_call_async_cb,
-      "closing channel", NULL, G_OBJECT (call));
+      NULL, NULL, NULL, NULL);
 
   priv->status = EMPATHY_TP_CALL_STATUS_CLOSED;
   g_object_notify (G_OBJECT (call), "status");
@@ -484,14 +508,12 @@ tp_call_constructor (GType type,
   /* Setup group interface */
   priv->group = empathy_tp_group_new (priv->channel);
 
-  g_signal_connect (G_OBJECT (priv->group), "member-added",
+  g_signal_connect (priv->group, "member-added",
       G_CALLBACK (tp_call_member_added_cb), call);
-
-  if (empathy_tp_group_is_ready (priv->group))
-      tp_call_group_ready_cb (call);
-  else
-      g_signal_connect_swapped (priv->group, "notify::ready",
-          G_CALLBACK (tp_call_group_ready_cb), call);
+  g_signal_connect (priv->group, "local-pending",
+      G_CALLBACK (tp_call_local_pending_cb), call);
+  g_signal_connect (priv->group, "remote-pending",
+      G_CALLBACK (tp_call_remote_pending_cb), call);
 
   /* Start stream engine */
   tp_call_stream_engine_handle_channel (call);
@@ -514,6 +536,7 @@ tp_call_finalize (GObject *object)
     {
       g_signal_handlers_disconnect_by_func (priv->channel,
           tp_call_channel_invalidated_cb, object);
+      tp_call_close_channel (EMPATHY_TP_CALL (object));
       g_object_unref (priv->channel);
     }
 

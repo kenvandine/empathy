@@ -966,7 +966,7 @@ empathy_tp_group_get_invitation (EmpathyTpGroup  *group,
 		contact = priv->remote_pendings->data;
 	}
 
-	if (remote_contact) {
+	if (remote_contact && contact) {
 		*remote_contact = g_object_ref (contact);
 	}
 
