@@ -58,6 +58,7 @@ empathy_substring (const gchar *str,
 /*
  * Regular Expression code to match urls.
  */
+#define APTCHARS  "-A-Za-z0-9,-."
 #define USERCHARS "-A-Za-z0-9"
 #define PASSCHARS "-A-Za-z0-9,?;.:/!%$^*&~\"#'"
 #define HOSTCHARS "-A-Za-z0-9_"
@@ -90,6 +91,10 @@ regex_init (void)
 			expression =
 				"(www|ftp)[" HOSTCHARS "]*\\.[" HOSTCHARS ".]+"
 				"(:[0-9]+)?(" URLPATH ")?";
+			break;
+		case EMPATHY_REGEX_APT:
+			expression =
+				"apt://[" APTCHARS "]*";
 			break;
 		case EMPATHY_REGEX_EMAIL:
 			expression =
