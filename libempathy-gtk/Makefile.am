@@ -3,6 +3,7 @@ AM_CPPFLAGS =                                           \
 	-I$(top_srcdir)                                 \
 	-DDATADIR=\""$(datadir)"\"              	\
 	$(EMPATHY_CFLAGS)				\
+	$(ENCHANT_CFLAGS)				\
 	$(WARN_CFLAGS)
 
 BUILT_SOURCES = 					\
@@ -54,6 +55,7 @@ nodist_libempathy_gtk_la_SOURCES =\
 
 libempathy_gtk_la_LIBADD =			\
 	$(EMPATHY_LIBS)				\
+	$(ENCHANT_LIBS)				\
 	$(top_builddir)/libempathy/libempathy.la
 
 libempathy_gtk_la_LDFLAGS =                \

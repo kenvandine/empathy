@@ -232,8 +232,8 @@ spell_setup_languages (void)
 	}
 }
 
-const char *
-empathy_spell_get_language_name (const char *code)
+const gchar *
+empathy_spell_get_language_name (const gchar *code)
 {
 	const gchar *name;
 
@@ -252,14 +252,14 @@ empathy_spell_get_language_name (const char *code)
 }
 
 static void
-enumerate_dicts (const char * const lang_tag,
-                 const char * const provider_name,
-                 const char * const provider_desc,
-                 const char * const provider_file,
-		 void * user_data)
+enumerate_dicts (const gchar * const lang_tag,
+                 const gchar * const provider_name,
+                 const gchar * const provider_desc,
+                 const gchar * const provider_file,
+		 gpointer            user_data)
 {
 	GList **list = user_data;
-	char *lang = g_strdup(lang_tag);
+	gchar  *lang = g_strdup (lang_tag);
 
 	if (strchr (lang, '_')) {
 		/* cut country part out of language */
@@ -272,9 +272,8 @@ enumerate_dicts (const char * const lang_tag,
 		return;
 	}
 
-	*list = g_list_append (*list, g_strdup(lang));
+	*list = g_list_append (*list, g_strdup (lang));
 }
-
 
 GList *
 empathy_spell_get_language_codes (void)
@@ -299,7 +298,7 @@ empathy_spell_free_language_codes (GList *codes)
 gboolean
 empathy_spell_check (const gchar *word)
 {
-	int          enchant_result = 1;
+	gint         enchant_result = 1;
 	const gchar *p;
 	gboolean     digit;
 	gunichar     c;
@@ -346,7 +345,7 @@ empathy_spell_check (const gchar *word)
 GList *
 empathy_spell_get_suggestions (const gchar *word)
 {
-	gint                     len;
+	gint   len;
 	GList *l1;
 	GList *suggestion_list = NULL;
 
@@ -358,20 +357,22 @@ empathy_spell_get_suggestions (const gchar *word)
 
 	for (l1 = languages; l1; l1 = l1->next) {
 		SpellLanguage *lang;
-		char    **suggestions;
-		size_t    i, number_of_suggestions;
+		gchar **suggestions;
+		gsize   i, number_of_suggestions;
 
 		lang = l1->data;
 
 		suggestions = enchant_dict_suggest (lang->speller, word, len,
-				&number_of_suggestions);
+						    &number_of_suggestions);
 		
 		for (i = 0; i < number_of_suggestions; i++) {
 			suggestion_list = g_list_append (suggestion_list,
-							 g_strdup(suggestions[i]));
+							 g_strdup (suggestions[i]));
 		}
 
-		enchant_dict_free_string_list (lang->speller, suggestions);
+		if (suggestions) {
+			enchant_dict_free_string_list (lang->speller, suggestions);
+		}
 	}
 
 	return suggestion_list;
@@ -412,8 +413,8 @@ empathy_spell_check (const gchar *word)
 	return TRUE;
 }
 
-const char *
-empathy_spell_get_language_name (const char *lang)
+const gchar *
+empathy_spell_get_language_name (const gchar *lang)
 {
 	empathy_debug (DEBUG_DOMAIN, "Support disabled, could not get language name");
 

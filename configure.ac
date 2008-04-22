@@ -32,6 +32,8 @@ LIBGLADE_REQUIRED=2.0.0
 LIBPANELAPPLET_REQUIRED=2.10.0
 TELEPATHY_GLIB_REQUIRED=0.7.3
 MISSION_CONTROL_REQUIRED=4.61
+ENCHANT_REQUIRED=1.2.0
+ISO_CODES_REQUIRED=0.35
 
 # Uncomment that to build without deprecated symbols
 # AC_DEFINE(GTK_DISABLE_DEPRECATED, 1, [Disable deprecated GTK symbols])
@@ -111,63 +113,43 @@ AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE",[Gettext package name])
 
 AM_GLIB_GNU_GETTEXT
 
-dnl ================================================================
-dnl spellchecking checks: enchant and iso-codes
-dnl ================================================================
+# -----------------------------------------------------------
+# spellchecking checks: enchant and iso-codes
+# -----------------------------------------------------------
+AC_ARG_ENABLE(spell,
+              AS_HELP_STRING([--enable-spell=@<:@no/yes/auto@:>@],
+                             [Enable spell checking]), ,
+                             enable_spell=auto)
 
-ENCHANT_REQUIRED=1.2.0
-ISO_CODES_REQUIRED=0.35
+if test "x$enable_spell" != "xno"; then
+   PKG_CHECK_MODULES(ENCHANT,
+   [
+      enchant >= $ENCHANT_REQUIRED,
+      iso-codes >= $ISO_CODES_REQUIRED
+   ], have_enchant="yes", have_enchant="no")
 
-AC_ARG_ENABLE([spell],
-	AS_HELP_STRING([--disable-spell],[Disable spell checking (default: enabled)]),
-	[enable_enchant=$enableval],
-	[enable_enchant=yes])
-
-if test "x$enable_enchant" = "xyes" ; then
-
-	PKG_CHECK_MODULES(ENCHANT, enchant >= $ENCHANT_REQUIRED, \
-			  have_enchant=yes, have_enchant=no)
-
-	if test "x$have_enchant" = "xyes"; then
-
-		PKG_CHECK_EXISTS([iso-codes >= $ISO_CODES_REQUIRED],
-				 [have_iso_codes=yes],[have_iso_codes=no])
-
-		if test "x$have_iso_codes" = "xyes"; then
-			AC_MSG_CHECKING([whether iso-codes has iso-639 and iso-3166 domains])
-			if $PKG_CONFIG --variable=domains iso-codes | grep 639 > /dev/null && \
-			   $PKG_CONFIG --variable=domains iso-codes | grep 3166 > /dev/null ; then
-				result=yes
-			else
-				result=no
-				have_iso_codes=no
-			fi
-			AC_MSG_RESULT([$result])
-		fi
-
-		if test "x$have_iso_codes" = "xyes"; then
-			AC_DEFINE_UNQUOTED([ISO_CODES_PREFIX],["`$PKG_CONFIG --variable=prefix iso-codes`"],[ISO codes prefix])
-			AC_DEFINE([HAVE_ISO_CODES],[1],[Define if you have the iso-codes package])
-		else
-			AC_MSG_ERROR([iso-codes is required for spellchecking. Use --disable-spell to build without spellchecking support.])
-		fi
-
-		enable_enchant=yes
-		ENCHANT_CFLAGS="${ENCHANT_CFLAGS}"
-		ENCHANT_LIBS="${ENCHANT_LIBS}"
-		AC_DEFINE([HAVE_ENCHANT],[1],[Define if you have libenchant])
-	else
-		AC_MSG_ERROR([Enchant library not found or too old. Use --disable-spell to build without spellchecking support.])
-	fi
+   if test "x$have_enchant" = "xyes"; then
+      AC_MSG_CHECKING([whether iso-codes has iso-639 and iso-3166 domains])
+      if $PKG_CONFIG --variable=domains iso-codes | grep 639 > /dev/null && \
+         $PKG_CONFIG --variable=domains iso-codes | grep 3166 > /dev/null ; then
+            AC_DEFINE_UNQUOTED(ISO_CODES_PREFIX, ["`$PKG_CONFIG --variable=prefix iso-codes`"], [ISO codes prefix])
+            AC_DEFINE(HAVE_ENCHANT, 1, [Define if you have libenchant])
+            result=yes
+      else
+            result=no
+            have_enchant="no"
+      fi
+      AC_MSG_RESULT([$result])
+   fi
 else
-	enable_enchant=no
-	ENCHANT_CFLAGS=
-	ENCHANT_LIBS=
+   have_enchant=no
 fi
 
-AC_SUBST(ENCHANT_CFLAGS)
-AC_SUBST(ENCHANT_LIBS)
+if test "x$enable_spell" = "xyes" -a "x$have_enchant" != "xyes"; then
+   AC_MSG_ERROR([Couldn't find spell dependencies.])
+fi
 
+AM_CONDITIONAL(HAVE_ENCHANT, test "x$have_enchant" = "xyes")
 
 # -----------------------------------------------------------
 # Megaphone
