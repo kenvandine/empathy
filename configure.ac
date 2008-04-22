@@ -111,52 +111,62 @@ AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE",[Gettext package name])
 
 AM_GLIB_GNU_GETTEXT
 
-# -----------------------------------------------------------
-# ISO codes, used for aspell support
-# -----------------------------------------------------------
-AC_MSG_CHECKING([whether iso-codes exists and has iso-639 domain])
-if $PKG_CONFIG --variable=domains iso-codes | grep -q 639 ; then
-   AC_MSG_RESULT([yes])
-   iso_codes_prefix=`$PKG_CONFIG --variable=prefix iso-codes`
-   iso_codes_pkgconfig=iso-codes
-   have_iso_codes=yes
+dnl ================================================================
+dnl spellchecking checks: enchant and iso-codes
+dnl ================================================================
+
+ENCHANT_REQUIRED=1.2.0
+ISO_CODES_REQUIRED=0.35
+
+AC_ARG_ENABLE([spell],
+	AS_HELP_STRING([--disable-spell],[Disable spell checking (default: enabled)]),
+	[enable_enchant=$enableval],
+	[enable_enchant=yes])
+
+if test "x$enable_enchant" = "xyes" ; then
+
+	PKG_CHECK_MODULES(ENCHANT, enchant >= $ENCHANT_REQUIRED, \
+			  have_enchant=yes, have_enchant=no)
+
+	if test "x$have_enchant" = "xyes"; then
+
+		PKG_CHECK_EXISTS([iso-codes >= $ISO_CODES_REQUIRED],
+				 [have_iso_codes=yes],[have_iso_codes=no])
+
+		if test "x$have_iso_codes" = "xyes"; then
+			AC_MSG_CHECKING([whether iso-codes has iso-639 and iso-3166 domains])
+			if $PKG_CONFIG --variable=domains iso-codes | grep 639 > /dev/null && \
+			   $PKG_CONFIG --variable=domains iso-codes | grep 3166 > /dev/null ; then
+				result=yes
+			else
+				result=no
+				have_iso_codes=no
+			fi
+			AC_MSG_RESULT([$result])
+		fi
+
+		if test "x$have_iso_codes" = "xyes"; then
+			AC_DEFINE_UNQUOTED([ISO_CODES_PREFIX],["`$PKG_CONFIG --variable=prefix iso-codes`"],[ISO codes prefix])
+			AC_DEFINE([HAVE_ISO_CODES],[1],[Define if you have the iso-codes package])
+		else
+			AC_MSG_ERROR([iso-codes is required for spellchecking. Use --disable-spell to build without spellchecking support.])
+		fi
+
+		enable_enchant=yes
+		ENCHANT_CFLAGS="${ENCHANT_CFLAGS}"
+		ENCHANT_LIBS="${ENCHANT_LIBS}"
+		AC_DEFINE([HAVE_ENCHANT],[1],[Define if you have libenchant])
+	else
+		AC_MSG_ERROR([Enchant library not found or too old. Use --disable-spell to build without spellchecking support.])
+	fi
 else
-   AC_MSG_RESULT([no])
-   iso_codes_prefix=
-   iso_codes_pkgconfig=
-   have_iso_codes=no
+	enable_enchant=no
+	ENCHANT_CFLAGS=
+	ENCHANT_LIBS=
 fi
 
-AC_DEFINE_UNQUOTED([ISO_CODES_PREFIX],["$iso_codes_prefix"],[ISO codes prefix])
-
-# -----------------------------------------------------------
-# ASpell
-# -----------------------------------------------------------
-AC_ARG_ENABLE(aspell,
-              AS_HELP_STRING([--enable-aspell=@<:@no/yes/auto@:>@],
-                             [compile with aspell support]), ,
-                             enable_aspell=auto)
-
-if test "x$enable_aspell" = "xyes" -a "x$have_iso_codes" != "xyes"; then
-   AC_MSG_ERROR([You must have iso-codes with the iso-639 domain to use aspell.])
-fi
-
-if test "x$enable_aspell" != "xno" -a "x$have_iso_codes" = "xyes"; then
-   AC_CHECK_LIB(aspell, aspell_speller_check,have_aspell=yes,have_aspell=no,)
-
-   if test "x$have_aspell" = "xyes"; then
-      AC_DEFINE(HAVE_ASPELL, 1, [Define if we have aspell])
-      EMPATHY_LIBS="$EMPATHY_LIBS -laspell"
-   else
-      have_aspell=no
-   fi
-else
-   have_aspell=no
-fi
-
-if test "x$enable_aspell" = "xyes" -a "x$have_aspell" != "xyes"; then
-   AC_MSG_ERROR([Couldn't find aspell.])
-fi
+AC_SUBST(ENCHANT_CFLAGS)
+AC_SUBST(ENCHANT_LIBS)
 
 
 # -----------------------------------------------------------
