@@ -47,6 +47,10 @@ glade_DATA = 					\
 	empathy-new-chatroom-dialog.glade	\
 	empathy-status-icon.glade
 
+dist_man_MANS =			\
+	empathy.1		\
+	empathy-accounts.1
+
 EXTRA_DIST =			\
 	$(autostart_DATA)	\
 	$(glade_DATA)
