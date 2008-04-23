@@ -34,6 +34,7 @@
 #include <glade/glade.h>
 #include <glib/gi18n.h>
 
+#include <telepathy-glib/util.h>
 #include <libmissioncontrol/mission-control.h>
 
 #include <libempathy/empathy-contact-factory.h>
@@ -470,17 +471,18 @@ chat_window_clear_activate_cb (GtkWidget        *menuitem,
 static const gchar *
 chat_get_window_id_for_geometry (EmpathyChat *chat)
 {
-	gboolean separate_windows;
+	const gchar *res = NULL;
+	gboolean     separate_windows;
 
 	empathy_conf_get_bool (empathy_conf_get (),
 			       EMPATHY_PREFS_UI_SEPARATE_CHAT_WINDOWS,
 			       &separate_windows);
 
 	if (separate_windows) {
-		return empathy_chat_get_id (chat);
-	} else {
-		return "chat-window";
+		res = empathy_chat_get_id (chat);
 	}
+
+	return res ? res : "chat-window";
 }
 
 static gboolean
@@ -1455,7 +1457,7 @@ empathy_chat_window_find_chat (McAccount   *account,
 			chat = ll->data;
 
 			if (empathy_account_equal (account, empathy_chat_get_account (chat)) &&
-			    strcmp (id, empathy_chat_get_id (chat)) == 0) {
+			    !tp_strdiff (id, empathy_chat_get_id (chat))) {
 				return chat;
 			}
 		}

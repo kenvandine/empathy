@@ -191,7 +191,7 @@ chat_status_changed_cb (MissionControl           *mc,
 
 	if (status == TP_CONNECTION_STATUS_CONNECTED && !priv->tp_chat &&
 	    empathy_account_equal (account, priv->account) &&
-	    priv->handle_type != 0) {
+	    priv->handle_type != TP_HANDLE_TYPE_NONE) {
 		empathy_debug (DEBUG_DOMAIN,
 			       "Account reconnected, request a new Text channel");
 		mission_control_request_channel_with_string_handle (mc,
@@ -529,10 +529,14 @@ chat_message_received_cb (EmpathyTpChat  *tp_chat,
 		       empathy_contact_get_name (sender),
 		       empathy_contact_get_handle (sender));
 
-	empathy_log_manager_add_message (priv->log_manager,
-					 empathy_chat_get_id (chat),
-					 FALSE,
-					 message);
+	if (priv->id) {
+		gboolean is_chatroom;
+
+		is_chatroom = priv->handle_type == TP_HANDLE_TYPE_ROOM;
+		empathy_log_manager_add_message (priv->log_manager,
+						 priv->id, is_chatroom,
+						 message);
+	}
 
 	empathy_chat_view_append_message (chat->view, message);
 
@@ -1168,21 +1172,25 @@ chat_text_populate_popup_cb (GtkTextView *view,
 static void
 chat_add_logs (EmpathyChat *chat)
 {
-	EmpathyChatPriv *priv;
-	GList          *messages, *l;
-	guint           num_messages;
-	guint           i;
+	EmpathyChatPriv *priv = GET_PRIV (chat);
+	gboolean         is_chatroom;
+	GList           *messages, *l;
+	guint            num_messages;
+	guint            i;
 
-	priv = GET_PRIV (chat);
+	if (!priv->id) {
+		return;
+	}
 
 	/* Turn off scrolling temporarily */
 	empathy_chat_view_scroll (chat->view, FALSE);
 
 	/* Add messages from last conversation */
+	is_chatroom = priv->handle_type == TP_HANDLE_TYPE_ROOM;
 	messages = empathy_log_manager_get_last_messages (priv->log_manager,
 							  priv->account,
-							  empathy_chat_get_id (chat),
-							  FALSE);
+							  priv->id,
+							  is_chatroom);
 	num_messages  = g_list_length (messages);
 
 	/* Only keep the 10 last messages */
@@ -1319,11 +1327,23 @@ chat_remote_contact_changed_cb (EmpathyChat *chat)
 	priv->remote_contact = empathy_tp_chat_get_remote_contact (priv->tp_chat);
 	if (priv->remote_contact) {
 		g_object_ref (priv->remote_contact);
+		priv->handle_type = TP_HANDLE_TYPE_CONTACT;
+		g_free (priv->id);
+		priv->id = g_strdup (empathy_contact_get_id (priv->remote_contact));
+	}
+	else if (priv->tp_chat) {
+		TpChannel *channel;
+
+		channel = empathy_tp_chat_get_channel (priv->tp_chat);
+		g_object_get (channel, "handle-type", &priv->handle_type, NULL);
+		g_free (priv->id);
+		priv->id = g_strdup (empathy_tp_chat_get_id (priv->tp_chat));
 	}
 
 	chat_set_show_contacts (chat, priv->remote_contact == NULL);
 
 	g_object_notify (G_OBJECT (chat), "remote-contact");
+	g_object_notify (G_OBJECT (chat), "id");
 }
 
 static void
@@ -1678,10 +1698,8 @@ empathy_chat_set_tp_chat (EmpathyChat   *chat,
 	if (priv->account) {
 		g_object_unref (priv->account);
 	}
-	g_free (priv->id);
 
 	priv->tp_chat = g_object_ref (tp_chat);
-	priv->id = g_strdup (empathy_tp_chat_get_id (tp_chat));
 	priv->account = g_object_ref (empathy_tp_chat_get_account (tp_chat));
 
 	g_signal_connect (tp_chat, "message-received",

@@ -183,13 +183,25 @@ filter_chat_dispatch (EmpathyFilter *filter,
 		      gpointer       user_data)
 {
 	EmpathyTpChat *tp_chat = EMPATHY_TP_CHAT (user_data);
-	McAccount     *account;
-	EmpathyChat   *chat;
+	EmpathyChat   *chat = NULL;
 	const gchar   *id;
 
 	id = empathy_tp_chat_get_id (tp_chat);
-	account = empathy_tp_chat_get_account (tp_chat);
-	chat = empathy_chat_window_find_chat (account, id);
+	if (!id) {
+		EmpathyContact *contact;
+
+		contact = empathy_tp_chat_get_remote_contact (tp_chat);
+		if (contact) {
+			id = empathy_contact_get_id (contact);
+		}
+	}
+
+	if (id) {
+		McAccount *account;
+
+		account = empathy_tp_chat_get_account (tp_chat);
+		chat = empathy_chat_window_find_chat (account, id);
+	}
 
 	if (chat) {
 		empathy_chat_set_tp_chat (chat, tp_chat);
@@ -235,6 +247,7 @@ filter_chat_handle_channel (EmpathyFilter *filter,
 		       channel);
 
 	tp_chat = empathy_tp_chat_new (channel, FALSE);
+	empathy_run_until_ready (tp_chat);
 	if (is_incoming) {
 		filter_chat_dispatch (filter, tp_chat);
 	} else {

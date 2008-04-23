@@ -1119,6 +1119,16 @@ empathy_tp_chat_get_account (EmpathyTpChat *chat)
 	return priv->account;
 }
 
+TpChannel *
+empathy_tp_chat_get_channel (EmpathyTpChat *chat)
+{
+	EmpathyTpChatPriv *priv = GET_PRIV (chat);
+
+	g_return_val_if_fail (EMPATHY_IS_TP_CHAT (chat), NULL);
+
+	return priv->channel;
+}
+
 gboolean
 empathy_tp_chat_is_ready (EmpathyTpChat *chat)
 {
