@@ -73,7 +73,6 @@ struct _EmpathyChatViewPriv {
 	gboolean       allow_scrolling;
 	guint          scroll_timeout;
 	GTimer        *scroll_time;
-	gboolean       is_group_chat;
 
 	GtkTextMark   *find_mark_previous;
 	GtkTextMark   *find_mark_next;
@@ -157,7 +156,6 @@ empathy_chat_view_init (EmpathyChatView *view)
 	priv->buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
 	priv->last_timestamp = 0;
 	priv->allow_scrolling = TRUE;
-	priv->is_group_chat = FALSE;
 
 	g_object_set (view,
 		      "wrap-mode", GTK_WRAP_WORD_CHAR,
@@ -628,18 +626,10 @@ chat_view_theme_changed_cb (EmpathyThemeManager *manager,
 {
 	EmpathyChatViewPriv *priv;
 	gboolean            show_avatars = FALSE;
-	gboolean            theme_rooms = FALSE;
 
 	priv = GET_PRIV (view);
 
-	empathy_conf_get_bool (empathy_conf_get (),
-			      EMPATHY_PREFS_CHAT_THEME_CHAT_ROOM,
-			      &theme_rooms);
-	if (!theme_rooms && priv->is_group_chat) {
-		empathy_theme_manager_apply (manager, view, NULL);
-	} else {
-		empathy_theme_manager_apply_saved (manager, view);
-	}
+	empathy_theme_manager_apply_saved (manager, view);
 
 	/* Needed for now to update the "rise" property of the names to get it
 	 * vertically centered.
@@ -1441,36 +1431,6 @@ empathy_chat_view_get_smiley_menu (GCallback    callback,
 	gtk_widget_show_all (menu);
 
 	return menu;
-}
-
-/* FIXME: Do we really need this? Better to do it internally only at setup time,
- * we will never change it on the fly.
- */
-void
-empathy_chat_view_set_is_group_chat (EmpathyChatView *view,
-				    gboolean        is_group_chat)
-{
-	EmpathyChatViewPriv *priv;
-	gboolean            theme_rooms = FALSE;
-
-	g_return_if_fail (EMPATHY_IS_CHAT_VIEW (view));
-
-	priv = GET_PRIV (view);
-
-	priv->is_group_chat = is_group_chat;
-
-	empathy_conf_get_bool (empathy_conf_get (),
-			      EMPATHY_PREFS_CHAT_THEME_CHAT_ROOM,
-			      &theme_rooms);
-
-	if (!theme_rooms && is_group_chat) {
-		empathy_theme_manager_apply (empathy_theme_manager_get (),
-					    view,
-					    NULL);
-	} else {
-		empathy_theme_manager_apply_saved (empathy_theme_manager_get (),
-						  view);
-	}
 }
 
 time_t

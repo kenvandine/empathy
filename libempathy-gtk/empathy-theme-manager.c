@@ -39,7 +39,6 @@
 typedef struct {
 	gchar       *name;
 	guint        name_notify_id;
-	guint        room_notify_id;
 
 	gboolean     show_avatars;
 	guint        show_avatars_notify_id;
@@ -56,9 +55,7 @@ static void        theme_manager_finalize                 (GObject            *o
 static void        theme_manager_notify_name_cb           (EmpathyConf         *conf,
 							   const gchar        *key,
 							   gpointer            user_data);
-static void        theme_manager_notify_room_cb           (EmpathyConf         *conf,
-							   const gchar        *key,
-							   gpointer            user_data);
+
 static void        theme_manager_notify_show_avatars_cb   (EmpathyConf         *conf,
 							   const gchar        *key,
 							   gpointer            user_data);
@@ -224,12 +221,6 @@ empathy_theme_manager_init (EmpathyThemeManager *manager)
 					theme_manager_notify_name_cb,
 					manager);
 
-	priv->room_notify_id =
-		empathy_conf_notify_add (empathy_conf_get (),
-					EMPATHY_PREFS_CHAT_THEME_CHAT_ROOM,
-					theme_manager_notify_room_cb,
-					manager);
-
 	empathy_conf_get_string (empathy_conf_get (),
 				EMPATHY_PREFS_CHAT_THEME,
 				&priv->name);
@@ -289,7 +280,6 @@ theme_manager_finalize (GObject *object)
 	priv = GET_PRIV (object);
 
 	empathy_conf_notify_remove (empathy_conf_get (), priv->name_notify_id);
-	empathy_conf_notify_remove (empathy_conf_get (), priv->room_notify_id);
 	empathy_conf_notify_remove (empathy_conf_get (), priv->show_avatars_notify_id);
 
 	g_free (priv->name);
@@ -326,14 +316,6 @@ theme_manager_notify_name_cb (EmpathyConf  *conf,
 	}
 
 	g_signal_emit (manager, signals[THEME_CHANGED], 0, NULL);
-}
-
-static void
-theme_manager_notify_room_cb (EmpathyConf  *conf,
-			      const gchar *key,
-			      gpointer     user_data)
-{
-	g_signal_emit (user_data, signals[THEME_CHANGED], 0, NULL);
 }
 
 static void

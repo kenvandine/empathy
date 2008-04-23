@@ -50,7 +50,6 @@ typedef struct {
 	GtkWidget *checkbutton_compact_contact_list;
 	GtkWidget *checkbutton_show_smileys;
 	GtkWidget *combobox_chat_theme;
-	GtkWidget *checkbutton_theme_chat_room;
 	GtkWidget *checkbutton_separate_chat_windows;
 	GtkWidget *checkbutton_autoconnect;
 	GtkWidget *radiobutton_contact_list_sort_by_name;
@@ -203,10 +202,6 @@ preferences_setup_widgets (EmpathyPreferences *preferences)
 	preferences_hookup_string_combo (preferences,
 					 EMPATHY_PREFS_CHAT_THEME,
 					 preferences->combobox_chat_theme);
-
-	preferences_hookup_toggle_button (preferences,
-					  EMPATHY_PREFS_CHAT_THEME_CHAT_ROOM,
-					  preferences->checkbutton_theme_chat_room);
 
 	preferences_hookup_radio_button (preferences,
 					 EMPATHY_PREFS_CONTACTS_SORT_CRITERIUM,
@@ -950,7 +945,6 @@ empathy_preferences_show (GtkWindow *parent)
 		"checkbutton_compact_contact_list", &preferences->checkbutton_compact_contact_list,
 		"checkbutton_show_smileys", &preferences->checkbutton_show_smileys,
 		"combobox_chat_theme", &preferences->combobox_chat_theme,
-		"checkbutton_theme_chat_room", &preferences->checkbutton_theme_chat_room,
 		"checkbutton_separate_chat_windows", &preferences->checkbutton_separate_chat_windows,
 		"checkbutton_autoconnect", &preferences->checkbutton_autoconnect,
 		"radiobutton_contact_list_sort_by_name", &preferences->radiobutton_contact_list_sort_by_name,

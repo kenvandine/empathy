@@ -90,8 +90,6 @@ void             empathy_chat_view_set_margin           (EmpathyChatView *view,
 							 gint             margin);
 GtkWidget *      empathy_chat_view_get_smiley_menu      (GCallback        callback,
 							 gpointer         user_data);
-void             empathy_chat_view_set_is_group_chat    (EmpathyChatView *view,
-							 gboolean         is_group_chat);
 time_t           empathy_chat_view_get_last_timestamp   (EmpathyChatView *view);
 void             empathy_chat_view_set_last_timestamp   (EmpathyChatView *view,
 							 time_t           timestamp);
