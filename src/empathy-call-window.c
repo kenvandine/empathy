@@ -267,13 +267,16 @@ call_window_delete_event_cb (GtkWidget *widget,
     {
       dialog = gtk_message_dialog_new (GTK_WINDOW (window->window),
           GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-          GTK_MESSAGE_QUESTION, GTK_BUTTONS_YES_NO,
-          "This call will be ended. Continue?");
+          GTK_MESSAGE_WARNING, GTK_BUTTONS_CANCEL, _("End this call?"));
+      gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
+          _("This window has running call. Closing the window will end it."));
+      gtk_dialog_add_button (GTK_DIALOG (dialog), _("_End Call"), GTK_RESPONSE_OK);
+      gtk_dialog_set_default_response (GTK_DIALOG (dialog), GTK_RESPONSE_OK);
 
       result = gtk_dialog_run (GTK_DIALOG (dialog));
       gtk_widget_destroy (dialog);
 
-      if (result != GTK_RESPONSE_YES)
+      if (result != GTK_RESPONSE_OK)
           return TRUE;
     }
 
