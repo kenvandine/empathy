@@ -95,7 +95,7 @@ static void     new_chatroom_dialog_new_room_cb                     (EmpathyTpRo
 								     EmpathyChatroom          *chatroom,
 								     EmpathyNewChatroomDialog *dialog);
 static void     new_chatroom_dialog_listing_cb                      (EmpathyTpRoomlist        *room_list,
-								     gboolean                  listing,
+								     gpointer                  unused,
 								     EmpathyNewChatroomDialog *dialog);
 static void     new_chatroom_dialog_model_clear                     (EmpathyNewChatroomDialog *dialog);
 static void     new_chatroom_dialog_model_row_activated_cb          (GtkTreeView             *tree_view,
@@ -366,7 +366,7 @@ new_chatroom_dialog_account_changed_cb (GtkComboBox             *combobox,
 		g_signal_connect (dialog->room_list, "new-room",
 				  G_CALLBACK (new_chatroom_dialog_new_room_cb),
 				  dialog);
-		g_signal_connect (dialog->room_list, "listing",
+		g_signal_connect (dialog->room_list, "notify::listing",
 				  G_CALLBACK (new_chatroom_dialog_listing_cb),
 				  dialog);
 
@@ -415,9 +415,13 @@ new_chatroom_dialog_new_room_cb (EmpathyTpRoomlist        *room_list,
 
 static void
 new_chatroom_dialog_listing_cb (EmpathyTpRoomlist        *room_list,
-				gboolean                  listing,
+				gpointer                  unused,
 				EmpathyNewChatroomDialog *dialog)
 {
+	gboolean listing;
+
+	listing = empathy_tp_roomlist_is_listing (room_list);
+
 	/* Update the throbber */
 	if (listing) {
 		ephy_spinner_start (EPHY_SPINNER (dialog->throbber));		

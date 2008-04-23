@@ -344,20 +344,23 @@ empathy_tp_roomlist_init (EmpathyTpRoomlist *list)
 EmpathyTpRoomlist *
 empathy_tp_roomlist_new (McAccount *account)
 {
-	MissionControl *mc;
-	TpConnection   *connection;
+	EmpathyTpRoomlist *list;
+	MissionControl    *mc;
+	TpConnection      *connection;
 
 	g_return_val_if_fail (MC_IS_ACCOUNT (account), NULL);
 
 	mc = empathy_mission_control_new ();
 	connection = mission_control_get_tpconnection (mc, account, NULL);
 
-	return g_object_new (EMPATHY_TYPE_TP_ROOMLIST,
+	list = g_object_new (EMPATHY_TYPE_TP_ROOMLIST,
 			     "connection", connection,
 			     NULL);
 
 	g_object_unref (mc);
 	g_object_unref (connection);
+
+	return list;
 }
 
 gboolean
@@ -376,6 +379,7 @@ empathy_tp_roomlist_start (EmpathyTpRoomlist *list)
 	EmpathyTpRoomlistPriv *priv = GET_PRIV (list);
 
 	g_return_if_fail (EMPATHY_IS_TP_ROOMLIST (list));
+	g_return_if_fail (TP_IS_CHANNEL (priv->channel));
 
 	tp_cli_channel_type_room_list_call_list_rooms (priv->channel, -1,
 						       NULL, NULL, NULL,
@@ -388,6 +392,7 @@ empathy_tp_roomlist_stop (EmpathyTpRoomlist *list)
 	EmpathyTpRoomlistPriv *priv = GET_PRIV (list);
 
 	g_return_if_fail (EMPATHY_IS_TP_ROOMLIST (list));
+	g_return_if_fail (TP_IS_CHANNEL (priv->channel));
 
 	tp_cli_channel_type_room_list_call_stop_listing (priv->channel, -1,
 							 NULL, NULL, NULL,
