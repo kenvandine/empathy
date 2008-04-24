@@ -257,7 +257,6 @@ filter_chat_handle_channel (EmpathyFilter *filter,
 	}
 }
 
-#ifdef HAVE_VOIP
 static void
 filter_call_dispatch (EmpathyFilter *filter,
 		      gpointer       user_data)
@@ -314,7 +313,6 @@ filter_call_handle_channel (EmpathyFilter *filter,
 				  filter);	
 	}
 }
-#endif
 
 static void
 filter_contact_list_subscribe (EmpathyFilter *filter,
@@ -763,11 +761,9 @@ filter_conection_new_channel_cb (TpConnection *connection,
 	if (!tp_strdiff (channel_type, TP_IFACE_CHANNEL_TYPE_TEXT)) {
 		func = filter_chat_handle_channel;
 	}
-#ifdef HAVE_VOIP
 	else if (!tp_strdiff (channel_type, TP_IFACE_CHANNEL_TYPE_STREAMED_MEDIA)) {
 		func = filter_call_handle_channel;
 	}
-#endif
 	else if (!tp_strdiff (channel_type, TP_IFACE_CHANNEL_TYPE_CONTACT_LIST)) {
 		func = filter_contact_list_handle_channel;
 	}
@@ -820,7 +816,6 @@ filter_connection_list_channels_cb (TpConnection    *connection,
 	}
 }
 
-#ifdef HAVE_VOIP
 static void
 filter_connection_advertise_capabilities_cb (TpConnection    *connection,
 					     const GPtrArray *capabilities,
@@ -833,19 +828,16 @@ filter_connection_advertise_capabilities_cb (TpConnection    *connection,
 			       error->message);
 	}
 }
-#endif
 
 static void
 filter_connection_ready_cb (TpConnection  *connection,
 			    gpointer       unused,
 			    EmpathyFilter *filter)
 {
-#ifdef HAVE_VOIP
 	GPtrArray   *capabilities;
 	GType        cap_type;
 	GValue       cap = {0, };
 	const gchar *remove = NULL;
-#endif
 
 	empathy_debug (DEBUG_DOMAIN, "Connection ready, accepting new channels");
 
@@ -858,7 +850,6 @@ filter_connection_ready_cb (TpConnection  *connection,
 					      NULL, NULL,
 					      G_OBJECT (filter));
 
-#ifdef HAVE_VOIP
 	/* Advertise VoIP capabilities */
 	capabilities = g_ptr_array_sized_new (1);
 	cap_type = dbus_g_type_get_struct ("GValueArray", G_TYPE_STRING,
@@ -879,7 +870,6 @@ filter_connection_ready_cb (TpConnection  *connection,
 		capabilities, &remove,
 		filter_connection_advertise_capabilities_cb,
 		NULL, NULL, G_OBJECT (filter));
-#endif
 }
 
 static void

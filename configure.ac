@@ -269,20 +269,6 @@ fi
 AM_CONDITIONAL(HAVE_PYTHON, test "x$have_python" = "xyes")
 
 # -----------------------------------------------------------
-# VoIP support
-# -----------------------------------------------------------
-AC_ARG_ENABLE(voip,
-              AS_HELP_STRING([--enable-voip=@<:@no/yes@:>@],
-                             [Add support for Voice and Video call]), ,
-                             enable_voip=yes)
-
-if test "x$enable_voip" = "xyes"; then
-   AC_DEFINE(HAVE_VOIP, 1, [Define if we have voip])
-fi
-
-AM_CONDITIONAL(HAVE_VOIP, test "x$enable_voip" = "xyes")
-
-# -----------------------------------------------------------
 
 AC_OUTPUT([
    Makefile

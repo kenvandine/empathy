@@ -138,13 +138,11 @@ static void        contact_list_view_pixbuf_cell_data_func     (GtkTreeViewColum
 								GtkTreeModel               *model,
 								GtkTreeIter                *iter,
 								EmpathyContactListView     *view);
-#ifdef HAVE_VOIP
 static void        contact_list_view_voip_cell_data_func       (GtkTreeViewColumn          *tree_column,
 								GtkCellRenderer            *cell,
 								GtkTreeModel               *model,
 								GtkTreeIter                *iter,
 								EmpathyContactListView     *view);
-#endif
 static void        contact_list_view_avatar_cell_data_func     (GtkTreeViewColumn          *tree_column,
 								GtkCellRenderer            *cell,
 								GtkTreeModel               *model,
@@ -171,11 +169,9 @@ static void        contact_list_view_row_activated_cb          (EmpathyContactLi
 								GtkTreePath                *path,
 								GtkTreeViewColumn          *col,
 								gpointer                    user_data);
-#ifdef HAVE_VOIP
 static void        contact_list_view_voip_activated_cb         (EmpathyCellRendererActivatable *cell,
 								const gchar                *path_string,
 								EmpathyContactListView     *view);
-#endif
 static void        contact_list_view_row_expand_or_collapse_cb (EmpathyContactListView      *view,
 								GtkTreeIter                *iter,
 								GtkTreePath                *path,
@@ -234,12 +230,10 @@ static const GtkActionEntry entries[] = {
 	  N_("_View Previous Conversations"), NULL, N_("View previous conversations with this contact"),
 	  G_CALLBACK (contact_list_view_action_cb)
 	},
-#ifdef HAVE_VOIP
 	{ "Call", EMPATHY_IMAGE_VOIP,
 	  N_("_Call"), NULL, N_("Start a voice or video conversation with this contact"),
 	  G_CALLBACK (contact_list_view_action_cb)
 	},
-#endif
 };
 
 static guint n_entries = G_N_ELEMENTS (entries);
@@ -248,9 +242,7 @@ static const gchar *ui_info =
 	"<ui>"
 	"  <popup name='Contact'>"
 	"    <menuitem action='Chat'/>"
-#ifdef HAVE_VOIP
 	"    <menuitem action='Call'/>"
-#endif
 	"    <menuitem action='Log'/>"
 	"    <menuitem action='SendFile'/>"
 	"    <separator/>"
@@ -628,7 +620,6 @@ contact_list_view_setup (EmpathyContactListView *view)
 	gtk_tree_view_column_add_attribute (col, cell,
 					    "is_group", EMPATHY_CONTACT_LIST_STORE_COL_IS_GROUP);
 
-#ifdef HAVE_VOIP
 	/* Voip Capability Icon */
 	cell = empathy_cell_renderer_activatable_new ();
 	gtk_tree_view_column_pack_start (col, cell, FALSE);
@@ -644,7 +635,6 @@ contact_list_view_setup (EmpathyContactListView *view)
 	g_signal_connect (cell, "path-activated",
 			  G_CALLBACK (contact_list_view_voip_activated_cb),
 			  view);
-#endif
 
 	/* Avatar */
 	cell = gtk_cell_renderer_pixbuf_new ();
@@ -1062,7 +1052,6 @@ contact_list_view_pixbuf_cell_data_func (GtkTreeViewColumn     *tree_column,
 	contact_list_view_cell_set_background (view, cell, is_group, is_active);
 }
 
-#ifdef HAVE_VOIP
 static void
 contact_list_view_voip_cell_data_func (GtkTreeViewColumn      *tree_column,
 				       GtkCellRenderer        *cell,
@@ -1087,7 +1076,6 @@ contact_list_view_voip_cell_data_func (GtkTreeViewColumn      *tree_column,
 
 	contact_list_view_cell_set_background (view, cell, is_group, is_active);
 }
-#endif
 
 static void
 contact_list_view_avatar_cell_data_func (GtkTreeViewColumn     *tree_column,
@@ -1202,11 +1190,9 @@ contact_list_view_get_contact_menu (EmpathyContactListView *view,
 	action = gtk_ui_manager_get_action (priv->ui, "/Contact/Chat");
 	gtk_action_set_visible (action, priv->features & EMPATHY_CONTACT_LIST_FEATURE_CONTACT_CHAT);
 
-#ifdef HAVE_VOIP
 	action = gtk_ui_manager_get_action (priv->ui, "/Contact/Call");
 	gtk_action_set_sensitive (action, can_voip);
 	gtk_action_set_visible (action, priv->features & EMPATHY_CONTACT_LIST_FEATURE_CONTACT_CALL);
-#endif
 
 	action = gtk_ui_manager_get_action (priv->ui, "/Contact/Log");
 	gtk_action_set_sensitive (action, can_show_log);
@@ -1371,7 +1357,6 @@ contact_list_view_row_activated_cb (EmpathyContactListView *view,
 	}
 }
 
-#ifdef HAVE_VOIP
 static void
 contact_list_view_voip_activated_cb (EmpathyCellRendererActivatable *cell,
 				     const gchar                    *path_string,
@@ -1400,8 +1385,6 @@ contact_list_view_voip_activated_cb (EmpathyCellRendererActivatable *cell,
 		g_object_unref (contact);
 	}
 }
-#endif
-
 
 static void
 contact_list_view_row_expand_or_collapse_cb (EmpathyContactListView *view,

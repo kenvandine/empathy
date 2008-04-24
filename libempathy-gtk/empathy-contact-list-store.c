@@ -163,7 +163,6 @@ enum {
 
 G_DEFINE_TYPE (EmpathyContactListStore, empathy_contact_list_store, GTK_TYPE_TREE_STORE);
 
-
 static gboolean
 contact_list_store_iface_setup (gpointer user_data)
 {

@@ -345,7 +345,6 @@ empathy_mission_control_new (void)
 void
 empathy_call_with_contact (EmpathyContact *contact)
 {
-#ifdef HAVE_VOIP
 	MissionControl        *mc;
 	McAccount             *account;
 	TpConnection          *connection;
@@ -404,13 +403,11 @@ empathy_call_with_contact (EmpathyContact *contact)
 	g_object_unref (connection);
 	g_object_unref (channel);
 	g_free (object_path);
-#endif
 }
 
 void
 empathy_call_with_contact_id (McAccount *account, const gchar *contact_id)
 {
-#ifdef HAVE_VOIP
 	EmpathyContactFactory *factory;
 	EmpathyContact        *contact;
 
@@ -422,7 +419,6 @@ empathy_call_with_contact_id (McAccount *account, const gchar *contact_id)
 
 	g_object_unref (contact);
 	g_object_unref (factory);
-#endif
 }
 
 void

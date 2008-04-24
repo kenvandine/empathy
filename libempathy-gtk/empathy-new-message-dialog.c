@@ -157,10 +157,6 @@ empathy_new_message_dialog_show (GtkWindow *parent)
 	gtk_widget_set_sensitive (dialog->button_chat, FALSE);
 	gtk_widget_set_sensitive (dialog->button_call, FALSE);
 
-#ifndef HAVE_VOIP
-	gtk_widget_hide (dialog->button_call);
-#endif
-
 	gtk_widget_show (dialog->dialog);
 
 	return dialog->dialog;
