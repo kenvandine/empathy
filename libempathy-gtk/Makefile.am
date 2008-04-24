@@ -47,6 +47,7 @@ libempathy_gtk_la_SOURCES =             	\
 	empathy-smiley-manager.c		\
 	empathy-cell-renderer-text.c		\
 	empathy-spell.c				\
+	empathy-contact-menu.c			\
 	totem-subtitle-encoding.c totem-subtitle-encoding.h
 
 # do not distribute generated files
@@ -94,7 +95,8 @@ libempathy_gtk_headers =			\
 	empathy-geometry.h			\
 	empathy-smiley-manager.h		\
 	empathy-cell-renderer-text.h		\
-	empathy-spell.h
+	empathy-spell.h				\
+	empathy-contact-menu.h
 
 libempathy_gtk_includedir = $(includedir)/libempathy-gtk/
 libempathy_gtk_include_HEADERS =		\

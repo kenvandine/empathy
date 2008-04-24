@@ -44,14 +44,13 @@
 
 #include "empathy-contact-list-view.h"
 #include "empathy-contact-list-store.h"
+#include "empathy-contact-menu.h"
 #include "empathy-images.h"
 #include "empathy-cell-renderer-expander.h"
 #include "empathy-cell-renderer-text.h"
 #include "empathy-cell-renderer-activatable.h"
 #include "empathy-ui-utils.h"
 #include "empathy-contact-dialogs.h"
-//#include "empathy-chat-invite.h"
-//#include "empathy-ft-window.h"
 #include "empathy-log-window.h"
 #include "empathy-gtk-enum-types.h"
 #include "empathy-gtk-marshal.h"
@@ -69,7 +68,6 @@
 
 typedef struct {
 	EmpathyContactListStore    *store;
-	GtkUIManager               *ui;
 	GtkTreeRowReference        *drag_row;
 	EmpathyContactListFeatures  features;
 } EmpathyContactListViewPriv;
@@ -158,10 +156,6 @@ static void        contact_list_view_expander_cell_data_func   (GtkTreeViewColum
 								GtkTreeModel               *model,
 								GtkTreeIter                *iter,
 								EmpathyContactListView      *view);
-static GtkWidget * contact_list_view_get_contact_menu          (EmpathyContactListView      *view,
-								gboolean                    can_send_file,
-								gboolean                    can_show_log,
-								gboolean                    can_voip);
 static gboolean    contact_list_view_button_press_event_cb     (EmpathyContactListView      *view,
 								GdkEventButton             *event,
 								gpointer                    user_data);
@@ -176,8 +170,6 @@ static void        contact_list_view_row_expand_or_collapse_cb (EmpathyContactLi
 								GtkTreeIter                *iter,
 								GtkTreePath                *path,
 								gpointer                    user_data);
-static void        contact_list_view_action_cb                 (GtkAction                  *action,
-								EmpathyContactListView      *view);
 static void        contact_list_view_voip_activated            (EmpathyContactListView      *view,
 								EmpathyContact              *contact);
 static gboolean	   contact_list_view_remove_dialog_show 	(GtkWindow 		    *parent,
@@ -188,76 +180,6 @@ enum {
 	PROP_0,
 	PROP_FEATURES
 };
-
-static const GtkActionEntry entries[] = {
-	{ "ContactMenu", NULL,
-	  N_("_Contact"), NULL, NULL,
-	  NULL
-	},
-	{ "GroupMenu", NULL,
-	  N_("_Group"),NULL, NULL,
-	  NULL
-	},
-	{ "Chat", EMPATHY_IMAGE_MESSAGE,
-	  N_("_Chat"), NULL, N_("Chat with contact"),
-	  G_CALLBACK (contact_list_view_action_cb)
-	},
-	{ "Information", EMPATHY_IMAGE_CONTACT_INFORMATION,
-	  N_("Infor_mation"), "<control>I", N_("View contact information"),
-	  G_CALLBACK (contact_list_view_action_cb)
-	},
-	{ "Rename", NULL,
-	  N_("Re_name"), NULL, N_("Rename"),
-	  G_CALLBACK (contact_list_view_action_cb)
-	},
-	{ "Edit", GTK_STOCK_EDIT,
-	  N_("_Edit"), NULL, N_("Edit the groups and name for this contact"),
-	  G_CALLBACK (contact_list_view_action_cb)
-	},
-	{ "Remove", GTK_STOCK_REMOVE,
-	  N_("_Remove"), NULL, N_("Remove contact"),
-	  G_CALLBACK (contact_list_view_action_cb)
-	},
-	{ "Invite", EMPATHY_IMAGE_GROUP_MESSAGE,
-	  N_("_Invite to Chat Room"), NULL, N_("Invite to a currently open chat room"),
-	  G_CALLBACK (contact_list_view_action_cb)
-	},
-	{ "SendFile", NULL,
-	  N_("_Send File..."), NULL, N_("Send a file"),
-	  G_CALLBACK (contact_list_view_action_cb)
-	},
-	{ "Log", EMPATHY_IMAGE_LOG,
-	  N_("_View Previous Conversations"), NULL, N_("View previous conversations with this contact"),
-	  G_CALLBACK (contact_list_view_action_cb)
-	},
-	{ "Call", EMPATHY_IMAGE_VOIP,
-	  N_("_Call"), NULL, N_("Start a voice or video conversation with this contact"),
-	  G_CALLBACK (contact_list_view_action_cb)
-	},
-};
-
-static guint n_entries = G_N_ELEMENTS (entries);
-
-static const gchar *ui_info =
-	"<ui>"
-	"  <popup name='Contact'>"
-	"    <menuitem action='Chat'/>"
-	"    <menuitem action='Call'/>"
-	"    <menuitem action='Log'/>"
-	"    <menuitem action='SendFile'/>"
-	"    <separator/>"
-	"    <menuitem action='Invite'/>"
-	"    <separator/>"
-	"    <menuitem action='Edit'/>"
-	"    <menuitem action='Remove'/>"
-	"    <separator/>"
-	"    <menuitem action='Information'/>"
-	"  </popup>"
-	"  <popup name='Group'>"
-	"    <menuitem action='Rename'/>"
-	"    <menuitem action='Remove'/>"
-	"  </popup>"
-	"</ui>";
 
 enum DndDragType {
 	DND_DRAG_TYPE_CONTACT_ID,
@@ -334,29 +256,8 @@ empathy_contact_list_view_class_init (EmpathyContactListViewClass *klass)
 static void
 empathy_contact_list_view_init (EmpathyContactListView *view)
 {
-	EmpathyContactListViewPriv *priv;
-	GtkActionGroup            *action_group;
-	GError                    *error = NULL;
-
-	priv = GET_PRIV (view);
-
 	/* Get saved group states. */
 	empathy_contact_groups_get_all ();
-
-	/* Set up UI Manager */
-	priv->ui = gtk_ui_manager_new ();
-
-	action_group = gtk_action_group_new ("Actions");
-	gtk_action_group_set_translation_domain (action_group, GETTEXT_PACKAGE);
-	gtk_action_group_add_actions (action_group, entries, n_entries, view);
-	gtk_ui_manager_insert_action_group (priv->ui, action_group, 0);
-
-	if (!gtk_ui_manager_add_ui_from_string (priv->ui, ui_info, -1, &error)) {
-		g_warning ("Could not build contact menus from string:'%s'", error->message);
-		g_error_free (error);
-	}
-
-	g_object_unref (action_group);
 
 	gtk_tree_view_set_row_separator_func (GTK_TREE_VIEW (view), 
 					      empathy_contact_list_store_row_separator_func,
@@ -388,9 +289,6 @@ contact_list_view_finalize (GObject *object)
 
 	priv = GET_PRIV (object);
 
-	if (priv->ui) {
-		g_object_unref (priv->ui);
-	}
 	if (priv->store) {
 		g_object_unref (priv->store);
 	}
@@ -1166,14 +1064,151 @@ contact_list_view_expander_cell_data_func (GtkTreeViewColumn     *column,
 	contact_list_view_cell_set_background (view, cell, is_group, is_active);
 }
 
-static GtkWidget *
-contact_list_view_get_contact_menu (EmpathyContactListView *view,
-				    gboolean               can_send_file,
-				    gboolean               can_show_log,
-				    gboolean               can_voip)
+static gboolean
+contact_list_view_remove_dialog_show (GtkWindow   *parent, 
+				      const gchar *window_title, 
+				      const gchar *text)
+{
+	GtkWidget *dialog, *label, *image, *hbox;
+	gboolean res;
+	
+	dialog = gtk_dialog_new_with_buttons (window_title, parent,
+					      GTK_DIALOG_MODAL,
+					      GTK_STOCK_DELETE, GTK_RESPONSE_YES,
+					      GTK_STOCK_CANCEL, GTK_RESPONSE_NO,
+					      NULL);
+	gtk_dialog_set_has_separator (GTK_DIALOG(dialog), FALSE);
+	 
+	label = gtk_label_new (text);
+	image = gtk_image_new_from_stock (GTK_STOCK_DIALOG_QUESTION, GTK_ICON_SIZE_DIALOG);
+	 
+	hbox = gtk_hbox_new (FALSE, 5);
+	gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
+	gtk_box_pack_start_defaults (GTK_BOX (hbox), image);
+	gtk_box_pack_start_defaults (GTK_BOX (hbox), label);	 
+	gtk_box_pack_start_defaults (GTK_BOX(GTK_DIALOG(dialog)->vbox), hbox);
+
+	gtk_widget_show (image);
+	gtk_widget_show (label);
+	gtk_widget_show (hbox);
+	gtk_widget_show (dialog);
+	 
+	res = gtk_dialog_run (GTK_DIALOG (dialog));
+	gtk_widget_destroy (dialog);
+
+	return (res == GTK_RESPONSE_YES);
+}
+
+static void
+contact_list_view_group_remove_activate_cb (GtkMenuItem            *menuitem,
+					    EmpathyContactListView *view)
 {
 	EmpathyContactListViewPriv *priv = GET_PRIV (view);
-	GtkAction                  *action;
+	gchar                      *group;
+
+	group = empathy_contact_list_view_get_selected_group (view);
+	if (group) {
+		gchar     *text;
+		GtkWindow *parent;
+
+		text = g_strdup_printf (_("Do you really want to remove the group '%s' ?"), group);
+		parent = empathy_get_toplevel_window (GTK_WIDGET (view));
+		if (contact_list_view_remove_dialog_show (parent, _("Removing group"), text)) {
+			EmpathyContactList *list;
+
+			list = empathy_contact_list_store_get_list_iface (priv->store);
+			empathy_contact_list_remove_group (list, group);
+		}
+
+		g_free (text);
+	}
+
+	g_free (group);
+}
+
+GtkWidget *
+empathy_contact_list_view_get_group_menu (EmpathyContactListView *view)
+{
+	EmpathyContactListViewPriv *priv = GET_PRIV (view);
+	GtkWidget                  *menu;
+	GtkWidget                  *item;
+	GtkWidget                  *image;
+
+	g_return_val_if_fail (EMPATHY_IS_CONTACT_LIST_VIEW (view), NULL);
+
+	if (!(priv->features & (EMPATHY_CONTACT_LIST_FEATURE_GROUPS_RENAME |
+				EMPATHY_CONTACT_LIST_FEATURE_GROUPS_REMOVE))) {
+		return NULL;
+	}
+
+	menu = gtk_menu_new ();
+
+	/* FIXME: Not implemented yet
+	if (priv->features & EMPATHY_CONTACT_LIST_FEATURE_GROUPS_RENAME) {
+		item = gtk_menu_item_new_with_mnemonic (_("Re_name"));
+		gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+		gtk_widget_show (item);
+		g_signal_connect (item, "activate",
+				  G_CALLBACK (contact_list_view_group_rename_activate_cb),
+				  view);
+	}*/
+
+	if (priv->features & EMPATHY_CONTACT_LIST_FEATURE_GROUPS_REMOVE) {
+		item = gtk_image_menu_item_new_with_mnemonic (_("_Remove"));
+		image = gtk_image_new_from_icon_name (GTK_STOCK_REMOVE,
+						      GTK_ICON_SIZE_MENU);
+		gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
+		gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+		gtk_widget_show (item);
+		g_signal_connect (item, "activate",
+				  G_CALLBACK (contact_list_view_group_remove_activate_cb),
+				  view);
+	}
+
+	return menu;
+}
+
+static void
+contact_list_view_remove_activate_cb (GtkMenuItem            *menuitem,
+				      EmpathyContactListView *view)
+{
+	EmpathyContactListViewPriv *priv = GET_PRIV (view);
+	EmpathyContact             *contact;
+		
+	contact = empathy_contact_list_view_get_selected (view);
+
+	if (contact) {
+		gchar     *text; 
+		GtkWindow *parent;
+
+		parent = empathy_get_toplevel_window (GTK_WIDGET (view));
+		text = g_strdup_printf (_("Do you really want to remove the contact '%s' ?"),
+					empathy_contact_get_name (contact));						
+		if (contact_list_view_remove_dialog_show (parent, _("Removing contact"), text)) {
+			EmpathyContactList *list;
+
+			list = empathy_contact_list_store_get_list_iface (priv->store);
+			empathy_contact_list_remove (list, contact, 
+				_("Sorry, I don't want you in my contact list anymore."));
+		}
+
+		g_free (text);
+		g_object_unref (contact);
+	}
+}
+
+GtkWidget *
+empathy_contact_list_view_get_contact_menu (EmpathyContactListView *view,
+					    EmpathyContact         *contact)
+{
+	EmpathyContactListViewPriv *priv = GET_PRIV (view);
+	GtkWidget                  *menu;
+	GtkMenuShell               *shell;
+	GtkWidget                  *item;
+	GtkWidget                  *image;
+
+	g_return_val_if_fail (EMPATHY_IS_CONTACT_LIST_VIEW (view), NULL);
+	g_return_val_if_fail (EMPATHY_IS_CONTACT (contact), NULL);
 
 	if (!(priv->features & (EMPATHY_CONTACT_LIST_FEATURE_CONTACT_CHAT |
 				EMPATHY_CONTACT_LIST_FEATURE_CONTACT_CALL |
@@ -1186,84 +1221,67 @@ contact_list_view_get_contact_menu (EmpathyContactListView *view,
 		return NULL;
 	}
 
-	/* Sort out sensitive/visible items */
-	action = gtk_ui_manager_get_action (priv->ui, "/Contact/Chat");
-	gtk_action_set_visible (action, priv->features & EMPATHY_CONTACT_LIST_FEATURE_CONTACT_CHAT);
+	menu = gtk_menu_new ();
+	shell = GTK_MENU_SHELL (menu);
 
-	action = gtk_ui_manager_get_action (priv->ui, "/Contact/Call");
-	gtk_action_set_sensitive (action, can_voip);
-	gtk_action_set_visible (action, priv->features & EMPATHY_CONTACT_LIST_FEATURE_CONTACT_CALL);
-
-	action = gtk_ui_manager_get_action (priv->ui, "/Contact/Log");
-	gtk_action_set_sensitive (action, can_show_log);
-	gtk_action_set_visible (action, priv->features & EMPATHY_CONTACT_LIST_FEATURE_CONTACT_LOG);
-
-
-	action = gtk_ui_manager_get_action (priv->ui, "/Contact/SendFile");
-	gtk_action_set_visible (action, can_send_file && (priv->features & EMPATHY_CONTACT_LIST_FEATURE_CONTACT_FT));
-
-	action = gtk_ui_manager_get_action (priv->ui, "/Contact/Invite");
-	gtk_action_set_visible (action, priv->features & EMPATHY_CONTACT_LIST_FEATURE_CONTACT_INVITE);
-
-	action = gtk_ui_manager_get_action (priv->ui, "/Contact/Edit");
-	gtk_action_set_visible (action, priv->features & EMPATHY_CONTACT_LIST_FEATURE_CONTACT_EDIT);
-
-	action = gtk_ui_manager_get_action (priv->ui, "/Contact/Information");
-	gtk_action_set_visible (action, priv->features & EMPATHY_CONTACT_LIST_FEATURE_CONTACT_INFO);
-
-	action = gtk_ui_manager_get_action (priv->ui, "/Contact/Remove");
-	gtk_action_set_visible (action, priv->features & EMPATHY_CONTACT_LIST_FEATURE_CONTACT_REMOVE);
-
-	return gtk_ui_manager_get_widget (priv->ui, "/Contact");
-}
-
-GtkWidget *
-empathy_contact_list_view_get_group_menu (EmpathyContactListView *view)
-{
-	EmpathyContactListViewPriv *priv = GET_PRIV (view);
-	GtkAction                  *action;
-
-	g_return_val_if_fail (EMPATHY_IS_CONTACT_LIST_VIEW (view), NULL);
-
-	if (!(priv->features & (EMPATHY_CONTACT_LIST_FEATURE_GROUPS_RENAME |
-				EMPATHY_CONTACT_LIST_FEATURE_GROUPS_REMOVE))) {
-		return NULL;
+	/* Main items */
+	if (priv->features & EMPATHY_CONTACT_LIST_FEATURE_CONTACT_CHAT) {
+		item = empathy_contact_chat_menu_item_new (contact);
+		gtk_menu_shell_append (shell, item);
+		gtk_widget_show (item);
+	}
+	if (priv->features & EMPATHY_CONTACT_LIST_FEATURE_CONTACT_CALL) {
+		item = empathy_contact_call_menu_item_new (contact);
+		gtk_menu_shell_append (shell, item);
+		gtk_widget_show (item);
+	}
+	if (priv->features & EMPATHY_CONTACT_LIST_FEATURE_CONTACT_LOG) {
+		item = empathy_contact_log_menu_item_new (contact);
+		gtk_menu_shell_append (shell, item);
+		gtk_widget_show (item);
 	}
 
-	action = gtk_ui_manager_get_action (priv->ui, "/Group/Rename");
-	gtk_action_set_visible (action, priv->features & EMPATHY_CONTACT_LIST_FEATURE_GROUPS_RENAME);
+	/* Separator */
+	if (priv->features & (EMPATHY_CONTACT_LIST_FEATURE_CONTACT_EDIT |
+			      EMPATHY_CONTACT_LIST_FEATURE_CONTACT_INFO)) {
+		item = gtk_separator_menu_item_new ();
+		gtk_menu_shell_append (shell, item);
+		gtk_widget_show (item);
+	}
 
-	action = gtk_ui_manager_get_action (priv->ui, "/Group/Remove");
-	gtk_action_set_visible (action, priv->features & EMPATHY_CONTACT_LIST_FEATURE_GROUPS_REMOVE);
+	/* More items */
+	if (priv->features & EMPATHY_CONTACT_LIST_FEATURE_CONTACT_EDIT) {
+		item = empathy_contact_edit_menu_item_new (contact);
+		gtk_menu_shell_append (shell, item);
+		gtk_widget_show (item);
+	}
+	if (priv->features & EMPATHY_CONTACT_LIST_FEATURE_CONTACT_INFO) {
+		item = empathy_contact_info_menu_item_new (contact);
+		gtk_menu_shell_append (shell, item);
+		gtk_widget_show (item);
+	}
 
-	return gtk_ui_manager_get_widget (priv->ui, "/Group");
-}
+	/* Separator */
+	if (priv->features & EMPATHY_CONTACT_LIST_FEATURE_CONTACT_REMOVE) {
+		item = gtk_separator_menu_item_new ();
+		gtk_menu_shell_append (shell, item);
+		gtk_widget_show (item);
+	}
 
-GtkWidget *
-empathy_contact_list_view_get_contact_menu (EmpathyContactListView *view,
-					    EmpathyContact         *contact)
-{
-	EmpathyLogManager *log_manager;
-	gboolean           can_show_log;
-	gboolean           can_send_file;
-	gboolean           can_voip;
+	/* Custom items */
+	if (priv->features & EMPATHY_CONTACT_LIST_FEATURE_CONTACT_REMOVE) {
+		item = gtk_image_menu_item_new_with_mnemonic (_("_Remove"));
+		image = gtk_image_new_from_icon_name (GTK_STOCK_REMOVE,
+						      GTK_ICON_SIZE_MENU);
+		gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
+		gtk_menu_shell_append (shell, item);
+		gtk_widget_show (item);
+		g_signal_connect (item, "activate",
+				  G_CALLBACK (contact_list_view_remove_activate_cb),
+				  view);
+	}
 
-	g_return_val_if_fail (EMPATHY_IS_CONTACT_LIST_VIEW (view), NULL);
-	g_return_val_if_fail (EMPATHY_IS_CONTACT (contact), NULL);
-
-	log_manager = empathy_log_manager_new ();
-	can_show_log = empathy_log_manager_exists (log_manager,
-						   empathy_contact_get_account (contact),
-						   empathy_contact_get_id (contact),
-						   FALSE);
-	g_object_unref (log_manager);
-	can_send_file = FALSE;
-	can_voip = empathy_contact_can_voip (contact);
-
-	return contact_list_view_get_contact_menu (view,
-						   can_send_file,
-						   can_show_log,
-						   can_voip);
+	return menu;
 }
 
 static gboolean
@@ -1411,124 +1429,6 @@ contact_list_view_row_expand_or_collapse_cb (EmpathyContactListView *view,
 	empathy_contact_group_set_expanded (name, expanded);
 
 	g_free (name);
-}
-
-static void
-contact_list_view_action_cb (GtkAction             *action,
-			     EmpathyContactListView *view)
-{
-	EmpathyContactListViewPriv *priv;
-	EmpathyContact             *contact;
-	const gchar               *name;
-	gchar                     *group;
-	GtkWindow                 *parent;
-
-	priv = GET_PRIV (view);
-
-	name = gtk_action_get_name (action);
-	if (!name) {
-		return;
-	}
-
-	empathy_debug (DEBUG_DOMAIN, "Action:'%s' activated", name);
-
-	contact = empathy_contact_list_view_get_selected (view);
-	group = empathy_contact_list_view_get_selected_group (view);
-	parent = empathy_get_toplevel_window (GTK_WIDGET (view));
-
-	if (contact && strcmp (name, "Chat") == 0) {
-		empathy_chat_with_contact (contact);
-	}
-	else if (contact && strcmp (name, "Call") == 0) {
-		contact_list_view_voip_activated (view, contact);
-	}
-	else if (contact && strcmp (name, "Information") == 0) {
-		empathy_contact_information_dialog_show (contact, parent, FALSE, FALSE);
-	}
-	else if (contact && strcmp (name, "Edit") == 0) {
-		empathy_contact_information_dialog_show (contact, parent, TRUE, FALSE);
-	}
-	else if (contact && strcmp (name, "Remove") == 0) {
-		EmpathyContactList *list;
-		gchar              *text; 
-		
-		text = g_strdup_printf (_("Do you really want to remove the contact '%s' ?"),
-					empathy_contact_get_name (contact));
-						
-		/* TRUE if user wants to remove the contact. FALSE otherwise.*/
-		if (contact_list_view_remove_dialog_show (parent, _("Removing contact"), text)) {
-			list = empathy_contact_list_store_get_list_iface (priv->store);
-			empathy_contact_list_remove (list, contact, 
-				_("Sorry, I don't want you in my contact list anymore."));
-		}
-
-		g_free (text);
-	}
-	else if (contact && strcmp (name, "Invite") == 0) {
-	}
-	else if (contact && strcmp (name, "SendFile") == 0) {
-	}
-	else if (contact && strcmp (name, "Log") == 0) {
-		empathy_log_window_show (empathy_contact_get_account (contact),
-					empathy_contact_get_id (contact),
-					FALSE,
-					parent);
-	}
-	else if (group && strcmp (name, "Rename") == 0) {
-	}
-	else if (group && strcmp (name, "Remove") == 0) {
-		EmpathyContactList *list;
-		gchar              *text; 
-		
-		text = g_strdup_printf (_("Do you really want to remove the group '%s' ?"), group);
-		
-		if (contact_list_view_remove_dialog_show (parent, _("Removing group"), text)) {
-			list = empathy_contact_list_store_get_list_iface (priv->store);
-			empathy_contact_list_remove_group (list, group);
-		}
-
-		g_free (text);
-	}
-
-	g_free (group);
-	if (contact) {
-		g_object_unref (contact);
-	}
-}
-
-static gboolean
-contact_list_view_remove_dialog_show (GtkWindow   *parent, 
-				      const gchar *window_title, 
-				      const gchar *text)
-{
-	GtkWidget *dialog, *label, *image, *hbox;
-	gboolean res;
-	
-	dialog = gtk_dialog_new_with_buttons (window_title, parent,
-					      GTK_DIALOG_MODAL,
-					      GTK_STOCK_DELETE, GTK_RESPONSE_YES,
-					      GTK_STOCK_CANCEL, GTK_RESPONSE_NO,
-					      NULL);
-	gtk_dialog_set_has_separator (GTK_DIALOG(dialog), FALSE);
-	 
-	label = gtk_label_new (text);
-	image = gtk_image_new_from_stock (GTK_STOCK_DIALOG_QUESTION, GTK_ICON_SIZE_DIALOG);
-	 
-	hbox = gtk_hbox_new (FALSE, 5);
-	gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
-	gtk_box_pack_start_defaults (GTK_BOX (hbox), image);
-	gtk_box_pack_start_defaults (GTK_BOX (hbox), label);	 
-	gtk_box_pack_start_defaults (GTK_BOX(GTK_DIALOG(dialog)->vbox), hbox);
-
-	gtk_widget_show (image);
-	gtk_widget_show (label);
-	gtk_widget_show (hbox);
-	gtk_widget_show (dialog);
-	 
-	res = gtk_dialog_run (GTK_DIALOG (dialog));
-	gtk_widget_destroy (dialog);
-
-	return (res == GTK_RESPONSE_YES);
 }
 
 static void
