@@ -88,10 +88,6 @@ struct _EmpathyChatWindowPriv {
 	GtkWidget   *menu_help_about;
 };
 
-static void       empathy_chat_window_class_init (EmpathyChatWindowClass *klass);
-static void       empathy_chat_window_init       (EmpathyChatWindow      *window);
-static void       chat_window_finalize           (GObject                *object);
-
 static GList *chat_windows = NULL;
 
 static const guint tab_accel_keys[] = {
