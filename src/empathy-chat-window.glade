@@ -42,11 +42,6 @@
                       </widget>
                     </child>
                     <child>
-                      <widget class="GtkSeparatorMenuItem" id="separator7">
-                        <property name="visible">True</property>
-                      </widget>
-                    </child>
-                    <child>
                       <widget class="GtkMenuItem" id="menu_conv_contact">
                         <property name="visible">True</property>
                         <property name="label" translatable="yes">_Contact</property>
@@ -54,7 +49,7 @@
                       </widget>
                     </child>
                     <child>
-                      <widget class="GtkSeparatorMenuItem" id="separator1">
+                      <widget class="GtkSeparatorMenuItem" id="separator7">
                         <property name="visible">True</property>
                       </widget>
                     </child>

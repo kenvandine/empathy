@@ -48,6 +48,7 @@
 #include "empathy-spell-dialog.h"
 #include "empathy-contact-list-store.h"
 #include "empathy-contact-list-view.h"
+#include "empathy-contact-menu.h"
 #include "empathy-ui-utils.h"
 
 #define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), EMPATHY_TYPE_CHAT, EmpathyChatPriv))
@@ -1697,6 +1698,53 @@ empathy_chat_get_members_count (EmpathyChat *chat)
 	}
 
 	return 0;
+}
+
+GtkWidget *
+empathy_chat_get_contact_menu (EmpathyChat *chat)
+{
+	EmpathyChatPriv *priv = GET_PRIV (chat);
+	GtkWidget       *menu = NULL;
+
+	g_return_val_if_fail (EMPATHY_IS_CHAT (chat), NULL);
+
+	if (priv->remote_contact) {
+		GtkMenuShell *shell;
+		GtkWidget    *item;
+
+		menu = gtk_menu_new ();
+		shell = GTK_MENU_SHELL (menu);
+
+		item = empathy_contact_call_menu_item_new (priv->remote_contact);
+		gtk_menu_shell_append (shell, item);
+		gtk_widget_show (item);
+
+		item = empathy_contact_log_menu_item_new (priv->remote_contact);
+		gtk_menu_shell_append (shell, item);
+		gtk_widget_show (item);
+
+		/* Separator */
+		item = gtk_separator_menu_item_new ();
+		gtk_menu_shell_append (shell, item);
+		gtk_widget_show (item);
+
+		item = empathy_contact_info_menu_item_new (priv->remote_contact);
+		gtk_menu_shell_append (shell, item);
+		gtk_widget_show (item);
+	}
+	else if (priv->contact_list_view) {
+		EmpathyContactListView *view;
+		EmpathyContact         *contact;
+
+		view = EMPATHY_CONTACT_LIST_VIEW (priv->contact_list_view);
+		contact = empathy_contact_list_view_get_selected (view);
+		if (contact) {
+			menu = empathy_contact_list_view_get_contact_menu (view, contact);
+			g_object_unref (contact);
+		}
+	}
+
+	return menu;
 }
 
 void

@@ -454,12 +454,28 @@ chat_window_insert_smiley_activate_cb (GtkWidget         *menuitem,
 }
 
 static void
+chat_window_conv_activate_cb (GtkWidget         *menuitem,
+			      EmpathyChatWindow *window)
+{
+	EmpathyChatWindowPriv *priv = GET_PRIV (window);
+	GtkWidget             *submenu = NULL;
+
+	submenu = empathy_chat_get_contact_menu (priv->current_chat);
+	if (submenu) {
+		gtk_menu_item_set_submenu (GTK_MENU_ITEM (priv->menu_conv_contact),
+					   submenu);
+		gtk_widget_show (priv->menu_conv_contact);
+		gtk_widget_show (submenu);
+	} else {
+		gtk_widget_hide (priv->menu_conv_contact);
+	}
+}
+
+static void
 chat_window_clear_activate_cb (GtkWidget        *menuitem,
 			       EmpathyChatWindow *window)
 {
-	EmpathyChatWindowPriv *priv;
-
-	priv = GET_PRIV (window);
+	EmpathyChatWindowPriv *priv = GET_PRIV (window);
 
 	empathy_chat_clear (priv->current_chat);
 }
@@ -1120,6 +1136,7 @@ empathy_chat_window_init (EmpathyChatWindow *window)
 	empathy_glade_connect (glade,
 			      window,
 			      "chat_window", "configure-event", chat_window_configure_event_cb,
+			      "menu_conv", "activate", chat_window_conv_activate_cb,
 			      "menu_conv_clear", "activate", chat_window_clear_activate_cb,
 			      "menu_conv_close", "activate", chat_window_close_activate_cb,
 			      "menu_edit", "activate", chat_window_edit_activate_cb,
