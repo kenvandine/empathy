@@ -37,6 +37,69 @@
 #define DEBUG_DOMAIN "ContactMenu"
 
 GtkWidget *
+empathy_contact_menu_new (EmpathyContact             *contact,
+			  EmpathyContactFeatureFlags  features)
+{
+	GtkWidget    *menu;
+	GtkMenuShell *shell;
+	GtkWidget    *item;
+
+	g_return_val_if_fail (EMPATHY_IS_CONTACT (contact), NULL);
+
+	if (features == EMPATHY_CONTACT_FEATURE_NONE) {
+		return NULL;
+	}
+
+	menu = gtk_menu_new ();
+	shell = GTK_MENU_SHELL (menu);
+
+	/* Chat */
+	if (features & EMPATHY_CONTACT_FEATURE_CHAT) {
+		item = empathy_contact_chat_menu_item_new (contact);
+		gtk_menu_shell_append (shell, item);
+		gtk_widget_show (item);
+	}
+
+	/* Call */
+	if (features & EMPATHY_CONTACT_FEATURE_CALL) {
+		item = empathy_contact_call_menu_item_new (contact);
+		gtk_menu_shell_append (shell, item);
+		gtk_widget_show (item);
+	}
+
+	/* Log */
+	if (features & EMPATHY_CONTACT_FEATURE_LOG) {
+		item = empathy_contact_log_menu_item_new (contact);
+		gtk_menu_shell_append (shell, item);
+		gtk_widget_show (item);
+	}
+
+	/* Separator */
+	if (features & (EMPATHY_CONTACT_FEATURE_EDIT |
+			EMPATHY_CONTACT_FEATURE_INFO)) {
+		item = gtk_separator_menu_item_new ();
+		gtk_menu_shell_append (shell, item);
+		gtk_widget_show (item);
+	}
+
+	/* Edit */
+	if (features & EMPATHY_CONTACT_FEATURE_EDIT) {
+		item = empathy_contact_edit_menu_item_new (contact);
+		gtk_menu_shell_append (shell, item);
+		gtk_widget_show (item);
+	}
+
+	/* Info */
+	if (features & EMPATHY_CONTACT_FEATURE_INFO) {
+		item = empathy_contact_info_menu_item_new (contact);
+		gtk_menu_shell_append (shell, item);
+		gtk_widget_show (item);
+	}
+
+	return menu;
+}
+
+GtkWidget *
 empathy_contact_chat_menu_item_new (EmpathyContact *contact)
 {
 	GtkWidget *item;

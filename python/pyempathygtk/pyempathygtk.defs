@@ -152,22 +152,15 @@
   )
 )
 
-(define-flags ContactListFeatures
+(define-flags ContactListFeatureFlags
   (in-module "Empathy")
-  (c-name "EmpathyContactListFeatures")
-  (gtype-id "EMPATHY_TYPE_CONTACT_LIST_FEATURES")
+  (c-name "EmpathyContactListFeatureFlags")
+  (gtype-id "EMPATHY_TYPE_CONTACT_LIST_FEATURE_FLAGS")
   (values
     '("none" "EMPATHY_CONTACT_LIST_FEATURE_NONE")
     '("groups-save" "EMPATHY_CONTACT_LIST_FEATURE_GROUPS_SAVE")
     '("groups-rename" "EMPATHY_CONTACT_LIST_FEATURE_GROUPS_RENAME")
     '("groups-remove" "EMPATHY_CONTACT_LIST_FEATURE_GROUPS_REMOVE")
-    '("contact-chat" "EMPATHY_CONTACT_LIST_FEATURE_CONTACT_CHAT")
-    '("contact-call" "EMPATHY_CONTACT_LIST_FEATURE_CONTACT_CALL")
-    '("contact-log" "EMPATHY_CONTACT_LIST_FEATURE_CONTACT_LOG")
-    '("contact-ft" "EMPATHY_CONTACT_LIST_FEATURE_CONTACT_FT")
-    '("contact-invite" "EMPATHY_CONTACT_LIST_FEATURE_CONTACT_INVITE")
-    '("contact-edit" "EMPATHY_CONTACT_LIST_FEATURE_CONTACT_EDIT")
-    '("contact-info" "EMPATHY_CONTACT_LIST_FEATURE_CONTACT_INFO")
     '("contact-remove" "EMPATHY_CONTACT_LIST_FEATURE_CONTACT_REMOVE")
     '("contact-drop" "EMPATHY_CONTACT_LIST_FEATURE_CONTACT_DROP")
     '("contact-drag" "EMPATHY_CONTACT_LIST_FEATURE_CONTACT_DRAG")
@@ -186,6 +179,21 @@
     '("account" "EMPATHY_CONTACT_WIDGET_EDIT_ACCOUNT")
     '("id" "EMPATHY_CONTACT_WIDGET_EDIT_ID")
     '("groups" "EMPATHY_CONTACT_WIDGET_EDIT_GROUPS")
+  )
+)
+
+(define-flags ContactFeatureFlags
+  (in-module "Empathy")
+  (c-name "EmpathyContactFeatureFlags")
+  (gtype-id "EMPATHY_TYPE_CONTACT_FEATURE_FLAGS")
+  (values
+    '("none" "EMPATHY_CONTACT_FEATURE_NONE")
+    '("chat" "EMPATHY_CONTACT_FEATURE_CHAT")
+    '("call" "EMPATHY_CONTACT_FEATURE_CALL")
+    '("log" "EMPATHY_CONTACT_FEATURE_LOG")
+    '("edit" "EMPATHY_CONTACT_FEATURE_EDIT")
+    '("info" "EMPATHY_CONTACT_FEATURE_INFO")
+    '("all" "EMPATHY_CONTACT_FEATURE_ALL")
   )
 )
 
@@ -325,6 +333,12 @@
   (return-type "guint")
 )
 
+(define-method get_contact_menu
+  (of-object "EmpathyChat")
+  (c-name "empathy_chat_get_contact_menu")
+  (return-type "GtkWidget*")
+)
+
 (define-method clear
   (of-object "EmpathyChat")
   (c-name "empathy_chat_clear")
@@ -450,15 +464,6 @@
   )
 )
 
-(define-method set_margin
-  (of-object "EmpathyChatView")
-  (c-name "empathy_chat_view_set_margin")
-  (return-type "none")
-  (parameters
-    '("gint" "margin")
-  )
-)
-
 (define-method scroll
   (of-object "EmpathyChatView")
   (c-name "empathy_chat_view_scroll")
@@ -566,15 +571,6 @@
   (parameters
     '("GCallback" "callback")
     '("gpointer" "user_data")
-  )
-)
-
-(define-method set_is_group_chat
-  (of-object "EmpathyChatView")
-  (c-name "empathy_chat_view_set_is_group_chat")
-  (return-type "none")
-  (parameters
-    '("gboolean" "is_group_chat")
   )
 )
 
@@ -1286,23 +1282,9 @@
   (return-type "EmpathyContactListView*")
   (parameters
     '("EmpathyContactListStore*" "store")
-    '("EmpathyContactListFeatures" "features")
+    '("EmpathyContactListFeatureFlags" "list_features")
+    '("EmpathyContactFeatureFlags" "contact_features")
   )
-)
-
-(define-method set_features
-  (of-object "EmpathyContactListView")
-  (c-name "empathy_contact_list_view_set_features")
-  (return-type "none")
-  (parameters
-    '("EmpathyContactListFeatures" "features")
-  )
-)
-
-(define-method get_features
-  (of-object "EmpathyContactListView")
-  (c-name "empathy_contact_list_view_get_features")
-  (return-type "EmpathyContactListFeatures")
 )
 
 (define-method get_selected
@@ -1321,9 +1303,6 @@
   (of-object "EmpathyContactListView")
   (c-name "empathy_contact_list_view_get_contact_menu")
   (return-type "GtkWidget*")
-  (parameters
-    '("EmpathyContact*" "contact")
-  )
 )
 
 (define-method get_group_menu
@@ -1806,6 +1785,49 @@
   (parameters
     '("GList*" "suggestions")
   )
+)
+
+
+
+;; From empathy-contact-menu.h
+
+(define-method menu_new
+  (of-object "EmpathyContact")
+  (c-name "empathy_contact_menu_new")
+  (return-type "GtkWidget*")
+  (parameters
+    '("EmpathyContactFeatureFlags" "features")
+  )
+)
+
+(define-method chat_menu_item_new
+  (of-object "EmpathyContact")
+  (c-name "empathy_contact_chat_menu_item_new")
+  (return-type "GtkWidget*")
+)
+
+(define-method call_menu_item_new
+  (of-object "EmpathyContact")
+  (c-name "empathy_contact_call_menu_item_new")
+  (return-type "GtkWidget*")
+)
+
+(define-method log_menu_item_new
+  (of-object "EmpathyContact")
+  (c-name "empathy_contact_log_menu_item_new")
+  (return-type "GtkWidget*")
+)
+
+(define-method info_menu_item_new
+  (of-object "EmpathyContact")
+  (c-name "empathy_contact_info_menu_item_new")
+  (return-type "GtkWidget*")
+)
+
+(define-method edit_menu_item_new
+  (of-object "EmpathyContact")
+  (c-name "empathy_contact_edit_menu_item_new")
+  (return-type "GtkWidget*")
 )
 
 

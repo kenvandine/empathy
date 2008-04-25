@@ -1203,12 +1203,11 @@ chat_set_show_contacts (EmpathyChat *chat, gboolean show)
 
 		store = empathy_contact_list_store_new (EMPATHY_CONTACT_LIST (priv->tp_chat));
 		priv->contact_list_view = GTK_WIDGET (empathy_contact_list_view_new (store,
-			EMPATHY_CONTACT_LIST_FEATURE_CONTACT_CHAT |
-			EMPATHY_CONTACT_LIST_FEATURE_CONTACT_CALL |
-			EMPATHY_CONTACT_LIST_FEATURE_CONTACT_LOG |
-			EMPATHY_CONTACT_LIST_FEATURE_CONTACT_FT |
-			EMPATHY_CONTACT_LIST_FEATURE_CONTACT_INVITE |
-			EMPATHY_CONTACT_LIST_FEATURE_CONTACT_INFO));
+			EMPATHY_CONTACT_LIST_FEATURE_NONE,
+			EMPATHY_CONTACT_FEATURE_CHAT |
+			EMPATHY_CONTACT_FEATURE_CALL |
+			EMPATHY_CONTACT_FEATURE_LOG |
+			EMPATHY_CONTACT_FEATURE_INFO));
 		gtk_container_add (GTK_CONTAINER (priv->scrolled_window_contacts),
 				   priv->contact_list_view);
 		gtk_widget_show (priv->contact_list_view);
@@ -1709,39 +1708,16 @@ empathy_chat_get_contact_menu (EmpathyChat *chat)
 	g_return_val_if_fail (EMPATHY_IS_CHAT (chat), NULL);
 
 	if (priv->remote_contact) {
-		GtkMenuShell *shell;
-		GtkWidget    *item;
-
-		menu = gtk_menu_new ();
-		shell = GTK_MENU_SHELL (menu);
-
-		item = empathy_contact_call_menu_item_new (priv->remote_contact);
-		gtk_menu_shell_append (shell, item);
-		gtk_widget_show (item);
-
-		item = empathy_contact_log_menu_item_new (priv->remote_contact);
-		gtk_menu_shell_append (shell, item);
-		gtk_widget_show (item);
-
-		/* Separator */
-		item = gtk_separator_menu_item_new ();
-		gtk_menu_shell_append (shell, item);
-		gtk_widget_show (item);
-
-		item = empathy_contact_info_menu_item_new (priv->remote_contact);
-		gtk_menu_shell_append (shell, item);
-		gtk_widget_show (item);
+		menu = empathy_contact_menu_new (priv->remote_contact,
+						 EMPATHY_CONTACT_FEATURE_CALL |
+						 EMPATHY_CONTACT_FEATURE_LOG |
+						 EMPATHY_CONTACT_FEATURE_INFO);
 	}
 	else if (priv->contact_list_view) {
 		EmpathyContactListView *view;
-		EmpathyContact         *contact;
 
 		view = EMPATHY_CONTACT_LIST_VIEW (priv->contact_list_view);
-		contact = empathy_contact_list_view_get_selected (view);
-		if (contact) {
-			menu = empathy_contact_list_view_get_contact_menu (view, contact);
-			g_object_unref (contact);
-		}
+		menu = empathy_contact_list_view_get_contact_menu (view);
 	}
 
 	return menu;

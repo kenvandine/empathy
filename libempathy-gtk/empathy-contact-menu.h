@@ -28,11 +28,23 @@
 
 G_BEGIN_DECLS
 
-GtkWidget * empathy_contact_chat_menu_item_new (EmpathyContact *contact);
-GtkWidget * empathy_contact_call_menu_item_new (EmpathyContact *contact);
-GtkWidget * empathy_contact_log_menu_item_new  (EmpathyContact *contact);
-GtkWidget * empathy_contact_info_menu_item_new (EmpathyContact *contact);
-GtkWidget * empathy_contact_edit_menu_item_new (EmpathyContact *contact);
+typedef enum {
+	EMPATHY_CONTACT_FEATURE_NONE = 0,
+	EMPATHY_CONTACT_FEATURE_CHAT = 1 << 0,
+	EMPATHY_CONTACT_FEATURE_CALL = 1 << 1,
+	EMPATHY_CONTACT_FEATURE_LOG = 1 << 2,
+	EMPATHY_CONTACT_FEATURE_EDIT = 1 << 3,
+	EMPATHY_CONTACT_FEATURE_INFO = 1 << 4,
+	EMPATHY_CONTACT_FEATURE_ALL = (1 << 5) - 1,
+} EmpathyContactFeatureFlags;
+
+GtkWidget * empathy_contact_menu_new           (EmpathyContact             *contact,
+						EmpathyContactFeatureFlags  features);
+GtkWidget * empathy_contact_chat_menu_item_new (EmpathyContact             *contact);
+GtkWidget * empathy_contact_call_menu_item_new (EmpathyContact             *contact);
+GtkWidget * empathy_contact_log_menu_item_new  (EmpathyContact             *contact);
+GtkWidget * empathy_contact_info_menu_item_new (EmpathyContact             *contact);
+GtkWidget * empathy_contact_edit_menu_item_new (EmpathyContact             *contact);
 
 G_END_DECLS
 

@@ -67,6 +67,7 @@ python /usr/share/pygtk/2.0/codegen/h2def.py	\
 	empathy-smiley-manager.h		\
 	empathy-cell-renderer-text.h		\
 	empathy-spell.h				\
+	empathy-contact-menu.h			\
  > ../python/pyempathygtk/pyempathygtk.defs
 
 # Keep original version

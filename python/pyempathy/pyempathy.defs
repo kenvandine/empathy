@@ -150,6 +150,7 @@
   (values
     '("as-is" "EMPATHY_REGEX_AS_IS")
     '("browser" "EMPATHY_REGEX_BROWSER")
+    '("apt" "EMPATHY_REGEX_APT")
     '("email" "EMPATHY_REGEX_EMAIL")
     '("other" "EMPATHY_REGEX_OTHER")
     '("all" "EMPATHY_REGEX_ALL")
@@ -1595,6 +1596,12 @@
   (of-object "EmpathyTpChat")
   (c-name "empathy_tp_chat_get_account")
   (return-type "McAccount*")
+)
+
+(define-method get_channel
+  (of-object "EmpathyTpChat")
+  (c-name "empathy_tp_chat_get_channel")
+  (return-type "TpChannel*")
 )
 
 (define-method is_ready

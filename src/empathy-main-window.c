@@ -291,7 +291,8 @@ empathy_main_window_show (void)
 	list_iface = EMPATHY_CONTACT_LIST (empathy_contact_manager_new ());
 	window->list_store = empathy_contact_list_store_new (list_iface);
 	window->list_view = empathy_contact_list_view_new (window->list_store,
-							   EMPATHY_CONTACT_LIST_FEATURE_ALL);
+							   EMPATHY_CONTACT_LIST_FEATURE_ALL,
+							   EMPATHY_CONTACT_FEATURE_ALL);
 	g_object_unref (list_iface);
 
 	gtk_widget_show (GTK_WIDGET (window->list_view));
@@ -594,39 +595,16 @@ main_window_edit_button_press_event_cb (GtkWidget         *widget,
 					GdkEventButton    *event,
 					EmpathyMainWindow *window)
 {
-	EmpathyContact *contact;
-	gchar         *group;
+	GtkWidget *submenu;
 
 	if (!event->button == 1) {
 		return FALSE;
 	}
 
-	group = empathy_contact_list_view_get_selected_group (window->list_view);
-	if (group) {
+	submenu = empathy_contact_list_view_get_contact_menu (window->list_view);
+	if (submenu) {
 		GtkMenuItem *item;
 		GtkWidget   *label;
-		GtkWidget   *submenu;
-
-		item = GTK_MENU_ITEM (window->edit_context);
-		label = gtk_bin_get_child (GTK_BIN (item));
-		gtk_label_set_text (GTK_LABEL (label), _("Group"));
-
-		gtk_widget_show (window->edit_context);
-		gtk_widget_show (window->edit_context_separator);
-
-		submenu = empathy_contact_list_view_get_group_menu (window->list_view);
-		gtk_menu_item_set_submenu (item, submenu);
-
-		g_free (group);
-
-		return FALSE;
-	}
-
-	contact = empathy_contact_list_view_get_selected (window->list_view);
-	if (contact) {
-		GtkMenuItem *item;
-		GtkWidget   *label;
-		GtkWidget   *submenu;
 
 		item = GTK_MENU_ITEM (window->edit_context);
 		label = gtk_bin_get_child (GTK_BIN (item));
@@ -635,11 +613,24 @@ main_window_edit_button_press_event_cb (GtkWidget         *widget,
 		gtk_widget_show (window->edit_context);
 		gtk_widget_show (window->edit_context_separator);
 
-		submenu = empathy_contact_list_view_get_contact_menu (window->list_view,
-								     contact);
 		gtk_menu_item_set_submenu (item, submenu);
 
-		g_object_unref (contact);
+		return FALSE;
+	}
+
+	submenu = empathy_contact_list_view_get_group_menu (window->list_view);
+	if (submenu) {
+		GtkMenuItem *item;
+		GtkWidget   *label;
+
+		item = GTK_MENU_ITEM (window->edit_context);
+		label = gtk_bin_get_child (GTK_BIN (item));
+		gtk_label_set_text (GTK_LABEL (label), _("Group"));
+
+		gtk_widget_show (window->edit_context);
+		gtk_widget_show (window->edit_context_separator);
+
+		gtk_menu_item_set_submenu (item, submenu);
 
 		return FALSE;
 	}
