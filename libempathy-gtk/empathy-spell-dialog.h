@@ -30,8 +30,8 @@
 G_BEGIN_DECLS
 
 void empathy_spell_dialog_show (EmpathyChat  *chat,
-			       GtkTextIter  start,
-			       GtkTextIter  end,
+			       GtkTextIter *start,
+			       GtkTextIter *end,
 			       const gchar *word);
 
 G_END_DECLS

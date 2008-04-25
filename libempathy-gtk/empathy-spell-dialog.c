@@ -208,8 +208,8 @@ spell_dialog_response_cb (GtkWidget         *widget,
 		gtk_tree_model_get (model, &iter, COL_SPELL_WORD, &new_word, -1);
 
 		empathy_chat_correct_word (dialog->chat,
-					  dialog->start,
-					  dialog->end,
+					  &dialog->start,
+					  &dialog->end,
 					  new_word);
 
 		g_free (new_word);
@@ -220,8 +220,8 @@ spell_dialog_response_cb (GtkWidget         *widget,
 
 void
 empathy_spell_dialog_show (EmpathyChat  *chat,
-			  GtkTextIter  start,
-			  GtkTextIter  end,
+			  GtkTextIter *start,
+			  GtkTextIter *end,
 			  const gchar *word)
 {
 	EmpathySpellDialog *dialog;
@@ -238,8 +238,8 @@ empathy_spell_dialog_show (EmpathyChat  *chat,
 
 	dialog->word = g_strdup (word);
 
-	dialog->start = start;
-	dialog->end = end;
+	dialog->start = *start;
+	dialog->end = *end;
 
 	filename = empathy_file_lookup ("empathy-spell-dialog.glade",
 					"libempathy-gtk");

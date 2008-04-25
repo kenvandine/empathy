@@ -79,8 +79,8 @@ void               empathy_chat_cut                  (EmpathyChat   *chat);
 void               empathy_chat_copy                 (EmpathyChat   *chat);
 void               empathy_chat_paste                (EmpathyChat   *chat);
 void               empathy_chat_correct_word         (EmpathyChat   *chat,
-						      GtkTextIter    start,
-						      GtkTextIter    end,
+						      GtkTextIter   *start,
+						      GtkTextIter   *end,
 						      const gchar   *new_word);
 
 G_END_DECLS

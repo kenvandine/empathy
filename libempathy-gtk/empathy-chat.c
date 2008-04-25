@@ -978,8 +978,8 @@ chat_text_check_word_spelling_cb (GtkMenuItem     *menuitem,
 				  EmpathyChatSpell *chat_spell)
 {
 	empathy_spell_dialog_show (chat_spell->chat,
-				  chat_spell->start,
-				  chat_spell->end,
+				  &chat_spell->start,
+				  &chat_spell->end,
 				  chat_spell->word);
 }
 
@@ -1794,8 +1794,8 @@ empathy_chat_paste (EmpathyChat *chat)
 
 void
 empathy_chat_correct_word (EmpathyChat  *chat,
-			  GtkTextIter  start,
-			  GtkTextIter  end,
+			  GtkTextIter *start,
+			  GtkTextIter *end,
 			  const gchar *new_word)
 {
 	GtkTextBuffer *buffer;
@@ -1805,8 +1805,8 @@ empathy_chat_correct_word (EmpathyChat  *chat,
 
 	buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (chat->input_text_view));
 
-	gtk_text_buffer_delete (buffer, &start, &end);
-	gtk_text_buffer_insert (buffer, &start,
+	gtk_text_buffer_delete (buffer, start, end);
+	gtk_text_buffer_insert (buffer, start,
 				new_word,
 				-1);
 }
