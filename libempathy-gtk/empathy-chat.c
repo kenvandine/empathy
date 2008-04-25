@@ -89,8 +89,7 @@ struct _EmpathyChatPriv {
 	GtkWidget         *scrolled_window_contacts;
 	GtkWidget         *hbox_topic;
 	GtkWidget         *label_topic;
-	EmpathyContactListView *view;
-	EmpathyContactListStore *store;
+	GtkWidget         *contact_list_view;
 
 	/* Used to automatically shrink a window that has temporarily
 	 * grown due to long input. 
@@ -1285,13 +1284,13 @@ chat_set_show_contacts (EmpathyChat *chat, gboolean show)
 {
 	EmpathyChatPriv *priv = GET_PRIV (chat);
 
-	if (!priv->scrolled_window_contacts ||
-	    GTK_WIDGET_VISIBLE (priv->scrolled_window_contacts) == show) {
+	if (!priv->scrolled_window_contacts) {
 		return;
 	}
 
 	if (show) {
-		gint min_width;
+		EmpathyContactListStore *store;
+		gint                     min_width;
 
 		/* We are adding the contact list to the chat, we don't want the
 		 * chat view to become too small. If the chat view is already
@@ -1307,10 +1306,27 @@ chat_set_show_contacts (EmpathyChat *chat, gboolean show)
 			gtk_paned_set_position (GTK_PANED (priv->hpaned),
 						priv->contacts_width);
 		}
+
+		store = empathy_contact_list_store_new (EMPATHY_CONTACT_LIST (priv->tp_chat));
+		priv->contact_list_view = GTK_WIDGET (empathy_contact_list_view_new (store,
+			EMPATHY_CONTACT_LIST_FEATURE_CONTACT_CHAT |
+			EMPATHY_CONTACT_LIST_FEATURE_CONTACT_CALL |
+			EMPATHY_CONTACT_LIST_FEATURE_CONTACT_LOG |
+			EMPATHY_CONTACT_LIST_FEATURE_CONTACT_FT |
+			EMPATHY_CONTACT_LIST_FEATURE_CONTACT_INVITE |
+			EMPATHY_CONTACT_LIST_FEATURE_CONTACT_INFO));
+		gtk_container_add (GTK_CONTAINER (priv->scrolled_window_contacts),
+				   priv->contact_list_view);
+		gtk_widget_show (priv->contact_list_view);
 		gtk_widget_show (priv->scrolled_window_contacts);
+		g_object_unref (store);
 	} else {
 		priv->contacts_width = gtk_paned_get_position (GTK_PANED (priv->hpaned));
 		gtk_widget_hide (priv->scrolled_window_contacts);
+		if (priv->contact_list_view) {
+			gtk_widget_destroy (priv->contact_list_view);
+			priv->contact_list_view = NULL;
+		}
 	}
 }
 
@@ -1414,17 +1430,6 @@ chat_create_ui (EmpathyChat *chat)
 	gtk_widget_show (chat->input_text_view);
 
 	/* Create contact list */
-	priv->store = empathy_contact_list_store_new (EMPATHY_CONTACT_LIST (priv->tp_chat));
-	priv->view = empathy_contact_list_view_new (priv->store,
-						    EMPATHY_CONTACT_LIST_FEATURE_CONTACT_CHAT |
-						    EMPATHY_CONTACT_LIST_FEATURE_CONTACT_CALL |
-						    EMPATHY_CONTACT_LIST_FEATURE_CONTACT_LOG |
-						    EMPATHY_CONTACT_LIST_FEATURE_CONTACT_FT |
-						    EMPATHY_CONTACT_LIST_FEATURE_CONTACT_INVITE |
-						    EMPATHY_CONTACT_LIST_FEATURE_CONTACT_INFO);
-	gtk_container_add (GTK_CONTAINER (priv->scrolled_window_contacts),
-			   GTK_WIDGET (priv->view));
-	gtk_widget_show (GTK_WIDGET (priv->view));
 	chat_set_show_contacts (chat, priv->remote_contact == NULL);
 
 	/* Initialy hide the topic, will be shown if not empty */
@@ -1514,7 +1519,6 @@ chat_finalize (GObject *object)
 	empathy_disconnect_account_status_changed (priv->token);
 	g_object_unref (priv->mc);
 	g_object_unref (priv->log_manager);
-	g_object_unref (priv->store);
 
 	if (priv->tp_chat) {
 		g_object_unref (priv->tp_chat);
