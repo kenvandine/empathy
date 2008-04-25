@@ -80,6 +80,7 @@ struct _EmpathyChatPriv {
 	TpHandleType       handle_type;
 	gpointer           token;
 	gint               contacts_width;
+	gboolean           has_input_vscroll;
 
 	GtkWidget         *widget;
 	GtkWidget         *hpaned;
@@ -90,15 +91,6 @@ struct _EmpathyChatPriv {
 	GtkWidget         *hbox_topic;
 	GtkWidget         *label_topic;
 	GtkWidget         *contact_list_view;
-
-	/* Used to automatically shrink a window that has temporarily
-	 * grown due to long input. 
-	 */
-	gint               padding_height;
-	gint               default_window_height;
-	gint               last_input_height;
-	gboolean           vscroll_visible;
-	gboolean           is_first_char;
 };
 
 static void empathy_chat_class_init (EmpathyChatClass *klass);
@@ -420,8 +412,6 @@ chat_input_text_view_send (EmpathyChat *chat)
 
 	chat_send (chat, msg);
 	g_free (msg);
-
-	priv->is_first_char = TRUE;
 }
 
 static void
@@ -665,27 +655,6 @@ chat_input_text_buffer_changed_cb (GtkTextBuffer *buffer,
 			      EMPATHY_PREFS_CHAT_SPELL_CHECKER_ENABLED,
 			      &spell_checker);
 
-	if (priv->is_first_char) {
-		GtkRequisition  req;
-		gint            window_height;
-		GtkWindow      *dialog;
-		GtkAllocation  *allocation;
-
-		/* Save the window's size */
-		dialog = empathy_get_toplevel_window (GTK_WIDGET (chat));
-		if (dialog) {
-			gtk_window_get_size (GTK_WINDOW (dialog), NULL, &window_height);
-			gtk_widget_size_request (chat->input_text_view, &req);
-			allocation = &GTK_WIDGET (chat->view)->allocation;
-
-			priv->default_window_height = window_height;
-			priv->last_input_height = req.height;
-			priv->padding_height = window_height - req.height - allocation->height;
-		}
-
-		priv->is_first_char = FALSE;
-	}
-
 	gtk_text_buffer_get_start_iter (buffer, &start);
 
 	if (!spell_checker) {
@@ -908,119 +877,43 @@ chat_text_view_focus_in_event_cb (GtkWidget  *widget,
 	return TRUE;
 }
 
-typedef struct {
-	GtkWindow *window;
-	gint       width;
-	gint       height;
-} ChangeSizeData;
-
 static gboolean
-chat_change_size_in_idle_cb (ChangeSizeData *data)
+chat_input_set_size_request_idle (gpointer sw)
 {
-	gtk_window_resize (data->window, data->width, data->height);
+	gtk_widget_set_size_request (sw, -1, MAX_INPUT_HEIGHT);
 
 	return FALSE;
 }
 
 static void
-chat_text_view_scroll_hide_cb (GtkWidget  *widget,
-			       EmpathyChat *chat)
+chat_input_size_request_cb (GtkWidget      *widget,
+			    GtkRequisition *requisition,
+			    EmpathyChat    *chat)
 {
-	EmpathyChatPriv *priv;
-	GtkWidget      *sw;
-
-	priv = GET_PRIV (chat);
-
-	priv->vscroll_visible = FALSE;
-	g_signal_handlers_disconnect_by_func (widget,
-					      chat_text_view_scroll_hide_cb,
-					      chat);
-
-	sw = gtk_widget_get_parent (chat->input_text_view);
-	gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
-					GTK_POLICY_NEVER,
-					GTK_POLICY_NEVER);
-	g_object_set (sw, "height-request", -1, NULL);
-}
-
-static void
-chat_text_view_size_allocate_cb (GtkWidget     *widget,
-				 GtkAllocation *allocation,
-				 EmpathyChat    *chat)
-{
-	EmpathyChatPriv *priv;
-	gint            width;
-	GtkWindow      *dialog;
-	ChangeSizeData *data;
-	gint            window_height;
-	gint            new_height;
-	GtkAllocation  *view_allocation;
-	gint            current_height;
-	gint            diff;
-	GtkWidget      *sw;
-
-	priv = GET_PRIV (chat);
-
-	if (priv->default_window_height <= 0) {
-		return;
-	}
+	EmpathyChatPriv *priv = GET_PRIV (chat);
+	GtkWidget       *sw;
 
 	sw = gtk_widget_get_parent (widget);
-	if (sw->allocation.height >= MAX_INPUT_HEIGHT && !priv->vscroll_visible) {
-		GtkWidget *vscroll;
-
-		priv->vscroll_visible = TRUE;
-		gtk_widget_set_size_request (sw, sw->allocation.width, MAX_INPUT_HEIGHT);
+	if (requisition->height >= MAX_INPUT_HEIGHT && !priv->has_input_vscroll) {
+		g_idle_add (chat_input_set_size_request_idle, sw);
 		gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
 						GTK_POLICY_NEVER,
-						GTK_POLICY_AUTOMATIC);
-		vscroll = gtk_scrolled_window_get_vscrollbar (GTK_SCROLLED_WINDOW (sw));
-		g_signal_connect (vscroll, "hide",
-				  G_CALLBACK (chat_text_view_scroll_hide_cb),
-				  chat);
+						GTK_POLICY_ALWAYS);
+		priv->has_input_vscroll = TRUE;
 	}
 
-	if (priv->last_input_height <= allocation->height) {
-		priv->last_input_height = allocation->height;
-		return;
+	if (requisition->height < MAX_INPUT_HEIGHT && priv->has_input_vscroll) {
+		gtk_widget_set_size_request (sw, -1, -1);
+		gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (sw),
+						GTK_POLICY_NEVER,
+						GTK_POLICY_NEVER);
+		priv->has_input_vscroll = FALSE;
 	}
-
-	diff = priv->last_input_height - allocation->height;
-	priv->last_input_height = allocation->height;
-
-	view_allocation = &GTK_WIDGET (chat->view)->allocation;
-
-	dialog = empathy_get_toplevel_window (GTK_WIDGET (widget));
-	gtk_window_get_size (dialog, NULL, &current_height);
-
-	new_height = view_allocation->height + priv->padding_height + allocation->height - diff;
-
-	if (new_height <= priv->default_window_height) {
-		window_height = priv->default_window_height;
-	} else {
-		window_height = new_height;
-	}
-
-	if (current_height <= window_height) {
-		return;
-	}
-
-	/* Restore the window's size */
-	gtk_window_get_size (dialog, &width, NULL);
-
-	data = g_new0 (ChangeSizeData, 1);
-	data->window = dialog;
-	data->width  = width;
-	data->height = window_height;
-
-	g_idle_add_full (G_PRIORITY_DEFAULT_IDLE,
-			 (GSourceFunc) chat_change_size_in_idle_cb,
-			 data, g_free);
 }
 
 static void
-chat_text_view_realize_cb (GtkWidget  *widget,
-			   EmpathyChat *chat)
+chat_input_realize_cb (GtkWidget   *widget,
+		       EmpathyChat *chat)
 {
 	empathy_debug (DEBUG_DOMAIN, "Setting focus to the input text view");
 	gtk_widget_grab_focus (widget);
@@ -1090,9 +983,9 @@ chat_text_check_word_spelling_cb (GtkMenuItem     *menuitem,
 }
 
 static void
-chat_text_populate_popup_cb (GtkTextView *view,
-			     GtkMenu     *menu,
-			     EmpathyChat  *chat)
+chat_input_populate_popup_cb (GtkTextView *view,
+			      GtkMenu     *menu,
+			      EmpathyChat *chat)
 {
 	EmpathyChatPriv  *priv;
 	GtkTextBuffer   *buffer;
@@ -1406,17 +1299,17 @@ chat_create_ui (EmpathyChat *chat)
 					      "left-margin", 2,
 					      "wrap-mode", GTK_WRAP_WORD_CHAR,
 					      NULL);
-	g_signal_connect (chat->input_text_view, "key_press_event",
+	g_signal_connect (chat->input_text_view, "key-press-event",
 			  G_CALLBACK (chat_input_key_press_event_cb),
 			  chat);
-	g_signal_connect (chat->input_text_view, "size_allocate",
-			  G_CALLBACK (chat_text_view_size_allocate_cb),
+	g_signal_connect (chat->input_text_view, "size-request",
+			  G_CALLBACK (chat_input_size_request_cb),
 			  chat);
 	g_signal_connect (chat->input_text_view, "realize",
-			  G_CALLBACK (chat_text_view_realize_cb),
+			  G_CALLBACK (chat_input_realize_cb),
 			  chat);
-	g_signal_connect (chat->input_text_view, "populate_popup",
-			  G_CALLBACK (chat_text_populate_popup_cb),
+	g_signal_connect (chat->input_text_view, "populate-popup",
+			  G_CALLBACK (chat_input_populate_popup_cb),
 			  chat);
 	buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (chat->input_text_view));
 	g_signal_connect (buffer, "changed",
@@ -1646,11 +1539,8 @@ empathy_chat_init (EmpathyChat *chat)
 {
 	EmpathyChatPriv *priv = GET_PRIV (chat);
 
-	priv->is_first_char = TRUE;
 	priv->log_manager = empathy_log_manager_new ();
-	priv->default_window_height = -1;
 	priv->contacts_width = -1;
-	priv->vscroll_visible = FALSE;
 	priv->sent_messages = NULL;
 	priv->sent_messages_index = -1;
 	priv->mc = empathy_mission_control_new ();
