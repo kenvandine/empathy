@@ -300,7 +300,7 @@
       <locale name="C">
         <short>Checks if Empathy should auto-connect on startup</short>
 	<long>
-	Whether or not Empathy should automatically login to your accounts on startup.
+	Whether or not Empathy should automatically log in to your accounts on startup.
         </long>
       </locale>
     </schema>

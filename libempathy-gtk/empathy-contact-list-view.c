@@ -1159,7 +1159,7 @@ contact_list_view_group_remove_activate_cb (GtkMenuItem            *menuitem,
 		gchar     *text;
 		GtkWindow *parent;
 
-		text = g_strdup_printf (_("Do you really want to remove the group '%s' ?"), group);
+		text = g_strdup_printf (_("Do you really want to remove the group '%s'?"), group);
 		parent = empathy_get_toplevel_window (GTK_WIDGET (view));
 		if (contact_list_view_remove_dialog_show (parent, _("Removing group"), text)) {
 			EmpathyContactList *list;
@@ -1238,7 +1238,7 @@ contact_list_view_remove_activate_cb (GtkMenuItem            *menuitem,
 		GtkWindow *parent;
 
 		parent = empathy_get_toplevel_window (GTK_WIDGET (view));
-		text = g_strdup_printf (_("Do you really want to remove the contact '%s' ?"),
+		text = g_strdup_printf (_("Do you really want to remove the contact '%s'?"),
 					empathy_contact_get_name (contact));						
 		if (contact_list_view_remove_dialog_show (parent, _("Removing contact"), text)) {
 			EmpathyContactList *list;
