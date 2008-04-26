@@ -1324,7 +1324,7 @@ empathy_url_show (const char *url)
 
 		dialog = gtk_message_dialog_new (NULL, 0,
 						 GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, 
-						 _("Unable to open uri"));
+						 _("Unable to open URI"));
 		gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
 							  error->message);
 

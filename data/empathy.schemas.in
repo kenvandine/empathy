@@ -271,7 +271,7 @@
         <short>Checks if Salut account is created</short>
 	<long>
 	Whether or not the Salut account has been created on the first
-      empathy run.
+      Empathy run.
         </long>
       </locale>
     </schema>
