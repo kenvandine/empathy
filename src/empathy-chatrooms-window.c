@@ -286,7 +286,7 @@ chatrooms_window_model_add_columns (EmpathyChatroomsWindow *window)
 
 	/* Chatroom auto connect */
 	cell = gtk_cell_renderer_toggle_new ();
-	column = gtk_tree_view_column_new_with_attributes (_("Auto Connect"), cell,
+	column = gtk_tree_view_column_new_with_attributes (_("Auto-Connect"), cell,
 							   "active", COL_AUTO_CONNECT,
 							   NULL);
 	count = gtk_tree_view_append_column (view, column);

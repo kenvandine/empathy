@@ -923,7 +923,7 @@ main_window_status_changed_cb (MissionControl           *mc,
 			message = _("Certificate fingerprint mismatch");
 			break;
 		case TP_CONNECTION_STATUS_REASON_CERT_SELF_SIGNED:
-			message = _("Certificate self signed");
+			message = _("Certificate self-signed");
 			break;
 		case TP_CONNECTION_STATUS_REASON_CERT_OTHER_ERROR:
 			message = _("Certificate error");

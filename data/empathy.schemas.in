@@ -298,7 +298,7 @@
       <type>bool</type>
       <default>true</default>
       <locale name="C">
-        <short>Checks if Empathy should autoconnect on startup</short>
+        <short>Checks if Empathy should auto-connect on startup</short>
 	<long>
 	Whether or not Empathy should automatically login to your accounts on startup.
         </long>
