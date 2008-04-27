@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: empathy.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-04-26 03:11+0000\n"
-"PO-Revision-Date: 2008-04-26 17:14+0200\n"
+"POT-Creation-Date: 2008-04-26 21:55+0000\n"
+"PO-Revision-Date: 2008-04-27 20:40+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -42,7 +42,7 @@ msgid "Chat window theme"
 msgstr "Tema de la ventana de charla"
 
 #: ../data/empathy.schemas.in.h:4
-msgid "Checks if Empathy should autoconnect on startup"
+msgid "Checks if Empathy should auto-connect on startup"
 msgstr "Comprueba si Empathy debe autoconectarse al inicio"
 
 #: ../data/empathy.schemas.in.h:5
@@ -141,15 +141,13 @@ msgstr "Usar tema para salas de chat"
 
 #: ../data/empathy.schemas.in.h:28
 msgid ""
-"Whether or not Empathy should automatically login to your accounts on "
+"Whether or not Empathy should automatically log in to your accounts on "
 "startup."
-msgstr "Indica si Empathy debe registrar sus cuentas automáticamente al inicio."
+msgstr "Indica si Empathy debe iniciar sesión en sus cuentas automáticamente al inicio."
 
 #: ../data/empathy.schemas.in.h:29
-msgid "Whether or not the Salut account has been created on the first empathy run."
-msgstr ""
-"Indica si la cuenta Salut se ha creado cuando ejecutó por primera vez "
-"Empathy."
+msgid "Whether or not the Salut account has been created on the first Empathy run."
+msgstr "Indica si la cuenta Salut se ha creado cuando ejecutó por primera vez Empathy."
 
 #: ../data/empathy.schemas.in.h:30
 msgid ""
@@ -389,8 +387,8 @@ msgid "Remove the selected IRC network"
 msgstr "Quitar la red IRC seleccionada"
 
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:2
-msgid "<b>Override  server settings</b>"
-msgstr "<b>Sobreescribir la configuración del servidor</b>"
+msgid "<b>Override server settings</b>"
+msgstr "<b>Sobreescribir los ajustes del servidor</b>"
 
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:6
 msgid "Pri_ority:"
@@ -699,7 +697,7 @@ msgstr "Petición de suscripción"
 
 #: ../libempathy-gtk/empathy-contact-list-view.c:1162
 #, c-format
-msgid "Do you really want to remove the group '%s' ?"
+msgid "Do you really want to remove the group '%s'?"
 msgstr "¿Realmente quiere quitar el grupo «%s»?"
 
 #: ../libempathy-gtk/empathy-contact-list-view.c:1164
@@ -713,7 +711,7 @@ msgstr "_Quitar"
 
 #: ../libempathy-gtk/empathy-contact-list-view.c:1241
 #, c-format
-msgid "Do you really want to remove the contact '%s' ?"
+msgid "Do you really want to remove the contact '%s'?"
 msgstr "¿Realmente quiere quitar el contacto «%s»?"
 
 #: ../libempathy-gtk/empathy-contact-list-view.c:1243
@@ -932,7 +930,7 @@ msgid "Blue"
 msgstr "Azul"
 
 #: ../libempathy-gtk/empathy-ui-utils.c:1327
-msgid "Unable to open uri"
+msgid "Unable to open URI"
 msgstr "No se pudo abrir el URI"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:158
@@ -1413,7 +1411,7 @@ msgid "Room"
 msgstr "Sala"
 
 #: ../src/empathy-chatrooms-window.c:289
-msgid "Auto Connect"
+msgid "Auto-Connect"
 msgstr "Autoconectar"
 
 #: ../src/empathy-chatrooms-window.glade.h:2
@@ -1554,8 +1552,8 @@ msgid "Certificate fingerprint mismatch"
 msgstr "La huella del certificado no coincide"
 
 #: ../src/empathy-main-window.c:926
-msgid "Certificate self signed"
-msgstr "El certificado está firmado consigo mismo"
+msgid "Certificate self-signed"
+msgstr "Certificado firmado consigo mismo"
 
 #: ../src/empathy-main-window.c:929
 msgid "Certificate error"
