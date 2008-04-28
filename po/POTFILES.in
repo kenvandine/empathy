@@ -32,6 +32,7 @@ libempathy-gtk/empathy-chat-view.c
 libempathy-gtk/empathy-contact-dialogs.c
 libempathy-gtk/empathy-contact-dialogs.glade
 libempathy-gtk/empathy-contact-list-view.c
+libempathy-gtk/empathy-contact-menu.c
 libempathy-gtk/empathy-contact-widget.c
 libempathy-gtk/empathy-contact-widget.glade
 libempathy-gtk/empathy-irc-network-dialog.c
