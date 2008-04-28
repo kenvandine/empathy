@@ -257,24 +257,6 @@ chat_composing_stop (EmpathyChat *chat)
 				   TP_CHANNEL_CHAT_STATE_ACTIVE);
 }
 
-static void
-chat_destroy_cb (EmpathyTpChat *tp_chat,
-		 EmpathyChat    *chat)
-{
-	EmpathyChatPriv *priv;
-
-	priv = GET_PRIV (chat);
-
-	if (priv->tp_chat) {
-		g_object_unref (priv->tp_chat);
-		priv->tp_chat = NULL;
-		g_object_notify (G_OBJECT (chat), "tp-chat");
-	}
-
-	empathy_chat_view_append_event (chat->view, _("Disconnected"));
-	gtk_widget_set_sensitive (chat->input_text_view, FALSE);
-}
-
 static void 
 chat_sent_message_add (EmpathyChat  *chat,
 		       const gchar *str)
@@ -1253,6 +1235,27 @@ chat_remote_contact_changed_cb (EmpathyChat *chat)
 
 	g_object_notify (G_OBJECT (chat), "remote-contact");
 	g_object_notify (G_OBJECT (chat), "id");
+}
+
+static void
+chat_destroy_cb (EmpathyTpChat *tp_chat,
+		 EmpathyChat   *chat)
+{
+	EmpathyChatPriv *priv;
+
+	priv = GET_PRIV (chat);
+
+	if (!priv->tp_chat) {
+		return;
+	}
+
+	g_object_unref (priv->tp_chat);
+	priv->tp_chat = NULL;
+	g_object_notify (G_OBJECT (chat), "tp-chat");
+
+	empathy_chat_view_append_event (chat->view, _("Disconnected"));
+	gtk_widget_set_sensitive (chat->input_text_view, FALSE);
+	chat_set_show_contacts (chat, FALSE);
 }
 
 static void
