@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: empathy\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-10-18 03:41+0100\n"
-"PO-Revision-Date: 2008-04-28 20:29+0100\n"
+"PO-Revision-Date: 2008-04-28 20:33+0100\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -525,69 +525,69 @@ msgstr "Vse datoteke"
 msgid "Click to enlarge"
 msgstr "Kliknite za povečavo"
 
-#: ../libempathy-gtk/empathy-chat.c:274
+#: ../libempathy-gtk/empathy-chat.c:534
+msgid "offline"
+msgstr "nepovezan"
+
+#: ../libempathy-gtk/empathy-chat.c:537
+msgid "invalid contact"
+msgstr "neveljaven stik"
+
+#: ../libempathy-gtk/empathy-chat.c:540
+msgid "permission denied"
+msgstr "ni dovoljenja"
+
+#: ../libempathy-gtk/empathy-chat.c:543
+msgid "too long message"
+msgstr "predolgo sporočilo"
+
+#: ../libempathy-gtk/empathy-chat.c:546
+msgid "not implemented"
+msgstr "ni del programa"
+
+#: ../libempathy-gtk/empathy-chat.c:549
+msgid "unknown"
+msgstr "neznano"
+
+#: ../libempathy-gtk/empathy-chat.c:553
+#, c-format
+msgid "Error sending message '%s': %s"
+msgstr "Napaka med pošiljanjem sporočila '%s': %s"
+
+#: ../libempathy-gtk/empathy-chat.c:583
+#, c-format
+msgid "Topic set to: %s"
+msgstr "Tema določena na: %s"
+
+#: ../libempathy-gtk/empathy-chat.c:585
+msgid "No topic defined"
+msgstr "Ni določene teme"
+
+#: ../libempathy-gtk/empathy-chat.c:991
+msgid "Insert Smiley"
+msgstr "Vstavi smeška"
+
+#: ../libempathy-gtk/empathy-chat.c:1038
+msgid "_Check Word Spelling..."
+msgstr "_Preveri črkovanje"
+
+#: ../libempathy-gtk/empathy-chat.c:1139
+#, c-format
+msgid "%s has joined the room"
+msgstr "%s se je pridružil klepatalnici"
+
+#: ../libempathy-gtk/empathy-chat.c:1142
+#, c-format
+msgid "%s has left the room"
+msgstr "%s je zapustil klepetalnico"
+
+#: ../libempathy-gtk/empathy-chat.c:1256
 #: ../src/empathy.c:70
 #: ../src/empathy-call-window.c:358
 msgid "Disconnected"
 msgstr "Povezava prekinjena"
 
-#: ../libempathy-gtk/empathy-chat.c:552
-msgid "offline"
-msgstr "nepovezan"
-
-#: ../libempathy-gtk/empathy-chat.c:555
-msgid "invalid contact"
-msgstr "neveljaven stik"
-
-#: ../libempathy-gtk/empathy-chat.c:558
-msgid "permission denied"
-msgstr "ni dovoljenja"
-
-#: ../libempathy-gtk/empathy-chat.c:561
-msgid "too long message"
-msgstr "predolgo sporočilo"
-
-#: ../libempathy-gtk/empathy-chat.c:564
-msgid "not implemented"
-msgstr "ni del programa"
-
-#: ../libempathy-gtk/empathy-chat.c:567
-msgid "unknown"
-msgstr "neznano"
-
-#: ../libempathy-gtk/empathy-chat.c:571
-#, c-format
-msgid "Error sending message '%s': %s"
-msgstr "Napaka med pošiljanjem sporočila '%s': %s"
-
-#: ../libempathy-gtk/empathy-chat.c:601
-#, c-format
-msgid "Topic set to: %s"
-msgstr "Tema določena na: %s"
-
-#: ../libempathy-gtk/empathy-chat.c:603
-msgid "No topic defined"
-msgstr "Ni določene teme"
-
-#: ../libempathy-gtk/empathy-chat.c:1009
-msgid "Insert Smiley"
-msgstr "Vstavi smeška"
-
-#: ../libempathy-gtk/empathy-chat.c:1056
-msgid "_Check Word Spelling..."
-msgstr "_Preveri črkovanje"
-
-#: ../libempathy-gtk/empathy-chat.c:1157
-#, c-format
-msgid "%s has joined the room"
-msgstr "%s se je pridružil klepatalnici"
-
-#: ../libempathy-gtk/empathy-chat.c:1160
-#, c-format
-msgid "%s has left the room"
-msgstr "%s je zapustil klepetalnico"
-
-#: ../libempathy-gtk/empathy-chat.c:1626
+#: ../libempathy-gtk/empathy-chat.c:1629
 msgid "Connected"
 msgstr "Povezano"
 
@@ -661,6 +661,30 @@ msgstr "Odstranjevanje stika"
 #: ../libempathy-gtk/empathy-contact-list-view.c:1248
 msgid "Sorry, I don't want you in my contact list anymore."
 msgstr ""
+
+#: ../libempathy-gtk/empathy-contact-menu.c:110
+#: ../src/empathy-main-window.glade.h:9
+msgid "_Chat"
+msgstr "_Klepet"
+
+#: ../libempathy-gtk/empathy-contact-menu.c:131
+msgid "_Call"
+msgstr "_Klic"
+
+#: ../libempathy-gtk/empathy-contact-menu.c:170
+#: ../src/empathy-main-window.glade.h:17
+msgid "_View Previous Conversations"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-contact-menu.c:198
+msgid "Infor_mation"
+msgstr "_Podrobnosti"
+
+#: ../libempathy-gtk/empathy-contact-menu.c:225
+#: ../src/empathy-chat-window.glade.h:14
+#: ../src/empathy-main-window.glade.h:11
+msgid "_Edit"
+msgstr "_Uredi"
 
 #: ../libempathy-gtk/empathy-contact-widget.c:694
 msgid "Select"
@@ -1281,11 +1305,6 @@ msgstr "_Pogovori"
 msgid "_Detach Tab"
 msgstr "_Odcepi zavihek"
 
-#: ../src/empathy-chat-window.glade.h:14
-#: ../src/empathy-main-window.glade.h:11
-msgid "_Edit"
-msgstr "_Uredi"
-
 #: ../src/empathy-chat-window.glade.h:15
 #: ../src/empathy-main-window.glade.h:12
 msgid "_Help"
@@ -1498,10 +1517,6 @@ msgstr "_Računi"
 msgid "_Add Contact..."
 msgstr "_Dodaj stik ..."
 
-#: ../src/empathy-main-window.glade.h:9
-msgid "_Chat"
-msgstr "_Klepet"
-
 #: ../src/empathy-main-window.glade.h:13
 #: ../src/empathy-status-icon.glade.h:2
 msgid "_New Conversation..."
@@ -1514,10 +1529,6 @@ msgstr "_Osebni podatki"
 #: ../src/empathy-main-window.glade.h:16
 msgid "_Room"
 msgstr "_Soba"
-
-#: ../src/empathy-main-window.glade.h:17
-msgid "_View Previous Conversations"
-msgstr ""
 
 #: ../src/empathy-main-window.glade.h:18
 msgid "gtk-about"
