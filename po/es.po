@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: empathy.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-04-26 21:55+0000\n"
-"PO-Revision-Date: 2008-04-27 20:40+0200\n"
+"POT-Creation-Date: 2008-04-30 08:16+0000\n"
+"PO-Revision-Date: 2008-04-30 20:48+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -143,11 +143,15 @@ msgstr "Usar tema para salas de chat"
 msgid ""
 "Whether or not Empathy should automatically log in to your accounts on "
 "startup."
-msgstr "Indica si Empathy debe iniciar sesión en sus cuentas automáticamente al inicio."
+msgstr ""
+"Indica si Empathy debe iniciar sesión en sus cuentas automáticamente al "
+"inicio."
 
 #: ../data/empathy.schemas.in.h:29
 msgid "Whether or not the Salut account has been created on the first Empathy run."
-msgstr "Indica si la cuenta Salut se ha creado cuando ejecutó por primera vez Empathy."
+msgstr ""
+"Indica si la cuenta Salut se ha creado cuando ejecutó por primera vez "
+"Empathy."
 
 #: ../data/empathy.schemas.in.h:30
 msgid ""
@@ -586,68 +590,68 @@ msgstr "Todos los archivos"
 msgid "Click to enlarge"
 msgstr "Pulse para agrandar"
 
-#: ../libempathy-gtk/empathy-chat.c:274 ../src/empathy.c:70
-#: ../src/empathy-call-window.c:358
-msgid "Disconnected"
-msgstr "Desconectado"
-
-#: ../libempathy-gtk/empathy-chat.c:552
+#: ../libempathy-gtk/empathy-chat.c:534
 msgid "offline"
 msgstr "desconectado"
 
-#: ../libempathy-gtk/empathy-chat.c:555
+#: ../libempathy-gtk/empathy-chat.c:537
 msgid "invalid contact"
 msgstr "contacto no válido"
 
-#: ../libempathy-gtk/empathy-chat.c:558
+#: ../libempathy-gtk/empathy-chat.c:540
 msgid "permission denied"
 msgstr "permiso denegado"
 
-#: ../libempathy-gtk/empathy-chat.c:561
+#: ../libempathy-gtk/empathy-chat.c:543
 msgid "too long message"
 msgstr "mensaje demasiado largo"
 
-#: ../libempathy-gtk/empathy-chat.c:564
+#: ../libempathy-gtk/empathy-chat.c:546
 msgid "not implemented"
 msgstr "no implementado"
 
-#: ../libempathy-gtk/empathy-chat.c:567
+#: ../libempathy-gtk/empathy-chat.c:549
 msgid "unknown"
 msgstr "desconocido"
 
-#: ../libempathy-gtk/empathy-chat.c:571
+#: ../libempathy-gtk/empathy-chat.c:553
 #, c-format
 msgid "Error sending message '%s': %s"
 msgstr "Error al enviar el mensaje «%s»: %s"
 
-#: ../libempathy-gtk/empathy-chat.c:601
+#: ../libempathy-gtk/empathy-chat.c:583
 #, c-format
 msgid "Topic set to: %s"
 msgstr "El tema se ha establecido a: %s"
 
-#: ../libempathy-gtk/empathy-chat.c:603
+#: ../libempathy-gtk/empathy-chat.c:585
 msgid "No topic defined"
 msgstr "No se ha definido el tema"
 
-#: ../libempathy-gtk/empathy-chat.c:1009
+#: ../libempathy-gtk/empathy-chat.c:991
 msgid "Insert Smiley"
 msgstr "Insertar emoticono"
 
-#: ../libempathy-gtk/empathy-chat.c:1056
+#: ../libempathy-gtk/empathy-chat.c:1038
 msgid "_Check Word Spelling..."
 msgstr "_Comprobar ortografía…"
 
-#: ../libempathy-gtk/empathy-chat.c:1157
+#: ../libempathy-gtk/empathy-chat.c:1139
 #, c-format
 msgid "%s has joined the room"
 msgstr "%s ha entrado en la sala"
 
-#: ../libempathy-gtk/empathy-chat.c:1160
+#: ../libempathy-gtk/empathy-chat.c:1142
 #, c-format
 msgid "%s has left the room"
 msgstr "%s ha dejado la sala"
 
-#: ../libempathy-gtk/empathy-chat.c:1626
+#: ../libempathy-gtk/empathy-chat.c:1256 ../src/empathy.c:70
+#: ../src/empathy-call-window.c:387
+msgid "Disconnected"
+msgstr "Desconectado"
+
+#: ../libempathy-gtk/empathy-chat.c:1629
 msgid "Connected"
 msgstr "Conectado"
 
@@ -721,6 +725,29 @@ msgstr "Quitando el contacto"
 #: ../libempathy-gtk/empathy-contact-list-view.c:1248
 msgid "Sorry, I don't want you in my contact list anymore."
 msgstr "Lo siento, no te quiero en mi lista de contactos."
+
+#: ../libempathy-gtk/empathy-contact-menu.c:110
+#: ../src/empathy-main-window.glade.h:9
+msgid "_Chat"
+msgstr "_Chat"
+
+#: ../libempathy-gtk/empathy-contact-menu.c:131
+msgid "_Call"
+msgstr "_Llamar"
+
+#: ../libempathy-gtk/empathy-contact-menu.c:170
+#: ../src/empathy-main-window.glade.h:17
+msgid "_View Previous Conversations"
+msgstr "_Ver conversaciones previas"
+
+#: ../libempathy-gtk/empathy-contact-menu.c:198
+msgid "Infor_mation"
+msgstr "Infor_mación"
+
+#: ../libempathy-gtk/empathy-contact-menu.c:225
+#: ../src/empathy-chat-window.glade.h:14 ../src/empathy-main-window.glade.h:11
+msgid "_Edit"
+msgstr "_Editar"
 
 #: ../libempathy-gtk/empathy-contact-widget.c:694
 msgid "Select"
@@ -1247,63 +1274,71 @@ msgstr "Un cliente de mensajería instantánea para GNOME"
 msgid "translator-credits"
 msgstr "Jorge González <jorgegonz@svn.gnome.org>, 2007-2008."
 
-#: ../src/empathy-call-window.c:270
+#: ../src/empathy-call-window.c:139
+msgid "Closed"
+msgstr "Cerrado"
+
+#: ../src/empathy-call-window.c:250
 msgid "End this call?"
 msgstr "¿Finalizar esta llamada?"
 
-#: ../src/empathy-call-window.c:272
+#: ../src/empathy-call-window.c:252
 msgid "Closing this window will end the call in progress."
 msgstr "Cerrar esta ventana finalizará la llamada en progreso."
 
-#: ../src/empathy-call-window.c:273
+#: ../src/empathy-call-window.c:253
 msgid "_End Call"
 msgstr "_Finalizar llamada"
 
-#: ../src/empathy-call-window.c:332
+#: ../src/empathy-call-window.c:304
+msgid "Incoming call"
+msgstr "Llamada entrante"
+
+#: ../src/empathy-call-window.c:306
+#, c-format
+msgid "%s is calling you, do you want to answer?"
+msgstr "%s le está llamando, ¿quiere responder?"
+
+#: ../src/empathy-call-window.c:312
+msgid "_Reject"
+msgstr "_Rechazar"
+
+#: ../src/empathy-call-window.c:317
+msgid "_Answer"
+msgstr "Re_spuesta"
+
+#: ../src/empathy-call-window.c:363
 msgid "Empathy Call"
 msgstr "Llamada de Empathy"
 
-#: ../src/empathy-call-window.c:333
+#: ../src/empathy-call-window.c:364
 msgid "Readying"
 msgstr "Preparándose"
 
-#: ../src/empathy-call-window.c:344
+#: ../src/empathy-call-window.c:372
 #, c-format
 msgid "%s - Empathy Call"
 msgstr "Llamada de Empathy - %s"
 
-#: ../src/empathy-call-window.c:348
+#: ../src/empathy-call-window.c:376
 msgid "Ringing"
 msgstr "Sonando"
 
-#: ../src/empathy-call-window.c:360
+#: ../src/empathy-call-window.c:389
 msgid "Connecting"
 msgstr "Conectado"
-
-#: ../src/empathy-call-window.c:389
-msgid "Closed"
-msgstr "Cerrado"
-
-#. Output video label
-#: ../src/empathy-call-window.c:449
-msgid "No video output"
-msgstr "No hay salida de vídeo"
 
 #: ../src/empathy-call-window.glade.h:1
 msgid "<b>Volume</b>"
 msgstr "<b>Volumen</b>"
 
 #: ../src/empathy-call-window.glade.h:2
-msgid "End Call"
-msgstr "Finalizar llamada"
+msgid "Hang Up"
+msgstr "Colgar"
 
 #: ../src/empathy-call-window.glade.h:3
 msgid "Send Video"
 msgstr "Envía vídeo"
-
-#: ../src/empathy-call-window.glade.h:4
-msgid "Start Call"
-msgstr "Iniciar llamada"
 
 #: ../src/empathy-chat-window.c:316
 #, c-format
@@ -1366,10 +1401,6 @@ msgstr "_Conversación"
 msgid "_Detach Tab"
 msgstr "_Desacoplar solapa"
 
-#: ../src/empathy-chat-window.glade.h:14 ../src/empathy-main-window.glade.h:11
-msgid "_Edit"
-msgstr "_Editar"
-
 #: ../src/empathy-chat-window.glade.h:15 ../src/empathy-main-window.glade.h:12
 msgid "_Help"
 msgstr "Ay_uda"
@@ -1385,22 +1416,6 @@ msgstr "Solapa _anterior"
 #: ../src/empathy-chat-window.glade.h:18
 msgid "_Tabs"
 msgstr "_Solapas"
-
-#: ../src/empathy-chat-window.glade.h:19
-msgid "gtk-close"
-msgstr "gtk-close"
-
-#: ../src/empathy-chat-window.glade.h:20
-msgid "gtk-copy"
-msgstr "gtk-copy"
-
-#: ../src/empathy-chat-window.glade.h:21
-msgid "gtk-cut"
-msgstr "gtk-cut"
-
-#: ../src/empathy-chat-window.glade.h:22
-msgid "gtk-paste"
-msgstr "gtk-paste"
 
 #: ../src/empathy-chatrooms-window.c:262
 msgid "Name"
@@ -1595,10 +1610,6 @@ msgstr "_Cuentas"
 msgid "_Add Contact..."
 msgstr "_Añadir contacto…"
 
-#: ../src/empathy-main-window.glade.h:9
-msgid "_Chat"
-msgstr "_Chat"
-
 #: ../src/empathy-main-window.glade.h:13 ../src/empathy-status-icon.glade.h:2
 msgid "_New Conversation..."
 msgstr "_Conversación nueva…"
@@ -1610,18 +1621,6 @@ msgstr "Información _personal"
 #: ../src/empathy-main-window.glade.h:16
 msgid "_Room"
 msgstr "_Sala"
-
-#: ../src/empathy-main-window.glade.h:17
-msgid "_View Previous Conversations"
-msgstr "_Ver conversaciones previas"
-
-#: ../src/empathy-main-window.glade.h:18
-msgid "gtk-about"
-msgstr "gtk-about"
-
-#: ../src/empathy-main-window.glade.h:19
-msgid "gtk-quit"
-msgstr "gtk-quit"
 
 #: ../src/empathy-new-chatroom-dialog.c:290
 msgid "Chat Rooms"
