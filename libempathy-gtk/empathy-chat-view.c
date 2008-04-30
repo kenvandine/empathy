@@ -43,7 +43,6 @@
 #include <libmissioncontrol/mc-account.h>
 
 #include <libempathy/empathy-utils.h>
-#include <libempathy/empathy-debug.h>
 
 #include "empathy-chat-view.h"
 #include "empathy-chat.h"
@@ -52,7 +51,8 @@
 #include "empathy-ui-utils.h"
 #include "empathy-smiley-manager.h"
 
-#define DEBUG_DOMAIN "ChatView"
+#define DEBUG_FLAG EMPATHY_DEBUG_CHAT
+#include <libempathy/empathy-debug.h>
 
 /* Number of seconds between timestamps when using normal mode, 5 minutes. */
 #define TIMESTAMP_INTERVAL 300
@@ -208,7 +208,7 @@ chat_view_finalize (GObject *object)
 	view = EMPATHY_CHAT_VIEW (object);
 	priv = GET_PRIV (view);
 
-	empathy_debug (DEBUG_DOMAIN, "finalize: %p", object);
+	DEBUG ("finalize: %p", object);
 
 	empathy_conf_notify_remove (empathy_conf_get (), priv->notify_system_fonts_id);
 	empathy_conf_notify_remove (empathy_conf_get (), priv->notify_show_avatars_id);
@@ -780,7 +780,7 @@ empathy_chat_view_scroll_down (EmpathyChatView *view)
 		return;
 	}
 
-	empathy_debug (DEBUG_DOMAIN, "Scrolling down");
+	DEBUG ("Scrolling down");
 
 	if (priv->scroll_time) {
 		g_timer_reset (priv->scroll_time);
@@ -933,8 +933,7 @@ empathy_chat_view_scroll (EmpathyChatView *view,
 
 	g_return_if_fail (EMPATHY_IS_CHAT_VIEW (view));
 
-	empathy_debug (DEBUG_DOMAIN, "Scrolling %s",
-		      allow_scrolling ? "enabled" : "disabled");
+	DEBUG ("Scrolling %s", allow_scrolling ? "enabled" : "disabled");
 
 	priv->allow_scrolling = allow_scrolling;
 	if (allow_scrolling) {

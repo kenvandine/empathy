@@ -24,15 +24,11 @@
 
 #include <string.h>
 
-#include <libempathy/empathy-debug.h>
-
 #include "empathy-smiley-manager.h"
 #include "empathy-ui-utils.h"
 
 #define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), \
 		       EMPATHY_TYPE_SMILEY_MANAGER, EmpathySmileyManagerPriv))
-
-#define DEBUG_DOMAIN "SmileyManager"
 
 typedef struct {
 	gunichar   c;

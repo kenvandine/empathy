@@ -31,11 +31,11 @@
 
 #include <extensions/extensions.h>
 
-#include "empathy-debug.h"
 #include "empathy-tp-tube.h"
 #include "empathy-tube-handler.h"
 
-#define DEBUG_DOMAIN "TubeHandler"
+#define DEBUG_FLAG EMPATHY_DEBUG_OTHER
+#include "empathy-debug.h"
 
 static void empathy_tube_handler_iface_init (EmpSvcTubeHandlerClass *klass);
 
@@ -71,7 +71,7 @@ tube_handler_handle_tube_idle_cb (gpointer data)
   EmpathyTpTube *tube;
   static TpDBusDaemon *daemon = NULL;
 
-  empathy_debug (DEBUG_DOMAIN, "New tube to be handled id=%d", idle_data->id);
+  DEBUG ("New tube to be handled id=%d", idle_data->id);
 
   if (!daemon)
     daemon = tp_dbus_daemon_new (tp_get_bus ());
@@ -169,7 +169,7 @@ empathy_tube_handler_new (TpTubeType type, const gchar *service)
       G_TYPE_STRING, bus_name, G_TYPE_UINT, DBUS_NAME_FLAG_DO_NOT_QUEUE,
       G_TYPE_INVALID, G_TYPE_UINT, &result, G_TYPE_INVALID))
     {
-      empathy_debug (DEBUG_DOMAIN, "Failed to request name: %s",
+      DEBUG ("Failed to request name: %s",
           error ? error->message : "No error given");
       g_clear_error (&error);
       goto OUT;

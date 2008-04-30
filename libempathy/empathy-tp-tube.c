@@ -25,12 +25,12 @@
 #include <telepathy-glib/util.h>
 
 #include "empathy-contact-factory.h"
-#include "empathy-debug.h"
 #include "empathy-enum-types.h"
 #include "empathy-tp-tube.h"
 #include "empathy-utils.h"
 
-#define DEBUG_DOMAIN "TpTube"
+#define DEBUG_FLAG EMPATHY_DEBUG_TP
+#include "empathy-debug.h"
 
 #define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), EMPATHY_TYPE_TP_TUBE, \
     EmpathyTpTubePriv))
@@ -86,7 +86,7 @@ tp_tube_state_changed_cb (TpChannel *channel,
   if (id != priv->id)
       return;
 
-  empathy_debug (DEBUG_DOMAIN, "Tube state changed");
+  DEBUG ("Tube state changed");
 
   priv->state = state;
   g_object_notify (tube, "state");
@@ -99,7 +99,7 @@ tp_tube_invalidated_cb (TpChannel     *channel,
                         gchar         *message,
                         EmpathyTpTube *tube)
 {
-  empathy_debug (DEBUG_DOMAIN, "Channel invalidated: %s", message);
+  DEBUG ("Channel invalidated: %s", message);
   g_signal_emit (tube, signals[DESTROY], 0);
 }
 
@@ -114,7 +114,7 @@ tp_tube_closed_cb (TpChannel *channel,
   if (id != priv->id)
       return;
 
-  empathy_debug (DEBUG_DOMAIN, "Tube closed");
+  DEBUG ("Tube closed");
   g_signal_emit (tube, signals[DESTROY], 0);
 }
 
@@ -125,7 +125,7 @@ tp_tube_async_cb (TpChannel *channel,
                   GObject *tube)
 {
   if (error)
-      empathy_debug (DEBUG_DOMAIN, "Error %s: %s", user_data, error->message);
+      DEBUG ("Error %s: %s", (gchar*) user_data, error->message);
 }
 
 static void
@@ -217,8 +217,7 @@ tp_tube_constructor (GType type,
   if (!tp_cli_channel_type_tubes_run_list_tubes (priv->channel, -1, &tubes,
       &error, NULL))
     {
-      empathy_debug (DEBUG_DOMAIN, "Couldn't list tubes: %s",
-          error->message);
+      DEBUG ("Couldn't list tubes: %s", error->message);
       g_clear_error (&error);
       return self;
     }
@@ -267,7 +266,7 @@ tp_tube_finalize (GObject *object)
 {
   EmpathyTpTubePriv *priv = GET_PRIV (object);
 
-  empathy_debug (DEBUG_DOMAIN, "Finalizing: %p", object);
+  DEBUG ("Finalizing: %p", object);
 
   if (priv->channel)
     {
@@ -397,13 +396,13 @@ empathy_tp_tube_new_stream_tube (EmpathyContact *contact,
       TP_IFACE_CHANNEL_TYPE_TUBES, TP_HANDLE_TYPE_CONTACT,
       empathy_contact_get_handle (contact), FALSE, &object_path, &error, NULL))
     {
-      empathy_debug (DEBUG_DOMAIN, "Error requesting channel: %s", error->message);
+      DEBUG ("Error requesting channel: %s", error->message);
       g_clear_error (&error);
       g_object_unref (connection);
       return NULL;
     }
 
-  empathy_debug (DEBUG_DOMAIN, "Offering a new stream tube");
+  DEBUG ("Offering a new stream tube");
 
   channel = tp_channel_new (connection, object_path,
       TP_IFACE_CHANNEL_TYPE_TUBES, TP_HANDLE_TYPE_CONTACT,
@@ -421,12 +420,12 @@ empathy_tp_tube_new_stream_tube (EmpathyContact *contact,
         service, params, type, address,
         TP_SOCKET_ACCESS_CONTROL_LOCALHOST, control_param, &id, &error, NULL))
     {
-      empathy_debug (DEBUG_DOMAIN, "Couldn't offer tube: %s", error->message);
+      DEBUG ("Couldn't offer tube: %s", error->message);
       g_clear_error (&error);
       goto OUT;
     }
 
-  empathy_debug (DEBUG_DOMAIN, "Stream tube id=%d offered", id);
+  DEBUG ("Stream tube id=%d offered", id);
 
   tube = empathy_tp_tube_new (channel, id);
 
@@ -449,7 +448,7 @@ tp_tube_accept_stream_cb (TpChannel *proxy,
                           GObject *weak_object)
 {
   if (error)
-      empathy_debug (DEBUG_DOMAIN, "Error accepting tube: %s", error->message);
+      DEBUG ("Error accepting tube: %s", error->message);
 }
 
 void
@@ -461,7 +460,7 @@ empathy_tp_tube_accept_stream_tube (EmpathyTpTube *tube,
 
   g_return_if_fail (EMPATHY_IS_TP_TUBE (tube));
 
-  empathy_debug (DEBUG_DOMAIN, "Accepting stream tube - id: %d", priv->id);
+  DEBUG ("Accepting stream tube - id: %d", priv->id);
 
   control_param = tp_g_value_slice_new (G_TYPE_STRING);
   tp_cli_channel_type_tubes_call_accept_stream_tube (priv->channel, -1, priv->id,
@@ -483,14 +482,13 @@ empathy_tp_tube_get_socket (EmpathyTpTube *tube,
 
   g_return_if_fail (EMPATHY_IS_TP_TUBE (tube));
 
-  empathy_debug (DEBUG_DOMAIN, "Getting stream tube socket address");
+  DEBUG ("Getting stream tube socket address");
 
   address = g_slice_new0 (GValue);
   if (!tp_cli_channel_type_tubes_run_get_stream_tube_socket_address (priv->channel,
       -1, priv->id, &address_type, &address, &error, NULL))
     {
-      empathy_debug (DEBUG_DOMAIN, "Couldn't get socket address: %s",
-          error->message);
+      DEBUG ("Couldn't get socket address: %s", error->message);
       g_clear_error (&error);
       return;
     }

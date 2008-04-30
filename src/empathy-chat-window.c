@@ -40,7 +40,6 @@
 #include <libempathy/empathy-contact-factory.h>
 #include <libempathy/empathy-contact.h>
 #include <libempathy/empathy-message.h>
-#include <libempathy/empathy-debug.h>
 #include <libempathy/empathy-utils.h>
 
 #include <libempathy-gtk/empathy-images.h>
@@ -53,9 +52,10 @@
 #include "empathy-chat-window.h"
 #include "empathy-about-dialog.h"
 
-#define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), EMPATHY_TYPE_CHAT_WINDOW, EmpathyChatWindowPriv))
+#define DEBUG_FLAG EMPATHY_DEBUG_CHAT
+#include <libempathy/empathy-debug.h>
 
-#define DEBUG_DOMAIN "ChatWindow"
+#define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), EMPATHY_TYPE_CHAT_WINDOW, EmpathyChatWindowPriv))
 
 struct _EmpathyChatWindowPriv {
 	EmpathyChat *current_chat;
@@ -297,7 +297,7 @@ chat_window_update (EmpathyChatWindow *window)
 	name = chat_window_get_chat_name (priv->current_chat);
 	n_chats = g_list_length (priv->chats);
 
-	empathy_debug (DEBUG_DOMAIN, "Update window");
+	DEBUG ("Update window");
 
 	/* Update menu */
 	gtk_widget_set_sensitive (priv->menu_tabs_next, !last_page);
@@ -351,8 +351,8 @@ chat_window_update_chat_tab (EmpathyChat *chat)
 	subject = empathy_chat_get_subject (chat);
 	remote_contact = empathy_chat_get_remote_contact (chat);
 
-	empathy_debug (DEBUG_DOMAIN, "Updating chat tab, name=%s, subject=%s, "
-		       "remote_contact=%p", name, subject, remote_contact);
+	DEBUG ("Updating chat tab, name=%s, subject=%s, remote_contact=%p",
+		name, subject, remote_contact);
 
 	/* Update tab image */
 	if (g_list_find (priv->chats_new_msg, chat)) {
@@ -713,7 +713,7 @@ chat_window_delete_event_cb (GtkWidget        *dialog,
 
 	priv = GET_PRIV (window);
 
-	empathy_debug (DEBUG_DOMAIN, "Delete event received");
+	DEBUG ("Delete event received");
 
 	list = g_list_copy (priv->chats);
 
@@ -752,8 +752,7 @@ chat_window_set_urgency_hint (EmpathyChatWindow *window,
 
 	priv = GET_PRIV (window);
 
-	empathy_debug (DEBUG_DOMAIN, "Turning %s urgency hint",
-		       urgent ? "on" : "off");
+	DEBUG ("Turning %s urgency hint", urgent ? "on" : "off");
 	gtk_window_set_urgency_hint (GTK_WINDOW (priv->dialog), urgent);
 }
 
@@ -807,7 +806,7 @@ chat_window_detach_hook (GtkNotebook *source,
 	new_window = empathy_chat_window_new ();
 	priv = GET_PRIV (new_window);
 
-	empathy_debug (DEBUG_DOMAIN, "Detach hook called");
+	DEBUG ("Detach hook called");
 
 	empathy_chat_window_move_chat (window, new_window, chat);
 
@@ -827,7 +826,7 @@ chat_window_page_switched_cb (GtkNotebook      *notebook,
 	EmpathyChat           *chat;
 	GtkWidget            *child;
 
-	empathy_debug (DEBUG_DOMAIN, "Page switched");
+	DEBUG ("Page switched");
 
 	priv = GET_PRIV (window);
 
@@ -864,12 +863,12 @@ chat_window_page_added_cb (GtkNotebook      *notebook,
 	 * it, so we return here and in "page-added".
 	 */
 	if (priv->dnd_same_window) {
-		empathy_debug (DEBUG_DOMAIN, "Page added (back to the same window)");
+		DEBUG ("Page added (back to the same window)");
 		priv->dnd_same_window = FALSE;
 		return;
 	}
 
-	empathy_debug (DEBUG_DOMAIN, "Page added");
+	DEBUG ("Page added");
 
 	/* Get chat object */
 	chat = EMPATHY_CHAT (child);
@@ -909,11 +908,11 @@ chat_window_page_removed_cb (GtkNotebook      *notebook,
 	 * it, so we return here and in "page-added".
 	 */
 	if (priv->dnd_same_window) {
-		empathy_debug (DEBUG_DOMAIN, "Page removed (and will be readded to same window)");
+		DEBUG ("Page removed (and will be readded to same window)");
 		return;
 	}
 
-	empathy_debug (DEBUG_DOMAIN, "Page removed");
+	DEBUG ("Page removed");
 
 	/* Get chat object */
 	chat = EMPATHY_CHAT (child);
@@ -945,7 +944,7 @@ chat_window_focus_in_event_cb (GtkWidget        *widget,
 {
 	EmpathyChatWindowPriv *priv;
 
-	empathy_debug (DEBUG_DOMAIN, "Focus in event, updating title");
+	DEBUG ("Focus in event, updating title");
 
 	priv = GET_PRIV (window);
 
@@ -978,7 +977,7 @@ chat_window_drag_data_received (GtkWidget        *widget,
 
 		id = (const gchar*) selection->data;
 
-		empathy_debug (DEBUG_DOMAIN, "DND contact from roster with id:'%s'", id);
+		DEBUG ("DND contact from roster with id:'%s'", id);
 		
 		strv = g_strsplit (id, "/", 2);
 		account = mc_account_lookup (strv[0]);
@@ -1019,7 +1018,7 @@ chat_window_drag_data_received (GtkWidget        *widget,
 		EmpathyChat        **chat;
 		EmpathyChatWindow   *old_window = NULL;
 
-		empathy_debug (DEBUG_DOMAIN, "DND tab");
+		DEBUG ("DND tab");
 
 		chat = (void*) selection->data;
 		old_window = chat_window_find_chat (*chat);
@@ -1030,7 +1029,7 @@ chat_window_drag_data_received (GtkWidget        *widget,
 			priv = GET_PRIV (window);
 
 			if (old_window == window) {
-				empathy_debug (DEBUG_DOMAIN, "DND tab (within same window)");
+				DEBUG ("DND tab (within same window)");
 				priv->dnd_same_window = TRUE;
 				gtk_drag_finish (context, TRUE, FALSE, time);
 				return;
@@ -1046,7 +1045,7 @@ chat_window_drag_data_received (GtkWidget        *widget,
 		 */
 		gtk_drag_finish (context, TRUE, FALSE, time);
 	} else {
-		empathy_debug (DEBUG_DOMAIN, "DND from unknown source");
+		DEBUG ("DND from unknown source");
 		gtk_drag_finish (context, FALSE, FALSE, time);
 	}
 }
@@ -1060,7 +1059,7 @@ chat_window_finalize (GObject *object)
 	window = EMPATHY_CHAT_WINDOW (object);
 	priv = GET_PRIV (window);
 
-	empathy_debug (DEBUG_DOMAIN, "Finalized: %p", object);
+	DEBUG ("Finalized: %p", object);
 
 	if (priv->save_geometry_id != 0) {
 		g_source_remove (priv->save_geometry_id);
@@ -1343,9 +1342,7 @@ empathy_chat_window_add_chat (EmpathyChatWindow *window,
 	gtk_notebook_set_tab_label_packing (GTK_NOTEBOOK (priv->notebook), child,
 					    TRUE, TRUE, GTK_PACK_START); 
 
-	empathy_debug (DEBUG_DOMAIN, 
-		      "Chat added (%d references)",
-		      G_OBJECT (chat)->ref_count);
+	DEBUG ("Chat added (%d references)", G_OBJECT (chat)->ref_count);
 }
 
 void
@@ -1376,9 +1373,7 @@ empathy_chat_window_remove_chat (EmpathyChatWindow *window,
 					  GTK_WIDGET (chat));
 	gtk_notebook_remove_page (GTK_NOTEBOOK (priv->notebook), position);
 
-	empathy_debug (DEBUG_DOMAIN, 
-		      "Chat removed (%d references)", 
-		      G_OBJECT (chat)->ref_count - 1);
+	DEBUG ("Chat removed (%d references)", G_OBJECT (chat)->ref_count - 1);
 
 	g_object_unref (chat);
 }
@@ -1396,10 +1391,8 @@ empathy_chat_window_move_chat (EmpathyChatWindow *old_window,
 
 	widget = GTK_WIDGET (chat);
 
-	empathy_debug (DEBUG_DOMAIN,
-		      "Chat moving with widget:%p (%d references)", 
-		      widget,
-		      G_OBJECT (widget)->ref_count);
+	DEBUG ("Chat moving with widget:%p (%d references)", widget,
+		G_OBJECT (widget)->ref_count);
 
 	/* We reference here to make sure we don't loose the widget
 	 * and the EmpathyChat object during the move.

@@ -31,13 +31,13 @@
 #include "empathy-log-manager.h"
 #include "empathy-contact.h"
 #include "empathy-time.h"
-#include "empathy-debug.h"
 #include "empathy-utils.h"
+
+#define DEBUG_FLAG EMPATHY_DEBUG_OTHER
+#include "empathy-debug.h"
 
 #define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), \
 		       EMPATHY_TYPE_LOG_MANAGER, EmpathyLogManagerPriv))
-
-#define DEBUG_DOMAIN "LogManager"
 
 #define LOG_DIR_CREATE_MODE       (S_IRUSR | S_IWUSR | S_IXUSR)
 #define LOG_FILE_CREATE_MODE      (S_IRUSR | S_IWUSR)
@@ -164,14 +164,13 @@ empathy_log_manager_add_message (EmpathyLogManager *manager,
 	filename = log_manager_get_filename (manager, account, chat_id, chatroom);
 	basedir = g_path_get_dirname (filename);
 	if (!g_file_test (basedir, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR)) {
-		empathy_debug (DEBUG_DOMAIN, "Creating directory:'%s'", basedir);
+		DEBUG ("Creating directory:'%s'", basedir);
 
 		g_mkdir_with_parents (basedir, LOG_DIR_CREATE_MODE);
 	}
 	g_free (basedir);
 
-	empathy_debug (DEBUG_DOMAIN, "Adding message: '%s' to file: '%s'",
-		      body_str, filename);
+	DEBUG ("Adding message: '%s' to file: '%s'", body_str, filename);
 
 	if (!g_file_test (filename, G_FILE_TEST_EXISTS)) {
 		file = g_fopen (filename, "w+");
@@ -255,12 +254,12 @@ empathy_log_manager_get_dates (EmpathyLogManager *manager,
 	directory = log_manager_get_dir (manager, account, chat_id, chatroom);
 	dir = g_dir_open (directory, 0, NULL);
 	if (!dir) {
-		empathy_debug (DEBUG_DOMAIN, "Could not open directory:'%s'", directory);
+		DEBUG ("Could not open directory:'%s'", directory);
 		g_free (directory);
 		return NULL;
 	}
 
-	empathy_debug (DEBUG_DOMAIN, "Collating a list of dates in:'%s'", directory);
+	DEBUG ("Collating a list of dates in:'%s'", directory);
 
 	while ((filename = g_dir_read_name (dir)) != NULL) {
 		if (!g_str_has_suffix (filename, LOG_FILENAME_SUFFIX)) {
@@ -283,7 +282,7 @@ empathy_log_manager_get_dates (EmpathyLogManager *manager,
 	g_free (directory);
 	g_dir_close (dir);
 
-	empathy_debug (DEBUG_DOMAIN, "Parsed %d dates", g_list_length (dates));
+	DEBUG ("Parsed %d dates", g_list_length (dates));
 
 	return dates;
 }
@@ -303,10 +302,10 @@ empathy_log_manager_get_messages_for_file (EmpathyLogManager *manager,
 	g_return_val_if_fail (EMPATHY_IS_LOG_MANAGER (manager), NULL);
 	g_return_val_if_fail (filename != NULL, NULL);
 
-	empathy_debug (DEBUG_DOMAIN, "Attempting to parse filename:'%s'...", filename);
+	DEBUG ("Attempting to parse filename:'%s'...", filename);
 
 	if (!g_file_test (filename, G_FILE_TEST_EXISTS)) {
-		empathy_debug (DEBUG_DOMAIN, "Filename:'%s' does not exist", filename);
+		DEBUG ("Filename:'%s' does not exist", filename);
 		return NULL;
 	}
 
@@ -397,7 +396,7 @@ empathy_log_manager_get_messages_for_file (EmpathyLogManager *manager,
 		xmlFree (msg_type_str);
 	}
 
-	empathy_debug (DEBUG_DOMAIN, "Parsed %d messages", g_list_length (messages));
+	DEBUG ("Parsed %d messages", g_list_length (messages));
 
 	xmlFreeDoc (doc);
 	xmlFreeParserCtxt (ctxt);
@@ -486,8 +485,7 @@ empathy_log_manager_search_new (EmpathyLogManager *manager,
 	text_casefold = g_utf8_casefold (text, -1);
 
 	files = log_manager_get_all_files (manager, NULL);
-	empathy_debug (DEBUG_DOMAIN, "Found %d log files in total",
-		      g_list_length (files));
+	DEBUG ("Found %d log files in total", g_list_length (files));
 
 	for (l = files; l; l = l->next) {
 		gchar       *filename;
@@ -516,9 +514,8 @@ empathy_log_manager_search_new (EmpathyLogManager *manager,
 
 			if (hit) {
 				hits = g_list_prepend (hits, hit);
-				empathy_debug (DEBUG_DOMAIN, 
-					      "Found text:'%s' in file:'%s' on date:'%s'...",
-					      text, hit->filename, hit->date);
+				DEBUG ("Found text:'%s' in file:'%s' on date:'%s'",
+					text, hit->filename, hit->date);
 			}
 		}
 

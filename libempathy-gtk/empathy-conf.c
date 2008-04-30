@@ -26,11 +26,10 @@
 
 #include <gconf/gconf-client.h>
 
-#include <libempathy/empathy-debug.h>
-
 #include "empathy-conf.h"
 
-#define DEBUG_DOMAIN "Config"
+#define DEBUG_FLAG EMPATHY_DEBUG_OTHER
+#include <libempathy/empathy-debug.h>
 
 #define EMPATHY_CONF_ROOT       "/apps/empathy"
 #define DESKTOP_INTERFACE_ROOT  "/desktop/gnome/interface"
@@ -131,7 +130,7 @@ empathy_conf_set_int (EmpathyConf  *conf,
 
 	g_return_val_if_fail (EMPATHY_IS_CONF (conf), FALSE);
 
-	empathy_debug (DEBUG_DOMAIN, "Setting int:'%s' to %d", key, value);
+	DEBUG ("Setting int:'%s' to %d", key, value);
 
 	priv = GET_PRIV (conf);
 
@@ -177,8 +176,8 @@ empathy_conf_set_bool (EmpathyConf  *conf,
 
 	g_return_val_if_fail (EMPATHY_IS_CONF (conf), FALSE);
 
-	empathy_debug (DEBUG_DOMAIN, "Setting bool:'%s' to %d ---> %s",
-		      key, value, value ? "true" : "false");
+	DEBUG ("Setting bool:'%s' to %d ---> %s", key, value,
+		value ? "true" : "false");
 
 	priv = GET_PRIV (conf);
 
@@ -224,8 +223,7 @@ empathy_conf_set_string (EmpathyConf  *conf,
 
 	g_return_val_if_fail (EMPATHY_IS_CONF (conf), FALSE);
 
-	empathy_debug (DEBUG_DOMAIN, "Setting string:'%s' to '%s'",
-		      key, value);
+	DEBUG ("Setting string:'%s' to '%s'", key, value);
 
 	priv = GET_PRIV (conf);
 

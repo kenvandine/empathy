@@ -29,11 +29,10 @@
 #include <glib.h>
 #include <gdk/gdk.h>
 
-#include <libempathy/empathy-debug.h>
-
 #include "empathy-geometry.h"
 
-#define DEBUG_DOMAIN "Geometry"
+#define DEBUG_FLAG EMPATHY_DEBUG_OTHER
+#include <libempathy/empathy-debug.h>
 
 #define GEOMETRY_DIR_CREATE_MODE  (S_IRUSR | S_IWUSR | S_IXUSR)
 #define GEOMETRY_FILE_CREATE_MODE (S_IRUSR | S_IWUSR)
@@ -52,7 +51,7 @@ geometry_get_filename (void)
 
 	dir = g_build_filename (g_get_home_dir (), ".gnome2", PACKAGE_NAME, NULL);
 	if (!g_file_test (dir, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR)) {
-		empathy_debug (DEBUG_DOMAIN, "Creating directory:'%s'", dir);
+		DEBUG ("Creating directory:'%s'", dir);
 		g_mkdir_with_parents (dir, GEOMETRY_DIR_CREATE_MODE);
 	}
 
@@ -79,8 +78,8 @@ empathy_geometry_save (const gchar *name,
 	gsize        length;
 	gchar       *str;
 
-	empathy_debug (DEBUG_DOMAIN, "Saving window geometry: x:%d, y:%d, w:%d, h:%d\n",
-		      x, y, w, h);
+	DEBUG ("Saving window geometry: x:%d, y:%d, w:%d, h:%d\n",
+		x, y, w, h);
 
 	screen = gdk_screen_get_default ();
 	max_width = gdk_screen_get_width (screen);
@@ -174,11 +173,8 @@ empathy_geometry_load (const gchar *name,
 		g_free (str);
 	}
 
-	empathy_debug (DEBUG_DOMAIN, "Loading window geometry: x:%d, y:%d, w:%d, h:%d\n",
-		      x ? *x : -1,
-		      y ? *y : -1,
-		      w ? *w : -1,
-		      h ? *h : -1);
+	DEBUG ("Loading window geometry: x:%d, y:%d, w:%d, h:%d\n",
+		x ? *x : -1, y ? *y : -1, w ? *w : -1, h ? *h : -1);
 
 	g_free (filename);
 	g_key_file_free (key_file);

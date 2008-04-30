@@ -38,7 +38,6 @@
 #include <libmissioncontrol/mc-account-monitor.h>
 #include <telepathy-glib/util.h>
 
-#include <libempathy/empathy-debug.h>
 #include <libempathy/empathy-utils.h>
 #include <libempathy-gtk/empathy-ui-utils.h>
 
@@ -48,7 +47,8 @@
 #include "empathy-account-widget-irc.h"
 #include "empathy-account-widget-sip.h"
 
-#define DEBUG_DOMAIN "AccountDialog"
+#define DEBUG_FLAG EMPATHY_DEBUG_ACCOUNT
+#include <libempathy/empathy-debug.h>
 
 /* Flashing delay for icons (milliseconds). */
 #define FLASH_TIMEOUT 500
@@ -402,9 +402,8 @@ accounts_dialog_enable_toggled_cb (GtkCellRendererToggle *cell_renderer,
 	enabled = mc_account_is_enabled (account);
 	mc_account_set_enabled (account, !enabled);
 
-	empathy_debug (DEBUG_DOMAIN, "%s account %s",
-		       enabled ? "Disabled" : "Enable",
-		       mc_account_get_display_name(account));
+	DEBUG ("%s account %s", enabled ? "Disabled" : "Enable",
+		mc_account_get_display_name(account));
 
 	g_object_unref (account);
 }
@@ -663,7 +662,7 @@ accounts_dialog_add_account (EmpathyAccountsDialog *dialog,
 
 	g_return_if_fail (name != NULL);
 
-	empathy_debug (DEBUG_DOMAIN, "Adding new account: %s", name);
+	DEBUG ("Adding new account: %s", name);
 
 	model = gtk_tree_view_get_model (GTK_TREE_VIEW (dialog->treeview));
 	gtk_list_store_insert_with_values (GTK_LIST_STORE (model), &iter,
@@ -747,9 +746,8 @@ accounts_dialog_status_changed_cb (MissionControl           *mc,
 	model = gtk_tree_view_get_model (GTK_TREE_VIEW (dialog->treeview));
 	account = mc_account_lookup (unique_name);
 
-	empathy_debug (DEBUG_DOMAIN, "Status changed for account %s: "
-		      "status=%d presence=%d",
-		      unique_name, status, presence);
+	DEBUG ("Status changed for account %s: status=%d presence=%d",
+		unique_name, status, presence);
 
 	if (accounts_dialog_get_account_iter (dialog, account, &iter)) {
 		GtkTreePath *path;
@@ -808,9 +806,9 @@ accounts_dialog_account_enabled_cb (McAccountMonitor      *monitor,
 	account = mc_account_lookup (unique_name);
 	enabled = mc_account_is_enabled (account);
 
-	empathy_debug (DEBUG_DOMAIN, "Account %s is now %s",
-		       mc_account_get_display_name (account),
-		       enabled ? "enabled" : "disabled");
+	DEBUG ("Account %s is now %s",
+		mc_account_get_display_name (account),
+		enabled ? "enabled" : "disabled");
 
 	if (accounts_dialog_get_account_iter (dialog, account, &iter)) {
 		gtk_list_store_set (GTK_LIST_STORE (model), &iter,

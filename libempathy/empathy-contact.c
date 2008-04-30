@@ -33,10 +33,10 @@
 
 #include "empathy-contact.h"
 #include "empathy-utils.h"
-#include "empathy-debug.h"
 #include "empathy-enum-types.h"
 
-#define DEBUG_DOMAIN "Contact"
+#define DEBUG_FLAG EMPATHY_DEBUG_CONTACT
+#include "empathy-debug.h"
 
 #define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), EMPATHY_TYPE_CONTACT, EmpathyContactPriv))
 
@@ -195,7 +195,7 @@ contact_finalize (GObject *object)
 
 	priv = GET_PRIV (object);
 
-	empathy_debug (DEBUG_DOMAIN, "finalize: %p", object);
+	DEBUG ("finalize: %p", object);
 
 	g_free (priv->name);
 	g_free (priv->id);

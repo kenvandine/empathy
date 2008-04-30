@@ -29,13 +29,12 @@
 #include <gtk/gtk.h>
 #include <gio/gio.h>
 
-#include <libempathy/empathy-debug.h>
-
 #include "empathy-avatar-chooser.h"
 #include "empathy-conf.h"
 #include "empathy-ui-utils.h"
 
-#define DEBUG_DOMAIN "AvatarChooser"
+#define DEBUG_FLAG EMPATHY_DEBUG_OTHER
+#include <libempathy/empathy-debug.h>
 
 #define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), EMPATHY_TYPE_AVATAR_CHOOSER, EmpathyAvatarChooserPriv))
 
@@ -187,8 +186,8 @@ avatar_chooser_set_pixbuf (EmpathyAvatarChooser *chooser,
 						&priv->image_data_size,
 						"png",
 						&error, NULL)) {
-			empathy_debug (DEBUG_DOMAIN, "Failed to save pixbuf: %s",
-				       error ? error->message : "No error given");
+			DEBUG ("Failed to save pixbuf: %s",
+				error ? error->message : "No error given");
 			g_clear_error (&error);
 		}
 		image = gtk_image_new_from_pixbuf (pixbuf_view);
@@ -212,8 +211,8 @@ avatar_chooser_set_image_from_file (EmpathyAvatarChooser *chooser,
 	GError    *error = NULL;
 
 	if (!(pixbuf = gdk_pixbuf_new_from_file (filename, &error))) {
-		empathy_debug (DEBUG_DOMAIN, "Failed to load pixbuf from file: %s",
-			       error ? error->message : "No error given");
+		DEBUG ("Failed to load pixbuf from file: %s",
+			error ? error->message : "No error given");
 		g_clear_error (&error);
 	}
 

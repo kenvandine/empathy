@@ -28,6 +28,7 @@
 #include <glib.h>
 #include <gtk/gtk.h>
 
+#include <libempathy/empathy-debug.h>
 #include <libempathy-gtk/empathy-accounts-dialog.h>
 
 static void
@@ -43,6 +44,12 @@ main (int argc, char *argv[])
 	GtkWidget *dialog;
 
 	gtk_init (&argc, &argv);
+
+	if (g_getenv ("EMPATHY_TIMING") != NULL) {
+		g_log_set_default_handler (tp_debug_timestamped_log_handler, NULL);
+	}
+	empathy_debug_set_flags (g_getenv ("EMPATHY_DEBUG"));
+	tp_debug_divert_messages (g_getenv ("EMPATHY_LOGFILE"));
 
 	gtk_icon_theme_append_search_path (gtk_icon_theme_get_default (),
 					   PKGDATADIR G_DIR_SEPARATOR_S "icons");

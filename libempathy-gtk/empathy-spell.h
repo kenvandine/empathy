@@ -24,6 +24,8 @@
 #ifndef __EMPATHY_SPELL_H__
 #define __EMPATHY_SPELL_H__
 
+#include <glib.h>
+
 G_BEGIN_DECLS
 
 gboolean     empathy_spell_supported           (void);

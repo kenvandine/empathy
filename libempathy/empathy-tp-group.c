@@ -30,14 +30,14 @@
 
 #include "empathy-tp-group.h"
 #include "empathy-contact-factory.h"
-#include "empathy-debug.h"
 #include "empathy-utils.h"
 #include "empathy-marshal.h"
 
+#define DEBUG_FLAG EMPATHY_DEBUG_TP
+#include "empathy-debug.h"
+
 #define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), \
 		       EMPATHY_TYPE_TP_GROUP, EmpathyTpGroupPriv))
-
-#define DEBUG_DOMAIN "TpGroup"
 
 struct _EmpathyTpGroupPriv {
 	TpChannel             *channel;
@@ -210,18 +210,17 @@ tp_group_update_members (EmpathyTpGroup *group,
 
 	actor_contact = tp_group_get_contact (group, actor);
 
-	empathy_debug (DEBUG_DOMAIN, "Members changed for list %s:\n"
-				     "  added-len=%d, current-len=%d\n"
-				     "  removed-len=%d\n"
-				     "  local-pending-len=%d, current-len=%d\n"
-				     "  remote-pending-len=%d, current-len=%d",
-		       priv->group_name,
-		       added ? added->len : 0, g_list_length (priv->members),
-		       removed ? removed->len : 0,
-		       local_pending ? local_pending->len : 0,
-		       g_list_length (priv->local_pendings),
-		       remote_pending ? remote_pending->len : 0,
-		       g_list_length (priv->remote_pendings));
+	DEBUG ("Members changed for list %s:\n"
+		"  added-len=%d, current-len=%d\n"
+		"  removed-len=%d\n"
+		"  local-pending-len=%d, current-len=%d\n"
+		"  remote-pending-len=%d, current-len=%d",
+		priv->group_name, added ? added->len : 0,
+		g_list_length (priv->members), removed ? removed->len : 0,
+		local_pending ? local_pending->len : 0,
+		g_list_length (priv->local_pendings),
+		remote_pending ? remote_pending->len : 0,
+		g_list_length (priv->remote_pendings));
 
 	/* Contacts added */
 	contacts = tp_group_get_contacts (group, added);
@@ -293,14 +292,13 @@ tp_group_update_members (EmpathyTpGroup *group,
 		g_object_unref (actor_contact);
 	}
 
-	empathy_debug (DEBUG_DOMAIN, "Members changed done for list %s:\n"
-				     "  members-len=%d\n"
-				     "  local-pendings-len=%d\n"
-				     "  remote-pendings-len=%d",
-		       priv->group_name,
-		       g_list_length (priv->members),
-		       g_list_length (priv->local_pendings),
-		       g_list_length (priv->remote_pendings));
+	DEBUG ("Members changed done for list %s:\n"
+		"  members-len=%d\n"
+		"  local-pendings-len=%d\n"
+		"  remote-pendings-len=%d",
+		priv->group_name, g_list_length (priv->members),
+		g_list_length (priv->local_pendings),
+		g_list_length (priv->remote_pendings));
 }
 
 static void
@@ -335,8 +333,7 @@ tp_group_get_members_cb (TpChannel    *channel,
 	EmpathyTpGroupPriv *priv = GET_PRIV (group);
 
 	if (error) {
-		empathy_debug (DEBUG_DOMAIN, "Failed to get members: %s",
-			       error->message);
+		DEBUG ("Failed to get members: %s", error->message);
 		return;
 	}
 
@@ -349,7 +346,7 @@ tp_group_get_members_cb (TpChannel    *channel,
 				 0,       /* actor */
 				 0);      /* reason */
 
-	empathy_debug (DEBUG_DOMAIN, "Ready");
+	DEBUG ("Ready");
 	priv->ready = TRUE;
 	g_object_notify (group, "ready");
 }
@@ -365,8 +362,7 @@ tp_group_get_local_pending_cb (TpChannel        *channel,
 	guint   i = 0;
 	
 	if (error) {
-		empathy_debug (DEBUG_DOMAIN, "Failed to get local pendings: %s",
-			       error->message);
+		DEBUG ("Failed to get local pendings: %s", error->message);
 		return;
 	}
 
@@ -407,8 +403,7 @@ tp_group_get_remote_pending_cb (TpChannel    *channel,
 				GObject      *group)
 {
 	if (error) {
-		empathy_debug (DEBUG_DOMAIN, "Failed to get remote pendings: %s",
-			       error->message);
+		DEBUG ("Failed to get remote pendings: %s", error->message);
 		return;
 	}
 
@@ -432,8 +427,7 @@ tp_group_inspect_handles_cb (TpConnection  *connection,
 	EmpathyTpGroupPriv *priv = GET_PRIV (group);
 
 	if (error) {
-		empathy_debug (DEBUG_DOMAIN, "Failed to inspect channel handle: %s",
-			       error->message);
+		DEBUG ("Failed to inspect channel handle: %s", error->message);
 		return;
 	}
 
@@ -447,7 +441,7 @@ tp_group_invalidated_cb (TpProxy        *proxy,
 			 gchar          *message,
 			 EmpathyTpGroup *group)
 {
-	empathy_debug (DEBUG_DOMAIN, "Channel invalidated: %s", message);
+	DEBUG ("Channel invalidated: %s", message);
 	g_signal_emit (group, signals[DESTROY], 0);
 }
 
@@ -465,8 +459,7 @@ tp_group_get_self_handle_cb (TpChannel    *proxy,
 	GArray             *handles;
 
 	if (error) {
-		empathy_debug (DEBUG_DOMAIN, "Failed to get self handle: %s",
-			       error->message);
+		DEBUG ("Failed to get self handle: %s", error->message);
 		return;
 	}
 
@@ -546,7 +539,7 @@ tp_group_finalize (GObject *object)
 	EmpathyTpGroupPriv      *priv = GET_PRIV (object);
 	EmpathyTpContactFactory *tp_factory;
 
-	empathy_debug (DEBUG_DOMAIN, "finalize: %p", object);
+	DEBUG ("finalize: %p", object);
 
 	tp_factory = empathy_contact_factory_get_tp_factory (priv->factory, priv->account);
 	g_signal_handlers_disconnect_by_func (tp_factory, tp_group_factory_ready_cb, object);
@@ -742,7 +735,7 @@ tp_group_async_cb (TpChannel    *channel,
 	const gchar *msg = user_data;
 
 	if (error) {
-		empathy_debug (DEBUG_DOMAIN, "%s: %s", msg, error->message);
+		DEBUG ("%s: %s", msg, error->message);
 	}
 }
 

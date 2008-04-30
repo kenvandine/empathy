@@ -39,7 +39,6 @@
 
 #include <libempathy/empathy-log-manager.h>
 #include <libempathy/empathy-contact-list.h>
-#include <libempathy/empathy-debug.h>
 #include <libempathy/empathy-utils.h>
 
 #include "empathy-chat.h"
@@ -51,9 +50,10 @@
 #include "empathy-contact-menu.h"
 #include "empathy-ui-utils.h"
 
-#define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), EMPATHY_TYPE_CHAT, EmpathyChatPriv))
+#define DEBUG_FLAG EMPATHY_DEBUG_CHAT
+#include <libempathy/empathy-debug.h>
 
-#define DEBUG_DOMAIN "Chat"
+#define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), EMPATHY_TYPE_CHAT, EmpathyChatPriv))
 
 #define CHAT_DIR_CREATE_MODE  (S_IRUSR | S_IWUSR | S_IXUSR)
 #define CHAT_FILE_CREATE_MODE (S_IRUSR | S_IWUSR)
@@ -184,8 +184,7 @@ chat_status_changed_cb (MissionControl           *mc,
 	if (status == TP_CONNECTION_STATUS_CONNECTED && !priv->tp_chat &&
 	    empathy_account_equal (account, priv->account) &&
 	    priv->handle_type != TP_HANDLE_TYPE_NONE) {
-		empathy_debug (DEBUG_DOMAIN,
-			       "Account reconnected, request a new Text channel");
+		DEBUG ("Account reconnected, request a new Text channel");
 		mission_control_request_channel_with_string_handle (mc,
 								    priv->account,
 								    TP_IFACE_CHANNEL_TYPE_TEXT,
@@ -304,8 +303,7 @@ chat_sent_message_get_next (EmpathyChat *chat)
 	priv = GET_PRIV (chat);
 
 	if (!priv->sent_messages) {
-		empathy_debug (DEBUG_DOMAIN, 
-			      "No sent messages, next message is NULL");
+		DEBUG ("No sent messages, next message is NULL");
 		return NULL;
 	}
 
@@ -315,9 +313,7 @@ chat_sent_message_get_next (EmpathyChat *chat)
 		priv->sent_messages_index++;
 	}
 	
-	empathy_debug (DEBUG_DOMAIN, 
-		      "Returning next message index:%d",
-		      priv->sent_messages_index);
+	DEBUG ("Returning next message index:%d", priv->sent_messages_index);
 
 	return g_slist_nth_data (priv->sent_messages, priv->sent_messages_index);
 }
@@ -332,8 +328,7 @@ chat_sent_message_get_last (EmpathyChat *chat)
 	priv = GET_PRIV (chat);
 	
 	if (!priv->sent_messages) {
-		empathy_debug (DEBUG_DOMAIN, 
-			      "No sent messages, last message is NULL");
+		DEBUG ("No sent messages, last message is NULL");
 		return NULL;
 	}
 
@@ -341,9 +336,7 @@ chat_sent_message_get_last (EmpathyChat *chat)
 		priv->sent_messages_index--;
 	}
 
-	empathy_debug (DEBUG_DOMAIN, 
-		      "Returning last message index:%d",
-		      priv->sent_messages_index);
+	DEBUG ("Returning last message index:%d", priv->sent_messages_index);
 
 	return g_slist_nth_data (priv->sent_messages, priv->sent_messages_index);
 }
@@ -446,9 +439,9 @@ chat_state_changed_cb (EmpathyTpChat      *tp_chat,
 		g_assert_not_reached ();
 	}
 
-	empathy_debug (DEBUG_DOMAIN, "Was composing: %s now composing: %s",
-		      was_composing ? "yes" : "no",
-		      priv->compositors ? "yes" : "no");
+	DEBUG ("Was composing: %s now composing: %s",
+		was_composing ? "yes" : "no",
+		priv->compositors ? "yes" : "no");
 
 	if ((was_composing && !priv->compositors) ||
 	    (!was_composing && priv->compositors)) {
@@ -488,18 +481,17 @@ chat_message_received_cb (EmpathyTpChat  *tp_chat,
 			/* The message we received is already displayed because
 			 * some jabber chatrooms sends us back logs and we
 			 * already displayed it from localy logged messages. */
-			empathy_debug (DEBUG_DOMAIN, "Skipping message because "
-				       "it is already displayed from logged "
-				       "messages");
+			DEBUG ("Skipping message because it is already "
+				"displayed from logged messages");
 			g_object_unref (log_message);
 			return;
 		}
 		g_object_unref (log_message);
 	}
 
-	empathy_debug (DEBUG_DOMAIN, "Appending new message from %s (%d)",
-		       empathy_contact_get_name (sender),
-		       empathy_contact_get_handle (sender));
+	DEBUG ("Appending new message from %s (%d)",
+		empathy_contact_get_name (sender),
+		empathy_contact_get_handle (sender));
 
 	if (priv->id) {
 		gboolean is_chatroom;
@@ -898,7 +890,7 @@ static void
 chat_input_realize_cb (GtkWidget   *widget,
 		       EmpathyChat *chat)
 {
-	empathy_debug (DEBUG_DOMAIN, "Setting focus to the input text view");
+	DEBUG ("Setting focus to the input text view");
 	gtk_widget_grab_focus (widget);
 }
 
@@ -1399,7 +1391,7 @@ chat_finalize (GObject *object)
 	chat = EMPATHY_CHAT (object);
 	priv = GET_PRIV (chat);
 
-	empathy_debug (DEBUG_DOMAIN, "Finalized: %p", object);
+	DEBUG ("Finalized: %p", object);
 
 	g_slist_foreach (priv->sent_messages, (GFunc) g_free, NULL);
 	g_slist_free (priv->sent_messages);

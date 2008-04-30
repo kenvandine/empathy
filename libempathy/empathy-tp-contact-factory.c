@@ -29,12 +29,12 @@
 
 #include "empathy-tp-contact-factory.h"
 #include "empathy-utils.h"
+
+#define DEBUG_FLAG EMPATHY_DEBUG_TP | EMPATHY_DEBUG_CONTACT
 #include "empathy-debug.h"
 
 #define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), \
 		       EMPATHY_TYPE_TP_CONTACT_FACTORY, EmpathyTpContactFactoryPriv))
-
-#define DEBUG_DOMAIN "TpContactFactory"
 
 struct _EmpathyTpContactFactoryPriv {
 	MissionControl *mc;
@@ -96,8 +96,7 @@ tp_contact_factory_weak_notify (gpointer data,
 {
 	EmpathyTpContactFactoryPriv *priv = GET_PRIV (data);
 
-	empathy_debug (DEBUG_DOMAIN, "Remove finalized contact %p",
-		       where_the_object_was);
+	DEBUG ("Remove finalized contact %p", where_the_object_was);
 
 	priv->contacts = g_list_remove (priv->contacts, where_the_object_was);
 }
@@ -140,11 +139,11 @@ tp_contact_factory_parse_presence_foreach (guint                    handle,
 			      (GHFunc) tp_contact_factory_presences_table_foreach,
 			      contact);
 
-	empathy_debug (DEBUG_DOMAIN, "Changing presence for contact %s (%d) to %s (%d)",
-		      empathy_contact_get_id (contact),
-		      handle,
-		      empathy_contact_get_presence_message (contact),
-		      empathy_contact_get_presence (contact));
+	DEBUG ("Changing presence for contact %s (%d) to %s (%d)",
+		empathy_contact_get_id (contact),
+		handle,
+		empathy_contact_get_presence_message (contact),
+		empathy_contact_get_presence (contact));
 }
 
 static void
@@ -155,8 +154,7 @@ tp_contact_factory_get_presence_cb (TpConnection *connection,
 				    GObject      *tp_factory)
 {
 	if (error) {
-		empathy_debug (DEBUG_DOMAIN, "Error getting presence: %s",
-			      error->message);
+		DEBUG ("Error getting presence: %s", error->message);
 		if (error->domain == TP_DBUS_ERRORS &&
 		    error->code == TP_DBUS_ERROR_NO_INTERFACE) {
 			guint *handles = user_data;
@@ -204,8 +202,7 @@ tp_contact_factory_set_aliases_cb (TpConnection *connection,
 				   GObject      *tp_factory)
 {
 	if (error) {
-		empathy_debug (DEBUG_DOMAIN, "Error setting alias: %s",
-			       error->message);
+		DEBUG ("Error setting alias: %s", error->message);
 	}
 }
 
@@ -221,8 +218,7 @@ tp_contact_factory_request_aliases_cb (TpConnection *connection,
 	const gchar **name;
 
 	if (error) {
-		empathy_debug (DEBUG_DOMAIN, "Error requesting aliases: %s",
-			      error->message);
+		DEBUG ("Error requesting aliases: %s", error->message);
 
 		/* If we failed to get alias set it to NULL, like that if
 		 * someone is waiting for the name to be ready it won't wait
@@ -251,10 +247,10 @@ tp_contact_factory_request_aliases_cb (TpConnection *connection,
 			continue;
 		}
 
-		empathy_debug (DEBUG_DOMAIN, "Renaming contact %s (%d) to %s (request cb)",
-			       empathy_contact_get_id (contact),
-			       empathy_contact_get_handle (contact),
-			       *name);
+		DEBUG ("Renaming contact %s (%d) to %s (request cb)",
+			empathy_contact_get_id (contact),
+			empathy_contact_get_handle (contact),
+			*name);
 
 		empathy_contact_set_name (contact, *name);
 
@@ -287,9 +283,9 @@ tp_contact_factory_aliases_changed_cb (TpConnection    *connection,
 			continue;
 		}
 
-		empathy_debug (DEBUG_DOMAIN, "Renaming contact %s (%d) to %s (changed cb)",
-			       empathy_contact_get_id (contact),
-			       handle, alias);
+		DEBUG ("Renaming contact %s (%d) to %s (changed cb)",
+			empathy_contact_get_id (contact),
+			handle, alias);
 
 		empathy_contact_set_name (contact, alias);
 	}
@@ -303,8 +299,7 @@ tp_contact_factory_set_avatar_cb (TpConnection *connection,
 				  GObject      *tp_factory)
 {
 	if (error) {
-		empathy_debug (DEBUG_DOMAIN, "Error setting avatar: %s",
-			       error->message);
+		DEBUG ("Error setting avatar: %s", error->message);
 	}
 }
 
@@ -315,8 +310,7 @@ tp_contact_factory_clear_avatar_cb (TpConnection *connection,
 				    GObject      *tp_factory)
 {
 	if (error) {
-		empathy_debug (DEBUG_DOMAIN, "Error clearing avatar: %s",
-			       error->message);
+		DEBUG ("Error clearing avatar: %s", error->message);
 	}
 }
 
@@ -338,9 +332,9 @@ tp_contact_factory_avatar_retrieved_cb (TpConnection *connection,
 		return;
 	}
 
-	empathy_debug (DEBUG_DOMAIN, "Avatar retrieved for contact %s (%d)",
-		       empathy_contact_get_id (contact),
-		       handle);
+	DEBUG ("Avatar retrieved for contact %s (%d)",
+		empathy_contact_get_id (contact),
+		handle);
 
 	avatar = empathy_avatar_new (avatar_data->data,
 				     avatar_data->len,
@@ -358,8 +352,7 @@ tp_contact_factory_request_avatars_cb (TpConnection *connection,
 				       GObject      *tp_factory)
 {
 	if (error) {
-		empathy_debug (DEBUG_DOMAIN, "Error requesting avatars: %s",
-			       error->message);
+		DEBUG ("Error requesting avatars: %s", error->message);
 	}
 }
 
@@ -431,9 +424,7 @@ tp_contact_factory_get_known_avatar_tokens_cb (TpConnection *connection,
 	TokensData data;
 
 	if (error) {
-		empathy_debug (DEBUG_DOMAIN,
-			       "Error getting known avatars tokens: %s",
-			       error->message);
+		DEBUG ("Error getting known avatars tokens: %s", error->message);
 		return;
 	}
 
@@ -443,9 +434,8 @@ tp_contact_factory_get_known_avatar_tokens_cb (TpConnection *connection,
 			      tp_contact_factory_avatar_tokens_foreach,
 			      &data);
 
-	empathy_debug (DEBUG_DOMAIN, "Got %d tokens, need to request %d avatars",
-		       g_hash_table_size (tokens),
-		       data.handles->len);
+	DEBUG ("Got %d tokens, need to request %d avatars",
+		g_hash_table_size (tokens), data.handles->len);
 
 	/* Request needed avatars */
 	if (data.handles->len > 0) {
@@ -475,8 +465,7 @@ tp_contact_factory_avatar_updated_cb (TpConnection *connection,
 		return;
 	}
 
-	empathy_debug (DEBUG_DOMAIN, "Need to request avatar for token %s",
-		       new_token);
+	DEBUG ("Need to request avatar for token %s", new_token);
 
 	handles = g_array_new (FALSE, FALSE, sizeof (guint));
 	g_array_append_val (handles, handle);
@@ -519,10 +508,10 @@ tp_contact_factory_update_capabilities (EmpathyTpContactFactory *tp_factory,
 		}
 	}
 
-	empathy_debug (DEBUG_DOMAIN, "Changing capabilities for contact %s (%d) to %d",
-		       empathy_contact_get_id (contact),
-		       empathy_contact_get_handle (contact),
-		       capabilities);
+	DEBUG ("Changing capabilities for contact %s (%d) to %d",
+		empathy_contact_get_id (contact),
+		empathy_contact_get_handle (contact),
+		capabilities);
 
 	empathy_contact_set_capabilities (contact, capabilities);
 }
@@ -538,8 +527,7 @@ tp_contact_factory_get_capabilities_cb (TpConnection    *connection,
 	guint                    i;
 
 	if (error) {
-		empathy_debug (DEBUG_DOMAIN, "Error getting capabilities: %s",
-			       error->message);
+		DEBUG ("Error getting capabilities: %s", error->message);
 		/* FIXME Should set the capabilities of the contacts for which this request
 		 * originated to NONE */
 		return;
@@ -662,8 +650,7 @@ tp_contact_factory_request_handles_cb (TpConnection *connection,
 	guint  i = 0;
 
 	if (error) {
-		empathy_debug (DEBUG_DOMAIN, "Failed to request handles: %s",
-			       error->message);
+		DEBUG ("Failed to request handles: %s", error->message);
 		return;
 	}
 
@@ -692,8 +679,7 @@ tp_contact_factory_inspect_handles_cb (TpConnection  *connection,
 	GList        *l;
 
 	if (error) {
-		empathy_debug (DEBUG_DOMAIN, "Failed to inspect handles: %s",
-			       error->message);
+		DEBUG ("Failed to inspect handles: %s", error->message);
 		return;
 	}
 
@@ -719,7 +705,7 @@ tp_contact_factory_connection_invalidated_cb (EmpathyTpContactFactory *tp_factor
 {
 	EmpathyTpContactFactoryPriv *priv = GET_PRIV (tp_factory);
 
-	empathy_debug (DEBUG_DOMAIN, "Connection invalidated");
+	DEBUG ("Connection invalidated");
 
 	g_object_unref (priv->connection);
 	priv->connection = NULL;
@@ -748,12 +734,11 @@ tp_contact_factory_got_self_handle_cb (TpConnection *proxy,
 	GList                       *id_needed_contacts = NULL;
 
 	if (error) {
-		empathy_debug (DEBUG_DOMAIN, "Failed to get self handles: %s",
-			       error->message);
+		DEBUG ("Failed to get self handles: %s", error->message);
 		return;
 	}
 
-	empathy_debug (DEBUG_DOMAIN, "Connection ready");
+	DEBUG ("Connection ready");
 
 	empathy_contact_set_handle (priv->user, handle);
 	priv->ready = TRUE;
@@ -907,9 +892,9 @@ tp_contact_factory_add_contact (EmpathyTpContactFactory *tp_factory,
 			   tp_factory);
 	priv->contacts = g_list_prepend (priv->contacts, contact);
 
-	empathy_debug (DEBUG_DOMAIN, "Contact added: %s (%d)",
-		       empathy_contact_get_id (contact),
-		       empathy_contact_get_handle (contact));
+	DEBUG ("Contact added: %s (%d)",
+		empathy_contact_get_id (contact),
+		empathy_contact_get_handle (contact));
 }
 
 static void
@@ -919,8 +904,7 @@ tp_contact_factory_hold_handles_cb (TpConnection *connection,
 				    GObject      *tp_factory)
 {
 	if (error) {
-		empathy_debug (DEBUG_DOMAIN, "Failed to hold handles: %s",
-			       error->message);
+		DEBUG ("Failed to hold handles: %s", error->message);
 	}
 }
 
@@ -1093,9 +1077,9 @@ empathy_tp_contact_factory_set_alias (EmpathyTpContactFactory *tp_factory,
 
 	handle = empathy_contact_get_handle (contact);
 
-	empathy_debug (DEBUG_DOMAIN, "Setting alias for contact %s (%d) to %s",
-		       empathy_contact_get_id (contact),
-		       handle, alias);
+	DEBUG ("Setting alias for contact %s (%d) to %s",
+		empathy_contact_get_id (contact),
+		handle, alias);
 
 	new_alias = g_hash_table_new_full (g_direct_hash,
 					   g_direct_equal,
@@ -1133,8 +1117,8 @@ empathy_tp_contact_factory_set_avatar (EmpathyTpContactFactory *tp_factory,
 		avatar.data = (gchar*) data;
 		avatar.len = size;
 
-		empathy_debug (DEBUG_DOMAIN, "Setting avatar on account %s",
-			       mc_account_get_unique_name (priv->account));
+		DEBUG ("Setting avatar on account %s",
+			mc_account_get_unique_name (priv->account));
 
 		tp_cli_connection_interface_avatars_call_set_avatar (priv->connection,
 								     -1,
@@ -1144,8 +1128,8 @@ empathy_tp_contact_factory_set_avatar (EmpathyTpContactFactory *tp_factory,
 								     NULL, NULL,
 								     G_OBJECT (tp_factory));
 	} else {
-		empathy_debug (DEBUG_DOMAIN, "Clearing avatar on account %s",
-			       mc_account_get_unique_name (priv->account));
+		DEBUG ("Clearing avatar on account %s",
+			mc_account_get_unique_name (priv->account));
 
 		tp_cli_connection_interface_avatars_call_clear_avatar (priv->connection,
 								       -1,
@@ -1210,9 +1194,8 @@ tp_contact_factory_finalize (GObject *object)
 	EmpathyTpContactFactoryPriv *priv = GET_PRIV (object);
 	GList                       *l;
 
-	empathy_debug (DEBUG_DOMAIN, "Finalized: %p (%s)",
-		       object,
-		       mc_account_get_normalized_name (priv->account));
+	DEBUG ("Finalized: %p (%s)", object,
+		mc_account_get_normalized_name (priv->account));
 
 	empathy_disconnect_account_status_changed (priv->token);
 

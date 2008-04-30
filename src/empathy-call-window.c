@@ -30,13 +30,13 @@
 
 #include <libempathy/empathy-contact.h>
 #include <libempathy/empathy-tp-call.h>
-#include <libempathy/empathy-debug.h>
 #include <libempathy/empathy-utils.h>
 #include <libempathy-gtk/empathy-ui-utils.h>
 
 #include "empathy-call-window.h"
 
-#define DEBUG_DOMAIN "CallWindow"
+#define DEBUG_FLAG EMPATHY_DEBUG_OTHER
+#include <libempathy/empathy-debug.h>
 
 typedef struct 
 {
@@ -98,7 +98,7 @@ call_window_update_timer (gpointer data)
 static void
 call_window_stop_timeout (EmpathyCallWindow *window)
 {
-  empathy_debug (DEBUG_DOMAIN, "Timer stopped");
+  DEBUG ("Timer stopped");
 
   if (window->timeout_event_id)
     {
@@ -111,8 +111,7 @@ static void
 call_window_set_output_video_is_drawing (EmpathyCallWindow *window,
                                          gboolean is_drawing)
 {
-  empathy_debug (DEBUG_DOMAIN,
-      "Setting output video is drawing - %d", is_drawing);
+  DEBUG ("Setting output video is drawing - %d", is_drawing);
 
   if (is_drawing && !window->is_drawing)
     {
@@ -162,12 +161,12 @@ call_window_socket_realized_cb (GtkWidget *widget,
 {
   if (widget == window->preview_video_socket)
     {
-      empathy_debug (DEBUG_DOMAIN, "Preview socket realized");
+      DEBUG ("Preview socket realized");
       empathy_tp_call_add_preview_video (window->call,
           gtk_socket_get_id (GTK_SOCKET (window->preview_video_socket)));
     }
   else
-      empathy_debug (DEBUG_DOMAIN, "Output socket realized");
+      DEBUG ("Output socket realized");
 }
 
 static void
@@ -179,7 +178,7 @@ call_window_video_button_toggled_cb (GtkWidget *button,
 
   is_sending = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (button));
 
-  empathy_debug (DEBUG_DOMAIN, "Send video toggled - %d", is_sending);
+  DEBUG ("Send video toggled - %d", is_sending);
 
   g_object_get (window->call, "status", &status, NULL);
   if (status == EMPATHY_TP_CALL_STATUS_ACCEPTED)
@@ -190,7 +189,7 @@ static void
 call_window_hang_up_button_clicked_cb (GtkWidget *widget,
                                        EmpathyCallWindow *window)
 {
-  empathy_debug (DEBUG_DOMAIN, "Call clicked, end call");
+  DEBUG ("Call clicked, end call");
   call_window_finalize (window);
 }
 
@@ -238,7 +237,7 @@ call_window_delete_event_cb (GtkWidget *widget,
   gint result;
   guint status = EMPATHY_TP_CALL_STATUS_CLOSED;
 
-  empathy_debug (DEBUG_DOMAIN, "Delete event occurred");
+  DEBUG ("Delete event occurred");
 
   if (window->call)
       g_object_get (window->call, "status", &status, NULL);
@@ -349,7 +348,7 @@ call_window_update (EmpathyCallWindow *window)
   else
       stream_state = audio_stream->state;
 
-  empathy_debug (DEBUG_DOMAIN, "Status changed - status: %d, stream state: %d, "
+  DEBUG ("Status changed - status: %d, stream state: %d, "
       "is-incoming: %d video-stream direction: %d",
       window->status, stream_state, is_incoming, video_stream->direction);
 

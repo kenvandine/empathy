@@ -1,58 +1,94 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /*
- * Copyright (C) 2006-2007 Imendio AB
+ * Copyright (C) 2007 Collabora Ltd.
+ * Copyright (C) 2007 Nokia Corporation
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License as
- * published by the Free Software Foundation; either version 2 of the
- * License, or (at your option) any later version.
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
+ * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
+ * Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the
- * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- * Boston, MA 02111-1307, USA.
- *
- * Authors: Richard Hult <richard@imendio.com>
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
 #ifndef __EMPATHY_DEBUG_H__
 #define __EMPATHY_DEBUG_H__
 
+#include "config.h"
+
+
 #include <glib.h>
+#include <telepathy-glib/debug.h>
 
 G_BEGIN_DECLS
 
-#ifdef G_HAVE_ISO_VARARGS
-#  ifdef EMPATHY_DISABLE_DEBUG
-#    define empathy_debug(...)
-#  else
-#    define empathy_debug(...) empathy_debug_impl (__VA_ARGS__)
-#  endif
-#elif defined(G_HAVE_GNUC_VARARGS)
-#  if EMPATHY_DISABLE_DEBUG
-#    define empathy_debug(fmt...)
-#  else
-#    define empathy_debug(fmt...) empathy_debug_impl(fmt)
-#  endif
-#else
-#  if EMPATHY_DISABLE_DEBUG
-#    define empathy_debug(x)
-#  else
-#    define empathy_debug empathy_debug_impl
-#  endif
-#endif
+#ifdef ENABLE_DEBUG
 
-void empathy_debug_impl                  (const gchar *domain,
-					  const gchar *msg,
-					  ...);
-void empathy_debug_set_log_file_from_env (void);
+/* Please keep this enum in sync with #keys in empathy-debug.c */
+typedef enum
+{
+  EMPATHY_DEBUG_TP = 1 << 1,
+  EMPATHY_DEBUG_CHAT = 1 << 2,
+  EMPATHY_DEBUG_CONTACT = 1 << 3,
+  EMPATHY_DEBUG_ACCOUNT = 1 << 4,
+  EMPATHY_DEBUG_IRC = 1 << 5,
+  EMPATHY_DEBUG_FILTER = 1 << 6,
+  EMPATHY_DEBUG_OTHER = 1 << 7,
+} EmpathyDebugFlags;
 
+gboolean empathy_debug_flag_is_set (EmpathyDebugFlags flag);
+void empathy_debug (EmpathyDebugFlags flag, const gchar *format, ...)
+    G_GNUC_PRINTF (2, 3);
+
+#endif /* ENABLE_DEBUG */
+
+void empathy_debug_set_flags (const gchar *flags_string);
 G_END_DECLS
 
 #endif /* __EMPATHY_DEBUG_H__ */
 
+/* ------------------------------------ */
+
+/* Below this point is outside the __DEBUG_H__ guard - so it can take effect
+ * more than once. So you can do:
+ *
+ * #define DEBUG_FLAG EMPATHY_DEBUG_ONE_THING
+ * #include "internal-debug.h"
+ * ...
+ * DEBUG ("if we're debugging one thing");
+ * ...
+ * #undef DEBUG_FLAG
+ * #define DEBUG_FLAG EMPATHY_DEBUG_OTHER_THING
+ * #include "internal-debug.h"
+ * ...
+ * DEBUG ("if we're debugging the other thing");
+ * ...
+ */
+
+#ifdef DEBUG_FLAG
+#ifdef ENABLE_DEBUG
+
+#undef DEBUG
+#define DEBUG(format, ...) \
+  empathy_debug (DEBUG_FLAG, "%s: " format, G_STRFUNC, ##__VA_ARGS__)
+
+#undef DEBUGGING
+#define DEBUGGING empathy_debug_flag_is_set (DEBUG_FLAG)
+
+#else /* !defined (ENABLE_DEBUG) */
+
+#undef DEBUG
+#define DEBUG(format, ...) do {} while (0)
+
+#undef DEBUGGING
+#define DEBUGGING 0
+
+#endif /* !defined (ENABLE_DEBUG) */
+#endif /* defined (DEBUG_FLAG) */

@@ -143,6 +143,21 @@
 
 ;; Enumerations and flags ...
 
+(define-flags DebugFlags
+  (in-module "Empathy")
+  (c-name "EmpathyDebugFlags")
+  (gtype-id "EMPATHY_TYPE_DEBUG_FLAGS")
+  (values
+    '("tp" "EMPATHY_DEBUG_TP")
+    '("chat" "EMPATHY_DEBUG_CHAT")
+    '("contact" "EMPATHY_DEBUG_CONTACT")
+    '("account" "EMPATHY_DEBUG_ACCOUNT")
+    '("irc" "EMPATHY_DEBUG_IRC")
+    '("filter" "EMPATHY_DEBUG_FILTER")
+    '("other" "EMPATHY_DEBUG_OTHER")
+  )
+)
+
 (define-enum RegExType
   (in-module "Empathy")
   (c-name "EmpathyRegExType")
@@ -359,19 +374,30 @@
 
 ;; From empathy-debug.h
 
-(define-function empathy_debug_impl
-  (c-name "empathy_debug_impl")
+(define-function empathy_debug_flag_is_set
+  (c-name "empathy_debug_flag_is_set")
+  (return-type "gboolean")
+  (parameters
+    '("EmpathyDebugFlags" "flag")
+  )
+)
+
+(define-function empathy_debug
+  (c-name "empathy_debug")
   (return-type "none")
   (parameters
-    '("const-gchar*" "domain")
-    '("const-gchar*" "msg")
+    '("EmpathyDebugFlags" "flag")
+    '("const-gchar*" "format")
   )
   (varargs #t)
 )
 
-(define-function empathy_debug_set_log_file_from_env
-  (c-name "empathy_debug_set_log_file_from_env")
+(define-function empathy_debug_set_flags
+  (c-name "empathy_debug_set_flags")
   (return-type "none")
+  (parameters
+    '("const-gchar*" "flags_string")
+  )
 )
 
 

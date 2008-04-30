@@ -104,6 +104,18 @@ PKG_CHECK_MODULES(EMPATHY,
 ])
 
 # -----------------------------------------------------------
+# Enable debug
+# -----------------------------------------------------------
+
+AC_ARG_ENABLE(debug,
+  AC_HELP_STRING([--disable-debug],[compile without debug code]),
+    enable_debug=$enableval, enable_debug=yes )
+
+if test x$enable_debug = xyes; then
+  AC_DEFINE(ENABLE_DEBUG, [], [Enable debug code])
+fi
+
+# -----------------------------------------------------------
 # Language Support
 # -----------------------------------------------------------
 

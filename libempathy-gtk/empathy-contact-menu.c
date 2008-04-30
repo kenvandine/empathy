@@ -34,8 +34,6 @@
 #include "empathy-log-window.h"
 #include "empathy-contact-dialogs.h"
 
-#define DEBUG_DOMAIN "ContactMenu"
-
 GtkWidget *
 empathy_contact_menu_new (EmpathyContact             *contact,
 			  EmpathyContactFeatureFlags  features)

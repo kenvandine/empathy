@@ -374,8 +374,8 @@
   (c-name "empathy_chat_correct_word")
   (return-type "none")
   (parameters
-    '("GtkTextIter" "start")
-    '("GtkTextIter" "end")
+    '("GtkTextIter*" "start")
+    '("GtkTextIter*" "end")
     '("const-gchar*" "new_word")
   )
 )
@@ -402,8 +402,8 @@
   (return-type "none")
   (parameters
     '("EmpathyChat*" "chat")
-    '("GtkTextIter" "start")
-    '("GtkTextIter" "end")
+    '("GtkTextIter*" "start")
+    '("GtkTextIter*" "end")
     '("const-gchar*" "word")
   )
 )

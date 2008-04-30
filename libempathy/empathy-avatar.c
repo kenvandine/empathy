@@ -20,15 +20,16 @@
  * Authors: Xavier Claessens <xclaesse@gmail.com>
  */
 
+
 #include "config.h"
 
 #include <telepathy-glib/util.h>
 
 #include "empathy-avatar.h"
 #include "empathy-utils.h"
-#include "empathy-debug.h"
 
-#define DEBUG_DOMAIN "Avatar"
+#define DEBUG_FLAG EMPATHY_DEBUG_OTHER
+#include "empathy-debug.h"
 
 GType
 empathy_avatar_get_type (void)
@@ -109,12 +110,11 @@ empathy_avatar_new (const guchar *data,
 	filename = avatar_get_filename (token);
 	if (!g_file_test (filename, G_FILE_TEST_EXISTS)) {
 		if (!g_file_set_contents (filename, data, len, &error)) {
-			empathy_debug (DEBUG_DOMAIN,
-				       "Failed to save avatar in cache: %s",
-				       error ? error->message : "No error given");
+			DEBUG ("Failed to save avatar in cache: %s",
+				error ? error->message : "No error given");
 			g_clear_error (&error);
 		} else {
-			empathy_debug (DEBUG_DOMAIN, "Avatar saved to %s", filename);
+			DEBUG ("Avatar saved to %s", filename);
 		}
 	}
 	g_free (filename);
@@ -137,15 +137,14 @@ empathy_avatar_new_from_cache (const gchar *token)
 	filename = avatar_get_filename (token);
 	if (g_file_test (filename, G_FILE_TEST_EXISTS)) {
 		if (!g_file_get_contents (filename, &data, &len, &error)) {
-			empathy_debug (DEBUG_DOMAIN,
-				       "Failed to load avatar from cache: %s",
-				       error ? error->message : "No error given");
+			DEBUG ("Failed to load avatar from cache: %s",
+				error ? error->message : "No error given");
 			g_clear_error (&error);
 		}
 	}
 
 	if (data) {
-		empathy_debug (DEBUG_DOMAIN, "Avatar loaded from %s", filename);
+		DEBUG ("Avatar loaded from %s", filename);
 		avatar = avatar_new (data, len, NULL, g_strdup (token));
 	}
 

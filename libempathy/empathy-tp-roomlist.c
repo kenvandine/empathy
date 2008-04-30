@@ -33,10 +33,11 @@
 #include "empathy-utils.h"
 #include "empathy-debug.h"
 
+#define DEBUG_FLAG EMPATHY_DEBUG_TP
+#include "empathy-debug.h"
+
 #define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), \
 		       EMPATHY_TYPE_TP_ROOMLIST, EmpathyTpRoomlistPriv))
-
-#define DEBUG_DOMAIN "TpRoomlist"
 
 struct _EmpathyTpRoomlistPriv {
 	TpConnection *connection;
@@ -72,7 +73,7 @@ tp_roomlist_listing_cb (TpChannel *channel,
 {
 	EmpathyTpRoomlistPriv *priv = GET_PRIV (list);
 
-	empathy_debug (DEBUG_DOMAIN, "Listing: %s", listing ? "Yes" : "No");
+	DEBUG ("Listing: %s", listing ? "Yes" : "No");
 	priv->is_listing = listing;
 	g_object_notify (list, "is-listing");
 }
@@ -139,8 +140,7 @@ tp_roomlist_get_listing_rooms_cb (TpChannel    *channel,
 	EmpathyTpRoomlistPriv *priv = GET_PRIV (list);
 
 	if (error) {
-		empathy_debug (DEBUG_DOMAIN, "Error geting listing rooms: %s",
-			       error->message);
+		DEBUG ("Error geting listing rooms: %s", error->message);
 		return;
 	}
 
@@ -155,7 +155,7 @@ tp_roomlist_invalidated_cb (TpChannel         *channel,
 			    gchar             *message,
 			    EmpathyTpRoomlist *list)
 {
-	empathy_debug (DEBUG_DOMAIN, "Channel invalidated: %s", message);
+	DEBUG ("Channel invalidated: %s", message);
 	g_signal_emit (list, signals[DESTROY], 0);
 }
 
@@ -169,8 +169,7 @@ tp_roomlist_request_channel_cb (TpConnection *connection,
 	EmpathyTpRoomlistPriv *priv = GET_PRIV (list);
 
 	if (error) {
-		empathy_debug (DEBUG_DOMAIN, "Error requesting channel: %s",
-			       error->message);
+		DEBUG ("Error requesting channel: %s", error->message);
 		return;
 	}
 
@@ -207,7 +206,7 @@ tp_roomlist_finalize (GObject *object)
 	EmpathyTpRoomlistPriv *priv = GET_PRIV (object);
 
 	if (priv->channel) {
-		empathy_debug (DEBUG_DOMAIN, "Closing channel...");
+		DEBUG ("Closing channel...");
 		g_signal_handlers_disconnect_by_func (priv->channel,
 						      tp_roomlist_invalidated_cb,
 						      object);

@@ -40,12 +40,11 @@
 
 #include <libmissioncontrol/mc-profile.h>
 
-#include <libempathy/empathy-debug.h>
-
 #include "empathy-ui-utils.h"
 #include "empathy-images.h"
 
-#define DEBUG_DOMAIN "UiUtils"
+#define DEBUG_FLAG EMPATHY_DEBUG_OTHER
+#include <libempathy/empathy-debug.h>
 
 struct SizeData {
 	gint     width;
@@ -64,7 +63,7 @@ get_glade_file (const gchar *filename,
 	const char *name;
 	GtkWidget **widget_ptr;
 
-	empathy_debug (DEBUG_DOMAIN, "Loading glade file %s", filename);
+	DEBUG ("Loading glade file %s", filename);
 
 	gui = glade_xml_new (filename, root, domain);
 
@@ -259,15 +258,15 @@ empathy_pixbuf_from_data (gchar *data,
 
 	loader = gdk_pixbuf_loader_new ();
 	if (!gdk_pixbuf_loader_write (loader, data, data_size, &error)) {
-		empathy_debug (DEBUG_DOMAIN, "Failed to write to pixbuf loader: %s",
-			       error ? error->message : "No error given");
+		DEBUG ("Failed to write to pixbuf loader: %s",
+			error ? error->message : "No error given");
 		g_clear_error (&error);
 		g_object_unref (loader);
 		return NULL;
 	}
 	if (!gdk_pixbuf_loader_close (loader, &error)) {
-		empathy_debug (DEBUG_DOMAIN, "Failed to close pixbuf loader: %s",
-			       error ? error->message : "No error given");
+		DEBUG ("Failed to close pixbuf loader: %s",
+			error ? error->message : "No error given");
 		g_clear_error (&error);
 		g_object_unref (loader);
 		return NULL;
@@ -527,7 +526,7 @@ empathy_pixbuf_from_icon_name (const gchar *icon_name,
 					   0,
 					   &error);
 	if (error) {
-		empathy_debug (DEBUG_DOMAIN, "Error loading icon: %s", error->message);
+		DEBUG ("Error loading icon: %s", error->message);
 		g_clear_error (&error);
 	}
 

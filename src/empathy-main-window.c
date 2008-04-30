@@ -29,7 +29,6 @@
 #include <glib/gi18n.h>
 
 #include <libempathy/empathy-contact.h>
-#include <libempathy/empathy-debug.h>
 #include <libempathy/empathy-utils.h>
 #include <libempathy/empathy-chatroom-manager.h>
 #include <libempathy/empathy-chatroom.h>
@@ -57,7 +56,8 @@
 #include "empathy-new-chatroom-dialog.h"
 #include "empathy-chatrooms-window.h"
 
-#define DEBUG_DOMAIN "MainWindow"
+#define DEBUG_FLAG EMPATHY_DEBUG_OTHER
+#include <libempathy/empathy-debug.h>
 
 /* Minimum width of roster window if something goes wrong. */
 #define MIN_WIDTH 50
@@ -309,7 +309,7 @@ empathy_main_window_show (void)
 		/* Use the defaults from the glade file if we
 		 * don't have good w, h geometry.
 		 */
-		empathy_debug (DEBUG_DOMAIN, "Configuring window default size w:%d, h:%d", w, h);
+		DEBUG ("Configuring window default size w:%d, h:%d", w, h);
 		gtk_window_set_default_size (GTK_WINDOW (window->window), w, h);
 	}
 
@@ -317,7 +317,7 @@ empathy_main_window_show (void)
 		/* Let the window manager position it if we
 		 * don't have good x, y coordinates.
 		 */
-		empathy_debug (DEBUG_DOMAIN, "Configuring window default position x:%d, y:%d", x, y);
+		DEBUG ("Configuring window default position x:%d, y:%d", x, y);
 		gtk_window_move (GTK_WINDOW (window->window), x, y);
 	}
 
@@ -506,7 +506,7 @@ main_window_favorite_chatroom_join (EmpathyChatroom *chatroom)
 	account = empathy_chatroom_get_account (chatroom);
 	room = empathy_chatroom_get_room (chatroom);
 
-	empathy_debug (DEBUG_DOMAIN, "Requesting channel for '%s'", room);
+	DEBUG ("Requesting channel for '%s'", room);
 
 	mission_control_request_channel_with_string_handle (mc,
 							    account,
@@ -1009,7 +1009,7 @@ main_window_accels_load (void)
 
 	filename = g_build_filename (g_get_home_dir (), ".gnome2", PACKAGE_NAME, ACCELS_FILENAME, NULL);
 	if (g_file_test (filename, G_FILE_TEST_EXISTS)) {
-		empathy_debug (DEBUG_DOMAIN, "Loading from:'%s'", filename);
+		DEBUG ("Loading from:'%s'", filename);
 		gtk_accel_map_load (filename);
 	}
 
@@ -1027,7 +1027,7 @@ main_window_accels_save (void)
 	file_with_path = g_build_filename (dir, ACCELS_FILENAME, NULL);
 	g_free (dir);
 
-	empathy_debug (DEBUG_DOMAIN, "Saving to:'%s'", file_with_path);
+	DEBUG ("Saving to:'%s'", file_with_path);
 	gtk_accel_map_save (file_with_path);
 
 	g_free (file_with_path);

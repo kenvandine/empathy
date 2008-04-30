@@ -32,13 +32,13 @@
 #include <libmissioncontrol/mc-account.h>
 #include <libmissioncontrol/mc-protocol.h>
 
-#include <libempathy/empathy-debug.h>
 #include <libempathy/empathy-utils.h>
 
 #include "empathy-account-widget.h"
 #include "empathy-ui-utils.h"
 
-#define DEBUG_DOMAIN "AccountWidget"
+#define DEBUG_FLAG EMPATHY_DEBUG_ACCOUNT
+#include <libempathy/empathy-debug.h>
 
 static gboolean 
 account_widget_entry_focus_cb (GtkWidget     *widget,
@@ -56,12 +56,12 @@ account_widget_entry_focus_cb (GtkWidget     *widget,
 
 		mc_account_unset_param (account, param_name);
 		mc_account_get_param_string (account, param_name, &value);
-		empathy_debug (DEBUG_DOMAIN, "Unset %s and restore to %s", param_name, value);
+		DEBUG ("Unset %s and restore to %s", param_name, value);
 		gtk_entry_set_text (GTK_ENTRY (widget), value ? value : "");
 		g_free (value);
 	} else {
-		empathy_debug (DEBUG_DOMAIN, "Setting %s to %s", param_name,
-			       strstr (param_name, "password") ? "***" : str);
+		DEBUG ("Setting %s to %s", param_name,
+			strstr (param_name, "password") ? "***" : str);
 		mc_account_set_param_string (account, param_name, str);
 	}
 
@@ -81,10 +81,10 @@ account_widget_int_changed_cb (GtkWidget *widget,
 	if (value == 0) {
 		mc_account_unset_param (account, param_name);
 		mc_account_get_param_int (account, param_name, &value);
-		empathy_debug (DEBUG_DOMAIN, "Unset %s and restore to %d", param_name, value);
+		DEBUG ("Unset %s and restore to %d", param_name, value);
 		gtk_spin_button_set_value (GTK_SPIN_BUTTON (widget), value);
 	} else {
-		empathy_debug (DEBUG_DOMAIN, "Setting %s to %d", param_name, value);
+		DEBUG ("Setting %s to %d", param_name, value);
 		mc_account_set_param_int (account, param_name, value);
 	}
 }
@@ -107,9 +107,9 @@ account_widget_checkbutton_toggled_cb (GtkWidget *widget,
 	mc_account_get_param_boolean (account, param_name, &default_value);
 
 	if (default_value == value) {
-		empathy_debug (DEBUG_DOMAIN, "Unset %s and restore to %d", param_name, default_value);
+		DEBUG ("Unset %s and restore to %d", param_name, default_value);
 	} else {
-		empathy_debug (DEBUG_DOMAIN, "Setting %s to %d", param_name, value);
+		DEBUG ("Setting %s to %d", param_name, value);
 		mc_account_set_param_boolean (account, param_name, value);
 	}
 }
@@ -124,7 +124,7 @@ account_widget_forget_clicked_cb (GtkWidget *button,
 	param_name = g_object_get_data (G_OBJECT (entry), "param_name");
 	account = g_object_get_data (G_OBJECT (entry), "account");
 
-	empathy_debug (DEBUG_DOMAIN, "Unset %s", param_name);
+	DEBUG ("Unset %s", param_name);
 	mc_account_unset_param (account, param_name);
 	gtk_entry_set_text (GTK_ENTRY (entry), "");
 }
@@ -209,9 +209,7 @@ account_widget_setup_widget (GtkWidget   *widget,
 				  G_CALLBACK (account_widget_checkbutton_toggled_cb),
 				  account);
 	} else {
-		empathy_debug (DEBUG_DOMAIN,
-		               "Unknown type of widget for param %s",
-		               param_name);
+		DEBUG ("Unknown type of widget for param %s", param_name);
 	}
 }
 
@@ -357,9 +355,8 @@ accounts_widget_generic_setup (McAccount *account,
 					  GTK_FILL | GTK_EXPAND, 0,
 					  0, 0);
 		} else {
-			empathy_debug (DEBUG_DOMAIN,
-				       "Unknown signature for param %s: %s",
-				       param_name_formatted, param->signature);
+			DEBUG ("Unknown signature for param %s: %s",
+				param_name_formatted, param->signature);
 		}
 
 		if (widget) {

@@ -31,13 +31,13 @@
 #include <gtk/gtk.h>
 
 #include <telepathy-glib/util.h>
-#include <libempathy/empathy-debug.h>
 
 #include "empathy-contact-list-store.h"
 #include "empathy-ui-utils.h"
 #include "empathy-gtk-enum-types.h"
 
-#define DEBUG_DOMAIN "ContactListStore"
+#define DEBUG_FLAG EMPATHY_DEBUG_CONTACT
+#include <libempathy/empathy-debug.h>
 
 /* Active users are those which have recently changed state
  * (e.g. online, offline or from normal to a busy state).
@@ -786,11 +786,10 @@ contact_list_store_members_changed_cb (EmpathyContactList      *list_iface,
 
 	priv = GET_PRIV (store);
 
-	empathy_debug (DEBUG_DOMAIN, 
-		      "Contact %s (%d) %s",
-		      empathy_contact_get_id (contact),
-		      empathy_contact_get_handle (contact),
-		      is_member ? "added" : "removed");
+	DEBUG ("Contact %s (%d) %s",
+		empathy_contact_get_id (contact),
+		empathy_contact_get_handle (contact),
+		is_member ? "added" : "removed");
 
 	if (is_member) {
 		g_signal_connect (contact, "notify::presence",
@@ -831,9 +830,9 @@ contact_list_store_groups_changed_cb (EmpathyContactList      *list_iface,
 
 	priv = GET_PRIV (store);
 
-	empathy_debug (DEBUG_DOMAIN, "Updating groups for contact %s (%d)",
-		      empathy_contact_get_id (contact),
-		      empathy_contact_get_handle (contact));
+	DEBUG ("Updating groups for contact %s (%d)",
+		empathy_contact_get_id (contact),
+		empathy_contact_get_handle (contact));
 
 	/* We do this to make sure the groups are correct, if not, we
 	 * would have to check the groups already set up for each
@@ -978,18 +977,16 @@ contact_list_store_contact_update (EmpathyContactListStore *store,
 
 	if (!in_list && !should_be_in_list) {
 		/* Nothing to do. */
-		empathy_debug (DEBUG_DOMAIN,
-			      "Contact:'%s' in list:NO, should be:NO",
-			      empathy_contact_get_name (contact));
+		DEBUG ("Contact:'%s' in list:NO, should be:NO",
+			empathy_contact_get_name (contact));
 
 		g_list_foreach (iters, (GFunc) gtk_tree_iter_free, NULL);
 		g_list_free (iters);
 		return;
 	}
 	else if (in_list && !should_be_in_list) {
-		empathy_debug (DEBUG_DOMAIN,
-			      "Contact:'%s' in list:YES, should be:NO",
-			      empathy_contact_get_name (contact));
+		DEBUG ("Contact:'%s' in list:YES, should be:NO",
+			empathy_contact_get_name (contact));
 
 		if (priv->show_active) {
 			do_remove = TRUE;
@@ -997,28 +994,26 @@ contact_list_store_contact_update (EmpathyContactListStore *store,
 			do_set_refresh = TRUE;
 
 			set_model = TRUE;
-			empathy_debug (DEBUG_DOMAIN, "Remove item (after timeout)");
+			DEBUG ("Remove item (after timeout)");
 		} else {
-			empathy_debug (DEBUG_DOMAIN, "Remove item (now)!");
+			DEBUG ("Remove item (now)!");
 			contact_list_store_remove_contact (store, contact);
 		}
 	}
 	else if (!in_list && should_be_in_list) {
-		empathy_debug (DEBUG_DOMAIN,
-			      "Contact:'%s' in list:NO, should be:YES",
-			      empathy_contact_get_name (contact));
+		DEBUG ("Contact:'%s' in list:NO, should be:YES",
+			empathy_contact_get_name (contact));
 
 		contact_list_store_add_contact (store, contact);
 
 		if (priv->show_active) {
 			do_set_active = TRUE;
 
-			empathy_debug (DEBUG_DOMAIN, "Set active (contact added)");
+			DEBUG ("Set active (contact added)");
 		}
 	} else {
-		empathy_debug (DEBUG_DOMAIN,
-			      "Contact:'%s' in list:YES, should be:YES",
-			      empathy_contact_get_name (contact));
+		DEBUG ("Contact:'%s' in list:YES, should be:YES",
+			empathy_contact_get_name (contact));
 
 		/* Get online state before. */
 		if (iters && g_list_length (iters) > 0) {
@@ -1033,15 +1028,15 @@ contact_list_store_contact_update (EmpathyContactListStore *store,
 				do_set_active = TRUE;
 				do_set_refresh = TRUE;
 
-				empathy_debug (DEBUG_DOMAIN, "Set active (contact updated %s)",
-					      was_online ? "online  -> offline" :
-							   "offline -> online");
+				DEBUG ("Set active (contact updated %s)",
+					was_online ? "online  -> offline" :
+					"offline -> online");
 			} else {
 				/* Was TRUE for presence updates. */
 				/* do_set_active = FALSE;  */
 				do_set_refresh = TRUE;
 
-				empathy_debug (DEBUG_DOMAIN, "Set active (contact updated)");
+				DEBUG ("Set active (contact updated)");
 			}
 		}
 
@@ -1096,9 +1091,8 @@ contact_list_store_contact_updated_cb (EmpathyContact          *contact,
 				       GParamSpec              *param,
 				       EmpathyContactListStore *store)
 {
-	empathy_debug (DEBUG_DOMAIN,
-		      "Contact:'%s' updated, checking roster is in sync...",
-		      empathy_contact_get_name (contact));
+	DEBUG ("Contact:'%s' updated, checking roster is in sync...",
+		empathy_contact_get_name (contact));
 
 	contact_list_store_contact_update (store, contact);
 }
@@ -1124,7 +1118,7 @@ contact_list_store_contact_set_active (EmpathyContactListStore *store,
 				    EMPATHY_CONTACT_LIST_STORE_COL_IS_ACTIVE, active,
 				    -1);
 
-		empathy_debug (DEBUG_DOMAIN, "Set item %s", active ? "active" : "inactive");
+		DEBUG ("Set item %s", active ? "active" : "inactive");
 
 		if (set_changed) {
 			path = gtk_tree_model_get_path (model, l->data);
@@ -1145,10 +1139,9 @@ contact_list_store_contact_active_new (EmpathyContactListStore *store,
 {
 	ShowActiveData *data;
 
-	empathy_debug (DEBUG_DOMAIN, 
-		      "Contact:'%s' now active, and %s be removed",
-		      empathy_contact_get_name (contact), 
-		      remove ? "WILL" : "WILL NOT");
+	DEBUG ("Contact:'%s' now active, and %s be removed",
+		empathy_contact_get_name (contact), 
+		remove ? "WILL" : "WILL NOT");
 	
 	data = g_slice_new0 (ShowActiveData);
 
@@ -1178,15 +1171,13 @@ contact_list_store_contact_active_cb (ShowActiveData *data)
 	if (data->remove &&
 	    !priv->show_offline &&
 	    !empathy_contact_is_online (data->contact)) {
-		empathy_debug (DEBUG_DOMAIN, 
-			      "Contact:'%s' active timeout, removing item",
-			      empathy_contact_get_name (data->contact));
+		DEBUG ("Contact:'%s' active timeout, removing item",
+			empathy_contact_get_name (data->contact));
 		contact_list_store_remove_contact (data->store, data->contact);
 	}
 
-	empathy_debug (DEBUG_DOMAIN, 
-		      "Contact:'%s' no longer active",
-		      empathy_contact_get_name (data->contact));
+	DEBUG ("Contact:'%s' no longer active",
+		empathy_contact_get_name (data->contact));
 
 	contact_list_store_contact_set_active (data->store,
 					       data->contact,

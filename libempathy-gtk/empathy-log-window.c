@@ -35,7 +35,6 @@
 #include <libempathy/empathy-chatroom-manager.h>
 #include <libempathy/empathy-chatroom.h>
 #include <libempathy/empathy-message.h>
-#include <libempathy/empathy-debug.h>
 #include <libempathy/empathy-utils.h>
 #include <libempathy/empathy-time.h>
 
@@ -44,7 +43,8 @@
 #include "empathy-chat-view.h"
 #include "empathy-ui-utils.h"
 
-#define DEBUG_DOMAIN "LogWindow"
+#define DEBUG_FLAG EMPATHY_DEBUG_OTHER
+#include <libempathy/empathy-debug.h>
 
 typedef struct {
 	GtkWidget         *window;
@@ -895,7 +895,7 @@ log_window_chats_get_messages (EmpathyLogWindow *window,
 			}
 
 
-			empathy_debug (DEBUG_DOMAIN, "Marking date:'%s'", str);
+			DEBUG ("Marking date:'%s'", str);
 			gtk_calendar_mark_day (GTK_CALENDAR (window->calendar_chats), day);
 
 			if (l->next) {
@@ -986,7 +986,7 @@ log_window_calendar_chats_day_selected_cb (GtkWidget       *calendar,
 
 	date = g_strdup_printf ("%4.4d%2.2d%2.2d", year, month, day);
 
-	empathy_debug (DEBUG_DOMAIN, "Currently selected date is:'%s'", date);
+	DEBUG ("Currently selected date is:'%s'", date);
 
 	log_window_chats_get_messages (window, date);
 
@@ -1010,7 +1010,7 @@ log_window_calendar_chats_month_changed_cb (GtkWidget       *calendar,
 
 	if (!log_window_chats_get_selected (window, &account,
 					    &chat_id, &is_chatroom)) {
-		empathy_debug (DEBUG_DOMAIN, "No chat selected to get dates for...");
+		DEBUG ("No chat selected to get dates for...");
 		return;
 	}
 
@@ -1042,7 +1042,7 @@ log_window_calendar_chats_month_changed_cb (GtkWidget       *calendar,
 		sscanf (str, "%4d%2d%2d", &year, &month, &day);
 
 		if (year == year_selected && month == month_selected) {
-			empathy_debug (DEBUG_DOMAIN, "Marking date:'%s'", str);
+			DEBUG ("Marking date:'%s'", str);
 			gtk_calendar_mark_day (GTK_CALENDAR (window->calendar_chats), day);
 		}
 	}
@@ -1050,9 +1050,8 @@ log_window_calendar_chats_month_changed_cb (GtkWidget       *calendar,
 	g_list_foreach (dates, (GFunc) g_free, NULL);
 	g_list_free (dates);
 
-	empathy_debug (DEBUG_DOMAIN,
-		      "Currently showing month %d and year %d",
-		      month_selected, year_selected);
+	DEBUG ("Currently showing month %d and year %d", month_selected,
+		year_selected);
 }
 
 static void

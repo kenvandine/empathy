@@ -33,13 +33,13 @@
 #include "empathy-tp-contact-list.h"
 #include "empathy-contact-list.h"
 #include "empathy-tp-group.h"
-#include "empathy-debug.h"
 #include "empathy-utils.h"
+
+#define DEBUG_FLAG EMPATHY_DEBUG_TP | EMPATHY_DEBUG_CONTACT
+#include "empathy-debug.h"
 
 #define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), \
 		       EMPATHY_TYPE_TP_CONTACT_LIST, EmpathyTpContactListPriv))
-
-#define DEBUG_DOMAIN "TpContactList"
 
 struct _EmpathyTpContactListPriv {
 	McAccount      *account;
@@ -88,8 +88,7 @@ tp_contact_list_group_destroy_cb (EmpathyTpGroup       *group,
 {
 	EmpathyTpContactListPriv *priv = GET_PRIV (list);
 
-	empathy_debug (DEBUG_DOMAIN, "Group destroyed: %s",
-		       empathy_tp_group_get_name (group));
+	DEBUG ("Group destroyed: %s", empathy_tp_group_get_name (group));
 
 	priv->groups = g_list_remove (priv->groups, group);
 	g_object_unref (group);
@@ -121,10 +120,10 @@ tp_contact_list_group_member_added_cb (EmpathyTpGroup       *group,
 
 	group_name = empathy_tp_group_get_name (group);
 	if (!g_list_find_custom (*groups, group_name, (GCompareFunc) strcmp)) {
-		empathy_debug (DEBUG_DOMAIN, "Contact %s (%d) added to group %s",
-			       empathy_contact_get_id (contact),
-			       empathy_contact_get_handle (contact),
-			       group_name);
+		DEBUG ("Contact %s (%d) added to group %s",
+			empathy_contact_get_id (contact),
+			empathy_contact_get_handle (contact),
+			group_name);
 		*groups = g_list_prepend (*groups, g_strdup (group_name));
 		g_signal_emit_by_name (list, "groups-changed", contact,
 				       group_name,
@@ -155,10 +154,10 @@ tp_contact_list_group_member_removed_cb (EmpathyTpGroup       *group,
 
 	group_name = empathy_tp_group_get_name (group);
 	if ((l = g_list_find_custom (*groups, group_name, (GCompareFunc) strcmp))) {
-		empathy_debug (DEBUG_DOMAIN, "Contact %s (%d) removed from group %s",
-			       empathy_contact_get_id (contact),
-			       empathy_contact_get_handle (contact),
-			       group_name);
+		DEBUG ("Contact %s (%d) removed from group %s",
+			empathy_contact_get_id (contact),
+			empathy_contact_get_handle (contact),
+			group_name);
 		*groups = g_list_delete_link (*groups, l);
 		g_signal_emit_by_name (list, "groups-changed", contact,
 				       group_name,
@@ -240,10 +239,10 @@ tp_contact_list_added_cb (EmpathyTpGroup       *group,
 	TpContactListType         list_type;
 
 	list_type = tp_contact_list_get_type (list, group);
-	empathy_debug (DEBUG_DOMAIN, "Contact %s (%d) added to list type %d",
-		      empathy_contact_get_id (contact),
-		      empathy_contact_get_handle (contact),
-		      list_type);
+	DEBUG ("Contact %s (%d) added to list type %d",
+		empathy_contact_get_id (contact),
+		empathy_contact_get_handle (contact),
+		list_type);
 
 	/* We now get the presence of that contact, add it to members */
 	if (list_type == TP_CONTACT_LIST_TYPE_SUBSCRIBE &&
@@ -274,10 +273,10 @@ tp_contact_list_removed_cb (EmpathyTpGroup       *group,
 	TpContactListType         list_type;
 
 	list_type = tp_contact_list_get_type (list, group);
-	empathy_debug (DEBUG_DOMAIN, "Contact %s (%d) removed from list type %d",
-		      empathy_contact_get_id (contact),
-		      empathy_contact_get_handle (contact),
-		      list_type);
+	DEBUG ("Contact %s (%d) removed from list type %d",
+		empathy_contact_get_id (contact),
+		empathy_contact_get_handle (contact),
+		list_type);
 
 	/* This contact refuses to send us his presence, remove from members. */
 	if (list_type == TP_CONTACT_LIST_TYPE_SUBSCRIBE &&
@@ -312,10 +311,10 @@ tp_contact_list_pending_cb (EmpathyTpGroup       *group,
 	TpContactListType         list_type;
 
 	list_type = tp_contact_list_get_type (list, group);
-	empathy_debug (DEBUG_DOMAIN, "Contact %s (%d) pending in list type %d",
-		      empathy_contact_get_id (contact),
-		      empathy_contact_get_handle (contact),
-		      list_type);
+	DEBUG ("Contact %s (%d) pending in list type %d",
+		empathy_contact_get_id (contact),
+		empathy_contact_get_handle (contact),
+		list_type);
 
 	/* We want this contact in our contact list but we don't get its 
 	 * presence yet. Add to members anyway. */
@@ -350,7 +349,7 @@ tp_contact_list_invalidated_cb (TpConnection         *connection,
 	EmpathyTpContactListPriv *priv = GET_PRIV (list);
 	GList                    *l;
 
-	empathy_debug (DEBUG_DOMAIN, "Connection invalidated");
+	DEBUG ("Connection invalidated");
 
 	/* Remove all contacts */
 	for (l = priv->members; l; l = l->next) {
@@ -455,15 +454,12 @@ tp_contact_list_add_channel (EmpathyTpContactList *list,
 			}
 			g_list_free (contacts);
 		} else {
-			empathy_debug (DEBUG_DOMAIN,
-				      "Type of contact list channel unknown "
-				      "or aleady have that list: %s",
-				      empathy_tp_group_get_name (group));
+			DEBUG ("Type of contact list channel unknown or aleady "
+				"have that list: %s",
+				empathy_tp_group_get_name (group));
 			goto OUT;
 		}
-		empathy_debug (DEBUG_DOMAIN,
-			       "New contact list channel of type: %d",
-			       list_type);
+		DEBUG ("New contact list channel of type: %d", list_type);
 
 		g_signal_connect (group, "member-added",
 				  G_CALLBACK (tp_contact_list_added_cb),
@@ -492,8 +488,7 @@ tp_contact_list_add_channel (EmpathyTpContactList *list,
 			goto OUT;
 		}
 
-		empathy_debug (DEBUG_DOMAIN, "New server-side group channel: %s",
-			       group_name);
+		DEBUG ("New server-side group channel: %s", group_name);
 
 		priv->groups = g_list_prepend (priv->groups, g_object_ref (group));
 
@@ -516,9 +511,8 @@ tp_contact_list_add_channel (EmpathyTpContactList *list,
 		}
 		g_list_free (contacts);
 	} else {
-		empathy_debug (DEBUG_DOMAIN,
-			       "Unknown handle type (%d) for contact list channel",
-			       handle_type);
+		DEBUG ("Unknown handle type (%d) for contact list channel",
+			handle_type);
 	}
 
 OUT:
@@ -555,9 +549,8 @@ tp_contact_list_list_channels_cb (TpConnection    *connection,
 	guint                     i;
 
 	if (error) {
-		empathy_debug (DEBUG_DOMAIN,
-			      "Failed to get list of open channels: %s",
-			      error ? error->message : "No error given");
+		DEBUG ("Failed to get list of open channels: %s",
+			error ? error->message : "No error given");
 		return;
 	}
 
@@ -591,7 +584,7 @@ tp_contact_list_finalize (GObject *object)
 	list = EMPATHY_TP_CONTACT_LIST (object);
 	priv = GET_PRIV (list);
 
-	empathy_debug (DEBUG_DOMAIN, "finalize: %p", object);
+	DEBUG ("finalize: %p", object);
 
 	if (priv->subscribe) {
 		g_object_unref (priv->subscribe);
@@ -893,16 +886,15 @@ tp_contact_list_get_group (EmpathyTpContactList *list,
 		return tp_group;
 	}
 
-	empathy_debug (DEBUG_DOMAIN, "creating new group: %s", group);
+	DEBUG ("creating new group: %s", group);
 
 	if (!tp_cli_connection_run_request_handles (priv->connection, -1,
 						    TP_HANDLE_TYPE_GROUP,
 						    names,
 						    &handles,
 						    &error, NULL)) {
-		empathy_debug (DEBUG_DOMAIN,
-			      "Failed to RequestHandles: %s",
-			      error ? error->message : "No error given");
+		DEBUG ("Failed to RequestHandles: %s",
+			error ? error->message : "No error given");
 		g_clear_error (&error);
 		return NULL;
 	}
@@ -916,9 +908,8 @@ tp_contact_list_get_group (EmpathyTpContactList *list,
 						    TRUE,
 						    &object_path,
 						    &error, NULL)) {
-		empathy_debug (DEBUG_DOMAIN,
-			      "Failed to RequestChannel: %s",
-			      error ? error->message : "No error given");
+		DEBUG ("Failed to RequestChannel: %s",
+			error ? error->message : "No error given");
 		g_clear_error (&error);
 		return NULL;
 	}
@@ -981,7 +972,7 @@ tp_contact_list_rename_group (EmpathyContactList *list,
 		return;
 	}
 
-	empathy_debug (DEBUG_DOMAIN, "rename group %s to %s", old_group, new_group);
+	DEBUG ("rename group %s to %s", old_group, new_group);
 
 	/* Remove all members from the old group */
 	members = empathy_tp_group_get_members (tp_group);
@@ -1013,7 +1004,7 @@ tp_contact_list_remove_group (EmpathyContactList *list,
 		return;
 	}
 
-	empathy_debug (DEBUG_DOMAIN, "remove group %s", group);
+	DEBUG ("remove group %s", group);
 
 	/* Remove all members of the group */
 	members = empathy_tp_group_get_members (tp_group);

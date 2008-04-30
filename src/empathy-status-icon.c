@@ -27,7 +27,6 @@
 #include <glade/glade.h>
 #include <glib/gi18n.h>
 
-#include <libempathy/empathy-debug.h>
 #include <libempathy/empathy-utils.h>
 #include <libempathy/empathy-idle.h>
 
@@ -42,10 +41,11 @@
 #include "empathy-preferences.h"
 #include "empathy-filter.h"
 
+#define DEBUG_FLAG EMPATHY_DEBUG_FILTER
+#include <libempathy/empathy-debug.h>
+
 #define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), \
 		       EMPATHY_TYPE_STATUS_ICON, EmpathyStatusIconPriv))
-
-#define DEBUG_DOMAIN "StatusIcon"
 
 /* Number of ms to wait when blinking */
 #define BLINK_TIMEOUT 500
@@ -95,8 +95,7 @@ status_icon_set_visibility (EmpathyStatusIcon *icon,
 		if (accounts) {
 			mc_accounts_list_free (accounts);
 		} else {
-			empathy_debug (DEBUG_DOMAIN,
-				      "No enabled account, Showing account dialog");
+			DEBUG ("No enabled account, Showing account dialog");
 			empathy_accounts_dialog_show (GTK_WINDOW (priv->window));
 		}
 	}
@@ -182,8 +181,7 @@ status_icon_activate_cb (GtkStatusIcon     *status_icon,
 {
 	EmpathyStatusIconPriv *priv = GET_PRIV (icon);
 
-	empathy_debug (DEBUG_DOMAIN, "Activated: %s",
-		       priv->event ? "event" : "toggle");
+	DEBUG ("Activated: %s", priv->event ? "event" : "toggle");
 
 	if (priv->event) {
 		empathy_filter_activate_event (priv->filter, priv->event);

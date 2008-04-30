@@ -36,7 +36,6 @@
 
 #include <libempathy/empathy-idle.h>
 #include <libempathy/empathy-utils.h>
-#include <libempathy/empathy-debug.h>
 #include <libempathy/empathy-status-presets.h>
 
 #include "empathy-ui-utils.h"
@@ -44,8 +43,6 @@
 #include "empathy-presence-chooser.h"
 
 #define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), EMPATHY_TYPE_PRESENCE_CHOOSER, EmpathyPresenceChooserPriv))
-
-#define DEBUG_DOMAIN "PresenceChooser"
 
 /* Flashing delay for icons (milliseconds). */
 #define FLASH_TIMEOUT 500

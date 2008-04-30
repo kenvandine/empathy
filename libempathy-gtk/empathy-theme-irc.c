@@ -21,13 +21,10 @@
 #include "config.h"
 
 #include <glib/gi18n.h>
-#include <libempathy/empathy-debug.h>
 
 #include "empathy-chat.h"
 #include "empathy-ui-utils.h"
 #include "empathy-theme-irc.h"
-
-#define DEBUG_DOMAIN "Theme"
 
 #define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), EMPATHY_TYPE_THEME_IRC, EmpathyThemeIrcPriv))
 

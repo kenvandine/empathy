@@ -39,7 +39,6 @@
 #include <libempathy/empathy-tp-roomlist.h>
 #include <libempathy/empathy-chatroom.h>
 #include <libempathy/empathy-utils.h>
-#include <libempathy/empathy-debug.h>
 
 #include <libempathy-gtk/empathy-account-chooser.h>
 #include <libempathy-gtk/empathy-ui-utils.h>
@@ -47,7 +46,8 @@
 #include "empathy-new-chatroom-dialog.h"
 #include "ephy-spinner.h"
 
-#define DEBUG_DOMAIN "NewChatroomDialog"
+#define DEBUG_FLAG EMPATHY_DEBUG_OTHER
+#include <libempathy/empathy-debug.h>
 
 typedef struct {
 	EmpathyTpRoomlist *room_list;
@@ -397,9 +397,9 @@ new_chatroom_dialog_new_room_cb (EmpathyTpRoomlist        *room_list,
 	GtkListStore     *store;
 	GtkTreeIter       iter;
 
-	empathy_debug (DEBUG_DOMAIN, "New chatroom listed: %s (%s)",
-		       empathy_chatroom_get_name (chatroom),
-		       empathy_chatroom_get_room (chatroom));
+	DEBUG ("New chatroom listed: %s (%s)",
+		empathy_chatroom_get_name (chatroom),
+		empathy_chatroom_get_room (chatroom));
 
 	/* Add to model */
 	view = GTK_TREE_VIEW (dialog->treeview);
@@ -506,7 +506,7 @@ new_chatroom_dialog_join (EmpathyNewChatroomDialog *dialog)
 		room_name = g_strdup (room);
 	}
 
-	empathy_debug (DEBUG_DOMAIN, "Requesting channel for '%s'", room_name);
+	DEBUG ("Requesting channel for '%s'", room_name);
 
 	mc = empathy_mission_control_new ();
 	mission_control_request_channel_with_string_handle (mc,

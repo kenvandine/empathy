@@ -39,7 +39,6 @@
 #include <libempathy/empathy-contact.h>
 #include <libempathy/empathy-contact-list.h>
 #include <libempathy/empathy-contact-manager.h>
-#include <libempathy/empathy-debug.h>
 #include <libempathy/empathy-utils.h>
 
 #include <libempathy-gtk/empathy-contact-list-view.h>
@@ -49,7 +48,8 @@
 
 #include "megaphone-applet.h"
 
-#define DEBUG_DOMAIN "MegaphoneApplet"
+#define DEBUG_FLAG EMPATHY_DEBUG_OTHER
+#include <libempathy/empathy-debug.h>
 
 #define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), MEGAPHONE_TYPE_APPLET, MegaphoneAppletPriv))
 
@@ -268,7 +268,7 @@ megaphone_applet_set_contact (MegaphoneApplet *applet,
 	McAccount           *account = NULL;
 	gchar              **strv = NULL;
 
-	empathy_debug (DEBUG_DOMAIN, "Setting new contact %s", str);
+	DEBUG ("Setting new contact %s", str);
 
 	/* Release old contact, if any */
 	if (priv->contact) {
@@ -442,9 +442,9 @@ megaphone_applet_button_press_event_cb (GtkWidget       *widget,
 		return TRUE;
 	}
 	
-	empathy_debug (DEBUG_DOMAIN, "Requesting text channel for contact %s (%d)",
-		       empathy_contact_get_id (priv->contact),
-		       empathy_contact_get_handle (priv->contact));
+	DEBUG ("Requesting text channel for contact %s (%d)",
+		empathy_contact_get_id (priv->contact),
+		empathy_contact_get_handle (priv->contact));
 
 	mc = empathy_mission_control_new ();
 	mission_control_request_channel (mc,
@@ -492,7 +492,7 @@ megaphone_applet_gconf_notify_cb (GConfClient     *client,
 
 	key = gconf_entry_get_key (entry);
 	value = gconf_entry_get_value (entry);
-	empathy_debug (DEBUG_DOMAIN, "GConf notification for key '%s'", key);
+	DEBUG ("GConf notification for key '%s'", key);
 
 	if (value && g_str_has_suffix (key, "/contact_id")) {
 		megaphone_applet_set_contact (applet,
@@ -514,7 +514,7 @@ megaphone_applet_factory (PanelApplet *applet,
 		return FALSE;
 	}
 	
-	empathy_debug (DEBUG_DOMAIN, "Starting up new instance!");
+	DEBUG ("Starting up new instance!");
 
 	/* Set up the right-click menu */
 	panel_applet_setup_menu_from_file (applet,

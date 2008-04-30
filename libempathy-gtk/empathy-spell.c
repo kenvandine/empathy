@@ -32,12 +32,11 @@
 #include <enchant.h>
 #endif
 
-#include <libempathy/empathy-debug.h>
-
 #include "empathy-spell.h"
 #include "empathy-conf.h"
 
-#define DEBUG_DOMAIN "Spell"
+#define DEBUG_FLAG EMPATHY_DEBUG_OTHER
+#include <libempathy/empathy-debug.h>
 
 #ifdef HAVE_ENCHANT
 
@@ -166,7 +165,7 @@ spell_notify_languages_cb (EmpathyConf  *conf,
 {
 	GList *l;
 
-	empathy_debug (DEBUG_DOMAIN, "Resetting languages due to config change");
+	DEBUG ("Resetting languages due to config change");
 
 	/* We just reset the languages list. */
 	for (l = languages; l; l = l->next) {
@@ -213,7 +212,7 @@ spell_setup_languages (void)
 		while (strv && strv[i]) {
 			SpellLanguage *lang;
 
-			empathy_debug (DEBUG_DOMAIN, "Setting up language:'%s'", strv[i]);
+			DEBUG ("Setting up language:'%s'", strv[i]);
 
 			lang = g_slice_new0 (SpellLanguage);
 
@@ -310,7 +309,7 @@ empathy_spell_check (const gchar *word)
 	spell_setup_languages ();
 
 	if (!languages) {
-		empathy_debug (DEBUG_DOMAIN, "No languages to check against");
+		DEBUG ("No languages to check against");
 		return TRUE;
 	}
 
@@ -322,7 +321,7 @@ empathy_spell_check (const gchar *word)
 
 	if (digit) {
 		/* We don't spell check digits. */
-		empathy_debug (DEBUG_DOMAIN, "Not spell checking word:'%s', it is all digits", word);
+		DEBUG ("Not spell checking word:'%s', it is all digits", word);
 		return TRUE;
 	}
 
@@ -382,7 +381,7 @@ gboolean
 empathy_spell_supported (void)
 {
 	if (g_getenv ("EMPATHY_SPELL_DISABLED")) {
-		empathy_debug (DEBUG_DOMAIN, "EMPATHY_SPELL_DISABLE env variable defined");
+		DEBUG ("EMPATHY_SPELL_DISABLE env variable defined");
 		return FALSE;
 	}
 
@@ -400,7 +399,7 @@ empathy_spell_supported (void)
 GList *
 empathy_spell_get_suggestions (const gchar *word)
 {
-	empathy_debug (DEBUG_DOMAIN, "Support disabled, could not get suggestions");
+	DEBUG ("Support disabled, could not get suggestions");
 
 	return NULL;
 }
@@ -408,7 +407,7 @@ empathy_spell_get_suggestions (const gchar *word)
 gboolean
 empathy_spell_check (const gchar *word)
 {
-	empathy_debug (DEBUG_DOMAIN, "Support disabled, could not check spelling");
+	DEBUG ("Support disabled, could not check spelling");
 
 	return TRUE;
 }
@@ -416,7 +415,7 @@ empathy_spell_check (const gchar *word)
 const gchar *
 empathy_spell_get_language_name (const gchar *lang)
 {
-	empathy_debug (DEBUG_DOMAIN, "Support disabled, could not get language name");
+	DEBUG ("Support disabled, could not get language name");
 
 	return NULL;
 }
@@ -424,7 +423,7 @@ empathy_spell_get_language_name (const gchar *lang)
 GList *
 empathy_spell_get_language_codes (void)
 {
-	empathy_debug (DEBUG_DOMAIN, "Support disabled, could not get language codes");
+	DEBUG ("Support disabled, could not get language codes");
 
 	return NULL;
 }

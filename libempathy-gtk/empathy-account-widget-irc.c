@@ -32,7 +32,6 @@
 #include <libmissioncontrol/mc-protocol.h>
 
 #include <libempathy/empathy-utils.h>
-#include <libempathy/empathy-debug.h>
 #include <libempathy/empathy-irc-network-manager.h>
 
 #include "empathy-irc-network-dialog.h"
@@ -40,7 +39,8 @@
 #include "empathy-account-widget-irc.h"
 #include "empathy-ui-utils.h"
 
-#define DEBUG_DOMAIN "AccountWidgetIRC"
+#define DEBUG_FLAG EMPATHY_DEBUG_ACCOUNT | EMPATHY_DEBUG_IRC
+#include <libempathy/empathy-debug.h>
 
 #define IRC_NETWORKS_FILENAME "irc-networks.xml"
 
@@ -73,7 +73,7 @@ account_widget_irc_destroy_cb (GtkWidget *widget,
 static void
 unset_server_params (EmpathyAccountWidgetIrc *settings)
 {
-  empathy_debug (DEBUG_DOMAIN, "Unset server, port and use-ssl");
+  DEBUG ("Unset server, port and use-ssl");
   mc_account_unset_param (settings->account, "server");
   mc_account_unset_param (settings->account, "port");
   mc_account_unset_param (settings->account, "use-ssl");
@@ -101,7 +101,7 @@ update_server_params (EmpathyAccountWidgetIrc *settings)
   g_assert (network != NULL);
 
   g_object_get (network, "charset", &charset, NULL);
-  empathy_debug (DEBUG_DOMAIN, "Setting charset to %s", charset);
+  DEBUG ("Setting charset to %s", charset);
   mc_account_set_param_string (settings->account, "charset", charset);
   g_free (charset);
 
@@ -120,12 +120,11 @@ update_server_params (EmpathyAccountWidgetIrc *settings)
           "ssl", &ssl,
           NULL);
 
-      empathy_debug (DEBUG_DOMAIN, "Setting server to %s", address);
+      DEBUG ("Setting server to %s", address);
       mc_account_set_param_string (settings->account, "server", address);
-      empathy_debug (DEBUG_DOMAIN, "Setting port to %u", port);
+      DEBUG ("Setting port to %u", port);
       mc_account_set_param_int (settings->account, "port", port);
-      empathy_debug (DEBUG_DOMAIN, "Setting use-ssl to %s",
-          ssl ? "TRUE": "FALSE" );
+      DEBUG ("Setting use-ssl to %s", ssl ? "TRUE": "FALSE" );
       mc_account_set_param_boolean (settings->account, "use-ssl", ssl);
 
       g_free (address);
@@ -217,7 +216,7 @@ account_widget_irc_button_remove_clicked_cb (GtkWidget *button,
   g_assert (network != NULL);
 
   g_object_get (network, "name", &name, NULL);
-  empathy_debug (DEBUG_DOMAIN, "Remove network %s", name);
+  DEBUG ("Remove network %s", name);
 
   gtk_list_store_remove (GTK_LIST_STORE (model), &iter);
   empathy_irc_network_manager_remove (settings->network_manager, network);
@@ -378,7 +377,7 @@ account_widget_irc_setup (EmpathyAccountWidgetIrc *settings)
           g_object_set (network, "charset", charset, NULL);
 
           g_object_get (network, "name", &name, NULL);
-          empathy_debug (DEBUG_DOMAIN, "Account use network %s", name);
+          DEBUG ("Account use network %s", name);
 
           g_free (name);
         }
@@ -388,7 +387,7 @@ account_widget_irc_setup (EmpathyAccountWidgetIrc *settings)
           EmpathyIrcServer *srv;
           GtkTreeIter iter;
 
-          empathy_debug (DEBUG_DOMAIN, "Create a network %s", server);
+          DEBUG ("Create a network %s", server);
           network = empathy_irc_network_new (server);
           srv = empathy_irc_server_new (server, port, ssl);
 

@@ -33,13 +33,10 @@
 #include <libmissioncontrol/mc-protocol.h>
 
 #include <libempathy/empathy-utils.h>
-#include <libempathy/empathy-debug.h>
 
 #include "empathy-account-widget.h"
 #include "empathy-account-widget-sip.h"
 #include "empathy-ui-utils.h"
-
-#define DEBUG_DOMAIN "AccountWidgetSIP"
 
 typedef struct {
   McAccount *account;

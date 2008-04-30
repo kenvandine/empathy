@@ -28,12 +28,12 @@
 #include "empathy-contact-manager.h"
 #include "empathy-contact-list.h"
 #include "empathy-utils.h"
+
+#define DEBUG_FLAG EMPATHY_DEBUG_CONTACT
 #include "empathy-debug.h"
 
 #define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), \
 		       EMPATHY_TYPE_CONTACT_MANAGER, EmpathyContactManagerPriv))
-
-#define DEBUG_DOMAIN "ContactManager"
 
 struct _EmpathyContactManagerPriv {
 	GHashTable     *lists;
@@ -121,8 +121,7 @@ contact_manager_destroy_cb (EmpathyTpContactList  *list,
 
 	account = empathy_tp_contact_list_get_account (list);
 
-	empathy_debug (DEBUG_DOMAIN, "Removing account: %s",
-		       mc_account_get_display_name (account));
+	DEBUG ("Removing account: %s", mc_account_get_display_name (account));
 
 	contact_manager_disconnect_foreach (account, list, manager);
 	g_hash_table_remove (priv->lists, account);
@@ -139,8 +138,7 @@ contact_manager_add_account (EmpathyContactManager *manager,
 		return;
 	}
 
-	empathy_debug (DEBUG_DOMAIN, "Adding new account: %s",
-		       mc_account_get_display_name (account));
+	DEBUG ("Adding new account: %s", mc_account_get_display_name (account));
 
 	list = empathy_tp_contact_list_new (account);
 	if (!list) {

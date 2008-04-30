@@ -32,15 +32,12 @@
 #include <libmissioncontrol/mc-protocol.h>
 
 #include <libempathy/empathy-utils.h>
-#include <libempathy/empathy-debug.h>
 
 #include <libempathy/empathy-irc-network-manager.h>
 #include "empathy-ui-utils.h"
 #include "totem-subtitle-encoding.h"
 
 #include "empathy-irc-network-dialog.h"
-
-#define DEBUG_DOMAIN "AccountWidgetIRC"
 
 typedef struct {
   EmpathyIrcNetwork *network;

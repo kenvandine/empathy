@@ -32,11 +32,11 @@
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 
-#include "empathy-debug.h"
 #include "empathy-utils.h"
 #include "empathy-contact-groups.h"
 
-#define DEBUG_DOMAIN "ContactGroups"
+#define DEBUG_FLAG EMPATHY_DEBUG_CONTACT
+#include "empathy-debug.h"
 
 #define CONTACT_GROUPS_XML_FILENAME "contact-groups.xml"
 #define CONTACT_GROUPS_DTD_FILENAME "empathy-contact-groups.dtd"
@@ -87,7 +87,7 @@ contact_groups_file_parse (const gchar *filename)
 	xmlNodePtr       account;
 	xmlNodePtr       node;
 
-	empathy_debug (DEBUG_DOMAIN, "Attempting to parse file:'%s'...", filename);
+	DEBUG ("Attempting to parse file:'%s'...", filename);
 
 	ctxt = xmlNewParserCtxt ();
 
@@ -150,7 +150,7 @@ contact_groups_file_parse (const gchar *filename)
 		node = node->next;
 	}
 
-	empathy_debug (DEBUG_DOMAIN, "Parsed %d contact groups", g_list_length (groups));
+	DEBUG ("Parsed %d contact groups", g_list_length (groups));
 
 	xmlFreeDoc(doc);
 	xmlFreeParserCtxt (ctxt);
@@ -216,7 +216,7 @@ contact_groups_file_save (void)
 	/* Make sure the XML is indented properly */
 	xmlIndentTreeOutput = 1;
 
-	empathy_debug (DEBUG_DOMAIN, "Saving file:'%s'", file);
+	DEBUG ("Saving file:'%s'", file);
 	xmlSaveFormatFileEnc (file, doc, "utf-8", 1);
 	xmlFreeDoc (doc);
 

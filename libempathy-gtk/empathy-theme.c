@@ -24,15 +24,12 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
-#include <libempathy/empathy-debug.h>
 #include <libempathy/empathy-utils.h>
 
 #include "empathy-chat.h"
 #include "empathy-conf.h"
 #include "empathy-theme.h"
 #include "empathy-smiley-manager.h"
-
-#define DEBUG_DOMAIN "Theme"
 
 /* Number of seconds between timestamps when using normal mode, 5 minutes. */
 #define TIMESTAMP_INTERVAL 300

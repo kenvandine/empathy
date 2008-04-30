@@ -29,12 +29,8 @@
 #include <gtk/gtk.h>
 #include <gdk/gdkx.h>
 
-#include <libempathy/empathy-debug.h>
-
 #include "empathy-avatar-image.h"
 #include "empathy-ui-utils.h"
-
-#define DEBUG_DOMAIN "AvatarImage"
 
 #define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), EMPATHY_TYPE_AVATAR_IMAGE, EmpathyAvatarImagePriv))
 

@@ -37,13 +37,13 @@
 #include <telepathy-glib/channel.h>
 #include <telepathy-glib/dbus.h>
 
-#include "empathy-debug.h"
 #include "empathy-utils.h"
 #include "empathy-contact-factory.h"
 #include "empathy-contact-manager.h"
 #include "empathy-tp-group.h"
 
-#define DEBUG_DOMAIN "Utils"
+#define DEBUG_FLAG EMPATHY_DEBUG_OTHER
+#include "empathy-debug.h"
 
 static void regex_init (void);
 
@@ -151,9 +151,7 @@ empathy_regex_match (EmpathyRegExType  type,
 	}
 
 	if (type != EMPATHY_REGEX_ALL) {
-		empathy_debug (DEBUG_DOMAIN,
-			      "Found %d matches for regex type:%d",
-			      num_matches, type);
+		DEBUG ("Found %d matches for regex type:%d", num_matches, type);
 		return num_matches;
 	}
 
@@ -175,9 +173,7 @@ empathy_regex_match (EmpathyRegExType  type,
 		}
 	}
 
-	empathy_debug (DEBUG_DOMAIN,
-		      "Found %d matches for ALL regex types",
-		      num_matches);
+	DEBUG ("Found %d matches for ALL regex types", num_matches);
 
 	return num_matches;
 }
@@ -222,7 +218,7 @@ empathy_xml_validate (xmlDoc      *doc,
 		g_free (path);
 		path = g_build_filename (DATADIR, "empathy", dtd_filename, NULL);
 	}
-	empathy_debug (DEBUG_DOMAIN, "Loading dtd file %s", path);
+	DEBUG ("Loading dtd file %s", path);
 
 	/* The list of valid chars is taken from libxml. */
 	escaped = xmlURIEscapeStr (path, ":@&=+$,/?;");
@@ -373,9 +369,8 @@ empathy_call_with_contact (EmpathyContact *contact)
 						    &object_path,
 						    &error,
 						    NULL)) {
-		empathy_debug (DEBUG_DOMAIN, 
-			      "Couldn't request channel: %s",
-			      error ? error->message : "No error given");
+		DEBUG ("Couldn't request channel: %s",
+			error ? error->message : "No error given");
 		g_clear_error (&error);
 		g_object_unref (connection);
 		return;
@@ -562,7 +557,7 @@ static void
 run_until_ready_cb (RunUntilReadyData *data)
 {
 	if (!data->func || data->func (data->object, data->user_data)) {
-		empathy_debug (DEBUG_DOMAIN, "Object %p is ready", data->object);
+		DEBUG ("Object %p is ready", data->object);
 		g_main_loop_quit (data->loop);
 	}
 }
@@ -595,8 +590,7 @@ empathy_run_until_ready_full (gpointer                  object,
 		return;
 	}
 
-	empathy_debug (DEBUG_DOMAIN, "Starting run until ready for object %p",
-		       object);
+	DEBUG ("Starting run until ready for object %p", object);
 
 	data.func = func;
 	data.user_data = user_data;

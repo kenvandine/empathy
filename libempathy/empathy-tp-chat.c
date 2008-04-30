@@ -31,14 +31,14 @@
 #include "empathy-contact-factory.h"
 #include "empathy-contact-list.h"
 #include "empathy-marshal.h"
-#include "empathy-debug.h"
 #include "empathy-time.h"
 #include "empathy-utils.h"
 
+#define DEBUG_FLAG EMPATHY_DEBUG_TP | EMPATHY_DEBUG_CHAT
+#include "empathy-debug.h"
+
 #define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), \
 		       EMPATHY_TYPE_TP_CHAT, EmpathyTpChatPriv))
-
-#define DEBUG_DOMAIN "TpChat"
 
 struct _EmpathyTpChatPriv {
 	EmpathyContactFactory *factory;
@@ -98,7 +98,7 @@ tp_chat_invalidated_cb (TpProxy       *proxy,
 			gchar         *message,
 			EmpathyTpChat *chat)
 {
-	empathy_debug (DEBUG_DOMAIN, "Channel invalidated: %s", message);
+	DEBUG ("Channel invalidated: %s", message);
 	g_signal_emit (chat, signals[DESTROY], 0);
 }
 
@@ -109,8 +109,7 @@ tp_chat_async_cb (TpChannel *proxy,
 		  GObject *weak_object)
 {
 	if (error) {
-		empathy_debug (DEBUG_DOMAIN, "Error %s: %s",
-			       user_data, error->message);
+		DEBUG ("Error %s: %s", (gchar*) user_data, error->message);
 	}
 }
 
@@ -309,7 +308,7 @@ tp_chat_sender_ready_notify_cb (EmpathyContact *contact,
 			break;
 		}
 
-		empathy_debug (DEBUG_DOMAIN, "Queued message ready");
+		DEBUG ("Queued message ready");
 		g_signal_emit (chat, signals[MESSAGE_RECEIVED], 0, message);
 		priv->message_queue = g_slist_remove (priv->message_queue,
 						      message);
@@ -339,7 +338,7 @@ tp_chat_emit_or_queue_message (EmpathyTpChat  *chat,
 	EmpathyContactReady  ready;
 
 	if (priv->message_queue != NULL) {
-		empathy_debug (DEBUG_DOMAIN, "Message queue not empty");
+		DEBUG ("Message queue not empty");
 		priv->message_queue = g_slist_append (priv->message_queue,
 						      g_object_ref (message));
 		return;
@@ -348,12 +347,12 @@ tp_chat_emit_or_queue_message (EmpathyTpChat  *chat,
 	sender = empathy_message_get_sender (message);
 	ready = empathy_contact_get_ready (sender);
 	if (ready & EMPATHY_CONTACT_READY_NAME) {
-		empathy_debug (DEBUG_DOMAIN, "Message queue empty and sender ready");
+		DEBUG ("Message queue empty and sender ready");
 		g_signal_emit (chat, signals[MESSAGE_RECEIVED], 0, message);
 		return;
 	}
 
-	empathy_debug (DEBUG_DOMAIN, "Sender not ready");
+	DEBUG ("Sender not ready");
 	priv->message_queue = g_slist_append (priv->message_queue, 
 					      g_object_ref (message));
 	g_signal_connect (sender, "notify::ready",
@@ -379,7 +378,7 @@ tp_chat_received_cb (TpChannel   *channel,
 		return;
 	}
  
- 	empathy_debug (DEBUG_DOMAIN, "Message received: %s", message_body);
+ 	DEBUG ("Message received: %s", message_body);
 
 	message = tp_chat_build_message (EMPATHY_TP_CHAT (chat),
 					 message_type,
@@ -416,7 +415,7 @@ tp_chat_sent_cb (TpChannel   *channel,
 {
 	EmpathyMessage *message;
 
-	empathy_debug (DEBUG_DOMAIN, "Message sent: %s", message_body);
+	DEBUG ("Message sent: %s", message_body);
 
 	message = tp_chat_build_message (EMPATHY_TP_CHAT (chat),
 					 message_type,
@@ -439,8 +438,7 @@ tp_chat_send_error_cb (TpChannel   *channel,
 {
 	EmpathyMessage *message;
 
-	empathy_debug (DEBUG_DOMAIN, "Message sent error: %s (%d)",
-		       message_body, error_code);
+	DEBUG ("Message sent error: %s (%d)", message_body, error_code);
 
 	message = tp_chat_build_message (EMPATHY_TP_CHAT (chat),
 					 message_type,
@@ -466,9 +464,8 @@ tp_chat_state_changed_cb (TpChannel *channel,
 							   priv->account,
 							   handle);
 
-	empathy_debug (DEBUG_DOMAIN, "Chat state changed for %s (%d): %d",
-		      empathy_contact_get_name (contact),
-		      handle, state);
+	DEBUG ("Chat state changed for %s (%d): %d",
+		empathy_contact_get_name (contact), handle, state);
 
 	g_signal_emit (chat, signals[CHAT_STATE_CHANGED], 0, contact, state);
 	g_object_unref (contact);
@@ -488,8 +485,7 @@ tp_chat_list_pending_messages_cb (TpChannel       *channel,
 	priv->had_pending_messages = TRUE;
 
 	if (error) {
-		empathy_debug (DEBUG_DOMAIN, "Error listing pending messages: %s",
-			       error->message);
+		DEBUG ("Error listing pending messages: %s", error->message);
 		return;
 	}
 
@@ -517,7 +513,7 @@ tp_chat_list_pending_messages_cb (TpChannel       *channel,
 		message_flags = g_value_get_uint (g_value_array_get_nth (message_struct, 4));
 		message_body = g_value_get_string (g_value_array_get_nth (message_struct, 5));
 
-		empathy_debug (DEBUG_DOMAIN, "Message pending: %s", message_body);
+		DEBUG ("Message pending: %s", message_body);
 
 		if (message_ids) {
 			g_array_append_val (message_ids, message_id);
@@ -572,9 +568,8 @@ tp_chat_property_flags_changed_cb (TpProxy         *proxy,
 			property = g_ptr_array_index (priv->properties, j);
 			if (property->id == id) {
 				property->flags = flags;
-				empathy_debug (DEBUG_DOMAIN,
-					       "property %s flags changed: %d",
-					       property->name, property->flags);
+				DEBUG ("property %s flags changed: %d",
+					property->name, property->flags);
 				break;
 			}
 		}
@@ -613,8 +608,7 @@ tp_chat_properties_changed_cb (TpProxy         *proxy,
 					property->value = tp_g_value_slice_dup (src_value);
 				}
 
-				empathy_debug (DEBUG_DOMAIN, "property %s changed",
-					       property->name);
+				DEBUG ("property %s changed", property->name);
 				g_signal_emit (chat, signals[PROPERTY_CHANGED], 0,
 					       property->name, property->value);
 				break;
@@ -631,8 +625,7 @@ tp_chat_get_properties_cb (TpProxy         *proxy,
 			   GObject         *chat)
 {
 	if (error) {
-		empathy_debug (DEBUG_DOMAIN, "Error getting properties: %s",
-			       error->message);
+		DEBUG ("Error getting properties: %s", error->message);
 		return;
 	}
 
@@ -653,8 +646,7 @@ tp_chat_list_properties_cb (TpProxy         *proxy,
 	priv->had_properties_list = TRUE;
 
 	if (error) {
-		empathy_debug (DEBUG_DOMAIN, "Error listing properties: %s",
-			       error->message);
+		DEBUG ("Error listing properties: %s", error->message);
 		return;
 	}
 
@@ -670,8 +662,8 @@ tp_chat_list_properties_cb (TpProxy         *proxy,
 		property->name = g_value_dup_string (g_value_array_get_nth (prop_struct, 1));
 		property->flags = g_value_get_uint (g_value_array_get_nth (prop_struct, 3));
 
-		empathy_debug (DEBUG_DOMAIN, "Adding property name=%s id=%d flags=%d",
-			       property->name, property->id, property->flags);
+		DEBUG ("Adding property name=%s id=%d flags=%d",
+			property->name, property->id, property->flags);
 		g_ptr_array_add (priv->properties, property);
 		if (property->flags & TP_PROPERTY_FLAG_READ) {
 			g_array_append_val (ids, property->id);
@@ -722,7 +714,7 @@ empathy_tp_chat_set_property (EmpathyTpChat *chat,
 			properties = g_ptr_array_sized_new (1);
 			g_ptr_array_add (properties, prop);
 
-			empathy_debug (DEBUG_DOMAIN, "Set property %s", name);
+			DEBUG ("Set property %s", name);
 			tp_cli_properties_interface_call_set_properties (priv->channel, -1,
 									 properties,
 									 (tp_cli_properties_interface_callback_for_set_properties)
@@ -745,7 +737,7 @@ tp_chat_channel_ready_cb (EmpathyTpChat *chat)
 	TpConnection      *connection;
 	guint              handle, handle_type;
 
-	empathy_debug (DEBUG_DOMAIN, "Channel ready");
+	DEBUG ("Channel ready");
 
 	g_object_get (priv->channel,
 		      "connection", &connection,
@@ -846,7 +838,7 @@ tp_chat_finalize (GObject *object)
 	guint              i;
 
 	if (priv->acknowledge && priv->channel) {
-		empathy_debug (DEBUG_DOMAIN, "Closing channel...");
+		DEBUG ("Closing channel...");
 		tp_cli_channel_call_close (priv->channel, -1,
 					   tp_chat_async_cb,
 					   "closing channel", NULL,
@@ -1191,7 +1183,7 @@ empathy_tp_chat_send (EmpathyTpChat *chat,
 	message_body = empathy_message_get_body (message);
 	message_type = empathy_message_get_type (message);
 
-	empathy_debug (DEBUG_DOMAIN, "Sending message: %s", message_body);
+	DEBUG ("Sending message: %s", message_body);
 	tp_cli_channel_type_text_call_send (priv->channel, -1,
 					    message_type,
 					    message_body,
@@ -1209,7 +1201,7 @@ empathy_tp_chat_set_state (EmpathyTpChat      *chat,
 	g_return_if_fail (EMPATHY_IS_TP_CHAT (chat));
 	g_return_if_fail (priv->ready);
 
-	empathy_debug (DEBUG_DOMAIN, "Set state: %d", state);
+	DEBUG ("Set state: %d", state);
 	tp_cli_channel_interface_chat_state_call_set_chat_state (priv->channel, -1,
 								 state,
 								 tp_chat_async_cb,

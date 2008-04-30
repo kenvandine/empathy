@@ -22,11 +22,7 @@
 
 #include <gtk/gtktreeview.h>
 
-#include <libempathy/empathy-debug.h>
-
 #include "empathy-cell-renderer-activatable.h"
-
-#define DEBUG_DOMAIN "CellRendererActivatable"
 
 static void     empathy_cell_renderer_activatable_init       (EmpathyCellRendererActivatable      *cell);
 static void     empathy_cell_renderer_activatable_class_init (EmpathyCellRendererActivatableClass *klass);

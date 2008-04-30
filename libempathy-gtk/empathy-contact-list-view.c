@@ -36,7 +36,6 @@
 #include <libempathy/empathy-contact-factory.h>
 #include <libempathy/empathy-contact-list.h>
 #include <libempathy/empathy-contact-groups.h>
-#include <libempathy/empathy-debug.h>
 #include <libempathy/empathy-utils.h>
 
 #include "empathy-contact-list-view.h"
@@ -49,7 +48,8 @@
 #include "empathy-gtk-enum-types.h"
 #include "empathy-gtk-marshal.h"
 
-#define DEBUG_DOMAIN "ContactListView"
+#define DEBUG_FLAG EMPATHY_DEBUG_CONTACT
+#include <libempathy/empathy-debug.h>
 
 /* Flashing delay for icons (milliseconds). */
 #define FLASH_TIMEOUT 500
@@ -141,10 +141,10 @@ contact_list_view_drag_data_received (GtkWidget         *widget,
 	priv = GET_PRIV (widget);
 
 	id = (const gchar*) selection->data;
-	empathy_debug (DEBUG_DOMAIN, "Received %s%s drag & drop contact from roster with id:'%s'",
-		      context->action == GDK_ACTION_MOVE ? "move" : "",
-		      context->action == GDK_ACTION_COPY ? "copy" : "",
-		      id);
+	DEBUG ("Received %s%s drag & drop contact from roster with id:'%s'",
+		context->action == GDK_ACTION_MOVE ? "move" : "",
+		context->action == GDK_ACTION_COPY ? "copy" : "",
+		id);
 
 	strv = g_strsplit (id, "/", 2);
 	factory = empathy_contact_factory_new ();
@@ -159,7 +159,7 @@ contact_list_view_drag_data_received (GtkWidget         *widget,
 	g_strfreev (strv);
 
 	if (!contact) {
-		empathy_debug (DEBUG_DOMAIN, "No contact found associated with drag & drop");
+		DEBUG ("No contact found associated with drag & drop");
 		return;
 	}
 
@@ -190,11 +190,10 @@ contact_list_view_drag_data_received (GtkWidget         *widget,
 		gtk_tree_path_free (path);
 	}
 
-	empathy_debug (DEBUG_DOMAIN,
-		      "contact %s (%d) dragged from '%s' to '%s'",
-		      empathy_contact_get_id (contact),
-		      empathy_contact_get_handle (contact),
-		      old_group, new_group);
+	DEBUG ("contact %s (%d) dragged from '%s' to '%s'",
+		empathy_contact_get_id (contact),
+		empathy_contact_get_handle (contact),
+		old_group, new_group);
 
 	list = empathy_contact_list_store_get_list_iface (priv->store);
 	if (new_group) {

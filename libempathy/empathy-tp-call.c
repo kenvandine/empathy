@@ -28,13 +28,13 @@
 
 #include <extensions/extensions.h>
 #include <libempathy/empathy-contact-factory.h>
-#include <libempathy/empathy-debug.h>
 #include <libempathy/empathy-tp-group.h>
 #include <libempathy/empathy-utils.h>
 
 #include "empathy-tp-call.h"
 
-#define DEBUG_DOMAIN "TpCall"
+#define DEBUG_FLAG EMPATHY_DEBUG_TP
+#include "empathy-debug.h"
 
 #define GET_PRIV(object) (G_TYPE_INSTANCE_GET_PRIVATE \
     ((object), EMPATHY_TYPE_TP_CALL, EmpathyTpCallPriv))
@@ -85,8 +85,7 @@ tp_call_add_stream (EmpathyTpCall *call,
   switch (stream_type)
     {
       case TP_MEDIA_STREAM_TYPE_AUDIO:
-        empathy_debug (DEBUG_DOMAIN,
-            "Audio stream - id: %d, state: %d, direction: %d",
+        DEBUG ("Audio stream - id: %d, state: %d, direction: %d",
             stream_id, stream_state, stream_direction);
         priv->audio->exists = TRUE;
         priv->audio->id = stream_id;
@@ -95,8 +94,7 @@ tp_call_add_stream (EmpathyTpCall *call,
         g_object_notify (G_OBJECT (call), "audio-stream");
         break;
       case TP_MEDIA_STREAM_TYPE_VIDEO:
-        empathy_debug (DEBUG_DOMAIN,
-            "Video stream - id: %d, state: %d, direction: %d",
+        DEBUG ("Video stream - id: %d, state: %d, direction: %d",
             stream_id, stream_state, stream_direction);
         priv->video->exists = TRUE;
         priv->video->id = stream_id;
@@ -105,8 +103,7 @@ tp_call_add_stream (EmpathyTpCall *call,
         g_object_notify (G_OBJECT (call), "video-stream");
         break;
       default:
-        empathy_debug (DEBUG_DOMAIN, "Unknown stream type: %d",
-            stream_type);
+        DEBUG ("Unknown stream type: %d", stream_type);
     }
 }
 
@@ -118,8 +115,7 @@ tp_call_stream_added_cb (TpChannel *channel,
                          gpointer user_data,
                          GObject *call)
 {
-  empathy_debug (DEBUG_DOMAIN,
-      "Stream added - stream id: %d, contact handle: %d, stream type: %d",
+  DEBUG ("Stream added - stream id: %d, contact handle: %d, stream type: %d",
       stream_id, contact_handle, stream_type);
 
   tp_call_add_stream (EMPATHY_TP_CALL (call), stream_id, contact_handle,
@@ -135,7 +131,7 @@ tp_call_stream_removed_cb (TpChannel *channel,
 {
   EmpathyTpCallPriv *priv = GET_PRIV (call);
 
-  empathy_debug (DEBUG_DOMAIN, "Stream removed - stream id: %d", stream_id);
+  DEBUG ("Stream removed - stream id: %d", stream_id);
 
   if (stream_id == priv->audio->id)
     {
@@ -158,8 +154,7 @@ tp_call_stream_state_changed_cb (TpChannel *proxy,
 {
   EmpathyTpCallPriv *priv = GET_PRIV (call);
 
-  empathy_debug (DEBUG_DOMAIN,
-      "Stream state changed - stream id: %d, state state: %d",
+  DEBUG ("Stream state changed - stream id: %d, state state: %d",
       stream_id, stream_state);
 
   if (stream_id == priv->audio->id)
@@ -184,8 +179,7 @@ tp_call_stream_direction_changed_cb (TpChannel *channel,
 {
   EmpathyTpCallPriv *priv = GET_PRIV (call);
 
-  empathy_debug (DEBUG_DOMAIN,
-      "Stream direction changed - stream: %d, direction: %d",
+  DEBUG ("Stream direction changed - stream: %d, direction: %d",
       stream_id, stream_direction);
 
   if (stream_id == priv->audio->id)
@@ -211,7 +205,7 @@ tp_call_request_streams_cb (TpChannel *channel,
 
   if (error)
     {
-      empathy_debug (DEBUG_DOMAIN, "Error requesting streams: %s", error->message);
+      DEBUG ("Error requesting streams: %s", error->message);
       return;
     }
 
@@ -248,7 +242,7 @@ tp_call_request_streams_for_capabilities (EmpathyTpCall *call,
   if (capabilities == EMPATHY_CAPABILITIES_UNKNOWN)
       capabilities = EMPATHY_CAPABILITIES_AUDIO | EMPATHY_CAPABILITIES_VIDEO;
 
-  empathy_debug (DEBUG_DOMAIN, "Requesting new stream for capabilities %d",
+  DEBUG ("Requesting new stream for capabilities %d",
       capabilities);
 
   stream_types = g_array_new (FALSE, FALSE, sizeof (guint));
@@ -342,7 +336,7 @@ tp_call_channel_invalidated_cb (TpChannel     *channel,
 {
   EmpathyTpCallPriv *priv = GET_PRIV (call);
 
-  empathy_debug (DEBUG_DOMAIN, "Channel invalidated: %s", message);
+  DEBUG ("Channel invalidated: %s", message);
   priv->status = EMPATHY_TP_CALL_STATUS_CLOSED;
   g_object_notify (G_OBJECT (call), "status");
 }
@@ -355,8 +349,7 @@ tp_call_async_cb (TpProxy *proxy,
 {
   if (error)
     {
-      empathy_debug (DEBUG_DOMAIN, "Error %s: %s",
-          user_data, error->message);
+      DEBUG ("Error %s: %s", (gchar*) user_data, error->message);
     }
 }
 
@@ -368,7 +361,7 @@ tp_call_close_channel (EmpathyTpCall *call)
   if (priv->status == EMPATHY_TP_CALL_STATUS_CLOSED)
       return;
 
-  empathy_debug (DEBUG_DOMAIN, "Closing channel");
+  DEBUG ("Closing channel");
 
   tp_cli_channel_call_close (priv->channel, -1,
       NULL, NULL, NULL, NULL);
@@ -384,8 +377,7 @@ tp_call_stream_engine_invalidated_cb (TpProxy       *stream_engine,
 				      gchar         *message,
 				      EmpathyTpCall *call)
 {
-  empathy_debug (DEBUG_DOMAIN, "Stream engine proxy invalidated: %s",
-      message);
+  DEBUG ("Stream engine proxy invalidated: %s", message);
   tp_call_close_channel (call);
 }
 
@@ -400,13 +392,12 @@ tp_call_stream_engine_watch_name_owner_cb (TpDBusDaemon *daemon,
   /* G_STR_EMPTY(new_owner) means either stream-engine has not started yet or
    * has crashed. We want to close the channel if stream-engine has crashed.
    * */
-  empathy_debug (DEBUG_DOMAIN,
-                 "Watch SE: name='%s' SE running='%s' new_owner='%s'",
-                 name, priv->stream_engine_running ? "yes" : "no",
-                 new_owner ? new_owner : "none");
+  DEBUG ("Watch SE: name='%s' SE running='%s' new_owner='%s'",
+      name, priv->stream_engine_running ? "yes" : "no",
+      new_owner ? new_owner : "none");
   if (priv->stream_engine_running && G_STR_EMPTY (new_owner))
     {
-      empathy_debug (DEBUG_DOMAIN, "Stream engine falled off the bus");
+      DEBUG ("Stream engine falled off the bus");
       tp_call_close_channel (call);
       return;
     }
@@ -424,7 +415,7 @@ tp_call_stream_engine_handle_channel (EmpathyTpCall *call)
   guint handle;
   TpProxy *connection;
 
-  empathy_debug (DEBUG_DOMAIN, "Revving up the stream engine");
+  DEBUG ("Revving up the stream engine");
 
   priv->stream_engine = g_object_new (TP_TYPE_PROXY,
       "bus-name", STREAM_ENGINE_BUS_NAME,
@@ -514,7 +505,7 @@ tp_call_finalize (GObject *object)
 {
   EmpathyTpCallPriv *priv = GET_PRIV (object);
 
-  empathy_debug (DEBUG_DOMAIN, "Finalizing: %p", object);
+  DEBUG ("Finalizing: %p", object);
 
   g_slice_free (EmpathyTpCallStream, priv->audio);
   g_slice_free (EmpathyTpCallStream, priv->video);
@@ -677,7 +668,7 @@ empathy_tp_call_accept_incoming_call (EmpathyTpCall *call)
   g_return_if_fail (EMPATHY_IS_TP_CALL (call));
   g_return_if_fail (priv->status == EMPATHY_TP_CALL_STATUS_PENDING);
 
-  empathy_debug (DEBUG_DOMAIN, "Accepting incoming call");
+  DEBUG ("Accepting incoming call");
 
   self_contact = empathy_tp_group_get_self_contact (priv->group);
   empathy_tp_group_add_member (priv->group, self_contact, NULL);
@@ -694,8 +685,7 @@ empathy_tp_call_request_video_stream_direction (EmpathyTpCall *call,
   g_return_if_fail (EMPATHY_IS_TP_CALL (call));
   g_return_if_fail (priv->status == EMPATHY_TP_CALL_STATUS_ACCEPTED);
 
-  empathy_debug (DEBUG_DOMAIN,
-      "Requesting video stream direction - is_sending: %d", is_sending);
+  DEBUG ("Requesting video stream direction - is_sending: %d", is_sending);
 
   if (!priv->video->exists)
     {
@@ -724,7 +714,7 @@ empathy_tp_call_add_preview_video (EmpathyTpCall *call,
 
   g_return_if_fail (EMPATHY_IS_TP_CALL (call));
 
-  empathy_debug (DEBUG_DOMAIN, "Adding preview video");
+  DEBUG ("Adding preview video");
 
   emp_cli_stream_engine_call_add_preview_window (priv->stream_engine, -1,
       preview_video_socket_id,
@@ -741,7 +731,7 @@ empathy_tp_call_remove_preview_video (EmpathyTpCall *call,
 
   g_return_if_fail (EMPATHY_IS_TP_CALL (call));
 
-  empathy_debug (DEBUG_DOMAIN, "Removing preview video");
+  DEBUG ("Removing preview video");
 
   emp_cli_stream_engine_call_remove_preview_window (priv->stream_engine, -1,
       preview_video_socket_id,
@@ -758,8 +748,7 @@ empathy_tp_call_add_output_video (EmpathyTpCall *call,
 
   g_return_if_fail (EMPATHY_IS_TP_CALL (call));
 
-  empathy_debug (DEBUG_DOMAIN, "Adding output video - socket: %d",
-      output_video_socket_id);
+  DEBUG ("Adding output video - socket: %d", output_video_socket_id);
 
   emp_cli_stream_engine_call_set_output_window (priv->stream_engine, -1,
       TP_PROXY (priv->channel)->object_path,
@@ -778,7 +767,7 @@ empathy_tp_call_set_output_volume (EmpathyTpCall *call,
   g_return_if_fail (EMPATHY_IS_TP_CALL (call));
   g_return_if_fail (priv->status != EMPATHY_TP_CALL_STATUS_CLOSED);
 
-  empathy_debug (DEBUG_DOMAIN, "Setting output volume: %d", volume);
+  DEBUG ("Setting output volume: %d", volume);
 
   emp_cli_stream_engine_call_set_output_volume (priv->stream_engine, -1,
       TP_PROXY (priv->channel)->object_path,
@@ -796,7 +785,7 @@ empathy_tp_call_mute_output (EmpathyTpCall *call,
 
   g_return_if_fail (EMPATHY_IS_TP_CALL (call));
 
-  empathy_debug (DEBUG_DOMAIN, "Setting output mute: %d", is_muted);
+  DEBUG ("Setting output mute: %d", is_muted);
 
   emp_cli_stream_engine_call_mute_output (priv->stream_engine, -1,
       TP_PROXY (priv->channel)->object_path,
@@ -814,7 +803,7 @@ empathy_tp_call_mute_input (EmpathyTpCall *call,
 
   g_return_if_fail (EMPATHY_IS_TP_CALL (call));
 
-  empathy_debug (DEBUG_DOMAIN, "Setting input mute: %d", is_muted);
+  DEBUG ("Setting input mute: %d", is_muted);
 
   emp_cli_stream_engine_call_mute_input (priv->stream_engine, -1,
       TP_PROXY (priv->channel)->object_path,

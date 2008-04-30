@@ -1,134 +1,99 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /*
- * Copyright (C) 2006-2007 Imendio AB
+ * Copyright (C) 2007 Collabora Ltd.
+ * Copyright (C) 2007 Nokia Corporation
  *
- * This program is free software; you can redistribute it and/or
- * modify it under the terms of the GNU General Public License as
- * published by the Free Software Foundation; either version 2 of the
- * License, or (at your option) any later version.
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
  *
- * This program is distributed in the hope that it will be useful,
+ * This library is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
+ * Lesser General Public License for more details.
  *
- * You should have received a copy of the GNU General Public
- * License along with this program; if not, write to the
- * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
- * Boston, MA 02111-1307, USA.
- *
- * Authors: Richard Hult <richard@imendio.com>
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
 #include "config.h"
 
-#include <stdarg.h>
-#include <string.h>
-#include <unistd.h>
-#include <sys/types.h>
-#include <sys/stat.h>
-#include <fcntl.h>
 #include <errno.h>
+#include <fcntl.h>
+#include <stdarg.h>
+#include <sys/stat.h>
+#include <unistd.h>
 
 #include <glib.h>
-#include <glib/gprintf.h>
 #include <glib/gstdio.h>
 
 #include <telepathy-glib/debug.h>
 
-/* Set EMPATHY_DEBUG to a colon/comma/space separated list of domains, or "all"
- * to get all debug output.
- */
-
 #include "empathy-debug.h"
 
-static gchar    **debug_strv;
-static gboolean   all_domains = FALSE;
+#ifdef ENABLE_DEBUG
+
+static EmpathyDebugFlags flags = 0;
+
+static GDebugKey keys[] = {
+  { "Tp", EMPATHY_DEBUG_TP },
+  { "Chat", EMPATHY_DEBUG_CHAT },
+  { "Contact", EMPATHY_DEBUG_CONTACT },
+  { "Account", EMPATHY_DEBUG_ACCOUNT },
+  { "Irc", EMPATHY_DEBUG_IRC },
+  { "Filter", EMPATHY_DEBUG_FILTER },
+  { "Other", EMPATHY_DEBUG_OTHER },
+  { 0, }
+};
 
 static void
-debug_init (void)
+debug_set_flags (EmpathyDebugFlags new_flags)
 {
-	static gboolean inited = FALSE;
-
-	if (!inited) {
-		const gchar *env;
-		gint         i;
-
-		env = g_getenv ("TELEPATHY_GLIB_DEBUG");
-		tp_debug_set_flags (env);
-
-		env = g_getenv ("EMPATHY_DEBUG");
-
-		if (env) {
-			debug_strv = g_strsplit_set (env, ":, ", 0);
-		} else {
-			debug_strv = NULL;
-		}
-
-		for (i = 0; debug_strv && debug_strv[i]; i++) {
-			if (strcmp ("all", debug_strv[i]) == 0) {
-				all_domains = TRUE;
-			}
-		}
-
-		inited = TRUE;
-	}
+  flags |= new_flags;
+  g_print ("%d\n", flags);
 }
 
 void
-empathy_debug_impl (const gchar *domain, const gchar *msg, ...)
+empathy_debug_set_flags (const gchar *flags_string)
 {
-	gint i;
+  guint nkeys;
 
-	g_return_if_fail (domain != NULL);
-	g_return_if_fail (msg != NULL);
+  for (nkeys = 0; keys[nkeys].value; nkeys++);
+g_print ("%s %d\n", flags_string, nkeys);
+  //tp_debug_set_flags (flags_string);
 
-	debug_init ();
+  if (flags_string)
+      debug_set_flags (g_parse_debug_string (flags_string, keys, nkeys));
+}
 
-	for (i = 0; debug_strv && debug_strv[i]; i++) {
-		if (all_domains || strcmp (domain, debug_strv[i]) == 0) {
-			va_list args;
-
-			g_print ("%s: ", domain);
-
-			va_start (args, msg);
-			g_vprintf (msg, args);
-			va_end (args);
-
-			g_print ("\n");
-			break;
-		}
-	}
+gboolean
+empathy_debug_flag_is_set (EmpathyDebugFlags flag)
+{
+  return (flag & flags) != 0;
 }
 
 void
-empathy_debug_set_log_file_from_env (void)
+empathy_debug (EmpathyDebugFlags flag,
+               const gchar *format,
+               ...)
 {
-	const gchar *output_file;
-	gint         out;
-
-	output_file = g_getenv ("EMPATHY_LOGFILE");
-	if (output_file == NULL) {
-		return;
-	}
-
-	out = g_open (output_file, O_WRONLY | O_CREAT, 0644);
-	if (out == -1) {
-		g_warning ("Can't open logfile '%s': %s", output_file,
-			   g_strerror (errno));
-		return;
-	}
-
-	if (dup2 (out, STDOUT_FILENO) == -1) {
-		g_warning ("Error when duplicating stdout file descriptor: %s",
-			   g_strerror (errno));
-		return;
-	}
-
-	if (dup2 (out, STDERR_FILENO) == -1) {
-		g_warning ("Error when duplicating stderr file descriptor: %s",
-			   g_strerror (errno));
-		return;
-	}
+  if (flag & flags)
+    {
+      va_list args;
+      va_start (args, format);
+      g_logv (G_LOG_DOMAIN, G_LOG_LEVEL_DEBUG, format, args);
+      va_end (args);
+    }
 }
+
+#else
+
+void
+empathy_debug_set_flags (const gchar *flags_string)
+{
+}
+
+#endif /* ENABLE_DEBUG */
 

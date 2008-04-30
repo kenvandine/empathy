@@ -34,11 +34,11 @@
 
 #include <telepathy-glib/util.h>
 
-#include "empathy-debug.h"
 #include "empathy-utils.h"
 #include "empathy-status-presets.h"
 
-#define DEBUG_DOMAIN "StatusPresets"
+#define DEBUG_FLAG EMPATHY_DEBUG_OTHER
+#include "empathy-debug.h"
 
 #define STATUS_PRESETS_XML_FILENAME "status-presets.xml"
 #define STATUS_PRESETS_DTD_FILENAME "empathy-status-presets.dtd"
@@ -90,7 +90,7 @@ status_presets_file_parse (const gchar *filename)
 	xmlNodePtr       presets_node;
 	xmlNodePtr       node;
 
-	empathy_debug (DEBUG_DOMAIN, "Attempting to parse file:'%s'...", filename);
+	DEBUG ("Attempting to parse file:'%s'...", filename);
 
 	ctxt = xmlNewParserCtxt ();
 
@@ -133,9 +133,9 @@ status_presets_file_parse (const gchar *filename)
 				state = empathy_presence_from_str (state_str);
 
 				if (is_default) {
-					empathy_debug (DEBUG_DOMAIN,
-						      "Default status preset state is:'%s', status:'%s'",
-						      state_str, status);
+					DEBUG ("Default status preset state is:"
+						" '%s', status:'%s'", state_str,
+						status);
 
 					status_presets_set_default (state, status);
 				} else {
@@ -156,7 +156,7 @@ status_presets_file_parse (const gchar *filename)
 		status_presets_set_default (MC_PRESENCE_OFFLINE, NULL);
 	}
 
-	empathy_debug (DEBUG_DOMAIN, "Parsed %d status presets", g_list_length (presets));
+	DEBUG ("Parsed %d status presets", g_list_length (presets));
 
 	xmlFreeDoc (doc);
 	xmlFreeParserCtxt (ctxt);
@@ -243,7 +243,7 @@ status_presets_file_save (void)
 	/* Make sure the XML is indented properly */
 	xmlIndentTreeOutput = 1;
 
-	empathy_debug (DEBUG_DOMAIN, "Saving file:'%s'", file);
+	DEBUG ("Saving file:'%s'", file);
 	xmlSaveFormatFileEnc (file, doc, "utf-8", 1);
 	xmlFreeDoc (doc);
 

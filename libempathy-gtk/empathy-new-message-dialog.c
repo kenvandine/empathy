@@ -32,15 +32,12 @@
 #include <libmissioncontrol/mission-control.h>
 
 #include <libempathy/empathy-contact-factory.h>
-#include <libempathy/empathy-debug.h>
 #include <libempathy/empathy-utils.h>
 
 #include <libempathy-gtk/empathy-ui-utils.h>
 
 #include "empathy-new-message-dialog.h"
 #include "empathy-account-chooser.h"
-
-#define DEBUG_DOMAIN "NewMessageDialog"
 
 typedef struct {
 	GtkWidget *dialog;

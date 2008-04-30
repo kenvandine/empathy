@@ -38,7 +38,6 @@
 
 #include <libempathy/empathy-idle.h>
 #include <libempathy/empathy-utils.h>
-#include <libempathy/empathy-debug.h>
 
 #include <libempathy-gtk/empathy-conf.h>
 
@@ -46,7 +45,8 @@
 #include "empathy-status-icon.h"
 #include "bacon-message-connection.h"
 
-#define DEBUG_DOMAIN "EmpathyMain"
+#define DEBUG_FLAG EMPATHY_DEBUG_OTHER
+#include <libempathy/empathy-debug.h>
 
 static BaconMessageConnection *connection = NULL;
 
@@ -54,7 +54,7 @@ static void
 service_ended_cb (MissionControl *mc,
 		  gpointer        user_data)
 {
-	empathy_debug (DEBUG_DOMAIN, "Mission Control stopped");
+	DEBUG ("Mission Control stopped");
 }
 
 static void
@@ -109,8 +109,7 @@ operation_error_cb (MissionControl *mc,
 		message = _("Unknown error code");
 	}
 
-	empathy_debug (DEBUG_DOMAIN, "Error during operation %d: %s",
-		       operation_id, message);
+	DEBUG ("Error during operation %d: %s", operation_id, message);
 }
 
 static void
@@ -151,13 +150,13 @@ create_salut_account (void)
 		return;
 	}
 
-	empathy_debug (DEBUG_DOMAIN, "Try to add a salut account...");
+	DEBUG ("Try to add a salut account...");
 
 	/* Check if the salut CM is installed */
 	profile = mc_profile_lookup ("salut");
 	protocol = mc_profile_get_protocol (profile);
 	if (!protocol) {
-		empathy_debug (DEBUG_DOMAIN, "Salut not installed");
+		DEBUG ("Salut not installed");
 		g_object_unref (profile);
 		return;
 	}
@@ -165,8 +164,8 @@ create_salut_account (void)
 
 	/* Get self EContact from EDS */
 	if (!e_book_get_self (&contact, &book, &error)) {
-		empathy_debug (DEBUG_DOMAIN, "Failed to get self econtact: %s",
-			       error ? error->message : "No error given");
+		DEBUG ("Failed to get self econtact: %s",
+			error ? error->message : "No error given");
 		g_clear_error (&error);
 		g_object_unref (profile);
 		return;
@@ -179,7 +178,7 @@ create_salut_account (void)
 	/* Check if there is already a salut account */
 	accounts = mc_accounts_list_by_profile (profile);
 	if (accounts) {
-		empathy_debug (DEBUG_DOMAIN, "There is already a salut account");
+		DEBUG ("There is already a salut account");
 		mc_accounts_list_free (accounts);
 		g_object_unref (profile);
 		return;
@@ -199,13 +198,9 @@ create_salut_account (void)
 		nickname = NULL;
 	}
 
-	empathy_debug (DEBUG_DOMAIN, "Salut account created:\n"
-				     "  nickname=%s\n"
-				     "  first-name=%s\n"
-				     "  last-name=%s\n"
-				     "  email=%s\n"
-				     "  jid=%s\n",
-		       nickname, first_name, last_name, email, jid);
+	DEBUG ("Salut account created:\nnickname=%s\nfirst-name=%s\n"
+		"last-name=%s\nemail=%s\njid=%s\n",
+		nickname, first_name, last_name, email, jid);
 
 	mc_account_set_param_string (account, "nickname", nickname ? nickname : "");
 	mc_account_set_param_string (account, "first-name", first_name ? first_name : "");
@@ -238,9 +233,8 @@ on_bacon_message_received (const char *message,
 
 	g_return_if_fail (message != NULL);
 
-	empathy_debug (DEBUG_DOMAIN,
-		       "Other instance launched, presenting the main window "
-		       "(message is '%s')", message);
+	DEBUG ("Other instance launched, presenting the main window. message='%s'",
+		message);
 
 	startup_timestamp = atoi (message);
 
@@ -251,7 +245,7 @@ on_bacon_message_received (const char *message,
 	 * has been realized otherwise it will not work. lame. */
 	if (startup_timestamp == 0) {
 		/* Work if launched from the terminal */
-		empathy_debug (DEBUG_DOMAIN, "Using X server timestamp as a fallback");
+		DEBUG ("Using X server timestamp as a fallback");
 
 		if (!GTK_WIDGET_REALIZED (window)) {
 			gtk_widget_realize (GTK_WIDGET (window));
@@ -329,11 +323,15 @@ main (int argc, char *argv[])
 	if (!gtk_init_with_args (&argc, &argv,
 				 _("- Empathy Instant Messenger"),
 				 options, GETTEXT_PACKAGE, &error)) {
-		empathy_debug (DEBUG_DOMAIN, error->message);
+		g_warning ("Error in gtk init: %s", error->message);
 		return EXIT_FAILURE;
 	}
 
-	empathy_debug_set_log_file_from_env ();
+	if (g_getenv ("EMPATHY_TIMING") != NULL) {
+		g_log_set_default_handler (tp_debug_timestamped_log_handler, NULL);
+	}
+	empathy_debug_set_flags (g_getenv ("EMPATHY_DEBUG"));
+	tp_debug_divert_messages (g_getenv ("EMPATHY_LOGFILE"));
 
 	g_set_application_name (PACKAGE_NAME);
 
@@ -347,7 +345,7 @@ main (int argc, char *argv[])
 		if (!bacon_message_connection_get_is_server (connection)) {
 			gchar *message;
 
-			empathy_debug (DEBUG_DOMAIN, "Activating existing instance");
+			DEBUG ("Activating existing instance");
 
 			message = g_strdup_printf ("%" G_GUINT32_FORMAT,
 						   startup_timestamp);

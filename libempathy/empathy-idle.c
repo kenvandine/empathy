@@ -33,10 +33,11 @@
 #include "empathy-utils.h" 
 #include "empathy-debug.h"
 
+#define DEBUG_FLAG EMPATHY_DEBUG_OTHER
+#include "empathy-debug.h"
+
 #define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), \
 		       EMPATHY_TYPE_IDLE, EmpathyIdlePriv))
-
-#define DEBUG_DOMAIN "Idle"
 
 /* Number of seconds before entering extended autoaway. */
 #define EXT_AWAY_TIME (30*60)
@@ -189,14 +190,14 @@ empathy_idle_init (EmpathyIdle *idle)
 					     G_CALLBACK (idle_session_idle_changed_cb),
 					     idle, NULL);
 	} else {
-		empathy_debug (DEBUG_DOMAIN, "Failed to get gs proxy");
+		DEBUG ("Failed to get gs proxy");
 	}
 
 
 	system_bus = dbus_g_bus_get (DBUS_BUS_SYSTEM, &error);
 	if (!system_bus) {
-		empathy_debug (DEBUG_DOMAIN, "Failed to get system bus: %s",
-			      error ? error->message : "No error given");
+		DEBUG ("Failed to get system bus: %s",
+			error ? error->message : "No error given");
 	} else {
 		priv->nm_proxy = dbus_g_proxy_new_for_name (system_bus,
 							    "org.freedesktop.NetworkManager",
@@ -210,7 +211,7 @@ empathy_idle_init (EmpathyIdle *idle)
 					     G_CALLBACK (idle_nm_state_change_cb),
 					     idle, NULL);
 	} else {
-		empathy_debug (DEBUG_DOMAIN, "Failed to get nm proxy");
+		DEBUG ("Failed to get nm proxy");
 	}
 
 	priv->nm_connected = TRUE;
@@ -398,11 +399,11 @@ empathy_idle_set_presence (EmpathyIdle *idle,
 
 	priv = GET_PRIV (idle);
 
-	empathy_debug (DEBUG_DOMAIN, "Changing presence to %s (%d)",
+	DEBUG ("Changing presence to %s (%d)",
 		       status, state);
 
 	if (!priv->nm_connected) {
-		empathy_debug (DEBUG_DOMAIN, "NM not connected");
+		DEBUG ("NM not connected");
 		return;
 	}
 
@@ -468,9 +469,7 @@ empathy_idle_set_use_nm (EmpathyIdle *idle,
 				   G_TYPE_INVALID);
 
 		if (error) {
-			empathy_debug (DEBUG_DOMAIN, 
-				       "Couldn't get NM state: %s",
-				       error->message);
+			DEBUG ("Couldn't get NM state: %s", error->message);
 			g_clear_error (&error);
 			nm_status = NM_STATE_ASLEEP;
 		}
@@ -497,8 +496,7 @@ idle_presence_changed_cb (MissionControl *mc,
 
 	priv = GET_PRIV (idle);
 
-	empathy_debug (DEBUG_DOMAIN, "Presence changed to '%s' (%d)",
-		       status, state);
+	DEBUG ("Presence changed to '%s' (%d)", status, state);
 
 	g_free (priv->status);
 	priv->state = state;
@@ -520,9 +518,9 @@ idle_session_idle_changed_cb (DBusGProxy  *gs_proxy,
 
 	priv = GET_PRIV (idle);
 
-	empathy_debug (DEBUG_DOMAIN, "Session idle state changed, %s -> %s",
-		      priv->is_idle ? "yes" : "no",
-		      is_idle ? "yes" : "no");
+	DEBUG ("Session idle state changed, %s -> %s",
+		priv->is_idle ? "yes" : "no",
+		is_idle ? "yes" : "no");
 
 	if (priv->state <= MC_PRESENCE_OFFLINE ||
 	    priv->state == MC_PRESENCE_HIDDEN ||
@@ -550,7 +548,7 @@ idle_session_idle_changed_cb (DBusGProxy  *gs_proxy,
 			priv->away_reset_status = FALSE;
 		}
 
-		empathy_debug (DEBUG_DOMAIN, "Going to autoaway");
+		DEBUG ("Going to autoaway");
 		empathy_idle_set_state (idle, new_state);
 
 		idle_ext_away_start (idle);
@@ -558,9 +556,9 @@ idle_session_idle_changed_cb (DBusGProxy  *gs_proxy,
 		/* We are no more idle, restore state */
 		idle_ext_away_stop (idle);
 
-		empathy_debug (DEBUG_DOMAIN, "Restoring state to %d, reset status: %s",
-			      priv->away_saved_state,
-			      priv->away_reset_status ? "Yes" : "No");
+		DEBUG ("Restoring state to %d, reset status: %s",
+			priv->away_saved_state,
+			priv->away_reset_status ? "Yes" : "No");
 
 		if (priv->nm_connected) {
 			empathy_idle_set_presence (idle,
@@ -591,8 +589,8 @@ idle_nm_state_change_cb (DBusGProxy  *proxy,
 
 	priv = GET_PRIV (idle);
 
-	empathy_debug (DEBUG_DOMAIN, "New network state (%d), in use = %s",
-		       state, priv->use_nm ? "Yes" : "No");
+	DEBUG ("New network state (%d), in use = %s",
+		state, priv->use_nm ? "Yes" : "No");
 
 	if (!priv->use_nm) {
 		return;
@@ -655,7 +653,7 @@ idle_ext_away_cb (EmpathyIdle *idle)
 
 	priv = GET_PRIV (idle);
 
-	empathy_debug (DEBUG_DOMAIN, "Going to extended autoaway");
+	DEBUG ("Going to extended autoaway");
 	empathy_idle_set_state (idle, MC_PRESENCE_EXTENDED_AWAY);
 	priv->ext_away_timeout = 0;
 

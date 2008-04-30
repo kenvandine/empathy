@@ -30,7 +30,9 @@
 #include "empathy-utils.h"
 #include "empathy-irc-network-manager.h"
 
-#define DEBUG_DOMAIN "IrcNetworkManager"
+#define DEBUG_FLAG EMPATHY_DEBUG_IRC
+#include "empathy-debug.h"
+
 #define IRC_NETWORKS_DTD_FILENAME "empathy-irc-networks.dtd"
 #define SAVE_TIMER 4
 
@@ -336,12 +338,11 @@ empathy_irc_network_manager_add (EmpathyIrcNetworkManager *self,
 
   if (priv->last_id == G_MAXUINT)
     {
-      empathy_debug (DEBUG_DOMAIN,
-          "Can't add network: too many networks using a similiar ID");
+      DEBUG ("Can't add network: too many networks using a similiar ID");
       return;
     }
 
-  empathy_debug (DEBUG_DOMAIN, "add server with \"%s\" as ID", id);
+  DEBUG ("add server with \"%s\" as ID", id);
 
   network->user_defined = TRUE;
   add_network (self, network, id);
@@ -429,8 +430,7 @@ load_global_file (EmpathyIrcNetworkManager *self)
 
   if (!g_file_test (priv->global_file, G_FILE_TEST_EXISTS))
     {
-      empathy_debug (DEBUG_DOMAIN, "Global networks file %s doesn't exist",
-          priv->global_file);
+      DEBUG ("Global networks file %s doesn't exist", priv->global_file);
       return;
     }
 
@@ -448,8 +448,7 @@ load_user_file (EmpathyIrcNetworkManager *self)
 
   if (!g_file_test (priv->user_file, G_FILE_TEST_EXISTS))
     {
-      empathy_debug (DEBUG_DOMAIN, "User networks file %s doesn't exist",
-          priv->global_file);
+      DEBUG ("User networks file %s doesn't exist", priv->global_file);
       return;
     }
 
@@ -504,8 +503,7 @@ irc_network_manager_parse_irc_server (EmpathyIrcNetwork *network,
           if (ssl == NULL || strcmp (ssl, "TRUE") == 0)
             have_ssl = TRUE;
 
-          empathy_debug (DEBUG_DOMAIN, "parsed server %s port %d ssl %d",
-              address, port_nb, have_ssl);
+          DEBUG ("parsed server %s port %d ssl %d", address, port_nb, have_ssl);
 
           server = empathy_irc_server_new (address, port_nb, have_ssl);
           empathy_irc_network_append_server (network, server);
@@ -537,8 +535,7 @@ irc_network_manager_parse_irc_network (EmpathyIrcNetworkManager *self,
     {
       if (!user_defined)
         {
-          empathy_debug (DEBUG_DOMAIN, "the \"dropped\" attribute shouldn't be"
-             " used in the global file");
+          DEBUG ("the 'dropped' attribute shouldn't be used in the global file");
         }
 
       network = g_hash_table_lookup (priv->networks, id);
@@ -566,7 +563,7 @@ irc_network_manager_parse_irc_network (EmpathyIrcNetworkManager *self,
     }
 
   add_network (self, network, id);
-  empathy_debug (DEBUG_DOMAIN, "add network %s (id %s)", name, id);
+  DEBUG ("add network %s (id %s)", name, id);
 
   for (child = node->children; child; child = child->next)
     {
@@ -605,7 +602,7 @@ irc_network_manager_file_parse (EmpathyIrcNetworkManager *self,
 
   priv = EMPATHY_IRC_NETWORK_MANAGER_GET_PRIVATE (self);
 
-  empathy_debug (DEBUG_DOMAIN, "Attempting to parse file:'%s'...", filename);
+  DEBUG ("Attempting to parse file:'%s'...", filename);
 
   ctxt = xmlNewParserCtxt ();
 
@@ -717,11 +714,11 @@ irc_network_manager_file_save (EmpathyIrcNetworkManager *self)
 
   if (priv->user_file == NULL)
     {
-      empathy_debug (DEBUG_DOMAIN, "can't save: no user file defined");
+      DEBUG ("can't save: no user file defined");
       return FALSE;
     }
 
-  empathy_debug (DEBUG_DOMAIN, "Saving IRC networks");
+  DEBUG ("Saving IRC networks");
 
   doc = xmlNewDoc ("1.0");
   root = xmlNewNode (NULL, "networks");

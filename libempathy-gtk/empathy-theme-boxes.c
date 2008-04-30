@@ -25,12 +25,11 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
-#include <libempathy/empathy-debug.h>
-
 #include "empathy-ui-utils.h"
 #include "empathy-theme-boxes.h"
 
-#define DEBUG_DOMAIN "FancyTheme"
+#define DEBUG_FLAG EMPATHY_DEBUG_OTHER
+#include <libempathy/empathy-debug.h>
 
 #define MARGIN 4
 #define HEADER_PADDING 2
@@ -549,7 +548,7 @@ theme_boxes_maybe_append_header (EmpathyTheme        *theme,
 	last_contact = empathy_chat_view_get_last_contact (view);
 	buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
 
-	empathy_debug (DEBUG_DOMAIN, "Maybe add fancy header");
+	DEBUG ("Maybe add fancy header");
 
 	/* Only insert a header if the previously inserted block is not the same
 	 * as this one. This catches all the different cases:

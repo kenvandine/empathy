@@ -31,11 +31,11 @@
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 
-#include "empathy-debug.h"
 #include "empathy-chatroom-manager.h"
 #include "empathy-utils.h"
 
-#define DEBUG_DOMAIN "ChatroomManager"
+#define DEBUG_FLAG EMPATHY_DEBUG_OTHER
+#include "empathy-debug.h"
 
 #define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), EMPATHY_TYPE_CHATROOM_MANAGER, EmpathyChatroomManagerPriv))
 
@@ -338,7 +338,7 @@ chatroom_manager_file_parse (EmpathyChatroomManager *manager,
 
 	priv = GET_PRIV (manager);
 
-	empathy_debug (DEBUG_DOMAIN, "Attempting to parse file:'%s'...", filename);
+	DEBUG ("Attempting to parse file:'%s'...", filename);
 
 	ctxt = xmlNewParserCtxt ();
 
@@ -366,9 +366,7 @@ chatroom_manager_file_parse (EmpathyChatroomManager *manager,
 		}
 	}
 
-	empathy_debug (DEBUG_DOMAIN,
-		      "Parsed %d chatrooms",
-		      g_list_length (priv->chatrooms));
+	DEBUG ("Parsed %d chatrooms", g_list_length (priv->chatrooms));
 
 	xmlFreeDoc(doc);
 	xmlFreeParserCtxt (ctxt);
@@ -488,7 +486,7 @@ chatroom_manager_file_save (EmpathyChatroomManager *manager)
 	/* Make sure the XML is indented properly */
 	xmlIndentTreeOutput = 1;
 
-	empathy_debug (DEBUG_DOMAIN, "Saving file:'%s'", file);
+	DEBUG ("Saving file:'%s'", file);
 	xmlSaveFormatFileEnc (file, doc, "utf-8", 1);
 	xmlFreeDoc (doc);
 
