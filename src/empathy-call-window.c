@@ -48,16 +48,16 @@ typedef struct
 
   GtkWidget *window;
   GtkWidget *main_hbox;
+  GtkWidget *controls_vbox;
   GtkWidget *volume_hbox;
   GtkWidget *status_label;
-  GtkWidget *call_button;
   GtkWidget *input_volume_button;
   GtkWidget *output_volume_button;
-  GtkWidget *preview_video_frame;
   GtkWidget *preview_video_socket;
   GtkWidget *output_video_socket;
   GtkWidget *video_button;
-  GtkWidget *output_video_label;
+  GtkWidget *hang_up_button;
+  GtkWidget *confirmation_dialog;
 } EmpathyCallWindow;
 
 static gboolean
@@ -116,26 +116,18 @@ call_window_set_output_video_is_drawing (EmpathyCallWindow *window,
 
   if (is_drawing && !window->is_drawing)
     {
-      gtk_container_remove (GTK_CONTAINER (window->main_hbox),
-          window->output_video_label);
-      gtk_box_pack_start (GTK_BOX (window->main_hbox),
+      gtk_window_set_resizable (GTK_WINDOW (window->window), TRUE);
+      gtk_box_pack_end (GTK_BOX (window->main_hbox),
           window->output_video_socket, TRUE, TRUE, 0);
-      gtk_box_reorder_child (GTK_BOX (window->main_hbox),
-          window->output_video_socket, 0);
-      gtk_widget_show (window->output_video_socket);
       empathy_tp_call_add_output_video (window->call,
           gtk_socket_get_id (GTK_SOCKET (window->output_video_socket)));
     }
   if (!is_drawing && window->is_drawing)
     {
+      gtk_window_set_resizable (GTK_WINDOW (window->window), FALSE);
       empathy_tp_call_add_output_video (window->call, 0);
       gtk_container_remove (GTK_CONTAINER (window->main_hbox),
           window->output_video_socket);
-      gtk_box_pack_start (GTK_BOX (window->main_hbox),
-          window->output_video_label, TRUE, TRUE, 0);
-      gtk_box_reorder_child (GTK_BOX (window->main_hbox),
-          window->output_video_label, 0);
-      gtk_widget_show (window->output_video_label);
     }
 
   window->is_drawing = is_drawing;
@@ -144,6 +136,12 @@ call_window_set_output_video_is_drawing (EmpathyCallWindow *window,
 static void
 call_window_finalize (EmpathyCallWindow *window)
 {
+  gtk_label_set_text (GTK_LABEL (window->status_label), _("Closed"));
+  gtk_widget_set_sensitive (window->hang_up_button, FALSE);
+  gtk_widget_set_sensitive (window->video_button, FALSE);
+  gtk_widget_set_sensitive (window->output_volume_button, FALSE);
+  gtk_widget_set_sensitive (window->input_volume_button, FALSE);
+
   if (window->call)
     { 
       call_window_stop_timeout (window);
@@ -153,6 +151,9 @@ call_window_finalize (EmpathyCallWindow *window)
       g_object_unref (window->call);
       window->call = NULL;
     }
+
+  if (window->confirmation_dialog)
+      gtk_widget_destroy (window->confirmation_dialog);
 }
 
 static void
@@ -186,20 +187,11 @@ call_window_video_button_toggled_cb (GtkWidget *button,
 }
 
 static void
-call_window_call_button_clicked_cb (GtkWidget *widget,
-                                    EmpathyCallWindow *window)
+call_window_hang_up_button_clicked_cb (GtkWidget *widget,
+                                       EmpathyCallWindow *window)
 {
-  if (window->status == EMPATHY_TP_CALL_STATUS_PENDING)
-    {
-      empathy_debug (DEBUG_DOMAIN, "Call clicked, accept incoming call");
-      empathy_tp_call_accept_incoming_call (window->call);
-    }
-  else
-    {
-      empathy_debug (DEBUG_DOMAIN, "Call clicked, end call");
-      call_window_finalize (window);
-    }
-    gtk_widget_set_sensitive (window->call_button, FALSE);
+  empathy_debug (DEBUG_DOMAIN, "Call clicked, end call");
+  call_window_finalize (window);
 }
 
 static void
@@ -278,8 +270,60 @@ call_window_destroy_cb (GtkWidget *widget,
   call_window_finalize (window);
   g_object_unref (window->output_video_socket);
   g_object_unref (window->preview_video_socket);
-  g_object_unref (window->output_video_label);
   g_slice_free (EmpathyCallWindow, window);
+}
+
+static void
+call_window_confirmation_dialog_response_cb (GtkDialog *dialog,
+                                             gint response,
+                                             EmpathyCallWindow *window)
+{
+  if (response == GTK_RESPONSE_OK && window->call)
+      empathy_tp_call_accept_incoming_call (window->call);
+  else
+      call_window_finalize (window);
+
+  gtk_widget_destroy (window->confirmation_dialog);
+  window->confirmation_dialog = NULL;
+}
+
+static void
+call_window_show_confirmation_dialog (EmpathyCallWindow *window)
+{
+  EmpathyContact *contact;
+  GtkWidget *button;
+  GtkWidget *image;
+
+  if (window->confirmation_dialog)
+      return;
+
+  g_object_get (window->call, "contact", &contact, NULL);
+
+  window->confirmation_dialog = gtk_message_dialog_new (GTK_WINDOW (window->window),
+      GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+      GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE, _("Incoming call"));
+  gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (window->confirmation_dialog),
+      _("%s is calling you, do you want to answer?"),
+      empathy_contact_get_name (contact));
+  gtk_dialog_set_default_response (GTK_DIALOG (window->confirmation_dialog),
+      GTK_RESPONSE_OK);
+
+  button = gtk_dialog_add_button (GTK_DIALOG (window->confirmation_dialog),
+      _("_Reject"), GTK_RESPONSE_CANCEL);
+  image = gtk_image_new_from_icon_name (GTK_STOCK_CANCEL, GTK_ICON_SIZE_BUTTON);
+  gtk_button_set_image (GTK_BUTTON (button), image);
+
+  button = gtk_dialog_add_button (GTK_DIALOG (window->confirmation_dialog),
+      _("_Answer"), GTK_RESPONSE_OK);
+  image = gtk_image_new_from_icon_name (GTK_STOCK_APPLY, GTK_ICON_SIZE_BUTTON);
+  gtk_button_set_image (GTK_BUTTON (button), image);
+
+  g_signal_connect (window->confirmation_dialog, "response",
+      G_CALLBACK (call_window_confirmation_dialog_response_cb),
+      window);
+
+  gtk_widget_show (window->confirmation_dialog);
+  g_object_unref (contact);
 }
 
 static void
@@ -291,8 +335,6 @@ call_window_update (EmpathyCallWindow *window)
   EmpathyTpCallStream *video_stream;
   gboolean is_incoming;
   gchar *title;
-  const gchar *button_icon_name = NULL;
-  const gchar *button_label = NULL;
 
   g_object_get (window->call,
       "status", &window->status,
@@ -323,7 +365,7 @@ call_window_update (EmpathyCallWindow *window)
       gtk_widget_set_sensitive (window->video_button, FALSE);
       gtk_widget_set_sensitive (window->output_volume_button, FALSE);
       gtk_widget_set_sensitive (window->input_volume_button, FALSE);
-      gtk_widget_set_sensitive (window->call_button, FALSE);
+      gtk_widget_set_sensitive (window->hang_up_button, FALSE);
     }
   else if (window->status == EMPATHY_TP_CALL_STATUS_PENDING)
     {
@@ -332,17 +374,9 @@ call_window_update (EmpathyCallWindow *window)
 
       gtk_window_set_title (GTK_WINDOW (window->window), title);
       gtk_label_set_text (GTK_LABEL (window->status_label), _("Ringing"));
-      gtk_widget_set_sensitive (window->call_button, TRUE);
+      gtk_widget_set_sensitive (window->hang_up_button, TRUE);
       if (is_incoming)
-        {
-          button_icon_name = GTK_STOCK_APPLY;
-          button_label = _("Answer");
-        }
-      else
-        {
-          button_icon_name = GTK_STOCK_CANCEL;
-          button_label = _("Hang Up");
-        }
+          call_window_show_confirmation_dialog (window);
     }
   else if (window->status == EMPATHY_TP_CALL_STATUS_ACCEPTED)
     {
@@ -376,34 +410,13 @@ call_window_update (EmpathyCallWindow *window)
       gtk_widget_set_sensitive (window->video_button, TRUE);
       gtk_widget_set_sensitive (window->output_volume_button, TRUE);
       gtk_widget_set_sensitive (window->input_volume_button, TRUE);
-      gtk_widget_set_sensitive (window->call_button, TRUE);
-      button_icon_name = GTK_STOCK_CANCEL;
-      button_label = _("Hang Up");
+      gtk_widget_set_sensitive (window->hang_up_button, TRUE);
     }
   else if (window->status == EMPATHY_TP_CALL_STATUS_CLOSED)
-    {
-      gtk_label_set_text (GTK_LABEL (window->status_label), _("Closed"));
-      gtk_widget_set_sensitive (window->call_button, FALSE);
-      gtk_widget_set_sensitive (window->video_button, FALSE);
-      gtk_widget_set_sensitive (window->output_volume_button, FALSE);
-      gtk_widget_set_sensitive (window->input_volume_button, FALSE);
-
       call_window_finalize (window);
-    }
 
   if (contact)
       g_object_unref (contact);
-
-  if (button_label)
-      gtk_button_set_label (GTK_BUTTON (window->call_button), button_label);
-  if (button_icon_name)
-    {
-      GtkWidget *image;
-
-      image = gtk_image_new_from_icon_name (button_icon_name,
-          GTK_ICON_SIZE_BUTTON);
-      gtk_button_set_image (GTK_BUTTON (window->call_button), image);
-    }
 }
 
 GtkWidget *
@@ -425,12 +438,11 @@ empathy_call_window_new (EmpathyTpCall *call)
       NULL,
       "window", &window->window,
       "main_hbox", &window->main_hbox,
+      "controls_vbox", &window->controls_vbox,
       "volume_hbox", &window->volume_hbox,
-      "output_video_label", &window->output_video_label,
       "status_label", &window->status_label,
-      "call_button", &window->call_button,
-      "preview_video_frame", &window->preview_video_frame,
       "video_button", &window->video_button,
+      "hang_up_button", &window->hang_up_button,
       NULL);
   g_free (filename);
 
@@ -438,14 +450,11 @@ empathy_call_window_new (EmpathyTpCall *call)
       window,
       "window", "destroy", call_window_destroy_cb,
       "window", "delete_event", call_window_delete_event_cb,
-      "call_button", "clicked", call_window_call_button_clicked_cb,
+      "hang_up_button", "clicked", call_window_hang_up_button_clicked_cb,
       "video_button", "toggled", call_window_video_button_toggled_cb,
       NULL);
 
   g_object_unref (glade);
-
-  /* Keep it safe when we remove from container */
-  g_object_ref (window->output_video_label);
 
   /* Output volume button */
   window->output_volume_button = gtk_volume_button_new ();
@@ -469,17 +478,20 @@ empathy_call_window_new (EmpathyTpCall *call)
 
   /* Output video socket */
   window->output_video_socket = g_object_ref (gtk_socket_new ());
-  gtk_widget_set_size_request (window->output_video_socket, 400, -1);
+  gtk_widget_set_size_request (window->output_video_socket, 400, 300);
   g_signal_connect (GTK_OBJECT (window->output_video_socket), "realize",
       G_CALLBACK (call_window_socket_realized_cb), window);
   gtk_widget_show (window->output_video_socket);
 
   /* Preview video socket */
   window->preview_video_socket = g_object_ref (gtk_socket_new ());
+  gtk_widget_set_size_request (window->preview_video_socket, 176, 144);
   g_signal_connect (GTK_OBJECT (window->preview_video_socket), "realize",
       G_CALLBACK (call_window_socket_realized_cb), window);
-  gtk_container_add (GTK_CONTAINER (window->preview_video_frame),
-      window->preview_video_socket);
+  gtk_box_pack_start (GTK_BOX (window->controls_vbox),
+      window->preview_video_socket, TRUE, TRUE, 0);
+  gtk_box_reorder_child (GTK_BOX (window->controls_vbox),
+      window->preview_video_socket, 0);
   gtk_widget_show (window->preview_video_socket);
 
   g_signal_connect_swapped (G_OBJECT (window->call), "notify",

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.2 on Mon Apr 28 19:47:22 2008 -->
+<!--Generated with glade3 3.4.2 on Wed Apr 30 09:10:07 2008 -->
 <glade-interface>
   <widget class="GtkWindow" id="window">
-    <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
+    <property name="resizable">False</property>
     <child>
       <widget class="GtkHBox" id="main_hbox">
         <property name="visible">True</property>
@@ -11,34 +11,9 @@
         <property name="border_width">5</property>
         <property name="spacing">5</property>
         <child>
-          <widget class="GtkLabel" id="output_video_label">
-            <property name="visible">True</property>
-            <property name="label" translatable="yes">No video output</property>
-          </widget>
-        </child>
-        <child>
-          <widget class="GtkVBox" id="vbox3">
+          <widget class="GtkVBox" id="controls_vbox">
             <property name="visible">True</property>
             <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-            <child>
-              <widget class="GtkAspectFrame" id="preview_video_frame">
-                <property name="width_request">176</property>
-                <property name="height_request">144</property>
-                <property name="visible">True</property>
-                <property name="events">GDK_POINTER_MOTION_MASK | GDK_POINTER_MOTION_HINT_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK</property>
-                <property name="label_xalign">0</property>
-                <property name="shadow_type">GTK_SHADOW_IN</property>
-                <property name="ratio">1.2200000286102295</property>
-                <property name="obey_child">False</property>
-                <child>
-                  <placeholder/>
-                </child>
-              </widget>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-              </packing>
-            </child>
             <child>
               <widget class="GtkCheckButton" id="video_button">
                 <property name="visible">True</property>
@@ -52,7 +27,6 @@
                 <property name="expand">False</property>
                 <property name="fill">False</property>
                 <property name="padding">10</property>
-                <property name="position">1</property>
               </packing>
             </child>
             <child>
@@ -85,7 +59,7 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
-                <property name="position">2</property>
+                <property name="position">1</property>
               </packing>
             </child>
             <child>
@@ -97,29 +71,43 @@
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
-                <property name="position">3</property>
+                <property name="position">2</property>
               </packing>
             </child>
             <child>
-              <widget class="GtkButton" id="call_button">
+              <widget class="GtkButton" id="hang_up_button">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="receives_default">True</property>
-                <property name="label" translatable="yes">button</property>
-                <property name="response_id">0</property>
+                <property name="response_id">1</property>
+                <child>
+                  <widget class="GtkHBox" id="hbox1">
+                    <property name="visible">True</property>
+                    <child>
+                      <widget class="GtkImage" id="image1">
+                        <property name="visible">True</property>
+                        <property name="stock">gtk-cancel</property>
+                      </widget>
+                    </child>
+                    <child>
+                      <widget class="GtkLabel" id="label2">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">Hang Up</property>
+                      </widget>
+                      <packing>
+                        <property name="position">1</property>
+                      </packing>
+                    </child>
+                  </widget>
+                </child>
               </widget>
               <packing>
                 <property name="expand">False</property>
                 <property name="fill">False</property>
-                <property name="position">4</property>
+                <property name="position">3</property>
               </packing>
             </child>
           </widget>
-          <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">1</property>
-          </packing>
         </child>
       </widget>
     </child>
