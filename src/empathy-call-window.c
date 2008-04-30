@@ -341,7 +341,7 @@ call_window_update (EmpathyCallWindow *window)
       else
         {
           button_icon_name = GTK_STOCK_CANCEL;
-          button_label = _("Hand up");
+          button_label = _("Hang Up");
         }
     }
   else if (window->status == EMPATHY_TP_CALL_STATUS_ACCEPTED)
@@ -378,7 +378,7 @@ call_window_update (EmpathyCallWindow *window)
       gtk_widget_set_sensitive (window->input_volume_button, TRUE);
       gtk_widget_set_sensitive (window->call_button, TRUE);
       button_icon_name = GTK_STOCK_CANCEL;
-      button_label = _("Hand up");
+      button_label = _("Hang Up");
     }
   else if (window->status == EMPATHY_TP_CALL_STATUS_CLOSED)
     {
