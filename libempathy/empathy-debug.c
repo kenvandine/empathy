@@ -52,7 +52,6 @@ static void
 debug_set_flags (EmpathyDebugFlags new_flags)
 {
   flags |= new_flags;
-  g_print ("%d\n", flags);
 }
 
 void
@@ -61,8 +60,8 @@ empathy_debug_set_flags (const gchar *flags_string)
   guint nkeys;
 
   for (nkeys = 0; keys[nkeys].value; nkeys++);
-g_print ("%s %d\n", flags_string, nkeys);
-  //tp_debug_set_flags (flags_string);
+
+  tp_debug_set_flags (flags_string);
 
   if (flags_string)
       debug_set_flags (g_parse_debug_string (flags_string, keys, nkeys));
