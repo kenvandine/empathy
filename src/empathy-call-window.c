@@ -487,11 +487,13 @@ empathy_call_window_new (EmpathyTpCall *call)
   gtk_widget_set_size_request (window->preview_video_socket, 176, 144);
   g_signal_connect (GTK_OBJECT (window->preview_video_socket), "realize",
       G_CALLBACK (call_window_socket_realized_cb), window);
+  gtk_widget_show (window->preview_video_socket);
+
+  /* FIXME: We shouldn't do this if there is no video input */
   gtk_box_pack_start (GTK_BOX (window->controls_vbox),
-      window->preview_video_socket, TRUE, TRUE, 0);
+      window->preview_video_socket, FALSE, FALSE, 0);
   gtk_box_reorder_child (GTK_BOX (window->controls_vbox),
       window->preview_video_socket, 0);
-  gtk_widget_show (window->preview_video_socket);
 
   g_signal_connect_swapped (G_OBJECT (window->call), "notify",
       G_CALLBACK (call_window_update),
