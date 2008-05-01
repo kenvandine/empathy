@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: empathy\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-10-18 03:41+0100\n"
-"PO-Revision-Date: 2008-05-01 14:24+0100\n"
+"PO-Revision-Date: 2008-05-01 15:30+0100\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -33,7 +33,7 @@ msgstr "Vedno odpri ločeno pogovorno okno za nov klepet."
 
 #: ../data/empathy.schemas.in.h:2
 msgid "Character to add after nickname when using nick completion (tab) in group chat."
-msgstr ""
+msgstr "Znak, ki naj bo dodan na koncu vzdevka ob uporabi možnosti zaključevanja (zavihek) vzdevka ob skupinskem klepetu."
 
 #: ../data/empathy.schemas.in.h:3
 msgid "Chat window theme"
@@ -93,7 +93,7 @@ msgstr "Skrivanje glavnega okna."
 
 #: ../data/empathy.schemas.in.h:17
 msgid "Nick completed character"
-msgstr ""
+msgstr "Znak na koncu vzdevka"
 
 #: ../data/empathy.schemas.in.h:18
 msgid "Open new chats in separate windows"
@@ -105,7 +105,7 @@ msgstr "Prikaži podobe"
 
 #: ../data/empathy.schemas.in.h:20
 msgid "Show hint about closing the main window"
-msgstr ""
+msgstr "Prikaži namig ob zapiranju glavnega okna."
 
 #: ../data/empathy.schemas.in.h:21
 msgid "Show offline contacts"
@@ -117,11 +117,11 @@ msgstr "Jeziki za črkovanje"
 
 #: ../data/empathy.schemas.in.h:23
 msgid "The last directory that an avatar image was chosen from."
-msgstr ""
+msgstr "Zadnja mapa iz katere je bila izbrana podoba."
 
 #: ../data/empathy.schemas.in.h:24
 msgid "The theme that is used to display the conversation in chat windows."
-msgstr ""
+msgstr "Tema, ki je uporabljena za prikaz pogovora v klepetalnem oknu"
 
 #: ../data/empathy.schemas.in.h:25
 msgid "Use graphical smileys"
@@ -137,27 +137,27 @@ msgstr "Uporabi temo za klepetalnice"
 
 #: ../data/empathy.schemas.in.h:28
 msgid "Whether or not Empathy should automatically log in to your accounts on startup."
-msgstr ""
+msgstr "Ali naj se program samodejno prijavi v račun ob zagonu?"
 
 #: ../data/empathy.schemas.in.h:29
 msgid "Whether or not the Salut account has been created on the first Empathy run."
-msgstr ""
+msgstr "Ali je bil Salut račun ustvarjen ob prvem zagonu Empathy?"
 
 #: ../data/empathy.schemas.in.h:30
 msgid "Whether or not the network manager should be used to automatically disconnect/reconnect."
-msgstr ""
+msgstr "Ali naj upravitelj omrežja samodejno poveže in prekine povezavo?"
 
 #: ../data/empathy.schemas.in.h:31
 msgid "Whether or not to check words typed against the languages you want to check with."
-msgstr ""
+msgstr "Ali naj se preverja črkovanje besed v določenem jeziku?"
 
 #: ../data/empathy.schemas.in.h:32
 msgid "Whether or not to convert smileys into graphical images in conversations."
-msgstr ""
+msgstr "Ali naj bodo smeški pretvorjeni v sličice?"
 
 #: ../data/empathy.schemas.in.h:33
 msgid "Whether or not to play a sound when messages arrive."
-msgstr ""
+msgstr "Ali naj se predvaja zvok ob prejetju novega sporočila?"
 
 #: ../data/empathy.schemas.in.h:34
 msgid "Whether or not to play sounds when away."
@@ -181,19 +181,19 @@ msgstr "Ali naj se prikaže stike, ki niso povezani?"
 
 #: ../data/empathy.schemas.in.h:39
 msgid "Whether or not to show the message dialog about closing the main window with the 'x' button in the title bar."
-msgstr ""
+msgstr "Ali naj bo prikazano pogovorno okno sporočila o zapiranju glavnega okna preko 'x' gumba na naslovni vrstici?"
 
 #: ../data/empathy.schemas.in.h:40
 msgid "Whether to show the contact list in compact mode or not."
-msgstr ""
+msgstr "Ali naj bo prikazan seznam stikov v skrčenem načinu?"
 
 #: ../data/empathy.schemas.in.h:41
 msgid "Whether to use the theme for chat rooms or not."
-msgstr ""
+msgstr "Ali naj bo uporabljena tema za klepetalnice?"
 
 #: ../data/empathy.schemas.in.h:42
 msgid "Which criterium to use when sorting the contact list. Default is to use sort by the contact's name with the value \"name\". A value of \"state\" will sort the contact list by state."
-msgstr ""
+msgstr "Kateri kriterij naj bo uporabljen za razvrščanje seznama stikov. Privzeto je uporabljeno razvrščanje po imenu stika z vrednostjo \"ime\". Vrednost \"stanje\" razvrsti seznam glede na to lastnost."
 
 #: ../libempathy/empathy-tp-contact-list.c:669
 #: ../src/empathy.c:188
@@ -429,19 +429,19 @@ msgstr "Uporabi _Yahoo Japan"
 
 #: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:8
 msgid "_Ignore conference and chatroom invitations"
-msgstr ""
+msgstr "_Prezri konferenčna vabila in vabila klepetalnic"
 
 #: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:10
 msgid "_Room List locale:"
-msgstr ""
+msgstr "_Locale seznama sob:"
 
 #: ../libempathy-gtk/empathy-accounts-dialog.c:226
 msgid "To add a new account, you can click on the 'Add' button and a new entry will be created for you to start configuring."
-msgstr ""
+msgstr "Za dodajanje novega računa lahko kliknete na gumb 'Dodaj' in nov vnos bo ustvarjen za začetek nastavitev."
 
 #: ../libempathy-gtk/empathy-accounts-dialog.c:230
 msgid "To add a new account, you first have to install a backend for each protocol you want to use."
-msgstr ""
+msgstr "Za dodajanje novega računa morate najprej namestiti hrbtenico za vsak protokol, ki ga želite uporabiti."
 
 #: ../libempathy-gtk/empathy-accounts-dialog.c:237
 #: ../libempathy-gtk/empathy-accounts-dialog.glade.h:2
@@ -454,6 +454,9 @@ msgid ""
 "\n"
 "If you do not want to add an account, simply click on the account you want to configure in the list on the left."
 msgstr ""
+"\n"
+"\n"
+"V primeru, da ne želite dodati računa, enostavno kliknite na račun, ki ga želite nastaviti s seznama na levi."
 
 #: ../libempathy-gtk/empathy-accounts-dialog.c:244
 msgid "<b>No Accounts Configured</b>"
@@ -474,6 +477,8 @@ msgid ""
 "You are about to remove your %s account!\n"
 "Are you sure you want to proceed?"
 msgstr ""
+"Odstranili boste vaš račun %s!\n"
+"Ali zares želite nadaljevati?"
 
 #: ../libempathy-gtk/empathy-accounts-dialog.c:922
 msgid ""
@@ -481,6 +486,9 @@ msgid ""
 "\n"
 "Should you decide to add the account back at a later time, they will still be available."
 msgstr ""
+"Vsi pogovori in vse izbrane sobe NE bodo izbrisane, če se odločite nadaljevati.\n"
+"\n"
+"V primeru, da se odločite povrniti račun, bodo podatki še vedno na voljo.."
 
 #: ../libempathy-gtk/empathy-accounts-dialog.glade.h:1
 msgid "<b>New Account</b>"
@@ -500,6 +508,9 @@ msgid ""
 "\n"
 "If you do not want to add an account, simply click on the account you want to configure in the list on the left."
 msgstr ""
+"Za dodajanje računa lahko kliknete na gumb 'Dodaj' in ustvarjen bo nov vnos pripravljen za prikrojevanje.\n"
+"\n"
+"V primeru, da ne želite dodati računa, enostavno kliknite na račun, ki ga želite nastaviti s seznama na levi."
 
 #: ../libempathy-gtk/empathy-accounts-dialog.glade.h:9
 msgid "Type:"
@@ -757,7 +768,7 @@ msgstr "OS:"
 
 #: ../libempathy-gtk/empathy-contact-widget.glade.h:16
 msgid "Select the groups you want this contact to appear in, you can select more than one group or no groups."
-msgstr ""
+msgstr "Izberite skupino v kateri želite, da je postavljen stik. Izberete lahko eno ali več skupin, lahko pa polje tudi pustite prazno."
 
 #: ../libempathy-gtk/empathy-contact-widget.glade.h:17
 msgid "Version:"
@@ -1066,11 +1077,11 @@ msgstr "Vietnamsko"
 #.
 #: ../megaphone/data/GNOME_Megaphone_Applet.schemas.in.h:1
 msgid "The contact to display in the applet. Empty means no contact is displayed."
-msgstr ""
+msgstr "Stik, ki naj bo prikazan v apletu. Prazno polje pomeni, da stik ni prikazan."
 
 #: ../megaphone/data/GNOME_Megaphone_Applet.schemas.in.h:2
 msgid "The contact's avatar token. Empty means contact has no avatar."
-msgstr ""
+msgstr "Oznaka podobe stika. Prazno polje pomeni, da stik nima določene podobe."
 
 #: ../megaphone/data/GNOME_Megaphone_Applet.server.in.in.h:1
 msgid "Megaphone"
@@ -1167,15 +1178,15 @@ msgstr "- Empathy trenutna sporočila"
 
 #: ../src/empathy-about-dialog.c:64
 msgid "Empathy is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version."
-msgstr ""
+msgstr "Empathy je prosta programska oprema; program lahko razširjate in/ali spreminjate pod pogoji Splošnega dovoljenja GNU (GNU General PublicLicense), kot ga je objavila ustanova Free Software Foundation; bodisi različice 2 ali (po vaši izbiri) katerekoli poznejše različice."
 
 #: ../src/empathy-about-dialog.c:68
 msgid "Empathy is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details."
-msgstr ""
+msgstr "Empathy se razširja v upanju, da bo uporaben, vendar BREZ VSAKRŠNEGA JAMSTVA; tudi brez posredne zagotovitve CENOVNE VREDNOSTI ali PRIMERNOSTI ZA DOLOČEN NAMEN.  Za podrobnosti glejte besedilo GNU General Public License."
 
 #: ../src/empathy-about-dialog.c:72
 msgid "You should have received a copy of the GNU General Public License along with Empathy; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-130159 USA"
-msgstr ""
+msgstr "Skupaj s tem programom bi morali prejeti izvod Splošnega javnega dovoljenja GNU (GNU General Public License); v primeru da ga niste, pišite na Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-130159 USA"
 
 #: ../src/empathy-about-dialog.c:100
 msgid "An Instant Messaging client for GNOME"
@@ -1388,7 +1399,7 @@ msgstr "Dohodni klic od %s"
 #: ../src/empathy-filter.c:341
 #, c-format
 msgid "Subscription requested by %s"
-msgstr ""
+msgstr "Naročilo zahteva %s"
 
 #: ../src/empathy-filter.c:344
 #, c-format
@@ -1403,7 +1414,7 @@ msgstr ""
 #: ../src/empathy-filter.c:452
 #, c-format
 msgid "%s offered you an invitation, but you don't have the needed external application to handle it."
-msgstr ""
+msgstr "%s vam je poslal povabilo, vendar nimate ustreznega zunanjega programa za sprejem vabila."
 
 #: ../src/empathy-filter.c:461
 msgid "Invitation Error"
@@ -1412,12 +1423,12 @@ msgstr "Napaka povabila"
 #: ../src/empathy-filter.c:569
 #, c-format
 msgid "%s is offering you an invitation. An external application will be started to handle it."
-msgstr ""
+msgstr "%s vam pošilja povabilo. Zagnan bo ustrezen zunanji program za sprejem vabila."
 
 #: ../src/empathy-filter.c:574
 #, c-format
 msgid "%s is offering you an invitation, but you don't have the needed external application to handle it."
-msgstr ""
+msgstr "%s vam pošilja povabilo, vendar nimate ustreznega zunanjega programa za sprejem vabila."
 
 #: ../src/empathy-main-window.c:271
 msgid "Show and edit accounts"
@@ -1461,11 +1472,11 @@ msgstr "Certifikat ni potrjen"
 
 #: ../src/empathy-main-window.c:920
 msgid "Certificate hostname mismatch"
-msgstr ""
+msgstr "Neustrezen prstni odtis gostitelja"
 
 #: ../src/empathy-main-window.c:923
 msgid "Certificate fingerprint mismatch"
-msgstr ""
+msgstr "Neustrezen prstni odtis certifikata"
 
 #: ../src/empathy-main-window.c:926
 msgid "Certificate self-signed"
@@ -1534,11 +1545,11 @@ msgstr "Prebrskaj:"
 
 #: ../src/empathy-new-chatroom-dialog.glade.h:3
 msgid "Enter the room name to join here or click on one or more rooms in the list."
-msgstr ""
+msgstr "Vnesite ime sobe ali pa s klikom vstopite v eno ali več sob s seznama."
 
 #: ../src/empathy-new-chatroom-dialog.glade.h:4
 msgid "Enter the server which hosts the room, or leave it empty if the room is on the current account's server"
-msgstr ""
+msgstr "Vnesite strežnik, ki gosti sobo ali pa pustite polje prazno, če je soba na strežniku računa"
 
 #: ../src/empathy-new-chatroom-dialog.glade.h:5
 msgid "Join"
@@ -1554,7 +1565,7 @@ msgstr "_Osveži"
 
 #: ../src/empathy-new-chatroom-dialog.glade.h:8
 msgid "This list represents all chat rooms hosted on the server you have entered."
-msgstr ""
+msgstr "Seznam predstavlja vse klepetalnice, ki gostujejo na trenutno obiskanem strežniku."
 
 #: ../src/empathy-preferences.c:264
 msgid "Language"
@@ -1586,7 +1597,7 @@ msgstr "<b>Vidno</b>"
 
 #: ../src/empathy-preferences.glade.h:7
 msgid "<small>The list of languages reflects only the languages for which you have a dictionary installed.</small>"
-msgstr ""
+msgstr "<small>Seznam jezikov za katere imate nameščen slovar.</small>"
 
 #: ../src/empathy-preferences.glade.h:8
 msgid "Automatically _connect on startup "
@@ -1594,7 +1605,7 @@ msgstr "Samodejno _poveži ob zagonu"
 
 #: ../src/empathy-preferences.glade.h:9
 msgid "Avatars are user chosen images shown in the contact list"
-msgstr ""
+msgstr "Podobe so izbrane slike uporabnikov, ki so prikazane na seznamu"
 
 #: ../src/empathy-preferences.glade.h:10
 msgid "Chat Th_eme:"
