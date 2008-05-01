@@ -732,10 +732,8 @@ tp_group_async_cb (TpChannel    *channel,
 		   gpointer      user_data,
 		   GObject      *weak_object)
 {
-	const gchar *msg = user_data;
-
 	if (error) {
-		DEBUG ("%s: %s", msg, error->message);
+		DEBUG ("%s: %s", (gchar*) user_data, error->message);
 	}
 }
 
