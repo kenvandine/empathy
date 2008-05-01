@@ -29,8 +29,6 @@
 
 G_BEGIN_DECLS
 
-#ifdef ENABLE_DEBUG
-
 /* Please keep this enum in sync with #keys in empathy-debug.c */
 typedef enum
 {
@@ -46,9 +44,6 @@ typedef enum
 gboolean empathy_debug_flag_is_set (EmpathyDebugFlags flag);
 void empathy_debug (EmpathyDebugFlags flag, const gchar *format, ...)
     G_GNUC_PRINTF (2, 3);
-
-#endif /* ENABLE_DEBUG */
-
 void empathy_debug_set_flags (const gchar *flags_string);
 G_END_DECLS
 

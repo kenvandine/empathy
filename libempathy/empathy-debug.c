@@ -89,6 +89,17 @@ empathy_debug (EmpathyDebugFlags flag,
 
 #else
 
+gboolean
+empathy_debug_flag_is_set (EmpathyDebugFlags flag)
+{
+  return FALSE;
+}
+
+void
+empathy_debug (EmpathyDebugFlags flag, const gchar *format, ...)
+{
+}
+
 void
 empathy_debug_set_flags (const gchar *flags_string)
 {
