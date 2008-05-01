@@ -418,6 +418,44 @@ call_window_update (EmpathyCallWindow *window)
       g_object_unref (contact);
 }
 
+static gboolean
+call_window_dtmf_button_release_event_cb (GtkWidget *widget,
+                                          GdkEventButton *event,
+                                          EmpathyCallWindow *window)
+{
+  empathy_tp_call_stop_tone (window->call);
+  return FALSE;
+}
+
+static gboolean
+call_window_dtmf_button_press_event_cb (GtkWidget *widget,
+                                        GdkEventButton *event,
+                                        EmpathyCallWindow *window)
+{
+  TpDTMFEvent dtmf_event;
+
+  dtmf_event = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (widget), "code"));
+  empathy_tp_call_start_tone (window->call, dtmf_event);
+  return FALSE;
+}
+
+static void
+call_window_dtmf_connect (GladeXML *glade,
+                          EmpathyCallWindow *window,
+                          const gchar *name,
+                          TpDTMFEvent event)
+{
+  GtkWidget *widget;
+
+  widget = glade_xml_get_widget (glade, name);
+  g_object_set_data (G_OBJECT (widget), "code", GUINT_TO_POINTER (event));
+  g_signal_connect (widget, "button-press-event",
+      G_CALLBACK (call_window_dtmf_button_press_event_cb), window);
+  g_signal_connect (widget, "button-release-event",
+      G_CALLBACK (call_window_dtmf_button_release_event_cb), window);
+  /* FIXME: Connect "key-[press/release]-event" to*/
+}
+
 GtkWidget *
 empathy_call_window_new (EmpathyTpCall *call)
 {
@@ -452,6 +490,20 @@ empathy_call_window_new (EmpathyTpCall *call)
       "hang_up_button", "clicked", call_window_hang_up_button_clicked_cb,
       "video_button", "toggled", call_window_video_button_toggled_cb,
       NULL);
+
+  /* Setup DTMF buttons */
+  call_window_dtmf_connect (glade, window, "button_0", TP_DTMF_EVENT_DIGIT_0);
+  call_window_dtmf_connect (glade, window, "button_1", TP_DTMF_EVENT_DIGIT_1);
+  call_window_dtmf_connect (glade, window, "button_2", TP_DTMF_EVENT_DIGIT_2);
+  call_window_dtmf_connect (glade, window, "button_3", TP_DTMF_EVENT_DIGIT_3);
+  call_window_dtmf_connect (glade, window, "button_4", TP_DTMF_EVENT_DIGIT_4);
+  call_window_dtmf_connect (glade, window, "button_5", TP_DTMF_EVENT_DIGIT_5);
+  call_window_dtmf_connect (glade, window, "button_6", TP_DTMF_EVENT_DIGIT_6);
+  call_window_dtmf_connect (glade, window, "button_7", TP_DTMF_EVENT_DIGIT_7);
+  call_window_dtmf_connect (glade, window, "button_8", TP_DTMF_EVENT_DIGIT_8);
+  call_window_dtmf_connect (glade, window, "button_9", TP_DTMF_EVENT_DIGIT_9);
+  call_window_dtmf_connect (glade, window, "button_asterisk", TP_DTMF_EVENT_ASTERISK);
+  call_window_dtmf_connect (glade, window, "button_hash", TP_DTMF_EVENT_HASH);
 
   g_object_unref (glade);
 

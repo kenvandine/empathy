@@ -83,6 +83,8 @@ void empathy_tp_call_add_output_video (EmpathyTpCall *call,
 void empathy_tp_call_set_output_volume (EmpathyTpCall *call, guint volume);
 void empathy_tp_call_mute_output (EmpathyTpCall *call, gboolean is_muted);
 void empathy_tp_call_mute_input (EmpathyTpCall *call, gboolean is_muted);
+void empathy_tp_call_start_tone (EmpathyTpCall *call, TpDTMFEvent event);
+void empathy_tp_call_stop_tone (EmpathyTpCall *call);
 
 G_END_DECLS
 

@@ -348,9 +348,7 @@ tp_call_async_cb (TpProxy *proxy,
                   GObject *call)
 {
   if (error)
-    {
       DEBUG ("Error %s: %s", (gchar*) user_data, error->message);
-    }
 }
 
 static void
@@ -811,5 +809,39 @@ empathy_tp_call_mute_input (EmpathyTpCall *call,
       tp_call_async_cb,
       "muting input", NULL,
       G_OBJECT (call));
+}
+
+void
+empathy_tp_call_start_tone (EmpathyTpCall *call, TpDTMFEvent event)
+{
+  EmpathyTpCallPriv *priv = GET_PRIV (call);
+
+  g_return_if_fail (EMPATHY_IS_TP_CALL (call));
+  g_return_if_fail (priv->status != EMPATHY_TP_CALL_STATUS_ACCEPTED);
+
+  if (!priv->audio->exists)
+      return;
+
+  tp_cli_channel_interface_dtmf_call_start_tone (priv->channel, -1,
+      priv->audio->id, event,
+      (tp_cli_channel_interface_dtmf_callback_for_start_tone) tp_call_async_cb,
+      "starting tone", NULL, G_OBJECT (call));
+}
+
+void
+empathy_tp_call_stop_tone (EmpathyTpCall *call)
+{
+  EmpathyTpCallPriv *priv = GET_PRIV (call);
+
+  g_return_if_fail (EMPATHY_IS_TP_CALL (call));
+  g_return_if_fail (priv->status != EMPATHY_TP_CALL_STATUS_ACCEPTED);
+
+  if (!priv->audio->exists)
+      return;
+
+  tp_cli_channel_interface_dtmf_call_stop_tone (priv->channel, -1,
+      priv->audio->id,
+      (tp_cli_channel_interface_dtmf_callback_for_stop_tone) tp_call_async_cb,
+      "stoping tone", NULL, G_OBJECT (call));
 }
 
