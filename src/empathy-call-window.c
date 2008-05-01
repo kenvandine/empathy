@@ -58,6 +58,7 @@ typedef struct
   GtkWidget *video_button;
   GtkWidget *hang_up_button;
   GtkWidget *confirmation_dialog;
+  GtkWidget *keypad_expander;
 } EmpathyCallWindow;
 
 static gboolean
@@ -140,6 +141,7 @@ call_window_finalize (EmpathyCallWindow *window)
   gtk_widget_set_sensitive (window->video_button, FALSE);
   gtk_widget_set_sensitive (window->output_volume_button, FALSE);
   gtk_widget_set_sensitive (window->input_volume_button, FALSE);
+  gtk_widget_set_sensitive (window->keypad_expander, FALSE);
 
   if (window->call)
     { 
@@ -365,6 +367,7 @@ call_window_update (EmpathyCallWindow *window)
       gtk_widget_set_sensitive (window->output_volume_button, FALSE);
       gtk_widget_set_sensitive (window->input_volume_button, FALSE);
       gtk_widget_set_sensitive (window->hang_up_button, FALSE);
+      gtk_widget_set_sensitive (window->keypad_expander, FALSE);
     }
   else if (window->status == EMPATHY_TP_CALL_STATUS_PENDING)
     {
@@ -410,6 +413,7 @@ call_window_update (EmpathyCallWindow *window)
       gtk_widget_set_sensitive (window->output_volume_button, TRUE);
       gtk_widget_set_sensitive (window->input_volume_button, TRUE);
       gtk_widget_set_sensitive (window->hang_up_button, TRUE);
+      gtk_widget_set_sensitive (window->keypad_expander, TRUE);
     }
   else if (window->status == EMPATHY_TP_CALL_STATUS_CLOSED)
       call_window_finalize (window);
@@ -480,6 +484,7 @@ empathy_call_window_new (EmpathyTpCall *call)
       "status_label", &window->status_label,
       "video_button", &window->video_button,
       "hang_up_button", &window->hang_up_button,
+      "keypad_expander", &window->keypad_expander,
       NULL);
   g_free (filename);
 

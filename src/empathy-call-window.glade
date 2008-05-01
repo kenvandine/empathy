@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.2 on Thu May  1 22:33:28 2008 -->
+<!--Generated with glade3 3.4.2 on Thu May  1 23:37:49 2008 -->
 <glade-interface>
   <widget class="GtkWindow" id="window">
     <child>
@@ -62,118 +62,64 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkExpander" id="expander1">
+              <widget class="GtkExpander" id="keypad_expander">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <child>
-                  <widget class="GtkTable" id="table2">
+                  <widget class="GtkTable" id="keypad_table">
                     <property name="visible">True</property>
                     <property name="n_rows">4</property>
                     <property name="n_columns">3</property>
                     <property name="homogeneous">True</property>
                     <child>
-                      <widget class="GtkButton" id="button_hash">
+                      <widget class="GtkButton" id="button_1">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="label" translatable="yes">#</property>
+                        <property name="label" translatable="yes">1</property>
                         <property name="use_underline">True</property>
                         <property name="response_id">0</property>
                       </widget>
                       <packing>
-                        <property name="left_attach">2</property>
-                        <property name="right_attach">3</property>
-                        <property name="top_attach">3</property>
-                        <property name="bottom_attach">4</property>
                         <property name="y_options"></property>
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkButton" id="button_0">
+                      <widget class="GtkButton" id="button_2">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="label" translatable="yes">0</property>
+                        <property name="label" translatable="yes">2</property>
                         <property name="use_underline">True</property>
                         <property name="response_id">0</property>
                       </widget>
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="right_attach">2</property>
-                        <property name="top_attach">3</property>
-                        <property name="bottom_attach">4</property>
                         <property name="y_options"></property>
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkButton" id="button_asterisk">
+                      <widget class="GtkButton" id="button_3">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="label" translatable="yes">*</property>
-                        <property name="use_underline">True</property>
-                        <property name="response_id">0</property>
-                      </widget>
-                      <packing>
-                        <property name="top_attach">3</property>
-                        <property name="bottom_attach">4</property>
-                        <property name="y_options"></property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="GtkButton" id="button_9">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="label" translatable="yes">9</property>
+                        <property name="label" translatable="yes">3</property>
                         <property name="use_underline">True</property>
                         <property name="response_id">0</property>
                       </widget>
                       <packing>
                         <property name="left_attach">2</property>
                         <property name="right_attach">3</property>
-                        <property name="top_attach">2</property>
-                        <property name="bottom_attach">3</property>
                         <property name="y_options"></property>
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkButton" id="button_8">
+                      <widget class="GtkButton" id="button_4">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="label" translatable="yes">8</property>
+                        <property name="label" translatable="yes">4</property>
                         <property name="use_underline">True</property>
                         <property name="response_id">0</property>
                       </widget>
                       <packing>
-                        <property name="left_attach">1</property>
-                        <property name="right_attach">2</property>
-                        <property name="top_attach">2</property>
-                        <property name="bottom_attach">3</property>
-                        <property name="y_options"></property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="GtkButton" id="button_7">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="label" translatable="yes">7</property>
-                        <property name="use_underline">True</property>
-                        <property name="response_id">0</property>
-                      </widget>
-                      <packing>
-                        <property name="top_attach">2</property>
-                        <property name="bottom_attach">3</property>
-                        <property name="y_options"></property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="GtkButton" id="button_6">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="label" translatable="yes">6</property>
-                        <property name="use_underline">True</property>
-                        <property name="response_id">0</property>
-                      </widget>
-                      <packing>
-                        <property name="left_attach">2</property>
-                        <property name="right_attach">3</property>
                         <property name="top_attach">1</property>
                         <property name="bottom_attach">2</property>
                         <property name="y_options"></property>
@@ -196,56 +142,110 @@
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkButton" id="button_4">
+                      <widget class="GtkButton" id="button_6">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="label" translatable="yes">4</property>
-                        <property name="use_underline">True</property>
-                        <property name="response_id">0</property>
-                      </widget>
-                      <packing>
-                        <property name="top_attach">1</property>
-                        <property name="bottom_attach">2</property>
-                        <property name="y_options"></property>
-                      </packing>
-                    </child>
-                    <child>
-                      <widget class="GtkButton" id="button_3">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="label" translatable="yes">3</property>
+                        <property name="label" translatable="yes">6</property>
                         <property name="use_underline">True</property>
                         <property name="response_id">0</property>
                       </widget>
                       <packing>
                         <property name="left_attach">2</property>
                         <property name="right_attach">3</property>
+                        <property name="top_attach">1</property>
+                        <property name="bottom_attach">2</property>
                         <property name="y_options"></property>
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkButton" id="button_2">
+                      <widget class="GtkButton" id="button_7">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="label" translatable="yes">2</property>
+                        <property name="label" translatable="yes">7</property>
+                        <property name="use_underline">True</property>
+                        <property name="response_id">0</property>
+                      </widget>
+                      <packing>
+                        <property name="top_attach">2</property>
+                        <property name="bottom_attach">3</property>
+                        <property name="y_options"></property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkButton" id="button_8">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="label" translatable="yes">8</property>
                         <property name="use_underline">True</property>
                         <property name="response_id">0</property>
                       </widget>
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="right_attach">2</property>
+                        <property name="top_attach">2</property>
+                        <property name="bottom_attach">3</property>
                         <property name="y_options"></property>
                       </packing>
                     </child>
                     <child>
-                      <widget class="GtkButton" id="button_1">
+                      <widget class="GtkButton" id="button_9">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="label" translatable="yes">1</property>
+                        <property name="label" translatable="yes">9</property>
                         <property name="use_underline">True</property>
                         <property name="response_id">0</property>
                       </widget>
                       <packing>
+                        <property name="left_attach">2</property>
+                        <property name="right_attach">3</property>
+                        <property name="top_attach">2</property>
+                        <property name="bottom_attach">3</property>
+                        <property name="y_options"></property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkButton" id="button_asterisk">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="label" translatable="yes">*</property>
+                        <property name="use_underline">True</property>
+                        <property name="response_id">0</property>
+                      </widget>
+                      <packing>
+                        <property name="top_attach">3</property>
+                        <property name="bottom_attach">4</property>
+                        <property name="y_options"></property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkButton" id="button_0">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="label" translatable="yes">0</property>
+                        <property name="use_underline">True</property>
+                        <property name="response_id">0</property>
+                      </widget>
+                      <packing>
+                        <property name="left_attach">1</property>
+                        <property name="right_attach">2</property>
+                        <property name="top_attach">3</property>
+                        <property name="bottom_attach">4</property>
+                        <property name="y_options"></property>
+                      </packing>
+                    </child>
+                    <child>
+                      <widget class="GtkButton" id="button_hash">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="label" translatable="yes">#</property>
+                        <property name="use_underline">True</property>
+                        <property name="response_id">0</property>
+                      </widget>
+                      <packing>
+                        <property name="left_attach">2</property>
+                        <property name="right_attach">3</property>
+                        <property name="top_attach">3</property>
+                        <property name="bottom_attach">4</property>
                         <property name="y_options"></property>
                       </packing>
                     </child>

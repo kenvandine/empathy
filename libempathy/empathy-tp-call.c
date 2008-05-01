@@ -817,7 +817,7 @@ empathy_tp_call_start_tone (EmpathyTpCall *call, TpDTMFEvent event)
   EmpathyTpCallPriv *priv = GET_PRIV (call);
 
   g_return_if_fail (EMPATHY_IS_TP_CALL (call));
-  g_return_if_fail (priv->status != EMPATHY_TP_CALL_STATUS_ACCEPTED);
+  g_return_if_fail (priv->status == EMPATHY_TP_CALL_STATUS_ACCEPTED);
 
   if (!priv->audio->exists)
       return;
@@ -834,7 +834,7 @@ empathy_tp_call_stop_tone (EmpathyTpCall *call)
   EmpathyTpCallPriv *priv = GET_PRIV (call);
 
   g_return_if_fail (EMPATHY_IS_TP_CALL (call));
-  g_return_if_fail (priv->status != EMPATHY_TP_CALL_STATUS_ACCEPTED);
+  g_return_if_fail (priv->status == EMPATHY_TP_CALL_STATUS_ACCEPTED);
 
   if (!priv->audio->exists)
       return;
