@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: empathy\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2007-10-18 03:41+0100\n"
-"PO-Revision-Date: 2008-05-01 15:30+0100\n"
+"PO-Revision-Date: 2008-05-02 11:28+0100\n"
 "Last-Translator: Matej Urbančič <mateju@svn.gnome.org>\n"
 "Language-Team: Slovenian GNOME Translation Team <gnome-si@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -594,7 +594,7 @@ msgstr "%s je zapustil klepetalnico"
 
 #: ../libempathy-gtk/empathy-chat.c:1248
 #: ../src/empathy.c:70
-#: ../src/empathy-call-window.c:386
+#: ../src/empathy-call-window.c:389
 msgid "Disconnected"
 msgstr "Povezava prekinjena"
 
@@ -1196,69 +1196,121 @@ msgstr "Empathy odjemalec trenutnega sporočanja za GNOME"
 msgid "translator-credits"
 msgstr "Matej Urbančič"
 
-#: ../src/empathy-call-window.c:138
+#: ../src/empathy-call-window.c:139
 msgid "Closed"
 msgstr "Zaprto"
 
-#: ../src/empathy-call-window.c:249
+#: ../src/empathy-call-window.c:251
 msgid "End this call?"
 msgstr "Ali je klic končan?"
 
-#: ../src/empathy-call-window.c:251
+#: ../src/empathy-call-window.c:253
 msgid "Closing this window will end the call in progress."
 msgstr "Z zaprtjem tega okna prekinete trenutno dejavni klic."
 
-#: ../src/empathy-call-window.c:252
+#: ../src/empathy-call-window.c:254
 msgid "_End Call"
 msgstr "_Končaj klic"
 
-#: ../src/empathy-call-window.c:303
+#: ../src/empathy-call-window.c:305
 msgid "Incoming call"
 msgstr "Dohodni klic"
 
-#: ../src/empathy-call-window.c:305
+#: ../src/empathy-call-window.c:307
 #, c-format
 msgid "%s is calling you, do you want to answer?"
 msgstr "%s vas kliče. Ali se želite javiti?"
 
-#: ../src/empathy-call-window.c:311
+#: ../src/empathy-call-window.c:313
 msgid "_Reject"
 msgstr "_Zavrni"
 
-#: ../src/empathy-call-window.c:316
+#: ../src/empathy-call-window.c:318
 msgid "_Answer"
 msgstr "_Odgovori"
 
-#: ../src/empathy-call-window.c:362
+#: ../src/empathy-call-window.c:364
 msgid "Empathy Call"
 msgstr "Empathy klicanje"
 
-#: ../src/empathy-call-window.c:363
+#: ../src/empathy-call-window.c:365
 msgid "Readying"
 msgstr "Pripravljanje"
 
-#: ../src/empathy-call-window.c:371
+#: ../src/empathy-call-window.c:374
 #, c-format
 msgid "%s - Empathy Call"
 msgstr "%s - Empathy klicanje"
 
-#: ../src/empathy-call-window.c:375
+#: ../src/empathy-call-window.c:378
 msgid "Ringing"
 msgstr "Zvonjenje"
 
-#: ../src/empathy-call-window.c:388
+#: ../src/empathy-call-window.c:391
 msgid "Connecting"
 msgstr "Povezovanje"
 
 #: ../src/empathy-call-window.glade.h:1
+msgid "#"
+msgstr "#"
+
+#: ../src/empathy-call-window.glade.h:2
+msgid "*"
+msgstr "*"
+
+#: ../src/empathy-call-window.glade.h:3
+msgid "0"
+msgstr "0"
+
+#: ../src/empathy-call-window.glade.h:4
+msgid "1"
+msgstr "1"
+
+#: ../src/empathy-call-window.glade.h:5
+msgid "2"
+msgstr "2"
+
+#: ../src/empathy-call-window.glade.h:6
+msgid "3"
+msgstr "3"
+
+#: ../src/empathy-call-window.glade.h:7
+msgid "4"
+msgstr "4"
+
+#: ../src/empathy-call-window.glade.h:8
+msgid "5"
+msgstr "5"
+
+#: ../src/empathy-call-window.glade.h:9
+msgid "6"
+msgstr "6"
+
+#: ../src/empathy-call-window.glade.h:10
+msgid "7"
+msgstr "7"
+
+#: ../src/empathy-call-window.glade.h:11
+msgid "8"
+msgstr "8"
+
+#: ../src/empathy-call-window.glade.h:12
+msgid "9"
+msgstr "9"
+
+#: ../src/empathy-call-window.glade.h:13
+msgid "<b>Keypad</b>"
+msgstr "<b>Tipkovnica</b>"
+
+#: ../src/empathy-call-window.glade.h:14
 msgid "<b>Volume</b>"
 msgstr "<b>Glasnost</b>"
 
-#: ../src/empathy-call-window.glade.h:2
+#: ../src/empathy-call-window.glade.h:15
 msgid "Hang Up"
 msgstr "Odloži"
 
-#: ../src/empathy-call-window.glade.h:3
+#: ../src/empathy-call-window.glade.h:16
 msgid "Send Video"
 msgstr "Pošlji posnetek"
 
