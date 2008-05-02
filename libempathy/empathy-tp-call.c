@@ -267,15 +267,6 @@ tp_call_request_streams_for_capabilities (EmpathyTpCall *call,
 }
 
 static void
-tp_call_request_streams (EmpathyTpCall *call)
-{
-  EmpathyTpCallPriv *priv = GET_PRIV (call);
-
-  tp_call_request_streams_for_capabilities (call,
-      empathy_contact_get_capabilities (priv->contact));
-}
-
-static void
 tp_call_member_added_cb (EmpathyTpGroup *group,
                          EmpathyContact *contact,
                          EmpathyContact *actor,
@@ -290,10 +281,11 @@ tp_call_member_added_cb (EmpathyTpGroup *group,
       priv->contact = g_object_ref (contact);
       priv->is_incoming = TRUE;
       priv->status = EMPATHY_TP_CALL_STATUS_PENDING;
-      tp_call_request_streams (call);
       g_object_notify (G_OBJECT (call), "is-incoming");
       g_object_notify (G_OBJECT (call), "contact"); 
       g_object_notify (G_OBJECT (call), "status");	
+      tp_call_request_streams_for_capabilities (call,
+          EMPATHY_CAPABILITIES_AUDIO);
     }
 
   if (priv->status == EMPATHY_TP_CALL_STATUS_PENDING &&
@@ -320,10 +312,11 @@ tp_call_remote_pending_cb (EmpathyTpGroup *group,
       priv->contact = g_object_ref (contact);
       priv->is_incoming = FALSE;
       priv->status = EMPATHY_TP_CALL_STATUS_PENDING;
-      tp_call_request_streams (call);
       g_object_notify (G_OBJECT (call), "is-incoming");
       g_object_notify (G_OBJECT (call), "contact"); 
       g_object_notify (G_OBJECT (call), "status");	
+      tp_call_request_streams_for_capabilities (call,
+          EMPATHY_CAPABILITIES_AUDIO);
     }
 }
 
