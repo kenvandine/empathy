@@ -707,21 +707,15 @@ chat_window_delete_event_cb (GtkWidget        *dialog,
 			     GdkEvent         *event,
 			     EmpathyChatWindow *window)
 {
-	EmpathyChatWindowPriv *priv;
-	GList                *list;
-	GList                *l;
-
-	priv = GET_PRIV (window);
+	EmpathyChatWindowPriv *priv = GET_PRIV (window);
 
 	DEBUG ("Delete event received");
 
-	list = g_list_copy (priv->chats);
-
-	for (l = list; l; l = l->next) {
-		empathy_chat_window_remove_chat (window, l->data);
+	g_object_ref (window);
+	while (priv->chats) {
+		empathy_chat_window_remove_chat (window, priv->chats->data);
 	}
-
-	g_list_free (list);
+	g_object_unref (window);
 
 	return TRUE;
 }
