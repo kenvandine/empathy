@@ -32,12 +32,8 @@
 #define DEBUG_FLAG EMPATHY_DEBUG_TP
 #include "empathy-debug.h"
 
-#define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), EMPATHY_TYPE_TP_TUBE, \
-    EmpathyTpTubePriv))
-
-typedef struct _EmpathyTpTubePriv EmpathyTpTubePriv;
-
-struct _EmpathyTpTubePriv
+#define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyTpTube)
+typedef struct
 {
   TpChannel *channel;
   guint id;
@@ -48,7 +44,7 @@ struct _EmpathyTpTubePriv
   guint state;
   EmpathyContact *initiator_contact;
   EmpathyContactFactory *factory;
-};
+} EmpathyTpTubePriv;
 
 enum
 {
@@ -350,7 +346,10 @@ empathy_tp_tube_class_init (EmpathyTpTubeClass *klass)
 static void
 empathy_tp_tube_init (EmpathyTpTube *tube)
 {
-  EmpathyTpTubePriv *priv = GET_PRIV (tube);
+  EmpathyTpTubePriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (tube,
+		EMPATHY_TYPE_TP_TUBE, EmpathyTpTubePriv);
+
+  tube->priv = priv;
 
   priv->factory = empathy_contact_factory_new ();
 }

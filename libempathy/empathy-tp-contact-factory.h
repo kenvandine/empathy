@@ -39,10 +39,10 @@ G_BEGIN_DECLS
 
 typedef struct _EmpathyTpContactFactory      EmpathyTpContactFactory;
 typedef struct _EmpathyTpContactFactoryClass EmpathyTpContactFactoryClass;
-typedef struct _EmpathyTpContactFactoryPriv  EmpathyTpContactFactoryPriv;
 
 struct _EmpathyTpContactFactory {
 	GObject parent;
+	gpointer priv;
 };
 
 struct _EmpathyTpContactFactoryClass {

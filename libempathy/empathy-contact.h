@@ -47,6 +47,7 @@ typedef struct _EmpathyContactClass EmpathyContactClass;
 
 struct _EmpathyContact {
 	GObject parent;
+	gpointer priv;
 };
 
 struct _EmpathyContactClass {

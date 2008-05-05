@@ -58,8 +58,7 @@
  * (e.g. online, offline or from normal to a busy state).
  */
 
-#define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), EMPATHY_TYPE_CONTACT_LIST_VIEW, EmpathyContactListViewPriv))
-
+#define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyContactListView)
 typedef struct {
 	EmpathyContactListStore        *store;
 	GtkTreeRowReference            *drag_row;
@@ -1014,6 +1013,10 @@ empathy_contact_list_view_class_init (EmpathyContactListViewClass *klass)
 static void
 empathy_contact_list_view_init (EmpathyContactListView *view)
 {
+	EmpathyContactListViewPriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (view,
+		EMPATHY_TYPE_CONTACT_LIST_VIEW, EmpathyContactListViewPriv);
+
+	view->priv = priv;
 	/* Get saved group states. */
 	empathy_contact_groups_get_all ();
 

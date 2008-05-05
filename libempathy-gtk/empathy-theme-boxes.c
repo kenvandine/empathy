@@ -25,6 +25,7 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
+#include <libempathy/empathy-utils.h>
 #include "empathy-ui-utils.h"
 #include "empathy-theme-boxes.h"
 
@@ -34,11 +35,8 @@
 #define MARGIN 4
 #define HEADER_PADDING 2
 
-#define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), EMPATHY_TYPE_THEME_BOXES, EmpathyThemeBoxesPriv))
-
-typedef struct _EmpathyThemeBoxesPriv EmpathyThemeBoxesPriv;
-
-struct _EmpathyThemeBoxesPriv {
+#define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyThemeBoxes)
+typedef struct {
 	gchar *header_foreground;
 	gchar *header_background;
 	gchar *header_line_background;
@@ -50,7 +48,7 @@ struct _EmpathyThemeBoxesPriv {
 	gchar *event_foreground;
 	gchar *invite_foreground;
 	gchar *link_foreground;
-};
+} EmpathyThemeBoxesPriv;
 
 static void     theme_boxes_finalize          (GObject            *object);
 static void     theme_boxes_get_property      (GObject            *object,
@@ -215,9 +213,10 @@ empathy_theme_boxes_class_init (EmpathyThemeBoxesClass *class)
 static void
 empathy_theme_boxes_init (EmpathyThemeBoxes *theme)
 {
-	EmpathyThemeBoxesPriv *priv;
+	EmpathyThemeBoxesPriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (theme,
+		EMPATHY_TYPE_THEME_BOXES, EmpathyThemeBoxesPriv);
 
-	priv = GET_PRIV (theme);
+	theme->priv = priv;
 }
 
 static void
@@ -672,7 +671,7 @@ theme_boxes_append_message (EmpathyTheme        *theme,
 
 	sender = empathy_message_get_sender (message);
 
-	if (empathy_message_get_type (message) == EMPATHY_MESSAGE_TYPE_ACTION) {
+	if (empathy_message_get_tptype (message) == TP_CHANNEL_TEXT_MESSAGE_TYPE_ACTION) {
 		gchar *body;
 
 		body = g_strdup_printf (" * %s %s", 

@@ -51,18 +51,15 @@
 #define DEBUG_FLAG EMPATHY_DEBUG_OTHER
 #include <libempathy/empathy-debug.h>
 
-#define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), MEGAPHONE_TYPE_APPLET, MegaphoneAppletPriv))
-
-typedef struct _MegaphoneAppletPriv MegaphoneAppletPriv;
-
-struct _MegaphoneAppletPriv {
+#define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, MegaphoneApplet)
+typedef struct {
 	EmpathyContactFactory *factory;
 	GtkWidget             *image;
 	gint                   image_size;
 	EmpathyContact        *contact;
 	GConfClient           *gconf;
 	guint                  gconf_cnxn;
-};
+} MegaphoneAppletPriv;
 
 static void megaphone_applet_finalize                  (GObject            *object);
 static void megaphone_applet_size_allocate_cb          (GtkWidget          *widget,
@@ -111,8 +108,10 @@ megaphone_applet_class_init (MegaphoneAppletClass *class)
 static void
 megaphone_applet_init (MegaphoneApplet *applet)
 {
-	MegaphoneAppletPriv *priv = GET_PRIV (applet);
+	MegaphoneAppletPriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (applet,
+		MEGAPHONE_TYPE_APPLET, MegaphoneAppletPriv);
 
+	applet->priv = priv;
 	priv->factory = empathy_contact_factory_new ();
 	priv->gconf = gconf_client_get_default ();
 

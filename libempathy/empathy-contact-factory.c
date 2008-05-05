@@ -24,15 +24,10 @@
 #include "empathy-contact-factory.h"
 #include "empathy-utils.h"
 
-#define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), \
-		       EMPATHY_TYPE_CONTACT_FACTORY, EmpathyContactFactoryPriv))
-
-struct _EmpathyContactFactoryPriv {
+#define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyContactFactory)
+typedef struct {
 	GHashTable *accounts;
-};
-
-static void empathy_contact_factory_class_init (EmpathyContactFactoryClass *klass);
-static void empathy_contact_factory_init       (EmpathyContactFactory      *factory);
+} EmpathyContactFactoryPriv;
 
 G_DEFINE_TYPE (EmpathyContactFactory, empathy_contact_factory, G_TYPE_OBJECT);
 
@@ -153,8 +148,10 @@ empathy_contact_factory_class_init (EmpathyContactFactoryClass *klass)
 static void
 empathy_contact_factory_init (EmpathyContactFactory *factory)
 {
-	EmpathyContactFactoryPriv *priv = GET_PRIV (factory);
+	EmpathyContactFactoryPriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (factory,
+		EMPATHY_TYPE_CONTACT_FACTORY, EmpathyContactFactoryPriv);
 
+	factory->priv = priv;
 	priv->accounts = g_hash_table_new_full (empathy_account_hash,
 						empathy_account_equal,
 						g_object_unref,

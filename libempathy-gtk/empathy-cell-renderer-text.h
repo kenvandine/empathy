@@ -36,12 +36,10 @@ G_BEGIN_DECLS
 
 typedef struct _EmpathyCellRendererText      EmpathyCellRendererText;
 typedef struct _EmpathyCellRendererTextClass EmpathyCellRendererTextClass;
-typedef struct _EmpathyCellRendererTextPriv  EmpathyCellRendererTextPriv;
 
 struct _EmpathyCellRendererText {
-	GtkCellRendererText         parent;
-
-	EmpathyCellRendererTextPriv *priv;
+	GtkCellRendererText parent;
+	gpointer priv;
 };
 
 struct _EmpathyCellRendererTextClass {

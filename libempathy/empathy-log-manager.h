@@ -41,11 +41,11 @@ G_BEGIN_DECLS
 
 typedef struct _EmpathyLogManager      EmpathyLogManager;
 typedef struct _EmpathyLogManagerClass EmpathyLogManagerClass;
-typedef struct _EmpathyLogManagerPriv  EmpathyLogManagerPriv;
 typedef struct _EmpathyLogSearchHit    EmpathyLogSearchHit;
 
 struct _EmpathyLogManager {
 	GObject parent;
+	gpointer priv;
 };
 
 struct _EmpathyLogManagerClass {

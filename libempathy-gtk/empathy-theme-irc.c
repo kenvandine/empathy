@@ -22,17 +22,15 @@
 
 #include <glib/gi18n.h>
 
+#include <libempathy/empathy-utils.h>
 #include "empathy-chat.h"
 #include "empathy-ui-utils.h"
 #include "empathy-theme-irc.h"
 
-#define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), EMPATHY_TYPE_THEME_IRC, EmpathyThemeIrcPriv))
-
-typedef struct _EmpathyThemeIrcPriv EmpathyThemeIrcPriv;
-
-struct _EmpathyThemeIrcPriv {
+#define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyThemeIrc)
+typedef struct {
 	gint my_prop;
-};
+} EmpathyThemeIrcPriv;
 
 static void         theme_irc_finalize         (GObject             *object);
 static void         theme_irc_update_view      (EmpathyTheme         *theme,
@@ -80,11 +78,12 @@ empathy_theme_irc_class_init (EmpathyThemeIrcClass *class)
 }
 
 static void
-empathy_theme_irc_init (EmpathyThemeIrc *presence)
+empathy_theme_irc_init (EmpathyThemeIrc *theme)
 {
-	EmpathyThemeIrcPriv *priv;
+	EmpathyThemeIrcPriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (theme,
+		EMPATHY_TYPE_THEME_IRC, EmpathyThemeIrcPriv);
 
-	priv = GET_PRIV (presence);
+	theme->priv = priv;
 }
 
 static void
@@ -192,7 +191,7 @@ theme_irc_append_message (EmpathyTheme        *theme,
 	contact = empathy_message_get_sender (message);
 	name = empathy_contact_get_name (contact);
 
-	if (empathy_message_get_type (message) == EMPATHY_MESSAGE_TYPE_ACTION) {
+	if (empathy_message_get_tptype (message) == TP_CHANNEL_TEXT_MESSAGE_TYPE_ACTION) {
 		if (empathy_contact_is_user (contact)) {
 			body_tag = "irc-action-self";
 		} else {

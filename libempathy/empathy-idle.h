@@ -37,10 +37,10 @@ G_BEGIN_DECLS
 
 typedef struct _EmpathyIdle      EmpathyIdle;
 typedef struct _EmpathyIdleClass EmpathyIdleClass;
-typedef struct _EmpathyIdlePriv  EmpathyIdlePriv;
 
 struct _EmpathyIdle {
 	GObject parent;
+	gpointer priv;
 };
 
 struct _EmpathyIdleClass {

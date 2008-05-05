@@ -38,10 +38,10 @@ G_BEGIN_DECLS
 
 typedef struct _EmpathyTpContactList      EmpathyTpContactList;
 typedef struct _EmpathyTpContactListClass EmpathyTpContactListClass;
-typedef struct _EmpathyTpContactListPriv  EmpathyTpContactListPriv;
 
 struct _EmpathyTpContactList {
-	GObject      parent;
+	GObject parent;
+	gpointer priv;
 };
 
 struct _EmpathyTpContactListClass {

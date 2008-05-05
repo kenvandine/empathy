@@ -35,10 +35,10 @@ G_BEGIN_DECLS
 
 typedef struct _EmpathyStatusIcon      EmpathyStatusIcon;
 typedef struct _EmpathyStatusIconClass EmpathyStatusIconClass;
-typedef struct _EmpathyStatusIconPriv  EmpathyStatusIconPriv;
 
 struct _EmpathyStatusIcon {
-	GObject      parent;
+	GObject parent;
+	gpointer priv;
 };
 
 struct _EmpathyStatusIconClass {

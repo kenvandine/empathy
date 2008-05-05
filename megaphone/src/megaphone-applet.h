@@ -40,6 +40,7 @@ typedef struct _MegaphoneAppletClass MegaphoneAppletClass;
 
 struct _MegaphoneApplet {
 	PanelApplet applet;
+	gpointer priv;
 };
 
 struct _MegaphoneAppletClass {

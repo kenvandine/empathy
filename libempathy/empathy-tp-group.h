@@ -40,10 +40,10 @@ G_BEGIN_DECLS
 
 typedef struct _EmpathyTpGroup      EmpathyTpGroup;
 typedef struct _EmpathyTpGroupClass EmpathyTpGroupClass;
-typedef struct _EmpathyTpGroupPriv  EmpathyTpGroupPriv;
 
 struct _EmpathyTpGroup {
-	GObject      parent;
+	GObject parent;
+	gpointer priv;
 };
 
 struct _EmpathyTpGroupClass {

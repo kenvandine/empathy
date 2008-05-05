@@ -61,9 +61,8 @@
 #define MAX_SCROLL_TIME 0.4 /* seconds */
 #define SCROLL_DELAY 33     /* milliseconds */
 
-#define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), EMPATHY_TYPE_CHAT_VIEW, EmpathyChatViewPriv))
-
-struct _EmpathyChatViewPriv {
+#define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyChatView)
+typedef struct {
 	GtkTextBuffer *buffer;
 
 	EmpathyTheme   *theme;
@@ -86,10 +85,8 @@ struct _EmpathyChatViewPriv {
 
 	guint          notify_system_fonts_id;
 	guint          notify_show_avatars_id;
-};
+} EmpathyChatViewPriv;
 
-static void     empathy_chat_view_class_init          (EmpathyChatViewClass      *klass);
-static void     empathy_chat_view_init                (EmpathyChatView           *view);
 static void     chat_view_finalize                   (GObject                  *object);
 static gboolean chat_view_drag_motion                (GtkWidget                *widget,
 						      GdkDragContext           *context,
@@ -148,11 +145,11 @@ empathy_chat_view_class_init (EmpathyChatViewClass *klass)
 static void
 empathy_chat_view_init (EmpathyChatView *view)
 {
-	EmpathyChatViewPriv *priv;
-	gboolean            show_avatars;
+	gboolean             show_avatars;
+	EmpathyChatViewPriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (view,
+		EMPATHY_TYPE_CHAT_VIEW, EmpathyChatViewPriv);
 
-	priv = GET_PRIV (view);
-
+	view->priv = priv;
 	priv->buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
 	priv->last_timestamp = 0;
 	priv->allow_scrolling = TRUE;

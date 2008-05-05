@@ -30,9 +30,8 @@ typedef struct _EmpathyIrcServerClass EmpathyIrcServerClass;
 
 struct _EmpathyIrcServer
 {
-    GObject parent;
-
-    gpointer priv;
+  GObject parent;
+  gpointer priv;
 };
 
 struct _EmpathyIrcServerClass

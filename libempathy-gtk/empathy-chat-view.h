@@ -41,12 +41,12 @@ G_BEGIN_DECLS
 
 typedef struct _EmpathyChatView      EmpathyChatView;
 typedef struct _EmpathyChatViewClass EmpathyChatViewClass;
-typedef struct _EmpathyChatViewPriv  EmpathyChatViewPriv;
 
 #include "empathy-theme.h"
 
 struct _EmpathyChatView {
 	GtkTextView parent;
+	gpointer priv;
 };
 
 struct _EmpathyChatViewClass {

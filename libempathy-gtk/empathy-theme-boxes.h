@@ -39,6 +39,7 @@ typedef struct _EmpathyThemeBoxesClass EmpathyThemeBoxesClass;
 
 struct _EmpathyThemeBoxes {
 	EmpathyTheme parent;
+	gpointer priv;
 };
 
 struct _EmpathyThemeBoxesClass {

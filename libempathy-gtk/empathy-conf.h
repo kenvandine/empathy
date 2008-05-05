@@ -37,6 +37,7 @@ typedef struct _EmpathyConfClass EmpathyConfClass;
 
 struct _EmpathyConf  {
 	GObject parent;
+	gpointer priv;
 };
 
 struct _EmpathyConfClass {

@@ -28,8 +28,15 @@
 
 #include "empathy-marshal.h"
 #include "empathy-irc-server.h"
+#include "empathy-utils.h"
 
-G_DEFINE_TYPE (EmpathyIrcServer, empathy_irc_server, G_TYPE_OBJECT);
+#define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyIrcServer)
+typedef struct
+{
+  gchar *address;
+  gint port;
+  gboolean ssl;
+} EmpathyIrcServerPriv;
 
 /* properties */
 enum
@@ -49,17 +56,7 @@ enum
 
 static guint signals[LAST_SIGNAL] = {0};
 
-typedef struct _EmpathyIrcServerPrivate EmpathyIrcServerPrivate;
-
-struct _EmpathyIrcServerPrivate
-{
-  gchar *address;
-  gint port;
-  gboolean ssl;
-};
-
-#define EMPATHY_IRC_SERVER_GET_PRIVATE(obj)\
-    ((EmpathyIrcServerPrivate *) obj->priv)
+G_DEFINE_TYPE (EmpathyIrcServer, empathy_irc_server, G_TYPE_OBJECT);
 
 static void
 empathy_irc_server_get_property (GObject *object,
@@ -68,7 +65,7 @@ empathy_irc_server_get_property (GObject *object,
                                  GParamSpec *pspec)
 {
   EmpathyIrcServer *self = EMPATHY_IRC_SERVER (object);
-  EmpathyIrcServerPrivate *priv = EMPATHY_IRC_SERVER_GET_PRIVATE (self);
+  EmpathyIrcServerPriv *priv = GET_PRIV (self);
 
   switch (property_id)
     {
@@ -94,7 +91,7 @@ empathy_irc_server_set_property (GObject *object,
                                  GParamSpec *pspec)
 {
   EmpathyIrcServer *self = EMPATHY_IRC_SERVER (object);
-  EmpathyIrcServerPrivate *priv = EMPATHY_IRC_SERVER_GET_PRIVATE (self);
+  EmpathyIrcServerPriv *priv = GET_PRIV (self);
 
   switch (property_id)
     {
@@ -130,7 +127,7 @@ static void
 empathy_irc_server_finalize (GObject *object)
 {
   EmpathyIrcServer *self = EMPATHY_IRC_SERVER (object);
-  EmpathyIrcServerPrivate *priv = EMPATHY_IRC_SERVER_GET_PRIVATE (self);
+  EmpathyIrcServerPriv *priv = GET_PRIV (self);
 
   g_free (priv->address);
 
@@ -140,8 +137,8 @@ empathy_irc_server_finalize (GObject *object)
 static void
 empathy_irc_server_init (EmpathyIrcServer *self)
 {
-  EmpathyIrcServerPrivate *priv = G_TYPE_INSTANCE_GET_PRIVATE (self,
-      EMPATHY_TYPE_IRC_SERVER, EmpathyIrcServerPrivate);
+  EmpathyIrcServerPriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (self,
+      EMPATHY_TYPE_IRC_SERVER, EmpathyIrcServerPriv);
 
   self->priv = priv;
 }
@@ -155,8 +152,7 @@ empathy_irc_server_class_init (EmpathyIrcServerClass *klass)
   object_class->get_property = empathy_irc_server_get_property;
   object_class->set_property = empathy_irc_server_set_property;
 
-  g_type_class_add_private (object_class,
-          sizeof (EmpathyIrcServerPrivate));
+  g_type_class_add_private (object_class, sizeof (EmpathyIrcServerPriv));
 
   object_class->finalize = empathy_irc_server_finalize;
 

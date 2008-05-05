@@ -34,14 +34,11 @@
 /* Number of seconds between timestamps when using normal mode, 5 minutes. */
 #define TIMESTAMP_INTERVAL 300
 
-#define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), EMPATHY_TYPE_THEME, EmpathyThemePriv))
-
-typedef struct _EmpathyThemePriv EmpathyThemePriv;
-
-struct _EmpathyThemePriv {
+#define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyTheme)
+typedef struct {
 	EmpathySmileyManager *smiley_manager;
 	gboolean show_avatars;
-};
+} EmpathyThemePriv;
 
 static void         theme_finalize            (GObject            *object);
 static void         theme_get_property        (GObject            *object,
@@ -89,12 +86,12 @@ empathy_theme_class_init (EmpathyThemeClass *class)
 }
 
 static void
-empathy_theme_init (EmpathyTheme *presence)
+empathy_theme_init (EmpathyTheme *theme)
 {
-	EmpathyThemePriv *priv;
+	EmpathyThemePriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (theme,
+		EMPATHY_TYPE_THEME, EmpathyThemePriv);
 
-	priv = GET_PRIV (presence);
-
+	theme->priv = priv;
 	priv->smiley_manager = empathy_smiley_manager_new ();
 }
 

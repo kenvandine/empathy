@@ -37,10 +37,10 @@ G_BEGIN_DECLS
 
 typedef struct _EmpathySmileyManager      EmpathySmileyManager;
 typedef struct _EmpathySmileyManagerClass EmpathySmileyManagerClass;
-typedef struct _EmpathySmileyManagerPriv  EmpathySmileyManagerPriv;
 
 struct _EmpathySmileyManager {
 	GObject parent;
+	gpointer priv;
 };
 
 struct _EmpathySmileyManagerClass {

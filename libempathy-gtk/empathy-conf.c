@@ -26,6 +26,7 @@
 
 #include <gconf/gconf-client.h>
 
+#include <libempathy/empathy-utils.h>
 #include "empathy-conf.h"
 
 #define DEBUG_FLAG EMPATHY_DEBUG_OTHER
@@ -34,8 +35,7 @@
 #define EMPATHY_CONF_ROOT       "/apps/empathy"
 #define DESKTOP_INTERFACE_ROOT  "/desktop/gnome/interface"
 
-#define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), EMPATHY_TYPE_CONF, EmpathyConfPriv))
-
+#define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyConf)
 typedef struct {
 	GConfClient *gconf_client;
 } EmpathyConfPriv;
@@ -67,10 +67,10 @@ empathy_conf_class_init (EmpathyConfClass *class)
 static void
 empathy_conf_init (EmpathyConf *conf)
 {
-	EmpathyConfPriv *priv;
+	EmpathyConfPriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (conf,
+		EMPATHY_TYPE_CONF, EmpathyConfPriv);
 
-	priv = GET_PRIV (conf);
-
+	conf->priv = priv;
 	priv->gconf_client = gconf_client_get_default ();
 
 	gconf_client_add_dir (priv->gconf_client,

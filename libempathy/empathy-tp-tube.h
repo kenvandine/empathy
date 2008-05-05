@@ -47,6 +47,7 @@ typedef struct _EmpathyTpTubeClass EmpathyTpTubeClass;
 
 struct _EmpathyTpTube {
   GObject parent;
+  gpointer priv;
 };
 
 struct _EmpathyTpTubeClass {

@@ -37,10 +37,8 @@
 #define DEBUG_FLAG EMPATHY_DEBUG_TP | EMPATHY_DEBUG_CHAT
 #include "empathy-debug.h"
 
-#define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), \
-		       EMPATHY_TYPE_TP_CHAT, EmpathyTpChatPriv))
-
-struct _EmpathyTpChatPriv {
+#define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyTpChat)
+typedef struct {
 	EmpathyContactFactory *factory;
 	EmpathyContact        *user;
 	EmpathyContact        *remote_contact;
@@ -55,7 +53,7 @@ struct _EmpathyTpChatPriv {
 	GPtrArray             *properties;
 	gboolean               ready;
 	guint                  members_count;
-};
+} EmpathyTpChatPriv;
 
 typedef struct {
 	gchar          *name;
@@ -64,8 +62,6 @@ typedef struct {
 	GValue         *value;
 } TpChatProperty;
 
-static void empathy_tp_chat_class_init (EmpathyTpChatClass      *klass);
-static void empathy_tp_chat_init       (EmpathyTpChat           *chat);
 static void tp_chat_iface_init         (EmpathyContactListIface *iface);
 
 enum {
@@ -274,7 +270,7 @@ tp_chat_build_message (EmpathyTpChat *chat,
 	}
 
 	message = empathy_message_new (message_body);
-	empathy_message_set_type (message, type);
+	empathy_message_set_tptype (message, type);
 	empathy_message_set_sender (message, sender);
 	empathy_message_set_receiver (message, priv->user);
 	empathy_message_set_timestamp (message, timestamp);
@@ -1060,6 +1056,10 @@ empathy_tp_chat_class_init (EmpathyTpChatClass *klass)
 static void
 empathy_tp_chat_init (EmpathyTpChat *chat)
 {
+	EmpathyTpChatPriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (chat,
+		EMPATHY_TYPE_TP_CHAT, EmpathyTpChatPriv);
+
+	chat->priv = priv;
 }
 
 static void
@@ -1172,16 +1172,16 @@ void
 empathy_tp_chat_send (EmpathyTpChat *chat,
 		      EmpathyMessage *message)
 {
-	EmpathyTpChatPriv  *priv = GET_PRIV (chat);
-	const gchar        *message_body;
-	EmpathyMessageType  message_type;
+	EmpathyTpChatPriv        *priv = GET_PRIV (chat);
+	const gchar              *message_body;
+	TpChannelTextMessageType  message_type;
 
 	g_return_if_fail (EMPATHY_IS_TP_CHAT (chat));
 	g_return_if_fail (EMPATHY_IS_MESSAGE (message));
 	g_return_if_fail (priv->ready);
 
 	message_body = empathy_message_get_body (message);
-	message_type = empathy_message_get_type (message);
+	message_type = empathy_message_get_tptype (message);
 
 	DEBUG ("Sending message: %s", message_body);
 	tp_cli_channel_type_text_call_send (priv->channel, -1,

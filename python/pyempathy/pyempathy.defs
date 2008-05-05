@@ -172,19 +172,6 @@
   )
 )
 
-(define-enum MessageType
-  (in-module "Empathy")
-  (c-name "EmpathyMessageType")
-  (gtype-id "EMPATHY_TYPE_MESSAGE_TYPE")
-  (values
-    '("normal" "EMPATHY_MESSAGE_TYPE_NORMAL")
-    '("action" "EMPATHY_MESSAGE_TYPE_ACTION")
-    '("notice" "EMPATHY_MESSAGE_TYPE_NOTICE")
-    '("auto-reply" "EMPATHY_MESSAGE_TYPE_AUTO_REPLY")
-    '("last" "EMPATHY_MESSAGE_TYPE_LAST")
-  )
-)
-
 (define-flags Capabilities
   (in-module "Empathy")
   (c-name "EmpathyCapabilities")
@@ -622,8 +609,8 @@
 
 ;; From empathy-message.h
 
-(define-function empathy_message_get_gtype
-  (c-name "empathy_message_get_gtype")
+(define-function empathy_message_get_type
+  (c-name "empathy_message_get_type")
   (return-type "GType")
 )
 
@@ -636,18 +623,18 @@
   )
 )
 
-(define-method get_type
+(define-method get_tptype
   (of-object "EmpathyMessage")
-  (c-name "empathy_message_get_type")
-  (return-type "EmpathyMessageType")
+  (c-name "empathy_message_get_tptype")
+  (return-type "TpChannelTextMessageType")
 )
 
-(define-method set_type
+(define-method set_tptype
   (of-object "EmpathyMessage")
-  (c-name "empathy_message_set_type")
+  (c-name "empathy_message_set_tptype")
   (return-type "none")
   (parameters
-    '("EmpathyMessageType" "type")
+    '("TpChannelTextMessageType" "type")
   )
 )
 
@@ -728,16 +715,18 @@
 
 (define-function empathy_message_type_from_str
   (c-name "empathy_message_type_from_str")
-  (return-type "EmpathyMessageType")
+  (return-type "TpChannelTextMessageType")
   (parameters
     '("const-gchar*" "type_str")
   )
 )
 
-(define-method to_str
-  (of-object "EmpathyMessageType")
+(define-function empathy_message_type_to_str
   (c-name "empathy_message_type_to_str")
   (return-type "const-gchar*")
+  (parameters
+    '("TpChannelTextMessageType" "type")
+  )
 )
 
 
@@ -1806,6 +1795,21 @@
   (parameters
     '("gboolean" "is_muted")
   )
+)
+
+(define-method start_tone
+  (of-object "EmpathyTpCall")
+  (c-name "empathy_tp_call_start_tone")
+  (return-type "none")
+  (parameters
+    '("TpDTMFEvent" "event")
+  )
+)
+
+(define-method stop_tone
+  (of-object "EmpathyTpCall")
+  (c-name "empathy_tp_call_stop_tone")
+  (return-type "none")
 )
 
 

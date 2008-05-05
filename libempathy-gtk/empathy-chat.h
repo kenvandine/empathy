@@ -47,10 +47,10 @@ G_BEGIN_DECLS
 
 typedef struct _EmpathyChat       EmpathyChat;
 typedef struct _EmpathyChatClass  EmpathyChatClass;
-typedef struct _EmpathyChatPriv   EmpathyChatPriv;
 
 struct _EmpathyChat {
 	GtkBin parent;
+	gpointer priv;
 
 	/* Protected */
 	EmpathyChatView *view;

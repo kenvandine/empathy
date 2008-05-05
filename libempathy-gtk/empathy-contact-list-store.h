@@ -66,6 +66,7 @@ typedef enum {
 
 struct _EmpathyContactListStore {
 	GtkTreeStore parent;
+	gpointer priv;
 };
 
 struct _EmpathyContactListStoreClass {

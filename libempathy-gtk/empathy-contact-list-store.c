@@ -32,6 +32,7 @@
 
 #include <telepathy-glib/util.h>
 
+#include <libempathy/empathy-utils.h>
 #include "empathy-contact-list-store.h"
 #include "empathy-ui-utils.h"
 #include "empathy-gtk-enum-types.h"
@@ -49,8 +50,7 @@
 /* Time in seconds after connecting which we wait before active users are enabled */
 #define ACTIVE_USER_WAIT_TO_ENABLE_TIME 5
 
-#define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), EMPATHY_TYPE_CONTACT_LIST_STORE, EmpathyContactListStorePriv))
-
+#define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyContactListStore)
 typedef struct {
 	EmpathyContactList         *list;
 	gboolean                    show_offline;
@@ -80,8 +80,6 @@ typedef struct {
 	gboolean                remove;
 } ShowActiveData;
 
-static void             empathy_contact_list_store_class_init         (EmpathyContactListStoreClass *klass);
-static void             empathy_contact_list_store_init               (EmpathyContactListStore      *list);
 static void             contact_list_store_finalize                  (GObject                       *object);
 static void             contact_list_store_get_property              (GObject                       *object,
 								      guint                          param_id,
@@ -272,10 +270,10 @@ empathy_contact_list_store_class_init (EmpathyContactListStoreClass *klass)
 static void
 empathy_contact_list_store_init (EmpathyContactListStore *store)
 {
-	EmpathyContactListStorePriv *priv;
+	EmpathyContactListStorePriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (store,
+		EMPATHY_TYPE_CONTACT_LIST_STORE, EmpathyContactListStorePriv);
 
-	priv = GET_PRIV (store);
-
+	store->priv = priv;
 	priv->show_avatars = TRUE;
 	priv->show_groups = TRUE;
 	priv->inhibit_active = g_timeout_add_seconds (ACTIVE_USER_WAIT_TO_ENABLE_TIME,

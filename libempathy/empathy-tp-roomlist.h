@@ -38,10 +38,10 @@ G_BEGIN_DECLS
 
 typedef struct _EmpathyTpRoomlist      EmpathyTpRoomlist;
 typedef struct _EmpathyTpRoomlistClass EmpathyTpRoomlistClass;
-typedef struct _EmpathyTpRoomlistPriv  EmpathyTpRoomlistPriv;
 
 struct _EmpathyTpRoomlist {
-	GObject      parent;
+	GObject parent;
+	gpointer priv;
 };
 
 struct _EmpathyTpRoomlistClass {

@@ -32,17 +32,13 @@
 #define DEBUG_FLAG EMPATHY_DEBUG_CONTACT
 #include "empathy-debug.h"
 
-#define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), \
-		       EMPATHY_TYPE_CONTACT_MANAGER, EmpathyContactManagerPriv))
-
-struct _EmpathyContactManagerPriv {
+#define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyContactManager)
+typedef struct {
 	GHashTable     *lists;
 	MissionControl *mc;
 	gpointer        token;
-};
+} EmpathyContactManagerPriv;
 
-static void empathy_contact_manager_class_init (EmpathyContactManagerClass *klass);
-static void empathy_contact_manager_init       (EmpathyContactManager      *manager);
 static void contact_manager_iface_init         (EmpathyContactListIface    *iface);
 
 G_DEFINE_TYPE_WITH_CODE (EmpathyContactManager, empathy_contact_manager, G_TYPE_OBJECT,
@@ -208,11 +204,11 @@ empathy_contact_manager_class_init (EmpathyContactManagerClass *klass)
 static void
 empathy_contact_manager_init (EmpathyContactManager *manager)
 {
-	EmpathyContactManagerPriv *priv;
 	GSList                    *accounts, *l;
+	EmpathyContactManagerPriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (manager,
+		EMPATHY_TYPE_CONTACT_MANAGER, EmpathyContactManagerPriv);
 
-	priv = GET_PRIV (manager);
-
+	manager->priv = priv;
 	priv->lists = g_hash_table_new_full (empathy_account_hash,
 					     empathy_account_equal,
 					     (GDestroyNotify) g_object_unref,

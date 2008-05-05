@@ -39,10 +39,10 @@ G_BEGIN_DECLS
 
 typedef struct _EmpathyChatroom      EmpathyChatroom;
 typedef struct _EmpathyChatroomClass EmpathyChatroomClass;
-typedef struct _EmpathyChatroomPriv  EmpathyChatroomPriv;
 
 struct _EmpathyChatroom {
 	GObject parent;
+	gpointer priv;
 };
 
 struct _EmpathyChatroomClass {

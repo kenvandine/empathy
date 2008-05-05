@@ -38,11 +38,8 @@
 #define DEBUG_FLAG EMPATHY_DEBUG_CONTACT
 #include "empathy-debug.h"
 
-#define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), EMPATHY_TYPE_CONTACT, EmpathyContactPriv))
-
-typedef struct _EmpathyContactPriv EmpathyContactPriv;
-
-struct _EmpathyContactPriv {
+#define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyContact)
+typedef struct {
 	gchar              *id;
 	gchar              *name;
 	EmpathyAvatar      *avatar;
@@ -54,10 +51,8 @@ struct _EmpathyContactPriv {
 	gboolean            is_user;
 	guint               hash;
 	EmpathyContactReady ready;
-};
+} EmpathyContactPriv;
 
-static void empathy_contact_class_init (EmpathyContactClass *class);
-static void empathy_contact_init       (EmpathyContact      *contact);
 static void contact_finalize           (GObject             *object);
 static void contact_get_property       (GObject             *object,
 				        guint                param_id,
@@ -186,6 +181,10 @@ empathy_contact_class_init (EmpathyContactClass *class)
 static void
 empathy_contact_init (EmpathyContact *contact)
 {
+	EmpathyContactPriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (contact,
+		EMPATHY_TYPE_CONTACT, EmpathyContactPriv);
+
+	contact->priv = priv;
 }
 
 static void

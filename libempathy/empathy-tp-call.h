@@ -45,11 +45,12 @@ typedef struct _EmpathyTpCall EmpathyTpCall;
 typedef struct _EmpathyTpCallClass EmpathyTpCallClass;
 
 struct _EmpathyTpCall {
-    GObject parent;
+  GObject parent;
+  gpointer priv;
 };
 
 struct _EmpathyTpCallClass {
-    GObjectClass parent_class;
+  GObjectClass parent_class;
 };
 
 typedef enum

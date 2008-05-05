@@ -55,9 +55,8 @@
 #define DEBUG_FLAG EMPATHY_DEBUG_CHAT
 #include <libempathy/empathy-debug.h>
 
-#define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), EMPATHY_TYPE_CHAT_WINDOW, EmpathyChatWindowPriv))
-
-struct _EmpathyChatWindowPriv {
+#define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyChatWindow)
+typedef struct {
 	EmpathyChat *current_chat;
 	GList       *chats;
 	GList       *chats_new_msg;
@@ -86,7 +85,7 @@ struct _EmpathyChatWindowPriv {
 	
 	GtkWidget   *menu_help_contents;
 	GtkWidget   *menu_help_about;
-};
+} EmpathyChatWindowPriv;
 
 static GList *chat_windows = NULL;
 
@@ -1090,18 +1089,18 @@ empathy_chat_window_class_init (EmpathyChatWindowClass *klass)
 static void
 empathy_chat_window_init (EmpathyChatWindow *window)
 {
-	EmpathyChatWindowPriv *priv;
-	GladeXML             *glade;
-	GtkAccelGroup        *accel_group;
-	GClosure             *closure;
-	GtkWidget            *menu_conv;
-	GtkWidget            *menu;
-	gint                  i;
-	GtkWidget            *chat_vbox;
-	gchar                *filename;
+	GladeXML              *glade;
+	GtkAccelGroup         *accel_group;
+	GClosure              *closure;
+	GtkWidget             *menu_conv;
+	GtkWidget             *menu;
+	gint                   i;
+	GtkWidget             *chat_vbox;
+	gchar                 *filename;
+	EmpathyChatWindowPriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (window,
+		EMPATHY_TYPE_CHAT_WINDOW, EmpathyChatWindowPriv);
 
-	priv = GET_PRIV (window);
-
+	window->priv = priv;
 	filename = empathy_file_lookup ("empathy-chat-window.glade", "src");
 	glade = empathy_glade_get_file (filename,
 				       "chat_window",

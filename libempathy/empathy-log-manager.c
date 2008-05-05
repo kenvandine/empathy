@@ -36,9 +36,6 @@
 #define DEBUG_FLAG EMPATHY_DEBUG_OTHER
 #include "empathy-debug.h"
 
-#define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), \
-		       EMPATHY_TYPE_LOG_MANAGER, EmpathyLogManagerPriv))
-
 #define LOG_DIR_CREATE_MODE       (S_IRUSR | S_IWUSR | S_IXUSR)
 #define LOG_FILE_CREATE_MODE      (S_IRUSR | S_IWUSR)
 #define LOG_DIR_CHATROOMS         "chatrooms"
@@ -53,12 +50,11 @@
 #define LOG_FOOTER \
     "</log>\n"
 
-struct _EmpathyLogManagerPriv {
+#define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyLogManager)
+typedef struct {
 	gchar *basedir;
-};
+} EmpathyLogManagerPriv;
 
-static void                 empathy_log_manager_class_init         (EmpathyLogManagerClass *klass);
-static void                 empathy_log_manager_init               (EmpathyLogManager      *manager);
 static void                 log_manager_finalize                   (GObject                *object);
 static const gchar *        log_manager_get_basedir                (EmpathyLogManager      *manager);
 static GList *              log_manager_get_all_files              (EmpathyLogManager      *manager,
@@ -100,6 +96,10 @@ empathy_log_manager_class_init (EmpathyLogManagerClass *klass)
 static void
 empathy_log_manager_init (EmpathyLogManager *manager)
 {
+	EmpathyLogManagerPriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (manager,
+		EMPATHY_TYPE_LOG_MANAGER, EmpathyLogManagerPriv);
+
+	manager->priv = priv;
 }
 
 static void
@@ -146,7 +146,7 @@ empathy_log_manager_add_message (EmpathyLogManager *manager,
 	gchar         *timestamp;
 	gchar         *contact_name;
 	gchar         *contact_id;
-	EmpathyMessageType msg_type;
+	TpChannelTextMessageType msg_type;
 
 	g_return_if_fail (EMPATHY_IS_LOG_MANAGER (manager));
 	g_return_if_fail (chat_id != NULL);
@@ -155,7 +155,7 @@ empathy_log_manager_add_message (EmpathyLogManager *manager,
 	sender = empathy_message_get_sender (message);
 	account = empathy_contact_get_account (sender);
 	body_str = empathy_message_get_body (message);
-	msg_type = empathy_message_get_type (message);
+	msg_type = empathy_message_get_tptype (message);
 
 	if (G_STR_EMPTY (body_str)) {
 		return;
@@ -347,7 +347,7 @@ empathy_log_manager_get_messages_for_file (EmpathyLogManager *manager,
 		gchar              *is_user_str;
 		gboolean            is_user = FALSE;
 		gchar              *msg_type_str;
-		EmpathyMessageType  msg_type = EMPATHY_MESSAGE_TYPE_NORMAL;
+		TpChannelTextMessageType msg_type = TP_CHANNEL_TEXT_MESSAGE_TYPE_NORMAL;
 
 		if (strcmp (node->name, "message") != 0) {
 			continue;
@@ -383,7 +383,7 @@ empathy_log_manager_get_messages_for_file (EmpathyLogManager *manager,
 		message = empathy_message_new (body);
 		empathy_message_set_sender (message, sender);
 		empathy_message_set_timestamp (message, t);
-		empathy_message_set_type (message, msg_type);
+		empathy_message_set_tptype (message, msg_type);
 
 		messages = g_list_append (messages, message);
 

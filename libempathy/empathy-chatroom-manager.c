@@ -37,17 +37,14 @@
 #define DEBUG_FLAG EMPATHY_DEBUG_OTHER
 #include "empathy-debug.h"
 
-#define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), EMPATHY_TYPE_CHATROOM_MANAGER, EmpathyChatroomManagerPriv))
-
 #define CHATROOMS_XML_FILENAME "chatrooms.xml"
 #define CHATROOMS_DTD_FILENAME "empathy-chatroom-manager.dtd"
 
-struct _EmpathyChatroomManagerPriv {
+#define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyChatroomManager)
+typedef struct {
 	GList      *chatrooms;
-};
+} EmpathyChatroomManagerPriv;
 
-static void     empathy_chatroom_manager_class_init (EmpathyChatroomManagerClass *klass);
-static void     empathy_chatroom_manager_init       (EmpathyChatroomManager      *manager);
 static void     chatroom_manager_finalize          (GObject                    *object);
 static gboolean chatroom_manager_get_all           (EmpathyChatroomManager      *manager);
 static gboolean chatroom_manager_file_parse        (EmpathyChatroomManager      *manager,
@@ -99,9 +96,10 @@ empathy_chatroom_manager_class_init (EmpathyChatroomManagerClass *klass)
 static void
 empathy_chatroom_manager_init (EmpathyChatroomManager *manager)
 {
-	EmpathyChatroomManagerPriv *priv;
+	EmpathyChatroomManagerPriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (manager,
+		EMPATHY_TYPE_CHATROOM_MANAGER, EmpathyChatroomManagerPriv);
 
-	priv = GET_PRIV (manager);
+	manager->priv = priv;
 }
 
 static void

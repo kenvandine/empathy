@@ -31,12 +31,31 @@
 
 #include <gtk/gtktreeview.h>
 
+#include <libempathy/empathy-utils.h>
 #include "empathy-cell-renderer-expander.h"
 
-#define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), EMPATHY_TYPE_CELL_RENDERER_EXPANDER, EmpathyCellRendererExpanderPriv))
+#define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyCellRendererExpander)
+typedef struct {
+	GtkExpanderStyle     expander_style;
+	gint                 expander_size;
 
-static void     empathy_cell_renderer_expander_init         (EmpathyCellRendererExpander      *expander);
-static void     empathy_cell_renderer_expander_class_init   (EmpathyCellRendererExpanderClass *klass);
+	GtkTreeView         *animation_view;
+	GtkTreeRowReference *animation_node;
+	GtkExpanderStyle     animation_style;
+	guint                animation_timeout;
+	GdkRectangle         animation_area;
+
+	guint                activatable : 1;
+	guint                animation_expanding : 1;
+} EmpathyCellRendererExpanderPriv;
+
+enum {
+	PROP_0,
+	PROP_EXPANDER_STYLE,
+	PROP_EXPANDER_SIZE,
+	PROP_ACTIVATABLE
+};
+
 static void     empathy_cell_renderer_expander_get_property (GObject                         *object,
 							    guint                            param_id,
 							    GValue                          *value,
@@ -68,38 +87,15 @@ static gboolean empathy_cell_renderer_expander_activate     (GtkCellRenderer    
 							    GdkRectangle                    *cell_area,
 							    GtkCellRendererState             flags);
 
-enum {
-	PROP_0,
-	PROP_EXPANDER_STYLE,
-	PROP_EXPANDER_SIZE,
-	PROP_ACTIVATABLE
-};
-
-typedef struct _EmpathyCellRendererExpanderPriv EmpathyCellRendererExpanderPriv;
-
-struct _EmpathyCellRendererExpanderPriv {
-	GtkExpanderStyle     expander_style;
-	gint                 expander_size;
-
-	GtkTreeView         *animation_view;
-	GtkTreeRowReference *animation_node;
-	GtkExpanderStyle     animation_style;
-	guint                animation_timeout;
-	GdkRectangle         animation_area;
-
-	guint                activatable : 1;
-	guint                animation_expanding : 1;
-};
-
 G_DEFINE_TYPE (EmpathyCellRendererExpander, empathy_cell_renderer_expander, GTK_TYPE_CELL_RENDERER)
 
 static void
 empathy_cell_renderer_expander_init (EmpathyCellRendererExpander *expander)
 {
-	EmpathyCellRendererExpanderPriv *priv;
+	EmpathyCellRendererExpanderPriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (expander,
+		EMPATHY_TYPE_CELL_RENDERER_EXPANDER, EmpathyCellRendererExpanderPriv);
 
-	priv = GET_PRIV (expander);
-
+	expander->priv = priv;
 	priv->expander_style = GTK_EXPANDER_COLLAPSED;
 	priv->expander_size = 12;
 	priv->activatable = TRUE;

@@ -33,7 +33,6 @@ typedef struct _EmpathyIrcNetworkManagerClass EmpathyIrcNetworkManagerClass;
 struct _EmpathyIrcNetworkManager
 {
   GObject parent;
-
   gpointer priv;
 };
 

@@ -24,11 +24,11 @@
 
 #include <string.h>
 
+#include <libempathy/empathy-utils.h>
 #include "empathy-cell-renderer-text.h"
 
-#define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), EMPATHY_TYPE_CELL_RENDERER_TEXT, EmpathyCellRendererTextPriv))
-
-struct _EmpathyCellRendererTextPriv {
+#define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyCellRendererText)
+typedef struct {
 	gchar    *name;
 	gchar    *status;
 	gboolean  is_group;
@@ -37,10 +37,8 @@ struct _EmpathyCellRendererTextPriv {
 	gboolean  is_selected;
 
 	gboolean  show_status;
-};
+} EmpathyCellRendererTextPriv;
 
-static void empathy_cell_renderer_text_class_init (EmpathyCellRendererTextClass *klass);
-static void empathy_cell_renderer_text_init       (EmpathyCellRendererText      *cell);
 static void cell_renderer_text_finalize          (GObject                     *object);
 static void cell_renderer_text_get_property      (GObject                     *object,
 						  guint                        param_id,
@@ -131,10 +129,10 @@ empathy_cell_renderer_text_class_init (EmpathyCellRendererTextClass *klass)
 static void
 empathy_cell_renderer_text_init (EmpathyCellRendererText *cell)
 {
-	EmpathyCellRendererTextPriv *priv;
+	EmpathyCellRendererTextPriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (cell,
+		EMPATHY_TYPE_CELL_RENDERER_TEXT, EmpathyCellRendererTextPriv);
 
-	priv = GET_PRIV (cell);
-
+	cell->priv = priv;
 	g_object_set (cell,
 		      "ellipsize", PANGO_ELLIPSIZE_END,
 		      NULL);

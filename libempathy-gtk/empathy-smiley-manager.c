@@ -24,25 +24,23 @@
 
 #include <string.h>
 
+#include <libempathy/empathy-utils.h>
 #include "empathy-smiley-manager.h"
 #include "empathy-ui-utils.h"
 
-#define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), \
-		       EMPATHY_TYPE_SMILEY_MANAGER, EmpathySmileyManagerPriv))
+typedef struct _SmileyManagerTree SmileyManagerTree;
 
+#define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathySmileyManager)
 typedef struct {
+	SmileyManagerTree *tree;
+	GSList            *smileys;
+} EmpathySmileyManagerPriv;
+
+struct _SmileyManagerTree {
 	gunichar   c;
 	GdkPixbuf *pixbuf;
 	GSList    *childrens;
-} SmileyManagerTree;
-
-struct _EmpathySmileyManagerPriv {
-	SmileyManagerTree *tree;
-	GSList            *smileys;
 };
-
-static void empathy_smiley_manager_class_init (EmpathySmileyManagerClass *klass);
-static void empathy_smiley_manager_init       (EmpathySmileyManager      *manager);
 
 G_DEFINE_TYPE (EmpathySmileyManager, empathy_smiley_manager, G_TYPE_OBJECT);
 
@@ -130,8 +128,10 @@ empathy_smiley_manager_class_init (EmpathySmileyManagerClass *klass)
 static void
 empathy_smiley_manager_init (EmpathySmileyManager *manager)
 {
-	EmpathySmileyManagerPriv *priv = GET_PRIV (manager);
+	EmpathySmileyManagerPriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (manager,
+		EMPATHY_TYPE_SMILEY_MANAGER, EmpathySmileyManagerPriv);
 
+	manager->priv = priv;
 	priv->tree = smiley_manager_tree_new ('\0');
 	priv->smileys = NULL;
 }

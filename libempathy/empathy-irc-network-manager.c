@@ -36,21 +36,8 @@
 #define IRC_NETWORKS_DTD_FILENAME "empathy-irc-networks.dtd"
 #define SAVE_TIMER 4
 
-G_DEFINE_TYPE (EmpathyIrcNetworkManager, empathy_irc_network_manager,
-    G_TYPE_OBJECT);
-
-/* properties */
-enum
-{
-  PROP_GLOBAL_FILE = 1,
-  PROP_USER_FILE,
-  LAST_PROPERTY
-};
-
-typedef struct _EmpathyIrcNetworkManagerPrivate
-    EmpathyIrcNetworkManagerPrivate;
-
-struct _EmpathyIrcNetworkManagerPrivate {
+#define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyIrcNetworkManager)
+typedef struct {
   GHashTable *networks;
 
   gchar *global_file;
@@ -63,10 +50,18 @@ struct _EmpathyIrcNetworkManagerPrivate {
   gboolean loading;
   /* source id of the autosave timer */
   gint save_timer_id;
+} EmpathyIrcNetworkManagerPriv;
+
+/* properties */
+enum
+{
+  PROP_GLOBAL_FILE = 1,
+  PROP_USER_FILE,
+  LAST_PROPERTY
 };
 
-#define EMPATHY_IRC_NETWORK_MANAGER_GET_PRIVATE(obj)\
-    ((EmpathyIrcNetworkManagerPrivate *) obj->priv)
+G_DEFINE_TYPE (EmpathyIrcNetworkManager, empathy_irc_network_manager,
+    G_TYPE_OBJECT);
 
 static void irc_network_manager_load_servers (
     EmpathyIrcNetworkManager *manager);
@@ -83,8 +78,7 @@ empathy_irc_network_manager_get_property (GObject *object,
                                           GParamSpec *pspec)
 {
   EmpathyIrcNetworkManager *self = EMPATHY_IRC_NETWORK_MANAGER (object);
-  EmpathyIrcNetworkManagerPrivate *priv =
-    EMPATHY_IRC_NETWORK_MANAGER_GET_PRIVATE (self);
+  EmpathyIrcNetworkManagerPriv *priv = GET_PRIV (self);
 
   switch (property_id)
     {
@@ -107,8 +101,7 @@ empathy_irc_network_manager_set_property (GObject *object,
                                           GParamSpec *pspec)
 {
   EmpathyIrcNetworkManager *self = EMPATHY_IRC_NETWORK_MANAGER (object);
-  EmpathyIrcNetworkManagerPrivate *priv =
-    EMPATHY_IRC_NETWORK_MANAGER_GET_PRIVATE (self);
+  EmpathyIrcNetworkManagerPriv *priv = GET_PRIV (self);
 
   switch (property_id)
     {
@@ -148,8 +141,7 @@ static void
 empathy_irc_network_manager_finalize (GObject *object)
 {
   EmpathyIrcNetworkManager *self = EMPATHY_IRC_NETWORK_MANAGER (object);
-  EmpathyIrcNetworkManagerPrivate *priv = 
-    EMPATHY_IRC_NETWORK_MANAGER_GET_PRIVATE (self);
+  EmpathyIrcNetworkManagerPriv *priv = GET_PRIV (self);
 
   if (priv->save_timer_id > 0)
     {
@@ -172,8 +164,8 @@ empathy_irc_network_manager_finalize (GObject *object)
 static void
 empathy_irc_network_manager_init (EmpathyIrcNetworkManager *self)
 {
-  EmpathyIrcNetworkManagerPrivate *priv = G_TYPE_INSTANCE_GET_PRIVATE (self,
-      EMPATHY_TYPE_IRC_NETWORK_MANAGER, EmpathyIrcNetworkManagerPrivate);
+  EmpathyIrcNetworkManagerPriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (self,
+      EMPATHY_TYPE_IRC_NETWORK_MANAGER, EmpathyIrcNetworkManagerPriv);
 
   self->priv = priv;
 
@@ -197,8 +189,7 @@ empathy_irc_network_manager_class_init (EmpathyIrcNetworkManagerClass *klass)
   object_class->get_property = empathy_irc_network_manager_get_property;
   object_class->set_property = empathy_irc_network_manager_set_property;
 
-  g_type_class_add_private (object_class,
-          sizeof (EmpathyIrcNetworkManagerPrivate));
+  g_type_class_add_private (object_class, sizeof (EmpathyIrcNetworkManagerPriv));
 
   object_class->finalize = empathy_irc_network_manager_finalize;
 
@@ -255,8 +246,7 @@ empathy_irc_network_manager_new (const gchar *global_file,
 static gboolean
 save_timeout (EmpathyIrcNetworkManager *self)
 {
-  EmpathyIrcNetworkManagerPrivate *priv =
-    EMPATHY_IRC_NETWORK_MANAGER_GET_PRIVATE (self);
+  EmpathyIrcNetworkManagerPriv *priv = GET_PRIV (self);
 
   priv->save_timer_id = 0;
   irc_network_manager_file_save (self);
@@ -267,8 +257,7 @@ save_timeout (EmpathyIrcNetworkManager *self)
 static void
 reset_save_timeout (EmpathyIrcNetworkManager *self)
 {
-  EmpathyIrcNetworkManagerPrivate *priv =
-    EMPATHY_IRC_NETWORK_MANAGER_GET_PRIVATE (self);
+  EmpathyIrcNetworkManagerPriv *priv = GET_PRIV (self);
 
   if (priv->save_timer_id > 0)
     {
@@ -283,8 +272,7 @@ static void
 network_modified (EmpathyIrcNetwork *network,
                   EmpathyIrcNetworkManager *self)
 {
-  EmpathyIrcNetworkManagerPrivate *priv =
-    EMPATHY_IRC_NETWORK_MANAGER_GET_PRIVATE (self);
+  EmpathyIrcNetworkManagerPriv *priv = GET_PRIV (self);
 
   network->user_defined = TRUE;
 
@@ -300,8 +288,7 @@ add_network (EmpathyIrcNetworkManager *self,
              EmpathyIrcNetwork *network,
              const gchar *id)
 {
-  EmpathyIrcNetworkManagerPrivate *priv =
-    EMPATHY_IRC_NETWORK_MANAGER_GET_PRIVATE (self);
+  EmpathyIrcNetworkManagerPriv *priv = GET_PRIV (self);
 
   g_hash_table_insert (priv->networks, g_strdup (id), g_object_ref (network));
 
@@ -320,13 +307,13 @@ void
 empathy_irc_network_manager_add (EmpathyIrcNetworkManager *self,
                                  EmpathyIrcNetwork *network)
 {
-  EmpathyIrcNetworkManagerPrivate *priv;
+  EmpathyIrcNetworkManagerPriv *priv;
   gchar *id = NULL;
 
   g_return_if_fail (EMPATHY_IS_IRC_NETWORK_MANAGER (self));
   g_return_if_fail (EMPATHY_IS_IRC_NETWORK (network));
 
-  priv = EMPATHY_IRC_NETWORK_MANAGER_GET_PRIVATE (self);
+  priv = GET_PRIV (self);
 
   /* generate an id for this network */
   do
@@ -365,12 +352,12 @@ void
 empathy_irc_network_manager_remove (EmpathyIrcNetworkManager *self,
                                     EmpathyIrcNetwork *network)
 {
-  EmpathyIrcNetworkManagerPrivate *priv;
+  EmpathyIrcNetworkManagerPriv *priv;
 
   g_return_if_fail (EMPATHY_IS_IRC_NETWORK_MANAGER (self));
   g_return_if_fail (EMPATHY_IS_IRC_NETWORK (network));
 
-  priv = EMPATHY_IRC_NETWORK_MANAGER_GET_PRIVATE (self);
+  priv = GET_PRIV (self);
 
   network->user_defined = TRUE;
   network->dropped = TRUE;
@@ -402,12 +389,12 @@ append_network_to_list (const gchar *id,
 GSList *
 empathy_irc_network_manager_get_networks (EmpathyIrcNetworkManager *self)
 {
-  EmpathyIrcNetworkManagerPrivate *priv;
+  EmpathyIrcNetworkManagerPriv *priv;
   GSList *irc_networks = NULL;
 
   g_return_val_if_fail (EMPATHY_IS_IRC_NETWORK_MANAGER (self), NULL);
 
-  priv = EMPATHY_IRC_NETWORK_MANAGER_GET_PRIVATE (self);
+  priv = GET_PRIV (self);
 
   g_hash_table_foreach (priv->networks, (GHFunc) append_network_to_list,
       &irc_networks);
@@ -422,8 +409,7 @@ empathy_irc_network_manager_get_networks (EmpathyIrcNetworkManager *self)
 static void
 load_global_file (EmpathyIrcNetworkManager *self)
 {
-  EmpathyIrcNetworkManagerPrivate *priv =
-    EMPATHY_IRC_NETWORK_MANAGER_GET_PRIVATE (self);
+  EmpathyIrcNetworkManagerPriv *priv = GET_PRIV (self);
 
   if (priv->global_file == NULL)
     return;
@@ -440,8 +426,7 @@ load_global_file (EmpathyIrcNetworkManager *self)
 static void
 load_user_file (EmpathyIrcNetworkManager *self)
 {
-  EmpathyIrcNetworkManagerPrivate *priv =
-    EMPATHY_IRC_NETWORK_MANAGER_GET_PRIVATE (self);
+  EmpathyIrcNetworkManagerPriv *priv = GET_PRIV (self);
 
   if (priv->user_file == NULL)
     return;
@@ -458,8 +443,7 @@ load_user_file (EmpathyIrcNetworkManager *self)
 static void
 irc_network_manager_load_servers (EmpathyIrcNetworkManager *self)
 {
-  EmpathyIrcNetworkManagerPrivate *priv =
-    EMPATHY_IRC_NETWORK_MANAGER_GET_PRIVATE (self);
+  EmpathyIrcNetworkManagerPriv *priv = GET_PRIV (self);
 
   priv->loading = TRUE;
 
@@ -523,8 +507,7 @@ irc_network_manager_parse_irc_network (EmpathyIrcNetworkManager *self,
                                        xmlNodePtr node,
                                        gboolean user_defined)
 {
-  EmpathyIrcNetworkManagerPrivate *priv =
-    EMPATHY_IRC_NETWORK_MANAGER_GET_PRIVATE (self);
+  EmpathyIrcNetworkManagerPriv *priv = GET_PRIV (self);
   EmpathyIrcNetwork  *network;
   xmlNodePtr child;
   gchar *str;
@@ -594,13 +577,13 @@ irc_network_manager_file_parse (EmpathyIrcNetworkManager *self,
                                 const gchar *filename,
                                 gboolean user_defined)
 {
-  EmpathyIrcNetworkManagerPrivate *priv;
+  EmpathyIrcNetworkManagerPriv *priv;
   xmlParserCtxtPtr ctxt;
   xmlDocPtr doc;
   xmlNodePtr networks;
   xmlNodePtr node;
 
-  priv = EMPATHY_IRC_NETWORK_MANAGER_GET_PRIVATE (self);
+  priv = GET_PRIV (self);
 
   DEBUG ("Attempting to parse file:'%s'...", filename);
 
@@ -707,8 +690,7 @@ write_network_to_xml (const gchar *id,
 static gboolean
 irc_network_manager_file_save (EmpathyIrcNetworkManager *self)
 {
-  EmpathyIrcNetworkManagerPrivate *priv =
-    EMPATHY_IRC_NETWORK_MANAGER_GET_PRIVATE (self);
+  EmpathyIrcNetworkManagerPriv *priv = GET_PRIV (self);
   xmlDocPtr doc;
   xmlNodePtr root;
 
@@ -785,8 +767,7 @@ empathy_irc_network_manager_find_network_by_address (
     EmpathyIrcNetworkManager *self,
     const gchar *address)
 {
-  EmpathyIrcNetworkManagerPrivate *priv =
-    EMPATHY_IRC_NETWORK_MANAGER_GET_PRIVATE (self);
+  EmpathyIrcNetworkManagerPriv *priv = GET_PRIV (self);
   EmpathyIrcNetwork *network;
 
   g_return_val_if_fail (address != NULL, NULL);

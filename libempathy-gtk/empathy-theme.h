@@ -40,6 +40,7 @@ typedef struct _EmpathyThemeClass EmpathyThemeClass;
 
 struct _EmpathyTheme {
 	GObject parent;
+	gpointer priv;
 };
 
 struct _EmpathyThemeClass {

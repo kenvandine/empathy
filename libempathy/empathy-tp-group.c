@@ -36,10 +36,8 @@
 #define DEBUG_FLAG EMPATHY_DEBUG_TP
 #include "empathy-debug.h"
 
-#define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), \
-		       EMPATHY_TYPE_TP_GROUP, EmpathyTpGroupPriv))
-
-struct _EmpathyTpGroupPriv {
+#define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyTpGroup)
+typedef struct {
 	TpChannel             *channel;
 	gboolean               ready;
 
@@ -50,10 +48,7 @@ struct _EmpathyTpGroupPriv {
 	GList                 *members;
 	GList                 *local_pendings;
 	GList                 *remote_pendings;
-};
-
-static void empathy_tp_group_class_init (EmpathyTpGroupClass *klass);
-static void empathy_tp_group_init       (EmpathyTpGroup      *group);
+} EmpathyTpGroupPriv;
 
 enum {
 	MEMBER_ADDED,
@@ -714,6 +709,10 @@ empathy_tp_group_class_init (EmpathyTpGroupClass *klass)
 static void
 empathy_tp_group_init (EmpathyTpGroup *group)
 {
+	EmpathyTpGroupPriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (group,
+		EMPATHY_TYPE_TP_GROUP, EmpathyTpGroupPriv);
+
+	group->priv = priv;
 }
 
 EmpathyTpGroup *

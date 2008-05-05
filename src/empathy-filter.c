@@ -55,19 +55,14 @@
 #define DEBUG_FLAG EMPATHY_DEBUG_FILTER
 #include <libempathy/empathy-debug.h>
 
-#define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), \
-		       EMPATHY_TYPE_FILTER, EmpathyFilterPriv))
-
-struct _EmpathyFilterPriv {
+#define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyFilter)
+typedef struct {
 	GSList         *events;
 	GHashTable     *accounts;
 	gpointer        token;
 	MissionControl *mc;
 	GHashTable     *tubes;
-};
-
-static void empathy_filter_class_init (EmpathyFilterClass *klass);
-static void empathy_filter_init       (EmpathyFilter      *filter);
+} EmpathyFilterPriv;
 
 G_DEFINE_TYPE (EmpathyFilter, empathy_filter, G_TYPE_OBJECT);
 
@@ -963,9 +958,11 @@ empathy_filter_class_init (EmpathyFilterClass *klass)
 static void
 empathy_filter_init (EmpathyFilter *filter)
 {
-	EmpathyFilterPriv *priv = GET_PRIV (filter);
 	GList             *accounts, *l;
+	EmpathyFilterPriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (filter,
+		EMPATHY_TYPE_FILTER, EmpathyFilterPriv);
 
+	filter->priv = priv;
 	priv->tubes = g_hash_table_new_full (filter_channel_hash,
 					     filter_channel_equal,
 					     g_object_unref, NULL);

@@ -29,14 +29,14 @@
 #include <gtk/gtk.h>
 #include <gdk/gdkx.h>
 
+#include <libempathy/empathy-utils.h>
 #include "empathy-avatar-image.h"
 #include "empathy-ui-utils.h"
-
-#define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), EMPATHY_TYPE_AVATAR_IMAGE, EmpathyAvatarImagePriv))
 
 #define MAX_SMALL 64
 #define MAX_LARGE 400
 
+#define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyAvatarImage)
 typedef struct {
 	GtkWidget   *image;
 	GtkWidget   *popup;
@@ -73,10 +73,10 @@ empathy_avatar_image_class_init (EmpathyAvatarImageClass *klass)
 static void
 empathy_avatar_image_init (EmpathyAvatarImage *avatar_image)
 {
-	EmpathyAvatarImagePriv *priv;
+	EmpathyAvatarImagePriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (avatar_image,
+		EMPATHY_TYPE_AVATAR_IMAGE, EmpathyAvatarImagePriv);
 
-	priv = GET_PRIV (avatar_image);
-
+	avatar_image->priv = priv;
 	priv->image = gtk_image_new ();
 	gtk_container_add (GTK_CONTAINER (avatar_image), priv->image);
 	empathy_avatar_image_set (avatar_image, NULL);

@@ -57,11 +57,12 @@ typedef enum {
 } EmpathyContactListFeatureFlags;
 
 struct _EmpathyContactListView {
-	GtkTreeView            parent;
+	GtkTreeView parent;
+	gpointer priv;
 };
 
 struct _EmpathyContactListViewClass {
-	GtkTreeViewClass       parent_class;
+	GtkTreeViewClass parent_class;
 };
 
 GType                      empathy_contact_list_view_get_type           (void) G_GNUC_CONST;

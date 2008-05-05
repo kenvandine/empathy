@@ -27,24 +27,20 @@
 #include <telepathy-glib/dbus.h>
 
 #include <extensions/extensions.h>
-#include <libempathy/empathy-contact-factory.h>
-#include <libempathy/empathy-tp-group.h>
-#include <libempathy/empathy-utils.h>
 
 #include "empathy-tp-call.h"
+#include "empathy-contact-factory.h"
+#include "empathy-tp-group.h"
+#include "empathy-utils.h"
 
 #define DEBUG_FLAG EMPATHY_DEBUG_TP
 #include "empathy-debug.h"
 
-#define GET_PRIV(object) (G_TYPE_INSTANCE_GET_PRIVATE \
-    ((object), EMPATHY_TYPE_TP_CALL, EmpathyTpCallPriv))
-
 #define STREAM_ENGINE_BUS_NAME "org.freedesktop.Telepathy.StreamEngine"
 #define STREAM_ENGINE_OBJECT_PATH "/org/freedesktop/Telepathy/StreamEngine"
 
-typedef struct _EmpathyTpCallPriv EmpathyTpCallPriv;
-
-struct _EmpathyTpCallPriv
+#define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyTpCall)
+typedef struct
 {
   TpChannel *channel;
   TpProxy *stream_engine;
@@ -57,7 +53,7 @@ struct _EmpathyTpCallPriv
 
   EmpathyTpCallStream *audio;
   EmpathyTpCallStream *video;
-};
+} EmpathyTpCallPriv;
 
 enum
 {
@@ -629,8 +625,10 @@ empathy_tp_call_class_init (EmpathyTpCallClass *klass)
 static void
 empathy_tp_call_init (EmpathyTpCall *call)
 {
-  EmpathyTpCallPriv *priv = GET_PRIV (call);
+  EmpathyTpCallPriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (call,
+		EMPATHY_TYPE_TP_CALL, EmpathyTpCallPriv);
 
+  call->priv = priv;
   priv->status = EMPATHY_TP_CALL_STATUS_READYING;
   priv->contact = NULL;
   priv->stream_engine_running = FALSE;

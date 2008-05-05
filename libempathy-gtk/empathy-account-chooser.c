@@ -38,8 +38,7 @@
 #include "empathy-ui-utils.h"
 #include "empathy-account-chooser.h"
 
-#define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), EMPATHY_TYPE_ACCOUNT_CHOOSER, EmpathyAccountChooserPriv))
-
+#define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyAccountChooser)
 typedef struct {
 	MissionControl                 *mc;
 	McAccountMonitor               *monitor;
@@ -130,8 +129,10 @@ empathy_account_chooser_class_init (EmpathyAccountChooserClass *klass)
 static void
 empathy_account_chooser_init (EmpathyAccountChooser *chooser)
 {
-	EmpathyAccountChooserPriv *priv = GET_PRIV (chooser);
+	EmpathyAccountChooserPriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (chooser,
+		EMPATHY_TYPE_ACCOUNT_CHOOSER, EmpathyAccountChooserPriv);
 
+	chooser->priv = priv;
 	priv->set_active_item = FALSE;
 	priv->filter = NULL;
 	priv->filter_data = NULL;

@@ -33,10 +33,8 @@
 #define DEBUG_FLAG EMPATHY_DEBUG_TP | EMPATHY_DEBUG_CONTACT
 #include "empathy-debug.h"
 
-#define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), \
-		       EMPATHY_TYPE_TP_CONTACT_FACTORY, EmpathyTpContactFactoryPriv))
-
-struct _EmpathyTpContactFactoryPriv {
+#define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyTpContactFactory)
+typedef struct {
 	MissionControl *mc;
 	McAccount      *account;
 	TpConnection   *connection;
@@ -45,10 +43,7 @@ struct _EmpathyTpContactFactoryPriv {
 	GList          *contacts;
 	EmpathyContact *user;
 	gpointer        token;
-};
-
-static void empathy_tp_contact_factory_class_init (EmpathyTpContactFactoryClass *klass);
-static void empathy_tp_contact_factory_init       (EmpathyTpContactFactory      *factory);
+} EmpathyTpContactFactoryPriv;
 
 G_DEFINE_TYPE (EmpathyTpContactFactory, empathy_tp_contact_factory, G_TYPE_OBJECT);
 
@@ -1276,8 +1271,10 @@ empathy_tp_contact_factory_class_init (EmpathyTpContactFactoryClass *klass)
 static void
 empathy_tp_contact_factory_init (EmpathyTpContactFactory *tp_factory)
 {
-	EmpathyTpContactFactoryPriv *priv = GET_PRIV (tp_factory);
+	EmpathyTpContactFactoryPriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (tp_factory,
+		EMPATHY_TYPE_TP_CONTACT_FACTORY, EmpathyTpContactFactoryPriv);
 
+	tp_factory->priv = priv;
 	priv->mc = empathy_mission_control_new ();
 	priv->token = empathy_connect_to_account_status_changed (priv->mc,
 						   G_CALLBACK (tp_contact_factory_status_changed_cb),

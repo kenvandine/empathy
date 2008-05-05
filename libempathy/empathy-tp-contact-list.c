@@ -38,10 +38,8 @@
 #define DEBUG_FLAG EMPATHY_DEBUG_TP | EMPATHY_DEBUG_CONTACT
 #include "empathy-debug.h"
 
-#define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), \
-		       EMPATHY_TYPE_TP_CONTACT_LIST, EmpathyTpContactListPriv))
-
-struct _EmpathyTpContactListPriv {
+#define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyTpContactList)
+typedef struct {
 	McAccount      *account;
 	TpConnection   *connection;
 	const gchar    *protocol_group;
@@ -54,7 +52,7 @@ struct _EmpathyTpContactListPriv {
 
 	GList          *groups;
 	GHashTable     *contacts_groups;
-};
+} EmpathyTpContactListPriv;
 
 typedef enum {
 	TP_CONTACT_LIST_TYPE_PUBLISH,
@@ -62,8 +60,6 @@ typedef enum {
 	TP_CONTACT_LIST_TYPE_UNKNOWN
 } TpContactListType;
 
-static void empathy_tp_contact_list_class_init (EmpathyTpContactListClass *klass);
-static void empathy_tp_contact_list_init       (EmpathyTpContactList      *list);
 static void tp_contact_list_iface_init         (EmpathyContactListIface   *iface);
 
 enum {
@@ -742,8 +738,10 @@ empathy_tp_contact_list_class_init (EmpathyTpContactListClass *klass)
 static void
 empathy_tp_contact_list_init (EmpathyTpContactList *list)
 {
-	EmpathyTpContactListPriv *priv = GET_PRIV (list);
+	EmpathyTpContactListPriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (list,
+		EMPATHY_TYPE_TP_CONTACT_LIST, EmpathyTpContactListPriv);
 
+	list->priv = priv;
 	priv->contacts_groups = g_hash_table_new_full (g_direct_hash,
 						       g_direct_equal,
 						       (GDestroyNotify) g_object_unref,

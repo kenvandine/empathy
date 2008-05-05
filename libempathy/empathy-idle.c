@@ -36,21 +36,11 @@
 #define DEBUG_FLAG EMPATHY_DEBUG_OTHER
 #include "empathy-debug.h"
 
-#define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), \
-		       EMPATHY_TYPE_IDLE, EmpathyIdlePriv))
-
 /* Number of seconds before entering extended autoaway. */
 #define EXT_AWAY_TIME (30*60)
 
-typedef enum {
-	NM_STATE_UNKNOWN,
-	NM_STATE_ASLEEP,
-	NM_STATE_CONNECTING,
-	NM_STATE_CONNECTED,
-	NM_STATE_DISCONNECTED
-} NMState;
-
-struct _EmpathyIdlePriv {
+#define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyIdle)
+typedef struct {
 	MissionControl *mc;
 	DBusGProxy     *gs_proxy;
 	DBusGProxy     *nm_proxy;
@@ -69,10 +59,16 @@ struct _EmpathyIdlePriv {
 	gboolean        is_idle;
 	gboolean        nm_connected;
 	guint           ext_away_timeout;
-};
+} EmpathyIdlePriv;
 
-static void     empathy_idle_class_init      (EmpathyIdleClass *klass);
-static void     empathy_idle_init            (EmpathyIdle      *idle);
+typedef enum {
+	NM_STATE_UNKNOWN,
+	NM_STATE_ASLEEP,
+	NM_STATE_CONNECTING,
+	NM_STATE_CONNECTED,
+	NM_STATE_DISCONNECTED
+} NMState;
+
 static void     idle_finalize                (GObject          *object);
 static void     idle_get_property            (GObject          *object,
 					      guint             param_id,
@@ -162,12 +158,12 @@ empathy_idle_class_init (EmpathyIdleClass *klass)
 static void
 empathy_idle_init (EmpathyIdle *idle)
 {
-	EmpathyIdlePriv *priv;
 	DBusGConnection *system_bus;
 	GError          *error = NULL;
+	EmpathyIdlePriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (idle,
+		EMPATHY_TYPE_IDLE, EmpathyIdlePriv);
 
-	priv = GET_PRIV (idle);
-
+	idle->priv = priv;
 	priv->is_idle = FALSE;
 	priv->mc = empathy_mission_control_new ();
 	priv->state = mission_control_get_presence_actual (priv->mc, NULL);

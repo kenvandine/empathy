@@ -34,8 +34,7 @@
 #include "empathy-theme-irc.h"
 #include "empathy-theme-manager.h"
 
-#define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), EMPATHY_TYPE_THEME_MANAGER, EmpathyThemeManagerPriv))
-
+#define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyThemeManager)
 typedef struct {
 	gchar       *name;
 	guint        name_notify_id;
@@ -211,10 +210,10 @@ empathy_theme_manager_class_init (EmpathyThemeManagerClass *klass)
 static void
 empathy_theme_manager_init (EmpathyThemeManager *manager)
 {
-	EmpathyThemeManagerPriv *priv;
+	EmpathyThemeManagerPriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (manager,
+		EMPATHY_TYPE_THEME_MANAGER, EmpathyThemeManagerPriv);
 
-	priv = GET_PRIV (manager);
-
+	manager->priv = priv;
 	priv->name_notify_id =
 		empathy_conf_notify_add (empathy_conf_get (),
 					EMPATHY_PREFS_CHAT_THEME,

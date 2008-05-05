@@ -39,6 +39,7 @@ typedef struct _EmpathyCellRendererExpanderClass EmpathyCellRendererExpanderClas
 
 struct _EmpathyCellRendererExpander {
   GtkCellRenderer parent;
+  gpointer priv;
 };
 
 struct _EmpathyCellRendererExpanderClass {

@@ -36,18 +36,13 @@
 #define DEBUG_FLAG EMPATHY_DEBUG_TP
 #include "empathy-debug.h"
 
-#define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), \
-		       EMPATHY_TYPE_TP_ROOMLIST, EmpathyTpRoomlistPriv))
-
-struct _EmpathyTpRoomlistPriv {
+#define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyTpRoomlist)
+typedef struct {
 	TpConnection *connection;
 	TpChannel    *channel;
 	McAccount    *account;
 	gboolean      is_listing;
-};
-
-static void empathy_tp_roomlist_class_init (EmpathyTpRoomlistClass *klass);
-static void empathy_tp_roomlist_init       (EmpathyTpRoomlist      *chat);
+} EmpathyTpRoomlistPriv;
 
 enum {
 	NEW_ROOM,
@@ -338,6 +333,10 @@ empathy_tp_roomlist_class_init (EmpathyTpRoomlistClass *klass)
 static void
 empathy_tp_roomlist_init (EmpathyTpRoomlist *list)
 {
+	EmpathyTpRoomlistPriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (list,
+		EMPATHY_TYPE_TP_ROOMLIST, EmpathyTpRoomlistPriv);
+
+	list->priv = priv;
 }
 
 EmpathyTpRoomlist *

@@ -44,15 +44,11 @@
 #define DEBUG_FLAG EMPATHY_DEBUG_FILTER
 #include <libempathy/empathy-debug.h>
 
-#define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), \
-		       EMPATHY_TYPE_STATUS_ICON, EmpathyStatusIconPriv))
-
 /* Number of ms to wait when blinking */
 #define BLINK_TIMEOUT 500
 
-typedef struct _StatusIconEvent StatusIconEvent;
-
-struct _EmpathyStatusIconPriv {
+#define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyStatusIcon)
+typedef struct {
 	GtkStatusIcon      *icon;
 	EmpathyIdle        *idle;
 	MissionControl     *mc;
@@ -67,7 +63,7 @@ struct _EmpathyStatusIconPriv {
 	GtkWidget          *show_window_item;
 	GtkWidget          *message_item;
 	GtkWidget          *status_item;
-};
+} EmpathyStatusIconPriv;
 
 G_DEFINE_TYPE (EmpathyStatusIcon, empathy_status_icon, G_TYPE_OBJECT);
 
@@ -369,8 +365,10 @@ status_icon_status_changed_cb (MissionControl           *mc,
 static void
 empathy_status_icon_init (EmpathyStatusIcon *icon)
 {
-	EmpathyStatusIconPriv *priv = GET_PRIV (icon);
+	EmpathyStatusIconPriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (icon,
+		EMPATHY_TYPE_STATUS_ICON, EmpathyStatusIconPriv);
 
+	icon->priv = priv;
 	priv->icon = gtk_status_icon_new ();
 	priv->mc = empathy_mission_control_new ();
 	priv->idle = empathy_idle_new ();

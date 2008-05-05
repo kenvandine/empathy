@@ -29,20 +29,15 @@
 #include "empathy-message.h"
 #include "empathy-enum-types.h"
 
-#define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), EMPATHY_TYPE_MESSAGE, EmpathyMessagePriv))
+#define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyMessage)
+typedef struct {
+	TpChannelTextMessageType  type;
+	EmpathyContact           *sender;
+	EmpathyContact           *receiver;
+	gchar                    *body;
+	time_t                    timestamp;
+} EmpathyMessagePriv;
 
-typedef struct _EmpathyMessagePriv EmpathyMessagePriv;
-
-struct _EmpathyMessagePriv {
-	EmpathyMessageType  type;
-	EmpathyContact     *sender;
-	EmpathyContact     *receiver;
-	gchar              *body;
-	time_t              timestamp;
-};
-
-static void empathy_message_class_init (EmpathyMessageClass *class);
-static void empathy_message_init       (EmpathyMessage      *message);
 static void empathy_message_finalize   (GObject            *object);
 static void message_get_property      (GObject            *object,
 				       guint               param_id,
@@ -53,6 +48,8 @@ static void message_set_property      (GObject            *object,
 				       const GValue       *value,
 				       GParamSpec         *pspec);
 
+G_DEFINE_TYPE (EmpathyMessage, empathy_message, G_TYPE_OBJECT);
+
 enum {
 	PROP_0,
 	PROP_TYPE,
@@ -62,53 +59,24 @@ enum {
 	PROP_TIMESTAMP,
 };
 
-static gpointer parent_class = NULL;
-
-GType
-empathy_message_get_gtype (void)
-{
-	static GType type = 0;
-
-	if (!type) {
-		static const GTypeInfo info = {
-			sizeof (EmpathyMessageClass),
-			NULL, /* base_init */
-			NULL, /* base_finalize */
-			(GClassInitFunc) empathy_message_class_init,
-			NULL, /* class_finalize */
-			NULL, /* class_data */
-			sizeof (EmpathyMessage),
-			0,    /* n_preallocs */
-			(GInstanceInitFunc) empathy_message_init
-		};
-
-		type = g_type_register_static (G_TYPE_OBJECT,
-					       "EmpathyMessage",
-					       &info, 0);
-	}
-
-	return type;
-}
-
 static void
 empathy_message_class_init (EmpathyMessageClass *class)
 {
 	GObjectClass *object_class;
 
 	object_class = G_OBJECT_CLASS (class);
-	parent_class = g_type_class_peek_parent (class);
-
 	object_class->finalize     = empathy_message_finalize;
 	object_class->get_property = message_get_property;
 	object_class->set_property = message_set_property;
 
 	g_object_class_install_property (object_class,
 					 PROP_TYPE,
-					 g_param_spec_enum ("type",
+					 g_param_spec_uint ("type",
 							    "Message Type",
 							    "The type of message",
-							    EMPATHY_TYPE_MESSAGE_TYPE,
-							    EMPATHY_MESSAGE_TYPE_NORMAL,
+							    TP_CHANNEL_TEXT_MESSAGE_TYPE_NORMAL,
+							    TP_CHANNEL_TEXT_MESSAGE_TYPE_AUTO_REPLY,
+							    TP_CHANNEL_TEXT_MESSAGE_TYPE_NORMAL,
 							    G_PARAM_READWRITE));
 	g_object_class_install_property (object_class,
 					 PROP_SENDER,
@@ -149,10 +117,10 @@ empathy_message_class_init (EmpathyMessageClass *class)
 static void
 empathy_message_init (EmpathyMessage *message)
 {
-	EmpathyMessagePriv *priv;
+	EmpathyMessagePriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (message,
+		EMPATHY_TYPE_MESSAGE, EmpathyMessagePriv);
 
-	priv = GET_PRIV (message);
-
+	message->priv = priv;
 	priv->timestamp = empathy_time_get_current ();
 }
 
@@ -172,7 +140,7 @@ empathy_message_finalize (GObject *object)
 
 	g_free (priv->body);
 
-	(G_OBJECT_CLASS (parent_class)->finalize) (object);
+	G_OBJECT_CLASS (empathy_message_parent_class)->finalize (object);
 }
 
 static void
@@ -187,7 +155,7 @@ message_get_property (GObject    *object,
 
 	switch (param_id) {
 	case PROP_TYPE:
-		g_value_set_enum (value, priv->type);
+		g_value_set_uint (value, priv->type);
 		break;
 	case PROP_SENDER:
 		g_value_set_object (value, priv->sender);
@@ -216,8 +184,8 @@ message_set_property (GObject      *object,
 
 	switch (param_id) {
 	case PROP_TYPE:
-		empathy_message_set_type (EMPATHY_MESSAGE (object),
-					  g_value_get_enum (value));
+		empathy_message_set_tptype (EMPATHY_MESSAGE (object),
+					    g_value_get_uint (value));
 		break;
 	case PROP_SENDER:
 		empathy_message_set_sender (EMPATHY_MESSAGE (object),
@@ -245,13 +213,13 @@ empathy_message_new (const gchar *body)
 			     NULL);
 }
 
-EmpathyMessageType
-empathy_message_get_type (EmpathyMessage *message)
+TpChannelTextMessageType
+empathy_message_get_tptype (EmpathyMessage *message)
 {
 	EmpathyMessagePriv *priv;
 
 	g_return_val_if_fail (EMPATHY_IS_MESSAGE (message),
-			      EMPATHY_MESSAGE_TYPE_NORMAL);
+			      TP_CHANNEL_TEXT_MESSAGE_TYPE_NORMAL);
 
 	priv = GET_PRIV (message);
 
@@ -259,8 +227,8 @@ empathy_message_get_type (EmpathyMessage *message)
 }
 
 void
-empathy_message_set_type (EmpathyMessage     *message,
-			 EmpathyMessageType  type)
+empathy_message_set_tptype (EmpathyMessage           *message,
+			    TpChannelTextMessageType  type)
 {
 	EmpathyMessagePriv *priv;
 
@@ -353,21 +321,19 @@ empathy_message_get_body (EmpathyMessage *message)
 
 void
 empathy_message_set_body (EmpathyMessage *message,
-			 const gchar   *body)
+			  const gchar    *body)
 {
-	EmpathyMessagePriv *priv;
-	EmpathyMessageType  type;
+	EmpathyMessagePriv       *priv = GET_PRIV (message);
+	TpChannelTextMessageType  type;
 
 	g_return_if_fail (EMPATHY_IS_MESSAGE (message));
-
-	priv = GET_PRIV (message);
 
 	g_free (priv->body);
 	priv->body = NULL;
 
-	type = EMPATHY_MESSAGE_TYPE_NORMAL;
+	type = TP_CHANNEL_TEXT_MESSAGE_TYPE_NORMAL;
 	if (g_str_has_prefix (body, "/me")) {
-		type = EMPATHY_MESSAGE_TYPE_ACTION;
+		type = TP_CHANNEL_TEXT_MESSAGE_TYPE_ACTION;
 		body += 4;
 	}
 	else if (g_str_has_prefix (body, "/say")) {
@@ -379,7 +345,7 @@ empathy_message_set_body (EmpathyMessage *message,
 	}
 
 	if (type != priv->type) {
-		empathy_message_set_type (message, type);
+		empathy_message_set_tptype (message, type);
 	}
 
 	g_object_notify (G_OBJECT (message), "body");
@@ -498,34 +464,34 @@ finished:
 	return ret_val;
 }
 
-EmpathyMessageType
+TpChannelTextMessageType
 empathy_message_type_from_str (const gchar *type_str)
 {
 	if (strcmp (type_str, "normal") == 0) {
-		return EMPATHY_MESSAGE_TYPE_NORMAL;
+		return TP_CHANNEL_TEXT_MESSAGE_TYPE_NORMAL;
 	}
 	if (strcmp (type_str, "action") == 0) {
-		return EMPATHY_MESSAGE_TYPE_ACTION;
+		return TP_CHANNEL_TEXT_MESSAGE_TYPE_ACTION;
 	}
 	else if (strcmp (type_str, "notice") == 0) {
-		return EMPATHY_MESSAGE_TYPE_NOTICE;
+		return TP_CHANNEL_TEXT_MESSAGE_TYPE_NOTICE;
 	}
 	else if (strcmp (type_str, "auto-reply") == 0) {
-		return EMPATHY_MESSAGE_TYPE_AUTO_REPLY;
+		return TP_CHANNEL_TEXT_MESSAGE_TYPE_AUTO_REPLY;
 	}
 
-	return EMPATHY_MESSAGE_TYPE_NORMAL;
+	return TP_CHANNEL_TEXT_MESSAGE_TYPE_NORMAL;
 }
 
 const gchar *
-empathy_message_type_to_str (EmpathyMessageType type)
+empathy_message_type_to_str (TpChannelTextMessageType type)
 {
 	switch (type) {
-	case EMPATHY_MESSAGE_TYPE_ACTION:
+	case TP_CHANNEL_TEXT_MESSAGE_TYPE_ACTION:
 		return "action";
-	case EMPATHY_MESSAGE_TYPE_NOTICE:
+	case TP_CHANNEL_TEXT_MESSAGE_TYPE_NOTICE:
 		return "notice";
-	case EMPATHY_MESSAGE_TYPE_AUTO_REPLY:
+	case TP_CHANNEL_TEXT_MESSAGE_TYPE_AUTO_REPLY:
 		return "auto-reply";
 	default:
 		return "normal";

@@ -29,6 +29,7 @@
 #include <gtk/gtk.h>
 #include <gio/gio.h>
 
+#include <libempathy/empathy-utils.h>
 #include "empathy-avatar-chooser.h"
 #include "empathy-conf.h"
 #include "empathy-ui-utils.h"
@@ -36,12 +37,11 @@
 #define DEBUG_FLAG EMPATHY_DEBUG_OTHER
 #include <libempathy/empathy-debug.h>
 
-#define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), EMPATHY_TYPE_AVATAR_CHOOSER, EmpathyAvatarChooserPriv))
-
 #define AVATAR_SIZE_SAVE 96
 #define AVATAR_SIZE_VIEW 64
 #define DEFAULT_DIR DATADIR"/pixmaps/faces"
 
+#define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyAvatarChooser)
 typedef struct {
 	gchar *image_data;
 	gsize  image_data_size;
@@ -122,10 +122,10 @@ empathy_avatar_chooser_class_init (EmpathyAvatarChooserClass *klass)
 static void
 empathy_avatar_chooser_init (EmpathyAvatarChooser *chooser)
 {
-	EmpathyAvatarChooserPriv *priv;
+	EmpathyAvatarChooserPriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (chooser,
+		EMPATHY_TYPE_AVATAR_CHOOSER, EmpathyAvatarChooserPriv);
 
-	priv = GET_PRIV (chooser);
-
+	chooser->priv = priv;
 	gtk_drag_dest_set (GTK_WIDGET (chooser),
 			   GTK_DEST_DEFAULT_ALL,
 			   drop_types,

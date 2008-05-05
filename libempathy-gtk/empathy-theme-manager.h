@@ -36,7 +36,8 @@ typedef struct _EmpathyThemeManager      EmpathyThemeManager;
 typedef struct _EmpathyThemeManagerClass EmpathyThemeManagerClass;
 
 struct _EmpathyThemeManager {
-	GObject      parent;
+	GObject parent;
+	gpointer priv;
 };
 
 struct _EmpathyThemeManagerClass {

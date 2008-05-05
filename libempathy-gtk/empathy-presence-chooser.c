@@ -42,11 +42,10 @@
 #include "empathy-images.h"
 #include "empathy-presence-chooser.h"
 
-#define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), EMPATHY_TYPE_PRESENCE_CHOOSER, EmpathyPresenceChooserPriv))
-
 /* Flashing delay for icons (milliseconds). */
 #define FLASH_TIMEOUT 500
 
+#define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyPresenceChooser)
 typedef struct {
 	EmpathyIdle *idle;
 
@@ -97,8 +96,6 @@ static guint states[] = {MC_PRESENCE_AVAILABLE, TRUE,
 			 MC_PRESENCE_HIDDEN, FALSE,
 			 MC_PRESENCE_OFFLINE, FALSE};
 
-static void            empathy_presence_chooser_class_init      (EmpathyPresenceChooserClass *klass);
-static void            empathy_presence_chooser_init            (EmpathyPresenceChooser      *chooser);
 static void            presence_chooser_finalize               (GObject                    *object);
 static void            presence_chooser_presence_changed_cb    (EmpathyPresenceChooser      *chooser);
 static void            presence_chooser_reset_scroll_timeout   (EmpathyPresenceChooser      *chooser);
@@ -159,12 +156,12 @@ empathy_presence_chooser_class_init (EmpathyPresenceChooserClass *klass)
 static void
 empathy_presence_chooser_init (EmpathyPresenceChooser *chooser)
 {
-	EmpathyPresenceChooserPriv *priv;
-	GtkWidget                 *arrow;
-	GtkWidget                 *alignment;
+	GtkWidget                  *arrow;
+	GtkWidget                  *alignment;
+	EmpathyPresenceChooserPriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (chooser,
+		EMPATHY_TYPE_PRESENCE_CHOOSER, EmpathyPresenceChooserPriv);
 
-	priv = GET_PRIV (chooser);
-
+	chooser->priv = priv;
 	gtk_button_set_relief (GTK_BUTTON (chooser), GTK_RELIEF_NONE);
 	gtk_button_set_focus_on_click (GTK_BUTTON (chooser), FALSE);
 

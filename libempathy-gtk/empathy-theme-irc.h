@@ -39,6 +39,7 @@ typedef struct _EmpathyThemeIrcClass EmpathyThemeIrcClass;
 
 struct _EmpathyThemeIrc {
 	EmpathyTheme parent;
+	gpointer priv;
 };
 
 struct _EmpathyThemeIrcClass {

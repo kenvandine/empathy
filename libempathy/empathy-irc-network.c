@@ -29,8 +29,15 @@
 
 #include "empathy-marshal.h"
 #include "empathy-irc-network.h"
+#include "empathy-utils.h"
 
-G_DEFINE_TYPE (EmpathyIrcNetwork, empathy_irc_network, G_TYPE_OBJECT);
+#define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyIrcNetwork)
+typedef struct
+{
+  gchar *name;
+  gchar *charset;
+  GSList *servers;
+} EmpathyIrcNetworkPriv;
 
 /* properties */
 enum
@@ -49,17 +56,7 @@ enum
 
 static guint signals[LAST_SIGNAL] = {0};
 
-typedef struct _EmpathyIrcNetworkPrivate EmpathyIrcNetworkPrivate;
-
-struct _EmpathyIrcNetworkPrivate
-{
-  gchar *name;
-  gchar *charset;
-  GSList *servers;
-};
-
-#define EMPATHY_IRC_NETWORK_GET_PRIVATE(obj)\
-    ((EmpathyIrcNetworkPrivate *) obj->priv)
+G_DEFINE_TYPE (EmpathyIrcNetwork, empathy_irc_network, G_TYPE_OBJECT);
 
 static void
 server_modified_cb (EmpathyIrcServer *server,
@@ -75,7 +72,7 @@ empathy_irc_network_get_property (GObject *object,
                                   GParamSpec *pspec)
 {
   EmpathyIrcNetwork *self = EMPATHY_IRC_NETWORK (object);
-  EmpathyIrcNetworkPrivate *priv = EMPATHY_IRC_NETWORK_GET_PRIVATE (self);
+  EmpathyIrcNetworkPriv *priv = GET_PRIV (self);
 
   switch (property_id)
     {
@@ -98,7 +95,7 @@ empathy_irc_network_set_property (GObject *object,
                                   GParamSpec *pspec)
 {
   EmpathyIrcNetwork *self = EMPATHY_IRC_NETWORK (object);
-  EmpathyIrcNetworkPrivate *priv = EMPATHY_IRC_NETWORK_GET_PRIVATE (self);
+  EmpathyIrcNetworkPriv *priv = GET_PRIV (self);
 
   switch (property_id)
     {
@@ -128,7 +125,7 @@ static void
 empathy_irc_network_dispose (GObject *object)
 {
   EmpathyIrcNetwork *self = EMPATHY_IRC_NETWORK (object);
-  EmpathyIrcNetworkPrivate *priv = EMPATHY_IRC_NETWORK_GET_PRIVATE (self);
+  EmpathyIrcNetworkPriv *priv = GET_PRIV (self);
   GSList *l;
 
   for (l = priv->servers; l != NULL; l = g_slist_next (l))
@@ -145,7 +142,7 @@ static void
 empathy_irc_network_finalize (GObject *object)
 {
   EmpathyIrcNetwork *self = EMPATHY_IRC_NETWORK (object);
-  EmpathyIrcNetworkPrivate *priv = EMPATHY_IRC_NETWORK_GET_PRIVATE (self);
+  EmpathyIrcNetworkPriv *priv = GET_PRIV (self);
 
   g_slist_free (priv->servers);
   g_free (priv->name);
@@ -157,8 +154,8 @@ empathy_irc_network_finalize (GObject *object)
 static void
 empathy_irc_network_init (EmpathyIrcNetwork *self)
 {
-  EmpathyIrcNetworkPrivate *priv = G_TYPE_INSTANCE_GET_PRIVATE (self,
-      EMPATHY_TYPE_IRC_NETWORK, EmpathyIrcNetworkPrivate);
+  EmpathyIrcNetworkPriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (self,
+      EMPATHY_TYPE_IRC_NETWORK, EmpathyIrcNetworkPriv);
 
   self->priv = priv;
 
@@ -177,8 +174,7 @@ empathy_irc_network_class_init (EmpathyIrcNetworkClass *klass)
   object_class->get_property = empathy_irc_network_get_property;
   object_class->set_property = empathy_irc_network_set_property;
 
-  g_type_class_add_private (object_class,
-          sizeof (EmpathyIrcNetworkPrivate));
+  g_type_class_add_private (object_class, sizeof (EmpathyIrcNetworkPriv));
 
   object_class->dispose = empathy_irc_network_dispose;
   object_class->finalize = empathy_irc_network_finalize;
@@ -253,11 +249,11 @@ empathy_irc_network_new (const gchar *name)
 GSList *
 empathy_irc_network_get_servers (EmpathyIrcNetwork *self)
 {
-  EmpathyIrcNetworkPrivate *priv;
+  EmpathyIrcNetworkPriv *priv;
   GSList *servers = NULL, *l;
 
   g_return_val_if_fail (EMPATHY_IS_IRC_NETWORK (self), NULL);
-  priv = EMPATHY_IRC_NETWORK_GET_PRIVATE (self);
+  priv = GET_PRIV (self);
 
   for (l = priv->servers; l != NULL; l = g_slist_next (l))
     {
@@ -280,12 +276,12 @@ void
 empathy_irc_network_append_server (EmpathyIrcNetwork *self,
                                    EmpathyIrcServer *server)
 {
-  EmpathyIrcNetworkPrivate *priv;
+  EmpathyIrcNetworkPriv *priv;
 
   g_return_if_fail (EMPATHY_IS_IRC_NETWORK (self));
   g_return_if_fail (server != NULL && EMPATHY_IS_IRC_SERVER (server));
 
-  priv = EMPATHY_IRC_NETWORK_GET_PRIVATE (self);
+  priv = GET_PRIV (self);
 
   g_return_if_fail (g_slist_find (priv->servers, server) == NULL);
 
@@ -309,13 +305,13 @@ void
 empathy_irc_network_remove_server (EmpathyIrcNetwork *self,
                                    EmpathyIrcServer *server)
 {
-  EmpathyIrcNetworkPrivate *priv;
+  EmpathyIrcNetworkPriv *priv;
   GSList *l;
 
   g_return_if_fail (EMPATHY_IS_IRC_NETWORK (self));
   g_return_if_fail (server != NULL && EMPATHY_IS_IRC_SERVER (server));
 
-  priv = EMPATHY_IRC_NETWORK_GET_PRIVATE (self);
+  priv = GET_PRIV (self);
 
   l = g_slist_find (priv->servers, server);
   if (l == NULL)
@@ -346,13 +342,13 @@ empathy_irc_network_set_server_position (EmpathyIrcNetwork *self,
                                          EmpathyIrcServer *server,
                                          gint pos)
 {
-  EmpathyIrcNetworkPrivate *priv;
+  EmpathyIrcNetworkPriv *priv;
   GSList *l;
 
   g_return_if_fail (EMPATHY_IS_IRC_NETWORK (self));
   g_return_if_fail (server != NULL && EMPATHY_IS_IRC_SERVER (server));
 
-  priv = EMPATHY_IRC_NETWORK_GET_PRIVATE (self);
+  priv = GET_PRIV (self);
 
   l = g_slist_find (priv->servers, server);
   if (l == NULL)

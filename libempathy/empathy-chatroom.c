@@ -28,17 +28,15 @@
 #include "empathy-chatroom.h"
 #include "empathy-utils.h"
 
-#define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), EMPATHY_TYPE_CHATROOM, EmpathyChatroomPriv))
-
-struct _EmpathyChatroomPriv {
+#define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyChatroom)
+typedef struct {
 	McAccount *account;
 	gchar     *room;
 	gchar     *name;
 	gboolean   auto_connect;
-};
+} EmpathyChatroomPriv;
 
-static void empathy_chatroom_class_init (EmpathyChatroomClass *klass);
-static void empathy_chatroom_init       (EmpathyChatroom      *chatroom);
+
 static void chatroom_finalize          (GObject             *object);
 static void chatroom_get_property      (GObject             *object,
 					guint                param_id,
@@ -107,6 +105,10 @@ empathy_chatroom_class_init (EmpathyChatroomClass *klass)
 static void
 empathy_chatroom_init (EmpathyChatroom *chatroom)
 {
+	EmpathyChatroomPriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (chatroom,
+		EMPATHY_TYPE_CHATROOM, EmpathyChatroomPriv);
+
+	chatroom->priv = priv;
 }
 
 static void

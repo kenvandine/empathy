@@ -41,6 +41,7 @@ typedef struct _EmpathyPresenceChooserClass EmpathyPresenceChooserClass;
 
 struct _EmpathyPresenceChooser {
 	GtkToggleButton parent;
+	gpointer priv;
 };
 
 struct _EmpathyPresenceChooserClass {

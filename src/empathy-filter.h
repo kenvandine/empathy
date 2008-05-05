@@ -35,10 +35,10 @@ G_BEGIN_DECLS
 
 typedef struct _EmpathyFilter      EmpathyFilter;
 typedef struct _EmpathyFilterClass EmpathyFilterClass;
-typedef struct _EmpathyFilterPriv  EmpathyFilterPriv;
 
 struct _EmpathyFilter {
-	GObject      parent;
+	GObject parent;
+	gpointer priv;
 };
 
 struct _EmpathyFilterClass {

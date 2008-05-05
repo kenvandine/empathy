@@ -32,12 +32,11 @@ typedef struct _EmpathyIrcNetworkClass EmpathyIrcNetworkClass;
 
 struct _EmpathyIrcNetwork
 {
-    GObject parent;
+  GObject parent;
+  gpointer priv;
 
-    gpointer priv;
-
-    gboolean user_defined;
-    gboolean dropped;
+  gboolean user_defined;
+  gboolean dropped;
 };
 
 struct _EmpathyIrcNetworkClass

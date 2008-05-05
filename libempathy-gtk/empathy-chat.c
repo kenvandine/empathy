@@ -53,15 +53,14 @@
 #define DEBUG_FLAG EMPATHY_DEBUG_CHAT
 #include <libempathy/empathy-debug.h>
 
-#define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), EMPATHY_TYPE_CHAT, EmpathyChatPriv))
-
 #define CHAT_DIR_CREATE_MODE  (S_IRUSR | S_IWUSR | S_IXUSR)
 #define CHAT_FILE_CREATE_MODE (S_IRUSR | S_IWUSR)
 #define IS_ENTER(v) (v == GDK_Return || v == GDK_ISO_Enter || v == GDK_KP_Enter)
 #define MAX_INPUT_HEIGHT 150
 #define COMPOSING_STOP_TIMEOUT 5
 
-struct _EmpathyChatPriv {
+#define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyChat)
+typedef struct {
 	EmpathyTpChat     *tp_chat;
 	McAccount         *account;
 	gchar             *id;
@@ -92,10 +91,7 @@ struct _EmpathyChatPriv {
 	GtkWidget         *hbox_topic;
 	GtkWidget         *label_topic;
 	GtkWidget         *contact_list_view;
-};
-
-static void empathy_chat_class_init (EmpathyChatClass *klass);
-static void empathy_chat_init       (EmpathyChat      *chat);
+} EmpathyChatPriv;
 
 enum {
 	COMPOSING,
@@ -1532,8 +1528,10 @@ chat_block_events_timeout_cb (gpointer data)
 static void
 empathy_chat_init (EmpathyChat *chat)
 {
-	EmpathyChatPriv *priv = GET_PRIV (chat);
+	EmpathyChatPriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (chat,
+		EMPATHY_TYPE_CHAT, EmpathyChatPriv);
 
+	chat->priv = priv;
 	priv->log_manager = empathy_log_manager_new ();
 	priv->contacts_width = -1;
 	priv->sent_messages = NULL;

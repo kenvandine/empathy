@@ -42,10 +42,10 @@ G_BEGIN_DECLS
 
 typedef struct _EmpathyChatroomManager      EmpathyChatroomManager;
 typedef struct _EmpathyChatroomManagerClass EmpathyChatroomManagerClass;
-typedef struct _EmpathyChatroomManagerPriv  EmpathyChatroomManagerPriv;
 
 struct _EmpathyChatroomManager {
 	GObject parent;
+	gpointer priv;
 };
 
 struct _EmpathyChatroomManagerClass {

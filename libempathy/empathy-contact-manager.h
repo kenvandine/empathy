@@ -40,10 +40,10 @@ G_BEGIN_DECLS
 
 typedef struct _EmpathyContactManager      EmpathyContactManager;
 typedef struct _EmpathyContactManagerClass EmpathyContactManagerClass;
-typedef struct _EmpathyContactManagerPriv  EmpathyContactManagerPriv;
 
 struct _EmpathyContactManager {
-	GObject      parent;
+	GObject parent;
+	gpointer priv;
 };
 
 struct _EmpathyContactManagerClass {
