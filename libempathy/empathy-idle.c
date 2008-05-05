@@ -172,6 +172,10 @@ empathy_idle_init (EmpathyIdle *idle)
 	priv->mc = empathy_mission_control_new ();
 	priv->state = mission_control_get_presence_actual (priv->mc, NULL);
 	priv->status = mission_control_get_presence_message_actual (priv->mc, NULL);
+	if (G_STR_EMPTY (priv->status)) {
+		g_free (priv->status);
+		priv->status = NULL;
+	}
 
 	dbus_g_proxy_connect_signal (DBUS_G_PROXY (priv->mc),
 				     "PresenceChanged",

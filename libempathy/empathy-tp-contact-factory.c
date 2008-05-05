@@ -107,14 +107,18 @@ tp_contact_factory_presences_table_foreach (const gchar    *state_str,
 					    EmpathyContact *contact)
 {
 	const GValue *message;
+	const gchar  *message_str = NULL;
 
 	empathy_contact_set_presence (contact,
 				      empathy_presence_from_str (state_str));
 	
 	message = g_hash_table_lookup (presences_table, "message");
-	if (message != NULL) {
-		empathy_contact_set_presence_message (contact,
-						      g_value_get_string (message));
+	if (message) {
+		message_str = g_value_get_string (message);
+	}
+
+	if (!G_STR_EMPTY (message_str)) {
+		empathy_contact_set_presence_message (contact, message_str);
 	} else {
 		empathy_contact_set_presence_message (contact, NULL);
 	}
@@ -139,7 +143,7 @@ tp_contact_factory_parse_presence_foreach (guint                    handle,
 			      (GHFunc) tp_contact_factory_presences_table_foreach,
 			      contact);
 
-	DEBUG ("Changing presence for contact %s (%d) to %s (%d)",
+	DEBUG ("Changing presence for contact %s (%d) to '%s' (%d)",
 		empathy_contact_get_id (contact),
 		handle,
 		empathy_contact_get_presence_message (contact),
