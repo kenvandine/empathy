@@ -31,7 +31,6 @@
 
 #include "empathy-idle.h"
 #include "empathy-utils.h" 
-#include "empathy-debug.h"
 
 #define DEBUG_FLAG EMPATHY_DEBUG_OTHER
 #include "empathy-debug.h"
