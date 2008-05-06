@@ -25,8 +25,6 @@
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 
-#include <libempathy/empathy-debug.h>
-
 #include "empathy-utils.h"
 #include "empathy-irc-network-manager.h"
 

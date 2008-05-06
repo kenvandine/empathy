@@ -31,7 +31,6 @@
 #include "empathy-tp-roomlist.h"
 #include "empathy-chatroom.h"
 #include "empathy-utils.h"
-#include "empathy-debug.h"
 
 #define DEBUG_FLAG EMPATHY_DEBUG_TP
 #include "empathy-debug.h"
