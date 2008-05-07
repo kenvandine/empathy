@@ -73,7 +73,6 @@ typedef struct {
 	GSList            *sent_messages;
 	gint               sent_messages_index;
 	GList             *compositors;
-	GList             *backlog_messages;
 	GCompletion       *completion;
 	guint              composing_stop_timeout_id;
 	guint              block_events_timeout_id;
@@ -452,38 +451,10 @@ chat_message_received_cb (EmpathyTpChat  *tp_chat,
 			  EmpathyMessage *message,
 			  EmpathyChat    *chat)
 {
-	EmpathyChatPriv *priv;
+	EmpathyChatPriv *priv = GET_PRIV (chat);
 	EmpathyContact  *sender;
-	const gchar     *body;
-
-	priv = GET_PRIV (chat);
 
 	sender = empathy_message_get_sender (message);
-	body = empathy_message_get_body (message);
-	while (priv->backlog_messages) {
-		EmpathyMessage *log_message;
-		EmpathyContact *log_sender;
-		const gchar    *log_body;
-
-		log_message = priv->backlog_messages->data;
-		log_sender = empathy_message_get_sender (log_message);
-		log_body = empathy_message_get_body (log_message);
-
-		priv->backlog_messages = g_list_remove (priv->backlog_messages,
-							log_message);
-
-		if (empathy_contact_equal (sender, log_sender) &&
-		    !tp_strdiff (body, log_body)) {
-			/* The message we received is already displayed because
-			 * some jabber chatrooms sends us back logs and we
-			 * already displayed it from localy logged messages. */
-			DEBUG ("Skipping message because it is already "
-				"displayed from logged messages");
-			g_object_unref (log_message);
-			return;
-		}
-		g_object_unref (log_message);
-	}
 
 	DEBUG ("Appending new message from %s (%d)",
 		empathy_contact_get_name (sender),
@@ -1067,8 +1038,9 @@ chat_add_logs (EmpathyChat *chat)
 
 	for (l = messages; l; l = l->next) {
 		empathy_chat_view_append_message (chat->view, l->data);
+		g_object_unref (l->data);
 	}
-	priv->backlog_messages = messages;
+	g_list_free (messages);
 
 	/* Turn back on scrolling */
 	empathy_chat_view_scroll (chat->view, TRUE);
@@ -1394,9 +1366,6 @@ chat_finalize (GObject *object)
 
 	g_list_foreach (priv->compositors, (GFunc) g_object_unref, NULL);
 	g_list_free (priv->compositors);
-
-	g_list_foreach (priv->backlog_messages, (GFunc) g_object_unref, NULL);
-	g_list_free (priv->backlog_messages);
 
 	chat_composing_remove_timeout (chat);
 
