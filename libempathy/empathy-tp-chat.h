@@ -53,8 +53,7 @@ struct _EmpathyTpChatClass {
 };
 
 GType          empathy_tp_chat_get_type             (void) G_GNUC_CONST;
-EmpathyTpChat *empathy_tp_chat_new                  (TpChannel          *channel,
-						     gboolean            acknowledge);
+EmpathyTpChat *empathy_tp_chat_new                  (TpChannel          *channel);
 const gchar *  empathy_tp_chat_get_id               (EmpathyTpChat      *chat);
 EmpathyContact*empathy_tp_chat_get_remote_contact   (EmpathyTpChat      *chat);
 McAccount *    empathy_tp_chat_get_account          (EmpathyTpChat      *chat);

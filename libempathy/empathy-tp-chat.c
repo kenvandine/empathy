@@ -47,7 +47,7 @@ typedef struct {
 	TpChannel             *channel;
 	gchar                 *id;
 	gboolean               acknowledge;
-	gboolean               had_pending_messages;
+	gboolean               listing_pending_messages;
 	GSList                *message_queue;
 	gboolean               had_properties_list;
 	GPtrArray             *properties;
@@ -370,7 +370,7 @@ tp_chat_received_cb (TpChannel   *channel,
 	EmpathyTpChatPriv *priv = GET_PRIV (chat);
 	EmpathyMessage    *message;
 
-	if (!priv->had_pending_messages) {
+	if (priv->listing_pending_messages) {
 		return;
 	}
  
@@ -478,7 +478,7 @@ tp_chat_list_pending_messages_cb (TpChannel       *channel,
 	guint              i;
 	GArray            *message_ids = NULL;
 
-	priv->had_pending_messages = TRUE;
+	priv->listing_pending_messages = FALSE;
 
 	if (error) {
 		DEBUG ("Error listing pending messages: %s", error->message);
@@ -796,6 +796,7 @@ tp_chat_channel_ready_cb (EmpathyTpChat *chat)
 									       G_OBJECT (chat), NULL);
 	}
 
+	priv->listing_pending_messages = TRUE;
 	tp_cli_channel_type_text_call_list_pending_messages (priv->channel, -1,
 							     FALSE,
 							     tp_chat_list_pending_messages_cb,
@@ -981,8 +982,7 @@ empathy_tp_chat_class_init (EmpathyTpChatClass *klass)
 							       "acknowledge messages",
 							       "Wheter or not received messages should be acknowledged",
 							       FALSE,
-							       G_PARAM_READWRITE |
-							       G_PARAM_CONSTRUCT));
+							       G_PARAM_READWRITE));
 
 	g_object_class_install_property (object_class,
 					 PROP_REMOTE_CONTACT,
@@ -1071,12 +1071,10 @@ tp_chat_iface_init (EmpathyContactListIface *iface)
 }
 
 EmpathyTpChat *
-empathy_tp_chat_new (TpChannel *channel,
-		     gboolean   acknowledge)
+empathy_tp_chat_new (TpChannel *channel)
 {
 	return g_object_new (EMPATHY_TYPE_TP_CHAT, 
 			     "channel", channel,
-			     "acknowledge", acknowledge,
 			     NULL);
 }
 
@@ -1161,6 +1159,11 @@ empathy_tp_chat_emit_pendings (EmpathyTpChat *chat)
 	g_return_if_fail (EMPATHY_IS_TP_CHAT (chat));
 	g_return_if_fail (priv->ready);
 
+	if (priv->listing_pending_messages) {
+		return;
+	}
+
+	priv->listing_pending_messages = TRUE;
 	tp_cli_channel_type_text_call_list_pending_messages (priv->channel, -1,
 							     FALSE,
 							     tp_chat_list_pending_messages_cb,
