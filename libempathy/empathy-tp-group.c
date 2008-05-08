@@ -949,11 +949,16 @@ empathy_tp_group_get_invitation (EmpathyTpGroup  *group,
 		}
 	}
 
-	if (invitation && priv->members && !priv->members->next) {
-		contact = priv->members->data;
+	if (invitation) {
+		contact = invitation->actor;
 	}
-	if (!invitation && priv->remote_pendings && !priv->remote_pendings->next) {
-		contact = priv->remote_pendings->data;
+	if (!invitation) {
+		if (priv->remote_pendings) {
+			contact = priv->remote_pendings->data;
+		}
+		else if (priv->members) {
+			contact = priv->members->data;
+		}
 	}
 
 	if (remote_contact && contact) {
