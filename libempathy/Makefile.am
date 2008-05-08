@@ -41,7 +41,8 @@ libempathy_la_SOURCES =					\
 	empathy-irc-network-manager.c			\
 	empathy-irc-network.c				\
 	empathy-irc-server.c				\
-	empathy-tube-handler.c
+	empathy-tube-handler.c				\
+	empathy-dispatcher.c
 
 # do not distribute generated files
 nodist_libempathy_la_SOURCES =\
@@ -81,7 +82,8 @@ libempathy_headers =				\
 	empathy-irc-network-manager.h		\
 	empathy-irc-network.h			\
 	empathy-irc-server.h			\
-	empathy-tube-handler.h
+	empathy-tube-handler.h			\
+	empathy-dispatcher.h
 
 libempathy_includedir = $(includedir)/libempathy/
 libempathy_include_HEADERS =			\

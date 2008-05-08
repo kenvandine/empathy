@@ -31,7 +31,6 @@ empathy_SOURCES =							\
 	empathy-main-window.c empathy-main-window.h			\
 	empathy-preferences.c empathy-preferences.h			\
 	empathy-call-window.c empathy-call-window.h			\
-	empathy-filter.c empathy-filter.h				\
 	ephy-spinner.c ephy-spinner.h
 
 empathy_accounts_SOURCES = empathy-accounts.c

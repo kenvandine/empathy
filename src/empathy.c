@@ -38,17 +38,73 @@
 
 #include <libempathy/empathy-idle.h>
 #include <libempathy/empathy-utils.h>
+#include <libempathy/empathy-dispatcher.h>
+#include <libempathy/empathy-tp-chat.h>
+#include <libempathy/empathy-tp-call.h>
 
 #include <libempathy-gtk/empathy-conf.h>
 
 #include "empathy-main-window.h"
 #include "empathy-status-icon.h"
+#include "empathy-call-window.h"
+#include "empathy-chat-window.h"
 #include "bacon-message-connection.h"
 
 #define DEBUG_FLAG EMPATHY_DEBUG_OTHER
 #include <libempathy/empathy-debug.h>
 
 static BaconMessageConnection *connection = NULL;
+
+static void
+dispatch_channel_cb (EmpathyDispatcher *dispatcher,
+		     TpChannel         *channel,
+		     gpointer           user_data)
+{
+	gchar *channel_type;
+
+	g_object_get (channel, "channel-type", &channel_type, NULL);
+	if (!tp_strdiff (channel_type, TP_IFACE_CHANNEL_TYPE_TEXT)) {
+		EmpathyTpChat *tp_chat;
+		EmpathyChat   *chat = NULL;
+		const gchar   *id;
+
+		tp_chat = empathy_tp_chat_new (channel);
+		empathy_run_until_ready (tp_chat);
+
+		id = empathy_tp_chat_get_id (tp_chat);
+		if (!id) {
+			EmpathyContact *contact;
+
+			contact = empathy_tp_chat_get_remote_contact (tp_chat);
+			if (contact) {
+				id = empathy_contact_get_id (contact);
+			}
+		}
+
+		if (id) {
+			McAccount *account;
+
+			account = empathy_tp_chat_get_account (tp_chat);
+			chat = empathy_chat_window_find_chat (account, id);
+		}
+
+		if (chat) {
+			empathy_chat_set_tp_chat (chat, tp_chat);
+		} else {
+			chat = empathy_chat_new (tp_chat);
+		}
+
+		empathy_chat_window_present_chat (chat);
+		g_object_unref (tp_chat);
+	}
+	else if (!tp_strdiff (channel_type, TP_IFACE_CHANNEL_TYPE_STREAMED_MEDIA)) {
+		EmpathyTpCall *tp_call;
+
+		tp_call = empathy_tp_call_new (channel);
+		empathy_call_window_new (tp_call);
+		g_object_unref (tp_call);
+	}
+}
 
 static void
 service_ended_cb (MissionControl *mc,
@@ -300,6 +356,7 @@ main (int argc, char *argv[])
 {
 	guint32            startup_timestamp;
 	EmpathyStatusIcon *icon;
+	EmpathyDispatcher *dispatcher;
 	GtkWidget         *window;
 	MissionControl    *mc;
 	EmpathyIdle       *idle;
@@ -402,6 +459,12 @@ main (int argc, char *argv[])
 						       window);
 	}
 
+	/* Handle channels */
+	dispatcher = empathy_dispatcher_new ();
+	g_signal_connect (dispatcher, "dispatch-channel",
+			  G_CALLBACK (dispatch_channel_cb),
+			  NULL);
+
 	gtk_main ();
 
 	empathy_idle_set_state (idle, MC_PRESENCE_OFFLINE);
@@ -409,6 +472,7 @@ main (int argc, char *argv[])
 	g_object_unref (mc);
 	g_object_unref (idle);
 	g_object_unref (icon);
+	g_object_unref (dispatcher);
 
 	return EXIT_SUCCESS;
 }
