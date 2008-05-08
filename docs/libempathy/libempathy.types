@@ -17,3 +17,5 @@ empathy_tube_handler_get_type
 empathy_irc_server_get_type
 empathy_irc_network_get_type
 empathy_irc_network_manager_get_type
+empathy_dispatcher_get_type
+
