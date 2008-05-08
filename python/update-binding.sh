@@ -30,6 +30,7 @@ python /usr/share/pygtk/2.0/codegen/h2def.py	\
 	empathy-irc-network.h			\
 	empathy-irc-server.h			\
 	empathy-tube-handler.h			\
+	empathy-dispatcher.h			\
  > ../python/pyempathy/pyempathy.defs
 
 # Update the list of headers from Makefile.am

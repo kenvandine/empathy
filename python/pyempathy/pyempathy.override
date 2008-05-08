@@ -11,6 +11,7 @@ headers
 #include "empathy-contact-list.h"
 #include "empathy-contact-manager.h"
 #include "empathy-debug.h"
+#include "empathy-dispatcher.h"
 #include "empathy-enum-types.h"
 #include "empathy-idle.h"
 #include "empathy-irc-network.h"

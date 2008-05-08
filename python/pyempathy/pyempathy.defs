@@ -42,6 +42,13 @@
   (gtype-id "EMPATHY_TYPE_CONTACT_MANAGER")
 )
 
+(define-object Dispatcher
+  (in-module "Empathy")
+  (parent "GObject")
+  (c-name "EmpathyDispatcher")
+  (gtype-id "EMPATHY_TYPE_DISPATCHER")
+)
+
 (define-object Idle
   (in-module "Empathy")
   (parent "GObject")
@@ -153,7 +160,7 @@
     '("contact" "EMPATHY_DEBUG_CONTACT")
     '("account" "EMPATHY_DEBUG_ACCOUNT")
     '("irc" "EMPATHY_DEBUG_IRC")
-    '("filter" "EMPATHY_DEBUG_FILTER")
+    '("dispatcher" "EMPATHY_DEBUG_DISPATCHER")
     '("other" "EMPATHY_DEBUG_OTHER")
   )
 )
@@ -1591,7 +1598,6 @@
   (return-type "EmpathyTpChat*")
   (parameters
     '("TpChannel*" "channel")
-    '("gboolean" "acknowledge")
   )
 )
 
@@ -2243,6 +2249,56 @@
   (parameters
     '("TpTubeType" "type")
     '("const-gchar*" "service")
+  )
+)
+
+
+
+;; From empathy-dispatcher.h
+
+(define-function empathy_dispatcher_get_type
+  (c-name "empathy_dispatcher_get_type")
+  (return-type "GType")
+)
+
+(define-function empathy_dispatcher_new
+  (c-name "empathy_dispatcher_new")
+  (is-constructor-of "EmpathyDispatcher")
+  (return-type "EmpathyDispatcher*")
+)
+
+(define-method channel_process
+  (of-object "EmpathyDispatcher")
+  (c-name "empathy_dispatcher_channel_process")
+  (return-type "none")
+  (parameters
+    '("TpChannel*" "channel")
+  )
+)
+
+(define-function empathy_dispatcher_tube_get_type
+  (c-name "empathy_dispatcher_tube_get_type")
+  (return-type "GType")
+)
+
+(define-method ref
+  (of-object "EmpathyDispatcherTube")
+  (c-name "empathy_dispatcher_tube_ref")
+  (return-type "EmpathyDispatcherTube*")
+)
+
+(define-method unref
+  (of-object "EmpathyDispatcherTube")
+  (c-name "empathy_dispatcher_tube_unref")
+  (return-type "none")
+)
+
+(define-method tube_process
+  (of-object "EmpathyDispatcher")
+  (c-name "empathy_dispatcher_tube_process")
+  (return-type "none")
+  (parameters
+    '("EmpathyDispatcherTube*" "tube")
   )
 )
 
