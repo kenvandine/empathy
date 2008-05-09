@@ -368,6 +368,13 @@ status_icon_channel_process (EmpathyStatusIcon *icon,
 	g_object_unref (channel);
 }
 
+static gboolean
+status_icon_chat_unref_idle (gpointer user_data)
+{
+	g_object_unref (user_data);
+	return FALSE;
+}
+
 static void
 status_icon_chat_message_received_cb (EmpathyTpChat     *tp_chat,
 				      EmpathyMessage    *message,
@@ -376,6 +383,11 @@ status_icon_chat_message_received_cb (EmpathyTpChat     *tp_chat,
 	EmpathyContact  *sender;
 	gchar           *msg;
 	TpChannel       *channel;
+
+	g_idle_add (status_icon_chat_unref_idle, tp_chat);
+	g_signal_handlers_disconnect_by_func (tp_chat,
+					      status_icon_chat_message_received_cb,
+					      icon);
 
 	sender = empathy_message_get_sender (message);
 	msg = g_strdup_printf (_("New message from %s:\n%s"),
@@ -388,7 +400,6 @@ status_icon_chat_message_received_cb (EmpathyTpChat     *tp_chat,
 			       g_object_ref (channel));
 
 	g_free (msg);
-	g_object_unref (tp_chat);
 }
 
 static void
