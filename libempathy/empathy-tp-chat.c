@@ -834,6 +834,8 @@ tp_chat_finalize (GObject *object)
 	EmpathyTpChatPriv *priv = GET_PRIV (object);
 	guint              i;
 
+	DEBUG ("Finalize: %p", object);
+
 	if (priv->acknowledge && priv->channel) {
 		DEBUG ("Closing channel...");
 		tp_cli_channel_call_close (priv->channel, -1,
@@ -874,6 +876,19 @@ tp_chat_finalize (GObject *object)
 	g_object_unref (priv->user);
 	g_object_unref (priv->account);
 	g_free (priv->id);
+
+	if (priv->message_queue) {
+		EmpathyMessage *message;
+		EmpathyContact *contact;
+
+		message = priv->message_queue->data;
+		contact = empathy_message_get_sender (message);
+		g_signal_handlers_disconnect_by_func (contact,
+						      tp_chat_sender_ready_notify_cb,
+						      object);
+	}
+	g_slist_foreach (priv->message_queue, (GFunc) g_object_unref, NULL);
+	g_slist_free (priv->message_queue);
 
 	G_OBJECT_CLASS (empathy_tp_chat_parent_class)->finalize (object);
 }
