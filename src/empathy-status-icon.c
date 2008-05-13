@@ -199,6 +199,27 @@ status_icon_delete_event_cb (GtkWidget         *widget,
 }
 
 static void
+status_icon_event_activate (EmpathyStatusIcon *icon,
+			    StatusIconEvent   *event)
+{
+	EmpathyStatusIconPriv *priv = GET_PRIV (icon);
+
+	if (event->func) {
+		event->func (icon, event->user_data);
+	}
+
+	priv->events = g_slist_remove (priv->events, event);
+	status_icon_event_free (event);
+	status_icon_update_tooltip (icon);
+	status_icon_update_icon (icon);
+
+	if (!priv->events && priv->blink_timeout) {
+		g_source_remove (priv->blink_timeout);
+		priv->blink_timeout = 0;
+	}
+}
+
+static void
 status_icon_activate_cb (GtkStatusIcon     *status_icon,
 			 EmpathyStatusIcon *icon)
 {
@@ -207,21 +228,7 @@ status_icon_activate_cb (GtkStatusIcon     *status_icon,
 	DEBUG ("Activated: %s", priv->events ? "event" : "toggle");
 
 	if (priv->events) {
-		StatusIconEvent *event;
-
-		event = priv->events->data;
-		if (event->func) {
-			event->func (icon, event->user_data);
-		}
-		status_icon_event_free (event);
-		priv->events = g_slist_remove (priv->events, event);
-		status_icon_update_tooltip (icon);
-		status_icon_update_icon (icon);
-
-		if (!priv->events && priv->blink_timeout) {
-			g_source_remove (priv->blink_timeout);
-			priv->blink_timeout = 0;
-		}
+		status_icon_event_activate (icon, priv->events->data);
 	} else {
 		status_icon_toggle_visibility (icon);
 	}
