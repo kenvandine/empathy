@@ -1,3 +1,41 @@
+NEW in 0.23.2
+==============
+ - Keep a priv pointer in the object struct instead of using
+   G_TYPE_INSTANCE_GET_PRIVATE all the time. (Xavier Claessens).
+ - If self presence message is "" do like if it was NULL. (Xavier Claessens).
+ - Do not request video stream until the user click on the 'send video' box. (Xavier Claessens).
+ - Implement DTMF and add a keypad on call window. (Xavier Claessens).
+ - Make use of tp-glib debug system. (Xavier Claessens).
+ - Rework call window: Use GtkVolumeButton, only one button to hang up calls,
+   let s-e add black borders to keep good video ration and add a confirmation
+   dialog to accept/reject incoming calls. (Xavier Claessens).
+ - Remove conditional build of VOIP. (Xavier Claessens).
+ - Do not apply different theme to chat and chatrooms (Xavier Claessens).
+
+Bugs fixed:
+ - Fixed #460624, Use enchant instead of aspell (Frederic Peters)
+ - Fixed #523918, Empathy sometimes loose messages (Xavier Claessens)
+ - Fixed #526926, "This call will be ended. Continue?" dialog should be rephrased (Elliot Fairweather, Xavier Claessens)
+ - Fixed #529049, Empathy should know when an apt:// link appears (Gaëtan Podevijn)
+ - Fixed #529436, Lacking string hyphenation (Baptiste Mille-Mathias)
+ - Fixed #529437, Incorrect spacing in some strings (Baptiste Mille-Mathias)
+ - Fixed #529439, Incorrect capitalisation in some strings (Baptiste Mille-Mathias)
+ - Fixed #529552, Please incorporate the man pages written for Debian (Simon McVittie)
+ - Fixed #529651, 0.23.1: Compilation (Linking) Failure (Xavier Claessens)
+ - Fixed #530090, Stock ids marked for translation (Gabor Kelemen)
+
+Translations:
+ - Updated Galician Translation and POTFILES.in (icq).
+ - Updated cs translation  (Lucas Lommer).
+ - Updated Norwegian bokmål translation. (kmaraas).
+ - updated he translation (yairhr).
+ - Updated Slovenian translation (mateju).
+ - Updated es translation  (Jorge Gonzalez).
+ - Updated Slovenian translation (mateju).
+ - Updated hu translation (kelemeng).
+ - Updated sv translation  (Daniel Nylander).
+ - Updated en_GB translation  (Philip Withnall).
+
 NEW in 0.23.1
 ==============
  - Show contact list when a chat becomes a chatroom. (Xavier Claessens).
