@@ -610,19 +610,34 @@ tp_contact_list_finalize (GObject *object)
 }
 
 static void
-tp_contact_list_ready_cb (EmpathyTpContactList *list)
+tp_contact_list_connection_ready (TpConnection *connection,
+				  const GError *error,
+				  gpointer      list)
 {
 	EmpathyTpContactListPriv *priv = GET_PRIV (list);
+
+	if (error) {
+		tp_contact_list_invalidated_cb (connection,
+						error->domain,
+						error->code,
+						error->message,
+						EMPATHY_TP_CONTACT_LIST (list));
+		return;
+	}
+
+	g_signal_connect (priv->connection, "invalidated",
+			  G_CALLBACK (tp_contact_list_invalidated_cb),
+			  list);
 
 	tp_cli_connection_call_list_channels (priv->connection, -1,
 					      tp_contact_list_list_channels_cb,
 					      NULL, NULL,
-					      G_OBJECT (list));
+					      list);
 
 	tp_cli_connection_connect_to_new_channel (priv->connection,
 						  tp_contact_list_new_channel_cb,
 						  NULL, NULL,
-						  G_OBJECT (list), NULL);
+						  list, NULL);
 }
 
 static void
@@ -644,17 +659,9 @@ tp_contact_list_constructed (GObject *list)
 	g_return_if_fail (priv->connection != NULL);
 	g_object_unref (mc);
 
-	g_signal_connect (priv->connection, "invalidated",
-			  G_CALLBACK (tp_contact_list_invalidated_cb),
-			  list);
-	g_object_get (priv->connection, "connection-ready", &ready, NULL);
-	if (ready) {
-		tp_contact_list_ready_cb (EMPATHY_TP_CONTACT_LIST (list));
-	} else {
-		g_signal_connect_swapped (priv->connection, "notify::connection-ready",
-					  G_CALLBACK (tp_contact_list_ready_cb),
-					  list);
-	}
+	tp_connection_call_when_ready (priv->connection,
+				       tp_contact_list_connection_ready,
+				       list);
 
 	/* Check for protocols that does not support contact groups. We can
 	 * put all contacts into a special group in that case.
