@@ -4,8 +4,6 @@
 data/empathy.desktop.in.in
 data/empathy.schemas.in
 
-libempathy/empathy-idle.c
-libempathy/empathy-contact.c
 libempathy/empathy-tp-contact-list.c
 libempathy/empathy-utils.c
 
