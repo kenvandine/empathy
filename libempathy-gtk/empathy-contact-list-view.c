@@ -407,17 +407,13 @@ contact_list_view_popup_menu_idle_cb (gpointer user_data)
 		menu = empathy_contact_list_view_get_group_menu (data->view);
 	}
 
-	if (!menu) {
-		goto OUT;
+	if (menu) {
+		gtk_widget_show (menu);
+		gtk_menu_popup (GTK_MENU (menu),
+				NULL, NULL, NULL, NULL,
+				data->button, data->time);
 	}
 
-	gtk_widget_show (menu);
-
-	gtk_menu_popup (GTK_MENU (menu),
-			NULL, NULL, NULL, NULL,
-			data->button, data->time);
-
-OUT:
 	g_slice_free (MenuPopupData, data);
 
 	return FALSE;
