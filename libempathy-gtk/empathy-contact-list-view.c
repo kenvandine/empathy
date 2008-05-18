@@ -28,6 +28,7 @@
 #include <string.h>
 
 #include <glib/gi18n.h>
+#include <gdk/gdkkeysyms.h>
 #include <gtk/gtk.h>
 #include <glade/glade.h>
 
@@ -433,6 +434,24 @@ contact_list_view_button_press_event_cb (EmpathyContactListView *view,
 		data = g_slice_new (MenuPopupData);
 		data->view = view;
 		data->button = event->button;
+		data->time = event->time;
+		g_idle_add (contact_list_view_popup_menu_idle_cb, data);
+	}
+
+	return FALSE;
+}
+
+static gboolean
+contact_list_view_key_press_event_cb (EmpathyContactListView *view,
+				      GdkEventKey	     *event,
+				      gpointer		      user_data)
+{
+	if (event->keyval == GDK_Menu) {
+		MenuPopupData *data;
+
+		data = g_slice_new (MenuPopupData);
+		data->view = view;
+		data->button = event->keyval;
 		data->time = event->time;
 		g_idle_add (contact_list_view_popup_menu_idle_cb, data);
 	}
@@ -1029,6 +1048,10 @@ empathy_contact_list_view_init (EmpathyContactListView *view)
 	g_signal_connect (view,
 			  "button-press-event",
 			  G_CALLBACK (contact_list_view_button_press_event_cb),
+			  NULL);
+	g_signal_connect (view,
+			  "key-press-event",
+			  G_CALLBACK (contact_list_view_key_press_event_cb),
 			  NULL);
 	g_signal_connect (view,
 			  "row-activated",
