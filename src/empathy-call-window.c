@@ -38,7 +38,7 @@
 #define DEBUG_FLAG EMPATHY_DEBUG_OTHER
 #include <libempathy/empathy-debug.h>
 
-typedef struct 
+typedef struct
 {
   EmpathyTpCall *call;
   GTimeVal start_time;
@@ -60,6 +60,8 @@ typedef struct
   GtkWidget *confirmation_dialog;
   GtkWidget *keypad_expander;
 } EmpathyCallWindow;
+
+static GSList *windows = NULL;
 
 static gboolean
 call_window_update_timer (gpointer data)
@@ -269,8 +271,11 @@ call_window_destroy_cb (GtkWidget *widget,
                         EmpathyCallWindow *window)
 {
   call_window_finalize (window);
+
   g_object_unref (window->output_video_socket);
   g_object_unref (window->preview_video_socket);
+
+  windows = g_slist_remove (windows, window);
   g_slice_free (EmpathyCallWindow, window);
 }
 
@@ -461,17 +466,18 @@ call_window_dtmf_connect (GladeXML *glade,
 }
 
 GtkWidget *
-empathy_call_window_new (EmpathyTpCall *call)
+empathy_call_window_new (TpChannel *channel)
 {
   EmpathyCallWindow *window;
   GladeXML *glade;
   gchar *filename;
   const gchar *icons[] = {"audio-input-microphone", NULL};
 
-  g_return_val_if_fail (EMPATHY_IS_TP_CALL (call), NULL);
+  g_return_val_if_fail (TP_IS_CHANNEL (channel), NULL);
 
   window = g_slice_new0 (EmpathyCallWindow);
-  window->call = g_object_ref (call);
+  windows = g_slist_prepend (windows, window);
+  window->call = empathy_tp_call_new (channel);
 
   filename = empathy_file_lookup ("empathy-call-window.glade", "src");
   glade = empathy_glade_get_file (filename,
@@ -560,5 +566,54 @@ empathy_call_window_new (EmpathyTpCall *call)
   gtk_widget_show (window->window);
 
   return window->window;
+}
+
+GtkWidget *
+empathy_call_window_find (TpChannel *channel)
+{
+  GSList *l;
+
+  g_return_val_if_fail (TP_IS_CHANNEL (channel), NULL);
+
+  for (l = windows; l; l = l->next)
+    {
+      EmpathyCallWindow *window = l->data;
+      TpChannel *this_channel = NULL;
+
+      if (window->call)
+          g_object_get (window->call, "channel", &this_channel, NULL);
+      if (this_channel)
+        {
+          g_object_unref (this_channel);
+          if (empathy_proxy_equal (channel, this_channel))
+              return window->window;
+        }
+    }
+
+  return NULL;
+}
+
+void
+empathy_call_window_set_channel (GtkWidget *window, TpChannel *channel)
+{
+  GSList *l;
+
+  g_return_if_fail (GTK_IS_WIDGET (window));
+  g_return_if_fail (TP_IS_CHANNEL (channel));
+
+  for (l = windows; l; l = l->next)
+    {
+      EmpathyCallWindow *call_window = l->data;
+
+      if (call_window->window == window)
+        {
+          if (!call_window->call)
+            {
+              call_window->call = empathy_tp_call_new (channel);
+              call_window_update (call_window);
+            }
+          break;
+        }
+    }
 }
 

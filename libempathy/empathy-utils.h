@@ -83,12 +83,6 @@ guint        empathy_account_hash                   (gconstpointer    key);
 gboolean     empathy_account_equal                  (gconstpointer    a,
 						    gconstpointer    b);
 MissionControl *empathy_mission_control_new         (void);
-void         empathy_call_with_contact              (EmpathyContact  *contact);
-void         empathy_call_with_contact_id           (McAccount       *account,
-						     const gchar     *contact_id);
-void         empathy_chat_with_contact              (EmpathyContact  *contact);
-void         empathy_chat_with_contact_id           (McAccount       *account,
-						     const gchar     *contact_id);
 const gchar * empathy_presence_get_default_message  (McPresence       presence);
 const gchar * empathy_presence_to_str               (McPresence       presence);
 McPresence    empathy_presence_from_str             (const gchar     *str);
@@ -104,11 +98,16 @@ void          empathy_run_until_ready_full          (gpointer         object,
 						     gpointer         user_data,
 						     GMainLoop      **loop);
 McAccount *  empathy_channel_get_account            (TpChannel       *channel);
-gpointer      empathy_connect_to_account_status_changed (MissionControl *mc,
+gpointer     empathy_connect_to_account_status_changed (MissionControl *mc,
 							 GCallback       handler,
 							 gpointer        user_data,
 							 GClosureNotify  free_func);
-void          empathy_disconnect_account_status_changed (gpointer        token);
+void         empathy_disconnect_account_status_changed (gpointer      token);
+gboolean     empathy_proxy_equal                    (gconstpointer    a,
+						     gconstpointer    b);
+guint        empathy_proxy_hash                     (gconstpointer    key);
+
+
 
 G_END_DECLS
 

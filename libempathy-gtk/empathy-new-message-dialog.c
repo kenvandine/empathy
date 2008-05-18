@@ -32,6 +32,7 @@
 #include <libmissioncontrol/mission-control.h>
 
 #include <libempathy/empathy-contact-factory.h>
+#include <libempathy/empathy-dispatcher.h>
 #include <libempathy/empathy-utils.h>
 
 #include <libempathy-gtk/empathy-ui-utils.h>
@@ -67,10 +68,10 @@ new_message_dialog_response_cb (GtkWidget               *widget,
 	}
 
 	if (response == 1) {
-		empathy_call_with_contact_id (account, id);
+		empathy_dispatcher_call_with_contact_id (account, id);
 	}	
 	else if (response == 2) {
-		empathy_chat_with_contact_id (account, id);
+		empathy_dispatcher_chat_with_contact_id (account, id);
 	}
 
 	g_object_unref (account);

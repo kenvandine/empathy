@@ -36,6 +36,7 @@
 #include <libempathy/empathy-contact-factory.h>
 #include <libempathy/empathy-contact-list.h>
 #include <libempathy/empathy-contact-groups.h>
+#include <libempathy/empathy-dispatcher.h>
 #include <libempathy/empathy-utils.h>
 
 #include "empathy-contact-list-view.h"
@@ -462,7 +463,7 @@ contact_list_view_row_activated_cb (EmpathyContactListView *view,
 			    -1);
 
 	if (contact) {
-		empathy_chat_with_contact (contact);
+		empathy_dispatcher_chat_with_contact (contact);
 		g_object_unref (contact);
 	}
 }
@@ -491,7 +492,7 @@ contact_list_view_voip_activated_cb (EmpathyCellRendererActivatable *cell,
 			    -1);
 
 	if (contact) {
-		empathy_call_with_contact (contact);
+		empathy_dispatcher_call_with_contact (contact);
 		g_object_unref (contact);
 	}
 }

@@ -40,7 +40,7 @@
 #include <libempathy/empathy-utils.h>
 #include <libempathy/empathy-dispatcher.h>
 #include <libempathy/empathy-tp-chat.h>
-#include <libempathy/empathy-tp-call.h>
+#include <libempathy/empathy-tp-group.h>
 
 #include <libempathy-gtk/empathy-conf.h>
 
@@ -98,11 +98,14 @@ dispatch_channel_cb (EmpathyDispatcher *dispatcher,
 		g_object_unref (tp_chat);
 	}
 	else if (!tp_strdiff (channel_type, TP_IFACE_CHANNEL_TYPE_STREAMED_MEDIA)) {
-		EmpathyTpCall *tp_call;
+		GtkWidget *window;
 
-		tp_call = empathy_tp_call_new (channel);
-		empathy_call_window_new (tp_call);
-		g_object_unref (tp_call);
+		window = empathy_call_window_find (channel);
+		if (window) {
+			gtk_window_present (GTK_WINDOW (window));
+		} else {
+			empathy_call_window_new (channel);
+		}
 	}
 }
 

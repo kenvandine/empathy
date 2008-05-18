@@ -57,15 +57,21 @@ typedef struct {
 	gboolean        activatable;
 } EmpathyDispatcherTube;
 
-GType                  empathy_dispatcher_get_type       (void) G_GNUC_CONST;
-EmpathyDispatcher *    empathy_dispatcher_new            (void);
-void                   empathy_dispatcher_channel_process(EmpathyDispatcher     *dispatcher,
-							  TpChannel             *channel);
-GType                  empathy_dispatcher_tube_get_type  (void);
-EmpathyDispatcherTube *empathy_dispatcher_tube_ref       (EmpathyDispatcherTube *tube);
-void                   empathy_dispatcher_tube_unref     (EmpathyDispatcherTube *tube);
-void                   empathy_dispatcher_tube_process   (EmpathyDispatcher     *dispatcher,
-							  EmpathyDispatcherTube *tube);
+GType                  empathy_dispatcher_get_type             (void) G_GNUC_CONST;
+EmpathyDispatcher *    empathy_dispatcher_new                  (void);
+void                   empathy_dispatcher_channel_process      (EmpathyDispatcher     *dispatcher,
+								TpChannel             *channel);
+GType                  empathy_dispatcher_tube_get_type        (void);
+EmpathyDispatcherTube *empathy_dispatcher_tube_ref             (EmpathyDispatcherTube *tube);
+void                   empathy_dispatcher_tube_unref           (EmpathyDispatcherTube *tube);
+void                   empathy_dispatcher_tube_process         (EmpathyDispatcher     *dispatcher,
+								EmpathyDispatcherTube *tube);
+void                   empathy_dispatcher_call_with_contact    (EmpathyContact        *contact);
+void                   empathy_dispatcher_call_with_contact_id (McAccount             *account,
+								const gchar           *contact_id);
+void                   empathy_dispatcher_chat_with_contact_id (McAccount             *account,
+								const gchar           *contact_id);
+void                   empathy_dispatcher_chat_with_contact    (EmpathyContact        *contact);
 
 G_END_DECLS
 

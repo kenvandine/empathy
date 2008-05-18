@@ -82,16 +82,178 @@ struct _StatusIconEvent {
 	gchar               *message;
 	StatusIconEventFunc  func;
 	gpointer             user_data;
+	TpChannel           *channel;
+	EmpathyStatusIcon   *icon;
 };
 
 G_DEFINE_TYPE (EmpathyStatusIcon, empathy_status_icon, G_TYPE_OBJECT);
+
+static void
+status_icon_update_tooltip (EmpathyStatusIcon *icon)
+{
+	EmpathyStatusIconPriv *priv = GET_PRIV (icon);
+	const gchar           *tooltip = NULL;
+
+	if (priv->events) {
+		tooltip = ((StatusIconEvent*)priv->events->data)->message;
+	}
+
+	if (!tooltip) {
+		tooltip = empathy_idle_get_status (priv->idle);
+	}
+
+	gtk_status_icon_set_tooltip (priv->icon, tooltip);	
+}
+
+static void
+status_icon_update_icon (EmpathyStatusIcon *icon)
+{
+	EmpathyStatusIconPriv *priv = GET_PRIV (icon);
+	const gchar           *icon_name;
+
+	if (priv->events && priv->showing_event_icon) {
+		icon_name = ((StatusIconEvent*)priv->events->data)->icon_name;
+	} else {
+		McPresence state;
+
+		state = empathy_idle_get_state (priv->idle);
+		icon_name = empathy_icon_name_for_presence (state);
+	}
+
+	gtk_status_icon_set_from_icon_name (priv->icon, icon_name);
+}
+
+static gboolean
+status_icon_blink_timeout_cb (EmpathyStatusIcon *icon)
+{
+	EmpathyStatusIconPriv *priv = GET_PRIV (icon);
+
+	priv->showing_event_icon = !priv->showing_event_icon;
+	status_icon_update_icon (icon);
+
+	return TRUE;
+}
+
+static void status_icon_channel_invalidated_cb (TpProxy *channel, guint domain,
+						gint code, gchar *message,
+						EmpathyStatusIcon *icon);
 
 static void
 status_icon_event_free (StatusIconEvent *event)
 {
 	g_free (event->icon_name);
 	g_free (event->message);
+	if (event->channel) {
+		g_signal_handlers_disconnect_by_func (event->channel,
+						      status_icon_channel_invalidated_cb,
+						      event->icon);
+		g_object_unref (event->channel);
+	}
 	g_slice_free (StatusIconEvent, event);
+}
+
+static void
+status_icon_event_remove (EmpathyStatusIcon *icon,
+			  StatusIconEvent   *event)
+{
+	EmpathyStatusIconPriv *priv = GET_PRIV (icon);
+	GSList                *l;
+
+	if (!(l = g_slist_find (priv->events, event))) {
+		return;
+	}
+
+	priv->events = g_slist_delete_link (priv->events, l);		
+	status_icon_event_free (event);
+	status_icon_update_tooltip (icon);
+	status_icon_update_icon (icon);
+
+	if (!priv->events && priv->blink_timeout) {
+		g_source_remove (priv->blink_timeout);
+		priv->blink_timeout = 0;
+	}
+}
+
+static void
+status_icon_event_remove_by_channel (EmpathyStatusIcon *icon,
+				     TpChannel         *channel)
+{
+	EmpathyStatusIconPriv *priv = GET_PRIV (icon);
+	GSList                *l;
+
+	for (l = priv->events; l; l = l->next) {
+		StatusIconEvent *event = l->data;
+
+		if (empathy_proxy_equal (event->channel, channel)) {
+			DEBUG ("Found event '%s'", event->message);
+			status_icon_event_remove (icon, event);
+			break;
+		}
+	}
+}
+
+static void
+status_icon_event_activate (EmpathyStatusIcon *icon,
+			    StatusIconEvent   *event)
+{
+	if (event->func) {
+		event->func (icon, event->user_data);
+	}
+	status_icon_event_remove (icon, event);
+}
+
+static void
+status_icon_event_add (EmpathyStatusIcon   *icon,
+		       const gchar         *icon_name,
+		       const gchar         *message,
+		       StatusIconEventFunc  func,
+		       gpointer             user_data,
+		       TpChannel           *channel)
+{
+	EmpathyStatusIconPriv *priv = GET_PRIV (icon);
+	StatusIconEvent       *event;
+	gboolean               had_events;
+
+	DEBUG ("Adding event: %s", message);
+
+	event = g_slice_new0 (StatusIconEvent);
+	event->icon_name = g_strdup (icon_name);
+	event->message = g_strdup (message);
+	event->func = func;
+	event->user_data = user_data;
+	event->icon = icon;
+
+	if (channel) {
+		event->channel = g_object_ref (channel);
+		g_signal_connect (channel, "invalidated",
+				  G_CALLBACK (status_icon_channel_invalidated_cb),
+				  icon);
+	}
+
+	had_events = (priv->events != NULL);
+	priv->events = g_slist_append (priv->events, event);
+	if (!had_events) {
+		priv->showing_event_icon = TRUE;
+		status_icon_update_icon (icon);
+		status_icon_update_tooltip (icon);
+
+		if (!priv->blink_timeout) {
+			priv->blink_timeout = g_timeout_add (BLINK_TIMEOUT,
+							     (GSourceFunc) status_icon_blink_timeout_cb,
+							     icon);
+		}
+	}
+}
+
+static void
+status_icon_channel_invalidated_cb (TpProxy           *channel,
+				    guint              domain,
+				    gint               code,
+				    gchar             *message,
+				    EmpathyStatusIcon *icon)
+{
+	DEBUG ("%s", message);
+	status_icon_event_remove_by_channel (icon, TP_CHANNEL (channel));
 }
 
 static void
@@ -148,41 +310,6 @@ status_icon_toggle_visibility (EmpathyStatusIcon *icon)
 }
 
 static void
-status_icon_update_tooltip (EmpathyStatusIcon *icon)
-{
-	EmpathyStatusIconPriv *priv = GET_PRIV (icon);
-	const gchar           *tooltip = NULL;
-
-	if (priv->events) {
-		tooltip = ((StatusIconEvent*)priv->events->data)->message;
-	}
-
-	if (!tooltip) {
-		tooltip = empathy_idle_get_status (priv->idle);
-	}
-
-	gtk_status_icon_set_tooltip (priv->icon, tooltip);	
-}
-
-static void
-status_icon_update_icon (EmpathyStatusIcon *icon)
-{
-	EmpathyStatusIconPriv *priv = GET_PRIV (icon);
-	const gchar           *icon_name;
-
-	if (priv->events && priv->showing_event_icon) {
-		icon_name = ((StatusIconEvent*)priv->events->data)->icon_name;
-	} else {
-		McPresence state;
-
-		state = empathy_idle_get_state (priv->idle);
-		icon_name = empathy_icon_name_for_presence (state);
-	}
-
-	gtk_status_icon_set_from_icon_name (priv->icon, icon_name);
-}
-
-static void
 status_icon_idle_notify_cb (EmpathyStatusIcon *icon)
 {
 	status_icon_update_icon (icon);
@@ -196,27 +323,6 @@ status_icon_delete_event_cb (GtkWidget         *widget,
 {
 	status_icon_set_visibility (icon, FALSE, TRUE);
 	return TRUE;
-}
-
-static void
-status_icon_event_activate (EmpathyStatusIcon *icon,
-			    StatusIconEvent   *event)
-{
-	EmpathyStatusIconPriv *priv = GET_PRIV (icon);
-
-	if (event->func) {
-		event->func (icon, event->user_data);
-	}
-
-	priv->events = g_slist_remove (priv->events, event);
-	status_icon_event_free (event);
-	status_icon_update_tooltip (icon);
-	status_icon_update_icon (icon);
-
-	if (!priv->events && priv->blink_timeout) {
-		g_source_remove (priv->blink_timeout);
-		priv->blink_timeout = 0;
-	}
 }
 
 static void
@@ -319,51 +425,6 @@ status_icon_create_menu (EmpathyStatusIcon *icon)
 	g_object_unref (glade);
 }
 
-static gboolean
-status_icon_blink_timeout_cb (EmpathyStatusIcon *icon)
-{
-	EmpathyStatusIconPriv *priv = GET_PRIV (icon);
-
-	priv->showing_event_icon = !priv->showing_event_icon;
-	status_icon_update_icon (icon);
-
-	return TRUE;
-}
-
-static void
-status_icon_event_add (EmpathyStatusIcon   *icon,
-		       const gchar         *icon_name,
-		       const gchar         *message,
-		       StatusIconEventFunc  func,
-		       gpointer             user_data)
-{
-	EmpathyStatusIconPriv *priv = GET_PRIV (icon);
-	StatusIconEvent       *event;
-	gboolean               had_events;
-
-	DEBUG ("Adding event: %s", message);
-
-	event = g_slice_new (StatusIconEvent);
-	event->icon_name = g_strdup (icon_name);
-	event->message = g_strdup (message);
-	event->func = func;
-	event->user_data = user_data;
-
-	had_events = (priv->events != NULL);
-	priv->events = g_slist_append (priv->events, event);
-	if (!had_events) {
-		priv->showing_event_icon = TRUE;
-		status_icon_update_icon (icon);
-		status_icon_update_tooltip (icon);
-
-		if (!priv->blink_timeout) {
-			priv->blink_timeout = g_timeout_add (BLINK_TIMEOUT,
-							     (GSourceFunc) status_icon_blink_timeout_cb,
-							     icon);
-		}
-	}
-}
-
 static void
 status_icon_channel_process (EmpathyStatusIcon *icon,
 			     gpointer           user_data)
@@ -372,7 +433,6 @@ status_icon_channel_process (EmpathyStatusIcon *icon,
 	TpChannel             *channel = TP_CHANNEL (user_data);
 
 	empathy_dispatcher_channel_process (priv->dispatcher, channel);
-	g_object_unref (channel);
 }
 
 static gboolean
@@ -404,7 +464,7 @@ status_icon_chat_message_received_cb (EmpathyTpChat     *tp_chat,
 	channel = empathy_tp_chat_get_channel (tp_chat);
 	status_icon_event_add (icon, EMPATHY_IMAGE_NEW_MESSAGE, msg,
 			       status_icon_channel_process,
-			       g_object_ref (channel));
+			       channel, channel);
 
 	g_free (msg);
 }
@@ -442,7 +502,7 @@ status_icon_filter_channel_cb (EmpathyDispatcher *dispatcher,
 
 		status_icon_event_add (icon, EMPATHY_IMAGE_VOIP, msg,
 				       status_icon_channel_process,
-				       g_object_ref (channel));
+				       channel, channel);
 
 		g_free (msg);
 		g_object_unref (contact);
@@ -450,6 +510,14 @@ status_icon_filter_channel_cb (EmpathyDispatcher *dispatcher,
 	}
 
 	g_free (channel_type);
+}
+
+static void
+status_icon_dispatch_channel_cb (EmpathyDispatcher *dispatcher,
+				 TpChannel         *channel,
+				 EmpathyStatusIcon *icon)
+{
+	status_icon_event_remove_by_channel (icon, channel);
 }
 
 static void
@@ -512,7 +580,8 @@ status_icon_filter_tube_cb (EmpathyDispatcher     *dispatcher,
 	}
 
 	status_icon_event_add (icon, icon_name, msg, status_icon_tube_process,
-			       empathy_dispatcher_tube_ref (tube));
+			       empathy_dispatcher_tube_ref (tube),
+			       tube->channel);
 
 	g_free (msg);
 }
@@ -558,7 +627,8 @@ status_icon_pendings_changed_cb (EmpathyContactList *list,
 
 	status_icon_event_add (icon, GTK_STOCK_DIALOG_QUESTION, str->str,
 			       status_icon_pending_subscribe,
-			       g_object_ref (contact));
+			       g_object_ref (contact),
+			       NULL);
 
 	g_string_free (str, TRUE);
 }
@@ -649,6 +719,9 @@ empathy_status_icon_init (EmpathyStatusIcon *icon)
 				  icon);
 	g_signal_connect (priv->dispatcher, "filter-channel",
 			  G_CALLBACK (status_icon_filter_channel_cb),
+			  icon);
+	g_signal_connect (priv->dispatcher, "dispatch-channel",
+			  G_CALLBACK (status_icon_dispatch_channel_cb),
 			  icon);
 	g_signal_connect (priv->dispatcher, "filter-tube",
 			  G_CALLBACK (status_icon_filter_tube_cb),

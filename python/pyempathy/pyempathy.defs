@@ -498,40 +498,6 @@
   (return-type "MissionControl*")
 )
 
-(define-function empathy_call_with_contact
-  (c-name "empathy_call_with_contact")
-  (return-type "none")
-  (parameters
-    '("EmpathyContact*" "contact")
-  )
-)
-
-(define-function empathy_call_with_contact_id
-  (c-name "empathy_call_with_contact_id")
-  (return-type "none")
-  (parameters
-    '("McAccount*" "account")
-    '("const-gchar*" "contact_id")
-  )
-)
-
-(define-function empathy_chat_with_contact
-  (c-name "empathy_chat_with_contact")
-  (return-type "none")
-  (parameters
-    '("EmpathyContact*" "contact")
-  )
-)
-
-(define-function empathy_chat_with_contact_id
-  (c-name "empathy_chat_with_contact_id")
-  (return-type "none")
-  (parameters
-    '("McAccount*" "account")
-    '("const-gchar*" "contact_id")
-  )
-)
-
 (define-function empathy_presence_get_default_message
   (c-name "empathy_presence_get_default_message")
   (return-type "const-gchar*")
@@ -609,6 +575,23 @@
   (return-type "none")
   (parameters
     '("gpointer" "token")
+  )
+)
+
+(define-function empathy_proxy_equal
+  (c-name "empathy_proxy_equal")
+  (return-type "gboolean")
+  (parameters
+    '("gconstpointer" "a")
+    '("gconstpointer" "b")
+  )
+)
+
+(define-function empathy_proxy_hash
+  (c-name "empathy_proxy_hash")
+  (return-type "guint")
+  (parameters
+    '("gconstpointer" "key")
   )
 )
 
@@ -2299,6 +2282,40 @@
   (return-type "none")
   (parameters
     '("EmpathyDispatcherTube*" "tube")
+  )
+)
+
+(define-function empathy_dispatcher_call_with_contact
+  (c-name "empathy_dispatcher_call_with_contact")
+  (return-type "none")
+  (parameters
+    '("EmpathyContact*" "contact")
+  )
+)
+
+(define-function empathy_dispatcher_call_with_contact_id
+  (c-name "empathy_dispatcher_call_with_contact_id")
+  (return-type "none")
+  (parameters
+    '("McAccount*" "account")
+    '("const-gchar*" "contact_id")
+  )
+)
+
+(define-function empathy_dispatcher_chat_with_contact_id
+  (c-name "empathy_dispatcher_chat_with_contact_id")
+  (return-type "none")
+  (parameters
+    '("McAccount*" "account")
+    '("const-gchar*" "contact_id")
+  )
+)
+
+(define-function empathy_dispatcher_chat_with_contact
+  (c-name "empathy_dispatcher_chat_with_contact")
+  (return-type "none")
+  (parameters
+    '("EmpathyContact*" "contact")
   )
 )
 

@@ -40,6 +40,7 @@
 #include "empathy-utils.h"
 #include "empathy-tube-handler.h"
 #include "empathy-contact-factory.h"
+#include "empathy-tp-group.h"
 
 #define DEBUG_FLAG EMPATHY_DEBUG_DISPATCHER
 #include <libempathy/empathy-debug.h>
@@ -49,7 +50,7 @@ typedef struct {
 	GHashTable     *connections;
 	gpointer        token;
 	MissionControl *mc;
-	GHashTable     *tubes;
+	GSList         *tubes;
 } EmpathyDispatcherPriv;
 
 G_DEFINE_TYPE (EmpathyDispatcher, empathy_dispatcher, G_TYPE_OBJECT);
@@ -203,7 +204,6 @@ dispatcher_tubes_new_tube_cb (TpChannel   *channel,
 			      gpointer     user_data,
 			      GObject     *dispatcher)
 {
-	EmpathyDispatcherPriv *priv = GET_PRIV (dispatcher);
 	static TpDBusDaemon   *daemon = NULL;
 	DispatcherTube        *tube;
 	McAccount             *account;
@@ -213,9 +213,8 @@ dispatcher_tubes_new_tube_cb (TpChannel   *channel,
 	GError                *error = NULL;
 
 	/* Increase tube count */
-	number = GPOINTER_TO_UINT (g_hash_table_lookup (priv->tubes, channel));
-	g_hash_table_replace (priv->tubes, g_object_ref (channel),
-			      GUINT_TO_POINTER (++number));
+	number = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (channel), "tube-count"));
+	g_object_set_data (G_OBJECT (channel), "tube-count", GUINT_TO_POINTER (++number));
 	DEBUG ("Increased tube count for channel %p: %d", channel, number);
 
 	/* We dispatch only local pending tubes */
@@ -308,17 +307,18 @@ dispatcher_tubes_list_tubes_cb (TpChannel       *channel,
 }
 
 static void
-dispatcher_tubes_channel_invalidated_cb (TpProxy       *proxy,
-					 guint          domain,
-					 gint           code,
-					 gchar         *message,
+dispatcher_tubes_channel_invalidated_cb (TpProxy           *proxy,
+					 guint              domain,
+					 gint               code,
+					 gchar             *message,
 					 EmpathyDispatcher *dispatcher)
 {
 	EmpathyDispatcherPriv *priv = GET_PRIV (dispatcher);
 
-	DEBUG ("Error: %s", message);
+	DEBUG ("%s", message);
 
-	g_hash_table_remove (priv->tubes, proxy);
+	priv->tubes = g_slist_remove (priv->tubes, proxy);
+	g_object_unref (proxy);
 }
 
 static void
@@ -327,18 +327,16 @@ dispatcher_tubes_tube_closed_cb (TpChannel *channel,
 				 gpointer   user_data,
 				 GObject   *dispatcher)
 {
-	EmpathyDispatcherPriv *priv = GET_PRIV (dispatcher);
-	guint                  number;
+	guint number;
 
-	number = GPOINTER_TO_UINT (g_hash_table_lookup (priv->tubes, channel));
+	number = GPOINTER_TO_UINT (g_object_get_data (G_OBJECT (channel), "tube-count"));
 	if (number == 1) {
 		DEBUG ("No more tube, closing channel");
 		tp_cli_channel_call_close (channel, -1, NULL, NULL, NULL, NULL);
 	}
 	else if (number > 1) {
 		DEBUG ("Decrease tube count: %d", number);
-		g_hash_table_replace (priv->tubes, g_object_ref (channel),
-				      GUINT_TO_POINTER (--number));
+		g_object_set_data (G_OBJECT (channel), "tube-count", GUINT_TO_POINTER (--number));
 	}
 }
 
@@ -348,15 +346,9 @@ dispatcher_tubes_handle_channel (EmpathyDispatcher *dispatcher,
 {
 	EmpathyDispatcherPriv *priv = GET_PRIV (dispatcher);
 
-	if (g_hash_table_lookup (priv->tubes, channel)) {
-		return;
-	}
+	DEBUG ("Called");
 
-	DEBUG ("Handling new channel");
-
-	g_hash_table_insert (priv->tubes, g_object_ref (channel),
-			     GUINT_TO_POINTER (0));
-
+	priv->tubes = g_slist_prepend (priv->tubes, g_object_ref (channel));
 	g_signal_connect (channel, "invalidated",
 			  G_CALLBACK (dispatcher_tubes_channel_invalidated_cb),
 			  dispatcher);
@@ -569,34 +561,24 @@ dispatcher_status_changed_cb (MissionControl           *mc,
 	g_object_unref (account);
 }
 
-static guint
-dispatcher_channel_hash (gconstpointer key)
-{
-	TpProxy *channel = TP_PROXY (key);
-
-	return g_str_hash (channel->object_path);
-}
-
-static gboolean
-dispatcher_channel_equal (gconstpointer a,
-		      gconstpointer b)
-{
-	TpProxy *channel_a = TP_PROXY (a);
-	TpProxy *channel_b = TP_PROXY (b);
-
-	return g_str_equal (channel_a->object_path, channel_b->object_path);
-}
-
 static void
 dispatcher_finalize (GObject *object)
 {
 	EmpathyDispatcherPriv *priv = GET_PRIV (object);
+	GSList                *l;
 
 	empathy_disconnect_account_status_changed (priv->token);
 	g_object_unref (priv->mc);
 
+	for (l = priv->tubes; l; l = l->next) {
+		g_signal_handlers_disconnect_by_func (l->data,
+						      dispatcher_tubes_channel_invalidated_cb,
+						      object);
+		g_object_unref (l->data);
+	}
+	g_slist_free (priv->tubes);
+
 	g_hash_table_destroy (priv->connections);
-	g_hash_table_destroy (priv->tubes);
 }
 
 static void
@@ -645,10 +627,6 @@ empathy_dispatcher_init (EmpathyDispatcher *dispatcher)
 		EMPATHY_TYPE_DISPATCHER, EmpathyDispatcherPriv);
 
 	dispatcher->priv = priv;
-	priv->tubes = g_hash_table_new_full (dispatcher_channel_hash,
-					     dispatcher_channel_equal,
-					     g_object_unref, NULL);
-
 	priv->mc = empathy_mission_control_new ();
 	priv->token = empathy_connect_to_account_status_changed (priv->mc,
 		G_CALLBACK (dispatcher_status_changed_cb),
@@ -677,5 +655,164 @@ empathy_dispatcher_new (void)
 	}
 
 	return dispatcher;
+}
+
+typedef struct {
+	const gchar *channel_type;
+	guint        handle_type;
+	guint        handle;
+} DispatcherRequestData;
+
+static void
+dispatcher_request_channel_cb (TpConnection *connection,
+			       const gchar  *object_path,
+			       const GError *error,
+			       gpointer      user_data,
+			       GObject      *weak_object)
+{
+	DispatcherRequestData *data = (DispatcherRequestData*) user_data;
+
+	if (error) {
+		DEBUG ("Error: %s", error->message);
+		return;
+	}
+
+	if (dispatcher) {
+		TpChannel *channel;
+
+		channel = tp_channel_new (connection, object_path,
+					  data->channel_type,
+					  data->handle_type,
+					  data->handle, NULL);
+
+		g_signal_emit (dispatcher, signals[DISPATCH_CHANNEL], 0, channel);
+	}
+}
+
+void
+empathy_dispatcher_call_with_contact (EmpathyContact *contact)
+{
+	MissionControl        *mc;
+	McAccount             *account;
+	TpConnection          *connection;
+	gchar                 *object_path;
+	TpChannel             *channel;
+	EmpathyContactFactory *factory;
+	EmpathyTpGroup        *group;
+	EmpathyContact        *self_contact;
+	GError                *error = NULL;
+
+	g_return_if_fail (EMPATHY_IS_CONTACT (contact));
+
+	mc = empathy_mission_control_new ();
+	account = empathy_contact_get_account (contact);
+	connection = mission_control_get_tpconnection (mc, account, NULL);
+	tp_connection_run_until_ready (connection, FALSE, NULL, NULL);
+	g_object_unref (mc);
+
+	/* We abuse of suppress_handler, TRUE means OUTGOING. The channel
+	 * will be catched in EmpathyFilter */
+	if (!tp_cli_connection_run_request_channel (connection, -1,
+						    TP_IFACE_CHANNEL_TYPE_STREAMED_MEDIA,
+						    TP_HANDLE_TYPE_NONE,
+						    0,
+						    TRUE,
+						    &object_path,
+						    &error,
+						    NULL)) {
+		DEBUG ("Couldn't request channel: %s",
+			error ? error->message : "No error given");
+		g_clear_error (&error);
+		g_object_unref (connection);
+		return;
+	}
+
+	channel = tp_channel_new (connection,
+				  object_path, TP_IFACE_CHANNEL_TYPE_STREAMED_MEDIA,
+				  TP_HANDLE_TYPE_NONE, 0, NULL);
+
+	group = empathy_tp_group_new (channel);
+	empathy_run_until_ready (group);
+
+	factory = empathy_contact_factory_new ();
+	self_contact = empathy_contact_factory_get_user (factory, account);
+	empathy_contact_run_until_ready (self_contact,
+					 EMPATHY_CONTACT_READY_HANDLE,
+					 NULL);
+
+	empathy_tp_group_add_member (group, contact, "");
+	empathy_tp_group_add_member (group, self_contact, "");	
+
+	g_object_unref (factory);
+	g_object_unref (self_contact);
+	g_object_unref (group);
+	g_object_unref (connection);
+	g_object_unref (channel);
+	g_free (object_path);
+}
+
+void
+empathy_dispatcher_call_with_contact_id (McAccount *account, const gchar *contact_id)
+{
+	EmpathyContactFactory *factory;
+	EmpathyContact        *contact;
+
+	factory = empathy_contact_factory_new ();
+	contact = empathy_contact_factory_get_from_id (factory, account, contact_id);
+	empathy_contact_run_until_ready (contact, EMPATHY_CONTACT_READY_HANDLE, NULL);
+
+	empathy_dispatcher_call_with_contact (contact);
+
+	g_object_unref (contact);
+	g_object_unref (factory);
+}
+
+void
+empathy_dispatcher_chat_with_contact (EmpathyContact  *contact)
+{
+	MissionControl        *mc;
+	McAccount             *account;
+	TpConnection          *connection;
+	DispatcherRequestData *data;
+
+	g_return_if_fail (EMPATHY_IS_CONTACT (contact));
+
+	mc = empathy_mission_control_new ();
+	account = empathy_contact_get_account (contact);
+	connection = mission_control_get_tpconnection (mc, account, NULL);
+	tp_connection_run_until_ready (connection, FALSE, NULL, NULL);
+	g_object_unref (mc);
+
+	/* We abuse of suppress_handler, TRUE means OUTGOING. */
+	data = g_new (DispatcherRequestData, 1);
+	data->channel_type = TP_IFACE_CHANNEL_TYPE_TEXT;
+	data->handle_type = TP_HANDLE_TYPE_CONTACT;
+	data->handle = empathy_contact_get_handle (contact);
+	tp_cli_connection_call_request_channel (connection, -1,
+						data->channel_type,
+						data->handle_type,
+						data->handle,
+						TRUE,
+						dispatcher_request_channel_cb,
+						data, g_free,
+						NULL);
+	g_object_unref (connection);
+}
+
+void
+empathy_dispatcher_chat_with_contact_id (McAccount   *account,
+					 const gchar *contact_id)
+{
+	EmpathyContactFactory *factory;
+	EmpathyContact        *contact;
+
+	factory = empathy_contact_factory_new ();
+	contact = empathy_contact_factory_get_from_id (factory, account, contact_id);
+	empathy_contact_run_until_ready (contact, EMPATHY_CONTACT_READY_HANDLE, NULL);
+
+	empathy_dispatcher_chat_with_contact (contact);
+
+	g_object_unref (contact);
+	g_object_unref (factory);
 }
 

@@ -26,8 +26,9 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
-#include <libempathy/empathy-utils.h>
 #include <libempathy/empathy-log-manager.h>
+#include <libempathy/empathy-dispatcher.h>
+#include <libempathy/empathy-utils.h>
 
 #include "empathy-contact-menu.h"
 #include "empathy-images.h"
@@ -112,7 +113,7 @@ empathy_contact_chat_menu_item_new (EmpathyContact *contact)
 	gtk_widget_show (image);
 
 	g_signal_connect_swapped (item, "activate",
-				  G_CALLBACK (empathy_chat_with_contact),
+				  G_CALLBACK (empathy_dispatcher_chat_with_contact),
 				  contact);
 	
 	return item;
@@ -134,7 +135,7 @@ empathy_contact_call_menu_item_new (EmpathyContact *contact)
 	gtk_widget_show (image);
 
 	g_signal_connect_swapped (item, "activate",
-				  G_CALLBACK (empathy_call_with_contact),
+				  G_CALLBACK (empathy_dispatcher_call_with_contact),
 				  contact);
 	
 	return item;

@@ -338,126 +338,6 @@ empathy_mission_control_new (void)
 	return mc;
 }
 
-void
-empathy_call_with_contact (EmpathyContact *contact)
-{
-	MissionControl        *mc;
-	McAccount             *account;
-	TpConnection          *connection;
-	gchar                 *object_path;
-	TpChannel             *channel;
-	EmpathyContactFactory *factory;
-	EmpathyTpGroup        *group;
-	EmpathyContact        *self_contact;
-	GError                *error = NULL;
-
-	g_return_if_fail (EMPATHY_IS_CONTACT (contact));
-
-	mc = empathy_mission_control_new ();
-	account = empathy_contact_get_account (contact);
-	connection = mission_control_get_tpconnection (mc, account, NULL);
-	tp_connection_run_until_ready (connection, FALSE, NULL, NULL);
-	g_object_unref (mc);
-
-	/* We abuse of suppress_handler, TRUE means OUTGOING. The channel
-	 * will be catched in EmpathyFilter */
-	if (!tp_cli_connection_run_request_channel (connection, -1,
-						    TP_IFACE_CHANNEL_TYPE_STREAMED_MEDIA,
-						    TP_HANDLE_TYPE_NONE,
-						    0,
-						    TRUE,
-						    &object_path,
-						    &error,
-						    NULL)) {
-		DEBUG ("Couldn't request channel: %s",
-			error ? error->message : "No error given");
-		g_clear_error (&error);
-		g_object_unref (connection);
-		return;
-	}
-
-	channel = tp_channel_new (connection,
-				  object_path, TP_IFACE_CHANNEL_TYPE_STREAMED_MEDIA,
-				  TP_HANDLE_TYPE_NONE, 0, NULL);
-
-	group = empathy_tp_group_new (channel);
-	empathy_run_until_ready (group);
-
-	factory = empathy_contact_factory_new ();
-	self_contact = empathy_contact_factory_get_user (factory, account);
-	empathy_contact_run_until_ready (self_contact,
-					 EMPATHY_CONTACT_READY_HANDLE,
-					 NULL);
-
-	empathy_tp_group_add_member (group, contact, "");
-	empathy_tp_group_add_member (group, self_contact, "");	
-
-	g_object_unref (factory);
-	g_object_unref (self_contact);
-	g_object_unref (group);
-	g_object_unref (connection);
-	g_object_unref (channel);
-	g_free (object_path);
-}
-
-void
-empathy_call_with_contact_id (McAccount *account, const gchar *contact_id)
-{
-	EmpathyContactFactory *factory;
-	EmpathyContact        *contact;
-
-	factory = empathy_contact_factory_new ();
-	contact = empathy_contact_factory_get_from_id (factory, account, contact_id);
-	empathy_contact_run_until_ready (contact, EMPATHY_CONTACT_READY_HANDLE, NULL);
-
-	empathy_call_with_contact (contact);
-
-	g_object_unref (contact);
-	g_object_unref (factory);
-}
-
-void
-empathy_chat_with_contact (EmpathyContact  *contact)
-{
-	MissionControl        *mc;
-	McAccount             *account;
-	TpConnection          *connection;
-
-	g_return_if_fail (EMPATHY_IS_CONTACT (contact));
-
-	mc = empathy_mission_control_new ();
-	account = empathy_contact_get_account (contact);
-	connection = mission_control_get_tpconnection (mc, account, NULL);
-	tp_connection_run_until_ready (connection, FALSE, NULL, NULL);
-	g_object_unref (mc);
-
-	/* We abuse of suppress_handler, TRUE means OUTGOING. The channel
-	 * will be catched in EmpathyFilter */
-	tp_cli_connection_call_request_channel (connection, -1,
-						TP_IFACE_CHANNEL_TYPE_TEXT,
-						TP_HANDLE_TYPE_CONTACT,
-						empathy_contact_get_handle (contact),
-						TRUE,
-						NULL, NULL, NULL, NULL);
-	g_object_unref (connection);
-}
-
-void
-empathy_chat_with_contact_id (McAccount *account, const gchar *contact_id)
-{
-	EmpathyContactFactory *factory;
-	EmpathyContact        *contact;
-
-	factory = empathy_contact_factory_new ();
-	contact = empathy_contact_factory_get_from_id (factory, account, contact_id);
-	empathy_contact_run_until_ready (contact, EMPATHY_CONTACT_READY_HANDLE, NULL);
-
-	empathy_chat_with_contact (contact);
-
-	g_object_unref (contact);
-	g_object_unref (factory);
-}
-
 const gchar *
 empathy_presence_get_default_message (McPresence presence)
 {
@@ -745,5 +625,30 @@ empathy_disconnect_account_status_changed (gpointer token)
 					"AccountStatusChanged",
 					G_CALLBACK (account_status_changed_cb),
 					data);
+}
+
+guint
+empathy_proxy_hash (gconstpointer key)
+{
+	TpProxy *proxy = TP_PROXY (key);
+
+	g_return_val_if_fail (TP_IS_PROXY (proxy), 0);
+
+	return g_str_hash (proxy->object_path) +
+	       g_str_hash (proxy->bus_name);
+}
+
+gboolean
+empathy_proxy_equal (gconstpointer a,
+		     gconstpointer b)
+{
+	TpProxy *proxy_a = TP_PROXY (a);
+	TpProxy *proxy_b = TP_PROXY (b);
+
+	g_return_val_if_fail (TP_IS_PROXY (proxy_a), FALSE);
+	g_return_val_if_fail (TP_IS_PROXY (proxy_b), FALSE);
+
+	return g_str_equal (proxy_a->object_path, proxy_b->object_path) &&
+	       g_str_equal (proxy_a->bus_name, proxy_b->bus_name);
 }
 

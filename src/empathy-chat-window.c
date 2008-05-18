@@ -40,6 +40,7 @@
 #include <libempathy/empathy-contact-factory.h>
 #include <libempathy/empathy-contact.h>
 #include <libempathy/empathy-message.h>
+#include <libempathy/empathy-dispatcher.h>
 #include <libempathy/empathy-utils.h>
 
 #include <libempathy-gtk/empathy-images.h>
@@ -977,7 +978,7 @@ chat_window_drag_data_received (GtkWidget        *widget,
 		chat = empathy_chat_window_find_chat (account, strv[1]);
 
 		if (!chat) {
-			empathy_chat_with_contact_id (account, strv[2]);
+			empathy_dispatcher_chat_with_contact_id (account, strv[2]);
 			g_object_unref (account);
 			g_strfreev (strv);
 			return;
