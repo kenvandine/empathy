@@ -443,12 +443,13 @@ contact_list_view_key_press_event_cb (EmpathyContactListView *view,
 				      gpointer		      user_data)
 {
 	if (event->keyval == GDK_Menu) {
-		MenuPopupData data;
+		MenuPopupData *data;
 
-		data.view = view;
-		data.button = 0;
-		data.time = event->time;
-		contact_list_view_popup_menu_idle_cb (&data);
+		data = g_slice_new (MenuPopupData);
+		data->view = view;
+		data->button = 0;
+		data->time = event->time;
+		g_idle_add (contact_list_view_popup_menu_idle_cb, data);
 	}
 
 	return FALSE;
