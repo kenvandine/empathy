@@ -268,7 +268,7 @@
       <type>bool</type>
       <default>false</default>
       <locale name="C">
-        <short>Checks if Salut account is created</short>
+        <short>Salut account is created</short>
 	<long>
 	Whether or not the Salut account has been created on the first
       Empathy run.
@@ -283,7 +283,7 @@
       <type>bool</type>
       <default>true</default>
       <locale name="C">
-        <short>Checks if NetworkManager should be used</short>
+        <short>NetworkManager should be used</short>
 	<long>
 	Whether or not the network manager should be used to automatically
 	disconnect/reconnect.
@@ -298,7 +298,7 @@
       <type>bool</type>
       <default>true</default>
       <locale name="C">
-        <short>Checks if Empathy should auto-connect on startup</short>
+        <short>Empathy should auto-connect on startup</short>
 	<long>
 	Whether or not Empathy should automatically log in to your accounts on startup.
         </long>
