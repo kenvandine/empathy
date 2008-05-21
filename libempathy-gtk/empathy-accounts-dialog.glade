@@ -329,14 +329,30 @@ If you do not want to add an account, simply click on the account you want to co
             <property name="visible">True</property>
             <property name="layout_style">GTK_BUTTONBOX_END</property>
             <child>
+              <widget class="GtkButton" id="button_help">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="can_default">True</property>
+                <property name="label">gtk-help</property>
+                <property name="use_stock">True</property>
+                <property name="response_id">-11</property>
+              </widget>
+              <packing>
+                <property name="secondary">True</property>
+              </packing>
+            </child>
+            <child>
               <widget class="GtkButton" id="button_close">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="label">gtk-close</property>
                 <property name="use_stock">True</property>
-                <property name="response_id">-6</property>
+                <property name="response_id">-7</property>
               </widget>
+              <packing>
+                <property name="position">1</property>
+              </packing>
             </child>
           </widget>
           <packing>

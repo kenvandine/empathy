@@ -138,6 +138,8 @@ static void       accounts_dialog_button_back_clicked_cb    (GtkWidget          
 							     EmpathyAccountsDialog    *dialog);
 static void       accounts_dialog_button_add_clicked_cb     (GtkWidget                *button,
 							     EmpathyAccountsDialog    *dialog);
+static void       accounts_dialog_button_help_clicked_cb    (GtkWidget                *button,
+							     EmpathyAccountsDialog    *dialog);
 static void       accounts_dialog_remove_response_cb        (GtkWidget                *dialog,
 							     gint                      response,
 							     McAccount                *account);
@@ -884,6 +886,13 @@ accounts_dialog_button_add_clicked_cb (GtkWidget             *button,
 }
 
 static void
+accounts_dialog_button_help_clicked_cb (GtkWidget             *button,
+					EmpathyAccountsDialog *dialog)
+{
+	empathy_url_show ("ghelp:empathy?empathy-create-account");
+}
+
+static void
 accounts_dialog_remove_response_cb (GtkWidget *dialog,
 				    gint       response,
 				    McAccount *account)
@@ -944,7 +953,9 @@ accounts_dialog_response_cb (GtkWidget            *widget,
 			     gint                  response,
 			     EmpathyAccountsDialog *dialog)
 {
-	gtk_widget_destroy (widget);
+	if (response == GTK_RESPONSE_CLOSE) {
+		gtk_widget_destroy (widget);
+	}
 }
 
 static void
@@ -995,10 +1006,8 @@ GtkWidget *
 empathy_accounts_dialog_show (GtkWindow *parent)
 {
 	static EmpathyAccountsDialog *dialog = NULL;
-	GladeXML                    *glade;
-	gchar                       *filename;
-	GtkWidget                   *bbox;
-	GtkWidget                   *button_close;
+	GladeXML                     *glade;
+	gchar                        *filename;
 
 	if (dialog) {
 		gtk_window_present (GTK_WINDOW (dialog->window));
@@ -1018,7 +1027,6 @@ empathy_accounts_dialog_show (GtkWindow *parent)
 				       "label_no_account", &dialog->label_no_account,
 				       "label_no_account_blurb", &dialog->label_no_account_blurb,
 				       "alignment_settings", &dialog->alignment_settings,
-				       "dialog-action_area", &bbox,
 				       "treeview", &dialog->treeview,
 				       "frame_new_account", &dialog->frame_new_account,
 				       "hbox_type", &dialog->hbox_type,
@@ -1028,7 +1036,6 @@ empathy_accounts_dialog_show (GtkWindow *parent)
 				       "label_name", &dialog->label_name,
 				       "button_add", &dialog->button_add,
 				       "button_remove", &dialog->button_remove,
-				       "button_close", &button_close,
 				       NULL);
 	g_free (filename);
 
@@ -1040,6 +1047,7 @@ empathy_accounts_dialog_show (GtkWindow *parent)
 			      "button_back", "clicked", accounts_dialog_button_back_clicked_cb,
 			      "button_add", "clicked", accounts_dialog_button_add_clicked_cb,
 			      "button_remove", "clicked", accounts_dialog_button_remove_clicked_cb,
+			      "button_help", "clicked", accounts_dialog_button_help_clicked_cb,
 			      NULL);
 
 	g_object_add_weak_pointer (G_OBJECT (dialog->window), (gpointer) &dialog);
