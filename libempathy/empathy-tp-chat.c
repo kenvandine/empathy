@@ -447,6 +447,21 @@ tp_chat_send_error_cb (TpChannel   *channel,
 }
 
 static void
+tp_chat_send_cb (TpChannel    *proxy,
+		 const GError *error,
+		 gpointer      user_data,
+		 GObject      *chat)
+{
+	EmpathyMessage *message = EMPATHY_MESSAGE (user_data);
+
+	if (error) {
+		DEBUG ("Error: %s", error->message);
+		g_signal_emit (chat, signals[SEND_ERROR], 0, message,
+			       TP_CHANNEL_TEXT_SEND_ERROR_UNKNOWN);
+	}
+}
+
+static void
 tp_chat_state_changed_cb (TpChannel *channel,
 			  guint      handle,
 			  guint      state,
@@ -1205,8 +1220,9 @@ empathy_tp_chat_send (EmpathyTpChat *chat,
 	tp_cli_channel_type_text_call_send (priv->channel, -1,
 					    message_type,
 					    message_body,
-					    tp_chat_async_cb,
-					    "sending message", NULL,
+					    tp_chat_send_cb,
+					    g_object_ref (message),
+					    (GDestroyNotify) g_object_unref,
 					    G_OBJECT (chat));
 }
 
