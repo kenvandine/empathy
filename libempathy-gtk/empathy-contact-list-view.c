@@ -1293,10 +1293,9 @@ empathy_contact_list_view_get_contact_menu (EmpathyContactListView *view)
 
 	menu = empathy_contact_menu_new (contact, priv->contact_features);
 
-	if (!menu &&
-	    !(priv->list_features & EMPATHY_CONTACT_LIST_FEATURE_CONTACT_REMOVE)) {
+	if (!(priv->list_features & EMPATHY_CONTACT_LIST_FEATURE_CONTACT_REMOVE)) {
 		g_object_unref (contact);
-		return NULL;
+		return menu;
 	}
 
 	if (menu) {
