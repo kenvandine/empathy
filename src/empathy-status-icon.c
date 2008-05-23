@@ -184,7 +184,8 @@ status_icon_event_remove_by_channel (EmpathyStatusIcon *icon,
 	for (l = priv->events; l; l = l->next) {
 		StatusIconEvent *event = l->data;
 
-		if (empathy_proxy_equal (event->channel, channel)) {
+		if (event->channel &&
+		    empathy_proxy_equal (event->channel, channel)) {
 			DEBUG ("Found event '%s'", event->message);
 			status_icon_event_remove (icon, event);
 			break;
