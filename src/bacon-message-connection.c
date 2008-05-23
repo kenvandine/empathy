@@ -101,7 +101,17 @@ static gboolean server_cb (GIOChannel *source,
 static gboolean
 setup_connection (BaconMessageConnection *conn)
 {
+	int fdflags;
+
 	g_return_val_if_fail (conn->chan == NULL, FALSE);
+
+	/* Add CLOEXEC flag on the fd to make sure the socket get closed
+	 * if exec is called. */
+	fdflags = fcntl (conn->fd, F_GETFD, 0);
+	if (fdflags >= 0) {
+		fdflags |= FD_CLOEXEC;
+		fcntl (conn->fd, F_SETFD, fdflags);
+	}
 
 	conn->chan = g_io_channel_unix_new (conn->fd);
 	if (!conn->chan) {
@@ -269,9 +279,7 @@ try_server (BaconMessageConnection *conn)
 	}
 	listen (conn->fd, 5);
 
-	if (!setup_connection (conn))
-		return FALSE;
-	return TRUE;
+	return setup_connection (conn);
 }
 
 static gboolean
