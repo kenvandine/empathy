@@ -475,6 +475,36 @@ empathy_call_window_new (TpChannel *channel)
 
   g_return_val_if_fail (TP_IS_CHANNEL (channel), NULL);
 
+  if (windows)
+    {
+      window = (EmpathyCallWindow*) windows->data;
+      if (!window->call)
+        {
+          window->call = empathy_tp_call_new (channel);
+          g_signal_connect_swapped (G_OBJECT (window->call), "notify",
+              G_CALLBACK (call_window_update), window);
+          call_window_update (window);
+        }
+      else
+        {
+          GtkWidget *dialog;
+
+          /* We don't want to have multiple calls running.
+           * FIXME: We should use the hold interface... */
+          tp_cli_channel_call_close (channel, -1, NULL, NULL, NULL, NULL);
+
+          dialog = gtk_message_dialog_new (NULL, 0, GTK_MESSAGE_INFO,
+              GTK_BUTTONS_CLOSE,
+              _("Call rejected because there is already a running call."));
+          g_signal_connect (dialog, "response", G_CALLBACK (gtk_widget_destroy),
+              NULL);
+          gtk_widget_show (dialog);
+        }
+
+      gtk_window_present (GTK_WINDOW (window->window));
+      return window->window;
+    }
+
   window = g_slice_new0 (EmpathyCallWindow);
   windows = g_slist_prepend (windows, window);
   window->call = empathy_tp_call_new (channel);
@@ -566,54 +596,5 @@ empathy_call_window_new (TpChannel *channel)
   gtk_widget_show (window->window);
 
   return window->window;
-}
-
-GtkWidget *
-empathy_call_window_find (TpChannel *channel)
-{
-  GSList *l;
-
-  g_return_val_if_fail (TP_IS_CHANNEL (channel), NULL);
-
-  for (l = windows; l; l = l->next)
-    {
-      EmpathyCallWindow *window = l->data;
-      TpChannel *this_channel = NULL;
-
-      if (window->call)
-          g_object_get (window->call, "channel", &this_channel, NULL);
-      if (this_channel)
-        {
-          g_object_unref (this_channel);
-          if (empathy_proxy_equal (channel, this_channel))
-              return window->window;
-        }
-    }
-
-  return NULL;
-}
-
-void
-empathy_call_window_set_channel (GtkWidget *window, TpChannel *channel)
-{
-  GSList *l;
-
-  g_return_if_fail (GTK_IS_WIDGET (window));
-  g_return_if_fail (TP_IS_CHANNEL (channel));
-
-  for (l = windows; l; l = l->next)
-    {
-      EmpathyCallWindow *call_window = l->data;
-
-      if (call_window->window == window)
-        {
-          if (!call_window->call)
-            {
-              call_window->call = empathy_tp_call_new (channel);
-              call_window_update (call_window);
-            }
-          break;
-        }
-    }
 }
 

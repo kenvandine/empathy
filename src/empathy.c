@@ -98,14 +98,7 @@ dispatch_channel_cb (EmpathyDispatcher *dispatcher,
 		g_object_unref (tp_chat);
 	}
 	else if (!tp_strdiff (channel_type, TP_IFACE_CHANNEL_TYPE_STREAMED_MEDIA)) {
-		GtkWidget *window;
-
-		window = empathy_call_window_find (channel);
-		if (window) {
-			gtk_window_present (GTK_WINDOW (window));
-		} else {
-			empathy_call_window_new (channel);
-		}
+		empathy_call_window_new (channel);
 	}
 }
 
