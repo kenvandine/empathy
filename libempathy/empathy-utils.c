@@ -630,12 +630,13 @@ empathy_disconnect_account_status_changed (gpointer token)
 guint
 empathy_proxy_hash (gconstpointer key)
 {
-	TpProxy *proxy = TP_PROXY (key);
+	TpProxy      *proxy = TP_PROXY (key);
+	TpProxyClass *proxy_class = TP_PROXY_GET_CLASS (key);
 
 	g_return_val_if_fail (TP_IS_PROXY (proxy), 0);
+	g_return_val_if_fail (proxy_class->must_have_unique_name, 0);
 
-	return g_str_hash (proxy->object_path) +
-	       g_str_hash (proxy->bus_name);
+	return g_str_hash (proxy->object_path) ^ g_str_hash (proxy->bus_name);
 }
 
 gboolean
@@ -644,9 +645,13 @@ empathy_proxy_equal (gconstpointer a,
 {
 	TpProxy *proxy_a = TP_PROXY (a);
 	TpProxy *proxy_b = TP_PROXY (b);
+	TpProxyClass *proxy_a_class = TP_PROXY_GET_CLASS (a);
+	TpProxyClass *proxy_b_class = TP_PROXY_GET_CLASS (b);
 
 	g_return_val_if_fail (TP_IS_PROXY (proxy_a), FALSE);
 	g_return_val_if_fail (TP_IS_PROXY (proxy_b), FALSE);
+	g_return_val_if_fail (proxy_a_class->must_have_unique_name, 0);
+	g_return_val_if_fail (proxy_b_class->must_have_unique_name, 0);
 
 	return g_str_equal (proxy_a->object_path, proxy_b->object_path) &&
 	       g_str_equal (proxy_a->bus_name, proxy_b->bus_name);
