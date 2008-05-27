@@ -769,6 +769,10 @@ contact_get_avatar_filename (EmpathyContact *contact,
 	gchar              *token_escaped;
 	gchar              *contact_escaped;
 
+	if (G_STR_EMPTY (priv->id)) {
+		return NULL;
+	}
+
 	contact_escaped = tp_escape_as_identifier (priv->id);
 	token_escaped = tp_escape_as_identifier (token);
 
@@ -796,13 +800,11 @@ empathy_contact_load_avatar_data (EmpathyContact *contact,
 				  const gchar    *format,
 				  const gchar    *token)
 {
-	EmpathyContactPriv *priv = GET_PRIV (contact);
-	EmpathyAvatar      *avatar;
-	gchar              *filename;
-	GError             *error = NULL;
+	EmpathyAvatar *avatar;
+	gchar         *filename;
+	GError        *error = NULL;
 
 	g_return_if_fail (EMPATHY_IS_CONTACT (contact));
-	g_return_if_fail (!G_STR_EMPTY (priv->id));
 	g_return_if_fail (data != NULL);
 	g_return_if_fail (len > 0);
 	g_return_if_fail (format != NULL);
@@ -817,7 +819,7 @@ empathy_contact_load_avatar_data (EmpathyContact *contact,
 
 	/* Save to cache if not yet in it */
 	filename = contact_get_avatar_filename (contact, token);
-	if (!g_file_test (filename, G_FILE_TEST_EXISTS)) {
+	if (filename && !g_file_test (filename, G_FILE_TEST_EXISTS)) {
 		if (!g_file_set_contents (filename, data, len, &error)) {
 			DEBUG ("Failed to save avatar in cache: %s",
 				error ? error->message : "No error given");
@@ -833,20 +835,18 @@ gboolean
 empathy_contact_load_avatar_cache (EmpathyContact *contact,
 				   const gchar    *token)
 {
-	EmpathyContactPriv *priv = GET_PRIV (contact);
-	EmpathyAvatar      *avatar = NULL;
-	gchar              *filename;
-	gchar              *data = NULL;
-	gsize               len;
-	GError             *error = NULL;
+	EmpathyAvatar *avatar = NULL;
+	gchar         *filename;
+	gchar         *data = NULL;
+	gsize          len;
+	GError        *error = NULL;
 
 	g_return_val_if_fail (EMPATHY_IS_CONTACT (contact), FALSE);
-	g_return_val_if_fail (!G_STR_EMPTY (priv->id), FALSE);
 	g_return_val_if_fail (!G_STR_EMPTY (token), FALSE);
 
 	/* Load the avatar from file if it exists */
 	filename = contact_get_avatar_filename (contact, token);
-	if (g_file_test (filename, G_FILE_TEST_EXISTS)) {
+	if (filename && g_file_test (filename, G_FILE_TEST_EXISTS)) {
 		if (!g_file_get_contents (filename, &data, &len, &error)) {
 			DEBUG ("Failed to load avatar from cache: %s",
 				error ? error->message : "No error given");
