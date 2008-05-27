@@ -38,7 +38,6 @@
 #include <libmissioncontrol/mc-profile.h>
 
 #include <libempathy/empathy-contact.h>
-#include <libempathy/empathy-avatar.h>
 
 #include "empathy-chat-view.h"
 

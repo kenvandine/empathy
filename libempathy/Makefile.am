@@ -16,7 +16,6 @@ BUILT_SOURCES = 					\
 lib_LTLIBRARIES = libempathy.la
 
 libempathy_la_SOURCES =					\
-	empathy-avatar.c				\
 	empathy-time.c					\
 	empathy-status-presets.c			\
 	empathy-debug.c					\
@@ -57,7 +56,6 @@ libempathy_la_LDFLAGS =		\
        -export-symbols-regex ^empathy_
 
 libempathy_headers =				\
-	empathy-avatar.h			\
 	empathy-time.h				\
 	empathy-status-presets.h		\
 	empathy-debug.h				\

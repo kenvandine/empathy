@@ -337,7 +337,6 @@ empathy_log_manager_get_messages_for_file (EmpathyLogManager *manager,
 	for (node = log_node->children; node; node = node->next) {
 		EmpathyMessage     *message;
 		EmpathyContact     *sender;
-		EmpathyAvatar      *avatar = NULL;
 		gchar              *time;
 		time_t              t;
 		gchar              *sender_id;
@@ -361,9 +360,6 @@ empathy_log_manager_get_messages_for_file (EmpathyLogManager *manager,
 		is_user_str = xmlGetProp (node, "isuser");
 		msg_type_str = xmlGetProp (node, "type");
 
-		if (!G_STR_EMPTY (sender_avatar_token)) {
-			avatar = empathy_avatar_new_from_cache (sender_avatar_token);
-		}
 		if (is_user_str) {
 			is_user = strcmp (is_user_str, "true") == 0;
 		}
@@ -375,9 +371,9 @@ empathy_log_manager_get_messages_for_file (EmpathyLogManager *manager,
 
 		sender = empathy_contact_new_full (account, sender_id, sender_name);
 		empathy_contact_set_is_user (sender, is_user);
-		if (avatar) {
-			empathy_contact_set_avatar (sender, avatar);
-			empathy_avatar_unref (avatar);
+		if (!G_STR_EMPTY (sender_avatar_token)) {
+			empathy_contact_load_avatar_cache (sender,
+							   sender_avatar_token);
 		}
 
 		message = empathy_message_new (body);

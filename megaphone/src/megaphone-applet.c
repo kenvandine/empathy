@@ -177,18 +177,16 @@ megaphone_applet_update_icon (MegaphoneApplet *applet)
 							      "avatar_token",
 							      NULL);
 		if (!G_STR_EMPTY (avatar_token)) {
-			avatar = empathy_avatar_new_from_cache (avatar_token);
+			empathy_contact_load_avatar_cache (priv->contact, avatar_token);
+			avatar = empathy_contact_get_avatar (priv->contact);
 		}
 		g_free (avatar_token);
-	} else {
-		empathy_avatar_ref (avatar);
 	}
 
 	if (avatar) {
 		avatar_pixbuf = empathy_pixbuf_from_avatar_scaled (avatar,
 								   priv->image_size - 2,
 								   priv->image_size - 2);
-		empathy_avatar_unref (avatar);
 	} else {
 		GtkIconTheme *icon_theme;
 

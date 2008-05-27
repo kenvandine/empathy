@@ -26,7 +26,7 @@
 
 #include <gtk/gtkeventbox.h>
 
-#include <libempathy/empathy-avatar.h>
+#include <libempathy/empathy-contact.h>
 
 G_BEGIN_DECLS
 

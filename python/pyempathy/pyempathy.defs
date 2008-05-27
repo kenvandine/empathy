@@ -217,47 +217,6 @@
 )
 
 
-;; From empathy-avatar.h
-
-(define-function empathy_avatar_get_type
-  (c-name "empathy_avatar_get_type")
-  (return-type "GType")
-)
-
-(define-function empathy_avatar_new
-  (c-name "empathy_avatar_new")
-  (is-constructor-of "EmpathyAvatar")
-  (return-type "EmpathyAvatar*")
-  (parameters
-    '("const-guchar*" "avatar")
-    '("const-gsize" "len")
-    '("const-gchar*" "format")
-    '("const-gchar*" "token")
-  )
-)
-
-(define-function empathy_avatar_new_from_cache
-  (c-name "empathy_avatar_new_from_cache")
-  (return-type "EmpathyAvatar*")
-  (parameters
-    '("const-gchar*" "token")
-  )
-)
-
-(define-method ref
-  (of-object "EmpathyAvatar")
-  (c-name "empathy_avatar_ref")
-  (return-type "EmpathyAvatar*")
-)
-
-(define-method unref
-  (of-object "EmpathyAvatar")
-  (c-name "empathy_avatar_unref")
-  (return-type "none")
-)
-
-
-
 ;; From empathy-time.h
 
 (define-function empathy_time_get_current
@@ -1097,6 +1056,56 @@
     '("EmpathyContactReady" "ready")
     '("GMainLoop**" "loop")
   )
+)
+
+(define-method load_avatar_data
+  (of-object "EmpathyContact")
+  (c-name "empathy_contact_load_avatar_data")
+  (return-type "none")
+  (parameters
+    '("const-guchar*" "data")
+    '("const-gsize" "len")
+    '("const-gchar*" "format")
+    '("const-gchar*" "token")
+  )
+)
+
+(define-method load_avatar_cache
+  (of-object "EmpathyContact")
+  (c-name "empathy_contact_load_avatar_cache")
+  (return-type "gboolean")
+  (parameters
+    '("const-gchar*" "token")
+  )
+)
+
+(define-function empathy_avatar_get_type
+  (c-name "empathy_avatar_get_type")
+  (return-type "GType")
+)
+
+(define-function empathy_avatar_new
+  (c-name "empathy_avatar_new")
+  (is-constructor-of "EmpathyAvatar")
+  (return-type "EmpathyAvatar*")
+  (parameters
+    '("guchar*" "data")
+    '("gsize" "len")
+    '("gchar*" "format")
+    '("gchar*" "token")
+  )
+)
+
+(define-method ref
+  (of-object "EmpathyAvatar")
+  (c-name "empathy_avatar_ref")
+  (return-type "EmpathyAvatar*")
+)
+
+(define-method unref
+  (of-object "EmpathyAvatar")
+  (c-name "empathy_avatar_unref")
+  (return-type "none")
 )
 
 

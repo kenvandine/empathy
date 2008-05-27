@@ -323,7 +323,6 @@ tp_contact_factory_avatar_retrieved_cb (TpConnection *connection,
 					GObject      *tp_factory)
 {
 	EmpathyContact *contact;
-	EmpathyAvatar  *avatar;
 
 	contact = tp_contact_factory_find_by_handle (EMPATHY_TP_CONTACT_FACTORY (tp_factory),
 						     handle);
@@ -335,13 +334,11 @@ tp_contact_factory_avatar_retrieved_cb (TpConnection *connection,
 		empathy_contact_get_id (contact),
 		handle);
 
-	avatar = empathy_avatar_new (avatar_data->data,
-				     avatar_data->len,
-				     mime_type,
-				     token);
-
-	empathy_contact_set_avatar (contact, avatar);
-	empathy_avatar_unref (avatar);
+	empathy_contact_load_avatar_data (contact,
+					  avatar_data->data,
+					  avatar_data->len,
+					  mime_type,
+					  token);
 }
 
 static void
@@ -381,11 +378,8 @@ tp_contact_factory_avatar_maybe_update (EmpathyTpContactFactory *tp_factory,
 	}
 
 	/* The avatar changed, search the new one in the cache */
-	avatar = empathy_avatar_new_from_cache (token);
-	if (avatar) {
+	if (empathy_contact_load_avatar_cache (contact, token)) {
 		/* Got from cache, use it */
-		empathy_contact_set_avatar (contact, avatar);
-		empathy_avatar_unref (avatar);
 		return TRUE;
 	}
 
@@ -804,8 +798,6 @@ tp_contact_factory_got_self_handle_cb (TpConnection *proxy,
 						handle_needed_contacts, tp_contact_factory_list_free,
 						G_OBJECT (tp_factory));
 
-	tp_contact_factory_request_everything ((EmpathyTpContactFactory*) tp_factory,
-					       id_needed);
 	tp_cli_connection_call_inspect_handles (priv->connection,
 						-1,
 						TP_HANDLE_TYPE_CONTACT,
@@ -813,6 +805,9 @@ tp_contact_factory_got_self_handle_cb (TpConnection *proxy,
 						tp_contact_factory_inspect_handles_cb,
 						id_needed_contacts, tp_contact_factory_list_free,
 						G_OBJECT (tp_factory));
+
+	tp_contact_factory_request_everything ((EmpathyTpContactFactory*) tp_factory,
+					       id_needed);
 
 	g_array_free (handle_needed, TRUE);
 	g_array_free (id_needed, TRUE);

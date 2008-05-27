@@ -31,8 +31,6 @@
 #include <libmissioncontrol/mc-account.h>
 #include <libmissioncontrol/mission-control.h>
 
-#include "empathy-avatar.h"
-
 G_BEGIN_DECLS
 
 #define EMPATHY_TYPE_CONTACT         (empathy_contact_get_type ())
@@ -53,6 +51,14 @@ struct _EmpathyContact {
 struct _EmpathyContactClass {
 	GObjectClass parent_class;
 };
+
+typedef struct {
+	guchar *data;
+	gsize   len;
+	gchar  *format;
+	gchar  *token;
+	guint   refcount;
+} EmpathyAvatar;
 
 typedef enum {
 	EMPATHY_CAPABILITIES_NONE = 0,
@@ -111,6 +117,22 @@ guint               empathy_contact_hash               (gconstpointer        key
 void                empathy_contact_run_until_ready    (EmpathyContact      *contact,
 							EmpathyContactReady  ready,
 							GMainLoop          **loop);
+void                empathy_contact_load_avatar_data   (EmpathyContact      *contact,
+							const guchar        *data,
+							const gsize          len,
+							const gchar         *format,
+							const gchar         *token);
+gboolean            empathy_contact_load_avatar_cache  (EmpathyContact      *contact,
+							const gchar         *token);
+
+#define EMPATHY_TYPE_AVATAR (empathy_avatar_get_type ())
+GType               empathy_avatar_get_type            (void) G_GNUC_CONST;
+EmpathyAvatar *     empathy_avatar_new                 (guchar              *data,
+							gsize                len,
+							gchar               *format,
+							gchar               *token);
+EmpathyAvatar *     empathy_avatar_ref                 (EmpathyAvatar       *avatar);
+void                empathy_avatar_unref               (EmpathyAvatar       *avatar);
 
 G_END_DECLS
 

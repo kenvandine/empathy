@@ -759,3 +759,166 @@ empathy_contact_run_until_ready (EmpathyContact      *contact,
 				      loop);
 }
 
+static gchar *
+contact_get_avatar_filename (EmpathyContact *contact,
+			     const gchar    *token)
+{
+	EmpathyContactPriv *priv = GET_PRIV (contact);
+	gchar              *avatar_path;
+	gchar              *avatar_file;
+	gchar              *token_escaped;
+	gchar              *contact_escaped;
+
+	contact_escaped = tp_escape_as_identifier (priv->id);
+	token_escaped = tp_escape_as_identifier (token);
+
+	avatar_path = g_build_filename (g_get_user_cache_dir (),
+					PACKAGE_NAME,
+					"avatars",
+					mc_account_get_unique_name (priv->account),
+					contact_escaped,
+					NULL);
+	g_mkdir_with_parents (avatar_path, 0700);
+
+	avatar_file = g_build_filename (avatar_path, token_escaped, NULL);
+
+	g_free (contact_escaped);
+	g_free (token_escaped);
+	g_free (avatar_path);
+
+	return avatar_file;
+}
+
+void
+empathy_contact_load_avatar_data (EmpathyContact *contact,
+				  const guchar   *data,
+				  const gsize     len,
+				  const gchar    *format,
+				  const gchar    *token)
+{
+	EmpathyContactPriv *priv = GET_PRIV (contact);
+	EmpathyAvatar      *avatar;
+	gchar              *filename;
+	GError             *error = NULL;
+
+	g_return_if_fail (EMPATHY_IS_CONTACT (contact));
+	g_return_if_fail (!G_STR_EMPTY (priv->id));
+	g_return_if_fail (data != NULL);
+	g_return_if_fail (len > 0);
+	g_return_if_fail (format != NULL);
+	g_return_if_fail (!G_STR_EMPTY (token));
+
+	/* Load and set the avatar */
+	avatar = empathy_avatar_new (g_memdup (data, len), len,
+				     g_strdup (format),
+				     g_strdup (token));
+	empathy_contact_set_avatar (contact, avatar);
+	empathy_avatar_unref (avatar);
+
+	/* Save to cache if not yet in it */
+	filename = contact_get_avatar_filename (contact, token);
+	if (!g_file_test (filename, G_FILE_TEST_EXISTS)) {
+		if (!g_file_set_contents (filename, data, len, &error)) {
+			DEBUG ("Failed to save avatar in cache: %s",
+				error ? error->message : "No error given");
+			g_clear_error (&error);
+		} else {
+			DEBUG ("Avatar saved to %s", filename);
+		}
+	}
+	g_free (filename);
+}
+
+gboolean
+empathy_contact_load_avatar_cache (EmpathyContact *contact,
+				   const gchar    *token)
+{
+	EmpathyContactPriv *priv = GET_PRIV (contact);
+	EmpathyAvatar      *avatar = NULL;
+	gchar              *filename;
+	gchar              *data = NULL;
+	gsize               len;
+	GError             *error = NULL;
+
+	g_return_val_if_fail (EMPATHY_IS_CONTACT (contact), FALSE);
+	g_return_val_if_fail (!G_STR_EMPTY (priv->id), FALSE);
+	g_return_val_if_fail (!G_STR_EMPTY (token), FALSE);
+
+	/* Load the avatar from file if it exists */
+	filename = contact_get_avatar_filename (contact, token);
+	if (g_file_test (filename, G_FILE_TEST_EXISTS)) {
+		if (!g_file_get_contents (filename, &data, &len, &error)) {
+			DEBUG ("Failed to load avatar from cache: %s",
+				error ? error->message : "No error given");
+			g_clear_error (&error);
+		}
+	}
+
+	if (data) {
+		DEBUG ("Avatar loaded from %s", filename);
+		avatar = empathy_avatar_new (data, len, NULL, g_strdup (token));
+		empathy_contact_set_avatar (contact, avatar);
+		empathy_avatar_unref (avatar);
+	}
+
+	g_free (filename);
+
+	return data != NULL;
+}
+
+GType
+empathy_avatar_get_type (void)
+{
+	static GType type_id = 0;
+
+	if (!type_id) {
+		type_id = g_boxed_type_register_static ("EmpathyAvatar",
+							(GBoxedCopyFunc) empathy_avatar_ref,
+							(GBoxedFreeFunc) empathy_avatar_unref);
+	}
+
+	return type_id;
+}
+
+EmpathyAvatar *
+empathy_avatar_new (guchar *data,
+		    gsize   len,
+		    gchar  *format,
+		    gchar  *token)
+{
+	EmpathyAvatar *avatar;
+
+	avatar = g_slice_new0 (EmpathyAvatar);
+	avatar->data = data;
+	avatar->len = len;
+	avatar->format = format;
+	avatar->token = token;
+	avatar->refcount = 1;
+
+	return avatar;
+}
+
+void
+empathy_avatar_unref (EmpathyAvatar *avatar)
+{
+	g_return_if_fail (avatar != NULL);
+
+	avatar->refcount--;
+	if (avatar->refcount == 0) {
+		g_free (avatar->data);
+		g_free (avatar->format);
+		g_free (avatar->token);
+		g_slice_free (EmpathyAvatar, avatar);
+	}
+}
+
+EmpathyAvatar *
+empathy_avatar_ref (EmpathyAvatar *avatar)
+{
+	g_return_val_if_fail (avatar != NULL, NULL);
+
+	avatar->refcount++;
+
+	return avatar;
+}
+
