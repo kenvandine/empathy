@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: empathy.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-05-21 10:18+0000\n"
-"PO-Revision-Date: 2008-05-22 19:10+0200\n"
+"POT-Creation-Date: 2008-05-26 17:43+0000\n"
+"PO-Revision-Date: 2008-05-28 19:02+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -233,7 +233,7 @@ msgstr ""
 "predeterminado es ordenar por el nombre del contacto con el valor «nombre». "
 "Un valor «estado» ordenará la lista por el estado."
 
-#: ../libempathy/empathy-tp-contact-list.c:731 ../src/empathy.c:247
+#: ../libempathy/empathy-tp-contact-list.c:731 ../src/empathy.c:240
 msgid "People nearby"
 msgstr "Gente cerca"
 
@@ -646,7 +646,7 @@ msgstr "%s ha entrado en la sala"
 msgid "%s has left the room"
 msgstr "%s ha dejado la sala"
 
-#: ../libempathy-gtk/empathy-chat.c:1216 ../src/empathy.c:129
+#: ../libempathy-gtk/empathy-chat.c:1216 ../src/empathy.c:122
 #: ../src/empathy-call-window.c:394
 msgid "Disconnected"
 msgstr "Desconectado"
@@ -709,7 +709,7 @@ msgid "Removing group"
 msgstr "Quitando grupo"
 
 #: ../libempathy-gtk/empathy-contact-list-view.c:1233
-#: ../libempathy-gtk/empathy-contact-list-view.c:1313
+#: ../libempathy-gtk/empathy-contact-list-view.c:1312
 msgid "_Remove"
 msgstr "_Quitar"
 
@@ -1172,63 +1172,63 @@ msgstr "Presencia"
 msgid "Set your own presence"
 msgstr "Establezca su propia presencia"
 
-#: ../src/empathy.c:132
+#: ../src/empathy.c:125
 msgid "Invalid handle"
 msgstr "Manejador no válido"
 
-#: ../src/empathy.c:135
+#: ../src/empathy.c:128
 msgid "No matching connection"
 msgstr "No hay una conexión coincidente"
 
-#: ../src/empathy.c:138
+#: ../src/empathy.c:131
 msgid "Invalid account"
 msgstr "Cuenta no válida"
 
-#: ../src/empathy.c:141
+#: ../src/empathy.c:134
 msgid "Presence failure"
 msgstr "Fallo de presencia"
 
-#: ../src/empathy.c:144
+#: ../src/empathy.c:137
 msgid "No accounts"
 msgstr "Sin cuentas"
 
-#: ../src/empathy.c:147 ../src/empathy-main-window.c:896
+#: ../src/empathy.c:140 ../src/empathy-main-window.c:896
 msgid "Network error"
 msgstr "Error de red"
 
-#: ../src/empathy.c:150
+#: ../src/empathy.c:143
 msgid "Contact does not support voice"
 msgstr "El contacto no soporta voz"
 
-#: ../src/empathy.c:153
+#: ../src/empathy.c:146
 msgid "Lowmem"
 msgstr "Memoria baja"
 
-#: ../src/empathy.c:156
+#: ../src/empathy.c:149
 msgid "Channel request generic error"
 msgstr "Error genérico en la petición del canal"
 
-#: ../src/empathy.c:159
+#: ../src/empathy.c:152
 msgid "Channel banned"
 msgstr "Expulsado del canal"
 
-#: ../src/empathy.c:162
+#: ../src/empathy.c:155
 msgid "Channel full"
 msgstr "Canal lleno"
 
-#: ../src/empathy.c:165
+#: ../src/empathy.c:158
 msgid "Channel invite only"
 msgstr "El canal es de sólo invitación"
 
-#: ../src/empathy.c:168
+#: ../src/empathy.c:161
 msgid "Unknown error code"
 msgstr "Error de código desconocido"
 
-#: ../src/empathy.c:372
+#: ../src/empathy.c:365
 msgid "Don't connect on startup"
 msgstr "No conectarse automáticamente al inicio"
 
-#: ../src/empathy.c:384
+#: ../src/empathy.c:377
 msgid "- Empathy Instant Messenger"
 msgstr "- Mensajería instantánea Empathy"
 
@@ -1327,6 +1327,10 @@ msgstr "Sonando"
 #: ../src/empathy-call-window.c:396
 msgid "Connecting"
 msgstr "Conectado"
+
+#: ../src/empathy-call-window.c:498
+msgid "Call rejected because there is already a running call."
+msgstr "Llamada rechazada porque ya hay una llamada en curso."
 
 #: ../src/empathy-call-window.glade.h:1
 msgid "#"
@@ -1764,7 +1768,7 @@ msgstr "_Abrir charlas nuevas en ventanas separadas"
 msgid "_Play sound when messages arrive"
 msgstr "_Reproducir sonido cuando lleguen mensajes"
 
-#: ../src/empathy-status-icon.c:460
+#: ../src/empathy-status-icon.c:461
 #, c-format
 msgid ""
 "New message from %s:\n"
@@ -1773,13 +1777,13 @@ msgstr ""
 "Nuevo mensaje de %s:\n"
 "%s"
 
-#: ../src/empathy-status-icon.c:500
+#: ../src/empathy-status-icon.c:501
 #, c-format
 msgid "Incoming call from %s"
 msgstr "Llamada entrante de %s"
 
 #. Tell the user that the tube can't be handled
-#: ../src/empathy-status-icon.c:537
+#: ../src/empathy-status-icon.c:538
 #, c-format
 msgid ""
 "%s offered you an invitation, but you don't have the needed external "
@@ -1788,11 +1792,11 @@ msgstr ""
 "%s le ofreció una invitación pero no tiene la aplicación externa necesaria "
 "para manejarla."
 
-#: ../src/empathy-status-icon.c:546
+#: ../src/empathy-status-icon.c:547
 msgid "Invitation Error"
 msgstr "Error en la invitación"
 
-#: ../src/empathy-status-icon.c:571
+#: ../src/empathy-status-icon.c:572
 #, c-format
 msgid ""
 "%s is offering you an invitation. An external application will be started to "
@@ -1801,7 +1805,7 @@ msgstr ""
 "%s le está ofreciendo una invitación. Se iniciará una aplicación externa "
 "para manejarla."
 
-#: ../src/empathy-status-icon.c:576
+#: ../src/empathy-status-icon.c:577
 #, c-format
 msgid ""
 "%s is offering you an invitation, but you don't have the needed external "
@@ -1810,12 +1814,12 @@ msgstr ""
 "%s le está ofreciendo una invitación pero no tiene la aplicación externa "
 "necesaria para manejarla."
 
-#: ../src/empathy-status-icon.c:622
+#: ../src/empathy-status-icon.c:623
 #, c-format
 msgid "Subscription requested by %s"
 msgstr "Petición de suscripción de %s"
 
-#: ../src/empathy-status-icon.c:625
+#: ../src/empathy-status-icon.c:626
 #, c-format
 msgid ""
 "\n"
