@@ -935,6 +935,7 @@ contact_list_view_set_list_features (EmpathyContactListView         *view,
 				     EmpathyContactListFeatureFlags  features)
 {
 	EmpathyContactListViewPriv *priv = GET_PRIV (view);
+	gboolean                    has_tooltip;
 
 	g_return_if_fail (EMPATHY_IS_CONTACT_LIST_VIEW (view));
 
@@ -964,8 +965,8 @@ contact_list_view_set_list_features (EmpathyContactListView         *view,
 	}
 
 	/* Update has-tooltip */
-	gtk_widget_set_has_tooltip (GTK_WIDGET (view),
-				    features & EMPATHY_CONTACT_LIST_FEATURE_CONTACT_TOOLTIP);
+	has_tooltip = (features & EMPATHY_CONTACT_LIST_FEATURE_CONTACT_TOOLTIP) != 0;
+	gtk_widget_set_has_tooltip (GTK_WIDGET (view), has_tooltip);
 }
 
 static void
