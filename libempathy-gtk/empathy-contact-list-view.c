@@ -66,6 +66,7 @@ typedef struct {
 	GtkTreeRowReference            *drag_row;
 	EmpathyContactListFeatureFlags  list_features;
 	EmpathyContactFeatureFlags      contact_features;
+	GtkWidget                      *tooltip_widget;
 } EmpathyContactListViewPriv;
 
 typedef struct {
@@ -115,6 +116,67 @@ enum {
 static guint signals[LAST_SIGNAL];
 
 G_DEFINE_TYPE (EmpathyContactListView, empathy_contact_list_view, GTK_TYPE_TREE_VIEW);
+
+static void
+contact_list_view_tooltip_destroy_cb (GtkWidget              *widget,
+				      EmpathyContactListView *view)
+{
+	EmpathyContactListViewPriv *priv = GET_PRIV (view);
+
+	DEBUG ("Tooltip destroyed");
+	if (priv->tooltip_widget) {
+		g_object_unref (priv->tooltip_widget);
+		priv->tooltip_widget = NULL;
+	}
+}
+
+static gboolean
+contact_list_view_query_tooltip_cb (EmpathyContactListView *view,
+				    gint                    x,
+				    gint                    y,
+				    gboolean                keyboard_mode,
+				    GtkTooltip             *tooltip,
+				    gpointer                user_data)
+{
+	EmpathyContactListViewPriv *priv = GET_PRIV (view);
+	EmpathyContact             *contact;
+	GtkTreeModel               *model;
+	GtkTreeIter                 iter;
+	GtkTreePath                *path;
+
+	if (!gtk_tree_view_get_tooltip_context (GTK_TREE_VIEW (view), &x, &y,
+						keyboard_mode,
+						&model, &path, &iter)) {
+		return FALSE;
+	}
+
+	gtk_tree_view_set_tooltip_row (GTK_TREE_VIEW (view), tooltip, path);
+	gtk_tree_path_free (path);
+
+	gtk_tree_model_get (model, &iter,
+			    EMPATHY_CONTACT_LIST_STORE_COL_CONTACT, &contact,
+			    -1);
+	if (!contact) {
+		return FALSE;
+	}
+
+	if (!priv->tooltip_widget) {
+		priv->tooltip_widget = empathy_contact_widget_new (contact,
+						EMPATHY_CONTACT_WIDGET_EDIT_NONE);
+		g_object_ref (priv->tooltip_widget);
+		g_signal_connect (priv->tooltip_widget, "destroy",
+				  G_CALLBACK (contact_list_view_tooltip_destroy_cb),
+				  view);
+
+	} else {
+		empathy_contact_widget_set_contact (priv->tooltip_widget, contact);
+	}
+	gtk_tooltip_set_custom (tooltip, priv->tooltip_widget);
+
+	g_object_unref (contact);
+
+	return TRUE;
+}
 
 static void
 contact_list_view_drag_data_received (GtkWidget         *widget,
@@ -900,6 +962,10 @@ contact_list_view_set_list_features (EmpathyContactListView         *view,
 		/* FIXME: URI could still be  droped depending on FT feature */
 		gtk_drag_dest_unset (GTK_WIDGET (view));
 	}
+
+	/* Update has-tooltip */
+	gtk_widget_set_has_tooltip (GTK_WIDGET (view),
+				    features & EMPATHY_CONTACT_LIST_FEATURE_CONTACT_TOOLTIP);
 }
 
 static void
@@ -911,6 +977,10 @@ contact_list_view_finalize (GObject *object)
 
 	if (priv->store) {
 		g_object_unref (priv->store);
+	}
+
+	if (priv->tooltip_widget) {
+		g_object_unref (priv->tooltip_widget);
 	}
 
 	G_OBJECT_CLASS (empathy_contact_list_view_parent_class)->finalize (object);
@@ -1041,26 +1111,24 @@ empathy_contact_list_view_init (EmpathyContactListView *view)
 					      NULL, NULL);
 
 	/* Connect to tree view signals rather than override. */
-	g_signal_connect (view,
-			  "button-press-event",
+	g_signal_connect (view, "button-press-event",
 			  G_CALLBACK (contact_list_view_button_press_event_cb),
 			  NULL);
-	g_signal_connect (view,
-			  "key-press-event",
+	g_signal_connect (view, "key-press-event",
 			  G_CALLBACK (contact_list_view_key_press_event_cb),
 			  NULL);
-	g_signal_connect (view,
-			  "row-activated",
+	g_signal_connect (view, "row-activated",
 			  G_CALLBACK (contact_list_view_row_activated_cb),
 			  NULL);
-	g_signal_connect (view,
-			  "row-expanded",
+	g_signal_connect (view, "row-expanded",
 			  G_CALLBACK (contact_list_view_row_expand_or_collapse_cb),
 			  GINT_TO_POINTER (TRUE));
-	g_signal_connect (view,
-			  "row-collapsed",
+	g_signal_connect (view, "row-collapsed",
 			  G_CALLBACK (contact_list_view_row_expand_or_collapse_cb),
 			  GINT_TO_POINTER (FALSE));
+	g_signal_connect (view, "query-tooltip",
+			  G_CALLBACK (contact_list_view_query_tooltip_cb),
+			  NULL);
 }
 
 EmpathyContactListView *
