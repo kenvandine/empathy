@@ -8,7 +8,7 @@
 <!ENTITY app "<application>Empathy</application>">
 <!ENTITY appname "Empathy">
 ]>
-
+<?db.chunk.max_depth 2?>
 <article id="index" lang="en">
   <!-- please do not change the id; for translations, change lang to -->
   <!-- appropriate code -->
@@ -46,14 +46,6 @@
 	  <address><email>sdudenhofer@gmail.com</email></address> 
 	</affiliation> 
       </author> 
-      <author> 
-	<firstname>Jesse N.</firstname> 
-	<surname>Richardson</surname> 
-	<affiliation> 
-	  <orgname>Ubuntu Documentation Project</orgname> 
-	  <address><email>richardson183@bellsouth.net</email></address> 
-	</affiliation> 
-      </author> 
     </authorgroup>
 
 <!-- According to GNU FDL, revision history is mandatory if you are -->
@@ -78,9 +70,6 @@
 	  </para>
 	  <para role="author">Seth Dudenhofer
 	    <email>sdudenhofer@gmail.com</email>
-	  </para>
-	  <para role="author">Jesse N. Richardson
-	    <email>richardson183@bellsouth.net</email>
 	  </para>
 	  <para role="publisher">Ubuntu Documentation Project</para>
 	</revdescription> 
@@ -173,7 +162,7 @@
     <title>Getting Started</title>
 
     <sect2 id="empathy-starting">
-      <title>To Start &appname;</title>
+      <title>Starting &appname;</title>
       <para>You can start &app; in the following ways:
       </para> 
       <variablelist>
@@ -192,7 +181,7 @@
 	  <term>Command line</term>
 	  <listitem>
 	    <para>Type <command>empathy</command> and then press
-	      <keycap>Return</keycap>.
+	      <keycap>Enter</keycap>.
 	    </para>
 	  </listitem>
     	</varlistentry>
@@ -200,10 +189,10 @@
     </sect2>
 
     <sect2 id="emphaty-when-start">
-      <title>When you start &appname;</title>
+      <title>When You Start &appname;</title>
       <para>
-	When you start &app; the following window is displayed.
-	<!-- Figure -->
+	When you start &app; the following window is shown.
+	<!-- Figure 1 -->
 	<!-- 
 	Commented out, need to find a solution on how to
 	structure this section.
@@ -228,7 +217,8 @@
 	<!-- End of Figure -->
       </para>
       <para>
-	<xref linkend="empathy-TBL-1"/> describes the components of a browser window.
+	<xref linkend="empathy-TBL-1"/> describes the components of
+	&app;'s main window.
 	<table frame="topbot" id="empathy-TBL-1">
 	  <title>&app; Main Components</title>
 	  <tgroup cols="2" colsep="0" rowsep="0">
@@ -292,6 +282,46 @@
       </para>
     </sect2>
 
+    <sect2 id="empathy-when-start-new">
+      <title>When You Start &appname; for the First Time</title>
+      <para>
+	When you start &app; for the first time and you don't have
+	configured any account yet, the following window is shown.
+	<!-- Figure 2 -->
+	<!-- 
+	Commented out, need to find a solution on how to
+	structure this section.
+	<figure id="empathy-newaccount"> 
+	  <title>&app; Account Window</title> 
+	  <screenshot> 
+	    <mediaobject> 
+	      <imageobject>
+		<imagedata fileref="figures/empathy-new-account.png" format="PNG"/> 
+	      </imageobject>
+	      <textobject> 
+		<phrase>
+		  Shows &app; account creation dialog.
+		</phrase> 
+	      </textobject> 
+	    </mediaobject> 
+	  </screenshot> 
+	</figure>
+	-->
+	<!-- End of Figure -->
+      </para>
+      <para>
+	From here, you can configure and create your accounts. See
+	<xref linkend="empathy-create-account" /> for more information.
+      </para>
+    </sect2>
+
   </sect1>
+
+  <sect1 id="empathy-create-account">
+    <title>Creating an Account</title>
+    <para>
+    </para>
+  </sect1>
+
 
 </article>
