@@ -7,6 +7,16 @@
 <!ENTITY date "April 2008">
 <!ENTITY app "<application>Empathy</application>">
 <!ENTITY appname "Empathy">
+<!ENTITY gtalk "http://www.google.com/talk/">
+<!ENTITY icq "https://www.icq.com/register/">
+<!ENTITY aim "http://dashboard.aim.com/aim">
+<!ENTITY msn "https://accountservices.passport.net">
+<!ENTITY yahoo "https://login.yahoo.com/config/login">
+<!ENTITY fwd
+"http://account2.freeworlddialup.com/index.php?section_id=94">
+<!ENTITY ekiga
+"http://www.ekiga.net/user/reg/index.php?phplib_Session=c1d85267756241f8190e5fc21b029a62">
+<!ENTITY sipphone "https://signup.sipphone.com/new-users/app?class=NewUser;proc=start">
 ]>
 <?db.chunk.max_depth 2?>
 <article id="index" lang="en">
@@ -108,11 +118,11 @@
     <title>Introduction</title>
     <para>
       &app; is a multi-protocol instant messaging program for the
-      GNOME Desktop that allows you to keep in touch with your friends
-      over a network.
+      GNOME Desktop. With &app; you can keep in touch with all of your
+      friends through lots of supported instant messaging services.
     </para>
     <para>
-      It supports the following protocols:
+      &app; supports the following services:
       <itemizedlist>
 	<listitem>
 	  <para>
@@ -147,6 +157,11 @@
 	<listitem>
 	  <para>
 	    Salut
+	  </para>
+	</listitem>
+	<listitem>
+	  <para>
+	    <acronym>SIP</acronym>
 	  </para>
 	</listitem>
 	<listitem>
@@ -193,7 +208,7 @@
       <para>
 	When you start &app; the following window is shown.
 	<!-- Figure 1 -->
-	<figure id="empathy-mainwindow"> 
+	<figure id="empathy-FIG-mainwindow"> 
 	  <title>&app; Main Window</title> 
 	  <screenshot> 
 	    <mediaobject> 
@@ -284,8 +299,8 @@
 	When you start &app; for the first time and you don't have
 	configured any account yet, the following dialog is shown.
 	<!-- Figure 2 -->
-	<figure id="empathy-newaccount"> 
-	  <title>&app; Account Window</title> 
+	<figure id="empathy-FIG-newaccount"> 
+	  <title>&app; Accounts Dialog</title> 
 	  <screenshot> 
 	    <mediaobject> 
 	      <imageobject>
@@ -303,16 +318,317 @@
       </para>
       <para>
 	From here, you can configure and create your accounts. See
-	<xref linkend="empathy-create-account" /> for more information.
+	<xref linkend="empathy-accounts" /> for more information.
       </para>
     </sect2>
 
   </sect1>
 
-  <sect1 id="empathy-create-account">
-    <title>Creating an Account</title>
+  <sect1 id="empathy-accounts">
+    <title>Accounts</title>
     <para>
+      To use &app; you need at least one account of the supported services.
     </para>
+    <para>
+      If you don't already have an account and you don't have your <emphasis>user
+	name</emphasis> and <emphasis>password</emphasis>, you need to
+	register a new account (see <xref linkend="empathy-register-account" />).
+    </para>
+    <para>
+      In order to talk with other users (called
+      <emphasis>contatcs</emphasis>), you need to use the same service
+      they are using. If, for example, one contact is using the <emphasis
+      role="strong">Jabber</emphasis> service, you need to have an
+      account registerd with that service.
+    </para>
+    <para>
+      &app; can handle as many accounts on any supported services as you want and
+      you can have them all open at the same time.
+    </para>
+
+    <sect2 id="empathy-register-account">
+      <title>Registering an Account</title>
+      <para>
+	You can freely register an account on any of the following
+	services. Follow the instructions reported on each website on
+	how to register your new account. At the end of the
+	registration process you should have a <emphasis>user
+	  name</emphasis> (or an <emphasis>account ID</emphasis>) and
+	a <emphasis>password</emphasis> that you will use to
+	create the account in &app;.
+      </para>
+      <para>
+	Click on the name of the service to visit its website:
+	<!-- Need to do like that, if using only
+	<ulink>SERVICE</ulink> it wouldn't be possibile to
+	localize the links -->
+	<itemizedlist>
+	  <listitem>
+	    <!-- Translators: try to find a localized version of the
+	    registration service website -->
+	    <para>
+	      The <ulink type="http" url="&aim;">AIM</ulink> service.
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <!-- Translators: try to find a localized version of the
+	    registration service website -->
+	    <para>
+	      The <ulink type="http" url="&gtalk;">Google
+	      Talk</ulink> service.
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <!-- Translators: try to find a localized version of the
+	    registration service website -->
+	   <para>
+	      The <ulink type="http" url="&icq;">ICQ</ulink> service.
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <!-- Translators: try to find a localized version of the
+	    registration service website -->
+	    <para>
+	      The <ulink type="http" url="&msn;">MSN</ulink> service.
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <!-- Translators: try to find a localized version of the
+	    registration service website -->
+	    <para>
+	      The <ulink type="http" url="&yahoo;">Yahoo</ulink> service.
+	    </para>
+	  </listitem>
+	</itemizedlist>
+      </para>
+      <para>
+	For registering a <acronym>SIP</acronym> account, you can use one of the
+	following service:
+      </para>
+      <para>
+	<itemizedlist>
+	  <listitem>
+	    <!-- Translators: try to find a localized version of the
+	    registration service website -->
+	    <para>
+	      The <ulink type="http" url="&ekiga;">Ekiga</ulink> service.
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <!-- Translators: try to find a localized version of the
+	    registration service website -->
+	    <para>
+	      The <ulink type="http" url="&fwd;"><acronym>FWD</acronym></ulink> (Free
+	      World Dialup) service.
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <!-- Translators: try to find a localized version of the
+	    registration service website -->
+	    <para>
+	      The <ulink type="http" url="&sipphone;">Sipphone</ulink> service.
+	    </para>
+	  </listitem>
+	</itemizedlist>
+      </para>
+      <para>
+	You can use one of the following services if you already have
+	a <emphasis role="strong">Jabber</emphasis> account:
+      </para>
+      <para>
+	<itemizedlist>
+	  <listitem>
+	    <para>
+	      Salut
+	    </para>
+	  </listitem>
+	</itemizedlist>
+      </para>
+    </sect2>
+
+    <sect2 id="empathy-create-account">
+      <title>Creating an Account</title>
+      <para>
+	To create an account, proceed as follow:
+	<orderedlist>
+	  <listitem>
+	    <para>
+	      From the <link linkend="empathy-FIG-mainwindow">main window
+	      </link> (<guilabel>Contact List</guilabel>)
+	      click on the account button to open the
+	      <guilabel>Accounts</guilabel> dialog.
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para>
+	      Click on the <guibutton>Add</guibutton> button.
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para>
+	      From the <guilabel>Type</guilabel> drop-down list choose
+	      the service you wish to create an account for, then click
+	      on the <guibutton>Create</guibutton> button.
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para>
+	      Fill the required fields with your <emphasis>user
+		name</emphasis> and <emphasis>password</emphasis>.
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para>
+	      To enable the new account, select the
+	      <guilabel>Enabled</guilabel> check-box next to
+	      the name of the account.
+	      <!-- in the box on the left of the
+	      <guilabel>Accounts</guilabel> dialog. -->
+	    </para>
+	  </listitem>
+	</orderedlist>
+      </para>
+    </sect2>
+
+    <sect2 id="empathy-disabling-removing-account">
+      <title>Disabling and Removing an Account</title>
+      <para>
+	To disable an account, proceed as follow:
+      </para>
+      <para>
+	<orderedlist>
+	  <listitem>
+	    <para>
+	      From the <link linkend="empathy-FIG-mainwindow">main window
+	      </link> (<guilabel>Contact List</guilabel>)
+	      click on the account button to open the
+	      <guilabel>Accounts</guilabel> dialog.
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para>
+	      Select the account you wish to disable in the box on the
+	      left of the dialog and deselect the
+	      <guilabel>Enabled</guilabel> check-box.
+	    </para>
+	  </listitem>
+	</orderedlist>
+      </para>
+      <para>
+	To remove an account, proceed as follow:
+      </para>
+      <para>
+	<orderedlist>
+	  <listitem>
+	    <para>
+	      From the <link linkend="empathy-FIG-mainwindow">main window
+	      </link> (<guilabel>Contact List</guilabel>)
+	      click on the account button to open the
+	      <guilabel>Accounts</guilabel> dialog.
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para>
+	      Select the account you wish to disable in the box on the
+	      left of the dialog.
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para>
+	      Click on the <guibutton>Remove</guibutton> button.
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para>
+	      A dialog will be shown asking for confirmation. Click on
+	      the <guibutton>Remove</guibutton> button to remove the account.
+	    </para>
+	  </listitem>
+	</orderedlist>
+      </para>
+    </sect2>
+  </sect1>
+
+  <sect1 id="empathy-contacts">
+    <title>Contacts</title>
+    <para>
+      All the contacts are handled within &app;'s <link
+      linkend="empathy-FIG-mainwindow">main window</link>.
+    </para>
+    <sect2 id="empathy-add-contact">
+      <title>Adding a Contact</title>
+      <para>
+	To add a new contact, proceed as follow:
+      </para>
+      <para>
+	<orderedlist>
+	  <listitem>
+	    <para>
+	      From the <link linkend="empathy-FIG-mainwindow">main
+		window</link> choose <menuchoice>
+		<guimenu>Chat</guimenu>
+		<guimenuitem>Add Contact...</guimenuitem>
+	      </menuchoice>. The <guilabel>New Contact</guilabel>
+		dialog will be shown.
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para>
+	      From the <guilabel>Account</guilabel> drop-down list,
+	      choose the service used by the contact you are adding.
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para>
+	      In the <guilabel>Identifier</guilabel> text-box type the
+	      <emphasis>address</emphasis> of the contact in the form
+	      of
+	      <userinput><replaceable>user name</replaceable>@<replaceable>service
+	      domain</replaceable></userinput>.
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para>
+	      In the <guilabel>Alias</guilabel> text-box type the name
+	      you want to give at the the new contact.
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para>
+	      Click on <guibutton>Add</guibutton> to add the new contact.
+	    </para>
+	  </listitem>
+	</orderedlist>
+      </para>
+    </sect2>
+    <sect2 id="empathy-remove-contact">
+      <title>Removing a Contact</title>
+      <para>
+	To remove a contact, proceed as follow:
+      </para>
+      <para>
+	<orderedlist>
+	  <listitem>
+	    <para>
+	      From the <link linkend="empathy-FIG-mainwindow">main
+	      window</link>, select the contact you would like
+	      to remove and right-click on it.
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para>
+	      From the popup menu, choose <guilabel>Remove</guilabel> to
+	      remove the contact.
+	    </para>
+	  </listitem>
+	</orderedlist>
+      </para>
+    </sect2>
+    <sect2>
+      <title>Modyfing a Contact</title>
+      <para>
+      </para>
+    </sect2>
   </sect1>
 
 
