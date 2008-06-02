@@ -193,9 +193,6 @@
       <para>
 	When you start &app; the following window is shown.
 	<!-- Figure 1 -->
-	<!-- 
-	Commented out, need to find a solution on how to
-	structure this section.
 	<figure id="empathy-mainwindow"> 
 	  <title>&app; Main Window</title> 
 	  <screenshot> 
@@ -213,7 +210,6 @@
 	    </mediaobject> 
 	  </screenshot> 
 	</figure>
-	-->
 	<!-- End of Figure -->
       </para>
       <para>
@@ -286,11 +282,8 @@
       <title>When You Start &appname; for the First Time</title>
       <para>
 	When you start &app; for the first time and you don't have
-	configured any account yet, the following window is shown.
+	configured any account yet, the following dialog is shown.
 	<!-- Figure 2 -->
-	<!-- 
-	Commented out, need to find a solution on how to
-	structure this section.
 	<figure id="empathy-newaccount"> 
 	  <title>&app; Account Window</title> 
 	  <screenshot> 
@@ -306,7 +299,6 @@
 	    </mediaobject> 
 	  </screenshot> 
 	</figure>
-	-->
 	<!-- End of Figure -->
       </para>
       <para>
