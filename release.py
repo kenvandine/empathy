@@ -270,10 +270,19 @@ class Project:
 		cmd = 'ssh %s@%s install-module -u %s' % (username, upload_server, tarball)
 		self.exec_cmd(cmd)
 
+	def send_email(self):
+		notes = self.get_release_notes()
+		cmd = 'xdg-email ' \
+		      ' --cc telepathy@lists.freedesktop.org' \
+		      ' --subject ANNOUNCE: Empathy %s' \
+		      ' --body %s' \
+		      ' gnome-announce-list@gnome.org' % (self.package_version, notes)
+		self.exec_cmd(cmd)
+
 	def release(self):
 		self.make_tag()
 		self.upload_tarball()
-		print self.get_release_notes()
+		self.send_email()
 
 if __name__ == '__main__':
 	p = Project()
