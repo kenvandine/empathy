@@ -1,3 +1,27 @@
+NEW in 0.23.3
+==============
+ - Updated manual (Milo Casagrande).
+ - Set a tooltip on contact list view showing EmpathyContactWidget information.
+   Only enabled if running with GTK+ >= 2.12.10 because of
+   bug #504087 (Xavier Claessens).
+ - Move avatar cache to ~/.cache and don't mix avatar from different contacts,
+   tokens are not garanteed to be different. (Xavier Claessens).
+
+Bugs fixed:
+ - Fixed #465928, The status icon keep blinking when opening a chat with the contact list (Xavier Claessens)
+ - Fixed #527970, don't permit to call several time the same personn (Xavier Claessens)
+ - Fixed #531414, The "menu" key doesn't work in the contact list (Baptiste Mille-Mathias)
+ - Fixed #533541, Schema short description improved (Claude Paroz)
+ - Fixed #533732, Help button missing from the Accounts dialog (Milo Casagrande)
+ - Fixed #533840, BaconMessageConnection and D-Bus interaction (Xavier Claessens)
+
+Translations:
+ - Updated es translation  (Jorge Gonzalez).
+ - Updated ja translation  (Takeshi AIHANA).
+ - Updated Norwegian bokmål translation. (kmaraas).
+ - Updated Arabic Translation by Abou Manal. (djihed).
+ - Updated French translation (claudep).
+
 NEW in 0.23.2
 ==============
  - Keep a priv pointer in the object struct instead of using
