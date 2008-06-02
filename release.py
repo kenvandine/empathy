@@ -274,8 +274,8 @@ class Project:
 		notes = self.get_release_notes()
 		cmd = 'xdg-email ' \
 		      ' --cc telepathy@lists.freedesktop.org' \
-		      ' --subject ANNOUNCE: Empathy %s' \
-		      ' --body %s' \
+		      ' --subject "ANNOUNCE: Empathy %s"' \
+		      ' --body "%s"' \
 		      ' gnome-announce-list@gnome.org' % (self.package_version, notes)
 		self.exec_cmd(cmd)
 
