@@ -46,7 +46,8 @@ struct _EmpathyStatusIconClass {
 };
 
 GType              empathy_status_icon_get_type (void) G_GNUC_CONST;
-EmpathyStatusIcon *empathy_status_icon_new      (GtkWindow *window);
+EmpathyStatusIcon *empathy_status_icon_new      (GtkWindow *window,
+						 gboolean   hide_contact_list);
 
 G_END_DECLS
 

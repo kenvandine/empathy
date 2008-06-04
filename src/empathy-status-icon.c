@@ -739,7 +739,7 @@ empathy_status_icon_init (EmpathyStatusIcon *icon)
 }
 
 EmpathyStatusIcon *
-empathy_status_icon_new (GtkWindow *window)
+empathy_status_icon_new (GtkWindow *window, gboolean hide_contact_list)
 {
 	EmpathyStatusIconPriv *priv;
 	EmpathyStatusIcon     *icon;
@@ -756,9 +756,13 @@ empathy_status_icon_new (GtkWindow *window)
 			  G_CALLBACK (status_icon_delete_event_cb),
 			  icon);
 
-	empathy_conf_get_bool (empathy_conf_get (),
-			      EMPATHY_PREFS_UI_MAIN_WINDOW_HIDDEN,
-			      &should_hide);
+	if (!hide_contact_list) {
+		empathy_conf_get_bool (empathy_conf_get (),
+				       EMPATHY_PREFS_UI_MAIN_WINDOW_HIDDEN,
+			               &should_hide);
+	} else {
+		should_hide = TRUE;
+	}
 
 	if (gtk_window_is_active (priv->window) == should_hide) {
 		status_icon_set_visibility (icon, !should_hide, FALSE);

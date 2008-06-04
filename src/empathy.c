@@ -358,11 +358,16 @@ main (int argc, char *argv[])
 	EmpathyIdle       *idle;
 	gboolean           autoconnect = TRUE;
 	gboolean           no_connect = FALSE; 
+	gboolean           hide_contact_list = FALSE;
 	GError            *error = NULL;
 	GOptionEntry       options[] = {
 		{ "no-connect", 'n',
 		  0, G_OPTION_ARG_NONE, &no_connect,
 		  N_("Don't connect on startup"),
+		  NULL },
+		{ "hide-contact-list", 'h',
+		  0, G_OPTION_ARG_NONE, &hide_contact_list,
+		  N_("Don't show the contact list on startup"),
 		  NULL },
 		{ NULL }
 	};
@@ -446,7 +451,7 @@ main (int argc, char *argv[])
 
 	/* Setting up UI */
 	window = empathy_main_window_show ();
-	icon = empathy_status_icon_new (GTK_WINDOW (window));
+	icon = empathy_status_icon_new (GTK_WINDOW (window), hide_contact_list);
 
 	if (connection) {
 		/* We se the callback here because we need window */
