@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-06-04 14:34+0200\n"
-"PO-Revision-Date: 2008-06-04 14:36+0200\n"
+"POT-Creation-Date: 2008-06-06 12:06+0200\n"
+"PO-Revision-Date: 2008-06-06 12:06+0200\n"
 "Last-Translator: Ignacio Casal Quinteiro <icq@svn.gnome.org>\n"
 "Language-Team: Galego <proxecto@trasno.net>\n"
 "MIME-Version: 1.0\n"
@@ -1228,11 +1228,15 @@ msgstr "O canal é só de invitación"
 msgid "Unknown error code"
 msgstr "Erro de código descoñecido"
 
-#: ../src/empathy.c:365
+#: ../src/empathy.c:366
 msgid "Don't connect on startup"
 msgstr "Non conectarse automaticamente ao inicio"
 
-#: ../src/empathy.c:377
+#: ../src/empathy.c:370
+msgid "Don't show the contact list on startup"
+msgstr "Non mostrar a lista de contactos ao inicio"
+
+#: ../src/empathy.c:382
 msgid "- Empathy Instant Messenger"
 msgstr "- Mensaxería instantánea de Empathy"
 
