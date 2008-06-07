@@ -1299,20 +1299,23 @@ empathy_chat_window_add_chat (EmpathyChatWindow *window,
 	/* Reference the chat object */
 	g_object_ref (chat);
 
-	empathy_geometry_load (chat_get_window_id_for_geometry (chat), &x, &y, &w, &h);
-
-	if (x >= 0 && y >= 0) {
-		/* Let the window manager position it if we don't have
-		 * good x, y coordinates.
-		 */
-		gtk_window_move (GTK_WINDOW (priv->dialog), x, y);
-	}
-
-	if (w > 0 && h > 0) {
-		/* Use the defaults from the glade file if we don't have
-		 * good w, h geometry.
-		 */
-		gtk_window_resize (GTK_WINDOW (priv->dialog), w, h);
+	/* If this window has just been created, position it */
+	if (priv->chats == NULL) {
+		empathy_geometry_load (chat_get_window_id_for_geometry (chat), &x, &y, &w, &h);
+		
+		if (x >= 0 && y >= 0) {
+			/* Let the window manager position it if we don't have
+			 * good x, y coordinates.
+			 */
+			gtk_window_move (GTK_WINDOW (priv->dialog), x, y);
+		}
+		
+		if (w > 0 && h > 0) {
+			/* Use the defaults from the glade file if we don't have
+			 * good w, h geometry.
+			 */
+			gtk_window_resize (GTK_WINDOW (priv->dialog), w, h);
+		}
 	}
 
 	child = GTK_WIDGET (chat);
