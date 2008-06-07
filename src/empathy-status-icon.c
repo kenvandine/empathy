@@ -554,7 +554,8 @@ status_icon_tube_process (EmpathyStatusIcon *icon,
 
 		dialog = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL,
 						 GTK_MESSAGE_ERROR,
-						 GTK_BUTTONS_OK, str);
+						 GTK_BUTTONS_OK,
+						 "%s", str);
 		gtk_window_set_title (GTK_WINDOW (dialog),
 				      _("Invitation Error"));
 		g_free (str);

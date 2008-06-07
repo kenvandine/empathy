@@ -29,9 +29,9 @@ AC_DEFUN([IDT_COMPILE_WARNINGS],[
 	warning_flags="-Wall -Wunused -Wmissing-prototypes -Wmissing-declarations"
 	;;
     maximum|error)
-	warning_flags="-Wall -Wunused -Wchar-subscripts -Wmissing-declarations -Wmissing-prototypes -Wnested-externs -Wpointer-arith"
+	warning_flags="-Wall -Wunused -Wmissing-prototypes -Wmissing-declarations -Wchar-subscripts -Wnested-externs -Wpointer-arith"
 	CFLAGS="$warning_flags $CFLAGS"
-	for option in -Wno-sign-compare -Wno-pointer-sign; do
+	for option in -Wno-sign-compare -Wno-pointer-sign -Wformat; do
 		SAVE_CFLAGS="$CFLAGS"
 		CFLAGS="$CFLAGS $option"
 		AC_MSG_CHECKING([whether gcc understands $option])
