@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: empathy 0.21.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-05-23 09:24+0200\n"
-"PO-Revision-Date: 2008-05-23 09:28+0200\n"
+"POT-Creation-Date: 2008-06-07 18:51+0200\n"
+"PO-Revision-Date: 2008-06-07 18:52+0200\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian <i18n-nb@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
@@ -196,7 +196,9 @@ msgstr "Om kontakter som er frakoblet skal vises i kontaktlisten."
 msgid ""
 "Whether or not to show the message dialog about closing the main window with "
 "the 'x' button in the title bar."
-msgstr "Om meldingsdialog om lukking av vinduet med «x»-knappen i tittelfeltet skal vises."
+msgstr ""
+"Om meldingsdialog om lukking av vinduet med «x»-knappen i tittelfeltet skal "
+"vises."
 
 #: ../data/empathy.schemas.in.h:40
 msgid "Whether to show the contact list in compact mode or not."
@@ -211,9 +213,12 @@ msgid ""
 "Which criterium to use when sorting the contact list. Default is to use sort "
 "by the contact's name with the value \"name\". A value of \"state\" will "
 "sort the contact list by state."
-msgstr "Hvilke kriterier som skal brukes ved sortering av kontaktlisten. Forvalg er å sortere kontakter etter verdien «name». Hvis man bruker «state» vil kontaktlisten sorteres etter kontaktens tilstand."
+msgstr ""
+"Hvilke kriterier som skal brukes ved sortering av kontaktlisten. Forvalg er "
+"å sortere kontakter etter verdien «name». Hvis man bruker «state» vil "
+"kontaktlisten sorteres etter kontaktens tilstand."
 
-#: ../libempathy/empathy-tp-contact-list.c:731 ../src/empathy.c:247
+#: ../libempathy/empathy-tp-contact-list.c:731 ../src/empathy.c:240
 msgid "People nearby"
 msgstr "Personer i nærheten"
 
@@ -624,7 +629,7 @@ msgstr "%s har blitt med i rommet"
 msgid "%s has left the room"
 msgstr "%s har forlatt rommet"
 
-#: ../libempathy-gtk/empathy-chat.c:1216 ../src/empathy.c:129
+#: ../libempathy-gtk/empathy-chat.c:1216 ../src/empathy.c:122
 #: ../src/empathy-call-window.c:394
 msgid "Disconnected"
 msgstr "Koblet fra"
@@ -677,30 +682,30 @@ msgstr "A_vgjør senere"
 msgid "Subscription Request"
 msgstr "Abonnementsforespørsel"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1184
+#: ../libempathy-gtk/empathy-contact-list-view.c:1240
 #, c-format
 msgid "Do you really want to remove the group '%s'?"
 msgstr "Vil du virkelig fjerne gruppen «%s»?"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1186
+#: ../libempathy-gtk/empathy-contact-list-view.c:1242
 msgid "Removing group"
 msgstr "Fjerner gruppe"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1233
-#: ../libempathy-gtk/empathy-contact-list-view.c:1312
+#: ../libempathy-gtk/empathy-contact-list-view.c:1289
+#: ../libempathy-gtk/empathy-contact-list-view.c:1368
 msgid "_Remove"
 msgstr "Fje_rn"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1263
+#: ../libempathy-gtk/empathy-contact-list-view.c:1319
 #, c-format
 msgid "Do you really want to remove the contact '%s'?"
 msgstr "Vil du virkelig fjerne kontakten «%s»?"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1265
+#: ../libempathy-gtk/empathy-contact-list-view.c:1321
 msgid "Removing contact"
 msgstr "Fjerner kontakt"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1270
+#: ../libempathy-gtk/empathy-contact-list-view.c:1326
 msgid "Sorry, I don't want you in my contact list anymore."
 msgstr "Beklager, men jeg vil ikke ha deg på kontaktlisten min lenger."
 
@@ -1123,7 +1128,7 @@ msgid "Megaphone"
 msgstr "Megafon"
 
 #: ../megaphone/data/GNOME_Megaphone_Applet.server.in.in.h:2
-#: ../megaphone/src/megaphone-applet.c:419
+#: ../megaphone/src/megaphone-applet.c:417
 msgid "Talk!"
 msgstr "Snakk!"
 
@@ -1150,63 +1155,67 @@ msgstr "Tilstedeværelse"
 msgid "Set your own presence"
 msgstr "Velg din egen tilstedeværelse"
 
-#: ../src/empathy.c:132
+#: ../src/empathy.c:125
 msgid "Invalid handle"
 msgstr "Ugyldig håndtak"
 
-#: ../src/empathy.c:135
+#: ../src/empathy.c:128
 msgid "No matching connection"
 msgstr "Ingen passende tilkobling"
 
-#: ../src/empathy.c:138
+#: ../src/empathy.c:131
 msgid "Invalid account"
 msgstr "Ugyldig konto"
 
-#: ../src/empathy.c:141
+#: ../src/empathy.c:134
 msgid "Presence failure"
 msgstr "Feil med tilstedeinformasjon"
 
-#: ../src/empathy.c:144
+#: ../src/empathy.c:137
 msgid "No accounts"
 msgstr "Ingen kontoer"
 
-#: ../src/empathy.c:147 ../src/empathy-main-window.c:896
+#: ../src/empathy.c:140 ../src/empathy-main-window.c:896
 msgid "Network error"
 msgstr "Nettverksfeil"
 
-#: ../src/empathy.c:150
+#: ../src/empathy.c:143
 msgid "Contact does not support voice"
 msgstr "Kontakten støtter ikke talesamtaler"
 
-#: ../src/empathy.c:153
+#: ../src/empathy.c:146
 msgid "Lowmem"
 msgstr "Lite minne"
 
-#: ../src/empathy.c:156
+#: ../src/empathy.c:149
 msgid "Channel request generic error"
 msgstr "Generisk feil med kanalforespørsel"
 
-#: ../src/empathy.c:159
+#: ../src/empathy.c:152
 msgid "Channel banned"
 msgstr "Kanal bannlyst"
 
-#: ../src/empathy.c:162
+#: ../src/empathy.c:155
 msgid "Channel full"
 msgstr "Kanalen er full"
 
-#: ../src/empathy.c:165
+#: ../src/empathy.c:158
 msgid "Channel invite only"
 msgstr "Kanalen tar bare inviterte"
 
-#: ../src/empathy.c:168
+#: ../src/empathy.c:161
 msgid "Unknown error code"
 msgstr "Ukjent feilkode"
 
-#: ../src/empathy.c:372
+#: ../src/empathy.c:366
 msgid "Don't connect on startup"
 msgstr "Ikke koble til ved oppstart"
 
-#: ../src/empathy.c:384
+#: ../src/empathy.c:370
+msgid "Don't show the contact list on startup"
+msgstr "Ikke vis kontaktlisten ved oppstart"
+
+#: ../src/empathy.c:382
 msgid "- Empathy Instant Messenger"
 msgstr "- Empathy lynmeldingsprogram"
 
@@ -1307,6 +1316,10 @@ msgstr "Ringer"
 #: ../src/empathy-call-window.c:396
 msgid "Connecting"
 msgstr "Kobler til"
+
+#: ../src/empathy-call-window.c:498
+msgid "Call rejected because there is already a running call."
+msgstr "Samtale avvist fordi en samtale allerede er i gang."
 
 #: ../src/empathy-call-window.glade.h:1
 msgid "#"
@@ -1745,7 +1758,7 @@ msgstr "_Åpne nye samtaler i egne vinduer"
 msgid "_Play sound when messages arrive"
 msgstr "S_pill av lyd når meldinger kommer"
 
-#: ../src/empathy-status-icon.c:460
+#: ../src/empathy-status-icon.c:461
 #, c-format
 msgid ""
 "New message from %s:\n"
@@ -1754,13 +1767,13 @@ msgstr ""
 "Ny melding fra %s:\n"
 "%s"
 
-#: ../src/empathy-status-icon.c:500
+#: ../src/empathy-status-icon.c:501
 #, c-format
 msgid "Incoming call from %s"
 msgstr "Innkommende samtale fra %s"
 
 #. Tell the user that the tube can't be handled
-#: ../src/empathy-status-icon.c:537
+#: ../src/empathy-status-icon.c:538
 #, c-format
 msgid ""
 "%s offered you an invitation, but you don't have the needed external "
@@ -1769,11 +1782,11 @@ msgstr ""
 "%s sendte deg en invitasjon, men du har ikke nødvendig eksternt program som "
 "kan håndtere dette."
 
-#: ../src/empathy-status-icon.c:546
+#: ../src/empathy-status-icon.c:547
 msgid "Invitation Error"
 msgstr "Feil med invitasjon"
 
-#: ../src/empathy-status-icon.c:571
+#: ../src/empathy-status-icon.c:572
 #, c-format
 msgid ""
 "%s is offering you an invitation. An external application will be started to "
@@ -1782,7 +1795,7 @@ msgstr ""
 "%s sender deg en invitasjon. Et eksternt program vil bli startet for å "
 "håndtere den."
 
-#: ../src/empathy-status-icon.c:576
+#: ../src/empathy-status-icon.c:577
 #, c-format
 msgid ""
 "%s is offering you an invitation, but you don't have the needed external "
@@ -1791,12 +1804,12 @@ msgstr ""
 "%s sender deg en invitasjon, men du har ikke nødvendig eksternt program som "
 "kan håndtere dette."
 
-#: ../src/empathy-status-icon.c:622
+#: ../src/empathy-status-icon.c:623
 #, c-format
 msgid "Subscription requested by %s"
 msgstr "Abonnement forespurt av %s"
 
-#: ../src/empathy-status-icon.c:625
+#: ../src/empathy-status-icon.c:626
 #, c-format
 msgid ""
 "\n"
