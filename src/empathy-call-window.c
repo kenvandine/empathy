@@ -484,6 +484,12 @@ empathy_call_window_new (TpChannel *channel)
           g_signal_connect_swapped (G_OBJECT (window->call), "notify",
               G_CALLBACK (call_window_update), window);
           call_window_update (window);
+
+          if (GTK_WIDGET_REALIZED (GTK_WIDGET (window->preview_video_socket)))
+            {
+              call_window_socket_realized_cb (window->preview_video_socket,
+                  window);
+            }
         }
       else
         {
