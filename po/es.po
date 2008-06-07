@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: empathy.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-05-26 17:43+0000\n"
-"PO-Revision-Date: 2008-05-28 19:02+0200\n"
+"POT-Creation-Date: 2008-06-04 14:42+0000\n"
+"PO-Revision-Date: 2008-06-07 14:29+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -699,30 +699,30 @@ msgstr "Decidir _luego"
 msgid "Subscription Request"
 msgstr "Petición de suscripción"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1184
+#: ../libempathy-gtk/empathy-contact-list-view.c:1240
 #, c-format
 msgid "Do you really want to remove the group '%s'?"
 msgstr "¿Realmente quiere quitar el grupo «%s»?"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1186
+#: ../libempathy-gtk/empathy-contact-list-view.c:1242
 msgid "Removing group"
 msgstr "Quitando grupo"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1233
-#: ../libempathy-gtk/empathy-contact-list-view.c:1312
+#: ../libempathy-gtk/empathy-contact-list-view.c:1289
+#: ../libempathy-gtk/empathy-contact-list-view.c:1368
 msgid "_Remove"
 msgstr "_Quitar"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1263
+#: ../libempathy-gtk/empathy-contact-list-view.c:1319
 #, c-format
 msgid "Do you really want to remove the contact '%s'?"
 msgstr "¿Realmente quiere quitar el contacto «%s»?"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1265
+#: ../libempathy-gtk/empathy-contact-list-view.c:1321
 msgid "Removing contact"
 msgstr "Quitando el contacto"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1270
+#: ../libempathy-gtk/empathy-contact-list-view.c:1326
 msgid "Sorry, I don't want you in my contact list anymore."
 msgstr "Lo siento, no te quiero en mi lista de contactos."
 
@@ -1145,7 +1145,7 @@ msgid "Megaphone"
 msgstr "Megáfono"
 
 #: ../megaphone/data/GNOME_Megaphone_Applet.server.in.in.h:2
-#: ../megaphone/src/megaphone-applet.c:419
+#: ../megaphone/src/megaphone-applet.c:417
 msgid "Talk!"
 msgstr "Hablar"
 
@@ -1224,11 +1224,15 @@ msgstr "El canal es de sólo invitación"
 msgid "Unknown error code"
 msgstr "Error de código desconocido"
 
-#: ../src/empathy.c:365
+#: ../src/empathy.c:366
 msgid "Don't connect on startup"
 msgstr "No conectarse automáticamente al inicio"
 
-#: ../src/empathy.c:377
+#: ../src/empathy.c:370
+msgid "Don't show the contact list on startup"
+msgstr "No mostrar la lista de contactos al inicio"
+
+#: ../src/empathy.c:382
 msgid "- Empathy Instant Messenger"
 msgstr "- Mensajería instantánea Empathy"
 
