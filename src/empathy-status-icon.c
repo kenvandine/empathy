@@ -26,6 +26,7 @@
 #include <gtk/gtk.h>
 #include <glade/glade.h>
 #include <glib/gi18n.h>
+#include <gdk/gdkkeysyms.h>
 
 #include <telepathy-glib/util.h>
 
@@ -275,7 +276,7 @@ status_icon_set_visibility (EmpathyStatusIcon *icon,
 		GList *accounts;
 
 		empathy_window_present (GTK_WINDOW (priv->window), TRUE);
-	
+
 		/* Show the accounts dialog if there is no enabled accounts */
 		accounts = mc_accounts_list_by_enabled (TRUE);
 		if (accounts) {
@@ -326,6 +327,17 @@ status_icon_delete_event_cb (GtkWidget         *widget,
 	return TRUE;
 }
 
+static gboolean
+status_icon_key_press_event_cb  (GtkWidget *window,
+				 GdkEventKey *event,
+				 EmpathyStatusIcon *icon)
+{
+	if (event->keyval == GDK_Escape) {
+		status_icon_set_visibility (icon, FALSE, TRUE);
+	}
+	return FALSE;
+}
+				
 static void
 status_icon_activate_cb (GtkStatusIcon     *status_icon,
 			 EmpathyStatusIcon *icon)
@@ -751,6 +763,10 @@ empathy_status_icon_new (GtkWindow *window, gboolean hide_contact_list)
 	priv = GET_PRIV (icon);
 
 	priv->window = g_object_ref (window);
+
+	g_signal_connect (priv->window, "key-press-event",
+			  G_CALLBACK (status_icon_key_press_event_cb),
+			  icon);
 
 	g_signal_connect (priv->window, "delete-event",
 			  G_CALLBACK (status_icon_delete_event_cb),
