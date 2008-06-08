@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: empathy.help.HEAD\n"
 "POT-Creation-Date: 2008-06-02 09:49+0000\n"
-"PO-Revision-Date: 2008-06-08 13:02+0200\n"
+"PO-Revision-Date: 2008-06-08 18:28+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -414,7 +414,7 @@ msgstr "Diálogo de cuentas de <application>Empathy</application>"
 
 #: C/empathy.xml:310(phrase)
 msgid "Shows <placeholder-1/> account creation dialog."
-msgstr ""
+msgstr "Muestra <placeholder-1/> diálogo de creación de cuentas."
 
 #: C/empathy.xml:298(para)
 msgid ""
@@ -431,6 +431,8 @@ msgid ""
 "From here, you can configure and create your accounts. See <xref linkend="
 "\"empathy-accounts\"/> for more information."
 msgstr ""
+"Desde aquí puede configurar y crear sus cuentas. Para obtener más información "
+"consulte <xref linkend=\"empathy-accounts\"/>."
 
 #: C/empathy.xml:328(title)
 msgid "Accounts"
@@ -441,6 +443,8 @@ msgid ""
 "To use <application>Empathy</application> you need at least one account of "
 "the supported services."
 msgstr ""
+"Para usar <application>Empathy</application> debe tener al menos una cuenta de los "
+"servicios soportados."
 
 #: C/empathy.xml:332(para)
 msgid ""
@@ -448,6 +452,9 @@ msgid ""
 "name</emphasis> and <emphasis>password</emphasis>, you need to register a "
 "new account (see <xref linkend=\"empathy-register-account\"/>)."
 msgstr ""
+"Si aún no tiene una cuenta y no tiene su <emphasis>usuario</emphasis> y "
+"<emphasis>contraseña</emphasis>, debe registrar una cuenta nueva "
+"(consulte <xref linkend=\"empathy-register-account\"/>)."
 
 #: C/empathy.xml:337(para)
 msgid ""
@@ -466,7 +473,7 @@ msgstr ""
 
 #: C/empathy.xml:350(title)
 msgid "Registering an Account"
-msgstr ""
+msgstr "Registrar una cuenta"
 
 #: C/empathy.xml:351(para)
 msgid ""
@@ -484,7 +491,7 @@ msgstr ""
 msgid ""
 "The <ulink type=\"http\" url=\"http://dashboard.aim.com/aim\">AIM</ulink> "
 "service."
-msgstr ""
+msgstr "El servicio <ulink type=\"http\" url=\"http://dashboard.aim.com/aim\">AIM</ulink>."
 
 #. Translators: try to find a localized version of the
 #. 	    registration service website
@@ -492,7 +499,7 @@ msgstr ""
 msgid ""
 "The <ulink type=\"http\" url=\"http://www.google.com/talk/\">Google Talk</"
 "ulink> service."
-msgstr ""
+msgstr "El servicio <ulink type=\"http\" url=\"http://www.google.com/talk/\">Google Talk</ulink>."
 
 #. Translators: try to find a localized version of the
 #. 	    registration service website
@@ -500,7 +507,7 @@ msgstr ""
 msgid ""
 "The <ulink type=\"http\" url=\"https://www.icq.com/register/\">ICQ</ulink> "
 "service."
-msgstr ""
+msgstr "El servicio <ulink type=\"http\" url=\"https://www.icq.com/register/\">ICQ</ulink>."
 
 #. Translators: try to find a localized version of the
 #. 	    registration service website
@@ -508,7 +515,7 @@ msgstr ""
 msgid ""
 "The <ulink type=\"http\" url=\"https://accountservices.passport.net\">MSN</"
 "ulink> service."
-msgstr ""
+msgstr "El servicio <ulink type=\"http\" url=\"https://accountservices.passport.net\">MSN</ulink>."
 
 #. Translators: try to find a localized version of the
 #. 	    registration service website
@@ -516,7 +523,7 @@ msgstr ""
 msgid ""
 "The <ulink type=\"http\" url=\"https://login.yahoo.com/config/login\">Yahoo</"
 "ulink> service."
-msgstr ""
+msgstr "El servicio <ulink type=\"http\" url=\"https://login.yahoo.com/config/login\">Yahoo</ulink>."
 
 #: C/empathy.xml:360(para)
 msgid "Click on the name of the service to visit its website: <placeholder-1/>"
