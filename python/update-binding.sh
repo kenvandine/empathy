@@ -4,6 +4,7 @@
 # Update the list of headers from Makefile.am
 cd ../libempathy
 python /usr/share/pygtk/2.0/codegen/h2def.py	\
+        -m empathy				\
 	empathy-time.h				\
 	empathy-status-presets.h		\
 	empathy-debug.h				\
@@ -35,6 +36,7 @@ python /usr/share/pygtk/2.0/codegen/h2def.py	\
 # Update the list of headers from Makefile.am
 cd ../libempathy-gtk
 python /usr/share/pygtk/2.0/codegen/h2def.py	\
+	-m empathy				\
 	empathy-images.h			\
 	empathy-account-chooser.h		\
 	empathy-chat.h				\

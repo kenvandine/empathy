@@ -219,12 +219,12 @@
 
 ;; From empathy-time.h
 
-(define-function empathy_time_get_current
+(define-function time_get_current
   (c-name "empathy_time_get_current")
   (return-type "time_t")
 )
 
-(define-function empathy_time_get_local_time
+(define-function time_get_local_time
   (c-name "empathy_time_get_local_time")
   (return-type "time_t")
   (parameters
@@ -232,7 +232,7 @@
   )
 )
 
-(define-function empathy_time_parse
+(define-function time_parse
   (c-name "empathy_time_parse")
   (return-type "time_t")
   (parameters
@@ -240,7 +240,7 @@
   )
 )
 
-(define-function empathy_time_to_string_utc
+(define-function time_to_string_utc
   (c-name "empathy_time_to_string_utc")
   (return-type "gchar*")
   (parameters
@@ -249,7 +249,7 @@
   )
 )
 
-(define-function empathy_time_to_string_local
+(define-function time_to_string_local
   (c-name "empathy_time_to_string_local")
   (return-type "gchar*")
   (parameters
@@ -262,12 +262,12 @@
 
 ;; From empathy-status-presets.h
 
-(define-function empathy_status_presets_get_all
+(define-function status_presets_get_all
   (c-name "empathy_status_presets_get_all")
   (return-type "none")
 )
 
-(define-function empathy_status_presets_get
+(define-function status_presets_get
   (c-name "empathy_status_presets_get")
   (return-type "GList*")
   (parameters
@@ -276,7 +276,7 @@
   )
 )
 
-(define-function empathy_status_presets_set_last
+(define-function status_presets_set_last
   (c-name "empathy_status_presets_set_last")
   (return-type "none")
   (parameters
@@ -285,7 +285,7 @@
   )
 )
 
-(define-function empathy_status_presets_remove
+(define-function status_presets_remove
   (c-name "empathy_status_presets_remove")
   (return-type "none")
   (parameters
@@ -294,22 +294,22 @@
   )
 )
 
-(define-function empathy_status_presets_reset
+(define-function status_presets_reset
   (c-name "empathy_status_presets_reset")
   (return-type "none")
 )
 
-(define-function empathy_status_presets_get_default_state
+(define-function status_presets_get_default_state
   (c-name "empathy_status_presets_get_default_state")
   (return-type "McPresence")
 )
 
-(define-function empathy_status_presets_get_default_status
+(define-function status_presets_get_default_status
   (c-name "empathy_status_presets_get_default_status")
   (return-type "const-gchar*")
 )
 
-(define-function empathy_status_presets_set_default
+(define-function status_presets_set_default
   (c-name "empathy_status_presets_set_default")
   (return-type "none")
   (parameters
@@ -318,7 +318,7 @@
   )
 )
 
-(define-function empathy_status_presets_clear_default
+(define-function status_presets_clear_default
   (c-name "empathy_status_presets_clear_default")
   (return-type "none")
 )
@@ -327,7 +327,7 @@
 
 ;; From empathy-debug.h
 
-(define-function empathy_debug_flag_is_set
+(define-function debug_flag_is_set
   (c-name "empathy_debug_flag_is_set")
   (return-type "gboolean")
   (parameters
@@ -335,7 +335,7 @@
   )
 )
 
-(define-function empathy_debug
+(define-function debug
   (c-name "empathy_debug")
   (return-type "none")
   (parameters
@@ -345,7 +345,7 @@
   (varargs #t)
 )
 
-(define-function empathy_debug_set_flags
+(define-function debug_set_flags
   (c-name "empathy_debug_set_flags")
   (return-type "none")
   (parameters
@@ -357,7 +357,7 @@
 
 ;; From empathy-utils.h
 
-(define-function empathy_substring
+(define-function substring
   (c-name "empathy_substring")
   (return-type "gchar*")
   (parameters
@@ -367,7 +367,7 @@
   )
 )
 
-(define-function empathy_regex_match
+(define-function regex_match
   (c-name "empathy_regex_match")
   (return-type "gint")
   (parameters
@@ -378,7 +378,7 @@
   )
 )
 
-(define-function empathy_strcasecmp
+(define-function strcasecmp
   (c-name "empathy_strcasecmp")
   (return-type "gint")
   (parameters
@@ -387,7 +387,7 @@
   )
 )
 
-(define-function empathy_strncasecmp
+(define-function strncasecmp
   (c-name "empathy_strncasecmp")
   (return-type "gint")
   (parameters
@@ -397,7 +397,7 @@
   )
 )
 
-(define-function empathy_xml_validate
+(define-function xml_validate
   (c-name "empathy_xml_validate")
   (return-type "gboolean")
   (parameters
@@ -406,7 +406,7 @@
   )
 )
 
-(define-function empathy_xml_node_get_child
+(define-function xml_node_get_child
   (c-name "empathy_xml_node_get_child")
   (return-type "xmlNodePtr")
   (parameters
@@ -415,7 +415,7 @@
   )
 )
 
-(define-function empathy_xml_node_get_child_content
+(define-function xml_node_get_child_content
   (c-name "empathy_xml_node_get_child_content")
   (return-type "xmlChar*")
   (parameters
@@ -424,7 +424,7 @@
   )
 )
 
-(define-function empathy_xml_node_find_child_prop_value
+(define-function xml_node_find_child_prop_value
   (c-name "empathy_xml_node_find_child_prop_value")
   (return-type "xmlNodePtr")
   (parameters
@@ -434,7 +434,7 @@
   )
 )
 
-(define-function empathy_account_hash
+(define-function account_hash
   (c-name "empathy_account_hash")
   (return-type "guint")
   (parameters
@@ -442,7 +442,7 @@
   )
 )
 
-(define-function empathy_account_equal
+(define-function account_equal
   (c-name "empathy_account_equal")
   (return-type "gboolean")
   (parameters
@@ -451,13 +451,13 @@
   )
 )
 
-(define-function empathy_mission_control_new
+(define-function mission_control_new
   (c-name "empathy_mission_control_new")
   (is-constructor-of "EmpathyMissionControl")
   (return-type "MissionControl*")
 )
 
-(define-function empathy_presence_get_default_message
+(define-function presence_get_default_message
   (c-name "empathy_presence_get_default_message")
   (return-type "const-gchar*")
   (parameters
@@ -465,7 +465,7 @@
   )
 )
 
-(define-function empathy_presence_to_str
+(define-function presence_to_str
   (c-name "empathy_presence_to_str")
   (return-type "const-gchar*")
   (parameters
@@ -473,7 +473,7 @@
   )
 )
 
-(define-function empathy_presence_from_str
+(define-function presence_from_str
   (c-name "empathy_presence_from_str")
   (return-type "McPresence")
   (parameters
@@ -481,7 +481,7 @@
   )
 )
 
-(define-function empathy_file_lookup
+(define-function file_lookup
   (c-name "empathy_file_lookup")
   (return-type "gchar*")
   (parameters
@@ -490,7 +490,7 @@
   )
 )
 
-(define-function empathy_run_until_ready
+(define-function run_until_ready
   (c-name "empathy_run_until_ready")
   (return-type "none")
   (parameters
@@ -498,7 +498,7 @@
   )
 )
 
-(define-function empathy_run_until_ready_full
+(define-function run_until_ready_full
   (c-name "empathy_run_until_ready_full")
   (return-type "none")
   (parameters
@@ -510,7 +510,7 @@
   )
 )
 
-(define-function empathy_channel_get_account
+(define-function channel_get_account
   (c-name "empathy_channel_get_account")
   (return-type "McAccount*")
   (parameters
@@ -518,7 +518,7 @@
   )
 )
 
-(define-function empathy_connect_to_account_status_changed
+(define-function connect_to_account_status_changed
   (c-name "empathy_connect_to_account_status_changed")
   (return-type "gpointer")
   (parameters
@@ -529,7 +529,7 @@
   )
 )
 
-(define-function empathy_disconnect_account_status_changed
+(define-function disconnect_account_status_changed
   (c-name "empathy_disconnect_account_status_changed")
   (return-type "none")
   (parameters
@@ -537,7 +537,7 @@
   )
 )
 
-(define-function empathy_proxy_equal
+(define-function proxy_equal
   (c-name "empathy_proxy_equal")
   (return-type "gboolean")
   (parameters
@@ -546,7 +546,7 @@
   )
 )
 
-(define-function empathy_proxy_hash
+(define-function proxy_hash
   (c-name "empathy_proxy_hash")
   (return-type "guint")
   (parameters
@@ -558,12 +558,12 @@
 
 ;; From empathy-message.h
 
-(define-function empathy_message_get_type
+(define-function message_get_type
   (c-name "empathy_message_get_type")
   (return-type "GType")
 )
 
-(define-function empathy_message_new
+(define-function message_new
   (c-name "empathy_message_new")
   (is-constructor-of "EmpathyMessage")
   (return-type "EmpathyMessage*")
@@ -662,7 +662,7 @@
   (return-type "gboolean")
 )
 
-(define-function empathy_message_type_from_str
+(define-function message_type_from_str
   (c-name "empathy_message_type_from_str")
   (return-type "TpChannelTextMessageType")
   (parameters
@@ -670,7 +670,7 @@
   )
 )
 
-(define-function empathy_message_type_to_str
+(define-function message_type_to_str
   (c-name "empathy_message_type_to_str")
   (return-type "const-gchar*")
   (parameters
@@ -682,12 +682,12 @@
 
 ;; From empathy-chatroom-manager.h
 
-(define-function empathy_chatroom_manager_get_type
+(define-function chatroom_manager_get_type
   (c-name "empathy_chatroom_manager_get_type")
   (return-type "GType")
 )
 
-(define-function empathy_chatroom_manager_new
+(define-function chatroom_manager_new
   (c-name "empathy_chatroom_manager_new")
   (is-constructor-of "EmpathyChatroomManager")
   (return-type "EmpathyChatroomManager*")
@@ -749,12 +749,12 @@
 
 ;; From empathy-chatroom.h
 
-(define-function empathy_chatroom_get_type
+(define-function chatroom_get_type
   (c-name "empathy_chatroom_get_type")
   (return-type "GType")
 )
 
-(define-function empathy_chatroom_new
+(define-function chatroom_new
   (c-name "empathy_chatroom_new")
   (is-constructor-of "EmpathyChatroom")
   (return-type "EmpathyChatroom*")
@@ -764,7 +764,7 @@
   )
 )
 
-(define-function empathy_chatroom_new_full
+(define-function chatroom_new_full
   (c-name "empathy_chatroom_new_full")
   (return-type "EmpathyChatroom*")
   (parameters
@@ -835,7 +835,7 @@
   )
 )
 
-(define-function empathy_chatroom_equal
+(define-function chatroom_equal
   (c-name "empathy_chatroom_equal")
   (return-type "gboolean")
   (parameters
@@ -848,12 +848,12 @@
 
 ;; From empathy-contact.h
 
-(define-function empathy_contact_get_type
+(define-function contact_get_type
   (c-name "empathy_contact_get_type")
   (return-type "GType")
 )
 
-(define-function empathy_contact_new
+(define-function contact_new
   (c-name "empathy_contact_new")
   (is-constructor-of "EmpathyContact")
   (return-type "EmpathyContact*")
@@ -862,7 +862,7 @@
   )
 )
 
-(define-function empathy_contact_new_full
+(define-function contact_new_full
   (c-name "empathy_contact_new_full")
   (return-type "EmpathyContact*")
   (parameters
@@ -1031,7 +1031,7 @@
   (return-type "gboolean")
 )
 
-(define-function empathy_contact_equal
+(define-function contact_equal
   (c-name "empathy_contact_equal")
   (return-type "gboolean")
   (parameters
@@ -1040,7 +1040,7 @@
   )
 )
 
-(define-function empathy_contact_hash
+(define-function contact_hash
   (c-name "empathy_contact_hash")
   (return-type "guint")
   (parameters
@@ -1079,12 +1079,12 @@
   )
 )
 
-(define-function empathy_avatar_get_type
+(define-function avatar_get_type
   (c-name "empathy_avatar_get_type")
   (return-type "GType")
 )
 
-(define-function empathy_avatar_new
+(define-function avatar_new
   (c-name "empathy_avatar_new")
   (is-constructor-of "EmpathyAvatar")
   (return-type "EmpathyAvatar*")
@@ -1112,12 +1112,12 @@
 
 ;; From empathy-contact-groups.h
 
-(define-function empathy_contact_groups_get_all
+(define-function contact_groups_get_all
   (c-name "empathy_contact_groups_get_all")
   (return-type "none")
 )
 
-(define-function empathy_contact_group_get_expanded
+(define-function contact_group_get_expanded
   (c-name "empathy_contact_group_get_expanded")
   (return-type "gboolean")
   (parameters
@@ -1125,7 +1125,7 @@
   )
 )
 
-(define-function empathy_contact_group_set_expanded
+(define-function contact_group_set_expanded
   (c-name "empathy_contact_group_set_expanded")
   (return-type "none")
   (parameters
@@ -1138,7 +1138,7 @@
 
 ;; From empathy-contact-list.h
 
-(define-function empathy_contact_list_get_type
+(define-function contact_list_get_type
   (c-name "empathy_contact_list_get_type")
   (return-type "GType")
 )
@@ -1233,12 +1233,12 @@
 
 ;; From empathy-contact-manager.h
 
-(define-function empathy_contact_manager_get_type
+(define-function contact_manager_get_type
   (c-name "empathy_contact_manager_get_type")
   (return-type "GType")
 )
 
-(define-function empathy_contact_manager_new
+(define-function contact_manager_new
   (c-name "empathy_contact_manager_new")
   (is-constructor-of "EmpathyContactManager")
   (return-type "EmpathyContactManager*")
@@ -1257,12 +1257,12 @@
 
 ;; From empathy-contact-factory.h
 
-(define-function empathy_contact_factory_get_type
+(define-function contact_factory_get_type
   (c-name "empathy_contact_factory_get_type")
   (return-type "GType")
 )
 
-(define-function empathy_contact_factory_new
+(define-function contact_factory_new
   (c-name "empathy_contact_factory_new")
   (is-constructor-of "EmpathyContactFactory")
   (return-type "EmpathyContactFactory*")
@@ -1342,12 +1342,12 @@
 
 ;; From empathy-tp-contact-factory.h
 
-(define-function empathy_tp_contact_factory_get_type
+(define-function tp_contact_factory_get_type
   (c-name "empathy_tp_contact_factory_get_type")
   (return-type "GType")
 )
 
-(define-function empathy_tp_contact_factory_new
+(define-function tp_contact_factory_new
   (c-name "empathy_tp_contact_factory_new")
   (is-constructor-of "EmpathyTpContactFactory")
   (return-type "EmpathyTpContactFactory*")
@@ -1420,12 +1420,12 @@
 
 ;; From empathy-tp-group.h
 
-(define-function empathy_tp_group_get_type
+(define-function tp_group_get_type
   (c-name "empathy_tp_group_get_type")
   (return-type "GType")
 )
 
-(define-function empathy_tp_group_new
+(define-function tp_group_new
   (c-name "empathy_tp_group_new")
   (is-constructor-of "EmpathyTpGroup")
   (return-type "EmpathyTpGroup*")
@@ -1534,7 +1534,7 @@
   )
 )
 
-(define-function empathy_pending_info_new
+(define-function pending_info_new
   (c-name "empathy_pending_info_new")
   (is-constructor-of "EmpathyPendingInfo")
   (return-type "EmpathyPendingInfo*")
@@ -1555,12 +1555,12 @@
 
 ;; From empathy-tp-contact-list.h
 
-(define-function empathy_tp_contact_list_get_type
+(define-function tp_contact_list_get_type
   (c-name "empathy_tp_contact_list_get_type")
   (return-type "GType")
 )
 
-(define-function empathy_tp_contact_list_new
+(define-function tp_contact_list_new
   (c-name "empathy_tp_contact_list_new")
   (is-constructor-of "EmpathyTpContactList")
   (return-type "EmpathyTpContactList*")
@@ -1579,12 +1579,12 @@
 
 ;; From empathy-tp-chat.h
 
-(define-function empathy_tp_chat_get_type
+(define-function tp_chat_get_type
   (c-name "empathy_tp_chat_get_type")
   (return-type "GType")
 )
 
-(define-function empathy_tp_chat_new
+(define-function tp_chat_new
   (c-name "empathy_tp_chat_new")
   (is-constructor-of "EmpathyTpChat")
   (return-type "EmpathyTpChat*")
@@ -1676,12 +1676,12 @@
 
 ;; From empathy-tp-roomlist.h
 
-(define-function empathy_tp_roomlist_get_type
+(define-function tp_roomlist_get_type
   (c-name "empathy_tp_roomlist_get_type")
   (return-type "GType")
 )
 
-(define-function empathy_tp_roomlist_new
+(define-function tp_roomlist_new
   (c-name "empathy_tp_roomlist_new")
   (is-constructor-of "EmpathyTpRoomlist")
   (return-type "EmpathyTpRoomlist*")
@@ -1712,12 +1712,12 @@
 
 ;; From empathy-tp-call.h
 
-(define-function empathy_tp_call_get_type
+(define-function tp_call_get_type
   (c-name "empathy_tp_call_get_type")
   (return-type "GType")
 )
 
-(define-function empathy_tp_call_new
+(define-function tp_call_new
   (c-name "empathy_tp_call_new")
   (is-constructor-of "EmpathyTpCall")
   (return-type "EmpathyTpCall*")
@@ -1814,12 +1814,12 @@
 
 ;; From empathy-tp-tube.h
 
-(define-function empathy_tp_tube_get_type
+(define-function tp_tube_get_type
   (c-name "empathy_tp_tube_get_type")
   (return-type "GType")
 )
 
-(define-function empathy_tp_tube_new
+(define-function tp_tube_new
   (c-name "empathy_tp_tube_new")
   (is-constructor-of "EmpathyTpTube")
   (return-type "EmpathyTpTube*")
@@ -1829,7 +1829,7 @@
   )
 )
 
-(define-function empathy_tp_tube_new_stream_tube
+(define-function tp_tube_new_stream_tube
   (c-name "empathy_tp_tube_new_stream_tube")
   (return-type "EmpathyTpTube*")
   (parameters
@@ -1864,12 +1864,12 @@
 
 ;; From empathy-idle.h
 
-(define-function empathy_idle_get_type
+(define-function idle_get_type
   (c-name "empathy_idle_get_type")
   (return-type "GType")
 )
 
-(define-function empathy_idle_new
+(define-function idle_new
   (c-name "empathy_idle_new")
   (is-constructor-of "EmpathyIdle")
   (return-type "EmpathyIdle*")
@@ -1964,12 +1964,12 @@
 
 ;; From empathy-log-manager.h
 
-(define-function empathy_log_manager_get_type
+(define-function log_manager_get_type
   (c-name "empathy_log_manager_get_type")
   (return-type "GType")
 )
 
-(define-function empathy_log_manager_new
+(define-function log_manager_new
   (c-name "empathy_log_manager_new")
   (is-constructor-of "EmpathyLogManager")
   (return-type "EmpathyLogManager*")
@@ -2067,7 +2067,7 @@
   )
 )
 
-(define-function empathy_log_manager_search_free
+(define-function log_manager_search_free
   (c-name "empathy_log_manager_search_free")
   (return-type "none")
   (parameters
@@ -2075,7 +2075,7 @@
   )
 )
 
-(define-function empathy_log_manager_get_date_readable
+(define-function log_manager_get_date_readable
   (c-name "empathy_log_manager_get_date_readable")
   (return-type "gchar*")
   (parameters
@@ -2087,12 +2087,12 @@
 
 ;; From empathy-irc-network-manager.h
 
-(define-function empathy_irc_network_manager_get_type
+(define-function irc_network_manager_get_type
   (c-name "empathy_irc_network_manager_get_type")
   (return-type "GType")
 )
 
-(define-function empathy_irc_network_manager_new
+(define-function irc_network_manager_new
   (c-name "empathy_irc_network_manager_new")
   (is-constructor-of "EmpathyIrcNetworkManager")
   (return-type "EmpathyIrcNetworkManager*")
@@ -2139,12 +2139,12 @@
 
 ;; From empathy-irc-network.h
 
-(define-function empathy_irc_network_get_type
+(define-function irc_network_get_type
   (c-name "empathy_irc_network_get_type")
   (return-type "GType")
 )
 
-(define-function empathy_irc_network_new
+(define-function irc_network_new
   (c-name "empathy_irc_network_new")
   (is-constructor-of "EmpathyIrcNetwork")
   (return-type "EmpathyIrcNetwork*")
@@ -2191,12 +2191,12 @@
 
 ;; From empathy-irc-server.h
 
-(define-function empathy_irc_server_get_type
+(define-function irc_server_get_type
   (c-name "empathy_irc_server_get_type")
   (return-type "GType")
 )
 
-(define-function empathy_irc_server_new
+(define-function irc_server_new
   (c-name "empathy_irc_server_new")
   (is-constructor-of "EmpathyIrcServer")
   (return-type "EmpathyIrcServer*")
@@ -2211,12 +2211,12 @@
 
 ;; From empathy-tube-handler.h
 
-(define-function empathy_tube_handler_get_type
+(define-function tube_handler_get_type
   (c-name "empathy_tube_handler_get_type")
   (return-type "GType")
 )
 
-(define-function empathy_tube_handler_new
+(define-function tube_handler_new
   (c-name "empathy_tube_handler_new")
   (is-constructor-of "EmpathyTubeHandler")
   (return-type "EmpathyTubeHandler*")
@@ -2226,7 +2226,7 @@
   )
 )
 
-(define-function empathy_tube_handler_build_bus_name
+(define-function tube_handler_build_bus_name
   (c-name "empathy_tube_handler_build_bus_name")
   (return-type "gchar*")
   (parameters
@@ -2235,7 +2235,7 @@
   )
 )
 
-(define-function empathy_tube_handler_build_object_path
+(define-function tube_handler_build_object_path
   (c-name "empathy_tube_handler_build_object_path")
   (return-type "gchar*")
   (parameters
@@ -2248,12 +2248,12 @@
 
 ;; From empathy-dispatcher.h
 
-(define-function empathy_dispatcher_get_type
+(define-function dispatcher_get_type
   (c-name "empathy_dispatcher_get_type")
   (return-type "GType")
 )
 
-(define-function empathy_dispatcher_new
+(define-function dispatcher_new
   (c-name "empathy_dispatcher_new")
   (is-constructor-of "EmpathyDispatcher")
   (return-type "EmpathyDispatcher*")
@@ -2268,7 +2268,7 @@
   )
 )
 
-(define-function empathy_dispatcher_tube_get_type
+(define-function dispatcher_tube_get_type
   (c-name "empathy_dispatcher_tube_get_type")
   (return-type "GType")
 )
@@ -2294,7 +2294,7 @@
   )
 )
 
-(define-function empathy_dispatcher_call_with_contact
+(define-function dispatcher_call_with_contact
   (c-name "empathy_dispatcher_call_with_contact")
   (return-type "none")
   (parameters
@@ -2302,7 +2302,7 @@
   )
 )
 
-(define-function empathy_dispatcher_call_with_contact_id
+(define-function dispatcher_call_with_contact_id
   (c-name "empathy_dispatcher_call_with_contact_id")
   (return-type "none")
   (parameters
@@ -2311,7 +2311,7 @@
   )
 )
 
-(define-function empathy_dispatcher_chat_with_contact_id
+(define-function dispatcher_chat_with_contact_id
   (c-name "empathy_dispatcher_chat_with_contact_id")
   (return-type "none")
   (parameters
@@ -2320,7 +2320,7 @@
   )
 )
 
-(define-function empathy_dispatcher_chat_with_contact
+(define-function dispatcher_chat_with_contact
   (c-name "empathy_dispatcher_chat_with_contact")
   (return-type "none")
   (parameters

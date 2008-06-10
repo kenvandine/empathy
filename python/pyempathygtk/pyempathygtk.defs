@@ -164,6 +164,7 @@
     '("contact-remove" "EMPATHY_CONTACT_LIST_FEATURE_CONTACT_REMOVE")
     '("contact-drop" "EMPATHY_CONTACT_LIST_FEATURE_CONTACT_DROP")
     '("contact-drag" "EMPATHY_CONTACT_LIST_FEATURE_CONTACT_DRAG")
+    '("contact-tooltip" "EMPATHY_CONTACT_LIST_FEATURE_CONTACT_TOOLTIP")
     '("all" "EMPATHY_CONTACT_LIST_FEATURE_ALL")
   )
 )
@@ -204,12 +205,12 @@
 
 ;; From empathy-account-chooser.h
 
-(define-function empathy_account_chooser_get_type
+(define-function account_chooser_get_type
   (c-name "empathy_account_chooser_get_type")
   (return-type "GType")
 )
 
-(define-function empathy_account_chooser_new
+(define-function account_chooser_new
   (c-name "empathy_account_chooser_new")
   (is-constructor-of "EmpathyAccountChooser")
   (return-type "GtkWidget*")
@@ -255,7 +256,7 @@
   )
 )
 
-(define-function empathy_account_chooser_filter_is_connected
+(define-function account_chooser_filter_is_connected
   (c-name "empathy_account_chooser_filter_is_connected")
   (return-type "gboolean")
   (parameters
@@ -268,12 +269,12 @@
 
 ;; From empathy-chat.h
 
-(define-function empathy_chat_get_type
+(define-function chat_get_type
   (c-name "empathy_chat_get_type")
   (return-type "GType")
 )
 
-(define-function empathy_chat_new
+(define-function chat_new
   (c-name "empathy_chat_new")
   (is-constructor-of "EmpathyChat")
   (return-type "EmpathyChat*")
@@ -397,7 +398,7 @@
 
 ;; From empathy-spell-dialog.h
 
-(define-function empathy_spell_dialog_show
+(define-function spell_dialog_show
   (c-name "empathy_spell_dialog_show")
   (return-type "none")
   (parameters
@@ -412,7 +413,7 @@
 
 ;; From empathy-accounts-dialog.h
 
-(define-function empathy_accounts_dialog_show
+(define-function accounts_dialog_show
   (c-name "empathy_accounts_dialog_show")
   (return-type "GtkWidget*")
   (parameters
@@ -424,12 +425,12 @@
 
 ;; From empathy-chat-view.h
 
-(define-function empathy_chat_view_get_type
+(define-function chat_view_get_type
   (c-name "empathy_chat_view_get_type")
   (return-type "GType")
 )
 
-(define-function empathy_chat_view_new
+(define-function chat_view_new
   (c-name "empathy_chat_view_new")
   (is-constructor-of "EmpathyChatView")
   (return-type "EmpathyChatView*")
@@ -565,7 +566,7 @@
   )
 )
 
-(define-function empathy_chat_view_get_smiley_menu
+(define-function chat_view_get_smiley_menu
   (c-name "empathy_chat_view_get_smiley_menu")
   (return-type "GtkWidget*")
   (parameters
@@ -595,7 +596,7 @@
   (return-type "EmpathyContact*")
 )
 
-(define-function empathy_chat_view_get_avatar_pixbuf_with_cache
+(define-function chat_view_get_avatar_pixbuf_with_cache
   (c-name "empathy_chat_view_get_avatar_pixbuf_with_cache")
   (return-type "GdkPixbuf*")
   (parameters
@@ -607,7 +608,7 @@
 
 ;; From empathy-log-window.h
 
-(define-function empathy_log_window_show
+(define-function log_window_show
   (c-name "empathy_log_window_show")
   (return-type "GtkWidget*")
   (parameters
@@ -622,7 +623,7 @@
 
 ;; From empathy-theme-boxes.h
 
-(define-function empathy_theme_boxes_get_type
+(define-function theme_boxes_get_type
   (c-name "empathy_theme_boxes_get_type")
   (return-type "GType")
 )
@@ -631,7 +632,7 @@
 
 ;; From empathy-account-widget.h
 
-(define-function empathy_account_widget_handle_params
+(define-function account_widget_handle_params
   (c-name "empathy_account_widget_handle_params")
   (return-type "none")
   (parameters
@@ -642,7 +643,7 @@
   (varargs #t)
 )
 
-(define-function empathy_account_widget_add_forget_button
+(define-function account_widget_add_forget_button
   (c-name "empathy_account_widget_add_forget_button")
   (return-type "none")
   (parameters
@@ -653,7 +654,7 @@
   )
 )
 
-(define-function empathy_account_widget_generic_new
+(define-function account_widget_generic_new
   (c-name "empathy_account_widget_generic_new")
   (is-constructor-of "EmpathyAccountWidgetGeneric")
   (return-type "GtkWidget*")
@@ -662,7 +663,7 @@
   )
 )
 
-(define-function empathy_account_widget_salut_new
+(define-function account_widget_salut_new
   (c-name "empathy_account_widget_salut_new")
   (is-constructor-of "EmpathyAccountWidgetSalut")
   (return-type "GtkWidget*")
@@ -671,7 +672,7 @@
   )
 )
 
-(define-function empathy_account_widget_msn_new
+(define-function account_widget_msn_new
   (c-name "empathy_account_widget_msn_new")
   (is-constructor-of "EmpathyAccountWidgetMsn")
   (return-type "GtkWidget*")
@@ -680,7 +681,7 @@
   )
 )
 
-(define-function empathy_account_widget_jabber_new
+(define-function account_widget_jabber_new
   (c-name "empathy_account_widget_jabber_new")
   (is-constructor-of "EmpathyAccountWidgetJabber")
   (return-type "GtkWidget*")
@@ -689,7 +690,7 @@
   )
 )
 
-(define-function empathy_account_widget_icq_new
+(define-function account_widget_icq_new
   (c-name "empathy_account_widget_icq_new")
   (is-constructor-of "EmpathyAccountWidgetIcq")
   (return-type "GtkWidget*")
@@ -698,7 +699,7 @@
   )
 )
 
-(define-function empathy_account_widget_aim_new
+(define-function account_widget_aim_new
   (c-name "empathy_account_widget_aim_new")
   (is-constructor-of "EmpathyAccountWidgetAim")
   (return-type "GtkWidget*")
@@ -707,7 +708,7 @@
   )
 )
 
-(define-function empathy_account_widget_yahoo_new
+(define-function account_widget_yahoo_new
   (c-name "empathy_account_widget_yahoo_new")
   (is-constructor-of "EmpathyAccountWidgetYahoo")
   (return-type "GtkWidget*")
@@ -716,7 +717,7 @@
   )
 )
 
-(define-function empathy_account_widget_groupwise_new
+(define-function account_widget_groupwise_new
   (c-name "empathy_account_widget_groupwise_new")
   (is-constructor-of "EmpathyAccountWidgetGroupwise")
   (return-type "GtkWidget*")
@@ -729,17 +730,17 @@
 
 ;; From empathy-conf.h
 
-(define-function empathy_conf_get_type
+(define-function conf_get_type
   (c-name "empathy_conf_get_type")
   (return-type "GType")
 )
 
-(define-function empathy_conf_get
+(define-function conf_get
   (c-name "empathy_conf_get")
   (return-type "EmpathyConf*")
 )
 
-(define-function empathy_conf_shutdown
+(define-function conf_shutdown
   (c-name "empathy_conf_shutdown")
   (return-type "none")
 )
@@ -848,7 +849,7 @@
 
 ;; From empathy-theme.h
 
-(define-function empathy_theme_get_type
+(define-function theme_get_type
   (c-name "empathy_theme_get_type")
   (return-type "GType")
 )
@@ -944,7 +945,7 @@
 
 ;; From empathy-account-widget-irc.h
 
-(define-function empathy_account_widget_irc_new
+(define-function account_widget_irc_new
   (c-name "empathy_account_widget_irc_new")
   (is-constructor-of "EmpathyAccountWidgetIrc")
   (return-type "GtkWidget*")
@@ -957,7 +958,7 @@
 
 ;; From empathy-account-widget-sip.h
 
-(define-function empathy_account_widget_sip_new
+(define-function account_widget_sip_new
   (c-name "empathy_account_widget_sip_new")
   (is-constructor-of "EmpathyAccountWidgetSip")
   (return-type "GtkWidget*")
@@ -970,7 +971,7 @@
 
 ;; From empathy-contact-dialogs.h
 
-(define-function empathy_subscription_dialog_show
+(define-function subscription_dialog_show
   (c-name "empathy_subscription_dialog_show")
   (return-type "none")
   (parameters
@@ -990,7 +991,7 @@
   )
 )
 
-(define-function empathy_new_contact_dialog_show
+(define-function new_contact_dialog_show
   (c-name "empathy_new_contact_dialog_show")
   (return-type "none")
   (parameters
@@ -1002,7 +1003,7 @@
 
 ;; From empathy-new-message-dialog.h
 
-(define-function empathy_new_message_dialog_show
+(define-function new_message_dialog_show
   (c-name "empathy_new_message_dialog_show")
   (return-type "GtkWidget*")
   (parameters
@@ -1014,7 +1015,7 @@
 
 ;; From empathy-theme-irc.h
 
-(define-function empathy_theme_irc_get_type
+(define-function theme_irc_get_type
   (c-name "empathy_theme_irc_get_type")
   (return-type "GType")
 )
@@ -1023,12 +1024,12 @@
 
 ;; From empathy-avatar-chooser.h
 
-(define-function empathy_avatar_chooser_get_type
+(define-function avatar_chooser_get_type
   (c-name "empathy_avatar_chooser_get_type")
   (return-type "GType")
 )
 
-(define-function empathy_avatar_chooser_new
+(define-function avatar_chooser_new
   (c-name "empathy_avatar_chooser_new")
   (is-constructor-of "EmpathyAvatarChooser")
   (return-type "GtkWidget*")
@@ -1058,7 +1059,7 @@
 
 ;; From empathy-contact-list-store.h
 
-(define-function empathy_contact_list_store_get_type
+(define-function contact_list_store_get_type
   (c-name "empathy_contact_list_store_get_type")
   (return-type "GType")
 )
@@ -1153,7 +1154,7 @@
   )
 )
 
-(define-function empathy_contact_list_store_row_separator_func
+(define-function contact_list_store_row_separator_func
   (c-name "empathy_contact_list_store_row_separator_func")
   (return-type "gboolean")
   (parameters
@@ -1163,7 +1164,7 @@
   )
 )
 
-(define-function empathy_contact_list_store_get_parent_group
+(define-function contact_list_store_get_parent_group
   (c-name "empathy_contact_list_store_get_parent_group")
   (return-type "gchar*")
   (parameters
@@ -1173,7 +1174,7 @@
   )
 )
 
-(define-function empathy_contact_list_store_search_equal_func
+(define-function contact_list_store_search_equal_func
   (c-name "empathy_contact_list_store_search_equal_func")
   (return-type "gboolean")
   (parameters
@@ -1189,18 +1190,18 @@
 
 ;; From empathy-presence-chooser.h
 
-(define-function empathy_presence_chooser_get_type
+(define-function presence_chooser_get_type
   (c-name "empathy_presence_chooser_get_type")
   (return-type "GType")
 )
 
-(define-function empathy_presence_chooser_new
+(define-function presence_chooser_new
   (c-name "empathy_presence_chooser_new")
   (is-constructor-of "EmpathyPresenceChooser")
   (return-type "GtkWidget*")
 )
 
-(define-function empathy_presence_chooser_create_menu
+(define-function presence_chooser_create_menu
   (c-name "empathy_presence_chooser_create_menu")
   (return-type "GtkWidget*")
 )
@@ -1209,17 +1210,17 @@
 
 ;; From empathy-theme-manager.h
 
-(define-function empathy_theme_manager_get_type
+(define-function theme_manager_get_type
   (c-name "empathy_theme_manager_get_type")
   (return-type "GType")
 )
 
-(define-function empathy_theme_manager_get
+(define-function theme_manager_get
   (c-name "empathy_theme_manager_get")
   (return-type "EmpathyThemeManager*")
 )
 
-(define-function empathy_theme_manager_get_themes
+(define-function theme_manager_get_themes
   (c-name "empathy_theme_manager_get_themes")
   (return-type "const-gchar**")
 )
@@ -1247,12 +1248,12 @@
 
 ;; From empathy-avatar-image.h
 
-(define-function empathy_avatar_image_get_type
+(define-function avatar_image_get_type
   (c-name "empathy_avatar_image_get_type")
   (return-type "GType")
 )
 
-(define-function empathy_avatar_image_new
+(define-function avatar_image_new
   (c-name "empathy_avatar_image_new")
   (is-constructor-of "EmpathyAvatarImage")
   (return-type "GtkWidget*")
@@ -1271,12 +1272,12 @@
 
 ;; From empathy-contact-list-view.h
 
-(define-function empathy_contact_list_view_get_type
+(define-function contact_list_view_get_type
   (c-name "empathy_contact_list_view_get_type")
   (return-type "GType")
 )
 
-(define-function empathy_contact_list_view_new
+(define-function contact_list_view_new
   (c-name "empathy_contact_list_view_new")
   (is-constructor-of "EmpathyContactListView")
   (return-type "EmpathyContactListView*")
@@ -1315,7 +1316,7 @@
 
 ;; From empathy-ui-utils.h
 
-(define-function empathy_glade_get_file_simple
+(define-function glade_get_file_simple
   (c-name "empathy_glade_get_file_simple")
   (return-type "none")
   (parameters
@@ -1327,7 +1328,7 @@
   (varargs #t)
 )
 
-(define-function empathy_glade_get_file
+(define-function glade_get_file
   (c-name "empathy_glade_get_file")
   (return-type "GladeXML*")
   (parameters
@@ -1339,7 +1340,7 @@
   (varargs #t)
 )
 
-(define-function empathy_glade_connect
+(define-function glade_connect
   (c-name "empathy_glade_connect")
   (return-type "none")
   (parameters
@@ -1350,7 +1351,7 @@
   (varargs #t)
 )
 
-(define-function empathy_glade_setup_size_group
+(define-function glade_setup_size_group
   (c-name "empathy_glade_setup_size_group")
   (return-type "none")
   (parameters
@@ -1361,7 +1362,7 @@
   (varargs #t)
 )
 
-(define-function empathy_icon_name_from_account
+(define-function icon_name_from_account
   (c-name "empathy_icon_name_from_account")
   (return-type "const-gchar*")
   (parameters
@@ -1369,7 +1370,7 @@
   )
 )
 
-(define-function empathy_icon_name_for_presence
+(define-function icon_name_for_presence
   (c-name "empathy_icon_name_for_presence")
   (return-type "const-gchar*")
   (parameters
@@ -1377,7 +1378,7 @@
   )
 )
 
-(define-function empathy_icon_name_for_contact
+(define-function icon_name_for_contact
   (c-name "empathy_icon_name_for_contact")
   (return-type "const-gchar*")
   (parameters
@@ -1385,7 +1386,7 @@
   )
 )
 
-(define-function empathy_pixbuf_from_data
+(define-function pixbuf_from_data
   (c-name "empathy_pixbuf_from_data")
   (return-type "GdkPixbuf*")
   (parameters
@@ -1394,7 +1395,7 @@
   )
 )
 
-(define-function empathy_pixbuf_from_avatar_scaled
+(define-function pixbuf_from_avatar_scaled
   (c-name "empathy_pixbuf_from_avatar_scaled")
   (return-type "GdkPixbuf*")
   (parameters
@@ -1404,7 +1405,7 @@
   )
 )
 
-(define-function empathy_pixbuf_avatar_from_contact_scaled
+(define-function pixbuf_avatar_from_contact_scaled
   (c-name "empathy_pixbuf_avatar_from_contact_scaled")
   (return-type "GdkPixbuf*")
   (parameters
@@ -1414,7 +1415,7 @@
   )
 )
 
-(define-function empathy_pixbuf_scale_down_if_necessary
+(define-function pixbuf_scale_down_if_necessary
   (c-name "empathy_pixbuf_scale_down_if_necessary")
   (return-type "GdkPixbuf*")
   (parameters
@@ -1423,7 +1424,7 @@
   )
 )
 
-(define-function empathy_pixbuf_from_icon_name
+(define-function pixbuf_from_icon_name
   (c-name "empathy_pixbuf_from_icon_name")
   (return-type "GdkPixbuf*")
   (parameters
@@ -1432,7 +1433,7 @@
   )
 )
 
-(define-function empathy_text_iter_forward_search
+(define-function text_iter_forward_search
   (c-name "empathy_text_iter_forward_search")
   (return-type "gboolean")
   (parameters
@@ -1444,7 +1445,7 @@
   )
 )
 
-(define-function empathy_text_iter_backward_search
+(define-function text_iter_backward_search
   (c-name "empathy_text_iter_backward_search")
   (return-type "gboolean")
   (parameters
@@ -1456,7 +1457,7 @@
   )
 )
 
-(define-function empathy_window_get_is_visible
+(define-function window_get_is_visible
   (c-name "empathy_window_get_is_visible")
   (return-type "gboolean")
   (parameters
@@ -1464,7 +1465,7 @@
   )
 )
 
-(define-function empathy_window_present
+(define-function window_present
   (c-name "empathy_window_present")
   (return-type "none")
   (parameters
@@ -1473,7 +1474,7 @@
   )
 )
 
-(define-function empathy_window_iconify
+(define-function window_iconify
   (c-name "empathy_window_iconify")
   (return-type "none")
   (parameters
@@ -1482,7 +1483,7 @@
   )
 )
 
-(define-function empathy_get_toplevel_window
+(define-function get_toplevel_window
   (c-name "empathy_get_toplevel_window")
   (return-type "GtkWindow*")
   (parameters
@@ -1490,7 +1491,7 @@
   )
 )
 
-(define-function empathy_url_show
+(define-function url_show
   (c-name "empathy_url_show")
   (return-type "none")
   (parameters
@@ -1498,7 +1499,7 @@
   )
 )
 
-(define-function empathy_toggle_button_set_state_quietly
+(define-function toggle_button_set_state_quietly
   (c-name "empathy_toggle_button_set_state_quietly")
   (return-type "none")
   (parameters
@@ -1509,7 +1510,7 @@
   )
 )
 
-(define-function empathy_link_button_new
+(define-function link_button_new
   (c-name "empathy_link_button_new")
   (is-constructor-of "EmpathyLinkButton")
   (return-type "GtkWidget*")
@@ -1519,7 +1520,7 @@
   )
 )
 
-(define-function empathy_text_buffer_tag_set
+(define-function text_buffer_tag_set
   (c-name "empathy_text_buffer_tag_set")
   (return-type "GtkTextTag*")
   (parameters
@@ -1534,12 +1535,12 @@
 
 ;; From empathy-cell-renderer-activatable.h
 
-(define-function empathy_cell_renderer_activatable_get_type
+(define-function cell_renderer_activatable_get_type
   (c-name "empathy_cell_renderer_activatable_get_type")
   (return-type "GType")
 )
 
-(define-function empathy_cell_renderer_activatable_new
+(define-function cell_renderer_activatable_new
   (c-name "empathy_cell_renderer_activatable_new")
   (is-constructor-of "EmpathyCellRendererActivatable")
   (return-type "GtkCellRenderer*")
@@ -1558,7 +1559,7 @@
   )
 )
 
-(define-function empathy_contact_widget_get_contact
+(define-function contact_widget_get_contact
   (c-name "empathy_contact_widget_get_contact")
   (return-type "EmpathyContact*")
   (parameters
@@ -1566,7 +1567,7 @@
   )
 )
 
-(define-function empathy_contact_widget_set_contact
+(define-function contact_widget_set_contact
   (c-name "empathy_contact_widget_set_contact")
   (return-type "none")
   (parameters
@@ -1575,7 +1576,7 @@
   )
 )
 
-(define-function empathy_contact_widget_set_account_filter
+(define-function contact_widget_set_account_filter
   (c-name "empathy_contact_widget_set_account_filter")
   (return-type "none")
   (parameters
@@ -1589,13 +1590,13 @@
 
 ;; From empathy-profile-chooser.h
 
-(define-function empathy_profile_chooser_new
+(define-function profile_chooser_new
   (c-name "empathy_profile_chooser_new")
   (is-constructor-of "EmpathyProfileChooser")
   (return-type "GtkWidget*")
 )
 
-(define-function empathy_profile_chooser_get_selected
+(define-function profile_chooser_get_selected
   (c-name "empathy_profile_chooser_get_selected")
   (return-type "McProfile*")
   (parameters
@@ -1603,7 +1604,7 @@
   )
 )
 
-(define-function empathy_profile_chooser_n_profiles
+(define-function profile_chooser_n_profiles
   (c-name "empathy_profile_chooser_n_profiles")
   (return-type "gint")
   (parameters
@@ -1615,12 +1616,12 @@
 
 ;; From empathy-cell-renderer-expander.h
 
-(define-function empathy_cell_renderer_expander_get_type
+(define-function cell_renderer_expander_get_type
   (c-name "empathy_cell_renderer_expander_get_type")
   (return-type "GType")
 )
 
-(define-function empathy_cell_renderer_expander_new
+(define-function cell_renderer_expander_new
   (c-name "empathy_cell_renderer_expander_new")
   (is-constructor-of "EmpathyCellRendererExpander")
   (return-type "GtkCellRenderer*")
@@ -1630,7 +1631,7 @@
 
 ;; From empathy-geometry.h
 
-(define-function empathy_geometry_save
+(define-function geometry_save
   (c-name "empathy_geometry_save")
   (return-type "none")
   (parameters
@@ -1642,7 +1643,7 @@
   )
 )
 
-(define-function empathy_geometry_load
+(define-function geometry_load
   (c-name "empathy_geometry_load")
   (return-type "none")
   (parameters
@@ -1658,12 +1659,12 @@
 
 ;; From empathy-smiley-manager.h
 
-(define-function empathy_smiley_manager_get_type
+(define-function smiley_manager_get_type
   (c-name "empathy_smiley_manager_get_type")
   (return-type "GType")
 )
 
-(define-function empathy_smiley_manager_new
+(define-function smiley_manager_new
   (c-name "empathy_smiley_manager_new")
   (is-constructor-of "EmpathySmileyManager")
   (return-type "EmpathySmileyManager*")
@@ -1722,12 +1723,12 @@
 
 ;; From empathy-cell-renderer-text.h
 
-(define-function empathy_cell_renderer_text_get_type
+(define-function cell_renderer_text_get_type
   (c-name "empathy_cell_renderer_text_get_type")
   (return-type "GType")
 )
 
-(define-function empathy_cell_renderer_text_new
+(define-function cell_renderer_text_new
   (c-name "empathy_cell_renderer_text_new")
   (is-constructor-of "EmpathyCellRendererText")
   (return-type "GtkCellRenderer*")
@@ -1737,12 +1738,12 @@
 
 ;; From empathy-spell.h
 
-(define-function empathy_spell_supported
+(define-function spell_supported
   (c-name "empathy_spell_supported")
   (return-type "gboolean")
 )
 
-(define-function empathy_spell_get_language_name
+(define-function spell_get_language_name
   (c-name "empathy_spell_get_language_name")
   (return-type "const-gchar*")
   (parameters
@@ -1750,12 +1751,12 @@
   )
 )
 
-(define-function empathy_spell_get_language_codes
+(define-function spell_get_language_codes
   (c-name "empathy_spell_get_language_codes")
   (return-type "GList*")
 )
 
-(define-function empathy_spell_free_language_codes
+(define-function spell_free_language_codes
   (c-name "empathy_spell_free_language_codes")
   (return-type "none")
   (parameters
@@ -1763,7 +1764,7 @@
   )
 )
 
-(define-function empathy_spell_check
+(define-function spell_check
   (c-name "empathy_spell_check")
   (return-type "gboolean")
   (parameters
@@ -1771,7 +1772,7 @@
   )
 )
 
-(define-function empathy_spell_get_suggestions
+(define-function spell_get_suggestions
   (c-name "empathy_spell_get_suggestions")
   (return-type "GList*")
   (parameters
@@ -1779,7 +1780,7 @@
   )
 )
 
-(define-function empathy_spell_free_suggestions
+(define-function spell_free_suggestions
   (c-name "empathy_spell_free_suggestions")
   (return-type "none")
   (parameters
