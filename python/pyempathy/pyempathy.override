@@ -61,3 +61,24 @@ _wrap_empathy_contact_list_get_members(PyGObject *self, PyObject *args, PyObject
 
 }
 %%
+override empathy_dispatcher_chat_with_contact_id kwargs
+static PyObject *
+_wrap_empathy_dispatcher_chat_with_contact_id(PyObject *self, PyObject *args, PyObject *kwargs)
+{
+    static char *kwlist[] = { "account_id", "contact_id", NULL };
+    char *account_id, *contact_id;
+    McAccount *account;
+
+    if (!PyArg_ParseTupleAndKeywords(args, kwargs,"ss:dispatcher_chat_with_contact_id", kwlist, &account_id, &contact_id))
+        return NULL;
+
+    account = mc_account_lookup (account_id);
+    if (account) {
+        empathy_dispatcher_chat_with_contact_id(account, contact_id);
+        g_object_unref (account);
+    }
+    
+    Py_INCREF(Py_None);
+    return Py_None;
+}
+%%
