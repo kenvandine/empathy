@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gossip.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-05-22 23:32+0100\n"
+"POT-Creation-Date: 2008-06-11 22:23+0100\n"
 "PO-Revision-Date: 2008-02-09 22:41+0100\n"
 "Last-Translator: Abou Manal <aboumanal@gmail.com>\n"
 "Language-Team: Arabic <support@eglug.org>\n"
@@ -235,7 +235,7 @@ msgstr ""
 "أي معيار سيُستخدم لفرز لائحة المراسلين. المفترض استخدام الفرز بواسطة اسم "
 "المراسل بقيمة \"name\". أما قيمة \"state\" فستُفرز الائحة بواسطة الولاية."
 
-#: ../libempathy/empathy-tp-contact-list.c:731 ../src/empathy.c:247
+#: ../libempathy/empathy-tp-contact-list.c:731 ../src/empathy.c:240
 msgid "People nearby"
 msgstr "الأشخاص القريبون"
 
@@ -660,7 +660,7 @@ msgstr "أنضم %s الى غرفة"
 msgid "%s has left the room"
 msgstr "غادر %s الغرفة"
 
-#: ../libempathy-gtk/empathy-chat.c:1216 ../src/empathy.c:129
+#: ../libempathy-gtk/empathy-chat.c:1216 ../src/empathy.c:122
 #: ../src/empathy-call-window.c:394
 msgid "Disconnected"
 msgstr "غير متَّصل"
@@ -713,7 +713,7 @@ msgstr "_سأقرر لاحقاً"
 msgid "Subscription Request"
 msgstr "طلب تسجيل"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1184
+#: ../libempathy-gtk/empathy-contact-list-view.c:1240
 #, fuzzy, c-format
 msgid "Do you really want to remove the group '%s'?"
 msgstr ""
@@ -721,16 +721,16 @@ msgstr ""
 "%s\n"
 "من قائمة مراسَليك؟"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1186
+#: ../libempathy-gtk/empathy-contact-list-view.c:1242
 msgid "Removing group"
 msgstr ""
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1233
-#: ../libempathy-gtk/empathy-contact-list-view.c:1312
+#: ../libempathy-gtk/empathy-contact-list-view.c:1289
+#: ../libempathy-gtk/empathy-contact-list-view.c:1368
 msgid "_Remove"
 msgstr "أ_زل"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1263
+#: ../libempathy-gtk/empathy-contact-list-view.c:1319
 #, fuzzy, c-format
 msgid "Do you really want to remove the contact '%s'?"
 msgstr ""
@@ -738,12 +738,12 @@ msgstr ""
 "%s\n"
 "من قائمة مراسَليك؟"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1265
+#: ../libempathy-gtk/empathy-contact-list-view.c:1321
 #, fuzzy
 msgid "Removing contact"
 msgstr "احذف المراسل"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1270
+#: ../libempathy-gtk/empathy-contact-list-view.c:1326
 msgid "Sorry, I don't want you in my contact list anymore."
 msgstr "آسف، ولكن لا أرغب بك في لائحة مراسليَّ بعد الآن."
 
@@ -1174,7 +1174,7 @@ msgid "Megaphone"
 msgstr "مكبّر الصوت"
 
 #: ../megaphone/data/GNOME_Megaphone_Applet.server.in.in.h:2
-#: ../megaphone/src/megaphone-applet.c:419
+#: ../megaphone/src/megaphone-applet.c:417
 msgid "Talk!"
 msgstr "تكلم!"
 
@@ -1201,71 +1201,76 @@ msgstr "الوجود"
 msgid "Set your own presence"
 msgstr "اضبط وجودك"
 
-#: ../src/empathy.c:132
+#: ../src/empathy.c:125
 msgid "Invalid handle"
 msgstr ""
 
-#: ../src/empathy.c:135
+#: ../src/empathy.c:128
 #, fuzzy
 msgid "No matching connection"
 msgstr "إتَّصال"
 
-#: ../src/empathy.c:138
+#: ../src/empathy.c:131
 #, fuzzy
 msgid "Invalid account"
 msgstr "مراسل غير صحيح"
 
-#: ../src/empathy.c:141
+#: ../src/empathy.c:134
 #, fuzzy
 msgid "Presence failure"
 msgstr "الوجود"
 
-#: ../src/empathy.c:144
+#: ../src/empathy.c:137
 #, fuzzy
 msgid "No accounts"
 msgstr "حسابات"
 
-#: ../src/empathy.c:147 ../src/empathy-main-window.c:896
+#: ../src/empathy.c:140 ../src/empathy-main-window.c:896
 msgid "Network error"
 msgstr "خطأ شبكي"
 
-#: ../src/empathy.c:150
+#: ../src/empathy.c:143
 #, fuzzy
 msgid "Contact does not support voice"
 msgstr "معيار ترتيب قائمة المراسلين"
 
-#: ../src/empathy.c:153
+#: ../src/empathy.c:146
 #, fuzzy
 msgid "Lowmem"
 msgstr "المنزل"
 
-#: ../src/empathy.c:156
+#: ../src/empathy.c:149
 msgid "Channel request generic error"
 msgstr ""
 
-#: ../src/empathy.c:159
+#: ../src/empathy.c:152
 msgid "Channel banned"
 msgstr ""
 
-#: ../src/empathy.c:162
+#: ../src/empathy.c:155
 msgid "Channel full"
 msgstr ""
 
-#: ../src/empathy.c:165
+#: ../src/empathy.c:158
 msgid "Channel invite only"
 msgstr ""
 
-#: ../src/empathy.c:168
+#: ../src/empathy.c:161
 #, fuzzy
 msgid "Unknown error code"
 msgstr "خطأ مجهول"
 
-#: ../src/empathy.c:372
+#: ../src/empathy.c:366
 #, fuzzy
 msgid "Don't connect on startup"
 msgstr "على هذا الحاسوب"
 
-#: ../src/empathy.c:384
+#: ../src/empathy.c:370
+#, fuzzy
+msgid "Don't show the contact list on startup"
+msgstr "على هذا الحاسوب"
+
+#: ../src/empathy.c:382
 msgid "- Empathy Instant Messenger"
 msgstr "- مرسال أمبثي"
 
@@ -1372,6 +1377,10 @@ msgstr "إ_نضمام"
 #, fuzzy
 msgid "Connecting"
 msgstr "إتَّصال"
+
+#: ../src/empathy-call-window.c:504
+msgid "Call rejected because there is already a running call."
+msgstr ""
 
 #: ../src/empathy-call-window.glade.h:1
 msgid "#"
@@ -1812,7 +1821,7 @@ msgstr "_افتح غرف الدردشة الجديدة في نوافذ منفص�
 msgid "_Play sound when messages arrive"
 msgstr "شغل صوت عند وصول الرسائل"
 
-#: ../src/empathy-status-icon.c:460
+#: ../src/empathy-status-icon.c:473
 #, c-format
 msgid ""
 "New message from %s:\n"
@@ -1821,44 +1830,44 @@ msgstr ""
 "رسالة جديدة من %s:\n"
 "%s"
 
-#: ../src/empathy-status-icon.c:500
+#: ../src/empathy-status-icon.c:513
 #, fuzzy, c-format
 msgid "Incoming call from %s"
 msgstr "مكالمة من %s"
 
 #. Tell the user that the tube can't be handled
-#: ../src/empathy-status-icon.c:537
+#: ../src/empathy-status-icon.c:550
 #, c-format
 msgid ""
 "%s offered you an invitation, but you don't have the needed external "
 "application to handle it."
 msgstr ""
 
-#: ../src/empathy-status-icon.c:546
+#: ../src/empathy-status-icon.c:560
 #, fuzzy
 msgid "Invitation Error"
 msgstr "خطأ التشفير"
 
-#: ../src/empathy-status-icon.c:571
+#: ../src/empathy-status-icon.c:585
 #, c-format
 msgid ""
 "%s is offering you an invitation. An external application will be started to "
 "handle it."
 msgstr ""
 
-#: ../src/empathy-status-icon.c:576
+#: ../src/empathy-status-icon.c:590
 #, c-format
 msgid ""
 "%s is offering you an invitation, but you don't have the needed external "
 "application to handle it."
 msgstr ""
 
-#: ../src/empathy-status-icon.c:622
+#: ../src/empathy-status-icon.c:636
 #, c-format
 msgid "Subscription requested by %s"
 msgstr "طُلِبَ التسجيل من %s"
 
-#: ../src/empathy-status-icon.c:625
+#: ../src/empathy-status-icon.c:639
 #, c-format
 msgid ""
 "\n"
@@ -2689,7 +2698,7 @@ msgstr "إظهار _قائمة المراسلين"
 #~ ">Accounts menu item."
 #~ msgstr ""
 #~ "كُسِّب الآن مهيَّئ بشكلٍ مناسبٍ لنظامك.\n"
-#~ "يمكنك تغيير تعيينات حسابك لاحقا، بإختيار العنصر>إتَّصل... من قائِمة دردشة-."
+#~ "يمكنك تغيير إعدادات حسابك لاحقا، بإختيار العنصر>إتَّصل... من قائِمة دردشة-."
 
 #, fuzzy
 #~ msgid "Your Account"
