@@ -843,8 +843,11 @@ tp_contact_list_add (EmpathyContactList *list,
 
 	g_return_if_fail (EMPATHY_IS_TP_CONTACT_LIST (list));
 
-	empathy_tp_group_add_member (priv->subscribe, contact, message);
-	if (g_list_find (priv->pendings, contact)) {
+	if (priv->subscribe) {
+		empathy_tp_group_add_member (priv->subscribe, contact, message);
+	}
+
+	if (priv->publish && g_list_find (priv->pendings, contact)) {
 		empathy_tp_group_add_member (priv->publish, contact, message);		
 	}
 }
@@ -858,8 +861,12 @@ tp_contact_list_remove (EmpathyContactList *list,
 
 	g_return_if_fail (EMPATHY_IS_TP_CONTACT_LIST (list));
 
-	empathy_tp_group_remove_member (priv->subscribe, contact, message);
-	empathy_tp_group_remove_member (priv->publish, contact, message);		
+	if (priv->subscribe) {
+		empathy_tp_group_remove_member (priv->subscribe, contact, message);
+	}
+	if (priv->publish) {
+		empathy_tp_group_remove_member (priv->publish, contact, message);		
+	}
 }
 
 static GList *
