@@ -847,6 +847,8 @@ empathy_tp_call_has_dtmf (EmpathyTpCall *call)
 {
   EmpathyTpCallPriv *priv = GET_PRIV (call);
 
+  g_return_val_if_fail (EMPATHY_IS_TP_CALL (call), FALSE);
+
   return tp_proxy_has_interface_by_id (priv->channel,
       TP_IFACE_QUARK_CHANNEL_INTERFACE_DTMF);
 }
