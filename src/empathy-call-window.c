@@ -340,7 +340,6 @@ call_window_update (EmpathyCallWindow *window)
   EmpathyTpCallStream *audio_stream;
   EmpathyTpCallStream *video_stream;
   gboolean is_incoming;
-  gboolean has_dtmf;
   gchar *title;
 
   g_object_get (window->call,
@@ -349,7 +348,6 @@ call_window_update (EmpathyCallWindow *window)
       "video-stream", &video_stream,
       "contact", &contact,
       "is-incoming", &is_incoming,
-      "has-dtmf", &has_dtmf,
       NULL);
 
   if (video_stream->state > audio_stream->state)
@@ -361,7 +359,7 @@ call_window_update (EmpathyCallWindow *window)
       "is-incoming: %d video-stream direction: %d",
       window->status, stream_state, is_incoming, video_stream->direction);
 
-  if (has_dtmf)
+  if (empathy_tp_call_has_dtmf (window->call))
     {
       gtk_widget_show (window->keypad_expander);
     }

@@ -86,6 +86,7 @@ void empathy_tp_call_mute_output (EmpathyTpCall *call, gboolean is_muted);
 void empathy_tp_call_mute_input (EmpathyTpCall *call, gboolean is_muted);
 void empathy_tp_call_start_tone (EmpathyTpCall *call, TpDTMFEvent event);
 void empathy_tp_call_stop_tone (EmpathyTpCall *call);
+gboolean empathy_tp_call_has_dtmf (EmpathyTpCall *call);
 
 G_END_DECLS
 
