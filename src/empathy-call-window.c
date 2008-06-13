@@ -517,7 +517,7 @@ empathy_call_window_new (TpChannel *channel)
               _("Incoming call from %s rejected because there is already a"
                 " running call."), empathy_contact_get_name (contact));
 
-          g_object_unref (window->call);
+          g_object_unref (contact);
 
           g_signal_connect (dialog, "response", G_CALLBACK (gtk_widget_destroy),
               NULL);
