@@ -25,6 +25,7 @@
 
 #include <telepathy-glib/proxy-subclass.h>
 #include <telepathy-glib/dbus.h>
+#include <telepathy-glib/_gen/telepathy-interfaces.h>
 
 #include <extensions/extensions.h>
 
@@ -61,6 +62,7 @@ enum
   PROP_CHANNEL,
   PROP_CONTACT,
   PROP_IS_INCOMING,
+  PROP_HAS_DTMF,
   PROP_STATUS,
   PROP_AUDIO_STREAM,
   PROP_VIDEO_STREAM
@@ -571,6 +573,10 @@ tp_call_get_property (GObject *object,
     case PROP_IS_INCOMING:
       g_value_set_boolean (value, priv->is_incoming);
       break;
+    case PROP_HAS_DTMF:
+      g_value_set_boolean (value, tp_proxy_has_interface_by_id (priv->channel,
+          TP_IFACE_QUARK_CHANNEL_INTERFACE_DTMF));
+      break;
     case PROP_STATUS:
       g_value_set_uint (value, priv->status);
       break;
@@ -612,6 +618,10 @@ empathy_tp_call_class_init (EmpathyTpCallClass *klass)
   g_object_class_install_property (object_class, PROP_IS_INCOMING,
       g_param_spec_boolean ("is-incoming", "Is media stream incoming",
       "Is media stream incoming", FALSE, G_PARAM_READABLE |
+      G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
+  g_object_class_install_property (object_class, PROP_HAS_DTMF,
+      g_param_spec_boolean ("has-dtmf", "Has the media channel DTMF",
+      "Has the media channel DTMF", FALSE, G_PARAM_READABLE |
       G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
   g_object_class_install_property (object_class, PROP_STATUS,
       g_param_spec_uint ("status", "Call status",

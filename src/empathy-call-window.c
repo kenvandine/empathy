@@ -340,6 +340,7 @@ call_window_update (EmpathyCallWindow *window)
   EmpathyTpCallStream *audio_stream;
   EmpathyTpCallStream *video_stream;
   gboolean is_incoming;
+  gboolean has_dtmf;
   gchar *title;
 
   g_object_get (window->call,
@@ -348,6 +349,7 @@ call_window_update (EmpathyCallWindow *window)
       "video-stream", &video_stream,
       "contact", &contact,
       "is-incoming", &is_incoming,
+      "has-dtmf", &has_dtmf,
       NULL);
 
   if (video_stream->state > audio_stream->state)
@@ -358,6 +360,15 @@ call_window_update (EmpathyCallWindow *window)
   DEBUG ("Status changed - status: %d, stream state: %d, "
       "is-incoming: %d video-stream direction: %d",
       window->status, stream_state, is_incoming, video_stream->direction);
+
+  if (has_dtmf)
+    {
+      gtk_widget_show (window->keypad_expander);
+    }
+  else
+    {
+      gtk_widget_hide (window->keypad_expander);
+    }
 
   /* Depending on the status we have to set:
    * - window's title
