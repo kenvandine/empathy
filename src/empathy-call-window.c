@@ -494,6 +494,10 @@ empathy_call_window_new (TpChannel *channel)
       else
         {
           GtkWidget *dialog;
+          EmpathyContact *contact;
+          g_object_get (window->call,
+              "contact", &contact,
+              NULL);
 
           /* We don't want to have multiple calls running.
            * FIXME: We should use the hold interface... */
@@ -501,7 +505,7 @@ empathy_call_window_new (TpChannel *channel)
 
           dialog = gtk_message_dialog_new (NULL, 0, GTK_MESSAGE_INFO,
               GTK_BUTTONS_CLOSE,
-              _("Call rejected because there is already a running call."));
+              _("Incoming call from %s rejected because there is already a running call."), empathy_contact_get_name (contact));
           g_signal_connect (dialog, "response", G_CALLBACK (gtk_widget_destroy),
               NULL);
           gtk_widget_show (dialog);
