@@ -516,7 +516,8 @@ empathy_call_window_new (TpChannel *channel)
 
           dialog = gtk_message_dialog_new (NULL, 0, GTK_MESSAGE_INFO,
               GTK_BUTTONS_CLOSE,
-              _("Incoming call from %s rejected because there is already a running call."), empathy_contact_get_name (contact));
+              _("Incoming call from %s rejected because there is already a"
+                " running call."), empathy_contact_get_name (contact));
 
           g_object_unref (window->call);
 
