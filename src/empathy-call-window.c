@@ -504,9 +504,8 @@ empathy_call_window_new (TpChannel *channel)
         {
           GtkWidget *dialog;
           EmpathyContact *contact;
-          g_object_get (window->call,
-              "contact", &contact,
-              NULL);
+
+          g_object_get (window->call, "contact", &contact, NULL);
 
           /* We don't want to have multiple calls running.
            * FIXME: We should use the hold interface... */
