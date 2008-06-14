@@ -21,8 +21,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: empathy HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-05-21 13:17+0200\n"
-"PO-Revision-Date: 2008-05-21 13:19+0200\n"
+"POT-Creation-Date: 2008-06-14 22:06+0200\n"
+"PO-Revision-Date: 2008-06-14 22:11+0200\n"
 "Last-Translator: Claude Paroz <claude@2xlibre.net>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
 "MIME-Version: 1.0\n"
@@ -250,7 +250,7 @@ msgstr ""
 "par défaut est de trier selon le nom du contact (valeur: « name »).  Une "
 "valeur « state » triera la liste des contacts selon leur état."
 
-#: ../libempathy/empathy-tp-contact-list.c:731 ../src/empathy.c:247
+#: ../libempathy/empathy-tp-contact-list.c:731 ../src/empathy.c:240
 msgid "People nearby"
 msgstr "Personnes à proximité"
 
@@ -664,8 +664,8 @@ msgstr "%s a rejoint la salle"
 msgid "%s has left the room"
 msgstr "%s a quitté la salle"
 
-#: ../libempathy-gtk/empathy-chat.c:1216 ../src/empathy.c:129
-#: ../src/empathy-call-window.c:394
+#: ../libempathy-gtk/empathy-chat.c:1216 ../src/empathy.c:122
+#: ../src/empathy-call-window.c:403
 msgid "Disconnected"
 msgstr "Déconnecté"
 
@@ -717,37 +717,37 @@ msgstr "Décider plus _tard"
 msgid "Subscription Request"
 msgstr "Requête d'abonnement"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1184
+#: ../libempathy-gtk/empathy-contact-list-view.c:1240
 #, c-format
 msgid "Do you really want to remove the group '%s'?"
 msgstr "Voulez-vous réellement supprimer le groupe « %s » ?"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1186
+#: ../libempathy-gtk/empathy-contact-list-view.c:1242
 msgid "Removing group"
 msgstr "Suppression du groupe"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1233
-#: ../libempathy-gtk/empathy-contact-list-view.c:1313
+#: ../libempathy-gtk/empathy-contact-list-view.c:1289
+#: ../libempathy-gtk/empathy-contact-list-view.c:1368
 msgid "_Remove"
 msgstr "_Supprimer"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1263
+#: ../libempathy-gtk/empathy-contact-list-view.c:1319
 #, c-format
 msgid "Do you really want to remove the contact '%s'?"
 msgstr "Voulez-vous réellement supprimer le contact « %s » ?"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1265
+#: ../libempathy-gtk/empathy-contact-list-view.c:1321
 msgid "Removing contact"
 msgstr "Suppression du contact"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1270
+#: ../libempathy-gtk/empathy-contact-list-view.c:1326
 msgid "Sorry, I don't want you in my contact list anymore."
 msgstr "Désolé, je ne te veux plus dans ma liste de contacts."
 
 #: ../libempathy-gtk/empathy-contact-menu.c:109
 #: ../src/empathy-main-window.glade.h:9
 msgid "_Chat"
-msgstr "_Discuter"
+msgstr "Dis_cussion"
 
 #: ../libempathy-gtk/empathy-contact-menu.c:130
 msgid "_Call"
@@ -765,7 +765,7 @@ msgstr "Infor_mations"
 #: ../libempathy-gtk/empathy-contact-menu.c:224
 #: ../src/empathy-chat-window.glade.h:14 ../src/empathy-main-window.glade.h:11
 msgid "_Edit"
-msgstr "É_diter"
+msgstr "É_dition"
 
 #: ../libempathy-gtk/empathy-contact-widget.c:694
 msgid "Select"
@@ -1168,7 +1168,7 @@ msgid "Megaphone"
 msgstr "Mégaphone"
 
 #: ../megaphone/data/GNOME_Megaphone_Applet.server.in.in.h:2
-#: ../megaphone/src/megaphone-applet.c:419
+#: ../megaphone/src/megaphone-applet.c:417
 msgid "Talk!"
 msgstr "Parlez !"
 
@@ -1195,63 +1195,67 @@ msgstr "Présence"
 msgid "Set your own presence"
 msgstr "Définissez votre présence"
 
-#: ../src/empathy.c:132
+#: ../src/empathy.c:125
 msgid "Invalid handle"
 msgstr "Identificateur non valide"
 
-#: ../src/empathy.c:135
+#: ../src/empathy.c:128
 msgid "No matching connection"
 msgstr "Aucune connexion correspondante"
 
-#: ../src/empathy.c:138
+#: ../src/empathy.c:131
 msgid "Invalid account"
 msgstr "Compte non valide"
 
-#: ../src/empathy.c:141
+#: ../src/empathy.c:134
 msgid "Presence failure"
 msgstr "Échec de présence"
 
-#: ../src/empathy.c:144
+#: ../src/empathy.c:137
 msgid "No accounts"
 msgstr "Aucun compte"
 
-#: ../src/empathy.c:147 ../src/empathy-main-window.c:896
+#: ../src/empathy.c:140 ../src/empathy-main-window.c:896
 msgid "Network error"
 msgstr "Erreur réseau"
 
-#: ../src/empathy.c:150
+#: ../src/empathy.c:143
 msgid "Contact does not support voice"
 msgstr "Ce contact ne gère pas la voix"
 
-#: ../src/empathy.c:153
+#: ../src/empathy.c:146
 msgid "Lowmem"
 msgstr "Mémoire insuffisante"
 
-#: ../src/empathy.c:156
+#: ../src/empathy.c:149
 msgid "Channel request generic error"
 msgstr "Erreur générique de requête de canal"
 
-#: ../src/empathy.c:159
+#: ../src/empathy.c:152
 msgid "Channel banned"
 msgstr "Canal banni"
 
-#: ../src/empathy.c:162
+#: ../src/empathy.c:155
 msgid "Channel full"
 msgstr "Canal complet"
 
-#: ../src/empathy.c:165
+#: ../src/empathy.c:158
 msgid "Channel invite only"
 msgstr "Canal sur invitation uniquement"
 
-#: ../src/empathy.c:168
+#: ../src/empathy.c:161
 msgid "Unknown error code"
 msgstr "Code d'erreur inconnu"
 
-#: ../src/empathy.c:372
+#: ../src/empathy.c:366
 msgid "Don't connect on startup"
 msgstr "Ne pas se connecter au démarrage"
 
-#: ../src/empathy.c:384
+#: ../src/empathy.c:370
+msgid "Don't show the contact list on startup"
+msgstr "Ne pas afficher la liste des contacts au démarrage"
+
+#: ../src/empathy.c:382
 msgid "- Empathy Instant Messenger"
 msgstr "- Messagerie instantanée Empathy"
 
@@ -1344,26 +1348,31 @@ msgstr "Re_fuser"
 msgid "_Answer"
 msgstr "_Répondre"
 
-#: ../src/empathy-call-window.c:369
+#: ../src/empathy-call-window.c:378
 msgid "Empathy Call"
 msgstr "Appel Empathy"
 
-#: ../src/empathy-call-window.c:370
+#: ../src/empathy-call-window.c:379
 msgid "Readying"
 msgstr "Préparation"
 
-#: ../src/empathy-call-window.c:379
+#: ../src/empathy-call-window.c:388
 #, c-format
 msgid "%s - Empathy Call"
 msgstr "%s - Appel Empathy"
 
-#: ../src/empathy-call-window.c:383
+#: ../src/empathy-call-window.c:392
 msgid "Ringing"
 msgstr "Sonnerie"
 
-#: ../src/empathy-call-window.c:396
+#: ../src/empathy-call-window.c:405
 msgid "Connecting"
 msgstr "Connexion"
+
+#: ../src/empathy-call-window.c:516
+#, c-format
+msgid "Incoming call from %s rejected because there is already a running call."
+msgstr "L'appel entrant de %s a été rejeté car un autre appel est déjà en cours."
 
 #: ../src/empathy-call-window.glade.h:1
 msgid "#"
@@ -1805,7 +1814,7 @@ msgstr "_Ouvrir les nouvelles discussions dans des fenêtres séparées"
 msgid "_Play sound when messages arrive"
 msgstr "_Jouer un son lors de la réception des messages"
 
-#: ../src/empathy-status-icon.c:460
+#: ../src/empathy-status-icon.c:473
 #, c-format
 msgid ""
 "New message from %s:\n"
@@ -1814,13 +1823,13 @@ msgstr ""
 "Nouveau message de %s\n"
 "%s"
 
-#: ../src/empathy-status-icon.c:500
+#: ../src/empathy-status-icon.c:513
 #, c-format
 msgid "Incoming call from %s"
 msgstr "Appel entrant de %s"
 
 #. Tell the user that the tube can't be handled
-#: ../src/empathy-status-icon.c:537
+#: ../src/empathy-status-icon.c:550
 #, c-format
 msgid ""
 "%s offered you an invitation, but you don't have the needed external "
@@ -1829,11 +1838,11 @@ msgstr ""
 "%s vous a proposé une invitation, mais vous ne disposez pas de l'application "
 "externe nécessaire pour la gérer."
 
-#: ../src/empathy-status-icon.c:546
+#: ../src/empathy-status-icon.c:560
 msgid "Invitation Error"
 msgstr "Erreur d'invitation"
 
-#: ../src/empathy-status-icon.c:571
+#: ../src/empathy-status-icon.c:585
 #, c-format
 msgid ""
 "%s is offering you an invitation. An external application will be started to "
@@ -1842,7 +1851,7 @@ msgstr ""
 "%s vous a proposé une invitation. Une application externe sera lancée pour "
 "la gérer."
 
-#: ../src/empathy-status-icon.c:576
+#: ../src/empathy-status-icon.c:590
 #, c-format
 msgid ""
 "%s is offering you an invitation, but you don't have the needed external "
@@ -1851,12 +1860,12 @@ msgstr ""
 "%s vous propose une invitation, mais vous ne disposez pas de l'application "
 "externe nécessaire pour la gérer."
 
-#: ../src/empathy-status-icon.c:622
+#: ../src/empathy-status-icon.c:636
 #, c-format
 msgid "Subscription requested by %s"
 msgstr "Demande d'abonnement de %s"
 
-#: ../src/empathy-status-icon.c:625
+#: ../src/empathy-status-icon.c:639
 #, c-format
 msgid ""
 "\n"
@@ -1876,99 +1885,3 @@ msgstr "_Quitter"
 #: ../src/empathy-status-icon.glade.h:4
 msgid "_Show Contact List"
 msgstr "_Afficher la liste des contacts"
-
-#~ msgid "ICQ account settings"
-#~ msgstr "Paramètres de compte ICQ"
-
-#~ msgid "irc account settings"
-#~ msgstr "paramètres de compte irc"
-
-#~ msgid "jabber account settings"
-#~ msgstr "paramètres de compte jabber"
-
-#~ msgid "msn account settings"
-#~ msgstr "paramètres de compte msn"
-
-#~ msgid "salut account settings"
-#~ msgstr "paramètres de compte salut"
-
-#~ msgid "Yahoo! account settings"
-#~ msgstr "Paramètres de compte Yahoo!"
-
-#~ msgid "Ca_ll"
-#~ msgstr "Appe_ler"
-
-#~ msgid "Change _Topic..."
-#~ msgstr "Modifier le _sujet..."
-
-#~ msgid "Contact Infor_mation"
-#~ msgstr "Infor_mations du contact"
-
-#~ msgid "In_vite..."
-#~ msgstr "In_viter..."
-
-#~ msgid "_Add To Favorites"
-#~ msgstr "_Ajouter aux favoris..."
-
-#~ msgid "_Show Contacts"
-#~ msgstr "Afficher les contacts"
-
-#~ msgid "_Group"
-#~ msgstr "_Groupe"
-
-#~ msgid "Chat with contact"
-#~ msgstr "Discuter avec un contact"
-
-#~ msgid "View contact information"
-#~ msgstr "Voir les informations sur le contact"
-
-#~ msgid "Re_name"
-#~ msgstr "Re_nommer"
-
-#~ msgid "Rename"
-#~ msgstr "Renommer"
-
-#~ msgid "Edit the groups and name for this contact"
-#~ msgstr "Éditer les groupes et le nom de ce contact"
-
-#~ msgid "Remove contact"
-#~ msgstr "Supprimer le contact"
-
-#~ msgid "_Invite to Chat Room"
-#~ msgstr "_Inviter dans la salle de discussion"
-
-#~ msgid "Invite to a currently open chat room"
-#~ msgstr "Inviter dans une salle de discussion actuellement ouverte"
-
-#~ msgid "_Send File..."
-#~ msgstr "_Envoyer un fichier..."
-
-#~ msgid "Send a file"
-#~ msgstr "Envoie un fichier"
-
-#~ msgid "View previous conversations with this contact"
-#~ msgstr "Affiche les conversations précédentes avec ce contact"
-
-#~ msgid "Start a voice or video conversation with this contact"
-#~ msgstr "Démarre une conversation audio ou vidéo avec ce contact"
-
-#~ msgid "Enter the new topic you want to set for this room:"
-#~ msgstr "Saisissez le nouveau sujet à définir pour cette salle :"
-
-#~ msgid "%s went offline"
-#~ msgstr "%s s'est déconnecté"
-
-#~ msgid "%s has come online"
-#~ msgstr "%s s'est connecté"
-
-#~ msgid "Input"
-#~ msgstr "Entrée"
-
-#~ msgid "Mute"
-#~ msgstr "Sourdine"
-
-#~ msgid "Output"
-#~ msgstr "Sortie"
-
-#~ msgid "_Use for chat rooms"
-#~ msgstr "_Utiliser pour les salles de discussion"
