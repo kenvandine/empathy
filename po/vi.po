@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: empathy GNOME TRUNK\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-06-04 14:42+0000\n"
-"PO-Revision-Date: 2008-06-05 18:55+0930\n"
+"POT-Creation-Date: 2008-06-14 03:55+0000\n"
+"PO-Revision-Date: 2008-06-15 22:17+0930\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: Vietnamese <vi-VN@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -643,7 +643,7 @@ msgid "%s has left the room"
 msgstr "%s rời phòng"
 
 #: ../libempathy-gtk/empathy-chat.c:1216 ../src/empathy.c:122
-#: ../src/empathy-call-window.c:394
+#: ../src/empathy-call-window.c:403
 msgid "Disconnected"
 msgstr "Bị ngắt kết nối"
 
@@ -1308,30 +1308,31 @@ msgstr "_Từ chối"
 msgid "_Answer"
 msgstr "T_rả lời"
 
-#: ../src/empathy-call-window.c:369
+#: ../src/empathy-call-window.c:378
 msgid "Empathy Call"
 msgstr "Gọi Empathy"
 
-#: ../src/empathy-call-window.c:370
+#: ../src/empathy-call-window.c:379
 msgid "Readying"
 msgstr "Đang chuẩn bị"
 
-#: ../src/empathy-call-window.c:379
+#: ../src/empathy-call-window.c:388
 #, c-format
 msgid "%s - Empathy Call"
 msgstr "%s — Gọi Empathy"
 
-#: ../src/empathy-call-window.c:383
+#: ../src/empathy-call-window.c:392
 msgid "Ringing"
 msgstr "Đang réo"
 
-#: ../src/empathy-call-window.c:396
+#: ../src/empathy-call-window.c:405
 msgid "Connecting"
 msgstr "Đang kết nối"
 
-#: ../src/empathy-call-window.c:498
-msgid "Call rejected because there is already a running call."
-msgstr "Cuộc gọi bị từ chối vì đã có một cuộc gọi đang chạy."
+#: ../src/empathy-call-window.c:516
+#, c-format
+msgid "Incoming call from %s rejected because there is already a running call."
+msgstr "Cuộc gọi gửi đến từ %s bị từ chối vì đã có một cuộc gọi đang chạy."
 
 #: ../src/empathy-call-window.glade.h:1
 msgid "#"
@@ -1770,7 +1771,7 @@ msgstr "Mở cuộc trò chuyện mới tr_ong cửa sổ riêng"
 msgid "_Play sound when messages arrive"
 msgstr "_Phát âm thanh khi mới nhận tin nhẳn"
 
-#: ../src/empathy-status-icon.c:461
+#: ../src/empathy-status-icon.c:473
 #, c-format
 msgid ""
 "New message from %s:\n"
@@ -1779,13 +1780,13 @@ msgstr ""
 "Tin nhẳn mới từ %s:\n"
 "%s"
 
-#: ../src/empathy-status-icon.c:501
+#: ../src/empathy-status-icon.c:513
 #, c-format
 msgid "Incoming call from %s"
 msgstr "Cuộc gọi gửi đến từ %s"
 
 #. Tell the user that the tube can't be handled
-#: ../src/empathy-status-icon.c:538
+#: ../src/empathy-status-icon.c:550
 #, c-format
 msgid ""
 "%s offered you an invitation, but you don't have the needed external "
@@ -1793,11 +1794,11 @@ msgid ""
 msgstr ""
 "%s đã mời bạn tham gia, nhưng bạn không có ứng dụng bên ngoài để xử lý nó."
 
-#: ../src/empathy-status-icon.c:547
+#: ../src/empathy-status-icon.c:560
 msgid "Invitation Error"
 msgstr "Lỗi mời"
 
-#: ../src/empathy-status-icon.c:572
+#: ../src/empathy-status-icon.c:585
 #, c-format
 msgid ""
 "%s is offering you an invitation. An external application will be started to "
@@ -1806,7 +1807,7 @@ msgstr ""
 "%s đang mời bạn tham gia. Một ứng dụng bên ngoài sẽ được khởi chạy để xử lý "
 "nó."
 
-#: ../src/empathy-status-icon.c:577
+#: ../src/empathy-status-icon.c:590
 #, c-format
 msgid ""
 "%s is offering you an invitation, but you don't have the needed external "
@@ -1814,12 +1815,12 @@ msgid ""
 msgstr ""
 "%s đang mời bạn tham gia, nhưng bạn không có ứng dụng bên ngoài để xử lý nó."
 
-#: ../src/empathy-status-icon.c:623
+#: ../src/empathy-status-icon.c:636
 #, c-format
 msgid "Subscription requested by %s"
 msgstr "%s yêu cầu đang ký"
 
-#: ../src/empathy-status-icon.c:626
+#: ../src/empathy-status-icon.c:639
 #, c-format
 msgid ""
 "\n"
