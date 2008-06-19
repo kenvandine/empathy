@@ -411,12 +411,12 @@ empathy_contact_set_name (EmpathyContact *contact,
 	priv = GET_PRIV (contact);
 
 	g_object_ref (contact);
-	contact_set_ready_flag (contact, EMPATHY_CONTACT_READY_NAME);
 	if (tp_strdiff (name, priv->name)) {
 		g_free (priv->name);
 		priv->name = g_strdup (name);
 		g_object_notify (G_OBJECT (contact), "name");
 	}
+	contact_set_ready_flag (contact, EMPATHY_CONTACT_READY_NAME);
 	g_object_unref (contact);
 }
 
@@ -577,11 +577,11 @@ empathy_contact_set_handle (EmpathyContact *contact,
 	priv = GET_PRIV (contact);
 
 	g_object_ref (contact);
-	contact_set_ready_flag (contact, EMPATHY_CONTACT_READY_HANDLE);
 	if (handle != priv->handle) {
 		priv->handle = handle;
 		g_object_notify (G_OBJECT (contact), "handle");
 	}
+	contact_set_ready_flag (contact, EMPATHY_CONTACT_READY_HANDLE);
 	g_object_unref (contact);
 }
 
