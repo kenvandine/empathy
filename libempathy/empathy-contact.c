@@ -746,6 +746,15 @@ contact_is_ready_func (GObject  *contact,
 
 	ready = GPOINTER_TO_UINT (user_data);
 
+  /* When the name is NULL, empathy_contact_get_name() fallback to the id.
+   * When the caller want to wait the name to be ready, it also want to wait
+   * the id to be ready in case of fallback. */
+  if ((ready | EMPATHY_CONTACT_READY_NAME) &&
+       G_STR_EMPTY (priv->name))
+    {
+      ready |= EMPATHY_CONTACT_READY_ID;
+    }
+
 	return (priv->ready & ready) == ready;
 }
 
