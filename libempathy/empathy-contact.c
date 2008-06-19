@@ -370,7 +370,6 @@ empathy_contact_set_id (EmpathyContact *contact,
 	/* We temporally ref the contact because it could be destroyed
 	 * during the signal emition */
 	g_object_ref (contact);
-	contact_set_ready_flag (contact, EMPATHY_CONTACT_READY_ID);
 	if (tp_strdiff (id, priv->id)) {
 		g_free (priv->id);
 		priv->id = g_strdup (id);
@@ -380,6 +379,7 @@ empathy_contact_set_id (EmpathyContact *contact,
 			g_object_notify (G_OBJECT (contact), "name");
 		}
 	}
+	contact_set_ready_flag (contact, EMPATHY_CONTACT_READY_ID);
 
 	g_object_unref (contact);
 }
