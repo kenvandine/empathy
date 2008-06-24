@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: empathy 0.21.x\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-06-07 18:51+0200\n"
-"PO-Revision-Date: 2008-06-07 18:52+0200\n"
+"POT-Creation-Date: 2008-06-24 21:04+0200\n"
+"PO-Revision-Date: 2008-06-24 21:05+0200\n"
 "Last-Translator: Kjartan Maraas <kmaraas@gnome.org>\n"
 "Language-Team: Norwegian <i18n-nb@lister.ping.uio.no>\n"
 "MIME-Version: 1.0\n"
@@ -630,7 +630,7 @@ msgid "%s has left the room"
 msgstr "%s har forlatt rommet"
 
 #: ../libempathy-gtk/empathy-chat.c:1216 ../src/empathy.c:122
-#: ../src/empathy-call-window.c:394
+#: ../src/empathy-call-window.c:403
 msgid "Disconnected"
 msgstr "Koblet fra"
 
@@ -1296,30 +1296,31 @@ msgstr "Av_vis"
 msgid "_Answer"
 msgstr "Sv_ar"
 
-#: ../src/empathy-call-window.c:369
+#: ../src/empathy-call-window.c:378
 msgid "Empathy Call"
 msgstr "Empathy samtale"
 
-#: ../src/empathy-call-window.c:370
+#: ../src/empathy-call-window.c:379
 msgid "Readying"
 msgstr "Forbereder"
 
-#: ../src/empathy-call-window.c:379
+#: ../src/empathy-call-window.c:388
 #, c-format
 msgid "%s - Empathy Call"
 msgstr "%s - Empathy samtale"
 
-#: ../src/empathy-call-window.c:383
+#: ../src/empathy-call-window.c:392
 msgid "Ringing"
 msgstr "Ringer"
 
-#: ../src/empathy-call-window.c:396
+#: ../src/empathy-call-window.c:405
 msgid "Connecting"
 msgstr "Kobler til"
 
-#: ../src/empathy-call-window.c:498
-msgid "Call rejected because there is already a running call."
-msgstr "Samtale avvist fordi en samtale allerede er i gang."
+#: ../src/empathy-call-window.c:516
+#, c-format
+msgid "Incoming call from %s rejected because there is already a running call."
+msgstr "Innkommende samtale fra %s avvist fordi en samtale allerede er i gang."
 
 #: ../src/empathy-call-window.glade.h:1
 msgid "#"
@@ -1758,7 +1759,7 @@ msgstr "_Åpne nye samtaler i egne vinduer"
 msgid "_Play sound when messages arrive"
 msgstr "S_pill av lyd når meldinger kommer"
 
-#: ../src/empathy-status-icon.c:461
+#: ../src/empathy-status-icon.c:473
 #, c-format
 msgid ""
 "New message from %s:\n"
@@ -1767,13 +1768,13 @@ msgstr ""
 "Ny melding fra %s:\n"
 "%s"
 
-#: ../src/empathy-status-icon.c:501
+#: ../src/empathy-status-icon.c:513
 #, c-format
 msgid "Incoming call from %s"
 msgstr "Innkommende samtale fra %s"
 
 #. Tell the user that the tube can't be handled
-#: ../src/empathy-status-icon.c:538
+#: ../src/empathy-status-icon.c:550
 #, c-format
 msgid ""
 "%s offered you an invitation, but you don't have the needed external "
@@ -1782,11 +1783,11 @@ msgstr ""
 "%s sendte deg en invitasjon, men du har ikke nødvendig eksternt program som "
 "kan håndtere dette."
 
-#: ../src/empathy-status-icon.c:547
+#: ../src/empathy-status-icon.c:560
 msgid "Invitation Error"
 msgstr "Feil med invitasjon"
 
-#: ../src/empathy-status-icon.c:572
+#: ../src/empathy-status-icon.c:585
 #, c-format
 msgid ""
 "%s is offering you an invitation. An external application will be started to "
@@ -1795,7 +1796,7 @@ msgstr ""
 "%s sender deg en invitasjon. Et eksternt program vil bli startet for å "
 "håndtere den."
 
-#: ../src/empathy-status-icon.c:577
+#: ../src/empathy-status-icon.c:590
 #, c-format
 msgid ""
 "%s is offering you an invitation, but you don't have the needed external "
@@ -1804,12 +1805,12 @@ msgstr ""
 "%s sender deg en invitasjon, men du har ikke nødvendig eksternt program som "
 "kan håndtere dette."
 
-#: ../src/empathy-status-icon.c:623
+#: ../src/empathy-status-icon.c:636
 #, c-format
 msgid "Subscription requested by %s"
 msgstr "Abonnement forespurt av %s"
 
-#: ../src/empathy-status-icon.c:626
+#: ../src/empathy-status-icon.c:639
 #, c-format
 msgid ""
 "\n"
