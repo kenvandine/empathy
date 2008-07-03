@@ -967,7 +967,6 @@ chat_input_populate_popup_cb (GtkTextView *view,
 	/* Add the Send menu item. */
 	gtk_text_buffer_get_bounds (buffer, &start, &end);
 	str = gtk_text_buffer_get_text (buffer, &start, &end, FALSE);
-
 	if (!G_STR_EMPTY (str)) {
 		item = gtk_menu_item_new_with_mnemonic (_("_Send"));
 		g_signal_connect (G_OBJECT (item), "activate",
@@ -975,53 +974,42 @@ chat_input_populate_popup_cb (GtkTextView *view,
 		gtk_menu_shell_prepend (GTK_MENU_SHELL (menu), item);
 		gtk_widget_show (item);
 	}
-
 	str = NULL;
 
 	/* Add the spell check menu item. */
 	table = gtk_text_buffer_get_tag_table (buffer);
-
 	tag = gtk_text_tag_table_lookup (table, "misspelled");
-
 	gtk_widget_get_pointer (GTK_WIDGET (view), &x, &y);
-
 	gtk_text_view_window_to_buffer_coords (GTK_TEXT_VIEW (view),
 					       GTK_TEXT_WINDOW_WIDGET,
 					       x, y,
 					       &x, &y);
-
 	gtk_text_view_get_iter_at_location (GTK_TEXT_VIEW (view), &iter, x, y);
-
 	start = end = iter;
-
 	if (gtk_text_iter_backward_to_tag_toggle (&start, tag) &&
 	    gtk_text_iter_forward_to_tag_toggle (&end, tag)) {
 
 		str = gtk_text_buffer_get_text (buffer,
 						&start, &end, FALSE);
 	}
+	if (!G_STR_EMPTY (str)) {
+		chat_spell = chat_spell_new (chat, str, start, end);
+		g_object_set_data_full (G_OBJECT (menu),
+					"chat_spell", chat_spell,
+					(GDestroyNotify) chat_spell_free);
 
-	if (G_STR_EMPTY (str)) {
-		return;
+		item = gtk_separator_menu_item_new ();
+		gtk_menu_shell_prepend (GTK_MENU_SHELL (menu), item);
+		gtk_widget_show (item);
+
+		item = gtk_menu_item_new_with_mnemonic (_("_Check Word Spelling..."));
+		g_signal_connect (item,
+				  "activate",
+				  G_CALLBACK (chat_text_check_word_spelling_cb),
+				  chat_spell);
+		gtk_menu_shell_prepend (GTK_MENU_SHELL (menu), item);
+		gtk_widget_show (item);
 	}
-
-	chat_spell = chat_spell_new (chat, str, start, end);
-
-	g_object_set_data_full (G_OBJECT (menu),
-				"chat_spell", chat_spell,
-				(GDestroyNotify) chat_spell_free);
-
-	item = gtk_separator_menu_item_new ();
-	gtk_menu_shell_prepend (GTK_MENU_SHELL (menu), item);
-	gtk_widget_show (item);
-
-	item = gtk_menu_item_new_with_mnemonic (_("_Check Word Spelling..."));
-	g_signal_connect (item,
-			  "activate",
-			  G_CALLBACK (chat_text_check_word_spelling_cb),
-			  chat_spell);
-	gtk_menu_shell_prepend (GTK_MENU_SHELL (menu), item);
-	gtk_widget_show (item);
 }
 
 static void
