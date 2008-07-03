@@ -925,6 +925,13 @@ chat_text_check_word_spelling_cb (GtkMenuItem     *menuitem,
 }
 
 static void
+chat_text_send_cb (GtkMenuItem *menuitem,
+		   EmpathyChat *chat)
+{
+	chat_input_text_view_send (chat);
+}
+
+static void
 chat_input_populate_popup_cb (GtkTextView *view,
 			      GtkMenu     *menu,
 			      EmpathyChat *chat)
@@ -941,6 +948,7 @@ chat_input_populate_popup_cb (GtkTextView *view,
 	GtkWidget       *smiley_menu;
 
 	priv = GET_PRIV (chat);
+	buffer = gtk_text_view_get_buffer (view);
 
 	/* Add the emoticon menu. */
 	item = gtk_separator_menu_item_new ();
@@ -956,8 +964,21 @@ chat_input_populate_popup_cb (GtkTextView *view,
 		chat);
 	gtk_menu_item_set_submenu (GTK_MENU_ITEM (item), smiley_menu);
 
+	/* Add the Send menu item. */
+	gtk_text_buffer_get_bounds (buffer, &start, &end);
+	str = gtk_text_buffer_get_text (buffer, &start, &end, FALSE);
+
+	if (!G_STR_EMPTY (str)) {
+		item = gtk_menu_item_new_with_mnemonic (_("_Send"));
+		g_signal_connect (G_OBJECT (item), "activate",
+				  G_CALLBACK (chat_text_send_cb), chat);
+		gtk_menu_shell_prepend (GTK_MENU_SHELL (menu), item);
+		gtk_widget_show (item);
+	}
+
+	str = NULL;
+
 	/* Add the spell check menu item. */
-	buffer = gtk_text_view_get_buffer (view);
 	table = gtk_text_buffer_get_tag_table (buffer);
 
 	tag = gtk_text_tag_table_lookup (table, "misspelled");
