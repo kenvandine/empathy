@@ -946,6 +946,7 @@ chat_input_populate_popup_cb (GtkTextView *view,
 	gchar           *str = NULL;
 	EmpathyChatSpell *chat_spell;
 	GtkWidget       *smiley_menu;
+	GtkWidget       *image;
 
 	priv = GET_PRIV (chat);
 	buffer = gtk_text_view_get_buffer (view);
@@ -1002,7 +1003,10 @@ chat_input_populate_popup_cb (GtkTextView *view,
 		gtk_menu_shell_prepend (GTK_MENU_SHELL (menu), item);
 		gtk_widget_show (item);
 
-		item = gtk_menu_item_new_with_mnemonic (_("_Check Word Spelling..."));
+		item = gtk_image_menu_item_new_with_mnemonic (_("_Check Word Spelling..."));
+		image = gtk_image_new_from_icon_name (GTK_STOCK_SPELL_CHECK,
+						      GTK_ICON_SIZE_MENU);
+		gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
 		g_signal_connect (item,
 				  "activate",
 				  G_CALLBACK (chat_text_check_word_spelling_cb),
