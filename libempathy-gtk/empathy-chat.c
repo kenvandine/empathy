@@ -956,7 +956,10 @@ chat_input_populate_popup_cb (GtkTextView *view,
 	gtk_menu_shell_prepend (GTK_MENU_SHELL (menu), item);
 	gtk_widget_show (item);
 
-	item = gtk_menu_item_new_with_mnemonic (_("Insert Smiley"));
+	item = gtk_image_menu_item_new_with_mnemonic (_("Insert Smiley"));
+	image = gtk_image_new_from_icon_name ("face-smile",
+					      GTK_ICON_SIZE_MENU);
+	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
 	gtk_menu_shell_prepend (GTK_MENU_SHELL (menu), item);
 	gtk_widget_show (item);
 

@@ -35,10 +35,17 @@
                       </widget>
                     </child>
                     <child>
-                      <widget class="GtkMenuItem" id="menu_conv_insert_smiley">
+                      <widget class="GtkImageMenuItem" id="menu_conv_insert_smiley">
                         <property name="visible">True</property>
                         <property name="label" translatable="yes">Insert _Smiley</property>
                         <property name="use_underline">True</property>
+                        <child internal-child="image">
+                          <widget class="GtkImage" id="menu-item-image3">
+                            <property name="visible">True</property>
+                            <property name="icon_size">1</property>
+                            <property name="icon_name">face-smile</property>
+                          </widget>
+                        </child>
                       </widget>
                     </child>
                     <child>
