@@ -645,7 +645,7 @@ static void
 main_window_edit_accounts_cb (GtkWidget         *widget,
 			      EmpathyMainWindow *window)
 {
-	empathy_accounts_dialog_show (GTK_WINDOW (window->window));
+	empathy_accounts_dialog_show (GTK_WINDOW (window->window), NULL);
 }
 
 static void
@@ -710,7 +710,7 @@ main_window_throbber_button_press_event_cb (GtkWidget         *throbber_ebox,
 		return FALSE;
 	}
 
-	empathy_accounts_dialog_show (GTK_WINDOW (window->window));
+	empathy_accounts_dialog_show (GTK_WINDOW (window->window), NULL);
 
 	return FALSE;
 }
@@ -722,9 +722,9 @@ main_window_error_edit_clicked_cb (GtkButton         *button,
 	McAccount *account;
 	GtkWidget *error_widget;
 
-	empathy_accounts_dialog_show (GTK_WINDOW (window->window));
-
 	account = g_object_get_data (G_OBJECT (button), "account");
+	empathy_accounts_dialog_show (GTK_WINDOW (window->window), account);
+
 	error_widget = g_hash_table_lookup (window->errors, account);
 	gtk_widget_destroy (error_widget);
 	g_hash_table_remove (window->errors, account);

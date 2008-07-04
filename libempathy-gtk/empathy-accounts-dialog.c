@@ -1003,7 +1003,8 @@ accounts_dialog_destroy_cb (GtkWidget            *widget,
 }
 
 GtkWidget *
-empathy_accounts_dialog_show (GtkWindow *parent)
+empathy_accounts_dialog_show (GtkWindow *parent,
+			      McAccount *selected_account)
 {
 	static EmpathyAccountsDialog *dialog = NULL;
 	GladeXML                     *glade;
@@ -1086,7 +1087,12 @@ empathy_accounts_dialog_show (GtkWindow *parent)
 
 	accounts_dialog_model_setup (dialog);
 	accounts_dialog_setup (dialog);
-	accounts_dialog_model_select_first (dialog);
+
+	if (selected_account) {
+		accounts_dialog_model_set_selected (dialog, selected_account);
+	} else {
+		accounts_dialog_model_select_first (dialog);
+	}
 
 	if (parent) {
 		gtk_window_set_transient_for (GTK_WINDOW (dialog->window),

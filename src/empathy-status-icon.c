@@ -283,7 +283,7 @@ status_icon_set_visibility (EmpathyStatusIcon *icon,
 			mc_accounts_list_free (accounts);
 		} else {
 			DEBUG ("No enabled account, Showing account dialog");
-			empathy_accounts_dialog_show (GTK_WINDOW (priv->window));
+			empathy_accounts_dialog_show (GTK_WINDOW (priv->window), NULL);
 		}
 	}
 }

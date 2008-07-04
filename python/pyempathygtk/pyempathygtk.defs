@@ -418,6 +418,7 @@
   (return-type "GtkWidget*")
   (parameters
     '("GtkWindow*" "parent")
+    '("McAccount*" "selected_account")
   )
 )
 

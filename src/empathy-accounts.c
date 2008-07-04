@@ -53,7 +53,7 @@ main (int argc, char *argv[])
 
 	gtk_icon_theme_append_search_path (gtk_icon_theme_get_default (),
 					   PKGDATADIR G_DIR_SEPARATOR_S "icons");
-	dialog = empathy_accounts_dialog_show (NULL);
+	dialog = empathy_accounts_dialog_show (NULL, NULL);
 
 	g_signal_connect (dialog, "destroy",
 			  G_CALLBACK (destroy_cb),

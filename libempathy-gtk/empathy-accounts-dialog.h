@@ -27,9 +27,12 @@
 
 #include <gtk/gtkwidget.h>
 
+#include <libmissioncontrol/mc-account.h>
+
 G_BEGIN_DECLS
 
-GtkWidget *empathy_accounts_dialog_show (GtkWindow *parent);
+GtkWidget *empathy_accounts_dialog_show (GtkWindow *parent,
+					 McAccount *selected_account);
 
 G_END_DECLS
 
