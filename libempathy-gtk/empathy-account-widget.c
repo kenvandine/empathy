@@ -60,9 +60,31 @@ account_widget_entry_focus_cb (GtkWidget     *widget,
 		gtk_entry_set_text (GTK_ENTRY (widget), value ? value : "");
 		g_free (value);
 	} else {
+		McProfile *profile;
+		const gchar *default_account_domain = NULL;
+		gchar *value = NULL;
+
+		profile = mc_account_get_profile (account);
+		if (mc_profile_get_capabilities (profile) &
+			MC_PROFILE_CAPABILITY_SPLIT_ACCOUNT) {
+
+			default_account_domain = mc_profile_get_default_account_domain (profile);
+		}
+
+		if ((strcmp (param_name, "account") == 0) && default_account_domain &&
+			!strstr (str, "@")) {
+
+			DEBUG ("Adding @%s suffix to account",
+				default_account_domain);
+			value = g_strconcat (str, "@", default_account_domain, NULL);
+			gtk_entry_set_text (GTK_ENTRY (widget), value);
+		} else {
+			value = g_strdup (str);
+		}
 		DEBUG ("Setting %s to %s", param_name,
-			strstr (param_name, "password") ? "***" : str);
-		mc_account_set_param_string (account, param_name, str);
+			strstr (param_name, "password") ? "***" : value);
+		mc_account_set_param_string (account, param_name, value);
+		g_free (value);
 	}
 
 	return FALSE;
