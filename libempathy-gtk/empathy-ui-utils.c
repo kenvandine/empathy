@@ -1294,13 +1294,17 @@ empathy_get_toplevel_window (GtkWidget *widget)
 static gchar *
 fixup_url (const gchar *url)
 {
-	if (!g_str_has_prefix (url, "ghelp:") &&
-	    !strstr (url, ":/") &&
-	    !strstr (url, "@")) {
-		return g_strdup_printf ("http://%s", url);
-	} else {
+	if (g_str_has_prefix (url, "ghelp:") ||
+	    g_str_has_prefix (url, "mailto:") ||
+	    strstr (url, ":/")) {
 		return NULL;
 	}
+
+	if (strstr (url, "@")) {
+		return g_strdup_printf ("mailto:%s", url);
+	}
+
+	return g_strdup_printf ("http://%s", url);
 }
 
 void
