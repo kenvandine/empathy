@@ -288,7 +288,7 @@ tp_chat_sender_ready_notify_cb (EmpathyContact *contact,
 	EmpathyTpChatPriv   *priv = GET_PRIV (chat);
 	EmpathyMessage      *message;
 	EmpathyContactReady  ready;
-	EmpathyContact      *sender;
+	EmpathyContact      *sender = NULL;
 	gboolean             removed = FALSE;
 
 	/* Emit all messages queued until we find a message with not
