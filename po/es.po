@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: empathy.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-06-14 03:55+0000\n"
-"PO-Revision-Date: 2008-06-15 13:23+0200\n"
+"POT-Creation-Date: 2008-07-04 03:55+0000\n"
+"PO-Revision-Date: 2008-07-04 15:42+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -628,30 +628,34 @@ msgstr "El tema se ha establecido a: %s"
 msgid "No topic defined"
 msgstr "No se ha definido el tema"
 
-#: ../libempathy-gtk/empathy-chat.c:950
+#: ../libempathy-gtk/empathy-chat.c:959
 msgid "Insert Smiley"
 msgstr "Insertar emoticono"
 
-#: ../libempathy-gtk/empathy-chat.c:997
+#: ../libempathy-gtk/empathy-chat.c:975
+msgid "_Send"
+msgstr "E_nviar"
+
+#: ../libempathy-gtk/empathy-chat.c:1009
 msgid "_Check Word Spelling..."
 msgstr "_Comprobar ortografía…"
 
-#: ../libempathy-gtk/empathy-chat.c:1099
+#: ../libempathy-gtk/empathy-chat.c:1115
 #, c-format
 msgid "%s has joined the room"
 msgstr "%s ha entrado en la sala"
 
-#: ../libempathy-gtk/empathy-chat.c:1102
+#: ../libempathy-gtk/empathy-chat.c:1118
 #, c-format
 msgid "%s has left the room"
 msgstr "%s ha dejado la sala"
 
-#: ../libempathy-gtk/empathy-chat.c:1216 ../src/empathy.c:122
+#: ../libempathy-gtk/empathy-chat.c:1232 ../src/empathy.c:122
 #: ../src/empathy-call-window.c:403
 msgid "Disconnected"
 msgstr "Desconectado"
 
-#: ../libempathy-gtk/empathy-chat.c:1588
+#: ../libempathy-gtk/empathy-chat.c:1604
 msgid "Connected"
 msgstr "Conectado"
 
