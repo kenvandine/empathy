@@ -718,7 +718,8 @@ empathy_contact_equal (gconstpointer v1,
 	id_a = empathy_contact_get_id (EMPATHY_CONTACT (v1));
 	id_b = empathy_contact_get_id (EMPATHY_CONTACT (v2));
 
-	return empathy_account_equal (account_a, account_b) && g_str_equal (id_a, id_b);
+	return empathy_account_equal (account_a, account_b) &&
+	       !tp_strdiff (id_a, id_b);
 }
 
 guint
@@ -731,7 +732,8 @@ empathy_contact_hash (gconstpointer key)
 	priv = GET_PRIV (EMPATHY_CONTACT (key));
 
 	if (priv->hash == 0) {
-		priv->hash = empathy_account_hash (priv->account) + g_str_hash (priv->id);
+		priv->hash = empathy_account_hash (priv->account) ^
+			     g_str_hash (priv->id);
 	}
 
 	return priv->hash;
