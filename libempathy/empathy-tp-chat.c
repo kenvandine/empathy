@@ -300,7 +300,8 @@ tp_chat_sender_ready_notify_cb (EmpathyContact *contact,
 		sender = empathy_message_get_sender (message);
 		ready = empathy_contact_get_ready (sender);
 
-		if (!(ready & EMPATHY_CONTACT_READY_NAME)) {
+		if ((ready & EMPATHY_CONTACT_READY_NAME) == 0 ||
+		    (ready & EMPATHY_CONTACT_READY_ID) == 0) {
 			break;
 		}
 
@@ -342,7 +343,8 @@ tp_chat_emit_or_queue_message (EmpathyTpChat  *chat,
 
 	sender = empathy_message_get_sender (message);
 	ready = empathy_contact_get_ready (sender);
-	if (ready & EMPATHY_CONTACT_READY_NAME) {
+	if ((ready & EMPATHY_CONTACT_READY_NAME) &&
+	    (ready & EMPATHY_CONTACT_READY_ID)) {
 		DEBUG ("Message queue empty and sender ready");
 		g_signal_emit (chat, signals[MESSAGE_RECEIVED], 0, message);
 		return;
