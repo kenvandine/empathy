@@ -292,8 +292,9 @@ tp_chat_sender_ready_notify_cb (EmpathyContact *contact,
 	gboolean             removed = FALSE;
 
 	/* Emit all messages queued until we find a message with not
-	 * ready sender. When leaving this loop, sender is the first not ready
-	 * contact queued and removed tells if at least one message got removed
+	 * ready sender (in case of a MUC we could have more than one sender).
+	 * When leaving this loop, sender is the first not ready contact queued
+	 * and removed tells if at least one message got removed
 	 * from the queue. */
 	while (priv->message_queue) {
 		message = priv->message_queue->data;
@@ -314,11 +315,15 @@ tp_chat_sender_ready_notify_cb (EmpathyContact *contact,
 	}
 
 	if (removed) {
+		/* We removed at least one message from the queue, disconnect
+		 * the ready signal from the previous contact */
 		g_signal_handlers_disconnect_by_func (contact,
 						      tp_chat_sender_ready_notify_cb,
 						      chat);
 
 		if (priv->message_queue) {
+			/* We still have queued message, connect the ready
+			 * signal on the new first message sender. */
 			g_signal_connect (sender, "notify::ready",
 					  G_CALLBACK (tp_chat_sender_ready_notify_cb),
 					  chat);
