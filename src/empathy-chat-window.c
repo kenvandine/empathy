@@ -287,6 +287,9 @@ chat_window_update (EmpathyChatWindow *window)
 	gint                   page_num;
 	const gchar           *name;
 	guint                  n_chats;
+	GdkPixbuf             *icon;
+	EmpathyContact        *remote_contact;
+	gboolean               avatar_in_icon;
 
 	/* Get information */
 	page_num = gtk_notebook_get_current_page (GTK_NOTEBOOK (priv->notebook));
@@ -323,7 +326,18 @@ chat_window_update (EmpathyChatWindow *window)
 		gtk_window_set_icon_name (GTK_WINDOW (priv->dialog),
 					  EMPATHY_IMAGE_MESSAGE);
 	} else {
-		gtk_window_set_icon_name (GTK_WINDOW (priv->dialog), NULL);
+		empathy_conf_get_bool (empathy_conf_get (),
+				       EMPATHY_PREFS_CHAT_AVATAR_IN_ICON,
+				       &avatar_in_icon);
+
+		if (n_chats == 1 && avatar_in_icon) {
+			remote_contact = empathy_chat_get_remote_contact (priv->current_chat);
+			icon = empathy_pixbuf_avatar_from_contact_scaled (remote_contact, 0, 0);
+			gtk_window_set_icon (GTK_WINDOW (priv->dialog), icon);
+			g_object_unref (icon);
+		} else {
+			gtk_window_set_icon_name (GTK_WINDOW (priv->dialog), NULL);
+		}
 	}
 }
 

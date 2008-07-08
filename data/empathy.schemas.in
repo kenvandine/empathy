@@ -247,6 +247,20 @@
     </schema>
 
     <schema>
+      <key>/schemas/apps/empathy/conversation/avatar_in_icon</key>
+      <applyto>/apps/empathy/conversation/avatar_in_icon</applyto>
+      <owner>empathy</owner>
+      <type>bool</type>
+      <default>false</default>
+      <locale name="C">
+        <short>Empathy should use the avatar of the contact as the chat window icon</short>
+	<long>
+	Whether or not Empathy should use the avatar of the contact as the chat window icon.
+        </long>
+      </locale>
+    </schema>
+
+    <schema>
       <key>/schemas/apps/empathy/hints/close_main_window</key>
       <applyto>/apps/empathy/hints/close_main_window</applyto>
       <owner>empathy</owner>
