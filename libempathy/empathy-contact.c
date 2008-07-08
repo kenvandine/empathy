@@ -199,14 +199,10 @@ contact_finalize (GObject *object)
   g_free (priv->presence_message);
 
   if (priv->avatar)
-    {
       empathy_avatar_unref (priv->avatar);
-    }
 
   if (priv->account)
-    {
       g_object_unref (priv->account);
-    }
 
   G_OBJECT_CLASS (empathy_contact_parent_class)->finalize (object);
 }
@@ -221,42 +217,43 @@ contact_get_property (GObject *object,
 
   priv = GET_PRIV (object);
 
-  switch (param_id) {
-  case PROP_ID:
-    g_value_set_string (value, priv->id);
-    break;
-  case PROP_NAME:
-    g_value_set_string (value,
-        empathy_contact_get_name (EMPATHY_CONTACT (object)));
-    break;
-  case PROP_AVATAR:
-    g_value_set_boxed (value, priv->avatar);
-    break;
-  case PROP_ACCOUNT:
-    g_value_set_object (value, priv->account);
-    break;
-  case PROP_PRESENCE:
-    g_value_set_uint (value, priv->presence);
-    break;
-  case PROP_PRESENCE_MESSAGE:
-    g_value_set_string (value, priv->presence_message);
-    break;
-  case PROP_HANDLE:
-    g_value_set_uint (value, priv->handle);
-    break;
-  case PROP_CAPABILITIES:
-    g_value_set_flags (value, priv->capabilities);
-    break;
-  case PROP_IS_USER:
-    g_value_set_boolean (value, priv->is_user);
-    break;
-  case PROP_READY:
-    g_value_set_flags (value, priv->ready);
-    break;
-  default:
-    G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
-    break;
-  };
+  switch (param_id)
+    {
+      case PROP_ID:
+        g_value_set_string (value, priv->id);
+        break;
+      case PROP_NAME:
+        g_value_set_string (value,
+            empathy_contact_get_name (EMPATHY_CONTACT (object)));
+        break;
+      case PROP_AVATAR:
+        g_value_set_boxed (value, priv->avatar);
+        break;
+      case PROP_ACCOUNT:
+        g_value_set_object (value, priv->account);
+        break;
+      case PROP_PRESENCE:
+        g_value_set_uint (value, priv->presence);
+        break;
+      case PROP_PRESENCE_MESSAGE:
+        g_value_set_string (value, priv->presence_message);
+        break;
+      case PROP_HANDLE:
+        g_value_set_uint (value, priv->handle);
+        break;
+      case PROP_CAPABILITIES:
+        g_value_set_flags (value, priv->capabilities);
+        break;
+      case PROP_IS_USER:
+        g_value_set_boolean (value, priv->is_user);
+        break;
+      case PROP_READY:
+        g_value_set_flags (value, priv->ready);
+        break;
+      default:
+        G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
+        break;
+    };
 }
 
 static void
@@ -269,47 +266,48 @@ contact_set_property (GObject *object,
 
   priv = GET_PRIV (object);
 
-  switch (param_id) {
-  case PROP_ID:
-    empathy_contact_set_id (EMPATHY_CONTACT (object),
+  switch (param_id)
+    {
+      case PROP_ID:
+        empathy_contact_set_id (EMPATHY_CONTACT (object),
         g_value_get_string (value));
-    break;
-  case PROP_NAME:
-    empathy_contact_set_name (EMPATHY_CONTACT (object),
+        break;
+      case PROP_NAME:
+        empathy_contact_set_name (EMPATHY_CONTACT (object),
         g_value_get_string (value));
-    break;
-  case PROP_AVATAR:
-    empathy_contact_set_avatar (EMPATHY_CONTACT (object),
+        break;
+      case PROP_AVATAR:
+        empathy_contact_set_avatar (EMPATHY_CONTACT (object),
         g_value_get_boxed (value));
-    break;
-  case PROP_ACCOUNT:
-    empathy_contact_set_account (EMPATHY_CONTACT (object),
+        break;
+      case PROP_ACCOUNT:
+        empathy_contact_set_account (EMPATHY_CONTACT (object),
         MC_ACCOUNT (g_value_get_object (value)));
-    break;
-  case PROP_PRESENCE:
-    empathy_contact_set_presence (EMPATHY_CONTACT (object),
+        break;
+      case PROP_PRESENCE:
+        empathy_contact_set_presence (EMPATHY_CONTACT (object),
         g_value_get_uint (value));
-    break;
-  case PROP_PRESENCE_MESSAGE:
-    empathy_contact_set_presence_message (EMPATHY_CONTACT (object),
+        break;
+      case PROP_PRESENCE_MESSAGE:
+        empathy_contact_set_presence_message (EMPATHY_CONTACT (object),
         g_value_get_string (value));
-    break;
-  case PROP_HANDLE:
-    empathy_contact_set_handle (EMPATHY_CONTACT (object),
+        break;
+      case PROP_HANDLE:
+        empathy_contact_set_handle (EMPATHY_CONTACT (object),
         g_value_get_uint (value));
-    break;
-  case PROP_CAPABILITIES:
-    empathy_contact_set_capabilities (EMPATHY_CONTACT (object),
+        break;
+      case PROP_CAPABILITIES:
+        empathy_contact_set_capabilities (EMPATHY_CONTACT (object),
         g_value_get_flags (value));
-    break;
-  case PROP_IS_USER:
-    empathy_contact_set_is_user (EMPATHY_CONTACT (object),
+        break;
+      case PROP_IS_USER:
+        empathy_contact_set_is_user (EMPATHY_CONTACT (object),
         g_value_get_boolean (value));
-    break;
-  default:
-    G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
-    break;
-  };
+        break;
+      default:
+        G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
+        break;
+    };
 }
 
 static void
@@ -378,9 +376,7 @@ empathy_contact_set_id (EmpathyContact *contact,
 
       g_object_notify (G_OBJECT (contact), "id");
       if (G_STR_EMPTY (priv->name))
-        {
           g_object_notify (G_OBJECT (contact), "name");
-        }
     }
   contact_set_ready_flag (contact, EMPATHY_CONTACT_READY_ID);
 
@@ -397,9 +393,7 @@ empathy_contact_get_name (EmpathyContact *contact)
   priv = GET_PRIV (contact);
 
   if (G_STR_EMPTY (priv->name))
-    {
       return empathy_contact_get_id (contact);
-    }
 
   return priv->name;
 }
@@ -457,9 +451,7 @@ empathy_contact_set_avatar (EmpathyContact *contact,
     }
 
   if (avatar)
-    {
       priv->avatar = empathy_avatar_ref (avatar);
-    }
 
   g_object_notify (G_OBJECT (contact), "avatar");
 }
@@ -491,9 +483,7 @@ empathy_contact_set_account (EmpathyContact *contact,
     return;
 
   if (priv->account)
-    {
       g_object_unref (priv->account);
-    }
   priv->account = g_object_ref (account);
 
   g_object_notify (G_OBJECT (contact), "account");
@@ -687,7 +677,7 @@ empathy_contact_can_voip (EmpathyContact *contact)
   priv = GET_PRIV (contact);
 
   return priv->capabilities & (EMPATHY_CAPABILITIES_AUDIO |
-             EMPATHY_CAPABILITIES_VIDEO);
+      EMPATHY_CAPABILITIES_VIDEO);
 }
 
 EmpathyContactReady
@@ -721,7 +711,7 @@ empathy_contact_equal (gconstpointer v1,
   id_b = empathy_contact_get_id (EMPATHY_CONTACT (v2));
 
   return empathy_account_equal (account_a, account_b) &&
-         !tp_strdiff (id_a, id_b);
+      !tp_strdiff (id_a, id_b);
 }
 
 guint
@@ -733,10 +723,11 @@ empathy_contact_hash (gconstpointer key)
 
   priv = GET_PRIV (EMPATHY_CONTACT (key));
 
-  if (priv->hash == 0) {
-    priv->hash = empathy_account_hash (priv->account) ^
-           g_str_hash (priv->id);
-  }
+  if (priv->hash == 0)
+    {
+      priv->hash = empathy_account_hash (priv->account) ^
+          g_str_hash (priv->id);
+    }
 
   return priv->hash;
 }
@@ -753,9 +744,8 @@ contact_is_ready_func (GObject *contact,
   /* When the name is NULL, empathy_contact_get_name() fallback to the id.
    * When the caller want to wait the name to be ready, it also want to wait
    * the id to be ready in case of fallback. */
-  if ((ready & EMPATHY_CONTACT_READY_NAME) && G_STR_EMPTY (priv->name)) {
-    ready |= EMPATHY_CONTACT_READY_ID;
-  }
+  if ((ready & EMPATHY_CONTACT_READY_NAME) && G_STR_EMPTY (priv->name))
+      ready |= EMPATHY_CONTACT_READY_ID;
 
   return (priv->ready & ready) == ready;
 }
@@ -837,9 +827,7 @@ empathy_contact_load_avatar_data (EmpathyContact *contact,
           g_clear_error (&error);
         }
       else
-        {
           DEBUG ("Avatar saved to %s", filename);
-        }
     }
   g_free (filename);
 }

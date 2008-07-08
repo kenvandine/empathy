@@ -121,9 +121,9 @@ gboolean empathy_contact_load_avatar_cache (EmpathyContact *contact,
 #define EMPATHY_TYPE_AVATAR (empathy_avatar_get_type ())
 GType empathy_avatar_get_type (void) G_GNUC_CONST;
 EmpathyAvatar * empathy_avatar_new (guchar *data,
-              gsize len,
-              gchar *format,
-              gchar *token);
+    gsize len,
+    gchar *format,
+    gchar *token);
 EmpathyAvatar * empathy_avatar_ref (EmpathyAvatar *avatar);
 void empathy_avatar_unref (EmpathyAvatar *avatar);
 

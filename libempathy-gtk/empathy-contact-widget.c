@@ -226,9 +226,7 @@ empathy_contact_widget_get_contact (GtkWidget *widget)
 
   information = g_object_get_data (G_OBJECT (widget), "EmpathyContactWidget");
   if (!information)
-    {
       return NULL;
-    }
 
   return information->contact;
 }
@@ -266,9 +264,7 @@ empathy_contact_widget_set_account_filter (
 
   chooser = EMPATHY_ACCOUNT_CHOOSER (information->widget_account);
   if (chooser)
-    {
       empathy_account_chooser_set_filter (chooser, filter, user_data);
-    }
 }
   
 static void
@@ -321,9 +317,7 @@ contact_widget_set_contact (EmpathyContactWidget *information,
 
   contact_widget_remove_contact (information);
   if (contact)
-    {
       information->contact = g_object_ref (contact);
-    }
 
   /* Update information for widgets */
   contact_widget_contact_update (information);
@@ -379,9 +373,7 @@ save_avatar_menu_activate_cb (GtkWidget *widget,
 
       splitted = g_strsplit (avatar->format, "/", 2);
       if (splitted[0] != NULL && splitted[1] != NULL)
-        {
           ext = g_strdup (splitted[1]);
-        }
 
       g_strfreev (splitted);
     }
@@ -637,13 +629,9 @@ contact_widget_contact_update (EmpathyContactWidget *information)
 
   /* Update id widget */
   if (information->flags & EMPATHY_CONTACT_WIDGET_EDIT_ID)
-    {
       gtk_entry_set_text (GTK_ENTRY (information->widget_id), id ? id : "");
-    }
   else
-    {
       gtk_label_set_label (GTK_LABEL (information->widget_id), id ? id : "");
-    }
 
   /* Update other widgets */
   if (information->contact)
@@ -675,7 +663,7 @@ contact_widget_change_contact (EmpathyContactWidget *information)
   account = empathy_account_chooser_get_account (
       EMPATHY_ACCOUNT_CHOOSER (information->widget_account));
   if (!account)
-    return;
+      return;
 
   if (information->flags & EMPATHY_CONTACT_WIDGET_EDIT_ID)
     {
@@ -683,16 +671,16 @@ contact_widget_change_contact (EmpathyContactWidget *information)
 
       id = gtk_entry_get_text (GTK_ENTRY (information->widget_id));
       if (G_STR_EMPTY (id))
-        return;
+          return;
 
       contact = empathy_contact_factory_get_from_id (information->factory,
           account, id);
     }
   else
     {
-    contact = empathy_contact_factory_get_user (information->factory,
-        account);
-  }
+      contact = empathy_contact_factory_get_user (information->factory,
+          account);
+    }
 
   if (contact)
     {
@@ -762,15 +750,11 @@ static void
 contact_widget_name_notify_cb (EmpathyContactWidget *information)
 {
   if (GTK_IS_ENTRY (information->widget_alias))
-    {
       gtk_entry_set_text (GTK_ENTRY (information->widget_alias),
           empathy_contact_get_name (information->contact));
-    }
   else
-    {
       gtk_label_set_label (GTK_LABEL (information->widget_alias),
           empathy_contact_get_name (information->contact));
-    }
 }
 
 static void
@@ -788,23 +772,22 @@ contact_widget_avatar_notify_cb (EmpathyContactWidget *information)
 {
   EmpathyAvatar *avatar = NULL;
 
-  if (information->contact) {
-    avatar = empathy_contact_get_avatar (information->contact);
-  }
-  if (information->flags & EMPATHY_CONTACT_WIDGET_EDIT_AVATAR) {
-    g_signal_handlers_block_by_func (information->widget_avatar,
-             contact_widget_avatar_changed_cb,
-             information);
-    empathy_avatar_chooser_set (
-        EMPATHY_AVATAR_CHOOSER (information->widget_avatar), avatar);
-    g_signal_handlers_unblock_by_func (information->widget_avatar,
-        contact_widget_avatar_changed_cb, information);
-  }
-  else
+  if (information->contact)
+      avatar = empathy_contact_get_avatar (information->contact);
+
+  if (information->flags & EMPATHY_CONTACT_WIDGET_EDIT_AVATAR)
     {
+      g_signal_handlers_block_by_func (information->widget_avatar,
+          contact_widget_avatar_changed_cb,
+          information);
+      empathy_avatar_chooser_set (
+          EMPATHY_AVATAR_CHOOSER (information->widget_avatar), avatar);
+      g_signal_handlers_unblock_by_func (information->widget_avatar,
+          contact_widget_avatar_changed_cb, information);
+    }
+  else
       empathy_avatar_image_set (
           EMPATHY_AVATAR_IMAGE (information->widget_avatar), avatar);
-    }
 }
 
 static void
@@ -830,9 +813,7 @@ contact_widget_groups_update (EmpathyContactWidget *information)
       gtk_widget_show (information->vbox_groups);
     }
   else
-    {
       gtk_widget_hide (information->vbox_groups);
-    }
 }
 
 static void
@@ -902,9 +883,7 @@ contact_widget_model_populate_columns (EmpathyContactWidget *information)
   gtk_tree_view_column_set_clickable (GTK_TREE_VIEW_COLUMN (column), TRUE);
 
   if (information->renderer)
-    {
       g_object_unref (information->renderer);
-    }
 
   information->renderer = g_object_ref (renderer);
 }
@@ -968,7 +947,7 @@ contact_widget_model_find_name (EmpathyContactWidget *information,
   FindName data;
 
   if (G_STR_EMPTY (name))
-    return FALSE;
+      return FALSE;
 
   data.information = information;
   data.name = name;
@@ -1003,7 +982,7 @@ contact_widget_model_find_name_foreach (GtkTreeModel *model,
       -1);
 
   if (!name)
-    return FALSE;
+      return FALSE;
 
   if (data->name && strcmp (data->name, name) == 0)
     {
@@ -1050,21 +1029,20 @@ contact_widget_cell_toggled (GtkCellRendererToggle *cell,
 
   if (group)
     {
-    if (enabled)
-      {
-        empathy_contact_list_remove_from_group (
-            EMPATHY_CONTACT_LIST (information->manager), information->contact,
-            group);
+      if (enabled)
+        {
+          empathy_contact_list_remove_from_group (
+              EMPATHY_CONTACT_LIST (information->manager), information->contact,
+              group);
+        }
+      else
+        {
+          empathy_contact_list_add_to_group (
+              EMPATHY_CONTACT_LIST (information->manager), information->contact,
+              group);
+        }
+      g_free (group);
     }
-    else
-      {
-      empathy_contact_list_add_to_group (
-          EMPATHY_CONTACT_LIST (information->manager), information->contact,
-          group);
-    }
-
-    g_free (group);
-  }
 }
 
 static void
@@ -1077,14 +1055,10 @@ contact_widget_entry_group_changed_cb (GtkEditable *editable,
   group = gtk_entry_get_text (GTK_ENTRY (information->entry_group));
 
   if (contact_widget_model_find_name (information, group, &iter))
-    {
       gtk_widget_set_sensitive (GTK_WIDGET (information->button_group), FALSE);
-    }
   else
-    {
       gtk_widget_set_sensitive (GTK_WIDGET (information->button_group),
           !G_STR_EMPTY (group));
-    }
 }
 
 static void
