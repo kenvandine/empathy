@@ -192,6 +192,8 @@ empathy_contact_information_dialog_show (EmpathyContact *contact,
 	gtk_dialog_add_action_widget (GTK_DIALOG (dialog),
 				      button,
 				      GTK_RESPONSE_CLOSE);
+	GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+	gtk_window_set_default (GTK_WINDOW (dialog), button);
 	gtk_widget_show (button);
 
 	/* Contact info widget */

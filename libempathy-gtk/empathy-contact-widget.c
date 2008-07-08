@@ -406,6 +406,8 @@ contact_widget_contact_setup (EmpathyContactWidget *information)
 		g_signal_connect (information->widget_alias, "focus-out-event",
 				  G_CALLBACK (contact_widget_entry_alias_focus_event_cb),
 				  information);
+		/* Make return activate the window default (the Close button) */
+		gtk_entry_set_activates_default (GTK_ENTRY (information->widget_alias), TRUE);
 	} else {
 		information->widget_alias = gtk_label_new (NULL);
 		gtk_label_set_selectable (GTK_LABEL (information->widget_alias), TRUE);
