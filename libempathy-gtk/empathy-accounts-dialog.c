@@ -919,7 +919,7 @@ accounts_dialog_button_remove_clicked_cb (GtkWidget            *button,
 	}
 	message_dialog = gtk_message_dialog_new
 		(GTK_WINDOW (dialog->window),
-		 GTK_DIALOG_DESTROY_WITH_PARENT,
+		 GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
 		 GTK_MESSAGE_QUESTION,
 		 GTK_BUTTONS_NONE,
 		 _("You are about to remove your %s account!\n"
