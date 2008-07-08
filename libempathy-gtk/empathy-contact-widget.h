@@ -31,19 +31,19 @@ G_BEGIN_DECLS
 
 typedef enum
 {
-	EMPATHY_CONTACT_WIDGET_EDIT_NONE    = 0,
-	EMPATHY_CONTACT_WIDGET_EDIT_ALIAS   = 1 << 0,
-	EMPATHY_CONTACT_WIDGET_EDIT_AVATAR  = 1 << 1,
-	EMPATHY_CONTACT_WIDGET_EDIT_ACCOUNT = 1 << 2,
-	EMPATHY_CONTACT_WIDGET_EDIT_ID      = 1 << 3,
-	EMPATHY_CONTACT_WIDGET_EDIT_GROUPS  = 1 << 4,
+  EMPATHY_CONTACT_WIDGET_EDIT_NONE    = 0,
+  EMPATHY_CONTACT_WIDGET_EDIT_ALIAS   = 1 << 0,
+  EMPATHY_CONTACT_WIDGET_EDIT_AVATAR  = 1 << 1,
+  EMPATHY_CONTACT_WIDGET_EDIT_ACCOUNT = 1 << 2,
+  EMPATHY_CONTACT_WIDGET_EDIT_ID      = 1 << 3,
+  EMPATHY_CONTACT_WIDGET_EDIT_GROUPS  = 1 << 4,
 } EmpathyContactWidgetFlags;
 
 GtkWidget * empathy_contact_widget_new (EmpathyContact *contact,
     EmpathyContactWidgetFlags flags);
 EmpathyContact *empathy_contact_widget_get_contact (GtkWidget *widget);
 void empathy_contact_widget_set_contact (GtkWidget *widget,
-							   EmpathyContact *contact);
+    EmpathyContact *contact);
 void empathy_contact_widget_set_account_filter (GtkWidget *widget,
     EmpathyAccountChooserFilterFunc filter, gpointer user_data);
 
