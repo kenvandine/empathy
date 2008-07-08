@@ -45,103 +45,107 @@
 /* Delay before updating the widget when the id entry changed (seconds) */
 #define ID_CHANGED_TIMEOUT 1
 
-typedef struct {
-	EmpathyContactFactory    *factory;
-	EmpathyContactManager    *manager;
-	EmpathyContact           *contact;
+typedef struct
+{
+	EmpathyContactFactory *factory;
+	EmpathyContactManager *manager;
+	EmpathyContact *contact;
 	EmpathyContactWidgetFlags flags;
-	GtkCellRenderer          *renderer;
-	guint                     widget_id_timeout;
+	GtkCellRenderer *renderer;
+	guint widget_id_timeout;
 
-	GtkWidget                *vbox_contact_widget;
+	GtkWidget *vbox_contact_widget;
 
 	/* Contact */
-	GtkWidget                *vbox_contact;
-	GtkWidget                *widget_avatar;
-	GtkWidget                *widget_account;
-	GtkWidget                *widget_id;
-	GtkWidget                *widget_alias;
-	GtkWidget                *label_alias;
-	GtkWidget                *entry_alias;
-	GtkWidget                *hbox_presence;
-	GtkWidget                *image_state;
-	GtkWidget                *label_status;
-	GtkWidget                *table_contact;
-	GtkWidget                *vbox_avatar;
+	GtkWidget *vbox_contact;
+	GtkWidget *widget_avatar;
+	GtkWidget *widget_account;
+	GtkWidget *widget_id;
+	GtkWidget *widget_alias;
+	GtkWidget *label_alias;
+	GtkWidget *entry_alias;
+	GtkWidget *hbox_presence;
+	GtkWidget *image_state;
+	GtkWidget *label_status;
+	GtkWidget *table_contact;
+	GtkWidget *vbox_avatar;
 
 	/* Groups */
-	GtkWidget                *vbox_groups;
-	GtkWidget                *entry_group;
-	GtkWidget                *button_group;
-	GtkWidget                *treeview_groups;
+	GtkWidget *vbox_groups;
+	GtkWidget *entry_group;
+	GtkWidget *button_group;
+	GtkWidget *treeview_groups;
 
 	/* Details */
-	GtkWidget                *vbox_details;
-	GtkWidget                *table_details;
-	GtkWidget                *hbox_details_requested;
+	GtkWidget *vbox_details;
+	GtkWidget *table_details;
+	GtkWidget *hbox_details_requested;
 
 	/* Client */
-	GtkWidget                *vbox_client;
-	GtkWidget                *table_client;
-	GtkWidget                *hbow_client_requested;
+	GtkWidget *vbox_client;
+	GtkWidget *table_client;
+	GtkWidget *hbow_client_requested;
 } EmpathyContactWidget;
 
-typedef struct {
+typedef struct
+{
 	EmpathyContactWidget *information;
-	const gchar          *name;
-	gboolean              found;
-	GtkTreeIter           found_iter;
+	const gchar *name;
+	gboolean found;
+	GtkTreeIter found_iter;
 } FindName;
 
-static void     contact_widget_destroy_cb                 (GtkWidget             *widget,
-							   EmpathyContactWidget  *information);
-static void     contact_widget_remove_contact             (EmpathyContactWidget  *information);
-static void     contact_widget_set_contact                (EmpathyContactWidget  *information,
-							   EmpathyContact         *contact);
-static void     contact_widget_contact_setup              (EmpathyContactWidget  *information);
-static void     contact_widget_contact_update             (EmpathyContactWidget  *information);
-static void     contact_widget_change_contact             (EmpathyContactWidget  *information);
-static void     contact_widget_avatar_changed_cb          (EmpathyAvatarChooser  *chooser,
-							   EmpathyContactWidget  *information);
-static void     contact_widget_account_changed_cb         (GtkComboBox           *widget,
-							   EmpathyContactWidget  *information);
-static gboolean contact_widget_id_focus_out_cb            (GtkWidget             *widget,
-							   GdkEventFocus         *event,
-							   EmpathyContactWidget  *information);
-static gboolean contact_widget_entry_alias_focus_event_cb (GtkEditable           *editable,
-							   GdkEventFocus         *event,
-							   EmpathyContactWidget  *information);
-static void     contact_widget_name_notify_cb             (EmpathyContactWidget  *information);
-static void     contact_widget_presence_notify_cb         (EmpathyContactWidget  *information);
-static void     contact_widget_avatar_notify_cb           (EmpathyContactWidget  *information);
-static void     contact_widget_groups_setup               (EmpathyContactWidget  *information);
-static void     contact_widget_groups_update              (EmpathyContactWidget  *information);
-static void     contact_widget_model_setup                (EmpathyContactWidget  *information);
-static void     contact_widget_model_populate_columns     (EmpathyContactWidget  *information);
-static void     contact_widget_groups_populate_data       (EmpathyContactWidget  *information);
-static void     contact_widget_groups_notify_cb           (EmpathyContactWidget  *information);
-static gboolean contact_widget_model_find_name            (EmpathyContactWidget  *information,
-							   const gchar           *name,
-							   GtkTreeIter           *iter);
-static gboolean contact_widget_model_find_name_foreach    (GtkTreeModel          *model,
-							   GtkTreePath           *path,
-							   GtkTreeIter           *iter,
-							   FindName              *data);
-static void     contact_widget_cell_toggled               (GtkCellRendererToggle *cell,
-							   gchar                 *path_string,
-							   EmpathyContactWidget  *information);
-static void     contact_widget_entry_group_changed_cb     (GtkEditable           *editable,
-							   EmpathyContactWidget  *information);
-static void     contact_widget_entry_group_activate_cb    (GtkEntry              *entry,
-							   EmpathyContactWidget  *information);
-static void     contact_widget_button_group_clicked_cb    (GtkButton             *button,
-							   EmpathyContactWidget  *information);
-static void     contact_widget_details_setup              (EmpathyContactWidget  *information);
-static void     contact_widget_details_update             (EmpathyContactWidget  *information);
-static void     contact_widget_client_setup               (EmpathyContactWidget  *information);
-static void     contact_widget_client_update              (EmpathyContactWidget  *information);
+static void contact_widget_destroy_cb (GtkWidget *widget,
+    EmpathyContactWidget *information);
+static void contact_widget_remove_contact (EmpathyContactWidget *information);
+static void contact_widget_set_contact (EmpathyContactWidget *information,
+    EmpathyContact *contact);
+static void contact_widget_contact_setup (EmpathyContactWidget *information);
+static void contact_widget_contact_update (EmpathyContactWidget *information);
+static void contact_widget_change_contact (EmpathyContactWidget *information);
+static void contact_widget_avatar_changed_cb (EmpathyAvatarChooser *chooser,
+    EmpathyContactWidget *information);
+static void contact_widget_account_changed_cb (GtkComboBox *widget,
+    EmpathyContactWidget *information);
+static gboolean contact_widget_id_focus_out_cb (GtkWidget *widget,
+    GdkEventFocus *event, EmpathyContactWidget *information);
+static gboolean contact_widget_entry_alias_focus_event_cb (
+    GtkEditable *editable, GdkEventFocus *event,
+    EmpathyContactWidget *information);
+static void contact_widget_name_notify_cb (EmpathyContactWidget *information);
+static void contact_widget_presence_notify_cb (
+    EmpathyContactWidget *information);
+static void contact_widget_avatar_notify_cb (
+    EmpathyContactWidget *information);
+static void contact_widget_groups_setup (
+    EmpathyContactWidget *information);
+static void contact_widget_groups_update (EmpathyContactWidget *information);
+static void contact_widget_model_setup (EmpathyContactWidget *information);
+static void contact_widget_model_populate_columns (
+    EmpathyContactWidget *information);
+static void contact_widget_groups_populate_data (
+    EmpathyContactWidget *information);
+static void contact_widget_groups_notify_cb (
+    EmpathyContactWidget *information);
+static gboolean contact_widget_model_find_name (
+    EmpathyContactWidget *information,const gchar *name, GtkTreeIter *iter);
+static gboolean contact_widget_model_find_name_foreach (GtkTreeModel *model,
+    GtkTreePath *path, GtkTreeIter *iter, FindName *data);
+static void contact_widget_cell_toggled (GtkCellRendererToggle *cell,
+    gchar *path_string, EmpathyContactWidget *information);
+static void contact_widget_entry_group_changed_cb (GtkEditable *editable,
+    EmpathyContactWidget *information);
+static void contact_widget_entry_group_activate_cb (GtkEntry *entry,
+    EmpathyContactWidget *information);
+static void contact_widget_button_group_clicked_cb (GtkButton *button,
+    EmpathyContactWidget *information);
+static void contact_widget_details_setup (EmpathyContactWidget *information);
+static void contact_widget_details_update (EmpathyContactWidget *information);
+static void contact_widget_client_setup (EmpathyContactWidget *information);
+static void contact_widget_client_update (EmpathyContactWidget *information);
 
-enum {
+enum
+{
 	COL_NAME,
 	COL_ENABLED,
 	COL_EDITABLE,
@@ -149,56 +153,56 @@ enum {
 };
 
 GtkWidget *
-empathy_contact_widget_new (EmpathyContact           *contact,
-			    EmpathyContactWidgetFlags flags)
+empathy_contact_widget_new (EmpathyContact *contact,
+                            EmpathyContactWidgetFlags flags)
 {
 	EmpathyContactWidget *information;
-	GladeXML             *glade;
-	gchar                *filename;
+	GladeXML *glade;
+	gchar *filename;
 
 	information = g_slice_new0 (EmpathyContactWidget);
 	information->flags = flags;
 	information->factory = empathy_contact_factory_new ();
 
 	filename = empathy_file_lookup ("empathy-contact-widget.glade",
-					"libempathy-gtk");
+      "libempathy-gtk");
 	glade = empathy_glade_get_file (filename,
-				       "vbox_contact_widget",
-				       NULL,
-				       "vbox_contact_widget", &information->vbox_contact_widget,
-				       "vbox_contact", &information->vbox_contact,
-				       "hbox_presence", &information->hbox_presence,
-				       "label_alias", &information->label_alias,
-				       "image_state", &information->image_state,
-				       "label_status", &information->label_status,
-				       "table_contact", &information->table_contact,
-				       "vbox_avatar", &information->vbox_avatar,
-				       "vbox_groups", &information->vbox_groups,
-				       "entry_group", &information->entry_group,
-				       "button_group", &information->button_group,
-				       "treeview_groups", &information->treeview_groups,
-				       "vbox_details", &information->vbox_details,
-				       "table_details", &information->table_details,
-				       "hbox_details_requested", &information->hbox_details_requested,
-				       "vbox_client", &information->vbox_client,
-				       "table_client", &information->table_client,
-				       "hbox_client_requested", &information->hbow_client_requested,
-				       NULL);
+      "vbox_contact_widget",
+       NULL,
+       "vbox_contact_widget", &information->vbox_contact_widget,
+       "vbox_contact", &information->vbox_contact,
+       "hbox_presence", &information->hbox_presence,
+       "label_alias", &information->label_alias,
+       "image_state", &information->image_state,
+       "label_status", &information->label_status,
+       "table_contact", &information->table_contact,
+       "vbox_avatar", &information->vbox_avatar,
+       "vbox_groups", &information->vbox_groups,
+       "entry_group", &information->entry_group,
+       "button_group", &information->button_group,
+       "treeview_groups", &information->treeview_groups,
+       "vbox_details", &information->vbox_details,
+       "table_details", &information->table_details,
+       "hbox_details_requested", &information->hbox_details_requested,
+       "vbox_client", &information->vbox_client,
+       "table_client", &information->table_client,
+       "hbox_client_requested", &information->hbow_client_requested,
+       NULL);
 	g_free (filename);
 
 	empathy_glade_connect (glade,
-			      information,
-			      "vbox_contact_widget", "destroy", contact_widget_destroy_cb,
-			      "entry_group", "changed", contact_widget_entry_group_changed_cb,
-			      "entry_group", "activate", contact_widget_entry_group_activate_cb,
-			      "button_group", "clicked", contact_widget_button_group_clicked_cb,
-			      NULL);
+      information,
+      "vbox_contact_widget", "destroy", contact_widget_destroy_cb,
+      "entry_group", "changed", contact_widget_entry_group_changed_cb,
+      "entry_group", "activate", contact_widget_entry_group_activate_cb,
+      "button_group", "clicked", contact_widget_button_group_clicked_cb,
+      NULL);
 
 	g_object_unref (glade);
 
 	g_object_set_data (G_OBJECT (information->vbox_contact_widget),
-			   "EmpathyContactWidget",
-			   information);
+      "EmpathyContactWidget",
+			information);
 
 	/* Create widgets */
 	contact_widget_contact_setup (information);
@@ -221,16 +225,17 @@ empathy_contact_widget_get_contact (GtkWidget *widget)
 	g_return_val_if_fail (GTK_IS_WIDGET (widget), NULL);
 
 	information = g_object_get_data (G_OBJECT (widget), "EmpathyContactWidget");
-	if (!information) {
-		return NULL;
-	}
+	if (!information)
+    {
+      return NULL;
+    }
 
 	return information->contact;
 }
 
 void
-empathy_contact_widget_set_contact (GtkWidget      *widget,
-				    EmpathyContact *contact)
+empathy_contact_widget_set_contact (GtkWidget *widget,
+                                    EmpathyContact *contact)
 {
 	EmpathyContactWidget *information;
 
@@ -246,41 +251,45 @@ empathy_contact_widget_set_contact (GtkWidget      *widget,
 }
 
 void
-empathy_contact_widget_set_account_filter (GtkWidget                       *widget,
-					   EmpathyAccountChooserFilterFunc  filter,
-					   gpointer                         user_data)
+empathy_contact_widget_set_account_filter (
+    GtkWidget *widget,
+    EmpathyAccountChooserFilterFunc filter,
+    gpointer user_data)
 {
-	EmpathyContactWidget  *information;
+	EmpathyContactWidget *information;
 	EmpathyAccountChooser *chooser;
 
 	g_return_if_fail (GTK_IS_WIDGET (widget));
 
 	information = g_object_get_data (G_OBJECT (widget), "EmpathyContactWidget");
-	if (!information) {
+	if (!information)
 		return;
-	}
 
 	chooser = EMPATHY_ACCOUNT_CHOOSER (information->widget_account);
-	if (chooser) {
-		empathy_account_chooser_set_filter (chooser, filter, user_data);
-	}
+	if (chooser)
+    {
+      empathy_account_chooser_set_filter (chooser, filter, user_data);
+    }
 }
 	
 static void
-contact_widget_destroy_cb (GtkWidget            *widget,
-			   EmpathyContactWidget *information)
+contact_widget_destroy_cb (GtkWidget *widget,
+                           EmpathyContactWidget *information)
 {
 	contact_widget_remove_contact (information);
 
-	if (information->widget_id_timeout != 0) {
-		g_source_remove (information->widget_id_timeout);
-	}
-	if (information->factory) {
-		g_object_unref (information->factory);
-	}		
-	if (information->manager) {
-		g_object_unref (information->manager);
-	}		
+	if (information->widget_id_timeout != 0)
+    {
+      g_source_remove (information->widget_id_timeout);
+    }
+	if (information->factory)
+    {
+      g_object_unref (information->factory);
+    }		
+	if (information->manager)
+    {
+      g_object_unref (information->manager);
+    }		
 
 	g_slice_free (EmpathyContactWidget, information);
 }
@@ -288,37 +297,34 @@ contact_widget_destroy_cb (GtkWidget            *widget,
 static void
 contact_widget_remove_contact (EmpathyContactWidget *information)
 {
-	if (information->contact) {
-		g_signal_handlers_disconnect_by_func (information->contact,
-						      contact_widget_name_notify_cb,
-						      information);
-		g_signal_handlers_disconnect_by_func (information->contact,
-						      contact_widget_presence_notify_cb,
-						      information);
-		g_signal_handlers_disconnect_by_func (information->contact,
-						      contact_widget_avatar_notify_cb,
-						      information);
-		g_signal_handlers_disconnect_by_func (information->contact,
-						      contact_widget_groups_notify_cb,
-						      information);
+	if (information->contact)
+    {
+      g_signal_handlers_disconnect_by_func (information->contact,
+          contact_widget_name_notify_cb, information);
+      g_signal_handlers_disconnect_by_func (information->contact,
+          contact_widget_presence_notify_cb, information);
+      g_signal_handlers_disconnect_by_func (information->contact,
+          contact_widget_avatar_notify_cb, information);
+      g_signal_handlers_disconnect_by_func (information->contact,
+          contact_widget_groups_notify_cb, information);
 
-		g_object_unref (information->contact);
-		information->contact = NULL;
-	}
+      g_object_unref (information->contact);
+      information->contact = NULL;
+    }
 }
 
 static void
 contact_widget_set_contact (EmpathyContactWidget *information,
-			    EmpathyContact        *contact)
+		                        EmpathyContact *contact)
 {
-	if (contact == information->contact) {
+	if (contact == information->contact)
 		return;
-	}
 
 	contact_widget_remove_contact (information);
-	if (contact) {
-		information->contact = g_object_ref (contact);
-	}
+	if (contact)
+    {
+      information->contact = g_object_ref (contact);
+    }
 
 	/* Update information for widgets */
 	contact_widget_contact_update (information);
@@ -335,17 +341,17 @@ contact_widget_id_activate_timeout (EmpathyContactWidget *self)
 }
 
 static void
-contact_widget_id_changed_cb (GtkEntry             *entry,
+contact_widget_id_changed_cb (GtkEntry *entry,
                               EmpathyContactWidget *self)
 {
-	if (self->widget_id_timeout != 0) {		
-		g_source_remove (self->widget_id_timeout);
-	}
+	if (self->widget_id_timeout != 0)
+    {		
+      g_source_remove (self->widget_id_timeout);
+    }
 
 	self->widget_id_timeout =
 		g_timeout_add_seconds (ID_CHANGED_TIMEOUT,
-				       (GSourceFunc) contact_widget_id_activate_timeout,
-				       self);
+        (GSourceFunc) contact_widget_id_activate_timeout, self);
 }
 
 static void
@@ -357,11 +363,11 @@ save_avatar_menu_activate_cb (GtkWidget *widget,
   gchar *ext = NULL, *filename;
 
   dialog = gtk_file_chooser_dialog_new (_("Save Avatar"),
-                NULL,
-                GTK_FILE_CHOOSER_ACTION_SAVE,
-                GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-                GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
-                NULL);
+      NULL,
+      GTK_FILE_CHOOSER_ACTION_SAVE,
+      GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+      GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
+      NULL);
 
   gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog),
       TRUE);
@@ -413,8 +419,8 @@ save_avatar_menu_activate_cb (GtkWidget *widget,
           GtkWidget *dialog;
 
           dialog = gtk_message_dialog_new (NULL, 0,
-                   GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, 
-                   _("Unable to save avatar"));
+              GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, 
+              _("Unable to save avatar"));
 
           gtk_message_dialog_format_secondary_text (
               GTK_MESSAGE_DIALOG (dialog), "%s", error->message);
@@ -574,158 +580,170 @@ contact_widget_contact_setup (EmpathyContactWidget *information)
 static void
 contact_widget_contact_update (EmpathyContactWidget *information)
 {
-	McAccount   *account = NULL;
+	McAccount *account = NULL;
 	const gchar *id = NULL;
 
 	/* Connect and get info from new contact */
-	if (information->contact) {
-		g_signal_connect_swapped (information->contact, "notify::name",
-					  G_CALLBACK (contact_widget_name_notify_cb),
-					  information);
-		g_signal_connect_swapped (information->contact, "notify::presence",
-					  G_CALLBACK (contact_widget_presence_notify_cb),
-					  information);
-		g_signal_connect_swapped (information->contact, "notify::presence-message",
-					  G_CALLBACK (contact_widget_presence_notify_cb),
-					  information);
-		g_signal_connect_swapped (information->contact, "notify::avatar",
-					  G_CALLBACK (contact_widget_avatar_notify_cb),
-					  information);
+	if (information->contact)
+    {
+      g_signal_connect_swapped (information->contact, "notify::name",
+          G_CALLBACK (contact_widget_name_notify_cb), information);
+      g_signal_connect_swapped (information->contact, "notify::presence",
+          G_CALLBACK (contact_widget_presence_notify_cb), information);
+      g_signal_connect_swapped (information->contact,
+          "notify::presence-message",
+          G_CALLBACK (contact_widget_presence_notify_cb), information);
+      g_signal_connect_swapped (information->contact, "notify::avatar",
+          G_CALLBACK (contact_widget_avatar_notify_cb), information);
 
-		account = empathy_contact_get_account (information->contact);
-		id = empathy_contact_get_id (information->contact);
-	}
+      account = empathy_contact_get_account (information->contact);
+      id = empathy_contact_get_id (information->contact);
+    }
 
 	/* Update account widget */
-	if (information->flags & EMPATHY_CONTACT_WIDGET_EDIT_ACCOUNT) {
-		if (account) {
-			g_signal_handlers_block_by_func (information->widget_account,
-							 contact_widget_account_changed_cb,
-							 information);
-			empathy_account_chooser_set_account (EMPATHY_ACCOUNT_CHOOSER (information->widget_account),
-							    account);
-			g_signal_handlers_unblock_by_func (information->widget_account,
-							   contact_widget_account_changed_cb,
-							   information);
-		}
-	} else {
-		if (account) {
-			const gchar *name;
+	if (information->flags & EMPATHY_CONTACT_WIDGET_EDIT_ACCOUNT)
+    {
+      if (account)
+        {
+          g_signal_handlers_block_by_func (information->widget_account,
+                   contact_widget_account_changed_cb,
+                   information);
+          empathy_account_chooser_set_account (
+              EMPATHY_ACCOUNT_CHOOSER (information->widget_account), account);
+          g_signal_handlers_unblock_by_func (information->widget_account,
+              contact_widget_account_changed_cb, information);
+        }
+    }
+  else
+    {
+      if (account)
+        {
+          const gchar *name;
 
-			name = mc_account_get_display_name (account);
-			gtk_label_set_label (GTK_LABEL (information->widget_account), name);
-		}
-	}
+          name = mc_account_get_display_name (account);
+          gtk_label_set_label (GTK_LABEL (information->widget_account), name);
+        }
+	  }
 
 	/* Update id widget */
-	if (information->flags & EMPATHY_CONTACT_WIDGET_EDIT_ID) {
-		gtk_entry_set_text (GTK_ENTRY (information->widget_id), id ? id : "");
-	} else {
-		gtk_label_set_label (GTK_LABEL (information->widget_id), id ? id : "");
-	}
-	/* Update other widgets */
-	if (information->contact) {
-		contact_widget_name_notify_cb (information);
-		contact_widget_presence_notify_cb (information);
-		contact_widget_avatar_notify_cb (information);
+	if (information->flags & EMPATHY_CONTACT_WIDGET_EDIT_ID)
+    {
+		  gtk_entry_set_text (GTK_ENTRY (information->widget_id), id ? id : "");
+	  }
+  else
+    {
+      gtk_label_set_label (GTK_LABEL (information->widget_id), id ? id : "");
+    }
 
-		gtk_widget_show (information->label_alias);
-		gtk_widget_show (information->widget_alias);
-		gtk_widget_show (information->hbox_presence);
-		gtk_widget_show (information->widget_avatar);
-	} else {
-		gtk_widget_hide (information->label_alias);
-		gtk_widget_hide (information->widget_alias);
-		gtk_widget_hide (information->hbox_presence);
-		gtk_widget_hide (information->widget_avatar);
-	}
+	/* Update other widgets */
+	if (information->contact)
+    {
+      contact_widget_name_notify_cb (information);
+      contact_widget_presence_notify_cb (information);
+      contact_widget_avatar_notify_cb (information);
+
+      gtk_widget_show (information->label_alias);
+      gtk_widget_show (information->widget_alias);
+      gtk_widget_show (information->hbox_presence);
+      gtk_widget_show (information->widget_avatar);
+    }
+  else
+    {
+      gtk_widget_hide (information->label_alias);
+      gtk_widget_hide (information->widget_alias);
+      gtk_widget_hide (information->hbox_presence);
+      gtk_widget_hide (information->widget_avatar);
+    }
 }
 
 static void
 contact_widget_change_contact (EmpathyContactWidget *information)
 {
 	EmpathyContact *contact;
-	McAccount      *account;
+	McAccount *account;
 
-	account = empathy_account_chooser_get_account (EMPATHY_ACCOUNT_CHOOSER (information->widget_account));
-	if (!account) {
+	account = empathy_account_chooser_get_account (
+      EMPATHY_ACCOUNT_CHOOSER (information->widget_account));
+	if (!account)
 		return;
-	}
 
-	if (information->flags & EMPATHY_CONTACT_WIDGET_EDIT_ID) {
-		const gchar *id;
+	if (information->flags & EMPATHY_CONTACT_WIDGET_EDIT_ID)
+    {
+      const gchar *id;
 
-		id = gtk_entry_get_text (GTK_ENTRY (information->widget_id));
-		if (G_STR_EMPTY (id)) {
-			return;
-		}
+      id = gtk_entry_get_text (GTK_ENTRY (information->widget_id));
+      if (G_STR_EMPTY (id))
+        return;
 
-		contact = empathy_contact_factory_get_from_id (information->factory,
-							       account, id);
-	} else {
+      contact = empathy_contact_factory_get_from_id (information->factory,
+          account, id);
+    }
+  else
+    {
 		contact = empathy_contact_factory_get_user (information->factory,
-							    account);
+        account);
 	}
 
-	if (contact) {
-		empathy_contact_run_until_ready (contact,
-						 EMPATHY_CONTACT_READY_HANDLE |
-						 EMPATHY_CONTACT_READY_ID,
-						 NULL);
-		contact_widget_set_contact (information, contact);
-		g_object_unref (contact);
-	}
+	if (contact)
+    {
+      empathy_contact_run_until_ready (contact,
+          EMPATHY_CONTACT_READY_HANDLE |
+          EMPATHY_CONTACT_READY_ID,
+          NULL);
+      contact_widget_set_contact (information, contact);
+      g_object_unref (contact);
+    }
 }
 
 static void
 contact_widget_avatar_changed_cb (EmpathyAvatarChooser *chooser,
-				  EmpathyContactWidget *information)
+		                              EmpathyContactWidget *information)
 {
-	if (information->contact &&
-	    empathy_contact_is_user (information->contact)) {
-		McAccount   *account;
-		const gchar *data;
-		gsize        size;
-		const gchar *mime_type;
+	if (information->contact && empathy_contact_is_user (information->contact))
+    {
+      McAccount *account;
+      const gchar *data;
+      gsize size;
+      const gchar *mime_type;
 
-		account = empathy_contact_get_account (information->contact);
-		empathy_avatar_chooser_get_image_data (EMPATHY_AVATAR_CHOOSER (information->widget_avatar),
-						       &data, &size, &mime_type);
-		empathy_contact_factory_set_avatar (information->factory,
-						    account,
-						    data, size, mime_type);
-	}
+      account = empathy_contact_get_account (information->contact);
+      empathy_avatar_chooser_get_image_data (
+          EMPATHY_AVATAR_CHOOSER (information->widget_avatar),
+          &data, &size, &mime_type);
+      empathy_contact_factory_set_avatar (information->factory, account,
+          data, size, mime_type);
+    }
 }
 
 static void
-contact_widget_account_changed_cb (GtkComboBox          *widget,
-				   EmpathyContactWidget *information)
+contact_widget_account_changed_cb (GtkComboBox *widget,
+                                   EmpathyContactWidget *information)
 {
 	contact_widget_change_contact (information);
 }
 
 static gboolean
-contact_widget_id_focus_out_cb (GtkWidget            *widget,
-				GdkEventFocus        *event,
-				EmpathyContactWidget *information)
+contact_widget_id_focus_out_cb (GtkWidget *widget,
+				                        GdkEventFocus *event,
+                                EmpathyContactWidget *information)
 {
 	contact_widget_change_contact (information);
 	return FALSE;
 }
 
 static gboolean
-contact_widget_entry_alias_focus_event_cb (GtkEditable          *editable,
-					   GdkEventFocus        *event,
-					   EmpathyContactWidget *information)
+contact_widget_entry_alias_focus_event_cb (GtkEditable *editable,
+                                           GdkEventFocus *event,
+                                           EmpathyContactWidget *information)
 {
-	if (information->contact) {
-		const gchar *alias;
+	if (information->contact)
+    {
+      const gchar *alias;
 
-		alias = gtk_entry_get_text (GTK_ENTRY (editable));
-		empathy_contact_factory_set_alias (information->factory,
-						  information->contact,
-						  alias);
-	}
+      alias = gtk_entry_get_text (GTK_ENTRY (editable));
+      empathy_contact_factory_set_alias (information->factory,
+          information->contact, alias);
+    }
 
 	return FALSE;
 }
@@ -733,24 +751,26 @@ contact_widget_entry_alias_focus_event_cb (GtkEditable          *editable,
 static void
 contact_widget_name_notify_cb (EmpathyContactWidget *information)
 {
-	if (GTK_IS_ENTRY (information->widget_alias)) {
-		gtk_entry_set_text (GTK_ENTRY (information->widget_alias),
-				    empathy_contact_get_name (information->contact));
-	} else {
-		gtk_label_set_label (GTK_LABEL (information->widget_alias),
-				     empathy_contact_get_name (information->contact));
-	}
+	if (GTK_IS_ENTRY (information->widget_alias))
+    {
+      gtk_entry_set_text (GTK_ENTRY (information->widget_alias),
+          empathy_contact_get_name (information->contact));
+    }
+  else
+    {
+      gtk_label_set_label (GTK_LABEL (information->widget_alias),
+          empathy_contact_get_name (information->contact));
+    }
 }
 
 static void
 contact_widget_presence_notify_cb (EmpathyContactWidget *information)
 {
 	gtk_label_set_text (GTK_LABEL (information->label_status),
-			    empathy_contact_get_status (information->contact));
+      empathy_contact_get_status (information->contact));
 	gtk_image_set_from_icon_name (GTK_IMAGE (information->image_state),
-				      empathy_icon_name_for_contact (information->contact),
-				      GTK_ICON_SIZE_BUTTON);
-
+			empathy_icon_name_for_contact (information->contact),
+      GTK_ICON_SIZE_BUTTON);
 }
 
 static void
@@ -765,55 +785,59 @@ contact_widget_avatar_notify_cb (EmpathyContactWidget *information)
 		g_signal_handlers_block_by_func (information->widget_avatar,
 						 contact_widget_avatar_changed_cb,
 						 information);
-		empathy_avatar_chooser_set (EMPATHY_AVATAR_CHOOSER (information->widget_avatar),
-					    avatar);
+		empathy_avatar_chooser_set (
+        EMPATHY_AVATAR_CHOOSER (information->widget_avatar), avatar);
 		g_signal_handlers_unblock_by_func (information->widget_avatar,
-						   contact_widget_avatar_changed_cb,
-						   information);
-	} else {
-		empathy_avatar_image_set (EMPATHY_AVATAR_IMAGE (information->widget_avatar),
-					  avatar);
+        contact_widget_avatar_changed_cb, information);
 	}
+  else
+    {
+      empathy_avatar_image_set (
+          EMPATHY_AVATAR_IMAGE (information->widget_avatar), avatar);
+    }
 }
 
 static void
 contact_widget_groups_setup (EmpathyContactWidget *information)
 {
-	if (information->flags & EMPATHY_CONTACT_WIDGET_EDIT_GROUPS) {
-		information->manager = empathy_contact_manager_new ();
-		contact_widget_model_setup (information);
-	}
+	if (information->flags & EMPATHY_CONTACT_WIDGET_EDIT_GROUPS)
+    {
+      information->manager = empathy_contact_manager_new ();
+      contact_widget_model_setup (information);
+    }
 }
 
 static void
 contact_widget_groups_update (EmpathyContactWidget *information)
 {
 	if (information->flags & EMPATHY_CONTACT_WIDGET_EDIT_GROUPS &&
-	    information->contact) {
-		g_signal_connect_swapped (information->contact, "notify::groups",
-					  G_CALLBACK (contact_widget_groups_notify_cb),
-					  information);
-		contact_widget_groups_populate_data (information);
+      information->contact)
+    {
+      g_signal_connect_swapped (information->contact, "notify::groups",
+          G_CALLBACK (contact_widget_groups_notify_cb), information);
+      contact_widget_groups_populate_data (information);
 
-		gtk_widget_show (information->vbox_groups);
-	} else {
-		gtk_widget_hide (information->vbox_groups);
-	}
+      gtk_widget_show (information->vbox_groups);
+    }
+  else
+    {
+      gtk_widget_hide (information->vbox_groups);
+    }
 }
 
 static void
 contact_widget_model_setup (EmpathyContactWidget *information)
 {
-	GtkTreeView      *view;
-	GtkListStore     *store;
+	GtkTreeView *view;
+	GtkListStore *store;
 	GtkTreeSelection *selection;
 
 	view = GTK_TREE_VIEW (information->treeview_groups);
 
 	store = gtk_list_store_new (COL_COUNT,
-				    G_TYPE_STRING,   /* name */
-				    G_TYPE_BOOLEAN,  /* enabled */
-				    G_TYPE_BOOLEAN); /* editable */
+      G_TYPE_STRING,   /* name */
+			G_TYPE_BOOLEAN,  /* enabled */
+			G_TYPE_BOOLEAN); /* editable */
 
 	gtk_tree_view_set_model (view, GTK_TREE_MODEL (store));
 
@@ -823,7 +847,7 @@ contact_widget_model_setup (EmpathyContactWidget *information)
 	contact_widget_model_populate_columns (information);
 
 	gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (store),
-					      COL_NAME, GTK_SORT_ASCENDING);
+      COL_NAME, GTK_SORT_ASCENDING);
 
 	g_object_unref (store);
 }
@@ -831,23 +855,21 @@ contact_widget_model_setup (EmpathyContactWidget *information)
 static void
 contact_widget_model_populate_columns (EmpathyContactWidget *information)
 {
-	GtkTreeView       *view;
-	GtkTreeModel      *model;
+	GtkTreeView *view;
+	GtkTreeModel *model;
 	GtkTreeViewColumn *column;
-	GtkCellRenderer   *renderer;
-	guint              col_offset;
+	GtkCellRenderer  *renderer;
+	guint col_offset;
 
 	view = GTK_TREE_VIEW (information->treeview_groups);
 	model = gtk_tree_view_get_model (view);
 
 	renderer = gtk_cell_renderer_toggle_new ();
 	g_signal_connect (renderer, "toggled",
-			  G_CALLBACK (contact_widget_cell_toggled),
-			  information);
+      G_CALLBACK (contact_widget_cell_toggled), information);
 
 	column = gtk_tree_view_column_new_with_attributes (_("Select"), renderer,
-							   "active", COL_ENABLED,
-							   NULL);
+      "active", COL_ENABLED, NULL);
 
 	gtk_tree_view_column_set_sizing (column, GTK_TREE_VIEW_COLUMN_FIXED);
 	gtk_tree_view_column_set_fixed_width (column, 50);
@@ -855,23 +877,24 @@ contact_widget_model_populate_columns (EmpathyContactWidget *information)
 
 	renderer = gtk_cell_renderer_text_new ();
 	col_offset = gtk_tree_view_insert_column_with_attributes (view,
-								  -1, _("Group"),
-								  renderer,
-								  "text", COL_NAME,
-								  /* "editable", COL_EDITABLE, */
-								  NULL);
+      -1, _("Group"),
+			renderer,
+			"text", COL_NAME,
+			/* "editable", COL_EDITABLE, */
+			NULL);
 
 	g_object_set_data (G_OBJECT (renderer),
-			   "column", GINT_TO_POINTER (COL_NAME));
+      "column", GINT_TO_POINTER (COL_NAME));
 
 	column = gtk_tree_view_get_column (view, col_offset - 1);
 	gtk_tree_view_column_set_sort_column_id (column, COL_NAME);
 	gtk_tree_view_column_set_resizable (column,FALSE);
 	gtk_tree_view_column_set_clickable (GTK_TREE_VIEW_COLUMN (column), TRUE);
 
-	if (information->renderer) {
-		g_object_unref (information->renderer);
-	}
+	if (information->renderer)
+    {
+      g_object_unref (information->renderer);
+    }
 
 	information->renderer = g_object_ref (renderer);
 }
@@ -879,37 +902,39 @@ contact_widget_model_populate_columns (EmpathyContactWidget *information)
 static void
 contact_widget_groups_populate_data (EmpathyContactWidget *information)
 {
-	GtkTreeView  *view;
+	GtkTreeView *view;
 	GtkListStore *store;
-	GtkTreeIter   iter;
-	GList        *my_groups, *l;
-	GList        *all_groups;
+	GtkTreeIter iter;
+	GList *my_groups, *l;
+	GList *all_groups;
 
 	view = GTK_TREE_VIEW (information->treeview_groups);
 	store = GTK_LIST_STORE (gtk_tree_view_get_model (view));
 	gtk_list_store_clear (store);
 
-	all_groups = empathy_contact_list_get_all_groups (EMPATHY_CONTACT_LIST (information->manager));
-	my_groups = empathy_contact_list_get_groups (EMPATHY_CONTACT_LIST (information->manager),
-						     information->contact);
+	all_groups = empathy_contact_list_get_all_groups (
+      EMPATHY_CONTACT_LIST (information->manager));
+	my_groups = empathy_contact_list_get_groups (
+      EMPATHY_CONTACT_LIST (information->manager),
+			information->contact);
 
-	for (l = all_groups; l; l = l->next) {
-		const gchar *group_str;
-		gboolean     enabled;
+	for (l = all_groups; l; l = l->next)
+    {
+      const gchar *group_str;
+      gboolean enabled;
 
-		group_str = l->data;
+      group_str = l->data;
 
-		enabled = g_list_find_custom (my_groups,
-					      group_str,
-					      (GCompareFunc) strcmp) != NULL;
+      enabled = g_list_find_custom (my_groups,
+          group_str, (GCompareFunc) strcmp) != NULL;
 
-		gtk_list_store_append (store, &iter);
-		gtk_list_store_set (store, &iter,
-				    COL_NAME, group_str,
-				    COL_EDITABLE, TRUE,
-				    COL_ENABLED, enabled,
-				    -1);
-	}
+      gtk_list_store_append (store, &iter);
+      gtk_list_store_set (store, &iter,
+          COL_NAME, group_str,
+          COL_EDITABLE, TRUE,
+          COL_ENABLED, enabled,
+          -1);
+    }
 
 	g_list_foreach (all_groups, (GFunc) g_free, NULL);
 	g_list_foreach (my_groups, (GFunc) g_free, NULL);
@@ -925,16 +950,15 @@ contact_widget_groups_notify_cb (EmpathyContactWidget *information)
 
 static gboolean
 contact_widget_model_find_name (EmpathyContactWidget *information,
-				const gchar          *name,
-				GtkTreeIter          *iter)
+				                        const gchar *name,
+				                        GtkTreeIter *iter)
 {
-	GtkTreeView  *view;
+	GtkTreeView *view;
 	GtkTreeModel *model;
-	FindName      data;
+	FindName data;
 
-	if (G_STR_EMPTY (name)) {
+	if (G_STR_EMPTY (name))
 		return FALSE;
-	}
 
 	data.information = information;
 	data.name = name;
@@ -944,41 +968,42 @@ contact_widget_model_find_name (EmpathyContactWidget *information,
 	model = gtk_tree_view_get_model (view);
 
 	gtk_tree_model_foreach (model,
-				(GtkTreeModelForeachFunc) contact_widget_model_find_name_foreach,
-				&data);
+      (GtkTreeModelForeachFunc) contact_widget_model_find_name_foreach,
+			&data);
 
-	if (data.found == TRUE) {
-		*iter = data.found_iter;
-		return TRUE;
-	}
+	if (data.found == TRUE)
+    {
+      *iter = data.found_iter;
+      return TRUE;
+    }
 
 	return FALSE;
 }
 
 static gboolean
 contact_widget_model_find_name_foreach (GtkTreeModel *model,
-					GtkTreePath  *path,
-					GtkTreeIter  *iter,
-					FindName     *data)
+                                        GtkTreePath *path,
+                                        GtkTreeIter *iter,
+                                        FindName *data)
 {
 	gchar *name;
 
 	gtk_tree_model_get (model, iter,
-			    COL_NAME, &name,
-			    -1);
+      COL_NAME, &name,
+      -1);
 
-	if (!name) {
+	if (!name)
 		return FALSE;
-	}
 
-	if (data->name && strcmp (data->name, name) == 0) {
-		data->found = TRUE;
-		data->found_iter = *iter;
+	if (data->name && strcmp (data->name, name) == 0)
+    {
+      data->found = TRUE;
+      data->found_iter = *iter;
 
-		g_free (name);
+      g_free (name);
 
-		return TRUE;
-	}
+      return TRUE;
+    }
 
 	g_free (name);
 
@@ -987,16 +1012,16 @@ contact_widget_model_find_name_foreach (GtkTreeModel *model,
 
 static void
 contact_widget_cell_toggled (GtkCellRendererToggle *cell,
-			     gchar                 *path_string,
-			     EmpathyContactWidget  *information)
+                             gchar *path_string,
+                             EmpathyContactWidget *information)
 {
-	GtkTreeView  *view;
+	GtkTreeView *view;
 	GtkTreeModel *model;
 	GtkListStore *store;
-	GtkTreePath  *path;
-	GtkTreeIter   iter;
-	gboolean      enabled;
-	gchar        *group;
+	GtkTreePath *path;
+	GtkTreeIter iter;
+	gboolean enabled;
+	gchar *group;
 
 	view = GTK_TREE_VIEW (information->treeview_groups);
 	model = gtk_tree_view_get_model (view);
@@ -1006,22 +1031,26 @@ contact_widget_cell_toggled (GtkCellRendererToggle *cell,
 
 	gtk_tree_model_get_iter (model, &iter, path);
 	gtk_tree_model_get (model, &iter,
-			    COL_ENABLED, &enabled,
-			    COL_NAME, &group,
-			    -1);
+      COL_ENABLED, &enabled,
+			COL_NAME, &group,
+			-1);
 
 	gtk_list_store_set (store, &iter, COL_ENABLED, !enabled, -1);
 	gtk_tree_path_free (path);
 
-	if (group) {
-		if (enabled) {
-			empathy_contact_list_remove_from_group (EMPATHY_CONTACT_LIST (information->manager),
-								information->contact,
-								group);
-		} else {
-			empathy_contact_list_add_to_group (EMPATHY_CONTACT_LIST (information->manager),
-							   information->contact,
-							   group);
+	if (group)
+    {
+		if (enabled)
+      {
+        empathy_contact_list_remove_from_group (
+            EMPATHY_CONTACT_LIST (information->manager), information->contact,
+            group);
+		}
+    else
+      {
+			empathy_contact_list_add_to_group (
+          EMPATHY_CONTACT_LIST (information->manager), information->contact,
+          group);
 		}
 
 		g_free (group);
@@ -1029,38 +1058,40 @@ contact_widget_cell_toggled (GtkCellRendererToggle *cell,
 }
 
 static void
-contact_widget_entry_group_changed_cb (GtkEditable           *editable,
-				       EmpathyContactWidget  *information)
+contact_widget_entry_group_changed_cb (GtkEditable *editable,
+                                       EmpathyContactWidget *information)
 {
-	GtkTreeIter  iter;
+	GtkTreeIter iter;
 	const gchar *group;
 
 	group = gtk_entry_get_text (GTK_ENTRY (information->entry_group));
 
-	if (contact_widget_model_find_name (information, group, &iter)) {
-		gtk_widget_set_sensitive (GTK_WIDGET (information->button_group), FALSE);
-
-	} else {
-		gtk_widget_set_sensitive (GTK_WIDGET (information->button_group),
-					  !G_STR_EMPTY (group));
-	}
+	if (contact_widget_model_find_name (information, group, &iter))
+    {
+      gtk_widget_set_sensitive (GTK_WIDGET (information->button_group), FALSE);
+    }
+  else
+    {
+      gtk_widget_set_sensitive (GTK_WIDGET (information->button_group),
+          !G_STR_EMPTY (group));
+	  }
 }
 
 static void
-contact_widget_entry_group_activate_cb (GtkEntry              *entry,
-					EmpathyContactWidget  *information)
+contact_widget_entry_group_activate_cb (GtkEntry *entry,
+                                        EmpathyContactWidget  *information)
 {
 	gtk_widget_activate (GTK_WIDGET (information->button_group));
 }
 
 static void
-contact_widget_button_group_clicked_cb (GtkButton             *button,
-					EmpathyContactWidget  *information)
+contact_widget_button_group_clicked_cb (GtkButton *button,
+					                              EmpathyContactWidget *information)
 {
-	GtkTreeView  *view;
+	GtkTreeView *view;
 	GtkListStore *store;
-	GtkTreeIter   iter;
-	const gchar  *group;
+	GtkTreeIter iter;
+	const gchar *group;
 
 	view = GTK_TREE_VIEW (information->treeview_groups);
 	store = GTK_LIST_STORE (gtk_tree_view_get_model (view));
@@ -1069,13 +1100,13 @@ contact_widget_button_group_clicked_cb (GtkButton             *button,
 
 	gtk_list_store_append (store, &iter);
 	gtk_list_store_set (store, &iter,
-			    COL_NAME, group,
-			    COL_ENABLED, TRUE,
-			    -1);
+      COL_NAME, group,
+			COL_ENABLED, TRUE,
+			-1);
 
-	empathy_contact_list_add_to_group (EMPATHY_CONTACT_LIST (information->manager),
-					   information->contact,
-					   group);
+	empathy_contact_list_add_to_group (
+      EMPATHY_CONTACT_LIST (information->manager), information->contact,
+      group);
 }
 
 static void
@@ -1103,4 +1134,3 @@ contact_widget_client_update (EmpathyContactWidget *information)
 {
 	/* FIXME: Needs new telepathy spec */
 }
-
