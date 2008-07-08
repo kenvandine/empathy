@@ -45,36 +45,36 @@ typedef struct _EmpathyContactClass EmpathyContactClass;
 
 struct _EmpathyContact
 {
-	GObject parent;
-	gpointer priv;
+  GObject parent;
+  gpointer priv;
 };
 
 struct _EmpathyContactClass
 {
-	GObjectClass parent_class;
+  GObjectClass parent_class;
 };
 
 typedef struct {
-	guchar *data;
-	gsize len;
-	gchar *format;
-	gchar *token;
-	guint refcount;
+  guchar *data;
+  gsize len;
+  gchar *format;
+  gchar *token;
+  guint refcount;
 } EmpathyAvatar;
 
 typedef enum {
-	EMPATHY_CAPABILITIES_NONE = 0,
-	EMPATHY_CAPABILITIES_AUDIO = 1 << 0,
-	EMPATHY_CAPABILITIES_VIDEO = 1 << 1,
-	EMPATHY_CAPABILITIES_UNKNOWN = 1 << 7
+  EMPATHY_CAPABILITIES_NONE = 0,
+  EMPATHY_CAPABILITIES_AUDIO = 1 << 0,
+  EMPATHY_CAPABILITIES_VIDEO = 1 << 1,
+  EMPATHY_CAPABILITIES_UNKNOWN = 1 << 7
 } EmpathyCapabilities;
 
 typedef enum {
-	EMPATHY_CONTACT_READY_NONE = 0,
-	EMPATHY_CONTACT_READY_ID = 1 << 0,
-	EMPATHY_CONTACT_READY_HANDLE = 1 << 1,
-	EMPATHY_CONTACT_READY_NAME = 1 << 2,
-	EMPATHY_CONTACT_READY_ALL = (1 << 3) - 1,
+  EMPATHY_CONTACT_READY_NONE = 0,
+  EMPATHY_CONTACT_READY_ID = 1 << 0,
+  EMPATHY_CONTACT_READY_HANDLE = 1 << 1,
+  EMPATHY_CONTACT_READY_NAME = 1 << 2,
+  EMPATHY_CONTACT_READY_ALL = (1 << 3) - 1,
 } EmpathyContactReady;
 
 GType empathy_contact_get_type (void) G_GNUC_CONST;
@@ -121,9 +121,9 @@ gboolean empathy_contact_load_avatar_cache (EmpathyContact *contact,
 #define EMPATHY_TYPE_AVATAR (empathy_avatar_get_type ())
 GType empathy_avatar_get_type (void) G_GNUC_CONST;
 EmpathyAvatar * empathy_avatar_new (guchar *data,
-							gsize len,
-							gchar *format,
-							gchar *token);
+              gsize len,
+              gchar *format,
+              gchar *token);
 EmpathyAvatar * empathy_avatar_ref (EmpathyAvatar *avatar);
 void empathy_avatar_unref (EmpathyAvatar *avatar);
 
@@ -133,4 +133,3 @@ gboolean empathy_avatar_save_to_file (EmpathyAvatar *avatar,
 G_END_DECLS
 
 #endif /* __EMPATHY_CONTACT_H__ */
-
