@@ -829,7 +829,7 @@ empathy_contact_load_avatar_data (EmpathyContact *contact,
 	/* Save to cache if not yet in it */
 	filename = contact_get_avatar_filename (contact, token);
 	if (filename && !g_file_test (filename, G_FILE_TEST_EXISTS)) {
-		if (!g_file_set_contents (filename, data, len, &error)) {
+		if (!empathy_avatar_save_to_file (avatar, filename, &error)) {
 			DEBUG ("Failed to save avatar in cache: %s",
 				error ? error->message : "No error given");
 			g_clear_error (&error);
@@ -931,3 +931,10 @@ empathy_avatar_ref (EmpathyAvatar *avatar)
 	return avatar;
 }
 
+gboolean
+empathy_avatar_save_to_file (EmpathyAvatar *self,
+                             const gchar *filename,
+                             GError **error)
+{
+  return g_file_set_contents (filename, self->data, self->len, error);
+}
