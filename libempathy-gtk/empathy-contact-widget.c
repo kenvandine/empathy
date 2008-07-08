@@ -444,15 +444,13 @@ popup_avatar_menu (EmpathyContactWidget *information,
                    GtkWidget *parent,
                    GdkEventButton *event)
 {
-  GtkWidget *menu, *item, *image;
+  GtkWidget *menu, *item;
   gint button, event_time;
 
   menu = gtk_menu_new ();
 
   /* Add "Save as..." entry */
-  item = gtk_image_menu_item_new_with_mnemonic (_("_Save As..."));
-	image = gtk_image_new_from_icon_name (GTK_STOCK_SAVE_AS, GTK_ICON_SIZE_MENU);
-  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
+  item = gtk_image_menu_item_new_from_stock (GTK_STOCK_SAVE_AS, NULL);
   gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
   gtk_widget_show (item);
 
