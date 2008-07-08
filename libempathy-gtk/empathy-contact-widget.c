@@ -29,6 +29,7 @@
 #include <glib/gi18n.h>
 
 #include <libmissioncontrol/mc-account.h>
+#include <telepathy-glib/util.h>
 
 #include <libempathy/empathy-contact-factory.h>
 #include <libempathy/empathy-contact-manager.h>
@@ -348,6 +349,151 @@ contact_widget_id_changed_cb (GtkEntry             *entry,
 }
 
 static void
+save_avatar_menu_activate_cb (GtkWidget *widget,
+                              EmpathyContactWidget *information)
+{
+  GtkWidget *dialog;
+  EmpathyAvatar *avatar;
+  gchar *ext = NULL, *filename;
+
+  dialog = gtk_file_chooser_dialog_new (_("Save Avatar"),
+                NULL,
+                GTK_FILE_CHOOSER_ACTION_SAVE,
+                GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+                GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
+                NULL);
+
+  gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (dialog),
+      TRUE);
+
+  /* look for the avatar extension */
+  avatar = empathy_contact_get_avatar (information->contact);
+  if (avatar->format != NULL)
+    {
+      gchar **splitted;
+
+      splitted = g_strsplit (avatar->format, "/", 2);
+      if (splitted[0] != NULL && splitted[1] != NULL)
+        {
+          ext = g_strdup (splitted[1]);
+        }
+
+      g_strfreev (splitted);
+    }
+  else
+    {
+      /* Avatar was loaded from the cache so was converted to PNG */
+      ext = g_strdup ("png");
+    }
+
+  if (ext != NULL)
+    {
+      gchar *id;
+
+      id = tp_escape_as_identifier (empathy_contact_get_id (
+            information->contact));
+
+      filename = g_strdup_printf ("%s.%s", id, ext);
+      gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (dialog), filename);
+
+      g_free (id);
+      g_free (ext);
+      g_free (filename);
+    }
+
+  if (gtk_dialog_run (GTK_DIALOG (dialog)) == GTK_RESPONSE_ACCEPT)
+    {
+      GError *error = NULL;
+
+      filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
+
+      if (!empathy_avatar_save_to_file (avatar, filename, &error))
+        {
+          /* Save error */
+          GtkWidget *dialog;
+
+          dialog = gtk_message_dialog_new (NULL, 0,
+                   GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, 
+                   _("Unable to save avatar"));
+
+          gtk_message_dialog_format_secondary_text (
+              GTK_MESSAGE_DIALOG (dialog), "%s", error->message);
+
+          g_signal_connect (dialog, "response",
+              G_CALLBACK (gtk_widget_destroy), NULL);
+
+          gtk_window_present (GTK_WINDOW (dialog));
+
+          g_clear_error (&error);
+        }
+
+      g_free (filename);
+    }
+
+  gtk_widget_destroy (dialog);
+}
+
+static void
+popup_avatar_menu (EmpathyContactWidget *information,
+                   GtkWidget *parent,
+                   GdkEventButton *event)
+{
+  GtkWidget *menu, *item, *image;
+  gint button, event_time;
+
+  menu = gtk_menu_new ();
+
+  /* Add "Save as..." entry */
+  item = gtk_image_menu_item_new_with_mnemonic (_("_Save As..."));
+	image = gtk_image_new_from_icon_name (GTK_STOCK_SAVE, GTK_ICON_SIZE_MENU);
+  gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
+  gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
+  gtk_widget_show (item);
+
+  g_signal_connect (item, "activate",
+      G_CALLBACK (save_avatar_menu_activate_cb), information);
+
+  if (event)
+    {
+      button = event->button;
+      event_time = event->time;
+    }
+  else
+    {
+      button = 0;
+      event_time = gtk_get_current_event_time ();
+    }
+
+  gtk_menu_attach_to_widget (GTK_MENU (menu), parent, NULL);
+  gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL, 
+      button, event_time);
+}
+
+static gboolean
+widget_avatar_popup_menu_cb (GtkWidget *widget,
+                             EmpathyContactWidget *information)
+{
+  popup_avatar_menu (information, widget, NULL);
+
+  return TRUE;
+}
+
+static gboolean
+widget_avatar_button_press_event_cb (GtkWidget *widget,
+                                     GdkEventButton *event,
+                                     EmpathyContactWidget *information)
+{
+  /* Ignore double-clicks and triple-clicks */
+  if (event->button == 3 && event->type == GDK_BUTTON_PRESS)
+    {
+      popup_avatar_menu (information, widget, event);
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
+static void
 contact_widget_contact_setup (EmpathyContactWidget *information)
 {
 	if (information->flags & EMPATHY_CONTACT_WIDGET_EDIT_AVATAR) {
@@ -357,7 +503,13 @@ contact_widget_contact_setup (EmpathyContactWidget *information)
 				  information);
 	} else {
 		information->widget_avatar = empathy_avatar_image_new ();
+
+    g_signal_connect (information->widget_avatar, "popup-menu",
+        G_CALLBACK (widget_avatar_popup_menu_cb), information);
+    g_signal_connect (information->widget_avatar, "button-press-event",
+        G_CALLBACK (widget_avatar_button_press_event_cb), information);
 	}
+  
 	gtk_box_pack_start (GTK_BOX (information->vbox_avatar),
 			    information->widget_avatar,
 			    FALSE, FALSE,
