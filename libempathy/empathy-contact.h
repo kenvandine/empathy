@@ -134,7 +134,7 @@ EmpathyAvatar *     empathy_avatar_new                 (guchar              *dat
 EmpathyAvatar *     empathy_avatar_ref                 (EmpathyAvatar       *avatar);
 void                empathy_avatar_unref               (EmpathyAvatar       *avatar);
 
-gboolean empathy_avatar_save_to_file (EmpathyAvatar *self,
+gboolean empathy_avatar_save_to_file (EmpathyAvatar *avatar,
     const gchar *filename, GError **error);
 
 G_END_DECLS

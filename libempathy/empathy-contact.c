@@ -931,6 +931,16 @@ empathy_avatar_ref (EmpathyAvatar *avatar)
 	return avatar;
 }
 
+/**
+ * empathy_avatar_save_to_file:
+ * @avatar: the avatar
+ * @filename: name of a file to write avatar to
+ * @error: return location for a GError, or NULL
+ *
+ * Save the avatar to a file named filename
+ *
+ * Returns: %TRUE on success, %FALSE if an error occurred 
+ */
 gboolean
 empathy_avatar_save_to_file (EmpathyAvatar *self,
                              const gchar *filename,
