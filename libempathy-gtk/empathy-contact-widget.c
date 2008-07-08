@@ -438,6 +438,10 @@ popup_avatar_menu (EmpathyContactWidget *information,
   GtkWidget *menu, *item;
   gint button, event_time;
 
+  if (information->contact == NULL ||
+      empathy_contact_get_avatar (information->contact) == NULL)
+      return;
+
   menu = gtk_menu_new ();
 
   /* Add "Save as..." entry */
