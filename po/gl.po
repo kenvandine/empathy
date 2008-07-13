@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-06-14 18:59+0200\n"
-"PO-Revision-Date: 2008-06-14 18:59+0200\n"
+"POT-Creation-Date: 2008-07-13 09:55+0200\n"
+"PO-Revision-Date: 2008-07-13 09:56+0200\n"
 "Last-Translator: Ignacio Casal Quinteiro <icq@svn.gnome.org>\n"
 "Language-Team: Galego <proxecto@trasno.net>\n"
 "MIME-Version: 1.0\n"
@@ -65,82 +65,87 @@ msgid "Empathy should auto-connect on startup"
 msgstr "Se Empathy debería conectarse automaticamente ao inicio"
 
 #: ../data/empathy.schemas.in.h:9
+msgid "Empathy should use the avatar of the contact as the chat window icon"
+msgstr ""
+"Empathy debería usar o avatar do contacto como icona da ventá de conversa"
+
+#: ../data/empathy.schemas.in.h:10
 msgid "Enable popup when contact is available"
 msgstr "Activar ventá emerxente cando un contacto está dispoñible"
 
-#: ../data/empathy.schemas.in.h:10
+#: ../data/empathy.schemas.in.h:11
 msgid "Enable sound when away"
 msgstr "Activar son ao ausentarse"
 
-#: ../data/empathy.schemas.in.h:11
+#: ../data/empathy.schemas.in.h:12
 msgid "Enable sound when busy"
 msgstr "Activar son cando se está ocupado"
 
-#: ../data/empathy.schemas.in.h:12
+#: ../data/empathy.schemas.in.h:13
 msgid "Enable spell checker"
 msgstr "Activar corrector ortográfico"
 
-#: ../data/empathy.schemas.in.h:13
+#: ../data/empathy.schemas.in.h:14
 msgid "Hide main window"
 msgstr "Ocultar a ventá principal"
 
-#: ../data/empathy.schemas.in.h:14
+#: ../data/empathy.schemas.in.h:15
 msgid "Hide the main window."
 msgstr "Ocultar a ventá principal."
 
-#: ../data/empathy.schemas.in.h:15
+#: ../data/empathy.schemas.in.h:16
 msgid "NetworkManager should be used"
 msgstr "Se se debería usar NetworkManager"
 
-#: ../data/empathy.schemas.in.h:16
+#: ../data/empathy.schemas.in.h:17
 msgid "Nick completed character"
 msgstr "Carácter de completado de alcume"
 
-#: ../data/empathy.schemas.in.h:17
+#: ../data/empathy.schemas.in.h:18
 msgid "Open new chats in separate windows"
 msgstr "Abrir conversas novas en ventás separadas"
 
-#: ../data/empathy.schemas.in.h:18
+#: ../data/empathy.schemas.in.h:19
 msgid "Salut account is created"
 msgstr "A conta Salut está creada"
 
-#: ../data/empathy.schemas.in.h:19
+#: ../data/empathy.schemas.in.h:20
 msgid "Show avatars"
 msgstr "Mostrar avatares"
 
-#: ../data/empathy.schemas.in.h:20
+#: ../data/empathy.schemas.in.h:21
 msgid "Show hint about closing the main window"
 msgstr "Mostrar consello sobre como pechar a ventá principal"
 
-#: ../data/empathy.schemas.in.h:21
+#: ../data/empathy.schemas.in.h:22
 msgid "Show offline contacts"
 msgstr "Mostrar os contactos desconectados"
 
-#: ../data/empathy.schemas.in.h:22
+#: ../data/empathy.schemas.in.h:23
 msgid "Spell checking languages"
 msgstr "Linguas para revisión ortográfica"
 
-#: ../data/empathy.schemas.in.h:23
+#: ../data/empathy.schemas.in.h:24
 msgid "The last directory that an avatar image was chosen from."
 msgstr "O último directorio do que foi escollido un avatar."
 
-#: ../data/empathy.schemas.in.h:24
+#: ../data/empathy.schemas.in.h:25
 msgid "The theme that is used to display the conversation in chat windows."
 msgstr "O tema que se usará para mostrar a conversa nas ventás de conversas."
 
-#: ../data/empathy.schemas.in.h:25
+#: ../data/empathy.schemas.in.h:26
 msgid "Use graphical smileys"
 msgstr "Usar emoticonas gráficas"
 
-#: ../data/empathy.schemas.in.h:26
+#: ../data/empathy.schemas.in.h:27
 msgid "Use notification sounds"
 msgstr "Usar sons de notificación"
 
-#: ../data/empathy.schemas.in.h:27
+#: ../data/empathy.schemas.in.h:28
 msgid "Use theme for chat rooms"
 msgstr "Usar tema para salas de conversas"
 
-#: ../data/empathy.schemas.in.h:28
+#: ../data/empathy.schemas.in.h:29
 msgid ""
 "Whether or not Empathy should automatically log in to your accounts on "
 "startup."
@@ -148,13 +153,21 @@ msgstr ""
 "Indica ou non se Empathy debería inciar sesión automaticamente nas súas ao "
 "inicio."
 
-#: ../data/empathy.schemas.in.h:29
+#: ../data/empathy.schemas.in.h:30
+msgid ""
+"Whether or not Empathy should use the avatar of the contact as the chat "
+"window icon."
+msgstr ""
+"Indica se Empathy debe usar o avatar do contacto como icona da ventá de "
+"conversa."
+
+#: ../data/empathy.schemas.in.h:31
 msgid ""
 "Whether or not the Salut account has been created on the first Empathy run."
 msgstr ""
 "Indica se a conta Salut creouse cando executou por primeira vez Empathy."
 
-#: ../data/empathy.schemas.in.h:30
+#: ../data/empathy.schemas.in.h:32
 msgid ""
 "Whether or not the network manager should be used to automatically "
 "disconnect/reconnect."
@@ -162,7 +175,7 @@ msgstr ""
 "Indica ou non se se debería usar network manager para desconectar/reconectar "
 "automaticamente."
 
-#: ../data/empathy.schemas.in.h:31
+#: ../data/empathy.schemas.in.h:33
 msgid ""
 "Whether or not to check words typed against the languages you want to check "
 "with."
@@ -170,32 +183,32 @@ msgstr ""
 "Indica se se debe ou non revisar as palabras tecleadas con respecto aos "
 "idiomas cos que quere comprobalo."
 
-#: ../data/empathy.schemas.in.h:32
+#: ../data/empathy.schemas.in.h:34
 msgid ""
 "Whether or not to convert smileys into graphical images in conversations."
 msgstr ""
 "Indica se debe ou non converter as emoticonas en imaxes gráficas nas "
 "conversas."
 
-#: ../data/empathy.schemas.in.h:33
+#: ../data/empathy.schemas.in.h:35
 msgid "Whether or not to play a sound when messages arrive."
 msgstr "Indica se debe reproducir un son cando cheguen mensaxes."
 
-#: ../data/empathy.schemas.in.h:34
+#: ../data/empathy.schemas.in.h:36
 msgid "Whether or not to play sounds when away."
 msgstr "Indica se debe ou non reproducir sons cando esté ausente."
 
-#: ../data/empathy.schemas.in.h:35
+#: ../data/empathy.schemas.in.h:37
 msgid "Whether or not to play sounds when busy."
 msgstr "Indica se debe ou non reproducir sons cando esté ocupado."
 
-#: ../data/empathy.schemas.in.h:36
+#: ../data/empathy.schemas.in.h:38
 msgid "Whether or not to show a popup when a contact becomes available."
 msgstr ""
 "Indica se debe ou non mostrar unha ventá emerxente cando un contacto volva a "
 "estar dispoñible."
 
-#: ../data/empathy.schemas.in.h:37
+#: ../data/empathy.schemas.in.h:39
 msgid ""
 "Whether or not to show avatars for contacts in the contact list and chat "
 "windows."
@@ -203,13 +216,13 @@ msgstr ""
 "Indica se debe ou non mostrar os avatares para os contactos na lista de "
 "contactos e ventás de conversas."
 
-#: ../data/empathy.schemas.in.h:38
+#: ../data/empathy.schemas.in.h:40
 msgid "Whether or not to show contacts that are offline in the contact list."
 msgstr ""
 "Indica se debe ou non mostrar os contactos que están deconectados na lista "
 "de contactos"
 
-#: ../data/empathy.schemas.in.h:39
+#: ../data/empathy.schemas.in.h:41
 msgid ""
 "Whether or not to show the message dialog about closing the main window with "
 "the 'x' button in the title bar."
@@ -217,15 +230,15 @@ msgstr ""
 "Indica se debe ou non mostrar unha mensaxe de diálogo sobre como pechar a "
 "ventá principal co botón 'x' na barra de título."
 
-#: ../data/empathy.schemas.in.h:40
+#: ../data/empathy.schemas.in.h:42
 msgid "Whether to show the contact list in compact mode or not."
 msgstr "Indica se debe ou non mostrar a lista de contactos en modo compacto."
 
-#: ../data/empathy.schemas.in.h:41
+#: ../data/empathy.schemas.in.h:43
 msgid "Whether to use the theme for chat rooms or not."
 msgstr "Indica se debe ou non usar o tema para salas de conversa."
 
-#: ../data/empathy.schemas.in.h:42
+#: ../data/empathy.schemas.in.h:44
 msgid ""
 "Which criterium to use when sorting the contact list. Default is to use sort "
 "by the contact's name with the value \"name\". A value of \"state\" will "
@@ -263,8 +276,8 @@ msgstr "Desconectado"
 msgid "All"
 msgstr "Todo"
 
-#: ../libempathy-gtk/empathy-account-widget.c:284
-#: ../libempathy-gtk/empathy-account-widget.c:329
+#: ../libempathy-gtk/empathy-account-widget.c:302
+#: ../libempathy-gtk/empathy-account-widget.c:347
 #, c-format
 msgid "%s:"
 msgstr "%s:"
@@ -630,30 +643,34 @@ msgstr "Tema establecido a: %s"
 msgid "No topic defined"
 msgstr "Tema sen definir"
 
-#: ../libempathy-gtk/empathy-chat.c:950
+#: ../libempathy-gtk/empathy-chat.c:959
 msgid "Insert Smiley"
 msgstr "Inserir emoticona"
 
-#: ../libempathy-gtk/empathy-chat.c:997
+#: ../libempathy-gtk/empathy-chat.c:975
+msgid "_Send"
+msgstr "_Enviar"
+
+#: ../libempathy-gtk/empathy-chat.c:1009
 msgid "_Check Word Spelling..."
 msgstr "_Comprobar ortografía..."
 
-#: ../libempathy-gtk/empathy-chat.c:1099
+#: ../libempathy-gtk/empathy-chat.c:1115
 #, c-format
 msgid "%s has joined the room"
 msgstr "%s uniuse á sala"
 
-#: ../libempathy-gtk/empathy-chat.c:1102
+#: ../libempathy-gtk/empathy-chat.c:1118
 #, c-format
 msgid "%s has left the room"
 msgstr "%s deixou a sala"
 
-#: ../libempathy-gtk/empathy-chat.c:1216 ../src/empathy.c:122
+#: ../libempathy-gtk/empathy-chat.c:1232 ../src/empathy.c:122
 #: ../src/empathy-call-window.c:403
 msgid "Disconnected"
 msgstr "Desconectado"
 
-#: ../libempathy-gtk/empathy-chat.c:1588
+#: ../libempathy-gtk/empathy-chat.c:1604
 msgid "Connected"
 msgstr "Conectado"
 
@@ -685,11 +702,11 @@ msgstr "Editar a información do contacto"
 msgid "Contact Information"
 msgstr "Información do contacto"
 
-#: ../libempathy-gtk/empathy-contact-dialogs.c:281
+#: ../libempathy-gtk/empathy-contact-dialogs.c:283
 msgid "I would like to add you to my contact list."
 msgstr "Gustaríame engadirte á miña lista de contactos."
 
-#: ../libempathy-gtk/empathy-contact-dialogs.c:305
+#: ../libempathy-gtk/empathy-contact-dialogs.c:307
 msgid "New Contact"
 msgstr "Novo contacto"
 
@@ -751,11 +768,19 @@ msgstr "Infor_mación"
 msgid "_Edit"
 msgstr "_Editar"
 
-#: ../libempathy-gtk/empathy-contact-widget.c:694
+#: ../libempathy-gtk/empathy-contact-widget.c:358
+msgid "Save Avatar"
+msgstr "Gardar avatar"
+
+#: ../libempathy-gtk/empathy-contact-widget.c:414
+msgid "Unable to save avatar"
+msgstr "Non se pode gardar o avatar"
+
+#: ../libempathy-gtk/empathy-contact-widget.c:866
 msgid "Select"
 msgstr "Seleccionar"
 
-#: ../libempathy-gtk/empathy-contact-widget.c:704
+#: ../libempathy-gtk/empathy-contact-widget.c:875
 #: ../src/empathy-main-window.c:628
 msgid "Group"
 msgstr "Grupo"
@@ -958,7 +983,7 @@ msgstr "Limpar"
 msgid "Blue"
 msgstr "Azul"
 
-#: ../libempathy-gtk/empathy-ui-utils.c:1326
+#: ../libempathy-gtk/empathy-ui-utils.c:1330
 msgid "Unable to open URI"
 msgstr "Non se puido abrir a URI"
 
@@ -1405,16 +1430,16 @@ msgstr "Colgar"
 msgid "Send Video"
 msgstr "Envía vídeo"
 
-#: ../src/empathy-chat-window.c:316
+#: ../src/empathy-chat-window.c:319
 #, c-format
 msgid "Conversations (%d)"
 msgstr "Conversas (%d)"
 
-#: ../src/empathy-chat-window.c:383
+#: ../src/empathy-chat-window.c:397
 msgid "Topic:"
 msgstr "Tema:"
 
-#: ../src/empathy-chat-window.c:386
+#: ../src/empathy-chat-window.c:400
 msgid "Typing a message."
 msgstr "Escribindo unha mensaxe."
 
