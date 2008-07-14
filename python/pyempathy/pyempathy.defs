@@ -1108,6 +1108,16 @@
   (return-type "none")
 )
 
+(define-method save_to_file
+  (of-object "EmpathyAvatar")
+  (c-name "empathy_avatar_save_to_file")
+  (return-type "gboolean")
+  (parameters
+    '("const-gchar*" "filename")
+    '("GError**" "error")
+  )
+)
+
 
 
 ;; From empathy-contact-groups.h
@@ -1808,6 +1818,12 @@
   (of-object "EmpathyTpCall")
   (c-name "empathy_tp_call_stop_tone")
   (return-type "none")
+)
+
+(define-method has_dtmf
+  (of-object "EmpathyTpCall")
+  (c-name "empathy_tp_call_has_dtmf")
+  (return-type "gboolean")
 )
 
 
