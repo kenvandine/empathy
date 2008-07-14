@@ -1275,7 +1275,7 @@ empathy_chat_window_get_default (void)
 		chat_window = l->data;
 
 		dialog = empathy_chat_window_get_dialog (chat_window);
-		if (empathy_window_get_is_visible (GTK_WINDOW (GTK_WINDOW (dialog)))) {
+		if (empathy_window_get_is_visible (GTK_WINDOW (dialog))) {
 			/* Found a visible window on this desktop */
 			return chat_window;
 		}
