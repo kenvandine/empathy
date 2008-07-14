@@ -477,9 +477,12 @@ empathy_tp_tube_get_socket (EmpathyTpTube *tube,
   EmpathyTpTubePriv *priv = GET_PRIV (tube);
   GValue *address;
   guint address_type;
+  gchar *ret_hostname = NULL;
+  guint ret_port;
   GError *error = NULL;
 
   g_return_if_fail (EMPATHY_IS_TP_TUBE (tube));
+  g_return_if_fail (hostname != NULL || port != NULL);
 
   DEBUG ("Getting stream tube socket address");
 
@@ -495,14 +498,20 @@ empathy_tp_tube_get_socket (EmpathyTpTube *tube,
     {
     case TP_SOCKET_ADDRESS_TYPE_UNIX:
     case TP_SOCKET_ADDRESS_TYPE_ABSTRACT_UNIX:
-        dbus_g_type_struct_get (address, 0, hostname, G_MAXUINT);
+        dbus_g_type_struct_get (address, 0, &ret_hostname, G_MAXUINT);
         break;
     case TP_SOCKET_ADDRESS_TYPE_IPV4:
     case TP_SOCKET_ADDRESS_TYPE_IPV6:
-        dbus_g_type_struct_get (address, 0, hostname, 1, port, G_MAXUINT);    
+        dbus_g_type_struct_get (address, 0, &ret_hostname, 1, &ret_port, G_MAXUINT);    
         break;
     }
 
-  g_free (address);
+  if (hostname) {
+  	*hostname = g_strdup (ret_hostname);
+  }
+  if (port) {
+  	*port = ret_port;
+  }
+  g_boxed_free (G_TYPE_VALUE, address);
 }
 
