@@ -1200,8 +1200,8 @@ contact_list_view_remove_dialog_show (GtkWindow   *parent,
 	
 	dialog = gtk_dialog_new_with_buttons (window_title, parent,
 					      GTK_DIALOG_MODAL,
+  					      GTK_STOCK_CANCEL, GTK_RESPONSE_NO,
 					      GTK_STOCK_DELETE, GTK_RESPONSE_YES,
-					      GTK_STOCK_CANCEL, GTK_RESPONSE_NO,
 					      NULL);
 	gtk_dialog_set_has_separator (GTK_DIALOG(dialog), FALSE);
 	 
