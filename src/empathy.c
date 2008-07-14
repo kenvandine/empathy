@@ -100,6 +100,8 @@ dispatch_channel_cb (EmpathyDispatcher *dispatcher,
 	else if (!tp_strdiff (channel_type, TP_IFACE_CHANNEL_TYPE_STREAMED_MEDIA)) {
 		empathy_call_window_new (channel);
 	}
+
+	g_free (channel_type);
 }
 
 static void

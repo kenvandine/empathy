@@ -1051,6 +1051,8 @@ empathy_tp_contact_factory_get_from_handles (EmpathyTpContactFactory *tp_factory
 		tp_contact_factory_request_everything (tp_factory, new_handles);
 	}
 
+	g_array_free (new_handles, TRUE);
+
 	return contacts;
 }
 
