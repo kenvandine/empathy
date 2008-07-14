@@ -483,7 +483,6 @@ empathy_tp_tube_get_socket (EmpathyTpTube *tube,
 
   DEBUG ("Getting stream tube socket address");
 
-  address = g_slice_new0 (GValue);
   if (!tp_cli_channel_type_tubes_run_get_stream_tube_socket_address (priv->channel,
       -1, priv->id, &address_type, &address, &error, NULL))
     {
@@ -504,6 +503,6 @@ empathy_tp_tube_get_socket (EmpathyTpTube *tube,
         break;
     }
 
-  tp_g_value_slice_free (address);
+  g_free (address);
 }
 
