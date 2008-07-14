@@ -174,6 +174,7 @@ accounts_dialog_setup (EmpathyAccountsDialog *dialog)
 
 		name = mc_account_get_display_name (account);
 		if (!name) {
+			g_object_unref (account);
 			continue;
 		}
 
@@ -765,17 +766,19 @@ accounts_dialog_status_changed_cb (MissionControl           *mc,
 	g_object_unref (account);
 
 	/* Check if there is still accounts in CONNECTING state */
-	accounts = mc_accounts_list ();
+	accounts = mc_accounts_list_by_enabled (TRUE);
 	for (l = accounts; l; l = l->next) {
-		McAccount          *this_account;
+		McAccount          *this_account = l->data;
 		TpConnectionStatus  status;
 
-		this_account = l->data;
+		if (found) {
+			g_object_unref (this_account);
+			continue;
+		}
 
 		status = mission_control_get_connection_status (mc, this_account, NULL);
 		if (status == TP_CONNECTION_STATUS_CONNECTING) {
 			found = TRUE;
-			break;
 		}
 
 		g_object_unref (this_account);
