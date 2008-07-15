@@ -506,10 +506,9 @@ contact_list_view_key_press_event_cb (EmpathyContactListView *view,
 }
 
 static void
-contact_list_view_row_activated_cb (EmpathyContactListView *view,
-				    GtkTreePath            *path,
-				    GtkTreeViewColumn      *col,
-				    gpointer                user_data)
+contact_list_view_row_activated (GtkTreeView       *view,
+				 GtkTreePath       *path,
+				 GtkTreeViewColumn *column)
 {
 	EmpathyContactListViewPriv *priv = GET_PRIV (view);
 	EmpathyContact             *contact;
@@ -528,6 +527,7 @@ contact_list_view_row_activated_cb (EmpathyContactListView *view,
 
 	/* There is no event for the contact, default action is starting a chat */
 	if (priv->contact_features & EMPATHY_CONTACT_FEATURE_CHAT) {
+		DEBUG ("Starting a chat");
 		empathy_dispatcher_chat_with_contact (contact);
 	}
 
@@ -1027,8 +1027,9 @@ contact_list_view_set_property (GObject      *object,
 static void
 empathy_contact_list_view_class_init (EmpathyContactListViewClass *klass)
 {
-	GObjectClass   *object_class = G_OBJECT_CLASS (klass);
-	GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+	GObjectClass     *object_class = G_OBJECT_CLASS (klass);
+	GtkWidgetClass   *widget_class = GTK_WIDGET_CLASS (klass);
+	GtkTreeViewClass *tree_view_class = GTK_TREE_VIEW_CLASS (klass);
 
 	object_class->finalize = contact_list_view_finalize;
 	object_class->get_property = contact_list_view_get_property;
@@ -1040,6 +1041,8 @@ empathy_contact_list_view_class_init (EmpathyContactListViewClass *klass)
 	widget_class->drag_data_get      = contact_list_view_drag_data_get;
 	widget_class->drag_end           = contact_list_view_drag_end;
 	widget_class->drag_motion        = contact_list_view_drag_motion;
+
+	tree_view_class->row_activated = contact_list_view_row_activated;
 
 	signals[DRAG_CONTACT_RECEIVED] =
 		g_signal_new ("drag-contact-received",
@@ -1098,9 +1101,6 @@ empathy_contact_list_view_init (EmpathyContactListView *view)
 			  NULL);
 	g_signal_connect (view, "key-press-event",
 			  G_CALLBACK (contact_list_view_key_press_event_cb),
-			  NULL);
-	g_signal_connect (view, "row-activated",
-			  G_CALLBACK (contact_list_view_row_activated_cb),
 			  NULL);
 	g_signal_connect (view, "row-expanded",
 			  G_CALLBACK (contact_list_view_row_expand_or_collapse_cb),
