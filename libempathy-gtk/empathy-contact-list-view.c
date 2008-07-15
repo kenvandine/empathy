@@ -153,7 +153,6 @@ contact_list_view_flash_foreach (GtkTreeModel *model,
 	GtkTreePath      *parent_path = NULL;
 	GtkTreeIter       parent_iter;
 
-
 	gtk_tree_model_get (model, iter,
 			    EMPATHY_CONTACT_LIST_STORE_COL_CONTACT, &contact,
 			    -1);
