@@ -346,7 +346,8 @@ main_window_row_activated_cb (EmpathyContactListView *view,
 		return;
 	}
 
-	/* If the contact has an event, activate it */
+	/* If the contact has an event activate it, otherwise the
+	 * default handler of row-activated will be called. */
 	events = empathy_event_manager_get_events (window->event_manager);
 	for (l = events; l; l = l->next) {
 		EmpathyEvent *event = l->data;
