@@ -153,7 +153,10 @@ contact_list_view_flash_foreach (GtkTreeModel *model,
 	GtkTreePath      *parent_path = NULL;
 	GtkTreeIter       parent_iter;
 
-	gtk_tree_model_get (model, iter,
+	/* To be used with gtk_tree_model_foreach, update the status icon
+	 * of the contact to show the event icon (on=TRUE) or the presence
+	 * (on=FALSE) */
+ 	gtk_tree_model_get (model, iter,
 			    EMPATHY_CONTACT_LIST_STORE_COL_CONTACT, &contact,
 			    -1);
 
@@ -237,6 +240,7 @@ contact_list_view_flash_start (EmpathyContactListView *view)
 	priv->flash_timeout_id = g_timeout_add (FLASH_TIMEOUT,
 						(GSourceFunc) contact_list_view_flash_cb,
 						view);
+	contact_list_view_flash_cb (view);
 }
 
 static void
@@ -680,7 +684,8 @@ contact_list_view_row_activated_cb (EmpathyContactListView *view,
 		return;
 	}
 
-	if (priv->event_manager) {
+	/* If the contact has an event, activate it */
+	if (priv->contact_features & EMPATHY_CONTACT_FEATURE_EVENT) {
 		GSList *events, *l;
 
 		events = empathy_event_manager_get_events (priv->event_manager);
@@ -694,6 +699,7 @@ contact_list_view_row_activated_cb (EmpathyContactListView *view,
 		}
 	}
 
+	/* There is no event for the contact, default action is starting a chat */
 	if (priv->contact_features & EMPATHY_CONTACT_FEATURE_CHAT) {
 		empathy_dispatcher_chat_with_contact (contact);
 	}
