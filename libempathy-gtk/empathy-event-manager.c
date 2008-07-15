@@ -318,10 +318,22 @@ event_manager_pendings_changed_cb (EmpathyContactList  *list,
 				   gboolean             is_pending,
 				   EmpathyEventManager *manager)
 {
-	GString *str;
+	EmpathyEventManagerPriv *priv = GET_PRIV (manager);
+	GString                 *str;
 
 	if (!is_pending) {
-		/* FIXME: remove event if any */
+		GSList *l;
+
+		for (l = priv->events; l; l = l->next) {
+			EventPriv *event = l->data;
+
+			if (event->public.contact == contact &&
+			    event->func == event_pending_subscribe_func) {
+				event_remove (event);
+				break;
+			}
+		}
+
 		return;
 	}
 
