@@ -35,7 +35,7 @@ typedef struct {
 static void theme_adium_iface_init (EmpathyChatViewIface *iface);
 
 G_DEFINE_TYPE_WITH_CODE (EmpathyThemeAdium, empathy_theme_adium,
-			 GTK_TYPE_TEXT_VIEW,
+			 WEBKIT_TYPE_WEB_VIEW,
 			 G_IMPLEMENT_INTERFACE (EMPATHY_TYPE_CHAT_VIEW,
 						theme_adium_iface_init));
 
@@ -56,12 +56,12 @@ empathy_theme_adium_class_init (EmpathyThemeAdiumClass *klass)
 }
 
 static void
-empathy_theme_adium_init (EmpathyThemeAdium *view)
+empathy_theme_adium_init (EmpathyThemeAdium *theme)
 {
-	EmpathyThemeAdiumPriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (view,
+	EmpathyThemeAdiumPriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (theme,
 		EMPATHY_TYPE_THEME_ADIUM, EmpathyThemeAdiumPriv);
 
-	view->priv = priv;	
+	theme->priv = priv;	
 }
 
 static void
