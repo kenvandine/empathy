@@ -515,23 +515,21 @@ contact_list_view_row_activated (GtkTreeView       *view,
 	GtkTreeModel               *model;
 	GtkTreeIter                 iter;
 
+	if (!(priv->contact_features & EMPATHY_CONTACT_FEATURE_CHAT)) {
+		return;
+	}
+
 	model = GTK_TREE_MODEL (priv->store);
 	gtk_tree_model_get_iter (model, &iter, path);
 	gtk_tree_model_get (model, &iter,
 			    EMPATHY_CONTACT_LIST_STORE_COL_CONTACT, &contact,
 			    -1);
 
-	if (!contact) {
-		return;
-	}
-
-	/* There is no event for the contact, default action is starting a chat */
-	if (priv->contact_features & EMPATHY_CONTACT_FEATURE_CHAT) {
+	if (contact) {
 		DEBUG ("Starting a chat");
 		empathy_dispatcher_chat_with_contact (contact);
+		g_object_unref (contact);
 	}
-
-	g_object_unref (contact);
 }
 
 static void
@@ -1042,6 +1040,9 @@ empathy_contact_list_view_class_init (EmpathyContactListViewClass *klass)
 	widget_class->drag_end           = contact_list_view_drag_end;
 	widget_class->drag_motion        = contact_list_view_drag_motion;
 
+	/* We use the class method to let user of this widget to connect to
+	 * the signal and stop emission of the signal so the default handler
+	 * won't be called. */
 	tree_view_class->row_activated = contact_list_view_row_activated;
 
 	signals[DRAG_CONTACT_RECEIVED] =
