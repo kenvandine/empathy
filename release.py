@@ -276,7 +276,8 @@ class Project:
 		      ' --cc telepathy@lists.freedesktop.org' \
 		      ' --subject "ANNOUNCE: Empathy %s"' \
 		      ' --body "%s"' \
-		      ' gnome-announce-list@gnome.org' % (self.package_version, notes)
+		      ' gnome-announce-list@gnome.org' % (self.package_version,
+		      					  notes.replace('"', '\\"'))
 		self.exec_cmd(cmd)
 
 	def release(self):
@@ -295,6 +296,8 @@ if __name__ == '__main__':
 		dest="write_news", help="Generate and write news into the NEWS file")
 	parser.add_option("-r", "--release", action="store_true",\
 		dest="release", help="Release the tarball")
+	parser.add_option("-e", "--email", action="store_true",\
+		dest="email", help="Send the release announce email")
 
 	(options, args) = parser.parse_args ()
 	if (options.print_news):
@@ -305,4 +308,6 @@ if __name__ == '__main__':
 		p.write_news ()
 	if (options.release):
 		p.release ()
+	if (options.email):
+		p.send_email ()
 
