@@ -420,10 +420,22 @@ empathy_event_manager_new (void)
 	return manager;
 }
 
+GSList *
+empathy_event_manager_get_events (EmpathyEventManager *manager)
+{
+	EmpathyEventManagerPriv *priv = GET_PRIV (manager);
+
+	g_return_val_if_fail (EMPATHY_IS_EVENT_MANAGER (manager), NULL);
+
+	return priv->events;
+}
+
 EmpathyEvent *
 empathy_event_manager_get_top_event (EmpathyEventManager *manager)
 {
 	EmpathyEventManagerPriv *priv = GET_PRIV (manager);
+
+	g_return_val_if_fail (EMPATHY_IS_EVENT_MANAGER (manager), NULL);
 
 	return priv->events ? priv->events->data : NULL;
 }
@@ -432,6 +444,8 @@ void
 empathy_event_activate (EmpathyEvent *event_public)
 {
 	EventPriv *event = (EventPriv*) event_public;
+
+	g_return_if_fail (event_public != NULL);
 
 	if (event->func) {
 		event->func (event);
