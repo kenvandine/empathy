@@ -671,21 +671,36 @@ contact_list_view_row_activated_cb (EmpathyContactListView *view,
 	GtkTreeModel               *model;
 	GtkTreeIter                 iter;
 
-	if (!(priv->contact_features & EMPATHY_CONTACT_FEATURE_CHAT)) {
-		return;
-	}
-
-	model = gtk_tree_view_get_model (GTK_TREE_VIEW (view));
-
+	model = GTK_TREE_MODEL (priv->store);
 	gtk_tree_model_get_iter (model, &iter, path);
 	gtk_tree_model_get (model, &iter,
 			    EMPATHY_CONTACT_LIST_STORE_COL_CONTACT, &contact,
 			    -1);
 
-	if (contact) {
-		empathy_dispatcher_chat_with_contact (contact);
-		g_object_unref (contact);
+	if (!contact) {
+		return;
 	}
+
+	if (priv->event_manager) {
+		GSList *events, *l;
+
+		events = empathy_event_manager_get_events (priv->event_manager);
+		for (l = events; l; l = l->next) {
+			EmpathyEvent *event = l->data;
+
+			if (event->contact == contact) {
+				empathy_event_activate (event);
+				goto OUT;
+			}
+		}
+	}
+
+	if (priv->contact_features & EMPATHY_CONTACT_FEATURE_CHAT) {
+		empathy_dispatcher_chat_with_contact (contact);
+	}
+
+OUT:
+	g_object_unref (contact);
 }
 
 static void
