@@ -20,8 +20,6 @@ libempathy-gtk/empathy-account-widget-msn.glade
 libempathy-gtk/empathy-account-widget-salut.glade
 libempathy-gtk/empathy-account-widget-sip.glade
 libempathy-gtk/empathy-account-widget-yahoo.glade
-libempathy-gtk/empathy-accounts-dialog.c
-libempathy-gtk/empathy-accounts-dialog.glade
 libempathy-gtk/empathy-avatar-chooser.c
 libempathy-gtk/empathy-avatar-image.c
 libempathy-gtk/empathy-chat.c
@@ -58,6 +56,8 @@ nothere/src/nothere-applet.c
 
 src/empathy.c
 src/empathy-about-dialog.c
+src/empathy-accounts-dialog.c
+src/empathy-accounts-dialog.glade
 src/empathy-call-window.c
 src/empathy-call-window.glade
 src/empathy-chat-window.c
