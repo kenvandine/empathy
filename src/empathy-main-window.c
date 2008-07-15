@@ -356,7 +356,8 @@ main_window_row_activated_cb (EmpathyContactListView *view,
 			DEBUG ("Activate event");
 			empathy_event_activate (event);
 
-			/* We don't want the default handler of this signal */
+			/* We don't want the default handler of this signal
+			 * (e.g. open a chat) */
 			g_signal_stop_emission_by_name (view, "row-activated");
 			break;
 		}
