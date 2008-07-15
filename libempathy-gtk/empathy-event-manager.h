@@ -25,6 +25,8 @@
 #include <glib.h>
 #include <glib-object.h>
 
+#include <libempathy/empathy-contact.h>
+
 G_BEGIN_DECLS
 
 #define EMPATHY_TYPE_EVENT_MANAGER         (empathy_event_manager_get_type ())
@@ -47,8 +49,9 @@ struct _EmpathyEventManagerClass {
 };
 
 typedef struct {
-	gchar *icon_name;
-	gchar *message;
+	EmpathyContact *contact;
+	gchar          *icon_name;
+	gchar          *message;
 } EmpathyEvent;
 
 GType                empathy_event_manager_get_type      (void) G_GNUC_CONST;

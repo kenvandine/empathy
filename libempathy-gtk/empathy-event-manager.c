@@ -74,6 +74,11 @@ event_free (EventPriv *event)
 {
 	g_free (event->public.icon_name);
 	g_free (event->public.message);
+
+	if (event->public.contact) {
+		g_object_unref (event->public.contact);
+	}
+
 	if (event->channel) {
 		g_signal_handlers_disconnect_by_func (event->channel,
 						      event_remove,
@@ -96,6 +101,7 @@ event_remove (EventPriv *event)
 
 static void
 event_manager_add (EmpathyEventManager *manager,
+		   EmpathyContact      *contact,
 		   const gchar         *icon_name,
 		   const gchar         *message,
 		   TpChannel           *channel,
@@ -106,6 +112,7 @@ event_manager_add (EmpathyEventManager *manager,
 	EventPriv               *event;
 
 	event = g_slice_new0 (EventPriv);
+	event->public.contact = contact ? g_object_ref (contact) : NULL;
 	event->public.icon_name = g_strdup (icon_name);
 	event->public.message = g_strdup (message);
 	event->manager = manager;
@@ -161,8 +168,8 @@ event_manager_chat_message_received_cb (EmpathyTpChat       *tp_chat,
 			       empathy_message_get_body (message));
 
 	channel = empathy_tp_chat_get_channel (tp_chat);
-	event_manager_add (manager, EMPATHY_IMAGE_NEW_MESSAGE, msg, channel,
-			   event_channel_process_func, NULL);
+	event_manager_add (manager, sender, EMPATHY_IMAGE_NEW_MESSAGE, msg,
+			   channel, event_channel_process_func, NULL);
 
 	g_free (msg);
 }
@@ -198,8 +205,8 @@ event_manager_filter_channel_cb (EmpathyDispatcher   *dispatcher,
 		msg = g_strdup_printf (_("Incoming call from %s"),
 				       empathy_contact_get_name (contact));
 
-		event_manager_add (manager, EMPATHY_IMAGE_VOIP, msg, channel,
-				   event_channel_process_func, NULL);
+		event_manager_add (manager, contact, EMPATHY_IMAGE_VOIP, msg,
+				   channel, event_channel_process_func, NULL);
 
 		g_free (msg);
 		g_object_unref (contact);
@@ -288,8 +295,8 @@ event_manager_filter_tube_cb (EmpathyDispatcher     *dispatcher,
 				       empathy_contact_get_name (tube->initiator));
 	}
 
-	event_manager_add (manager, icon_name, msg, tube->channel,
-			   event_tube_process_func,
+	event_manager_add (manager, tube->initiator, icon_name, msg,
+			   tube->channel, event_tube_process_func,
 			   empathy_dispatcher_tube_ref (tube));
 
 	g_free (msg);
@@ -298,11 +305,7 @@ event_manager_filter_tube_cb (EmpathyDispatcher     *dispatcher,
 static void
 event_pending_subscribe_func (EventPriv *event)
 {
-	EmpathyContact *contact = EMPATHY_CONTACT (event->user_data);
-
-	empathy_subscription_dialog_show (contact, NULL);
-
-	g_object_unref (contact);
+	empathy_subscription_dialog_show (event->public.contact, NULL);
 	event_remove (event);
 }
 
@@ -333,9 +336,8 @@ event_manager_pendings_changed_cb (EmpathyContactList  *list,
 		g_string_append_printf (str, _("\nMessage: %s"), message);
 	}
 
-	event_manager_add (manager, GTK_STOCK_DIALOG_QUESTION, str->str, NULL,
-			   event_pending_subscribe_func,
-			   g_object_ref (contact));
+	event_manager_add (manager, contact, GTK_STOCK_DIALOG_QUESTION, str->str,
+			   NULL, event_pending_subscribe_func, NULL);
 
 	g_string_free (str, TRUE);
 }
