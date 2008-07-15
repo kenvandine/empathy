@@ -25,6 +25,7 @@
 
 #include <telepathy-glib/channel.h>
 #include <telepathy-glib/dbus.h>
+#include <telepathy-glib/util.h>
 
 #include <libmissioncontrol/mission-control.h>
 
@@ -79,49 +80,85 @@ tp_roomlist_got_rooms_cb (TpChannel       *channel,
 			  GObject         *list)
 {
 	EmpathyTpRoomlistPriv *priv = GET_PRIV (list);
+	EmpathyChatroom       *chatroom;
 	guint                  i;
-	const gchar          **names;
 	gchar                **room_ids;
-	GArray                *handles;
+	GArray                *handles = NULL;
+	GSList                *chatrooms = NULL, *l;
+	const gchar           *str;
 
-	names = g_new0 (const gchar*, rooms->len + 1);
-	handles = g_array_sized_new (FALSE, FALSE, sizeof (guint), rooms->len);
 	for (i = 0; i < rooms->len; i++) {
 		const GValue *room_name_value;
+		const GValue *handle_name_value;
 		GValueArray  *room_struct;
 		guint         handle;
+		const gchar  *channel_type;
 		GHashTable   *info;
 
 		/* Get information */
 		room_struct = g_ptr_array_index (rooms, i);
 		handle = g_value_get_uint (g_value_array_get_nth (room_struct, 0));
+		channel_type = g_value_get_string (g_value_array_get_nth (room_struct, 1));
 		info = g_value_get_boxed (g_value_array_get_nth (room_struct, 2));
 		room_name_value = g_hash_table_lookup (info, "name");
+		handle_name_value = g_hash_table_lookup (info, "handle-name");
 
-		names[i] = g_value_get_string (room_name_value);
-		g_array_append_val (handles, handle);
+		if (tp_strdiff (channel_type, TP_IFACE_CHANNEL_TYPE_TEXT)) {
+			continue;
+		}
+
+		chatroom = g_object_new (EMPATHY_TYPE_CHATROOM,
+					 "account", priv->account,
+					 NULL);
+
+		if (room_name_value) {
+			str = g_value_get_string (room_name_value);
+			empathy_chatroom_set_name (chatroom, str);
+		}
+
+		if (handle_name_value) {
+			str = g_value_get_string (handle_name_value);
+			empathy_chatroom_set_room (chatroom, str);
+
+			/* Room is ready, emit it */
+			g_signal_emit (list, signals[NEW_ROOM], 0, chatroom);
+			g_object_unref (chatroom);
+		} else {
+			/* We first need to inspect the handle */
+			if (!handles) {
+				handles = g_array_new (FALSE, FALSE, sizeof (guint));
+			}
+
+			g_array_append_val (handles, handle);
+			chatrooms = g_slist_prepend (chatrooms, chatroom);
+		}
 	}
-		
+
+	if (!handles) {
+		/* All rooms were ready, we are done */
+		return;
+	}
+
 	tp_cli_connection_run_inspect_handles (priv->connection, -1,
 					       TP_HANDLE_TYPE_ROOM,
 					       handles,
 					       &room_ids,
 					       NULL, NULL);
-	for (i = 0; i < handles->len; i++) {
-		EmpathyChatroom *chatroom;
 
-		chatroom = empathy_chatroom_new_full (priv->account,
-						      room_ids[i],
-						      names[i],
-						      FALSE);
+	l = chatrooms = g_slist_reverse (chatrooms);
+	for (i = 0; i < handles->len; i++) {
+		EmpathyChatroom *chatroom = l->data;
+
+		empathy_chatroom_set_room (chatroom, room_ids[i]);
 		g_signal_emit (list, signals[NEW_ROOM], 0, chatroom);
+
 		g_object_unref (chatroom);
 		g_free (room_ids[i]);
 	}
 
-	g_free (names);
 	g_free (room_ids);
 	g_array_free (handles, TRUE);
+	g_slist_free (chatrooms);
 }
 
 static void
@@ -379,8 +416,7 @@ empathy_tp_roomlist_start (EmpathyTpRoomlist *list)
 	g_return_if_fail (TP_IS_CHANNEL (priv->channel));
 
 	tp_cli_channel_type_room_list_call_list_rooms (priv->channel, -1,
-						       NULL, NULL, NULL,
-						       G_OBJECT (list));
+						       NULL, NULL, NULL, NULL);
 }
 
 void
@@ -392,7 +428,6 @@ empathy_tp_roomlist_stop (EmpathyTpRoomlist *list)
 	g_return_if_fail (TP_IS_CHANNEL (priv->channel));
 
 	tp_cli_channel_type_room_list_call_stop_listing (priv->channel, -1,
-							 NULL, NULL, NULL,
-							 G_OBJECT (list));
+							 NULL, NULL, NULL, NULL);
 }
 
