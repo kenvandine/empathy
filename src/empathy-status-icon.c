@@ -40,11 +40,11 @@
 #include <libempathy-gtk/empathy-presence-chooser.h>
 #include <libempathy-gtk/empathy-conf.h>
 #include <libempathy-gtk/empathy-ui-utils.h>
-#include <libempathy-gtk/empathy-accounts-dialog.h>
 #include <libempathy-gtk/empathy-images.h>
 #include <libempathy-gtk/empathy-new-message-dialog.h>
 #include <libempathy-gtk/empathy-contact-dialogs.h>
 
+#include "empathy-accounts-dialog.h"
 #include "empathy-status-icon.h"
 #include "empathy-preferences.h"
 

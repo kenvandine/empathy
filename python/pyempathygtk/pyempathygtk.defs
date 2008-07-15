@@ -411,19 +411,6 @@
 
 
 
-;; From empathy-accounts-dialog.h
-
-(define-function accounts_dialog_show
-  (c-name "empathy_accounts_dialog_show")
-  (return-type "GtkWidget*")
-  (parameters
-    '("GtkWindow*" "parent")
-    '("McAccount*" "selected_account")
-  )
-)
-
-
-
 ;; From empathy-chat-view.h
 
 (define-function chat_view_get_type

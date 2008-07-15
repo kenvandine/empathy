@@ -40,12 +40,12 @@
 
 #include <libempathy/empathy-utils.h>
 #include <libempathy-gtk/empathy-ui-utils.h>
+#include <libempathy-gtk/empathy-profile-chooser.h>
+#include <libempathy-gtk/empathy-account-widget.h>
+#include <libempathy-gtk/empathy-account-widget-irc.h>
+#include <libempathy-gtk/empathy-account-widget-sip.h>
 
 #include "empathy-accounts-dialog.h"
-#include "empathy-profile-chooser.h"
-#include "empathy-account-widget.h"
-#include "empathy-account-widget-irc.h"
-#include "empathy-account-widget-sip.h"
 
 #define DEBUG_FLAG EMPATHY_DEBUG_ACCOUNT
 #include <libempathy/empathy-debug.h>
@@ -1021,7 +1021,7 @@ empathy_accounts_dialog_show (GtkWindow *parent,
 	dialog = g_new0 (EmpathyAccountsDialog, 1);
 
 	filename = empathy_file_lookup ("empathy-accounts-dialog.glade",
-					"libempathy-gtk");
+					"src");
 	glade = empathy_glade_get_file (filename,
 				       "accounts_dialog",
 				       NULL,

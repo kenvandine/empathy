@@ -44,11 +44,11 @@
 #include <libempathy-gtk/empathy-ui-utils.h>
 #include <libempathy-gtk/empathy-geometry.h>
 #include <libempathy-gtk/empathy-conf.h>
-#include <libempathy-gtk/empathy-accounts-dialog.h>
 #include <libempathy-gtk/empathy-log-window.h>
 #include <libempathy-gtk/empathy-new-message-dialog.h>
 #include <libempathy-gtk/empathy-gtk-enum-types.h>
 
+#include "empathy-accounts-dialog.h"
 #include "empathy-main-window.h"
 #include "ephy-spinner.h"
 #include "empathy-preferences.h"

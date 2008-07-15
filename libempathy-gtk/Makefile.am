@@ -20,7 +20,6 @@ libempathy_gtk_la_SOURCES =             	\
 	empathy-chat.c				\
 	empathy-irc-network-dialog.c		\
 	empathy-spell-dialog.c			\
-	empathy-accounts-dialog.c		\
 	empathy-chat-view.c			\
 	empathy-log-window.c			\
 	empathy-theme-boxes.c			\
@@ -69,7 +68,6 @@ libempathy_gtk_headers =			\
 	empathy-chat.h				\
 	empathy-irc-network-dialog.h		\
 	empathy-spell-dialog.h			\
-	empathy-accounts-dialog.h		\
 	empathy-chat-view.h			\
 	empathy-log-window.h			\
 	empathy-theme-boxes.h			\
@@ -108,7 +106,6 @@ glade_DATA = 					\
 	empathy-contact-widget.glade		\
 	empathy-contact-dialogs.glade		\
 	empathy-presence-chooser.glade		\
-	empathy-accounts-dialog.glade		\
 	empathy-account-widget-generic.glade	\
 	empathy-account-widget-jabber.glade	\
 	empathy-account-widget-msn.glade	\

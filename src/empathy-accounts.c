@@ -29,7 +29,8 @@
 #include <gtk/gtk.h>
 
 #include <libempathy/empathy-debug.h>
-#include <libempathy-gtk/empathy-accounts-dialog.h>
+
+#include "empathy-accounts-dialog.h"
 
 static void
 destroy_cb (GtkWidget *dialog,

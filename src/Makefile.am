@@ -31,9 +31,12 @@ empathy_SOURCES =							\
 	empathy-main-window.c empathy-main-window.h			\
 	empathy-preferences.c empathy-preferences.h			\
 	empathy-call-window.c empathy-call-window.h			\
-	ephy-spinner.c ephy-spinner.h
+	ephy-spinner.c ephy-spinner.h					\
+	empathy-accounts-dialog.c empathy-accounts-dialog.h
 
-empathy_accounts_SOURCES = empathy-accounts.c
+empathy_accounts_SOURCES = empathy-accounts.c				\
+	empathy-accounts-dialog.c empathy-accounts-dialog.h
+
 empathy_logs_SOURCES = empathy-logs.c
 
 gladedir = $(datadir)/empathy
@@ -44,7 +47,8 @@ glade_DATA = 					\
 	empathy-chatrooms-window.glade		\
 	empathy-chat-window.glade		\
 	empathy-new-chatroom-dialog.glade	\
-	empathy-status-icon.glade
+	empathy-status-icon.glade		\
+	empathy-accounts-dialog.glade
 
 dist_man_MANS =			\
 	empathy.1		\

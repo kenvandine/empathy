@@ -3,7 +3,6 @@ headers
 #include <Python.h>
 #include <pygobject.h>
 #include "empathy-account-chooser.h"
-#include "empathy-accounts-dialog.h"
 #include "empathy-account-widget.h"
 #include "empathy-account-widget-irc.h"
 #include "empathy-avatar-chooser.h"

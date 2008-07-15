@@ -17,7 +17,6 @@
     <chapter id="libempathy_api">
       <title>libempathy-gtk API reference</title>
     <xi:include href="xml/empathy-account-chooser.xml"/>
-    <xi:include href="xml/empathy-accounts-dialog.xml"/>
     <xi:include href="xml/empathy-account-widget.xml"/>
     <xi:include href="xml/empathy-account-widget-irc.xml"/>
     <xi:include href="xml/empathy-avatar-chooser.xml"/>
