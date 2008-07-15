@@ -1,3 +1,44 @@
+NEW in 0.23.4
+==============
+ - Save avatar to file when right click on the avatar image (Guillaume Desmottes).
+ - Made the Close button the default widget in the contact edit dialog. (Jonny Lamb)
+ - Made account removal confirmation dialog modal. (Jonny Lamb)
+ - Set an smiley icon for the "Insert smiley" menu item. (Xavier Claessens).
+ - Set an icon for the spellcheck menu item (Xavier Claessens).
+ - Fix the bug "Incoming call from (null)" (Alban Crequy)
+ - Do not show the keypad when the media channel does not have the DTMF interface  (Alban Crequy).
+ - Better dialog message when a call is rejected (Alban Crequy)
+ - Use empathy.foo() instead of empathy_foo() for functions binding (Xavier Claessens).
+ - EmpathyCallWindow: Get a new video preview when pushing a new call into the window.  (Sjoerd Simons).
+
+Bugs fixed:
+ - Fixed #537690, crash in Empathy Instant Messenger: Adding new SIP contact t... (Xavier Claessens)
+ - Fixed #540360, crash in Empathy Instant Messenger: starting empathy (Xavier Claessens)
+ - Fixed #526892, Should set the buddy icon as window icon (Xavier Claessens)
+ - Fixed #532622, No way to send a message with the mouse. (Xavier Claessens)
+ - Fixed #534425, Username is full ID (should it detect missing @ekiga.net?) (Xavier Claessens)
+ - Fixed #535080, Add a --silent option (Marco Pesenti Gritti)
+ - Fixed #536391, Existing chat window moves when a new chat window is opened (Ross Burton)
+ - Fixed #536628, Close contact list when Escape is pressed (Ross Burton)
+ - Fixed #536984, Should select the right account when reconfigure a bugged account (Xavier Claessens)
+ - Fixed #537129, Does not build with gcc 4.3.0 (Cosimo Cecchi)
+ - Fixed #537249, Use function to check GTK+ version instead of mangling directly (Ross Burton)
+ - Fixed #541431, Feature to save a contact's display picture (Guillaume Desmottes)
+ - Fixed #542196, Reverse order of buttons on the dialog box to delete a contact (or a group) (Gaëtan Podevijn)
+ - Fixed #542231, Tubes: memory freed with tp_g_value_slice_free instead of g_free() (Alban Crequy)
+
+Translations:
+ - Updated de translation  (Andre Klapper).
+ - Updated Galician Translation. (icq).
+ - Updated es translation  (Jorge Gonzalez).
+ - Updated Norwegian bokmål translation. (kmaraas).
+ - Updated Occitan translation (ymarcheg).
+ - Updated sv translation  (Daniel Nylander).
+ - Updated vi translation  (Clytie Siddall).
+ - Updated Russian translation. (Il'ya Mertsalov).
+ - Updated fr translation. (claudep).
+ - Updated Arabic Translation. (Abou Manal).
+
 NEW in 0.23.3
 ==============
  - Updated manual (Milo Casagrande).
