@@ -74,6 +74,35 @@ tp_roomlist_listing_cb (TpChannel *channel,
 }
 
 static void
+tp_roomlist_chatrooms_free (gpointer data)
+{
+	GSList *chatrooms = data;
+
+	g_slist_foreach (chatrooms, (GFunc) g_object_unref, NULL);
+	g_slist_free (chatrooms);
+}
+
+static void
+tp_roomlist_inspect_handles_cb (TpConnection *connection,
+				const gchar **names,
+				const GError *error,
+				gpointer      user_data,
+				GObject      *list)
+{
+	GSList *chatrooms = user_data;
+
+	while (*names) {
+		EmpathyChatroom *chatroom = chatrooms->data;
+
+		empathy_chatroom_set_room (chatroom, *names);
+		g_signal_emit (list, signals[NEW_ROOM], 0, chatroom);
+
+		names++;
+		chatrooms = chatrooms->next;
+	}
+}
+
+static void
 tp_roomlist_got_rooms_cb (TpChannel       *channel,
 			  const GPtrArray *rooms,
 			  gpointer         user_data,
@@ -82,10 +111,8 @@ tp_roomlist_got_rooms_cb (TpChannel       *channel,
 	EmpathyTpRoomlistPriv *priv = GET_PRIV (list);
 	EmpathyChatroom       *chatroom;
 	guint                  i;
-	gchar                **room_ids;
 	GArray                *handles = NULL;
-	GSList                *chatrooms = NULL, *l;
-	const gchar           *str;
+	GSList                *chatrooms = NULL;
 
 	for (i = 0; i < rooms->len; i++) {
 		const GValue *room_name_value;
@@ -107,25 +134,24 @@ tp_roomlist_got_rooms_cb (TpChannel       *channel,
 			continue;
 		}
 
-		chatroom = g_object_new (EMPATHY_TYPE_CHATROOM,
-					 "account", priv->account,
-					 NULL);
+		chatroom = empathy_chatroom_new (priv->account);
 
-		if (room_name_value) {
-			str = g_value_get_string (room_name_value);
-			empathy_chatroom_set_name (chatroom, str);
+		if (room_name_value != NULL) {
+			empathy_chatroom_set_name (chatroom,
+						   g_value_get_string (room_name_value));
 		}
 
-		if (handle_name_value) {
-			str = g_value_get_string (handle_name_value);
-			empathy_chatroom_set_room (chatroom, str);
+		if (handle_name_value != NULL) {
+			empathy_chatroom_set_room (chatroom,
+						   g_value_get_string (handle_name_value));
 
-			/* Room is ready, emit it */
+			/* We have the room ID, we can directly emit it */
 			g_signal_emit (list, signals[NEW_ROOM], 0, chatroom);
 			g_object_unref (chatroom);
 		} else {
-			/* We first need to inspect the handle */
-			if (!handles) {
+			/* We don't have the room ID, we'll inspect all handles
+			 * at once and then emit rooms */
+			if (handles == NULL) {
 				handles = g_array_new (FALSE, FALSE, sizeof (guint));
 			}
 
@@ -134,31 +160,18 @@ tp_roomlist_got_rooms_cb (TpChannel       *channel,
 		}
 	}
 
-	if (!handles) {
-		/* All rooms were ready, we are done */
-		return;
+	if (handles != NULL) {
+		chatrooms = g_slist_reverse (chatrooms);
+		tp_cli_connection_call_inspect_handles (priv->connection, -1,
+						       TP_HANDLE_TYPE_ROOM,
+						       handles,
+						       tp_roomlist_inspect_handles_cb,
+						       chatrooms,
+						       tp_roomlist_chatrooms_free,
+						       list);
 	}
 
-	tp_cli_connection_run_inspect_handles (priv->connection, -1,
-					       TP_HANDLE_TYPE_ROOM,
-					       handles,
-					       &room_ids,
-					       NULL, NULL);
-
-	l = chatrooms = g_slist_reverse (chatrooms);
-	for (i = 0; i < handles->len; i++) {
-		EmpathyChatroom *chatroom = l->data;
-
-		empathy_chatroom_set_room (chatroom, room_ids[i]);
-		g_signal_emit (list, signals[NEW_ROOM], 0, chatroom);
-
-		g_object_unref (chatroom);
-		g_free (room_ids[i]);
-	}
-
-	g_free (room_ids);
 	g_array_free (handles, TRUE);
-	g_slist_free (chatrooms);
 }
 
 static void

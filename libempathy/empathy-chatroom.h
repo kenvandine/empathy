@@ -50,9 +50,8 @@ struct _EmpathyChatroomClass {
 };
 
 GType            empathy_chatroom_get_type        (void) G_GNUC_CONST;
-EmpathyChatroom *empathy_chatroom_new             (McAccount       *account,
-						   const gchar     *room);
-EmpathyChatroom *empathy_chatroom_new_full         (McAccount      *account,
+EmpathyChatroom *empathy_chatroom_new             (McAccount       *account);
+EmpathyChatroom *empathy_chatroom_new_full        (McAccount       *account,
 						   const gchar     *room,
 						   const gchar     *name,
 						   gboolean         auto_connect);

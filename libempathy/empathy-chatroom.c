@@ -188,15 +188,12 @@ chatroom_set_property (GObject      *object,
 }
 
 EmpathyChatroom *
-empathy_chatroom_new (McAccount   *account,
-		     const gchar *room)
+empathy_chatroom_new (McAccount *account)
 {
 	g_return_val_if_fail (MC_IS_ACCOUNT (account), NULL);
-	g_return_val_if_fail (room != NULL, NULL);
 
 	return g_object_new (EMPATHY_TYPE_CHATROOM,
 			     "account", account,
-			     "room", room,
 			     NULL);
 }
 
