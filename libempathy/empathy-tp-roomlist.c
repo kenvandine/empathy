@@ -91,7 +91,12 @@ tp_roomlist_inspect_handles_cb (TpConnection *connection,
 {
 	GSList *chatrooms = user_data;
 
-	while (*names) {
+	if (error != NULL) {
+		DEBUG ("Error: %s", error->message);
+		return;
+	}
+
+	while (*names != NULL) {
 		EmpathyChatroom *chatroom = chatrooms->data;
 
 		empathy_chatroom_set_room (chatroom, *names);
