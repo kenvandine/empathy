@@ -16,6 +16,7 @@ BUILT_SOURCES = 					\
 lib_LTLIBRARIES = libempathy-gtk.la
 
 libempathy_gtk_la_SOURCES =             	\
+	totem-subtitle-encoding.c totem-subtitle-encoding.h \
 	empathy-account-chooser.c		\
 	empathy-chat.c				\
 	empathy-irc-network-dialog.c		\
@@ -47,7 +48,7 @@ libempathy_gtk_la_SOURCES =             	\
 	empathy-cell-renderer-text.c		\
 	empathy-spell.c				\
 	empathy-contact-menu.c			\
-	totem-subtitle-encoding.c totem-subtitle-encoding.h
+	empathy-event-manager.c
 
 # do not distribute generated files
 nodist_libempathy_gtk_la_SOURCES =\
@@ -94,7 +95,8 @@ libempathy_gtk_headers =			\
 	empathy-smiley-manager.h		\
 	empathy-cell-renderer-text.h		\
 	empathy-spell.h				\
-	empathy-contact-menu.h
+	empathy-contact-menu.h			\
+	empathy-event-manager.h
 
 libempathy_gtk_includedir = $(includedir)/libempathy-gtk/
 libempathy_gtk_include_HEADERS =		\
