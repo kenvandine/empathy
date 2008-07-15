@@ -366,7 +366,7 @@ new_chatroom_dialog_account_changed_cb (GtkComboBox             *combobox,
 		g_signal_connect (dialog->room_list, "new-room",
 				  G_CALLBACK (new_chatroom_dialog_new_room_cb),
 				  dialog);
-		g_signal_connect (dialog->room_list, "notify::listing",
+		g_signal_connect (dialog->room_list, "notify::is-listing",
 				  G_CALLBACK (new_chatroom_dialog_listing_cb),
 				  dialog);
 
