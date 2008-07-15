@@ -685,7 +685,7 @@ contact_list_view_row_activated_cb (EmpathyContactListView *view,
 	}
 
 	/* If the contact has an event, activate it */
-	if (priv->contact_features & EMPATHY_CONTACT_FEATURE_EVENT) {
+	if (priv->contact_features & EMPATHY_CONTACT_LIST_FEATURE_CONTACT_EVENTS) {
 		GSList *events, *l;
 
 		events = empathy_event_manager_get_events (priv->event_manager);
