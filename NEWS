@@ -10,6 +10,7 @@ NEW in 0.23.4
  - Better dialog message when a call is rejected (Alban Crequy)
  - Use empathy.foo() instead of empathy_foo() for functions binding (Xavier Claessens).
  - EmpathyCallWindow: Get a new video preview when pushing a new call into the window.  (Sjoerd Simons).
+ - Fix chatroom listing with salut accounts. (Xavier Claessens).
 
 Bugs fixed:
  - Fixed #537690, crash in Empathy Instant Messenger: Adding new SIP contact t... (Xavier Claessens)
