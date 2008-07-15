@@ -35,6 +35,7 @@
 #include "empathy-chat-view.h"
 #include "empathy-conf.h"
 #include "empathy-chat-text-view.h"
+#include "empathy-theme-adium.h"
 #include "empathy-theme-boxes.h"
 #include "empathy-theme-irc.h"
 
@@ -61,6 +62,7 @@ static const gchar *themes[] = {
 	"simple", N_("Simple"),
 	"clean", N_("Clean"),
 	"blue", N_("Blue"),
+	"adium", N_("Adium"),
 	NULL
 };
 
@@ -320,6 +322,9 @@ empathy_theme_manager_create_view (EmpathyThemeManager *manager)
 
 	if (strcmp (priv->name, "classic") == 0)  {
 		return EMPATHY_CHAT_VIEW (theme_manager_create_irc_view (manager));
+	}
+	if (strcmp (priv->name, "adium") == 0)  {
+		return EMPATHY_CHAT_VIEW (empathy_theme_adium_new ());
 	}
 
 	theme = theme_manager_create_boxes_view (manager);

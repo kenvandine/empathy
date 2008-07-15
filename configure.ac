@@ -156,6 +156,29 @@ AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE,"$GETTEXT_PACKAGE",[Gettext package name])
 AM_GLIB_GNU_GETTEXT
 
 # -----------------------------------------------------------
+# Webkit
+# -----------------------------------------------------------
+AC_ARG_ENABLE(webkit,
+              AS_HELP_STRING([--enable-webkit=@<:@no/yes/auto@:>@],
+                             [build with webkit support]), ,
+                             enable_webkit=auto)
+
+if test "x$enable_webkit" != "xno"; then
+   PKG_CHECK_MODULES(WEBKIT, 
+   [
+      WebKitGtk
+   ], have_webkit="yes", have_webkit="no")
+else
+   have_webkit=no
+fi
+
+if test "x$enable_webkit" = "xyes" -a "x$have_webkit" != "xyes"; then
+   AC_MSG_ERROR([Couldn't find webkit dependencies.])
+fi
+
+AM_CONDITIONAL(HAVE_WEBKIT, test "x$have_webkit" = "xyes")
+
+# -----------------------------------------------------------
 # spellchecking checks: enchant and iso-codes
 # -----------------------------------------------------------
 AC_ARG_ENABLE(spell,

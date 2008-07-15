@@ -10,6 +10,7 @@ AM_CPPFLAGS =                                           \
 	$(ENCHANT_CFLAGS)				\
 	$(LIBCHAMPLAIN_CFLAGS)				\
 	$(GEOCLUE_CFLAGS)				\
+	$(WEBKIT_CFLAGS)				\
 	$(WARN_CFLAGS)					\
 	$(DISABLE_DEPRECATED)
 
@@ -55,6 +56,7 @@ libempathy_gtk_handwritten_source =            	\
 	empathy-smiley-manager.c		\
 	empathy-spell.c				\
 	empathy-status-preset-dialog.c		\
+	empathy-theme-adium.c			\
 	empathy-theme-boxes.c			\
 	empathy-theme-irc.c			\
 	empathy-theme-manager.c			\
@@ -73,6 +75,7 @@ libempathy_gtk_la_LIBADD =			\
 	$(ENCHANT_LIBS)				\
 	$(LIBCHAMPLAIN_LIBS)			\
 	$(GEOCLUE_LIBS)				\
+	$(WEBKIT_LIBS)				\
 	$(top_builddir)/libempathy/libempathy.la
 
 libempathy_gtk_la_LDFLAGS =                \
@@ -113,6 +116,7 @@ libempathy_gtk_headers =			\
 	empathy-smiley-manager.h		\
 	empathy-spell.h				\
 	empathy-status-preset-dialog.h		\
+	empathy-theme-adium.h			\
 	empathy-theme-boxes.h			\
 	empathy-theme-irc.h			\
 	empathy-theme-manager.h			\
