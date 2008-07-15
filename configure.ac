@@ -168,6 +168,10 @@ if test "x$enable_webkit" != "xno"; then
    [
       WebKitGtk
    ], have_webkit="yes", have_webkit="no")
+
+   if test "x$have_webkit" = "xyes"; then
+      AC_DEFINE(HAVE_WEBKIT, 1, [Define if you have libwebkitgtk])
+   fi
 else
    have_webkit=no
 fi

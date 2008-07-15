@@ -56,7 +56,6 @@ libempathy_gtk_handwritten_source =            	\
 	empathy-smiley-manager.c		\
 	empathy-spell.c				\
 	empathy-status-preset-dialog.c		\
-	empathy-theme-adium.c			\
 	empathy-theme-boxes.c			\
 	empathy-theme-irc.c			\
 	empathy-theme-manager.c			\
@@ -116,7 +115,6 @@ libempathy_gtk_headers =			\
 	empathy-smiley-manager.h		\
 	empathy-spell.h				\
 	empathy-status-preset-dialog.h		\
-	empathy-theme-adium.h			\
 	empathy-theme-boxes.h			\
 	empathy-theme-irc.h			\
 	empathy-theme-manager.h			\
@@ -132,6 +130,11 @@ libempathy_gtk_includedir = $(includedir)/libempathy-gtk/
 libempathy_gtk_include_HEADERS =		\
 	$(libempathy_gtk_headers)		\
 	empathy-gtk-enum-types.h
+
+if HAVE_WEBKIT
+libempathy_gtk_headers += empathy-theme-adium.h
+libempathy_gtk_la_SOURCES += empathy-theme-adium.c
+endif
 
 uidir = $(datadir)/empathy
 ui_DATA = 					\
