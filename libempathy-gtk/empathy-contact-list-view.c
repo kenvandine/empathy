@@ -1039,10 +1039,6 @@ empathy_contact_list_view_class_init (EmpathyContactListViewClass *klass)
 	widget_class->drag_begin         = contact_list_view_drag_begin;
 	widget_class->drag_data_get      = contact_list_view_drag_data_get;
 	widget_class->drag_end           = contact_list_view_drag_end;
-	/* FIXME: noticed but when you drag the row over the treeview
-	 * fast, it seems to stop redrawing itself, if we don't
-	 * connect this signal, all is fine.
-	 */
 	widget_class->drag_motion        = contact_list_view_drag_motion;
 
 	signals[DRAG_CONTACT_RECEIVED] =
