@@ -47,8 +47,7 @@ libempathy_gtk_la_SOURCES =             	\
 	empathy-smiley-manager.c		\
 	empathy-cell-renderer-text.c		\
 	empathy-spell.c				\
-	empathy-contact-menu.c			\
-	empathy-event-manager.c
+	empathy-contact-menu.c
 
 # do not distribute generated files
 nodist_libempathy_gtk_la_SOURCES =\
@@ -95,8 +94,7 @@ libempathy_gtk_headers =			\
 	empathy-smiley-manager.h		\
 	empathy-cell-renderer-text.h		\
 	empathy-spell.h				\
-	empathy-contact-menu.h			\
-	empathy-event-manager.h
+	empathy-contact-menu.h
 
 libempathy_gtk_includedir = $(includedir)/libempathy-gtk/
 libempathy_gtk_include_HEADERS =		\

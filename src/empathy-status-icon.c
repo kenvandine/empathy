@@ -30,7 +30,6 @@
 #include <libempathy/empathy-utils.h>
 #include <libempathy/empathy-idle.h>
 
-#include <libempathy-gtk/empathy-event-manager.h>
 #include <libempathy-gtk/empathy-presence-chooser.h>
 #include <libempathy-gtk/empathy-conf.h>
 #include <libempathy-gtk/empathy-ui-utils.h>
@@ -40,6 +39,7 @@
 #include "empathy-accounts-dialog.h"
 #include "empathy-status-icon.h"
 #include "empathy-preferences.h"
+#include "empathy-event-manager.h"
 
 #define DEBUG_FLAG EMPATHY_DEBUG_DISPATCHER
 #include <libempathy/empathy-debug.h>

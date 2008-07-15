@@ -46,16 +46,12 @@
 #include "empathy-cell-renderer-expander.h"
 #include "empathy-cell-renderer-text.h"
 #include "empathy-cell-renderer-activatable.h"
-#include "empathy-event-manager.h"
 #include "empathy-ui-utils.h"
 #include "empathy-gtk-enum-types.h"
 #include "empathy-gtk-marshal.h"
 
 #define DEBUG_FLAG EMPATHY_DEBUG_CONTACT
 #include <libempathy/empathy-debug.h>
-
-/* Flashing delay for icons (milliseconds). */
-#define FLASH_TIMEOUT 500
 
 /* Active users are those which have recently changed state
  * (e.g. online, offline or from normal to a busy state).
@@ -68,9 +64,6 @@ typedef struct {
 	EmpathyContactListFeatureFlags  list_features;
 	EmpathyContactFeatureFlags      contact_features;
 	GtkWidget                      *tooltip_widget;
-	EmpathyEventManager            *event_manager;
-	guint                           flash_timeout_id;
-	gboolean                        flash_on;
 } EmpathyContactListViewPriv;
 
 typedef struct {
@@ -120,157 +113,6 @@ enum {
 static guint signals[LAST_SIGNAL];
 
 G_DEFINE_TYPE (EmpathyContactListView, empathy_contact_list_view, GTK_TYPE_TREE_VIEW);
-
-static void
-contact_list_view_flash_stop (EmpathyContactListView *view)
-{
-	EmpathyContactListViewPriv *priv = GET_PRIV (view);
-
-	if (priv->flash_timeout_id == 0) {
-		return;
-	}
-
-	DEBUG ("Stop flashing");
-	g_source_remove (priv->flash_timeout_id);
-	priv->flash_timeout_id = 0;
-	priv->flash_on = FALSE;
-}
-
-typedef struct {
-	EmpathyEvent *event;
-	gboolean      on;
-} FlashForeachData;
-
-static gboolean
-contact_list_view_flash_foreach (GtkTreeModel *model,
-				 GtkTreePath  *path,
-				 GtkTreeIter  *iter,
-				 gpointer      user_data)
-{
-	FlashForeachData *data = (FlashForeachData*) user_data;
-	EmpathyContact   *contact;
-	const gchar      *icon_name;
-	GtkTreePath      *parent_path = NULL;
-	GtkTreeIter       parent_iter;
-
-	/* To be used with gtk_tree_model_foreach, update the status icon
-	 * of the contact to show the event icon (on=TRUE) or the presence
-	 * (on=FALSE) */
- 	gtk_tree_model_get (model, iter,
-			    EMPATHY_CONTACT_LIST_STORE_COL_CONTACT, &contact,
-			    -1);
-
-	if (contact != data->event->contact) {
-		if (contact) {
-			g_object_unref (contact);
-		}
-		return FALSE;
-	}
-
-	if (data->on) {
-		icon_name = data->event->icon_name;
-	} else {
-		icon_name = empathy_icon_name_for_contact (contact);
-	}
-
-	gtk_tree_store_set (GTK_TREE_STORE (model), iter,
-			    EMPATHY_CONTACT_LIST_STORE_COL_ICON_STATUS, icon_name,
-			    -1);
-
-	/* To make sure the parent is shown correctly, we emit
-	 * the row-changed signal on the parent so it prompts
-	 * it to be refreshed by the filter func. 
-	 */
-	if (gtk_tree_model_iter_parent (model, &parent_iter, iter)) {
-		parent_path = gtk_tree_model_get_path (model, &parent_iter);
-	}
-	if (parent_path) {
-		gtk_tree_model_row_changed (model, parent_path, &parent_iter);
-		gtk_tree_path_free (parent_path);
-	}
-
-	g_object_unref (contact);
-
-	return FALSE;
-}
-
-static gboolean
-contact_list_view_flash_cb (EmpathyContactListView *view)
-{
-	EmpathyContactListViewPriv *priv = GET_PRIV (view);
-	GtkTreeModel               *model;
-	GSList                     *events, *l;
-	gboolean                    found_event = FALSE;
-	FlashForeachData            data;
-
-	priv->flash_on = !priv->flash_on;
-	data.on = priv->flash_on;
-	model = GTK_TREE_MODEL (priv->store);
-
-	events = empathy_event_manager_get_events (priv->event_manager);
-	for (l = events; l; l = l->next) {
-		data.event = l->data;
-		if (!data.event->contact) {
-			continue;
-		}
-
-		found_event = TRUE;
-		gtk_tree_model_foreach (model,
-					contact_list_view_flash_foreach,
-					&data);
-	}
-
-	if (!found_event) {
-		contact_list_view_flash_stop (view);
-	}
-
-	return TRUE;
-}
-
-static void
-contact_list_view_flash_start (EmpathyContactListView *view)
-{
-	EmpathyContactListViewPriv *priv = GET_PRIV (view);
-
-	if (priv->flash_timeout_id != 0) {
-		return;
-	}
-
-	DEBUG ("Start flashing");
-	priv->flash_timeout_id = g_timeout_add (FLASH_TIMEOUT,
-						(GSourceFunc) contact_list_view_flash_cb,
-						view);
-	contact_list_view_flash_cb (view);
-}
-
-static void
-contact_list_view_event_added_cb (EmpathyEventManager    *manager,
-				  EmpathyEvent           *event,
-				  EmpathyContactListView *view)
-{
-	if (event->contact) {
-		contact_list_view_flash_start (view);
-	}
-}
-
-static void
-contact_list_view_event_removed_cb (EmpathyEventManager    *manager,
-				    EmpathyEvent           *event,
-				    EmpathyContactListView *view)
-{
-	EmpathyContactListViewPriv *priv = GET_PRIV (view);
-	FlashForeachData            data;
-
-	if (!event->contact) {
-		return;
-	}
-
-	data.on = FALSE;
-	data.event = event;
-	gtk_tree_model_foreach (GTK_TREE_MODEL (priv->store),
-				contact_list_view_flash_foreach,
-				&data);
-}
 
 static gboolean
 contact_list_view_query_tooltip_cb (EmpathyContactListView *view,
@@ -684,27 +526,11 @@ contact_list_view_row_activated_cb (EmpathyContactListView *view,
 		return;
 	}
 
-	/* If the contact has an event, activate it */
-	if (priv->contact_features & EMPATHY_CONTACT_LIST_FEATURE_CONTACT_EVENTS) {
-		GSList *events, *l;
-
-		events = empathy_event_manager_get_events (priv->event_manager);
-		for (l = events; l; l = l->next) {
-			EmpathyEvent *event = l->data;
-
-			if (event->contact == contact) {
-				empathy_event_activate (event);
-				goto OUT;
-			}
-		}
-	}
-
 	/* There is no event for the contact, default action is starting a chat */
 	if (priv->contact_features & EMPATHY_CONTACT_FEATURE_CHAT) {
 		empathy_dispatcher_chat_with_contact (contact);
 	}
 
-OUT:
 	g_object_unref (contact);
 }
 
@@ -1130,40 +956,6 @@ contact_list_view_set_list_features (EmpathyContactListView         *view,
 	/* Update has-tooltip */
 	has_tooltip = (features & EMPATHY_CONTACT_LIST_FEATURE_CONTACT_TOOLTIP) != 0;
 	gtk_widget_set_has_tooltip (GTK_WIDGET (view), has_tooltip);
-
-	/* Enable event handling if needed */
-	if (features & EMPATHY_CONTACT_LIST_FEATURE_CONTACT_EVENTS &&
-	    !priv->event_manager) {
-		GSList *l;
-
-		priv->event_manager = empathy_event_manager_new ();
-		g_signal_connect (priv->event_manager, "event-added",
-				  G_CALLBACK (contact_list_view_event_added_cb),
-				  view);
-		g_signal_connect (priv->event_manager, "event-removed",
-				  G_CALLBACK (contact_list_view_event_removed_cb),
-				  view);
-
-		l = empathy_event_manager_get_events (priv->event_manager);
-		while (l) {
-			contact_list_view_event_added_cb (priv->event_manager,
-							  l->data, view);
-			l = l->next;
-		}
-	}
-
-	/* Disable event handling if needed */
-	if (!(features & EMPATHY_CONTACT_LIST_FEATURE_CONTACT_EVENTS) &&
-	    priv->event_manager) {
-		g_signal_handlers_disconnect_by_func (priv->event_manager,
-				  		      contact_list_view_event_added_cb,
-				  		      view);
-		g_signal_handlers_disconnect_by_func (priv->event_manager,
-				  		      contact_list_view_event_removed_cb,
-				  		      view);
-		g_object_unref (priv->event_manager);
-		priv->event_manager = NULL;
-	}
 }
 
 static void
@@ -1175,16 +967,6 @@ contact_list_view_finalize (GObject *object)
 
 	if (priv->store) {
 		g_object_unref (priv->store);
-	}
-
-	if (priv->event_manager) {
-		g_signal_handlers_disconnect_by_func (priv->event_manager,
-				  		      contact_list_view_event_added_cb,
-				  		      object);
-		g_signal_handlers_disconnect_by_func (priv->event_manager,
-				  		      contact_list_view_event_removed_cb,
-				  		      object);
-		g_object_unref (priv->event_manager);
 	}
 
 	G_OBJECT_CLASS (empathy_contact_list_view_parent_class)->finalize (object);

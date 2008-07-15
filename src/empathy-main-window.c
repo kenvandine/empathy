@@ -55,9 +55,13 @@
 #include "empathy-about-dialog.h"
 #include "empathy-new-chatroom-dialog.h"
 #include "empathy-chatrooms-window.h"
+#include "empathy-event-manager.h"
 
 #define DEBUG_FLAG EMPATHY_DEBUG_OTHER
 #include <libempathy/empathy-debug.h>
+
+/* Flashing delay for icons (milliseconds). */
+#define FLASH_TIMEOUT 500
 
 /* Minimum width of roster window if something goes wrong. */
 #define MIN_WIDTH 50
@@ -73,6 +77,9 @@ typedef struct {
 	EmpathyContactListStore *list_store;
 	MissionControl          *mc;
 	EmpathyChatroomManager  *chatroom_manager;
+	EmpathyEventManager     *event_manager;
+	guint                    flash_timeout_id;
+	gboolean                 flash_on;
 	gpointer                 token;
 
 	GtkWidget              *window;
@@ -172,6 +179,187 @@ static void     main_window_notify_sort_criterium_cb           (EmpathyConf     
 								const gchar              *key,
 								EmpathyMainWindow        *window);
 
+static void
+main_window_flash_stop (EmpathyMainWindow *window)
+{
+	if (window->flash_timeout_id == 0) {
+		return;
+	}
+
+	DEBUG ("Stop flashing");
+	g_source_remove (window->flash_timeout_id);
+	window->flash_timeout_id = 0;
+	window->flash_on = FALSE;
+}
+
+typedef struct {
+	EmpathyEvent *event;
+	gboolean      on;
+} FlashForeachData;
+
+static gboolean
+main_window_flash_foreach (GtkTreeModel *model,
+			   GtkTreePath  *path,
+			   GtkTreeIter  *iter,
+			   gpointer      user_data)
+{
+	FlashForeachData *data = (FlashForeachData*) user_data;
+	EmpathyContact   *contact;
+	const gchar      *icon_name;
+	GtkTreePath      *parent_path = NULL;
+	GtkTreeIter       parent_iter;
+
+	/* To be used with gtk_tree_model_foreach, update the status icon
+	 * of the contact to show the event icon (on=TRUE) or the presence
+	 * (on=FALSE) */
+ 	gtk_tree_model_get (model, iter,
+			    EMPATHY_CONTACT_LIST_STORE_COL_CONTACT, &contact,
+			    -1);
+
+	if (contact != data->event->contact) {
+		if (contact) {
+			g_object_unref (contact);
+		}
+		return FALSE;
+	}
+
+	if (data->on) {
+		icon_name = data->event->icon_name;
+	} else {
+		icon_name = empathy_icon_name_for_contact (contact);
+	}
+
+	gtk_tree_store_set (GTK_TREE_STORE (model), iter,
+			    EMPATHY_CONTACT_LIST_STORE_COL_ICON_STATUS, icon_name,
+			    -1);
+
+	/* To make sure the parent is shown correctly, we emit
+	 * the row-changed signal on the parent so it prompts
+	 * it to be refreshed by the filter func. 
+	 */
+	if (gtk_tree_model_iter_parent (model, &parent_iter, iter)) {
+		parent_path = gtk_tree_model_get_path (model, &parent_iter);
+	}
+	if (parent_path) {
+		gtk_tree_model_row_changed (model, parent_path, &parent_iter);
+		gtk_tree_path_free (parent_path);
+	}
+
+	g_object_unref (contact);
+
+	return FALSE;
+}
+
+static gboolean
+main_window_flash_cb (EmpathyMainWindow *window)
+{
+	GtkTreeModel     *model;
+	GSList           *events, *l;
+	gboolean          found_event = FALSE;
+	FlashForeachData  data;
+
+	window->flash_on = !window->flash_on;
+	data.on = window->flash_on;
+	model = GTK_TREE_MODEL (window->list_store);
+
+	events = empathy_event_manager_get_events (window->event_manager);
+	for (l = events; l; l = l->next) {
+		data.event = l->data;
+		if (!data.event->contact) {
+			continue;
+		}
+
+		found_event = TRUE;
+		gtk_tree_model_foreach (model,
+					main_window_flash_foreach,
+					&data);
+	}
+
+	if (!found_event) {
+		main_window_flash_stop (window);
+	}
+
+	return TRUE;
+}
+
+static void
+main_window_flash_start (EmpathyMainWindow *window)
+{
+
+	if (window->flash_timeout_id != 0) {
+		return;
+	}
+
+	DEBUG ("Start flashing");
+	window->flash_timeout_id = g_timeout_add (FLASH_TIMEOUT,
+						  (GSourceFunc) main_window_flash_cb,
+						  window);
+	main_window_flash_cb (window);
+}
+
+static void
+main_window_event_added_cb (EmpathyEventManager *manager,
+			    EmpathyEvent        *event,
+			    EmpathyMainWindow   *window)
+{
+	if (event->contact) {
+		main_window_flash_start (window);
+	}
+}
+
+static void
+main_window_event_removed_cb (EmpathyEventManager *manager,
+			      EmpathyEvent        *event,
+			      EmpathyMainWindow   *window)
+{
+	FlashForeachData data;
+
+	if (!event->contact) {
+		return;
+	}
+
+	data.on = FALSE;
+	data.event = event;
+	gtk_tree_model_foreach (GTK_TREE_MODEL (window->list_store),
+				main_window_flash_foreach,
+				&data);
+}
+
+static void
+main_window_row_activated_cb (EmpathyContactListView *view,
+			      GtkTreePath            *path,
+			      GtkTreeViewColumn      *col,
+			      EmpathyMainWindow      *window)
+{
+	EmpathyContact *contact;
+	GtkTreeModel   *model;
+	GtkTreeIter     iter;
+	GSList         *events, *l;
+
+	model = GTK_TREE_MODEL (window->list_store);
+	gtk_tree_model_get_iter (model, &iter, path);
+	gtk_tree_model_get (model, &iter,
+			    EMPATHY_CONTACT_LIST_STORE_COL_CONTACT, &contact,
+			    -1);
+
+	if (!contact) {
+		return;
+	}
+
+	/* If the contact has an event, activate it */
+	events = empathy_event_manager_get_events (window->event_manager);
+	for (l = events; l; l = l->next) {
+		EmpathyEvent *event = l->data;
+
+		if (event->contact == contact) {
+			empathy_event_activate (event);
+			break;
+		}
+	}
+
+	g_object_unref (contact);
+}
+
 GtkWidget *
 empathy_main_window_show (void)
 {
@@ -188,6 +376,7 @@ empathy_main_window_show (void)
 	gboolean                  compact_contact_list;
 	gint                      x, y, w, h;
 	gchar                    *filename;
+	GSList                   *l;
 
 	if (window) {
 		empathy_window_present (GTK_WINDOW (window->window), TRUE);
@@ -298,6 +487,9 @@ empathy_main_window_show (void)
 	gtk_widget_show (GTK_WIDGET (window->list_view));
 	gtk_container_add (GTK_CONTAINER (sw),
 			   GTK_WIDGET (window->list_view));
+	g_signal_connect (window->list_view, "row-activated",
+			  G_CALLBACK (main_window_row_activated_cb),
+			  window);
 
 	/* Load user-defined accelerators. */
 	main_window_accels_load ();
@@ -321,8 +513,24 @@ empathy_main_window_show (void)
 		gtk_window_move (GTK_WINDOW (window->window), x, y);
 	}
 
+	/* Enable event handling */
+	window->event_manager = empathy_event_manager_new ();
+	g_signal_connect (window->event_manager, "event-added",
+			  G_CALLBACK (main_window_event_added_cb),
+			  window);
+	g_signal_connect (window->event_manager, "event-removed",
+			  G_CALLBACK (main_window_event_removed_cb),
+			  window);
+
+	l = empathy_event_manager_get_events (window->event_manager);
+	while (l) {
+		main_window_event_added_cb (window->event_manager,
+					    l->data, window);
+		l = l->next;
+	}
+
 	conf = empathy_conf_get ();
-	
+
 	/* Show offline ? */
 	empathy_conf_get_bool (conf,
 			      EMPATHY_PREFS_CONTACTS_SHOW_OFFLINE,
@@ -388,6 +596,14 @@ main_window_destroy_cb (GtkWidget         *widget,
 	g_object_unref (window->mc);
 	g_object_unref (window->list_store);
 	g_hash_table_destroy (window->errors);
+
+	g_signal_handlers_disconnect_by_func (window->event_manager,
+			  		      main_window_event_added_cb,
+			  		      window);
+	g_signal_handlers_disconnect_by_func (window->event_manager,
+			  		      main_window_event_removed_cb,
+			  		      window);
+	g_object_unref (window->event_manager);
 
 	g_free (window);
 }

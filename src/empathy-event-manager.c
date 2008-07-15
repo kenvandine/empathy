@@ -31,10 +31,10 @@
 #include <libempathy/empathy-tp-chat.h>
 #include <libempathy/empathy-tp-group.h>
 #include <libempathy/empathy-utils.h>
+#include <libempathy-gtk/empathy-images.h>
+#include <libempathy-gtk/empathy-contact-dialogs.h>
 
 #include "empathy-event-manager.h"
-#include "empathy-images.h"
-#include "empathy-contact-dialogs.h"
 
 #define DEBUG_FLAG EMPATHY_DEBUG_DISPATCHER
 #include <libempathy/empathy-debug.h>

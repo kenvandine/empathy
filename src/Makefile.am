@@ -23,6 +23,7 @@ bin_PROGRAMS =			\
 empathy_SOURCES =							\
 	empathy.c							\
 	bacon-message-connection.c bacon-message-connection.h		\
+	ephy-spinner.c ephy-spinner.h					\
 	empathy-chat-window.c empathy-chat-window.h			\
 	empathy-new-chatroom-dialog.c empathy-new-chatroom-dialog.h	\
 	empathy-status-icon.c empathy-status-icon.h			\
@@ -31,8 +32,8 @@ empathy_SOURCES =							\
 	empathy-main-window.c empathy-main-window.h			\
 	empathy-preferences.c empathy-preferences.h			\
 	empathy-call-window.c empathy-call-window.h			\
-	ephy-spinner.c ephy-spinner.h					\
-	empathy-accounts-dialog.c empathy-accounts-dialog.h
+	empathy-accounts-dialog.c empathy-accounts-dialog.h		\
+	empathy-event-manager.c empathy-event-manager.h
 
 empathy_accounts_SOURCES = empathy-accounts.c				\
 	empathy-accounts-dialog.c empathy-accounts-dialog.h
