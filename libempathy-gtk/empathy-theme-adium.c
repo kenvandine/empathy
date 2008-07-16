@@ -153,6 +153,7 @@ theme_adium_scroll_down (EmpathyChatView *view)
 	/* Not implemented */
 }
 
+#define FOLLOW(str) (!strncmp (cur, str, strlen (str)))
 static void
 theme_adium_append_message (EmpathyChatView *view,
 			    EmpathyMessage  *msg)
@@ -162,7 +163,7 @@ theme_adium_append_message (EmpathyChatView *view,
 	const gchar           *body;
 	const gchar           *name;
 	gchar                 *avatar;
-	gchar                 *time;
+	time_t                 timestamp;
 	gsize                  len;
 	GString               *string;
 	gchar                 *cur;
@@ -182,8 +183,7 @@ theme_adium_append_message (EmpathyChatView *view,
 	body = empathy_message_get_body (msg);
 	name = empathy_contact_get_name (sender);
 	avatar = empathy_contact_get_avatar_filename (sender);
-	time = empathy_time_to_string_local (empathy_message_get_timestamp (msg),
-					     EMPATHY_TIME_FORMAT_DISPLAY_SHORT);
+	timestamp = empathy_message_get_timestamp (msg);
 
 	if (!avatar) {
 		/* FIXME: We should give a default icon of a buddy */
@@ -217,14 +217,33 @@ theme_adium_append_message (EmpathyChatView *view,
 	string = g_string_sized_new (len + strlen (body));
 	while ((cur = strchr (cur, '%'))) {
 		const gchar *replace = NULL;
-			
-		if (!strncmp (cur, "%message%", strlen ("%message%"))) {
+		gchar       *dup_replace = NULL;
+		gchar       *fin = NULL;
+
+		if (FOLLOW (cur, "%message%")) {
 			replace = body;
-		} else if (!strncmp (cur, "%time", strlen("%time"))) {
-			replace = time;
-		} else if (!strncmp (cur, "%userIconPath%", strlen("%userIconPath%"))) {
+		} else if (FOLLOW (cur, "%time")) {
+			gchar *format = NULL;
+			gchar *start;
+			gchar *end;
+
+			/* Extract the time format it provided. */
+			if (*(start = cur + strlen("%time")) == '{') {
+				start++;
+				end = strstr (start, "}%");
+				if (!end) /* Invalid string */
+					continue;
+				format = g_strndup (start, end - start);
+				fin = end + 1;
+			} 
+
+			dup_replace = empathy_time_to_string_local (timestamp,
+				format ? format : EMPATHY_TIME_FORMAT_DISPLAY_SHORT);
+			replace = dup_replace;
+			g_free (format);
+		} else if (FOLLOW (cur, "%userIconPath%")) {
 			replace = avatar;
-		} else if (!strncmp(cur, "%sender%", strlen("%sender%"))) {
+		} else if (FOLLOW (cur, "%sender%")) {
 			replace = name;
 		} else {
 			cur++;
@@ -234,9 +253,14 @@ theme_adium_append_message (EmpathyChatView *view,
 		/* Here we have a replacement to make */
 		g_string_append_len (string, prev, cur - prev);
 		g_string_append (string, replace);
+		g_free (dup_replace);
 
 		/* And update the pointers */
-		prev = cur = strchr (cur + 1, '%') + 1;
+		if (fin) {
+			prev = cur = fin + 1;
+		} else {
+			prev = cur = strchr (cur + 1, '%') + 1;
+		}
 	}
 	g_string_append (string, prev);
 
@@ -252,11 +276,11 @@ theme_adium_append_message (EmpathyChatView *view,
 	}
 	priv->last_contact = g_object_ref (sender);
 
-	g_free (time);
 	g_free (avatar);
 	g_free (cur);
 	g_free (script);
 }
+#undef FOLLOW
 
 static void
 theme_adium_append_event (EmpathyChatView *view,
