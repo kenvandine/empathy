@@ -214,7 +214,7 @@ theme_adium_append_message (EmpathyChatView *view,
 	time_t                 timestamp;
 	gsize                  len;
 	GString               *string;
-	gchar                 *cur;
+	gchar                 *cur = NULL;
 	gchar                 *prev;
 	gchar                 *script;
 	gchar                 *escape;
@@ -246,16 +246,19 @@ theme_adium_append_message (EmpathyChatView *view,
 		if (empathy_contact_is_user (sender)) {
 			cur = priv->out_nextcontent_html;
 			len = priv->out_nextcontent_len;
-		} else {
+		}
+		if (!cur) {
 			cur = priv->in_nextcontent_html;
 			len = priv->in_nextcontent_len;
 		}
-	} else {
+	}
+	if (!cur) {
 		func = "appendMessage";
 		if (empathy_contact_is_user (sender)) {
 			cur = priv->out_content_html;
 			len = priv->out_content_len;
-		} else {
+		}
+		if (!cur) {
 			cur = priv->in_content_html;
 			len = priv->in_content_len;
 		}
