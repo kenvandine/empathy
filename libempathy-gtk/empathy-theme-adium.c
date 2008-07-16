@@ -183,7 +183,10 @@ theme_adium_get_default_avatar_filename (EmpathyThemeAdium *theme)
 		size = (w + h) / 2;
 	}
 
-	icon_info = gtk_icon_theme_lookup_icon (icon_theme, "stock_person", size, 0);
+	/* FIXME: We should not avoid SVG, but old webkit from ubuntu hardy
+	 * can't load them correctly. */
+	icon_info = gtk_icon_theme_lookup_icon (icon_theme, "stock_person",
+						size, GTK_ICON_LOOKUP_NO_SVG);
 	priv->default_avatar_filename = g_strdup (gtk_icon_info_get_filename (icon_info));
 	gtk_icon_info_free (icon_info);
 
