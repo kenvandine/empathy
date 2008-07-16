@@ -938,6 +938,18 @@ empathy_contact_load_avatar_cache (EmpathyContact *contact,
   return data != NULL;
 }
 
+gchar *
+empathy_contact_get_avatar_filename (EmpathyContact *contact)
+{
+  EmpathyContactPriv *priv = GET_PRIV (contact);
+
+  if (priv->avatar)
+      return contact_get_avatar_filename (contact, priv->avatar->token);
+
+  return NULL;
+}
+
+
 GType
 empathy_avatar_get_type (void)
 {

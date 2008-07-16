@@ -107,6 +107,7 @@ void empathy_contact_load_avatar_data (EmpathyContact *contact,
     const gchar *token);
 gboolean empathy_contact_load_avatar_cache (EmpathyContact *contact,
     const gchar *token);
+gchar * empathy_contact_get_avatar_filename (EmpathyContact *contact);
 
 
 #define EMPATHY_TYPE_AVATAR (empathy_avatar_get_type ())
