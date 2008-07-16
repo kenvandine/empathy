@@ -166,7 +166,7 @@ AC_ARG_ENABLE(webkit,
 if test "x$enable_webkit" != "xno"; then
    PKG_CHECK_MODULES(WEBKIT, 
    [
-      WebKitGtk
+      webkit-1.0
    ], have_webkit="yes", have_webkit="no")
 
    if test "x$have_webkit" = "xyes"; then

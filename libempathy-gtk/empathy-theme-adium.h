@@ -22,7 +22,7 @@
 #ifndef __EMPATHY_THEME_ADIUM_H__
 #define __EMPATHY_THEME_ADIUM_H__
 
-#include <webkitwebview.h>
+#include <webkit/webkitwebview.h>
 
 #include "empathy-chat-view.h"
 
