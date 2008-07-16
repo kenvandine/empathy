@@ -55,6 +55,7 @@ typedef struct {
   gsize len;
   gchar *format;
   gchar *token;
+  gchar *filename;
   guint refcount;
 } EmpathyAvatar;
 
@@ -107,7 +108,6 @@ void empathy_contact_load_avatar_data (EmpathyContact *contact,
     const gchar *token);
 gboolean empathy_contact_load_avatar_cache (EmpathyContact *contact,
     const gchar *token);
-gchar * empathy_contact_get_avatar_filename (EmpathyContact *contact);
 
 
 #define EMPATHY_TYPE_AVATAR (empathy_avatar_get_type ())
@@ -115,7 +115,8 @@ GType empathy_avatar_get_type (void) G_GNUC_CONST;
 EmpathyAvatar * empathy_avatar_new (guchar *data,
     gsize len,
     gchar *format,
-    gchar *token);
+    gchar *token,
+    gchar *filename);
 EmpathyAvatar * empathy_avatar_ref (EmpathyAvatar *avatar);
 void empathy_avatar_unref (EmpathyAvatar *avatar);
 

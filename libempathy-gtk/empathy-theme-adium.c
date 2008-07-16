@@ -44,6 +44,7 @@ typedef struct {
 	EmpathyContact *last_contact;
 	gboolean        ready;
 	GList          *message_queue;
+	gchar          *default_avatar_filename;
 } EmpathyThemeAdiumPriv;
 
 static void theme_adium_iface_init (EmpathyChatViewIface *iface);
@@ -118,8 +119,7 @@ theme_adium_load (EmpathyThemeAdium *theme)
 }
 
 static gchar *
-theme_adium_escape (EmpathyThemeAdium *theme,
-		    const gchar       *text)
+theme_adium_escape_script (const gchar *text)
 {
 	const gchar *cur = text;
 	GString     *string;
@@ -147,22 +147,67 @@ theme_adium_escape (EmpathyThemeAdium *theme,
 	return g_string_free (string, FALSE);
 }
 
+static gchar *
+theme_adium_escape_body (const gchar *body)
+{
+	gchar *ret, *iter;
+
+	/* Replace \n by \r so it will be replaced by <br/> */
+	ret = g_strdup (body);
+	for (iter = ret; *iter != '\0'; iter++) {
+		if (*iter == '\n') {
+			*iter = '\r';
+		}
+	}
+
+	return ret;
+}
+
+static const gchar *
+theme_adium_get_default_avatar_filename (EmpathyThemeAdium *theme)
+{
+	EmpathyThemeAdiumPriv *priv = GET_PRIV (theme);
+	GtkIconTheme          *icon_theme;
+	GtkIconInfo           *icon_info;
+	gint                   w, h;
+	gint                   size = 48;
+
+	/* Lazy initialization */
+	if (priv->default_avatar_filename) {
+		return priv->default_avatar_filename;
+	}
+
+	icon_theme = gtk_icon_theme_get_default ();
+
+	if (gtk_icon_size_lookup (GTK_ICON_SIZE_DIALOG, &w, &h)) {
+		size = (w + h) / 2;
+	}
+
+	icon_info = gtk_icon_theme_lookup_icon (icon_theme, "stock_person", size, 0);
+	priv->default_avatar_filename = g_strdup (gtk_icon_info_get_filename (icon_info));
+	gtk_icon_info_free (icon_info);
+
+	return priv->default_avatar_filename;
+}
+
 static void
 theme_adium_scroll_down (EmpathyChatView *view)
 {
 	/* Not implemented */
 }
 
-#define FOLLOW(str) (!strncmp (cur, str, strlen (str)))
+#define FOLLOW(cur, str) (!strncmp (cur, str, strlen (str)))
 static void
 theme_adium_append_message (EmpathyChatView *view,
 			    EmpathyMessage  *msg)
 {
-	EmpathyThemeAdiumPriv *priv = GET_PRIV (view);
+	EmpathyThemeAdium     *theme = EMPATHY_THEME_ADIUM (view);
+	EmpathyThemeAdiumPriv *priv = GET_PRIV (theme);
 	EmpathyContact        *sender;
-	const gchar           *body;
+	gchar                 *body;
 	const gchar           *name;
-	gchar                 *avatar;
+	EmpathyAvatar         *avatar;
+	const gchar           *avatar_filename = NULL;
 	time_t                 timestamp;
 	gsize                  len;
 	GString               *string;
@@ -180,15 +225,19 @@ theme_adium_append_message (EmpathyChatView *view,
 
 	/* Get information */
 	sender = empathy_message_get_sender (msg);
-	body = empathy_message_get_body (msg);
-	name = empathy_contact_get_name (sender);
-	avatar = empathy_contact_get_avatar_filename (sender);
 	timestamp = empathy_message_get_timestamp (msg);
-
-	if (!avatar) {
-		/* FIXME: We should give a default icon of a buddy */
-		avatar = g_strdup ("FIXME");
+	body = theme_adium_escape_body (empathy_message_get_body (msg));
+	name = empathy_contact_get_name (sender);
+	avatar = empathy_contact_get_avatar (sender);
+	if (avatar) {
+		avatar_filename = avatar->filename;
 	}
+	if (!avatar_filename) {
+		avatar_filename = theme_adium_get_default_avatar_filename (theme);
+	}
+
+g_print ("%s\n", priv->default_avatar_filename);
+
 
 	/* Get the right html/func to add the message */
 	if (priv->last_contact &&
@@ -222,6 +271,10 @@ theme_adium_append_message (EmpathyChatView *view,
 
 		if (FOLLOW (cur, "%message%")) {
 			replace = body;
+		} else if (FOLLOW (cur, "%userIconPath%")) {
+			replace = avatar_filename;
+		} else if (FOLLOW (cur, "%sender%")) {
+			replace = name;
 		} else if (FOLLOW (cur, "%time")) {
 			gchar *format = NULL;
 			gchar *start;
@@ -241,10 +294,6 @@ theme_adium_append_message (EmpathyChatView *view,
 				format ? format : EMPATHY_TIME_FORMAT_DISPLAY_SHORT);
 			replace = dup_replace;
 			g_free (format);
-		} else if (FOLLOW (cur, "%userIconPath%")) {
-			replace = avatar;
-		} else if (FOLLOW (cur, "%sender%")) {
-			replace = name;
 		} else {
 			cur++;
 			continue;
@@ -266,7 +315,7 @@ theme_adium_append_message (EmpathyChatView *view,
 
 	/* Execute a js to add the message */
 	cur = g_string_free (string, FALSE);
-	escape = theme_adium_escape (EMPATHY_THEME_ADIUM (view), cur);
+	escape = theme_adium_escape_script (cur);
 	script = g_strdup_printf("%s(\"%s\")", func, escape);
 	webkit_web_view_execute_script (WEBKIT_WEB_VIEW (view), script);
 
@@ -276,7 +325,7 @@ theme_adium_append_message (EmpathyChatView *view,
 	}
 	priv->last_contact = g_object_ref (sender);
 
-	g_free (avatar);
+	g_free (body);
 	g_free (cur);
 	g_free (script);
 }
@@ -396,6 +445,7 @@ theme_adium_finalize (GObject *object)
 	g_free (priv->in_nextcontent_html);
 	g_free (priv->out_content_html);
 	g_free (priv->out_nextcontent_html);
+	g_free (priv->default_avatar_filename);
 
 	if (priv->last_contact) {
 		g_object_unref (priv->last_contact);

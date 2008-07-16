@@ -863,7 +863,7 @@ contact_get_avatar_filename (EmpathyContact *contact,
 
 void
 empathy_contact_load_avatar_data (EmpathyContact *contact,
-                                  const guchar  *data,
+                                  const guchar *data,
                                   const gsize len,
                                   const gchar *format,
                                   const gchar *token)
@@ -879,13 +879,13 @@ empathy_contact_load_avatar_data (EmpathyContact *contact,
   g_return_if_fail (!EMP_STR_EMPTY (token));
 
   /* Load and set the avatar */
+  filename = contact_get_avatar_filename (contact, token);
   avatar = empathy_avatar_new (g_memdup (data, len), len, g_strdup (format),
-      g_strdup (token));
+      g_strdup (token), filename);
   empathy_contact_set_avatar (contact, avatar);
   empathy_avatar_unref (avatar);
 
   /* Save to cache if not yet in it */
-  filename = contact_get_avatar_filename (contact, token);
   if (filename && !g_file_test (filename, G_FILE_TEST_EXISTS))
     {
       if (!empathy_avatar_save_to_file (avatar, filename, &error))
@@ -897,7 +897,6 @@ empathy_contact_load_avatar_data (EmpathyContact *contact,
       else
           DEBUG ("Avatar saved to %s", filename);
     }
-  g_free (filename);
 }
 
 gboolean
@@ -928,27 +927,13 @@ empathy_contact_load_avatar_cache (EmpathyContact *contact,
   if (data)
     {
       DEBUG ("Avatar loaded from %s", filename);
-      avatar = empathy_avatar_new (data, len, NULL, g_strdup (token));
+      avatar = empathy_avatar_new (data, len, NULL, g_strdup (token), filename);
       empathy_contact_set_avatar (contact, avatar);
       empathy_avatar_unref (avatar);
     }
 
-  g_free (filename);
-
   return data != NULL;
 }
-
-gchar *
-empathy_contact_get_avatar_filename (EmpathyContact *contact)
-{
-  EmpathyContactPriv *priv = GET_PRIV (contact);
-
-  if (priv->avatar)
-      return contact_get_avatar_filename (contact, priv->avatar->token);
-
-  return NULL;
-}
-
 
 GType
 empathy_avatar_get_type (void)
@@ -969,7 +954,8 @@ EmpathyAvatar *
 empathy_avatar_new (guchar *data,
                     gsize len,
                     gchar *format,
-                    gchar *token)
+                    gchar *token,
+                    gchar *filename)
 {
   EmpathyAvatar *avatar;
 
@@ -978,6 +964,7 @@ empathy_avatar_new (guchar *data,
   avatar->len = len;
   avatar->format = format;
   avatar->token = token;
+  avatar->filename = filename;
   avatar->refcount = 1;
 
   return avatar;
