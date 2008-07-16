@@ -239,9 +239,6 @@ theme_adium_append_message (EmpathyChatView *view,
 		avatar_filename = theme_adium_get_default_avatar_filename (theme);
 	}
 
-g_print ("%s\n", priv->default_avatar_filename);
-
-
 	/* Get the right html/func to add the message */
 	if (priv->last_contact &&
 	    empathy_contact_equal (priv->last_contact, sender)) {
