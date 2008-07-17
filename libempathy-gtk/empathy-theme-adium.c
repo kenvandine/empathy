@@ -22,6 +22,8 @@
 #include "config.h"
 #include <string.h>
 
+#include <webkit/webkitnetworkrequest.h>
+
 #include <libempathy/empathy-time.h>
 #include <libempathy/empathy-utils.h>
 
@@ -122,6 +124,20 @@ theme_adium_load (EmpathyThemeAdium *theme)
 	g_strfreev (strv);
 }
 
+static WebKitNavigationResponse
+theme_adium_navigation_requested_cb (WebKitWebView        *view,
+				     WebKitWebFrame       *frame,
+				     WebKitNetworkRequest *request,
+				     gpointer              user_data)
+{
+	const gchar *uri;
+
+	uri = webkit_network_request_get_uri (request);
+	empathy_url_show (GTK_WIDGET (view), uri);
+
+	return WEBKIT_NAVIGATION_RESPONSE_IGNORE;
+}
+
 static gchar *
 theme_adium_escape_script (const gchar *text)
 {
@@ -194,6 +210,7 @@ theme_adium_parse_body (EmpathyThemeAdium *theme,
 		cur = ret = g_string_free (string, FALSE);
 	}
 
+	/* Add <a href></a> arround links */
 	uri_regex = empathy_uri_regex_dup_singleton ();
 	match = g_regex_match (uri_regex, cur, 0, &match_info);
 	if (match) {
@@ -545,11 +562,16 @@ empathy_theme_adium_init (EmpathyThemeAdium *theme)
 	theme->priv = priv;	
 
 	priv->smiley_manager = empathy_smiley_manager_new ();
-	theme_adium_load (theme);
 
 	g_signal_connect (theme, "load-finished",
 			  G_CALLBACK (theme_adium_load_finished_cb),
 			  NULL);
+	g_signal_connect (theme, "navigation-requested",
+			  G_CALLBACK (theme_adium_navigation_requested_cb),
+			  NULL);
+
+
+	theme_adium_load (theme);
 }
 
 EmpathyThemeAdium *
