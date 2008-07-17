@@ -152,57 +152,103 @@ theme_adium_escape_script (const gchar *text)
 }
 
 static gchar *
-theme_adium_escape_body (const gchar *body)
-{
-	gchar *ret, *iter;
-
-	/* Replace \n by \r so it will be replaced by <br/> */
-	ret = g_strdup (body);
-	for (iter = ret; *iter != '\0'; iter++) {
-		if (*iter == '\n') {
-			*iter = '\r';
-		}
-	}
-
-	return ret;
-}
-
-static gchar *
-theme_adium_replace_smileys (EmpathyThemeAdium *theme,
-			     const gchar       *text)
+theme_adium_parse_body (EmpathyThemeAdium *theme,
+			const gchar       *text)
 {
 	EmpathyThemeAdiumPriv *priv = GET_PRIV (theme);
 	gboolean               use_smileys = FALSE;
 	GSList                *smileys, *l;
 	GString               *string;
+	gint                   i;
+	GRegex                *uri_regex;
+	GMatchInfo            *match_info;
+	gboolean               match;
+	gchar                 *ret = NULL;
+	gchar                 *iter;
+	const gchar           *cur = text;
 
 	empathy_conf_get_bool (empathy_conf_get (),
 			       EMPATHY_PREFS_CHAT_SHOW_SMILEYS,
 			       &use_smileys);
 
-	/* To avoid dup the text, returning NULL means keep the original text */
-	if (!use_smileys) {
-		return NULL;
-	}
+	if (use_smileys) {
+		/* Replace smileys by a <img/> tag */
+		string = g_string_sized_new (strlen (cur));
+		smileys = empathy_smiley_manager_parse (priv->smiley_manager, cur);
+		for (l = smileys; l; l = l->next) {
+			EmpathySmiley *smiley;
 
-	string = g_string_sized_new (strlen (text));
-	smileys = empathy_smiley_manager_parse (priv->smiley_manager, text);
-	for (l = smileys; l; l = l->next) {
-		EmpathySmiley *smiley;
-
-		smiley = l->data;
-		if (smiley->path) {
-			g_string_append_printf (string,
-						"<img src=\"%s\"/ title=\"%s\">",
-						smiley->path, smiley->str);
-		} else {
-			g_string_append (string, smiley->str);
+			smiley = l->data;
+			if (smiley->path) {
+				g_string_append_printf (string,
+							"<img src=\"%s\"/ title=\"%s\"/>",
+							smiley->path, smiley->str);
+			} else {
+				g_string_append (string, smiley->str);
+			}
+			empathy_smiley_free (smiley);
 		}
-		empathy_smiley_free (smiley);
-	}
-	g_slist_free (smileys);
+		g_slist_free (smileys);
 
-	return g_string_free (string, FALSE);
+		g_free (ret);
+		cur = ret = g_string_free (string, FALSE);
+	}
+
+	uri_regex = empathy_uri_regex_dup_singleton ();
+	match = g_regex_match (uri_regex, cur, 0, &match_info);
+	if (match) {
+		gint last = 0;
+		gint s = 0, e = 0;
+
+		string = g_string_sized_new (strlen (cur));
+		do {
+			g_match_info_fetch_pos (match_info, 0, &s, &e);
+
+			if (s > last) {
+				/* Append the text between last link (or the
+				 * start of the message) and this link */
+				g_string_append_len (string, cur + last, s - last);
+			}
+
+			/* Append the link inside <a href=""></a> tag */
+			g_string_append (string, "<a href=\"");
+			g_string_append_len (string, cur + s, e - s);
+			g_string_append (string, "\">");
+			g_string_append_len (string, cur + s, e - s);
+			g_string_append (string, "</a>");
+
+			last = e;
+		} while (g_match_info_next (match_info, NULL));
+
+		if (e < strlen (cur)) {
+			/* Append the text after the last link */
+			g_string_append_len (string, cur + e, strlen (cur) - e);
+		}
+
+		g_free (ret);
+		cur = ret = g_string_free (string, FALSE);
+	}
+	g_match_info_free (match_info);
+	g_regex_unref (uri_regex);
+
+	/* Replace \n by \r so it will be replaced by <br/> */
+	iter = (gchar*) cur;
+	for (i = 0; iter[i] != '\0'; i++) {
+		if (iter[i] == '\n') {
+			if (ret == NULL) {
+				/* We have changes to make to the string but we
+				 * are still using the original one.
+				 * Dup it now */
+				cur = iter = ret = g_strdup (cur);
+			}
+			iter[i] = '\r';
+		}		
+	}
+
+	/* If we made changes to the text ret is now a newly allocated string,
+	 * otherwise it is NULL to indicate that the original text can be
+	 * used without modification */
+	return ret;
 }
 
 static void
@@ -219,7 +265,8 @@ theme_adium_append_message (EmpathyChatView *view,
 	EmpathyThemeAdium     *theme = EMPATHY_THEME_ADIUM (view);
 	EmpathyThemeAdiumPriv *priv = GET_PRIV (theme);
 	EmpathyContact        *sender;
-	gchar                 *body;
+	gchar                 *dup_body = NULL;
+	const gchar           *body;
 	const gchar           *name;
 	EmpathyAvatar         *avatar;
 	const gchar           *avatar_filename = NULL;
@@ -241,14 +288,11 @@ theme_adium_append_message (EmpathyChatView *view,
 	/* Get information */
 	sender = empathy_message_get_sender (msg);
 	timestamp = empathy_message_get_timestamp (msg);
-	body = theme_adium_replace_smileys (theme, empathy_message_get_body (msg));
-	if (!body) {
-		escape = theme_adium_escape_body (empathy_message_get_body (msg));
-	} else {
-		escape = theme_adium_escape_body (body);
-		g_free (body);
+	body = empathy_message_get_body (msg);
+	dup_body = theme_adium_parse_body (theme, body);
+	if (dup_body) {
+		body = dup_body;
 	}
-	body = escape;
 	name = empathy_contact_get_name (sender);
 	avatar = empathy_contact_get_avatar (sender);
 	if (avatar) {
@@ -352,7 +396,7 @@ theme_adium_append_message (EmpathyChatView *view,
 	}
 	priv->last_contact = g_object_ref (sender);
 
-	g_free (body);
+	g_free (dup_body);
 	g_free (cur);
 	g_free (script);
 }
