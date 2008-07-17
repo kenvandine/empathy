@@ -48,8 +48,9 @@ struct _EmpathySmileyManagerClass {
 };
 
 typedef struct {
-	GdkPixbuf *pixbuf;
-	gchar     *str;
+	GdkPixbuf   *pixbuf;
+	gchar       *str;
+	const gchar *path;
 } EmpathySmiley;
 
 typedef void (*EmpathySmileyMenuFunc) (EmpathySmileyManager *manager,
@@ -61,10 +62,6 @@ EmpathySmileyManager *empathy_smiley_manager_dup_singleton   (void);
 void                  empathy_smiley_manager_load            (EmpathySmileyManager *manager);
 void                  empathy_smiley_manager_add             (EmpathySmileyManager *manager,
 							      const gchar          *icon_name,
-							      const gchar          *first_str,
-							      ...);
-void                  empathy_smiley_manager_add_from_pixbuf (EmpathySmileyManager *manager,
-							      GdkPixbuf            *smiley,
 							      const gchar          *first_str,
 							      ...);
 GSList *              empathy_smiley_manager_get_all         (EmpathySmileyManager *manager);

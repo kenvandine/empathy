@@ -37,9 +37,10 @@ typedef struct {
 } EmpathySmileyManagerPriv;
 
 struct _SmileyManagerTree {
-	gunichar   c;
-	GdkPixbuf *pixbuf;
-	GSList    *childrens;
+	gunichar     c;
+	GdkPixbuf   *pixbuf;
+	const gchar *path;
+	GSList      *childrens;
 };
 
 G_DEFINE_TYPE (EmpathySmileyManager, empathy_smiley_manager, G_TYPE_OBJECT);
@@ -55,6 +56,7 @@ smiley_manager_tree_new (gunichar c)
 	tree->c = c;
 	tree->pixbuf = NULL;
 	tree->childrens = NULL;
+	tree->path = NULL;
 
 	return tree;
 }
@@ -81,7 +83,7 @@ smiley_manager_tree_free (SmileyManagerTree *tree)
 
 /* Note: This function takes the ownership of str */
 static EmpathySmiley *
-smiley_new (GdkPixbuf *pixbuf, gchar *str)
+smiley_new (GdkPixbuf *pixbuf, gchar *str, const gchar *path)
 {
 	EmpathySmiley *smiley;
 
@@ -90,6 +92,7 @@ smiley_new (GdkPixbuf *pixbuf, gchar *str)
 		smiley->pixbuf = g_object_ref (pixbuf);
 	}
 	smiley->str = str;
+	smiley->path = path;
 
 	return smiley;
 }
@@ -112,8 +115,16 @@ static void
 smiley_manager_finalize (GObject *object)
 {
 	EmpathySmileyManagerPriv *priv = GET_PRIV (object);
+	GSList                   *l;
 
 	smiley_manager_tree_free (priv->tree);
+	for (l = priv->smileys; l; l = l->next) {
+		EmpathySmiley *smiley = l->data;
+
+		/* The smiley got the ownership of the path */
+		g_free ((gchar*) smiley->path);
+		empathy_smiley_free (smiley);
+	}
 	g_slist_foreach (priv->smileys, (GFunc) empathy_smiley_free, NULL);
 	g_slist_free (priv->smileys);
 }
@@ -201,8 +212,9 @@ smiley_manager_tree_find_or_insert_child (SmileyManagerTree *tree, gunichar c)
 
 static void
 smiley_manager_tree_insert (SmileyManagerTree *tree,
-			    GdkPixbuf         *smiley,
-			    const gchar       *str)
+			    GdkPixbuf         *pixbuf,
+			    const gchar       *str,
+			    const gchar       *path)
 {
 	SmileyManagerTree *child;
 
@@ -210,28 +222,32 @@ smiley_manager_tree_insert (SmileyManagerTree *tree,
 
 	str = g_utf8_next_char (str);
 	if (*str) {
-		smiley_manager_tree_insert (child, smiley, str);
+		smiley_manager_tree_insert (child, pixbuf, str, path);
 		return;
 	}
 
-	child->pixbuf = g_object_ref (smiley);
+	child->pixbuf = g_object_ref (pixbuf);
+	child->path = path;
 }
 
 static void
 smiley_manager_add_valist (EmpathySmileyManager *manager,
-			   GdkPixbuf            *smiley,
+			   GdkPixbuf            *pixbuf,
+			   gchar                *path,
 			   const gchar          *first_str,
 			   va_list               var_args)
 {
 	EmpathySmileyManagerPriv *priv = GET_PRIV (manager);
 	const gchar              *str;
+	EmpathySmiley            *smiley;
 
 	for (str = first_str; str; str = va_arg (var_args, gchar*)) {
-		smiley_manager_tree_insert (priv->tree, smiley, str);
+		smiley_manager_tree_insert (priv->tree, pixbuf, str, path);
 	}
 
-	priv->smileys = g_slist_prepend (priv->smileys,
-		smiley_new (smiley, g_strdup (first_str)));
+	/* We give the ownership of path to the smiley */
+	smiley = smiley_new (pixbuf, g_strdup (first_str), path);
+	priv->smileys = g_slist_prepend (priv->smileys, smiley);
 }
 
 void
@@ -240,37 +256,23 @@ empathy_smiley_manager_add (EmpathySmileyManager *manager,
 			    const gchar          *first_str,
 			    ...)
 {
-	GdkPixbuf *smiley;
+	GdkPixbuf *pixbuf;
 	va_list    var_args;
 
 	g_return_if_fail (EMPATHY_IS_SMILEY_MANAGER (manager));
 	g_return_if_fail (!EMP_STR_EMPTY (icon_name));
 	g_return_if_fail (!EMP_STR_EMPTY (first_str));
 
-	smiley = empathy_pixbuf_from_icon_name (icon_name, GTK_ICON_SIZE_MENU);
-	if (smiley) {
+	pixbuf = empathy_pixbuf_from_icon_name (icon_name, GTK_ICON_SIZE_MENU);
+	if (pixbuf) {
+		gchar *path;
+
 		va_start (var_args, first_str);
-		smiley_manager_add_valist (manager, smiley, first_str, var_args);
+		path = empathy_filename_from_icon_name (icon_name, GTK_ICON_SIZE_MENU);
+		smiley_manager_add_valist (manager, pixbuf, path, first_str, var_args);
 		va_end (var_args);
-		g_object_unref (smiley);
+		g_object_unref (pixbuf);
 	}
-}
-
-void
-empathy_smiley_manager_add_from_pixbuf (EmpathySmileyManager *manager,
-					GdkPixbuf            *smiley,
-					const gchar          *first_str,
-					...)
-{
-	va_list var_args;
-
-	g_return_if_fail (EMPATHY_IS_SMILEY_MANAGER (manager));
-	g_return_if_fail (GDK_IS_PIXBUF (smiley));
-	g_return_if_fail (!EMP_STR_EMPTY (first_str));
-
-	va_start (var_args, first_str);
-	smiley_manager_add_valist (manager, smiley, first_str, var_args);
-	va_end (var_args);
 }
 
 void
@@ -320,7 +322,9 @@ empathy_smiley_manager_parse (EmpathySmileyManager *manager,
 		if (cur_tree == priv->tree) {
 			if (child) {
 				if (t > cur_str) {
-					smiley = smiley_new (NULL, g_strndup (cur_str, t - cur_str));
+					smiley = smiley_new (NULL,
+							     g_strndup (cur_str, t - cur_str),
+							     NULL);
 					smileys = g_slist_prepend (smileys, smiley);
 				}
 				cur_str = t;
@@ -335,7 +339,9 @@ empathy_smiley_manager_parse (EmpathySmileyManager *manager,
 			continue;
 		}
 
-		smiley = smiley_new (cur_tree->pixbuf, g_strndup (cur_str, t - cur_str));
+		smiley = smiley_new (cur_tree->pixbuf,
+				     g_strndup (cur_str, t - cur_str),
+				     cur_tree->path);
 		smileys = g_slist_prepend (smileys, smiley);
 		if (cur_tree->pixbuf) {
 			cur_str = t;
@@ -350,7 +356,9 @@ empathy_smiley_manager_parse (EmpathySmileyManager *manager,
 		}
 	}
 
-	smiley = smiley_new (cur_tree->pixbuf, g_strndup (cur_str, t - cur_str));
+	smiley = smiley_new (cur_tree->pixbuf,
+			     g_strndup (cur_str, t - cur_str),
+			     cur_tree->path);
 	smileys = g_slist_prepend (smileys, smiley);
 
 	return g_slist_reverse (smileys);

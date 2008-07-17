@@ -26,6 +26,7 @@
 #include <libempathy/empathy-utils.h>
 
 #include "empathy-theme-adium.h"
+#include "empathy-ui-utils.h"
 
 #define DEBUG_FLAG EMPATHY_DEBUG_CHAT
 #include <libempathy/empathy-debug.h>
@@ -163,33 +164,6 @@ theme_adium_escape_body (const gchar *body)
 	return ret;
 }
 
-static const gchar *
-theme_adium_get_default_avatar_filename (EmpathyThemeAdium *theme)
-{
-	EmpathyThemeAdiumPriv *priv = GET_PRIV (theme);
-	GtkIconTheme          *icon_theme;
-	GtkIconInfo           *icon_info;
-	gint                   w, h;
-	gint                   size = 48;
-
-	/* Lazy initialization */
-	if (priv->default_avatar_filename) {
-		return priv->default_avatar_filename;
-	}
-
-	icon_theme = gtk_icon_theme_get_default ();
-
-	if (gtk_icon_size_lookup (GTK_ICON_SIZE_DIALOG, &w, &h)) {
-		size = (w + h) / 2;
-	}
-
-	icon_info = gtk_icon_theme_lookup_icon (icon_theme, "stock_person", size, 0);
-	priv->default_avatar_filename = g_strdup (gtk_icon_info_get_filename (icon_info));
-	gtk_icon_info_free (icon_info);
-
-	return priv->default_avatar_filename;
-}
-
 static void
 theme_adium_scroll_down (EmpathyChatView *view)
 {
@@ -233,7 +207,12 @@ theme_adium_append_message (EmpathyChatView *view,
 		avatar_filename = avatar->filename;
 	}
 	if (!avatar_filename) {
-		avatar_filename = theme_adium_get_default_avatar_filename (theme);
+		if (!priv->default_avatar_filename) {
+			priv->default_avatar_filename =
+				empathy_filename_from_icon_name ("stock_person",
+								 GTK_ICON_SIZE_DIALOG);
+		}
+		avatar_filename = priv->default_avatar_filename;
 	}
 
 	/* Get the right html/func to add the message */

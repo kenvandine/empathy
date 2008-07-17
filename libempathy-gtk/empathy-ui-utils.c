@@ -558,6 +558,29 @@ empathy_pixbuf_from_icon_name (const gchar *icon_name,
 	return empathy_pixbuf_from_icon_name_sized (icon_name, size);
 }
 
+gchar *
+empathy_filename_from_icon_name (const gchar *icon_name,
+				 GtkIconSize  icon_size)
+{
+	GtkIconTheme *icon_theme;
+	GtkIconInfo  *icon_info;
+	gint          w, h;
+	gint          size = 48;
+	gchar        *ret;
+
+	icon_theme = gtk_icon_theme_get_default ();
+
+	if (gtk_icon_size_lookup (icon_size, &w, &h)) {
+		size = (w + h) / 2;
+	}
+
+	icon_info = gtk_icon_theme_lookup_icon (icon_theme, icon_name, size, 0);
+	ret = g_strdup (gtk_icon_info_get_filename (icon_info));
+	gtk_icon_info_free (icon_info);
+
+	return ret;
+}
+
 /* Stolen from GtkSourceView, hence the weird intendation. Please keep it like
  * that to make it easier to apply changes from the original code.
  */

@@ -90,12 +90,15 @@ GdkPixbuf *   empathy_pixbuf_from_avatar_scaled         (EmpathyAvatar    *avata
 GdkPixbuf *   empathy_pixbuf_avatar_from_contact_scaled (EmpathyContact   *contact,
 							 gint              width,
 							 gint              height);
-GdkPixbuf * empathy_pixbuf_scale_down_if_necessary      (GdkPixbuf        *pixbuf,
+GdkPixbuf *   empathy_pixbuf_scale_down_if_necessary    (GdkPixbuf        *pixbuf,
 							 gint              max_size);
-GdkPixbuf * empathy_pixbuf_from_icon_name               (const gchar      *icon_name,
+GdkPixbuf *   empathy_pixbuf_from_icon_name             (const gchar      *icon_name,
 							 GtkIconSize       icon_size);
-GdkPixbuf * empathy_pixbuf_from_icon_name_sized         (const gchar      *icon_name,
+GdkPixbuf *   empathy_pixbuf_from_icon_name_sized       (const gchar      *icon_name,
 							 gint              size);
+gchar *       empathy_filename_from_icon_name           (const gchar      *icon_name,
+							 GtkIconSize       icon_size);
+
 /* Text view */
 gboolean    empathy_text_iter_forward_search            (const GtkTextIter*iter,
 							 const gchar      *str,
