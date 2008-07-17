@@ -197,8 +197,8 @@ theme_adium_parse_body (EmpathyThemeAdium *theme,
 			smiley = l->data;
 			if (smiley->path) {
 				g_string_append_printf (string,
-							"<img src=\"%s\"/ title=\"%s\"/>",
-							smiley->path, smiley->str);
+							"<abbr title='%s'><img src=\"%s\"/ alt=\"%s\"/></abbr>",
+							smiley->str, smiley->path, smiley->str);
 			} else {
 				g_string_append (string, smiley->str);
 			}
