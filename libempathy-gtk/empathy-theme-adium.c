@@ -26,6 +26,8 @@
 #include <libempathy/empathy-utils.h>
 
 #include "empathy-theme-adium.h"
+#include "empathy-smiley-manager.h"
+#include "empathy-conf.h"
 #include "empathy-ui-utils.h"
 
 #define DEBUG_FLAG EMPATHY_DEBUG_CHAT
@@ -34,18 +36,19 @@
 #define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyThemeAdium)
 
 typedef struct {
-	gchar          *in_content_html;
-	gsize           in_content_len;
-	gchar          *in_nextcontent_html;
-	gsize           in_nextcontent_len;
-	gchar          *out_content_html;
-	gsize           out_content_len;
-	gchar          *out_nextcontent_html;
-	gsize           out_nextcontent_len;
-	EmpathyContact *last_contact;
-	gboolean        page_loaded;
-	GList          *message_queue;
-	gchar          *default_avatar_filename;
+	EmpathySmileyManager *smiley_manager;
+	EmpathyContact       *last_contact;
+	gboolean              page_loaded;
+	GList                *message_queue;
+	gchar                *default_avatar_filename;
+	gchar                *in_content_html;
+	gsize                 in_content_len;
+	gchar                *in_nextcontent_html;
+	gsize                 in_nextcontent_len;
+	gchar                *out_content_html;
+	gsize                 out_content_len;
+	gchar                *out_nextcontent_html;
+	gsize                 out_nextcontent_len;
 } EmpathyThemeAdiumPriv;
 
 static void theme_adium_iface_init (EmpathyChatViewIface *iface);
@@ -164,6 +167,44 @@ theme_adium_escape_body (const gchar *body)
 	return ret;
 }
 
+static gchar *
+theme_adium_replace_smileys (EmpathyThemeAdium *theme,
+			     const gchar       *text)
+{
+	EmpathyThemeAdiumPriv *priv = GET_PRIV (theme);
+	gboolean               use_smileys = FALSE;
+	GSList                *smileys, *l;
+	GString               *string;
+
+	empathy_conf_get_bool (empathy_conf_get (),
+			       EMPATHY_PREFS_CHAT_SHOW_SMILEYS,
+			       &use_smileys);
+
+	/* To avoid dup the text, returning NULL means keep the original text */
+	if (!use_smileys) {
+		return NULL;
+	}
+
+	string = g_string_sized_new (strlen (text));
+	smileys = empathy_smiley_manager_parse (priv->smiley_manager, text);
+	for (l = smileys; l; l = l->next) {
+		EmpathySmiley *smiley;
+
+		smiley = l->data;
+		if (smiley->path) {
+			g_string_append_printf (string,
+						"<img src=\"%s\"/ title=\"%s\">",
+						smiley->path, smiley->str);
+		} else {
+			g_string_append (string, smiley->str);
+		}
+		empathy_smiley_free (smiley);
+	}
+	g_slist_free (smileys);
+
+	return g_string_free (string, FALSE);
+}
+
 static void
 theme_adium_scroll_down (EmpathyChatView *view)
 {
@@ -200,7 +241,14 @@ theme_adium_append_message (EmpathyChatView *view,
 	/* Get information */
 	sender = empathy_message_get_sender (msg);
 	timestamp = empathy_message_get_timestamp (msg);
-	body = theme_adium_escape_body (empathy_message_get_body (msg));
+	body = theme_adium_replace_smileys (theme, empathy_message_get_body (msg));
+	if (!body) {
+		escape = theme_adium_escape_body (empathy_message_get_body (msg));
+	} else {
+		escape = theme_adium_escape_body (body);
+		g_free (body);
+	}
+	body = escape;
 	name = empathy_contact_get_name (sender);
 	avatar = empathy_contact_get_avatar (sender);
 	if (avatar) {
@@ -425,6 +473,7 @@ theme_adium_finalize (GObject *object)
 	g_free (priv->out_content_html);
 	g_free (priv->out_nextcontent_html);
 	g_free (priv->default_avatar_filename);
+	g_object_unref (priv->smiley_manager);
 
 	if (priv->last_contact) {
 		g_object_unref (priv->last_contact);
@@ -451,6 +500,7 @@ empathy_theme_adium_init (EmpathyThemeAdium *theme)
 
 	theme->priv = priv;	
 
+	priv->smiley_manager = empathy_smiley_manager_new ();
 	theme_adium_load (theme);
 
 	g_signal_connect (theme, "load-finished",
