@@ -43,7 +43,7 @@ typedef struct {
 	gchar          *out_nextcontent_html;
 	gsize           out_nextcontent_len;
 	EmpathyContact *last_contact;
-	gboolean        ready;
+	gboolean        page_loaded;
 	GList          *message_queue;
 	gchar          *default_avatar_filename;
 } EmpathyThemeAdiumPriv;
@@ -191,7 +191,7 @@ theme_adium_append_message (EmpathyChatView *view,
 	gchar                 *escape;
 	const gchar           *func;
 
-	if (!priv->ready) {
+	if (!priv->page_loaded) {
 		priv->message_queue = g_list_prepend (priv->message_queue,
 						      g_object_ref (msg));
 		return;
@@ -402,7 +402,7 @@ theme_adium_load_finished_cb (WebKitWebView  *view,
 	EmpathyChatView       *chat_view = EMPATHY_CHAT_VIEW (view);
 
 	DEBUG ("Page loaded");
-	priv->ready = TRUE;
+	priv->page_loaded = TRUE;
 
 	/* Display queued messages */
 	priv->message_queue = g_list_reverse (priv->message_queue);
