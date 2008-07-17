@@ -7,6 +7,7 @@ AM_CPPFLAGS =						\
 	$(LIBNOTIFY_CFLAGS)				\
 	$(LIBCHAMPLAIN_CFLAGS)				\
 	$(DISABLE_DEPRECATED)				\
+	$(WEBKIT_CFLAGS)				\
 	$(WARN_CFLAGS)
 
 LDADD =								\
@@ -15,7 +16,8 @@ LDADD =								\
 	$(top_builddir)/extensions/libemp-extensions.la		\
 	$(LIBNOTIFY_LIBS)					\
 	$(EMPATHY_LIBS)						\
-	$(LIBCHAMPLAIN_LIBS)
+	$(LIBCHAMPLAIN_LIBS)					\
+	$(WEBKIT_LIBS)
 
 bin_PROGRAMS =			\
 	empathy			\

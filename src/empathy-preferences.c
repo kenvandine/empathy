@@ -34,6 +34,7 @@
 #include <libempathy-gtk/empathy-conf.h>
 #include <libempathy-gtk/empathy-ui-utils.h>
 #include <libempathy-gtk/empathy-theme-manager.h>
+#include <libempathy-gtk/empathy-theme-adium.h>
 #include <libempathy-gtk/empathy-spell.h>
 #include <libempathy-gtk/empathy-contact-list-store.h>
 #include <libempathy-gtk/empathy-gtk-enum-types.h>
@@ -49,6 +50,9 @@ typedef struct {
 	GtkWidget *checkbutton_compact_contact_list;
 	GtkWidget *checkbutton_show_smileys;
 	GtkWidget *combobox_chat_theme;
+	GtkWidget *hbox_adium_theme;
+	GtkWidget *filechooserbutton_adium_theme;
+	GtkWidget *label_invalid_adium_theme;
 	GtkWidget *checkbutton_separate_chat_windows;
 	GtkWidget *checkbutton_autoconnect;
 	GtkWidget *radiobutton_contact_list_sort_by_name;
@@ -89,17 +93,11 @@ static gboolean preferences_languages_load_foreach       (GtkTreeModel          
 static void     preferences_languages_cell_toggled_cb    (GtkCellRendererToggle  *cell,
 							  gchar                  *path_string,
 							  EmpathyPreferences      *preferences);
-static void     preferences_themes_setup                 (EmpathyPreferences      *preferences);
 static void     preferences_widget_sync_bool             (const gchar            *key,
 							  GtkWidget              *widget);
 static void     preferences_widget_sync_string           (const gchar            *key,
 							  GtkWidget              *widget);
-static void     preferences_widget_sync_string_combo     (const gchar            *key,
-							  GtkWidget              *widget);
 static void     preferences_notify_string_cb             (EmpathyConf             *conf,
-							  const gchar            *key,
-							  gpointer                user_data);
-static void     preferences_notify_string_combo_cb       (EmpathyConf             *conf,
 							  const gchar            *key,
 							  gpointer                user_data);
 static void     preferences_notify_bool_cb               (EmpathyConf             *conf,
@@ -114,17 +112,12 @@ static void     preferences_hookup_toggle_button         (EmpathyPreferences    
 static void     preferences_hookup_radio_button          (EmpathyPreferences      *preferences,
 							  const gchar            *key,
 							  GtkWidget              *widget);
-static void     preferences_hookup_string_combo          (EmpathyPreferences      *preferences,
-							  const gchar            *key,
-							  GtkWidget              *widget);
 static void     preferences_hookup_sensitivity           (EmpathyPreferences      *preferences,
 							  const gchar            *key,
 							  GtkWidget              *widget);
 static void     preferences_toggle_button_toggled_cb     (GtkWidget              *button,
 							  gpointer                user_data);
 static void     preferences_radio_button_toggled_cb      (GtkWidget              *button,
-							  gpointer                user_data);
-static void     preferences_string_combo_changed_cb      (GtkWidget *button,
 							  gpointer                user_data);
 static void     preferences_destroy_cb                   (GtkWidget              *widget,
 							  EmpathyPreferences      *preferences);
@@ -240,10 +233,6 @@ preferences_setup_widgets (EmpathyPreferences *preferences)
 	preferences_hookup_toggle_button (preferences,
 					  EMPATHY_PREFS_CHAT_SHOW_SMILEYS,
 					  preferences->checkbutton_show_smileys);
-
-	preferences_hookup_string_combo (preferences,
-					 EMPATHY_PREFS_CHAT_THEME,
-					 preferences->combobox_chat_theme);
 
 	preferences_hookup_radio_button (preferences,
 					 EMPATHY_PREFS_CONTACTS_SORT_CRITERIUM,
@@ -639,43 +628,6 @@ preferences_languages_cell_toggled_cb (GtkCellRendererToggle *cell,
 }
 
 static void
-preferences_themes_setup (EmpathyPreferences *preferences)
-{
-	GtkComboBox   *combo;
-	GtkCellLayout *cell_layout;
-	GtkCellRenderer *renderer;
-	GtkListStore  *store;
-	const gchar  **themes;
-	gint           i;
-
-	combo = GTK_COMBO_BOX (preferences->combobox_chat_theme);
-	cell_layout = GTK_CELL_LAYOUT (combo);
-
-	/* Create the model */
-	store = gtk_list_store_new (COL_COMBO_COUNT,
-				    G_TYPE_STRING,  /* Display name */
-				    G_TYPE_STRING); /* Theme name */
-
-	/* Fill the model */
-	themes = empathy_theme_manager_get_themes ();
-	for (i = 0; themes[i]; i += 2) {
-		gtk_list_store_insert_with_values (store, NULL, -1,
-			COL_COMBO_VISIBLE_NAME, _(themes[i + 1]),
-			COL_COMBO_NAME, themes[i],
-			-1);
-	}
-
-	/* Add cell renderer */
-	renderer = gtk_cell_renderer_text_new ();
-	gtk_cell_layout_pack_start (cell_layout, renderer, TRUE);
-	gtk_cell_layout_set_attributes (cell_layout, renderer,
-		"text", COL_COMBO_VISIBLE_NAME, NULL);
-
-	gtk_combo_box_set_model (combo, GTK_TREE_MODEL (store));
-	g_object_unref (store);
-}
-
-static void
 preferences_widget_sync_bool (const gchar *key, GtkWidget *widget)
 {
 	gboolean value;
@@ -721,48 +673,6 @@ preferences_widget_sync_string (const gchar *key, GtkWidget *widget)
 }
 
 static void
-preferences_widget_sync_string_combo (const gchar *key, GtkWidget *widget)
-{
-	gchar        *value;
-	GtkTreeModel *model;
-	GtkTreeIter   iter;
-	gboolean      found;
-
-	if (!empathy_conf_get_string (empathy_conf_get (), key, &value)) {
-		return;
-	}
-
-	model = gtk_combo_box_get_model (GTK_COMBO_BOX (widget));
-
-	found = FALSE;
-	if (value && gtk_tree_model_get_iter_first (model, &iter)) {
-
-		do {
-			gchar *name;
-			gtk_tree_model_get (model, &iter,
-					    COL_COMBO_NAME, &name,
-					    -1);
-
-			if (strcmp (name, value) == 0) {
-				found = TRUE;
-				gtk_combo_box_set_active_iter (GTK_COMBO_BOX (widget), &iter);
-			}
-
-			g_free (name);
-		} while (!found && gtk_tree_model_iter_next (model, &iter));
-	}
-
-	/* Fallback to the first one. */
-	if (!found) {
-		if (gtk_tree_model_get_iter_first (model, &iter)) {
-			gtk_combo_box_set_active_iter (GTK_COMBO_BOX (widget), &iter);
-		}
-	}
-
-	g_free (value);
-}
-
-static void
 preferences_notify_string_cb (EmpathyConf  *conf,
 			      const gchar *key,
 			      gpointer     user_data)
@@ -770,13 +680,6 @@ preferences_notify_string_cb (EmpathyConf  *conf,
 	preferences_widget_sync_string (key, user_data);
 }
 
-static void
-preferences_notify_string_combo_cb (EmpathyConf  *conf,
-				    const gchar *key,
-				    gpointer     user_data)
-{
-	preferences_widget_sync_string_combo (key, user_data);
-}
 
 static void
 preferences_notify_bool_cb (EmpathyConf  *conf,
@@ -955,32 +858,6 @@ preferences_hookup_radio_button (EmpathyPreferences *preferences,
 }
 
 static void
-preferences_hookup_string_combo (EmpathyPreferences *preferences,
-				 const gchar       *key,
-				 GtkWidget         *widget)
-{
-	guint id;
-
-	preferences_widget_sync_string_combo (key, widget);
-
-	g_object_set_data_full (G_OBJECT (widget), "key",
-				g_strdup (key), g_free);
-
-	g_signal_connect (widget,
-			  "changed",
-			  G_CALLBACK (preferences_string_combo_changed_cb),
-			  NULL);
-
-	id = empathy_conf_notify_add (empathy_conf_get (),
-				      key,
-				      preferences_notify_string_combo_cb,
-				      widget);
-	if (id) {
-		preferences_add_id (preferences, id);
-	}
-}
-
-static void
 preferences_hookup_sensitivity (EmpathyPreferences *preferences,
 				const gchar       *key,
 				GtkWidget         *widget)
@@ -1054,25 +931,203 @@ preferences_radio_button_toggled_cb (GtkWidget *button,
 	empathy_conf_set_string (empathy_conf_get (), key, value);
 }
 
+
 static void
-preferences_string_combo_changed_cb (GtkWidget *combo,
-				     gpointer   user_data)
+preferences_theme_adium_update_visibility (EmpathyPreferences *preferences,
+					   const gchar        *name)
 {
-	const gchar  *key;
+	if (name && strcmp (name, "adium") == 0) {
+		gtk_widget_show (preferences->hbox_adium_theme);
+	} else {
+		gtk_widget_hide (preferences->hbox_adium_theme);
+		gtk_widget_hide (preferences->label_invalid_adium_theme);
+	}
+}
+
+static void
+preferences_theme_adium_update_validity (EmpathyPreferences *preferences,
+					 const gchar        *path)
+{
+	if (empathy_theme_adium_is_valid (path)) {
+		gtk_widget_hide (preferences->label_invalid_adium_theme);
+	} else {
+		gtk_widget_show (preferences->label_invalid_adium_theme);
+	}
+}
+
+static void
+preferences_theme_adium_path_notify_cb (EmpathyConf *conf,
+					const gchar *key,
+					gpointer     user_data)
+{
+	EmpathyPreferences *preferences = user_data;
+	GtkFileChooser     *chooser;
+	gchar              *value;
+
+	if (!empathy_conf_get_string (conf, key, &value)) {
+		return;
+	}
+
+	chooser = GTK_FILE_CHOOSER (preferences->filechooserbutton_adium_theme);
+	gtk_file_chooser_set_current_folder (chooser, value);
+	preferences_theme_adium_update_validity (preferences, value);
+	g_free (value);
+}
+
+static void
+preferences_theme_adium_file_set_cb (GtkFileChooser     *chooser,
+				     EmpathyPreferences *preferences)
+{
+	gchar *path;
+
+	path = gtk_file_chooser_get_current_folder (chooser);
+	empathy_conf_set_string (empathy_conf_get (),
+				 EMPATHY_PREFS_CHAT_ADIUM_PATH,
+				 path);
+	preferences_theme_adium_update_validity (preferences, path);
+
+	g_free (path);
+}
+
+static void
+preferences_theme_notify_cb (EmpathyConf *conf,
+			     const gchar *key,
+			     gpointer     user_data)
+{
+	EmpathyPreferences *preferences = user_data;
+	GtkComboBox        *combo;
+	gchar              *value;
+	GtkTreeModel       *model;
+	GtkTreeIter         iter;
+	gboolean            found = FALSE;
+
+	if (!empathy_conf_get_string (conf, key, &value)) {
+		return;
+	}
+
+	preferences_theme_adium_update_visibility (preferences, value);
+
+	combo = GTK_COMBO_BOX (preferences->combobox_chat_theme);
+	model = gtk_combo_box_get_model (combo);
+	if (value && gtk_tree_model_get_iter_first (model, &iter)) {
+		gchar *name;
+
+		do {
+			gtk_tree_model_get (model, &iter,
+					    COL_COMBO_NAME, &name,
+					    -1);
+
+			if (strcmp (name, value) == 0) {
+				found = TRUE;
+				gtk_combo_box_set_active_iter (combo, &iter);
+				break;
+			}
+
+			g_free (name);
+		} while (gtk_tree_model_iter_next (model, &iter));
+	}
+
+	/* Fallback to the first one. */
+	if (!found) {
+		if (gtk_tree_model_get_iter_first (model, &iter)) {
+			gtk_combo_box_set_active_iter (combo, &iter);
+		}
+	}
+
+	g_free (value);
+}
+
+static void
+preferences_theme_changed_cb (GtkComboBox        *combo,
+			      EmpathyPreferences *preferences)
+{
 	GtkTreeModel *model;
 	GtkTreeIter   iter;
 	gchar        *name;
 
-	key = g_object_get_data (G_OBJECT (combo), "key");
-
-	if (gtk_combo_box_get_active_iter (GTK_COMBO_BOX (combo), &iter)) {
-		model = gtk_combo_box_get_model (GTK_COMBO_BOX (combo));
+	if (gtk_combo_box_get_active_iter (combo, &iter)) {
+		model = gtk_combo_box_get_model (combo);
 
 		gtk_tree_model_get (model, &iter,
 				    COL_COMBO_NAME, &name,
 				    -1);
-		empathy_conf_set_string (empathy_conf_get (), key, name);
+
+		preferences_theme_adium_update_visibility (preferences, name);
+
+		empathy_conf_set_string (empathy_conf_get (),
+					 EMPATHY_PREFS_CHAT_THEME,
+					 name);
 		g_free (name);
+	}
+}
+
+static void
+preferences_themes_setup (EmpathyPreferences *preferences)
+{
+	GtkComboBox   *combo;
+	GtkCellLayout *cell_layout;
+	GtkCellRenderer *renderer;
+	GtkListStore  *store;
+	const gchar  **themes;
+	gint           i;
+	guint          id;
+
+	combo = GTK_COMBO_BOX (preferences->combobox_chat_theme);
+	cell_layout = GTK_CELL_LAYOUT (combo);
+
+	/* Create the model */
+	store = gtk_list_store_new (COL_COMBO_COUNT,
+				    G_TYPE_STRING,  /* Display name */
+				    G_TYPE_STRING); /* Theme name */
+
+	/* Fill the model */
+	themes = empathy_theme_manager_get_themes ();
+	for (i = 0; themes[i]; i += 2) {
+		gtk_list_store_insert_with_values (store, NULL, -1,
+			COL_COMBO_VISIBLE_NAME, _(themes[i + 1]),
+			COL_COMBO_NAME, themes[i],
+			-1);
+	}
+
+	/* Add cell renderer */
+	renderer = gtk_cell_renderer_text_new ();
+	gtk_cell_layout_pack_start (cell_layout, renderer, TRUE);
+	gtk_cell_layout_set_attributes (cell_layout, renderer,
+		"text", COL_COMBO_VISIBLE_NAME, NULL);
+
+	gtk_combo_box_set_model (combo, GTK_TREE_MODEL (store));
+	g_object_unref (store);
+
+	g_signal_connect (combo, "changed",
+			  G_CALLBACK (preferences_theme_changed_cb),
+			  preferences);
+
+	/* Select the theme from the gconf key and track changes */
+	preferences_theme_notify_cb (empathy_conf_get (),
+				     EMPATHY_PREFS_CHAT_THEME,
+				     preferences);
+	id = empathy_conf_notify_add (empathy_conf_get (),
+				      EMPATHY_PREFS_CHAT_THEME,
+				      preferences_theme_notify_cb,
+				      preferences);
+	if (id) {
+		preferences_add_id (preferences, id);
+	}
+
+	g_signal_connect (preferences->filechooserbutton_adium_theme,
+			  "file-set",
+			  G_CALLBACK (preferences_theme_adium_file_set_cb),
+			  preferences);
+	/* Select the adium path from the gconf key and track changes */
+	preferences_theme_adium_path_notify_cb (empathy_conf_get (),
+						EMPATHY_PREFS_CHAT_ADIUM_PATH,
+						preferences);
+	id = empathy_conf_notify_add (empathy_conf_get (),
+				      EMPATHY_PREFS_CHAT_ADIUM_PATH,
+				      preferences_theme_adium_path_notify_cb,
+				      preferences);
+	if (id) {
+		preferences_add_id (preferences, id);
 	}
 }
 
@@ -1124,6 +1179,9 @@ empathy_preferences_show (GtkWindow *parent)
 		"checkbutton_compact_contact_list", &preferences->checkbutton_compact_contact_list,
 		"checkbutton_show_smileys", &preferences->checkbutton_show_smileys,
 		"combobox_chat_theme", &preferences->combobox_chat_theme,
+		"hbox_adium_theme", &preferences->hbox_adium_theme,
+		"filechooserbutton_adium_theme", &preferences->filechooserbutton_adium_theme,
+		"label_invalid_adium_theme", &preferences->label_invalid_adium_theme,
 		"checkbutton_separate_chat_windows", &preferences->checkbutton_separate_chat_windows,
 		"checkbutton_autoconnect", &preferences->checkbutton_autoconnect,
 		"radiobutton_contact_list_sort_by_name", &preferences->radiobutton_contact_list_sort_by_name,

@@ -580,3 +580,9 @@ empathy_theme_adium_new (void)
 	return g_object_new (EMPATHY_TYPE_THEME_ADIUM, NULL);
 }
 
+gboolean
+empathy_theme_adium_is_valid (const gchar *path)
+{
+	return TRUE;
+}
+

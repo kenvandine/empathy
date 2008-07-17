@@ -304,6 +304,20 @@
     </schema>
 
     <schema>
+      <key>/schemas/apps/empathy/conversation/adium_path</key>
+      <applyto>/apps/empathy/conversation/adium_path</applyto>
+      <owner>empathy</owner>
+      <type>string</type>
+      <default></default>
+      <locale name="C">
+         <short>Path of the adium theme to use</short>
+         <long>
+           Path of the adium theme to use if the theme used for chat is adium.
+         </long>
+      </locale>
+    </schema>
+
+    <schema>
       <key>/schemas/apps/empathy/conversation/theme_chat_room</key>
       <applyto>/apps/empathy/conversation/theme_chat_room</applyto>
       <owner>empathy</owner>
