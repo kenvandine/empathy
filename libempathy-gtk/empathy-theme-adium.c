@@ -288,7 +288,7 @@ theme_adium_append_message (EmpathyChatView *view,
 		}
 	}
 
-	/* Make some search-and-replece in the html code */
+	/* Make some search-and-replace in the html code */
 	prev = cur;
 	string = g_string_sized_new (len + strlen (body));
 	while ((cur = strchr (cur, '%'))) {
