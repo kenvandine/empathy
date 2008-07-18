@@ -155,15 +155,15 @@ theme_adium_escape_script (const gchar *text)
 	while (!G_STR_EMPTY (cur)) {
 		switch (*cur) {
 		case '\\':
+			/* \ becomes \\ */
 			g_string_append (string, "\\\\");	
 			break;
 		case '\"':
+			/* " becomes \" */
 			g_string_append (string, "\\\"");
 			break;
-		case '\r':
-			g_string_append (string, "<br/>");
-			break;
 		case '\n':
+			/* Remove end of lines */
 			break;
 		default:
 			g_string_append_c (string, *cur);
@@ -187,8 +187,9 @@ theme_adium_parse_body (EmpathyThemeAdium *theme,
 	GMatchInfo            *match_info;
 	gboolean               match;
 	gchar                 *ret = NULL;
-	gchar                 *iter;
-	const gchar           *cur = text;
+	gint                   prev;
+
+	ret = g_markup_escape_text (text, -1);
 
 	empathy_conf_get_bool (empathy_conf_get (),
 			       EMPATHY_PREFS_CHAT_SHOW_SMILEYS,
@@ -196,8 +197,8 @@ theme_adium_parse_body (EmpathyThemeAdium *theme,
 
 	if (use_smileys) {
 		/* Replace smileys by a <img/> tag */
-		string = g_string_sized_new (strlen (cur));
-		smileys = empathy_smiley_manager_parse (priv->smiley_manager, cur);
+		string = g_string_sized_new (strlen (ret));
+		smileys = empathy_smiley_manager_parse (priv->smiley_manager, ret);
 		for (l = smileys; l; l = l->next) {
 			EmpathySmiley *smiley;
 
@@ -214,7 +215,7 @@ theme_adium_parse_body (EmpathyThemeAdium *theme,
 		g_slist_free (smileys);
 
 		g_free (ret);
-		cur = ret = g_string_free (string, FALSE);
+		ret = g_string_free (string, FALSE);
 	}
 
 	/* Add <a href></a> arround links */
@@ -224,54 +225,56 @@ theme_adium_parse_body (EmpathyThemeAdium *theme,
 		gint last = 0;
 		gint s = 0, e = 0;
 
-		string = g_string_sized_new (strlen (cur));
+		string = g_string_sized_new (strlen (ret));
 		do {
 			g_match_info_fetch_pos (match_info, 0, &s, &e);
 
 			if (s > last) {
 				/* Append the text between last link (or the
 				 * start of the message) and this link */
-				g_string_append_len (string, cur + last, s - last);
+				g_string_append_len (string, ret + last, s - last);
 			}
 
 			/* Append the link inside <a href=""></a> tag */
 			g_string_append (string, "<a href=\"");
-			g_string_append_len (string, cur + s, e - s);
+			g_string_append_len (string, ret + s, e - s);
 			g_string_append (string, "\">");
-			g_string_append_len (string, cur + s, e - s);
+			g_string_append_len (string, ret + s, e - s);
 			g_string_append (string, "</a>");
 
 			last = e;
 		} while (g_match_info_next (match_info, NULL));
 
-		if (e < strlen (cur)) {
+		if (e < strlen (ret)) {
 			/* Append the text after the last link */
-			g_string_append_len (string, cur + e, strlen (cur) - e);
+			g_string_append_len (string, ret + e, strlen (ret) - e);
 		}
 
 		g_free (ret);
-		cur = ret = g_string_free (string, FALSE);
+		ret = g_string_free (string, FALSE);
 	}
 	g_match_info_free (match_info);
 	g_regex_unref (uri_regex);
 
-	/* Replace \n by \r so it will be replaced by <br/> */
-	iter = (gchar*) cur;
-	for (i = 0; iter[i] != '\0'; i++) {
-		if (iter[i] == '\n') {
-			if (ret == NULL) {
-				/* We have changes to make to the string but we
-				 * are still using the original one.
-				 * Dup it now */
-				cur = iter = ret = g_strdup (cur);
+	/* Replace \n by <br/> */
+	string = NULL;
+	prev = 0;
+	for (i = 0; ret[i] != '\0'; i++) {
+		if (ret[i] == '\n') {
+			if (!string ) {
+				string = g_string_sized_new (strlen (ret));
 			}
-			iter[i] = '\r';
-		}		
+			g_string_append_len (string, ret + prev, i - prev);
+			g_string_append (string, "<br/>");
+			prev = i + 1;
+		}
+	}
+	if (string) {
+		g_string_append (string, ret + prev);
+		g_free (ret);
+		ret = g_string_free (string, FALSE);
 	}
 
-	/* If we made changes to the text ret is now a newly allocated string,
-	 * otherwise it is NULL to indicate that the original text can be
-	 * used without modification */
 	return ret;
 }
 
