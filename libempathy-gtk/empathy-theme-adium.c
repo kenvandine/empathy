@@ -74,20 +74,18 @@ theme_adium_load (EmpathyThemeAdium *theme)
 	EmpathyThemeAdiumPriv *priv = GET_PRIV (theme);
 	gchar                 *basedir;
 	gchar                 *file;
-	gchar                 *template_html;
+	gchar                 *template_html = NULL;
 	gsize                  template_len;
 	GString               *string;
-	gchar                **strv;
+	gchar                **strv = NULL;
 	gchar                 *content;
 	gchar                 *css_path;
+	guint                  len = 0;
+	guint                  i = 0;
 
 	basedir = g_build_filename (priv->path, "Contents", "Resources", NULL);
 
 	/* Load html files */
-	file = g_build_filename (basedir, "Template.html", NULL);
-	g_file_get_contents (file, &template_html, &template_len, NULL);
-	g_free (file);
-
 	file = g_build_filename (basedir, "Incoming", "Content.html", NULL);
 	g_file_get_contents (file, &priv->in_content_html, &priv->in_content_len, NULL);
 	g_free (file);
@@ -106,18 +104,48 @@ theme_adium_load (EmpathyThemeAdium *theme)
 
 	css_path = g_build_filename (basedir, "main.css", NULL);
 
-	/* Replace %@ with the needed information in the template html */
-	strv = g_strsplit (template_html, "%@", 5);
+	/* There is 2 formats for Template.html: The old one has 4 parameters,
+	 * the new one has 5 parameters. */
+	file = g_build_filename (basedir, "Template.html", NULL);
+	if (g_file_get_contents (file, &template_html, &template_len, NULL)) {
+		strv = g_strsplit (template_html, "%@", -1);
+		len = g_strv_length (strv);
+	}
+	g_free (file);
+
+	if (len != 5 && len != 6) {
+		/* Either the theme has no template or it don't have the good
+		 * number of parameters. Fallback to use our own template. */
+		g_free (template_html);
+		g_strfreev (strv);
+
+		file = empathy_file_lookup ("Template.html", "data");
+		g_file_get_contents (file, &template_html, &template_len, NULL);
+		g_free (file);
+		strv = g_strsplit (template_html, "%@", -1);
+		len = g_strv_length (strv);
+	}
+
+	/* Replace %@ with the needed information in the template html. */
 	string = g_string_sized_new (template_len);
-	g_string_append (string, strv[0]);
+	g_string_append (string, strv[i++]);
 	g_string_append (string, basedir);
-	g_string_append (string, strv[1]);
-	g_string_append (string, css_path);
-	g_string_append (string, strv[2]);
+	g_string_append (string, strv[i++]);
+	if (len == 6) {
+		/* We include main.css by default */
+		g_string_append_printf (string, "@import url(\"%s\");", css_path);
+		g_string_append (string, strv[i++]);
+		/* FIXME: We should set the variant css here */
+		g_string_append (string, "");
+	} else {
+		/* FIXME: We should set main.css OR the variant css */
+		g_string_append (string, css_path);
+	}
+	g_string_append (string, strv[i++]);
 	g_string_append (string, ""); /* We don't want header */
-	g_string_append (string, strv[3]);
-	g_string_append (string, ""); /* We have no footer */
-	g_string_append (string, strv[4]);
+	g_string_append (string, strv[i++]);
+	g_string_append (string, ""); /* FIXME: We don't support footer yet */
+	g_string_append (string, strv[i++]);
 	content = g_string_free (string, FALSE);
 
 	/* Load the template */
