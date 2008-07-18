@@ -20,7 +20,9 @@
  */
 
 #include "config.h"
+
 #include <string.h>
+#include <glib/gi18n.h>
 
 #include <webkit/webkitnetworkrequest.h>
 
@@ -61,7 +63,8 @@ G_DEFINE_TYPE_WITH_CODE (EmpathyThemeAdium, empathy_theme_adium,
 						theme_adium_iface_init));
 
 static void
-theme_adium_load (EmpathyThemeAdium *theme)
+theme_adium_load (EmpathyThemeAdium *theme,
+		  const gchar       *path)
 {
 	EmpathyThemeAdiumPriv *priv = GET_PRIV (theme);
 	gchar                 *basedir;
@@ -73,8 +76,7 @@ theme_adium_load (EmpathyThemeAdium *theme)
 	gchar                 *content;
 	gchar                 *css_path;
 
-	/* FIXME: Find a better way to get the theme dir */
-	basedir = g_build_filename (g_get_home_dir (), "Contents", "Resources", NULL);
+	basedir = g_build_filename (path, "Contents", "Resources", NULL);
 
 	/* Load html files */
 	file = g_build_filename (basedir, "Template.html", NULL);
@@ -558,6 +560,7 @@ empathy_theme_adium_init (EmpathyThemeAdium *theme)
 {
 	EmpathyThemeAdiumPriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (theme,
 		EMPATHY_TYPE_THEME_ADIUM, EmpathyThemeAdiumPriv);
+	gchar *path = NULL;
 
 	theme->priv = priv;	
 
@@ -570,8 +573,10 @@ empathy_theme_adium_init (EmpathyThemeAdium *theme)
 			  G_CALLBACK (theme_adium_navigation_requested_cb),
 			  NULL);
 
-
-	theme_adium_load (theme);
+	empathy_conf_get_string (empathy_conf_get (),
+				 EMPATHY_PREFS_CHAT_ADIUM_PATH,
+				 &path);
+	theme_adium_load (theme, path);
 }
 
 EmpathyThemeAdium *
@@ -583,6 +588,18 @@ empathy_theme_adium_new (void)
 gboolean
 empathy_theme_adium_is_valid (const gchar *path)
 {
-	return TRUE;
+	gboolean ret;
+	gchar   *file;
+
+	/* We ship a default Template.html as fallback if there is any problem
+	 * with the one inside the theme. The only other required file is
+	 * Content.html for incoming messages (outgoing fallback to use
+	 * incoming). */
+	file = g_build_filename (path, "Contents", "Resources", "Incoming",
+				 "Content.html", NULL);
+	ret = g_file_test (file, G_FILE_TEST_EXISTS);
+	g_free (file);
+
+	return ret;
 }
 

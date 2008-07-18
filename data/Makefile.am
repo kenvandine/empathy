@@ -41,12 +41,16 @@ else
 install-data-local:
 endif
 
+htmldir = $(datadir)/empathy
+html_DATA = Template.html
+
 EXTRA_DIST = 				\
 	$(profile_DATA)			\
 	$(desktop_in_files)		\
-	$(desktop_DATA)		\
+	$(desktop_DATA)			\
 	$(schemas_in_files)		\
-	$(schemas_DATA)
+	$(schemas_DATA)			\
+	$(html_DATA)
 
 DISTCLEANFILES = 			\
 	$(desktop_DATA)		\
