@@ -49,6 +49,8 @@
 typedef struct {
 	gchar       *name;
 	guint        name_notify_id;
+	gchar       *adium_path;
+	guint        adium_path_notify_id;
 	GtkSettings *settings;
 	GList       *boxes_views;
 } EmpathyThemeManagerPriv;
@@ -325,14 +327,20 @@ empathy_theme_manager_create_view (EmpathyThemeManager *manager)
 
 	DEBUG ("Using theme %s", priv->name);
 
+#ifdef HAVE_WEBKIT
+	if (strcmp (priv->name, "adium") == 0)  {
+		if (empathy_theme_adium_is_valid (priv->adium_path)) {
+			return EMPATHY_CHAT_VIEW (empathy_theme_adium_new (priv->adium_path));
+		} else {
+			/* The adium path is not valid, fallback to classic theme */
+			return EMPATHY_CHAT_VIEW (theme_manager_create_irc_view (manager));
+		}
+	}
+#endif
+
 	if (strcmp (priv->name, "classic") == 0)  {
 		return EMPATHY_CHAT_VIEW (theme_manager_create_irc_view (manager));
 	}
-#ifdef HAVE_WEBKIT
-	if (strcmp (priv->name, "adium") == 0)  {
-		return EMPATHY_CHAT_VIEW (empathy_theme_adium_new ());
-	}
-#endif
 
 	theme = theme_manager_create_boxes_view (manager);
 	theme_manager_update_boxes_theme (manager, theme);
@@ -416,6 +424,27 @@ theme_manager_notify_name_cb (EmpathyConf *conf,
 }
 
 static void
+theme_manager_notify_adium_path_cb (EmpathyConf *conf,
+				    const gchar *key,
+				    gpointer     user_data)
+{
+	EmpathyThemeManager     *manager = EMPATHY_THEME_MANAGER (user_data);
+	EmpathyThemeManagerPriv *priv = GET_PRIV (manager);
+	gchar                   *adium_path = NULL;
+
+	if (!empathy_conf_get_string (conf, key, &adium_path) ||
+	    !tp_strdiff (priv->adium_path, adium_path)) {
+		g_free (adium_path);
+		return;
+	}
+
+	g_free (priv->adium_path);
+	priv->adium_path = adium_path;
+
+	g_signal_emit (manager, signals[THEME_CHANGED], 0, NULL);
+}
+
+static void
 theme_manager_finalize (GObject *object)
 {
 	EmpathyThemeManagerPriv *priv = GET_PRIV (object);
@@ -423,6 +452,8 @@ theme_manager_finalize (GObject *object)
 
 	empathy_conf_notify_remove (empathy_conf_get (), priv->name_notify_id);
 	g_free (priv->name);
+	empathy_conf_notify_remove (empathy_conf_get (), priv->adium_path_notify_id);
+	g_free (priv->adium_path);
 
 	for (l = priv->boxes_views; l; l = l->next) {
 		g_object_weak_unref (G_OBJECT (l->data),
@@ -471,6 +502,16 @@ empathy_theme_manager_init (EmpathyThemeManager *manager)
 	theme_manager_notify_name_cb (empathy_conf_get (),
 				      EMPATHY_PREFS_CHAT_THEME,
 				      manager);
+
+	/* Take the adium path and track changes */
+	priv->adium_path_notify_id =
+		empathy_conf_notify_add (empathy_conf_get (),
+					 EMPATHY_PREFS_CHAT_ADIUM_PATH,
+					 theme_manager_notify_adium_path_cb,
+					 manager);
+	theme_manager_notify_adium_path_cb (empathy_conf_get (),
+					    EMPATHY_PREFS_CHAT_ADIUM_PATH,
+					    manager);
 
 	/* Track GTK color changes */
 	priv->settings = gtk_settings_get_default ();

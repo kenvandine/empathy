@@ -44,6 +44,7 @@ typedef struct {
 	EmpathyContact       *last_contact;
 	gboolean              page_loaded;
 	GList                *message_queue;
+	gchar                *path;
 	gchar                *default_avatar_filename;
 	gchar                *in_content_html;
 	gsize                 in_content_len;
@@ -57,14 +58,18 @@ typedef struct {
 
 static void theme_adium_iface_init (EmpathyChatViewIface *iface);
 
+enum {
+	PROP_0,
+	PROP_PATH,
+};
+
 G_DEFINE_TYPE_WITH_CODE (EmpathyThemeAdium, empathy_theme_adium,
 			 WEBKIT_TYPE_WEB_VIEW,
 			 G_IMPLEMENT_INTERFACE (EMPATHY_TYPE_CHAT_VIEW,
 						theme_adium_iface_init));
 
 static void
-theme_adium_load (EmpathyThemeAdium *theme,
-		  const gchar       *path)
+theme_adium_load (EmpathyThemeAdium *theme)
 {
 	EmpathyThemeAdiumPriv *priv = GET_PRIV (theme);
 	gchar                 *basedir;
@@ -76,7 +81,7 @@ theme_adium_load (EmpathyThemeAdium *theme,
 	gchar                 *content;
 	gchar                 *css_path;
 
-	basedir = g_build_filename (path, "Contents", "Resources", NULL);
+	basedir = g_build_filename (priv->path, "Contents", "Resources", NULL);
 
 	/* Load html files */
 	file = g_build_filename (basedir, "Template.html", NULL);
@@ -536,6 +541,7 @@ theme_adium_finalize (GObject *object)
 	g_free (priv->out_content_html);
 	g_free (priv->out_nextcontent_html);
 	g_free (priv->default_avatar_filename);
+	g_free (priv->path);
 	g_object_unref (priv->smiley_manager);
 
 	if (priv->last_contact) {
@@ -546,11 +552,67 @@ theme_adium_finalize (GObject *object)
 }
 
 static void
+theme_adium_constructed (GObject *object)
+{
+	theme_adium_load (EMPATHY_THEME_ADIUM (object));
+}
+
+static void
+theme_adium_get_property (GObject    *object,
+			  guint       param_id,
+			  GValue     *value,
+			  GParamSpec *pspec)
+{
+	EmpathyThemeAdiumPriv *priv = GET_PRIV (object);
+
+	switch (param_id) {
+	case PROP_PATH:
+		g_value_set_string (value, priv->path);
+		break;
+	default:
+		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
+		break;
+	};
+}
+
+static void
+theme_adium_set_property (GObject      *object,
+			  guint         param_id,
+			  const GValue *value,
+			  GParamSpec   *pspec)
+{
+	EmpathyThemeAdiumPriv *priv = GET_PRIV (object);
+
+	switch (param_id) {
+	case PROP_PATH:
+		g_free (priv->path);
+		priv->path = g_value_dup_string (value);
+		break;
+	default:
+		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
+		break;
+	};
+}
+
+static void
 empathy_theme_adium_class_init (EmpathyThemeAdiumClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 	
 	object_class->finalize = theme_adium_finalize;
+	object_class->constructed = theme_adium_constructed;
+	object_class->get_property = theme_adium_get_property;
+	object_class->set_property = theme_adium_set_property;
+
+	g_object_class_install_property (object_class,
+					 PROP_PATH,
+					 g_param_spec_string ("path",
+							      "The theme path",
+							      "Path to the adium theme",
+							      g_get_home_dir (),
+							      G_PARAM_CONSTRUCT_ONLY |
+							      G_PARAM_READWRITE));
+
 
 	g_type_class_add_private (object_class, sizeof (EmpathyThemeAdiumPriv));
 }
@@ -560,7 +622,6 @@ empathy_theme_adium_init (EmpathyThemeAdium *theme)
 {
 	EmpathyThemeAdiumPriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (theme,
 		EMPATHY_TYPE_THEME_ADIUM, EmpathyThemeAdiumPriv);
-	gchar *path = NULL;
 
 	theme->priv = priv;	
 
@@ -572,17 +633,16 @@ empathy_theme_adium_init (EmpathyThemeAdium *theme)
 	g_signal_connect (theme, "navigation-requested",
 			  G_CALLBACK (theme_adium_navigation_requested_cb),
 			  NULL);
-
-	empathy_conf_get_string (empathy_conf_get (),
-				 EMPATHY_PREFS_CHAT_ADIUM_PATH,
-				 &path);
-	theme_adium_load (theme, path);
 }
 
 EmpathyThemeAdium *
-empathy_theme_adium_new (void)
+empathy_theme_adium_new (const gchar *path)
 {
-	return g_object_new (EMPATHY_TYPE_THEME_ADIUM, NULL);
+	g_return_val_if_fail (empathy_theme_adium_is_valid (path), NULL);
+
+	return g_object_new (EMPATHY_TYPE_THEME_ADIUM,
+			     "path", path,
+			     NULL);
 }
 
 gboolean
