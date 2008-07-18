@@ -34,10 +34,13 @@
 #include <libempathy-gtk/empathy-conf.h>
 #include <libempathy-gtk/empathy-ui-utils.h>
 #include <libempathy-gtk/empathy-theme-manager.h>
-#include <libempathy-gtk/empathy-theme-adium.h>
 #include <libempathy-gtk/empathy-spell.h>
 #include <libempathy-gtk/empathy-contact-list-store.h>
 #include <libempathy-gtk/empathy-gtk-enum-types.h>
+
+#ifdef HAVE_WEBKIT
+#include <libempathy-gtk/empathy-theme-adium.h>
+#endif
 
 #include "empathy-preferences.h"
 
@@ -948,11 +951,13 @@ static void
 preferences_theme_adium_update_validity (EmpathyPreferences *preferences,
 					 const gchar        *path)
 {
+#ifdef HAVE_WEBKIT
 	if (empathy_theme_adium_is_valid (path)) {
 		gtk_widget_hide (preferences->label_invalid_adium_theme);
 	} else {
 		gtk_widget_show (preferences->label_invalid_adium_theme);
 	}
+#endif
 }
 
 static void
