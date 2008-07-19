@@ -1110,10 +1110,13 @@ main_window_status_changed_cb (MissionControl           *mc,
 	account = mc_account_lookup (unique_name);
 
 	if (status == TP_CONNECTION_STATUS_DISCONNECTED &&
-	    reason > TP_CONNECTION_STATUS_REASON_REQUESTED) {
+	    reason != TP_CONNECTION_STATUS_REASON_REQUESTED) {
 		const gchar *message;
 
 		switch (reason) {
+		case TP_CONNECTION_STATUS_REASON_NONE_SPECIFIED:
+			message = _("No error specified");
+			break;
 		case TP_CONNECTION_STATUS_REASON_NETWORK_ERROR:
 			message = _("Network error");
 			break;
