@@ -183,6 +183,20 @@
                               </widget>
                             </child>
                             <child>
+                              <widget class="GtkCheckButton" id="checkbutton_register">
+                                <property name="visible">True</property>
+                                <property name="can_focus">True</property>
+                                <property name="label" translatable="yes">I already have an account I want to use</property>
+                                <property name="use_underline">True</property>
+                                <property name="response_id">0</property>
+                                <property name="active">True</property>
+                                <property name="draw_indicator">True</property>
+                              </widget>
+                              <packing>
+                                <property name="position">2</property>
+                              </packing>
+                            </child>
+                            <child>
                               <widget class="GtkHBox" id="hbox181">
                                 <property name="visible">True</property>
                                 <property name="spacing">6</property>

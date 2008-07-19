@@ -73,6 +73,7 @@ typedef struct {
 	GtkWidget        *hbox_type;
 	GtkWidget        *button_create;
 	GtkWidget        *button_back;
+	GtkWidget        *checkbutton_register;
 
 	GtkWidget        *image_type;
 	GtkWidget        *label_name;
@@ -862,6 +863,7 @@ accounts_dialog_button_create_clicked_cb (GtkWidget             *button,
 	McProfile   *profile;
 	McAccount   *account;
 	const gchar *str;
+	McProfileCapabilityFlags cap;
 
 	/* Update widgets */
 	gtk_widget_show (dialog->vbox_details);
@@ -872,9 +874,18 @@ accounts_dialog_button_create_clicked_cb (GtkWidget             *button,
 
 	/* Create account */
 	account = mc_account_create (profile);
-
 	str = mc_account_get_unique_name (account);
 	mc_account_set_display_name (account, str);
+
+	cap = mc_profile_get_capabilities (profile);
+	if (cap & MC_PROFILE_CAPABILITY_REGISTRATION_UI) {
+		gboolean active;
+
+		active = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (dialog->checkbutton_register));
+		if (!active) {
+			mc_account_set_param_boolean (account, "register", TRUE);
+		}
+	}
 
 	accounts_dialog_add_account (dialog, account);
 	accounts_dialog_model_set_selected (dialog, account);
@@ -900,6 +911,24 @@ accounts_dialog_button_back_clicked_cb (GtkWidget             *button,
 }
 
 static void
+accounts_dialog_profile_changed_cb (GtkWidget             *widget,
+				    EmpathyAccountsDialog *dialog)
+{
+	McProfile *profile;
+	McProfileCapabilityFlags cap;
+
+	profile = empathy_profile_chooser_get_selected (dialog->combobox_profile);
+	cap = mc_profile_get_capabilities (profile);
+
+	if (cap & MC_PROFILE_CAPABILITY_REGISTRATION_UI) {
+		gtk_widget_show (dialog->checkbutton_register);
+	} else {
+		gtk_widget_hide (dialog->checkbutton_register);
+	}
+	g_object_unref (profile);
+}
+
+static void
 accounts_dialog_button_add_clicked_cb (GtkWidget             *button,
 				       EmpathyAccountsDialog *dialog)
 {
@@ -915,6 +944,9 @@ accounts_dialog_button_add_clicked_cb (GtkWidget             *button,
 	gtk_widget_hide (dialog->frame_no_account);
 	gtk_widget_show (dialog->frame_new_account);
 
+	accounts_dialog_profile_changed_cb (dialog->checkbutton_register, dialog);
+	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog->checkbutton_register),
+				      TRUE);
 	gtk_combo_box_set_active (GTK_COMBO_BOX (dialog->combobox_profile), 0);
 	gtk_widget_grab_focus (dialog->combobox_profile);
 }
@@ -1067,6 +1099,7 @@ empathy_accounts_dialog_show (GtkWindow *parent,
 				       "hbox_type", &dialog->hbox_type,
 				       "button_create", &dialog->button_create,
 				       "button_back", &dialog->button_back,
+				       "checkbutton_register", &dialog->checkbutton_register,
 				       "image_type", &dialog->image_type,
 				       "label_name", &dialog->label_name,
 				       "button_add", &dialog->button_add,
@@ -1098,6 +1131,9 @@ empathy_accounts_dialog_show (GtkWindow *parent,
 	if (empathy_profile_chooser_n_profiles (dialog->combobox_profile) <= 0) {
 		gtk_widget_set_sensitive (dialog->button_add, FALSE);
 	}
+	g_signal_connect (dialog->combobox_profile, "changed",
+			  G_CALLBACK (accounts_dialog_profile_changed_cb),
+			  dialog);
 
 	/* Set up signalling */
 	dialog->mc = empathy_mission_control_new ();
