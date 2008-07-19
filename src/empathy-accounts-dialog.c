@@ -101,6 +101,10 @@ static void       accounts_dialog_update_account            (EmpathyAccountsDial
 							     McAccount                *account);
 static void       accounts_dialog_model_setup               (EmpathyAccountsDialog    *dialog);
 static void       accounts_dialog_model_add_columns         (EmpathyAccountsDialog    *dialog);
+static void       accounts_dialog_name_editing_started_cb   (GtkCellRenderer          *renderer,
+							     GtkCellEditable          *editable,
+							     gchar                    *path,
+							     EmpathyAccountsDialog    *dialog);
 static void       accounts_dialog_model_select_first        (EmpathyAccountsDialog    *dialog);
 static void       accounts_dialog_model_pixbuf_data_func    (GtkTreeViewColumn        *tree_column,
 							     GtkCellRenderer          *cell,
@@ -126,6 +130,7 @@ static gboolean   accounts_dialog_row_changed_foreach       (GtkTreeModel       
 							     GtkTreeIter              *iter,
 							     gpointer                  user_data);
 static gboolean   accounts_dialog_flash_connecting_cb       (EmpathyAccountsDialog    *dialog);
+static gboolean   accounts_dialog_are_accounts_connecting   (MissionControl           *mc);
 static void       accounts_dialog_status_changed_cb         (MissionControl           *mc,
 							     TpConnectionStatus        status,
 							     McPresence                presence,
@@ -368,6 +373,12 @@ accounts_dialog_name_edited_cb (GtkCellRendererText   *renderer,
 	GtkTreePath  *treepath;
 	GtkTreeIter   iter;
 
+	if (accounts_dialog_are_accounts_connecting (dialog->mc)) {
+		dialog->connecting_id = g_timeout_add (FLASH_TIMEOUT,
+						       (GSourceFunc) accounts_dialog_flash_connecting_cb,
+						       dialog);
+	}
+
 	model = gtk_tree_view_get_model (GTK_TREE_VIEW (dialog->treeview));
 	treepath = gtk_tree_path_new_from_string (path);
 	gtk_tree_model_get_iter (model, &iter, treepath);
@@ -409,6 +420,18 @@ accounts_dialog_enable_toggled_cb (GtkCellRendererToggle *cell_renderer,
 		mc_account_get_display_name(account));
 
 	g_object_unref (account);
+}
+
+static void
+accounts_dialog_name_editing_started_cb (GtkCellRenderer       *renderer,
+					 GtkCellEditable       *editable,
+					 gchar                 *path,
+					 EmpathyAccountsDialog *dialog)
+{
+	if (dialog->connecting_id) {
+		g_source_remove (dialog->connecting_id);
+	}
+	DEBUG ("Editing account name started; stopping flashing");
 }
 
 static void
@@ -457,6 +480,9 @@ accounts_dialog_model_add_columns (EmpathyAccountsDialog *dialog)
 	gtk_tree_view_column_add_attribute (column, cell, "text", COL_NAME);
 	g_signal_connect (cell, "edited",
 			  G_CALLBACK (accounts_dialog_name_edited_cb),
+			  dialog);
+	g_signal_connect (cell, "editing-started",
+			  G_CALLBACK (accounts_dialog_name_editing_started_cb),
 			  dialog);
 }
 
@@ -731,6 +757,30 @@ accounts_dialog_flash_connecting_cb (EmpathyAccountsDialog *dialog)
 	return TRUE;
 }
 
+static gboolean
+accounts_dialog_are_accounts_connecting (MissionControl *mc)
+{
+	GList    *accounts, *l;
+	gboolean  found = FALSE;
+
+	/* Check if there is still accounts in CONNECTING state */
+	accounts = mc_accounts_list_by_enabled (TRUE);
+	for (l = accounts; l; l = l->next) {
+		McAccount          *this_account = l->data;
+		TpConnectionStatus  status;
+
+		status = mission_control_get_connection_status (mc, this_account,
+								NULL);
+		if (status == TP_CONNECTION_STATUS_CONNECTING) {
+			found = TRUE;
+			break;
+		}
+	}
+	mc_accounts_list_free (accounts);
+
+	return found;
+}
+
 static void
 accounts_dialog_status_changed_cb (MissionControl           *mc,
 				   TpConnectionStatus        status,
@@ -742,7 +792,6 @@ accounts_dialog_status_changed_cb (MissionControl           *mc,
 	GtkTreeModel *model;
 	GtkTreeIter   iter;
 	McAccount    *account;
-	GList        *accounts, *l;
 	gboolean      found = FALSE;
 	
 	/* Update the status in the model */
@@ -765,25 +814,7 @@ accounts_dialog_status_changed_cb (MissionControl           *mc,
 	}
 	g_object_unref (account);
 
-	/* Check if there is still accounts in CONNECTING state */
-	accounts = mc_accounts_list_by_enabled (TRUE);
-	for (l = accounts; l; l = l->next) {
-		McAccount          *this_account = l->data;
-		TpConnectionStatus  status;
-
-		if (found) {
-			g_object_unref (this_account);
-			continue;
-		}
-
-		status = mission_control_get_connection_status (mc, this_account, NULL);
-		if (status == TP_CONNECTION_STATUS_CONNECTING) {
-			found = TRUE;
-		}
-
-		g_object_unref (this_account);
-	}
-	g_list_free (accounts);
+	found = accounts_dialog_are_accounts_connecting (mc);
 
 	if (!found && dialog->connecting_id) {
 		g_source_remove (dialog->connecting_id);
