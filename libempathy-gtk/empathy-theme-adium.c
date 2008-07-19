@@ -306,12 +306,6 @@ theme_adium_parse_body (EmpathyThemeAdium *theme,
 	return ret;
 }
 
-static void
-theme_adium_scroll_down (EmpathyChatView *view)
-{
-	/* Not implemented */
-}
-
 #define FOLLOW(cur, str) (!strncmp (cur, str, strlen (str)))
 static void
 theme_adium_append_message (EmpathyChatView *view,
@@ -362,6 +356,7 @@ theme_adium_append_message (EmpathyChatView *view,
 		avatar_filename = priv->default_avatar_filename;
 	}
 
+	/* FIXME: What if the message is an action "/me foo"? */
 	/* Get the right html/func to add the message */
 	if (priv->last_contact &&
 	    empathy_contact_equal (priv->last_contact, sender)) {
@@ -406,15 +401,18 @@ theme_adium_append_message (EmpathyChatView *view,
 			gchar *start;
 			gchar *end;
 
-			/* Extract the time format it provided. */
+			/* Extract the time format if provided. */
 			if (*(start = cur + strlen("%time")) == '{') {
 				start++;
 				end = strstr (start, "}%");
-				if (!end) /* Invalid string */
+				if (!end) {
+					/* Invalid string */
+					cur++;
 					continue;
+				}
 				format = g_strndup (start, end - start);
 				fin = end + 1;
-			} 
+			}
 
 			dup_replace = empathy_time_to_string_local (timestamp,
 				format ? format : EMPATHY_TIME_FORMAT_DISPLAY_SHORT);
@@ -467,6 +465,12 @@ theme_adium_append_event (EmpathyChatView *view,
 static void
 theme_adium_scroll (EmpathyChatView *view,
 		    gboolean         allow_scrolling)
+{
+	/* Not implemented */
+}
+
+static void
+theme_adium_scroll_down (EmpathyChatView *view)
 {
 	/* Not implemented */
 }
