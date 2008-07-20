@@ -217,16 +217,14 @@ theme_adium_parse_body (EmpathyThemeAdium *theme,
 	gchar                 *ret = NULL;
 	gint                   prev;
 
-	ret = g_markup_escape_text (text, -1);
-
 	empathy_conf_get_bool (empathy_conf_get (),
 			       EMPATHY_PREFS_CHAT_SHOW_SMILEYS,
 			       &use_smileys);
 
 	if (use_smileys) {
 		/* Replace smileys by a <img/> tag */
-		string = g_string_sized_new (strlen (ret));
-		smileys = empathy_smiley_manager_parse (priv->smiley_manager, ret);
+		string = g_string_sized_new (strlen (text));
+		smileys = empathy_smiley_manager_parse (priv->smiley_manager, text);
 		for (l = smileys; l; l = l->next) {
 			EmpathySmiley *smiley;
 
@@ -236,13 +234,14 @@ theme_adium_parse_body (EmpathyThemeAdium *theme,
 							"<abbr title='%s'><img src=\"%s\"/ alt=\"%s\"/></abbr>",
 							smiley->str, smiley->path, smiley->str);
 			} else {
-				g_string_append (string, smiley->str);
+				ret = g_markup_escape_text (smiley->str, -1);
+				g_string_append (string, ret);
+				g_free (ret);
 			}
 			empathy_smiley_free (smiley);
 		}
 		g_slist_free (smileys);
 
-		g_free (ret);
 		ret = g_string_free (string, FALSE);
 	}
 
