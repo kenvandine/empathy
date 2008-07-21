@@ -1,16 +1,16 @@
 # Bulgarian translation of empathy po-file.
-# Copyright (C) 2004, 2007 Free Software Foundation, Inc.
+# Copyright (C) 2004, 2007, 2008 Free Software Foundation, Inc.
 # This file is distributed under the same license as the empathy package.
 # Yasen Pramatarov <yasen@lindeas.com>, 2004.
-# Alexander Shopov <ash@contact.bg>, 2007.
+# Alexander Shopov <ash@contact.bg>, 2007, 2008.
 #
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gossip trunk\n"
+"Project-Id-Version: empathy trunk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-11-26 08:23+0200\n"
-"PO-Revision-Date: 2007-11-26 07:45+0200\n"
+"POT-Creation-Date: 2008-07-21 23:11+0300\n"
+"PO-Revision-Date: 2008-07-21 23:11+0300\n"
 "Last-Translator: Alexander Shopov <ash@contact.bg>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
 "MIME-Version: 1.0\n"
@@ -31,12 +31,16 @@ msgid "Always open a separate chat window for new chats."
 msgstr "Новите разговори да се отварят в отделни прозорци."
 
 #: ../data/empathy.schemas.in.h:2
-msgid "Chat window theme"
-msgstr "Графична тема за прозореца за разговори"
+msgid ""
+"Character to add after nickname when using nick completion (tab) in group "
+"chat."
+msgstr ""
+"Знак, който да се добави след псевдонима при ползване на дописване на "
+"псевдоними (с табулатор) в прозореца за групови разговори."
 
 #: ../data/empathy.schemas.in.h:3
-msgid "Checks if Salut account is created"
-msgstr "Проверка дали е създаден абонамент за Salut"
+msgid "Chat window theme"
+msgstr "Графична тема за прозореца за разговори"
 
 #: ../data/empathy.schemas.in.h:4
 msgid ""
@@ -51,82 +55,125 @@ msgstr "Стегнат списък с контакти"
 
 #: ../data/empathy.schemas.in.h:6
 msgid "Contact list sort criterium"
-msgstr "Критерий за подребдата на списъка с контактите"
+msgstr "Критерий за подредбата на списъка с контактите"
 
 #: ../data/empathy.schemas.in.h:7
 msgid "Default directory to select an avatar image from"
 msgstr "Стандартна папка, в която да се търсят изображения за аватари"
 
 #: ../data/empathy.schemas.in.h:8
+msgid "Empathy should auto-connect on startup"
+msgstr "Автоматично свързване при стартиране"
+
+#: ../data/empathy.schemas.in.h:9
+msgid "Empathy should use the avatar of the contact as the chat window icon"
+msgstr "Иконата на прозореца за разговори да е аватарът на контакта"
+
+#: ../data/empathy.schemas.in.h:10
 msgid "Enable popup when contact is available"
 msgstr "Известяване с прозорец при появата на контакт"
 
-#: ../data/empathy.schemas.in.h:9
-msgid "Enable sound when away"
-msgstr "Със звуци в състояние „_Отсъстващ“"
-
-#: ../data/empathy.schemas.in.h:10
-msgid "Enable sound when busy"
-msgstr "Със звуци в състояние „_Зает“"
-
 #: ../data/empathy.schemas.in.h:11
+msgid "Enable sound when away"
+msgstr "Със звуци в състояние „Отсъстващ“"
+
+#: ../data/empathy.schemas.in.h:12
+msgid "Enable sound when busy"
+msgstr "Със звуци в състояние „Зает“"
+
+#: ../data/empathy.schemas.in.h:13
 msgid "Enable spell checker"
 msgstr "Да се ползва проверка на правописа"
 
-#: ../data/empathy.schemas.in.h:12
+#: ../data/empathy.schemas.in.h:14
 msgid "Hide main window"
 msgstr "Скриване на основния прозорец"
 
-#: ../data/empathy.schemas.in.h:13
+#: ../data/empathy.schemas.in.h:15
 msgid "Hide the main window."
-msgstr "Скирване на основния прозорец."
+msgstr "Скриване на основния прозорец."
 
-#: ../data/empathy.schemas.in.h:14
+#: ../data/empathy.schemas.in.h:16
+msgid "NetworkManager should be used"
+msgstr "Да се използва NetworkManager"
+
+#: ../data/empathy.schemas.in.h:17
+msgid "Nick completed character"
+msgstr "Знак за дописване на псевдоними"
+
+#: ../data/empathy.schemas.in.h:18
 msgid "Open new chats in separate windows"
 msgstr "Отваряне на разговорите в отделни прозорци"
 
-#: ../data/empathy.schemas.in.h:15
+#: ../data/empathy.schemas.in.h:19
+msgid "Salut account is created"
+msgstr "Създадена е регистрация за Salut"
+
+#: ../data/empathy.schemas.in.h:20
 msgid "Show avatars"
 msgstr "Показване на аватари"
 
-#: ../data/empathy.schemas.in.h:16
+#: ../data/empathy.schemas.in.h:21
 msgid "Show hint about closing the main window"
 msgstr "Показване на съвет за затваряне на основния прозорец"
 
-#: ../data/empathy.schemas.in.h:17
+#: ../data/empathy.schemas.in.h:22
 msgid "Show offline contacts"
 msgstr "Показване на изключените контакти"
 
-#: ../data/empathy.schemas.in.h:18
+#: ../data/empathy.schemas.in.h:23
 msgid "Spell checking languages"
 msgstr "Езици с проверка на правописа"
 
-#: ../data/empathy.schemas.in.h:19
+#: ../data/empathy.schemas.in.h:24
 msgid "The last directory that an avatar image was chosen from."
 msgstr "Последната папка, от която е взето изображение за аватар."
 
-#: ../data/empathy.schemas.in.h:20
+#: ../data/empathy.schemas.in.h:25
 msgid "The theme that is used to display the conversation in chat windows."
 msgstr "Темата, която ще се ползва за прозорците за разговори."
 
-#: ../data/empathy.schemas.in.h:21
+#: ../data/empathy.schemas.in.h:26
 msgid "Use graphical smileys"
 msgstr "Изображения за емотикони"
 
-#: ../data/empathy.schemas.in.h:22
+#: ../data/empathy.schemas.in.h:27
 msgid "Use notification sounds"
 msgstr "Използване на звуци за уведомяване"
 
-#: ../data/empathy.schemas.in.h:23
+#: ../data/empathy.schemas.in.h:28
 msgid "Use theme for chat rooms"
 msgstr "Тема за прозорците за разговори"
 
-#: ../data/empathy.schemas.in.h:24
+#: ../data/empathy.schemas.in.h:29
 msgid ""
-"Whether or not the Salut account has been created on the first empathy run."
-msgstr "Дали при първото стартиране на Empathy е създаден абонамент за Salut."
+"Whether or not Empathy should automatically log in to your accounts on "
+"startup."
+msgstr "Дали Empathy автоматично да включва регистрациите при стартиране."
 
-#: ../data/empathy.schemas.in.h:25
+#: ../data/empathy.schemas.in.h:30
+msgid ""
+"Whether or not Empathy should use the avatar of the contact as the chat "
+"window icon."
+msgstr ""
+"Дали Empathy да ползва аватара на контакта за икона на прозореца за "
+"разговори."
+
+#: ../data/empathy.schemas.in.h:31
+msgid ""
+"Whether or not the Salut account has been created on the first Empathy run."
+msgstr ""
+"Дали при първото стартиране на Empathy е създадена регистрация за Salut."
+
+#: ../data/empathy.schemas.in.h:32
+msgid ""
+"Whether or not the network manager should be used to automatically "
+"disconnect/reconnect."
+msgstr ""
+"Дали да се използва NetworkManager за автоматично прекъсване и "
+"възстановяване на връзката."
+
+#: ../data/empathy.schemas.in.h:33
 msgid ""
 "Whether or not to check words typed against the languages you want to check "
 "with."
@@ -134,28 +181,28 @@ msgstr ""
 "Дали да се прави проверка на правописа на въведения текст спрямо избраните "
 "езици."
 
-#: ../data/empathy.schemas.in.h:26
+#: ../data/empathy.schemas.in.h:34
 msgid ""
 "Whether or not to convert smileys into graphical images in conversations."
 msgstr "Дали емотиконите да се преобразуват от ASCII в картинки."
 
-#: ../data/empathy.schemas.in.h:27
+#: ../data/empathy.schemas.in.h:35
 msgid "Whether or not to play a sound when messages arrive."
 msgstr "Дали пристигането на съобщения да се известява със звук."
 
-#: ../data/empathy.schemas.in.h:28
+#: ../data/empathy.schemas.in.h:36
 msgid "Whether or not to play sounds when away."
 msgstr "Дали в състояние „Отсъствам“ да се ползват звуци."
 
-#: ../data/empathy.schemas.in.h:29
+#: ../data/empathy.schemas.in.h:37
 msgid "Whether or not to play sounds when busy."
 msgstr "Дали в състояние „Зает“ да се ползват звуци."
 
-#: ../data/empathy.schemas.in.h:30
+#: ../data/empathy.schemas.in.h:38
 msgid "Whether or not to show a popup when a contact becomes available."
 msgstr "Дали прозорец да известява за появата на контакт."
 
-#: ../data/empathy.schemas.in.h:31
+#: ../data/empathy.schemas.in.h:39
 msgid ""
 "Whether or not to show avatars for contacts in the contact list and chat "
 "windows."
@@ -163,174 +210,220 @@ msgstr ""
 "Дали да се показват аватари в списъците за контакти и прозорците за "
 "разговори."
 
-#: ../data/empathy.schemas.in.h:32
+#: ../data/empathy.schemas.in.h:40
 msgid "Whether or not to show contacts that are offline in the contact list."
 msgstr ""
 "Дали в списъка да се показват контактите, които в момента не са включени."
 
-#: ../data/empathy.schemas.in.h:33
+#: ../data/empathy.schemas.in.h:41
 msgid ""
 "Whether or not to show the message dialog about closing the main window with "
 "the 'x' button in the title bar."
 msgstr ""
 "Дали да се показва съобщение за затварянето на основния прозорец при "
-"натискане на бутона „х“ в заглавната лента."
+"натискане на бутона „×“ в заглавната лента."
 
-#: ../data/empathy.schemas.in.h:34
+#: ../data/empathy.schemas.in.h:42
 msgid "Whether to show the contact list in compact mode or not."
 msgstr "Дали да се ползва стегнат изглед за списъка с контактите."
 
-#: ../data/empathy.schemas.in.h:35
+#: ../data/empathy.schemas.in.h:43
 msgid "Whether to use the theme for chat rooms or not."
 msgstr "Дали да се ползва тема за стаите за разговори."
 
-#: ../data/empathy.schemas.in.h:36
+#: ../data/empathy.schemas.in.h:44
 msgid ""
 "Which criterium to use when sorting the contact list. Default is to use sort "
 "by the contact's name with the value \"name\". A value of \"state\" will "
 "sort the contact list by state."
 msgstr ""
 "Кой критерий да се използва за подредбата на списъка с контактите. "
-"Стандартната стойност е „name“ - подредба по име. Стойност „state“ означава "
+"Стандартната стойност е „name“ — подредба по име. Стойност „state“ означава "
 "подреждане по състояние."
 
-#: ../libempathy/empathy-presence.c:185 ../libempathy/empathy-presence.c:285
-msgid "Offline"
-msgstr "Изключен"
-
-#: ../libempathy/empathy-presence.c:275
-msgid "Available"
-msgstr "На линия"
-
-#: ../libempathy/empathy-presence.c:277
-msgid "Busy"
-msgstr "Зает"
-
-#: ../libempathy/empathy-presence.c:280
-msgid "Away"
-msgstr "Отсъстващ"
-
-#: ../libempathy/empathy-presence.c:282
-msgid "Hidden"
-msgstr "Скрит"
-
-#: ../libempathy/empathy-tp-contact-list.c:729 ../src/empathy.c:151
+#: ../libempathy/empathy-tp-contact-list.c:731 ../src/empathy.c:242
 msgid "People nearby"
 msgstr "Хора наблизо"
 
-#: ../libempathy-gtk/empathy-about-dialog.c:63
-msgid ""
-"Empathy is free software; you can redistribute it and/or modify it under the "
-"terms of the GNU General Public License as published by the Free Software "
-"Foundation; either version 2 of the License, or (at your option) any later "
-"version."
-msgstr ""
-"Тази програма (Empathy) е свободен софтуер. Можете да я разпространявате и/"
-"или променяте според условията на версия 2 или по-висока (по ваш избор) на "
-"Общия публичен лиценз на GNU, който е публикуван от Фондацията за свободен "
-"софтуер."
+#: ../libempathy/empathy-utils.c:346
+msgid "Available"
+msgstr "На линия"
 
-#: ../libempathy-gtk/empathy-about-dialog.c:67
-msgid ""
-"Empathy is distributed in the hope that it will be useful, but WITHOUT ANY "
-"WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS "
-"FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more "
-"details."
-msgstr ""
-"Тази програма (Empathy) се разпространява с надеждата да е полезна, но БЕЗ "
-"НИКАКВА ГАРАНЦИЯ, дори и подразбиращата се ПРИГОДНОСТ или ГОДНОСТ ЗА "
-"КОНКРЕТНА УПОТРЕБА. За подробности прегледайте Общия публичен лиценз на GNU."
+#: ../libempathy/empathy-utils.c:348
+msgid "Busy"
+msgstr "Зает"
 
-#: ../libempathy-gtk/empathy-about-dialog.c:71
-msgid ""
-"You should have received a copy of the GNU General Public License along with "
-"Empathy; if not, write to the Free Software Foundation, Inc., 51 Franklin "
-"Street, Fifth Floor, Boston, MA 02110-130159 USA"
-msgstr ""
-"Трябва да сте получили копие на Общия публичен лиценз на GNU заедно с тази "
-"програма. Ако не се сте - пишете на Фондацията за свободен софтуер на "
-"адрес:\n"
-"Free Software Foundation, Inc., 51 Franklin Street,\n"
-"Fifth Floor, Boston, MA 02110-1301, USA. "
+#: ../libempathy/empathy-utils.c:351
+msgid "Away"
+msgstr "Отсъстващ"
 
-#: ../libempathy-gtk/empathy-about-dialog.c:99
-msgid "An Instant Messaging client for GNOME"
-msgstr "Програма за бързи съобщения за GNOME"
+#: ../libempathy/empathy-utils.c:353
+msgid "Hidden"
+msgstr "Скрит"
 
-#: ../libempathy-gtk/empathy-about-dialog.c:105
-msgid "translator-credits"
-msgstr ""
-"Ясен Праматаров <yasen@lindeas.com>\n"
-"Александър Шопов <ash@contact.bg>\n"
-"\n"
-"Проектът за превод на GNOME има нужда от подкрепа.\n"
-"Научете повече за нас на http://gnome.cult.bg\n"
-"Докладвайте за грешки на http://gnome.cult.bg/bugs"
+#: ../libempathy/empathy-utils.c:356
+msgid "Offline"
+msgstr "Изключен"
 
-#: ../libempathy-gtk/empathy-account-chooser.c:337
+#: ../libempathy-gtk/empathy-account-chooser.c:335
 msgid "All"
 msgstr "Всички"
 
-#: ../libempathy-gtk/empathy-account-widget-generic.c:146
-#: ../libempathy-gtk/empathy-account-widget-generic.c:208
+#: ../libempathy-gtk/empathy-account-widget.c:302
+#: ../libempathy-gtk/empathy-account-widget.c:347
 #, c-format
 msgid "%s:"
 msgstr "%s:"
 
+#: ../libempathy-gtk/empathy-account-widget-aim.glade.h:1
+#: ../libempathy-gtk/empathy-account-widget-generic.glade.h:1
+#: ../libempathy-gtk/empathy-account-widget-groupwise.glade.h:1
+#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:1
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:1
 #: ../libempathy-gtk/empathy-account-widget-msn.glade.h:1
 #: ../libempathy-gtk/empathy-account-widget-salut.glade.h:1
+#: ../libempathy-gtk/empathy-account-widget-sip.glade.h:1
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:1
 msgid "<b>Advanced</b>"
 msgstr "<b>За напреднали</b>"
 
-#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:2
+#: ../libempathy-gtk/empathy-account-widget-aim.glade.h:2
+#: ../libempathy-gtk/empathy-account-widget-groupwise.glade.h:2
+#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:2
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:3
 #: ../libempathy-gtk/empathy-account-widget-msn.glade.h:2
+#: ../libempathy-gtk/empathy-account-widget-sip.glade.h:4
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:2
 msgid "Forget password and clear the entry."
 msgstr "Изчистване на полето и забравяне на паролата."
 
-#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:3
-#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:3
-msgid "Login I_D:"
-msgstr "_Идентификатор:"
-
-#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:4
+#: ../libempathy-gtk/empathy-account-widget-aim.glade.h:3
+#: ../libempathy-gtk/empathy-account-widget-groupwise.glade.h:4
+#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:4
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:5
 #: ../libempathy-gtk/empathy-account-widget-msn.glade.h:4
+#: ../libempathy-gtk/empathy-account-widget-sip.glade.h:5
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:5
 msgid "Pass_word:"
 msgstr "П_арола:"
 
-#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:5
-msgid "Priority:"
-msgstr "Приоритет:"
+#: ../libempathy-gtk/empathy-account-widget-aim.glade.h:4
+msgid "Screen _Name:"
+msgstr "_Псевдоним:"
 
-#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:6
-msgid "Reso_urce:"
-msgstr "_Ресурс:"
-
-#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:7
-msgid "Use encryption (SS_L)"
-msgstr "Използване на _шифриране (SSL)"
-
-#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:8
+#: ../libempathy-gtk/empathy-account-widget-aim.glade.h:5
+#: ../libempathy-gtk/empathy-account-widget-groupwise.glade.h:5
+#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:6
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:11
 #: ../libempathy-gtk/empathy-account-widget-msn.glade.h:5
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:9
 msgid "_Port:"
 msgstr "_Порт:"
 
-#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:9
+#: ../libempathy-gtk/empathy-account-widget-aim.glade.h:6
+#: ../libempathy-gtk/empathy-account-widget-groupwise.glade.h:6
+#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:7
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:12
 #: ../libempathy-gtk/empathy-account-widget-msn.glade.h:6
-#: ../libempathy-gtk/empathy-new-chatroom-dialog.glade.h:10
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:11
+#: ../src/empathy-new-chatroom-dialog.glade.h:10
 msgid "_Server:"
 msgstr "_Сървър:"
 
-#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:10
-msgid "jabber account settings"
-msgstr "Настройки на абонамент за jabber"
+#: ../libempathy-gtk/empathy-account-widget-groupwise.glade.h:3
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:4
+#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:3
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:4
+msgid "Login I_D:"
+msgstr "_Идентификатор:"
 
-#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:7
-msgid "msn account settings"
-msgstr "Настройки на абонамент за msn"
+#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:3
+msgid "ICQ _UIN:"
+msgstr "И_дентификатор за ICQ:"
+
+#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:5
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:7
+msgid "_Charset:"
+msgstr "_Кодиране:"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.c:245
+msgid "New Network"
+msgstr "Нова мрежа"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:1
+msgid "<b>Network</b>"
+msgstr "<b>Мрежа</b>"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:2
+msgid "<b>Servers</b>"
+msgstr "<b>Сървъри</b>"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:3
+msgid "Charset:"
+msgstr "Кодиране:"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:4
+msgid "Create a new IRC network"
+msgstr "Създаване на нова мрежа в IRC"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:5
+msgid "Edit the selected IRC network"
+msgstr "Редактиране на избраната мрежа в IRC"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:6
+msgid "Network"
+msgstr "Мрежа"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:7
+msgid "Network:"
+msgstr "Мрежа:"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:8
+msgid "Nickname:"
+msgstr "Псевдоним:"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:9
+msgid "Password:"
+msgstr "Парола:"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:10
+msgid "Quit message:"
+msgstr "Съобщение при напускане:"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:11
+msgid "Real name:"
+msgstr "Истинско име:"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:12
+msgid "Remove the selected IRC network"
+msgstr "Премахване на избраната мрежа в IRC"
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:2
+msgid "<b>Override server settings</b>"
+msgstr "<b>Използване на собствените настройки</b>"
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:6
+msgid "Pri_ority:"
+msgstr "_Приоритет:"
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:7
+msgid "Reso_urce:"
+msgstr "_Ресурс:"
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:8
+msgid "Use old SS_L"
+msgstr "Използване на _стар SSL"
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:9
+msgid "_Encryption required (TLS/SSL)"
+msgstr "_Шифрирането е задължително (TLS/SSL)"
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:10
+msgid "_Ignore SSL certificate errors"
+msgstr "_Пренебрегване на грешките в сертификата"
 
 #: ../libempathy-gtk/empathy-account-widget-salut.glade.h:2
-msgid "_E-mail:"
+msgid "_Email:"
 msgstr "_Е-поща:"
 
 #: ../libempathy-gtk/empathy-account-widget-salut.glade.h:3
@@ -339,14 +432,14 @@ msgstr "_Лично име:"
 
 #: ../libempathy-gtk/empathy-account-widget-salut.glade.h:4
 msgid "_Jabber ID:"
-msgstr "_Идентификатор по Jabber:"
+msgstr "Ид_ентификатор за Jabber:"
 
 #: ../libempathy-gtk/empathy-account-widget-salut.glade.h:5
 msgid "_Last Name:"
 msgstr "_Фамилно име:"
 
 #: ../libempathy-gtk/empathy-account-widget-salut.glade.h:6
-#: ../libempathy-gtk/empathy-chatrooms-window.glade.h:8
+#: ../src/empathy-chatrooms-window.glade.h:8
 msgid "_Nickname:"
 msgstr "_Псевдоним:"
 
@@ -354,411 +447,163 @@ msgstr "_Псевдоним:"
 msgid "_Published Name:"
 msgstr "Име за п_убликуване:"
 
-#: ../libempathy-gtk/empathy-account-widget-salut.glade.h:8
-msgid "salut account settings"
-msgstr "Настройки на абонамент за Salut"
+#. look up the DNS SRV record at the service's domain for the host name of a STUN server.
+#: ../libempathy-gtk/empathy-account-widget-sip.glade.h:3
+msgid "Discover STUN"
+msgstr "Откриване на STUN"
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:218
-msgid "Disable"
-msgstr "Изключване"
+#: ../libempathy-gtk/empathy-account-widget-sip.glade.h:6
+msgid "Stun Server:"
+msgstr "Сървър за STUN:"
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:221
-msgid "Enable"
-msgstr "Включване"
+#: ../libempathy-gtk/empathy-account-widget-sip.glade.h:7
+msgid "Stun port:"
+msgstr "Порт за STUN:"
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:256
-msgid ""
-"To add a new account, you can click on the 'Add' button and a new entry will "
-"be created for you to start configuring."
-msgstr ""
-"За да добавите нов абонамент, натиснете бутона „Добавяне“. Ще се появи нов "
-"запис, който можете да настроите."
+#: ../libempathy-gtk/empathy-account-widget-sip.glade.h:8
+msgid "_Username:"
+msgstr "Потребителско _име:"
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:260
-msgid ""
-"To add a new account, you first have to install a backend for each protocol "
-"you want to use."
-msgstr ""
-"За да добавите нов абонамент, трябва да имате модул, който поддръжа неговия "
-"протокол."
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:3
+msgid "J_apan server:"
+msgstr "_Японски сървър:"
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:267
-#: ../libempathy-gtk/empathy-accounts-dialog.glade.h:2
-msgid "<b>No Account Selected</b>"
-msgstr "<b>Не е избран абонамент</b>"
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:6
+msgid "Use _Yahoo Japan"
+msgstr "Ползване на Yahoo _от Япония"
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:268
-msgid ""
-"\n"
-"\n"
-"If you do not want to add an account, simply click on the account you want "
-"to configure in the list on the left."
-msgstr ""
-"\n"
-"\n"
-"Ако не искате да добавяте нов абонамент, натиснете върху абонамента, който "
-"искате да настроите, в списъка отляво."
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:8
+msgid "_Ignore conference and chatroom invitations"
+msgstr "_Да не се обръща внимание на поканите за конферентни разговори"
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:274
-msgid "<b>No Accounts Configured</b>"
-msgstr "<b>Няма настроени абонаменти</b>"
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:10
+msgid "_Room List locale:"
+msgstr "_Локал на списъка със стаи:"
 
-#: ../libempathy-gtk/empathy-accounts-dialog.c:401
-#: ../libempathy-gtk/empathy-accounts-dialog.glade.h:4
-msgid "Accounts"
-msgstr "Абонаменти"
-
-#: ../libempathy-gtk/empathy-accounts-dialog.c:898
-#, c-format
-msgid ""
-"You are about to remove your %s account!\n"
-"Are you sure you want to proceed?"
-msgstr ""
-"Ще изтриете абонамента „%s“!\n"
-"Искате ли да продължите?"
-
-#: ../libempathy-gtk/empathy-accounts-dialog.c:904
-msgid ""
-"Any associated conversations and chat rooms will NOT be removed if you "
-"decide to proceed.\n"
-"\n"
-"Should you decide to add the account back at a later time, they will still "
-"be available."
-msgstr ""
-"Никои придналежащи на този абонамент разговори или стаи НЯМА да бъдат "
-"премахнати.\n"
-"\n"
-"Те ще бъдат достъпни, ако решите да добавите отново този абонамент."
-
-#: ../libempathy-gtk/empathy-accounts-dialog.glade.h:1
-msgid "<b>New Account</b>"
-msgstr "<b>Нов абонамент</b>"
-
-#: ../libempathy-gtk/empathy-accounts-dialog.glade.h:3
-msgid "<b>Settings</b>"
-msgstr "<b>Настройки</b>"
-
-#: ../libempathy-gtk/empathy-accounts-dialog.glade.h:5
-msgid "Cr_eate"
-msgstr "_Създаване"
-
-#: ../libempathy-gtk/empathy-accounts-dialog.glade.h:6
-msgid ""
-"To add a new account, you can click on the 'Add' button and a new entry will "
-"be created for you to started configuring.\n"
-"\n"
-"If you do not want to add an account, simply click on the account you want "
-"to configure in the list on the left."
-msgstr ""
-"За да добавите нов абонамент, натиснете бутона „Добавяне“. Ще се появи нов "
-"запис, който можете да настроите.\n"
-"\n"
-"Ако не искате да добавяте нов абонамент, натиснете върху абонамента, който "
-"искате да настроите, в списъка отляво."
-
-#: ../libempathy-gtk/empathy-accounts-dialog.glade.h:9
-msgid "Type:"
-msgstr "Вид:"
-
-#: ../libempathy-gtk/empathy-avatar-chooser.c:448
+#: ../libempathy-gtk/empathy-avatar-chooser.c:457
 msgid "Select Your Avatar Image"
 msgstr "Избор на изображение за аватар"
 
-#: ../libempathy-gtk/empathy-avatar-chooser.c:451
+#: ../libempathy-gtk/empathy-avatar-chooser.c:460
 msgid "No Image"
 msgstr "Без изображение"
 
-#: ../libempathy-gtk/empathy-avatar-chooser.c:511
+#: ../libempathy-gtk/empathy-avatar-chooser.c:520
 msgid "Images"
 msgstr "Изображения"
 
-#: ../libempathy-gtk/empathy-avatar-chooser.c:515
+#: ../libempathy-gtk/empathy-avatar-chooser.c:524
 msgid "All Files"
 msgstr "Всички файлове"
 
-#: ../libempathy-gtk/empathy-avatar-image.c:298
+#: ../libempathy-gtk/empathy-avatar-image.c:294
 msgid "Click to enlarge"
 msgstr "Натиснете за увеличаване"
 
-#: ../libempathy-gtk/empathy-call-window.glade.h:1
-msgid "Call"
-msgstr "Обаждане"
-
-#: ../libempathy-gtk/empathy-call-window.glade.h:2
-msgid "Input"
-msgstr "Вход"
-
-#: ../libempathy-gtk/empathy-call-window.glade.h:3
-msgid "Mute"
-msgstr "Заглушаване"
-
-#: ../libempathy-gtk/empathy-call-window.glade.h:4
-msgid "Output"
-msgstr "Изход"
-
-#: ../libempathy-gtk/empathy-call-window.glade.h:5
-msgid "Send Video"
-msgstr "Изпращане на видео"
-
-#: ../libempathy-gtk/empathy-call-window.glade.h:6
-msgid "Volume"
-msgstr "Сила на звука"
-
-#: ../libempathy-gtk/empathy-chat.c:329
-msgid "Disconnected"
-msgstr "Изключен"
-
-#: ../libempathy-gtk/empathy-chat.c:449
+#: ../libempathy-gtk/empathy-chat.c:493
 msgid "offline"
 msgstr "изключен"
 
-#: ../libempathy-gtk/empathy-chat.c:452
+#: ../libempathy-gtk/empathy-chat.c:496
 msgid "invalid contact"
 msgstr "грешен контакт"
 
-#: ../libempathy-gtk/empathy-chat.c:455
+#: ../libempathy-gtk/empathy-chat.c:499
 msgid "permission denied"
 msgstr "липсват права"
 
-#: ../libempathy-gtk/empathy-chat.c:458
+#: ../libempathy-gtk/empathy-chat.c:502
 msgid "too long message"
 msgstr "прекалено дълго съобщение"
 
-#: ../libempathy-gtk/empathy-chat.c:461
+#: ../libempathy-gtk/empathy-chat.c:505
 msgid "not implemented"
 msgstr "не е реализирано"
 
-#: ../libempathy-gtk/empathy-chat.c:464
+#: ../libempathy-gtk/empathy-chat.c:508
 msgid "unknown"
 msgstr "неизвестна грешка"
 
-#: ../libempathy-gtk/empathy-chat.c:468
+#: ../libempathy-gtk/empathy-chat.c:512
 #, c-format
 msgid "Error sending message '%s': %s"
 msgstr "Грешка при изпращането на съобщението „%s“: %s"
 
-#: ../libempathy-gtk/empathy-chat.c:925
+#: ../libempathy-gtk/empathy-chat.c:542
+#, c-format
+msgid "Topic set to: %s"
+msgstr "Темата вече е: „%s“"
+
+#: ../libempathy-gtk/empathy-chat.c:544
+msgid "No topic defined"
+msgstr "Не е зададена тема"
+
+#: ../libempathy-gtk/empathy-chat.c:959
 msgid "Insert Smiley"
 msgstr "Вмъкване на емотикон"
 
-#: ../libempathy-gtk/empathy-chat.c:972
-msgid "_Check Word Spelling..."
-msgstr "_Проверка на правопис..."
+#: ../libempathy-gtk/empathy-chat.c:975
+msgid "_Send"
+msgstr "_Изпращане"
 
-#: ../libempathy-gtk/empathy-chat.c:1397
+#: ../libempathy-gtk/empathy-chat.c:1009
+msgid "_Check Word Spelling..."
+msgstr "_Проверка на правопис…"
+
+#: ../libempathy-gtk/empathy-chat.c:1115
+#, c-format
+msgid "%s has joined the room"
+msgstr "%s влезе в стаята"
+
+#: ../libempathy-gtk/empathy-chat.c:1118
+#, c-format
+msgid "%s has left the room"
+msgstr "%s излезе от стаята"
+
+#: ../libempathy-gtk/empathy-chat.c:1232 ../src/empathy.c:124
+#: ../src/empathy-call-window.c:403
+msgid "Disconnected"
+msgstr "Изключен"
+
+#: ../libempathy-gtk/empathy-chat.c:1604
 msgid "Connected"
 msgstr "Свързан"
 
 #: ../libempathy-gtk/empathy-chat.glade.h:1
-msgid "C_lear"
-msgstr "_Изчистване на прозореца"
+msgid "<b>Topic:</b>"
+msgstr "<b>Тема:</b>"
 
 #: ../libempathy-gtk/empathy-chat.glade.h:2
-msgid "Ca_ll"
-msgstr "_Обаждане"
+msgid "Group Chat"
+msgstr "Разговор в група"
 
-#: ../libempathy-gtk/empathy-chat.glade.h:3
-msgid "Change _Topic..."
-msgstr "_Смяна на темата..."
-
-#: ../libempathy-gtk/empathy-chat.glade.h:4
-msgid "Chat"
-msgstr "Разговор"
-
-#: ../libempathy-gtk/empathy-chat.glade.h:5
-msgid "Contact Infor_mation"
-msgstr "_Данни за контакта"
-
-#: ../libempathy-gtk/empathy-chat.glade.h:6
-msgid "Cu_t"
-msgstr "От_рязване"
-
-#: ../libempathy-gtk/empathy-chat.glade.h:7
-msgid "In_vite..."
-msgstr "П_окана..."
-
-#: ../libempathy-gtk/empathy-chat.glade.h:8
-msgid "Insert _Smiley"
-msgstr "_Вмъкване на емотикон"
-
-#: ../libempathy-gtk/empathy-chat.glade.h:9
-msgid "Invitation _message:"
-msgstr "_Съобщение за поканата:"
-
-#: ../libempathy-gtk/empathy-chat.glade.h:10
-msgid "Invite"
-msgstr "Покана"
-
-#: ../libempathy-gtk/empathy-chat.glade.h:11
-#: ../libempathy-gtk/empathy-main-window.glade.h:4
-msgid "Join _New..."
-msgstr "Влизане в _нова..."
-
-#: ../libempathy-gtk/empathy-chat.glade.h:12
-msgid "Move Tab _Left"
-msgstr "Преместване на подпрозореца _наляво"
-
-#: ../libempathy-gtk/empathy-chat.glade.h:13
-msgid "Move Tab _Right"
-msgstr "Преместване на подпрозореца _надясно"
-
-#: ../libempathy-gtk/empathy-chat.glade.h:14
-msgid "Select who would you like to invite:"
-msgstr "Изберете, кого ще поканите:"
-
-#: ../libempathy-gtk/empathy-chat.glade.h:15
-msgid "You have been invited to join a chat conference."
-msgstr "Поканени сте да се присъедините към конферентен разговор."
-
-#: ../libempathy-gtk/empathy-chat.glade.h:16
-#: ../libempathy-gtk/empathy-main-window.glade.h:9
-msgid "_Add Contact..."
-msgstr "_Добавяне на контакт..."
-
-#: ../libempathy-gtk/empathy-chat.glade.h:17
-msgid "_Add To Favorites"
-msgstr "_Добавяне към отметките..."
-
-#: ../libempathy-gtk/empathy-chat.glade.h:18
-msgid "_Close"
-msgstr "_Затваряне"
-
-#: ../libempathy-gtk/empathy-chat.glade.h:19
-msgid "_Conversation"
-msgstr "_Разговор"
-
-#: ../libempathy-gtk/empathy-chat.glade.h:20
-msgid "_Copy"
-msgstr "_Копиране"
-
-#: ../libempathy-gtk/empathy-chat.glade.h:21
-msgid "_Detach Tab"
-msgstr "_Отделяне на подпрозореца"
-
-#: ../libempathy-gtk/empathy-chat.glade.h:22
-#: ../libempathy-gtk/empathy-contact-list-view.c:218
-#: ../libempathy-gtk/empathy-main-window.glade.h:12
-msgid "_Edit"
-msgstr "_Редактиране"
-
-#: ../libempathy-gtk/empathy-chat.glade.h:23
-msgid "_Next Tab"
-msgstr "_Следващ подпрозорец"
-
-#: ../libempathy-gtk/empathy-chat.glade.h:24
-msgid "_Paste"
-msgstr "_Поставяне"
-
-#: ../libempathy-gtk/empathy-chat.glade.h:25
-msgid "_Previous Tab"
-msgstr "_Предишен подпрозорец"
-
-#: ../libempathy-gtk/empathy-chat.glade.h:26
-#: ../libempathy-gtk/empathy-main-window.glade.h:18
-msgid "_Room"
-msgstr "_Стая:"
-
-#: ../libempathy-gtk/empathy-chat.glade.h:27
-msgid "_Show Contacts"
-msgstr "_Показване на списъка с контакти"
-
-#: ../libempathy-gtk/empathy-chat.glade.h:28
-msgid "_Tabs"
-msgstr "_Страници"
-
-#: ../libempathy-gtk/empathy-chat.glade.h:29
-#: ../libempathy-gtk/empathy-contact-list-view.c:234
-#: ../libempathy-gtk/empathy-main-window.glade.h:19
-msgid "_View Previous Conversations"
-msgstr "_Преглед на предишни разговори"
-
-#: ../libempathy-gtk/empathy-chat-view.c:468
+#: ../libempathy-gtk/empathy-chat-view.c:430
 msgid "_Copy Link Address"
 msgstr "_Копиране на адреса"
 
-#: ../libempathy-gtk/empathy-chat-view.c:476
+#: ../libempathy-gtk/empathy-chat-view.c:438
 msgid "_Open Link"
 msgstr "_Отваряне на адреса"
 
-#: ../libempathy-gtk/empathy-chat-view.c:754
-msgid "%A %d %B %Y"
-msgstr "%d.%m.%Y, %A"
-
-#: ../libempathy-gtk/empathy-chat-window.c:695
-#, c-format
-msgid "Conversations (%d)"
-msgstr "Разговори (%d)"
-
-#: ../libempathy-gtk/empathy-chat-window.c:1281
-msgid "Typing a message."
-msgstr "Пише съобщение."
-
-#: ../libempathy-gtk/empathy-chatrooms-window.c:258
-msgid "Name"
-msgstr "Име"
-
-#: ../libempathy-gtk/empathy-chatrooms-window.c:276
-msgid "Room"
-msgstr "Стая"
-
-#: ../libempathy-gtk/empathy-chatrooms-window.c:285
-msgid "Auto Connect"
-msgstr "Автоматично свързване"
-
-#: ../libempathy-gtk/empathy-chatrooms-window.glade.h:1
-#: ../libempathy-gtk/empathy-contact-widget.glade.h:5
-#: ../libempathy-gtk/empathy-new-chatroom-dialog.glade.h:1
-msgid "Account:"
-msgstr "Абонамент:"
-
-#: ../libempathy-gtk/empathy-chatrooms-window.glade.h:2
-msgid "Edit Favorite Room"
-msgstr "Редактиране на стаите в отметките"
-
-#: ../libempathy-gtk/empathy-chatrooms-window.glade.h:3
-msgid "Join room on start_up"
-msgstr "_Автоматично влизане в стаи при стартиране"
-
-#: ../libempathy-gtk/empathy-chatrooms-window.glade.h:4
-msgid "Join this chat room when Empathy starts and you are connected"
-msgstr "Влизане в тази стая при стартиране на Empathy, ако сте свързани"
-
-#: ../libempathy-gtk/empathy-chatrooms-window.glade.h:5
-msgid "Manage Favorite Rooms"
-msgstr "Управление на стаите в отметките"
-
-#: ../libempathy-gtk/empathy-chatrooms-window.glade.h:6
-msgid "N_ame:"
-msgstr "_Име:"
-
-#: ../libempathy-gtk/empathy-chatrooms-window.glade.h:7
-msgid "S_erver:"
-msgstr "_Сървър:"
-
-#: ../libempathy-gtk/empathy-chatrooms-window.glade.h:9
-#: ../libempathy-gtk/empathy-new-chatroom-dialog.glade.h:9
-msgid "_Room:"
-msgstr "_Стая:"
-
-#: ../libempathy-gtk/empathy-contact-dialogs.c:176
+#: ../libempathy-gtk/empathy-contact-dialogs.c:180
 msgid "Personal Information"
 msgstr "Лични данни"
 
-#: ../libempathy-gtk/empathy-contact-dialogs.c:179
+#: ../libempathy-gtk/empathy-contact-dialogs.c:183
 msgid "Edit Contact Information"
 msgstr "Редактиране на данните за контакта"
 
-#: ../libempathy-gtk/empathy-contact-dialogs.c:182
+#: ../libempathy-gtk/empathy-contact-dialogs.c:186
 msgid "Contact Information"
 msgstr "Данни за контакта"
 
-#: ../libempathy-gtk/empathy-contact-dialogs.c:277
+#: ../libempathy-gtk/empathy-contact-dialogs.c:283
 msgid "I would like to add you to my contact list."
 msgstr ""
 "bg: Искам да ви добавя към списъка си с контакти.\n"
 "en: I would like to add you to my contact list."
 
-#: ../libempathy-gtk/empathy-contact-dialogs.c:301
+#: ../libempathy-gtk/empathy-contact-dialogs.c:307
 msgid "New Contact"
 msgstr "Нов контакт"
 
@@ -770,93 +615,72 @@ msgstr "Отлагане на _решението"
 msgid "Subscription Request"
 msgstr "Искане за записване"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:198
-msgid "_Contact"
-msgstr "_Контакт"
+#: ../libempathy-gtk/empathy-contact-list-view.c:1235
+#, c-format
+msgid "Do you really want to remove the group '%s'?"
+msgstr "Сигурни ли сте, че искате да изтриете групата „%s“?"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:202
-msgid "_Group"
-msgstr "_Група"
+#: ../libempathy-gtk/empathy-contact-list-view.c:1237
+msgid "Removing group"
+msgstr "Изтриване на група"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:206
-#: ../libempathy-gtk/empathy-main-window.glade.h:10
-msgid "_Chat"
-msgstr "_Разговор"
-
-#: ../libempathy-gtk/empathy-contact-list-view.c:206
-msgid "Chat with contact"
-msgstr "Разговор с контакт"
-
-#: ../libempathy-gtk/empathy-contact-list-view.c:210
-msgid "Infor_mation"
-msgstr "_Данни за контакта"
-
-#: ../libempathy-gtk/empathy-contact-list-view.c:210
-msgid "View contact information"
-msgstr "Данни за контакта"
-
-#: ../libempathy-gtk/empathy-contact-list-view.c:214
-msgid "Re_name"
-msgstr "_Преименуване"
-
-#: ../libempathy-gtk/empathy-contact-list-view.c:214
-msgid "Rename"
-msgstr "Преименуване"
-
-#: ../libempathy-gtk/empathy-contact-list-view.c:218
-msgid "Edit the groups and name for this contact"
-msgstr ""
-"Редактиране на името и групите на този контакт\n"
-"%s"
-
-#: ../libempathy-gtk/empathy-contact-list-view.c:222
+#: ../libempathy-gtk/empathy-contact-list-view.c:1284
+#: ../libempathy-gtk/empathy-contact-list-view.c:1363
 msgid "_Remove"
-msgstr "_Премахване"
+msgstr "_Изтриване"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:222
-msgid "Remove contact"
-msgstr "Премахване на контакт"
+#: ../libempathy-gtk/empathy-contact-list-view.c:1314
+#, c-format
+msgid "Do you really want to remove the contact '%s'?"
+msgstr "Сигурни ли сте, че искате да изтриете контакта „%s“?"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:226
-msgid "_Invite to Chat Room"
-msgstr "_Пращане на покана в стая за рзговор"
+#: ../libempathy-gtk/empathy-contact-list-view.c:1316
+msgid "Removing contact"
+msgstr "Изтриване на контакт"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:226
-msgid "Invite to a currently open chat room"
-msgstr "Изпращане на покана за текущо отворена стая за разговор"
-
-#: ../libempathy-gtk/empathy-contact-list-view.c:230
-msgid "_Send File..."
-msgstr "_Изпращане на файл..."
-
-#: ../libempathy-gtk/empathy-contact-list-view.c:230
-msgid "Send a file"
-msgstr "Изпращане на файл"
-
-#: ../libempathy-gtk/empathy-contact-list-view.c:234
-msgid "View previous conversations with this contact"
-msgstr "Разглеждане на предишните разговори с този контакт"
-
-#: ../libempathy-gtk/empathy-contact-list-view.c:239
-msgid "_Call"
-msgstr "_Разговор"
-
-#: ../libempathy-gtk/empathy-contact-list-view.c:239
-msgid "Start a voice or video conversation with this contact"
-msgstr "Начало на гласова или видео връзка с този контакт"
-
-#: ../libempathy-gtk/empathy-contact-list-view.c:1423
+#: ../libempathy-gtk/empathy-contact-list-view.c:1321
 msgid "Sorry, I don't want you in my contact list anymore."
 msgstr ""
 "bg: Съжалявам, вече не желая да сте в списъка ми с контакти.\n"
 "en: Sorry, I don't want you in my contact list anymore."
 
-#: ../libempathy-gtk/empathy-contact-widget.c:662
+#: ../libempathy-gtk/empathy-contact-menu.c:109
+#: ../src/empathy-main-window.glade.h:9
+msgid "_Chat"
+msgstr "_Разговор"
+
+#: ../libempathy-gtk/empathy-contact-menu.c:130
+msgid "_Call"
+msgstr "_Разговор"
+
+#: ../libempathy-gtk/empathy-contact-menu.c:169
+#: ../src/empathy-main-window.glade.h:17
+msgid "_View Previous Conversations"
+msgstr "_Преглед на предишни разговори"
+
+#: ../libempathy-gtk/empathy-contact-menu.c:197
+msgid "Infor_mation"
+msgstr "_Данни за контакта"
+
+#: ../libempathy-gtk/empathy-contact-menu.c:224
+#: ../src/empathy-chat-window.glade.h:14 ../src/empathy-main-window.glade.h:11
+msgid "_Edit"
+msgstr "_Редактиране"
+
+#: ../libempathy-gtk/empathy-contact-widget.c:358
+msgid "Save Avatar"
+msgstr "Запазване на аватар"
+
+#: ../libempathy-gtk/empathy-contact-widget.c:414
+msgid "Unable to save avatar"
+msgstr "Неуспех при запазването на аватар"
+
+#: ../libempathy-gtk/empathy-contact-widget.c:866
 msgid "Select"
 msgstr "Избор"
 
-#: ../libempathy-gtk/empathy-contact-widget.c:672
-#: ../libempathy-gtk/empathy-main-window.c:608
+#: ../libempathy-gtk/empathy-contact-widget.c:875
+#: ../src/empathy-main-window.c:850
 msgid "Group"
 msgstr "Група"
 
@@ -875,6 +699,13 @@ msgstr "<b>Контакт</b>"
 #: ../libempathy-gtk/empathy-contact-widget.glade.h:4
 msgid "<b>Groups</b>"
 msgstr "<b>Групи</b>"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:5
+#: ../libempathy-gtk/empathy-new-message-dialog.glade.h:1
+#: ../src/empathy-chatrooms-window.glade.h:1
+#: ../src/empathy-new-chatroom-dialog.glade.h:1
+msgid "Account:"
+msgstr "Регистрация:"
 
 #: ../libempathy-gtk/empathy-contact-widget.glade.h:6
 msgid "Alias:"
@@ -900,75 +731,56 @@ msgstr "Е-поща:"
 msgid "Fullname:"
 msgstr "Пълно име:"
 
-#: ../libempathy-gtk/empathy-contact-widget.glade.h:12
+#. Identifier to connect to Instant Messaging network
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:13
 msgid "Identifier:"
 msgstr "Идентификатор:"
 
-#: ../libempathy-gtk/empathy-contact-widget.glade.h:13
-msgid "Information requested..."
-msgstr "Данните са поискани..."
-
 #: ../libempathy-gtk/empathy-contact-widget.glade.h:14
+msgid "Information requested..."
+msgstr "Данните са поискани…"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:15
 msgid "OS:"
 msgstr "ОС:"
 
-#: ../libempathy-gtk/empathy-contact-widget.glade.h:15
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:16
 msgid ""
 "Select the groups you want this contact to appear in, you can select more "
 "than one group or no groups."
 msgstr ""
-"Изберете групите, в които да се появава контакта. Можете да изберете 0 или "
-"повече групи за контакт."
+"Изберете групите, в които контактът да се появява. Можете да изберете 0 или "
+"повече групи."
 
-#: ../libempathy-gtk/empathy-contact-widget.glade.h:16
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:17
 msgid "Version:"
 msgstr "Версия:"
 
-#: ../libempathy-gtk/empathy-contact-widget.glade.h:17
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:18
 msgid "Web site:"
-msgstr "Интернет страница:"
+msgstr "Страница в Интернет:"
 
-#: ../libempathy-gtk/empathy-group-chat.c:254
-msgid "Enter the new topic you want to set for this room:"
-msgstr "Въведете новата тема за тази стая:"
+#: ../libempathy-gtk/empathy-irc-network-dialog.c:284
+msgid "new server"
+msgstr "нов сървър"
 
-#: ../libempathy-gtk/empathy-group-chat.c:367
-#, c-format
-msgid "%s has joined the room"
-msgstr "%s влезе в стаята"
+#: ../libempathy-gtk/empathy-irc-network-dialog.c:513
+msgid "Server"
+msgstr "Сървър"
 
-#: ../libempathy-gtk/empathy-group-chat.c:370
-#, c-format
-msgid "%s has left the room"
-msgstr "%s излезе от стаята"
+#: ../libempathy-gtk/empathy-irc-network-dialog.c:528
+msgid "Port"
+msgstr "Порт"
 
-#: ../libempathy-gtk/empathy-group-chat.c:450
-#, c-format
-msgid "Topic: %s"
-msgstr "Тема: „%s“"
-
-#: ../libempathy-gtk/empathy-group-chat.c:572
-#, c-format
-msgid "Topic set to: %s"
-msgstr "Темата вече е: „%s“"
-
-#: ../libempathy-gtk/empathy-group-chat.c:574
-msgid "No topic defined"
-msgstr "Не е зададена тема"
-
-#: ../libempathy-gtk/empathy-group-chat.glade.h:1
-msgid "<b>Topic:</b>"
-msgstr "<b>Тема:</b>"
-
-#: ../libempathy-gtk/empathy-group-chat.glade.h:2
-msgid "Group Chat"
-msgstr "Разговор в група"
+#: ../libempathy-gtk/empathy-irc-network-dialog.c:541
+msgid "SSL"
+msgstr "SSL"
 
 #: ../libempathy-gtk/empathy-log-window.c:497
 msgid "Account"
-msgstr "Абонамент"
+msgstr "Регистрация"
 
-#: ../libempathy-gtk/empathy-log-window.c:504
+#: ../libempathy-gtk/empathy-log-window.c:504 ../src/empathy-chat-window.c:276
 msgid "Conversation"
 msgstr "Разговор"
 
@@ -976,302 +788,46 @@ msgstr "Разговор"
 msgid "Date"
 msgstr "Дата"
 
-#: ../libempathy-gtk/empathy-log-window.glade.h:1
+#. Tab Label
+#: ../libempathy-gtk/empathy-log-window.glade.h:2
 msgid "Conversations"
 msgstr "Разговори"
 
-#: ../libempathy-gtk/empathy-log-window.glade.h:2
+#: ../libempathy-gtk/empathy-log-window.glade.h:3
 msgid "Previous Conversations"
 msgstr "Предишни разговори"
 
-#: ../libempathy-gtk/empathy-log-window.glade.h:3
+#. Tab Label
+#: ../libempathy-gtk/empathy-log-window.glade.h:5
 msgid "Search"
 msgstr "Търсене"
 
-#: ../libempathy-gtk/empathy-log-window.glade.h:4
+#. Searching *for* something
+#: ../libempathy-gtk/empathy-log-window.glade.h:7
 msgid "_For:"
 msgstr "_За:"
 
-#: ../libempathy-gtk/empathy-new-chatroom-dialog.c:286
-msgid "Chat Rooms"
-msgstr "Стаи за разговор"
+#: ../libempathy-gtk/empathy-new-message-dialog.glade.h:2
+msgid "Call"
+msgstr "Обаждане"
 
-#: ../libempathy-gtk/empathy-new-chatroom-dialog.glade.h:2
-msgid "Browse:"
-msgstr "Избор:"
+#: ../libempathy-gtk/empathy-new-message-dialog.glade.h:3
+#: ../src/empathy-chat-window.glade.h:2
+msgid "Chat"
+msgstr "Разговор"
 
-#: ../libempathy-gtk/empathy-new-chatroom-dialog.glade.h:3
-msgid ""
-"Enter the room name to join here or click on one or more rooms in the list."
-msgstr ""
-"Въведете името на стаята, в която да влезете, или натиснете една или повече "
-"стаи от списъка."
+#: ../libempathy-gtk/empathy-new-message-dialog.glade.h:4
+msgid "Contact ID:"
+msgstr "Идентификатор:"
 
-#: ../libempathy-gtk/empathy-new-chatroom-dialog.glade.h:4
-msgid ""
-"Enter the server which hosts the room, or leave it empty if the room is on "
-"the current account's server"
-msgstr ""
-"Попълнете сървъра, на който е стаята. Ако тя е на сървъра на текущия "
-"абонамент, оставете полето празно."
-
-#: ../libempathy-gtk/empathy-new-chatroom-dialog.glade.h:5
-msgid "Join"
-msgstr "Влизане"
-
-#: ../libempathy-gtk/empathy-new-chatroom-dialog.glade.h:6
-msgid "Join New"
-msgstr "Влизане в нова"
-
-#: ../libempathy-gtk/empathy-new-chatroom-dialog.glade.h:7
-msgid "Re_fresh"
-msgstr "_Обновяване"
-
-#: ../libempathy-gtk/empathy-new-chatroom-dialog.glade.h:8
-msgid ""
-"This list represents all chat rooms hosted on the server you have entered."
-msgstr ""
-"Този списък показва всички стаи, които се намират на съвръра, към който се "
-"включихте."
-
-#: ../libempathy-gtk/empathy-main-window.c:265
-msgid "Show and edit accounts"
-msgstr "Показване и редактиране на абонаменти"
-
-#: ../libempathy-gtk/empathy-main-window.c:629
-msgid "Contact"
-msgstr "Контакт"
-
-#: ../libempathy-gtk/empathy-main-window.c:812
-msgid "Edit Account _Details"
-msgstr "_Редактиране настройките на абонамент"
-
-#: ../libempathy-gtk/empathy-main-window.c:895
-msgid "Network error"
-msgstr "Мрежова грешка"
-
-#: ../libempathy-gtk/empathy-main-window.c:898
-msgid "Authentication failed"
-msgstr "Неуспешно идентифициране"
-
-#: ../libempathy-gtk/empathy-main-window.c:901
-msgid "Encryption error"
-msgstr "Грешка в шифрирането"
-
-#: ../libempathy-gtk/empathy-main-window.c:904
-msgid "Name in use"
-msgstr "Името е заето"
-
-#: ../libempathy-gtk/empathy-main-window.c:907
-msgid "Certificate not provided"
-msgstr "Не е предоставен сертификат"
-
-#: ../libempathy-gtk/empathy-main-window.c:910
-msgid "Certificate untrusted"
-msgstr "Сертификатът не е доверен"
-
-#: ../libempathy-gtk/empathy-main-window.c:913
-msgid "Certificate expired"
-msgstr "Сертификатът е изтекъл"
-
-#: ../libempathy-gtk/empathy-main-window.c:916
-msgid "Certificate not activated"
-msgstr "Сертификатът не е влязъл в сила"
-
-#: ../libempathy-gtk/empathy-main-window.c:919
-msgid "Certificate hostname mismatch"
-msgstr "Несъвпадение на името с това в сертификата"
-
-#: ../libempathy-gtk/empathy-main-window.c:922
-msgid "Certificate fingerprint mismatch"
-msgstr "Несъвпадение на отпечатъка на сертификата"
-
-#: ../libempathy-gtk/empathy-main-window.c:925
-msgid "Certificate self signed"
-msgstr "Сертификатът е самоподписан"
-
-#: ../libempathy-gtk/empathy-main-window.c:928
-msgid "Certificate error"
-msgstr "Грешка в сертификата"
-
-#: ../libempathy-gtk/empathy-main-window.c:931
-msgid "Unknown error"
-msgstr "Неизвестна грешка"
-
-#: ../libempathy-gtk/empathy-main-window.glade.h:1
-msgid "Contact List"
-msgstr "Списък с контакти"
-
-#: ../libempathy-gtk/empathy-main-window.glade.h:2
-msgid "Context"
-msgstr "Контекст"
-
-#: ../libempathy-gtk/empathy-main-window.glade.h:3
-msgid "Join _Favorites"
-msgstr "_Добавяне към отметките"
-
-#: ../libempathy-gtk/empathy-main-window.glade.h:5
-msgid "Manage Favorites"
-msgstr "Редактиране на отметките"
-
-#: ../libempathy-gtk/empathy-main-window.glade.h:6
-msgid "Show _Offline Contacts"
-msgstr "Показване на _изключените контакти"
-
-#: ../libempathy-gtk/empathy-main-window.glade.h:7
-#: ../megaphone/data/GNOME_Megaphone_Applet.xml.h:1
-#: ../nothere/data/GNOME_NotHere_Applet.xml.h:1
-msgid "_About"
-msgstr "_Относно"
-
-#: ../libempathy-gtk/empathy-main-window.glade.h:8
-msgid "_Accounts"
-msgstr "_Абонаменти"
-
-#: ../libempathy-gtk/empathy-main-window.glade.h:11
-msgid "_Contents"
-msgstr "_Ръководство"
-
-#: ../libempathy-gtk/empathy-main-window.glade.h:13
-msgid "_Help"
-msgstr "_Помощ"
-
-#: ../libempathy-gtk/empathy-main-window.glade.h:14
-#: ../libempathy-gtk/empathy-status-icon.glade.h:2
-msgid "_New Message..."
-msgstr "_Ново съобщение..."
-
-#: ../libempathy-gtk/empathy-main-window.glade.h:15
-msgid "_Personal Information"
-msgstr "_Лични данни"
-
-#: ../libempathy-gtk/empathy-main-window.glade.h:16
-#: ../megaphone/data/GNOME_Megaphone_Applet.xml.h:3
-msgid "_Preferences"
-msgstr "_Настройки"
-
-#: ../libempathy-gtk/empathy-main-window.glade.h:17
-#: ../libempathy-gtk/empathy-status-icon.glade.h:3
-msgid "_Quit"
-msgstr "_Спиране на програмата"
-
-#: ../libempathy-gtk/empathy-preferences.c:243
-msgid "Language"
-msgstr "Език"
-
-#: ../libempathy-gtk/empathy-preferences.glade.h:1
-msgid "<b>Appearance</b>"
-msgstr "<b>Изглед</b>"
-
-#: ../libempathy-gtk/empathy-preferences.glade.h:2
-msgid "<b>Audio</b>"
-msgstr "<b>Звуци</b>"
-
-#: ../libempathy-gtk/empathy-preferences.glade.h:3
-msgid "<b>Behaviour</b>"
-msgstr "<b>Поведение</b>"
-
-#: ../libempathy-gtk/empathy-preferences.glade.h:4
-msgid "<b>Contact List</b>"
-msgstr "<b>Списък с контакти</b>"
-
-#: ../libempathy-gtk/empathy-preferences.glade.h:5
-msgid "<b>Enable spell checking for languages:</b>"
-msgstr "<b>Езици с проверка на правописа:</b>"
-
-#: ../libempathy-gtk/empathy-preferences.glade.h:6
-msgid "<b>Options</b>"
-msgstr "<b>Настройки</b>"
-
-#: ../libempathy-gtk/empathy-preferences.glade.h:7
-msgid "<b>Visual</b>"
-msgstr "<b>Визуални настройки</b>"
-
-#: ../libempathy-gtk/empathy-preferences.glade.h:8
-msgid ""
-"<small>The list of languages reflects only the languages for which you have "
-"a dictionary installed.</small>"
-msgstr ""
-"<small>В списъка са само езицитие, за които е инсталиран речник.</small>"
-
-#: ../libempathy-gtk/empathy-preferences.glade.h:9
-msgid "Avatars are user chosen images shown in the contact list"
-msgstr ""
-"Аватарите са изображенията, които се избират от потребителите, за да се "
-"показват в списъка с контакти"
-
-#: ../libempathy-gtk/empathy-preferences.glade.h:10
-msgid "Chat Th_eme:"
-msgstr "_Тема за прозорците за разговори:"
-
-#: ../libempathy-gtk/empathy-preferences.glade.h:11
-msgid "Display notifications when contacts come _online"
-msgstr "_Известяване при появата на контакти"
-
-#: ../libempathy-gtk/empathy-preferences.glade.h:12
-msgid "Enable sounds when _away"
-msgstr "Със звуци в състояние „_Отсъстващ“"
-
-#: ../libempathy-gtk/empathy-preferences.glade.h:13
-msgid "Enable sounds when _busy"
-msgstr "Със звуци в състояние „_Зает“"
-
-#: ../libempathy-gtk/empathy-preferences.glade.h:14
-msgid "General"
-msgstr "Общи"
-
-#: ../libempathy-gtk/empathy-preferences.glade.h:15
-msgid "Notifications"
-msgstr "Уведомяване"
-
-#: ../libempathy-gtk/empathy-preferences.glade.h:16
-msgid "Preferences"
-msgstr "Настройки"
-
-#: ../libempathy-gtk/empathy-preferences.glade.h:17
-msgid "Show _avatars"
-msgstr "Показване на _аватари"
-
-#: ../libempathy-gtk/empathy-preferences.glade.h:18
-msgid "Show _smileys as images"
-msgstr "Използване на _картинки за емотикони"
-
-#: ../libempathy-gtk/empathy-preferences.glade.h:19
-msgid "Show co_mpact contact list"
-msgstr "_Стегнат списък с контакти"
-
-#: ../libempathy-gtk/empathy-preferences.glade.h:20
-msgid "Sort by _name"
-msgstr "Подреждане по _име"
-
-#: ../libempathy-gtk/empathy-preferences.glade.h:21
-msgid "Sort by s_tate"
-msgstr "Подреждане по _състояние"
-
-#: ../libempathy-gtk/empathy-preferences.glade.h:22
-msgid "Spell Checking"
-msgstr "Проверка на правописа"
-
-#: ../libempathy-gtk/empathy-preferences.glade.h:23
-msgid "Themes"
-msgstr "Теми"
-
-#: ../libempathy-gtk/empathy-preferences.glade.h:24
-msgid "_Open new chats in separate windows"
-msgstr "_Отваряне на разговорите в отделни прозорци"
-
-#: ../libempathy-gtk/empathy-preferences.glade.h:25
-msgid "_Play sound when messages arrive"
-msgstr "_Уведомяване със звук при пристигане на съобщение"
-
-#: ../libempathy-gtk/empathy-preferences.glade.h:26
-msgid "_Use for chat rooms"
-msgstr "_Да се ползва за стаите за разговор"
+#: ../libempathy-gtk/empathy-new-message-dialog.glade.h:5
+msgid "New Conversation"
+msgstr "Нов разговор"
 
 #. Custom messages
-#: ../libempathy-gtk/empathy-presence-chooser.c:691
+#: ../libempathy-gtk/empathy-presence-chooser.c:685
 msgid "Custom messages..."
-msgstr "Други съобщения..."
+msgstr "Други съобщения…"
 
 #: ../libempathy-gtk/empathy-presence-chooser.glade.h:1
 msgid "Custom message"
@@ -1289,21 +845,11 @@ msgstr "Запазване на съобщение"
 msgid "Status:"
 msgstr "Състояние:"
 
-#: ../libempathy-gtk/empathy-private-chat.c:188
-#, c-format
-msgid "%s went offline"
-msgstr "%s се изключи"
-
-#: ../libempathy-gtk/empathy-private-chat.c:202
-#, c-format
-msgid "%s has come online"
-msgstr "%s се включи"
-
-#: ../libempathy-gtk/empathy-spell-dialog.c:85
+#: ../libempathy-gtk/empathy-spell-dialog.c:88
 msgid "Word"
 msgstr "Дума"
 
-#: ../libempathy-gtk/empathy-spell-dialog.c:258
+#: ../libempathy-gtk/empathy-spell-dialog.c:265
 msgid "Suggestions for the word"
 msgstr "Предложения за думата"
 
@@ -1315,53 +861,201 @@ msgstr "Проверка на правописа"
 msgid "Suggestions for the word:"
 msgstr "Предложения за думата:"
 
-#: ../libempathy-gtk/empathy-status-icon.c:310
-#, c-format
-msgid ""
-"New message from %s:\n"
-"%s"
-msgstr ""
-"Ново съобщение от :%s\n"
-"%s"
+#: ../libempathy-gtk/empathy-theme-boxes.c:745
+#: ../libempathy-gtk/empathy-theme-irc.c:293
+msgid "%A %d %B %Y"
+msgstr "%d.%m.%Y, %A"
 
-#: ../libempathy-gtk/empathy-status-icon.c:579
-#, c-format
-msgid "Subscription requested by %s"
-msgstr "Искане за записване от %s"
-
-#: ../libempathy-gtk/empathy-status-icon.c:582
-#, c-format
-msgid ""
-"\n"
-"Message: %s"
-msgstr ""
-"\n"
-"Съобщение: %s"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:1
-msgid "Status"
-msgstr "Състояние"
-
-#: ../libempathy-gtk/empathy-status-icon.glade.h:4
-msgid "_Show Contact List"
-msgstr "_Показване на списъка с контакти"
-
-#: ../libempathy-gtk/empathy-theme-manager.c:87
+#: ../libempathy-gtk/empathy-theme-manager.c:73
 msgid "Classic"
 msgstr "Класическа"
 
-#: ../libempathy-gtk/empathy-theme-manager.c:88
+#: ../libempathy-gtk/empathy-theme-manager.c:74
 msgid "Simple"
 msgstr "Проста"
 
-#: ../libempathy-gtk/empathy-theme-manager.c:89
+#: ../libempathy-gtk/empathy-theme-manager.c:75
 msgid "Clean"
 msgstr "Изчистена"
 
-#: ../libempathy-gtk/empathy-theme-manager.c:90
+#: ../libempathy-gtk/empathy-theme-manager.c:76
 msgid "Blue"
 msgstr "Синя"
 
+#: ../libempathy-gtk/empathy-ui-utils.c:1330
+msgid "Unable to open URI"
+msgstr "Адресът не може да бъде отворен"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:158
+msgid "Current Locale"
+msgstr "текущ локал"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:161
+#: ../libempathy-gtk/totem-subtitle-encoding.c:163
+#: ../libempathy-gtk/totem-subtitle-encoding.c:165
+#: ../libempathy-gtk/totem-subtitle-encoding.c:167
+msgid "Arabic"
+msgstr "арабски"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:170
+msgid "Armenian"
+msgstr "арменски"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:173
+#: ../libempathy-gtk/totem-subtitle-encoding.c:175
+#: ../libempathy-gtk/totem-subtitle-encoding.c:177
+msgid "Baltic"
+msgstr "балтийски"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:180
+msgid "Celtic"
+msgstr "келтски"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:183
+#: ../libempathy-gtk/totem-subtitle-encoding.c:185
+#: ../libempathy-gtk/totem-subtitle-encoding.c:187
+#: ../libempathy-gtk/totem-subtitle-encoding.c:189
+msgid "Central European"
+msgstr "централноевропейски"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:192
+#: ../libempathy-gtk/totem-subtitle-encoding.c:194
+#: ../libempathy-gtk/totem-subtitle-encoding.c:196
+#: ../libempathy-gtk/totem-subtitle-encoding.c:198
+msgid "Chinese Simplified"
+msgstr "китайски, опростен"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:201
+#: ../libempathy-gtk/totem-subtitle-encoding.c:203
+#: ../libempathy-gtk/totem-subtitle-encoding.c:205
+msgid "Chinese Traditional"
+msgstr "китайски, традиционен"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:208
+msgid "Croatian"
+msgstr "хърватски"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:211
+#: ../libempathy-gtk/totem-subtitle-encoding.c:213
+#: ../libempathy-gtk/totem-subtitle-encoding.c:215
+#: ../libempathy-gtk/totem-subtitle-encoding.c:217
+#: ../libempathy-gtk/totem-subtitle-encoding.c:219
+#: ../libempathy-gtk/totem-subtitle-encoding.c:221
+msgid "Cyrillic"
+msgstr "кирилица"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:224
+msgid "Cyrillic/Russian"
+msgstr "кирилица, руска"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:227
+#: ../libempathy-gtk/totem-subtitle-encoding.c:229
+msgid "Cyrillic/Ukrainian"
+msgstr "кирилица, украинска"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:232
+msgid "Georgian"
+msgstr "грузински"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:235
+#: ../libempathy-gtk/totem-subtitle-encoding.c:237
+#: ../libempathy-gtk/totem-subtitle-encoding.c:239
+msgid "Greek"
+msgstr "гръцки"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:242
+msgid "Gujarati"
+msgstr "гуджарати"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:245
+msgid "Gurmukhi"
+msgstr "гурмуки"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:248
+#: ../libempathy-gtk/totem-subtitle-encoding.c:250
+#: ../libempathy-gtk/totem-subtitle-encoding.c:252
+#: ../libempathy-gtk/totem-subtitle-encoding.c:254
+msgid "Hebrew"
+msgstr "иврит"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:257
+msgid "Hebrew Visual"
+msgstr "иврит, визуален"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:260
+msgid "Hindi"
+msgstr "хинди"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:263
+msgid "Icelandic"
+msgstr "исландски"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:266
+#: ../libempathy-gtk/totem-subtitle-encoding.c:268
+#: ../libempathy-gtk/totem-subtitle-encoding.c:270
+msgid "Japanese"
+msgstr "японски"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:273
+#: ../libempathy-gtk/totem-subtitle-encoding.c:275
+#: ../libempathy-gtk/totem-subtitle-encoding.c:277
+#: ../libempathy-gtk/totem-subtitle-encoding.c:279
+msgid "Korean"
+msgstr "корейски"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:282
+msgid "Nordic"
+msgstr "скандинавски"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:285
+msgid "Persian"
+msgstr "персийски"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:288
+#: ../libempathy-gtk/totem-subtitle-encoding.c:290
+msgid "Romanian"
+msgstr "румънски"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:293
+msgid "South European"
+msgstr "южноевропейски"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:296
+msgid "Thai"
+msgstr "тайски"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:299
+#: ../libempathy-gtk/totem-subtitle-encoding.c:301
+#: ../libempathy-gtk/totem-subtitle-encoding.c:303
+#: ../libempathy-gtk/totem-subtitle-encoding.c:305
+msgid "Turkish"
+msgstr "турски"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:308
+#: ../libempathy-gtk/totem-subtitle-encoding.c:310
+#: ../libempathy-gtk/totem-subtitle-encoding.c:312
+#: ../libempathy-gtk/totem-subtitle-encoding.c:314
+#: ../libempathy-gtk/totem-subtitle-encoding.c:316
+msgid "Unicode"
+msgstr "Уникод"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:319
+#: ../libempathy-gtk/totem-subtitle-encoding.c:321
+#: ../libempathy-gtk/totem-subtitle-encoding.c:323
+#: ../libempathy-gtk/totem-subtitle-encoding.c:325
+#: ../libempathy-gtk/totem-subtitle-encoding.c:327
+msgid "Western"
+msgstr "западен"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:330
+#: ../libempathy-gtk/totem-subtitle-encoding.c:332
+#: ../libempathy-gtk/totem-subtitle-encoding.c:334
+msgid "Vietnamese"
+msgstr "виетнамски"
+
+#.
+#. * vim: sw=2 ts=8 cindent noai bs=2
+#.
 #: ../megaphone/data/GNOME_Megaphone_Applet.schemas.in.h:1
 msgid ""
 "The contact to display in the applet. Empty means no contact is displayed."
@@ -1380,27 +1074,810 @@ msgid "Megaphone"
 msgstr "Мегафон"
 
 #: ../megaphone/data/GNOME_Megaphone_Applet.server.in.in.h:2
-#: ../megaphone/src/megaphone-applet.c:419
+#: ../megaphone/src/megaphone-applet.c:417
 msgid "Talk!"
 msgstr "Разговаряйте!"
+
+#: ../megaphone/data/GNOME_Megaphone_Applet.xml.h:1
+#: ../nothere/data/GNOME_NotHere_Applet.xml.h:1
+msgid "_About"
+msgstr "_Относно"
 
 #: ../megaphone/data/GNOME_Megaphone_Applet.xml.h:2
 msgid "_Information"
 msgstr "_Данни за контакта"
+
+#: ../megaphone/data/GNOME_Megaphone_Applet.xml.h:3
+#: ../src/empathy-main-window.glade.h:15
+msgid "_Preferences"
+msgstr "_Настройки"
 
 #: ../nothere/data/GNOME_NotHere_Applet.server.in.in.h:1
 msgid "Presence"
 msgstr "Присъствие"
 
 #: ../nothere/data/GNOME_NotHere_Applet.server.in.in.h:2
-#: ../nothere/src/nothere-applet.c:89
+#: ../nothere/src/nothere-applet.c:106
 msgid "Set your own presence"
 msgstr "Задайте присъствието си"
 
-#: ../src/empathy.c:210
-msgid "Don't connect on startup"
-msgstr "Без автоматично свързване в началото"
+#: ../src/empathy.c:127
+msgid "Invalid handle"
+msgstr "Неправилен модул за обработка"
 
-#: ../src/empathy.c:222
+#: ../src/empathy.c:130
+msgid "No matching connection"
+msgstr "Никоя връзка не съвпада"
+
+#: ../src/empathy.c:133
+msgid "Invalid account"
+msgstr "Грешна регистрация"
+
+#: ../src/empathy.c:136
+msgid "Presence failure"
+msgstr "Неуспешно присъствие"
+
+#: ../src/empathy.c:139
+msgid "No accounts"
+msgstr "Няма регистрации"
+
+#: ../src/empathy.c:142 ../src/empathy-main-window.c:1121
+msgid "Network error"
+msgstr "Мрежова грешка"
+
+#: ../src/empathy.c:145
+msgid "Contact does not support voice"
+msgstr "Контактът не поддържа глас"
+
+#: ../src/empathy.c:148
+msgid "Lowmem"
+msgstr "Няма памет"
+
+#: ../src/empathy.c:151
+msgid "Channel request generic error"
+msgstr "Обща грешка след заявката за канал"
+
+#: ../src/empathy.c:154
+msgid "Channel banned"
+msgstr "Каналът е забранен"
+
+#: ../src/empathy.c:157
+msgid "Channel full"
+msgstr "Каналът е пълен"
+
+#: ../src/empathy.c:160
+msgid "Channel invite only"
+msgstr "Каналът е с покана"
+
+#: ../src/empathy.c:163
+msgid "Unknown error code"
+msgstr "Неизвестен код за грешка"
+
+#: ../src/empathy.c:368
+msgid "Don't connect on startup"
+msgstr "Без автоматично свързване при стартиране"
+
+#: ../src/empathy.c:372
+msgid "Don't show the contact list on startup"
+msgstr "Без показване на списъка с контакти при стартиране"
+
+#: ../src/empathy.c:384
 msgid "- Empathy Instant Messenger"
-msgstr "- бързи съобщения с Empathy"
+msgstr "— бързи съобщения с Empathy"
+
+#: ../src/empathy-about-dialog.c:64
+msgid ""
+"Empathy is free software; you can redistribute it and/or modify it under the "
+"terms of the GNU General Public License as published by the Free Software "
+"Foundation; either version 2 of the License, or (at your option) any later "
+"version."
+msgstr ""
+"Тази програма (Empathy) е свободен софтуер. Можете да я разпространявате и/"
+"или променяте според условията на версия 2 или по-висока (по ваш избор) на "
+"Общия публичен лиценз на GNU, който е публикуван от Фондацията за свободен "
+"софтуер."
+
+#: ../src/empathy-about-dialog.c:68
+msgid ""
+"Empathy is distributed in the hope that it will be useful, but WITHOUT ANY "
+"WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS "
+"FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more "
+"details."
+msgstr ""
+"Тази програма (Empathy) се разпространява с надеждата да е полезна, но БЕЗ "
+"НИКАКВА ГАРАНЦИЯ, дори и подразбиращата се ПРИГОДНОСТ или ГОДНОСТ ЗА "
+"КОНКРЕТНА УПОТРЕБА. За подробности прегледайте Общия публичен лиценз на GNU."
+
+#: ../src/empathy-about-dialog.c:72
+msgid ""
+"You should have received a copy of the GNU General Public License along with "
+"Empathy; if not, write to the Free Software Foundation, Inc., 51 Franklin "
+"Street, Fifth Floor, Boston, MA 02110-130159 USA"
+msgstr ""
+"Трябва да сте получили копие на Общия публичен лиценз на GNU заедно с тази "
+"програма. Ако не се сте — пишете на Фондацията за свободен софтуер на "
+"адрес:\n"
+"Free Software Foundation, Inc., 51 Franklin Street,\n"
+"Fifth Floor, Boston, MA 02110-1301, USA. "
+
+#: ../src/empathy-about-dialog.c:100
+msgid "An Instant Messaging client for GNOME"
+msgstr "Програма за бързи съобщения за GNOME"
+
+#: ../src/empathy-about-dialog.c:106
+msgid "translator-credits"
+msgstr ""
+"Ясен Праматаров <yasen@lindeas.com>\n"
+"Александър Шопов <ash@contact.bg>\n"
+"\n"
+"Проектът за превод на GNOME има нужда от подкрепа.\n"
+"Научете повече за нас на http://gnome.cult.bg\n"
+"Докладвайте за грешки на http://gnome.cult.bg/bugs"
+
+#: ../src/empathy-accounts-dialog.c:235
+msgid ""
+"To add a new account, you can click on the 'Add' button and a new entry will "
+"be created for you to start configuring."
+msgstr ""
+"За да добавите нова регистрация, натиснете бутона „Добавяне“. Ще се появи "
+"нов запис, който можете да настроите."
+
+#: ../src/empathy-accounts-dialog.c:239
+msgid ""
+"To add a new account, you first have to install a backend for each protocol "
+"you want to use."
+msgstr ""
+"За да добавите нова регистрация, трябва да имате модул, който поддържа "
+"нейния протокол."
+
+#: ../src/empathy-accounts-dialog.c:246
+#: ../src/empathy-accounts-dialog.glade.h:2
+msgid "<b>No Account Selected</b>"
+msgstr "<b>Не е избрана регистрация</b>"
+
+#: ../src/empathy-accounts-dialog.c:247
+msgid ""
+"\n"
+"\n"
+"If you do not want to add an account, simply click on the account you want "
+"to configure in the list on the left."
+msgstr ""
+"\n"
+"\n"
+"Ако не искате да добавяте нова регистрация, в списъка отляво натиснете върху "
+"тази, която искате да настроите."
+
+#: ../src/empathy-accounts-dialog.c:253
+msgid "<b>No Accounts Configured</b>"
+msgstr "<b>Няма настроени регистрации</b>"
+
+#: ../src/empathy-accounts-dialog.c:451
+msgid "Enabled"
+msgstr "Включена"
+
+#: ../src/empathy-accounts-dialog.c:461
+#: ../src/empathy-accounts-dialog.glade.h:4
+msgid "Accounts"
+msgstr "Регистрации"
+
+#: ../src/empathy-accounts-dialog.c:991
+#, c-format
+msgid ""
+"You are about to remove your %s account!\n"
+"Are you sure you want to proceed?"
+msgstr ""
+"Ще изтриете регистрацията „%s“!\n"
+"Искате ли да продължите?"
+
+#: ../src/empathy-accounts-dialog.c:997
+msgid ""
+"Any associated conversations and chat rooms will NOT be removed if you "
+"decide to proceed.\n"
+"\n"
+"Should you decide to add the account back at a later time, they will still "
+"be available."
+msgstr ""
+"Никои принадлежащи на тази регистрация разговори или стаи НЯМА да бъдат "
+"премахнати.\n"
+"\n"
+"Те ще бъдат достъпни, ако решите да добавите отново тази регистрация."
+
+#: ../src/empathy-accounts-dialog.glade.h:1
+msgid "<b>New Account</b>"
+msgstr "<b>Нова регистрация</b>"
+
+#: ../src/empathy-accounts-dialog.glade.h:3
+msgid "<b>Settings</b>"
+msgstr "<b>Настройки</b>"
+
+#: ../src/empathy-accounts-dialog.glade.h:5
+msgid "Cr_eate"
+msgstr "_Създаване"
+
+#: ../src/empathy-accounts-dialog.glade.h:6
+msgid "I already have an account I want to use"
+msgstr "Вече имам регистрация, която искам да ползвам"
+
+#: ../src/empathy-accounts-dialog.glade.h:7
+msgid ""
+"To add a new account, you can click on the 'Add' button and a new entry will "
+"be created for you to started configuring.\n"
+"\n"
+"If you do not want to add an account, simply click on the account you want "
+"to configure in the list on the left."
+msgstr ""
+"За да добавите нова регистрация, натиснете бутона „Добавяне“. Ще се появи "
+"нов запис, който можете да настроите.\n"
+"\n"
+"Ако не искате да добавяте нова регистрация, в списъка отляво натиснете върху "
+"тази, която искате да настроите."
+
+#: ../src/empathy-accounts-dialog.glade.h:10
+msgid "Type:"
+msgstr "Вид:"
+
+#: ../src/empathy-call-window.c:141
+msgid "Closed"
+msgstr "Затворен"
+
+#: ../src/empathy-call-window.c:253
+msgid "End this call?"
+msgstr "Приключване на разговора?"
+
+#: ../src/empathy-call-window.c:255
+msgid "Closing this window will end the call in progress."
+msgstr "Ако затворите този прозорец, ще приключите текущия разговор."
+
+#: ../src/empathy-call-window.c:256
+msgid "_End Call"
+msgstr "_Приключване на разговор"
+
+#: ../src/empathy-call-window.c:310
+msgid "Incoming call"
+msgstr "Входящ разговор"
+
+#: ../src/empathy-call-window.c:312
+#, c-format
+msgid "%s is calling you, do you want to answer?"
+msgstr "%s ви търси, искате ли да отговорите?"
+
+#: ../src/empathy-call-window.c:318
+msgid "_Reject"
+msgstr "От_казване"
+
+#: ../src/empathy-call-window.c:323
+msgid "_Answer"
+msgstr "_Отговаряне"
+
+#: ../src/empathy-call-window.c:378
+msgid "Empathy Call"
+msgstr "Разговор по Empathy"
+
+#: ../src/empathy-call-window.c:379
+msgid "Readying"
+msgstr "Подготвяне"
+
+#: ../src/empathy-call-window.c:388
+#, c-format
+msgid "%s - Empathy Call"
+msgstr "%s — разговор чрез Empathy"
+
+#: ../src/empathy-call-window.c:392
+msgid "Ringing"
+msgstr "Звънене"
+
+#: ../src/empathy-call-window.c:405
+msgid "Connecting"
+msgstr "Свързване"
+
+#: ../src/empathy-call-window.c:516
+#, c-format
+msgid "Incoming call from %s rejected because there is already a running call."
+msgstr "Отказано е входящо повикване от %s, поради друг текущ разговор."
+
+#: ../src/empathy-call-window.glade.h:1
+msgid "#"
+msgstr "#"
+
+#: ../src/empathy-call-window.glade.h:2
+msgid "*"
+msgstr "*"
+
+#: ../src/empathy-call-window.glade.h:3
+msgid "0"
+msgstr "0"
+
+#: ../src/empathy-call-window.glade.h:4
+msgid "1"
+msgstr "1"
+
+#: ../src/empathy-call-window.glade.h:5
+msgid "2"
+msgstr "2"
+
+#: ../src/empathy-call-window.glade.h:6
+msgid "3"
+msgstr "3"
+
+#: ../src/empathy-call-window.glade.h:7
+msgid "4"
+msgstr "4"
+
+#: ../src/empathy-call-window.glade.h:8
+msgid "5"
+msgstr "5"
+
+#: ../src/empathy-call-window.glade.h:9
+msgid "6"
+msgstr "6"
+
+#: ../src/empathy-call-window.glade.h:10
+msgid "7"
+msgstr "7"
+
+#: ../src/empathy-call-window.glade.h:11
+msgid "8"
+msgstr "8"
+
+#: ../src/empathy-call-window.glade.h:12
+msgid "9"
+msgstr "9"
+
+#: ../src/empathy-call-window.glade.h:13
+msgid "<b>Keypad</b>"
+msgstr "<b>Циферблат</b>"
+
+#: ../src/empathy-call-window.glade.h:14
+msgid "<b>Volume</b>"
+msgstr "<b>Сила на звука</b>"
+
+#: ../src/empathy-call-window.glade.h:15
+msgid "Hang Up"
+msgstr "Затваряне"
+
+#: ../src/empathy-call-window.glade.h:16
+msgid "Send Video"
+msgstr "Изпращане на видео"
+
+#: ../src/empathy-chat-window.c:319
+#, c-format
+msgid "Conversations (%d)"
+msgstr "Разговори (%d)"
+
+#: ../src/empathy-chat-window.c:397
+msgid "Topic:"
+msgstr "Тема:"
+
+#: ../src/empathy-chat-window.c:400
+msgid "Typing a message."
+msgstr "Пише съобщение."
+
+#: ../src/empathy-chat-window.glade.h:1
+msgid "C_lear"
+msgstr "_Изчистване на прозореца"
+
+#: ../src/empathy-chat-window.glade.h:3
+msgid "Insert _Smiley"
+msgstr "_Вмъкване на емотикон"
+
+#: ../src/empathy-chat-window.glade.h:4
+msgid "Invitation _message:"
+msgstr "_Съобщение за поканата:"
+
+#: ../src/empathy-chat-window.glade.h:5
+msgid "Invite"
+msgstr "Покана"
+
+#: ../src/empathy-chat-window.glade.h:6
+msgid "Move Tab _Left"
+msgstr "Преместване на подпрозореца на_ляво"
+
+#: ../src/empathy-chat-window.glade.h:7
+msgid "Move Tab _Right"
+msgstr "Преместване на подпрозореца на_дясно"
+
+#: ../src/empathy-chat-window.glade.h:8
+msgid "Select who would you like to invite:"
+msgstr "Изберете, кого ще поканите:"
+
+#: ../src/empathy-chat-window.glade.h:9
+msgid "You have been invited to join a chat conference."
+msgstr "Поканени сте да се присъедините към конферентен разговор."
+
+#: ../src/empathy-chat-window.glade.h:10
+msgid "_Contact"
+msgstr "_Контакт"
+
+#: ../src/empathy-chat-window.glade.h:11 ../src/empathy-main-window.glade.h:10
+msgid "_Contents"
+msgstr "_Ръководство"
+
+#: ../src/empathy-chat-window.glade.h:12
+msgid "_Conversation"
+msgstr "_Разговор"
+
+#: ../src/empathy-chat-window.glade.h:13
+msgid "_Detach Tab"
+msgstr "_Отделяне на подпрозореца"
+
+#: ../src/empathy-chat-window.glade.h:15 ../src/empathy-main-window.glade.h:12
+msgid "_Help"
+msgstr "Помо_щ"
+
+#: ../src/empathy-chat-window.glade.h:16
+msgid "_Next Tab"
+msgstr "_Следващ подпрозорец"
+
+#: ../src/empathy-chat-window.glade.h:17
+msgid "_Previous Tab"
+msgstr "_Предишен подпрозорец"
+
+#: ../src/empathy-chat-window.glade.h:18
+msgid "_Tabs"
+msgstr "_Страници"
+
+#: ../src/empathy-chatrooms-window.c:262
+msgid "Name"
+msgstr "Име"
+
+#: ../src/empathy-chatrooms-window.c:280
+msgid "Room"
+msgstr "Стая"
+
+#: ../src/empathy-chatrooms-window.c:289
+msgid "Auto-Connect"
+msgstr "Автоматично свързване"
+
+#: ../src/empathy-chatrooms-window.glade.h:2
+msgid "Edit Favorite Room"
+msgstr "Редактиране на стая в отметките"
+
+#: ../src/empathy-chatrooms-window.glade.h:3
+msgid "Join room on start_up"
+msgstr "_Автоматично влизане в стаи при стартиране"
+
+#: ../src/empathy-chatrooms-window.glade.h:4
+msgid "Join this chat room when Empathy starts and you are connected"
+msgstr "Влизане в тази стая при стартиране на Empathy, ако сте свързани"
+
+#: ../src/empathy-chatrooms-window.glade.h:5
+msgid "Manage Favorite Rooms"
+msgstr "Управление на стаите в отметките"
+
+#: ../src/empathy-chatrooms-window.glade.h:6
+msgid "N_ame:"
+msgstr "_Име:"
+
+#: ../src/empathy-chatrooms-window.glade.h:7
+msgid "S_erver:"
+msgstr "_Сървър:"
+
+#: ../src/empathy-chatrooms-window.glade.h:9
+#: ../src/empathy-new-chatroom-dialog.glade.h:9
+msgid "_Room:"
+msgstr "_Стая:"
+
+#: ../src/empathy-event-manager.c:166
+#, c-format
+msgid ""
+"New message from %s:\n"
+"%s"
+msgstr ""
+"Ново съобщение от %s:\n"
+"%s"
+
+#: ../src/empathy-event-manager.c:205
+#, c-format
+msgid "Incoming call from %s"
+msgstr "Входящ разговор от %s"
+
+#. Tell the user that the tube can't be handled
+#: ../src/empathy-event-manager.c:251
+#, c-format
+msgid ""
+"%s offered you an invitation, but you don't have the needed external "
+"application to handle it."
+msgstr ""
+
+#: ../src/empathy-event-manager.c:261
+msgid "Invitation Error"
+msgstr "Грешка в поканата"
+
+#: ../src/empathy-event-manager.c:287
+#, c-format
+msgid ""
+"%s is offering you an invitation. An external application will be started to "
+"handle it."
+msgstr ""
+
+#: ../src/empathy-event-manager.c:292
+#, c-format
+msgid ""
+"%s is offering you an invitation, but you don't have the needed external "
+"application to handle it."
+msgstr ""
+
+#: ../src/empathy-event-manager.c:345
+#, c-format
+msgid "Subscription requested by %s"
+msgstr "Искане за записване от %s"
+
+#: ../src/empathy-event-manager.c:348
+#, c-format
+msgid ""
+"\n"
+"Message: %s"
+msgstr ""
+"\n"
+"Съобщение: %s"
+
+#: ../src/empathy-main-window.c:466
+msgid "Show and edit accounts"
+msgstr "Показване и редактиране на регистрации"
+
+#: ../src/empathy-main-window.c:833
+msgid "Contact"
+msgstr "Контакт"
+
+#: ../src/empathy-main-window.c:1035
+msgid "_Edit account"
+msgstr "_Редактиране на регистрация"
+
+#: ../src/empathy-main-window.c:1118
+msgid "No error specified"
+msgstr "Не е указана грешка"
+
+#: ../src/empathy-main-window.c:1124
+msgid "Authentication failed"
+msgstr "Неуспешно идентифициране"
+
+#: ../src/empathy-main-window.c:1127
+msgid "Encryption error"
+msgstr "Грешка в шифрирането"
+
+#: ../src/empathy-main-window.c:1130
+msgid "Name in use"
+msgstr "Името е заето"
+
+#: ../src/empathy-main-window.c:1133
+msgid "Certificate not provided"
+msgstr "Не е предоставен сертификат"
+
+#: ../src/empathy-main-window.c:1136
+msgid "Certificate untrusted"
+msgstr "Сертификатът не е доверен"
+
+#: ../src/empathy-main-window.c:1139
+msgid "Certificate expired"
+msgstr "Сертификатът е изтекъл"
+
+#: ../src/empathy-main-window.c:1142
+msgid "Certificate not activated"
+msgstr "Сертификатът не е влязъл в сила"
+
+#: ../src/empathy-main-window.c:1145
+msgid "Certificate hostname mismatch"
+msgstr "Несъвпадение на името с това в сертификата"
+
+#: ../src/empathy-main-window.c:1148
+msgid "Certificate fingerprint mismatch"
+msgstr "Несъвпадение на отпечатъка на сертификата"
+
+#: ../src/empathy-main-window.c:1151
+msgid "Certificate self-signed"
+msgstr "Сертификатът е самоподписан"
+
+#: ../src/empathy-main-window.c:1154
+msgid "Certificate error"
+msgstr "Грешка в сертификата"
+
+#: ../src/empathy-main-window.c:1157
+msgid "Unknown error"
+msgstr "Неизвестна грешка"
+
+#: ../src/empathy-main-window.glade.h:1
+msgid "Contact List"
+msgstr "Списък с контакти"
+
+#: ../src/empathy-main-window.glade.h:2
+msgid "Context"
+msgstr "Контекст"
+
+#: ../src/empathy-main-window.glade.h:3
+msgid "Join _Favorites"
+msgstr "_Добавяне към отметките"
+
+#: ../src/empathy-main-window.glade.h:4
+msgid "Join _New..."
+msgstr "Влизане в _нова…"
+
+#: ../src/empathy-main-window.glade.h:5
+msgid "Manage Favorites"
+msgstr "Редактиране на отметките"
+
+#: ../src/empathy-main-window.glade.h:6
+msgid "Show _Offline Contacts"
+msgstr "Показване на _изключените контакти"
+
+#: ../src/empathy-main-window.glade.h:7
+msgid "_Accounts"
+msgstr "_Регистрации"
+
+#: ../src/empathy-main-window.glade.h:8
+msgid "_Add Contact..."
+msgstr "_Добавяне на контакт…"
+
+#: ../src/empathy-main-window.glade.h:13 ../src/empathy-status-icon.glade.h:2
+msgid "_New Conversation..."
+msgstr "_Нов разговор…"
+
+#: ../src/empathy-main-window.glade.h:14
+msgid "_Personal Information"
+msgstr "_Лични данни"
+
+#: ../src/empathy-main-window.glade.h:16
+msgid "_Room"
+msgstr "_Стая:"
+
+#: ../src/empathy-new-chatroom-dialog.c:290
+msgid "Chat Rooms"
+msgstr "Стаи за разговор"
+
+#: ../src/empathy-new-chatroom-dialog.glade.h:2
+msgid "Browse:"
+msgstr "Избор:"
+
+#: ../src/empathy-new-chatroom-dialog.glade.h:3
+msgid ""
+"Enter the room name to join here or click on one or more rooms in the list."
+msgstr ""
+"Въведете името на стаята, в която да влезете, или натиснете една или повече "
+"стаи от списъка."
+
+#: ../src/empathy-new-chatroom-dialog.glade.h:4
+msgid ""
+"Enter the server which hosts the room, or leave it empty if the room is on "
+"the current account's server"
+msgstr ""
+"Попълнете сървъра, на който е стаята. Ако тя е на сървъра на текущата "
+"регистрация, оставете полето празно."
+
+#: ../src/empathy-new-chatroom-dialog.glade.h:5
+msgid "Join"
+msgstr "Влизане"
+
+#: ../src/empathy-new-chatroom-dialog.glade.h:6
+msgid "Join New"
+msgstr "Влизане в нова"
+
+#: ../src/empathy-new-chatroom-dialog.glade.h:7
+msgid "Re_fresh"
+msgstr "_Обновяване"
+
+#: ../src/empathy-new-chatroom-dialog.glade.h:8
+msgid ""
+"This list represents all chat rooms hosted on the server you have entered."
+msgstr ""
+"Този списък показва всички стаи, които се намират на сървъра, към който се "
+"включихте."
+
+#: ../src/empathy-preferences.c:264
+msgid "Language"
+msgstr "Език"
+
+#: ../src/empathy-preferences.glade.h:1
+msgid "<b>Appearance</b>"
+msgstr "<b>Изглед</b>"
+
+#: ../src/empathy-preferences.glade.h:2
+msgid "<b>Audio</b>"
+msgstr "<b>Звуци</b>"
+
+#: ../src/empathy-preferences.glade.h:3
+msgid "<b>Behaviour</b>"
+msgstr "<b>Поведение</b>"
+
+#: ../src/empathy-preferences.glade.h:4
+msgid "<b>Contact List</b>"
+msgstr "<b>Списък с контакти</b>"
+
+#: ../src/empathy-preferences.glade.h:5
+msgid "<b>Enable spell checking for languages:</b>"
+msgstr "<b>Езици с проверка на правописа:</b>"
+
+#: ../src/empathy-preferences.glade.h:6
+msgid "<b>Visual</b>"
+msgstr "<b>Визуални настройки</b>"
+
+#: ../src/empathy-preferences.glade.h:7
+msgid ""
+"<small>The list of languages reflects only the languages for which you have "
+"a dictionary installed.</small>"
+msgstr ""
+"<small>В списъка са само езиците, за които е инсталиран речник.</small>"
+
+#: ../src/empathy-preferences.glade.h:8
+msgid "Automatically _connect on startup "
+msgstr "_Автоматично свързване при стартиране"
+
+#: ../src/empathy-preferences.glade.h:9
+msgid "Avatars are user chosen images shown in the contact list"
+msgstr ""
+"Аватарите са изображенията, които се избират от потребителите, за да се "
+"показват в списъка с контакти"
+
+#: ../src/empathy-preferences.glade.h:10
+msgid "Chat Th_eme:"
+msgstr "_Тема за прозорците за разговори:"
+
+#: ../src/empathy-preferences.glade.h:11
+msgid "Display notifications when contacts come _online"
+msgstr "_Известяване при появата на контакти"
+
+#: ../src/empathy-preferences.glade.h:12
+msgid "Enable sounds when _away"
+msgstr "Със звуци в състояние „_Отсъстващ“"
+
+#: ../src/empathy-preferences.glade.h:13
+msgid "Enable sounds when _busy"
+msgstr "Със звуци в състояние „_Зает“"
+
+#: ../src/empathy-preferences.glade.h:14
+msgid "General"
+msgstr "Общи"
+
+#: ../src/empathy-preferences.glade.h:15
+msgid "Notifications"
+msgstr "Уведомяване"
+
+#: ../src/empathy-preferences.glade.h:16
+msgid "Preferences"
+msgstr "Настройки"
+
+#: ../src/empathy-preferences.glade.h:17
+msgid "Show _avatars"
+msgstr "Показване на _аватари"
+
+#: ../src/empathy-preferences.glade.h:18
+msgid "Show _smileys as images"
+msgstr "Използване на _картинки за емотикони"
+
+#: ../src/empathy-preferences.glade.h:19
+msgid "Show co_mpact contact list"
+msgstr "_Стегнат списък с контакти"
+
+#: ../src/empathy-preferences.glade.h:20
+msgid "Sort by _name"
+msgstr "Подреждане по _име"
+
+#: ../src/empathy-preferences.glade.h:21
+msgid "Sort by s_tate"
+msgstr "Подреждане по _състояние"
+
+#: ../src/empathy-preferences.glade.h:22
+msgid "Spell Checking"
+msgstr "Проверка на правописа"
+
+#: ../src/empathy-preferences.glade.h:23
+msgid "Themes"
+msgstr "Теми"
+
+#: ../src/empathy-preferences.glade.h:24
+msgid "_Open new chats in separate windows"
+msgstr "_Отваряне на разговорите в отделни прозорци"
+
+#: ../src/empathy-preferences.glade.h:25
+msgid "_Play sound when messages arrive"
+msgstr "_Уведомяване със звук при пристигане на съобщение"
+
+#: ../src/empathy-status-icon.glade.h:1
+msgid "Status"
+msgstr "Състояние"
+
+#: ../src/empathy-status-icon.glade.h:3
+msgid "_Quit"
+msgstr "_Спиране на програмата"
+
+#: ../src/empathy-status-icon.glade.h:4
+msgid "_Show Contact List"
+msgstr "_Показване на списъка с контакти"
