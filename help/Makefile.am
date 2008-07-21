@@ -5,6 +5,6 @@ DOC_ENTITIES = legal.xml
 DOC_FIGURES = \
 	figures/empathy-main-window.png \
 	figures/empathy-new-account.png
-DOC_LINGUAS = es fr de
+DOC_LINGUAS = es fr de sv
 
 dist-hook: doc-dist-hook
