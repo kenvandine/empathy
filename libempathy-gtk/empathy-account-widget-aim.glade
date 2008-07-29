@@ -38,7 +38,7 @@
                 <property name="xalign">0</property>
                 <property name="label" translatable="yes">Screen _Name:</property>
                 <property name="use_underline">True</property>
-                <property name="mnemonic_widget">entry_uin</property>
+                <property name="mnemonic_widget">entry_screenname</property>
               </widget>
               <packing>
                 <property name="x_options">GTK_FILL</property>
@@ -69,7 +69,7 @@
               </packing>
             </child>
             <child>
-              <widget class="GtkEntry" id="entry_uin">
+              <widget class="GtkEntry" id="entry_screenname">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
               </widget>
