@@ -405,7 +405,7 @@ empathy_presence_from_str (const gchar *str)
 		return MC_PRESENCE_UNSET;
 	}
 
-	return MC_PRESENCE_AVAILABLE;
+	return MC_PRESENCE_UNSET;
 }
 
 gchar *
