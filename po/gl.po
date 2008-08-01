@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-07-19 22:02+0200\n"
-"PO-Revision-Date: 2008-07-19 22:02+0200\n"
+"POT-Creation-Date: 2008-08-01 16:34+0200\n"
+"PO-Revision-Date: 2008-08-01 16:34+0200\n"
 "Last-Translator: Ignacio Casal Quinteiro <icq@svn.gnome.org>\n"
 "Language-Team: Galego <proxecto@trasno.net>\n"
 "MIME-Version: 1.0\n"
@@ -762,6 +762,10 @@ msgstr "Versión:"
 #: ../libempathy-gtk/empathy-contact-widget.glade.h:18
 msgid "Web site:"
 msgstr "Sitio web:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:19
+msgid "_Add Group"
+msgstr "_Engadir grupo"
 
 #: ../libempathy-gtk/empathy-irc-network-dialog.c:284
 msgid "new server"
@@ -1931,9 +1935,6 @@ msgstr "_Mostrar lista de contactos"
 
 #~ msgid "_Show Contacts"
 #~ msgstr "_Mostrar contactos"
-
-#~ msgid "_Group"
-#~ msgstr "_Grupo"
 
 #~ msgid "Chat with contact"
 #~ msgstr "Conversar con contacto"
