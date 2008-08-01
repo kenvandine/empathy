@@ -1,26 +1,6 @@
 Things you can do if you want to help:
 
- - UI for inviting a contact in a chatroom.
- - UI for accept/refuse invitation to join a chatroom and VoIP calls.
- - GtkWidget-ify libempathy-gtk. Actually most window/dialog do not inherit from
-   GtkWindow/GtkDialog. Need to create a glade catalog, it seems to not be
-   that easy.
- - Remove Quit option everywhere, empathy is a session service and shouldn't be
-   leaved.
- - Add sound events
- - Add register capability in EmpathyAccountsDialog if the profile says
-   it's supported.
- - Write a manual based on gossip's.
- - Reviewing File Transfer patch, see bug #462172.
- - Drop libtelepathy and use telepathy-glib instead when it gets client-side
-   functions.
- - Drop Nokia's MissionControl and use the standardized MC spec instead.
- - Improve VoIP support once stream-engine gets cleaned and moved into tp-glib.
- - Split MUC out of Empathy's main program and create a xchat-gnome-like
-   program for MUCs.
- - See with Gnome Online Desktop project how to implement meta-contacts and
-   merge information from multiple contacts.
- - Testing and Bugfixing.
+See http://live.gnome.org/Empathy/Roadmap
 
 If you want to contribute you can ask for information at
  - #telepathy on freenode
