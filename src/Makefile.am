@@ -17,7 +17,6 @@ LDADD =								\
 
 bin_PROGRAMS =			\
 	empathy			\
-	empathy-accounts	\
 	empathy-logs
 
 empathy_SOURCES =							\
@@ -35,9 +34,6 @@ empathy_SOURCES =							\
 	empathy-accounts-dialog.c empathy-accounts-dialog.h		\
 	empathy-event-manager.c empathy-event-manager.h
 
-empathy_accounts_SOURCES = empathy-accounts.c				\
-	empathy-accounts-dialog.c empathy-accounts-dialog.h
-
 empathy_logs_SOURCES = empathy-logs.c
 
 gladedir = $(datadir)/empathy
@@ -52,8 +48,7 @@ glade_DATA = 					\
 	empathy-accounts-dialog.glade
 
 dist_man_MANS =			\
-	empathy.1		\
-	empathy-accounts.1
+	empathy.1
 
 EXTRA_DIST =			\
 	$(autostart_DATA)	\
