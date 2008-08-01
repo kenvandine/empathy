@@ -292,10 +292,9 @@ on_bacon_message_received (const char *message,
 	DEBUG ("Other instance launched, presenting the main window. message='%s'",
 		message);
 
-	if (strcmp(message, "accounts") == 0) {
+	if (strcmp (message, "accounts") == 0) {
 		/* accounts dialog requested */
 		empathy_accounts_dialog_show (GTK_WINDOW (window), NULL);
-
 	} else {
 		startup_timestamp = atoi (message);
 
