@@ -1,0 +1,14 @@
+[Desktop Entry]
+Encoding=UTF-8
+_Name=Empathy accounts
+_Comment=Configure Telepathy account settings
+Exec=empathy-accounts
+Icon=empathy
+Terminal=false
+Type=Application
+Categories=Settings;
+OnlyShowIn=GNOME;
+X-GNOME-Bugzilla-Bugzilla=GNOME
+X-GNOME-Bugzilla-Product=empathy
+X-GNOME-Bugzilla-Component=General
+X-GNOME-Bugzilla-Version=@VERSION@

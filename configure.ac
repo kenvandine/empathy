@@ -286,6 +286,7 @@ AC_OUTPUT([
    Makefile
    data/Makefile
    data/empathy.desktop.in
+   data/empathy-properties.desktop.in
    data/icons/Makefile
    extensions/Makefile
    po/Makefile.in
