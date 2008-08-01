@@ -3,6 +3,7 @@
 
 data/empathy.desktop.in.in
 data/empathy.schemas.in
+data/empathy-properties.desktop.in.in
 
 libempathy/empathy-tp-contact-list.c
 libempathy/empathy-utils.c

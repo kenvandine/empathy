@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-01 16:34+0200\n"
-"PO-Revision-Date: 2008-08-01 16:34+0200\n"
+"POT-Creation-Date: 2008-08-01 21:49+0200\n"
+"PO-Revision-Date: 2008-08-01 21:50+0200\n"
 "Last-Translator: Ignacio Casal Quinteiro <icq@svn.gnome.org>\n"
 "Language-Team: Galego <proxecto@trasno.net>\n"
 "MIME-Version: 1.0\n"
@@ -248,7 +248,15 @@ msgstr ""
 "ordenar polo nome do contacto co valor \"name\". Un valor de \"state\" "
 "ordenará a lista polo estado."
 
-#: ../libempathy/empathy-tp-contact-list.c:731 ../src/empathy.c:242
+#: ../data/empathy-properties.desktop.in.in.h:1
+msgid "Configure Telepathy account settings"
+msgstr "Configurar os axustes da conta de Telephaty"
+
+#: ../data/empathy-properties.desktop.in.in.h:2
+msgid "Empathy accounts"
+msgstr "Contas de Empathy"
+
+#: ../libempathy/empathy-tp-contact-list.c:731 ../src/empathy.c:244
 msgid "People nearby"
 msgstr "Xente máis próxima"
 
@@ -567,7 +575,7 @@ msgstr "%s uniuse á sala"
 msgid "%s has left the room"
 msgstr "%s deixou a sala"
 
-#: ../libempathy-gtk/empathy-chat.c:1232 ../src/empathy.c:124
+#: ../libempathy-gtk/empathy-chat.c:1232 ../src/empathy.c:126
 #: ../src/empathy-call-window.c:403
 msgid "Disconnected"
 msgstr "Desconectado"
@@ -1107,67 +1115,71 @@ msgstr "Presencia"
 msgid "Set your own presence"
 msgstr "Establecer a súa presencia"
 
-#: ../src/empathy.c:127
+#: ../src/empathy.c:129
 msgid "Invalid handle"
 msgstr "Manexador inválido"
 
-#: ../src/empathy.c:130
+#: ../src/empathy.c:132
 msgid "No matching connection"
 msgstr "Non hai unha conexión coincidinte"
 
-#: ../src/empathy.c:133
+#: ../src/empathy.c:135
 msgid "Invalid account"
 msgstr "Conta inválida"
 
-#: ../src/empathy.c:136
+#: ../src/empathy.c:138
 msgid "Presence failure"
 msgstr "Fallo de presencia"
 
-#: ../src/empathy.c:139
+#: ../src/empathy.c:141
 msgid "No accounts"
 msgstr "Sen contas"
 
-#: ../src/empathy.c:142 ../src/empathy-main-window.c:1121
+#: ../src/empathy.c:144 ../src/empathy-main-window.c:1121
 msgid "Network error"
 msgstr "Erro da rede"
 
-#: ../src/empathy.c:145
+#: ../src/empathy.c:147
 msgid "Contact does not support voice"
 msgstr "O contacto non soporta voz"
 
-#: ../src/empathy.c:148
+#: ../src/empathy.c:150
 msgid "Lowmem"
 msgstr "Memoria baixa"
 
-#: ../src/empathy.c:151
+#: ../src/empathy.c:153
 msgid "Channel request generic error"
 msgstr "Erro xenérico na petición do canal"
 
-#: ../src/empathy.c:154
+#: ../src/empathy.c:156
 msgid "Channel banned"
 msgstr "Expulsado do canal"
 
-#: ../src/empathy.c:157
+#: ../src/empathy.c:159
 msgid "Channel full"
 msgstr "Canal cheo"
 
-#: ../src/empathy.c:160
+#: ../src/empathy.c:162
 msgid "Channel invite only"
 msgstr "O canal é só de invitación"
 
-#: ../src/empathy.c:163
+#: ../src/empathy.c:165
 msgid "Unknown error code"
 msgstr "Erro de código descoñecido"
 
-#: ../src/empathy.c:368
+#: ../src/empathy.c:376
 msgid "Don't connect on startup"
 msgstr "Non conectarse automaticamente ao inicio"
 
-#: ../src/empathy.c:372
+#: ../src/empathy.c:380
 msgid "Don't show the contact list on startup"
 msgstr "Non mostrar a lista de contactos ao inicio"
 
 #: ../src/empathy.c:384
+msgid "Show the accounts dialog"
+msgstr "Mostrar o diálogo de contas"
+
+#: ../src/empathy.c:396
 msgid "- Empathy Instant Messenger"
 msgstr "- Mensaxería instantánea de Empathy"
 
@@ -1893,9 +1905,6 @@ msgstr "_Mostrar lista de contactos"
 
 #~ msgid "msn account settings"
 #~ msgstr "axustes da conta msn"
-
-#~ msgid "salut account settings"
-#~ msgstr "axustes da conta salut"
 
 #~ msgid "Input"
 #~ msgstr "Entrada"
