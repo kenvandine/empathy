@@ -282,9 +282,6 @@ tp_call_member_added_cb (EmpathyTpGroup *group,
       g_object_notify (G_OBJECT (call), "is-incoming");
       g_object_notify (G_OBJECT (call), "contact");
       g_object_notify (G_OBJECT (call), "status");
-      tp_call_request_streams_for_capabilities (call,
-          EMPATHY_CAPABILITIES_AUDIO);
-
     }
 
   if (priv->status == EMPATHY_TP_CALL_STATUS_PENDING &&
