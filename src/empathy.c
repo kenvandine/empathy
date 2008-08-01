@@ -24,6 +24,7 @@
 
 #include <stdlib.h>
 #include <errno.h>
+#include <string.h>
 
 #include <glib.h>
 #include <glib/gi18n.h>
@@ -44,6 +45,7 @@
 
 #include <libempathy-gtk/empathy-conf.h>
 
+#include "empathy-accounts-dialog.h"
 #include "empathy-main-window.h"
 #include "empathy-status-icon.h"
 #include "empathy-call-window.h"
@@ -290,25 +292,31 @@ on_bacon_message_received (const char *message,
 	DEBUG ("Other instance launched, presenting the main window. message='%s'",
 		message);
 
-	startup_timestamp = atoi (message);
+	if (strcmp(message, "accounts") == 0) {
+		/* accounts dialog requested */
+		empathy_accounts_dialog_show (GTK_WINDOW (window), NULL);
 
-	/* Set the proper interaction time on the window.
-	 * Fall back to roundtripping to the X server when we
-	 * don't have the timestamp, e.g. when launched from
-	 * terminal. We also need to make sure that the window
-	 * has been realized otherwise it will not work. lame. */
-	if (startup_timestamp == 0) {
-		/* Work if launched from the terminal */
-		DEBUG ("Using X server timestamp as a fallback");
+	} else {
+		startup_timestamp = atoi (message);
 
-		if (!GTK_WIDGET_REALIZED (window)) {
-			gtk_widget_realize (GTK_WIDGET (window));
+		/* Set the proper interaction time on the window.
+		 * Fall back to roundtripping to the X server when we
+		 * don't have the timestamp, e.g. when launched from
+		 * terminal. We also need to make sure that the window
+		 * has been realized otherwise it will not work. lame. */
+		if (startup_timestamp == 0) {
+			/* Work if launched from the terminal */
+			DEBUG ("Using X server timestamp as a fallback");
+
+			if (!GTK_WIDGET_REALIZED (window)) {
+				gtk_widget_realize (GTK_WIDGET (window));
+			}
+
+			startup_timestamp = gdk_x11_get_server_time (window->window);
 		}
 
-		startup_timestamp = gdk_x11_get_server_time (window->window);
+		gtk_window_present_with_time (GTK_WINDOW (window), startup_timestamp);
 	}
-
-	gtk_window_present_with_time (GTK_WINDOW (window), startup_timestamp);
 }
 
 static guint32
@@ -361,6 +369,7 @@ main (int argc, char *argv[])
 	gboolean           autoconnect = TRUE;
 	gboolean           no_connect = FALSE; 
 	gboolean           hide_contact_list = FALSE;
+	gboolean           accounts_dialog = FALSE;
 	GError            *error = NULL;
 	GOptionEntry       options[] = {
 		{ "no-connect", 'n',
@@ -370,6 +379,10 @@ main (int argc, char *argv[])
 		{ "hide-contact-list", 'h',
 		  0, G_OPTION_ARG_NONE, &hide_contact_list,
 		  N_("Don't show the contact list on startup"),
+		  NULL },
+		{ "accounts", 'a',
+		  0, G_OPTION_ARG_NONE, &accounts_dialog,
+		  N_("Show the accounts dialog"),
 		  NULL },
 		{ NULL }
 	};
@@ -405,10 +418,19 @@ main (int argc, char *argv[])
 		if (!bacon_message_connection_get_is_server (connection)) {
 			gchar *message;
 
-			DEBUG ("Activating existing instance");
+			if (accounts_dialog) {
+				DEBUG ("Showing accounts dialog from existing Empathy instance");
 
-			message = g_strdup_printf ("%" G_GUINT32_FORMAT,
-						   startup_timestamp);
+				message = g_strdup ("accounts");
+
+			} else {
+
+				DEBUG ("Activating existing instance");
+
+				message = g_strdup_printf ("%" G_GUINT32_FORMAT,
+							   startup_timestamp);
+			}
+
 			bacon_message_connection_send (connection, message);
 
 			/* We never popup a window, so tell startup-notification
@@ -432,6 +454,18 @@ main (int argc, char *argv[])
 	g_signal_connect (mc, "Error",
 			  G_CALLBACK (operation_error_cb),
 			  NULL);
+
+	if (accounts_dialog) {
+		GtkWidget *dialog;
+
+		dialog = empathy_accounts_dialog_show (NULL, NULL);
+		g_signal_connect (dialog, "destroy",
+				  G_CALLBACK (gtk_main_quit),
+				  NULL);
+
+		gtk_main ();
+		return 0;
+	}
 
 	/* Setting up Idle */
 	idle = empathy_idle_new ();
