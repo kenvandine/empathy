@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: empathy.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-07-19 20:03+0000\n"
-"PO-Revision-Date: 2008-07-20 14:48+0200\n"
+"POT-Creation-Date: 2008-08-01 20:04+0000\n"
+"PO-Revision-Date: 2008-08-03 17:08+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -245,7 +245,15 @@ msgstr ""
 "predeterminado es ordenar por el nombre del contacto con el valor «nombre». "
 "Un valor «estado» ordenará la lista por el estado."
 
-#: ../libempathy/empathy-tp-contact-list.c:731 ../src/empathy.c:242
+#: ../data/empathy-properties.desktop.in.in.h:1
+msgid "Configure Telepathy account settings"
+msgstr "Configurar los ajustes de la cuenta Telepathy"
+
+#: ../data/empathy-properties.desktop.in.in.h:2
+msgid "Empathy accounts"
+msgstr "Cuentas en Empathy"
+
+#: ../libempathy/empathy-tp-contact-list.c:731 ../src/empathy.c:244
 msgid "People nearby"
 msgstr "Gente cerca"
 
@@ -564,7 +572,7 @@ msgstr "%s ha entrado en la sala"
 msgid "%s has left the room"
 msgstr "%s ha dejado la sala"
 
-#: ../libempathy-gtk/empathy-chat.c:1232 ../src/empathy.c:124
+#: ../libempathy-gtk/empathy-chat.c:1232 ../src/empathy.c:126
 #: ../src/empathy-call-window.c:403
 msgid "Disconnected"
 msgstr "Desconectado"
@@ -760,6 +768,10 @@ msgstr "Versión:"
 msgid "Web site:"
 msgstr "Página web:"
 
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:19
+msgid "_Add Group"
+msgstr "_Añadir grupo"
+
 #: ../libempathy-gtk/empathy-irc-network-dialog.c:284
 msgid "new server"
 msgstr "servidor nuevo"
@@ -876,7 +888,7 @@ msgstr "Simple"
 
 #: ../libempathy-gtk/empathy-theme-manager.c:75
 msgid "Clean"
-msgstr "Limpiar"
+msgstr "Limpio"
 
 #: ../libempathy-gtk/empathy-theme-manager.c:76
 msgid "Blue"
@@ -1098,67 +1110,71 @@ msgstr "Presencia"
 msgid "Set your own presence"
 msgstr "Establezca su propia presencia"
 
-#: ../src/empathy.c:127
+#: ../src/empathy.c:129
 msgid "Invalid handle"
 msgstr "Manejador no válido"
 
-#: ../src/empathy.c:130
+#: ../src/empathy.c:132
 msgid "No matching connection"
 msgstr "No hay una conexión coincidente"
 
-#: ../src/empathy.c:133
+#: ../src/empathy.c:135
 msgid "Invalid account"
 msgstr "Cuenta no válida"
 
-#: ../src/empathy.c:136
+#: ../src/empathy.c:138
 msgid "Presence failure"
 msgstr "Fallo de presencia"
 
-#: ../src/empathy.c:139
+#: ../src/empathy.c:141
 msgid "No accounts"
 msgstr "Sin cuentas"
 
-#: ../src/empathy.c:142 ../src/empathy-main-window.c:1121
+#: ../src/empathy.c:144 ../src/empathy-main-window.c:1121
 msgid "Network error"
 msgstr "Error de red"
 
-#: ../src/empathy.c:145
+#: ../src/empathy.c:147
 msgid "Contact does not support voice"
 msgstr "El contacto no soporta voz"
 
-#: ../src/empathy.c:148
+#: ../src/empathy.c:150
 msgid "Lowmem"
 msgstr "Memoria baja"
 
-#: ../src/empathy.c:151
+#: ../src/empathy.c:153
 msgid "Channel request generic error"
 msgstr "Error genérico en la petición del canal"
 
-#: ../src/empathy.c:154
+#: ../src/empathy.c:156
 msgid "Channel banned"
 msgstr "Expulsado del canal"
 
-#: ../src/empathy.c:157
+#: ../src/empathy.c:159
 msgid "Channel full"
 msgstr "Canal lleno"
 
-#: ../src/empathy.c:160
+#: ../src/empathy.c:162
 msgid "Channel invite only"
 msgstr "El canal es de sólo invitación"
 
-#: ../src/empathy.c:163
+#: ../src/empathy.c:165
 msgid "Unknown error code"
 msgstr "Error de código desconocido"
 
-#: ../src/empathy.c:368
+#: ../src/empathy.c:376
 msgid "Don't connect on startup"
 msgstr "No conectarse automáticamente al inicio"
 
-#: ../src/empathy.c:372
+#: ../src/empathy.c:380
 msgid "Don't show the contact list on startup"
 msgstr "No mostrar la lista de contactos al inicio"
 
 #: ../src/empathy.c:384
+msgid "Show the accounts dialog"
+msgstr "Mostrar el diálogo de las cuentas"
+
+#: ../src/empathy.c:396
 msgid "- Empathy Instant Messenger"
 msgstr "- Mensajería instantánea Empathy"
 
