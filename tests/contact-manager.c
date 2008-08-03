@@ -2,6 +2,8 @@
 
 #include <glib.h>
 #include <libempathy/empathy-contact-manager.h>
+#include <libempathy/empathy-debug.h>
+
 
 static gboolean
 time_out (gpointer main_loop)
@@ -19,6 +21,7 @@ main (int argc, char **argv)
 
 	g_type_init ();
 
+	empathy_debug_set_flags (g_getenv ("EMPATHY_DEBUG"));
 	main_loop = g_main_loop_new (NULL, FALSE);
 	manager = empathy_contact_manager_new ();
 
