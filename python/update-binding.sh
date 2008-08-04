@@ -42,7 +42,6 @@ python /usr/share/pygtk/2.0/codegen/h2def.py	\
 	empathy-chat.h				\
 	empathy-irc-network-dialog.h		\
 	empathy-spell-dialog.h			\
-	empathy-accounts-dialog.h		\
 	empathy-chat-view.h			\
 	empathy-log-window.h			\
 	empathy-theme-boxes.h			\
