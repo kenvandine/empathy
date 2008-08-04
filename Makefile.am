@@ -23,24 +23,15 @@ DISTCHECK_CONFIGURE_FLAGS =		\
 	--disable-schemas-install	\
 	--enable-gtk-doc
 
-INTLTOOL = 			\
-	intltool-extract.in 	\
-	intltool-merge.in 	\
-	intltool-update.in
-
 EXTRA_DIST = 			\
         ChangeLog               \
         ChangeLog.old           \
         README                  \
 	CONTRIBUTORS		\
-	autogen.sh		\
-	$(INTLTOOL)
+	autogen.sh
 
 DISTCLEANFILES = 		\
-        ChangeLog               \
-	intltool-extract	\
-	intltool-merge		\
-	intltool-update
+        ChangeLog
 
 # Workaround broken scrollkeeper that doesn't remove its files on
 # uninstall.
