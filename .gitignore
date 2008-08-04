@@ -20,7 +20,6 @@ Makefile
 ChangeLog
 stamp-h1
 xmldocs.make
-INSTALL
 aclocal.m4
 config.guess
 config.h
