@@ -30,6 +30,7 @@
 
 #include <libempathy/empathy-contact.h>
 #include <libempathy/empathy-tp-call.h>
+#include <libempathy/empathy-tp-group.h>
 #include <libempathy/empathy-utils.h>
 #include <libempathy-gtk/empathy-ui-utils.h>
 
@@ -506,8 +507,13 @@ empathy_call_window_new (TpChannel *channel)
         {
           GtkWidget *dialog;
           EmpathyContact *contact;
+          EmpathyTpGroup *tp_group;
 
-          g_object_get (window->call, "contact", &contact, NULL);
+          tp_group = empathy_tp_group_new (channel);
+          empathy_run_until_ready (tp_group);
+          empathy_tp_group_get_invitation (tp_group, &contact);
+          empathy_contact_run_until_ready (contact, EMPATHY_CONTACT_READY_NAME,
+              NULL);
 
           /* We don't want to have multiple calls running.
            * FIXME: We should use the hold interface... */
@@ -519,6 +525,7 @@ empathy_call_window_new (TpChannel *channel)
                 " running call."), empathy_contact_get_name (contact));
 
           g_object_unref (contact);
+          g_object_unref (tp_group);
 
           g_signal_connect (dialog, "response", G_CALLBACK (gtk_widget_destroy),
               NULL);
