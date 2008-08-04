@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: empathy.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-01 20:04+0000\n"
-"PO-Revision-Date: 2008-08-03 17:08+0200\n"
+"POT-Creation-Date: 2008-08-04 11:16+0000\n"
+"PO-Revision-Date: 2008-08-04 17:55+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -315,7 +315,7 @@ msgstr "Olvidar la contraseña y limpiar la entrada."
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:5
 #: ../libempathy-gtk/empathy-account-widget-msn.glade.h:4
 #: ../libempathy-gtk/empathy-account-widget-sip.glade.h:5
-#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:5
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:4
 msgid "Pass_word:"
 msgstr "Contra_seña:"
 
@@ -328,7 +328,7 @@ msgstr "_Nombre en pantalla:"
 #: ../libempathy-gtk/empathy-account-widget-icq.glade.h:6
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:11
 #: ../libempathy-gtk/empathy-account-widget-msn.glade.h:5
-#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:9
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:8
 msgid "_Port:"
 msgstr "_Puerto:"
 
@@ -337,7 +337,7 @@ msgstr "_Puerto:"
 #: ../libempathy-gtk/empathy-account-widget-icq.glade.h:7
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:12
 #: ../libempathy-gtk/empathy-account-widget-msn.glade.h:6
-#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:11
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:10
 #: ../src/empathy-new-chatroom-dialog.glade.h:10
 msgid "_Server:"
 msgstr "_Servidor:"
@@ -345,7 +345,7 @@ msgstr "_Servidor:"
 #: ../libempathy-gtk/empathy-account-widget-groupwise.glade.h:3
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:4
 #: ../libempathy-gtk/empathy-account-widget-msn.glade.h:3
-#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:4
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:3
 msgid "Login I_D:"
 msgstr "_ID de sesión:"
 
@@ -354,7 +354,7 @@ msgid "ICQ _UIN:"
 msgstr "_UIN ICQ:"
 
 #: ../libempathy-gtk/empathy-account-widget-icq.glade.h:5
-#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:7
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:6
 msgid "_Charset:"
 msgstr "Conjunto de _caracteres:"
 
@@ -465,30 +465,26 @@ msgid "Discover STUN"
 msgstr "Descubrir STUN"
 
 #: ../libempathy-gtk/empathy-account-widget-sip.glade.h:6
-msgid "Stun Server:"
-msgstr "Servidor Stun:"
+msgid "STUN Server:"
+msgstr "Servidor STUN:"
 
 #: ../libempathy-gtk/empathy-account-widget-sip.glade.h:7
-msgid "Stun port:"
-msgstr "Puerto Stun:"
+msgid "STUN port:"
+msgstr "Puerto STUN:"
 
 #: ../libempathy-gtk/empathy-account-widget-sip.glade.h:8
 msgid "_Username:"
 msgstr "_Usuario:"
 
-#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:3
-msgid "J_apan server:"
-msgstr "servidor j_aponés:"
-
-#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:6
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:5
 msgid "Use _Yahoo Japan"
 msgstr "User _Yahoo Japan"
 
-#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:8
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:7
 msgid "_Ignore conference and chatroom invitations"
 msgstr "_Ignorar invitaciones a conferencias y salas de chat"
 
-#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:10
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:9
 msgid "_Room List locale:"
 msgstr "Configuración de la lista de _salas:"
 
@@ -572,8 +568,7 @@ msgstr "%s ha entrado en la sala"
 msgid "%s has left the room"
 msgstr "%s ha dejado la sala"
 
-#: ../libempathy-gtk/empathy-chat.c:1232 ../src/empathy.c:126
-#: ../src/empathy-call-window.c:403
+#: ../libempathy-gtk/empathy-chat.c:1232 ../src/empathy-call-window.c:405
 msgid "Disconnected"
 msgstr "Desconectado"
 
@@ -1110,58 +1105,6 @@ msgstr "Presencia"
 msgid "Set your own presence"
 msgstr "Establezca su propia presencia"
 
-#: ../src/empathy.c:129
-msgid "Invalid handle"
-msgstr "Manejador no válido"
-
-#: ../src/empathy.c:132
-msgid "No matching connection"
-msgstr "No hay una conexión coincidente"
-
-#: ../src/empathy.c:135
-msgid "Invalid account"
-msgstr "Cuenta no válida"
-
-#: ../src/empathy.c:138
-msgid "Presence failure"
-msgstr "Fallo de presencia"
-
-#: ../src/empathy.c:141
-msgid "No accounts"
-msgstr "Sin cuentas"
-
-#: ../src/empathy.c:144 ../src/empathy-main-window.c:1121
-msgid "Network error"
-msgstr "Error de red"
-
-#: ../src/empathy.c:147
-msgid "Contact does not support voice"
-msgstr "El contacto no soporta voz"
-
-#: ../src/empathy.c:150
-msgid "Lowmem"
-msgstr "Memoria baja"
-
-#: ../src/empathy.c:153
-msgid "Channel request generic error"
-msgstr "Error genérico en la petición del canal"
-
-#: ../src/empathy.c:156
-msgid "Channel banned"
-msgstr "Expulsado del canal"
-
-#: ../src/empathy.c:159
-msgid "Channel full"
-msgstr "Canal lleno"
-
-#: ../src/empathy.c:162
-msgid "Channel invite only"
-msgstr "El canal es de sólo invitación"
-
-#: ../src/empathy.c:165
-msgid "Unknown error code"
-msgstr "Error de código desconocido"
-
 #: ../src/empathy.c:376
 msgid "Don't connect on startup"
 msgstr "No conectarse automáticamente al inicio"
@@ -1305,20 +1248,6 @@ msgid "I already have an account I want to use"
 msgstr "Ya tengo una cuenta que quiero usar"
 
 #: ../src/empathy-accounts-dialog.glade.h:7
-msgid ""
-"To add a new account, you can click on the 'Add' button and a new entry will "
-"be created for you to started configuring.\n"
-"\n"
-"If you do not want to add an account, simply click on the account you want "
-"to configure in the list on the left."
-msgstr ""
-"Para añadir una cuenta nueva, pulse en el botón de 'Añadir' y una se creará "
-"una entrada nueva para que la configure.\n"
-"\n"
-"Si no quiere añadir una cuenta, simplemente pulse en la cuenta que quiere "
-"configurar en la lista de la izquierda."
-
-#: ../src/empathy-accounts-dialog.glade.h:10
 msgid "Type:"
 msgstr "Tipo:"
 
@@ -1359,24 +1288,26 @@ msgstr "Re_spuesta"
 msgid "Empathy Call"
 msgstr "Llamada de Empathy"
 
-#: ../src/empathy-call-window.c:379
+#. To translators: Readying is the first state of the call, it is
+#. * preparing the connection and it does not yet ring.
+#: ../src/empathy-call-window.c:381
 msgid "Readying"
 msgstr "Preparándose"
 
-#: ../src/empathy-call-window.c:388
+#: ../src/empathy-call-window.c:390
 #, c-format
 msgid "%s - Empathy Call"
 msgstr "Llamada de Empathy - %s"
 
-#: ../src/empathy-call-window.c:392
+#: ../src/empathy-call-window.c:394
 msgid "Ringing"
 msgstr "Sonando"
 
-#: ../src/empathy-call-window.c:405
+#: ../src/empathy-call-window.c:407
 msgid "Connecting"
 msgstr "Conectado"
 
-#: ../src/empathy-call-window.c:516
+#: ../src/empathy-call-window.c:518
 #, c-format
 msgid "Incoming call from %s rejected because there is already a running call."
 msgstr "Llamada de %s rechazada porque ya hay una llamada en curso."
@@ -1429,19 +1360,20 @@ msgstr "8"
 msgid "9"
 msgstr "9"
 
-#: ../src/empathy-call-window.glade.h:13
+#. To translators: The keypad is numbers [0-9], asterisk (*) and hash (#). Presented like on any phone
+#: ../src/empathy-call-window.glade.h:14
 msgid "<b>Keypad</b>"
 msgstr "<b>Teclado numérico</b>"
 
-#: ../src/empathy-call-window.glade.h:14
+#: ../src/empathy-call-window.glade.h:15
 msgid "<b>Volume</b>"
 msgstr "<b>Volumen</b>"
 
-#: ../src/empathy-call-window.glade.h:15
+#: ../src/empathy-call-window.glade.h:16
 msgid "Hang Up"
 msgstr "Colgar"
 
-#: ../src/empathy-call-window.glade.h:16
+#: ../src/empathy-call-window.glade.h:17
 msgid "Send Video"
 msgstr "Envía vídeo"
 
@@ -1577,30 +1509,7 @@ msgstr ""
 msgid "Incoming call from %s"
 msgstr "Llamada entrante de %s"
 
-#. Tell the user that the tube can't be handled
-#: ../src/empathy-event-manager.c:251
-#, c-format
-msgid ""
-"%s offered you an invitation, but you don't have the needed external "
-"application to handle it."
-msgstr ""
-"%s le ofreció una invitación pero no tiene la aplicación externa necesaria "
-"para manejarla."
-
-#: ../src/empathy-event-manager.c:261
-msgid "Invitation Error"
-msgstr "Error en la invitación"
-
-#: ../src/empathy-event-manager.c:287
-#, c-format
-msgid ""
-"%s is offering you an invitation. An external application will be started to "
-"handle it."
-msgstr ""
-"%s le está ofreciendo una invitación. Se iniciará una aplicación externa "
-"para manejarla."
-
-#: ../src/empathy-event-manager.c:292
+#: ../src/empathy-event-manager.c:238
 #, c-format
 msgid ""
 "%s is offering you an invitation, but you don't have the needed external "
@@ -1608,6 +1517,19 @@ msgid ""
 msgstr ""
 "%s le está ofreciendo una invitación pero no tiene la aplicación externa "
 "necesaria para manejarla."
+
+#: ../src/empathy-event-manager.c:263
+msgid "Invitation Error"
+msgstr "Error en la invitación"
+
+#: ../src/empathy-event-manager.c:289
+#, c-format
+msgid ""
+"%s is offering you an invitation. An external application will be started to "
+"handle it."
+msgstr ""
+"%s le está ofreciendo una invitación. Se iniciará una aplicación externa "
+"para manejarla."
 
 #: ../src/empathy-event-manager.c:345
 #, c-format
@@ -1638,6 +1560,10 @@ msgstr "_Editar cuenta"
 #: ../src/empathy-main-window.c:1118
 msgid "No error specified"
 msgstr "No se especificó el error"
+
+#: ../src/empathy-main-window.c:1121
+msgid "Network error"
+msgstr "Error de red"
 
 #: ../src/empathy-main-window.c:1124
 msgid "Authentication failed"
@@ -1779,27 +1705,29 @@ msgstr "Idioma"
 msgid "<b>Appearance</b>"
 msgstr "<b>Apariencia</b>"
 
-#: ../src/empathy-preferences.glade.h:2
+#. To translators: Audio notifications preferences
+#: ../src/empathy-preferences.glade.h:3
 msgid "<b>Audio</b>"
 msgstr "<b>Sonido</b>"
 
-#: ../src/empathy-preferences.glade.h:3
+#: ../src/empathy-preferences.glade.h:4
 msgid "<b>Behaviour</b>"
 msgstr "<b>Comportamiento</b>"
 
-#: ../src/empathy-preferences.glade.h:4
+#: ../src/empathy-preferences.glade.h:5
 msgid "<b>Contact List</b>"
 msgstr "<b>Lista de contactos</b>"
 
-#: ../src/empathy-preferences.glade.h:5
+#: ../src/empathy-preferences.glade.h:6
 msgid "<b>Enable spell checking for languages:</b>"
 msgstr "<b>Activar la revisión ortográfica para idiomas:</b>"
 
-#: ../src/empathy-preferences.glade.h:6
+#. To translators: Visual notifications preferences, like notify bubbles, etc.
+#: ../src/empathy-preferences.glade.h:8
 msgid "<b>Visual</b>"
 msgstr "<b>Visual</b>"
 
-#: ../src/empathy-preferences.glade.h:7
+#: ../src/empathy-preferences.glade.h:9
 msgid ""
 "<small>The list of languages reflects only the languages for which you have "
 "a dictionary installed.</small>"
@@ -1807,77 +1735,77 @@ msgstr ""
 "<small>La lista de idiomas refleja sólo los idiomas para los cuales tiene un "
 "diccionario instalado.</small>"
 
-#: ../src/empathy-preferences.glade.h:8
+#: ../src/empathy-preferences.glade.h:10
 msgid "Automatically _connect on startup "
 msgstr "_Conectarse automáticamente al inicio"
 
-#: ../src/empathy-preferences.glade.h:9
+#: ../src/empathy-preferences.glade.h:11
 msgid "Avatars are user chosen images shown in the contact list"
 msgstr ""
 "Los avatares son imágenes elegidas por el usuario que se muestran en la "
 "lista de contactos"
 
-#: ../src/empathy-preferences.glade.h:10
+#: ../src/empathy-preferences.glade.h:12
 msgid "Chat Th_eme:"
 msgstr "_Tema del chat:"
 
-#: ../src/empathy-preferences.glade.h:11
+#: ../src/empathy-preferences.glade.h:13
 msgid "Display notifications when contacts come _online"
 msgstr "Mostrar notificaciones cuando los contactos se _conecten"
 
-#: ../src/empathy-preferences.glade.h:12
+#: ../src/empathy-preferences.glade.h:14
 msgid "Enable sounds when _away"
 msgstr "Activar sonidos al _ausentarse"
 
-#: ../src/empathy-preferences.glade.h:13
+#: ../src/empathy-preferences.glade.h:15
 msgid "Enable sounds when _busy"
 msgstr "Activar sonidos cuando se esté _ocupado"
 
-#: ../src/empathy-preferences.glade.h:14
+#: ../src/empathy-preferences.glade.h:16
 msgid "General"
 msgstr "General"
 
-#: ../src/empathy-preferences.glade.h:15
+#: ../src/empathy-preferences.glade.h:17
 msgid "Notifications"
 msgstr "Notificaciones"
 
-#: ../src/empathy-preferences.glade.h:16
+#: ../src/empathy-preferences.glade.h:18
 msgid "Preferences"
 msgstr "Preferencias"
 
-#: ../src/empathy-preferences.glade.h:17
+#: ../src/empathy-preferences.glade.h:19
 msgid "Show _avatars"
 msgstr "Mostrar _avatares"
 
-#: ../src/empathy-preferences.glade.h:18
+#: ../src/empathy-preferences.glade.h:20
 msgid "Show _smileys as images"
 msgstr "Mostrar los _emoticonos como imágenes"
 
-#: ../src/empathy-preferences.glade.h:19
+#: ../src/empathy-preferences.glade.h:21
 msgid "Show co_mpact contact list"
 msgstr "Mostrar lista de contactos co_mpacta"
 
-#: ../src/empathy-preferences.glade.h:20
+#: ../src/empathy-preferences.glade.h:22
 msgid "Sort by _name"
 msgstr "Ordenar por _nombre"
 
-#: ../src/empathy-preferences.glade.h:21
+#: ../src/empathy-preferences.glade.h:23
 msgid "Sort by s_tate"
 msgstr "Ordenar por es_tado"
 
-#: ../src/empathy-preferences.glade.h:22
+#: ../src/empathy-preferences.glade.h:24
 msgid "Spell Checking"
 msgstr "Revisión ortográfica"
 
-#: ../src/empathy-preferences.glade.h:23
+#: ../src/empathy-preferences.glade.h:25
 msgid "Themes"
 msgstr "Temas"
 
-#: ../src/empathy-preferences.glade.h:24
+#: ../src/empathy-preferences.glade.h:26
 msgid "_Open new chats in separate windows"
 msgstr "_Abrir charlas nuevas en ventanas separadas"
 
-#: ../src/empathy-preferences.glade.h:25
+#: ../src/empathy-preferences.glade.h:27
 msgid "_Play sound when messages arrive"
 msgstr "_Reproducir sonido cuando lleguen mensajes"
 
