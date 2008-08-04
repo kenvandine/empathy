@@ -1,3 +1,29 @@
+NEW in 2.23.6
+==============
+ - Remove empathy-accounts binary, it is replaced by empathy --accounts (Xavier Claessens).
+ - Added empathy-properties desktop file to configure MC accounts from the GNOME panel -> System -> Preferences. (Jonny Lamb)
+ - Replace the preview button by a cancel button when creating a new account (Xavier Claessens).
+ - Move event code from EmpathyStatusIcon to EmpathyEventManager (Xavier Claessens).
+ - Make the icon blink in the contact list when a contact has an event like new message, incoming call, etc. (Xavier Claessens)
+
+Bugs fixed:
+ - Fixed #462880, Can't register a new account on Jabber servers (Xavier Claessens)
+ - Fixed #486801, Unable to rename the account (change the account name) (Xavier Claessens)
+ - Fixed #544964, Button "Add Gruop" not translatable (Milo Casagrande)
+ - Fixed #546154, translation issues (Xavier Claessens)
+ - Fixed #546218, Bad message when a call is refused (Xavier Claessens)
+
+Translations:
+ - Updated es translation  (Jorge Gonzalez).
+ - Updated Arabic Translation (Youssef Chahibi).
+ - Updated de translation  (Andre Klapper).
+ - Updated Galician translation (icq).
+ - Updated Norwegian bokmål translation. (kmaraas).
+ - Updated sv translation  (Daniel Nylander).
+ - Updated Bulgarian translation (Alexander Shopov).
+ - Updated ja translation  (Takeshi AIHANA).
+ - Updated Polish translation (Tomasz Dominikowski).
+
 NEW in 0.23.4
 ==============
  - Save avatar to file when right click on the avatar image (Guillaume Desmottes).
