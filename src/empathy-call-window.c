@@ -376,6 +376,8 @@ call_window_update (EmpathyCallWindow *window)
   if (window->status == EMPATHY_TP_CALL_STATUS_READYING)
     {
       gtk_window_set_title (GTK_WINDOW (window->window), _("Empathy Call"));
+      /* To translators: Readying is the first state of the call, it is
+       * preparing the connection and it does not yet ring. */
       gtk_label_set_text (GTK_LABEL (window->status_label), _("Readying"));
       gtk_widget_set_sensitive (window->video_button, FALSE);
       gtk_widget_set_sensitive (window->output_volume_button, FALSE);

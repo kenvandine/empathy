@@ -309,7 +309,7 @@
                     <child>
                       <widget class="GtkLabel" id="label613">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">&lt;b&gt;Audio&lt;/b&gt;</property>
+                        <property name="label" translatable="yes" comments="To translators: Audio notifications preferences">&lt;b&gt;Audio&lt;/b&gt;</property>
                         <property name="use_markup">True</property>
                       </widget>
                       <packing>
@@ -347,7 +347,7 @@
                     <child>
                       <widget class="GtkLabel" id="label614">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">&lt;b&gt;Visual&lt;/b&gt;</property>
+                        <property name="label" translatable="yes" comments="To translators: Visual notifications preferences, like notify bubbles, etc.">&lt;b&gt;Visual&lt;/b&gt;</property>
                         <property name="use_markup">True</property>
                       </widget>
                       <packing>

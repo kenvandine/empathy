@@ -693,7 +693,6 @@ empathy_account_widget_yahoo_new (McAccount *account)
 			"entry_id", "account",
 			"entry_password", "password",
 			"entry_server", "server",
-			"entry_serverjp", "serverjp",
 			"entry_locale", "room-list-locale",
 			"entry_charset", "charset",
 			"spinbutton_port", "port",

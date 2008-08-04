@@ -235,6 +235,10 @@ event_manager_dispatch_channel_cb (EmpathyDispatcher   *dispatcher,
 	}
 }
 
+#define TUBE_NO_APP_MESSAGE _("%s is offering you an invitation, but " \
+			      "you don't have the needed external " \
+			      "application to handle it.")
+
 static void
 event_tube_process_func (EventPriv *event)
 {
@@ -248,9 +252,7 @@ event_tube_process_func (EventPriv *event)
 		gchar     *str;
 
 		/* Tell the user that the tube can't be handled */
-		str = g_strdup_printf (_("%s offered you an invitation, but "
-					 "you don't have the needed external "
-					 "application to handle it."),
+		str = g_strdup_printf (TUBE_NO_APP_MESSAGE,
 				       empathy_contact_get_name (tube->initiator));
 
 		dialog = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL,
@@ -289,9 +291,7 @@ event_manager_filter_tube_cb (EmpathyDispatcher     *dispatcher,
 				       empathy_contact_get_name (tube->initiator));
 	} else {
 		icon_name = GTK_STOCK_DIALOG_ERROR;
-		msg = g_strdup_printf (_("%s is offering you an invitation, but "
-					 "you don't have the needed external "
-					 "application to handle it."),
+		msg = g_strdup_printf (TUBE_NO_APP_MESSAGE,
 				       empathy_contact_get_name (tube->initiator));
 	}
 

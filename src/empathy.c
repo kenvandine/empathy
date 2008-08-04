@@ -123,46 +123,46 @@ operation_error_cb (MissionControl *mc,
 
 	switch (error_code) {
 	case MC_DISCONNECTED_ERROR:
-		message = _("Disconnected");
+		message = "Disconnected";
 		break;
 	case MC_INVALID_HANDLE_ERROR:
-		message = _("Invalid handle");
+		message = "Invalid handle";
 		break;
 	case MC_NO_MATCHING_CONNECTION_ERROR:
-		message = _("No matching connection");
+		message = "No matching connection";
 		break;
 	case MC_INVALID_ACCOUNT_ERROR:
-		message = _("Invalid account");
+		message = "Invalid account";
 		break;
 	case MC_PRESENCE_FAILURE_ERROR:
-		message = _("Presence failure");
+		message = "Presence failure";
 		break;
 	case MC_NO_ACCOUNTS_ERROR:
-		message = _("No accounts");
+		message = "No accounts";
 		break;
 	case MC_NETWORK_ERROR:
-		message = _("Network error");
+		message = "Network error";
 		break;
 	case MC_CONTACT_DOES_NOT_SUPPORT_VOICE_ERROR:
-		message = _("Contact does not support voice");
+		message = "Contact does not support voice";
 		break;
 	case MC_LOWMEM_ERROR:
-		message = _("Lowmem");
+		message = "Lowmem";
 		break;
 	case MC_CHANNEL_REQUEST_GENERIC_ERROR:
-		message = _("Channel request generic error");
+		message = "Channel request generic error";
 		break;
 	case MC_CHANNEL_BANNED_ERROR:
-		message = _("Channel banned");
+		message = "Channel banned";
 		break;
 	case MC_CHANNEL_FULL_ERROR:
-		message = _("Channel full");
+		message = "Channel full";
 		break;
 	case MC_CHANNEL_INVITE_ONLY_ERROR:
-		message = _("Channel invite only");
+		message = "Channel invite only";
 		break;
 	default:
-		message = _("Unknown error code");
+		message = "Unknown error code";
 	}
 
 	DEBUG ("Error during operation %d: %s", operation_id, message);
