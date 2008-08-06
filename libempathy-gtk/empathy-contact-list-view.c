@@ -1187,31 +1187,22 @@ empathy_contact_list_view_get_selected_group (EmpathyContactListView *view)
 
 static gboolean
 contact_list_view_remove_dialog_show (GtkWindow   *parent, 
-				      const gchar *window_title, 
-				      const gchar *text)
+				      const gchar *message, 
+				      const gchar *secondary_text)
 {
-	GtkWidget *dialog, *label, *image, *hbox;
+	GtkWidget *dialog;
 	gboolean res;
 	
-	dialog = gtk_dialog_new_with_buttons (window_title, parent,
-					      GTK_DIALOG_MODAL,
-  					      GTK_STOCK_CANCEL, GTK_RESPONSE_NO,
-					      GTK_STOCK_DELETE, GTK_RESPONSE_YES,
-					      NULL);
-	gtk_dialog_set_has_separator (GTK_DIALOG(dialog), FALSE);
+	dialog = gtk_message_dialog_new (parent, GTK_DIALOG_MODAL,
+					 GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE,
+					 "%s", message);
+	gtk_dialog_add_buttons (GTK_DIALOG (dialog),
+				GTK_STOCK_CANCEL, GTK_RESPONSE_NO,
+				GTK_STOCK_DELETE, GTK_RESPONSE_YES,
+				NULL);
+	gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
+						  "%s", secondary_text);
 	 
-	label = gtk_label_new (text);
-	image = gtk_image_new_from_stock (GTK_STOCK_DIALOG_QUESTION, GTK_ICON_SIZE_DIALOG);
-	 
-	hbox = gtk_hbox_new (FALSE, 5);
-	gtk_container_set_border_width (GTK_CONTAINER (hbox), 5);
-	gtk_box_pack_start_defaults (GTK_BOX (hbox), image);
-	gtk_box_pack_start_defaults (GTK_BOX (hbox), label);	 
-	gtk_box_pack_start_defaults (GTK_BOX(GTK_DIALOG(dialog)->vbox), hbox);
-
-	gtk_widget_show (image);
-	gtk_widget_show (label);
-	gtk_widget_show (hbox);
 	gtk_widget_show (dialog);
 	 
 	res = gtk_dialog_run (GTK_DIALOG (dialog));
