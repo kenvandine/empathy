@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gossip.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-04 01:08+0100\n"
+"POT-Creation-Date: 2008-08-06 09:12+0100\n"
 "PO-Revision-Date: 2008-08-03 01:32-0000\n"
 "Last-Translator: Youssef Chahibi <chahibi@gmail.com>\n"
 "Language-Team: Arabic <support@eglug.org>\n"
@@ -303,7 +303,7 @@ msgstr "انس كلمة السر وامح المدخلة."
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:5
 #: ../libempathy-gtk/empathy-account-widget-msn.glade.h:4
 #: ../libempathy-gtk/empathy-account-widget-sip.glade.h:5
-#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:5
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:4
 msgid "Pass_word:"
 msgstr "كلمة ال_سر:"
 
@@ -316,7 +316,7 @@ msgstr "الاسم الم_عروض:"
 #: ../libempathy-gtk/empathy-account-widget-icq.glade.h:6
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:11
 #: ../libempathy-gtk/empathy-account-widget-msn.glade.h:5
-#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:9
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:8
 msgid "_Port:"
 msgstr "ال_منْفذ:"
 
@@ -325,7 +325,7 @@ msgstr "ال_منْفذ:"
 #: ../libempathy-gtk/empathy-account-widget-icq.glade.h:7
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:12
 #: ../libempathy-gtk/empathy-account-widget-msn.glade.h:6
-#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:11
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:10
 #: ../src/empathy-new-chatroom-dialog.glade.h:10
 msgid "_Server:"
 msgstr "ال_خادوم:"
@@ -333,7 +333,7 @@ msgstr "ال_خادوم:"
 #: ../libempathy-gtk/empathy-account-widget-groupwise.glade.h:3
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:4
 #: ../libempathy-gtk/empathy-account-widget-msn.glade.h:3
-#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:4
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:3
 msgid "Login I_D:"
 msgstr "ا_سم المستخدم:"
 
@@ -342,7 +342,7 @@ msgid "ICQ _UIN:"
 msgstr "ICQ _UIN:"
 
 #: ../libempathy-gtk/empathy-account-widget-icq.glade.h:5
-#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:7
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:6
 msgid "_Charset:"
 msgstr "_طقم المحارف:"
 
@@ -453,30 +453,28 @@ msgid "Discover STUN"
 msgstr "اكتشف ال‍STUN"
 
 #: ../libempathy-gtk/empathy-account-widget-sip.glade.h:6
-msgid "Stun Server:"
+#, fuzzy
+msgid "STUN Server:"
 msgstr "خادم Stun:"
 
 #: ../libempathy-gtk/empathy-account-widget-sip.glade.h:7
-msgid "Stun port:"
+#, fuzzy
+msgid "STUN port:"
 msgstr "منفذ Stun:"
 
 #: ../libempathy-gtk/empathy-account-widget-sip.glade.h:8
 msgid "_Username:"
 msgstr "اسم المست_خدم:"
 
-#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:3
-msgid "J_apan server:"
-msgstr "خادم ال_يابان:"
-
-#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:6
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:5
 msgid "Use _Yahoo Japan"
 msgstr "استخدم يا_هو اليابان"
 
-#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:8
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:7
 msgid "_Ignore conference and chatroom invitations"
 msgstr "_تجاهل دعوات المحاضرات وغرف الدردشة"
 
-#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:10
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:9
 msgid "_Room List locale:"
 msgstr "محلية لائحة ال_غرف:"
 
@@ -560,8 +558,7 @@ msgstr "انضم %s الى غرفة"
 msgid "%s has left the room"
 msgstr "غادر %s الغرفة"
 
-#: ../libempathy-gtk/empathy-chat.c:1232 ../src/empathy.c:126
-#: ../src/empathy-call-window.c:403
+#: ../libempathy-gtk/empathy-chat.c:1232 ../src/empathy-call-window.c:406
 msgid "Disconnected"
 msgstr "غير متَصل"
 
@@ -1100,58 +1097,6 @@ msgstr "الوجود"
 msgid "Set your own presence"
 msgstr "اضبط وجودك"
 
-#: ../src/empathy.c:129
-msgid "Invalid handle"
-msgstr "مقبض غير صالح"
-
-#: ../src/empathy.c:132
-msgid "No matching connection"
-msgstr "لا يوجد اتصال مطابق"
-
-#: ../src/empathy.c:135
-msgid "Invalid account"
-msgstr "حساب غير صالح"
-
-#: ../src/empathy.c:138
-msgid "Presence failure"
-msgstr "فشل الوجود"
-
-#: ../src/empathy.c:141
-msgid "No accounts"
-msgstr "لا حساب"
-
-#: ../src/empathy.c:144 ../src/empathy-main-window.c:1121
-msgid "Network error"
-msgstr "خطأ شبكي"
-
-#: ../src/empathy.c:147
-msgid "Contact does not support voice"
-msgstr "المراسل لا يدعم الصوت"
-
-#: ../src/empathy.c:150
-msgid "Lowmem"
-msgstr "Lowmem"
-
-#: ../src/empathy.c:153
-msgid "Channel request generic error"
-msgstr "خطأ طلب القناة"
-
-#: ../src/empathy.c:156
-msgid "Channel banned"
-msgstr "قناة محظورة"
-
-#: ../src/empathy.c:159
-msgid "Channel full"
-msgstr "القناة كاملة"
-
-#: ../src/empathy.c:162
-msgid "Channel invite only"
-msgstr "قناة بدعوة فقط"
-
-#: ../src/empathy.c:165
-msgid "Unknown error code"
-msgstr "خطأ مجهول الرمز"
-
 #: ../src/empathy.c:376
 msgid "Don't connect on startup"
 msgstr "لا تتصل عند بدء التشغيل"
@@ -1295,78 +1240,66 @@ msgid "I already have an account I want to use"
 msgstr ""
 
 #: ../src/empathy-accounts-dialog.glade.h:7
-msgid ""
-"To add a new account, you can click on the 'Add' button and a new entry will "
-"be created for you to started configuring.\n"
-"\n"
-"If you do not want to add an account, simply click on the account you want "
-"to configure in the list on the left."
-msgstr ""
-"لإضافة حساب جديد، يمكنك النقر على زر ‘أضف‘ فتُنشأ مُدخلة جديدة لتبدأ "
-"بتشكيلها.\n"
-"\n"
-"إذا لم تكن ترغب في إضافة حساب، فانقر فقط على الحساب الذي ترغب في تشكيله من "
-"الائحة على اليسار. "
-
-#: ../src/empathy-accounts-dialog.glade.h:10
 msgid "Type:"
 msgstr "النوع:"
 
-#: ../src/empathy-call-window.c:141
+#: ../src/empathy-call-window.c:142
 msgid "Closed"
 msgstr "مغلق"
 
-#: ../src/empathy-call-window.c:253
+#: ../src/empathy-call-window.c:254
 msgid "End this call?"
 msgstr "هل أنهي هذا الاتصال؟"
 
-#: ../src/empathy-call-window.c:255
+#: ../src/empathy-call-window.c:256
 msgid "Closing this window will end the call in progress."
 msgstr "إذا أغلقت هذه النافذة فستنهي المكالمة الجارية."
 
-#: ../src/empathy-call-window.c:256
+#: ../src/empathy-call-window.c:257
 msgid "_End Call"
 msgstr "_أنه المكالمة"
 
-#: ../src/empathy-call-window.c:310
+#: ../src/empathy-call-window.c:311
 msgid "Incoming call"
 msgstr "مكالمة واردة"
 
-#: ../src/empathy-call-window.c:312
+#: ../src/empathy-call-window.c:313
 #, c-format
 msgid "%s is calling you, do you want to answer?"
 msgstr "يتصل بك %s، هل ترغب بالإجابة؟"
 
-#: ../src/empathy-call-window.c:318
+#: ../src/empathy-call-window.c:319
 msgid "_Reject"
 msgstr "_ارفض"
 
-#: ../src/empathy-call-window.c:323
+#: ../src/empathy-call-window.c:324
 msgid "_Answer"
 msgstr "_أجب"
 
-#: ../src/empathy-call-window.c:378
+#: ../src/empathy-call-window.c:379
 msgid "Empathy Call"
 msgstr "اتصال مرسال جنوم"
 
-#: ../src/empathy-call-window.c:379
+#. To translators: Readying is the first state of the call, it is
+#. * preparing the connection and it does not yet ring.
+#: ../src/empathy-call-window.c:382
 msgid "Readying"
 msgstr "استعداد..."
 
-#: ../src/empathy-call-window.c:388
+#: ../src/empathy-call-window.c:391
 #, c-format
 msgid "%s - Empathy Call"
 msgstr "%s - اتصال مرسال جنوم"
 
-#: ../src/empathy-call-window.c:392
+#: ../src/empathy-call-window.c:395
 msgid "Ringing"
 msgstr "رنين..."
 
-#: ../src/empathy-call-window.c:405
+#: ../src/empathy-call-window.c:408
 msgid "Connecting"
 msgstr "يتصل"
 
-#: ../src/empathy-call-window.c:516
+#: ../src/empathy-call-window.c:524
 #, fuzzy, c-format
 msgid "Incoming call from %s rejected because there is already a running call."
 msgstr "رفضت المكالمة بسبب وجود مكالمة جارية."
@@ -1419,19 +1352,20 @@ msgstr "8"
 msgid "9"
 msgstr "9"
 
-#: ../src/empathy-call-window.glade.h:13
+#. To translators: The keypad is numbers [0-9], asterisk (*) and hash (#). Presented like on any phone
+#: ../src/empathy-call-window.glade.h:14
 msgid "<b>Keypad</b>"
 msgstr "<b>رقعة المفاتيح</b>"
 
-#: ../src/empathy-call-window.glade.h:14
+#: ../src/empathy-call-window.glade.h:15
 msgid "<b>Volume</b>"
 msgstr "<b>الصوت</b>"
 
-#: ../src/empathy-call-window.glade.h:15
+#: ../src/empathy-call-window.glade.h:16
 msgid "Hang Up"
 msgstr "اقطع المكالمة"
 
-#: ../src/empathy-call-window.glade.h:16
+#: ../src/empathy-call-window.glade.h:17
 msgid "Send Video"
 msgstr "أرسل الفيديو"
 
@@ -1567,31 +1501,23 @@ msgstr ""
 msgid "Incoming call from %s"
 msgstr "مكالمة واردة من %s"
 
-#. Tell the user that the tube can't be handled
-#: ../src/empathy-event-manager.c:251
-#, c-format
-msgid ""
-"%s offered you an invitation, but you don't have the needed external "
-"application to handle it."
-msgstr "%s قدم لك دعوة، لكنك لا تملك برنامجا خارجيا للتعامل معها."
-
-#: ../src/empathy-event-manager.c:261
-msgid "Invitation Error"
-msgstr "خطأ في الدعوة"
-
-#: ../src/empathy-event-manager.c:287
-#, c-format
-msgid ""
-"%s is offering you an invitation. An external application will be started to "
-"handle it."
-msgstr "%s يقدم لك دعوة. سيتم بدء برنامج خارجي للتعامل معها."
-
-#: ../src/empathy-event-manager.c:292
+#: ../src/empathy-event-manager.c:238
 #, c-format
 msgid ""
 "%s is offering you an invitation, but you don't have the needed external "
 "application to handle it."
 msgstr "%s يقدم لك دعوة، لكنك لا تملك برنامجا خارجيا يمكنه التعامل معها "
+
+#: ../src/empathy-event-manager.c:263
+msgid "Invitation Error"
+msgstr "خطأ في الدعوة"
+
+#: ../src/empathy-event-manager.c:289
+#, c-format
+msgid ""
+"%s is offering you an invitation. An external application will be started to "
+"handle it."
+msgstr "%s يقدم لك دعوة. سيتم بدء برنامج خارجي للتعامل معها."
 
 #: ../src/empathy-event-manager.c:345
 #, c-format
@@ -1622,6 +1548,10 @@ msgstr "_حرِر الحساب"
 #: ../src/empathy-main-window.c:1118
 msgid "No error specified"
 msgstr ""
+
+#: ../src/empathy-main-window.c:1121
+msgid "Network error"
+msgstr "خطأ شبكي"
 
 #: ../src/empathy-main-window.c:1124
 msgid "Authentication failed"
@@ -1763,27 +1693,29 @@ msgstr "اللغة"
 msgid "<b>Appearance</b>"
 msgstr "<b>المظهر</b>"
 
-#: ../src/empathy-preferences.glade.h:2
+#. To translators: Audio notifications preferences
+#: ../src/empathy-preferences.glade.h:3
 msgid "<b>Audio</b>"
 msgstr "<b>الصوت</b>"
 
-#: ../src/empathy-preferences.glade.h:3
+#: ../src/empathy-preferences.glade.h:4
 msgid "<b>Behaviour</b>"
 msgstr "<b>السلوك</b>"
 
-#: ../src/empathy-preferences.glade.h:4
+#: ../src/empathy-preferences.glade.h:5
 msgid "<b>Contact List</b>"
 msgstr "<b>قائمة المراسَلين</b>"
 
-#: ../src/empathy-preferences.glade.h:5
+#: ../src/empathy-preferences.glade.h:6
 msgid "<b>Enable spell checking for languages:</b>"
 msgstr "<b>فعل تدقيق التهجئة للغات:</b>"
 
-#: ../src/empathy-preferences.glade.h:6
+#. To translators: Visual notifications preferences, like notify bubbles, etc.
+#: ../src/empathy-preferences.glade.h:8
 msgid "<b>Visual</b>"
 msgstr "<b>مرئي</b>"
 
-#: ../src/empathy-preferences.glade.h:7
+#: ../src/empathy-preferences.glade.h:9
 msgid ""
 "<small>The list of languages reflects only the languages for which you have "
 "a dictionary installed.</small>"
@@ -1791,75 +1723,75 @@ msgstr ""
 "<small>قائمة اللغات الموجودة هنا لا تظهر إلا اللغات التي يوجد لها قاموس مثبت."
 "</small>"
 
-#: ../src/empathy-preferences.glade.h:8
+#: ../src/empathy-preferences.glade.h:10
 msgid "Automatically _connect on startup "
 msgstr "_اتّصل آليا عند بدء التَّشغيل"
 
-#: ../src/empathy-preferences.glade.h:9
+#: ../src/empathy-preferences.glade.h:11
 msgid "Avatars are user chosen images shown in the contact list"
 msgstr "الأفاتارات هي الصور التي اختار المستخدم والظاهرة في لائحة المراسَل"
 
-#: ../src/empathy-preferences.glade.h:10
+#: ../src/empathy-preferences.glade.h:12
 msgid "Chat Th_eme:"
 msgstr "_سمة المحادثة:"
 
-#: ../src/empathy-preferences.glade.h:11
+#: ../src/empathy-preferences.glade.h:13
 msgid "Display notifications when contacts come _online"
 msgstr "اعرض الإشعارات عندما يصبح المراسَلون متصلين "
 
-#: ../src/empathy-preferences.glade.h:12
+#: ../src/empathy-preferences.glade.h:14
 msgid "Enable sounds when _away"
 msgstr "فعل الأصوات عندما أكون _بعيدا"
 
-#: ../src/empathy-preferences.glade.h:13
+#: ../src/empathy-preferences.glade.h:15
 msgid "Enable sounds when _busy"
 msgstr "فعل الأصوات عندما أكون مَ_شْغولًا"
 
-#: ../src/empathy-preferences.glade.h:14
+#: ../src/empathy-preferences.glade.h:16
 msgid "General"
 msgstr "عامّ"
 
-#: ../src/empathy-preferences.glade.h:15
+#: ../src/empathy-preferences.glade.h:17
 msgid "Notifications"
 msgstr "التبليغات"
 
-#: ../src/empathy-preferences.glade.h:16
+#: ../src/empathy-preferences.glade.h:18
 msgid "Preferences"
 msgstr "تفضيلات"
 
-#: ../src/empathy-preferences.glade.h:17
+#: ../src/empathy-preferences.glade.h:19
 msgid "Show _avatars"
 msgstr "اعرض الأ_فاتارات"
 
-#: ../src/empathy-preferences.glade.h:18
+#: ../src/empathy-preferences.glade.h:20
 msgid "Show _smileys as images"
 msgstr "اظهر الصّور المتحرّكة كرسوم"
 
-#: ../src/empathy-preferences.glade.h:19
+#: ../src/empathy-preferences.glade.h:21
 msgid "Show co_mpact contact list"
 msgstr "أظهر _قائمة مضغوطة للمراسلين"
 
-#: ../src/empathy-preferences.glade.h:20
+#: ../src/empathy-preferences.glade.h:22
 msgid "Sort by _name"
 msgstr "رتّب بالا_سم"
 
-#: ../src/empathy-preferences.glade.h:21
+#: ../src/empathy-preferences.glade.h:23
 msgid "Sort by s_tate"
 msgstr "رتّب حسب ال_حالة"
 
-#: ../src/empathy-preferences.glade.h:22
+#: ../src/empathy-preferences.glade.h:24
 msgid "Spell Checking"
 msgstr "تدقيق التهجئة"
 
-#: ../src/empathy-preferences.glade.h:23
+#: ../src/empathy-preferences.glade.h:25
 msgid "Themes"
 msgstr "السِمات"
 
-#: ../src/empathy-preferences.glade.h:24
+#: ../src/empathy-preferences.glade.h:26
 msgid "_Open new chats in separate windows"
 msgstr "ا_فتح غرف الدردشة الجديدة في نوافذ منفصلة"
 
-#: ../src/empathy-preferences.glade.h:25
+#: ../src/empathy-preferences.glade.h:27
 msgid "_Play sound when messages arrive"
 msgstr "_شغل صوت عند وصول الرسائل"
 
@@ -1874,3 +1806,60 @@ msgstr "أ_نه"
 #: ../src/empathy-status-icon.glade.h:4
 msgid "_Show Contact List"
 msgstr "أظهر _قائمة المراسلين"
+
+#~ msgid "J_apan server:"
+#~ msgstr "خادم ال_يابان:"
+
+#~ msgid "Invalid handle"
+#~ msgstr "مقبض غير صالح"
+
+#~ msgid "No matching connection"
+#~ msgstr "لا يوجد اتصال مطابق"
+
+#~ msgid "Invalid account"
+#~ msgstr "حساب غير صالح"
+
+#~ msgid "Presence failure"
+#~ msgstr "فشل الوجود"
+
+#~ msgid "No accounts"
+#~ msgstr "لا حساب"
+
+#~ msgid "Contact does not support voice"
+#~ msgstr "المراسل لا يدعم الصوت"
+
+#~ msgid "Lowmem"
+#~ msgstr "Lowmem"
+
+#~ msgid "Channel request generic error"
+#~ msgstr "خطأ طلب القناة"
+
+#~ msgid "Channel banned"
+#~ msgstr "قناة محظورة"
+
+#~ msgid "Channel full"
+#~ msgstr "القناة كاملة"
+
+#~ msgid "Channel invite only"
+#~ msgstr "قناة بدعوة فقط"
+
+#~ msgid "Unknown error code"
+#~ msgstr "خطأ مجهول الرمز"
+
+#~ msgid ""
+#~ "To add a new account, you can click on the 'Add' button and a new entry "
+#~ "will be created for you to started configuring.\n"
+#~ "\n"
+#~ "If you do not want to add an account, simply click on the account you "
+#~ "want to configure in the list on the left."
+#~ msgstr ""
+#~ "لإضافة حساب جديد، يمكنك النقر على زر ‘أضف‘ فتُنشأ مُدخلة جديدة لتبدأ "
+#~ "بتشكيلها.\n"
+#~ "\n"
+#~ "إذا لم تكن ترغب في إضافة حساب، فانقر فقط على الحساب الذي ترغب في تشكيله "
+#~ "من الائحة على اليسار. "
+
+#~ msgid ""
+#~ "%s offered you an invitation, but you don't have the needed external "
+#~ "application to handle it."
+#~ msgstr "%s قدم لك دعوة، لكنك لا تملك برنامجا خارجيا للتعامل معها."
