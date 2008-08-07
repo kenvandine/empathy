@@ -107,7 +107,21 @@ gboolean     empathy_proxy_equal                    (gconstpointer    a,
 						     gconstpointer    b);
 guint        empathy_proxy_hash                     (gconstpointer    key);
 
-
+typedef void (*empathy_connection_callback_for_request_channel) (TpConnection *connection,
+								 TpChannel *channel,
+								 const GError *error,
+								 gpointer user_data,
+								 GObject *weak_object);
+void empathy_connection_request_channel (TpConnection *proxy,
+					 gint timeout_ms,
+				    	 const gchar *channel_type,
+					 guint handle_type,
+					 const gchar *name,
+					 gboolean suppress_handler,
+					 empathy_connection_callback_for_request_channel callback,
+					 gpointer user_data,
+					 GDestroyNotify destroy,
+					 GObject *weak_object);
 
 G_END_DECLS
 

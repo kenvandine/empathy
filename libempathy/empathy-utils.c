@@ -40,7 +40,6 @@
 #include "empathy-utils.h"
 #include "empathy-contact-factory.h"
 #include "empathy-contact-manager.h"
-#include "empathy-tp-group.h"
 
 #define DEBUG_FLAG EMPATHY_DEBUG_OTHER
 #include "empathy-debug.h"
@@ -655,5 +654,123 @@ empathy_proxy_equal (gconstpointer a,
 
 	return g_str_equal (proxy_a->object_path, proxy_b->object_path) &&
 	       g_str_equal (proxy_a->bus_name, proxy_b->bus_name);
+}
+
+typedef struct {
+	gint timeout_ms;
+	gchar *channel_type;
+	guint handle_type;
+	empathy_connection_callback_for_request_channel callback;
+	gpointer user_data;
+	GDestroyNotify destroy;
+	TpHandle handle;
+	gboolean suppress_handler;
+	guint ref_count;
+} ConnectionRequestChannelData;
+
+static void
+connection_request_channel_data_unref (gpointer user_data)
+{
+	ConnectionRequestChannelData *data = (ConnectionRequestChannelData*) user_data;
+
+	if (--data->ref_count == 0) {
+		g_free (data->channel_type);
+		if (data->destroy) {
+			data->destroy (data->user_data);
+		}
+		g_slice_free (ConnectionRequestChannelData, data);
+	}
+}
+
+static void
+connection_request_channel_cb (TpConnection *connection,
+			       const gchar *object_path,
+			       const GError *error,
+			       gpointer user_data,
+			       GObject *weak_object)
+{
+	ConnectionRequestChannelData *data = (ConnectionRequestChannelData*) user_data;
+	TpChannel *channel;
+
+	if (!data->callback) {
+		return;
+	}
+
+	if (error) {
+		data->callback (connection, NULL, error, data->user_data, weak_object);
+		return;
+	}
+
+	channel = tp_channel_new (connection, object_path,
+				  data->channel_type,
+				  data->handle_type,
+				  data->handle, NULL);
+
+	data->callback (connection, channel, NULL, data->user_data, weak_object);
+	g_object_unref (channel);
+}
+
+static void
+connection_request_handles_cb (TpConnection *connection,
+			       const GArray *handles,
+			       const GError *error,
+			       gpointer user_data,
+			       GObject *weak_object)
+{
+	ConnectionRequestChannelData *data = (ConnectionRequestChannelData*) user_data;
+
+	if (error) {
+		if (data->callback) {
+			data->callback (connection, NULL, error, data->user_data, weak_object);
+		}
+		return;
+	}
+
+	data->handle = g_array_index (handles, guint, 0);
+	data->ref_count++;
+	tp_cli_connection_call_request_channel (connection, data->timeout_ms,
+						data->channel_type,
+						data->handle_type,
+						data->handle,
+						data->suppress_handler,
+						connection_request_channel_cb,
+						data,
+						(GDestroyNotify) connection_request_channel_data_unref,
+						weak_object);
+}
+
+void
+empathy_connection_request_channel (TpConnection *connection,
+				    gint timeout_ms,
+				    const gchar *channel_type,
+				    guint handle_type,
+				    const gchar *name,
+				    gboolean suppress_handler,
+				    empathy_connection_callback_for_request_channel callback,
+				    gpointer user_data,
+				    GDestroyNotify destroy,
+				    GObject *weak_object)
+{
+	const gchar *names[] = {name, NULL};
+	ConnectionRequestChannelData *data;
+
+	data = g_slice_new (ConnectionRequestChannelData);
+	data->timeout_ms = timeout_ms;
+	data->channel_type = g_strdup (channel_type);
+	data->handle_type = handle_type;
+	data->callback = callback;
+	data->user_data = user_data;
+	data->destroy = destroy;
+	data->handle = 0;
+	data->suppress_handler = suppress_handler;
+	data->ref_count = 1;
+	tp_cli_connection_call_request_handles (connection,
+						timeout_ms,
+						handle_type,
+						names,
+						connection_request_handles_cb,
+						data,
+						(GDestroyNotify) connection_request_channel_data_unref,
+						weak_object);
 }
 
