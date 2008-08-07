@@ -179,13 +179,17 @@ chat_status_changed_cb (MissionControl           *mc,
 	if (status == TP_CONNECTION_STATUS_CONNECTED && !priv->tp_chat &&
 	    empathy_account_equal (account, priv->account) &&
 	    priv->handle_type != TP_HANDLE_TYPE_NONE) {
+		TpConnection *connection;
+
 		DEBUG ("Account reconnected, request a new Text channel");
-		mission_control_request_channel_with_string_handle (mc,
-								    priv->account,
-								    TP_IFACE_CHANNEL_TYPE_TEXT,
-								    priv->id,
-								    priv->handle_type,
-								    NULL, NULL);
+		connection = mission_control_get_tpconnection (mc, account, NULL);
+		tp_connection_run_until_ready (connection, FALSE, NULL, NULL);
+		empathy_connection_request_channel (connection, -1,
+						    TP_IFACE_CHANNEL_TYPE_TEXT,
+						    priv->handle_type,
+						    priv->id, TRUE,
+						    NULL, NULL, NULL, NULL);
+		g_object_unref (connection);
 	}
 
 	g_object_unref (account);

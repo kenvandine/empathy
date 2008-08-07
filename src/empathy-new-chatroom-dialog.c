@@ -487,12 +487,13 @@ new_chatroom_dialog_model_selection_changed (GtkTreeSelection         *selection
 static void
 new_chatroom_dialog_join (EmpathyNewChatroomDialog *dialog)
 {
-	McAccount            *account;
 	EmpathyAccountChooser *account_chooser;
-	MissionControl       *mc;
-	const gchar          *room;
-	const gchar          *server = NULL;
-	gchar                *room_name = NULL;
+	McAccount             *account;
+	MissionControl        *mc;
+	TpConnection          *connection;
+	const gchar           *room;
+	const gchar           *server = NULL;
+	gchar                 *room_name = NULL;
 
 	room = gtk_entry_get_text (GTK_ENTRY (dialog->entry_room));
 	server = gtk_entry_get_text (GTK_ENTRY (dialog->entry_server));
@@ -509,13 +510,15 @@ new_chatroom_dialog_join (EmpathyNewChatroomDialog *dialog)
 	DEBUG ("Requesting channel for '%s'", room_name);
 
 	mc = empathy_mission_control_new ();
-	mission_control_request_channel_with_string_handle (mc,
-							    account,
-							    TP_IFACE_CHANNEL_TYPE_TEXT,
-							    room_name,
-							    TP_HANDLE_TYPE_ROOM,
-							    NULL, NULL);	
+	connection = mission_control_get_tpconnection (mc, account, NULL);
+	tp_connection_run_until_ready (connection, TRUE, NULL, NULL);	
+	empathy_connection_request_channel (connection, -1,
+					    TP_IFACE_CHANNEL_TYPE_TEXT,
+					    TP_HANDLE_TYPE_ROOM,
+					    room_name, TRUE,
+					    NULL, NULL, NULL, NULL);
 	g_free (room_name);
+	g_object_unref (connection);
 	g_object_unref (mc);
 }
 
