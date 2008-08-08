@@ -55,6 +55,7 @@ static const char *authors[] = {
 	"Jonny Lamb",
 	"Jordi Mallach",
 	"Kim Andersen",
+	"Marco Barisione",
 	"Martyn Russell <martyn@gnome.org>",
 	"Mikael Hallendal <micke@imendio.com>",
 	"Mike Gratton",
