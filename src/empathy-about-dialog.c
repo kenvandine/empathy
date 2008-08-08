@@ -40,17 +40,36 @@ static void about_dialog_activate_link_cb (GtkAboutDialog  *about,
 					   gpointer         data);
 
 static const char *authors[] = {
-	"Mikael Hallendal",
-	"Richard Hult",
-	"Martyn Russell",
+	"Alban Crequy",
+	"Andreas Lööw",
+	"Aurelien Naldi",
+	"Bastien Nocera",
+	"Christoffer Olsen",
+	"Elliot Fairweather",
+	"Frederic Crozat",
+	"Frederic Peters",
 	"Geert-Jan Van den Bogaerde",
-	"Kevin Dougherty",
-	"Eitan Isaacson",
-	"Xavier Claessens",
+	"Guillaume Desmottes",
+	"Johan Hammar",
+	"Jonatan Magnusson",
+	"Jonny Lamb",
+	"Jordi Mallach",
+	"Kim Andersen",
+	"Martyn Russell <martyn@gnome.org>",
+	"Mikael Hallendal <micke@imendio.com>",
+	"Mike Gratton",
+	"Richard Hult <richard@imendio.com>",
+	"Ross Burton",
+	"Sjoerd Simons",
+	"Thomas Reynolds",
+	"Vincent Untz",
+	"Xavier Claessens <xclaesse@gmail.com>",
 	NULL
 };
 
 static const char *documenters[] = {
+	"Milo Casagrande",
+	"Seth Dudenhofer",
 	NULL
 };
 
@@ -100,7 +119,7 @@ empathy_about_dialog_new (GtkWindow *parent)
 			       "comments", _("An Instant Messaging client for GNOME"),
 			       "license", license_trans,
 			       "wrap-license", TRUE,
-			       "copyright", "Imendio AB 2002-2007\nCollabora Ltd 2007",
+			       "copyright", "Imendio AB 2002-2007\nCollabora Ltd 2007-2008",
 			       "documenters", documenters,
 			       "logo-icon-name", "empathy",
 			       "translator-credits", _("translator-credits"),
