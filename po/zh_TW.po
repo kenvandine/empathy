@@ -1,353 +1,1134 @@
-# traditional Chinese translation of gossip.
+# traditional Chinese translation of empathy.
 # Copyright (C) 2003, 2004 Free Software Foundation, Inc.
 # Abel Cheung <abel@oaka.org>, 2003, 2004.
 # Chao-Hsiung Liao <j_h_liau@yahoo.com.tw>, 2005.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gossip 0.13\n"
+"Project-Id-Version: empathy 2.23.90\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-05-15 23:46+0200\n"
-"PO-Revision-Date: 2006-07-05 07:38+0800\n"
+"POT-Creation-Date: 2008-08-11 20:26+0800\n"
+"PO-Revision-Date: 2008-08-08 07:38+0800\n"
 "Last-Translator: Chao-Hsiung Liao <j_h_liau@yahoo.com.tw>\n"
 "Language-Team: Chinese (traditional) <community@linuxhall.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../data/empathy.desktop.in.h:1
-#, fuzzy
+#: ../data/empathy.desktop.in.in.h:1
 msgid "Empathy Instant Messenger"
-msgstr "即時通訊程式"
+msgstr "Empathy 即時通訊程式"
 
-#: ../data/empathy.desktop.in.h:2
-msgid "Instant Messenger"
-msgstr "即時通訊程式"
+#: ../data/empathy.desktop.in.in.h:2
+msgid "Send and receive instant messages"
+msgstr "傳送與接收即時訊息"
 
 #: ../data/empathy.schemas.in.h:1
 msgid "Always open a separate chat window for new chats."
-msgstr "永遠為新的聊天開啟個別的聊天視窗。"
+msgstr "永遠為每個新的聊天開啟新的聊天視窗。"
 
 #: ../data/empathy.schemas.in.h:2
+msgid ""
+"Character to add after nickname when using nick completion (tab) in group "
+"chat."
+msgstr "在群組聊天中使用暱稱補齊 (tab) 時要加到暱稱之後的字元。"
+
+#: ../data/empathy.schemas.in.h:3
 msgid "Chat window theme"
 msgstr "聊天視窗佈景主題"
 
-#: ../data/empathy.schemas.in.h:3
+#: ../data/empathy.schemas.in.h:4
 msgid ""
 "Comma separated list of spell checker languages to use (e.g. en, fr, nl)."
-msgstr "以逗號分隔的拼字檢查程式語言清單(例. en, fr, nl)。"
-
-#: ../data/empathy.schemas.in.h:4
-#, fuzzy
-msgid "Compact contact list"
-msgstr "顯示好友名單(_S)"
+msgstr "要使用拼字檢查的語言清單（以逗號分隔，如 en,fr,nl）。"
 
 #: ../data/empathy.schemas.in.h:5
+msgid "Compact contact list"
+msgstr "精簡連絡人清單"
+
+#: ../data/empathy.schemas.in.h:6
 msgid "Contact list sort criterium"
 msgstr ""
 
-#: ../data/empathy.schemas.in.h:6
-msgid "Default directory to select an avatar image from"
-msgstr "預設用以選擇大頭貼影像的目錄"
-
 #: ../data/empathy.schemas.in.h:7
-msgid "Enable popup when contact is available"
-msgstr "當連絡人上線時使用彈出式選單"
+msgid "Default directory to select an avatar image from"
+msgstr "用來選擇大頭貼圖片的預設目錄"
 
 #: ../data/empathy.schemas.in.h:8
-msgid "Enable sound when away"
-msgstr "當「離開」時啟用音效"
+msgid "Empathy should auto-connect on startup"
+msgstr "Empathy 啟動時自動連線"
 
 #: ../data/empathy.schemas.in.h:9
-msgid "Enable sound when busy"
-msgstr "當「忙碌」時啟用音效"
+msgid "Empathy should use the avatar of the contact as the chat window icon"
+msgstr "Empathy 要使用連絡人的大頭貼做為聊天視窗圖示"
 
 #: ../data/empathy.schemas.in.h:10
-#, fuzzy
-msgid "Enable spell checker"
-msgstr "啟用拼字檢查"
+msgid "Enable popup when contact is available"
+msgstr "當連絡人有空時啟用彈出視窗"
 
 #: ../data/empathy.schemas.in.h:11
+msgid "Enable sound when away"
+msgstr "當離開時啟用音效"
+
+#: ../data/empathy.schemas.in.h:12
+msgid "Enable sound when busy"
+msgstr "當忙碌時啟用音效"
+
+#: ../data/empathy.schemas.in.h:13
+msgid "Enable spell checker"
+msgstr "啟用拼字檢查程式"
+
+#: ../data/empathy.schemas.in.h:14
 msgid "Hide main window"
 msgstr "隱藏主視窗"
 
-#: ../data/empathy.schemas.in.h:12
+#: ../data/empathy.schemas.in.h:15
 msgid "Hide the main window."
 msgstr "隱藏主視窗。"
 
-#: ../data/empathy.schemas.in.h:13
-msgid "Open new chats in separate windows"
-msgstr "在個別視窗中開啟新聊天"
+#: ../data/empathy.schemas.in.h:16
+msgid "NetworkManager should be used"
+msgstr "應該使用 NetworkManager"
 
-#: ../data/empathy.schemas.in.h:14
+#: ../data/empathy.schemas.in.h:17
+msgid "Nick completed character"
+msgstr "暱稱補齊字元"
+
+#: ../data/empathy.schemas.in.h:18
+msgid "Open new chats in separate windows"
+msgstr "在個別視窗開啟新的聊天"
+
+#: ../data/empathy.schemas.in.h:19
+msgid "Salut account is created"
+msgstr "已建立 Salut 帳號"
+
+#: ../data/empathy.schemas.in.h:20
 msgid "Show avatars"
 msgstr "顯示大頭貼"
 
-#: ../data/empathy.schemas.in.h:15
-#, fuzzy
-msgid "Show hint about closing the main window"
-msgstr "主視窗高度"
-
-#: ../data/empathy.schemas.in.h:16
-msgid "Show offline contacts"
-msgstr "顯示已離線的好友"
-
-#: ../data/empathy.schemas.in.h:17
-msgid "Spell checking languages"
-msgstr "拼字檢查程式語言"
-
-#: ../data/empathy.schemas.in.h:18
-msgid "The last directory that an avatar image was chosen from."
-msgstr "用來選擇大頭貼影像的最後目錄。"
-
-#: ../data/empathy.schemas.in.h:19
-msgid "The theme that is used to display the conversation in chat windows."
-msgstr "這個佈景主題會用在聊天視窗中顯示交談。"
-
-#: ../data/empathy.schemas.in.h:20
-msgid "Use graphical smileys"
-msgstr "使用表情圖示"
-
 #: ../data/empathy.schemas.in.h:21
-msgid "Use notification sounds"
-msgstr "使用音效來通知收到訊息"
+msgid "Show hint about closing the main window"
+msgstr "關閉主視窗時顯示提示"
 
 #: ../data/empathy.schemas.in.h:22
-#, fuzzy
-msgid "Use theme for chat rooms"
-msgstr "加入該聊天室"
+msgid "Show offline contacts"
+msgstr "顯示離線連絡人"
 
 #: ../data/empathy.schemas.in.h:23
-msgid ""
-"Whether or not to check words typed against the languages you want to check "
-"with."
-msgstr ""
+msgid "Spell checking languages"
+msgstr "拼字檢查語言"
 
 #: ../data/empathy.schemas.in.h:24
-msgid ""
-"Whether or not to convert smileys into graphical images in conversations."
-msgstr "在對話時，是否將代表表情圖示的字符轉換為真正的圖示。"
+msgid "The last directory that an avatar image was chosen from."
+msgstr "上次選擇大頭貼圖片的目錄。"
 
 #: ../data/empathy.schemas.in.h:25
-msgid "Whether or not to play a sound when messages arrive."
-msgstr "將收到訊息時，是否播放音效。"
+msgid "The theme that is used to display the conversation in chat windows."
+msgstr "用來顯示在聊天視窗的談話中的佈景主題。"
 
 #: ../data/empathy.schemas.in.h:26
-msgid "Whether or not to play sounds when away."
-msgstr "當離開時是否播放音效。"
+msgid "Use graphical smileys"
+msgstr "使用圖片式表情符號"
 
 #: ../data/empathy.schemas.in.h:27
-msgid "Whether or not to play sounds when busy."
-msgstr "當忙碌時是否播放音效。"
+msgid "Use notification sounds"
+msgstr "使用通知音效"
 
 #: ../data/empathy.schemas.in.h:28
-msgid "Whether or not to show a popup when a contact becomes available."
-msgstr "當連絡人上線時，是否顯示彈出式視窗。"
+msgid "Use theme for chat rooms"
+msgstr "在聊天室使用佈景主題"
 
 #: ../data/empathy.schemas.in.h:29
 msgid ""
-"Whether or not to show avatars for contacts in the contact list and chat "
-"windows."
-msgstr "是否在連絡人清單與聊天視窗中顯示大頭貼。"
+"Whether or not Empathy should automatically log in to your accounts on "
+"startup."
+msgstr "Empathy 是否應在啟動時自動登入您的帳號。"
 
 #: ../data/empathy.schemas.in.h:30
-msgid "Whether or not to show contacts that are offline in the contact list."
-msgstr "是否顯示清單中離線的好友。"
+msgid ""
+"Whether or not Empathy should use the avatar of the contact as the chat "
+"window icon."
+msgstr "Empathy 是否使用連絡人大頭貼做為聊天視窗圖示。"
 
 #: ../data/empathy.schemas.in.h:31
 msgid ""
-"Whether or not to show the message dialog about closing the main window with "
-"the 'x' button in the title bar."
-msgstr ""
+"Whether or not the Salut account has been created on the first Empathy run."
+msgstr "是否在 Empathy 第一次執行時建立 Salut 帳號。"
 
 #: ../data/empathy.schemas.in.h:32
-#, fuzzy
-msgid "Whether to show the contact list in compact mode or not."
-msgstr "是否在連絡人清單與聊天視窗中顯示大頭貼。"
+msgid ""
+"Whether or not the network manager should be used to automatically "
+"disconnect/reconnect."
+msgstr "在斷線/重新連線時是否自動使用網路管理程式。"
 
 #: ../data/empathy.schemas.in.h:33
-msgid "Whether to use the theme for chat rooms or not."
-msgstr ""
+msgid ""
+"Whether or not to check words typed against the languages you want to check "
+"with."
+msgstr "是否以您設定的語言檢查輸入有無錯字。"
 
 #: ../data/empathy.schemas.in.h:34
+msgid ""
+"Whether or not to convert smileys into graphical images in conversations."
+msgstr "在談話中是否將表情符號轉換為圖片形式。"
+
+#: ../data/empathy.schemas.in.h:35
+msgid "Whether or not to play a sound when messages arrive."
+msgstr "當訊息抵達時是否播放音效。"
+
+#: ../data/empathy.schemas.in.h:36
+msgid "Whether or not to play sounds when away."
+msgstr "當狀態為離開時是否播放音效。"
+
+#: ../data/empathy.schemas.in.h:37
+msgid "Whether or not to play sounds when busy."
+msgstr "當狀態為忙碌時是否播放音效。"
+
+#: ../data/empathy.schemas.in.h:38
+msgid "Whether or not to show a popup when a contact becomes available."
+msgstr "當連絡人有空時是否顯示彈出式視窗。"
+
+#: ../data/empathy.schemas.in.h:39
+msgid ""
+"Whether or not to show avatars for contacts in the contact list and chat "
+"windows."
+msgstr "是否在連絡人清單與聊天視窗顯示連絡人大頭貼。"
+
+#: ../data/empathy.schemas.in.h:40
+msgid "Whether or not to show contacts that are offline in the contact list."
+msgstr "是否在連絡人清單中顯示離線的連絡人。"
+
+#: ../data/empathy.schemas.in.h:41
+msgid ""
+"Whether or not to show the message dialog about closing the main window with "
+"the 'x' button in the title bar."
+msgstr "使用標題列的「x」按鈕關閉主視窗時是否顯示訊息。"
+
+#: ../data/empathy.schemas.in.h:42
+msgid "Whether to show the contact list in compact mode or not."
+msgstr "是否以精簡模式顯示連絡人清單。"
+
+#: ../data/empathy.schemas.in.h:43
+msgid "Whether to use the theme for chat rooms or not."
+msgstr "是否在聊天室使用佈景主題。"
+
+#: ../data/empathy.schemas.in.h:44
 msgid ""
 "Which criterium to use when sorting the contact list. Default is to use sort "
 "by the contact's name with the value \"name\". A value of \"state\" will "
 "sort the contact list by state."
 msgstr ""
 
-#: ../libempathy/gossip-contact.c:654 ../libempathy/gossip-presence.c:184
-#: ../libempathy/gossip-presence.c:283
-msgid "Offline"
-msgstr "離線"
+#: ../data/empathy-properties.desktop.in.in.h:1
+msgid "Configure Telepathy account settings"
+msgstr "設定 Telepathy 帳號設定值"
 
-#: ../libempathy/gossip-presence.c:274
+#: ../data/empathy-properties.desktop.in.in.h:2
+msgid "Empathy accounts"
+msgstr "Empathy 帳號"
+
+#: ../libempathy/empathy-tp-contact-list.c:731 ../src/empathy.c:244
+msgid "People nearby"
+msgstr ""
+
+#: ../libempathy/empathy-utils.c:345
 msgid "Available"
-msgstr "已連線"
+msgstr "有空"
 
-#: ../libempathy/gossip-presence.c:276
+#: ../libempathy/empathy-utils.c:347
 msgid "Busy"
 msgstr "忙碌"
 
-#: ../libempathy/gossip-presence.c:279
+#: ../libempathy/empathy-utils.c:350
 msgid "Away"
 msgstr "離開"
 
-#: ../libempathy-gtk/empathy-main-window.c:254
-#, fuzzy
-msgid "Show and edit accounts"
-msgstr "顯示好友名單(_S)"
+#: ../libempathy/empathy-utils.c:352
+msgid "Hidden"
+msgstr "隱藏"
 
-#: ../libempathy-gtk/empathy-main-window.c:456
-msgid "Group"
-msgstr "群組"
+#: ../libempathy/empathy-utils.c:355
+msgid "Offline"
+msgstr "離線"
 
-#: ../libempathy-gtk/empathy-main-window.c:477
-#, fuzzy
-msgid "Contact"
-msgstr "連絡人"
+#: ../libempathy-gtk/empathy-account-chooser.c:335
+msgid "All"
+msgstr "全部"
 
-#: ../libempathy-gtk/empathy-main-window.glade.h:1
-#, fuzzy
-msgid "Contact List - Empathy"
-msgstr "隱藏好友名單(_H)"
+#: ../libempathy-gtk/empathy-account-widget.c:302
+#: ../libempathy-gtk/empathy-account-widget.c:347
+#, c-format
+msgid "%s:"
+msgstr "%s:"
 
-#: ../libempathy-gtk/empathy-main-window.glade.h:2
-#, fuzzy
-msgid "Context"
-msgstr "內容(_C)"
+#: ../libempathy-gtk/empathy-account-widget-aim.glade.h:1
+#: ../libempathy-gtk/empathy-account-widget-generic.glade.h:1
+#: ../libempathy-gtk/empathy-account-widget-groupwise.glade.h:1
+#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:1
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:1
+#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:1
+#: ../libempathy-gtk/empathy-account-widget-salut.glade.h:1
+#: ../libempathy-gtk/empathy-account-widget-sip.glade.h:1
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:1
+msgid "<b>Advanced</b>"
+msgstr "<b>進階</b>"
 
-#: ../libempathy-gtk/empathy-main-window.glade.h:3
-#, fuzzy
-msgid "Join _Favorites"
-msgstr "加入喜好(_F)"
+#: ../libempathy-gtk/empathy-account-widget-aim.glade.h:2
+#: ../libempathy-gtk/empathy-account-widget-groupwise.glade.h:2
+#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:2
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:3
+#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:2
+#: ../libempathy-gtk/empathy-account-widget-sip.glade.h:4
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:2
+msgid "Forget password and clear the entry."
+msgstr "清除密碼及這個項目。"
 
-#: ../libempathy-gtk/empathy-main-window.glade.h:4
-#: ../libempathy-gtk/gossip-chat.glade.h:10
-msgid "Join _New..."
-msgstr "加入新的(_N)..."
+#: ../libempathy-gtk/empathy-account-widget-aim.glade.h:3
+#: ../libempathy-gtk/empathy-account-widget-groupwise.glade.h:4
+#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:4
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:5
+#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:4
+#: ../libempathy-gtk/empathy-account-widget-sip.glade.h:5
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:4
+msgid "Pass_word:"
+msgstr "密碼(_W):"
 
-#: ../libempathy-gtk/empathy-main-window.glade.h:5
-#, fuzzy
-msgid "Manage Favorites..."
-msgstr "加入喜好(_F)"
+#: ../libempathy-gtk/empathy-account-widget-aim.glade.h:4
+msgid "Screen _Name:"
+msgstr "螢幕名稱(_N):"
 
-#: ../libempathy-gtk/empathy-main-window.glade.h:6
-msgid "Show _Offline Contacts"
-msgstr "顯示已離線的好友(_O)"
+#: ../libempathy-gtk/empathy-account-widget-aim.glade.h:5
+#: ../libempathy-gtk/empathy-account-widget-groupwise.glade.h:5
+#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:6
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:11
+#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:5
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:8
+msgid "_Port:"
+msgstr "連接埠(_P):"
 
-#: ../libempathy-gtk/empathy-main-window.glade.h:7
-#, fuzzy
-msgid "_About"
-msgstr "帳號(_A)"
+#: ../libempathy-gtk/empathy-account-widget-aim.glade.h:6
+#: ../libempathy-gtk/empathy-account-widget-groupwise.glade.h:6
+#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:7
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:12
+#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:6
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:10
+#: ../src/empathy-new-chatroom-dialog.glade.h:10
+msgid "_Server:"
+msgstr "伺服器(_S):"
 
-#: ../libempathy-gtk/empathy-main-window.glade.h:8
-msgid "_Accounts"
-msgstr "帳號(_A)"
+#: ../libempathy-gtk/empathy-account-widget-groupwise.glade.h:3
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:4
+#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:3
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:3
+msgid "Login I_D:"
+msgstr "登入 I_D:"
 
-#: ../libempathy-gtk/empathy-main-window.glade.h:9
-#: ../libempathy-gtk/gossip-chat.glade.h:15
-msgid "_Add Contact..."
-msgstr "加入好友(_A)..."
+#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:3
+msgid "ICQ _UIN:"
+msgstr "ICQ _UIN:"
 
-#: ../libempathy-gtk/empathy-main-window.glade.h:10
-#: ../libempathy-gtk/gossip-contact-list.c:298
+#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:5
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:6
+msgid "_Charset:"
+msgstr "編碼(_C):"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.c:245
+msgid "New Network"
+msgstr "新網路"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:1
+msgid "<b>Network</b>"
+msgstr "<b>網路</b>"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:2
+msgid "<b>Servers</b>"
+msgstr "<b>伺服器</b>"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:3
+msgid "Charset:"
+msgstr "編碼:"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:4
+msgid "Create a new IRC network"
+msgstr "建立一個新的 IRC 網路"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:5
+msgid "Edit the selected IRC network"
+msgstr "編輯選取的 IRC 網路"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:6
+msgid "Network"
+msgstr "網路"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:7
+msgid "Network:"
+msgstr "網路:"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:8
+msgid "Nickname:"
+msgstr "稱呼："
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:9
+msgid "Password:"
+msgstr "密碼:"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:10
+msgid "Quit message:"
+msgstr "離開訊息:"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:11
+msgid "Real name:"
+msgstr "真實姓名:"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:12
+msgid "Remove the selected IRC network"
+msgstr "移除選取的 IRC 網路"
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:2
+msgid "<b>Override server settings</b>"
+msgstr "<b>覆蓋伺服器設定值</b>"
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:6
+msgid "Pri_ority:"
+msgstr "優先權(_O):"
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:7
+msgid "Reso_urce:"
+msgstr "資源(_U):"
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:8
+msgid "Use old SS_L"
+msgstr "使用舊的 SS_L"
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:9
+msgid "_Encryption required (TLS/SSL)"
+msgstr "要求加密[TLS/SSL](_E)"
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:10
+msgid "_Ignore SSL certificate errors"
+msgstr "忽略 SSL 憑證錯誤(_I)"
+
+#: ../libempathy-gtk/empathy-account-widget-salut.glade.h:2
+msgid "_Email:"
+msgstr "電子郵件(_E):"
+
+#: ../libempathy-gtk/empathy-account-widget-salut.glade.h:3
+msgid "_First Name: "
+msgstr "名字(_F):"
+
+#: ../libempathy-gtk/empathy-account-widget-salut.glade.h:4
+msgid "_Jabber ID:"
+msgstr "_Jabber ID:"
+
+#: ../libempathy-gtk/empathy-account-widget-salut.glade.h:5
+msgid "_Last Name:"
+msgstr "姓氏(_L):"
+
+#: ../libempathy-gtk/empathy-account-widget-salut.glade.h:6
+#: ../src/empathy-chatrooms-window.glade.h:8
+msgid "_Nickname:"
+msgstr "暱稱(_N):"
+
+#: ../libempathy-gtk/empathy-account-widget-salut.glade.h:7
+msgid "_Published Name:"
+msgstr "發佈的名稱(_P):"
+
+#. look up the DNS SRV record at the service's domain for the host name of a STUN server.
+#: ../libempathy-gtk/empathy-account-widget-sip.glade.h:3
+msgid "Discover STUN"
+msgstr "探索 STUN"
+
+#: ../libempathy-gtk/empathy-account-widget-sip.glade.h:6
+msgid "STUN Server:"
+msgstr "STUN 伺服器:"
+
+#: ../libempathy-gtk/empathy-account-widget-sip.glade.h:7
+msgid "STUN port:"
+msgstr "STUN 通訊埠:"
+
+#: ../libempathy-gtk/empathy-account-widget-sip.glade.h:8
+msgid "_Username:"
+msgstr "使用者名稱(_U):"
+
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:5
+msgid "Use _Yahoo Japan"
+msgstr "使用 _Yahoo 日本"
+
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:7
+msgid "_Ignore conference and chatroom invitations"
+msgstr "忽略會議與聊天室邀請(_I)"
+
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:9
+msgid "_Room List locale:"
+msgstr "聊天室清單地區(_R):"
+
+#: ../libempathy-gtk/empathy-avatar-chooser.c:457
+msgid "Select Your Avatar Image"
+msgstr "選擇您的大頭貼圖片"
+
+#: ../libempathy-gtk/empathy-avatar-chooser.c:460
+msgid "No Image"
+msgstr "沒有圖像"
+
+#: ../libempathy-gtk/empathy-avatar-chooser.c:520
+msgid "Images"
+msgstr "圖片"
+
+#: ../libempathy-gtk/empathy-avatar-chooser.c:524
+msgid "All Files"
+msgstr "所有檔案"
+
+#: ../libempathy-gtk/empathy-avatar-image.c:294
+msgid "Click to enlarge"
+msgstr "請按這裡放大"
+
+#: ../libempathy-gtk/empathy-chat.c:497
+msgid "offline"
+msgstr "離線"
+
+#: ../libempathy-gtk/empathy-chat.c:500
+msgid "invalid contact"
+msgstr "無效的連絡人"
+
+#: ../libempathy-gtk/empathy-chat.c:503
+msgid "permission denied"
+msgstr "權限被拒絕"
+
+#: ../libempathy-gtk/empathy-chat.c:506
+msgid "too long message"
+msgstr "太長的訊息"
+
+#: ../libempathy-gtk/empathy-chat.c:509
+msgid "not implemented"
+msgstr "未實作"
+
+#: ../libempathy-gtk/empathy-chat.c:512
+msgid "unknown"
+msgstr "未知的"
+
+#: ../libempathy-gtk/empathy-chat.c:516
+#, c-format
+msgid "Error sending message '%s': %s"
+msgstr "傳送訊息「%s」時發生錯誤；%s"
+
+#: ../libempathy-gtk/empathy-chat.c:546
+#, c-format
+msgid "Topic set to: %s"
+msgstr "主題設定為：%s"
+
+#: ../libempathy-gtk/empathy-chat.c:548
+msgid "No topic defined"
+msgstr "尚未定義主題"
+
+#: ../libempathy-gtk/empathy-chat.c:963
+msgid "Insert Smiley"
+msgstr "插入表情符號"
+
+#: ../libempathy-gtk/empathy-chat.c:979
+msgid "_Send"
+msgstr "傳送(_S)"
+
+#: ../libempathy-gtk/empathy-chat.c:1013
+msgid "_Check Word Spelling..."
+msgstr "檢查拼字(_C)..."
+
+#: ../libempathy-gtk/empathy-chat.c:1119
+#, c-format
+msgid "%s has joined the room"
+msgstr "%s 已經加入此聊天室"
+
+#: ../libempathy-gtk/empathy-chat.c:1122
+#, c-format
+msgid "%s has left the room"
+msgstr "%s 已經離開此聊天室"
+
+#: ../libempathy-gtk/empathy-chat.c:1236 ../src/empathy-call-window.c:406
+msgid "Disconnected"
+msgstr "已斷線"
+
+#: ../libempathy-gtk/empathy-chat.c:1608
+msgid "Connected"
+msgstr "成功連線"
+
+#: ../libempathy-gtk/empathy-chat.glade.h:1
+msgid "<b>Topic:</b>"
+msgstr "<b>主題:</b>"
+
+#: ../libempathy-gtk/empathy-chat.glade.h:2
+msgid "Group Chat"
+msgstr "群組聊天"
+
+#: ../libempathy-gtk/empathy-chat-view.c:430
+msgid "_Copy Link Address"
+msgstr "複製鏈結位址(_C)"
+
+#: ../libempathy-gtk/empathy-chat-view.c:438
+msgid "_Open Link"
+msgstr "開啟連結(_O)"
+
+#: ../libempathy-gtk/empathy-contact-dialogs.c:180
+msgid "Personal Information"
+msgstr "個人資訊"
+
+#: ../libempathy-gtk/empathy-contact-dialogs.c:183
+msgid "Edit Contact Information"
+msgstr "編輯連絡人資訊"
+
+#: ../libempathy-gtk/empathy-contact-dialogs.c:186
+msgid "Contact Information"
+msgstr "連絡人資訊"
+
+#: ../libempathy-gtk/empathy-contact-dialogs.c:283
+msgid "I would like to add you to my contact list."
+msgstr "我想要將您加入我的連絡人清單。"
+
+#: ../libempathy-gtk/empathy-contact-dialogs.c:307
+msgid "New Contact"
+msgstr "新增連絡人"
+
+#: ../libempathy-gtk/empathy-contact-dialogs.glade.h:1
+msgid "Decide _Later"
+msgstr "稍後再決定"
+
+#: ../libempathy-gtk/empathy-contact-dialogs.glade.h:2
+msgid "Subscription Request"
+msgstr "訂閱要求"
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:1226
+#, c-format
+msgid "Do you really want to remove the group '%s'?"
+msgstr "是否想要移除群組「%s」？"
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:1228
+msgid "Removing group"
+msgstr "正在移除群組"
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:1275
+#: ../libempathy-gtk/empathy-contact-list-view.c:1354
+msgid "_Remove"
+msgstr "移除(_R)"
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:1305
+#, c-format
+msgid "Do you really want to remove the contact '%s'?"
+msgstr "是否想要移除連絡人「%s」？"
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:1307
+msgid "Removing contact"
+msgstr "正在移除連絡人"
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:1312
+msgid "Sorry, I don't want you in my contact list anymore."
+msgstr "抱歉，我要將您從我的連絡人清單中移除。"
+
+#: ../libempathy-gtk/empathy-contact-menu.c:109
+#: ../src/empathy-main-window.glade.h:9
 msgid "_Chat"
 msgstr "聊天(_C)"
 
-#: ../libempathy-gtk/empathy-main-window.glade.h:11
-msgid "_Contents"
-msgstr "內容(_C)"
+#: ../libempathy-gtk/empathy-contact-menu.c:130
+msgid "_Call"
+msgstr "通話(_C)"
 
-#: ../libempathy-gtk/empathy-main-window.glade.h:12
-#: ../libempathy-gtk/gossip-chat.glade.h:21
-#: ../libempathy-gtk/gossip-contact-list.c:310
-#, fuzzy
+#: ../libempathy-gtk/empathy-contact-menu.c:169
+#: ../src/empathy-main-window.glade.h:17
+msgid "_View Previous Conversations"
+msgstr "檢視前一次談話(_V)"
+
+#: ../libempathy-gtk/empathy-contact-menu.c:197
+msgid "Infor_mation"
+msgstr "資訊(_M)"
+
+#: ../libempathy-gtk/empathy-contact-menu.c:224
+#: ../src/empathy-chat-window.glade.h:14 ../src/empathy-main-window.glade.h:11
 msgid "_Edit"
-msgstr "編輯"
+msgstr "編輯(_E)"
 
-#: ../libempathy-gtk/empathy-main-window.glade.h:13
-msgid "_Help"
+#: ../libempathy-gtk/empathy-contact-widget.c:358
+msgid "Save Avatar"
+msgstr "儲存大頭貼"
+
+#: ../libempathy-gtk/empathy-contact-widget.c:414
+msgid "Unable to save avatar"
+msgstr "無法儲存大頭貼"
+
+#: ../libempathy-gtk/empathy-contact-widget.c:866
+msgid "Select"
+msgstr "選擇"
+
+#: ../libempathy-gtk/empathy-contact-widget.c:875
+#: ../src/empathy-main-window.c:853
+msgid "Group"
+msgstr "群組"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:1
+msgid "<b>Client Information</b>"
+msgstr "<b>客戶端資訊</b>"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:2
+msgid "<b>Contact Details</b>"
+msgstr "<b>連絡人詳細資料</b>"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:3
+msgid "<b>Contact</b>"
+msgstr "<b>連絡人</b>"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:4
+msgid "<b>Groups</b>"
+msgstr "<b>群組</b>"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:5
+#: ../libempathy-gtk/empathy-new-message-dialog.glade.h:1
+#: ../src/empathy-chatrooms-window.glade.h:1
+#: ../src/empathy-new-chatroom-dialog.glade.h:1
+msgid "Account:"
+msgstr "帳號："
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:6
+msgid "Alias:"
+msgstr "別名:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:7
+msgid "Birthday:"
+msgstr "生日:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:8
+msgid "Client:"
+msgstr "客戶端:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:9
+msgid "Contact information"
+msgstr "連絡人資訊"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:10
+msgid "Email:"
+msgstr "電子郵件:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:11
+msgid "Fullname:"
+msgstr "全名:"
+
+#. Identifier to connect to Instant Messaging network
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:13
+msgid "Identifier:"
+msgstr "識別器:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:14
+msgid "Information requested..."
+msgstr "要求資訊..."
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:15
+msgid "OS:"
+msgstr "OS:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:16
+msgid ""
+"Select the groups you want this contact to appear in, you can select more "
+"than one group or no groups."
+msgstr ""
+"請選擇這個連絡人要顯現在哪個群組，您可以選擇一個以上的群組或不選擇群組。"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:17
+msgid "Version:"
+msgstr "版本:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:18
+msgid "Web site:"
+msgstr "網站:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:19
+msgid "_Add Group"
+msgstr "加入群組(_G)"
+
+#: ../libempathy-gtk/empathy-irc-network-dialog.c:284
+msgid "new server"
+msgstr "新增伺服器"
+
+#: ../libempathy-gtk/empathy-irc-network-dialog.c:513
+msgid "Server"
+msgstr "伺服器"
+
+#: ../libempathy-gtk/empathy-irc-network-dialog.c:528
+msgid "Port"
+msgstr "通訊埠"
+
+#: ../libempathy-gtk/empathy-irc-network-dialog.c:541
+msgid "SSL"
+msgstr "SSL"
+
+#: ../libempathy-gtk/empathy-log-window.c:497
+msgid "Account"
+msgstr "帳號"
+
+#: ../libempathy-gtk/empathy-log-window.c:504 ../src/empathy-chat-window.c:276
+msgid "Conversation"
+msgstr "談話"
+
+#: ../libempathy-gtk/empathy-log-window.c:514
+msgid "Date"
+msgstr "日期"
+
+#. Tab Label
+#: ../libempathy-gtk/empathy-log-window.glade.h:2
+msgid "Conversations"
+msgstr "談話"
+
+#: ../libempathy-gtk/empathy-log-window.glade.h:3
+msgid "Previous Conversations"
+msgstr "上一次談話"
+
+#. Tab Label
+#: ../libempathy-gtk/empathy-log-window.glade.h:5
+msgid "Search"
+msgstr "搜尋"
+
+#. Searching *for* something
+#: ../libempathy-gtk/empathy-log-window.glade.h:7
+msgid "_For:"
+msgstr "搜尋(_F):"
+
+#: ../libempathy-gtk/empathy-new-message-dialog.glade.h:2
+msgid "Call"
+msgstr "通話"
+
+#: ../libempathy-gtk/empathy-new-message-dialog.glade.h:3
+#: ../src/empathy-chat-window.glade.h:2
+msgid "Chat"
+msgstr "聊天"
+
+#: ../libempathy-gtk/empathy-new-message-dialog.glade.h:4
+msgid "Contact ID:"
+msgstr "連絡人 ID:"
+
+#: ../libempathy-gtk/empathy-new-message-dialog.glade.h:5
+msgid "New Conversation"
+msgstr "新增談話"
+
+#. Custom messages
+#: ../libempathy-gtk/empathy-presence-chooser.c:685
+msgid "Custom messages..."
+msgstr "自訂訊息..."
+
+#: ../libempathy-gtk/empathy-presence-chooser.glade.h:1
+msgid "Custom message"
+msgstr "自訂訊息"
+
+#: ../libempathy-gtk/empathy-presence-chooser.glade.h:2
+msgid "Message:"
+msgstr "訊息:"
+
+#: ../libempathy-gtk/empathy-presence-chooser.glade.h:3
+msgid "Save message"
+msgstr "儲存訊息"
+
+#: ../libempathy-gtk/empathy-presence-chooser.glade.h:4
+msgid "Status:"
+msgstr "狀態:"
+
+#: ../libempathy-gtk/empathy-spell-dialog.c:88
+msgid "Word"
+msgstr "字"
+
+#: ../libempathy-gtk/empathy-spell-dialog.c:265
+msgid "Suggestions for the word"
+msgstr "對這個字的建議"
+
+#: ../libempathy-gtk/empathy-spell-dialog.glade.h:1
+msgid "Spell Checker"
+msgstr "拼字檢查"
+
+#: ../libempathy-gtk/empathy-spell-dialog.glade.h:2
+msgid "Suggestions for the word:"
+msgstr "對這個字的建議："
+
+#: ../libempathy-gtk/empathy-theme-boxes.c:745
+#: ../libempathy-gtk/empathy-theme-irc.c:293
+msgid "%A %d %B %Y"
+msgstr "%A %d %B %Y"
+
+#: ../libempathy-gtk/empathy-theme-manager.c:73
+msgid "Classic"
+msgstr "古典"
+
+#: ../libempathy-gtk/empathy-theme-manager.c:74
+msgid "Simple"
+msgstr "簡易"
+
+#: ../libempathy-gtk/empathy-theme-manager.c:75
+msgid "Clean"
+msgstr "清除"
+
+#: ../libempathy-gtk/empathy-theme-manager.c:76
+msgid "Blue"
+msgstr "藍色"
+
+#: ../libempathy-gtk/empathy-ui-utils.c:1330
+msgid "Unable to open URI"
+msgstr "無法開啓 URI"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:158
+msgid "Current Locale"
+msgstr "目前的地區"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:161
+#: ../libempathy-gtk/totem-subtitle-encoding.c:163
+#: ../libempathy-gtk/totem-subtitle-encoding.c:165
+#: ../libempathy-gtk/totem-subtitle-encoding.c:167
+msgid "Arabic"
+msgstr "阿拉伯語"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:170
+msgid "Armenian"
+msgstr "阿美尼亞文"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:173
+#: ../libempathy-gtk/totem-subtitle-encoding.c:175
+#: ../libempathy-gtk/totem-subtitle-encoding.c:177
+msgid "Baltic"
+msgstr "波羅的海文"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:180
+msgid "Celtic"
+msgstr "塞爾特語系"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:183
+#: ../libempathy-gtk/totem-subtitle-encoding.c:185
+#: ../libempathy-gtk/totem-subtitle-encoding.c:187
+#: ../libempathy-gtk/totem-subtitle-encoding.c:189
+msgid "Central European"
+msgstr "中歐"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:192
+#: ../libempathy-gtk/totem-subtitle-encoding.c:194
+#: ../libempathy-gtk/totem-subtitle-encoding.c:196
+#: ../libempathy-gtk/totem-subtitle-encoding.c:198
+msgid "Chinese Simplified"
+msgstr "簡體中文"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:201
+#: ../libempathy-gtk/totem-subtitle-encoding.c:203
+#: ../libempathy-gtk/totem-subtitle-encoding.c:205
+msgid "Chinese Traditional"
+msgstr "正體中文"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:208
+msgid "Croatian"
+msgstr "克羅埃西亞語"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:211
+#: ../libempathy-gtk/totem-subtitle-encoding.c:213
+#: ../libempathy-gtk/totem-subtitle-encoding.c:215
+#: ../libempathy-gtk/totem-subtitle-encoding.c:217
+#: ../libempathy-gtk/totem-subtitle-encoding.c:219
+#: ../libempathy-gtk/totem-subtitle-encoding.c:221
+msgid "Cyrillic"
+msgstr "斯拉夫文"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:224
+msgid "Cyrillic/Russian"
+msgstr "斯拉夫文字/俄文"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:227
+#: ../libempathy-gtk/totem-subtitle-encoding.c:229
+msgid "Cyrillic/Ukrainian"
+msgstr "斯拉夫文字/烏克蘭文"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:232
+msgid "Georgian"
+msgstr "喬治亞文"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:235
+#: ../libempathy-gtk/totem-subtitle-encoding.c:237
+#: ../libempathy-gtk/totem-subtitle-encoding.c:239
+msgid "Greek"
+msgstr "希臘文"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:242
+msgid "Gujarati"
+msgstr "印度 Gujarati 文"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:245
+msgid "Gurmukhi"
+msgstr "古魯穆奇文字"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:248
+#: ../libempathy-gtk/totem-subtitle-encoding.c:250
+#: ../libempathy-gtk/totem-subtitle-encoding.c:252
+#: ../libempathy-gtk/totem-subtitle-encoding.c:254
+msgid "Hebrew"
+msgstr "希伯來語"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:257
+msgid "Hebrew Visual"
+msgstr "希伯來文[左至右]"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:260
+msgid "Hindi"
+msgstr "北印度文"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:263
+msgid "Icelandic"
+msgstr "冰島語"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:266
+#: ../libempathy-gtk/totem-subtitle-encoding.c:268
+#: ../libempathy-gtk/totem-subtitle-encoding.c:270
+msgid "Japanese"
+msgstr "日文"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:273
+#: ../libempathy-gtk/totem-subtitle-encoding.c:275
+#: ../libempathy-gtk/totem-subtitle-encoding.c:277
+#: ../libempathy-gtk/totem-subtitle-encoding.c:279
+msgid "Korean"
+msgstr "韓文"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:282
+msgid "Nordic"
+msgstr "北歐語系"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:285
+msgid "Persian"
+msgstr "波斯文"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:288
+#: ../libempathy-gtk/totem-subtitle-encoding.c:290
+msgid "Romanian"
+msgstr "羅馬尼亞語"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:293
+msgid "South European"
+msgstr "南歐語系"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:296
+msgid "Thai"
+msgstr "泰文"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:299
+#: ../libempathy-gtk/totem-subtitle-encoding.c:301
+#: ../libempathy-gtk/totem-subtitle-encoding.c:303
+#: ../libempathy-gtk/totem-subtitle-encoding.c:305
+msgid "Turkish"
+msgstr "土耳其語"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:308
+#: ../libempathy-gtk/totem-subtitle-encoding.c:310
+#: ../libempathy-gtk/totem-subtitle-encoding.c:312
+#: ../libempathy-gtk/totem-subtitle-encoding.c:314
+#: ../libempathy-gtk/totem-subtitle-encoding.c:316
+msgid "Unicode"
+msgstr "萬國碼"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:319
+#: ../libempathy-gtk/totem-subtitle-encoding.c:321
+#: ../libempathy-gtk/totem-subtitle-encoding.c:323
+#: ../libempathy-gtk/totem-subtitle-encoding.c:325
+#: ../libempathy-gtk/totem-subtitle-encoding.c:327
+msgid "Western"
+msgstr "西方"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:330
+#: ../libempathy-gtk/totem-subtitle-encoding.c:332
+#: ../libempathy-gtk/totem-subtitle-encoding.c:334
+msgid "Vietnamese"
+msgstr "越南"
+
+#.
+#. * vim: sw=2 ts=8 cindent noai bs=2
+#.
+#: ../megaphone/data/GNOME_Megaphone_Applet.schemas.in.h:1
+msgid ""
+"The contact to display in the applet. Empty means no contact is displayed."
+msgstr "要在面板程式中顯示的連絡人。留空代表不顯示連絡人。"
+
+#: ../megaphone/data/GNOME_Megaphone_Applet.schemas.in.h:2
+msgid "The contact's avatar token. Empty means contact has no avatar."
+msgstr "此連絡人的大頭貼記號。留空代表連絡人沒有大頭貼。"
+
+#: ../megaphone/data/GNOME_Megaphone_Applet.server.in.in.h:1
+msgid "Megaphone"
 msgstr ""
 
-#: ../libempathy-gtk/empathy-main-window.glade.h:14
-#: ../libempathy-gtk/empathy-status-icon.glade.h:2
-msgid "_New Message..."
-msgstr "新增訊息(_N)..."
+#: ../megaphone/data/GNOME_Megaphone_Applet.server.in.in.h:2
+#: ../megaphone/src/megaphone-applet.c:417
+msgid "Talk!"
+msgstr "講話！"
 
-#: ../libempathy-gtk/empathy-main-window.glade.h:15
-msgid "_Personal Information"
-msgstr "個人資訊(_P)"
+#: ../megaphone/data/GNOME_Megaphone_Applet.xml.h:1
+#: ../nothere/data/GNOME_NotHere_Applet.xml.h:1
+msgid "_About"
+msgstr "關於(_A)"
 
-#: ../libempathy-gtk/empathy-main-window.glade.h:16
+#: ../megaphone/data/GNOME_Megaphone_Applet.xml.h:2
+msgid "_Information"
+msgstr "資訊(_I)"
+
+#: ../megaphone/data/GNOME_Megaphone_Applet.xml.h:3
+#: ../src/empathy-main-window.glade.h:15
 msgid "_Preferences"
 msgstr "偏好設定(_P)"
 
-#: ../libempathy-gtk/empathy-main-window.glade.h:17
-#: ../libempathy-gtk/empathy-status-icon.glade.h:3
-msgid "_Quit"
-msgstr ""
+#: ../nothere/data/GNOME_NotHere_Applet.server.in.in.h:1
+msgid "Presence"
+msgstr "上線狀態"
 
-#: ../libempathy-gtk/empathy-main-window.glade.h:18
-#: ../libempathy-gtk/gossip-chat.glade.h:25
-msgid "_Room"
-msgstr "聊天室(_R)"
+#: ../nothere/data/GNOME_NotHere_Applet.server.in.in.h:2
+#: ../nothere/src/nothere-applet.c:106
+msgid "Set your own presence"
+msgstr "設定您自己的上線狀態"
 
-#: ../libempathy-gtk/empathy-main-window.glade.h:19
-#: ../libempathy-gtk/gossip-chat.glade.h:28
-#: ../libempathy-gtk/gossip-contact-list.c:326
-msgid "_View Previous Conversations"
-msgstr "顯示前一次交談(_V)"
+#: ../src/empathy.c:376
+msgid "Don't connect on startup"
+msgstr "啟動時不要自動連線"
 
-#: ../libempathy-gtk/empathy-status-icon.glade.h:1
-msgid "Status"
-msgstr "狀態"
+#: ../src/empathy.c:380
+msgid "Don't show the contact list on startup"
+msgstr "啟動時不顯示連絡人清單"
 
-#: ../libempathy-gtk/empathy-status-icon.glade.h:4
-msgid "_Show Contact List"
-msgstr "顯示好友名單(_S)"
+#: ../src/empathy.c:384
+msgid "Show the accounts dialog"
+msgstr "顯示帳號對話盒"
 
-#: ../libempathy-gtk/gossip-about-dialog.c:63
-#, fuzzy
+#: ../src/empathy.c:396
+msgid "- Empathy Instant Messenger"
+msgstr "- Empathy 即時通訊程式"
+
+#: ../src/empathy-about-dialog.c:84
 msgid ""
 "Empathy is free software; you can redistribute it and/or modify it under the "
 "terms of the GNU General Public License as published by the Free Software "
 "Foundation; either version 2 of the License, or (at your option) any later "
 "version."
 msgstr ""
-"Gossip 是自由軟體；您可以遵照自由軟體基金會 (Free Software Foundation) 出版"
+"Empathy 是自由軟體，您可以遵照自由軟體基金會 (Free Software Foundation) 出版"
 "的 GNU 通用公共許可證條款 (GNU General Public License) 第二版來修改和重新發佈"
 "這一程式，或者自由選擇使用任何更新的版本。"
 
-#: ../libempathy-gtk/gossip-about-dialog.c:67
-#, fuzzy
+#: ../src/empathy-about-dialog.c:88
 msgid ""
 "Empathy is distributed in the hope that it will be useful, but WITHOUT ANY "
 "WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS "
 "FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more "
 "details."
 msgstr ""
-"發佈 Gossip 的目的是希望它有用，但沒有任何擔保。甚至沒有適合特定目的而隱含的"
+"發佈 Empathy 的目的是希望它有用，但沒有任何擔保。甚至沒有適合特定目的而隱含的"
 "擔保。更詳細的情況請參閱 GNU 通用公共許可證。"
 
-#: ../libempathy-gtk/gossip-about-dialog.c:71
-#, fuzzy
+#: ../src/empathy-about-dialog.c:92
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "Empathy; if not, write to the Free Software Foundation, Inc., 51 Franklin "
 "Street, Fifth Floor, Boston, MA 02110-130159 USA"
 msgstr ""
-"您應該已經和 Gossip 一起收到一份 GNU 通用公共許可證的副本；如果還沒有，寫信"
-"給： Free Software Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  "
-"02111-1307  USA"
+"您應該已經和 Empathy 一起收到一份 GNU 通用公共許可證的副本；如果還沒有，寫信"
+"給： Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, "
+"Boston, MA 02110-130159 USA"
 
-#: ../libempathy-gtk/gossip-about-dialog.c:99
+#: ../src/empathy-about-dialog.c:120
 msgid "An Instant Messaging client for GNOME"
-msgstr "GNOME 的即時通訊軟體"
+msgstr "GNOME 的即時訊息客戶端程式"
 
-# Abel's note: The dialog is really not wide enough to show email with name.
-#
-#: ../libempathy-gtk/gossip-about-dialog.c:105
+#: ../src/empathy-about-dialog.c:126
 msgid "translator-credits"
 msgstr ""
 "如對翻譯有任何意見，請送一封電子郵件給\n"
@@ -358,56 +1139,59 @@ msgstr ""
 "Craig Jeffares <cjeffares@novell.com>, 2004\n"
 "Joe Man <trmetal@yahoo.com.hk>, 2001"
 
-#: ../libempathy-gtk/gossip-accounts-dialog.c:224
-#, fuzzy
-msgid "Disable"
-msgstr "已連線"
-
-#: ../libempathy-gtk/gossip-accounts-dialog.c:227
-msgid "Enable"
-msgstr "啟用"
-
-#: ../libempathy-gtk/gossip-accounts-dialog.c:261
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:3
-#, fuzzy
-msgid "<b>No Account Selected</b>"
-msgstr "<b>帳號設定</b>"
-
-#: ../libempathy-gtk/gossip-accounts-dialog.c:263
-msgid ""
-"To add a new account, you can click on the 'Add' button and a new entry will "
-"be created for you to start configuring.\n"
-"\n"
-"If you do not want to add an account, simply click on the account you want "
-"to configure in the list on the left."
-msgstr ""
-
-#: ../libempathy-gtk/gossip-accounts-dialog.c:272
-#, fuzzy
-msgid "<b>No Accounts Configured</b>"
-msgstr "<b>帳號設定</b>"
-
-#: ../libempathy-gtk/gossip-accounts-dialog.c:274
+#: ../src/empathy-accounts-dialog.c:235
 msgid ""
 "To add a new account, you can click on the 'Add' button and a new entry will "
 "be created for you to start configuring."
 msgstr ""
+"要加入新的帳號，您可以按下「加入」按鈕，這樣就會建立一個新的項目讓您開始設"
+"定。"
 
-#: ../libempathy-gtk/gossip-accounts-dialog.c:362
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:6
+#: ../src/empathy-accounts-dialog.c:239
+msgid ""
+"To add a new account, you first have to install a backend for each protocol "
+"you want to use."
+msgstr "要加入新的帳號，您必須先安裝每個會用到的通訊協定後端程式。"
+
+#: ../src/empathy-accounts-dialog.c:246
+#: ../src/empathy-accounts-dialog.glade.h:2
+msgid "<b>No Account Selected</b>"
+msgstr "<b>尚未選取帳號</b>"
+
+#: ../src/empathy-accounts-dialog.c:247
+msgid ""
+"\n"
+"\n"
+"If you do not want to add an account, simply click on the account you want "
+"to configure in the list on the left."
+msgstr ""
+"\n"
+"\n"
+"如果您不想加入帳號，只要在左邊清單中點選想要設定的帳號即可。"
+
+#: ../src/empathy-accounts-dialog.c:253
+msgid "<b>No Accounts Configured</b>"
+msgstr "<b>尚未設定帳號</b>"
+
+#: ../src/empathy-accounts-dialog.c:451
+msgid "Enabled"
+msgstr "已啟用"
+
+#: ../src/empathy-accounts-dialog.c:461
+#: ../src/empathy-accounts-dialog.glade.h:4
 msgid "Accounts"
 msgstr "帳號"
 
-#: ../libempathy-gtk/gossip-accounts-dialog.c:857
+#: ../src/empathy-accounts-dialog.c:991
 #, c-format
 msgid ""
 "You are about to remove your %s account!\n"
 "Are you sure you want to proceed?"
 msgstr ""
-"即將移除您的 %s 帳號！\n"
-"確定要繼續嗎？"
+"您即將移除您的 %s 帳號！\n"
+"確定要繼續？"
 
-#: ../libempathy-gtk/gossip-accounts-dialog.c:863
+#: ../src/empathy-accounts-dialog.c:997
 msgid ""
 "Any associated conversations and chat rooms will NOT be removed if you "
 "decide to proceed.\n"
@@ -415,2147 +1199,585 @@ msgid ""
 "Should you decide to add the account back at a later time, they will still "
 "be available."
 msgstr ""
-"如果您決定繼續，任何相關的交談及聊天室將 不會 被移除。\n"
+"如果您決定要繼續，任何相關的談話和聊天室並不會被移除。\n"
 "\n"
-"若您稍後決定將該帳號加回來，它們仍然可以使用。"
+"當您往後決定要將該帳號重新加入時，上述資源將仍然可以取用。"
 
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:1
-msgid "<b>Account</b>"
-msgstr "<b>帳戶</b>"
-
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:2
-#, fuzzy
+#: ../src/empathy-accounts-dialog.glade.h:1
 msgid "<b>New Account</b>"
-msgstr "<b>帳戶</b>"
+msgstr "<b>新增帳號</b>"
 
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:4
-#, fuzzy
+#: ../src/empathy-accounts-dialog.glade.h:3
 msgid "<b>Settings</b>"
-msgstr "<b>帳號設定</b>"
+msgstr "<b>設定值</b>"
 
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:5
-msgid "A unique name for this account to identify it personally to you."
-msgstr ""
-
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:7
-#, fuzzy
+#: ../src/empathy-accounts-dialog.glade.h:5
 msgid "Cr_eate"
-msgstr "聊天！"
+msgstr "建立(_E)"
 
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:8
-msgid "Imendio "
-msgstr ""
+#: ../src/empathy-accounts-dialog.glade.h:6
+msgid "I already have an account I want to use"
+msgstr "我已經有要使用的帳號"
 
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:9
-msgid "Jabber"
-msgstr "Jabber"
+#: ../src/empathy-accounts-dialog.glade.h:7
+msgid "Type:"
+msgstr "類型:"
 
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:10
-msgid ""
-"To add a new account, you can click on the 'Add' button and a new entry will "
-"be created for you to started configuring.\n"
-"\n"
-"If you do not want to add an account, simply click on the account you want "
-"to configure in the list on the left."
-msgstr ""
+#: ../src/empathy-call-window.c:142
+msgid "Closed"
+msgstr "已關閉"
 
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:13
-msgid "_Name:"
-msgstr "名稱(_N):"
+#: ../src/empathy-call-window.c:254
+msgid "End this call?"
+msgstr "結束這次通話？"
 
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:14
-#, fuzzy
-msgid "_Type:"
-msgstr "題目(_T)："
+#: ../src/empathy-call-window.c:256
+msgid "Closing this window will end the call in progress."
+msgstr "關閉這個視窗會結束還在進行中的通話。"
 
-#: ../libempathy-gtk/gossip-account-widget-generic.c:144
-#: ../libempathy-gtk/gossip-account-widget-generic.c:186
+#: ../src/empathy-call-window.c:257
+msgid "_End Call"
+msgstr "結束通話(_E)"
+
+#: ../src/empathy-call-window.c:311
+msgid "Incoming call"
+msgstr "來電"
+
+#: ../src/empathy-call-window.c:313
 #, c-format
-msgid "%s:"
-msgstr ""
+msgid "%s is calling you, do you want to answer?"
+msgstr "%s 要與您通話，是否要接聽？"
 
-#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:1
-#, fuzzy
-msgid ""
-"<small><b><span foreground=\"#555\">Example: user@jabber.org</span></b></"
-"small>"
-msgstr "<span size=\"smaller\">範例：user@jabber.org</span>"
+#: ../src/empathy-call-window.c:319
+msgid "_Reject"
+msgstr "拒絕(_R)"
 
-#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:2
-msgid "Forget password and clear the entry."
-msgstr ""
+#: ../src/empathy-call-window.c:324
+msgid "_Answer"
+msgstr "接聽(_A)"
 
-#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:3
-msgid "Login I_D:"
-msgstr "登入 I_D:"
+#: ../src/empathy-call-window.c:379
+msgid "Empathy Call"
+msgstr "Empathy 電話"
 
-#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:4
-msgid "Pass_word:"
-msgstr "密碼(_W):"
+#. To translators: Readying is the first state of the call, it is
+#. * preparing the connection and it does not yet ring.
+#: ../src/empathy-call-window.c:382
+msgid "Readying"
+msgstr "正在準備"
 
-#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:5
-msgid "Reso_urce:"
-msgstr "資源(_U):"
+#: ../src/empathy-call-window.c:391
+#, c-format
+msgid "%s - Empathy Call"
+msgstr "%s - Empathy 電話"
 
-#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:6
-#, fuzzy
-msgid "Use encryption (SS_L)"
-msgstr "將訊息加密(_SSL)"
+#: ../src/empathy-call-window.c:395
+msgid "Ringing"
+msgstr "電話鈴響"
 
-#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:7
-msgid "_Port:"
-msgstr "連接埠(_P):"
+#: ../src/empathy-call-window.c:408
+msgid "Connecting"
+msgstr "連線中"
 
-#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:8
-msgid "_Server:"
-msgstr "伺服器(_S):"
+#: ../src/empathy-call-window.c:524
+#, c-format
+msgid "Incoming call from %s rejected because there is already a running call."
+msgstr "已拒絕 %s 的來電，因為目前已經在通話中。"
 
-#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:9
-#, fuzzy
-msgid "jabber account settings"
-msgstr "<b>帳號設定</b>"
+#: ../src/empathy-call-window.glade.h:1
+msgid "#"
+msgstr "#"
 
-#: ../libempathy-gtk/gossip-chat.c:314
-msgid "Disconnected"
-msgstr "已斷線"
+#: ../src/empathy-call-window.glade.h:2
+msgid "*"
+msgstr "*"
 
-#: ../libempathy-gtk/gossip-chat.c:858
-msgid "Insert Smiley"
-msgstr "插入笑臉影像"
+#: ../src/empathy-call-window.glade.h:3
+msgid "0"
+msgstr "0"
 
-#: ../libempathy-gtk/gossip-chat.c:906
-msgid "_Check Word Spelling..."
-msgstr "檢查拼字(_C)..."
+#: ../src/empathy-call-window.glade.h:4
+msgid "1"
+msgstr "1"
 
-#: ../libempathy-gtk/gossip-chat.c:1244
-msgid "Connected"
-msgstr "已連線"
+#: ../src/empathy-call-window.glade.h:5
+msgid "2"
+msgstr "2"
 
-#: ../libempathy-gtk/gossip-chat.glade.h:1
-#, fuzzy
+#: ../src/empathy-call-window.glade.h:6
+msgid "3"
+msgstr "3"
+
+#: ../src/empathy-call-window.glade.h:7
+msgid "4"
+msgstr "4"
+
+#: ../src/empathy-call-window.glade.h:8
+msgid "5"
+msgstr "5"
+
+#: ../src/empathy-call-window.glade.h:9
+msgid "6"
+msgstr "6"
+
+#: ../src/empathy-call-window.glade.h:10
+msgid "7"
+msgstr "7"
+
+#: ../src/empathy-call-window.glade.h:11
+msgid "8"
+msgstr "8"
+
+#: ../src/empathy-call-window.glade.h:12
+msgid "9"
+msgstr "9"
+
+#. To translators: The keypad is numbers [0-9], asterisk (*) and hash (#). Presented like on any phone
+#: ../src/empathy-call-window.glade.h:14
+msgid "<b>Keypad</b>"
+msgstr "<b>撥號盤</b>"
+
+#: ../src/empathy-call-window.glade.h:15
+msgid "<b>Volume</b>"
+msgstr "<b>音量</b>"
+
+#: ../src/empathy-call-window.glade.h:16
+msgid "Hang Up"
+msgstr "掛斷"
+
+#: ../src/empathy-call-window.glade.h:17
+msgid "Send Video"
+msgstr "傳送視訊"
+
+#: ../src/empathy-chat-window.c:319
+#, c-format
+msgid "Conversations (%d)"
+msgstr "談話 (%d)"
+
+#: ../src/empathy-chat-window.c:397
+msgid "Topic:"
+msgstr "主題:"
+
+#: ../src/empathy-chat-window.c:400
+msgid "Typing a message."
+msgstr "正在輸入訊息。"
+
+#: ../src/empathy-chat-window.glade.h:1
 msgid "C_lear"
 msgstr "清除(_L)"
 
-#: ../libempathy-gtk/gossip-chat.glade.h:2
-msgid "Change _Topic..."
-msgstr ""
-
-#: ../libempathy-gtk/gossip-chat.glade.h:3
-msgid "Chat"
-msgstr "聊天"
-
-#: ../libempathy-gtk/gossip-chat.glade.h:4
-msgid "Contact Infor_mation"
-msgstr "連絡人資訊(_M)"
-
-#: ../libempathy-gtk/gossip-chat.glade.h:5
-#, fuzzy
-msgid "Cu_t"
-msgstr "聊天(_A)"
-
-#: ../libempathy-gtk/gossip-chat.glade.h:6
-#, fuzzy
-msgid "In_vite..."
-msgstr "邀請(_V)"
-
-#: ../libempathy-gtk/gossip-chat.glade.h:7
+#: ../src/empathy-chat-window.glade.h:3
 msgid "Insert _Smiley"
-msgstr "插入笑臉影像(_S)"
+msgstr "插入表情符號(_S)"
 
-#: ../libempathy-gtk/gossip-chat.glade.h:8
-#, fuzzy
+#: ../src/empathy-chat-window.glade.h:4
 msgid "Invitation _message:"
-msgstr "輸入狀態訊息:"
+msgstr "邀請訊息(_M):"
 
-#: ../libempathy-gtk/gossip-chat.glade.h:9
-#, fuzzy
+#: ../src/empathy-chat-window.glade.h:5
 msgid "Invite"
-msgstr "邀請(_V)"
+msgstr "邀請"
 
-#: ../libempathy-gtk/gossip-chat.glade.h:11
+#: ../src/empathy-chat-window.glade.h:6
 msgid "Move Tab _Left"
 msgstr "將分頁左移(_L)"
 
-#: ../libempathy-gtk/gossip-chat.glade.h:12
+#: ../src/empathy-chat-window.glade.h:7
 msgid "Move Tab _Right"
 msgstr "將分頁右移(_R)"
 
-#: ../libempathy-gtk/gossip-chat.glade.h:13
+#: ../src/empathy-chat-window.glade.h:8
 msgid "Select who would you like to invite:"
-msgstr ""
+msgstr "選擇您要邀請誰："
 
-#: ../libempathy-gtk/gossip-chat.glade.h:14
+#: ../src/empathy-chat-window.glade.h:9
 msgid "You have been invited to join a chat conference."
-msgstr "您已經被邀請參加聊天會議。"
+msgstr "您已經被邀請加入聊天會議。"
 
-#: ../libempathy-gtk/gossip-chat.glade.h:16
-msgid "_Add To Favorites"
-msgstr "加入喜好(_A)"
+#: ../src/empathy-chat-window.glade.h:10
+msgid "_Contact"
+msgstr "連絡人(_C)"
 
-#: ../libempathy-gtk/gossip-chat.glade.h:17
-msgid "_Close"
-msgstr ""
+#: ../src/empathy-chat-window.glade.h:11 ../src/empathy-main-window.glade.h:10
+msgid "_Contents"
+msgstr "內容(_C)"
 
-#: ../libempathy-gtk/gossip-chat.glade.h:18
+#: ../src/empathy-chat-window.glade.h:12
 msgid "_Conversation"
-msgstr "對話(_C)"
+msgstr "談話(_C)"
 
-#: ../libempathy-gtk/gossip-chat.glade.h:19
-msgid "_Copy"
-msgstr ""
-
-#: ../libempathy-gtk/gossip-chat.glade.h:20
+#: ../src/empathy-chat-window.glade.h:13
 msgid "_Detach Tab"
-msgstr "脫離分頁(_D)"
+msgstr "轉為獨立視窗(_D)"
 
-#: ../libempathy-gtk/gossip-chat.glade.h:22
+#: ../src/empathy-chat-window.glade.h:15 ../src/empathy-main-window.glade.h:12
+msgid "_Help"
+msgstr "求助(_H)"
+
+#: ../src/empathy-chat-window.glade.h:16
 msgid "_Next Tab"
-msgstr "下個分頁(_N)"
+msgstr "下一個分頁(_N)"
 
-#: ../libempathy-gtk/gossip-chat.glade.h:23
-#, fuzzy
-msgid "_Paste"
-msgstr "日期"
-
-#: ../libempathy-gtk/gossip-chat.glade.h:24
+#: ../src/empathy-chat-window.glade.h:17
 msgid "_Previous Tab"
-msgstr "上個分頁(_P)"
+msgstr "上一個分頁(_P)"
 
-#: ../libempathy-gtk/gossip-chat.glade.h:26
-msgid "_Show Contacts"
-msgstr "顯示好友名單(_S)"
-
-#: ../libempathy-gtk/gossip-chat.glade.h:27
+#: ../src/empathy-chat-window.glade.h:18
 msgid "_Tabs"
 msgstr "分頁(_T)"
 
-#: ../libempathy-gtk/gossip-chat-view.c:544
-msgid "_Copy Link Address"
-msgstr "複製鏈結地址(_C)"
+#: ../src/empathy-chatrooms-window.c:262
+msgid "Name"
+msgstr "名稱"
 
-#: ../libempathy-gtk/gossip-chat-view.c:552
-msgid "_Open Link"
-msgstr "開啟連結(_O)"
-
-#: ../libempathy-gtk/gossip-chat-view.c:889
-msgid "%A %d %B %Y"
-msgstr "%Y-%m-%d (%A)"
-
-#: ../libempathy-gtk/gossip-chat-window.c:685
-#: ../libempathy-gtk/gossip-chat-window.c:715
-#, fuzzy
-msgid "New Message"
-msgid_plural "New Messages"
-msgstr[0] "新增訊息"
-msgstr[1] "新增訊息"
-
-#: ../libempathy-gtk/gossip-chat-window.c:691
-msgid "Chat Room"
+#: ../src/empathy-chatrooms-window.c:280
+msgid "Room"
 msgstr "聊天室"
 
-#: ../libempathy-gtk/gossip-chat-window.c:696
-#: ../libempathy-gtk/gossip-chat-window.c:719
-#, fuzzy, c-format
-msgid "Conversation"
-msgid_plural "Conversations (%d)"
-msgstr[0] "對話(_C)"
-msgstr[1] "對話(_C)"
+#: ../src/empathy-chatrooms-window.c:289
+msgid "Auto-Connect"
+msgstr "自動連線"
 
-#: ../libempathy-gtk/gossip-chat-window.c:1295
-msgid "Typing a message."
-msgstr "正在鍵入訊息。"
+#: ../src/empathy-chatrooms-window.glade.h:2
+msgid "Edit Favorite Room"
+msgstr "編輯喜好的聊天室"
 
-#: ../libempathy-gtk/gossip-contact-list.c:290
-#, fuzzy
-msgid "_Contact"
+#: ../src/empathy-chatrooms-window.glade.h:3
+msgid "Join room on start_up"
+msgstr "啟動時加入聊天室(_U)"
+
+#: ../src/empathy-chatrooms-window.glade.h:4
+msgid "Join this chat room when Empathy starts and you are connected"
+msgstr "當 Empathy 啟動並連上網路時加入這個聊天室"
+
+#: ../src/empathy-chatrooms-window.glade.h:5
+msgid "Manage Favorite Rooms"
+msgstr "管理喜好的聊天室"
+
+#: ../src/empathy-chatrooms-window.glade.h:6
+msgid "N_ame:"
+msgstr "名稱(_A):"
+
+#: ../src/empathy-chatrooms-window.glade.h:7
+msgid "S_erver:"
+msgstr "伺服器(_E):"
+
+#: ../src/empathy-chatrooms-window.glade.h:9
+#: ../src/empathy-new-chatroom-dialog.glade.h:9
+msgid "_Room:"
+msgstr "聊天室(_R):"
+
+#: ../src/empathy-event-manager.c:166
+#, c-format
+msgid ""
+"New message from %s:\n"
+"%s"
+msgstr ""
+"來自 %s 的新訊息：\n"
+"%s"
+
+#: ../src/empathy-event-manager.c:205
+#, c-format
+msgid "Incoming call from %s"
+msgstr "%s 的來電"
+
+#: ../src/empathy-event-manager.c:238
+#, c-format
+msgid ""
+"%s is offering you an invitation, but you don't have the needed external "
+"application to handle it."
+msgstr "%s 正在邀請您，但是您沒有處理它所需的外部應用程式。"
+
+#: ../src/empathy-event-manager.c:263
+msgid "Invitation Error"
+msgstr "邀請發生錯誤"
+
+#: ../src/empathy-event-manager.c:289
+#, c-format
+msgid ""
+"%s is offering you an invitation. An external application will be started to "
+"handle it."
+msgstr "%s 正在邀請您。將啟動外部應用程式來處理它。"
+
+#: ../src/empathy-event-manager.c:345
+#, c-format
+msgid "Subscription requested by %s"
+msgstr "來自 %s 的訂閱要求"
+
+#: ../src/empathy-event-manager.c:348
+#, c-format
+msgid ""
+"\n"
+"Message: %s"
+msgstr ""
+"\n"
+"訊息：%s"
+
+#: ../src/empathy-main-window.c:466
+msgid "Show and edit accounts"
+msgstr "顯示並編輯帳號"
+
+#: ../src/empathy-main-window.c:836
+msgid "Contact"
 msgstr "連絡人"
 
-#: ../libempathy-gtk/gossip-contact-list.c:294
-#, fuzzy
-msgid "_Group"
-msgstr "群組"
+#: ../src/empathy-main-window.c:1038
+msgid "_Edit account"
+msgstr "編輯帳號(_E)"
 
-#: ../libempathy-gtk/gossip-contact-list.c:298
-#, fuzzy
-msgid "Chat with contact"
-msgstr "加入好友"
+#: ../src/empathy-main-window.c:1121
+msgid "No error specified"
+msgstr "沒有指定的錯誤"
 
-#: ../libempathy-gtk/gossip-contact-list.c:302
-#, fuzzy
-msgid "Infor_mation"
-msgstr "連絡人資訊(_M)"
+#: ../src/empathy-main-window.c:1124
+msgid "Network error"
+msgstr "網路錯誤"
 
-#: ../libempathy-gtk/gossip-contact-list.c:302
-#, fuzzy
-msgid "View contact information"
-msgstr "好友資訊"
+#: ../src/empathy-main-window.c:1127
+msgid "Authentication failed"
+msgstr "驗證失敗"
 
-#: ../libempathy-gtk/gossip-contact-list.c:306
-#, fuzzy
-msgid "Re_name"
-msgstr "/更改群組名稱(_N)"
+#: ../src/empathy-main-window.c:1130
+msgid "Encryption error"
+msgstr "加密發生錯誤"
 
-#: ../libempathy-gtk/gossip-contact-list.c:306
-#, fuzzy
-msgid "Rename"
-msgstr "檔案名稱:"
+#: ../src/empathy-main-window.c:1133
+msgid "Name in use"
+msgstr "使用中的名稱"
 
-#: ../libempathy-gtk/gossip-contact-list.c:310
-#, fuzzy
-msgid "Edit the groups and name for this contact"
-msgstr "請輸入這個帳號的名稱"
+#: ../src/empathy-main-window.c:1136
+msgid "Certificate not provided"
+msgstr "沒有提供憑證"
 
-#: ../libempathy-gtk/gossip-contact-list.c:314
-#, fuzzy
-msgid "_Remove"
-msgstr "/移除好友(_R)"
+#: ../src/empathy-main-window.c:1139
+msgid "Certificate untrusted"
+msgstr "憑證不被信任"
 
-#: ../libempathy-gtk/gossip-contact-list.c:314
-#, fuzzy
-msgid "Remove contact"
-msgstr "/移除好友(_R)"
+#: ../src/empathy-main-window.c:1142
+msgid "Certificate expired"
+msgstr "憑證已逾期"
 
-#: ../libempathy-gtk/gossip-contact-list.c:318
-#, fuzzy
-msgid "_Invite to Chat Room"
-msgstr "/邀請至聊天室(_I)"
+#: ../src/empathy-main-window.c:1145
+msgid "Certificate not activated"
+msgstr "憑證尚未使用"
 
-#: ../libempathy-gtk/gossip-contact-list.c:318
-msgid "Invite to a currently open chat room"
+#: ../src/empathy-main-window.c:1148
+msgid "Certificate hostname mismatch"
+msgstr "憑證主機名稱不符"
+
+#: ../src/empathy-main-window.c:1151
+msgid "Certificate fingerprint mismatch"
+msgstr "憑證指紋檔不符"
+
+#: ../src/empathy-main-window.c:1154
+msgid "Certificate self-signed"
+msgstr "憑證為自我簽署"
+
+#: ../src/empathy-main-window.c:1157
+msgid "Certificate error"
+msgstr "憑證錯誤"
+
+#: ../src/empathy-main-window.c:1160
+msgid "Unknown error"
+msgstr "不明的錯誤"
+
+#: ../src/empathy-main-window.glade.h:1
+msgid "Contact List"
+msgstr "連絡人清單"
+
+#: ../src/empathy-main-window.glade.h:2
+msgid "Context"
+msgstr "上下文"
+
+#: ../src/empathy-main-window.glade.h:3
+msgid "Join _Favorites"
+msgstr "加入喜好(_F)"
+
+#: ../src/empathy-main-window.glade.h:4
+msgid "Join _New..."
+msgstr "加入新的(_N)..."
+
+#: ../src/empathy-main-window.glade.h:5
+msgid "Manage Favorites"
+msgstr "管理喜好"
+
+#: ../src/empathy-main-window.glade.h:6
+msgid "Show _Offline Contacts"
+msgstr "顯示離線連絡人(_O)"
+
+#: ../src/empathy-main-window.glade.h:7
+msgid "_Accounts"
+msgstr "帳號(_A)"
+
+#: ../src/empathy-main-window.glade.h:8
+msgid "_Add Contact..."
+msgstr "新增聯絡人(_A)..."
+
+#: ../src/empathy-main-window.glade.h:13 ../src/empathy-status-icon.glade.h:2
+msgid "_New Conversation..."
+msgstr "新增談話(_N)..."
+
+#: ../src/empathy-main-window.glade.h:14
+msgid "_Personal Information"
+msgstr "個人資訊(_P)"
+
+#: ../src/empathy-main-window.glade.h:16
+msgid "_Room"
+msgstr "聊天室(_R)"
+
+#: ../src/empathy-new-chatroom-dialog.c:290
+msgid "Chat Rooms"
+msgstr "聊天室"
+
+#: ../src/empathy-new-chatroom-dialog.glade.h:2
+msgid "Browse:"
+msgstr "瀏覽:"
+
+#: ../src/empathy-new-chatroom-dialog.glade.h:3
+msgid ""
+"Enter the room name to join here or click on one or more rooms in the list."
+msgstr "在這裡輸入要加入的聊天室名稱或從清單中點選一或多個聊天室。"
+
+#: ../src/empathy-new-chatroom-dialog.glade.h:4
+msgid ""
+"Enter the server which hosts the room, or leave it empty if the room is on "
+"the current account's server"
 msgstr ""
+"輸入此聊天室所在的伺服器，或者當該聊天室位於目前帳號所在的伺服器時留空即可"
 
-#: ../libempathy-gtk/gossip-contact-list.c:322
-#, fuzzy
-msgid "_Send File..."
-msgstr "/傳送檔案(_S)..."
+#: ../src/empathy-new-chatroom-dialog.glade.h:5
+msgid "Join"
+msgstr "參加"
 
-#: ../libempathy-gtk/gossip-contact-list.c:322
-#, fuzzy
-msgid "Send a file"
-msgstr "選擇一個檔案"
+#: ../src/empathy-new-chatroom-dialog.glade.h:6
+msgid "Join New"
+msgstr "參加新的"
 
-#: ../libempathy-gtk/gossip-contact-list.c:326
-#, fuzzy
-msgid "View previous conversations with this contact"
-msgstr "顯示前一次交談"
+#: ../src/empathy-new-chatroom-dialog.glade.h:7
+msgid "Re_fresh"
+msgstr "重新整理(_F)"
 
-#: ../libempathy-gtk/gossip-preferences.c:250
+#: ../src/empathy-new-chatroom-dialog.glade.h:8
+msgid ""
+"This list represents all chat rooms hosted on the server you have entered."
+msgstr "這個清單中呈現了您進入的伺服器上開設的所有聊天室。"
+
+#: ../src/empathy-preferences.c:264
 msgid "Language"
 msgstr "語言"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:1
+#: ../src/empathy-preferences.glade.h:1
 msgid "<b>Appearance</b>"
 msgstr "<b>外觀</b>"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:2
+#. To translators: Audio notifications preferences
+#: ../src/empathy-preferences.glade.h:3
 msgid "<b>Audio</b>"
-msgstr "<b>音訊</b>"
+msgstr "<b>音效提示</b>"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:3
+#: ../src/empathy-preferences.glade.h:4
 msgid "<b>Behaviour</b>"
 msgstr "<b>行為</b>"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:4
-#, fuzzy
+#: ../src/empathy-preferences.glade.h:5
 msgid "<b>Contact List</b>"
-msgstr "<b>狀態</b>"
+msgstr "<b>連絡人清單</b>"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:5
-msgid "<b>Languages</b>"
-msgstr "<b>語言</b>"
+#: ../src/empathy-preferences.glade.h:6
+msgid "<b>Enable spell checking for languages:</b>"
+msgstr "<b>啟用拼字檢查程式語言：</b>"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:6
-#, fuzzy
-msgid "<b>Options</b>"
-msgstr "<b>連線</b>"
-
-#: ../libempathy-gtk/gossip-preferences.glade.h:7
+#. To translators: Visual notifications preferences, like notify bubbles, etc.
+#: ../src/empathy-preferences.glade.h:8
 msgid "<b>Visual</b>"
-msgstr "<b>視覺效果</b>"
+msgstr "<b>視覺提示</b>"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:8
+#: ../src/empathy-preferences.glade.h:9
 msgid ""
 "<small>The list of languages reflects only the languages for which you have "
 "a dictionary installed.</small>"
 msgstr "<small>這裡的語言清單只反映出您已經安裝字典的語言。</small>"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:9
-msgid "Avatars are user chosen images shown in the contact list"
-msgstr "大頭貼是使用者選擇來提供連絡人清單顯示用的"
+#: ../src/empathy-preferences.glade.h:10
+msgid "Automatically _connect on startup "
+msgstr "啟動時自動連線(_C)"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:10
+#: ../src/empathy-preferences.glade.h:11
+msgid "Avatars are user chosen images shown in the contact list"
+msgstr "在連線人清單中顯示使用者選擇的大頭貼"
+
+#: ../src/empathy-preferences.glade.h:12
 msgid "Chat Th_eme:"
 msgstr "聊天佈景主題(_E):"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:11
+#: ../src/empathy-preferences.glade.h:13
 msgid "Display notifications when contacts come _online"
-msgstr "連絡人上線時顯示通知(_O)"
+msgstr "當連線人上線時顯示通知(_O)"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:12
+#: ../src/empathy-preferences.glade.h:14
 msgid "Enable sounds when _away"
-msgstr "當「離開」時啟用音效(_A)"
+msgstr "當離開時啟用音效(_A)"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:13
+#: ../src/empathy-preferences.glade.h:15
 msgid "Enable sounds when _busy"
-msgstr "當「忙碌」時啟用音效(_B)"
+msgstr "當忙碌時啟用音效(_B)"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:14
+#: ../src/empathy-preferences.glade.h:16
 msgid "General"
 msgstr "一般"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:15
+#: ../src/empathy-preferences.glade.h:17
 msgid "Notifications"
 msgstr "通知"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:16
+#: ../src/empathy-preferences.glade.h:18
 msgid "Preferences"
 msgstr "偏好設定"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:17
+#: ../src/empathy-preferences.glade.h:19
 msgid "Show _avatars"
 msgstr "顯示大頭貼(_A)"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:18
+#: ../src/empathy-preferences.glade.h:20
 msgid "Show _smileys as images"
-msgstr "以影像顯示表情符號(_S)"
+msgstr "將表情符號以圖片顯示(_S)"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:19
-#, fuzzy
+#: ../src/empathy-preferences.glade.h:21
 msgid "Show co_mpact contact list"
-msgstr "顯示好友名單(_S)"
+msgstr "顯示精簡連絡人清單(_M)"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:20
+#: ../src/empathy-preferences.glade.h:22
 msgid "Sort by _name"
-msgstr ""
+msgstr "依名稱排序(_N)"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:21
+#: ../src/empathy-preferences.glade.h:23
 msgid "Sort by s_tate"
-msgstr ""
+msgstr "依狀態排序(_T)"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:22
+#: ../src/empathy-preferences.glade.h:24
 msgid "Spell Checking"
 msgstr "拼字檢查"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:23
+#: ../src/empathy-preferences.glade.h:25
 msgid "Themes"
-msgstr ""
+msgstr "佈景主題"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:24
-#, fuzzy
-msgid "_Enable spell checking"
-msgstr "啟用拼字檢查"
-
-#: ../libempathy-gtk/gossip-preferences.glade.h:25
+#: ../src/empathy-preferences.glade.h:26
 msgid "_Open new chats in separate windows"
 msgstr "在個別視窗開啟新的聊天(_O)"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:26
+#: ../src/empathy-preferences.glade.h:27
 msgid "_Play sound when messages arrive"
-msgstr "收到訊息時播放音效(_P)"
-
-#: ../libempathy-gtk/gossip-preferences.glade.h:27
-#, fuzzy
-msgid "_Use for chat rooms"
-msgstr "儲存此聊天室(_T)"
-
-#: ../libempathy-gtk/gossip-presence-chooser.c:702
-msgid "Custom message..."
-msgstr "自訂訊息..."
-
-#. Clear list
-#: ../libempathy-gtk/gossip-presence-chooser.c:724
-msgid "Clear List..."
-msgstr "清除清單..."
-
-#: ../libempathy-gtk/gossip-presence-chooser.c:803
-#, fuzzy
-msgid "Are you sure you want to clear the list?"
-msgstr "確定要清空這個清單？"
-
-#: ../libempathy-gtk/gossip-presence-chooser.c:807
-msgid ""
-"This will remove any custom messages you have added to the list of preset "
-"status messages."
-msgstr "這樣會移除任何您曾加入到預先設定狀態訊息清單中的自訂訊息。"
-
-#: ../libempathy-gtk/gossip-presence-chooser.c:812
-msgid "Clear List"
-msgstr "清除清單"
-
-#: ../libempathy-gtk/gossip-presence-chooser.glade.h:1
-msgid "Enter status message:"
-msgstr "輸入狀態訊息:"
-
-#: ../libempathy-gtk/gossip-presence-chooser.glade.h:2
-msgid "Status Message Presets"
-msgstr "狀態訊息預先設定"
-
-#: ../libempathy-gtk/gossip-presence-chooser.glade.h:3
-#, fuzzy
-msgid "_Add to status message list"
-msgstr "加入至狀態訊息清單"
-
-#: ../libempathy-gtk/gossip-private-chat.c:198
-#, c-format
-msgid "%s went offline"
-msgstr "%s 已離線"
-
-#: ../libempathy-gtk/gossip-private-chat.c:212
-#, c-format
-msgid "%s has come online"
-msgstr "%s 已經上線"
-
-#: ../libempathy-gtk/gossip-theme-manager.c:87
-msgid "Classic"
-msgstr "古典"
-
-#: ../libempathy-gtk/gossip-theme-manager.c:88
-#, fuzzy
-msgid "Simple"
-msgstr "範例"
-
-#: ../libempathy-gtk/gossip-theme-manager.c:89
-#, fuzzy
-msgid "Clean"
-msgstr "清除(_L)"
-
-#: ../libempathy-gtk/gossip-theme-manager.c:90
-msgid "Blue"
-msgstr "藍色"
-
-#: ../src/empathy-main.c:145
-msgid "Don't connect on startup"
-msgstr "啟動程式時不進行連線"
-
-#: ../src/empathy-main.c:155
-#, fuzzy
-msgid "- Empathy Instant Messenger"
-msgstr "- Gossip 即時通訊程式"
-
-#~ msgid "Gossip Instant Messenger"
-#~ msgstr "Gossip 即時通訊程式"
-
-#~ msgid "Normal"
-#~ msgstr "正常"
-
-#~ msgid "Joining"
-#~ msgstr "加入中"
-
-#~ msgid "Active"
-#~ msgstr "使用中"
-
-#~ msgid "Inactive"
-#~ msgstr "未使用"
-
-#~ msgid "Unknown"
-#~ msgstr "不明"
-
-#~ msgid "Error"
-#~ msgstr "錯誤"
-
-#, fuzzy
-#~ msgid "Participant"
-#~ msgid_plural "Participants"
-#~ msgstr[0] "加利西亞文"
-#~ msgstr[1] "加利西亞文"
-
-#, fuzzy
-#~ msgid "No role"
-#~ msgstr "正常"
-
-#, fuzzy
-#~ msgid "No affiliation"
-#~ msgstr "通知"
-
-#~ msgid "The nickname you have chosen is already in use."
-#~ msgstr "您所選的暱稱已經被使用了。"
-
-#~ msgid "The chat room you tried to join requires a password."
-#~ msgstr "您嘗試加入的聊天室需要密碼。"
-
-#~ msgid "The remote conference server did not respond in a sensible time."
-#~ msgstr "遠端會議伺服器沒有在時間內回應。"
-
-#~ msgid "The conference server you tried to join could not be found."
-#~ msgstr "找不到您嘗試加入的會議伺服器。"
-
-#~ msgid "An unknown error occurred, check your details are correct."
-#~ msgstr "發生了未知的錯誤，請檢查您的詳細資訊是否正確。"
-
-#, fuzzy
-#~ msgid "Joining the chatroom was canceled."
-#~ msgstr "加入該聊天室"
-
-#~ msgid "Unavailable"
-#~ msgstr "無法使用"
-
-#~ msgid "An unknown error occurred."
-#~ msgstr "發生不明的錯誤。"
-
-#~ msgid "Connection refused."
-#~ msgstr "連線被拒絕。"
-
-#~ msgid "Server address could not be resolved."
-#~ msgstr "無法解析伺服器位址。"
-
-#~ msgid "Connection timed out."
-#~ msgstr "連線已逾時。"
-
-#~ msgid "Authentication failed."
-#~ msgstr "驗證已失敗。"
-
-#~ msgid "The username you are trying already exists."
-#~ msgstr "您所輸入的使用者名稱已經被使用了。"
-
-#~ msgid "The username you are trying is not valid."
-#~ msgstr "您所輸入的使用者名稱是無效的。"
-
-#~ msgid "This feature is unavailable."
-#~ msgstr "這項功能無法使用。"
-
-#~ msgid "This feature is unauthorized."
-#~ msgstr "這項功能未獲授權。"
-
-#~ msgid "A specific protocol error occurred that was unexpected."
-#~ msgstr "指定的通訊協定發生未預期的錯誤。"
-
-#, fuzzy
-#~ msgid "new account"
-#~ msgstr "新增帳號"
-
-#~ msgid "Home"
-#~ msgstr "首頁"
-
-#~ msgid "Couldn't send message!"
-#~ msgstr "無法傳送訊息！"
-
-#~ msgid "Connection could not be opened"
-#~ msgstr "無法開啟連線"
-
-#, fuzzy
-#~ msgid "This service is unavailable or not found"
-#~ msgstr "這項功能無法使用。"
-
-#, fuzzy
-#~ msgid "Registration is required"
-#~ msgstr "註冊"
-
-#, fuzzy
-#~ msgid "There was an internal service error"
-#~ msgstr "內部的伺服器錯誤"
-
-#, fuzzy
-#~ msgid "This feature is not implemented"
-#~ msgstr "這項功能未獲授權。"
-
-#, fuzzy
-#~ msgid "The remote service timed out"
-#~ msgstr "遠端伺服器逾時"
-
-#~ msgid "Stop"
-#~ msgstr "停止"
-
-#~ msgid "Disconnect"
-#~ msgstr "中斷連線"
-
-#~ msgid "Connect"
-#~ msgstr "連線"
-
-#, fuzzy
-#~ msgid "Successfully registered your new account settings."
-#~ msgstr "成功註冊帳號"
-
-#, fuzzy
-#~ msgid "You should now be able to connect to your new account."
-#~ msgstr "您不能將 --no-connect 與 --account 一起使用"
-
-#, fuzzy
-#~ msgid "Failed to register your new account settings."
-#~ msgstr "註冊新帳號設定值不成功"
-
-#, fuzzy
-#~ msgid "Successfully changed your account password."
-#~ msgstr "輸入您的帳號密碼: "
-
-#, fuzzy
-#~ msgid "Failed to change your account password."
-#~ msgstr "輸入您的帳號密碼: "
-
-#, fuzzy
-#~ msgid ""
-#~ "Please enter a new password for this account:\n"
-#~ "%s"
-#~ msgstr ""
-#~ "請為新的群組命名：\n"
-#~ "%s"
-
-#~ msgid "No information is available for this contact."
-#~ msgstr "沒有這個好友的相關資訊。"
-
-#~ msgid "Information requested, please wait..."
-#~ msgstr "要求資訊，請稍候..."
-
-#~ msgid "I would like to add you to my contact list."
-#~ msgstr "我希望可以將您加入我的好友名單之內。"
-
-#~ msgid "To summarize:"
-#~ msgstr "要做總結："
-
-#, fuzzy
-#~ msgid "%d new message"
-#~ msgid_plural "%d new messages"
-#~ msgstr[0] "新增訊息"
-#~ msgstr[1] "新增訊息"
-
-#, fuzzy
-#~ msgid "%d subscription request"
-#~ msgid_plural "%d subscription requests"
-#~ msgstr[0] "訂閱要求"
-#~ msgstr[1] "訂閱要求"
-
-#, fuzzy
-#~ msgid "%d file transfer request"
-#~ msgid_plural "%d file transfer requests"
-#~ msgstr[0] "檔案傳輸要求"
-#~ msgstr[1] "檔案傳輸要求"
-
-#, fuzzy
-#~ msgid "%d server message"
-#~ msgid_plural "%d server messages"
-#~ msgstr[0] "無法傳送訊息！"
-#~ msgstr[1] "無法傳送訊息！"
-
-#, fuzzy
-#~ msgid "%d error"
-#~ msgid_plural "%d errors"
-#~ msgstr[0] "錯誤"
-#~ msgstr[1] "錯誤"
-
-#~ msgid "If you quit, you will lose all unread information."
-#~ msgstr "如果離開，您將失去所有未閱讀的資訊。"
-
-#~ msgid "Edit Account _Details"
-#~ msgstr "編輯帳號詳細資訊(_D)"
-
-#~ msgid "Click to enlarge"
-#~ msgstr "按這裡放大"
-
-#~ msgid "Word"
-#~ msgstr "字"
-
-#~ msgid "New message from %s"
-#~ msgstr "收到來自 %s 的新訊息"
-
-#~ msgid "Your invitation has been declined"
-#~ msgstr "您的邀請被拒絕了"
-
-#~ msgid "Accept"
-#~ msgstr "接受"
-
-#~ msgid "Decline"
-#~ msgstr "拒絕"
-
-#, fuzzy
-#~ msgid "Name"
-#~ msgstr "名稱："
-
-#, fuzzy
-#~ msgid "Room"
-#~ msgstr "聊天室(_R)"
-
-#~ msgid "Auto Connect"
-#~ msgstr "自動連線"
-
-#~ msgid "Information requested..."
-#~ msgstr "要求資訊..."
-
-#~ msgid "Do you want to remove this contact from your roster?"
-#~ msgstr "是否想從名單中移除這個好友？"
-
-#~ msgid ""
-#~ "Please enter a new name for the group:\n"
-#~ "%s"
-#~ msgstr ""
-#~ "請為新的群組命名：\n"
-#~ "%s"
-
-#~ msgid "Select"
-#~ msgstr "選擇"
-
-#~ msgid "Unsorted"
-#~ msgstr "未排序"
-
-#~ msgid "New file transfer request from %s"
-#~ msgstr "來自 %s 的檔案傳輸要求"
-
-#~ msgid "File transfer is not supported by both parties."
-#~ msgstr "雙方都不支援檔案傳輸。"
-
-#~ msgid "Your file transfer offer declined."
-#~ msgstr "您的檔案傳輸要求被拒絕了。"
-
-#~ msgid "The other user decided not to continue."
-#~ msgstr "另一個使用者決定不要繼續。"
-
-#~ msgid "Unknown error occurred during file transfer."
-#~ msgstr "在檔案傳輸過程中遇到未知的錯誤。"
-
-#~ msgid "%s would like to send you a file."
-#~ msgstr "%s 希望可以傳送給您一個檔案。"
-
-#~ msgid "Someone would like to send you a file."
-#~ msgstr "某人想要傳送給您一個檔案。"
-
-#~ msgid "Select a file"
-#~ msgstr "選擇一個檔案"
-
-#, fuzzy
-#~ msgid "Connecting..."
-#~ msgstr "正在連線"
-
-#, fuzzy
-#~ msgid "Retry connection"
-#~ msgstr "停止連線"
-
-#~ msgid "Invited %s to join this chat conference."
-#~ msgstr "邀請 %s 參加這個聊天會議。"
-
-#, fuzzy
-#~ msgid "%s has set the topic: %s"
-#~ msgstr "%s 已經設定該主題"
-
-#, fuzzy
-#~ msgid "Enter the new topic you want to set for this room:"
-#~ msgstr "您想使用甚麼稱呼來代表這個好友？"
-
-#, fuzzy
-#~ msgid "%s has joined the room"
-#~ msgstr "%s 已經設定該主題"
-
-#, fuzzy
-#~ msgid "%s has left the room"
-#~ msgstr "%s 已經設定該主題"
-
-#, fuzzy
-#~ msgid "Topic: %s"
-#~ msgstr "題目(_T)："
-
-#~ msgid "Account"
-#~ msgstr "帳號"
-
-#~ msgid "Conversation With"
-#~ msgstr "交談於"
-
-#~ msgid "Date"
-#~ msgstr "日期"
-
-#~ msgid "List the available accounts"
-#~ msgstr "列出可供使用的帳號"
-
-#~ msgid "Which account to connect to on startup"
-#~ msgstr "程式啟動時自動連接至哪個帳號"
-
-#~ msgid "ACCOUNT-NAME"
-#~ msgstr "帳號名稱"
-
-#~ msgid "You can not use --no-connect together with --account"
-#~ msgstr "您不能將 --no-connect 與 --account 一起使用"
-
-#~ msgid "No accounts available."
-#~ msgstr "沒有可用的帳號。"
-
-#~ msgid "Available accounts:"
-#~ msgstr "可使用的帳號："
-
-#~ msgid "[default]"
-#~ msgstr "[預設]"
-
-#~ msgid "There is no account with the name '%s'."
-#~ msgstr "已經有名為“%s”的帳號存在。"
-
-#~ msgid "Join"
-#~ msgstr "加入"
-
-#, fuzzy
-#~ msgid "Create"
-#~ msgstr "日期"
-
-#~ msgid "Chat Rooms"
-#~ msgstr "聊天室"
-
-#, fuzzy
-#~ msgid "Browsing for conference rooms, please wait..."
-#~ msgstr "正嘗試加入聊天室，請稍等..."
-
-#~ msgid "Default"
-#~ msgstr "預設值"
-
-#~ msgid "Chat!"
-#~ msgstr "聊天！"
-
-#~ msgid "%s wants to be added to your contact list."
-#~ msgstr "%s 將會被加入至您的好友名單。"
-
-#~ msgid "Someone wants to be added to your contact list."
-#~ msgstr "有人希望能加入至您的好友名單。"
-
-#, fuzzy
-#~ msgid "Subscription request"
-#~ msgstr "訂閱要求"
-
-#~ msgid "Contact Information"
-#~ msgstr "連絡人資訊"
-
-#~ msgid "Subject: %s"
-#~ msgstr "主旨：%s"
-
-#~ msgid "Suggestions for the word"
-#~ msgstr "對這個字的建議"
-
-#~ msgid "New subscription request from %s"
-#~ msgstr "來自 %s 的新訂閱要求"
-
-#~ msgid "Do you want to add this person to your contact list?"
-#~ msgstr "您是否想將這個人加入至您的好友名單？"
-
-#~ msgid "Do you want to add %s to your contact list?"
-#~ msgstr "您是否想將 %s 加入您的好友名單？"
-
-#~ msgid "Please enter your %s account password"
-#~ msgstr "請輸入 %s 的帳號密碼"
-
-#, fuzzy
-#~ msgid "Logging in to account '%s'"
-#~ msgstr "登入到：%s"
-
-#~ msgid "Remember Password?"
-#~ msgstr "是否記下密碼？"
-
-#~ msgid "Could not display the help contents."
-#~ msgstr "無法顯示說明內容。"
-
-#~ msgid "Select Your Avatar Image"
-#~ msgstr "選擇您的大頭貼影像。"
-
-#~ msgid "No Image"
-#~ msgstr "沒有影像"
-
-#~ msgid "The server does not seem to be responding."
-#~ msgstr "此伺服器似乎沒有回應。"
-
-#~ msgid "Try again later."
-#~ msgstr "請稍後再試。"
-
-#, fuzzy
-#~ msgid "Change"
-#~ msgstr "聊天"
-
-#~ msgid "Contact goes offline"
-#~ msgstr "好友已離線"
-
-#~ msgid "Contact goes online"
-#~ msgstr "好友已上線"
-
-#~ msgid "Contact ID:"
-#~ msgstr "連絡人 ID:"
-
-#~ msgid "Do you want to accept this file?"
-#~ msgstr "您是否想接受這個檔案？"
-
-#~ msgid "File Transfer Request"
-#~ msgstr "檔案傳輸要求"
-
-#~ msgid "File name:"
-#~ msgstr "檔案名稱:"
-
-#~ msgid "File size:"
-#~ msgstr "檔案大小:"
-
-#~ msgid "Not supported yet"
-#~ msgstr "尚未支援"
-
-#~ msgid "This person wishes to send you this file:"
-#~ msgstr "這個人希望傳送給您這個檔案："
-
-#~ msgid "Web site:"
-#~ msgstr "網站："
-
-#~ msgid "_Accept"
-#~ msgstr "接受(_A)"
-
-#~ msgid "_Deny"
-#~ msgstr "拒絕(_D)"
-
-#, fuzzy
-#~ msgid "<b>Topic:</b>"
-#~ msgstr "<b>關於</b>"
-
-#~ msgid "Account:"
-#~ msgstr "帳號:"
-
-#, fuzzy
-#~ msgid "Browse:"
-#~ msgstr "法羅文"
-
-#, fuzzy
-#~ msgid "Edit Favorite Room"
-#~ msgstr "編輯聊天室"
-
-#~ msgid "Group Chat"
-#~ msgstr "群組聊天"
-
-#, fuzzy
-#~ msgid "Join New"
-#~ msgstr "加入新的(_N)..."
-
-#~ msgid "Join room on start_up"
-#~ msgstr "啟動時加入聊天室(_U)"
-
-#~ msgid "Join this chat room when Gossip starts and you are connected"
-#~ msgstr "當 Gossip 啟動並連上網路時加入這個聊天室。"
-
-#, fuzzy
-#~ msgid "Manage Favorite Rooms"
-#~ msgstr "管理聊天室"
-
-#~ msgid "N_ame:"
-#~ msgstr "名稱(_A):"
-
-#~ msgid "S_erver:"
-#~ msgstr "伺服器(_E):"
-
-#~ msgid "_Nickname:"
-#~ msgstr "暱稱(_N)："
-
-#~ msgid "_Room:"
-#~ msgstr "聊天室(_R)："
-
-#~ msgid "-"
-#~ msgstr "-"
-
-#~ msgid "<b>About</b>"
-#~ msgstr "<b>關於</b>"
-
-#~ msgid "<b>Client Information</b>"
-#~ msgstr "<b>客戶端資訊</b>"
-
-#, fuzzy
-#~ msgid "<b>Groups</b>"
-#~ msgstr "<b>關於</b>"
-
-#, fuzzy
-#~ msgid "<b>Name</b>"
-#~ msgstr "<b>語言</b>"
-
-#~ msgid "<b>Personal Details</b>"
-#~ msgstr "<b>個人資訊</b>"
-
-#, fuzzy
-#~ msgid "<b>Subscription</b>"
-#~ msgstr "<b>連線</b>"
-
-#~ msgid "<span size=\"smaller\">Example: Mikael or user@server.org</span>"
-#~ msgstr "<span size=\"smaller\">範例：Mikael 或 user@jabber.org</span>"
-
-#, fuzzy
-#~ msgid "Accou_nt:"
-#~ msgstr "帳號:"
-
-#~ msgid "Add Contact"
-#~ msgstr "加入聯絡人"
-
-#, fuzzy
-#~ msgid "Alia_s:"
-#~ msgstr "別名:"
-
-#~ msgid "Avatar:"
-#~ msgstr "大頭貼:"
-
-#~ msgid "Ch_at"
-#~ msgstr "聊天(_A)"
-
-#~ msgid "Client:"
-#~ msgstr "客戶端:"
-
-#, fuzzy
-#~ msgid "Con_tact:"
-#~ msgstr "連絡人"
-
-#~ msgid "Connect on S_tartup"
-#~ msgstr "啟動時連線(_T)"
-
-#~ msgid "Contacts"
-#~ msgstr "連絡人"
-
-#~ msgid "Country:"
-#~ msgstr "國家:"
-
-#~ msgid "Decide _Later"
-#~ msgstr "稍後決定(_L)"
-
-#, fuzzy
-#~ msgid "Edit Contact"
-#~ msgstr "加入聯絡人"
-
-#~ msgid "Edit Groups"
-#~ msgstr "編輯群組"
-
-#~ msgid "Email:"
-#~ msgstr "電郵："
-
-#~ msgid "ID:"
-#~ msgstr "ID:"
-
-#~ msgid ""
-#~ "If you chose to decide later you will be asked the next time you log on."
-#~ msgstr "如果您選擇稍後再決定，下次登入時將被再詢問一次。"
-
-#~ msgid "Name:"
-#~ msgstr "名稱："
-
-#~ msgid "OS:"
-#~ msgstr "作業系統："
-
-#~ msgid "Personal Details"
-#~ msgstr "個人詳細資料"
-
-#, fuzzy
-#~ msgid "R_egister"
-#~ msgstr "註冊(_G)..."
-
-#~ msgid "Search"
-#~ msgstr "搜尋"
-
-#~ msgid "Spell Checker"
-#~ msgstr "拼字檢查"
-
-#~ msgid "Subscription Request"
-#~ msgstr "訂閱要求"
-
-#~ msgid "Suggestions for the word:"
-#~ msgstr "對這個字的建議:"
-
-#~ msgid ""
-#~ "This acts as a filter to the contact list below. You can use segments of "
-#~ "contact's name or ID, for example, \"jabber.org\" will list everyone "
-#~ "using that server"
-#~ msgstr ""
-#~ "這會做為下面連絡人清單的過濾器。您可以使用連絡人的部分名稱或 ID，例如，"
-#~ "「jabber.org」會列出每個使用該伺服器的人"
-
-#~ msgid "This is the name that will be used on your roster for this contact"
-#~ msgstr "這是在您的好友名單上用來顯示此連絡人的名稱"
-
-#~ msgid "This name will be used to identify you in chat windows"
-#~ msgstr "這個名稱會用在聊天視窗中辨識您的身分"
-
-#~ msgid ""
-#~ "This name will be used to identify you when new contacts lookup your "
-#~ "details"
-#~ msgstr "這個名稱用在有新的連絡人查詢您的詳細資訊時可供辨識身分"
-
-#~ msgid "Use system pro_xy"
-#~ msgstr "使用系統的代理伺服器設定(_X)"
-
-#~ msgid "Version:"
-#~ msgstr "版本："
-
-#~ msgid "View Previous Conversations"
-#~ msgstr "顯示前一次交談"
-
-#~ msgid "Which account do you want to use?"
-#~ msgstr "要使用甚麼帳號名稱？"
-
-#~ msgid "You are not subscribed to this contact."
-#~ msgstr "您沒有訂閱這個好友。"
-
-#~ msgid "_Connect"
-#~ msgstr "連線(_C)"
-
-#, fuzzy
-#~ msgid "_Description:"
-#~ msgstr "描述:"
-
-#~ msgid "_Disconnect"
-#~ msgstr "斷線(_D)"
-
-#, fuzzy
-#~ msgid "_Email:"
-#~ msgstr "電郵："
-
-#, fuzzy
-#~ msgid ""
-#~ "_Enter the name or contact ID of the person you want to chat to below:"
-#~ msgstr "在下面輸入您想聊天的人名或連絡人 ID:"
-
-#, fuzzy
-#~ msgid "_For:"
-#~ msgstr "連接埠(_P):"
-
-#, fuzzy
-#~ msgid "_Full Name:"
-#~ msgstr "名稱(_N):"
-
-#, fuzzy
-#~ msgid "_Group:"
-#~ msgstr "群組:"
-
-#, fuzzy
-#~ msgid "_Nick Name:"
-#~ msgstr "暱稱(_N)："
-
-#~ msgid "_Password:"
-#~ msgstr "密碼(_P):"
-
-#, fuzzy
-#~ msgid "_Quit Message:"
-#~ msgstr "新增訊息"
-
-#~ msgid "_Subscribe"
-#~ msgstr "訂閱(_S)"
-
-#, fuzzy
-#~ msgid "_Web site:"
-#~ msgstr "網站："
-
-#, fuzzy
-#~ msgid "irc account settings"
-#~ msgstr "<b>帳號設定</b>"
-
-#, fuzzy
-#~ msgid "msn account settings"
-#~ msgstr "<b>帳號設定</b>"
-
-#~ msgid "Preset status messages"
-#~ msgstr "預設狀態訊息"
-
-#~ msgid "Preset status messages."
-#~ msgstr "預設狀態訊息"
-
-#~ msgid "Connecting"
-#~ msgstr "正在連線"
-
-#~ msgid "Perhaps you are trying to connect to the wrong port?"
-#~ msgstr "也許您嘗試連線到錯誤的連接埠？"
-
-#~ msgid "Perhaps the service is not currently running?"
-#~ msgstr "也許此伺服器並未執行這個服務？"
-
-#~ msgid "Check your connection details."
-#~ msgstr "請檢查您的連線詳細資訊。"
-
-#~ msgid "Perhaps the server is not running this service."
-#~ msgstr "也許此伺服器並未執行這個服務。"
-
-#~ msgid "Check your username and password are correct."
-#~ msgstr "請檢查您的使用者名稱與密碼是否正確。"
-
-#~ msgid "%s will be added to your contact list."
-#~ msgstr "%s 將會被加入至您的好友名單。"
-
-#~ msgid "%s ID of new contact:"
-#~ msgstr "新的好友的 %s ID："
-
-#~ msgid "Example: %s"
-#~ msgstr "範例： %s"
-
-#, fuzzy
-#~ msgid "Show accounts and pending connections"
-#~ msgstr "按這裡顯示帳號及任何進行中的連線。"
-
-#~ msgid "You have no Instant Messaging accounts configured!"
-#~ msgstr "您尚未設定即時通訊帳號！"
-
-#~ msgid ""
-#~ "Next you will be presented with the Account Information dialog to set "
-#~ "your details up."
-#~ msgstr "接下來將會出現帳號資訊對話方塊以讓您設定詳細資訊。"
-
-#~ msgid ""
-#~ "Please enter your invitation message to:\n"
-#~ "%s"
-#~ msgstr ""
-#~ "請輸入您的邀請訊息給：\n"
-#~ "%s"
-
-#~ msgid "Favourite"
-#~ msgstr "喜好"
-
-#~ msgid "/Contact Infor_mation"
-#~ msgstr "/連絡人資訊(_M)"
-
-#~ msgid "/Re_name Contact"
-#~ msgstr "/更改好友名稱(_N)"
-
-#~ msgid "/_Edit Groups"
-#~ msgstr "/編輯群組(_E)"
-
-#~ msgid "/_View Previous Conversations"
-#~ msgstr "/顯示前一次交談(_V)"
-
-#~ msgid ""
-#~ "Please enter a new nickname for the contact\n"
-#~ "%s"
-#~ msgstr ""
-#~ "請輸入以下好友的稱呼\n"
-#~ "%s"
-
-#~ msgid "Edit groups for %s"
-#~ msgstr "編輯 %s 的群組"
-
-#~ msgid "Conversation Log"
-#~ msgstr "對話紀錄"
-
-#~ msgid "Registering account"
-#~ msgstr "註冊帳號"
-
-#~ msgid "Example"
-#~ msgstr "範例"
-
-#~ msgid "Add to _favourites"
-#~ msgstr "加入喜好(_F)"
-
-#~ msgid ""
-#~ "Customize your own nickname, the server and chatroom which you wish to "
-#~ "join."
-#~ msgstr "自訂您的暱稱、伺服器名稱和要進入的聊天室名稱。"
-
-#~ msgid "Edit your chat room details:"
-#~ msgstr "編輯您的群組聊天室詳細資訊："
-
-#~ msgid "Na_me:"
-#~ msgstr "名稱(_M):"
-
-#~ msgid "New Chat Room"
-#~ msgstr "新增聊天室"
-
-#~ msgid ""
-#~ "Pick a saved chat room from the presets available below and click Join to "
-#~ "start chatting."
-#~ msgstr "從下列可用的預先設定中挑選一個已儲存的聊天室，再按加入開始聊天。"
-
-#~ msgid "    "
-#~ msgstr "    "
-
-#~ msgid "<b>Information requested, please wait...</b>"
-#~ msgstr "<b>要求資訊，請稍候...</b>"
-
-#~ msgid "<span size=\"smaller\">Example:</span>"
-#~ msgstr "<span size=\"smaller\">範例：</span>"
-
-#~ msgid "Account Name"
-#~ msgstr "帳號名稱"
-
-#~ msgid "Connection Details"
-#~ msgstr "連線詳細資料"
-
-#~ msgid "Do you already have an account set up on a server?"
-#~ msgstr "您是不是已經有伺服器的帳號了？"
-
-#~ msgid "Enter the port used in the connection for this account"
-#~ msgstr "輸入這個帳號在此連線中所使用的連接埠"
-
-#~ msgid "Enter the server used in the connection for this account"
-#~ msgstr "輸入這個帳號在此連線中所使用的伺服器"
-
-#~ msgid "Enter the user's contact ID:"
-#~ msgstr "輸入該使用者的連絡人 ID:"
-
-#~ msgid "Enter your real name here"
-#~ msgstr "在這裡輸入您的真實姓名"
-
-#~ msgid "Finished"
-#~ msgstr "完成設定"
-
-#~ msgid "For increased security, enable this option"
-#~ msgstr "為了增進安全性，請啟用這個選項"
-
-#~ msgid "Gossip"
-#~ msgstr "Gossip"
-
-#~ msgid ""
-#~ "Gossip is a modern client for the Jabber Instant Messaging system.\n"
-#~ "\n"
-#~ "This assistant will help you configure Gossip and connect you to your "
-#~ "favorite Jabber server.\n"
-#~ "\n"
-#~ "To get started, just click \"Forward\"."
-#~ msgstr ""
-#~ "Gossip 是一個嶄新的 Jabber 即時通訊客戶端程式。\n"
-#~ "\n"
-#~ "本精靈會協助您設定 Gossip，並連接至您想使用的 Jabber 伺服器。\n"
-#~ "\n"
-#~ "如果準備好，請按「下一頁」。"
-
-#~ msgid ""
-#~ "If you have another machine on your network which 'proxies' the "
-#~ "connection to the internet and you want to use it, enable this option"
-#~ msgstr ""
-#~ "如果在您的網路中有其他電腦「代理」到網際網絡的連線而您想要使用它，請啟用這"
-#~ "個選項"
-
-#~ msgid ""
-#~ "If you need to set specific connection details, like a different server "
-#~ "or port, you can configure that here:"
-#~ msgstr ""
-#~ "如果需要設定特定的連線資訊，像是不同的伺服器或連接埠，可以在這裡設定："
-
-#~ msgid ""
-#~ "In order to subscribe to presence notifications from the user, a request "
-#~ "will be sent. Until this request is approved, the user will always be "
-#~ "shown as \"Offline\" in your contact list."
-#~ msgstr ""
-#~ "為了訂閱使用者的上線通知，將送出要求。直到這個要求被同意之前，該使用者在您"
-#~ "的好友名單中將顯示為“離線”。"
-
-#~ msgid "In which group do you want to place this contact?"
-#~ msgstr "您想將這個好友加入哪個群組之內？"
-
-#~ msgid "Jabber ID:"
-#~ msgstr "Jabber ID："
-
-#~ msgid ""
-#~ "Leave this blank if you don't want your password stored on a public "
-#~ "machine. If you decide to do this, you will be prompted each time you "
-#~ "connect for a password"
-#~ msgstr ""
-#~ "如果不希望您的密碼儲存在公用的電腦上，可以保持此欄空白。如果決定要這麼做，"
-#~ "每一次連線的時候都會向您提問密碼"
-
-#~ msgid "Nickname:"
-#~ msgstr "暱稱："
-
-#~ msgid "Port:"
-#~ msgstr "埠號:"
-
-#~ msgid "Press Subscribe to request to receive their status"
-#~ msgstr "請訂閱以接收他們的狀態"
-
-#~ msgid "Registering Account"
-#~ msgstr "註冊帳號"
-
-#~ msgid "Resource:"
-#~ msgstr "資源:"
-
-#~ msgid "Sending request"
-#~ msgstr "正在傳送要求"
-
-#~ msgid "Server:"
-#~ msgstr "伺服器:"
-
-#~ msgid "Web Site:"
-#~ msgstr "網站:"
-
-#~ msgid "Welcome to Gossip"
-#~ msgstr "歡迎使用 Gossip"
-
-#~ msgid "What instant messaging system does the contact use?"
-#~ msgstr "該好友使用哪種即時通訊系統？"
-
-#~ msgid "What is your name?"
-#~ msgstr "怎樣稱呼您？"
-
-#~ msgid ""
-#~ "What name do you want to use to identify this account?\n"
-#~ "\n"
-#~ "This name could be something associated with the service provider, for "
-#~ "example, <b>Google</b>."
-#~ msgstr ""
-#~ "要使用何種名稱來識別這個帳號？\n"
-#~ "\n"
-#~ "這個名稱可以是跟其服務的提供者有關的事物，例如，<b>Google</b>。"
-
-#~ msgid "What password do you want to use?"
-#~ msgstr "要使用什麼密碼？"
-
-#~ msgid "What username do you use?"
-#~ msgstr "您使用甚麼名稱？"
-
-#~ msgid "What username do you want to use?"
-#~ msgstr "您想使用甚麼用戶名稱？"
-
-#~ msgid "Which account do you want to add this contact to?"
-#~ msgstr "您想將這個好友加入哪個帳號之內？"
-
-#~ msgid ""
-#~ "You can change your account settings later by selecting the Edit-"
-#~ ">Accounts menu item."
-#~ msgstr "稍後您可以在選單中選取「編輯→帳號」來更改帳號設定。"
-
-#~ msgid ""
-#~ "You need to set a name for the connection, for example, <b>Home</b> or "
-#~ "<b>Laptop</b>."
-#~ msgstr "您需要設定該連線的名稱，例如，<b>家裡</b> 或 <b>筆電</b>。"
-
-#~ msgid "Your Account"
-#~ msgstr "您的帳號"
-
-#~ msgid "Your Identity"
-#~ msgstr "您的身分"
-
-#~ msgid "Your new account has now been set up."
-#~ msgstr "現在已設定好您的新帳號。"
-
-#~ msgid "_Forget"
-#~ msgstr "忘記密碼(_F)"
-
-#~ msgid "_Group Chat"
-#~ msgstr "群組聊天(_G)"
-
-#~ msgid "_No"
-#~ msgstr "否(_N)"
-
-#~ msgid "_Search..."
-#~ msgstr "搜尋(_S)..."
-
-#~ msgid "_Yes"
-#~ msgstr "是(_Y)"
-
-#~ msgid "Respond"
-#~ msgstr "回應"
-
-#~ msgid "Dark"
-#~ msgstr "暗"
-
-#~ msgid "Contact Information for %s"
-#~ msgstr "有關 %s 的資訊"
-
-#, fuzzy
-#~ msgid "Chat Rooms..."
-#~ msgstr "聊天室:"
-
-#~ msgid "Be silent when away"
-#~ msgstr "「離開」時不發出音效"
-
-#~ msgid "Be silent when busy"
-#~ msgstr "「忙碌」時不發出音效"
-
-#~ msgid "Height of main window"
-#~ msgstr "主視窗高度"
-
-#~ msgid "The X position of the main window."
-#~ msgstr "啟動時主視窗的水平位置。"
-
-#~ msgid "The Y position of the main window."
-#~ msgstr "啟動時主視窗的垂直位置。"
-
-#~ msgid "The width of the main window."
-#~ msgstr "主視窗寬度"
-
-#~ msgid "Whether spell checking should be turned on."
-#~ msgstr "是否開啟拼字檢查。"
-
-#~ msgid "Width of the main window"
-#~ msgstr "主視窗寬度"
-
-#~ msgid "X position of main window"
-#~ msgstr "主視窗水平位置"
-
-#~ msgid "Y position of main window"
-#~ msgstr "主視窗垂直位置"
-
-#~ msgid "Gossip, Instant Messaging Client"
-#~ msgstr "Gossip 即時通訊軟體"
-
-#, fuzzy
-#~ msgid "Close this chat window"
-#~ msgstr "邀請至聊天室(_I)"
-
-#~ msgid "Requested Information"
-#~ msgstr "要求的資訊"
-
-#~ msgid "/_Invite to Chat Conference"
-#~ msgstr "/邀請至聊天會議(_I)"
-
-#, fuzzy
-#~ msgid "Send Message"
-#~ msgstr "新增訊息(_N)..."
-
-#, fuzzy
-#~ msgid "%s has gone offline"
-#~ msgstr "%s 已離線"
-
-#~ msgid "Available..."
-#~ msgstr "有空..."
-
-#~ msgid "Busy..."
-#~ msgstr "忙碌..."
-
-#~ msgid "Away..."
-#~ msgstr "離開..."
-
-#~ msgid "Contact _Information"
-#~ msgstr "連絡資訊(_I)"
-
-#~ msgid "<b>Sound</b>"
-#~ msgstr "<b>聲音</b>"
-
-#~ msgid "Check spelling while I _type"
-#~ msgstr "當我輸入時檢查拼字(_T)"
-
-#~ msgid "Gossip - Accounts"
-#~ msgstr "Gossip - 帳號"
-
-#, fuzzy
-#~ msgid "Join _Group Chat..."
-#~ msgstr "加入群組聊天(_J)..."
-
-#~ msgid "Por_t:"
-#~ msgstr "連接埠(_T):"
-
-#~ msgid "Requested information."
-#~ msgstr "要求的資訊。"
-
-#~ msgid "Requesting contact information, please wait..."
-#~ msgstr "正要求好友資訊，請稍候..."
-
-#~ msgid "Could not open connection"
-#~ msgstr "無法開啟連線"
-
-#~ msgid "Could not find the server you wanted to use"
-#~ msgstr "找不到您想要使用的伺服器"
-
-#~ msgid "Connection to the server failed."
-#~ msgstr "連線至伺服器時失敗。"
-
-#~ msgid "Authentication failed"
-#~ msgstr "驗證失敗"
-
-#~ msgid "Written by:"
-#~ msgstr "作者："
-
-#~ msgid "Artwork by:"
-#~ msgstr "美工："
-
-#~ msgid "Translated by:"
-#~ msgstr "翻譯："
-
-#~ msgid "Account ID"
-#~ msgstr "帳號 ID"
-
-#~ msgid "Last Error"
-#~ msgstr "上次錯誤"
-
-#~ msgid "%sChat - %s"
-#~ msgstr "%s聊天 - %s"
-
-#~ msgid "/Show _Log"
-#~ msgstr "/顯示對話紀錄(_L)"
-
-#~ msgid "Afrikaans"
-#~ msgstr "南非荷蘭語"
-
-#~ msgid "Amharic"
-#~ msgstr "阿姆哈拉語"
-
-#~ msgid "Arabic"
-#~ msgstr "阿拉伯語"
-
-#~ msgid "Azerbaijani"
-#~ msgstr "亞塞拜然語"
-
-#~ msgid "Belarusian"
-#~ msgstr "白俄羅斯語"
-
-#~ msgid "Bulgarian"
-#~ msgstr "保加利亞語"
-
-#~ msgid "Bengali"
-#~ msgstr "孟加拉語"
-
-#~ msgid "Breton"
-#~ msgstr "不列塔尼語"
-
-#~ msgid "Bosnian"
-#~ msgstr "波士尼亞語"
-
-#~ msgid "Catalan"
-#~ msgstr "加泰隆語"
-
-#~ msgid "Czech"
-#~ msgstr "捷克語"
-
-#~ msgid "Welsh"
-#~ msgstr "威爾士語"
-
-#~ msgid "Danish"
-#~ msgstr "丹麥語"
-
-#~ msgid "German"
-#~ msgstr "德文"
-
-#~ msgid "German (Austria)"
-#~ msgstr "德文(奧地利)"
-
-#~ msgid "German (Germany)"
-#~ msgstr "德文(德意志)"
-
-#~ msgid "German (Swiss)"
-#~ msgstr "德文(瑞士)"
-
-#~ msgid "Greek"
-#~ msgstr "希臘語"
-
-#~ msgid "English"
-#~ msgstr "英文"
-
-#~ msgid "English (Canadian)"
-#~ msgstr "英文(加拿大)"
-
-#~ msgid "English (British)"
-#~ msgstr "英語(英式)"
-
-#~ msgid "English (American)"
-#~ msgstr "英語(美式)"
-
-#~ msgid "Esperanto"
-#~ msgstr "世界語"
-
-#~ msgid "Spanish"
-#~ msgstr "西班牙文"
-
-#~ msgid "Estonian"
-#~ msgstr "愛沙尼亞語"
-
-#~ msgid "Persian"
-#~ msgstr "波斯語"
-
-#~ msgid "Finnish"
-#~ msgstr "芬蘭語"
-
-#~ msgid "French"
-#~ msgstr "法文"
-
-#~ msgid "French (France)"
-#~ msgstr "法文(法蘭西)"
-
-#~ msgid "French (Swiss)"
-#~ msgstr "法文(瑞士)"
-
-#~ msgid "Irish Gaelic"
-#~ msgstr "愛爾蘭蓋爾文"
-
-#~ msgid "Scots Gaelic"
-#~ msgstr "蘇格蘭蓋爾文"
-
-#~ msgid "Gujarati"
-#~ msgstr "印度語"
-
-#~ msgid "Manx Gaelic"
-#~ msgstr "人島蓋爾文"
-
-#~ msgid "Hebrew"
-#~ msgstr "希伯來語"
-
-#~ msgid "Hindi"
-#~ msgstr "印度語（北印度）"
-
-#~ msgid "Croatian"
-#~ msgstr "克羅地亞語"
-
-#~ msgid "Hungarian"
-#~ msgstr "匈牙利語"
-
-#~ msgid "Indonesian"
-#~ msgstr "印尼語"
-
-#~ msgid "Icelandic"
-#~ msgstr "冰島語"
-
-#~ msgid "Italian"
-#~ msgstr "意大利文"
-
-#~ msgid "Japanese"
-#~ msgstr "日語"
-
-#~ msgid "Georgian"
-#~ msgstr "喬治亞語"
-
-#~ msgid "Kannada"
-#~ msgstr "坎納達語"
-
-#~ msgid "Korean"
-#~ msgstr "韓文"
-
-#~ msgid "Kurdish"
-#~ msgstr "庫德語"
-
-#~ msgid "Cornish"
-#~ msgstr "康沃爾語"
-
-#~ msgid "Limburgish"
-#~ msgstr "林堡語"
-
-#~ msgid "Lithuanian"
-#~ msgstr "立陶宛文"
-
-#~ msgid "Latvian"
-#~ msgstr "拉脫維亞語"
-
-#~ msgid "Maori"
-#~ msgstr "毛利語"
-
-#~ msgid "Macedonian"
-#~ msgstr "馬其頓語"
-
-#~ msgid "Malayalam"
-#~ msgstr "馬拉雅拉姆語"
-
-#~ msgid "Mongolian"
-#~ msgstr "蒙古語"
-
-#~ msgid "Marathi"
-#~ msgstr "馬拉塔語"
-
-#~ msgid "Malay"
-#~ msgstr "馬來語"
-
-#~ msgid "Norwegian (Bokmal)"
-#~ msgstr "挪威語(Bokmaal)"
-
-#~ msgid "Nepali"
-#~ msgstr "尼泊爾語"
-
-#~ msgid "Dutch"
-#~ msgstr "荷蘭語"
-
-#~ msgid "Norwegian"
-#~ msgstr "挪威語"
-
-#~ msgid "Norwegian (Nynorsk)"
-#~ msgstr "挪威語(Nynorsk)"
-
-#~ msgid "Norwegian (Nyorsk)"
-#~ msgstr "挪威語(Bokmaal)"
-
-#~ msgid "Oriya"
-#~ msgstr "奧里雅語"
-
-#~ msgid "Punjabi"
-#~ msgstr "旁加語"
-
-#~ msgid "Polish"
-#~ msgstr "波蘭語"
-
-#~ msgid "Portuguese"
-#~ msgstr "葡萄牙文"
-
-#~ msgid "Portuguese (Portugal)"
-#~ msgstr "葡萄牙文(葡萄牙)"
-
-#~ msgid "Portuguese (Brazil)"
-#~ msgstr "葡萄牙文(巴西)"
-
-#~ msgid "Romanian"
-#~ msgstr "羅馬尼亞語"
-
-#~ msgid "Russian"
-#~ msgstr "俄文"
-
-#~ msgid "Kinyarwanda"
-#~ msgstr "盧安達語"
-
-#~ msgid "Slovak"
-#~ msgstr "斯洛伐克語"
-
-#~ msgid "Slovenian"
-#~ msgstr "斯洛文尼亞語"
-
-#~ msgid "Albanian"
-#~ msgstr "阿爾巴尼亞語"
-
-#~ msgid "Serbian"
-#~ msgstr "塞爾維亞語"
-
-#~ msgid "Swedish"
-#~ msgstr "瑞典語"
-
-#~ msgid "Tamil"
-#~ msgstr "泰米爾語"
-
-#~ msgid "Telugu"
-#~ msgstr "泰盧固語"
-
-#~ msgid "Thai"
-#~ msgstr "泰文"
-
-#~ msgid "Turkmen"
-#~ msgstr "土庫曼語"
-
-#~ msgid "Turkish"
-#~ msgstr "土耳其語"
-
-#~ msgid "Ukrainian"
-#~ msgstr "烏克蘭語"
-
-#~ msgid "Vietnamese"
-#~ msgstr "越南文"
-
-#~ msgid "Wallon"
-#~ msgstr "瓦隆語"
-
-#~ msgid "Xhosa"
-#~ msgstr "科薩語"
-
-#~ msgid "Yiddish"
-#~ msgstr "意第緒語"
-
-#~ msgid "Chinese Simplified"
-#~ msgstr "簡體中文"
-
-#~ msgid "Chinese Traditional"
-#~ msgstr "繁體中文"
-
-#~ msgid "View Lo_g"
-#~ msgstr "觀看對話紀錄(_G)"
-
-#, fuzzy
-#~ msgid "Gossip - Chat Rooms"
-#~ msgstr "Gossip - 編輯聊天室"
-
-#~ msgid "Gossip - Group Chat"
-#~ msgstr "Gossip - 群組聊天"
-
-#, fuzzy
-#~ msgid "Gossip - New Chatroom"
-#~ msgstr "Gossip - 編輯聊天室"
-
-#~ msgid "Gossip - Add contact"
-#~ msgstr "Gossip - 加入好友"
-
-#~ msgid "Gossip - Contact Information"
-#~ msgstr "Gossip - 好友資訊"
-
-#~ msgid "Gossip - Edit Groups"
-#~ msgstr "Gossip - 編輯群組"
-
-#~ msgid "Gossip - New Account"
-#~ msgstr "Gossip - 新增帳號"
-
-#~ msgid "Gossip - New Message"
-#~ msgstr "Gossip - 新訊息"
-
-#~ msgid "Gossip - Personal Details"
-#~ msgstr "Gossip - 個人資訊"
-
-#~ msgid "Gossip - Preferences"
-#~ msgstr "Gossip - 偏好設定"
-
-#~ msgid "Gossip - Spell Checker"
-#~ msgstr "Gossip - 拼字檢查"
-
-#~ msgid "Gossip - Status Message"
-#~ msgstr "Gossip - 狀態訊息"
-
-#~ msgid "Waiting for server to respond, please wait..."
-#~ msgstr "等候伺服器的回應，請稍候..."
-
-#~ msgid "Connection could not be created"
-#~ msgstr "無法建立連線"
-
-#~ msgid "Redirect"
-#~ msgstr "重新導向"
-
-#~ msgid "Bad Request"
-#~ msgstr "錯誤的要求"
-
-#~ msgid "Not Authorized"
-#~ msgstr "未授權"
-
-#~ msgid "Payment Required"
-#~ msgstr "需付款"
-
-#~ msgid "Forbidden"
-#~ msgstr "被禁止"
-
-#~ msgid "Not Found"
-#~ msgstr "找不到"
-
-#~ msgid "Not Allowed"
-#~ msgstr "不允許"
-
-#~ msgid "Not Acceptable"
-#~ msgstr "不能接受"
-
-#~ msgid "Request Timeout"
-#~ msgstr "要求已逾時"
-
-#~ msgid "Conflict"
-#~ msgstr "衝突"
-
-#~ msgid "Not Implemented"
-#~ msgstr "未實作"
-
-#~ msgid "Remote Server Error"
-#~ msgstr "遠端伺服器錯誤"
-
-#~ msgid "Service Unavailable"
-#~ msgstr "服務無法使用"
-
-#~ msgid "Unknown error."
-#~ msgstr "不明的錯誤。"
-
-#~ msgid "Custom"
-#~ msgstr "自訂"
-
-#~ msgid "The chat room you are trying is not responding."
-#~ msgstr "您所嘗試的聊天室沒有回應。"
-
-#~ msgid "Check your details and try again."
-#~ msgstr "請檢查您的詳細資訊並再試一次。"
-
-#~ msgid "This is currently unsupported."
-#~ msgstr "此項目前不支援。"
-
-#~ msgid "Perhaps the conference server is busy, try again later."
-#~ msgstr "也許此會議伺服器正在忙碌，請稍後再試。"
-
-#~ msgid "Check the server host name is correct and is available."
-#~ msgstr "請檢查伺服器主機名稱是否正確可用。"
-
-#~ msgid "Gossip will now try to use your account:"
-#~ msgstr "Gossip 現在會嘗試使用這個帳號："
-
-#~ msgid "Gossip will now try to register the account:"
-#~ msgstr "現在 Gossip 會嘗試註冊帳號："
-
-#~ msgid "Cus_tomize"
-#~ msgstr "自訂(_T)"
-
-#~ msgid "Edit or Delete this favorite."
-#~ msgstr "編輯或刪除這個喜好。"
-
-#~ msgid "Gossip - Join Chat Room "
-#~ msgstr "Gossip - 加入聊天室"
-
-#~ msgid "Choose a Server"
-#~ msgstr "選取伺服器"
-
-#~ msgid "On what server do you have an account?"
-#~ msgstr "您在哪個伺服器有帳號？"
-
-#~ msgid "Configure Transports"
-#~ msgstr "設定轉送程式"
-
-#~ msgid "_Jabber ID of new contact:"
-#~ msgstr "新的好友的 _Jabber ID："
-
-#~ msgid "Edit List..."
-#~ msgstr "編輯清單..."
-
-#~ msgid "Automatically Connect"
-#~ msgstr "自動連線"
-
-#~ msgid "Connect _Server:"
-#~ msgstr "連接伺服器(_S):"
-
-#~ msgid "Gossip - Account Information"
-#~ msgstr "Gossip - 帳號資訊"
-
-#~ msgid "_Jabber ID:"
-#~ msgstr "_Jabber ID："
-
-#~ msgid "Gossip - Edit Favorite"
-#~ msgstr "Gossip - 編輯喜好"
-
-#~ msgid "Gossip - Edit Group Chat Favorites"
-#~ msgstr "Gossip - 編輯群組聊天喜好"
-
-#~ msgid " "
-#~ msgstr " "
-
-#~ msgid ""
-#~ "<b>Configuring your new service...</b>\n"
-#~ "This will take a few moments, please wait."
-#~ msgstr ""
-#~ "<b>正在設定您的新服務...</b>\n"
-#~ "這需要一點時間，請稍等。"
-
-#~ msgid "<b>Preferred Service</b>"
-#~ msgstr "<b>偏好的服務</b>"
-
-#~ msgid "<b>Recommended Services</b>"
-#~ msgstr "<b>建議的服務</b>"
-
-#~ msgid ""
-#~ "<b>Requested service requirements...</b>\n"
-#~ "This will take a few moments, please wait."
-#~ msgstr ""
-#~ "<b>正在尋找服務的要件...</b>\n"
-#~ "這需要一點時間，請稍等。"
-
-#~ msgid "Add Account"
-#~ msgstr "新增帳號"
-
-#~ msgid "Add Another Account"
-#~ msgstr "新增其他帳號"
-
-#~ msgid "Choose from list:"
-#~ msgstr "從名單中選取："
-
-#~ msgid "Configure Transport"
-#~ msgstr "設定轉送程式"
-
-#~ msgid "Configuring Service"
-#~ msgstr "正在設定服務"
-
-#~ msgid "Gossip - Status Presets"
-#~ msgstr "Gossip - 狀態預先設定"
-
-#~ msgid "Gossip - Welcome"
-#~ msgstr "Gossip - 歡迎"
-
-#~ msgid "If you prefer, you can specify your own service:"
-#~ msgstr "如果您喜歡，可以指定您自己的服務:"
-
-#~ msgid "Jabber Account"
-#~ msgstr "Jabber 帳號"
-
-#~ msgid "Jabber.com"
-#~ msgstr "Jabber.com"
-
-#~ msgid "Jabber.org"
-#~ msgstr "Jabber.org"
-
-#~ msgid "Nick name:"
-#~ msgstr "暱稱："
-
-#~ msgid "Please complete the details below to set up your account:  "
-#~ msgstr "請在以下的欄位填上詳細的資料，以設定您的帳號：  "
-
-#~ msgid "Populating services..."
-#~ msgstr "計算服務的使用率..."
-
-#~ msgid "Remove Account"
-#~ msgstr "移除帳號"
-
-#~ msgid "Service Details"
-#~ msgstr "服務詳細資料"
-
-#~ msgid "Service:"
-#~ msgstr "服務："
-
-#~ msgid ""
-#~ "This wizard will allow you to configure your account settings for another "
-#~ "protocol. "
-#~ msgstr "這個精靈會讓您設定其他協定的帳號設定值。"
-
-#~ msgid "Transport Accounts"
-#~ msgstr "轉送程式帳號"
-
-#~ msgid "Use a different server"
-#~ msgstr "使用另一個伺服器"
-
-#~ msgid "Which protocol would you like to set up? "
-#~ msgstr "您想要設定哪個協定？"
-
-#~ msgid ""
-#~ "You can set the status presets which appear in the presence menu on the "
-#~ "main window here."
-#~ msgstr "您可以在此設定顯示在主視窗上線選單中的狀態預先設定。"
-
-#~ msgid "You currently have the following accounts set up:"
-#~ msgstr "您目前已設定下列帳號："
-
-#~ msgid "_Account Information"
-#~ msgstr "帳號資訊(_A)"
+msgstr "當訊息抵達時播放音效(_P)"
+
+#: ../src/empathy-status-icon.glade.h:1
+msgid "Status"
+msgstr "狀態"
+
+#: ../src/empathy-status-icon.glade.h:3
+msgid "_Quit"
+msgstr "離開(_Q)"
+
+#: ../src/empathy-status-icon.glade.h:4
+msgid "_Show Contact List"
+msgstr "顯示連絡人清單(_S)"
