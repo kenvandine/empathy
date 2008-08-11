@@ -1,0 +1,1773 @@
+# translation of mr.po to marathi
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+#
+# Sandeep Shedmake <sandeep.shedmake@gmail.com>, 2008.
+msgid ""
+msgstr ""
+"Project-Id-Version: mr\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-08-08 03:57+0000\n"
+"PO-Revision-Date: 2008-08-11 12:13+0530\n"
+"Last-Translator: Sandeep Shedmake <sandeep.shedmake@gmail.com>\n"
+"Language-Team: marathi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: KBabel 1.11.4\n"
+"Plural-Forms: nplurals=2; plural=(n!=1);\n"
+
+#: ../data/empathy.desktop.in.in.h:1
+msgid "Empathy Instant Messenger"
+msgstr "Empathy जलद संदेशवाहक"
+
+#: ../data/empathy.desktop.in.in.h:2
+msgid "Send and receive instant messages"
+msgstr "संदेश जलद पाठवा व प्राप्त करा"
+
+#: ../data/empathy.schemas.in.h:1
+msgid "Always open a separate chat window for new chats."
+msgstr "नविन संवाद करीता नेहमी वेगळे संवाद चौकट उघडा."
+
+#: ../data/empathy.schemas.in.h:2
+msgid ""
+"Character to add after nickname when using nick completion (tab) in group "
+"chat."
+msgstr "गट संवादात टोपननाव पूर्णत्वचा (टॅब) वापर करतेवेळी जोडण्याजोगी अक्षर."
+
+#: ../data/empathy.schemas.in.h:3
+msgid "Chat window theme"
+msgstr "संवाद चौकटची सुत्रयोजना"
+
+#: ../data/empathy.schemas.in.h:4
+msgid "Comma separated list of spell checker languages to use (e.g. en, fr, nl)."
+msgstr "वापरण्याजोगी स्वल्पविराम विभाजीत भाषांकरीता शब्दलेखन तपासणी (उ.दा. en, fr, nl)."
+
+#: ../data/empathy.schemas.in.h:5
+msgid "Compact contact list"
+msgstr "संपर्क यादी एकत्र करा"
+
+#: ../data/empathy.schemas.in.h:6
+msgid "Contact list sort criterium"
+msgstr "संपर्क यादी क्रमवारी अटी"
+
+#: ../data/empathy.schemas.in.h:7
+msgid "Default directory to select an avatar image from"
+msgstr "अवतार प्रतिमा निवडण्याकरीता मुलभूत संचयीका"
+
+#: ../data/empathy.schemas.in.h:8
+msgid "Empathy should auto-connect on startup"
+msgstr "प्रारंभवेळी Empathy ने स्वंय-जुळवणी करायची"
+
+#: ../data/empathy.schemas.in.h:9
+msgid "Empathy should use the avatar of the contact as the chat window icon"
+msgstr "Empathy ने संपर्काचे अवतार संवाद चौकट चिन्ह म्हणून वापरले पाहिजे"
+
+#: ../data/empathy.schemas.in.h:10
+msgid "Enable popup when contact is available"
+msgstr "संपर्क उपलब्ध झाल्यावर पॉपअप कार्यान्वीत करा"
+
+#: ../data/empathy.schemas.in.h:11
+msgid "Enable sound when away"
+msgstr "दूर असल्यावर आवाज कार्यान्वीत करा"
+
+#: ../data/empathy.schemas.in.h:12
+msgid "Enable sound when busy"
+msgstr "व्यस्त असल्यावर आवाज कार्यान्वीत करा"
+
+#: ../data/empathy.schemas.in.h:13
+msgid "Enable spell checker"
+msgstr "शब्दलेखन तपासक कार्यान्वीत करा"
+
+#: ../data/empathy.schemas.in.h:14
+msgid "Hide main window"
+msgstr "मुख्य चौकट लपवा"
+
+#: ../data/empathy.schemas.in.h:15
+msgid "Hide the main window."
+msgstr "मुख्य चौकट लपवा."
+
+#: ../data/empathy.schemas.in.h:16
+msgid "NetworkManager should be used"
+msgstr "NetworkManager वापरले पाहिजे"
+
+#: ../data/empathy.schemas.in.h:17
+msgid "Nick completed character"
+msgstr "टोपननाव पूर्णत्व अक्षर"
+
+#: ../data/empathy.schemas.in.h:18
+msgid "Open new chats in separate windows"
+msgstr "नविन संवाद वेगळ्या चौकटीत उघडा"
+
+#: ../data/empathy.schemas.in.h:19
+msgid "Salut account is created"
+msgstr "Salut खाते निर्माण केले"
+
+#: ../data/empathy.schemas.in.h:20
+msgid "Show avatars"
+msgstr "अवतार दर्शवा"
+
+#: ../data/empathy.schemas.in.h:21
+msgid "Show hint about closing the main window"
+msgstr "मुख्य चौकट बंद करण्यापूर्वी टिप दर्शवा"
+
+#: ../data/empathy.schemas.in.h:22
+msgid "Show offline contacts"
+msgstr "ऑफलाइन संपर्क दर्शवा"
+
+#: ../data/empathy.schemas.in.h:23
+msgid "Spell checking languages"
+msgstr "भाषांकरीता शब्दलेखन तपासणी"
+
+#: ../data/empathy.schemas.in.h:24
+msgid "The last directory that an avatar image was chosen from."
+msgstr "शेवटच्यावेळी अवतार प्रतिमा निवडली ती संचयीका."
+
+#: ../data/empathy.schemas.in.h:25
+msgid "The theme that is used to display the conversation in chat windows."
+msgstr "संवाद चौकटीतील संवाद दर्शविण्याकरीता सुत्रयोजना वापरा."
+
+#: ../data/empathy.schemas.in.h:26
+msgid "Use graphical smileys"
+msgstr "चित्रलेखीय स्माइली वापरा"
+
+#: ../data/empathy.schemas.in.h:27
+msgid "Use notification sounds"
+msgstr "सूचीत करण्याकरती संगीत चालवा"
+
+#: ../data/empathy.schemas.in.h:28
+msgid "Use theme for chat rooms"
+msgstr "संवाद कक्ष करीता सुत्रयोजना वापरा"
+
+#: ../data/empathy.schemas.in.h:29
+msgid ""
+"Whether or not Empathy should automatically log in to your accounts on "
+"startup."
+msgstr "प्रारंभवेळी Empathy ने आपोआप वापरकर्त्याच्या खात्यात दाखलन करायचे की नाही."
+
+#: ../data/empathy.schemas.in.h:30
+msgid ""
+"Whether or not Empathy should use the avatar of the contact as the chat "
+"window icon."
+msgstr "प्रारंभवेळी Empathy ने संपर्काचे संवाद चौकट चिन्ह म्हणून वापरायचे की नाही."
+
+#: ../data/empathy.schemas.in.h:31
+msgid "Whether or not the Salut account has been created on the first Empathy run."
+msgstr "प्रथम Empathy रन वेळी Salut खाते निर्माण झालेत की नाही."
+
+#: ../data/empathy.schemas.in.h:32
+msgid ""
+"Whether or not the network manager should be used to automatically "
+"disconnect/reconnect."
+msgstr "संजाळ व्यवस्थपाकने आपोआप जुळवणी स्थपीत करायची की नाही."
+
+#: ../data/empathy.schemas.in.h:33
+msgid ""
+"Whether or not to check words typed against the languages you want to check "
+"with."
+msgstr "इच्छिक भाषांकरीता टाइप केलेले शब्दांची तपासणी करायची की नाही."
+
+#: ../data/empathy.schemas.in.h:34
+msgid "Whether or not to convert smileys into graphical images in conversations."
+msgstr "संभाषण मध्ये स्माइलीला चित्रलेखीय प्रतिमेत रूपांतरीत करायचे की नाही."
+
+#: ../data/empathy.schemas.in.h:35
+msgid "Whether or not to play a sound when messages arrive."
+msgstr "संदेश प्राप्त झाल्यावर आवज चालवायचे की नाही."
+
+#: ../data/empathy.schemas.in.h:36
+msgid "Whether or not to play sounds when away."
+msgstr "दूर असल्यास संगीत चालवायचे की नाही."
+
+#: ../data/empathy.schemas.in.h:37
+msgid "Whether or not to play sounds when busy."
+msgstr "व्यस्त असल्यावर आवाज चालवायचे की नाही."
+
+#: ../data/empathy.schemas.in.h:38
+msgid "Whether or not to show a popup when a contact becomes available."
+msgstr "संपर्क उपलब्ध झाल्यावर पॉपअप दर्शवायचे की नाही."
+
+#: ../data/empathy.schemas.in.h:39
+msgid ""
+"Whether or not to show avatars for contacts in the contact list and chat "
+"windows."
+msgstr "संपर्क करीता संपर्क यादी व संवाद चौकटीत अवतार दर्शवायचे की नाही."
+
+#: ../data/empathy.schemas.in.h:40
+msgid "Whether or not to show contacts that are offline in the contact list."
+msgstr "संपर्क यादीत ऑफलाइन संपर्क दर्शवायचे की नाही."
+
+#: ../data/empathy.schemas.in.h:41
+msgid ""
+"Whether or not to show the message dialog about closing the main window with "
+"the 'x' button in the title bar."
+msgstr "मुख्य चौकट बंद करतेवेळी संदेश संवादाला शिर्षक पट्टी अंतर्गत 'x' बटनासह दर्शवायचे की नाही."
+
+#: ../data/empathy.schemas.in.h:42
+msgid "Whether to show the contact list in compact mode or not."
+msgstr "एकत्र पद्धतीत संपर्क यादी दर्शवायची की नाही."
+
+#: ../data/empathy.schemas.in.h:43
+msgid "Whether to use the theme for chat rooms or not."
+msgstr "संवाद कक्षाने सुत्रयोजनाचा वापर करावा की नाही."
+
+#: ../data/empathy.schemas.in.h:44
+msgid ""
+"Which criterium to use when sorting the contact list. Default is to use sort "
+"by the contact's name with the value \"name\". A value of \"state\" will "
+"sort the contact list by state."
+msgstr "संपर्क यादी क्रमवारीत लावण्याकरीता कुठल्या अटी मान्य करायचे. संपर्क नावला मुल्य \"name\" सह क्रमवारीत लावण्याची मुलभूत रित आहे. मुल्य \"state\" असल्यास संपर्क यादी राज्यनुरूप क्रमवारीत लावली जाईल."
+
+#: ../data/empathy-properties.desktop.in.in.h:1
+msgid "Configure Telepathy account settings"
+msgstr "टेलीपथि खाते संयोजना संयोजीत करा"
+
+#: ../data/empathy-properties.desktop.in.in.h:2
+msgid "Empathy accounts"
+msgstr "Empathy खाते"
+
+#: ../libempathy/empathy-tp-contact-list.c:731 ../src/empathy.c:244
+msgid "People nearby"
+msgstr "नजिक व्यक्ति"
+
+#: ../libempathy/empathy-utils.c:345
+msgid "Available"
+msgstr "उपलब्ध"
+
+#: ../libempathy/empathy-utils.c:347
+msgid "Busy"
+msgstr "व्यस्त"
+
+#: ../libempathy/empathy-utils.c:350
+msgid "Away"
+msgstr "दूर"
+
+#: ../libempathy/empathy-utils.c:352
+msgid "Hidden"
+msgstr "लपविलेले"
+
+#: ../libempathy/empathy-utils.c:355
+msgid "Offline"
+msgstr "ऑफलाईन"
+
+#: ../libempathy-gtk/empathy-account-chooser.c:335
+msgid "All"
+msgstr "सर्व"
+
+#: ../libempathy-gtk/empathy-account-widget.c:302
+#: ../libempathy-gtk/empathy-account-widget.c:347
+#, c-format
+msgid "%s:"
+msgstr "%s:"
+
+#: ../libempathy-gtk/empathy-account-widget-aim.glade.h:1
+#: ../libempathy-gtk/empathy-account-widget-generic.glade.h:1
+#: ../libempathy-gtk/empathy-account-widget-groupwise.glade.h:1
+#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:1
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:1
+#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:1
+#: ../libempathy-gtk/empathy-account-widget-salut.glade.h:1
+#: ../libempathy-gtk/empathy-account-widget-sip.glade.h:1
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:1
+msgid "<b>Advanced</b>"
+msgstr "<b>प्रगत</b>"
+
+#: ../libempathy-gtk/empathy-account-widget-aim.glade.h:2
+#: ../libempathy-gtk/empathy-account-widget-groupwise.glade.h:2
+#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:2
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:3
+#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:2
+#: ../libempathy-gtk/empathy-account-widget-sip.glade.h:4
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:2
+msgid "Forget password and clear the entry."
+msgstr "गुप्तशब्द विसरून जा व नोंदणी काढून टाका."
+
+#: ../libempathy-gtk/empathy-account-widget-aim.glade.h:3
+#: ../libempathy-gtk/empathy-account-widget-groupwise.glade.h:4
+#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:4
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:5
+#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:4
+#: ../libempathy-gtk/empathy-account-widget-sip.glade.h:5
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:4
+msgid "Pass_word:"
+msgstr "गुप्तशब्द (_w):"
+
+#: ../libempathy-gtk/empathy-account-widget-aim.glade.h:4
+msgid "Screen _Name:"
+msgstr "पडद्यावरील नाव (_N):"
+
+#: ../libempathy-gtk/empathy-account-widget-aim.glade.h:5
+#: ../libempathy-gtk/empathy-account-widget-groupwise.glade.h:5
+#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:6
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:11
+#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:5
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:8
+msgid "_Port:"
+msgstr "पोर्ट(_P):"
+
+#: ../libempathy-gtk/empathy-account-widget-aim.glade.h:6
+#: ../libempathy-gtk/empathy-account-widget-groupwise.glade.h:6
+#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:7
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:12
+#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:6
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:10
+#: ../src/empathy-new-chatroom-dialog.glade.h:10
+msgid "_Server:"
+msgstr "सर्वर (_S):"
+
+#: ../libempathy-gtk/empathy-account-widget-groupwise.glade.h:3
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:4
+#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:3
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:3
+msgid "Login I_D:"
+msgstr "दाखलन ID (_D):"
+
+#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:3
+msgid "ICQ _UIN:"
+msgstr "ICQ UIN (_U):"
+
+#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:5
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:6
+msgid "_Charset:"
+msgstr "अक्षरसंच (_C):"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.c:245
+msgid "New Network"
+msgstr "नविन संजाळ"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:1
+msgid "<b>Network</b>"
+msgstr "<b>संजाळ</b>"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:2
+msgid "<b>Servers</b>"
+msgstr "<b>सर्वर</b>"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:3
+msgid "Charset:"
+msgstr "अक्षरसंच:"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:4
+msgid "Create a new IRC network"
+msgstr "नविन IRC संजाळ बनवा"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:5
+msgid "Edit the selected IRC network"
+msgstr "निवडलेले IRC संजाळ संपादीत करा"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:6
+msgid "Network"
+msgstr "संजाळ"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:7
+msgid "Network:"
+msgstr "संजाळ:"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:8
+msgid "Nickname:"
+msgstr "टोपननाव:"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:9
+msgid "Password:"
+msgstr "गुप्तशब्द:"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:10
+msgid "Quit message:"
+msgstr "बाहेर पडतेवेळीचे संदेश:"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:11
+msgid "Real name:"
+msgstr "वास्तविक नाव:"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:12
+msgid "Remove the selected IRC network"
+msgstr "निवडलेले IRC संजाळ काढून टाका"
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:2
+msgid "<b>Override server settings</b>"
+msgstr "<b>सर्वर संयोजना खोडून पुन्हा लिहा</b>"
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:6
+msgid "Pri_ority:"
+msgstr "प्राधान्यक्रम (_o):"
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:7
+msgid "Reso_urce:"
+msgstr "स्त्रोत (_u):"
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:8
+msgid "Use old SS_L"
+msgstr "जुणे SSL वापरा (_L)"
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:9
+msgid "_Encryption required (TLS/SSL)"
+msgstr "एनक्रिप्शन आवश्यक (TLS/SSL) (_E)"
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:10
+msgid "_Ignore SSL certificate errors"
+msgstr "SSL प्रमाण त्रुटी दुर्लक्ष करा (_I)"
+
+#: ../libempathy-gtk/empathy-account-widget-salut.glade.h:2
+msgid "_Email:"
+msgstr "इमेल (_E):"
+
+#: ../libempathy-gtk/empathy-account-widget-salut.glade.h:3
+msgid "_First Name: "
+msgstr "पहिले नाव (_F): "
+
+#: ../libempathy-gtk/empathy-account-widget-salut.glade.h:4
+msgid "_Jabber ID:"
+msgstr "जॅबर ID (_J):"
+
+#: ../libempathy-gtk/empathy-account-widget-salut.glade.h:5
+msgid "_Last Name:"
+msgstr "शेवटचे नाव (_L):"
+
+#: ../libempathy-gtk/empathy-account-widget-salut.glade.h:6
+#: ../src/empathy-chatrooms-window.glade.h:8
+msgid "_Nickname:"
+msgstr "टोपननाव (_N):"
+
+#: ../libempathy-gtk/empathy-account-widget-salut.glade.h:7
+msgid "_Published Name:"
+msgstr "प्रकाशीत नाव (_P):"
+
+#. look up the DNS SRV record at the service's domain for the host name of a STUN server.
+#: ../libempathy-gtk/empathy-account-widget-sip.glade.h:3
+msgid "Discover STUN"
+msgstr "STUN शोधा"
+
+#: ../libempathy-gtk/empathy-account-widget-sip.glade.h:6
+msgid "STUN Server:"
+msgstr "STUN सर्वर:"
+
+#: ../libempathy-gtk/empathy-account-widget-sip.glade.h:7
+msgid "STUN port:"
+msgstr "STUN पोर्ट:"
+
+#: ../libempathy-gtk/empathy-account-widget-sip.glade.h:8
+msgid "_Username:"
+msgstr "वापरकर्ता नाव (_U):"
+
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:5
+msgid "Use _Yahoo Japan"
+msgstr "Yahoo जपान वापरा (_Y)"
+
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:7
+msgid "_Ignore conference and chatroom invitations"
+msgstr "परस्पर संवाद व संवादकक्ष निमंत्रणकडे दुर्लक्ष करा (_I)"
+
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:9
+msgid "_Room List locale:"
+msgstr "कक्ष यादी लोकेल (_R):"
+
+#: ../libempathy-gtk/empathy-avatar-chooser.c:457
+msgid "Select Your Avatar Image"
+msgstr "आपली अवतार प्रतिमा निवडा"
+
+#: ../libempathy-gtk/empathy-avatar-chooser.c:460
+msgid "No Image"
+msgstr "प्रतिमा नाही"
+
+#: ../libempathy-gtk/empathy-avatar-chooser.c:520
+msgid "Images"
+msgstr "प्रतिमा"
+
+#: ../libempathy-gtk/empathy-avatar-chooser.c:524
+msgid "All Files"
+msgstr "सर्व फाइल"
+
+#: ../libempathy-gtk/empathy-avatar-image.c:294
+msgid "Click to enlarge"
+msgstr "मोठे करण्याकरीता क्लिक करा"
+
+#: ../libempathy-gtk/empathy-chat.c:497
+msgid "offline"
+msgstr "ऑफलाइन"
+
+#: ../libempathy-gtk/empathy-chat.c:500
+msgid "invalid contact"
+msgstr "अवैध संपर्क"
+
+#: ../libempathy-gtk/empathy-chat.c:503
+msgid "permission denied"
+msgstr "परवानगी नकारली"
+
+#: ../libempathy-gtk/empathy-chat.c:506
+msgid "too long message"
+msgstr "खूप लांब संदेश"
+
+#: ../libempathy-gtk/empathy-chat.c:509
+msgid "not implemented"
+msgstr "लागू केले नाही"
+
+#: ../libempathy-gtk/empathy-chat.c:512
+msgid "unknown"
+msgstr "अपरिचीत"
+
+#: ../libempathy-gtk/empathy-chat.c:516
+#, c-format
+msgid "Error sending message '%s': %s"
+msgstr "'%s' संदेश पाठतेवेळी त्रुटी आढळली: %s"
+
+#: ../libempathy-gtk/empathy-chat.c:546
+#, c-format
+msgid "Topic set to: %s"
+msgstr "विषय निश्चित करा: %s"
+
+#: ../libempathy-gtk/empathy-chat.c:548
+msgid "No topic defined"
+msgstr "विषय निश्चित नाही"
+
+#: ../libempathy-gtk/empathy-chat.c:963
+msgid "Insert Smiley"
+msgstr "स्माइली अंतर्भूत करा"
+
+#: ../libempathy-gtk/empathy-chat.c:979
+msgid "_Send"
+msgstr "पाठवा (_S)"
+
+#: ../libempathy-gtk/empathy-chat.c:1013
+msgid "_Check Word Spelling..."
+msgstr "शब्द लेखन तपासा (_C)..."
+
+#: ../libempathy-gtk/empathy-chat.c:1119
+#, c-format
+msgid "%s has joined the room"
+msgstr "%s ने कक्ष सोडले"
+
+#: ../libempathy-gtk/empathy-chat.c:1122
+#, c-format
+msgid "%s has left the room"
+msgstr "%s ने कक्ष सोडले"
+
+#: ../libempathy-gtk/empathy-chat.c:1236 ../src/empathy-call-window.c:406
+msgid "Disconnected"
+msgstr "जुळवणी तूटली"
+
+#: ../libempathy-gtk/empathy-chat.c:1608
+msgid "Connected"
+msgstr "जुळवणी स्थापीत"
+
+#: ../libempathy-gtk/empathy-chat.glade.h:1
+msgid "<b>Topic:</b>"
+msgstr "<b>विषय:</b>"
+
+#: ../libempathy-gtk/empathy-chat.glade.h:2
+msgid "Group Chat"
+msgstr "गट संवाद"
+
+#: ../libempathy-gtk/empathy-chat-view.c:430
+msgid "_Copy Link Address"
+msgstr "लिंक पत्ता प्रतिकृत करा (_C)"
+
+#: ../libempathy-gtk/empathy-chat-view.c:438
+msgid "_Open Link"
+msgstr "लिंक उघडा(_O)"
+
+#: ../libempathy-gtk/empathy-contact-dialogs.c:180
+msgid "Personal Information"
+msgstr "व्यक्तिगत माहिती"
+
+#: ../libempathy-gtk/empathy-contact-dialogs.c:183
+msgid "Edit Contact Information"
+msgstr "संपर्क माहिती संपादीत करा"
+
+#: ../libempathy-gtk/empathy-contact-dialogs.c:186
+msgid "Contact Information"
+msgstr "संपर्क माहिती"
+
+#: ../libempathy-gtk/empathy-contact-dialogs.c:283
+msgid "I would like to add you to my contact list."
+msgstr "तुम्हास संपर्क यादीत जोडण्याची इच्छा आहे."
+
+#: ../libempathy-gtk/empathy-contact-dialogs.c:307
+msgid "New Contact"
+msgstr "नविन संपर्क"
+
+#: ../libempathy-gtk/empathy-contact-dialogs.glade.h:1
+msgid "Decide _Later"
+msgstr "भविष्यात निर्णय घ्या (_L)"
+
+#: ../libempathy-gtk/empathy-contact-dialogs.glade.h:2
+msgid "Subscription Request"
+msgstr "सबस्क्रीप्शन विनंती"
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:1226
+#, c-format
+msgid "Do you really want to remove the group '%s'?"
+msgstr "तुम्हाला नक्की '%s' गट काढून टाकायचे?"
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:1228
+msgid "Removing group"
+msgstr "गट काढून टाकत आहे"
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:1275
+#: ../libempathy-gtk/empathy-contact-list-view.c:1354
+msgid "_Remove"
+msgstr "काढून टाका (_R)"
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:1305
+#, c-format
+msgid "Do you really want to remove the contact '%s'?"
+msgstr "तुम्हाला नक्की '%s' काढून टाकायचे?"
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:1307
+msgid "Removing contact"
+msgstr "संपर्क वगळ आहे"
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:1312
+msgid "Sorry, I don't want you in my contact list anymore."
+msgstr "माफ करा, संपर्क यादीत तुमचे नाव संग्रहीत ठेवणे पसंत नाही."
+
+#: ../libempathy-gtk/empathy-contact-menu.c:109
+#: ../src/empathy-main-window.glade.h:9
+msgid "_Chat"
+msgstr "संवाद (_C)"
+
+#: ../libempathy-gtk/empathy-contact-menu.c:130
+msgid "_Call"
+msgstr "बोला (_C)"
+
+#: ../libempathy-gtk/empathy-contact-menu.c:169
+#: ../src/empathy-main-window.glade.h:17
+msgid "_View Previous Conversations"
+msgstr "पूर्वीचे संभाषण पहा (_V)"
+
+#: ../libempathy-gtk/empathy-contact-menu.c:197
+msgid "Infor_mation"
+msgstr "माहिती (_m)"
+
+#: ../libempathy-gtk/empathy-contact-menu.c:224
+#: ../src/empathy-chat-window.glade.h:14 ../src/empathy-main-window.glade.h:11
+msgid "_Edit"
+msgstr "संपादन (_E)"
+
+#: ../libempathy-gtk/empathy-contact-widget.c:358
+msgid "Save Avatar"
+msgstr "अवतार संचयन"
+
+#: ../libempathy-gtk/empathy-contact-widget.c:414
+msgid "Unable to save avatar"
+msgstr "अवतार संचयीत करू शकले नाही"
+
+#: ../libempathy-gtk/empathy-contact-widget.c:866
+msgid "Select"
+msgstr "निवडा"
+
+#: ../libempathy-gtk/empathy-contact-widget.c:875
+#: ../src/empathy-main-window.c:853
+msgid "Group"
+msgstr "गट"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:1
+msgid "<b>Client Information</b>"
+msgstr "<b>क्लाऐंट माहिती</b>"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:2
+msgid "<b>Contact Details</b>"
+msgstr "<b>संपर्क तपशील</b>"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:3
+msgid "<b>Contact</b>"
+msgstr "<b>संपर्क</b>"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:4
+msgid "<b>Groups</b>"
+msgstr "<b>गट</b>"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:5
+#: ../libempathy-gtk/empathy-new-message-dialog.glade.h:1
+#: ../src/empathy-chatrooms-window.glade.h:1
+#: ../src/empathy-new-chatroom-dialog.glade.h:1
+msgid "Account:"
+msgstr "खाते:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:6
+msgid "Alias:"
+msgstr "अलायस:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:7
+msgid "Birthday:"
+msgstr "वाढदिवस:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:8
+msgid "Client:"
+msgstr "क्लाऐंट:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:9
+msgid "Contact information"
+msgstr "संपर्क माहिती"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:10
+msgid "Email:"
+msgstr "ईमेल:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:11
+msgid "Fullname:"
+msgstr "पूर्णनाव:"
+
+#. Identifier to connect to Instant Messaging network
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:13
+msgid "Identifier:"
+msgstr "ओळखकर्ता:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:14
+msgid "Information requested..."
+msgstr "विनंतीकृत माहिती..."
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:15
+msgid "OS:"
+msgstr "OS:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:16
+msgid ""
+"Select the groups you want this contact to appear in, you can select more "
+"than one group or no groups."
+msgstr "हे संपर्क ज्या गटा मध्ये समाविष्ठीत प्रदर्शित व्हावे ते गट निवडा, तुम्ही एकापेक्षा जास्त किंवा शून्य गट निवडू शकता."
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:17
+msgid "Version:"
+msgstr "आवृत्ती:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:18
+msgid "Web site:"
+msgstr "संकेतस्थळ:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:19
+msgid "_Add Group"
+msgstr "गट जोडा (_A)"
+
+#: ../libempathy-gtk/empathy-irc-network-dialog.c:284
+msgid "new server"
+msgstr "नविन सर्वर"
+
+#: ../libempathy-gtk/empathy-irc-network-dialog.c:513
+msgid "Server"
+msgstr "सर्वर"
+
+#: ../libempathy-gtk/empathy-irc-network-dialog.c:528
+msgid "Port"
+msgstr "पोर्ट"
+
+#: ../libempathy-gtk/empathy-irc-network-dialog.c:541
+msgid "SSL"
+msgstr "SSL"
+
+#: ../libempathy-gtk/empathy-log-window.c:497
+msgid "Account"
+msgstr "खाते"
+
+#: ../libempathy-gtk/empathy-log-window.c:504 ../src/empathy-chat-window.c:276
+msgid "Conversation"
+msgstr "संभाषण"
+
+#: ../libempathy-gtk/empathy-log-window.c:514
+msgid "Date"
+msgstr "दिनांक"
+
+#. Tab Label
+#: ../libempathy-gtk/empathy-log-window.glade.h:2
+msgid "Conversations"
+msgstr "संभाषण"
+
+#: ../libempathy-gtk/empathy-log-window.glade.h:3
+msgid "Previous Conversations"
+msgstr "पूर्वीचे संभाषण"
+
+#. Tab Label
+#: ../libempathy-gtk/empathy-log-window.glade.h:5
+msgid "Search"
+msgstr "शोधा"
+
+#. Searching *for* something
+#: ../libempathy-gtk/empathy-log-window.glade.h:7
+msgid "_For:"
+msgstr "करीता (_F):"
+
+#: ../libempathy-gtk/empathy-new-message-dialog.glade.h:2
+msgid "Call"
+msgstr "संवाद करा"
+
+#: ../libempathy-gtk/empathy-new-message-dialog.glade.h:3
+#: ../src/empathy-chat-window.glade.h:2
+msgid "Chat"
+msgstr "संवाद"
+
+#: ../libempathy-gtk/empathy-new-message-dialog.glade.h:4
+msgid "Contact ID:"
+msgstr "संपर्क ID:"
+
+#: ../libempathy-gtk/empathy-new-message-dialog.glade.h:5
+msgid "New Conversation"
+msgstr "नविन संभाषण"
+
+#. Custom messages
+#: ../libempathy-gtk/empathy-presence-chooser.c:685
+msgid "Custom messages..."
+msgstr "इच्छिक संदेस..."
+
+#: ../libempathy-gtk/empathy-presence-chooser.glade.h:1
+msgid "Custom message"
+msgstr "इच्छिक संदेश"
+
+#: ../libempathy-gtk/empathy-presence-chooser.glade.h:2
+msgid "Message:"
+msgstr "संदेश:"
+
+#: ../libempathy-gtk/empathy-presence-chooser.glade.h:3
+msgid "Save message"
+msgstr "संदेश संचयन"
+
+#: ../libempathy-gtk/empathy-presence-chooser.glade.h:4
+msgid "Status:"
+msgstr "स्थिती:"
+
+#: ../libempathy-gtk/empathy-spell-dialog.c:88
+msgid "Word"
+msgstr "शब्द"
+
+#: ../libempathy-gtk/empathy-spell-dialog.c:265
+msgid "Suggestions for the word"
+msgstr "शब्द करीता उपदेश"
+
+#: ../libempathy-gtk/empathy-spell-dialog.glade.h:1
+msgid "Spell Checker"
+msgstr "शब्द तपासक"
+
+#: ../libempathy-gtk/empathy-spell-dialog.glade.h:2
+msgid "Suggestions for the word:"
+msgstr "शब्द करीता उपदेश:"
+
+#: ../libempathy-gtk/empathy-theme-boxes.c:745
+#: ../libempathy-gtk/empathy-theme-irc.c:293
+msgid "%A %d %B %Y"
+msgstr "%A %d %B %Y"
+
+#: ../libempathy-gtk/empathy-theme-manager.c:73
+msgid "Classic"
+msgstr "क्लासिक"
+
+#: ../libempathy-gtk/empathy-theme-manager.c:74
+msgid "Simple"
+msgstr "सोपे"
+
+#: ../libempathy-gtk/empathy-theme-manager.c:75
+msgid "Clean"
+msgstr "साफ"
+
+#: ../libempathy-gtk/empathy-theme-manager.c:76
+msgid "Blue"
+msgstr "निळा"
+
+#: ../libempathy-gtk/empathy-ui-utils.c:1330
+msgid "Unable to open URI"
+msgstr "URI उघडण्यास अपयशी"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:158
+msgid "Current Locale"
+msgstr "सद्याची लोकेल"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:161
+#: ../libempathy-gtk/totem-subtitle-encoding.c:163
+#: ../libempathy-gtk/totem-subtitle-encoding.c:165
+#: ../libempathy-gtk/totem-subtitle-encoding.c:167
+msgid "Arabic"
+msgstr "अरेबिक"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:170
+msgid "Armenian"
+msgstr "आर्मेनिअन"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:173
+#: ../libempathy-gtk/totem-subtitle-encoding.c:175
+#: ../libempathy-gtk/totem-subtitle-encoding.c:177
+msgid "Baltic"
+msgstr "बाल्टिक"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:180
+msgid "Celtic"
+msgstr "सेल्टिक"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:183
+#: ../libempathy-gtk/totem-subtitle-encoding.c:185
+#: ../libempathy-gtk/totem-subtitle-encoding.c:187
+#: ../libempathy-gtk/totem-subtitle-encoding.c:189
+msgid "Central European"
+msgstr "मध्य युरोपिअन"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:192
+#: ../libempathy-gtk/totem-subtitle-encoding.c:194
+#: ../libempathy-gtk/totem-subtitle-encoding.c:196
+#: ../libempathy-gtk/totem-subtitle-encoding.c:198
+msgid "Chinese Simplified"
+msgstr "विश्लेषीत चिनी"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:201
+#: ../libempathy-gtk/totem-subtitle-encoding.c:203
+#: ../libempathy-gtk/totem-subtitle-encoding.c:205
+msgid "Chinese Traditional"
+msgstr "पारंपारिक चिनी"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:208
+msgid "Croatian"
+msgstr "क्रोएशीयन"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:211
+#: ../libempathy-gtk/totem-subtitle-encoding.c:213
+#: ../libempathy-gtk/totem-subtitle-encoding.c:215
+#: ../libempathy-gtk/totem-subtitle-encoding.c:217
+#: ../libempathy-gtk/totem-subtitle-encoding.c:219
+#: ../libempathy-gtk/totem-subtitle-encoding.c:221
+msgid "Cyrillic"
+msgstr "सिरीलिक"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:224
+msgid "Cyrillic/Russian"
+msgstr "सायरिलिक/रशियन"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:227
+#: ../libempathy-gtk/totem-subtitle-encoding.c:229
+msgid "Cyrillic/Ukrainian"
+msgstr "सायरिलिक/युक्रेनियन"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:232
+msgid "Georgian"
+msgstr "जॉर्जियन"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:235
+#: ../libempathy-gtk/totem-subtitle-encoding.c:237
+#: ../libempathy-gtk/totem-subtitle-encoding.c:239
+msgid "Greek"
+msgstr "ग्रीक"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:242
+msgid "Gujarati"
+msgstr "गुजराती"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:245
+msgid "Gurmukhi"
+msgstr "गुरमुखी"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:248
+#: ../libempathy-gtk/totem-subtitle-encoding.c:250
+#: ../libempathy-gtk/totem-subtitle-encoding.c:252
+#: ../libempathy-gtk/totem-subtitle-encoding.c:254
+msgid "Hebrew"
+msgstr "हिब्रू"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:257
+msgid "Hebrew Visual"
+msgstr "द्रुश्य हिब्रू"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:260
+msgid "Hindi"
+msgstr "हिंदी"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:263
+msgid "Icelandic"
+msgstr "आयलॅंडिक"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:266
+#: ../libempathy-gtk/totem-subtitle-encoding.c:268
+#: ../libempathy-gtk/totem-subtitle-encoding.c:270
+msgid "Japanese"
+msgstr "जपानी"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:273
+#: ../libempathy-gtk/totem-subtitle-encoding.c:275
+#: ../libempathy-gtk/totem-subtitle-encoding.c:277
+#: ../libempathy-gtk/totem-subtitle-encoding.c:279
+msgid "Korean"
+msgstr "कोरियन"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:282
+msgid "Nordic"
+msgstr "नॉर्डिक"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:285
+msgid "Persian"
+msgstr "पर्शियन"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:288
+#: ../libempathy-gtk/totem-subtitle-encoding.c:290
+msgid "Romanian"
+msgstr "रोमानियन"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:293
+msgid "South European"
+msgstr "दक्षिण युरोपिअन"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:296
+msgid "Thai"
+msgstr "थाई"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:299
+#: ../libempathy-gtk/totem-subtitle-encoding.c:301
+#: ../libempathy-gtk/totem-subtitle-encoding.c:303
+#: ../libempathy-gtk/totem-subtitle-encoding.c:305
+msgid "Turkish"
+msgstr "तुर्किश"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:308
+#: ../libempathy-gtk/totem-subtitle-encoding.c:310
+#: ../libempathy-gtk/totem-subtitle-encoding.c:312
+#: ../libempathy-gtk/totem-subtitle-encoding.c:314
+#: ../libempathy-gtk/totem-subtitle-encoding.c:316
+msgid "Unicode"
+msgstr "युनिकोड"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:319
+#: ../libempathy-gtk/totem-subtitle-encoding.c:321
+#: ../libempathy-gtk/totem-subtitle-encoding.c:323
+#: ../libempathy-gtk/totem-subtitle-encoding.c:325
+#: ../libempathy-gtk/totem-subtitle-encoding.c:327
+msgid "Western"
+msgstr "पश्चिमी"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:330
+#: ../libempathy-gtk/totem-subtitle-encoding.c:332
+#: ../libempathy-gtk/totem-subtitle-encoding.c:334
+msgid "Vietnamese"
+msgstr "वियेतनामी"
+
+#.
+#. * vim: sw=2 ts=8 cindent noai bs=2
+#.
+#: ../megaphone/data/GNOME_Megaphone_Applet.schemas.in.h:1
+msgid "The contact to display in the applet. Empty means no contact is displayed."
+msgstr "ऍपलेट मध्ये दर्शविण्याजोगी संपर्क. रिकामे म्हणजे संपर्क दर्शविले नाही."
+
+#: ../megaphone/data/GNOME_Megaphone_Applet.schemas.in.h:2
+msgid "The contact's avatar token. Empty means contact has no avatar."
+msgstr "संपर्काचे अवतार टोकन. रिकमे म्हणजे संपर्काचे अवतार नाही."
+
+#: ../megaphone/data/GNOME_Megaphone_Applet.server.in.in.h:1
+msgid "Megaphone"
+msgstr "मेगाफोन"
+
+#: ../megaphone/data/GNOME_Megaphone_Applet.server.in.in.h:2
+#: ../megaphone/src/megaphone-applet.c:417
+msgid "Talk!"
+msgstr "Talk!"
+
+#: ../megaphone/data/GNOME_Megaphone_Applet.xml.h:1
+#: ../nothere/data/GNOME_NotHere_Applet.xml.h:1
+msgid "_About"
+msgstr "विषयी (_A)"
+
+#: ../megaphone/data/GNOME_Megaphone_Applet.xml.h:2
+msgid "_Information"
+msgstr "माहीती(_I)"
+
+#: ../megaphone/data/GNOME_Megaphone_Applet.xml.h:3
+#: ../src/empathy-main-window.glade.h:15
+msgid "_Preferences"
+msgstr "प्राधान्यता (_P)"
+
+#: ../nothere/data/GNOME_NotHere_Applet.server.in.in.h:1
+msgid "Presence"
+msgstr "उपस्थिती"
+
+#: ../nothere/data/GNOME_NotHere_Applet.server.in.in.h:2
+#: ../nothere/src/nothere-applet.c:106
+msgid "Set your own presence"
+msgstr "आपली उपस्थिती निश्चित करा"
+
+#: ../src/empathy.c:376
+msgid "Don't connect on startup"
+msgstr "प्रारंभवेळी जुळवणी स्थापीत करू नका"
+
+#: ../src/empathy.c:380
+msgid "Don't show the contact list on startup"
+msgstr "प्रारंभवेळी संपर्क यादी दर्शवू नका"
+
+#: ../src/empathy.c:384
+msgid "Show the accounts dialog"
+msgstr "खाते संवाद दर्शवा"
+
+#: ../src/empathy.c:396
+msgid "- Empathy Instant Messenger"
+msgstr "- Empathy जलद संदेशवाहक"
+
+#: ../src/empathy-about-dialog.c:64
+msgid ""
+"Empathy is free software; you can redistribute it and/or modify it under the "
+"terms of the GNU General Public License as published by the Free Software "
+"Foundation; either version 2 of the License, or (at your option) any later "
+"version."
+msgstr ""
+"Empathy is free software; you can redistribute it and/or modify it under the "
+"terms of the GNU General Public License as published by the Free Software "
+"Foundation; either version 2 of the License, or (at your option) any later "
+"version."
+
+#: ../src/empathy-about-dialog.c:68
+msgid ""
+"Empathy is distributed in the hope that it will be useful, but WITHOUT ANY "
+"WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS "
+"FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more "
+"details."
+msgstr ""
+"Empathy is distributed in the hope that it will be useful, but WITHOUT ANY "
+"WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS "
+"FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more "
+"details."
+
+#: ../src/empathy-about-dialog.c:72
+msgid ""
+"You should have received a copy of the GNU General Public License along with "
+"Empathy; if not, write to the Free Software Foundation, Inc., 51 Franklin "
+"Street, Fifth Floor, Boston, MA 02110-130159 USA"
+msgstr ""
+"You should have received a copy of the GNU General Public License along with "
+"Empathy; if not, write to the Free Software Foundation, Inc., 51 Franklin "
+"Street, Fifth Floor, Boston, MA 02110-130159 USA"
+
+#: ../src/empathy-about-dialog.c:100
+msgid "An Instant Messaging client for GNOME"
+msgstr "GNOME करीता जलद संदेशवाहक क्लाऐंट"
+
+#: ../src/empathy-about-dialog.c:106
+msgid "translator-credits"
+msgstr "संदिप शेडमाके <sandeep.shedmake@gmail.com>, 2008"
+
+#: ../src/empathy-accounts-dialog.c:235
+msgid ""
+"To add a new account, you can click on the 'Add' button and a new entry will "
+"be created for you to start configuring."
+msgstr "नविन खाते जोडण्याकरीता, तुम्ही 'जोडा' या बटणावर क्लिक करू शकता व संयोजना करीता नविन नोंदणी लगेचच तयार होईल."
+
+#: ../src/empathy-accounts-dialog.c:239
+msgid ""
+"To add a new account, you first have to install a backend for each protocol "
+"you want to use."
+msgstr "नविन खाते जोडण्याकरीता, प्रथम प्रत्येक वापरण्याजोगी शिष्टाचार करीता बॅकएन्ड प्रतिष्ठापीत करा."
+
+#: ../src/empathy-accounts-dialog.c:246
+#: ../src/empathy-accounts-dialog.glade.h:2
+msgid "<b>No Account Selected</b>"
+msgstr "<b>खाते निवडले नाही</b>"
+
+#: ../src/empathy-accounts-dialog.c:247
+msgid ""
+"\n"
+"\n"
+"If you do not want to add an account, simply click on the account you want "
+"to configure in the list on the left."
+msgstr ""
+"\n"
+"\n"
+"खाते जोडायचे नसल्यास, फक्त डावीकडील यादीतील संयोजनाजोगी खात्यावर क्लिक करा."
+
+#: ../src/empathy-accounts-dialog.c:253
+msgid "<b>No Accounts Configured</b>"
+msgstr "<b>खाते संयोजीत नाही</b>"
+
+#: ../src/empathy-accounts-dialog.c:451
+msgid "Enabled"
+msgstr "कार्यान्वीत"
+
+#: ../src/empathy-accounts-dialog.c:461
+#: ../src/empathy-accounts-dialog.glade.h:4
+msgid "Accounts"
+msgstr "खाते"
+
+#: ../src/empathy-accounts-dialog.c:991
+#, c-format
+msgid ""
+"You are about to remove your %s account!\n"
+"Are you sure you want to proceed?"
+msgstr ""
+"तुम्ही %s खाते काढण्याच्या मार्गावर आहात!\n"
+"तुम्हाला नक्की पुढे जायचे?"
+
+#: ../src/empathy-accounts-dialog.c:997
+msgid ""
+"Any associated conversations and chat rooms will NOT be removed if you "
+"decide to proceed.\n"
+"\n"
+"Should you decide to add the account back at a later time, they will still "
+"be available."
+msgstr ""
+"पुढे जाण्याचे ठरविल्यास संबंधित संभाषन व संवाद कक्ष काढून टाकले "
+"जाणार नाही.\n"
+"\n"
+"खाते भविष्यात जोडायचे निश्चित केल्यास, भविष्यात देखिल उपलब्ध होतील."
+
+#: ../src/empathy-accounts-dialog.glade.h:1
+msgid "<b>New Account</b>"
+msgstr "<b>नविन खाते</b>"
+
+#: ../src/empathy-accounts-dialog.glade.h:3
+msgid "<b>Settings</b>"
+msgstr "<b>संयोजना</b>"
+
+#: ../src/empathy-accounts-dialog.glade.h:5
+msgid "Cr_eate"
+msgstr "निर्माण करा (_e)"
+
+#: ../src/empathy-accounts-dialog.glade.h:6
+msgid "I already have an account I want to use"
+msgstr "वापरणी करीता आधिपासूनच खाते इपलब्ध आहे"
+
+#: ../src/empathy-accounts-dialog.glade.h:7
+msgid "Type:"
+msgstr "प्रकार:"
+
+#: ../src/empathy-call-window.c:142
+msgid "Closed"
+msgstr "बंद झाले"
+
+#: ../src/empathy-call-window.c:254
+msgid "End this call?"
+msgstr "या कॉल समाप्त करायचा?"
+
+#: ../src/empathy-call-window.c:256
+msgid "Closing this window will end the call in progress."
+msgstr "हे चौकट बंद केल्यास कार्यरत संभाषण बंद होईल."
+
+#: ../src/empathy-call-window.c:257
+msgid "_End Call"
+msgstr "संभाषण संपवा (_E)"
+
+#: ../src/empathy-call-window.c:311
+msgid "Incoming call"
+msgstr "येणारे कॉल"
+
+#: ../src/empathy-call-window.c:313
+#, c-format
+msgid "%s is calling you, do you want to answer?"
+msgstr "%s आपल्याशी संपर्क साधू इच्छिते, त्याला प्रतिसाद द्यायचे?"
+
+#: ../src/empathy-call-window.c:319
+msgid "_Reject"
+msgstr "अमान्य(_R)"
+
+#: ../src/empathy-call-window.c:324
+msgid "_Answer"
+msgstr "उत्तर (_A)"
+
+#: ../src/empathy-call-window.c:379
+msgid "Empathy Call"
+msgstr "Empathy कॉल"
+
+#. To translators: Readying is the first state of the call, it is
+#. * preparing the connection and it does not yet ring.
+#: ../src/empathy-call-window.c:382
+msgid "Readying"
+msgstr "सज्ज होत आहे"
+
+#: ../src/empathy-call-window.c:391
+#, c-format
+msgid "%s - Empathy Call"
+msgstr "%s - Empathy कॉल"
+
+#: ../src/empathy-call-window.c:395
+msgid "Ringing"
+msgstr "रिंग होत आहे"
+
+#: ../src/empathy-call-window.c:408
+msgid "Connecting"
+msgstr "जुळवणी करीत आहे"
+
+#: ../src/empathy-call-window.c:524
+#, c-format
+msgid "Incoming call from %s rejected because there is already a running call."
+msgstr "आधिपासूनच कॉल कार्यरत असल्यामुळे %s पासून येणाऱे कॉल नकारले गेले."
+
+#: ../src/empathy-call-window.glade.h:1
+msgid "#"
+msgstr "#"
+
+#: ../src/empathy-call-window.glade.h:2
+msgid "*"
+msgstr "*"
+
+#: ../src/empathy-call-window.glade.h:3
+msgid "0"
+msgstr "0"
+
+#: ../src/empathy-call-window.glade.h:4
+msgid "1"
+msgstr "1"
+
+#: ../src/empathy-call-window.glade.h:5
+msgid "2"
+msgstr "2"
+
+#: ../src/empathy-call-window.glade.h:6
+msgid "3"
+msgstr "3"
+
+#: ../src/empathy-call-window.glade.h:7
+msgid "4"
+msgstr "4"
+
+#: ../src/empathy-call-window.glade.h:8
+msgid "5"
+msgstr "5"
+
+#: ../src/empathy-call-window.glade.h:9
+msgid "6"
+msgstr "6"
+
+#: ../src/empathy-call-window.glade.h:10
+msgid "7"
+msgstr "7"
+
+#: ../src/empathy-call-window.glade.h:11
+msgid "8"
+msgstr "8"
+
+#: ../src/empathy-call-window.glade.h:12
+msgid "9"
+msgstr "9"
+
+#. To translators: The keypad is numbers [0-9], asterisk (*) and hash (#). Presented like on any phone
+#: ../src/empathy-call-window.glade.h:14
+msgid "<b>Keypad</b>"
+msgstr "<b>कीपॅड</b>"
+
+#: ../src/empathy-call-window.glade.h:15
+msgid "<b>Volume</b>"
+msgstr "<b>आवाज</b>"
+
+#: ../src/empathy-call-window.glade.h:16
+msgid "Hang Up"
+msgstr "जरा वाट पहा"
+
+#: ../src/empathy-call-window.glade.h:17
+msgid "Send Video"
+msgstr "विडीओ पाठवा"
+
+#: ../src/empathy-chat-window.c:319
+#, c-format
+msgid "Conversations (%d)"
+msgstr "संभाषण (%d)"
+
+#: ../src/empathy-chat-window.c:397
+msgid "Topic:"
+msgstr "विषय:"
+
+#: ../src/empathy-chat-window.c:400
+msgid "Typing a message."
+msgstr "संदेश टाइप करीत आहे."
+
+#: ../src/empathy-chat-window.glade.h:1
+msgid "C_lear"
+msgstr "पुसून टाका (_l)"
+
+#: ../src/empathy-chat-window.glade.h:3
+msgid "Insert _Smiley"
+msgstr "स्माइली अंतर्भूत करा (_S)"
+
+#: ../src/empathy-chat-window.glade.h:4
+msgid "Invitation _message:"
+msgstr "आमंत्रण संदेश (_m):"
+
+#: ../src/empathy-chat-window.glade.h:5
+msgid "Invite"
+msgstr "आमंत्रण"
+
+#: ../src/empathy-chat-window.glade.h:6
+msgid "Move Tab _Left"
+msgstr "टॅब डावीकडे हलवा(_L)"
+
+#: ../src/empathy-chat-window.glade.h:7
+msgid "Move Tab _Right"
+msgstr "टॅब उजवीकडे हलवा(_R)"
+
+#: ../src/empathy-chat-window.glade.h:8
+msgid "Select who would you like to invite:"
+msgstr "कुणाला निमंत्रण द्यायचे ते ठरवा:"
+
+#: ../src/empathy-chat-window.glade.h:9
+msgid "You have been invited to join a chat conference."
+msgstr "संवाद परस्पर संवाद करीता आपल्या निमंत्रण भेट केले गेले आहे."
+
+#: ../src/empathy-chat-window.glade.h:10
+msgid "_Contact"
+msgstr "संपर्क (_C)"
+
+#: ../src/empathy-chat-window.glade.h:11 ../src/empathy-main-window.glade.h:10
+msgid "_Contents"
+msgstr "विषयसूची (_C)"
+
+#: ../src/empathy-chat-window.glade.h:12
+msgid "_Conversation"
+msgstr "संभाषण (_C)"
+
+#: ../src/empathy-chat-window.glade.h:13
+msgid "_Detach Tab"
+msgstr "टॅब मोडून टाका (_D)"
+
+#: ../src/empathy-chat-window.glade.h:15 ../src/empathy-main-window.glade.h:12
+msgid "_Help"
+msgstr "मदत (_H)"
+
+#: ../src/empathy-chat-window.glade.h:16
+msgid "_Next Tab"
+msgstr "पुढील टॅब(_N)"
+
+#: ../src/empathy-chat-window.glade.h:17
+msgid "_Previous Tab"
+msgstr "मागील टॅब(_P)"
+
+#: ../src/empathy-chat-window.glade.h:18
+msgid "_Tabs"
+msgstr "टॅब्स (_T)"
+
+#: ../src/empathy-chatrooms-window.c:262
+msgid "Name"
+msgstr "नाव"
+
+#: ../src/empathy-chatrooms-window.c:280
+msgid "Room"
+msgstr "कक्ष"
+
+#: ../src/empathy-chatrooms-window.c:289
+msgid "Auto-Connect"
+msgstr "स्वयं-जुळवणी"
+
+#: ../src/empathy-chatrooms-window.glade.h:2
+msgid "Edit Favorite Room"
+msgstr "पसंतीचे कक्ष संपादीत करा"
+
+#: ../src/empathy-chatrooms-window.glade.h:3
+msgid "Join room on start_up"
+msgstr "प्रारंभवेळी कक्षाशी जोडणी करा (_u)"
+
+#: ../src/empathy-chatrooms-window.glade.h:4
+msgid "Join this chat room when Empathy starts and you are connected"
+msgstr "Empathy सुरू झाल्यावर व जुळवणी स्थापीत झाल्यास या संवाद कक्षाशी जोडणी स्थापीत करा"
+
+#: ../src/empathy-chatrooms-window.glade.h:5
+msgid "Manage Favorite Rooms"
+msgstr "पसंतीचे कक्ष नियंत्रीत करा"
+
+#: ../src/empathy-chatrooms-window.glade.h:6
+msgid "N_ame:"
+msgstr "नाव (_a):"
+
+#: ../src/empathy-chatrooms-window.glade.h:7
+msgid "S_erver:"
+msgstr "सर्वर (_e):"
+
+#: ../src/empathy-chatrooms-window.glade.h:9
+#: ../src/empathy-new-chatroom-dialog.glade.h:9
+msgid "_Room:"
+msgstr "कक्ष (_R):"
+
+#: ../src/empathy-event-manager.c:166
+#, c-format
+msgid ""
+"New message from %s:\n"
+"%s"
+msgstr ""
+"%s कडून नविन संदेश:\n"
+"%s"
+
+#: ../src/empathy-event-manager.c:205
+#, c-format
+msgid "Incoming call from %s"
+msgstr "%s कडून इनकमींग कॉल"
+
+#: ../src/empathy-event-manager.c:238
+#, c-format
+msgid ""
+"%s is offering you an invitation, but you don't have the needed external "
+"application to handle it."
+msgstr "%s ने निमंत्रण करीता प्रस्ताव मांडला आहे, परंतु हाताळणी करीता भाहेरील अनुप्रयोग उपलब्ध नाही."
+
+#: ../src/empathy-event-manager.c:263
+msgid "Invitation Error"
+msgstr "निमंत्रण त्रुटी"
+
+#: ../src/empathy-event-manager.c:289
+#, c-format
+msgid ""
+"%s is offering you an invitation. An external application will be started to "
+"handle it."
+msgstr "%s ने निमंत्रण करीता प्रस्ताव मांडला आहे. हाताळणी करीता भाहेरील अनुप्रयोग सुरू केले जाईल."
+
+#: ../src/empathy-event-manager.c:345
+#, c-format
+msgid "Subscription requested by %s"
+msgstr "%s द्वारे विनंतीकृत सबस्क्रिप्शन"
+
+#: ../src/empathy-event-manager.c:348
+#, c-format
+msgid ""
+"\n"
+"Message: %s"
+msgstr ""
+"\n"
+"संदेश: %s"
+
+#: ../src/empathy-main-window.c:466
+msgid "Show and edit accounts"
+msgstr "खाते दर्शवा व संपादीत करा"
+
+#: ../src/empathy-main-window.c:836
+msgid "Contact"
+msgstr "संपर्क"
+
+#: ../src/empathy-main-window.c:1038
+msgid "_Edit account"
+msgstr "खाते संपादन (_E)"
+
+#: ../src/empathy-main-window.c:1121
+msgid "No error specified"
+msgstr "त्रुटी निश्चित केले नाही"
+
+#: ../src/empathy-main-window.c:1124
+msgid "Network error"
+msgstr "संजाळ त्रुटी"
+
+#: ../src/empathy-main-window.c:1127
+msgid "Authentication failed"
+msgstr "ओळख पटली नाही"
+
+#: ../src/empathy-main-window.c:1130
+msgid "Encryption error"
+msgstr "एनक्रिप्शन त्रुटी"
+
+#: ../src/empathy-main-window.c:1133
+msgid "Name in use"
+msgstr "नाव वापरणीत आहे"
+
+#: ../src/empathy-main-window.c:1136
+msgid "Certificate not provided"
+msgstr "प्रमाणपत्र पुरविले नाही"
+
+#: ../src/empathy-main-window.c:1139
+msgid "Certificate untrusted"
+msgstr "प्रमाणपत्र वर विश्वास नाही"
+
+#: ../src/empathy-main-window.c:1142
+msgid "Certificate expired"
+msgstr "प्रमापपत्र कालबाह्य झाले"
+
+#: ../src/empathy-main-window.c:1145
+msgid "Certificate not activated"
+msgstr "प्रमाणपत्र सक्रीय केले नाही"
+
+#: ../src/empathy-main-window.c:1148
+msgid "Certificate hostname mismatch"
+msgstr "प्रमाणपत्र यजमान जुळवणी अपयशी"
+
+#: ../src/empathy-main-window.c:1151
+msgid "Certificate fingerprint mismatch"
+msgstr "प्रमाणपत्र ठस्सा जुळवणी अपयशी"
+
+#: ../src/empathy-main-window.c:1154
+msgid "Certificate self-signed"
+msgstr "प्रमाणपत्र स्वयं-स्वाक्षरीत"
+
+#: ../src/empathy-main-window.c:1157
+msgid "Certificate error"
+msgstr "प्रमाणपत्र त्रुटी"
+
+#: ../src/empathy-main-window.c:1160
+msgid "Unknown error"
+msgstr "अपरिचीत त्रुटी"
+
+#: ../src/empathy-main-window.glade.h:1
+msgid "Contact List"
+msgstr "संपर्क यादी"
+
+#: ../src/empathy-main-window.glade.h:2
+msgid "Context"
+msgstr "संदर्भ"
+
+#: ../src/empathy-main-window.glade.h:3
+msgid "Join _Favorites"
+msgstr "पसंती जोडणी (_F)"
+
+#: ../src/empathy-main-window.glade.h:4
+msgid "Join _New..."
+msgstr "नविन जोडणी (_N)..."
+
+#: ../src/empathy-main-window.glade.h:5
+msgid "Manage Favorites"
+msgstr "पसंती व्यवस्थापन"
+
+#: ../src/empathy-main-window.glade.h:6
+msgid "Show _Offline Contacts"
+msgstr "ऑफलाइन संपर्क दर्शवा (_O)"
+
+#: ../src/empathy-main-window.glade.h:7
+msgid "_Accounts"
+msgstr "खाते (_A)"
+
+#: ../src/empathy-main-window.glade.h:8
+msgid "_Add Contact..."
+msgstr "संपर्क जोडा (_A)..."
+
+#: ../src/empathy-main-window.glade.h:13 ../src/empathy-status-icon.glade.h:2
+msgid "_New Conversation..."
+msgstr "नविन संभाषण (_N)..."
+
+#: ../src/empathy-main-window.glade.h:14
+msgid "_Personal Information"
+msgstr "व्यक्तिगत माहिती (_P)"
+
+#: ../src/empathy-main-window.glade.h:16
+msgid "_Room"
+msgstr "कक्ष (_R)"
+
+#: ../src/empathy-new-chatroom-dialog.c:290
+msgid "Chat Rooms"
+msgstr "संवाद कक्ष"
+
+#: ../src/empathy-new-chatroom-dialog.glade.h:2
+msgid "Browse:"
+msgstr "संचार:"
+
+#: ../src/empathy-new-chatroom-dialog.glade.h:3
+msgid "Enter the room name to join here or click on one or more rooms in the list."
+msgstr "येथे जोडणी करीता कक्ष नाव प्रविष्ट करा किंवा एक व त्यापेक्षा अधिक यादीतील कक्षावर क्लिक करा."
+
+#: ../src/empathy-new-chatroom-dialog.glade.h:4
+msgid ""
+"Enter the server which hosts the room, or leave it empty if the room is on "
+"the current account's server"
+msgstr "कक्ष दर्शविणारे सर्वर प्रविष्ट करा, किंवा कक्ष वर्तमान खाते अंतर्गत सर्वरवर आढळल्यास रिकामे सोडा"
+
+#: ../src/empathy-new-chatroom-dialog.glade.h:5
+msgid "Join"
+msgstr "जुळवणी करा"
+
+#: ../src/empathy-new-chatroom-dialog.glade.h:6
+msgid "Join New"
+msgstr "नविन जोडणी"
+
+#: ../src/empathy-new-chatroom-dialog.glade.h:7
+msgid "Re_fresh"
+msgstr "पुन्हदाखलन (_f)"
+
+#: ../src/empathy-new-chatroom-dialog.glade.h:8
+msgid "This list represents all chat rooms hosted on the server you have entered."
+msgstr "ही यादी सर्वर वरील वापरकर्ता द्वारे प्रविष्ट सर्व संवाद कक्ष दर्शविते."
+
+#: ../src/empathy-preferences.c:264
+msgid "Language"
+msgstr "भाषा"
+
+#: ../src/empathy-preferences.glade.h:1
+msgid "<b>Appearance</b>"
+msgstr "<b>दर्शन</b>"
+
+#. To translators: Audio notifications preferences
+#: ../src/empathy-preferences.glade.h:3
+msgid "<b>Audio</b>"
+msgstr "<b>ऑडिओ</b>"
+
+#: ../src/empathy-preferences.glade.h:4
+msgid "<b>Behaviour</b>"
+msgstr "<b>वर्तन</b>"
+
+#: ../src/empathy-preferences.glade.h:5
+msgid "<b>Contact List</b>"
+msgstr "<b>संपर्क यादी</b>"
+
+#: ../src/empathy-preferences.glade.h:6
+msgid "<b>Enable spell checking for languages:</b>"
+msgstr "<b>भाषांकरीता शब्दलेखन कार्यान्वीत करा:</b>"
+
+#. To translators: Visual notifications preferences, like notify bubbles, etc.
+#: ../src/empathy-preferences.glade.h:8
+msgid "<b>Visual</b>"
+msgstr "<b>दृश्यमान</b>"
+
+#: ../src/empathy-preferences.glade.h:9
+msgid ""
+"<small>The list of languages reflects only the languages for which you have "
+"a dictionary installed.</small>"
+msgstr "<small>शब्दकोष प्रतिष्ठापीत असलेल्या भाषांचेच नाव यादीतील दर्शविले जाते.</small>"
+
+#: ../src/empathy-preferences.glade.h:10
+msgid "Automatically _connect on startup "
+msgstr "प्रारंभवेळी आपोआप जुळवणी स्थापीत करा (_c)"
+
+#: ../src/empathy-preferences.glade.h:11
+msgid "Avatars are user chosen images shown in the contact list"
+msgstr "अवतार संपर्क यादीत दर्शविलेले वापरकर्ता द्वारे निवडलेले प्रतिमा असतात"
+
+#: ../src/empathy-preferences.glade.h:12
+msgid "Chat Th_eme:"
+msgstr "संवाद करीत सुत्रयोजना (_e):"
+
+#: ../src/empathy-preferences.glade.h:13
+msgid "Display notifications when contacts come _online"
+msgstr "संपर्क ऑनलाइन आढळल्यास सूचना दर्शवा (_o)"
+
+#: ../src/empathy-preferences.glade.h:14
+msgid "Enable sounds when _away"
+msgstr "दूर असल्यावर संगीत चालवा (_b)"
+
+#: ../src/empathy-preferences.glade.h:15
+msgid "Enable sounds when _busy"
+msgstr "व्यस्त असल्यावर संगीत चालवा (_b)"
+
+#: ../src/empathy-preferences.glade.h:16
+msgid "General"
+msgstr "सामान्य"
+
+#: ../src/empathy-preferences.glade.h:17
+msgid "Notifications"
+msgstr "सूचना"
+
+#: ../src/empathy-preferences.glade.h:18
+msgid "Preferences"
+msgstr "प्राधान्यता"
+
+#: ../src/empathy-preferences.glade.h:19
+msgid "Show _avatars"
+msgstr "अवतार दर्शवा (_a)"
+
+#: ../src/empathy-preferences.glade.h:20
+msgid "Show _smileys as images"
+msgstr "प्रतिमाला स्माइलीनुरूप दर्शवा (_s)"
+
+#: ../src/empathy-preferences.glade.h:21
+msgid "Show co_mpact contact list"
+msgstr "एकत्रीत संपर्क यादी दर्शवा (_m)"
+
+#: ../src/empathy-preferences.glade.h:22
+msgid "Sort by _name"
+msgstr "नावानुरूप क्रमावारीत लावा (_n)"
+
+#: ../src/empathy-preferences.glade.h:23
+msgid "Sort by s_tate"
+msgstr "स्थिती नुरूप क्रमवारीत लावा (_t)"
+
+#: ../src/empathy-preferences.glade.h:24
+msgid "Spell Checking"
+msgstr "शब्दलेखन तपास"
+
+#: ../src/empathy-preferences.glade.h:25
+msgid "Themes"
+msgstr "सुत्रयोजना"
+
+#: ../src/empathy-preferences.glade.h:26
+msgid "_Open new chats in separate windows"
+msgstr "संवाद वेगळ्या चौकटीत उघडा (_O)"
+
+#: ../src/empathy-preferences.glade.h:27
+msgid "_Play sound when messages arrive"
+msgstr "संदेश प्राप्त होताच संगीत चालवा (_P)"
+
+#: ../src/empathy-status-icon.glade.h:1
+msgid "Status"
+msgstr "स्थिती"
+
+#: ../src/empathy-status-icon.glade.h:3
+msgid "_Quit"
+msgstr "बाहेर पडा (_Q)"
+
+#: ../src/empathy-status-icon.glade.h:4
+msgid "_Show Contact List"
+msgstr "संपर्क यादि दर्शवा (_S)"
+
