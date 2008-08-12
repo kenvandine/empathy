@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-04 20:40+0200\n"
-"PO-Revision-Date: 2008-08-04 20:40+0200\n"
+"POT-Creation-Date: 2008-08-12 12:31+0200\n"
+"PO-Revision-Date: 2008-08-12 12:31+0200\n"
 "Last-Translator: Ignacio Casal Quinteiro <icq@svn.gnome.org>\n"
 "Language-Team: Galego <proxecto@trasno.net>\n"
 "MIME-Version: 1.0\n"
@@ -260,23 +260,23 @@ msgstr "Contas de Empathy"
 msgid "People nearby"
 msgstr "Xente máis próxima"
 
-#: ../libempathy/empathy-utils.c:346
+#: ../libempathy/empathy-utils.c:345
 msgid "Available"
 msgstr "Dispoñible"
 
-#: ../libempathy/empathy-utils.c:348
+#: ../libempathy/empathy-utils.c:347
 msgid "Busy"
 msgstr "Ocupado"
 
-#: ../libempathy/empathy-utils.c:351
+#: ../libempathy/empathy-utils.c:350
 msgid "Away"
 msgstr "Ausente"
 
-#: ../libempathy/empathy-utils.c:353
+#: ../libempathy/empathy-utils.c:352
 msgid "Hidden"
 msgstr "Oculto"
 
-#: ../libempathy/empathy-utils.c:356
+#: ../libempathy/empathy-utils.c:355
 msgid "Offline"
 msgstr "Desconectado"
 
@@ -511,71 +511,71 @@ msgstr "Todos os ficheiros"
 msgid "Click to enlarge"
 msgstr "Prema para agrandar"
 
-#: ../libempathy-gtk/empathy-chat.c:493
+#: ../libempathy-gtk/empathy-chat.c:497
 msgid "offline"
 msgstr "desconectado"
 
-#: ../libempathy-gtk/empathy-chat.c:496
+#: ../libempathy-gtk/empathy-chat.c:500
 msgid "invalid contact"
 msgstr "contacto inválido"
 
-#: ../libempathy-gtk/empathy-chat.c:499
+#: ../libempathy-gtk/empathy-chat.c:503
 msgid "permission denied"
 msgstr "permiso denegado"
 
-#: ../libempathy-gtk/empathy-chat.c:502
+#: ../libempathy-gtk/empathy-chat.c:506
 msgid "too long message"
 msgstr "mensaxe demasiado longa"
 
-#: ../libempathy-gtk/empathy-chat.c:505
+#: ../libempathy-gtk/empathy-chat.c:509
 msgid "not implemented"
 msgstr "sen implementar"
 
-#: ../libempathy-gtk/empathy-chat.c:508
+#: ../libempathy-gtk/empathy-chat.c:512
 msgid "unknown"
 msgstr "descoñecido"
 
-#: ../libempathy-gtk/empathy-chat.c:512
+#: ../libempathy-gtk/empathy-chat.c:516
 #, c-format
 msgid "Error sending message '%s': %s"
 msgstr "Erro enviando a mensaxe '%s': %s"
 
-#: ../libempathy-gtk/empathy-chat.c:542
+#: ../libempathy-gtk/empathy-chat.c:546
 #, c-format
 msgid "Topic set to: %s"
 msgstr "Tema establecido a: %s"
 
-#: ../libempathy-gtk/empathy-chat.c:544
+#: ../libempathy-gtk/empathy-chat.c:548
 msgid "No topic defined"
 msgstr "Tema sen definir"
 
-#: ../libempathy-gtk/empathy-chat.c:959
+#: ../libempathy-gtk/empathy-chat.c:963
 msgid "Insert Smiley"
 msgstr "Inserir emoticona"
 
-#: ../libempathy-gtk/empathy-chat.c:975
+#: ../libempathy-gtk/empathy-chat.c:979
 msgid "_Send"
 msgstr "_Enviar"
 
-#: ../libempathy-gtk/empathy-chat.c:1009
+#: ../libempathy-gtk/empathy-chat.c:1013
 msgid "_Check Word Spelling..."
 msgstr "_Comprobar ortografía..."
 
-#: ../libempathy-gtk/empathy-chat.c:1115
+#: ../libempathy-gtk/empathy-chat.c:1119
 #, c-format
 msgid "%s has joined the room"
 msgstr "%s uniuse á sala"
 
-#: ../libempathy-gtk/empathy-chat.c:1118
+#: ../libempathy-gtk/empathy-chat.c:1122
 #, c-format
 msgid "%s has left the room"
 msgstr "%s deixou a sala"
 
-#: ../libempathy-gtk/empathy-chat.c:1232 ../src/empathy-call-window.c:406
+#: ../libempathy-gtk/empathy-chat.c:1236 ../src/empathy-call-window.c:406
 msgid "Disconnected"
 msgstr "Desconectado"
 
-#: ../libempathy-gtk/empathy-chat.c:1604
+#: ../libempathy-gtk/empathy-chat.c:1608
 msgid "Connected"
 msgstr "Conectado"
 
@@ -623,30 +623,30 @@ msgstr "Decidir _despois"
 msgid "Subscription Request"
 msgstr "Solicitude de subscrición"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1235
+#: ../libempathy-gtk/empathy-contact-list-view.c:1226
 #, c-format
 msgid "Do you really want to remove the group '%s'?"
 msgstr "Está seguro de que quere eliminar o grupo '%s'?"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1237
+#: ../libempathy-gtk/empathy-contact-list-view.c:1228
 msgid "Removing group"
 msgstr "Eliminando grupo"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1284
-#: ../libempathy-gtk/empathy-contact-list-view.c:1363
+#: ../libempathy-gtk/empathy-contact-list-view.c:1275
+#: ../libempathy-gtk/empathy-contact-list-view.c:1354
 msgid "_Remove"
 msgstr "_Eliminar"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1314
+#: ../libempathy-gtk/empathy-contact-list-view.c:1305
 #, c-format
 msgid "Do you really want to remove the contact '%s'?"
 msgstr "Está seguro de que quere eliminar o contacto '%s'?"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1316
+#: ../libempathy-gtk/empathy-contact-list-view.c:1307
 msgid "Removing contact"
 msgstr "Eliminando contacto"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1321
+#: ../libempathy-gtk/empathy-contact-list-view.c:1312
 msgid "Sorry, I don't want you in my contact list anymore."
 msgstr "Síntoo, non te quero na miña lista de contactos máis."
 
@@ -686,7 +686,7 @@ msgid "Select"
 msgstr "Seleccionar"
 
 #: ../libempathy-gtk/empathy-contact-widget.c:875
-#: ../src/empathy-main-window.c:850
+#: ../src/empathy-main-window.c:853
 msgid "Group"
 msgstr "Grupo"
 
@@ -752,10 +752,10 @@ msgstr "SO:"
 
 #: ../libempathy-gtk/empathy-contact-widget.glade.h:16
 msgid ""
-"Select the groups you want this contact to appear in, you can select more "
-"than one group or no groups."
+"Select the groups you want this contact to appear in.  Note that you can "
+"select more than one group or no groups."
 msgstr ""
-"Seleccione os grupos nos que quere que apareza este contacto, pode "
+"Seleccione os grupos nos que quere que apareza este contacto. Note que pode "
 "seleccionar máis de un ou ningún grupo."
 
 #: ../libempathy-gtk/empathy-contact-widget.glade.h:17
@@ -1126,7 +1126,7 @@ msgstr "Mostrar o diálogo de contas"
 msgid "- Empathy Instant Messenger"
 msgstr "- Mensaxería instantánea de Empathy"
 
-#: ../src/empathy-about-dialog.c:64
+#: ../src/empathy-about-dialog.c:84
 msgid ""
 "Empathy is free software; you can redistribute it and/or modify it under the "
 "terms of the GNU General Public License as published by the Free Software "
@@ -1138,7 +1138,7 @@ msgstr ""
 "Foundation; xa sexa na versión 2 da Licenza como (segundo a súa escolla) en "
 "calquera versión posterior."
 
-#: ../src/empathy-about-dialog.c:68
+#: ../src/empathy-about-dialog.c:88
 msgid ""
 "Empathy is distributed in the hope that it will be useful, but WITHOUT ANY "
 "WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS "
@@ -1150,7 +1150,7 @@ msgstr ""
 "PARA UN PROPÓSITO PARTICULAR. Para máis detalles vexa a Licenza Pública "
 "Xeral de GNU."
 
-#: ../src/empathy-about-dialog.c:72
+#: ../src/empathy-about-dialog.c:92
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "Empathy; if not, write to the Free Software Foundation, Inc., 51 Franklin "
@@ -1160,11 +1160,11 @@ msgstr ""
 "en caso contrario, escriba á Free Software Foundation, Inc., 51 Franklin "
 "Street, Fifth Floor, Boston, MA 02110-130159 USA"
 
-#: ../src/empathy-about-dialog.c:100
+#: ../src/empathy-about-dialog.c:120
 msgid "An Instant Messaging client for GNOME"
 msgstr "Un cliente de mensaxería instantánea para Gnome"
 
-#: ../src/empathy-about-dialog.c:106
+#: ../src/empathy-about-dialog.c:126
 msgid "translator-credits"
 msgstr "Ignacio Casal Quinteiro <nacho.resa@gmail.com>"
 
@@ -1554,67 +1554,67 @@ msgstr ""
 msgid "Show and edit accounts"
 msgstr "Mostrar e editar contas"
 
-#: ../src/empathy-main-window.c:833
+#: ../src/empathy-main-window.c:836
 msgid "Contact"
 msgstr "Contacto"
 
-#: ../src/empathy-main-window.c:1035
+#: ../src/empathy-main-window.c:1038
 msgid "_Edit account"
 msgstr "_Editar conta"
 
-#: ../src/empathy-main-window.c:1118
+#: ../src/empathy-main-window.c:1121
 msgid "No error specified"
 msgstr "Ningún erro especificado"
 
-#: ../src/empathy-main-window.c:1121
+#: ../src/empathy-main-window.c:1124
 msgid "Network error"
 msgstr "Erro da rede"
 
-#: ../src/empathy-main-window.c:1124
+#: ../src/empathy-main-window.c:1127
 msgid "Authentication failed"
 msgstr "Fallou a autenticación"
 
-#: ../src/empathy-main-window.c:1127
+#: ../src/empathy-main-window.c:1130
 msgid "Encryption error"
 msgstr "Erro de cifrado"
 
-#: ../src/empathy-main-window.c:1130
+#: ../src/empathy-main-window.c:1133
 msgid "Name in use"
 msgstr "Nome en uso"
 
-#: ../src/empathy-main-window.c:1133
+#: ../src/empathy-main-window.c:1136
 msgid "Certificate not provided"
 msgstr "Non se proporcionou ningún certificado"
 
-#: ../src/empathy-main-window.c:1136
+#: ../src/empathy-main-window.c:1139
 msgid "Certificate untrusted"
 msgstr "Certificado non fiable"
 
-#: ../src/empathy-main-window.c:1139
+#: ../src/empathy-main-window.c:1142
 msgid "Certificate expired"
 msgstr "Certificado caducado"
 
-#: ../src/empathy-main-window.c:1142
+#: ../src/empathy-main-window.c:1145
 msgid "Certificate not activated"
 msgstr "Certificado non activado"
 
-#: ../src/empathy-main-window.c:1145
+#: ../src/empathy-main-window.c:1148
 msgid "Certificate hostname mismatch"
 msgstr "O nome do host do certificado non coincide"
 
-#: ../src/empathy-main-window.c:1148
+#: ../src/empathy-main-window.c:1151
 msgid "Certificate fingerprint mismatch"
 msgstr "A pegada do certificado non coincide"
 
-#: ../src/empathy-main-window.c:1151
+#: ../src/empathy-main-window.c:1154
 msgid "Certificate self-signed"
 msgstr "O certificado está asinado por si mesmo"
 
-#: ../src/empathy-main-window.c:1154
+#: ../src/empathy-main-window.c:1157
 msgid "Certificate error"
 msgstr "Erro de certificado"
 
-#: ../src/empathy-main-window.c:1157
+#: ../src/empathy-main-window.c:1160
 msgid "Unknown error"
 msgstr "Erro descoñecido"
 
