@@ -16,7 +16,8 @@ profile_DATA = 				\
 	fwd.profile			\
 	sipphone.profile		\
 	groupwise.profile		\
-	gadugadu.profile
+	gadugadu.profile		\
+	qq.profile
 
 desktopdir = $(datadir)/applications
 desktop_in_files = empathy.desktop.in empathy-properties.desktop.in
