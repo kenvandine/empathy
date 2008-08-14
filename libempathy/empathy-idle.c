@@ -79,6 +79,29 @@ enum {
 
 G_DEFINE_TYPE (EmpathyIdle, empathy_idle, G_TYPE_OBJECT)
 
+static void
+idle_presence_changed_cb (MissionControl *mc,
+			  McPresence      state,
+			  gchar          *status,
+			  EmpathyIdle    *idle)
+{
+	EmpathyIdlePriv *priv;
+
+	priv = GET_PRIV (idle);
+
+	DEBUG ("Presence changed to '%s' (%d)", status, state);
+
+	g_free (priv->status);
+	priv->state = state;
+	priv->status = NULL;
+	if (!G_STR_EMPTY (status)) {
+		priv->status = g_strdup (status);
+	}
+
+	g_object_notify (G_OBJECT (idle), "state");
+	g_object_notify (G_OBJECT (idle), "status");
+}
+
 static gboolean
 idle_ext_away_cb (EmpathyIdle *idle)
 {
@@ -119,29 +142,6 @@ idle_ext_away_start (EmpathyIdle *idle)
 	priv->ext_away_timeout = g_timeout_add_seconds (EXT_AWAY_TIME,
 							(GSourceFunc) idle_ext_away_cb,
 							idle);
-}
-
-static void
-idle_presence_changed_cb (MissionControl *mc,
-			  McPresence      state,
-			  gchar          *status,
-			  EmpathyIdle    *idle)
-{
-	EmpathyIdlePriv *priv;
-
-	priv = GET_PRIV (idle);
-
-	DEBUG ("Presence changed to '%s' (%d)", status, state);
-
-	g_free (priv->status);
-	priv->state = state;
-	priv->status = NULL;
-	if (!G_STR_EMPTY (status)) {
-		priv->status = g_strdup (status);
-	}
-
-	g_object_notify (G_OBJECT (idle), "state");
-	g_object_notify (G_OBJECT (idle), "status");
 }
 
 static void
