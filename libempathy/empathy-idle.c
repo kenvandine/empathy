@@ -27,6 +27,7 @@
 #include <dbus/dbus-glib.h>
 
 #include <telepathy-glib/dbus.h>
+#include <telepathy-glib/util.h>
 #include <libmissioncontrol/mc-enum-types.h>
 
 #include "empathy-idle.h"
@@ -50,9 +51,7 @@ typedef struct {
 	gboolean        auto_away;
 	gboolean        use_nm;
 
-	gboolean        away_reset_status;
 	McPresence      away_saved_state;
-	gboolean        nm_reset_status;
 	McPresence      nm_saved_state;
 
 	gboolean        is_idle;
@@ -157,11 +156,12 @@ idle_session_idle_changed_cb (DBusGProxy  *gs_proxy,
 		priv->is_idle ? "yes" : "no",
 		is_idle ? "yes" : "no");
 
-	if (priv->state <= MC_PRESENCE_OFFLINE ||
-	    priv->state == MC_PRESENCE_HIDDEN ||
-	    !priv->auto_away) {
-		/* We are not online or we don't want to go auto away,
-		 * nothing to do here */
+	if (!priv->auto_away ||
+	    (priv->nm_saved_state == MC_PRESENCE_UNSET &&
+	     (priv->state <= MC_PRESENCE_OFFLINE ||
+	      priv->state == MC_PRESENCE_HIDDEN))) {
+		/* We don't want to go auto away OR we explicitely asked to be
+		 * offline, nothing to do here */
 		priv->is_idle = is_idle;
 		return;
 	}
@@ -170,44 +170,47 @@ idle_session_idle_changed_cb (DBusGProxy  *gs_proxy,
 		McPresence new_state;
 		/* We are now idle */
 
-		if (priv->state == MC_PRESENCE_AWAY ||
-		    priv->state == MC_PRESENCE_EXTENDED_AWAY) {
-			/* User set away manually, when coming back we restore
-			 * default presence. */
-			new_state = priv->state;
-			priv->away_saved_state = MC_PRESENCE_AVAILABLE;
-			priv->away_reset_status = TRUE;
+		idle_ext_away_start (idle);
+
+		if (priv->nm_saved_state != MC_PRESENCE_UNSET) {
+		    	/* We are disconnected, when coming back from away
+		    	 * we want to restore the presence before the
+		    	 * disconnection. */
+			priv->away_saved_state = priv->nm_saved_state;
 		} else {
-			new_state = MC_PRESENCE_AWAY;
 			priv->away_saved_state = priv->state;
-			priv->away_reset_status = FALSE;
 		}
 
-		DEBUG ("Going to autoaway");
-		empathy_idle_set_state (idle, new_state);
+		new_state = MC_PRESENCE_AWAY;
+		if (priv->state == MC_PRESENCE_EXTENDED_AWAY) {
+			new_state = MC_PRESENCE_EXTENDED_AWAY;
+		}
 
-		idle_ext_away_start (idle);
+		DEBUG ("Going to autoaway. Saved state=%d, new state=%d",
+			priv->away_saved_state, new_state);
+		empathy_idle_set_state (idle, new_state);
 	} else if (!is_idle && priv->is_idle) {
+		const gchar *new_status;
 		/* We are no more idle, restore state */
+
 		idle_ext_away_stop (idle);
 
-		DEBUG ("Restoring state to %d, reset status: %s",
-			priv->away_saved_state,
-			priv->away_reset_status ? "Yes" : "No");
-
-		if (priv->nm_connected) {
-			empathy_idle_set_presence (idle,
-						   priv->away_saved_state,
-						   priv->away_reset_status ? NULL : priv->status);
+		if (priv->away_saved_state == MC_PRESENCE_AWAY ||
+		    priv->away_saved_state == MC_PRESENCE_EXTENDED_AWAY) {
+			priv->away_saved_state = MC_PRESENCE_AVAILABLE;
+			new_status = NULL;
 		} else {
-			/* We can't restore state now, will do when NM gets
-			 * connected. */
-			priv->nm_saved_state = priv->away_saved_state;
-			priv->nm_reset_status = priv->away_reset_status;
+			new_status = priv->status;
 		}
 
+		DEBUG ("Restoring state to %d, reset status to %s",
+			priv->away_saved_state, new_status);
+
+		empathy_idle_set_presence (idle,
+					   priv->away_saved_state,
+					   new_status);
+
 		priv->away_saved_state = MC_PRESENCE_UNSET;
-		priv->away_reset_status = FALSE;
 	}
 
 	priv->is_idle = is_idle;
@@ -224,9 +227,6 @@ idle_nm_state_change_cb (DBusGProxy  *proxy,
 
 	priv = GET_PRIV (idle);
 
-	DEBUG ("New network state (%d), in use = %s",
-		state, priv->use_nm ? "Yes" : "No");
-
 	if (!priv->use_nm) {
 		return;
 	}
@@ -236,20 +236,19 @@ idle_nm_state_change_cb (DBusGProxy  *proxy,
 			     state == NM_STATE_DISCONNECTED);
 	priv->nm_connected = TRUE; /* To be sure _set_state will work */
 
+	DEBUG ("New network state %d", state);
+
 	if (old_nm_connected && !new_nm_connected) {
 		/* We are no more connected */
-		idle_ext_away_stop (idle);
-
+		DEBUG ("Disconnected: Save state %d", priv->state);
 		priv->nm_saved_state = priv->state;
 		empathy_idle_set_state (idle, MC_PRESENCE_OFFLINE);
 	}
 	else if (!old_nm_connected && new_nm_connected) {
 		/* We are now connected */
-		empathy_idle_set_presence (idle,
-					   priv->nm_saved_state,
-					   priv->nm_reset_status ? NULL : priv->status);
+		DEBUG ("Reconnected: Restore state %d", priv->nm_saved_state);
+		empathy_idle_set_state (idle, priv->nm_saved_state);
 		priv->nm_saved_state = MC_PRESENCE_UNSET;
-		priv->nm_reset_status = FALSE;
 	}
 
 	priv->nm_connected = new_nm_connected;
@@ -551,24 +550,31 @@ empathy_idle_set_presence (EmpathyIdle *idle,
 
 	priv = GET_PRIV (idle);
 
-	DEBUG ("Changing presence to %s (%d)",
-		       status, state);
-
-	if (!priv->nm_connected) {
-		DEBUG ("NM not connected");
-		return;
-	}
+	DEBUG ("Changing presence to %s (%d)", status, state);
 
 	/* Do not set translated default messages */
 	default_status = empathy_presence_get_default_message (state);
-	if (status && strcmp (status, default_status) == 0) {
+	if (!tp_strdiff (status, default_status)) {
 		status = NULL;
 	}
 
-	mission_control_set_presence (priv->mc,
-				      state,
-				      status,
-				      NULL, NULL);
+	if (!priv->nm_connected) {
+		DEBUG ("NM not connected");
+
+		priv->nm_saved_state = state;
+		if (tp_strdiff (priv->status, status)) {
+			g_free (priv->status);
+			priv->status = NULL;
+			if (!G_STR_EMPTY (status)) {
+				priv->status = g_strdup (status);
+			}
+			g_object_notify (G_OBJECT (idle), "status");
+		}
+
+		return;
+	}
+
+	mission_control_set_presence (priv->mc, state, status, NULL, NULL);
 }
 
 gboolean
@@ -628,10 +634,10 @@ empathy_idle_set_use_nm (EmpathyIdle *idle,
 		
 		idle_nm_state_change_cb (priv->nm_proxy, nm_status, idle);
 	} else {
-		if (!priv->nm_connected) {
+		priv->nm_connected = TRUE;
+		if (priv->nm_saved_state != MC_PRESENCE_UNSET) {
 			empathy_idle_set_state (idle, priv->nm_saved_state);
 		}
-		priv->nm_connected = TRUE;
 		priv->nm_saved_state = MC_PRESENCE_UNSET;
 	}
 
