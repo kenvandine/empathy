@@ -1,7 +1,6 @@
 # Please keep this file sorted alphabetically.
 
 data/empathy.desktop.in
-data/empathy-properties.desktop.in
 megaphone/data/GNOME_Megaphone_Applet.server.in
 nothere/data/GNOME_NotHere_Applet.server.in
 
