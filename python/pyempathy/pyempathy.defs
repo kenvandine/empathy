@@ -554,6 +554,23 @@
   )
 )
 
+(define-function connection_request_channel
+  (c-name "empathy_connection_request_channel")
+  (return-type "none")
+  (parameters
+    '("TpConnection*" "proxy")
+    '("gint" "timeout_ms")
+    '("const-gchar*" "channel_type")
+    '("guint" "handle_type")
+    '("const-gchar*" "name")
+    '("gboolean" "suppress_handler")
+    '("empathy_connection_callback_for_request_channel" "callback")
+    '("gpointer" "user_data")
+    '("GDestroyNotify" "destroy")
+    '("GObject*" "weak_object")
+  )
+)
+
 
 
 ;; From empathy-message.h
