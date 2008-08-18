@@ -59,9 +59,7 @@ typedef struct {
 	GtkWidget        *alignment_settings;
 
 	GtkWidget        *vbox_details;
-	GtkWidget        *frame_no_account;
-	GtkWidget        *label_no_account;
-	GtkWidget        *label_no_account_blurb;
+	GtkWidget        *frame_no_profile;
 
 	GtkWidget        *treeview;
 
@@ -146,9 +144,6 @@ static void       accounts_dialog_button_add_clicked_cb     (GtkWidget          
 							     EmpathyAccountsDialog    *dialog);
 static void       accounts_dialog_button_help_clicked_cb    (GtkWidget                *button,
 							     EmpathyAccountsDialog    *dialog);
-static void       accounts_dialog_remove_response_cb        (GtkWidget                *dialog,
-							     gint                      response,
-							     McAccount                *account);
 static void       accounts_dialog_button_remove_clicked_cb  (GtkWidget                *button,
 							     EmpathyAccountsDialog    *dialog);
 static void       accounts_dialog_response_cb               (GtkWidget                *widget,
@@ -212,125 +207,112 @@ static void
 accounts_dialog_update_account (EmpathyAccountsDialog *dialog,
 				McAccount            *account)
 {
+	McProfile   *profile;
+	const gchar *config_ui;
+	gchar       *text;
+
+	if (!account) {
+		GtkTreeView  *view;
+		GtkTreeModel *model;
+
+		view = GTK_TREE_VIEW (dialog->treeview);
+		model = gtk_tree_view_get_model (view);
+
+		if (gtk_tree_model_iter_n_children (model, NULL) > 0) {
+			/* We have configured accounts, select the first one */
+			accounts_dialog_model_select_first (dialog);
+			return;
+		}
+		if (empathy_profile_chooser_n_profiles (dialog->combobox_profile) > 0) {
+			/* We have no account configured but we have some
+			 * profiles instsalled. The user obviously wants to add
+			 * an account. Click on the Add button for him. */
+			accounts_dialog_button_add_clicked_cb (dialog->button_add,
+							       dialog);
+			return;
+		}
+
+		/* No account and no profile, warn the user */
+		gtk_widget_hide (dialog->vbox_details);
+		gtk_widget_hide (dialog->frame_new_account);
+		gtk_widget_show (dialog->frame_no_profile);
+		gtk_widget_set_sensitive (dialog->button_add, FALSE);
+		gtk_widget_set_sensitive (dialog->button_remove, FALSE);
+		return;
+	}
+
+	/* We have an account selected, destroy old settings and create a new
+	 * one for the account selected */
+	gtk_widget_hide (dialog->frame_new_account);
+	gtk_widget_hide (dialog->frame_no_profile);
+	gtk_widget_show (dialog->vbox_details);
+	gtk_widget_set_sensitive (dialog->button_add, TRUE);
+	gtk_widget_set_sensitive (dialog->button_remove, TRUE);
+
 	if (dialog->settings_widget) {
 		gtk_widget_destroy (dialog->settings_widget);
 		dialog->settings_widget = NULL;
 	}
 
-	if (!account) {
-		GtkTreeView  *view;
-		GtkTreeModel *model;
-		GString      *string;
-		gchar        *str;
-
-		gtk_widget_show (dialog->frame_no_account);
-		gtk_widget_hide (dialog->vbox_details);
-
-		gtk_widget_set_sensitive (dialog->button_remove, FALSE);
-
-		view = GTK_TREE_VIEW (dialog->treeview);
-		model = gtk_tree_view_get_model (view);
-
-		if (empathy_profile_chooser_n_profiles (dialog->combobox_profile) > 0) {
-			string = g_string_new (_("To add a new account, you can click on the "
-						 "'Add' button and a new entry will be created "
-						 "for you to start configuring."));
-		} else {
-			string = g_string_new (_("To add a new account, you first have to "
-						 "install a backend for each protocol "
-						 "you want to use."));
-		}
-
-		if (gtk_tree_model_iter_n_children (model, NULL) > 0) {
-			gtk_label_set_markup (GTK_LABEL (dialog->label_no_account),
-					      _("<b>No Account Selected</b>"));
-			g_string_append (string, _("\n\n"
-					"If you do not want to add an account, simply "
-					"click on the account you want to configure in "
-					"the list on the left."));
-		} else {
-			gtk_label_set_markup (GTK_LABEL (dialog->label_no_account),
-					      _("<b>No Accounts Configured</b>"));
-		}
-
-		str = g_string_free (string, FALSE);
-		gtk_label_set_markup (GTK_LABEL (dialog->label_no_account_blurb),
-				      str);
-		g_free (str);
-	} else {
-		McProfile *profile;
-		const gchar *config_ui;
-
-		gtk_widget_hide (dialog->frame_no_account);
-		gtk_widget_show (dialog->vbox_details);
-
-		profile = mc_account_get_profile (account);
-		config_ui = mc_profile_get_configuration_ui (profile);
-		g_object_unref (profile);
-
-		if (!tp_strdiff (config_ui, "jabber")) {
-			dialog->settings_widget = 
-				empathy_account_widget_jabber_new (account);
-		} 
-		else if (!tp_strdiff (config_ui, "msn")) {
-			dialog ->settings_widget =
-				empathy_account_widget_msn_new (account);
-		}
-		else if (!tp_strdiff (config_ui, "local-xmpp")) {
-			dialog->settings_widget =
-				empathy_account_widget_salut_new (account);
-		}
-		else if (!tp_strdiff (config_ui, "irc")) {
-			dialog->settings_widget =
-				empathy_account_widget_irc_new (account);
-		}
-		else if (!tp_strdiff(config_ui, "icq")) {
-			dialog->settings_widget =
-				empathy_account_widget_icq_new (account);
-		}
-		else if (!tp_strdiff(config_ui, "aim")) {
-			dialog->settings_widget =
-				empathy_account_widget_aim_new (account);
-		}
-		else if (!tp_strdiff (config_ui, "yahoo")) {
-			dialog->settings_widget =
-				empathy_account_widget_yahoo_new (account);
-		}
-		else if  (!tp_strdiff (config_ui, "sofiasip")) {
-			dialog->settings_widget =
-				empathy_account_widget_sip_new (account);
-		}
-		else if  (!tp_strdiff (config_ui, "groupwise")) {
-			dialog->settings_widget =
-				empathy_account_widget_groupwise_new (account);
-		}
-		else {
-			dialog->settings_widget = 
-				empathy_account_widget_generic_new (account);
-		}
+	profile = mc_account_get_profile (account);
+	config_ui = mc_profile_get_configuration_ui (profile);
+	if (!tp_strdiff (config_ui, "jabber")) {
+		dialog->settings_widget = 
+			empathy_account_widget_jabber_new (account);
+	} 
+	else if (!tp_strdiff (config_ui, "msn")) {
+		dialog ->settings_widget =
+			empathy_account_widget_msn_new (account);
+	}
+	else if (!tp_strdiff (config_ui, "local-xmpp")) {
+		dialog->settings_widget =
+			empathy_account_widget_salut_new (account);
+	}
+	else if (!tp_strdiff (config_ui, "irc")) {
+		dialog->settings_widget =
+			empathy_account_widget_irc_new (account);
+	}
+	else if (!tp_strdiff(config_ui, "icq")) {
+		dialog->settings_widget =
+			empathy_account_widget_icq_new (account);
+	}
+	else if (!tp_strdiff(config_ui, "aim")) {
+		dialog->settings_widget =
+			empathy_account_widget_aim_new (account);
+	}
+	else if (!tp_strdiff (config_ui, "yahoo")) {
+		dialog->settings_widget =
+			empathy_account_widget_yahoo_new (account);
+	}
+	else if  (!tp_strdiff (config_ui, "sofiasip")) {
+		dialog->settings_widget =
+			empathy_account_widget_sip_new (account);
+	}
+	else if  (!tp_strdiff (config_ui, "groupwise")) {
+		dialog->settings_widget =
+			empathy_account_widget_groupwise_new (account);
+	}
+	else {
+		dialog->settings_widget = 
+			empathy_account_widget_generic_new (account);
 	}
 
-	if (dialog->settings_widget) {
-		gtk_container_add (GTK_CONTAINER (dialog->alignment_settings),
-				   dialog->settings_widget);
-	}
+	gtk_container_add (GTK_CONTAINER (dialog->alignment_settings),
+			   dialog->settings_widget);
 
-	if (account) {
-		McProfile *profile;
-		gchar     *text;
 
-		profile = mc_account_get_profile (account);
-		gtk_image_set_from_icon_name (GTK_IMAGE (dialog->image_type),
-					      mc_profile_get_icon_name (profile),
-					      GTK_ICON_SIZE_DIALOG);
-		gtk_widget_set_tooltip_text (dialog->image_type,
-					     mc_profile_get_display_name (profile));
+	gtk_image_set_from_icon_name (GTK_IMAGE (dialog->image_type),
+				      mc_profile_get_icon_name (profile),
+				      GTK_ICON_SIZE_DIALOG);
+	gtk_widget_set_tooltip_text (dialog->image_type,
+				     mc_profile_get_display_name (profile));
 
-		text = g_markup_printf_escaped ("<big><b>%s</b></big>",
-				mc_account_get_display_name (account));
-		gtk_label_set_markup (GTK_LABEL (dialog->label_name), text);
-		g_free (text);
-	}
+	text = g_markup_printf_escaped ("<big><b>%s</b></big>",
+			mc_account_get_display_name (account));
+	gtk_label_set_markup (GTK_LABEL (dialog->label_name), text);
+
+	g_free (text);
+	g_object_unref (profile);
 }
 
 static void
@@ -658,18 +640,12 @@ accounts_dialog_model_selection_changed (GtkTreeSelection     *selection,
 
 	is_selection = gtk_tree_selection_get_selected (selection, &model, &iter);
 
-	gtk_widget_set_sensitive (dialog->button_add, TRUE);
-	gtk_widget_set_sensitive (dialog->button_remove, is_selection);
-
 	account = accounts_dialog_model_get_selected (dialog);
 	accounts_dialog_update_account (dialog, account);
 
 	if (account) {
 		g_object_unref (account);
 	}
-
-	/* insure new account frame is hidden when a row is selected*/
-	gtk_widget_hide (dialog->frame_new_account);
 }
 
 static void
@@ -865,11 +841,6 @@ accounts_dialog_button_create_clicked_cb (GtkWidget             *button,
 	const gchar *str;
 	McProfileCapabilityFlags cap;
 
-	/* Update widgets */
-	gtk_widget_show (dialog->vbox_details);
-	gtk_widget_hide (dialog->frame_no_account);
-	gtk_widget_hide (dialog->frame_new_account);
-
 	profile = empathy_profile_chooser_get_selected (dialog->combobox_profile);
 
 	/* Create account */
@@ -900,12 +871,6 @@ accounts_dialog_button_back_clicked_cb (GtkWidget             *button,
 {
 	McAccount *account;
 
-	gtk_widget_hide (dialog->vbox_details);
-	gtk_widget_hide (dialog->frame_no_account);
-	gtk_widget_hide (dialog->frame_new_account);
-
-	gtk_widget_set_sensitive (dialog->button_add, TRUE);
-
 	account = accounts_dialog_model_get_selected (dialog);
 	accounts_dialog_update_account (dialog, account);
 }
@@ -934,15 +899,25 @@ accounts_dialog_button_add_clicked_cb (GtkWidget             *button,
 {
 	GtkTreeView      *view;
 	GtkTreeSelection *selection;
+	GtkTreeModel     *model;
 
 	view = GTK_TREE_VIEW (dialog->treeview);
+	model = gtk_tree_view_get_model (view);
 	selection = gtk_tree_view_get_selection (view);
 	gtk_tree_selection_unselect_all (selection);
 
 	gtk_widget_set_sensitive (dialog->button_add, FALSE);
+	gtk_widget_set_sensitive (dialog->button_remove, FALSE);
 	gtk_widget_hide (dialog->vbox_details);
-	gtk_widget_hide (dialog->frame_no_account);
+	gtk_widget_hide (dialog->frame_no_profile);
 	gtk_widget_show (dialog->frame_new_account);
+
+	/* If we have no account, no need of a back button */
+	if (gtk_tree_model_iter_n_children (model, NULL) > 0) {
+		gtk_widget_show (dialog->button_back);
+	} else {
+		gtk_widget_hide (dialog->button_back);
+	}
 
 	accounts_dialog_profile_changed_cb (dialog->checkbutton_register, dialog);
 	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog->checkbutton_register),
@@ -959,28 +934,18 @@ accounts_dialog_button_help_clicked_cb (GtkWidget             *button,
 }
 
 static void
-accounts_dialog_remove_response_cb (GtkWidget *dialog,
-				    gint       response,
-				    McAccount *account)
-{
-	if (response == GTK_RESPONSE_YES) {
-		mc_account_delete (account);
-	}
-
-	gtk_widget_destroy (dialog);
-}
-
-static void
 accounts_dialog_button_remove_clicked_cb (GtkWidget            *button,
 					  EmpathyAccountsDialog *dialog)
 {
 	McAccount *account;
 	GtkWidget *message_dialog;
+	gint       res;
 
 	account = accounts_dialog_model_get_selected (dialog);
 
 	if (!mc_account_is_complete (account)) {
 		accounts_dialog_model_remove_selected (dialog);
+		accounts_dialog_model_select_first (dialog);
 		return;
 	}
 	message_dialog = gtk_message_dialog_new
@@ -1007,11 +972,14 @@ accounts_dialog_button_remove_clicked_cb (GtkWidget            *button,
 			       GTK_STOCK_REMOVE, 
 			       GTK_RESPONSE_YES);
 
-	g_signal_connect (message_dialog, "response",
-			  G_CALLBACK (accounts_dialog_remove_response_cb),
-			  account);
-
 	gtk_widget_show (message_dialog);
+	res = gtk_dialog_run (GTK_DIALOG (message_dialog));
+
+	if (res == GTK_RESPONSE_YES) {
+		mc_account_delete (account);
+		accounts_dialog_model_select_first (dialog);
+	}
+	gtk_widget_destroy (message_dialog);
 }
 
 static void
@@ -1090,9 +1058,7 @@ empathy_accounts_dialog_show (GtkWindow *parent,
 				       NULL,
 				       "accounts_dialog", &dialog->window,
 				       "vbox_details", &dialog->vbox_details,
-				       "frame_no_account", &dialog->frame_no_account,
-				       "label_no_account", &dialog->label_no_account,
-				       "label_no_account_blurb", &dialog->label_no_account_blurb,
+				       "frame_no_profile", &dialog->frame_no_profile,
 				       "alignment_settings", &dialog->alignment_settings,
 				       "treeview", &dialog->treeview,
 				       "frame_new_account", &dialog->frame_new_account,
@@ -1128,9 +1094,6 @@ empathy_accounts_dialog_show (GtkWindow *parent,
 			  dialog->combobox_profile,
 			  TRUE, TRUE, 0);
 	gtk_widget_show (dialog->combobox_profile);
-	if (empathy_profile_chooser_n_profiles (dialog->combobox_profile) <= 0) {
-		gtk_widget_set_sensitive (dialog->button_add, FALSE);
-	}
 	g_signal_connect (dialog->combobox_profile, "changed",
 			  G_CALLBACK (accounts_dialog_profile_changed_cb),
 			  dialog);

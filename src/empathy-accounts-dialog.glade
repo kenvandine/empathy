@@ -291,7 +291,7 @@
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkFrame" id="frame_no_account">
+                  <widget class="GtkFrame" id="frame_no_profile">
                     <property name="label_xalign">0</property>
                     <property name="shadow_type">GTK_SHADOW_NONE</property>
                     <child>
@@ -300,21 +300,18 @@
                         <property name="top_padding">6</property>
                         <property name="left_padding">12</property>
                         <child>
-                          <widget class="GtkLabel" id="label_no_account_blurb">
+                          <widget class="GtkLabel" id="label2">
                             <property name="visible">True</property>
-                            <property name="label">To add a new account, you can click on the 'Add' button and a new entry will be created for you to started configuring.
-
-If you do not want to add an account, simply click on the account you want to configure in the list on the left.</property>
-                            <property name="use_markup">True</property>
+                            <property name="label" translatable="yes">To add a new account, you first have to install a backend for each protocol you want to use.</property>
                             <property name="wrap">True</property>
                           </widget>
                         </child>
                       </widget>
                     </child>
                     <child>
-                      <widget class="GtkLabel" id="label_no_account">
+                      <widget class="GtkLabel" id="label_no_protocol">
                         <property name="visible">True</property>
-                        <property name="label" translatable="yes">&lt;b&gt;No Account Selected&lt;/b&gt;</property>
+                        <property name="label" translatable="yes">&lt;b&gt;No protocol installed&lt;/b&gt;</property>
                         <property name="use_markup">True</property>
                       </widget>
                       <packing>
