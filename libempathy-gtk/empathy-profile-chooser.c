@@ -124,6 +124,7 @@ empathy_profile_chooser_new (void)
 	GtkWidget       *combo_box;
 	GtkTreeIter      iter;
 	gboolean         iter_set = FALSE;
+	McManager       *btf_cm;
 
 	/* set up combo box with new store */
 	store = gtk_list_store_new (COL_COUNT,
@@ -146,10 +147,12 @@ empathy_profile_chooser_new (void)
 					"text", COL_LABEL,
 					NULL);
 
+	btf_cm = mc_manager_lookup ("butterfly");
 	profiles = mc_profiles_list ();
 	for (l = profiles; l; l = l->next) {
-		McProfile  *profile;
-		McProtocol *protocol;
+		McProfile   *profile;
+		McProtocol  *protocol;
+		const gchar *unique_name;
 
 		profile = l->data;
 
@@ -161,12 +164,21 @@ empathy_profile_chooser_new (void)
 		}
 		g_object_unref (protocol);
 
+		/* Skip MSN-Haze if we have butterfly */
+		unique_name = mc_profile_get_unique_name (profile);
+		if (btf_cm && strcmp (unique_name, "msn-haze") == 0) {
+			continue;
+		}
+
 		gtk_list_store_insert_with_values (store, &iter, 0,
 						   COL_ICON, mc_profile_get_icon_name (profile),
 						   COL_LABEL, mc_profile_get_display_name (profile),
 						   COL_PROFILE, profile,
 						   -1);
                 iter_set = TRUE;
+	}
+	if (btf_cm) {
+		g_object_unref (btf_cm);
 	}
 
 	/* Set the profile sort function */
