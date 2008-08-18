@@ -151,12 +151,24 @@ static void       accounts_dialog_destroy_cb                (GtkWidget          
 							     EmpathyAccountsDialog    *dialog);
 
 static void
+accounts_dialog_update_name_label (EmpathyAccountsDialog *dialog,
+				   McAccount             *account)
+{
+	gchar *text;
+
+	text = g_markup_printf_escaped ("<big><b>%s</b></big>",
+			mc_account_get_display_name (account));
+	gtk_label_set_markup (GTK_LABEL (dialog->label_name), text);
+
+	g_free (text);
+}
+
+static void
 accounts_dialog_update_account (EmpathyAccountsDialog *dialog,
 				McAccount            *account)
 {
 	McProfile   *profile;
 	const gchar *config_ui;
-	gchar       *text;
 
 	if (!account) {
 		GtkTreeView  *view;
@@ -254,11 +266,8 @@ accounts_dialog_update_account (EmpathyAccountsDialog *dialog,
 	gtk_widget_set_tooltip_text (dialog->image_type,
 				     mc_profile_get_display_name (profile));
 
-	text = g_markup_printf_escaped ("<big><b>%s</b></big>",
-			mc_account_get_display_name (account));
-	gtk_label_set_markup (GTK_LABEL (dialog->label_name), text);
+	accounts_dialog_update_name_label (dialog, account);
 
-	g_free (text);
 	g_object_unref (profile);
 }
 
@@ -816,6 +825,27 @@ accounts_dialog_account_enabled_cb (McAccountMonitor      *monitor,
 }
 
 static void
+accounts_dialog_account_changed_cb (McAccountMonitor       *monitor,
+				    gchar                  *unique_name,
+				    EmpathyAccountsDialog  *dialog)
+{
+
+	McAccount *account;
+	McAccount *selected_account;
+
+	account = mc_account_lookup (unique_name);
+	if (!account) {
+		return;
+	}
+
+	accounts_dialog_add_or_update_account (dialog, account);
+	selected_account = accounts_dialog_model_get_selected (dialog);
+	if (empathy_account_equal (account, selected_account)) {
+		accounts_dialog_update_name_label (dialog, account);
+	}
+}
+
+static void
 accounts_dialog_button_create_clicked_cb (GtkWidget             *button,
 					  EmpathyAccountsDialog  *dialog)
 {
@@ -994,6 +1024,9 @@ accounts_dialog_destroy_cb (GtkWidget            *widget,
 	g_signal_handlers_disconnect_by_func (dialog->monitor,
 					      accounts_dialog_account_enabled_cb,
 					      dialog);
+	g_signal_handlers_disconnect_by_func (dialog->monitor,
+					      accounts_dialog_account_changed_cb,
+					      dialog);
 	empathy_disconnect_account_status_changed (dialog->token);
 
 	/* Delete incomplete accounts */
@@ -1100,6 +1133,9 @@ empathy_accounts_dialog_show (GtkWindow *parent,
 			  dialog);
 	g_signal_connect (dialog->monitor, "account-disabled",
 			  G_CALLBACK (accounts_dialog_account_enabled_cb),
+			  dialog);
+	g_signal_connect (dialog->monitor, "account-changed",
+			  G_CALLBACK (accounts_dialog_account_changed_cb),
 			  dialog);
 	dialog->token = empathy_connect_to_account_status_changed (dialog->mc,
 						   G_CALLBACK (accounts_dialog_status_changed_cb),
