@@ -1,3 +1,33 @@
+NEW in 2.23.90
+==============
+ - Do not display MSN Haze if butterfly is installed (Xavier Claessens).
+ - If display name of the selected account changes, update the label. (Xavier Claessens).
+ - If there is no account configured, accounts dialog directly propose to add an account (Xavier Claessens).
+ - Add QQ profile and icons (Xavier Claessens).
+ - Add gadugadu profile and icons (Xavier Claessens).
+ - Show the main window by default on first run. (Xavier Claessens).
+ - Use a GtkMessageDialog instead of GtkDialog for remove confirmation diaog of contact/group. (Xavier Claessens).
+
+Bugs fixed:
+ - Fixed #529084, going offline then coming back leaves chat text input unsensitive (Xavier Claessens)
+ - Fixed #540356, Problem with NetworkManager interaction (Xavier Claessens)
+ - Fixed #547326, A sentence is too big without pauses (fpeters)
+
+Translations:
+ - Updated the kn translations (sprasad).
+ - Updated Norwegian bokmål translation. (kmaraas).
+ - Updated pl translation  (Tomasz Dominikowski).
+ - Updated pt_BR translation  (Djavan Fagundes).
+ - Updated Finnish translation (ituohela).
+ - Updated Spanish translation (jorgegonz).
+ - Updated Galician translation (icq).
+ - Updated Marathi Translations (sandeeps).
+ - Updated pt translation  (Duarte Loreto).
+ - Updated fr translation  (Claude Paroz).
+ - updated he translation (yairhr).
+ - Updated Arabic Translation by Youssef Chahibi. (djihed).
+ - Updated sv translation  (Daniel Nylander).
+
 NEW in 2.23.6
 ==============
  - Remove empathy-accounts binary, it is replaced by empathy --accounts (Xavier Claessens).
