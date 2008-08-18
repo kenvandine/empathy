@@ -635,11 +635,41 @@ accounts_dialog_account_added_cb (McAccountMonitor     *monitor,
 				  gchar                *unique_name,
 				  EmpathyAccountsDialog *dialog)
 {
-	McAccount *account;
+	McAccount   *account;
+	const gchar *current_name;
+	gchar       *account_param = NULL;
 
 	account = mc_account_lookup (unique_name);
 	accounts_dialog_add_or_update_account (dialog, account);
-	g_object_unref (account);
+
+	/* Change the display name to "%s (%s)" % (protocol, account).
+	 *  - The protocol is the display name of the profile.
+	 *  - The account should be the normalized name of the McAccount but
+	 *    it's not set until first connection, so we get the "account"
+	 *    parameter for CM that have it. */
+	current_name = mc_account_get_display_name (account);
+	mc_account_get_param_string (account, "account", &account_param);
+	if (!G_STR_EMPTY (account_param)) {
+		McProfile   *profile;
+		const gchar *profile_name;
+		gchar       *new_name;
+
+		profile = mc_account_get_profile (account);
+		profile_name = mc_profile_get_display_name (profile);
+		new_name = g_strdup_printf ("%s (%s)", profile_name,
+					    account_param);
+
+		DEBUG ("Setting new display name for account %s: '%s'",
+		       unique_name, new_name);
+
+		mc_account_set_display_name (account, new_name);
+		g_free (new_name);
+		g_object_unref (profile);
+	} else {
+		/* FIXME: This CM has no account parameter, what can be done? */
+	}
+	g_free (account_param);
+  	g_object_unref (account);
 }
 
 static void
@@ -789,17 +819,20 @@ static void
 accounts_dialog_button_create_clicked_cb (GtkWidget             *button,
 					  EmpathyAccountsDialog  *dialog)
 {
-	McProfile   *profile;
-	McAccount   *account;
-	const gchar *str;
+	McProfile *profile;
+	McAccount *account;
+	gchar     *str;
 	McProfileCapabilityFlags cap;
 
 	profile = empathy_profile_chooser_get_selected (dialog->combobox_profile);
 
 	/* Create account */
 	account = mc_account_create (profile);
-	str = mc_account_get_unique_name (account);
+	/* To translator: %s is the protocol name */
+	str = g_strdup_printf (_("New %s account"),
+			       mc_profile_get_display_name (profile));
 	mc_account_set_display_name (account, str);
+	g_free (str);
 
 	cap = mc_profile_get_capabilities (profile);
 	if (cap & MC_PROFILE_CAPABILITY_REGISTRATION_UI) {
