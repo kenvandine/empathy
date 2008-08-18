@@ -80,7 +80,6 @@ typedef struct {
 
 	gboolean          connecting_show;
 	guint             connecting_id;
-	gboolean          account_changed;
 
 	MissionControl   *mc;
 	McAccountMonitor *monitor;
