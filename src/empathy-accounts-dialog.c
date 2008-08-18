@@ -95,7 +95,6 @@ enum {
 	COL_COUNT
 };
 
-static void       accounts_dialog_setup                     (EmpathyAccountsDialog    *dialog);
 static void       accounts_dialog_update_account            (EmpathyAccountsDialog    *dialog,
 							     McAccount                *account);
 static void       accounts_dialog_model_setup               (EmpathyAccountsDialog    *dialog);
@@ -151,57 +150,6 @@ static void       accounts_dialog_response_cb               (GtkWidget          
 							     EmpathyAccountsDialog    *dialog);
 static void       accounts_dialog_destroy_cb                (GtkWidget                *widget,
 							     EmpathyAccountsDialog    *dialog);
-
-static void
-accounts_dialog_setup (EmpathyAccountsDialog *dialog)
-{
-	GtkTreeView  *view;
-	GtkListStore *store;
-	GtkTreeIter   iter;
-	GList        *accounts, *l;
-
-	view = GTK_TREE_VIEW (dialog->treeview);
-	store = GTK_LIST_STORE (gtk_tree_view_get_model (view));
-
-	accounts = mc_accounts_list ();
-
-	for (l = accounts; l; l = l->next) {
-		McAccount          *account;
-		const gchar        *name;
-		TpConnectionStatus  status;
-		gboolean            enabled;
-
-		account = l->data;
-
-		name = mc_account_get_display_name (account);
-		if (!name) {
-			g_object_unref (account);
-			continue;
-		}
-
-		status = mission_control_get_connection_status (dialog->mc, account, NULL);
-		enabled = mc_account_is_enabled (account);
-
-		gtk_list_store_insert_with_values (store, &iter,
-						   -1,
-						   COL_ENABLED, enabled,
-						   COL_NAME, name,
-						   COL_STATUS, status,
-						   COL_ACCOUNT_POINTER, account,
-						   -1);
-
-		accounts_dialog_status_changed_cb (dialog->mc,
-						   status,
-						   MC_PRESENCE_UNSET,
-						   TP_CONNECTION_STATUS_REASON_NONE_SPECIFIED,
-						   mc_account_get_unique_name (account),
-						   dialog);
-
-		g_object_unref (account);
-	}
-
-	g_list_free (accounts);
-}
 
 static void
 accounts_dialog_update_account (EmpathyAccountsDialog *dialog,
@@ -678,6 +626,12 @@ accounts_dialog_add_account (EmpathyAccountsDialog *dialog,
 					   COL_STATUS, status,
 					   COL_ACCOUNT_POINTER, account,
 					   -1);
+	accounts_dialog_status_changed_cb (dialog->mc,
+					   status,
+					   MC_PRESENCE_UNSET,
+					   TP_CONNECTION_STATUS_REASON_NONE_SPECIFIED,
+					   mc_account_get_unique_name (account),
+					   dialog);
 }
 
 static void
@@ -1043,6 +997,7 @@ empathy_accounts_dialog_show (GtkWindow *parent,
 	static EmpathyAccountsDialog *dialog = NULL;
 	GladeXML                     *glade;
 	gchar                        *filename;
+	GList                        *accounts, *l;
 
 	if (dialog) {
 		gtk_window_present (GTK_WINDOW (dialog->window));
@@ -1119,7 +1074,14 @@ empathy_accounts_dialog_show (GtkWindow *parent,
 						   dialog, NULL);
 
 	accounts_dialog_model_setup (dialog);
-	accounts_dialog_setup (dialog);
+
+	/* Add existing accounts */
+	accounts = mc_accounts_list ();
+	for (l = accounts; l; l = l->next) {
+		accounts_dialog_add_account (dialog, l->data);
+		g_object_unref (l->data);
+	}
+	g_list_free (accounts);
 
 	if (selected_account) {
 		accounts_dialog_model_set_selected (dialog, selected_account);
