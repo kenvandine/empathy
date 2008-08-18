@@ -724,6 +724,9 @@ accounts_dialog_status_changed_cb (MissionControl           *mc,
 	/* Update the status in the model */
 	model = gtk_tree_view_get_model (GTK_TREE_VIEW (dialog->treeview));
 	account = mc_account_lookup (unique_name);
+	if (!account) {
+		return;
+	}
 
 	DEBUG ("Status changed for account %s: status=%d presence=%d",
 		unique_name, status, presence);
