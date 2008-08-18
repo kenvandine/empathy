@@ -210,6 +210,10 @@ create_salut_account (void)
 
 	/* Check if the salut CM is installed */
 	profile = mc_profile_lookup ("salut");
+	if (!profile) {
+		DEBUG ("No salut profile");
+		return;
+	}
 	protocol = mc_profile_get_protocol (profile);
 	if (!protocol) {
 		DEBUG ("Salut not installed");
