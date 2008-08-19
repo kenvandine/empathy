@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-12 12:31+0200\n"
-"PO-Revision-Date: 2008-08-12 12:31+0200\n"
+"POT-Creation-Date: 2008-08-19 18:09+0200\n"
+"PO-Revision-Date: 2008-08-19 18:10+0200\n"
 "Last-Translator: Ignacio Casal Quinteiro <icq@svn.gnome.org>\n"
 "Language-Team: Galego <proxecto@trasno.net>\n"
 "MIME-Version: 1.0\n"
@@ -248,15 +248,7 @@ msgstr ""
 "ordenar polo nome do contacto co valor \"name\". Un valor de \"state\" "
 "ordenará a lista polo estado."
 
-#: ../data/empathy-properties.desktop.in.in.h:1
-msgid "Configure Telepathy account settings"
-msgstr "Configurar os axustes da conta de Telephaty"
-
-#: ../data/empathy-properties.desktop.in.in.h:2
-msgid "Empathy accounts"
-msgstr "Contas de Empathy"
-
-#: ../libempathy/empathy-tp-contact-list.c:731 ../src/empathy.c:244
+#: ../libempathy/empathy-tp-contact-list.c:731 ../src/empathy.c:248
 msgid "People nearby"
 msgstr "Xente máis próxima"
 
@@ -1110,19 +1102,19 @@ msgstr "Presencia"
 msgid "Set your own presence"
 msgstr "Establecer a súa presencia"
 
-#: ../src/empathy.c:376
+#: ../src/empathy.c:380
 msgid "Don't connect on startup"
 msgstr "Non conectarse automaticamente ao inicio"
 
-#: ../src/empathy.c:380
+#: ../src/empathy.c:384
 msgid "Don't show the contact list on startup"
 msgstr "Non mostrar a lista de contactos ao inicio"
 
-#: ../src/empathy.c:384
+#: ../src/empathy.c:388
 msgid "Show the accounts dialog"
 msgstr "Mostrar o diálogo de contas"
 
-#: ../src/empathy.c:396
+#: ../src/empathy.c:400
 msgid "- Empathy Instant Messenger"
 msgstr "- Mensaxería instantánea de Empathy"
 
@@ -1168,53 +1160,22 @@ msgstr "Un cliente de mensaxería instantánea para Gnome"
 msgid "translator-credits"
 msgstr "Ignacio Casal Quinteiro <nacho.resa@gmail.com>"
 
-#: ../src/empathy-accounts-dialog.c:235
-msgid ""
-"To add a new account, you can click on the 'Add' button and a new entry will "
-"be created for you to start configuring."
-msgstr ""
-"Para engadir unha nova conta, pode premer no botón 'Engadir' e crearase unha "
-"nova entrada para que a configure."
-
-#: ../src/empathy-accounts-dialog.c:239
-msgid ""
-"To add a new account, you first have to install a backend for each protocol "
-"you want to use."
-msgstr ""
-"Para engadir unha nova conta, primeiro debe instalar un \"backend\" para "
-"cada protocolo que queira usar."
-
-#: ../src/empathy-accounts-dialog.c:246
-#: ../src/empathy-accounts-dialog.glade.h:2
-msgid "<b>No Account Selected</b>"
-msgstr "<b>Ningunha conta seleccionada</b>"
-
-#: ../src/empathy-accounts-dialog.c:247
-msgid ""
-"\n"
-"\n"
-"If you do not want to add an account, simply click on the account you want "
-"to configure in the list on the left."
-msgstr ""
-"\n"
-"\n"
-"Se non quere engadir unha conta, simplemente prema na conta que quere "
-"configurar na lista da esquerda."
-
-#: ../src/empathy-accounts-dialog.c:253
-msgid "<b>No Accounts Configured</b>"
-msgstr "<b>Non hai ningunha conta configurada</b>"
-
-#: ../src/empathy-accounts-dialog.c:451
+#: ../src/empathy-accounts-dialog.c:389
 msgid "Enabled"
 msgstr "Activado"
 
-#: ../src/empathy-accounts-dialog.c:461
+#: ../src/empathy-accounts-dialog.c:399
 #: ../src/empathy-accounts-dialog.glade.h:4
 msgid "Accounts"
 msgstr "Contas"
 
-#: ../src/empathy-accounts-dialog.c:991
+#. To translator: %s is the protocol name
+#: ../src/empathy-accounts-dialog.c:862
+#, c-format
+msgid "New %s account"
+msgstr "Nova conta %s"
+
+#: ../src/empathy-accounts-dialog.c:972
 #, c-format
 msgid ""
 "You are about to remove your %s account!\n"
@@ -1223,7 +1184,7 @@ msgstr ""
 "Vai a eliminar a súa conta %s!\n"
 "Está seguro de que quere proceder?"
 
-#: ../src/empathy-accounts-dialog.c:997
+#: ../src/empathy-accounts-dialog.c:978
 msgid ""
 "Any associated conversations and chat rooms will NOT be removed if you "
 "decide to proceed.\n"
@@ -1240,6 +1201,10 @@ msgstr ""
 msgid "<b>New Account</b>"
 msgstr "<b>Nova conta</b>"
 
+#: ../src/empathy-accounts-dialog.glade.h:2
+msgid "<b>No protocol installed</b>"
+msgstr "<b>Non hai protocolos instalados</b>"
+
 #: ../src/empathy-accounts-dialog.glade.h:3
 msgid "<b>Settings</b>"
 msgstr "<b>Axustes</b>"
@@ -1253,6 +1218,14 @@ msgid "I already have an account I want to use"
 msgstr "Xa teño unha conta que quero usar"
 
 #: ../src/empathy-accounts-dialog.glade.h:7
+msgid ""
+"To add a new account, you first have to install a backend for each protocol "
+"you want to use."
+msgstr ""
+"Para engadir unha nova conta, primeiro debe instalar un \"backend\" para "
+"cada protocolo que queira usar."
+
+#: ../src/empathy-accounts-dialog.glade.h:8
 msgid "Type:"
 msgstr "Tipo:"
 
@@ -1828,6 +1801,33 @@ msgstr "_Saír"
 msgid "_Show Contact List"
 msgstr "_Mostrar lista de contactos"
 
+#~ msgid "Configure Telepathy account settings"
+#~ msgstr "Configurar os axustes da conta de Telephaty"
+
+#~ msgid "Empathy accounts"
+#~ msgstr "Contas de Empathy"
+
+#~ msgid ""
+#~ "To add a new account, you can click on the 'Add' button and a new entry "
+#~ "will be created for you to start configuring."
+#~ msgstr ""
+#~ "Para engadir unha nova conta, pode premer no botón 'Engadir' e crearase "
+#~ "unha nova entrada para que a configure."
+
+#~ msgid ""
+#~ "\n"
+#~ "\n"
+#~ "If you do not want to add an account, simply click on the account you "
+#~ "want to configure in the list on the left."
+#~ msgstr ""
+#~ "\n"
+#~ "\n"
+#~ "Se non quere engadir unha conta, simplemente prema na conta que quere "
+#~ "configurar na lista da esquerda."
+
+#~ msgid "<b>No Accounts Configured</b>"
+#~ msgstr "<b>Non hai ningunha conta configurada</b>"
+
 #~ msgid "J_apan server:"
 #~ msgstr "Servidor X_aponés:"
 
@@ -1842,9 +1842,6 @@ msgstr "_Mostrar lista de contactos"
 
 #~ msgid "Presence failure"
 #~ msgstr "Fallo de presencia"
-
-#~ msgid "No accounts"
-#~ msgstr "Sen contas"
 
 #~ msgid "Contact does not support voice"
 #~ msgstr "O contacto non soporta voz"
