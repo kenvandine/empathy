@@ -244,7 +244,9 @@ empathy_account_chooser_get_account (EmpathyAccountChooser *chooser)
 	priv = GET_PRIV (chooser);
 
 	model = gtk_combo_box_get_model (GTK_COMBO_BOX (chooser));
-	gtk_combo_box_get_active_iter (GTK_COMBO_BOX (chooser), &iter);
+	if (!gtk_combo_box_get_active_iter (GTK_COMBO_BOX (chooser), &iter)) {
+		return NULL;
+	}
 
 	gtk_tree_model_get (model, &iter, COL_ACCOUNT_POINTER, &account, -1);
 
