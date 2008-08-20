@@ -118,7 +118,7 @@ profile_chooser_sort_func (GtkTreeModel *model,
 GtkWidget *
 empathy_profile_chooser_new (void)
 {
-	GList           *profiles, *l;
+	GList           *profiles, *l, *seen;
 	GtkListStore    *store;
 	GtkCellRenderer *renderer;
 	GtkWidget       *combo_box;
@@ -149,6 +149,7 @@ empathy_profile_chooser_new (void)
 
 	btf_cm = mc_manager_lookup ("butterfly");
 	profiles = mc_profiles_list ();
+	seen = NULL;
 	for (l = profiles; l; l = l->next) {
 		McProfile   *profile;
 		McProtocol  *protocol;
@@ -170,6 +171,11 @@ empathy_profile_chooser_new (void)
 			continue;
 		}
 
+		if (g_list_find_custom (seen, unique_name, (GCompareFunc) strcmp)) {
+			continue;
+		}
+		seen = g_list_append (seen, (char*) unique_name);
+
 		gtk_list_store_insert_with_values (store, &iter, 0,
 						   COL_ICON, mc_profile_get_icon_name (profile),
 						   COL_LABEL, mc_profile_get_display_name (profile),
@@ -177,6 +183,9 @@ empathy_profile_chooser_new (void)
 						   -1);
                 iter_set = TRUE;
 	}
+
+	g_list_free (seen);
+
 	if (btf_cm) {
 		g_object_unref (btf_cm);
 	}
