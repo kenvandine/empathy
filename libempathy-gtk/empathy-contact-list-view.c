@@ -151,7 +151,7 @@ contact_list_view_query_tooltip_cb (EmpathyContactListView *view,
 
 	if (!priv->tooltip_widget) {
 		priv->tooltip_widget = empathy_contact_widget_new (contact,
-			EMPATHY_CONTACT_WIDGET_EDIT_NONE);
+			EMPATHY_CONTACT_WIDGET_FOR_TOOLTIP);
 		g_object_add_weak_pointer (G_OBJECT (priv->tooltip_widget),
 					   (gpointer) &priv->tooltip_widget);
 	} else {
