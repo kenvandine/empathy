@@ -12,18 +12,19 @@
 # Jonathan Ernst <jonathan@ernstfamily.ch>, 2007.
 # Damien Durand <splinux@fedoraproject.org>, 2007.
 # Robert-André Mauchin <zebob.m@pengzone.org>, 2007-2008.
-# Frederic Peters <fpeters@0d.be>, 2007.
+# Frederic Peters <fpeters@0d.be>, 2007-2008.
 # Laurent Bigonville <bigon@bigon.be>, 2007.
 # Stéphane Raimbault <stephane.raimbault@gmail.com>, 2007.
 # Christophe Benz <christophe.benz@gmail.com>, 2007.
+# Yannick Tailliez <ytdispatch-libre@yahoo.com>, 2008.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: empathy HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-07 22:53+0200\n"
-"PO-Revision-Date: 2008-08-07 22:51+0200\n"
-"Last-Translator: Claude Paroz <claude@2xlibre.net>\n"
+"POT-Creation-Date: 2008-08-20 18:49+0000\n"
+"PO-Revision-Date: 2008-08-21 22:48+0200\n"
+"Last-Translator: Robert-André Mauchin <zebob.m@pengzone.org>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -51,7 +52,7 @@ msgid ""
 "chat."
 msgstr ""
 "Caractère à ajouter à la suite du pseudonyme lors de l'utilisation de l'auto-"
-"complètement du pseudonyme (tab) dans un groupe de discussion."
+"complétion du pseudonyme (tab) dans un groupe de discussion."
 
 #: ../data/empathy.schemas.in.h:3
 msgid "Chat window theme"
@@ -116,7 +117,7 @@ msgstr "NetworkManager devrait être utilisé"
 
 #: ../data/empathy.schemas.in.h:17
 msgid "Nick completed character"
-msgstr "Caractère d'auto-complètement du pseudonyme"
+msgstr "Caractère d'auto-complétion du pseudonyme"
 
 #: ../data/empathy.schemas.in.h:18
 msgid "Open new chats in separate windows"
@@ -260,19 +261,11 @@ msgid ""
 "by the contact's name with the value \"name\". A value of \"state\" will "
 "sort the contact list by state."
 msgstr ""
-"Quel critère utiliser pour le tri de la liste des contacts.  Le comportement "
+"Quel critère utiliser pour le tri de la liste des contacts. Le comportement "
 "par défaut est de trier selon le nom du contact (valeur: « name »).  Une "
 "valeur « state » triera la liste des contacts selon leur état."
 
-#: ../data/empathy-properties.desktop.in.in.h:1
-msgid "Configure Telepathy account settings"
-msgstr "Configurer les paramètres de comptes Telepathy"
-
-#: ../data/empathy-properties.desktop.in.in.h:2
-msgid "Empathy accounts"
-msgstr "Comptes Empathy"
-
-#: ../libempathy/empathy-tp-contact-list.c:731 ../src/empathy.c:244
+#: ../libempathy/empathy-tp-contact-list.c:731 ../src/empathy.c:248
 msgid "People nearby"
 msgstr "Personnes à proximité"
 
@@ -296,7 +289,7 @@ msgstr "Masqué"
 msgid "Offline"
 msgstr "Déconnecté"
 
-#: ../libempathy-gtk/empathy-account-chooser.c:335
+#: ../libempathy-gtk/empathy-account-chooser.c:337
 msgid "All"
 msgstr "Toutes"
 
@@ -334,9 +327,9 @@ msgstr "Oublier le mot de passe et effacer la zone."
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:5
 #: ../libempathy-gtk/empathy-account-widget-msn.glade.h:4
 #: ../libempathy-gtk/empathy-account-widget-sip.glade.h:5
-#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:4
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:3
 msgid "Pass_word:"
-msgstr "Mot de _passe :"
+msgstr "_Mot de passe :"
 
 #: ../libempathy-gtk/empathy-account-widget-aim.glade.h:4
 msgid "Screen _Name:"
@@ -364,7 +357,6 @@ msgstr "_Serveur :"
 #: ../libempathy-gtk/empathy-account-widget-groupwise.glade.h:3
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:4
 #: ../libempathy-gtk/empathy-account-widget-msn.glade.h:3
-#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:3
 msgid "Login I_D:"
 msgstr "I_dentifiant de connexion :"
 
@@ -495,9 +487,13 @@ msgstr "Port STUN :"
 msgid "_Username:"
 msgstr "_Nom d'utilisateur :"
 
-#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:5
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:4
 msgid "Use _Yahoo Japan"
 msgstr "Utiliser _Yahoo Japan"
+
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:5
+msgid "Yahoo I_D:"
+msgstr "I_dentifiant Yahoo :"
 
 #: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:7
 msgid "_Ignore conference and chatroom invitations"
@@ -697,11 +693,11 @@ msgstr "Enregistrer l'avatar"
 msgid "Unable to save avatar"
 msgstr "Impossible d'enregistrer l'avatar"
 
-#: ../libempathy-gtk/empathy-contact-widget.c:866
+#: ../libempathy-gtk/empathy-contact-widget.c:875
 msgid "Select"
 msgstr "Sélectionner"
 
-#: ../libempathy-gtk/empathy-contact-widget.c:875
+#: ../libempathy-gtk/empathy-contact-widget.c:884
 #: ../src/empathy-main-window.c:853
 msgid "Group"
 msgstr "Groupe"
@@ -768,8 +764,8 @@ msgstr "OS :"
 
 #: ../libempathy-gtk/empathy-contact-widget.glade.h:16
 msgid ""
-"Select the groups you want this contact to appear in, you can select more "
-"than one group or no groups."
+"Select the groups you want this contact to appear in.  Note that you can "
+"select more than one group or no groups."
 msgstr ""
 "Sélectionnez les groupes auxquels ce contact appartiendra ; vous pouvez "
 "sélectionner plus d'un groupe ou aucun groupe."
@@ -1129,23 +1125,23 @@ msgstr "Présence"
 msgid "Set your own presence"
 msgstr "Définissez votre présence"
 
-#: ../src/empathy.c:376
+#: ../src/empathy.c:380
 msgid "Don't connect on startup"
 msgstr "Ne pas se connecter au démarrage"
 
-#: ../src/empathy.c:380
+#: ../src/empathy.c:384
 msgid "Don't show the contact list on startup"
 msgstr "Ne pas afficher la liste des contacts au démarrage"
 
-#: ../src/empathy.c:384
+#: ../src/empathy.c:388
 msgid "Show the accounts dialog"
 msgstr "Afficher la boîte de dialogue des comptes"
 
-#: ../src/empathy.c:396
+#: ../src/empathy.c:400
 msgid "- Empathy Instant Messenger"
 msgstr "- Messagerie instantanée Empathy"
 
-#: ../src/empathy-about-dialog.c:64
+#: ../src/empathy-about-dialog.c:84
 msgid ""
 "Empathy is free software; you can redistribute it and/or modify it under the "
 "terms of the GNU General Public License as published by the Free Software "
@@ -1157,7 +1153,7 @@ msgstr ""
 "publiée par la Free Software Foundation ; version 2 de la licence ou (à "
 "votre discrétion) toute version ultérieure."
 
-#: ../src/empathy-about-dialog.c:68
+#: ../src/empathy-about-dialog.c:88
 msgid ""
 "Empathy is distributed in the hope that it will be useful, but WITHOUT ANY "
 "WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS "
@@ -1169,7 +1165,7 @@ msgstr ""
 "D'ADÉQUATION À UN BESOIN PARTICULIER. Pour plus de détails, voir la Licence "
 "Publique Générale GNU."
 
-#: ../src/empathy-about-dialog.c:72
+#: ../src/empathy-about-dialog.c:92
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "Empathy; if not, write to the Free Software Foundation, Inc., 51 Franklin "
@@ -1179,11 +1175,11 @@ msgstr ""
 "Empathy ; si ce n'est pas le cas, écrivez à la Free Software Foundation, "
 "Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-130159 USA"
 
-#: ../src/empathy-about-dialog.c:100
+#: ../src/empathy-about-dialog.c:120
 msgid "An Instant Messaging client for GNOME"
 msgstr "Un client de messagerie instantanée pour GNOME"
 
-#: ../src/empathy-about-dialog.c:106
+#: ../src/empathy-about-dialog.c:126
 msgid "translator-credits"
 msgstr ""
 "Frédéric Brin <duckx@mezimail.com>\n"
@@ -1201,53 +1197,22 @@ msgstr ""
 "Stéphane Raimbault <stephane.raimbault@gmail.com>\n"
 "Christophe Benz <christophe.benz@gmail.com>"
 
-#: ../src/empathy-accounts-dialog.c:235
-msgid ""
-"To add a new account, you can click on the 'Add' button and a new entry will "
-"be created for you to start configuring."
-msgstr ""
-"Pour ajouter un nouveau compte, vous pouvez cliquer sur le bouton « Ajouter » "
-"et vous pourrez alors configurer cette nouvelle entrée."
-
-#: ../src/empathy-accounts-dialog.c:239
-msgid ""
-"To add a new account, you first have to install a backend for each protocol "
-"you want to use."
-msgstr ""
-"Pour ajouter un nouveau compte, vous devez d'abord installer le moteur "
-"correspondant à chaque protocole que vous voulez utiliser."
-
-#: ../src/empathy-accounts-dialog.c:246
-#: ../src/empathy-accounts-dialog.glade.h:2
-msgid "<b>No Account Selected</b>"
-msgstr "<b>Aucun compte sélectionné</b>"
-
-#: ../src/empathy-accounts-dialog.c:247
-msgid ""
-"\n"
-"\n"
-"If you do not want to add an account, simply click on the account you want "
-"to configure in the list on the left."
-msgstr ""
-"\n"
-"\n"
-"Si vous ne souhaitez pas créer de compte, cliquez simplement dans la liste "
-"de gauche sur le compte que vous voulez configurer."
-
-#: ../src/empathy-accounts-dialog.c:253
-msgid "<b>No Accounts Configured</b>"
-msgstr "<b>Aucun compte configuré</b>"
-
-#: ../src/empathy-accounts-dialog.c:451
+#: ../src/empathy-accounts-dialog.c:389
 msgid "Enabled"
 msgstr "Activé"
 
-#: ../src/empathy-accounts-dialog.c:461
+#: ../src/empathy-accounts-dialog.c:399
 #: ../src/empathy-accounts-dialog.glade.h:4
 msgid "Accounts"
 msgstr "Comptes"
 
-#: ../src/empathy-accounts-dialog.c:991
+#. To translator: %s is the protocol name
+#: ../src/empathy-accounts-dialog.c:862
+#, c-format
+msgid "New %s account"
+msgstr "Nouveau compte %s"
+
+#: ../src/empathy-accounts-dialog.c:972
 #, c-format
 msgid ""
 "You are about to remove your %s account!\n"
@@ -1256,7 +1221,7 @@ msgstr ""
 "Vous êtes sur le point de supprimer votre compte %s !\n"
 "Voulez-vous vraiment continuer ?"
 
-#: ../src/empathy-accounts-dialog.c:997
+#: ../src/empathy-accounts-dialog.c:978
 msgid ""
 "Any associated conversations and chat rooms will NOT be removed if you "
 "decide to proceed.\n"
@@ -1274,6 +1239,10 @@ msgstr ""
 msgid "<b>New Account</b>"
 msgstr "<b>Nouveau compte</b>"
 
+#: ../src/empathy-accounts-dialog.glade.h:2
+msgid "<b>No protocol installed</b>"
+msgstr "<b>Aucun protocole installé</b>"
+
 #: ../src/empathy-accounts-dialog.glade.h:3
 msgid "<b>Settings</b>"
 msgstr "<b>Paramètres</b>"
@@ -1287,6 +1256,14 @@ msgid "I already have an account I want to use"
 msgstr "Je possède déjà un compte que je souhaite utiliser"
 
 #: ../src/empathy-accounts-dialog.glade.h:7
+msgid ""
+"To add a new account, you first have to install a backend for each protocol "
+"you want to use."
+msgstr ""
+"Pour ajouter un nouveau compte, vous devez d'abord installer le moteur "
+"correspondant à chaque protocole que vous voulez utiliser."
+
+#: ../src/empathy-accounts-dialog.glade.h:8
 msgid "Type:"
 msgstr "Type :"
 
@@ -1508,7 +1485,7 @@ msgstr "Connexion automatique"
 
 #: ../src/empathy-chatrooms-window.glade.h:2
 msgid "Edit Favorite Room"
-msgstr "Éditer les salles favorites"
+msgstr "Modifier les salles favorites"
 
 #: ../src/empathy-chatrooms-window.glade.h:3
 msgid "Join room on start_up"
@@ -1864,3 +1841,4 @@ msgstr "_Quitter"
 #: ../src/empathy-status-icon.glade.h:4
 msgid "_Show Contact List"
 msgstr "_Afficher la liste des contacts"
+
