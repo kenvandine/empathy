@@ -5,10 +5,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: empathy 2.23.90\n"
+"Project-Id-Version: empathy 2.23.91\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-11 20:26+0800\n"
-"PO-Revision-Date: 2008-08-08 07:38+0800\n"
+"POT-Creation-Date: 2008-08-21 19:21+0800\n"
+"PO-Revision-Date: 2008-08-20 07:38+0800\n"
 "Last-Translator: Chao-Hsiung Liao <j_h_liau@yahoo.com.tw>\n"
 "Language-Team: Chinese (traditional) <community@linuxhall.org>\n"
 "MIME-Version: 1.0\n"
@@ -219,15 +219,7 @@ msgid ""
 "sort the contact list by state."
 msgstr ""
 
-#: ../data/empathy-properties.desktop.in.in.h:1
-msgid "Configure Telepathy account settings"
-msgstr "設定 Telepathy 帳號設定值"
-
-#: ../data/empathy-properties.desktop.in.in.h:2
-msgid "Empathy accounts"
-msgstr "Empathy 帳號"
-
-#: ../libempathy/empathy-tp-contact-list.c:731 ../src/empathy.c:244
+#: ../libempathy/empathy-tp-contact-list.c:731 ../src/empathy.c:248
 msgid "People nearby"
 msgstr ""
 
@@ -251,7 +243,7 @@ msgstr "隱藏"
 msgid "Offline"
 msgstr "離線"
 
-#: ../libempathy-gtk/empathy-account-chooser.c:335
+#: ../libempathy-gtk/empathy-account-chooser.c:337
 msgid "All"
 msgstr "全部"
 
@@ -289,7 +281,7 @@ msgstr "清除密碼及這個項目。"
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:5
 #: ../libempathy-gtk/empathy-account-widget-msn.glade.h:4
 #: ../libempathy-gtk/empathy-account-widget-sip.glade.h:5
-#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:4
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:3
 msgid "Pass_word:"
 msgstr "密碼(_W):"
 
@@ -319,7 +311,6 @@ msgstr "伺服器(_S):"
 #: ../libempathy-gtk/empathy-account-widget-groupwise.glade.h:3
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:4
 #: ../libempathy-gtk/empathy-account-widget-msn.glade.h:3
-#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:3
 msgid "Login I_D:"
 msgstr "登入 I_D:"
 
@@ -450,9 +441,14 @@ msgstr "STUN 通訊埠:"
 msgid "_Username:"
 msgstr "使用者名稱(_U):"
 
-#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:5
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:4
 msgid "Use _Yahoo Japan"
 msgstr "使用 _Yahoo 日本"
+
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:5
+#, fuzzy
+msgid "Yahoo I_D:"
+msgstr "登入 I_D:"
 
 #: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:7
 msgid "_Ignore conference and chatroom invitations"
@@ -652,11 +648,11 @@ msgstr "儲存大頭貼"
 msgid "Unable to save avatar"
 msgstr "無法儲存大頭貼"
 
-#: ../libempathy-gtk/empathy-contact-widget.c:866
+#: ../libempathy-gtk/empathy-contact-widget.c:875
 msgid "Select"
 msgstr "選擇"
 
-#: ../libempathy-gtk/empathy-contact-widget.c:875
+#: ../libempathy-gtk/empathy-contact-widget.c:884
 #: ../src/empathy-main-window.c:853
 msgid "Group"
 msgstr "群組"
@@ -723,10 +719,10 @@ msgstr "OS:"
 
 #: ../libempathy-gtk/empathy-contact-widget.glade.h:16
 msgid ""
-"Select the groups you want this contact to appear in, you can select more "
-"than one group or no groups."
+"Select the groups you want this contact to appear in.  Note that you can "
+"select more than one group or no groups."
 msgstr ""
-"請選擇這個連絡人要顯現在哪個群組，您可以選擇一個以上的群組或不選擇群組。"
+"請選擇這個連絡人要顯現在哪個群組。注意您可以選擇一個以上的群組或不選擇群組。"
 
 #: ../libempathy-gtk/empathy-contact-widget.glade.h:17
 msgid "Version:"
@@ -1047,7 +1043,7 @@ msgstr "此連絡人的大頭貼記號。留空代表連絡人沒有大頭貼。
 
 #: ../megaphone/data/GNOME_Megaphone_Applet.server.in.in.h:1
 msgid "Megaphone"
-msgstr ""
+msgstr "話筒"
 
 #: ../megaphone/data/GNOME_Megaphone_Applet.server.in.in.h:2
 #: ../megaphone/src/megaphone-applet.c:417
@@ -1077,19 +1073,19 @@ msgstr "上線狀態"
 msgid "Set your own presence"
 msgstr "設定您自己的上線狀態"
 
-#: ../src/empathy.c:376
+#: ../src/empathy.c:380
 msgid "Don't connect on startup"
 msgstr "啟動時不要自動連線"
 
-#: ../src/empathy.c:380
+#: ../src/empathy.c:384
 msgid "Don't show the contact list on startup"
 msgstr "啟動時不顯示連絡人清單"
 
-#: ../src/empathy.c:384
+#: ../src/empathy.c:388
 msgid "Show the accounts dialog"
 msgstr "顯示帳號對話盒"
 
-#: ../src/empathy.c:396
+#: ../src/empathy.c:400
 msgid "- Empathy Instant Messenger"
 msgstr "- Empathy 即時通訊程式"
 
@@ -1139,50 +1135,22 @@ msgstr ""
 "Craig Jeffares <cjeffares@novell.com>, 2004\n"
 "Joe Man <trmetal@yahoo.com.hk>, 2001"
 
-#: ../src/empathy-accounts-dialog.c:235
-msgid ""
-"To add a new account, you can click on the 'Add' button and a new entry will "
-"be created for you to start configuring."
-msgstr ""
-"要加入新的帳號，您可以按下「加入」按鈕，這樣就會建立一個新的項目讓您開始設"
-"定。"
-
-#: ../src/empathy-accounts-dialog.c:239
-msgid ""
-"To add a new account, you first have to install a backend for each protocol "
-"you want to use."
-msgstr "要加入新的帳號，您必須先安裝每個會用到的通訊協定後端程式。"
-
-#: ../src/empathy-accounts-dialog.c:246
-#: ../src/empathy-accounts-dialog.glade.h:2
-msgid "<b>No Account Selected</b>"
-msgstr "<b>尚未選取帳號</b>"
-
-#: ../src/empathy-accounts-dialog.c:247
-msgid ""
-"\n"
-"\n"
-"If you do not want to add an account, simply click on the account you want "
-"to configure in the list on the left."
-msgstr ""
-"\n"
-"\n"
-"如果您不想加入帳號，只要在左邊清單中點選想要設定的帳號即可。"
-
-#: ../src/empathy-accounts-dialog.c:253
-msgid "<b>No Accounts Configured</b>"
-msgstr "<b>尚未設定帳號</b>"
-
-#: ../src/empathy-accounts-dialog.c:451
+#: ../src/empathy-accounts-dialog.c:389
 msgid "Enabled"
 msgstr "已啟用"
 
-#: ../src/empathy-accounts-dialog.c:461
+#: ../src/empathy-accounts-dialog.c:399
 #: ../src/empathy-accounts-dialog.glade.h:4
 msgid "Accounts"
 msgstr "帳號"
 
-#: ../src/empathy-accounts-dialog.c:991
+#. To translator: %s is the protocol name
+#: ../src/empathy-accounts-dialog.c:862
+#, c-format
+msgid "New %s account"
+msgstr "新增 %s 帳號"
+
+#: ../src/empathy-accounts-dialog.c:972
 #, c-format
 msgid ""
 "You are about to remove your %s account!\n"
@@ -1191,7 +1159,7 @@ msgstr ""
 "您即將移除您的 %s 帳號！\n"
 "確定要繼續？"
 
-#: ../src/empathy-accounts-dialog.c:997
+#: ../src/empathy-accounts-dialog.c:978
 msgid ""
 "Any associated conversations and chat rooms will NOT be removed if you "
 "decide to proceed.\n"
@@ -1207,6 +1175,10 @@ msgstr ""
 msgid "<b>New Account</b>"
 msgstr "<b>新增帳號</b>"
 
+#: ../src/empathy-accounts-dialog.glade.h:2
+msgid "<b>No protocol installed</b>"
+msgstr "<b>尚未安裝通訊協定</b>"
+
 #: ../src/empathy-accounts-dialog.glade.h:3
 msgid "<b>Settings</b>"
 msgstr "<b>設定值</b>"
@@ -1220,6 +1192,12 @@ msgid "I already have an account I want to use"
 msgstr "我已經有要使用的帳號"
 
 #: ../src/empathy-accounts-dialog.glade.h:7
+msgid ""
+"To add a new account, you first have to install a backend for each protocol "
+"you want to use."
+msgstr "要加入新的帳號，您必須先安裝每個會用到的通訊協定後端程式。"
+
+#: ../src/empathy-accounts-dialog.glade.h:8
 msgid "Type:"
 msgstr "類型:"
 
@@ -1781,3 +1759,29 @@ msgstr "離開(_Q)"
 #: ../src/empathy-status-icon.glade.h:4
 msgid "_Show Contact List"
 msgstr "顯示連絡人清單(_S)"
+
+#~ msgid "Configure Telepathy account settings"
+#~ msgstr "設定 Telepathy 帳號設定值"
+
+#~ msgid "Empathy accounts"
+#~ msgstr "Empathy 帳號"
+
+#~ msgid ""
+#~ "To add a new account, you can click on the 'Add' button and a new entry "
+#~ "will be created for you to start configuring."
+#~ msgstr ""
+#~ "要加入新的帳號，您可以按下「加入」按鈕，這樣就會建立一個新的項目讓您開始設"
+#~ "定。"
+
+#~ msgid ""
+#~ "\n"
+#~ "\n"
+#~ "If you do not want to add an account, simply click on the account you "
+#~ "want to configure in the list on the left."
+#~ msgstr ""
+#~ "\n"
+#~ "\n"
+#~ "如果您不想加入帳號，只要在左邊清單中點選想要設定的帳號即可。"
+
+#~ msgid "<b>No Accounts Configured</b>"
+#~ msgstr "<b>尚未設定帳號</b>"
