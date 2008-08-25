@@ -105,7 +105,7 @@
                         <child>
                           <widget class="GtkLabel" id="label3">
                             <property name="visible">True</property>
-                            <property name="label" translatable="yes">Call</property>
+                            <property name="label" translatable="yes">C_all</property>
                             <property name="use_underline">True</property>
                           </widget>
                           <packing>
@@ -151,7 +151,7 @@
                         <child>
                           <widget class="GtkLabel" id="label4">
                             <property name="visible">True</property>
-                            <property name="label" translatable="yes">Chat</property>
+                            <property name="label" translatable="yes">C_hat</property>
                             <property name="use_underline">True</property>
                           </widget>
                           <packing>
