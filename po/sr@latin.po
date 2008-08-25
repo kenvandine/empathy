@@ -351,7 +351,7 @@ msgstr "Brzi glasnik za Gnoma"
 #: ../libempathy-gtk/gossip-about-dialog.c:105
 #, fuzzy
 msgid "translator-credits"
-msgstr "Dejan Matijević"
+msgstr "dejan@ns.sympatico.ca"
 
 #: ../libempathy-gtk/gossip-accounts-dialog.c:224
 #, fuzzy
@@ -440,7 +440,7 @@ msgstr ""
 
 #: ../libempathy-gtk/gossip-accounts-dialog.glade.h:9
 msgid "Jabber"
-msgstr "DŽaber"
+msgstr "Džaber"
 
 #: ../libempathy-gtk/gossip-accounts-dialog.glade.h:10
 msgid ""
@@ -1387,7 +1387,7 @@ msgstr "Brzi glasnik"
 #~ msgid "Email:"
 #~ msgstr "E-pošta:"
 
-# DŽaber identifikaciona oznaka :-)
+# Džaber identifikaciona oznaka :-)
 #, fuzzy
 #~ msgid "ID:"
 #~ msgstr "DŽIO"
@@ -1507,7 +1507,7 @@ msgstr "Brzi glasnik"
 
 #, fuzzy
 #~ msgid "%s ID of new contact:"
-#~ msgstr "_DŽaber ID novog kontakta:"
+#~ msgstr "_Džaber ID novog kontakta:"
 
 #, fuzzy
 #~ msgid ""
@@ -1591,7 +1591,7 @@ msgstr "Brzi glasnik"
 
 #, fuzzy
 #~ msgid "Do you already have an account set up on a server?"
-#~ msgstr "Da li već imate nalog na DŽaber serveru?"
+#~ msgstr "Da li već imate nalog na Džaber serveru?"
 
 #, fuzzy
 #~ msgid "Enter the port used in the connection for this account"
@@ -1624,10 +1624,10 @@ msgstr "Brzi glasnik"
 #~ "\n"
 #~ "To get started, just click \"Forward\"."
 #~ msgstr ""
-#~ "Čavrljanje je moderan klijent za DŽaber sistem brzih poruka.\n"
+#~ "Čavrljanje je moderan klijent za Džaber sistem brzih poruka.\n"
 #~ "\n"
 #~ "Ovaj pomoćnik će vam pomoći da podesite Čavrljanje i povežete se na vaš "
-#~ "omiljen DŽaber server.\n"
+#~ "omiljen Džaber server.\n"
 #~ "\n"
 #~ "Da počnete, samo kliknite „Napred“."
 
@@ -1644,7 +1644,7 @@ msgstr "Brzi glasnik"
 #~ msgstr "U koju grupu želite da rasporedite ovaj kontakt?"
 
 #~ msgid "Jabber ID:"
-#~ msgstr "DŽaber ID:"
+#~ msgstr "Džaber ID:"
 
 #, fuzzy
 #~ msgid "Nickname:"
@@ -1706,7 +1706,7 @@ msgstr "Brzi glasnik"
 
 #, fuzzy
 #~ msgid "Your Account"
-#~ msgstr "DŽaber Nalog"
+#~ msgstr "Džaber Nalog"
 
 #~ msgid "Your Identity"
 #~ msgstr "Vaš identitet"
@@ -1995,7 +1995,7 @@ msgstr "Brzi glasnik"
 #~ msgstr "Jabber.org"
 
 #~ msgid "On what server do you have a Jabber account?"
-#~ msgstr "Na kom serveru imate DŽaber nalog?"
+#~ msgstr "Na kom serveru imate Džaber nalog?"
 
 #~ msgid "Sound"
 #~ msgstr "Zvuk"
@@ -2026,7 +2026,7 @@ msgstr "Brzi glasnik"
 #~ msgstr "Ne mogu da se identifikujem"
 
 #~ msgid "Gossip, Jabber Client"
-#~ msgstr "Čavrljanje, DŽaber Klijent"
+#~ msgstr "Čavrljanje, Džaber Klijent"
 
 #~ msgid "About to leave..."
 #~ msgstr "Upravo odlazim..."
@@ -2141,8 +2141,8 @@ msgstr "Brzi glasnik"
 #~ "These messages are used to describe your status when you're available, "
 #~ "about to leave, or automatically set away due to inactivity."
 #~ msgstr ""
-#~ "Ove poruke se koriste za opisivanje vašeg stanja kada ste dostupni, "
-#~ "upravo odlazite ili ste odsutni usled neaktivnosti."
+#~ "Ove poruke se koriste za opisivanje vašeg stanja kada ste dostupni, upravo "
+#~ "odlazite ili ste odsutni usled neaktivnosti."
 
 #~ msgid "Use com_pact conversation style"
 #~ msgstr "Koristi stil sa_žetog razgovora"
@@ -2241,10 +2241,10 @@ msgstr "Brzi glasnik"
 #~ msgstr ""
 #~ "<b>Dobrodošli u Čavrljanje</b>\n"
 #~ "\n"
-#~ "Čavrljanje je moderan klijent za DŽaber Trenutne Poruke.\n"
+#~ "Čavrljanje je moderan klijent za Džaber Trenutne Poruke.\n"
 #~ "\n"
-#~ "Ovaj pomoćnik će vam pomoći da podesite Čavrljanje i konektujete se na "
-#~ "vaš omiljen DŽaber server."
+#~ "Ovaj pomoćnik će vam pomoći da podesite Čavrljanje i konektujete se na vaš "
+#~ "omiljen Džaber server."
 
 #~ msgid "<b>Additional information</b>"
 #~ msgstr "<b>Dodatne informacije</b>"
@@ -2274,7 +2274,7 @@ msgstr "Brzi glasnik"
 #~ msgstr "minuta"
 
 #~ msgid "<b>Jabber ID:</b>"
-#~ msgstr "<b>DŽaber ID:</b>"
+#~ msgstr "<b>Džaber ID:</b>"
 
 #~ msgid "<b>Setup Finished</b>"
 #~ msgstr "<b>Postavka je završena</b>"
