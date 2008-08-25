@@ -84,7 +84,7 @@ typedef struct
   /* Client */
   GtkWidget *vbox_client;
   GtkWidget *table_client;
-  GtkWidget *hbow_client_requested;
+  GtkWidget *hbox_client_requested;
 } EmpathyContactWidget;
 
 typedef struct
@@ -186,7 +186,7 @@ empathy_contact_widget_new (EmpathyContact *contact,
        "hbox_details_requested", &information->hbox_details_requested,
        "vbox_client", &information->vbox_client,
        "table_client", &information->table_client,
-       "hbox_client_requested", &information->hbow_client_requested,
+       "hbox_client_requested", &information->hbox_client_requested,
        NULL);
   g_free (filename);
 
