@@ -268,6 +268,7 @@ if test "x$enable_python" != "xno"; then
       ], have_python="yes", have_python="no")
       if test "x$have_python" = "xyes" ; then
          AM_CHECK_PYTHON_HEADERS(,have_python="no")
+         AC_CHECK_PROGS([PYGOBJECTCODEGEN], [pygobject-codegen-2.0 pygtk-codegen-2.0])
       fi
    fi
 else

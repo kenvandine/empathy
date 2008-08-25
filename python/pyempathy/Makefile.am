@@ -27,7 +27,7 @@ empathy_la_LDFLAGS =					\
 	-module -avoid-version
 
 pyempathy.c: pyempathy.override pyempathy.defs
-	pygtk-codegen-2.0				\
+	$(PYGOBJECTCODEGEN)				\
 		--prefix empathy 			\
 		--register $(PYDEFS)/gdk-types.defs 	\
 		--register $(PYDEFS)/gtk-types.defs 	\
