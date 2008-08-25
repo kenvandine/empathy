@@ -128,6 +128,7 @@
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
+                <property name="has_default">True</property>
                 <property name="response_id">2</property>
                 <child>
                   <widget class="GtkAlignment" id="alignment2">
