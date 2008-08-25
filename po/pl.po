@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: empathy\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-15 12:39+0200\n"
-"PO-Revision-Date: 2008-08-15 12:42+0100\n"
+"POT-Creation-Date: 2008-08-25 18:37+0200\n"
+"PO-Revision-Date: 2008-08-25 18:43+0100\n"
 "Last-Translator: Tomasz Dominikowski <dominikowski@gmail.com>\n"
 "Language-Team: Aviary.pl <gnomepl@aviary.pl>\n"
 "MIME-Version: 1.0\n"
@@ -207,7 +207,7 @@ msgid "Which criterium to use when sorting the contact list. Default is to use s
 msgstr "Określa, jakie kryterium używać podczas sortowania listy kontaktów. Domyślnie jest używane sortowanie wg nazwy kontaktów, wartość \"name\". Wartość \"state\" spowoduje sortowanie wg stanu kontaktu."
 
 #: ../libempathy/empathy-tp-contact-list.c:731
-#: ../src/empathy.c:244
+#: ../src/empathy.c:248
 msgid "People nearby"
 msgstr "Osoby w pobliżu"
 
@@ -231,7 +231,7 @@ msgstr "Ukryty"
 msgid "Offline"
 msgstr "Rozłączony"
 
-#: ../libempathy-gtk/empathy-account-chooser.c:335
+#: ../libempathy-gtk/empathy-account-chooser.c:337
 msgid "All"
 msgstr "Wszystkie"
 
@@ -269,7 +269,7 @@ msgstr "Usunięcie hasła i wyczyszczenie pola."
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:5
 #: ../libempathy-gtk/empathy-account-widget-msn.glade.h:4
 #: ../libempathy-gtk/empathy-account-widget-sip.glade.h:5
-#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:4
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:3
 msgid "Pass_word:"
 msgstr "_Hasło:"
 
@@ -299,7 +299,6 @@ msgstr "_Serwer:"
 #: ../libempathy-gtk/empathy-account-widget-groupwise.glade.h:3
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:4
 #: ../libempathy-gtk/empathy-account-widget-msn.glade.h:3
-#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:3
 msgid "Login I_D:"
 msgstr "I_dentyfikator logowania:"
 
@@ -430,9 +429,13 @@ msgstr "Port STUN:"
 msgid "_Username:"
 msgstr "N_azwa użytkownika:"
 
-#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:5
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:4
 msgid "Use _Yahoo Japan"
 msgstr "Użycie _Jahoo Japan"
+
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:5
+msgid "Yahoo I_D:"
+msgstr "I_D Yahoo:"
 
 #: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:7
 msgid "_Ignore conference and chatroom invitations"
@@ -634,11 +637,11 @@ msgstr "Zapisanie awataru"
 msgid "Unable to save avatar"
 msgstr "Nie można zapisać awataru"
 
-#: ../libempathy-gtk/empathy-contact-widget.c:866
+#: ../libempathy-gtk/empathy-contact-widget.c:875
 msgid "Select"
 msgstr "Wybierz"
 
-#: ../libempathy-gtk/empathy-contact-widget.c:875
+#: ../libempathy-gtk/empathy-contact-widget.c:884
 #: ../src/empathy-main-window.c:853
 msgid "Group"
 msgstr "Grupa"
@@ -768,13 +771,12 @@ msgid "_For:"
 msgstr "_Czego:"
 
 #: ../libempathy-gtk/empathy-new-message-dialog.glade.h:2
-msgid "Call"
-msgstr "Zadzwoń"
+msgid "C_all"
+msgstr "_Zadzwoń"
 
 #: ../libempathy-gtk/empathy-new-message-dialog.glade.h:3
-#: ../src/empathy-chat-window.glade.h:2
-msgid "Chat"
-msgstr "Rozmowa"
+msgid "C_hat"
+msgstr "_Rozmowa"
 
 #: ../libempathy-gtk/empathy-new-message-dialog.glade.h:4
 msgid "Contact ID:"
@@ -1056,19 +1058,19 @@ msgstr "Obecność"
 msgid "Set your own presence"
 msgstr "Ustawianie obecności"
 
-#: ../src/empathy.c:376
+#: ../src/empathy.c:380
 msgid "Don't connect on startup"
 msgstr "Bez łączenia przy uruchamianiu"
 
-#: ../src/empathy.c:380
+#: ../src/empathy.c:384
 msgid "Don't show the contact list on startup"
 msgstr "Bez wyświetlania listy kontaktów przy uruchamianiu"
 
-#: ../src/empathy.c:384
+#: ../src/empathy.c:388
 msgid "Show the accounts dialog"
 msgstr "Wyświetlanie okna kont"
 
-#: ../src/empathy.c:396
+#: ../src/empathy.c:400
 msgid "- Empathy Instant Messenger"
 msgstr "- Komunikator internetowy Empathy"
 
@@ -1094,43 +1096,22 @@ msgstr ""
 "Aviary.pl <gnomepl@aviary.pl>\n"
 "Tomasz Dominikowski <tdominikowski@aviary.pl>, 2007, 2008"
 
-#: ../src/empathy-accounts-dialog.c:235
-msgid "To add a new account, you can click on the 'Add' button and a new entry will be created for you to start configuring."
-msgstr "Aby dodać nowe konto można nacisnąć przycisk \"Dodaj\", a zostanie utworzony nowy wpis, który można skonfigurować."
-
-#: ../src/empathy-accounts-dialog.c:239
-msgid "To add a new account, you first have to install a backend for each protocol you want to use."
-msgstr "Aby dodać nowe konto należy najpierw zainstalować moduł obsługi dla każdego wymaganego protokołu."
-
-#: ../src/empathy-accounts-dialog.c:246
-#: ../src/empathy-accounts-dialog.glade.h:2
-msgid "<b>No Account Selected</b>"
-msgstr "<b>Nie zaznaczono żadnego konta</b>"
-
-#: ../src/empathy-accounts-dialog.c:247
-msgid ""
-"\n"
-"\n"
-"If you do not want to add an account, simply click on the account you want to configure in the list on the left."
-msgstr ""
-"\n"
-"\n"
-"Można także skonfigurować już istniejące konto wybierając je z listy po lewej stronie."
-
-#: ../src/empathy-accounts-dialog.c:253
-msgid "<b>No Accounts Configured</b>"
-msgstr "<b>Brak skonfigurowanych kont</b>"
-
-#: ../src/empathy-accounts-dialog.c:451
+#: ../src/empathy-accounts-dialog.c:389
 msgid "Enabled"
 msgstr "Włączone"
 
-#: ../src/empathy-accounts-dialog.c:461
+#: ../src/empathy-accounts-dialog.c:399
 #: ../src/empathy-accounts-dialog.glade.h:4
 msgid "Accounts"
 msgstr "Konta"
 
-#: ../src/empathy-accounts-dialog.c:991
+#. To translator: %s is the protocol name
+#: ../src/empathy-accounts-dialog.c:862
+#, c-format
+msgid "New %s account"
+msgstr "Nowe konto %s"
+
+#: ../src/empathy-accounts-dialog.c:972
 #, c-format
 msgid ""
 "You are about to remove your %s account!\n"
@@ -1139,7 +1120,7 @@ msgstr ""
 "Nastąpi usunięcie konta %s!\n"
 "Na pewno kontynuować?"
 
-#: ../src/empathy-accounts-dialog.c:997
+#: ../src/empathy-accounts-dialog.c:978
 msgid ""
 "Any associated conversations and chat rooms will NOT be removed if you decide to proceed.\n"
 "\n"
@@ -1152,6 +1133,10 @@ msgstr ""
 #: ../src/empathy-accounts-dialog.glade.h:1
 msgid "<b>New Account</b>"
 msgstr "<b>Nowe konto</b>"
+
+#: ../src/empathy-accounts-dialog.glade.h:2
+msgid "<b>No protocol installed</b>"
+msgstr "<b>Brak zainstalowanych protokołów</b>"
 
 #: ../src/empathy-accounts-dialog.glade.h:3
 msgid "<b>Settings</b>"
@@ -1166,6 +1151,10 @@ msgid "I already have an account I want to use"
 msgstr "Użytkownik posiada konto do użycia"
 
 #: ../src/empathy-accounts-dialog.glade.h:7
+msgid "To add a new account, you first have to install a backend for each protocol you want to use."
+msgstr "Aby dodać nowe konto należy najpierw zainstalować moduł obsługi dla każdego wymaganego protokołu."
+
+#: ../src/empathy-accounts-dialog.glade.h:8
 msgid "Type:"
 msgstr "Typ:"
 
@@ -1312,6 +1301,10 @@ msgstr "Wprowadza wiadomość."
 msgid "C_lear"
 msgstr "_Wyczyść"
 
+#: ../src/empathy-chat-window.glade.h:2
+msgid "Chat"
+msgstr "Rozmowa"
+
 #: ../src/empathy-chat-window.glade.h:3
 msgid "Insert _Smiley"
 msgstr "Wstaw _emotikonę"
@@ -1360,7 +1353,7 @@ msgstr "_Odłącz kartę"
 #: ../src/empathy-chat-window.glade.h:15
 #: ../src/empathy-main-window.glade.h:12
 msgid "_Help"
-msgstr "P_omoc"
+msgstr "Pomo_c"
 
 #: ../src/empathy-chat-window.glade.h:16
 msgid "_Next Tab"
@@ -1720,6 +1713,24 @@ msgstr "_Zakończ"
 msgid "_Show Contact List"
 msgstr "_Wyświetlanie listy kontaktów"
 
+#~ msgid ""
+#~ "To add a new account, you can click on the 'Add' button and a new entry "
+#~ "will be created for you to start configuring."
+#~ msgstr ""
+#~ "Aby dodać nowe konto można nacisnąć przycisk \"Dodaj\", a zostanie "
+#~ "utworzony nowy wpis, który można skonfigurować."
+#~ msgid ""
+#~ "\n"
+#~ "\n"
+#~ "If you do not want to add an account, simply click on the account you "
+#~ "want to configure in the list on the left."
+#~ msgstr ""
+#~ "\n"
+#~ "\n"
+#~ "Można także skonfigurować już istniejące konto wybierając je z listy po "
+#~ "lewej stronie."
+#~ msgid "<b>No Accounts Configured</b>"
+#~ msgstr "<b>Brak skonfigurowanych kont</b>"
 #~ msgid "Configure Telepathy account settings"
 #~ msgstr "Konfiguracja ustawień kont Telepathy"
 #~ msgid "Empathy accounts"
@@ -1734,8 +1745,6 @@ msgstr "_Wyświetlanie listy kontaktów"
 #~ msgstr "Niepoprawne konto"
 #~ msgid "Presence failure"
 #~ msgstr "Błąd obecności"
-#~ msgid "No accounts"
-#~ msgstr "Brak kont"
 #~ msgid "Contact does not support voice"
 #~ msgstr "Kontakt nie obsługuje rozmów głosowych"
 #~ msgid "Lowmem"
