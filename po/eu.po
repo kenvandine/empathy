@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-20 18:40+0200\n"
-"PO-Revision-Date: 2008-08-20 19:22+0200\n"
+"POT-Creation-Date: 2008-08-26 16:55+0200\n"
+"PO-Revision-Date: 2008-08-26 16:55+0200\n"
 "Last-Translator: Iñaki Larrañaga Murgoitio <dooteo@euskalgnu.org>\n"
 "Language-Team: Basque <itzulpena@euskalgnu.org>\n"
 "MIME-Version: 1.0\n"
@@ -67,9 +67,7 @@ msgstr "Empathy-k automatikoki konektatu behar duen abiatzean"
 
 #: ../data/empathy.schemas.in.h:9
 msgid "Empathy should use the avatar of the contact as the chat window icon"
-msgstr ""
-"Empathy-k berriketako leihoetan kontaktuen avatarrak ikono gisa  "
-"erabiltzea"
+msgstr "Empathy-k berriketako leihoetan kontaktuen avatarrak ikono gisa  erabiltzea"
 
 #: ../data/empathy.schemas.in.h:10
 msgid "Enable popup when contact is available"
@@ -158,8 +156,8 @@ msgid ""
 "Whether or not Empathy should use the avatar of the contact as the chat "
 "window icon."
 msgstr ""
-"Empathy-k berriketako leihoetan kontaktuen avatarrak ikono gisa erakutsi "
-"edo ez adierazten du."
+"Empathy-k berriketako leihoetan kontaktuen avatarrak ikono gisa erakutsi edo "
+"ez adierazten du."
 
 #: ../data/empathy.schemas.in.h:31
 msgid "Whether or not the Salut account has been created on the first Empathy run."
@@ -305,7 +303,7 @@ msgstr "Ahaztu pasahitza eta garbitu sarrera."
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:5
 #: ../libempathy-gtk/empathy-account-widget-msn.glade.h:4
 #: ../libempathy-gtk/empathy-account-widget-sip.glade.h:5
-#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:4
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:3
 msgid "Pass_word:"
 msgstr "_Pasahitza:"
 
@@ -335,7 +333,6 @@ msgstr "_Zerbitzaria:"
 #: ../libempathy-gtk/empathy-account-widget-groupwise.glade.h:3
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:4
 #: ../libempathy-gtk/empathy-account-widget-msn.glade.h:3
-#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:3
 msgid "Login I_D:"
 msgstr "Saioko _IDa:"
 
@@ -466,9 +463,13 @@ msgstr "STUN ataka:"
 msgid "_Username:"
 msgstr "_Erabiltzaile-izena:"
 
-#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:5
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:4
 msgid "Use _Yahoo Japan"
 msgstr "Erabili japoniako _Yahoo"
+
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:5
+msgid "Yahoo I_D:"
+msgstr "Yahoo! _IDa:"
 
 #: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:7
 msgid "_Ignore conference and chatroom invitations"
@@ -805,13 +806,12 @@ msgid "_For:"
 msgstr "_Honentzako:"
 
 #: ../libempathy-gtk/empathy-new-message-dialog.glade.h:2
-msgid "Call"
-msgstr "Deitu"
+msgid "C_all"
+msgstr "_Deitu"
 
 #: ../libempathy-gtk/empathy-new-message-dialog.glade.h:3
-#: ../src/empathy-chat-window.glade.h:2
-msgid "Chat"
-msgstr "Berriketa"
+msgid "C_hat"
+msgstr "_Berriketa"
 
 #: ../libempathy-gtk/empathy-new-message-dialog.glade.h:4
 msgid "Contact ID:"
@@ -1285,7 +1285,9 @@ msgstr "Konektatzen"
 #: ../src/empathy-call-window.c:524
 #, c-format
 msgid "Incoming call from %s rejected because there is already a running call."
-msgstr "%s(e)ndik datorren sarrerako deia ukatuta, badagoelako dei bat exekutatzen ari dena."
+msgstr ""
+"%s(e)ndik datorren sarrerako deia ukatuta, badagoelako dei bat exekutatzen "
+"ari dena."
 
 #: ../src/empathy-call-window.glade.h:1
 msgid "#"
@@ -1368,6 +1370,10 @@ msgstr "Mezua idazten."
 #: ../src/empathy-chat-window.glade.h:1
 msgid "C_lear"
 msgstr "_Garbitu"
+
+#: ../src/empathy-chat-window.glade.h:2
+msgid "Chat"
+msgstr "Berriketa"
 
 #: ../src/empathy-chat-window.glade.h:3
 msgid "Insert _Smiley"
@@ -1490,8 +1496,8 @@ msgid ""
 "%s is offering you an invitation, but you don't have the needed external "
 "application to handle it."
 msgstr ""
-"%s(e)k gonbidapena eskaintzen ari zaizu, baina ez daukazu kanpoko aplikaziorik "
-"gonbidapena kudeatzeko."
+"%s(e)k gonbidapena eskaintzen ari zaizu, baina ez daukazu kanpoko "
+"aplikaziorik gonbidapena kudeatzeko."
 
 #: ../src/empathy-event-manager.c:263
 msgid "Invitation Error"
@@ -1503,8 +1509,8 @@ msgid ""
 "%s is offering you an invitation. An external application will be started to "
 "handle it."
 msgstr ""
-"%s(e)k gonbidapena eskaintzen ari zaizu. Kanpoko aplikazioa "
-"abiaraziko da gonbidapena kudeatzeko."
+"%s(e)k gonbidapena eskaintzen ari zaizu. Kanpoko aplikazioa abiaraziko da "
+"gonbidapena kudeatzeko."
 
 #: ../src/empathy-event-manager.c:345
 #, c-format
