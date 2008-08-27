@@ -1,4 +1,5 @@
 # This file is distributed under the same license as the empathy package.
+# Copyright (C) 2006-2008 Free Software Foundation Inc.
 # Copyright (C) 2006 Samuli Seppänen and Henna Nykänen.
 #
 # Ilkka Tuohela <hile@iki.fi>, 2006-2008.
@@ -8,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gossip\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-13 15:06+0300\n"
-"PO-Revision-Date: 2008-08-13 15:00+0300\n"
+"POT-Creation-Date: 2008-08-27 12:13+0300\n"
+"PO-Revision-Date: 2008-08-27 12:00+0300\n"
 "Last-Translator: Ilkka Tuohela <hile@utu.fi>\n"
 "Language-Team: Finnish <gnome-fi-laatu@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -235,15 +236,7 @@ msgstr ""
 "järjestää tuttavan nimen mukaan arvolla \"name\". Luettelo voidaan järjestää "
 "tuttavan tilan mukaan arvolla \"state\"."
 
-#: ../data/empathy-properties.desktop.in.in.h:1
-msgid "Configure Telepathy account settings"
-msgstr "Määrittele telepathy-tilin asetukset"
-
-#: ../data/empathy-properties.desktop.in.in.h:2
-msgid "Empathy accounts"
-msgstr "Empathy-tilit"
-
-#: ../libempathy/empathy-tp-contact-list.c:731 ../src/empathy.c:244
+#: ../libempathy/empathy-tp-contact-list.c:731 ../src/empathy.c:248
 msgid "People nearby"
 msgstr "Lähellä olevat ihmiset"
 
@@ -267,7 +260,7 @@ msgstr "Piilotettu"
 msgid "Offline"
 msgstr "Poissa linjoilta"
 
-#: ../libempathy-gtk/empathy-account-chooser.c:335
+#: ../libempathy-gtk/empathy-account-chooser.c:337
 msgid "All"
 msgstr "Kaikki"
 
@@ -305,7 +298,7 @@ msgstr "Unohda salasana ja tyhjennä kohta."
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:5
 #: ../libempathy-gtk/empathy-account-widget-msn.glade.h:4
 #: ../libempathy-gtk/empathy-account-widget-sip.glade.h:5
-#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:4
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:3
 msgid "Pass_word:"
 msgstr "S_alasana:"
 
@@ -335,7 +328,6 @@ msgstr "Pal_velin:"
 #: ../libempathy-gtk/empathy-account-widget-groupwise.glade.h:3
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:4
 #: ../libempathy-gtk/empathy-account-widget-msn.glade.h:3
-#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:3
 msgid "Login I_D:"
 msgstr "_Käyttäjätunnus:"
 
@@ -466,9 +458,13 @@ msgstr "STUN-portti:"
 msgid "_Username:"
 msgstr "_Käyttäjätunnus:"
 
-#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:5
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:4
 msgid "Use _Yahoo Japan"
 msgstr "Käytä _Yahoo Japania"
+
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:5
+msgid "Yahoo I_D:"
+msgstr "Yahoo-_tunnus:"
 
 #: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:7
 msgid "_Ignore conference and chatroom invitations"
@@ -668,11 +664,11 @@ msgstr "Tallenna vastaus"
 msgid "Unable to save avatar"
 msgstr "Avataria ei voitu tallentaa"
 
-#: ../libempathy-gtk/empathy-contact-widget.c:866
+#: ../libempathy-gtk/empathy-contact-widget.c:875
 msgid "Select"
 msgstr "Valitse"
 
-#: ../libempathy-gtk/empathy-contact-widget.c:875
+#: ../libempathy-gtk/empathy-contact-widget.c:884
 #: ../src/empathy-main-window.c:853
 msgid "Group"
 msgstr "Ryhmä"
@@ -742,8 +738,8 @@ msgid ""
 "Select the groups you want this contact to appear in.  Note that you can "
 "select more than one group or no groups."
 msgstr ""
-"Valitse ryhmät, joissa haluat tämän yhteystiedon näkyvän. Huomaa että "
-"Voit valita useita ryhmiä tai olla valitsematta yhtään ryhmää."
+"Valitse ryhmät, joissa haluat tämän yhteystiedon näkyvän. Huomaa että Voit "
+"valita useita ryhmiä tai olla valitsematta yhtään ryhmää."
 
 #: ../libempathy-gtk/empathy-contact-widget.glade.h:17
 msgid "Version:"
@@ -805,13 +801,12 @@ msgid "_For:"
 msgstr "_Ajalta:"
 
 #: ../libempathy-gtk/empathy-new-message-dialog.glade.h:2
-msgid "Call"
-msgstr "Soita"
+msgid "C_all"
+msgstr "_Soita"
 
 #: ../libempathy-gtk/empathy-new-message-dialog.glade.h:3
-#: ../src/empathy-chat-window.glade.h:2
-msgid "Chat"
-msgstr "Keskustelu"
+msgid "C_hat"
+msgstr "_Keskustele"
 
 #: ../libempathy-gtk/empathy-new-message-dialog.glade.h:4
 msgid "Contact ID:"
@@ -1096,19 +1091,19 @@ msgstr "Läsnäolo"
 msgid "Set your own presence"
 msgstr "Aseta läsnäolosi tila"
 
-#: ../src/empathy.c:376
+#: ../src/empathy.c:380
 msgid "Don't connect on startup"
 msgstr "Älä yhdistä käynnistettäessä"
 
-#: ../src/empathy.c:380
+#: ../src/empathy.c:384
 msgid "Don't show the contact list on startup"
 msgstr "Älä näytä tuttavaluetteloa käynnistettäessä"
 
-#: ../src/empathy.c:384
+#: ../src/empathy.c:388
 msgid "Show the accounts dialog"
 msgstr "Näytä tili-ikkuna"
 
-#: ../src/empathy.c:396
+#: ../src/empathy.c:400
 msgid "- Empathy Instant Messenger"
 msgstr "- Empathy-pikaviestiohjelma"
 
@@ -1158,53 +1153,22 @@ msgstr ""
 "\n"
 "http://www.gnome.fi/"
 
-#: ../src/empathy-accounts-dialog.c:235
-msgid ""
-"To add a new account, you can click on the 'Add' button and a new entry will "
-"be created for you to start configuring."
-msgstr ""
-"Jos haluat lisätä uuden tilin, voit napsauttaa \"Lisää\"-painiketta ja uusi "
-"kohta lisätään, josta voit määritellä tilin asetukset."
-
-#: ../src/empathy-accounts-dialog.c:239
-msgid ""
-"To add a new account, you first have to install a backend for each protocol "
-"you want to use."
-msgstr ""
-"Ennen kuin voit lisätä tilin, sinun täytyy asentaa kullekin käytettävälle "
-"protokollalle tarvittava taustajärjestelmä."
-
-#: ../src/empathy-accounts-dialog.c:246
-#: ../src/empathy-accounts-dialog.glade.h:2
-msgid "<b>No Account Selected</b>"
-msgstr "<b>Tiliä ei ole valittu</b>"
-
-#: ../src/empathy-accounts-dialog.c:247
-msgid ""
-"\n"
-"\n"
-"If you do not want to add an account, simply click on the account you want "
-"to configure in the list on the left."
-msgstr ""
-"\n"
-"\n"
-"Jos et halua lisätä uutta tiliä, valitse vasemmalla olevasta luettelosta "
-"tili, jonka asetuksia haluat muuttaa."
-
-#: ../src/empathy-accounts-dialog.c:253
-msgid "<b>No Accounts Configured</b>"
-msgstr "<b>Tilejä ei ole määritelty</b>"
-
-#: ../src/empathy-accounts-dialog.c:451
+#: ../src/empathy-accounts-dialog.c:389
 msgid "Enabled"
 msgstr "Käytössä"
 
-#: ../src/empathy-accounts-dialog.c:461
+#: ../src/empathy-accounts-dialog.c:399
 #: ../src/empathy-accounts-dialog.glade.h:4
 msgid "Accounts"
 msgstr "Käyttäjätilit"
 
-#: ../src/empathy-accounts-dialog.c:991
+#. To translator: %s is the protocol name
+#: ../src/empathy-accounts-dialog.c:862
+#, c-format
+msgid "New %s account"
+msgstr "Uusi %s-tili"
+
+#: ../src/empathy-accounts-dialog.c:972
 #, c-format
 msgid ""
 "You are about to remove your %s account!\n"
@@ -1213,7 +1177,7 @@ msgstr ""
 "Olet poistamassa %s-tilisi!\n"
 "Haluatko varmasti jatkaa?"
 
-#: ../src/empathy-accounts-dialog.c:997
+#: ../src/empathy-accounts-dialog.c:978
 msgid ""
 "Any associated conversations and chat rooms will NOT be removed if you "
 "decide to proceed.\n"
@@ -1231,6 +1195,10 @@ msgstr ""
 msgid "<b>New Account</b>"
 msgstr "<b>Uusi tili</b>"
 
+#: ../src/empathy-accounts-dialog.glade.h:2
+msgid "<b>No protocol installed</b>"
+msgstr "<b>Protokollaa ei ole asennnettu</b>"
+
 #: ../src/empathy-accounts-dialog.glade.h:3
 msgid "<b>Settings</b>"
 msgstr "<b>Asetukset</b>"
@@ -1244,6 +1212,14 @@ msgid "I already have an account I want to use"
 msgstr "Minulla on jo tili, jota haluan käyttää"
 
 #: ../src/empathy-accounts-dialog.glade.h:7
+msgid ""
+"To add a new account, you first have to install a backend for each protocol "
+"you want to use."
+msgstr ""
+"Ennen kuin voit lisätä tilin, sinun täytyy asentaa kullekin käytettävälle "
+"protokollalle tarvittava taustajärjestelmä."
+
+#: ../src/empathy-accounts-dialog.glade.h:8
 msgid "Type:"
 msgstr "Tyyppi:"
 
@@ -1390,6 +1366,10 @@ msgstr "Kirjoittaa viestiä."
 #: ../src/empathy-chat-window.glade.h:1
 msgid "C_lear"
 msgstr "_Tyhjennä"
+
+#: ../src/empathy-chat-window.glade.h:2
+msgid "Chat"
+msgstr "Keskustelu"
 
 #: ../src/empathy-chat-window.glade.h:3
 msgid "Insert _Smiley"
@@ -1816,6 +1796,33 @@ msgstr "_Lopeta"
 #: ../src/empathy-status-icon.glade.h:4
 msgid "_Show Contact List"
 msgstr "_Näytä tuttavaluettelo"
+
+#~ msgid "Configure Telepathy account settings"
+#~ msgstr "Määrittele telepathy-tilin asetukset"
+
+#~ msgid "Empathy accounts"
+#~ msgstr "Empathy-tilit"
+
+#~ msgid ""
+#~ "To add a new account, you can click on the 'Add' button and a new entry "
+#~ "will be created for you to start configuring."
+#~ msgstr ""
+#~ "Jos haluat lisätä uuden tilin, voit napsauttaa \"Lisää\"-painiketta ja "
+#~ "uusi kohta lisätään, josta voit määritellä tilin asetukset."
+
+#~ msgid ""
+#~ "\n"
+#~ "\n"
+#~ "If you do not want to add an account, simply click on the account you "
+#~ "want to configure in the list on the left."
+#~ msgstr ""
+#~ "\n"
+#~ "\n"
+#~ "Jos et halua lisätä uutta tiliä, valitse vasemmalla olevasta luettelosta "
+#~ "tili, jonka asetuksia haluat muuttaa."
+
+#~ msgid "<b>No Accounts Configured</b>"
+#~ msgstr "<b>Tilejä ei ole määritelty</b>"
 
 #~ msgid "ICQ account settings"
 #~ msgstr "ICQ-tilin asetukset"
