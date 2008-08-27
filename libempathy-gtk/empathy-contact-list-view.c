@@ -114,6 +114,19 @@ static guint signals[LAST_SIGNAL];
 
 G_DEFINE_TYPE (EmpathyContactListView, empathy_contact_list_view, GTK_TYPE_TREE_VIEW);
 
+static void
+contact_list_view_tooltip_destroy_cb (GtkWidget              *widget,
+				      EmpathyContactListView *view)
+{
+	EmpathyContactListViewPriv *priv = GET_PRIV (view);
+	
+	if (priv->tooltip_widget) {
+		DEBUG ("Tooltip destroyed");
+		g_object_unref (priv->tooltip_widget);
+		priv->tooltip_widget = NULL;
+	}
+}
+
 static gboolean
 contact_list_view_query_tooltip_cb (EmpathyContactListView *view,
 				    gint                    x,
@@ -152,8 +165,10 @@ contact_list_view_query_tooltip_cb (EmpathyContactListView *view,
 	if (!priv->tooltip_widget) {
 		priv->tooltip_widget = empathy_contact_widget_new (contact,
 			EMPATHY_CONTACT_WIDGET_FOR_TOOLTIP);
-		g_object_add_weak_pointer (G_OBJECT (priv->tooltip_widget),
-					   (gpointer) &priv->tooltip_widget);
+		g_object_ref (priv->tooltip_widget);
+		g_signal_connect (priv->tooltip_widget, "destroy",
+				  G_CALLBACK (contact_list_view_tooltip_destroy_cb),
+				  view);
 	} else {
 		empathy_contact_widget_set_contact (priv->tooltip_widget,
 						    contact);
@@ -965,6 +980,9 @@ contact_list_view_finalize (GObject *object)
 
 	if (priv->store) {
 		g_object_unref (priv->store);
+	}
+	if (priv->tooltip_widget) {
+		g_object_unref (priv->tooltip_widget);
 	}
 
 	G_OBJECT_CLASS (empathy_contact_list_view_parent_class)->finalize (object);
