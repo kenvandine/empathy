@@ -122,8 +122,8 @@ contact_list_view_tooltip_destroy_cb (GtkWidget              *widget,
 	
 	if (priv->tooltip_widget) {
 		DEBUG ("Tooltip destroyed");
-		g_object_unref (priv->tooltip_widget);
 		priv->tooltip_widget = NULL;
+		g_object_unref (widget);
 	}
 }
 
@@ -982,7 +982,7 @@ contact_list_view_finalize (GObject *object)
 		g_object_unref (priv->store);
 	}
 	if (priv->tooltip_widget) {
-		g_object_unref (priv->tooltip_widget);
+		gtk_widget_destroy (priv->tooltip_widget);
 	}
 
 	G_OBJECT_CLASS (empathy_contact_list_view_parent_class)->finalize (object);
