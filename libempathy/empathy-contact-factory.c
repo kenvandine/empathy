@@ -41,12 +41,10 @@ empathy_contact_factory_get_tp_factory (EmpathyContactFactory *factory,
 	tp_factory = g_hash_table_lookup (priv->accounts, account);
 	if (!tp_factory) {
 		tp_factory = empathy_tp_contact_factory_new (account);
-		g_hash_table_insert (priv->accounts,
-				     g_object_ref (account),
-				     tp_factory);
+		g_hash_table_insert (priv->accounts, account, tp_factory);
 	}
 
-	return tp_factory;
+	return g_object_ref (tp_factory);
 }
 
 EmpathyContact *
