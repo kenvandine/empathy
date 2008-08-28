@@ -4,56 +4,56 @@
 <!ENTITY version SYSTEM "version.xml">
 ]>
 <book lang="en" id="libempathy-gtk" xmlns:xi="http://www.w3.org/2003/XInclude">
-<title>libempathy-gtk Reference Manual</title>
+  <title>libempathy-gtk Reference Manual</title>
   <bookinfo>
     <title>libempathy-gtk Reference Manual</title>
     <releaseinfo>for libempathy-gtk &version;</releaseinfo>
   </bookinfo>
   <part>
-  <title>libempathy-gtk Overview</title>
+    <title>libempathy-gtk Overview</title>
   </part>
   <part>
-  <title>API Reference</title>
+    <title>API Reference</title>
     <chapter id="libempathy_api">
       <title>libempathy-gtk API reference</title>
-    <xi:include href="xml/empathy-account-chooser.xml"/>
-    <xi:include href="xml/empathy-account-widget-irc.xml"/>
-    <xi:include href="xml/empathy-account-widget-sip.xml"/>
-    <xi:include href="xml/empathy-account-widget.xml"/>
-    <xi:include href="xml/empathy-avatar-chooser.xml"/>
-    <xi:include href="xml/empathy-avatar-image.xml"/>
-    <xi:include href="xml/empathy-cell-renderer-activatable.xml"/>
-    <xi:include href="xml/empathy-cell-renderer-expander.xml"/>
-    <xi:include href="xml/empathy-cell-renderer-text.xml"/>
-    <xi:include href="xml/empathy-chat-view.xml"/>
-    <xi:include href="xml/empathy-chat.xml"/>
-    <xi:include href="xml/empathy-conf.xml"/>
-    <xi:include href="xml/empathy-contact-dialogs.xml"/>
-    <xi:include href="xml/empathy-contact-list-store.xml"/>
-    <xi:include href="xml/empathy-contact-list-view.xml"/>
-    <xi:include href="xml/empathy-contact-menu.xml"/>
-    <xi:include href="xml/empathy-contact-widget.xml"/>
-    <xi:include href="xml/empathy-geometry.xml"/>
-    <xi:include href="xml/empathy-images.xml"/>
-    <xi:include href="xml/empathy-irc-network-dialog.xml"/>
-    <xi:include href="xml/empathy-log-window.xml"/>
-    <xi:include href="xml/empathy-new-message-dialog.xml"/>
-    <xi:include href="xml/empathy-presence-chooser.xml"/>
-    <xi:include href="xml/empathy-profile-chooser.xml"/>
-    <xi:include href="xml/empathy-smiley-manager.xml"/>
-    <xi:include href="xml/empathy-spell-dialog.xml"/>
-    <xi:include href="xml/empathy-spell.xml"/>
-    <xi:include href="xml/empathy-theme-boxes.xml"/>
-    <xi:include href="xml/empathy-theme-irc.xml"/>
-    <xi:include href="xml/empathy-theme-manager.xml"/>
-    <xi:include href="xml/empathy-theme.xml"/>
-    <xi:include href="xml/empathy-ui-utils.xml"/>
+      <xi:include href="xml/empathy-account-chooser.xml"/>
+      <xi:include href="xml/empathy-account-widget-irc.xml"/>
+      <xi:include href="xml/empathy-account-widget-sip.xml"/>
+      <xi:include href="xml/empathy-account-widget.xml"/>
+      <xi:include href="xml/empathy-avatar-chooser.xml"/>
+      <xi:include href="xml/empathy-avatar-image.xml"/>
+      <xi:include href="xml/empathy-cell-renderer-activatable.xml"/>
+      <xi:include href="xml/empathy-cell-renderer-expander.xml"/>
+      <xi:include href="xml/empathy-cell-renderer-text.xml"/>
+      <xi:include href="xml/empathy-chat-view.xml"/>
+      <xi:include href="xml/empathy-chat.xml"/>
+      <xi:include href="xml/empathy-conf.xml"/>
+      <xi:include href="xml/empathy-contact-dialogs.xml"/>
+      <xi:include href="xml/empathy-contact-list-store.xml"/>
+      <xi:include href="xml/empathy-contact-list-view.xml"/>
+      <xi:include href="xml/empathy-contact-menu.xml"/>
+      <xi:include href="xml/empathy-contact-widget.xml"/>
+      <xi:include href="xml/empathy-geometry.xml"/>
+      <xi:include href="xml/empathy-images.xml"/>
+      <xi:include href="xml/empathy-irc-network-dialog.xml"/>
+      <xi:include href="xml/empathy-log-window.xml"/>
+      <xi:include href="xml/empathy-new-message-dialog.xml"/>
+      <xi:include href="xml/empathy-presence-chooser.xml"/>
+      <xi:include href="xml/empathy-profile-chooser.xml"/>
+      <xi:include href="xml/empathy-smiley-manager.xml"/>
+      <xi:include href="xml/empathy-spell-dialog.xml"/>
+      <xi:include href="xml/empathy-spell.xml"/>
+      <xi:include href="xml/empathy-theme-boxes.xml"/>
+      <xi:include href="xml/empathy-theme-irc.xml"/>
+      <xi:include href="xml/empathy-theme-manager.xml"/>
+      <xi:include href="xml/empathy-theme.xml"/>
+      <xi:include href="xml/empathy-ui-utils.xml"/>
     </chapter>
   </part>
 
   <chapter id="libempathy-gtk-hierarchy">
     <title>Object Hierarchy</title>
-      <xi:include href="xml/tree_index.sgml"/>
+    <xi:include href="xml/tree_index.sgml"/>
   </chapter>
   
   <index>

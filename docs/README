@@ -5,4 +5,4 @@ empathy/libempathy$ grep _get_type *.h | grep GType | awk '{ print $2 }'
 
 2) Update libempathy-docs.sgml
 empathy$ make
-empathy/doc/libempathy$ for f in `ls -l xml/*.xml | awk '{ print $8 }'`; do echo "    <xi:include href=\"$f\"/>"; done
+empathy/doc/libempathy$ for f in `ls -l xml/*.xml | awk '{ print $8 }'`; do echo "      <xi:include href=\"$f\"/>"; done
