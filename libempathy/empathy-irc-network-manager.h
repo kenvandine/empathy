@@ -41,8 +41,7 @@ struct _EmpathyIrcNetworkManagerClass
   GObjectClass parent_class;
 };
 
-GType
-empathy_irc_network_manager_get_type (void);
+GType empathy_irc_network_manager_get_type (void);
 
 /* TYPE MACROS */
 #define EMPATHY_TYPE_IRC_NETWORK_MANAGER \

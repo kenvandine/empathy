@@ -16,32 +16,31 @@
   <title>API Reference</title>
     <chapter id="libempathy_api">
       <title>libempathy API reference</title>
-      <xi:include href="xml/empathy-chatroom-manager.xml"/>
-      <xi:include href="xml/empathy-chatroom.xml"/>
-      <xi:include href="xml/empathy-contact-factory.xml"/>
-      <xi:include href="xml/empathy-contact-groups.xml"/>
-      <xi:include href="xml/empathy-contact-list.xml"/>
-      <xi:include href="xml/empathy-contact-manager.xml"/>
-      <xi:include href="xml/empathy-contact.xml"/>
-      <xi:include href="xml/empathy-dispatcher.xml"/>
-      <xi:include href="xml/empathy-enum-types.xml"/>
-      <xi:include href="xml/empathy-idle.xml"/>
-      <xi:include href="xml/empathy-irc-server.xml"/>
-      <xi:include href="xml/empathy-irc-network.xml"/>
-      <xi:include href="xml/empathy-irc-network-manager.xml"/>
-      <xi:include href="xml/empathy-log-manager.xml"/>
-      <xi:include href="xml/empathy-message.xml"/>
-      <xi:include href="xml/empathy-status-presets.xml"/>
-      <xi:include href="xml/empathy-time.xml"/>
-      <xi:include href="xml/empathy-tp-call.xml"/>
-      <xi:include href="xml/empathy-tp-chat.xml"/>
-      <xi:include href="xml/empathy-tp-contact-factory.xml"/>
-      <xi:include href="xml/empathy-tp-contact-list.xml"/>
-      <xi:include href="xml/empathy-tp-group.xml"/>
-      <xi:include href="xml/empathy-tp-roomlist.xml"/>
-      <xi:include href="xml/empathy-tp-tube.xml"/>
-      <xi:include href="xml/empathy-tube-handler.xml"/>
-      <xi:include href="xml/empathy-utils.xml"/>
+    <xi:include href="xml/empathy-chatroom-manager.xml"/>
+    <xi:include href="xml/empathy-chatroom.xml"/>
+    <xi:include href="xml/empathy-contact-factory.xml"/>
+    <xi:include href="xml/empathy-contact-groups.xml"/>
+    <xi:include href="xml/empathy-contact-list.xml"/>
+    <xi:include href="xml/empathy-contact-manager.xml"/>
+    <xi:include href="xml/empathy-contact.xml"/>
+    <xi:include href="xml/empathy-dispatcher.xml"/>
+    <xi:include href="xml/empathy-idle.xml"/>
+    <xi:include href="xml/empathy-irc-network-manager.xml"/>
+    <xi:include href="xml/empathy-irc-network.xml"/>
+    <xi:include href="xml/empathy-irc-server.xml"/>
+    <xi:include href="xml/empathy-log-manager.xml"/>
+    <xi:include href="xml/empathy-message.xml"/>
+    <xi:include href="xml/empathy-status-presets.xml"/>
+    <xi:include href="xml/empathy-time.xml"/>
+    <xi:include href="xml/empathy-tp-call.xml"/>
+    <xi:include href="xml/empathy-tp-chat.xml"/>
+    <xi:include href="xml/empathy-tp-contact-factory.xml"/>
+    <xi:include href="xml/empathy-tp-contact-list.xml"/>
+    <xi:include href="xml/empathy-tp-group.xml"/>
+    <xi:include href="xml/empathy-tp-roomlist.xml"/>
+    <xi:include href="xml/empathy-tp-tube.xml"/>
+    <xi:include href="xml/empathy-tube-handler.xml"/>
+    <xi:include href="xml/empathy-utils.xml"/>
     </chapter>
   </part>
 
