@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Empathy\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-23 08:42-0400\n"
+"POT-Creation-Date: 2008-08-29 05:03+0000\n"
 "PO-Revision-Date: 2008-08-23 08:43-0400\n"
 "Last-Translator: Og Maciel <ogmaciel@gnome.org>\n"
 "Language-Team: Gnome-BR <gnome-l10n-br@listas.cipsga.org.br>\n"
@@ -617,30 +617,30 @@ msgstr "Decidir _depois"
 msgid "Subscription Request"
 msgstr "Requisição de inscrição"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1226
+#: ../libempathy-gtk/empathy-contact-list-view.c:1244
 #, c-format
 msgid "Do you really want to remove the group '%s'?"
 msgstr "Você realmente deseja remover o grupo \"%s\"?"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1228
+#: ../libempathy-gtk/empathy-contact-list-view.c:1246
 msgid "Removing group"
 msgstr "Removendo grupo"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1275
-#: ../libempathy-gtk/empathy-contact-list-view.c:1354
+#: ../libempathy-gtk/empathy-contact-list-view.c:1293
+#: ../libempathy-gtk/empathy-contact-list-view.c:1372
 msgid "_Remove"
 msgstr "_Remover"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1305
+#: ../libempathy-gtk/empathy-contact-list-view.c:1323
 #, c-format
 msgid "Do you really want to remove the contact '%s'?"
 msgstr "Você realmente deseja remover o contato \"%s\"?"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1307
+#: ../libempathy-gtk/empathy-contact-list-view.c:1325
 msgid "Removing contact"
 msgstr "Removendo contato"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1312
+#: ../libempathy-gtk/empathy-contact-list-view.c:1330
 msgid "Sorry, I don't want you in my contact list anymore."
 msgstr "Desculpe, mas eu não desejo mais mantê-lo em minha lista de contatos."
 
@@ -812,13 +812,12 @@ msgid "_For:"
 msgstr "_Por:"
 
 #: ../libempathy-gtk/empathy-new-message-dialog.glade.h:2
-msgid "Call"
-msgstr "Chamar"
+msgid "C_all"
+msgstr "Ch_amar"
 
 #: ../libempathy-gtk/empathy-new-message-dialog.glade.h:3
-#: ../src/empathy-chat-window.glade.h:2
-msgid "Chat"
-msgstr "Bate-Papo"
+msgid "C_hat"
+msgstr "Ba_te-papo"
 
 #: ../libempathy-gtk/empathy-new-message-dialog.glade.h:4
 msgid "Contact ID:"
@@ -1382,6 +1381,10 @@ msgstr "Digitando uma mensagem."
 #: ../src/empathy-chat-window.glade.h:1
 msgid "C_lear"
 msgstr "_Limpar"
+
+#: ../src/empathy-chat-window.glade.h:2
+msgid "Chat"
+msgstr "Bate-papo"
 
 #: ../src/empathy-chat-window.glade.h:3
 msgid "Insert _Smiley"
