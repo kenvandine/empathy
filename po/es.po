@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: empathy.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-29 05:03+0000\n"
-"PO-Revision-Date: 2008-08-29 10:31+0200\n"
+"POT-Creation-Date: 2008-08-29 17:57+0000\n"
+"PO-Revision-Date: 2008-08-29 20:11+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -787,7 +787,7 @@ msgstr "SSL"
 msgid "Account"
 msgstr "Cuenta"
 
-#: ../libempathy-gtk/empathy-log-window.c:504 ../src/empathy-chat-window.c:276
+#: ../libempathy-gtk/empathy-log-window.c:504 ../src/empathy-chat-window.c:279
 msgid "Conversation"
 msgstr "Conversación"
 
@@ -1358,16 +1358,16 @@ msgstr "Colgar"
 msgid "Send Video"
 msgstr "Envía vídeo"
 
-#: ../src/empathy-chat-window.c:319
+#: ../src/empathy-chat-window.c:322
 #, c-format
 msgid "Conversations (%d)"
 msgstr "Conversaciones (%d)"
 
-#: ../src/empathy-chat-window.c:397
+#: ../src/empathy-chat-window.c:400
 msgid "Topic:"
 msgstr "Tema:"
 
-#: ../src/empathy-chat-window.c:400
+#: ../src/empathy-chat-window.c:403
 msgid "Typing a message."
 msgstr "Tecleando un mensaje."
 
@@ -1423,19 +1423,23 @@ msgstr "_Conversación"
 msgid "_Detach Tab"
 msgstr "_Desacoplar solapa"
 
-#: ../src/empathy-chat-window.glade.h:15 ../src/empathy-main-window.glade.h:12
+#: ../src/empathy-chat-window.glade.h:15
+msgid "_Favorite Chatroom"
+msgstr "Sala de chat _favorita"
+
+#: ../src/empathy-chat-window.glade.h:16 ../src/empathy-main-window.glade.h:12
 msgid "_Help"
 msgstr "Ay_uda"
 
-#: ../src/empathy-chat-window.glade.h:16
+#: ../src/empathy-chat-window.glade.h:17
 msgid "_Next Tab"
 msgstr "Solapa _siguiente"
 
-#: ../src/empathy-chat-window.glade.h:17
+#: ../src/empathy-chat-window.glade.h:18
 msgid "_Previous Tab"
 msgstr "Solapa _anterior"
 
-#: ../src/empathy-chat-window.glade.h:18
+#: ../src/empathy-chat-window.glade.h:19
 msgid "_Tabs"
 msgstr "_Solapas"
 
