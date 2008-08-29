@@ -16,32 +16,32 @@ BUILT_SOURCES = 					\
 lib_LTLIBRARIES = libempathy.la
 
 libempathy_la_SOURCES =					\
-	empathy-time.c					\
-	empathy-status-presets.c			\
-	empathy-debug.c					\
-	empathy-utils.c					\
-	empathy-message.c				\
-	empathy-chatroom-manager.c			\
 	empathy-chatroom.c				\
+	empathy-chatroom-manager.c			\
 	empathy-contact.c				\
+	empathy-contact-factory.c			\
 	empathy-contact-groups.c			\
 	empathy-contact-list.c				\
 	empathy-contact-manager.c			\
-	empathy-contact-factory.c			\
-	empathy-tp-contact-factory.c			\
-	empathy-tp-group.c				\
-	empathy-tp-contact-list.c			\
-	empathy-tp-chat.c				\
-	empathy-tp-roomlist.c				\
-	empathy-tp-call.c				\
-	empathy-tp-tube.c				\
+	empathy-debug.c					\
+	empathy-dispatcher.c				\
 	empathy-idle.c					\
-	empathy-log-manager.c				\
-	empathy-irc-network-manager.c			\
 	empathy-irc-network.c				\
+	empathy-irc-network-manager.c			\
 	empathy-irc-server.c				\
+	empathy-log-manager.c				\
+	empathy-message.c				\
+	empathy-status-presets.c			\
+	empathy-time.c					\
+	empathy-tp-call.c				\
+	empathy-tp-chat.c				\
+	empathy-tp-contact-factory.c			\
+	empathy-tp-contact-list.c			\
+	empathy-tp-group.c				\
+	empathy-tp-roomlist.c				\
+	empathy-tp-tube.c				\
 	empathy-tube-handler.c				\
-	empathy-dispatcher.c
+	empathy-utils.c
 
 # do not distribute generated files
 nodist_libempathy_la_SOURCES =\
@@ -56,32 +56,32 @@ libempathy_la_LDFLAGS =		\
        -export-symbols-regex ^empathy_
 
 libempathy_headers =				\
-	empathy-time.h				\
-	empathy-status-presets.h		\
-	empathy-debug.h				\
-	empathy-utils.h				\
-	empathy-message.h			\
-	empathy-chatroom-manager.h		\
 	empathy-chatroom.h			\
+	empathy-chatroom-manager.h		\
 	empathy-contact.h			\
+	empathy-contact-factory.h		\
 	empathy-contact-groups.h		\
 	empathy-contact-list.h			\
 	empathy-contact-manager.h		\
-	empathy-contact-factory.h		\
-	empathy-tp-contact-factory.h		\
-	empathy-tp-group.h			\
-	empathy-tp-contact-list.h		\
-	empathy-tp-chat.h			\
-	empathy-tp-roomlist.h			\
-	empathy-tp-call.h			\
-	empathy-tp-tube.h			\
+	empathy-debug.h				\
+	empathy-dispatcher.h			\
 	empathy-idle.h				\
-	empathy-log-manager.h			\
-	empathy-irc-network-manager.h		\
 	empathy-irc-network.h			\
+	empathy-irc-network-manager.h		\
 	empathy-irc-server.h			\
+	empathy-log-manager.h			\
+	empathy-message.h			\
+	empathy-status-presets.h		\
+	empathy-time.h				\
+	empathy-tp-call.h			\
+	empathy-tp-chat.h			\
+	empathy-tp-contact-factory.h		\
+	empathy-tp-contact-list.h		\
+	empathy-tp-group.h			\
+	empathy-tp-roomlist.h			\
+	empathy-tp-tube.h			\
 	empathy-tube-handler.h			\
-	empathy-dispatcher.h
+	empathy-utils.h
 
 libempathy_includedir = $(includedir)/libempathy/
 libempathy_include_HEADERS =			\
