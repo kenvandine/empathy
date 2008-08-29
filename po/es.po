@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: empathy.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-25 10:39+0000\n"
-"PO-Revision-Date: 2008-08-25 20:42+0200\n"
+"POT-Creation-Date: 2008-08-29 05:03+0000\n"
+"PO-Revision-Date: 2008-08-29 10:31+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -620,30 +620,30 @@ msgstr "Decidir _luego"
 msgid "Subscription Request"
 msgstr "Petición de suscripción"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1226
+#: ../libempathy-gtk/empathy-contact-list-view.c:1244
 #, c-format
 msgid "Do you really want to remove the group '%s'?"
 msgstr "¿Realmente quiere quitar el grupo «%s»?"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1228
+#: ../libempathy-gtk/empathy-contact-list-view.c:1246
 msgid "Removing group"
 msgstr "Quitando grupo"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1275
-#: ../libempathy-gtk/empathy-contact-list-view.c:1354
+#: ../libempathy-gtk/empathy-contact-list-view.c:1293
+#: ../libempathy-gtk/empathy-contact-list-view.c:1372
 msgid "_Remove"
 msgstr "_Quitar"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1305
+#: ../libempathy-gtk/empathy-contact-list-view.c:1323
 #, c-format
 msgid "Do you really want to remove the contact '%s'?"
 msgstr "¿Realmente quiere quitar el contacto «%s»?"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1307
+#: ../libempathy-gtk/empathy-contact-list-view.c:1325
 msgid "Removing contact"
 msgstr "Quitando el contacto"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1312
+#: ../libempathy-gtk/empathy-contact-list-view.c:1330
 msgid "Sorry, I don't want you in my contact list anymore."
 msgstr "Lo siento, no te quiero en mi lista de contactos."
 
@@ -1085,7 +1085,7 @@ msgstr "Hablar"
 #: ../megaphone/data/GNOME_Megaphone_Applet.xml.h:1
 #: ../nothere/data/GNOME_NotHere_Applet.xml.h:1
 msgid "_About"
-msgstr "_Acerca de"
+msgstr "Acerca _de"
 
 #: ../megaphone/data/GNOME_Megaphone_Applet.xml.h:2
 msgid "_Information"
