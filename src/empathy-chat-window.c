@@ -518,27 +518,35 @@ chat_window_clear_activate_cb (GtkWidget        *menuitem,
 }
 
 static void
-chat_window_favorite_activate_cb (GtkWidget         *menuitem,
-				  EmpathyChatWindow *window)
+chat_window_favorite_toggled_cb (GtkCheckMenuItem  *menuitem,
+				 EmpathyChatWindow *window)
 {
 	EmpathyChatWindowPriv *priv = GET_PRIV (window);
+	gboolean               active;
 	McAccount             *account;
 	const gchar           *room;
-	const gchar           *name;
 	EmpathyChatroom       *chatroom;
 
+	active = gtk_check_menu_item_get_active (menuitem);
 	account = empathy_chat_get_account (priv->current_chat);
 	room = empathy_chat_get_id (priv->current_chat);
-	name = empathy_chat_get_name (priv->current_chat);
-	chatroom = empathy_chatroom_new_full (account, room, name, FALSE);
 
-	if (gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM (priv->menu_conv_favorite))) {
+	chatroom = empathy_chatroom_manager_find (priv->chatroom_manager,
+						  account, room);
+
+	if (active && !chatroom) {
+		const gchar *name;
+
+		name = empathy_chat_get_name (priv->current_chat);
+		chatroom = empathy_chatroom_new_full (account, room, name, FALSE);
 		empathy_chatroom_manager_add (priv->chatroom_manager, chatroom);
-	} else {
+		g_object_unref (chatroom);
+		return;
+	}
+	
+	if (!active && chatroom) {
 		empathy_chatroom_manager_remove (priv->chatroom_manager, chatroom);
 	}
-
-	g_object_unref (chatroom);
 }
 
 static const gchar *
@@ -1194,7 +1202,7 @@ empathy_chat_window_init (EmpathyChatWindow *window)
 			      "chat_window", "configure-event", chat_window_configure_event_cb,
 			      "menu_conv", "activate", chat_window_conv_activate_cb,
 			      "menu_conv_clear", "activate", chat_window_clear_activate_cb,
-			      "menu_conv_favorite", "activate", chat_window_favorite_activate_cb,
+			      "menu_conv_favorite", "toggled", chat_window_favorite_toggled_cb,
 			      "menu_conv_close", "activate", chat_window_close_activate_cb,
 			      "menu_edit", "activate", chat_window_edit_activate_cb,
 			      "menu_edit_cut", "activate", chat_window_cut_activate_cb,
