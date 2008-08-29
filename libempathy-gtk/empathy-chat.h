@@ -82,7 +82,7 @@ void               empathy_chat_correct_word         (EmpathyChat   *chat,
 						      GtkTextIter   *start,
 						      GtkTextIter   *end,
 						      const gchar   *new_word);
-
+gboolean           empathy_chat_is_room              (EmpathyChat   *chat);
 G_END_DECLS
 
 #endif /* __EMPATHY_CHAT_H__ */

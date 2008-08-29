@@ -1793,3 +1793,13 @@ empathy_chat_correct_word (EmpathyChat  *chat,
 				-1);
 }
 
+gboolean
+empathy_chat_is_room (EmpathyChat *chat)
+{
+	EmpathyChatPriv *priv = GET_PRIV (chat);
+
+	g_return_val_if_fail (EMPATHY_IS_CHAT (chat), FALSE);
+
+	return (priv->handle_type == TP_HANDLE_TYPE_ROOM);
+}
+

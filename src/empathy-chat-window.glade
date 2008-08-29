@@ -56,6 +56,13 @@
                       </widget>
                     </child>
                     <child>
+                      <widget class="GtkCheckMenuItem" id="menu_conv_favorite">
+                        <property name="visible">True</property>
+                        <property name="label" translatable="yes">_Favorite Chatroom</property>
+                        <property name="use_underline">True</property>
+                      </widget>
+                    </child>
+                    <child>
                       <widget class="GtkSeparatorMenuItem" id="separator7">
                         <property name="visible">True</property>
                       </widget>
