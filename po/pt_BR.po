@@ -12,7 +12,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Empathy\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-29 05:03+0000\n"
+"POT-Creation-Date: 2008-08-29 16:05+0000\n"
 "PO-Revision-Date: 2008-08-23 08:43-0400\n"
 "Last-Translator: Og Maciel <ogmaciel@gnome.org>\n"
 "Language-Team: Gnome-BR <gnome-l10n-br@listas.cipsga.org.br>\n"
@@ -784,7 +784,7 @@ msgstr "SSL"
 msgid "Account"
 msgstr "Conta"
 
-#: ../libempathy-gtk/empathy-log-window.c:504 ../src/empathy-chat-window.c:276
+#: ../libempathy-gtk/empathy-log-window.c:504 ../src/empathy-chat-window.c:279
 msgid "Conversation"
 msgstr "Conversação"
 
@@ -1365,16 +1365,16 @@ msgstr "Desligar"
 msgid "Send Video"
 msgstr "Enviar vídeo"
 
-#: ../src/empathy-chat-window.c:319
+#: ../src/empathy-chat-window.c:322
 #, c-format
 msgid "Conversations (%d)"
 msgstr "Conversações (%d)"
 
-#: ../src/empathy-chat-window.c:397
+#: ../src/empathy-chat-window.c:400
 msgid "Topic:"
 msgstr "Tópico:"
 
-#: ../src/empathy-chat-window.c:400
+#: ../src/empathy-chat-window.c:403
 msgid "Typing a message."
 msgstr "Digitando uma mensagem."
 
@@ -1430,19 +1430,23 @@ msgstr "_Conversação"
 msgid "_Detach Tab"
 msgstr "_Destacar aba"
 
-#: ../src/empathy-chat-window.glade.h:15 ../src/empathy-main-window.glade.h:12
+#: ../src/empathy-chat-window.glade.h:15
+msgid "_Favorite Chatroom"
+msgstr "Sala de bate-papo _favorita"
+
+#: ../src/empathy-chat-window.glade.h:16 ../src/empathy-main-window.glade.h:12
 msgid "_Help"
 msgstr "Aj_uda"
 
-#: ../src/empathy-chat-window.glade.h:16
+#: ../src/empathy-chat-window.glade.h:17
 msgid "_Next Tab"
 msgstr "_Próxima aba"
 
-#: ../src/empathy-chat-window.glade.h:17
+#: ../src/empathy-chat-window.glade.h:18
 msgid "_Previous Tab"
 msgstr "Aba _anterior"
 
-#: ../src/empathy-chat-window.glade.h:18
+#: ../src/empathy-chat-window.glade.h:19
 msgid "_Tabs"
 msgstr "_Abas"
 
@@ -1925,9 +1929,6 @@ msgstr "_Mostrar lista de contatos"
 
 #~ msgid "Edit the groups and name for this contact"
 #~ msgstr "Editar os grupos e nome para este contato"
-
-#~ msgid "_Invite to Chat Room"
-#~ msgstr "Conv_idar para Sala de Bate-Papo"
 
 #~ msgid "Invite to a currently open chat room"
 #~ msgstr "Convidar para uma sala de bate-papo já aberta"
