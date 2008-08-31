@@ -22,8 +22,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: empathy HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-20 18:49+0000\n"
-"PO-Revision-Date: 2008-08-21 22:48+0200\n"
+"POT-Creation-Date: 2008-08-31 11:45+0200\n"
+"PO-Revision-Date: 2008-08-31 11:46+0200\n"
 "Last-Translator: Robert-André Mauchin <zebob.m@pengzone.org>\n"
 "Language-Team: GNOME French Team <gnomefr@traduc.org>\n"
 "MIME-Version: 1.0\n"
@@ -635,30 +635,30 @@ msgstr "Décider plus _tard"
 msgid "Subscription Request"
 msgstr "Requête d'abonnement"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1226
+#: ../libempathy-gtk/empathy-contact-list-view.c:1244
 #, c-format
 msgid "Do you really want to remove the group '%s'?"
 msgstr "Voulez-vous réellement supprimer le groupe « %s » ?"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1228
+#: ../libempathy-gtk/empathy-contact-list-view.c:1246
 msgid "Removing group"
 msgstr "Suppression du groupe"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1275
-#: ../libempathy-gtk/empathy-contact-list-view.c:1354
+#: ../libempathy-gtk/empathy-contact-list-view.c:1293
+#: ../libempathy-gtk/empathy-contact-list-view.c:1372
 msgid "_Remove"
 msgstr "_Supprimer"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1305
+#: ../libempathy-gtk/empathy-contact-list-view.c:1323
 #, c-format
 msgid "Do you really want to remove the contact '%s'?"
 msgstr "Voulez-vous réellement supprimer le contact « %s » ?"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1307
+#: ../libempathy-gtk/empathy-contact-list-view.c:1325
 msgid "Removing contact"
 msgstr "Suppression du contact"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1312
+#: ../libempathy-gtk/empathy-contact-list-view.c:1330
 msgid "Sorry, I don't want you in my contact list anymore."
 msgstr "Désolé, je ne te veux plus dans ma liste de contacts."
 
@@ -802,7 +802,7 @@ msgstr "SSL"
 msgid "Account"
 msgstr "Compte"
 
-#: ../libempathy-gtk/empathy-log-window.c:504 ../src/empathy-chat-window.c:276
+#: ../libempathy-gtk/empathy-log-window.c:504 ../src/empathy-chat-window.c:279
 msgid "Conversation"
 msgstr "Conversation"
 
@@ -832,13 +832,12 @@ msgid "_For:"
 msgstr "ce _terme :"
 
 #: ../libempathy-gtk/empathy-new-message-dialog.glade.h:2
-msgid "Call"
-msgstr "Appel"
+msgid "C_all"
+msgstr "_Appeler"
 
 #: ../libempathy-gtk/empathy-new-message-dialog.glade.h:3
-#: ../src/empathy-chat-window.glade.h:2
-msgid "Chat"
-msgstr "Discuter"
+msgid "C_hat"
+msgstr "_Discuter"
 
 #: ../libempathy-gtk/empathy-new-message-dialog.glade.h:4
 msgid "Contact ID:"
@@ -1394,22 +1393,26 @@ msgstr "Raccrocher"
 msgid "Send Video"
 msgstr "Envoyer la vidéo"
 
-#: ../src/empathy-chat-window.c:319
+#: ../src/empathy-chat-window.c:322
 #, c-format
 msgid "Conversations (%d)"
 msgstr "Conversations (%d)"
 
-#: ../src/empathy-chat-window.c:397
+#: ../src/empathy-chat-window.c:400
 msgid "Topic:"
 msgstr "Sujet :"
 
-#: ../src/empathy-chat-window.c:400
+#: ../src/empathy-chat-window.c:403
 msgid "Typing a message."
 msgstr "Saisie d'un message."
 
 #: ../src/empathy-chat-window.glade.h:1
 msgid "C_lear"
 msgstr "_Nettoyer"
+
+#: ../src/empathy-chat-window.glade.h:2
+msgid "Chat"
+msgstr "Discuter"
 
 #: ../src/empathy-chat-window.glade.h:3
 msgid "Insert _Smiley"
@@ -1455,19 +1458,23 @@ msgstr "_Conversation"
 msgid "_Detach Tab"
 msgstr "_Détacher l'onglet"
 
-#: ../src/empathy-chat-window.glade.h:15 ../src/empathy-main-window.glade.h:12
+#: ../src/empathy-chat-window.glade.h:15
+msgid "_Favorite Chatroom"
+msgstr "Salles de discussion _favorites"
+
+#: ../src/empathy-chat-window.glade.h:16 ../src/empathy-main-window.glade.h:12
 msgid "_Help"
 msgstr "Aid_e"
 
-#: ../src/empathy-chat-window.glade.h:16
+#: ../src/empathy-chat-window.glade.h:17
 msgid "_Next Tab"
 msgstr "Onglet _suivant"
 
-#: ../src/empathy-chat-window.glade.h:17
+#: ../src/empathy-chat-window.glade.h:18
 msgid "_Previous Tab"
 msgstr "Onglet _précédent"
 
-#: ../src/empathy-chat-window.glade.h:18
+#: ../src/empathy-chat-window.glade.h:19
 msgid "_Tabs"
 msgstr "_Onglets"
 
@@ -1841,4 +1848,3 @@ msgstr "_Quitter"
 #: ../src/empathy-status-icon.glade.h:4
 msgid "_Show Contact List"
 msgstr "_Afficher la liste des contacts"
-
