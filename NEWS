@@ -1,3 +1,586 @@
+NEW in 2.23.91
+==============
+ - Add a menu item in chat window to set the room as favorite (Xavier Claessens).
+ - Make Chat the default in New Conversation… dialog (Xavier Claessens).
+ - Give Chat and Call accelerators in New Conversation dialog. (Xavier Claessens).
+
+Bugs fixed:
+ - Fixed #546568, Account name in contact tootlip is shown as selected (fpeters)
+ - Fixed #548578, all protocols are listed twice in the accounts creation list (fpeters)
+ - Fixed #548632, don't use italic for status text in contact list (fpeters)
+ - Fixed #548693, Use Yahoo ID as label (fpeters)
+ - Fixed #548709, "Undo" button in Accounts window doesn't undo anything (fpeters)
+ - Fixed #549002, pygtk-codegen-2.0 got replaced by pygobject-codegen-2.0 (fpeters)
+ - Fixed #549280, Notifications when Contacts come online doesn't work (Xavier Claessens)
+ - Fixed #549545, empathy_contact_factory_get_tp_factory sometimes returns a new reference, sometimes not. (Xavier Claessens)
+
+Translations:
+ - Updated Brazilian Portuguese translation (Vladimir Melo, Fábio Nogueira).
+ - Updated Finnish translation (ituohela).
+ - Updated cs translation (Adrian Gunis).
+ - Updated mk translation (Jovan Naumovski).
+ - Updated Basque translation (Larranaga Murgoitio).
+ - Updated Arabic Translation (Youssef Chahibi).
+ - Updated sv translation  (Daniel Nylander).
+ - Updated es translation  (Jorge Gonzalez).
+ - Updated Polish translation (Tomasz Dominikowski).
+ - Updated Galician translation (icq).
+ - Updated Brazilian Portuguese translation. (ogmaciel).
+ - Updated French translation (bobmauchin).
+ - Added Bengali India Translation (runab).
+ - Added gujarati translation (swkothar).
+
+NEW in 2.23.91
+==============
+ - Do not create a new EmpathyChatroom is it already exists. (Xavier Claessens).
+ - Add a menu item in chat window to set the room as favorite (Xavier Claessens).
+ - Reorder files in alphabetical order. (Xavier Claessens).
+ - Correct the xml indentation (Xavier Claessens).
+ - Update API doc and add a README to explain how to keep it updated. (Xavier Claessens).
+ - Make sure to not unref tooltop_widget more than once (Xavier Claessens).
+ - Keep a ref to the tooltip_widget so it is not recreated all the time. (Xavier Claessens).
+ - Update translation (kmaraas).
+ - Conversion from sr@Latn to sr@latin (grakic).
+ - Make Chat the default in New Conversation… dialog (Xavier Claessens).
+ - Give Chat and Call accelerators in New Conversation dialog. (Xavier Claessens).
+ - EmpathyContactWidget: correct typo, "hbow" -> "hbox" (Xavier Claessens).
+ - Added entry for the Bengali India translation addtion and addition to LINGUAS (runab).
+ - Added Bengali India (bn_IN) to the list of languages (runab).
+ - Added Bengali India Translation (runab).
+ - Added gujarati translation (swkothar).
+ - 2.23.91 (chliao).
+ - 2008-08-20  Leonardo Ferreira Fontenelle  <leonardof@gnome.org>
+* pt_BR.po: Fixed two minor errors. (leonardof).
+ - check there is an account before accessing it; prevents a segfault when calling
+up the 'previous conversations' dialog and there is no account configured. (fpeters).
+ - Bump version to 2.23.91 (Xavier Claessens).
+
+Bugs fixed:
+ - Fixed #546568, Account name in contact tootlip is shown as selected (fpeters)
+ - Fixed #548578, all protocols are listed twice in the accounts creation list (fpeters)
+ - Fixed #548632, don't use italic for status text in contact list (fpeters)
+ - Fixed #548693, Use Yahoo ID as label (fpeters)
+ - Fixed #548709, "Undo" button in Accounts window doesn't undo anything (fpeters)
+ - Fixed #549002, pygtk-codegen-2.0 got replaced by pygobject-codegen-2.0 (fpeters)
+ - Fixed #549280, Notifications when Contacts come online doesn't work (Xavier Claessens)
+ - Fixed #549545, empathy_contact_factory_get_tp_factory sometimes returns a new reference, sometimes not. (Xavier Claessens)
+
+Translations:
+ - Updated Brazilian Portuguese translation  (Vladimir Melo).
+ - Updated Finnish translation (ituohela).
+ - Updated cs translation  (Adrian Gunis).
+ - Updated mk translation  (Jovan Naumovski).
+ - Updated mk translation  (Jovan Naumovski).
+ - 2008-08-26  Inaki Larranaga Murgoitio  <dooteo@euskalgnu.org>
+* eu.po: Updated Basque translation. (dooteo).
+ - * Updated Arabic Translation by Youssef Chahibi. (djihed).
+ - Updated sv translation  (Daniel Nylander).
+ - Updated es translation  (Jorge Gonzalez).
+ - 2008-08-25  Tomasz Dominikowski  <tdominikowski@aviary.pl>
+* pl.po: Updated Polish translation (tomaszd).
+ - Updated Galician translation (icq).
+ - Updated Brazilian Portuguese translation. (ogmaciel).
+ - Updated French translation (bobmauchin).
+ - Updated Spanish translation (jorgegonz).
+ - Updated Galician translation (icq).
+ - 2008-08-20  Inaki Larranaga Murgoitio  <dooteo@euskalgnu.org>
+* eu.po: Updated Basque translation. (dooteo).
+ - Updated Translation (laurenti).
+ - 2008-08-19  Leonardo Ferreira Fontenelle  <leonardof@gnome.org>
+* pt_BR.po: Brazilian Portuguese translation updated by Fábio Nogueira
+and Leonardo Ferreira Fontenelle. (leonardof).
+ - Updated Galician translation (icq).
+ - Updated Spanish translation (jorgegonz).
+
+NEW in 2.23.91
+==============
+ - Do not create a new EmpathyChatroom is it already exists. (Xavier Claessens).
+ - Add a menu item in chat window to set the room as favorite (Xavier Claessens).
+ - Reorder files in alphabetical order. (Xavier Claessens).
+ - Correct the xml indentation (Xavier Claessens).
+ - Update API doc and add a README to explain how to keep it updated. (Xavier Claessens).
+ - Make sure to not unref tooltop_widget more than once (Xavier Claessens).
+ - Keep a ref to the tooltip_widget so it is not recreated all the time. (Xavier Claessens).
+ - Update translation (kmaraas).
+ - Conversion from sr@Latn to sr@latin (grakic).
+ - Make Chat the default in New Conversation… dialog (Xavier Claessens).
+ - Give Chat and Call accelerators in New Conversation dialog. (Xavier Claessens).
+ - EmpathyContactWidget: correct typo, "hbow" -> "hbox" (Xavier Claessens).
+ - Added entry for the Bengali India translation addtion and addition to LINGUAS (runab).
+ - Added Bengali India (bn_IN) to the list of languages (runab).
+ - Added Bengali India Translation (runab).
+ - Added gujarati translation (swkothar).
+ - 2.23.91 (chliao).
+ - 2008-08-20  Leonardo Ferreira Fontenelle  <leonardof@gnome.org>
+* pt_BR.po: Fixed two minor errors. (leonardof).
+ - check there is an account before accessing it; prevents a segfault when calling
+up the 'previous conversations' dialog and there is no account configured. (fpeters).
+ - Bump version to 2.23.91 (Xavier Claessens).
+
+Bugs fixed:
+ - Fixed #546568, Account name in contact tootlip is shown as selected (fpeters)
+ - Fixed #548578, all protocols are listed twice in the accounts creation list (fpeters)
+ - Fixed #548632, don't use italic for status text in contact list (fpeters)
+ - Fixed #548693, Use Yahoo ID as label (fpeters)
+ - Fixed #548709, "Undo" button in Accounts window doesn't undo anything (fpeters)
+ - Fixed #549002, pygtk-codegen-2.0 got replaced by pygobject-codegen-2.0 (fpeters)
+ - Fixed #549280, Notifications when Contacts come online doesn't work (Xavier Claessens)
+ - Fixed #549545, empathy_contact_factory_get_tp_factory sometimes returns a new reference, sometimes not. (Xavier Claessens)
+
+Translations:
+ - Updated Brazilian Portuguese translation  (Vladimir Melo).
+ - Updated Finnish translation (ituohela).
+ - Updated cs translation  (Adrian Gunis).
+ - Updated mk translation  (Jovan Naumovski).
+ - Updated mk translation  (Jovan Naumovski).
+ - 2008-08-26  Inaki Larranaga Murgoitio  <dooteo@euskalgnu.org>
+* eu.po: Updated Basque translation. (dooteo).
+ - * Updated Arabic Translation by Youssef Chahibi. (djihed).
+ - Updated sv translation  (Daniel Nylander).
+ - Updated es translation  (Jorge Gonzalez).
+ - 2008-08-25  Tomasz Dominikowski  <tdominikowski@aviary.pl>
+* pl.po: Updated Polish translation (tomaszd).
+ - Updated Galician translation (icq).
+ - Updated Brazilian Portuguese translation. (ogmaciel).
+ - Updated French translation (bobmauchin).
+ - Updated Spanish translation (jorgegonz).
+ - Updated Galician translation (icq).
+ - 2008-08-20  Inaki Larranaga Murgoitio  <dooteo@euskalgnu.org>
+* eu.po: Updated Basque translation. (dooteo).
+ - Updated Translation (laurenti).
+ - 2008-08-19  Leonardo Ferreira Fontenelle  <leonardof@gnome.org>
+* pt_BR.po: Brazilian Portuguese translation updated by Fábio Nogueira
+and Leonardo Ferreira Fontenelle. (leonardof).
+ - Updated Galician translation (icq).
+ - Updated Spanish translation (jorgegonz).
+
+NEW in 2.23.91
+==============
+ - Do not create a new EmpathyChatroom is it already exists. (Xavier Claessens).
+ - Add a menu item in chat window to set the room as favorite (Xavier Claessens).
+ - Reorder files in alphabetical order. (Xavier Claessens).
+ - Correct the xml indentation (Xavier Claessens).
+ - Update API doc and add a README to explain how to keep it updated. (Xavier Claessens).
+ - Make sure to not unref tooltop_widget more than once (Xavier Claessens).
+ - Keep a ref to the tooltip_widget so it is not recreated all the time. (Xavier Claessens).
+ - Update translation (kmaraas).
+ - don't use italic for status text in contact list  (closes: #548632).
+ - Conversion from sr@Latn to sr@latin (grakic).
+ - Make Chat the default in New Conversation… dialog (Xavier Claessens).
+ - Give Chat and Call accelerators in New Conversation dialog. (Xavier Claessens).
+ - EmpathyContactWidget: correct typo, "hbow" -> "hbox" (Xavier Claessens).
+ - added check for pygtk-codegen-2.0 and pygobject-codegen-2.0 as the latter
+replaced the former in pygobject/pygtk trunk.   (closes: #549002).
+ - Added entry for the Bengali India translation addtion and addition to LINGUAS (runab).
+ - Added Bengali India (bn_IN) to the list of languages (runab).
+ - Added Bengali India Translation (runab).
+ - Added gujarati translation (swkothar).
+ - 2.23.91 (chliao).
+ - Change label in Accounts window from Undo to Cancel.   (closes: #548709).
+ - 2008-08-20  Leonardo Ferreira Fontenelle  <leonardof@gnome.org>
+* pt_BR.po: Fixed two minor errors. (leonardof).
+ - don't list profiles twice.   (closes: #548578).
+ - Use "Yahoo ID" instead of "Login ID" for Yahoo accounts.   (closes: #548693).
+ - don't let label text be selected in contact tooltip   (closes: #546568).
+ - check there is an account before accessing it; prevents a segfault when calling
+up the 'previous conversations' dialog and there is no account configured. (fpeters).
+ - Bump version to 2.23.91 (Xavier Claessens).
+
+Bugs fixed:
+ - Fixed #549280, Notifications when Contacts come online doesn't work (Xavier Claessens)
+ - Fixed #549545, empathy_contact_factory_get_tp_factory sometimes returns a new reference, sometimes not. (Xavier Claessens)
+
+Translations:
+ - Updated Brazilian Portuguese translation  (Vladimir Melo).
+ - Updated Finnish translation (ituohela).
+ - Updated cs translation  (Adrian Gunis).
+ - Updated mk translation  (Jovan Naumovski).
+ - Updated mk translation  (Jovan Naumovski).
+ - 2008-08-26  Inaki Larranaga Murgoitio  <dooteo@euskalgnu.org>
+* eu.po: Updated Basque translation. (dooteo).
+ - * Updated Arabic Translation by Youssef Chahibi. (djihed).
+ - Updated sv translation  (Daniel Nylander).
+ - Updated es translation  (Jorge Gonzalez).
+ - 2008-08-25  Tomasz Dominikowski  <tdominikowski@aviary.pl>
+* pl.po: Updated Polish translation (tomaszd).
+ - Updated Galician translation (icq).
+ - Updated Brazilian Portuguese translation. (ogmaciel).
+ - Updated French translation (bobmauchin).
+ - Updated Spanish translation (jorgegonz).
+ - Updated Galician translation (icq).
+ - 2008-08-20  Inaki Larranaga Murgoitio  <dooteo@euskalgnu.org>
+* eu.po: Updated Basque translation. (dooteo).
+ - Updated Translation (laurenti).
+ - 2008-08-19  Leonardo Ferreira Fontenelle  <leonardof@gnome.org>
+* pt_BR.po: Brazilian Portuguese translation updated by Fábio Nogueira
+and Leonardo Ferreira Fontenelle. (leonardof).
+ - Updated Galician translation (icq).
+ - Updated Spanish translation (jorgegonz).
+
+NEW in 2.23.91
+==============
+ - Do not create a new EmpathyChatroom is it already exists. (Xavier Claessens).
+ - Add a menu item in chat window to set the room as favorite (Xavier Claessens).
+ - Reorder files in alphabetical order. (Xavier Claessens).
+ - Correct the xml indentation (Xavier Claessens).
+ - Update API doc and add a README to explain how to keep it updated. (Xavier Claessens).
+ - Make sure to not unref tooltop_widget more than once (Xavier Claessens).
+ - Keep a ref to the tooltip_widget so it is not recreated all the time. (Xavier Claessens).
+ - Update translation (kmaraas).
+ - don't use italic for status text in contact list  (closes: #548632).
+ - Conversion from sr@Latn to sr@latin (grakic).
+ - Make Chat the default in New Conversation… dialog (Xavier Claessens).
+ - Give Chat and Call accelerators in New Conversation dialog. (Xavier Claessens).
+ - EmpathyContactWidget: correct typo, "hbow" -> "hbox" (Xavier Claessens).
+ - added check for pygtk-codegen-2.0 and pygobject-codegen-2.0 as the latter
+replaced the former in pygobject/pygtk trunk.   (closes: #549002).
+ - Added entry for the Bengali India translation addtion and addition to LINGUAS (runab).
+ - Added Bengali India (bn_IN) to the list of languages (runab).
+ - Added Bengali India Translation (runab).
+ - Added gujarati translation (swkothar).
+ - 2.23.91 (chliao).
+ - Change label in Accounts window from Undo to Cancel.   (closes: #548709).
+ - 2008-08-20  Leonardo Ferreira Fontenelle  <leonardof@gnome.org>
+* pt_BR.po: Fixed two minor errors. (leonardof).
+ - don't list profiles twice.   (closes: #548578).
+ - Use "Yahoo ID" instead of "Login ID" for Yahoo accounts.   (closes: #548693).
+ - don't let label text be selected in contact tooltip   (closes: #546568).
+ - check there is an account before accessing it; prevents a segfault when calling
+up the 'previous conversations' dialog and there is no account configured. (fpeters).
+ - Bump version to 2.23.91 (Xavier Claessens).
+
+Bugs fixed:
+ - Fixed #549280, Notifications when Contacts come online doesn't work (Xavier Claessens)
+ - Fixed #549545, empathy_contact_factory_get_tp_factory sometimes returns a new reference, sometimes not. (Xavier Claessens)
+
+Translations:
+ - Updated Brazilian Portuguese translation  (Vladimir Melo).
+ - Updated Finnish translation (ituohela).
+ - Updated cs translation  (Adrian Gunis).
+ - Updated mk translation  (Jovan Naumovski).
+ - Updated mk translation  (Jovan Naumovski).
+ - 2008-08-26  Inaki Larranaga Murgoitio  <dooteo@euskalgnu.org>
+* eu.po: Updated Basque translation. (dooteo).
+ - * Updated Arabic Translation by Youssef Chahibi. (djihed).
+ - Updated sv translation  (Daniel Nylander).
+ - Updated es translation  (Jorge Gonzalez).
+ - 2008-08-25  Tomasz Dominikowski  <tdominikowski@aviary.pl>
+* pl.po: Updated Polish translation (tomaszd).
+ - Updated Galician translation (icq).
+ - Updated Brazilian Portuguese translation. (ogmaciel).
+ - Updated French translation (bobmauchin).
+ - Updated Spanish translation (jorgegonz).
+ - Updated Galician translation (icq).
+ - 2008-08-20  Inaki Larranaga Murgoitio  <dooteo@euskalgnu.org>
+* eu.po: Updated Basque translation. (dooteo).
+ - Updated Translation (laurenti).
+ - 2008-08-19  Leonardo Ferreira Fontenelle  <leonardof@gnome.org>
+* pt_BR.po: Brazilian Portuguese translation updated by Fábio Nogueira
+and Leonardo Ferreira Fontenelle. (leonardof).
+ - Updated Galician translation (icq).
+ - Updated Spanish translation (jorgegonz).
+
+NEW in 2.23.91
+==============
+ - Do not create a new EmpathyChatroom is it already exists. (Xavier Claessens).
+ - Add a menu item in chat window to set the room as favorite (Xavier Claessens).
+ - Reorder files in alphabetical order. (Xavier Claessens).
+ - Correct the xml indentation (Xavier Claessens).
+ - Update API doc and add a README to explain how to keep it updated. (Xavier Claessens).
+ - Make sure to not unref tooltop_widget more than once (Xavier Claessens).
+ - Keep a ref to the tooltip_widget so it is not recreated all the time. (Xavier Claessens).
+ - Update translation (kmaraas).
+ - don't use italic for status text in contact list  (closes: #548632).
+ - Conversion from sr@Latn to sr@latin (grakic).
+ - Make Chat the default in New Conversation… dialog (Xavier Claessens).
+ - Give Chat and Call accelerators in New Conversation dialog. (Xavier Claessens).
+ - EmpathyContactWidget: correct typo, "hbow" -> "hbox" (Xavier Claessens).
+ - added check for pygtk-codegen-2.0 and pygobject-codegen-2.0 as the latter
+replaced the former in pygobject/pygtk trunk.   (closes: #549002).
+ - Added entry for the Bengali India translation addtion and addition to LINGUAS (runab).
+ - Added Bengali India (bn_IN) to the list of languages (runab).
+ - Added Bengali India Translation (runab).
+ - Added gujarati translation (swkothar).
+ - 2.23.91 (chliao).
+ - Change label in Accounts window from Undo to Cancel.   (closes: #548709).
+ - 2008-08-20  Leonardo Ferreira Fontenelle  <leonardof@gnome.org>
+* pt_BR.po: Fixed two minor errors. (leonardof).
+ - don't list profiles twice.   (closes: #548578).
+ - Use "Yahoo ID" instead of "Login ID" for Yahoo accounts.   (closes: #548693).
+ - don't let label text be selected in contact tooltip   (closes: #546568).
+ - check there is an account before accessing it; prevents a segfault when calling
+up the 'previous conversations' dialog and there is no account configured. (fpeters).
+ - Bump version to 2.23.91 (Xavier Claessens).
+
+Bugs fixed:
+ - Fixed #549280, Notifications when Contacts come online doesn't work (Xavier Claessens)
+ - Fixed #549545, empathy_contact_factory_get_tp_factory sometimes returns a new reference, sometimes not. (Xavier Claessens)
+
+Translations:
+ - Updated Brazilian Portuguese translation  (Vladimir Melo).
+ - Updated Finnish translation (ituohela).
+ - Updated cs translation  (Adrian Gunis).
+ - Updated mk translation  (Jovan Naumovski).
+ - Updated mk translation  (Jovan Naumovski).
+ - 2008-08-26  Inaki Larranaga Murgoitio  <dooteo@euskalgnu.org>
+* eu.po: Updated Basque translation. (dooteo).
+ - * Updated Arabic Translation by Youssef Chahibi. (djihed).
+ - Updated sv translation  (Daniel Nylander).
+ - Updated es translation  (Jorge Gonzalez).
+ - 2008-08-25  Tomasz Dominikowski  <tdominikowski@aviary.pl>
+* pl.po: Updated Polish translation (tomaszd).
+ - Updated Galician translation (icq).
+ - Updated Brazilian Portuguese translation. (ogmaciel).
+ - Updated French translation (bobmauchin).
+ - Updated Spanish translation (jorgegonz).
+ - Updated Galician translation (icq).
+ - 2008-08-20  Inaki Larranaga Murgoitio  <dooteo@euskalgnu.org>
+* eu.po: Updated Basque translation. (dooteo).
+ - Updated Translation (laurenti).
+ - 2008-08-19  Leonardo Ferreira Fontenelle  <leonardof@gnome.org>
+* pt_BR.po: Brazilian Portuguese translation updated by Fábio Nogueira
+and Leonardo Ferreira Fontenelle. (leonardof).
+ - Updated Galician translation (icq).
+ - Updated Spanish translation (jorgegonz).
+
+NEW in 2.23.91
+==============
+ - Do not create a new EmpathyChatroom is it already exists. (Xavier Claessens).
+ - Add a menu item in chat window to set the room as favorite (Xavier Claessens).
+ - Reorder files in alphabetical order. (Xavier Claessens).
+ - Correct the xml indentation (Xavier Claessens).
+ - Update API doc and add a README to explain how to keep it updated. (Xavier Claessens).
+ - Make sure to not unref tooltop_widget more than once (Xavier Claessens).
+ - Keep a ref to the tooltip_widget so it is not recreated all the time. (Xavier Claessens).
+ - Update translation (kmaraas).
+ - don't use italic for status text in contact list  (closes: #548632).
+ - Conversion from sr@Latn to sr@latin (grakic).
+ - Make Chat the default in New Conversation… dialog (Xavier Claessens).
+ - Give Chat and Call accelerators in New Conversation dialog. (Xavier Claessens).
+ - EmpathyContactWidget: correct typo, "hbow" -> "hbox" (Xavier Claessens).
+ - added check for pygtk-codegen-2.0 and pygobject-codegen-2.0 as the latter
+replaced the former in pygobject/pygtk trunk.   (closes: #549002).
+ - Added entry for the Bengali India translation addtion and addition to LINGUAS (runab).
+ - Added Bengali India (bn_IN) to the list of languages (runab).
+ - Added Bengali India Translation (runab).
+ - Added gujarati translation (swkothar).
+ - 2.23.91 (chliao).
+ - Change label in Accounts window from Undo to Cancel.   (closes: #548709).
+ - 2008-08-20  Leonardo Ferreira Fontenelle  <leonardof@gnome.org>
+* pt_BR.po: Fixed two minor errors. (leonardof).
+ - don't list profiles twice.   (closes: #548578).
+ - Use "Yahoo ID" instead of "Login ID" for Yahoo accounts.   (closes: #548693).
+ - don't let label text be selected in contact tooltip   (closes: #546568).
+ - check there is an account before accessing it; prevents a segfault when calling
+up the 'previous conversations' dialog and there is no account configured. (fpeters).
+ - Bump version to 2.23.91 (Xavier Claessens).
+
+Bugs fixed:
+ - Fixed #549280, Notifications when Contacts come online doesn't work (Xavier Claessens)
+ - Fixed #549545, empathy_contact_factory_get_tp_factory sometimes returns a new reference, sometimes not. (Xavier Claessens)
+
+Translations:
+ - Updated Brazilian Portuguese translation  (Vladimir Melo).
+ - Updated Finnish translation (ituohela).
+ - Updated cs translation  (Adrian Gunis).
+ - Updated mk translation  (Jovan Naumovski).
+ - Updated mk translation  (Jovan Naumovski).
+ - 2008-08-26  Inaki Larranaga Murgoitio  <dooteo@euskalgnu.org>
+* eu.po: Updated Basque translation. (dooteo).
+ - * Updated Arabic Translation by Youssef Chahibi. (djihed).
+ - Updated sv translation  (Daniel Nylander).
+ - Updated es translation  (Jorge Gonzalez).
+ - 2008-08-25  Tomasz Dominikowski  <tdominikowski@aviary.pl>
+* pl.po: Updated Polish translation (tomaszd).
+ - Updated Galician translation (icq).
+ - Updated Brazilian Portuguese translation. (ogmaciel).
+ - Updated French translation (bobmauchin).
+ - Updated Spanish translation (jorgegonz).
+ - Updated Galician translation (icq).
+ - 2008-08-20  Inaki Larranaga Murgoitio  <dooteo@euskalgnu.org>
+* eu.po: Updated Basque translation. (dooteo).
+ - Updated Translation (laurenti).
+ - 2008-08-19  Leonardo Ferreira Fontenelle  <leonardof@gnome.org>
+* pt_BR.po: Brazilian Portuguese translation updated by Fábio Nogueira
+and Leonardo Ferreira Fontenelle. (leonardof).
+ - Updated Galician translation (icq).
+ - Updated Spanish translation (jorgegonz).
+
+NEW in 2.23.91
+==============
+ - Do not create a new EmpathyChatroom is it already exists. (Xavier Claessens).
+ - Add a menu item in chat window to set the room as favorite (Xavier Claessens).
+ - Reorder files in alphabetical order. (Xavier Claessens).
+ - Correct the xml indentation (Xavier Claessens).
+ - Update API doc and add a README to explain how to keep it updated. (Xavier Claessens).
+ - Make sure to not unref tooltop_widget more than once (Xavier Claessens).
+ - Keep a ref to the tooltip_widget so it is not recreated all the time. (Xavier Claessens).
+ - Update translation (kmaraas).
+ - don't use italic for status text in contact list  (closes: #548632).
+ - Conversion from sr@Latn to sr@latin (grakic).
+ - Make Chat the default in New Conversation… dialog (Xavier Claessens).
+ - Give Chat and Call accelerators in New Conversation dialog. (Xavier Claessens).
+ - EmpathyContactWidget: correct typo, "hbow" -> "hbox" (Xavier Claessens).
+ - added check for pygtk-codegen-2.0 and pygobject-codegen-2.0 as the latter
+replaced the former in pygobject/pygtk trunk.   (closes: #549002).
+ - Added entry for the Bengali India translation addtion and addition to LINGUAS (runab).
+ - Added Bengali India (bn_IN) to the list of languages (runab).
+ - Added Bengali India Translation (runab).
+ - Added gujarati translation (swkothar).
+ - 2.23.91 (chliao).
+ - Change label in Accounts window from Undo to Cancel.   (closes: #548709).
+ - 2008-08-20  Leonardo Ferreira Fontenelle  <leonardof@gnome.org>
+* pt_BR.po: Fixed two minor errors. (leonardof).
+ - don't list profiles twice.   (closes: #548578).
+ - Use "Yahoo ID" instead of "Login ID" for Yahoo accounts.   (closes: #548693).
+ - don't let label text be selected in contact tooltip   (closes: #546568).
+ - check there is an account before accessing it; prevents a segfault when calling
+up the 'previous conversations' dialog and there is no account configured. (fpeters).
+ - Bump version to 2.23.91 (Xavier Claessens).
+
+Bugs fixed:
+ - Fixed #549280, Notifications when Contacts come online doesn't work (Xavier Claessens)
+ - Fixed #549545, empathy_contact_factory_get_tp_factory sometimes returns a new reference, sometimes not. (Xavier Claessens)
+
+Translations:
+ - Updated Brazilian Portuguese translation  (Vladimir Melo).
+ - Updated Finnish translation (ituohela).
+ - Updated cs translation  (Adrian Gunis).
+ - Updated mk translation  (Jovan Naumovski).
+ - Updated mk translation  (Jovan Naumovski).
+ - 2008-08-26  Inaki Larranaga Murgoitio  <dooteo@euskalgnu.org>
+* eu.po: Updated Basque translation. (dooteo).
+ - * Updated Arabic Translation by Youssef Chahibi. (djihed).
+ - Updated sv translation  (Daniel Nylander).
+ - Updated es translation  (Jorge Gonzalez).
+ - 2008-08-25  Tomasz Dominikowski  <tdominikowski@aviary.pl>
+* pl.po: Updated Polish translation (tomaszd).
+ - Updated Galician translation (icq).
+ - Updated Brazilian Portuguese translation. (ogmaciel).
+ - Updated French translation (bobmauchin).
+ - Updated Spanish translation (jorgegonz).
+ - Updated Galician translation (icq).
+ - 2008-08-20  Inaki Larranaga Murgoitio  <dooteo@euskalgnu.org>
+* eu.po: Updated Basque translation. (dooteo).
+ - Updated Translation (laurenti).
+ - 2008-08-19  Leonardo Ferreira Fontenelle  <leonardof@gnome.org>
+* pt_BR.po: Brazilian Portuguese translation updated by Fábio Nogueira
+and Leonardo Ferreira Fontenelle. (leonardof).
+ - Updated Galician translation (icq).
+ - Updated Spanish translation (jorgegonz).
+
+NEW in 2.23.91
+==============
+ - Do not create a new EmpathyChatroom is it already exists. (Xavier Claessens).
+ - Add a menu item in chat window to set the room as favorite (Xavier Claessens).
+ - Reorder files in alphabetical order. (Xavier Claessens).
+ - Correct the xml indentation (Xavier Claessens).
+ - Update API doc and add a README to explain how to keep it updated. (Xavier Claessens).
+ - Make sure to not unref tooltop_widget more than once (Xavier Claessens).
+ - Keep a ref to the tooltip_widget so it is not recreated all the time. (Xavier Claessens).
+ - Update translation (kmaraas).
+ - don't use italic for status text in contact list  (closes: #548632).
+ - Conversion from sr@Latn to sr@latin (grakic).
+ - Make Chat the default in New Conversation… dialog (Xavier Claessens).
+ - Give Chat and Call accelerators in New Conversation dialog. (Xavier Claessens).
+ - EmpathyContactWidget: correct typo, "hbow" -> "hbox" (Xavier Claessens).
+ - added check for pygtk-codegen-2.0 and pygobject-codegen-2.0 as the latter
+replaced the former in pygobject/pygtk trunk.   (closes: #549002).
+ - Added entry for the Bengali India translation addtion and addition to LINGUAS (runab).
+ - Added Bengali India (bn_IN) to the list of languages (runab).
+ - Added Bengali India Translation (runab).
+ - Added gujarati translation (swkothar).
+ - 2.23.91 (chliao).
+ - Change label in Accounts window from Undo to Cancel.   (closes: #548709).
+ - 2008-08-20  Leonardo Ferreira Fontenelle  <leonardof@gnome.org>
+* pt_BR.po: Fixed two minor errors. (leonardof).
+ - don't list profiles twice.   (closes: #548578).
+ - Use "Yahoo ID" instead of "Login ID" for Yahoo accounts.   (closes: #548693).
+ - don't let label text be selected in contact tooltip   (closes: #546568).
+ - check there is an account before accessing it; prevents a segfault when calling
+up the 'previous conversations' dialog and there is no account configured. (fpeters).
+ - Bump version to 2.23.91 (Xavier Claessens).
+
+Bugs fixed:
+ - Fixed #549280, Notifications when Contacts come online doesn't work (Xavier Claessens)
+ - Fixed #549545, empathy_contact_factory_get_tp_factory sometimes returns a new reference, sometimes not. (Xavier Claessens)
+
+Translations:
+ - Updated Brazilian Portuguese translation  (Vladimir Melo).
+ - Updated Finnish translation (ituohela).
+ - Updated cs translation  (Adrian Gunis).
+ - Updated mk translation  (Jovan Naumovski).
+ - Updated mk translation  (Jovan Naumovski).
+ - 2008-08-26  Inaki Larranaga Murgoitio  <dooteo@euskalgnu.org>
+* eu.po: Updated Basque translation. (dooteo).
+ - * Updated Arabic Translation by Youssef Chahibi. (djihed).
+ - Updated sv translation  (Daniel Nylander).
+ - Updated es translation  (Jorge Gonzalez).
+ - 2008-08-25  Tomasz Dominikowski  <tdominikowski@aviary.pl>
+* pl.po: Updated Polish translation (tomaszd).
+ - Updated Galician translation (icq).
+ - Updated Brazilian Portuguese translation. (ogmaciel).
+ - Updated French translation (bobmauchin).
+ - Updated Spanish translation (jorgegonz).
+ - Updated Galician translation (icq).
+ - 2008-08-20  Inaki Larranaga Murgoitio  <dooteo@euskalgnu.org>
+* eu.po: Updated Basque translation. (dooteo).
+ - Updated Translation (laurenti).
+ - 2008-08-19  Leonardo Ferreira Fontenelle  <leonardof@gnome.org>
+* pt_BR.po: Brazilian Portuguese translation updated by Fábio Nogueira
+and Leonardo Ferreira Fontenelle. (leonardof).
+ - Updated Galician translation (icq).
+ - Updated Spanish translation (jorgegonz).
+
+NEW in 2.23.91
+==============
+ - Add a menu item in chat window to set the room as favorite (Xavier Claessens).
+ - Reorder files in alphabetical order. (Xavier Claessens).
+ - Correct the xml indentation (Xavier Claessens).
+ - Update API doc and add a README to explain how to keep it updated. (Xavier Claessens).
+ - Make sure to not unref tooltop_widget more than once (Xavier Claessens).
+ - Keep a ref to the tooltip_widget so it is not recreated all the time. (Xavier Claessens).
+ - Update translation (kmaraas).
+ - don't use italic for status text in contact list  (closes: #548632).
+ - Conversion from sr@Latn to sr@latin (grakic).
+ - Make Chat the default in New Conversation… dialog (Xavier Claessens).
+ - Give Chat and Call accelerators in New Conversation dialog. (Xavier Claessens).
+ - EmpathyContactWidget: correct typo, "hbow" -> "hbox" (Xavier Claessens).
+ - added check for pygtk-codegen-2.0 and pygobject-codegen-2.0 as the latter
+replaced the former in pygobject/pygtk trunk.   (closes: #549002).
+ - Added entry for the Bengali India translation addtion and addition to LINGUAS (runab).
+ - Added Bengali India (bn_IN) to the list of languages (runab).
+ - Added Bengali India Translation (runab).
+ - Added gujarati translation (swkothar).
+ - 2.23.91 (chliao).
+ - Change label in Accounts window from Undo to Cancel.   (closes: #548709).
+ - 2008-08-20  Leonardo Ferreira Fontenelle  <leonardof@gnome.org>
+* pt_BR.po: Fixed two minor errors. (leonardof).
+ - don't list profiles twice.   (closes: #548578).
+ - Use "Yahoo ID" instead of "Login ID" for Yahoo accounts.   (closes: #548693).
+ - don't let label text be selected in contact tooltip   (closes: #546568).
+ - check there is an account before accessing it; prevents a segfault when calling
+up the 'previous conversations' dialog and there is no account configured. (fpeters).
+ - Bump version to 2.23.91 (Xavier Claessens).
+
+Bugs fixed:
+ - Fixed #549280, Notifications when Contacts come online doesn't work (Xavier Claessens)
+ - Fixed #549545, empathy_contact_factory_get_tp_factory sometimes returns a new reference, sometimes not. (Xavier Claessens)
+
+Translations:
+ - Updated Brazilian Portuguese translation  (Vladimir Melo, Fábio Nogueira).
+ - Updated Finnish translation (ituohela).
+ - Updated cs translation  (Adrian Gunis).
+ - Updated mk translation  (Jovan Naumovski).
+ - Updated Basque translation. (dooteo).
+ - Updated Arabic Translation (Youssef Chahibi).
+ - Updated sv translation  (Daniel Nylander).
+ - Updated es translation  (Jorge Gonzalez).
+ - Updated Polish translation (tomaszd).
+ - Updated Galician translation (icq).
+ - Updated French translation (bobmauchin).
+ - Updated Spanish translation (jorgegonz).
+
 NEW in 2.23.90
 ==============
  - Do not display MSN Haze if butterfly is installed (Xavier Claessens).
