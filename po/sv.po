@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: empathy\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-25 21:44+0200\n"
-"PO-Revision-Date: 2008-08-25 21:45+0100\n"
+"POT-Creation-Date: 2008-09-02 15:00+0200\n"
+"PO-Revision-Date: 2008-09-02 15:00+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "MIME-Version: 1.0\n"
@@ -579,30 +579,30 @@ msgstr "Bestäm _senare"
 msgid "Subscription Request"
 msgstr "Prenumerationsförfrågan"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1226
+#: ../libempathy-gtk/empathy-contact-list-view.c:1244
 #, c-format
 msgid "Do you really want to remove the group '%s'?"
 msgstr "Vill du verkligen ta bort gruppen \"%s\"?"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1228
+#: ../libempathy-gtk/empathy-contact-list-view.c:1246
 msgid "Removing group"
 msgstr "Tar bort grupp"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1275
-#: ../libempathy-gtk/empathy-contact-list-view.c:1354
+#: ../libempathy-gtk/empathy-contact-list-view.c:1293
+#: ../libempathy-gtk/empathy-contact-list-view.c:1372
 msgid "_Remove"
 msgstr "_Ta bort"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1305
+#: ../libempathy-gtk/empathy-contact-list-view.c:1323
 #, c-format
 msgid "Do you really want to remove the contact '%s'?"
 msgstr "Vill du verkligen ta bort kontakten \"%s\"?"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1307
+#: ../libempathy-gtk/empathy-contact-list-view.c:1325
 msgid "Removing contact"
 msgstr "Tar bort kontakt"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1312
+#: ../libempathy-gtk/empathy-contact-list-view.c:1330
 msgid "Sorry, I don't want you in my contact list anymore."
 msgstr "Tyvärr, jag vill inte längre ha dig i min kontaktlista."
 
@@ -745,7 +745,7 @@ msgid "Account"
 msgstr "Konto"
 
 #: ../libempathy-gtk/empathy-log-window.c:504
-#: ../src/empathy-chat-window.c:276
+#: ../src/empathy-chat-window.c:279
 msgid "Conversation"
 msgstr "Samtal"
 
@@ -1291,16 +1291,16 @@ msgstr "Lägg på"
 msgid "Send Video"
 msgstr "Skicka video"
 
-#: ../src/empathy-chat-window.c:319
+#: ../src/empathy-chat-window.c:322
 #, c-format
 msgid "Conversations (%d)"
 msgstr "Samtal (%d)"
 
-#: ../src/empathy-chat-window.c:397
+#: ../src/empathy-chat-window.c:400
 msgid "Topic:"
 msgstr "Ämne:"
 
-#: ../src/empathy-chat-window.c:400
+#: ../src/empathy-chat-window.c:403
 msgid "Typing a message."
 msgstr "Skriver ett meddelande."
 
@@ -1358,19 +1358,23 @@ msgid "_Detach Tab"
 msgstr "_Koppla loss flik"
 
 #: ../src/empathy-chat-window.glade.h:15
+msgid "_Favorite Chatroom"
+msgstr "_Favoritchattrum"
+
+#: ../src/empathy-chat-window.glade.h:16
 #: ../src/empathy-main-window.glade.h:12
 msgid "_Help"
 msgstr "_Hjälp"
 
-#: ../src/empathy-chat-window.glade.h:16
+#: ../src/empathy-chat-window.glade.h:17
 msgid "_Next Tab"
 msgstr "_Nästa flik"
 
-#: ../src/empathy-chat-window.glade.h:17
+#: ../src/empathy-chat-window.glade.h:18
 msgid "_Previous Tab"
 msgstr "_Föregående flik"
 
-#: ../src/empathy-chat-window.glade.h:18
+#: ../src/empathy-chat-window.glade.h:19
 msgid "_Tabs"
 msgstr "_Flikar"
 
@@ -1797,8 +1801,6 @@ msgstr "_Visa kontaktlista"
 #~ msgstr "Redigera grupper och namn för kontakten"
 #~ msgid "Remove contact"
 #~ msgstr "Ta bort kontakt"
-#~ msgid "_Invite to Chat Room"
-#~ msgstr "_Bjud in till chattrum"
 #~ msgid "Invite to a currently open chat room"
 #~ msgstr "Bjud in till ett för tillfället öppet chattrum"
 #~ msgid "_Send File..."
