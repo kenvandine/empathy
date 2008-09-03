@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: empathy\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-01 16:02+0700\n"
-"PO-Revision-Date: 2008-09-01 22:10+0700\n"
+"POT-Creation-Date: 2008-09-03 11:06+0700\n"
+"PO-Revision-Date: 2008-09-03 11:13+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -52,7 +52,7 @@ msgstr "วิธีเรียงลำดับชื่อผู้ติด
 
 #: ../data/empathy.schemas.in.h:7
 msgid "Default directory to select an avatar image from"
-msgstr "ไดเรกทอรีปริยายที่จะใช้เลือกรูปประจำตัว"
+msgstr "ไดเรกทอรีปริยายที่จะใช้เลือกรูปแทนตัว"
 
 #: ../data/empathy.schemas.in.h:8
 msgid "Empathy should auto-connect on startup"
@@ -60,7 +60,7 @@ msgstr "Empathy ควรเชื่อมต่อโดยอัตโนม�
 
 #: ../data/empathy.schemas.in.h:9
 msgid "Empathy should use the avatar of the contact as the chat window icon"
-msgstr "Empathy ควรใช้รูปประจำตัวของผู้ติดต่อเป็นไอคอนของหน้าต่างสนทนา"
+msgstr "Empathy ควรใช้รูปแทนตัวของผู้ติดต่อเป็นไอคอนของหน้าต่างสนทนา"
 
 #: ../data/empathy.schemas.in.h:10
 msgid "Enable popup when contact is available"
@@ -100,11 +100,11 @@ msgstr "เปิดการสนทนาใหม่ในหน้าต่
 
 #: ../data/empathy.schemas.in.h:19
 msgid "Salut account is created"
-msgstr ""
+msgstr "สร้างบัญชี Salut แล้ว"
 
 #: ../data/empathy.schemas.in.h:20
 msgid "Show avatars"
-msgstr "แสดงรูปประจำตัว"
+msgstr "แสดงรูปแทนตัว"
 
 #: ../data/empathy.schemas.in.h:21
 msgid "Show hint about closing the main window"
@@ -120,7 +120,7 @@ msgstr "ภาษาที่ตรวจตัวสะกด"
 
 #: ../data/empathy.schemas.in.h:24
 msgid "The last directory that an avatar image was chosen from."
-msgstr "ไดเรกทอรีล่าสุดที่ถูกใช้เลือกรูปประจำตัว"
+msgstr "ไดเรกทอรีล่าสุดที่ถูกใช้เลือกรูปแทนตัว"
 
 #: ../data/empathy.schemas.in.h:25
 msgid "The theme that is used to display the conversation in chat windows."
@@ -148,12 +148,12 @@ msgstr "กำหนดว่าจะให้ Empathy เข้าระบบ
 msgid ""
 "Whether or not Empathy should use the avatar of the contact as the chat "
 "window icon."
-msgstr "กำหนดว่าจะให้ Empathy ใช้รูปประจำตัวของผู้ติดต่อเป็นไอคอนของหน้าต่างสนทนาหรือไม่"
+msgstr "กำหนดว่าจะให้ Empathy ใช้รูปแทนตัวของผู้ติดต่อเป็นไอคอนของหน้าต่างสนทนาหรือไม่"
 
 #: ../data/empathy.schemas.in.h:31
 msgid ""
 "Whether or not the Salut account has been created on the first Empathy run."
-msgstr ""
+msgstr "กำหนดว่าได้สร้างบัญชี Salut ไปแล้วหรือยัง เมื่อเรียก Empathy ครั้งแรก"
 
 #: ../data/empathy.schemas.in.h:32
 msgid ""
@@ -192,7 +192,7 @@ msgstr "กำหนดว่าจะแสดงหน้าต่างผุ
 msgid ""
 "Whether or not to show avatars for contacts in the contact list and chat "
 "windows."
-msgstr "กำหนดว่าจะแสดงรูปประจำตัวของผู้ติดต่อในรายชื่อผู้ติดต่อและในหน้าต่างสนทนาหรือไม่"
+msgstr "กำหนดว่าจะแสดงรูปแทนตัวของผู้ติดต่อในรายชื่อผู้ติดต่อและในหน้าต่างสนทนาหรือไม่"
 
 #: ../data/empathy.schemas.in.h:40
 msgid "Whether or not to show contacts that are offline in the contact list."
@@ -461,7 +461,7 @@ msgstr "โลแคลของรายชื่อ_ห้อง:"
 
 #: ../libempathy-gtk/empathy-avatar-chooser.c:457
 msgid "Select Your Avatar Image"
-msgstr "เลือกรูปประจำตัวของคุณ"
+msgstr "เลือกรูปแทนตัวของคุณ"
 
 #: ../libempathy-gtk/empathy-avatar-chooser.c:460
 msgid "No Image"
@@ -643,11 +643,11 @@ msgstr "แ_ก้ไข"
 
 #: ../libempathy-gtk/empathy-contact-widget.c:358
 msgid "Save Avatar"
-msgstr "บันทึกรูปประจำตัว"
+msgstr "บันทึกรูปแทนตัว"
 
 #: ../libempathy-gtk/empathy-contact-widget.c:414
 msgid "Unable to save avatar"
-msgstr "ไม่สามารถบันทึกรูปประจำตัว"
+msgstr "ไม่สามารถบันทึกรูปแทนตัว"
 
 #: ../libempathy-gtk/empathy-contact-widget.c:875
 msgid "Select"
@@ -1040,7 +1040,7 @@ msgstr "ผู้ติดต่อที่จะแสดงในแอพเ
 
 #: ../megaphone/data/GNOME_Megaphone_Applet.schemas.in.h:2
 msgid "The contact's avatar token. Empty means contact has no avatar."
-msgstr "รูปประจำตัวของผู้ติดต่อ ถ้าเว้นว่างไว้ ก็หมายถึงผู้ติดต่อไม่มีรูปประจำตัว"
+msgstr "รูปแทนตัวของผู้ติดต่อ ถ้าเว้นว่างไว้ ก็หมายถึงผู้ติดต่อไม่มีรูปแทนตัว"
 
 #: ../megaphone/data/GNOME_Megaphone_Applet.server.in.in.h:1
 msgid "Megaphone"
@@ -1573,7 +1573,7 @@ msgstr "รายชื่อผู้ติดต่อ"
 
 #: ../src/empathy-main-window.glade.h:2
 msgid "Context"
-msgstr ""
+msgstr "บริบท"
 
 #: ../src/empathy-main-window.glade.h:3
 msgid "Join _Favorites"
@@ -1689,7 +1689,7 @@ msgstr "เชื่อม_ต่อโดยอัตโนมัติเม�
 
 #: ../src/empathy-preferences.glade.h:11
 msgid "Avatars are user chosen images shown in the contact list"
-msgstr "รูปประจำตัวเป็นรูปที่ผู้ใช้เลือกแทนตัวเองในรายชื่อผู้ติดต่อ"
+msgstr "รูปแทนตัวเป็นรูปที่ผู้ใช้เลือกแทนตัวเองในรายชื่อผู้ติดต่อ"
 
 #: ../src/empathy-preferences.glade.h:12
 msgid "Chat Th_eme:"
@@ -1721,7 +1721,7 @@ msgstr "ปรับแต่ง"
 
 #: ../src/empathy-preferences.glade.h:19
 msgid "Show _avatars"
-msgstr "แสดงรูป_ประจำตัว"
+msgstr "แสดงรูปแ_ทนตัว"
 
 #: ../src/empathy-preferences.glade.h:20
 msgid "Show _smileys as images"
