@@ -1,13 +1,13 @@
 # Përkthimi i empathy në shqip.
+# Laurent Dhima <laurenti@alblinux.net>, 2004, 2008.
 # Copyright (C) 2004, 2008 Free Software Foundation, Inc.
 # This file is distributed under the same license as the empathy package.
-# Laurent Dhima <laurenti@alblinux.net>, 2004, 2008.
 msgid ""
 msgstr ""
 "Project-Id-Version: empathy HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-14 18:30+0000\n"
-"PO-Revision-Date: 2008-08-20 12:23+0200\n"
+"POT-Creation-Date: 2008-09-02 07:19+0000\n"
+"PO-Revision-Date: 2008-09-04 10:02+0200\n"
 "Last-Translator: Laurent Dhima <laurenti@alblinux.net>\n"
 "Language-Team: albanian <gnome-albanian-perkthyesit@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -32,8 +32,8 @@ msgid ""
 "Character to add after nickname when using nick completion (tab) in group "
 "chat."
 msgstr ""
-"Simboli që duhet shtuar mbas pseudonimit kur përdoret plotësimi i pseudonimit "
-"tek chat-ime në grup."
+"Simboli që duhet shtuar mbas pseudonimit kur përdoret plotësimi i "
+"pseudonimit tek chat-ime në grup."
 
 #: ../data/empathy.schemas.in.h:3
 msgid "Chat window theme"
@@ -162,16 +162,16 @@ msgstr ""
 #: ../data/empathy.schemas.in.h:31
 msgid "Whether or not the Salut account has been created on the first Empathy run."
 msgstr ""
-"Tregon nëse profili Salut është krijuar ose jo gjatë nisjes për herë të "
-"parë të Empathy."
+"Tregon nëse profili Salut është krijuar ose jo gjatë nisjes për herë të parë "
+"të Empathy."
 
 #: ../data/empathy.schemas.in.h:32
 msgid ""
 "Whether or not the network manager should be used to automatically "
 "disconnect/reconnect."
 msgstr ""
-"Tregon nëse menazhuesi i rrjetit duhet përdorur ose jo për tu lidhur/shkëputur "
-"automatikisht."
+"Tregon nëse menazhuesi i rrjetit duhet përdorur ose jo për tu lidhur/"
+"shkëputur automatikisht."
 
 #: ../data/empathy.schemas.in.h:33
 msgid ""
@@ -212,8 +212,8 @@ msgstr ""
 #: ../data/empathy.schemas.in.h:40
 msgid "Whether or not to show contacts that are offline in the contact list."
 msgstr ""
-"Tregon nëse duhen ose jo shfaqur në listën e kontakteve kontaktet "
-"që nuk janë në linjë."
+"Tregon nëse duhen ose jo shfaqur në listën e kontakteve kontaktet që nuk "
+"janë në linjë."
 
 #: ../data/empathy.schemas.in.h:41
 msgid ""
@@ -237,11 +237,11 @@ msgid ""
 "by the contact's name with the value \"name\". A value of \"state\" will "
 "sort the contact list by state."
 msgstr ""
-"Çfarë kriteri duhet përdorur për renditjen e listës së kontakteve. Renditja e "
-"paracaktuar është sipas emrit të kontaktit me vlerën \"name\". Vlera \"state\" "
-"do të rendisë listën e kontakteve sipas gjëndjes së kontakteve."
+"Çfarë kriteri duhet përdorur për renditjen e listës së kontakteve. Renditja "
+"e paracaktuar është sipas emrit të kontaktit me vlerën \"name\". Vlera "
+"\"state\" do të rendisë listën e kontakteve sipas gjëndjes së kontakteve."
 
-#: ../libempathy/empathy-tp-contact-list.c:731 ../src/empathy.c:244
+#: ../libempathy/empathy-tp-contact-list.c:731 ../src/empathy.c:248
 msgid "People nearby"
 msgstr "Persona afër"
 
@@ -265,7 +265,7 @@ msgstr "I padukshëm"
 msgid "Offline"
 msgstr "Jashtë linje"
 
-#: ../libempathy-gtk/empathy-account-chooser.c:335
+#: ../libempathy-gtk/empathy-account-chooser.c:337
 msgid "All"
 msgstr "Të gjithë"
 
@@ -303,7 +303,7 @@ msgstr "Harro fjalëkalimin dhe pastro fushën."
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:5
 #: ../libempathy-gtk/empathy-account-widget-msn.glade.h:4
 #: ../libempathy-gtk/empathy-account-widget-sip.glade.h:5
-#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:4
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:3
 msgid "Pass_word:"
 msgstr "Fjalë_kalimi:"
 
@@ -333,7 +333,6 @@ msgstr "_Serveri:"
 #: ../libempathy-gtk/empathy-account-widget-groupwise.glade.h:3
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:4
 #: ../libempathy-gtk/empathy-account-widget-msn.glade.h:3
-#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:3
 msgid "Login I_D:"
 msgstr "I_D e hyrjes:"
 
@@ -464,9 +463,13 @@ msgstr "Porta e STUN:"
 msgid "_Username:"
 msgstr "_Përdoruesi:"
 
-#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:5
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:4
 msgid "Use _Yahoo Japan"
 msgstr "Përdor _Yahoo Japonia"
+
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:5
+msgid "Yahoo I_D:"
+msgstr "I_D Yahoo:"
 
 #: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:7
 msgid "_Ignore conference and chatroom invitations"
@@ -608,30 +611,30 @@ msgstr "Vendos më _vonë"
 msgid "Subscription Request"
 msgstr "Kërkesë regjistrimi"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1226
+#: ../libempathy-gtk/empathy-contact-list-view.c:1244
 #, c-format
 msgid "Do you really want to remove the group '%s'?"
 msgstr "Me të vërtetë dëshiron të heqësh grupin '%s'?"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1228
+#: ../libempathy-gtk/empathy-contact-list-view.c:1246
 msgid "Removing group"
 msgstr "Heqja e grupit"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1275
-#: ../libempathy-gtk/empathy-contact-list-view.c:1354
+#: ../libempathy-gtk/empathy-contact-list-view.c:1293
+#: ../libempathy-gtk/empathy-contact-list-view.c:1372
 msgid "_Remove"
 msgstr "_Hiq"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1305
+#: ../libempathy-gtk/empathy-contact-list-view.c:1323
 #, c-format
 msgid "Do you really want to remove the contact '%s'?"
 msgstr "Me të vërtetë dëshiron të heqësh kontaktin '%s'?"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1307
+#: ../libempathy-gtk/empathy-contact-list-view.c:1325
 msgid "Removing contact"
 msgstr "Heqja e kontaktit"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1312
+#: ../libempathy-gtk/empathy-contact-list-view.c:1330
 msgid "Sorry, I don't want you in my contact list anymore."
 msgstr "Më vjen keq, nuk dëshiroj më praninë tuaj në listën time të kontakteve."
 
@@ -666,11 +669,11 @@ msgstr "Ruaj avatar-in"
 msgid "Unable to save avatar"
 msgstr "E pamundur ruajtja e avatar-it"
 
-#: ../libempathy-gtk/empathy-contact-widget.c:866
+#: ../libempathy-gtk/empathy-contact-widget.c:875
 msgid "Select"
 msgstr "Zgjidh"
 
-#: ../libempathy-gtk/empathy-contact-widget.c:875
+#: ../libempathy-gtk/empathy-contact-widget.c:884
 #: ../src/empathy-main-window.c:853
 msgid "Group"
 msgstr "Grupi"
@@ -740,8 +743,8 @@ msgid ""
 "Select the groups you want this contact to appear in.  Note that you can "
 "select more than one group or no groups."
 msgstr ""
-"Zgjidh grupet në të cilët dëshirohet të shfaqet ky kontakt.  Ki parasysh "
-"që mund të zgjidhet më shumë se një grup ose asnjë grup."
+"Zgjidh grupet në të cilët dëshirohet të shfaqet ky kontakt.  Ki parasysh që "
+"mund të zgjidhet më shumë se një grup ose asnjë grup."
 
 #: ../libempathy-gtk/empathy-contact-widget.glade.h:17
 msgid "Version:"
@@ -775,7 +778,7 @@ msgstr "SSL"
 msgid "Account"
 msgstr "Profili"
 
-#: ../libempathy-gtk/empathy-log-window.c:504 ../src/empathy-chat-window.c:276
+#: ../libempathy-gtk/empathy-log-window.c:504 ../src/empathy-chat-window.c:279
 msgid "Conversation"
 msgstr "Biseda"
 
@@ -803,13 +806,12 @@ msgid "_For:"
 msgstr "_Për:"
 
 #: ../libempathy-gtk/empathy-new-message-dialog.glade.h:2
-msgid "Call"
-msgstr "Thirrje"
+msgid "C_all"
+msgstr "Th_irrje"
 
 #: ../libempathy-gtk/empathy-new-message-dialog.glade.h:3
-#: ../src/empathy-chat-window.glade.h:2
-msgid "Chat"
-msgstr "Bisedë në linjë"
+msgid "C_hat"
+msgstr "C_hat"
 
 #: ../libempathy-gtk/empathy-new-message-dialog.glade.h:4
 msgid "Contact ID:"
@@ -1054,8 +1056,8 @@ msgstr "Vietnameze"
 #: ../megaphone/data/GNOME_Megaphone_Applet.schemas.in.h:1
 msgid "The contact to display in the applet. Empty means no contact is displayed."
 msgstr ""
-"Kontakti për tu shfaqur në miniaplikativ. Bosh do të thotë asnjë kontakt "
-"i shfaqur."
+"Kontakti për tu shfaqur në miniaplikativ. Bosh do të thotë asnjë kontakt i "
+"shfaqur."
 
 #: ../megaphone/data/GNOME_Megaphone_Applet.schemas.in.h:2
 msgid "The contact's avatar token. Empty means contact has no avatar."
@@ -1093,19 +1095,19 @@ msgstr "Prania"
 msgid "Set your own presence"
 msgstr "Përcakto praninë tënde"
 
-#: ../src/empathy.c:376
+#: ../src/empathy.c:380
 msgid "Don't connect on startup"
 msgstr "Mos u lidh në nisje"
 
-#: ../src/empathy.c:380
+#: ../src/empathy.c:384
 msgid "Don't show the contact list on startup"
 msgstr "Mos shfaq listën e kontakteve në nisje"
 
-#: ../src/empathy.c:384
+#: ../src/empathy.c:388
 msgid "Show the accounts dialog"
 msgstr "Shfaq dialogun e profileve"
 
-#: ../src/empathy.c:396
+#: ../src/empathy.c:400
 msgid "- Empathy Instant Messenger"
 msgstr "- Empathy, mesazhe të menjëhershëm"
 
@@ -1118,8 +1120,8 @@ msgid ""
 msgstr ""
 "Empathy është program i lirë; ju mund ta rishpërndani dhe/ose ndryshoniatë "
 "sipas kushteve së Liçencës Publike të Përgjithshme GNU sikurse publikuar nga "
-"Free Software Foundation; sipas versionit 2 të Liçencës, ose(sipas "
-"opinionit tuaj) çdo versioni të mëvonshëm."
+"Free Software Foundation; sipas versionit 2 të Liçencës, ose(sipas opinionit "
+"tuaj) çdo versioni të mëvonshëm."
 
 #: ../src/empathy-about-dialog.c:88
 msgid ""
@@ -1138,9 +1140,9 @@ msgid ""
 "Empathy; if not, write to the Free Software Foundation, Inc., 51 Franklin "
 "Street, Fifth Floor, Boston, MA 02110-130159 USA"
 msgstr ""
-"Së bashku me Empathy duhet të keni marrë edhe një kopje të Liçencës "
-"Publike të Përgjithshme GNU; Nëse jo, shkruani tek Free Software Foundation, "
-"Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA"
+"Së bashku me Empathy duhet të keni marrë edhe një kopje të Liçencës Publike "
+"të Përgjithshme GNU; Nëse jo, shkruani tek Free Software Foundation, Inc., "
+"51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA"
 
 #: ../src/empathy-about-dialog.c:120
 msgid "An Instant Messaging client for GNOME"
@@ -1150,53 +1152,22 @@ msgstr "Një klient për mesazhe të menjëhershëm për GNOME"
 msgid "translator-credits"
 msgstr "Laurent Dhima <laurenti@alblinux.net>"
 
-#: ../src/empathy-accounts-dialog.c:235
-msgid ""
-"To add a new account, you can click on the 'Add' button and a new entry will "
-"be created for you to start configuring."
-msgstr ""
-"Për të shtuar një profil të ri, mund të klikohet tek butoni 'Shto' dhe një zë i ri "
-"do të krijohet gati për tu konfiguruar."
-
-#: ../src/empathy-accounts-dialog.c:239
-msgid ""
-"To add a new account, you first have to install a backend for each protocol "
-"you want to use."
-msgstr ""
-"Për të shtuar një profil të ri duhet fillimisht instaluar një backend për secilin "
-"nga protokollet që dëshirohet të përdoren."
-
-#: ../src/empathy-accounts-dialog.c:246
-#: ../src/empathy-accounts-dialog.glade.h:2
-msgid "<b>No Account Selected</b>"
-msgstr "<b>Nuk është zgjedhur asnjë profil</b>"
-
-#: ../src/empathy-accounts-dialog.c:247
-msgid ""
-"\n"
-"\n"
-"If you do not want to add an account, simply click on the account you want "
-"to configure in the list on the left."
-msgstr ""
-"\n"
-"\n"
-"Nëse nuk dëshirohet të shtohet një profil, thjesht klikohet tek profili që "
-"dëshirohet të konfigurohet tek lista majtas."
-
-#: ../src/empathy-accounts-dialog.c:253
-msgid "<b>No Accounts Configured</b>"
-msgstr "<b>Nuk është konfiguruar asnjë profil</b>"
-
-#: ../src/empathy-accounts-dialog.c:451
+#: ../src/empathy-accounts-dialog.c:389
 msgid "Enabled"
 msgstr "Aktivizuar"
 
-#: ../src/empathy-accounts-dialog.c:461
+#: ../src/empathy-accounts-dialog.c:399
 #: ../src/empathy-accounts-dialog.glade.h:4
 msgid "Accounts"
 msgstr "Profilet"
 
-#: ../src/empathy-accounts-dialog.c:991
+#. To translator: %s is the protocol name
+#: ../src/empathy-accounts-dialog.c:862
+#, c-format
+msgid "New %s account"
+msgstr "Profil i ri %s"
+
+#: ../src/empathy-accounts-dialog.c:972
 #, c-format
 msgid ""
 "You are about to remove your %s account!\n"
@@ -1205,7 +1176,7 @@ msgstr ""
 "Je duke hequr profilin tënd %s!\n"
 "Je sigurt që dëshiron të vazhdosh?"
 
-#: ../src/empathy-accounts-dialog.c:997
+#: ../src/empathy-accounts-dialog.c:978
 msgid ""
 "Any associated conversations and chat rooms will NOT be removed if you "
 "decide to proceed.\n"
@@ -1213,15 +1184,19 @@ msgid ""
 "Should you decide to add the account back at a later time, they will still "
 "be available."
 msgstr ""
-"Asnjë nga bisedat dhe kanalet chat përkatëse NUK do të hiqen nëse "
-"vendosni të vazhdoni.\n"
+"Asnjë nga bisedat dhe kanalet chat përkatëse NUK do të hiqen nëse vendosni "
+"të vazhdoni.\n"
 "\n"
-"Nëse më vonë do të dëshironi të rifusni përsëri profilin, ato do të "
-"gjenden akoma në dispozicion."
+"Nëse më vonë do të dëshironi të rifusni përsëri profilin, ato do të gjenden "
+"akoma në dispozicion."
 
 #: ../src/empathy-accounts-dialog.glade.h:1
 msgid "<b>New Account</b>"
 msgstr "<b>Profil i ri</b>"
+
+#: ../src/empathy-accounts-dialog.glade.h:2
+msgid "<b>No protocol installed</b>"
+msgstr "<b>Nuk është instaluar protokolli</b>"
 
 #: ../src/empathy-accounts-dialog.glade.h:3
 msgid "<b>Settings</b>"
@@ -1236,6 +1211,14 @@ msgid "I already have an account I want to use"
 msgstr "E kam rregullisht profilin që dëshiroj të përdor"
 
 #: ../src/empathy-accounts-dialog.glade.h:7
+msgid ""
+"To add a new account, you first have to install a backend for each protocol "
+"you want to use."
+msgstr ""
+"Për të shtuar një profil të ri duhet fillimisht instaluar një backend për "
+"secilin nga protokollet që dëshirohet të përdoren."
+
+#: ../src/empathy-accounts-dialog.glade.h:8
 msgid "Type:"
 msgstr "Lloji:"
 
@@ -1299,8 +1282,8 @@ msgstr "Duke u lidhur"
 #, c-format
 msgid "Incoming call from %s rejected because there is already a running call."
 msgstr ""
-"Telefonata në hyrje nga %s nuk u pranua meqenëse është duke u kryer "
-"një tjetër bisedë telefonike."
+"Telefonata në hyrje nga %s nuk u pranua meqenëse është duke u kryer një "
+"tjetër bisedë telefonike."
 
 #: ../src/empathy-call-window.glade.h:1
 msgid "#"
@@ -1367,22 +1350,26 @@ msgstr "Mbylle"
 msgid "Send Video"
 msgstr "Dërgo video"
 
-#: ../src/empathy-chat-window.c:319
+#: ../src/empathy-chat-window.c:322
 #, c-format
 msgid "Conversations (%d)"
 msgstr "Bisedat (%d)"
 
-#: ../src/empathy-chat-window.c:397
+#: ../src/empathy-chat-window.c:400
 msgid "Topic:"
 msgstr "Argumenti:"
 
-#: ../src/empathy-chat-window.c:400
+#: ../src/empathy-chat-window.c:403
 msgid "Typing a message."
 msgstr "Duke shkruar një mesazh."
 
 #: ../src/empathy-chat-window.glade.h:1
 msgid "C_lear"
 msgstr "P_astro"
+
+#: ../src/empathy-chat-window.glade.h:2
+msgid "Chat"
+msgstr "Bisedë në linjë"
 
 #: ../src/empathy-chat-window.glade.h:3
 msgid "Insert _Smiley"
@@ -1428,19 +1415,23 @@ msgstr "_Biseda"
 msgid "_Detach Tab"
 msgstr "_Shkëput skedën"
 
-#: ../src/empathy-chat-window.glade.h:15 ../src/empathy-main-window.glade.h:12
+#: ../src/empathy-chat-window.glade.h:15
+msgid "_Favorite Chatroom"
+msgstr "Kanal i pre_feruar"
+
+#: ../src/empathy-chat-window.glade.h:16 ../src/empathy-main-window.glade.h:12
 msgid "_Help"
 msgstr "_Ndihmë"
 
-#: ../src/empathy-chat-window.glade.h:16
+#: ../src/empathy-chat-window.glade.h:17
 msgid "_Next Tab"
 msgstr "Skeda në _vazhdim"
 
-#: ../src/empathy-chat-window.glade.h:17
+#: ../src/empathy-chat-window.glade.h:18
 msgid "_Previous Tab"
 msgstr "Skeda _paraardhëse"
 
-#: ../src/empathy-chat-window.glade.h:18
+#: ../src/empathy-chat-window.glade.h:19
 msgid "_Tabs"
 msgstr "_Skedat"
 
@@ -1505,8 +1496,8 @@ msgid ""
 "%s is offering you an invitation, but you don't have the needed external "
 "application to handle it."
 msgstr ""
-"%s ju ka dërguar një ftesë, por ju nuk keni aplikativin e jashtëm të nevojshëm "
-"për ta përdorur."
+"%s ju ka dërguar një ftesë, por ju nuk keni aplikativin e jashtëm të "
+"nevojshëm për ta përdorur."
 
 #: ../src/empathy-event-manager.c:263
 msgid "Invitation Error"
@@ -1683,7 +1674,9 @@ msgstr "Ri_fresko"
 
 #: ../src/empathy-new-chatroom-dialog.glade.h:8
 msgid "This list represents all chat rooms hosted on the server you have entered."
-msgstr "Kjo listë paraqet të gjithë kanalet chat të pranishëm në serverin ku jeni futur."
+msgstr ""
+"Kjo listë paraqet të gjithë kanalet chat të pranishëm në serverin ku jeni "
+"futur."
 
 #: ../src/empathy-preferences.c:264
 msgid "Language"
