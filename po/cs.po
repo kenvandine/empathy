@@ -11,9 +11,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: empathy\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-26 23:09+0200\n"
-"PO-Revision-Date: 2008-08-26 23:07+0200\n"
-"Last-Translator: Petr Kovar <pknbe@volny.cz>\n"
+"POT-Creation-Date: 2008-09-07 01:16+0200\n"
+"PO-Revision-Date: 2008-09-02 17:57+0100\n"
+"Last-Translator: Adrian Guniš <andygun@seznam.cz>\n"
 "Language-Team: Czech <gnome-cs-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -611,30 +611,30 @@ msgstr "_Rozhodnout se později"
 msgid "Subscription Request"
 msgstr "Požadavek na přihlášení"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1226
+#: ../libempathy-gtk/empathy-contact-list-view.c:1244
 #, c-format
 msgid "Do you really want to remove the group '%s'?"
 msgstr "Opravdu chcete odstranit skupinu '%s'?"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1228
+#: ../libempathy-gtk/empathy-contact-list-view.c:1246
 msgid "Removing group"
 msgstr "Odstraňuje se skupina"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1275
-#: ../libempathy-gtk/empathy-contact-list-view.c:1354
+#: ../libempathy-gtk/empathy-contact-list-view.c:1293
+#: ../libempathy-gtk/empathy-contact-list-view.c:1372
 msgid "_Remove"
 msgstr "_Odstranit"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1305
+#: ../libempathy-gtk/empathy-contact-list-view.c:1323
 #, c-format
 msgid "Do you really want to remove the contact '%s'?"
 msgstr "Opravdu chcete odstranit kontakt '%s'?"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1307
+#: ../libempathy-gtk/empathy-contact-list-view.c:1325
 msgid "Removing contact"
 msgstr "Odstraňuje se kontakt"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1312
+#: ../libempathy-gtk/empathy-contact-list-view.c:1330
 msgid "Sorry, I don't want you in my contact list anymore."
 msgstr "Lituji, už Vás nechci v mém seznamu kontaktů."
 
@@ -778,7 +778,7 @@ msgstr "SSL"
 msgid "Account"
 msgstr "Účet"
 
-#: ../libempathy-gtk/empathy-log-window.c:504 ../src/empathy-chat-window.c:276
+#: ../libempathy-gtk/empathy-log-window.c:504 ../src/empathy-chat-window.c:279
 msgid "Conversation"
 msgstr "Konverzace"
 
@@ -1352,16 +1352,16 @@ msgstr "Zavěsit"
 msgid "Send Video"
 msgstr "Odeslat video"
 
-#: ../src/empathy-chat-window.c:319
+#: ../src/empathy-chat-window.c:322
 #, c-format
 msgid "Conversations (%d)"
 msgstr "Konverzace (%d)"
 
-#: ../src/empathy-chat-window.c:397
+#: ../src/empathy-chat-window.c:400
 msgid "Topic:"
 msgstr "Téma:"
 
-#: ../src/empathy-chat-window.c:400
+#: ../src/empathy-chat-window.c:403
 msgid "Typing a message."
 msgstr "Píše zprávu."
 
@@ -1417,19 +1417,23 @@ msgstr "_Konverzace"
 msgid "_Detach Tab"
 msgstr "_Odpojit záložku"
 
-#: ../src/empathy-chat-window.glade.h:15 ../src/empathy-main-window.glade.h:12
+#: ../src/empathy-chat-window.glade.h:15
+msgid "_Favorite Chatroom"
+msgstr "_Oblíbená diskuzní místnost"
+
+#: ../src/empathy-chat-window.glade.h:16 ../src/empathy-main-window.glade.h:12
 msgid "_Help"
 msgstr "_Nápověda"
 
-#: ../src/empathy-chat-window.glade.h:16
+#: ../src/empathy-chat-window.glade.h:17
 msgid "_Next Tab"
 msgstr "_Následující záložka"
 
-#: ../src/empathy-chat-window.glade.h:17
+#: ../src/empathy-chat-window.glade.h:18
 msgid "_Previous Tab"
 msgstr "_Předchozí záložka"
 
-#: ../src/empathy-chat-window.glade.h:18
+#: ../src/empathy-chat-window.glade.h:19
 msgid "_Tabs"
 msgstr "_Záložky"
 
