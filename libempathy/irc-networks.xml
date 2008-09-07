@@ -3,7 +3,6 @@
   <network name="Debian Servers" id="debian_servers">
     <servers>
       <server ssl="FALSE" port="6667" address="irc.debian.org"/>
-      <server ssl="FALSE" port="6667" address="irc.oftc.net"/>
     </servers>
   </network>
   <network name="Ubuntu Servers" id="ubuntu_servers">
