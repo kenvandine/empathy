@@ -5,7 +5,8 @@ includedir=@includedir@
 
 Name: libempathy-gtk
 Description:  Empathy interface library
-Requires: glib-2.0, gobject-2.0, gtk+-2.0, libglade-2.0, libmissioncontrol, libempathy
+Requires: pkg-config >= 0.21
+Requires.private: glib-2.0, gobject-2.0, gtk+-2.0, libglade-2.0, libmissioncontrol, libempathy
 Version: @VERSION@
 Libs: -L${libdir} -lempathy-gtk
 Cflags: -I${includedir} 
