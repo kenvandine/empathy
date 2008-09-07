@@ -226,6 +226,7 @@ chat_window_create_label (EmpathyChatWindow *window,
 
 	close_button = gtk_button_new ();
 	gtk_button_set_relief (GTK_BUTTON (close_button), GTK_RELIEF_NONE);
+	g_object_set_data (G_OBJECT (chat), "chat-window-tab-close-button", close_button);
 
 	/* We don't want focus/keynav for the button to avoid clutter, and
 	 * Ctrl-W works anyway.
@@ -288,11 +289,14 @@ chat_window_update (EmpathyChatWindow *window)
 	gboolean               is_connected;
 	gint                   num_pages;
 	gint                   page_num;
+	gint                   i;
 	const gchar           *name;
 	guint                  n_chats;
 	GdkPixbuf             *icon;
 	EmpathyContact        *remote_contact;
 	gboolean               avatar_in_icon;
+	GtkWidget             *chat;
+	GtkWidget             *chat_close_button;
 
 	/* Get information */
 	page_num = gtk_notebook_get_current_page (GTK_NOTEBOOK (priv->notebook));
@@ -340,6 +344,20 @@ chat_window_update (EmpathyChatWindow *window)
 			g_object_unref (icon);
 		} else {
 			gtk_window_set_icon_name (GTK_WINDOW (priv->dialog), NULL);
+		}
+	}
+
+	if (num_pages == 1) {
+		chat = gtk_notebook_get_nth_page (GTK_NOTEBOOK (priv->notebook), 0);
+		chat_close_button = g_object_get_data (G_OBJECT (chat),
+				"chat-window-tab-close-button");
+		gtk_widget_hide (chat_close_button);
+	} else {
+		for (i=0; i<num_pages; i++) {
+			chat = gtk_notebook_get_nth_page (GTK_NOTEBOOK (priv->notebook), i);
+			chat_close_button = g_object_get_data (G_OBJECT (chat),
+					"chat-window-tab-close-button");
+			gtk_widget_show (chat_close_button);
 		}
 	}
 }
