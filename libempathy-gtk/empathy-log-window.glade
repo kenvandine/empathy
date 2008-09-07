@@ -4,6 +4,7 @@
 <glade-interface>
   <widget class="GtkWindow" id="log_window">
     <property name="title" translatable="yes">Previous Conversations</property>
+    <property name="role">log</property>
     <property name="default_width">640</property>
     <property name="default_height">450</property>
     <property name="icon_name">document-open-recent</property>

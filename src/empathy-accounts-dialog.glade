@@ -5,6 +5,7 @@
   <widget class="GtkDialog" id="accounts_dialog">
     <property name="border_width">5</property>
     <property name="title" translatable="yes">Accounts</property>
+    <property name="role">accounts</property>
     <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
     <property name="has_separator">False</property>
     <child internal-child="vbox">

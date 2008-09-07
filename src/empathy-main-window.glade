@@ -4,6 +4,7 @@
 <glade-interface>
   <widget class="GtkWindow" id="main_window">
     <property name="title" translatable="yes">Contact List</property>
+    <property name="role">contact_list</property>
     <property name="default_width">225</property>
     <property name="default_height">325</property>
     <child>

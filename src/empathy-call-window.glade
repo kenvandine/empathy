@@ -3,6 +3,7 @@
 <!--Generated with glade3 3.4.5 on Mon Aug  4 11:04:43 2008 -->
 <glade-interface>
   <widget class="GtkWindow" id="window">
+    <property name="role">call</property>
     <child>
       <widget class="GtkHBox" id="main_hbox">
         <property name="visible">True</property>

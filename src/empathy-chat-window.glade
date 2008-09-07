@@ -4,6 +4,7 @@
 <glade-interface>
   <widget class="GtkWindow" id="chat_window">
     <property name="title" translatable="yes">Chat</property>
+    <property name="role">chat</property>
     <property name="default_width">350</property>
     <property name="default_height">250</property>
     <child>
