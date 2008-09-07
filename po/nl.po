@@ -1,127 +1,179 @@
-# Dutch translation of Gossip.
+# Dutch translation of Empathy.
 #
 # Copyright (C) 2003-2004 Free Software Foundation, Inc.
 # This file is distributed under the same license as the gossip package.
 #
+# Luk Claes <luk.claes@ugent.be>, 2005.
+# Reinout van Schouwen <reinouts@gnome.org>, 2007.
+# Freek de Kruijf <f.de.kruijf@hetnet.nl>, 2006, 2007, 2008.
 # Vincent van Adrighem <V.vanAdrighem@dirck.mine.nu>, 2003.
 # Taco Witte <tcwitte@cs.uu.nl>, 2003-2004.
 # Wouter Bolsterlee <wbolster@gnome.org>, 2006, 2007.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: gossip cvs\n"
+"Project-Id-Version: empathy\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-05-15 23:46+0200\n"
-"PO-Revision-Date: 2007-04-09 15:19+0200 \n"
-"Last-Translator: Wouter Bolsterlee <wbolster@gnome.org>\n"
+"POT-Creation-Date: 2008-09-01 06:30+0000\n"
+"PO-Revision-Date: 2008-09-07 17:43+0200\n"
+"Last-Translator: Vincent van Adrighem <adrighem@gnome.org>\n"
 "Language-Team: Gnome-NL <gnome-nl-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: ../data/empathy.desktop.in.h:1
-#, fuzzy
+#: ../data/empathy.desktop.in.in.h:1
 msgid "Empathy Instant Messenger"
-msgstr "Instant Messenger"
+msgstr "Empathy Instant Messenger"
 
-#: ../data/empathy.desktop.in.h:2
-msgid "Instant Messenger"
-msgstr "Instant Messenger"
+#: ../data/empathy.desktop.in.in.h:2
+msgid "Send and receive instant messages"
+msgstr "Berichten sturen en ontvangen"
 
 #: ../data/empathy.schemas.in.h:1
 msgid "Always open a separate chat window for new chats."
 msgstr "Altijd een nieuw scherm voor nieuwe gesprekken openen."
 
 #: ../data/empathy.schemas.in.h:2
+msgid ""
+"Character to add after nickname when using nick completion (tab) in group "
+"chat."
+msgstr "Te gebruiken achtervoegsel bij auto-afmaken (tab) in groepschat."
+
+#: ../data/empathy.schemas.in.h:3
 msgid "Chat window theme"
 msgstr "Thema voor chatvensters"
 
-#: ../data/empathy.schemas.in.h:3
+#: ../data/empathy.schemas.in.h:4
 msgid ""
 "Comma separated list of spell checker languages to use (e.g. en, fr, nl)."
 msgstr ""
 "Komma-gescheiden lijst van talen voor de spellingchecker (bijv. en, fr, nl)."
 
-#: ../data/empathy.schemas.in.h:4
-msgid "Compact contact list"
-msgstr "Compacte contactlijst"
-
 #: ../data/empathy.schemas.in.h:5
+msgid "Compact contact list"
+msgstr "Compacte contactenlijst"
+
+#: ../data/empathy.schemas.in.h:6
 msgid "Contact list sort criterium"
-msgstr ""
+msgstr "Sorteercriterium contactenlijst"
 
 # avatar? :s  (Wouter Bolsterlee)
-#: ../data/empathy.schemas.in.h:6
+#: ../data/empathy.schemas.in.h:7
 msgid "Default directory to select an avatar image from"
 msgstr "Standaardmap voor het kiezen van gebruikersafbeeldingen"
 
-#: ../data/empathy.schemas.in.h:7
+#: ../data/empathy.schemas.in.h:8
+msgid "Empathy should auto-connect on startup"
+msgstr "Automatisch verbinden bij starten"
+
+#: ../data/empathy.schemas.in.h:9
+msgid "Empathy should use the avatar of the contact as the chat window icon"
+msgstr "De gebruikersafbeelding gebruiken als pictogram van het chatvenster"
+
+#: ../data/empathy.schemas.in.h:10
 msgid "Enable popup when contact is available"
 msgstr "Notificatiebericht tonen als een contact online komt"
 
-#: ../data/empathy.schemas.in.h:8
+#: ../data/empathy.schemas.in.h:11
 msgid "Enable sound when away"
 msgstr "Geluid afspelen indien afwezig"
 
-#: ../data/empathy.schemas.in.h:9
+#: ../data/empathy.schemas.in.h:12
 msgid "Enable sound when busy"
 msgstr "Geluid afspelen indien bezig"
 
-#: ../data/empathy.schemas.in.h:10
+#: ../data/empathy.schemas.in.h:13
 msgid "Enable spell checker"
 msgstr "Spellingchecker inschakelen"
 
-#: ../data/empathy.schemas.in.h:11
+#: ../data/empathy.schemas.in.h:14
 msgid "Hide main window"
 msgstr "Hoofdvenster verbergen"
 
-#: ../data/empathy.schemas.in.h:12
+#: ../data/empathy.schemas.in.h:15
 msgid "Hide the main window."
 msgstr "Het hoofdvenster niet tonen."
 
-#: ../data/empathy.schemas.in.h:13
+#: ../data/empathy.schemas.in.h:16
+msgid "NetworkManager should be used"
+msgstr "Networkmanager gebruiken"
+
+#: ../data/empathy.schemas.in.h:17
+msgid "Nick completed character"
+msgstr "Achtervoegsel auto-afmaken"
+
+#: ../data/empathy.schemas.in.h:18
 msgid "Open new chats in separate windows"
 msgstr "Nieuwe chats openen in aparte vensters"
 
-#: ../data/empathy.schemas.in.h:14
+#: ../data/empathy.schemas.in.h:19
+msgid "Salut account is created"
+msgstr "Salut-account is aangemaakt"
+
+#: ../data/empathy.schemas.in.h:20
 msgid "Show avatars"
 msgstr "Gebruikersafbeeldingen tonen"
 
-#: ../data/empathy.schemas.in.h:15
+#: ../data/empathy.schemas.in.h:21
 msgid "Show hint about closing the main window"
 msgstr "Tip tonen bij het sluiten van het hoofdvenster."
 
-#: ../data/empathy.schemas.in.h:16
+#: ../data/empathy.schemas.in.h:22
 msgid "Show offline contacts"
 msgstr "Offline contacten tonen"
 
-#: ../data/empathy.schemas.in.h:17
+#: ../data/empathy.schemas.in.h:23
 msgid "Spell checking languages"
 msgstr "Talen voor de spellingchecker"
 
-#: ../data/empathy.schemas.in.h:18
+#: ../data/empathy.schemas.in.h:24
 msgid "The last directory that an avatar image was chosen from."
 msgstr "De laatst gebruikte map voor gebruikersafbeeldingen."
 
-#: ../data/empathy.schemas.in.h:19
+#: ../data/empathy.schemas.in.h:25
 msgid "The theme that is used to display the conversation in chat windows."
 msgstr "Het thema dat gebruikt wordt voor het tonen van chats in chatvensters."
 
-#: ../data/empathy.schemas.in.h:20
+#: ../data/empathy.schemas.in.h:26
 msgid "Use graphical smileys"
 msgstr "Smileys grafisch tonen"
 
-#: ../data/empathy.schemas.in.h:21
+#: ../data/empathy.schemas.in.h:27
 msgid "Use notification sounds"
 msgstr "Waarschuwingsgeluiden gebruiken"
 
-#: ../data/empathy.schemas.in.h:22
+#: ../data/empathy.schemas.in.h:28
 msgid "Use theme for chat rooms"
 msgstr "Thema voor chatruimte gebruiken"
 
+#: ../data/empathy.schemas.in.h:29
+msgid ""
+"Whether or not Empathy should automatically log in to your accounts on "
+"startup."
+msgstr "Accounts automatisch aanmelden bij opstarten."
+
+#: ../data/empathy.schemas.in.h:30
+msgid ""
+"Whether or not Empathy should use the avatar of the contact as the chat "
+"window icon."
+msgstr "Gebruikersafbeeldingen gebruiken als pictogram voor de chatvensters."
+
+#: ../data/empathy.schemas.in.h:31
+msgid ""
+"Whether or not the Salut account has been created on the first Empathy run."
+msgstr ""
+"Of het Salut-account is aangemaakt bij eerste maal opstarten van Empathy."
+
+#: ../data/empathy.schemas.in.h:32
+msgid ""
+"Whether or not the network manager should be used to automatically "
+"disconnect/reconnect."
+msgstr "Of Networkmanager gebruikt moet worden om automatisch te verbinden."
+
 # Bah, wat een lelijke vertaling (Wouter Bolsterlee)
-#: ../data/empathy.schemas.in.h:23
+#: ../data/empathy.schemas.in.h:33
 msgid ""
 "Whether or not to check words typed against the languages you want to check "
 "with."
@@ -129,39 +181,40 @@ msgstr ""
 "Ingetypte woorden al dan niet controleren op de talen waar u op wilt "
 "controleren."
 
-#: ../data/empathy.schemas.in.h:24
+#: ../data/empathy.schemas.in.h:34
 msgid ""
 "Whether or not to convert smileys into graphical images in conversations."
 msgstr "Smileys in gesprekken grafisch tonen."
 
-#: ../data/empathy.schemas.in.h:25
+#: ../data/empathy.schemas.in.h:35
 msgid "Whether or not to play a sound when messages arrive."
 msgstr "Een geluid afspelen als berichten binnenkomen."
 
-#: ../data/empathy.schemas.in.h:26
+#: ../data/empathy.schemas.in.h:36
 msgid "Whether or not to play sounds when away."
 msgstr "Geluiden afspelen indien afwezig."
 
-#: ../data/empathy.schemas.in.h:27
+#: ../data/empathy.schemas.in.h:37
 msgid "Whether or not to play sounds when busy."
 msgstr "Geluiden afspelen indien bezig."
 
-#: ../data/empathy.schemas.in.h:28
+#: ../data/empathy.schemas.in.h:38
 msgid "Whether or not to show a popup when a contact becomes available."
 msgstr "Een notificatiebericht tonen als een contact online komt."
 
-#: ../data/empathy.schemas.in.h:29
+#: ../data/empathy.schemas.in.h:39
 msgid ""
 "Whether or not to show avatars for contacts in the contact list and chat "
 "windows."
 msgstr ""
-"Gebruikersafbeeldingen wel of niet tonen in de contactlijst en chatvensters."
+"Gebruikersafbeeldingen wel of niet tonen in de contactenlijst en "
+"chatvensters."
 
-#: ../data/empathy.schemas.in.h:30
+#: ../data/empathy.schemas.in.h:40
 msgid "Whether or not to show contacts that are offline in the contact list."
-msgstr "Contacten die offline zijn in de contactlijst wel of niet tonen."
+msgstr "Contacten die offline zijn in de contactenlijst wel of niet tonen."
 
-#: ../data/empathy.schemas.in.h:31
+#: ../data/empathy.schemas.in.h:41
 msgid ""
 "Whether or not to show the message dialog about closing the main window with "
 "the 'x' button in the title bar."
@@ -169,187 +222,937 @@ msgstr ""
 "Al dan niet het informatievenster over het sluiten van het hoofdvenster "
 "tonen als het venster met de ‘x’ in de titelbank gesloten wordt."
 
-#: ../data/empathy.schemas.in.h:32
+#: ../data/empathy.schemas.in.h:42
 msgid "Whether to show the contact list in compact mode or not."
-msgstr "Al dan niet de contactlijst in compacte modus tonen"
+msgstr "Al dan niet de contactenlijst in compacte modus tonen"
 
-#: ../data/empathy.schemas.in.h:33
+#: ../data/empathy.schemas.in.h:43
 msgid "Whether to use the theme for chat rooms or not."
 msgstr "Thema voor chatruimtes gebruiken"
 
-#: ../data/empathy.schemas.in.h:34
+#: ../data/empathy.schemas.in.h:44
 msgid ""
 "Which criterium to use when sorting the contact list. Default is to use sort "
 "by the contact's name with the value \"name\". A value of \"state\" will "
 "sort the contact list by state."
 msgstr ""
+"Te gebruiken criterium bij sorteren van contactenlijst. Standaardsortering "
+"is op naam. Instelling \"status\" zal de lijst sorteren op status."
 
-#: ../libempathy/gossip-contact.c:654 ../libempathy/gossip-presence.c:184
-#: ../libempathy/gossip-presence.c:283
-msgid "Offline"
-msgstr "Offline"
+#: ../libempathy/empathy-tp-contact-list.c:731 ../src/empathy.c:248
+msgid "People nearby"
+msgstr "Mensen in de buurt"
 
-#: ../libempathy/gossip-presence.c:274
+#: ../libempathy/empathy-utils.c:345
 msgid "Available"
 msgstr "Beschikbaar"
 
-#: ../libempathy/gossip-presence.c:276
+#: ../libempathy/empathy-utils.c:347
 msgid "Busy"
 msgstr "Bezig"
 
-#: ../libempathy/gossip-presence.c:279
+#: ../libempathy/empathy-utils.c:350
 msgid "Away"
 msgstr "Afwezig"
 
-#: ../libempathy-gtk/empathy-main-window.c:254
-msgid "Show and edit accounts"
-msgstr "Accounts tonen en bewerken"
+#: ../libempathy/empathy-utils.c:352
+msgid "Hidden"
+msgstr "Verborgen"
 
-#: ../libempathy-gtk/empathy-main-window.c:456
-msgid "Group"
-msgstr "Groep"
+#: ../libempathy/empathy-utils.c:355
+msgid "Offline"
+msgstr "Offline"
 
-#: ../libempathy-gtk/empathy-main-window.c:477
-msgid "Contact"
-msgstr "Contact"
+#: ../libempathy-gtk/empathy-account-chooser.c:337
+msgid "All"
+msgstr "Iedereen"
 
-#: ../libempathy-gtk/empathy-main-window.glade.h:1
-#, fuzzy
-msgid "Contact List - Empathy"
-msgstr "Contactlijst - Gossip"
+#: ../libempathy-gtk/empathy-account-widget.c:302
+#: ../libempathy-gtk/empathy-account-widget.c:347
+#, c-format
+msgid "%s:"
+msgstr "%s:"
 
-#: ../libempathy-gtk/empathy-main-window.glade.h:2
-msgid "Context"
-msgstr "Context"
+#: ../libempathy-gtk/empathy-account-widget-aim.glade.h:1
+#: ../libempathy-gtk/empathy-account-widget-generic.glade.h:1
+#: ../libempathy-gtk/empathy-account-widget-groupwise.glade.h:1
+#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:1
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:1
+#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:1
+#: ../libempathy-gtk/empathy-account-widget-salut.glade.h:1
+#: ../libempathy-gtk/empathy-account-widget-sip.glade.h:1
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:1
+msgid "<b>Advanced</b>"
+msgstr "<b>Geavanceerd</b>"
 
-#: ../libempathy-gtk/empathy-main-window.glade.h:3
-msgid "Join _Favorites"
-msgstr "_Bladwijzers openen"
+#: ../libempathy-gtk/empathy-account-widget-aim.glade.h:2
+#: ../libempathy-gtk/empathy-account-widget-groupwise.glade.h:2
+#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:2
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:3
+#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:2
+#: ../libempathy-gtk/empathy-account-widget-sip.glade.h:4
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:2
+msgid "Forget password and clear the entry."
+msgstr "Wachtwoord vergeten en het invoervak leegmaken"
 
-#: ../libempathy-gtk/empathy-main-window.glade.h:4
-#: ../libempathy-gtk/gossip-chat.glade.h:10
-msgid "Join _New..."
-msgstr "_Nieuw groepsgesprek binnengaan…"
+#: ../libempathy-gtk/empathy-account-widget-aim.glade.h:3
+#: ../libempathy-gtk/empathy-account-widget-groupwise.glade.h:4
+#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:4
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:5
+#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:4
+#: ../libempathy-gtk/empathy-account-widget-sip.glade.h:5
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:3
+msgid "Pass_word:"
+msgstr "_Wachtwoord:"
 
-#: ../libempathy-gtk/empathy-main-window.glade.h:5
-msgid "Manage Favorites..."
-msgstr "Bladwijzers beheren…"
+#: ../libempathy-gtk/empathy-account-widget-aim.glade.h:4
+msgid "Screen _Name:"
+msgstr "Bij_naam:"
 
-#: ../libempathy-gtk/empathy-main-window.glade.h:6
-msgid "Show _Offline Contacts"
-msgstr "_Offline contacten tonen"
+#: ../libempathy-gtk/empathy-account-widget-aim.glade.h:5
+#: ../libempathy-gtk/empathy-account-widget-groupwise.glade.h:5
+#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:6
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:11
+#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:5
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:8
+msgid "_Port:"
+msgstr "_Poort:"
 
-#: ../libempathy-gtk/empathy-main-window.glade.h:7
-msgid "_About"
-msgstr "_Over"
+#: ../libempathy-gtk/empathy-account-widget-aim.glade.h:6
+#: ../libempathy-gtk/empathy-account-widget-groupwise.glade.h:6
+#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:7
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:12
+#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:6
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:10
+#: ../src/empathy-new-chatroom-dialog.glade.h:10
+msgid "_Server:"
+msgstr "_Server:"
 
-#: ../libempathy-gtk/empathy-main-window.glade.h:8
-msgid "_Accounts"
-msgstr "_Accounts"
+#: ../libempathy-gtk/empathy-account-widget-groupwise.glade.h:3
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:4
+#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:3
+msgid "Login I_D:"
+msgstr "Login I_D"
 
-#: ../libempathy-gtk/empathy-main-window.glade.h:9
-#: ../libempathy-gtk/gossip-chat.glade.h:15
-msgid "_Add Contact..."
-msgstr "_Contact toevoegen..."
+#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:3
+msgid "ICQ _UIN:"
+msgstr "ICQ _UIN:"
 
-#: ../libempathy-gtk/empathy-main-window.glade.h:10
-#: ../libempathy-gtk/gossip-contact-list.c:298
+#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:5
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:6
+msgid "_Charset:"
+msgstr "_Tekenset:"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.c:245
+msgid "New Network"
+msgstr "Nieuw netwerk"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:1
+msgid "<b>Network</b>"
+msgstr "<b>Netwerk</b>"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:2
+msgid "<b>Servers</b>"
+msgstr "<b>Servers</b>"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:3
+msgid "Charset:"
+msgstr "Tekenset:"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:4
+msgid "Create a new IRC network"
+msgstr "Nieuw IRC-netwerk aanmaken"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:5
+msgid "Edit the selected IRC network"
+msgstr "IRC-netwerk bewerken"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:6
+msgid "Network"
+msgstr "Netwerk"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:7
+msgid "Network:"
+msgstr "Netwerk:"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:8
+msgid "Nickname:"
+msgstr "Bijnaam:"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:9
+msgid "Password:"
+msgstr "Wachtwoord:"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:10
+msgid "Quit message:"
+msgstr "Bericht bij afsluiten:"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:11
+msgid "Real name:"
+msgstr "Echte naam:"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:12
+msgid "Remove the selected IRC network"
+msgstr "IRC-netwerk verwijderen"
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:2
+msgid "<b>Override server settings</b>"
+msgstr "<b>Eigen instellingen gebruiken</b>"
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:6
+msgid "Pri_ority:"
+msgstr "Pri_oriteit:"
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:7
+msgid "Reso_urce:"
+msgstr "_Bron:"
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:8
+msgid "Use old SS_L"
+msgstr "Oude SS_L gebruiken"
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:9
+msgid "_Encryption required (TLS/SSL)"
+msgstr "_Codering verplicht (TLS/SSL)"
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:10
+msgid "_Ignore SSL certificate errors"
+msgstr "SSL-Certificaatproblemen _negeren"
+
+#: ../libempathy-gtk/empathy-account-widget-salut.glade.h:2
+msgid "_Email:"
+msgstr "_E-mail:"
+
+#: ../libempathy-gtk/empathy-account-widget-salut.glade.h:3
+msgid "_First Name: "
+msgstr "_Voornaam: "
+
+#: ../libempathy-gtk/empathy-account-widget-salut.glade.h:4
+msgid "_Jabber ID:"
+msgstr "_Jabber-ID:"
+
+#: ../libempathy-gtk/empathy-account-widget-salut.glade.h:5
+msgid "_Last Name:"
+msgstr "_Achternaam:"
+
+#: ../libempathy-gtk/empathy-account-widget-salut.glade.h:6
+#: ../src/empathy-chatrooms-window.glade.h:8
+msgid "_Nickname:"
+msgstr "_Bijnaam:"
+
+#: ../libempathy-gtk/empathy-account-widget-salut.glade.h:7
+msgid "_Published Name:"
+msgstr "_Weergegeven naam:"
+
+#. look up the DNS SRV record at the service's domain for the host name of a STUN server.
+#: ../libempathy-gtk/empathy-account-widget-sip.glade.h:3
+msgid "Discover STUN"
+msgstr "STUN opzoeken"
+
+#: ../libempathy-gtk/empathy-account-widget-sip.glade.h:6
+msgid "STUN Server:"
+msgstr "STUN-_Server:"
+
+#: ../libempathy-gtk/empathy-account-widget-sip.glade.h:7
+msgid "STUN port:"
+msgstr "STUN-poort:"
+
+#: ../libempathy-gtk/empathy-account-widget-sip.glade.h:8
+msgid "_Username:"
+msgstr "_Gebruikersnaam:"
+
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:4
+msgid "Use _Yahoo Japan"
+msgstr "_Yahoo Japan gebruiken"
+
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:5
+msgid "Yahoo I_D:"
+msgstr "Yahoo I_D:"
+
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:7
+msgid "_Ignore conference and chatroom invitations"
+msgstr "Uitnodigingen voor groepsgesprekken _negeren"
+
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:9
+msgid "_Room List locale:"
+msgstr "_Locale voor lijst van chatruimten:"
+
+#: ../libempathy-gtk/empathy-avatar-chooser.c:457
+msgid "Select Your Avatar Image"
+msgstr "Kies uw gebruikersafbeelding"
+
+#: ../libempathy-gtk/empathy-avatar-chooser.c:460
+msgid "No Image"
+msgstr "Geen afbeelding"
+
+#: ../libempathy-gtk/empathy-avatar-chooser.c:520
+msgid "Images"
+msgstr "Afbeeldingen"
+
+#: ../libempathy-gtk/empathy-avatar-chooser.c:524
+msgid "All Files"
+msgstr "Alle bestanden"
+
+#: ../libempathy-gtk/empathy-avatar-image.c:294
+msgid "Click to enlarge"
+msgstr "Klik om te vergroten"
+
+#: ../libempathy-gtk/empathy-chat.c:497
+msgid "offline"
+msgstr "offline"
+
+#: ../libempathy-gtk/empathy-chat.c:500
+msgid "invalid contact"
+msgstr "ongeldinge contactpersoon"
+
+#: ../libempathy-gtk/empathy-chat.c:503
+msgid "permission denied"
+msgstr "toestemming geweigerd"
+
+#: ../libempathy-gtk/empathy-chat.c:506
+msgid "too long message"
+msgstr "bericht te lang"
+
+#: ../libempathy-gtk/empathy-chat.c:509
+msgid "not implemented"
+msgstr "niet geïmplementeerd"
+
+#: ../libempathy-gtk/empathy-chat.c:512
+msgid "unknown"
+msgstr "onbekend"
+
+#: ../libempathy-gtk/empathy-chat.c:516
+#, c-format
+msgid "Error sending message '%s': %s"
+msgstr "Fout bij versturen van bericht '%s': %s"
+
+#: ../libempathy-gtk/empathy-chat.c:546
+#, c-format
+msgid "Topic set to: %s"
+msgstr "Onderwerp ingesteld: %s"
+
+#: ../libempathy-gtk/empathy-chat.c:548
+msgid "No topic defined"
+msgstr "Geen onderwerp"
+
+#: ../libempathy-gtk/empathy-chat.c:963
+msgid "Insert Smiley"
+msgstr "Smiley invoegen"
+
+#: ../libempathy-gtk/empathy-chat.c:979
+msgid "_Send"
+msgstr "_Sturen"
+
+#: ../libempathy-gtk/empathy-chat.c:1013
+msgid "_Check Word Spelling..."
+msgstr "Spelling van woord _controleren..."
+
+#: ../libempathy-gtk/empathy-chat.c:1119
+#, c-format
+msgid "%s has joined the room"
+msgstr "%s is de chatruimte binnengekomen"
+
+#: ../libempathy-gtk/empathy-chat.c:1122
+#, c-format
+msgid "%s has left the room"
+msgstr "%s heeft de chatruimte verlaten"
+
+#: ../libempathy-gtk/empathy-chat.c:1236 ../src/empathy-call-window.c:406
+msgid "Disconnected"
+msgstr "Verbinding verbroken"
+
+#: ../libempathy-gtk/empathy-chat.c:1608
+msgid "Connected"
+msgstr "Verbonden"
+
+#: ../libempathy-gtk/empathy-chat.glade.h:1
+msgid "<b>Topic:</b>"
+msgstr "<b>Onderwerp:</b>"
+
+#: ../libempathy-gtk/empathy-chat.glade.h:2
+msgid "Group Chat"
+msgstr "Chatten"
+
+#: ../libempathy-gtk/empathy-chat-view.c:430
+msgid "_Copy Link Address"
+msgstr "Koppelingsadres _kopiëren"
+
+#: ../libempathy-gtk/empathy-chat-view.c:438
+msgid "_Open Link"
+msgstr "Koppeling _openen"
+
+#: ../libempathy-gtk/empathy-contact-dialogs.c:180
+msgid "Personal Information"
+msgstr "Persoonlijke gegevens"
+
+#: ../libempathy-gtk/empathy-contact-dialogs.c:183
+msgid "Edit Contact Information"
+msgstr "Contactinformatie bewerken"
+
+#: ../libempathy-gtk/empathy-contact-dialogs.c:186
+msgid "Contact Information"
+msgstr "Contactinformatie"
+
+#: ../libempathy-gtk/empathy-contact-dialogs.c:283
+msgid "I would like to add you to my contact list."
+msgstr "Ik wil je graag toevoegen aan mijn contactenlijst."
+
+#: ../libempathy-gtk/empathy-contact-dialogs.c:307
+msgid "New Contact"
+msgstr "Nieuw contact"
+
+#: ../libempathy-gtk/empathy-contact-dialogs.glade.h:1
+msgid "Decide _Later"
+msgstr "_Later besluiten"
+
+#: ../libempathy-gtk/empathy-contact-dialogs.glade.h:2
+msgid "Subscription Request"
+msgstr "Inschrijvingsverzoek"
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:1244
+#, c-format
+msgid "Do you really want to remove the group '%s'?"
+msgstr "Wilt u dit contact echt uit de de groep '%s' verwijderen?"
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:1246
+msgid "Removing group"
+msgstr "Groep verwijderen"
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:1293
+#: ../libempathy-gtk/empathy-contact-list-view.c:1372
+msgid "_Remove"
+msgstr "_Verwijderen"
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:1323
+#, c-format
+msgid "Do you really want to remove the contact '%s'?"
+msgstr "Wilt u dit contact echt uit de groep '%s' verwijderen?"
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:1325
+msgid "Removing contact"
+msgstr "Contact verwijderen"
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:1330
+msgid "Sorry, I don't want you in my contact list anymore."
+msgstr "Sorry, maar ik wil je niet meer in mijn contactenlijst."
+
+#: ../libempathy-gtk/empathy-contact-menu.c:109
+#: ../src/empathy-main-window.glade.h:9
 msgid "_Chat"
 msgstr "_Chatten"
 
-#: ../libempathy-gtk/empathy-main-window.glade.h:11
-msgid "_Contents"
-msgstr "In_houd"
+#: ../libempathy-gtk/empathy-contact-menu.c:130
+msgid "_Call"
+msgstr "_Opbellen"
 
-#: ../libempathy-gtk/empathy-main-window.glade.h:12
-#: ../libempathy-gtk/gossip-chat.glade.h:21
-#: ../libempathy-gtk/gossip-contact-list.c:310
-msgid "_Edit"
-msgstr "Be_werken"
-
-#: ../libempathy-gtk/empathy-main-window.glade.h:13
-msgid "_Help"
-msgstr "_Help"
-
-#: ../libempathy-gtk/empathy-main-window.glade.h:14
-#: ../libempathy-gtk/empathy-status-icon.glade.h:2
-msgid "_New Message..."
-msgstr "_Nieuw bericht..."
-
-#: ../libempathy-gtk/empathy-main-window.glade.h:15
-msgid "_Personal Information"
-msgstr "_Persoonlijke gegevens"
-
-#: ../libempathy-gtk/empathy-main-window.glade.h:16
-msgid "_Preferences"
-msgstr "_Voorkeuren"
-
-#: ../libempathy-gtk/empathy-main-window.glade.h:17
-#: ../libempathy-gtk/empathy-status-icon.glade.h:3
-msgid "_Quit"
-msgstr "_Afsluiten"
-
-#: ../libempathy-gtk/empathy-main-window.glade.h:18
-#: ../libempathy-gtk/gossip-chat.glade.h:25
-msgid "_Room"
-msgstr "_Ruimte"
-
-#: ../libempathy-gtk/empathy-main-window.glade.h:19
-#: ../libempathy-gtk/gossip-chat.glade.h:28
-#: ../libempathy-gtk/gossip-contact-list.c:326
+#: ../libempathy-gtk/empathy-contact-menu.c:169
+#: ../src/empathy-main-window.glade.h:17
 msgid "_View Previous Conversations"
 msgstr "_Vorige gesprekken tonen"
 
-#: ../libempathy-gtk/empathy-status-icon.glade.h:1
-msgid "Status"
-msgstr "Status"
+#: ../libempathy-gtk/empathy-contact-menu.c:197
+msgid "Infor_mation"
+msgstr "Infor_matie"
 
-#: ../libempathy-gtk/empathy-status-icon.glade.h:4
-msgid "_Show Contact List"
-msgstr "Contactlijst _tonen"
+#: ../libempathy-gtk/empathy-contact-menu.c:224
+#: ../src/empathy-chat-window.glade.h:14 ../src/empathy-main-window.glade.h:11
+msgid "_Edit"
+msgstr "Be_werken"
 
-#: ../libempathy-gtk/gossip-about-dialog.c:63
-#, fuzzy
+# hier geen 'gebruikersafbeelding', want dat is te groot (Wouter Bolsterlee)
+#: ../libempathy-gtk/empathy-contact-widget.c:358
+msgid "Save Avatar"
+msgstr "Afbeelding opslaan"
+
+#: ../libempathy-gtk/empathy-contact-widget.c:414
+msgid "Unable to save avatar"
+msgstr "Kan afbeelding niet opslaan"
+
+#: ../libempathy-gtk/empathy-contact-widget.c:875
+msgid "Select"
+msgstr "Selecteren"
+
+#: ../libempathy-gtk/empathy-contact-widget.c:884
+#: ../src/empathy-main-window.c:853
+msgid "Group"
+msgstr "Groep"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:1
+msgid "<b>Client Information</b>"
+msgstr "<b>Clientinformatie</b>"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:2
+msgid "<b>Contact Details</b>"
+msgstr "<b>Details Contact</b>"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:3
+msgid "<b>Contact</b>"
+msgstr "<b>Contact</b>"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:4
+msgid "<b>Groups</b>"
+msgstr "<b>Groepen</b>"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:5
+#: ../libempathy-gtk/empathy-new-message-dialog.glade.h:1
+#: ../src/empathy-chatrooms-window.glade.h:1
+#: ../src/empathy-new-chatroom-dialog.glade.h:1
+msgid "Account:"
+msgstr "Account:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:6
+msgid "Alias:"
+msgstr "Alias:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:7
+msgid "Birthday:"
+msgstr "Verjaardag:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:8
+msgid "Client:"
+msgstr "Client:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:9
+msgid "Contact information"
+msgstr "Contactinformatie"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:10
+msgid "Email:"
+msgstr "E-mail:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:11
+msgid "Fullname:"
+msgstr "Volledige naam:"
+
+#. Identifier to connect to Instant Messaging network
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:13
+msgid "Identifier:"
+msgstr "Identificatie:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:14
+msgid "Information requested..."
+msgstr "Informatie opgevraagd…"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:15
+msgid "OS:"
+msgstr "OS:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:16
+msgid ""
+"Select the groups you want this contact to appear in.  Note that you can "
+"select more than one group or no groups."
+msgstr ""
+"Selecteer de groepen waar u dit contact in wilt plaatsen. U kunt meerdere of "
+"zelfs geen groepen kiezen."
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:17
+msgid "Version:"
+msgstr "Versie:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:18
+msgid "Web site:"
+msgstr "Website:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:19
+msgid "_Add Group"
+msgstr "Groep _toevoegen"
+
+#: ../libempathy-gtk/empathy-irc-network-dialog.c:284
+msgid "new server"
+msgstr "Nieuwe server"
+
+#: ../libempathy-gtk/empathy-irc-network-dialog.c:513
+msgid "Server"
+msgstr "Server"
+
+#: ../libempathy-gtk/empathy-irc-network-dialog.c:528
+msgid "Port"
+msgstr "Poort"
+
+#: ../libempathy-gtk/empathy-irc-network-dialog.c:541
+msgid "SSL"
+msgstr "SSL"
+
+#: ../libempathy-gtk/empathy-log-window.c:497
+msgid "Account"
+msgstr "Account"
+
+#: ../libempathy-gtk/empathy-log-window.c:504 ../src/empathy-chat-window.c:279
+msgid "Conversation"
+msgstr "Gesprek"
+
+#: ../libempathy-gtk/empathy-log-window.c:514
+msgid "Date"
+msgstr "Datum"
+
+#. Tab Label
+#: ../libempathy-gtk/empathy-log-window.glade.h:2
+msgid "Conversations"
+msgstr "Gesprekken"
+
+#: ../libempathy-gtk/empathy-log-window.glade.h:3
+msgid "Previous Conversations"
+msgstr "Vorige gesprekken"
+
+#. Tab Label
+#: ../libempathy-gtk/empathy-log-window.glade.h:5
+msgid "Search"
+msgstr "Zoeken"
+
+#. Searching *for* something
+#: ../libempathy-gtk/empathy-log-window.glade.h:7
+msgid "_For:"
+msgstr "_Voor:"
+
+#: ../libempathy-gtk/empathy-new-message-dialog.glade.h:2
+msgid "C_all"
+msgstr "_Opbellen"
+
+#: ../libempathy-gtk/empathy-new-message-dialog.glade.h:3
+msgid "C_hat"
+msgstr "_Chatten"
+
+#: ../libempathy-gtk/empathy-new-message-dialog.glade.h:4
+msgid "Contact ID:"
+msgstr "Contact ID:"
+
+#: ../libempathy-gtk/empathy-new-message-dialog.glade.h:5
+msgid "New Conversation"
+msgstr "Nieuw gesprek"
+
+#. Custom messages
+#: ../libempathy-gtk/empathy-presence-chooser.c:685
+msgid "Custom messages..."
+msgstr "Aangepaste berichten…"
+
+#: ../libempathy-gtk/empathy-presence-chooser.glade.h:1
+msgid "Custom message"
+msgstr "Aangepast bericht"
+
+#: ../libempathy-gtk/empathy-presence-chooser.glade.h:2
+msgid "Message:"
+msgstr "Bericht:"
+
+#: ../libempathy-gtk/empathy-presence-chooser.glade.h:3
+msgid "Save message"
+msgstr "Bericht opslaan"
+
+#: ../libempathy-gtk/empathy-presence-chooser.glade.h:4
+msgid "Status:"
+msgstr "Status:"
+
+#: ../libempathy-gtk/empathy-spell-dialog.c:88
+msgid "Word"
+msgstr "Woord"
+
+#: ../libempathy-gtk/empathy-spell-dialog.c:265
+msgid "Suggestions for the word"
+msgstr "Suggesties voor dit woord"
+
+#: ../libempathy-gtk/empathy-spell-dialog.glade.h:1
+msgid "Spell Checker"
+msgstr "Spellingchecker"
+
+#: ../libempathy-gtk/empathy-spell-dialog.glade.h:2
+msgid "Suggestions for the word:"
+msgstr "Suggesties voor dit woord:"
+
+#: ../libempathy-gtk/empathy-theme-boxes.c:745
+#: ../libempathy-gtk/empathy-theme-irc.c:293
+msgid "%A %d %B %Y"
+msgstr "%A %d %B %Y"
+
+#: ../libempathy-gtk/empathy-theme-manager.c:73
+msgid "Classic"
+msgstr "Klassiek"
+
+#: ../libempathy-gtk/empathy-theme-manager.c:74
+msgid "Simple"
+msgstr "Simpel"
+
+# Dichterlijke vrijheid (Wouter Bolsterlee)
+#: ../libempathy-gtk/empathy-theme-manager.c:75
+msgid "Clean"
+msgstr "Helder"
+
+#: ../libempathy-gtk/empathy-theme-manager.c:76
+msgid "Blue"
+msgstr "Blauw"
+
+#: ../libempathy-gtk/empathy-ui-utils.c:1330
+msgid "Unable to open URI"
+msgstr "Kan URI niet openen"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:158
+msgid "Current Locale"
+msgstr "Huidige locale"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:161
+#: ../libempathy-gtk/totem-subtitle-encoding.c:163
+#: ../libempathy-gtk/totem-subtitle-encoding.c:165
+#: ../libempathy-gtk/totem-subtitle-encoding.c:167
+msgid "Arabic"
+msgstr "Arabisch"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:170
+msgid "Armenian"
+msgstr "Armeens"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:173
+#: ../libempathy-gtk/totem-subtitle-encoding.c:175
+#: ../libempathy-gtk/totem-subtitle-encoding.c:177
+msgid "Baltic"
+msgstr "Baltisch"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:180
+msgid "Celtic"
+msgstr "Keltisch"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:183
+#: ../libempathy-gtk/totem-subtitle-encoding.c:185
+#: ../libempathy-gtk/totem-subtitle-encoding.c:187
+#: ../libempathy-gtk/totem-subtitle-encoding.c:189
+msgid "Central European"
+msgstr "Centraaleuropees"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:192
+#: ../libempathy-gtk/totem-subtitle-encoding.c:194
+#: ../libempathy-gtk/totem-subtitle-encoding.c:196
+#: ../libempathy-gtk/totem-subtitle-encoding.c:198
+msgid "Chinese Simplified"
+msgstr "Vereenvoudigd chinees"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:201
+#: ../libempathy-gtk/totem-subtitle-encoding.c:203
+#: ../libempathy-gtk/totem-subtitle-encoding.c:205
+msgid "Chinese Traditional"
+msgstr "Traditioneel chinees"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:208
+msgid "Croatian"
+msgstr "Kroatisch"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:211
+#: ../libempathy-gtk/totem-subtitle-encoding.c:213
+#: ../libempathy-gtk/totem-subtitle-encoding.c:215
+#: ../libempathy-gtk/totem-subtitle-encoding.c:217
+#: ../libempathy-gtk/totem-subtitle-encoding.c:219
+#: ../libempathy-gtk/totem-subtitle-encoding.c:221
+msgid "Cyrillic"
+msgstr "Cyrillisch"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:224
+msgid "Cyrillic/Russian"
+msgstr "Russisch Cyrillisch"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:227
+#: ../libempathy-gtk/totem-subtitle-encoding.c:229
+msgid "Cyrillic/Ukrainian"
+msgstr "Oekraïns Cyrillisch"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:232
+msgid "Georgian"
+msgstr "Georgisch"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:235
+#: ../libempathy-gtk/totem-subtitle-encoding.c:237
+#: ../libempathy-gtk/totem-subtitle-encoding.c:239
+msgid "Greek"
+msgstr "Grieks"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:242
+msgid "Gujarati"
+msgstr "Gujarati"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:245
+msgid "Gurmukhi"
+msgstr "Gurmukhi"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:248
+#: ../libempathy-gtk/totem-subtitle-encoding.c:250
+#: ../libempathy-gtk/totem-subtitle-encoding.c:252
+#: ../libempathy-gtk/totem-subtitle-encoding.c:254
+msgid "Hebrew"
+msgstr "Hebreeuws"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:257
+msgid "Hebrew Visual"
+msgstr "Visueel Hebreeuws"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:260
+msgid "Hindi"
+msgstr "Hindi"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:263
+msgid "Icelandic"
+msgstr "IJslands"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:266
+#: ../libempathy-gtk/totem-subtitle-encoding.c:268
+#: ../libempathy-gtk/totem-subtitle-encoding.c:270
+msgid "Japanese"
+msgstr "Japans"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:273
+#: ../libempathy-gtk/totem-subtitle-encoding.c:275
+#: ../libempathy-gtk/totem-subtitle-encoding.c:277
+#: ../libempathy-gtk/totem-subtitle-encoding.c:279
+msgid "Korean"
+msgstr "Koreaans"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:282
+msgid "Nordic"
+msgstr "Noors"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:285
+msgid "Persian"
+msgstr "Perzisch"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:288
+#: ../libempathy-gtk/totem-subtitle-encoding.c:290
+msgid "Romanian"
+msgstr "Roemeens"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:293
+msgid "South European"
+msgstr "Zuideuropees"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:296
+msgid "Thai"
+msgstr "Thai"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:299
+#: ../libempathy-gtk/totem-subtitle-encoding.c:301
+#: ../libempathy-gtk/totem-subtitle-encoding.c:303
+#: ../libempathy-gtk/totem-subtitle-encoding.c:305
+msgid "Turkish"
+msgstr "Turks"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:308
+#: ../libempathy-gtk/totem-subtitle-encoding.c:310
+#: ../libempathy-gtk/totem-subtitle-encoding.c:312
+#: ../libempathy-gtk/totem-subtitle-encoding.c:314
+#: ../libempathy-gtk/totem-subtitle-encoding.c:316
+msgid "Unicode"
+msgstr "Unicode"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:319
+#: ../libempathy-gtk/totem-subtitle-encoding.c:321
+#: ../libempathy-gtk/totem-subtitle-encoding.c:323
+#: ../libempathy-gtk/totem-subtitle-encoding.c:325
+#: ../libempathy-gtk/totem-subtitle-encoding.c:327
+msgid "Western"
+msgstr "Westers"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:330
+#: ../libempathy-gtk/totem-subtitle-encoding.c:332
+#: ../libempathy-gtk/totem-subtitle-encoding.c:334
+msgid "Vietnamese"
+msgstr "Vietnamees"
+
+#.
+#. * vim: sw=2 ts=8 cindent noai bs=2
+#.
+#: ../megaphone/data/GNOME_Megaphone_Applet.schemas.in.h:1
+msgid ""
+"The contact to display in the applet. Empty means no contact is displayed."
+msgstr ""
+"Weer te geven contact in het applet. Leeg betekent dat er geen contact wordt "
+"weergegeven."
+
+#: ../megaphone/data/GNOME_Megaphone_Applet.schemas.in.h:2
+msgid "The contact's avatar token. Empty means contact has no avatar."
+msgstr ""
+"Token voor gebruikersafbeelding. Leeg betekent dat gebruiker geen afbeelding "
+"heeft."
+
+#: ../megaphone/data/GNOME_Megaphone_Applet.server.in.in.h:1
+msgid "Megaphone"
+msgstr "Megafoon"
+
+#: ../megaphone/data/GNOME_Megaphone_Applet.server.in.in.h:2
+#: ../megaphone/src/megaphone-applet.c:417
+msgid "Talk!"
+msgstr "Praten!"
+
+#: ../megaphone/data/GNOME_Megaphone_Applet.xml.h:1
+#: ../nothere/data/GNOME_NotHere_Applet.xml.h:1
+msgid "_About"
+msgstr "_Over"
+
+#: ../megaphone/data/GNOME_Megaphone_Applet.xml.h:2
+msgid "_Information"
+msgstr "Infor_matie"
+
+#: ../megaphone/data/GNOME_Megaphone_Applet.xml.h:3
+#: ../src/empathy-main-window.glade.h:15
+msgid "_Preferences"
+msgstr "_Voorkeuren"
+
+#: ../nothere/data/GNOME_NotHere_Applet.server.in.in.h:1
+msgid "Presence"
+msgstr "Aanwezigheid"
+
+#: ../nothere/data/GNOME_NotHere_Applet.server.in.in.h:2
+#: ../nothere/src/nothere-applet.c:106
+msgid "Set your own presence"
+msgstr "Aanwezigheid instellen"
+
+#: ../src/empathy.c:380
+msgid "Don't connect on startup"
+msgstr "Niet verbinden bij opstarten"
+
+#: ../src/empathy.c:384
+msgid "Don't show the contact list on startup"
+msgstr "Contactenlijst niet weergeven bij opstarten"
+
+#: ../src/empathy.c:388
+msgid "Show the accounts dialog"
+msgstr "Accountslijst tonen"
+
+#: ../src/empathy.c:400
+msgid "- Empathy Instant Messenger"
+msgstr "- Empathy Instant Messenger"
+
+#: ../src/empathy-about-dialog.c:84
 msgid ""
 "Empathy is free software; you can redistribute it and/or modify it under the "
 "terms of the GNU General Public License as published by the Free Software "
 "Foundation; either version 2 of the License, or (at your option) any later "
 "version."
 msgstr ""
-"Gossip is vrije Software; u kunt het verspreiden en/of aanpassen onder de "
+"Empathy is vrije Software; u kunt het verspreiden en/of aanpassen onder de "
 "voorwaarden van de GNU General Public License zoals uitgegeven door de Free "
-"Software Foundation; ofwel versie 2, ofwel (naar keuze) een latere versie."
+"Software Foundation; versie 2, ofwel (naar keuze) een latere versie."
 
-#: ../libempathy-gtk/gossip-about-dialog.c:67
-#, fuzzy
+#: ../src/empathy-about-dialog.c:88
 msgid ""
 "Empathy is distributed in the hope that it will be useful, but WITHOUT ANY "
 "WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS "
 "FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more "
 "details."
 msgstr ""
-"Gossip wordt verspreid in de hoop dat het bruikbaar is, maar ZONDER ENIGE "
+"Empathy wordt verspreid in de hoop dat het bruikbaar is, maar ZONDER ENIGE "
 "GARANTIE; zelfs niet de impliciete garantie van VERKOOPBAARHEID of "
 "GESCHIKTHEID VOOR EEN BEPAALD DOEL. Zie de GNU General Public License voor "
 "meer informatie."
 
-#: ../libempathy-gtk/gossip-about-dialog.c:71
-#, fuzzy
+#: ../src/empathy-about-dialog.c:92
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "Empathy; if not, write to the Free Software Foundation, Inc., 51 Franklin "
 "Street, Fifth Floor, Boston, MA 02110-130159 USA"
 msgstr ""
 "U zou een kopie van de GNU General Public License moeten hebben ontvangen "
-"bij Gossip; is dit niet het geval, dan kun u schrijven naar de Free Software "
-"Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-130159 "
-"USA"
+"bij Empathy; is dit niet het geval, dan kun u schrijven naar de Free "
+"Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-"
+"130159 USA"
 
-#: ../libempathy-gtk/gossip-about-dialog.c:99
+#: ../src/empathy-about-dialog.c:120
 msgid "An Instant Messaging client for GNOME"
 msgstr "Gossip, een chatclient voor GNOME"
 
-#: ../libempathy-gtk/gossip-about-dialog.c:105
+#: ../src/empathy-about-dialog.c:126
 msgid "translator-credits"
 msgstr ""
 "Vincent van Adrighem\n"
@@ -357,55 +1160,22 @@ msgstr ""
 "Wouter Bolsterlee\n"
 "http://nl.gnome.org/"
 
-#: ../libempathy-gtk/gossip-accounts-dialog.c:224
-#, fuzzy
-msgid "Disable"
-msgstr "Beschikbaar"
+#: ../src/empathy-accounts-dialog.c:389
+msgid "Enabled"
+msgstr "Ingeschakeld"
 
-#: ../libempathy-gtk/gossip-accounts-dialog.c:227
-#, fuzzy
-msgid "Enable"
-msgstr "Voorbeeld"
-
-#: ../libempathy-gtk/gossip-accounts-dialog.c:261
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:3
-msgid "<b>No Account Selected</b>"
-msgstr "<b>Geen account geselecteerd</b>"
-
-# Vrij vertaald (Wouter Bolsterlee)
-#: ../libempathy-gtk/gossip-accounts-dialog.c:263
-msgid ""
-"To add a new account, you can click on the 'Add' button and a new entry will "
-"be created for you to start configuring.\n"
-"\n"
-"If you do not want to add an account, simply click on the account you want "
-"to configure in the list on the left."
-msgstr ""
-"U kunt de knop ‘Toevoegen’ gebruiken om een nieuw account toe te voegen en "
-"in te stellen.\n"
-"\n"
-"Om bestaande accountgegevens te veranderen u een account uit de lijst aan de "
-"linkerzijde kiezen."
-
-#: ../libempathy-gtk/gossip-accounts-dialog.c:272
-msgid "<b>No Accounts Configured</b>"
-msgstr "<b>Geen accounts ingesteld</b>"
-
-# Vrij vertaald (Wouter Bolsterlee)
-#: ../libempathy-gtk/gossip-accounts-dialog.c:274
-msgid ""
-"To add a new account, you can click on the 'Add' button and a new entry will "
-"be created for you to start configuring."
-msgstr ""
-"U kunt de knop ‘Toevoegen’ gebruiken om een nieuw account toe te voegen en "
-"in te stellen."
-
-#: ../libempathy-gtk/gossip-accounts-dialog.c:362
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:6
+#: ../src/empathy-accounts-dialog.c:399
+#: ../src/empathy-accounts-dialog.glade.h:4
 msgid "Accounts"
 msgstr "Accounts"
 
-#: ../libempathy-gtk/gossip-accounts-dialog.c:857
+#. To translator: %s is the protocol name
+#: ../src/empathy-accounts-dialog.c:862
+#, c-format
+msgid "New %s account"
+msgstr "Nieuw %s-account"
+
+#: ../src/empathy-accounts-dialog.c:972
 #, c-format
 msgid ""
 "You are about to remove your %s account!\n"
@@ -414,7 +1184,7 @@ msgstr ""
 "Het account ‘%s’ zal verwijderd worden!\n"
 "Weet u zeker dat u wilt doorgaan?"
 
-#: ../libempathy-gtk/gossip-accounts-dialog.c:863
+#: ../src/empathy-accounts-dialog.c:978
 msgid ""
 "Any associated conversations and chat rooms will NOT be removed if you "
 "decide to proceed.\n"
@@ -427,340 +1197,527 @@ msgstr ""
 "\n"
 "Als u het account later weer toevoegt, dan zullen deze weer beschikbaar zijn."
 
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:1
-msgid "<b>Account</b>"
-msgstr "<b>Account</b>"
-
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:2
+#: ../src/empathy-accounts-dialog.glade.h:1
 msgid "<b>New Account</b>"
 msgstr "<b>Nieuw account</b>"
 
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:4
+#: ../src/empathy-accounts-dialog.glade.h:2
+msgid "<b>No protocol installed</b>"
+msgstr "<b>Geen protocol beschikbaar</b>"
+
+#: ../src/empathy-accounts-dialog.glade.h:3
 msgid "<b>Settings</b>"
 msgstr "<b>Instellingen</b>"
 
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:5
-msgid "A unique name for this account to identify it personally to you."
-msgstr ""
-"Een unieke naam voor dit account om het voor u persoonlijk herkenbaar te "
-"maken."
-
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:7
+#: ../src/empathy-accounts-dialog.glade.h:5
 msgid "Cr_eate"
 msgstr "_Aanmaken"
 
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:8
-msgid "Imendio "
-msgstr "Imendio "
+#: ../src/empathy-accounts-dialog.glade.h:6
+msgid "I already have an account I want to use"
+msgstr "Ik heb al een account dat ik wil gebruiken"
 
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:9
-msgid "Jabber"
-msgstr "Jabber"
-
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:10
+#: ../src/empathy-accounts-dialog.glade.h:7
 msgid ""
-"To add a new account, you can click on the 'Add' button and a new entry will "
-"be created for you to started configuring.\n"
-"\n"
-"If you do not want to add an account, simply click on the account you want "
-"to configure in the list on the left."
+"To add a new account, you first have to install a backend for each protocol "
+"you want to use."
 msgstr ""
-"U kunt de knop ‘Toevoegen’ gebruiken om een nieuw account toe te voegen en "
-"in te stellen.\n"
-"\n"
-"Om bestaande accountgegevens te veranderen u een account uit de lijst aan de "
-"linkerzijde kiezen."
+"Voordat u een account kunt toevoegen dient u eerst een backend voor het "
+"protocol te installeren."
 
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:13
-msgid "_Name:"
-msgstr "_Naam:"
+#: ../src/empathy-accounts-dialog.glade.h:8
+msgid "Type:"
+msgstr "Type:"
 
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:14
-msgid "_Type:"
-msgstr "_Type:"
+#: ../src/empathy-call-window.c:142
+msgid "Closed"
+msgstr "Gesloten"
 
-#: ../libempathy-gtk/gossip-account-widget-generic.c:144
-#: ../libempathy-gtk/gossip-account-widget-generic.c:186
+#: ../src/empathy-call-window.c:254
+msgid "End this call?"
+msgstr "Gesprek afsluiten?"
+
+#: ../src/empathy-call-window.c:256
+msgid "Closing this window will end the call in progress."
+msgstr "Als u dit venster sluit wordt het gesprek afgesloten."
+
+#: ../src/empathy-call-window.c:257
+msgid "_End Call"
+msgstr "Gesprek _afsluiten"
+
+#: ../src/empathy-call-window.c:311
+msgid "Incoming call"
+msgstr "Binnenkomende oproep"
+
+#: ../src/empathy-call-window.c:313
 #, c-format
-msgid "%s:"
-msgstr "%s:"
+msgid "%s is calling you, do you want to answer?"
+msgstr "U wordt gebeld door %s. Wilt u opnemen?"
 
-#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:1
-msgid ""
-"<small><b><span foreground=\"#555\">Example: user@jabber.org</span></b></"
-"small>"
+#: ../src/empathy-call-window.c:319
+msgid "_Reject"
+msgstr "_Afwijzen"
+
+#: ../src/empathy-call-window.c:324
+msgid "_Answer"
+msgstr "_Opnemen"
+
+#: ../src/empathy-call-window.c:379
+msgid "Empathy Call"
+msgstr "Empathy gesprek"
+
+#. To translators: Readying is the first state of the call, it is
+#. * preparing the connection and it does not yet ring.
+#: ../src/empathy-call-window.c:382
+msgid "Readying"
+msgstr "Verbinding voorbereiden"
+
+#: ../src/empathy-call-window.c:391
+#, c-format
+msgid "%s - Empathy Call"
+msgstr "%s - Empathy gesprek"
+
+#: ../src/empathy-call-window.c:395
+msgid "Ringing"
+msgstr "Gaat over…"
+
+#: ../src/empathy-call-window.c:408
+msgid "Connecting"
+msgstr "Verbinden"
+
+#: ../src/empathy-call-window.c:524
+#, c-format
+msgid "Incoming call from %s rejected because there is already a running call."
 msgstr ""
+"Binnenkomende oproep van %s geweigerd omdat er al een gesprek gaande is."
 
-#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:2
-msgid "Forget password and clear the entry."
-msgstr "Wachtwoord vergeten en het invoervak leegmaken"
+#: ../src/empathy-call-window.glade.h:1
+msgid "#"
+msgstr "#"
 
-#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:3
-msgid "Login I_D:"
-msgstr "Login I_D"
+#: ../src/empathy-call-window.glade.h:2
+msgid "*"
+msgstr "*"
 
-#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:4
-msgid "Pass_word:"
-msgstr "_Wachtwoord:"
+#: ../src/empathy-call-window.glade.h:3
+msgid "0"
+msgstr "0"
 
-#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:5
-msgid "Reso_urce:"
-msgstr "_Bron:"
+#: ../src/empathy-call-window.glade.h:4
+msgid "1"
+msgstr "1"
 
-#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:6
-msgid "Use encryption (SS_L)"
-msgstr "Encryptie gebruiken (SS_L)"
+#: ../src/empathy-call-window.glade.h:5
+msgid "2"
+msgstr "2"
 
-#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:7
-msgid "_Port:"
-msgstr "_Poort:"
+#: ../src/empathy-call-window.glade.h:6
+msgid "3"
+msgstr "3"
 
-#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:8
-msgid "_Server:"
-msgstr "_Server:"
+#: ../src/empathy-call-window.glade.h:7
+msgid "4"
+msgstr "4"
 
-#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:9
-msgid "jabber account settings"
-msgstr "jabber-accountgegevens"
+#: ../src/empathy-call-window.glade.h:8
+msgid "5"
+msgstr "5"
 
-#: ../libempathy-gtk/gossip-chat.c:314
-msgid "Disconnected"
-msgstr "Verbinding verbroken"
+#: ../src/empathy-call-window.glade.h:9
+msgid "6"
+msgstr "6"
 
-#: ../libempathy-gtk/gossip-chat.c:858
-msgid "Insert Smiley"
-msgstr "Smiley invoegen"
+#: ../src/empathy-call-window.glade.h:10
+msgid "7"
+msgstr "7"
 
-#: ../libempathy-gtk/gossip-chat.c:906
-msgid "_Check Word Spelling..."
-msgstr "Spelling van woord _controleren..."
+#: ../src/empathy-call-window.glade.h:11
+msgid "8"
+msgstr "8"
 
-#: ../libempathy-gtk/gossip-chat.c:1244
-msgid "Connected"
-msgstr "Verbonden"
+#: ../src/empathy-call-window.glade.h:12
+msgid "9"
+msgstr "9"
 
-#: ../libempathy-gtk/gossip-chat.glade.h:1
+#. To translators: The keypad is numbers [0-9], asterisk (*) and hash (#). Presented like on any phone
+#: ../src/empathy-call-window.glade.h:14
+msgid "<b>Keypad</b>"
+msgstr "<b>Nummerblok</b>"
+
+#: ../src/empathy-call-window.glade.h:15
+msgid "<b>Volume</b>"
+msgstr "<b>Volume</b>"
+
+#: ../src/empathy-call-window.glade.h:16
+msgid "Hang Up"
+msgstr "Ophangen"
+
+#: ../src/empathy-call-window.glade.h:17
+msgid "Send Video"
+msgstr "Video sturen"
+
+#: ../src/empathy-chat-window.c:322
+#, c-format
+msgid "Conversations (%d)"
+msgstr "Gesprekken (%d)"
+
+#: ../src/empathy-chat-window.c:400
+msgid "Topic:"
+msgstr "Onderwerp:"
+
+#: ../src/empathy-chat-window.c:403
+msgid "Typing a message."
+msgstr "Bezig met typen van een bericht."
+
+#: ../src/empathy-chat-window.glade.h:1
 msgid "C_lear"
 msgstr "_Wissen"
 
-#: ../libempathy-gtk/gossip-chat.glade.h:2
-msgid "Change _Topic..."
-msgstr "_Onderwerp instellen…"
-
-#: ../libempathy-gtk/gossip-chat.glade.h:3
+#: ../src/empathy-chat-window.glade.h:2
 msgid "Chat"
 msgstr "Chatten"
 
-#: ../libempathy-gtk/gossip-chat.glade.h:4
-msgid "Contact Infor_mation"
-msgstr "Contactinfor_matie"
-
-#: ../libempathy-gtk/gossip-chat.glade.h:5
-msgid "Cu_t"
-msgstr "K_nippen"
-
-#: ../libempathy-gtk/gossip-chat.glade.h:6
-msgid "In_vite..."
-msgstr "_Uitnodigen…"
-
-#: ../libempathy-gtk/gossip-chat.glade.h:7
+#: ../src/empathy-chat-window.glade.h:3
 msgid "Insert _Smiley"
 msgstr "_Smiley invoegen"
 
 # Vrij vertaald (Wouter Bolsterlee)
-#: ../libempathy-gtk/gossip-chat.glade.h:8
+#: ../src/empathy-chat-window.glade.h:4
 msgid "Invitation _message:"
 msgstr "_Uitnodiging:"
 
-#: ../libempathy-gtk/gossip-chat.glade.h:9
+#: ../src/empathy-chat-window.glade.h:5
 msgid "Invite"
 msgstr "Uitnodigen"
 
-#: ../libempathy-gtk/gossip-chat.glade.h:11
+#: ../src/empathy-chat-window.glade.h:6
 msgid "Move Tab _Left"
 msgstr "Tabblad naar _links verplaatsen"
 
-#: ../libempathy-gtk/gossip-chat.glade.h:12
+#: ../src/empathy-chat-window.glade.h:7
 msgid "Move Tab _Right"
 msgstr "Tabblad naar _rechts verplaatsen"
 
-#: ../libempathy-gtk/gossip-chat.glade.h:13
+#: ../src/empathy-chat-window.glade.h:8
 msgid "Select who would you like to invite:"
 msgstr "Kies wie u wilt uitnodigen:"
 
-#: ../libempathy-gtk/gossip-chat.glade.h:14
+#: ../src/empathy-chat-window.glade.h:9
 msgid "You have been invited to join a chat conference."
 msgstr "U bent uitgenodigd voor een groepsgesprek."
 
-#: ../libempathy-gtk/gossip-chat.glade.h:16
-msgid "_Add To Favorites"
-msgstr "_Aan bladwijzers toevoegen"
-
-#: ../libempathy-gtk/gossip-chat.glade.h:17
-msgid "_Close"
-msgstr "Sl_uiten"
-
-#: ../libempathy-gtk/gossip-chat.glade.h:18
-msgid "_Conversation"
-msgstr "_Gesprek"
-
-#: ../libempathy-gtk/gossip-chat.glade.h:19
-msgid "_Copy"
-msgstr "_Kopiëren"
-
-#: ../libempathy-gtk/gossip-chat.glade.h:20
-msgid "_Detach Tab"
-msgstr "Tabblad _losmaken"
-
-#: ../libempathy-gtk/gossip-chat.glade.h:22
-msgid "_Next Tab"
-msgstr "Vo_lgend tabblad"
-
-#: ../libempathy-gtk/gossip-chat.glade.h:23
-msgid "_Paste"
-msgstr "_Plakken"
-
-#: ../libempathy-gtk/gossip-chat.glade.h:24
-msgid "_Previous Tab"
-msgstr "Vo_rig tabblad"
-
-#: ../libempathy-gtk/gossip-chat.glade.h:26
-msgid "_Show Contacts"
-msgstr "C_ontactlijst tonen"
-
-#: ../libempathy-gtk/gossip-chat.glade.h:27
-msgid "_Tabs"
-msgstr "_Tabbladen"
-
-#: ../libempathy-gtk/gossip-chat-view.c:544
-msgid "_Copy Link Address"
-msgstr "Koppelingsadres _kopiëren"
-
-#: ../libempathy-gtk/gossip-chat-view.c:552
-msgid "_Open Link"
-msgstr "Koppeling _openen"
-
-#: ../libempathy-gtk/gossip-chat-view.c:889
-msgid "%A %d %B %Y"
-msgstr "%A %d %B %Y"
-
-#: ../libempathy-gtk/gossip-chat-window.c:685
-#: ../libempathy-gtk/gossip-chat-window.c:715
-msgid "New Message"
-msgid_plural "New Messages"
-msgstr[0] "Nieuw bericht"
-msgstr[1] "Nieuwe berichten"
-
-#: ../libempathy-gtk/gossip-chat-window.c:691
-msgid "Chat Room"
-msgstr "Chatruimte"
-
-#: ../libempathy-gtk/gossip-chat-window.c:696
-#: ../libempathy-gtk/gossip-chat-window.c:719
-#, c-format
-msgid "Conversation"
-msgid_plural "Conversations (%d)"
-msgstr[0] "Gesprek"
-msgstr[1] "Gesprekken (%d)"
-
-#: ../libempathy-gtk/gossip-chat-window.c:1295
-msgid "Typing a message."
-msgstr "Bezig met typen van een bericht."
-
-#: ../libempathy-gtk/gossip-contact-list.c:290
+#: ../src/empathy-chat-window.glade.h:10
 msgid "_Contact"
 msgstr "_Contact"
 
-#: ../libempathy-gtk/gossip-contact-list.c:294
-msgid "_Group"
-msgstr "_Groep"
+#: ../src/empathy-chat-window.glade.h:11 ../src/empathy-main-window.glade.h:10
+msgid "_Contents"
+msgstr "In_houd"
 
-#: ../libempathy-gtk/gossip-contact-list.c:298
-msgid "Chat with contact"
-msgstr "Met dit contact chatten"
+#: ../src/empathy-chat-window.glade.h:12
+msgid "_Conversation"
+msgstr "_Gesprek"
 
-#: ../libempathy-gtk/gossip-contact-list.c:302
-msgid "Infor_mation"
-msgstr "Infor_matie"
+#: ../src/empathy-chat-window.glade.h:13
+msgid "_Detach Tab"
+msgstr "Tabblad _losmaken"
 
-#: ../libempathy-gtk/gossip-contact-list.c:302
-msgid "View contact information"
-msgstr "Contactinformatie tonen"
+#: ../src/empathy-chat-window.glade.h:15
+msgid "_Favorite Chatroom"
+msgstr "_Favoriete chatruimte"
 
-#: ../libempathy-gtk/gossip-contact-list.c:306
-msgid "Re_name"
-msgstr "Her_noemen"
+#: ../src/empathy-chat-window.glade.h:16 ../src/empathy-main-window.glade.h:12
+msgid "_Help"
+msgstr "_Hulp"
 
-#: ../libempathy-gtk/gossip-contact-list.c:306
-msgid "Rename"
-msgstr "Hernoemen"
+#: ../src/empathy-chat-window.glade.h:17
+msgid "_Next Tab"
+msgstr "Vo_lgend tabblad"
 
-#: ../libempathy-gtk/gossip-contact-list.c:310
-msgid "Edit the groups and name for this contact"
-msgstr "Groepen en naam voor dit contact bewerken"
+#: ../src/empathy-chat-window.glade.h:18
+msgid "_Previous Tab"
+msgstr "Vo_rig tabblad"
 
-#: ../libempathy-gtk/gossip-contact-list.c:314
-msgid "_Remove"
-msgstr "_Verwijderen"
+#: ../src/empathy-chat-window.glade.h:19
+msgid "_Tabs"
+msgstr "_Tabbladen"
 
-#: ../libempathy-gtk/gossip-contact-list.c:314
-msgid "Remove contact"
-msgstr "Contact verwijderen"
+#: ../src/empathy-chatrooms-window.c:262
+msgid "Name"
+msgstr "Naam"
 
-#: ../libempathy-gtk/gossip-contact-list.c:318
-msgid "_Invite to Chat Room"
-msgstr "In chatruimte _uitnodigen"
+#: ../src/empathy-chatrooms-window.c:280
+msgid "Room"
+msgstr "Ruimte"
 
-#: ../libempathy-gtk/gossip-contact-list.c:318
-msgid "Invite to a currently open chat room"
-msgstr "In een geopende chatruimte uitnodigen"
+#: ../src/empathy-chatrooms-window.c:289
+msgid "Auto-Connect"
+msgstr "Automatisch verbinden"
 
-#: ../libempathy-gtk/gossip-contact-list.c:322
-msgid "_Send File..."
-msgstr "Be_stand versturen…"
+#: ../src/empathy-chatrooms-window.glade.h:2
+msgid "Edit Favorite Room"
+msgstr "Bladwijzer bewerken"
 
-#: ../libempathy-gtk/gossip-contact-list.c:322
-msgid "Send a file"
-msgstr "Een bestand versturen"
+#: ../src/empathy-chatrooms-window.glade.h:3
+msgid "Join room on start_up"
+msgstr "Chatruimte binnengaan bij _opstarten"
 
-#: ../libempathy-gtk/gossip-contact-list.c:326
-msgid "View previous conversations with this contact"
-msgstr "Vorige gesprekken met dit contact tonen"
+#: ../src/empathy-chatrooms-window.glade.h:4
+msgid "Join this chat room when Empathy starts and you are connected"
+msgstr "Deze chatruimte binnengaan als Empathy start en u verbonden bent"
 
-#: ../libempathy-gtk/gossip-preferences.c:250
+#: ../src/empathy-chatrooms-window.glade.h:5
+msgid "Manage Favorite Rooms"
+msgstr "Bladwijzers beheren…"
+
+#: ../src/empathy-chatrooms-window.glade.h:6
+msgid "N_ame:"
+msgstr "_Naam:"
+
+#: ../src/empathy-chatrooms-window.glade.h:7
+msgid "S_erver:"
+msgstr "S_erver:"
+
+#: ../src/empathy-chatrooms-window.glade.h:9
+#: ../src/empathy-new-chatroom-dialog.glade.h:9
+msgid "_Room:"
+msgstr "_Ruimte:"
+
+#: ../src/empathy-event-manager.c:166
+#, c-format
+msgid ""
+"New message from %s:\n"
+"%s"
+msgstr ""
+"Nieuw bericht van %s:\n"
+"%s"
+
+#: ../src/empathy-event-manager.c:205
+#, c-format
+msgid "Incoming call from %s"
+msgstr "Binnenkomende oproep van %s"
+
+#: ../src/empathy-event-manager.c:238
+#, c-format
+msgid ""
+"%s is offering you an invitation, but you don't have the needed external "
+"application to handle it."
+msgstr ""
+"U heeft een uitnodiging ontvangen van %s, maar heeft het programma niet om "
+"deze te verwerken."
+
+# Vrij vertaald (Wouter Bolsterlee)
+#: ../src/empathy-event-manager.c:263
+msgid "Invitation Error"
+msgstr "Fout bij uitnodiging"
+
+#: ../src/empathy-event-manager.c:289
+#, c-format
+msgid ""
+"%s is offering you an invitation. An external application will be started to "
+"handle it."
+msgstr ""
+"U heeft een uitnodiging ontvangen van %s. Er zal een programma gestart "
+"worden hiervoor."
+
+#: ../src/empathy-event-manager.c:345
+#, c-format
+msgid "Subscription requested by %s"
+msgstr "Inschrijvingsverzoek van %s"
+
+#: ../src/empathy-event-manager.c:348
+#, c-format
+msgid ""
+"\n"
+"Message: %s"
+msgstr ""
+"\n"
+"Bericht: %s"
+
+#: ../src/empathy-main-window.c:466
+msgid "Show and edit accounts"
+msgstr "Accounts tonen en bewerken"
+
+#: ../src/empathy-main-window.c:836
+msgid "Contact"
+msgstr "Contact"
+
+#: ../src/empathy-main-window.c:1038
+msgid "_Edit account"
+msgstr "Account be_werken"
+
+#: ../src/empathy-main-window.c:1121
+msgid "No error specified"
+msgstr "Geen foutcode gegeven"
+
+#: ../src/empathy-main-window.c:1124
+msgid "Network error"
+msgstr "Netwerkprobleem"
+
+#: ../src/empathy-main-window.c:1127
+msgid "Authentication failed"
+msgstr "Aanmelden mislukt"
+
+#: ../src/empathy-main-window.c:1130
+msgid "Encryption error"
+msgstr "Coderingsfout"
+
+#: ../src/empathy-main-window.c:1133
+msgid "Name in use"
+msgstr "Naam in gebruik"
+
+#: ../src/empathy-main-window.c:1136
+msgid "Certificate not provided"
+msgstr "Geen certificaat gegeven"
+
+#: ../src/empathy-main-window.c:1139
+msgid "Certificate untrusted"
+msgstr "Onbetrouwbaar certificaat"
+
+#: ../src/empathy-main-window.c:1142
+msgid "Certificate expired"
+msgstr "Verlopen certificaat"
+
+#: ../src/empathy-main-window.c:1145
+msgid "Certificate not activated"
+msgstr "Certificaat nog niet geldig"
+
+#: ../src/empathy-main-window.c:1148
+msgid "Certificate hostname mismatch"
+msgstr "Certificaat is niet voor deze server"
+
+#: ../src/empathy-main-window.c:1151
+msgid "Certificate fingerprint mismatch"
+msgstr "Vingerafdruk van certificaat klopt niet"
+
+#: ../src/empathy-main-window.c:1154
+msgid "Certificate self-signed"
+msgstr "Zelfondertekend certificaat"
+
+#: ../src/empathy-main-window.c:1157
+msgid "Certificate error"
+msgstr "Certificaatfout"
+
+#: ../src/empathy-main-window.c:1160
+msgid "Unknown error"
+msgstr "Onbekend probleem"
+
+#: ../src/empathy-main-window.glade.h:1
+msgid "Contact List"
+msgstr "Contactenlijst"
+
+#: ../src/empathy-main-window.glade.h:2
+msgid "Context"
+msgstr "Context"
+
+#: ../src/empathy-main-window.glade.h:3
+msgid "Join _Favorites"
+msgstr "_Bladwijzers openen"
+
+#: ../src/empathy-main-window.glade.h:4
+msgid "Join _New..."
+msgstr "_Nieuw groepsgesprek binnengaan…"
+
+#: ../src/empathy-main-window.glade.h:5
+msgid "Manage Favorites"
+msgstr "Bladwijzers beheren"
+
+#: ../src/empathy-main-window.glade.h:6
+msgid "Show _Offline Contacts"
+msgstr "_Offline contacten tonen"
+
+#: ../src/empathy-main-window.glade.h:7
+msgid "_Accounts"
+msgstr "_Accounts"
+
+#: ../src/empathy-main-window.glade.h:8
+msgid "_Add Contact..."
+msgstr "_Contact toevoegen..."
+
+#: ../src/empathy-main-window.glade.h:13 ../src/empathy-status-icon.glade.h:2
+msgid "_New Conversation..."
+msgstr "_Nieuw gesprek…"
+
+#: ../src/empathy-main-window.glade.h:14
+msgid "_Personal Information"
+msgstr "_Persoonlijke gegevens"
+
+#: ../src/empathy-main-window.glade.h:16
+msgid "_Room"
+msgstr "_Ruimte"
+
+#: ../src/empathy-new-chatroom-dialog.c:290
+msgid "Chat Rooms"
+msgstr "Chatruimtes"
+
+#: ../src/empathy-new-chatroom-dialog.glade.h:2
+msgid "Browse:"
+msgstr "Bladeren:"
+
+#: ../src/empathy-new-chatroom-dialog.glade.h:3
+msgid ""
+"Enter the room name to join here or click on one or more rooms in the list."
+msgstr ""
+"Vul hier de naam van de chatruimte in of kies een chatruimte uit de lijst."
+
+#: ../src/empathy-new-chatroom-dialog.glade.h:4
+msgid ""
+"Enter the server which hosts the room, or leave it empty if the room is on "
+"the current account's server"
+msgstr ""
+"Geef de naam van de server waar deze chatruimte zich op bevindt, of laat "
+"leeg wanneer de ruimte zich op de huidige server bevindt."
+
+#: ../src/empathy-new-chatroom-dialog.glade.h:5
+msgid "Join"
+msgstr "_Binnengaan"
+
+# Vrij vertaald (Wouter Bolsterlee)
+#: ../src/empathy-new-chatroom-dialog.glade.h:6
+msgid "Join New"
+msgstr "Nieuw groepsgesprek"
+
+#: ../src/empathy-new-chatroom-dialog.glade.h:7
+msgid "Re_fresh"
+msgstr "Ver_versen"
+
+#: ../src/empathy-new-chatroom-dialog.glade.h:8
+msgid ""
+"This list represents all chat rooms hosted on the server you have entered."
+msgstr ""
+"Deze lijst toont alle chatruimtes op de server waarmee u verbonden bent."
+
+#: ../src/empathy-preferences.c:264
 msgid "Language"
 msgstr "Taal"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:1
+#: ../src/empathy-preferences.glade.h:1
 msgid "<b>Appearance</b>"
 msgstr "<b>Uiterlijk</b>"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:2
+#. To translators: Audio notifications preferences
+#: ../src/empathy-preferences.glade.h:3
 msgid "<b>Audio</b>"
 msgstr "<b>Geluid</b>"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:3
+#: ../src/empathy-preferences.glade.h:4
 msgid "<b>Behaviour</b>"
 msgstr "<b>Gedrag</b>"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:4
-#, fuzzy
+#: ../src/empathy-preferences.glade.h:5
 msgid "<b>Contact List</b>"
-msgstr "<b>Verbinding</b>"
+msgstr "<b>COntactenlijst</b>"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:5
-msgid "<b>Languages</b>"
-msgstr "<b>Talen</b>"
+#: ../src/empathy-preferences.glade.h:6
+msgid "<b>Enable spell checking for languages:</b>"
+msgstr "<b>Spellingscontrole gebruiken voor de talen:</b>"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:6
-msgid "<b>Options</b>"
-msgstr "<b>Opties</b>"
-
-#: ../libempathy-gtk/gossip-preferences.glade.h:7
+#. To translators: Visual notifications preferences, like notify bubbles, etc.
+#: ../src/empathy-preferences.glade.h:8
 msgid "<b>Visual</b>"
 msgstr "<b>Visueel</b>"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:8
+#: ../src/empathy-preferences.glade.h:9
 msgid ""
 "<small>The list of languages reflects only the languages for which you have "
 "a dictionary installed.</small>"
@@ -768,157 +1725,246 @@ msgstr ""
 "<small>Bovenstaande lijst met talen toont alleen de talen waarvoor u een "
 "woordenboek heeft geïnstalleerd.</small>"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:9
+#: ../src/empathy-preferences.glade.h:10
+msgid "Automatically _connect on startup "
+msgstr "Automatisch _verbinden bij opstarten "
+
+#: ../src/empathy-preferences.glade.h:11
 msgid "Avatars are user chosen images shown in the contact list"
 msgstr ""
 "Gebruikersafbeeldingen zijn door de gebruiker gekozen afbeeldingen die in de "
-"contactlijst en in chatvensters getoond worden"
+"contactenlijst en in chatvensters getoond worden"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:10
+#: ../src/empathy-preferences.glade.h:12
 msgid "Chat Th_eme:"
 msgstr "_Chatthema:"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:11
+#: ../src/empathy-preferences.glade.h:13
 msgid "Display notifications when contacts come _online"
 msgstr "_Notificatiebericht tonen als contacten online komen"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:12
+#: ../src/empathy-preferences.glade.h:14
 msgid "Enable sounds when _away"
 msgstr "Geluid afspelen indien _afwezig"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:13
+#: ../src/empathy-preferences.glade.h:15
 msgid "Enable sounds when _busy"
 msgstr "Geluid afspelen indien _bezig"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:14
+#: ../src/empathy-preferences.glade.h:16
 msgid "General"
 msgstr "Algemeen"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:15
+#: ../src/empathy-preferences.glade.h:17
 msgid "Notifications"
 msgstr "Notificatieberichten"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:16
+#: ../src/empathy-preferences.glade.h:18
 msgid "Preferences"
 msgstr "Voorkeuren"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:17
+#: ../src/empathy-preferences.glade.h:19
 msgid "Show _avatars"
 msgstr "_Gebruikersafbeeldingen tonen"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:18
+#: ../src/empathy-preferences.glade.h:20
 msgid "Show _smileys as images"
 msgstr "_Smileys tonen"
 
 # Vrij vertaald (Wouter Bolsterlee)
-#: ../libempathy-gtk/gossip-preferences.glade.h:19
+#: ../src/empathy-preferences.glade.h:21
 msgid "Show co_mpact contact list"
-msgstr "Contactlijst co_mpact maken"
+msgstr "Contactenlijst co_mpact maken"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:20
+#: ../src/empathy-preferences.glade.h:22
 msgid "Sort by _name"
-msgstr ""
+msgstr "Op _naam sorteren"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:21
+#: ../src/empathy-preferences.glade.h:23
 msgid "Sort by s_tate"
-msgstr ""
+msgstr "Op _status sorteren"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:22
+#: ../src/empathy-preferences.glade.h:24
 msgid "Spell Checking"
 msgstr "Spellingchecker"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:23
+#: ../src/empathy-preferences.glade.h:25
 msgid "Themes"
 msgstr "Thema's"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:24
-msgid "_Enable spell checking"
-msgstr "_Spellingchecker inschakelen"
-
-#: ../libempathy-gtk/gossip-preferences.glade.h:25
+#: ../src/empathy-preferences.glade.h:26
 msgid "_Open new chats in separate windows"
 msgstr "_Nieuwe chats in eigen vensters openen"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:26
+#: ../src/empathy-preferences.glade.h:27
 msgid "_Play sound when messages arrive"
 msgstr "_Geluid afspelen bij nieuwe berichten"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:27
-msgid "_Use for chat rooms"
-msgstr "Voor chatruimtes _gebruiken"
+#: ../src/empathy-status-icon.glade.h:1
+msgid "Status"
+msgstr "Status"
 
-#: ../libempathy-gtk/gossip-presence-chooser.c:702
-msgid "Custom message..."
-msgstr "Aangepast bericht…"
+#: ../src/empathy-status-icon.glade.h:3
+msgid "_Quit"
+msgstr "_Afsluiten"
 
-#. Clear list
-#: ../libempathy-gtk/gossip-presence-chooser.c:724
-msgid "Clear List..."
-msgstr "Lijst wissen…"
+#: ../src/empathy-status-icon.glade.h:4
+msgid "_Show Contact List"
+msgstr "Contactenlijst _tonen"
 
-#: ../libempathy-gtk/gossip-presence-chooser.c:803
-msgid "Are you sure you want to clear the list?"
-msgstr "Weet u zeker dat u de lijst wilt wissen?"
+#~ msgid "Instant Messenger"
+#~ msgstr "Instant Messenger"
 
-#: ../libempathy-gtk/gossip-presence-chooser.c:807
-msgid ""
-"This will remove any custom messages you have added to the list of preset "
-"status messages."
-msgstr ""
-"Hiermee verwijdert u alle aangepaste statusberichten die u eerder aan de "
-"lijst heeft toegevoegd."
-
-#: ../libempathy-gtk/gossip-presence-chooser.c:812
-msgid "Clear List"
-msgstr "Wissen"
-
-#: ../libempathy-gtk/gossip-presence-chooser.glade.h:1
-msgid "Enter status message:"
-msgstr "Geef een statusbericht:"
-
-#: ../libempathy-gtk/gossip-presence-chooser.glade.h:2
-msgid "Status Message Presets"
-msgstr "Opgeslagen statusberichten"
-
-#: ../libempathy-gtk/gossip-presence-chooser.glade.h:3
-msgid "_Add to status message list"
-msgstr "_Aan statusberichten toevoegen"
-
-#: ../libempathy-gtk/gossip-private-chat.c:198
-#, c-format
-msgid "%s went offline"
-msgstr "%s ging offline"
-
-#: ../libempathy-gtk/gossip-private-chat.c:212
-#, c-format
-msgid "%s has come online"
-msgstr "%s is nu online"
-
-#: ../libempathy-gtk/gossip-theme-manager.c:87
-msgid "Classic"
-msgstr "Klassiek"
-
-#: ../libempathy-gtk/gossip-theme-manager.c:88
-msgid "Simple"
-msgstr "Simpel"
-
-# Dichterlijke vrijheid (Wouter Bolsterlee)
-#: ../libempathy-gtk/gossip-theme-manager.c:89
-msgid "Clean"
-msgstr "Helder"
-
-#: ../libempathy-gtk/gossip-theme-manager.c:90
-msgid "Blue"
-msgstr "Blauw"
-
-#: ../src/empathy-main.c:145
-msgid "Don't connect on startup"
-msgstr "Niet verbinden bij opstarten"
-
-#: ../src/empathy-main.c:155
 #, fuzzy
-msgid "- Empathy Instant Messenger"
-msgstr "- Gossip Instant Messenger"
+#~ msgid "Contact List - Empathy"
+#~ msgstr "Contactenlijst - Empathy"
+
+#~ msgid "_New Message..."
+#~ msgstr "_Nieuw bericht..."
+
+#, fuzzy
+#~ msgid "Disable"
+#~ msgstr "Beschikbaar"
+
+# Vrij vertaald (Wouter Bolsterlee)
+#~ msgid ""
+#~ "To add a new account, you can click on the 'Add' button and a new entry "
+#~ "will be created for you to start configuring.\n"
+#~ "\n"
+#~ "If you do not want to add an account, simply click on the account you "
+#~ "want to configure in the list on the left."
+#~ msgstr ""
+#~ "U kunt de knop ‘Toevoegen’ gebruiken om een nieuw account toe te voegen "
+#~ "en in te stellen.\n"
+#~ "\n"
+#~ "Om bestaande accountgegevens te veranderen u een account uit de lijst aan "
+#~ "de linkerzijde kiezen."
+
+#~ msgid "<b>No Accounts Configured</b>"
+#~ msgstr "<b>Geen accounts ingesteld</b>"
+
+# Vrij vertaald (Wouter Bolsterlee)
+#~ msgid ""
+#~ "To add a new account, you can click on the 'Add' button and a new entry "
+#~ "will be created for you to start configuring."
+#~ msgstr ""
+#~ "U kunt de knop ‘Toevoegen’ gebruiken om een nieuw account toe te voegen "
+#~ "en in te stellen."
+
+#~ msgid "<b>Account</b>"
+#~ msgstr "<b>Account</b>"
+
+#~ msgid "A unique name for this account to identify it personally to you."
+#~ msgstr ""
+#~ "Een unieke naam voor dit account om het voor u persoonlijk herkenbaar te "
+#~ "maken."
+
+#~ msgid "Imendio "
+#~ msgstr "Imendio "
+
+#~ msgid ""
+#~ "To add a new account, you can click on the 'Add' button and a new entry "
+#~ "will be created for you to started configuring.\n"
+#~ "\n"
+#~ "If you do not want to add an account, simply click on the account you "
+#~ "want to configure in the list on the left."
+#~ msgstr ""
+#~ "U kunt de knop ‘Toevoegen’ gebruiken om een nieuw account toe te voegen "
+#~ "en in te stellen.\n"
+#~ "\n"
+#~ "Om bestaande accountgegevens te veranderen u een account uit de lijst aan "
+#~ "de linkerzijde kiezen."
+
+#~ msgid "jabber account settings"
+#~ msgstr "jabber-accountgegevens"
+
+#~ msgid "Change _Topic..."
+#~ msgstr "_Onderwerp instellen…"
+
+#~ msgid "Contact Infor_mation"
+#~ msgstr "Contactinfor_matie"
+
+#~ msgid "Cu_t"
+#~ msgstr "K_nippen"
+
+#~ msgid "In_vite..."
+#~ msgstr "_Uitnodigen…"
+
+#~ msgid "_Add To Favorites"
+#~ msgstr "_Aan bladwijzers toevoegen"
+
+#~ msgid "_Copy"
+#~ msgstr "_Kopiëren"
+
+#~ msgid "_Paste"
+#~ msgstr "_Plakken"
+
+#~ msgid "_Show Contacts"
+#~ msgstr "C_ontactenlijst tonen"
+
+#~ msgid "Chat Room"
+#~ msgstr "Chatruimte"
+
+#~ msgid "View contact information"
+#~ msgstr "Contactinformatie tonen"
+
+#~ msgid "Re_name"
+#~ msgstr "Her_noemen"
+
+#~ msgid "Edit the groups and name for this contact"
+#~ msgstr "Groepen en naam voor dit contact bewerken"
+
+#~ msgid "Invite to a currently open chat room"
+#~ msgstr "In een geopende chatruimte uitnodigen"
+
+#~ msgid "_Send File..."
+#~ msgstr "Be_stand versturen…"
+
+#~ msgid "View previous conversations with this contact"
+#~ msgstr "Vorige gesprekken met dit contact tonen"
+
+#~ msgid "<b>Languages</b>"
+#~ msgstr "<b>Talen</b>"
+
+#~ msgid "<b>Options</b>"
+#~ msgstr "<b>Opties</b>"
+
+#~ msgid "_Enable spell checking"
+#~ msgstr "_Spellingchecker inschakelen"
+
+#~ msgid "_Use for chat rooms"
+#~ msgstr "Voor chatruimtes _gebruiken"
+
+#~ msgid "Clear List..."
+#~ msgstr "Lijst wissen…"
+
+#~ msgid "Are you sure you want to clear the list?"
+#~ msgstr "Weet u zeker dat u de lijst wilt wissen?"
+
+#~ msgid ""
+#~ "This will remove any custom messages you have added to the list of preset "
+#~ "status messages."
+#~ msgstr ""
+#~ "Hiermee verwijdert u alle aangepaste statusberichten die u eerder aan de "
+#~ "lijst heeft toegevoegd."
+
+#~ msgid "Clear List"
+#~ msgstr "Wissen"
+
+#~ msgid "Enter status message:"
+#~ msgstr "Geef een statusbericht:"
+
+#~ msgid "Status Message Presets"
+#~ msgstr "Opgeslagen statusberichten"
+
+#~ msgid "_Add to status message list"
+#~ msgstr "_Aan statusberichten toevoegen"
+
+#~ msgid "%s went offline"
+#~ msgstr "%s ging offline"
+
+#~ msgid "%s has come online"
+#~ msgstr "%s is nu online"
 
 #~ msgid "Gossip Instant Messenger"
 #~ msgstr "Gossip Instant Messenger"
@@ -926,17 +1972,11 @@ msgstr "- Gossip Instant Messenger"
 #~ msgid "Normal"
 #~ msgstr "Normaal"
 
-#~ msgid "Joining"
-#~ msgstr "Verbinden…"
-
 #~ msgid "Active"
 #~ msgstr "Actief"
 
 #~ msgid "Inactive"
 #~ msgstr "Niet actief"
-
-#~ msgid "Unknown"
-#~ msgstr "Onbekend"
 
 #~ msgid "Error"
 #~ msgstr "Fout"
@@ -1018,9 +2058,6 @@ msgstr "- Gossip Instant Messenger"
 #~ msgid "Connection timed out."
 #~ msgstr "Er kan geen verbinding gemaakt worden."
 
-#~ msgid "Authentication failed."
-#~ msgstr "Aanmelden mislukt."
-
 #~ msgid "The username you are trying already exists."
 #~ msgstr "Deze gebruikersnaam is al in gebruik."
 
@@ -1035,9 +2072,6 @@ msgstr "- Gossip Instant Messenger"
 
 #~ msgid "A specific protocol error occurred that was unexpected."
 #~ msgstr "Er is een onverwachtse protocolfout opgetreden."
-
-#~ msgid "new account"
-#~ msgstr "nieuw account"
 
 #~ msgid "Home"
 #~ msgstr "Thuis"
@@ -1078,9 +2112,6 @@ msgstr "- Gossip Instant Messenger"
 
 #~ msgid "There was an internal service error"
 #~ msgstr "Er is een interne fout opgetreden"
-
-#~ msgid "This feature is not implemented"
-#~ msgstr "Deze functie is niet geïmplementeerd."
 
 # Vrij vertaald (Wouter Bolsterlee)
 #~ msgid "The remote service timed out"
@@ -1133,16 +2164,8 @@ msgstr "- Gossip Instant Messenger"
 #~ msgid "Information requested, please wait..."
 #~ msgstr "Informatie opgevraagd, even geduld..."
 
-#~ msgid "I would like to add you to my contact list."
-#~ msgstr "Ik wil je graag toevoegen aan mijn contactlijst."
-
 #~ msgid "To summarize:"
 #~ msgstr "Samengevat:"
-
-#~ msgid "%d new message"
-#~ msgid_plural "%d new messages"
-#~ msgstr[0] "%d nieuw bericht"
-#~ msgstr[1] "%d nieuwe berichten"
 
 #~ msgid "%d subscription request"
 #~ msgid_plural "%d subscription requests"
@@ -1195,20 +2218,11 @@ msgstr "- Gossip Instant Messenger"
 #~ msgid "Edit Account _Details"
 #~ msgstr "Accountgegevens _bewerken"
 
-#~ msgid "Click to enlarge"
-#~ msgstr "Klik om te vergroten"
-
-#~ msgid "Word"
-#~ msgstr "Woord"
-
 #~ msgid "Select who would you like to invite to room:"
 #~ msgstr "Kies wie u wilt uitnodigen in deze ruimte:"
 
 #~ msgid "Select which room you would like to invite:"
 #~ msgstr "Kies welke ruimte u wilt uitnodigen:"
-
-#~ msgid "New message from %s"
-#~ msgstr "Nieuw bericht van %s"
 
 #~ msgid "Your invitation has been declined"
 #~ msgstr "Uw uitnodiging is geweigerd."
@@ -1219,33 +2233,12 @@ msgstr "- Gossip Instant Messenger"
 #~ msgid "Decline"
 #~ msgstr "Weigeren"
 
-#~ msgid "Name"
-#~ msgstr "Naam"
-
-#~ msgid "Room"
-#~ msgstr "Ruimte"
-
-#~ msgid "Server"
-#~ msgstr "Server"
-
-#~ msgid "Auto Connect"
-#~ msgstr "Automatisch verbinden"
-
-#~ msgid "Information requested..."
-#~ msgstr "Informatie opgevraagd…"
-
-#~ msgid "Do you want to remove this contact from your roster?"
-#~ msgstr "Wilt u dit contact echt uit de contactlijst verwijderen?"
-
 #~ msgid ""
 #~ "Please enter a new name for the group:\n"
 #~ "%s"
 #~ msgstr ""
 #~ "Vul een nieuwe naam in voor de groep\n"
 #~ "%s"
-
-#~ msgid "Select"
-#~ msgstr "Selecteren"
 
 #~ msgid "Unsorted"
 #~ msgstr "Ongesorteerd"
@@ -1285,9 +2278,6 @@ msgstr "- Gossip Instant Messenger"
 #~ msgid "Select a file"
 #~ msgstr "Bestand selecteren"
 
-#~ msgid "Connecting..."
-#~ msgstr "Verbinden..."
-
 # Vrij vertaald (Wouter Bolsterlee)
 #~ msgid "Retry connection"
 #~ msgstr "Opnieuw verbinding maken"
@@ -1301,32 +2291,14 @@ msgstr "- Gossip Instant Messenger"
 #~ msgid "Enter the new topic you want to set for this room:"
 #~ msgstr "Geef een nieuw onderwerp dat u voor deze chatruime wilt instellen:"
 
-#~ msgid "%s has joined the room"
-#~ msgstr "%s is de chatruimte binnengekomen"
-
-#~ msgid "%s has left the room"
-#~ msgstr "%s heeft de chatruimte verlaten"
-
-#~ msgid "Topic: %s"
-#~ msgstr "Onderwerp: %s"
-
-#~ msgid "Account"
-#~ msgstr "Account"
-
 #~ msgid "Conversation With"
 #~ msgstr "Gesprek met"
-
-#~ msgid "Date"
-#~ msgstr "Datum"
 
 #~ msgid "Allow multiple instances of the application to run at the same time"
 #~ msgstr "Meerdere keren opstarten van deze applicatie toestaan"
 
 #~ msgid "List the available accounts"
 #~ msgstr "Beschikbare accounts tonen"
-
-#~ msgid "Which account to connect to on startup"
-#~ msgstr "Met dit account verbinden bij opstarten"
 
 #~ msgid "ACCOUNT-NAME"
 #~ msgstr "ACCOUNTNAAM"
@@ -1346,14 +2318,8 @@ msgstr "- Gossip Instant Messenger"
 #~ msgid "There is no account with the name '%s'."
 #~ msgstr "Er is geen account met de naam ‘%s’."
 
-#~ msgid "Join"
-#~ msgstr "_Binnengaan"
-
 #~ msgid "Create"
 #~ msgstr "Aanmaken"
-
-#~ msgid "Chat Rooms"
-#~ msgstr "Chatruimtes"
 
 #~ msgid "Found %d conference rooms"
 #~ msgstr "%d chatruimtes gevonden"
@@ -1371,19 +2337,13 @@ msgstr "- Gossip Instant Messenger"
 #~ msgstr "Chatten"
 
 #~ msgid "%s wants to be added to your contact list."
-#~ msgstr "%s wil aan uw contactlijst worden toegevoegd."
+#~ msgstr "%s wil aan uw contactenlijst worden toegevoegd."
 
 #~ msgid "Someone wants to be added to your contact list."
-#~ msgstr "Iemand wil aan de contactlijst worden toegevoegd."
-
-#~ msgid "Subscription request"
-#~ msgstr "Inschrijvingsverzoek"
+#~ msgstr "Iemand wil aan de contactenlijst worden toegevoegd."
 
 #~ msgid "Show"
 #~ msgstr "Tonen"
-
-#~ msgid "Contact Information"
-#~ msgstr "Contactinformatie"
 
 #~ msgid "Contact has been removed"
 #~ msgstr "Het contact is verwijderd."
@@ -1391,17 +2351,14 @@ msgstr "- Gossip Instant Messenger"
 #~ msgid "Subject: %s"
 #~ msgstr "Onderwerp: %s"
 
-#~ msgid "Suggestions for the word"
-#~ msgstr "Suggesties voor dit woord"
-
 #~ msgid "New subscription request from %s"
 #~ msgstr "Nieuw inschrijvingsverzoek van %s"
 
 #~ msgid "Do you want to add this person to your contact list?"
-#~ msgstr "Wilt u deze persoon aan de contactlijst toevoegen?"
+#~ msgstr "Wilt u deze persoon aan de contactenlijst toevoegen?"
 
 #~ msgid "Do you want to add %s to your contact list?"
-#~ msgstr "Wilt u %s aan de contactlijst toevoegen?"
+#~ msgstr "Wilt u %s aan de contactenlijst toevoegen?"
 
 #~ msgid "Please enter your %s account password"
 #~ msgstr "Geef uw wachtwoord voor account ‘%s’:"
@@ -1417,12 +2374,6 @@ msgstr "- Gossip Instant Messenger"
 
 #~ msgid "Could not display the help contents."
 #~ msgstr "De hulptekst kan niet worden weergegeven."
-
-#~ msgid "Select Your Avatar Image"
-#~ msgstr "Kies uw gebruikersafbeelding"
-
-#~ msgid "No Image"
-#~ msgstr "Geen afbeelding"
 
 #~ msgid "Cancel"
 #~ msgstr "Annuleren"
@@ -1445,9 +2396,6 @@ msgstr "- Gossip Instant Messenger"
 #~ msgid "Contact goes online"
 #~ msgstr "Contact komt online"
 
-#~ msgid "Contact ID:"
-#~ msgstr "Contact ID:"
-
 #~ msgid "Do you want to accept this file?"
 #~ msgstr "Wilt u dit bestand accepteren?"
 
@@ -1466,83 +2414,14 @@ msgstr "- Gossip Instant Messenger"
 #~ msgid "This person wishes to send you this file:"
 #~ msgstr "Deze persoon wil u dit bestand toe sturen:"
 
-#~ msgid "Web site:"
-#~ msgstr "Website:"
-
 #~ msgid "_Accept"
 #~ msgstr "_Accepteren"
-
-#~ msgid "_Deny"
-#~ msgstr "_Weigeren"
-
-#~ msgid "<b>Topic:</b>"
-#~ msgstr "<b>Onderwerp:</b>"
-
-#~ msgid "Account:"
-#~ msgstr "Account:"
-
-#~ msgid "Browse:"
-#~ msgstr "Bladeren:"
-
-#~ msgid "Edit Favorite Room"
-#~ msgstr "Bladwijzer bewerken"
-
-#~ msgid ""
-#~ "Enter the room name to join here or click on one or more rooms in the "
-#~ "list."
-#~ msgstr ""
-#~ "Vul hier de naam van de chatruimte in of kies een chatruimte uit de lijst."
-
-#~ msgid "Group Chat"
-#~ msgstr "Chatten"
-
-# Vrij vertaald (Wouter Bolsterlee)
-#~ msgid "Join New"
-#~ msgstr "Nieuw groepsgesprek"
-
-#~ msgid "Join room on start_up"
-#~ msgstr "Chatruimte binnengaan bij _opstarten"
-
-#~ msgid "Join this chat room when Gossip starts and you are connected"
-#~ msgstr "Deze chatruimte binnengaan als Gossip start en u verbonden bent"
-
-#~ msgid "Manage Favorite Rooms"
-#~ msgstr "Bladwijzers beheren…"
-
-#~ msgid "N_ame:"
-#~ msgstr "_Naam:"
-
-#~ msgid "Re_fresh"
-#~ msgstr "Ver_versen"
-
-#~ msgid "S_erver:"
-#~ msgstr "S_erver:"
-
-#~ msgid ""
-#~ "This list represents all chat rooms hosted on the server you have entered."
-#~ msgstr ""
-#~ "Deze lijst toont alle chatruimtes op de server waarmee u verbonden bent."
-
-#~ msgid "_Nickname:"
-#~ msgstr "_Bijnaam:"
-
-#~ msgid "_Room:"
-#~ msgstr "_Ruimte:"
 
 #~ msgid "-"
 #~ msgstr "-"
 
 #~ msgid "<b>About</b>"
 #~ msgstr "<b>Over</b>"
-
-#~ msgid "<b>Client Information</b>"
-#~ msgstr "<b>Clientinformatie</b>"
-
-#~ msgid "<b>Groups</b>"
-#~ msgstr "<b>Groepen</b>"
-
-#~ msgid "<b>Name</b>"
-#~ msgstr "<b>Naam</b>"
 
 #~ msgid "<b>Personal Details</b>"
 #~ msgstr "<b>Persoonlijke details</b>"
@@ -1563,24 +2442,8 @@ msgstr "- Gossip Instant Messenger"
 #~ msgid "Add Contact"
 #~ msgstr "Contact toevoegen"
 
-#~ msgid "Alia_s:"
-#~ msgstr "Alia_s:"
-
-# hier geen 'gebruikersafbeelding', want dat is te groot (Wouter Bolsterlee)
-#~ msgid "Avatar:"
-#~ msgstr "Afbeelding:"
-
-#~ msgid "Birthday:"
-#~ msgstr "Verjaardag:"
-
 #~ msgid "C_hange"
 #~ msgstr "_Wijzigen"
-
-#~ msgid "Ch_at"
-#~ msgstr "Ch_atten"
-
-#~ msgid "Client:"
-#~ msgstr "Client:"
 
 #~ msgid "Con_tact:"
 #~ msgstr "Con_tact"
@@ -1594,17 +2457,11 @@ msgstr "- Gossip Instant Messenger"
 #~ msgid "Country:"
 #~ msgstr "Land:"
 
-#~ msgid "Decide _Later"
-#~ msgstr "_Later besluiten"
-
 #~ msgid "Edit Contact"
 #~ msgstr "Contact bewerken"
 
 #~ msgid "Edit Groups"
 #~ msgstr "Groepen bewerken"
-
-#~ msgid "Email:"
-#~ msgstr "E-mail:"
 
 #~ msgid "ID:"
 #~ msgstr "ID:"
@@ -1618,24 +2475,11 @@ msgstr "- Gossip Instant Messenger"
 #~ msgid "Name:"
 #~ msgstr "Naam:"
 
-#~ msgid "OS:"
-#~ msgstr "OS:"
-
 #~ msgid "Personal Details"
 #~ msgstr "Persoonlijke details"
 
 #~ msgid "R_egister"
 #~ msgstr "R_egistreren"
-
-#~ msgid "Search"
-#~ msgstr "Zoeken"
-
-#~ msgid ""
-#~ "Select the groups you want this contact to appear in, you can select more "
-#~ "than one group or no groups."
-#~ msgstr ""
-#~ "Selecteer de groepen waar u dit contact in wilt plaatsen. U kunt meerdere "
-#~ "of zelfs geen groepen kiezen."
 
 #~ msgid ""
 #~ "Set the alias you want to use for:\n"
@@ -1648,27 +2492,18 @@ msgstr "- Gossip Instant Messenger"
 #~ "\n"
 #~ "Contactinformatie kan van de server opgevraagd worden."
 
-#~ msgid "Spell Checker"
-#~ msgstr "Spellingchecker"
-
-#~ msgid "Subscription Request"
-#~ msgstr "Inschrijvingsverzoek"
-
-#~ msgid "Suggestions for the word:"
-#~ msgstr "Suggesties voor dit woord:"
-
 #~ msgid ""
 #~ "This acts as a filter to the contact list below. You can use segments of "
 #~ "contact's name or ID, for example, \"jabber.org\" will list everyone "
 #~ "using that server"
 #~ msgstr ""
-#~ "Dit werkt als een filter voor de contactlijst hieronder. U kunt delen van "
-#~ "de naam of het ID van een contact invullen. Voorbeeld: ‘jabber.org’ toont "
-#~ "iedereen op die server."
+#~ "Dit werkt als een filter voor de contactenlijst hieronder. U kunt delen "
+#~ "van de naam of het ID van een contact invullen. Voorbeeld: ‘jabber.org’ "
+#~ "toont iedereen op die server."
 
 #~ msgid "This is the name that will be used on your roster for this contact"
 #~ msgstr ""
-#~ "Dit is de naam die voor dit contact getoond wordt in uw contactlijst"
+#~ "Dit is de naam die voor dit contact getoond wordt in uw contactenlijst"
 
 #~ msgid "This name will be used to identify you in chat windows"
 #~ msgstr ""
@@ -1688,15 +2523,6 @@ msgstr "- Gossip Instant Messenger"
 #~ msgid "Use system pro_xy"
 #~ msgstr "Systeempro_xy gebruiken"
 
-#~ msgid "Version:"
-#~ msgstr "Versie:"
-
-#~ msgid "View Previous Conversations"
-#~ msgstr "Vorige gesprekken tonen"
-
-#~ msgid "Which account do you want to use?"
-#~ msgstr "Welk account wilt u gebruiken?"
-
 #~ msgid "You are not subscribed to this contact."
 #~ msgstr "U bent niet ingeschreven voor dit contact."
 
@@ -1712,18 +2538,9 @@ msgstr "- Gossip Instant Messenger"
 #~ msgid "_Disconnect"
 #~ msgstr "Verbinding ver_breken"
 
-#~ msgid "_Email:"
-#~ msgstr "_E-mail:"
-
 #~ msgid ""
 #~ "_Enter the name or contact ID of the person you want to chat to below:"
 #~ msgstr "_Vul de naam of het adres in van de persoon met wie u wilt chatten:"
-
-#~ msgid "_For:"
-#~ msgstr "_Voor:"
-
-#~ msgid "_Full Name:"
-#~ msgstr "_Volledige naam:"
 
 #~ msgid "_Group:"
 #~ msgstr "_Groep:"
@@ -1733,9 +2550,6 @@ msgstr "- Gossip Instant Messenger"
 
 #~ msgid "_Password:"
 #~ msgstr "_Wachtwoord:"
-
-#~ msgid "_Quit Message:"
-#~ msgstr "Bericht bij afsl_uiten:"
 
 #~ msgid "_Retrieve"
 #~ msgstr "Op_vragen"
@@ -1780,9 +2594,6 @@ msgstr "- Gossip Instant Messenger"
 
 #~ msgid "Group:"
 #~ msgstr "Groep:"
-
-#~ msgid "Nickname:"
-#~ msgstr "Bijnaam:"
 
 #~ msgid "Web Site:"
 #~ msgstr "Website:"
@@ -1847,9 +2658,6 @@ msgstr "- Gossip Instant Messenger"
 #~ msgid "Connection Details"
 #~ msgstr "Verbindingsgegevens"
 
-#~ msgid "Do you already have an account set up on a server?"
-#~ msgstr "Heeft u al een account op een Jabber-server?"
-
 #~ msgid "Enter a name for this account"
 #~ msgstr "Geef een naam voor dit account"
 
@@ -1905,9 +2713,6 @@ msgstr "- Gossip Instant Messenger"
 #~ "U kunt dit leeglaten als u niet wilt dat uw wachtwoord op een gedeelde "
 #~ "computer opgeslagen wordt. U wordt dan wel iedere keer om uw wachtwoord "
 #~ "gevraagd bij het maken van een verbinding."
-
-#~ msgid "Port:"
-#~ msgstr "Poort:"
 
 #~ msgid "Registering Account"
 #~ msgstr "Bezig met accountregistratie"
@@ -1969,3 +2774,1431 @@ msgstr "- Gossip Instant Messenger"
 
 #~ msgid "_Yes"
 #~ msgstr "_Ja"
+
+#~ msgid "Afar"
+#~ msgstr "Afar, Hamitisch"
+
+#~ msgid "Abkhazian"
+#~ msgstr "Abchazisch"
+
+#~ msgid "Achinese"
+#~ msgstr "Achinees"
+
+#~ msgid "Acoli"
+#~ msgstr "Acholi"
+
+#~ msgid "Adangme"
+#~ msgstr "Adangme"
+
+#~ msgid "Adyghe; Adygei"
+#~ msgstr "Adyghe, Circassisch"
+
+#~ msgid "Afro-Asiatic (Other)"
+#~ msgstr "Afro-Aziatisch (Overige)"
+
+#~ msgid "Afrihili"
+#~ msgstr "Afrihili"
+
+#~ msgid "Afrikaans"
+#~ msgstr "Afrikaans"
+
+#~ msgid "Ainu"
+#~ msgstr "Ainu"
+
+#~ msgid "Akan"
+#~ msgstr "Akaans"
+
+#~ msgid "Akkadian"
+#~ msgstr "Akkadiaans"
+
+#~ msgid "Albanian"
+#~ msgstr "Albanees"
+
+#~ msgid "Aleut"
+#~ msgstr "Aleut"
+
+#~ msgid "Algonquian languages"
+#~ msgstr "Algonquiaanse talen"
+
+#~ msgid "Southern Altai"
+#~ msgstr "Zuid-Altai"
+
+#~ msgid "Amharic"
+#~ msgstr "Amhaars, Amharisch"
+
+#~ msgid "English, Old (ca. 450-1100)"
+#~ msgstr "Engels, Oud (ca.450-1100)"
+
+#~ msgid "Angika"
+#~ msgstr "Angikaans"
+
+#~ msgid "Apache languages"
+#~ msgstr "Apache-talen"
+
+#~ msgid "Official Aramaic (700-300 BCE); Imperial Aramaic (700-300 BCE)"
+#~ msgstr ""
+#~ "Officiëel Aramees (700-300 v.Chr.); Keizerlijk Aramees (700-300 v.Chr.)"
+
+#~ msgid "Aragonese"
+#~ msgstr "Aragonees"
+
+#~ msgid "Mapudungun; Mapuche"
+#~ msgstr "Mapudungun; Mapuche"
+
+#~ msgid "Arapaho"
+#~ msgstr "Arapaho"
+
+#~ msgid "Artificial (Other)"
+#~ msgstr "Kunstmatig (Overige)"
+
+#~ msgid "Arawak"
+#~ msgstr "Arawak"
+
+#~ msgid "Assamese"
+#~ msgstr "Assamees, Assami"
+
+#~ msgid "Asturian; Bable; Leonese; Asturleonese"
+#~ msgstr "Asturisch; Bable; Leonees; Astur-Leonees"
+
+#~ msgid "Athapascan languages"
+#~ msgstr "Athabaskaanse talen"
+
+#~ msgid "Australian languages"
+#~ msgstr "Australische talen"
+
+#~ msgid "Avaric"
+#~ msgstr "Avaars, Awari"
+
+#~ msgid "Avestan"
+#~ msgstr "Avestisch"
+
+#~ msgid "Awadhi"
+#~ msgstr "Awadhi"
+
+#~ msgid "Aymara"
+#~ msgstr "Aymara"
+
+#~ msgid "Azerbaijani"
+#~ msgstr "Azeri, Azerbeidzjaans"
+
+#~ msgid "Banda languages"
+#~ msgstr "Banda-talen"
+
+#~ msgid "Bamileke languages"
+#~ msgstr "Bamileek-talen"
+
+#~ msgid "Bashkir"
+#~ msgstr "Basjkiers, Basjkirisch"
+
+#~ msgid "Baluchi"
+#~ msgstr "Balutsji, Baluchi"
+
+#~ msgid "Bambara"
+#~ msgstr "Bambara"
+
+#~ msgid "Balinese"
+#~ msgstr "Balinees"
+
+#~ msgid "Basque"
+#~ msgstr "Baskisch"
+
+#~ msgid "Basa"
+#~ msgstr "Basa"
+
+#~ msgid "Baltic (Other)"
+#~ msgstr "Baltisch (Overige)"
+
+#~ msgid "Beja; Bedawiyet"
+#~ msgstr "Bejaans; Bedawiaans"
+
+#~ msgid "Belarusian"
+#~ msgstr "Wit-Russisch, Belarussisch"
+
+#~ msgid "Bemba"
+#~ msgstr "Bemba"
+
+#~ msgid "Bengali"
+#~ msgstr "Bengaals"
+
+#~ msgid "Berber (Other)"
+#~ msgstr "Berbers (Overige)"
+
+#~ msgid "Bhojpuri"
+#~ msgstr "Bhojpuri"
+
+#~ msgid "Bihari"
+#~ msgstr "Bihari"
+
+#~ msgid "Bikol"
+#~ msgstr "Bikol"
+
+#~ msgid "Bini; Edo"
+#~ msgstr "Bini; Edo"
+
+#~ msgid "Bislama"
+#~ msgstr "Bislama"
+
+#~ msgid "Siksika"
+#~ msgstr "Siksika"
+
+#~ msgid "Bantu (Other)"
+#~ msgstr "Bantu (Overige)"
+
+#~ msgid "Bosnian"
+#~ msgstr "Bosnisch"
+
+#~ msgid "Braj"
+#~ msgstr "Braj"
+
+#~ msgid "Breton"
+#~ msgstr "Bretons, Bretoens"
+
+#~ msgid "Batak languages"
+#~ msgstr "Batak-talen"
+
+#~ msgid "Buriat"
+#~ msgstr "Boeriaats"
+
+#~ msgid "Buginese"
+#~ msgstr "Buginees"
+
+#~ msgid "Bulgarian"
+#~ msgstr "Bulgaars"
+
+#~ msgid "Burmese"
+#~ msgstr "Burmees"
+
+#~ msgid "Blin; Bilin"
+#~ msgstr "Blin; Bilin"
+
+#~ msgid "Caddo"
+#~ msgstr "Caddo"
+
+#~ msgid "Central American Indian (Other)"
+#~ msgstr "Centraal-Amerikaans Indiaans (Overige)"
+
+#~ msgid "Galibi Carib"
+#~ msgstr "Galibi Carib"
+
+#~ msgid "Catalan; Valencian"
+#~ msgstr "Catalaans; Valenciaans"
+
+#~ msgid "Caucasian (Other)"
+#~ msgstr "Kaukasisch (Overige)"
+
+#~ msgid "Cebuano"
+#~ msgstr "Cebuano"
+
+#~ msgid "Celtic (Other)"
+#~ msgstr "Keltisch (Overige)"
+
+#~ msgid "Chamorro"
+#~ msgstr "Chamorro"
+
+#~ msgid "Chibcha"
+#~ msgstr "Tsjibtsja"
+
+#~ msgid "Chechen"
+#~ msgstr "Tsjetsjeens"
+
+#~ msgid "Chagatai"
+#~ msgstr "Chagatai"
+
+#~ msgid "Chinese"
+#~ msgstr "Chinees"
+
+#~ msgid "Chuukese"
+#~ msgstr "Tsjoekees"
+
+#~ msgid "Mari"
+#~ msgstr "Mari"
+
+#~ msgid "Chinook jargon"
+#~ msgstr "Chinook-jargon"
+
+#~ msgid "Choctaw"
+#~ msgstr "Choctaw"
+
+#~ msgid "Chipewyan; Dene Suline"
+#~ msgstr "Chipewyan; Dene Suline"
+
+#~ msgid "Cherokee"
+#~ msgstr "Cherokee"
+
+#~ msgid ""
+#~ "Church Slavic; Old Slavonic; Church Slavonic; Old Bulgarian; Old Church "
+#~ "Slavonic"
+#~ msgstr "Kerk-Slavisch; Oud Slavisch; Oud Bulgaars; Oud Kerk-Slavisch"
+
+#~ msgid "Chuvash"
+#~ msgstr "Tsjoevasjisch"
+
+#~ msgid "Cheyenne"
+#~ msgstr "Cheyenne"
+
+#~ msgid "Chamic languages"
+#~ msgstr "Chamische talen"
+
+#~ msgid "Coptic"
+#~ msgstr "Koptisch"
+
+#~ msgid "Cornish"
+#~ msgstr "Cornish"
+
+#~ msgid "Corsican"
+#~ msgstr "Corsicaans"
+
+#~ msgid "Creoles and pidgins, English based (Other)"
+#~ msgstr "Creools en pidgins, Op het Engels gebaseerd (Overige)"
+
+#~ msgid "Creoles and pidgins, French-based (Other)"
+#~ msgstr "Creools en pidgins, Op het Frans gebaseerd (Overige)"
+
+#~ msgid "Creoles and pidgins, Portuguese-based (Other)"
+#~ msgstr "Creools en pidgins, Op het Portugees gebaseerd (Overige)"
+
+#~ msgid "Cree"
+#~ msgstr "Cree"
+
+#~ msgid "Crimean Tatar; Crimean Turkish"
+#~ msgstr "Krim Tataars; Krim Turks"
+
+#~ msgid "Creoles and pidgins (Other)"
+#~ msgstr "Creools en pidgins (Overige)"
+
+#~ msgid "Kashubian"
+#~ msgstr "Kasjoebiaans"
+
+#~ msgid "Cushitic (Other)"
+#~ msgstr "Cusjitisch (Overige)"
+
+#~ msgid "Czech"
+#~ msgstr "Tsjechisch"
+
+#~ msgid "Dakota"
+#~ msgstr "Dakota"
+
+#~ msgid "Danish"
+#~ msgstr "Deens"
+
+#~ msgid "Dargwa"
+#~ msgstr "Dargwa"
+
+#~ msgid "Land Dayak languages"
+#~ msgstr "Land Dajak-talen"
+
+#~ msgid "Delaware"
+#~ msgstr "Delaware"
+
+#~ msgid "Slave (Athapascan)"
+#~ msgstr "Slavisch (Athapascaans)"
+
+#~ msgid "Dogrib"
+#~ msgstr "Dogrib"
+
+#~ msgid "Dinka"
+#~ msgstr "Dinka"
+
+#~ msgid "Divehi; Dhivehi; Maldivian"
+#~ msgstr "Divehi; Maldiviaans"
+
+#~ msgid "Dogri"
+#~ msgstr "Dogri"
+
+#~ msgid "Dravidian (Other)"
+#~ msgstr "Dravidiaans (Overige)"
+
+#~ msgid "Lower Sorbian"
+#~ msgstr "Laag-Sorbiaans"
+
+#~ msgid "Duala"
+#~ msgstr "Duala"
+
+#~ msgid "Dutch, Middle (ca. 1050-1350)"
+#~ msgstr "Nederlands, Middel (ca. 1050-1350)"
+
+#~ msgid "Dutch; Flemish"
+#~ msgstr "Nederlands"
+
+#~ msgid "Dyula"
+#~ msgstr "Dyula"
+
+#~ msgid "Dzongkha"
+#~ msgstr "Dzongkha"
+
+#~ msgid "Efik"
+#~ msgstr "Efikisch"
+
+#~ msgid "Egyptian (Ancient)"
+#~ msgstr "Egyptisch (Oud)"
+
+#~ msgid "Ekajuk"
+#~ msgstr "Ekajuk"
+
+#~ msgid "Elamite"
+#~ msgstr "Elamitisch"
+
+#~ msgid "English"
+#~ msgstr "Engels"
+
+#~ msgid "English, Middle (1100-1500)"
+#~ msgstr "Engels, Middel (1100-1500)"
+
+#~ msgid "Esperanto"
+#~ msgstr "Esperanto"
+
+#~ msgid "Estonian"
+#~ msgstr "Estlands"
+
+#~ msgid "Ewe"
+#~ msgstr "Ewe"
+
+#~ msgid "Ewondo"
+#~ msgstr "Ewondo"
+
+#~ msgid "Fang"
+#~ msgstr "Fang"
+
+#~ msgid "Faroese"
+#~ msgstr "Faeröers"
+
+#~ msgid "Fanti"
+#~ msgstr "Fanti"
+
+#~ msgid "Fijian"
+#~ msgstr "Fijisch"
+
+#~ msgid "Filipino; Pilipino"
+#~ msgstr "Filippino"
+
+#~ msgid "Finnish"
+#~ msgstr "Fins"
+
+#~ msgid "Finno-Ugrian (Other)"
+#~ msgstr "Fins-Oegrisch (Overige)"
+
+#~ msgid "Fon"
+#~ msgstr "Fon"
+
+#~ msgid "French"
+#~ msgstr "Frans"
+
+#~ msgid "French, Middle (ca. 1400-1600)"
+#~ msgstr "Frans, Middel (ca.1400-1600)"
+
+#~ msgid "French, Old (842-ca. 1400)"
+#~ msgstr "Frans, Oud (842-ca.1400)"
+
+#~ msgid "Northern Frisian"
+#~ msgstr "Noord-Fries"
+
+#~ msgid "Eastern Frisian"
+#~ msgstr "Oost-Fries"
+
+#~ msgid "Western Frisian"
+#~ msgstr "West-Fries"
+
+#~ msgid "Fulah"
+#~ msgstr "Fulah"
+
+#~ msgid "Friulian"
+#~ msgstr "Friulisch"
+
+#~ msgid "Ga"
+#~ msgstr "Ga"
+
+#~ msgid "Gayo"
+#~ msgstr "Gayo"
+
+#~ msgid "Gbaya"
+#~ msgstr "Gbaya"
+
+#~ msgid "Germanic (Other)"
+#~ msgstr "Germaans (Overige)"
+
+#~ msgid "German"
+#~ msgstr "Duits"
+
+#~ msgid "Geez"
+#~ msgstr "Geez"
+
+#~ msgid "Gilbertese"
+#~ msgstr "Gilbertees"
+
+#~ msgid "Gaelic; Scottish Gaelic"
+#~ msgstr "Gaelisch; Schots"
+
+#~ msgid "Irish"
+#~ msgstr "Iers"
+
+#~ msgid "Galician"
+#~ msgstr "Galiciaans"
+
+#~ msgid "Manx"
+#~ msgstr "Manx"
+
+#~ msgid "German, Middle High (ca. 1050-1500)"
+#~ msgstr "Duits, Middel Hoog (ca.1050-1500)"
+
+#~ msgid "German, Old High (ca. 750-1050)"
+#~ msgstr "Duits, Oud Hoog (ca.750-1050)"
+
+#~ msgid "Gondi"
+#~ msgstr "Gondi"
+
+#~ msgid "Gorontalo"
+#~ msgstr "Gorontalo"
+
+#~ msgid "Gothic"
+#~ msgstr "Gothisch"
+
+#~ msgid "Grebo"
+#~ msgstr "Grebo"
+
+#~ msgid "Greek, Ancient (to 1453)"
+#~ msgstr "Grieks, Oud (tot 1453)"
+
+#~ msgid "Greek, Modern (1453-)"
+#~ msgstr "Grieks, Modern (1453-)"
+
+#~ msgid "Guarani"
+#~ msgstr "Guarani"
+
+#~ msgid "Swiss German; Alemannic; Alsatian"
+#~ msgstr "Zwitserduits; Alemannisch; Elzassisch"
+
+#~ msgid "Gwich'in"
+#~ msgstr "Gwitsjin"
+
+#~ msgid "Haida"
+#~ msgstr "Haida"
+
+#~ msgid "Haitian; Haitian Creole"
+#~ msgstr "Haïtiaans; Haïtiaans Creools"
+
+#~ msgid "Hausa"
+#~ msgstr "Hausa"
+
+#~ msgid "Hawaiian"
+#~ msgstr "Hawaiiaans"
+
+#~ msgid "Herero"
+#~ msgstr "Herero"
+
+#~ msgid "Hiligaynon"
+#~ msgstr "Hiligainoons"
+
+#~ msgid "Himachali"
+#~ msgstr "Himatsjali"
+
+#~ msgid "Hittite"
+#~ msgstr "Hittitisch"
+
+#~ msgid "Hmong"
+#~ msgstr "Hmong"
+
+#~ msgid "Hiri Motu"
+#~ msgstr "Hiri Motu"
+
+#~ msgid "Upper Sorbian"
+#~ msgstr "Opper-Sorbiaans"
+
+#~ msgid "Hungarian"
+#~ msgstr "Hongaars"
+
+#~ msgid "Hupa"
+#~ msgstr "Hupa"
+
+#~ msgid "Iban"
+#~ msgstr "Ibaans"
+
+#~ msgid "Igbo"
+#~ msgstr "Igbo"
+
+#~ msgid "Ido"
+#~ msgstr "Ido"
+
+#~ msgid "Sichuan Yi; Nuosu"
+#~ msgstr "Sitsjuan Yi; Nuosu"
+
+#~ msgid "Ijo languages"
+#~ msgstr "Ijo-talen"
+
+#~ msgid "Inuktitut"
+#~ msgstr "Inuktitut"
+
+#~ msgid "Interlingue; Occidental"
+#~ msgstr "Interlingue; Occidental"
+
+#~ msgid "Iloko"
+#~ msgstr "Iloko"
+
+#~ msgid "Interlingua (International Auxiliary Language Association)"
+#~ msgstr "Interlingua (International Auxiliary Language Association)"
+
+#~ msgid "Indic (Other)"
+#~ msgstr "Indisch (Overige)"
+
+#~ msgid "Indonesian"
+#~ msgstr "Indonesisch"
+
+#~ msgid "Indo-European (Other)"
+#~ msgstr "Indo-Europees (Overige)"
+
+#~ msgid "Ingush"
+#~ msgstr "Ingoesjetisch"
+
+#~ msgid "Inupiaq"
+#~ msgstr "Inupiak"
+
+#~ msgid "Iranian (Other)"
+#~ msgstr "Iraans (Overige)"
+
+#~ msgid "Iroquoian languages"
+#~ msgstr "Iroquoiaanse talen"
+
+#~ msgid "Italian"
+#~ msgstr "Italiaans"
+
+#~ msgid "Javanese"
+#~ msgstr "Javaans"
+
+#~ msgid "Lojban"
+#~ msgstr "Lojbaans"
+
+#~ msgid "Judeo-Persian"
+#~ msgstr "Judeo-Perzisch"
+
+#~ msgid "Judeo-Arabic"
+#~ msgstr "Judeo-Arabisch"
+
+#~ msgid "Kara-Kalpak"
+#~ msgstr "Kara-Kalpak"
+
+#~ msgid "Kabyle"
+#~ msgstr "Kabyle"
+
+#~ msgid "Kachin; Jingpho"
+#~ msgstr "Kachin; Jingpho"
+
+#~ msgid "Kalaallisut; Greenlandic"
+#~ msgstr "Kalaallisut; Groenlands"
+
+#~ msgid "Kamba"
+#~ msgstr "Kamba"
+
+#~ msgid "Kannada"
+#~ msgstr "Kannada, Kanarees"
+
+#~ msgid "Karen languages"
+#~ msgstr "Karen-talen"
+
+#~ msgid "Kashmiri"
+#~ msgstr "Kashmiri"
+
+#~ msgid "Kanuri"
+#~ msgstr "Kanuri"
+
+#~ msgid "Kawi"
+#~ msgstr "Kawi"
+
+#~ msgid "Kazakh"
+#~ msgstr "Kazachs"
+
+#~ msgid "Kabardian"
+#~ msgstr "Kabardisch, Tsjerkessisch"
+
+#~ msgid "Khasi"
+#~ msgstr "Khasi"
+
+#~ msgid "Khoisan (Other)"
+#~ msgstr "Khoisaans (Overige)"
+
+#~ msgid "Central Khmer"
+#~ msgstr "Centraal Khmer"
+
+#~ msgid "Khotanese"
+#~ msgstr "Khotanees"
+
+#~ msgid "Kikuyu; Gikuyu"
+#~ msgstr "Kikuyu; Gikuyu"
+
+#~ msgid "Kinyarwanda"
+#~ msgstr "Kinyarwanda"
+
+#~ msgid "Kirghiz; Kyrgyz"
+#~ msgstr "Kirgizisch"
+
+#~ msgid "Kimbundu"
+#~ msgstr "Kimbundu"
+
+#~ msgid "Konkani"
+#~ msgstr "Konkani"
+
+#~ msgid "Komi"
+#~ msgstr "Komi"
+
+#~ msgid "Kongo"
+#~ msgstr "Kongo"
+
+#~ msgid "Kosraean"
+#~ msgstr "Kosraeaans"
+
+#~ msgid "Kpelle"
+#~ msgstr "Kpelle"
+
+#~ msgid "Karachay-Balkar"
+#~ msgstr "Karatsjay-Balkar"
+
+#~ msgid "Karelian"
+#~ msgstr "Karelisch"
+
+#~ msgid "Kru languages"
+#~ msgstr "Kru-talen"
+
+#~ msgid "Kurukh"
+#~ msgstr "Kurukh"
+
+#~ msgid "Kuanyama; Kwanyama"
+#~ msgstr "Kuanyama; Kwanyama"
+
+#~ msgid "Kumyk"
+#~ msgstr "Kumyk"
+
+#~ msgid "Kurdish"
+#~ msgstr "Koerdisch"
+
+#~ msgid "Kutenai"
+#~ msgstr "Kutenaïsch"
+
+#~ msgid "Ladino"
+#~ msgstr "Ladino"
+
+#~ msgid "Lahnda"
+#~ msgstr "Lahnda"
+
+#~ msgid "Lamba"
+#~ msgstr "Lamba"
+
+#~ msgid "Lao"
+#~ msgstr "Lao"
+
+#~ msgid "Latin"
+#~ msgstr "Latijn"
+
+#~ msgid "Latvian"
+#~ msgstr "Lets"
+
+#~ msgid "Lezghian"
+#~ msgstr "Lezghiaans"
+
+#~ msgid "Limburgan; Limburger; Limburgish"
+#~ msgstr "Limburgs"
+
+#~ msgid "Lingala"
+#~ msgstr "Lingala"
+
+#~ msgid "Lithuanian"
+#~ msgstr "Litouws"
+
+#~ msgid "Mongo"
+#~ msgstr "Mongo"
+
+#~ msgid "Lozi"
+#~ msgstr "Lozi"
+
+#~ msgid "Luxembourgish; Letzeburgesch"
+#~ msgstr "Luxemburgs; Lëtzebuergesch"
+
+#~ msgid "Luba-Lulua"
+#~ msgstr "Luba-Lulua"
+
+#~ msgid "Luba-Katanga"
+#~ msgstr "Luba-Katanga"
+
+#~ msgid "Ganda"
+#~ msgstr "Ganda"
+
+#~ msgid "Luiseno"
+#~ msgstr "Luiseno"
+
+#~ msgid "Lunda"
+#~ msgstr "Lunda"
+
+#~ msgid "Luo (Kenya and Tanzania)"
+#~ msgstr "Luo (Kenia en Tanzania)"
+
+#~ msgid "Lushai"
+#~ msgstr "Lushai"
+
+#~ msgid "Macedonian"
+#~ msgstr "Macedonisch"
+
+#~ msgid "Madurese"
+#~ msgstr "Madurees"
+
+#~ msgid "Magahi"
+#~ msgstr "Magahisch"
+
+#~ msgid "Marshallese"
+#~ msgstr "Marshallees"
+
+#~ msgid "Maithili"
+#~ msgstr "Maithili"
+
+#~ msgid "Makasar"
+#~ msgstr "Makasar"
+
+#~ msgid "Malayalam"
+#~ msgstr "Malayalam"
+
+#~ msgid "Mandingo"
+#~ msgstr "Mandingo"
+
+#~ msgid "Maori"
+#~ msgstr "Maori"
+
+#~ msgid "Austronesian (Other)"
+#~ msgstr "Austronesisch (Overige)"
+
+#~ msgid "Marathi"
+#~ msgstr "Marathi"
+
+#~ msgid "Masai"
+#~ msgstr "Masai"
+
+#~ msgid "Malay"
+#~ msgstr "Maleis"
+
+#~ msgid "Moksha"
+#~ msgstr "Moksja"
+
+#~ msgid "Mandar"
+#~ msgstr "Mandars"
+
+#~ msgid "Mende"
+#~ msgstr "Mende"
+
+#~ msgid "Irish, Middle (900-1200)"
+#~ msgstr "Iers, Middel (900-1200)"
+
+#~ msgid "Mi'kmaq; Micmac"
+#~ msgstr "Mi'kmaq; Micmac"
+
+#~ msgid "Minangkabau"
+#~ msgstr "Minangkabau"
+
+#~ msgid "Uncoded languages"
+#~ msgstr "Niet-gecodeerde talen"
+
+#~ msgid "Mon-Khmer (Other)"
+#~ msgstr "Mon-Khmer (Overige)"
+
+#~ msgid "Malagasy"
+#~ msgstr "Malagassisch"
+
+#~ msgid "Maltese"
+#~ msgstr "Maltees"
+
+#~ msgid "Manchu"
+#~ msgstr "Manchu"
+
+#~ msgid "Manipuri"
+#~ msgstr "Manipuri"
+
+#~ msgid "Manobo languages"
+#~ msgstr "Manobo-talen"
+
+#~ msgid "Mohawk"
+#~ msgstr "Mohawk"
+
+#~ msgid "Moldavian; Moldovan"
+#~ msgstr "Moldavisch"
+
+#~ msgid "Mongolian"
+#~ msgstr "Mongools"
+
+#~ msgid "Mossi"
+#~ msgstr "Mossisch"
+
+#~ msgid "Multiple languages"
+#~ msgstr "Meerdere talen"
+
+#~ msgid "Munda languages"
+#~ msgstr "Munda-talen"
+
+#~ msgid "Creek"
+#~ msgstr "Creek"
+
+#~ msgid "Mirandese"
+#~ msgstr "Mirandees"
+
+#~ msgid "Marwari"
+#~ msgstr "Marwari"
+
+#~ msgid "Mayan languages"
+#~ msgstr "Maja-talen"
+
+#~ msgid "Erzya"
+#~ msgstr "Erzya"
+
+#~ msgid "Nahuatl languages"
+#~ msgstr "Nahuatl-talen"
+
+#~ msgid "North American Indian"
+#~ msgstr "Noord-Amerikaans Indiaans"
+
+#~ msgid "Neapolitan"
+#~ msgstr "Napolitaans"
+
+#~ msgid "Nauru"
+#~ msgstr "Nauruaans"
+
+#~ msgid "Navajo; Navaho"
+#~ msgstr "Navajo; Navaho"
+
+#~ msgid "Ndebele, South; South Ndebele"
+#~ msgstr "Ndbele, Zuid; Zuid-Ndebele"
+
+#~ msgid "Ndebele, North; North Ndebele"
+#~ msgstr "Ndbele, Noord; Noord-Ndebele"
+
+#~ msgid "Ndonga"
+#~ msgstr "Ndonga"
+
+#~ msgid "Low German; Low Saxon; German, Low; Saxon, Low"
+#~ msgstr "Nederduits; Nedersaksisch; Duits, Neder-; Saksisch, Neder-"
+
+#~ msgid "Nepali"
+#~ msgstr "Nepalees"
+
+#~ msgid "Nepal Bhasa; Newari"
+#~ msgstr "Nepal Bhasa; Newari"
+
+#~ msgid "Nias"
+#~ msgstr "Niaas"
+
+#~ msgid "Niger-Kordofanian (Other)"
+#~ msgstr "Niger-Kordofaniaans (Overige)"
+
+#~ msgid "Niuean"
+#~ msgstr "Niueaans"
+
+#~ msgid "Norwegian Nynorsk; Nynorsk, Norwegian"
+#~ msgstr "Nynorsk-Noors; Noors, Nynorsk"
+
+#~ msgid "Bokmål, Norwegian; Norwegian Bokmål"
+#~ msgstr "Bokmål, Noors; Noors Bokmål"
+
+#~ msgid "Nogai"
+#~ msgstr "Nogai"
+
+#~ msgid "Norse, Old"
+#~ msgstr "Noors, Oud"
+
+#~ msgid "Norwegian"
+#~ msgstr "Noors"
+
+#~ msgid "N'Ko"
+#~ msgstr "Nko"
+
+#~ msgid "Pedi; Sepedi; Northern Sotho"
+#~ msgstr "Pedi; Sepedi; Noord Sotho"
+
+#~ msgid "Nubian languages"
+#~ msgstr "Nubische talen"
+
+#~ msgid "Classical Newari; Old Newari; Classical Nepal Bhasa"
+#~ msgstr "Klassiek Newari; Oud Newari; Klassiek Nepalees Bhasa"
+
+#~ msgid "Chichewa; Chewa; Nyanja"
+#~ msgstr "Tsjewa; Tsjitsjewa; Nyanja"
+
+#~ msgid "Nyamwezi"
+#~ msgstr "Nyamwezi"
+
+#~ msgid "Nyankole"
+#~ msgstr "Nyankools"
+
+#~ msgid "Nyoro"
+#~ msgstr "Nyoro"
+
+#~ msgid "Nzima"
+#~ msgstr "Nzima"
+
+#~ msgid "Occitan (post 1500)"
+#~ msgstr "Occitaans (na 1500)"
+
+#~ msgid "Ojibwa"
+#~ msgstr "Ojibwa"
+
+#~ msgid "Oriya"
+#~ msgstr "Oriya"
+
+#~ msgid "Oromo"
+#~ msgstr "Oromo"
+
+#~ msgid "Osage"
+#~ msgstr "Osaags"
+
+#~ msgid "Ossetian; Ossetic"
+#~ msgstr "Ossetisch, Osseets"
+
+#~ msgid "Turkish, Ottoman (1500-1928)"
+#~ msgstr "Turks, Ottomaans (1500-1928)"
+
+#~ msgid "Otomian languages"
+#~ msgstr "Otomiaanse talen"
+
+#~ msgid "Papuan (Other)"
+#~ msgstr "Papuaans (Overige)"
+
+#~ msgid "Pangasinan"
+#~ msgstr "Pangasinaans"
+
+#~ msgid "Pahlavi"
+#~ msgstr "Pehlevi"
+
+#~ msgid "Pampanga; Kapampangan"
+#~ msgstr "Pampanga; Kapampangan"
+
+#~ msgid "Panjabi; Punjabi"
+#~ msgstr "Panjabi; Punjabi"
+
+#~ msgid "Papiamento"
+#~ msgstr "Papiamento"
+
+#~ msgid "Palauan"
+#~ msgstr "Palauaans"
+
+#~ msgid "Persian, Old (ca. 600-400 B.C.)"
+#~ msgstr "Oud Perzisch (ca.600-400 B.C.)"
+
+#~ msgid "Philippine (Other)"
+#~ msgstr "Filipijns (Overige)"
+
+#~ msgid "Phoenician"
+#~ msgstr "Foenisisch"
+
+#~ msgid "Pali"
+#~ msgstr "Pali"
+
+#~ msgid "Polish"
+#~ msgstr "Pools"
+
+#~ msgid "Pohnpeian"
+#~ msgstr "Pohnpeiaans"
+
+#~ msgid "Portuguese"
+#~ msgstr "Portugees"
+
+#~ msgid "Prakrit languages"
+#~ msgstr "Prakrit-talen"
+
+#~ msgid "Provençal, Old (to 1500); Occitan, Old (to 1500)"
+#~ msgstr "Provinciaals, Oud (tot 1500) Occitaans; Occitaans, Oud (tot 1500)"
+
+#~ msgid "Pushto; Pashto"
+#~ msgstr "Pasjtoe"
+
+#~ msgid "Reserved for local use"
+#~ msgstr "Gereserveerd voor lokaal gebruik"
+
+#~ msgid "Quechua"
+#~ msgstr "Quechua"
+
+#~ msgid "Rajasthani"
+#~ msgstr "Rajasthani"
+
+#~ msgid "Rapanui"
+#~ msgstr "Rapanui"
+
+#~ msgid "Rarotongan; Cook Islands Maori"
+#~ msgstr "Rarotongan; Cook Island Maori"
+
+#~ msgid "Romance (Other)"
+#~ msgstr "Romaans (Overige)"
+
+#~ msgid "Romansh"
+#~ msgstr "Romaans"
+
+#~ msgid "Romany"
+#~ msgstr "Roma"
+
+#~ msgid "Rundi"
+#~ msgstr "Rundi"
+
+#~ msgid "Aromanian; Arumanian; Macedo-Romanian"
+#~ msgstr "Aroemeens; Macedo-Roemeens"
+
+#~ msgid "Russian"
+#~ msgstr "Russisch"
+
+#~ msgid "Sandawe"
+#~ msgstr "Sandawe"
+
+#~ msgid "Sango"
+#~ msgstr "Sangho"
+
+#~ msgid "Yakut"
+#~ msgstr "Jakoets"
+
+#~ msgid "South American Indian (Other)"
+#~ msgstr "Zuid-Amerikaans Indiaans (Overige)"
+
+#~ msgid "Salishan languages"
+#~ msgstr "Salisjische talen"
+
+#~ msgid "Samaritan Aramaic"
+#~ msgstr "Samaritaans Aramees"
+
+#~ msgid "Sanskrit"
+#~ msgstr "Sanskriet"
+
+#~ msgid "Sasak"
+#~ msgstr "Sasaaks"
+
+#~ msgid "Santali"
+#~ msgstr "Santali"
+
+#~ msgid "Sicilian"
+#~ msgstr "Siciliaans"
+
+#~ msgid "Scots"
+#~ msgstr "Schots"
+
+#~ msgid "Selkup"
+#~ msgstr "Sulkoeps"
+
+#~ msgid "Semitic (Other)"
+#~ msgstr "Semitisch (Overige)"
+
+#~ msgid "Irish, Old (to 900)"
+#~ msgstr "Iers, Oud (tot 900)"
+
+#~ msgid "Sign Languages"
+#~ msgstr "Gebarentalen"
+
+#~ msgid "Shan"
+#~ msgstr "Sjaans"
+
+#~ msgid "Sidamo"
+#~ msgstr "Sidamo"
+
+#~ msgid "Sinhala; Sinhalese"
+#~ msgstr "Sinhala; Sinhalees"
+
+#~ msgid "Siouan languages"
+#~ msgstr "Siouaanse talen"
+
+#~ msgid "Sino-Tibetan (Other)"
+#~ msgstr "Sino-Tibetaans (Overige)"
+
+#~ msgid "Slavic (Other)"
+#~ msgstr "Slavisch (Overige)"
+
+#~ msgid "Slovak"
+#~ msgstr "Slovaaks, Slowaaks"
+
+#~ msgid "Slovenian"
+#~ msgstr "Sloveens"
+
+#~ msgid "Southern Sami"
+#~ msgstr "Zuid-Sami"
+
+#~ msgid "Northern Sami"
+#~ msgstr "Noord-Sami"
+
+#~ msgid "Sami languages (Other)"
+#~ msgstr "Sami-talen (Overige)"
+
+#~ msgid "Lule Sami"
+#~ msgstr "Lule Sami"
+
+#~ msgid "Inari Sami"
+#~ msgstr "Inari Sami"
+
+#~ msgid "Samoan"
+#~ msgstr "Samoaans"
+
+#~ msgid "Skolt Sami"
+#~ msgstr "Skolt Sami"
+
+#~ msgid "Shona"
+#~ msgstr "Shona"
+
+#~ msgid "Sindhi"
+#~ msgstr "Sindhi"
+
+#~ msgid "Soninke"
+#~ msgstr "Soninke"
+
+#~ msgid "Sogdian"
+#~ msgstr "Sogdiaans"
+
+#~ msgid "Somali"
+#~ msgstr "Somali"
+
+#~ msgid "Songhai languages"
+#~ msgstr "Songhai-talen"
+
+#~ msgid "Sotho, Southern"
+#~ msgstr "Zuid-Sothaans"
+
+#~ msgid "Spanish; Castilian"
+#~ msgstr "Spaans; Castiliaans"
+
+#~ msgid "Sardinian"
+#~ msgstr "Sardijns"
+
+#~ msgid "Sranan Tongo"
+#~ msgstr "Sranan Tongo"
+
+#~ msgid "Serbian"
+#~ msgstr "Servisch"
+
+#~ msgid "Serer"
+#~ msgstr "Serer"
+
+#~ msgid "Nilo-Saharan (Other)"
+#~ msgstr "Nilo-Saharaans (Overige)"
+
+#~ msgid "Swati"
+#~ msgstr "Swati"
+
+#~ msgid "Sukuma"
+#~ msgstr "Sukuma"
+
+#~ msgid "Sundanese"
+#~ msgstr "Soendanees, Sundanees"
+
+#~ msgid "Susu"
+#~ msgstr "Susu"
+
+#~ msgid "Sumerian"
+#~ msgstr "Sumerisch"
+
+#~ msgid "Swahili"
+#~ msgstr "Swahili"
+
+#~ msgid "Swedish"
+#~ msgstr "Zweeds"
+
+#~ msgid "Classical Syriac"
+#~ msgstr "Klassiek Syrich"
+
+#~ msgid "Syriac"
+#~ msgstr "Syrisch"
+
+#~ msgid "Tahitian"
+#~ msgstr "Tahitisch"
+
+#~ msgid "Tai (Other)"
+#~ msgstr "Tai (Overige)"
+
+#~ msgid "Tamil"
+#~ msgstr "Tamil"
+
+#~ msgid "Tatar"
+#~ msgstr "Tatar"
+
+#~ msgid "Telugu"
+#~ msgstr "Telugu"
+
+#~ msgid "Timne"
+#~ msgstr "Timne"
+
+#~ msgid "Tereno"
+#~ msgstr "Tereno"
+
+#~ msgid "Tetum"
+#~ msgstr "Tetum"
+
+#~ msgid "Tajik"
+#~ msgstr "Tadzjieks"
+
+#~ msgid "Tagalog"
+#~ msgstr "Tagalog"
+
+#~ msgid "Tibetan"
+#~ msgstr "Tibetaans"
+
+#~ msgid "Tigre"
+#~ msgstr "Tigre"
+
+#~ msgid "Tigrinya"
+#~ msgstr "Tigrinya"
+
+#~ msgid "Tiv"
+#~ msgstr "Tiv"
+
+#~ msgid "Tokelau"
+#~ msgstr "Tokelau"
+
+#~ msgid "Klingon; tlhIngan-Hol"
+#~ msgstr "Klingon; tlhIngan-Hol"
+
+#~ msgid "Tlingit"
+#~ msgstr "Tlingit"
+
+#~ msgid "Tamashek"
+#~ msgstr "Tamasjek"
+
+#~ msgid "Tonga (Nyasa)"
+#~ msgstr "Tonga (Nyasa)"
+
+#~ msgid "Tonga (Tonga Islands)"
+#~ msgstr "Tonga (Tonga-eilanden)"
+
+#~ msgid "Tok Pisin"
+#~ msgstr "Tok Pisin"
+
+#~ msgid "Tsimshian"
+#~ msgstr "Tsimsjiaans"
+
+#~ msgid "Tswana"
+#~ msgstr "Tswana"
+
+#~ msgid "Tsonga"
+#~ msgstr "Tsonga"
+
+#~ msgid "Turkmen"
+#~ msgstr "Turkmeens"
+
+#~ msgid "Tumbuka"
+#~ msgstr "Tumbuka"
+
+#~ msgid "Tupi languages"
+#~ msgstr "Tupi-talen"
+
+#~ msgid "Altaic (Other)"
+#~ msgstr "Altaïsch (Overige)"
+
+#~ msgid "Tuvalu"
+#~ msgstr "Tuvalu"
+
+#~ msgid "Twi"
+#~ msgstr "Twi"
+
+#~ msgid "Tuvinian"
+#~ msgstr "Tuviniaans"
+
+#~ msgid "Udmurt"
+#~ msgstr "Udmurts"
+
+#~ msgid "Ugaritic"
+#~ msgstr "Ugaritisch"
+
+#~ msgid "Uighur; Uyghur"
+#~ msgstr "Oeigoers; Oejgoers"
+
+#~ msgid "Ukrainian"
+#~ msgstr "Oekraïens"
+
+#~ msgid "Umbundu"
+#~ msgstr "Umbundu"
+
+#~ msgid "Undetermined"
+#~ msgstr "Onbepaald"
+
+#~ msgid "Urdu"
+#~ msgstr "Urdu"
+
+#~ msgid "Uzbek"
+#~ msgstr "Oezbeeks"
+
+#~ msgid "Vai"
+#~ msgstr "Vai"
+
+#~ msgid "Venda"
+#~ msgstr "Venda"
+
+#~ msgid "Volapük"
+#~ msgstr "Volapük"
+
+#~ msgid "Votic"
+#~ msgstr "Votisch"
+
+#~ msgid "Wakashan languages"
+#~ msgstr "Wakasjaanse talen"
+
+#~ msgid "Wolaitta; Wolaytta"
+#~ msgstr "Wolaytta"
+
+#~ msgid "Waray"
+#~ msgstr "Waray"
+
+#~ msgid "Washo"
+#~ msgstr "Wasjo"
+
+#~ msgid "Welsh"
+#~ msgstr "Welsh"
+
+#~ msgid "Sorbian languages"
+#~ msgstr "Sorbiaanse talen"
+
+#~ msgid "Walloon"
+#~ msgstr "Waals"
+
+#~ msgid "Wolof"
+#~ msgstr "Wolof"
+
+#~ msgid "Kalmyk; Oirat"
+#~ msgstr "Kalmuks"
+
+#~ msgid "Xhosa"
+#~ msgstr "Xhosa"
+
+#~ msgid "Yao"
+#~ msgstr "Yao"
+
+#~ msgid "Yapese"
+#~ msgstr "Yapees"
+
+#~ msgid "Yiddish"
+#~ msgstr "Jiddisch"
+
+#~ msgid "Yoruba"
+#~ msgstr "Yoruba"
+
+#~ msgid "Yupik languages"
+#~ msgstr "Joepikse talen"
+
+#~ msgid "Zapotec"
+#~ msgstr "Zapotec"
+
+#~ msgid "Blissymbols; Blissymbolics; Bliss"
+#~ msgstr "Bliss-symbolen; Bliss symbolisme; Bliss"
+
+#~ msgid "Zenaga"
+#~ msgstr "Zenaga"
+
+#~ msgid "Zhuang; Chuang"
+#~ msgstr "Zhuang; Chuang"
+
+#~ msgid "Zande languages"
+#~ msgstr "Zande-talen"
+
+#~ msgid "Zulu"
+#~ msgstr "Zoeloe"
+
+#~ msgid "Zuni"
+#~ msgstr "Zuni"
+
+#~ msgid "No linguistic content; Not applicable"
+#~ msgstr "Geen linguïstische inhoud; niet van toepassing"
+
+#~ msgid "Zaza; Dimili; Dimli; Kirdki; Kirmanjki; Zazaki"
+#~ msgstr "Zaza; Dimili; Dimli; Kirdki; Kirmanjki; Zazaki"
+
+#~ msgid "Newari; Nepal Bhasa"
+#~ msgstr "Newari; Bhasa-Nepalees"
+
+#~ msgid "Norwegian Bokmål; Bokmål, Norwegian"
+#~ msgstr "Bokmål-Noors; Bokmål, Noors"
+
+#~ msgid "Northern Sotho, Pedi; Sepedi"
+#~ msgstr "Noord-Sothaans; Pedi; Sepedi"
+
+#~ msgid "Walamo"
+#~ msgstr "Walamo"
