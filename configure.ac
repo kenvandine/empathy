@@ -1,4 +1,4 @@
-AC_INIT(Empathy, 2.23.92, http://bugzilla.gnome.org/browse.cgi?product=empathy)
+AC_INIT(Empathy, 2.24.0, http://bugzilla.gnome.org/browse.cgi?product=empathy)
 AC_PREREQ(2.59)
 AC_COPYRIGHT([
   Copyright (C) 2003-2007 Imendio AB
