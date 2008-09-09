@@ -142,23 +142,18 @@ class Project:
 			author = message[p1+1:p2]
 			message = message[:p1]
 
-		print message
-		print message.find('#')
-
 		msg = message.lower()
 		if msg.find('translation') != -1 and \
 		   (msg.find('added') != -1 or \
 		    msg.find('updated') != -1):
 			self.translations += ' - ' + message + ' (' + author + ').\n' 
 		elif message.find('#') != -1:
-			print message
 			p1 = message.find('#')
 			while p1 != -1:
 				bug = Bug()
 				p2 = p1 + 1
 				while message[p2].isdigit():
 					p2 = p2 + 1
-				print message[p1+1:p2]
 				bug.number = message[p1+1:p2]
 				bug.author = author
 				self.bug_commits.append(bug)
