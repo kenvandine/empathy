@@ -3,72 +3,72 @@
 
 # Update the list of headers from Makefile.am
 cd ../libempathy
-python /usr/share/pygtk/2.0/codegen/h2def.py	\
+python /usr/share/pygobject/2.0/codegen/h2def.py	\
         -m empathy				\
-	empathy-time.h				\
-	empathy-status-presets.h		\
-	empathy-debug.h				\
-	empathy-utils.h				\
-	empathy-message.h			\
-	empathy-chatroom-manager.h		\
 	empathy-chatroom.h			\
+	empathy-chatroom-manager.h		\
 	empathy-contact.h			\
+	empathy-contact-factory.h		\
 	empathy-contact-groups.h		\
 	empathy-contact-list.h			\
 	empathy-contact-manager.h		\
-	empathy-contact-factory.h		\
-	empathy-tp-contact-factory.h		\
-	empathy-tp-group.h			\
-	empathy-tp-contact-list.h		\
-	empathy-tp-chat.h			\
-	empathy-tp-roomlist.h			\
-	empathy-tp-call.h			\
-	empathy-tp-tube.h			\
-	empathy-idle.h				\
-	empathy-log-manager.h			\
-	empathy-irc-network-manager.h		\
-	empathy-irc-network.h			\
-	empathy-irc-server.h			\
-	empathy-tube-handler.h			\
+	empathy-debug.h				\
 	empathy-dispatcher.h			\
+	empathy-idle.h				\
+	empathy-irc-network.h			\
+	empathy-irc-network-manager.h		\
+	empathy-irc-server.h			\
+	empathy-log-manager.h			\
+	empathy-message.h			\
+	empathy-status-presets.h		\
+	empathy-time.h				\
+	empathy-tp-call.h			\
+	empathy-tp-chat.h			\
+	empathy-tp-contact-factory.h		\
+	empathy-tp-contact-list.h		\
+	empathy-tp-group.h			\
+	empathy-tp-roomlist.h			\
+	empathy-tp-tube.h			\
+	empathy-tube-handler.h			\
+	empathy-utils.h				\
  > ../python/pyempathy/pyempathy.defs
 
 # Update the list of headers from Makefile.am
 cd ../libempathy-gtk
-python /usr/share/pygtk/2.0/codegen/h2def.py	\
+python /usr/share/pygobject/2.0/codegen/h2def.py	\
 	-m empathy				\
-	empathy-images.h			\
 	empathy-account-chooser.h		\
-	empathy-chat.h				\
-	empathy-irc-network-dialog.h		\
-	empathy-spell-dialog.h			\
-	empathy-chat-view.h			\
-	empathy-log-window.h			\
-	empathy-theme-boxes.h			\
 	empathy-account-widget.h		\
-	empathy-conf.h				\
-	empathy-theme.h				\
 	empathy-account-widget-irc.h		\
 	empathy-account-widget-sip.h		\
-	empathy-contact-dialogs.h		\
-	empathy-new-message-dialog.h		\
-	empathy-theme-irc.h			\
 	empathy-avatar-chooser.h		\
-	empathy-contact-list-store.h		\
-	empathy-presence-chooser.h		\
-	empathy-theme-manager.h			\
 	empathy-avatar-image.h			\
-	empathy-contact-list-view.h		\
-	empathy-ui-utils.h			\
 	empathy-cell-renderer-activatable.h	\
-	empathy-contact-widget.h		\
-	empathy-profile-chooser.h		\
 	empathy-cell-renderer-expander.h	\
-	empathy-geometry.h			\
-	empathy-smiley-manager.h		\
 	empathy-cell-renderer-text.h		\
-	empathy-spell.h				\
+	empathy-chat.h				\
+	empathy-chat-view.h			\
+	empathy-conf.h				\
+	empathy-contact-dialogs.h		\
+	empathy-contact-list-store.h		\
+	empathy-contact-list-view.h		\
 	empathy-contact-menu.h			\
+	empathy-contact-widget.h		\
+	empathy-geometry.h			\
+	empathy-images.h			\
+	empathy-irc-network-dialog.h		\
+	empathy-log-window.h			\
+	empathy-new-message-dialog.h		\
+	empathy-presence-chooser.h		\
+	empathy-profile-chooser.h		\
+	empathy-smiley-manager.h		\
+	empathy-spell.h				\
+	empathy-spell-dialog.h			\
+	empathy-theme-boxes.h			\
+	empathy-theme.h				\
+	empathy-theme-irc.h			\
+	empathy-theme-manager.h			\
+	empathy-ui-utils.h			\
  > ../python/pyempathygtk/pyempathygtk.defs
 
 # Keep original version
