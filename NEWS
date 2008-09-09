@@ -1,3 +1,23 @@
+NEW in 2.23.92
+==============
+
+Bugs fixed:
+ - Fixed #550556, IRC Network combo sometimes has wrong network selected (Guillaume Desmottes)
+ - Fixed #551096, Chat window has two close buttons (fpeters)
+ - Fixed #551113, windows lack WM_WINDOW_ROLE property (fpeters)
+ - Fixed #504154, Cleanup in *.pc files (Dafydd Harries)
+
+Translations:
+ - Updated pt translation (Duarte Loreto).
+ - Updated nl translation (Vincent van Adrighem).
+ - Updated en_GB translation  (Philip Withnall).
+ - Updated cs translation  (Adrian Gunis).
+ - Updated Polish translation (Tomasz Dominikowski).
+ - Updated Bulgarian translation (Alexander Shopov).
+ - Updated sv translation (dnylande).
+ - Updated Vietnamese translation (Nguyễn Thái Ngọc Duy).
+ - Added th translation  (Theppitak Karoonboonyanan).
+
 NEW in 2.23.91
 ==============
  - Add a menu item in chat window to set the room as favorite (Xavier Claessens).
