@@ -13,7 +13,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gossip.HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-26 14:43+0100\n"
+"POT-Creation-Date: 2008-09-14 11:08+0100\n"
 "PO-Revision-Date: 2008-08-03 01:32-0000\n"
 "Last-Translator: Youssef Chahibi <chahibi@gmail.com>\n"
 "Language-Team: Arabic <support@eglug.org>\n"
@@ -605,30 +605,30 @@ msgstr "_سأقرر لاحقًا"
 msgid "Subscription Request"
 msgstr "طلب تسجيل"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1226
+#: ../libempathy-gtk/empathy-contact-list-view.c:1244
 #, c-format
 msgid "Do you really want to remove the group '%s'?"
 msgstr "هل ترغب حقا بإزالة المجموعة '%s'؟"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1228
+#: ../libempathy-gtk/empathy-contact-list-view.c:1246
 msgid "Removing group"
 msgstr "إزالة مجموعة"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1275
-#: ../libempathy-gtk/empathy-contact-list-view.c:1354
+#: ../libempathy-gtk/empathy-contact-list-view.c:1293
+#: ../libempathy-gtk/empathy-contact-list-view.c:1372
 msgid "_Remove"
 msgstr "أ_زل"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1305
+#: ../libempathy-gtk/empathy-contact-list-view.c:1323
 #, c-format
 msgid "Do you really want to remove the contact '%s'?"
 msgstr "هل ترغب حقا بإزالة المراسل '%s'؟"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1307
+#: ../libempathy-gtk/empathy-contact-list-view.c:1325
 msgid "Removing contact"
 msgstr "حذف المراسل"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1312
+#: ../libempathy-gtk/empathy-contact-list-view.c:1330
 msgid "Sorry, I don't want you in my contact list anymore."
 msgstr "آسف، ولكن لا أرغب بك في لائحة مراسليَّ بعد الآن."
 
@@ -776,7 +776,7 @@ msgstr "SSL"
 msgid "Account"
 msgstr "حساب"
 
-#: ../libempathy-gtk/empathy-log-window.c:504 ../src/empathy-chat-window.c:276
+#: ../libempathy-gtk/empathy-log-window.c:504 ../src/empathy-chat-window.c:280
 msgid "Conversation"
 msgstr "محادثة"
 
@@ -1349,16 +1349,16 @@ msgstr "اقطع المكالمة"
 msgid "Send Video"
 msgstr "أرسل الفيديو"
 
-#: ../src/empathy-chat-window.c:319
+#: ../src/empathy-chat-window.c:326
 #, c-format
 msgid "Conversations (%d)"
 msgstr "محادثات (%d)"
 
-#: ../src/empathy-chat-window.c:397
+#: ../src/empathy-chat-window.c:418
 msgid "Topic:"
 msgstr "الموضوع:"
 
-#: ../src/empathy-chat-window.c:400
+#: ../src/empathy-chat-window.c:421
 msgid "Typing a message."
 msgstr "يكتب رسالة..."
 
@@ -1414,19 +1414,24 @@ msgstr "م_حادثة"
 msgid "_Detach Tab"
 msgstr "_فصل اللسان"
 
-#: ../src/empathy-chat-window.glade.h:15 ../src/empathy-main-window.glade.h:12
+#: ../src/empathy-chat-window.glade.h:15
+#, fuzzy
+msgid "_Favorite Chatroom"
+msgstr "حرّر الغرفة المفضلة"
+
+#: ../src/empathy-chat-window.glade.h:16 ../src/empathy-main-window.glade.h:12
 msgid "_Help"
 msgstr "م_ساعدة"
 
-#: ../src/empathy-chat-window.glade.h:16
+#: ../src/empathy-chat-window.glade.h:17
 msgid "_Next Tab"
 msgstr "اللسان ال_تالي"
 
-#: ../src/empathy-chat-window.glade.h:17
+#: ../src/empathy-chat-window.glade.h:18
 msgid "_Previous Tab"
 msgstr "اللسان ال_سابق"
 
-#: ../src/empathy-chat-window.glade.h:18
+#: ../src/empathy-chat-window.glade.h:19
 msgid "_Tabs"
 msgstr "أ_لسنة"
 
