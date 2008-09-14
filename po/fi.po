@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gossip\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-27 12:13+0300\n"
-"PO-Revision-Date: 2008-08-27 12:00+0300\n"
+"POT-Creation-Date: 2008-09-14 12:42+0300\n"
+"PO-Revision-Date: 2008-09-14 12:30+0300\n"
 "Last-Translator: Ilkka Tuohela <hile@utu.fi>\n"
 "Language-Team: Finnish <gnome-fi-laatu@lists.sourceforge.net>\n"
 "MIME-Version: 1.0\n"
@@ -606,30 +606,30 @@ msgstr "_Päätä myöhemmin"
 msgid "Subscription Request"
 msgstr "Liittymispyyntö"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1226
+#: ../libempathy-gtk/empathy-contact-list-view.c:1244
 #, c-format
 msgid "Do you really want to remove the group '%s'?"
 msgstr "Haluatko varmasti poistaa ryhmän \"%s\"?"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1228
+#: ../libempathy-gtk/empathy-contact-list-view.c:1246
 msgid "Removing group"
 msgstr "Poistetaan ryhmää"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1275
-#: ../libempathy-gtk/empathy-contact-list-view.c:1354
+#: ../libempathy-gtk/empathy-contact-list-view.c:1293
+#: ../libempathy-gtk/empathy-contact-list-view.c:1372
 msgid "_Remove"
 msgstr "_Poista"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1305
+#: ../libempathy-gtk/empathy-contact-list-view.c:1323
 #, c-format
 msgid "Do you really want to remove the contact '%s'?"
 msgstr "Haluatko varmasti poistaa tuttavan \"%s\" yhteystiedot?"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1307
+#: ../libempathy-gtk/empathy-contact-list-view.c:1325
 msgid "Removing contact"
 msgstr "Poistetaan tuttava"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1312
+#: ../libempathy-gtk/empathy-contact-list-view.c:1330
 msgid "Sorry, I don't want you in my contact list anymore."
 msgstr "Anteeksi mutta en halua sinua enää tuttavaluettelooni."
 
@@ -773,7 +773,7 @@ msgstr "SSL"
 msgid "Account"
 msgstr "Käyttäjätili"
 
-#: ../libempathy-gtk/empathy-log-window.c:504 ../src/empathy-chat-window.c:276
+#: ../libempathy-gtk/empathy-log-window.c:504 ../src/empathy-chat-window.c:280
 msgid "Conversation"
 msgstr "Keskustelu"
 
@@ -1350,16 +1350,16 @@ msgstr "Katkaise puhelu"
 msgid "Send Video"
 msgstr "Lähetä videokuvaa"
 
-#: ../src/empathy-chat-window.c:319
+#: ../src/empathy-chat-window.c:326
 #, c-format
 msgid "Conversations (%d)"
 msgstr "Keskustelut (%d)"
 
-#: ../src/empathy-chat-window.c:397
+#: ../src/empathy-chat-window.c:418
 msgid "Topic:"
 msgstr "Aihe: "
 
-#: ../src/empathy-chat-window.c:400
+#: ../src/empathy-chat-window.c:421
 msgid "Typing a message."
 msgstr "Kirjoittaa viestiä."
 
@@ -1415,19 +1415,23 @@ msgstr "_Keskustelu"
 msgid "_Detach Tab"
 msgstr "_Irrota välilehti"
 
-#: ../src/empathy-chat-window.glade.h:15 ../src/empathy-main-window.glade.h:12
+#: ../src/empathy-chat-window.glade.h:15
+msgid "_Favorite Chatroom"
+msgstr "_Suosituin keskusteluhuone"
+
+#: ../src/empathy-chat-window.glade.h:16 ../src/empathy-main-window.glade.h:12
 msgid "_Help"
 msgstr "O_hje"
 
-#: ../src/empathy-chat-window.glade.h:16
+#: ../src/empathy-chat-window.glade.h:17
 msgid "_Next Tab"
 msgstr "_Seuraava välilehti"
 
-#: ../src/empathy-chat-window.glade.h:17
+#: ../src/empathy-chat-window.glade.h:18
 msgid "_Previous Tab"
 msgstr "_Edellinen välilehti"
 
-#: ../src/empathy-chat-window.glade.h:18
+#: ../src/empathy-chat-window.glade.h:19
 msgid "_Tabs"
 msgstr "V_älilehdet"
 
@@ -1908,9 +1912,6 @@ msgstr "_Näytä tuttavaluettelo"
 
 #~ msgid "Edit the groups and name for this contact"
 #~ msgstr "Muokkaa yhteystiedon ryhmiä ja nimeä"
-
-#~ msgid "_Invite to Chat Room"
-#~ msgstr "K_utsu keskusteluhuoneeseen"
 
 #~ msgid "Invite to a currently open chat room"
 #~ msgstr "Kutsu avoinna olevaan keskusteluhuoneeseen"
