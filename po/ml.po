@@ -1,896 +1,1735 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FSF-India <locale@gnu.org.in>, 2003.
+# Copyright (C) 2008 empathy'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the empathy package.
 #
+# FSF-India <locale@gnu.org.in>, 2003.
+# ashik salahudeen <aashiks@gmail.com>, 2008.
+# പ്രവീണ്‍ അരിമ്പ്രത്തൊടിയില്‍ <pravi.a@gmail.com>, 2008.
 msgid ""
 msgstr ""
-"Project-Id-Version:gossip\n"
+"Project-Id-Version: gossip\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2007-05-15 23:46+0200\n"
-"PO-Revision-Date: 2003-07-05 10:29+0530\n"
-"Last-Translator: FSF-India <locale@gnu.org.in>\n"
-"Language-Team: Malayalam <locale@gnu.org.in>\n"
+"POT-Creation-Date: 2008-09-09 11:33+0000\n"
+"PO-Revision-Date: 2008-09-15 23:08-0500\n"
+"Last-Translator: പ്രവീണ്‍ അരിമ്പ്രത്തൊടിയില്‍ <pravi.a@gmail.com>\n"
+"Language-Team: Malayalam <smc-discuss@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Lokalize 0.2\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
 
-#: ../data/empathy.desktop.in.h:1
-#, fuzzy
+#: ../data/empathy.desktop.in.in.h:1
 msgid "Empathy Instant Messenger"
-msgstr "സന്ദേശം:"
+msgstr "എമ്പതി സന്ദേശവാഹകന്‍"
 
-#: ../data/empathy.desktop.in.h:2
-msgid "Instant Messenger"
-msgstr ""
+#: ../data/empathy.desktop.in.in.h:2
+msgid "Send and receive instant messages"
+msgstr "ഞൊടിയിടയിലുള്ള സന്ദേശങ്ങള്‍ അയക്കുകയും സ്വീകരിക്കുകയും ചെയ്യുക"
 
 #: ../data/empathy.schemas.in.h:1
 msgid "Always open a separate chat window for new chats."
-msgstr ""
+msgstr "പുതിയ ചാറ്റുകള്‍ എപ്പോഴും മറ്റൊരു പുതിയ ജാലകത്തില്‍ തന്നെ തുറക്കുക"
 
 #: ../data/empathy.schemas.in.h:2
-msgid "Chat window theme"
-msgstr ""
+msgid "Character to add after nickname when using nick completion (tab) in group chat."
+msgstr "ഗ്രൂപ്പ് ചാറ്റില്‍ വിളിപ്പേരു മുഴുമിക്കല്‍ (റ്റാബ്) ഉപയോഗിക്കുമ്പോള്‍ വിളിപ്പേരിനു ശേഷം ചേര്‍‌ക്കേണ്ട അക്ഷരം/ചിഹ്നം"
 
 #: ../data/empathy.schemas.in.h:3
-msgid ""
-"Comma separated list of spell checker languages to use (e.g. en, fr, nl)."
-msgstr ""
+msgid "Chat window theme"
+msgstr "ചാറ്റ് വിന്‍ഡോയുടെ തീം"
 
 #: ../data/empathy.schemas.in.h:4
-msgid "Compact contact list"
-msgstr ""
+msgid "Comma separated list of spell checker languages to use (e.g. en, fr, nl)."
+msgstr "കോമകളിട്ട് തിരിച്ചിട്ടുള്ള സ്പെല്‍ ചെക്കര്‍ ഭാഷകളുടെ ഒരു പട്ടിക ( ഉദാ. hi,ml) ."
 
 #: ../data/empathy.schemas.in.h:5
-msgid "Contact list sort criterium"
-msgstr ""
+msgid "Compact contact list"
+msgstr "കോണ്‍ടാക്റ്റ് പട്ടികയുടെ ചുരുക്കരൂപം"
 
 #: ../data/empathy.schemas.in.h:6
-msgid "Default directory to select an avatar image from"
-msgstr ""
+msgid "Contact list sort criterium"
+msgstr "കോണ്‍ടാക്റ്റ് പട്ടിക ക്രമീകരിക്കേണ്ടത് ഇതിനെ അടിസ്ഥാനമാക്കിയാണ് "
 
 #: ../data/empathy.schemas.in.h:7
-msgid "Enable popup when contact is available"
-msgstr ""
+msgid "Default directory to select an avatar image from"
+msgstr "അവതാരം ആയി ഉപയോഗിക്കേണ്ട ചിത്രം തെരഞ്ഞെടുക്കാനുപയോഗിക്കേണ്ട ഡിഫോള്‍ട്ട് ഡയറക്റ്ററി"
 
 #: ../data/empathy.schemas.in.h:8
-msgid "Enable sound when away"
-msgstr ""
+msgid "Empathy should auto-connect on startup"
+msgstr "എംപതി തുടക്കത്തില്‍ തന്നത്താന്‍ കണക്റ്റ് ചെയ്യണം"
 
 #: ../data/empathy.schemas.in.h:9
-msgid "Enable sound when busy"
-msgstr ""
+msgid "Empathy should use the avatar of the contact as the chat window icon"
+msgstr "എംപതി ചാറ്റ് ജാലകത്തിന്റെ ഐക്കണ്‍ ആയി കോണ്‍ടാക്റ്റിന്റെ അവതാരത്തെ തന്നെ ഉപയോഗിക്കണം"
 
 #: ../data/empathy.schemas.in.h:10
-msgid "Enable spell checker"
-msgstr ""
+msgid "Enable popup when contact is available"
+msgstr "കോണ്‍ടാക്റ്റ് ചാറ്റിനായി ലഭ്യമാകുമ്പോള്‍ പോപ്പ് അപ്പ് സജീവമാക്കുക"
 
 #: ../data/empathy.schemas.in.h:11
-msgid "Hide main window"
-msgstr ""
+msgid "Enable sound when away"
+msgstr "ദൂരെപ്പോകുമ്പോള്‍ ശബ്ദസംവിധാനം സജീവമാക്കുക"
 
 #: ../data/empathy.schemas.in.h:12
-msgid "Hide the main window."
-msgstr ""
+msgid "Enable sound when busy"
+msgstr "തിരക്കിലായിരിക്കുമ്പോള്‍ ശബ്ദസംവിധാനം സജീവമാക്കുക"
 
 #: ../data/empathy.schemas.in.h:13
-msgid "Open new chats in separate windows"
-msgstr ""
+msgid "Enable spell checker"
+msgstr "സ്പെല്‍ ചെക്കര്‍ സജീവമാക്കുക"
 
 #: ../data/empathy.schemas.in.h:14
-msgid "Show avatars"
-msgstr ""
+msgid "Hide main window"
+msgstr "പ്രധാനജാലകത്തെ മറയ്ക്കുക"
 
 #: ../data/empathy.schemas.in.h:15
-msgid "Show hint about closing the main window"
-msgstr ""
+msgid "Hide the main window."
+msgstr "പ്രധാനജാലകത്തെ മറയ്ക്കുക"
 
 #: ../data/empathy.schemas.in.h:16
-msgid "Show offline contacts"
-msgstr ""
+msgid "NetworkManager should be used"
+msgstr "നെറ്റ്വര്‍ക്ക് മാനേജരെ ഉപയോഗിക്കണം"
 
 #: ../data/empathy.schemas.in.h:17
-msgid "Spell checking languages"
-msgstr ""
+msgid "Nick completed character"
+msgstr "വിളിപ്പേരു മുഴുമിക്കപ്പെടുമ്പോള്‍ ഉപയോഗിക്കേണ്ട ചിഹ്നം"
 
 #: ../data/empathy.schemas.in.h:18
-msgid "The last directory that an avatar image was chosen from."
-msgstr ""
+msgid "Open new chats in separate windows"
+msgstr "പുതിയ ചാറ്റുകള്‍ വെവ്വേറെ ജാലകങ്ങളില്‍ തുറക്കുക"
 
 #: ../data/empathy.schemas.in.h:19
-msgid "The theme that is used to display the conversation in chat windows."
-msgstr ""
+msgid "Salut account is created"
+msgstr "സല്യൂട്ട് അക്കൗണ്ട് ഉണ്ടാക്കിക്കഴിഞിരിക്കുന്നു"
 
 #: ../data/empathy.schemas.in.h:20
-msgid "Use graphical smileys"
-msgstr ""
+msgid "Show avatars"
+msgstr "അവതാരങ്ങളെ കാണിക്കുക"
 
 #: ../data/empathy.schemas.in.h:21
-msgid "Use notification sounds"
-msgstr ""
+msgid "Show hint about closing the main window"
+msgstr "പ്രധാനജാലകം അടയ്ക്കുമ്പോള്‍ ഒരു സൂചന കാണിക്കുക"
 
 #: ../data/empathy.schemas.in.h:22
-msgid "Use theme for chat rooms"
-msgstr ""
+msgid "Show offline contacts"
+msgstr "ഓഫ്‌ലൈന്‍ ആയ കോണ്‍ടാക്റ്റുകളെ കാണിക്കുക"
 
 #: ../data/empathy.schemas.in.h:23
-msgid ""
-"Whether or not to check words typed against the languages you want to check "
-"with."
-msgstr ""
+msgid "Spell checking languages"
+msgstr "സ്പെല്‍ ചെക് നടത്താവുന്ന ഭാഷകള്‍"
 
 #: ../data/empathy.schemas.in.h:24
-msgid ""
-"Whether or not to convert smileys into graphical images in conversations."
-msgstr ""
+msgid "The last directory that an avatar image was chosen from."
+msgstr "ഒരു അവതാരചിത്രം തെരഞ്ഞെടുക്കാനുപയോഗിച്ച അവസാനത്തെ ഡയറക്റ്ററി"
 
 #: ../data/empathy.schemas.in.h:25
-msgid "Whether or not to play a sound when messages arrive."
-msgstr ""
+msgid "The theme that is used to display the conversation in chat windows."
+msgstr "വര്‍ത്തമാനത്തെ ചാറ്റ് ജാലകങ്ങളില്‍ കാണിക്കുമ്പോള്‍ ഉപയോഗിക്കേണ്ട തീം"
 
 #: ../data/empathy.schemas.in.h:26
-msgid "Whether or not to play sounds when away."
-msgstr ""
+msgid "Use graphical smileys"
+msgstr "ഗ്രാഫിക്കല്‍ സ്മൈലികള്‍ ഉപയോഗിക്കുക"
 
 #: ../data/empathy.schemas.in.h:27
-msgid "Whether or not to play sounds when busy."
-msgstr ""
+msgid "Use notification sounds"
+msgstr "സൂചനാശബ്ദങ്ങള്‍ ഉപയോഗിക്കുക"
 
 #: ../data/empathy.schemas.in.h:28
-msgid "Whether or not to show a popup when a contact becomes available."
-msgstr ""
+msgid "Use theme for chat rooms"
+msgstr "ചാറ്റ് മുറികള്‍ക്ക് തീം ഉപയോഗിക്കുക"
 
 #: ../data/empathy.schemas.in.h:29
-msgid ""
-"Whether or not to show avatars for contacts in the contact list and chat "
-"windows."
-msgstr ""
+msgid "Whether or not Empathy should automatically log in to your accounts on startup."
+msgstr "എംപതി തുടക്കത്തില്‍ തന്നെ നിങ്ങളുടെ അക്കൗണ്ടുകളിലേക്ക് ലോഗിന്‍ ചെയ്യണമോ വേണ്ടയോ എന്ന് "
 
 #: ../data/empathy.schemas.in.h:30
-msgid "Whether or not to show contacts that are offline in the contact list."
-msgstr ""
+msgid "Whether or not Empathy should use the avatar of the contact as the chat window icon."
+msgstr "എംപതി കോണ്ടാക്റ്റിന്റെ അവതാരചിത്രത്തെ തന്നെ ചാറ്റ് ജാലകത്തിന്റെ ഐക്കണായി ഉപയോഗിക്കണമോ വേണ്ടയോ എന്ന്"
 
 #: ../data/empathy.schemas.in.h:31
-msgid ""
-"Whether or not to show the message dialog about closing the main window with "
-"the 'x' button in the title bar."
-msgstr ""
+msgid "Whether or not the Salut account has been created on the first Empathy run."
+msgstr "എംപതി ആദ്യമായി ഉപയോഗിക്കുമ്പോള്‍ സല്യൂട്ട് അക്കൗണ്ട് ഉണ്ടാക്കണമോ വേണ്ടയോ എന്ന് "
 
 #: ../data/empathy.schemas.in.h:32
-msgid "Whether to show the contact list in compact mode or not."
-msgstr ""
+msgid "Whether or not the network manager should be used to automatically disconnect/reconnect."
+msgstr "തന്നത്താന്‍ കണക്റ്റ് / റീ കണക്റ്റ് ചെയ്യാന്‍ നെറ്റ്‌വര്‍ക്ക് മാനേജറെ ഉപയോഗിക്കണമോ എന്ന്"
 
 #: ../data/empathy.schemas.in.h:33
-msgid "Whether to use the theme for chat rooms or not."
-msgstr ""
+msgid "Whether or not to check words typed against the languages you want to check with."
+msgstr "നിങ്ങള്‍ പരിശോധിയ്ക്കണമെന്നാഗ്രഹിയ്ക്കുന്ന ഭാഷകളില്‍ എഴുതുന്ന വാക്കുകള്‍ പരിശോധിയ്ക്കണോ വേണ്ടയോ എന്നു്."
 
 #: ../data/empathy.schemas.in.h:34
-msgid ""
-"Which criterium to use when sorting the contact list. Default is to use sort "
-"by the contact's name with the value \"name\". A value of \"state\" will "
-"sort the contact list by state."
-msgstr ""
+msgid "Whether or not to convert smileys into graphical images in conversations."
+msgstr "വര്‍ത്തമാനം പറയുമ്പോള്‍ ഉപയോഗിക്കുന്ന സ്മൈലികളെ ചിത്രങ്ങളാക്കി മാറ്റണമോ വേണ്ടയോ എന്ന്"
 
-#: ../libempathy/gossip-contact.c:654 ../libempathy/gossip-presence.c:184
-#: ../libempathy/gossip-presence.c:283
-#, fuzzy
-msgid "Offline"
-msgstr "കാര്യാലയം"
+#: ../data/empathy.schemas.in.h:35
+msgid "Whether or not to play a sound when messages arrive."
+msgstr "ഒരു സന്ദേശം വരുമ്പോള്‍ ശബ്ദമുണ്ടാക്കണോ വേണ്ടയോ എന്ന് "
 
-#: ../libempathy/gossip-presence.c:274
-#, fuzzy
+#: ../data/empathy.schemas.in.h:36
+msgid "Whether or not to play sounds when away."
+msgstr "നിങ്ങള്‍ ദൂരെയായിരിക്കുമ്പോള്‍ ശബ്ദമുണ്ടാക്കണോ വേണ്ടയോ എന്ന്"
+
+#: ../data/empathy.schemas.in.h:37
+msgid "Whether or not to play sounds when busy."
+msgstr "നിങ്ങള്‍ തിരക്കിലായിരിക്കുമ്പോള്‍ ശബ്ദമുണ്ടാക്കണോ വേണ്ടയോ എന്ന്"
+
+#: ../data/empathy.schemas.in.h:38
+msgid "Whether or not to show a popup when a contact becomes available."
+msgstr "ഒരു കോണ്ടാക്റ്റ്  ചാറ്റിനായി ലഭ്യമാകുമ്പോള്‍ ഒരു പോപ്പ് അപ്പ്  കാണിക്കണോ വേണ്ടയോ എന്ന്"
+
+#: ../data/empathy.schemas.in.h:39
+msgid "Whether or not to show avatars for contacts in the contact list and chat windows."
+msgstr "ചാറ്റ് ജാലകങ്ങളിലും കോണ്ടാക്റ്റ് പട്ടികയിലും കോണ്ടാക്റ്റുകള്‍ക്ക് അവതാറുകളെ കാണിക്കണോ എന്ന്"
+
+#: ../data/empathy.schemas.in.h:40
+msgid "Whether or not to show contacts that are offline in the contact list."
+msgstr "ഓഫ്‌ലൈന്‍ ആയ കോണ്ടാക്റ്റുകളെ കോണ്ടാക്റ്റ് പട്ടികയില്‍ കാണിക്കണോ വേണ്ടയോ എന്ന് "
+
+#: ../data/empathy.schemas.in.h:41
+msgid "Whether or not to show the message dialog about closing the main window with the 'x' button in the title bar."
+msgstr "ടൈറ്റില്‍ ബാറിലെ 'x' ബട്ടണുപയോഗിച്ച് പ്രധാനജാലകം അടച്ചു കളയുന്നതിനെക്കുറിച്ചുള്ള മെസ്സേജ് ഡയലോഗ് കാണിക്കണോവേണ്ടയോ"
+
+#: ../data/empathy.schemas.in.h:42
+msgid "Whether to show the contact list in compact mode or not."
+msgstr "കോണ്‍ടാക്റ്റ് പട്ടികയെ ചുരുക്കി കാണിക്കണോ വേണ്ടയോ എന്ന്"
+
+#: ../data/empathy.schemas.in.h:43
+msgid "Whether to use the theme for chat rooms or not."
+msgstr "ചാറ്റ് മുറികള്‍ക്ക് തീം ഉപയോഗിക്കണോ വേണ്ടയോ എന്ന് "
+
+#: ../data/empathy.schemas.in.h:44
+msgid "Which criterium to use when sorting the contact list. Default is to use sort by the contact's name with the value \"name\". A value of \"state\" will sort the contact list by state."
+msgstr "കോണ്ടാക്റ്റ് പട്ടികയെ ക്രമീകരിക്കുമ്പോള്‍ ഉപയോഗിക്കേണ്ട അടിസ്ഥാനം. കോണ്ടാക്റ്റിന്റെ \"പേര്\" അനുസരിച്ച് അക്ഷരമാലാക്രമത്തിലാക്കുക എന്നതാണ് ഡിഫോള്‍ട്ട്.  \"സംസ്ഥാനം\" എന്നത് കോണ്ടാക്റ്റ് പട്ടികയെ സംസ്ഥാനത്തിനനുസരിച്ച്  അക്ഷരമാലാക്രമത്തിലാക്കും"
+
+#: ../libempathy/empathy-tp-contact-list.c:731
+#: ../src/empathy.c:248
+msgid "People nearby"
+msgstr "അടുത്തുള്ളവര്‍"
+
+#: ../libempathy/empathy-utils.c:345
 msgid "Available"
-msgstr "ലഭ്യത"
+msgstr "ലഭ്യമാണു്"
 
-#: ../libempathy/gossip-presence.c:276
+#: ../libempathy/empathy-utils.c:347
 msgid "Busy"
-msgstr "തിരക്ക്"
+msgstr "തിരക്കില്‍"
 
-#: ../libempathy/gossip-presence.c:279
+#: ../libempathy/empathy-utils.c:350
 msgid "Away"
 msgstr "ദൂരെ"
 
-#: ../libempathy-gtk/empathy-main-window.c:254
-msgid "Show and edit accounts"
-msgstr ""
+#: ../libempathy/empathy-utils.c:352
+msgid "Hidden"
+msgstr "മറയ്ക്കപ്പെട്ടിരിക്കുന്നു"
 
-#: ../libempathy-gtk/empathy-main-window.c:456
-msgid "Group"
-msgstr ""
+#: ../libempathy/empathy-utils.c:355
+msgid "Offline"
+msgstr "ഓഫ്‌ലൈന്‍"
 
-#: ../libempathy-gtk/empathy-main-window.c:477
-#, fuzzy
-msgid "Contact"
-msgstr "ഘടിപ്പിക്കുക"
+#: ../libempathy-gtk/empathy-account-chooser.c:337
+msgid "All"
+msgstr "എല്ലാവരും"
 
-#: ../libempathy-gtk/empathy-main-window.glade.h:1
-msgid "Contact List - Empathy"
-msgstr ""
+#: ../libempathy-gtk/empathy-account-widget.c:302
+#: ../libempathy-gtk/empathy-account-widget.c:347
+msgid "%s:"
+msgstr "%s:"
 
-#: ../libempathy-gtk/empathy-main-window.glade.h:2
-#, fuzzy
-msgid "Context"
-msgstr "ഘടിപ്പിക്കുക"
+#: ../libempathy-gtk/empathy-account-widget-aim.glade.h:1
+#: ../libempathy-gtk/empathy-account-widget-generic.glade.h:1
+#: ../libempathy-gtk/empathy-account-widget-groupwise.glade.h:1
+#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:1
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:1
+#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:1
+#: ../libempathy-gtk/empathy-account-widget-salut.glade.h:1
+#: ../libempathy-gtk/empathy-account-widget-sip.glade.h:1
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:1
+msgid "<b>Advanced</b>"
+msgstr "<b>സങ്കീര്‍ണ്ണമായ</b>"
 
-#: ../libempathy-gtk/empathy-main-window.glade.h:3
-msgid "Join _Favorites"
-msgstr ""
+#: ../libempathy-gtk/empathy-account-widget-aim.glade.h:2
+#: ../libempathy-gtk/empathy-account-widget-groupwise.glade.h:2
+#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:2
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:3
+#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:2
+#: ../libempathy-gtk/empathy-account-widget-sip.glade.h:4
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:2
+msgid "Forget password and clear the entry."
+msgstr "അടയാളവാക്ക്  മറന്നുകളയുക"
 
-#: ../libempathy-gtk/empathy-main-window.glade.h:4
-#: ../libempathy-gtk/gossip-chat.glade.h:10
-msgid "Join _New..."
-msgstr ""
+#: ../libempathy-gtk/empathy-account-widget-aim.glade.h:3
+#: ../libempathy-gtk/empathy-account-widget-groupwise.glade.h:4
+#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:4
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:5
+#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:4
+#: ../libempathy-gtk/empathy-account-widget-sip.glade.h:5
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:3
+msgid "Pass_word:"
+msgstr "അടയാള_വാക്ക്:"
 
-#: ../libempathy-gtk/empathy-main-window.glade.h:5
-msgid "Manage Favorites..."
-msgstr ""
+#: ../libempathy-gtk/empathy-account-widget-aim.glade.h:4
+msgid "Screen _Name:"
+msgstr "സ്ക്രീനിലെ _പേരു്:"
 
-#: ../libempathy-gtk/empathy-main-window.glade.h:6
-msgid "Show _Offline Contacts"
-msgstr ""
+#: ../libempathy-gtk/empathy-account-widget-aim.glade.h:5
+#: ../libempathy-gtk/empathy-account-widget-groupwise.glade.h:5
+#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:6
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:11
+#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:5
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:8
+msgid "_Port:"
+msgstr "_പോര്‍ട്ട് :"
 
-#: ../libempathy-gtk/empathy-main-window.glade.h:7
-msgid "_About"
-msgstr ""
+#: ../libempathy-gtk/empathy-account-widget-aim.glade.h:6
+#: ../libempathy-gtk/empathy-account-widget-groupwise.glade.h:6
+#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:7
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:12
+#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:6
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:10
+#: ../src/empathy-new-chatroom-dialog.glade.h:10
+msgid "_Server:"
+msgstr "സെര്‍വര്‍ (_S):"
 
-#: ../libempathy-gtk/empathy-main-window.glade.h:8
-msgid "_Accounts"
-msgstr ""
+#: ../libempathy-gtk/empathy-account-widget-groupwise.glade.h:3
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:4
+#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:3
+msgid "Login I_D:"
+msgstr "ലോഗിന്‍ ഐ ഡി (_D)"
 
-#: ../libempathy-gtk/empathy-main-window.glade.h:9
-#: ../libempathy-gtk/gossip-chat.glade.h:15
-msgid "_Add Contact..."
-msgstr ""
+#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:3
+msgid "ICQ _UIN:"
+msgstr "ഐസിക്യു യുഐഎന്‍ (_U):"
 
-#: ../libempathy-gtk/empathy-main-window.glade.h:10
-#: ../libempathy-gtk/gossip-contact-list.c:298
+#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:5
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:6
+msgid "_Charset:"
+msgstr "ക്യാര്‍സെറ്റ് :"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.c:245
+msgid "New Network"
+msgstr "പുതിയ ശൃംഖല"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:1
+msgid "<b>Network</b>"
+msgstr "<b>ശൃംഖല</b>"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:2
+msgid "<b>Servers</b>"
+msgstr "<b>സെര്‍വറുകള്‍</b>"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:3
+msgid "Charset:"
+msgstr "ക്യാര്‍സെറ്റ്:"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:4
+msgid "Create a new IRC network"
+msgstr "ഒരു പുതിയ ഐആര്‍സി ശൃംഖല ഉണ്ടാക്കുക"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:5
+msgid "Edit the selected IRC network"
+msgstr "തെരഞ്ഞെടുത്ത ഐആര്‍സി ശൃംഖലയുടെ ക്രമീകരണങ്ങളില്‍ മാറ്റം വരുത്തുക"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:6
+msgid "Network"
+msgstr "ശൃംഖല"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:7
+msgid "Network:"
+msgstr "ശൃംഖല : "
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:8
+msgid "Nickname:"
+msgstr "വിളിപ്പേര് :"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:9
+msgid "Password:"
+msgstr "അടയാളവാക്ക്:"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:10
+msgid "Quit message:"
+msgstr "സന്ദേശം :"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:11
+msgid "Real name:"
+msgstr "ശരിയായ പേരു്:"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:12
+msgid "Remove the selected IRC network"
+msgstr "തെരഞ്ഞെടുത്ത ഐആര്‍സി ശൃംഖല എടുത്തുകളയുക"
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:2
+msgid "<b>Override server settings</b>"
+msgstr "<b>സര്‍വറുടെ ക്രമീകരണങ്ങളെ മറികടക്കുക</b>"
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:6
+msgid "Pri_ority:"
+msgstr "പ്രാ_ധാന്യം:"
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:7
+msgid "Reso_urce:"
+msgstr "വിഭവം (‌_u)"
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:8
+msgid "Use old SS_L"
+msgstr "പഴയ എസ്എസ്എല്‍ (_L) ഉപയോഗിക്കുക"
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:9
+msgid "_Encryption required (TLS/SSL)"
+msgstr "ടിഎല്‍എസ് അല്ലെങ്കില്‍ എസ്എസ്എല്‍ എന്‍ക്രിപ്ഷന്‍ ആവശ്യമാണ് (_E)"
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:10
+msgid "_Ignore SSL certificate errors"
+msgstr "എസ്എസ്എല്‍ സാക്ഷ്യപത്രങ്ങളിലുള്ള തെറ്റുകളെ അവഗണിക്കുക (_I)"
+
+#: ../libempathy-gtk/empathy-account-widget-salut.glade.h:2
+msgid "_Email:"
+msgstr "ഇ-മെയില്‍ ( _E): "
+
+#: ../libempathy-gtk/empathy-account-widget-salut.glade.h:3
+msgid "_First Name: "
+msgstr "നാമം (_F) :"
+
+#: ../libempathy-gtk/empathy-account-widget-salut.glade.h:4
+msgid "_Jabber ID:"
+msgstr "ജാബര്‍ ഐഡി (‌ _J) : "
+
+#: ../libempathy-gtk/empathy-account-widget-salut.glade.h:5
+msgid "_Last Name:"
+msgstr "_അവസാന പേരു്:"
+
+#: ../libempathy-gtk/empathy-account-widget-salut.glade.h:6
+#: ../src/empathy-chatrooms-window.glade.h:8
+msgid "_Nickname:"
+msgstr "വിളിപ്പേരു് (_N) :"
+
+#: ../libempathy-gtk/empathy-account-widget-salut.glade.h:7
+msgid "_Published Name:"
+msgstr "_പ്രസിദ്ധീകരിച്ച പേരു്:"
+
+#. look up the DNS SRV record at the service's domain for the host name of a STUN server.
+#: ../libempathy-gtk/empathy-account-widget-sip.glade.h:3
+msgid "Discover STUN"
+msgstr "STUN കണ്ടുപിടിക്കുക"
+
+#: ../libempathy-gtk/empathy-account-widget-sip.glade.h:6
+msgid "STUN Server:"
+msgstr "STUN സര്‍വര്‍: "
+
+#: ../libempathy-gtk/empathy-account-widget-sip.glade.h:7
+msgid "STUN port:"
+msgstr "STUN പോര്‍ട്ട് :"
+
+#: ../libempathy-gtk/empathy-account-widget-sip.glade.h:8
+msgid "_Username:"
+msgstr "_ഉപയോക്താവിന്റെ പേരു്:"
+
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:4
+msgid "Use _Yahoo Japan"
+msgstr "യാഹൂ ജപ്പാന്‍ ഉപയോഗിക്കുക (_Y)"
+
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:5
+msgid "Yahoo I_D:"
+msgstr "യാഹൂ ഐഡി (_D)"
+
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:7
+msgid "_Ignore conference and chatroom invitations"
+msgstr "ചാറ്റ് മുറികളിലേക്കും കോണ്‍ഫറന്‍സുകളിലേക്കും ഉള്ള ക്ഷണങ്ങളെ നിരസിക്കുക (_I) "
+
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:9
+msgid "_Room List locale:"
+msgstr "മുറികളുടെ പട്ടികയുടെ സ്ഥാനം (_R)"
+
+#: ../libempathy-gtk/empathy-avatar-chooser.c:457
+msgid "Select Your Avatar Image"
+msgstr "നിങ്ങളുടെ അവതാരചിത്രം തിരഞ്ഞെടുക്കുക"
+
+#: ../libempathy-gtk/empathy-avatar-chooser.c:460
+msgid "No Image"
+msgstr "ചിത്രമൊന്നും ഇല്ല"
+
+#: ../libempathy-gtk/empathy-avatar-chooser.c:520
+msgid "Images"
+msgstr "ചിത്രങ്ങള്‍"
+
+#: ../libempathy-gtk/empathy-avatar-chooser.c:524
+msgid "All Files"
+msgstr "എല്ലാ ഫയലുകളും"
+
+#: ../libempathy-gtk/empathy-avatar-image.c:294
+msgid "Click to enlarge"
+msgstr "വലുതാക്കാനായി ക്ളിക്ക് ചെയ്യുക"
+
+#: ../libempathy-gtk/empathy-chat.c:497
+msgid "offline"
+msgstr "ഓഫ്‌ലൈന്‍"
+
+#: ../libempathy-gtk/empathy-chat.c:500
+msgid "invalid contact"
+msgstr "അസാധുവായ കോണ്‍ടാക്റ്റ്"
+
+#: ../libempathy-gtk/empathy-chat.c:503
+msgid "permission denied"
+msgstr "അനുവാദമില്ല"
+
+#: ../libempathy-gtk/empathy-chat.c:506
+msgid "too long message"
+msgstr "സന്ദേശത്തിന്റെ നീളം വളരെക്കൂടുതലാണ്"
+
+#: ../libempathy-gtk/empathy-chat.c:509
+msgid "not implemented"
+msgstr "ചെയ്തു് തീര്‍ത്തിട്ടില്ല"
+
+#: ../libempathy-gtk/empathy-chat.c:512
+msgid "unknown"
+msgstr "അറിയാത്ത ഏതോ പ്രശ്നം"
+
+#: ../libempathy-gtk/empathy-chat.c:516
+#, c-format
+msgid "Error sending message '%s': %s"
+msgstr "'%s' എന്ന സന്ദേശം അയക്കാന്‍ പറ്റിയില്ല : %s"
+
+#: ../libempathy-gtk/empathy-chat.c:546
+#, c-format
+msgid "Topic set to: %s"
+msgstr "വിഷയം %s ആക്കിയിരിക്കുന്നു"
+
+#: ../libempathy-gtk/empathy-chat.c:548
+msgid "No topic defined"
+msgstr "വിഷയമൊന്നും ഇല്ല"
+
+#: ../libempathy-gtk/empathy-chat.c:963
+msgid "Insert Smiley"
+msgstr "സ്മൈലി ഇവിടെ വെക്കുക"
+
+#: ../libempathy-gtk/empathy-chat.c:979
+msgid "_Send"
+msgstr "അയക്കുക (_S) "
+
+#: ../libempathy-gtk/empathy-chat.c:1013
+msgid "_Check Word Spelling..."
+msgstr "വാക്കില്‍ തെറ്റുകളുണ്ടോ എന്നു പരിശോധിക്കുക (_C)"
+
+#: ../libempathy-gtk/empathy-chat.c:1119
+#, c-format
+msgid "%s has joined the room"
+msgstr "%s ഈ മുറിയിലേക്ക് ചേര്‍ന്നിരിക്കുന്നു"
+
+#: ../libempathy-gtk/empathy-chat.c:1122
+#, c-format
+msgid "%s has left the room"
+msgstr "%s ഈ മുറിയില്‍ നിന്നും പുറത്തേക്കു പോയി"
+
+#: ../libempathy-gtk/empathy-chat.c:1236
+#: ../src/empathy-call-window.c:406
+msgid "Disconnected"
+msgstr "ബന്ധം വേര്‍പെടുത്തിയിരിക്കുന്നു"
+
+#: ../libempathy-gtk/empathy-chat.c:1608
+msgid "Connected"
+msgstr "ബന്ധപ്പെട്ടിരിക്കുന്നു"
+
+#: ../libempathy-gtk/empathy-chat.glade.h:1
+msgid "<b>Topic:</b>"
+msgstr "<b>വിഷയം:</b>"
+
+#: ../libempathy-gtk/empathy-chat.glade.h:2
+msgid "Group Chat"
+msgstr "കൂട്ടവര്‍ത്തമാനം"
+
+#: ../libempathy-gtk/empathy-chat-view.c:430
+msgid "_Copy Link Address"
+msgstr "ലിങ്കിലെ വിലാസം പകര്‍ത്തുക (_C)"
+
+#: ../libempathy-gtk/empathy-chat-view.c:438
+msgid "_Open Link"
+msgstr "ലിങ്ക് തുറക്കുക (_O)"
+
+#: ../libempathy-gtk/empathy-contact-dialogs.c:180
+msgid "Personal Information"
+msgstr "സ്വകാര്യ വിവരങ്ങള്‍"
+
+#: ../libempathy-gtk/empathy-contact-dialogs.c:183
+msgid "Edit Contact Information"
+msgstr "ബന്ധപ്പെടാനുള്ള വിവരങ്ങളില്‍ മാറ്റം വരുത്തുക"
+
+#: ../libempathy-gtk/empathy-contact-dialogs.c:186
+msgid "Contact Information"
+msgstr "ബന്ധപ്പെടാനുള്ള വിവരം"
+
+#: ../libempathy-gtk/empathy-contact-dialogs.c:283
+msgid "I would like to add you to my contact list."
+msgstr "നിങ്ങളെ എന്റെ കോണ്‍ടാക്റ്റ് പട്ടികയില്‍ ചേര്‍ക്കാന്‍ എനിക്ക് ആഗ്രഹമുണ്ട്"
+
+#: ../libempathy-gtk/empathy-contact-dialogs.c:307
+msgid "New Contact"
+msgstr "പുതിയ ബന്ധം"
+
+#: ../libempathy-gtk/empathy-contact-dialogs.glade.h:1
+msgid "Decide _Later"
+msgstr "പിന്നെ തീരുമാനിക്കുക (_L)"
+
+#: ../libempathy-gtk/empathy-contact-dialogs.glade.h:2
+msgid "Subscription Request"
+msgstr "വരിക്കാരനാകാനുള്ള അപേക്ഷ"
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:1244
+#, c-format
+msgid "Do you really want to remove the group '%s'?"
+msgstr "'%s' എന്ന ഈ കൂട്ടത്തെ എടുത്തു കളയുവാന്‍ നിങ്ങള്‍ക്ക് ശരിക്കും ആഗ്രഹമുണ്ടോ ?"
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:1246
+msgid "Removing group"
+msgstr "കൂട്ടത്തെ എടുത്തു കളയുന്നു"
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:1293
+#: ../libempathy-gtk/empathy-contact-list-view.c:1372
+msgid "_Remove"
+msgstr "എടുത്തുകളയുക (_R)"
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:1323
+#, c-format
+msgid "Do you really want to remove the contact '%s'?"
+msgstr "'%s' എന്ന ഈ കോണ്‍ടാക്റ്റിനെ എടുത്തു കളയുവാന്‍ നിങ്ങള്‍ക്ക് ശരിക്കും ആഗ്രഹമുണ്ടോ ?"
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:1325
+msgid "Removing contact"
+msgstr "കോണ്‍ടാക്റ്റിനെ എടുത്തുകളയുന്നു"
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:1330
+msgid "Sorry, I don't want you in my contact list anymore."
+msgstr "ക്ഷമിക്കൂ , നിങ്ങളെ എന്റെ കോണ്ടാക്റ്റ് പട്ടികയില്‍ ഉള്‍പ്പെടുത്താന്‍ ഇനി ഞാന്‍ ആഗ്രഹിക്കുന്നില്ല"
+
+#: ../libempathy-gtk/empathy-contact-menu.c:109
+#: ../src/empathy-main-window.glade.h:9
 msgid "_Chat"
-msgstr ""
+msgstr "ചാറ്റ് (_C)"
 
-#: ../libempathy-gtk/empathy-main-window.glade.h:11
-#, fuzzy
-msgid "_Contents"
-msgstr "ഘടിപ്പിക്കുക"
+#: ../libempathy-gtk/empathy-contact-menu.c:130
+msgid "_Call"
+msgstr "വിളിക്കുക(_C)"
 
-#: ../libempathy-gtk/empathy-main-window.glade.h:12
-#: ../libempathy-gtk/gossip-chat.glade.h:21
-#: ../libempathy-gtk/gossip-contact-list.c:310
-#, fuzzy
+#: ../libempathy-gtk/empathy-contact-menu.c:169
+#: ../src/empathy-main-window.glade.h:17
+msgid "_View Previous Conversations"
+msgstr "പഴയ വര്‍ത്തമാനങ്ങള്‍ കാണുക (_V)"
+
+#: ../libempathy-gtk/empathy-contact-menu.c:197
+msgid "Infor_mation"
+msgstr "വി_വരങ്ങള്‍"
+
+#: ../libempathy-gtk/empathy-contact-menu.c:224
+#: ../src/empathy-chat-window.glade.h:14
+#: ../src/empathy-main-window.glade.h:11
 msgid "_Edit"
-msgstr "പുറത്ത് കടക്കുക"
+msgstr "മാറ്റം വരുത്തുക(_E)"
 
-#: ../libempathy-gtk/empathy-main-window.glade.h:13
-msgid "_Help"
-msgstr ""
+#: ../libempathy-gtk/empathy-contact-widget.c:358
+msgid "Save Avatar"
+msgstr "അവതാരത്തിനെ സൂക്ഷിച്ചുവെക്കുക"
 
-#: ../libempathy-gtk/empathy-main-window.glade.h:14
-#: ../libempathy-gtk/empathy-status-icon.glade.h:2
-msgid "_New Message..."
-msgstr ""
+#: ../libempathy-gtk/empathy-contact-widget.c:414
+msgid "Unable to save avatar"
+msgstr "അവതാരത്തിനെ സൂക്ഷിച്ചുവെക്കുവാന്‍ കഴിഞ്ഞില്ല"
 
-#: ../libempathy-gtk/empathy-main-window.glade.h:15
-msgid "_Personal Information"
-msgstr ""
+#: ../libempathy-gtk/empathy-contact-widget.c:875
+msgid "Select"
+msgstr "തെരഞ്ഞെടുക്കുക"
 
-#: ../libempathy-gtk/empathy-main-window.glade.h:16
-#, fuzzy
+#: ../libempathy-gtk/empathy-contact-widget.c:884
+#: ../src/empathy-main-window.c:853
+msgid "Group"
+msgstr "കൂട്ടം"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:1
+msgid "<b>Client Information</b>"
+msgstr "<b>ക്ളയന്റിനെക്കുറിച്ചുള്ള വിവരങ്ങള്‍</b>"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:2
+msgid "<b>Contact Details</b>"
+msgstr "<b>കോണ്‍ടാക്റ്റിനെക്കുറിച്ചുള്ള വിവരങ്ങള്‍</b>"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:3
+msgid "<b>Contact</b>"
+msgstr "<b>കോണ്‍ടാക്റ്റ്</b>"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:4
+msgid "<b>Groups</b>"
+msgstr "<b>കൂട്ടങ്ങള്‍</b>"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:5
+#: ../libempathy-gtk/empathy-new-message-dialog.glade.h:1
+#: ../src/empathy-chatrooms-window.glade.h:1
+#: ../src/empathy-new-chatroom-dialog.glade.h:1
+msgid "Account:"
+msgstr "അക്കൗണ്ട് : "
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:6
+msgid "Alias:"
+msgstr "അപരനാമം:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:7
+msgid "Birthday:"
+msgstr "ജന്മദിനം:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:8
+msgid "Client:"
+msgstr "ക്ളയന്റ്:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:9
+msgid "Contact information"
+msgstr "ബന്ധപ്പെടാനുള്ള വിവരങ്ങള്‍"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:10
+msgid "Email:"
+msgstr "ഇ-മെയില്:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:11
+msgid "Fullname:"
+msgstr "മുഴുവന്‍ പേരു്:"
+
+#. Identifier to connect to Instant Messaging network
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:13
+msgid "Identifier:"
+msgstr "പേരു്:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:14
+msgid "Information requested..."
+msgstr "വിവരങ്ങള്‍ക്ക് അപേക്ഷിച്ചിട്ടുണ്ട്..."
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:15
+msgid "OS:"
+msgstr "ഓഎസ്:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:16
+msgid "Select the groups you want this contact to appear in.  Note that you can select more than one group or no groups."
+msgstr "നിങ്ങള്‍ക്ക് ഈ കോണ്‍ടാക്റ്റിനെ നിങ്ങള്‍ക്ക് ഏതൊക്കെ കൂട്ടങ്ങളില്‍ കാണിക്കണമോ അവയെ ഇവിടെ തെരഞ്ഞെടുക്കുകനിങ്ങള്‍ക്ക് കൂട്ടങ്ങളൊന്നും തെരഞ്ഞെടുക്കാതിരിക്കുവാനും ഒന്നില്‍ കൂടുതല്‍ കൂട്ടങ്ങള്‍ തെരഞ്ഞെടുക്കാനും സാധിക്കും എന്ന കാര്യം ശ്രദ്ധിക്കുക"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:17
+msgid "Version:"
+msgstr "പതിപ്പ്"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:18
+msgid "Web site:"
+msgstr "വെബ് വിലാസം"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:19
+msgid "_Add Group"
+msgstr "ഒരു കൂട്ടത്തെ ചേര്‍ക്കുക (_A)"
+
+#: ../libempathy-gtk/empathy-irc-network-dialog.c:284
+msgid "new server"
+msgstr "പുതിയ സര്‍വര്‍"
+
+#: ../libempathy-gtk/empathy-irc-network-dialog.c:513
+msgid "Server"
+msgstr "സര്‍വര്‍"
+
+#: ../libempathy-gtk/empathy-irc-network-dialog.c:528
+msgid "Port"
+msgstr "പോര്‍ട്ട്:"
+
+#: ../libempathy-gtk/empathy-irc-network-dialog.c:541
+msgid "SSL"
+msgstr "എസ്എസ്എല്‍"
+
+#: ../libempathy-gtk/empathy-log-window.c:497
+msgid "Account"
+msgstr "അക്കൗണ്ട്"
+
+#: ../libempathy-gtk/empathy-log-window.c:504
+#: ../src/empathy-chat-window.c:280
+msgid "Conversation"
+msgstr "വര്‍ത്തമാനം"
+
+#: ../libempathy-gtk/empathy-log-window.c:514
+msgid "Date"
+msgstr "തീയതി"
+
+#. Tab Label
+#: ../libempathy-gtk/empathy-log-window.glade.h:2
+msgid "Conversations"
+msgstr "വര്‍ത്തമാനങ്ങള്‍"
+
+#: ../libempathy-gtk/empathy-log-window.glade.h:3
+msgid "Previous Conversations"
+msgstr "മുന്നത്തെ വര്‍ത്തമാനങ്ങള്‍"
+
+#. Tab Label
+#: ../libempathy-gtk/empathy-log-window.glade.h:5
+msgid "Search"
+msgstr "തെരയുക"
+
+#. Searching *for* something
+#: ../libempathy-gtk/empathy-log-window.glade.h:7
+msgid "_For:"
+msgstr "വേണ്ടി:"
+
+#: ../libempathy-gtk/empathy-new-message-dialog.glade.h:2
+msgid "C_all"
+msgstr "വിളിക്കുക (_a)"
+
+#: ../libempathy-gtk/empathy-new-message-dialog.glade.h:3
+msgid "C_hat"
+msgstr "ചാറ്റ് (_h)"
+
+#: ../libempathy-gtk/empathy-new-message-dialog.glade.h:4
+msgid "Contact ID:"
+msgstr "കോണ്‍ടാക്റ്റ് ഐഡി:"
+
+#: ../libempathy-gtk/empathy-new-message-dialog.glade.h:5
+msgid "New Conversation"
+msgstr "പുതിയ വര്‍ത്തമാനം"
+
+#. Custom messages
+#: ../libempathy-gtk/empathy-presence-chooser.c:685
+msgid "Custom messages..."
+msgstr "ഇഷ്ടപ്പെട്ട സന്ദേശങ്ങള്‍..."
+
+#: ../libempathy-gtk/empathy-presence-chooser.glade.h:1
+msgid "Custom message"
+msgstr "ഇഷ്ടപ്പെട്ട സന്ദേശം:"
+
+#: ../libempathy-gtk/empathy-presence-chooser.glade.h:2
+msgid "Message:"
+msgstr "സന്ദേശം:"
+
+#: ../libempathy-gtk/empathy-presence-chooser.glade.h:3
+msgid "Save message"
+msgstr "സന്ദേശം സൂക്ഷിക്കുക"
+
+#: ../libempathy-gtk/empathy-presence-chooser.glade.h:4
+msgid "Status:"
+msgstr "അവസ്ഥ:"
+
+#: ../libempathy-gtk/empathy-spell-dialog.c:88
+msgid "Word"
+msgstr "വാക്ക്"
+
+#: ../libempathy-gtk/empathy-spell-dialog.c:265
+msgid "Suggestions for the word"
+msgstr "വാക്കിനുള്ള നിര്‍ദ്ദേശങ്ങള്‍"
+
+#: ../libempathy-gtk/empathy-spell-dialog.glade.h:1
+msgid "Spell Checker"
+msgstr "സ്പെല്‍ ചെക്കര്‍"
+
+#: ../libempathy-gtk/empathy-spell-dialog.glade.h:2
+msgid "Suggestions for the word:"
+msgstr "വാക്കിനുള്ള നിര്‍ദ്ദേശങ്ങള്‍:"
+
+#: ../libempathy-gtk/empathy-theme-boxes.c:745
+#: ../libempathy-gtk/empathy-theme-irc.c:293
+msgid "%A %d %B %Y"
+msgstr "%A %d %B %Y"
+
+#: ../libempathy-gtk/empathy-theme-manager.c:73
+msgid "Classic"
+msgstr "ക്ളാസ്സിക്"
+
+#: ../libempathy-gtk/empathy-theme-manager.c:74
+msgid "Simple"
+msgstr "ലളിതം"
+
+#: ../libempathy-gtk/empathy-theme-manager.c:75
+msgid "Clean"
+msgstr "വൃത്തിയുള്ളത്"
+
+#: ../libempathy-gtk/empathy-theme-manager.c:76
+msgid "Blue"
+msgstr "നീല"
+
+#: ../libempathy-gtk/empathy-ui-utils.c:1330
+msgid "Unable to open URI"
+msgstr "യുആര്‍ഐ തുറക്കുവാന്‍ കഴിഞ്ഞില്ല"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:158
+msgid "Current Locale"
+msgstr "ഇപ്പോഴത്തെ സ്ഥലം"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:161
+#: ../libempathy-gtk/totem-subtitle-encoding.c:163
+#: ../libempathy-gtk/totem-subtitle-encoding.c:165
+#: ../libempathy-gtk/totem-subtitle-encoding.c:167
+msgid "Arabic"
+msgstr "അറബിക്"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:170
+msgid "Armenian"
+msgstr "അര്‍മേനിയന്‍"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:173
+#: ../libempathy-gtk/totem-subtitle-encoding.c:175
+#: ../libempathy-gtk/totem-subtitle-encoding.c:177
+msgid "Baltic"
+msgstr "ബാള്‍ട്ടിക്"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:180
+msgid "Celtic"
+msgstr "സെല്‍റ്റിക്"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:183
+#: ../libempathy-gtk/totem-subtitle-encoding.c:185
+#: ../libempathy-gtk/totem-subtitle-encoding.c:187
+#: ../libempathy-gtk/totem-subtitle-encoding.c:189
+msgid "Central European"
+msgstr "മധ്യയൂറോപ്പ്യന്‍"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:192
+#: ../libempathy-gtk/totem-subtitle-encoding.c:194
+#: ../libempathy-gtk/totem-subtitle-encoding.c:196
+#: ../libempathy-gtk/totem-subtitle-encoding.c:198
+msgid "Chinese Simplified"
+msgstr "ചൈനീസ് ( ലളിതമാക്കിയത് )"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:201
+#: ../libempathy-gtk/totem-subtitle-encoding.c:203
+#: ../libempathy-gtk/totem-subtitle-encoding.c:205
+msgid "Chinese Traditional"
+msgstr "ചൈനീസ് ( പരമ്പരാഗതമായത് )"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:208
+msgid "Croatian"
+msgstr "ക്രോയേഷ്യന്‍"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:211
+#: ../libempathy-gtk/totem-subtitle-encoding.c:213
+#: ../libempathy-gtk/totem-subtitle-encoding.c:215
+#: ../libempathy-gtk/totem-subtitle-encoding.c:217
+#: ../libempathy-gtk/totem-subtitle-encoding.c:219
+#: ../libempathy-gtk/totem-subtitle-encoding.c:221
+msgid "Cyrillic"
+msgstr "സിറിളിക്"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:224
+msgid "Cyrillic/Russian"
+msgstr "സിറിളിക്/റഷ്യന്‍"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:227
+#: ../libempathy-gtk/totem-subtitle-encoding.c:229
+msgid "Cyrillic/Ukrainian"
+msgstr "സിറിളിക് / ഉക്രേനിയന്‍"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:232
+msgid "Georgian"
+msgstr "ജോര്‍ജ്ജിയന്‍"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:235
+#: ../libempathy-gtk/totem-subtitle-encoding.c:237
+#: ../libempathy-gtk/totem-subtitle-encoding.c:239
+msgid "Greek"
+msgstr "ഗ്രീക്ക്"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:242
+msgid "Gujarati"
+msgstr "ഗുജറാത്തി"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:245
+msgid "Gurmukhi"
+msgstr "ഗുര്‍മുഖി"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:248
+#: ../libempathy-gtk/totem-subtitle-encoding.c:250
+#: ../libempathy-gtk/totem-subtitle-encoding.c:252
+#: ../libempathy-gtk/totem-subtitle-encoding.c:254
+msgid "Hebrew"
+msgstr "ഹീബ്രു"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:257
+msgid "Hebrew Visual"
+msgstr "ഹീബ്രു വിഷ്വല്‍"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:260
+msgid "Hindi"
+msgstr "ഹിന്ദി"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:263
+msgid "Icelandic"
+msgstr "ഐസ്‌ലാന്‍ഡിക്"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:266
+#: ../libempathy-gtk/totem-subtitle-encoding.c:268
+#: ../libempathy-gtk/totem-subtitle-encoding.c:270
+msgid "Japanese"
+msgstr "ജാപ്പനീസ്"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:273
+#: ../libempathy-gtk/totem-subtitle-encoding.c:275
+#: ../libempathy-gtk/totem-subtitle-encoding.c:277
+#: ../libempathy-gtk/totem-subtitle-encoding.c:279
+msgid "Korean"
+msgstr "കൊറിയന്‍"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:282
+msgid "Nordic"
+msgstr "നോര്‍ഡിക്"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:285
+msgid "Persian"
+msgstr "പേര്‍ഷ്യന്‍"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:288
+#: ../libempathy-gtk/totem-subtitle-encoding.c:290
+msgid "Romanian"
+msgstr "റൊമാനിയന്‍"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:293
+msgid "South European"
+msgstr "ദക്ഷിണയൂറോപ്പ്യന്‍"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:296
+msgid "Thai"
+msgstr "തായ്"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:299
+#: ../libempathy-gtk/totem-subtitle-encoding.c:301
+#: ../libempathy-gtk/totem-subtitle-encoding.c:303
+#: ../libempathy-gtk/totem-subtitle-encoding.c:305
+msgid "Turkish"
+msgstr "ടര്‍ക്കിഷ്"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:308
+#: ../libempathy-gtk/totem-subtitle-encoding.c:310
+#: ../libempathy-gtk/totem-subtitle-encoding.c:312
+#: ../libempathy-gtk/totem-subtitle-encoding.c:314
+#: ../libempathy-gtk/totem-subtitle-encoding.c:316
+msgid "Unicode"
+msgstr "യൂണിക്കോഡ്"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:319
+#: ../libempathy-gtk/totem-subtitle-encoding.c:321
+#: ../libempathy-gtk/totem-subtitle-encoding.c:323
+#: ../libempathy-gtk/totem-subtitle-encoding.c:325
+#: ../libempathy-gtk/totem-subtitle-encoding.c:327
+msgid "Western"
+msgstr "പടിഞ്ഞാട്ട്"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:330
+#: ../libempathy-gtk/totem-subtitle-encoding.c:332
+#: ../libempathy-gtk/totem-subtitle-encoding.c:334
+msgid "Vietnamese"
+msgstr "വിയറ്റ്നാമീസ്"
+
+#.
+#. * vim: sw=2 ts=8 cindent noai bs=2
+#.
+#: ../megaphone/data/GNOME_Megaphone_Applet.schemas.in.h:1
+msgid "The contact to display in the applet. Empty means no contact is displayed."
+msgstr "ആപ്ളെറ്റില്‍ കാണിക്കേണ്ട കോണ്ടാക്റ്റ് . ശൂന്യമാണെങ്കില്‍ ഒരു കോണ്‍ടാക്റ്റും കാണിക്കുകയില്ല എന്നാണ് അര്‍ത്ഥം"
+
+#: ../megaphone/data/GNOME_Megaphone_Applet.schemas.in.h:2
+msgid "The contact's avatar token. Empty means contact has no avatar."
+msgstr "കോണ്ടാക്റ്റിന്റെ അവതാരം. ശൂന്യമാണെങ്കില്‍ കോണ്‍ടാക്റ്റിന് അവതാരമൊന്നും ഇല്ല എന്നാണ് അര്‍ത്ഥം"
+
+#: ../megaphone/data/GNOME_Megaphone_Applet.server.in.in.h:1
+msgid "Megaphone"
+msgstr "ഉച്ചഭാഷിണി"
+
+#: ../megaphone/data/GNOME_Megaphone_Applet.server.in.in.h:2
+#: ../megaphone/src/megaphone-applet.c:417
+msgid "Talk!"
+msgstr "സംസാരിക്കൂ !"
+
+#: ../megaphone/data/GNOME_Megaphone_Applet.xml.h:1
+#: ../nothere/data/GNOME_NotHere_Applet.xml.h:1
+msgid "_About"
+msgstr "_സംബന്ധിച്ചു്"
+
+#: ../megaphone/data/GNOME_Megaphone_Applet.xml.h:2
+msgid "_Information"
+msgstr "വിവരം"
+
+#: ../megaphone/data/GNOME_Megaphone_Applet.xml.h:3
+#: ../src/empathy-main-window.glade.h:15
 msgid "_Preferences"
 msgstr "മുന്‍ഗണനകള്‍"
 
-#: ../libempathy-gtk/empathy-main-window.glade.h:17
-#: ../libempathy-gtk/empathy-status-icon.glade.h:3
-msgid "_Quit"
-msgstr "പുറത്ത് കടക്കുക"
+#: ../nothere/data/GNOME_NotHere_Applet.server.in.in.h:1
+msgid "Presence"
+msgstr "സാന്നിദ്ധ്യം"
 
-#: ../libempathy-gtk/empathy-main-window.glade.h:18
-#: ../libempathy-gtk/gossip-chat.glade.h:25
-msgid "_Room"
-msgstr ""
+#: ../nothere/data/GNOME_NotHere_Applet.server.in.in.h:2
+#: ../nothere/src/nothere-applet.c:106
+msgid "Set your own presence"
+msgstr "നിങ്ങളുടേതായ സാന്നിദ്ധ്യം നിങ്ങള്‍ തന്നെ ഉറപ്പിക്കൂ"
 
-#: ../libempathy-gtk/empathy-main-window.glade.h:19
-#: ../libempathy-gtk/gossip-chat.glade.h:28
-#: ../libempathy-gtk/gossip-contact-list.c:326
-msgid "_View Previous Conversations"
-msgstr ""
+#: ../src/empathy.c:380
+msgid "Don't connect on startup"
+msgstr "തുടക്കത്തില്‍ തന്നെ കണക്റ്റ് ചെയ്യണ്ട"
 
-#: ../libempathy-gtk/empathy-status-icon.glade.h:1
-#, fuzzy
-msgid "Status"
-msgstr "<b>അവസ്ഥ</b>"
+#: ../src/empathy.c:384
+msgid "Don't show the contact list on startup"
+msgstr "തുടക്കത്തില്‍ കോണ്‍ടാക്റ്റ് പട്ടിക കാണിക്കേണ്ട"
 
-#: ../libempathy-gtk/empathy-status-icon.glade.h:4
-msgid "_Show Contact List"
-msgstr ""
+#: ../src/empathy.c:388
+msgid "Show the accounts dialog"
+msgstr "അക്കൗണ്ടുകള്‍ക്കു വേണ്ടിയുള്ള ഡയലോഗ് കാണിക്കുക"
 
-#: ../libempathy-gtk/gossip-about-dialog.c:63
-msgid ""
-"Empathy is free software; you can redistribute it and/or modify it under the "
-"terms of the GNU General Public License as published by the Free Software "
-"Foundation; either version 2 of the License, or (at your option) any later "
-"version."
-msgstr ""
+#: ../src/empathy.c:400
+msgid "- Empathy Instant Messenger"
+msgstr "- എമ്പതി സന്ദേശവാഹകന്‍"
 
-#: ../libempathy-gtk/gossip-about-dialog.c:67
-msgid ""
-"Empathy is distributed in the hope that it will be useful, but WITHOUT ANY "
-"WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS "
-"FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more "
-"details."
-msgstr ""
+#: ../src/empathy-about-dialog.c:84
+msgid "Empathy is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version."
+msgstr "എംപതി സ്വതന്ത്ര സോഫ്റ്റ്‌വേറാണ് ; നിങ്ങള്‍ക്ക് ഫ്രീ സോഫ്റ്റ്‌വേര്‍ ഫൗണ്ടേഷന്‍ പ്രസിദ്ധീകരിച്ചിട്ടുള്ള ഗ്നു ജനറല്‍ പബ്ളിക് ലൈസന്‍സ് പ്രകാരംഇത് വിതരണം ചെയ്യുകയോ ഇതില്‍ മാറ്റങ്ങള്‍ വരുത്തുകയോ ആവാം; ഈ ലൈസന്‍സിന്റെ രണ്ടാം പതിപ്പു പ്രകാരമോ അല്ലെങ്കില്‍ (നിങ്ങളുടെ ഇഷ്ടപ്രകാരം) അതിനു ശേഷമുള്ള പതിപ്പുകളിന്‍ പ്രകാരമോ"
 
-#: ../libempathy-gtk/gossip-about-dialog.c:71
-msgid ""
-"You should have received a copy of the GNU General Public License along with "
-"Empathy; if not, write to the Free Software Foundation, Inc., 51 Franklin "
-"Street, Fifth Floor, Boston, MA 02110-130159 USA"
-msgstr ""
+#: ../src/empathy-about-dialog.c:88
+msgid "Empathy is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details."
+msgstr "എമ്പതി നിങ്ങള്‍ക്കു് പ്രയോജനപ്പെടും എന്ന പ്രതീക്ഷയില്‍ വിതരണം ചെയ്യുന്നതാണു്, പക്ഷേ, ഇതിനു് ഒരു വാറണ്ടിയും ലഭ്യമല്ല; വ്യാപാരയോഗ്യതയോ ഒരു പ്രത്യേക കാര്യത്തിനു് ചേരുന്നതാണെന്നോ പരോക്ഷമായി ഉള്‍‌ക്കൊള്ളുന്ന വാറണ്ടി പോലും ഇല്ല. കൂടുതല്‍ വിവരങ്ങള്‍ക്കു് ഗ്നു ജനറല്‍ പബ്ലിക് ലൈസന്‍സ് കാണുക."
 
-#: ../libempathy-gtk/gossip-about-dialog.c:99
+#: ../src/empathy-about-dialog.c:92
+msgid "You should have received a copy of the GNU General Public License along with Empathy; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-130159 USA"
+msgstr "നിങ്ങള്‍ക്കു് എമ്പതിയ്ക്കൊപ്പം ഗ്നു ജനറല്‍ പബ്ലിക് ലൈസന്‍സിന്റെ ഒരു പകര്‍പ്പു് ലഭിച്ചിട്ടുണ്ടായിരിയ്ക്കണം; ഇല്ലെങ്കില്‍, ഈ വിലാസത്തിലേയ്ക്കെഴുതുക: Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA."
+
+#: ../src/empathy-about-dialog.c:120
 msgid "An Instant Messaging client for GNOME"
-msgstr ""
+msgstr "ഗ്നോമിനു വേണ്ടിയുള്ള ഒരു സന്ദേശവാഹകന്‍"
 
-#: ../libempathy-gtk/gossip-about-dialog.c:105
-#, fuzzy
+#: ../src/empathy-about-dialog.c:126
 msgid "translator-credits"
-msgstr "എഫ്.എസ്.എഫ് - ഇന്ത്യ"
-
-#: ../libempathy-gtk/gossip-accounts-dialog.c:224
-#, fuzzy
-msgid "Disable"
-msgstr "ലഭ്യത"
-
-#: ../libempathy-gtk/gossip-accounts-dialog.c:227
-msgid "Enable"
 msgstr ""
+"എഫ്.എസ്.എഫ് - ഇന്ത്യ <locale@gnu.org.in>\n"
+"ആഷിക് സലാഹുദ്ദീന്‍ <aashiks@gmail.com>\n"
+"പ്രവീണ്‍ അരിമ്പ്രത്തൊടിയില്‍ <pravi.a@gmail.com>"
 
-#: ../libempathy-gtk/gossip-accounts-dialog.c:261
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:3
-msgid "<b>No Account Selected</b>"
-msgstr ""
+#: ../src/empathy-accounts-dialog.c:389
+msgid "Enabled"
+msgstr "സജീവമാക്കിയിരിക്കുന്നു"
 
-#: ../libempathy-gtk/gossip-accounts-dialog.c:263
-msgid ""
-"To add a new account, you can click on the 'Add' button and a new entry will "
-"be created for you to start configuring.\n"
-"\n"
-"If you do not want to add an account, simply click on the account you want "
-"to configure in the list on the left."
-msgstr ""
-
-#: ../libempathy-gtk/gossip-accounts-dialog.c:272
-msgid "<b>No Accounts Configured</b>"
-msgstr ""
-
-#: ../libempathy-gtk/gossip-accounts-dialog.c:274
-msgid ""
-"To add a new account, you can click on the 'Add' button and a new entry will "
-"be created for you to start configuring."
-msgstr ""
-
-#: ../libempathy-gtk/gossip-accounts-dialog.c:362
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:6
+#: ../src/empathy-accounts-dialog.c:399
+#: ../src/empathy-accounts-dialog.glade.h:4
 msgid "Accounts"
-msgstr ""
+msgstr "അക്കൗണ്ടുകള്‍"
 
-#: ../libempathy-gtk/gossip-accounts-dialog.c:857
-#, c-format
+#. To translator: %s is the protocol name
+#: ../src/empathy-accounts-dialog.c:862
+msgid "New %s account"
+msgstr "പുതിയ  %s അക്കൗണ്ട് "
+
+#: ../src/empathy-accounts-dialog.c:972
 msgid ""
 "You are about to remove your %s account!\n"
 "Are you sure you want to proceed?"
 msgstr ""
+"നിങ്ങളുടെ %s അക്കൗണ്ടിനെ നിങ്ങള്‍ എടുത്തു കളയുവാന്‍ പോകുകയാണ് !\n"
+"മുന്നോട്ടു നീങ്ങണം എന്നു നിങ്ങള്‍ക്കു ഉറപ്പാണോ ? "
 
-#: ../libempathy-gtk/gossip-accounts-dialog.c:863
+#: ../src/empathy-accounts-dialog.c:978
 msgid ""
-"Any associated conversations and chat rooms will NOT be removed if you "
-"decide to proceed.\n"
+"Any associated conversations and chat rooms will NOT be removed if you decide to proceed.\n"
 "\n"
-"Should you decide to add the account back at a later time, they will still "
-"be available."
+"Should you decide to add the account back at a later time, they will still be available."
 msgstr ""
+"മുമ്പോട്ടു് പോകാന്‍ നിങ്ങള്‍ തീരുമാനിച്ചാല്‍ ബന്ധപ്പെട്ട സല്ലാപമുറികളും സംഭാഷണങ്ങളും നീക്കം ചെയ്യുന്നതല്ല.\n"
+"\n"
+"പിന്നീടൊരിയ്ക്കല്‍ നിങ്ങളൊരു അക്കൊണ്ടു് ചേര്‍ക്കാന്‍ തീരുമാനിച്ചാലും അവ ലഭ്യമായിരിയ്ക്കും."
 
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:1
-msgid "<b>Account</b>"
-msgstr ""
-
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:2
-#, fuzzy
+#: ../src/empathy-accounts-dialog.glade.h:1
 msgid "<b>New Account</b>"
-msgstr "ഘടിപ്പിക്കുക"
+msgstr "<b>പുതിയ അക്കൌണ്ടു്</b>"
 
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:4
-#, fuzzy
+#: ../src/empathy-accounts-dialog.glade.h:2
+msgid "<b>No protocol installed</b>"
+msgstr "<b>കീഴ്വഴക്കമൊന്നും ഇന്‍സ്റ്റോള്‍ ചെയ്തിട്ടില്ല</b>"
+
+#: ../src/empathy-accounts-dialog.glade.h:3
 msgid "<b>Settings</b>"
-msgstr "<b>അവസ്ഥ</b>"
+msgstr "<b>സജ്ജീകരണങ്ങള്‍</b>"
 
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:5
-msgid "A unique name for this account to identify it personally to you."
-msgstr ""
-
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:7
+#: ../src/empathy-accounts-dialog.glade.h:5
 msgid "Cr_eate"
-msgstr ""
+msgstr "സൃ_ഷ്ടിയ്ക്കുക"
 
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:8
-msgid "Imendio "
-msgstr ""
+#: ../src/empathy-accounts-dialog.glade.h:6
+msgid "I already have an account I want to use"
+msgstr "എനിയ്ക്കുപയോഗിയ്ക്കാന്‍ നേരത്തെ തന്നെ ഒരു അക്കൌണ്ടുണ്ടു്"
 
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:9
-msgid "Jabber"
-msgstr ""
+#: ../src/empathy-accounts-dialog.glade.h:7
+msgid "To add a new account, you first have to install a backend for each protocol you want to use."
+msgstr "പുതിയ അക്കൊണ്ടു് ചേര്‍ക്കാന്‍, ആദ്യമായി നിങ്ങളുപയോഗിയ്ക്കാനാഗ്രഹിയ്ക്കുന്ന ഓരോ കീഴ്വഴക്കത്തിനുമുള്ള ബാക്കെന്‍ഡ് നിങ്ങള്‍ക്കു് ഇന്‍സ്റ്റോള്‍ ചെയ്യേണ്ടതായി വരും."
 
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:10
-msgid ""
-"To add a new account, you can click on the 'Add' button and a new entry will "
-"be created for you to started configuring.\n"
-"\n"
-"If you do not want to add an account, simply click on the account you want "
-"to configure in the list on the left."
-msgstr ""
+#: ../src/empathy-accounts-dialog.glade.h:8
+msgid "Type:"
+msgstr "തരം:"
 
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:13
-#, fuzzy
-msgid "_Name:"
-msgstr "നാമം:"
+#: ../src/empathy-call-window.c:142
+msgid "Closed"
+msgstr "അടച്ചു"
 
-#: ../libempathy-gtk/gossip-accounts-dialog.glade.h:14
-msgid "_Type:"
-msgstr ""
+#: ../src/empathy-call-window.c:254
+msgid "End this call?"
+msgstr "ഈ വിളി നിര്‍ത്തുക"
 
-#: ../libempathy-gtk/gossip-account-widget-generic.c:144
-#: ../libempathy-gtk/gossip-account-widget-generic.c:186
+#: ../src/empathy-call-window.c:256
+msgid "Closing this window will end the call in progress."
+msgstr "ഈ ജാലകം അടയ്ക്കുന്നതു് ഇപ്പോഴത്തെ വിളി അവസാനിപ്പിയ്ക്കും"
+
+#: ../src/empathy-call-window.c:257
+msgid "_End Call"
+msgstr "വിളി _അവസാനിപ്പിയ്ക്കുക"
+
+#: ../src/empathy-call-window.c:311
+msgid "Incoming call"
+msgstr "ഇങ്ങോട്ടുള്ള വിളി"
+
+#: ../src/empathy-call-window.c:313
 #, c-format
-msgid "%s:"
-msgstr ""
+msgid "%s is calling you, do you want to answer?"
+msgstr "%s നിങ്ങളെ വിളിയ്ക്കുന്നു, എടുക്കണോ?"
 
-#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:1
-msgid ""
-"<small><b><span foreground=\"#555\">Example: user@jabber.org</span></b></"
-"small>"
-msgstr ""
+#: ../src/empathy-call-window.c:319
+msgid "_Reject"
+msgstr "_തള്ളിക്കളയുക"
 
-#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:2
-msgid "Forget password and clear the entry."
-msgstr ""
+#: ../src/empathy-call-window.c:324
+msgid "_Answer"
+msgstr "_എടുക്കുക"
 
-#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:3
-msgid "Login I_D:"
-msgstr ""
+#: ../src/empathy-call-window.c:379
+msgid "Empathy Call"
+msgstr "എമ്പതി വിളി"
 
-#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:4
-#, fuzzy
-msgid "Pass_word:"
-msgstr "അടയാളവാക്ക്:"
+#. To translators: Readying is the first state of the call, it is
+#. * preparing the connection and it does not yet ring.
+#: ../src/empathy-call-window.c:382
+msgid "Readying"
+msgstr "തയ്യാറാക്കിക്കൊണ്ടിരിയ്ക്കുന്നു"
 
-#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:5
-msgid "Reso_urce:"
-msgstr ""
+#: ../src/empathy-call-window.c:391
+#, c-format
+msgid "%s - Empathy Call"
+msgstr "%s - എമ്പതി വിളി"
 
-#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:6
-msgid "Use encryption (SS_L)"
-msgstr ""
+#: ../src/empathy-call-window.c:395
+msgid "Ringing"
+msgstr "ബെല്ലടിയ്ക്കുന്നു"
 
-#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:7
-#, fuzzy
-msgid "_Port:"
-msgstr "വഴി:"
+#: ../src/empathy-call-window.c:408
+msgid "Connecting"
+msgstr "ബന്ധിപ്പിച്ചുകൊണ്ടിരിയ്ക്കുന്നു"
 
-#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:8
-msgid "_Server:"
-msgstr "സ‍ര്‍വ്വര്:"
+#: ../src/empathy-call-window.c:524
+#, c-format
+msgid "Incoming call from %s rejected because there is already a running call."
+msgstr "ഇപ്പോള്‍ സംസാരിച്ചുകൊണ്ടിരിയ്ക്കുകയായതിനാല്‍ %s ന്റെ വിളി എടുക്കാന്‍ സാധിച്ചില്ല."
 
-#: ../libempathy-gtk/gossip-account-widget-jabber.glade.h:9
-msgid "jabber account settings"
-msgstr ""
+#: ../src/empathy-call-window.glade.h:1
+msgid "#"
+msgstr "#"
 
-#: ../libempathy-gtk/gossip-chat.c:314
-#, fuzzy
-msgid "Disconnected"
-msgstr "ഘടിപ്പിക്കുക"
+#: ../src/empathy-call-window.glade.h:2
+msgid "*"
+msgstr "*"
 
-#: ../libempathy-gtk/gossip-chat.c:858
-msgid "Insert Smiley"
-msgstr ""
+#: ../src/empathy-call-window.glade.h:3
+msgid "0"
+msgstr "0"
 
-#: ../libempathy-gtk/gossip-chat.c:906
-msgid "_Check Word Spelling..."
-msgstr ""
+#: ../src/empathy-call-window.glade.h:4
+msgid "1"
+msgstr "1"
 
-#: ../libempathy-gtk/gossip-chat.c:1244
-#, fuzzy
-msgid "Connected"
-msgstr "ഘടിപ്പിക്കുക"
+#: ../src/empathy-call-window.glade.h:5
+msgid "2"
+msgstr "2"
 
-#: ../libempathy-gtk/gossip-chat.glade.h:1
-msgid "C_lear"
-msgstr ""
+#: ../src/empathy-call-window.glade.h:6
+msgid "3"
+msgstr "3"
 
-#: ../libempathy-gtk/gossip-chat.glade.h:2
-msgid "Change _Topic..."
-msgstr ""
+#: ../src/empathy-call-window.glade.h:7
+msgid "4"
+msgstr "4"
 
-#: ../libempathy-gtk/gossip-chat.glade.h:3
-msgid "Chat"
-msgstr ""
+#: ../src/empathy-call-window.glade.h:8
+msgid "5"
+msgstr "5"
 
-#: ../libempathy-gtk/gossip-chat.glade.h:4
-msgid "Contact Infor_mation"
-msgstr ""
+#: ../src/empathy-call-window.glade.h:9
+msgid "6"
+msgstr "6"
 
-#: ../libempathy-gtk/gossip-chat.glade.h:5
-msgid "Cu_t"
-msgstr ""
+#: ../src/empathy-call-window.glade.h:10
+msgid "7"
+msgstr "7"
 
-#: ../libempathy-gtk/gossip-chat.glade.h:6
-msgid "In_vite..."
-msgstr ""
+#: ../src/empathy-call-window.glade.h:11
+msgid "8"
+msgstr "8"
 
-#: ../libempathy-gtk/gossip-chat.glade.h:7
-msgid "Insert _Smiley"
-msgstr ""
+#: ../src/empathy-call-window.glade.h:12
+msgid "9"
+msgstr "9"
 
-#: ../libempathy-gtk/gossip-chat.glade.h:8
-#, fuzzy
-msgid "Invitation _message:"
-msgstr "സന്ദേശം:"
+#. To translators: The keypad is numbers [0-9], asterisk (*) and hash (#). Presented like on any phone
+#: ../src/empathy-call-window.glade.h:14
+msgid "<b>Keypad</b>"
+msgstr "<b>കീപാഡ്</b>"
 
-#: ../libempathy-gtk/gossip-chat.glade.h:9
-msgid "Invite"
-msgstr ""
+#: ../src/empathy-call-window.glade.h:15
+msgid "<b>Volume</b>"
+msgstr "<b>ഒച്ച</b>"
 
-#: ../libempathy-gtk/gossip-chat.glade.h:11
-msgid "Move Tab _Left"
-msgstr ""
+#: ../src/empathy-call-window.glade.h:16
+msgid "Hang Up"
+msgstr "കട്ടാക്കുക"
 
-#: ../libempathy-gtk/gossip-chat.glade.h:12
-msgid "Move Tab _Right"
-msgstr ""
+#: ../src/empathy-call-window.glade.h:17
+msgid "Send Video"
+msgstr "ചലച്ചിത്രം അയയ്ക്കുക"
 
-#: ../libempathy-gtk/gossip-chat.glade.h:13
-msgid "Select who would you like to invite:"
-msgstr ""
+#: ../src/empathy-chat-window.c:326
+#, c-format
+msgid "Conversations (%d)"
+msgstr "സംഭാഷണങ്ങള്‍ (%d)"
 
-#: ../libempathy-gtk/gossip-chat.glade.h:14
-msgid "You have been invited to join a chat conference."
-msgstr ""
+#: ../src/empathy-chat-window.c:418
+msgid "Topic:"
+msgstr "വിഷയം:"
 
-#: ../libempathy-gtk/gossip-chat.glade.h:16
-msgid "_Add To Favorites"
-msgstr ""
-
-#: ../libempathy-gtk/gossip-chat.glade.h:17
-msgid "_Close"
-msgstr ""
-
-#: ../libempathy-gtk/gossip-chat.glade.h:18
-msgid "_Conversation"
-msgstr ""
-
-#: ../libempathy-gtk/gossip-chat.glade.h:19
-msgid "_Copy"
-msgstr ""
-
-#: ../libempathy-gtk/gossip-chat.glade.h:20
-msgid "_Detach Tab"
-msgstr ""
-
-#: ../libempathy-gtk/gossip-chat.glade.h:22
-msgid "_Next Tab"
-msgstr ""
-
-#: ../libempathy-gtk/gossip-chat.glade.h:23
-msgid "_Paste"
-msgstr ""
-
-#: ../libempathy-gtk/gossip-chat.glade.h:24
-msgid "_Previous Tab"
-msgstr ""
-
-#: ../libempathy-gtk/gossip-chat.glade.h:26
-msgid "_Show Contacts"
-msgstr ""
-
-#: ../libempathy-gtk/gossip-chat.glade.h:27
-msgid "_Tabs"
-msgstr ""
-
-#: ../libempathy-gtk/gossip-chat-view.c:544
-msgid "_Copy Link Address"
-msgstr ""
-
-#: ../libempathy-gtk/gossip-chat-view.c:552
-msgid "_Open Link"
-msgstr ""
-
-#: ../libempathy-gtk/gossip-chat-view.c:889
-msgid "%A %d %B %Y"
-msgstr ""
-
-#: ../libempathy-gtk/gossip-chat-window.c:685
-#: ../libempathy-gtk/gossip-chat-window.c:715
-#, fuzzy
-msgid "New Message"
-msgid_plural "New Messages"
-msgstr[0] "സന്ദേശം:"
-msgstr[1] "സന്ദേശം:"
-
-#: ../libempathy-gtk/gossip-chat-window.c:691
-msgid "Chat Room"
-msgstr ""
-
-#: ../libempathy-gtk/gossip-chat-window.c:696
-#: ../libempathy-gtk/gossip-chat-window.c:719
-#, fuzzy, c-format
-msgid "Conversation"
-msgid_plural "Conversations (%d)"
-msgstr[0] "ഘടിപ്പിക്കുക"
-msgstr[1] "ഘടിപ്പിക്കുക"
-
-#: ../libempathy-gtk/gossip-chat-window.c:1295
+#: ../src/empathy-chat-window.c:421
 msgid "Typing a message."
-msgstr ""
+msgstr "ഒരു സന്ദേശം എഴുതിക്കൊണ്ടിരിയ്ക്കുന്നു."
 
-#: ../libempathy-gtk/gossip-contact-list.c:290
-#, fuzzy
+#: ../src/empathy-chat-window.glade.h:1
+msgid "C_lear"
+msgstr "വൃ_ത്തിയാക്കുക"
+
+#: ../src/empathy-chat-window.glade.h:2
+msgid "Chat"
+msgstr "സല്ലാപം"
+
+#: ../src/empathy-chat-window.glade.h:3
+msgid "Insert _Smiley"
+msgstr "_വികാരചിഹ്നം ചേര്‍ക്കുക"
+
+#: ../src/empathy-chat-window.glade.h:4
+msgid "Invitation _message:"
+msgstr "ക്ഷണിച്ചുകൊണ്ടുള്ള _സന്ദേശം:"
+
+#: ../src/empathy-chat-window.glade.h:5
+msgid "Invite"
+msgstr "ക്ഷണിയ്ക്കുക"
+
+#: ../src/empathy-chat-window.glade.h:6
+msgid "Move Tab _Left"
+msgstr "കിളിവാതില്‍ _ഇടത്തോട്ടു് മാറ്റുക"
+
+#: ../src/empathy-chat-window.glade.h:7
+msgid "Move Tab _Right"
+msgstr "കിളിവാതില്‍ _വലത്തോട്ടു് മാറ്റുക"
+
+#: ../src/empathy-chat-window.glade.h:8
+msgid "Select who would you like to invite:"
+msgstr "നിങ്ങള്‍ക്കാരെയാണു് ക്ഷണിയ്ക്കേണ്ടതെന്നു് തെരഞ്ഞെടുക്കുക:"
+
+#: ../src/empathy-chat-window.glade.h:9
+msgid "You have been invited to join a chat conference."
+msgstr "നിങ്ങളെ ഒരു സല്ലാപ സമ്മേളനത്തില്‍ ചേരുവാന്‍ ക്ഷണിച്ചിരിയ്ക്കുന്നു."
+
+#: ../src/empathy-chat-window.glade.h:10
 msgid "_Contact"
-msgstr "ഘടിപ്പിക്കുക"
+msgstr "_ബന്ധം"
 
-#: ../libempathy-gtk/gossip-contact-list.c:294
-msgid "_Group"
-msgstr ""
+#: ../src/empathy-chat-window.glade.h:11
+#: ../src/empathy-main-window.glade.h:10
+msgid "_Contents"
+msgstr "_ഉള്ളടക്കം"
 
-#: ../libempathy-gtk/gossip-contact-list.c:298
-msgid "Chat with contact"
-msgstr ""
+#: ../src/empathy-chat-window.glade.h:12
+msgid "_Conversation"
+msgstr "_സംഭാഷണങ്ങള്‍"
 
-#: ../libempathy-gtk/gossip-contact-list.c:302
-#, fuzzy
-msgid "Infor_mation"
-msgstr "ഘടിപ്പിക്കുക"
+#: ../src/empathy-chat-window.glade.h:13
+msgid "_Detach Tab"
+msgstr "കിളിവാതില്‍ _വേര്‍പ്പെടുത്തുക"
 
-#: ../libempathy-gtk/gossip-contact-list.c:302
-msgid "View contact information"
-msgstr ""
+#: ../src/empathy-chat-window.glade.h:15
+msgid "_Favorite Chatroom"
+msgstr "_ഇഷ്ടപ്പെട്ട സല്ലാപമുറി"
 
-#: ../libempathy-gtk/gossip-contact-list.c:306
-#, fuzzy
-msgid "Re_name"
-msgstr "നാമം:"
+#: ../src/empathy-chat-window.glade.h:16
+#: ../src/empathy-main-window.glade.h:12
+msgid "_Help"
+msgstr "_സഹായം"
 
-#: ../libempathy-gtk/gossip-contact-list.c:306
-msgid "Rename"
-msgstr ""
+#: ../src/empathy-chat-window.glade.h:17
+msgid "_Next Tab"
+msgstr "_അടുത്ത കിളിവാതില്‍"
 
-#: ../libempathy-gtk/gossip-contact-list.c:310
-msgid "Edit the groups and name for this contact"
-msgstr ""
+#: ../src/empathy-chat-window.glade.h:18
+msgid "_Previous Tab"
+msgstr "_മുമ്പത്തെ കിളിവാതില്‍"
 
-#: ../libempathy-gtk/gossip-contact-list.c:314
-#, fuzzy
-msgid "_Remove"
-msgstr "നീക്കുക"
+#: ../src/empathy-chat-window.glade.h:19
+msgid "_Tabs"
+msgstr "_കിളിവാതിലുകള്‍"
 
-#: ../libempathy-gtk/gossip-contact-list.c:314
-#, fuzzy
-msgid "Remove contact"
-msgstr "നീക്കുക"
+#: ../src/empathy-chatrooms-window.c:262
+msgid "Name"
+msgstr "പേരു്:"
 
-#: ../libempathy-gtk/gossip-contact-list.c:318
-msgid "_Invite to Chat Room"
-msgstr ""
+#: ../src/empathy-chatrooms-window.c:280
+msgid "Room"
+msgstr "മുറി"
 
-#: ../libempathy-gtk/gossip-contact-list.c:318
-msgid "Invite to a currently open chat room"
-msgstr ""
+#: ../src/empathy-chatrooms-window.c:289
+msgid "Auto-Connect"
+msgstr "സ്വയം-ഘടിപ്പിക്കുക"
 
-#: ../libempathy-gtk/gossip-contact-list.c:322
-msgid "_Send File..."
-msgstr ""
+#: ../src/empathy-chatrooms-window.glade.h:2
+msgid "Edit Favorite Room"
+msgstr "ഇഷ്ടപ്പെട്ട മുറി മാറ്റുക"
 
-#: ../libempathy-gtk/gossip-contact-list.c:322
-#, fuzzy
-msgid "Send a file"
-msgstr "തള്ളിക്കളയുക"
+#: ../src/empathy-chatrooms-window.glade.h:3
+msgid "Join room on start_up"
+msgstr "തു_ടങ്ങുമ്പോള്‍ തന്നെ മുറിയില്‍ കയറുക"
 
-#: ../libempathy-gtk/gossip-contact-list.c:326
-msgid "View previous conversations with this contact"
-msgstr ""
+#: ../src/empathy-chatrooms-window.glade.h:4
+msgid "Join this chat room when Empathy starts and you are connected"
+msgstr "നിങ്ങള്‍ ബന്ധപ്പെട്ടിരിയ്ക്കുകയും എമ്പതി തുടങ്ങുകയും ചെയ്യുകയാണെങ്കില്‍ ഈ സല്ലാപ മുറിയില്‍ കയറുക"
 
-#: ../libempathy-gtk/gossip-preferences.c:250
-msgid "Language"
-msgstr ""
+#: ../src/empathy-chatrooms-window.glade.h:5
+msgid "Manage Favorite Rooms"
+msgstr "ഇഷ്ടപ്പെട്ട മുറികള്‍ തെരഞ്ഞെടുക്കുക"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:1
-msgid "<b>Appearance</b>"
-msgstr ""
+#: ../src/empathy-chatrooms-window.glade.h:6
+msgid "N_ame:"
+msgstr "പേ_രു്:"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:2
-#, fuzzy
-msgid "<b>Audio</b>"
-msgstr "<b>അവസ്ഥ</b>"
+#: ../src/empathy-chatrooms-window.glade.h:7
+msgid "S_erver:"
+msgstr "സെ_ര്‍വര്‍:"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:3
-#, fuzzy
-msgid "<b>Behaviour</b>"
-msgstr "<b>അവസ്ഥ</b>"
+#: ../src/empathy-chatrooms-window.glade.h:9
+#: ../src/empathy-new-chatroom-dialog.glade.h:9
+msgid "_Room:"
+msgstr "_മുറി:"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:4
-#, fuzzy
-msgid "<b>Contact List</b>"
-msgstr "<b>അവസ്ഥ</b>"
-
-#: ../libempathy-gtk/gossip-preferences.glade.h:5
-msgid "<b>Languages</b>"
-msgstr ""
-
-#: ../libempathy-gtk/gossip-preferences.glade.h:6
-#, fuzzy
-msgid "<b>Options</b>"
-msgstr "ഘടിപ്പിക്കുക"
-
-#: ../libempathy-gtk/gossip-preferences.glade.h:7
-#, fuzzy
-msgid "<b>Visual</b>"
-msgstr "<b>അവസ്ഥ</b>"
-
-#: ../libempathy-gtk/gossip-preferences.glade.h:8
+#: ../src/empathy-event-manager.c:166
+#, c-format
 msgid ""
-"<small>The list of languages reflects only the languages for which you have "
-"a dictionary installed.</small>"
+"New message from %s:\n"
+"%s"
 msgstr ""
+"%s ല്‍ നിന്നുള്ള പുതിയ സന്ദേശം:\n"
+"%s"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:9
+#: ../src/empathy-event-manager.c:205
+#, c-format
+msgid "Incoming call from %s"
+msgstr "%s വിളിയ്ക്കുന്നു"
+
+#: ../src/empathy-event-manager.c:238
+#, c-format
+msgid "%s is offering you an invitation, but you don't have the needed external application to handle it."
+msgstr "%s നിങ്ങളെ ക്ഷണിയ്ക്കുകയാണു്, പക്ഷേ അതു് കൈകാര്യം ചെയ്യാനുള്ള പുറമെയുള്ള പ്രയോഗം നിങ്ങളുടെ കയ്യിലില്ല."
+
+#: ../src/empathy-event-manager.c:263
+msgid "Invitation Error"
+msgstr "ക്ഷണത്തില്‍ പിശകു്:"
+
+#: ../src/empathy-event-manager.c:289
+#, c-format
+msgid "%s is offering you an invitation. An external application will be started to handle it."
+msgstr "%s നിങ്ങളെ ക്ഷണിയ്ക്കുകയാണു്. ഇതു് കൈകാര്യം ചെയ്യാന്‍ പുറമെയുള്ളൊരു പ്രയോഗം തുടങ്ങുന്നതായിരിയ്ക്കും."
+
+#: ../src/empathy-event-manager.c:345
+#, c-format
+msgid "Subscription requested by %s"
+msgstr "%s വരിക്കാരനാകാന്‍ ആവശ്യപ്പെട്ടിരിയ്ക്കുന്നു"
+
+#: ../src/empathy-event-manager.c:348
+#, c-format
+msgid ""
+"\n"
+"Message: %s"
+msgstr ""
+"\n"
+"സന്ദേശം: %s"
+
+#: ../src/empathy-main-window.c:466
+msgid "Show and edit accounts"
+msgstr "അക്കൌണ്ടുകള്‍ കാണിയ്ക്കുകയും മാറ്റം വരുത്തുകയും ചെയ്യുക"
+
+#: ../src/empathy-main-window.c:836
+msgid "Contact"
+msgstr "ബന്ധം"
+
+#: ../src/empathy-main-window.c:1038
+msgid "_Edit account"
+msgstr "അക്കൌണ്ടില്‍ _മാറ്റം വരുത്തുക"
+
+#: ../src/empathy-main-window.c:1121
+msgid "No error specified"
+msgstr "പിശകൊന്നും വ്യക്തമാക്കിയില്ല"
+
+#: ../src/empathy-main-window.c:1124
+msgid "Network error"
+msgstr "ശൃംഖലയില്‍ പിഴവു്"
+
+#: ../src/empathy-main-window.c:1127
+msgid "Authentication failed"
+msgstr "തിരിച്ചറിയല്‍ പരാജയപ്പെട്ടു"
+
+#: ../src/empathy-main-window.c:1130
+msgid "Encryption error"
+msgstr "എന്‍ക്രിപ്ഷനില്‍ പിശകു്"
+
+#: ../src/empathy-main-window.c:1133
+msgid "Name in use"
+msgstr "പേരു് ഉപയോഗത്തിലുണ്ടു്"
+
+#: ../src/empathy-main-window.c:1136
+msgid "Certificate not provided"
+msgstr "സാക്ഷ്യപത്രം നല്‍കിയില്ല"
+
+#: ../src/empathy-main-window.c:1139
+msgid "Certificate untrusted"
+msgstr "സാക്ഷ്യംപത്രം വിശ്വാസമില്ലാത്തു്"
+
+#: ../src/empathy-main-window.c:1142
+msgid "Certificate expired"
+msgstr "സാക്ഷ്യപത്രം കാലാവധി തീര്‍ന്നതു്"
+
+#: ../src/empathy-main-window.c:1145
+msgid "Certificate not activated"
+msgstr "സാക്ഷ്യപത്രം സജീകമാക്കാത്തതു്"
+
+#: ../src/empathy-main-window.c:1148
+msgid "Certificate hostname mismatch"
+msgstr "സാക്ഷ്യപത്രത്തിലെ ഹോസ്റ്റിന്റെ പേരു് പൊരുത്തമില്ല"
+
+#: ../src/empathy-main-window.c:1151
+msgid "Certificate fingerprint mismatch"
+msgstr "സാക്ഷ്യപത്രത്തിലെ ഒപ്പു് പൊരുത്തമില്ല"
+
+#: ../src/empathy-main-window.c:1154
+msgid "Certificate self-signed"
+msgstr "സാക്ഷ്യപത്രം സ്വയം ഒപ്പിട്ടതാണു്"
+
+#: ../src/empathy-main-window.c:1157
+msgid "Certificate error"
+msgstr "സാക്ഷ്യപത്രത്തില്‍ പിശകു്"
+
+#: ../src/empathy-main-window.c:1160
+msgid "Unknown error"
+msgstr "അറിയാത്ത ഏതോ പിശകു്"
+
+#: ../src/empathy-main-window.glade.h:1
+msgid "Contact List"
+msgstr "ബന്ധപ്പട്ടിക"
+
+#: ../src/empathy-main-window.glade.h:2
+msgid "Context"
+msgstr "സന്ദര്‍ഭം"
+
+#: ../src/empathy-main-window.glade.h:3
+msgid "Join _Favorites"
+msgstr "_ഇഷ്ടപ്പെട്ടതില്‍ ചേരുക"
+
+#: ../src/empathy-main-window.glade.h:4
+msgid "Join _New..."
+msgstr "_പുതിയതില്‍ ചേരുക..."
+
+#: ../src/empathy-main-window.glade.h:5
+msgid "Manage Favorites"
+msgstr "ഇഷ്ടപ്പെട്ടവ കൈകാര്യം ചെയ്യുക"
+
+#: ../src/empathy-main-window.glade.h:6
+msgid "Show _Offline Contacts"
+msgstr "_ഓഫ്‌ലൈനായ ബന്ധങ്ങളും കാണിയ്ക്കുക"
+
+#: ../src/empathy-main-window.glade.h:7
+msgid "_Accounts"
+msgstr "_അക്കൌണ്ടുകള്‍"
+
+#: ../src/empathy-main-window.glade.h:8
+msgid "_Add Contact..."
+msgstr "_ബന്ധം ചേര്‍ക്കുക..."
+
+#: ../src/empathy-main-window.glade.h:13
+#: ../src/empathy-status-icon.glade.h:2
+msgid "_New Conversation..."
+msgstr "_പുതിയ സംഭാഷണം..."
+
+#: ../src/empathy-main-window.glade.h:14
+msgid "_Personal Information"
+msgstr "_സ്വകാര്യ വിവരം"
+
+#: ../src/empathy-main-window.glade.h:16
+msgid "_Room"
+msgstr "_മുറി"
+
+#: ../src/empathy-new-chatroom-dialog.c:290
+msgid "Chat Rooms"
+msgstr "സല്ലാപ മുറികള്‍"
+
+#: ../src/empathy-new-chatroom-dialog.glade.h:2
+msgid "Browse:"
+msgstr "പരതുക:"
+
+#: ../src/empathy-new-chatroom-dialog.glade.h:3
+msgid "Enter the room name to join here or click on one or more rooms in the list."
+msgstr "കയറാനായി പട്ടികയിലുള്ള ഒന്നോ അതിലധികമോ മുറികളില്‍ ഞെക്കുകയോ ഇവിടെ മുറിയുടെ പേരു് നല്‍കുകയോ ചെയ്യുക"
+
+#: ../src/empathy-new-chatroom-dialog.glade.h:4
+msgid "Enter the server which hosts the room, or leave it empty if the room is on the current account's server"
+msgstr "മുറി ഏതു് സെര്‍വ്വറിലാണെന്നു് പറയുക, ഇപ്പോഴുള്ള അക്കൌണ്ടിന്റെ സെര്‍വ്വറില്‍ തന്നെയാണു് മുറിയെങ്കില്‍ ഇതു് കാലിയായിടുക"
+
+#: ../src/empathy-new-chatroom-dialog.glade.h:5
+msgid "Join"
+msgstr "കയറുക"
+
+#: ../src/empathy-new-chatroom-dialog.glade.h:6
+msgid "Join New"
+msgstr "പുതിയതില്‍ കയറുക"
+
+#: ../src/empathy-new-chatroom-dialog.glade.h:7
+msgid "Re_fresh"
+msgstr "പു_തുക്കുക"
+
+#: ../src/empathy-new-chatroom-dialog.glade.h:8
+msgid "This list represents all chat rooms hosted on the server you have entered."
+msgstr "നിങ്ങള്‍ നല്‍കിയ സെര്‍വ്വറിലുള്ള മുറികളെല്ലാം ഈ പട്ടികയിലുണ്ടു്."
+
+#: ../src/empathy-preferences.c:264
+msgid "Language"
+msgstr "ഭാഷ"
+
+#: ../src/empathy-preferences.glade.h:1
+msgid "<b>Appearance</b>"
+msgstr "<b>ചമയം</b>"
+
+#. To translators: Audio notifications preferences
+#: ../src/empathy-preferences.glade.h:3
+msgid "<b>Audio</b>"
+msgstr "<b>ശബ്ദം</b>"
+
+#: ../src/empathy-preferences.glade.h:4
+msgid "<b>Behaviour</b>"
+msgstr "<b>പെരുമാറ്റം</b>"
+
+#: ../src/empathy-preferences.glade.h:5
+msgid "<b>Contact List</b>"
+msgstr "<b>ബന്ധപ്പട്ടിക</b>"
+
+#: ../src/empathy-preferences.glade.h:6
+msgid "<b>Enable spell checking for languages:</b>"
+msgstr "<b>അക്ഷരത്തെറ്റുകള്‍ പരിശോധിയ്ക്കേണ്ട ഭാഷകള്‍:</b>"
+
+#. To translators: Visual notifications preferences, like notify bubbles, etc.
+#: ../src/empathy-preferences.glade.h:8
+msgid "<b>Visual</b>"
+msgstr "<b>കാഴ്ചയില്‍</b>"
+
+#: ../src/empathy-preferences.glade.h:9
+msgid "<small>The list of languages reflects only the languages for which you have a dictionary installed.</small>"
+msgstr "<small>നിങ്ങള്‍ ഇപ്പോള്‍ നിഘണ്ടു ഇന്‍സ്റ്റോള്‍ ചെയ്തിട്ടുള്ള ഭാഷകള്‍ മാത്രമേ പട്ടികയിലുള്ളൂ.</small>"
+
+#: ../src/empathy-preferences.glade.h:10
+msgid "Automatically _connect on startup "
+msgstr "തുടങ്ങുമ്പോള്‍ സ്വയം _ബന്ധപ്പെടുക"
+
+#: ../src/empathy-preferences.glade.h:11
 msgid "Avatars are user chosen images shown in the contact list"
-msgstr ""
+msgstr "ബന്ധപ്പട്ടികയില്‍ കാണിയ്ക്കുന്ന ഉപയോക്താവു് തെരഞ്ഞെടുക്കുന്ന ചിത്രങ്ങളാണു് അവതാരങ്ങള്‍"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:10
+#: ../src/empathy-preferences.glade.h:12
 msgid "Chat Th_eme:"
-msgstr ""
+msgstr "സല്ലാപത്തിന്റെ രം_ഗവിതാനം:"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:11
+#: ../src/empathy-preferences.glade.h:13
 msgid "Display notifications when contacts come _online"
-msgstr ""
+msgstr "ബന്ധങ്ങള്‍ _ഓണ്‍ലൈനാകുമ്പോള്‍ അറിയിപ്പുകള്‍ കാണിയ്ക്കുക"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:12
+#: ../src/empathy-preferences.glade.h:14
 msgid "Enable sounds when _away"
-msgstr ""
+msgstr "_ദൂരെയാകുമ്പോള്‍ ശബ്ദം പ്രായോഗികമാക്കുക"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:13
+#: ../src/empathy-preferences.glade.h:15
 msgid "Enable sounds when _busy"
-msgstr ""
+msgstr "_തിരക്കിലാകുമ്പോള്‍ ശബ്ദം പ്രായോഗികമാക്കുക"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:14
+#: ../src/empathy-preferences.glade.h:16
 msgid "General"
-msgstr ""
+msgstr "പൊതുവായ"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:15
+#: ../src/empathy-preferences.glade.h:17
 msgid "Notifications"
-msgstr ""
+msgstr "അറിയിപ്പുകള്‍"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:16
-#, fuzzy
+#: ../src/empathy-preferences.glade.h:18
 msgid "Preferences"
 msgstr "മുന്‍ഗണനകള്‍"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:17
+#: ../src/empathy-preferences.glade.h:19
 msgid "Show _avatars"
-msgstr ""
+msgstr "_അവതാരങ്ങള്‍ കാണിയ്ക്കുക"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:18
+#: ../src/empathy-preferences.glade.h:20
 msgid "Show _smileys as images"
-msgstr ""
+msgstr "_വികാരചിഹ്നങ്ങള്‍ ചിത്രങ്ങളായി കാണിയ്ക്കുക"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:19
+#: ../src/empathy-preferences.glade.h:21
 msgid "Show co_mpact contact list"
-msgstr ""
+msgstr "ചു_രുങ്ങിയ ബന്ധപ്പട്ടിക കാണിയ്ക്കുക"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:20
+#: ../src/empathy-preferences.glade.h:22
 msgid "Sort by _name"
-msgstr ""
+msgstr "_പേരനുസരിച്ചു് അടുക്കുക"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:21
+#: ../src/empathy-preferences.glade.h:23
 msgid "Sort by s_tate"
-msgstr ""
+msgstr "_അവസ്ഥയനുസരിച്ചു് അടുക്കി വയ്ക്കുക"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:22
+#: ../src/empathy-preferences.glade.h:24
 msgid "Spell Checking"
-msgstr ""
+msgstr "അക്ഷരത്തെറ്റു് പരിശോധന"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:23
+#: ../src/empathy-preferences.glade.h:25
 msgid "Themes"
-msgstr ""
+msgstr "രംഗവിതാനങ്ങള്‍"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:24
-msgid "_Enable spell checking"
-msgstr ""
-
-#: ../libempathy-gtk/gossip-preferences.glade.h:25
+#: ../src/empathy-preferences.glade.h:26
 msgid "_Open new chats in separate windows"
-msgstr ""
+msgstr "പുതിയ സല്ലാപങ്ങള്‍ വ്യത്യസ്ത ജാലകങ്ങളില്‍ _തുറക്കുക"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:26
+#: ../src/empathy-preferences.glade.h:27
 msgid "_Play sound when messages arrive"
-msgstr ""
+msgstr "സന്ദേശം വരുമ്പോള്‍ ശബ്ദമുണ്ടാക്കുക (_P)"
 
-#: ../libempathy-gtk/gossip-preferences.glade.h:27
-msgid "_Use for chat rooms"
-msgstr ""
+#: ../src/empathy-status-icon.glade.h:1
+msgid "Status"
+msgstr "അവസ്ഥ"
 
-#: ../libempathy-gtk/gossip-presence-chooser.c:702
-msgid "Custom message..."
-msgstr ""
+#: ../src/empathy-status-icon.glade.h:3
+msgid "_Quit"
+msgstr "പുറത്ത് കടക്കുക"
 
-#. Clear list
-#: ../libempathy-gtk/gossip-presence-chooser.c:724
-msgid "Clear List..."
-msgstr ""
-
-#: ../libempathy-gtk/gossip-presence-chooser.c:803
-msgid "Are you sure you want to clear the list?"
-msgstr ""
-
-#: ../libempathy-gtk/gossip-presence-chooser.c:807
-msgid ""
-"This will remove any custom messages you have added to the list of preset "
-"status messages."
-msgstr ""
-
-#: ../libempathy-gtk/gossip-presence-chooser.c:812
-msgid "Clear List"
-msgstr ""
-
-#: ../libempathy-gtk/gossip-presence-chooser.glade.h:1
-#, fuzzy
-msgid "Enter status message:"
-msgstr "സന്ദേശം:"
-
-#: ../libempathy-gtk/gossip-presence-chooser.glade.h:2
-#, fuzzy
-msgid "Status Message Presets"
-msgstr "സന്ദേശം:"
-
-#: ../libempathy-gtk/gossip-presence-chooser.glade.h:3
-#, fuzzy
-msgid "_Add to status message list"
-msgstr "സന്ദേശം:"
-
-#: ../libempathy-gtk/gossip-private-chat.c:198
-#, c-format
-msgid "%s went offline"
-msgstr ""
-
-#: ../libempathy-gtk/gossip-private-chat.c:212
-#, c-format
-msgid "%s has come online"
-msgstr ""
-
-#: ../libempathy-gtk/gossip-theme-manager.c:87
-msgid "Classic"
-msgstr ""
-
-#: ../libempathy-gtk/gossip-theme-manager.c:88
-msgid "Simple"
-msgstr ""
-
-#: ../libempathy-gtk/gossip-theme-manager.c:89
-msgid "Clean"
-msgstr ""
-
-#: ../libempathy-gtk/gossip-theme-manager.c:90
-msgid "Blue"
-msgstr ""
-
-#: ../src/empathy-main.c:145
-msgid "Don't connect on startup"
-msgstr ""
-
-#: ../src/empathy-main.c:155
-#, fuzzy
-msgid "- Empathy Instant Messenger"
-msgstr "സന്ദേശം:"
+#: ../src/empathy-status-icon.glade.h:4
+msgid "_Show Contact List"
+msgstr "ബന്ധപ്പട്ടിക _കാണിയ്ക്കുക"
 
 #, fuzzy
-#~ msgid "Unknown"
-#~ msgstr "അറിയാത്ത ഏതോ പ്രശ്നം"
+#~ msgid "Disable"
+#~ msgstr "ലഭ്യത"
+
+#, fuzzy
+#~ msgid "<b>Options</b>"
+#~ msgstr "ഘടിപ്പിക്കുക"
+
+#, fuzzy
+#~ msgid "Enter status message:"
+#~ msgstr "സന്ദേശം:"
+
+#, fuzzy
+#~ msgid "Status Message Presets"
+#~ msgstr "സന്ദേശം:"
+
+#, fuzzy
+#~ msgid "_Add to status message list"
+#~ msgstr "സന്ദേശം:"
 
 #, fuzzy
 #~ msgid "An unknown error occurred, check your details are correct."
@@ -921,28 +1760,6 @@ msgstr "സന്ദേശം:"
 #~ msgstr "ഘടിപ്പിക്കുക"
 
 #, fuzzy
-#~ msgid "%d new message"
-#~ msgid_plural "%d new messages"
-#~ msgstr[0] "സന്ദേശം:"
-#~ msgstr[1] "സന്ദേശം:"
-
-#, fuzzy
-#~ msgid "Name"
-#~ msgstr "നാമം:"
-
-#, fuzzy
-#~ msgid "Auto Connect"
-#~ msgstr "ഘടിപ്പിക്കുക"
-
-#, fuzzy
-#~ msgid "Information requested..."
-#~ msgstr "ഘടിപ്പിക്കുക"
-
-#, fuzzy
-#~ msgid "Select"
-#~ msgstr "തള്ളിക്കളയുക"
-
-#, fuzzy
 #~ msgid "Unknown error occurred during file transfer."
 #~ msgstr "അറിയാത്ത ഏതോ പ്രശ്നം"
 
@@ -951,60 +1768,12 @@ msgstr "സന്ദേശം:"
 #~ msgstr "തള്ളിക്കളയുക"
 
 #, fuzzy
-#~ msgid "Connecting..."
-#~ msgstr "ഘടിപ്പിക്കുക"
-
-#, fuzzy
 #~ msgid "Retry connection"
 #~ msgstr "ഘടിപ്പിക്കുക"
 
 #, fuzzy
 #~ msgid "_Deny"
 #~ msgstr "അയ‍യ്‍ക്കുക"
-
-#, fuzzy
-#~ msgid "<b>Topic:</b>"
-#~ msgstr "<b>അവസ്ഥ</b>"
-
-#, fuzzy
-#~ msgid "N_ame:"
-#~ msgstr "നാമം:"
-
-#, fuzzy
-#~ msgid "S_erver:"
-#~ msgstr "സ‍ര്‍വ്വര്:"
-
-#, fuzzy
-#~ msgid "<b>Groups</b>"
-#~ msgstr "<b>അവസ്ഥ</b>"
-
-#, fuzzy
-#~ msgid "<b>Name</b>"
-#~ msgstr "<b>അവസ്ഥ</b>"
-
-#, fuzzy
-#~ msgid "<b>Subscription</b>"
-#~ msgstr "ഘടിപ്പിക്കുക"
-
-#, fuzzy
-#~ msgid "Con_tact:"
-#~ msgstr "ഘടിപ്പിക്കുക"
-
-#, fuzzy
-#~ msgid "Connect on S_tartup"
-#~ msgstr "ഘടിപ്പിക്കുക"
-
-#, fuzzy
-#~ msgid "Contacts"
-#~ msgstr "ഘടിപ്പിക്കുക"
-
-#, fuzzy
-#~ msgid "Edit Contact"
-#~ msgstr "ഘടിപ്പിക്കുക"
-
-#~ msgid "Email:"
-#~ msgstr "ഇ-മെയില്:"
-
 #~ msgid "Name:"
 #~ msgstr "നാമം:"
 
@@ -1013,32 +1782,8 @@ msgstr "സന്ദേശം:"
 #~ msgstr "ഘടിപ്പിക്കുക"
 
 #, fuzzy
-#~ msgid "_Email:"
-#~ msgstr "ഇ-മെയില്:"
-
-#, fuzzy
-#~ msgid "_For:"
-#~ msgstr "വഴി:"
-
-#, fuzzy
-#~ msgid "_Full Name:"
-#~ msgstr "നാമം:"
-
-#, fuzzy
-#~ msgid "_Nick Name:"
-#~ msgstr "നാമം:"
-
-#, fuzzy
 #~ msgid "_Password:"
 #~ msgstr "അടയാളവാക്ക്:"
-
-#, fuzzy
-#~ msgid "_Quit Message:"
-#~ msgstr "സന്ദേശം:"
-
-#, fuzzy
-#~ msgid "Preset status messages"
-#~ msgstr "സന്ദേശം:"
 
 #, fuzzy
 #~ msgid "Preset status messages."
@@ -1047,17 +1792,8 @@ msgstr "സന്ദേശം:"
 #, fuzzy
 #~ msgid "Na_me:"
 #~ msgstr "നാമം:"
-
 #~ msgid "    "
 #~ msgstr "   "
-
-#, fuzzy
-#~ msgid "Port:"
-#~ msgstr "വഴി:"
-
-#, fuzzy
-#~ msgid "Server:"
-#~ msgstr "സ‍ര്‍വ്വര്:"
 
 #, fuzzy
 #~ msgid "_No"
@@ -1066,10 +1802,6 @@ msgstr "സന്ദേശം:"
 #, fuzzy
 #~ msgid "_Yes"
 #~ msgstr "അതെ"
-
-#, fuzzy
-#~ msgid "Send Message"
-#~ msgstr "സന്ദേശം:"
 
 #, fuzzy
 #~ msgid "Available..."
@@ -1090,22 +1822,10 @@ msgstr "സന്ദേശം:"
 #, fuzzy
 #~ msgid "Gossip - Preferences"
 #~ msgstr "മുന്‍ഗണനകള്‍"
-
-#~ msgid "*"
-#~ msgstr "*"
-
-#~ msgid "To:"
-#~ msgstr "വരെ:"
-
 #~ msgid "_Reply..."
 #~ msgstr "മറുപടി..."
-
-#~ msgid "_Send"
-#~ msgstr "അയ‍യ്‍ക്കുക"
-
 #~ msgid "C_onnect"
 #~ msgstr "ഘടിപ്പിക്കുക"
-
 #~ msgid "_Add"
 #~ msgstr "ചേര്ക്കുക"
 
@@ -1116,9 +1836,8 @@ msgstr "സന്ദേശം:"
 #, fuzzy
 #~ msgid "translator_credits_old"
 #~ msgstr "എഫ്.എസ്.എഫ് - ഇന്ത്യ <gnu@gnu.org.in>"
-
 #~ msgid "Others"
 #~ msgstr "മറ്റുള്ളവ"
-
 #~ msgid "minutes"
 #~ msgstr "മിനിട്ട്"
+
