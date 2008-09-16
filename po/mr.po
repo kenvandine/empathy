@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mr\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-08 03:57+0000\n"
-"PO-Revision-Date: 2008-08-11 12:13+0530\n"
+"POT-Creation-Date: 2008-09-09 11:33+0000\n"
+"PO-Revision-Date: 2008-09-16 14:32+0530\n"
 "Last-Translator: Sandeep Shedmake <sandeep.shedmake@gmail.com>\n"
 "Language-Team: marathi\n"
 "MIME-Version: 1.0\n"
@@ -216,17 +216,12 @@ msgid ""
 "Which criterium to use when sorting the contact list. Default is to use sort "
 "by the contact's name with the value \"name\". A value of \"state\" will "
 "sort the contact list by state."
-msgstr "संपर्क यादी क्रमवारीत लावण्याकरीता कुठल्या अटी मान्य करायचे. संपर्क नावला मुल्य \"name\" सह क्रमवारीत लावण्याची मुलभूत रित आहे. मुल्य \"state\" असल्यास संपर्क यादी राज्यनुरूप क्रमवारीत लावली जाईल."
+msgstr ""
+"संपर्क यादी क्रमवारीत लावण्याकरीता कुठल्या अटी मान्य करायचे. संपर्क नावला मुल्य \"name\" "
+"सह क्रमवारीत लावण्याची मुलभूत रित आहे. मुल्य \"state\" असल्यास संपर्क यादी राज्यनुरूप "
+"क्रमवारीत लावली जाईल."
 
-#: ../data/empathy-properties.desktop.in.in.h:1
-msgid "Configure Telepathy account settings"
-msgstr "टेलीपथि खाते संयोजना संयोजीत करा"
-
-#: ../data/empathy-properties.desktop.in.in.h:2
-msgid "Empathy accounts"
-msgstr "Empathy खाते"
-
-#: ../libempathy/empathy-tp-contact-list.c:731 ../src/empathy.c:244
+#: ../libempathy/empathy-tp-contact-list.c:731 ../src/empathy.c:248
 msgid "People nearby"
 msgstr "नजिक व्यक्ति"
 
@@ -250,7 +245,7 @@ msgstr "लपविलेले"
 msgid "Offline"
 msgstr "ऑफलाईन"
 
-#: ../libempathy-gtk/empathy-account-chooser.c:335
+#: ../libempathy-gtk/empathy-account-chooser.c:337
 msgid "All"
 msgstr "सर्व"
 
@@ -288,7 +283,7 @@ msgstr "गुप्तशब्द विसरून जा व नोंद�
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:5
 #: ../libempathy-gtk/empathy-account-widget-msn.glade.h:4
 #: ../libempathy-gtk/empathy-account-widget-sip.glade.h:5
-#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:4
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:3
 msgid "Pass_word:"
 msgstr "गुप्तशब्द (_w):"
 
@@ -318,7 +313,6 @@ msgstr "सर्वर (_S):"
 #: ../libempathy-gtk/empathy-account-widget-groupwise.glade.h:3
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:4
 #: ../libempathy-gtk/empathy-account-widget-msn.glade.h:3
-#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:3
 msgid "Login I_D:"
 msgstr "दाखलन ID (_D):"
 
@@ -449,9 +443,13 @@ msgstr "STUN पोर्ट:"
 msgid "_Username:"
 msgstr "वापरकर्ता नाव (_U):"
 
-#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:5
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:4
 msgid "Use _Yahoo Japan"
 msgstr "Yahoo जपान वापरा (_Y)"
+
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:5
+msgid "Yahoo I_D:"
+msgstr "Yahoo ID (_D):"
 
 #: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:7
 msgid "_Ignore conference and chatroom invitations"
@@ -593,30 +591,30 @@ msgstr "भविष्यात निर्णय घ्या (_L)"
 msgid "Subscription Request"
 msgstr "सबस्क्रीप्शन विनंती"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1226
+#: ../libempathy-gtk/empathy-contact-list-view.c:1244
 #, c-format
 msgid "Do you really want to remove the group '%s'?"
 msgstr "तुम्हाला नक्की '%s' गट काढून टाकायचे?"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1228
+#: ../libempathy-gtk/empathy-contact-list-view.c:1246
 msgid "Removing group"
 msgstr "गट काढून टाकत आहे"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1275
-#: ../libempathy-gtk/empathy-contact-list-view.c:1354
+#: ../libempathy-gtk/empathy-contact-list-view.c:1293
+#: ../libempathy-gtk/empathy-contact-list-view.c:1372
 msgid "_Remove"
 msgstr "काढून टाका (_R)"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1305
+#: ../libempathy-gtk/empathy-contact-list-view.c:1323
 #, c-format
 msgid "Do you really want to remove the contact '%s'?"
 msgstr "तुम्हाला नक्की '%s' काढून टाकायचे?"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1307
+#: ../libempathy-gtk/empathy-contact-list-view.c:1325
 msgid "Removing contact"
 msgstr "संपर्क वगळ आहे"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1312
+#: ../libempathy-gtk/empathy-contact-list-view.c:1330
 msgid "Sorry, I don't want you in my contact list anymore."
 msgstr "माफ करा, संपर्क यादीत तुमचे नाव संग्रहीत ठेवणे पसंत नाही."
 
@@ -651,11 +649,11 @@ msgstr "अवतार संचयन"
 msgid "Unable to save avatar"
 msgstr "अवतार संचयीत करू शकले नाही"
 
-#: ../libempathy-gtk/empathy-contact-widget.c:866
+#: ../libempathy-gtk/empathy-contact-widget.c:875
 msgid "Select"
 msgstr "निवडा"
 
-#: ../libempathy-gtk/empathy-contact-widget.c:875
+#: ../libempathy-gtk/empathy-contact-widget.c:884
 #: ../src/empathy-main-window.c:853
 msgid "Group"
 msgstr "गट"
@@ -722,9 +720,9 @@ msgstr "OS:"
 
 #: ../libempathy-gtk/empathy-contact-widget.glade.h:16
 msgid ""
-"Select the groups you want this contact to appear in, you can select more "
-"than one group or no groups."
-msgstr "हे संपर्क ज्या गटा मध्ये समाविष्ठीत प्रदर्शित व्हावे ते गट निवडा, तुम्ही एकापेक्षा जास्त किंवा शून्य गट निवडू शकता."
+"Select the groups you want this contact to appear in.  Note that you can "
+"select more than one group or no groups."
+msgstr "हे संपर्क ज्या गटात प्रदर्शित व्हावे ते गट निवडा.  टिप तुम्ही एकापेक्षा जास्त किंवा शून्य गट निवडू शकता."
 
 #: ../libempathy-gtk/empathy-contact-widget.glade.h:17
 msgid "Version:"
@@ -758,7 +756,7 @@ msgstr "SSL"
 msgid "Account"
 msgstr "खाते"
 
-#: ../libempathy-gtk/empathy-log-window.c:504 ../src/empathy-chat-window.c:276
+#: ../libempathy-gtk/empathy-log-window.c:504 ../src/empathy-chat-window.c:280
 msgid "Conversation"
 msgstr "संभाषण"
 
@@ -786,13 +784,12 @@ msgid "_For:"
 msgstr "करीता (_F):"
 
 #: ../libempathy-gtk/empathy-new-message-dialog.glade.h:2
-msgid "Call"
-msgstr "संवाद करा"
+msgid "C_all"
+msgstr "कॉल (_a)"
 
 #: ../libempathy-gtk/empathy-new-message-dialog.glade.h:3
-#: ../src/empathy-chat-window.glade.h:2
-msgid "Chat"
-msgstr "संवाद"
+msgid "C_hat"
+msgstr "संवाद (_h)"
 
 #: ../libempathy-gtk/empathy-new-message-dialog.glade.h:4
 msgid "Contact ID:"
@@ -1074,23 +1071,23 @@ msgstr "उपस्थिती"
 msgid "Set your own presence"
 msgstr "आपली उपस्थिती निश्चित करा"
 
-#: ../src/empathy.c:376
+#: ../src/empathy.c:380
 msgid "Don't connect on startup"
 msgstr "प्रारंभवेळी जुळवणी स्थापीत करू नका"
 
-#: ../src/empathy.c:380
+#: ../src/empathy.c:384
 msgid "Don't show the contact list on startup"
 msgstr "प्रारंभवेळी संपर्क यादी दर्शवू नका"
 
-#: ../src/empathy.c:384
+#: ../src/empathy.c:388
 msgid "Show the accounts dialog"
 msgstr "खाते संवाद दर्शवा"
 
-#: ../src/empathy.c:396
+#: ../src/empathy.c:400
 msgid "- Empathy Instant Messenger"
 msgstr "- Empathy जलद संदेशवाहक"
 
-#: ../src/empathy-about-dialog.c:64
+#: ../src/empathy-about-dialog.c:84
 msgid ""
 "Empathy is free software; you can redistribute it and/or modify it under the "
 "terms of the GNU General Public License as published by the Free Software "
@@ -1102,7 +1099,7 @@ msgstr ""
 "Foundation; either version 2 of the License, or (at your option) any later "
 "version."
 
-#: ../src/empathy-about-dialog.c:68
+#: ../src/empathy-about-dialog.c:88
 msgid ""
 "Empathy is distributed in the hope that it will be useful, but WITHOUT ANY "
 "WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS "
@@ -1114,7 +1111,7 @@ msgstr ""
 "FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more "
 "details."
 
-#: ../src/empathy-about-dialog.c:72
+#: ../src/empathy-about-dialog.c:92
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "Empathy; if not, write to the Free Software Foundation, Inc., 51 Franklin "
@@ -1124,56 +1121,30 @@ msgstr ""
 "Empathy; if not, write to the Free Software Foundation, Inc., 51 Franklin "
 "Street, Fifth Floor, Boston, MA 02110-130159 USA"
 
-#: ../src/empathy-about-dialog.c:100
+#: ../src/empathy-about-dialog.c:120
 msgid "An Instant Messaging client for GNOME"
 msgstr "GNOME करीता जलद संदेशवाहक क्लाऐंट"
 
-#: ../src/empathy-about-dialog.c:106
+#: ../src/empathy-about-dialog.c:126
 msgid "translator-credits"
-msgstr "संदिप शेडमाके <sandeep.shedmake@gmail.com>, 2008"
+msgstr "संदिप शेडमाके <sandeep.shedmake@gmail.com>, 2008."
 
-#: ../src/empathy-accounts-dialog.c:235
-msgid ""
-"To add a new account, you can click on the 'Add' button and a new entry will "
-"be created for you to start configuring."
-msgstr "नविन खाते जोडण्याकरीता, तुम्ही 'जोडा' या बटणावर क्लिक करू शकता व संयोजना करीता नविन नोंदणी लगेचच तयार होईल."
-
-#: ../src/empathy-accounts-dialog.c:239
-msgid ""
-"To add a new account, you first have to install a backend for each protocol "
-"you want to use."
-msgstr "नविन खाते जोडण्याकरीता, प्रथम प्रत्येक वापरण्याजोगी शिष्टाचार करीता बॅकएन्ड प्रतिष्ठापीत करा."
-
-#: ../src/empathy-accounts-dialog.c:246
-#: ../src/empathy-accounts-dialog.glade.h:2
-msgid "<b>No Account Selected</b>"
-msgstr "<b>खाते निवडले नाही</b>"
-
-#: ../src/empathy-accounts-dialog.c:247
-msgid ""
-"\n"
-"\n"
-"If you do not want to add an account, simply click on the account you want "
-"to configure in the list on the left."
-msgstr ""
-"\n"
-"\n"
-"खाते जोडायचे नसल्यास, फक्त डावीकडील यादीतील संयोजनाजोगी खात्यावर क्लिक करा."
-
-#: ../src/empathy-accounts-dialog.c:253
-msgid "<b>No Accounts Configured</b>"
-msgstr "<b>खाते संयोजीत नाही</b>"
-
-#: ../src/empathy-accounts-dialog.c:451
+#: ../src/empathy-accounts-dialog.c:389
 msgid "Enabled"
 msgstr "कार्यान्वीत"
 
-#: ../src/empathy-accounts-dialog.c:461
+#: ../src/empathy-accounts-dialog.c:399
 #: ../src/empathy-accounts-dialog.glade.h:4
 msgid "Accounts"
 msgstr "खाते"
 
-#: ../src/empathy-accounts-dialog.c:991
+#. To translator: %s is the protocol name
+#: ../src/empathy-accounts-dialog.c:862
+#, c-format
+msgid "New %s account"
+msgstr "नविन %s खाते"
+
+#: ../src/empathy-accounts-dialog.c:972
 #, c-format
 msgid ""
 "You are about to remove your %s account!\n"
@@ -1182,7 +1153,7 @@ msgstr ""
 "तुम्ही %s खाते काढण्याच्या मार्गावर आहात!\n"
 "तुम्हाला नक्की पुढे जायचे?"
 
-#: ../src/empathy-accounts-dialog.c:997
+#: ../src/empathy-accounts-dialog.c:978
 msgid ""
 "Any associated conversations and chat rooms will NOT be removed if you "
 "decide to proceed.\n"
@@ -1190,14 +1161,17 @@ msgid ""
 "Should you decide to add the account back at a later time, they will still "
 "be available."
 msgstr ""
-"पुढे जाण्याचे ठरविल्यास संबंधित संभाषन व संवाद कक्ष काढून टाकले "
-"जाणार नाही.\n"
+"पुढे जाण्याचे ठरविल्यास संबंधित संभाषन व संवाद कक्ष काढून टाकले जाणार नाही.\n"
 "\n"
 "खाते भविष्यात जोडायचे निश्चित केल्यास, भविष्यात देखिल उपलब्ध होतील."
 
 #: ../src/empathy-accounts-dialog.glade.h:1
 msgid "<b>New Account</b>"
 msgstr "<b>नविन खाते</b>"
+
+#: ../src/empathy-accounts-dialog.glade.h:2
+msgid "<b>No protocol installed</b>"
+msgstr "<b>शिष्टाचार प्रतिष्ठापीत नाही</b>"
 
 #: ../src/empathy-accounts-dialog.glade.h:3
 msgid "<b>Settings</b>"
@@ -1212,6 +1186,14 @@ msgid "I already have an account I want to use"
 msgstr "वापरणी करीता आधिपासूनच खाते इपलब्ध आहे"
 
 #: ../src/empathy-accounts-dialog.glade.h:7
+msgid ""
+"To add a new account, you first have to install a backend for each protocol "
+"you want to use."
+msgstr ""
+"नविन खाते जोडण्याकरीता, प्रथम प्रत्येक वापरण्याजोगी शिष्टाचार करीता बॅकएन्ड प्रतिष्ठापीत "
+"करा."
+
+#: ../src/empathy-accounts-dialog.glade.h:8
 msgid "Type:"
 msgstr "प्रकार:"
 
@@ -1341,22 +1323,26 @@ msgstr "जरा वाट पहा"
 msgid "Send Video"
 msgstr "विडीओ पाठवा"
 
-#: ../src/empathy-chat-window.c:319
+#: ../src/empathy-chat-window.c:326
 #, c-format
 msgid "Conversations (%d)"
 msgstr "संभाषण (%d)"
 
-#: ../src/empathy-chat-window.c:397
+#: ../src/empathy-chat-window.c:418
 msgid "Topic:"
 msgstr "विषय:"
 
-#: ../src/empathy-chat-window.c:400
+#: ../src/empathy-chat-window.c:421
 msgid "Typing a message."
 msgstr "संदेश टाइप करीत आहे."
 
 #: ../src/empathy-chat-window.glade.h:1
 msgid "C_lear"
 msgstr "पुसून टाका (_l)"
+
+#: ../src/empathy-chat-window.glade.h:2
+msgid "Chat"
+msgstr "संवाद"
 
 #: ../src/empathy-chat-window.glade.h:3
 msgid "Insert _Smiley"
@@ -1402,19 +1388,23 @@ msgstr "संभाषण (_C)"
 msgid "_Detach Tab"
 msgstr "टॅब मोडून टाका (_D)"
 
-#: ../src/empathy-chat-window.glade.h:15 ../src/empathy-main-window.glade.h:12
+#: ../src/empathy-chat-window.glade.h:15
+msgid "_Favorite Chatroom"
+msgstr "पसंतीचे संवादकक्ष (_F)"
+
+#: ../src/empathy-chat-window.glade.h:16 ../src/empathy-main-window.glade.h:12
 msgid "_Help"
 msgstr "मदत (_H)"
 
-#: ../src/empathy-chat-window.glade.h:16
+#: ../src/empathy-chat-window.glade.h:17
 msgid "_Next Tab"
 msgstr "पुढील टॅब(_N)"
 
-#: ../src/empathy-chat-window.glade.h:17
+#: ../src/empathy-chat-window.glade.h:18
 msgid "_Previous Tab"
 msgstr "मागील टॅब(_P)"
 
-#: ../src/empathy-chat-window.glade.h:18
+#: ../src/empathy-chat-window.glade.h:19
 msgid "_Tabs"
 msgstr "टॅब्स (_T)"
 
@@ -1478,7 +1468,9 @@ msgstr "%s कडून इनकमींग कॉल"
 msgid ""
 "%s is offering you an invitation, but you don't have the needed external "
 "application to handle it."
-msgstr "%s ने निमंत्रण करीता प्रस्ताव मांडला आहे, परंतु हाताळणी करीता भाहेरील अनुप्रयोग उपलब्ध नाही."
+msgstr ""
+"%s ने निमंत्रण करीता प्रस्ताव मांडला आहे, परंतु हाताळणी करीता भाहेरील अनुप्रयोग उपलब्ध "
+"नाही."
 
 #: ../src/empathy-event-manager.c:263
 msgid "Invitation Error"
@@ -1627,13 +1619,17 @@ msgstr "संचार:"
 
 #: ../src/empathy-new-chatroom-dialog.glade.h:3
 msgid "Enter the room name to join here or click on one or more rooms in the list."
-msgstr "येथे जोडणी करीता कक्ष नाव प्रविष्ट करा किंवा एक व त्यापेक्षा अधिक यादीतील कक्षावर क्लिक करा."
+msgstr ""
+"येथे जोडणी करीता कक्ष नाव प्रविष्ट करा किंवा एक व त्यापेक्षा अधिक यादीतील कक्षावर क्लिक "
+"करा."
 
 #: ../src/empathy-new-chatroom-dialog.glade.h:4
 msgid ""
 "Enter the server which hosts the room, or leave it empty if the room is on "
 "the current account's server"
-msgstr "कक्ष दर्शविणारे सर्वर प्रविष्ट करा, किंवा कक्ष वर्तमान खाते अंतर्गत सर्वरवर आढळल्यास रिकामे सोडा"
+msgstr ""
+"कक्ष दर्शविणारे सर्वर प्रविष्ट करा, किंवा कक्ष वर्तमान खाते अंतर्गत सर्वरवर आढळल्यास रिकामे "
+"सोडा"
 
 #: ../src/empathy-new-chatroom-dialog.glade.h:5
 msgid "Join"
