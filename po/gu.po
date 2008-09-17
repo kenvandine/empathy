@@ -1,14 +1,14 @@
-# translation of empathy.HEAD.po to Gujarati
+# translation of empathy.HEAD.gu.po to Gujarati
 # Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the PACKAGE package.
 #
 # Sweta Kothari <swkothar@redhat.com>, 2008.
 msgid ""
 msgstr ""
-"Project-Id-Version: empathy.HEAD\n"
+"Project-Id-Version: empathy.HEAD.gu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-21 09:15+0000\n"
-"PO-Revision-Date: 2008-08-21 17:47+0530\n"
+"POT-Creation-Date: 2008-09-09 11:33+0000\n"
+"PO-Revision-Date: 2008-09-17 15:52+0530\n"
 "Last-Translator: Sweta Kothari <swkothar@redhat.com>\n"
 "Language-Team: Gujarati\n"
 "MIME-Version: 1.0\n"
@@ -380,7 +380,7 @@ msgstr ""
 
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:6
 msgid "Pri_ority:"
-msgstr ""
+msgstr "પ્રાધાન્ય (_o):"
 
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:7
 msgid "Reso_urce:"
@@ -458,7 +458,7 @@ msgstr ""
 
 #: ../libempathy-gtk/empathy-avatar-chooser.c:457
 msgid "Select Your Avatar Image"
-msgstr ""
+msgstr "તમારી અવતાર ચિત્રને પસંદ કરો"
 
 #: ../libempathy-gtk/empathy-avatar-chooser.c:460
 msgid "No Image"
@@ -474,7 +474,7 @@ msgstr "બધી ફાઇલો"
 
 #: ../libempathy-gtk/empathy-avatar-image.c:294
 msgid "Click to enlarge"
-msgstr ""
+msgstr "વિસ્તૃત કરવા માટે ક્લિક કરો"
 
 #: ../libempathy-gtk/empathy-chat.c:497
 msgid "offline"
@@ -486,7 +486,7 @@ msgstr "અયોગ્ય સંપર્ક"
 
 #: ../libempathy-gtk/empathy-chat.c:503
 msgid "permission denied"
-msgstr ""
+msgstr "પરવાનગી નો ઇન્કાર કરેલ છે"
 
 #: ../libempathy-gtk/empathy-chat.c:506
 msgid "too long message"
@@ -524,17 +524,17 @@ msgstr "મોકલો (_S)"
 
 #: ../libempathy-gtk/empathy-chat.c:1013
 msgid "_Check Word Spelling..."
-msgstr ""
+msgstr "શબ્દ જોડણી ચકાસો (_C)..."
 
 #: ../libempathy-gtk/empathy-chat.c:1119
 #, c-format
 msgid "%s has joined the room"
-msgstr ""
+msgstr "%s રુમમાં જોડાયેલ છે"
 
 #: ../libempathy-gtk/empathy-chat.c:1122
 #, c-format
 msgid "%s has left the room"
-msgstr ""
+msgstr "%s રુમને છોડેલ છે"
 
 #: ../libempathy-gtk/empathy-chat.c:1236 ../src/empathy-call-window.c:406
 msgid "Disconnected"
@@ -550,7 +550,7 @@ msgstr "<b>વિષય:</b>"
 
 #: ../libempathy-gtk/empathy-chat.glade.h:2
 msgid "Group Chat"
-msgstr ""
+msgstr "જૂથ વાતચીત"
 
 #: ../libempathy-gtk/empathy-chat-view.c:430
 msgid "_Copy Link Address"
@@ -582,38 +582,38 @@ msgstr "નવુ સંપર્ક"
 
 #: ../libempathy-gtk/empathy-contact-dialogs.glade.h:1
 msgid "Decide _Later"
-msgstr ""
+msgstr "પછીથી નક્કી કરો (_L)"
 
 #: ../libempathy-gtk/empathy-contact-dialogs.glade.h:2
 msgid "Subscription Request"
 msgstr ""
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1226
+#: ../libempathy-gtk/empathy-contact-list-view.c:1244
 #, c-format
 msgid "Do you really want to remove the group '%s'?"
 msgstr ""
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1228
+#: ../libempathy-gtk/empathy-contact-list-view.c:1246
 msgid "Removing group"
-msgstr ""
+msgstr "જૂથને દૂર કરો"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1275
-#: ../libempathy-gtk/empathy-contact-list-view.c:1354
+#: ../libempathy-gtk/empathy-contact-list-view.c:1293
+#: ../libempathy-gtk/empathy-contact-list-view.c:1372
 msgid "_Remove"
 msgstr "દૂર કરો (_R)"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1305
+#: ../libempathy-gtk/empathy-contact-list-view.c:1323
 #, c-format
 msgid "Do you really want to remove the contact '%s'?"
-msgstr ""
+msgstr "શું ખરેખર તમે સંપર્કને '%s' દૂર કરવા માંગો છો?"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1307
+#: ../libempathy-gtk/empathy-contact-list-view.c:1325
 msgid "Removing contact"
 msgstr "સંપર્ક દૂર કરી રહ્યા છે "
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1312
+#: ../libempathy-gtk/empathy-contact-list-view.c:1330
 msgid "Sorry, I don't want you in my contact list anymore."
-msgstr ""
+msgstr "દિલગીર છું, હું આનાથી વધારે તમે મારી સંપર્ક યાદીમાં ઇચ્છતી નથી."
 
 #: ../libempathy-gtk/empathy-contact-menu.c:109
 #: ../src/empathy-main-window.glade.h:9
@@ -627,7 +627,7 @@ msgstr "કોલ (_C)"
 #: ../libempathy-gtk/empathy-contact-menu.c:169
 #: ../src/empathy-main-window.glade.h:17
 msgid "_View Previous Conversations"
-msgstr ""
+msgstr "પહેલાનાં વાર્તાલાપ ને દર્શાવો (_V)"
 
 #: ../libempathy-gtk/empathy-contact-menu.c:197
 msgid "Infor_mation"
@@ -753,9 +753,9 @@ msgstr "SSL"
 msgid "Account"
 msgstr "ખાતુ"
 
-#: ../libempathy-gtk/empathy-log-window.c:504 ../src/empathy-chat-window.c:276
+#: ../libempathy-gtk/empathy-log-window.c:504 ../src/empathy-chat-window.c:280
 msgid "Conversation"
-msgstr ""
+msgstr "વાર્તાલાપ"
 
 #: ../libempathy-gtk/empathy-log-window.c:514
 msgid "Date"
@@ -764,11 +764,11 @@ msgstr "તારીખ"
 #. Tab Label
 #: ../libempathy-gtk/empathy-log-window.glade.h:2
 msgid "Conversations"
-msgstr ""
+msgstr "વાર્તાલાપો"
 
 #: ../libempathy-gtk/empathy-log-window.glade.h:3
 msgid "Previous Conversations"
-msgstr ""
+msgstr "પહેલાનાં વાર્તાલાપો"
 
 #. Tab Label
 #: ../libempathy-gtk/empathy-log-window.glade.h:5
@@ -781,13 +781,12 @@ msgid "_For:"
 msgstr "માટે (_F):"
 
 #: ../libempathy-gtk/empathy-new-message-dialog.glade.h:2
-msgid "Call"
-msgstr "કોલ"
+msgid "C_all"
+msgstr "કોલ (_a)"
 
 #: ../libempathy-gtk/empathy-new-message-dialog.glade.h:3
-#: ../src/empathy-chat-window.glade.h:2
-msgid "Chat"
-msgstr "વાતચીત"
+msgid "C_hat"
+msgstr "વાતચીત (_h)"
 
 #: ../libempathy-gtk/empathy-new-message-dialog.glade.h:4
 msgid "Contact ID:"
@@ -795,16 +794,16 @@ msgstr "સંપર્ક ID:"
 
 #: ../libempathy-gtk/empathy-new-message-dialog.glade.h:5
 msgid "New Conversation"
-msgstr ""
+msgstr "નવા વાર્તાલાપ"
 
 #. Custom messages
 #: ../libempathy-gtk/empathy-presence-chooser.c:685
 msgid "Custom messages..."
-msgstr ""
+msgstr "કસ્ટમ સંદેશાઓ..."
 
 #: ../libempathy-gtk/empathy-presence-chooser.glade.h:1
 msgid "Custom message"
-msgstr ""
+msgstr "કસ્ટમ સંદેશ"
 
 #: ../libempathy-gtk/empathy-presence-chooser.glade.h:2
 msgid "Message:"
@@ -824,7 +823,7 @@ msgstr "શબ્દ"
 
 #: ../libempathy-gtk/empathy-spell-dialog.c:265
 msgid "Suggestions for the word"
-msgstr ""
+msgstr "શબ્દ માટે સૂચનાઓ"
 
 #: ../libempathy-gtk/empathy-spell-dialog.glade.h:1
 msgid "Spell Checker"
@@ -832,7 +831,7 @@ msgstr "જોડણી ચકાસનાર"
 
 #: ../libempathy-gtk/empathy-spell-dialog.glade.h:2
 msgid "Suggestions for the word:"
-msgstr ""
+msgstr "શબ્દ માટે સૂચનાઓ:"
 
 #: ../libempathy-gtk/empathy-theme-boxes.c:745
 #: ../libempathy-gtk/empathy-theme-irc.c:293
@@ -841,7 +840,7 @@ msgstr "%A %d %B %Y"
 
 #: ../libempathy-gtk/empathy-theme-manager.c:73
 msgid "Classic"
-msgstr ""
+msgstr "ઉત્તમ"
 
 #: ../libempathy-gtk/empathy-theme-manager.c:74
 msgid "Simple"
@@ -849,7 +848,7 @@ msgstr "સાદુ"
 
 #: ../libempathy-gtk/empathy-theme-manager.c:75
 msgid "Clean"
-msgstr ""
+msgstr "સાફ કરો"
 
 #: ../libempathy-gtk/empathy-theme-manager.c:76
 msgid "Blue"
@@ -872,7 +871,7 @@ msgstr "અરેબીક"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:170
 msgid "Armenian"
-msgstr ""
+msgstr "અર્મેનિઅન"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:173
 #: ../libempathy-gtk/totem-subtitle-encoding.c:175
@@ -882,14 +881,14 @@ msgstr "બાલ્ટીક"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:180
 msgid "Celtic"
-msgstr ""
+msgstr "સેલ્ટિક"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:183
 #: ../libempathy-gtk/totem-subtitle-encoding.c:185
 #: ../libempathy-gtk/totem-subtitle-encoding.c:187
 #: ../libempathy-gtk/totem-subtitle-encoding.c:189
 msgid "Central European"
-msgstr ""
+msgstr "કેન્દ્રિય યુરોપિઅન"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:192
 #: ../libempathy-gtk/totem-subtitle-encoding.c:194
@@ -906,7 +905,7 @@ msgstr ""
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:208
 msgid "Croatian"
-msgstr ""
+msgstr "ક્રોએટિઅન"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:211
 #: ../libempathy-gtk/totem-subtitle-encoding.c:213
@@ -915,16 +914,16 @@ msgstr ""
 #: ../libempathy-gtk/totem-subtitle-encoding.c:219
 #: ../libempathy-gtk/totem-subtitle-encoding.c:221
 msgid "Cyrillic"
-msgstr ""
+msgstr "સેરિલીક"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:224
 msgid "Cyrillic/Russian"
-msgstr ""
+msgstr "સેરિલીક/રશિઅન"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:227
 #: ../libempathy-gtk/totem-subtitle-encoding.c:229
 msgid "Cyrillic/Ukrainian"
-msgstr ""
+msgstr "સેરિલીક/યુક્રેનિઅન"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:232
 msgid "Georgian"
@@ -949,7 +948,7 @@ msgstr "ગુરમુખી"
 #: ../libempathy-gtk/totem-subtitle-encoding.c:252
 #: ../libempathy-gtk/totem-subtitle-encoding.c:254
 msgid "Hebrew"
-msgstr ""
+msgstr "હેબ્રુ"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:257
 msgid "Hebrew Visual"
@@ -967,7 +966,7 @@ msgstr ""
 #: ../libempathy-gtk/totem-subtitle-encoding.c:268
 #: ../libempathy-gtk/totem-subtitle-encoding.c:270
 msgid "Japanese"
-msgstr ""
+msgstr "જાપાનીઝ"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:273
 #: ../libempathy-gtk/totem-subtitle-encoding.c:275
@@ -982,16 +981,16 @@ msgstr "નોરડીક"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:285
 msgid "Persian"
-msgstr ""
+msgstr "પર્સીઅન"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:288
 #: ../libempathy-gtk/totem-subtitle-encoding.c:290
 msgid "Romanian"
-msgstr ""
+msgstr "રોમાનિઅન"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:293
 msgid "South European"
-msgstr ""
+msgstr "દક્ષિણ યુરોપિઅન"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:296
 msgid "Thai"
@@ -1002,7 +1001,7 @@ msgstr "થાઇ"
 #: ../libempathy-gtk/totem-subtitle-encoding.c:303
 #: ../libempathy-gtk/totem-subtitle-encoding.c:305
 msgid "Turkish"
-msgstr ""
+msgstr "તુર્કિશ"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:308
 #: ../libempathy-gtk/totem-subtitle-encoding.c:310
@@ -1018,7 +1017,7 @@ msgstr "યુનીકોડ"
 #: ../libempathy-gtk/totem-subtitle-encoding.c:325
 #: ../libempathy-gtk/totem-subtitle-encoding.c:327
 msgid "Western"
-msgstr ""
+msgstr "પશ્ચિમી"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:330
 #: ../libempathy-gtk/totem-subtitle-encoding.c:332
@@ -1062,28 +1061,28 @@ msgstr "પસંદગીઓ (_P)"
 
 #: ../nothere/data/GNOME_NotHere_Applet.server.in.in.h:1
 msgid "Presence"
-msgstr ""
+msgstr "હાજરી"
 
 #: ../nothere/data/GNOME_NotHere_Applet.server.in.in.h:2
 #: ../nothere/src/nothere-applet.c:106
 msgid "Set your own presence"
-msgstr ""
+msgstr "તમારી પોતાની હાજરી સુયોજિત કરો"
 
 #: ../src/empathy.c:380
 msgid "Don't connect on startup"
-msgstr ""
+msgstr "સ્ટાર્ટઅપ પર જોડો નહિં"
 
 #: ../src/empathy.c:384
 msgid "Don't show the contact list on startup"
-msgstr ""
+msgstr "સ્ટાર્ટઅપ પર સંપર્ક યાદીને બતાવો નહિં"
 
 #: ../src/empathy.c:388
 msgid "Show the accounts dialog"
-msgstr ""
+msgstr "ખાતાઓનાં સંવાદને બતાવો"
 
 #: ../src/empathy.c:400
 msgid "- Empathy Instant Messenger"
-msgstr ""
+msgstr "- એમ્પેથી આવશ્યક મેસેન્જર"
 
 #: ../src/empathy-about-dialog.c:84
 msgid ""
@@ -1206,7 +1205,7 @@ msgstr ""
 
 #: ../src/empathy-call-window.c:311
 msgid "Incoming call"
-msgstr ""
+msgstr "ઇનકમિંગ કોલ"
 
 #: ../src/empathy-call-window.c:313
 #, c-format
@@ -1223,7 +1222,7 @@ msgstr "જવાબ (_A)"
 
 #: ../src/empathy-call-window.c:379
 msgid "Empathy Call"
-msgstr ""
+msgstr "એમ્પેથી કોલ"
 
 #. To translators: Readying is the first state of the call, it is
 #. * preparing the connection and it does not yet ring.
@@ -1238,7 +1237,7 @@ msgstr ""
 
 #: ../src/empathy-call-window.c:395
 msgid "Ringing"
-msgstr ""
+msgstr "રીગીંગ"
 
 #: ../src/empathy-call-window.c:408
 msgid "Connecting"
@@ -1314,42 +1313,46 @@ msgstr ""
 msgid "Send Video"
 msgstr "વિડીઓ મોકલો"
 
-#: ../src/empathy-chat-window.c:319
+#: ../src/empathy-chat-window.c:326
 #, c-format
 msgid "Conversations (%d)"
-msgstr ""
+msgstr "વાર્તાલાપ (%d)"
 
-#: ../src/empathy-chat-window.c:397
+#: ../src/empathy-chat-window.c:418
 msgid "Topic:"
 msgstr "વિષય:"
 
-#: ../src/empathy-chat-window.c:400
+#: ../src/empathy-chat-window.c:421
 msgid "Typing a message."
-msgstr ""
+msgstr "સંદેશ ટાઇપ કરી રહ્યા છે."
 
 #: ../src/empathy-chat-window.glade.h:1
 msgid "C_lear"
-msgstr ""
+msgstr "સાફ કરો (_l)"
+
+#: ../src/empathy-chat-window.glade.h:2
+msgid "Chat"
+msgstr "વાતચીત"
 
 #: ../src/empathy-chat-window.glade.h:3
 msgid "Insert _Smiley"
-msgstr ""
+msgstr "સ્માઇલીને સમાવો (_S)"
 
 #: ../src/empathy-chat-window.glade.h:4
 msgid "Invitation _message:"
-msgstr ""
+msgstr "આમંત્રિત સંદેશ (_m):"
 
 #: ../src/empathy-chat-window.glade.h:5
 msgid "Invite"
-msgstr ""
+msgstr "આમંત્રણ"
 
 #: ../src/empathy-chat-window.glade.h:6
 msgid "Move Tab _Left"
-msgstr ""
+msgstr "ડાબે ટેબ ખસેડો (_L)"
 
 #: ../src/empathy-chat-window.glade.h:7
 msgid "Move Tab _Right"
-msgstr ""
+msgstr "જમણે ટેબ ખસેડો (_R)"
 
 #: ../src/empathy-chat-window.glade.h:8
 msgid "Select who would you like to invite:"
@@ -1361,33 +1364,37 @@ msgstr ""
 
 #: ../src/empathy-chat-window.glade.h:10
 msgid "_Contact"
-msgstr ""
+msgstr "સંપર્ક (_C)"
 
 #: ../src/empathy-chat-window.glade.h:11 ../src/empathy-main-window.glade.h:10
 msgid "_Contents"
-msgstr ""
+msgstr "સમાવિષ્ટો (_C)"
 
 #: ../src/empathy-chat-window.glade.h:12
 msgid "_Conversation"
-msgstr ""
+msgstr "વાર્તાલાપ (_C)"
 
 #: ../src/empathy-chat-window.glade.h:13
 msgid "_Detach Tab"
 msgstr ""
 
-#: ../src/empathy-chat-window.glade.h:15 ../src/empathy-main-window.glade.h:12
+#: ../src/empathy-chat-window.glade.h:15
+msgid "_Favorite Chatroom"
+msgstr "પસંદીદા વાતચીતરુમ (_F)"
+
+#: ../src/empathy-chat-window.glade.h:16 ../src/empathy-main-window.glade.h:12
 msgid "_Help"
 msgstr "મદદ (_H)"
 
-#: ../src/empathy-chat-window.glade.h:16
+#: ../src/empathy-chat-window.glade.h:17
 msgid "_Next Tab"
 msgstr "પછીનું ટેબ (_N)"
 
-#: ../src/empathy-chat-window.glade.h:17
+#: ../src/empathy-chat-window.glade.h:18
 msgid "_Previous Tab"
 msgstr "પહેલાનું ટેબ (_P)"
 
-#: ../src/empathy-chat-window.glade.h:18
+#: ../src/empathy-chat-window.glade.h:19
 msgid "_Tabs"
 msgstr "ટેબો (_T)"
 
@@ -1405,11 +1412,11 @@ msgstr ""
 
 #: ../src/empathy-chatrooms-window.glade.h:2
 msgid "Edit Favorite Room"
-msgstr ""
+msgstr "પસંદીદા રુમમાં ફેરફાર કરો"
 
 #: ../src/empathy-chatrooms-window.glade.h:3
 msgid "Join room on start_up"
-msgstr ""
+msgstr "સ્ટાર્ટઅપ પર રુમ ને જોડો (_u)"
 
 #: ../src/empathy-chatrooms-window.glade.h:4
 msgid "Join this chat room when Empathy starts and you are connected"
@@ -1417,7 +1424,7 @@ msgstr ""
 
 #: ../src/empathy-chatrooms-window.glade.h:5
 msgid "Manage Favorite Rooms"
-msgstr ""
+msgstr "પસંદીદા રુમોનું વ્યવસ્થા કરો"
 
 #: ../src/empathy-chatrooms-window.glade.h:6
 msgid "N_ame:"
@@ -1438,11 +1445,13 @@ msgid ""
 "New message from %s:\n"
 "%s"
 msgstr ""
+"%s માંથી નવો સંદેશ:\n"
+"%s"
 
 #: ../src/empathy-event-manager.c:205
 #, c-format
 msgid "Incoming call from %s"
-msgstr ""
+msgstr "%s માંથી ઇનકમિંગ કોલ"
 
 #: ../src/empathy-event-manager.c:238
 #, c-format
@@ -1453,7 +1462,7 @@ msgstr ""
 
 #: ../src/empathy-event-manager.c:263
 msgid "Invitation Error"
-msgstr ""
+msgstr "આમંત્રિત ભૂલ"
 
 #: ../src/empathy-event-manager.c:289
 #, c-format
@@ -1473,10 +1482,12 @@ msgid ""
 "\n"
 "Message: %s"
 msgstr ""
+"\n"
+"સંદેશ: %s"
 
 #: ../src/empathy-main-window.c:466
 msgid "Show and edit accounts"
-msgstr ""
+msgstr "ખાતાઓમાં ફેરફાર કરો અને બતાવો"
 
 #: ../src/empathy-main-window.c:836
 msgid "Contact"
@@ -1496,7 +1507,7 @@ msgstr "નેટવર્ક ભૂલ"
 
 #: ../src/empathy-main-window.c:1127
 msgid "Authentication failed"
-msgstr ""
+msgstr "સત્તાધિકરણ માં નિષ્ફળતા"
 
 #: ../src/empathy-main-window.c:1130
 msgid "Encryption error"
@@ -1504,19 +1515,19 @@ msgstr "એન્ક્રિપ્સન ભૂલ"
 
 #: ../src/empathy-main-window.c:1133
 msgid "Name in use"
-msgstr ""
+msgstr "નામ વપરાશમાં છે"
 
 #: ../src/empathy-main-window.c:1136
 msgid "Certificate not provided"
-msgstr ""
+msgstr "પ્રમાણપત્ર પૂરુ પાડેલ નથીે"
 
 #: ../src/empathy-main-window.c:1139
 msgid "Certificate untrusted"
-msgstr ""
+msgstr "પ્રમાણપત્ર વિશ્ર્વાસપાત્ર નથી"
 
 #: ../src/empathy-main-window.c:1142
 msgid "Certificate expired"
-msgstr ""
+msgstr "પ્રમાણપત્ર નિવૃત્ત થયેલ છે"
 
 #: ../src/empathy-main-window.c:1145
 msgid "Certificate not activated"
@@ -1524,7 +1535,7 @@ msgstr "પ્રમાણપત્ર સક્રિય થયેલ નથી
 
 #: ../src/empathy-main-window.c:1148
 msgid "Certificate hostname mismatch"
-msgstr ""
+msgstr "પ્રમાણપત્ર યજમાનનામ બંધબેસતુ નથી"
 
 #: ../src/empathy-main-window.c:1151
 msgid "Certificate fingerprint mismatch"
@@ -1552,19 +1563,19 @@ msgstr "સંદર્ભ"
 
 #: ../src/empathy-main-window.glade.h:3
 msgid "Join _Favorites"
-msgstr ""
+msgstr "પસંદીદાઓને જોડો (_F)"
 
 #: ../src/empathy-main-window.glade.h:4
 msgid "Join _New..."
-msgstr ""
+msgstr "નવા ને જોડો (_N)..."
 
 #: ../src/empathy-main-window.glade.h:5
 msgid "Manage Favorites"
-msgstr ""
+msgstr "પસંદીદાનું વ્યવસ્થાપન કરો"
 
 #: ../src/empathy-main-window.glade.h:6
 msgid "Show _Offline Contacts"
-msgstr ""
+msgstr "ઓફલાઇન સંપર્કોને બતાવો (_O)"
 
 #: ../src/empathy-main-window.glade.h:7
 msgid "_Accounts"
@@ -1572,11 +1583,11 @@ msgstr "ખાતાઓ (_A)"
 
 #: ../src/empathy-main-window.glade.h:8
 msgid "_Add Contact..."
-msgstr ""
+msgstr "સંપર્કને ઉમેરો (_A)..."
 
 #: ../src/empathy-main-window.glade.h:13 ../src/empathy-status-icon.glade.h:2
 msgid "_New Conversation..."
-msgstr ""
+msgstr "નવો વાર્તાલાપ (_N)..."
 
 #: ../src/empathy-main-window.glade.h:14
 msgid "_Personal Information"
@@ -1588,15 +1599,15 @@ msgstr "રુમ (_R)"
 
 #: ../src/empathy-new-chatroom-dialog.c:290
 msgid "Chat Rooms"
-msgstr ""
+msgstr "વાતચીત રુમો"
 
 #: ../src/empathy-new-chatroom-dialog.glade.h:2
 msgid "Browse:"
-msgstr ""
+msgstr "બ્રાઉઝ:"
 
 #: ../src/empathy-new-chatroom-dialog.glade.h:3
 msgid "Enter the room name to join here or click on one or more rooms in the list."
-msgstr ""
+msgstr "અહિંયા જોડાવા માટે રુમ નામ પસંદ કરો અથવા યાદીમાં એક અથવા વધારે રુમોને ક્લિક કરો."
 
 #: ../src/empathy-new-chatroom-dialog.glade.h:4
 msgid ""
@@ -1606,15 +1617,15 @@ msgstr ""
 
 #: ../src/empathy-new-chatroom-dialog.glade.h:5
 msgid "Join"
-msgstr ""
+msgstr "જોડો"
 
 #: ../src/empathy-new-chatroom-dialog.glade.h:6
 msgid "Join New"
-msgstr ""
+msgstr "નવું જોડો"
 
 #: ../src/empathy-new-chatroom-dialog.glade.h:7
 msgid "Re_fresh"
-msgstr ""
+msgstr "તાજેતર (_f)"
 
 #: ../src/empathy-new-chatroom-dialog.glade.h:8
 msgid "This list represents all chat rooms hosted on the server you have entered."
@@ -1622,33 +1633,33 @@ msgstr ""
 
 #: ../src/empathy-preferences.c:264
 msgid "Language"
-msgstr ""
+msgstr "ભાષા"
 
 #: ../src/empathy-preferences.glade.h:1
 msgid "<b>Appearance</b>"
-msgstr ""
+msgstr "<b>દેખાવુ</b>"
 
 #. To translators: Audio notifications preferences
 #: ../src/empathy-preferences.glade.h:3
 msgid "<b>Audio</b>"
-msgstr ""
+msgstr "<b>ઓડિયો</b>"
 
 #: ../src/empathy-preferences.glade.h:4
 msgid "<b>Behaviour</b>"
-msgstr ""
+msgstr "<b>વર્તણૂક</b>"
 
 #: ../src/empathy-preferences.glade.h:5
 msgid "<b>Contact List</b>"
-msgstr ""
+msgstr "<b>સંપર્ક યાદી</b>"
 
 #: ../src/empathy-preferences.glade.h:6
 msgid "<b>Enable spell checking for languages:</b>"
-msgstr ""
+msgstr "<b>ભાષાઓ માટે જોડણી ચકાસવાને સક્રિય કરો:</b>"
 
 #. To translators: Visual notifications preferences, like notify bubbles, etc.
 #: ../src/empathy-preferences.glade.h:8
 msgid "<b>Visual</b>"
-msgstr ""
+msgstr "<b>દ્રષ્ટિ</b>"
 
 #: ../src/empathy-preferences.glade.h:9
 msgid ""
@@ -1658,7 +1669,7 @@ msgstr ""
 
 #: ../src/empathy-preferences.glade.h:10
 msgid "Automatically _connect on startup "
-msgstr ""
+msgstr "સ્ટાર્ટઅપ પર આપોઆપ જોડાવો (_c)"
 
 #: ../src/empathy-preferences.glade.h:11
 msgid "Avatars are user chosen images shown in the contact list"
@@ -1666,47 +1677,47 @@ msgstr ""
 
 #: ../src/empathy-preferences.glade.h:12
 msgid "Chat Th_eme:"
-msgstr ""
+msgstr "વાતચીત થીમ (_e):"
 
 #: ../src/empathy-preferences.glade.h:13
 msgid "Display notifications when contacts come _online"
-msgstr ""
+msgstr "જ્યારે સંપર્કો ઓનલાઇન આવે ત્યારે સૂચનો દર્શાવો (_o)"
 
 #: ../src/empathy-preferences.glade.h:14
 msgid "Enable sounds when _away"
-msgstr ""
+msgstr "જ્યારે દૂર હોય ત્યારે સાઉન્ડોને સક્રિય કરો (_a)"
 
 #: ../src/empathy-preferences.glade.h:15
 msgid "Enable sounds when _busy"
-msgstr ""
+msgstr "જ્યારે વ્યસ્ત હોય ત્યારે સાઉન્ડોને સક્રિય કરો (_b)"
 
 #: ../src/empathy-preferences.glade.h:16
 msgid "General"
-msgstr ""
+msgstr "સામાન્ય"
 
 #: ../src/empathy-preferences.glade.h:17
 msgid "Notifications"
-msgstr ""
+msgstr "સૂચના"
 
 #: ../src/empathy-preferences.glade.h:18
 msgid "Preferences"
-msgstr ""
+msgstr "પસંદગીઓ"
 
 #: ../src/empathy-preferences.glade.h:19
 msgid "Show _avatars"
-msgstr ""
+msgstr "અવતારોને બતાવો (_a)"
 
 #: ../src/empathy-preferences.glade.h:20
 msgid "Show _smileys as images"
-msgstr ""
+msgstr "ચિત્રો તરીકે સ્માઇલીઓને બતાવો (_s)"
 
 #: ../src/empathy-preferences.glade.h:21
 msgid "Show co_mpact contact list"
-msgstr ""
+msgstr "સંકુલિત સંપર્ક યાદીને બતાવો (_m)"
 
 #: ../src/empathy-preferences.glade.h:22
 msgid "Sort by _name"
-msgstr ""
+msgstr "નામ વડે ટૂંકુ કરો (_n)"
 
 #: ../src/empathy-preferences.glade.h:23
 msgid "Sort by s_tate"
@@ -1714,7 +1725,7 @@ msgstr ""
 
 #: ../src/empathy-preferences.glade.h:24
 msgid "Spell Checking"
-msgstr ""
+msgstr "જોડણી ચકાસી રહ્યા છે"
 
 #: ../src/empathy-preferences.glade.h:25
 msgid "Themes"
@@ -1722,21 +1733,21 @@ msgstr "થીમો"
 
 #: ../src/empathy-preferences.glade.h:26
 msgid "_Open new chats in separate windows"
-msgstr ""
+msgstr "અલગ વિન્ડોમાં નવી વાતચીત વિન્ડોને ખોલો (_O)"
 
 #: ../src/empathy-preferences.glade.h:27
 msgid "_Play sound when messages arrive"
-msgstr ""
+msgstr "જ્યારે સંદેશાઓ આવી રહ્યા હોય ત્યારે સાઉન્ડને વગાડો (_P)"
 
 #: ../src/empathy-status-icon.glade.h:1
 msgid "Status"
-msgstr ""
+msgstr "સ્થિતી"
 
 #: ../src/empathy-status-icon.glade.h:3
 msgid "_Quit"
-msgstr ""
+msgstr "બહાર નીકળો (_Q)"
 
 #: ../src/empathy-status-icon.glade.h:4
 msgid "_Show Contact List"
-msgstr ""
+msgstr "સંપર્ક યાદીને બતાવો (_S)"
 
