@@ -5,10 +5,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: empathy 2.23.91\n"
+"Project-Id-Version: empathy 2.24.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-21 19:21+0800\n"
-"PO-Revision-Date: 2008-08-21 19:23+0800\n"
+"POT-Creation-Date: 2008-09-18 10:35+0800\n"
+"PO-Revision-Date: 2008-09-18 10:37+0800\n"
 "Last-Translator: Chao-Hsiung Liao <j_h_liau@yahoo.com.tw>\n"
 "Language-Team: Chinese (Hong Kong) <community@linuxhall.org>\n"
 "MIME-Version: 1.0\n"
@@ -28,9 +28,7 @@ msgid "Always open a separate chat window for new chats."
 msgstr "永遠為每個新的聊天開啟新的聊天視窗。"
 
 #: ../data/empathy.schemas.in.h:2
-msgid ""
-"Character to add after nickname when using nick completion (tab) in group "
-"chat."
+msgid "Character to add after nickname when using nick completion (tab) in group chat."
 msgstr "在羣組聊天中使用網名補齊 (tab) 時要加到網名之後的字符。"
 
 #: ../data/empathy.schemas.in.h:3
@@ -38,8 +36,7 @@ msgid "Chat window theme"
 msgstr "聊天視窗佈景主題"
 
 #: ../data/empathy.schemas.in.h:4
-msgid ""
-"Comma separated list of spell checker languages to use (e.g. en, fr, nl)."
+msgid "Comma separated list of spell checker languages to use (e.g. en, fr, nl)."
 msgstr "要使用拼字檢查的語言清單（以逗號分隔，如 en,fr,nl）。"
 
 #: ../data/empathy.schemas.in.h:5
@@ -139,37 +136,27 @@ msgid "Use theme for chat rooms"
 msgstr "在聊天室使用佈景主題"
 
 #: ../data/empathy.schemas.in.h:29
-msgid ""
-"Whether or not Empathy should automatically log in to your accounts on "
-"startup."
+msgid "Whether or not Empathy should automatically log in to your accounts on startup."
 msgstr "Empathy 是否應在啟動時自動登入你的帳號。"
 
 #: ../data/empathy.schemas.in.h:30
-msgid ""
-"Whether or not Empathy should use the avatar of the contact as the chat "
-"window icon."
+msgid "Whether or not Empathy should use the avatar of the contact as the chat window icon."
 msgstr "Empathy 是否使用聯絡人大頭貼做為聊天視窗圖示。"
 
 #: ../data/empathy.schemas.in.h:31
-msgid ""
-"Whether or not the Salut account has been created on the first Empathy run."
+msgid "Whether or not the Salut account has been created on the first Empathy run."
 msgstr "是否在 Empathy 第一次執行時建立 Salut 帳號。"
 
 #: ../data/empathy.schemas.in.h:32
-msgid ""
-"Whether or not the network manager should be used to automatically "
-"disconnect/reconnect."
+msgid "Whether or not the network manager should be used to automatically disconnect/reconnect."
 msgstr "在斷線/重新連線時是否自動使用網絡管理程式。"
 
 #: ../data/empathy.schemas.in.h:33
-msgid ""
-"Whether or not to check words typed against the languages you want to check "
-"with."
+msgid "Whether or not to check words typed against the languages you want to check with."
 msgstr "是否以你設定的語言檢查輸入有無錯字。"
 
 #: ../data/empathy.schemas.in.h:34
-msgid ""
-"Whether or not to convert smileys into graphical images in conversations."
+msgid "Whether or not to convert smileys into graphical images in conversations."
 msgstr "在談話中是否將表情符號轉換為圖片形式。"
 
 #: ../data/empathy.schemas.in.h:35
@@ -189,9 +176,7 @@ msgid "Whether or not to show a popup when a contact becomes available."
 msgstr "當聯絡人有空時是否顯示彈出式視窗。"
 
 #: ../data/empathy.schemas.in.h:39
-msgid ""
-"Whether or not to show avatars for contacts in the contact list and chat "
-"windows."
+msgid "Whether or not to show avatars for contacts in the contact list and chat windows."
 msgstr "是否在聯絡人清單與聊天視窗顯示聯絡人大頭貼。"
 
 #: ../data/empathy.schemas.in.h:40
@@ -199,9 +184,7 @@ msgid "Whether or not to show contacts that are offline in the contact list."
 msgstr "是否在聯絡人清單中顯示離線的聯絡人。"
 
 #: ../data/empathy.schemas.in.h:41
-msgid ""
-"Whether or not to show the message dialog about closing the main window with "
-"the 'x' button in the title bar."
+msgid "Whether or not to show the message dialog about closing the main window with the 'x' button in the title bar."
 msgstr "使用標題列的「x」按鈕關閉主視窗時是否顯示訊息。"
 
 #: ../data/empathy.schemas.in.h:42
@@ -213,15 +196,13 @@ msgid "Whether to use the theme for chat rooms or not."
 msgstr "是否在聊天室使用佈景主題。"
 
 #: ../data/empathy.schemas.in.h:44
-msgid ""
-"Which criterium to use when sorting the contact list. Default is to use sort "
-"by the contact's name with the value \"name\". A value of \"state\" will "
-"sort the contact list by state."
+msgid "Which criterium to use when sorting the contact list. Default is to use sort by the contact's name with the value \"name\". A value of \"state\" will sort the contact list by state."
 msgstr ""
 
-#: ../libempathy/empathy-tp-contact-list.c:731 ../src/empathy.c:248
+#: ../libempathy/empathy-tp-contact-list.c:731
+#: ../src/empathy.c:248
 msgid "People nearby"
-msgstr ""
+msgstr "臨近人員"
 
 #: ../libempathy/empathy-utils.c:345
 msgid "Available"
@@ -446,9 +427,8 @@ msgid "Use _Yahoo Japan"
 msgstr "使用 _Yahoo 日本"
 
 #: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:5
-#, fuzzy
 msgid "Yahoo I_D:"
-msgstr "登入 I_D:"
+msgstr "Yahoo I_D:"
 
 #: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:7
 msgid "_Ignore conference and chatroom invitations"
@@ -538,7 +518,8 @@ msgstr "%s 已經加入此聊天室"
 msgid "%s has left the room"
 msgstr "%s 已經離開此聊天室"
 
-#: ../libempathy-gtk/empathy-chat.c:1236 ../src/empathy-call-window.c:406
+#: ../libempathy-gtk/empathy-chat.c:1236
+#: ../src/empathy-call-window.c:406
 msgid "Disconnected"
 msgstr "已斷線"
 
@@ -590,30 +571,30 @@ msgstr "稍後再決定"
 msgid "Subscription Request"
 msgstr "訂閱要求"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1226
+#: ../libempathy-gtk/empathy-contact-list-view.c:1244
 #, c-format
 msgid "Do you really want to remove the group '%s'?"
 msgstr "是否想要移除羣組「%s」？"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1228
+#: ../libempathy-gtk/empathy-contact-list-view.c:1246
 msgid "Removing group"
 msgstr "正在移除羣組"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1275
-#: ../libempathy-gtk/empathy-contact-list-view.c:1354
+#: ../libempathy-gtk/empathy-contact-list-view.c:1293
+#: ../libempathy-gtk/empathy-contact-list-view.c:1372
 msgid "_Remove"
 msgstr "移除(_R)"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1305
+#: ../libempathy-gtk/empathy-contact-list-view.c:1323
 #, c-format
 msgid "Do you really want to remove the contact '%s'?"
 msgstr "是否想要移除聯絡人「%s」？"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1307
+#: ../libempathy-gtk/empathy-contact-list-view.c:1325
 msgid "Removing contact"
 msgstr "正在移除聯絡人"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1312
+#: ../libempathy-gtk/empathy-contact-list-view.c:1330
 msgid "Sorry, I don't want you in my contact list anymore."
 msgstr "抱歉，我要將你從我的聯絡人清單中移除。"
 
@@ -636,7 +617,8 @@ msgid "Infor_mation"
 msgstr "資訊(_M)"
 
 #: ../libempathy-gtk/empathy-contact-menu.c:224
-#: ../src/empathy-chat-window.glade.h:14 ../src/empathy-main-window.glade.h:11
+#: ../src/empathy-chat-window.glade.h:14
+#: ../src/empathy-main-window.glade.h:11
 msgid "_Edit"
 msgstr "編輯(_E)"
 
@@ -718,9 +700,7 @@ msgid "OS:"
 msgstr "OS:"
 
 #: ../libempathy-gtk/empathy-contact-widget.glade.h:16
-msgid ""
-"Select the groups you want this contact to appear in.  Note that you can "
-"select more than one group or no groups."
+msgid "Select the groups you want this contact to appear in.  Note that you can select more than one group or no groups."
 msgstr "請選擇這個聯絡人要顯現在哪個羣組。注意你可以選擇一個以上的羣組或不選擇羣組。"
 
 #: ../libempathy-gtk/empathy-contact-widget.glade.h:17
@@ -755,7 +735,8 @@ msgstr "SSL"
 msgid "Account"
 msgstr "帳號"
 
-#: ../libempathy-gtk/empathy-log-window.c:504 ../src/empathy-chat-window.c:276
+#: ../libempathy-gtk/empathy-log-window.c:504
+#: ../src/empathy-chat-window.c:280
 msgid "Conversation"
 msgstr "談話"
 
@@ -783,13 +764,12 @@ msgid "_For:"
 msgstr "搜尋(_F):"
 
 #: ../libempathy-gtk/empathy-new-message-dialog.glade.h:2
-msgid "Call"
-msgstr "通話"
+msgid "C_all"
+msgstr "通話(_A)"
 
 #: ../libempathy-gtk/empathy-new-message-dialog.glade.h:3
-#: ../src/empathy-chat-window.glade.h:2
-msgid "Chat"
-msgstr "聊天"
+msgid "C_hat"
+msgstr "聊天(_C)"
 
 #: ../libempathy-gtk/empathy-new-message-dialog.glade.h:4
 msgid "Contact ID:"
@@ -1032,8 +1012,7 @@ msgstr "越南"
 #. * vim: sw=2 ts=8 cindent noai bs=2
 #.
 #: ../megaphone/data/GNOME_Megaphone_Applet.schemas.in.h:1
-msgid ""
-"The contact to display in the applet. Empty means no contact is displayed."
+msgid "The contact to display in the applet. Empty means no contact is displayed."
 msgstr "要在面板程式中顯示的聯絡人。留空代表不顯示聯絡人。"
 
 #: ../megaphone/data/GNOME_Megaphone_Applet.schemas.in.h:2
@@ -1089,26 +1068,15 @@ msgid "- Empathy Instant Messenger"
 msgstr "- Empathy 即時通訊程式"
 
 #: ../src/empathy-about-dialog.c:84
-msgid ""
-"Empathy is free software; you can redistribute it and/or modify it under the "
-"terms of the GNU General Public License as published by the Free Software "
-"Foundation; either version 2 of the License, or (at your option) any later "
-"version."
+msgid "Empathy is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version."
 msgstr "Empathy 是自由軟件，你可以遵照自由軟件基金會 (Free Software Foundation) 出版的 GNU 通用公共許可證條款 (GNU General Public License) 第二版來修改和重新發佈這一程式，或者自由選擇使用任何更新的版本。"
 
 #: ../src/empathy-about-dialog.c:88
-msgid ""
-"Empathy is distributed in the hope that it will be useful, but WITHOUT ANY "
-"WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS "
-"FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more "
-"details."
+msgid "Empathy is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details."
 msgstr "發佈 Empathy 的目的是希望它有用，但沒有任何擔保。甚至沒有適合特定目的而隱含的擔保。更詳細的情況請參閱 GNU 通用公共許可證。"
 
 #: ../src/empathy-about-dialog.c:92
-msgid ""
-"You should have received a copy of the GNU General Public License along with "
-"Empathy; if not, write to the Free Software Foundation, Inc., 51 Franklin "
-"Street, Fifth Floor, Boston, MA 02110-130159 USA"
+msgid "You should have received a copy of the GNU General Public License along with Empathy; if not, write to the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-130159 USA"
 msgstr "你應該已經和 Empathy 一起收到一份 GNU 通用公共許可證的副本；如果還沒有，寫信給： Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-130159 USA"
 
 #: ../src/empathy-about-dialog.c:120
@@ -1152,11 +1120,9 @@ msgstr ""
 
 #: ../src/empathy-accounts-dialog.c:978
 msgid ""
-"Any associated conversations and chat rooms will NOT be removed if you "
-"decide to proceed.\n"
+"Any associated conversations and chat rooms will NOT be removed if you decide to proceed.\n"
 "\n"
-"Should you decide to add the account back at a later time, they will still "
-"be available."
+"Should you decide to add the account back at a later time, they will still be available."
 msgstr ""
 "如果你決定要繼續，任何相關的談話和聊天室並不會被移除。\n"
 "\n"
@@ -1183,9 +1149,7 @@ msgid "I already have an account I want to use"
 msgstr "我已經有要使用的帳號"
 
 #: ../src/empathy-accounts-dialog.glade.h:7
-msgid ""
-"To add a new account, you first have to install a backend for each protocol "
-"you want to use."
+msgid "To add a new account, you first have to install a backend for each protocol you want to use."
 msgstr "要加入新的帳號，你必須先安裝每個會用到的通訊協定後端程式。"
 
 #: ../src/empathy-accounts-dialog.glade.h:8
@@ -1318,22 +1282,26 @@ msgstr "掛斷"
 msgid "Send Video"
 msgstr "傳送視像"
 
-#: ../src/empathy-chat-window.c:319
+#: ../src/empathy-chat-window.c:326
 #, c-format
 msgid "Conversations (%d)"
 msgstr "談話 (%d)"
 
-#: ../src/empathy-chat-window.c:397
+#: ../src/empathy-chat-window.c:418
 msgid "Topic:"
 msgstr "主題:"
 
-#: ../src/empathy-chat-window.c:400
+#: ../src/empathy-chat-window.c:421
 msgid "Typing a message."
 msgstr "正在輸入訊息。"
 
 #: ../src/empathy-chat-window.glade.h:1
 msgid "C_lear"
 msgstr "清除(_L)"
+
+#: ../src/empathy-chat-window.glade.h:2
+msgid "Chat"
+msgstr "聊天"
 
 #: ../src/empathy-chat-window.glade.h:3
 msgid "Insert _Smiley"
@@ -1367,7 +1335,8 @@ msgstr "你已經被邀請加入聊天會議。"
 msgid "_Contact"
 msgstr "聯絡人(_C)"
 
-#: ../src/empathy-chat-window.glade.h:11 ../src/empathy-main-window.glade.h:10
+#: ../src/empathy-chat-window.glade.h:11
+#: ../src/empathy-main-window.glade.h:10
 msgid "_Contents"
 msgstr "內容(_C)"
 
@@ -1379,19 +1348,24 @@ msgstr "談話(_C)"
 msgid "_Detach Tab"
 msgstr "轉為獨立視窗(_D)"
 
-#: ../src/empathy-chat-window.glade.h:15 ../src/empathy-main-window.glade.h:12
+#: ../src/empathy-chat-window.glade.h:15
+msgid "_Favorite Chatroom"
+msgstr "喜好的聊天室(_F)"
+
+#: ../src/empathy-chat-window.glade.h:16
+#: ../src/empathy-main-window.glade.h:12
 msgid "_Help"
 msgstr "求助(_H)"
 
-#: ../src/empathy-chat-window.glade.h:16
+#: ../src/empathy-chat-window.glade.h:17
 msgid "_Next Tab"
 msgstr "下一個分頁(_N)"
 
-#: ../src/empathy-chat-window.glade.h:17
+#: ../src/empathy-chat-window.glade.h:18
 msgid "_Previous Tab"
 msgstr "上一個分頁(_P)"
 
-#: ../src/empathy-chat-window.glade.h:18
+#: ../src/empathy-chat-window.glade.h:19
 msgid "_Tabs"
 msgstr "分頁(_T)"
 
@@ -1452,9 +1426,7 @@ msgstr "%s 的來電"
 
 #: ../src/empathy-event-manager.c:238
 #, c-format
-msgid ""
-"%s is offering you an invitation, but you don't have the needed external "
-"application to handle it."
+msgid "%s is offering you an invitation, but you don't have the needed external application to handle it."
 msgstr "%s 正在邀請你，但是你沒有處理它所需的外部應用程式。"
 
 #: ../src/empathy-event-manager.c:263
@@ -1463,9 +1435,7 @@ msgstr "邀請發生錯誤"
 
 #: ../src/empathy-event-manager.c:289
 #, c-format
-msgid ""
-"%s is offering you an invitation. An external application will be started to "
-"handle it."
+msgid "%s is offering you an invitation. An external application will be started to handle it."
 msgstr "%s 正在邀請你。將啟動外部應用程式來處理它。"
 
 #: ../src/empathy-event-manager.c:345
@@ -1582,7 +1552,8 @@ msgstr "帳號(_A)"
 msgid "_Add Contact..."
 msgstr "新增聯絡人(_A)..."
 
-#: ../src/empathy-main-window.glade.h:13 ../src/empathy-status-icon.glade.h:2
+#: ../src/empathy-main-window.glade.h:13
+#: ../src/empathy-status-icon.glade.h:2
 msgid "_New Conversation..."
 msgstr "新增談話(_N)..."
 
@@ -1603,14 +1574,11 @@ msgid "Browse:"
 msgstr "瀏覽:"
 
 #: ../src/empathy-new-chatroom-dialog.glade.h:3
-msgid ""
-"Enter the room name to join here or click on one or more rooms in the list."
+msgid "Enter the room name to join here or click on one or more rooms in the list."
 msgstr "在這裏輸入要加入的聊天室名稱或從清單中點選一或多個聊天室。"
 
 #: ../src/empathy-new-chatroom-dialog.glade.h:4
-msgid ""
-"Enter the server which hosts the room, or leave it empty if the room is on "
-"the current account's server"
+msgid "Enter the server which hosts the room, or leave it empty if the room is on the current account's server"
 msgstr "輸入此聊天室所在的伺服器，或者當該聊天室位於目前帳號所在的伺服器時留空即可"
 
 #: ../src/empathy-new-chatroom-dialog.glade.h:5
@@ -1626,8 +1594,7 @@ msgid "Re_fresh"
 msgstr "重新整理(_F)"
 
 #: ../src/empathy-new-chatroom-dialog.glade.h:8
-msgid ""
-"This list represents all chat rooms hosted on the server you have entered."
+msgid "This list represents all chat rooms hosted on the server you have entered."
 msgstr "這個清單中呈現了你進入的伺服器上開設的所有聊天室。"
 
 #: ../src/empathy-preferences.c:264
@@ -1661,9 +1628,7 @@ msgid "<b>Visual</b>"
 msgstr "<b>視覺提示</b>"
 
 #: ../src/empathy-preferences.glade.h:9
-msgid ""
-"<small>The list of languages reflects only the languages for which you have "
-"a dictionary installed.</small>"
+msgid "<small>The list of languages reflects only the languages for which you have a dictionary installed.</small>"
 msgstr "<small>這裏的語言清單只反映出你已經安裝字典的語言。</small>"
 
 #: ../src/empathy-preferences.glade.h:10
@@ -1752,17 +1717,14 @@ msgstr "顯示聯絡人清單(_S)"
 
 #~ msgid "Configure Telepathy account settings"
 #~ msgstr "設定 Telepathy 帳號設定值"
-
 #~ msgid "Empathy accounts"
 #~ msgstr "Empathy 帳號"
-
 #~ msgid ""
 #~ "To add a new account, you can click on the 'Add' button and a new entry "
 #~ "will be created for you to start configuring."
 #~ msgstr ""
 #~ "要加入新的帳號，您可以按下「加入」按鈕，這樣就會建立一個新的項目讓您開始設"
 #~ "定。"
-
 #~ msgid ""
 #~ "\n"
 #~ "\n"
@@ -1772,6 +1734,6 @@ msgstr "顯示聯絡人清單(_S)"
 #~ "\n"
 #~ "\n"
 #~ "如果您不想加入帳號，只要在左邊清單中點選想要設定的帳號即可。"
-
 #~ msgid "<b>No Accounts Configured</b>"
 #~ msgstr "<b>尚未設定帳號</b>"
+
