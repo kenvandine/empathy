@@ -1007,7 +1007,9 @@ tp_contact_list_add_to_group (EmpathyContactList *list,
 	tp_group = tp_contact_list_get_group (EMPATHY_TP_CONTACT_LIST (list),
 					      group);
 
-	empathy_tp_group_add_member (tp_group, contact, "");
+	if (tp_group) {
+		empathy_tp_group_add_member (tp_group, contact, "");
+	}
 }
 
 static void
