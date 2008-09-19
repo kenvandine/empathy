@@ -152,7 +152,8 @@ class Project:
 			while p1 != -1:
 				bug = Bug()
 				p2 = p1 + 1
-				while message[p2].isdigit():
+				while p2 < len (message) and \
+				      message[p2].isdigit():
 					p2 = p2 + 1
 				bug.number = message[p1+1:p2]
 				bug.author = author
