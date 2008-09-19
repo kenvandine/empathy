@@ -732,13 +732,15 @@ main_window_favorite_chatroom_join (EmpathyChatroom *chatroom)
 	DEBUG ("Requesting channel for '%s'", room);
 
 	connection = mission_control_get_tpconnection (mc, account, NULL);
-	tp_connection_run_until_ready (connection, TRUE, NULL, NULL);	
-	empathy_connection_request_channel (connection, -1,
-					    TP_IFACE_CHANNEL_TYPE_TEXT,
-					    TP_HANDLE_TYPE_ROOM,
-					    room, TRUE,
-					    NULL, NULL, NULL, NULL);
-	g_object_unref (connection);
+	if (connection) {
+		tp_connection_run_until_ready (connection, TRUE, NULL, NULL);	
+		empathy_connection_request_channel (connection, -1,
+						    TP_IFACE_CHANNEL_TYPE_TEXT,
+						    TP_HANDLE_TYPE_ROOM,
+						    room, TRUE,
+						    NULL, NULL, NULL, NULL);
+		g_object_unref (connection);
+	}
 	g_object_unref (mc);
 }
 
