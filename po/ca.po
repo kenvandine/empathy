@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: empathy\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-16 16:06+0200\n"
-"PO-Revision-Date: 2008-09-16 22:11+0200\n"
+"POT-Creation-Date: 2008-09-19 10:10+0200\n"
+"PO-Revision-Date: 2008-09-19 10:10+0200\n"
 "Last-Translator: Gil Forcada <gilforcada@guifi.net>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "MIME-Version: 1.0\n"
@@ -67,8 +67,8 @@ msgstr "Fes que l'Empathy es connecti automàticament en iniciar-se"
 #: ../data/empathy.schemas.in.h:9
 msgid "Empathy should use the avatar of the contact as the chat window icon"
 msgstr ""
-"Fes que l'Empathy utilitzi l'avatar del contacte com a icona de la "
-"finestra de xat"
+"Fes que l'Empathy utilitzi l'avatar del contacte com a icona de la finestra "
+"de xat"
 
 #: ../data/empathy.schemas.in.h:10
 msgid "Enable popup when contact is available"
@@ -151,16 +151,15 @@ msgstr "Usa el tema per a les sales de xat"
 msgid ""
 "Whether or not Empathy should automatically log in to your accounts on "
 "startup."
-msgstr ""
-"Si l'Empathy ha d'entrar en els comptes automàticament en iniciar-se."
+msgstr "Si l'Empathy ha d'entrar en els comptes automàticament en iniciar-se."
 
 #: ../data/empathy.schemas.in.h:30
 msgid ""
 "Whether or not Empathy should use the avatar of the contact as the chat "
 "window icon."
 msgstr ""
-"Si l'Empathy ha d'utilitzar l'avatar del contacte com a icona de la "
-"finestra de xat."
+"Si l'Empathy ha d'utilitzar l'avatar del contacte com a icona de la finestra "
+"de xat."
 
 #: ../data/empathy.schemas.in.h:31
 msgid ""
@@ -1197,7 +1196,8 @@ msgstr ""
 "No se suprimirà cap de les converses i sales de xat associades si decidiu "
 "continuar.\n"
 "\n"
-"Si decidiu tornar a afegir el compte més endavant, encara estaran disponibles."
+"Si decidiu tornar a afegir el compte més endavant, encara estaran "
+"disponibles."
 
 #: ../src/empathy-accounts-dialog.glade.h:1
 msgid "<b>New Account</b>"
@@ -1343,7 +1343,6 @@ msgstr "9"
 
 #. To translators: The keypad is numbers [0-9], asterisk (*) and hash (#). Presented like on any phone
 #: ../src/empathy-call-window.glade.h:14
-#, fuzzy
 msgid "<b>Keypad</b>"
 msgstr "<b>Teclat numèric</b>"
 
