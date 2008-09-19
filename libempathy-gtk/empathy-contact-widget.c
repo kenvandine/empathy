@@ -530,7 +530,7 @@ contact_widget_contact_setup (EmpathyContactWidget *information)
   else
     {
       information->widget_account = gtk_label_new (NULL);
-      if (!information->flags & EMPATHY_CONTACT_WIDGET_FOR_TOOLTIP) {
+      if (!(information->flags & EMPATHY_CONTACT_WIDGET_FOR_TOOLTIP)) {
         gtk_label_set_selectable (GTK_LABEL (information->widget_account), TRUE);
       }
       gtk_misc_set_alignment (GTK_MISC (information->widget_account), 0, 0.5);
@@ -554,7 +554,7 @@ contact_widget_contact_setup (EmpathyContactWidget *information)
   else
     {
       information->widget_id = gtk_label_new (NULL);
-      if (!information->flags & EMPATHY_CONTACT_WIDGET_FOR_TOOLTIP) {
+      if (!(information->flags & EMPATHY_CONTACT_WIDGET_FOR_TOOLTIP)) {
         gtk_label_set_selectable (GTK_LABEL (information->widget_id), TRUE);
       }
       gtk_misc_set_alignment (GTK_MISC (information->widget_id), 0, 0.5);
@@ -578,7 +578,7 @@ contact_widget_contact_setup (EmpathyContactWidget *information)
   else
     {
       information->widget_alias = gtk_label_new (NULL);
-      if (!information->flags & EMPATHY_CONTACT_WIDGET_FOR_TOOLTIP) {
+      if (!(information->flags & EMPATHY_CONTACT_WIDGET_FOR_TOOLTIP)) {
         gtk_label_set_selectable (GTK_LABEL (information->widget_alias), TRUE);
       }
       gtk_misc_set_alignment (GTK_MISC (information->widget_alias), 0, 0.5);
