@@ -1734,7 +1734,7 @@ msgstr "_Avatarok megjelenítése"
 
 #: ../src/empathy-preferences.glade.h:20
 msgid "Show _smileys as images"
-msgstr "Hang_ulatjelek képekké alakítása"
+msgstr "_Hangulatjelek képekké alakítása"
 
 #: ../src/empathy-preferences.glade.h:21
 msgid "Show co_mpact contact list"
@@ -1746,7 +1746,7 @@ msgstr "Rendezés _név szerint"
 
 #: ../src/empathy-preferences.glade.h:23
 msgid "Sort by s_tate"
-msgstr "Rendezés áll_apot szerint"
+msgstr "Rendezés álla_pot szerint"
 
 #: ../src/empathy-preferences.glade.h:24
 msgid "Spell Checking"
