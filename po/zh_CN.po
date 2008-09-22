@@ -1,18 +1,18 @@
-# traditional Chinese translation of Empathy.
-# Convert to Simp. Chinese translation of Empathy.
-# Copyright (C) 2003-2004 Free Software Foundation, Inc.
+# Simplified Chinese translation of Empathy.
+# Copyright (C) 2008 Free Software Foundation, Inc.
+# Inited from gossip zh_CN translation.
 # Abel Cheung <maddog@linux.org.hk>, 2003.
 # Mai Haohui <maihaohui@hotmail.com>, 2003.
 # Rongjun Mu <elanmu@sina.com>, 2003.
 # YangZhang <zyangmath@gmail.com>, 2008
 msgid ""
 msgstr ""
-"Project-Id-Version: gossip\n"
+"Project-Id-Version: Empathy\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-09-09 11:33+0000\n"
-"PO-Revision-Date: 2008-09-22 11:10+0800\n"
-"Last-Translator: Mai Haohui <maihaohui@hotmail.com>\n"
-"Language-Team: zh_CN <i18n-translation@lists.linux.net.cn>\n"
+"PO-Revision-Date: 2008-09-22 11:36+0800\n"
+"Last-Translator: YangZhang <zyangmath@gmail.com>\n"
+"Language-Team: i18n-zh <i18n-zh@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: UTF-8\n"
