@@ -114,7 +114,7 @@
                   <widget class="GtkSpinButton" id="spinbutton_port">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="adjustment">5222 0 65556 1 10 10</property>
+                    <property name="adjustment">5222 0 65555 1 10 0</property>
                     <property name="climb_rate">1</property>
                     <property name="numeric">True</property>
                   </widget>
