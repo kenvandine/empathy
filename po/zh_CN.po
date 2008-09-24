@@ -1,18 +1,18 @@
-# Simplified Chinese translation of Empathy.
-# Copyright (C) 2008 Free Software Foundation, Inc.
-# Inited from gossip zh_CN translation.
+# traditional Chinese translation of Empathy.
+# Convert to Simp. Chinese translation of Empathy.
+# Copyright (C) 2003-2004 Free Software Foundation, Inc.
 # Abel Cheung <maddog@linux.org.hk>, 2003.
 # Mai Haohui <maihaohui@hotmail.com>, 2003.
 # Rongjun Mu <elanmu@sina.com>, 2003.
 # YangZhang <zyangmath@gmail.com>, 2008
 msgid ""
 msgstr ""
-"Project-Id-Version: Empathy\n"
+"Project-Id-Version: gossip\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-09 11:33+0000\n"
-"PO-Revision-Date: 2008-09-22 11:36+0800\n"
-"Last-Translator: YangZhang <zyangmath@gmail.com>\n"
-"Language-Team: i18n-zh <i18n-zh@googlegroups.com>\n"
+"POT-Creation-Date: 2008-09-22 03:09+0000\n"
+"PO-Revision-Date: 2008-09-22 11:10+0800\n"
+"Last-Translator: Mai Haohui <maihaohui@hotmail.com>\n"
+"Language-Team: zh_CN <i18n-translation@lists.linux.net.cn>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: UTF-8\n"
@@ -27,7 +27,7 @@ msgstr "发送和接收即时消息"
 
 #: ../data/empathy.schemas.in.h:1
 msgid "Always open a separate chat window for new chats."
-msgstr "总是为新聊天打开单独的聊天窗口"
+msgstr "总是为新聊天打开单独的聊天窗口。"
 
 #: ../data/empathy.schemas.in.h:2
 msgid ""
@@ -70,11 +70,11 @@ msgstr "启用联系人上线时弹出通知"
 
 #: ../data/empathy.schemas.in.h:11
 msgid "Enable sound when away"
-msgstr "“离开”时启用声音(_A)"
+msgstr "离开时启用声音"
 
 #: ../data/empathy.schemas.in.h:12
 msgid "Enable sound when busy"
-msgstr "“忙碌”时启用声音(_B)"
+msgstr "忙碌时启用声音"
 
 #: ../data/empathy.schemas.in.h:13
 msgid "Enable spell checker"
@@ -122,7 +122,7 @@ msgstr "拼写检查器语言"
 
 #: ../data/empathy.schemas.in.h:24
 msgid "The last directory that an avatar image was chosen from."
-msgstr "上次选取头像图片的目录"
+msgstr "上次选取头像图片的目录。"
 
 #: ../data/empathy.schemas.in.h:25
 msgid "The theme that is used to display the conversation in chat windows."
@@ -180,11 +180,11 @@ msgstr "收到消息时是否播放声音。"
 
 #: ../data/empathy.schemas.in.h:36
 msgid "Whether or not to play sounds when away."
-msgstr "“离开”时是否播放声音。"
+msgstr "离开时是否播放声音。"
 
 #: ../data/empathy.schemas.in.h:37
 msgid "Whether or not to play sounds when busy."
-msgstr "“忙碌”时是否播放声音。"
+msgstr "忙碌时是否播放声音。"
 
 #: ../data/empathy.schemas.in.h:38
 msgid "Whether or not to show a popup when a contact becomes available."
@@ -389,7 +389,7 @@ msgstr "优先级(_O)："
 
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:7
 msgid "Reso_urce:"
-msgstr "资源(_u)："
+msgstr "资源(_U)："
 
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:8
 msgid "Use old SS_L"
@@ -583,7 +583,7 @@ msgstr "我希望可以将您加入我的联系人列表中。"
 
 #: ../libempathy-gtk/empathy-contact-dialogs.c:307
 msgid "New Contact"
-msgstr "新建联系人..."
+msgstr "新建联系人"
 
 #: ../libempathy-gtk/empathy-contact-dialogs.glade.h:1
 msgid "Decide _Later"
@@ -656,7 +656,7 @@ msgid "Select"
 msgstr "选择"
 
 #: ../libempathy-gtk/empathy-contact-widget.c:884
-#: ../src/empathy-main-window.c:853
+#: ../src/empathy-main-window.c:855
 msgid "Group"
 msgstr "群组"
 
@@ -1096,7 +1096,9 @@ msgid ""
 "terms of the GNU General Public License as published by the Free Software "
 "Foundation; either version 2 of the License, or (at your option) any later "
 "version."
-msgstr "Empathy 是自由软件；您可以在自由软件基金会发布的 GNU 通用公共许可证下重新发布或修改它；许可证可使用第二版或您想选择的更新的版本。"
+msgstr ""
+"Empathy 是自由软件；您可以在自由软件基金会发布的 GNU 通用公共许可证下重新发布"
+"或修改它；许可证可使用第二版或您想选择的更新的版本。"
 
 #: ../src/empathy-about-dialog.c:88
 msgid ""
@@ -1104,14 +1106,19 @@ msgid ""
 "WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS "
 "FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more "
 "details."
-msgstr "Empathy 发布的目的是希望它对您有用，但是没有任何担保；即使是对商业应用以及其它特定目的。查阅 GNU 通用公共许可证以获取更多细节。"
+msgstr ""
+"Empathy 发布的目的是希望它对您有用，但是没有任何担保；即使是对商业应用以及其"
+"它特定目的。查阅 GNU 通用公共许可证以获取更多细节。"
 
 #: ../src/empathy-about-dialog.c:92
 msgid ""
 "You should have received a copy of the GNU General Public License along with "
 "Empathy; if not, write to the Free Software Foundation, Inc., 51 Franklin "
 "Street, Fifth Floor, Boston, MA 02110-130159 USA"
-msgstr "您应该在收到 Empathy 时收到了一份 GNU 通用公共许可证的副本；如果没有的话，请给自由软件基金会写信。地址是：51 Franklin Street, Fifth Floor, Boston, MA 02110-130159 USA"
+msgstr ""
+"您应该在收到 Empathy 时收到了一份 GNU 通用公共许可证的副本；如果没有的话，请"
+"给自由软件基金会写信。地址是：51 Franklin Street, Fifth Floor, Boston, MA "
+"02110-130159 USA"
 
 #: ../src/empathy-about-dialog.c:120
 msgid "An Instant Messaging client for GNOME"
@@ -1339,7 +1346,7 @@ msgstr "聊天"
 
 #: ../src/empathy-chat-window.glade.h:3
 msgid "Insert _Smiley"
-msgstr "插入表情(_M)："
+msgstr "插入表情(_M)"
 
 #: ../src/empathy-chat-window.glade.h:4
 msgid "Invitation _message:"
@@ -1379,7 +1386,7 @@ msgstr "对话(_C)"
 
 #: ../src/empathy-chat-window.glade.h:13
 msgid "_Detach Tab"
-msgstr "分离标签(_D)"
+msgstr "漂移标签(_D)"
 
 #: ../src/empathy-chat-window.glade.h:15
 msgid "_Favorite Chatroom"
@@ -1465,7 +1472,7 @@ msgstr "%s 给您发送了一份邀请，但是您没有处理它所需的外部
 
 #: ../src/empathy-event-manager.c:263
 msgid "Invitation Error"
-msgstr "邀请错误"
+msgstr "邀请出错"
 
 #: ../src/empathy-event-manager.c:289
 #, c-format
@@ -1484,73 +1491,75 @@ msgstr "%s 的订阅请求"
 msgid ""
 "\n"
 "Message: %s"
-msgstr "\n消息：%s"
+msgstr ""
+"\n"
+"消息：%s"
 
 #: ../src/empathy-main-window.c:466
 msgid "Show and edit accounts"
 msgstr "显示和编辑帐户"
 
-#: ../src/empathy-main-window.c:836
+#: ../src/empathy-main-window.c:838
 msgid "Contact"
 msgstr "联系人"
 
-#: ../src/empathy-main-window.c:1038
+#: ../src/empathy-main-window.c:1040
 msgid "_Edit account"
 msgstr "编辑帐户(_E)"
 
-#: ../src/empathy-main-window.c:1121
+#: ../src/empathy-main-window.c:1123
 msgid "No error specified"
 msgstr "没有说明错误"
 
-#: ../src/empathy-main-window.c:1124
+#: ../src/empathy-main-window.c:1126
 msgid "Network error"
 msgstr "网络错误"
 
-#: ../src/empathy-main-window.c:1127
+#: ../src/empathy-main-window.c:1129
 msgid "Authentication failed"
 msgstr "验证失败"
 
-#: ../src/empathy-main-window.c:1130
+#: ../src/empathy-main-window.c:1132
 msgid "Encryption error"
 msgstr "加密错误"
 
-#: ../src/empathy-main-window.c:1133
+#: ../src/empathy-main-window.c:1135
 msgid "Name in use"
 msgstr "用户名已经被占用"
 
-#: ../src/empathy-main-window.c:1136
+#: ../src/empathy-main-window.c:1138
 msgid "Certificate not provided"
 msgstr "未提供证书"
 
-#: ../src/empathy-main-window.c:1139
+#: ../src/empathy-main-window.c:1141
 msgid "Certificate untrusted"
 msgstr "证书不被信任"
 
-#: ../src/empathy-main-window.c:1142
+#: ../src/empathy-main-window.c:1144
 msgid "Certificate expired"
 msgstr "证书已过期"
 
-#: ../src/empathy-main-window.c:1145
+#: ../src/empathy-main-window.c:1147
 msgid "Certificate not activated"
 msgstr "证书尚未激活"
 
-#: ../src/empathy-main-window.c:1148
+#: ../src/empathy-main-window.c:1150
 msgid "Certificate hostname mismatch"
 msgstr "证书主机名不匹配"
 
-#: ../src/empathy-main-window.c:1151
+#: ../src/empathy-main-window.c:1153
 msgid "Certificate fingerprint mismatch"
 msgstr "证书指纹不匹配"
 
-#: ../src/empathy-main-window.c:1154
+#: ../src/empathy-main-window.c:1156
 msgid "Certificate self-signed"
 msgstr "证书是自签属的"
 
-#: ../src/empathy-main-window.c:1157
+#: ../src/empathy-main-window.c:1159
 msgid "Certificate error"
 msgstr "证书错误"
 
-#: ../src/empathy-main-window.c:1160
+#: ../src/empathy-main-window.c:1162
 msgid "Unknown error"
 msgstr "未知的错误"
 
@@ -1753,4 +1762,3 @@ msgstr "退出(_Q)"
 #: ../src/empathy-status-icon.glade.h:4
 msgid "_Show Contact List"
 msgstr "显示联系人列表(_S)"
-
