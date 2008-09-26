@@ -1224,7 +1224,7 @@ msgstr "%s 来电，您想要接听吗？"
 
 #: ../src/empathy-call-window.c:319
 msgid "_Reject"
-msgstr "拒绝(＿R)"
+msgstr "拒绝(_R)"
 
 #: ../src/empathy-call-window.c:324
 msgid "_Answer"
