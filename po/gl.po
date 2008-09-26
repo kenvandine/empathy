@@ -881,7 +881,7 @@ msgstr "Sinxela"
 
 #: ../libempathy-gtk/empathy-theme-manager.c:75
 msgid "Clean"
-msgstr "Limpar"
+msgstr "Limpo"
 
 #: ../libempathy-gtk/empathy-theme-manager.c:76
 msgid "Blue"
