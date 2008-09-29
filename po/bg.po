@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: empathy trunk\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-05 09:18+0300\n"
+"POT-Creation-Date: 2008-09-29 22:03+0300\n"
 "PO-Revision-Date: 2008-09-05 09:18+0300\n"
 "Last-Translator: Alexander Shopov <ash@contact.bg>\n"
 "Language-Team: Bulgarian <dict@fsa-bg.org>\n"
@@ -678,7 +678,7 @@ msgid "Select"
 msgstr "Избор"
 
 #: ../libempathy-gtk/empathy-contact-widget.c:884
-#: ../src/empathy-main-window.c:853
+#: ../src/empathy-main-window.c:855
 msgid "Group"
 msgstr "Група"
 
@@ -782,7 +782,7 @@ msgstr "SSL"
 msgid "Account"
 msgstr "Регистрация"
 
-#: ../libempathy-gtk/empathy-log-window.c:504 ../src/empathy-chat-window.c:279
+#: ../libempathy-gtk/empathy-log-window.c:504 ../src/empathy-chat-window.c:280
 msgid "Conversation"
 msgstr "Разговор"
 
@@ -1126,9 +1126,9 @@ msgid ""
 "version."
 msgstr ""
 "Тази програма (Empathy) е свободен софтуер. Можете да я разпространявате и/"
-"или променяте според условията на версия 2 или по-висока (по ваш избор) на "
-"Общия публичен лиценз на GNU, който е публикуван от Фондацията за свободен "
-"софтуер."
+"или променяте под условията на Общия публичен лиценз на GNU (GNU GPL), както "
+"е публикуван от Фондацията за свободен софтуер — версия 2 на лиценза или (по "
+"ваше решение) по-късна версия."
 
 #: ../src/empathy-about-dialog.c:88
 msgid ""
@@ -1137,9 +1137,9 @@ msgid ""
 "FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more "
 "details."
 msgstr ""
-"Тази програма (Empathy) се разпространява с надеждата да е полезна, но БЕЗ "
-"НИКАКВА ГАРАНЦИЯ, дори и подразбиращата се ПРИГОДНОСТ или ГОДНОСТ ЗА "
-"КОНКРЕТНА УПОТРЕБА. За подробности прегледайте Общия публичен лиценз на GNU."
+"Тази програма се разпространява с надеждата, че ще бъде полезна, но БЕЗ "
+"НИКАКВИ ГАРАНЦИИ, дори и косвените за ПРОДАЖБА или СЪОТВЕТСТВИЕ С КАКВАТО И "
+"ДА Е УПОТРЕБА. За подробности погледнете Общия публичен лиценз на GNU."
 
 #: ../src/empathy-about-dialog.c:92
 msgid ""
@@ -1147,11 +1147,9 @@ msgid ""
 "Empathy; if not, write to the Free Software Foundation, Inc., 51 Franklin "
 "Street, Fifth Floor, Boston, MA 02110-130159 USA"
 msgstr ""
-"Трябва да сте получили копие на Общия публичен лиценз на GNU заедно с тази "
-"програма. Ако не се сте — пишете на Фондацията за свободен софтуер на "
-"адрес:\n"
-"Free Software Foundation, Inc., 51 Franklin Street,\n"
-"Fifth Floor, Boston, MA 02110-1301, USA. "
+"Трябва да сте получили копие от Общия публичен лиценз на GNU (GNU GPL) "
+"заедно с тази програма. Ако не сте, пишете до Free Software Foundation, "
+"Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA."
 
 #: ../src/empathy-about-dialog.c:120
 msgid "An Instant Messaging client for GNOME"
@@ -1362,16 +1360,16 @@ msgstr "Затваряне"
 msgid "Send Video"
 msgstr "Изпращане на видео"
 
-#: ../src/empathy-chat-window.c:322
+#: ../src/empathy-chat-window.c:326
 #, c-format
 msgid "Conversations (%d)"
 msgstr "Разговори (%d)"
 
-#: ../src/empathy-chat-window.c:400
+#: ../src/empathy-chat-window.c:418
 msgid "Topic:"
 msgstr "Тема:"
 
-#: ../src/empathy-chat-window.c:403
+#: ../src/empathy-chat-window.c:421
 msgid "Typing a message."
 msgstr "Пише съобщение."
 
@@ -1539,67 +1537,67 @@ msgstr ""
 msgid "Show and edit accounts"
 msgstr "Показване и редактиране на регистрации"
 
-#: ../src/empathy-main-window.c:836
+#: ../src/empathy-main-window.c:838
 msgid "Contact"
 msgstr "Контакт"
 
-#: ../src/empathy-main-window.c:1038
+#: ../src/empathy-main-window.c:1040
 msgid "_Edit account"
 msgstr "_Редактиране на регистрация"
 
-#: ../src/empathy-main-window.c:1121
+#: ../src/empathy-main-window.c:1123
 msgid "No error specified"
 msgstr "Не е указана грешка"
 
-#: ../src/empathy-main-window.c:1124
+#: ../src/empathy-main-window.c:1126
 msgid "Network error"
 msgstr "Мрежова грешка"
 
-#: ../src/empathy-main-window.c:1127
+#: ../src/empathy-main-window.c:1129
 msgid "Authentication failed"
 msgstr "Неуспешно идентифициране"
 
-#: ../src/empathy-main-window.c:1130
+#: ../src/empathy-main-window.c:1132
 msgid "Encryption error"
 msgstr "Грешка в шифрирането"
 
-#: ../src/empathy-main-window.c:1133
+#: ../src/empathy-main-window.c:1135
 msgid "Name in use"
 msgstr "Името е заето"
 
-#: ../src/empathy-main-window.c:1136
+#: ../src/empathy-main-window.c:1138
 msgid "Certificate not provided"
 msgstr "Не е предоставен сертификат"
 
-#: ../src/empathy-main-window.c:1139
+#: ../src/empathy-main-window.c:1141
 msgid "Certificate untrusted"
 msgstr "Сертификатът не е доверен"
 
-#: ../src/empathy-main-window.c:1142
+#: ../src/empathy-main-window.c:1144
 msgid "Certificate expired"
 msgstr "Сертификатът е изтекъл"
 
-#: ../src/empathy-main-window.c:1145
+#: ../src/empathy-main-window.c:1147
 msgid "Certificate not activated"
 msgstr "Сертификатът не е влязъл в сила"
 
-#: ../src/empathy-main-window.c:1148
+#: ../src/empathy-main-window.c:1150
 msgid "Certificate hostname mismatch"
 msgstr "Несъвпадение на името с това в сертификата"
 
-#: ../src/empathy-main-window.c:1151
+#: ../src/empathy-main-window.c:1153
 msgid "Certificate fingerprint mismatch"
 msgstr "Несъвпадение на отпечатъка на сертификата"
 
-#: ../src/empathy-main-window.c:1154
+#: ../src/empathy-main-window.c:1156
 msgid "Certificate self-signed"
 msgstr "Сертификатът е самоподписан"
 
-#: ../src/empathy-main-window.c:1157
+#: ../src/empathy-main-window.c:1159
 msgid "Certificate error"
 msgstr "Грешка в сертификата"
 
-#: ../src/empathy-main-window.c:1160
+#: ../src/empathy-main-window.c:1162
 msgid "Unknown error"
 msgstr "Неизвестна грешка"
 
@@ -1811,73 +1809,3 @@ msgstr "_Спиране на програмата"
 #: ../src/empathy-status-icon.glade.h:4
 msgid "_Show Contact List"
 msgstr "_Показване на списъка с контакти"
-
-#~ msgid "J_apan server:"
-#~ msgstr "_Японски сървър:"
-
-#~ msgid "Invalid handle"
-#~ msgstr "Неправилен модул за обработка"
-
-#~ msgid "No matching connection"
-#~ msgstr "Никоя връзка не съвпада"
-
-#~ msgid "Invalid account"
-#~ msgstr "Грешна регистрация"
-
-#~ msgid "Presence failure"
-#~ msgstr "Неуспешно присъствие"
-
-#~ msgid "Contact does not support voice"
-#~ msgstr "Контактът не поддържа глас"
-
-#~ msgid "Lowmem"
-#~ msgstr "Няма памет"
-
-#~ msgid "Channel request generic error"
-#~ msgstr "Обща грешка след заявката за канал"
-
-#~ msgid "Channel banned"
-#~ msgstr "Каналът е забранен"
-
-#~ msgid "Channel full"
-#~ msgstr "Каналът е пълен"
-
-#~ msgid "Channel invite only"
-#~ msgstr "Каналът е с покана"
-
-#~ msgid "Unknown error code"
-#~ msgstr "Неизвестен код за грешка"
-
-#~ msgid ""
-#~ "To add a new account, you can click on the 'Add' button and a new entry "
-#~ "will be created for you to start configuring."
-#~ msgstr ""
-#~ "За да добавите нова регистрация, натиснете бутона „Добавяне“. Ще се появи "
-#~ "нов запис, който можете да настроите."
-
-#~ msgid ""
-#~ "\n"
-#~ "\n"
-#~ "If you do not want to add an account, simply click on the account you "
-#~ "want to configure in the list on the left."
-#~ msgstr ""
-#~ "\n"
-#~ "\n"
-#~ "Ако не искате да добавяте нова регистрация, в списъка отляво натиснете "
-#~ "върху тази, която искате да настроите."
-
-#~ msgid "<b>No Accounts Configured</b>"
-#~ msgstr "<b>Няма настроени регистрации</b>"
-
-#~ msgid ""
-#~ "To add a new account, you can click on the 'Add' button and a new entry "
-#~ "will be created for you to started configuring.\n"
-#~ "\n"
-#~ "If you do not want to add an account, simply click on the account you "
-#~ "want to configure in the list on the left."
-#~ msgstr ""
-#~ "За да добавите нова регистрация, натиснете бутона „Добавяне“. Ще се появи "
-#~ "нов запис, който можете да настроите.\n"
-#~ "\n"
-#~ "Ако не искате да добавяте нова регистрация, в списъка отляво натиснете "
-#~ "върху тази, която искате да настроите."
