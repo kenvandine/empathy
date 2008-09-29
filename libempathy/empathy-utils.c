@@ -97,7 +97,7 @@ regex_init (void)
 			break;
 		case EMPATHY_REGEX_EMAIL:
 			expression =
-				"(mailto:)?[a-z0-9][a-z0-9.-]*@[a-z0-9]"
+				"(mailto:)?[a-z0-9][a-z0-9._-]*@[a-z0-9]"
 				"[a-z0-9-]*(\\.[a-z0-9][a-z0-9-]*)+";
 			break;
 		case EMPATHY_REGEX_OTHER:
