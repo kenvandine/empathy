@@ -252,7 +252,7 @@ megaphone_applet_update_contact (MegaphoneApplet *applet)
 		g_free (tip);
 	} else {
 		gtk_widget_set_tooltip_markup (GTK_WIDGET (applet),
-					       "Please configure a contact.");
+					       _("Please configure a contact."));
 	}
 
 }
@@ -345,7 +345,7 @@ megaphone_applet_show_preferences (MegaphoneApplet *applet)
 	EmpathyContactListStore *contact_store;
 	EmpathyContactManager   *contact_manager;
 
-	dialog = gtk_dialog_new_with_buttons ("Select contact...",
+	dialog = gtk_dialog_new_with_buttons (_("Select contact..."),
 					      NULL, 0,
 					      GTK_STOCK_CANCEL,
 					      GTK_RESPONSE_REJECT,
