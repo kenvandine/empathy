@@ -9,12 +9,12 @@ msgid ""
 msgstr ""
 "Project-Id-Version: gl\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-08-30 18:00+0200\n"
-"PO-Revision-Date: 2008-08-30 18:01+0200\n"
+"POT-Creation-Date: 2008-10-03 22:24+0200\n"
+"PO-Revision-Date: 2008-10-03 22:24+0200\n"
 "Last-Translator: Ignacio Casal Quinteiro <nacho.resa@gmail.com>\n"
 "Language-Team: Galego <proxecto@trasno.net>\n"
 "MIME-Version: 1.0\n"
-"Content-Type:  text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.11.4\n"
 
@@ -682,7 +682,7 @@ msgid "Select"
 msgstr "Seleccionar"
 
 #: ../libempathy-gtk/empathy-contact-widget.c:884
-#: ../src/empathy-main-window.c:853
+#: ../src/empathy-main-window.c:855
 msgid "Group"
 msgstr "Grupo"
 
@@ -786,7 +786,7 @@ msgstr "SSL"
 msgid "Account"
 msgstr "Conta"
 
-#: ../libempathy-gtk/empathy-log-window.c:504 ../src/empathy-chat-window.c:279
+#: ../libempathy-gtk/empathy-log-window.c:504 ../src/empathy-chat-window.c:280
 msgid "Conversation"
 msgstr "Conversa"
 
@@ -1096,6 +1096,14 @@ msgstr "_Información"
 msgid "_Preferences"
 msgstr "_Preferencias"
 
+#: ../megaphone/src/megaphone-applet.c:255
+msgid "Please configure a contact."
+msgstr "Configure un contacto."
+
+#: ../megaphone/src/megaphone-applet.c:348
+msgid "Select contact..."
+msgstr "Seleccionar contacto..."
+
 #: ../nothere/data/GNOME_NotHere_Applet.server.in.in.h:1
 msgid "Presence"
 msgstr "Presencia"
@@ -1358,16 +1366,16 @@ msgstr "Colgar"
 msgid "Send Video"
 msgstr "Envía vídeo"
 
-#: ../src/empathy-chat-window.c:322
+#: ../src/empathy-chat-window.c:326
 #, c-format
 msgid "Conversations (%d)"
 msgstr "Conversas (%d)"
 
-#: ../src/empathy-chat-window.c:400
+#: ../src/empathy-chat-window.c:418
 msgid "Topic:"
 msgstr "Tema:"
 
-#: ../src/empathy-chat-window.c:403
+#: ../src/empathy-chat-window.c:421
 msgid "Typing a message."
 msgstr "Escribindo unha mensaxe."
 
@@ -1538,67 +1546,67 @@ msgstr ""
 msgid "Show and edit accounts"
 msgstr "Mostrar e editar contas"
 
-#: ../src/empathy-main-window.c:836
+#: ../src/empathy-main-window.c:838
 msgid "Contact"
 msgstr "Contacto"
 
-#: ../src/empathy-main-window.c:1038
+#: ../src/empathy-main-window.c:1040
 msgid "_Edit account"
 msgstr "_Editar conta"
 
-#: ../src/empathy-main-window.c:1121
+#: ../src/empathy-main-window.c:1123
 msgid "No error specified"
 msgstr "Ningún erro especificado"
 
-#: ../src/empathy-main-window.c:1124
+#: ../src/empathy-main-window.c:1126
 msgid "Network error"
 msgstr "Erro da rede"
 
-#: ../src/empathy-main-window.c:1127
+#: ../src/empathy-main-window.c:1129
 msgid "Authentication failed"
 msgstr "Fallou a autenticación"
 
-#: ../src/empathy-main-window.c:1130
+#: ../src/empathy-main-window.c:1132
 msgid "Encryption error"
 msgstr "Erro de cifrado"
 
-#: ../src/empathy-main-window.c:1133
+#: ../src/empathy-main-window.c:1135
 msgid "Name in use"
 msgstr "Nome en uso"
 
-#: ../src/empathy-main-window.c:1136
+#: ../src/empathy-main-window.c:1138
 msgid "Certificate not provided"
 msgstr "Non se proporcionou ningún certificado"
 
-#: ../src/empathy-main-window.c:1139
+#: ../src/empathy-main-window.c:1141
 msgid "Certificate untrusted"
 msgstr "Certificado non fiable"
 
-#: ../src/empathy-main-window.c:1142
+#: ../src/empathy-main-window.c:1144
 msgid "Certificate expired"
 msgstr "Certificado caducado"
 
-#: ../src/empathy-main-window.c:1145
+#: ../src/empathy-main-window.c:1147
 msgid "Certificate not activated"
 msgstr "Certificado non activado"
 
-#: ../src/empathy-main-window.c:1148
+#: ../src/empathy-main-window.c:1150
 msgid "Certificate hostname mismatch"
 msgstr "O nome do host do certificado non coincide"
 
-#: ../src/empathy-main-window.c:1151
+#: ../src/empathy-main-window.c:1153
 msgid "Certificate fingerprint mismatch"
 msgstr "A pegada do certificado non coincide"
 
-#: ../src/empathy-main-window.c:1154
+#: ../src/empathy-main-window.c:1156
 msgid "Certificate self-signed"
 msgstr "O certificado está asinado por si mesmo"
 
-#: ../src/empathy-main-window.c:1157
+#: ../src/empathy-main-window.c:1159
 msgid "Certificate error"
 msgstr "Erro de certificado"
 
-#: ../src/empathy-main-window.c:1160
+#: ../src/empathy-main-window.c:1162
 msgid "Unknown error"
 msgstr "Erro descoñecido"
 
