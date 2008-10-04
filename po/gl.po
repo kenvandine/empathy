@@ -293,7 +293,7 @@ msgstr "%s:"
 #: ../libempathy-gtk/empathy-account-widget-sip.glade.h:1
 #: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:1
 msgid "<b>Advanced</b>"
-msgstr "<b>Avanzado</b> asdfas "
+msgstr "<b>Avanzado</b>"
 
 #: ../libempathy-gtk/empathy-account-widget-aim.glade.h:2
 #: ../libempathy-gtk/empathy-account-widget-groupwise.glade.h:2
