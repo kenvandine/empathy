@@ -193,7 +193,7 @@ empathy_theme_update_view (EmpathyTheme    *theme,
 		g_error ("Theme must override update_view");
 	}
 
-	return EMPATHY_THEME_GET_CLASS(theme)->update_view (theme, view);
+	EMPATHY_THEME_GET_CLASS(theme)->update_view (theme, view);
 }
 
 void
