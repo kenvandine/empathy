@@ -5,10 +5,10 @@
 # Gabor Kelemen <kelemeng@gnome.hu>, 2005, 2006, 2007, 2008.
 msgid ""
 msgstr ""
-"Project-Id-Version: gossip.HEAD\n"
+"Project-Id-Version: empathy HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-09 11:33+0000\n"
-"PO-Revision-Date: 2008-09-13 08:22+0200\n"
+"POT-Creation-Date: 2008-10-03 17:51+0000\n"
+"PO-Revision-Date: 2008-10-06 02:36+0200\n"
 "Last-Translator: Gabor Kelemen <kelemeng@gnome.hu>\n"
 "Language-Team: Hungarian <gnome@fsf.hu>\n"
 "MIME-Version: 1.0\n"
@@ -659,7 +659,7 @@ msgid "Select"
 msgstr "Kijelölés"
 
 #: ../libempathy-gtk/empathy-contact-widget.c:884
-#: ../src/empathy-main-window.c:853
+#: ../src/empathy-main-window.c:855
 msgid "Group"
 msgstr "Csoport"
 
@@ -727,7 +727,9 @@ msgstr "OS:"
 msgid ""
 "Select the groups you want this contact to appear in.  Note that you can "
 "select more than one group or no groups."
-msgstr "Válassza ki azokat a csoportokat, amelyekben a partner megjelenjen, kiválaszthat nulla vagy több csoportot is."
+msgstr ""
+"Válassza ki azokat a csoportokat, amelyekben a partner megjelenjen, "
+"kiválaszthat nulla vagy több csoportot is."
 
 #: ../libempathy-gtk/empathy-contact-widget.glade.h:17
 msgid "Version:"
@@ -1066,6 +1068,14 @@ msgstr "_Információk"
 #: ../src/empathy-main-window.glade.h:15
 msgid "_Preferences"
 msgstr "_Beállítások"
+
+#: ../megaphone/src/megaphone-applet.c:255
+msgid "Please configure a contact."
+msgstr "Állítson be egy partnert."
+
+#: ../megaphone/src/megaphone-applet.c:348
+msgid "Select contact..."
+msgstr "Válasszon partnert…"
 
 #: ../nothere/data/GNOME_NotHere_Applet.server.in.in.h:1
 msgid "Presence"
@@ -1506,67 +1516,67 @@ msgstr ""
 msgid "Show and edit accounts"
 msgstr "Fiókok megjelenítése és szerkesztése"
 
-#: ../src/empathy-main-window.c:836
+#: ../src/empathy-main-window.c:838
 msgid "Contact"
 msgstr "Partner"
 
-#: ../src/empathy-main-window.c:1038
+#: ../src/empathy-main-window.c:1040
 msgid "_Edit account"
 msgstr "_Fiók szerkesztése"
 
-#: ../src/empathy-main-window.c:1121
+#: ../src/empathy-main-window.c:1123
 msgid "No error specified"
 msgstr "Nincs megadva hiba"
 
-#: ../src/empathy-main-window.c:1124
+#: ../src/empathy-main-window.c:1126
 msgid "Network error"
 msgstr "Hálózati hiba"
 
-#: ../src/empathy-main-window.c:1127
+#: ../src/empathy-main-window.c:1129
 msgid "Authentication failed"
 msgstr "A hitelesítés meghiúsult"
 
-#: ../src/empathy-main-window.c:1130
+#: ../src/empathy-main-window.c:1132
 msgid "Encryption error"
 msgstr "Titkosítási hiba"
 
-#: ../src/empathy-main-window.c:1133
+#: ../src/empathy-main-window.c:1135
 msgid "Name in use"
 msgstr "A név használatban"
 
-#: ../src/empathy-main-window.c:1136
+#: ../src/empathy-main-window.c:1138
 msgid "Certificate not provided"
 msgstr "Nincs megadva tanúsítvány"
 
-#: ../src/empathy-main-window.c:1139
+#: ../src/empathy-main-window.c:1141
 msgid "Certificate untrusted"
 msgstr "A tanúsítvány nem megbízható"
 
-#: ../src/empathy-main-window.c:1142
+#: ../src/empathy-main-window.c:1144
 msgid "Certificate expired"
 msgstr "A tanúsítvány lejárt"
 
-#: ../src/empathy-main-window.c:1145
+#: ../src/empathy-main-window.c:1147
 msgid "Certificate not activated"
 msgstr "A tanúsítvány nincs aktiválva"
 
-#: ../src/empathy-main-window.c:1148
+#: ../src/empathy-main-window.c:1150
 msgid "Certificate hostname mismatch"
 msgstr "A tanúsítvány gépneve eltér"
 
-#: ../src/empathy-main-window.c:1151
+#: ../src/empathy-main-window.c:1153
 msgid "Certificate fingerprint mismatch"
 msgstr "A tanúsítvány ujjlenyomata eltér"
 
-#: ../src/empathy-main-window.c:1154
+#: ../src/empathy-main-window.c:1156
 msgid "Certificate self-signed"
 msgstr "A tanúsítvány saját aláírású"
 
-#: ../src/empathy-main-window.c:1157
+#: ../src/empathy-main-window.c:1159
 msgid "Certificate error"
 msgstr "Tanúsítványhiba"
 
-#: ../src/empathy-main-window.c:1160
+#: ../src/empathy-main-window.c:1162
 msgid "Unknown error"
 msgstr "Ismeretlen hiba"
 
