@@ -69,10 +69,7 @@ AC_CHECK_PROGS([XSLTPROC], [xsltproc])
 if test -z "$XSLTPROC"; then
   AC_MSG_ERROR([xsltproc (from libxslt) is required])
 fi
-AC_CHECK_PROGS([PYTHON], [python python2.3 python2.4 python2.5])
-if test -z "$PYTHON"; then
-  AC_MSG_ERROR([Python is required])
-fi
+AM_PATH_PYTHON([2.3])
 
 EMPATHY_ARG_VALGRIND
 
@@ -251,25 +248,20 @@ AC_ARG_ENABLE(python,
                              enable_python=auto)
 
 if test "x$enable_python" != "xno"; then
-   AM_PATH_PYTHON
-   if test -z "$PYTHON" ; then
-      have_python="no"
-   else
-      PKG_CHECK_MODULES(PYTHON_BINDING,
-      [
-         pygtk-2.0,
-         glib-2.0 >= $GLIB_REQUIRED
-         gobject-2.0
-         gconf-2.0 >= $GCONF_REQUIRED
-         libxml-2.0
-         libmissioncontrol >= $MISSION_CONTROL_REQUIRED
-         gtk+-2.0 >= $GTK_REQUIRED
-         libglade-2.0 >= $LIBGLADE_REQUIRED
-      ], have_python="yes", have_python="no")
-      if test "x$have_python" = "xyes" ; then
-         AM_CHECK_PYTHON_HEADERS(,have_python="no")
-         AC_CHECK_PROGS([PYGOBJECTCODEGEN], [pygobject-codegen-2.0 pygtk-codegen-2.0])
-      fi
+   PKG_CHECK_MODULES(PYTHON_BINDING,
+   [
+      pygtk-2.0,
+      glib-2.0 >= $GLIB_REQUIRED
+      gobject-2.0
+      gconf-2.0 >= $GCONF_REQUIRED
+      libxml-2.0
+      libmissioncontrol >= $MISSION_CONTROL_REQUIRED
+      gtk+-2.0 >= $GTK_REQUIRED
+      libglade-2.0 >= $LIBGLADE_REQUIRED
+   ], have_python="yes", have_python="no")
+   if test "x$have_python" = "xyes" ; then
+      AM_CHECK_PYTHON_HEADERS(,have_python="no")
+      AC_CHECK_PROGS([PYGOBJECTCODEGEN], [pygobject-codegen-2.0 pygtk-codegen-2.0])
    fi
 else
    have_python=no
