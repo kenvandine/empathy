@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: empathy docs\n"
-"POT-Creation-Date: 2008-07-21 03:55+0000\n"
-"PO-Revision-Date: 2008-07-21 22:39+0100\n"
+"POT-Creation-Date: 2008-07-22 04:52+0000\n"
+"PO-Revision-Date: 2008-10-09 21:06+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "MIME-Version: 1.0\n"
@@ -111,7 +111,7 @@ msgstr "Återkoppling"
 
 #: C/empathy.xml:94(para)
 msgid "To report a bug or make a suggestion regarding the <application>Empathy</application> application or this manual, follow the directions in the <ulink url=\"ghelp:gnome-feedback\" type=\"help\">GNOME Feedback Page</ulink>."
-msgstr ""
+msgstr "För att rapportera ett fel eller föreslå någonting angående programmet <application>Empathy</application> eller den här handboken, följ anvisningarna på <ulink url=\"ghelp:gnome-feedback\" type=\"help\">GNOME:s återkopplingssida</ulink>."
 
 #: C/empathy.xml:102(para)
 msgid "Empathy is an application for instant messaging."
@@ -128,7 +128,7 @@ msgstr "empathy"
 
 #: C/empathy.xml:114(secondary)
 msgid "istant messaging"
-msgstr ""
+msgstr "snabbmeddelanden"
 
 #: C/empathy.xml:118(title)
 msgid "Introduction"
@@ -136,7 +136,7 @@ msgstr "Introduktion"
 
 #: C/empathy.xml:119(para)
 msgid "<application>Empathy</application> is a multi-protocol instant messaging program for the GNOME Desktop. With <application>Empathy</application> you can keep in touch with all of your friends through lots of supported instant messaging services."
-msgstr ""
+msgstr "<application>Empathy</application> är en snabbmeddelandeklient för flera protokoll för GNOME-skrivbordet. Med <application>Empathy</application> kan du hålla kontakten med alla dina vänner genom många olika snabbmeddelandetjänster."
 
 #: C/empathy.xml:129(acronym)
 msgid "AIM"
@@ -177,7 +177,7 @@ msgstr "Yahoo"
 
 #: C/empathy.xml:124(para)
 msgid "<application>Empathy</application> supports the following services: <placeholder-1/>"
-msgstr ""
+msgstr "<application>Empathy</application> har stöd för följande tjänster: <placeholder-1/>"
 
 #: C/empathy.xml:177(title)
 msgid "Getting Started"
@@ -189,7 +189,7 @@ msgstr "Starta Empathy"
 
 #: C/empathy.xml:181(para)
 msgid "You can start <application>Empathy</application> in the following ways:"
-msgstr ""
+msgstr "Du kan starta <application>Empathy</application> på följande sätt:"
 
 #: C/empathy.xml:185(term)
 msgid "<guimenu>Applications</guimenu> menu"
@@ -197,7 +197,7 @@ msgstr "<guimenu>Program</guimenu>-menyn"
 
 #: C/empathy.xml:187(para)
 msgid "Choose <menuchoice><guisubmenu>Internet</guisubmenu><guimenuitem>Empathy Instant Messenger</guimenuitem></menuchoice>."
-msgstr ""
+msgstr "Välj <menuchoice><guisubmenu>Internet</guisubmenu><guimenuitem>Snabbmeddelandeklienten Empathy</guimenuitem></menuchoice>."
 
 #: C/empathy.xml:196(term)
 msgid "Command line"
@@ -205,7 +205,7 @@ msgstr "Kommandorad"
 
 #: C/empathy.xml:198(para)
 msgid "Type <command>empathy</command> and then press <keycap>Enter</keycap>."
-msgstr ""
+msgstr "Ange <command>empathy</command> och tryck sedan på <keycap>Enter</keycap>."
 
 #: C/empathy.xml:207(title)
 msgid "When You Start Empathy"
@@ -213,19 +213,19 @@ msgstr "När du startar Empathy"
 
 #: C/empathy.xml:212(title)
 msgid "<application>Empathy</application> Main Window"
-msgstr ""
+msgstr "Huvudfönstret i <application>Empathy</application>"
 
 #: C/empathy.xml:219(phrase)
 msgid "Shows <placeholder-1/> main window. Contains the titlebar, the menubar, contact list, status icon and status arrow button list."
-msgstr ""
+msgstr "Visar <placeholder-1/> huvudfönstret. Innehåller titellisten, menyraden, kontaktlista, statusikon och knapplista för statuspil."
 
 #: C/empathy.xml:208(para)
 msgid "When you start <application>Empathy</application> the following window is shown. <placeholder-1/>"
-msgstr ""
+msgstr "När du startar <application>Empathy</application> visas följande fönster. <placeholder-1/>"
 
 #: C/empathy.xml:234(title)
 msgid "<application>Empathy</application> Main Components"
-msgstr ""
+msgstr "Huvudkomponenter i <application>Empathy</application>"
 
 #: C/empathy.xml:241(para)
 msgid "Component"
@@ -241,15 +241,15 @@ msgstr "Menyrad"
 
 #: C/empathy.xml:254(para)
 msgid "Contains menus used to perform actions in <application>Empathy</application>."
-msgstr ""
+msgstr "Innehåller menyer som används för att genomföra åtgärder i <application>Empathy</application>."
 
 #: C/empathy.xml:261(para)
 msgid "Status Drop-Down List"
-msgstr ""
+msgstr "Rullgardinslista för status"
 
 #: C/empathy.xml:264(para)
 msgid "Allows to update the user's status."
-msgstr ""
+msgstr "Tillåter uppdatering av användarens status."
 
 #: C/empathy.xml:271(para)
 msgid "Account Button"
@@ -257,7 +257,7 @@ msgstr "Kontoknapp"
 
 #: C/empathy.xml:274(para)
 msgid "Opens the <guilabel>Accounts</guilabel> dialog."
-msgstr ""
+msgstr "Öppnar dialogrutan <guilabel>Konton</guilabel>."
 
 #: C/empathy.xml:281(para)
 msgid "Contact List"
@@ -265,31 +265,31 @@ msgstr "Kontaktlista"
 
 #: C/empathy.xml:284(para)
 msgid "Shows all the available contacts and their associated status."
-msgstr ""
+msgstr "Visar alla tillgängliga kontakter och deras status."
 
 #: C/empathy.xml:230(para)
 msgid "<xref linkend=\"empathy-TBL-1\"/> describes the components of <application>Empathy</application>'s main window. <table frame=\"topbot\" id=\"empathy-TBL-1\"><placeholder-1/><tgroup cols=\"2\" colsep=\"0\" rowsep=\"0\"><colspec colname=\"colspec0\" colwidth=\"29.39*\"/><colspec colname=\"colspec1\" colwidth=\"70.61*\"/><placeholder-2/><placeholder-3/></tgroup></table>"
-msgstr ""
+msgstr "<xref linkend=\"empathy-TBL-1\"/> beskriver komponenterna i <application>Empathy</application>s huvudfönster. <table frame=\"topbot\" id=\"empathy-TBL-1\"><placeholder-1/><tgroup cols=\"2\" colsep=\"0\" rowsep=\"0\"><colspec colname=\"colspec0\" colwidth=\"29.39*\"/><colspec colname=\"colspec1\" colwidth=\"70.61*\"/><placeholder-2/><placeholder-3/></tgroup></table>"
 
 #: C/empathy.xml:297(title)
 msgid "When You Start Empathy for the First Time"
-msgstr ""
+msgstr "När du startar Empathy för första gången"
 
 #: C/empathy.xml:303(title)
 msgid "<application>Empathy</application> Accounts Dialog"
-msgstr ""
+msgstr "Kontodialogrutan i <application>Empathy</application>"
 
 #: C/empathy.xml:310(phrase)
 msgid "Shows <placeholder-1/> account creation dialog."
-msgstr ""
+msgstr "Visar <placeholder-1/> kontoskapandedialogen."
 
 #: C/empathy.xml:298(para)
 msgid "When you start <application>Empathy</application> for the first time and you don't have configured any account yet, the following dialog is shown. <placeholder-1/>"
-msgstr ""
+msgstr "När du startar <application>Empathy</application> för första gången och du inte har konfigurerats några konton än så kommer följande dialogruta att visas. <placeholder-1/>"
 
 #: C/empathy.xml:319(para)
 msgid "From here, you can configure and create your accounts. See <xref linkend=\"empathy-accounts\"/> for more information."
-msgstr ""
+msgstr "Här du kan konfigurera och skapa dina konton. Se <xref linkend=\"empathy-accounts\"/> för mer information."
 
 #: C/empathy.xml:328(title)
 msgid "Accounts"
@@ -297,19 +297,19 @@ msgstr "Konton"
 
 #: C/empathy.xml:329(para)
 msgid "To use <application>Empathy</application> you need at least one account of the supported services."
-msgstr ""
+msgstr "Du behöver åtminstone ett konto från någon tjänst som stöds för att använda <application>Empathy</application>."
 
 #: C/empathy.xml:332(para)
 msgid "If you don't already have an account and you don't have your <emphasis>user name</emphasis> and <emphasis>password</emphasis>, you need to register a new account (see <xref linkend=\"empathy-register-account\"/>)."
-msgstr ""
+msgstr "Om du inte redan har ett konto och du inte har ditt <emphasis>användarnamn</emphasis> och <emphasis>lösenord</emphasis> så behöver du registrera ett nytt konto (se <xref linkend=\"empathy-register-account\"/>)."
 
 #: C/empathy.xml:337(para)
 msgid "In order to talk with other users (called <emphasis>contatcs</emphasis>), you need to use the same service they are using. If, for example, one contact is using the <emphasis role=\"strong\">Jabber</emphasis> service, you need to have an account registerd with that service."
-msgstr ""
+msgstr "För att kunna prata med andra användare (kallade <emphasis>kontakter</emphasis>) så behöver du använda samma tjänst som de användare. Om, till exempel, en kontakt använder tjänster <emphasis role=\"strong\">Jabber</emphasis> så behöver du ha ett konto registrerat hos den tjänsten."
 
 #: C/empathy.xml:344(para)
 msgid "<application>Empathy</application> can handle as many accounts on any supported services as you want and you can have them all open at the same time."
-msgstr ""
+msgstr "<application>Empathy</application> kan hantera så många konton på alla tjänster som stöds som du vill och du kan ha alla öppnade samtidigt."
 
 #: C/empathy.xml:350(title)
 msgid "Registering an Account"
@@ -317,67 +317,67 @@ msgstr "Registrera ett konto"
 
 #: C/empathy.xml:351(para)
 msgid "You can freely register an account on any of the following services. Follow the instructions reported on each website on how to register your new account. At the end of the registration process you should have a <emphasis>user name</emphasis> (or an <emphasis>account ID</emphasis>) and a <emphasis>password</emphasis> that you will use to create the account in <application>Empathy</application>."
-msgstr ""
+msgstr "Du kan helt gratis registrera ett konto på någon av följande tjänster. Följ instruktionerna på varje webbplats för information om hur man registrerar ett nytt konto. Vid slutet av registreringsprocessen så kommer du att ha ett <emphasis>användarnamn</emphasis> (eller ett <emphasis>konto-ID</emphasis>) och ett <emphasis>lösenord</emphasis> som du kommer att använda för att skapa kontot i <application>Empathy</application>."
 
 #. Translators: try to find a localized version of the
 #. 	    registration service website
 #: C/empathy.xml:369(para)
 msgid "The <ulink type=\"http\" url=\"http://dashboard.aim.com/aim\">AIM</ulink> service."
-msgstr ""
+msgstr "Tjänsten <ulink type=\"http\" url=\"http://dashboard.aim.com/aim\">AIM</ulink>."
 
 #. Translators: try to find a localized version of the
 #. 	    registration service website
 #: C/empathy.xml:376(para)
 msgid "The <ulink type=\"http\" url=\"http://www.google.com/talk/\">Google Talk</ulink> service."
-msgstr ""
+msgstr "Tjänsten <ulink type=\"http\" url=\"http://www.google.com/talk/\">Google Talk</ulink>."
 
 #. Translators: try to find a localized version of the
 #. 	    registration service website
 #: C/empathy.xml:384(para)
 msgid "The <ulink type=\"http\" url=\"https://www.icq.com/register/\">ICQ</ulink> service."
-msgstr ""
+msgstr "Tjänsten <ulink type=\"http\" url=\"https://www.icq.com/register/\">ICQ</ulink>."
 
 #. Translators: try to find a localized version of the
 #. 	    registration service website
 #: C/empathy.xml:391(para)
 msgid "The <ulink type=\"http\" url=\"https://accountservices.passport.net\">MSN</ulink> service."
-msgstr ""
+msgstr "Tjänsten <ulink type=\"http\" url=\"https://accountservices.passport.net\">MSN</ulink>."
 
 #. Translators: try to find a localized version of the
 #. 	    registration service website
 #: C/empathy.xml:398(para)
 msgid "The <ulink type=\"http\" url=\"https://login.yahoo.com/config/login\">Yahoo</ulink> service."
-msgstr ""
+msgstr "Tjänsten <ulink type=\"http\" url=\"https://login.yahoo.com/config/login\">Yahoo</ulink>."
 
 #: C/empathy.xml:360(para)
 msgid "Click on the name of the service to visit its website: <placeholder-1/>"
-msgstr ""
+msgstr "Klicka på namnet för tjänsten för att besöka dess webbplats: <placeholder-1/>"
 
 #: C/empathy.xml:404(para)
 msgid "For registering a <acronym>SIP</acronym> account, you can use one of the following service:"
-msgstr ""
+msgstr "Du kan använda någon av följande tjänster för att registrera ett <acronym>SIP</acronym>-konto:"
 
 #. Translators: try to find a localized version of the
 #. 	    registration service website
 #: C/empathy.xml:413(para)
 msgid "The <ulink type=\"http\" url=\"http://www.ekiga.net/user/reg/index.php?phplib_Session=c1d85267756241f8190e5fc21b029a62\">Ekiga</ulink> service."
-msgstr ""
+msgstr "Tjänsten <ulink type=\"http\" url=\"http://www.ekiga.net/user/reg/index.php?phplib_Session=c1d85267756241f8190e5fc21b029a62\">Ekiga</ulink>"
 
 #. Translators: try to find a localized version of the
 #. 	    registration service website
 #: C/empathy.xml:420(para)
 msgid "The <ulink type=\"http\" url=\"http://account2.freeworlddialup.com/index.php?section_id=94\"><acronym>FWD</acronym></ulink> (Free World Dialup) service."
-msgstr ""
+msgstr "Tjänsten <ulink type=\"http\" url=\"http://account2.freeworlddialup.com/index.php?section_id=94\"><acronym>FWD</acronym></ulink> (Free World Dialup)."
 
 #. Translators: try to find a localized version of the
 #. 	    registration service website
 #: C/empathy.xml:428(para)
 msgid "The <ulink type=\"http\" url=\"https://signup.sipphone.com/new-users/app?class=NewUser;proc=start\">Sipphone</ulink> service."
-msgstr ""
+msgstr "Tjänsten <ulink type=\"http\" url=\"https://signup.sipphone.com/new-users/app?class=NewUser;proc=start\">Sipphone</ulink>."
 
 #: C/empathy.xml:434(para)
 msgid "You can use one of the following services if you already have a <emphasis role=\"strong\">Jabber</emphasis> account:"
-msgstr ""
+msgstr "Du kan använda en av följande tjänster om du redan har ett <emphasis role=\"strong\">Jabber</emphasis>-konto:"
 
 #: C/empathy.xml:450(title)
 msgid "Creating an Account"
@@ -387,27 +387,27 @@ msgstr "Skapa ett konto"
 #: C/empathy.xml:501(para)
 #: C/empathy.xml:523(para)
 msgid "From the <link linkend=\"empathy-FIG-mainwindow\">main window </link> (<guilabel>Contact List</guilabel>) click on the account button to open the <guilabel>Accounts</guilabel> dialog."
-msgstr ""
+msgstr "Klicka på kontoknappen för att öppna dialogrutan <guilabel>Konton</guilabel> från <link linkend=\"empathy-FIG-mainwindow\">huvudfönstret </link> (<guilabel>Kontaktlista</guilabel>) "
 
 #: C/empathy.xml:463(para)
 msgid "Click on the <guibutton>Add</guibutton> button."
-msgstr ""
+msgstr "Klicka på knappen <guibutton>Lägg till</guibutton>."
 
 #: C/empathy.xml:468(para)
 msgid "From the <guilabel>Type</guilabel> drop-down list choose the service you wish to create an account for, then click on the <guibutton>Create</guibutton> button."
-msgstr ""
+msgstr "Välj den tjänst som du vill skapa ett konto för från rullgardinslistan <guilabel>Typ</guilabel>. Klicka sedan på knappen <guibutton>Skapa</guibutton>."
 
 #: C/empathy.xml:475(para)
 msgid "Fill the required fields with your <emphasis>user name</emphasis> and <emphasis>password</emphasis>."
-msgstr ""
+msgstr "Fyll i de nödvändiga fälten med ditt <emphasis>användarnamn</emphasis> och <emphasis>lösenord</emphasis>."
 
 #: C/empathy.xml:481(para)
 msgid "To enable the new account, select the <guilabel>Enabled</guilabel> check-box next to the name of the account."
-msgstr ""
+msgstr "Välj kryssrutan <guilabel>Aktiverad</guilabel> bredvid namnet för kontot för att aktivera det nya kontot."
 
 #: C/empathy.xml:451(para)
 msgid "To create an account, proceed as follow: <placeholder-1/>"
-msgstr ""
+msgstr "Gör följande för att skapa ett konto: <placeholder-1/>"
 
 #: C/empathy.xml:494(title)
 msgid "Disabling and Removing an Account"
@@ -415,27 +415,27 @@ msgstr "Inaktivera och ta bort ett konto"
 
 #: C/empathy.xml:495(para)
 msgid "To disable an account, proceed as follow:"
-msgstr ""
+msgstr "Gör följande för att inaktivera ett konto:"
 
 #: C/empathy.xml:509(para)
 msgid "Select the account you wish to disable in the box on the left of the dialog and deselect the <guilabel>Enabled</guilabel> check-box."
-msgstr ""
+msgstr "Välj det konto som du vill inaktivera i rutan till vänster i dialogrutan och avmarkera kryssrutan <guilabel>Aktiverad</guilabel>."
 
 #: C/empathy.xml:517(para)
 msgid "To remove an account, proceed as follow:"
-msgstr ""
+msgstr "Gör följande för att ta bort ett konto:"
 
 #: C/empathy.xml:531(para)
 msgid "Select the account you wish to disable in the box on the left of the dialog."
-msgstr ""
+msgstr "Välj det konto som du vill inaktivera i rutan till vänster i dialogrutan."
 
 #: C/empathy.xml:537(para)
 msgid "Click on the <guibutton>Remove</guibutton> button."
-msgstr ""
+msgstr "Klicka på knappen <guibutton>Ta bort</guibutton>."
 
 #: C/empathy.xml:542(para)
 msgid "A dialog will be shown asking for confirmation. Click on the <guibutton>Remove</guibutton> button to remove the account."
-msgstr ""
+msgstr "En dialogruta kommer att visas som frågar efter bekräftelse. Klicka på knappen <guibutton>Ta bort</guibutton> för att ta bort kontot."
 
 #: C/empathy.xml:553(title)
 msgid "Contacts"
@@ -443,7 +443,7 @@ msgstr "Kontakter"
 
 #: C/empathy.xml:554(para)
 msgid "All the contacts are handled within <application>Empathy</application>'s <link linkend=\"empathy-FIG-mainwindow\">main window</link>."
-msgstr ""
+msgstr "Alla kontakter hanteras i <application>Empathy</application>s <link linkend=\"empathy-FIG-mainwindow\">huvudfönster</link>."
 
 #: C/empathy.xml:559(title)
 msgid "Adding a Contact"
@@ -451,29 +451,31 @@ msgstr "Lägg till en kontakt"
 
 #: C/empathy.xml:560(para)
 msgid "To add a new contact, proceed as follow:"
-msgstr ""
+msgstr "Gör följande för att lägga till en ny kontakt:"
 
 #: C/empathy.xml:566(para)
 msgid "From the <link linkend=\"empathy-FIG-mainwindow\">main window</link> choose <menuchoice><guimenu>Chat</guimenu><guimenuitem>Add Contact...</guimenuitem></menuchoice>. The <guilabel>New Contact</guilabel> dialog will be shown."
-msgstr ""
+msgstr "Välj <menuchoice><guimenu>Chatt</guimenu><guimenuitem>Lägg till kontakt...</guimenuitem></menuchoice> från <link linkend=\"empathy-FIG-mainwindow\">huvudfönstret</link>. Dialogrutan <guilabel>Ny kontakt</guilabel> kommer att visas."
 
 #: C/empathy.xml:576(para)
 msgid "From the <guilabel>Account</guilabel> drop-down list, choose the service used by the contact you are adding."
-msgstr ""
+msgstr "Välj den tjänst som används av kontakten som du lägger till från rullgardinslistan <guilabel>Konto</guilabel>."
 
 #: C/empathy.xml:582(para)
 msgid ""
 "In the <guilabel>Identifier</guilabel> text-box type the <emphasis>address</emphasis> of the contact in the form of <userinput><replaceable>user name</replaceable>@<replaceable>service\n"
 "\t      domain</replaceable></userinput>."
 msgstr ""
+"Ange <emphasis>adressen</emphasis> för kontakten i formatet <userinput><replaceable>användarnamn</replaceable>@<replaceable>tjänst\n"
+"\t      domän</replaceable></userinput> i textrutan <guilabel>Identifierare</guilabel> ."
 
 #: C/empathy.xml:591(para)
 msgid "In the <guilabel>Alias</guilabel> text-box type the name you want to give at the the new contact."
-msgstr ""
+msgstr "Ange namnet som du vill ge den nya kontakten i textrutan <guilabel>Alias</guilabel>."
 
 #: C/empathy.xml:597(para)
 msgid "Click on <guibutton>Add</guibutton> to add the new contact."
-msgstr ""
+msgstr "Klicka på <guibutton>Lägg till</guibutton> för att lägga till den nya kontakten."
 
 #: C/empathy.xml:605(title)
 msgid "Removing a Contact"
@@ -481,11 +483,11 @@ msgstr "Ta bort en kontakt"
 
 #: C/empathy.xml:606(para)
 msgid "To remove a contact, proceed as follow:"
-msgstr ""
+msgstr "Gör följande för att ta bort en kontakt:"
 
 #: C/empathy.xml:612(para)
 msgid "From the <link linkend=\"empathy-FIG-mainwindow\">main window</link>, select the contact you would like to remove and right-click on it."
-msgstr ""
+msgstr "Markera den kontakt som du vill ta bort och högerklicka på den från <link linkend=\"empathy-FIG-mainwindow\">huvudfönstret</link>."
 
 #: C/empathy.xml:619(para)
 msgid "From the popup menu, choose <guilabel>Remove</guilabel> to remove the contact."
