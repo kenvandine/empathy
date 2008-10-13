@@ -270,9 +270,9 @@ reset_save_timeout (EmpathyChatroomManager *self)
 }
 
 static void
-chatroom_favorite_changed_cb (EmpathyChatroom *chatroom,
-                              GParamSpec *spec,
-                              EmpathyChatroomManager *self)
+chatroom_changed_cb (EmpathyChatroom *chatroom,
+                     GParamSpec *spec,
+                     EmpathyChatroomManager *self)
 {
   reset_save_timeout (self);
 }
@@ -285,8 +285,17 @@ add_chatroom (EmpathyChatroomManager *self,
 
   priv->chatrooms = g_list_prepend (priv->chatrooms, g_object_ref (chatroom));
 
+  /* FIXME: disconnect when removed */
   g_signal_connect (chatroom, "notify::favorite",
-      G_CALLBACK (chatroom_favorite_changed_cb), self);
+      G_CALLBACK (chatroom_changed_cb), self);
+  g_signal_connect (chatroom, "notify::name",
+      G_CALLBACK (chatroom_changed_cb), self);
+  g_signal_connect (chatroom, "notify::auto-connect",
+      G_CALLBACK (chatroom_changed_cb), self);
+  g_signal_connect (chatroom, "notify::room",
+      G_CALLBACK (chatroom_changed_cb), self);
+  g_signal_connect (chatroom, "notify::account",
+      G_CALLBACK (chatroom_changed_cb), self);
 }
 
 gboolean

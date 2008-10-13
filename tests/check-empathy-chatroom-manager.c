@@ -294,6 +294,79 @@ START_TEST (test_empathy_chatroom_manager_change_favorite)
 }
 END_TEST
 
+START_TEST (test_empathy_chatroom_manager_change_chatroom)
+{
+  EmpathyChatroomManager *mgr;
+  gchar *cmd;
+  gchar *file;
+  McAccount *account;
+  struct chatroom_t chatrooms[] = {
+        { "name1", "room1", TRUE, TRUE },
+        { "name2", "room2", FALSE, TRUE }};
+  EmpathyChatroom *chatroom;
+
+  account = create_test_account ();
+
+  /*
+  copy_xml_file (CHATROOM_SAMPLE, CHATROOM_FILE);
+
+  file = get_user_xml_file (CHATROOM_FILE);
+  */
+  copy_xml_file (CHATROOM_SAMPLE, "foo.xml");
+
+  file = get_user_xml_file ("foo.xml");
+  /* change the chatrooms XML file to use the account we just created */
+  cmd = g_strdup_printf ("sed -i 's/CHANGE_ME/%s/' %s",
+      mc_account_get_unique_name (account), file);
+  system (cmd);
+  g_free (cmd);
+
+  mgr = empathy_chatroom_manager_new (file);
+
+  check_chatrooms_list (mgr, account, chatrooms, 2);
+
+  /* change room2 name */
+  chatroom = empathy_chatroom_manager_find (mgr, account, "room2");
+  fail_if (chatroom == NULL);
+  empathy_chatroom_set_name (chatroom, "new_name");
+
+  /* reload chatrooms file */
+  g_object_unref (mgr);
+  mgr = empathy_chatroom_manager_new (file);
+
+  chatrooms[1].name = "new_name";
+  check_chatrooms_list (mgr, account, chatrooms, 2);
+
+  /* change room2 auto-connect status */
+  chatroom = empathy_chatroom_manager_find (mgr, account, "room2");
+  fail_if (chatroom == NULL);
+  empathy_chatroom_set_auto_connect (chatroom, TRUE);
+
+  /* reload chatrooms file */
+  g_object_unref (mgr);
+  mgr = empathy_chatroom_manager_new (file);
+
+  chatrooms[1].auto_connect = TRUE;
+  check_chatrooms_list (mgr, account, chatrooms, 2);
+
+  /* change room2 room */
+  chatroom = empathy_chatroom_manager_find (mgr, account, "room2");
+  fail_if (chatroom == NULL);
+  empathy_chatroom_set_room (chatroom, "new_room");
+
+  /* reload chatrooms file */
+  g_object_unref (mgr);
+  mgr = empathy_chatroom_manager_new (file);
+
+  chatrooms[1].room = "new_room";
+  check_chatrooms_list (mgr, account, chatrooms, 2);
+
+  g_object_unref (mgr);
+  g_free (file);
+  destroy_test_account (account);
+}
+END_TEST
+
 TCase *
 make_empathy_chatroom_manager_tcase (void)
 {
@@ -302,5 +375,6 @@ make_empathy_chatroom_manager_tcase (void)
     tcase_add_test (tc, test_empathy_chatroom_manager_add);
     tcase_add_test (tc, test_empathy_chatroom_manager_remove);
     tcase_add_test (tc, test_empathy_chatroom_manager_change_favorite);
+    tcase_add_test (tc, test_empathy_chatroom_manager_change_chatroom);
     return tc;
 }
