@@ -752,7 +752,7 @@ empathy_dispatcher_init (EmpathyDispatcher *dispatcher)
 	}
 	g_list_free (accounts);
 
-  priv->chatroom_mgr = empathy_chatroom_manager_new ();
+  priv->chatroom_mgr = empathy_chatroom_manager_new (NULL);
 }
 
 EmpathyDispatcher *

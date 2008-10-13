@@ -144,7 +144,7 @@ empathy_chatrooms_window_show (GtkWindow *parent)
 	g_object_add_weak_pointer (G_OBJECT (window->window), (gpointer) &window);
 
 	/* Get the session and chat room manager */
-	window->manager = empathy_chatroom_manager_new ();
+	window->manager = empathy_chatroom_manager_new (NULL);
 
 	g_signal_connect (window->manager, "chatroom-added",
 			  G_CALLBACK (chatrooms_window_chatroom_added_cb),

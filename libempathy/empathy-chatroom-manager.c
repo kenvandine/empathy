@@ -65,7 +65,7 @@ static guint signals[LAST_SIGNAL];
 /* properties */
 enum
 {
-  PROP_FILE =1,
+  PROP_FILE = 1,
   LAST_PROPERTY
 };
 
@@ -215,12 +215,14 @@ chatroom_manager_finalize (GObject *object)
 }
 
 EmpathyChatroomManager *
-empathy_chatroom_manager_new (void)
+empathy_chatroom_manager_new (const gchar *file)
 {
 	static EmpathyChatroomManager *manager = NULL;
 
 	if (!manager) {
-		manager = g_object_new (EMPATHY_TYPE_CHATROOM_MANAGER, NULL);
+		manager = g_object_new (EMPATHY_TYPE_CHATROOM_MANAGER,
+        "file", file,
+        NULL);
 	
 		g_object_add_weak_pointer (G_OBJECT (manager), (gpointer) &manager);
 	} else {
