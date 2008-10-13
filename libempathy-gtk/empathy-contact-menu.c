@@ -330,7 +330,7 @@ empathy_contact_invite_menu_item_new (EmpathyContact *contact)
 
 	g_return_val_if_fail (EMPATHY_IS_CONTACT (contact), NULL);
 
-	item = gtk_image_menu_item_new_with_mnemonic (_("_Invite to..."));
+	item = gtk_image_menu_item_new_with_mnemonic (_("_Invite to chatroom"));
 	image = gtk_image_new_from_icon_name (EMPATHY_IMAGE_GROUP_MESSAGE,
 					      GTK_ICON_SIZE_MENU);
 	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
