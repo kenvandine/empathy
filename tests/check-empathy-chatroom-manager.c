@@ -174,6 +174,61 @@ START_TEST (test_empathy_chatroom_manager_add)
 }
 END_TEST
 
+START_TEST (test_empathy_chatroom_manager_remove)
+{
+  EmpathyChatroomManager *mgr;
+  gchar *cmd;
+  gchar *file;
+  McAccount *account;
+  struct chatroom_t chatrooms[] = {
+        { "name2", "room2", FALSE, TRUE }};
+  EmpathyChatroom *chatroom;
+
+  account = create_test_account ();
+
+  copy_xml_file (CHATROOM_SAMPLE, CHATROOM_FILE);
+
+  file = get_user_xml_file (CHATROOM_FILE);
+  /* change the chatrooms XML file to use the account we just created */
+  cmd = g_strdup_printf ("sed -i 's/CHANGE_ME/%s/' %s",
+      mc_account_get_unique_name (account), file);
+  system (cmd);
+  g_free (cmd);
+
+  mgr = empathy_chatroom_manager_new (file);
+
+  /* remove room1 */
+  chatroom = empathy_chatroom_manager_find (mgr, account, "room1");
+  fail_if (chatroom == NULL);
+  empathy_chatroom_manager_remove (mgr, chatroom);
+
+  check_chatrooms_list (mgr, account, chatrooms, 1);
+
+  /* reload chatrooms file */
+  g_object_unref (mgr);
+  mgr = empathy_chatroom_manager_new (file);
+
+  check_chatrooms_list (mgr, account, chatrooms, 1);
+
+  /* remove room1 */
+  chatroom = empathy_chatroom_manager_find (mgr, account, "room2");
+  fail_if (chatroom == NULL);
+
+  empathy_chatroom_manager_remove (mgr, chatroom);
+
+  check_chatrooms_list (mgr, account, chatrooms, 0);
+
+  /* reload chatrooms file */
+  g_object_unref (mgr);
+  mgr = empathy_chatroom_manager_new (file);
+
+  check_chatrooms_list (mgr, account, chatrooms, 0);
+
+  g_object_unref (mgr);
+  g_free (file);
+  destroy_test_account (account);
+}
+END_TEST
 
 TCase *
 make_empathy_chatroom_manager_tcase (void)
@@ -181,5 +236,6 @@ make_empathy_chatroom_manager_tcase (void)
     TCase *tc = tcase_create ("empathy-chatroom-manager");
     tcase_add_test (tc, test_empathy_chatroom_manager_new);
     tcase_add_test (tc, test_empathy_chatroom_manager_add);
+    tcase_add_test (tc, test_empathy_chatroom_manager_remove);
     return tc;
 }
