@@ -20,11 +20,9 @@ START_TEST (test_empathy_chatroom_manager_new)
   EmpathyChatroomManager *mgr;
   gchar *cmd;
   gchar *file;
-  McProfile *profile;
   McAccount *account;
 
-  profile = mc_profile_lookup ("test");
-  account = mc_account_create (profile);
+  account = create_test_account ();
 
   copy_xml_file (CHATROOM_SAMPLE, CHATROOM_FILE);
 
@@ -41,7 +39,6 @@ START_TEST (test_empathy_chatroom_manager_new)
 
   g_free (file);
   g_object_unref (mgr);
-  g_object_unref (profile);
   remove_account_from_gconf (account);
   mc_account_delete (account);
   g_object_unref (account);

@@ -63,6 +63,20 @@ copy_xml_file (const gchar *orig,
   g_free (buffer);
 }
 
+McAccount *
+create_test_account (void)
+{
+  McProfile *profile;
+  McAccount *account;
+
+  profile = mc_profile_lookup ("test");
+  account = mc_account_create (profile);
+
+  g_object_unref (profile);
+
+  return account;
+}
+
 void
 remove_account_from_gconf (McAccount *account)
 {

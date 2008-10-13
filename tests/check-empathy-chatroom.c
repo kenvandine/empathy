@@ -5,18 +5,17 @@
 #include <check.h>
 #include "check-helpers.h"
 #include "check-libempathy.h"
+#include "check-empathy-helpers.h"
 
 #include <libempathy/empathy-chatroom.h>
 
 static EmpathyChatroom *
 create_chatroom (void)
 {
-  McProfile *profile;
   McAccount *account;
   EmpathyChatroom *chatroom;
 
-  profile = mc_profile_lookup ("test");
-  account = mc_account_create (profile);
+  account = create_test_account ();
   chatroom = empathy_chatroom_new (account);
   fail_if (chatroom == NULL);
 
@@ -24,7 +23,6 @@ create_chatroom (void)
    * configuration */
   /* FIXME: the account is not really removed */
   mc_account_delete (account);
-  g_object_unref (profile);
   g_object_unref (account);
 
   return chatroom;
