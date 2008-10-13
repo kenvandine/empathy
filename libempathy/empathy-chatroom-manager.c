@@ -232,6 +232,26 @@ empathy_chatroom_manager_new (const gchar *file)
 	return manager;
 }
 
+static void
+chatroom_favorite_changed_cb (EmpathyChatroom *chatroom,
+                              GParamSpec *spec,
+                              EmpathyChatroomManager *self)
+{
+  chatroom_manager_file_save (self);
+}
+
+static void
+add_chatroom (EmpathyChatroomManager *self,
+              EmpathyChatroom *chatroom)
+{
+  EmpathyChatroomManagerPriv *priv = GET_PRIV (self);
+
+  priv->chatrooms = g_list_prepend (priv->chatrooms, g_object_ref (chatroom));
+
+  g_signal_connect (chatroom, "notify::favorite",
+      G_CALLBACK (chatroom_favorite_changed_cb), self);
+}
+
 gboolean
 empathy_chatroom_manager_add (EmpathyChatroomManager *manager,
 			     EmpathyChatroom        *chatroom)
@@ -247,7 +267,7 @@ empathy_chatroom_manager_add (EmpathyChatroomManager *manager,
 	if (!empathy_chatroom_manager_find (manager,
 					   empathy_chatroom_get_account (chatroom),
 					   empathy_chatroom_get_room (chatroom))) {
-		priv->chatrooms = g_list_prepend (priv->chatrooms, g_object_ref (chatroom));
+    add_chatroom (manager, chatroom);
 		chatroom_manager_file_save (manager);
 
 		g_signal_emit (manager, signals[CHATROOM_ADDED], 0, chatroom);
@@ -517,7 +537,7 @@ chatroom_manager_parse_chatroom (EmpathyChatroomManager *manager,
 
 	chatroom = empathy_chatroom_new_full (account, room, name, auto_connect);
   g_object_set (chatroom, "favorite", TRUE, NULL);
-	priv->chatrooms = g_list_prepend (priv->chatrooms, chatroom);
+  add_chatroom (manager, chatroom);
 	g_signal_emit (manager, signals[CHATROOM_ADDED], 0, chatroom);
 
 	g_object_unref (account);
