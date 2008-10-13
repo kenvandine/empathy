@@ -53,6 +53,7 @@ typedef struct {
 	gpointer        token;
 	MissionControl *mc;
 	GSList         *tubes;
+  EmpathyChatroomManager *chatroom_mgr;
 } EmpathyDispatcherPriv;
 
 G_DEFINE_TYPE (EmpathyDispatcher, empathy_dispatcher, G_TYPE_OBJECT);
@@ -391,29 +392,57 @@ dispatcher_connection_invalidated_cb (TpConnection  *connection,
 	}
 }
 
-static void dispatcher_chatroom_invalidated_cb (TpProxy *channel,
-                                                guint domain,
-                                                gint code,
-                                                gchar *message,
-                                                EmpathyChatroom *chatroom)
+typedef struct
 {
-  EmpathyChatroomManager *mgr;
-  mgr = empathy_chatroom_manager_new ();
+  EmpathyDispatcher *self;
+  EmpathyChatroom *chatroom;
+} dispatcher_connection_invalidated_cb_ctx;
+
+static dispatcher_connection_invalidated_cb_ctx *
+dispatcher_connection_invalidated_cb_ctx_new (EmpathyDispatcher *dispatcher,
+                                              EmpathyChatroom *chatroom)
+{
+  dispatcher_connection_invalidated_cb_ctx *ctx;
+
+  ctx = g_slice_new (dispatcher_connection_invalidated_cb_ctx);
+
+  ctx->self = g_object_ref (dispatcher);
+  ctx->chatroom = g_object_ref (chatroom);
+
+  return ctx;
+}
+
+static void
+dispatcher_connection_invalidated_cb_ctx_free (
+    dispatcher_connection_invalidated_cb_ctx *ctx)
+{
+  g_object_unref (ctx->self);
+  g_object_unref (ctx->chatroom);
+
+  g_slice_free (dispatcher_connection_invalidated_cb_ctx, ctx);
+}
+
+static void dispatcher_chatroom_invalidated_cb (
+    TpProxy *channel,
+    guint domain,
+    gint code,
+    gchar *message,
+    dispatcher_connection_invalidated_cb_ctx *ctx)
+{
+  EmpathyDispatcherPriv *priv = GET_PRIV (ctx->self);
   gboolean favorite;
 
-  g_object_get (chatroom, "favorite", &favorite, NULL);
+  g_object_get (ctx->chatroom, "favorite", &favorite, NULL);
 
   if (favorite)
     {
       /* Chatroom is in favorites so don't remove it from the manager */
-      g_object_set (chatroom, "tp-channel", NULL, NULL);
+      g_object_set (ctx->chatroom, "tp-channel", NULL, NULL);
     }
   else
     {
-      empathy_chatroom_manager_remove (mgr, chatroom);
+      empathy_chatroom_manager_remove (priv->chatroom_mgr, ctx->chatroom);
     }
-
-  g_object_unref (mgr);
 }
 
 static void
@@ -427,6 +456,7 @@ dispatcher_connection_new_channel_cb (TpConnection *connection,
 				      GObject      *object)
 {
 	EmpathyDispatcher *dispatcher = EMPATHY_DISPATCHER (object);
+  EmpathyDispatcherPriv *priv = GET_PRIV (dispatcher);
 	TpChannel         *channel;
 	gpointer           had_channels;
 
@@ -449,14 +479,12 @@ dispatcher_connection_new_channel_cb (TpConnection *connection,
       handle_type == TP_HANDLE_TYPE_ROOM)
     {
       /* Add the chatroom to the chatroom manager */
-      EmpathyChatroomManager *mgr;
       EmpathyChatroom *chatroom;
       GArray *handles;
       gchar **room_ids;
-  	  MissionControl *mc;
+      MissionControl *mc;
       McAccount *account;
-
-      mgr = empathy_chatroom_manager_new ();
+      dispatcher_connection_invalidated_cb_ctx *ctx;
 
       handles = g_array_sized_new (FALSE, FALSE, sizeof (TpHandle), 1);
       g_array_append_val (handles, handle);
@@ -468,12 +496,13 @@ dispatcher_connection_new_channel_cb (TpConnection *connection,
       account = mission_control_get_account_for_tpconnection (mc, connection,
           NULL);
 
-      chatroom = empathy_chatroom_manager_find (mgr, account, room_ids[0]);
+      chatroom = empathy_chatroom_manager_find (priv->chatroom_mgr, account,
+          room_ids[0]);
       if (chatroom == NULL)
         {
           chatroom = empathy_chatroom_new (account);
           empathy_chatroom_set_name (chatroom, room_ids[0]);
-          empathy_chatroom_manager_add (mgr, chatroom);
+          empathy_chatroom_manager_add (priv->chatroom_mgr, chatroom);
         }
       else
         {
@@ -482,8 +511,11 @@ dispatcher_connection_new_channel_cb (TpConnection *connection,
 
       g_object_set (chatroom, "tp-channel", channel, NULL);
 
-      g_signal_connect (channel, "invalidated",
-          G_CALLBACK (dispatcher_chatroom_invalidated_cb), chatroom);
+      ctx = dispatcher_connection_invalidated_cb_ctx_new (dispatcher, chatroom);
+
+      g_signal_connect_data (channel, "invalidated",
+          G_CALLBACK (dispatcher_chatroom_invalidated_cb), ctx,
+          (GClosureNotify) dispatcher_connection_invalidated_cb_ctx_free, 0);
 
       g_free (room_ids[0]);
       g_free (room_ids);
@@ -491,7 +523,6 @@ dispatcher_connection_new_channel_cb (TpConnection *connection,
       g_object_unref (mc);
       g_object_unref (account);
       g_object_unref (chatroom);
-      g_object_unref (mgr);
     }
 
 	if (suppress_handler) {
@@ -655,6 +686,8 @@ dispatcher_finalize (GObject *object)
 	g_slist_free (priv->tubes);
 
 	g_hash_table_destroy (priv->connections);
+
+  g_object_unref (priv->chatroom_mgr);
 }
 
 static void
@@ -718,6 +751,8 @@ empathy_dispatcher_init (EmpathyDispatcher *dispatcher)
 		g_object_unref (l->data);
 	}
 	g_list_free (accounts);
+
+  priv->chatroom_mgr = empathy_chatroom_manager_new ();
 }
 
 EmpathyDispatcher *
