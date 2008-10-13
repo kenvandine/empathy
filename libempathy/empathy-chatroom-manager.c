@@ -56,6 +56,7 @@ static gboolean chatroom_manager_file_parse        (EmpathyChatroomManager      
 static void     chatroom_manager_parse_chatroom    (EmpathyChatroomManager      *manager,
 						    xmlNodePtr                  node);
 static gboolean chatroom_manager_file_save         (EmpathyChatroomManager      *manager);
+static void reset_save_timeout (EmpathyChatroomManager *self);
 
 enum {
 	CHATROOM_ADDED,
@@ -204,10 +205,19 @@ empathy_chatroom_manager_init (EmpathyChatroomManager *manager)
 }
 
 static void
+chatroom_changed_cb (EmpathyChatroom *chatroom,
+                     GParamSpec *spec,
+                     EmpathyChatroomManager *self)
+{
+  reset_save_timeout (self);
+}
+
+static void
 chatroom_manager_finalize (GObject *object)
 {
   EmpathyChatroomManager *self = EMPATHY_CHATROOM_MANAGER (object);
 	EmpathyChatroomManagerPriv *priv;
+  GList *l;
 
 	priv = GET_PRIV (object);
 
@@ -219,7 +229,16 @@ chatroom_manager_finalize (GObject *object)
       chatroom_manager_file_save (self);
     }
 
-	g_list_foreach (priv->chatrooms, (GFunc) g_object_unref, NULL);
+  for (l = priv->chatrooms; l != NULL; l = g_list_next (l))
+    {
+      EmpathyChatroom *chatroom = l->data;
+
+      g_signal_handlers_disconnect_by_func (chatroom, chatroom_changed_cb,
+          self);
+
+      g_object_unref (chatroom);
+    }
+
 	g_list_free (priv->chatrooms);
   g_free (priv->file);
 
@@ -270,14 +289,6 @@ reset_save_timeout (EmpathyChatroomManager *self)
 }
 
 static void
-chatroom_changed_cb (EmpathyChatroom *chatroom,
-                     GParamSpec *spec,
-                     EmpathyChatroomManager *self)
-{
-  reset_save_timeout (self);
-}
-
-static void
 add_chatroom (EmpathyChatroomManager *self,
               EmpathyChatroom *chatroom)
 {
@@ -285,7 +296,6 @@ add_chatroom (EmpathyChatroomManager *self,
 
   priv->chatrooms = g_list_prepend (priv->chatrooms, g_object_ref (chatroom));
 
-  /* FIXME: disconnect when removed */
   g_signal_connect (chatroom, "notify::favorite",
       G_CALLBACK (chatroom_changed_cb), self);
   g_signal_connect (chatroom, "notify::name",
@@ -361,6 +371,10 @@ empathy_chatroom_manager_remove (EmpathyChatroomManager *manager,
         }
 
 			g_signal_emit (manager, signals[CHATROOM_REMOVED], 0, this_chatroom);
+
+      g_signal_handlers_disconnect_by_func (chatroom, chatroom_changed_cb,
+          manager);
+
 			g_object_unref (this_chatroom);
 			break;
 		}
