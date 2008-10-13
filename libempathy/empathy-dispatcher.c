@@ -391,11 +391,11 @@ dispatcher_connection_invalidated_cb (TpConnection  *connection,
 	}
 }
 
-static void chatroom_invalidated_cb (TpProxy *channel,
-                                     guint domain,
-						                         gint code,
-                                     gchar *message,
-						                         EmpathyChatroom *chatroom)
+static void dispatcher_chatroom_invalidated_cb (TpProxy *channel,
+                                                guint domain,
+                                                gint code,
+                                                gchar *message,
+                                                EmpathyChatroom *chatroom)
 {
   EmpathyChatroomManager *mgr;
   mgr = empathy_chatroom_manager_new ();
@@ -483,7 +483,7 @@ dispatcher_connection_new_channel_cb (TpConnection *connection,
       g_object_set (chatroom, "tp-channel", channel, NULL);
 
       g_signal_connect (channel, "invalidated",
-          G_CALLBACK (chatroom_invalidated_cb), chatroom);
+          G_CALLBACK (dispatcher_chatroom_invalidated_cb), chatroom);
 
       g_free (room_ids[0]);
       g_free (room_ids);
