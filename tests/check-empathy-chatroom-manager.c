@@ -78,6 +78,7 @@ check_chatrooms_list (EmpathyChatroomManager *mgr,
 
   fail_if (g_hash_table_size (found) != 0);
 
+  g_list_free (chatrooms);
   g_hash_table_destroy (found);
 }
 
@@ -111,10 +112,74 @@ START_TEST (test_empathy_chatroom_manager_new)
 }
 END_TEST
 
+START_TEST (test_empathy_chatroom_manager_add)
+{
+  EmpathyChatroomManager *mgr;
+  gchar *cmd;
+  gchar *file;
+  McAccount *account;
+  struct chatroom_t chatrooms[] = {
+        { "name1", "room1", TRUE, TRUE },
+        { "name2", "room2", FALSE, TRUE },
+        { "name3", "room3", FALSE, TRUE },
+        { "name4", "room4", FALSE, FALSE }};
+  EmpathyChatroom *chatroom;
+
+  account = create_test_account ();
+
+  copy_xml_file (CHATROOM_SAMPLE, CHATROOM_FILE);
+
+  file = get_user_xml_file (CHATROOM_FILE);
+  /* change the chatrooms XML file to use the account we just created */
+  cmd = g_strdup_printf ("sed -i 's/CHANGE_ME/%s/' %s",
+      mc_account_get_unique_name (account), file);
+  system (cmd);
+  g_free (cmd);
+
+  mgr = empathy_chatroom_manager_new (file);
+
+  /* add a favorite chatroom */
+  chatroom = empathy_chatroom_new_full (account, "room3", "name3", FALSE);
+  g_object_set (chatroom, "favorite", TRUE, NULL);
+  empathy_chatroom_manager_add (mgr, chatroom);
+  g_object_unref (chatroom);
+
+  check_chatrooms_list (mgr, account, chatrooms, 3);
+
+  /* reload chatrooms file */
+  g_object_unref (mgr);
+  mgr = empathy_chatroom_manager_new (file);
+
+  /* chatroom has been added to the XML file as it's a favorite */
+  check_chatrooms_list (mgr, account, chatrooms, 3);
+
+  /* add a non favorite chatroom */
+  chatroom = empathy_chatroom_new_full (account, "room4", "name4", FALSE);
+  g_object_set (chatroom, "favorite", FALSE, NULL);
+  empathy_chatroom_manager_add (mgr, chatroom);
+  g_object_unref (chatroom);
+
+  check_chatrooms_list (mgr, account, chatrooms, 4);
+
+  /* reload chatrooms file */
+  g_object_unref (mgr);
+  mgr = empathy_chatroom_manager_new (file);
+
+  /* chatrooms has not been added to the XML file */
+  check_chatrooms_list (mgr, account, chatrooms, 3);
+
+  g_object_unref (mgr);
+  g_free (file);
+  destroy_test_account (account);
+}
+END_TEST
+
+
 TCase *
 make_empathy_chatroom_manager_tcase (void)
 {
     TCase *tc = tcase_create ("empathy-chatroom-manager");
     tcase_add_test (tc, test_empathy_chatroom_manager_new);
+    tcase_add_test (tc, test_empathy_chatroom_manager_add);
     return tc;
 }
