@@ -1235,7 +1235,7 @@ empathy_chat_window_init (EmpathyChatWindow *window)
 
 	g_object_unref (glade);
 
-	priv->chatroom_manager = empathy_chatroom_manager_new ();
+	priv->chatroom_manager = empathy_chatroom_manager_new (NULL);
 
 	priv->notebook = gtk_notebook_new ();
  	gtk_notebook_set_group (GTK_NOTEBOOK (priv->notebook), "EmpathyChatWindow"); 
