@@ -326,6 +326,9 @@
   (c-name "empathy_chatroom_manager_new")
   (is-constructor-of "EmpathyChatroomManager")
   (return-type "EmpathyChatroomManager*")
+  (parameters
+    '("const-gchar*" "file")
+  )
 )
 
 (define-method add
@@ -372,12 +375,6 @@
   (parameters
     '("McAccount*" "account")
   )
-)
-
-(define-method store
-  (of-object "EmpathyChatroomManager")
-  (c-name "empathy_chatroom_manager_store")
-  (return-type "none")
 )
 
 
