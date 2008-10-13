@@ -49,19 +49,36 @@ check_chatrooms_list (EmpathyChatroomManager *mgr,
 {
   GList *chatrooms, *l;
   guint i;
+  GHashTable *found;
 
   fail_if (empathy_chatroom_manager_get_count (mgr, account) != nb_chatrooms);
+
+  found = g_hash_table_new (g_str_hash, g_str_equal);
+  for (i = 0; i < nb_chatrooms; i++)
+    {
+      g_hash_table_insert (found, _chatrooms[i].room, &_chatrooms[i]);
+    }
 
   chatrooms = empathy_chatroom_manager_get_chatrooms (mgr, account);
   fail_if (g_list_length (chatrooms) != nb_chatrooms);
 
-  for (l = chatrooms, i = 0; l != NULL; l = g_list_next (l), i++)
+  for (l = chatrooms; l != NULL; l = g_list_next (l))
     {
       EmpathyChatroom *chatroom = l->data;
+      struct chatroom_t *tmp;
 
-      check_chatroom (chatroom, _chatrooms[i].name, _chatrooms[i].room,
-          _chatrooms[i].auto_connect, _chatrooms[i].favorite);
+      tmp = g_hash_table_lookup (found, empathy_chatroom_get_room (chatroom));
+      fail_if (tmp == NULL);
+
+      check_chatroom (chatroom, tmp->name, tmp->room, tmp->auto_connect,
+          tmp->favorite);
+
+      g_hash_table_remove (found, empathy_chatroom_get_room (chatroom));
     }
+
+  fail_if (g_hash_table_size (found) != 0);
+
+  g_hash_table_destroy (found);
 }
 
 START_TEST (test_empathy_chatroom_manager_new)
@@ -71,8 +88,8 @@ START_TEST (test_empathy_chatroom_manager_new)
   gchar *file;
   McAccount *account;
   struct chatroom_t chatrooms[] = {
-        { "name2", "room2", FALSE, TRUE },
-        { "name1", "room1", TRUE, TRUE }};
+        { "name1", "room1", TRUE, TRUE },
+        { "name2", "room2", FALSE, TRUE }};
 
   account = create_test_account ();
 
