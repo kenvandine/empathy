@@ -15,7 +15,7 @@ create_chatroom (void)
   McAccount *account;
   EmpathyChatroom *chatroom;
 
-  account = create_test_account ();
+  account = get_test_account ();
   chatroom = empathy_chatroom_new (account);
   fail_if (chatroom == NULL);
 
@@ -36,7 +36,7 @@ START_TEST (test_empathy_chatroom_new)
   fail_if (auto_connect);
   fail_if (favorite);
 
-  destroy_test_account (empathy_chatroom_get_account (chatroom));
+  g_object_unref (empathy_chatroom_get_account (chatroom));
   g_object_unref (chatroom);
 }
 END_TEST
@@ -109,7 +109,7 @@ START_TEST (test_favorite_and_auto_connect)
   fail_if (auto_connect);
   fail_if (favorite);
 
-  destroy_test_account (empathy_chatroom_get_account (chatroom));
+  g_object_unref (empathy_chatroom_get_account (chatroom));
   g_object_unref (chatroom);
 }
 END_TEST

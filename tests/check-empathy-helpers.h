@@ -25,7 +25,7 @@
 gchar * get_xml_file (const gchar *filename);
 gchar * get_user_xml_file (const gchar *filename);
 void copy_xml_file (const gchar *orig, const gchar *dest);
-McAccount * create_test_account (void);
+McAccount * get_test_account (void);
 void destroy_test_account (McAccount *account);
 
 #endif /* #ifndef __CHECK_EMPATHY_HELPERS_H__ */

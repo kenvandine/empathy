@@ -92,7 +92,7 @@ START_TEST (test_empathy_chatroom_manager_new)
         { "name1", "room1", TRUE, TRUE },
         { "name2", "room2", FALSE, TRUE }};
 
-  account = create_test_account ();
+  account = get_test_account ();
 
   copy_xml_file (CHATROOM_SAMPLE, CHATROOM_FILE);
 
@@ -108,7 +108,7 @@ START_TEST (test_empathy_chatroom_manager_new)
 
   g_free (file);
   g_object_unref (mgr);
-  destroy_test_account (account);
+  g_object_unref (account);
 }
 END_TEST
 
@@ -125,7 +125,7 @@ START_TEST (test_empathy_chatroom_manager_add)
         { "name4", "room4", FALSE, FALSE }};
   EmpathyChatroom *chatroom;
 
-  account = create_test_account ();
+  account = get_test_account ();
 
   copy_xml_file (CHATROOM_SAMPLE, CHATROOM_FILE);
 
@@ -170,7 +170,7 @@ START_TEST (test_empathy_chatroom_manager_add)
 
   g_object_unref (mgr);
   g_free (file);
-  destroy_test_account (account);
+  g_object_unref (account);
 }
 END_TEST
 
@@ -184,7 +184,7 @@ START_TEST (test_empathy_chatroom_manager_remove)
         { "name2", "room2", FALSE, TRUE }};
   EmpathyChatroom *chatroom;
 
-  account = create_test_account ();
+  account = get_test_account ();
 
   copy_xml_file (CHATROOM_SAMPLE, CHATROOM_FILE);
 
@@ -226,7 +226,7 @@ START_TEST (test_empathy_chatroom_manager_remove)
 
   g_object_unref (mgr);
   g_free (file);
-  destroy_test_account (account);
+  g_object_unref (account);
 }
 END_TEST
 
@@ -241,7 +241,7 @@ START_TEST (test_empathy_chatroom_manager_change_favorite)
         { "name2", "room2", FALSE, FALSE }};
   EmpathyChatroom *chatroom;
 
-  account = create_test_account ();
+  account = get_test_account ();
 
   copy_xml_file (CHATROOM_SAMPLE, CHATROOM_FILE);
 
@@ -290,7 +290,7 @@ START_TEST (test_empathy_chatroom_manager_change_favorite)
   g_object_unref (mgr);
   g_object_unref (chatroom);
   g_free (file);
-  destroy_test_account (account);
+  g_object_unref (account);
 }
 END_TEST
 
@@ -305,7 +305,7 @@ START_TEST (test_empathy_chatroom_manager_change_chatroom)
         { "name2", "room2", FALSE, TRUE }};
   EmpathyChatroom *chatroom;
 
-  account = create_test_account ();
+  account = get_test_account ();
 
   /*
   copy_xml_file (CHATROOM_SAMPLE, CHATROOM_FILE);
@@ -363,7 +363,7 @@ START_TEST (test_empathy_chatroom_manager_change_chatroom)
 
   g_object_unref (mgr);
   g_free (file);
-  destroy_test_account (account);
+  g_object_unref (account);
 }
 END_TEST
 

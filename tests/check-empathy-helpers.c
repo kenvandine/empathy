@@ -64,19 +64,32 @@ copy_xml_file (const gchar *orig,
 }
 
 McAccount *
-create_test_account (void)
+get_test_account (void)
 {
   McProfile *profile;
   McAccount *account;
+  GList *accounts;
 
   profile = mc_profile_lookup ("test");
-  account = mc_account_create (profile);
+  accounts = mc_accounts_list_by_profile (profile);
+  if (g_list_length (accounts) == 0)
+    {
+      /* need to create a test account */
+      account = mc_account_create (profile);
+    }
+  else
+    {
+      /* reuse an existing test account */
+      account = accounts->data;
+    }
 
   g_object_unref (profile);
 
   return account;
 }
 
+/* Not used for now as there is no API to remove completely gconf keys.
+ * So we reuse existing accounts instead of creating new ones */
 void
 destroy_test_account (McAccount *account)
 {
