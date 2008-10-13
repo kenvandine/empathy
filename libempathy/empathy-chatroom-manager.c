@@ -351,7 +351,8 @@ empathy_chatroom_manager_remove (EmpathyChatroomManager *manager,
 
 		this_chatroom = l->data;
 
-		if (empathy_chatroom_equal (chatroom, this_chatroom)) {
+		if (this_chatroom == chatroom ||
+        empathy_chatroom_equal (chatroom, this_chatroom)) {
         gboolean favorite;
 			priv->chatrooms = g_list_delete_link (priv->chatrooms, l);
 
