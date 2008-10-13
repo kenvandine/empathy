@@ -12,47 +12,12 @@
 #define CHATROOM_SAMPLE "chatrooms-sample.xml"
 #define CHATROOM_FILE "chatrooms.xml"
 
-static gchar *
-get_xml_file (const gchar *filename)
-{
-  return g_build_filename (g_getenv ("EMPATHY_SRCDIR"), "tests", "xml",
-      filename, NULL);
-}
-
-static gchar *
-get_user_xml_file (const gchar *filename)
-{
-  return g_build_filename (g_get_tmp_dir (), filename, NULL);
-}
-
-static void
-copy_chatroom_file (void)
-{
-  gboolean result;
-  gchar *buffer;
-  gsize length;
-  gchar *sample;
-  gchar *file;
-
-  sample = get_xml_file (CHATROOM_SAMPLE);
-  result = g_file_get_contents (sample, &buffer, &length, NULL);
-  fail_if (!result);
-
-  file = get_user_xml_file (CHATROOM_FILE);
-  result = g_file_set_contents (file, buffer, length, NULL);
-  fail_if (!result);
-
-  g_free (sample);
-  g_free (file);
-  g_free (buffer);
-}
-
 START_TEST (test_empathy_chatroom_manager_new)
 {
   EmpathyChatroomManager *mgr;
   gchar *file;
 
-  copy_chatroom_file ();
+  copy_xml_file (CHATROOM_SAMPLE, CHATROOM_FILE);
   file = get_xml_file (CHATROOM_FILE);
   mgr = empathy_chatroom_manager_new (file);
 

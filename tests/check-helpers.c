@@ -61,3 +61,39 @@ check_helpers_init (void)
   g_log_set_handler (NULL, G_LOG_LEVEL_CRITICAL,
       check_helper_log_critical_func, NULL);
 }
+
+gchar *
+get_xml_file (const gchar *filename)
+{
+  return g_build_filename (g_getenv ("EMPATHY_SRCDIR"), "tests", "xml",
+      filename, NULL);
+}
+
+gchar *
+get_user_xml_file (const gchar *filename)
+{
+  return g_build_filename (g_get_tmp_dir (), filename, NULL);
+}
+
+void
+copy_xml_file (const gchar *orig,
+               const gchar *dest)
+{
+  gboolean result;
+  gchar *buffer;
+  gsize length;
+  gchar *sample;
+  gchar *file;
+
+  sample = get_xml_file (orig);
+  result = g_file_get_contents (sample, &buffer, &length, NULL);
+  fail_if (!result);
+
+  file = get_user_xml_file (dest);
+  result = g_file_set_contents (file, buffer, length, NULL);
+  fail_if (!result);
+
+  g_free (sample);
+  g_free (file);
+  g_free (buffer);
+}

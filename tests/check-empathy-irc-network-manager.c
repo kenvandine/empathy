@@ -14,18 +14,6 @@
 #define USER_SAMPLE "user-irc-networks-sample.xml"
 #define USER_FILE "user-irc-networks.xml"
 
-static gchar *
-get_xml_file (const gchar *filename)
-{
-  return g_build_filename (g_getenv ("EMPATHY_SRCDIR"), "tests", "xml", filename, NULL);
-}
-
-static gchar *
-get_user_xml_file (const gchar *filename)
-{
-  return g_build_filename (g_get_tmp_dir (), filename, NULL);
-}
-
 START_TEST (test_empathy_irc_network_manager_add)
 {
   EmpathyIrcNetworkManager *mgr;
@@ -251,28 +239,6 @@ START_TEST (test_empathy_irc_network_manager_remove)
 }
 END_TEST
 
-static void
-copy_user_file (void)
-{
-  gboolean result;
-  gchar *buffer;
-  gsize length;
-  gchar *user_sample;
-  gchar *user_file;
-
-  user_sample = get_xml_file (USER_SAMPLE);
-  result = g_file_get_contents (user_sample, &buffer, &length, NULL);
-  fail_if (!result);
-
-  user_file = get_user_xml_file (USER_FILE);
-  result = g_file_set_contents (user_file, buffer, length, NULL);
-  fail_if (!result);
-
-  g_free (user_sample);
-  g_free (user_file);
-  g_free (buffer);
-}
-
 START_TEST (test_load_user_file)
 {
   EmpathyIrcNetworkManager *mgr;
@@ -289,7 +255,7 @@ START_TEST (test_load_user_file)
   gboolean network_checked[3];
   gchar *user_file_orig;
 
-  copy_user_file ();
+  copy_xml_file (USER_SAMPLE, USER_FILE);
   user_file_orig = get_user_xml_file (USER_FILE);
   mgr = empathy_irc_network_manager_new (NULL, user_file_orig);
 
@@ -453,7 +419,7 @@ START_TEST (test_modify_user_file)
   gboolean network_checked[3];
   gchar *user_file_orig;
 
-  copy_user_file ();
+  copy_xml_file (USER_SAMPLE, USER_FILE);
   user_file_orig = get_user_xml_file (USER_FILE);
   mgr = empathy_irc_network_manager_new (NULL, user_file_orig);
 
@@ -622,7 +588,7 @@ START_TEST (test_modify_both_files)
   gboolean network_checked[4];
   gchar *global_file_orig, *user_file_orig;
 
-  copy_user_file ();
+  copy_xml_file (USER_SAMPLE, USER_FILE);
   global_file_orig = get_xml_file (GLOBAL_SAMPLE);
   user_file_orig = get_user_xml_file (USER_FILE);
   mgr = empathy_irc_network_manager_new (global_file_orig, user_file_orig);
