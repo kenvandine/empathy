@@ -296,15 +296,7 @@ add_chatroom (EmpathyChatroomManager *self,
 
   priv->chatrooms = g_list_prepend (priv->chatrooms, g_object_ref (chatroom));
 
-  g_signal_connect (chatroom, "notify::favorite",
-      G_CALLBACK (chatroom_changed_cb), self);
-  g_signal_connect (chatroom, "notify::name",
-      G_CALLBACK (chatroom_changed_cb), self);
-  g_signal_connect (chatroom, "notify::auto-connect",
-      G_CALLBACK (chatroom_changed_cb), self);
-  g_signal_connect (chatroom, "notify::room",
-      G_CALLBACK (chatroom_changed_cb), self);
-  g_signal_connect (chatroom, "notify::account",
+  g_signal_connect (chatroom, "notify",
       G_CALLBACK (chatroom_changed_cb), self);
 }
 
