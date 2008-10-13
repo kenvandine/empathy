@@ -9,6 +9,9 @@
 
 #include <libempathy/empathy-chatroom-manager.h>
 
+#define CHATROOM_SAMPLE "chatrooms-sample.xml"
+#define CHATROOM_FILE "chatrooms.xml"
+
 static gchar *
 get_xml_file (const gchar *filename)
 {
@@ -21,7 +24,7 @@ START_TEST (test_empathy_chatroom_manager_new)
   EmpathyChatroomManager *mgr;
   gchar *file;
 
-  file = get_xml_file ("chatrooms.xml");
+  file = get_xml_file (CHATROOM_SAMPLE);
   mgr = empathy_chatroom_manager_new (file);
 
   g_free (file);
