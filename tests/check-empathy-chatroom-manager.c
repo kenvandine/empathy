@@ -100,7 +100,13 @@ START_TEST (test_empathy_chatroom_manager_new)
   /* change the chatrooms XML file to use the account we just created */
   cmd = g_strdup_printf ("sed -i 's/CHANGE_ME/%s/' %s",
       mc_account_get_unique_name (account), file);
-  system (cmd);
+
+  if (system (cmd) == -1)
+    {
+      g_print ("system call failed\n");
+      return;
+    }
+
   g_free (cmd);
 
   mgr = empathy_chatroom_manager_new (file);
