@@ -230,6 +230,70 @@ START_TEST (test_empathy_chatroom_manager_remove)
 }
 END_TEST
 
+START_TEST (test_empathy_chatroom_manager_change_favorite)
+{
+  EmpathyChatroomManager *mgr;
+  gchar *cmd;
+  gchar *file;
+  McAccount *account;
+  struct chatroom_t chatrooms[] = {
+        { "name1", "room1", TRUE, TRUE },
+        { "name2", "room2", FALSE, FALSE }};
+  EmpathyChatroom *chatroom;
+
+  account = create_test_account ();
+
+  copy_xml_file (CHATROOM_SAMPLE, CHATROOM_FILE);
+
+  file = get_user_xml_file (CHATROOM_FILE);
+  /* change the chatrooms XML file to use the account we just created */
+  cmd = g_strdup_printf ("sed -i 's/CHANGE_ME/%s/' %s",
+      mc_account_get_unique_name (account), file);
+  system (cmd);
+  g_free (cmd);
+
+  mgr = empathy_chatroom_manager_new (file);
+
+  /* room2 is not favorite anymore */
+  chatroom = empathy_chatroom_manager_find (mgr, account, "room2");
+  fail_if (chatroom == NULL);
+  g_object_set (chatroom, "favorite", FALSE, NULL);
+
+  check_chatrooms_list (mgr, account, chatrooms, 2);
+
+  /* reload chatrooms file */
+  g_object_unref (mgr);
+  mgr = empathy_chatroom_manager_new (file);
+
+  /* room2 is not present in the XML file anymore as it's not a favorite */
+  check_chatrooms_list (mgr, account, chatrooms, 1);
+
+  /* re-add room2 */
+  chatroom = empathy_chatroom_new_full (account, "room2", "name2", FALSE);
+  empathy_chatroom_manager_add (mgr, chatroom);
+
+  check_chatrooms_list (mgr, account, chatrooms, 2);
+
+  /* set room2 as favorite */
+  g_object_set (chatroom, "favorite", TRUE, NULL);
+
+  chatrooms[1].favorite = TRUE;
+  check_chatrooms_list (mgr, account, chatrooms, 2);
+
+  /* reload chatrooms file */
+  g_object_unref (mgr);
+  mgr = empathy_chatroom_manager_new (file);
+
+  /* room2 is back in the XML file now */
+  check_chatrooms_list (mgr, account, chatrooms, 2);
+
+  g_object_unref (mgr);
+  g_object_unref (chatroom);
+  g_free (file);
+  destroy_test_account (account);
+}
+END_TEST
+
 TCase *
 make_empathy_chatroom_manager_tcase (void)
 {
@@ -237,5 +301,6 @@ make_empathy_chatroom_manager_tcase (void)
     tcase_add_test (tc, test_empathy_chatroom_manager_new);
     tcase_add_test (tc, test_empathy_chatroom_manager_add);
     tcase_add_test (tc, test_empathy_chatroom_manager_remove);
+    tcase_add_test (tc, test_empathy_chatroom_manager_change_favorite);
     return tc;
 }
