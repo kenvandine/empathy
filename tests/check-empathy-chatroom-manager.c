@@ -6,7 +6,6 @@
 #include <check.h>
 #include "check-helpers.h"
 #include "check-libempathy.h"
-#include "check-irc-helper.h"
 
 #include <libempathy/empathy-chatroom-manager.h>
 
@@ -33,7 +32,7 @@ END_TEST
 TCase *
 make_empathy_chatroom_manager_tcase (void)
 {
-    TCase *tc = tcase_create ("empathy-irc-chatroom-manager");
+    TCase *tc = tcase_create ("empathy-chatroom-manager");
     tcase_add_test (tc, test_empathy_chatroom_manager_new);
     return tc;
 }
