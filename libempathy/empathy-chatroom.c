@@ -396,6 +396,7 @@ empathy_chatroom_set_auto_connect (EmpathyChatroom *chatroom,
     {
       /* auto_connect implies favorite */
       priv->favorite = TRUE;
+      g_object_notify (G_OBJECT (chatroom), "favorite");
     }
 
 	g_object_notify (G_OBJECT (chatroom), "auto-connect");
