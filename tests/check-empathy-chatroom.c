@@ -114,11 +114,42 @@ START_TEST (test_favorite_and_auto_connect)
 }
 END_TEST
 
+static void
+favorite_changed (EmpathyChatroom *chatroom,
+                  GParamSpec *spec,
+                  gboolean *changed)
+{
+  *changed = TRUE;
+}
+
+START_TEST (test_change_favorite)
+{
+  EmpathyChatroom *chatroom;
+  gboolean changed = FALSE;
+
+  chatroom = create_chatroom ();
+
+  g_signal_connect (chatroom, "notify::favorite", G_CALLBACK (favorite_changed),
+      &changed);
+
+  /* change favorite to TRUE */
+  g_object_set (chatroom, "favorite", TRUE, NULL);
+  fail_if (!changed);
+
+  changed = FALSE;
+
+  /* change favorite to FALSE */
+  g_object_set (chatroom, "favorite", FALSE, NULL);
+  fail_if (!changed);
+}
+END_TEST
+
 TCase *
 make_empathy_chatroom_tcase (void)
 {
     TCase *tc = tcase_create ("empathy-chatroom");
     tcase_add_test (tc, test_empathy_chatroom_new);
     tcase_add_test (tc, test_favorite_and_auto_connect);
+    tcase_add_test (tc, test_change_favorite);
     return tc;
 }
