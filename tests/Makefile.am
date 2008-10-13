@@ -38,7 +38,8 @@ check_main_SOURCES =                             \
     check-empathy-irc-server.c                   \
     check-empathy-irc-network.c                  \
     check-empathy-irc-network-manager.c          \
-    check-empathy-chatroom.c
+    check-empathy-chatroom.c                     \
+    check-empathy-irc-chatroom-manager.c
 
 check_main_LDADD = \
     @CHECK_LIBS@ \
