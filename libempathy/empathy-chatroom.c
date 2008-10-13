@@ -24,6 +24,7 @@
 #include <string.h>
 
 #include <glib.h>
+#include <telepathy-glib/util.h>
 
 #include "empathy-chatroom.h"
 #include "empathy-utils.h"
@@ -420,7 +421,6 @@ empathy_chatroom_equal (gconstpointer v1,
 	room_a = empathy_chatroom_get_room (EMPATHY_CHATROOM (v1));
 	room_b = empathy_chatroom_get_room (EMPATHY_CHATROOM (v2));
 
-	return empathy_account_equal (account_a, account_b) && g_str_equal (room_a, room_b);
+	return empathy_account_equal (account_a, account_b) && !tp_strdiff (room_a,
+      room_b);
 }
-
-
