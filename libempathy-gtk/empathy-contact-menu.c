@@ -243,19 +243,19 @@ empathy_contact_edit_menu_item_new (EmpathyContact *contact)
 typedef struct 
 {
   EmpathyContact *contact;
-  TpChannel *channel;
+  EmpathyChatroom *chatroom;
 } contact_room_sub_menu_item_activate_cb_ctx;
 
 static contact_room_sub_menu_item_activate_cb_ctx *
 contact_room_sub_menu_item_activate_cb_ctx_new (EmpathyContact *contact,
-                                                TpChannel *channel)
+                                                EmpathyChatroom *chatroom)
 {
   contact_room_sub_menu_item_activate_cb_ctx *ctx;
 
   ctx = g_slice_new (contact_room_sub_menu_item_activate_cb_ctx);
 
   ctx->contact = g_object_ref (contact);
-  ctx->channel = g_object_ref (channel);
+  ctx->chatroom = g_object_ref (chatroom);
 
   return ctx;
 }
@@ -266,7 +266,7 @@ contact_room_sub_menu_item_activate_cb_ctx_free (
 {
   /* FIXME: seems this is never called... */
   g_object_unref (ctx->contact);
-  g_object_unref (ctx->channel);
+  g_object_unref (ctx->chatroom);
 
   g_slice_free (contact_room_sub_menu_item_activate_cb_ctx, ctx);
 }
@@ -278,16 +278,23 @@ contact_room_sub_menu_item_activate_cb (
 {
   GArray *handles;
   TpHandle handle;
+  TpChannel *channel;
+
+  g_object_get (ctx->chatroom, "tp-channel", &channel, NULL);
+  if (channel == NULL)
+    /* channel was invalidated. Ignoring */
+    return;
 
   /* send invitation */
   handles = g_array_new (FALSE, FALSE, sizeof (TpHandle));
   handle = empathy_contact_get_handle (ctx->contact);
   g_array_append_val (handles, handle);
 
-  tp_cli_channel_interface_group_call_add_members (ctx->channel, -1, handles,
+  tp_cli_channel_interface_group_call_add_members (channel, -1, handles,
       _("Inviting to this room"), NULL, NULL, NULL, NULL);
 
   g_array_free (handles, TRUE);
+  g_object_unref (channel);
 }
 
 static GtkWidget *
@@ -295,24 +302,18 @@ create_room_sub_menu_item (EmpathyContact *contact,
                            EmpathyChatroom *chatroom)
 {
 	GtkWidget *item;
-  TpChannel *channel;
   contact_room_sub_menu_item_activate_cb_ctx *ctx;
 
 	g_return_val_if_fail (EMPATHY_IS_CONTACT (contact), NULL);
 
   item = gtk_menu_item_new_with_label (empathy_chatroom_get_name (chatroom));
 
-  g_object_get (chatroom, "tp-channel", &channel, NULL);
-  g_assert (channel != NULL);
-
-  ctx = contact_room_sub_menu_item_activate_cb_ctx_new (contact, channel);
+  ctx = contact_room_sub_menu_item_activate_cb_ctx_new (contact, chatroom);
 
   g_signal_connect_data (item, "activate",
       G_CALLBACK (contact_room_sub_menu_item_activate_cb), ctx,
       (GClosureNotify) contact_room_sub_menu_item_activate_cb_ctx_free, 0);
 
-  g_object_unref (channel);
-	
 	return item;
 }
 
