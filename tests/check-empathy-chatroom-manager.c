@@ -17,6 +17,22 @@
 #define CHATROOM_SAMPLE "chatrooms-sample.xml"
 #define CHATROOM_FILE "chatrooms.xml"
 
+static void
+check_chatroom (EmpathyChatroom *chatroom,
+                const gchar *name,
+                const gchar *room,
+                gboolean auto_connect,
+                gboolean favorite)
+{
+  gboolean _favorite;
+
+  fail_if (tp_strdiff (empathy_chatroom_get_name (chatroom), name));
+  fail_if (tp_strdiff (empathy_chatroom_get_room (chatroom), room));
+  fail_if (empathy_chatroom_get_auto_connect (chatroom) != auto_connect);
+  g_object_get (chatroom, "favorite", &_favorite, NULL);
+  fail_if (favorite != _favorite);
+}
+
 START_TEST (test_empathy_chatroom_manager_new)
 {
   EmpathyChatroomManager *mgr;
@@ -48,23 +64,16 @@ START_TEST (test_empathy_chatroom_manager_new)
   for (l = chatrooms; l != NULL; l = g_list_next (l))
     {
       EmpathyChatroom *chatroom = l->data;
-      gboolean favorite;
 
       if (!tp_strdiff (empathy_chatroom_get_room (chatroom), "room1"))
         {
           room1_found = TRUE;
-          fail_if (tp_strdiff (empathy_chatroom_get_name (chatroom), "name1"));
-          fail_if (!empathy_chatroom_get_auto_connect (chatroom));
-          g_object_get (chatroom, "favorite", &favorite, NULL);
-          fail_if (!favorite);
+          check_chatroom (chatroom, "name1", "room1", TRUE, TRUE);
         }
       else if (!tp_strdiff (empathy_chatroom_get_room (chatroom), "room2"))
         {
           room2_found = TRUE;
-          fail_if (tp_strdiff (empathy_chatroom_get_name (chatroom), "name2"));
-          fail_if (empathy_chatroom_get_auto_connect (chatroom));
-          g_object_get (chatroom, "favorite", &favorite, NULL);
-          fail_if (!favorite);
+          check_chatroom (chatroom, "name2", "room2", FALSE, TRUE);
         }
       else
         {
