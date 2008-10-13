@@ -15,8 +15,7 @@ create_chatroom (void)
   McAccount *account;
   EmpathyChatroom *chatroom;
 
-  /* FIXME: we should fake the profile */
-  profile = mc_profile_lookup ("jabber");
+  profile = mc_profile_lookup ("test");
   account = mc_account_create (profile);
   chatroom = empathy_chatroom_new (account);
   fail_if (chatroom == NULL);
