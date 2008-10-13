@@ -1,2 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<chatrooms/>
+<chatrooms>
+  <chatroom>
+    <name>name1</name>
+    <room>room1</room>
+    <account>CHANGE_ME</account>
+    <auto_connect>yes</auto_connect>
+  </chatroom>
+  <chatroom>
+    <name>name2</name>
+    <room>room2</room>
+    <account>CHANGE_ME</account>
+    <auto_connect>no</auto_connect>
+  </chatroom>
+</chatrooms>
