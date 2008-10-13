@@ -45,6 +45,7 @@ GtkWidget * empathy_contact_call_menu_item_new (EmpathyContact             *cont
 GtkWidget * empathy_contact_log_menu_item_new  (EmpathyContact             *contact);
 GtkWidget * empathy_contact_info_menu_item_new (EmpathyContact             *contact);
 GtkWidget * empathy_contact_edit_menu_item_new (EmpathyContact             *contact);
+GtkWidget * empathy_contact_invite_menu_item_new (EmpathyContact *contact);
 
 G_END_DECLS
 
