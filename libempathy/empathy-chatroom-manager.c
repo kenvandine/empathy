@@ -433,6 +433,7 @@ chatroom_manager_parse_chatroom (EmpathyChatroomManager *manager,
 	}
 
 	chatroom = empathy_chatroom_new_full (account, room, name, auto_connect);
+  g_object_set (chatroom, "favorite", TRUE, NULL);
 	priv->chatrooms = g_list_prepend (priv->chatrooms, chatroom);
 	g_signal_emit (manager, signals[CHATROOM_ADDED], 0, chatroom);
 
@@ -470,8 +471,14 @@ chatroom_manager_file_save (EmpathyChatroomManager *manager)
 		EmpathyChatroom *chatroom;
 		xmlNodePtr      node;
 		const gchar    *account_id;
+    gboolean favorite;
 
 		chatroom = l->data;
+
+    g_object_get (chatroom, "favorite", &favorite, NULL);
+    if (!favorite)
+      continue;
+
 		account_id = mc_account_get_unique_name (empathy_chatroom_get_account (chatroom));
 
 		node = xmlNewChild (root, NULL, "chatroom", NULL);
