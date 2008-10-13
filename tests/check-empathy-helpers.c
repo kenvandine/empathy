@@ -78,7 +78,7 @@ create_test_account (void)
 }
 
 void
-remove_account_from_gconf (McAccount *account)
+destroy_test_account (McAccount *account)
 {
   GConfClient *client;
   gchar *path;
@@ -135,4 +135,7 @@ remove_account_from_gconf (McAccount *account)
 
   g_object_unref (client);
   g_free (path);
+
+  mc_account_delete (account);
+  g_object_unref (account);
 }

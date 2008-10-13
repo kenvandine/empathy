@@ -39,9 +39,7 @@ START_TEST (test_empathy_chatroom_manager_new)
 
   g_free (file);
   g_object_unref (mgr);
-  remove_account_from_gconf (account);
-  mc_account_delete (account);
-  g_object_unref (account);
+  destroy_test_account (account);
 }
 END_TEST
 
