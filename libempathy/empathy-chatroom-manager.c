@@ -474,14 +474,6 @@ empathy_chatroom_manager_get_count (EmpathyChatroomManager *manager,
 	return count;
 }
 
-void
-empathy_chatroom_manager_store (EmpathyChatroomManager *manager)
-{
-	g_return_if_fail (EMPATHY_IS_CHATROOM_MANAGER (manager));
-
-	chatroom_manager_file_save (manager);
-}
-
 /*
  * API to save/load and parse the chatrooms file.
  */

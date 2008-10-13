@@ -65,7 +65,6 @@ GList *                empathy_chatroom_manager_get_chatrooms (EmpathyChatroomMa
 							      McAccount             *account);
 guint                  empathy_chatroom_manager_get_count     (EmpathyChatroomManager *manager,
 							      McAccount             *account);
-void                   empathy_chatroom_manager_store         (EmpathyChatroomManager *manager);
 
 G_END_DECLS
 
