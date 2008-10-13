@@ -82,10 +82,29 @@ check_chatrooms_list (EmpathyChatroomManager *mgr,
   g_hash_table_destroy (found);
 }
 
+static gboolean
+change_account_name_in_file (McAccount *account,
+                             const gchar *file)
+{
+  gchar *cmd;
+
+  cmd = g_strdup_printf ("sed -i 's/CHANGE_ME/%s/' %s",
+      mc_account_get_unique_name (account), file);
+
+  if (system (cmd) == -1)
+    {
+      g_print ("'%s' call failed\n", cmd);
+      g_free (cmd);
+      return FALSE;
+    }
+
+  g_free (cmd);
+  return TRUE;
+}
+
 START_TEST (test_empathy_chatroom_manager_new)
 {
   EmpathyChatroomManager *mgr;
-  gchar *cmd;
   gchar *file;
   McAccount *account;
   struct chatroom_t chatrooms[] = {
@@ -97,17 +116,10 @@ START_TEST (test_empathy_chatroom_manager_new)
   copy_xml_file (CHATROOM_SAMPLE, CHATROOM_FILE);
 
   file = get_user_xml_file (CHATROOM_FILE);
+
   /* change the chatrooms XML file to use the account we just created */
-  cmd = g_strdup_printf ("sed -i 's/CHANGE_ME/%s/' %s",
-      mc_account_get_unique_name (account), file);
-
-  if (system (cmd) == -1)
-    {
-      g_print ("system call failed\n");
-      return;
-    }
-
-  g_free (cmd);
+  if (!change_account_name_in_file (account, file))
+    return;
 
   mgr = empathy_chatroom_manager_new (file);
   check_chatrooms_list (mgr, account, chatrooms, 2);
@@ -121,7 +133,6 @@ END_TEST
 START_TEST (test_empathy_chatroom_manager_add)
 {
   EmpathyChatroomManager *mgr;
-  gchar *cmd;
   gchar *file;
   McAccount *account;
   struct chatroom_t chatrooms[] = {
@@ -136,11 +147,10 @@ START_TEST (test_empathy_chatroom_manager_add)
   copy_xml_file (CHATROOM_SAMPLE, CHATROOM_FILE);
 
   file = get_user_xml_file (CHATROOM_FILE);
+
   /* change the chatrooms XML file to use the account we just created */
-  cmd = g_strdup_printf ("sed -i 's/CHANGE_ME/%s/' %s",
-      mc_account_get_unique_name (account), file);
-  system (cmd);
-  g_free (cmd);
+  if (!change_account_name_in_file (account, file))
+    return;
 
   mgr = empathy_chatroom_manager_new (file);
 
@@ -183,7 +193,6 @@ END_TEST
 START_TEST (test_empathy_chatroom_manager_remove)
 {
   EmpathyChatroomManager *mgr;
-  gchar *cmd;
   gchar *file;
   McAccount *account;
   struct chatroom_t chatrooms[] = {
@@ -195,11 +204,10 @@ START_TEST (test_empathy_chatroom_manager_remove)
   copy_xml_file (CHATROOM_SAMPLE, CHATROOM_FILE);
 
   file = get_user_xml_file (CHATROOM_FILE);
+
   /* change the chatrooms XML file to use the account we just created */
-  cmd = g_strdup_printf ("sed -i 's/CHANGE_ME/%s/' %s",
-      mc_account_get_unique_name (account), file);
-  system (cmd);
-  g_free (cmd);
+  if (!change_account_name_in_file (account, file))
+    return;
 
   mgr = empathy_chatroom_manager_new (file);
 
@@ -239,7 +247,6 @@ END_TEST
 START_TEST (test_empathy_chatroom_manager_change_favorite)
 {
   EmpathyChatroomManager *mgr;
-  gchar *cmd;
   gchar *file;
   McAccount *account;
   struct chatroom_t chatrooms[] = {
@@ -252,11 +259,10 @@ START_TEST (test_empathy_chatroom_manager_change_favorite)
   copy_xml_file (CHATROOM_SAMPLE, CHATROOM_FILE);
 
   file = get_user_xml_file (CHATROOM_FILE);
+
   /* change the chatrooms XML file to use the account we just created */
-  cmd = g_strdup_printf ("sed -i 's/CHANGE_ME/%s/' %s",
-      mc_account_get_unique_name (account), file);
-  system (cmd);
-  g_free (cmd);
+  if (!change_account_name_in_file (account, file))
+    return;
 
   mgr = empathy_chatroom_manager_new (file);
 
@@ -303,7 +309,6 @@ END_TEST
 START_TEST (test_empathy_chatroom_manager_change_chatroom)
 {
   EmpathyChatroomManager *mgr;
-  gchar *cmd;
   gchar *file;
   McAccount *account;
   struct chatroom_t chatrooms[] = {
@@ -313,19 +318,13 @@ START_TEST (test_empathy_chatroom_manager_change_chatroom)
 
   account = get_test_account ();
 
-  /*
-  copy_xml_file (CHATROOM_SAMPLE, CHATROOM_FILE);
-
-  file = get_user_xml_file (CHATROOM_FILE);
-  */
   copy_xml_file (CHATROOM_SAMPLE, "foo.xml");
 
   file = get_user_xml_file ("foo.xml");
+
   /* change the chatrooms XML file to use the account we just created */
-  cmd = g_strdup_printf ("sed -i 's/CHANGE_ME/%s/' %s",
-      mc_account_get_unique_name (account), file);
-  system (cmd);
-  g_free (cmd);
+  if (!change_account_name_in_file (account, file))
+    return;
 
   mgr = empathy_chatroom_manager_new (file);
 
