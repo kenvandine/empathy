@@ -226,6 +226,11 @@ chatroom_set_property (GObject      *object,
 		break;
   case PROP_FAVORITE:
     priv->favorite = g_value_get_boolean (value);
+    if (!priv->favorite)
+      {
+        empathy_chatroom_set_auto_connect (EMPATHY_CHATROOM (object),
+            FALSE);
+      }
     break;
   case PROP_TP_CHANNEL:
     if (priv->tp_channel != NULL)
@@ -386,6 +391,12 @@ empathy_chatroom_set_auto_connect (EmpathyChatroom *chatroom,
 	priv = GET_PRIV (chatroom);
 
 	priv->auto_connect = auto_connect;
+
+  if (priv->auto_connect)
+    {
+      /* auto_connect implies favorite */
+      priv->favorite = TRUE;
+    }
 
 	g_object_notify (G_OBJECT (chatroom), "auto-connect");
 }
