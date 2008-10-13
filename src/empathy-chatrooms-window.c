@@ -413,7 +413,6 @@ chatrooms_window_model_cell_auto_connect_toggled (GtkCellRendererToggle  *cell,
 	enabled = !enabled;
 
 	empathy_chatroom_set_auto_connect (chatroom, enabled);
-	empathy_chatroom_manager_store (window->manager);
 
 	gtk_list_store_set (store, &iter, COL_AUTO_CONNECT, enabled, -1);
 	gtk_tree_path_free (path);
