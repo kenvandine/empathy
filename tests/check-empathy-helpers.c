@@ -117,6 +117,8 @@ destroy_test_account (McAccount *account)
               if (g_rmdir (dir) != 0)
                 g_print ("can't remove %s\n", dir);
             }
+
+          g_free (dir);
         }
 
       /* FIXME: this doesn't remove the key */
