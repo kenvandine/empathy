@@ -33,14 +33,46 @@ check_chatroom (EmpathyChatroom *chatroom,
   fail_if (favorite != _favorite);
 }
 
+struct chatroom_t
+{
+  gchar *name;
+  gchar *room;
+  gboolean auto_connect;
+  gboolean favorite;
+};
+
+static void
+check_chatrooms_list (EmpathyChatroomManager *mgr,
+                      McAccount *account,
+                      struct chatroom_t *_chatrooms,
+                      guint nb_chatrooms)
+{
+  GList *chatrooms, *l;
+  guint i;
+
+  fail_if (empathy_chatroom_manager_get_count (mgr, account) != nb_chatrooms);
+
+  chatrooms = empathy_chatroom_manager_get_chatrooms (mgr, account);
+  fail_if (g_list_length (chatrooms) != nb_chatrooms);
+
+  for (l = chatrooms, i = 0; l != NULL; l = g_list_next (l), i++)
+    {
+      EmpathyChatroom *chatroom = l->data;
+
+      check_chatroom (chatroom, _chatrooms[i].name, _chatrooms[i].room,
+          _chatrooms[i].auto_connect, _chatrooms[i].favorite);
+    }
+}
+
 START_TEST (test_empathy_chatroom_manager_new)
 {
   EmpathyChatroomManager *mgr;
   gchar *cmd;
   gchar *file;
   McAccount *account;
-  GList *chatrooms, *l;
-  gboolean room1_found, room2_found;
+  struct chatroom_t chatrooms[] = {
+        { "name2", "room2", FALSE, TRUE },
+        { "name1", "room1", TRUE, TRUE }};
 
   account = create_test_account ();
 
@@ -54,34 +86,7 @@ START_TEST (test_empathy_chatroom_manager_new)
   g_free (cmd);
 
   mgr = empathy_chatroom_manager_new (file);
-
-  fail_if (empathy_chatroom_manager_get_count (mgr, account) != 2);
-
-  chatrooms = empathy_chatroom_manager_get_chatrooms (mgr, account);
-  fail_if (g_list_length (chatrooms) != 2);
-
-  room1_found = room2_found = FALSE;
-  for (l = chatrooms; l != NULL; l = g_list_next (l))
-    {
-      EmpathyChatroom *chatroom = l->data;
-
-      if (!tp_strdiff (empathy_chatroom_get_room (chatroom), "room1"))
-        {
-          room1_found = TRUE;
-          check_chatroom (chatroom, "name1", "room1", TRUE, TRUE);
-        }
-      else if (!tp_strdiff (empathy_chatroom_get_room (chatroom), "room2"))
-        {
-          room2_found = TRUE;
-          check_chatroom (chatroom, "name2", "room2", FALSE, TRUE);
-        }
-      else
-        {
-          g_assert_not_reached ();
-        }
-    }
-
-  fail_if (!room1_found || !room2_found);
+  check_chatrooms_list (mgr, account, chatrooms, 2);
 
   g_free (file);
   g_object_unref (mgr);
