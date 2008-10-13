@@ -267,8 +267,16 @@ empathy_chatroom_manager_add (EmpathyChatroomManager *manager,
 	if (!empathy_chatroom_manager_find (manager,
 					   empathy_chatroom_get_account (chatroom),
 					   empathy_chatroom_get_room (chatroom))) {
+      gboolean favorite;
+
+      g_object_get (chatroom, "favorite", &favorite, NULL);
+
     add_chatroom (manager, chatroom);
-		chatroom_manager_file_save (manager);
+
+    if (favorite)
+      {
+        chatroom_manager_file_save (manager);
+      }
 
 		g_signal_emit (manager, signals[CHATROOM_ADDED], 0, chatroom);
 
@@ -296,9 +304,15 @@ empathy_chatroom_manager_remove (EmpathyChatroomManager *manager,
 		this_chatroom = l->data;
 
 		if (empathy_chatroom_equal (chatroom, this_chatroom)) {
+        gboolean favorite;
 			priv->chatrooms = g_list_delete_link (priv->chatrooms, l);
 
-			chatroom_manager_file_save (manager);
+      g_object_get (chatroom, "favorite", &favorite, NULL);
+
+      if (favorite)
+        {
+          chatroom_manager_file_save (manager);
+        }
 
 			g_signal_emit (manager, signals[CHATROOM_REMOVED], 0, this_chatroom);
 			g_object_unref (this_chatroom);
