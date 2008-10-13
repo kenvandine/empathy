@@ -41,6 +41,8 @@
 #include "empathy-tube-handler.h"
 #include "empathy-contact-factory.h"
 #include "empathy-tp-group.h"
+#include "empathy-chatroom-manager.h"
+#include "empathy-utils.h"
 
 #define DEBUG_FLAG EMPATHY_DEBUG_DISPATCHER
 #include <libempathy/empathy-debug.h>
@@ -389,6 +391,31 @@ dispatcher_connection_invalidated_cb (TpConnection  *connection,
 	}
 }
 
+static void chatroom_invalidated_cb (TpProxy *channel,
+                                     guint domain,
+						                         gint code,
+                                     gchar *message,
+						                         EmpathyChatroom *chatroom)
+{
+  EmpathyChatroomManager *mgr;
+  mgr = empathy_chatroom_manager_new ();
+  gboolean favorite;
+
+  g_object_get (chatroom, "favorite", &favorite, NULL);
+
+  if (favorite)
+    {
+      /* Chatroom is in favorites so don't remove it from the manager */
+      g_object_set (chatroom, "tp-channel", NULL, NULL);
+    }
+  else
+    {
+      empathy_chatroom_manager_remove (mgr, chatroom);
+    }
+
+  g_object_unref (mgr);
+}
+
 static void
 dispatcher_connection_new_channel_cb (TpConnection *connection,
 				      const gchar  *object_path,
@@ -417,6 +444,54 @@ dispatcher_connection_new_channel_cb (TpConnection *connection,
 	if (!tp_strdiff (channel_type, TP_IFACE_CHANNEL_TYPE_TUBES)) {
 		dispatcher_tubes_handle_channel (dispatcher, channel);
 	}
+
+  if (!tp_strdiff (channel_type, TP_IFACE_CHANNEL_TYPE_TEXT) &&
+      handle_type == TP_HANDLE_TYPE_ROOM)
+    {
+      /* Add the chatroom to the chatroom manager */
+      EmpathyChatroomManager *mgr;
+      EmpathyChatroom *chatroom;
+      GArray *handles;
+      gchar **room_ids;
+  	  MissionControl *mc;
+      McAccount *account;
+
+      mgr = empathy_chatroom_manager_new ();
+
+      handles = g_array_sized_new (FALSE, FALSE, sizeof (TpHandle), 1);
+      g_array_append_val (handles, handle);
+
+      tp_cli_connection_run_inspect_handles (connection, -1,
+          TP_HANDLE_TYPE_ROOM, handles, &room_ids, NULL, NULL);
+
+      mc = empathy_mission_control_new ();
+      account = mission_control_get_account_for_tpconnection (mc, connection,
+          NULL);
+
+      chatroom = empathy_chatroom_manager_find (mgr, account, room_ids[0]);
+      if (chatroom == NULL)
+        {
+          chatroom = empathy_chatroom_new (account, room_ids[0]);
+          empathy_chatroom_manager_add (mgr, chatroom);
+        }
+      else
+        {
+          g_object_ref (chatroom);
+        }
+
+      g_object_set (chatroom, "tp-channel", channel, NULL);
+
+      g_signal_connect (channel, "invalidated",
+          G_CALLBACK (chatroom_invalidated_cb), chatroom);
+
+      g_free (room_ids[0]);
+      g_free (room_ids);
+      g_array_free (handles, TRUE);
+      g_object_unref (mc);
+      g_object_unref (account);
+      g_object_unref (chatroom);
+      g_object_unref (mgr);
+    }
 
 	if (suppress_handler) {
 		g_signal_emit (dispatcher, signals[DISPATCH_CHANNEL], 0, channel);
