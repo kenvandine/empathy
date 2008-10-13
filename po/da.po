@@ -15,8 +15,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Empathy\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-09-21 03:49+0200\n"
-"PO-Revision-Date: 2008-09-21 03:46+0200\n"
+"POT-Creation-Date: 2008-10-13 22:53+0200\n"
+"PO-Revision-Date: 2008-10-13 22:49+0200\n"
 "Last-Translator: M.P. Rommedahl <Lhademmor@gmail.com>\n"
 "Language-Team: Danish <dansk@dansk-gruppen.dk>\n"
 "MIME-Version: 1.0\n"
@@ -643,29 +643,38 @@ msgstr "Fjerner kontakt"
 msgid "Sorry, I don't want you in my contact list anymore."
 msgstr "Beklager, jeg vil ikke have dig på min kontaktliste længere."
 
-#: ../libempathy-gtk/empathy-contact-menu.c:109
+#: ../libempathy-gtk/empathy-contact-menu.c:115
 #: ../src/empathy-main-window.glade.h:9
 msgid "_Chat"
 msgstr "_Samtale"
 
 # TIdligere oversat til "samtale", men det kunne sammenblandes med 'chat' som også bliver til 'samtale'
-#: ../libempathy-gtk/empathy-contact-menu.c:130
+#: ../libempathy-gtk/empathy-contact-menu.c:136
 msgid "_Call"
 msgstr "_Opringning"
 
-#: ../libempathy-gtk/empathy-contact-menu.c:169
+#: ../libempathy-gtk/empathy-contact-menu.c:175
 #: ../src/empathy-main-window.glade.h:17
 msgid "_View Previous Conversations"
 msgstr "_Vis foregående samtaler"
 
-#: ../libempathy-gtk/empathy-contact-menu.c:197
+#: ../libempathy-gtk/empathy-contact-menu.c:203
 msgid "Infor_mation"
 msgstr "Opl_ysninger"
 
-#: ../libempathy-gtk/empathy-contact-menu.c:224
+#: ../libempathy-gtk/empathy-contact-menu.c:230
 #: ../src/empathy-chat-window.glade.h:14 ../src/empathy-main-window.glade.h:11
 msgid "_Edit"
 msgstr "_Redigér"
+
+#: ../libempathy-gtk/empathy-contact-menu.c:294
+msgid "Inviting to this room"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-contact-menu.c:334
+#, fuzzy
+msgid "_Invite to chatroom"
+msgstr "_Ynglingssamtalerum"
 
 #: ../libempathy-gtk/empathy-contact-widget.c:358
 msgid "Save Avatar"
@@ -1094,6 +1103,14 @@ msgstr "Opl_ysninger"
 #: ../src/empathy-main-window.glade.h:15
 msgid "_Preferences"
 msgstr "_Indstillinger"
+
+#: ../megaphone/src/megaphone-applet.c:255
+msgid "Please configure a contact."
+msgstr "Konfigurér venligst en kontakt."
+
+#: ../megaphone/src/megaphone-applet.c:348
+msgid "Select contact..."
+msgstr "Vælg kontakt..."
 
 #: ../nothere/data/GNOME_NotHere_Applet.server.in.in.h:1
 msgid "Presence"
