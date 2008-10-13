@@ -471,7 +471,8 @@ dispatcher_connection_new_channel_cb (TpConnection *connection,
       chatroom = empathy_chatroom_manager_find (mgr, account, room_ids[0]);
       if (chatroom == NULL)
         {
-          chatroom = empathy_chatroom_new (account, room_ids[0]);
+          chatroom = empathy_chatroom_new (account);
+          empathy_chatroom_set_name (chatroom, room_ids[0]);
           empathy_chatroom_manager_add (mgr, chatroom);
         }
       else
