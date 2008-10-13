@@ -39,11 +39,14 @@
 
 #define CHATROOMS_XML_FILENAME "chatrooms.xml"
 #define CHATROOMS_DTD_FILENAME "empathy-chatroom-manager.dtd"
+#define SAVE_TIMER 4
 
 #define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyChatroomManager)
 typedef struct {
 	GList      *chatrooms;
   gchar *file;
+  /* source id of the autosave timer */
+  gint save_timer_id;
 } EmpathyChatroomManagerPriv;
 
 static void     chatroom_manager_finalize          (GObject                    *object);
@@ -203,9 +206,18 @@ empathy_chatroom_manager_init (EmpathyChatroomManager *manager)
 static void
 chatroom_manager_finalize (GObject *object)
 {
+  EmpathyChatroomManager *self = EMPATHY_CHATROOM_MANAGER (object);
 	EmpathyChatroomManagerPriv *priv;
 
 	priv = GET_PRIV (object);
+
+  if (priv->save_timer_id > 0)
+    {
+      /* have to save before destroy the object */
+      g_source_remove (priv->save_timer_id);
+      priv->save_timer_id = 0;
+      chatroom_manager_file_save (self);
+    }
 
 	g_list_foreach (priv->chatrooms, (GFunc) g_object_unref, NULL);
 	g_list_free (priv->chatrooms);
@@ -232,12 +244,37 @@ empathy_chatroom_manager_new (const gchar *file)
 	return manager;
 }
 
+static gboolean
+save_timeout (EmpathyChatroomManager *self)
+{
+  EmpathyChatroomManagerPriv *priv = GET_PRIV (self);
+
+  priv->save_timer_id = 0;
+  chatroom_manager_file_save (self);
+
+  return FALSE;
+}
+
+static void
+reset_save_timeout (EmpathyChatroomManager *self)
+{
+  EmpathyChatroomManagerPriv *priv = GET_PRIV (self);
+
+  if (priv->save_timer_id > 0)
+    {
+      g_source_remove (priv->save_timer_id);
+    }
+
+  priv->save_timer_id = g_timeout_add_seconds (SAVE_TIMER,
+      (GSourceFunc) save_timeout, self);
+}
+
 static void
 chatroom_favorite_changed_cb (EmpathyChatroom *chatroom,
                               GParamSpec *spec,
                               EmpathyChatroomManager *self)
 {
-  chatroom_manager_file_save (self);
+  reset_save_timeout (self);
 }
 
 static void
@@ -275,7 +312,7 @@ empathy_chatroom_manager_add (EmpathyChatroomManager *manager,
 
     if (favorite)
       {
-        chatroom_manager_file_save (manager);
+        reset_save_timeout (manager);
       }
 
 		g_signal_emit (manager, signals[CHATROOM_ADDED], 0, chatroom);
@@ -311,7 +348,7 @@ empathy_chatroom_manager_remove (EmpathyChatroomManager *manager,
 
       if (favorite)
         {
-          chatroom_manager_file_save (manager);
+          reset_save_timeout (manager);
         }
 
 			g_signal_emit (manager, signals[CHATROOM_REMOVED], 0, this_chatroom);
