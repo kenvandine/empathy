@@ -21,6 +21,7 @@
 
 #include <glib.h>
 #include <check.h>
+#include <libmissioncontrol/mc-account.h>
 
 void
 check_helpers_init (void);
@@ -43,5 +44,7 @@ G_STMT_START {                                                    \
 gchar * get_xml_file (const gchar *filename);
 gchar * get_user_xml_file (const gchar *filename);
 void copy_xml_file (const gchar *orig, const gchar *dest);
+void remove_account_from_gconf (McAccount *account);
+
 
 #endif /* #ifndef __CHECK_HELPERS_H__ */

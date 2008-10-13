@@ -20,6 +20,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <glib/gstdio.h>
+#include <gconf/gconf.h>
+#include <gconf/gconf-client.h>
+
 #include "check-helpers.h"
 
 static gboolean expecting_critical = FALSE;
@@ -96,4 +100,64 @@ copy_xml_file (const gchar *orig,
   g_free (sample);
   g_free (file);
   g_free (buffer);
+}
+
+void
+remove_account_from_gconf (McAccount *account)
+{
+  GConfClient *client;
+  gchar *path;
+  GError *error = NULL;
+  GSList *entries = NULL, *l;
+
+  client = gconf_client_get_default ();
+  path = g_strdup_printf ("/apps/telepathy/mc/accounts/%s",
+      mc_account_get_unique_name (account));
+
+  entries = gconf_client_all_entries (client, path, &error);
+  if (error != NULL)
+    {
+      g_print ("failed to list entries in %s: %s\n", path, error->message);
+      g_error_free (error);
+      error = NULL;
+    }
+
+  for (l = entries; l != NULL; l = g_slist_next (l))
+    {
+      GConfEntry *entry = l->data;
+
+      if (g_str_has_suffix (entry->key, "data_dir"))
+        {
+          gchar *dir;
+
+          dir = gconf_client_get_string (client, entry->key, &error);
+          if (error != NULL)
+            {
+              g_print ("get data_dir string failed: %s\n", entry->key);
+              g_error_free (error);
+              error = NULL;
+            }
+          else
+            {
+              if (g_rmdir (dir) != 0)
+                g_print ("can't remove %s\n", dir);
+            }
+        }
+
+      /* FIXME: this doesn't remove the key */
+      gconf_client_unset (client, entry->key, &error);
+      if (error != NULL)
+        {
+          g_print ("unset of %s failed: %s\n", path, error->message);
+          g_error_free (error);
+          error = NULL;
+        }
+
+      gconf_entry_free (entry);
+    }
+
+  g_slist_free (entries);
+
+  g_object_unref (client);
+  g_free (path);
 }
