@@ -43,6 +43,7 @@
 #define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyChatroomManager)
 typedef struct {
 	GList      *chatrooms;
+  gchar *file;
 } EmpathyChatroomManagerPriv;
 
 static void     chatroom_manager_finalize          (GObject                    *object);
@@ -61,14 +62,111 @@ enum {
 
 static guint signals[LAST_SIGNAL];
 
+/* properties */
+enum
+{
+  PROP_FILE =1,
+  LAST_PROPERTY
+};
+
 G_DEFINE_TYPE (EmpathyChatroomManager, empathy_chatroom_manager, G_TYPE_OBJECT);
+
+static void
+empathy_chatroom_manager_get_property (GObject *object,
+                                       guint property_id,
+                                       GValue *value,
+                                       GParamSpec *pspec)
+{
+  EmpathyChatroomManager *self = EMPATHY_CHATROOM_MANAGER (object);
+  EmpathyChatroomManagerPriv *priv = GET_PRIV (self);
+
+  switch (property_id)
+    {
+      case PROP_FILE:
+        g_value_set_string (value, priv->file);
+        break;
+      default:
+        G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+        break;
+    }
+}
+
+static void
+empathy_chatroom_manager_set_property (GObject *object,
+                                       guint property_id,
+                                       const GValue *value,
+                                       GParamSpec *pspec)
+{
+  EmpathyChatroomManager *self = EMPATHY_CHATROOM_MANAGER (object);
+  EmpathyChatroomManagerPriv *priv = GET_PRIV (self);
+
+  switch (property_id)
+    {
+      case PROP_FILE:
+        g_free (priv->file);
+        priv->file = g_value_dup_string (value);
+        break;
+      default:
+        G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+        break;
+    }
+}
+
+static GObject *
+empathy_chatroom_manager_constructor (GType type,
+                                      guint n_props,
+                                      GObjectConstructParam *props)
+{
+  GObject *obj;
+  EmpathyChatroomManager *self;
+  EmpathyChatroomManagerPriv *priv;
+
+  /* Parent constructor chain */
+  obj = G_OBJECT_CLASS (empathy_chatroom_manager_parent_class)->
+        constructor (type, n_props, props);
+
+  self = EMPATHY_CHATROOM_MANAGER (obj);
+  priv = GET_PRIV (self);
+
+  if (priv->file == NULL)
+    {
+      /* Set the default file path */
+      gchar *dir;
+
+      dir = g_build_filename (g_get_home_dir (), ".gnome2", PACKAGE_NAME, NULL);
+      if (!g_file_test (dir, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR))
+        g_mkdir_with_parents (dir, S_IRUSR | S_IWUSR | S_IXUSR);
+
+      priv->file = g_build_filename (dir, CHATROOMS_XML_FILENAME, NULL);
+      g_free (dir);
+    }
+
+  chatroom_manager_get_all (self);
+  return obj;
+}
 
 static void
 empathy_chatroom_manager_class_init (EmpathyChatroomManagerClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GParamSpec *param_spec;
 
+  object_class->constructor = empathy_chatroom_manager_constructor;
+  object_class->get_property = empathy_chatroom_manager_get_property;
+  object_class->set_property = empathy_chatroom_manager_set_property;
 	object_class->finalize = chatroom_manager_finalize;
+
+  param_spec = g_param_spec_string (
+      "file",
+      "path of the favorite file",
+      "The path of the XML file containing user's favorites",
+      NULL,
+      G_PARAM_CONSTRUCT_ONLY |
+      G_PARAM_READWRITE |
+      G_PARAM_STATIC_NAME |
+      G_PARAM_STATIC_NICK |
+      G_PARAM_STATIC_BLURB);
+  g_object_class_install_property (object_class, PROP_FILE, param_spec);
 
 	signals[CHATROOM_ADDED] =
 		g_signal_new ("chatroom-added",
@@ -111,6 +209,7 @@ chatroom_manager_finalize (GObject *object)
 
 	g_list_foreach (priv->chatrooms, (GFunc) g_object_unref, NULL);
 	g_list_free (priv->chatrooms);
+  g_free (priv->file);
 
 	(G_OBJECT_CLASS (empathy_chatroom_manager_parent_class)->finalize) (object);
 }
@@ -121,11 +220,7 @@ empathy_chatroom_manager_new (void)
 	static EmpathyChatroomManager *manager = NULL;
 
 	if (!manager) {
-		EmpathyChatroomManagerPriv *priv;
-
 		manager = g_object_new (EMPATHY_TYPE_CHATROOM_MANAGER, NULL);
-		priv = GET_PRIV (manager);
-		chatroom_manager_get_all (manager);
 	
 		g_object_add_weak_pointer (G_OBJECT (manager), (gpointer) &manager);
 	} else {
@@ -299,27 +394,13 @@ static gboolean
 chatroom_manager_get_all (EmpathyChatroomManager *manager)
 {
 	EmpathyChatroomManagerPriv *priv;
-	gchar                     *dir;
-	gchar                     *file_with_path = NULL;
 
 	priv = GET_PRIV (manager);
 
-	dir = g_build_filename (g_get_home_dir (), ".gnome2", PACKAGE_NAME, NULL);
-	if (!g_file_test (dir, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR)) {
-		g_mkdir_with_parents (dir, S_IRUSR | S_IWUSR | S_IXUSR);
-	}
-
-	file_with_path = g_build_filename (dir, CHATROOMS_XML_FILENAME, NULL);
-	g_free (dir);
-
 	/* read file in */
-	if (g_file_test (file_with_path, G_FILE_TEST_EXISTS) &&
-	    !chatroom_manager_file_parse (manager, file_with_path)) {
-		g_free (file_with_path);
-		return FALSE;
-	}
-
-	g_free (file_with_path);
+	if (g_file_test (priv->file, G_FILE_TEST_EXISTS) &&
+	    !chatroom_manager_file_parse (manager, priv->file))
+    return FALSE;
 
 	return TRUE;
 }
@@ -450,18 +531,8 @@ chatroom_manager_file_save (EmpathyChatroomManager *manager)
 	xmlDocPtr                  doc;
 	xmlNodePtr                 root;
 	GList                     *l;
-	gchar                     *dir;
-	gchar                     *file;
 
 	priv = GET_PRIV (manager);
-
-	dir = g_build_filename (g_get_home_dir (), ".gnome2", PACKAGE_NAME, NULL);
-	if (!g_file_test (dir, G_FILE_TEST_EXISTS | G_FILE_TEST_IS_DIR)) {
-		g_mkdir_with_parents (dir, S_IRUSR | S_IWUSR | S_IXUSR);
-	}
-
-	file = g_build_filename (dir, CHATROOMS_XML_FILENAME, NULL);
-	g_free (dir);
 
 	doc = xmlNewDoc ("1.0");
 	root = xmlNewNode (NULL, "chatrooms");
@@ -491,14 +562,12 @@ chatroom_manager_file_save (EmpathyChatroomManager *manager)
 	/* Make sure the XML is indented properly */
 	xmlIndentTreeOutput = 1;
 
-	DEBUG ("Saving file:'%s'", file);
-	xmlSaveFormatFileEnc (file, doc, "utf-8", 1);
+	DEBUG ("Saving file:'%s'", priv->file);
+	xmlSaveFormatFileEnc (priv->file, doc, "utf-8", 1);
 	xmlFreeDoc (doc);
 
 	xmlCleanupParser ();
 	xmlMemoryDump ();
-
-	g_free (file);
 
 	return TRUE;
 }
