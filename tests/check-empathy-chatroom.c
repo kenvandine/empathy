@@ -21,7 +21,12 @@ create_chatroom (void)
   chatroom = empathy_chatroom_new (account);
   fail_if (chatroom == NULL);
 
+  /* destroy the account as we don't have to add it to the accounts
+   * configuration */
+  /* FIXME: the account is not really removed */
+  mc_account_delete (account);
   g_object_unref (profile);
+  g_object_unref (account);
 
   return chatroom;
 }
@@ -41,7 +46,6 @@ START_TEST (test_empathy_chatroom_new)
   fail_if (favorite);
 
   g_object_unref (chatroom);
-  /* FIXME: unref the account ? */
 }
 END_TEST
 
@@ -114,7 +118,6 @@ START_TEST (test_favorite_and_auto_connect)
   fail_if (favorite);
 
   g_object_unref (chatroom);
-  /* FIXME: unref the account ? */
 }
 END_TEST
 
