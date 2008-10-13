@@ -1,5 +1,5 @@
 /*
- * check-helpers.c - Source for some check helpers
+ * check-empathy-helpers.c - Source for some check helpers
  * Copyright (C) 2007 Collabora Ltd.
  *
  * This library is free software; you can redistribute it and/or
@@ -16,29 +16,15 @@
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  */
-#ifndef __CHECK_HELPERS_H__
-#define __CHECK_HELPERS_H__
+#ifndef __CHECK_EMPATHY_HELPERS_H__
+#define __CHECK_EMPATHY_HELPERS_H__
 
 #include <glib.h>
-#include <check.h>
 #include <libmissioncontrol/mc-account.h>
 
-void
-check_helpers_init (void);
+gchar * get_xml_file (const gchar *filename);
+gchar * get_user_xml_file (const gchar *filename);
+void copy_xml_file (const gchar *orig, const gchar *dest);
+void remove_account_from_gconf (McAccount *account);
 
-void
-expect_critical (gboolean expected);
-
-gboolean
-got_critical (void);
-
-#define fail_unless_critical(expr, ...)                          \
-G_STMT_START {                                                    \
-  expect_critical (TRUE);                                         \
-  expr;                                                           \
-  _fail_unless (got_critical (), __FILE__, __LINE__,              \
-      "Expected g_critical, got none", ## __VA_ARGS__, NULL);     \
-  expect_critical (FALSE);                                        \
-} G_STMT_END;
-
-#endif /* #ifndef __CHECK_HELPERS_H__ */
+#endif /* #ifndef __CHECK_EMPATHY_HELPERS_H__ */

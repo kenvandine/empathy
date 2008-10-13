@@ -3,9 +3,12 @@
 #include <string.h>
 #include <glib/gstdio.h>
 
+#include <gconf/gconf.h>
+#include <gconf/gconf-client.h>
 #include <check.h>
 #include "check-helpers.h"
 #include "check-libempathy.h"
+#include "check-empathy-helpers.h"
 
 #include <libempathy/empathy-chatroom-manager.h>
 

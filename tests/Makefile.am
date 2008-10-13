@@ -33,6 +33,8 @@ check_main_SOURCES =                             \
     check-helpers.h                              \
     check-libempathy.h                           \
     check-empathy-utils.c                        \
+    check-empathy-helpers.h                      \
+    check-empathy-helpers.c                      \
     check-irc-helper.h                           \
     check-irc-helper.c                           \
     check-empathy-irc-server.c                   \
