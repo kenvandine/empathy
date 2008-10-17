@@ -42,6 +42,7 @@
                 <child>
                   <widget class="GtkVBox" id="vbox1">
                     <property name="visible">True</property>
+                    <property name="spacing">6</property>
                     <property name="homogeneous">True</property>
                     <child>
                       <widget class="GtkHBox" id="hbox148">
