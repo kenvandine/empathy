@@ -398,54 +398,6 @@ FILENAME:
 }
 
 static gboolean
-import_dialog_tree_model_foreach (GtkTreeModel *model,
-                                  GtkTreePath *path,
-                                  GtkTreeIter *iter,
-                                  gpointer user_data)
-{
-  gboolean to_import;
-  AccountData *data;
-
-  gtk_tree_model_get (model, iter,
-      COL_IMPORT, &to_import,
-      COL_ACCOUNT_DATA, &data,
-      -1);
-
-  if (to_import)
-    import_dialog_add_account (data);
-
-  import_dialog_account_data_free (data);
-  return FALSE;
-}
-
-static void
-import_dialog_free (EmpathyImportDialog *dialog)
-{
-  if (dialog->window)
-    gtk_widget_destroy (dialog->window);
-  g_list_free (dialog->accounts);
-  g_slice_free (EmpathyImportDialog, dialog);
-}
-
-static void
-import_dialog_button_ok_clicked_cb (GtkButton *button,
-                                    EmpathyImportDialog *dialog)
-{
-  GtkTreeModel *model;
-
-  model = gtk_tree_view_get_model (GTK_TREE_VIEW (dialog->treeview));
-  gtk_tree_model_foreach (model, import_dialog_tree_model_foreach, dialog);
-  import_dialog_free (dialog);
-}
-
-static void
-import_dialog_button_cancel_clicked_cb (GtkButton *button,
-                                        EmpathyImportDialog *dialog)
-{
-  import_dialog_free (dialog);
-}
-
-static gboolean
 import_dialog_account_id_in_list (GList *accounts,
                                   const gchar *account_id)
 {
@@ -603,6 +555,52 @@ import_dialog_set_up_account_list (EmpathyImportDialog *dialog)
   import_dialog_add_accounts_to_model (dialog);
 }
 
+static gboolean
+import_dialog_tree_model_foreach (GtkTreeModel *model,
+                                  GtkTreePath *path,
+                                  GtkTreeIter *iter,
+                                  gpointer user_data)
+{
+  gboolean to_import;
+  AccountData *data;
+
+  gtk_tree_model_get (model, iter,
+      COL_IMPORT, &to_import,
+      COL_ACCOUNT_DATA, &data,
+      -1);
+
+  if (to_import)
+    import_dialog_add_account (data);
+
+  return FALSE;
+}
+
+static void
+import_dialog_response_cb (GtkWidget *widget,
+                           gint response,
+                           EmpathyImportDialog *dialog)
+{
+  if (response == GTK_RESPONSE_OK)
+    {
+      GtkTreeModel *model;
+
+      model = gtk_tree_view_get_model (GTK_TREE_VIEW (dialog->treeview));
+      gtk_tree_model_foreach (model, import_dialog_tree_model_foreach, dialog);
+    }
+
+  gtk_widget_destroy (dialog->window);
+}
+
+static void
+import_dialog_destroy_cb (GtkWidget *widget,
+                          EmpathyImportDialog *dialog)
+{
+  g_list_foreach (dialog->accounts, (GFunc) import_dialog_account_data_free,
+    NULL);
+  g_list_free (dialog->accounts);
+  g_slice_free (EmpathyImportDialog, dialog);
+}
+
 void
 empathy_import_dialog_show (GtkWindow *parent,
                             gboolean warning)
@@ -610,18 +608,18 @@ empathy_import_dialog_show (GtkWindow *parent,
   static EmpathyImportDialog *dialog = NULL;
   GladeXML *glade;
   gchar *filename;
+  GList *accounts;
 
+  /* This window is a singleton. If it already exist, present it */
   if (dialog)
     {
       gtk_window_present (GTK_WINDOW (dialog->window));
       return;
     }
 
-  dialog = g_slice_new0 (EmpathyImportDialog);
-
-  dialog->accounts = import_dialog_pidgin_load ();
-
-  if (!dialog->accounts)
+  /* Check if we have accounts to import before creating the window */
+  accounts = import_dialog_pidgin_load ();
+  if (!accounts)
     {
       GtkWidget *message;
 
@@ -638,10 +636,12 @@ empathy_import_dialog_show (GtkWindow *parent,
       else
         DEBUG ("No accounts to import; closing dialog silently.");
 
-      import_dialog_free (dialog);
-      dialog = NULL;
       return;
     }
+  
+  /* We have accounts, let's display the window with them */
+  dialog = g_slice_new0 (EmpathyImportDialog);
+  dialog->accounts = accounts;  
 
   filename = empathy_file_lookup ("empathy-import-dialog.glade", "src");
   glade = empathy_glade_get_file (filename,
@@ -653,8 +653,8 @@ empathy_import_dialog_show (GtkWindow *parent,
 
   empathy_glade_connect (glade,
       dialog,
-      "button_ok", "clicked", import_dialog_button_ok_clicked_cb,
-      "button_cancel", "clicked", import_dialog_button_cancel_clicked_cb,
+      "import_dialog", "destroy", import_dialog_destroy_cb,
+      "import_dialog", "response", import_dialog_response_cb,
       NULL);
 
   g_object_add_weak_pointer (G_OBJECT (dialog->window), (gpointer) &dialog);

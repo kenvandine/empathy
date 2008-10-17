@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Fri Oct  3 19:30:53 2008 -->
+<!--Generated with glade3 3.4.5 on Fri Oct 17 11:01:30 2008 -->
 <glade-interface>
   <widget class="GtkDialog" id="import_dialog">
     <property name="border_width">5</property>
@@ -54,7 +54,7 @@
                 <property name="receives_default">True</property>
                 <property name="label" translatable="yes">gtk-ok</property>
                 <property name="use_stock">True</property>
-                <property name="response_id">0</property>
+                <property name="response_id">-5</property>
               </widget>
               <packing>
                 <property name="position">1</property>
