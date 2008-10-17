@@ -384,14 +384,19 @@ empathy_import_dialog_response_cb (GtkDialog *dialog_window,
         empathy_import_dialog_pidgin_import_accounts ();
     }
 
-  gtk_widget_destroy (GTK_WIDGET (dialog_window));
-  g_slice_free (EmpathyImportDialog, dialog);
+  gtk_widget_hide (GTK_WIDGET (dialog_window));
 }
 
 void
 empathy_import_dialog_show (GtkWindow *parent)
 {
-  EmpathyImportDialog *dialog;
+  static EmpathyImportDialog *dialog = NULL;
+
+  if (dialog)
+    {
+      gtk_window_present (GTK_WINDOW (dialog->window));
+      return;
+    }
 
   dialog = g_slice_new0 (EmpathyImportDialog);
 
