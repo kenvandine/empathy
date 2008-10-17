@@ -293,9 +293,10 @@ import_dialog_pidgin_load (void)
           if (!tp_strdiff ((gchar *) child->name,
               PIDGIN_ACCOUNT_TAG_PROTOCOL))
             {
+              gchar *content;
               const gchar *protocol;
 
-              protocol = (gchar *) xmlNodeGetContent (child);
+              protocol = content = (gchar *) xmlNodeGetContent (child);
 
               if (g_str_has_prefix (protocol, "prpl-"))
                 protocol += 5;
@@ -306,6 +307,10 @@ import_dialog_pidgin_load (void)
                 protocol = "groupwise";
 
               data->profile = mc_profile_lookup (protocol);
+              g_free (content);
+
+              if (data->profile == NULL)
+                break;
             }
 
           /* Username and IRC server. */
@@ -376,7 +381,7 @@ import_dialog_pidgin_load (void)
 
       /* If we have the needed settings, add the account data to the list,
        * otherwise free the data */
-      if (g_hash_table_size (data->settings) > 0)
+      if (data->profile != NULL && g_hash_table_size (data->settings) > 0)
         accounts = g_list_prepend (accounts, data);
       else
         import_dialog_account_data_free (data);
