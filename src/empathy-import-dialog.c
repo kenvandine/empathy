@@ -92,7 +92,7 @@ static PidginMcMapItem pidgin_mc_map[] =
 typedef struct
 {
   GHashTable *settings;
-  gchar *protocol;
+  McProfile *profile;
 } AccountData;
 
 typedef struct
@@ -140,27 +140,20 @@ static void import_dialog_button_cancel_clicked_cb (GtkButton *button,
 static void
 import_dialog_account_data_free (AccountData *data)
 {
-	g_free (data->protocol);
-	g_hash_table_destroy (data->settings);
+  g_object_unref (data->profile);
+  g_hash_table_destroy (data->settings);
 }
 
 static gboolean
 import_dialog_add_account (AccountData *data)
 {
-  McProfile *profile;
   McAccount *account;
   GHashTableIter iter;
   gpointer key, value;
   gchar *display_name;
   GValue *username;
 
-  DEBUG ("Looking up profile with protocol '%s'", data->protocol);
-  profile = mc_profile_lookup (data->protocol);
-
-  if (profile == NULL)
-    return FALSE;
-
-  account = mc_account_create (profile);
+  account = mc_account_create (data->profile);
 
   g_hash_table_iter_init (&iter, data->settings);
   while (g_hash_table_iter_next (&iter, &key, &value))
@@ -196,12 +189,12 @@ import_dialog_add_account (AccountData *data)
   /* Set the display name of the account */
   username = g_hash_table_lookup (data->settings, "account");
   display_name = g_strdup_printf ("%s (%s)",
-      mc_profile_get_display_name (profile), g_value_get_string (username));
+      mc_profile_get_display_name (data->profile),
+      g_value_get_string (username));
   mc_account_set_display_name (account, display_name);
 
   g_free (display_name);
   g_object_unref (account);
-  g_object_unref (profile);
 
   return TRUE;
 }
@@ -217,10 +210,6 @@ import_dialog_pidgin_parse_setting (AccountData *data,
   gint i;
   GValue *value = NULL;
 
-  /* We can't do anything if we didn't discovered the protocol yet */
-  if (!data->protocol)
-    return;
-
   /* We can't do anything if the setting don't have a name */
   tag_name = (gchar *) xmlGetProp (setting, PIDGIN_ACCOUNT_TAG_NAME);
   if (!tag_name)
@@ -229,7 +218,8 @@ import_dialog_pidgin_parse_setting (AccountData *data,
   /* Search for the map corresponding to setting we are parsing */
   for (i = 0; i < G_N_ELEMENTS (pidgin_mc_map); i++)
     {
-      if (!tp_strdiff (data->protocol, pidgin_mc_map[i].protocol) &&
+      if (!tp_strdiff (mc_profile_get_protocol_name (data->profile),
+            pidgin_mc_map[i].protocol) &&
           !tp_strdiff (tag_name, pidgin_mc_map[i].pidgin_name))
         {
           item = pidgin_mc_map + i;
@@ -316,9 +306,8 @@ import_dialog_pidgin_load (void)
               PIDGIN_ACCOUNT_TAG_PROTOCOL))
             {
               const gchar *protocol;
-              gchar *content;
 
-              protocol = content = (gchar *) xmlNodeGetContent (child);
+              protocol = (gchar *) xmlNodeGetContent (child);
 
               if (g_str_has_prefix (protocol, "prpl-"))
                 protocol += 5;
@@ -328,8 +317,7 @@ import_dialog_pidgin_load (void)
               else if (!tp_strdiff (protocol, PIDGIN_PROTOCOL_NOVELL))
                 protocol = "groupwise";
 
-              data->protocol = g_strdup (protocol);
-              g_free (content);
+              data->profile = mc_profile_lookup (protocol);
             }
 
           /* Username and IRC server. */
@@ -353,8 +341,8 @@ import_dialog_pidgin_load (void)
                 username = name;
 
              /* Split "username@server" if it is an IRC account */
-             if (data->protocol && strstr (name, "@") &&
-                 !tp_strdiff (data->protocol, "irc"))
+             if (strstr (name, "@") && !tp_strdiff (
+                   mc_profile_get_protocol_name (data->profile), "irc"))
               {
                 nick_server = g_strsplit (name, "@", 2);
                 username = nick_server[0];
@@ -400,7 +388,7 @@ import_dialog_pidgin_load (void)
 
       /* If we have the needed settings, add the account data to the list,
        * otherwise free the data */
-      if (data->protocol && g_hash_table_size (data->settings) > 0)
+      if (g_hash_table_size (data->settings) > 0)
         accounts = g_list_prepend (accounts, data);
       else
         import_dialog_account_data_free (data);
@@ -524,16 +512,10 @@ import_dialog_add_accounts_to_model (EmpathyImportDialog *dialog)
       AccountData *data = (AccountData *) account->data;
       gboolean import;
       GList *accounts;
-      McProfile *profile;
 
       value = g_hash_table_lookup (data->settings, "account");
 
-      /* Get the profile of the account we're adding to get all current
-       * accounts in MC. */
-      profile = mc_profile_lookup (data->protocol);
-
-      accounts = profile ? mc_accounts_list_by_profile (profile) :
-        mc_accounts_list ();
+      accounts = mc_accounts_list_by_profile (data->profile);
 
       /* Only set the "Import" cell to be active if there isn't already an
        * account set up with the same account id. */
@@ -541,13 +523,12 @@ import_dialog_add_accounts_to_model (EmpathyImportDialog *dialog)
           g_value_get_string (value));
 
       mc_accounts_list_free (accounts);
-      g_object_unref (profile);
 
       gtk_list_store_append (GTK_LIST_STORE (model), &iter);
 
       gtk_list_store_set (GTK_LIST_STORE (model), &iter,
           COL_IMPORT, import,
-          COL_PROTOCOL, data->protocol,
+          COL_PROTOCOL, mc_profile_get_display_name (data->profile),
           COL_NAME, g_value_get_string (value),
           COL_SOURCE, "Pidgin",
           COL_ACCOUNT_DATA, data,
