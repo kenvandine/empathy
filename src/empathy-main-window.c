@@ -56,6 +56,7 @@
 #include "empathy-new-chatroom-dialog.h"
 #include "empathy-chatrooms-window.h"
 #include "empathy-event-manager.h"
+#include "empathy-import-dialog.h"
 
 #define DEBUG_FLAG EMPATHY_DEBUG_OTHER
 #include <libempathy/empathy-debug.h>
@@ -132,6 +133,8 @@ static void     main_window_room_join_favorites_cb             (GtkWidget       
 static void     main_window_room_manage_favorites_cb           (GtkWidget                *widget,
 								EmpathyMainWindow        *window);
 static void     main_window_chat_add_contact_cb                (GtkWidget                *widget,
+								EmpathyMainWindow        *window);
+static void     main_window_chat_import_cb                     (GtkWidget                *widget,
 								EmpathyMainWindow        *window);
 static void     main_window_chat_show_offline_cb               (GtkCheckMenuItem         *item,
 								EmpathyMainWindow        *window);
@@ -421,6 +424,7 @@ empathy_main_window_show (void)
 			      "room_join_favorites", "activate", main_window_room_join_favorites_cb,
 			      "room_manage_favorites", "activate", main_window_room_manage_favorites_cb,
 			      "chat_add_contact", "activate", main_window_chat_add_contact_cb,
+			      "chat_import", "activate", main_window_chat_import_cb,
 			      "chat_show_offline", "toggled", main_window_chat_show_offline_cb,
 			      "edit", "button-press-event", main_window_edit_button_press_event_cb,
 			      "edit_accounts", "activate", main_window_edit_accounts_cb,
@@ -797,6 +801,13 @@ main_window_chat_add_contact_cb (GtkWidget         *widget,
 				 EmpathyMainWindow *window)
 {
 	empathy_new_contact_dialog_show (GTK_WINDOW (window->window));
+}
+
+static void
+main_window_chat_import_cb (GtkWidget         *widget,
+			    EmpathyMainWindow *window)
+{
+	empathy_import_dialog_show (GTK_WINDOW (window->window));
 }
 
 static void
