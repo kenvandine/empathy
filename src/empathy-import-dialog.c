@@ -274,8 +274,7 @@ empathy_import_dialog_pidgin_import_accounts ()
   if (rootnode == NULL)
     return;
 
-  node = rootnode->children;
-  while (node)
+  for (node = rootnode->children; node; node = node->next)
     {
       if (strcmp ((gchar *) node->name, PIDGIN_ACCOUNT_TAG_ACCOUNT) == 0)
         {
@@ -364,7 +363,6 @@ empathy_import_dialog_pidgin_import_accounts ()
           g_hash_table_unref (settings);
         }
 
-      node = node->next;
     }
 
   xmlFreeDoc(doc);
