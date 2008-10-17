@@ -101,7 +101,6 @@ typedef struct
   GtkWidget *treeview;
   GtkWidget *button_ok;
   GtkWidget *button_cancel;
-  gboolean not_imported;
   GList *accounts;
 } EmpathyImportDialog;
 
@@ -127,7 +126,7 @@ enum
 
 static void import_dialog_add_setting (GHashTable *settings,
     gchar *key, gpointer value, EmpathyImportSettingType  type);
-static gboolean import_dialog_add_account (gchar *protocol_name,
+static void import_dialog_add_account (gchar *protocol_name,
     GHashTable *settings);
 static void import_dialog_pidgin_parse_setting (gchar *protocol,
     xmlNodePtr setting, GHashTable *settings);
@@ -148,7 +147,7 @@ import_dialog_account_data_free (AccountData *data)
     g_hash_table_destroy (data->settings);
 }
 
-static gboolean
+static void
 import_dialog_add_account (AccountData *data)
 {
   McAccount *account;
@@ -199,8 +198,6 @@ import_dialog_add_account (AccountData *data)
 
   g_free (display_name);
   g_object_unref (account);
-
-  return TRUE;
 }
 
 static void
@@ -424,8 +421,7 @@ import_dialog_tree_model_foreach (GtkTreeModel *model,
       -1);
 
   if (to_import)
-    if (!import_dialog_add_account (data))
-      dialog->not_imported = TRUE;
+    import_dialog_add_account (data);
 
   import_dialog_account_data_free (data);
   return FALSE;
