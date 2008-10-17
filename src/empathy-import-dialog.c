@@ -123,6 +123,7 @@ static void empathy_import_dialog_pidgin_import_accounts ();
 static void empathy_import_dialog_response_cb (GtkDialog *dialog_window,
     gint response, EmpathyImportDialog *dialog);
 
+
 static void
 empathy_import_dialog_add_setting (GHashTable *settings,
                                    gchar *key,
