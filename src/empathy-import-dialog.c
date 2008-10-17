@@ -199,7 +199,7 @@ import_dialog_pidgin_parse_setting (AccountData *data,
   /* Search for the map corresponding to setting we are parsing */
   for (i = 0; i < G_N_ELEMENTS (pidgin_mc_map); i++)
     {
-      if (strcmp (data->protocol, pidgin_mc_map[i].protocol) != 0 &&
+      if (strcmp (data->protocol, pidgin_mc_map[i].protocol) == 0 &&
           strcmp (tag_name, pidgin_mc_map[i].pidgin_name) == 0)
         {
           item = pidgin_mc_map + i;
