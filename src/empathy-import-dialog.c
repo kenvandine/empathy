@@ -398,7 +398,6 @@ import_dialog_tree_model_foreach (GtkTreeModel *model,
                                   GtkTreeIter *iter,
                                   gpointer user_data)
 {
-  EmpathyImportDialog *dialog = (EmpathyImportDialog *) user_data;
   gboolean to_import;
   AccountData *data;
 
