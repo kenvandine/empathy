@@ -276,92 +276,89 @@ empathy_import_dialog_pidgin_import_accounts ()
 
   for (node = rootnode->children; node; node = node->next)
     {
-      if (strcmp ((gchar *) node->name, PIDGIN_ACCOUNT_TAG_ACCOUNT) == 0)
+      if (strcmp ((gchar *) node->name, PIDGIN_ACCOUNT_TAG_ACCOUNT) != 0)
+        continue;
+
+      settings = g_hash_table_new (g_str_hash, g_str_equal);
+
+      for (child = node->children; child; child = child->next)
         {
-          child = node->children;
 
-          settings = g_hash_table_new (g_str_hash, g_str_equal);
-
-          while (child)
+          if (strcmp ((gchar *) child->name,
+              PIDGIN_ACCOUNT_TAG_PROTOCOL) == 0)
             {
+              protocol = (gchar *) xmlNodeGetContent (child);
 
-              if (strcmp ((gchar *) child->name,
-                  PIDGIN_ACCOUNT_TAG_PROTOCOL) == 0)
-                {
-                  protocol = (gchar *) xmlNodeGetContent (child);
+              if (g_str_has_prefix (protocol, "prpl-"))
+                protocol = strchr (protocol, '-') + 1;
 
-                  if (g_str_has_prefix (protocol, "prpl-"))
-                    protocol = strchr (protocol, '-') + 1;
+              if (strcmp (protocol, PIDGIN_PROTOCOL_BONJOUR) == 0)
+                protocol = "salut";
+              else if (strcmp (protocol, PIDGIN_PROTOCOL_NOVELL) == 0)
+                protocol = "groupwise";
 
-                  if (strcmp (protocol, PIDGIN_PROTOCOL_BONJOUR) == 0)
-                    protocol = "salut";
-                  else if (strcmp (protocol, PIDGIN_PROTOCOL_NOVELL) == 0)
-                    protocol = "groupwise";
+              empathy_import_dialog_add_setting (settings, "protocol",
+                  (gpointer) protocol,
+                  EMPATHY_IMPORT_SETTING_TYPE_STRING);
 
-                  empathy_import_dialog_add_setting (settings, "protocol",
-                      (gpointer) protocol,
-                      EMPATHY_IMPORT_SETTING_TYPE_STRING);
-
-                }
-              else if (strcmp ((gchar *) child->name,
-                  PIDGIN_ACCOUNT_TAG_NAME) == 0)
-                {
-                  name = (gchar *) xmlNodeGetContent (child);
-
-                  if (g_strrstr (name, "/") != NULL)
-                    {
-                      gchar **name_resource;
-                      name_resource = g_strsplit (name, "/", 2);
-                      username = g_strdup(name_resource[0]);
-                      g_free (name_resource);
-                    }
-                  else
-                    username = name;
-
-                 if (strstr (name, "@") && strcmp (protocol, "irc") == 0)
-                  {
-                    gchar **nick_server;
-                    nick_server = g_strsplit (name, "@", 2);
-                    username = nick_server[0];
-                    empathy_import_dialog_add_setting (settings,
-                        "server", (gpointer) nick_server[1],
-                        EMPATHY_IMPORT_SETTING_TYPE_STRING);
-                  }
-
-                  empathy_import_dialog_add_setting (settings, "account",
-                      (gpointer) username, EMPATHY_IMPORT_SETTING_TYPE_STRING);
-
-                }
-              else if (strcmp ((gchar *) child->name,
-                  PIDGIN_ACCOUNT_TAG_PASSWORD) == 0)
-                {
-                  empathy_import_dialog_add_setting (settings, "password",
-                      (gpointer) xmlNodeGetContent (child),
-                      EMPATHY_IMPORT_SETTING_TYPE_STRING);
-
-                }
-              else if (strcmp ((gchar *) child->name,
-                  PIDGIN_ACCOUNT_TAG_SETTINGS) == 0)
-                {
-                  setting = child->children;
-
-                  while (setting)
-                    {
-                      empathy_import_dialog_pidgin_parse_setting (protocol,
-                          setting, settings);
-                          setting = setting->next;
-                    }
-
-                }
-              child = child->next;
             }
+          else if (strcmp ((gchar *) child->name,
+              PIDGIN_ACCOUNT_TAG_NAME) == 0)
+            {
+              name = (gchar *) xmlNodeGetContent (child);
 
-          if (g_hash_table_size (settings) > 0)
-              empathy_import_dialog_add_account (protocol, settings);
+              if (g_strrstr (name, "/") != NULL)
+                {
+                  gchar **name_resource;
+                  name_resource = g_strsplit (name, "/", 2);
+                  username = g_strdup(name_resource[0]);
+                  g_free (name_resource);
+                }
+              else
+                username = name;
 
-          g_free (username);
-          g_hash_table_unref (settings);
+             if (strstr (name, "@") && strcmp (protocol, "irc") == 0)
+              {
+                gchar **nick_server;
+                nick_server = g_strsplit (name, "@", 2);
+                username = nick_server[0];
+                empathy_import_dialog_add_setting (settings,
+                    "server", (gpointer) nick_server[1],
+                    EMPATHY_IMPORT_SETTING_TYPE_STRING);
+              }
+
+              empathy_import_dialog_add_setting (settings, "account",
+                  (gpointer) username, EMPATHY_IMPORT_SETTING_TYPE_STRING);
+
+            }
+          else if (strcmp ((gchar *) child->name,
+              PIDGIN_ACCOUNT_TAG_PASSWORD) == 0)
+            {
+              empathy_import_dialog_add_setting (settings, "password",
+                  (gpointer) xmlNodeGetContent (child),
+                  EMPATHY_IMPORT_SETTING_TYPE_STRING);
+
+            }
+          else if (strcmp ((gchar *) child->name,
+              PIDGIN_ACCOUNT_TAG_SETTINGS) == 0)
+            {
+              setting = child->children;
+
+              while (setting)
+                {
+                  empathy_import_dialog_pidgin_parse_setting (protocol,
+                      setting, settings);
+                      setting = setting->next;
+                }
+
+            }
         }
+
+      if (g_hash_table_size (settings) > 0)
+          empathy_import_dialog_add_account (protocol, settings);
+
+      g_free (username);
+      g_hash_table_unref (settings);
 
     }
 
