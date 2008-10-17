@@ -248,13 +248,13 @@ import_dialog_pidgin_parse_setting (AccountData *data,
 
   if (!tp_strdiff (type, "bool"))
     {
-      sscanf (content, "%i", &i);
+      i = (gint) g_ascii_strtod (content, NULL);
       value = tp_g_value_slice_new (G_TYPE_BOOLEAN);
       g_value_set_boolean (value, i != 0);
     }
   else if (!tp_strdiff (type, "int"))
     {
-      sscanf (content, "%i", &i);
+      i = (gint) g_ascii_strtod (content, NULL);
       value = tp_g_value_slice_new (G_TYPE_INT);
       g_value_set_int (value, i);
     }
