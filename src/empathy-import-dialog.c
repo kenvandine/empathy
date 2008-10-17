@@ -25,6 +25,7 @@
 
 #include <glib.h>
 #include <gtk/gtk.h>
+#include <glade/glade.h>
 #include <glib/gi18n.h>
 
 #include <libxml/parser.h>
@@ -37,6 +38,9 @@
 
 #define DEBUG_FLAG EMPATHY_DEBUG_OTHER
 #include <libempathy/empathy-debug.h>
+#include <libempathy/empathy-utils.h>
+
+#include <libempathy-gtk/empathy-ui-utils.h>
 
 /* Pidgin to MC map */
 typedef struct
@@ -93,8 +97,9 @@ typedef struct
 typedef struct
 {
   GtkWidget *window;
-  GtkWidget *label_select;
-  GtkWidget *combo;
+  GtkWidget *treeview;
+  GtkWidget *button_ok;
+  GtkWidget *button_cancel;
 } EmpathyImportDialog;
 
 #define PIDGIN_ACCOUNT_TAG_NAME "name"
@@ -105,6 +110,29 @@ typedef struct
 #define PIDGIN_SETTING_PROP_TYPE "type"
 #define PIDGIN_PROTOCOL_BONJOUR "bonjour"
 #define PIDGIN_PROTOCOL_NOVELL "novell"
+
+enum
+{
+  COL_IMPORT = 0,
+  COL_PROTOCOL,
+  COL_NAME,
+  COL_SOURCE,
+  COL_ACCOUNT,
+  COL_COUNT
+};
+
+
+static void import_dialog_add_setting (GHashTable *settings,
+    gchar *key, gpointer value, EmpathyImportSettingType  type);
+static gboolean import_dialog_add_account (gchar *protocol_name,
+    GHashTable *settings);
+static void import_dialog_pidgin_parse_setting (gchar *protocol,
+    xmlNodePtr setting, GHashTable *settings);
+static void import_dialog_pidgin_import_accounts ();
+static void import_dialog_button_ok_clicked_cb (GtkButton *button,
+    EmpathyImportDialog *dialog);
+static void import_dialog_button_cancel_clicked_cb (GtkButton *button,
+    EmpathyImportDialog *dialog);
 
 static void
 import_dialog_account_data_free (AccountData *data)
@@ -378,28 +406,152 @@ OUT:
 }
 
 static void
-import_dialog_response_cb (GtkDialog *dialog_window,
-                           gint response,
-                           EmpathyImportDialog *dialog)
+import_dialog_button_ok_clicked_cb (GtkButton *button,
+                                    EmpathyImportDialog *dialog)
 {
-  gchar *from = NULL;
-  if (response == GTK_RESPONSE_OK)
+  if (FALSE)
+    import_dialog_pidgin_import_accounts ();
+
+  DEBUG ("ok clicked");
+
+  gtk_widget_hide (GTK_WIDGET (dialog->window));
+}
+
+static void
+import_dialog_button_cancel_clicked_cb (GtkButton *button,
+                                        EmpathyImportDialog *dialog)
+{
+  gtk_widget_hide (GTK_WIDGET (dialog->window));
+}
+
+static void
+import_dialog_add_accounts (EmpathyImportDialog *dialog)
+{
+  GtkTreeModel *model;
+  GtkTreeIter iter;
+  GList *accounts, *account;
+
+  model = gtk_tree_view_get_model (GTK_TREE_VIEW (dialog->treeview));
+
+  accounts = g_list_alloc ();
+
+  for (account = accounts; account; account = account->next)
     {
-      from = gtk_combo_box_get_active_text (GTK_COMBO_BOX (dialog->combo));
-
-      if (strcmp (from, "Pidgin") == 0)
-        import_dialog_pidgin_import_accounts ();
-
-      g_free (from);
+      /* Add the accounts here. */
     }
 
-  gtk_widget_hide (GTK_WIDGET (dialog_window));
+  /* A sample item for testing. */
+  gtk_list_store_append (GTK_LIST_STORE (model), &iter);
+
+  gtk_list_store_set (GTK_LIST_STORE (model), &iter,
+      COL_IMPORT, TRUE,
+      COL_PROTOCOL, "Jabber",
+      COL_NAME, "foo@gmail.com",
+      COL_SOURCE, "Pidgin",
+      COL_ACCOUNT, NULL,
+      -1);
+
+  g_list_free (accounts);
+}
+
+static void
+import_dialog_cell_toggled_cb (GtkCellRendererToggle *cell_renderer,
+                               const gchar *path_str,
+                               EmpathyImportDialog *dialog)
+{
+  GtkTreeModel *model;
+  GtkTreeIter iter;
+  GtkTreePath *path;
+
+  path = gtk_tree_path_new_from_string (path_str);
+  model = gtk_tree_view_get_model (GTK_TREE_VIEW (dialog->treeview));
+
+  gtk_tree_model_get_iter (model, &iter, path);
+
+  gtk_list_store_set (GTK_LIST_STORE (model), &iter,
+      COL_IMPORT, !gtk_cell_renderer_toggle_get_active (cell_renderer),
+      -1);
+
+  gtk_tree_path_free (path);
+}
+
+static void
+import_dialog_set_up_account_list (EmpathyImportDialog *dialog)
+{
+  GtkListStore *store;
+  GtkTreeView *view;
+  GtkTreeViewColumn *column;
+  GtkCellRenderer *cell;
+
+  store = gtk_list_store_new (COL_COUNT, G_TYPE_BOOLEAN, G_TYPE_STRING,
+      G_TYPE_STRING, G_TYPE_STRING, G_TYPE_HASH_TABLE);
+
+  gtk_tree_view_set_model (GTK_TREE_VIEW (dialog->treeview),
+      GTK_TREE_MODEL (store));
+
+  g_object_unref (store);
+
+  view = GTK_TREE_VIEW (dialog->treeview);
+  gtk_tree_view_set_headers_visible (view, TRUE);
+
+  /* Import column */
+  cell = gtk_cell_renderer_toggle_new ();
+  gtk_tree_view_insert_column_with_attributes (view, -1,
+      _("Import"), cell,
+      "active", COL_IMPORT,
+      NULL);
+
+  g_signal_connect (cell, "toggled",
+      G_CALLBACK (import_dialog_cell_toggled_cb), dialog);
+
+  /* Protocol column */
+  column = gtk_tree_view_column_new ();
+  gtk_tree_view_column_set_title (column, _("Protocol"));
+  gtk_tree_view_column_set_expand (column, TRUE);
+  gtk_tree_view_append_column (view, column);
+
+  cell = gtk_cell_renderer_text_new ();
+  g_object_set (cell,
+      "editable", FALSE,
+      NULL);
+  gtk_tree_view_column_pack_start (column, cell, TRUE);
+  gtk_tree_view_column_add_attribute (column, cell, "text", COL_PROTOCOL);
+
+  /* Account column */
+  column = gtk_tree_view_column_new ();
+  gtk_tree_view_column_set_title (column, _("Account"));
+  gtk_tree_view_column_set_expand (column, TRUE);
+  gtk_tree_view_append_column (view, column);
+
+  cell = gtk_cell_renderer_text_new ();
+  g_object_set (cell,
+      "editable", FALSE,
+      NULL);
+  gtk_tree_view_column_pack_start (column, cell, TRUE);
+  gtk_tree_view_column_add_attribute (column, cell, "text", COL_NAME);
+
+  /* Source column */
+  column = gtk_tree_view_column_new ();
+  gtk_tree_view_column_set_title (column, _("Source"));
+  gtk_tree_view_column_set_expand (column, TRUE);
+  gtk_tree_view_append_column (view, column);
+
+  cell = gtk_cell_renderer_text_new ();
+  g_object_set (cell,
+      "editable", FALSE,
+      NULL);
+  gtk_tree_view_column_pack_start (column, cell, TRUE);
+  gtk_tree_view_column_add_attribute (column, cell, "text", COL_SOURCE);
+
+  import_dialog_add_accounts (dialog);
 }
 
 void
 empathy_import_dialog_show (GtkWindow *parent)
 {
   static EmpathyImportDialog *dialog = NULL;
+  GladeXML *glade;
+  gchar *filename;
 
   if (dialog)
     {
@@ -409,32 +561,26 @@ empathy_import_dialog_show (GtkWindow *parent)
 
   dialog = g_slice_new0 (EmpathyImportDialog);
 
-  dialog->window = gtk_dialog_new_with_buttons (_("Import accounts"),
+  filename = empathy_file_lookup ("empathy-import-dialog.glade", "src");
+  glade = empathy_glade_get_file (filename,
+      "import_dialog",
       NULL,
-      GTK_DIALOG_MODAL,
-      GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-      GTK_STOCK_OK, GTK_RESPONSE_OK,
+      "import_dialog", &dialog->window,
+      "treeview", &dialog->treeview,
       NULL);
 
-  g_signal_connect (G_OBJECT (dialog->window), "response",
-      G_CALLBACK (import_dialog_response_cb),
-      dialog);
+  empathy_glade_connect (glade,
+      dialog,
+      "button_ok", "clicked", import_dialog_button_ok_clicked_cb,
+      "button_cancel", "clicked", import_dialog_button_cancel_clicked_cb,
+      NULL);
 
-  dialog->label_select = gtk_label_new (
-      _("Select the program to import accounts from:"));
-  gtk_widget_show (dialog->label_select);
+  import_dialog_set_up_account_list (dialog);
 
-  dialog->combo = gtk_combo_box_new_text ();
-  gtk_widget_show (dialog->combo);
+  g_object_add_weak_pointer (G_OBJECT (dialog->window), (gpointer) &dialog);
 
-  gtk_combo_box_append_text (GTK_COMBO_BOX (dialog->combo), "Pidgin");
-  gtk_combo_box_set_active (GTK_COMBO_BOX (dialog->combo), 0);
-
-  gtk_box_pack_start_defaults (GTK_BOX (GTK_DIALOG (dialog->window)->vbox),
-      dialog->label_select);
-
-  gtk_box_pack_start_defaults (GTK_BOX (GTK_DIALOG (dialog->window)->vbox),
-      dialog->combo);
+  g_free (filename);
+  g_object_unref (glade);
 
   if (parent)
     gtk_window_set_transient_for (GTK_WINDOW (dialog->window), parent);
