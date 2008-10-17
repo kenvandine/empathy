@@ -529,9 +529,9 @@ import_dialog_add_accounts_to_model (EmpathyImportDialog *dialog)
     {
       GtkWidget *message;
 
-      message = gtk_message_dialog_new (NULL,
-          GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING,
-          GTK_BUTTONS_CLOSE,
+      message = gtk_message_dialog_new (
+          gtk_window_get_transient_for (GTK_WINDOW (dialog->window)),
+          GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_CLOSE,
           _("No accounts to import could be found. Empathy currently only "
             "supports importing accounts from Pidgin."));
 
