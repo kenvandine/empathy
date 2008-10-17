@@ -44,6 +44,7 @@
 #include <libempathy-gtk/empathy-account-widget.h>
 #include <libempathy-gtk/empathy-account-widget-irc.h>
 #include <libempathy-gtk/empathy-account-widget-sip.h>
+#include <libempathy-gtk/empathy-conf.h>
 
 #include "empathy-accounts-dialog.h"
 #include "empathy-import-dialog.h"
@@ -1020,6 +1021,36 @@ accounts_dialog_response_cb (GtkWidget            *widget,
 }
 
 static void
+accounts_dialog_accounts_to_import (EmpathyAccountsDialog *dialog)
+{
+	GtkWidget *message;
+	gint response;
+	gboolean ask;
+
+	empathy_conf_get_bool (empathy_conf_get (),
+				 EMPATHY_PREFS_IMPORT_ASKED, &ask);
+
+	if (ask)
+		return;
+
+	empathy_conf_set_bool (empathy_conf_get (),
+				 EMPATHY_PREFS_IMPORT_ASKED, TRUE);
+
+	message = gtk_message_dialog_new (GTK_WINDOW (dialog->window),
+					  GTK_DIALOG_MODAL,
+					  GTK_MESSAGE_QUESTION,
+					  GTK_BUTTONS_YES_NO,
+					  _("Do you want to import accounts"
+					    " from Pidgin?"));
+
+	response = gtk_dialog_run (GTK_DIALOG (message));
+	gtk_widget_destroy (message);
+
+	if (response == GTK_RESPONSE_YES)
+		empathy_import_dialog_show (GTK_WINDOW (dialog->window));
+}
+
+static void
 accounts_dialog_destroy_cb (GtkWidget            *widget,
 			    EmpathyAccountsDialog *dialog)
 {
@@ -1176,6 +1207,9 @@ empathy_accounts_dialog_show (GtkWindow *parent,
 	}
 
 	gtk_widget_show (dialog->window);
+
+	if (empathy_import_dialog_accounts_to_import ())
+		accounts_dialog_accounts_to_import (dialog);
 
 	return dialog->window;
 }
