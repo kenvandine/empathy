@@ -431,12 +431,11 @@ import_dialog_tree_model_foreach (GtkTreeModel *model,
       COL_ACCOUNT_DATA, &data,
       -1);
 
-  if (!to_import)
-      return FALSE;
+  if (to_import)
+    if (!import_dialog_add_account (data))
+      dialog->not_imported = TRUE;
 
-  if (!import_dialog_add_account (data))
-    dialog->not_imported = TRUE;
-
+  import_dialog_account_data_free (data);
   return FALSE;
 }
 
