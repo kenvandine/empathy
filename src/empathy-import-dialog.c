@@ -31,25 +31,12 @@
 #include <libxml/tree.h>
 
 #include <libmissioncontrol/mc-account.h>
+#include <telepathy-glib/util.h>
 
 #include "empathy-import-dialog.h"
 
 #define DEBUG_FLAG EMPATHY_DEBUG_OTHER
 #include <libempathy/empathy-debug.h>
-
-typedef enum
-{
-  EMPATHY_IMPORT_SETTING_TYPE_STRING,
-  EMPATHY_IMPORT_SETTING_TYPE_BOOL,
-  EMPATHY_IMPORT_SETTING_TYPE_INT,
-} EmpathyImportSettingType;
-
-typedef struct
-{
-  gpointer     value;
-  EmpathyImportSettingType  type;
-} EmpathyImportSetting;
-
 
 /* Pidgin to MC map */
 typedef struct
@@ -99,6 +86,12 @@ static PidginMcMapItem pidgin_mc_map[] =
 
 typedef struct
 {
+  GHashTable *settings;
+  gchar *protocol;
+} AccountData;
+
+typedef struct
+{
   GtkWidget *window;
   GtkWidget *label_select;
   GtkWidget *combo;
@@ -113,157 +106,150 @@ typedef struct
 #define PIDGIN_PROTOCOL_BONJOUR "bonjour"
 #define PIDGIN_PROTOCOL_NOVELL "novell"
 
-static void import_dialog_add_setting (GHashTable *settings,
-    gchar *key, gpointer value, EmpathyImportSettingType  type);
-static gboolean import_dialog_add_account (gchar *protocol_name,
-    GHashTable *settings);
-static void import_dialog_pidgin_parse_setting (gchar *protocol,
-    xmlNodePtr setting, GHashTable *settings);
-static void import_dialog_pidgin_import_accounts ();
-static void import_dialog_response_cb (GtkDialog *dialog_window,
-    gint response, EmpathyImportDialog *dialog);
-
-
 static void
-import_dialog_add_setting (GHashTable *settings,
-                           gchar *key,
-                           gpointer value,
-                           EmpathyImportSettingType type)
+import_dialog_account_data_free (AccountData *data)
 {
-  EmpathyImportSetting *set = g_slice_new0 (EmpathyImportSetting);
-
-  set->value = value;
-  set->type = type;
-
-  g_hash_table_insert (settings, key, set);
+	g_free (data->protocol);
+	g_hash_table_destroy (data->settings);
 }
 
 static gboolean
-import_dialog_add_account (gchar *protocol_name,
-                           GHashTable *settings)
+import_dialog_add_account (AccountData *data)
 {
   McProfile *profile;
   McAccount *account;
-  gchar *key_char;
   GHashTableIter iter;
   gpointer key, value;
-  EmpathyImportSetting *set;
   gchar *display_name;
   gchar *username;
 
-  DEBUG ("Looking up profile with protocol '%s'", protocol_name);
-  profile = mc_profile_lookup (protocol_name);
+  DEBUG ("Looking up profile with protocol '%s'", data->protocol);
+  profile = mc_profile_lookup (data->protocol);
 
   if (profile == NULL)
     return FALSE;
 
   account = mc_account_create (profile);
 
-  g_hash_table_iter_init (&iter, settings);
+  g_hash_table_iter_init (&iter, data->settings);
   while (g_hash_table_iter_next (&iter, &key, &value))
     {
-      set = (EmpathyImportSetting *) value;
-      key_char = (gchar *) key;
-      switch (((EmpathyImportSetting *) value)->type)
+      const gchar *param = key;
+      GValue *gvalue = value;
+
+      switch (G_VALUE_TYPE (gvalue))
         {
-          case EMPATHY_IMPORT_SETTING_TYPE_STRING:
-            DEBUG ("Setting %s to (string) %s",
-                key_char, (gchar *) set->value);
+          case G_TYPE_STRING:
+            DEBUG ("Set param '%s' to '%s' (string)",
+                param, g_value_get_string (gvalue));
             mc_account_set_param_string (account,
-                key_char, (gchar *) set->value);
+                param, g_value_get_string (gvalue));
             break;
 
-          case EMPATHY_IMPORT_SETTING_TYPE_BOOL:
-            DEBUG ("Setting %s to (bool) %i",
-                key_char, (gboolean) set->value);
+          case G_TYPE_BOOLEAN:
+            DEBUG ("Set param '%s' to %s (boolean)",
+                param, g_value_get_boolean (gvalue) ? "TRUE" : "FALSE");
             mc_account_set_param_boolean (account,
-                key_char, (gboolean) set->value);
+                param, g_value_get_boolean (gvalue));
             break;
 
-          case EMPATHY_IMPORT_SETTING_TYPE_INT:
-            DEBUG ("Setting %s to (int) %i",
-                key_char, (gint) set->value);
+          case G_TYPE_INT:
+            DEBUG ("Set param '%s' to '%i' (integer)",
+                param, g_value_get_int (gvalue));
             mc_account_set_param_int (account,
-                key_char, (gint) set->value);
+                param, g_value_get_int (gvalue));
             break;
         }
     }
 
+  /* Set the display name of the account */
   mc_account_get_param_string (account, "account", &username);
-  display_name = g_strdup_printf ("%s (%s)", username,
-      mc_profile_get_display_name (profile));
+  display_name = g_strdup_printf ("%s (%s)",
+    mc_profile_get_display_name (profile), username);
   mc_account_set_display_name (account, display_name);
 
   g_free (username);
   g_free (display_name);
   g_object_unref (account);
   g_object_unref (profile);
+
   return TRUE;
 }
 
 static void
-import_dialog_pidgin_parse_setting (gchar *protocol,
-                                    xmlNodePtr setting,
-                                    GHashTable *settings)
+import_dialog_pidgin_parse_setting (AccountData *data,
+                                    xmlNodePtr setting)
 {
-  int i;
+  PidginMcMapItem *item = NULL;
+  gchar *tag_name;
+  gchar *type = NULL;
+  gchar *content;
+  gint i;
+  GValue *value = NULL;
 
-  if (!xmlHasProp (setting, PIDGIN_ACCOUNT_TAG_NAME))
+  /* We can't do anything if we didn't discovered the protocol yet */
+  if (!data->protocol)
     return;
 
+  /* We can't do anything if the setting don't have a name */
+  tag_name = (gchar *) xmlGetProp (setting, PIDGIN_ACCOUNT_TAG_NAME);
+  if (!tag_name)
+    return;
+
+  /* Search for the map corresponding to setting we are parsing */
   for (i = 0; i < G_N_ELEMENTS (pidgin_mc_map); i++)
     {
-      if (strcmp(protocol, pidgin_mc_map[i].protocol) != 0)
-        continue;
-
-      if (strcmp ((gchar *) xmlGetProp (setting, PIDGIN_ACCOUNT_TAG_NAME),
-        pidgin_mc_map[i].pidgin_name) == 0)
+      if (strcmp (data->protocol, pidgin_mc_map[i].protocol) != 0 &&
+          strcmp (tag_name, pidgin_mc_map[i].pidgin_name) == 0)
         {
-          gint arg;
-          gchar *type = NULL;
-
-          type = (gchar *) xmlGetProp (setting, PIDGIN_SETTING_PROP_TYPE);
-
-          if (strcmp (type, "bool") == 0)
-            {
-              sscanf ((gchar *) xmlNodeGetContent (setting),"%i", &arg);
-              import_dialog_add_setting (settings,
-                  pidgin_mc_map[i].mc_name,
-                  (gpointer) arg,
-                  EMPATHY_IMPORT_SETTING_TYPE_BOOL);
-            }
-          else if (strcmp (type, "int") == 0)
-            {
-              sscanf ((gchar *) xmlNodeGetContent (setting),
-                  "%i", &arg);
-              import_dialog_add_setting (settings,
-                  pidgin_mc_map[i].mc_name,
-                  (gpointer) arg,
-                  EMPATHY_IMPORT_SETTING_TYPE_INT);
-            }
-          else if (strcmp (type, "string") == 0)
-            {
-              import_dialog_add_setting (settings,
-                  pidgin_mc_map[i].mc_name,
-                  (gpointer) xmlNodeGetContent (setting),
-                  EMPATHY_IMPORT_SETTING_TYPE_STRING);
-            }
+          item = pidgin_mc_map + i;
+          break;
         }
     }
+  g_free (tag_name);
+
+  /* If we didn't find the item, there is nothing we can do */
+  if (!item)
+    return;
+
+  type = (gchar *) xmlGetProp (setting, PIDGIN_SETTING_PROP_TYPE);
+  content = (gchar *) xmlNodeGetContent (setting);
+
+  if (strcmp (type, "bool") == 0)
+    {
+      sscanf (content, "%i", &i);
+      value = tp_g_value_slice_new (G_TYPE_BOOLEAN);
+      g_value_set_boolean (value, i != 0);
+    }
+  else if (strcmp (type, "int") == 0)
+    {
+      sscanf (content, "%i", &i);
+      value = tp_g_value_slice_new (G_TYPE_INT);
+      g_value_set_int (value, i);
+    }
+  else if (strcmp (type, "string") == 0)
+    {
+      value = tp_g_value_slice_new (G_TYPE_STRING);
+      g_value_set_string (value, content);
+    }
+
+  if (value)
+    g_hash_table_insert (data->settings, item->mc_name, value);
+
+  g_free (type);
+  g_free (content);
 }
 
-static void
-import_dialog_pidgin_import_accounts ()
+static GList *
+import_dialog_pidgin_load (void)
 {
   xmlNodePtr rootnode, node, child, setting;
   xmlParserCtxtPtr ctxt;
   xmlDocPtr doc;
   gchar *filename;
-  gchar *protocol = NULL;
-  gchar *name = NULL;
-  gchar *username = NULL;
-  GHashTable *settings;
+  GList *accounts = NULL;
 
+  /* Load pidgin accounts xml */
   ctxt = xmlNewParserCtxt ();
   filename = g_build_filename (g_get_home_dir (), ".purple", "accounts.xml",
       NULL);
@@ -272,98 +258,123 @@ import_dialog_pidgin_import_accounts ()
 
   rootnode = xmlDocGetRootElement (doc);
   if (rootnode == NULL)
-    return;
+    goto OUT;
 
   for (node = rootnode->children; node; node = node->next)
     {
+      AccountData *data;
+
+      /* If it is not an account node, skip */
       if (strcmp ((gchar *) node->name, PIDGIN_ACCOUNT_TAG_ACCOUNT) != 0)
         continue;
 
-      settings = g_hash_table_new (g_str_hash, g_str_equal);
+      /* Create account data struct */
+      data = g_slice_new0 (AccountData);
+      data->settings = g_hash_table_new_full (g_str_hash, g_str_equal, NULL,
+        (GDestroyNotify) tp_g_value_slice_free);
 
+      /* Parse account's child nodes to fill the account data struct */
       for (child = node->children; child; child = child->next)
         {
+          GValue *value;
 
+          /* Protocol */
           if (strcmp ((gchar *) child->name,
               PIDGIN_ACCOUNT_TAG_PROTOCOL) == 0)
             {
-              protocol = (gchar *) xmlNodeGetContent (child);
+              const gchar *protocol;
+              gchar *content;
+
+              protocol = content = (gchar *) xmlNodeGetContent (child);
 
               if (g_str_has_prefix (protocol, "prpl-"))
-                protocol = strchr (protocol, '-') + 1;
+                protocol += 5;
 
               if (strcmp (protocol, PIDGIN_PROTOCOL_BONJOUR) == 0)
                 protocol = "salut";
               else if (strcmp (protocol, PIDGIN_PROTOCOL_NOVELL) == 0)
                 protocol = "groupwise";
 
-              import_dialog_add_setting (settings, "protocol",
-                  (gpointer) protocol,
-                  EMPATHY_IMPORT_SETTING_TYPE_STRING);
-
+              data->protocol = g_strdup (protocol);
+              g_free (content);
             }
+          /* Username and IRC server */
           else if (strcmp ((gchar *) child->name,
               PIDGIN_ACCOUNT_TAG_NAME) == 0)
             {
+              gchar *name;
+              GStrv name_resource = NULL;
+              GStrv nick_server = NULL;
+              const gchar *username;
+
               name = (gchar *) xmlNodeGetContent (child);
 
+              /* Split "username/resource" */
               if (g_strrstr (name, "/") != NULL)
                 {
-                  gchar **name_resource;
                   name_resource = g_strsplit (name, "/", 2);
-                  username = g_strdup(name_resource[0]);
-                  g_free (name_resource);
+                  username = name_resource[0];
                 }
               else
                 username = name;
 
-             if (strstr (name, "@") && strcmp (protocol, "irc") == 0)
+             /* Split "username@server" if it is an IRC account */
+             if (data->protocol && strstr (name, "@") &&
+                 strcmp (data->protocol, "irc") == 0)
               {
-                gchar **nick_server;
                 nick_server = g_strsplit (name, "@", 2);
                 username = nick_server[0];
-                import_dialog_add_setting (settings,
-                    "server", (gpointer) nick_server[1],
-                    EMPATHY_IMPORT_SETTING_TYPE_STRING);
+
+                /* Add the server setting */
+                value = tp_g_value_slice_new (G_TYPE_STRING);
+                g_value_set_string (value, nick_server[1]);
+                g_hash_table_insert (data->settings, "server", value);
               }
 
-              import_dialog_add_setting (settings, "account",
-                  (gpointer) username, EMPATHY_IMPORT_SETTING_TYPE_STRING);
+              /* Add the account setting */
+              value = tp_g_value_slice_new (G_TYPE_STRING);
+              g_value_set_string (value, username);
+              g_hash_table_insert (data->settings, "account", value);
 
+              g_strfreev (name_resource);
+              g_strfreev (nick_server);
+              g_free (name);
             }
+          /* Password */
           else if (strcmp ((gchar *) child->name,
               PIDGIN_ACCOUNT_TAG_PASSWORD) == 0)
             {
-              import_dialog_add_setting (settings, "password",
-                  (gpointer) xmlNodeGetContent (child),
-                  EMPATHY_IMPORT_SETTING_TYPE_STRING);
+              gchar *password;
 
+              password = (gchar *) xmlNodeGetContent (child);
+
+              /* Add the password setting */
+              value = tp_g_value_slice_new (G_TYPE_STRING);
+              g_value_set_string (value, password);
+              g_hash_table_insert (data->settings, "password", value);
+
+              g_free (password);
             }
+          /* Other settings */
           else if (strcmp ((gchar *) child->name,
               PIDGIN_ACCOUNT_TAG_SETTINGS) == 0)
-            {
-              setting = child->children;
-
-              while (setting)
-                {
-                  import_dialog_pidgin_parse_setting (protocol,
-                      setting, settings);
-                      setting = setting->next;
-                }
-
-            }
+              for (setting = child->children; setting; setting = setting->next)
+                import_dialog_pidgin_parse_setting (data, setting);
         }
 
-      if (g_hash_table_size (settings) > 0)
-          import_dialog_add_account (protocol, settings);
-
-      g_free (username);
-      g_hash_table_unref (settings);
-
+      /* If we have the needed settings, add the account data to the list,
+       * otherwise free the data */
+      if (data->protocol && g_hash_table_size (data->settings) > 0)
+        accounts = g_list_prepend (accounts, data);
+      else
+        import_dialog_account_data_free (data);
     }
 
+OUT:
   xmlFreeDoc(doc);
   xmlFreeParserCtxt (ctxt);
+
+  return accounts;
 }
 
 static void
