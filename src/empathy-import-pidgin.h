@@ -21,23 +21,13 @@
 
 #include <gtk/gtk.h>
 
-#ifndef __EMPATHY_IMPORT_DIALOG_H__
-#define __EMPATHY_IMPORT_DIALOG_H__
+#ifndef __EMPATHY_IMPORT_PIDGIN_H__
+#define __EMPATHY_IMPORT_PIDGIN_H__
 
 G_BEGIN_DECLS
 
-typedef struct
-{
-  /* Table mapping CM param string to a GValue */
-  GHashTable *settings;
-  /* The profile to use for this account */
-  McProfile *profile;
-} EmpathyImportAccountData;
-
-EmpathyImportAccountData *empathy_import_account_data_new (void);
-void empathy_import_account_data_free (EmpathyImportAccountData *data);
-void empathy_import_dialog_show (GtkWindow *parent, gboolean warning);
+GList *empathy_import_pidgin_load (void);
 
 G_END_DECLS
 
-#endif /* __EMPATHY_IMPORT_DIALOG_H__ */
+#endif /* __EMPATHY_IMPORT_PIDGIN_H__ */
