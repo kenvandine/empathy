@@ -326,7 +326,8 @@ import_dialog_pidgin_load (void)
               data->protocol = g_strdup (protocol);
               g_free (content);
             }
-          /* Username and IRC server */
+
+          /* Username and IRC server. */
           else if (strcmp ((gchar *) child->name,
               PIDGIN_ACCOUNT_TAG_NAME) == 0)
             {
@@ -368,6 +369,7 @@ import_dialog_pidgin_load (void)
               g_strfreev (nick_server);
               g_free (name);
             }
+
           /* Password */
           else if (strcmp ((gchar *) child->name,
               PIDGIN_ACCOUNT_TAG_PASSWORD) == 0)
@@ -383,6 +385,7 @@ import_dialog_pidgin_load (void)
 
               g_free (password);
             }
+
           /* Other settings */
           else if (strcmp ((gchar *) child->name,
               PIDGIN_ACCOUNT_TAG_SETTINGS) == 0)
