@@ -489,6 +489,27 @@ import_dialog_button_cancel_clicked_cb (GtkButton *button,
 }
 
 static gboolean
+import_dialog_filter_mc_accounts (McAccount *account,
+                                  gpointer user_data)
+{
+  gchar *value;
+  const gchar *username;
+  gboolean result;
+
+  username = (const gchar *) user_data;
+
+  if (mc_account_get_param_string (account, "account", &value)
+      == MC_ACCOUNT_SETTING_ABSENT)
+    return FALSE;
+
+  result = tp_strdiff (value, username);
+
+  g_free (value);
+
+  return !result;
+}
+
+static gboolean
 import_dialog_add_accounts_to_model (EmpathyImportDialog *dialog)
 {
   GtkTreeModel *model;
@@ -506,16 +527,39 @@ import_dialog_add_accounts_to_model (EmpathyImportDialog *dialog)
     {
       GValue *value, *account_data;
       AccountData *data = (AccountData *) account->data;
+      gboolean import;
+      GList *accounts, *all_accounts;
+      McProfile *profile;
 
       account_data = tp_g_value_slice_new (G_TYPE_POINTER);
       g_value_set_pointer (account_data, data);
 
       value = g_hash_table_lookup (data->settings, "account");
 
+      /* Get the profile of the account we're adding to get all current
+       * accounts in MC. */
+      profile = mc_profile_lookup (data->protocol);
+
+      all_accounts = profile ? mc_accounts_list_by_profile (profile) :
+        mc_accounts_list ();
+
+      /* Filter the list of all relevant accounts to remove ones which are NOT
+       * the same as the one we're now adding. */
+      accounts = mc_accounts_filter (all_accounts,
+          import_dialog_filter_mc_accounts,
+          (gpointer) g_value_get_string (value));
+
+      /* Make the checkbox ticked if there is *no* account already with the
+       * relevant details. */
+      import = (g_list_length (accounts) == 0);
+
+      mc_accounts_list_free (accounts);
+      g_object_unref (profile);
+
       gtk_list_store_append (GTK_LIST_STORE (model), &iter);
 
       gtk_list_store_set (GTK_LIST_STORE (model), &iter,
-          COL_IMPORT, TRUE,
+          COL_IMPORT, import,
           COL_PROTOCOL, data->protocol,
           COL_NAME, g_value_get_string (value),
           COL_SOURCE, "Pidgin",
