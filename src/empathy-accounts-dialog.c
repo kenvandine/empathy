@@ -1075,8 +1075,7 @@ empathy_accounts_dialog_show (GtkWindow *parent,
 	GladeXML                     *glade;
 	gchar                        *filename;
 	GList                        *accounts, *l;
-	gboolean                      import;
-
+	gboolean                      import_asked;
 
 	if (dialog) {
 		gtk_window_present (GTK_WINDOW (dialog->window));
@@ -1181,9 +1180,9 @@ empathy_accounts_dialog_show (GtkWindow *parent,
 	gtk_widget_show (dialog->window);
 
 	empathy_conf_get_bool (empathy_conf_get (),
-			       EMPATHY_PREFS_IMPORT_ASKED, &import);
+			       EMPATHY_PREFS_IMPORT_ASKED, &import_asked);
 
-	if (!import) {
+	if (!import_asked) {
 		empathy_conf_set_bool (empathy_conf_get (),
 				       EMPATHY_PREFS_IMPORT_ASKED, TRUE);
 		empathy_import_dialog_show (GTK_WINDOW (dialog->window),
