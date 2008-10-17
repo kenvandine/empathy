@@ -382,6 +382,8 @@ empathy_import_dialog_response_cb (GtkDialog *dialog_window,
 
       if (strcmp (from, "Pidgin") == 0)
         empathy_import_dialog_pidgin_import_accounts ();
+
+      g_free (from);
     }
 
   gtk_widget_hide (GTK_WIDGET (dialog_window));
