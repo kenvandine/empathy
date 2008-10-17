@@ -428,7 +428,7 @@ import_dialog_button_cancel_clicked_cb (GtkButton *button,
 }
 
 static void
-import_dialog_add_accounts (EmpathyImportDialog *dialog)
+import_dialog_add_accounts_to_model (EmpathyImportDialog *dialog)
 {
   GtkTreeModel *model;
   GtkTreeIter iter;
@@ -551,7 +551,7 @@ import_dialog_set_up_account_list (EmpathyImportDialog *dialog)
   gtk_tree_view_column_pack_start (column, cell, TRUE);
   gtk_tree_view_column_add_attribute (column, cell, "text", COL_SOURCE);
 
-  import_dialog_add_accounts (dialog);
+  import_dialog_add_accounts_to_model (dialog);
 }
 
 void
