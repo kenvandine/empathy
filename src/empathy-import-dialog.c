@@ -415,8 +415,10 @@ empathy_import_dialog_show (GtkWindow *parent)
 
   dialog->label_select = gtk_label_new (
       _("Select the program to import accounts from:"));
+  gtk_widget_show (dialog->label_select);
 
   dialog->combo = gtk_combo_box_new_text ();
+  gtk_widget_show (dialog->combo);
 
   gtk_combo_box_append_text (GTK_COMBO_BOX (dialog->combo), "Pidgin");
   gtk_combo_box_set_active (GTK_COMBO_BOX (dialog->combo), 0);
@@ -427,9 +429,8 @@ empathy_import_dialog_show (GtkWindow *parent)
   gtk_box_pack_start_defaults (GTK_BOX (GTK_DIALOG (dialog->window)->vbox),
       dialog->combo);
 
-
   if (parent)
     gtk_window_set_transient_for (GTK_WINDOW (dialog->window), parent);
 
-  gtk_widget_show_all (dialog->window);
+  gtk_widget_show (dialog->window);
 }
