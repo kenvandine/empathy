@@ -319,5 +319,19 @@
       </locale>
     </schema>
 
+    <schema>
+      <key>/schemas/apps/empathy/import_asked</key>
+      <applyto>/apps/empathy/import_asked</applyto>
+      <owner>empathy</owner>
+      <type>bool</type>
+      <default>false</default>
+      <locale name="C">
+        <short>Empathy has asked about importing accounts</short>
+	<long>
+	Whether or not Empathy has asked about importing accounts from other programs.
+        </long>
+      </locale>
+    </schema>
+
   </schemalist>  
 </gconfschemafile>
