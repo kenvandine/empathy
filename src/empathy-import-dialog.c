@@ -100,6 +100,10 @@ typedef struct
   GtkWidget *treeview;
   GtkWidget *button_ok;
   GtkWidget *button_cancel;
+
+  guint no_imported;
+  guint no_not_imported;
+  guint no_ignored;
 } EmpathyImportDialog;
 
 #define PIDGIN_ACCOUNT_TAG_NAME "name"
@@ -149,7 +153,7 @@ import_dialog_add_account (AccountData *data)
   GHashTableIter iter;
   gpointer key, value;
   gchar *display_name;
-  gchar *username;
+  GValue *username;
 
   DEBUG ("Looking up profile with protocol '%s'", data->protocol);
   profile = mc_profile_lookup (data->protocol);
@@ -191,12 +195,11 @@ import_dialog_add_account (AccountData *data)
     }
 
   /* Set the display name of the account */
-  mc_account_get_param_string (account, "account", &username);
+  username = g_hash_table_lookup (data->settings, "account");
   display_name = g_strdup_printf ("%s (%s)",
-    mc_profile_get_display_name (profile), username);
+      mc_profile_get_display_name (profile), g_value_get_string (username));
   mc_account_set_display_name (account, display_name);
 
-  g_free (username);
   g_free (display_name);
   g_object_unref (account);
   g_object_unref (profile);
@@ -408,14 +411,58 @@ OUT:
   return accounts;
 }
 
+static gboolean
+import_dialog_tree_model_foreach (GtkTreeModel *model,
+                                  GtkTreePath *path,
+                                  GtkTreeIter *iter,
+                                  gpointer user_data)
+{
+  EmpathyImportDialog *dialog = (EmpathyImportDialog *) user_data;
+  gboolean to_import;
+  AccountData *data;
+  GValue *value;
+
+  gtk_tree_model_get (model, iter,
+      COL_IMPORT, &to_import,
+      COL_ACCOUNT_DATA, &value,
+      -1);
+
+  if (!to_import)
+    {
+      dialog->no_ignored++;
+      return FALSE;
+    }
+
+  data = g_value_get_pointer (value);
+
+  if (import_dialog_add_account (data))
+    dialog->no_imported++;
+  else
+    dialog->no_not_imported++;
+
+  return FALSE;
+}
+
 static void
 import_dialog_button_ok_clicked_cb (GtkButton *button,
                                     EmpathyImportDialog *dialog)
 {
-  if (FALSE)
-    import_dialog_pidgin_import_accounts ();
+  GtkTreeModel *model;
+  GtkWidget *message;
 
-  DEBUG ("ok clicked");
+  model = gtk_tree_view_get_model (GTK_TREE_VIEW (dialog->treeview));
+
+  gtk_tree_model_foreach (model, import_dialog_tree_model_foreach, dialog);
+
+  message = gtk_message_dialog_new (GTK_WINDOW (dialog->window),
+      GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE,
+      _("%u accounts imported successfully.\n"
+        "%u accounts failed to import.\n"
+        "%u accounts were ignored."),
+      dialog->no_imported, dialog->no_not_imported, dialog->no_ignored);
+
+  gtk_dialog_run (GTK_DIALOG (message));
+  gtk_widget_destroy (message);
 
   gtk_widget_hide (GTK_WIDGET (dialog->window));
 }
