@@ -46,6 +46,7 @@
 #include <libempathy-gtk/empathy-account-widget-sip.h>
 
 #include "empathy-accounts-dialog.h"
+#include "empathy-import-dialog.h"
 
 #define DEBUG_FLAG EMPATHY_DEBUG_ACCOUNT
 #include <libempathy/empathy-debug.h>
@@ -65,6 +66,7 @@ typedef struct {
 
 	GtkWidget        *button_add;
 	GtkWidget        *button_remove;
+	GtkWidget        *button_import;
 
 	GtkWidget        *frame_new_account;
 	GtkWidget        *combobox_profile;
@@ -143,6 +145,8 @@ static void       accounts_dialog_button_add_clicked_cb     (GtkWidget          
 static void       accounts_dialog_button_help_clicked_cb    (GtkWidget                *button,
 							     EmpathyAccountsDialog    *dialog);
 static void       accounts_dialog_button_remove_clicked_cb  (GtkWidget                *button,
+							     EmpathyAccountsDialog    *dialog);
+static void       accounts_dialog_button_import_clicked_cb  (GtkWidget                *button,
 							     EmpathyAccountsDialog    *dialog);
 static void       accounts_dialog_response_cb               (GtkWidget                *widget,
 							     gint                      response,
@@ -999,6 +1003,13 @@ accounts_dialog_button_remove_clicked_cb (GtkWidget            *button,
 }
 
 static void
+accounts_dialog_button_import_clicked_cb (GtkWidget             *button,
+					  EmpathyAccountsDialog *dialog)
+{
+	empathy_import_dialog_show (GTK_WINDOW (dialog->window));
+}
+
+static void
 accounts_dialog_response_cb (GtkWidget            *widget,
 			     gint                  response,
 			     EmpathyAccountsDialog *dialog)
@@ -1090,6 +1101,7 @@ empathy_accounts_dialog_show (GtkWindow *parent,
 				       "label_name", &dialog->label_name,
 				       "button_add", &dialog->button_add,
 				       "button_remove", &dialog->button_remove,
+				       "button_import", &dialog->button_import,
 				       NULL);
 	g_free (filename);
 
@@ -1101,6 +1113,7 @@ empathy_accounts_dialog_show (GtkWindow *parent,
 			      "button_back", "clicked", accounts_dialog_button_back_clicked_cb,
 			      "button_add", "clicked", accounts_dialog_button_add_clicked_cb,
 			      "button_remove", "clicked", accounts_dialog_button_remove_clicked_cb,
+			      "button_import", "clicked", accounts_dialog_button_import_clicked_cb,
 			      "button_help", "clicked", accounts_dialog_button_help_clicked_cb,
 			      NULL);
 
