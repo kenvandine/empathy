@@ -487,24 +487,30 @@ import_dialog_button_cancel_clicked_cb (GtkButton *button,
 }
 
 static gboolean
-import_dialog_filter_mc_accounts (McAccount *account,
-                                  gpointer user_data)
+import_dialog_account_id_in_list (GList *accounts,
+                                  const gchar *account_id)
 {
-  gchar *value;
-  const gchar *username;
-  gboolean result;
+  GList *l;
 
-  username = (const gchar *) user_data;
+  for (l = accounts; l; l = l->next)
+    {
+      McAccount *account = l->data;
+      gchar *value;
+      gboolean result;
 
-  if (mc_account_get_param_string (account, "account", &value)
-      == MC_ACCOUNT_SETTING_ABSENT)
-    return FALSE;
+      if (mc_account_get_param_string (account, "account", &value)
+          == MC_ACCOUNT_SETTING_ABSENT)
+        continue;
 
-  result = tp_strdiff (value, username);
+      result = tp_strdiff (value, account_id);
 
-  g_free (value);
+      g_free (value);
 
-  return !result;
+      if (!result)
+        return TRUE;
+    }
+
+  return FALSE;
 }
 
 static void
@@ -521,7 +527,7 @@ import_dialog_add_accounts_to_model (EmpathyImportDialog *dialog)
       GValue *value, *account_data;
       AccountData *data = (AccountData *) account->data;
       gboolean import;
-      GList *accounts, *all_accounts;
+      GList *accounts;
       McProfile *profile;
 
       account_data = tp_g_value_slice_new (G_TYPE_POINTER);
@@ -533,18 +539,13 @@ import_dialog_add_accounts_to_model (EmpathyImportDialog *dialog)
        * accounts in MC. */
       profile = mc_profile_lookup (data->protocol);
 
-      all_accounts = profile ? mc_accounts_list_by_profile (profile) :
+      accounts = profile ? mc_accounts_list_by_profile (profile) :
         mc_accounts_list ();
 
-      /* Filter the list of all relevant accounts to remove ones which are NOT
-       * the same as the one we're now adding. */
-      accounts = mc_accounts_filter (all_accounts,
-          import_dialog_filter_mc_accounts,
-          (gpointer) g_value_get_string (value));
-
-      /* Make the checkbox ticked if there is *no* account already with the
-       * relevant details. */
-      import = accounts == NULL;
+      /* Only set the "Import" cell to be active if there isn't already an
+       * account set up with the same account id. */
+      import = !import_dialog_account_id_in_list (accounts,
+          g_value_get_string (value));
 
       mc_accounts_list_free (accounts);
       g_object_unref (profile);
