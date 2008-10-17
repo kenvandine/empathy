@@ -27,6 +27,7 @@
 #include <gtk/gtk.h>
 #include <glade/glade.h>
 #include <glib/gi18n.h>
+#include <glib/gstdio.h>
 
 #include <libxml/parser.h>
 #include <libxml/tree.h>
@@ -284,8 +285,11 @@ import_dialog_pidgin_load (void)
   ctxt = xmlNewParserCtxt ();
   filename = g_build_filename (g_get_home_dir (), ".purple", "accounts.xml",
       NULL);
+
+  if (g_access (filename, R_OK) != 0)
+    goto FILENAME;
+
   doc = xmlCtxtReadFile (ctxt, filename, NULL, 0);
-  g_free (filename);
 
   rootnode = xmlDocGetRootElement (doc);
   if (rootnode == NULL)
@@ -407,6 +411,9 @@ import_dialog_pidgin_load (void)
 OUT:
   xmlFreeDoc(doc);
   xmlFreeParserCtxt (ctxt);
+
+FILENAME:
+  g_free (filename);
 
   return accounts;
 }
