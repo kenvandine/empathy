@@ -26,8 +26,7 @@
 
 G_BEGIN_DECLS
 
-gboolean empathy_import_dialog_accounts_to_import (void);
-void empathy_import_dialog_show (GtkWindow *parent);
+void empathy_import_dialog_show (GtkWindow *parent, gboolean warning);
 
 G_END_DECLS
 

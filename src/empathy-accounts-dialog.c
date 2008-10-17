@@ -1007,7 +1007,7 @@ static void
 accounts_dialog_button_import_clicked_cb (GtkWidget             *button,
 					  EmpathyAccountsDialog *dialog)
 {
-	empathy_import_dialog_show (GTK_WINDOW (dialog->window));
+	empathy_import_dialog_show (GTK_WINDOW (dialog->window), TRUE);
 }
 
 static void
@@ -1018,36 +1018,6 @@ accounts_dialog_response_cb (GtkWidget            *widget,
 	if (response == GTK_RESPONSE_CLOSE) {
 		gtk_widget_destroy (widget);
 	}
-}
-
-static void
-accounts_dialog_accounts_to_import (EmpathyAccountsDialog *dialog)
-{
-	GtkWidget *message;
-	gint response;
-	gboolean ask;
-
-	empathy_conf_get_bool (empathy_conf_get (),
-				 EMPATHY_PREFS_IMPORT_ASKED, &ask);
-
-	if (ask)
-		return;
-
-	empathy_conf_set_bool (empathy_conf_get (),
-				 EMPATHY_PREFS_IMPORT_ASKED, TRUE);
-
-	message = gtk_message_dialog_new (GTK_WINDOW (dialog->window),
-					  GTK_DIALOG_MODAL,
-					  GTK_MESSAGE_QUESTION,
-					  GTK_BUTTONS_YES_NO,
-					  _("Do you want to import accounts"
-					    " from Pidgin?"));
-
-	response = gtk_dialog_run (GTK_DIALOG (message));
-	gtk_widget_destroy (message);
-
-	if (response == GTK_RESPONSE_YES)
-		empathy_import_dialog_show (GTK_WINDOW (dialog->window));
 }
 
 static void
@@ -1105,6 +1075,8 @@ empathy_accounts_dialog_show (GtkWindow *parent,
 	GladeXML                     *glade;
 	gchar                        *filename;
 	GList                        *accounts, *l;
+	gboolean                      import;
+
 
 	if (dialog) {
 		gtk_window_present (GTK_WINDOW (dialog->window));
@@ -1208,8 +1180,15 @@ empathy_accounts_dialog_show (GtkWindow *parent,
 
 	gtk_widget_show (dialog->window);
 
-	if (empathy_import_dialog_accounts_to_import ())
-		accounts_dialog_accounts_to_import (dialog);
+	empathy_conf_get_bool (empathy_conf_get (),
+			       EMPATHY_PREFS_IMPORT_ASKED, &import);
+
+	if (!import) {
+		empathy_conf_set_bool (empathy_conf_get (),
+				       EMPATHY_PREFS_IMPORT_ASKED, TRUE);
+		empathy_import_dialog_show (GTK_WINDOW (dialog->window),
+					    FALSE);
+	}
 
 	return dialog->window;
 }
