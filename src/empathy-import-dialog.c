@@ -117,7 +117,7 @@ enum
   COL_PROTOCOL,
   COL_NAME,
   COL_SOURCE,
-  COL_ACCOUNT,
+  COL_ACCOUNT_DATA,
   COL_COUNT
 };
 
@@ -433,23 +433,28 @@ import_dialog_add_accounts (EmpathyImportDialog *dialog)
 
   model = gtk_tree_view_get_model (GTK_TREE_VIEW (dialog->treeview));
 
-  accounts = g_list_alloc ();
+  accounts = import_dialog_pidgin_load ();
 
   for (account = accounts; account; account = account->next)
     {
-      /* Add the accounts here. */
+      GValue *value, *account_data;
+      AccountData *data = (AccountData *) account->data;
+
+      account_data = tp_g_value_slice_new (G_TYPE_POINTER);
+      g_value_set_pointer (account_data, data);
+
+      value = g_hash_table_lookup (data->settings, "account");
+
+      gtk_list_store_append (GTK_LIST_STORE (model), &iter);
+
+      gtk_list_store_set (GTK_LIST_STORE (model), &iter,
+          COL_IMPORT, TRUE,
+          COL_PROTOCOL, data->protocol,
+          COL_NAME, g_value_get_string (value),
+          COL_SOURCE, "Pidgin",
+          COL_ACCOUNT_DATA, account_data,
+          -1);
     }
-
-  /* A sample item for testing. */
-  gtk_list_store_append (GTK_LIST_STORE (model), &iter);
-
-  gtk_list_store_set (GTK_LIST_STORE (model), &iter,
-      COL_IMPORT, TRUE,
-      COL_PROTOCOL, "Jabber",
-      COL_NAME, "foo@gmail.com",
-      COL_SOURCE, "Pidgin",
-      COL_ACCOUNT, NULL,
-      -1);
 
   g_list_free (accounts);
 }
@@ -484,7 +489,7 @@ import_dialog_set_up_account_list (EmpathyImportDialog *dialog)
   GtkCellRenderer *cell;
 
   store = gtk_list_store_new (COL_COUNT, G_TYPE_BOOLEAN, G_TYPE_STRING,
-      G_TYPE_STRING, G_TYPE_STRING, G_TYPE_HASH_TABLE);
+      G_TYPE_STRING, G_TYPE_STRING, G_TYPE_VALUE);
 
   gtk_tree_view_set_model (GTK_TREE_VIEW (dialog->treeview),
       GTK_TREE_MODEL (store));
