@@ -9,9 +9,9 @@
       <default>false</default>
       <locale name="C">
         <short>Show offline contacts</short>
-	<long>
-	Whether or not to show contacts that are offline in the contact list.
-	</long>
+        <long>
+        Whether or not to show contacts that are offline in the contact list.
+        </long>
       </locale>
     </schema>
 
@@ -24,9 +24,9 @@
       <locale name="C">
         <short>Contact list sort criterium</short>
         <long>
-	Which criterium to use when sorting the contact list.
-	Default is to use sort by the contact's name with the value
-	"name". A value of "state" will sort the contact list by state.
+        Which criterium to use when sorting the contact list.
+        Default is to use sort by the contact's name with the value
+        "name". A value of "state" will sort the contact list by state.
         </long>
       </locale>
     </schema>
@@ -39,10 +39,10 @@
       <default>true</default>
       <locale name="C">
         <short>Show avatars</short>
-	<long>
-	Whether or not to show avatars for contacts in the contact
+        <long>
+        Whether or not to show avatars for contacts in the contact
         list and chat windows.
-	</long>
+        </long>
       </locale>
     </schema>
 
@@ -54,9 +54,9 @@
       <default>false</default>
       <locale name="C">
         <short>Compact contact list</short>
-	<long>
-	Whether to show the contact list in compact mode or not. 
-	</long>
+        <long>
+        Whether to show the contact list in compact mode or not. 
+        </long>
       </locale>
     </schema>
 
@@ -83,7 +83,7 @@
        <locale name="C">
           <short>Default directory to select an avatar image from</short>
           <long>
-	    The last directory that an avatar image was chosen from.
+            The last directory that an avatar image was chosen from.
           </long>
        </locale>
     </schema>
@@ -97,7 +97,7 @@
       <locale name="C">
          <short>Use notification sounds</short>
          <long>
-	 Whether or not to play a sound when messages arrive.
+         Whether or not to play a sound when messages arrive.
          </long>
       </locale>
     </schema>
@@ -111,7 +111,7 @@
       <locale name="C">
          <short>Enable sound when away</short>
          <long>
-	 Whether or not to play sounds when away.
+         Whether or not to play sounds when away.
          </long>
       </locale>
     </schema>
@@ -125,7 +125,7 @@
       <locale name="C">
          <short>Enable sound when busy</short>
          <long>
-	 Whether or not to play sounds when busy.
+         Whether or not to play sounds when busy.
          </long>
       </locale>
     </schema>
@@ -139,7 +139,7 @@
       <locale name="C">
          <short>Enable popup when contact is available</short>
          <long>
-	 Whether or not to show a popup when a contact becomes available.
+         Whether or not to show a popup when a contact becomes available.
          </long>
       </locale>
     </schema>
@@ -153,7 +153,7 @@
        <locale name="C">
           <short>Open new chats in separate windows</short>
           <long>
-	    Always open a separate chat window for new chats.
+            Always open a separate chat window for new chats.
           </long>
        </locale>
     </schema>
@@ -167,8 +167,8 @@
       <locale name="C">
          <short>Use graphical smileys</short>
          <long>
-	 Whether or not to convert smileys into graphical images in
-	 conversations.
+         Whether or not to convert smileys into graphical images in
+         conversations.
          </long>
       </locale>
     </schema>
@@ -208,10 +208,10 @@
       <type>string</type>
       <default>en</default>
       <locale name="C">
-	<short>Spell checking languages</short>
-	<long>
-	  Comma separated list of spell checker languages to use (e.g. en, fr, nl).
-	</long>
+        <short>Spell checking languages</short>
+        <long>
+          Comma separated list of spell checker languages to use (e.g. en, fr, nl).
+        </long>
       </locale>
     </schema>
 
@@ -223,10 +223,10 @@
       <default>true</default>
       <locale name="C">
         <short>Enable spell checker</short>
-	<long>
-	Whether or not to check words typed against the languages you
+        <long>
+        Whether or not to check words typed against the languages you
       want to check with.
-	</long>
+        </long>
       </locale>
     </schema>
 
@@ -238,11 +238,11 @@
       <default>:</default>
       <locale name="C">
         <short>Nick completed character</short>
-	<long>
-	Character to add after nickname when using nick completion (tab)
+        <long>
+        Character to add after nickname when using nick completion (tab)
         in group chat.
-	</long>
-	
+        </long>
+        
       </locale>
     </schema>
 
@@ -254,8 +254,8 @@
       <default>false</default>
       <locale name="C">
         <short>Empathy should use the avatar of the contact as the chat window icon</short>
-	<long>
-	Whether or not Empathy should use the avatar of the contact as the chat window icon.
+        <long>
+        Whether or not Empathy should use the avatar of the contact as the chat window icon.
         </long>
       </locale>
     </schema>
@@ -268,10 +268,10 @@
       <default>true</default>
       <locale name="C">
         <short>Show hint about closing the main window</short>
-	<long>
-	Whether or not to show the message dialog about closing the
+        <long>
+        Whether or not to show the message dialog about closing the
       main window with the 'x' button in the title bar.
-	</long>
+        </long>
       </locale>
     </schema>
 
@@ -283,8 +283,8 @@
       <default>false</default>
       <locale name="C">
         <short>Salut account is created</short>
-	<long>
-	Whether or not the Salut account has been created on the first
+        <long>
+        Whether or not the Salut account has been created on the first
       Empathy run.
         </long>
       </locale>
@@ -298,9 +298,9 @@
       <default>true</default>
       <locale name="C">
         <short>NetworkManager should be used</short>
-	<long>
-	Whether or not the network manager should be used to automatically
-	disconnect/reconnect.
+        <long>
+        Whether or not the network manager should be used to automatically
+        disconnect/reconnect.
         </long>
       </locale>
     </schema>
@@ -313,8 +313,8 @@
       <default>true</default>
       <locale name="C">
         <short>Empathy should auto-connect on startup</short>
-	<long>
-	Whether or not Empathy should automatically log in to your accounts on startup.
+        <long>
+        Whether or not Empathy should automatically log in to your accounts on startup.
         </long>
       </locale>
     </schema>
@@ -327,8 +327,8 @@
       <default>false</default>
       <locale name="C">
         <short>Empathy has asked about importing accounts</short>
-	<long>
-	Whether or not Empathy has asked about importing accounts from other programs.
+        <long>
+        Whether or not Empathy has asked about importing accounts from other programs.
         </long>
       </locale>
     </schema>
