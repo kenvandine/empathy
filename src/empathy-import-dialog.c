@@ -544,7 +544,7 @@ import_dialog_add_accounts_to_model (EmpathyImportDialog *dialog)
 
       /* Make the checkbox ticked if there is *no* account already with the
        * relevant details. */
-      import = (g_list_length (accounts) == 0);
+      import = accounts == NULL;
 
       mc_accounts_list_free (accounts);
       g_object_unref (profile);
@@ -671,7 +671,7 @@ empathy_import_dialog_show (GtkWindow *parent,
 
   dialog->accounts = import_dialog_pidgin_load ();
 
-  if (g_list_length (dialog->accounts) == 0)
+  if (!dialog->accounts)
     {
       GtkWidget *message;
 
