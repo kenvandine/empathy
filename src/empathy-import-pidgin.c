@@ -40,15 +40,15 @@
 
 #include <libempathy-gtk/empathy-ui-utils.h>
 
-/* Pidgin to MC map */
+/* Pidgin to CM map */
 typedef struct
 {
   gchar *protocol;
   gchar *pidgin_name;
-  gchar *mc_name;
-} PidginMcMapItem;
+  gchar *cm_name;
+} PidginCmMapItem;
 
-static PidginMcMapItem pidgin_mc_map[] =
+static PidginCmMapItem pidgin_cm_map[] =
 {
   { "msn", "server", "server" },
   { "msn", "port", "port" },
@@ -99,7 +99,7 @@ static void
 import_dialog_pidgin_parse_setting (EmpathyImportAccountData *data,
                                     xmlNodePtr setting)
 {
-  PidginMcMapItem *item = NULL;
+  PidginCmMapItem *item = NULL;
   gchar *tag_name;
   gchar *type = NULL;
   gchar *content;
@@ -112,13 +112,13 @@ import_dialog_pidgin_parse_setting (EmpathyImportAccountData *data,
     return;
 
   /* Search for the map corresponding to setting we are parsing */
-  for (i = 0; i < G_N_ELEMENTS (pidgin_mc_map); i++)
+  for (i = 0; i < G_N_ELEMENTS (pidgin_cm_map); i++)
     {
       if (!tp_strdiff (mc_profile_get_protocol_name (data->profile),
-            pidgin_mc_map[i].protocol) &&
-          !tp_strdiff (tag_name, pidgin_mc_map[i].pidgin_name))
+            pidgin_cm_map[i].protocol) &&
+          !tp_strdiff (tag_name, pidgin_cm_map[i].pidgin_name))
         {
-          item = pidgin_mc_map + i;
+          item = pidgin_cm_map + i;
           break;
         }
     }
@@ -150,7 +150,7 @@ import_dialog_pidgin_parse_setting (EmpathyImportAccountData *data,
     }
 
   if (value)
-    g_hash_table_insert (data->settings, item->mc_name, value);
+    g_hash_table_insert (data->settings, item->cm_name, value);
 
   g_free (type);
   g_free (content);
