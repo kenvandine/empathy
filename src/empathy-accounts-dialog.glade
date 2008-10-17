@@ -80,7 +80,7 @@
                       <widget class="GtkButton" id="button_import">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="label" translatable="yes">Import accounts</property>
+                        <property name="label" translatable="yes">Import Accounts...</property>
                         <property name="response_id">0</property>
                       </widget>
                       <packing>
