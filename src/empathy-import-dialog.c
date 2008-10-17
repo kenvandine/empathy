@@ -418,6 +418,21 @@ FILENAME:
   return accounts;
 }
 
+gboolean
+empathy_import_dialog_accounts_to_import (void)
+{
+  GList *list;
+  gboolean out;
+
+  list = import_dialog_pidgin_load ();
+
+  out = (g_list_length (list) > 0);
+
+  g_list_free (list);
+
+  return out;
+}
+
 static gboolean
 import_dialog_tree_model_foreach (GtkTreeModel *model,
                                   GtkTreePath *path,

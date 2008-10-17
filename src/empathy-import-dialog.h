@@ -26,6 +26,7 @@
 
 G_BEGIN_DECLS
 
+gboolean empathy_import_dialog_accounts_to_import (void);
 void empathy_import_dialog_show (GtkWindow *parent);
 
 G_END_DECLS
