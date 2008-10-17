@@ -102,6 +102,7 @@ typedef struct
   GtkWidget *button_ok;
   GtkWidget *button_cancel;
   gboolean not_imported;
+  GList *accounts;
 } EmpathyImportDialog;
 
 #define PIDGIN_ACCOUNT_TAG_NAME "name"
@@ -460,7 +461,9 @@ import_dialog_tree_model_foreach (GtkTreeModel *model,
 static void
 import_dialog_free (EmpathyImportDialog *dialog)
 {
-  gtk_widget_destroy (dialog->window);
+  if (dialog->window)
+    gtk_widget_destroy (dialog->window);
+  g_list_free (dialog->accounts);
   g_slice_free (EmpathyImportDialog, dialog);
 }
 
@@ -519,21 +522,16 @@ import_dialog_filter_mc_accounts (McAccount *account,
   return !result;
 }
 
-static gboolean
+static void
 import_dialog_add_accounts_to_model (EmpathyImportDialog *dialog)
 {
   GtkTreeModel *model;
   GtkTreeIter iter;
-  GList *accounts, *account;
-  guint length;
+  GList *account;
 
   model = gtk_tree_view_get_model (GTK_TREE_VIEW (dialog->treeview));
 
-  accounts = import_dialog_pidgin_load ();
-
-  length = g_list_length (accounts);
-
-  for (account = accounts; account; account = account->next)
+  for (account = dialog->accounts; account; account = account->next)
     {
       GValue *value, *account_data;
       AccountData *data = (AccountData *) account->data;
@@ -576,26 +574,6 @@ import_dialog_add_accounts_to_model (EmpathyImportDialog *dialog)
           COL_ACCOUNT_DATA, account_data,
           -1);
     }
-
-  g_list_free (accounts);
-
-  if (length == 0)
-    {
-      GtkWidget *message;
-
-      message = gtk_message_dialog_new (
-          gtk_window_get_transient_for (GTK_WINDOW (dialog->window)),
-          GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_CLOSE,
-          _("No accounts to import could be found. Empathy currently only "
-            "supports importing accounts from Pidgin."));
-
-      gtk_dialog_run (GTK_DIALOG (message));
-      gtk_widget_destroy (message);
-      import_dialog_free (dialog);
-      return FALSE;
-    }
-  else
-    return TRUE;
 }
 
 static void
@@ -619,7 +597,7 @@ import_dialog_cell_toggled_cb (GtkCellRendererToggle *cell_renderer,
   gtk_tree_path_free (path);
 }
 
-static gboolean
+static void
 import_dialog_set_up_account_list (EmpathyImportDialog *dialog)
 {
   GtkListStore *store;
@@ -687,7 +665,7 @@ import_dialog_set_up_account_list (EmpathyImportDialog *dialog)
   gtk_tree_view_column_pack_start (column, cell, TRUE);
   gtk_tree_view_column_add_attribute (column, cell, "text", COL_SOURCE);
 
-  return import_dialog_add_accounts_to_model (dialog);
+  import_dialog_add_accounts_to_model (dialog);
 }
 
 void
@@ -704,6 +682,24 @@ empathy_import_dialog_show (GtkWindow *parent)
     }
 
   dialog = g_slice_new0 (EmpathyImportDialog);
+
+  dialog->accounts = import_dialog_pidgin_load ();
+
+  if (g_list_length (dialog->accounts) == 0)
+    {
+      GtkWidget *message;
+
+      message = gtk_message_dialog_new (parent,
+          GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_CLOSE,
+          _("No accounts to import could be found. Empathy currently only "
+            "supports importing accounts from Pidgin."));
+
+      gtk_dialog_run (GTK_DIALOG (message));
+      gtk_widget_destroy (message);
+      import_dialog_free (dialog);
+      dialog = NULL;
+      return;
+    }
 
   filename = empathy_file_lookup ("empathy-import-dialog.glade", "src");
   glade = empathy_glade_get_file (filename,
@@ -727,6 +723,7 @@ empathy_import_dialog_show (GtkWindow *parent)
   if (parent)
     gtk_window_set_transient_for (GTK_WINDOW (dialog->window), parent);
 
-  if (import_dialog_set_up_account_list (dialog))
-    gtk_widget_show (dialog->window);
+  import_dialog_set_up_account_list (dialog);
+
+  gtk_widget_show (dialog->window);
 }
