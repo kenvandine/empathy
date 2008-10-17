@@ -200,7 +200,7 @@ empathy_import_dialog_pidgin_parse_setting (gchar *protocol,
 {
         int i;
 
-        if (!xmlHasProp (setting, PIDGIN_SETTING_TAG_NAME))
+        if (!xmlHasProp (setting, PIDGIN_ACCOUNT_TAG_NAME))
                 return;
 
         for (i = 0; i < G_N_ELEMENTS (pidgin_mc_map); i++) {
@@ -208,7 +208,7 @@ empathy_import_dialog_pidgin_parse_setting (gchar *protocol,
                         continue;
                 }
 
-                if (strcmp ((gchar *) xmlGetProp (setting, PIDGIN_SETTING_TAG_NAME),
+                if (strcmp ((gchar *) xmlGetProp (setting, PIDGIN_ACCOUNT_TAG_NAME),
                         pidgin_mc_map[i].pidgin_name) == 0) {
 
                         gint arg;
@@ -261,7 +261,7 @@ empathy_import_dialog_pidgin_import_accounts ()
 
         node = rootnode->children;
         while (node) {
-                if (strcmp ((gchar *) node->name, PIDGIN_SETTING_TAG_ACCOUNT) == 0) {
+                if (strcmp ((gchar *) node->name, PIDGIN_ACCOUNT_TAG_ACCOUNT) == 0) {
                         child = node->children;
 
                         settings = g_hash_table_new (g_str_hash, g_str_equal);
