@@ -113,22 +113,22 @@ typedef struct
 #define PIDGIN_PROTOCOL_BONJOUR "bonjour"
 #define PIDGIN_PROTOCOL_NOVELL "novell"
 
-static void empathy_import_dialog_add_setting (GHashTable *settings,
+static void import_dialog_add_setting (GHashTable *settings,
     gchar *key, gpointer value, EmpathyImportSettingType  type);
-static gboolean empathy_import_dialog_add_account (gchar *protocol_name,
+static gboolean import_dialog_add_account (gchar *protocol_name,
     GHashTable *settings);
-static void empathy_import_dialog_pidgin_parse_setting (gchar *protocol,
+static void import_dialog_pidgin_parse_setting (gchar *protocol,
     xmlNodePtr setting, GHashTable *settings);
-static void empathy_import_dialog_pidgin_import_accounts ();
-static void empathy_import_dialog_response_cb (GtkDialog *dialog_window,
+static void import_dialog_pidgin_import_accounts ();
+static void import_dialog_response_cb (GtkDialog *dialog_window,
     gint response, EmpathyImportDialog *dialog);
 
 
 static void
-empathy_import_dialog_add_setting (GHashTable *settings,
-                                   gchar *key,
-                                   gpointer value,
-                                   EmpathyImportSettingType type)
+import_dialog_add_setting (GHashTable *settings,
+                           gchar *key,
+                           gpointer value,
+                           EmpathyImportSettingType type)
 {
   EmpathyImportSetting *set = g_slice_new0 (EmpathyImportSetting);
 
@@ -139,8 +139,8 @@ empathy_import_dialog_add_setting (GHashTable *settings,
 }
 
 static gboolean
-empathy_import_dialog_add_account (gchar *protocol_name,
-                                   GHashTable *settings)
+import_dialog_add_account (gchar *protocol_name,
+                           GHashTable *settings)
 {
   McProfile *profile;
   McAccount *account;
@@ -202,9 +202,9 @@ empathy_import_dialog_add_account (gchar *protocol_name,
 }
 
 static void
-empathy_import_dialog_pidgin_parse_setting (gchar *protocol,
-                                            xmlNodePtr setting,
-                                            GHashTable *settings)
+import_dialog_pidgin_parse_setting (gchar *protocol,
+                                    xmlNodePtr setting,
+                                    GHashTable *settings)
 {
   int i;
 
@@ -227,7 +227,7 @@ empathy_import_dialog_pidgin_parse_setting (gchar *protocol,
           if (strcmp (type, "bool") == 0)
             {
               sscanf ((gchar *) xmlNodeGetContent (setting),"%i", &arg);
-              empathy_import_dialog_add_setting (settings,
+              import_dialog_add_setting (settings,
                   pidgin_mc_map[i].mc_name,
                   (gpointer) arg,
                   EMPATHY_IMPORT_SETTING_TYPE_BOOL);
@@ -236,14 +236,14 @@ empathy_import_dialog_pidgin_parse_setting (gchar *protocol,
             {
               sscanf ((gchar *) xmlNodeGetContent (setting),
                   "%i", &arg);
-              empathy_import_dialog_add_setting (settings,
+              import_dialog_add_setting (settings,
                   pidgin_mc_map[i].mc_name,
                   (gpointer) arg,
                   EMPATHY_IMPORT_SETTING_TYPE_INT);
             }
           else if (strcmp (type, "string") == 0)
             {
-              empathy_import_dialog_add_setting (settings,
+              import_dialog_add_setting (settings,
                   pidgin_mc_map[i].mc_name,
                   (gpointer) xmlNodeGetContent (setting),
                   EMPATHY_IMPORT_SETTING_TYPE_STRING);
@@ -253,7 +253,7 @@ empathy_import_dialog_pidgin_parse_setting (gchar *protocol,
 }
 
 static void
-empathy_import_dialog_pidgin_import_accounts ()
+import_dialog_pidgin_import_accounts ()
 {
   xmlNodePtr rootnode, node, child, setting;
   xmlParserCtxtPtr ctxt;
@@ -297,7 +297,7 @@ empathy_import_dialog_pidgin_import_accounts ()
               else if (strcmp (protocol, PIDGIN_PROTOCOL_NOVELL) == 0)
                 protocol = "groupwise";
 
-              empathy_import_dialog_add_setting (settings, "protocol",
+              import_dialog_add_setting (settings, "protocol",
                   (gpointer) protocol,
                   EMPATHY_IMPORT_SETTING_TYPE_STRING);
 
@@ -322,19 +322,19 @@ empathy_import_dialog_pidgin_import_accounts ()
                 gchar **nick_server;
                 nick_server = g_strsplit (name, "@", 2);
                 username = nick_server[0];
-                empathy_import_dialog_add_setting (settings,
+                import_dialog_add_setting (settings,
                     "server", (gpointer) nick_server[1],
                     EMPATHY_IMPORT_SETTING_TYPE_STRING);
               }
 
-              empathy_import_dialog_add_setting (settings, "account",
+              import_dialog_add_setting (settings, "account",
                   (gpointer) username, EMPATHY_IMPORT_SETTING_TYPE_STRING);
 
             }
           else if (strcmp ((gchar *) child->name,
               PIDGIN_ACCOUNT_TAG_PASSWORD) == 0)
             {
-              empathy_import_dialog_add_setting (settings, "password",
+              import_dialog_add_setting (settings, "password",
                   (gpointer) xmlNodeGetContent (child),
                   EMPATHY_IMPORT_SETTING_TYPE_STRING);
 
@@ -346,7 +346,7 @@ empathy_import_dialog_pidgin_import_accounts ()
 
               while (setting)
                 {
-                  empathy_import_dialog_pidgin_parse_setting (protocol,
+                  import_dialog_pidgin_parse_setting (protocol,
                       setting, settings);
                       setting = setting->next;
                 }
@@ -355,7 +355,7 @@ empathy_import_dialog_pidgin_import_accounts ()
         }
 
       if (g_hash_table_size (settings) > 0)
-          empathy_import_dialog_add_account (protocol, settings);
+          import_dialog_add_account (protocol, settings);
 
       g_free (username);
       g_hash_table_unref (settings);
@@ -367,9 +367,9 @@ empathy_import_dialog_pidgin_import_accounts ()
 }
 
 static void
-empathy_import_dialog_response_cb (GtkDialog *dialog_window,
-                                   gint response,
-                                   EmpathyImportDialog *dialog)
+import_dialog_response_cb (GtkDialog *dialog_window,
+                           gint response,
+                           EmpathyImportDialog *dialog)
 {
   gchar *from = NULL;
   if (response == GTK_RESPONSE_OK)
@@ -377,7 +377,7 @@ empathy_import_dialog_response_cb (GtkDialog *dialog_window,
       from = gtk_combo_box_get_active_text (GTK_COMBO_BOX (dialog->combo));
 
       if (strcmp (from, "Pidgin") == 0)
-        empathy_import_dialog_pidgin_import_accounts ();
+        import_dialog_pidgin_import_accounts ();
 
       g_free (from);
     }
@@ -406,7 +406,7 @@ empathy_import_dialog_show (GtkWindow *parent)
       NULL);
 
   g_signal_connect (G_OBJECT (dialog->window), "response",
-      G_CALLBACK (empathy_import_dialog_response_cb),
+      G_CALLBACK (import_dialog_response_cb),
       dialog);
 
   dialog->label_select = gtk_label_new (
