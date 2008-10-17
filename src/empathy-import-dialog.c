@@ -488,16 +488,19 @@ import_dialog_button_cancel_clicked_cb (GtkButton *button,
   import_dialog_free (dialog);
 }
 
-static void
+static gboolean
 import_dialog_add_accounts_to_model (EmpathyImportDialog *dialog)
 {
   GtkTreeModel *model;
   GtkTreeIter iter;
   GList *accounts, *account;
+  guint length;
 
   model = gtk_tree_view_get_model (GTK_TREE_VIEW (dialog->treeview));
 
   accounts = import_dialog_pidgin_load ();
+
+  length = g_list_length (accounts);
 
   for (account = accounts; account; account = account->next)
     {
@@ -521,6 +524,24 @@ import_dialog_add_accounts_to_model (EmpathyImportDialog *dialog)
     }
 
   g_list_free (accounts);
+
+  if (length == 0)
+    {
+      GtkWidget *message;
+
+      message = gtk_message_dialog_new (NULL,
+          GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING,
+          GTK_BUTTONS_CLOSE,
+          _("No accounts to import could be found. Empathy currently only "
+            "supports importing accounts from Pidgin."));
+
+      gtk_dialog_run (GTK_DIALOG (message));
+      gtk_widget_destroy (message);
+      import_dialog_free (dialog);
+      return FALSE;
+    }
+  else
+    return TRUE;
 }
 
 static void
@@ -544,7 +565,7 @@ import_dialog_cell_toggled_cb (GtkCellRendererToggle *cell_renderer,
   gtk_tree_path_free (path);
 }
 
-static void
+static gboolean
 import_dialog_set_up_account_list (EmpathyImportDialog *dialog)
 {
   GtkListStore *store;
@@ -612,7 +633,7 @@ import_dialog_set_up_account_list (EmpathyImportDialog *dialog)
   gtk_tree_view_column_pack_start (column, cell, TRUE);
   gtk_tree_view_column_add_attribute (column, cell, "text", COL_SOURCE);
 
-  import_dialog_add_accounts_to_model (dialog);
+  return import_dialog_add_accounts_to_model (dialog);
 }
 
 void
@@ -644,8 +665,6 @@ empathy_import_dialog_show (GtkWindow *parent)
       "button_cancel", "clicked", import_dialog_button_cancel_clicked_cb,
       NULL);
 
-  import_dialog_set_up_account_list (dialog);
-
   g_object_add_weak_pointer (G_OBJECT (dialog->window), (gpointer) &dialog);
 
   g_free (filename);
@@ -654,5 +673,6 @@ empathy_import_dialog_show (GtkWindow *parent)
   if (parent)
     gtk_window_set_transient_for (GTK_WINDOW (dialog->window), parent);
 
-  gtk_widget_show (dialog->window);
+  if (import_dialog_set_up_account_list (dialog))
+    gtk_widget_show (dialog->window);
 }
