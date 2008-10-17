@@ -140,8 +140,12 @@ static void import_dialog_button_cancel_clicked_cb (GtkButton *button,
 static void
 import_dialog_account_data_free (AccountData *data)
 {
-  g_object_unref (data->profile);
-  g_hash_table_destroy (data->settings);
+  if (data == NULL)
+    return;
+  if (data->profile != NULL)
+    g_object_unref (data->profile);
+  if (data->settings != NULL)
+    g_hash_table_destroy (data->settings);
 }
 
 static gboolean
