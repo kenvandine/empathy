@@ -169,14 +169,14 @@ import_dialog_add_accounts_to_model (EmpathyImportDialog *dialog)
 {
   GtkTreeModel *model;
   GtkTreeIter iter;
-  GList *account;
+  GList *l;
 
   model = gtk_tree_view_get_model (GTK_TREE_VIEW (dialog->treeview));
 
-  for (account = dialog->accounts; account; account = account->next)
+  for (l = dialog->accounts; l; l = l->next)
     {
       GValue *value;
-      EmpathyImportAccountData *data = account->data;
+      EmpathyImportAccountData *data = l->data;
       gboolean import;
       GList *accounts;
 
