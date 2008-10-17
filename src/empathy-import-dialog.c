@@ -101,10 +101,7 @@ typedef struct
   GtkWidget *treeview;
   GtkWidget *button_ok;
   GtkWidget *button_cancel;
-
-  guint no_imported;
-  guint no_not_imported;
-  guint no_ignored;
+  gboolean not_imported;
 } EmpathyImportDialog;
 
 #define PIDGIN_ACCOUNT_TAG_NAME "name"
@@ -450,17 +447,12 @@ import_dialog_tree_model_foreach (GtkTreeModel *model,
       -1);
 
   if (!to_import)
-    {
-      dialog->no_ignored++;
       return FALSE;
-    }
 
   data = g_value_get_pointer (value);
 
-  if (import_dialog_add_account (data))
-    dialog->no_imported++;
-  else
-    dialog->no_not_imported++;
+  if (!import_dialog_add_account (data))
+    dialog->not_imported = TRUE;
 
   return FALSE;
 }
@@ -478,22 +470,25 @@ import_dialog_button_ok_clicked_cb (GtkButton *button,
 {
   GtkTreeModel *model;
   GtkWidget *message;
+  GtkWindow *window;
 
   model = gtk_tree_view_get_model (GTK_TREE_VIEW (dialog->treeview));
 
   gtk_tree_model_foreach (model, import_dialog_tree_model_foreach, dialog);
 
-  message = gtk_message_dialog_new (GTK_WINDOW (dialog->window),
-      GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_CLOSE,
-      _("%u accounts imported successfully.\n"
-        "%u accounts failed to import.\n"
-        "%u accounts were ignored."),
-      dialog->no_imported, dialog->no_not_imported, dialog->no_ignored);
+  window = gtk_window_get_transient_for (GTK_WINDOW (dialog->window));
+
+  import_dialog_free (dialog);
+
+  if (!dialog->not_imported)
+    return;
+
+  message = gtk_message_dialog_new (window,
+      GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_CLOSE,
+      _("One or more accounts failed to import."));
 
   gtk_dialog_run (GTK_DIALOG (message));
   gtk_widget_destroy (message);
-
-  import_dialog_free (dialog);
 }
 
 static void
