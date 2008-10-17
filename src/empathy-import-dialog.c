@@ -425,17 +425,14 @@ import_dialog_tree_model_foreach (GtkTreeModel *model,
   EmpathyImportDialog *dialog = (EmpathyImportDialog *) user_data;
   gboolean to_import;
   AccountData *data;
-  GValue *value;
 
   gtk_tree_model_get (model, iter,
       COL_IMPORT, &to_import,
-      COL_ACCOUNT_DATA, &value,
+      COL_ACCOUNT_DATA, &data,
       -1);
 
   if (!to_import)
       return FALSE;
-
-  data = g_value_get_pointer (value);
 
   if (!import_dialog_add_account (data))
     dialog->not_imported = TRUE;
@@ -524,14 +521,11 @@ import_dialog_add_accounts_to_model (EmpathyImportDialog *dialog)
 
   for (account = dialog->accounts; account; account = account->next)
     {
-      GValue *value, *account_data;
+      GValue *value;
       AccountData *data = (AccountData *) account->data;
       gboolean import;
       GList *accounts;
       McProfile *profile;
-
-      account_data = tp_g_value_slice_new (G_TYPE_POINTER);
-      g_value_set_pointer (account_data, data);
 
       value = g_hash_table_lookup (data->settings, "account");
 
@@ -557,7 +551,7 @@ import_dialog_add_accounts_to_model (EmpathyImportDialog *dialog)
           COL_PROTOCOL, data->protocol,
           COL_NAME, g_value_get_string (value),
           COL_SOURCE, "Pidgin",
-          COL_ACCOUNT_DATA, account_data,
+          COL_ACCOUNT_DATA, data,
           -1);
     }
 }
@@ -592,7 +586,7 @@ import_dialog_set_up_account_list (EmpathyImportDialog *dialog)
   GtkCellRenderer *cell;
 
   store = gtk_list_store_new (COL_COUNT, G_TYPE_BOOLEAN, G_TYPE_STRING,
-      G_TYPE_STRING, G_TYPE_STRING, G_TYPE_VALUE);
+      G_TYPE_STRING, G_TYPE_STRING, G_TYPE_POINTER);
 
   gtk_tree_view_set_model (GTK_TREE_VIEW (dialog->treeview),
       GTK_TREE_MODEL (store));
