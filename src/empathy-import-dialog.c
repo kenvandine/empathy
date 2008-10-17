@@ -123,19 +123,6 @@ enum
   COL_COUNT
 };
 
-
-static void import_dialog_add_setting (GHashTable *settings,
-    gchar *key, gpointer value, EmpathyImportSettingType  type);
-static void import_dialog_add_account (gchar *protocol_name,
-    GHashTable *settings);
-static void import_dialog_pidgin_parse_setting (gchar *protocol,
-    xmlNodePtr setting, GHashTable *settings);
-static void import_dialog_pidgin_import_accounts ();
-static void import_dialog_button_ok_clicked_cb (GtkButton *button,
-    EmpathyImportDialog *dialog);
-static void import_dialog_button_cancel_clicked_cb (GtkButton *button,
-    EmpathyImportDialog *dialog);
-
 static void
 import_dialog_account_data_free (AccountData *data)
 {
@@ -441,26 +428,10 @@ import_dialog_button_ok_clicked_cb (GtkButton *button,
                                     EmpathyImportDialog *dialog)
 {
   GtkTreeModel *model;
-  GtkWidget *message;
-  GtkWindow *window;
 
   model = gtk_tree_view_get_model (GTK_TREE_VIEW (dialog->treeview));
-
   gtk_tree_model_foreach (model, import_dialog_tree_model_foreach, dialog);
-
-  window = gtk_window_get_transient_for (GTK_WINDOW (dialog->window));
-
   import_dialog_free (dialog);
-
-  if (!dialog->not_imported)
-    return;
-
-  message = gtk_message_dialog_new (window,
-      GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_CLOSE,
-      _("One or more accounts failed to import."));
-
-  gtk_dialog_run (GTK_DIALOG (message));
-  gtk_widget_destroy (message);
 }
 
 static void
