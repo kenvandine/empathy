@@ -444,6 +444,13 @@ import_dialog_tree_model_foreach (GtkTreeModel *model,
 }
 
 static void
+import_dialog_free (EmpathyImportDialog *dialog)
+{
+  gtk_widget_destroy (dialog->window);
+  g_slice_free (EmpathyImportDialog, dialog);
+}
+
+static void
 import_dialog_button_ok_clicked_cb (GtkButton *button,
                                     EmpathyImportDialog *dialog)
 {
@@ -464,14 +471,14 @@ import_dialog_button_ok_clicked_cb (GtkButton *button,
   gtk_dialog_run (GTK_DIALOG (message));
   gtk_widget_destroy (message);
 
-  gtk_widget_hide (GTK_WIDGET (dialog->window));
+  import_dialog_free (dialog);
 }
 
 static void
 import_dialog_button_cancel_clicked_cb (GtkButton *button,
                                         EmpathyImportDialog *dialog)
 {
-  gtk_widget_hide (GTK_WIDGET (dialog->window));
+  import_dialog_free (dialog);
 }
 
 static void
