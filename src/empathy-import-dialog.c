@@ -143,12 +143,12 @@ empathy_import_dialog_add_account (gchar *protocol_name,
 {
   McProfile *profile;
   McAccount *account;
-  const gchar *unique_name;
   gchar *key_char;
   GHashTableIter iter;
   gpointer key, value;
   EmpathyImportSetting *set;
-
+  gchar *display_name;
+  gchar *username;
 
   DEBUG ("Looking up profile with protocol '%s'", protocol_name);
   profile = mc_profile_lookup (protocol_name);
@@ -157,9 +157,6 @@ empathy_import_dialog_add_account (gchar *protocol_name,
     return FALSE;
 
   account = mc_account_create (profile);
-
-  unique_name = mc_account_get_unique_name (account);
-  mc_account_set_display_name (account, unique_name);
 
   g_hash_table_iter_init (&iter, settings);
   while (g_hash_table_iter_next (&iter, &key, &value))
@@ -190,6 +187,14 @@ empathy_import_dialog_add_account (gchar *protocol_name,
             break;
         }
     }
+
+  mc_account_get_param_string (account, "account", &username);
+  display_name = g_strdup_printf ("%s (%s)", username,
+      mc_profile_get_display_name (profile));
+  mc_account_set_display_name (account, display_name);
+
+  g_free (username);
+  g_free (display_name);
   g_object_unref (account);
   g_object_unref (profile);
   return TRUE;
