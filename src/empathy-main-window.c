@@ -56,7 +56,6 @@
 #include "empathy-new-chatroom-dialog.h"
 #include "empathy-chatrooms-window.h"
 #include "empathy-event-manager.h"
-#include "empathy-import-dialog.h"
 
 #define DEBUG_FLAG EMPATHY_DEBUG_OTHER
 #include <libempathy/empathy-debug.h>
