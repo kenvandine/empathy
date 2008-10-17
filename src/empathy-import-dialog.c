@@ -230,8 +230,8 @@ import_dialog_pidgin_parse_setting (AccountData *data,
   /* Search for the map corresponding to setting we are parsing */
   for (i = 0; i < G_N_ELEMENTS (pidgin_mc_map); i++)
     {
-      if (strcmp (data->protocol, pidgin_mc_map[i].protocol) == 0 &&
-          strcmp (tag_name, pidgin_mc_map[i].pidgin_name) == 0)
+      if (!tp_strdiff (data->protocol, pidgin_mc_map[i].protocol) &&
+          !tp_strdiff (tag_name, pidgin_mc_map[i].pidgin_name))
         {
           item = pidgin_mc_map + i;
           break;
@@ -246,19 +246,19 @@ import_dialog_pidgin_parse_setting (AccountData *data,
   type = (gchar *) xmlGetProp (setting, PIDGIN_SETTING_PROP_TYPE);
   content = (gchar *) xmlNodeGetContent (setting);
 
-  if (strcmp (type, "bool") == 0)
+  if (!tp_strdiff (type, "bool"))
     {
       sscanf (content, "%i", &i);
       value = tp_g_value_slice_new (G_TYPE_BOOLEAN);
       g_value_set_boolean (value, i != 0);
     }
-  else if (strcmp (type, "int") == 0)
+  else if (!tp_strdiff (type, "int"))
     {
       sscanf (content, "%i", &i);
       value = tp_g_value_slice_new (G_TYPE_INT);
       g_value_set_int (value, i);
     }
-  else if (strcmp (type, "string") == 0)
+  else if (!tp_strdiff (type, "string"))
     {
       value = tp_g_value_slice_new (G_TYPE_STRING);
       g_value_set_string (value, content);
@@ -295,8 +295,8 @@ import_dialog_pidgin_load (void)
     {
       AccountData *data;
 
-      /* If it is not an account node, skip */
-      if (strcmp ((gchar *) node->name, PIDGIN_ACCOUNT_TAG_ACCOUNT) != 0)
+      /* If it is not an account node, skip. */
+      if (tp_strdiff ((gchar *) node->name, PIDGIN_ACCOUNT_TAG_ACCOUNT))
         continue;
 
       /* Create account data struct */
@@ -310,8 +310,8 @@ import_dialog_pidgin_load (void)
           GValue *value;
 
           /* Protocol */
-          if (strcmp ((gchar *) child->name,
-              PIDGIN_ACCOUNT_TAG_PROTOCOL) == 0)
+          if (!tp_strdiff ((gchar *) child->name,
+              PIDGIN_ACCOUNT_TAG_PROTOCOL))
             {
               const gchar *protocol;
               gchar *content;
@@ -321,9 +321,9 @@ import_dialog_pidgin_load (void)
               if (g_str_has_prefix (protocol, "prpl-"))
                 protocol += 5;
 
-              if (strcmp (protocol, PIDGIN_PROTOCOL_BONJOUR) == 0)
+              if (!tp_strdiff (protocol, PIDGIN_PROTOCOL_BONJOUR))
                 protocol = "salut";
-              else if (strcmp (protocol, PIDGIN_PROTOCOL_NOVELL) == 0)
+              else if (!tp_strdiff (protocol, PIDGIN_PROTOCOL_NOVELL))
                 protocol = "groupwise";
 
               data->protocol = g_strdup (protocol);
@@ -331,8 +331,8 @@ import_dialog_pidgin_load (void)
             }
 
           /* Username and IRC server. */
-          else if (strcmp ((gchar *) child->name,
-              PIDGIN_ACCOUNT_TAG_NAME) == 0)
+          else if (!tp_strdiff ((gchar *) child->name,
+              PIDGIN_ACCOUNT_TAG_NAME))
             {
               gchar *name;
               GStrv name_resource = NULL;
@@ -352,7 +352,7 @@ import_dialog_pidgin_load (void)
 
              /* Split "username@server" if it is an IRC account */
              if (data->protocol && strstr (name, "@") &&
-                 strcmp (data->protocol, "irc") == 0)
+                 !tp_strdiff (data->protocol, "irc"))
               {
                 nick_server = g_strsplit (name, "@", 2);
                 username = nick_server[0];
@@ -374,8 +374,8 @@ import_dialog_pidgin_load (void)
             }
 
           /* Password */
-          else if (strcmp ((gchar *) child->name,
-              PIDGIN_ACCOUNT_TAG_PASSWORD) == 0)
+          else if (!tp_strdiff ((gchar *) child->name,
+              PIDGIN_ACCOUNT_TAG_PASSWORD))
             {
               gchar *password;
 
@@ -390,8 +390,8 @@ import_dialog_pidgin_load (void)
             }
 
           /* Other settings */
-          else if (strcmp ((gchar *) child->name,
-              PIDGIN_ACCOUNT_TAG_SETTINGS) == 0)
+          else if (!tp_strdiff ((gchar *) child->name,
+              PIDGIN_ACCOUNT_TAG_SETTINGS))
               for (setting = child->children; setting; setting = setting->next)
                 import_dialog_pidgin_parse_setting (data, setting);
         }
