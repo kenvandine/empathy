@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: empathy\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2008-10-18 18:02+0700\n"
-"PO-Revision-Date: 2008-10-18 18:02+0700\n"
+"PO-Revision-Date: 2008-10-18 19:38+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -56,7 +56,7 @@ msgstr "ไดเรกทอรีปริยายที่จะใช้เ
 
 #: ../data/empathy.schemas.in.h:8
 msgid "Empathy has asked about importing accounts"
-msgstr ""
+msgstr "Empathy ได้ถามเกี่ยวกับการนำเข้าบัญชีไปแล้ว"
 
 #: ../data/empathy.schemas.in.h:9
 msgid "Empathy should auto-connect on startup"
@@ -143,11 +143,10 @@ msgid "Use theme for chat rooms"
 msgstr "ใช้ชุดตกแต่งกับห้องสนทนา"
 
 #: ../data/empathy.schemas.in.h:30
-#, fuzzy
 msgid ""
 "Whether or not Empathy has asked about importing accounts from other "
 "programs."
-msgstr "กำหนดว่าจะให้ Empathy เข้าระบบในบัญชีของคุณโดยอัตโนมัติเมื่อเริ่มทำงานหรือไม่"
+msgstr "กำหนดว่า Empathy ได้ถามเกี่ยวกับการนำเข้าบัญชีจากโปรแกรมอื่นไปแล้วหรือยัง"
 
 #: ../data/empathy.schemas.in.h:31
 msgid ""
@@ -654,12 +653,11 @@ msgstr "แ_ก้ไข"
 
 #: ../libempathy-gtk/empathy-contact-menu.c:294
 msgid "Inviting to this room"
-msgstr ""
+msgstr "เชิญเข้ามาห้องนี้"
 
 #: ../libempathy-gtk/empathy-contact-menu.c:334
-#, fuzzy
 msgid "_Invite to chatroom"
-msgstr "_ห้องสนทนาโปรด"
+msgstr "เ_ชิญเข้าห้องสนทนา"
 
 #: ../libempathy-gtk/empathy-contact-widget.c:358
 msgid "Save Avatar"
@@ -1220,9 +1218,8 @@ msgid "I already have an account I want to use"
 msgstr "ข้าพเจ้ามีบัญชีที่จะใช้งานอยู่แล้ว"
 
 #: ../src/empathy-accounts-dialog.glade.h:7
-#, fuzzy
 msgid "Import Accounts..."
-msgstr "บัญชี"
+msgstr "นำเข้าบัญชี..."
 
 #: ../src/empathy-accounts-dialog.glade.h:8
 msgid ""
