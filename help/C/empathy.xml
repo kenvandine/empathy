@@ -14,8 +14,7 @@
 <!ENTITY yahoo "https://login.yahoo.com/config/login">
 <!ENTITY fwd
 "http://account2.freeworlddialup.com/index.php?section_id=94">
-<!ENTITY ekiga
-"http://www.ekiga.net/user/reg/index.php?phplib_Session=c1d85267756241f8190e5fc21b029a62">
+<!ENTITY ekiga "http://www.ekiga.net/user/reg/">
 <!ENTITY sipphone "https://signup.sipphone.com/new-users/app?class=NewUser;proc=start">
 ]>
 <?db.chunk.max_depth 2?>
