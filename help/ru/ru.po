@@ -1,0 +1,775 @@
+# Russian translation for empathy documentation
+# Copyright 2008 Free Software Foundation
+#
+# Nikita Belobrov <qvzqvz@gmail.com>, 2008
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: empathy docs trunk\n"
+"POT-Creation-Date: 2008-10-24 04:10+0000\n"
+"PO-Revision-Date: 2008-10-19 10:37+0400\n"
+"Last-Translator: Nikita Belobrov <qvzqvz@gmail.com>\n"
+"Language-Team: Russian <gnome-cyr@gnome.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms:  nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%"
+"10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+#. When image changes, this message will be marked fuzzy or untranslated for you.
+#. It doesn't matter what you translate it to: it's not used at all.
+#: C/empathy.xml:216(None)
+msgid ""
+"@@image: 'figures/empathy-main-window.png'; "
+"md5=38259a866f38ff1f754828e46d2b0e5c"
+msgstr ""
+"@@image: 'figures/empathy-main-window.png'; "
+"md5=38259a866f38ff1f754828e46d2b0e5c"
+
+#. When image changes, this message will be marked fuzzy or untranslated for you.
+#. It doesn't matter what you translate it to: it's not used at all.
+#: C/empathy.xml:307(None)
+msgid ""
+"@@image: 'figures/empathy-new-account.png'; "
+"md5=6c1e0d8c709125d387e975e5738b8c0f"
+msgstr ""
+"@@image: 'figures/empathy-new-account.png'; "
+"md5=6c1e0d8c709125d387e975e5738b8c0f"
+
+#: C/empathy.xml:26(title)
+msgid "<application>Empathy</application> Manual V2.0"
+msgstr "Руководство по <application>Empathy</application> версии 2.0"
+
+#: C/empathy.xml:29(year)
+msgid "2008"
+msgstr "2008"
+
+#: C/empathy.xml:30(holder) C/empathy.xml:36(publishername)
+#: C/empathy.xml:47(orgname) C/empathy.xml:55(orgname) C/empathy.xml:84(para)
+msgid "Ubuntu Documentation Project"
+msgstr "Проект документации Ubuntu"
+
+#: C/empathy.xml:2(para)
+msgid ""
+"Permission is granted to copy, distribute and/or modify this document under "
+"the terms of the GNU Free Documentation License (GFDL), Version 1.1 or any "
+"later version published by the Free Software Foundation with no Invariant "
+"Sections, no Front-Cover Texts, and no Back-Cover Texts. You can find a copy "
+"of the GFDL at this <ulink type=\"help\" url=\"ghelp:fdl\">link</ulink> or "
+"in the file COPYING-DOCS distributed with this manual."
+msgstr ""
+"Разрешается копировать, распространять и/или изменять этот документ на "
+"условиях лицензии GNU Free Documentation License (GFDL), версии 1.1 или "
+"любой более поздней версии, опубликованной Фондом свободного программного "
+"обеспечения (Free Software Foundation), без неизменяемых частей и без "
+"текстов на обложках. Вы можете найти копию лицензии GFDL по  <ulink type="
+"\"help\" url=\"ghelp:fdl\">этой ссылке</ulink> или в файле COPYING-DOCS, "
+"распространяемом с этим документом."
+
+#: C/empathy.xml:12(para)
+msgid ""
+"This manual is part of a collection of GNOME manuals distributed under the "
+"GFDL. If you want to distribute this manual separately from the collection, "
+"you can do so by adding a copy of the license to the manual, as described in "
+"section 6 of the license."
+msgstr ""
+"Это руководство — часть документации GNOME, которая распространяется на "
+"условиях лицензии GNU FDL. Если вы хотите распространять это руководство "
+"отдельно от остальной документации, вам следует приложить к руководству "
+"копию лицензии, как описано в разделе 6 лицензии."
+
+#: C/empathy.xml:19(para)
+msgid ""
+"Many of the names used by companies to distinguish their products and "
+"services are claimed as trademarks. Where those names appear in any GNOME "
+"documentation, and the members of the GNOME Documentation Project are made "
+"aware of those trademarks, then the names are in capital letters or initial "
+"capital letters."
+msgstr ""
+"Некоторые имена и марки используются компаниями для обозначения их продуктов "
+"и услуг и являются торговыми марками. Там, где эти имена присутствуют в "
+"документации и где участники проекта документирования GNOME знают об этом, "
+"имена выделяются заглавными буквами или начальной заглавной буквой."
+
+#: C/empathy.xml:35(para)
+msgid ""
+"DOCUMENT IS PROVIDED ON AN \"AS IS\" BASIS, WITHOUT WARRANTY OF ANY KIND, "
+"EITHER EXPRESSED OR IMPLIED, INCLUDING, WITHOUT LIMITATION, WARRANTIES THAT "
+"THE DOCUMENT OR MODIFIED VERSION OF THE DOCUMENT IS FREE OF DEFECTS "
+"MERCHANTABLE, FIT FOR A PARTICULAR PURPOSE OR NON-INFRINGING. THE ENTIRE "
+"RISK AS TO THE QUALITY, ACCURACY, AND PERFORMANCE OF THE DOCUMENT OR "
+"MODIFIED VERSION OF THE DOCUMENT IS WITH YOU. SHOULD ANY DOCUMENT OR "
+"MODIFIED VERSION PROVE DEFECTIVE IN ANY RESPECT, YOU (NOT THE INITIAL "
+"WRITER, AUTHOR OR ANY CONTRIBUTOR) ASSUME THE COST OF ANY NECESSARY "
+"SERVICING, REPAIR OR CORRECTION. THIS DISCLAIMER OF WARRANTY CONSTITUTES AN "
+"ESSENTIAL PART OF THIS LICENSE. NO USE OF ANY DOCUMENT OR MODIFIED VERSION "
+"OF THE DOCUMENT IS AUTHORIZED HEREUNDER EXCEPT UNDER THIS DISCLAIMER; AND"
+msgstr ""
+"ДОКУМЕНТ РАСПРОСТРАНЯЕТСЯ «КАК ЕСТЬ», БЕЗ ВСЯКИХ ГАРАНТИЙ, ЯВНЫХ ИЛИ НЕЯВНЫХ, "
+"ВКЛЮЧАЯ, БЕЗ ОГРАНИЧЕНИЙ, ГАРАНТИИ ТОГО, ЧТО ДОКУМЕНТ ИЛИ ИЗМЕНЁННАЯ ВЕРСИЯ "
+"ДОКУМЕНТА СВОБОДНА ОТ ДЕФЕКТОВ, ПРИГОДНА К ПРОДАЖЕ, ПРИГОДНА К ИСПОЛЬЗОВАНИЮ "
+"В ОПРЕДЕЛЁННЫХ ЦЕЛЯХ ИЛИ НЕ НАРУШАЕТ ЗАКОНЫ. ВЕСЬ РИСК, КАСАЮЩИЙСЯ КАЧЕСТВА, "
+"ТОЧНОСТИ ИЛИ ПРАВИЛЬНОСТИ ДОКУМЕНТА ИЛИ ИЗМЕНЁННЫХ ВЕРСИЙ ДОКУМЕНТА, ЛЕЖИТ "
+"НА ВАС. ЕСЛИ ДОКУМЕНТ ИЛИ ИЗМЕНЁННАЯ ВЕРСИЯ ДОКУМЕНТА ИМЕЕТ НЕДОСТАТКИ, ВЫ "
+"(А НЕ АВТОР ДОКУМЕНТА ИЛИ ЕГО ПОМОЩНИК) БЕРЁТЕ НА СЕБЯ СТОИМОСТЬ ЛЮБОЙ "
+"НЕОБХОДИМОЙ ДОРАБОТКИ, КОРРЕКЦИИ ИЛИ ВОССТАНОВЛЕНИЯ. ЭТОТ ОТКАЗ ОТ ГАРАНТИЙ "
+"СОСТАВЛЯЕТ ВАЖНУЮ ЧАСТЬ ЛИЦЕНЗИИ. НИКАКОЕ ИСПОЛЬЗОВАНИЕ ДОКУМЕНТА ИЛИ "
+"ИЗМЕНЁННОЙ ВЕРСИИ ДОКУМЕНТА НЕ ДОПУСКАЕТСЯ БЕЗ ДАННОГО ПРЕДУПРЕЖДЕНИЯ И"
+
+#: C/empathy.xml:55(para)
+msgid ""
+"UNDER NO CIRCUMSTANCES AND UNDER NO LEGAL THEORY, WHETHER IN TORT (INCLUDING "
+"NEGLIGENCE), CONTRACT, OR OTHERWISE, SHALL THE AUTHOR, INITIAL WRITER, ANY "
+"CONTRIBUTOR, OR ANY DISTRIBUTOR OF THE DOCUMENT OR MODIFIED VERSION OF THE "
+"DOCUMENT, OR ANY SUPPLIER OF ANY OF SUCH PARTIES, BE LIABLE TO ANY PERSON "
+"FOR ANY DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR CONSEQUENTIAL DAMAGES OF "
+"ANY CHARACTER INCLUDING, WITHOUT LIMITATION, DAMAGES FOR LOSS OF GOODWILL, "
+"WORK STOPPAGE, COMPUTER FAILURE OR MALFUNCTION, OR ANY AND ALL OTHER DAMAGES "
+"OR LOSSES ARISING OUT OF OR RELATING TO USE OF THE DOCUMENT AND MODIFIED "
+"VERSIONS OF THE DOCUMENT, EVEN IF SUCH PARTY SHALL HAVE BEEN INFORMED OF THE "
+"POSSIBILITY OF SUCH DAMAGES."
+msgstr ""
+"НИ ПРИ КАКИХ ОБСТОЯТЕЛЬСТВАХ И НИ ПРИ КАКОМ ЗАКОННОМ СПОСОБЕ, НИ ПО КАКОМУ "
+"СОГЛАШЕНИЮ ИЛИ ДРУГОЙ ПРИЧИНЕ, АВТОР, СОЗДАТЕЛЬ, ПОМОЩНИКИ ИЛИ "
+"РАСПРОСТРАНИТЕЛИ ДОКУМЕНТА НЕ НЕСУТ ОТВЕТСТВЕННОСТЬ ЗА ПРЯМОЙ, КОСВЕННЫЙ, "
+"СПЕЦИАЛЬНЫЙ, СЛУЧАЙНЫЙ ИЛИ ПРЕДНАМЕРЕННЫЙ УЩЕРБ ЛЮБОГО СВОЙСТВА, ВКЛЮЧАЯ, "
+"БЕЗ ОГРАНИЧЕНИЯ, ПОТЕРЮ РЕПУТАЦИИ, РАБОТОСПОСОБНОСТИ, КОМПЬЮТЕРНЫЕ СБОИ ИЛИ "
+"ПОЛОМКИ, ИЛИ ЛЮБОЙ ДРУГОЙ УЩЕРБ ИЛИ ПОТЕРИ, ВОЗНИКАЮЩИЕ ВСЛЕДСТВИЕ ИЛИ "
+"СВЯЗАННЫЕ С ИСПОЛЬЗОВАНИЕМ ДОКУМЕНТА ИЛИ ИЗМЕНЁННЫХ ВЕРСИЙ ДОКУМЕНТА, ДАЖЕ "
+"ЕСЛИ СТОРОНА БЫЛА УВЕДОМЛЕНА О ВОЗМОЖНОСТИ ТАКОГО УЩЕРБА."
+
+#: C/empathy.xml:28(para)
+msgid ""
+"DOCUMENT AND MODIFIED VERSIONS OF THE DOCUMENT ARE PROVIDED UNDER THE TERMS "
+"OF THE GNU FREE DOCUMENTATION LICENSE WITH THE FURTHER UNDERSTANDING THAT: "
+"<placeholder-1/>"
+msgstr ""
+"ДОКУМЕНТ И ИЗМЕНЁННЫЕ ВЕРСИИ ДОКУМЕНТА ПРЕДОСТАВЛЯЮТСЯ ПОЛЬЗОВАТЕЛЮ НА "
+"УСЛОВИЯХ ЛИЦЕНЗИИ GNU FREE DOCUMENTATION LICENSE С УВЕДОМЛЕНИЕМ О ТОМ, ЧТО: "
+"<placeholder-1/>"
+
+#: C/empathy.xml:44(firstname)
+msgid "Milo"
+msgstr "Milo"
+
+#: C/empathy.xml:45(surname)
+msgid "Casagrande"
+msgstr "Casagrande"
+
+#: C/empathy.xml:48(email)
+msgid "milo_casagrande@yahoo.it"
+msgstr "milo_casagrande@yahoo.it"
+
+#: C/empathy.xml:52(firstname)
+msgid "Seth"
+msgstr "Seth"
+
+#: C/empathy.xml:53(surname)
+msgid "Dudenhofer"
+msgstr "Dudenhofer"
+
+#: C/empathy.xml:56(email)
+msgid "sdudenhofer@gmail.com"
+msgstr "sdudenhofer@gmail.com"
+
+#: C/empathy.xml:75(revnumber)
+msgid "Empathy Manual V2.0"
+msgstr "Руководство по Empathy версии 2.0"
+
+#: C/empathy.xml:76(date)
+msgid "April 2008"
+msgstr "Апрель 2008 г."
+
+#: C/empathy.xml:78(para)
+msgid "Milo Casagrande <email>milo_casagrande@yahoo.it</email>"
+msgstr "Milo Casagrande <email>milo_casagrande@yahoo.it</email>"
+
+#: C/empathy.xml:81(para)
+msgid "Seth Dudenhofer <email>sdudenhofer@gmail.com</email>"
+msgstr "Seth Dudenhofer <email>sdudenhofer@gmail.com</email>"
+
+#: C/empathy.xml:89(releaseinfo)
+msgid "This manual describes version 2.24 of Empathy."
+msgstr "Это руководство описывает приложение Empathy версии 2.24."
+
+#: C/empathy.xml:93(title)
+msgid "Feedback"
+msgstr "Обратная связь"
+
+#: C/empathy.xml:94(para)
+msgid ""
+"To report a bug or make a suggestion regarding the <application>Empathy</"
+"application> application or this manual, follow the directions in the <ulink "
+"url=\"ghelp:gnome-feedback\" type=\"help\">GNOME Feedback Page</ulink>."
+msgstr ""
+"Чтобы сообщить об ошибке или сделать предложение по <application>Empathy</application> "
+"или этому руководству, посетите <ulink url=\"ghelp:gnome-feedback\" type="
+"\"help\">страницу обратной связи GNOME</ulink> и следуйте дальнейшим указаниям."
+
+#: C/empathy.xml:102(para)
+msgid "Empathy is an application for instant messaging."
+msgstr "Empathy — это приложение для обмена мгновенными сообщениями."
+
+#: C/empathy.xml:110(primary) C/empathy.xml:0(application)
+msgid "Empathy"
+msgstr "Empathy"
+
+#: C/empathy.xml:113(primary)
+msgid "empathy"
+msgstr "empathy"
+
+#: C/empathy.xml:114(secondary)
+msgid "istant messaging"
+msgstr "обмен мгновенными сообщениями"
+
+#: C/empathy.xml:118(title)
+msgid "Introduction"
+msgstr "Введение"
+
+#: C/empathy.xml:119(para)
+msgid ""
+"<application>Empathy</application> is a multi-protocol instant messaging "
+"program for the GNOME Desktop. With <application>Empathy</application> you "
+"can keep in touch with all of your friends through lots of supported instant "
+"messaging services."
+msgstr ""
+"<application>Empathy</application> — приложение обмена мгновенными сообщениями для "
+"рабочего стола GNOME, поддерживающее множество протоколов. "
+"<application>Empathy</application> позволяет быть на связи со всеми друзьями "
+"с помощью большого количества поддерживаемых сервисов мгновенных сообщений."
+
+#: C/empathy.xml:129(acronym)
+msgid "AIM"
+msgstr "AIM"
+
+#: C/empathy.xml:133(para)
+msgid "Google Talk"
+msgstr "Google Talk"
+
+#: C/empathy.xml:138(para)
+msgid "ICQ"
+msgstr "ICQ"
+
+#: C/empathy.xml:144(acronym)
+msgid "IRC"
+msgstr "IRC"
+
+#: C/empathy.xml:148(para)
+msgid "Jabber"
+msgstr "Jabber"
+
+#: C/empathy.xml:154(acronym)
+msgid "MSN"
+msgstr "MSN"
+
+#: C/empathy.xml:158(para) C/empathy.xml:441(para)
+msgid "Salut"
+msgstr "Salut"
+
+#: C/empathy.xml:164(acronym)
+msgid "SIP"
+msgstr "SIP"
+
+#: C/empathy.xml:168(para)
+msgid "Yahoo"
+msgstr "Yahoo"
+
+#: C/empathy.xml:124(para)
+msgid ""
+"<application>Empathy</application> supports the following services: "
+"<placeholder-1/>"
+msgstr ""
+"<application>Empathy</application> поддерживает следующие сервисы: "
+"<placeholder-1/>"
+
+#: C/empathy.xml:177(title)
+msgid "Getting Started"
+msgstr "Начало работы"
+
+#: C/empathy.xml:180(title)
+msgid "Starting Empathy"
+msgstr "Запуск Empathy"
+
+#: C/empathy.xml:181(para)
+msgid "You can start <application>Empathy</application> in the following ways:"
+msgstr "Запустить <application>Empathy</application> можно следующим образом:"
+
+#: C/empathy.xml:185(term)
+msgid "<guimenu>Applications</guimenu> menu"
+msgstr "Меню <guimenu>Приложения</guimenu>"
+
+#: C/empathy.xml:187(para)
+msgid ""
+"Choose <menuchoice><guisubmenu>Internet</guisubmenu><guimenuitem>Empathy "
+"Instant Messenger</guimenuitem></menuchoice>."
+msgstr ""
+"Выберите <menuchoice><guisubmenu>Интернет</guisubmenu><guimenuitem>Empathy</"
+"guimenuitem></menuchoice>."
+
+#: C/empathy.xml:196(term)
+msgid "Command line"
+msgstr "Командная строка"
+
+#: C/empathy.xml:198(para)
+msgid "Type <command>empathy</command> and then press <keycap>Enter</keycap>."
+msgstr "Наберите <command>empathy</command> и нажмите клавишу <keycap>Enter</keycap>."
+
+#: C/empathy.xml:207(title)
+msgid "When You Start Empathy"
+msgstr "Работа с Empathy"
+
+#: C/empathy.xml:212(title)
+msgid "<application>Empathy</application> Main Window"
+msgstr "Главное окно <application>Empathy</application>"
+
+#: C/empathy.xml:219(phrase)
+msgid ""
+"Shows <placeholder-1/> main window. Contains the titlebar, the menubar, "
+"contact list, status icon and status arrow button list."
+msgstr ""
+"Показывает <placeholder-1/> главное окно, содержащее заголовок, меню, список "
+"контактов, значок состояния и кнопку выбора состояния."
+
+#: C/empathy.xml:208(para)
+msgid ""
+"When you start <application>Empathy</application> the following window is "
+"shown. <placeholder-1/>"
+msgstr ""
+"При запуске <application>Empathy</application> появляется следующее окно. "
+"<placeholder-1/>"
+
+#: C/empathy.xml:234(title)
+msgid "<application>Empathy</application> Main Components"
+msgstr "Главные компоненты <application>Empathy</application>"
+
+#: C/empathy.xml:241(para)
+msgid "Component"
+msgstr "Компонент"
+
+#: C/empathy.xml:244(para)
+msgid "Description"
+msgstr "Описание"
+
+#: C/empathy.xml:251(para)
+msgid "Menubar"
+msgstr "Меню"
+
+#: C/empathy.xml:254(para)
+msgid ""
+"Contains menus used to perform actions in <application>Empathy</application>."
+msgstr ""
+"Содержит меню для выполнения различных действий в <application>Empathy</"
+"application>."
+
+#: C/empathy.xml:261(para)
+msgid "Status Drop-Down List"
+msgstr "Выпадающий список состояний"
+
+#: C/empathy.xml:264(para)
+msgid "Allows to update the user's status."
+msgstr "Позволяет изменять состояние пользователя."
+
+#: C/empathy.xml:271(para)
+msgid "Account Button"
+msgstr "Кнопка учётной записи"
+
+#: C/empathy.xml:274(para)
+msgid "Opens the <guilabel>Accounts</guilabel> dialog."
+msgstr "Открывает диалог <guilabel>Учётные записи</guilabel>."
+
+#: C/empathy.xml:281(para)
+msgid "Contact List"
+msgstr "Список контактов"
+
+#: C/empathy.xml:284(para)
+msgid "Shows all the available contacts and their associated status."
+msgstr "Показывает все доступные контакты и их состояния."
+
+#: C/empathy.xml:230(para)
+msgid ""
+"<xref linkend=\"empathy-TBL-1\"/> describes the components of "
+"<application>Empathy</application>'s main window. <table frame=\"topbot\" id="
+"\"empathy-TBL-1\"><placeholder-1/><tgroup cols=\"2\" colsep=\"0\" rowsep=\"0"
+"\"><colspec colname=\"colspec0\" colwidth=\"29.39*\"/><colspec colname="
+"\"colspec1\" colwidth=\"70.61*\"/><placeholder-2/><placeholder-3/></tgroup></"
+"table>"
+msgstr ""
+"<xref linkend=\"empathy-TBL-1\"/> описывает компоненты главного окна "
+"<application>Empathy</application>. <table frame=\"topbot\" id=\"empathy-TBL-"
+"1\"><placeholder-1/><tgroup cols=\"2\" colsep=\"0\" rowsep=\"0\"><colspec "
+"colname=\"colspec0\" colwidth=\"29.39*\"/><colspec colname=\"colspec1\" "
+"colwidth=\"70.61*\"/><placeholder-2/><placeholder-3/></tgroup></table>"
+
+#: C/empathy.xml:297(title)
+msgid "When You Start Empathy for the First Time"
+msgstr "При первом запуске Empathy"
+
+#: C/empathy.xml:303(title)
+msgid "<application>Empathy</application> Accounts Dialog"
+msgstr "Диалог учётных записей <application>Empathy</application>"
+
+#: C/empathy.xml:310(phrase)
+msgid "Shows <placeholder-1/> account creation dialog."
+msgstr "Отображает <placeholder-1/> диалог создания учетной записи."
+
+#: C/empathy.xml:298(para)
+msgid ""
+"When you start <application>Empathy</application> for the first time and you "
+"don't have configured any account yet, the following dialog is shown. "
+"<placeholder-1/>"
+msgstr ""
+"При первом запуске в <application>Empathy</application> ещё не "
+"настроены учетные записеи, поэтому появляется следующий диалог. "
+"<placeholder-1/>"
+
+#: C/empathy.xml:319(para)
+msgid ""
+"From here, you can configure and create your accounts. See <xref linkend="
+"\"empathy-accounts\"/> for more information."
+msgstr ""
+"Здесь можно настроить существующую или создать новую учетную запись. "
+"Обратитесь к <xref linkend=\"empathy-accounts\"/> за дополнительной "
+"информацией."
+
+#: C/empathy.xml:328(title)
+msgid "Accounts"
+msgstr "Учётные записи"
+
+#: C/empathy.xml:329(para)
+msgid ""
+"To use <application>Empathy</application> you need at least one account of "
+"the supported services."
+msgstr ""
+"Перед использованием <application>Empathy</application> необходимо иметь "
+"хотя бы одну учётную запись в поддерживаемом сервисе."
+
+#: C/empathy.xml:332(para)
+msgid ""
+"If you don't already have an account and you don't have your <emphasis>user "
+"name</emphasis> and <emphasis>password</emphasis>, you need to register a "
+"new account (see <xref linkend=\"empathy-register-account\"/>)."
+msgstr ""
+"При отсутствии зарегистрированной учётной записи: <emphasis>имени "
+"пользователя</emphasis> и <emphasis>пароля</emphasis>, её необходимо "
+"получить (см.  <xref linkend=\"empathy-register-account\"/>)."
+
+#: C/empathy.xml:337(para)
+msgid ""
+"In order to talk with other users (called <emphasis>contatcs</emphasis>), "
+"you need to use the same service they are using. If, for example, one "
+"contact is using the <emphasis role=\"strong\">Jabber</emphasis> service, "
+"you need to have an account registerd with that service."
+msgstr ""
+"Чтобы общаться с пользователями (называемыми <emphasis>контактами</"
+"emphasis>), необходимо использовать тот же сервис, что и нужный пользователь. "
+"Например, если один контакт использует сервис <emphasis role=\"strong"
+"\">Jabber</emphasis>, вам необходимо так же иметь учётную запись этого "
+"сервиса."
+
+#: C/empathy.xml:344(para)
+msgid ""
+"<application>Empathy</application> can handle as many accounts on any "
+"supported services as you want and you can have them all open at the same "
+"time."
+msgstr ""
+"<application>Empathy</application> может одновременно открыть и обслуживать "
+"любое количество учётных записей любого сервиса."
+
+#: C/empathy.xml:350(title)
+msgid "Registering an Account"
+msgstr "Регистрация учётной записи"
+
+#: C/empathy.xml:351(para)
+msgid ""
+"You can freely register an account on any of the following services. Follow "
+"the instructions reported on each website on how to register your new "
+"account. At the end of the registration process you should have a "
+"<emphasis>user name</emphasis> (or an <emphasis>account ID</emphasis>) and a "
+"<emphasis>password</emphasis> that you will use to create the account in "
+"<application>Empathy</application>."
+msgstr ""
+"Можно свободно зарегистрировать новую учетную запись в любом из "
+"перечисленных сервисе. Для чего необходимо следовать инструкциям на веб-"
+"сайте соответствующего сервиса. По завершении регистрации будут получены "
+"<emphasis>имя пользователя</emphasis> (или <emphasis>Идентификатор "
+"пользователя</emphasis>) и <emphasis>пароль</emphasis> которые необходимо "
+"использовать при создании учётной записи в <application>Empathy</application>."
+
+#. Translators: try to find a localized version of the
+#. 	    registration service website
+#: C/empathy.xml:369(para)
+msgid ""
+"The <ulink type=\"http\" url=\"http://dashboard.aim.com/aim\">AIM</ulink> "
+"service."
+msgstr ""
+"Сервис <ulink type=\"http\" url=\"http://dashboard.aim.com/aim\">AIM</ulink>."
+
+#. Translators: try to find a localized version of the
+#. 	    registration service website
+#: C/empathy.xml:376(para)
+msgid ""
+"The <ulink type=\"http\" url=\"http://www.google.com/talk/\">Google Talk</"
+"ulink> service."
+msgstr ""
+"Сервис <ulink type=\"http\" url=\"http://www.google.com/talk/\">Google Talk</"
+"ulink>."
+
+#. Translators: try to find a localized version of the
+#. 	    registration service website
+#: C/empathy.xml:384(para)
+msgid ""
+"The <ulink type=\"http\" url=\"https://www.icq.com/register/\">ICQ</ulink> "
+"service."
+msgstr ""
+"Сервис <ulink type=\"http\" url=\"https://www.icq.com/register/\">ICQ</"
+"ulink>."
+
+#. Translators: try to find a localized version of the
+#. 	    registration service website
+#: C/empathy.xml:391(para)
+msgid ""
+"The <ulink type=\"http\" url=\"https://accountservices.passport.net\">MSN</"
+"ulink> service."
+msgstr ""
+"Сервис <ulink type=\"http\" url=\"https://accountservices.passport.net"
+"\">MSN</ulink>."
+
+#. Translators: try to find a localized version of the
+#. 	    registration service website
+#: C/empathy.xml:398(para)
+msgid ""
+"The <ulink type=\"http\" url=\"https://login.yahoo.com/config/login\">Yahoo</"
+"ulink> service."
+msgstr ""
+"Сервис <ulink type=\"http\" url=\"https://login.yahoo.com/config/login"
+"\">Yahoo</ulink>."
+
+#: C/empathy.xml:360(para)
+msgid "Click on the name of the service to visit its website: <placeholder-1/>"
+msgstr ""
+"Щёлкните мышью на имени сервиса или посетите его веб-сайт: <placeholder-1/>"
+
+#: C/empathy.xml:404(para)
+msgid ""
+"For registering a <acronym>SIP</acronym> account, you can use one of the "
+"following service:"
+msgstr ""
+"Для получения учетной записи <acronym>SIP</acronym>, можно использовать один "
+"из следующих сервисов:"
+
+#. Translators: try to find a localized version of the
+#. 	    registration service website
+#: C/empathy.xml:413(para)
+msgid ""
+"The <ulink type=\"http\" url=\"http://www.ekiga.net/user/reg/index.php?"
+"phplib_Session=c1d85267756241f8190e5fc21b029a62\">Ekiga</ulink> service."
+msgstr ""
+"Сервис <ulink type=\"http\" url=\"http://www.ekiga.net/user/reg/index.php?"
+"phplib_Session=c1d85267756241f8190e5fc21b029a62\">Ekiga</ulink>."
+
+#. Translators: try to find a localized version of the
+#. 	    registration service website
+#: C/empathy.xml:420(para)
+msgid ""
+"The <ulink type=\"http\" url=\"http://account2.freeworlddialup.com/index.php?"
+"section_id=94\"><acronym>FWD</acronym></ulink> (Free World Dialup) service."
+msgstr ""
+"Сервис <ulink type=\"http\" url=\"http://account2.freeworlddialup.com/index."
+"php?section_id=94\"><acronym>FWD</acronym></ulink> (Free World Dialup)."
+
+#. Translators: try to find a localized version of the
+#. 	    registration service website
+#: C/empathy.xml:428(para)
+msgid ""
+"The <ulink type=\"http\" url=\"https://signup.sipphone.com/new-users/app?"
+"class=NewUser;proc=start\">Sipphone</ulink> service."
+msgstr ""
+"Сервис <ulink type=\"http\" url=\"https://signup.sipphone.com/new-users/app?"
+"class=NewUser;proc=start\">Sipphone</ulink>."
+
+#: C/empathy.xml:434(para)
+msgid ""
+"You can use one of the following services if you already have a <emphasis "
+"role=\"strong\">Jabber</emphasis> account:"
+msgstr ""
+"Если имеется учётная запись <emphasis role=\"strong\">Jabber</emphasis>, "
+"можно использовать один из перечисленных сервисов:"
+
+#: C/empathy.xml:450(title)
+msgid "Creating an Account"
+msgstr "Создание учётной записи"
+
+#: C/empathy.xml:455(para) C/empathy.xml:501(para) C/empathy.xml:523(para)
+msgid ""
+"From the <link linkend=\"empathy-FIG-mainwindow\">main window </link> "
+"(<guilabel>Contact List</guilabel>) click on the account button to open the "
+"<guilabel>Accounts</guilabel> dialog."
+msgstr ""
+"В <link linkend=\"empathy-FIG-mainwindow\">главном окне</link> "
+"(<guilabel>Список контактов</guilabel>) следует нажать кнопку учётной "
+"записи, чтобы открыть диалог <guilabel>Учётных записей</guilabel>."
+
+#: C/empathy.xml:463(para)
+msgid "Click on the <guibutton>Add</guibutton> button."
+msgstr "Щёлкните по кнопке <guibutton>Добавить</guibutton>."
+
+#: C/empathy.xml:468(para)
+msgid ""
+"From the <guilabel>Type</guilabel> drop-down list choose the service you "
+"wish to create an account for, then click on the <guibutton>Create</"
+"guibutton> button."
+msgstr ""
+"Из выпадающего списка <guilabel>Тип</guilabel> необходимо выбрать "
+"используемый сервис, затем нажать кнопку <guibutton>Создать</guibutton>."
+
+#: C/empathy.xml:475(para)
+msgid ""
+"Fill the required fields with your <emphasis>user name</emphasis> and "
+"<emphasis>password</emphasis>."
+msgstr ""
+"Заполнить соответствующие поля <emphasis>именем пользователя</"
+"emphasis> и <emphasis>паролем</emphasis>."
+
+#: C/empathy.xml:481(para)
+msgid ""
+"To enable the new account, select the <guilabel>Enabled</guilabel> check-box "
+"next to the name of the account."
+msgstr ""
+"Чтобы включить новую учётную запись, необходимо установить флажок "
+"<guilabel>Включено</guilabel> напротив имени учётной записи."
+
+#: C/empathy.xml:451(para)
+msgid "To create an account, proceed as follow: <placeholder-1/>"
+msgstr "Для создания учётной записи следуйте указаниям: <placeholder-1/>"
+
+#: C/empathy.xml:494(title)
+msgid "Disabling and Removing an Account"
+msgstr "Отключение и удаление учётной записи"
+
+#: C/empathy.xml:495(para)
+msgid "To disable an account, proceed as follow:"
+msgstr "Для отключения учётной записи необходимо выполнить следующее:"
+
+#: C/empathy.xml:509(para)
+msgid ""
+"Select the account you wish to disable in the box on the left of the dialog "
+"and deselect the <guilabel>Enabled</guilabel> check-box."
+msgstr ""
+"Выбрать учётную запись для отключения в рамке в левой части диалога и снять "
+"флажок <guilabel>Включено</guilabel>."
+
+#: C/empathy.xml:517(para)
+msgid "To remove an account, proceed as follow:"
+msgstr "Для удаления учётной записи необходимо выполнить следующее:"
+
+#: C/empathy.xml:531(para)
+msgid ""
+"Select the account you wish to disable in the box on the left of the dialog."
+msgstr "Выбрать учетную запись для удаления в левой части диалога."
+
+#: C/empathy.xml:537(para)
+msgid "Click on the <guibutton>Remove</guibutton> button."
+msgstr "Нажать на кнопку <guibutton>Удалить</guibutton>."
+
+#: C/empathy.xml:542(para)
+msgid ""
+"A dialog will be shown asking for confirmation. Click on the "
+"<guibutton>Remove</guibutton> button to remove the account."
+msgstr ""
+"После этого появится диалог подтверждения удаления. Для удаления учётной "
+"записи следует нажать на кнопку <guibutton>Удалить</guibutton>."
+
+#: C/empathy.xml:553(title)
+msgid "Contacts"
+msgstr "Контакты"
+
+#: C/empathy.xml:554(para)
+msgid ""
+"All the contacts are handled within <application>Empathy</application>'s "
+"<link linkend=\"empathy-FIG-mainwindow\">main window</link>."
+msgstr ""
+"Вся работа с контактами производится в <link linkend=\"empathy-FIG-mainwindow"
+"\">главном окне</link> <application>Empathy</application>."
+
+#: C/empathy.xml:559(title)
+msgid "Adding a Contact"
+msgstr "Добавление контакта"
+
+#: C/empathy.xml:560(para)
+msgid "To add a new contact, proceed as follow:"
+msgstr "Для добавления нового контакта следует выполнить следующее:"
+
+#: C/empathy.xml:566(para)
+msgid ""
+"From the <link linkend=\"empathy-FIG-mainwindow\">main window</link> choose "
+"<menuchoice><guimenu>Chat</guimenu><guimenuitem>Add Contact...</"
+"guimenuitem></menuchoice>. The <guilabel>New Contact</guilabel> dialog will "
+"be shown."
+msgstr ""
+"В <link linkend=\"empathy-FIG-mainwindow\">главном окне</link> выбрать "
+"пункт <menuchoice><guimenu>Разговор</guimenu><guimenuitem>Добавить собеседника...</"
+"guimenuitem></menuchoice>. Появится диалог <guilabel>Новый собеседник</"
+"guilabel>."
+
+#: C/empathy.xml:576(para)
+msgid ""
+"From the <guilabel>Account</guilabel> drop-down list, choose the service "
+"used by the contact you are adding."
+msgstr ""
+"Из выпадающего списка <guilabel>Учётная запись</guilabel> указать сервис, "
+"используемый добавляемым контактом."
+
+#: C/empathy.xml:582(para)
+msgid ""
+"In the <guilabel>Identifier</guilabel> text-box type the <emphasis>address</"
+"emphasis> of the contact in the form of <userinput><replaceable>user name</"
+"replaceable>@<replaceable>service\n"
+"\t      domain</replaceable></userinput>."
+msgstr ""
+"В поле <guilabel>Идентификатор</guilabel> ввести <emphasis>адрес</emphasis> "
+"контакта в виде <userinput><replaceable>имя пользователя</"
+"replaceable>@<replaceable>сервис\n"
+"\t      домен</replaceable></userinput>."
+
+#: C/empathy.xml:591(para)
+msgid ""
+"In the <guilabel>Alias</guilabel> text-box type the name you want to give at "
+"the the new contact."
+msgstr ""
+"В поле <guilabel>Псевдоним</guilabel> ввести имя, под которым будет "
+"отображаться контакт."
+
+#: C/empathy.xml:597(para)
+msgid "Click on <guibutton>Add</guibutton> to add the new contact."
+msgstr "Нажать на кнопку <guibutton>Добавить</guibutton>."
+
+#: C/empathy.xml:605(title)
+msgid "Removing a Contact"
+msgstr "Удаление собеседника"
+
+#: C/empathy.xml:606(para)
+msgid "To remove a contact, proceed as follow:"
+msgstr "Для удаления собеседника необходимо выполнить следующее:"
+
+#: C/empathy.xml:612(para)
+msgid ""
+"From the <link linkend=\"empathy-FIG-mainwindow\">main window</link>, select "
+"the contact you would like to remove and right-click on it."
+msgstr ""
+"В <link linkend=\"empathy-FIG-mainwindow\">главном окне</link>выбрать "
+"собеседника для удаления и щёлкнуть на нём правой кнопкой мыши."
+
+#: C/empathy.xml:619(para)
+msgid ""
+"From the popup menu, choose <guilabel>Remove</guilabel> to remove the "
+"contact."
+msgstr "В всплывающем меню выбрать пункт <guilabel>Удалить</guilabel>."
+
+#: C/empathy.xml:628(title)
+msgid "Modifying a Contact"
+msgstr "Изменение данных собеседника"
+
+#. Put one translator per line, in the form of NAME <EMAIL>, YEAR1, YEAR2.
+#: C/empathy.xml:0(None)
+msgid "translator-credits"
+msgstr "Никита Белобров <qvzqvz@gmail.com>, 2008"
