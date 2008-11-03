@@ -1,9 +1,11 @@
 *.omf
 *.mo
 
+cs/*.xml
 de/*.xml
 es/*.xml
 fr/*.xml
 it/*.xml
+ru/*.xml
 sv/*.xml
-cs/*.xml
+
