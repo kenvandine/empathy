@@ -968,14 +968,21 @@ preferences_theme_adium_path_notify_cb (EmpathyConf *conf,
 	EmpathyPreferences *preferences = user_data;
 	GtkFileChooser     *chooser;
 	gchar              *value;
+	const gchar        *path;
 
 	if (!empathy_conf_get_string (conf, key, &value)) {
 		return;
 	}
 
+	if (G_STR_EMPTY (value)) {
+		path = g_get_home_dir ();
+	} else {
+		path = value;
+	}
+
 	chooser = GTK_FILE_CHOOSER (preferences->filechooserbutton_adium_theme);
-	gtk_file_chooser_set_current_folder (chooser, value);
-	preferences_theme_adium_update_validity (preferences, value);
+	gtk_file_chooser_set_current_folder (chooser, path);
+	preferences_theme_adium_update_validity (preferences, path);
 	g_free (value);
 }
 
