@@ -207,7 +207,7 @@ theme_manager_update_boxes_tags (EmpathyThemeBoxes *theme,
 					      "pixels-above-lines", 4,
 					      NULL);
 	TAG_SET ("paragraph-background", "paragraph-background-set", text_background);
-	TAG_SET ("foreground", "foreground-set",highlight_foreground);
+	TAG_SET ("foreground", "foreground-set", highlight_foreground);
 
 	empathy_chat_text_view_tag_set (view, EMPATHY_CHAT_TEXT_VIEW_TAG_SPACING,
 					"size", 3000,
