@@ -231,12 +231,6 @@ chat_text_view_notify_system_font_cb (EmpathyConf *conf,
 }
 
 static void
-chat_text_view_clear_view_cb (GtkMenuItem *menuitem, EmpathyChatTextView *view)
-{
-	empathy_chat_view_clear (EMPATHY_CHAT_VIEW (view));
-}
-
-static void
 chat_text_view_open_address_cb (GtkMenuItem *menuitem, const gchar *url)
 {
 	empathy_url_show (GTK_WIDGET (menuitem), url);
@@ -256,8 +250,8 @@ chat_text_view_copy_address_cb (GtkMenuItem *menuitem, const gchar *url)
 
 static void
 chat_text_view_populate_popup (EmpathyChatTextView *view,
-			  GtkMenu        *menu,
-			  gpointer        user_data)
+			       GtkMenu        *menu,
+			       gpointer        user_data)
 {
 	EmpathyChatTextViewPriv *priv;
 	GtkTextTagTable    *table;
@@ -271,7 +265,7 @@ chat_text_view_populate_popup (EmpathyChatTextView *view,
 	
 	/* Clear menu item */
 	if (gtk_text_buffer_get_char_count (priv->buffer) > 0) {
-		item = gtk_menu_item_new ();
+		item = gtk_separator_menu_item_new ();
 		gtk_menu_shell_prepend (GTK_MENU_SHELL (menu), item);
 		gtk_widget_show (item);
 		
@@ -279,10 +273,9 @@ chat_text_view_populate_popup (EmpathyChatTextView *view,
 		gtk_menu_shell_prepend (GTK_MENU_SHELL (menu), item);
 		gtk_widget_show (item);
 		
-		g_signal_connect (item,
-				  "activate",
-				  G_CALLBACK (chat_text_view_clear_view_cb),
-				  view);
+		g_signal_connect_swapped (item, "activate",
+					  G_CALLBACK (empathy_chat_view_clear),
+					  view);
 	}
 	
 	/* Link context menu items */
@@ -316,21 +309,19 @@ chat_text_view_populate_popup (EmpathyChatTextView *view,
 				"url", str,
 				(GDestroyNotify) g_free);
 	
-	item = gtk_menu_item_new ();
+	item = gtk_separator_menu_item_new ();
 	gtk_menu_shell_prepend (GTK_MENU_SHELL (menu), item);
 	gtk_widget_show (item);
 	
 	item = gtk_menu_item_new_with_mnemonic (_("_Copy Link Address"));
-	g_signal_connect (item,
-			  "activate",
+	g_signal_connect (item, "activate",
 			  G_CALLBACK (chat_text_view_copy_address_cb),
 			  str);
 	gtk_menu_shell_prepend (GTK_MENU_SHELL (menu), item);
 	gtk_widget_show (item);
 	
 	item = gtk_menu_item_new_with_mnemonic (_("_Open Link"));
-	g_signal_connect (item,
-			  "activate",
+	g_signal_connect (item, "activate",
 			  G_CALLBACK (chat_text_view_open_address_cb),
 			  str);
 	gtk_menu_shell_prepend (GTK_MENU_SHELL (menu), item);
@@ -576,6 +567,7 @@ chat_text_view_finalize (GObject *object)
 	if (priv->scroll_timeout) {
 		g_source_remove (priv->scroll_timeout);
 	}
+	g_object_unref (priv->smiley_manager);
 	
 	G_OBJECT_CLASS (empathy_chat_text_view_parent_class)->finalize (object);
 }

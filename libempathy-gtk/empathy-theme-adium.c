@@ -46,6 +46,8 @@ typedef struct {
 	GList                *message_queue;
 	gchar                *path;
 	gchar                *default_avatar_filename;
+	gchar                *template_html;
+	gchar                *basedir;
 	gchar                *in_content_html;
 	gsize                 in_content_len;
 	gchar                *in_nextcontent_html;
@@ -54,6 +56,8 @@ typedef struct {
 	gsize                 out_content_len;
 	gchar                *out_nextcontent_html;
 	gsize                 out_nextcontent_len;
+	gchar                *status_html;
+	gsize                 status_len;
 } EmpathyThemeAdiumPriv;
 
 static void theme_adium_iface_init (EmpathyChatViewIface *iface);
@@ -72,41 +76,43 @@ static void
 theme_adium_load (EmpathyThemeAdium *theme)
 {
 	EmpathyThemeAdiumPriv *priv = GET_PRIV (theme);
-	gchar                 *basedir;
 	gchar                 *file;
 	gchar                 *template_html = NULL;
 	gsize                  template_len;
 	GString               *string;
 	gchar                **strv = NULL;
-	gchar                 *content;
 	gchar                 *css_path;
 	guint                  len = 0;
 	guint                  i = 0;
 
-	basedir = g_build_filename (priv->path, "Contents", "Resources", NULL);
+	priv->basedir = g_build_filename (priv->path, "Contents", "Resources", NULL);
 
 	/* Load html files */
-	file = g_build_filename (basedir, "Incoming", "Content.html", NULL);
+	file = g_build_filename (priv->basedir, "Incoming", "Content.html", NULL);
 	g_file_get_contents (file, &priv->in_content_html, &priv->in_content_len, NULL);
 	g_free (file);
 
-	file = g_build_filename (basedir, "Incoming", "NextContent.html", NULL);
+	file = g_build_filename (priv->basedir, "Incoming", "NextContent.html", NULL);
 	g_file_get_contents (file, &priv->in_nextcontent_html, &priv->in_nextcontent_len, NULL);
 	g_free (file);
 
-	file = g_build_filename (basedir, "Outgoing", "Content.html", NULL);
+	file = g_build_filename (priv->basedir, "Outgoing", "Content.html", NULL);
 	g_file_get_contents (file, &priv->out_content_html, &priv->out_content_len, NULL);
 	g_free (file);
 
-	file = g_build_filename (basedir, "Outgoing", "NextContent.html", NULL);
+	file = g_build_filename (priv->basedir, "Outgoing", "NextContent.html", NULL);
 	g_file_get_contents (file, &priv->out_nextcontent_html, &priv->out_nextcontent_len, NULL);
 	g_free (file);
 
-	css_path = g_build_filename (basedir, "main.css", NULL);
+	file = g_build_filename (priv->basedir, "Status.html", NULL);
+	g_file_get_contents (file, &priv->status_html, &priv->status_len, NULL);
+	g_free (file);
+
+	css_path = g_build_filename (priv->basedir, "main.css", NULL);
 
 	/* There is 2 formats for Template.html: The old one has 4 parameters,
 	 * the new one has 5 parameters. */
-	file = g_build_filename (basedir, "Template.html", NULL);
+	file = g_build_filename (priv->basedir, "Template.html", NULL);
 	if (g_file_get_contents (file, &template_html, &template_len, NULL)) {
 		strv = g_strsplit (template_html, "%@", -1);
 		len = g_strv_length (strv);
@@ -129,7 +135,7 @@ theme_adium_load (EmpathyThemeAdium *theme)
 	/* Replace %@ with the needed information in the template html. */
 	string = g_string_sized_new (template_len);
 	g_string_append (string, strv[i++]);
-	g_string_append (string, basedir);
+	g_string_append (string, priv->basedir);
 	g_string_append (string, strv[i++]);
 	if (len == 6) {
 		/* We include main.css by default */
@@ -146,14 +152,12 @@ theme_adium_load (EmpathyThemeAdium *theme)
 	g_string_append (string, strv[i++]);
 	g_string_append (string, ""); /* FIXME: We don't support footer yet */
 	g_string_append (string, strv[i++]);
-	content = g_string_free (string, FALSE);
+	priv->template_html = g_string_free (string, FALSE);
 
 	/* Load the template */
 	webkit_web_view_load_html_string (WEBKIT_WEB_VIEW (theme),
-					  content, basedir);
+					  priv->template_html, priv->basedir);
 
-	g_free (basedir);
-	g_free (content);
 	g_free (template_html);
 	g_free (css_path);
 	g_strfreev (strv);
@@ -173,33 +177,54 @@ theme_adium_navigation_requested_cb (WebKitWebView        *view,
 	return WEBKIT_NAVIGATION_RESPONSE_IGNORE;
 }
 
-static gchar *
-theme_adium_escape_script (const gchar *text)
+static void
+theme_adium_populate_popup_cb (WebKitWebView *view,
+			       GtkMenu       *menu,
+			       gpointer       user_data)
 {
-	const gchar *cur = text;
-	GString     *string;
+	GtkWidget *item;
 
-	string = g_string_sized_new (strlen (text));
-	while (!G_STR_EMPTY (cur)) {
-		switch (*cur) {
-		case '\\':
-			/* \ becomes \\ */
-			g_string_append (string, "\\\\");	
-			break;
-		case '\"':
-			/* " becomes \" */
-			g_string_append (string, "\\\"");
-			break;
-		case '\n':
-			/* Remove end of lines */
-			break;
-		default:
-			g_string_append_c (string, *cur);
-		}
-		cur++;
+	/* Remove default menu items */
+	gtk_container_foreach (GTK_CONTAINER (menu),
+		(GtkCallback) gtk_widget_destroy, NULL);
+	
+	/* Select all item */
+	item = gtk_image_menu_item_new_from_stock (GTK_STOCK_SELECT_ALL, NULL);
+	gtk_menu_shell_prepend (GTK_MENU_SHELL (menu), item);
+	gtk_widget_show (item);
+		
+	g_signal_connect_swapped (item, "activate",
+				  G_CALLBACK (webkit_web_view_select_all),
+				  view);
+
+	/* Copy menu item */
+	if (webkit_web_view_can_copy_clipboard (view)) {
+		item = gtk_image_menu_item_new_from_stock (GTK_STOCK_COPY, NULL);
+		gtk_menu_shell_prepend (GTK_MENU_SHELL (menu), item);
+		gtk_widget_show (item);
+		
+		g_signal_connect_swapped (item, "activate",
+					  G_CALLBACK (webkit_web_view_copy_clipboard),
+					  view);
 	}
 
-	return g_string_free (string, FALSE);
+	/* Clear menu item */
+	item = gtk_separator_menu_item_new ();
+	gtk_menu_shell_prepend (GTK_MENU_SHELL (menu), item);
+	gtk_widget_show (item);
+		
+	item = gtk_image_menu_item_new_from_stock (GTK_STOCK_CLEAR, NULL);
+	gtk_menu_shell_prepend (GTK_MENU_SHELL (menu), item);
+	gtk_widget_show (item);
+		
+	g_signal_connect_swapped (item, "activate",
+				  G_CALLBACK (empathy_chat_view_clear),
+				  view);
+
+	/* FIXME: Add open_link and copy_link when those bugs are fixed:
+	 * https://bugs.webkit.org/show_bug.cgi?id=16092
+	 * https://bugs.webkit.org/show_bug.cgi?id=16562
+	 */
 }
 
 static gchar *
@@ -305,7 +330,109 @@ theme_adium_parse_body (EmpathyThemeAdium *theme,
 	return ret;
 }
 
-#define FOLLOW(cur, str) (!strncmp (cur, str, strlen (str)))
+static void
+escape_and_append_len (GString *string, const gchar *str, gint len)
+{
+	while (*str != '\0' && len != 0) {
+		switch (*str) {
+		case '\\':
+			/* \ becomes \\ */
+			g_string_append (string, "\\\\");	
+			break;
+		case '\"':
+			/* " becomes \" */
+			g_string_append (string, "\\\"");
+			break;
+		case '\n':
+			/* Remove end of lines */
+			break;
+		default:
+			g_string_append_c (string, *str);
+		}
+
+		str++;
+		len--;
+	}
+}
+
+static gboolean
+theme_adium_match (const gchar **str, const gchar *match)
+{
+	gint len;
+
+	len = strlen (match);
+	if (strncmp (*str, match, len) == 0) {
+		*str += len - 1;
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
+static void
+theme_adium_append_html (EmpathyThemeAdium *theme,
+			 const gchar       *func,
+			 const gchar       *html, gsize len,
+		         const gchar       *message,
+		         const gchar       *avatar_filename,
+		         const gchar       *name,
+		         time_t             timestamp)
+{
+	GString     *string;
+	const gchar *cur = NULL;
+	gchar       *script;
+
+	/* Make some search-and-replace in the html code */
+	string = g_string_sized_new (len + strlen (message));
+	g_string_append_printf (string, "%s(\"", func);
+	for (cur = html; *cur != '\0'; cur++) {
+		const gchar *replace = NULL;
+		gchar       *dup_replace = NULL;
+
+		if (theme_adium_match (&cur, "%message%")) {
+			replace = message;
+		} else if (theme_adium_match (&cur, "%userIconPath%")) {
+			replace = avatar_filename;
+		} else if (theme_adium_match (&cur, "%sender%")) {
+			replace = name;
+		} else if (theme_adium_match (&cur, "%time")) {
+			gchar *format = NULL;
+			gchar *end;
+
+			/* Extract the time format if provided. */
+			if (*cur == '{') {
+				end = strstr (cur + 1, "}%");
+				if (!end) {
+					/* Invalid string */
+					continue;
+				}
+				cur++;
+				format = g_strndup (cur, end - cur);
+				cur = end;
+			} else {
+				cur++;
+			}
+
+			dup_replace = empathy_time_to_string_local (timestamp,
+				format ? format : EMPATHY_TIME_FORMAT_DISPLAY_SHORT);
+			replace = dup_replace;
+			g_free (format);
+		} else {
+			escape_and_append_len (string, cur, 1);
+			continue;
+		}
+
+		/* Here we have a replacement to make */
+		escape_and_append_len (string, replace, -1);
+		g_free (dup_replace);
+	}
+	g_string_append (string, "\")");
+
+	script = g_string_free (string, FALSE);
+	webkit_web_view_execute_script (WEBKIT_WEB_VIEW (theme), script);
+	g_free (script);
+}
+
 static void
 theme_adium_append_message (EmpathyChatView *view,
 			    EmpathyMessage  *msg)
@@ -319,12 +446,8 @@ theme_adium_append_message (EmpathyChatView *view,
 	EmpathyAvatar         *avatar;
 	const gchar           *avatar_filename = NULL;
 	time_t                 timestamp;
-	gsize                  len;
-	GString               *string;
-	gchar                 *cur = NULL;
-	gchar                 *prev;
-	gchar                 *script;
-	gchar                 *escape;
+	gchar                 *html = NULL;
+	gsize                  len = 0;
 	const gchar           *func;
 
 	if (!priv->page_loaded) {
@@ -361,86 +484,28 @@ theme_adium_append_message (EmpathyChatView *view,
 	    empathy_contact_equal (priv->last_contact, sender)) {
 		func = "appendNextMessage";
 		if (empathy_contact_is_user (sender)) {
-			cur = priv->out_nextcontent_html;
+			html = priv->out_nextcontent_html;
 			len = priv->out_nextcontent_len;
 		}
-		if (!cur) {
-			cur = priv->in_nextcontent_html;
+		if (!html) {
+			html = priv->in_nextcontent_html;
 			len = priv->in_nextcontent_len;
 		}
 	}
-	if (!cur) {
+	if (!html) {
 		func = "appendMessage";
 		if (empathy_contact_is_user (sender)) {
-			cur = priv->out_content_html;
+			html = priv->out_content_html;
 			len = priv->out_content_len;
 		}
-		if (!cur) {
-			cur = priv->in_content_html;
+		if (!html) {
+			html = priv->in_content_html;
 			len = priv->in_content_len;
 		}
 	}
 
-	/* Make some search-and-replace in the html code */
-	prev = cur;
-	string = g_string_sized_new (len + strlen (body));
-	while ((cur = strchr (cur, '%'))) {
-		const gchar *replace = NULL;
-		gchar       *dup_replace = NULL;
-		gchar       *fin = NULL;
-
-		if (FOLLOW (cur, "%message%")) {
-			replace = body;
-		} else if (FOLLOW (cur, "%userIconPath%")) {
-			replace = avatar_filename;
-		} else if (FOLLOW (cur, "%sender%")) {
-			replace = name;
-		} else if (FOLLOW (cur, "%time")) {
-			gchar *format = NULL;
-			gchar *start;
-			gchar *end;
-
-			/* Extract the time format if provided. */
-			if (*(start = cur + strlen("%time")) == '{') {
-				start++;
-				end = strstr (start, "}%");
-				if (!end) {
-					/* Invalid string */
-					cur++;
-					continue;
-				}
-				format = g_strndup (start, end - start);
-				fin = end + 1;
-			}
-
-			dup_replace = empathy_time_to_string_local (timestamp,
-				format ? format : EMPATHY_TIME_FORMAT_DISPLAY_SHORT);
-			replace = dup_replace;
-			g_free (format);
-		} else {
-			cur++;
-			continue;
-		}
-
-		/* Here we have a replacement to make */
-		g_string_append_len (string, prev, cur - prev);
-		g_string_append (string, replace);
-		g_free (dup_replace);
-
-		/* And update the pointers */
-		if (fin) {
-			prev = cur = fin + 1;
-		} else {
-			prev = cur = strchr (cur + 1, '%') + 1;
-		}
-	}
-	g_string_append (string, prev);
-
-	/* Execute a js to add the message */
-	cur = g_string_free (string, FALSE);
-	escape = theme_adium_escape_script (cur);
-	script = g_strdup_printf("%s(\"%s\")", func, escape);
-	webkit_web_view_execute_script (WEBKIT_WEB_VIEW (view), script);
+	theme_adium_append_html (theme, func, html, len, body, avatar_filename,
+				 name, timestamp);
 
 	/* Keep the sender of the last displayed message */
 	if (priv->last_contact) {
@@ -449,42 +514,57 @@ theme_adium_append_message (EmpathyChatView *view,
 	priv->last_contact = g_object_ref (sender);
 
 	g_free (dup_body);
-	g_free (cur);
-	g_free (script);
 }
-#undef FOLLOW
 
 static void
 theme_adium_append_event (EmpathyChatView *view,
 			  const gchar     *str)
 {
-	/* Not implemented */
+	EmpathyThemeAdium     *theme = EMPATHY_THEME_ADIUM (view);
+	EmpathyThemeAdiumPriv *priv = GET_PRIV (theme);
+
+	if (priv->status_html) {
+		theme_adium_append_html (theme, "appendMessage",
+					 priv->status_html, priv->status_len,
+					 str, NULL, NULL,
+					 empathy_time_get_current ());
+	}
+
+	/* There is no last contact */
+	if (priv->last_contact) {
+		g_object_unref (priv->last_contact);
+		priv->last_contact = NULL;
+	}
 }
 
 static void
 theme_adium_scroll (EmpathyChatView *view,
 		    gboolean         allow_scrolling)
 {
-	/* Not implemented */
+	/* FIXME: Is it possible? I guess we need a js function, but I don't 
+	 * see any... */
 }
 
 static void
 theme_adium_scroll_down (EmpathyChatView *view)
 {
-	/* Not implemented */
+	webkit_web_view_execute_script (WEBKIT_WEB_VIEW (view), "scrollToBottom()");
 }
 
 static gboolean
 theme_adium_get_has_selection (EmpathyChatView *view)
 {
-	/* Not implemented */
-	return FALSE;
+	return webkit_web_view_has_selection (WEBKIT_WEB_VIEW (view));
 }
 
 static void
 theme_adium_clear (EmpathyChatView *view)
 {
-	/* Not implemented */
+	EmpathyThemeAdiumPriv *priv = GET_PRIV (view);
+
+	priv->page_loaded = FALSE;
+	webkit_web_view_load_html_string (WEBKIT_WEB_VIEW (view),
+					  priv->template_html, priv->basedir);
 }
 
 static gboolean
@@ -492,8 +572,9 @@ theme_adium_find_previous (EmpathyChatView *view,
 			   const gchar     *search_criteria,
 			   gboolean         new_search)
 {
-	/* Not implemented */
-	return FALSE;
+	return webkit_web_view_search_text (WEBKIT_WEB_VIEW (view),
+					    search_criteria, FALSE,
+					    FALSE, TRUE);
 }
 
 static gboolean
@@ -501,8 +582,9 @@ theme_adium_find_next (EmpathyChatView *view,
 		       const gchar     *search_criteria,
 		       gboolean         new_search)
 {
-	/* Not implemented */
-	return FALSE;
+	return webkit_web_view_search_text (WEBKIT_WEB_VIEW (view),
+					    search_criteria, FALSE,
+					    TRUE, TRUE);
 }
 
 static void
@@ -511,20 +593,29 @@ theme_adium_find_abilities (EmpathyChatView *view,
 			    gboolean       *can_do_previous,
 			    gboolean       *can_do_next)
 {
-	/* Not implemented */
+	/* FIXME: Does webkit provide an API for that? We have wrap=true in
+	 * find_next and find_previous to work around this problem. */
+	if (can_do_previous)
+		*can_do_previous = TRUE;
+	if (can_do_next)
+		*can_do_next = TRUE;
 }
 
 static void
 theme_adium_highlight (EmpathyChatView *view,
 		       const gchar     *text)
 {
-	/* Not implemented */
+	webkit_web_view_unmark_text_matches (WEBKIT_WEB_VIEW (view));
+	webkit_web_view_mark_text_matches (WEBKIT_WEB_VIEW (view),
+					   text, FALSE, 0);
+	webkit_web_view_set_highlight_text_matches (WEBKIT_WEB_VIEW (view),
+						    TRUE);
 }
 
 static void
 theme_adium_copy_clipboard (EmpathyChatView *view)
 {
-	/* Not implemented */
+	webkit_web_view_copy_clipboard (WEBKIT_WEB_VIEW (view));
 }
 
 static void
@@ -570,6 +661,8 @@ theme_adium_finalize (GObject *object)
 {
 	EmpathyThemeAdiumPriv *priv = GET_PRIV (object);
 
+	g_free (priv->basedir);
+	g_free (priv->template_html);
 	g_free (priv->in_content_html);
 	g_free (priv->in_nextcontent_html);
 	g_free (priv->out_content_html);
@@ -666,6 +759,9 @@ empathy_theme_adium_init (EmpathyThemeAdium *theme)
 			  NULL);
 	g_signal_connect (theme, "navigation-requested",
 			  G_CALLBACK (theme_adium_navigation_requested_cb),
+			  NULL);
+	g_signal_connect (theme, "populate-popup",
+			  G_CALLBACK (theme_adium_populate_popup_cb),
 			  NULL);
 }
 

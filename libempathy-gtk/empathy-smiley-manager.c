@@ -125,7 +125,6 @@ smiley_manager_finalize (GObject *object)
 		g_free ((gchar*) smiley->path);
 		empathy_smiley_free (smiley);
 	}
-	g_slist_foreach (priv->smileys, (GFunc) empathy_smiley_free, NULL);
 	g_slist_free (priv->smileys);
 }
 
