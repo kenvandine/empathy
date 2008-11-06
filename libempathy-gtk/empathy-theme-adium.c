@@ -85,7 +85,7 @@ theme_adium_load (EmpathyThemeAdium *theme)
 	guint                  len = 0;
 	guint                  i = 0;
 
-	priv->basedir = g_build_filename (priv->path, "Contents", "Resources", NULL);
+	priv->basedir = g_strconcat (priv->path, G_DIR_SEPARATOR_S "Contents" G_DIR_SEPARATOR_S "Resources" G_DIR_SEPARATOR_S, NULL);
 
 	/* Load html files */
 	file = g_build_filename (priv->basedir, "Incoming", "Content.html", NULL);
