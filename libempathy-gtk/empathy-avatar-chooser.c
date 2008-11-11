@@ -287,6 +287,36 @@ avatar_chooser_set_account (EmpathyAvatarChooser *self,
 	}
 }
 
+static void
+avatar_chooser_error_show (EmpathyAvatarChooser *chooser,
+			   const gchar          *primary_text,
+			   const gchar          *secondary_text)
+{
+	GtkWidget *parent;
+	GtkWidget *dialog;
+
+	parent = gtk_widget_get_toplevel (GTK_WIDGET (chooser));
+	if (!GTK_IS_WINDOW (parent)) {
+		parent = NULL;
+	}
+
+	dialog = gtk_message_dialog_new (parent ? GTK_WINDOW (parent) : NULL,
+					 GTK_DIALOG_MODAL,
+					 GTK_MESSAGE_WARNING,
+					 GTK_BUTTONS_CLOSE,
+					 "%s", primary_text);
+
+	if (secondary_text != NULL) {
+		gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
+							  "%s", secondary_text);
+	}
+
+	g_signal_connect (dialog, "response",
+			  G_CALLBACK (gtk_widget_destroy), NULL);
+	gtk_widget_show (dialog);
+
+}
+
 static gboolean
 str_in_strv (gchar  *str,
 	     gchar **strv)
@@ -406,8 +436,9 @@ avatar_chooser_maybe_convert_and_scale (EmpathyAvatarChooser *chooser,
 
 	if (!can_satisfy_mime_type_requirements (mime_types, &new_format_name,
 						 &new_mime_type)) {
-		/* FIXME: That should be reported to the user */
-		DEBUG ("Mon dieu! Can't convert to any acceptable format!");
+		avatar_chooser_error_show (chooser,
+			_("Can't convert to any acceptable format!"),
+			NULL);
 		g_strfreev (mime_types);
 		return NULL;
 	}
@@ -487,10 +518,12 @@ avatar_chooser_maybe_convert_and_scale (EmpathyAvatarChooser *chooser,
 						   &error, NULL);
 
 		if (!saved) {
-			DEBUG ("Couldn't convert image: %s", error->message);
-			g_clear_error (&error);
 			g_free (new_format_name);
 			g_free (new_mime_type);
+			avatar_chooser_error_show (chooser,
+				_("Couldn't convert image"),
+				error ? error->message : NULL);
+			g_clear_error (&error);
 			return NULL;
 		}
 
