@@ -551,7 +551,7 @@ avatar_chooser_maybe_convert_and_scale (EmpathyAvatarChooser *chooser,
 			max_factor = factor;
 		if (converted_image_size < max_size)
 			min_factor = factor;
-		factor = min_factor + (max_factor - min_factor)/2;
+		factor = (min_factor + max_factor)/2;
 
 		/* We are done if either:
 		 * - min_factor == max_factor. That happens if we resized to
