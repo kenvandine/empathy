@@ -43,6 +43,13 @@ typedef struct {
 	GList          *contacts;
 	EmpathyContact *user;
 	gpointer        token;
+
+	const gchar   **avatar_mime_types;
+	guint           avatar_min_width;
+	guint           avatar_min_height;
+	guint           avatar_max_width;
+	guint           avatar_max_height;
+	guint           avatar_max_size;
 } EmpathyTpContactFactoryPriv;
 
 G_DEFINE_TYPE (EmpathyTpContactFactory, empathy_tp_contact_factory, G_TYPE_OBJECT);
@@ -1212,6 +1219,8 @@ tp_contact_factory_finalize (GObject *object)
 						      object);
 		g_object_unref (priv->connection);
 	}
+
+	g_strfreev (priv->avatar_mime_types);
 
 	G_OBJECT_CLASS (empathy_tp_contact_factory_parent_class)->finalize (object);
 }
