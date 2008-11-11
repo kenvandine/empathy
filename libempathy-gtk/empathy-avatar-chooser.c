@@ -362,16 +362,8 @@ can_satisfy_mime_type_requirements (gchar **accepted_mime_types,
 	}
 
 	if (done) {
-		if (satisfactory_format_name != NULL) {
-			*satisfactory_format_name = name;
-		} else {
-			g_free (name);
-		}
-		if (satisfactory_mime_type != NULL) {
-			*satisfactory_mime_type = type;
-		} else {
-			g_free (type);
-		}
+		*satisfactory_format_name = name;
+		*satisfactory_mime_type = type;
 		return TRUE;
 	} else {
 		/* check we're not leaking. */
