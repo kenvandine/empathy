@@ -415,7 +415,10 @@ avatar_chooser_convert (EmpathyAvatarChooser *chooser,
 		 *        high compression (if jpeg is supported). Not sure how
 		 *        much we care.
 		 */
-		DEBUG ("Converted the image, but the new filesize is too big");
+		DEBUG ("Converted the image, but image data "
+		       "(%"G_GSIZE_FORMAT" bytes) is too big "
+		       "(max is %"G_GSIZE_FORMAT" bytes)",
+		       converted_avatar->len , max_size);
 
 		empathy_avatar_unref (converted_avatar);
 		converted_avatar = NULL;
@@ -435,6 +438,7 @@ avatar_chooser_maybe_convert_and_scale (EmpathyAvatarChooser *chooser,
 	gchar                   **mime_types = NULL;
 	gboolean                  needs_conversion = FALSE;
 	GdkPixbuf                *pixbuf_scaled = NULL;
+	gint                      width, height;
 
 	/* This should only be called if the user is setting a new avatar,
 	 * which should only be allowed once the avatar requirements have been
@@ -453,25 +457,41 @@ avatar_chooser_maybe_convert_and_scale (EmpathyAvatarChooser *chooser,
 
 	/* If the avatar's not already the right type, it needs converting. */
 	if (!str_in_strv (avatar->format, mime_types)) {
+		DEBUG ("Image format %s not supported by the protocol, "
+		       "conversion needed.", avatar->format);
 		needs_conversion = TRUE;
 	}
 
-	/* If _scale_down_if_necessary yields a new pixbuf, then it needed
-	 * scaling.  If it's the same pixbuf, it did not, and did no extra work
-	 * beyond checking the dimensions.  Hence, we call it even if
-	 * needs_conversion is already TRUE, rather than duplicating the
-	 * dimension checking code here, as it's no more expensive than
-	 * checking the dimensions first in the case where no scaling is
-	 * necessary.
-	 */
-	pixbuf_scaled = empathy_pixbuf_scale_down_if_necessary (pixbuf,
-		MIN(max_width, max_height));
-	if (pixbuf_scaled != pixbuf) {
-		needs_conversion = TRUE;
-	}
-
+	/* If the data len is too big, it needs converting. */
 	if (max_size > 0 && avatar->len > max_size) {
+		DEBUG ("Image data (%"G_GSIZE_FORMAT" bytes) is too big "
+		       "(max is %"G_GSIZE_FORMAT" bytes), conversion needed.",
+		       avatar->len, max_size);
+
 		needs_conversion = TRUE;
+	}
+
+	/* If width or height are too big, it needs converting. */
+	width = gdk_pixbuf_get_width (pixbuf);
+	height = gdk_pixbuf_get_height (pixbuf);
+	if ((max_width > 0 && width > max_width) ||
+	    (max_height > 0 && height > max_height)) {
+		gdouble h_factor, v_factor;
+
+		h_factor = (gdouble) max_width / width;
+		v_factor = (gdouble) max_height / height;
+		width = width * MIN (h_factor, v_factor);
+		height = height * MIN (h_factor, v_factor);
+
+		DEBUG ("Image dimensions are too big. Max is %dx%d,"
+		       "scaling down to %dx%d",
+		       max_width, max_height, width, height);
+		pixbuf_scaled = gdk_pixbuf_scale_simple (pixbuf,
+							 width, height,
+							 GDK_INTERP_HYPER);		
+		needs_conversion = TRUE;
+	} else {
+		pixbuf_scaled = g_object_ref (pixbuf);
 	}
 
 	if (needs_conversion) {
