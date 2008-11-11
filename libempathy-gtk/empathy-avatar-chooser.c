@@ -437,8 +437,9 @@ avatar_chooser_maybe_convert_and_scale (EmpathyAvatarChooser *chooser,
 	if (!can_satisfy_mime_type_requirements (mime_types, &new_format_name,
 						 &new_mime_type)) {
 		avatar_chooser_error_show (chooser,
-			_("Can't convert to any acceptable format!"),
-			NULL);
+			_("Couldn't convert image"),
+			_("None of the accepted image formats is supported on "
+			  "your system"));
 		g_strfreev (mime_types);
 		return NULL;
 	}
