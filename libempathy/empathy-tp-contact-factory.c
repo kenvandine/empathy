@@ -1350,14 +1350,16 @@ empathy_tp_contact_factory_class_init (EmpathyTpContactFactoryClass *klass)
 							      "The account associated with the factory",
 							      MC_TYPE_ACCOUNT,
 							      G_PARAM_READWRITE |
-							      G_PARAM_CONSTRUCT_ONLY));
+							      G_PARAM_CONSTRUCT_ONLY |
+							      G_PARAM_STATIC_STRINGS));
 	g_object_class_install_property (object_class,
 					 PROP_READY,
 					 g_param_spec_boolean ("ready",
 							       "Whether the factory is ready",
 							       "TRUE once the factory is ready to be used",
 							       FALSE,
-							       G_PARAM_READABLE));
+							       G_PARAM_READABLE |
+							       G_PARAM_STATIC_STRINGS));
 	g_object_class_install_property (object_class,
 					 PROP_MIME_TYPES,
 					 g_param_spec_boxed ("avatar-mime-types",
@@ -1366,7 +1368,8 @@ empathy_tp_contact_factory_class_init (EmpathyTpContactFactoryClass *klass)
 							     "avatars on this connection.  Only valid "
 							     "once 'ready' becomes TRUE.",
 							     G_TYPE_STRV,
-							     G_PARAM_READABLE));
+							     G_PARAM_READABLE |
+							     G_PARAM_STATIC_STRINGS));
 	g_object_class_install_property (object_class,
 					 PROP_MIN_WIDTH,
 					 g_param_spec_uint ("avatar-min-width",
@@ -1376,7 +1379,8 @@ empathy_tp_contact_factory_class_init (EmpathyTpContactFactoryClass *klass)
 							    0,
 							    G_MAXUINT,
 							    0,
-							    G_PARAM_READABLE));
+							    G_PARAM_READABLE |
+							    G_PARAM_STATIC_STRINGS));
 	g_object_class_install_property (object_class,
 					 PROP_MIN_HEIGHT,
 					 g_param_spec_uint ("avatar-min-height",
@@ -1386,7 +1390,8 @@ empathy_tp_contact_factory_class_init (EmpathyTpContactFactoryClass *klass)
 							    0,
 							    G_MAXUINT,
 							    0,
-							    G_PARAM_READABLE));
+							    G_PARAM_READABLE |
+							    G_PARAM_STATIC_STRINGS));
 	g_object_class_install_property (object_class,
 					 PROP_MAX_WIDTH,
 					 g_param_spec_uint ("avatar-max-width",
@@ -1397,7 +1402,8 @@ empathy_tp_contact_factory_class_init (EmpathyTpContactFactoryClass *klass)
 							    0,
 							    G_MAXUINT,
 							    0,
-							    G_PARAM_READABLE));
+							    G_PARAM_READABLE |
+							    G_PARAM_STATIC_STRINGS));
 	g_object_class_install_property (object_class,
 					 PROP_MAX_HEIGHT,
 					 g_param_spec_uint ("avatar-max-height",
@@ -1408,7 +1414,8 @@ empathy_tp_contact_factory_class_init (EmpathyTpContactFactoryClass *klass)
 							    0,
 							    G_MAXUINT,
 							    0,
-							    G_PARAM_READABLE));
+							    G_PARAM_READABLE |
+							    G_PARAM_STATIC_STRINGS));
 	g_object_class_install_property (object_class,
 					 PROP_MAX_SIZE,
 					 g_param_spec_uint ("avatar-max-size",
@@ -1419,7 +1426,8 @@ empathy_tp_contact_factory_class_init (EmpathyTpContactFactoryClass *klass)
 							    0,
 							    G_MAXUINT,
 							    0,
-							    G_PARAM_READABLE));
+							    G_PARAM_READABLE |
+							    G_PARAM_STATIC_STRINGS));
 
 
 	g_type_class_add_private (object_class, sizeof (EmpathyTpContactFactoryPriv));
