@@ -60,6 +60,10 @@ enum {
 	PROP_READY
 };
 
+/* Prototypes */
+static void tp_contact_factory_maybe_ready (EmpathyTpContactFactory *tp_factory);
+
+
 static EmpathyContact *
 tp_contact_factory_find_by_handle (EmpathyTpContactFactory *tp_factory,
 				   guint                    handle)
@@ -727,22 +731,36 @@ tp_contact_factory_got_self_handle_cb (TpConnection *proxy,
 				       GObject      *tp_factory)
 {
 	EmpathyTpContactFactoryPriv *priv = GET_PRIV (tp_factory);
-	GList                       *l;
-	GArray                      *handle_needed;
-	GArray                      *id_needed;
-	GList                       *handle_needed_contacts = NULL;
-	GList                       *id_needed_contacts = NULL;
 
 	if (error) {
 		DEBUG ("Failed to get self handles: %s", error->message);
 		return;
 	}
 
+	empathy_contact_set_handle (priv->user, handle);
+
+	tp_contact_factory_maybe_ready (EMPATHY_TP_CONTACT_FACTORY (tp_factory));
+}
+
+static void
+tp_contact_factory_maybe_ready (EmpathyTpContactFactory *tp_factory)
+{
+	EmpathyTpContactFactoryPriv *priv = GET_PRIV (tp_factory);
+	GList                       *l;
+	GArray                      *handle_needed;
+	GArray                      *id_needed;
+	GList                       *handle_needed_contacts = NULL;
+	GList                       *id_needed_contacts = NULL;
+
+	if (empathy_contact_get_handle (priv->user) == 0) {
+		DEBUG ("Connection not ready: still waiting for self handle");
+		return;
+	}
+
 	DEBUG ("Connection ready");
 
-	empathy_contact_set_handle (priv->user, handle);
 	priv->ready = TRUE;
-	g_object_notify (tp_factory, "ready");
+	g_object_notify (G_OBJECT (tp_factory), "ready");
 
 	/* Connect signals */
 	tp_cli_connection_interface_aliasing_connect_to_aliases_changed (priv->connection,
