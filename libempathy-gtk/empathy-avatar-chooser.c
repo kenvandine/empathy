@@ -223,11 +223,10 @@ avatar_chooser_finalize (GObject *object)
 
 	priv = GET_PRIV (object);
 
-	g_object_unref (priv->contact_factory);
-	priv->contact_factory = NULL;
-
 	avatar_chooser_set_account (EMPATHY_AVATAR_CHOOSER (object), NULL);
 	g_assert (priv->account == NULL && priv->tp_contact_factory == NULL);
+
+	g_object_unref (priv->contact_factory);
 
 	if (priv->avatar != NULL) {
 		empathy_avatar_unref (priv->avatar);
