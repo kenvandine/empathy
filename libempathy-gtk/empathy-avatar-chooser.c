@@ -380,11 +380,9 @@ avatar_chooser_convert (EmpathyAvatarChooser *chooser,
 			gsize                 max_size)
 {
 	gchar         *format_name = NULL, *new_mime_type = NULL;
-
 	gchar         *converted_image_data = NULL;
 	gsize          converted_image_size = 0;
 	EmpathyAvatar *converted_avatar = NULL;
-
 	gboolean       saved;
 	GError        *error = NULL;
 
@@ -432,11 +430,9 @@ avatar_chooser_maybe_convert_and_scale (EmpathyAvatarChooser *chooser,
 {
 	EmpathyAvatarChooserPriv *priv = GET_PRIV (chooser);
 	EmpathyTpContactFactory  *tp_cf = priv->tp_contact_factory;
-
 	gint                      max_width = 0, max_height = 0, max_size = 0;
 	gchar                   **mime_types = NULL;
 	gboolean                  needs_conversion = FALSE;
-
 	GdkPixbuf                *pixbuf_scaled = NULL;
 
 	/* This should only be called if the user is setting a new avatar,
