@@ -50,7 +50,7 @@ struct _EmpathyAvatarChooserClass {
 };
 
 GType      empathy_avatar_chooser_get_type       (void);
-GtkWidget *empathy_avatar_chooser_new            (EmpathyContactFactory *contact_factory);
+GtkWidget *empathy_avatar_chooser_new            (void);
 void       empathy_avatar_chooser_set            (EmpathyAvatarChooser *chooser,
 						  EmpathyAvatar        *avatar);
 void       empathy_avatar_chooser_get_image_data (EmpathyAvatarChooser *chooser,

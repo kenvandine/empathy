@@ -499,8 +499,7 @@ contact_widget_contact_setup (EmpathyContactWidget *information)
 {
   if (information->flags & EMPATHY_CONTACT_WIDGET_EDIT_AVATAR)
     {
-      information->widget_avatar = empathy_avatar_chooser_new (
-          information->factory);
+      information->widget_avatar = empathy_avatar_chooser_new ();
       g_signal_connect (information->widget_avatar, "changed",
             G_CALLBACK (contact_widget_avatar_changed_cb),
             information);

@@ -93,7 +93,6 @@ enum {
 
 enum {
 	PROP_0,
-	PROP_CONTACT_FACTORY,
 	PROP_ACCOUNT
 };
 
@@ -123,10 +122,6 @@ empathy_avatar_chooser_get_property (GObject    *object,
 	EmpathyAvatarChooserPriv *priv = GET_PRIV (object);
 
 	switch (param_id) {
-	case PROP_CONTACT_FACTORY:
-		g_assert (priv->contact_factory != NULL);
-		g_value_set_object (value, priv->contact_factory);
-		break;
 	case PROP_ACCOUNT:
 		g_value_set_object (value, priv->account);
 		break;
@@ -143,16 +138,8 @@ empathy_avatar_chooser_set_property (GObject      *object,
 				     GParamSpec   *pspec)
 {
 	EmpathyAvatarChooser *self = EMPATHY_AVATAR_CHOOSER (object);
-	EmpathyAvatarChooserPriv *priv = GET_PRIV (self);
 
 	switch (param_id) {
-	case PROP_CONTACT_FACTORY:
-		priv->contact_factory = g_value_get_object (value);
-
-		g_assert (priv->contact_factory != NULL);
-		g_object_ref (priv->contact_factory);
-
-		break;
 	case PROP_ACCOUNT:
 		avatar_chooser_set_account (self, g_value_get_object (value));
 		break;
@@ -180,18 +167,6 @@ empathy_avatar_chooser_class_init (EmpathyAvatarChooserClass *klass)
 			      NULL, NULL,
 			      g_cclosure_marshal_VOID__VOID,
 			      G_TYPE_NONE, 0);
-
-	param_spec = g_param_spec_object ("contact-factory",
-					  "EmpathyContactFactory instance",
-					  "EmpathyContactFactory instance "
-					  "(may not be NULL)",
-					  EMPATHY_TYPE_CONTACT_FACTORY,
-					  G_PARAM_CONSTRUCT_ONLY |
-					  G_PARAM_READWRITE |
-					  G_PARAM_STATIC_STRINGS);
-	g_object_class_install_property (object_class,
-					 PROP_CONTACT_FACTORY,
-					 param_spec);
 
 	param_spec = g_param_spec_object ("account",
 					  "McAccount",
@@ -235,6 +210,8 @@ empathy_avatar_chooser_init (EmpathyAvatarChooser *chooser)
 	g_signal_connect (chooser, "clicked",
 			  G_CALLBACK (avatar_chooser_clicked_cb),
 			  chooser);
+
+	priv->contact_factory = empathy_contact_factory_new ();
 
 	empathy_avatar_chooser_set (chooser, NULL);
 }
@@ -888,11 +865,9 @@ avatar_chooser_clicked_cb (GtkWidget            *button,
 }
 
 GtkWidget *
-empathy_avatar_chooser_new (EmpathyContactFactory *contact_factory)
+empathy_avatar_chooser_new ()
 {
-	return g_object_new (EMPATHY_TYPE_AVATAR_CHOOSER,
-			     "contact-factory", contact_factory,
-			     NULL);
+	return g_object_new (EMPATHY_TYPE_AVATAR_CHOOSER, NULL);
 }
 
 /* FIXME: when the avatar passed to this function actually can be relied upon to
