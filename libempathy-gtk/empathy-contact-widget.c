@@ -105,6 +105,8 @@ static void contact_widget_contact_update (EmpathyContactWidget *information);
 static void contact_widget_change_contact (EmpathyContactWidget *information);
 static void contact_widget_avatar_changed_cb (EmpathyAvatarChooser *chooser,
     EmpathyContactWidget *information);
+static void contact_widget_update_avatar_chooser_account (
+    EmpathyContactWidget *information);
 static void contact_widget_account_changed_cb (GtkComboBox *widget,
     EmpathyContactWidget *information);
 static gboolean contact_widget_id_focus_out_cb (GtkWidget *widget,
@@ -527,6 +529,7 @@ contact_widget_contact_setup (EmpathyContactWidget *information)
       g_signal_connect (information->widget_account, "changed",
             G_CALLBACK (contact_widget_account_changed_cb),
             information);
+      contact_widget_update_avatar_chooser_account (information);
     }
   else
     {
@@ -727,10 +730,31 @@ contact_widget_avatar_changed_cb (EmpathyAvatarChooser *chooser,
     }
 }
 
+
+static void
+contact_widget_update_avatar_chooser_account (EmpathyContactWidget *information)
+{
+  McAccount *account;
+  EmpathyAccountChooser *account_chooser;
+
+  g_assert (EMPATHY_IS_ACCOUNT_CHOOSER (information->widget_account));
+  account_chooser = EMPATHY_ACCOUNT_CHOOSER (information->widget_account);
+
+  if (information->flags & EMPATHY_CONTACT_WIDGET_EDIT_AVATAR)
+    {
+      g_assert (EMPATHY_IS_AVATAR_CHOOSER (information->widget_avatar));
+
+      account = empathy_account_chooser_get_account (account_chooser);
+      g_object_set (information->widget_avatar, "account", account, NULL);
+    }
+}
+
+
 static void
 contact_widget_account_changed_cb (GtkComboBox *widget,
                                    EmpathyContactWidget *information)
 {
+  contact_widget_update_avatar_chooser_account (information);
   contact_widget_change_contact (information);
 }
 
