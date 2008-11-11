@@ -224,7 +224,8 @@ avatar_chooser_finalize (GObject *object)
 	priv = GET_PRIV (object);
 
 	avatar_chooser_set_account (EMPATHY_AVATAR_CHOOSER (object), NULL);
-	g_assert (priv->account == NULL && priv->tp_contact_factory == NULL);
+	g_assert (priv->account == NULL);
+	g_assert (priv->tp_contact_factory == NULL);
 
 	g_object_unref (priv->contact_factory);
 
@@ -367,7 +368,8 @@ can_satisfy_mime_type_requirements (gchar **accepted_mime_types,
 		return TRUE;
 	} else {
 		/* check we're not leaking. */
-		g_assert (name == NULL && type == NULL);
+		g_assert (name == NULL);
+		g_assert (type == NULL);
 		return FALSE;
 	}
 }
