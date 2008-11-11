@@ -280,7 +280,7 @@ empathy_pixbuf_from_data (gchar  *data,
 			mime_types = gdk_pixbuf_format_get_mime_types (format);
 
 			*mime_type = g_strdup (*mime_types);
-			if (*(mime_types + 1) != NULL) {
+			if (mime_types[1] != NULL) {
 				DEBUG ("Loader supports more than one mime "
 					"type! Picking the first one, %s",
 					*mime_type);
