@@ -27,7 +27,6 @@
 #include <gtk/gtkbutton.h>
 
 #include <libempathy/empathy-contact.h>
-#include <libempathy/empathy-contact-factory.h>
 
 G_BEGIN_DECLS
 

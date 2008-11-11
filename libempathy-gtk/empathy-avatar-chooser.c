@@ -30,6 +30,8 @@
 #include <gio/gio.h>
 
 #include <libempathy/empathy-utils.h>
+#include <libempathy/empathy-contact-factory.h>
+
 #include "empathy-avatar-chooser.h"
 #include "empathy-conf.h"
 #include "empathy-ui-utils.h"
@@ -498,15 +500,23 @@ avatar_chooser_maybe_convert_and_scale (EmpathyAvatarChooser *chooser,
 		if (max_size == 0)
 			break;
 
-		/* Make a dichotomic search for the optimal factor that produce
-		 * an image data size close to max_size */
+		/* Make a binary search for the bigest factor that produce
+		 * an image data size less than max_size */
 		if (converted_image_size > max_size)
 			max_factor = factor;
 		if (converted_image_size < max_size)
 			min_factor = factor;
 		factor = min_factor + (max_factor - min_factor)/2;
+
+		/* We are done if either:
+		 * - min_factor == max_factor. That happens if we resized to
+		 *   the max required dimension and the produced data size is
+		 *   less than max_size.
+		 * - The data size is close enough to max_size. Here we accept
+		 *   a difference of 1k.
+		 */
 	} while (min_factor != max_factor &&
-	         ABS (max_size - converted_image_size) > 1000);
+	         ABS (max_size - converted_image_size) > 1024);
 	g_free (new_format_name);
 
 	/* Takes ownership of new_mime_type and converted_image_data */
@@ -546,7 +556,6 @@ avatar_chooser_set_image_from_data (EmpathyAvatarChooser *chooser,
 
 	if (data == NULL) {
 		avatar_chooser_clear_image (chooser);
-		g_free (data);
 		return;
 	}
 
@@ -609,8 +618,10 @@ avatar_chooser_set_image (EmpathyAvatarChooser *chooser,
 	g_assert (pixbuf != NULL);
 
 	if (set_locally) {
-		EmpathyAvatar *conv = avatar_chooser_maybe_convert_and_scale (
-			chooser, pixbuf, avatar);
+		EmpathyAvatar *conv;
+
+		conv = avatar_chooser_maybe_convert_and_scale (chooser,
+			pixbuf, avatar);
 		empathy_avatar_unref (avatar);
 
 		if (conv == NULL) {
