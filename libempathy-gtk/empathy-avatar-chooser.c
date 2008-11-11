@@ -586,7 +586,7 @@ avatar_chooser_response_cb (GtkWidget            *widget,
 		}
 	}
 	else if (response == GTK_RESPONSE_NO) {
-		avatar_chooser_set_image_from_data (chooser, NULL, 0);
+		avatar_chooser_clear_image (chooser);
 	}
 
 	gtk_widget_destroy (widget);
