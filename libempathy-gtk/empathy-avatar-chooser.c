@@ -313,12 +313,15 @@ static gboolean
 str_in_strv (gchar  *str,
 	     gchar **strv)
 {
-	if (strv == NULL)
+	if (strv == NULL) {
 		return FALSE;
+	}
+
 	while (*strv != NULL)
 	{
-		if (g_str_equal (str, *strv))
+		if (g_str_equal (str, *strv)) {
 			return TRUE;
+		}
 		strv++;
 	}
 	return FALSE;
@@ -338,8 +341,9 @@ can_satisfy_mime_type_requirements (gchar **accepted_mime_types,
 	gchar **j;
 	gboolean done = FALSE;
 
-	if (accepted_mime_types == NULL || *accepted_mime_types == NULL)
+	if (accepted_mime_types == NULL || *accepted_mime_types == NULL) {
 		return FALSE;
+	}
 
 	g_assert (satisfactory_format_name != NULL);
 	g_assert (satisfactory_mime_type != NULL);
@@ -350,8 +354,9 @@ can_satisfy_mime_type_requirements (gchar **accepted_mime_types,
 		GdkPixbufFormat *format = i->data;
 		gchar **format_mime_types;
 
-		if (!gdk_pixbuf_format_is_writable (format))
+		if (!gdk_pixbuf_format_is_writable (format)) {
 			continue;
+		}
 
 		format_mime_types = gdk_pixbuf_format_get_mime_types (format);
 		for (j = accepted_mime_types; *j != NULL; j++) {
@@ -454,19 +459,22 @@ avatar_chooser_maybe_convert_and_scale (EmpathyAvatarChooser *chooser,
 		NULL);
 
 	/* If the avatar's not already the right type, it needs converting. */
-	if (!str_in_strv (avatar->format, mime_types))
+	if (!str_in_strv (avatar->format, mime_types)) {
 		needs_conversion = TRUE;
+	}
 
 	/* If scaling down the pixbuf to fit the dimensions yields a new
 	 * pixbuf, then it needed scaling. if it's the same pixbuf, it did not.
 	 */
 	pixbuf_scaled = empathy_pixbuf_scale_down_if_necessary (pixbuf,
 		MIN(max_width, max_height));
-	if (pixbuf_scaled != pixbuf)
+	if (pixbuf_scaled != pixbuf) {
 		needs_conversion = TRUE;
+	}
 
-	if (max_size > 0 && avatar->len > max_size)
+	if (max_size > 0 && avatar->len > max_size) {
 		needs_conversion = TRUE;
+	}
 
 	if (needs_conversion) {
 		avatar = avatar_chooser_convert (chooser, pixbuf_scaled,
@@ -488,8 +496,9 @@ avatar_chooser_clear_image (EmpathyAvatarChooser *chooser)
 	EmpathyAvatarChooserPriv *priv = GET_PRIV (chooser);
 	GtkWidget *image;
 
-	if (priv->avatar == NULL)
+	if (priv->avatar == NULL) {
 		return;
+	}
 
 	empathy_avatar_unref (priv->avatar);
 	priv->avatar = NULL;
@@ -539,8 +548,9 @@ avatar_chooser_set_image (EmpathyAvatarChooser *chooser,
 		return;
 	}
 
-	if (priv->avatar != NULL)
+	if (priv->avatar != NULL) {
 		empathy_avatar_unref (priv->avatar);
+	}
 	priv->avatar = avatar;
 
 	pixbuf_view = empathy_pixbuf_scale_down_if_necessary (pixbuf, AVATAR_SIZE_VIEW);
