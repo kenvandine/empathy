@@ -565,8 +565,6 @@ avatar_chooser_set_image_from_file (EmpathyAvatarChooser *chooser,
 		DEBUG ("Failed to load image from '%s': %s", filename,
 			error ? error->message : "No error given");
 
-		avatar_chooser_clear_image (chooser, TRUE);
-
 		g_clear_error (&error);
 		return;
 	}
