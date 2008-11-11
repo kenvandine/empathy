@@ -44,7 +44,7 @@ typedef struct {
 	EmpathyContact *user;
 	gpointer        token;
 
-	const gchar   **avatar_mime_types;
+	gchar         **avatar_mime_types;
 	guint           avatar_min_width;
 	guint           avatar_min_height;
 	guint           avatar_max_width;
@@ -61,7 +61,17 @@ enum {
 };
 
 /* Prototypes */
-static void tp_contact_factory_maybe_ready (EmpathyTpContactFactory *tp_factory);
+static void tp_contact_factory_got_avatar_requirements_cb (TpConnection *proxy,
+							   const gchar **mime_types,
+							   guint         min_width,
+							   guint         min_height,
+							   guint         max_width,
+							   guint         max_height,
+							   guint         max_size,
+							   const GError *error,
+							   gpointer      user_data,
+							   GObject      *tp_factory);
+static void tp_contact_factory_ready (EmpathyTpContactFactory *tp_factory);
 
 
 static EmpathyContact *
@@ -739,11 +749,51 @@ tp_contact_factory_got_self_handle_cb (TpConnection *proxy,
 
 	empathy_contact_set_handle (priv->user, handle);
 
-	tp_contact_factory_maybe_ready (EMPATHY_TP_CONTACT_FACTORY (tp_factory));
+	/* Get avatar requirements for this connection */
+	tp_cli_connection_interface_avatars_call_get_avatar_requirements (
+		priv->connection,
+		-1,
+		tp_contact_factory_got_avatar_requirements_cb,
+		NULL, NULL,
+		tp_factory);
 }
 
+
 static void
-tp_contact_factory_maybe_ready (EmpathyTpContactFactory *tp_factory)
+tp_contact_factory_got_avatar_requirements_cb (TpConnection *proxy,
+					       const gchar **mime_types,
+					       guint         min_width,
+					       guint         min_height,
+					       guint         max_width,
+					       guint         max_height,
+					       guint         max_size,
+					       const GError *error,
+					       gpointer      user_data,
+					       GObject      *tp_factory)
+{
+	EmpathyTpContactFactoryPriv *priv = GET_PRIV (tp_factory);
+
+	if (error) {
+		DEBUG ("Failed to get avatar requirements: %s", error->message);
+		/* We'll just leave avatar_mime_types as NULL; the
+		 * avatar-setting code can use this as a signal that you can't
+		 * set avatars.
+		 */
+	} else {
+		priv->avatar_mime_types = g_strdupv ((gchar **)mime_types);
+		priv->avatar_min_width = min_width;
+		priv->avatar_min_height = min_height;
+		priv->avatar_max_width = max_width;
+		priv->avatar_max_height = max_height;
+		priv->avatar_max_size = max_size;
+	}
+
+	tp_contact_factory_ready (EMPATHY_TP_CONTACT_FACTORY (tp_factory));
+}
+
+
+static void
+tp_contact_factory_ready (EmpathyTpContactFactory *tp_factory)
 {
 	EmpathyTpContactFactoryPriv *priv = GET_PRIV (tp_factory);
 	GList                       *l;
@@ -751,11 +801,6 @@ tp_contact_factory_maybe_ready (EmpathyTpContactFactory *tp_factory)
 	GArray                      *id_needed;
 	GList                       *handle_needed_contacts = NULL;
 	GList                       *id_needed_contacts = NULL;
-
-	if (empathy_contact_get_handle (priv->user) == 0) {
-		DEBUG ("Connection not ready: still waiting for self handle");
-		return;
-	}
 
 	DEBUG ("Connection ready");
 
