@@ -551,11 +551,11 @@ avatar_chooser_set_image_from_avatar (EmpathyAvatarChooser *chooser,
 
 	if (avatar->format == NULL) {
 		avatar->format = mime_type;
-	} else if (strcmp (mime_type, avatar->format)) {
-		DEBUG ("avatar had incorrect format! correcting");
-		g_free (avatar->format);
-		avatar->format = mime_type;
 	} else {
+		if (strcmp (mime_type, avatar->format)) {
+			DEBUG ("avatar->format is %s; gdkpixbuf yields %s!",
+				avatar->format, mime_type);
+		}
 		g_free (mime_type);
 	}
 
