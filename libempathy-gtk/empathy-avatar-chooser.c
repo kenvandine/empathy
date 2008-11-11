@@ -309,9 +309,11 @@ can_satisfy_mime_type_requirements (gchar **accepted_mime_types,
 				    gchar **satisfactory_format_name,
 				    gchar **satisfactory_mime_type)
 {
-	GSList *formats;
-	GSList *l;
-	gchar **strv;
+	GSList  *formats;
+	GSList  *l;
+	gchar  **strv;
+	gchar   *name = NULL,
+	        *type = NULL;
 	gboolean done = FALSE;
 
 	if (accepted_mime_types == NULL || *accepted_mime_types == NULL) {
@@ -334,8 +336,8 @@ can_satisfy_mime_type_requirements (gchar **accepted_mime_types,
 		format_mime_types = gdk_pixbuf_format_get_mime_types (format);
 		for (strv = format_mime_types; *strv != NULL; strv++) {
 			if (str_in_strv (*strv, accepted_mime_types)) {
-				*satisfactory_format_name = gdk_pixbuf_format_get_name (format);
-				*satisfactory_mime_type = g_strdup (*strv);
+				name = gdk_pixbuf_format_get_name (format);
+				type = g_strdup (*strv);
 				done = TRUE;
 				break;
 			}
@@ -345,7 +347,23 @@ can_satisfy_mime_type_requirements (gchar **accepted_mime_types,
 
 	g_slist_free (formats);
 
-	return done;
+	if (done) {
+		if (satisfactory_format_name != NULL) {
+			*satisfactory_format_name = name;
+		} else {
+			g_free (name);
+		}
+		if (satisfactory_mime_type != NULL) {
+			*satisfactory_mime_type = type;
+		} else {
+			g_free (type);
+		}
+		return TRUE;
+	} else {
+		/* check we're not leaking. */
+		g_assert (name == NULL && type == NULL);
+		return FALSE;
+	}
 }
 
 static EmpathyAvatar *
