@@ -497,29 +497,6 @@ widget_avatar_button_press_event_cb (GtkWidget *widget,
 static void
 contact_widget_contact_setup (EmpathyContactWidget *information)
 {
-  if (information->flags & EMPATHY_CONTACT_WIDGET_EDIT_AVATAR)
-    {
-      information->widget_avatar = empathy_avatar_chooser_new ();
-      g_signal_connect (information->widget_avatar, "changed",
-            G_CALLBACK (contact_widget_avatar_changed_cb),
-            information);
-    }
-  else
-    {
-      information->widget_avatar = empathy_avatar_image_new ();
-
-      g_signal_connect (information->widget_avatar, "popup-menu",
-          G_CALLBACK (widget_avatar_popup_menu_cb), information);
-      g_signal_connect (information->widget_avatar, "button-press-event",
-          G_CALLBACK (widget_avatar_button_press_event_cb), information);
-    }
-  
-  gtk_box_pack_start (GTK_BOX (information->vbox_avatar),
-          information->widget_avatar,
-          FALSE, FALSE,
-          6);
-  gtk_widget_show (information->widget_avatar);
-
   /* Setup account label/chooser */
   if (information->flags & EMPATHY_CONTACT_WIDGET_EDIT_ACCOUNT)
     {
@@ -542,6 +519,30 @@ contact_widget_contact_setup (EmpathyContactWidget *information)
            information->widget_account,
            1, 2, 0, 1);
   gtk_widget_show (information->widget_account);
+
+  /* Set up avatar chooser/display */
+  if (information->flags & EMPATHY_CONTACT_WIDGET_EDIT_AVATAR)
+    {
+      information->widget_avatar = empathy_avatar_chooser_new ();
+      g_signal_connect (information->widget_avatar, "changed",
+            G_CALLBACK (contact_widget_avatar_changed_cb),
+            information);
+    }
+  else
+    {
+      information->widget_avatar = empathy_avatar_image_new ();
+
+      g_signal_connect (information->widget_avatar, "popup-menu",
+          G_CALLBACK (widget_avatar_popup_menu_cb), information);
+      g_signal_connect (information->widget_avatar, "button-press-event",
+          G_CALLBACK (widget_avatar_button_press_event_cb), information);
+    }
+
+  gtk_box_pack_start (GTK_BOX (information->vbox_avatar),
+          information->widget_avatar,
+          FALSE, FALSE,
+          6);
+  gtk_widget_show (information->widget_avatar);
 
   /* Setup id label/entry */
   if (information->flags & EMPATHY_CONTACT_WIDGET_EDIT_ID)
