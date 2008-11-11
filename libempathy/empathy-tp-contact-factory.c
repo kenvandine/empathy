@@ -57,7 +57,14 @@ G_DEFINE_TYPE (EmpathyTpContactFactory, empathy_tp_contact_factory, G_TYPE_OBJEC
 enum {
 	PROP_0,
 	PROP_ACCOUNT,
-	PROP_READY
+	PROP_READY,
+
+	PROP_MIME_TYPES,
+	PROP_MIN_WIDTH,
+	PROP_MIN_HEIGHT,
+	PROP_MAX_WIDTH,
+	PROP_MAX_HEIGHT,
+	PROP_MAX_SIZE
 };
 
 /* Prototypes */
@@ -1230,6 +1237,24 @@ tp_contact_factory_get_property (GObject    *object,
 	case PROP_READY:
 		g_value_set_boolean (value, priv->ready);
 		break;
+	case PROP_MIME_TYPES:
+		g_value_set_boxed (value, priv->avatar_mime_types);
+		break;
+	case PROP_MIN_WIDTH:
+		g_value_set_uint (value, priv->avatar_min_width);
+		break;
+	case PROP_MIN_HEIGHT:
+		g_value_set_uint (value, priv->avatar_min_height);
+		break;
+	case PROP_MAX_WIDTH:
+		g_value_set_uint (value, priv->avatar_max_width);
+		break;
+	case PROP_MAX_HEIGHT:
+		g_value_set_uint (value, priv->avatar_max_height);
+		break;
+	case PROP_MAX_SIZE:
+		g_value_set_uint (value, priv->avatar_max_size);
+		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
 		break;
@@ -1329,10 +1354,73 @@ empathy_tp_contact_factory_class_init (EmpathyTpContactFactoryClass *klass)
 	g_object_class_install_property (object_class,
 					 PROP_READY,
 					 g_param_spec_boolean ("ready",
-							       "Wheter the factor is ready",
-							       "Is the factory ready",
+							       "Whether the factory is ready",
+							       "TRUE once the factory is ready to be used",
 							       FALSE,
 							       G_PARAM_READABLE));
+	g_object_class_install_property (object_class,
+					 PROP_MIME_TYPES,
+					 g_param_spec_boxed ("avatar-mime-types",
+							     "Supported MIME types for avatars",
+							     "Types of images that may be set as "
+							     "avatars on this connection.  Only valid "
+							     "once 'ready' becomes TRUE.",
+							     G_TYPE_STRV,
+							     G_PARAM_READABLE));
+	g_object_class_install_property (object_class,
+					 PROP_MIN_WIDTH,
+					 g_param_spec_uint ("avatar-min-width",
+							    "Minimum width for avatars",
+							    "Minimum width of avatar that may be set. "
+							    "Only valid once 'ready' becomes TRUE.",
+							    0,
+							    G_MAXUINT,
+							    0,
+							    G_PARAM_READABLE));
+	g_object_class_install_property (object_class,
+					 PROP_MIN_HEIGHT,
+					 g_param_spec_uint ("avatar-min-height",
+							    "Minimum height for avatars",
+							    "Minimum height of avatar that may be set. "
+							    "Only valid once 'ready' becomes TRUE.",
+							    0,
+							    G_MAXUINT,
+							    0,
+							    G_PARAM_READABLE));
+	g_object_class_install_property (object_class,
+					 PROP_MAX_WIDTH,
+					 g_param_spec_uint ("avatar-max-width",
+							    "Maximum width for avatars",
+							    "Maximum width of avatar that may be set "
+							    "or 0 if there is no maximum. "
+							    "Only valid once 'ready' becomes TRUE.",
+							    0,
+							    G_MAXUINT,
+							    0,
+							    G_PARAM_READABLE));
+	g_object_class_install_property (object_class,
+					 PROP_MAX_HEIGHT,
+					 g_param_spec_uint ("avatar-max-height",
+							    "Maximum height for avatars",
+							    "Maximum height of avatar that may be set "
+							    "or 0 if there is no maximum. "
+							    "Only valid once 'ready' becomes TRUE.",
+							    0,
+							    G_MAXUINT,
+							    0,
+							    G_PARAM_READABLE));
+	g_object_class_install_property (object_class,
+					 PROP_MAX_SIZE,
+					 g_param_spec_uint ("avatar-max-size",
+							    "Maximum size for avatars in bytes",
+							    "Maximum file size of avatar that may be "
+							    "set or 0 if there is no maximum. "
+							    "Only valid once 'ready' becomes TRUE.",
+							    0,
+							    G_MAXUINT,
+							    0,
+							    G_PARAM_READABLE));
+
 
 	g_type_class_add_private (object_class, sizeof (EmpathyTpContactFactoryPriv));
 }
