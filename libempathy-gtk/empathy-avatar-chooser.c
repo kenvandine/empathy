@@ -309,9 +309,6 @@ can_satisfy_mime_type_requirements (gchar **accepted_mime_types,
 				    gchar **satisfactory_format_name,
 				    gchar **satisfactory_mime_type)
 {
-	GSList  *formats;
-	GSList  *l;
-	gchar  **strv;
 	gchar   *name = NULL,
 	        *type = NULL;
 	gboolean done = FALSE;
@@ -323,29 +320,46 @@ can_satisfy_mime_type_requirements (gchar **accepted_mime_types,
 	g_assert (satisfactory_format_name != NULL);
 	g_assert (satisfactory_mime_type != NULL);
 
-	formats = gdk_pixbuf_get_formats ();
+	/* Special-case png and jpeg to avoid accidentally saving to something
+	 * uncompressed like bmp. This assumes that we can write image/png and
+	 * image/jpeg; if this isn't true then something's really wrong with
+	 * GdkPixbuf.
+	 */
+	if (str_in_strv ("image/png", accepted_mime_types)) {
+		name = g_strdup ("png");
+		type = g_strdup ("image/png");
+		done = TRUE;
+	} else if (str_in_strv ("image/jpeg", accepted_mime_types)) {
+		name = g_strdup ("jpeg");
+		type = g_strdup ("image/jpeg");
+		done = TRUE;
+	} else {
+		GSList  *formats = gdk_pixbuf_get_formats ();
+		GSList  *l;
+		gchar  **strv;
 
-	for (l = formats; !done && l != NULL; l = l->next) {
-		GdkPixbufFormat *format = l->data;
-		gchar **format_mime_types;
+		for (l = formats; !done && l != NULL; l = l->next) {
+			GdkPixbufFormat *format = l->data;
+			gchar **format_mime_types;
 
-		if (!gdk_pixbuf_format_is_writable (format)) {
-			continue;
-		}
-
-		format_mime_types = gdk_pixbuf_format_get_mime_types (format);
-		for (strv = format_mime_types; *strv != NULL; strv++) {
-			if (str_in_strv (*strv, accepted_mime_types)) {
-				name = gdk_pixbuf_format_get_name (format);
-				type = g_strdup (*strv);
-				done = TRUE;
-				break;
+			if (!gdk_pixbuf_format_is_writable (format)) {
+				continue;
 			}
-		}
-		g_strfreev (format_mime_types);
-	}
 
-	g_slist_free (formats);
+			format_mime_types = gdk_pixbuf_format_get_mime_types (format);
+			for (strv = format_mime_types; *strv != NULL; strv++) {
+				if (str_in_strv (*strv, accepted_mime_types)) {
+					name = gdk_pixbuf_format_get_name (format);
+					type = g_strdup (*strv);
+					done = TRUE;
+					break;
+				}
+			}
+			g_strfreev (format_mime_types);
+		}
+
+		g_slist_free (formats);
+	}
 
 	if (done) {
 		if (satisfactory_format_name != NULL) {
