@@ -756,6 +756,18 @@ avatar_chooser_response_cb (GtkWidget            *widget,
 			    gint                  response,
 			    EmpathyAvatarChooser *chooser)
 {
+	EmpathyAvatarChooserPriv *priv = GET_PRIV (chooser);
+
+	if (response == GTK_RESPONSE_CANCEL) {
+		goto out;
+	}
+
+	/* Check if we went non-ready since displaying the dialog. */
+	if (!empathy_tp_contact_factory_is_ready (priv->tp_contact_factory)) {
+		DEBUG ("Can't set avatar when contact factory isn't ready.");
+		goto out;
+	}
+
 	if (response == GTK_RESPONSE_OK) {
 		gchar *filename;
 		gchar *path;
@@ -777,6 +789,7 @@ avatar_chooser_response_cb (GtkWidget            *widget,
 		avatar_chooser_clear_image (chooser);
 	}
 
+out:
 	gtk_widget_destroy (widget);
 }
 
