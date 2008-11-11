@@ -411,10 +411,10 @@ avatar_chooser_convert (EmpathyAvatarChooser *chooser,
 		converted_image_size, new_mime_type, NULL);
 
 	if (max_size > 0 && converted_avatar->len > max_size) {
-		/* TODO: We could try converting to a different format; in
-		 *       particular, try converting to jpeg with increasingly
-		 *       high compression (if jpeg is supported). Not sure how
-		 *       much we care.
+		/* FIXME: We could try converting to a different format; in
+		 *        particular, try converting to jpeg with increasingly
+		 *        high compression (if jpeg is supported). Not sure how
+		 *        much we care.
 		 */
 		DEBUG ("Converted the image, but the new filesize is too big");
 
@@ -899,7 +899,7 @@ empathy_avatar_chooser_new (EmpathyContactFactory *contact_factory)
 			     NULL);
 }
 
-/* TODO: when the avatar passed to this function actually can be relied upon to
+/* FIXME: when the avatar passed to this function actually can be relied upon to
  * contain a mime type, we can probably just ref it and store it.
  */
 void
