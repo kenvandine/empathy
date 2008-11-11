@@ -296,9 +296,9 @@ avatar_chooser_set_account (EmpathyAvatarChooser *self,
 
 	if (account != NULL) {
 		priv->account = g_object_ref (account);
-		priv->tp_contact_factory =
+		priv->tp_contact_factory = g_object_ref (
 			empathy_contact_factory_get_tp_factory (
-				priv->contact_factory, priv->account);
+				priv->contact_factory, priv->account));
 
 		priv->ready_handler_id = g_signal_connect (
 			priv->tp_contact_factory, "notify::ready",
