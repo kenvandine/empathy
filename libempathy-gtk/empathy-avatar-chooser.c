@@ -114,10 +114,10 @@ static const GtkTargetEntry drop_types[] = {
 };
 
 static void
-empathy_avatar_chooser_get_property (GObject    *object,
-				     guint       param_id,
-				     GValue     *value,
-				     GParamSpec *pspec)
+avatar_chooser_get_property (GObject    *object,
+			     guint       param_id,
+			     GValue     *value,
+			     GParamSpec *pspec)
 {
 	EmpathyAvatarChooserPriv *priv = GET_PRIV (object);
 
@@ -132,10 +132,10 @@ empathy_avatar_chooser_get_property (GObject    *object,
 }
 
 static void
-empathy_avatar_chooser_set_property (GObject      *object,
-				     guint         param_id,
-				     const GValue *value,
-				     GParamSpec   *pspec)
+avatar_chooser_set_property (GObject      *object,
+			     guint         param_id,
+			     const GValue *value,
+			     GParamSpec   *pspec)
 {
 	EmpathyAvatarChooser *self = EMPATHY_AVATAR_CHOOSER (object);
 
@@ -156,8 +156,8 @@ empathy_avatar_chooser_class_init (EmpathyAvatarChooserClass *klass)
 	GParamSpec *param_spec;
 
 	object_class->finalize = avatar_chooser_finalize;
-	object_class->get_property = empathy_avatar_chooser_get_property;
-	object_class->set_property = empathy_avatar_chooser_set_property;
+	object_class->get_property = avatar_chooser_get_property;
+	object_class->set_property = avatar_chooser_set_property;
 
 	signals[CHANGED] =
 		g_signal_new ("changed",
