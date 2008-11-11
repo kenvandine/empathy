@@ -318,7 +318,7 @@ avatar_chooser_error_show (EmpathyAvatarChooser *chooser,
 }
 
 static gboolean
-str_in_strv (gchar  *str,
+str_in_strv (const gchar  *str,
 	     gchar **strv)
 {
 	if (strv == NULL) {
@@ -338,61 +338,71 @@ str_in_strv (gchar  *str,
  * satisfactory_mime_type.
  */
 static gboolean
-can_satisfy_mime_type_requirements (gchar **accepted_mime_types,
-				    gchar **satisfactory_format_name,
-				    gchar **satisfactory_mime_type)
+avatar_chooser_need_mime_type_conversion (const gchar *current_mime_type,
+					  gchar      **accepted_mime_types,
+					  gchar      **satisfactory_format_name,
+					  gchar      **satisfactory_mime_type)
 {
-	gchar *name = NULL;
-	gchar *type = NULL;
+	gchar   *good_mime_types[] = {"image/jpeg", "image/png", NULL};
+	guint    i;
+	GSList  *formats, *l;
+	gboolean found = FALSE;
 
+	*satisfactory_format_name = NULL;
+	*satisfactory_mime_type = NULL;
+
+	/* If there is no accepted format there is nothing we can do */
 	if (accepted_mime_types == NULL || *accepted_mime_types == NULL) {
+		return TRUE;
+	}
+
+	/* If the current mime type is good and accepted, don't change it!
+	 * jpeg is compress better pictures, but png is better for logos and
+	 * could have an alpha layer. */
+	if (str_in_strv (current_mime_type, good_mime_types) &&
+	    str_in_strv (current_mime_type, accepted_mime_types)) {
+		*satisfactory_mime_type = g_strdup (current_mime_type);
+		*satisfactory_format_name = g_strdup (current_mime_type +
+						      strlen ("image/"));
 		return FALSE;
 	}
 
-	/* Special-case png and jpeg to avoid accidentally saving to something
-	 * uncompressed like bmp. This assumes that we can write image/png and
-	 * image/jpeg; if this isn't true then something's really wrong with
-	 * GdkPixbuf.
-	 */
-	if (str_in_strv ("image/jpeg", accepted_mime_types)) {
-		name = g_strdup ("jpeg");
-		type = g_strdup ("image/jpeg");
-	} else if (str_in_strv ("image/png", accepted_mime_types)) {
-		name = g_strdup ("png");
-		type = g_strdup ("image/png");
-	} else {
-		GSList  *formats, *l;
-		gboolean found = FALSE;
-
-		formats = gdk_pixbuf_get_formats ();
-		for (l = formats; !found && l != NULL; l = l->next) {
-			GdkPixbufFormat *format = l->data;
-			gchar **format_mime_types;
-			gchar **iter;
-
-			if (!gdk_pixbuf_format_is_writable (format)) {
-				continue;
-			}
-
-			format_mime_types = gdk_pixbuf_format_get_mime_types (format);
-			for (iter = format_mime_types; *iter != NULL; iter++) {
-				if (str_in_strv (*iter, accepted_mime_types)) {
-					name = gdk_pixbuf_format_get_name (format);
-					type = g_strdup (*iter);
-					found = TRUE;
-					break;
-				}
-			}
-			g_strfreev (format_mime_types);
+	/* The current mime type is either not accepted or not good to use.
+	 * Check if one of the good format is supported... */
+	for (i = 0; good_mime_types[i] != NULL;  i++) {
+		if (str_in_strv (good_mime_types[i], accepted_mime_types)) {
+			*satisfactory_mime_type = g_strdup (good_mime_types[i]);
+			*satisfactory_format_name = g_strdup (good_mime_types[i] +
+							      strlen ("image/"));
+			return TRUE;
 		}
-
-		g_slist_free (formats);
 	}
 
-	*satisfactory_format_name = name;
-	*satisfactory_mime_type = type;
+	/* Pick the first supported format we can write */
+	formats = gdk_pixbuf_get_formats ();
+	for (l = formats; !found && l != NULL; l = l->next) {
+		GdkPixbufFormat *format = l->data;
+		gchar **format_mime_types;
+		gchar **iter;
 
-	return name != NULL;
+		if (!gdk_pixbuf_format_is_writable (format)) {
+			continue;
+		}
+
+		format_mime_types = gdk_pixbuf_format_get_mime_types (format);
+		for (iter = format_mime_types; *iter != NULL; iter++) {
+			if (str_in_strv (*iter, accepted_mime_types)) {
+				*satisfactory_format_name = gdk_pixbuf_format_get_name (format);
+				*satisfactory_mime_type = g_strdup (*iter);
+				found = TRUE;
+				break;
+			}
+		}
+		g_strfreev (format_mime_types);
+	}
+	g_slist_free (formats);
+
+	return TRUE;
 }
 
 static EmpathyAvatar *
@@ -434,24 +444,25 @@ avatar_chooser_maybe_convert_and_scale (EmpathyAvatarChooser *chooser,
 	max_factor = 1;
 	factor = 1;
 
-	if (!can_satisfy_mime_type_requirements (mime_types, &new_format_name,
-						 &new_mime_type)) {
-		avatar_chooser_error_show (chooser,
-			_("Couldn't convert image"),
-			_("None of the accepted image formats is supported on "
-			  "your system"));
-		g_strfreev (mime_types);
-		return NULL;
-	}
-
-	/* If the avatar is not already in the right type, it needs converting. */
-	if (!str_in_strv (avatar->format, mime_types)) {
-		DEBUG ("Image format %s not supported by the protocol",
-			avatar->format);
-
+	/* Check if we need to convert to another image format */
+	if (avatar_chooser_need_mime_type_conversion (avatar->format,
+						      mime_types,
+						      &new_format_name,
+						      &new_mime_type)) {
+		DEBUG ("Format conversion needed, we'll use mime type '%s' "
+		       "and format name '%s'. Current mime type is '%s'",
+		       new_mime_type, new_format_name, avatar->format);
 		needs_conversion = TRUE;
 	}
 	g_strfreev (mime_types);
+
+	/* If there is no format we can use, report error to the user. */
+	if (new_mime_type == NULL || new_format_name == NULL) {
+		avatar_chooser_error_show (chooser, _("Couldn't convert image"),
+				_("None of the accepted image formats is "
+				  "supported on your system"));
+		return NULL;
+	}
 
 	/* If width or height are too big, it needs converting. */
 	width = gdk_pixbuf_get_width (pixbuf);
