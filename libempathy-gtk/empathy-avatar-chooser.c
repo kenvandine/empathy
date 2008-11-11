@@ -43,6 +43,9 @@
 
 #define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyAvatarChooser)
 typedef struct {
+	EmpathyContactFactory *contact_factory;
+	McAccount             *account;
+
 	gchar *image_data;
 	gsize  image_data_size;
 	gchar *mime_type;
@@ -84,6 +87,12 @@ enum {
 	LAST_SIGNAL
 };
 
+enum {
+	PROP_0,
+	PROP_CONTACT_FACTORY,
+	PROP_ACCOUNT
+};
+
 static guint signals [LAST_SIGNAL];
 
 G_DEFINE_TYPE (EmpathyAvatarChooser, empathy_avatar_chooser, GTK_TYPE_BUTTON);
@@ -102,11 +111,67 @@ static const GtkTargetEntry drop_types[] = {
 };
 
 static void
+empathy_avatar_chooser_get_property (GObject    *object,
+				     guint       param_id,
+				     GValue     *value,
+				     GParamSpec *pspec)
+{
+	EmpathyAvatarChooserPriv *priv = GET_PRIV (object);
+
+	switch (param_id) {
+	case PROP_CONTACT_FACTORY:
+		g_assert (priv->contact_factory != NULL);
+		g_value_set_object (value, priv->contact_factory);
+		break;
+	case PROP_ACCOUNT:
+		g_value_set_object (value, priv->account);
+		break;
+	default:
+		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
+		break;
+	}
+}
+
+static void
+empathy_avatar_chooser_set_property (GObject      *object,
+				     guint         param_id,
+				     const GValue *value,
+				     GParamSpec   *pspec)
+{
+	EmpathyAvatarChooser *self = EMPATHY_AVATAR_CHOOSER (object);
+	EmpathyAvatarChooserPriv *priv = GET_PRIV (self);
+
+	switch (param_id) {
+	case PROP_CONTACT_FACTORY:
+		priv->contact_factory = g_value_get_object (value);
+
+		g_assert (priv->contact_factory != NULL);
+		g_object_ref (priv->contact_factory);
+
+		break;
+	case PROP_ACCOUNT:
+		if (priv->account)
+			g_object_unref (priv->account);
+
+		priv->account = g_value_get_object (value);
+		if (priv->account)
+			g_object_ref (priv->account);
+		break;
+	default:
+		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
+		break;
+	}
+}
+
+static void
 empathy_avatar_chooser_class_init (EmpathyAvatarChooserClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+	GParamSpec *param_spec;
 
 	object_class->finalize = avatar_chooser_finalize;
+	object_class->get_property = empathy_avatar_chooser_get_property;
+	object_class->set_property = empathy_avatar_chooser_set_property;
 
 	signals[CHANGED] =
 		g_signal_new ("changed",
@@ -116,6 +181,29 @@ empathy_avatar_chooser_class_init (EmpathyAvatarChooserClass *klass)
 			      NULL, NULL,
 			      g_cclosure_marshal_VOID__VOID,
 			      G_TYPE_NONE, 0);
+
+	param_spec = g_param_spec_object ("contact-factory",
+					  "EmpathyContactFactory instance",
+					  "EmpathyContactFactory instance "
+					  "(may not be NULL)",
+					  EMPATHY_TYPE_CONTACT_FACTORY,
+					  G_PARAM_CONSTRUCT_ONLY |
+					  G_PARAM_READWRITE |
+					  G_PARAM_STATIC_STRINGS);
+	g_object_class_install_property (object_class,
+					 PROP_CONTACT_FACTORY,
+					 param_spec);
+
+	param_spec = g_param_spec_object ("account",
+					  "McAccount",
+					  "McAccount whose avatar should be "
+					  "shown and modified by this widget",
+					  MC_TYPE_ACCOUNT,
+					  G_PARAM_READWRITE |
+					  G_PARAM_STATIC_STRINGS);
+	g_object_class_install_property (object_class,
+					 PROP_ACCOUNT,
+					 param_spec);
 
 	g_type_class_add_private (object_class, sizeof (EmpathyAvatarChooserPriv));
 }
@@ -158,6 +246,10 @@ avatar_chooser_finalize (GObject *object)
 	EmpathyAvatarChooserPriv *priv;
 
 	priv = GET_PRIV (object);
+
+	g_object_unref (priv->contact_factory);
+	if (priv->account)
+		g_object_unref (priv->account);
 
 	g_free (priv->image_data);
 	g_free (priv->mime_type);
@@ -542,9 +634,11 @@ avatar_chooser_clicked_cb (GtkWidget            *button,
 }
 
 GtkWidget *
-empathy_avatar_chooser_new (void)
+empathy_avatar_chooser_new (EmpathyContactFactory *contact_factory)
 {
-	return g_object_new (EMPATHY_TYPE_AVATAR_CHOOSER, NULL);
+	return g_object_new (EMPATHY_TYPE_AVATAR_CHOOSER,
+			     "contact-factory", contact_factory,
+			     NULL);
 }
 
 void

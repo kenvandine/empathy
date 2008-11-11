@@ -27,6 +27,7 @@
 #include <gtk/gtkbutton.h>
 
 #include <libempathy/empathy-contact.h>
+#include <libempathy/empathy-contact-factory.h>
 
 G_BEGIN_DECLS
 
@@ -49,7 +50,7 @@ struct _EmpathyAvatarChooserClass {
 };
 
 GType      empathy_avatar_chooser_get_type       (void);
-GtkWidget *empathy_avatar_chooser_new            (void);
+GtkWidget *empathy_avatar_chooser_new            (EmpathyContactFactory *contact_factory);
 void       empathy_avatar_chooser_set            (EmpathyAvatarChooser *chooser,
 						  EmpathyAvatar        *avatar);
 void       empathy_avatar_chooser_get_image_data (EmpathyAvatarChooser *chooser,
