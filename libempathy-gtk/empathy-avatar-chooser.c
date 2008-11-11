@@ -45,6 +45,7 @@
 typedef struct {
 	gchar *image_data;
 	gsize  image_data_size;
+	gchar *mime_type;
 } EmpathyAvatarChooserPriv;
 
 static void       avatar_chooser_finalize              (GObject              *object);
@@ -159,6 +160,7 @@ avatar_chooser_finalize (GObject *object)
 	priv = GET_PRIV (object);
 
 	g_free (priv->image_data);
+	g_free (priv->mime_type);
 
 	G_OBJECT_CLASS (empathy_avatar_chooser_parent_class)->finalize (object);
 }
@@ -176,6 +178,8 @@ avatar_chooser_set_pixbuf (EmpathyAvatarChooser *chooser,
 	g_free (priv->image_data);
 	priv->image_data = NULL;
 	priv->image_data_size = 0;
+	g_free (priv->mime_type);
+	priv->mime_type = NULL;
 
 	if (pixbuf) {
 		pixbuf_view = empathy_pixbuf_scale_down_if_necessary (pixbuf, AVATAR_SIZE_VIEW);
@@ -189,6 +193,8 @@ avatar_chooser_set_pixbuf (EmpathyAvatarChooser *chooser,
 			DEBUG ("Failed to save pixbuf: %s",
 				error ? error->message : "No error given");
 			g_clear_error (&error);
+		} else {
+			priv->mime_type = "image/png";
 		}
 		image = gtk_image_new_from_pixbuf (pixbuf_view);
 
@@ -571,7 +577,7 @@ empathy_avatar_chooser_get_image_data (EmpathyAvatarChooser  *chooser,
 		*data_size = priv->image_data_size;
 	}
 	if (mime_type) {
-		*mime_type = "png";
+		*mime_type = priv->mime_type;
 	}
 }
 
