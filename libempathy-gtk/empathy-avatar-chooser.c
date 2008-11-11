@@ -310,49 +310,44 @@ can_satisfy_mime_type_requirements (gchar **accepted_mime_types,
 				    gchar **satisfactory_format_name,
 				    gchar **satisfactory_mime_type)
 {
-	gchar   *name = NULL,
-	        *type = NULL;
-	gboolean done = FALSE;
+	gchar *name = NULL;
+	gchar *type = NULL;
 
 	if (accepted_mime_types == NULL || *accepted_mime_types == NULL) {
 		return FALSE;
 	}
-
-	g_assert (satisfactory_format_name != NULL);
-	g_assert (satisfactory_mime_type != NULL);
 
 	/* Special-case png and jpeg to avoid accidentally saving to something
 	 * uncompressed like bmp. This assumes that we can write image/png and
 	 * image/jpeg; if this isn't true then something's really wrong with
 	 * GdkPixbuf.
 	 */
-	if (str_in_strv ("image/png", accepted_mime_types)) {
-		name = g_strdup ("png");
-		type = g_strdup ("image/png");
-		done = TRUE;
-	} else if (str_in_strv ("image/jpeg", accepted_mime_types)) {
+	if (str_in_strv ("image/jpeg", accepted_mime_types)) {
 		name = g_strdup ("jpeg");
 		type = g_strdup ("image/jpeg");
-		done = TRUE;
+	} else if (str_in_strv ("image/png", accepted_mime_types)) {
+		name = g_strdup ("png");
+		type = g_strdup ("image/png");
 	} else {
-		GSList  *formats = gdk_pixbuf_get_formats ();
-		GSList  *l;
-		gchar  **strv;
+		GSList  *formats, *l;
+		gboolean found = FALSE;
 
-		for (l = formats; !done && l != NULL; l = l->next) {
+		formats = gdk_pixbuf_get_formats ();
+		for (l = formats; !found && l != NULL; l = l->next) {
 			GdkPixbufFormat *format = l->data;
 			gchar **format_mime_types;
+			gchar **iter;
 
 			if (!gdk_pixbuf_format_is_writable (format)) {
 				continue;
 			}
 
 			format_mime_types = gdk_pixbuf_format_get_mime_types (format);
-			for (strv = format_mime_types; *strv != NULL; strv++) {
-				if (str_in_strv (*strv, accepted_mime_types)) {
+			for (iter = format_mime_types; *iter != NULL; iter++) {
+				if (str_in_strv (*iter, accepted_mime_types)) {
 					name = gdk_pixbuf_format_get_name (format);
-					type = g_strdup (*strv);
-					done = TRUE;
+					type = g_strdup (*iter);
+					found = TRUE;
 					break;
 				}
 			}
@@ -362,69 +357,10 @@ can_satisfy_mime_type_requirements (gchar **accepted_mime_types,
 		g_slist_free (formats);
 	}
 
-	if (done) {
-		*satisfactory_format_name = name;
-		*satisfactory_mime_type = type;
-		return TRUE;
-	} else {
-		/* check we're not leaking. */
-		g_assert (name == NULL);
-		g_assert (type == NULL);
-		return FALSE;
-	}
-}
+	*satisfactory_format_name = name;
+	*satisfactory_mime_type = type;
 
-static EmpathyAvatar *
-avatar_chooser_convert (EmpathyAvatarChooser *chooser,
-			GdkPixbuf            *pixbuf_scaled,
-			gchar               **mime_types,
-			gsize                 max_size)
-{
-	gchar         *format_name = NULL, *new_mime_type = NULL;
-	gchar         *converted_image_data = NULL;
-	gsize          converted_image_size = 0;
-	EmpathyAvatar *converted_avatar = NULL;
-	gboolean       saved;
-	GError        *error = NULL;
-
-	if (!can_satisfy_mime_type_requirements (mime_types, &format_name,
-						 &new_mime_type)) {
-		DEBUG ("Mon dieu! Can't convert to any acceptable format!");
-		return NULL;
-	}
-
-	saved = gdk_pixbuf_save_to_buffer (pixbuf_scaled, &converted_image_data,
-		&converted_image_size, format_name, &error, NULL);
-	g_free (format_name);
-
-	if (!saved) {
-		DEBUG ("Couldn't convert image: %s", error->message);
-		g_error_free (error);
-
-		g_free (new_mime_type);
-		return NULL;
-	}
-
-	/* Takes ownership of new_mime_type */
-	converted_avatar = empathy_avatar_new (converted_image_data,
-		converted_image_size, new_mime_type, NULL);
-
-	if (max_size > 0 && converted_avatar->len > max_size) {
-		/* FIXME: We could try converting to a different format; in
-		 *        particular, try converting to jpeg with increasingly
-		 *        high compression (if jpeg is supported). Not sure how
-		 *        much we care.
-		 */
-		DEBUG ("Converted the image, but image data "
-		       "(%"G_GSIZE_FORMAT" bytes) is too big "
-		       "(max is %"G_GSIZE_FORMAT" bytes)",
-		       converted_avatar->len , max_size);
-
-		empathy_avatar_unref (converted_avatar);
-		converted_avatar = NULL;
-	}
-
-	return converted_avatar;
+	return name != NULL;
 }
 
 static EmpathyAvatar *
@@ -437,8 +373,13 @@ avatar_chooser_maybe_convert_and_scale (EmpathyAvatarChooser *chooser,
 	gint                      max_width = 0, max_height = 0, max_size = 0;
 	gchar                   **mime_types = NULL;
 	gboolean                  needs_conversion = FALSE;
-	GdkPixbuf                *pixbuf_scaled = NULL;
 	gint                      width, height;
+	gchar                    *new_format_name = NULL;
+	gchar                    *new_mime_type = NULL;
+	gdouble                   min_factor, max_factor;
+	gdouble                   factor;
+	gchar                    *converted_image_data = NULL;
+	gsize                     converted_image_size = 0;
 
 	/* This should only be called if the user is setting a new avatar,
 	 * which should only be allowed once the avatar requirements have been
@@ -455,21 +396,28 @@ avatar_chooser_maybe_convert_and_scale (EmpathyAvatarChooser *chooser,
 		"avatar-max-size", &max_size,
 		NULL);
 
-	/* If the avatar's not already the right type, it needs converting. */
+	/* Smaller is the factor, smaller will be the image.
+	 * 0 is an empty image, 1 is the full size. */
+	min_factor = 0;
+	max_factor = 1;
+	factor = 1;
+
+	if (!can_satisfy_mime_type_requirements (mime_types, &new_format_name,
+						 &new_mime_type)) {
+		/* FIXME: That should be reported to the user */
+		DEBUG ("Mon dieu! Can't convert to any acceptable format!");
+		g_strfreev (mime_types);
+		return NULL;
+	}
+
+	/* If the avatar is not already in the right type, it needs converting. */
 	if (!str_in_strv (avatar->format, mime_types)) {
-		DEBUG ("Image format %s not supported by the protocol, "
-		       "conversion needed.", avatar->format);
-		needs_conversion = TRUE;
-	}
-
-	/* If the data len is too big, it needs converting. */
-	if (max_size > 0 && avatar->len > max_size) {
-		DEBUG ("Image data (%"G_GSIZE_FORMAT" bytes) is too big "
-		       "(max is %"G_GSIZE_FORMAT" bytes), conversion needed.",
-		       avatar->len, max_size);
+		DEBUG ("Image format %s not supported by the protocol",
+			avatar->format);
 
 		needs_conversion = TRUE;
 	}
+	g_strfreev (mime_types);
 
 	/* If width or height are too big, it needs converting. */
 	width = gdk_pixbuf_get_width (pixbuf);
@@ -480,30 +428,91 @@ avatar_chooser_maybe_convert_and_scale (EmpathyAvatarChooser *chooser,
 
 		h_factor = (gdouble) max_width / width;
 		v_factor = (gdouble) max_height / height;
-		width = width * MIN (h_factor, v_factor);
-		height = height * MIN (h_factor, v_factor);
+		factor = max_factor = MIN (h_factor, v_factor);
 
-		DEBUG ("Image dimensions are too big. Max is %dx%d,"
-		       "scaling down to %dx%d",
-		       max_width, max_height, width, height);
-		pixbuf_scaled = gdk_pixbuf_scale_simple (pixbuf,
-							 width, height,
-							 GDK_INTERP_HYPER);		
+		DEBUG ("Image dimensions (%dx%d) are too big. Max is %dx%d.",
+		       width, height, max_width, max_height);
+
 		needs_conversion = TRUE;
-	} else {
-		pixbuf_scaled = g_object_ref (pixbuf);
 	}
 
-	if (needs_conversion) {
-		avatar = avatar_chooser_convert (chooser, pixbuf_scaled,
-			mime_types, max_size);
-	} else {
-		/* Just return another reference to the avatar passed in. */
-		avatar = empathy_avatar_ref (avatar);
+	/* If the data len is too big and no other conversion is needed,
+	 * try with a lower factor. */
+	if (max_size > 0 && avatar->len > max_size && !needs_conversion) {
+		DEBUG ("Image data (%"G_GSIZE_FORMAT" bytes) is too big "
+		       "(max is %"G_GSIZE_FORMAT" bytes), conversion needed.",
+		       avatar->len, max_size);
+
+		factor = 0.5;
+		needs_conversion = TRUE;
 	}
 
-	g_object_unref (pixbuf_scaled);
-	g_strfreev (mime_types);
+	/* If no conversion is needed, return the avatar */
+	if (!needs_conversion) {
+		g_free (new_format_name);
+		g_free (new_mime_type);
+		return empathy_avatar_ref (avatar);
+	}
+
+	do {
+		GdkPixbuf *pixbuf_scaled = NULL;
+		gboolean   saved;
+		gint       new_width, new_height;
+		GError    *error = NULL;
+
+		g_free (converted_image_data);
+
+		if (factor != 1) {
+			new_width = width * factor;
+			new_height = height * factor;
+			pixbuf_scaled = gdk_pixbuf_scale_simple (pixbuf,
+								 new_width,
+								 new_height,
+								 GDK_INTERP_HYPER);
+		} else {
+			new_width = width;
+			new_height = height;
+			pixbuf_scaled = g_object_ref (pixbuf);
+		}
+
+		DEBUG ("Trying with factor %f (%dx%d) and format %s...", factor,
+			new_width, new_height, new_format_name);
+
+		saved = gdk_pixbuf_save_to_buffer (pixbuf_scaled,
+						   &converted_image_data,
+						   &converted_image_size,
+						   new_format_name,
+						   &error, NULL);
+
+		if (!saved) {
+			DEBUG ("Couldn't convert image: %s", error->message);
+			g_clear_error (&error);
+			g_free (new_format_name);
+			g_free (new_mime_type);
+			return NULL;
+		}
+
+		DEBUG ("Produced an image data of %"G_GSIZE_FORMAT" bytes.",
+			converted_image_size);
+
+		if (max_size == 0)
+			break;
+
+		/* Make a dichotomic search for the optimal factor that produce
+		 * an image data size close to max_size */
+		if (converted_image_size > max_size)
+			max_factor = factor;
+		if (converted_image_size < max_size)
+			min_factor = factor;
+		factor = min_factor + (max_factor - min_factor)/2;
+	} while (min_factor != max_factor &&
+	         ABS (max_size - converted_image_size) > 1000);
+	g_free (new_format_name);
+
+	/* Takes ownership of new_mime_type and converted_image_data */
+	avatar = empathy_avatar_new (converted_image_data,
+		converted_image_size, new_mime_type, NULL);
+
 	return avatar;
 }
 
