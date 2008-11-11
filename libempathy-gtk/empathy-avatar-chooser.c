@@ -521,7 +521,7 @@ avatar_chooser_set_image_from_data (EmpathyAvatarChooser *chooser,
 		return;
 	}
 
-	pixbuf = empathy_pixbuf_from_data (data, size, &mime_type);
+	pixbuf = empathy_pixbuf_from_data_and_mime (data, size, &mime_type);
 	if (pixbuf == NULL) {
 		g_free (data);
 		return;
@@ -543,7 +543,9 @@ avatar_chooser_set_image_from_avatar (EmpathyAvatarChooser *chooser,
 
 	g_assert (avatar != NULL);
 
-	pixbuf = empathy_pixbuf_from_data (avatar->data, avatar->len, &mime_type);
+	pixbuf = empathy_pixbuf_from_data_and_mime (avatar->data,
+						    avatar->len,
+						    &mime_type);
 	if (pixbuf == NULL) {
 		DEBUG ("couldn't make a pixbuf from avatar; giving up");
 		return;

@@ -69,6 +69,8 @@ const gchar * empathy_icon_name_from_account            (McAccount        *accou
 const gchar * empathy_icon_name_for_presence            (McPresence        presence);
 const gchar * empathy_icon_name_for_contact             (EmpathyContact   *contact);
 GdkPixbuf *   empathy_pixbuf_from_data                  (gchar            *data,
+							 gsize             data_size);
+GdkPixbuf *   empathy_pixbuf_from_data_and_mime         (gchar            *data,
 							 gsize             data_size,
 							 gchar           **mime_type);
 GdkPixbuf *   empathy_pixbuf_from_avatar_scaled         (EmpathyAvatar    *avatar,

@@ -245,9 +245,16 @@ empathy_icon_name_for_contact (EmpathyContact *contact)
 }
 
 GdkPixbuf *
-empathy_pixbuf_from_data (gchar  *data,
-			  gsize   data_size,
-			  gchar **mime_type)
+empathy_pixbuf_from_data (gchar *data,
+			  gsize  data_size)
+{
+	return empathy_pixbuf_from_data_and_mime (data, data_size, NULL);
+}
+
+GdkPixbuf *
+empathy_pixbuf_from_data_and_mime (gchar  *data,
+				   gsize   data_size,
+				   gchar **mime_type)
 {
 	GdkPixbufLoader *loader;
 	GdkPixbufFormat *format;
