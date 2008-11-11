@@ -448,8 +448,13 @@ avatar_chooser_maybe_convert_and_scale (EmpathyAvatarChooser *chooser,
 		needs_conversion = TRUE;
 	}
 
-	/* If scaling down the pixbuf to fit the dimensions yields a new
-	 * pixbuf, then it needed scaling. if it's the same pixbuf, it did not.
+	/* If _scale_down_if_necessary yields a new pixbuf, then it needed
+	 * scaling.  If it's the same pixbuf, it did not, and did no extra work
+	 * beyond checking the dimensions.  Hence, we call it even if
+	 * needs_conversion is already TRUE, rather than duplicating the
+	 * dimension checking code here, as it's no more expensive than
+	 * checking the dimensions first in the case where no scaling is
+	 * necessary.
 	 */
 	pixbuf_scaled = empathy_pixbuf_scale_down_if_necessary (pixbuf,
 		MIN(max_width, max_height));
