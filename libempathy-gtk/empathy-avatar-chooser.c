@@ -56,8 +56,8 @@ static void       avatar_chooser_finalize              (GObject              *ob
 static void       avatar_chooser_set_account           (EmpathyAvatarChooser *self,
 							McAccount            *account);
 static void       avatar_chooser_set_image             (EmpathyAvatarChooser *chooser,
-							gchar                *data,
-							gsize                 size,
+							EmpathyAvatar        *avatar,
+							GdkPixbuf            *pixbuf,
 							gboolean              set_locally);
 static gboolean   avatar_chooser_drag_motion_cb        (GtkWidget            *widget,
 							GdkDragContext       *context,
@@ -498,15 +498,12 @@ avatar_chooser_clear_image (EmpathyAvatarChooser *chooser)
 }
 
 static void
-avatar_chooser_set_image (EmpathyAvatarChooser *chooser,
-			  gchar                *data,
-			  gsize                 size,
-			  gboolean              set_locally)
+avatar_chooser_set_image_from_data (EmpathyAvatarChooser *chooser,
+				    gchar                *data,
+				    gsize                 size,
+				    gboolean              set_locally)
 {
-	EmpathyAvatarChooserPriv *priv = GET_PRIV (chooser);
-
-	GdkPixbuf     *pixbuf, *pixbuf_view;
-	GtkWidget     *image;
+	GdkPixbuf     *pixbuf;
 	EmpathyAvatar *avatar = NULL;
 	gchar         *mime_type = NULL;
 
@@ -525,16 +522,64 @@ avatar_chooser_set_image (EmpathyAvatarChooser *chooser,
 	/* avatar takes ownership of data and mime_type */
 	avatar = empathy_avatar_new (data, size, mime_type, NULL);
 
+	avatar_chooser_set_image (chooser, avatar, pixbuf, set_locally);
+}
+
+static void
+avatar_chooser_set_image_from_avatar (EmpathyAvatarChooser *chooser,
+				      EmpathyAvatar        *avatar,
+				      gboolean              set_locally)
+{
+	GdkPixbuf *pixbuf;
+	gchar     *mime_type = NULL;
+
+	g_assert (avatar != NULL);
+
+	pixbuf = empathy_pixbuf_from_data (avatar->data, avatar->len, &mime_type);
+	if (pixbuf == NULL) {
+		DEBUG ("couldn't make a pixbuf from avatar; giving up");
+		return;
+	}
+
+	if (avatar->format == NULL) {
+		avatar->format = mime_type;
+	} else if (strcmp (mime_type, avatar->format)) {
+		DEBUG ("avatar had incorrect format! correcting");
+		g_free (avatar->format);
+		avatar->format = mime_type;
+	} else {
+		g_free (mime_type);
+	}
+
+	empathy_avatar_ref (avatar);
+
+	avatar_chooser_set_image (chooser, avatar, pixbuf, set_locally);
+}
+
+static void
+avatar_chooser_set_image (EmpathyAvatarChooser *chooser,
+			  EmpathyAvatar        *avatar,
+			  GdkPixbuf            *pixbuf,
+			  gboolean              set_locally)
+{
+	EmpathyAvatarChooserPriv *priv = GET_PRIV (chooser);
+	GdkPixbuf                *pixbuf_view;
+	GtkWidget                *image;
+
+	g_assert (avatar != NULL);
+	g_assert (pixbuf != NULL);
+
 	if (set_locally) {
 		EmpathyAvatar *conv = avatar_chooser_maybe_convert_and_scale (
 			chooser, pixbuf, avatar);
 		empathy_avatar_unref (avatar);
-		avatar = conv;
-	}
 
-	if (avatar == NULL) {
-		/* An error occured; don't change the avatar. */
-		return;
+		if (conv == NULL) {
+			/* An error occured; don't change the avatar. */
+			return;
+		}
+
+		avatar = conv;
 	}
 
 	if (priv->avatar != NULL) {
@@ -568,7 +613,7 @@ avatar_chooser_set_image_from_file (EmpathyAvatarChooser *chooser,
 		return;
 	}
 
-	avatar_chooser_set_image (chooser, image_data, image_size, TRUE);
+	avatar_chooser_set_image_from_data (chooser, image_data, image_size, TRUE);
 }
 
 static gboolean
@@ -698,10 +743,10 @@ avatar_chooser_drag_data_received_cb (GtkWidget          *widget,
 								  data, size,
 								  NULL, NULL);
 				if (bytes_read != -1) {
-					avatar_chooser_set_image (chooser,
-								  data,
-								  (gsize) bytes_read,
-								  TRUE);
+					avatar_chooser_set_image_from_data (
+						chooser, data,
+						(gsize) bytes_read,
+						TRUE);
 					handled = TRUE;
 				}
 
@@ -891,9 +936,6 @@ empathy_avatar_chooser_new ()
 	return g_object_new (EMPATHY_TYPE_AVATAR_CHOOSER, NULL);
 }
 
-/* FIXME: when the avatar passed to this function actually can be relied upon to
- * contain a mime type, we can probably just ref it and store it.
- */
 void
 empathy_avatar_chooser_set (EmpathyAvatarChooser *chooser,
 			    EmpathyAvatar        *avatar)
@@ -901,8 +943,7 @@ empathy_avatar_chooser_set (EmpathyAvatarChooser *chooser,
 	g_return_if_fail (EMPATHY_IS_AVATAR_CHOOSER (chooser));
 
 	if (avatar != NULL) {
-		gchar *data = g_memdup (avatar->data, avatar->len);
-		avatar_chooser_set_image (chooser, data, avatar->len, FALSE);
+		avatar_chooser_set_image_from_avatar (chooser, avatar, FALSE);
 	} else {
 		avatar_chooser_clear_image (chooser);
 	}
