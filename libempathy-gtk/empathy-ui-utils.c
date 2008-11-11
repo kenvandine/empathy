@@ -500,7 +500,7 @@ empathy_pixbuf_scale_down_if_necessary (GdkPixbuf *pixbuf, gint max_size)
 	width = gdk_pixbuf_get_width (pixbuf);
 	height = gdk_pixbuf_get_height (pixbuf);
 
-	if (width > max_size || height > max_size) {
+	if (width > 0 && (width > max_size || height > max_size)) {
 		factor = (gdouble) max_size / MAX (width, height);
 
 		width = width * factor;
