@@ -308,7 +308,6 @@ avatar_chooser_set_account (EmpathyAvatarChooser *self,
 	}
 }
 
-
 static gboolean
 str_in_strv (gchar  *str,
 	     gchar **strv)
@@ -326,7 +325,6 @@ str_in_strv (gchar  *str,
 	}
 	return FALSE;
 }
-
 
 /* The caller must free the strings stored in satisfactory_format_name and
  * satisfactory_mime_type.
@@ -374,7 +372,6 @@ can_satisfy_mime_type_requirements (gchar **accepted_mime_types,
 
 	return done;
 }
-
 
 static EmpathyAvatar *
 avatar_chooser_convert (EmpathyAvatarChooser *chooser,
@@ -427,7 +424,6 @@ avatar_chooser_convert (EmpathyAvatarChooser *chooser,
 
 	return converted_avatar;
 }
-
 
 static EmpathyAvatar *
 avatar_chooser_maybe_convert_and_scale (EmpathyAvatarChooser *chooser,
@@ -488,7 +484,6 @@ avatar_chooser_maybe_convert_and_scale (EmpathyAvatarChooser *chooser,
 	g_strfreev (mime_types);
 	return avatar;
 }
-
 
 static void
 avatar_chooser_clear_image (EmpathyAvatarChooser *chooser)

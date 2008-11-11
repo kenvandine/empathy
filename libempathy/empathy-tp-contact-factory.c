@@ -739,7 +739,6 @@ tp_contact_factory_connection_invalidated_cb (EmpathyTpContactFactory *tp_factor
 			tp_factory);
 }
 
-
 static void
 tp_contact_factory_got_self_handle_cb (TpConnection *proxy,
 				       guint         handle,
@@ -764,7 +763,6 @@ tp_contact_factory_got_self_handle_cb (TpConnection *proxy,
 		NULL, NULL,
 		tp_factory);
 }
-
 
 static void
 tp_contact_factory_got_avatar_requirements_cb (TpConnection *proxy,
@@ -797,7 +795,6 @@ tp_contact_factory_got_avatar_requirements_cb (TpConnection *proxy,
 
 	tp_contact_factory_ready (EMPATHY_TP_CONTACT_FACTORY (tp_factory));
 }
-
 
 static void
 tp_contact_factory_ready (EmpathyTpContactFactory *tp_factory)

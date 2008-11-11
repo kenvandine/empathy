@@ -730,7 +730,6 @@ contact_widget_avatar_changed_cb (EmpathyAvatarChooser *chooser,
     }
 }
 
-
 static void
 contact_widget_update_avatar_chooser_account (EmpathyContactWidget *information)
 {
@@ -748,7 +747,6 @@ contact_widget_update_avatar_chooser_account (EmpathyContactWidget *information)
       g_object_set (information->widget_avatar, "account", account, NULL);
     }
 }
-
 
 static void
 contact_widget_account_changed_cb (GtkComboBox *widget,
