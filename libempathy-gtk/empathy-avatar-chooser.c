@@ -292,8 +292,7 @@ str_in_strv (gchar  *str,
 		return FALSE;
 	}
 
-	while (*strv != NULL)
-	{
+	while (*strv != NULL) {
 		if (g_str_equal (str, *strv)) {
 			return TRUE;
 		}
