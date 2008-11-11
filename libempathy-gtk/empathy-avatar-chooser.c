@@ -332,8 +332,8 @@ can_satisfy_mime_type_requirements (gchar **accepted_mime_types,
 		}
 
 		format_mime_types = gdk_pixbuf_format_get_mime_types (format);
-		for (strv = accepted_mime_types; *strv != NULL; strv++) {
-			if (str_in_strv (*strv, format_mime_types)) {
+		for (strv = format_mime_types; *strv != NULL; strv++) {
+			if (str_in_strv (*strv, accepted_mime_types)) {
 				*satisfactory_format_name = gdk_pixbuf_format_get_name (format);
 				*satisfactory_mime_type = g_strdup (*strv);
 				done = TRUE;
