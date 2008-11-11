@@ -512,7 +512,7 @@ avatar_chooser_set_image (EmpathyAvatarChooser *chooser,
 	EmpathyAvatar *avatar = NULL;
 	gchar         *mime_type = NULL;
 
-	if (data == NULL || size == 0) {
+	if (data == NULL) {
 		avatar_chooser_clear_image (chooser);
 		g_free (data);
 		return;
