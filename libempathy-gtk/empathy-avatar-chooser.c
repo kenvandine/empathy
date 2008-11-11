@@ -310,8 +310,8 @@ can_satisfy_mime_type_requirements (gchar **accepted_mime_types,
 				    gchar **satisfactory_mime_type)
 {
 	GSList *formats;
-	GSList *i;
-	gchar **j;
+	GSList *l;
+	gchar **strv;
 	gboolean done = FALSE;
 
 	if (accepted_mime_types == NULL || *accepted_mime_types == NULL) {
@@ -323,8 +323,8 @@ can_satisfy_mime_type_requirements (gchar **accepted_mime_types,
 
 	formats = gdk_pixbuf_get_formats ();
 
-	for (i = formats; !done && i != NULL; i = i->next) {
-		GdkPixbufFormat *format = i->data;
+	for (l = formats; !done && l != NULL; l = l->next) {
+		GdkPixbufFormat *format = l->data;
 		gchar **format_mime_types;
 
 		if (!gdk_pixbuf_format_is_writable (format)) {
@@ -332,10 +332,10 @@ can_satisfy_mime_type_requirements (gchar **accepted_mime_types,
 		}
 
 		format_mime_types = gdk_pixbuf_format_get_mime_types (format);
-		for (j = accepted_mime_types; *j != NULL; j++) {
-			if (str_in_strv (*j, format_mime_types)) {
+		for (strv = accepted_mime_types; *strv != NULL; strv++) {
+			if (str_in_strv (*strv, format_mime_types)) {
 				*satisfactory_format_name = gdk_pixbuf_format_get_name (format);
-				*satisfactory_mime_type = g_strdup (*j);
+				*satisfactory_mime_type = g_strdup (*strv);
 				done = TRUE;
 				break;
 			}
