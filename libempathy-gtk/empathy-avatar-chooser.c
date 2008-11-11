@@ -166,39 +166,30 @@ avatar_chooser_finalize (GObject *object)
 }
 
 static void
-avatar_chooser_set_pixbuf (EmpathyAvatarChooser *chooser,
-			   GdkPixbuf            *pixbuf)
+avatar_chooser_set_image (EmpathyAvatarChooser *chooser,
+			  GdkPixbuf            *pixbuf,
+			  gchar                *image_data,
+			  gsize                 image_data_size,
+			  gchar                *mime_type)
 {
 	EmpathyAvatarChooserPriv *priv = GET_PRIV (chooser);
 	GtkWidget                *image;
 	GdkPixbuf                *pixbuf_view = NULL;
-	GdkPixbuf                *pixbuf_save = NULL;
-	GError                   *error = NULL;
 
 	g_free (priv->image_data);
+	g_free (priv->mime_type);
+
 	priv->image_data = NULL;
 	priv->image_data_size = 0;
-	g_free (priv->mime_type);
 	priv->mime_type = NULL;
 
 	if (pixbuf) {
+		priv->image_data = image_data;
+		priv->image_data_size = image_data_size;
+		priv->mime_type = mime_type;
+
 		pixbuf_view = empathy_pixbuf_scale_down_if_necessary (pixbuf, AVATAR_SIZE_VIEW);
-		pixbuf_save = empathy_pixbuf_scale_down_if_necessary (pixbuf, AVATAR_SIZE_SAVE);
-
-		if (!gdk_pixbuf_save_to_buffer (pixbuf_save,
-						&priv->image_data,
-						&priv->image_data_size,
-						"png",
-						&error, NULL)) {
-			DEBUG ("Failed to save pixbuf: %s",
-				error ? error->message : "No error given");
-			g_clear_error (&error);
-		} else {
-			priv->mime_type = "image/png";
-		}
 		image = gtk_image_new_from_pixbuf (pixbuf_view);
-
-		g_object_unref (pixbuf_save);
 		g_object_unref (pixbuf_view);
 	} else {
 		image = gtk_image_new_from_icon_name ("stock_person",
@@ -210,22 +201,30 @@ avatar_chooser_set_pixbuf (EmpathyAvatarChooser *chooser,
 }
 
 static void
+avatar_chooser_clear_image (EmpathyAvatarChooser *chooser)
+{
+	avatar_chooser_set_image (chooser, NULL, NULL, 0, NULL);
+}
+
+static void
 avatar_chooser_set_image_from_file (EmpathyAvatarChooser *chooser,
 				    const gchar          *filename)
 {
-	GdkPixbuf *pixbuf;
-	GError    *error = NULL;
+	gchar  *image_data = NULL;
+	gsize   image_size = 0;
+	GError *error = NULL;
 
-	if (!(pixbuf = gdk_pixbuf_new_from_file (filename, &error))) {
-		DEBUG ("Failed to load pixbuf from file: %s",
+	if (!g_file_get_contents (filename, &image_data, &image_size, &error)) {
+		DEBUG ("Failed to load image from '%s': %s", filename,
 			error ? error->message : "No error given");
+
+		avatar_chooser_clear_image (chooser);
+
 		g_clear_error (&error);
+		return;
 	}
 
-	avatar_chooser_set_pixbuf (chooser, pixbuf);
-	if (pixbuf) {
-		g_object_unref (pixbuf);
-	}
+	avatar_chooser_set_image_from_data (chooser, image_data, image_size);
 }
 
 static void
@@ -233,10 +232,11 @@ avatar_chooser_set_image_from_data (EmpathyAvatarChooser *chooser,
 				    gchar                *data,
 				    gsize                 size)
 {
-	GdkPixbuf *pixbuf;
+	GdkPixbuf       *pixbuf;
+	gchar           *mime_type = NULL;
 
-	pixbuf = empathy_pixbuf_from_data (data, size);
-	avatar_chooser_set_pixbuf (chooser, pixbuf);
+	pixbuf = empathy_pixbuf_from_data (data, size, &mime_type);
+	avatar_chooser_set_image (chooser, pixbuf, data, size, mime_type);
 	if (pixbuf) {
 		g_object_unref (pixbuf);
 	}
@@ -553,9 +553,12 @@ empathy_avatar_chooser_set (EmpathyAvatarChooser *chooser,
 {
 	g_return_if_fail (EMPATHY_IS_AVATAR_CHOOSER (chooser));
 
-	avatar_chooser_set_image_from_data (chooser,
-					    avatar ? avatar->data : NULL,
-					    avatar ? avatar->len : 0);
+	if (avatar != NULL) {
+		gchar *data = g_memdup (avatar->data, avatar->len);
+		avatar_chooser_set_image_from_data (chooser, data, avatar->len);
+	} else {
+		avatar_chooser_clear_image (chooser);
+	}
 }
 
 void
