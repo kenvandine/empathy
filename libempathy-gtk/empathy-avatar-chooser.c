@@ -59,7 +59,8 @@ static void       avatar_chooser_set_account           (EmpathyAvatarChooser *se
 							McAccount            *account);
 static void       avatar_chooser_set_image_from_data   (EmpathyAvatarChooser *chooser,
 							gchar                *data,
-							gsize                 size);
+							gsize                 size,
+							gboolean              set_locally);
 static gboolean   avatar_chooser_drag_motion_cb        (GtkWidget            *widget,
 							GdkDragContext       *context,
 							gint                  x,
@@ -314,7 +315,8 @@ avatar_chooser_set_image (EmpathyAvatarChooser *chooser,
 			  GdkPixbuf            *pixbuf,
 			  gchar                *image_data,
 			  gsize                 image_data_size,
-			  gchar                *mime_type)
+			  gchar                *mime_type,
+			  gboolean              set_locally)
 {
 	EmpathyAvatarChooserPriv *priv = GET_PRIV (chooser);
 	GtkWidget                *image;
@@ -345,9 +347,10 @@ avatar_chooser_set_image (EmpathyAvatarChooser *chooser,
 }
 
 static void
-avatar_chooser_clear_image (EmpathyAvatarChooser *chooser)
+avatar_chooser_clear_image (EmpathyAvatarChooser *chooser,
+			    gboolean              set_locally)
 {
-	avatar_chooser_set_image (chooser, NULL, NULL, 0, NULL);
+	avatar_chooser_set_image (chooser, NULL, NULL, 0, NULL, set_locally);
 }
 
 static void
@@ -362,25 +365,26 @@ avatar_chooser_set_image_from_file (EmpathyAvatarChooser *chooser,
 		DEBUG ("Failed to load image from '%s': %s", filename,
 			error ? error->message : "No error given");
 
-		avatar_chooser_clear_image (chooser);
+		avatar_chooser_clear_image (chooser, TRUE);
 
 		g_clear_error (&error);
 		return;
 	}
 
-	avatar_chooser_set_image_from_data (chooser, image_data, image_size);
+	avatar_chooser_set_image_from_data (chooser, image_data, image_size, TRUE);
 }
 
 static void
 avatar_chooser_set_image_from_data (EmpathyAvatarChooser *chooser,
 				    gchar                *data,
-				    gsize                 size)
+				    gsize                 size,
+				    gboolean              set_locally)
 {
 	GdkPixbuf       *pixbuf;
 	gchar           *mime_type = NULL;
 
 	pixbuf = empathy_pixbuf_from_data (data, size, &mime_type);
-	avatar_chooser_set_image (chooser, pixbuf, data, size, mime_type);
+	avatar_chooser_set_image (chooser, pixbuf, data, size, mime_type, set_locally);
 	if (pixbuf) {
 		g_object_unref (pixbuf);
 	}
@@ -515,7 +519,8 @@ avatar_chooser_drag_data_received_cb (GtkWidget          *widget,
 				if (bytes_read != -1) {
 					avatar_chooser_set_image_from_data (chooser,
 									    data,
-									    (gsize) bytes_read);
+									    (gsize) bytes_read,
+									    TRUE);
 					handled = TRUE;
 				}
 
@@ -586,7 +591,7 @@ avatar_chooser_response_cb (GtkWidget            *widget,
 		}
 	}
 	else if (response == GTK_RESPONSE_NO) {
-		avatar_chooser_clear_image (chooser);
+		avatar_chooser_clear_image (chooser, TRUE);
 	}
 
 	gtk_widget_destroy (widget);
@@ -701,9 +706,9 @@ empathy_avatar_chooser_set (EmpathyAvatarChooser *chooser,
 
 	if (avatar != NULL) {
 		gchar *data = g_memdup (avatar->data, avatar->len);
-		avatar_chooser_set_image_from_data (chooser, data, avatar->len);
+		avatar_chooser_set_image_from_data (chooser, data, avatar->len, FALSE);
 	} else {
-		avatar_chooser_clear_image (chooser);
+		avatar_chooser_clear_image (chooser, FALSE);
 	}
 }
 
