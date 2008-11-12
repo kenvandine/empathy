@@ -65,6 +65,8 @@ src/empathy-chat-window.glade
 src/empathy-chatrooms-window.c
 src/empathy-chatrooms-window.glade
 src/empathy-event-manager.c
+src/empathy-import-dialog.c
+src/empathy-import-dialog.glade
 src/empathy-main-window.c
 src/empathy-main-window.glade
 src/empathy-new-chatroom-dialog.c
