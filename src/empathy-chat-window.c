@@ -352,6 +352,7 @@ chat_window_update_chat_tab (EmpathyChat *chat)
 	EmpathyChatWindowPriv *priv;
 	EmpathyContact        *remote_contact;
 	const gchar           *name;
+	McAccount             *account;
 	const gchar           *subject;
 	GtkWidget             *widget;
 	GString               *tooltip;
@@ -366,11 +367,12 @@ chat_window_update_chat_tab (EmpathyChat *chat)
 
 	/* Get information */
 	name = empathy_chat_get_name (chat);
+	account = empathy_chat_get_account (chat);
 	subject = empathy_chat_get_subject (chat);
 	remote_contact = empathy_chat_get_remote_contact (chat);
 
-	DEBUG ("Updating chat tab, name=%s, subject=%s, remote_contact=%p",
-		name, subject, remote_contact);
+	DEBUG ("Updating chat tab, name=%s, account=%s, subject=%s, remote_contact=%p",
+		name, mc_account_get_unique_name (account), subject, remote_contact);
 
 	/* Update tab image */
 	if (g_list_find (priv->chats_new_msg, chat)) {
@@ -391,14 +393,16 @@ chat_window_update_chat_tab (EmpathyChat *chat)
 	tooltip = g_string_new (NULL);
 
 	if (remote_contact) {
-		markup = g_markup_printf_escaped ("<b>%s</b>\n%s",
+		markup = g_markup_printf_escaped ("<b>%s</b><small> (%s)</small>\n%s",
 						  empathy_contact_get_id (remote_contact),
+						  mc_account_get_display_name (account),
 						  empathy_contact_get_status (remote_contact));
 		g_string_append (tooltip, markup);
 		g_free (markup);
 	}
 	else {
-		markup = g_markup_printf_escaped ("<b>%s</b>", name);
+		markup = g_markup_printf_escaped ("<b>%s</b><small>  (%s)</small>", name,
+						  mc_account_get_display_name (account));
 		g_string_append (tooltip, markup);
 		g_free (markup);
 	}
