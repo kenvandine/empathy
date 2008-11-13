@@ -118,6 +118,7 @@ chat_get_property (GObject    *object,
 		   GValue     *value,
 		   GParamSpec *pspec)
 {
+	EmpathyChat *chat = EMPATHY_CHAT (object);
 	EmpathyChatPriv *priv = GET_PRIV (object);
 
 	switch (param_id) {
@@ -128,7 +129,7 @@ chat_get_property (GObject    *object,
 		g_value_set_object (value, priv->account);
 		break;
 	case PROP_NAME:
-		g_value_set_string (value, priv->name);
+		g_value_set_string (value, empathy_chat_get_name (chat));
 		break;
 	case PROP_ID:
 		g_value_set_string (value, priv->id);
@@ -1641,10 +1642,19 @@ const gchar *
 empathy_chat_get_name (EmpathyChat *chat)
 {
 	EmpathyChatPriv *priv = GET_PRIV (chat);
+	const gchar *ret;
 
 	g_return_val_if_fail (EMPATHY_IS_CHAT (chat), NULL);
 
-	return priv->name;
+	ret = priv->name;
+	if (!ret && priv->remote_contact) {
+		ret = empathy_contact_get_name (priv->remote_contact);
+	}
+
+	if (!ret)
+		ret = priv->id;
+
+	return ret ? ret : _("Conversation");
 }
 
 const gchar *

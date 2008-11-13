@@ -263,23 +263,6 @@ chat_window_create_label (EmpathyChatWindow *window,
 	return hbox;
 }
 
-static const gchar *
-chat_window_get_chat_name (EmpathyChat *chat)
-{
-	EmpathyContact *remote_contact = NULL;
-	const gchar    *name = NULL;
-
-	name = empathy_chat_get_name (chat);
-	if (!name) {
-		remote_contact = empathy_chat_get_remote_contact (chat);
-		if (remote_contact) {
-			name = empathy_contact_get_name (remote_contact);
-		}
-	}
-
-	return name ? name : _("Conversation");
-}
-
 static void
 chat_window_update (EmpathyChatWindow *window)
 {
@@ -304,7 +287,7 @@ chat_window_update (EmpathyChatWindow *window)
 	first_page = (page_num == 0);
 	last_page = (page_num == (num_pages - 1));
 	is_connected = empathy_chat_get_tp_chat (priv->current_chat) != NULL;
-	name = chat_window_get_chat_name (priv->current_chat);
+	name = empathy_chat_get_name (priv->current_chat);
 	n_chats = g_list_length (priv->chats);
 
 	DEBUG ("Update window");
@@ -382,7 +365,7 @@ chat_window_update_chat_tab (EmpathyChat *chat)
 	priv = GET_PRIV (window);
 
 	/* Get information */
-	name = chat_window_get_chat_name (chat);
+	name = empathy_chat_get_name (chat);
 	subject = empathy_chat_get_subject (chat);
 	remote_contact = empathy_chat_get_remote_contact (chat);
 
