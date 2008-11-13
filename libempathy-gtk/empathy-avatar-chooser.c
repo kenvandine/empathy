@@ -485,7 +485,7 @@ avatar_chooser_maybe_convert_and_scale (EmpathyAvatarChooser *chooser,
 	 * try with a lower factor. */
 	if (max_size > 0 && avatar->len > max_size && !needs_conversion) {
 		DEBUG ("Image data (%"G_GSIZE_FORMAT" bytes) is too big "
-		       "(max is %"G_GSIZE_FORMAT" bytes), conversion needed.",
+		       "(max is %u bytes), conversion needed.",
 		       avatar->len, max_size);
 
 		factor = 0.5;
