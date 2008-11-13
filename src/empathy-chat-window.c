@@ -355,7 +355,7 @@ chat_window_update_chat_tab (EmpathyChat *chat)
 	const gchar           *subject;
 	GtkWidget             *widget;
 	GString               *tooltip;
-	gchar                 *str;
+	gchar                 *markup;
 	const gchar           *icon_name;
 
 	window = chat_window_find_chat (chat);
@@ -389,24 +389,35 @@ chat_window_update_chat_tab (EmpathyChat *chat)
 
 	/* Update tab tooltip */
 	tooltip = g_string_new (NULL);
+
 	if (remote_contact) {
-		g_string_append_printf (tooltip, "%s\n%s",
-					empathy_contact_get_id (remote_contact),
-					empathy_contact_get_status (remote_contact));
+		markup = g_markup_printf_escaped ("<b>%s</b>\n%s",
+						  empathy_contact_get_id (remote_contact),
+						  empathy_contact_get_status (remote_contact));
+		g_string_append (tooltip, markup);
+		g_free (markup);
 	}
 	else {
-		g_string_append (tooltip, name);
+		markup = g_markup_printf_escaped ("<b>%s</b>", name);
+		g_string_append (tooltip, markup);
+		g_free (markup);
 	}
+
 	if (subject) {
-		g_string_append_printf (tooltip, "\n%s %s", _("Topic:"), subject);
+		markup = g_markup_printf_escaped ("\n<b>%s</b> %s", _("Topic:"), subject);
+		g_string_append (tooltip, markup);
+		g_free (markup);
 	}
 	if (g_list_find (priv->chats_composing, chat)) {
-		g_string_append_printf (tooltip, "\n%s", _("Typing a message."));
+		markup = g_markup_printf_escaped ("\n%s", _("Typing a message."));
+		g_string_append (tooltip, markup);
+		g_free (markup);
 	}
-	str = g_string_free (tooltip, FALSE);
+
+	markup = g_string_free (tooltip, FALSE);
 	widget = g_object_get_data (G_OBJECT (chat), "chat-window-tab-tooltip-widget");
-	gtk_widget_set_tooltip_text (widget, str);
-	g_free (str);
+	gtk_widget_set_tooltip_markup (widget, markup);
+	g_free (markup);
 
 	/* Update tab label */
 	widget = g_object_get_data (G_OBJECT (chat), "chat-window-tab-label");
