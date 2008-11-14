@@ -6,9 +6,10 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: empathy.HEAD\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-11-07 09:04+0100\n"
-"PO-Revision-Date: 2008-11-08 13:01+0100\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
+"product=empathy&amp;component=general\n"
+"POT-Creation-Date: 2008-11-12 23:46+0000\n"
+"PO-Revision-Date: 2008-11-14 20:52+0100\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -500,19 +501,28 @@ msgstr "_Ignorar invitaciones a conferencias y salas de chat"
 msgid "_Room List locale:"
 msgstr "Configuración de la lista de _salas:"
 
-#: ../libempathy-gtk/empathy-avatar-chooser.c:457
+#: ../libempathy-gtk/empathy-avatar-chooser.c:461
+#: ../libempathy-gtk/empathy-avatar-chooser.c:536
+msgid "Couldn't convert image"
+msgstr "No se pudo convertir la imagen"
+
+#: ../libempathy-gtk/empathy-avatar-chooser.c:462
+msgid "None of the accepted image formats is supported on your system"
+msgstr "Su sistema no soporta ninguno de los formatos de imagen aceptados"
+
+#: ../libempathy-gtk/empathy-avatar-chooser.c:947
 msgid "Select Your Avatar Image"
 msgstr "Seleccione su imagen de avatar"
 
-#: ../libempathy-gtk/empathy-avatar-chooser.c:460
+#: ../libempathy-gtk/empathy-avatar-chooser.c:950
 msgid "No Image"
 msgstr "Sin imagen"
 
-#: ../libempathy-gtk/empathy-avatar-chooser.c:520
+#: ../libempathy-gtk/empathy-avatar-chooser.c:1010
 msgid "Images"
 msgstr "Imágenes"
 
-#: ../libempathy-gtk/empathy-avatar-chooser.c:524
+#: ../libempathy-gtk/empathy-avatar-chooser.c:1014
 msgid "All Files"
 msgstr "Todos los archivos"
 
@@ -698,11 +708,11 @@ msgstr "Guardar avatar"
 msgid "Unable to save avatar"
 msgstr "No se pudo guardar el avatar"
 
-#: ../libempathy-gtk/empathy-contact-widget.c:875
+#: ../libempathy-gtk/empathy-contact-widget.c:895
 msgid "Select"
 msgstr "Seleccionar"
 
-#: ../libempathy-gtk/empathy-contact-widget.c:884
+#: ../libempathy-gtk/empathy-contact-widget.c:904
 #: ../src/empathy-main-window.c:855
 msgid "Group"
 msgstr "Grupo"
@@ -804,6 +814,7 @@ msgid "SSL"
 msgstr "SSL"
 
 #: ../libempathy-gtk/empathy-log-window.c:497
+#: ../src/empathy-import-dialog.c:271
 msgid "Account"
 msgstr "Cuenta"
 
@@ -908,7 +919,7 @@ msgstr "Limpio"
 msgid "Blue"
 msgstr "Azul"
 
-#: ../libempathy-gtk/empathy-ui-utils.c:1330
+#: ../libempathy-gtk/empathy-ui-utils.c:1351
 msgid "Unable to open URI"
 msgstr "No se pudo abrir el URI"
 
@@ -1189,7 +1200,7 @@ msgstr "Un cliente de mensajería instantánea para GNOME"
 
 #: ../src/empathy-about-dialog.c:126
 msgid "translator-credits"
-msgstr "Jorge González <jorgegonz@svn.gnome.org>, 2007-2008."
+msgstr "Jorge González <jorgegonz@svn.gnome.org>, 2007-2008"
 
 #: ../src/empathy-accounts-dialog.c:394
 msgid "Enabled"
@@ -1565,6 +1576,38 @@ msgid ""
 msgstr ""
 "\n"
 "Mensaje: %s"
+
+#: ../src/empathy-import-dialog.c:249
+msgid "Import"
+msgstr "Importar"
+
+#: ../src/empathy-import-dialog.c:258
+msgid "Protocol"
+msgstr "Protocolo"
+
+#: ../src/empathy-import-dialog.c:284
+msgid "Source"
+msgstr "Origen"
+
+#: ../src/empathy-import-dialog.c:372
+msgid ""
+"No accounts to import could be found. Empathy currently only supports "
+"importing accounts from Pidgin."
+msgstr ""
+"No se pudo encontrar ninguna cuenta que importar. Actualmente Empathy sólo "
+"soporta importar cunetas desde Pidgin."
+
+#: ../src/empathy-import-dialog.glade.h:1
+msgid "Import Accounts"
+msgstr "Importar cuentas"
+
+#: ../src/empathy-import-dialog.glade.h:2
+msgid "gtk-cancel"
+msgstr "gtk-cancel"
+
+#: ../src/empathy-import-dialog.glade.h:3
+msgid "gtk-ok"
+msgstr "gtk-ok"
 
 #: ../src/empathy-main-window.c:466
 msgid "Show and edit accounts"
