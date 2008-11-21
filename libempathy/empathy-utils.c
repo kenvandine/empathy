@@ -776,6 +776,135 @@ empathy_connection_request_channel (TpConnection *connection,
 						weak_object);
 }
 
+EmpathyFile *
+empathy_send_file_from_stream (EmpathyContact *contact,
+			       GInputStream   *in_stream,
+			       const gchar    *filename,
+			       guint64         size)
+{
+	MissionControl *mc;
+	McAccount      *account;
+	TpConnection   *connection;
+	guint           handle;
+	gchar          *object_path;
+	TpChannel      *channel;
+	EmpathyTpFile  *tp_file;
+	EmpathyFile    *file;
+	GError         *error = NULL;
+	GValue          value = { 0 };
+
+	g_return_val_if_fail (EMPATHY_IS_CONTACT (contact), NULL);
+	g_return_val_if_fail (G_IS_INPUT_STREAM (in_stream), NULL);
+	g_return_val_if_fail (filename != NULL, NULL);
+
+	DEBUG ("Sending %s from a stream to %s (size %llu)",
+	       filename, empathy_contact_get_name (contact), size);
+
+	mc = empathy_mission_control_new ();
+	account = empathy_contact_get_account (contact);
+	connection = mission_control_get_tpconnection (mc, account, NULL);
+	tp_connection_run_until_ready (connection, FALSE, NULL, NULL);
+	handle = empathy_contact_get_handle (contact);
+
+	if (!tp_cli_connection_run_request_channel (connection, -1,
+						    EMP_IFACE_CHANNEL_TYPE_FILE,
+						    TP_HANDLE_TYPE_CONTACT,
+						    handle,
+						    FALSE,
+						    &object_path,
+						    &error,
+						    NULL)) {
+		DEBUG ("Couldn't request channel: %s",
+		       error ? error->message : "No error given");
+		g_clear_error (&error);
+		g_object_unref (mc);
+		g_object_unref (connection);
+		return NULL;
+	}
+
+	channel = tp_channel_new (connection,
+				  object_path,
+				  EMP_IFACE_CHANNEL_TYPE_FILE,
+				  TP_HANDLE_TYPE_CONTACT,
+				  handle,
+				  NULL);
+
+	/* TODO: this should go in NewChannel in the new API */
+
+	g_value_init (&value, G_TYPE_STRING);
+	g_value_set_string (&value, g_filename_display_basename (filename));
+	tp_cli_dbus_properties_run_set (TP_PROXY (channel),
+		-1, EMP_IFACE_CHANNEL_TYPE_FILE, "Filename",
+		&value, NULL, NULL);
+	g_value_reset (&value);
+
+	g_value_set_string (&value, "foobar");
+	tp_cli_dbus_properties_run_set (TP_PROXY (channel),
+		-1, EMP_IFACE_CHANNEL_TYPE_FILE, "ContentMD5",
+		&value, NULL, NULL);
+	g_value_reset (&value);
+
+	g_value_set_string (&value, "application/octet-stream");
+	tp_cli_dbus_properties_run_set (TP_PROXY (channel),
+		-1, EMP_IFACE_CHANNEL_TYPE_FILE, "ContentType",
+		&value, NULL, NULL);
+
+	g_value_unset (&value);
+
+	g_value_init (&value, G_TYPE_UINT64);
+	g_value_set_uint64 (&value, size);
+	tp_cli_dbus_properties_run_set (TP_PROXY (channel),
+		-1, EMP_IFACE_CHANNEL_TYPE_FILE, "Size",
+		&value, NULL, NULL);
+	g_value_unset (&value);
+
+	tp_file = empathy_tp_file_new (account, channel);
+	file = empathy_file_new (tp_file);
+
+	if (file) {
+		empathy_file_set_input_stream (file, in_stream);
+	}
+
+	g_object_unref (tp_file);
+	g_object_unref (mc);
+	g_object_unref (connection);
+	g_object_unref (channel);
+	g_free (object_path);
+
+	return file;
+}
+
+EmpathyFile *
+empathy_send_file (EmpathyContact *contact,
+		   GFile          *gfile)
+{
+	GFileInfo        *info;
+	guint64           size;
+	gchar            *filename;
+	GInputStream     *in_stream = NULL;
+	EmpathyFile      *file;
+
+	g_return_val_if_fail (EMPATHY_IS_CONTACT (contact), NULL);
+	g_return_val_if_fail (G_IS_FILE (gfile), NULL);
+
+	filename = g_file_get_basename (gfile);
+	info = g_file_query_info (gfile, G_FILE_ATTRIBUTE_STANDARD_SIZE, 0, NULL, NULL);
+	size = info ? g_file_info_get_size (info) : EMPATHY_FILE_UNKNOWN_SIZE;
+
+	DEBUG ("Sending %s to %s",
+	       filename, empathy_contact_get_name (contact));
+
+	in_stream = G_INPUT_STREAM (g_file_read (gfile, NULL, NULL));
+	file = empathy_send_file_from_stream (contact, in_stream, filename, size);
+
+	g_object_unref (in_stream);
+	g_free (filename);
+	if (info)
+		g_object_unref (info);
+
+	return file;
+}
+
 void
 empathy_init (void)
 {
