@@ -38,7 +38,7 @@
 #include <libmissioncontrol/mc-profile.h>
 
 #include <libempathy/empathy-contact.h>
-#include <libempathy/empathy-file.h>
+#include <libempathy/empathy-tp-file.h>
 
 #include "empathy-chat-view.h"
 #include "empathy-ft-manager.h"
