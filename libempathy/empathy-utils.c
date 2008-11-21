@@ -32,6 +32,7 @@
 
 #include <glib/gi18n.h>
 
+#include <libgnomevfs/gnome-vfs.h>
 #include <libxml/uri.h>
 #include <telepathy-glib/connection.h>
 #include <telepathy-glib/channel.h>
@@ -843,7 +844,7 @@ empathy_send_file_from_stream (EmpathyContact *contact,
 		&value, NULL, NULL);
 	g_value_reset (&value);
 
-	g_value_set_string (&value, "application/octet-stream");
+	g_value_set_string (&value, gnome_vfs_get_mime_type_for_name (filename));
 	tp_cli_dbus_properties_run_set (TP_PROXY (channel),
 		-1, EMP_IFACE_CHANNEL_TYPE_FILE, "ContentType",
 		&value, NULL, NULL);
