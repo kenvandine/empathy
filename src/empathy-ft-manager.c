@@ -525,7 +525,8 @@ ft_manager_state_changed_cb (EmpathyTpFile *tp_file,
 
       manager = gtk_recent_manager_get_default ();
       uri = g_object_get_data (G_OBJECT (tp_file), "uri");
-      gtk_recent_manager_add_item (manager, uri);
+      if (uri != NULL)
+        gtk_recent_manager_add_item (manager, uri);
     }
 
     ft_manager_update_ft_row (ft_manager, tp_file);
