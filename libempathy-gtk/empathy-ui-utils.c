@@ -1481,8 +1481,7 @@ file_manager_send_file_response_cb (GtkDialog      *widget,
 			g_object_unref (gfile);
 			g_free (uri);
 		}
-
-			g_slist_free (list);
+		g_slist_free (list);
 	}
 
 	gtk_widget_destroy (GTK_WIDGET (widget));
