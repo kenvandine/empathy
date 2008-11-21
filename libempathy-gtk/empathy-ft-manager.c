@@ -740,7 +740,7 @@ typedef struct {
 } ReceiveResponseData;
 
 static void
-ft_manager_free_receive_response_data (ReceiveResponseData *response_data)
+ft_manager_receive_response_data_free (ReceiveResponseData *response_data)
 {
   if (!response_data)
     return;
@@ -811,7 +811,7 @@ ft_manager_save_dialog_response_cb (GtkDialog *widget,
     }
 
   gtk_widget_destroy (GTK_WIDGET (widget));
-  ft_manager_free_receive_response_data (response_data);
+  ft_manager_receive_response_data_free (response_data);
 }
 
 static void
@@ -876,7 +876,7 @@ ft_manager_receive_file_response_cb (GtkWidget *dialog,
     {
       channel = empathy_tp_file_get_channel (response_data->tp_file);
       tp_cli_channel_call_close (channel, -1, NULL, NULL, NULL, NULL);
-      ft_manager_free_receive_response_data (response_data);
+      ft_manager_receive_response_data_free (response_data);
     }
 
   gtk_widget_destroy (dialog);
