@@ -73,7 +73,7 @@ void                   empathy_dispatcher_call_with_contact_id (McAccount       
 void                   empathy_dispatcher_chat_with_contact_id (McAccount             *account,
 								const gchar           *contact_id);
 void                   empathy_dispatcher_chat_with_contact    (EmpathyContact        *contact);
-EmpathyTpFile *        empathy_dispatcher_send_file            (EmpathyContact        *contact,
+void                   empathy_dispatcher_send_file            (EmpathyContact        *contact,
 								GFile                 *gfile);
 
 G_END_DECLS

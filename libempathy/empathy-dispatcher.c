@@ -927,67 +927,52 @@ empathy_dispatcher_chat_with_contact_id (McAccount   *account,
 	g_object_unref (factory);
 }
 
-EmpathyTpFile *
-empathy_dispatcher_send_file (EmpathyContact *contact,
-		              GFile          *gfile)
+typedef struct {
+	GFile *gfile;
+	TpHandle handle;
+	EmpathyContact *contact;
+} FileChannelRequest;
+
+static void
+file_channel_request_cb (TpConnection *connection,
+			 const gchar  *object_path,
+			 const GError *error,
+			 gpointer      user_data,
+			 GObject      *weak_object)
 {
-	GFileInfo      *info;
-	guint64         size;
-	MissionControl *mc;
-	McAccount      *account;
-	TpConnection   *connection;
-	guint           handle;
-	gchar          *object_path;
-	TpChannel      *channel;
-	EmpathyTpFile  *tp_file;
-	GError         *error = NULL;
-	GValue          value = { 0 };
-	gchar          *filename;
+	GValue value = { 0 };
+	GFileInfo *info;
+	guint64 size;
+	gchar *filename;
+	TpChannel *channel;
+	EmpathyTpFile *tp_file;
+	FileChannelRequest *request = (FileChannelRequest *) user_data;
 
-	g_return_val_if_fail (EMPATHY_IS_CONTACT (contact), NULL);
-	g_return_val_if_fail (G_IS_FILE (gfile), NULL);
+	if (error) {
+		DEBUG ("Couldn't request channel: %s", error->message);
+		return;
+	}
 
-	info = g_file_query_info (gfile,
+	info = g_file_query_info (request->gfile,
 				  G_FILE_ATTRIBUTE_STANDARD_SIZE ","
 				  G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE,
 				  0, NULL, NULL);
 	size = info ? g_file_info_get_size (info) : EMPATHY_TP_FILE_UNKNOWN_SIZE;
-	filename = g_file_get_basename (gfile);
-	mc = empathy_mission_control_new ();
-	account = empathy_contact_get_account (contact);
-	connection = mission_control_get_tpconnection (mc, account, NULL);
+	filename = g_file_get_basename (request->gfile);
 	tp_connection_run_until_ready (connection, FALSE, NULL, NULL);
-	handle = empathy_contact_get_handle (contact);
 
 	DEBUG ("Sending %s from a stream to %s (size %llu, content-type %s)",
-	       filename, empathy_contact_get_name (contact), size,
+	       filename, empathy_contact_get_name (request->contact), size,
 	       g_file_info_get_content_type (info));
 
-	if (!tp_cli_connection_run_request_channel (connection, -1,
-						    EMP_IFACE_CHANNEL_TYPE_FILE,
-						    TP_HANDLE_TYPE_CONTACT,
-						    handle,
-						    TRUE,
-						    &object_path,
-						    &error,
-						    NULL)) {
-		DEBUG ("Couldn't request channel: %s",
-		       error ? error->message : "No error given");
-		g_clear_error (&error);
-		g_object_unref (mc);
-		g_object_unref (connection);
-		return NULL;
-	}
-
 	channel = tp_channel_new (connection,
-				  object_path,
-				  EMP_IFACE_CHANNEL_TYPE_FILE,
-				  TP_HANDLE_TYPE_CONTACT,
-				  handle,
-				  NULL);
+				 object_path,
+				 EMP_IFACE_CHANNEL_TYPE_FILE,
+				 TP_HANDLE_TYPE_CONTACT,
+				 request->handle,
+				 NULL);
 
 	/* FIXME: this should go in CreateChannel in the new requests API */
-
 	g_value_init (&value, G_TYPE_STRING);
 	g_value_set_string (&value, g_filename_display_basename (filename));
 	tp_cli_dbus_properties_call_set (TP_PROXY (channel), -1,
@@ -1012,15 +997,50 @@ empathy_dispatcher_send_file (EmpathyContact *contact,
 	tp_file = empathy_tp_file_new (channel);
 
 	if (tp_file) {
-		empathy_tp_file_set_gfile (tp_file, gfile, NULL);
+		empathy_tp_file_set_gfile (tp_file, request->gfile, NULL);
 	}
 
 	empathy_tp_file_offer (tp_file);
 
+	g_object_unref (request->gfile);
+	g_slice_free (FileChannelRequest, request);
+	g_object_unref (channel);
+	g_free (filename);
+}
+
+void
+empathy_dispatcher_send_file (EmpathyContact *contact,
+			      GFile          *gfile)
+{
+	MissionControl *mc;
+	McAccount      *account;
+	TpConnection   *connection;
+	guint           handle;
+	FileChannelRequest *request;
+
+	g_return_if_fail (EMPATHY_IS_CONTACT (contact));
+	g_return_if_fail (G_IS_FILE (gfile));
+
+	mc = empathy_mission_control_new ();
+	account = empathy_contact_get_account (contact);
+	connection = mission_control_get_tpconnection (mc, account, NULL);
+	handle = empathy_contact_get_handle (contact);
+
+	request = g_slice_new0 (FileChannelRequest);
+	request->gfile = g_object_ref (gfile);
+	request->handle = handle;
+	request->contact = contact;
+
+	tp_cli_connection_call_request_channel (connection, -1,
+						EMP_IFACE_CHANNEL_TYPE_FILE,
+						TP_HANDLE_TYPE_CONTACT,
+						handle,
+						TRUE,
+						file_channel_request_cb,
+						request,
+						NULL,
+						NULL);
+
 	g_object_unref (mc);
 	g_object_unref (connection);
-	g_object_unref (channel);
-	g_free (object_path);
-
-	return tp_file;
 }
