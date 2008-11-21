@@ -302,6 +302,7 @@ tp_file_constructor (GType                  type,
   EmpathyTpFilePriv *priv;
   GError            *error = NULL;
   GHashTable        *properties;
+  TpHandle           handle;
 
   tp_file = G_OBJECT_CLASS (empathy_tp_file_parent_class)->constructor (type, n_props, props);
 
@@ -324,6 +325,12 @@ tp_file_constructor (GType                  type,
                                                                   (emp_cli_channel_type_file_signal_callback_transferred_bytes_changed) tp_file_transferred_bytes_changed_cb,
                                                                   tp_file,
                                                                   NULL, NULL, NULL);
+
+
+  handle = tp_channel_get_handle (priv->channel, NULL);
+  priv->contact = empathy_contact_factory_get_from_handle (priv->factory,
+                                                           priv->account,
+                                                           (guint) handle);
 
   if (!tp_cli_dbus_properties_run_get_all (priv->channel,
       -1, EMP_IFACE_CHANNEL_TYPE_FILE, &properties, &error, NULL))
