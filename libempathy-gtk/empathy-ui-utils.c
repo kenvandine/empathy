@@ -1491,7 +1491,7 @@ file_manager_send_file_response_cb (GtkDialog               *widget,
 				gtk_recent_manager_add_item (manager, uri);
 
 				if (tp_file) ;
-					/* TODO: This should be unrefed, but
+					/* FIXME: This should be unrefed, but
 					 * it's not referenced anywhere else,
 					 * so the transfer just ends. Uncomment
 					 * this out when there is a file

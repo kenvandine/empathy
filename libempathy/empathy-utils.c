@@ -839,7 +839,7 @@ empathy_send_file (EmpathyContact *contact,
 				  handle,
 				  NULL);
 
-	/* TODO: this should go in CreateChannel in the new requests API */
+	/* FIXME: this should go in CreateChannel in the new requests API */
 
 	g_value_init (&value, G_TYPE_STRING);
 	g_value_set_string (&value, g_filename_display_basename (filename));
