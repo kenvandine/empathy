@@ -1570,3 +1570,17 @@ empathy_send_file_with_file_chooser (EmpathyContact             *contact,
 	gtk_widget_show (widget);
 }
 
+static void
+add_file_to_manager (EmpathyFile      *file,
+		     EmpathyFTManager *ft_manager)
+{
+	empathy_ft_manager_add_file (ft_manager, file);
+}
+
+void
+empathy_send_file_with_file_chooser_and_manager (EmpathyContact   *contact)
+{
+	empathy_send_file_with_file_chooser (contact,
+					     (EmpathyFileChooserCallback) add_file_to_manager,
+					     empathy_ft_manager_get_default ());
+}

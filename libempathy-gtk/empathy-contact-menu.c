@@ -195,7 +195,7 @@ empathy_contact_log_menu_item_new (EmpathyContact *contact)
 static void
 contact_file_transfer_menu_item_activate_cb (EmpathyContact *contact)
 {
-	empathy_send_file_with_file_chooser (contact, NULL, NULL);
+	empathy_send_file_with_file_chooser_and_manager (contact);
 }
 
 GtkWidget *

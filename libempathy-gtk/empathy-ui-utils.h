@@ -41,6 +41,7 @@
 #include <libempathy/empathy-file.h>
 
 #include "empathy-chat-view.h"
+#include "empathy-ft-manager.h"
 
 G_BEGIN_DECLS
 
@@ -120,6 +121,7 @@ typedef gboolean (*EmpathyFileChooserCallback)          (EmpathyFile *file,
 void        empathy_send_file_with_file_chooser         (EmpathyContact             *contact,
 							 EmpathyFileChooserCallback  callback,
 							 gpointer                    user_data);
+void    empathy_send_file_with_file_chooser_and_manager (EmpathyContact   *contact);
 
 G_END_DECLS
 
