@@ -747,7 +747,7 @@ ft_manager_receive_response_data_free (ReceiveResponseData *response_data)
 
   g_object_unref (response_data->tp_file);
   g_object_unref (response_data->ft_manager);
-  g_free (response_data);
+  g_slice_free (ReceiveResponseData, response_data);
 }
 
 static void
@@ -944,7 +944,7 @@ ft_manager_display_accept_dialog (EmpathyFTManager *ft_manager,
   GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
   gtk_widget_grab_default (button);
 
-  response_data = g_new0 (ReceiveResponseData, 1);
+  response_data = g_slice_new0 (ReceiveResponseData);
   response_data->ft_manager = g_object_ref (ft_manager);
   response_data->tp_file = g_object_ref (tp_file);
 
