@@ -209,6 +209,7 @@ empathy_contact_file_transfer_menu_item_new (EmpathyContact *contact)
 	item = gtk_image_menu_item_new_with_mnemonic (_("Send file"));
 	image = gtk_image_new_from_icon_name (EMPATHY_IMAGE_DOCUMENT_SEND,
 					      GTK_ICON_SIZE_MENU);
+	gtk_widget_set_sensitive (item, empathy_contact_can_send_files (contact));
 	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
 	gtk_widget_show (image);
 
