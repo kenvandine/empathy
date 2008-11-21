@@ -192,13 +192,6 @@ empathy_contact_log_menu_item_new (EmpathyContact *contact)
 	return item;
 }
 
-static void
-contact_file_transfer_menu_item_activate_cb (EmpathyContact *contact)
-{
-	g_return_if_fail (EMPATHY_IS_CONTACT (contact));
-	empathy_send_file_with_file_chooser (contact);
-}
-
 GtkWidget *
 empathy_contact_file_transfer_menu_item_new (EmpathyContact *contact)
 {
@@ -215,7 +208,7 @@ empathy_contact_file_transfer_menu_item_new (EmpathyContact *contact)
 	gtk_widget_show (image);
 
 	g_signal_connect_swapped (item, "activate",
-				  G_CALLBACK (contact_file_transfer_menu_item_activate_cb),
+				  G_CALLBACK (empathy_send_file_with_file_chooser),
 				  contact);
 
 	return item;
