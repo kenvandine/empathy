@@ -972,6 +972,13 @@ empathy_tp_contact_factory_get_user (EmpathyTpContactFactory *tp_factory)
 	return g_object_ref (priv->user);
 }
 
+static void
+contact_created (EmpathyTpContactFactory *self,
+                 EmpathyContact *contact)
+{
+  tp_contact_factory_add_contact (self, contact);
+}
+
 EmpathyContact *
 empathy_tp_contact_factory_get_from_id (EmpathyTpContactFactory *tp_factory,
 					const gchar             *id)
@@ -993,7 +1000,7 @@ empathy_tp_contact_factory_get_from_id (EmpathyTpContactFactory *tp_factory,
 				"account", priv->account,
 				"id", id,
 				NULL);
-	tp_contact_factory_add_contact (tp_factory, contact);
+	contact_created (tp_factory, contact);
 
 	if (priv->ready) {
 		const gchar *contact_ids[] = {id, NULL};
@@ -1082,7 +1089,7 @@ empathy_tp_contact_factory_get_from_handles (EmpathyTpContactFactory *tp_factory
 					"account", priv->account,
 					"handle", handle,
 					NULL);
-		tp_contact_factory_add_contact (tp_factory, contact);
+		contact_created (tp_factory, contact);
 		contacts = g_list_prepend (contacts, contact);
 		new_contacts = g_list_prepend (new_contacts, g_object_ref (contact));
 	}
