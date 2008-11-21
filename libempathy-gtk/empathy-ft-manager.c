@@ -636,7 +636,9 @@ ft_manager_add_tp_file_to_list (EmpathyFTManager *ft_manager,
 
   theme = gtk_icon_theme_get_default ();
   /* FIXME remove the dependency on libgnomeui replacing this function
-   * with gio/gvfs or copying the code from gtk-recent */
+   * with gio/gvfs or copying the code from gtk-recent.
+   * With GTK+ 2.14 we can get the GIcon using g_content_type_get_icon
+   * and then use the "gicon" property of GtkCellRendererPixbuf. */
   icon_name = gnome_icon_lookup (theme, NULL, NULL, NULL, NULL,
       content_type, GNOME_ICON_LOOKUP_FLAGS_NONE, NULL);
 
