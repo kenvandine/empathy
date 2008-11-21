@@ -352,6 +352,7 @@ ft_manager_update_ft_row (EmpathyFTManager *ft_manager,
   if (first_line != NULL && second_line != NULL)
     msg = g_strdup_printf ("%s\n%s", first_line, second_line);
 
+  /* Set new values in the store */
   path = gtk_tree_row_reference_get_path (row_ref);
   gtk_tree_model_get_iter (ft_manager->priv->model, &iter, path);
   gtk_list_store_set (GTK_LIST_STORE (ft_manager->priv->model),
@@ -537,52 +538,49 @@ static void
 ft_manager_add_tp_file_to_list (EmpathyFTManager *ft_manager,
                                 EmpathyTpFile *tp_file)
 {
-  GtkTreeRowReference  *row_ref;
+  GtkTreeRowReference *row_ref;
   GtkTreeIter iter;
   GtkTreeSelection *selection;
   GtkTreePath *path;
   GtkIconTheme *theme;
   gchar *icon_name;
-  gchar *content_type;
+  const gchar *content_type;
 
+  /* Get the icon name from the mime-type of the file.
+   * FIXME: Use g_content_type_get_icon instead of gnome_icon_lookup and drop
+   * libgnomeui. We need the "gicon" property on GtkCellRendererPixbuf which is
+   * in GTK+ 2.14 */
+  content_type = empathy_tp_file_get_content_type (tp_file);
+  theme = gtk_icon_theme_get_default ();
+  icon_name = gnome_icon_lookup (theme, NULL, NULL, NULL, NULL,
+      content_type, GNOME_ICON_LOOKUP_FLAGS_NONE, NULL);
+
+  /* Append the ft in the store */
   gtk_list_store_insert_with_values (GTK_LIST_STORE (ft_manager->priv->model),
-      &iter, G_MAXINT, COL_FT_OBJECT, tp_file, -1);
+      &iter, G_MAXINT, COL_FT_OBJECT, tp_file, COL_ICON, icon_name, -1);
 
-  path =  gtk_tree_model_get_path (GTK_TREE_MODEL (ft_manager->priv->model),
+  /* Insert the new row_ref in the hash table  */
+  path = gtk_tree_model_get_path (GTK_TREE_MODEL (ft_manager->priv->model),
       &iter);
   row_ref = gtk_tree_row_reference_new (GTK_TREE_MODEL (
       ft_manager->priv->model), path);
   gtk_tree_path_free (path);
-
   g_hash_table_insert (ft_manager->priv->tp_file_to_row_ref,
       g_object_ref (tp_file), row_ref);
 
-  ft_manager_update_ft_row (ft_manager, tp_file);
-
+  /* Select the new row */
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (
       ft_manager->priv->treeview));
   gtk_tree_selection_select_iter (selection, &iter);
 
+  /* Update the row with the initial values, and keep track of changes */
+  ft_manager_update_ft_row (ft_manager, tp_file);
   g_signal_connect (tp_file, "notify::state",
       G_CALLBACK (ft_manager_state_changed_cb), ft_manager);
   g_signal_connect (tp_file, "notify::transferred-bytes",
       G_CALLBACK (ft_manager_transferred_bytes_changed_cb), ft_manager);
 
-  g_object_get (tp_file, "content-type", &content_type, NULL);
-
-  theme = gtk_icon_theme_get_default ();
-  /* FIXME remove the dependency on libgnomeui replacing this function
-   * with gio/gvfs or copying the code from gtk-recent.
-   * With GTK+ 2.14 we can get the GIcon using g_content_type_get_icon
-   * and then use the "gicon" property of GtkCellRendererPixbuf. */
-  icon_name = gnome_icon_lookup (theme, NULL, NULL, NULL, NULL,
-      content_type, GNOME_ICON_LOOKUP_FLAGS_NONE, NULL);
-
-  gtk_list_store_set (GTK_LIST_STORE (
-      ft_manager->priv->model), &iter, COL_ICON, icon_name, -1);
-
   gtk_window_present (GTK_WINDOW (ft_manager->priv->window));
-  g_free (content_type);
   g_free (icon_name);
 }
 
@@ -1078,3 +1076,4 @@ empathy_ft_manager_class_init (EmpathyFTManagerClass *klass)
 
   g_type_class_add_private (object_class, sizeof (EmpathyFTManagerPriv));
 }
+

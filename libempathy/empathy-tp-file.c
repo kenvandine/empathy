@@ -935,6 +935,13 @@ empathy_tp_file_get_remaining_time (EmpathyTpFile *tp_file)
   return (gint) remaining_time;
 }
 
+const gchar *
+empathy_tp_file_get_content_type (EmpathyTpFile *tp_file)
+{
+  g_return_val_if_fail (EMPATHY_IS_TP_FILE (tp_file), NULL);
+  return tp_file->priv->content_type;
+}
+
 void
 empathy_tp_file_cancel (EmpathyTpFile *tp_file)
 {
