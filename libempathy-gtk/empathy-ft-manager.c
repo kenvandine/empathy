@@ -1033,11 +1033,20 @@ ft_manager_save_dialog_response_cb (GtkDialog           *widget,
 			GFile         *file;
 			GOutputStream *out_stream;
 			gchar         *filename;
+			GError        *error = NULL;
 
 			file = g_file_new_for_uri (uri);
 			out_stream = G_OUTPUT_STREAM (g_file_replace (file, NULL,
 								      FALSE, 0,
-								      NULL, NULL));
+								      NULL, &error));
+
+			if (error) {
+				g_warning ("Error with opening file to write to: %s",
+					error->message ? error->message : "no error");
+				g_error_free (error);
+				return;
+			}
+
 			empathy_file_set_output_stream (response_data->file, out_stream);
 
 			g_object_set_data_full (G_OBJECT (response_data->file),
