@@ -851,8 +851,6 @@ empathy_file_set_output_stream (EmpathyFile *file,
   if (out_stream)
     g_object_ref (out_stream);
   priv->out_stream = out_stream;
-
-  g_object_notify (G_OBJECT (file), "output-stream");
 }
 
 void
