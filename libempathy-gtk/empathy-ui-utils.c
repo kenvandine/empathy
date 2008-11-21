@@ -1520,7 +1520,6 @@ empathy_send_file_with_file_chooser (EmpathyContact             *contact,
 {
 	GtkWidget               *widget;
 	GtkWidget               *button;
-	GtkFileFilter           *filter;
 	FileChooserResponseData *response_data;
 
 	/* FIXME we cannot return the ft as the response is async, maybe we
@@ -1530,23 +1529,18 @@ empathy_send_file_with_file_chooser (EmpathyContact             *contact,
 
 	DEBUG ("Creating selection file chooser");
 
-	widget = g_object_new (GTK_TYPE_FILE_CHOOSER_DIALOG,
-			       "action", GTK_FILE_CHOOSER_ACTION_OPEN,
-			       "select-multiple", FALSE,
-			       NULL);
-
-	gtk_window_set_title (GTK_WINDOW (widget), _("Select a file"));
-
-	/* cancel button */
-	gtk_dialog_add_button (GTK_DIALOG (widget),
-			       GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
+	widget = gtk_file_chooser_dialog_new (_("Select a file"),
+					      NULL,
+					      GTK_FILE_CHOOSER_ACTION_OPEN,
+					      GTK_STOCK_CANCEL,
+					      GTK_RESPONSE_CANCEL,
+					      NULL);
 
 	/* send button */
 	button = gtk_button_new_with_mnemonic (_("_Send"));
-	/* FIXME maybe we should use another icon */
 	gtk_button_set_image (GTK_BUTTON (button),
-			      gtk_image_new_from_stock (GTK_STOCK_OPEN,
-							GTK_ICON_SIZE_BUTTON));
+		gtk_image_new_from_icon_name (EMPATHY_IMAGE_DOCUMENT_SEND,
+					      GTK_ICON_SIZE_BUTTON));
 	gtk_widget_show (button);
 	gtk_dialog_add_action_widget (GTK_DIALOG (widget), button,
 				      GTK_RESPONSE_OK);
@@ -1561,12 +1555,6 @@ empathy_send_file_with_file_chooser (EmpathyContact             *contact,
 	g_signal_connect (widget, "response",
 			  G_CALLBACK (file_manager_send_file_response_cb),
 			  response_data);
-
-	/* filters */
-	filter = gtk_file_filter_new ();
-	gtk_file_filter_set_name (filter, "All Files");
-	gtk_file_filter_add_pattern (filter, "*");
-	gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (widget), filter);
 
 	gtk_widget_show (widget);
 }
