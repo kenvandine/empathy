@@ -278,7 +278,6 @@ struct _EmpathyTpFilePriv {
   MissionControl *mc;
   TpChannel *channel;
 
-  EmpathyTpFile *cached_empathy_file;
   EmpathyContact *contact;
   GInputStream *in_stream;
   GOutputStream *out_stream;
