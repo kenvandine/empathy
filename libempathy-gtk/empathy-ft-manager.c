@@ -33,7 +33,7 @@
 #define DEBUG_FLAG EMPATHY_DEBUG_FT
 #include <libempathy/empathy-debug.h>
 #include <libempathy/empathy-file.h>
-#include <libempathy/empathy-tp-file.h>
+#include <libempathy/empathy-file.h>
 #include <libempathy/empathy-utils.h>
 
 #include "empathy-conf.h"

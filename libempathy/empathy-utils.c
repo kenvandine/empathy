@@ -788,7 +788,6 @@ empathy_send_file_from_stream (EmpathyContact *contact,
 	guint           handle;
 	gchar          *object_path;
 	TpChannel      *channel;
-	EmpathyTpFile  *tp_file;
 	EmpathyFile    *file;
 	GError         *error = NULL;
 	GValue          value = { 0 };
@@ -858,14 +857,12 @@ empathy_send_file_from_stream (EmpathyContact *contact,
 		&value, NULL, NULL);
 	g_value_unset (&value);
 
-	tp_file = empathy_tp_file_new (account, channel);
-	file = empathy_file_new (tp_file);
+	file = empathy_file_new (account, channel);
 
 	if (file) {
 		empathy_file_set_input_stream (file, in_stream);
 	}
 
-	g_object_unref (tp_file);
 	g_object_unref (mc);
 	g_object_unref (connection);
 	g_object_unref (channel);
