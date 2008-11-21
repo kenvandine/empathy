@@ -999,8 +999,6 @@ empathy_ft_manager_finalize (GObject *object)
   if (ft_manager->priv->save_geometry_id != 0)
     g_source_remove (ft_manager->priv->save_geometry_id);
 
-  manager_p = NULL;
-
   G_OBJECT_CLASS (empathy_ft_manager_parent_class)->finalize (object);
 }
 
