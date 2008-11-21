@@ -589,6 +589,12 @@ tp_file_constructor (GType type,
   tp_file->priv->content_hash = g_value_dup_string (
       g_hash_table_lookup (properties, "ContentHash"));
 
+  tp_file->priv->content_hash_type = g_value_get_uint (
+      g_hash_table_lookup (properties, "ContentHashType"));
+
+  tp_file->priv->content_type = g_value_dup_string (
+      g_hash_table_lookup (properties, "ContentType"));
+
   tp_file->priv->description = g_value_dup_string (
       g_hash_table_lookup (properties, "Description"));
 
