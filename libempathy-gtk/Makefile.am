@@ -33,6 +33,7 @@ libempathy_gtk_la_SOURCES =             	\
 	empathy-contact-list-view.c		\
 	empathy-contact-menu.c			\
 	empathy-contact-widget.c		\
+	empathy-ft-manager.c			\
 	empathy-geometry.c			\
 	empathy-irc-network-dialog.c		\
 	empathy-log-window.c			\
@@ -80,6 +81,7 @@ libempathy_gtk_headers =			\
 	empathy-contact-list-view.h		\
 	empathy-contact-menu.h			\
 	empathy-contact-widget.h		\
+	empathy-ft-manager.h			\
 	empathy-geometry.h			\
 	empathy-images.h			\
 	empathy-irc-network-dialog.h		\
@@ -119,7 +121,8 @@ glade_DATA = 					\
 	empathy-spell-dialog.glade		\
 	empathy-log-window.glade		\
 	empathy-chat.glade			\
-	empathy-new-message-dialog.glade
+	empathy-new-message-dialog.glade	\
+	empathy-ft-manager.glade
 
 empathy-gtk-marshal.list: $(libempathy_gtk_la_SOURCES) Makefile.am
 	( cd $(srcdir) && \

@@ -67,6 +67,7 @@ struct _EmpathyConfClass {
 #define EMPATHY_PREFS_USE_NM                       EMPATHY_PREFS_PATH "/use_nm"
 #define EMPATHY_PREFS_AUTOCONNECT                  EMPATHY_PREFS_PATH "/autoconnect"
 #define EMPATHY_PREFS_IMPORT_ASKED                 EMPATHY_PREFS_PATH "/import_asked"
+#define EMPATHY_PREFS_FILE_TRANSFER_DEFAULT_FOLDER EMPATHY_PREFS_PATH "/file_transfer/default_folder"
 
 typedef void (*EmpathyConfNotifyFunc) (EmpathyConf  *conf, 
 				      const gchar *key,
