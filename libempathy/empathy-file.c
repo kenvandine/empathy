@@ -297,7 +297,9 @@ file_finalize (GObject *object)
 }
 
 static GObject *
-file_constructor (GType type, guint n_props, GObjectConstructParam *props)
+file_constructor (GType type,
+                  guint n_props,
+                  GObjectConstructParam *props)
 {
   GObject *file;
   EmpathyFilePriv *priv;
@@ -379,8 +381,10 @@ file_constructor (GType type, guint n_props, GObjectConstructParam *props)
 }
 
 static void
-file_get_property (GObject *object, guint param_id, GValue *value,
-    GParamSpec *pspec)
+file_get_property (GObject *object,
+                   guint param_id,
+                   GValue *value,
+                   GParamSpec *pspec)
 {
   EmpathyFilePriv *priv;
   EmpathyFile *file;
@@ -403,8 +407,9 @@ file_get_property (GObject *object, guint param_id, GValue *value,
 }
 
 static void
-file_channel_set_dbus_property (gpointer proxy, const gchar *property,
-    const GValue *value)
+file_channel_set_dbus_property (gpointer proxy,
+                                const gchar *property,
+                                const GValue *value)
 {
         DEBUG ("Setting %s property", property);
         tp_cli_dbus_properties_run_set (TP_PROXY (proxy),
@@ -418,8 +423,10 @@ file_channel_set_dbus_property (gpointer proxy, const gchar *property,
 
 
 static void
-file_set_property (GObject *object, guint param_id, const GValue *value,
-    GParamSpec *pspec)
+file_set_property (GObject *object,
+                   guint param_id,
+                   const GValue *value,
+                   GParamSpec *pspec)
 {
   EmpathyFilePriv *priv;
 
@@ -479,7 +486,8 @@ file_set_property (GObject *object, guint param_id, const GValue *value,
  * Returns: a new #EmpathyFile
  */
 EmpathyFile *
-empathy_file_new (McAccount *account, TpChannel *channel)
+empathy_file_new (McAccount *account,
+                  TpChannel *channel)
 {
   return g_object_new (EMPATHY_TYPE_FILE,
       "account", account,
@@ -528,7 +536,8 @@ empathy_file_get_channel (EmpathyFile *file)
 }
 
 static void
-file_destroy_cb (TpChannel *file_channel, EmpathyFile *file)
+file_destroy_cb (TpChannel *file_channel,
+                 EmpathyFile *file)
 {
   EmpathyFilePriv *priv;
 
@@ -541,7 +550,9 @@ file_destroy_cb (TpChannel *file_channel, EmpathyFile *file)
 }
 
 static void
-file_closed_cb (TpChannel *file_channel, EmpathyFile *file, GObject *weak_object)
+file_closed_cb (TpChannel *file_channel,
+                EmpathyFile *file,
+                GObject *weak_object)
 {
   EmpathyFilePriv *priv;
 
@@ -710,8 +721,10 @@ send_file (EmpathyFile *file)
 }
 
 static void
-file_state_changed_cb (DBusGProxy *file_iface, EmpFileTransferState state,
-    EmpFileTransferStateChangeReason reason, EmpathyFile *file)
+file_state_changed_cb (DBusGProxy *file_iface,
+                       EmpFileTransferState state,
+                       EmpFileTransferStateChangeReason reason,
+                       EmpathyFile *file)
 {
   EmpathyFilePriv *priv;
 
@@ -746,7 +759,9 @@ file_state_changed_cb (DBusGProxy *file_iface, EmpFileTransferState state,
 
 static void
 file_transferred_bytes_changed_cb (TpProxy *proxy,
-    guint64 count, EmpathyFile *file, GObject *weak_object)
+                                   guint64 count,
+                                   EmpathyFile *file, 
+                                   GObject *weak_object)
 {
   EmpathyFilePriv *priv;
 
@@ -891,7 +906,7 @@ empathy_file_cancel (EmpathyFile *file)
 
 void
 empathy_file_set_input_stream (EmpathyFile *file,
-    GInputStream *in_stream)
+                               GInputStream *in_stream)
 {
   EmpathyFilePriv *priv;
 
@@ -916,7 +931,8 @@ empathy_file_set_input_stream (EmpathyFile *file,
 }
 
 void
-empathy_file_set_output_stream (EmpathyFile *file, GOutputStream *out_stream)
+empathy_file_set_output_stream (EmpathyFile *file,
+                                GOutputStream *out_stream)
 {
   EmpathyFilePriv *priv;
 
@@ -940,7 +956,7 @@ empathy_file_set_output_stream (EmpathyFile *file, GOutputStream *out_stream)
 
 void
 empathy_file_set_filename (EmpathyFile *file,
-    const gchar *filename)
+                           const gchar *filename)
 {
   EmpathyFilePriv *priv;
 
@@ -1003,7 +1019,8 @@ free_copy_data_if_closed (CopyData *copy)
 }
 
 static void
-io_error (CopyData *copy, GError *error)
+io_error (CopyData *copy,
+          GError *error)
 {
   g_cancellable_cancel (copy->cancellable);
 
@@ -1024,7 +1041,9 @@ io_error (CopyData *copy, GError *error)
 }
 
 static void
-close_done (GObject *source_object, GAsyncResult *res, gpointer user_data)
+close_done (GObject *source_object,
+            GAsyncResult *res,
+            gpointer user_data)
 {
   CopyData *copy = user_data;
 
@@ -1033,7 +1052,9 @@ close_done (GObject *source_object, GAsyncResult *res, gpointer user_data)
 }
 
 static void
-write_done_cb (GObject *source_object, GAsyncResult *res, gpointer user_data)
+write_done_cb (GObject *source_object,
+               GAsyncResult *res,
+               gpointer user_data)
 {
   CopyData *copy = user_data;
   gssize count_write;
@@ -1056,7 +1077,9 @@ write_done_cb (GObject *source_object, GAsyncResult *res, gpointer user_data)
 }
 
 static void
-read_done_cb (GObject *source_object, GAsyncResult *res, gpointer user_data)
+read_done_cb (GObject *source_object,
+              GAsyncResult *res,
+              gpointer user_data)
 {
   CopyData *copy = user_data;
   gssize count_read;
@@ -1129,7 +1152,9 @@ schedule_next (CopyData *copy)
 }
 
 static void
-copy_stream (GInputStream *in, GOutputStream *out, GCancellable *cancellable)
+copy_stream (GInputStream *in,
+             GOutputStream *out,
+             GCancellable *cancellable)
 {
   CopyData *copy;
   gint i;

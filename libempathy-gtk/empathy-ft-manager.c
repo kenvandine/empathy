@@ -186,7 +186,8 @@ empathy_ft_manager_get_default (void)
  * @ft.
  */
 void
-empathy_ft_manager_add_file (EmpathyFTManager *ft_manager, EmpathyFile *file)
+empathy_ft_manager_add_file (EmpathyFTManager *ft_manager,
+                             EmpathyFile *file)
 {
   EmpFileTransferState state;
 
@@ -243,7 +244,8 @@ format_interval (gint interval)
 }
 
 static GtkTreeRowReference *
-get_row_from_file (EmpathyFTManager *ft_manager, EmpathyFile *file)
+get_row_from_file (EmpathyFTManager *ft_manager,
+                   EmpathyFile *file)
 {
   EmpathyFTManagerPriv *priv;
 
@@ -322,7 +324,8 @@ get_state_change_reason_description (EmpFileTransferStateChangeReason reason)
 }
 
 static void
-update_ft_row (EmpathyFTManager *ft_manager, EmpathyFile *file)
+update_ft_row (EmpathyFTManager *ft_manager,
+               EmpathyFile *file)
 {
   EmpathyFTManagerPriv *priv;
   GtkTreeRowReference  *row_ref;
@@ -488,15 +491,17 @@ update_ft_row (EmpathyFTManager *ft_manager, EmpathyFile *file)
 }
 
 static void
-transferred_bytes_changed_cb (EmpathyFile *file, GParamSpec *pspec,
-    EmpathyFTManager *ft_manager)
+transferred_bytes_changed_cb (EmpathyFile *file,
+                              GParamSpec *pspec,
+                              EmpathyFTManager *ft_manager)
 {
   update_ft_row (ft_manager, file);
 }
 
 static void
-state_changed_cb (EmpathyFile *file, GParamSpec *pspec,
-    EmpathyFTManager *ft_manager)
+state_changed_cb (EmpathyFile *file,
+                  GParamSpec *pspec,
+                  EmpathyFTManager *ft_manager)
 {
   EmpathyFTManagerPriv *priv;
   gboolean remove;
@@ -537,7 +542,8 @@ state_changed_cb (EmpathyFile *file, GParamSpec *pspec,
 }
 
 static void
-ft_manager_add_file_to_list (EmpathyFTManager *ft_manager, EmpathyFile *file)
+ft_manager_add_file_to_list (EmpathyFTManager *ft_manager,
+                             EmpathyFile *file)
 {
   EmpathyFTManagerPriv *priv;
   GtkTreeRowReference  *row_ref;
@@ -607,14 +613,18 @@ ft_manager_add_file_to_list (EmpathyFTManager *ft_manager, EmpathyFile *file)
 }
 
 static void
-selection_changed (GtkTreeSelection *selection, EmpathyFTManager *ft_manager)
+selection_changed (GtkTreeSelection *selection,
+                   EmpathyFTManager *ft_manager)
 {
   update_buttons (ft_manager);
 }
 
 static void
-progress_cell_data_func (GtkTreeViewColumn *col, GtkCellRenderer *renderer,
-    GtkTreeModel *model, GtkTreeIter *iter, gpointer user_data)
+progress_cell_data_func (GtkTreeViewColumn *col,
+                         GtkCellRenderer *renderer,
+                         GtkTreeModel *model,
+                         GtkTreeIter *iter,
+                         gpointer user_data)
 {
   const gchar *text = NULL;
   gint percent;
@@ -634,7 +644,9 @@ progress_cell_data_func (GtkTreeViewColumn *col, GtkCellRenderer *renderer,
 }
 
 static void
-ft_manager_clear_foreach_cb (gpointer key, gpointer value, gpointer user_data)
+ft_manager_clear_foreach_cb (gpointer key,
+                             gpointer value,
+                             gpointer user_data)
 {
   GSList **list = user_data;
   EmpathyFile *file = key;
@@ -673,8 +685,9 @@ ft_manager_clear (EmpathyFTManager *ft_manager)
 }
 
 static gboolean
-ft_manager_delete_event_cb (GtkWidget *widget, GdkEvent *event,
-    EmpathyFTManager *ft_manager)
+ft_manager_delete_event_cb (GtkWidget *widget,
+                            GdkEvent *event,
+                            EmpathyFTManager *ft_manager)
 {
   EmpathyFTManagerPriv *priv;
 
@@ -715,8 +728,9 @@ ft_manager_save_geometry_timeout_cb (EmpathyFTManager *ft_manager)
 }
 
 static gboolean
-ft_manager_configure_event_cb (GtkWidget *widget, GdkEventConfigure *event,
-    EmpathyFTManager *ft_manager)
+ft_manager_configure_event_cb (GtkWidget *widget,
+                               GdkEventConfigure *event,
+                               EmpathyFTManager *ft_manager)
 {
   EmpathyFTManagerPriv *priv;
 
@@ -854,7 +868,7 @@ ft_manager_build_ui (EmpathyFTManager *ft_manager)
 
 static void
 ft_manager_remove_file_from_list (EmpathyFTManager *ft_manager,
-    EmpathyFile *file)
+                                  EmpathyFile *file)
 {
   EmpathyFTManagerPriv *priv;
   GtkTreeRowReference *row_ref;
@@ -977,8 +991,9 @@ ft_manager_stop (EmpathyFTManager *ft_manager)
 }
 
 static void
-ft_manager_response_cb (GtkWidget *dialog, gint response,
-    EmpathyFTManager *ft_manager)
+ft_manager_response_cb (GtkWidget *dialog,
+                        gint response,
+                        EmpathyFTManager *ft_manager)
 {
   switch (response)
     {
@@ -1015,8 +1030,9 @@ free_receive_response_data (ReceiveResponseData *response_data)
 }
 
 static void
-ft_manager_save_dialog_response_cb (GtkDialog *widget, gint response_id,
-    ReceiveResponseData *response_data)
+ft_manager_save_dialog_response_cb (GtkDialog *widget,
+                                    gint response_id,
+                                    ReceiveResponseData *response_data)
 {
   if (response_id == GTK_RESPONSE_OK)
     {
@@ -1127,8 +1143,9 @@ ft_manager_create_save_dialog (ReceiveResponseData *response_data)
 }
 
 static void
-ft_manager_receive_file_response_cb (GtkWidget *dialog, gint response,
-    ReceiveResponseData *response_data)
+ft_manager_receive_file_response_cb (GtkWidget *dialog,
+                                     gint response,
+                                     ReceiveResponseData *response_data)
 {
   TpChannel *channel;
 
@@ -1146,7 +1163,7 @@ ft_manager_receive_file_response_cb (GtkWidget *dialog, gint response,
 
 void
 ft_manager_display_accept_dialog (EmpathyFTManager *ft_manager,
-    EmpathyFile *file)
+                                  EmpathyFile *file)
 {
   GtkWidget *dialog;
   GtkWidget *image;
