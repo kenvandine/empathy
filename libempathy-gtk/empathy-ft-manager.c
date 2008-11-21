@@ -514,28 +514,34 @@ ft_manager_remove_file_from_list (EmpathyFTManager *ft_manager,
 
 }
 
+static gboolean
+remove_finished_transfer_foreach (gpointer key,
+                                  gpointer value,
+                                  gpointer user_data)
+{
+  EmpathyTpFile *tp_file = EMPATHY_TP_FILE (key);
+  EmpathyFTManager *self = EMPATHY_FT_MANAGER (user_data);
+  EmpFileTransferState state;
+
+  state = empathy_tp_file_get_state (tp_file);
+  if (state == EMP_FILE_TRANSFER_STATE_COMPLETED ||
+      state == EMP_FILE_TRANSFER_STATE_CANCELLED)
+    {
+      ft_manager_remove_file_from_list (self, tp_file);
+      return TRUE;
+    }
+
+  return FALSE;
+}
+
 static void
 ft_manager_clear (EmpathyFTManager *ft_manager)
 {
-  GHashTableIter iter;
-  gpointer key, value;
-
   DEBUG ("Clearing file transfer list");
 
   /* Remove completed and cancelled transfers */
-  g_hash_table_iter_init (&iter, ft_manager->priv->tp_file_to_row_ref);
-  while (g_hash_table_iter_next (&iter, &key, &value))
-    {
-      EmpathyTpFile *tp_file = EMPATHY_TP_FILE (key);
-      EmpFileTransferState state;
-
-      state = empathy_tp_file_get_state (tp_file);
-      if (state == EMP_FILE_TRANSFER_STATE_COMPLETED ||
-          state == EMP_FILE_TRANSFER_STATE_CANCELLED)
-        {
-          ft_manager_remove_file_from_list (ft_manager, tp_file);
-        }
-    }
+  g_hash_table_foreach_remove (ft_manager->priv->tp_file_to_row_ref,
+      remove_finished_transfer_foreach, ft_manager);
 }
 
 static void
