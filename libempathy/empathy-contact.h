@@ -66,6 +66,7 @@ typedef enum {
   EMPATHY_CAPABILITIES_NONE = 0,
   EMPATHY_CAPABILITIES_AUDIO = 1 << 0,
   EMPATHY_CAPABILITIES_VIDEO = 1 << 1,
+  EMPATHY_CAPABILITIES_FT = 1 << 2,
   EMPATHY_CAPABILITIES_UNKNOWN = 1 << 7
 } EmpathyCapabilities;
 
@@ -108,6 +109,7 @@ void empathy_contact_set_is_user (EmpathyContact *contact,
 gboolean empathy_contact_is_online (EmpathyContact *contact);
 const gchar * empathy_contact_get_status (EmpathyContact *contact);
 gboolean empathy_contact_can_voip (EmpathyContact *contact);
+gboolean empathy_contact_can_send_files (EmpathyContact *contact);
 gboolean empathy_contact_equal (gconstpointer v1, gconstpointer v2);
 guint empathy_contact_hash (gconstpointer key);
 void empathy_contact_run_until_ready (EmpathyContact *contact,

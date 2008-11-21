@@ -560,6 +560,20 @@ empathy_contact_get_handle (EmpathyContact *contact)
   return priv->handle;
 }
 
+static gboolean
+is_salut (EmpathyContact *contact)
+{
+  McAccount *account;
+  McProfile *profile;
+  const gchar *name;
+
+  account = empathy_contact_get_account (contact);
+  profile = mc_account_get_profile (account);
+  name = mc_profile_get_protocol_name (profile);
+
+  return (strcmp (name, "local-xmpp") == 0);
+}
+
 void
 empathy_contact_set_handle (EmpathyContact *contact,
                             guint handle)
@@ -575,6 +589,19 @@ empathy_contact_set_handle (EmpathyContact *contact,
     {
       priv->handle = handle;
       g_object_notify (G_OBJECT (contact), "handle");
+
+      /* FIXME salut does not yet support the Capabilities interface, so for
+       * now we use this hack.
+       */
+      if (is_salut (contact))
+        {
+          EmpathyCapabilities caps;
+
+          caps = empathy_contact_get_capabilities (contact);
+          caps |= EMPATHY_CAPABILITIES_FT;
+
+          empathy_contact_set_capabilities (contact, caps);
+        }
     }
   contact_set_ready_flag (contact, EMPATHY_CONTACT_READY_HANDLE);
   g_object_unref (contact);
@@ -678,6 +705,18 @@ empathy_contact_can_voip (EmpathyContact *contact)
 
   return priv->capabilities & (EMPATHY_CAPABILITIES_AUDIO |
       EMPATHY_CAPABILITIES_VIDEO);
+}
+
+gboolean
+empathy_contact_can_send_files (EmpathyContact *contact)
+{
+  EmpathyContactPriv *priv;
+
+  g_return_val_if_fail (EMPATHY_IS_CONTACT (contact), FALSE);
+
+  priv = GET_PRIV (contact);
+
+  return priv->capabilities & EMPATHY_CAPABILITIES_FT;
 }
 
 EmpathyContactReady
