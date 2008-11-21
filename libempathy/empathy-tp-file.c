@@ -390,49 +390,6 @@ tp_file_finalize (GObject *object)
 }
 
 static void
-tp_file_get_all_cb (TpProxy *proxy,
-                    GHashTable *properties,
-                    const GError *error,
-                    gpointer user_data,
-                    GObject *weak_object)
-{
-  EmpathyTpFile *tp_file = (EmpathyTpFile *) user_data;
-
-  if (error)
-    {
-      DEBUG ("Failed to get properties: %s", error->message);
-      return;
-    }
-
-  tp_file->priv->size = g_value_get_uint64 (
-      g_hash_table_lookup (properties, "Size"));
-
-  tp_file->priv->state = g_value_get_uint (
-      g_hash_table_lookup (properties, "State"));
-
-  /* Invalid reason, so empathy_file_get_state_change_reason() can give
-   * a warning if called for a not closed file transfer. */
-  tp_file->priv->state_change_reason = -1;
-
-  tp_file->priv->transferred_bytes = g_value_get_uint64 (
-      g_hash_table_lookup (properties, "TransferredBytes"));
-
-  tp_file->priv->filename = g_value_dup_string (
-      g_hash_table_lookup (properties, "Filename"));
-
-  tp_file->priv->content_hash = g_value_dup_string (
-      g_hash_table_lookup (properties, "ContentHash"));
-
-  tp_file->priv->description = g_value_dup_string (
-      g_hash_table_lookup (properties, "Description"));
-
-  if (tp_file->priv->state == EMP_FILE_TRANSFER_STATE_LOCAL_PENDING)
-    tp_file->priv->incoming = TRUE;
-
-  g_hash_table_destroy (properties);
-}
-
-static void
 tp_file_closed_cb (TpChannel *file_channel,
                    EmpathyTpFile *tp_file,
                    GObject *weak_object)
@@ -584,6 +541,7 @@ tp_file_constructor (GType type,
   GObject *file_obj;
   EmpathyTpFile *tp_file;
   TpHandle handle;
+  GHashTable *properties;
 
   file_obj = G_OBJECT_CLASS (empathy_tp_file_parent_class)->constructor (type,
       n_props, props);
@@ -616,8 +574,35 @@ tp_file_constructor (GType type,
   tp_file->priv->contact = empathy_contact_factory_get_from_handle (
       tp_file->priv->factory, tp_file->priv->account, (guint) handle);
 
-  tp_cli_dbus_properties_call_get_all (tp_file->priv->channel,
-      -1, EMP_IFACE_CHANNEL_TYPE_FILE, tp_file_get_all_cb, tp_file, NULL, NULL);
+  tp_cli_dbus_properties_run_get_all (tp_file->priv->channel,
+      -1, EMP_IFACE_CHANNEL_TYPE_FILE, &properties, NULL, NULL);
+
+  tp_file->priv->size = g_value_get_uint64 (
+      g_hash_table_lookup (properties, "Size"));
+
+  tp_file->priv->state = g_value_get_uint (
+      g_hash_table_lookup (properties, "State"));
+
+  /* Invalid reason, so empathy_file_get_state_change_reason() can give
+   * a warning if called for a not closed file transfer. */
+  tp_file->priv->state_change_reason = -1;
+
+  tp_file->priv->transferred_bytes = g_value_get_uint64 (
+      g_hash_table_lookup (properties, "TransferredBytes"));
+
+  tp_file->priv->filename = g_value_dup_string (
+      g_hash_table_lookup (properties, "Filename"));
+
+  tp_file->priv->content_hash = g_value_dup_string (
+      g_hash_table_lookup (properties, "ContentHash"));
+
+  tp_file->priv->description = g_value_dup_string (
+      g_hash_table_lookup (properties, "Description"));
+
+  if (tp_file->priv->state == EMP_FILE_TRANSFER_STATE_LOCAL_PENDING)
+    tp_file->priv->incoming = TRUE;
+
+  g_hash_table_destroy (properties);
 
   return file_obj;
 }
