@@ -30,7 +30,6 @@
 #include <glib.h>
 
 #include <libempathy/empathy-tp-file.h>
-#include <libempathy/empathy-contact.h>
 
 G_BEGIN_DECLS
 
