@@ -850,7 +850,7 @@ empathy_send_file (EmpathyContact *contact,
 
 	g_value_set_string (&value, g_file_info_get_content_type (info));
 	tp_cli_dbus_properties_call_set (TP_PROXY (channel), -1,
-		EMP_IFACE_CHANNEL_TYPE_FILE, "Filename",
+		EMP_IFACE_CHANNEL_TYPE_FILE, "ContentType",
 		&value, NULL, NULL, NULL, NULL);
 
 	g_value_unset (&value);
