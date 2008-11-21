@@ -287,7 +287,7 @@ struct _EmpathyTpFilePriv {
   EmpFileTransferStateChangeReason state_change_reason;
   guint64 size;
   guint64 transferred_bytes;
-  gint64 start_time;
+  time_t start_time;
   gchar *unix_socket_path;
   gchar *content_hash;
   EmpFileHashType content_hash_type;
@@ -394,15 +394,6 @@ tp_file_closed_cb (TpChannel *file_channel,
   tp_file_destroy_cb (file_channel, tp_file);
 }
 
-static gint64
-get_time_msec (void)
-{
-  GTimeVal tv;
-
-  g_get_current_time (&tv);
-  return ((gint64) tv.tv_sec) * 1000 + tv.tv_usec / 1000;
-}
-
 static gint
 _get_local_socket (EmpathyTpFile *tp_file)
 {
@@ -492,7 +483,7 @@ tp_file_state_changed_cb (DBusGProxy *tp_file_iface,
       tp_file->priv->filename, tp_file->priv->state, state, reason);
 
   if (state == EMP_FILE_TRANSFER_STATE_OPEN)
-    tp_file->priv->start_time = get_time_msec ();
+    tp_file->priv->start_time = empathy_time_get_current ();
 
   DEBUG ("state = %u, incoming = %s, in_stream = %s, out_stream = %s",
       state, tp_file->priv->incoming ? "yes" : "no",
@@ -885,7 +876,7 @@ empathy_tp_file_get_transferred_bytes (EmpathyTpFile *tp_file)
 gint
 empathy_tp_file_get_remaining_time (EmpathyTpFile *tp_file)
 {
-  gint64 curr_time, elapsed_time;
+  time_t curr_time, elapsed_time;
   gdouble time_per_byte;
   gdouble remaining_time;
 
@@ -897,12 +888,12 @@ empathy_tp_file_get_remaining_time (EmpathyTpFile *tp_file)
   if (tp_file->priv->transferred_bytes == tp_file->priv->size)
     return 0;
 
-  curr_time = get_time_msec ();
+  curr_time = empathy_time_get_current ();
   elapsed_time = curr_time - tp_file->priv->start_time;
   time_per_byte = (gdouble) elapsed_time /
       (gdouble) tp_file->priv->transferred_bytes;
-  remaining_time = (time_per_byte * (tp_file->priv->size -
-      tp_file->priv->transferred_bytes)) / 1000;
+  remaining_time = time_per_byte * (tp_file->priv->size -
+      tp_file->priv->transferred_bytes);
 
   return (gint) (remaining_time + 0.5);
 }
