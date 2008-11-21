@@ -182,7 +182,8 @@ ft_manager_update_ft_row (EmpathyFTManager *ft_manager,
   GtkTreeIter iter;
   const gchar *filename;
   const gchar *contact_name;
-  gchar *msg = NULL;
+  const gchar *msg;
+  gchar *msg_dup = NULL;
   gchar *remaining_str = NULL;
   gchar *first_line_format;
   gchar *first_line = NULL;
@@ -309,7 +310,9 @@ ft_manager_update_ft_row (EmpathyFTManager *ft_manager,
     remaining_str = ft_manager_format_interval (remaining);
 
   if (first_line != NULL && second_line != NULL)
-    msg = g_strdup_printf ("%s\n%s", first_line, second_line);
+    msg = msg_dup = g_strdup_printf ("%s\n%s", first_line, second_line);
+  else
+    msg = first_line ? first_line : second_line;
 
   /* Set new values in the store */
   path = gtk_tree_row_reference_get_path (row_ref);
@@ -323,7 +326,7 @@ ft_manager_update_ft_row (EmpathyFTManager *ft_manager,
 
   gtk_tree_path_free (path);
 
-  g_free (msg);
+  g_free (msg_dup);
   g_free (first_line);
   g_free (second_line);
   g_free (remaining_str);
