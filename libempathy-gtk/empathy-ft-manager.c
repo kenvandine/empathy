@@ -1055,8 +1055,6 @@ ft_manager_build_ui (EmpathyFTManager *ft_manager)
   g_signal_connect (ft_manager->priv->window, "configure-event",
       G_CALLBACK (ft_manager_configure_event_cb), ft_manager);
 
-  gtk_window_set_icon_name (GTK_WINDOW (ft_manager->priv->window), EMPATHY_IMAGE_DOCUMENT_SEND);
-
   /* Window geometry. */
   empathy_geometry_load ("ft-manager", &x, &y, &w, &h);
 
