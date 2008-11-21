@@ -84,6 +84,7 @@ void                                    empathy_file_set_output_stream       (Em
 										GOutputStream *uri);
 void                                    empathy_file_set_filename            (EmpathyFile   *file,
 										const gchar   *filename);
+void                                    empathy_file_cancel                  (EmpathyFile   *file);
 
 G_END_DECLS
 

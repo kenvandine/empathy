@@ -894,6 +894,18 @@ empathy_file_get_remaining_time (EmpathyFile *file)
 }
 
 void
+empathy_file_cancel (EmpathyFile *file)
+{
+  EmpathyFilePriv *priv;
+
+  priv = GET_PRIV (file);
+
+  g_cancellable_cancel (priv->cancellable);
+
+  tp_cli_channel_run_close (priv->channel, -1, NULL, NULL);
+}
+
+void
 empathy_file_set_input_stream (EmpathyFile *file,
     GInputStream *in_stream)
 {
