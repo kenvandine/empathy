@@ -32,7 +32,6 @@
 
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
-#include <libgnomevfs/gnome-vfs.h>
 #include <libgnomeui/libgnomeui.h>
 
 #define DEBUG_FLAG EMPATHY_DEBUG_FT
