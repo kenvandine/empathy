@@ -868,7 +868,7 @@ empathy_tp_file_get_filename (EmpathyTpFile *tp_file)
 }
 
 gboolean
-empathy_tp_file_get_incoming (EmpathyTpFile *tp_file)
+empathy_tp_file_is_incoming (EmpathyTpFile *tp_file)
 {
   g_return_val_if_fail (EMPATHY_IS_TP_FILE (tp_file), FALSE);
   return tp_file->priv->incoming;

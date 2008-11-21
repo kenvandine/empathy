@@ -180,7 +180,7 @@ ft_manager_update_buttons (EmpathyFTManager *ft_manager)
       if (empathy_tp_file_get_state (tp_file)
           == EMP_FILE_TRANSFER_STATE_COMPLETED)
         {
-          if (empathy_tp_file_get_incoming (tp_file))
+          if (empathy_tp_file_is_incoming (tp_file))
             open_enabled = TRUE;
           else
             open_enabled = FALSE;
@@ -256,7 +256,7 @@ ft_manager_update_ft_row (EmpathyFTManager *ft_manager,
   total_size = empathy_tp_file_get_size (tp_file);
   state = empathy_tp_file_get_state (tp_file);
   reason = empathy_tp_file_get_state_change_reason (tp_file);
-  incoming = empathy_tp_file_get_incoming (tp_file);
+  incoming = empathy_tp_file_is_incoming (tp_file);
 
   switch (state)
     {
@@ -304,7 +304,7 @@ ft_manager_update_ft_row (EmpathyFTManager *ft_manager,
       break;
 
     case EMP_FILE_TRANSFER_STATE_COMPLETED:
-      if (empathy_tp_file_get_incoming (tp_file))
+      if (empathy_tp_file_is_incoming (tp_file))
         /* translators: first %s is filename, second %s
          * is the contact name */
         first_line = g_strdup_printf (
@@ -322,7 +322,7 @@ ft_manager_update_ft_row (EmpathyFTManager *ft_manager,
       break;
 
     case EMP_FILE_TRANSFER_STATE_CANCELLED:
-      if (empathy_tp_file_get_incoming (tp_file))
+      if (empathy_tp_file_is_incoming (tp_file))
         /* translators: first %s is filename, second %s
          * is the contact name */
         first_line = g_strdup_printf (
@@ -554,7 +554,7 @@ ft_manager_state_changed_cb (EmpathyTpFile *tp_file,
   switch (empathy_tp_file_get_state (tp_file))
     {
       case EMP_FILE_TRANSFER_STATE_COMPLETED:
-        if (empathy_tp_file_get_incoming (tp_file))
+        if (empathy_tp_file_is_incoming (tp_file))
           {
             GtkRecentManager *manager;
             const gchar *uri;
@@ -947,7 +947,7 @@ empathy_ft_manager_add_tp_file (EmpathyFTManager *ft_manager,
   state = empathy_tp_file_get_state (tp_file);
 
   if (state == EMP_FILE_TRANSFER_STATE_PENDING &&
-      empathy_tp_file_get_incoming (tp_file))
+      empathy_tp_file_is_incoming (tp_file))
     ft_manager_display_accept_dialog (ft_manager, tp_file);
   else
     ft_manager_add_tp_file_to_list (ft_manager, tp_file);
