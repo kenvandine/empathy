@@ -30,6 +30,9 @@
 #include <glib/gi18n.h>
 
 #include <telepathy-glib/util.h>
+#include <telepathy-glib/gtypes.h>
+
+#include <extensions/extensions.h>
 
 #include "empathy-contact.h"
 #include "empathy-utils.h"
@@ -468,18 +471,59 @@ empathy_contact_get_account (EmpathyContact *contact)
   return priv->account;
 }
 
-static gboolean
-contact_is_salut (EmpathyContact *contact)
+static void
+get_requestable_channel_classes_cb (TpProxy *connection,
+                                    const GValue *value,
+                                    const GError *error,
+                                    gpointer user_data,
+                                    GObject *weak_object)
 {
-  McAccount *account;
-  McProfile *profile;
-  const gchar *name;
+  GPtrArray *classes;
+  guint i;
 
-  account = empathy_contact_get_account (contact);
-  profile = mc_account_get_profile (account);
-  name = mc_profile_get_protocol_name (profile);
+  if (error != NULL)
+    {
+      DEBUG ("Error: %s", error->message);
+      return;
+    }
 
-  return (strcmp (name, "local-xmpp") == 0);
+  classes = g_value_get_boxed (value);
+
+  for (i = 0; i < classes->len; i++)
+    {
+      GValue class = {0,};
+      GValue *chan_type, *handle_type;
+      GHashTable *fixed_prop;
+      EmpathyCapabilities caps;
+      EmpathyContact *contact;
+
+      g_value_init (&class, TP_STRUCT_TYPE_REQUESTABLE_CHANNEL_CLASS);
+      g_value_set_static_boxed (&class, g_ptr_array_index (classes, i));
+
+      dbus_g_type_struct_get (&class,
+          0, &fixed_prop,
+          G_MAXUINT);
+
+      chan_type = g_hash_table_lookup (fixed_prop,
+          TP_IFACE_CHANNEL ".ChannelType");
+      if (chan_type == NULL || tp_strdiff (g_value_get_string (chan_type),
+            EMP_IFACE_CHANNEL_TYPE_FILE_TRANSFER))
+        continue;
+
+      handle_type = g_hash_table_lookup (fixed_prop,
+        TP_IFACE_CHANNEL ".TargetHandleType");
+
+      if (handle_type == NULL || g_value_get_uint (handle_type)
+          != TP_HANDLE_TYPE_CONTACT)
+        continue;
+
+      /* We can request file transfer channel to contacts. Set the FT caps. */
+      contact = EMPATHY_CONTACT (user_data);
+      caps = empathy_contact_get_capabilities (contact);
+      caps |= EMPATHY_CAPABILITIES_FT;
+
+      empathy_contact_set_capabilities (contact, caps);
+    }
 }
 
 void
@@ -487,6 +531,8 @@ empathy_contact_set_account (EmpathyContact *contact,
                              McAccount *account)
 {
   EmpathyContactPriv *priv;
+  MissionControl *mc;
+  TpConnection *connection;
 
   g_return_if_fail (EMPATHY_IS_CONTACT (contact));
   g_return_if_fail (MC_IS_ACCOUNT (account));
@@ -500,20 +546,19 @@ empathy_contact_set_account (EmpathyContact *contact,
       g_object_unref (priv->account);
   priv->account = g_object_ref (account);
 
-  /* FIXME salut does not yet support the Capabilities interface, so for
-   * now we use this hack.
-   */
-  if (contact_is_salut (contact))
-    {
-      EmpathyCapabilities caps;
+  /* FIXME: We should use the futur ContactCapabilities interface */
+  /* Can we request FT channel on this connection? */
+  mc = empathy_mission_control_new ();
+  connection = mission_control_get_tpconnection (mc, account, NULL);
 
-      caps = empathy_contact_get_capabilities (contact);
-      caps |= EMPATHY_CAPABILITIES_FT;
-
-      empathy_contact_set_capabilities (contact, caps);
-    }
+  tp_cli_dbus_properties_call_get (connection, -1,
+      TP_IFACE_CONNECTION_INTERFACE_REQUESTS, "RequestableChannelClasses",
+      get_requestable_channel_classes_cb, contact, NULL, G_OBJECT (contact));
 
   g_object_notify (G_OBJECT (contact), "account");
+
+  g_object_unref (mc);
+  g_object_unref (connection);
 }
 
 McPresence
