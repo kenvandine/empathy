@@ -222,11 +222,11 @@ ft_manager_update_ft_row (EmpathyFTManager *ft_manager,
   GtkTreeIter iter;
   const gchar *filename;
   const gchar *contact_name;
-  gchar *msg;
-  gchar *remaining_str;
+  gchar *msg = NULL;
+  gchar *remaining_str = NULL;
   gchar *first_line_format;
-  gchar *first_line;
-  gchar *second_line;
+  gchar *first_line = NULL;
+  gchar *second_line = NULL;
   guint64 transferred_bytes;
   guint64 total_size;
   gint remaining = -1;
@@ -247,6 +247,11 @@ ft_manager_update_ft_row (EmpathyFTManager *ft_manager,
 
   switch (state)
     {
+      case EMP_FILE_TRANSFER_STATE_NONE:
+        /* This should never happen, the CM is broken. But we avoid warning
+         * because it's not our fault. */
+        DEBUG ("State is NONE, probably a broken CM");
+        break;
       case EMP_FILE_TRANSFER_STATE_PENDING:
       case EMP_FILE_TRANSFER_STATE_OPEN:
       case EMP_FILE_TRANSFER_STATE_ACCEPTED:
@@ -289,7 +294,7 @@ ft_manager_update_ft_row (EmpathyFTManager *ft_manager,
       break;
 
     case EMP_FILE_TRANSFER_STATE_COMPLETED:
-      if (empathy_tp_file_is_incoming (tp_file))
+      if (incoming)
         /* translators: first %s is filename, second %s
          * is the contact name */
         first_line = g_strdup_printf (
@@ -302,12 +307,12 @@ ft_manager_update_ft_row (EmpathyFTManager *ft_manager,
             _("\"%s\" sent to %s"), filename,
             contact_name);
 
-      second_line = g_strdup ("File transfer completed");
+      second_line = g_strdup (_("File transfer completed"));
 
       break;
 
     case EMP_FILE_TRANSFER_STATE_CANCELLED:
-      if (empathy_tp_file_is_incoming (tp_file))
+      if (incoming)
         /* translators: first %s is filename, second %s
          * is the contact name */
         first_line = g_strdup_printf (
@@ -324,23 +329,17 @@ ft_manager_update_ft_row (EmpathyFTManager *ft_manager,
           ft_manager_state_change_reason_to_string (reason));
 
       break;
-
-    default:
-      g_return_if_reached ();
-
     }
 
-  if (total_size != EMPATHY_TP_FILE_UNKNOWN_SIZE)
+  if (total_size != EMPATHY_TP_FILE_UNKNOWN_SIZE && total_size != 0)
     percent = transferred_bytes * 100 / total_size;
   else
     percent = -1;
 
   if (remaining < 0)
     {
-      if (state == EMP_FILE_TRANSFER_STATE_COMPLETED ||
-          state == EMP_FILE_TRANSFER_STATE_CANCELLED)
-        remaining_str = g_strdup ("");
-      else
+      if (state != EMP_FILE_TRANSFER_STATE_COMPLETED &&
+          state != EMP_FILE_TRANSFER_STATE_CANCELLED)
         /* translators: the text before the "|" is context to
          * help you decide on the correct translation. You
          * MUST OMIT it in the translated string. */
@@ -349,15 +348,16 @@ ft_manager_update_ft_row (EmpathyFTManager *ft_manager,
   else
     remaining_str = ft_manager_format_interval (remaining);
 
-  msg = g_strdup_printf ("%s\n%s", first_line, second_line);
+  if (first_line != NULL && second_line != NULL)
+    msg = g_strdup_printf ("%s\n%s", first_line, second_line);
 
   path = gtk_tree_row_reference_get_path (row_ref);
   gtk_tree_model_get_iter (ft_manager->priv->model, &iter, path);
   gtk_list_store_set (GTK_LIST_STORE (ft_manager->priv->model),
       &iter,
       COL_PERCENT, percent,
-      COL_MESSAGE, msg,
-      COL_REMAINING, remaining_str,
+      COL_MESSAGE, msg ? msg : "",
+      COL_REMAINING, remaining_str ? remaining_str : "",
       -1);
 
   gtk_tree_path_free (path);
