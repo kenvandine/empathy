@@ -602,8 +602,6 @@ ft_manager_add_tp_file_to_list (EmpathyFTManager *ft_manager,
   GtkTreePath *path;
   GtkIconTheme *theme;
   gchar *icon_name;
-  gint width = 16;
-  gint height = 16;
   gchar *content_type;
 
   gtk_list_store_insert_with_values (GTK_LIST_STORE (ft_manager->priv->model),
@@ -639,11 +637,6 @@ ft_manager_add_tp_file_to_list (EmpathyFTManager *ft_manager,
    * and then use the "gicon" property of GtkCellRendererPixbuf. */
   icon_name = gnome_icon_lookup (theme, NULL, NULL, NULL, NULL,
       content_type, GNOME_ICON_LOOKUP_FLAGS_NONE, NULL);
-
-  gtk_icon_size_lookup_for_settings (gtk_widget_get_settings (
-      ft_manager->priv->window),
-      GTK_ICON_SIZE_MENU, &width, &height);
-  width *= 2;
 
   gtk_list_store_set (GTK_LIST_STORE (
       ft_manager->priv->model), &iter, COL_ICON, icon_name, -1);
