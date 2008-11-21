@@ -379,9 +379,6 @@ tp_file_constructor (GType type,
   priv->description = g_value_dup_string (g_hash_table_lookup (properties,
       "Description"));
 
-  priv->unix_socket_path = g_value_dup_string (g_hash_table_lookup (properties,
-      "SocketPath"));
-
   if (priv->state == EMP_FILE_TRANSFER_STATE_LOCAL_PENDING)
     priv->incoming = TRUE;
 
@@ -591,24 +588,8 @@ _get_local_socket (EmpathyTpFile *tp_file)
   size_t path_len;
   struct sockaddr_un addr;
   EmpathyTpFilePriv *priv;
-  GValue *socket_path;
 
   priv = GET_PRIV (tp_file);
-
-  /* TODO: This could probably be a little nicer. */
-  tp_cli_dbus_properties_run_get (priv->channel,
-      -1,
-      EMP_IFACE_CHANNEL_TYPE_FILE,
-      "SocketPath",
-      &socket_path,
-      NULL,
-      NULL);
-
-  if (priv->unix_socket_path)
-    g_free (priv->unix_socket_path);
-
-  priv->unix_socket_path = g_value_dup_string (socket_path);
-  g_value_unset (socket_path);
 
   if (G_STR_EMPTY (priv->unix_socket_path))
     return -1;
