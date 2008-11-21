@@ -25,6 +25,8 @@
     from="Telepathy specification"/>
   <tp:external-type name="Unix_Timestamp64" type="t"
     from="Telepathy specification"/>
+  <tp:external-type name="Tube_ID" type="u"
+    from="Telepathy specification"/>
 </tp:generic-types>
 
 </tp:spec>
