@@ -984,6 +984,7 @@ empathy_dispatcher_send_file (EmpathyContact *contact,
 	GFileInfo *info;
 	guint64 size;
 	gchar *filename;
+  GTimeVal last_modif;
 
 	g_return_if_fail (EMPATHY_IS_CONTACT (contact));
 	g_return_if_fail (G_IS_FILE (gfile));
@@ -1000,7 +1001,8 @@ empathy_dispatcher_send_file (EmpathyContact *contact,
 
 	info = g_file_query_info (request->gfile,
 				  G_FILE_ATTRIBUTE_STANDARD_SIZE ","
-				  G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE,
+				  G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE ","
+          G_FILE_ATTRIBUTE_TIME_MODIFIED,
 				  0, NULL, NULL);
 	size = info ? g_file_info_get_size (info) : EMPATHY_TP_FILE_UNKNOWN_SIZE;
 	filename = g_file_get_basename (request->gfile);
@@ -1046,9 +1048,15 @@ empathy_dispatcher_send_file (EmpathyContact *contact,
   g_hash_table_insert (args, EMP_IFACE_CHANNEL_TYPE_FILE_TRANSFER ".Size",
       value);
 
+  /* org.freedesktop.Telepathy.Channel.Type.FileTransfer.Date */
+  g_file_info_get_modification_time (info, &last_modif);
+  value = tp_g_value_slice_new (G_TYPE_UINT64);
+  g_value_set_uint64 (value, last_modif.tv_sec);
+  g_hash_table_insert (args, EMP_IFACE_CHANNEL_TYPE_FILE_TRANSFER ".Date",
+      value);
+
   /* TODO: Description ? */
   /* TODO: ContentHashType and ContentHash ? */
-  /* TODO: Date */
 
 	tp_cli_connection_interface_requests_call_create_channel (connection, -1,
 						args,
