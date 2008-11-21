@@ -819,7 +819,6 @@ ft_manager_create_save_dialog (ReceiveResponseData *response_data)
 {
   GtkWidget *widget;
   gchar *folder;
-  GtkFileFilter *filter;
 
   DEBUG ("Creating save file chooser");
 
@@ -845,11 +844,6 @@ ft_manager_create_save_dialog (ReceiveResponseData *response_data)
 
   g_signal_connect (widget, "response",
       G_CALLBACK (ft_manager_save_dialog_response_cb), response_data);
-
-  filter = gtk_file_filter_new ();
-  gtk_file_filter_set_name (filter, "All Files");
-  gtk_file_filter_add_pattern (filter, "*");
-  gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (widget), filter);
 
   gtk_widget_show (widget);
 
