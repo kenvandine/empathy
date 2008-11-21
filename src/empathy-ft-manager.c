@@ -101,8 +101,6 @@ enum
 
 G_DEFINE_TYPE (EmpathyFTManager, empathy_ft_manager, G_TYPE_OBJECT);
 
-static EmpathyFTManager *manager_p = NULL;
-
 static gchar *
 ft_manager_format_interval (gint interval)
 {
@@ -599,7 +597,7 @@ ft_manager_stop (EmpathyFTManager *ft_manager)
 }
 
 static void
-ft_manager_response_cb (GtkWidget *dialog,
+ft_manager_response_cb (GtkWidget *widget,
                         gint response,
                         EmpathyFTManager *ft_manager)
 {
@@ -623,26 +621,28 @@ ft_manager_delete_event_cb (GtkWidget *widget,
                             EmpathyFTManager *ft_manager)
 {
   ft_manager_clear (ft_manager);
-  if (g_hash_table_size (ft_manager->priv->tp_file_to_row_ref) == 0)
+  if (g_hash_table_size (ft_manager->priv->tp_file_to_row_ref) > 0)
     {
-      DEBUG ("Destroying window");
-      if (manager_p != NULL)
-        g_object_unref (manager_p);
-
-      manager_p = NULL;
-      return FALSE;
-    }
-  else
-    {
+      /* There is still FTs on flight, just hide the window */
       DEBUG ("Hiding window");
       gtk_widget_hide (widget);
       return TRUE;
     }
+
+  return FALSE;
+}
+
+static void
+ft_manager_destroy_cb (GtkWidget *widget,
+                       EmpathyFTManager *ft_manager)
+{
+  g_object_unref (ft_manager);
 }
 
 static void
 ft_manager_build_ui (EmpathyFTManager *ft_manager)
 {
+  GladeXML *glade;
   gint x, y, w, h;
   GtkListStore *liststore;
   GtkTreeViewColumn *column;
@@ -651,7 +651,7 @@ ft_manager_build_ui (EmpathyFTManager *ft_manager)
   gchar *filename;
 
   filename = empathy_file_lookup ("empathy-ft-manager.glade", "src");
-  empathy_glade_get_file (filename,
+  glade = empathy_glade_get_file (filename,
       "ft_manager_dialog", NULL,
       "ft_manager_dialog", &ft_manager->priv->window,
       "ft_list", &ft_manager->priv->treeview,
@@ -660,12 +660,14 @@ ft_manager_build_ui (EmpathyFTManager *ft_manager)
       NULL);
   g_free (filename);
 
-  g_signal_connect (ft_manager->priv->window, "response",
-      G_CALLBACK (ft_manager_response_cb), ft_manager);
-  g_signal_connect (ft_manager->priv->window, "delete-event",
-      G_CALLBACK (ft_manager_delete_event_cb), ft_manager);
-  g_signal_connect (ft_manager->priv->window, "configure-event",
-      G_CALLBACK (ft_manager_configure_event_cb), ft_manager);
+  empathy_glade_connect (glade, ft_manager,
+      "ft_manager_dialog", "destroy", ft_manager_destroy_cb,
+      "ft_manager_dialog", "response", ft_manager_response_cb,
+      "ft_manager_dialog", "delete-event", ft_manager_delete_event_cb,
+      "ft_manager_dialog", "configure-event", ft_manager_configure_event_cb,
+      NULL);
+
+  g_object_unref (glade);
 
   /* Window geometry. */
   empathy_geometry_load ("ft-manager", &x, &y, &w, &h);
@@ -808,8 +810,13 @@ empathy_ft_manager_class_init (EmpathyFTManagerClass *klass)
 EmpathyFTManager *
 empathy_ft_manager_get_default (void)
 {
+  static EmpathyFTManager *manager_p = NULL;
+
   if (!manager_p)
-    manager_p = g_object_new (EMPATHY_TYPE_FT_MANAGER, NULL);
+    {
+      manager_p = g_object_new (EMPATHY_TYPE_FT_MANAGER, NULL);
+      g_object_add_weak_pointer (G_OBJECT (manager_p), (gpointer) &manager_p);
+    }
 
   return manager_p;
 }
