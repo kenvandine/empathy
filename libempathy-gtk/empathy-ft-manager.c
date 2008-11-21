@@ -764,13 +764,10 @@ ft_manager_save_dialog_response_cb (GtkDialog *widget,
       if (uri)
         {
           GFile *file;
-          GOutputStream *out_stream;
-          gchar *filename;
           GError *error = NULL;
 
           file = g_file_new_for_uri (uri);
-          out_stream = G_OUTPUT_STREAM (g_file_replace (file, NULL,
-              FALSE, 0, NULL, &error));
+          empathy_tp_file_set_gfile (response_data->tp_file, file, &error);
 
           if (error)
             {
@@ -780,23 +777,15 @@ ft_manager_save_dialog_response_cb (GtkDialog *widget,
               return;
             }
 
-          empathy_tp_file_set_output_stream (response_data->tp_file, out_stream);
-
           g_object_set_data_full (G_OBJECT (response_data->tp_file),
               "uri", uri, g_free);
-
-          filename = g_file_get_basename (file);
-          empathy_tp_file_set_filename (response_data->tp_file, filename);
 
           empathy_tp_file_accept (response_data->tp_file, 0);
 
           ft_manager_add_tp_file_to_list (response_data->ft_manager,
               response_data->tp_file);
 
-          g_free (filename);
           g_object_unref (file);
-          if (out_stream)
-            g_object_unref (out_stream);
         }
 
       folder = gtk_file_chooser_get_current_folder (GTK_FILE_CHOOSER (widget));

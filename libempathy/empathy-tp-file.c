@@ -275,6 +275,7 @@ struct _EmpathyTpFilePriv {
   TpChannel *channel;
 
   EmpathyContact *contact;
+  GFile *gfile;
   GInputStream *in_stream;
   GOutputStream *out_stream;
   gboolean incoming;
@@ -303,7 +304,6 @@ enum {
   PROP_TRANSFERRED_BYTES,
   PROP_CONTENT_HASH_TYPE,
   PROP_CONTENT_HASH,
-  PROP_IN_STREAM,
 };
 
 G_DEFINE_TYPE (EmpathyTpFile, empathy_tp_file, G_TYPE_OBJECT);
@@ -361,6 +361,9 @@ tp_file_finalize (GObject *object)
   g_free (tp_file->priv->description);
   g_free (tp_file->priv->content_hash);
   g_free (tp_file->priv->content_type);
+
+  if (tp_file->priv->gfile)
+    g_object_unref (tp_file->priv->gfile);
 
   if (tp_file->priv->in_stream)
     g_object_unref (tp_file->priv->in_stream);
@@ -663,11 +666,6 @@ tp_file_set_property (GObject *object,
         g_free (tp_file->priv->content_hash);
         tp_file->priv->content_hash = g_value_dup_string (value);
         break;
-      case PROP_IN_STREAM:
-        if (tp_file->priv->in_stream)
-          g_object_unref (tp_file->priv->in_stream);
-        tp_file->priv->in_stream = g_object_ref (g_value_get_object (value));
-        break;
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
         break;
@@ -805,18 +803,11 @@ empathy_tp_file_get_contact (EmpathyTpFile *tp_file)
   return tp_file->priv->contact;
 }
 
-GInputStream *
-empathy_tp_file_get_input_stream (EmpathyTpFile *tp_file)
+GFile *
+empathy_tp_file_get_gfile (EmpathyTpFile *tp_file)
 {
   g_return_val_if_fail (EMPATHY_IS_TP_FILE (tp_file), NULL);
-  return tp_file->priv->in_stream;
-}
-
-GOutputStream *
-empathy_tp_file_get_output_stream (EmpathyTpFile *tp_file)
-{
-  g_return_val_if_fail (EMPATHY_IS_TP_FILE (tp_file), NULL);
-  return tp_file->priv->out_stream;
+  return g_object_ref (tp_file->priv->gfile);
 }
 
 const gchar *
@@ -901,51 +892,53 @@ empathy_tp_file_cancel (EmpathyTpFile *tp_file)
 }
 
 void
-empathy_tp_file_set_input_stream (EmpathyTpFile *tp_file,
-                                  GInputStream *in_stream)
+empathy_tp_file_set_gfile (EmpathyTpFile *tp_file,
+                           GFile *gfile,
+                           GError **error)
 {
   g_return_if_fail (EMPATHY_IS_TP_FILE (tp_file));
-  g_return_if_fail (G_IS_INPUT_STREAM (in_stream));
+  g_return_if_fail (gfile);
 
-  if (tp_file->priv->in_stream == in_stream)
+  if (tp_file->priv->gfile == gfile)
     return;
 
-  if (tp_file->priv->incoming)
-    g_warning ("Setting an input stream for incoming file "
-         "transfers is useless");
-
-  if (tp_file->priv->in_stream)
-    g_object_unref (tp_file->priv->in_stream);
-
-  if (in_stream)
-    g_object_ref (in_stream);
-
-  tp_file->priv->in_stream = in_stream;
-
-  g_object_notify (G_OBJECT (tp_file), "in-stream");
-}
-
-void
-empathy_tp_file_set_output_stream (EmpathyTpFile *tp_file,
-                                   GOutputStream *out_stream)
-{
-  g_return_if_fail (EMPATHY_IS_TP_FILE (tp_file));
-  g_return_if_fail (G_IS_OUTPUT_STREAM (out_stream));
-
-  if (tp_file->priv->out_stream == out_stream)
-    return;
+  tp_file->priv->gfile = g_object_ref (gfile);
 
   if (!tp_file->priv->incoming)
-    g_warning ("Setting an output stream for outgoing file "
-         "transfers is useless");
+    {
+      GInputStream *in_stream;
 
-  if (tp_file->priv->out_stream)
-    g_object_unref (tp_file->priv->out_stream);
+      in_stream = G_INPUT_STREAM (g_file_read (gfile, NULL, NULL));
 
-  if (out_stream)
-    g_object_ref (out_stream);
+      if (tp_file->priv->in_stream)
+        g_object_unref (tp_file->priv->in_stream);
 
-  tp_file->priv->out_stream = out_stream;
+      tp_file->priv->in_stream = g_object_ref (in_stream);
+    }
+  else
+    {
+      GOutputStream *out_stream;
+      gchar *filename;
+
+      out_stream = G_OUTPUT_STREAM (g_file_replace (gfile, NULL, FALSE,
+        0, NULL, error));
+
+      if (*error)
+        return;
+
+      if (tp_file->priv->out_stream == out_stream)
+        return;
+
+      if (tp_file->priv->out_stream)
+        g_object_unref (tp_file->priv->out_stream);
+
+      tp_file->priv->out_stream = g_object_ref (out_stream);
+
+      filename = g_file_get_basename (gfile);
+      empathy_tp_file_set_filename (tp_file, filename);
+
+      g_free (filename);
+    }
 }
 
 void
@@ -1057,14 +1050,6 @@ empathy_tp_file_class_init (EmpathyTpFileClass *klass)
           0,
           G_MAXUINT64,
           0,
-          G_PARAM_READWRITE));
-
-  g_object_class_install_property (object_class,
-      PROP_IN_STREAM,
-      g_param_spec_object ("in-stream",
-          "transfer input stream",
-          "The input stream for file transfer",
-          G_TYPE_INPUT_STREAM,
           G_PARAM_READWRITE));
 
   g_type_class_add_private (object_class, sizeof (EmpathyTpFilePriv));

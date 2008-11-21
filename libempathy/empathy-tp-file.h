@@ -76,8 +76,6 @@ void empathy_tp_file_offer (EmpathyTpFile *tp_file);
 const gchar *empathy_tp_file_get_id (EmpathyTpFile *tp_file);
 guint64 empathy_tp_file_get_transferred_bytes (EmpathyTpFile *tp_file);
 EmpathyContact *empathy_tp_file_get_contact (EmpathyTpFile *tp_file);
-GInputStream *empathy_tp_file_get_input_stream (EmpathyTpFile *tp_file);
-GOutputStream *empathy_tp_file_get_output_stream (EmpathyTpFile *tp_file);
 const gchar *empathy_tp_file_get_filename (EmpathyTpFile *tp_file);
 gboolean empathy_tp_file_get_incoming (EmpathyTpFile *tp_file);
 EmpFileTransferState empathy_tp_file_get_state (EmpathyTpFile *tp_file);
@@ -85,9 +83,9 @@ EmpFileTransferStateChangeReason empathy_tp_file_get_state_change_reason (Empath
 guint64 empathy_tp_file_get_size (EmpathyTpFile *tp_file);
 guint64 empathy_tp_file_get_transferred_bytes (EmpathyTpFile *tp_file);
 gint empathy_tp_file_get_remaining_time (EmpathyTpFile *tp_file);
+GFile *empathy_tp_file_get_gfile (EmpathyTpFile *tp_file);
 
-void empathy_tp_file_set_input_stream (EmpathyTpFile *tp_file, GInputStream *uri);
-void empathy_tp_file_set_output_stream (EmpathyTpFile *tp_file, GOutputStream *uri);
+void empathy_tp_file_set_gfile (EmpathyTpFile *tp_file, GFile *gfile, GError **error);
 void empathy_tp_file_set_filename (EmpathyTpFile *tp_file, const gchar *filename);
 
 G_END_DECLS

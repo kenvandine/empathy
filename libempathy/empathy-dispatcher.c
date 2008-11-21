@@ -933,7 +933,6 @@ empathy_dispatcher_send_file (EmpathyContact *contact,
 {
 	GFileInfo      *info;
 	guint64         size;
-	GInputStream   *in_stream = NULL;
 	MissionControl *mc;
 	McAccount      *account;
 	TpConnection   *connection;
@@ -954,7 +953,6 @@ empathy_dispatcher_send_file (EmpathyContact *contact,
 				  0, NULL, NULL);
 	size = info ? g_file_info_get_size (info) : EMPATHY_TP_FILE_UNKNOWN_SIZE;
 	filename = g_file_get_basename (gfile);
-	in_stream = G_INPUT_STREAM (g_file_read (gfile, NULL, NULL));
 	mc = empathy_mission_control_new ();
 	account = empathy_contact_get_account (contact);
 	connection = mission_control_get_tpconnection (mc, account, NULL);
@@ -1014,7 +1012,7 @@ empathy_dispatcher_send_file (EmpathyContact *contact,
 	tp_file = empathy_tp_file_new (channel);
 
 	if (tp_file) {
-		empathy_tp_file_set_input_stream (tp_file, in_stream);
+		empathy_tp_file_set_gfile (tp_file, gfile, NULL);
 	}
 
 	empathy_tp_file_offer (tp_file);
