@@ -176,7 +176,6 @@ if test "x$enable_megaphone" != "xno"; then
    [
       libpanelapplet-2.0 >= $LIBPANELAPPLET_REQUIRED
       glib-2.0 >= $GLIB_REQUIRED
-      gio-2.0 >= $GLIB_REQUIRED
       gtk+-2.0 >= $GTK_REQUIRED
       gconf-2.0 >= $GCONF_REQUIRED
       libglade-2.0 >= $LIBGLADE_REQUIRED 
@@ -205,7 +204,6 @@ if test "x$enable_nothere" != "xno"; then
    [
       libpanelapplet-2.0 >= $LIBPANELAPPLET_REQUIRED
       glib-2.0 >= $GLIB_REQUIRED
-      gio-2.0 >= $GLIB_REQUIRED
       gtk+-2.0 >= $GTK_REQUIRED
       gconf-2.0 >= $GCONF_REQUIRED
       libglade-2.0 >= $LIBGLADE_REQUIRED 
@@ -257,7 +255,6 @@ if test "x$enable_python" != "xno"; then
    [
       pygtk-2.0,
       glib-2.0 >= $GLIB_REQUIRED
-      gio-2.0 >= $GLIB_REQUIRED
       gobject-2.0
       gconf-2.0 >= $GCONF_REQUIRED
       libxml-2.0
