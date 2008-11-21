@@ -1090,7 +1090,8 @@ ft_manager_create_save_dialog (ReceiveResponseData *response_data)
 		folder = g_strdup (g_get_user_special_dir (G_USER_DIRECTORY_DOWNLOAD));
 	}
 
-	gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (widget), folder);
+	if (folder)
+		gtk_file_chooser_set_current_folder (GTK_FILE_CHOOSER (widget), folder);
 
 	gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (widget),
 					   empathy_file_get_filename (response_data->file));
