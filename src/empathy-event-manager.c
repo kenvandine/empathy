@@ -215,6 +215,8 @@ file_channel_state_cb (TpProxy      *proxy,
 		tp_file = empathy_tp_file_new (account, channel);
 
 		contact = empathy_tp_file_get_contact (tp_file);
+		empathy_contact_run_until_ready (contact,
+			EMPATHY_CONTACT_READY_NAME, NULL);
 
 		msg = g_strdup_printf (_("Incoming file transfer from %s"),
 				       empathy_contact_get_name (contact));
