@@ -61,33 +61,24 @@
 static BaconMessageConnection *connection = NULL;
 
 static void
-file_channel_add_to_file_manager (TpChannel *channel)
-{
-	EmpathyTpFile *tp_file;
-	EmpathyFTManager *ft_manager;
-
-	ft_manager = empathy_ft_manager_get_default ();
-	tp_file = empathy_tp_file_new (channel);
-	empathy_ft_manager_add_tp_file (ft_manager, tp_file);
-
-	g_object_unref (channel);
-}
-
-static void
 file_channel_get_state_cb (TpProxy      *proxy,
 			   const GValue *state_value,
 			   const GError *error,
 			   gpointer      user_data,
 			   GObject      *weak_object)
 {
+	EmpathyTpFile *tp_file;
+	EmpathyFTManager *ft_manager;
 	EmpFileTransferState state;
-	state = g_value_get_uint (state_value);
 
-	if (state == EMP_FILE_TRANSFER_STATE_PENDING)
-  {
-		file_channel_add_to_file_manager (TP_CHANNEL (proxy));
+	state = g_value_get_uint (state_value);
+	if (state != EMP_FILE_TRANSFER_STATE_PENDING) {
 		return;
 	}
+
+	ft_manager = empathy_ft_manager_get_default ();
+	tp_file = empathy_tp_file_new (TP_CHANNEL (proxy));
+	empathy_ft_manager_add_tp_file (ft_manager, tp_file);
 }
 
 static void
@@ -136,7 +127,7 @@ dispatch_channel_cb (EmpathyDispatcher *dispatcher,
 		empathy_call_window_new (channel);
 	}
 	else if (!tp_strdiff (channel_type, EMP_IFACE_CHANNEL_TYPE_FILE_TRANSFER)) {
-		tp_cli_dbus_properties_call_get (g_object_ref (channel), -1,
+		tp_cli_dbus_properties_call_get (channel, -1,
 			EMP_IFACE_CHANNEL_TYPE_FILE_TRANSFER,
 			"State", file_channel_get_state_cb,
 			NULL, NULL, NULL);
