@@ -862,7 +862,7 @@ empathy_send_file (EmpathyContact *contact,
 		&value, NULL, NULL, NULL, NULL);
 	g_value_unset (&value);
 
-	tp_file = empathy_tp_file_new (account, channel);
+	tp_file = empathy_tp_file_new (channel);
 
 	if (tp_file) {
 		empathy_tp_file_set_input_stream (tp_file, in_stream);

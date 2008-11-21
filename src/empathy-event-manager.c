@@ -208,11 +208,9 @@ file_channel_state_cb (TpProxy      *proxy,
 	    EMP_FILE_TRANSFER_STATE_LOCAL_PENDING) {
 		EmpathyContact *contact;
 		gchar          *msg;
-		McAccount      *account;
 		EmpathyTpFile  *tp_file;
 
-		account = empathy_channel_get_account (channel);
-		tp_file = empathy_tp_file_new (account, channel);
+		tp_file = empathy_tp_file_new (channel);
 
 		contact = empathy_tp_file_get_contact (tp_file);
 		empathy_contact_run_until_ready (contact,

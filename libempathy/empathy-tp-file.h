@@ -67,7 +67,7 @@ struct _EmpathyTpFileClass
 
 GType empathy_tp_file_get_type (void) G_GNUC_CONST;
 
-EmpathyTpFile *empathy_tp_file_new (McAccount *account, TpChannel *channel);
+EmpathyTpFile *empathy_tp_file_new (TpChannel *channel);
 
 TpChannel *empathy_tp_file_get_channel (EmpathyTpFile *tp_file);
 void empathy_tp_file_accept (EmpathyTpFile *tp_file, guint64 offset);
