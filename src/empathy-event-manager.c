@@ -32,9 +32,9 @@
 #include <libempathy/empathy-tp-chat.h>
 #include <libempathy/empathy-tp-group.h>
 #include <libempathy/empathy-utils.h>
-#include <libempathy/empathy-tp-file.h>
 
-#include <libempathy-gtk/empathy-ft-manager.h>
+#include <extensions/extensions.h>
+
 #include <libempathy-gtk/empathy-images.h>
 #include <libempathy-gtk/empathy-contact-dialogs.h>
 
