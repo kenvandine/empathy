@@ -74,7 +74,7 @@ EmpathyContact *empathy_tp_file_get_contact (EmpathyTpFile *tp_file);
 GInputStream *empathy_tp_file_get_input_stream (EmpathyTpFile *tp_file);
 GOutputStream *empathy_tp_file_get_output_stream (EmpathyTpFile *tp_file);
 const gchar *empathy_tp_file_get_filename (EmpathyTpFile *tp_file);
-EmpFileTransferDirection empathy_tp_file_get_direction (EmpathyTpFile *tp_file);
+gboolean empathy_tp_file_get_incoming (EmpathyTpFile *tp_file);
 EmpFileTransferState empathy_tp_file_get_state (EmpathyTpFile *tp_file);
 EmpFileTransferStateChangeReason empathy_tp_file_get_state_change_reason (EmpathyTpFile *tp_file);
 guint64 empathy_tp_file_get_size (EmpathyTpFile *tp_file);

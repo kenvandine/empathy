@@ -101,8 +101,8 @@ struct _EmpathyTpFilePriv {
   EmpathyContact *contact;
   GInputStream *in_stream;
   GOutputStream *out_stream;
+  gboolean incoming;
   gchar *filename;
-  EmpFileTransferDirection direction;
   EmpFileTransferState state;
   EmpFileTransferStateChangeReason state_change_reason;
   guint64 size;
@@ -120,7 +120,7 @@ enum {
   PROP_ACCOUNT,
   PROP_CHANNEL,
   PROP_STATE,
-  PROP_DIRECTION,
+  PROP_INCOMING,
   PROP_FILENAME,
   PROP_SIZE,
   PROP_CONTENT_TYPE,
@@ -172,13 +172,11 @@ empathy_tp_file_class_init (EmpathyTpFileClass *klass)
           G_PARAM_CONSTRUCT));
 
   g_object_class_install_property (object_class,
-      PROP_DIRECTION,
-      g_param_spec_uint ("direction",
-          "direction of the transfer",
-          "The file transfer direction",
-          0,
-          G_MAXUINT,
-          G_MAXUINT,
+      PROP_INCOMING,
+      g_param_spec_boolean ("incoming",
+          "incoming",
+          "Whether the transfer is incoming",
+          FALSE,
           G_PARAM_READWRITE |
           G_PARAM_CONSTRUCT));
 
@@ -443,8 +441,8 @@ tp_file_set_property (GObject *object,
       case PROP_STATE:
         priv->state = g_value_get_uint (value);
         break;
-      case PROP_DIRECTION:
-        priv->direction = g_value_get_uint (value);
+      case PROP_INCOMING:
+        priv->incoming = g_value_get_boolean (value);
         break;
       case PROP_FILENAME:
         g_free (priv->filename);
@@ -737,17 +735,15 @@ tp_file_state_changed_cb (DBusGProxy *tp_file_iface,
   if (state == EMP_FILE_TRANSFER_STATE_OPEN)
     priv->start_time = get_time_msec ();
 
-  DEBUG ("state = %u, direction = %u, in_stream = %s, out_stream = %s",
-      state, priv->direction,
+  DEBUG ("state = %u, incoming = %s, in_stream = %s, out_stream = %s",
+      state, priv->incoming ? "yes" : "no",
       priv->in_stream ? "present" : "not present",
       priv->out_stream ? "present" : "not present");
 
-  if (state == EMP_FILE_TRANSFER_STATE_OPEN &&
-      priv->direction == EMP_FILE_TRANSFER_DIRECTION_OUTGOING &&
+  if (state == EMP_FILE_TRANSFER_STATE_OPEN && !priv->incoming &&
       priv->in_stream)
     send_tp_file (tp_file);
-  else if (state == EMP_FILE_TRANSFER_STATE_OPEN &&
-      priv->direction == EMP_FILE_TRANSFER_DIRECTION_INCOMING &&
+  else if (state == EMP_FILE_TRANSFER_STATE_OPEN && priv->incoming &&
       priv->out_stream)
       receive_tp_file (tp_file);
 
@@ -815,14 +811,14 @@ empathy_tp_file_get_filename (EmpathyTpFile *tp_file)
   return priv->filename;
 }
 
-EmpFileTransferDirection
-empathy_tp_file_get_direction (EmpathyTpFile *tp_file)
+gboolean
+empathy_tp_file_get_incoming (EmpathyTpFile *tp_file)
 {
   EmpathyTpFilePriv *priv;
 
   priv = GET_PRIV (tp_file);
 
-  return priv->direction;
+  return priv->incoming;
 }
 
 EmpFileTransferState
@@ -915,7 +911,7 @@ empathy_tp_file_set_input_stream (EmpathyTpFile *tp_file,
   if (priv->in_stream == in_stream)
     return;
 
-  if (priv->direction == EMP_FILE_TRANSFER_DIRECTION_INCOMING)
+  if (priv->incoming)
     g_warning ("Setting an input stream for incoming file "
          "transfers is useless");
 
@@ -941,7 +937,7 @@ empathy_tp_file_set_output_stream (EmpathyTpFile *tp_file,
   if (priv->out_stream == out_stream)
     return;
 
-  if (priv->direction == EMP_FILE_TRANSFER_DIRECTION_OUTGOING)
+  if (!priv->incoming)
     g_warning ("Setting an output stream for outgoing file "
          "transfers is useless");
 

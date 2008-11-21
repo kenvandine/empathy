@@ -276,8 +276,7 @@ update_buttons (EmpathyFTManager *ft_manager)
 
       if (empathy_tp_file_get_state (tp_file) == EMP_FILE_TRANSFER_STATE_COMPLETED)
         {
-          if (empathy_tp_file_get_direction (tp_file) ==
-              EMP_FILE_TRANSFER_DIRECTION_INCOMING)
+          if (empathy_tp_file_get_incoming (tp_file))
             open_enabled = TRUE;
           else
             open_enabled = FALSE;
@@ -399,15 +398,16 @@ update_ft_row (EmpathyFTManager *ft_manager,
             g_free (total_size_str);
 
           }
+        else if (state == EMP_FILE_TRANSFER_STATE_NOT_OFFERED)
+          second_line = g_strdup (_("File not yet offered"));
         else
-          second_line = g_strdup (_("Wating the other participant's response"));
+          second_line = g_strdup (_("Waiting the other participant's response"));
 
       remaining = empathy_tp_file_get_remaining_time (tp_file);
       break;
 
     case EMP_FILE_TRANSFER_STATE_COMPLETED:
-      if (empathy_tp_file_get_direction (tp_file) ==
-          EMP_FILE_TRANSFER_DIRECTION_INCOMING)
+      if (empathy_tp_file_get_incoming (tp_file))
         /* translators: first %s is filename, second %s
          * is the contact name */
         first_line = g_strdup_printf (
@@ -425,8 +425,7 @@ update_ft_row (EmpathyFTManager *ft_manager,
       break;
 
     case EMP_FILE_TRANSFER_STATE_CANCELED:
-      if (empathy_tp_file_get_direction (tp_file) ==
-          EMP_FILE_TRANSFER_DIRECTION_INCOMING)
+      if (empathy_tp_file_get_incoming (tp_file))
         /* translators: first %s is filename, second %s
          * is the contact name */
         first_line = g_strdup_printf (
@@ -510,8 +509,7 @@ state_changed_cb (EmpathyTpFile *tp_file,
   switch (empathy_tp_file_get_state (tp_file))
     {
       case EMP_FILE_TRANSFER_STATE_COMPLETED:
-        if (empathy_tp_file_get_direction (tp_file) ==
-            EMP_FILE_TRANSFER_DIRECTION_INCOMING)
+        if (empathy_tp_file_get_incoming (tp_file))
           {
             GtkRecentManager *manager;
             const gchar *uri;
