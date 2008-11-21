@@ -512,7 +512,6 @@ get_requestable_channel_classes_cb (TpProxy *connection,
 
       handle_type = g_hash_table_lookup (fixed_prop,
         TP_IFACE_CHANNEL ".TargetHandleType");
-
       if (handle_type == NULL || g_value_get_uint (handle_type)
           != TP_HANDLE_TYPE_CONTACT)
         continue;
