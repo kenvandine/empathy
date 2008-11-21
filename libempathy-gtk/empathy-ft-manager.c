@@ -381,7 +381,7 @@ update_ft_row (EmpathyFTManager *ft_manager,
             gchar *total_size_str;
             gchar *transferred_bytes_str;
 
-            if (total_size == EMPATHY_FILE_UNKNOWN_SIZE)
+            if (total_size == EMPATHY_TP_FILE_UNKNOWN_SIZE)
               /* translators: the text before the "|" is context to
                * help you decide on the correct translation. You MUST
                * OMIT it in the translated string. */
@@ -449,7 +449,7 @@ update_ft_row (EmpathyFTManager *ft_manager,
 
     }
 
-  if (total_size != EMPATHY_FILE_UNKNOWN_SIZE)
+  if (total_size != EMPATHY_TP_FILE_UNKNOWN_SIZE)
     percent = transferred_bytes * 100 / total_size;
   else
     percent = -1;
