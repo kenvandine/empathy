@@ -855,14 +855,11 @@ ft_manager_receive_file_response_cb (GtkWidget *dialog,
                                      gint response,
                                      ReceiveResponseData *response_data)
 {
-  TpChannel *channel;
-
   if (response == GTK_RESPONSE_ACCEPT)
     ft_manager_create_save_dialog (response_data);
   else
     {
-      channel = empathy_tp_file_get_channel (response_data->tp_file);
-      tp_cli_channel_call_close (channel, -1, NULL, NULL, NULL, NULL);
+      empathy_tp_file_cancel (response_data->tp_file);
       ft_manager_receive_response_data_free (response_data);
     }
 
