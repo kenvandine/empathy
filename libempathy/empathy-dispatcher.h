@@ -23,11 +23,11 @@
 #define __EMPATHY_DISPATCHER_H__
 
 #include <glib.h>
+#include <gio/gio.h>
 
 #include <telepathy-glib/channel.h>
 
 #include "empathy-contact.h"
-#include "empathy-tp-file.h"
 
 G_BEGIN_DECLS
 

@@ -41,6 +41,7 @@
 #include "empathy-tube-handler.h"
 #include "empathy-contact-factory.h"
 #include "empathy-tp-group.h"
+#include "empathy-tp-file.h"
 #include "empathy-chatroom-manager.h"
 #include "empathy-utils.h"
 
@@ -930,16 +931,15 @@ empathy_dispatcher_chat_with_contact_id (McAccount   *account,
 typedef struct {
 	GFile *gfile;
 	TpHandle handle;
-	EmpathyContact *contact;
 } FileChannelRequest;
 
 static void
 file_channel_create_cb (TpConnection *connection,
-			 const gchar  *object_path,
-       GHashTable *properties,
-			 const GError *error,
-			 gpointer      user_data,
-			 GObject      *weak_object)
+			const gchar  *object_path,
+			GHashTable   *properties,
+			const GError *error,
+			gpointer      user_data,
+			GObject      *weak_object)
 {
 	TpChannel *channel;
 	EmpathyTpFile *tp_file;
@@ -958,11 +958,7 @@ file_channel_create_cb (TpConnection *connection,
 				 NULL);
 
 	tp_file = empathy_tp_file_new (channel);
-
-	if (tp_file) {
-		empathy_tp_file_set_gfile (tp_file, request->gfile, NULL);
-	}
-
+	empathy_tp_file_set_gfile (tp_file, request->gfile, NULL);
 	empathy_tp_file_offer (tp_file);
 
 	g_object_unref (request->gfile);
@@ -974,20 +970,32 @@ void
 empathy_dispatcher_send_file (EmpathyContact *contact,
 			      GFile          *gfile)
 {
-	MissionControl *mc;
-	McAccount      *account;
-	TpConnection   *connection;
-	guint           handle;
+	MissionControl     *mc;
+	McAccount          *account;
+	TpConnection       *connection;
+	guint               handle;
 	FileChannelRequest *request;
-  GHashTable *args;
-  GValue *value;
-	GFileInfo *info;
-	guint64 size;
-	gchar *filename;
-  GTimeVal last_modif;
+	GHashTable         *args;
+	GValue             *value;
+	GFileInfo          *info;
+	gchar              *filename;
+	GTimeVal            last_modif;
+	GError             *error = NULL;
 
 	g_return_if_fail (EMPATHY_IS_CONTACT (contact));
 	g_return_if_fail (G_IS_FILE (gfile));
+
+	info = g_file_query_info (gfile,
+				  G_FILE_ATTRIBUTE_STANDARD_SIZE ","
+				  G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE ","
+				  G_FILE_ATTRIBUTE_TIME_MODIFIED,
+				  0, NULL, &error);
+
+	if (error) {
+		DEBUG ("Can't get info about the file: %s", error->message);
+		g_clear_error (&error);
+		return;
+	}
 
 	mc = empathy_mission_control_new ();
 	account = empathy_contact_get_account (contact);
@@ -997,76 +1005,67 @@ empathy_dispatcher_send_file (EmpathyContact *contact,
 	request = g_slice_new0 (FileChannelRequest);
 	request->gfile = g_object_ref (gfile);
 	request->handle = handle;
-	request->contact = contact;
 
-	info = g_file_query_info (request->gfile,
-				  G_FILE_ATTRIBUTE_STANDARD_SIZE ","
-				  G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE ","
-          G_FILE_ATTRIBUTE_TIME_MODIFIED,
-				  0, NULL, NULL);
-	size = info ? g_file_info_get_size (info) : EMPATHY_TP_FILE_UNKNOWN_SIZE;
 	filename = g_file_get_basename (request->gfile);
 	tp_connection_run_until_ready (connection, FALSE, NULL, NULL);
 
 	DEBUG ("Sending %s from a stream to %s (size %llu, content-type %s)",
-	       filename, empathy_contact_get_name (request->contact), size,
+	       filename, empathy_contact_get_name (contact),
+	       g_file_info_get_size (info),
 	       g_file_info_get_content_type (info));
 
-  args = g_hash_table_new_full (g_str_hash, g_str_equal, NULL,
-      (GDestroyNotify) tp_g_value_slice_free);
+	args = g_hash_table_new_full (g_str_hash, g_str_equal, NULL,
+				      (GDestroyNotify) tp_g_value_slice_free);
 
-  /* org.freedesktop.Telepathy.Channel.ChannelType */
-  value = tp_g_value_slice_new (G_TYPE_STRING);
-  g_value_set_string (value, EMP_IFACE_CHANNEL_TYPE_FILE_TRANSFER);
-  g_hash_table_insert (args, TP_IFACE_CHANNEL ".ChannelType", value);
+	/* org.freedesktop.Telepathy.Channel.ChannelType */
+	value = tp_g_value_slice_new (G_TYPE_STRING);
+	g_value_set_string (value, EMP_IFACE_CHANNEL_TYPE_FILE_TRANSFER);
+	g_hash_table_insert (args, TP_IFACE_CHANNEL ".ChannelType", value);
 
-  /* org.freedesktop.Telepathy.Channel.TargetHandleType */
-  value = tp_g_value_slice_new (G_TYPE_UINT);
-  g_value_set_uint (value, TP_HANDLE_TYPE_CONTACT);
-  g_hash_table_insert (args, TP_IFACE_CHANNEL ".TargetHandleType", value);
+	/* org.freedesktop.Telepathy.Channel.TargetHandleType */
+	value = tp_g_value_slice_new (G_TYPE_UINT);
+	g_value_set_uint (value, TP_HANDLE_TYPE_CONTACT);
+	g_hash_table_insert (args, TP_IFACE_CHANNEL ".TargetHandleType", value);
 
-  /* org.freedesktop.Telepathy.Channel.TargetHandle */
-  value = tp_g_value_slice_new (G_TYPE_UINT);
-  g_value_set_uint (value, handle);
-  g_hash_table_insert (args, TP_IFACE_CHANNEL ".TargetHandle", value);
+	/* org.freedesktop.Telepathy.Channel.TargetHandle */
+	value = tp_g_value_slice_new (G_TYPE_UINT);
+	g_value_set_uint (value, handle);
+	g_hash_table_insert (args, TP_IFACE_CHANNEL ".TargetHandle", value);
 
-  /* org.freedesktop.Telepathy.Channel.Type.FileTransfer.ContentType */
-  value = tp_g_value_slice_new (G_TYPE_STRING);
-  g_value_set_string (value, g_file_info_get_content_type (info));
-  g_hash_table_insert (args,
-      EMP_IFACE_CHANNEL_TYPE_FILE_TRANSFER ".ContentType", value);
+	/* org.freedesktop.Telepathy.Channel.Type.FileTransfer.ContentType */
+	value = tp_g_value_slice_new (G_TYPE_STRING);
+	g_value_set_string (value, g_file_info_get_content_type (info));
+	g_hash_table_insert (args,
+		EMP_IFACE_CHANNEL_TYPE_FILE_TRANSFER ".ContentType", value);
 
-  /* org.freedesktop.Telepathy.Channel.Type.FileTransfer.Filename */
-  value = tp_g_value_slice_new (G_TYPE_STRING);
-  g_value_set_string (value, g_filename_display_basename (filename));
-  g_hash_table_insert (args, EMP_IFACE_CHANNEL_TYPE_FILE_TRANSFER ".Filename",
-      value);
+	/* org.freedesktop.Telepathy.Channel.Type.FileTransfer.Filename */
+	value = tp_g_value_slice_new (G_TYPE_STRING);
+	g_value_set_string (value, g_filename_display_basename (filename));
+	g_hash_table_insert (args,
+		EMP_IFACE_CHANNEL_TYPE_FILE_TRANSFER ".Filename", value);
 
-  /* org.freedesktop.Telepathy.Channel.Type.FileTransfer.Size */
-  value = tp_g_value_slice_new (G_TYPE_UINT64);
-  g_value_set_uint64 (value, size);
-  g_hash_table_insert (args, EMP_IFACE_CHANNEL_TYPE_FILE_TRANSFER ".Size",
-      value);
+	/* org.freedesktop.Telepathy.Channel.Type.FileTransfer.Size */
+	value = tp_g_value_slice_new (G_TYPE_UINT64);
+	g_value_set_uint64 (value, g_file_info_get_size (info));
+	g_hash_table_insert (args,
+		EMP_IFACE_CHANNEL_TYPE_FILE_TRANSFER ".Size", value);
 
-  /* org.freedesktop.Telepathy.Channel.Type.FileTransfer.Date */
-  g_file_info_get_modification_time (info, &last_modif);
-  value = tp_g_value_slice_new (G_TYPE_UINT64);
-  g_value_set_uint64 (value, last_modif.tv_sec);
-  g_hash_table_insert (args, EMP_IFACE_CHANNEL_TYPE_FILE_TRANSFER ".Date",
-      value);
+	/* org.freedesktop.Telepathy.Channel.Type.FileTransfer.Date */
+	g_file_info_get_modification_time (info, &last_modif);
+	value = tp_g_value_slice_new (G_TYPE_UINT64);
+	g_value_set_uint64 (value, last_modif.tv_sec);
+	g_hash_table_insert (args,
+		EMP_IFACE_CHANNEL_TYPE_FILE_TRANSFER ".Date", value);
 
-  /* TODO: Description ? */
-  /* TODO: ContentHashType and ContentHash ? */
+	/* FIXME: Description ? */
+	/* FIXME: ContentHashType and ContentHash ? */
 
 	tp_cli_connection_interface_requests_call_create_channel (connection, -1,
-						args,
-						file_channel_create_cb,
-						request,
-						NULL,
-						NULL);
+		args, file_channel_create_cb, request, NULL, NULL);
 
-  g_hash_table_destroy (args);
+	g_hash_table_destroy (args);
 	g_free (filename);
 	g_object_unref (mc);
 	g_object_unref (connection);
 }
+
