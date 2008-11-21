@@ -625,6 +625,30 @@ tp_file_get_property (GObject *object,
       case PROP_CHANNEL:
         g_value_set_object (value, tp_file->priv->channel);
         break;
+      case PROP_INCOMING:
+        g_value_set_boolean (value, tp_file->priv->incoming);
+        break;
+      case PROP_STATE:
+        g_value_set_uint (value, tp_file->priv->state);
+        break;
+      case PROP_CONTENT_TYPE:
+        g_value_set_string (value, tp_file->priv->content_type);
+        break;
+      case PROP_FILENAME:
+        g_value_set_string (value, tp_file->priv->filename);
+        break;
+      case PROP_SIZE:
+        g_value_set_uint64 (value, tp_file->priv->size);
+        break;
+      case PROP_CONTENT_HASH_TYPE:
+        g_value_set_uint (value, tp_file->priv->content_hash_type);
+        break;
+      case PROP_CONTENT_HASH:
+        g_value_set_string (value, tp_file->priv->content_hash);
+        break;
+      case PROP_TRANSFERRED_BYTES:
+        g_value_set_uint64 (value, tp_file->priv->transferred_bytes);
+        break;
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
         break;
