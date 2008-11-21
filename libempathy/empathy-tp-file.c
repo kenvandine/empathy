@@ -727,7 +727,7 @@ empathy_tp_file_new (McAccount *account,
                      TpChannel *channel)
 {
   g_return_val_if_fail (MC_IS_ACCOUNT (account), NULL);
-  g_return_val_if_fail (TP_IS_CHANNEL (chnanel), NULL);
+  g_return_val_if_fail (TP_IS_CHANNEL (channel), NULL);
 
   return g_object_new (EMPATHY_TYPE_TP_FILE,
       "account", account,
@@ -872,21 +872,23 @@ empathy_tp_file_get_filename (EmpathyTpFile *tp_file)
 gboolean
 empathy_tp_file_get_incoming (EmpathyTpFile *tp_file)
 {
-  g_return_val_if_fail (EMPATHY_IS_TP_FILE (tp_file), NULL);
+  g_return_val_if_fail (EMPATHY_IS_TP_FILE (tp_file), FALSE);
   return tp_file->priv->incoming;
 }
 
 EmpFileTransferState
 empathy_tp_file_get_state (EmpathyTpFile *tp_file)
 {
-  g_return_val_if_fail (EMPATHY_IS_TP_FILE (tp_file), NULL);
+  g_return_val_if_fail (EMPATHY_IS_TP_FILE (tp_file),
+      EMP_FILE_TRANSFER_STATE_NONE);
   return tp_file->priv->state;
 }
 
 EmpFileTransferStateChangeReason
 empathy_tp_file_get_state_change_reason (EmpathyTpFile *tp_file)
 {
-  g_return_val_if_fail (EMPATHY_IS_TP_FILE (tp_file), NULL);
+  g_return_val_if_fail (EMPATHY_IS_TP_FILE (tp_file),
+      EMP_FILE_TRANSFER_STATE_CHANGE_REASON_NONE);
   g_return_val_if_fail (tp_file->priv->state_change_reason >= 0,
       EMP_FILE_TRANSFER_STATE_CHANGE_REASON_NONE);
 
@@ -896,14 +898,15 @@ empathy_tp_file_get_state_change_reason (EmpathyTpFile *tp_file)
 guint64
 empathy_tp_file_get_size (EmpathyTpFile *tp_file)
 {
-  g_return_val_if_fail (EMPATHY_IS_TP_FILE (tp_file), NULL);
+  g_return_val_if_fail (EMPATHY_IS_TP_FILE (tp_file),
+      EMPATHY_TP_FILE_UNKNOWN_SIZE);
   return tp_file->priv->size;
 }
 
 guint64
 empathy_tp_file_get_transferred_bytes (EmpathyTpFile *tp_file)
 {
-  g_return_val_if_fail (EMPATHY_IS_TP_FILE (tp_file), NULL);
+  g_return_val_if_fail (EMPATHY_IS_TP_FILE (tp_file), 0);
   return tp_file->priv->transferred_bytes;
 }
 
@@ -914,7 +917,7 @@ empathy_tp_file_get_remaining_time (EmpathyTpFile *tp_file)
   gdouble time_per_byte;
   gdouble remaining_time;
 
-  g_return_val_if_fail (EMPATHY_IS_TP_FILE (tp_file), NULL);
+  g_return_val_if_fail (EMPATHY_IS_TP_FILE (tp_file), -1);
 
   if (tp_file->priv->size == EMPATHY_TP_FILE_UNKNOWN_SIZE)
     return -1;
@@ -935,7 +938,7 @@ empathy_tp_file_get_remaining_time (EmpathyTpFile *tp_file)
 void
 empathy_tp_file_cancel (EmpathyTpFile *tp_file)
 {
-  g_return_val_if_fail (EMPATHY_IS_TP_FILE (tp_file), NULL);
+  g_return_if_fail (EMPATHY_IS_TP_FILE (tp_file));
 
   tp_cli_channel_call_close (tp_file->priv->channel, -1, NULL, NULL, NULL, NULL);
 
@@ -972,7 +975,7 @@ empathy_tp_file_set_output_stream (EmpathyTpFile *tp_file,
                                    GOutputStream *out_stream)
 {
   g_return_if_fail (EMPATHY_IS_TP_FILE (tp_file));
-  g_return_if_fail (G_IS_INPUT_STREAM (in_stream));
+  g_return_if_fail (G_IS_OUTPUT_STREAM (out_stream));
 
   if (tp_file->priv->out_stream == out_stream)
     return;

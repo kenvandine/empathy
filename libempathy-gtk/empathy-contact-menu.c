@@ -195,7 +195,7 @@ empathy_contact_log_menu_item_new (EmpathyContact *contact)
 static void
 contact_file_transfer_menu_item_activate_cb (EmpathyContact *contact)
 {
-	g_return_val_if_fail (EMPATHY_IS_CONTACT (contact), NULL);
+	g_return_if_fail (EMPATHY_IS_CONTACT (contact));
 	empathy_send_file_with_file_chooser_and_manager (contact);
 }
 
