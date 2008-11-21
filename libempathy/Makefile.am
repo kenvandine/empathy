@@ -38,7 +38,6 @@ libempathy_la_SOURCES =					\
 	empathy-tp-contact-factory.c			\
 	empathy-tp-contact-list.c			\
 	empathy-tp-file.c				\
-	empathy-tp-file-priv.h				\
 	empathy-tp-group.c				\
 	empathy-tp-roomlist.c				\
 	empathy-tp-tube.c				\
