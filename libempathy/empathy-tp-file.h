@@ -36,9 +36,6 @@
 
 #include <libmissioncontrol/mc-account.h>
 
-/* Forward-declaration to resolve cyclic dependencies */
-typedef struct _EmpathyTpFile      EmpathyTpFile;
-
 #include "empathy-tp-file.h"
 
 G_BEGIN_DECLS
@@ -52,11 +49,15 @@ G_BEGIN_DECLS
 #define EMPATHY_IS_TP_FILE_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), EMPATHY_TYPE_TP_FILE))
 #define EMPATHY_TP_FILE_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), EMPATHY_TYPE_TP_FILE, EmpathyTpFileClass))
 
+typedef struct _EmpathyTpFile EmpathyTpFile;
+typedef struct _EmpathyTpFilePriv EmpathyTpFilePriv;
 typedef struct _EmpathyTpFileClass EmpathyTpFileClass;
 
 struct _EmpathyTpFile
 {
   GObject      parent;
+
+  EmpathyTpFilePriv *priv;
 };
 
 struct _EmpathyTpFileClass
