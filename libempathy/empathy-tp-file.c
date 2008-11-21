@@ -616,7 +616,6 @@ tp_file_channel_set_dbus_property (gpointer proxy,
             NULL, NULL, NULL, NULL);
 }
 
-
 static void
 tp_file_set_property (GObject *object,
                       guint param_id,
@@ -710,6 +709,7 @@ tp_file_method_cb (TpProxy *proxy,
   if (error)
     {
       DEBUG ("Error: %s", error->message);
+      tp_cli_channel_call_close (tp_file->priv->channel, -1, NULL, NULL, NULL, NULL);
       return;
     }
 
@@ -968,3 +968,4 @@ empathy_tp_file_class_init (EmpathyTpFileClass *klass)
 
   g_type_class_add_private (object_class, sizeof (EmpathyTpFilePriv));
 }
+
