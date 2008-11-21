@@ -769,8 +769,24 @@ ft_manager_save_dialog_response_cb (GtkDialog *widget,
 
           if (error)
             {
-              g_warning ("Error with opening file to write to: %s",
+              GtkWidget *dialog;
+
+              DEBUG ("Error with opening file to write to: %s",
                   error->message ? error->message : "no error");
+
+              /* Error is already translated */
+              dialog = gtk_message_dialog_new (NULL, 0, GTK_MESSAGE_ERROR,
+                  GTK_BUTTONS_CLOSE, _("Cannot save file to this location"));
+
+              gtk_message_dialog_format_secondary_text (
+                  GTK_MESSAGE_DIALOG (dialog),
+                  error->message);
+
+              g_signal_connect (dialog, "response",
+                  G_CALLBACK (gtk_widget_destroy), NULL);
+
+              gtk_widget_show (dialog);
+
               g_error_free (error);
               return;
             }
