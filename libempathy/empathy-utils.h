@@ -37,7 +37,6 @@
 #include <libmissioncontrol/mission-control.h>
 
 #include "empathy-contact.h"
-#include "empathy-tp-file.h"
 
 G_BEGIN_DECLS
 
@@ -124,15 +123,6 @@ void empathy_connection_request_channel (TpConnection *proxy,
 					 gpointer user_data,
 					 GDestroyNotify destroy,
 					 GObject *weak_object);
-EmpathyFile *  empathy_send_file_from_stream        (EmpathyContact  *contact,
-                                                     GInputStream    *in_stream,
-                                                     const gchar     *filename,
-                                                     guint64          size);
-EmpathyFile *  empathy_send_file                    (EmpathyContact  *contact,
-                                                     GFile           *file);
-/* File transfer */
-EmpathyTpFile *empathy_send_file                      (EmpathyContact  *contact,
-						       GFile           *file);
 
 G_END_DECLS
 

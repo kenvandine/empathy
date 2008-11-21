@@ -47,6 +47,7 @@
 #define DEBUG_FLAG EMPATHY_DEBUG_OTHER
 #include <libempathy/empathy-debug.h>
 #include <libempathy/empathy-utils.h>
+#include <libempathy/empathy-dispatcher.h>
 
 struct SizeData {
 	gint     width;
@@ -1472,7 +1473,7 @@ file_manager_send_file_response_cb (GtkDialog      *widget,
 			gfile = g_file_new_for_uri (uri);
 
 			DEBUG ("\t%s", uri);
-			empathy_send_file (contact, gfile);
+			empathy_dispatcher_send_file (contact, gfile);
 
 			manager = gtk_recent_manager_get_default ();
 			gtk_recent_manager_add_item (manager, uri);

@@ -49,7 +49,7 @@
 /**
  * SECTION:empathy-tp-file
  * @short_description: File channel
- * @see_also: #EmpathyTpFile, #EmpathyContact, empathy_send_file()
+ * @see_also: #EmpathyTpFile, #EmpathyContact, empathy_dispatcher_send_file()
  * @include: libempthy/empathy-tp-file.h
  *
  * The #EmpathyTpFile object represents a Telepathy file channel.

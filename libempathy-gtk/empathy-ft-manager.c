@@ -50,8 +50,7 @@
 /**
  * SECTION:empathy-ft-manager
  * @short_description: File transfer dialog
- * @see_also: #EmpathyTpFile, empathy_send_file(),
- * empathy_send_file_from_stream()
+ * @see_also: #EmpathyTpFile, empathy_dispatcher_send_file()
  * @include: libempthy-gtk/empathy-ft-manager.h
  *
  * The #EmpathyFTManager object represents the file transfer dialog,
