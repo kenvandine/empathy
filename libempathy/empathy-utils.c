@@ -820,7 +820,7 @@ empathy_send_file (EmpathyContact *contact,
 						    EMP_IFACE_CHANNEL_TYPE_FILE,
 						    TP_HANDLE_TYPE_CONTACT,
 						    handle,
-						    FALSE,
+						    TRUE,
 						    &object_path,
 						    &error,
 						    NULL)) {
