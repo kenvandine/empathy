@@ -468,6 +468,20 @@ empathy_contact_get_account (EmpathyContact *contact)
   return priv->account;
 }
 
+static gboolean
+contact_is_salut (EmpathyContact *contact)
+{
+  McAccount *account;
+  McProfile *profile;
+  const gchar *name;
+
+  account = empathy_contact_get_account (contact);
+  profile = mc_account_get_profile (account);
+  name = mc_profile_get_protocol_name (profile);
+
+  return (strcmp (name, "local-xmpp") == 0);
+}
+
 void
 empathy_contact_set_account (EmpathyContact *contact,
                              McAccount *account)
@@ -485,6 +499,19 @@ empathy_contact_set_account (EmpathyContact *contact,
   if (priv->account)
       g_object_unref (priv->account);
   priv->account = g_object_ref (account);
+
+  /* FIXME salut does not yet support the Capabilities interface, so for
+   * now we use this hack.
+   */
+  if (contact_is_salut (contact))
+    {
+      EmpathyCapabilities caps;
+
+      caps = empathy_contact_get_capabilities (contact);
+      caps |= EMPATHY_CAPABILITIES_FT;
+
+      empathy_contact_set_capabilities (contact, caps);
+    }
 
   g_object_notify (G_OBJECT (contact), "account");
 }
@@ -560,20 +587,6 @@ empathy_contact_get_handle (EmpathyContact *contact)
   return priv->handle;
 }
 
-static gboolean
-contact_is_salut (EmpathyContact *contact)
-{
-  McAccount *account;
-  McProfile *profile;
-  const gchar *name;
-
-  account = empathy_contact_get_account (contact);
-  profile = mc_account_get_profile (account);
-  name = mc_profile_get_protocol_name (profile);
-
-  return (strcmp (name, "local-xmpp") == 0);
-}
-
 void
 empathy_contact_set_handle (EmpathyContact *contact,
                             guint handle)
@@ -589,19 +602,6 @@ empathy_contact_set_handle (EmpathyContact *contact,
     {
       priv->handle = handle;
       g_object_notify (G_OBJECT (contact), "handle");
-
-      /* FIXME salut does not yet support the Capabilities interface, so for
-       * now we use this hack.
-       */
-      if (contact_is_salut (contact))
-        {
-          EmpathyCapabilities caps;
-
-          caps = empathy_contact_get_capabilities (contact);
-          caps |= EMPATHY_CAPABILITIES_FT;
-
-          empathy_contact_set_capabilities (contact, caps);
-        }
     }
   contact_set_ready_flag (contact, EMPATHY_CONTACT_READY_HANDLE);
   g_object_unref (contact);
