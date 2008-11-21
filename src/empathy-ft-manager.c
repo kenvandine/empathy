@@ -103,39 +103,6 @@ G_DEFINE_TYPE (EmpathyFTManager, empathy_ft_manager, G_TYPE_OBJECT);
 
 static EmpathyFTManager *manager_p = NULL;
 
-/**
- * empathy_ft_manager_get_default:
- *
- * Returns a new #EmpathyFTManager if there is not already one, or the existing
- * one if it exists.
- *
- * Returns: a #EmpathyFTManager
- */
-EmpathyFTManager *
-empathy_ft_manager_get_default (void)
-{
-  if (!manager_p)
-    manager_p = g_object_new (EMPATHY_TYPE_FT_MANAGER, NULL);
-
-  return manager_p;
-}
-
-/**
- * empathy_ft_manager_get_dialog:
- * @ft_manager: an #EmpathyFTManager
- *
- * Returns the #GtkWidget of @ft_manager.
- *
- * Returns: the dialog
- */
-GtkWidget *
-empathy_ft_manager_get_dialog (EmpathyFTManager *ft_manager)
-{
-  g_return_val_if_fail (EMPATHY_IS_FT_MANAGER (ft_manager), NULL);
-
-  return ft_manager->priv->window;
-}
-
 static gchar *
 ft_manager_format_interval (gint interval)
 {
@@ -505,16 +472,6 @@ remove_finished_transfer_foreach (gpointer key,
 }
 
 static void
-ft_manager_clear (EmpathyFTManager *ft_manager)
-{
-  DEBUG ("Clearing file transfer list");
-
-  /* Remove completed and cancelled transfers */
-  g_hash_table_foreach_remove (ft_manager->priv->tp_file_to_row_ref,
-      remove_finished_transfer_foreach, ft_manager);
-}
-
-static void
 ft_manager_state_changed_cb (EmpathyTpFile *tp_file,
                              GParamSpec *pspec,
                              EmpathyFTManager *ft_manager)
@@ -585,6 +542,16 @@ ft_manager_add_tp_file_to_list (EmpathyFTManager *ft_manager,
 }
 
 static void
+ft_manager_clear (EmpathyFTManager *ft_manager)
+{
+  DEBUG ("Clearing file transfer list");
+
+  /* Remove completed and cancelled transfers */
+  g_hash_table_foreach_remove (ft_manager->priv->tp_file_to_row_ref,
+      remove_finished_transfer_foreach, ft_manager);
+}
+
+static void
 ft_manager_open (EmpathyFTManager *ft_manager)
 {
   GtkTreeSelection *selection;
@@ -650,9 +617,218 @@ ft_manager_response_cb (GtkWidget *dialog,
     }
 }
 
-/*
- * Receiving files
+static gboolean
+ft_manager_delete_event_cb (GtkWidget *widget,
+                            GdkEvent *event,
+                            EmpathyFTManager *ft_manager)
+{
+  ft_manager_clear (ft_manager);
+  if (g_hash_table_size (ft_manager->priv->tp_file_to_row_ref) == 0)
+    {
+      DEBUG ("Destroying window");
+      if (manager_p != NULL)
+        g_object_unref (manager_p);
+
+      manager_p = NULL;
+      return FALSE;
+    }
+  else
+    {
+      DEBUG ("Hiding window");
+      gtk_widget_hide (widget);
+      return TRUE;
+    }
+}
+
+static void
+ft_manager_build_ui (EmpathyFTManager *ft_manager)
+{
+  gint x, y, w, h;
+  GtkListStore *liststore;
+  GtkTreeViewColumn *column;
+  GtkCellRenderer *renderer;
+  GtkTreeSelection *selection;
+  gchar *filename;
+
+  filename = empathy_file_lookup ("empathy-ft-manager.glade", "src");
+  empathy_glade_get_file (filename,
+      "ft_manager_dialog", NULL,
+      "ft_manager_dialog", &ft_manager->priv->window,
+      "ft_list", &ft_manager->priv->treeview,
+      "open_button", &ft_manager->priv->open_button,
+      "abort_button", &ft_manager->priv->abort_button,
+      NULL);
+  g_free (filename);
+
+  g_signal_connect (ft_manager->priv->window, "response",
+      G_CALLBACK (ft_manager_response_cb), ft_manager);
+  g_signal_connect (ft_manager->priv->window, "delete-event",
+      G_CALLBACK (ft_manager_delete_event_cb), ft_manager);
+  g_signal_connect (ft_manager->priv->window, "configure-event",
+      G_CALLBACK (ft_manager_configure_event_cb), ft_manager);
+
+  /* Window geometry. */
+  empathy_geometry_load ("ft-manager", &x, &y, &w, &h);
+
+  if (x >= 0 && y >= 0)
+    {
+      /* Let the window manager position it if we don't have
+       * good x, y coordinates. */
+      gtk_window_move (GTK_WINDOW (ft_manager->priv->window), x, y);
+    }
+
+  if (w > 0 && h > 0)
+    {
+      /* Use the defaults from the glade file if we don't have
+       * good w, h geometry. */
+      gtk_window_resize (GTK_WINDOW (ft_manager->priv->window), w, h);
+    }
+
+  gtk_tree_selection_set_mode (gtk_tree_view_get_selection (GTK_TREE_VIEW (
+      ft_manager->priv->treeview)), GTK_SELECTION_BROWSE);
+
+  liststore = gtk_list_store_new (5, G_TYPE_INT, G_TYPE_STRING,
+      G_TYPE_STRING, G_TYPE_STRING, G_TYPE_OBJECT);
+
+  gtk_tree_view_set_model (GTK_TREE_VIEW(ft_manager->priv->treeview),
+      GTK_TREE_MODEL (liststore));
+  g_object_unref (liststore);
+  gtk_tree_view_set_headers_visible (GTK_TREE_VIEW(ft_manager->priv->treeview), TRUE);
+
+  /* Icon and filename column*/
+  column = gtk_tree_view_column_new ();
+  gtk_tree_view_column_set_title (column, _("File"));
+  renderer = gtk_cell_renderer_pixbuf_new ();
+  g_object_set (renderer, "xpad", 3, NULL);
+  gtk_tree_view_column_pack_start (column, renderer, FALSE);
+  gtk_tree_view_column_set_attributes (column, renderer,
+      "icon-name", COL_ICON,
+      NULL);
+  g_object_set (renderer, "stock-size", GTK_ICON_SIZE_DND, NULL);
+  renderer = gtk_cell_renderer_text_new ();
+  g_object_set (renderer, "ellipsize", PANGO_ELLIPSIZE_END, NULL);
+  gtk_tree_view_column_pack_start (column, renderer, TRUE);
+  gtk_tree_view_column_set_attributes (column, renderer,
+      "text", COL_MESSAGE,
+      NULL);
+  gtk_tree_view_insert_column (GTK_TREE_VIEW (ft_manager->priv->treeview), column,
+      FILE_COL_POS);
+  gtk_tree_view_column_set_expand (column, TRUE);
+  gtk_tree_view_column_set_resizable (column, TRUE);
+  gtk_tree_view_column_set_sort_column_id (column, COL_MESSAGE);
+  gtk_tree_view_column_set_spacing (column, 3);
+
+  /* Progress column */
+  renderer = gtk_cell_renderer_progress_new ();
+  g_object_set (renderer, "xalign", 0.5, NULL);
+  gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (ft_manager->priv->treeview),
+      PROGRESS_COL_POS, _("%"),
+      renderer,
+      NULL);
+  column = gtk_tree_view_get_column (GTK_TREE_VIEW (ft_manager->priv->treeview),
+      PROGRESS_COL_POS);
+  gtk_tree_view_column_set_cell_data_func(column, renderer,
+      ft_manager_progress_cell_data_func,
+      NULL, NULL);
+  gtk_tree_view_column_set_sort_column_id (column, COL_PERCENT);
+
+  /* Remaining time column */
+  renderer = gtk_cell_renderer_text_new ();
+  g_object_set (renderer, "xalign", 0.5, NULL);
+  gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (
+      ft_manager->priv->treeview), REMAINING_COL_POS, _("Remaining"),
+      renderer, "text", COL_REMAINING, NULL);
+
+  column = gtk_tree_view_get_column (GTK_TREE_VIEW (
+      ft_manager->priv->treeview),
+      REMAINING_COL_POS);
+  gtk_tree_view_column_set_sort_column_id (column, COL_REMAINING);
+
+  gtk_tree_view_set_enable_search (GTK_TREE_VIEW (ft_manager->priv->treeview),
+      FALSE);
+
+  ft_manager->priv->model = GTK_TREE_MODEL (liststore);
+
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (
+      ft_manager->priv->treeview));
+  g_signal_connect (selection, "changed",
+      G_CALLBACK (ft_manager_selection_changed), ft_manager);
+}
+
+static void
+empathy_ft_manager_finalize (GObject *object)
+{
+  EmpathyFTManager *ft_manager = (EmpathyFTManager *) object;
+
+  DEBUG ("%p", object);
+
+  g_hash_table_destroy (ft_manager->priv->tp_file_to_row_ref);
+
+  if (ft_manager->priv->save_geometry_id != 0)
+    g_source_remove (ft_manager->priv->save_geometry_id);
+
+  G_OBJECT_CLASS (empathy_ft_manager_parent_class)->finalize (object);
+}
+
+static void
+empathy_ft_manager_init (EmpathyFTManager *ft_manager)
+{
+  EmpathyFTManagerPriv *priv;
+
+  priv = G_TYPE_INSTANCE_GET_PRIVATE ((ft_manager), EMPATHY_TYPE_FT_MANAGER,
+      EmpathyFTManagerPriv);
+
+  ft_manager->priv = priv;
+
+  priv->tp_file_to_row_ref = g_hash_table_new_full (g_direct_hash,
+      g_direct_equal, (GDestroyNotify) g_object_unref,
+      (GDestroyNotify) gtk_tree_row_reference_free);
+
+  ft_manager_build_ui (ft_manager);
+}
+
+static void
+empathy_ft_manager_class_init (EmpathyFTManagerClass *klass)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+  object_class->finalize = empathy_ft_manager_finalize;
+
+  g_type_class_add_private (object_class, sizeof (EmpathyFTManagerPriv));
+}
+
+/**
+ * empathy_ft_manager_get_default:
+ *
+ * Returns a new #EmpathyFTManager if there is not already one, or the existing
+ * one if it exists.
+ *
+ * Returns: a #EmpathyFTManager
  */
+EmpathyFTManager *
+empathy_ft_manager_get_default (void)
+{
+  if (!manager_p)
+    manager_p = g_object_new (EMPATHY_TYPE_FT_MANAGER, NULL);
+
+  return manager_p;
+}
+
+/**
+ * empathy_ft_manager_get_dialog:
+ * @ft_manager: an #EmpathyFTManager
+ *
+ * Returns the #GtkWidget of @ft_manager.
+ *
+ * Returns: the dialog
+ */
+GtkWidget *
+empathy_ft_manager_get_dialog (EmpathyFTManager *ft_manager)
+{
+  g_return_val_if_fail (EMPATHY_IS_FT_MANAGER (ft_manager), NULL);
+
+  return ft_manager->priv->window;
+}
 
 typedef struct {
   EmpathyFTManager *ft_manager;
@@ -895,185 +1071,5 @@ empathy_ft_manager_add_tp_file (EmpathyFTManager *ft_manager,
     ft_manager_display_accept_dialog (ft_manager, tp_file);
   else
     ft_manager_add_tp_file_to_list (ft_manager, tp_file);
-}
-
-static void
-empathy_ft_manager_finalize (GObject *object)
-{
-  EmpathyFTManager *ft_manager = (EmpathyFTManager *) object;
-
-  DEBUG ("Finalizing: %p", object);
-
-  g_hash_table_destroy (ft_manager->priv->tp_file_to_row_ref);
-
-  if (ft_manager->priv->save_geometry_id != 0)
-    g_source_remove (ft_manager->priv->save_geometry_id);
-
-  G_OBJECT_CLASS (empathy_ft_manager_parent_class)->finalize (object);
-}
-
-static gboolean
-ft_manager_delete_event_cb (GtkWidget *widget,
-                            GdkEvent *event,
-                            EmpathyFTManager *ft_manager)
-{
-  ft_manager_clear (ft_manager);
-  if (g_hash_table_size (ft_manager->priv->tp_file_to_row_ref) == 0)
-    {
-      DEBUG ("Destroying window");
-      if (manager_p != NULL)
-        g_object_unref (manager_p);
-
-      manager_p = NULL;
-      return FALSE;
-    }
-  else
-    {
-      DEBUG ("Hiding window");
-      gtk_widget_hide (widget);
-      return TRUE;
-    }
-}
-
-static void
-ft_manager_build_ui (EmpathyFTManager *ft_manager)
-{
-  gint x, y, w, h;
-  GtkListStore *liststore;
-  GtkTreeViewColumn *column;
-  GtkCellRenderer *renderer;
-  GtkTreeSelection *selection;
-  gchar *filename;
-
-  filename = empathy_file_lookup ("empathy-ft-manager.glade", "src");
-  empathy_glade_get_file (filename,
-      "ft_manager_dialog", NULL,
-      "ft_manager_dialog", &ft_manager->priv->window,
-      "ft_list", &ft_manager->priv->treeview,
-      "open_button", &ft_manager->priv->open_button,
-      "abort_button", &ft_manager->priv->abort_button,
-      NULL);
-  g_free (filename);
-
-  g_signal_connect (ft_manager->priv->window, "response",
-      G_CALLBACK (ft_manager_response_cb), ft_manager);
-  g_signal_connect (ft_manager->priv->window, "delete-event",
-      G_CALLBACK (ft_manager_delete_event_cb), ft_manager);
-  g_signal_connect (ft_manager->priv->window, "configure-event",
-      G_CALLBACK (ft_manager_configure_event_cb), ft_manager);
-
-  /* Window geometry. */
-  empathy_geometry_load ("ft-manager", &x, &y, &w, &h);
-
-  if (x >= 0 && y >= 0)
-    {
-      /* Let the window manager position it if we don't have
-       * good x, y coordinates. */
-      gtk_window_move (GTK_WINDOW (ft_manager->priv->window), x, y);
-    }
-
-  if (w > 0 && h > 0)
-    {
-      /* Use the defaults from the glade file if we don't have
-       * good w, h geometry. */
-      gtk_window_resize (GTK_WINDOW (ft_manager->priv->window), w, h);
-    }
-
-  gtk_tree_selection_set_mode (gtk_tree_view_get_selection (GTK_TREE_VIEW (
-      ft_manager->priv->treeview)), GTK_SELECTION_BROWSE);
-
-  liststore = gtk_list_store_new (5, G_TYPE_INT, G_TYPE_STRING,
-      G_TYPE_STRING, G_TYPE_STRING, G_TYPE_OBJECT);
-
-  gtk_tree_view_set_model (GTK_TREE_VIEW(ft_manager->priv->treeview),
-      GTK_TREE_MODEL (liststore));
-  g_object_unref (liststore);
-  gtk_tree_view_set_headers_visible (GTK_TREE_VIEW(ft_manager->priv->treeview), TRUE);
-
-  /* Icon and filename column*/
-  column = gtk_tree_view_column_new ();
-  gtk_tree_view_column_set_title (column, _("File"));
-  renderer = gtk_cell_renderer_pixbuf_new ();
-  g_object_set (renderer, "xpad", 3, NULL);
-  gtk_tree_view_column_pack_start (column, renderer, FALSE);
-  gtk_tree_view_column_set_attributes (column, renderer,
-      "icon-name", COL_ICON,
-      NULL);
-  g_object_set (renderer, "stock-size", GTK_ICON_SIZE_DND, NULL);
-  renderer = gtk_cell_renderer_text_new ();
-  g_object_set (renderer, "ellipsize", PANGO_ELLIPSIZE_END, NULL);
-  gtk_tree_view_column_pack_start (column, renderer, TRUE);
-  gtk_tree_view_column_set_attributes (column, renderer,
-      "text", COL_MESSAGE,
-      NULL);
-  gtk_tree_view_insert_column (GTK_TREE_VIEW (ft_manager->priv->treeview), column,
-      FILE_COL_POS);
-  gtk_tree_view_column_set_expand (column, TRUE);
-  gtk_tree_view_column_set_resizable (column, TRUE);
-  gtk_tree_view_column_set_sort_column_id (column, COL_MESSAGE);
-  gtk_tree_view_column_set_spacing (column, 3);
-
-  /* Progress column */
-  renderer = gtk_cell_renderer_progress_new ();
-  g_object_set (renderer, "xalign", 0.5, NULL);
-  gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (ft_manager->priv->treeview),
-      PROGRESS_COL_POS, _("%"),
-      renderer,
-      NULL);
-  column = gtk_tree_view_get_column (GTK_TREE_VIEW (ft_manager->priv->treeview),
-      PROGRESS_COL_POS);
-  gtk_tree_view_column_set_cell_data_func(column, renderer,
-      ft_manager_progress_cell_data_func,
-      NULL, NULL);
-  gtk_tree_view_column_set_sort_column_id (column, COL_PERCENT);
-
-  /* Remaining time column */
-  renderer = gtk_cell_renderer_text_new ();
-  g_object_set (renderer, "xalign", 0.5, NULL);
-  gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (
-      ft_manager->priv->treeview), REMAINING_COL_POS, _("Remaining"),
-      renderer, "text", COL_REMAINING, NULL);
-
-  column = gtk_tree_view_get_column (GTK_TREE_VIEW (
-      ft_manager->priv->treeview),
-      REMAINING_COL_POS);
-  gtk_tree_view_column_set_sort_column_id (column, COL_REMAINING);
-
-  gtk_tree_view_set_enable_search (GTK_TREE_VIEW (ft_manager->priv->treeview),
-      FALSE);
-
-  ft_manager->priv->model = GTK_TREE_MODEL (liststore);
-
-  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (
-      ft_manager->priv->treeview));
-  g_signal_connect (selection, "changed",
-      G_CALLBACK (ft_manager_selection_changed), ft_manager);
-}
-
-static void
-empathy_ft_manager_init (EmpathyFTManager *ft_manager)
-{
-  EmpathyFTManagerPriv *priv;
-
-  priv = G_TYPE_INSTANCE_GET_PRIVATE ((ft_manager), EMPATHY_TYPE_FT_MANAGER,
-      EmpathyFTManagerPriv);
-
-  ft_manager->priv = priv;
-
-  priv->tp_file_to_row_ref = g_hash_table_new_full (g_direct_hash,
-      g_direct_equal, (GDestroyNotify) g_object_unref,
-      (GDestroyNotify) gtk_tree_row_reference_free);
-
-  ft_manager_build_ui (ft_manager);
-}
-
-static void
-empathy_ft_manager_class_init (EmpathyFTManagerClass *klass)
-{
-  GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-  object_class->finalize = empathy_ft_manager_finalize;
-
-  g_type_class_add_private (object_class, sizeof (EmpathyFTManagerPriv));
 }
 
