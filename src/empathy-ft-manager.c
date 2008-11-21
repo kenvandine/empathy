@@ -177,7 +177,7 @@ ft_manager_update_buttons (EmpathyFTManager *ft_manager)
     {
       gtk_tree_model_get (model, &iter, COL_FT_OBJECT, &tp_file, -1);
 
-      if (empathy_tp_file_get_state (tp_file)
+      if (empathy_tp_file_get_state (tp_file, NULL)
           == EMP_FILE_TRANSFER_STATE_COMPLETED)
         {
           if (empathy_tp_file_is_incoming (tp_file))
@@ -188,7 +188,7 @@ ft_manager_update_buttons (EmpathyFTManager *ft_manager)
           abort_enabled = FALSE;
 
         }
-      else if (empathy_tp_file_get_state (tp_file) ==
+      else if (empathy_tp_file_get_state (tp_file, NULL) ==
         EMP_FILE_TRANSFER_STATE_CANCELLED)
         {
           open_enabled = FALSE;
@@ -254,8 +254,7 @@ ft_manager_update_ft_row (EmpathyFTManager *ft_manager,
   contact_name = empathy_contact_get_name (empathy_tp_file_get_contact (tp_file));
   transferred_bytes = empathy_tp_file_get_transferred_bytes (tp_file);
   total_size = empathy_tp_file_get_size (tp_file);
-  state = empathy_tp_file_get_state (tp_file);
-  reason = empathy_tp_file_get_state_change_reason (tp_file);
+  state = empathy_tp_file_get_state (tp_file, &reason);
   incoming = empathy_tp_file_is_incoming (tp_file);
 
   switch (state)
@@ -523,7 +522,7 @@ remove_finished_transfer_foreach (gpointer key,
   EmpathyFTManager *self = EMPATHY_FT_MANAGER (user_data);
   EmpFileTransferState state;
 
-  state = empathy_tp_file_get_state (tp_file);
+  state = empathy_tp_file_get_state (tp_file, NULL);
   if (state == EMP_FILE_TRANSFER_STATE_COMPLETED ||
       state == EMP_FILE_TRANSFER_STATE_CANCELLED)
     {
@@ -551,7 +550,7 @@ ft_manager_state_changed_cb (EmpathyTpFile *tp_file,
 {
   gboolean remove;
 
-  switch (empathy_tp_file_get_state (tp_file))
+  switch (empathy_tp_file_get_state (tp_file, NULL))
     {
       case EMP_FILE_TRANSFER_STATE_COMPLETED:
         if (empathy_tp_file_is_incoming (tp_file))
@@ -944,7 +943,7 @@ empathy_ft_manager_add_tp_file (EmpathyFTManager *ft_manager,
       empathy_contact_get_name (empathy_tp_file_get_contact (tp_file)),
       empathy_tp_file_get_filename (tp_file));
 
-  state = empathy_tp_file_get_state (tp_file);
+  state = empathy_tp_file_get_state (tp_file, NULL);
 
   if (state == EMP_FILE_TRANSFER_STATE_PENDING &&
       empathy_tp_file_is_incoming (tp_file))

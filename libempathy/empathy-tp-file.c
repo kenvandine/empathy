@@ -327,13 +327,17 @@ empathy_tp_file_init (EmpathyTpFile *tp_file)
 }
 
 static void
-tp_file_destroy_cb (TpChannel *file_channel,
-                    EmpathyTpFile *tp_file)
+tp_file_invalidated_cb (TpProxy       *proxy,
+			guint          domain,
+			gint           code,
+			gchar         *message,
+			EmpathyTpFile *tp_file)
 {
-  DEBUG ("Channel Closed or CM crashed");
-
-  g_object_unref (tp_file->priv->channel);
-  tp_file->priv->channel = NULL;
+	DEBUG ("Channel invalidated: %s", message);
+	tp_file->priv->state = EMP_FILE_TRANSFER_STATE_CANCELLED;
+	tp_file->priv->state_change_reason =
+	    EMP_FILE_TRANSFER_STATE_CHANGE_REASON_LOCAL_ERROR;
+	g_object_notify (G_OBJECT (tp_file), "state");
 }
 
 static void
@@ -347,7 +351,7 @@ tp_file_finalize (GObject *object)
     {
       DEBUG ("Closing channel..");
       g_signal_handlers_disconnect_by_func (tp_file->priv->channel,
-          tp_file_destroy_cb, object);
+          tp_file_invalidated_cb, object);
       tp_cli_channel_call_close (tp_file->priv->channel, -1, NULL, NULL,
           NULL, NULL);
       g_object_unref (tp_file->priv->channel);
@@ -382,18 +386,6 @@ tp_file_finalize (GObject *object)
     g_object_unref (tp_file->priv->cancellable);
 
   G_OBJECT_CLASS (empathy_tp_file_parent_class)->finalize (object);
-}
-
-static void
-tp_file_closed_cb (TpChannel *file_channel,
-                   EmpathyTpFile *tp_file,
-                   GObject *weak_object)
-{
-  /* The channel is closed, do just like if the proxy was destroyed */
-  g_signal_handlers_disconnect_by_func (tp_file->priv->channel,
-      tp_file_destroy_cb,
-      tp_file);
-  tp_file_destroy_cb (file_channel, tp_file);
 }
 
 static gint
@@ -539,10 +531,8 @@ tp_file_constructor (GType type,
   tp_file->priv->factory = empathy_contact_factory_new ();
   tp_file->priv->mc = empathy_mission_control_new ();
 
-  tp_cli_channel_connect_to_closed (tp_file->priv->channel,
-      (tp_cli_channel_signal_callback_closed) tp_file_closed_cb,
-      tp_file,
-      NULL, NULL, NULL);
+  g_signal_connect (tp_file->priv->channel, "invalidated",
+    G_CALLBACK (tp_file_invalidated_cb), tp_file);
 
   emp_cli_channel_type_file_transfer_connect_to_file_transfer_state_changed (
       TP_PROXY (tp_file->priv->channel),
@@ -875,20 +865,16 @@ empathy_tp_file_is_incoming (EmpathyTpFile *tp_file)
 }
 
 EmpFileTransferState
-empathy_tp_file_get_state (EmpathyTpFile *tp_file)
+empathy_tp_file_get_state (EmpathyTpFile *tp_file,
+                           EmpFileTransferStateChangeReason *reason)
 {
   g_return_val_if_fail (EMPATHY_IS_TP_FILE (tp_file),
       EMP_FILE_TRANSFER_STATE_NONE);
+
+  if (reason != NULL)
+    *reason = tp_file->priv->state_change_reason;
+
   return tp_file->priv->state;
-}
-
-EmpFileTransferStateChangeReason
-empathy_tp_file_get_state_change_reason (EmpathyTpFile *tp_file)
-{
-  g_return_val_if_fail (EMPATHY_IS_TP_FILE (tp_file),
-      EMP_FILE_TRANSFER_STATE_CHANGE_REASON_NONE);
-
-  return tp_file->priv->state_change_reason;
 }
 
 guint64
