@@ -25,7 +25,10 @@
 
 #include <telepathy-glib/util.h>
 #include <telepathy-glib/connection.h>
+#include <telepathy-glib/gtypes.h>
 #include <libmissioncontrol/mission-control.h>
+
+#include <extensions/extensions.h>
 
 #include "empathy-tp-contact-factory.h"
 #include "empathy-utils.h"
@@ -50,6 +53,7 @@ typedef struct {
 	guint           avatar_max_width;
 	guint           avatar_max_height;
 	guint           avatar_max_size;
+  gboolean        can_request_ft;
 } EmpathyTpContactFactoryPriv;
 
 G_DEFINE_TYPE (EmpathyTpContactFactory, empathy_tp_contact_factory, G_TYPE_OBJECT);
@@ -817,6 +821,60 @@ tp_contact_factory_ready (EmpathyTpContactFactory *tp_factory)
 }
 
 static void
+get_requestable_channel_classes_cb (TpProxy *connection,
+                                    const GValue *value,
+                                    const GError *error,
+                                    gpointer user_data,
+                                    GObject *weak_object)
+{
+  EmpathyTpContactFactory *self = EMPATHY_TP_CONTACT_FACTORY (user_data);
+  EmpathyTpContactFactoryPriv *priv = GET_PRIV (self);
+  GPtrArray *classes;
+  guint i;
+
+  if (error != NULL)
+    {
+      DEBUG ("Error: %s", error->message);
+      return;
+    }
+
+  classes = g_value_get_boxed (value);
+
+  for (i = 0; i < classes->len; i++)
+    {
+      GValue class = {0,};
+      GValue *chan_type, *handle_type;
+      GHashTable *fixed_prop;
+
+      g_value_init (&class, TP_STRUCT_TYPE_REQUESTABLE_CHANNEL_CLASS);
+      g_value_set_static_boxed (&class, g_ptr_array_index (classes, i));
+
+      dbus_g_type_struct_get (&class,
+          0, &fixed_prop,
+          G_MAXUINT);
+
+      chan_type = g_hash_table_lookup (fixed_prop,
+          TP_IFACE_CHANNEL ".ChannelType");
+      if (chan_type == NULL || tp_strdiff (g_value_get_string (chan_type),
+            EMP_IFACE_CHANNEL_TYPE_FILE_TRANSFER))
+        continue;
+
+      handle_type = g_hash_table_lookup (fixed_prop,
+        TP_IFACE_CHANNEL ".TargetHandleType");
+      if (handle_type == NULL || g_value_get_uint (handle_type)
+          != TP_HANDLE_TYPE_CONTACT)
+        continue;
+
+      /* We can request file transfer channel to contacts. */
+      priv->can_request_ft = TRUE;
+
+      break;
+    }
+
+  tp_contact_factory_ready (self);
+}
+
+static void
 tp_contact_factory_got_avatar_requirements_cb (TpConnection *proxy,
 					       const gchar **mime_types,
 					       guint         min_width,
@@ -845,7 +903,11 @@ tp_contact_factory_got_avatar_requirements_cb (TpConnection *proxy,
 		priv->avatar_max_size = max_size;
 	}
 
-	tp_contact_factory_ready (EMPATHY_TP_CONTACT_FACTORY (tp_factory));
+  /* Can we request file transfer channels? */
+  tp_cli_dbus_properties_call_get (priv->connection, -1,
+    TP_IFACE_CONNECTION_INTERFACE_REQUESTS, "RequestableChannelClasses",
+    get_requestable_channel_classes_cb, tp_factory, NULL,
+    G_OBJECT (tp_factory));
 }
 
 static void
@@ -976,6 +1038,20 @@ static void
 contact_created (EmpathyTpContactFactory *self,
                  EmpathyContact *contact)
 {
+  EmpathyTpContactFactoryPriv *priv = GET_PRIV (self);
+
+  if (priv->can_request_ft)
+    {
+      /* Set the FT capability */
+      /* FIXME: We should use the futur ContactCapabilities interface */
+      EmpathyCapabilities caps;
+
+      caps = empathy_contact_get_capabilities (contact);
+      caps |= EMPATHY_CAPABILITIES_FT;
+
+      empathy_contact_set_capabilities (contact, caps);
+    }
+
   tp_contact_factory_add_contact (self, contact);
 }
 
@@ -1434,6 +1510,8 @@ empathy_tp_contact_factory_init (EmpathyTpContactFactory *tp_factory)
 	priv->token = empathy_connect_to_account_status_changed (priv->mc,
 						   G_CALLBACK (tp_contact_factory_status_changed_cb),
 						   tp_factory, NULL);
+
+  priv->can_request_ft = FALSE;
 }
 
 EmpathyTpContactFactory *
