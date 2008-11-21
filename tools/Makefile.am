@@ -7,40 +7,49 @@ telepathy-glib-env: telepathy-glib-env.in Makefile
 	chmod +x $@
 
 EXTRA_DIST = \
-    c-constants-generator.xsl \
+    c-constants-gen.py \
     check-coding-style.mk \
     check-c-style.sh \
     check-misc.sh \
     check-whitespace.sh \
-    c-interfaces-generator.xsl \
     doc-generator.xsl \
     glib-client-gen.py \
     glib-client-marshaller-gen.py \
-    glib-errors-enum-body.xsl \
-    glib-errors-enum-header.xsl \
-    glib-interfaces-generator.xsl \
-    glib-interfaces-body-generator.xsl \
+    glib-errors-enum-body-gen.py \
+    glib-errors-enum-header-gen.py \
     glib-ginterface-gen.py \
     glib-gtypes-generator.py \
+    glib-interfaces-gen.py \
     glib-signals-marshal-gen.py \
     gobject-foo.py \
     identity.xsl \
+    lcov.am \
+    libtpcodegen.py \
     libglibcodegen.py \
-    ls-interfaces.xsl \
-    make-all-async.xsl \
-    spec-to-introspect.xsl \
+    make-version-script.py \
+    telepathy.am \
     telepathy-glib-env.in \
     with-session-bus.sh
 
-CLEANFILES = libglibcodegen.pyc libglibcodegen.pyo $(noinst_SCRIPTS)
+CLEANFILES = libtpcodegen.pyc libtpcodegen.pyo libglibcodegen.pyc libglibcodegen.pyo $(noinst_SCRIPTS)
 
 all: $(EXTRA_DIST)
 
+libglibcodegen.py: libtpcodegen.py
+	touch $@
+c-constants-gen.py: libglibcodegen.py
+	touch $@
 glib-client-marshaller-gen.py: libglibcodegen.py
+	touch $@
+glib-errors-enum-body-gen.py: libglibcodegen.py
+	touch $@
+glib-errors-enum-header-gen.py: libglibcodegen.py
 	touch $@
 glib-ginterface-gen.py: libglibcodegen.py
 	touch $@
 glib-gtypes-generator.py: libglibcodegen.py
+	touch $@
+glib-interfaces-gen.py: libglibcodegen.py
 	touch $@
 glib-signals-marshal-gen.py: libglibcodegen.py
 	touch $@
