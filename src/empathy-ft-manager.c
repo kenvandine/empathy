@@ -22,6 +22,7 @@
  * Authors: Xan Lopez
  *          Marco Barisione <marco@barisione.org>
  *          Jonny Lamb <jonny.lamb@collabora.co.uk>
+ *          Xavier Claessens <xclaesse@gmail.com>
  */
 
 /* The original file transfer manager code was copied from Epiphany */
@@ -64,13 +65,6 @@ enum
   COL_MESSAGE,
   COL_REMAINING,
   COL_FT_OBJECT
-};
-
-enum
-{
-  PROGRESS_COL_POS,
-  FILE_COL_POS,
-  REMAINING_COL_POS
 };
 
 /**
@@ -644,6 +638,7 @@ ft_manager_build_ui (EmpathyFTManager *ft_manager)
 {
   GladeXML *glade;
   gint x, y, w, h;
+  GtkTreeView *view;
   GtkListStore *liststore;
   GtkTreeViewColumn *column;
   GtkCellRenderer *renderer;
@@ -686,75 +681,71 @@ ft_manager_build_ui (EmpathyFTManager *ft_manager)
       gtk_window_resize (GTK_WINDOW (ft_manager->priv->window), w, h);
     }
 
-  gtk_tree_selection_set_mode (gtk_tree_view_get_selection (GTK_TREE_VIEW (
-      ft_manager->priv->treeview)), GTK_SELECTION_BROWSE);
+  /* Setup the tree view */
+  view = GTK_TREE_VIEW (ft_manager->priv->treeview);
+  selection = gtk_tree_view_get_selection (view);
+  gtk_tree_selection_set_mode (selection, GTK_SELECTION_BROWSE);
+  g_signal_connect (selection, "changed",
+      G_CALLBACK (ft_manager_selection_changed), ft_manager);
+  gtk_tree_view_set_headers_visible (view, TRUE);
+  gtk_tree_view_set_enable_search (view, FALSE);
 
-  liststore = gtk_list_store_new (5, G_TYPE_INT, G_TYPE_STRING,
-      G_TYPE_STRING, G_TYPE_STRING, G_TYPE_OBJECT);
-
-  gtk_tree_view_set_model (GTK_TREE_VIEW(ft_manager->priv->treeview),
-      GTK_TREE_MODEL (liststore));
+  /* Setup the model */
+  liststore = gtk_list_store_new (5,
+      G_TYPE_INT,     /* percent */
+      G_TYPE_STRING,  /* icon */
+      G_TYPE_STRING,  /* message */
+      G_TYPE_STRING,  /* remaining */
+      G_TYPE_OBJECT); /* ft_file */
+  gtk_tree_view_set_model (view, GTK_TREE_MODEL (liststore));
+  ft_manager->priv->model = GTK_TREE_MODEL (liststore);
   g_object_unref (liststore);
-  gtk_tree_view_set_headers_visible (GTK_TREE_VIEW(ft_manager->priv->treeview), TRUE);
+
+  /* Progress column */
+  column = gtk_tree_view_column_new ();
+  gtk_tree_view_column_set_title (column, _("%"));
+  gtk_tree_view_column_set_sort_column_id (column, COL_PERCENT);
+  gtk_tree_view_insert_column (view, column, -1);
+
+  renderer = gtk_cell_renderer_progress_new ();
+  g_object_set (renderer, "xalign", 0.5, NULL);
+  gtk_tree_view_column_pack_start (column, renderer, FALSE);
+  gtk_tree_view_column_set_cell_data_func (column, renderer,
+      ft_manager_progress_cell_data_func, NULL, NULL);
 
   /* Icon and filename column*/
   column = gtk_tree_view_column_new ();
   gtk_tree_view_column_set_title (column, _("File"));
-  renderer = gtk_cell_renderer_pixbuf_new ();
-  g_object_set (renderer, "xpad", 3, NULL);
-  gtk_tree_view_column_pack_start (column, renderer, FALSE);
-  gtk_tree_view_column_set_attributes (column, renderer,
-      "icon-name", COL_ICON,
-      NULL);
-  g_object_set (renderer, "stock-size", GTK_ICON_SIZE_DND, NULL);
-  renderer = gtk_cell_renderer_text_new ();
-  g_object_set (renderer, "ellipsize", PANGO_ELLIPSIZE_END, NULL);
-  gtk_tree_view_column_pack_start (column, renderer, TRUE);
-  gtk_tree_view_column_set_attributes (column, renderer,
-      "text", COL_MESSAGE,
-      NULL);
-  gtk_tree_view_insert_column (GTK_TREE_VIEW (ft_manager->priv->treeview), column,
-      FILE_COL_POS);
   gtk_tree_view_column_set_expand (column, TRUE);
   gtk_tree_view_column_set_resizable (column, TRUE);
   gtk_tree_view_column_set_sort_column_id (column, COL_MESSAGE);
   gtk_tree_view_column_set_spacing (column, 3);
+  gtk_tree_view_insert_column (view, column, -1);
 
-  /* Progress column */
-  renderer = gtk_cell_renderer_progress_new ();
-  g_object_set (renderer, "xalign", 0.5, NULL);
-  gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (ft_manager->priv->treeview),
-      PROGRESS_COL_POS, _("%"),
-      renderer,
-      NULL);
-  column = gtk_tree_view_get_column (GTK_TREE_VIEW (ft_manager->priv->treeview),
-      PROGRESS_COL_POS);
-  gtk_tree_view_column_set_cell_data_func(column, renderer,
-      ft_manager_progress_cell_data_func,
-      NULL, NULL);
-  gtk_tree_view_column_set_sort_column_id (column, COL_PERCENT);
+  renderer = gtk_cell_renderer_pixbuf_new ();
+  g_object_set (renderer, "xpad", 3,
+      "stock-size", GTK_ICON_SIZE_DND, NULL);
+  gtk_tree_view_column_pack_start (column, renderer, FALSE);
+  gtk_tree_view_column_set_attributes (column, renderer,
+      "icon-name", COL_ICON, NULL);
+
+  renderer = gtk_cell_renderer_text_new ();
+  g_object_set (renderer, "ellipsize", PANGO_ELLIPSIZE_END, NULL);
+  gtk_tree_view_column_pack_start (column, renderer, TRUE);
+  gtk_tree_view_column_set_attributes (column, renderer,
+      "text", COL_MESSAGE, NULL);
 
   /* Remaining time column */
+  column = gtk_tree_view_column_new ();
+  gtk_tree_view_column_set_title (column, _("Remaining"));
+  gtk_tree_view_column_set_sort_column_id (column, COL_REMAINING);
+  gtk_tree_view_insert_column (view, column, -1);
+
   renderer = gtk_cell_renderer_text_new ();
   g_object_set (renderer, "xalign", 0.5, NULL);
-  gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (
-      ft_manager->priv->treeview), REMAINING_COL_POS, _("Remaining"),
-      renderer, "text", COL_REMAINING, NULL);
-
-  column = gtk_tree_view_get_column (GTK_TREE_VIEW (
-      ft_manager->priv->treeview),
-      REMAINING_COL_POS);
-  gtk_tree_view_column_set_sort_column_id (column, COL_REMAINING);
-
-  gtk_tree_view_set_enable_search (GTK_TREE_VIEW (ft_manager->priv->treeview),
-      FALSE);
-
-  ft_manager->priv->model = GTK_TREE_MODEL (liststore);
-
-  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (
-      ft_manager->priv->treeview));
-  g_signal_connect (selection, "changed",
-      G_CALLBACK (ft_manager_selection_changed), ft_manager);
+  gtk_tree_view_column_pack_start (column, renderer, FALSE);
+  gtk_tree_view_column_set_attributes (column, renderer,
+      "text", COL_REMAINING, NULL);
 }
 
 static void
