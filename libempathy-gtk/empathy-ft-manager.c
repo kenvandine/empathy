@@ -168,7 +168,6 @@ update_buttons (EmpathyFTManager *ft_manager)
   GtkTreeSelection *selection;
   GtkTreeModel *model;
   GtkTreeIter iter;
-  GValue val = {0, };
   EmpathyTpFile *tp_file;
   gboolean open_enabled = FALSE;
   gboolean abort_enabled = FALSE;
@@ -177,9 +176,7 @@ update_buttons (EmpathyFTManager *ft_manager)
       ft_manager->priv->treeview));
   if (gtk_tree_selection_get_selected (selection, &model, &iter))
     {
-      gtk_tree_model_get_value (model, &iter, COL_FT_OBJECT, &val);
-      tp_file = g_value_get_object (&val);
-      g_value_unset (&val);
+      gtk_tree_model_get (model, &iter, COL_FT_OBJECT, &tp_file, -1);
 
       if (empathy_tp_file_get_state (tp_file)
           == EMP_FILE_TRANSFER_STATE_COMPLETED)
@@ -678,7 +675,6 @@ ft_manager_add_tp_file_to_list (EmpathyFTManager *ft_manager,
 static void
 ft_manager_open (EmpathyFTManager *ft_manager)
 {
-  GValue val = {0, };
   GtkTreeSelection *selection;
   GtkTreeIter iter;
   GtkTreeModel *model;
@@ -690,9 +686,7 @@ ft_manager_open (EmpathyFTManager *ft_manager)
   if (!gtk_tree_selection_get_selected (selection, &model, &iter))
     return;
 
-  gtk_tree_model_get_value (model, &iter, COL_FT_OBJECT, &val);
-
-  tp_file = g_value_get_object (&val);
+  gtk_tree_model_get (model, &iter, COL_FT_OBJECT, &tp_file, -1);
   g_return_if_fail (tp_file != NULL);
 
   uri = g_object_get_data (G_OBJECT (tp_file), "uri");
@@ -703,7 +697,6 @@ ft_manager_open (EmpathyFTManager *ft_manager)
 static void
 ft_manager_stop (EmpathyFTManager *ft_manager)
 {
-  GValue val = {0, };
   GtkTreeSelection *selection;
   GtkTreeIter iter;
   GtkTreeModel *model;
@@ -714,9 +707,7 @@ ft_manager_stop (EmpathyFTManager *ft_manager)
   if (!gtk_tree_selection_get_selected (selection, &model, &iter))
     return;
 
-  gtk_tree_model_get_value (model, &iter, COL_FT_OBJECT, &val);
-
-  tp_file = g_value_get_object (&val);
+  gtk_tree_model_get (model, &iter, COL_FT_OBJECT, &tp_file, -1);
   g_return_if_fail (tp_file != NULL);
 
   DEBUG ("Stopping file transfer: contact=%s, filename=%s",
@@ -724,8 +715,6 @@ ft_manager_stop (EmpathyFTManager *ft_manager)
       empathy_tp_file_get_filename (tp_file));
 
   empathy_tp_file_cancel (tp_file);
-
-  g_value_unset (&val);
 }
 
 static void
