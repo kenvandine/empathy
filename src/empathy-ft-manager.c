@@ -231,10 +231,7 @@ ft_manager_update_ft_row (EmpathyFTManager *ft_manager,
             gchar *transferred_bytes_str;
 
             if (total_size == EMPATHY_TP_FILE_UNKNOWN_SIZE)
-              /* translators: the text before the "|" is context to
-               * help you decide on the correct translation. You MUST
-               * OMIT it in the translated string. */
-              total_size_str = g_strdup (Q_("file size|Unknown"));
+              total_size_str = g_strdup (C_("file size", "Unknown"));
             else
               total_size_str = g_format_size_for_display (total_size);
 
@@ -301,10 +298,7 @@ ft_manager_update_ft_row (EmpathyFTManager *ft_manager,
     {
       if (state != EMP_FILE_TRANSFER_STATE_COMPLETED &&
           state != EMP_FILE_TRANSFER_STATE_CANCELLED)
-        /* translators: the text before the "|" is context to
-         * help you decide on the correct translation. You
-         * MUST OMIT it in the translated string. */
-        remaining_str = g_strdup (Q_("remaining time|Unknown"));
+        remaining_str = g_strdup (C_("remaining time", "Unknown"));
     }
   else
     remaining_str = ft_manager_format_interval (remaining);
@@ -364,10 +358,7 @@ ft_manager_progress_cell_data_func (GtkTreeViewColumn *col,
   if (percent < 0)
     {
       percent = 0;
-      /* Translators: The text before the "|" is context to help you
-       * decide on the correct translation. You MUST OMIT it in the
-       * translated string. */
-      text = Q_("file transfer percent|Unknown");
+      text = C_("file transfer percent", "Unknown");
     }
 
   g_object_set (renderer, "text", text, "value", percent, NULL);
