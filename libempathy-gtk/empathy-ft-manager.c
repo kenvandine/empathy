@@ -61,7 +61,7 @@
 enum
 {
   COL_PERCENT,
-  COL_IMAGE,
+  COL_ICON,
   COL_MESSAGE,
   COL_REMAINING,
   COL_FT_OBJECT
@@ -601,8 +601,6 @@ ft_manager_add_tp_file_to_list (EmpathyFTManager *ft_manager,
   GtkTreeSelection *selection;
   GtkTreePath *path;
   GtkIconTheme *theme;
-  GtkIconInfo *icon_info;
-  GdkPixbuf *pixbuf;
   gchar *icon_name;
   gint width = 16;
   gint height = 16;
@@ -647,24 +645,12 @@ ft_manager_add_tp_file_to_list (EmpathyFTManager *ft_manager,
       GTK_ICON_SIZE_MENU, &width, &height);
   width *= 2;
 
-  icon_info = gtk_icon_theme_lookup_icon (theme, icon_name, width, 0);
-  g_free (icon_name);
-  if (icon_info != NULL)
-    {
-      pixbuf = gdk_pixbuf_new_from_file_at_size
-          (gtk_icon_info_get_filename (icon_info), width, width, NULL);
-      gtk_icon_info_free (icon_info);
-
-      gtk_list_store_set (GTK_LIST_STORE (
-          ft_manager->priv->model), &iter, COL_IMAGE, pixbuf, -1);
-      if (pixbuf != NULL)
-        {
-          g_object_unref (pixbuf);
-        }
-    }
+  gtk_list_store_set (GTK_LIST_STORE (
+      ft_manager->priv->model), &iter, COL_ICON, icon_name, -1);
 
   gtk_window_present (GTK_WINDOW (ft_manager->priv->window));
   g_free (content_type);
+  g_free (icon_name);
 }
 
 static void
@@ -1066,7 +1052,7 @@ ft_manager_build_ui (EmpathyFTManager *ft_manager)
   gtk_tree_selection_set_mode (gtk_tree_view_get_selection (GTK_TREE_VIEW (
       ft_manager->priv->treeview)), GTK_SELECTION_BROWSE);
 
-  liststore = gtk_list_store_new (5, G_TYPE_INT, GDK_TYPE_PIXBUF,
+  liststore = gtk_list_store_new (5, G_TYPE_INT, G_TYPE_STRING,
       G_TYPE_STRING, G_TYPE_STRING, G_TYPE_OBJECT);
 
   gtk_tree_view_set_model (GTK_TREE_VIEW(ft_manager->priv->treeview),
@@ -1081,8 +1067,9 @@ ft_manager_build_ui (EmpathyFTManager *ft_manager)
   g_object_set (renderer, "xpad", 3, NULL);
   gtk_tree_view_column_pack_start (column, renderer, FALSE);
   gtk_tree_view_column_set_attributes (column, renderer,
-      "pixbuf", COL_IMAGE,
+      "icon-name", COL_ICON,
       NULL);
+  g_object_set (renderer, "stock-size", GTK_ICON_SIZE_DND, NULL);
   renderer = gtk_cell_renderer_text_new ();
   g_object_set (renderer, "ellipsize", PANGO_ELLIPSIZE_END, NULL);
   gtk_tree_view_column_pack_start (column, renderer, TRUE);
