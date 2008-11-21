@@ -527,24 +527,6 @@ empathy_file_get_channel (EmpathyFile *file)
   return priv->channel;
 }
 
-/**
- * empathy_file_accept:
- * @file: an #EmpathyFile
- *
- * Accepts a file transfer that's in the "local pending" state (i.e.
- * EMP_FILE_TRANSFER_STATE_LOCAL_PENDING).
- */
-void
-empathy_file_accept (EmpathyFile *file)
-{
-  EmpathyFilePriv *priv;
-
-  g_return_if_fail (EMPATHY_IS_FILE (file));
-
-  /* TODO: accept file here */
-  if (priv) ;
-}
-
 static void
 file_destroy_cb (TpChannel *file_channel, EmpathyFile *file)
 {
@@ -630,6 +612,74 @@ _get_local_socket (EmpathyFile *file)
 
   return fd;
 }
+
+/**
+ * empathy_file_accept:
+ * @file: an #EmpathyFile
+ *
+ * Accepts a file transfer that's in the "local pending" state (i.e.
+ * EMP_FILE_TRANSFER_STATE_LOCAL_PENDING).
+ */
+void
+empathy_file_accept (EmpathyFile *file)
+{
+  EmpathyFilePriv *priv;
+  GValue *address;
+  GValue nothing = { 0 };
+  GError *error = NULL;
+
+  g_return_if_fail (EMPATHY_IS_FILE (file));
+
+  priv = GET_PRIV (file);
+
+  g_return_if_fail (priv->out_stream != NULL);
+
+  DEBUG ("Accepting file: filename=%s", priv->filename);
+
+  g_value_init (&nothing, G_TYPE_STRING);
+  g_value_set_string (&nothing, "");
+
+  if (!emp_cli_channel_type_file_run_accept_file (TP_PROXY (priv->channel),
+      -1, TP_SOCKET_ADDRESS_TYPE_UNIX, TP_SOCKET_ACCESS_CONTROL_LOCALHOST,
+      &nothing, &address, &error, NULL))
+    {
+      DEBUG ("Accept error: %s",
+          error ? error->message : "No message given");
+      g_clear_error (&error);
+    }
+
+  if (priv->unix_socket_path)
+    g_free (priv->unix_socket_path);
+
+  priv->unix_socket_path = g_value_dup_string (address);
+  g_value_unset (address);
+
+  DEBUG ("Got unix socket path: %s", priv->unix_socket_path);
+}
+
+static void
+receive_file (EmpathyFile *file)
+{
+  EmpathyFilePriv *priv;
+  GInputStream *socket_stream;
+  gint socket_fd;
+
+  priv = GET_PRIV (file);
+
+  socket_fd = _get_local_socket (file);
+
+  if (socket_fd < 0)
+    return;
+
+  socket_stream = g_unix_input_stream_new (socket_fd, TRUE);
+
+  priv->cancellable = g_cancellable_new ();
+
+  copy_stream (socket_stream, priv->out_stream, priv->cancellable);
+
+  g_object_unref (socket_stream);
+}
+
 
 static void
 send_file (EmpathyFile *file)
