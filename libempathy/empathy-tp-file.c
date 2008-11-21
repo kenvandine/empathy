@@ -347,8 +347,7 @@ tp_file_finalize (GObject *object)
           tp_file_destroy_cb, object);
       tp_cli_channel_call_close (tp_file->priv->channel, -1, NULL, NULL,
           NULL, NULL);
-      if (G_IS_OBJECT (tp_file->priv->channel))
-        g_object_unref (tp_file->priv->channel);
+      g_object_unref (tp_file->priv->channel);
     }
 
   if (tp_file->priv->factory)
