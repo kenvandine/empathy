@@ -283,18 +283,21 @@ struct _EmpathyTpFilePriv {
   GFile *gfile;
   GInputStream *in_stream;
   GOutputStream *out_stream;
-  gboolean incoming;
-  gchar *filename;
+
+  /* org.freedesktop.Telepathy.Channel.Type.FileTransfer D-Bus properties */
   EmpFileTransferState state;
-  EmpFileTransferStateChangeReason state_change_reason;
+  gchar *content_type;
+  gchar *filename;
   guint64 size;
+  EmpFileHashType content_hash_type;
+  gchar *content_hash;
+  gchar *description;
   guint64 transferred_bytes;
+
+  gboolean incoming;
+  EmpFileTransferStateChangeReason state_change_reason;
   time_t start_time;
   gchar *unix_socket_path;
-  gchar *content_hash;
-  EmpFileHashType content_hash_type;
-  gchar *content_type;
-  gchar *description;
   GCancellable *cancellable;
 };
 
