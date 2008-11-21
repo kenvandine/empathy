@@ -758,7 +758,7 @@ ft_manager_save_dialog_response_cb (GtkDialog *widget,
                   GTK_BUTTONS_CLOSE, _("Cannot save file to this location"));
 
               gtk_message_dialog_format_secondary_text (
-                  GTK_MESSAGE_DIALOG (dialog),
+                  GTK_MESSAGE_DIALOG (dialog), "%s",
                   error->message);
 
               g_signal_connect (dialog, "response",
