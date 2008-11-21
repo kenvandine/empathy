@@ -57,11 +57,11 @@ XSLTPROCFLAGS = --nonet --novalid
 _gen/all.xml: all.xml $(wildcard *.xml)
 	$(mkdir_p) _gen
 	$(XSLTPROC) $(XSLTPROCFLAGS) --xinclude $(tools_dir)/identity.xsl \
-		--param "allow-undefined-interfaces" "true()" \
 		$< > $@
 
 extensions.html: _gen/all.xml $(tools_dir)/doc-generator.xsl
 	$(XSLTPROC) $(XSLTPROCFLAGS) \
+		--param "allow-undefined-interfaces" "true()" \
 		$(tools_dir)/doc-generator.xsl \
 		$< > $@
 
