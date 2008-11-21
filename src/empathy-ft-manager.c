@@ -198,7 +198,9 @@ ft_manager_state_change_reason_to_string (EmpFileTransferStateChangeReason reaso
   switch (reason)
     {
       case EMP_FILE_TRANSFER_STATE_CHANGE_REASON_NONE:
-        return _("File transfer not completed");
+        return _("No reason was specified");
+      case EMP_FILE_TRANSFER_STATE_CHANGE_REASON_REQUESTED:
+        return _("The change in state was requested");      
       case EMP_FILE_TRANSFER_STATE_CHANGE_REASON_LOCAL_STOPPED:
         return _("You canceled the file transfer");
       case EMP_FILE_TRANSFER_STATE_CHANGE_REASON_REMOTE_STOPPED:
@@ -207,9 +209,8 @@ ft_manager_state_change_reason_to_string (EmpFileTransferStateChangeReason reaso
         return _("Error while trying to transfer the file");
       case EMP_FILE_TRANSFER_STATE_CHANGE_REASON_REMOTE_ERROR:
         return _("The other participant is unable to transfer the file");
-      default:
-        return _("Unknown reason");
     }
+  return _("Unknown reason");
 }
 
 static void
