@@ -867,6 +867,8 @@ empathy_send_file (EmpathyContact *contact,
 		empathy_tp_file_set_input_stream (tp_file, in_stream);
 	}
 
+	empathy_tp_file_offer (tp_file);
+
 	g_object_unref (mc);
 	g_object_unref (connection);
 	g_object_unref (channel);

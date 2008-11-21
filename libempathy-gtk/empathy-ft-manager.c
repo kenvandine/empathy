@@ -365,6 +365,8 @@ update_ft_row (EmpathyFTManager *ft_manager,
     {
       case EMP_FILE_TRANSFER_STATE_REMOTE_PENDING:
       case EMP_FILE_TRANSFER_STATE_OPEN:
+      case EMP_FILE_TRANSFER_STATE_ACCEPTED:
+      case EMP_FILE_TRANSFER_STATE_NOT_OFFERED:
         if (empathy_tp_file_get_incoming (tp_file))
           /* translators: first %s is filename, second %s is the contact name */
           first_line_format = _("Receiving \"%s\" from %s");
@@ -374,7 +376,8 @@ update_ft_row (EmpathyFTManager *ft_manager,
 
         first_line = g_strdup_printf (first_line_format, filename, contact_name);
 
-        if (state == EMP_FILE_TRANSFER_STATE_OPEN)
+        if (state == EMP_FILE_TRANSFER_STATE_OPEN
+            || state == EMP_FILE_TRANSFER_STATE_ACCEPTED)
           {
             gchar *total_size_str;
             gchar *transferred_bytes_str;
@@ -1064,7 +1067,7 @@ ft_manager_save_dialog_response_cb (GtkDialog *widget,
           filename = g_file_get_basename (file);
           empathy_tp_file_set_filename (response_data->tp_file, filename);
 
-          empathy_tp_file_accept (response_data->tp_file);
+          empathy_tp_file_accept (response_data->tp_file, 0);
 
           ft_manager_add_tp_file_to_list (response_data->ft_manager,
               response_data->tp_file);

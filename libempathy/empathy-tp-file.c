@@ -621,7 +621,8 @@ _get_local_socket (EmpathyTpFile *tp_file)
  * EMP_FILE_TRANSFER_STATE_LOCAL_PENDING).
  */
 void
-empathy_tp_file_accept (EmpathyTpFile *tp_file)
+empathy_tp_file_accept (EmpathyTpFile *tp_file,
+                        guint64 offset)
 {
   EmpathyTpFilePriv *priv;
   GValue *address;
@@ -641,11 +642,46 @@ empathy_tp_file_accept (EmpathyTpFile *tp_file)
 
   if (!emp_cli_channel_type_file_run_accept_file (TP_PROXY (priv->channel),
       -1, TP_SOCKET_ADDRESS_TYPE_UNIX, TP_SOCKET_ACCESS_CONTROL_LOCALHOST,
-      &nothing, &address, &error, NULL))
+      &nothing, offset, &address, &error, NULL))
     {
       DEBUG ("Accept error: %s",
           error ? error->message : "No message given");
       g_clear_error (&error);
+      return;
+    }
+
+  if (priv->unix_socket_path)
+    g_free (priv->unix_socket_path);
+
+  priv->unix_socket_path = g_value_dup_string (address);
+  g_value_unset (address);
+
+  DEBUG ("Got unix socket path: %s", priv->unix_socket_path);
+}
+
+void
+empathy_tp_file_offer (EmpathyTpFile *tp_file)
+{
+  EmpathyTpFilePriv *priv;
+  GValue *address;
+  GError *error = NULL;
+  GValue nothing = { 0 };
+
+  g_return_if_fail (EMPATHY_IS_TP_FILE (tp_file));
+
+  priv = GET_PRIV (tp_file);
+
+  g_value_init (&nothing, G_TYPE_STRING);
+  g_value_set_string (&nothing, "");
+
+  if (!emp_cli_channel_type_file_run_offer_file (TP_PROXY (priv->channel),
+      -1, TP_SOCKET_ADDRESS_TYPE_UNIX, TP_SOCKET_ACCESS_CONTROL_LOCALHOST,
+      &nothing, &address, &error, NULL))
+    {
+      DEBUG ("OfferFile error: %s",
+          error ? error->message : "No message given");
+      g_clear_error (&error);
+      return;
     }
 
   if (priv->unix_socket_path)

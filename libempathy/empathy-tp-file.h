@@ -65,8 +65,9 @@ GType empathy_tp_file_get_type (void) G_GNUC_CONST;
 EmpathyTpFile *empathy_tp_file_new (McAccount *account, TpChannel *channel);
 
 TpChannel *empathy_tp_file_get_channel (EmpathyTpFile *tp_file);
-void empathy_tp_file_accept (EmpathyTpFile *tp_file);
+void empathy_tp_file_accept (EmpathyTpFile *tp_file, guint64 offset);
 void empathy_tp_file_cancel (EmpathyTpFile *tp_file);
+void empathy_tp_file_offer (EmpathyTpFile *tp_file);
 
 const gchar *empathy_tp_file_get_id (EmpathyTpFile *tp_file);
 guint64 empathy_tp_file_get_transferred_bytes (EmpathyTpFile *tp_file);
