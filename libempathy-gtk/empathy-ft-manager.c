@@ -823,13 +823,11 @@ ft_manager_create_save_dialog (ReceiveResponseData *response_data)
 
   DEBUG ("Creating save file chooser");
 
-  widget = g_object_new (GTK_TYPE_FILE_CHOOSER_DIALOG,
-      "action", GTK_FILE_CHOOSER_ACTION_SAVE,
-      "select-multiple", FALSE,
-      "do-overwrite-confirmation", TRUE,
+  widget = gtk_file_chooser_dialog_new (_("Save file as..."),
+      NULL, GTK_FILE_CHOOSER_ACTION_SAVE,
+      GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+      GTK_STOCK_SAVE_AS, GTK_RESPONSE_OK,
       NULL);
-
-  gtk_window_set_title (GTK_WINDOW (widget), _("Save file"));
 
   if (!empathy_conf_get_string (empathy_conf_get (),
       EMPATHY_PREFS_FILE_TRANSFER_DEFAULT_FOLDER,
@@ -841,11 +839,6 @@ ft_manager_create_save_dialog (ReceiveResponseData *response_data)
 
   gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (widget),
       empathy_tp_file_get_filename (response_data->tp_file));
-
-  gtk_dialog_add_buttons (GTK_DIALOG (widget),
-      GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-      GTK_STOCK_SAVE, GTK_RESPONSE_OK,
-      NULL);
 
   gtk_dialog_set_default_response (GTK_DIALOG (widget),
       GTK_RESPONSE_OK);
