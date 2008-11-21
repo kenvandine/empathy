@@ -227,19 +227,21 @@ event_manager_filter_channel_cb (EmpathyDispatcher   *dispatcher,
 		g_object_unref (tp_group);
 	}
 	else if (!tp_strdiff (channel_type, EMP_IFACE_CHANNEL_TYPE_FILE)) {
-		GValue *direction;
+		GValue *state;
 
 		tp_cli_dbus_properties_run_get (channel,
 						-1,
 						EMP_IFACE_CHANNEL_TYPE_FILE,
-						"Direction",
-						&direction,
+						"State",
+						&state,
 						NULL,
 						NULL);
 
+		DEBUG ("file channel with state %u", g_value_get_uint (state));
+
 		/* Only deal with incoming channels */
-		if (g_value_get_uint (direction) ==
-		    EMP_FILE_TRANSFER_DIRECTION_INCOMING) {
+		if (g_value_get_uint (state) ==
+		    EMP_FILE_TRANSFER_STATE_LOCAL_PENDING) {
 			EmpathyContact *contact;
 			gchar          *msg;
 			McAccount      *account;
@@ -263,7 +265,7 @@ event_manager_filter_channel_cb (EmpathyDispatcher   *dispatcher,
 			g_free (msg);
 		}
 
-		g_value_unset (direction);
+		g_value_unset (state);
 	}
 
 	g_free (channel_type);
