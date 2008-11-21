@@ -44,7 +44,6 @@
 #include <libempathy/empathy-tp-group.h>
 
 #include <libempathy-gtk/empathy-conf.h>
-#include <libempathy-gtk/empathy-ft-manager.h>
 
 #include <extensions/extensions.h>
 
@@ -53,6 +52,7 @@
 #include "empathy-status-icon.h"
 #include "empathy-call-window.h"
 #include "empathy-chat-window.h"
+#include "empathy-ft-manager.h"
 #include "bacon-message-connection.h"
 
 #define DEBUG_FLAG EMPATHY_DEBUG_OTHER

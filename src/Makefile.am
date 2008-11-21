@@ -28,6 +28,7 @@ empathy_SOURCES =							\
 	empathy-chatrooms-window.c empathy-chatrooms-window.h		\
 	empathy-chat-window.c empathy-chat-window.h			\
 	empathy-event-manager.c empathy-event-manager.h			\
+	empathy-ft-manager.c empathy-ft-manager.h			\
 	empathy-import-dialog.c empathy-import-dialog.h			\
 	empathy-import-pidgin.c empathy-import-pidgin.h			\
 	empathy-main-window.c empathy-main-window.h			\
@@ -44,6 +45,7 @@ glade_DATA = 					\
 	empathy-call-window.glade		\
 	empathy-chatrooms-window.glade		\
 	empathy-chat-window.glade		\
+	empathy-ft-manager.glade		\
 	empathy-main-window.glade		\
 	empathy-new-chatroom-dialog.glade	\
 	empathy-preferences.glade		\

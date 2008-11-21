@@ -40,12 +40,12 @@
 #include <libempathy/empathy-tp-file.h>
 #include <libempathy/empathy-utils.h>
 
-#include "empathy-conf.h"
-#include "empathy-ft-manager.h"
-#include "empathy-ui-utils.h"
-#include "empathy-geometry.h"
-#include "empathy-images.h"
+#include <libempathy-gtk/empathy-conf.h>
+#include <libempathy-gtk/empathy-ui-utils.h>
+#include <libempathy-gtk/empathy-geometry.h>
+#include <libempathy-gtk/empathy-images.h>
 
+#include "empathy-ft-manager.h"
 
 /**
  * SECTION:empathy-ft-manager
