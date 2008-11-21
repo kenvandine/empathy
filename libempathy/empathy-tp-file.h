@@ -28,7 +28,6 @@
 #include <glib.h>
 
 #include <telepathy-glib/channel.h>
-#include <libtelepathy/tp-constants.h>
 
 #include <extensions/extensions.h>
 

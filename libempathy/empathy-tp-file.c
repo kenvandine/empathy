@@ -35,10 +35,6 @@
 #include <gio/gunixinputstream.h>
 #include <gio/gunixoutputstream.h>
 
-#include <libtelepathy/tp-conn.h>
-#include <libtelepathy/tp-helpers.h>
-#include <libtelepathy/tp-props-iface.h>
-
 #include <telepathy-glib/proxy-subclass.h>
 
 #include "empathy-tp-file.h"
