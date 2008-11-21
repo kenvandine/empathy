@@ -37,6 +37,8 @@
 #include <telepathy-glib/channel.h>
 #include <telepathy-glib/dbus.h>
 
+#include <extensions/extensions.h>
+
 #include "empathy-utils.h"
 #include "empathy-contact-factory.h"
 #include "empathy-contact-manager.h"
@@ -772,5 +774,11 @@ empathy_connection_request_channel (TpConnection *connection,
 						data,
 						(GDestroyNotify) connection_request_channel_data_unref,
 						weak_object);
+}
+
+void
+empathy_init (void)
+{
+	emp_cli_init ();
 }
 

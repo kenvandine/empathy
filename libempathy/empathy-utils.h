@@ -122,6 +122,7 @@ void empathy_connection_request_channel (TpConnection *proxy,
 					 gpointer user_data,
 					 GDestroyNotify destroy,
 					 GObject *weak_object);
+void         empathy_init                           (void);
 
 G_END_DECLS
 

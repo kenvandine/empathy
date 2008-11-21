@@ -589,8 +589,6 @@ empathy_tp_call_class_init (EmpathyTpCallClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  emp_cli_init ();
-
   object_class->constructor = tp_call_constructor;
   object_class->finalize = tp_call_finalize;
   object_class->set_property = tp_call_set_property;

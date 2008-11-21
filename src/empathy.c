@@ -449,6 +449,8 @@ main (int argc, char *argv[])
 		g_warning ("Cannot create the 'empathy' bacon connection.");
 	}
 
+	empathy_init ();
+
 	/* Setting up MC */
 	mc = empathy_mission_control_new ();
 	g_signal_connect (mc, "ServiceEnded",
