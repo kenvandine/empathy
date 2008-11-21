@@ -45,6 +45,7 @@
 
 #define DEBUG_FLAG EMPATHY_DEBUG_OTHER
 #include <libempathy/empathy-debug.h>
+#include <libempathy/empathy-utils.h>
 
 struct SizeData {
 	gint     width;
@@ -1444,5 +1445,128 @@ empathy_text_buffer_tag_set (GtkTextBuffer *buffer,
 	}
 
 	return tag;
+}
+
+/* Sending files with the file chooser */
+
+typedef struct {
+	EmpathyContact             *contact;
+	EmpathyFileChooserCallback  callback;
+	gpointer                    user_data;
+} FileChooserResponseData;
+
+static void
+file_manager_send_file_response_cb (GtkDialog               *widget,
+				    gint                     response_id,
+				    FileChooserResponseData *response_data)
+{
+	if (response_id == GTK_RESPONSE_OK) {
+		GSList *list;
+
+		list = gtk_file_chooser_get_uris (GTK_FILE_CHOOSER (widget));
+
+		if (list) {
+			GSList *l;
+
+			DEBUG ("File chooser selected files:");
+
+			for (l = list; l; l = l->next) {
+				gchar            *uri;
+				GFile            *gfile;
+				EmpathyFile      *file;
+				GtkRecentManager *manager;
+
+				uri = l->data;
+				gfile = g_file_new_for_uri (uri);
+
+				DEBUG ("\t%s", uri);
+				file = empathy_send_file (response_data->contact,
+							  gfile);
+				if (response_data->callback)
+					response_data->callback (file,
+								 response_data->user_data);
+
+				manager = gtk_recent_manager_get_default ();
+				gtk_recent_manager_add_item (manager, uri);
+
+				if (file) ;
+					/* TODO: This should be unrefed, but
+					 * it's not referenced anywhere else,
+					 * so the transfer just ends. Uncomment
+					 * this out when there is a file
+					 * transfer "manager".
+					g_object_unref (file);
+					 */
+				g_object_unref (gfile);
+				g_free (uri);
+			}
+
+			g_slist_free (list);
+		} else {
+			DEBUG ("File chooser had no files selected");
+		}
+	}
+
+	g_object_unref (response_data->contact);
+	g_free (response_data);
+	gtk_widget_destroy (GTK_WIDGET (widget));
+}
+
+void
+empathy_send_file_with_file_chooser (EmpathyContact             *contact,
+				     EmpathyFileChooserCallback  callback,
+				     gpointer                    user_data)
+{
+	GtkWidget               *widget;
+	GtkWidget               *button;
+	GtkFileFilter           *filter;
+	FileChooserResponseData *response_data;
+
+	/* FIXME we cannot return the ft as the response is async, maybe we
+	 * should call a callback with the file when available */
+
+	g_return_if_fail (EMPATHY_IS_CONTACT (contact));
+
+	DEBUG ("Creating selection file chooser");
+
+	widget = g_object_new (GTK_TYPE_FILE_CHOOSER_DIALOG,
+			       "action", GTK_FILE_CHOOSER_ACTION_OPEN,
+			       "select-multiple", FALSE,
+			       NULL);
+
+	gtk_window_set_title (GTK_WINDOW (widget), _("Select a file"));
+
+	/* cancel button */
+	gtk_dialog_add_button (GTK_DIALOG (widget),
+			       GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL);
+
+	/* send button */
+	button = gtk_button_new_with_mnemonic (_("_Send"));
+	/* FIXME maybe we should use another icon */
+	gtk_button_set_image (GTK_BUTTON (button),
+			      gtk_image_new_from_stock (GTK_STOCK_OPEN,
+							GTK_ICON_SIZE_BUTTON));
+	gtk_widget_show (button);
+	gtk_dialog_add_action_widget (GTK_DIALOG (widget), button,
+				      GTK_RESPONSE_OK);
+	GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+	gtk_dialog_set_default_response (GTK_DIALOG (widget),
+					 GTK_RESPONSE_OK);
+
+	response_data = g_new0 (FileChooserResponseData, 1);
+	response_data->contact = g_object_ref (contact);
+	response_data->callback = callback;
+	response_data->user_data = user_data;
+	g_signal_connect (widget, "response",
+			  G_CALLBACK (file_manager_send_file_response_cb),
+			  response_data);
+
+	/* filters */
+	filter = gtk_file_filter_new ();
+	gtk_file_filter_set_name (filter, "All Files");
+	gtk_file_filter_add_pattern (filter, "*");
+	gtk_file_chooser_add_filter (GTK_FILE_CHOOSER (widget), filter);
+
+	gtk_widget_show (widget);
 }
 

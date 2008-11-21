@@ -38,6 +38,7 @@
 #include <libmissioncontrol/mc-profile.h>
 
 #include <libempathy/empathy-contact.h>
+#include <libempathy/empathy-file.h>
 
 #include "empathy-chat-view.h"
 
@@ -112,6 +113,13 @@ GtkTextTag *empathy_text_buffer_tag_set                 (GtkTextBuffer *buffer,
 							 const gchar   *tag_name,
 							 const gchar   *first_property_name,
 							 ...);
+
+typedef gboolean (*EmpathyFileChooserCallback)          (EmpathyFile *file,
+							 gpointer   user_data);
+
+void        empathy_send_file_with_file_chooser         (EmpathyContact             *contact,
+							 EmpathyFileChooserCallback  callback,
+							 gpointer                    user_data);
 
 G_END_DECLS
 
