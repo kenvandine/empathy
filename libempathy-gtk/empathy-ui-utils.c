@@ -1581,6 +1581,8 @@ add_file_to_manager (EmpathyTpFile    *tp_file,
 void
 empathy_send_file_with_file_chooser_and_manager (EmpathyContact   *contact)
 {
+	g_return_if_fail (EMPATHY_IS_CONTACT (contact));
+
 	empathy_send_file_with_file_chooser (contact,
 					     (EmpathyFileChooserCallback) add_file_to_manager,
 					     empathy_ft_manager_get_default ());
