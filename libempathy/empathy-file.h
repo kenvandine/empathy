@@ -61,30 +61,29 @@ struct _EmpathyFileClass
 };
 
 GType empathy_file_get_type (void) G_GNUC_CONST;
-EmpathyFile *empathy_file_new (McAccount       *account, TpChannel *channel);
-const gchar *empathy_file_get_id (EmpathyFile *file);
+
+EmpathyFile *empathy_file_new (McAccount *account, TpChannel *channel);
+
 TpChannel *empathy_file_get_channel (EmpathyFile *file);
-
 void empathy_file_accept (EmpathyFile *file);
-guint64                                 empathy_file_get_transferred_bytes   (EmpathyFile   *file);
-EmpathyContact *                        empathy_file_get_contact             (EmpathyFile   *file);
-GInputStream *                          empathy_file_get_input_stream        (EmpathyFile   *file);
-GOutputStream *                         empathy_file_get_output_stream       (EmpathyFile   *file);
-const gchar *                           empathy_file_get_filename            (EmpathyFile   *file);
-EmpFileTransferDirection          empathy_file_get_direction           (EmpathyFile   *file);
-EmpFileTransferState              empathy_file_get_state               (EmpathyFile   *file);
-EmpFileTransferStateChangeReason  empathy_file_get_state_change_reason (EmpathyFile   *file);
-guint64                                 empathy_file_get_size                (EmpathyFile   *file);
-guint64                                 empathy_file_get_transferred_bytes   (EmpathyFile   *file);
-gint                                    empathy_file_get_remaining_time      (EmpathyFile   *file);
+void empathy_file_cancel (EmpathyFile *file);
 
-void                                    empathy_file_set_input_stream        (EmpathyFile   *file,
-										GInputStream  *uri);
-void                                    empathy_file_set_output_stream       (EmpathyFile   *file,
-										GOutputStream *uri);
-void                                    empathy_file_set_filename            (EmpathyFile   *file,
-										const gchar   *filename);
-void                                    empathy_file_cancel                  (EmpathyFile   *file);
+const gchar *empathy_file_get_id (EmpathyFile *file);
+guint64 empathy_file_get_transferred_bytes (EmpathyFile *file);
+EmpathyContact *empathy_file_get_contact (EmpathyFile *file);
+GInputStream *empathy_file_get_input_stream (EmpathyFile *file);
+GOutputStream *empathy_file_get_output_stream (EmpathyFile *file);
+const gchar *empathy_file_get_filename (EmpathyFile *file);
+EmpFileTransferDirection empathy_file_get_direction (EmpathyFile *file);
+EmpFileTransferState empathy_file_get_state (EmpathyFile *file);
+EmpFileTransferStateChangeReason empathy_file_get_state_change_reason (EmpathyFile *file);
+guint64 empathy_file_get_size (EmpathyFile *file);
+guint64 empathy_file_get_transferred_bytes (EmpathyFile *file);
+gint empathy_file_get_remaining_time (EmpathyFile *file);
+
+void empathy_file_set_input_stream (EmpathyFile *file, GInputStream *uri);
+void empathy_file_set_output_stream (EmpathyFile *file, GOutputStream *uri);
+void empathy_file_set_filename (EmpathyFile *file, const gchar *filename);
 
 G_END_DECLS
 

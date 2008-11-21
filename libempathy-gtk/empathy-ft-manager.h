@@ -30,33 +30,32 @@
 
 G_BEGIN_DECLS
 
-#define EMPATHY_TYPE_FT_MANAGER         (empathy_ft_manager_get_type ())
-#define EMPATHY_FT_MANAGER(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), EMPATHY_TYPE_FT_MANAGER, EmpathyFTManager))
-#define EMPATHY_FT_MANAGER_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST((k), EMPATHY_TYPE_FT_MANAGER, EmpathyFTManagerClass))
-#define EMPATHY_IS_FT_MANAGER(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), EMPATHY_TYPE_FT_MANAGER))
-#define EMPATHY_IS_FT_MANAGER_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), EMPATHY_TYPE_FT_MANAGER))
+#define EMPATHY_TYPE_FT_MANAGER (empathy_ft_manager_get_type ())
+#define EMPATHY_FT_MANAGER(o) (G_TYPE_CHECK_INSTANCE_CAST ((o), EMPATHY_TYPE_FT_MANAGER, EmpathyFTManager))
+#define EMPATHY_FT_MANAGER_CLASS(k) (G_TYPE_CHECK_CLASS_CAST((k), EMPATHY_TYPE_FT_MANAGER, EmpathyFTManagerClass))
+#define EMPATHY_IS_FT_MANAGER(o) (G_TYPE_CHECK_INSTANCE_TYPE ((o), EMPATHY_TYPE_FT_MANAGER))
+#define EMPATHY_IS_FT_MANAGER_CLASS(k) (G_TYPE_CHECK_CLASS_TYPE ((k), EMPATHY_TYPE_FT_MANAGER))
 #define EMPATHY_FT_MANAGER_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), EMPATHY_TYPE_FT_MANAGER, EmpathyFTManagerClass))
 
-typedef struct _EmpathyFTManager      EmpathyFTManager;
-typedef struct _EmpathyFTManagerPriv  EmpathyFTManagerPriv;
+typedef struct _EmpathyFTManager EmpathyFTManager;
+typedef struct _EmpathyFTManagerPriv EmpathyFTManagerPriv;
 typedef struct _EmpathyFTManagerClass EmpathyFTManagerClass;
 
 struct _EmpathyFTManager
 {
-	GObject parent;
+  GObject parent;
 };
 
 struct _EmpathyFTManagerClass
 {
-	GObjectClass parent_class;
+  GObjectClass parent_class;
 };
 
-GType             empathy_ft_manager_get_type  (void);
+GType empathy_ft_manager_get_type (void);
 
-EmpathyFTManager *empathy_ft_manager_get_default          (void);
-void              empathy_ft_manager_add_file             (EmpathyFTManager *ft_manager,
-							   EmpathyFile      *file);
-GtkWidget        *empathy_ft_manager_get_dialog           (EmpathyFTManager *ft_manager);
+EmpathyFTManager *empathy_ft_manager_get_default (void);
+void empathy_ft_manager_add_file (EmpathyFTManager *ft_manager, EmpathyFile *file);
+GtkWidget *empathy_ft_manager_get_dialog (EmpathyFTManager *ft_manager);
 
 G_END_DECLS
 

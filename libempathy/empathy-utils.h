@@ -129,6 +129,11 @@ EmpathyFile *  empathy_send_file_from_stream        (EmpathyContact  *contact,
                                                      guint64          size);
 EmpathyFile *  empathy_send_file                    (EmpathyContact  *contact,
                                                      GFile           *file);
+/* File transfer */
+EmpathyFile *empathy_send_file                      (EmpathyContact  *contact,
+						     GFile           *file);
+
+/* General */
 void         empathy_init                           (void);
 
 G_END_DECLS

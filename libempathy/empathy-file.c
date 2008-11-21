@@ -64,34 +64,24 @@
  * the transferred file is unknown.
  */
 
-static void      empathy_file_class_init           (EmpathyFileClass      *klass);
-static void      empathy_file_init                 (EmpathyFile           *file);
-static void      file_finalize                     (GObject               *object);
-static GObject * file_constructor                  (GType                  type,
-                 guint                  n_props,
-                 GObjectConstructParam *props);
-static void      file_get_property                 (GObject               *object,
-                 guint                  param_id,
-                 GValue                *value,
-                 GParamSpec            *pspec);
-static void      file_set_property                 (GObject               *object,
-                 guint                  param_id,
-                 const GValue          *value,
-                 GParamSpec            *pspec);
-static void      file_destroy_cb                   (TpChannel             *file_chan,
-                 EmpathyFile           *file);
-static void      file_closed_cb                    (TpChannel             *file_chan,
-                 EmpathyFile           *file,
-                 GObject                 *weak_object);
-static void      file_state_changed_cb             (DBusGProxy            *file_iface,
-                 guint                  state,
-                 guint                  reason,
-                 EmpathyFile           *file);
-static void      file_transferred_bytes_changed_cb (TpProxy *proxy, guint64 count,
+static void empathy_file_class_init (EmpathyFileClass *klass);
+static void empathy_file_init (EmpathyFile *file);
+static void file_finalize (GObject *object);
+static GObject *file_constructor (GType type, guint n_props,
+    GObjectConstructParam *props);
+static void file_get_property (GObject *object, guint param_id, GValue *value,
+    GParamSpec *pspec);
+static void file_set_property (GObject *object, guint param_id, const GValue *value,
+    GParamSpec *pspec);
+static void file_destroy_cb (TpChannel *file_chan, EmpathyFile *file);
+static void file_closed_cb (TpChannel *file_chan, EmpathyFile *file,
+    GObject *weak_object);
+static void file_state_changed_cb (DBusGProxy *file_iface, guint state,
+    guint reason, EmpathyFile *file);
+static void file_transferred_bytes_changed_cb (TpProxy *proxy, guint64 count,
     EmpathyFile *file, GObject *weak_object);
-static void      copy_stream                        (GInputStream          *in,
-                 GOutputStream         *out,
-                 GCancellable          *cancellable);
+static void copy_stream (GInputStream *in, GOutputStream *out,
+    GCancellable *cancellable);
 
 /* EmpathyFile object */
 
@@ -102,29 +92,27 @@ typedef struct _EmpathyFilePriv  EmpathyFilePriv;
 
 struct _EmpathyFilePriv {
   EmpathyContactFactory *factory;
-  McAccount             *account;
-  gchar                 *id;
-  MissionControl        *mc;
+  McAccount *account;
+  gchar *id;
+  MissionControl *mc;
+  TpChannel *channel;
 
-  TpChannel             *channel;
-
-  /* Previously in File/FT struct */
-  EmpathyFile                            *cached_empathy_file;
-  EmpathyContact                         *contact;
-  GInputStream                           *in_stream;
-  GOutputStream                          *out_stream;
-  gchar                                  *filename;
-  EmpFileTransferDirection                direction;
-  EmpFileTransferState                    state;
-  EmpFileTransferStateChangeReason        state_change_reason;
-  guint64                                 size;
-  guint64                                 transferred_bytes;
-  gint64                                  start_time;
-  gchar                                  *unix_socket_path;
-  gchar                                  *content_md5;
-  gchar                                  *content_type;
-  gchar                                  *description;
-  GCancellable                           *cancellable;
+  EmpathyFile *cached_empathy_file;
+  EmpathyContact *contact;
+  GInputStream *in_stream;
+  GOutputStream *out_stream;
+  gchar *filename;
+  EmpFileTransferDirection direction;
+  EmpFileTransferState state;
+  EmpFileTransferStateChangeReason state_change_reason;
+  guint64 size;
+  guint64 transferred_bytes;
+  gint64 start_time;
+  gchar *unix_socket_path;
+  gchar *content_md5;
+  gchar *content_type;
+  gchar *description;
+  GCancellable *cancellable;
 };
 
 enum {
@@ -258,7 +246,7 @@ static void
 file_finalize (GObject *object)
 {
   EmpathyFilePriv *priv;
-  EmpathyFile     *file;
+  EmpathyFile *file;
 
   file = EMPATHY_FILE (object);
   priv = GET_PRIV (file);
@@ -309,17 +297,16 @@ file_finalize (GObject *object)
 }
 
 static GObject *
-file_constructor (GType                  type,
-       guint                  n_props,
-       GObjectConstructParam *props)
+file_constructor (GType type, guint n_props, GObjectConstructParam *props)
 {
-  GObject         *file;
+  GObject *file;
   EmpathyFilePriv *priv;
-  GError            *error = NULL;
-  GHashTable        *properties;
-  TpHandle           handle;
+  GError *error = NULL;
+  GHashTable *properties;
+  TpHandle handle;
 
-  file = G_OBJECT_CLASS (empathy_file_parent_class)->constructor (type, n_props, props);
+  file = G_OBJECT_CLASS (empathy_file_parent_class)->constructor (type, n_props,
+      props);
 
   priv = GET_PRIV (file);
 
@@ -327,25 +314,29 @@ file_constructor (GType                  type,
   priv->mc = empathy_mission_control_new ();
 
   tp_cli_channel_connect_to_closed (priv->channel,
-                                    (tp_cli_channel_signal_callback_closed) file_closed_cb,
-                                    file,
-                                    NULL, NULL, NULL);
+      (tp_cli_channel_signal_callback_closed) file_closed_cb,
+      file,
+      NULL, NULL, NULL);
 
-  emp_cli_channel_type_file_connect_to_file_transfer_state_changed (TP_PROXY (priv->channel),
-                                                                    (emp_cli_channel_type_file_signal_callback_file_transfer_state_changed) file_state_changed_cb,
-                                                                    file,
-                                                                    NULL, NULL, NULL);
+  emp_cli_channel_type_file_connect_to_file_transfer_state_changed (
+      TP_PROXY (priv->channel),
+      (emp_cli_channel_type_file_signal_callback_file_transfer_state_changed)
+          file_state_changed_cb,
+      file,
+      NULL, NULL, NULL);
 
-  emp_cli_channel_type_file_connect_to_transferred_bytes_changed (TP_PROXY (priv->channel),
-                                                                  (emp_cli_channel_type_file_signal_callback_transferred_bytes_changed) file_transferred_bytes_changed_cb,
-                                                                  file,
-                                                                  NULL, NULL, NULL);
+  emp_cli_channel_type_file_connect_to_transferred_bytes_changed (
+      TP_PROXY (priv->channel),
+      (emp_cli_channel_type_file_signal_callback_transferred_bytes_changed)
+          file_transferred_bytes_changed_cb,
+      file,
+      NULL, NULL, NULL);
 
 
   handle = tp_channel_get_handle (priv->channel, NULL);
   priv->contact = empathy_contact_factory_get_from_handle (priv->factory,
-                                                           priv->account,
-                                                           (guint) handle);
+      priv->account,
+      (guint) handle);
 
   if (!tp_cli_dbus_properties_run_get_all (priv->channel,
       -1, EMP_IFACE_CHANNEL_TYPE_FILE, &properties, &error, NULL))
@@ -364,17 +355,23 @@ file_constructor (GType                  type,
    * a warning if called for a not closed file transfer. */
   priv->state_change_reason = -1;
 
-  priv->transferred_bytes = g_value_get_uint64 (g_hash_table_lookup (properties, "TransferredBytes"));
+  priv->transferred_bytes = g_value_get_uint64 (g_hash_table_lookup (
+      properties, "TransferredBytes"));
 
-  priv->filename = g_value_dup_string (g_hash_table_lookup (properties, "Filename"));
+  priv->filename = g_value_dup_string (g_hash_table_lookup (properties,
+      "Filename"));
 
-  priv->content_md5 = g_value_dup_string (g_hash_table_lookup (properties, "ContentMD5"));
+  priv->content_md5 = g_value_dup_string (g_hash_table_lookup (properties,
+      "ContentMD5"));
 
-  priv->description = g_value_dup_string (g_hash_table_lookup (properties, "Description"));
+  priv->description = g_value_dup_string (g_hash_table_lookup (properties,
+      "Description"));
 
-  priv->unix_socket_path = g_value_dup_string (g_hash_table_lookup (properties, "SocketPath"));
+  priv->unix_socket_path = g_value_dup_string (g_hash_table_lookup (properties,
+      "SocketPath"));
 
-  priv->direction = g_value_get_uint (g_hash_table_lookup (properties, "Direction"));
+  priv->direction = g_value_get_uint (g_hash_table_lookup (properties,
+      "Direction"));
 
   g_hash_table_destroy (properties);
 
@@ -382,13 +379,11 @@ file_constructor (GType                  type,
 }
 
 static void
-file_get_property (GObject    *object,
-        guint       param_id,
-        GValue     *value,
-        GParamSpec *pspec)
+file_get_property (GObject *object, guint param_id, GValue *value,
+    GParamSpec *pspec)
 {
   EmpathyFilePriv *priv;
-  EmpathyFile     *file;
+  EmpathyFile *file;
 
   priv = GET_PRIV (object);
   file = EMPATHY_FILE (object);
@@ -408,27 +403,23 @@ file_get_property (GObject    *object,
 }
 
 static void
-file_channel_set_dbus_property (gpointer proxy,
-                                   const gchar *property,
-                                   const GValue *value)
+file_channel_set_dbus_property (gpointer proxy, const gchar *property,
+    const GValue *value)
 {
         DEBUG ("Setting %s property", property);
         tp_cli_dbus_properties_run_set (TP_PROXY (proxy),
-                                        -1,
-                                        EMP_IFACE_CHANNEL_TYPE_FILE,
-                                        property,
-                                        value,
-                                        NULL,
-                                        NULL);
+            -1,
+            EMP_IFACE_CHANNEL_TYPE_FILE,
+            property,
+            value,
+            NULL, NULL);
         DEBUG ("done");
 }
 
 
 static void
-file_set_property (GObject      *object,
-        guint         param_id,
-        const GValue *value,
-        GParamSpec   *pspec)
+file_set_property (GObject *object, guint param_id, const GValue *value,
+    GParamSpec *pspec)
 {
   EmpathyFilePriv *priv;
 
@@ -488,13 +479,12 @@ file_set_property (GObject      *object,
  * Returns: a new #EmpathyFile
  */
 EmpathyFile *
-empathy_file_new (McAccount *account,
-       TpChannel *channel)
+empathy_file_new (McAccount *account, TpChannel *channel)
 {
   return g_object_new (EMPATHY_TYPE_FILE,
-           "account", account,
-           "channel", channel,
-           NULL);
+      "account", account,
+      "channel", channel,
+      NULL);
 }
 
 /**
@@ -546,7 +536,7 @@ file_destroy_cb (TpChannel *file_channel, EmpathyFile *file)
 
   DEBUG ("Channel Closed or CM crashed");
 
-  g_object_unref  (priv->channel);
+  g_object_unref (priv->channel);
   priv->channel = NULL;
 }
 
@@ -559,8 +549,8 @@ file_closed_cb (TpChannel *file_channel, EmpathyFile *file, GObject *weak_object
 
   /* The channel is closed, do just like if the proxy was destroyed */
   g_signal_handlers_disconnect_by_func (priv->channel,
-                file_destroy_cb,
-                file);
+      file_destroy_cb,
+      file);
   file_destroy_cb (file_channel, file);
 }
 
@@ -586,12 +576,12 @@ _get_local_socket (EmpathyFile *file)
 
   /* TODO: This could probably be a little nicer. */
   tp_cli_dbus_properties_run_get (priv->channel,
-                                  -1,
-                                  EMP_IFACE_CHANNEL_TYPE_FILE,
-                                  "SocketPath",
-                                  &socket_path,
-                                  NULL,
-                                  NULL);
+      -1,
+      EMP_IFACE_CHANNEL_TYPE_FILE,
+      "SocketPath",
+      &socket_path,
+      NULL,
+      NULL);
 
   if (priv->unix_socket_path)
     g_free (priv->unix_socket_path);
@@ -601,8 +591,6 @@ _get_local_socket (EmpathyFile *file)
 
   if (G_STR_EMPTY (priv->unix_socket_path))
     return -1;
-
-  DEBUG ("socket path is %s", priv->unix_socket_path);
 
   fd = socket (PF_UNIX, SOCK_STREAM, 0);
   if (fd < 0)
@@ -694,7 +682,7 @@ receive_file (EmpathyFile *file)
 static void
 send_file (EmpathyFile *file)
 {
-  gint           socket_fd;
+  gint socket_fd;
   GOutputStream *socket_stream;
   EmpathyFilePriv *priv;
 
@@ -722,26 +710,24 @@ send_file (EmpathyFile *file)
 }
 
 static void
-file_state_changed_cb (DBusGProxy *file_iface,
-    EmpFileTransferState state,
-    EmpFileTransferStateChangeReason reason,
-    EmpathyFile *file)
+file_state_changed_cb (DBusGProxy *file_iface, EmpFileTransferState state,
+    EmpFileTransferStateChangeReason reason, EmpathyFile *file)
 {
   EmpathyFilePriv *priv;
 
   priv = GET_PRIV (file);
 
   DEBUG ("File transfer state changed: filename=%s, "
-           "old state=%u, state=%u, reason=%u",
-           priv->filename, priv->state, state, reason);
+      "old state=%u, state=%u, reason=%u",
+      priv->filename, priv->state, state, reason);
 
   if (state == EMP_FILE_TRANSFER_STATE_OPEN)
     priv->start_time = get_time_msec ();
 
   DEBUG ("state = %u, direction = %u, in_stream = %s, out_stream = %s",
-         state, priv->direction,
-         priv->in_stream ? "present" : "not present",
-         priv->out_stream ? "present" : "not present");
+      state, priv->direction,
+      priv->in_stream ? "present" : "not present",
+      priv->out_stream ? "present" : "not present");
 
   if (state == EMP_FILE_TRANSFER_STATE_OPEN &&
       priv->direction == EMP_FILE_TRANSFER_DIRECTION_OUTGOING &&
@@ -842,7 +828,7 @@ empathy_file_get_state_change_reason (EmpathyFile *file)
   priv = GET_PRIV (file);
 
   g_return_val_if_fail (priv->state_change_reason >= 0,
-            EMP_FILE_TRANSFER_STATE_CHANGE_REASON_NONE);
+      EMP_FILE_TRANSFER_STATE_CHANGE_REASON_NONE);
 
   return priv->state_change_reason;
 }
@@ -871,9 +857,9 @@ gint
 empathy_file_get_remaining_time (EmpathyFile *file)
 {
   EmpathyFilePriv *priv;
-  gint64   curr_time, elapsed_time;
-  gdouble  time_per_byte;
-  gdouble  remaining_time;
+  gint64 curr_time, elapsed_time;
+  gdouble time_per_byte;
+  gdouble remaining_time;
 
   priv = GET_PRIV (file);
 
@@ -920,16 +906,17 @@ empathy_file_set_input_stream (EmpathyFile *file,
 
   if (priv->in_stream)
     g_object_unref (priv->in_stream);
+
   if (in_stream)
     g_object_ref (in_stream);
+
   priv->in_stream = in_stream;
 
   g_object_notify (G_OBJECT (file), "in-stream");
 }
 
 void
-empathy_file_set_output_stream (EmpathyFile *file,
-    GOutputStream *out_stream)
+empathy_file_set_output_stream (EmpathyFile *file, GOutputStream *out_stream)
 {
   EmpathyFilePriv *priv;
 
@@ -944,8 +931,10 @@ empathy_file_set_output_stream (EmpathyFile *file,
 
   if (priv->out_stream)
     g_object_unref (priv->out_stream);
+
   if (out_stream)
     g_object_ref (out_stream);
+
   priv->out_stream = out_stream;
 }
 
@@ -959,9 +948,8 @@ empathy_file_set_filename (EmpathyFile *file,
 
   g_return_if_fail (filename != NULL);
 
-  if (priv->filename && strcmp (filename, priv->filename) == 0) {
+  if (priv->filename && strcmp (filename, priv->filename) == 0)
     return;
-  }
 
   g_free (priv->filename);
   priv->filename = g_strdup (filename);
@@ -975,17 +963,17 @@ empathy_file_set_filename (EmpathyFile *file,
 #define BUFFER_SIZE 4096
 
 typedef struct {
-  GInputStream  *in;
+  GInputStream *in;
   GOutputStream *out;
   GCancellable  *cancellable;
-  char          *buff[N_BUFFERS]; /* the temporary buffers */
-  gsize          count[N_BUFFERS]; /* how many bytes are used in the buffers */
-  gboolean       is_full[N_BUFFERS]; /* whether the buffers contain data */
-  gint           curr_read; /* index of the buffer used for reading */
-  gint           curr_write; /* index of the buffer used for writing */
-  gboolean       is_reading; /* we are reading */
-  gboolean       is_writing; /* we are writing */
-  guint          n_closed; /* number of streams that have been closed */
+  char *buff[N_BUFFERS]; /* the temporary buffers */
+  gsize count[N_BUFFERS]; /* how many bytes are used in the buffers */
+  gboolean is_full[N_BUFFERS]; /* whether the buffers contain data */
+  gint curr_read; /* index of the buffer used for reading */
+  gint curr_write; /* index of the buffer used for writing */
+  gboolean is_reading; /* we are reading */
+  gboolean is_writing; /* we are writing */
+  guint n_closed; /* number of streams that have been closed */
 } CopyData;
 
 static void schedule_next (CopyData *copy);
@@ -1048,16 +1036,17 @@ static void
 write_done_cb (GObject *source_object, GAsyncResult *res, gpointer user_data)
 {
   CopyData *copy = user_data;
-  gssize    count_write;
-  GError   *error = NULL;
+  gssize count_write;
+  GError *error = NULL;
 
   count_write = g_output_stream_write_finish (copy->out, res, &error);
 
-  if (count_write <= 0) {
-    io_error (copy, error);
-    g_error_free (error);
-    return;
-  }
+  if (count_write <= 0)
+    {
+      io_error (copy, error);
+      g_error_free (error);
+      return;
+    }
 
   copy->is_full[copy->curr_write] = FALSE;
   copy->curr_write = (copy->curr_write + 1) % N_BUFFERS;
@@ -1070,21 +1059,23 @@ static void
 read_done_cb (GObject *source_object, GAsyncResult *res, gpointer user_data)
 {
   CopyData *copy = user_data;
-  gssize    count_read;
-  GError   *error = NULL;
+  gssize count_read;
+  GError *error = NULL;
 
   count_read = g_input_stream_read_finish (copy->in, res, &error);
 
-  if (count_read == 0) {
-    g_input_stream_close_async (copy->in, 0, copy->cancellable,
-              close_done, copy);
-    copy->in = NULL;
-  }
-  else if (count_read < 0) {
-    io_error (copy, error);
-    g_error_free (error);
-    return;
-  }
+  if (count_read == 0)
+    {
+      g_input_stream_close_async (copy->in, 0, copy->cancellable,
+          close_done, copy);
+      copy->in = NULL;
+    }
+  else if (count_read < 0)
+    {
+      io_error (copy, error);
+      g_error_free (error);
+      return;
+    }
 
   copy->count[copy->curr_read] = count_read;
   copy->is_full[copy->curr_read] = TRUE;
@@ -1099,44 +1090,49 @@ schedule_next (CopyData *copy)
 {
   if (copy->in != NULL &&
       !copy->is_reading &&
-      !copy->is_full[copy->curr_read]) {
-    /* We are not reading and the current buffer is empty, so
-     * start an async read. */
-    copy->is_reading = TRUE;
-    g_input_stream_read_async (copy->in,
-             copy->buff[copy->curr_read],
-             BUFFER_SIZE, 0, copy->cancellable,
-             read_done_cb, copy);
-  }
+      !copy->is_full[copy->curr_read])
+    {
+      /* We are not reading and the current buffer is empty, so
+       * start an async read. */
+      copy->is_reading = TRUE;
+      g_input_stream_read_async (copy->in,
+          copy->buff[copy->curr_read],
+          BUFFER_SIZE, 0, copy->cancellable,
+          read_done_cb, copy);
+    }
 
   if (!copy->is_writing &&
-      copy->is_full[copy->curr_write]) {
-    if (copy->count[copy->curr_write] == 0) {
-      /* The last read on the buffer read 0 bytes, this
-       * means that we got an EOF, so we can close
-       * the output channel. */
-      g_output_stream_close_async (copy->out, 0,
-                 copy->cancellable,
-                 close_done, copy);
+      copy->is_full[copy->curr_write])
+    {
+      if (copy->count[copy->curr_write] == 0)
+        {
+          /* The last read on the buffer read 0 bytes, this
+           * means that we got an EOF, so we can close
+           * the output channel. */
+          g_output_stream_close_async (copy->out, 0,
+              copy->cancellable,
+              close_done, copy);
       copy->out = NULL;
-    } else {
-      /* We are not writing and the current buffer contains
-       * data, so start an async write. */
-      copy->is_writing = TRUE;
-      g_output_stream_write_async (copy->out,
-                 copy->buff[copy->curr_write],
-                 copy->count[copy->curr_write],
-                 0, copy->cancellable,
-                 write_done_cb, copy);
+        }
+      else
+        {
+          /* We are not writing and the current buffer contains
+           * data, so start an async write. */
+          copy->is_writing = TRUE;
+          g_output_stream_write_async (copy->out,
+              copy->buff[copy->curr_write],
+              copy->count[copy->curr_write],
+              0, copy->cancellable,
+              write_done_cb, copy);
+        }
     }
-  }
 }
 
 static void
 copy_stream (GInputStream *in, GOutputStream *out, GCancellable *cancellable)
 {
   CopyData *copy;
-  gint      i;
+  gint i;
 
   g_return_if_fail (in != NULL);
   g_return_if_fail (out != NULL);
