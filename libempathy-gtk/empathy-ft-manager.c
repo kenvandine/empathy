@@ -611,9 +611,8 @@ ft_manager_add_tp_file_to_list (EmpathyFTManager *ft_manager,
   gint width = 16;
   gint height = 16;
 
-  gtk_list_store_append (GTK_LIST_STORE (ft_manager->priv->model), &iter);
-  gtk_list_store_set (GTK_LIST_STORE (ft_manager->priv->model), &iter,
-      COL_FT_OBJECT, tp_file, -1);
+  gtk_list_store_insert_with_values (GTK_LIST_STORE (ft_manager->priv->model),
+      &iter, G_MAXINT, COL_FT_OBJECT, tp_file, -1);
 
   path =  gtk_tree_model_get_path (GTK_TREE_MODEL (ft_manager->priv->model),
       &iter);
