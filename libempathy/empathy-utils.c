@@ -21,7 +21,6 @@
  * Authors: Richard Hult <richard@imendio.com>
  *          Martyn Russell <martyn@imendio.com>
  *          Xavier Claessens <xclaesse@gmail.com>
- *          Jonny Lamb <jonny.lamb@collabora.co.uk>
  */
 
 #include "config.h"
@@ -31,15 +30,12 @@
 #include <sys/types.h>
 #include <regex.h>
 
-#include <gio/gio.h>
 #include <glib/gi18n.h>
 
 #include <libxml/uri.h>
 #include <telepathy-glib/connection.h>
 #include <telepathy-glib/channel.h>
 #include <telepathy-glib/dbus.h>
-
-#include <extensions/extensions.h>
 
 #include "empathy-utils.h"
 #include "empathy-contact-factory.h"
