@@ -30,9 +30,9 @@
 #include <sys/types.h>
 #include <regex.h>
 
+#include <gio/gio.h>
 #include <glib/gi18n.h>
 
-#include <libgnomevfs/gnome-vfs.h>
 #include <libxml/uri.h>
 #include <telepathy-glib/connection.h>
 #include <telepathy-glib/channel.h>
@@ -778,11 +778,12 @@ empathy_connection_request_channel (TpConnection *connection,
 }
 
 EmpathyFile *
-empathy_send_file_from_stream (EmpathyContact *contact,
-			       GInputStream   *in_stream,
-			       const gchar    *filename,
-			       guint64         size)
+empathy_send_file (EmpathyContact *contact,
+		   GFile          *gfile)
 {
+	GFileInfo      *info;
+	guint64         size;
+	GInputStream   *in_stream = NULL;
 	MissionControl *mc;
 	McAccount      *account;
 	TpConnection   *connection;
@@ -792,19 +793,27 @@ empathy_send_file_from_stream (EmpathyContact *contact,
 	EmpathyFile    *file;
 	GError         *error = NULL;
 	GValue          value = { 0 };
+	gchar          *filename;
 
 	g_return_val_if_fail (EMPATHY_IS_CONTACT (contact), NULL);
-	g_return_val_if_fail (G_IS_INPUT_STREAM (in_stream), NULL);
-	g_return_val_if_fail (filename != NULL, NULL);
+	g_return_val_if_fail (G_IS_FILE (gfile), NULL);
 
-	DEBUG ("Sending %s from a stream to %s (size %llu)",
-	       filename, empathy_contact_get_name (contact), size);
-
+	info = g_file_query_info (gfile,
+				  G_FILE_ATTRIBUTE_STANDARD_SIZE ","
+				  G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE,
+				  0, NULL, NULL);
+	size = info ? g_file_info_get_size (info) : EMPATHY_FILE_UNKNOWN_SIZE;
+	filename = g_file_get_basename (gfile);
+	in_stream = G_INPUT_STREAM (g_file_read (gfile, NULL, NULL));
 	mc = empathy_mission_control_new ();
 	account = empathy_contact_get_account (contact);
 	connection = mission_control_get_tpconnection (mc, account, NULL);
 	tp_connection_run_until_ready (connection, FALSE, NULL, NULL);
 	handle = empathy_contact_get_handle (contact);
+
+	DEBUG ("Sending %s from a stream to %s (size %llu, content-type %s)",
+	       filename, empathy_contact_get_name (contact), size,
+	       g_file_info_get_content_type (info));
 
 	if (!tp_cli_connection_run_request_channel (connection, -1,
 						    EMP_IFACE_CHANNEL_TYPE_FILE,
@@ -844,7 +853,7 @@ empathy_send_file_from_stream (EmpathyContact *contact,
 		&value, NULL, NULL);
 	g_value_reset (&value);
 
-	g_value_set_string (&value, gnome_vfs_get_mime_type_for_name (filename));
+	g_value_set_string (&value, g_file_info_get_content_type (info));
 	tp_cli_dbus_properties_run_set (TP_PROXY (channel),
 		-1, EMP_IFACE_CHANNEL_TYPE_FILE, "ContentType",
 		&value, NULL, NULL);
@@ -868,37 +877,6 @@ empathy_send_file_from_stream (EmpathyContact *contact,
 	g_object_unref (connection);
 	g_object_unref (channel);
 	g_free (object_path);
-
-	return file;
-}
-
-EmpathyFile *
-empathy_send_file (EmpathyContact *contact,
-		   GFile          *gfile)
-{
-	GFileInfo        *info;
-	guint64           size;
-	gchar            *filename;
-	GInputStream     *in_stream = NULL;
-	EmpathyFile      *file;
-
-	g_return_val_if_fail (EMPATHY_IS_CONTACT (contact), NULL);
-	g_return_val_if_fail (G_IS_FILE (gfile), NULL);
-
-	filename = g_file_get_basename (gfile);
-	info = g_file_query_info (gfile, G_FILE_ATTRIBUTE_STANDARD_SIZE, 0, NULL, NULL);
-	size = info ? g_file_info_get_size (info) : EMPATHY_FILE_UNKNOWN_SIZE;
-
-	DEBUG ("Sending %s to %s",
-	       filename, empathy_contact_get_name (contact));
-
-	in_stream = G_INPUT_STREAM (g_file_read (gfile, NULL, NULL));
-	file = empathy_send_file_from_stream (contact, in_stream, filename, size);
-
-	g_object_unref (in_stream);
-	g_free (filename);
-	if (info)
-		g_object_unref (info);
 
 	return file;
 }

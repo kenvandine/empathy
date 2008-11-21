@@ -86,7 +86,6 @@ PKG_CHECK_MODULES(LIBEMPATHY,
    libmissioncontrol >= $MISSION_CONTROL_REQUIRED
    gio-2.0 >= $GLIB_REQUIRED
    gio-unix-2.0 >= $GLIB_REQUIRED
-   gnome-vfs-2.0
 ])
 
 PKG_CHECK_MODULES(EMPATHY,
