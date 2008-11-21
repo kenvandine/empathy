@@ -54,7 +54,6 @@ struct _EmpathyFTManagerClass
 GType             empathy_ft_manager_get_type  (void);
 
 EmpathyFTManager *empathy_ft_manager_get_default          (void);
-EmpathyFTManager *empathy_ft_manager_new                  (void);
 void              empathy_ft_manager_add_file             (EmpathyFTManager *ft_manager,
 							   EmpathyFile      *file);
 GtkWidget        *empathy_ft_manager_get_dialog           (EmpathyFTManager *ft_manager);

@@ -116,6 +116,8 @@ static void ft_manager_display_accept_dialog (EmpathyFTManager      *ft_manager,
 
 G_DEFINE_TYPE (EmpathyFTManager, empathy_ft_manager, G_TYPE_OBJECT);
 
+static EmpathyFTManager *manager_p = NULL;
+
 static void
 empathy_ft_manager_class_init (EmpathyFTManagerClass *klass)
 {
@@ -154,31 +156,26 @@ empathy_ft_manager_finalize (GObject *object)
 		g_source_remove (priv->save_geometry_id);
 	}
 
+	manager_p = NULL;
+
 	G_OBJECT_CLASS (empathy_ft_manager_parent_class)->finalize (object);
 }
 
+/**
+ * empathy_ft_manager_get_default:
+ *
+ * Returns a new #EmpathyFTManager if there is not already one, or the existing
+ * one if it exists.
+ *
+ * Returns: a #EmpathyFTManager
+ */
 EmpathyFTManager *
 empathy_ft_manager_get_default (void)
 {
-	static EmpathyFTManager *manager;
+	if (!manager_p)
+		manager_p = g_object_new (EMPATHY_TYPE_FT_MANAGER, NULL);
 
-	if (!manager)
-		manager = empathy_ft_manager_new ();
-
-	return manager;
-}
-
-/**
- * empathy_ft_manager_new:
- *
- * Creates a new #EmpathyFTManager.
- *
- * Returns: a new #EmpathyFTManager
- */
-EmpathyFTManager *
-empathy_ft_manager_new (void)
-{
-	return g_object_new (EMPATHY_TYPE_FT_MANAGER, NULL);
+	return manager_p;
 }
 
 /**
@@ -674,15 +671,18 @@ ft_manager_delete_event_cb (GtkWidget        *widget,
 
 	priv = GET_PRIV (ft_manager);
 
+	ft_manager_clear (ft_manager);
 	if (g_hash_table_size (priv->file_to_row_ref) == 0) {
 		DEBUG ("Destroying window");
+		empathy_ft_manager_finalize (G_OBJECT (ft_manager));
+		manager_p = NULL;
 		return FALSE;
 	} else {
 		DEBUG ("Hiding window");
 		gtk_widget_hide (widget);
-		ft_manager_clear (ft_manager);
 		return TRUE;
 	}
+
 }
 
 static gboolean
@@ -911,12 +911,6 @@ ft_manager_remove_file_from_list (EmpathyFTManager *ft_manager,
 			gtk_tree_path_free (path);
 		}
 		gtk_tree_row_reference_free (row_ref);
-	}
-
-	if (g_hash_table_size (priv->file_to_row_ref) == 0 &&
-	    !GTK_WIDGET_VISIBLE (priv->window)) {
-		DEBUG ("Destroying window");
-		gtk_widget_destroy (priv->window);
 	}
 }
 
