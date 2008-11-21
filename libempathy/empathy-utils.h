@@ -133,9 +133,6 @@ EmpathyFile *  empathy_send_file                    (EmpathyContact  *contact,
 EmpathyFile *empathy_send_file                      (EmpathyContact  *contact,
 						     GFile           *file);
 
-/* General */
-void         empathy_init                           (void);
-
 G_END_DECLS
 
 #endif /*  __EMPATHY_UTILS_H__ */

@@ -881,9 +881,3 @@ empathy_send_file (EmpathyContact *contact,
 	return file;
 }
 
-void
-empathy_init (void)
-{
-	emp_cli_init ();
-}
-
