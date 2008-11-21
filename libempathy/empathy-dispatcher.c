@@ -371,6 +371,15 @@ dispatcher_tubes_handle_channel (EmpathyDispatcher *dispatcher,
 }
 
 static void
+dispatcher_file_handle_channel (EmpathyDispatcher *dispatcher,
+				TpChannel         *channel)
+{
+	DEBUG ("New file channel");
+
+	/* handle new file channel here */
+}
+
+static void
 dispatcher_connection_invalidated_cb (TpConnection  *connection,
 				      guint          domain,
 				      gint           code,
@@ -473,6 +482,8 @@ dispatcher_connection_new_channel_cb (TpConnection *connection,
 
 	if (!tp_strdiff (channel_type, TP_IFACE_CHANNEL_TYPE_TUBES)) {
 		dispatcher_tubes_handle_channel (dispatcher, channel);
+	} else if (!tp_strdiff (channel_type, EMP_IFACE_CHANNEL_TYPE_FILE)) {
+		dispatcher_file_handle_channel (dispatcher, channel);
 	}
 
   if (!tp_strdiff (channel_type, TP_IFACE_CHANNEL_TYPE_TEXT) &&
