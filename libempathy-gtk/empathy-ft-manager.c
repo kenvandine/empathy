@@ -828,6 +828,9 @@ ft_manager_create_save_dialog (ReceiveResponseData *response_data)
   gtk_dialog_set_default_response (GTK_DIALOG (widget),
       GTK_RESPONSE_OK);
 
+  gtk_file_chooser_set_do_overwrite_confirmation (GTK_FILE_CHOOSER (widget),
+      TRUE);
+
   g_signal_connect (widget, "response",
       G_CALLBACK (ft_manager_save_dialog_response_cb), response_data);
 
