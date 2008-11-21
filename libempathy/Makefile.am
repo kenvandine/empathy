@@ -25,6 +25,7 @@ libempathy_la_SOURCES =					\
 	empathy-contact-manager.c			\
 	empathy-debug.c					\
 	empathy-dispatcher.c				\
+	empathy-file.c					\
 	empathy-idle.c					\
 	empathy-irc-network.c				\
 	empathy-irc-network-manager.c			\
@@ -37,6 +38,8 @@ libempathy_la_SOURCES =					\
 	empathy-tp-chat.c				\
 	empathy-tp-contact-factory.c			\
 	empathy-tp-contact-list.c			\
+	empathy-tp-file.c				\
+	empathy-tp-file-priv.h				\
 	empathy-tp-group.c				\
 	empathy-tp-roomlist.c				\
 	empathy-tp-tube.c				\
@@ -65,6 +68,7 @@ libempathy_headers =				\
 	empathy-contact-manager.h		\
 	empathy-debug.h				\
 	empathy-dispatcher.h			\
+	empathy-file.h				\
 	empathy-idle.h				\
 	empathy-irc-network.h			\
 	empathy-irc-network-manager.h		\
@@ -77,6 +81,7 @@ libempathy_headers =				\
 	empathy-tp-chat.h			\
 	empathy-tp-contact-factory.h		\
 	empathy-tp-contact-list.h		\
+	empathy-tp-file.h			\
 	empathy-tp-group.h			\
 	empathy-tp-roomlist.h			\
 	empathy-tp-tube.h			\
