@@ -588,11 +588,29 @@ _get_local_socket (EmpathyFile *file)
   size_t path_len;
   struct sockaddr_un addr;
   EmpathyFilePriv *priv;
+  GValue *socket_path;
 
   priv = GET_PRIV (file);
 
-  if (priv->unix_socket_path == NULL)
+  /* TODO: This could probably be a little nicer. */
+  tp_cli_dbus_properties_run_get (priv->channel,
+                                  -1,
+                                  EMP_IFACE_CHANNEL_TYPE_FILE,
+                                  "SocketPath",
+                                  &socket_path,
+                                  NULL,
+                                  NULL);
+
+  if (priv->unix_socket_path)
+    g_free (priv->unix_socket_path);
+
+  priv->unix_socket_path = g_value_dup_string (socket_path);
+  g_value_unset (socket_path);
+
+  if (G_STR_EMPTY (priv->unix_socket_path))
     return -1;
+
+  DEBUG ("socket path is %s", priv->unix_socket_path);
 
   fd = socket (PF_UNIX, SOCK_STREAM, 0);
   if (fd < 0)
@@ -604,7 +622,7 @@ _get_local_socket (EmpathyFile *file)
   strncpy (addr.sun_path, priv->unix_socket_path, path_len);
 
   if (connect (fd, (struct sockaddr*) &addr,
-      G_STRUCT_OFFSET (struct sockaddr_un, sun_path) + path_len) < 0)
+      sizeof (addr)) < 0)
     {
       close (fd);
       return -1;
