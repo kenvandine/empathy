@@ -891,7 +891,7 @@ empathy_tp_file_get_remaining_time (EmpathyTpFile *tp_file)
   remaining_time = time_per_byte * (tp_file->priv->size -
       tp_file->priv->transferred_bytes);
 
-  return (gint) (remaining_time + 0.5);
+  return (gint) remaining_time;
 }
 
 void
