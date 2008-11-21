@@ -48,6 +48,8 @@ typedef struct _EmpathyFTManagerClass EmpathyFTManagerClass;
 struct _EmpathyFTManager
 {
   GObject parent;
+
+  EmpathyFTManagerPriv *priv;
 };
 
 struct _EmpathyFTManagerClass

@@ -75,8 +75,6 @@ enum
   REMAINING_COL_POS
 };
 
-#define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), EMPATHY_TYPE_FT_MANAGER, EmpathyFTManagerPriv))
-
 /**
  * EmpathyFTManagerPriv:
  *
@@ -135,13 +133,9 @@ empathy_ft_manager_get_default (void)
 GtkWidget *
 empathy_ft_manager_get_dialog (EmpathyFTManager *ft_manager)
 {
-  EmpathyFTManagerPriv *priv;
-
   g_return_val_if_fail (EMPATHY_IS_FT_MANAGER (ft_manager), NULL);
 
-  priv = GET_PRIV (ft_manager);
-
-  return priv->window;
+  return ft_manager->priv->window;
 }
 
 static gchar *
@@ -165,17 +159,12 @@ static GtkTreeRowReference *
 get_row_from_tp_file (EmpathyFTManager *ft_manager,
                       EmpathyTpFile *tp_file)
 {
-  EmpathyFTManagerPriv *priv;
-
-  priv = GET_PRIV (ft_manager);
-
-  return g_hash_table_lookup (priv->tp_file_to_row_ref, tp_file);
+  return g_hash_table_lookup (ft_manager->priv->tp_file_to_row_ref, tp_file);
 }
 
 static void
 update_buttons (EmpathyFTManager *ft_manager)
 {
-  EmpathyFTManagerPriv *priv;
   GtkTreeSelection *selection;
   GtkTreeModel *model;
   GtkTreeIter iter;
@@ -184,16 +173,16 @@ update_buttons (EmpathyFTManager *ft_manager)
   gboolean open_enabled = FALSE;
   gboolean abort_enabled = FALSE;
 
-  priv = GET_PRIV (ft_manager);
-
-  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->treeview));
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (
+      ft_manager->priv->treeview));
   if (gtk_tree_selection_get_selected (selection, &model, &iter))
     {
       gtk_tree_model_get_value (model, &iter, COL_FT_OBJECT, &val);
       tp_file = g_value_get_object (&val);
       g_value_unset (&val);
 
-      if (empathy_tp_file_get_state (tp_file) == EMP_FILE_TRANSFER_STATE_COMPLETED)
+      if (empathy_tp_file_get_state (tp_file)
+          == EMP_FILE_TRANSFER_STATE_COMPLETED)
         {
           if (empathy_tp_file_get_incoming (tp_file))
             open_enabled = TRUE;
@@ -216,8 +205,8 @@ update_buttons (EmpathyFTManager *ft_manager)
         }
     }
 
-  gtk_widget_set_sensitive (priv->open_button, open_enabled);
-  gtk_widget_set_sensitive (priv->abort_button, abort_enabled);
+  gtk_widget_set_sensitive (ft_manager->priv->open_button, open_enabled);
+  gtk_widget_set_sensitive (ft_manager->priv->abort_button, abort_enabled);
 }
 
 static const gchar *
@@ -244,7 +233,6 @@ static void
 update_ft_row (EmpathyFTManager *ft_manager,
                EmpathyTpFile *tp_file)
 {
-  EmpathyFTManagerPriv *priv;
   GtkTreeRowReference  *row_ref;
   GtkTreePath *path;
   GtkTreeIter iter;
@@ -261,8 +249,6 @@ update_ft_row (EmpathyFTManager *ft_manager,
   gint percent;
   EmpFileTransferState state;
   EmpFileTransferStateChangeReason reason;
-
-  priv = GET_PRIV (ft_manager);
 
   row_ref = get_row_from_tp_file (ft_manager, tp_file);
   g_return_if_fail (row_ref != NULL);
@@ -391,8 +377,8 @@ update_ft_row (EmpathyFTManager *ft_manager,
   msg = g_strdup_printf ("%s\n%s", first_line, second_line);
 
   path = gtk_tree_row_reference_get_path (row_ref);
-  gtk_tree_model_get_iter (priv->model, &iter, path);
-  gtk_list_store_set (GTK_LIST_STORE (priv->model),
+  gtk_tree_model_get_iter (ft_manager->priv->model, &iter, path);
+  gtk_list_store_set (GTK_LIST_STORE (ft_manager->priv->model),
       &iter,
       COL_PERCENT, percent,
       COL_MESSAGE, msg,
@@ -451,17 +437,14 @@ progress_cell_data_func (GtkTreeViewColumn *col,
 static gboolean
 ft_manager_save_geometry_timeout_cb (EmpathyFTManager *ft_manager)
 {
-  EmpathyFTManagerPriv *priv;
   gint x, y, w, h;
 
-  priv = GET_PRIV (ft_manager);
-
-  gtk_window_get_size (GTK_WINDOW (priv->window), &w, &h);
-  gtk_window_get_position (GTK_WINDOW (priv->window), &x, &y);
+  gtk_window_get_size (GTK_WINDOW (ft_manager->priv->window), &w, &h);
+  gtk_window_get_position (GTK_WINDOW (ft_manager->priv->window), &x, &y);
 
   empathy_geometry_save ("ft-manager", x, y, w, h);
 
-  priv->save_geometry_id = 0;
+  ft_manager->priv->save_geometry_id = 0;
 
   return FALSE;
 }
@@ -471,14 +454,10 @@ ft_manager_configure_event_cb (GtkWidget *widget,
                                GdkEventConfigure *event,
                                EmpathyFTManager *ft_manager)
 {
-  EmpathyFTManagerPriv *priv;
+  if (ft_manager->priv->save_geometry_id != 0)
+    g_source_remove (ft_manager->priv->save_geometry_id);
 
-  priv = GET_PRIV (ft_manager);
-
-  if (priv->save_geometry_id != 0)
-    g_source_remove (priv->save_geometry_id);
-
-  priv->save_geometry_id = g_timeout_add (500,
+  ft_manager->priv->save_geometry_id = g_timeout_add (500,
       (GSourceFunc) ft_manager_save_geometry_timeout_cb, ft_manager);
 
   return FALSE;
@@ -488,12 +467,9 @@ static void
 ft_manager_remove_file_from_list (EmpathyFTManager *ft_manager,
                                   EmpathyTpFile *tp_file)
 {
-  EmpathyFTManagerPriv *priv;
   GtkTreeRowReference *row_ref;
   GtkTreePath *path = NULL;
   GtkTreeIter iter, iter2;
-
-  priv = GET_PRIV (ft_manager);
 
   row_ref = get_row_from_tp_file (ft_manager, tp_file);
   g_return_if_fail (row_ref);
@@ -505,23 +481,23 @@ ft_manager_remove_file_from_list (EmpathyFTManager *ft_manager,
   /* Get the row we'll select after removal ("smart" selection) */
 
   path = gtk_tree_row_reference_get_path (row_ref);
-  gtk_tree_model_get_iter (GTK_TREE_MODEL (priv->model),
+  gtk_tree_model_get_iter (GTK_TREE_MODEL (ft_manager->priv->model),
       &iter, path);
   gtk_tree_path_free (path);
 
   row_ref = NULL;
   iter2 = iter;
-  if (gtk_tree_model_iter_next (GTK_TREE_MODEL (priv->model), &iter))
+  if (gtk_tree_model_iter_next (GTK_TREE_MODEL (ft_manager->priv->model), &iter))
     {
-      path = gtk_tree_model_get_path  (GTK_TREE_MODEL (priv->model), &iter);
-      row_ref = gtk_tree_row_reference_new (GTK_TREE_MODEL (priv->model), path);
+      path = gtk_tree_model_get_path  (GTK_TREE_MODEL (ft_manager->priv->model), &iter);
+      row_ref = gtk_tree_row_reference_new (GTK_TREE_MODEL (ft_manager->priv->model), path);
     }
   else
     {
-      path = gtk_tree_model_get_path (GTK_TREE_MODEL (priv->model), &iter2);
+      path = gtk_tree_model_get_path (GTK_TREE_MODEL (ft_manager->priv->model), &iter2);
       if (gtk_tree_path_prev (path))
         {
-          row_ref = gtk_tree_row_reference_new (GTK_TREE_MODEL (priv->model),
+          row_ref = gtk_tree_row_reference_new (GTK_TREE_MODEL (ft_manager->priv->model),
               path);
         }
     }
@@ -529,8 +505,8 @@ ft_manager_remove_file_from_list (EmpathyFTManager *ft_manager,
 
   /* Removal */
 
-  gtk_list_store_remove (GTK_LIST_STORE (priv->model), &iter2);
-  g_hash_table_remove (priv->tp_file_to_row_ref, tp_file);
+  gtk_list_store_remove (GTK_LIST_STORE (ft_manager->priv->model), &iter2);
+  g_hash_table_remove (ft_manager->priv->tp_file_to_row_ref, tp_file);
   g_object_unref (tp_file);
 
   /* Actual selection */
@@ -540,7 +516,7 @@ ft_manager_remove_file_from_list (EmpathyFTManager *ft_manager,
       path = gtk_tree_row_reference_get_path (row_ref);
       if (path != NULL)
         {
-          gtk_tree_view_set_cursor (GTK_TREE_VIEW (priv->treeview),
+          gtk_tree_view_set_cursor (GTK_TREE_VIEW (ft_manager->priv->treeview),
               path, NULL, FALSE);
           gtk_tree_path_free (path);
         }
@@ -571,16 +547,13 @@ ft_manager_clear_foreach_cb (gpointer key,
 static void
 ft_manager_clear (EmpathyFTManager *ft_manager)
 {
-  EmpathyFTManagerPriv *priv;
   GSList *closed_files = NULL;
   GSList *l;
 
-  priv = GET_PRIV (ft_manager);
-
   DEBUG ("Clearing file transfer list");
 
-  g_hash_table_foreach (priv->tp_file_to_row_ref, ft_manager_clear_foreach_cb,
-      &closed_files);
+  g_hash_table_foreach (ft_manager->priv->tp_file_to_row_ref,
+      ft_manager_clear_foreach_cb, &closed_files);
 
   for (l = closed_files; l; l = l->next)
     {
@@ -595,10 +568,7 @@ state_changed_cb (EmpathyTpFile *tp_file,
                   GParamSpec *pspec,
                   EmpathyFTManager *ft_manager)
 {
-  EmpathyFTManagerPriv *priv;
   gboolean remove;
-
-  priv = GET_PRIV (ft_manager);
 
   switch (empathy_tp_file_get_state (tp_file))
     {
@@ -618,7 +588,7 @@ state_changed_cb (EmpathyTpFile *tp_file,
          * window if not visible. */
         /* FIXME how do the user know if the file transfer
          * failed? */
-        remove = !GTK_WIDGET_VISIBLE (priv->window);
+        remove = !GTK_WIDGET_VISIBLE (ft_manager->priv->window);
         break;
 
       default:
@@ -634,9 +604,8 @@ state_changed_cb (EmpathyTpFile *tp_file,
 
 static void
 ft_manager_add_tp_file_to_list (EmpathyFTManager *ft_manager,
-                             EmpathyTpFile *tp_file)
+                                EmpathyTpFile *tp_file)
 {
-  EmpathyFTManagerPriv *priv;
   GtkTreeRowReference  *row_ref;
   GtkTreeIter iter;
   GtkTreeSelection *selection;
@@ -649,22 +618,24 @@ ft_manager_add_tp_file_to_list (EmpathyFTManager *ft_manager,
   gint width = 16;
   gint height = 16;
 
-  priv = GET_PRIV (ft_manager);
+  gtk_list_store_append (GTK_LIST_STORE (ft_manager->priv->model), &iter);
+  gtk_list_store_set (GTK_LIST_STORE (ft_manager->priv->model), &iter,
+      COL_FT_OBJECT, tp_file, -1);
 
-  gtk_list_store_append (GTK_LIST_STORE (priv->model), &iter);
-  gtk_list_store_set (GTK_LIST_STORE (priv->model), &iter, COL_FT_OBJECT,
-      tp_file, -1);
-
-  path =  gtk_tree_model_get_path (GTK_TREE_MODEL (priv->model), &iter);
-  row_ref = gtk_tree_row_reference_new (GTK_TREE_MODEL (priv->model), path);
+  path =  gtk_tree_model_get_path (GTK_TREE_MODEL (ft_manager->priv->model),
+      &iter);
+  row_ref = gtk_tree_row_reference_new (GTK_TREE_MODEL (
+      ft_manager->priv->model), path);
   gtk_tree_path_free (path);
 
   g_object_ref (tp_file);
-  g_hash_table_insert (priv->tp_file_to_row_ref, tp_file, row_ref);
+  g_hash_table_insert (ft_manager->priv->tp_file_to_row_ref, tp_file,
+      row_ref);
 
   update_ft_row (ft_manager, tp_file);
 
-  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->treeview));
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (
+      ft_manager->priv->treeview));
   gtk_tree_selection_unselect_all (selection);
   gtk_tree_selection_select_iter (selection, &iter);
 
@@ -680,7 +651,8 @@ ft_manager_add_tp_file_to_list (EmpathyFTManager *ft_manager,
   icon_name = gnome_icon_lookup (theme, NULL, NULL, NULL, NULL,
       mime, GNOME_ICON_LOOKUP_FLAGS_NONE, NULL);
 
-  gtk_icon_size_lookup_for_settings (gtk_widget_get_settings (priv->window),
+  gtk_icon_size_lookup_for_settings (gtk_widget_get_settings (
+      ft_manager->priv->window),
       GTK_ICON_SIZE_MENU, &width, &height);
   width *= 2;
 
@@ -692,21 +664,20 @@ ft_manager_add_tp_file_to_list (EmpathyFTManager *ft_manager,
           (gtk_icon_info_get_filename (icon_info), width, width, NULL);
       gtk_icon_info_free (icon_info);
 
-      gtk_list_store_set (GTK_LIST_STORE (priv->model),
-          &iter, COL_IMAGE, pixbuf, -1);
+      gtk_list_store_set (GTK_LIST_STORE (
+          ft_manager->priv->model), &iter, COL_IMAGE, pixbuf, -1);
       if (pixbuf != NULL)
         {
           g_object_unref (pixbuf);
         }
     }
 
-  gtk_window_present (GTK_WINDOW (priv->window));
+  gtk_window_present (GTK_WINDOW (ft_manager->priv->window));
 }
 
 static void
 ft_manager_open (EmpathyFTManager *ft_manager)
 {
-  EmpathyFTManagerPriv *priv;
   GValue val = {0, };
   GtkTreeSelection *selection;
   GtkTreeIter iter;
@@ -714,9 +685,7 @@ ft_manager_open (EmpathyFTManager *ft_manager)
   EmpathyTpFile *tp_file;
   const gchar *uri;
 
-  priv = GET_PRIV (ft_manager);
-
-  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->treeview));
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (ft_manager->priv->treeview));
 
   if (!gtk_tree_selection_get_selected (selection, &model, &iter))
     return;
@@ -734,16 +703,13 @@ ft_manager_open (EmpathyFTManager *ft_manager)
 static void
 ft_manager_stop (EmpathyFTManager *ft_manager)
 {
-  EmpathyFTManagerPriv *priv;
   GValue val = {0, };
   GtkTreeSelection *selection;
   GtkTreeIter iter;
   GtkTreeModel *model;
   EmpathyTpFile *tp_file;
 
-  priv = GET_PRIV (ft_manager);
-
-  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->treeview));
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (ft_manager->priv->treeview));
 
   if (!gtk_tree_selection_get_selected (selection, &model, &iter))
     return;
@@ -1040,16 +1006,14 @@ empathy_ft_manager_add_tp_file (EmpathyFTManager *ft_manager,
 static void
 empathy_ft_manager_finalize (GObject *object)
 {
-  EmpathyFTManagerPriv *priv;
+  EmpathyFTManager *ft_manager = (EmpathyFTManager *) object;
 
   DEBUG ("Finalizing: %p", object);
 
-  priv = GET_PRIV (object);
+  g_hash_table_destroy (ft_manager->priv->tp_file_to_row_ref);
 
-  g_hash_table_destroy (priv->tp_file_to_row_ref);
-
-  if (priv->save_geometry_id != 0)
-    g_source_remove (priv->save_geometry_id);
+  if (ft_manager->priv->save_geometry_id != 0)
+    g_source_remove (ft_manager->priv->save_geometry_id);
 
   manager_p = NULL;
 
@@ -1061,12 +1025,8 @@ ft_manager_delete_event_cb (GtkWidget *widget,
                             GdkEvent *event,
                             EmpathyFTManager *ft_manager)
 {
-  EmpathyFTManagerPriv *priv;
-
-  priv = GET_PRIV (ft_manager);
-
   ft_manager_clear (ft_manager);
-  if (g_hash_table_size (priv->tp_file_to_row_ref) == 0)
+  if (g_hash_table_size (ft_manager->priv->tp_file_to_row_ref) == 0)
     {
       DEBUG ("Destroying window");
       empathy_ft_manager_finalize (G_OBJECT (ft_manager));
@@ -1084,15 +1044,12 @@ ft_manager_delete_event_cb (GtkWidget *widget,
 static void
 ft_manager_build_ui (EmpathyFTManager *ft_manager)
 {
-  EmpathyFTManagerPriv *priv;
   gint x, y, w, h;
   GtkListStore *liststore;
   GtkTreeViewColumn *column;
   GtkCellRenderer *renderer;
   GtkTreeSelection *selection;
   gchar *filename;
-
-  priv = GET_PRIV (ft_manager);
 
   /* Keep this object alive until we have the dialog window */
   g_object_ref (ft_manager);
@@ -1101,21 +1058,21 @@ ft_manager_build_ui (EmpathyFTManager *ft_manager)
       "libempathy-gtk");
   empathy_glade_get_file (filename,
       "ft_manager_dialog", NULL,
-      "ft_manager_dialog", &priv->window,
-      "ft_list", &priv->treeview,
-      "open_button", &priv->open_button,
-      "abort_button", &priv->abort_button,
+      "ft_manager_dialog", &ft_manager->priv->window,
+      "ft_list", &ft_manager->priv->treeview,
+      "open_button", &ft_manager->priv->open_button,
+      "abort_button", &ft_manager->priv->abort_button,
       NULL);
   g_free (filename);
 
-  g_signal_connect (priv->window, "response",
+  g_signal_connect (ft_manager->priv->window, "response",
       G_CALLBACK (ft_manager_response_cb), ft_manager);
-  g_signal_connect (priv->window, "delete-event",
+  g_signal_connect (ft_manager->priv->window, "delete-event",
       G_CALLBACK (ft_manager_delete_event_cb), ft_manager);
-  g_signal_connect (priv->window, "configure-event",
+  g_signal_connect (ft_manager->priv->window, "configure-event",
       G_CALLBACK (ft_manager_configure_event_cb), ft_manager);
 
-  gtk_window_set_icon_name (GTK_WINDOW (priv->window), EMPATHY_IMAGE_DOCUMENT_SEND);
+  gtk_window_set_icon_name (GTK_WINDOW (ft_manager->priv->window), EMPATHY_IMAGE_DOCUMENT_SEND);
 
   /* Window geometry. */
   empathy_geometry_load ("ft-manager", &x, &y, &w, &h);
@@ -1124,26 +1081,26 @@ ft_manager_build_ui (EmpathyFTManager *ft_manager)
     {
       /* Let the window manager position it if we don't have
        * good x, y coordinates. */
-      gtk_window_move (GTK_WINDOW (priv->window), x, y);
+      gtk_window_move (GTK_WINDOW (ft_manager->priv->window), x, y);
     }
 
   if (w > 0 && h > 0)
     {
       /* Use the defaults from the glade file if we don't have
        * good w, h geometry. */
-      gtk_window_resize (GTK_WINDOW (priv->window), w, h);
+      gtk_window_resize (GTK_WINDOW (ft_manager->priv->window), w, h);
     }
 
   gtk_tree_selection_set_mode (gtk_tree_view_get_selection (GTK_TREE_VIEW (
-      priv->treeview)), GTK_SELECTION_BROWSE);
+      ft_manager->priv->treeview)), GTK_SELECTION_BROWSE);
 
   liststore = gtk_list_store_new (5, G_TYPE_INT, GDK_TYPE_PIXBUF,
       G_TYPE_STRING, G_TYPE_STRING, G_TYPE_OBJECT);
 
-  gtk_tree_view_set_model (GTK_TREE_VIEW(priv->treeview),
+  gtk_tree_view_set_model (GTK_TREE_VIEW(ft_manager->priv->treeview),
       GTK_TREE_MODEL (liststore));
   g_object_unref (liststore);
-  gtk_tree_view_set_headers_visible (GTK_TREE_VIEW(priv->treeview), TRUE);
+  gtk_tree_view_set_headers_visible (GTK_TREE_VIEW(ft_manager->priv->treeview), TRUE);
 
   /* Icon and filename column*/
   column = gtk_tree_view_column_new ();
@@ -1160,7 +1117,7 @@ ft_manager_build_ui (EmpathyFTManager *ft_manager)
   gtk_tree_view_column_set_attributes (column, renderer,
       "text", COL_MESSAGE,
       NULL);
-  gtk_tree_view_insert_column (GTK_TREE_VIEW (priv->treeview), column,
+  gtk_tree_view_insert_column (GTK_TREE_VIEW (ft_manager->priv->treeview), column,
       FILE_COL_POS);
   gtk_tree_view_column_set_expand (column, TRUE);
   gtk_tree_view_column_set_resizable (column, TRUE);
@@ -1170,11 +1127,11 @@ ft_manager_build_ui (EmpathyFTManager *ft_manager)
   /* Progress column */
   renderer = gtk_cell_renderer_progress_new ();
   g_object_set (renderer, "xalign", 0.5, NULL);
-  gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW(priv->treeview),
+  gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (ft_manager->priv->treeview),
       PROGRESS_COL_POS, _("%"),
       renderer,
       NULL);
-  column = gtk_tree_view_get_column (GTK_TREE_VIEW(priv->treeview),
+  column = gtk_tree_view_get_column (GTK_TREE_VIEW (ft_manager->priv->treeview),
       PROGRESS_COL_POS);
   gtk_tree_view_column_set_cell_data_func(column, renderer,
       progress_cell_data_func,
@@ -1184,21 +1141,22 @@ ft_manager_build_ui (EmpathyFTManager *ft_manager)
   /* Remaining time column */
   renderer = gtk_cell_renderer_text_new ();
   g_object_set (renderer, "xalign", 0.5, NULL);
-  gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW(priv->treeview),
-      REMAINING_COL_POS, _("Remaining"),
-      renderer,
-      "text", COL_REMAINING,
-      NULL);
+  gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (
+      ft_manager->priv->treeview), REMAINING_COL_POS, _("Remaining"),
+      renderer, "text", COL_REMAINING, NULL);
 
-  column = gtk_tree_view_get_column (GTK_TREE_VIEW(priv->treeview),
+  column = gtk_tree_view_get_column (GTK_TREE_VIEW (
+      ft_manager->priv->treeview),
       REMAINING_COL_POS);
   gtk_tree_view_column_set_sort_column_id (column, COL_REMAINING);
 
-  gtk_tree_view_set_enable_search (GTK_TREE_VIEW (priv->treeview), FALSE);
+  gtk_tree_view_set_enable_search (GTK_TREE_VIEW (ft_manager->priv->treeview),
+      FALSE);
 
-  priv->model = GTK_TREE_MODEL (liststore);
+  ft_manager->priv->model = GTK_TREE_MODEL (liststore);
 
-  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (priv->treeview));
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (
+      ft_manager->priv->treeview));
   g_signal_connect (selection, "changed", G_CALLBACK (selection_changed), ft_manager);
 }
 
@@ -1207,7 +1165,10 @@ empathy_ft_manager_init (EmpathyFTManager *ft_manager)
 {
   EmpathyFTManagerPriv *priv;
 
-  priv = GET_PRIV (ft_manager);
+  priv = G_TYPE_INSTANCE_GET_PRIVATE ((ft_manager), EMPATHY_TYPE_FT_MANAGER,
+      EmpathyFTManagerPriv);
+
+  ft_manager->priv = priv;
 
   priv->tp_file_to_row_ref = g_hash_table_new_full (g_direct_hash,
       g_direct_equal, NULL, (GDestroyNotify) gtk_tree_row_reference_free);
@@ -1224,5 +1185,3 @@ empathy_ft_manager_class_init (EmpathyFTManagerClass *klass)
 
   g_type_class_add_private (object_class, sizeof (EmpathyFTManagerPriv));
 }
-
-
