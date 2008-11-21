@@ -509,43 +509,18 @@ ft_manager_state_changed_cb (EmpathyTpFile *tp_file,
                              GParamSpec *pspec,
                              EmpathyFTManager *ft_manager)
 {
-  gboolean remove;
-
-  switch (empathy_tp_file_get_state (tp_file, NULL))
+  if (empathy_tp_file_get_state (tp_file, NULL) ==
+      EMP_FILE_TRANSFER_STATE_COMPLETED)
     {
-      case EMP_FILE_TRANSFER_STATE_COMPLETED:
-        if (empathy_tp_file_is_incoming (tp_file))
-          {
-            GtkRecentManager *manager;
-            const gchar *uri;
+      GtkRecentManager *manager;
+      const gchar *uri;
 
-            manager = gtk_recent_manager_get_default ();
-            uri = g_object_get_data (G_OBJECT (tp_file), "uri");
-            gtk_recent_manager_add_item (manager, uri);
-         }
-
-      case EMP_FILE_TRANSFER_STATE_CANCELLED:
-        /* Automatically remove file transfers if the
-         * window if not visible. */
-        /* FIXME how do the user know if the file transfer
-         * failed? */
-        remove = !GTK_WIDGET_VISIBLE (ft_manager->priv->window);
-        break;
-
-      default:
-        remove = FALSE;
-        break;
+      manager = gtk_recent_manager_get_default ();
+      uri = g_object_get_data (G_OBJECT (tp_file), "uri");
+      gtk_recent_manager_add_item (manager, uri);
     }
 
-  if (remove)
-    {
-      ft_manager_remove_file_from_list (ft_manager, tp_file);
-      g_hash_table_remove (ft_manager->priv->tp_file_to_row_ref, tp_file);
-    }
-  else
-    {
-      ft_manager_update_ft_row (ft_manager, tp_file);
-    }
+    ft_manager_update_ft_row (ft_manager, tp_file);
 }
 
 static void
