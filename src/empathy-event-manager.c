@@ -216,7 +216,7 @@ event_manager_filter_channel_cb (EmpathyDispatcher   *dispatcher,
 		g_object_unref (contact);
 		g_object_unref (tp_group);
 	}
-	else if (!tp_strdiff (channel_type, EMP_IFACE_CHANNEL_TYPE_FILE)) {
+	else if (!tp_strdiff (channel_type, EMP_IFACE_CHANNEL_TYPE_FILE_TRANSFER)) {
 		EmpathyContact        *contact;
 		gchar                 *msg;
 		TpHandle               handle;

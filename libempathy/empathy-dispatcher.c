@@ -967,7 +967,7 @@ file_channel_request_cb (TpConnection *connection,
 
 	channel = tp_channel_new (connection,
 				 object_path,
-				 EMP_IFACE_CHANNEL_TYPE_FILE,
+				 EMP_IFACE_CHANNEL_TYPE_FILE_TRANSFER,
 				 TP_HANDLE_TYPE_CONTACT,
 				 request->handle,
 				 NULL);
@@ -976,13 +976,13 @@ file_channel_request_cb (TpConnection *connection,
 	g_value_init (&value, G_TYPE_STRING);
 	g_value_set_string (&value, g_filename_display_basename (filename));
 	tp_cli_dbus_properties_call_set (TP_PROXY (channel), -1,
-		EMP_IFACE_CHANNEL_TYPE_FILE, "Filename",
+		EMP_IFACE_CHANNEL_TYPE_FILE_TRANSFER, "Filename",
 		&value, NULL, NULL, NULL, NULL);
 	g_value_reset (&value);
 
 	g_value_set_string (&value, g_file_info_get_content_type (info));
 	tp_cli_dbus_properties_call_set (TP_PROXY (channel), -1,
-		EMP_IFACE_CHANNEL_TYPE_FILE, "ContentType",
+		EMP_IFACE_CHANNEL_TYPE_FILE_TRANSFER, "ContentType",
 		&value, NULL, NULL, NULL, NULL);
 
 	g_value_unset (&value);
@@ -990,7 +990,7 @@ file_channel_request_cb (TpConnection *connection,
 	g_value_init (&value, G_TYPE_UINT64);
 	g_value_set_uint64 (&value, size);
 	tp_cli_dbus_properties_call_set (TP_PROXY (channel), -1,
-		EMP_IFACE_CHANNEL_TYPE_FILE, "Size",
+		EMP_IFACE_CHANNEL_TYPE_FILE_TRANSFER, "Size",
 		&value, NULL, NULL, NULL, NULL);
 	g_value_unset (&value);
 
@@ -1032,7 +1032,7 @@ empathy_dispatcher_send_file (EmpathyContact *contact,
 	request->contact = contact;
 
 	tp_cli_connection_call_request_channel (connection, -1,
-						EMP_IFACE_CHANNEL_TYPE_FILE,
+						EMP_IFACE_CHANNEL_TYPE_FILE_TRANSFER,
 						TP_HANDLE_TYPE_CONTACT,
 						handle,
 						TRUE,

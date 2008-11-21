@@ -189,7 +189,7 @@ ft_manager_update_buttons (EmpathyFTManager *ft_manager)
 
         }
       else if (empathy_tp_file_get_state (tp_file) ==
-        EMP_FILE_TRANSFER_STATE_CANCELED)
+        EMP_FILE_TRANSFER_STATE_CANCELLED)
         {
           open_enabled = FALSE;
           abort_enabled = FALSE;
@@ -323,7 +323,7 @@ ft_manager_update_ft_row (EmpathyFTManager *ft_manager,
 
       break;
 
-    case EMP_FILE_TRANSFER_STATE_CANCELED:
+    case EMP_FILE_TRANSFER_STATE_CANCELLED:
       if (empathy_tp_file_get_incoming (tp_file))
         /* translators: first %s is filename, second %s
          * is the contact name */
@@ -355,7 +355,7 @@ ft_manager_update_ft_row (EmpathyFTManager *ft_manager,
   if (remaining < 0)
     {
       if (state == EMP_FILE_TRANSFER_STATE_COMPLETED ||
-          state == EMP_FILE_TRANSFER_STATE_CANCELED)
+          state == EMP_FILE_TRANSFER_STATE_CANCELLED)
         remaining_str = g_strdup ("");
       else
         /* translators: the text before the "|" is context to
@@ -528,7 +528,7 @@ ft_manager_clear_foreach_cb (gpointer key,
   switch (empathy_tp_file_get_state (tp_file))
     {
       case EMP_FILE_TRANSFER_STATE_COMPLETED:
-      case EMP_FILE_TRANSFER_STATE_CANCELED:
+      case EMP_FILE_TRANSFER_STATE_CANCELLED:
         *list = g_slist_append (*list, tp_file);
         break;
       default:
@@ -575,7 +575,7 @@ ft_manager_state_changed_cb (EmpathyTpFile *tp_file,
             gtk_recent_manager_add_item (manager, uri);
          }
 
-      case EMP_FILE_TRANSFER_STATE_CANCELED:
+      case EMP_FILE_TRANSFER_STATE_CANCELLED:
         /* Automatically remove file transfers if the
          * window if not visible. */
         /* FIXME how do the user know if the file transfer

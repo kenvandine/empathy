@@ -544,16 +544,16 @@ tp_file_constructor (GType type,
       tp_file,
       NULL, NULL, NULL);
 
-  emp_cli_channel_type_file_connect_to_file_transfer_state_changed (
+  emp_cli_channel_type_file_transfer_connect_to_file_transfer_state_changed (
       TP_PROXY (tp_file->priv->channel),
-      (emp_cli_channel_type_file_signal_callback_file_transfer_state_changed)
+      (emp_cli_channel_type_file_transfer_signal_callback_file_transfer_state_changed)
           tp_file_state_changed_cb,
       tp_file,
       NULL, NULL, NULL);
 
-  emp_cli_channel_type_file_connect_to_transferred_bytes_changed (
+  emp_cli_channel_type_file_transfer_connect_to_transferred_bytes_changed (
       TP_PROXY (tp_file->priv->channel),
-      (emp_cli_channel_type_file_signal_callback_transferred_bytes_changed)
+      (emp_cli_channel_type_file_transfer_signal_callback_transferred_bytes_changed)
           tp_file_transferred_bytes_changed_cb,
       tp_file,
       NULL, NULL, NULL);
@@ -565,7 +565,7 @@ tp_file_constructor (GType type,
       tp_file->priv->factory, account, (guint) handle);
 
   tp_cli_dbus_properties_run_get_all (tp_file->priv->channel,
-      -1, EMP_IFACE_CHANNEL_TYPE_FILE, &properties, NULL, NULL);
+      -1, EMP_IFACE_CHANNEL_TYPE_FILE_TRANSFER, &properties, NULL, NULL);
 
   tp_file->priv->size = g_value_get_uint64 (
       g_hash_table_lookup (properties, "Size"));
@@ -625,7 +625,7 @@ tp_file_channel_set_dbus_property (gpointer proxy,
 {
         DEBUG ("Setting %s property", property);
         tp_cli_dbus_properties_call_set (TP_PROXY (proxy), -1,
-            EMP_IFACE_CHANNEL_TYPE_FILE, property, value,
+            EMP_IFACE_CHANNEL_TYPE_FILE_TRANSFER, property, value,
             NULL, NULL, NULL, NULL);
 }
 
@@ -773,7 +773,8 @@ empathy_tp_file_accept (EmpathyTpFile *tp_file,
   g_value_init (&nothing, G_TYPE_STRING);
   g_value_set_string (&nothing, "");
 
-  emp_cli_channel_type_file_call_accept_file (TP_PROXY (tp_file->priv->channel),
+  emp_cli_channel_type_file_transfer_call_accept_file (TP_PROXY (
+      tp_file->priv->channel),
       -1, TP_SOCKET_ADDRESS_TYPE_UNIX, TP_SOCKET_ACCESS_CONTROL_LOCALHOST,
       &nothing, offset, tp_file_method_cb, tp_file, NULL, NULL);
 }
@@ -795,7 +796,7 @@ empathy_tp_file_offer (EmpathyTpFile *tp_file)
   g_value_init (&nothing, G_TYPE_STRING);
   g_value_set_string (&nothing, "");
 
-  emp_cli_channel_type_file_call_offer_file (
+  emp_cli_channel_type_file_transfer_call_offer_file (
       TP_PROXY (tp_file->priv->channel), -1,
       TP_SOCKET_ADDRESS_TYPE_UNIX, TP_SOCKET_ACCESS_CONTROL_LOCALHOST,
       &nothing, tp_file_method_cb, tp_file, NULL, NULL);

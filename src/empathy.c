@@ -102,7 +102,7 @@ file_channel_get_state_cb (TpProxy      *proxy,
 		return;
 	}
 
-	emp_cli_channel_type_file_connect_to_file_transfer_state_changed (
+	emp_cli_channel_type_file_transfer_connect_to_file_transfer_state_changed (
 		proxy, file_channel_state_changed_cb, NULL, NULL, NULL, NULL);
 }
 
@@ -151,9 +151,9 @@ dispatch_channel_cb (EmpathyDispatcher *dispatcher,
 	else if (!tp_strdiff (channel_type, TP_IFACE_CHANNEL_TYPE_STREAMED_MEDIA)) {
 		empathy_call_window_new (channel);
 	}
-	else if (!tp_strdiff (channel_type, EMP_IFACE_CHANNEL_TYPE_FILE)) {
+	else if (!tp_strdiff (channel_type, EMP_IFACE_CHANNEL_TYPE_FILE_TRANSFER)) {
 		tp_cli_dbus_properties_call_get (g_object_ref (channel), -1,
-			EMP_IFACE_CHANNEL_TYPE_FILE,
+			EMP_IFACE_CHANNEL_TYPE_FILE_TRANSFER,
 			"State", file_channel_get_state_cb,
 			NULL, NULL, NULL);
 	}
