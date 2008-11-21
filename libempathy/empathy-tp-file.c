@@ -530,6 +530,7 @@ tp_file_constructor (GType type,
   TpHandle handle;
   GHashTable *properties;
   McAccount *account;
+  GValue *requested;
 
   file_obj = G_OBJECT_CLASS (empathy_tp_file_parent_class)->constructor (type,
       n_props, props);
@@ -567,6 +568,9 @@ tp_file_constructor (GType type,
   tp_cli_dbus_properties_run_get_all (tp_file->priv->channel,
       -1, EMP_IFACE_CHANNEL_TYPE_FILE_TRANSFER, &properties, NULL, NULL);
 
+  tp_cli_dbus_properties_run_get (tp_file->priv->channel,
+      -1, TP_IFACE_CHANNEL, "Requested", &requested, NULL, NULL);
+
   tp_file->priv->size = g_value_get_uint64 (
       g_hash_table_lookup (properties, "Size"));
 
@@ -588,11 +592,11 @@ tp_file_constructor (GType type,
   tp_file->priv->description = g_value_dup_string (
       g_hash_table_lookup (properties, "Description"));
 
-  if (tp_file->priv->state == EMP_FILE_TRANSFER_STATE_LOCAL_PENDING)
-    tp_file->priv->incoming = TRUE;
+  tp_file->priv->incoming = !g_value_get_boolean (requested);
 
   g_hash_table_destroy (properties);
   g_object_unref (account);
+  g_value_unset (requested);
 
   return file_obj;
 }
@@ -796,7 +800,7 @@ empathy_tp_file_offer (EmpathyTpFile *tp_file)
   g_value_init (&nothing, G_TYPE_STRING);
   g_value_set_string (&nothing, "");
 
-  emp_cli_channel_type_file_transfer_call_offer_file (
+  emp_cli_channel_type_file_transfer_call_provide_file (
       TP_PROXY (tp_file->priv->channel), -1,
       TP_SOCKET_ADDRESS_TYPE_UNIX, TP_SOCKET_ACCESS_CONTROL_LOCALHOST,
       &nothing, tp_file_method_cb, tp_file, NULL, NULL);

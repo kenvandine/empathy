@@ -245,6 +245,7 @@ ft_manager_update_ft_row (EmpathyFTManager *ft_manager,
   gint percent;
   EmpFileTransferState state;
   EmpFileTransferStateChangeReason reason;
+  gboolean incoming;
 
   row_ref = ft_manager_get_row_from_tp_file (ft_manager, tp_file);
   g_return_if_fail (row_ref != NULL);
@@ -255,15 +256,14 @@ ft_manager_update_ft_row (EmpathyFTManager *ft_manager,
   total_size = empathy_tp_file_get_size (tp_file);
   state = empathy_tp_file_get_state (tp_file);
   reason = empathy_tp_file_get_state_change_reason (tp_file);
+  incoming = empathy_tp_file_get_incoming (tp_file);
 
   switch (state)
     {
-      case EMP_FILE_TRANSFER_STATE_LOCAL_PENDING:
-      case EMP_FILE_TRANSFER_STATE_REMOTE_PENDING:
+      case EMP_FILE_TRANSFER_STATE_PENDING:
       case EMP_FILE_TRANSFER_STATE_OPEN:
       case EMP_FILE_TRANSFER_STATE_ACCEPTED:
-      case EMP_FILE_TRANSFER_STATE_NOT_OFFERED:
-        if (empathy_tp_file_get_incoming (tp_file))
+        if (incoming)
           /* translators: first %s is filename, second %s is the contact name */
           first_line_format = _("Receiving \"%s\" from %s");
         else
@@ -273,8 +273,8 @@ ft_manager_update_ft_row (EmpathyFTManager *ft_manager,
         first_line = g_strdup_printf (first_line_format, filename, contact_name);
 
         if (state == EMP_FILE_TRANSFER_STATE_OPEN
-            || state == EMP_FILE_TRANSFER_STATE_ACCEPTED
-            || state == EMP_FILE_TRANSFER_STATE_LOCAL_PENDING)
+            || (incoming && state == EMP_FILE_TRANSFER_STATE_ACCEPTED)
+            || (incoming && state == EMP_FILE_TRANSFER_STATE_PENDING))
           {
             gchar *total_size_str;
             gchar *transferred_bytes_str;
@@ -297,8 +297,6 @@ ft_manager_update_ft_row (EmpathyFTManager *ft_manager,
             g_free (total_size_str);
 
           }
-        else if (state == EMP_FILE_TRANSFER_STATE_NOT_OFFERED)
-          second_line = g_strdup (_("File not yet offered"));
         else
           second_line = g_strdup (_("Waiting the other participant's response"));
 
@@ -952,7 +950,8 @@ empathy_ft_manager_add_tp_file (EmpathyFTManager *ft_manager,
 
   state = empathy_tp_file_get_state (tp_file);
 
-  if (state == EMP_FILE_TRANSFER_STATE_LOCAL_PENDING)
+  if (state == EMP_FILE_TRANSFER_STATE_PENDING &&
+      empathy_tp_file_get_incoming (tp_file))
     ft_manager_display_accept_dialog (ft_manager, tp_file);
   else
     ft_manager_add_tp_file_to_list (ft_manager, tp_file);

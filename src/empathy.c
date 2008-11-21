@@ -74,19 +74,6 @@ file_channel_add_to_file_manager (TpChannel *channel)
 }
 
 static void
-file_channel_state_changed_cb (TpProxy *proxy,
-			       guint    state,
-			       guint    reason,
-			       gpointer user_data,
-			       GObject *weak_object)
-{
-	/* Only deal with the channel being offered */
-	if (state == EMP_FILE_TRANSFER_STATE_REMOTE_PENDING) {
-		file_channel_add_to_file_manager (TP_CHANNEL (proxy));
-	}
-}
-
-static void
 file_channel_get_state_cb (TpProxy      *proxy,
 			   const GValue *state_value,
 			   const GError *error,
@@ -96,14 +83,11 @@ file_channel_get_state_cb (TpProxy      *proxy,
 	EmpFileTransferState state;
 	state = g_value_get_uint (state_value);
 
-	if (state == EMP_FILE_TRANSFER_STATE_REMOTE_PENDING
-	    || state == EMP_FILE_TRANSFER_STATE_LOCAL_PENDING) {
+	if (state == EMP_FILE_TRANSFER_STATE_PENDING)
+  {
 		file_channel_add_to_file_manager (TP_CHANNEL (proxy));
 		return;
 	}
-
-	emp_cli_channel_type_file_transfer_connect_to_file_transfer_state_changed (
-		proxy, file_channel_state_changed_cb, NULL, NULL, NULL, NULL);
 }
 
 static void
