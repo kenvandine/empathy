@@ -332,11 +332,17 @@ tp_file_invalidated_cb (TpProxy       *proxy,
 			gchar         *message,
 			EmpathyTpFile *tp_file)
 {
-	DEBUG ("Channel invalidated: %s", message);
-	tp_file->priv->state = EMP_FILE_TRANSFER_STATE_CANCELLED;
-	tp_file->priv->state_change_reason =
-	    EMP_FILE_TRANSFER_STATE_CHANGE_REASON_LOCAL_ERROR;
-	g_object_notify (G_OBJECT (tp_file), "state");
+  DEBUG ("Channel invalidated: %s", message);
+
+  if (tp_file->priv->state != EMP_FILE_TRANSFER_STATE_COMPLETED &&
+      tp_file->priv->state != EMP_FILE_TRANSFER_STATE_CANCELLED)
+    {
+      /* The channel is not in a finished state, an error occured */
+      tp_file->priv->state = EMP_FILE_TRANSFER_STATE_CANCELLED;
+      tp_file->priv->state_change_reason =
+          EMP_FILE_TRANSFER_STATE_CHANGE_REASON_LOCAL_ERROR;
+      g_object_notify (G_OBJECT (tp_file), "state");
+    }
 }
 
 static void
