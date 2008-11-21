@@ -716,7 +716,6 @@ receive_tp_file (EmpathyTpFile *tp_file)
   g_object_unref (socket_stream);
 }
 
-
 static void
 send_tp_file (EmpathyTpFile *tp_file)
 {
@@ -774,7 +773,7 @@ tp_file_state_changed_cb (DBusGProxy *tp_file_iface,
     send_tp_file (tp_file);
   else if (state == EMP_FILE_TRANSFER_STATE_OPEN && priv->incoming &&
       priv->out_stream)
-      receive_tp_file (tp_file);
+    receive_tp_file (tp_file);
 
   priv->state = state;
   priv->state_change_reason = reason;
