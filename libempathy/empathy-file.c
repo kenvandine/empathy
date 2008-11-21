@@ -898,9 +898,9 @@ empathy_file_cancel (EmpathyFile *file)
 
   priv = GET_PRIV (file);
 
-  g_cancellable_cancel (priv->cancellable);
-
   tp_cli_channel_run_close (priv->channel, -1, NULL, NULL);
+
+  g_cancellable_cancel (priv->cancellable);
 }
 
 void
