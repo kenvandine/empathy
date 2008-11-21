@@ -257,14 +257,9 @@ ft_manager_update_ft_row (EmpathyFTManager *ft_manager,
   state = empathy_tp_file_get_state (tp_file);
   reason = empathy_tp_file_get_state_change_reason (tp_file);
 
-  /* The state is changed asynchronously, so we can get local pending
-   * transfers just before their state is changed to open.
-   * Just treat them as open file transfers. */
-  if (state == EMP_FILE_TRANSFER_STATE_LOCAL_PENDING)
-    state = EMP_FILE_TRANSFER_STATE_OPEN;
-
   switch (state)
     {
+      case EMP_FILE_TRANSFER_STATE_LOCAL_PENDING:
       case EMP_FILE_TRANSFER_STATE_REMOTE_PENDING:
       case EMP_FILE_TRANSFER_STATE_OPEN:
       case EMP_FILE_TRANSFER_STATE_ACCEPTED:
@@ -279,7 +274,8 @@ ft_manager_update_ft_row (EmpathyFTManager *ft_manager,
         first_line = g_strdup_printf (first_line_format, filename, contact_name);
 
         if (state == EMP_FILE_TRANSFER_STATE_OPEN
-            || state == EMP_FILE_TRANSFER_STATE_ACCEPTED)
+            || state == EMP_FILE_TRANSFER_STATE_ACCEPTED
+            || state == EMP_FILE_TRANSFER_STATE_LOCAL_PENDING)
           {
             gchar *total_size_str;
             gchar *transferred_bytes_str;
