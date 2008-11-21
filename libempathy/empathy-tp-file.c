@@ -268,7 +268,7 @@ tp_file_finalize (GObject *object)
       DEBUG ("Closing channel..");
       g_signal_handlers_disconnect_by_func (priv->channel,
           tp_file_destroy_cb, object);
-      tp_cli_channel_run_close (priv->channel, -1, NULL, NULL);
+      tp_cli_channel_call_close (priv->channel, -1, NULL, NULL, NULL, NULL);
       if (G_IS_OBJECT (priv->channel))
         g_object_unref (priv->channel);
     }
@@ -308,6 +308,49 @@ tp_file_finalize (GObject *object)
   G_OBJECT_CLASS (empathy_tp_file_parent_class)->finalize (object);
 }
 
+static void
+tp_file_get_all_cb (TpProxy *proxy,
+                    GHashTable *properties,
+                    const GError *error,
+                    gpointer user_data,
+                    GObject *weak_object)
+{
+  EmpathyTpFilePriv *priv = (EmpathyTpFilePriv *) user_data;
+
+  if (error)
+    {
+      DEBUG ("Failed to get properties: %s", error->message);
+      return;
+    }
+
+  priv->size = g_value_get_uint64 (
+      g_hash_table_lookup (properties, "Size"));
+
+  priv->state = g_value_get_uint (
+      g_hash_table_lookup (properties, "State"));
+
+  /* Invalid reason, so empathy_file_get_state_change_reason() can give
+   * a warning if called for a not closed file transfer. */
+  priv->state_change_reason = -1;
+
+  priv->transferred_bytes = g_value_get_uint64 (
+      g_hash_table_lookup (properties, "TransferredBytes"));
+
+  priv->filename = g_value_dup_string (
+      g_hash_table_lookup (properties, "Filename"));
+
+  priv->content_hash = g_value_dup_string (
+      g_hash_table_lookup (properties, "ContentHash"));
+
+  priv->description = g_value_dup_string (
+      g_hash_table_lookup (properties, "Description"));
+
+  if (priv->state == EMP_FILE_TRANSFER_STATE_LOCAL_PENDING)
+    priv->incoming = TRUE;
+
+  g_hash_table_destroy (properties);
+}
+
 static GObject *
 tp_file_constructor (GType type,
                      guint n_props,
@@ -315,8 +358,6 @@ tp_file_constructor (GType type,
 {
   GObject *tp_file;
   EmpathyTpFilePriv *priv;
-  GError *error = NULL;
-  GHashTable *properties;
   TpHandle handle;
 
   tp_file = G_OBJECT_CLASS (empathy_tp_file_parent_class)->constructor (type,
@@ -352,39 +393,8 @@ tp_file_constructor (GType type,
       priv->account,
       (guint) handle);
 
-  if (!tp_cli_dbus_properties_run_get_all (priv->channel,
-      -1, EMP_IFACE_CHANNEL_TYPE_FILE, &properties, &error, NULL))
-    {
-      DEBUG ("Failed to get properties: %s",
-          error ? error->message : "No error given");
-      g_clear_error (&error);
-      return NULL;
-    }
-
-  priv->size = g_value_get_uint64 (g_hash_table_lookup (properties, "Size"));
-
-  priv->state = g_value_get_uint (g_hash_table_lookup (properties, "State"));
-
-  /* Invalid reason, so empathy_file_get_state_change_reason() can give
-   * a warning if called for a not closed file transfer. */
-  priv->state_change_reason = -1;
-
-  priv->transferred_bytes = g_value_get_uint64 (g_hash_table_lookup (
-      properties, "TransferredBytes"));
-
-  priv->filename = g_value_dup_string (g_hash_table_lookup (properties,
-      "Filename"));
-
-  priv->content_hash = g_value_dup_string (g_hash_table_lookup (properties,
-      "ContentHash"));
-
-  priv->description = g_value_dup_string (g_hash_table_lookup (properties,
-      "Description"));
-
-  if (priv->state == EMP_FILE_TRANSFER_STATE_LOCAL_PENDING)
-    priv->incoming = TRUE;
-
-  g_hash_table_destroy (properties);
+  tp_cli_dbus_properties_call_get_all (priv->channel,
+      -1, EMP_IFACE_CHANNEL_TYPE_FILE, tp_file_get_all_cb, priv, NULL, NULL);
 
   return tp_file;
 }
@@ -421,13 +431,9 @@ tp_file_channel_set_dbus_property (gpointer proxy,
                                    const GValue *value)
 {
         DEBUG ("Setting %s property", property);
-        tp_cli_dbus_properties_run_set (TP_PROXY (proxy),
-            -1,
-            EMP_IFACE_CHANNEL_TYPE_FILE,
-            property,
-            value,
-            NULL, NULL);
-        DEBUG ("done");
+        tp_cli_dbus_properties_call_set (TP_PROXY (proxy), -1,
+            EMP_IFACE_CHANNEL_TYPE_FILE, property, value,
+            NULL, NULL, NULL, NULL);
 }
 
 
@@ -615,6 +621,30 @@ _get_local_socket (EmpathyTpFile *tp_file)
   return fd;
 }
 
+static void
+tp_file_method_cb (TpProxy *proxy,
+                   const GValue *address,
+                   const GError *error,
+                   gpointer user_data,
+                   GObject *weak_object)
+{
+  EmpathyTpFilePriv *priv = (EmpathyTpFilePriv *) user_data;
+
+  if (error)
+    {
+      DEBUG ("Error: %s", error->message);
+      return;
+    }
+
+  if (priv->unix_socket_path)
+    g_free (priv->unix_socket_path);
+
+  priv->unix_socket_path = g_value_dup_string (address);
+
+  DEBUG ("Got unix socket path: %s", priv->unix_socket_path);
+}
+
+
 /**
  * empathy_tp_file_accept:
  * @tp_file: an #EmpathyTpFile
@@ -627,9 +657,7 @@ empathy_tp_file_accept (EmpathyTpFile *tp_file,
                         guint64 offset)
 {
   EmpathyTpFilePriv *priv;
-  GValue *address;
   GValue nothing = { 0 };
-  GError *error = NULL;
 
   g_return_if_fail (EMPATHY_IS_TP_FILE (tp_file));
 
@@ -642,31 +670,22 @@ empathy_tp_file_accept (EmpathyTpFile *tp_file,
   g_value_init (&nothing, G_TYPE_STRING);
   g_value_set_string (&nothing, "");
 
-  if (!emp_cli_channel_type_file_run_accept_file (TP_PROXY (priv->channel),
+  emp_cli_channel_type_file_call_accept_file (TP_PROXY (priv->channel),
       -1, TP_SOCKET_ADDRESS_TYPE_UNIX, TP_SOCKET_ACCESS_CONTROL_LOCALHOST,
-      &nothing, offset, &address, &error, NULL))
-    {
-      DEBUG ("Accept error: %s",
-          error ? error->message : "No message given");
-      g_clear_error (&error);
-      return;
-    }
-
-  if (priv->unix_socket_path)
-    g_free (priv->unix_socket_path);
-
-  priv->unix_socket_path = g_value_dup_string (address);
-  g_value_unset (address);
-
-  DEBUG ("Got unix socket path: %s", priv->unix_socket_path);
+      &nothing, offset, tp_file_method_cb, priv, NULL, NULL);
 }
 
+/**
+ * empathy_tp_file_offer:
+ * @tp_file: an #EmpathyTpFile
+ *
+ * Offers a file transfer that's in the "not offered" state (i.e.
+ * EMP_FILE_TRANSFER_STATE_NOT_OFFERED).
+ */
 void
 empathy_tp_file_offer (EmpathyTpFile *tp_file)
 {
   EmpathyTpFilePriv *priv;
-  GValue *address;
-  GError *error = NULL;
   GValue nothing = { 0 };
 
   g_return_if_fail (EMPATHY_IS_TP_FILE (tp_file));
@@ -676,23 +695,9 @@ empathy_tp_file_offer (EmpathyTpFile *tp_file)
   g_value_init (&nothing, G_TYPE_STRING);
   g_value_set_string (&nothing, "");
 
-  if (!emp_cli_channel_type_file_run_offer_file (TP_PROXY (priv->channel),
+  emp_cli_channel_type_file_call_offer_file (TP_PROXY (priv->channel),
       -1, TP_SOCKET_ADDRESS_TYPE_UNIX, TP_SOCKET_ACCESS_CONTROL_LOCALHOST,
-      &nothing, &address, &error, NULL))
-    {
-      DEBUG ("OfferFile error: %s",
-          error ? error->message : "No message given");
-      g_clear_error (&error);
-      return;
-    }
-
-  if (priv->unix_socket_path)
-    g_free (priv->unix_socket_path);
-
-  priv->unix_socket_path = g_value_dup_string (address);
-  g_value_unset (address);
-
-  DEBUG ("Got unix socket path: %s", priv->unix_socket_path);
+      &nothing, tp_file_method_cb, priv, NULL, NULL);
 }
 
 static void
@@ -925,7 +930,7 @@ empathy_tp_file_cancel (EmpathyTpFile *tp_file)
 
   priv = GET_PRIV (tp_file);
 
-  tp_cli_channel_run_close (priv->channel, -1, NULL, NULL);
+  tp_cli_channel_call_close (priv->channel, -1, NULL, NULL, NULL, NULL);
 
   g_cancellable_cancel (priv->cancellable);
 }

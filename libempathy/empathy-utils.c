@@ -843,23 +843,23 @@ empathy_send_file (EmpathyContact *contact,
 
 	g_value_init (&value, G_TYPE_STRING);
 	g_value_set_string (&value, g_filename_display_basename (filename));
-	tp_cli_dbus_properties_run_set (TP_PROXY (channel),
-		-1, EMP_IFACE_CHANNEL_TYPE_FILE, "Filename",
-		&value, NULL, NULL);
+	tp_cli_dbus_properties_call_set (TP_PROXY (channel), -1,
+		EMP_IFACE_CHANNEL_TYPE_FILE, "Filename",
+		&value, NULL, NULL, NULL, NULL);
 	g_value_reset (&value);
 
 	g_value_set_string (&value, g_file_info_get_content_type (info));
-	tp_cli_dbus_properties_run_set (TP_PROXY (channel),
-		-1, EMP_IFACE_CHANNEL_TYPE_FILE, "ContentType",
-		&value, NULL, NULL);
+	tp_cli_dbus_properties_call_set (TP_PROXY (channel), -1,
+		EMP_IFACE_CHANNEL_TYPE_FILE, "Filename",
+		&value, NULL, NULL, NULL, NULL);
 
 	g_value_unset (&value);
 
 	g_value_init (&value, G_TYPE_UINT64);
 	g_value_set_uint64 (&value, size);
-	tp_cli_dbus_properties_run_set (TP_PROXY (channel),
-		-1, EMP_IFACE_CHANNEL_TYPE_FILE, "Size",
-		&value, NULL, NULL);
+	tp_cli_dbus_properties_call_set (TP_PROXY (channel), -1,
+		EMP_IFACE_CHANNEL_TYPE_FILE, "Size",
+		&value, NULL, NULL, NULL, NULL);
 	g_value_unset (&value);
 
 	tp_file = empathy_tp_file_new (account, channel);

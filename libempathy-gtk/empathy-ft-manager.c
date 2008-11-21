@@ -1158,7 +1158,7 @@ ft_manager_receive_file_response_cb (GtkWidget *dialog,
   else
     {
       channel = empathy_tp_file_get_channel (response_data->tp_file);
-      tp_cli_channel_run_close (channel, -1, NULL, NULL);
+      tp_cli_channel_call_close (channel, -1, NULL, NULL, NULL, NULL);
       free_receive_response_data (response_data);
     }
 
