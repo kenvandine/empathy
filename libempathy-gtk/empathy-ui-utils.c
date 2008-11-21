@@ -1466,46 +1466,42 @@ file_manager_send_file_response_cb (GtkDialog               *widget,
 
 		list = gtk_file_chooser_get_uris (GTK_FILE_CHOOSER (widget));
 
-		if (list) {
-			GSList *l;
+		GSList *l;
 
-			DEBUG ("File chooser selected files:");
+		DEBUG ("File chooser selected files:");
 
-			for (l = list; l; l = l->next) {
-				gchar            *uri;
-				GFile            *gfile;
-				EmpathyTpFile    *tp_file;
-				GtkRecentManager *manager;
+		for (l = list; l; l = l->next) {
+			gchar            *uri;
+			GFile            *gfile;
+			EmpathyTpFile    *tp_file;
+			GtkRecentManager *manager;
 
-				uri = l->data;
-				gfile = g_file_new_for_uri (uri);
+			uri = l->data;
+			gfile = g_file_new_for_uri (uri);
 
-				DEBUG ("\t%s", uri);
-				tp_file = empathy_send_file (response_data->contact,
-							     gfile);
-				if (response_data->callback)
-					response_data->callback (tp_file,
-								 response_data->user_data);
+			DEBUG ("\t%s", uri);
+			tp_file = empathy_send_file (response_data->contact,
+						     gfile);
+			if (response_data->callback)
+				response_data->callback (tp_file,
+							 response_data->user_data);
 
-				manager = gtk_recent_manager_get_default ();
-				gtk_recent_manager_add_item (manager, uri);
+			manager = gtk_recent_manager_get_default ();
+			gtk_recent_manager_add_item (manager, uri);
 
-				if (tp_file) ;
-					/* FIXME: This should be unrefed, but
-					 * it's not referenced anywhere else,
-					 * so the transfer just ends. Uncomment
-					 * this out when there is a file
-					 * transfer "manager".
-					g_object_unref (file);
-					 */
-				g_object_unref (gfile);
-				g_free (uri);
-			}
+			if (tp_file) ;
+				/* FIXME: This should be unrefed, but
+				 * it's not referenced anywhere else,
+				 * so the transfer just ends. Uncomment
+				 * this out when there is a file
+				 * transfer "manager".
+				g_object_unref (file);
+				 */
+			g_object_unref (gfile);
+			g_free (uri);
+		}
 
 			g_slist_free (list);
-		} else {
-			DEBUG ("File chooser had no files selected");
-		}
 	}
 
 	g_object_unref (response_data->contact);
