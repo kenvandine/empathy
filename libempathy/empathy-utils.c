@@ -795,11 +795,6 @@ empathy_send_file (EmpathyContact *contact,
 	GValue          value = { 0 };
 	gchar          *filename;
 
-	/* for getting ContentMD5 */
-	gsize           checksum_length;
-	gchar          *checksum_data;
-	gchar          *checksum_hex;
-
 	g_return_val_if_fail (EMPATHY_IS_CONTACT (contact), NULL);
 	g_return_val_if_fail (G_IS_FILE (gfile), NULL);
 
@@ -849,29 +844,6 @@ empathy_send_file (EmpathyContact *contact,
 	g_value_set_string (&value, g_filename_display_basename (filename));
 	tp_cli_dbus_properties_run_set (TP_PROXY (channel),
 		-1, EMP_IFACE_CHANNEL_TYPE_FILE, "Filename",
-		&value, NULL, NULL);
-	g_value_reset (&value);
-
-
-	if (g_file_get_contents (g_file_get_path (gfile),
-				 &checksum_data, &checksum_length, &error)) {
-
-		checksum_hex = g_compute_checksum_for_data (G_CHECKSUM_MD5,
-							    (guchar *) checksum_data,
-							    (gssize) checksum_length);
-		g_free (checksum_data);
-		DEBUG ("Got a checksum: %s", checksum_hex);
-	} else {
-		DEBUG ("Couldn't get file contents for checksum: %s",
-		       error ? error->message : "No error given");
-		g_clear_error (&error);
-		checksum_hex = "";
-	}
-
-	g_value_set_string (&value, checksum_hex);
-	g_free (checksum_hex);
-	tp_cli_dbus_properties_run_set (TP_PROXY (channel),
-		-1, EMP_IFACE_CHANNEL_TYPE_FILE, "ContentMD5",
 		&value, NULL, NULL);
 	g_value_reset (&value);
 
