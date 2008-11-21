@@ -728,13 +728,21 @@ file_state_changed_cb (DBusGProxy *file_iface,
   if (state == EMP_FILE_TRANSFER_STATE_OPEN)
     priv->start_time = get_time_msec ();
 
-  DEBUG ("state = %u, direction = %u, in_stream = %s",
-         state, priv->direction, priv->in_stream ? "present" : "not present");
+  DEBUG ("state = %u, direction = %u, in_stream = %s, out_stream = %s",
+         state, priv->direction,
+         priv->in_stream ? "present" : "not present",
+         priv->out_stream ? "present" : "not present");
 
   if (state == EMP_FILE_TRANSFER_STATE_OPEN &&
       priv->direction == EMP_FILE_TRANSFER_DIRECTION_OUTGOING &&
       priv->in_stream)
     send_file (file);
+  else if (state == EMP_FILE_TRANSFER_STATE_OPEN &&
+      priv->direction == EMP_FILE_TRANSFER_DIRECTION_INCOMING &&
+      priv->out_stream)
+    {
+      receive_file (file);
+    }
 
   priv->state = state;
   priv->state_change_reason = reason;
