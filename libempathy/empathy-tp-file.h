@@ -67,9 +67,11 @@ GType empathy_tp_file_get_type (void) G_GNUC_CONST;
 EmpathyTpFile *empathy_tp_file_new (TpChannel *channel);
 
 TpChannel *empathy_tp_file_get_channel (EmpathyTpFile *tp_file);
-void empathy_tp_file_accept (EmpathyTpFile *tp_file, guint64 offset);
+void empathy_tp_file_accept (EmpathyTpFile *tp_file, guint64 offset,
+  GFile *gfile, GError **error);
 void empathy_tp_file_cancel (EmpathyTpFile *tp_file);
-void empathy_tp_file_offer (EmpathyTpFile *tp_file);
+void empathy_tp_file_offer (EmpathyTpFile *tp_file, GFile *gfile,
+  GError **error);
 
 const gchar *empathy_tp_file_get_id (EmpathyTpFile *tp_file);
 guint64 empathy_tp_file_get_transferred_bytes (EmpathyTpFile *tp_file);
@@ -81,10 +83,6 @@ EmpFileTransferStateChangeReason empathy_tp_file_get_state_change_reason (Empath
 guint64 empathy_tp_file_get_size (EmpathyTpFile *tp_file);
 guint64 empathy_tp_file_get_transferred_bytes (EmpathyTpFile *tp_file);
 gint empathy_tp_file_get_remaining_time (EmpathyTpFile *tp_file);
-GFile *empathy_tp_file_get_gfile (EmpathyTpFile *tp_file);
-
-void empathy_tp_file_set_gfile (EmpathyTpFile *tp_file, GFile *gfile, GError **error);
-void empathy_tp_file_set_filename (EmpathyTpFile *tp_file, const gchar *filename);
 
 G_END_DECLS
 

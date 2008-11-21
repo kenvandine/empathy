@@ -958,8 +958,7 @@ file_channel_create_cb (TpConnection *connection,
 				 NULL);
 
 	tp_file = empathy_tp_file_new (channel);
-	empathy_tp_file_set_gfile (tp_file, request->gfile, NULL);
-	empathy_tp_file_offer (tp_file);
+	empathy_tp_file_offer (tp_file, request->gfile, NULL);
 
 	g_object_unref (request->gfile);
 	g_slice_free (FileChannelRequest, request);

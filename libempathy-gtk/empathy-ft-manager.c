@@ -744,7 +744,7 @@ ft_manager_save_dialog_response_cb (GtkDialog *widget,
           GError *error = NULL;
 
           file = g_file_new_for_uri (uri);
-          empathy_tp_file_set_gfile (response_data->tp_file, file, &error);
+          empathy_tp_file_accept (response_data->tp_file, 0, file, &error);
 
           if (error)
             {
@@ -772,8 +772,6 @@ ft_manager_save_dialog_response_cb (GtkDialog *widget,
 
           g_object_set_data_full (G_OBJECT (response_data->tp_file),
               "uri", uri, g_free);
-
-          empathy_tp_file_accept (response_data->tp_file, 0);
 
           ft_manager_add_tp_file_to_list (response_data->ft_manager,
               response_data->tp_file);

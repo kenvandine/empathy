@@ -280,7 +280,6 @@ struct _EmpathyTpFilePriv {
   TpChannel *channel;
 
   EmpathyContact *contact;
-  GFile *gfile;
   GInputStream *in_stream;
   GOutputStream *out_stream;
 
@@ -369,9 +368,6 @@ tp_file_finalize (GObject *object)
   g_free (tp_file->priv->description);
   g_free (tp_file->priv->content_hash);
   g_free (tp_file->priv->content_type);
-
-  if (tp_file->priv->gfile)
-    g_object_unref (tp_file->priv->gfile);
 
   if (tp_file->priv->in_stream)
     g_object_unref (tp_file->priv->in_stream);
@@ -771,7 +767,7 @@ tp_file_method_cb (TpProxy *proxy,
                    gpointer user_data,
                    GObject *weak_object)
 {
-  EmpathyTpFile *tp_file = (EmpathyTpFile *) user_data;
+  EmpathyTpFile *tp_file = (EmpathyTpFile *) weak_object;
 
   if (error)
     {
@@ -791,52 +787,70 @@ tp_file_method_cb (TpProxy *proxy,
 /**
  * empathy_tp_file_accept:
  * @tp_file: an #EmpathyTpFile
+ * @offset: position where to start the transfer
+ * @gfile: a #GFile where to write transfered data
+ * @error: a #GError set if there is an error when opening @gfile
  *
  * Accepts a file transfer that's in the "local pending" state (i.e.
  * EMP_FILE_TRANSFER_STATE_LOCAL_PENDING).
  */
 void
 empathy_tp_file_accept (EmpathyTpFile *tp_file,
-                        guint64 offset)
+                        guint64 offset,
+                        GFile *gfile,
+                        GError **error)
 {
   GValue nothing = { 0 };
 
   g_return_if_fail (EMPATHY_IS_TP_FILE (tp_file));
+  g_return_if_fail (G_IS_FILE (gfile));
 
-  g_return_if_fail (tp_file->priv->out_stream != NULL);
+  tp_file->priv->out_stream = G_OUTPUT_STREAM (g_file_replace (gfile, NULL,
+  	FALSE, 0, NULL, error));
+  if (error && *error)
+    return;
+
+  tp_file->priv->filename = g_file_get_basename (gfile);
+  g_object_notify (G_OBJECT (tp_file), "filename");
 
   DEBUG ("Accepting file: filename=%s", tp_file->priv->filename);
 
   g_value_init (&nothing, G_TYPE_STRING);
-  g_value_set_string (&nothing, "");
+  g_value_set_static_string (&nothing, "");
 
   emp_cli_channel_type_file_transfer_call_accept_file (TP_PROXY (
       tp_file->priv->channel),
       -1, TP_SOCKET_ADDRESS_TYPE_UNIX, TP_SOCKET_ACCESS_CONTROL_LOCALHOST,
-      &nothing, offset, tp_file_method_cb, tp_file, NULL, NULL);
+      &nothing, offset, tp_file_method_cb, NULL, NULL, G_OBJECT (tp_file));
 }
 
 /**
  * empathy_tp_file_offer:
  * @tp_file: an #EmpathyTpFile
+ * @gfile: a #GFile where to read the data to transfer
+ * @error: a #GError set if there is an error when opening @gfile
  *
  * Offers a file transfer that's in the "not offered" state (i.e.
  * EMP_FILE_TRANSFER_STATE_NOT_OFFERED).
  */
 void
-empathy_tp_file_offer (EmpathyTpFile *tp_file)
+empathy_tp_file_offer (EmpathyTpFile *tp_file, GFile *gfile, GError **error)
 {
   GValue nothing = { 0 };
 
   g_return_if_fail (EMPATHY_IS_TP_FILE (tp_file));
 
+  tp_file->priv->in_stream = G_INPUT_STREAM (g_file_read (gfile, NULL, error));
+  if (error && *error)
+  	return;
+
   g_value_init (&nothing, G_TYPE_STRING);
-  g_value_set_string (&nothing, "");
+  g_value_set_static_string (&nothing, "");
 
   emp_cli_channel_type_file_transfer_call_provide_file (
       TP_PROXY (tp_file->priv->channel), -1,
       TP_SOCKET_ADDRESS_TYPE_UNIX, TP_SOCKET_ACCESS_CONTROL_LOCALHOST,
-      &nothing, tp_file_method_cb, tp_file, NULL, NULL);
+      &nothing, tp_file_method_cb, NULL, NULL, G_OBJECT (tp_file));
 }
 
 EmpathyContact *
@@ -844,13 +858,6 @@ empathy_tp_file_get_contact (EmpathyTpFile *tp_file)
 {
   g_return_val_if_fail (EMPATHY_IS_TP_FILE (tp_file), NULL);
   return tp_file->priv->contact;
-}
-
-GFile *
-empathy_tp_file_get_gfile (EmpathyTpFile *tp_file)
-{
-  g_return_val_if_fail (EMPATHY_IS_TP_FILE (tp_file), NULL);
-  return g_object_ref (tp_file->priv->gfile);
 }
 
 const gchar *
@@ -932,73 +939,6 @@ empathy_tp_file_cancel (EmpathyTpFile *tp_file)
   tp_cli_channel_call_close (tp_file->priv->channel, -1, NULL, NULL, NULL, NULL);
 
   g_cancellable_cancel (tp_file->priv->cancellable);
-}
-
-void
-empathy_tp_file_set_gfile (EmpathyTpFile *tp_file,
-                           GFile *gfile,
-                           GError **error)
-{
-  g_return_if_fail (EMPATHY_IS_TP_FILE (tp_file));
-  g_return_if_fail (gfile);
-
-  if (tp_file->priv->gfile == gfile)
-    return;
-
-  tp_file->priv->gfile = g_object_ref (gfile);
-
-  if (!tp_file->priv->incoming)
-    {
-      GInputStream *in_stream;
-
-      in_stream = G_INPUT_STREAM (g_file_read (gfile, NULL, NULL));
-
-      if (tp_file->priv->in_stream)
-        g_object_unref (tp_file->priv->in_stream);
-
-      tp_file->priv->in_stream = g_object_ref (in_stream);
-    }
-  else
-    {
-      GOutputStream *out_stream;
-      gchar *filename;
-
-      out_stream = G_OUTPUT_STREAM (g_file_replace (gfile, NULL, FALSE,
-        0, NULL, error));
-
-      if (*error)
-        return;
-
-      if (tp_file->priv->out_stream == out_stream)
-        return;
-
-      if (tp_file->priv->out_stream)
-        g_object_unref (tp_file->priv->out_stream);
-
-      tp_file->priv->out_stream = g_object_ref (out_stream);
-
-      filename = g_file_get_basename (gfile);
-      empathy_tp_file_set_filename (tp_file, filename);
-
-      g_free (filename);
-    }
-}
-
-void
-empathy_tp_file_set_filename (EmpathyTpFile *tp_file,
-                              const gchar *filename)
-{
-  g_return_if_fail (EMPATHY_IS_TP_FILE (tp_file));
-  g_return_if_fail (filename != NULL);
-
-  if (tp_file->priv->filename && strcmp (filename,
-      tp_file->priv->filename) == 0)
-    return;
-
-  g_free (tp_file->priv->filename);
-  tp_file->priv->filename = g_strdup (filename);
-
-  g_object_notify (G_OBJECT (tp_file), "filename");
 }
 
 static void
