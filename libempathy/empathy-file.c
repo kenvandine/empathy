@@ -87,9 +87,8 @@ static void      file_state_changed_cb             (DBusGProxy            *file_
                  guint                  state,
                  guint                  reason,
                  EmpathyFile           *file);
-static void      file_transferred_bytes_changed_cb (DBusGProxy            *file_iface,
-                 guint64                transferred_bytes,
-                 EmpathyFile           *file);
+static void      file_transferred_bytes_changed_cb (TpProxy *proxy, guint64 count,
+    EmpathyFile *file, GObject *weak_object);
 static void      copy_stream                        (GInputStream          *in,
                  GOutputStream         *out,
                  GCancellable          *cancellable);
@@ -137,6 +136,7 @@ enum {
   PROP_FILENAME,
   PROP_SIZE,
   PROP_CONTENT_TYPE,
+  PROP_TRANSFERRED_BYTES,
   PROP_CONTENT_MD5,
   PROP_IN_STREAM,
 };
@@ -226,6 +226,16 @@ empathy_file_class_init (EmpathyFileClass *klass)
           "file transfer md5sum",
           "The md5 sum of the transfer's contents",
           "",
+          G_PARAM_READWRITE));
+
+  g_object_class_install_property (object_class,
+      PROP_TRANSFERRED_BYTES,
+      g_param_spec_uint64 ("transferred-bytes",
+          "bytes transferred",
+          "The number of bytes transferred",
+          0,
+          G_MAXUINT64,
+          0,
           G_PARAM_READWRITE));
 
   g_object_class_install_property (object_class,
@@ -751,17 +761,17 @@ file_state_changed_cb (DBusGProxy *file_iface,
 }
 
 static void
-file_transferred_bytes_changed_cb (DBusGProxy *file_iface,
-    guint64 transferred_bytes, EmpathyFile *file)
+file_transferred_bytes_changed_cb (TpProxy *proxy,
+    guint64 count, EmpathyFile *file, GObject *weak_object)
 {
   EmpathyFilePriv *priv;
 
   priv = GET_PRIV (file);
 
-  if (priv->transferred_bytes == transferred_bytes)
+  if (priv->transferred_bytes == count)
     return;
 
-  priv->transferred_bytes = transferred_bytes;
+  priv->transferred_bytes = count;
 
   g_object_notify (G_OBJECT (file), "transferred-bytes");
 }
