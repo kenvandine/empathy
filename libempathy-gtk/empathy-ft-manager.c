@@ -1123,12 +1123,13 @@ ft_manager_receive_file_response_cb (GtkWidget           *dialog,
 				     gint                 response,
 				     ReceiveResponseData *response_data)
 {
+	TpChannel *channel;
+
 	if (response == GTK_RESPONSE_ACCEPT) {
 		ft_manager_create_save_dialog (response_data);
 	} else {
-/*		empathy_file_cancel (response_data->ft,
-				   EMPATHY_TP_FILE_TRANSFER_STATE_CHANGE_REASON_LOCAL_STOPPED);*/
-		/* cancel file transfer */
+		channel = empathy_file_get_channel (response_data->file);
+		tp_cli_channel_run_close (channel, -1, NULL, NULL);
 		free_receive_response_data (response_data);
 	}
 
