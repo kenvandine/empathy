@@ -21,6 +21,7 @@
  * Authors: Richard Hult <richard@imendio.com>
  *          Martyn Russell <martyn@imendio.com>
  *          Xavier Claessens <xclaesse@gmail.com>
+ *          Jonny Lamb <jonny.lamb@collabora.co.uk>
  */
 
 #include "config.h"

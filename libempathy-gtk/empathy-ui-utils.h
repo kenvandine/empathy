@@ -22,6 +22,7 @@
  *          Richard Hult <richard@imendio.com>
  *          Martyn Russell <martyn@imendio.com>
  *          Xavier Claessens <xclaesse@gmail.com>
+ *          Jonny Lamb <jonny.lamb@collabora.co.uk>
  * 
  *          Part of this file is copied from GtkSourceView (gtksourceiter.c):
  *          Paolo Maggi

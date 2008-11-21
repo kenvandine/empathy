@@ -1,7 +1,6 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /*
- * Copyright (C) 2007 Collabora Ltd.
- *   @author: Xavier Claessens <xclaesse@gmail.com>
+ * Copyright (C) 2007-2008 Collabora Ltd.
  * Copyright (C) 2007 Marco Barisione <marco@barisione.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -17,6 +16,9 @@
  * You should have received a copy of the GNU Lesser General Public
  * License along with this library; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * Authors: Marco Barisione <marco@barisione.org>
+ *          Jonny Lamb <jonny.lamb@collabora.co.uk>
  */
 
 #include <config.h>
