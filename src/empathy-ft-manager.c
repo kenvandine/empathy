@@ -961,8 +961,7 @@ ft_manager_build_ui (EmpathyFTManager *ft_manager)
   GtkTreeSelection *selection;
   gchar *filename;
 
-  filename = empathy_file_lookup ("empathy-ft-manager.glade",
-      "libempathy-gtk");
+  filename = empathy_file_lookup ("empathy-ft-manager.glade", "src");
   empathy_glade_get_file (filename,
       "ft_manager_dialog", NULL,
       "ft_manager_dialog", &ft_manager->priv->window,
