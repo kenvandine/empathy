@@ -35,6 +35,7 @@
 #include "empathy-images.h"
 #include "empathy-log-window.h"
 #include "empathy-contact-dialogs.h"
+#include "empathy-ui-utils.h"
 
 GtkWidget *
 empathy_contact_menu_new (EmpathyContact             *contact,
@@ -76,6 +77,11 @@ empathy_contact_menu_new (EmpathyContact             *contact,
 
   /* Invite */
   item = empathy_contact_invite_menu_item_new (contact);
+	gtk_menu_shell_append (shell, item);
+	gtk_widget_show (item);
+
+	/* File transfer */
+	item = empathy_contact_file_transfer_menu_item_new (contact);
 	gtk_menu_shell_append (shell, item);
 	gtk_widget_show (item);
 
@@ -183,6 +189,33 @@ empathy_contact_log_menu_item_new (EmpathyContact *contact)
 				  G_CALLBACK (contact_log_menu_item_activate_cb),
 				  contact);
 	
+	return item;
+}
+
+static void
+contact_file_transfer_menu_item_activate_cb (EmpathyContact *contact)
+{
+	empathy_send_file_with_file_chooser (contact, NULL, NULL);
+}
+
+GtkWidget *
+empathy_contact_file_transfer_menu_item_new (EmpathyContact *contact)
+{
+	GtkWidget         *item;
+	GtkWidget         *image;
+
+	g_return_val_if_fail (EMPATHY_IS_CONTACT (contact), NULL);
+
+	item = gtk_image_menu_item_new_with_mnemonic (_("Send file"));
+	image = gtk_image_new_from_icon_name (EMPATHY_IMAGE_LOG,
+					      GTK_ICON_SIZE_MENU);
+	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
+	gtk_widget_show (image);
+
+	g_signal_connect_swapped (item, "activate",
+				  G_CALLBACK (contact_file_transfer_menu_item_activate_cb),
+				  contact);
+
 	return item;
 }
 
