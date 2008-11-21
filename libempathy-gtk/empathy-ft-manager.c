@@ -628,7 +628,6 @@ ft_manager_add_tp_file_to_list (EmpathyFTManager *ft_manager,
 
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (
       ft_manager->priv->treeview));
-  gtk_tree_selection_unselect_all (selection);
   gtk_tree_selection_select_iter (selection, &iter);
 
   g_signal_connect (tp_file, "notify::state",
