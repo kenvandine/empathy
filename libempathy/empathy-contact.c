@@ -561,7 +561,7 @@ empathy_contact_get_handle (EmpathyContact *contact)
 }
 
 static gboolean
-is_salut (EmpathyContact *contact)
+contact_is_salut (EmpathyContact *contact)
 {
   McAccount *account;
   McProfile *profile;
@@ -593,7 +593,7 @@ empathy_contact_set_handle (EmpathyContact *contact,
       /* FIXME salut does not yet support the Capabilities interface, so for
        * now we use this hack.
        */
-      if (is_salut (contact))
+      if (contact_is_salut (contact))
         {
           EmpathyCapabilities caps;
 
