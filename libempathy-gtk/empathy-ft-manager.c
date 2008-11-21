@@ -139,7 +139,7 @@ empathy_ft_manager_get_dialog (EmpathyFTManager *ft_manager)
 }
 
 static gchar *
-format_interval (gint interval)
+ft_manager_format_interval (gint interval)
 {
   gint hours, mins, secs;
 
@@ -156,14 +156,14 @@ format_interval (gint interval)
 }
 
 static GtkTreeRowReference *
-get_row_from_tp_file (EmpathyFTManager *ft_manager,
-                      EmpathyTpFile *tp_file)
+ft_manager_get_row_from_tp_file (EmpathyFTManager *ft_manager,
+                                 EmpathyTpFile *tp_file)
 {
   return g_hash_table_lookup (ft_manager->priv->tp_file_to_row_ref, tp_file);
 }
 
 static void
-update_buttons (EmpathyFTManager *ft_manager)
+ft_manager_update_buttons (EmpathyFTManager *ft_manager)
 {
   GtkTreeSelection *selection;
   GtkTreeModel *model;
@@ -207,7 +207,7 @@ update_buttons (EmpathyFTManager *ft_manager)
 }
 
 static const gchar *
-get_state_change_reason_description (EmpFileTransferStateChangeReason reason)
+ft_manager_get_state_change_reason_description (EmpFileTransferStateChangeReason reason)
 {
   switch (reason)
     {
@@ -227,8 +227,8 @@ get_state_change_reason_description (EmpFileTransferStateChangeReason reason)
 }
 
 static void
-update_ft_row (EmpathyFTManager *ft_manager,
-               EmpathyTpFile *tp_file)
+ft_manager_update_ft_row (EmpathyFTManager *ft_manager,
+                          EmpathyTpFile *tp_file)
 {
   GtkTreeRowReference  *row_ref;
   GtkTreePath *path;
@@ -247,7 +247,7 @@ update_ft_row (EmpathyFTManager *ft_manager,
   EmpFileTransferState state;
   EmpFileTransferStateChangeReason reason;
 
-  row_ref = get_row_from_tp_file (ft_manager, tp_file);
+  row_ref = ft_manager_get_row_from_tp_file (ft_manager, tp_file);
   g_return_if_fail (row_ref != NULL);
 
   filename = empathy_tp_file_get_filename (tp_file);
@@ -343,7 +343,7 @@ update_ft_row (EmpathyFTManager *ft_manager,
             contact_name);
 
       second_line = g_strdup_printf (_("File transfer canceled: %s"),
-          get_state_change_reason_description (reason));
+          ft_manager_get_state_change_reason_description (reason));
 
       break;
 
@@ -369,7 +369,7 @@ update_ft_row (EmpathyFTManager *ft_manager,
         remaining_str = g_strdup (Q_("remaining time|Unknown"));
     }
   else
-    remaining_str = format_interval (remaining);
+    remaining_str = ft_manager_format_interval (remaining);
 
   msg = g_strdup_printf ("%s\n%s", first_line, second_line);
 
@@ -389,30 +389,30 @@ update_ft_row (EmpathyFTManager *ft_manager,
   g_free (second_line);
   g_free (remaining_str);
 
-  update_buttons (ft_manager);
+  ft_manager_update_buttons (ft_manager);
 }
 
 static void
-transferred_bytes_changed_cb (EmpathyTpFile *tp_file,
-                              GParamSpec *pspec,
+ft_manager_transferred_bytes_changed_cb (EmpathyTpFile *tp_file,
+                                         GParamSpec *pspec,
+                                         EmpathyFTManager *ft_manager)
+{
+  ft_manager_update_ft_row (ft_manager, tp_file);
+}
+
+static void
+ft_manager_selection_changed (GtkTreeSelection *selection,
                               EmpathyFTManager *ft_manager)
 {
-  update_ft_row (ft_manager, tp_file);
+  ft_manager_update_buttons (ft_manager);
 }
 
 static void
-selection_changed (GtkTreeSelection *selection,
-                   EmpathyFTManager *ft_manager)
-{
-  update_buttons (ft_manager);
-}
-
-static void
-progress_cell_data_func (GtkTreeViewColumn *col,
-                         GtkCellRenderer *renderer,
-                         GtkTreeModel *model,
-                         GtkTreeIter *iter,
-                         gpointer user_data)
+ft_manager_progress_cell_data_func (GtkTreeViewColumn *col,
+                                    GtkCellRenderer *renderer,
+                                    GtkTreeModel *model,
+                                    GtkTreeIter *iter,
+                                    gpointer user_data)
 {
   const gchar *text = NULL;
   gint percent;
@@ -468,7 +468,7 @@ ft_manager_remove_file_from_list (EmpathyFTManager *ft_manager,
   GtkTreePath *path = NULL;
   GtkTreeIter iter, iter2;
 
-  row_ref = get_row_from_tp_file (ft_manager, tp_file);
+  row_ref = ft_manager_get_row_from_tp_file (ft_manager, tp_file);
   g_return_if_fail (row_ref);
 
   DEBUG ("Removing file transfer from window: contact=%s, filename=%s",
@@ -561,9 +561,9 @@ ft_manager_clear (EmpathyFTManager *ft_manager)
 }
 
 static void
-state_changed_cb (EmpathyTpFile *tp_file,
-                  GParamSpec *pspec,
-                  EmpathyFTManager *ft_manager)
+ft_manager_state_changed_cb (EmpathyTpFile *tp_file,
+                             GParamSpec *pspec,
+                             EmpathyFTManager *ft_manager)
 {
   gboolean remove;
 
@@ -596,7 +596,7 @@ state_changed_cb (EmpathyTpFile *tp_file,
   if (remove)
     ft_manager_remove_file_from_list (ft_manager, tp_file);
   else
-    update_ft_row (ft_manager, tp_file);
+    ft_manager_update_ft_row (ft_manager, tp_file);
 }
 
 static void
@@ -629,7 +629,7 @@ ft_manager_add_tp_file_to_list (EmpathyFTManager *ft_manager,
   g_hash_table_insert (ft_manager->priv->tp_file_to_row_ref, tp_file,
       row_ref);
 
-  update_ft_row (ft_manager, tp_file);
+  ft_manager_update_ft_row (ft_manager, tp_file);
 
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (
       ft_manager->priv->treeview));
@@ -637,9 +637,9 @@ ft_manager_add_tp_file_to_list (EmpathyFTManager *ft_manager,
   gtk_tree_selection_select_iter (selection, &iter);
 
   g_signal_connect (tp_file, "notify::state",
-      G_CALLBACK (state_changed_cb), ft_manager);
+      G_CALLBACK (ft_manager_state_changed_cb), ft_manager);
   g_signal_connect (tp_file, "notify::transferred-bytes",
-      G_CALLBACK (transferred_bytes_changed_cb), ft_manager);
+      G_CALLBACK (ft_manager_transferred_bytes_changed_cb), ft_manager);
 
   mime = gnome_vfs_get_mime_type_for_name (empathy_tp_file_get_filename (tp_file));
   theme = gtk_icon_theme_get_default ();
@@ -746,7 +746,7 @@ typedef struct {
 } ReceiveResponseData;
 
 static void
-free_receive_response_data (ReceiveResponseData *response_data)
+ft_manager_free_receive_response_data (ReceiveResponseData *response_data)
 {
   if (!response_data)
     return;
@@ -817,7 +817,7 @@ ft_manager_save_dialog_response_cb (GtkDialog *widget,
     }
 
   gtk_widget_destroy (GTK_WIDGET (widget));
-  free_receive_response_data (response_data);
+  ft_manager_free_receive_response_data (response_data);
 }
 
 static void
@@ -882,7 +882,7 @@ ft_manager_receive_file_response_cb (GtkWidget *dialog,
     {
       channel = empathy_tp_file_get_channel (response_data->tp_file);
       tp_cli_channel_call_close (channel, -1, NULL, NULL, NULL, NULL);
-      free_receive_response_data (response_data);
+      ft_manager_free_receive_response_data (response_data);
     }
 
   gtk_widget_destroy (dialog);
@@ -1123,7 +1123,7 @@ ft_manager_build_ui (EmpathyFTManager *ft_manager)
   column = gtk_tree_view_get_column (GTK_TREE_VIEW (ft_manager->priv->treeview),
       PROGRESS_COL_POS);
   gtk_tree_view_column_set_cell_data_func(column, renderer,
-      progress_cell_data_func,
+      ft_manager_progress_cell_data_func,
       NULL, NULL);
   gtk_tree_view_column_set_sort_column_id (column, COL_PERCENT);
 
@@ -1146,7 +1146,8 @@ ft_manager_build_ui (EmpathyFTManager *ft_manager)
 
   selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (
       ft_manager->priv->treeview));
-  g_signal_connect (selection, "changed", G_CALLBACK (selection_changed), ft_manager);
+  g_signal_connect (selection, "changed",
+      G_CALLBACK (ft_manager_selection_changed), ft_manager);
 }
 
 static void
