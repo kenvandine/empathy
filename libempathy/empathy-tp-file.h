@@ -35,8 +35,6 @@
 
 #include <libmissioncontrol/mc-account.h>
 
-#include "empathy-tp-file.h"
-
 G_BEGIN_DECLS
 
 #define EMPATHY_TP_FILE_UNKNOWN_SIZE G_MAXUINT64
