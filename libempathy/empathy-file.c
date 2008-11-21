@@ -750,9 +750,7 @@ file_state_changed_cb (DBusGProxy *file_iface,
   else if (state == EMP_FILE_TRANSFER_STATE_OPEN &&
       priv->direction == EMP_FILE_TRANSFER_DIRECTION_INCOMING &&
       priv->out_stream)
-    {
       receive_file (file);
-    }
 
   priv->state = state;
   priv->state_change_reason = reason;
