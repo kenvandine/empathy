@@ -426,15 +426,6 @@ tp_file_start_transfer (EmpathyTpFile *tp_file)
   tp_file->priv->cancellable = g_cancellable_new ();
   if (tp_file->priv->incoming)
     {
-      GOutputStream *socket_stream;
-
-      socket_stream = g_unix_output_stream_new (fd, TRUE);
-      copy_stream (tp_file->priv->in_stream, socket_stream,
-          tp_file->priv->cancellable);
-      g_object_unref (socket_stream);
-    }
-  else
-    {
       GInputStream *socket_stream;
 
       socket_stream = g_unix_input_stream_new (fd, TRUE);
@@ -442,14 +433,29 @@ tp_file_start_transfer (EmpathyTpFile *tp_file)
           tp_file->priv->cancellable);
       g_object_unref (socket_stream);
     }
+  else
+    {
+      GOutputStream *socket_stream;
+
+      socket_stream = g_unix_output_stream_new (fd, TRUE);
+      copy_stream (tp_file->priv->in_stream, socket_stream,
+          tp_file->priv->cancellable);
+      g_object_unref (socket_stream);
+    }
 }
 
 static void
-tp_file_state_changed_cb (DBusGProxy *tp_file_iface,
-                          EmpFileTransferState state,
-                          EmpFileTransferStateChangeReason reason,
-                          EmpathyTpFile *tp_file)
+tp_file_state_changed_cb (TpProxy *proxy,
+                          guint state,
+                          guint reason,
+                          gpointer user_data,
+                          GObject *weak_object)
 {
+  EmpathyTpFile *tp_file = EMPATHY_TP_FILE (weak_object);
+
+  if (state == tp_file->priv->state)
+    return;
+
   DEBUG ("File transfer state changed:\n"
       "\tfilename = %s, old state = %u, state = %u, reason = %u\n"
       "\tincoming = %s, in_stream = %s, out_stream = %s",
@@ -458,7 +464,11 @@ tp_file_state_changed_cb (DBusGProxy *tp_file_iface,
       tp_file->priv->in_stream ? "present" : "not present",
       tp_file->priv->out_stream ? "present" : "not present");
 
-  if (state == EMP_FILE_TRANSFER_STATE_OPEN)
+  /* If the channel is open AND we have the socket path, we can start the
+   * transfer. The socket path could be NULL if we are not doing the actual
+   * data transfer but are just an observer for the channel. */
+  if (state == EMP_FILE_TRANSFER_STATE_OPEN &&
+      tp_file->priv->unix_socket_path != NULL)
     tp_file_start_transfer (tp_file);
 
   tp_file->priv->state = state;
@@ -470,14 +480,15 @@ tp_file_state_changed_cb (DBusGProxy *tp_file_iface,
 static void
 tp_file_transferred_bytes_changed_cb (TpProxy *proxy,
                                       guint64 count,
-                                      EmpathyTpFile *tp_file,
+                                      gpointer user_data,
                                       GObject *weak_object)
 {
+  EmpathyTpFile *tp_file = EMPATHY_TP_FILE (weak_object);
+
   if (tp_file->priv->transferred_bytes == count)
     return;
 
   tp_file->priv->transferred_bytes = count;
-
   g_object_notify (G_OBJECT (tp_file), "transferred-bytes");
 }
 
@@ -505,18 +516,12 @@ tp_file_constructor (GType type,
     G_CALLBACK (tp_file_invalidated_cb), tp_file);
 
   emp_cli_channel_type_file_transfer_connect_to_file_transfer_state_changed (
-      TP_PROXY (tp_file->priv->channel),
-      (emp_cli_channel_type_file_transfer_signal_callback_file_transfer_state_changed)
-          tp_file_state_changed_cb,
-      tp_file,
-      NULL, NULL, NULL);
+      TP_PROXY (tp_file->priv->channel), tp_file_state_changed_cb, NULL, NULL,
+      G_OBJECT (tp_file), NULL);
 
   emp_cli_channel_type_file_transfer_connect_to_transferred_bytes_changed (
-      TP_PROXY (tp_file->priv->channel),
-      (emp_cli_channel_type_file_transfer_signal_callback_transferred_bytes_changed)
-          tp_file_transferred_bytes_changed_cb,
-      tp_file,
-      NULL, NULL, NULL);
+      TP_PROXY (tp_file->priv->channel), tp_file_transferred_bytes_changed_cb,
+      NULL, NULL, G_OBJECT (tp_file), NULL);
 
   account = empathy_channel_get_account (tp_file->priv->channel);
 
@@ -723,7 +728,6 @@ tp_file_method_cb (TpProxy *proxy,
 
   DEBUG ("Got unix socket path: %s", tp_file->priv->unix_socket_path);
 }
-
 
 /**
  * empathy_tp_file_accept:
