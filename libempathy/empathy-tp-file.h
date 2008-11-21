@@ -72,7 +72,6 @@ void empathy_tp_file_accept (EmpathyTpFile *tp_file, guint64 offset,
 void empathy_tp_file_cancel (EmpathyTpFile *tp_file);
 void empathy_tp_file_offer (EmpathyTpFile *tp_file, GFile *gfile,
   GError **error);
-void empathy_tp_file_keep_alive (EmpathyTpFile *tp_file);
 
 guint64 empathy_tp_file_get_transferred_bytes (EmpathyTpFile *tp_file);
 EmpathyContact *empathy_tp_file_get_contact (EmpathyTpFile *tp_file);

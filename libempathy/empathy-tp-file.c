@@ -297,7 +297,6 @@ struct _EmpathyTpFilePriv {
   time_t start_time;
   gchar *unix_socket_path;
   GCancellable *cancellable;
-  gboolean keep_alive;
 };
 
 enum {
@@ -327,18 +326,6 @@ empathy_tp_file_init (EmpathyTpFile *tp_file)
 }
 
 static void
-tp_file_check_keep_alive (EmpathyTpFile *tp_file)
-{
-  if (tp_file->priv->keep_alive &&
-      (tp_file->priv->state == EMP_FILE_TRANSFER_STATE_COMPLETED ||
-       tp_file->priv->state == EMP_FILE_TRANSFER_STATE_CANCELLED))
-    {
-      tp_file->priv->keep_alive = FALSE;
-      g_object_unref (tp_file);
-    }
-}
-
-static void
 tp_file_invalidated_cb (TpProxy       *proxy,
 			guint          domain,
 			gint           code,
@@ -356,8 +343,6 @@ tp_file_invalidated_cb (TpProxy       *proxy,
           EMP_FILE_TRANSFER_STATE_CHANGE_REASON_LOCAL_ERROR;
       g_object_notify (G_OBJECT (tp_file), "state");
     }
-
-  tp_file_check_keep_alive (tp_file);
 }
 
 static void
@@ -488,7 +473,6 @@ tp_file_state_changed_cb (TpProxy *proxy,
   tp_file->priv->state_change_reason = reason;
 
   g_object_notify (G_OBJECT (tp_file), "state");
-  tp_file_check_keep_alive (tp_file);
 }
 
 static void
@@ -838,27 +822,6 @@ empathy_tp_file_offer (EmpathyTpFile *tp_file, GFile *gfile, GError **error)
       TP_PROXY (tp_file->priv->channel), -1,
       TP_SOCKET_ADDRESS_TYPE_UNIX, TP_SOCKET_ACCESS_CONTROL_LOCALHOST,
       &nothing, tp_file_method_cb, NULL, NULL, G_OBJECT (tp_file));
-}
-
-/**
- * empathy_tp_file_keep_alive:
- * @tp_file: an #EmpathyTpFile
- *
- * Keep @tp_file alive until the file transfer is COMPLETED or CANCELLED, by
- * adding a temporary reference.
- */
-void
-empathy_tp_file_keep_alive (EmpathyTpFile *tp_file)
-{
-  g_return_if_fail (EMPATHY_IS_TP_FILE (tp_file));
-
-  if (tp_file->priv->keep_alive)
-    return;
-
-  tp_file->priv->keep_alive = TRUE;
-  if (tp_file->priv->state != EMP_FILE_TRANSFER_STATE_COMPLETED &&
-      tp_file->priv->state != EMP_FILE_TRANSFER_STATE_CANCELLED)
-    g_object_ref (tp_file);
 }
 
 EmpathyContact *

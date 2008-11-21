@@ -934,6 +934,19 @@ typedef struct {
 } FileChannelRequest;
 
 static void
+tp_file_state_notify_cb (EmpathyTpFile *tp_file)
+{
+	EmpFileTransferState state;
+
+	state = empathy_tp_file_get_state (tp_file, NULL);
+	if (state == EMP_FILE_TRANSFER_STATE_COMPLETED ||
+	    state == EMP_FILE_TRANSFER_STATE_CANCELLED) {
+		DEBUG ("Transfer is done, unref the object");
+		g_object_unref (tp_file);
+	}
+}
+
+static void
 file_channel_create_cb (TpConnection *connection,
 			const gchar  *object_path,
 			GHashTable   *properties,
@@ -957,10 +970,13 @@ file_channel_create_cb (TpConnection *connection,
 				 request->handle,
 				 NULL);
 
+	/* We give the ref to the callback, it is responsible to unref the
+	 * object once the transfer is done. */
 	tp_file = empathy_tp_file_new (channel);
 	empathy_tp_file_offer (tp_file, request->gfile, NULL);
-	empathy_tp_file_keep_alive (tp_file);
-	g_object_unref (tp_file);
+	g_signal_connect (tp_file, "notify::state",
+			  G_CALLBACK (tp_file_state_notify_cb),
+			  NULL);
 
 	g_object_unref (request->gfile);
 	g_slice_free (FileChannelRequest, request);
