@@ -365,8 +365,7 @@ update_ft_row (EmpathyFTManager *ft_manager,
     {
       case EMP_FILE_TRANSFER_STATE_REMOTE_PENDING:
       case EMP_FILE_TRANSFER_STATE_OPEN:
-        if (empathy_tp_file_get_direction (tp_file) ==
-            EMP_FILE_TRANSFER_DIRECTION_INCOMING)
+        if (empathy_tp_file_get_incoming (tp_file))
           /* translators: first %s is filename, second %s is the contact name */
           first_line_format = _("Receiving \"%s\" from %s");
         else

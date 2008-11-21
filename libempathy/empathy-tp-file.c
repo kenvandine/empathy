@@ -370,8 +370,8 @@ tp_file_constructor (GType type,
   priv->unix_socket_path = g_value_dup_string (g_hash_table_lookup (properties,
       "SocketPath"));
 
-  priv->direction = g_value_get_uint (g_hash_table_lookup (properties,
-      "Direction"));
+  if (priv->state == EMP_FILE_TRANSFER_STATE_LOCAL_PENDING)
+    priv->incoming = TRUE;
 
   g_hash_table_destroy (properties);
 
