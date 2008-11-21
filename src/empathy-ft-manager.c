@@ -463,7 +463,7 @@ ft_manager_remove_file_from_list (EmpathyFTManager *ft_manager,
     {
       gint n_row;
 
-      /* There is no last row, set iter to the last row */
+      /* There is no next row, set iter to the last row */
       n_row = gtk_tree_model_iter_n_children (ft_manager->priv->model, NULL);
       if (n_row > 0)
         gtk_tree_model_iter_nth_child (ft_manager->priv->model, &iter, NULL,
