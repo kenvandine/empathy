@@ -25,7 +25,7 @@
 #include <glib-object.h>
 #include <glib.h>
 
-#include <libempathy/empathy-file.h>
+#include <libempathy/empathy-tp-file.h>
 #include <libempathy/empathy-contact.h>
 
 G_BEGIN_DECLS
@@ -54,7 +54,7 @@ struct _EmpathyFTManagerClass
 GType empathy_ft_manager_get_type (void);
 
 EmpathyFTManager *empathy_ft_manager_get_default (void);
-void empathy_ft_manager_add_file (EmpathyFTManager *ft_manager, EmpathyFile *file);
+void empathy_ft_manager_add_tp_file (EmpathyFTManager *ft_manager, EmpathyTpFile *tp_file);
 GtkWidget *empathy_ft_manager_get_dialog (EmpathyFTManager *ft_manager);
 
 G_END_DECLS

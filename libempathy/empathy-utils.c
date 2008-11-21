@@ -777,7 +777,7 @@ empathy_connection_request_channel (TpConnection *connection,
 						weak_object);
 }
 
-EmpathyFile *
+EmpathyTpFile *
 empathy_send_file (EmpathyContact *contact,
 		   GFile          *gfile)
 {
@@ -790,7 +790,7 @@ empathy_send_file (EmpathyContact *contact,
 	guint           handle;
 	gchar          *object_path;
 	TpChannel      *channel;
-	EmpathyFile    *file;
+	EmpathyTpFile  *tp_file;
 	GError         *error = NULL;
 	GValue          value = { 0 };
 	gchar          *filename;
@@ -807,7 +807,7 @@ empathy_send_file (EmpathyContact *contact,
 				  G_FILE_ATTRIBUTE_STANDARD_SIZE ","
 				  G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE,
 				  0, NULL, NULL);
-	size = info ? g_file_info_get_size (info) : EMPATHY_FILE_UNKNOWN_SIZE;
+	size = info ? g_file_info_get_size (info) : EMPATHY_TP_FILE_UNKNOWN_SIZE;
 	filename = g_file_get_basename (gfile);
 	in_stream = G_INPUT_STREAM (g_file_read (gfile, NULL, NULL));
 	mc = empathy_mission_control_new ();
@@ -889,10 +889,10 @@ empathy_send_file (EmpathyContact *contact,
 		&value, NULL, NULL);
 	g_value_unset (&value);
 
-	file = empathy_file_new (account, channel);
+	tp_file = empathy_tp_file_new (account, channel);
 
-	if (file) {
-		empathy_file_set_input_stream (file, in_stream);
+	if (tp_file) {
+		empathy_tp_file_set_input_stream (tp_file, in_stream);
 	}
 
 	g_object_unref (mc);
@@ -900,6 +900,6 @@ empathy_send_file (EmpathyContact *contact,
 	g_object_unref (channel);
 	g_free (object_path);
 
-	return file;
+	return tp_file;
 }
 

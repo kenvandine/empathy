@@ -39,7 +39,7 @@
 
 #include <telepathy-glib/proxy-subclass.h>
 
-#include "empathy-file.h"
+#include "empathy-tp-file.h"
 #include "empathy-contact-factory.h"
 #include "empathy-marshal.h"
 #include "empathy-time.h"
@@ -49,55 +49,55 @@
 #include "empathy-debug.h"
 
 /**
- * SECTION:empathy-file
+ * SECTION:empathy-tp-file
  * @short_description: File channel
- * @see_also: #EmpathyFile, #EmpathyContact, empathy_send_file()
- * @include: libempthy/empathy-file.h
+ * @see_also: #EmpathyTpFile, #EmpathyContact, empathy_send_file()
+ * @include: libempthy/empathy-tp-file.h
  *
- * The #EmpathyFile object represents a Telepathy file channel.
+ * The #EmpathyTpFile object represents a Telepathy file channel.
  */
 
 /**
- * EMPATHY_FILE_UNKNOWN_SIZE:
+ * EMPATHY_TP_FILE_UNKNOWN_SIZE:
  *
  * Value used for the "size" or "estimated-size" properties when the size of
  * the transferred file is unknown.
  */
 
-static void empathy_file_class_init (EmpathyFileClass *klass);
-static void empathy_file_init (EmpathyFile *file);
-static void file_finalize (GObject *object);
-static GObject *file_constructor (GType type, guint n_props,
+static void empathy_tp_file_class_init (EmpathyTpFileClass *klass);
+static void empathy_tp_file_init (EmpathyTpFile *tp_file);
+static void tp_file_finalize (GObject *object);
+static GObject *tp_file_constructor (GType type, guint n_props,
     GObjectConstructParam *props);
-static void file_get_property (GObject *object, guint param_id, GValue *value,
-    GParamSpec *pspec);
-static void file_set_property (GObject *object, guint param_id, const GValue *value,
-    GParamSpec *pspec);
-static void file_destroy_cb (TpChannel *file_chan, EmpathyFile *file);
-static void file_closed_cb (TpChannel *file_chan, EmpathyFile *file,
+static void tp_file_get_property (GObject *object, guint param_id,
+    GValue *value, GParamSpec *pspec);
+static void tp_file_set_property (GObject *object, guint param_id,
+    const GValue *value, GParamSpec *pspec);
+static void tp_file_destroy_cb (TpChannel *file_chan, EmpathyTpFile *tp_file);
+static void tp_file_closed_cb (TpChannel *file_chan, EmpathyTpFile *tp_file,
     GObject *weak_object);
-static void file_state_changed_cb (DBusGProxy *file_iface, guint state,
-    guint reason, EmpathyFile *file);
-static void file_transferred_bytes_changed_cb (TpProxy *proxy, guint64 count,
-    EmpathyFile *file, GObject *weak_object);
+static void tp_file_state_changed_cb (DBusGProxy *file_iface, guint state,
+    guint reason, EmpathyTpFile *tp_file);
+static void tp_file_transferred_bytes_changed_cb (TpProxy *proxy,
+    guint64 count, EmpathyTpFile *tp_file, GObject *weak_object);
 static void copy_stream (GInputStream *in, GOutputStream *out,
     GCancellable *cancellable);
 
-/* EmpathyFile object */
+/* EmpathyTpFile object */
 
 #define GET_PRIV(obj) (G_TYPE_INSTANCE_GET_PRIVATE ((obj), \
-           EMPATHY_TYPE_FILE, EmpathyFilePriv))
+           EMPATHY_TYPE_TP_FILE, EmpathyTpFilePriv))
 
-typedef struct _EmpathyFilePriv  EmpathyFilePriv;
+typedef struct _EmpathyTpFilePriv  EmpathyTpFilePriv;
 
-struct _EmpathyFilePriv {
+struct _EmpathyTpFilePriv {
   EmpathyContactFactory *factory;
   McAccount *account;
   gchar *id;
   MissionControl *mc;
   TpChannel *channel;
 
-  EmpathyFile *cached_empathy_file;
+  EmpathyTpFile *cached_empathy_file;
   EmpathyContact *contact;
   GInputStream *in_stream;
   GOutputStream *out_stream;
@@ -129,17 +129,17 @@ enum {
   PROP_IN_STREAM,
 };
 
-G_DEFINE_TYPE (EmpathyFile, empathy_file, G_TYPE_OBJECT);
+G_DEFINE_TYPE (EmpathyTpFile, empathy_tp_file, G_TYPE_OBJECT);
 
 static void
-empathy_file_class_init (EmpathyFileClass *klass)
+empathy_tp_file_class_init (EmpathyTpFileClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  object_class->finalize = file_finalize;
-  object_class->constructor = file_constructor;
-  object_class->get_property = file_get_property;
-  object_class->set_property = file_set_property;
+  object_class->finalize = tp_file_finalize;
+  object_class->constructor = tp_file_constructor;
+  object_class->get_property = tp_file_get_property;
+  object_class->set_property = tp_file_set_property;
 
   /* Construct-only properties */
   g_object_class_install_property (object_class,
@@ -234,28 +234,28 @@ empathy_file_class_init (EmpathyFileClass *klass)
           G_TYPE_INPUT_STREAM,
           G_PARAM_READWRITE));
 
-  g_type_class_add_private (object_class, sizeof (EmpathyFilePriv));
+  g_type_class_add_private (object_class, sizeof (EmpathyTpFilePriv));
 }
 
 static void
-empathy_file_init (EmpathyFile *file)
+empathy_tp_file_init (EmpathyTpFile *tp_file)
 {
 }
 
 static void
-file_finalize (GObject *object)
+tp_file_finalize (GObject *object)
 {
-  EmpathyFilePriv *priv;
-  EmpathyFile *file;
+  EmpathyTpFilePriv *priv;
+  EmpathyTpFile *tp_file;
 
-  file = EMPATHY_FILE (object);
-  priv = GET_PRIV (file);
+  tp_file = EMPATHY_TP_FILE (object);
+  priv = GET_PRIV (tp_file);
 
   if (priv->channel)
     {
       DEBUG ("Closing channel..");
       g_signal_handlers_disconnect_by_func (priv->channel,
-          file_destroy_cb, object);
+          tp_file_destroy_cb, object);
       tp_cli_channel_run_close (priv->channel, -1, NULL, NULL);
       if (G_IS_OBJECT (priv->channel))
         g_object_unref (priv->channel);
@@ -293,45 +293,45 @@ file_finalize (GObject *object)
   if (priv->cancellable)
     g_object_unref (priv->cancellable);
 
-  G_OBJECT_CLASS (empathy_file_parent_class)->finalize (object);
+  G_OBJECT_CLASS (empathy_tp_file_parent_class)->finalize (object);
 }
 
 static GObject *
-file_constructor (GType type,
-                  guint n_props,
-                  GObjectConstructParam *props)
+tp_file_constructor (GType type,
+                     guint n_props,
+                     GObjectConstructParam *props)
 {
-  GObject *file;
-  EmpathyFilePriv *priv;
+  GObject *tp_file;
+  EmpathyTpFilePriv *priv;
   GError *error = NULL;
   GHashTable *properties;
   TpHandle handle;
 
-  file = G_OBJECT_CLASS (empathy_file_parent_class)->constructor (type, n_props,
-      props);
+  tp_file = G_OBJECT_CLASS (empathy_tp_file_parent_class)->constructor (type,
+      n_props, props);
 
-  priv = GET_PRIV (file);
+  priv = GET_PRIV (tp_file);
 
   priv->factory = empathy_contact_factory_new ();
   priv->mc = empathy_mission_control_new ();
 
   tp_cli_channel_connect_to_closed (priv->channel,
-      (tp_cli_channel_signal_callback_closed) file_closed_cb,
-      file,
+      (tp_cli_channel_signal_callback_closed) tp_file_closed_cb,
+      tp_file,
       NULL, NULL, NULL);
 
   emp_cli_channel_type_file_connect_to_file_transfer_state_changed (
       TP_PROXY (priv->channel),
       (emp_cli_channel_type_file_signal_callback_file_transfer_state_changed)
-          file_state_changed_cb,
-      file,
+          tp_file_state_changed_cb,
+      tp_file,
       NULL, NULL, NULL);
 
   emp_cli_channel_type_file_connect_to_transferred_bytes_changed (
       TP_PROXY (priv->channel),
       (emp_cli_channel_type_file_signal_callback_transferred_bytes_changed)
-          file_transferred_bytes_changed_cb,
-      file,
+          tp_file_transferred_bytes_changed_cb,
+      tp_file,
       NULL, NULL, NULL);
 
 
@@ -377,20 +377,20 @@ file_constructor (GType type,
 
   g_hash_table_destroy (properties);
 
-  return file;
+  return tp_file;
 }
 
 static void
-file_get_property (GObject *object,
-                   guint param_id,
-                   GValue *value,
-                   GParamSpec *pspec)
+tp_file_get_property (GObject *object,
+                      guint param_id,
+                      GValue *value,
+                      GParamSpec *pspec)
 {
-  EmpathyFilePriv *priv;
-  EmpathyFile *file;
+  EmpathyTpFilePriv *priv;
+  EmpathyTpFile *tp_file;
 
   priv = GET_PRIV (object);
-  file = EMPATHY_FILE (object);
+  tp_file = EMPATHY_TP_FILE (object);
 
   switch (param_id)
     {
@@ -407,9 +407,9 @@ file_get_property (GObject *object,
 }
 
 static void
-file_channel_set_dbus_property (gpointer proxy,
-                                const gchar *property,
-                                const GValue *value)
+tp_file_channel_set_dbus_property (gpointer proxy,
+                                   const gchar *property,
+                                   const GValue *value)
 {
         DEBUG ("Setting %s property", property);
         tp_cli_dbus_properties_run_set (TP_PROXY (proxy),
@@ -423,12 +423,12 @@ file_channel_set_dbus_property (gpointer proxy,
 
 
 static void
-file_set_property (GObject *object,
-                   guint param_id,
-                   const GValue *value,
-                   GParamSpec *pspec)
+tp_file_set_property (GObject *object,
+                      guint param_id,
+                      const GValue *value,
+                      GParamSpec *pspec)
 {
-  EmpathyFilePriv *priv;
+  EmpathyTpFilePriv *priv;
 
   priv = GET_PRIV (object);
 
@@ -449,19 +449,19 @@ file_set_property (GObject *object,
       case PROP_FILENAME:
         g_free (priv->filename);
         priv->filename = g_value_dup_string (value);
-        file_channel_set_dbus_property (priv->channel, "Filename", value);
+        tp_file_channel_set_dbus_property (priv->channel, "Filename", value);
         break;
       case PROP_SIZE:
         priv->size = g_value_get_uint64 (value);
-        file_channel_set_dbus_property (priv->channel, "Size", value);
+        tp_file_channel_set_dbus_property (priv->channel, "Size", value);
         break;
       case PROP_CONTENT_TYPE:
-        file_channel_set_dbus_property (priv->channel, "ContentType", value);
+        tp_file_channel_set_dbus_property (priv->channel, "ContentType", value);
         g_free (priv->content_type);
         priv->content_type = g_value_dup_string (value);
         break;
       case PROP_CONTENT_MD5:
-        file_channel_set_dbus_property (priv->channel, "ContentMD5", value);
+        tp_file_channel_set_dbus_property (priv->channel, "ContentMD5", value);
         g_free (priv->content_md5);
         priv->content_md5 = g_value_dup_string (value);
         break;
@@ -477,71 +477,71 @@ file_set_property (GObject *object,
 }
 
 /**
- * empathy_file_new:
+ * empathy_tp_file_new:
  * @account: the #McAccount for the channel
  * @channel: a Telepathy channel
  *
- * Creates a new #EmpathyFile wrapping @channel.
+ * Creates a new #EmpathyTpFile wrapping @channel.
  *
- * Returns: a new #EmpathyFile
+ * Returns: a new #EmpathyTpFile
  */
-EmpathyFile *
-empathy_file_new (McAccount *account,
+EmpathyTpFile *
+empathy_tp_file_new (McAccount *account,
                   TpChannel *channel)
 {
-  return g_object_new (EMPATHY_TYPE_FILE,
+  return g_object_new (EMPATHY_TYPE_TP_FILE,
       "account", account,
       "channel", channel,
       NULL);
 }
 
 /**
- * empathy_file_get_id:
- * @tp_file: an #EmpathyFile
+ * empathy_tp_file_get_id:
+ * @tp_file: an #EmpathyTpFile
  *
- * Returns the ID of @file.
+ * Returns the ID of @tp_file.
  *
  * Returns: the ID
  */
 const gchar *
-empathy_file_get_id (EmpathyFile *file)
+empathy_tp_file_get_id (EmpathyTpFile *tp_file)
 {
-  EmpathyFilePriv *priv;
+  EmpathyTpFilePriv *priv;
 
-  g_return_val_if_fail (EMPATHY_IS_FILE (file), NULL);
+  g_return_val_if_fail (EMPATHY_IS_TP_FILE (tp_file), NULL);
 
-  priv = GET_PRIV (file);
+  priv = GET_PRIV (tp_file);
 
   return priv->id;
 }
 
 /**
- * empathy_file_get_channel
- * @file: an #EmpathyFile
+ * empathy_tp_file_get_channel
+ * @tp_file: an #EmpathyTpFile
  *
  * Returns the Telepathy file transfer channel
  *
  * Returns: the #TpChannel
  */
 TpChannel *
-empathy_file_get_channel (EmpathyFile *file)
+empathy_tp_file_get_channel (EmpathyTpFile *tp_file)
 {
-  EmpathyFilePriv *priv;
+  EmpathyTpFilePriv *priv;
 
-  g_return_val_if_fail (EMPATHY_IS_FILE (file), NULL);
+  g_return_val_if_fail (EMPATHY_IS_TP_FILE (tp_file), NULL);
 
-  priv = GET_PRIV (file);
+  priv = GET_PRIV (tp_file);
 
   return priv->channel;
 }
 
 static void
-file_destroy_cb (TpChannel *file_channel,
-                 EmpathyFile *file)
+tp_file_destroy_cb (TpChannel *file_channel,
+                    EmpathyTpFile *tp_file)
 {
-  EmpathyFilePriv *priv;
+  EmpathyTpFilePriv *priv;
 
-  priv = GET_PRIV (file);
+  priv = GET_PRIV (tp_file);
 
   DEBUG ("Channel Closed or CM crashed");
 
@@ -550,19 +550,19 @@ file_destroy_cb (TpChannel *file_channel,
 }
 
 static void
-file_closed_cb (TpChannel *file_channel,
-                EmpathyFile *file,
-                GObject *weak_object)
+tp_file_closed_cb (TpChannel *file_channel,
+                   EmpathyTpFile *tp_file,
+                   GObject *weak_object)
 {
-  EmpathyFilePriv *priv;
+  EmpathyTpFilePriv *priv;
 
-  priv = GET_PRIV (file);
+  priv = GET_PRIV (tp_file);
 
   /* The channel is closed, do just like if the proxy was destroyed */
   g_signal_handlers_disconnect_by_func (priv->channel,
-      file_destroy_cb,
-      file);
-  file_destroy_cb (file_channel, file);
+      tp_file_destroy_cb,
+      tp_file);
+  tp_file_destroy_cb (file_channel, tp_file);
 }
 
 static gint64
@@ -575,15 +575,15 @@ get_time_msec (void)
 }
 
 static gint
-_get_local_socket (EmpathyFile *file)
+_get_local_socket (EmpathyTpFile *tp_file)
 {
   gint fd;
   size_t path_len;
   struct sockaddr_un addr;
-  EmpathyFilePriv *priv;
+  EmpathyTpFilePriv *priv;
   GValue *socket_path;
 
-  priv = GET_PRIV (file);
+  priv = GET_PRIV (tp_file);
 
   /* TODO: This could probably be a little nicer. */
   tp_cli_dbus_properties_run_get (priv->channel,
@@ -623,23 +623,23 @@ _get_local_socket (EmpathyFile *file)
 }
 
 /**
- * empathy_file_accept:
- * @file: an #EmpathyFile
+ * empathy_tp_file_accept:
+ * @tp_file: an #EmpathyTpFile
  *
  * Accepts a file transfer that's in the "local pending" state (i.e.
  * EMP_FILE_TRANSFER_STATE_LOCAL_PENDING).
  */
 void
-empathy_file_accept (EmpathyFile *file)
+empathy_tp_file_accept (EmpathyTpFile *tp_file)
 {
-  EmpathyFilePriv *priv;
+  EmpathyTpFilePriv *priv;
   GValue *address;
   GValue nothing = { 0 };
   GError *error = NULL;
 
-  g_return_if_fail (EMPATHY_IS_FILE (file));
+  g_return_if_fail (EMPATHY_IS_TP_FILE (tp_file));
 
-  priv = GET_PRIV (file);
+  priv = GET_PRIV (tp_file);
 
   g_return_if_fail (priv->out_stream != NULL);
 
@@ -667,15 +667,15 @@ empathy_file_accept (EmpathyFile *file)
 }
 
 static void
-receive_file (EmpathyFile *file)
+receive_tp_file (EmpathyTpFile *tp_file)
 {
-  EmpathyFilePriv *priv;
+  EmpathyTpFilePriv *priv;
   GInputStream *socket_stream;
   gint socket_fd;
 
-  priv = GET_PRIV (file);
+  priv = GET_PRIV (tp_file);
 
-  socket_fd = _get_local_socket (file);
+  socket_fd = _get_local_socket (tp_file);
 
   if (socket_fd < 0)
     return;
@@ -691,20 +691,20 @@ receive_file (EmpathyFile *file)
 
 
 static void
-send_file (EmpathyFile *file)
+send_tp_file (EmpathyTpFile *tp_file)
 {
   gint socket_fd;
   GOutputStream *socket_stream;
-  EmpathyFilePriv *priv;
+  EmpathyTpFilePriv *priv;
 
-  priv = GET_PRIV (file);
+  priv = GET_PRIV (tp_file);
 
   DEBUG ("Sending file content: filename=%s",
            priv->filename);
 
   g_return_if_fail (priv->in_stream);
 
-  socket_fd = _get_local_socket (file);
+  socket_fd = _get_local_socket (tp_file);
   if (socket_fd < 0)
     {
       DEBUG ("failed to get local socket fd");
@@ -721,14 +721,14 @@ send_file (EmpathyFile *file)
 }
 
 static void
-file_state_changed_cb (DBusGProxy *file_iface,
-                       EmpFileTransferState state,
-                       EmpFileTransferStateChangeReason reason,
-                       EmpathyFile *file)
+tp_file_state_changed_cb (DBusGProxy *tp_file_iface,
+                          EmpFileTransferState state,
+                          EmpFileTransferStateChangeReason reason,
+                          EmpathyTpFile *tp_file)
 {
-  EmpathyFilePriv *priv;
+  EmpathyTpFilePriv *priv;
 
-  priv = GET_PRIV (file);
+  priv = GET_PRIV (tp_file);
 
   DEBUG ("File transfer state changed: filename=%s, "
       "old state=%u, state=%u, reason=%u",
@@ -745,102 +745,102 @@ file_state_changed_cb (DBusGProxy *file_iface,
   if (state == EMP_FILE_TRANSFER_STATE_OPEN &&
       priv->direction == EMP_FILE_TRANSFER_DIRECTION_OUTGOING &&
       priv->in_stream)
-    send_file (file);
+    send_tp_file (tp_file);
   else if (state == EMP_FILE_TRANSFER_STATE_OPEN &&
       priv->direction == EMP_FILE_TRANSFER_DIRECTION_INCOMING &&
       priv->out_stream)
-      receive_file (file);
+      receive_tp_file (tp_file);
 
   priv->state = state;
   priv->state_change_reason = reason;
 
-  g_object_notify (G_OBJECT (file), "state");
+  g_object_notify (G_OBJECT (tp_file), "state");
 }
 
 static void
-file_transferred_bytes_changed_cb (TpProxy *proxy,
-                                   guint64 count,
-                                   EmpathyFile *file, 
-                                   GObject *weak_object)
+tp_file_transferred_bytes_changed_cb (TpProxy *proxy,
+                                      guint64 count,
+                                      EmpathyTpFile *tp_file,
+                                      GObject *weak_object)
 {
-  EmpathyFilePriv *priv;
+  EmpathyTpFilePriv *priv;
 
-  priv = GET_PRIV (file);
+  priv = GET_PRIV (tp_file);
 
   if (priv->transferred_bytes == count)
     return;
 
   priv->transferred_bytes = count;
 
-  g_object_notify (G_OBJECT (file), "transferred-bytes");
+  g_object_notify (G_OBJECT (tp_file), "transferred-bytes");
 }
 
 EmpathyContact *
-empathy_file_get_contact (EmpathyFile *file)
+empathy_tp_file_get_contact (EmpathyTpFile *tp_file)
 {
-  EmpathyFilePriv *priv;
+  EmpathyTpFilePriv *priv;
 
-  priv = GET_PRIV (file);
+  priv = GET_PRIV (tp_file);
 
   return priv->contact;
 }
 
 GInputStream *
-empathy_file_get_input_stream (EmpathyFile *file)
+empathy_tp_file_get_input_stream (EmpathyTpFile *tp_file)
 {
-  EmpathyFilePriv *priv;
+  EmpathyTpFilePriv *priv;
 
-  priv = GET_PRIV (file);
+  priv = GET_PRIV (tp_file);
 
   return priv->in_stream;
 }
 
 GOutputStream *
-empathy_file_get_output_stream (EmpathyFile *file)
+empathy_tp_file_get_output_stream (EmpathyTpFile *tp_file)
 {
-  EmpathyFilePriv *priv;
+  EmpathyTpFilePriv *priv;
 
-  priv = GET_PRIV (file);
+  priv = GET_PRIV (tp_file);
 
   return priv->out_stream;
 }
 
 const gchar *
-empathy_file_get_filename (EmpathyFile *file)
+empathy_tp_file_get_filename (EmpathyTpFile *tp_file)
 {
-  EmpathyFilePriv *priv;
+  EmpathyTpFilePriv *priv;
 
-  priv = GET_PRIV (file);
+  priv = GET_PRIV (tp_file);
 
   return priv->filename;
 }
 
 EmpFileTransferDirection
-empathy_file_get_direction (EmpathyFile *file)
+empathy_tp_file_get_direction (EmpathyTpFile *tp_file)
 {
-  EmpathyFilePriv *priv;
+  EmpathyTpFilePriv *priv;
 
-  priv = GET_PRIV (file);
+  priv = GET_PRIV (tp_file);
 
   return priv->direction;
 }
 
 EmpFileTransferState
-empathy_file_get_state (EmpathyFile *file)
+empathy_tp_file_get_state (EmpathyTpFile *tp_file)
 {
-  EmpathyFilePriv *priv;
+  EmpathyTpFilePriv *priv;
 
-  priv = GET_PRIV (file);
+  priv = GET_PRIV (tp_file);
 
   return priv->state;
 }
 
 EmpFileTransferStateChangeReason
-empathy_file_get_state_change_reason (EmpathyFile *file)
+empathy_tp_file_get_state_change_reason (EmpathyTpFile *tp_file)
 {
-  EmpathyFilePriv *priv;
+  EmpathyTpFilePriv *priv;
 
-  priv = GET_PRIV (file);
+  priv = GET_PRIV (tp_file);
 
   g_return_val_if_fail (priv->state_change_reason >= 0,
       EMP_FILE_TRANSFER_STATE_CHANGE_REASON_NONE);
@@ -849,36 +849,36 @@ empathy_file_get_state_change_reason (EmpathyFile *file)
 }
 
 guint64
-empathy_file_get_size (EmpathyFile *file)
+empathy_tp_file_get_size (EmpathyTpFile *tp_file)
 {
-  EmpathyFilePriv *priv;
+  EmpathyTpFilePriv *priv;
 
-  priv = GET_PRIV (file);
+  priv = GET_PRIV (tp_file);
 
   return priv->size;
 }
 
 guint64
-empathy_file_get_transferred_bytes (EmpathyFile *file)
+empathy_tp_file_get_transferred_bytes (EmpathyTpFile *tp_file)
 {
-  EmpathyFilePriv *priv;
+  EmpathyTpFilePriv *priv;
 
-  priv = GET_PRIV (file);
+  priv = GET_PRIV (tp_file);
 
   return priv->transferred_bytes;
 }
 
 gint
-empathy_file_get_remaining_time (EmpathyFile *file)
+empathy_tp_file_get_remaining_time (EmpathyTpFile *tp_file)
 {
-  EmpathyFilePriv *priv;
+  EmpathyTpFilePriv *priv;
   gint64 curr_time, elapsed_time;
   gdouble time_per_byte;
   gdouble remaining_time;
 
-  priv = GET_PRIV (file);
+  priv = GET_PRIV (tp_file);
 
-  if (priv->size == EMPATHY_FILE_UNKNOWN_SIZE)
+  if (priv->size == EMPATHY_TP_FILE_UNKNOWN_SIZE)
     return -1;
 
   if (priv->transferred_bytes == priv->size)
@@ -893,11 +893,11 @@ empathy_file_get_remaining_time (EmpathyFile *file)
 }
 
 void
-empathy_file_cancel (EmpathyFile *file)
+empathy_tp_file_cancel (EmpathyTpFile *tp_file)
 {
-  EmpathyFilePriv *priv;
+  EmpathyTpFilePriv *priv;
 
-  priv = GET_PRIV (file);
+  priv = GET_PRIV (tp_file);
 
   tp_cli_channel_run_close (priv->channel, -1, NULL, NULL);
 
@@ -905,12 +905,12 @@ empathy_file_cancel (EmpathyFile *file)
 }
 
 void
-empathy_file_set_input_stream (EmpathyFile *file,
-                               GInputStream *in_stream)
+empathy_tp_file_set_input_stream (EmpathyTpFile *tp_file,
+                                  GInputStream *in_stream)
 {
-  EmpathyFilePriv *priv;
+  EmpathyTpFilePriv *priv;
 
-  priv = GET_PRIV (file);
+  priv = GET_PRIV (tp_file);
 
   if (priv->in_stream == in_stream)
     return;
@@ -927,16 +927,16 @@ empathy_file_set_input_stream (EmpathyFile *file,
 
   priv->in_stream = in_stream;
 
-  g_object_notify (G_OBJECT (file), "in-stream");
+  g_object_notify (G_OBJECT (tp_file), "in-stream");
 }
 
 void
-empathy_file_set_output_stream (EmpathyFile *file,
-                                GOutputStream *out_stream)
+empathy_tp_file_set_output_stream (EmpathyTpFile *tp_file,
+                                   GOutputStream *out_stream)
 {
-  EmpathyFilePriv *priv;
+  EmpathyTpFilePriv *priv;
 
-  priv = GET_PRIV (file);
+  priv = GET_PRIV (tp_file);
 
   if (priv->out_stream == out_stream)
     return;
@@ -955,12 +955,12 @@ empathy_file_set_output_stream (EmpathyFile *file,
 }
 
 void
-empathy_file_set_filename (EmpathyFile *file,
-                           const gchar *filename)
+empathy_tp_file_set_filename (EmpathyTpFile *tp_file,
+                              const gchar *filename)
 {
-  EmpathyFilePriv *priv;
+  EmpathyTpFilePriv *priv;
 
-  priv = GET_PRIV (file);
+  priv = GET_PRIV (tp_file);
 
   g_return_if_fail (filename != NULL);
 
@@ -970,7 +970,7 @@ empathy_file_set_filename (EmpathyFile *file,
   g_free (priv->filename);
   priv->filename = g_strdup (filename);
 
-  g_object_notify (G_OBJECT (file), "filename");
+  g_object_notify (G_OBJECT (tp_file), "filename");
 }
 
 /* Functions to copy the content of a GInputStream to a GOutputStream */

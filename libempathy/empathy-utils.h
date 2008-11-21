@@ -36,7 +36,7 @@
 #include <libmissioncontrol/mission-control.h>
 
 #include "empathy-contact.h"
-#include "empathy-file.h"
+#include "empathy-tp-file.h"
 
 G_BEGIN_DECLS
 
@@ -130,8 +130,8 @@ EmpathyFile *  empathy_send_file_from_stream        (EmpathyContact  *contact,
 EmpathyFile *  empathy_send_file                    (EmpathyContact  *contact,
                                                      GFile           *file);
 /* File transfer */
-EmpathyFile *empathy_send_file                      (EmpathyContact  *contact,
-						     GFile           *file);
+EmpathyTpFile *empathy_send_file                      (EmpathyContact  *contact,
+						       GFile           *file);
 
 G_END_DECLS
 

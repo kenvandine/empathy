@@ -1473,23 +1473,23 @@ file_manager_send_file_response_cb (GtkDialog               *widget,
 			for (l = list; l; l = l->next) {
 				gchar            *uri;
 				GFile            *gfile;
-				EmpathyFile      *file;
+				EmpathyTpFile    *tp_file;
 				GtkRecentManager *manager;
 
 				uri = l->data;
 				gfile = g_file_new_for_uri (uri);
 
 				DEBUG ("\t%s", uri);
-				file = empathy_send_file (response_data->contact,
-							  gfile);
+				tp_file = empathy_send_file (response_data->contact,
+							     gfile);
 				if (response_data->callback)
-					response_data->callback (file,
+					response_data->callback (tp_file,
 								 response_data->user_data);
 
 				manager = gtk_recent_manager_get_default ();
 				gtk_recent_manager_add_item (manager, uri);
 
-				if (file) ;
+				if (tp_file) ;
 					/* TODO: This should be unrefed, but
 					 * it's not referenced anywhere else,
 					 * so the transfer just ends. Uncomment
@@ -1571,10 +1571,10 @@ empathy_send_file_with_file_chooser (EmpathyContact             *contact,
 }
 
 static void
-add_file_to_manager (EmpathyFile      *file,
+add_file_to_manager (EmpathyTpFile    *tp_file,
 		     EmpathyFTManager *ft_manager)
 {
-	empathy_ft_manager_add_file (ft_manager, file);
+	empathy_ft_manager_add_tp_file (ft_manager, tp_file);
 }
 
 void

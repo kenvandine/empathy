@@ -31,7 +31,7 @@
 #include <libempathy/empathy-tp-chat.h>
 #include <libempathy/empathy-tp-group.h>
 #include <libempathy/empathy-utils.h>
-#include <libempathy/empathy-file.h>
+#include <libempathy/empathy-tp-file.h>
 
 #include <libempathy-gtk/empathy-ft-manager.h>
 #include <libempathy-gtk/empathy-images.h>
@@ -230,14 +230,14 @@ event_manager_filter_channel_cb (EmpathyDispatcher   *dispatcher,
 		if (g_value_get_uint (direction) == EMP_FILE_TRANSFER_DIRECTION_INCOMING) {
 			EmpathyFTManager *manager;
 			McAccount        *account;
-			EmpathyFile      *file;
+			EmpathyTpFile    *tp_file;
 
 			manager = empathy_ft_manager_get_default ();
 			account = empathy_channel_get_account (channel);
 
-			file = empathy_file_new (account, channel);
+			tp_file = empathy_tp_file_new (account, channel);
 
-			empathy_ft_manager_add_file (manager, file);
+			empathy_ft_manager_add_tp_file (manager, tp_file);
 		}
 
 		g_value_unset (direction);
