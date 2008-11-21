@@ -1,0 +1,1814 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: empathy\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2008-11-21 13:25+0000\n"
+"PO-Revision-Date: 2008-11-21 03:19-0800\n"
+"Last-Translator: \n"
+"Language-Team: Pashto <pathanisation@googlegroups.com>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-Language: Pashto, Pushto\n"
+"X-Poedit-Country: AFGHANISTAN\n"
+
+#: ../data/empathy.desktop.in.in.h:1
+msgid "Empathy Instant Messenger"
+msgstr ""
+
+#: ../data/empathy.desktop.in.in.h:2
+msgid "Send and receive instant messages"
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:1
+msgid "Always open a separate chat window for new chats."
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:2
+msgid ""
+"Character to add after nickname when using nick completion (tab) in group "
+"chat."
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:3
+msgid "Chat window theme"
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:4
+msgid ""
+"Comma separated list of spell checker languages to use (e.g. en, fr, nl)."
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:5
+msgid "Compact contact list"
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:6
+msgid "Contact list sort criterium"
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:7
+msgid "Default directory to select an avatar image from"
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:8
+msgid "Empathy has asked about importing accounts"
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:9
+msgid "Empathy should auto-connect on startup"
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:10
+msgid "Empathy should use the avatar of the contact as the chat window icon"
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:11
+msgid "Enable popup when contact is available"
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:12
+msgid "Enable sound when away"
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:13
+msgid "Enable sound when busy"
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:14
+msgid "Enable spell checker"
+msgstr "ليکدود کتونکی وړول"
+
+#: ../data/empathy.schemas.in.h:15
+msgid "Hide main window"
+msgstr "اره کړکۍ پټول"
+
+#: ../data/empathy.schemas.in.h:16
+msgid "Hide the main window."
+msgstr "اره کړکۍ پټول."
+
+#: ../data/empathy.schemas.in.h:17
+msgid "NetworkManager should be used"
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:18
+msgid "Nick completed character"
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:19
+msgid "Open new chats in separate windows"
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:20
+msgid "Salut account is created"
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:21
+msgid "Show avatars"
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:22
+msgid "Show hint about closing the main window"
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:23
+msgid "Show offline contacts"
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:24
+msgid "Spell checking languages"
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:25
+msgid "The last directory that an avatar image was chosen from."
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:26
+msgid "The theme that is used to display the conversation in chat windows."
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:27
+msgid "Use graphical smileys"
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:28
+msgid "Use notification sounds"
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:29
+msgid "Use theme for chat rooms"
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:30
+msgid ""
+"Whether or not Empathy has asked about importing accounts from other "
+"programs."
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:31
+msgid ""
+"Whether or not Empathy should automatically log in to your accounts on "
+"startup."
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:32
+msgid ""
+"Whether or not Empathy should use the avatar of the contact as the chat "
+"window icon."
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:33
+msgid ""
+"Whether or not the Salut account has been created on the first Empathy run."
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:34
+msgid ""
+"Whether or not the network manager should be used to automatically "
+"disconnect/reconnect."
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:35
+msgid ""
+"Whether or not to check words typed against the languages you want to check "
+"with."
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:36
+msgid ""
+"Whether or not to convert smileys into graphical images in conversations."
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:37
+msgid "Whether or not to play a sound when messages arrive."
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:38
+msgid "Whether or not to play sounds when away."
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:39
+msgid "Whether or not to play sounds when busy."
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:40
+msgid "Whether or not to show a popup when a contact becomes available."
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:41
+msgid ""
+"Whether or not to show avatars for contacts in the contact list and chat "
+"windows."
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:42
+msgid "Whether or not to show contacts that are offline in the contact list."
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:43
+msgid ""
+"Whether or not to show the message dialog about closing the main window with "
+"the 'x' button in the title bar."
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:44
+msgid "Whether to show the contact list in compact mode or not."
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:45
+msgid "Whether to use the theme for chat rooms or not."
+msgstr ""
+
+#: ../data/empathy.schemas.in.h:46
+msgid ""
+"Which criterium to use when sorting the contact list. Default is to use sort "
+"by the contact's name with the value \"name\". A value of \"state\" will "
+"sort the contact list by state."
+msgstr ""
+
+#: ../libempathy/empathy-tp-contact-list.c:731 ../src/empathy.c:248
+msgid "People nearby"
+msgstr "نږدې وګړي"
+
+#: ../libempathy/empathy-utils.c:345
+msgid "Available"
+msgstr "شته"
+
+#: ../libempathy/empathy-utils.c:347
+msgid "Busy"
+msgstr "بوخت"
+
+#: ../libempathy/empathy-utils.c:350
+msgid "Away"
+msgstr "لېرې"
+
+#: ../libempathy/empathy-utils.c:352
+msgid "Hidden"
+msgstr "پټ"
+
+#: ../libempathy/empathy-utils.c:355
+msgid "Offline"
+msgstr "ناليکه"
+
+#: ../libempathy-gtk/empathy-account-chooser.c:337
+msgid "All"
+msgstr "ټول"
+
+#: ../libempathy-gtk/empathy-account-widget.c:302
+#: ../libempathy-gtk/empathy-account-widget.c:347
+#, c-format
+msgid "%s:"
+msgstr ":%s"
+
+#: ../libempathy-gtk/empathy-account-widget-aim.glade.h:1
+#: ../libempathy-gtk/empathy-account-widget-generic.glade.h:1
+#: ../libempathy-gtk/empathy-account-widget-groupwise.glade.h:1
+#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:1
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:1
+#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:1
+#: ../libempathy-gtk/empathy-account-widget-salut.glade.h:1
+#: ../libempathy-gtk/empathy-account-widget-sip.glade.h:1
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:1
+msgid "<b>Advanced</b>"
+msgstr "<b>بريونلې</b>"
+
+#: ../libempathy-gtk/empathy-account-widget-aim.glade.h:2
+#: ../libempathy-gtk/empathy-account-widget-groupwise.glade.h:2
+#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:2
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:3
+#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:2
+#: ../libempathy-gtk/empathy-account-widget-sip.glade.h:4
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:2
+msgid "Forget password and clear the entry."
+msgstr ""
+
+#: ../libempathy-gtk/empathy-account-widget-aim.glade.h:3
+#: ../libempathy-gtk/empathy-account-widget-groupwise.glade.h:4
+#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:4
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:5
+#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:4
+#: ../libempathy-gtk/empathy-account-widget-sip.glade.h:5
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:3
+msgid "Pass_word:"
+msgstr "تېر_نويې:"
+
+#: ../libempathy-gtk/empathy-account-widget-aim.glade.h:4
+msgid "Screen _Name:"
+msgstr "پرده _نوم:"
+
+#: ../libempathy-gtk/empathy-account-widget-aim.glade.h:5
+#: ../libempathy-gtk/empathy-account-widget-groupwise.glade.h:5
+#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:6
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:11
+#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:5
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:8
+msgid "_Port:"
+msgstr "درشل:_"
+
+#: ../libempathy-gtk/empathy-account-widget-aim.glade.h:6
+#: ../libempathy-gtk/empathy-account-widget-groupwise.glade.h:6
+#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:7
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:12
+#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:6
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:10
+#: ../src/empathy-new-chatroom-dialog.glade.h:10
+msgid "_Server:"
+msgstr "پالنګر:_"
+
+#: ../libempathy-gtk/empathy-account-widget-groupwise.glade.h:3
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:4
+#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:3
+msgid "Login I_D:"
+msgstr "ننوت پ_ېژند:"
+
+#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:3
+msgid "ICQ _UIN:"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:5
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:6
+msgid "_Charset:"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-account-widget-irc.c:245
+msgid "New Network"
+msgstr "نوی ځال"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:1
+msgid "<b>Network</b>"
+msgstr "<b>ځال</b>"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:2
+msgid "<b>Servers</b>"
+msgstr "<b>پالنګرونه</b>"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:3
+msgid "Charset:"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:4
+msgid "Create a new IRC network"
+msgstr "ځال جوړول IRC نوی"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:5
+msgid "Edit the selected IRC network"
+msgstr "ځال سمول IRC ټاکل شوی"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:6
+msgid "Network"
+msgstr "ځال"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:7
+msgid "Network:"
+msgstr "ځال:"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:8
+msgid "Nickname:"
+msgstr "ستاېنوم"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:9
+msgid "Password:"
+msgstr "تېرنويې:"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:10
+msgid "Quit message:"
+msgstr "د پرېښودو استوزه:"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:11
+msgid "Real name:"
+msgstr "ار نوم:"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:12
+msgid "Remove the selected IRC network"
+msgstr "ځال ړنګول IRC ټاکل شوی"
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:2
+msgid "<b>Override server settings</b>"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:6
+msgid "Pri_ority:"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:7
+msgid "Reso_urce:"
+msgstr ":سرچ_ينه"
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:8
+msgid "Use old SS_L"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:9
+msgid "_Encryption required (TLS/SSL)"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:10
+msgid "_Ignore SSL certificate errors"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-account-widget-salut.glade.h:2
+msgid "_Email:"
+msgstr "برېښليک:_"
+
+#: ../libempathy-gtk/empathy-account-widget-salut.glade.h:3
+msgid "_First Name: "
+msgstr "لومړی نوم:_"
+
+#: ../libempathy-gtk/empathy-account-widget-salut.glade.h:4
+msgid "_Jabber ID:"
+msgstr "جېبر پېژندل:_"
+
+#: ../libempathy-gtk/empathy-account-widget-salut.glade.h:5
+msgid "_Last Name:"
+msgstr "وروستی نوم:"
+
+#: ../libempathy-gtk/empathy-account-widget-salut.glade.h:6
+#: ../src/empathy-chatrooms-window.glade.h:8
+msgid "_Nickname:"
+msgstr "ستاېنوم:_"
+
+#: ../libempathy-gtk/empathy-account-widget-salut.glade.h:7
+msgid "_Published Name:"
+msgstr ""
+
+#. look up the DNS SRV record at the service's domain for the host name of a STUN server.
+#: ../libempathy-gtk/empathy-account-widget-sip.glade.h:3
+msgid "Discover STUN"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-account-widget-sip.glade.h:6
+msgid "STUN Server:"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-account-widget-sip.glade.h:7
+msgid "STUN port:"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-account-widget-sip.glade.h:8
+msgid "_Username:"
+msgstr "کارننوم:_"
+
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:4
+msgid "Use _Yahoo Japan"
+msgstr "ياهو _جاپان کارول"
+
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:5
+msgid "Yahoo I_D:"
+msgstr "ياهو پ_ېژند:"
+
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:7
+msgid "_Ignore conference and chatroom invitations"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:9
+msgid "_Room List locale:"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-avatar-chooser.c:461
+#: ../libempathy-gtk/empathy-avatar-chooser.c:536
+msgid "Couldn't convert image"
+msgstr "انځور نه شي اړولی"
+
+#: ../libempathy-gtk/empathy-avatar-chooser.c:462
+msgid "None of the accepted image formats is supported on your system"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-avatar-chooser.c:947
+msgid "Select Your Avatar Image"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-avatar-chooser.c:950
+msgid "No Image"
+msgstr "هېڅ انځور"
+
+#: ../libempathy-gtk/empathy-avatar-chooser.c:1010
+msgid "Images"
+msgstr "انځورونه"
+
+#: ../libempathy-gtk/empathy-avatar-chooser.c:1014
+msgid "All Files"
+msgstr "ټولې دوتنې"
+
+#: ../libempathy-gtk/empathy-avatar-image.c:294
+msgid "Click to enlarge"
+msgstr "د غټولو لپاره کېکاږﺉ"
+
+#: ../libempathy-gtk/empathy-chat.c:498
+msgid "offline"
+msgstr "ناليکه"
+
+#: ../libempathy-gtk/empathy-chat.c:501
+msgid "invalid contact"
+msgstr "ناسم اړيکلوری"
+
+#: ../libempathy-gtk/empathy-chat.c:504
+msgid "permission denied"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-chat.c:507
+msgid "too long message"
+msgstr "ډېره اوږده استوزه"
+
+#: ../libempathy-gtk/empathy-chat.c:510
+msgid "not implemented"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-chat.c:513
+msgid "unknown"
+msgstr "ناپېژندلی"
+
+#: ../libempathy-gtk/empathy-chat.c:517
+#, c-format
+msgid "Error sending message '%s': %s"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-chat.c:547
+#, c-format
+msgid "Topic set to: %s"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-chat.c:549
+msgid "No topic defined"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-chat.c:964
+msgid "Insert Smiley"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-chat.c:980
+msgid "_Send"
+msgstr "لېږل_"
+
+#: ../libempathy-gtk/empathy-chat.c:1014
+msgid "_Check Word Spelling..."
+msgstr ""
+
+#: ../libempathy-gtk/empathy-chat.c:1120
+#, c-format
+msgid "%s has joined the room"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-chat.c:1123
+#, c-format
+msgid "%s has left the room"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-chat.c:1237 ../src/empathy-call-window.c:406
+msgid "Disconnected"
+msgstr "نا نښلېدلی"
+
+#: ../libempathy-gtk/empathy-chat.c:1609
+msgid "Connected"
+msgstr "نښلېدلی"
+
+#: ../libempathy-gtk/empathy-chat.c:1657
+#: ../libempathy-gtk/empathy-log-window.c:504
+msgid "Conversation"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-chat.glade.h:1
+msgid "<b>Topic:</b>"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-chat.glade.h:2
+msgid "Group Chat"
+msgstr "ډليز بنډار"
+
+#: ../libempathy-gtk/empathy-chat-view.c:430
+msgid "_Copy Link Address"
+msgstr "د تړنې پته لمېسل_"
+
+#: ../libempathy-gtk/empathy-chat-view.c:438
+msgid "_Open Link"
+msgstr "تړنه پرانيستل_"
+
+#: ../libempathy-gtk/empathy-contact-dialogs.c:180
+msgid "Personal Information"
+msgstr "وګړيزې خبرتياوې"
+
+#: ../libempathy-gtk/empathy-contact-dialogs.c:183
+msgid "Edit Contact Information"
+msgstr "اړيکلور خبرتياوې سمول"
+
+#: ../libempathy-gtk/empathy-contact-dialogs.c:186
+msgid "Contact Information"
+msgstr "اړيکلور خبرتياوې"
+
+#: ../libempathy-gtk/empathy-contact-dialogs.c:283
+msgid "I would like to add you to my contact list."
+msgstr "زه غواړم چې تا د خپلو اړيکلورو لړ ته زيات کړم."
+
+#: ../libempathy-gtk/empathy-contact-dialogs.c:307
+msgid "New Contact"
+msgstr "نوی اړيکلوری"
+
+#: ../libempathy-gtk/empathy-contact-dialogs.glade.h:1
+msgid "Decide _Later"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-contact-dialogs.glade.h:2
+msgid "Subscription Request"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:1244
+#, c-format
+msgid "Do you really want to remove the group '%s'?"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:1246
+msgid "Removing group"
+msgstr "ډله ړنګول کيږي"
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:1293
+#: ../libempathy-gtk/empathy-contact-list-view.c:1372
+msgid "_Remove"
+msgstr "ړنګول_"
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:1323
+#, c-format
+msgid "Do you really want to remove the contact '%s'?"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:1325
+msgid "Removing contact"
+msgstr "اړيکلور ړنګول کيږي"
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:1330
+msgid "Sorry, I don't want you in my contact list anymore."
+msgstr ""
+
+#: ../libempathy-gtk/empathy-contact-menu.c:115
+#: ../src/empathy-main-window.glade.h:9
+msgid "_Chat"
+msgstr "بنډار_"
+
+#: ../libempathy-gtk/empathy-contact-menu.c:136
+msgid "_Call"
+msgstr "اړيکنيو_"
+
+#: ../libempathy-gtk/empathy-contact-menu.c:175
+#: ../src/empathy-main-window.glade.h:17
+msgid "_View Previous Conversations"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-contact-menu.c:203
+msgid "Infor_mation"
+msgstr "خبر_تياوې"
+
+#: ../libempathy-gtk/empathy-contact-menu.c:230
+#: ../src/empathy-chat-window.glade.h:14 ../src/empathy-main-window.glade.h:11
+msgid "_Edit"
+msgstr "سمون_"
+
+#: ../libempathy-gtk/empathy-contact-menu.c:294
+msgid "Inviting to this room"
+msgstr "دې کوټې ته رابلل کيږي"
+
+#: ../libempathy-gtk/empathy-contact-menu.c:334
+msgid "_Invite to chatroom"
+msgstr "بنډارکوټې ته رابلل_"
+
+#: ../libempathy-gtk/empathy-contact-widget.c:358
+msgid "Save Avatar"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-contact-widget.c:414
+msgid "Unable to save avatar"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-contact-widget.c:895
+msgid "Select"
+msgstr "ټاکل"
+
+#: ../libempathy-gtk/empathy-contact-widget.c:904
+#: ../src/empathy-main-window.c:855
+msgid "Group"
+msgstr "ډله"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:1
+msgid "<b>Client Information</b>"
+msgstr "<b>پېرن خبرتياوې</b>"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:2
+msgid "<b>Contact Details</b>"
+msgstr "<b>اړيکلور سپړاوي</b>"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:3
+msgid "<b>Contact</b>"
+msgstr "<b>اړيکلوری</b>"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:4
+msgid "<b>Groups</b>"
+msgstr "<b>ډلې</b>"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:5
+#: ../libempathy-gtk/empathy-new-message-dialog.glade.h:1
+#: ../src/empathy-chatrooms-window.glade.h:1
+#: ../src/empathy-new-chatroom-dialog.glade.h:1
+msgid "Account:"
+msgstr "ګڼون:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:6
+msgid "Alias:"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:7
+msgid "Birthday:"
+msgstr "زوکړه:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:8
+msgid "Client:"
+msgstr "پېرن:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:9
+msgid "Contact information"
+msgstr "اړيکلور خبرتياوې"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:10
+msgid "Email:"
+msgstr "برېښليک"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:11
+msgid "Fullname:"
+msgstr "بشپړ نوم:"
+
+#. Identifier to connect to Instant Messaging network
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:13
+msgid "Identifier:"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:14
+msgid "Information requested..."
+msgstr ""
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:15
+msgid "OS:"
+msgstr "چليز غونډال:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:16
+msgid ""
+"Select the groups you want this contact to appear in.  Note that you can "
+"select more than one group or no groups."
+msgstr ""
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:17
+msgid "Version:"
+msgstr "نسخه:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:18
+msgid "Web site:"
+msgstr "ګورت پاڼه:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:19
+msgid "_Add Group"
+msgstr "ډله ډېرول_"
+
+#: ../libempathy-gtk/empathy-irc-network-dialog.c:284
+msgid "new server"
+msgstr "نوی پالنګر"
+
+#: ../libempathy-gtk/empathy-irc-network-dialog.c:513
+msgid "Server"
+msgstr "پالنګر"
+
+#: ../libempathy-gtk/empathy-irc-network-dialog.c:528
+msgid "Port"
+msgstr "درشل"
+
+#: ../libempathy-gtk/empathy-irc-network-dialog.c:541
+msgid "SSL"
+msgstr "SSL"
+
+#: ../libempathy-gtk/empathy-log-window.c:497
+#: ../src/empathy-import-dialog.c:271
+msgid "Account"
+msgstr "ګڼون"
+
+#: ../libempathy-gtk/empathy-log-window.c:514
+msgid "Date"
+msgstr "نېټه"
+
+#. Tab Label
+#: ../libempathy-gtk/empathy-log-window.glade.h:2
+msgid "Conversations"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-log-window.glade.h:3
+msgid "Previous Conversations"
+msgstr ""
+
+#. Tab Label
+#: ../libempathy-gtk/empathy-log-window.glade.h:5
+msgid "Search"
+msgstr "لټون"
+
+#. Searching *for* something
+#: ../libempathy-gtk/empathy-log-window.glade.h:7
+msgid "_For:"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-new-message-dialog.glade.h:2
+msgid "C_all"
+msgstr "ا_ړيکنيو"
+
+#: ../libempathy-gtk/empathy-new-message-dialog.glade.h:3
+msgid "C_hat"
+msgstr "ب_نډار"
+
+#: ../libempathy-gtk/empathy-new-message-dialog.glade.h:4
+msgid "Contact ID:"
+msgstr "د اړيکلوري پېژند:"
+
+#: ../libempathy-gtk/empathy-new-message-dialog.glade.h:5
+msgid "New Conversation"
+msgstr ""
+
+#. Custom messages
+#: ../libempathy-gtk/empathy-presence-chooser.c:685
+msgid "Custom messages..."
+msgstr "دوديزې استوزې..."
+
+#: ../libempathy-gtk/empathy-presence-chooser.glade.h:1
+msgid "Custom message"
+msgstr "دوديزه استوزه"
+
+#: ../libempathy-gtk/empathy-presence-chooser.glade.h:2
+msgid "Message:"
+msgstr "استوزه"
+
+#: ../libempathy-gtk/empathy-presence-chooser.glade.h:3
+msgid "Save message"
+msgstr "استوزه ساتل"
+
+#: ../libempathy-gtk/empathy-presence-chooser.glade.h:4
+msgid "Status:"
+msgstr "انکړ:"
+
+#: ../libempathy-gtk/empathy-spell-dialog.c:88
+msgid "Word"
+msgstr "ويې"
+
+#: ../libempathy-gtk/empathy-spell-dialog.c:265
+msgid "Suggestions for the word"
+msgstr "د ويې لپاره وړانديزونه"
+
+#: ../libempathy-gtk/empathy-spell-dialog.glade.h:1
+msgid "Spell Checker"
+msgstr "ليکدود کتونکی"
+
+#: ../libempathy-gtk/empathy-spell-dialog.glade.h:2
+msgid "Suggestions for the word:"
+msgstr ":د ويې لپاره وړانديزونه"
+
+#: ../libempathy-gtk/empathy-theme-boxes.c:745
+#: ../libempathy-gtk/empathy-theme-irc.c:293
+msgid "%A %d %B %Y"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-theme-manager.c:73
+msgid "Classic"
+msgstr ""
+
+#: ../libempathy-gtk/empathy-theme-manager.c:74
+msgid "Simple"
+msgstr "ساده"
+
+#: ../libempathy-gtk/empathy-theme-manager.c:75
+msgid "Clean"
+msgstr "پاک"
+
+#: ../libempathy-gtk/empathy-theme-manager.c:76
+msgid "Blue"
+msgstr "نيل"
+
+#: ../libempathy-gtk/empathy-ui-utils.c:1351
+msgid "Unable to open URI"
+msgstr ""
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:158
+msgid "Current Locale"
+msgstr ""
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:161
+#: ../libempathy-gtk/totem-subtitle-encoding.c:163
+#: ../libempathy-gtk/totem-subtitle-encoding.c:165
+#: ../libempathy-gtk/totem-subtitle-encoding.c:167
+msgid "Arabic"
+msgstr "عربي"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:170
+msgid "Armenian"
+msgstr "ارمني"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:173
+#: ../libempathy-gtk/totem-subtitle-encoding.c:175
+#: ../libempathy-gtk/totem-subtitle-encoding.c:177
+msgid "Baltic"
+msgstr ""
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:180
+msgid "Celtic"
+msgstr ""
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:183
+#: ../libempathy-gtk/totem-subtitle-encoding.c:185
+#: ../libempathy-gtk/totem-subtitle-encoding.c:187
+#: ../libempathy-gtk/totem-subtitle-encoding.c:189
+msgid "Central European"
+msgstr "منځنۍ اروپايي"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:192
+#: ../libempathy-gtk/totem-subtitle-encoding.c:194
+#: ../libempathy-gtk/totem-subtitle-encoding.c:196
+#: ../libempathy-gtk/totem-subtitle-encoding.c:198
+msgid "Chinese Simplified"
+msgstr "ساده چيني"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:201
+#: ../libempathy-gtk/totem-subtitle-encoding.c:203
+#: ../libempathy-gtk/totem-subtitle-encoding.c:205
+msgid "Chinese Traditional"
+msgstr "دوديزه چيني"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:208
+msgid "Croatian"
+msgstr "کروټي"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:211
+#: ../libempathy-gtk/totem-subtitle-encoding.c:213
+#: ../libempathy-gtk/totem-subtitle-encoding.c:215
+#: ../libempathy-gtk/totem-subtitle-encoding.c:217
+#: ../libempathy-gtk/totem-subtitle-encoding.c:219
+#: ../libempathy-gtk/totem-subtitle-encoding.c:221
+msgid "Cyrillic"
+msgstr "سېرېلېک"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:224
+msgid "Cyrillic/Russian"
+msgstr ""
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:227
+#: ../libempathy-gtk/totem-subtitle-encoding.c:229
+msgid "Cyrillic/Ukrainian"
+msgstr ""
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:232
+msgid "Georgian"
+msgstr "جارجي"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:235
+#: ../libempathy-gtk/totem-subtitle-encoding.c:237
+#: ../libempathy-gtk/totem-subtitle-encoding.c:239
+msgid "Greek"
+msgstr "يوناني"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:242
+msgid "Gujarati"
+msgstr "ګجراتي"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:245
+msgid "Gurmukhi"
+msgstr "ګرموکي"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:248
+#: ../libempathy-gtk/totem-subtitle-encoding.c:250
+#: ../libempathy-gtk/totem-subtitle-encoding.c:252
+#: ../libempathy-gtk/totem-subtitle-encoding.c:254
+msgid "Hebrew"
+msgstr "هېبرو"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:257
+msgid "Hebrew Visual"
+msgstr ""
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:260
+msgid "Hindi"
+msgstr "هندي"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:263
+msgid "Icelandic"
+msgstr "اېسلېنډي"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:266
+#: ../libempathy-gtk/totem-subtitle-encoding.c:268
+#: ../libempathy-gtk/totem-subtitle-encoding.c:270
+msgid "Japanese"
+msgstr "جاپاني"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:273
+#: ../libempathy-gtk/totem-subtitle-encoding.c:275
+#: ../libempathy-gtk/totem-subtitle-encoding.c:277
+#: ../libempathy-gtk/totem-subtitle-encoding.c:279
+msgid "Korean"
+msgstr "کوريايي"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:282
+msgid "Nordic"
+msgstr ""
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:285
+msgid "Persian"
+msgstr "پاړسي"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:288
+#: ../libempathy-gtk/totem-subtitle-encoding.c:290
+msgid "Romanian"
+msgstr "رومانيايي"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:293
+msgid "South European"
+msgstr "سويلي يورپي"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:296
+msgid "Thai"
+msgstr "ټايي"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:299
+#: ../libempathy-gtk/totem-subtitle-encoding.c:301
+#: ../libempathy-gtk/totem-subtitle-encoding.c:303
+#: ../libempathy-gtk/totem-subtitle-encoding.c:305
+msgid "Turkish"
+msgstr "ترکي"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:308
+#: ../libempathy-gtk/totem-subtitle-encoding.c:310
+#: ../libempathy-gtk/totem-subtitle-encoding.c:312
+#: ../libempathy-gtk/totem-subtitle-encoding.c:314
+#: ../libempathy-gtk/totem-subtitle-encoding.c:316
+msgid "Unicode"
+msgstr "يونيکوډ"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:319
+#: ../libempathy-gtk/totem-subtitle-encoding.c:321
+#: ../libempathy-gtk/totem-subtitle-encoding.c:323
+#: ../libempathy-gtk/totem-subtitle-encoding.c:325
+#: ../libempathy-gtk/totem-subtitle-encoding.c:327
+msgid "Western"
+msgstr "لويديځ"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:330
+#: ../libempathy-gtk/totem-subtitle-encoding.c:332
+#: ../libempathy-gtk/totem-subtitle-encoding.c:334
+msgid "Vietnamese"
+msgstr "وېټنامي"
+
+#.
+#. * vim: sw=2 ts=8 cindent noai bs=2
+#.
+#: ../megaphone/data/GNOME_Megaphone_Applet.schemas.in.h:1
+msgid ""
+"The contact to display in the applet. Empty means no contact is displayed."
+msgstr ""
+
+#: ../megaphone/data/GNOME_Megaphone_Applet.schemas.in.h:2
+msgid "The contact's avatar token. Empty means contact has no avatar."
+msgstr ""
+
+#: ../megaphone/data/GNOME_Megaphone_Applet.server.in.in.h:1
+msgid "Megaphone"
+msgstr ""
+
+#: ../megaphone/data/GNOME_Megaphone_Applet.server.in.in.h:2
+#: ../megaphone/src/megaphone-applet.c:417
+msgid "Talk!"
+msgstr "ګړېدل!"
+
+#: ../megaphone/data/GNOME_Megaphone_Applet.xml.h:1
+#: ../nothere/data/GNOME_NotHere_Applet.xml.h:1
+msgid "_About"
+msgstr "په اړه_"
+
+#: ../megaphone/data/GNOME_Megaphone_Applet.xml.h:2
+msgid "_Information"
+msgstr "خبرتياوې_"
+
+#: ../megaphone/data/GNOME_Megaphone_Applet.xml.h:3
+#: ../src/empathy-main-window.glade.h:15
+msgid "_Preferences"
+msgstr "غوراوي_"
+
+#: ../megaphone/src/megaphone-applet.c:255
+msgid "Please configure a contact."
+msgstr ""
+
+#: ../megaphone/src/megaphone-applet.c:348
+msgid "Select contact..."
+msgstr "اړيکلوری وټاکﺉ..."
+
+#: ../nothere/data/GNOME_NotHere_Applet.server.in.in.h:1
+msgid "Presence"
+msgstr "شتون"
+
+#: ../nothere/data/GNOME_NotHere_Applet.server.in.in.h:2
+#: ../nothere/src/nothere-applet.c:106
+msgid "Set your own presence"
+msgstr ""
+
+#: ../src/empathy.c:380
+msgid "Don't connect on startup"
+msgstr "د پېلېدو پر مهال نه نښلېدل"
+
+#: ../src/empathy.c:384
+msgid "Don't show the contact list on startup"
+msgstr "د پېلېدو پر مهال د اړيکلورو لړ نه ښودل"
+
+#: ../src/empathy.c:388
+msgid "Show the accounts dialog"
+msgstr ""
+
+#: ../src/empathy.c:400
+msgid "- Empathy Instant Messenger"
+msgstr ""
+
+#: ../src/empathy-about-dialog.c:84
+msgid ""
+"Empathy is free software; you can redistribute it and/or modify it under the "
+"terms of the GNU General Public License as published by the Free Software "
+"Foundation; either version 2 of the License, or (at your option) any later "
+"version."
+msgstr ""
+
+#: ../src/empathy-about-dialog.c:88
+msgid ""
+"Empathy is distributed in the hope that it will be useful, but WITHOUT ANY "
+"WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS "
+"FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more "
+"details."
+msgstr ""
+
+#: ../src/empathy-about-dialog.c:92
+msgid ""
+"You should have received a copy of the GNU General Public License along with "
+"Empathy; if not, write to the Free Software Foundation, Inc., 51 Franklin "
+"Street, Fifth Floor, Boston, MA 02110-130159 USA"
+msgstr ""
+
+#: ../src/empathy-about-dialog.c:120
+msgid "An Instant Messaging client for GNOME"
+msgstr ""
+
+#: ../src/empathy-about-dialog.c:126
+msgid "translator-credits"
+msgstr ""
+
+#: ../src/empathy-accounts-dialog.c:394
+msgid "Enabled"
+msgstr "وړول شوی"
+
+#: ../src/empathy-accounts-dialog.c:404
+#: ../src/empathy-accounts-dialog.glade.h:4
+msgid "Accounts"
+msgstr "ګڼونونه"
+
+#. To translator: %s is the protocol name
+#: ../src/empathy-accounts-dialog.c:867
+#, c-format
+msgid "New %s account"
+msgstr "ګڼون %s نوی"
+
+#: ../src/empathy-accounts-dialog.c:977
+#, c-format
+msgid ""
+"You are about to remove your %s account!\n"
+"Are you sure you want to proceed?"
+msgstr ""
+
+#: ../src/empathy-accounts-dialog.c:983
+msgid ""
+"Any associated conversations and chat rooms will NOT be removed if you "
+"decide to proceed.\n"
+"\n"
+"Should you decide to add the account back at a later time, they will still "
+"be available."
+msgstr ""
+
+#: ../src/empathy-accounts-dialog.glade.h:1
+msgid "<b>New Account</b>"
+msgstr "<b>نوی ګڼون</b>"
+
+#: ../src/empathy-accounts-dialog.glade.h:2
+msgid "<b>No protocol installed</b>"
+msgstr "<b>کومه باندره نه ده لګول شوې</b>"
+
+#: ../src/empathy-accounts-dialog.glade.h:3
+msgid "<b>Settings</b>"
+msgstr "<b>امستنې</b>"
+
+#: ../src/empathy-accounts-dialog.glade.h:5
+msgid "Cr_eate"
+msgstr "ج_وړول"
+
+#: ../src/empathy-accounts-dialog.glade.h:6
+msgid "I already have an account I want to use"
+msgstr ""
+
+#: ../src/empathy-accounts-dialog.glade.h:7
+msgid "Import Accounts..."
+msgstr "ګڼونونه راوړل..."
+
+#: ../src/empathy-accounts-dialog.glade.h:8
+msgid ""
+"To add a new account, you first have to install a backend for each protocol "
+"you want to use."
+msgstr ""
+
+#: ../src/empathy-accounts-dialog.glade.h:9
+msgid "Type:"
+msgstr "وليکﺉ:"
+
+#: ../src/empathy-call-window.c:142
+msgid "Closed"
+msgstr ""
+
+#: ../src/empathy-call-window.c:254
+msgid "End this call?"
+msgstr "دا اړيکنيو بندول غواړﺉ؟"
+
+#: ../src/empathy-call-window.c:256
+msgid "Closing this window will end the call in progress."
+msgstr ""
+
+#: ../src/empathy-call-window.c:257
+msgid "_End Call"
+msgstr "اړيکنيو بندول_"
+
+#: ../src/empathy-call-window.c:311
+msgid "Incoming call"
+msgstr "رالتونکی اړيکنيو"
+
+#: ../src/empathy-call-window.c:313
+#, c-format
+msgid "%s is calling you, do you want to answer?"
+msgstr ""
+
+#: ../src/empathy-call-window.c:319
+msgid "_Reject"
+msgstr "بندول_"
+
+#: ../src/empathy-call-window.c:324
+msgid "_Answer"
+msgstr "ځوابول_"
+
+#: ../src/empathy-call-window.c:379
+msgid "Empathy Call"
+msgstr ""
+
+#. To translators: Readying is the first state of the call, it is
+#. * preparing the connection and it does not yet ring.
+#: ../src/empathy-call-window.c:382
+msgid "Readying"
+msgstr "چمتو کيږي"
+
+#: ../src/empathy-call-window.c:391
+#, c-format
+msgid "%s - Empathy Call"
+msgstr ""
+
+#: ../src/empathy-call-window.c:395
+msgid "Ringing"
+msgstr ""
+
+#: ../src/empathy-call-window.c:408
+msgid "Connecting"
+msgstr "نښلول کيږي"
+
+#: ../src/empathy-call-window.c:524
+#, c-format
+msgid "Incoming call from %s rejected because there is already a running call."
+msgstr ""
+
+#: ../src/empathy-call-window.glade.h:1
+msgid "#"
+msgstr "#"
+
+#: ../src/empathy-call-window.glade.h:2
+msgid "*"
+msgstr "*"
+
+#: ../src/empathy-call-window.glade.h:3
+msgid "0"
+msgstr "۰"
+
+#: ../src/empathy-call-window.glade.h:4
+msgid "1"
+msgstr "۱"
+
+#: ../src/empathy-call-window.glade.h:5
+msgid "2"
+msgstr "۲"
+
+#: ../src/empathy-call-window.glade.h:6
+msgid "3"
+msgstr "۳"
+
+#: ../src/empathy-call-window.glade.h:7
+msgid "4"
+msgstr "۴"
+
+#: ../src/empathy-call-window.glade.h:8
+msgid "5"
+msgstr "۵"
+
+#: ../src/empathy-call-window.glade.h:9
+msgid "6"
+msgstr "۶"
+
+#: ../src/empathy-call-window.glade.h:10
+msgid "7"
+msgstr "۷"
+
+#: ../src/empathy-call-window.glade.h:11
+msgid "8"
+msgstr "۸"
+
+#: ../src/empathy-call-window.glade.h:12
+msgid "9"
+msgstr "۹"
+
+#. To translators: The keypad is numbers [0-9], asterisk (*) and hash (#). Presented like on any phone
+#: ../src/empathy-call-window.glade.h:14
+msgid "<b>Keypad</b>"
+msgstr ""
+
+#: ../src/empathy-call-window.glade.h:15
+msgid "<b>Volume</b>"
+msgstr "<b>ډکون</b>"
+
+#: ../src/empathy-call-window.glade.h:16
+msgid "Hang Up"
+msgstr ""
+
+#: ../src/empathy-call-window.glade.h:17
+msgid "Send Video"
+msgstr "ويډيو لېږل"
+
+#: ../src/empathy-chat-window.c:309
+#, c-format
+msgid "Conversations (%d)"
+msgstr ""
+
+#: ../src/empathy-chat-window.c:411
+msgid "Topic:"
+msgstr ""
+
+#: ../src/empathy-chat-window.c:416
+msgid "Typing a message."
+msgstr "استوزه ليکي."
+
+#: ../src/empathy-chat-window.glade.h:1
+msgid "C_lear"
+msgstr "پ_اکول"
+
+#: ../src/empathy-chat-window.glade.h:2
+msgid "Chat"
+msgstr "بنډار"
+
+#: ../src/empathy-chat-window.glade.h:3
+msgid "Insert _Smiley"
+msgstr ""
+
+#: ../src/empathy-chat-window.glade.h:4
+msgid "Invitation _message:"
+msgstr "د بلنې _استوزه:"
+
+#: ../src/empathy-chat-window.glade.h:5
+msgid "Invite"
+msgstr "بلل"
+
+#: ../src/empathy-chat-window.glade.h:6
+msgid "Move Tab _Left"
+msgstr "ټوپ _کيڼ ته خوځول"
+
+#: ../src/empathy-chat-window.glade.h:7
+msgid "Move Tab _Right"
+msgstr "ټوپ _ښي ته خوځول"
+
+#: ../src/empathy-chat-window.glade.h:8
+msgid "Select who would you like to invite:"
+msgstr "څوک چې رابلل غواړﺉ، ويې ټاکﺉ:"
+
+#: ../src/empathy-chat-window.glade.h:9
+msgid "You have been invited to join a chat conference."
+msgstr ""
+
+#: ../src/empathy-chat-window.glade.h:10
+msgid "_Contact"
+msgstr "اړيکلوری_"
+
+#: ../src/empathy-chat-window.glade.h:11 ../src/empathy-main-window.glade.h:10
+msgid "_Contents"
+msgstr "منځپانګې_"
+
+#: ../src/empathy-chat-window.glade.h:12
+msgid "_Conversation"
+msgstr ""
+
+#: ../src/empathy-chat-window.glade.h:13
+msgid "_Detach Tab"
+msgstr "ټوپ بېلول_"
+
+#: ../src/empathy-chat-window.glade.h:15
+msgid "_Favorite Chatroom"
+msgstr "خواپورې بنډارکوټه_"
+
+#: ../src/empathy-chat-window.glade.h:16 ../src/empathy-main-window.glade.h:12
+msgid "_Help"
+msgstr "مرسته_"
+
+#: ../src/empathy-chat-window.glade.h:17
+msgid "_Next Tab"
+msgstr "راتلونکی ټوپ_"
+
+#: ../src/empathy-chat-window.glade.h:18
+msgid "_Previous Tab"
+msgstr "مخکنی ټوپ_"
+
+#: ../src/empathy-chat-window.glade.h:19
+msgid "_Tabs"
+msgstr "ټوپونه_"
+
+#: ../src/empathy-chatrooms-window.c:262
+msgid "Name"
+msgstr "نوم"
+
+#: ../src/empathy-chatrooms-window.c:280
+msgid "Room"
+msgstr "کوټه"
+
+#: ../src/empathy-chatrooms-window.c:289
+msgid "Auto-Connect"
+msgstr ""
+
+#: ../src/empathy-chatrooms-window.glade.h:2
+msgid "Edit Favorite Room"
+msgstr ""
+
+#: ../src/empathy-chatrooms-window.glade.h:3
+msgid "Join room on start_up"
+msgstr ""
+
+#: ../src/empathy-chatrooms-window.glade.h:4
+msgid "Join this chat room when Empathy starts and you are connected"
+msgstr ""
+
+#: ../src/empathy-chatrooms-window.glade.h:5
+msgid "Manage Favorite Rooms"
+msgstr ""
+
+#: ../src/empathy-chatrooms-window.glade.h:6
+msgid "N_ame:"
+msgstr "ن_وم:"
+
+#: ../src/empathy-chatrooms-window.glade.h:7
+msgid "S_erver:"
+msgstr "پ_النګر:"
+
+#: ../src/empathy-chatrooms-window.glade.h:9
+#: ../src/empathy-new-chatroom-dialog.glade.h:9
+msgid "_Room:"
+msgstr "کوټه:_"
+
+#: ../src/empathy-event-manager.c:166
+#, c-format
+msgid ""
+"New message from %s:\n"
+"%s"
+msgstr ""
+
+#: ../src/empathy-event-manager.c:205
+#, c-format
+msgid "Incoming call from %s"
+msgstr ""
+
+#: ../src/empathy-event-manager.c:238
+#, c-format
+msgid ""
+"%s is offering you an invitation, but you don't have the needed external "
+"application to handle it."
+msgstr ""
+
+#: ../src/empathy-event-manager.c:263
+msgid "Invitation Error"
+msgstr ""
+
+#: ../src/empathy-event-manager.c:289
+#, c-format
+msgid ""
+"%s is offering you an invitation. An external application will be started to "
+"handle it."
+msgstr ""
+
+#: ../src/empathy-event-manager.c:345
+#, c-format
+msgid "Subscription requested by %s"
+msgstr ""
+
+#: ../src/empathy-event-manager.c:348
+#, c-format
+msgid ""
+"\n"
+"Message: %s"
+msgstr ""
+
+#: ../src/empathy-import-dialog.c:249
+msgid "Import"
+msgstr "راوړل"
+
+#: ../src/empathy-import-dialog.c:258
+msgid "Protocol"
+msgstr "باندره"
+
+#: ../src/empathy-import-dialog.c:284
+msgid "Source"
+msgstr "سرچينه"
+
+#: ../src/empathy-import-dialog.c:372
+msgid ""
+"No accounts to import could be found. Empathy currently only supports "
+"importing accounts from Pidgin."
+msgstr ""
+
+#: ../src/empathy-import-dialog.glade.h:1
+msgid "Import Accounts"
+msgstr "ګڼونونه راوړل"
+
+#: ../src/empathy-import-dialog.glade.h:2
+msgid "gtk-cancel"
+msgstr ""
+
+#: ../src/empathy-import-dialog.glade.h:3
+msgid "gtk-ok"
+msgstr ""
+
+#: ../src/empathy-main-window.c:466
+msgid "Show and edit accounts"
+msgstr "ګڼونونه ښودل او سمول"
+
+#: ../src/empathy-main-window.c:838
+msgid "Contact"
+msgstr "اړيکلوری"
+
+#: ../src/empathy-main-window.c:1040
+msgid "_Edit account"
+msgstr "ګڼون سمول_"
+
+#: ../src/empathy-main-window.c:1123
+msgid "No error specified"
+msgstr "کومه تېروتنه نه ده ټاکل شوې"
+
+#: ../src/empathy-main-window.c:1126
+msgid "Network error"
+msgstr "د ځال تېروتنه"
+
+#: ../src/empathy-main-window.c:1129
+msgid "Authentication failed"
+msgstr "کرونه پاتې راغله"
+
+#: ../src/empathy-main-window.c:1132
+msgid "Encryption error"
+msgstr "د کوډه کښنې تېروتنه"
+
+#: ../src/empathy-main-window.c:1135
+msgid "Name in use"
+msgstr ""
+
+#: ../src/empathy-main-window.c:1138
+msgid "Certificate not provided"
+msgstr ""
+
+#: ../src/empathy-main-window.c:1141
+msgid "Certificate untrusted"
+msgstr ""
+
+#: ../src/empathy-main-window.c:1144
+msgid "Certificate expired"
+msgstr ""
+
+#: ../src/empathy-main-window.c:1147
+msgid "Certificate not activated"
+msgstr ""
+
+#: ../src/empathy-main-window.c:1150
+msgid "Certificate hostname mismatch"
+msgstr ""
+
+#: ../src/empathy-main-window.c:1153
+msgid "Certificate fingerprint mismatch"
+msgstr ""
+
+#: ../src/empathy-main-window.c:1156
+msgid "Certificate self-signed"
+msgstr ""
+
+#: ../src/empathy-main-window.c:1159
+msgid "Certificate error"
+msgstr ""
+
+#: ../src/empathy-main-window.c:1162
+msgid "Unknown error"
+msgstr "ناپېژندلې تېروتنه"
+
+#: ../src/empathy-main-window.glade.h:1
+msgid "Contact List"
+msgstr "اړيکلور لړ"
+
+#: ../src/empathy-main-window.glade.h:2
+msgid "Context"
+msgstr ""
+
+#: ../src/empathy-main-window.glade.h:3
+msgid "Join _Favorites"
+msgstr ""
+
+#: ../src/empathy-main-window.glade.h:4
+msgid "Join _New..."
+msgstr ""
+
+#: ../src/empathy-main-window.glade.h:5
+msgid "Manage Favorites"
+msgstr ""
+
+#: ../src/empathy-main-window.glade.h:6
+msgid "Show _Offline Contacts"
+msgstr ""
+
+#: ../src/empathy-main-window.glade.h:7
+msgid "_Accounts"
+msgstr "ګڼونونه_"
+
+#: ../src/empathy-main-window.glade.h:8
+msgid "_Add Contact..."
+msgstr "اړيکلوری زياتول..._"
+
+#: ../src/empathy-main-window.glade.h:13 ../src/empathy-status-icon.glade.h:2
+msgid "_New Conversation..."
+msgstr ""
+
+#: ../src/empathy-main-window.glade.h:14
+msgid "_Personal Information"
+msgstr "وګړيزې خبرتياوې_"
+
+#: ../src/empathy-main-window.glade.h:16
+msgid "_Room"
+msgstr "کوټه_"
+
+#: ../src/empathy-new-chatroom-dialog.c:290
+msgid "Chat Rooms"
+msgstr "بنډار کوټې"
+
+#: ../src/empathy-new-chatroom-dialog.glade.h:2
+msgid "Browse:"
+msgstr "لټول"
+
+#: ../src/empathy-new-chatroom-dialog.glade.h:3
+msgid ""
+"Enter the room name to join here or click on one or more rooms in the list."
+msgstr ""
+
+#: ../src/empathy-new-chatroom-dialog.glade.h:4
+msgid ""
+"Enter the server which hosts the room, or leave it empty if the room is on "
+"the current account's server"
+msgstr ""
+
+#: ../src/empathy-new-chatroom-dialog.glade.h:5
+msgid "Join"
+msgstr "ګډون"
+
+#: ../src/empathy-new-chatroom-dialog.glade.h:6
+msgid "Join New"
+msgstr ""
+
+#: ../src/empathy-new-chatroom-dialog.glade.h:7
+msgid "Re_fresh"
+msgstr "تا_ندول"
+
+#: ../src/empathy-new-chatroom-dialog.glade.h:8
+msgid ""
+"This list represents all chat rooms hosted on the server you have entered."
+msgstr ""
+
+#: ../src/empathy-preferences.c:264
+msgid "Language"
+msgstr "ژبه"
+
+#: ../src/empathy-preferences.glade.h:1
+msgid "<b>Appearance</b>"
+msgstr "<b>ښکارېدنه</b>"
+
+#. To translators: Audio notifications preferences
+#: ../src/empathy-preferences.glade.h:3
+msgid "<b>Audio</b>"
+msgstr "<b>غږ</b>"
+
+#: ../src/empathy-preferences.glade.h:4
+msgid "<b>Behaviour</b>"
+msgstr ""
+
+#: ../src/empathy-preferences.glade.h:5
+msgid "<b>Contact List</b>"
+msgstr "<b>اړيکلور لړ</b>"
+
+#: ../src/empathy-preferences.glade.h:6
+msgid "<b>Enable spell checking for languages:</b>"
+msgstr ""
+
+#. To translators: Visual notifications preferences, like notify bubbles, etc.
+#: ../src/empathy-preferences.glade.h:8
+msgid "<b>Visual</b>"
+msgstr ""
+
+#: ../src/empathy-preferences.glade.h:9
+msgid ""
+"<small>The list of languages reflects only the languages for which you have "
+"a dictionary installed.</small>"
+msgstr ""
+
+#: ../src/empathy-preferences.glade.h:10
+msgid "Automatically _connect on startup "
+msgstr ""
+
+#: ../src/empathy-preferences.glade.h:11
+msgid "Avatars are user chosen images shown in the contact list"
+msgstr ""
+
+#: ../src/empathy-preferences.glade.h:12
+msgid "Chat Th_eme:"
+msgstr "بنډار کو_نده:"
+
+#: ../src/empathy-preferences.glade.h:13
+msgid "Display notifications when contacts come _online"
+msgstr ""
+
+#: ../src/empathy-preferences.glade.h:14
+msgid "Enable sounds when _away"
+msgstr ""
+
+#: ../src/empathy-preferences.glade.h:15
+msgid "Enable sounds when _busy"
+msgstr ""
+
+#: ../src/empathy-preferences.glade.h:16
+msgid "General"
+msgstr "ټولګړی"
+
+#: ../src/empathy-preferences.glade.h:17
+msgid "Notifications"
+msgstr "خبرتياوې"
+
+#: ../src/empathy-preferences.glade.h:18
+msgid "Preferences"
+msgstr "غوراوي"
+
+#: ../src/empathy-preferences.glade.h:19
+msgid "Show _avatars"
+msgstr ""
+
+#: ../src/empathy-preferences.glade.h:20
+msgid "Show _smileys as images"
+msgstr ""
+
+#: ../src/empathy-preferences.glade.h:21
+msgid "Show co_mpact contact list"
+msgstr ""
+
+#: ../src/empathy-preferences.glade.h:22
+msgid "Sort by _name"
+msgstr "د _نوم له مخې اڼل"
+
+#: ../src/empathy-preferences.glade.h:23
+msgid "Sort by s_tate"
+msgstr "د ا_نکړ له مخې اڼل"
+
+#: ../src/empathy-preferences.glade.h:24
+msgid "Spell Checking"
+msgstr "ليکدود کتل کيږي"
+
+#: ../src/empathy-preferences.glade.h:25
+msgid "Themes"
+msgstr "ويينه"
+
+#: ../src/empathy-preferences.glade.h:26
+msgid "_Open new chats in separate windows"
+msgstr "نوي بنډارونه په بېلو کړکېو کې پرانيستل_"
+
+#: ../src/empathy-preferences.glade.h:27
+msgid "_Play sound when messages arrive"
+msgstr "د استوزو د راسېدلو سره غږ غږول_"
+
+#: ../src/empathy-status-icon.glade.h:1
+msgid "Status"
+msgstr "انکړ"
+
+#: ../src/empathy-status-icon.glade.h:3
+msgid "_Quit"
+msgstr "بندول_"
+
+#: ../src/empathy-status-icon.glade.h:4
+msgid "_Show Contact List"
+msgstr "اړيکلور لړ ښودل_"
