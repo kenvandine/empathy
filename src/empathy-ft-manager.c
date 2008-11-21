@@ -448,7 +448,7 @@ ft_manager_remove_file_from_model (EmpathyFTManager *ft_manager,
   GtkTreeSelection *selection;
   GtkTreePath *path = NULL;
   GtkTreeIter iter;
-  gboolean empty = FALSE;
+  gboolean update_selection;
 
   row_ref = ft_manager_get_row_from_tp_file (ft_manager, tp_file);
   g_return_if_fail (row_ref);
@@ -457,10 +457,16 @@ ft_manager_remove_file_from_model (EmpathyFTManager *ft_manager,
       empathy_contact_get_name (empathy_tp_file_get_contact (tp_file)),
       empathy_tp_file_get_filename (tp_file));
 
-  /* Remove tp_file's row. After that iter points to the new row to select */
+  /* Get the iter from the row_ref */
   path = gtk_tree_row_reference_get_path (row_ref);
   gtk_tree_model_get_iter (ft_manager->priv->model, &iter, path);
   gtk_tree_path_free (path);
+
+  /* We have to update the selection only if we are removing the selected row */
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (ft_manager->priv->treeview));
+  update_selection = gtk_tree_selection_iter_is_selected (selection, &iter);
+
+  /* Remove tp_file's row. After that iter points to the next row */
   if (!gtk_list_store_remove (GTK_LIST_STORE (ft_manager->priv->model), &iter))
     {
       gint n_row;
@@ -471,15 +477,11 @@ ft_manager_remove_file_from_model (EmpathyFTManager *ft_manager,
         gtk_tree_model_iter_nth_child (ft_manager->priv->model, &iter, NULL,
           n_row - 1);
       else
-        empty = TRUE;
+        update_selection = FALSE;
     }
 
-  /* Select the next row */
-  if (!empty)
-    {
-      selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (ft_manager->priv->treeview));
-      gtk_tree_selection_select_iter (selection, &iter);
-    }
+  if (update_selection)
+    gtk_tree_selection_select_iter (selection, &iter);
 }
 
 static gboolean
