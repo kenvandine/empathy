@@ -296,22 +296,22 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</
           The change in state was requested.
         </tp:docstring>
       </tp:enumvalue>
-      <tp:enumvalue suffix="Local_Stopped" value="1">
+      <tp:enumvalue suffix="Local_Stopped" value="2">
         <tp:docstring>
           The file transfer was cancelled by the local user.
         </tp:docstring>
       </tp:enumvalue>
-      <tp:enumvalue suffix="Remote_Stopped" value="2">
+      <tp:enumvalue suffix="Remote_Stopped" value="3">
         <tp:docstring>
           The file transfer was cancelled by the remote user.
         </tp:docstring>
       </tp:enumvalue>
-      <tp:enumvalue suffix="Local_Error" value="3">
+      <tp:enumvalue suffix="Local_Error" value="4">
         <tp:docstring>
           The file transfer was cancelled because of a local error.
         </tp:docstring>
       </tp:enumvalue>
-      <tp:enumvalue suffix="Remote_Error" value="4">
+      <tp:enumvalue suffix="Remote_Error" value="5">
         <tp:docstring>
           The file transfer was cancelled because of a remote error.
         </tp:docstring>
