@@ -186,6 +186,8 @@ ft_manager_update_buttons (EmpathyFTManager *ft_manager)
       /* I can abort if the transfer is not already finished */
       abort_enabled = (state != EMP_FILE_TRANSFER_STATE_CANCELLED &&
         state != EMP_FILE_TRANSFER_STATE_COMPLETED);
+
+      g_object_unref (tp_file);
     }
 
   gtk_widget_set_sensitive (ft_manager->priv->open_button, open_enabled);
@@ -439,7 +441,7 @@ ft_manager_configure_event_cb (GtkWidget *widget,
 }
 
 static void
-ft_manager_remove_file_from_list (EmpathyFTManager *ft_manager,
+ft_manager_remove_file_from_model (EmpathyFTManager *ft_manager,
                                   EmpathyTpFile *tp_file)
 {
   GtkTreeRowReference *row_ref;
@@ -471,7 +473,6 @@ ft_manager_remove_file_from_list (EmpathyFTManager *ft_manager,
       else
         empty = TRUE;
     }
-  g_object_unref (tp_file);
 
   /* Select the next row */
   if (!empty)
@@ -494,7 +495,7 @@ remove_finished_transfer_foreach (gpointer key,
   if (state == EMP_FILE_TRANSFER_STATE_COMPLETED ||
       state == EMP_FILE_TRANSFER_STATE_CANCELLED)
     {
-      ft_manager_remove_file_from_list (self, tp_file);
+      ft_manager_remove_file_from_model (self, tp_file);
       return TRUE;
     }
 
@@ -551,9 +552,8 @@ ft_manager_add_tp_file_to_list (EmpathyFTManager *ft_manager,
       ft_manager->priv->model), path);
   gtk_tree_path_free (path);
 
-  g_object_ref (tp_file);
-  g_hash_table_insert (ft_manager->priv->tp_file_to_row_ref, tp_file,
-      row_ref);
+  g_hash_table_insert (ft_manager->priv->tp_file_to_row_ref,
+      g_object_ref (tp_file), row_ref);
 
   ft_manager_update_ft_row (ft_manager, tp_file);
 
@@ -604,6 +604,7 @@ ft_manager_open (EmpathyFTManager *ft_manager)
   uri = g_object_get_data (G_OBJECT (tp_file), "uri");
   DEBUG ("Opening URI: %s", uri);
   empathy_url_show (uri);
+  g_object_unref (tp_file);
 }
 
 static void
@@ -627,6 +628,7 @@ ft_manager_stop (EmpathyFTManager *ft_manager)
       empathy_tp_file_get_filename (tp_file));
 
   empathy_tp_file_cancel (tp_file);
+  g_object_unref (tp_file);
 }
 
 static void
@@ -1059,7 +1061,8 @@ empathy_ft_manager_init (EmpathyFTManager *ft_manager)
   ft_manager->priv = priv;
 
   priv->tp_file_to_row_ref = g_hash_table_new_full (g_direct_hash,
-      g_direct_equal, NULL, (GDestroyNotify) gtk_tree_row_reference_free);
+      g_direct_equal, (GDestroyNotify) g_object_unref,
+      (GDestroyNotify) gtk_tree_row_reference_free);
 
   ft_manager_build_ui (ft_manager);
 }

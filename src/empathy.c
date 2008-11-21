@@ -112,6 +112,8 @@ dispatch_channel_cb (EmpathyDispatcher *dispatcher,
 		ft_manager = empathy_ft_manager_get_default ();
 		tp_file = empathy_tp_file_new (channel);
 		empathy_ft_manager_add_tp_file (ft_manager, tp_file);
+		empathy_tp_file_keep_alive (tp_file);
+		g_object_unref (tp_file);
 	}
 
 	g_free (channel_type);

@@ -957,11 +957,10 @@ file_channel_create_cb (TpConnection *connection,
 				 request->handle,
 				 NULL);
 
-	/* FIXME: tp_file is leaked, but we need to keep it alive until the data
-	 * transfer is done. This is not the object that is going to be used
-	 * for the ft manager. */
 	tp_file = empathy_tp_file_new (channel);
 	empathy_tp_file_offer (tp_file, request->gfile, NULL);
+	empathy_tp_file_keep_alive (tp_file);
+	g_object_unref (tp_file);
 
 	g_object_unref (request->gfile);
 	g_slice_free (FileChannelRequest, request);
