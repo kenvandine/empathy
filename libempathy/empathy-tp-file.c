@@ -388,82 +388,56 @@ tp_file_finalize (GObject *object)
   G_OBJECT_CLASS (empathy_tp_file_parent_class)->finalize (object);
 }
 
-static gint
-_get_local_socket (EmpathyTpFile *tp_file)
+static void
+tp_file_start_transfer (EmpathyTpFile *tp_file)
 {
   gint fd;
   size_t path_len;
   struct sockaddr_un addr;
 
-  if (G_STR_EMPTY (tp_file->priv->unix_socket_path))
-    return -1;
-
   fd = socket (PF_UNIX, SOCK_STREAM, 0);
   if (fd < 0)
-    return -1;
+    {
+      DEBUG ("Failed to create socket, closing channel");
+      tp_cli_channel_call_close (tp_file->priv->channel, -1, NULL, NULL, NULL, NULL);
+      return;
+    }
 
   memset (&addr, 0, sizeof (addr));
   addr.sun_family = AF_UNIX;
   path_len = strlen (tp_file->priv->unix_socket_path);
   strncpy (addr.sun_path, tp_file->priv->unix_socket_path, path_len);
 
-  if (connect (fd, (struct sockaddr*) &addr,
-      sizeof (addr)) < 0)
+  if (connect (fd, (struct sockaddr*) &addr, sizeof (addr)) < 0)
     {
+      DEBUG ("Failed to connect socket, closing channel");
+      tp_cli_channel_call_close (tp_file->priv->channel, -1, NULL, NULL, NULL, NULL);
       close (fd);
-      return -1;
-    }
-
-  return fd;
-}
-
-static void
-send_tp_file (EmpathyTpFile *tp_file)
-{
-  gint socket_fd;
-  GOutputStream *socket_stream;
-
-  DEBUG ("Sending file content: filename=%s",
-      tp_file->priv->filename);
-
-  g_return_if_fail (tp_file->priv->in_stream);
-
-  socket_fd = _get_local_socket (tp_file);
-  if (socket_fd < 0)
-    {
-      DEBUG ("failed to get local socket fd");
       return;
     }
-  DEBUG ("got local socket fd");
-  socket_stream = g_unix_output_stream_new (socket_fd, TRUE);
 
+  DEBUG ("Start the transfer");
+
+  tp_file->priv->start_time = empathy_time_get_current ();
   tp_file->priv->cancellable = g_cancellable_new ();
+  if (tp_file->priv->incoming)
+    {
+      GOutputStream *socket_stream;
 
-  copy_stream (tp_file->priv->in_stream, socket_stream,
-      tp_file->priv->cancellable);
+      socket_stream = g_unix_output_stream_new (fd, TRUE);
+      copy_stream (tp_file->priv->in_stream, socket_stream,
+          tp_file->priv->cancellable);
+      g_object_unref (socket_stream);
+    }
+  else
+    {
+      GInputStream *socket_stream;
 
-  g_object_unref (socket_stream);
-}
-
-static void
-receive_tp_file (EmpathyTpFile *tp_file)
-{
-  GInputStream *socket_stream;
-  gint socket_fd;
-
-  socket_fd = _get_local_socket (tp_file);
-
-  if (socket_fd < 0)
-    return;
-
-  socket_stream = g_unix_input_stream_new (socket_fd, TRUE);
-
-  tp_file->priv->cancellable = g_cancellable_new ();
-
-  copy_stream (socket_stream, tp_file->priv->out_stream,
-      tp_file->priv->cancellable);
-
-  g_object_unref (socket_stream);
+      socket_stream = g_unix_input_stream_new (fd, TRUE);
+      copy_stream (socket_stream, tp_file->priv->out_stream,
+          tp_file->priv->cancellable);
+      g_object_unref (socket_stream);
+    }
 }
 
 static void
@@ -472,24 +446,16 @@ tp_file_state_changed_cb (DBusGProxy *tp_file_iface,
                           EmpFileTransferStateChangeReason reason,
                           EmpathyTpFile *tp_file)
 {
-  DEBUG ("File transfer state changed: filename=%s, "
-      "old state=%u, state=%u, reason=%u",
-      tp_file->priv->filename, tp_file->priv->state, state, reason);
-
-  if (state == EMP_FILE_TRANSFER_STATE_OPEN)
-    tp_file->priv->start_time = empathy_time_get_current ();
-
-  DEBUG ("state = %u, incoming = %s, in_stream = %s, out_stream = %s",
-      state, tp_file->priv->incoming ? "yes" : "no",
+  DEBUG ("File transfer state changed:\n"
+      "\tfilename = %s, old state = %u, state = %u, reason = %u\n"
+      "\tincoming = %s, in_stream = %s, out_stream = %s",
+      tp_file->priv->filename, tp_file->priv->state, state, reason,
+      tp_file->priv->incoming ? "yes" : "no",
       tp_file->priv->in_stream ? "present" : "not present",
       tp_file->priv->out_stream ? "present" : "not present");
 
-  if (state == EMP_FILE_TRANSFER_STATE_OPEN && !tp_file->priv->incoming &&
-      tp_file->priv->in_stream)
-    send_tp_file (tp_file);
-  else if (state == EMP_FILE_TRANSFER_STATE_OPEN && tp_file->priv->incoming &&
-      tp_file->priv->out_stream)
-    receive_tp_file (tp_file);
+  if (state == EMP_FILE_TRANSFER_STATE_OPEN)
+    tp_file_start_transfer (tp_file);
 
   tp_file->priv->state = state;
   tp_file->priv->state_change_reason = reason;
@@ -764,9 +730,6 @@ tp_file_method_cb (TpProxy *proxy,
       DEBUG ("Error: %s", error->message);
       return;
     }
-
-  if (tp_file->priv->unix_socket_path)
-    g_free (tp_file->priv->unix_socket_path);
 
   tp_file->priv->unix_socket_path = g_value_dup_string (address);
 
