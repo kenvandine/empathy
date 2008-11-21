@@ -496,7 +496,6 @@ ft_manager_remove_file_from_list (EmpathyFTManager *ft_manager,
   /* Removal */
 
   gtk_list_store_remove (GTK_LIST_STORE (ft_manager->priv->model), &iter2);
-  g_hash_table_remove (ft_manager->priv->tp_file_to_row_ref, tp_file);
   g_object_unref (tp_file);
 
   /* Actual selection */
@@ -516,41 +515,27 @@ ft_manager_remove_file_from_list (EmpathyFTManager *ft_manager,
 }
 
 static void
-ft_manager_clear_foreach_cb (gpointer key,
-                             gpointer value,
-                             gpointer user_data)
-{
-  GSList **list = user_data;
-  EmpathyTpFile *tp_file = key;
-
-  switch (empathy_tp_file_get_state (tp_file))
-    {
-      case EMP_FILE_TRANSFER_STATE_COMPLETED:
-      case EMP_FILE_TRANSFER_STATE_CANCELLED:
-        *list = g_slist_append (*list, tp_file);
-        break;
-      default:
-        break;
-    }
-}
-
-static void
 ft_manager_clear (EmpathyFTManager *ft_manager)
 {
-  GSList *closed_files = NULL;
-  GSList *l;
+  GHashTableIter iter;
+  gpointer key, value;
 
   DEBUG ("Clearing file transfer list");
 
-  g_hash_table_foreach (ft_manager->priv->tp_file_to_row_ref,
-      ft_manager_clear_foreach_cb, &closed_files);
-
-  for (l = closed_files; l; l = l->next)
+  /* Remove completed and cancelled transfers */
+  g_hash_table_iter_init (&iter, ft_manager->priv->tp_file_to_row_ref);
+  while (g_hash_table_iter_next (&iter, &key, &value))
     {
-      ft_manager_remove_file_from_list (ft_manager, l->data);
-    }
+      EmpathyTpFile *tp_file = EMPATHY_TP_FILE (key);
+      EmpFileTransferState state;
 
-  g_slist_free (closed_files);
+      state = empathy_tp_file_get_state (tp_file);
+      if (state == EMP_FILE_TRANSFER_STATE_COMPLETED ||
+          state == EMP_FILE_TRANSFER_STATE_CANCELLED)
+        {
+          ft_manager_remove_file_from_list (ft_manager, tp_file);
+        }
+    }
 }
 
 static void
@@ -587,9 +572,14 @@ ft_manager_state_changed_cb (EmpathyTpFile *tp_file,
     }
 
   if (remove)
-    ft_manager_remove_file_from_list (ft_manager, tp_file);
+    {
+      ft_manager_remove_file_from_list (ft_manager, tp_file);
+      g_hash_table_remove (ft_manager->priv->tp_file_to_row_ref, tp_file);
+    }
   else
-    ft_manager_update_ft_row (ft_manager, tp_file);
+    {
+      ft_manager_update_ft_row (ft_manager, tp_file);
+    }
 }
 
 static void
