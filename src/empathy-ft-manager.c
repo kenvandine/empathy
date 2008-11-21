@@ -443,8 +443,9 @@ ft_manager_remove_file_from_list (EmpathyFTManager *ft_manager,
                                   EmpathyTpFile *tp_file)
 {
   GtkTreeRowReference *row_ref;
+  GtkTreeSelection *selection;
   GtkTreePath *path = NULL;
-  GtkTreeIter iter, iter2;
+  GtkTreeIter iter;
 
   row_ref = ft_manager_get_row_from_tp_file (ft_manager, tp_file);
   g_return_if_fail (row_ref);
@@ -453,50 +454,24 @@ ft_manager_remove_file_from_list (EmpathyFTManager *ft_manager,
       empathy_contact_get_name (empathy_tp_file_get_contact (tp_file)),
       empathy_tp_file_get_filename (tp_file));
 
-  /* Get the row we'll select after removal ("smart" selection) */
-
+  /* Remove tp_file's row. After that iter points to the new row to select */
   path = gtk_tree_row_reference_get_path (row_ref);
-  gtk_tree_model_get_iter (GTK_TREE_MODEL (ft_manager->priv->model),
-      &iter, path);
+  gtk_tree_model_get_iter (ft_manager->priv->model, &iter, path);
   gtk_tree_path_free (path);
-
-  row_ref = NULL;
-  iter2 = iter;
-  if (gtk_tree_model_iter_next (GTK_TREE_MODEL (ft_manager->priv->model), &iter))
+  if (!gtk_list_store_remove (GTK_LIST_STORE (ft_manager->priv->model), &iter))
     {
-      path = gtk_tree_model_get_path  (GTK_TREE_MODEL (ft_manager->priv->model), &iter);
-      row_ref = gtk_tree_row_reference_new (GTK_TREE_MODEL (ft_manager->priv->model), path);
-    }
-  else
-    {
-      path = gtk_tree_model_get_path (GTK_TREE_MODEL (ft_manager->priv->model), &iter2);
-      if (gtk_tree_path_prev (path))
-        {
-          row_ref = gtk_tree_row_reference_new (GTK_TREE_MODEL (ft_manager->priv->model),
-              path);
-        }
-    }
-  gtk_tree_path_free (path);
+      gint n_row;
 
-  /* Removal */
-
-  gtk_list_store_remove (GTK_LIST_STORE (ft_manager->priv->model), &iter2);
+      /* There is no last row, set iter to the last row */
+      n_row = gtk_tree_model_iter_n_children (ft_manager->priv->model, NULL);
+      gtk_tree_model_iter_nth_child (ft_manager->priv->model, &iter, NULL,
+        n_row - 1);
+    }
   g_object_unref (tp_file);
 
-  /* Actual selection */
-
-  if (row_ref != NULL)
-    {
-      path = gtk_tree_row_reference_get_path (row_ref);
-      if (path != NULL)
-        {
-          gtk_tree_view_set_cursor (GTK_TREE_VIEW (ft_manager->priv->treeview),
-              path, NULL, FALSE);
-          gtk_tree_path_free (path);
-        }
-      gtk_tree_row_reference_free (row_ref);
-    }
-
+  /* Select the next row */
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (ft_manager->priv->treeview));
+  gtk_tree_selection_select_iter (selection, &iter);
 }
 
 static gboolean
