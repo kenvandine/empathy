@@ -427,6 +427,7 @@ update_ft_row (EmpathyFTManager *ft_manager,
 					_("\"%s\" sending to %s"), filename,
 					contact_name);
 		second_line = g_strdup ("File transfer cancelled");
+		break;
 
 	default:
 		g_return_if_reached ();
