@@ -168,6 +168,7 @@ ft_manager_update_buttons (EmpathyFTManager *ft_manager)
   GtkTreeModel *model;
   GtkTreeIter iter;
   EmpathyTpFile *tp_file;
+  EmpFileTransferState state;
   gboolean open_enabled = FALSE;
   gboolean abort_enabled = FALSE;
 
@@ -176,29 +177,15 @@ ft_manager_update_buttons (EmpathyFTManager *ft_manager)
   if (gtk_tree_selection_get_selected (selection, &model, &iter))
     {
       gtk_tree_model_get (model, &iter, COL_FT_OBJECT, &tp_file, -1);
+      state = empathy_tp_file_get_state (tp_file, NULL);
 
-      if (empathy_tp_file_get_state (tp_file, NULL)
-          == EMP_FILE_TRANSFER_STATE_COMPLETED)
-        {
-          if (empathy_tp_file_is_incoming (tp_file))
-            open_enabled = TRUE;
-          else
-            open_enabled = FALSE;
+      /* I can open the file if the transfer is completed and was incoming */
+      open_enabled = (state == EMP_FILE_TRANSFER_STATE_COMPLETED &&
+        empathy_tp_file_is_incoming (tp_file));
 
-          abort_enabled = FALSE;
-
-        }
-      else if (empathy_tp_file_get_state (tp_file, NULL) ==
-        EMP_FILE_TRANSFER_STATE_CANCELLED)
-        {
-          open_enabled = FALSE;
-          abort_enabled = FALSE;
-        }
-      else
-        {
-          open_enabled = FALSE;
-          abort_enabled = TRUE;
-        }
+      /* I can abort if the transfer is not already finished */
+      abort_enabled = (state != EMP_FILE_TRANSFER_STATE_CANCELLED &&
+        state != EMP_FILE_TRANSFER_STATE_COMPLETED);
     }
 
   gtk_widget_set_sensitive (ft_manager->priv->open_button, open_enabled);
