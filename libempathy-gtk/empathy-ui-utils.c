@@ -1450,23 +1450,18 @@ empathy_text_buffer_tag_set (GtkTextBuffer *buffer,
 
 /* Sending files with the file chooser */
 
-typedef struct {
-	EmpathyContact             *contact;
-	EmpathyFileChooserCallback  callback;
-	gpointer                    user_data;
-} FileChooserResponseData;
-
 static void
-file_manager_send_file_response_cb (GtkDialog               *widget,
-				    gint                     response_id,
-				    FileChooserResponseData *response_data)
+file_manager_send_file_response_cb (GtkDialog      *widget,
+				    gint            response_id,
+				    EmpathyContact *contact)
 {
 	if (response_id == GTK_RESPONSE_OK) {
 		GSList *list;
+		GSList *l;
+		EmpathyFTManager *ft_manager;
 
 		list = gtk_file_chooser_get_uris (GTK_FILE_CHOOSER (widget));
-
-		GSList *l;
+		ft_manager = empathy_ft_manager_get_default ();
 
 		DEBUG ("File chooser selected files:");
 
@@ -1480,11 +1475,10 @@ file_manager_send_file_response_cb (GtkDialog               *widget,
 			gfile = g_file_new_for_uri (uri);
 
 			DEBUG ("\t%s", uri);
-			tp_file = empathy_send_file (response_data->contact,
+			tp_file = empathy_send_file (contact,
 						     gfile);
-			if (response_data->callback)
-				response_data->callback (tp_file,
-							 response_data->user_data);
+
+			empathy_ft_manager_add_tp_file (ft_manager, tp_file);
 
 			manager = gtk_recent_manager_get_default ();
 			gtk_recent_manager_add_item (manager, uri);
@@ -1504,22 +1498,14 @@ file_manager_send_file_response_cb (GtkDialog               *widget,
 			g_slist_free (list);
 	}
 
-	g_object_unref (response_data->contact);
-	g_free (response_data);
 	gtk_widget_destroy (GTK_WIDGET (widget));
 }
 
 void
-empathy_send_file_with_file_chooser (EmpathyContact             *contact,
-				     EmpathyFileChooserCallback  callback,
-				     gpointer                    user_data)
+empathy_send_file_with_file_chooser (EmpathyContact *contact)
 {
 	GtkWidget               *widget;
 	GtkWidget               *button;
-	FileChooserResponseData *response_data;
-
-	/* FIXME we cannot return the ft as the response is async, maybe we
-	 * should call a callback with the file when available */
 
 	g_return_if_fail (EMPATHY_IS_CONTACT (contact));
 
@@ -1544,30 +1530,9 @@ empathy_send_file_with_file_chooser (EmpathyContact             *contact,
 	gtk_dialog_set_default_response (GTK_DIALOG (widget),
 					 GTK_RESPONSE_OK);
 
-	response_data = g_new0 (FileChooserResponseData, 1);
-	response_data->contact = g_object_ref (contact);
-	response_data->callback = callback;
-	response_data->user_data = user_data;
 	g_signal_connect (widget, "response",
 			  G_CALLBACK (file_manager_send_file_response_cb),
-			  response_data);
+			  contact);
 
 	gtk_widget_show (widget);
-}
-
-static void
-add_file_to_manager (EmpathyTpFile    *tp_file,
-		     EmpathyFTManager *ft_manager)
-{
-	empathy_ft_manager_add_tp_file (ft_manager, tp_file);
-}
-
-void
-empathy_send_file_with_file_chooser_and_manager (EmpathyContact   *contact)
-{
-	g_return_if_fail (EMPATHY_IS_CONTACT (contact));
-
-	empathy_send_file_with_file_chooser (contact,
-					     (EmpathyFileChooserCallback) add_file_to_manager,
-					     empathy_ft_manager_get_default ());
 }

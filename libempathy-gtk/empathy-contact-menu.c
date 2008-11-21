@@ -196,7 +196,7 @@ static void
 contact_file_transfer_menu_item_activate_cb (EmpathyContact *contact)
 {
 	g_return_if_fail (EMPATHY_IS_CONTACT (contact));
-	empathy_send_file_with_file_chooser_and_manager (contact);
+	empathy_send_file_with_file_chooser (contact);
 }
 
 GtkWidget *

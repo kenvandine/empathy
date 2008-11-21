@@ -116,13 +116,7 @@ GtkTextTag *empathy_text_buffer_tag_set                 (GtkTextBuffer *buffer,
 							 const gchar   *first_property_name,
 							 ...);
 
-typedef gboolean (*EmpathyFileChooserCallback)          (EmpathyTpFile *tp_file,
-							 gpointer       user_data);
-
-void        empathy_send_file_with_file_chooser         (EmpathyContact             *contact,
-							 EmpathyFileChooserCallback  callback,
-							 gpointer                    user_data);
-void    empathy_send_file_with_file_chooser_and_manager (EmpathyContact   *contact);
+void        empathy_send_file_with_file_chooser         (EmpathyContact   *contact);
 
 G_END_DECLS
 
