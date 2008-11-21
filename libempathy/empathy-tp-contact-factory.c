@@ -835,6 +835,7 @@ get_requestable_channel_classes_cb (TpProxy *connection,
   if (error != NULL)
     {
       DEBUG ("Error: %s", error->message);
+      tp_contact_factory_ready (self);
       return;
     }
 
