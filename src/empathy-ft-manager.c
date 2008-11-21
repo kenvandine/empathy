@@ -446,6 +446,7 @@ ft_manager_remove_file_from_list (EmpathyFTManager *ft_manager,
   GtkTreeSelection *selection;
   GtkTreePath *path = NULL;
   GtkTreeIter iter;
+  gboolean empty = FALSE;
 
   row_ref = ft_manager_get_row_from_tp_file (ft_manager, tp_file);
   g_return_if_fail (row_ref);
@@ -464,14 +465,20 @@ ft_manager_remove_file_from_list (EmpathyFTManager *ft_manager,
 
       /* There is no last row, set iter to the last row */
       n_row = gtk_tree_model_iter_n_children (ft_manager->priv->model, NULL);
-      gtk_tree_model_iter_nth_child (ft_manager->priv->model, &iter, NULL,
-        n_row - 1);
+      if (n_row > 0)
+        gtk_tree_model_iter_nth_child (ft_manager->priv->model, &iter, NULL,
+          n_row - 1);
+      else
+        empty = TRUE;
     }
   g_object_unref (tp_file);
 
   /* Select the next row */
-  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (ft_manager->priv->treeview));
-  gtk_tree_selection_select_iter (selection, &iter);
+  if (!empty)
+    {
+      selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (ft_manager->priv->treeview));
+      gtk_tree_selection_select_iter (selection, &iter);
+    }
 }
 
 static gboolean
@@ -875,11 +882,11 @@ empathy_ft_manager_add_tp_file (EmpathyFTManager *ft_manager,
   g_return_if_fail (EMPATHY_IS_FT_MANAGER (ft_manager));
   g_return_if_fail (EMPATHY_IS_TP_FILE (tp_file));
 
-  DEBUG ("Adding a file transfer: contact=%s, filename=%s",
-      empathy_contact_get_name (empathy_tp_file_get_contact (tp_file)),
-      empathy_tp_file_get_filename (tp_file));
-
   state = empathy_tp_file_get_state (tp_file, NULL);
+
+  DEBUG ("Adding a file transfer: contact=%s, filename=%s, state=%d",
+      empathy_contact_get_name (empathy_tp_file_get_contact (tp_file)),
+      empathy_tp_file_get_filename (tp_file), state);
 
   if (state == EMP_FILE_TRANSFER_STATE_PENDING &&
       empathy_tp_file_is_incoming (tp_file))
