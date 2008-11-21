@@ -69,6 +69,10 @@ static void file_get_property (GObject *object, guint param_id, GValue *value,
     GParamSpec *pspec);
 static void file_set_property (GObject *object, guint param_id,
     const GValue *value, GParamSpec *pspec);
+static void state_changed_cb (GObject *object, GParamSpec *pspec,
+    EmpathyFile *file);
+static void transferred_bytes_changed_cb (GObject *object, GParamSpec *pspec,
+    EmpathyFile *file);
 static void file_set_tp_file (EmpathyFile *file, EmpathyTpFile *tp_file);
 
 enum
@@ -210,6 +214,20 @@ empathy_file_init (EmpathyFile *file)
 }
 
 static void
+state_changed_cb (GObject *object, GParamSpec *pspec,
+    EmpathyFile *file)
+{
+  g_object_notify (G_OBJECT (file), "state");
+}
+
+static void
+transferred_bytes_changed_cb (GObject *object, GParamSpec *pspec,
+    EmpathyFile *file)
+{
+  g_object_notify (G_OBJECT (file), "transferred-bytes");
+}
+
+static void
 file_finalize (GObject *object)
 {
   EmpathyFilePriv *priv;
@@ -331,9 +349,18 @@ file_set_property (GObject *object, guint param_id, const GValue *value,
 EmpathyFile *
 empathy_file_new (EmpathyTpFile *tp_file)
 {
-  return g_object_new (EMPATHY_TYPE_FILE,
-                       "tp_file", tp_file,
+  EmpathyFile *file;
+
+  file = g_object_new (EMPATHY_TYPE_FILE,
+                       "tp-file", tp_file,
                        NULL);
+
+  g_signal_connect (tp_file, "notify::state",
+                    G_CALLBACK (state_changed_cb), file);
+  g_signal_connect (tp_file, "notify::transferred-bytes",
+                    G_CALLBACK (transferred_bytes_changed_cb), file);
+
+  return file;
 }
 
 /**
