@@ -31,8 +31,6 @@ libempathy-gtk/empathy-contact-list-view.c
 libempathy-gtk/empathy-contact-menu.c
 libempathy-gtk/empathy-contact-widget.c
 libempathy-gtk/empathy-contact-widget.glade
-libempathy-gtk/empathy-ft-manager.c
-libempathy-gtk/empathy-ft-manager.glade
 libempathy-gtk/empathy-irc-network-dialog.c
 libempathy-gtk/empathy-log-window.c
 libempathy-gtk/empathy-log-window.glade
@@ -67,6 +65,8 @@ src/empathy-chat-window.glade
 src/empathy-chatrooms-window.c
 src/empathy-chatrooms-window.glade
 src/empathy-event-manager.c
+src/empathy-ft-manager.c
+src/empathy-ft-manager.glade
 src/empathy-import-dialog.c
 src/empathy-import-dialog.glade
 src/empathy-main-window.c
