@@ -31,6 +31,9 @@
 #include <libempathy/empathy-tp-chat.h>
 #include <libempathy/empathy-tp-group.h>
 #include <libempathy/empathy-utils.h>
+#include <libempathy/empathy-file.h>
+
+#include <libempathy-gtk/empathy-ft-manager.h>
 #include <libempathy-gtk/empathy-images.h>
 #include <libempathy-gtk/empathy-contact-dialogs.h>
 
@@ -211,6 +214,33 @@ event_manager_filter_channel_cb (EmpathyDispatcher   *dispatcher,
 		g_free (msg);
 		g_object_unref (contact);
 		g_object_unref (tp_group);
+	}
+	else if (!tp_strdiff (channel_type, EMP_IFACE_CHANNEL_TYPE_FILE)) {
+		GValue *direction;
+
+		tp_cli_dbus_properties_run_get (channel,
+						-1,
+						EMP_IFACE_CHANNEL_TYPE_FILE,
+						"Direction",
+						&direction,
+						NULL,
+						NULL);
+
+		/* Only deal with incoming channels */
+		if (g_value_get_uint (direction) == EMP_FILE_TRANSFER_DIRECTION_INCOMING) {
+			EmpathyFTManager *manager;
+			McAccount        *account;
+			EmpathyFile      *file;
+
+			manager = empathy_ft_manager_get_default ();
+			account = empathy_channel_get_account (channel);
+
+			file = empathy_file_new (account, channel);
+
+			empathy_ft_manager_add_file (manager, file);
+		}
+
+		g_value_unset (direction);
 	}
 
 	g_free (channel_type);
