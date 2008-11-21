@@ -109,7 +109,8 @@ struct _EmpathyTpFilePriv {
   guint64 transferred_bytes;
   gint64 start_time;
   gchar *unix_socket_path;
-  gchar *content_md5;
+  gchar *content_hash;
+  EmpFileHashType content_hash_type;
   gchar *content_type;
   gchar *description;
   GCancellable *cancellable;
@@ -125,7 +126,8 @@ enum {
   PROP_SIZE,
   PROP_CONTENT_TYPE,
   PROP_TRANSFERRED_BYTES,
-  PROP_CONTENT_MD5,
+  PROP_CONTENT_HASH_TYPE,
+  PROP_CONTENT_HASH,
   PROP_IN_STREAM,
 };
 
@@ -207,10 +209,20 @@ empathy_tp_file_class_init (EmpathyTpFileClass *klass)
           G_PARAM_READWRITE));
 
   g_object_class_install_property (object_class,
-      PROP_CONTENT_MD5,
-      g_param_spec_string ("content-md5",
-          "file transfer md5sum",
-          "The md5 sum of the transfer's contents",
+      PROP_CONTENT_HASH_TYPE,
+      g_param_spec_uint ("content-hash-type",
+          "file transfer hash type",
+          "The type of the file transfer hash",
+          0,
+          G_MAXUINT,
+          0,
+          G_PARAM_READWRITE));
+
+  g_object_class_install_property (object_class,
+      PROP_CONTENT_HASH,
+      g_param_spec_string ("content-hash",
+          "file transfer hash",
+          "The hash of the transfer's contents",
           "",
           G_PARAM_READWRITE));
 
@@ -276,7 +288,7 @@ tp_file_finalize (GObject *object)
   g_free (priv->filename);
   g_free (priv->unix_socket_path);
   g_free (priv->description);
-  g_free (priv->content_md5);
+  g_free (priv->content_hash);
   g_free (priv->content_type);
 
   if (priv->in_stream)
@@ -361,8 +373,8 @@ tp_file_constructor (GType type,
   priv->filename = g_value_dup_string (g_hash_table_lookup (properties,
       "Filename"));
 
-  priv->content_md5 = g_value_dup_string (g_hash_table_lookup (properties,
-      "ContentMD5"));
+  priv->content_hash = g_value_dup_string (g_hash_table_lookup (properties,
+      "ContentHash"));
 
   priv->description = g_value_dup_string (g_hash_table_lookup (properties,
       "Description"));
@@ -458,10 +470,10 @@ tp_file_set_property (GObject *object,
         g_free (priv->content_type);
         priv->content_type = g_value_dup_string (value);
         break;
-      case PROP_CONTENT_MD5:
-        tp_file_channel_set_dbus_property (priv->channel, "ContentMD5", value);
-        g_free (priv->content_md5);
-        priv->content_md5 = g_value_dup_string (value);
+      case PROP_CONTENT_HASH:
+        tp_file_channel_set_dbus_property (priv->channel, "ContentHash", value);
+        g_free (priv->content_hash);
+        priv->content_hash = g_value_dup_string (value);
         break;
       case PROP_IN_STREAM:
         if (priv->in_stream)
