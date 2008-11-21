@@ -178,6 +178,17 @@ event_manager_chat_message_received_cb (EmpathyTpChat       *tp_chat,
 }
 
 static void
+event_channel_file_process_func (EventPriv *event)
+{
+	EmpathyFTManager *manager;
+	EmpathyTpFile    *tp_file = (EmpathyTpFile *) event->user_data;
+
+	manager = empathy_ft_manager_get_default ();
+	empathy_ft_manager_add_tp_file (manager, tp_file);
+	event_remove (event);
+}
+
+static void
 event_manager_filter_channel_cb (EmpathyDispatcher   *dispatcher,
 				 TpChannel           *channel,
 				 EmpathyEventManager *manager)
@@ -227,17 +238,29 @@ event_manager_filter_channel_cb (EmpathyDispatcher   *dispatcher,
 						NULL);
 
 		/* Only deal with incoming channels */
-		if (g_value_get_uint (direction) == EMP_FILE_TRANSFER_DIRECTION_INCOMING) {
-			EmpathyFTManager *manager;
-			McAccount        *account;
-			EmpathyTpFile    *tp_file;
+		if (g_value_get_uint (direction) ==
+		    EMP_FILE_TRANSFER_DIRECTION_INCOMING) {
+			EmpathyContact *contact;
+			gchar          *msg;
+			McAccount      *account;
+			EmpathyTpFile  *tp_file;
 
-			manager = empathy_ft_manager_get_default ();
 			account = empathy_channel_get_account (channel);
-
 			tp_file = empathy_tp_file_new (account, channel);
 
-			empathy_ft_manager_add_tp_file (manager, tp_file);
+			contact = empathy_tp_file_get_contact (tp_file);
+
+			msg = g_strdup_printf (_("Incoming file transfer from %s"),
+					       empathy_contact_get_name (contact));
+
+			event_manager_add (manager, contact,
+					   EMPATHY_IMAGE_DOCUMENT_SEND,
+					   msg,
+					   channel,
+					   event_channel_file_process_func,
+					   tp_file);
+
+			g_free (msg);
 		}
 
 		g_value_unset (direction);
