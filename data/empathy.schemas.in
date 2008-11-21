@@ -333,5 +333,19 @@
       </locale>
     </schema>
 
+    <schema>
+      <key>/schemas/apps/empathy/file_transfer/default_folder</key>
+      <applyto>/apps/empathy/file_transfer_default_folder</applyto>
+      <owner>empathy</owner>
+      <type>string</type>
+      <default></default>
+      <locale name="C">
+        <short>Empathy default download folder</short>
+        <long>
+        The default folder to save file transfers in.
+        </long>
+      </locale>
+    </schema>
+
   </schemalist>  
 </gconfschemafile>
