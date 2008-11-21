@@ -23,6 +23,8 @@
     from="Telepathy specification"/>
   <tp:external-type name="Supported_Socket_Map" type="a{uau}"
     from="Telepathy specification"/>
+  <tp:external-type name="Unix_Timestamp64" type="t"
+    from="Telepathy specification"/>
 </tp:generic-types>
 
 </tp:spec>
