@@ -569,9 +569,8 @@ tp_file_constructor (GType type,
   tp_file->priv->state = g_value_get_uint (
       g_hash_table_lookup (properties, "State"));
 
-  /* Invalid reason, so empathy_file_get_state_change_reason() can give
-   * a warning if called for a not closed file transfer. */
-  tp_file->priv->state_change_reason = -1;
+  tp_file->priv->state_change_reason =
+      EMP_FILE_TRANSFER_STATE_CHANGE_REASON_NONE;
 
   tp_file->priv->transferred_bytes = g_value_get_uint64 (
       g_hash_table_lookup (properties, "TransferredBytes"));
@@ -850,8 +849,6 @@ EmpFileTransferStateChangeReason
 empathy_tp_file_get_state_change_reason (EmpathyTpFile *tp_file)
 {
   g_return_val_if_fail (EMPATHY_IS_TP_FILE (tp_file),
-      EMP_FILE_TRANSFER_STATE_CHANGE_REASON_NONE);
-  g_return_val_if_fail (tp_file->priv->state_change_reason >= 0,
       EMP_FILE_TRANSFER_STATE_CHANGE_REASON_NONE);
 
   return tp_file->priv->state_change_reason;
