@@ -65,9 +65,9 @@ dispatch_channel_cb (EmpathyDispatcher *dispatcher,
 		     TpChannel         *channel,
 		     gpointer           user_data)
 {
-	gchar *channel_type;
+	const gchar *channel_type;
 
-	g_object_get (channel, "channel-type", &channel_type, NULL);
+	channel_type = tp_channel_get_channel_type (channel);
 	if (!tp_strdiff (channel_type, TP_IFACE_CHANNEL_TYPE_TEXT)) {
 		EmpathyTpChat *tp_chat;
 		EmpathyChat   *chat = NULL;
@@ -115,8 +115,6 @@ dispatch_channel_cb (EmpathyDispatcher *dispatcher,
 		empathy_tp_file_keep_alive (tp_file);
 		g_object_unref (tp_file);
 	}
-
-	g_free (channel_type);
 }
 
 static void
