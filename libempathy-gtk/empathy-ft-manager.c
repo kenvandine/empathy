@@ -298,7 +298,7 @@ update_buttons (EmpathyFTManager *ft_manager)
 	gtk_widget_set_sensitive (priv->abort_button, abort_enabled);
 }
 
-/*static const gchar *
+static const gchar *
 get_state_change_reason_description (EmpFileTransferStateChangeReason reason)
 {
 	switch (reason) {
@@ -315,7 +315,7 @@ get_state_change_reason_description (EmpFileTransferStateChangeReason reason)
 	default:
 		g_return_val_if_reached ("");
 	}
-}*/
+}
 
 static void
 update_ft_row (EmpathyFTManager *ft_manager,
@@ -337,6 +337,7 @@ update_ft_row (EmpathyFTManager *ft_manager,
 	gint                  remaining = -1;
 	gint                  percent;
 	EmpFileTransferState  state;
+	EmpFileTransferStateChangeReason reason;
 
 	priv = GET_PRIV (ft_manager);
 
@@ -348,6 +349,7 @@ update_ft_row (EmpathyFTManager *ft_manager,
 	transferred_bytes = empathy_file_get_transferred_bytes (file);
 	total_size = empathy_file_get_size (file);
 	state = empathy_file_get_state (file);
+	reason = empathy_file_get_state_change_reason (file);
 
 	/* The state is changed asynchronously, so we can get local pending
 	 * transfers just before their state is changed to open.
@@ -426,7 +428,8 @@ update_ft_row (EmpathyFTManager *ft_manager,
 			first_line = g_strdup_printf (
 					_("\"%s\" sending to %s"), filename,
 					contact_name);
-		second_line = g_strdup ("File transfer cancelled");
+		second_line = g_strdup_printf (_("File transfer canceled: %s"),
+		    get_state_change_reason_description (reason));
 		break;
 
 	default:
