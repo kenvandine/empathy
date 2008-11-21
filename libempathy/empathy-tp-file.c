@@ -397,7 +397,7 @@ tp_file_start_transfer (EmpathyTpFile *tp_file)
   if (fd < 0)
     {
       DEBUG ("Failed to create socket, closing channel");
-      tp_cli_channel_call_close (tp_file->priv->channel, -1, NULL, NULL, NULL, NULL);
+      empathy_tp_file_cancel (tp_file);
       return;
     }
 
@@ -409,7 +409,7 @@ tp_file_start_transfer (EmpathyTpFile *tp_file)
   if (connect (fd, (struct sockaddr*) &addr, sizeof (addr)) < 0)
     {
       DEBUG ("Failed to connect socket, closing channel");
-      tp_cli_channel_call_close (tp_file->priv->channel, -1, NULL, NULL, NULL, NULL);
+      empathy_tp_file_cancel (tp_file);
       close (fd);
       return;
     }
@@ -709,7 +709,7 @@ tp_file_method_cb (TpProxy *proxy,
   if (error)
     {
       DEBUG ("Error: %s", error->message);
-      tp_cli_channel_call_close (tp_file->priv->channel, -1, NULL, NULL, NULL, NULL);
+      empathy_tp_file_cancel (tp_file);
       return;
     }
 
@@ -869,7 +869,8 @@ empathy_tp_file_cancel (EmpathyTpFile *tp_file)
 
   tp_cli_channel_call_close (tp_file->priv->channel, -1, NULL, NULL, NULL, NULL);
 
-  g_cancellable_cancel (tp_file->priv->cancellable);
+  if (tp_file->priv->cancellable != NULL)
+    g_cancellable_cancel (tp_file->priv->cancellable);
 }
 
 static void
