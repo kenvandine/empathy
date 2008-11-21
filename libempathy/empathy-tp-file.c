@@ -254,7 +254,8 @@ tp_file_finalize (GObject *object)
       g_signal_handlers_disconnect_by_func (priv->channel,
           tp_file_destroy_cb, object);
       tp_cli_channel_run_close (priv->channel, -1, NULL, NULL);
-      g_object_unref (priv->channel);
+      if (G_IS_OBJECT (priv->channel))
+        g_object_unref (priv->channel);
     }
 
   if (priv->factory)
