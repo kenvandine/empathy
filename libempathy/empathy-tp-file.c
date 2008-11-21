@@ -79,32 +79,36 @@ typedef struct {
   gboolean is_reading; /* we are reading */
   gboolean is_writing; /* we are writing */
   guint n_closed; /* number of streams that have been closed */
+  gint ref_count;
 } CopyData;
 
 static void schedule_next (CopyData *copy);
 
 static void
-free_copy_data_if_closed (CopyData *copy)
+copy_data_unref (CopyData *copy)
 {
-  gint i;
+  if (--copy->ref_count == 0)
+    {
+      gint i;
 
-  /* Free the data only if both the input and output streams have
-   * been closed. */
-  copy->n_closed++;
-  if (copy->n_closed < 2)
-    return;
+      /* Free the data only if both the input and output streams have
+       * been closed. */
+      copy->n_closed++;
+      if (copy->n_closed < 2)
+        return;
 
-  if (copy->in != NULL)
-    g_object_unref (copy->in);
+      if (copy->in != NULL)
+        g_object_unref (copy->in);
 
-  if (copy->out != NULL)
-    g_object_unref (copy->out);
+      if (copy->out != NULL)
+        g_object_unref (copy->out);
 
-  for (i = 0; i < N_BUFFERS; i++)
-    g_free (copy->buff[i]);
+      for (i = 0; i < N_BUFFERS; i++)
+        g_free (copy->buff[i]);
 
-  g_object_unref (copy->cancellable);
-  g_free (copy);
+      g_object_unref (copy->cancellable);
+      g_free (copy);
+    }
 }
 
 static void
@@ -126,7 +130,7 @@ io_error (CopyData *copy,
   if (copy->out != NULL)
     g_output_stream_close (copy->out, NULL, NULL);
 
-  free_copy_data_if_closed (copy);
+  copy_data_unref (copy);
 }
 
 static void
@@ -137,7 +141,7 @@ close_done (GObject *source_object,
   CopyData *copy = user_data;
 
   g_object_unref (source_object);
-  free_copy_data_if_closed (copy);
+  copy_data_unref (copy);
 }
 
 static void
@@ -254,6 +258,7 @@ copy_stream (GInputStream *in,
   copy = g_new0 (CopyData, 1);
   copy->in = g_object_ref (in);
   copy->out = g_object_ref (out);
+  copy->ref_count = 1;
 
   if (cancellable != NULL)
     copy->cancellable = g_object_ref (cancellable);
