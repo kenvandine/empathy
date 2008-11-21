@@ -27,6 +27,7 @@
 #include <telepathy-glib/util.h>
 
 #include <libempathy/empathy-dispatcher.h>
+#include <libempathy/empathy-contact-factory.h>
 #include <libempathy/empathy-contact-manager.h>
 #include <libempathy/empathy-tp-chat.h>
 #include <libempathy/empathy-tp-group.h>
@@ -178,59 +179,6 @@ event_manager_chat_message_received_cb (EmpathyTpChat       *tp_chat,
 }
 
 static void
-event_channel_file_process_func (EventPriv *event)
-{
-	EmpathyFTManager *manager;
-	EmpathyTpFile    *tp_file = (EmpathyTpFile *) event->user_data;
-
-	manager = empathy_ft_manager_get_default ();
-	empathy_ft_manager_add_tp_file (manager, tp_file);
-	event_remove (event);
-}
-
-static void
-file_channel_state_cb (TpProxy      *proxy,
-		       const GValue *state,
-		       const GError *error,
-		       gpointer      user_data,
-		       GObject      *weak_object)
-{
-	TpChannel           *channel = (TpChannel *) weak_object;
-	EmpathyEventManager *manager = (EmpathyEventManager *) user_data;
-
-	if (error) {
-		DEBUG ("Error: %s", error->message);
-		return;
-	}
-
-	/* Only deal with incoming channels */
-	if (g_value_get_uint (state) ==
-	    EMP_FILE_TRANSFER_STATE_LOCAL_PENDING) {
-		EmpathyContact *contact;
-		gchar          *msg;
-		EmpathyTpFile  *tp_file;
-
-		tp_file = empathy_tp_file_new (channel);
-
-		contact = empathy_tp_file_get_contact (tp_file);
-		empathy_contact_run_until_ready (contact,
-			EMPATHY_CONTACT_READY_NAME, NULL);
-
-		msg = g_strdup_printf (_("Incoming file transfer from %s"),
-				       empathy_contact_get_name (contact));
-
-		event_manager_add (manager, contact,
-				   EMPATHY_IMAGE_DOCUMENT_SEND,
-				   msg,
-				   channel,
-				   event_channel_file_process_func,
-				   tp_file);
-
-		g_free (msg);
-	}
-}
-
-static void
 event_manager_filter_channel_cb (EmpathyDispatcher   *dispatcher,
 				 TpChannel           *channel,
 				 EmpathyEventManager *manager)
@@ -269,12 +217,33 @@ event_manager_filter_channel_cb (EmpathyDispatcher   *dispatcher,
 		g_object_unref (tp_group);
 	}
 	else if (!tp_strdiff (channel_type, EMP_IFACE_CHANNEL_TYPE_FILE)) {
-		tp_cli_dbus_properties_call_get (channel, -1,
-						 EMP_IFACE_CHANNEL_TYPE_FILE,
-						 "State",
-						 file_channel_state_cb,
-						 manager, NULL,
-						 G_OBJECT (channel));
+		EmpathyContact        *contact;
+		gchar                 *msg;
+		TpHandle               handle;
+		McAccount             *account;
+		EmpathyContactFactory *factory;
+
+		factory = empathy_contact_factory_new ();
+		handle = tp_channel_get_handle (channel, NULL);
+		account = empathy_channel_get_account (channel);
+
+		contact = empathy_contact_factory_get_from_handle (factory,
+								   account,
+								   handle);
+
+		empathy_contact_run_until_ready (contact,
+			EMPATHY_CONTACT_READY_NAME, NULL);
+
+		msg = g_strdup_printf (_("Incoming file transfer from %s"),
+				       empathy_contact_get_name (contact));
+
+		event_manager_add (manager, contact,
+				   EMPATHY_IMAGE_DOCUMENT_SEND,
+				   msg, channel,
+				   event_channel_process_func, NULL);
+
+		g_object_unref (factory);
+		g_object_unref (account);
 	}
 
 	g_free (channel_type);

@@ -1458,39 +1458,25 @@ file_manager_send_file_response_cb (GtkDialog      *widget,
 	if (response_id == GTK_RESPONSE_OK) {
 		GSList *list;
 		GSList *l;
-		EmpathyFTManager *ft_manager;
 
 		list = gtk_file_chooser_get_uris (GTK_FILE_CHOOSER (widget));
-		ft_manager = empathy_ft_manager_get_default ();
 
 		DEBUG ("File chooser selected files:");
 
 		for (l = list; l; l = l->next) {
 			gchar            *uri;
 			GFile            *gfile;
-			EmpathyTpFile    *tp_file;
 			GtkRecentManager *manager;
 
 			uri = l->data;
 			gfile = g_file_new_for_uri (uri);
 
 			DEBUG ("\t%s", uri);
-			tp_file = empathy_send_file (contact,
-						     gfile);
-
-			empathy_ft_manager_add_tp_file (ft_manager, tp_file);
+			empathy_send_file (contact, gfile);
 
 			manager = gtk_recent_manager_get_default ();
 			gtk_recent_manager_add_item (manager, uri);
 
-			if (tp_file) ;
-				/* FIXME: This should be unrefed, but
-				 * it's not referenced anywhere else,
-				 * so the transfer just ends. Uncomment
-				 * this out when there is a file
-				 * transfer "manager".
-				g_object_unref (file);
-				 */
 			g_object_unref (gfile);
 			g_free (uri);
 		}

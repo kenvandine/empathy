@@ -44,6 +44,7 @@
 #include <libempathy/empathy-tp-group.h>
 
 #include <libempathy-gtk/empathy-conf.h>
+#include <libempathy-gtk/empathy-ft-manager.h>
 
 #include <extensions/extensions.h>
 
@@ -103,6 +104,15 @@ dispatch_channel_cb (EmpathyDispatcher *dispatcher,
 	}
 	else if (!tp_strdiff (channel_type, TP_IFACE_CHANNEL_TYPE_STREAMED_MEDIA)) {
 		empathy_call_window_new (channel);
+	}
+	else if (!tp_strdiff (channel_type, EMP_IFACE_CHANNEL_TYPE_FILE)) {
+		EmpathyTpFile *tp_file;
+		EmpathyFTManager *ft_manager;
+
+		ft_manager = empathy_ft_manager_get_default ();
+		tp_file = empathy_tp_file_new (channel);
+
+		empathy_ft_manager_add_tp_file (ft_manager, tp_file);
 	}
 
 	g_free (channel_type);
