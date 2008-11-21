@@ -603,10 +603,10 @@ ft_manager_add_tp_file_to_list (EmpathyFTManager *ft_manager,
   GtkIconTheme *theme;
   GtkIconInfo *icon_info;
   GdkPixbuf *pixbuf;
-  const gchar *mime;
   gchar *icon_name;
   gint width = 16;
   gint height = 16;
+  gchar *content_type;
 
   gtk_list_store_insert_with_values (GTK_LIST_STORE (ft_manager->priv->model),
       &iter, G_MAXINT, COL_FT_OBJECT, tp_file, -1);
@@ -632,12 +632,13 @@ ft_manager_add_tp_file_to_list (EmpathyFTManager *ft_manager,
   g_signal_connect (tp_file, "notify::transferred-bytes",
       G_CALLBACK (ft_manager_transferred_bytes_changed_cb), ft_manager);
 
-  mime = gnome_vfs_get_mime_type_for_name (empathy_tp_file_get_filename (tp_file));
+  g_object_get (tp_file, "content-type", &content_type, NULL);
+
   theme = gtk_icon_theme_get_default ();
   /* FIXME remove the dependency on libgnomeui replacing this function
    * with gio/gvfs or copying the code from gtk-recent */
   icon_name = gnome_icon_lookup (theme, NULL, NULL, NULL, NULL,
-      mime, GNOME_ICON_LOOKUP_FLAGS_NONE, NULL);
+      content_type, GNOME_ICON_LOOKUP_FLAGS_NONE, NULL);
 
   gtk_icon_size_lookup_for_settings (gtk_widget_get_settings (
       ft_manager->priv->window),
@@ -661,6 +662,7 @@ ft_manager_add_tp_file_to_list (EmpathyFTManager *ft_manager,
     }
 
   gtk_window_present (GTK_WINDOW (ft_manager->priv->window));
+  g_free (content_type);
 }
 
 static void
