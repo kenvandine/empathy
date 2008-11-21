@@ -61,6 +61,52 @@
 static BaconMessageConnection *connection = NULL;
 
 static void
+file_channel_add_to_file_manager (TpChannel *channel)
+{
+	EmpathyTpFile *tp_file;
+	EmpathyFTManager *ft_manager;
+
+	ft_manager = empathy_ft_manager_get_default ();
+	tp_file = empathy_tp_file_new (channel);
+	empathy_ft_manager_add_tp_file (ft_manager, tp_file);
+
+	g_object_unref (channel);
+}
+
+static void
+file_channel_state_changed_cb (TpProxy *proxy,
+			       guint    state,
+			       guint    reason,
+			       gpointer user_data,
+			       GObject *weak_object)
+{
+	/* Only deal with the channel being offered */
+	if (state == EMP_FILE_TRANSFER_STATE_REMOTE_PENDING) {
+		file_channel_add_to_file_manager (TP_CHANNEL (proxy));
+	}
+}
+
+static void
+file_channel_get_state_cb (TpProxy      *proxy,
+			   const GValue *state_value,
+			   const GError *error,
+			   gpointer      user_data,
+			   GObject      *weak_object)
+{
+	EmpFileTransferState state;
+	state = g_value_get_uint (state_value);
+
+	if (state == EMP_FILE_TRANSFER_STATE_REMOTE_PENDING
+	    || state == EMP_FILE_TRANSFER_STATE_LOCAL_PENDING) {
+		file_channel_add_to_file_manager (TP_CHANNEL (proxy));
+		return;
+	}
+
+	emp_cli_channel_type_file_connect_to_file_transfer_state_changed (
+		proxy, file_channel_state_changed_cb, NULL, NULL, NULL, NULL);
+}
+
+static void
 dispatch_channel_cb (EmpathyDispatcher *dispatcher,
 		     TpChannel         *channel,
 		     gpointer           user_data)
@@ -106,13 +152,10 @@ dispatch_channel_cb (EmpathyDispatcher *dispatcher,
 		empathy_call_window_new (channel);
 	}
 	else if (!tp_strdiff (channel_type, EMP_IFACE_CHANNEL_TYPE_FILE)) {
-		EmpathyTpFile *tp_file;
-		EmpathyFTManager *ft_manager;
-
-		ft_manager = empathy_ft_manager_get_default ();
-		tp_file = empathy_tp_file_new (channel);
-
-		empathy_ft_manager_add_tp_file (ft_manager, tp_file);
+		tp_cli_dbus_properties_call_get (g_object_ref (channel), -1,
+			EMP_IFACE_CHANNEL_TYPE_FILE,
+			"State", file_channel_get_state_cb,
+			NULL, NULL, NULL);
 	}
 
 	g_free (channel_type);
