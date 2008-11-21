@@ -207,7 +207,7 @@ ft_manager_update_buttons (EmpathyFTManager *ft_manager)
 }
 
 static const gchar *
-ft_manager_get_state_change_reason_description (EmpFileTransferStateChangeReason reason)
+ft_manager_state_change_reason_to_string (EmpFileTransferStateChangeReason reason)
 {
   switch (reason)
     {
@@ -222,7 +222,7 @@ ft_manager_get_state_change_reason_description (EmpFileTransferStateChangeReason
       case EMP_FILE_TRANSFER_STATE_CHANGE_REASON_REMOTE_ERROR:
         return _("The other participant is unable to transfer the file");
       default:
-        g_return_val_if_reached ("");
+        return _("Unknown reason");
     }
 }
 
@@ -343,7 +343,7 @@ ft_manager_update_ft_row (EmpathyFTManager *ft_manager,
             contact_name);
 
       second_line = g_strdup_printf (_("File transfer canceled: %s"),
-          ft_manager_get_state_change_reason_description (reason));
+          ft_manager_state_change_reason_to_string (reason));
 
       break;
 
