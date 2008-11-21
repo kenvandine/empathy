@@ -275,7 +275,6 @@ copy_stream (GInputStream *in,
 
 struct _EmpathyTpFilePriv {
   EmpathyContactFactory *factory;
-  gchar *id;
   MissionControl *mc;
   TpChannel *channel;
 
@@ -366,7 +365,6 @@ tp_file_finalize (GObject *object)
       g_object_unref (tp_file->priv->mc);
     }
 
-  g_free (tp_file->priv->id);
   g_free (tp_file->priv->filename);
   g_free (tp_file->priv->unix_socket_path);
   g_free (tp_file->priv->description);
@@ -682,22 +680,6 @@ empathy_tp_file_new (TpChannel *channel)
   return g_object_new (EMPATHY_TYPE_TP_FILE,
       "channel", channel,
       NULL);
-}
-
-/**
- * empathy_tp_file_get_id:
- * @tp_file: an #EmpathyTpFile
- *
- * Returns the ID of @tp_file.
- *
- * Returns: the ID
- */
-const gchar *
-empathy_tp_file_get_id (EmpathyTpFile *tp_file)
-{
-  g_return_val_if_fail (EMPATHY_IS_TP_FILE (tp_file), NULL);
-
-  return tp_file->priv->id;
 }
 
 /**

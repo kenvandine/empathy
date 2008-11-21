@@ -73,7 +73,6 @@ void empathy_tp_file_cancel (EmpathyTpFile *tp_file);
 void empathy_tp_file_offer (EmpathyTpFile *tp_file, GFile *gfile,
   GError **error);
 
-const gchar *empathy_tp_file_get_id (EmpathyTpFile *tp_file);
 guint64 empathy_tp_file_get_transferred_bytes (EmpathyTpFile *tp_file);
 EmpathyContact *empathy_tp_file_get_contact (EmpathyTpFile *tp_file);
 const gchar *empathy_tp_file_get_filename (EmpathyTpFile *tp_file);
