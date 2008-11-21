@@ -38,7 +38,8 @@ typedef enum
   EMPATHY_DEBUG_ACCOUNT = 1 << 4,
   EMPATHY_DEBUG_IRC = 1 << 5,
   EMPATHY_DEBUG_DISPATCHER = 1 << 6,
-  EMPATHY_DEBUG_OTHER = 1 << 7,
+  EMPATHY_DEBUG_FT = 1 << 7,
+  EMPATHY_DEBUG_OTHER = 1 << 8,
 } EmpathyDebugFlags;
 
 gboolean empathy_debug_flag_is_set (EmpathyDebugFlags flag);
