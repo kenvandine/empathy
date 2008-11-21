@@ -971,8 +971,7 @@ ft_manager_stop (EmpathyFTManager *ft_manager)
 	       empathy_contact_get_name (empathy_file_get_contact (file)),
 	       empathy_file_get_filename (file));
 
-/*	empathy_file_cancel (ft, EMPATHY_TP_FILE_TRANSFER_STATE_CHANGE_REASON_LOCAL_STOPPED);*/
-	/* cancel file transfer here */
+	empathy_file_cancel (file);
 
 	g_value_unset (&val);
 }
