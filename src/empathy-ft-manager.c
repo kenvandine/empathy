@@ -259,9 +259,7 @@ ft_manager_update_ft_row (EmpathyFTManager *ft_manager,
 
         first_line = g_strdup_printf (first_line_format, filename, contact_name);
 
-        if (state == EMP_FILE_TRANSFER_STATE_OPEN
-            || (incoming && state == EMP_FILE_TRANSFER_STATE_ACCEPTED)
-            || (incoming && state == EMP_FILE_TRANSFER_STATE_PENDING))
+        if (state == EMP_FILE_TRANSFER_STATE_OPEN || incoming)
           {
             gchar *total_size_str;
             gchar *transferred_bytes_str;
