@@ -7,5 +7,6 @@
 <xi:include href="Stream_Engine.xml"/>
 <xi:include href="Channel_Handler.xml"/>
 <xi:include href="Tube_Handler.xml"/>
+<xi:include href="Channel_Type_File.xml"/>
 
 </tp:spec>
