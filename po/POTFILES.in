@@ -31,6 +31,8 @@ libempathy-gtk/empathy-contact-list-view.c
 libempathy-gtk/empathy-contact-menu.c
 libempathy-gtk/empathy-contact-widget.c
 libempathy-gtk/empathy-contact-widget.glade
+libempathy-gtk/empathy-ft-manager.c
+libempathy-gtk/empathy-ft-manager.glade
 libempathy-gtk/empathy-irc-network-dialog.c
 libempathy-gtk/empathy-log-window.c
 libempathy-gtk/empathy-log-window.glade
