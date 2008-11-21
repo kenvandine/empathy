@@ -1013,7 +1013,9 @@ ft_manager_delete_event_cb (GtkWidget *widget,
   if (g_hash_table_size (ft_manager->priv->tp_file_to_row_ref) == 0)
     {
       DEBUG ("Destroying window");
-      empathy_ft_manager_finalize (G_OBJECT (ft_manager));
+      if (manager_p != NULL)
+        g_object_unref (manager_p);
+
       manager_p = NULL;
       return FALSE;
     }
