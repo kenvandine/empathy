@@ -377,9 +377,9 @@ update_ft_row (EmpathyFTManager *ft_manager,
 				 * OMIT it in the translated string. */
 				total_size_str = g_strdup (Q_("file size|Unknown"));
 			else
-				total_size_str = gnome_vfs_format_file_size_for_display (total_size);
+				total_size_str = g_format_size_for_display (total_size);
 
-			transferred_bytes_str = gnome_vfs_format_file_size_for_display (transferred_bytes);
+			transferred_bytes_str = g_format_size_for_display (transferred_bytes);
 
 			/* translators: first %s is the transferred size, second %s is
 			 * the total file size */
@@ -1167,7 +1167,7 @@ ft_manager_display_accept_dialog (EmpathyFTManager *ft_manager,
 	if (size == EMPATHY_FILE_UNKNOWN_SIZE)
 		size_str = g_strdup (_("unknown size"));
 	else
-		size_str = gnome_vfs_format_file_size_for_display (size);
+		size_str = g_format_size_for_display (size);
 
 	dialog = gtk_message_dialog_new (NULL, 0, GTK_MESSAGE_INFO,
 					 GTK_BUTTONS_NONE,
