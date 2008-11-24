@@ -503,6 +503,7 @@ dispatcher_connection_new_channel_cb (TpConnection *connection,
         {
           chatroom = empathy_chatroom_new (account);
           empathy_chatroom_set_name (chatroom, room_ids[0]);
+          empathy_chatroom_set_room (chatroom, room_ids[0]);
           empathy_chatroom_manager_add (priv->chatroom_mgr, chatroom);
         }
       else
