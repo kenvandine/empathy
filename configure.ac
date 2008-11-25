@@ -35,10 +35,10 @@ ENCHANT_REQUIRED=1.2.0
 ISO_CODES_REQUIRED=0.35
 LIBNOTIFY_REQUIRED=0.4.4
 LIBCANBERRA_GTK_REQUIRED=0.4
-GEOCLUE_REQUIRED=0.11
 LIBCHAMPLAIN_REQUIRED=0.3.0
 LIBCHAMPLAIN_GTK_REQUIRED=0.3.0
 CLUTTER_GTK_REQUIRED=0.8.2
+GEOCLUE_REQUIRED=0.11
 
 # Use --enable-maintainer-mode to disabled deprecated symbols
 GNOME_MAINTAINER_MODE_DEFINES
@@ -240,7 +240,7 @@ if test "x$enable_location" != "xno"; then
       AC_DEFINE(HAVE_GEOCLUE, 1, [Define if you have geoclue])
    fi
 else
-   have_geoclue=no
+   have_geoclue="no"
 fi
 
 if test "x$enable_location" = "xyes" -a "x$have_geoclue" != "xyes"; then

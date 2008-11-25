@@ -8,6 +8,7 @@ AM_CPPFLAGS =                                           \
 	$(LIBEMPATHYGTK_CFLAGS)				\
 	$(ENCHANT_CFLAGS)				\
 	$(LIBCHAMPLAIN_CFLAGS)				\
+	$(GEOCLUE_CFLAGS)				\
 	$(WARN_CFLAGS)					\
 	$(DISABLE_DEPRECATED)
 
@@ -70,6 +71,7 @@ libempathy_gtk_la_LIBADD =			\
 	$(LIBEMPATHYGTK_LIBS)			\
 	$(ENCHANT_LIBS)				\
 	$(LIBCHAMPLAIN_LIBS)			\
+	$(GEOCLUE_LIBS)				\
 	$(top_builddir)/libempathy/libempathy.la
 
 libempathy_gtk_la_LDFLAGS =                \
