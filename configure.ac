@@ -35,6 +35,10 @@ ENCHANT_REQUIRED=1.2.0
 ISO_CODES_REQUIRED=0.35
 LIBNOTIFY_REQUIRED=0.4.4
 LIBCANBERRA_GTK_REQUIRED=0.4
+GEOCLUE_REQUIRED=0.11
+LIBCHAMPLAIN_REQUIRED=0.2.6
+LIBCHAMPLAIN_GTK_REQUIRED=0.2.6
+CLUTTER_GTK_REQUIRED=0.8.2
 
 # Use --enable-maintainer-mode to disabled deprecated symbols
 GNOME_MAINTAINER_MODE_DEFINES
@@ -188,6 +192,66 @@ if test "x$enable_spell" = "xyes" -a "x$have_enchant" != "xyes"; then
 fi
 
 AM_CONDITIONAL(HAVE_ENCHANT, test "x$have_enchant" = "xyes")
+
+# -----------------------------------------------------------
+# Map view checks: libchamplain
+# -----------------------------------------------------------
+AC_ARG_ENABLE(map,
+              AS_HELP_STRING([--enable-map=@<:@no/yes/auto@:>@],
+                             [Enable map view]), ,
+                             enable_map=auto)
+
+if test "x$enable_map" != "xno"; then
+   PKG_CHECK_MODULES(LIBCHAMPLAIN,
+   [
+      champlain-0.2 >= $LIBCHAMPLAIN_REQUIRED,
+      champlain-gtk-0.2 >= $LIBCHAMPLAIN_GTK_REQUIRED
+      clutter-gtk-0.8 >= $CLUTTER_GTK_REQUIRED
+   ], have_libchamplain="yes", have_libchamplain="no")
+
+   if test "x$have_libchamplain" = "xyes"; then
+      AC_DEFINE(HAVE_LIBCHAMPLAIN, 1, [Define if you have libchamplain])
+   else
+       have_libchamplain="no"
+   fi
+else
+   have_libchamplain=no
+fi
+
+if test "x$enable_map" = "xyes" -a "x$have_libchamplain" != "xyes"; then
+   AC_MSG_ERROR([Couldn't find map view dependencies.])
+fi
+
+AM_CONDITIONAL(HAVE_LIBCHAMPLAIN, test "x$have_libchamplain" = "xyes")
+
+# -----------------------------------------------------------
+# location checks: geoclue
+# -----------------------------------------------------------
+AC_ARG_ENABLE(location,
+              AS_HELP_STRING([--enable-location=@<:@no/yes/auto@:>@],
+                             [Enable location awareness]), ,
+                             enable_location=auto)
+
+if test "x$enable_location" != "xno"; then
+   PKG_CHECK_MODULES(GEOCLUE,
+   [
+      geoclue >= $GEOCLUE_REQUIRED
+   ], have_geoclue="yes", have_geoclue="no")
+
+   if test "x$have_geoclue" = "xyes"; then
+      AC_DEFINE(HAVE_GEOCLUE, 1, [Define if you have geoclue])
+   else
+       have_geoclue="no"
+   fi
+else
+   have_geoclue=no
+fi
+
+if test "x$enable_map" = "xyes" -a "x$have_geoclue" != "xyes"; then
+   AC_MSG_ERROR([Couldn't find location dependencies.])
+fi
+
+AM_CONDITIONAL(HAVE_GEOCLUE, test "x$have_geoclue" = "xyes")
 
 # -----------------------------------------------------------
 # Megaphone

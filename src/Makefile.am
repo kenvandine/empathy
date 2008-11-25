@@ -4,6 +4,7 @@ AM_CPPFLAGS =						\
 	-I$(top_srcdir)                          	\
 	$(EMPATHY_CFLAGS)				\
 	$(LIBNOTIFY_CFLAGS)				\
+	$(LIBCHAMPLAIN_CFLAGS)				\
 	$(WARN_CFLAGS)					\
 	$(DISABLE_DEPRECATED)
 
@@ -12,7 +13,8 @@ LDADD =								\
 	$(top_builddir)/libempathy/libempathy.la		\
 	$(top_builddir)/extensions/libemp-extensions.la		\
 	$(LIBNOTIFY_LIBS)					\
-	$(EMPATHY_LIBS)
+	$(EMPATHY_LIBS)						\
+	$(LIBCHAMPLAIN_LIBS)
 
 bin_PROGRAMS =			\
 	empathy			\
