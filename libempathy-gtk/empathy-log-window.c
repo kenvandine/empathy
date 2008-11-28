@@ -623,15 +623,15 @@ log_window_chats_populate (EmpathyLogWindow *window)
 	account_chooser = EMPATHY_ACCOUNT_CHOOSER (window->account_chooser_chats);
 	account = empathy_account_chooser_get_account (account_chooser);
 
-	if (account == NULL) {
-		gtk_list_store_clear (store);
-		return;
-	}
-
 	view = GTK_TREE_VIEW (window->treeview_chats);
 	model = gtk_tree_view_get_model (view);
 	selection = gtk_tree_view_get_selection (view);
 	store = GTK_LIST_STORE (model);
+
+	if (account == NULL) {
+		gtk_list_store_clear (store);
+		return;
+	}
 
 	/* Block signals to stop the logs being retrieved prematurely */
 	g_signal_handlers_block_by_func (selection,
