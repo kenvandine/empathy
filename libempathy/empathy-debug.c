@@ -45,6 +45,7 @@ static GDebugKey keys[] = {
   { "Irc", EMPATHY_DEBUG_IRC },
   { "Dispatcher", EMPATHY_DEBUG_DISPATCHER },
   { "Ft", EMPATHY_DEBUG_FT },
+  { "Location", EMPATHY_DEBUG_LOCATION },
   { "Other", EMPATHY_DEBUG_OTHER },
   { 0, }
 };
