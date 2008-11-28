@@ -412,7 +412,7 @@ avatar_chooser_maybe_convert_and_scale (EmpathyAvatarChooser *chooser,
 {
 	EmpathyAvatarChooserPriv *priv = GET_PRIV (chooser);
 	EmpathyTpContactFactory  *tp_cf = priv->tp_contact_factory;
-	gint                      max_width = 0, max_height = 0, max_size = 0;
+	guint                     max_width = 0, max_height = 0, max_size = 0;
 	gchar                   **mime_types = NULL;
 	gboolean                  needs_conversion = FALSE;
 	gint                      width, height;
