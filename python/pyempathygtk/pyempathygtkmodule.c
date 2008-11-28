@@ -1,3 +1,5 @@
+#define NO_IMPORT_PYGOBJECT
+
 #include <pygobject.h>
 
 void empathy_register_classes (PyObject *d);
