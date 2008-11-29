@@ -22,6 +22,7 @@ empathy_tp_call_get_type
 empathy_tp_chat_get_type
 empathy_tp_contact_factory_get_type
 empathy_tp_contact_list_get_type
+empathy_tp_file_get_type
 empathy_tp_group_get_type
 empathy_tp_roomlist_get_type
 empathy_tp_tube_get_type

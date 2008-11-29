@@ -36,6 +36,7 @@
       <xi:include href="xml/empathy-tp-chat.xml"/>
       <xi:include href="xml/empathy-tp-contact-factory.xml"/>
       <xi:include href="xml/empathy-tp-contact-list.xml"/>
+      <xi:include href="xml/empathy-tp-file.xml"/>
       <xi:include href="xml/empathy-tp-group.xml"/>
       <xi:include href="xml/empathy-tp-roomlist.xml"/>
       <xi:include href="xml/empathy-tp-tube.xml"/>
