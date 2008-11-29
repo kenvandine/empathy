@@ -26,6 +26,7 @@ python /usr/share/pygobject/2.0/codegen/h2def.py	\
 	empathy-tp-chat.h			\
 	empathy-tp-contact-factory.h		\
 	empathy-tp-contact-list.h		\
+	empathy-tp-file.h			\
 	empathy-tp-group.h			\
 	empathy-tp-roomlist.h			\
 	empathy-tp-tube.h			\

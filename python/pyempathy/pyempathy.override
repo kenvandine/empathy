@@ -24,6 +24,7 @@ headers
 #include "empathy-tp-chat.h"
 #include "empathy-tp-contact-factory.h"
 #include "empathy-tp-contact-list.h"
+#include "empathy-tp-file.h"
 #include "empathy-tp-group.h"
 #include "empathy-tp-roomlist.h"
 #include "empathy-tp-tube.h"

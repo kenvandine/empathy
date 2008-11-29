@@ -120,6 +120,13 @@
   (gtype-id "EMPATHY_TYPE_TP_CONTACT_LIST")
 )
 
+(define-object TpFile
+  (in-module "Empathy")
+  (parent "GObject")
+  (c-name "EmpathyTpFile")
+  (gtype-id "EMPATHY_TYPE_TP_FILE")
+)
+
 (define-object TpGroup
   (in-module "Empathy")
   (parent "GObject")
@@ -158,6 +165,7 @@
     '("none" "EMPATHY_CAPABILITIES_NONE")
     '("audio" "EMPATHY_CAPABILITIES_AUDIO")
     '("video" "EMPATHY_CAPABILITIES_VIDEO")
+    '("ft" "EMPATHY_CAPABILITIES_FT")
     '("unknown" "EMPATHY_CAPABILITIES_UNKNOWN")
   )
 )
@@ -186,6 +194,7 @@
     '("account" "EMPATHY_DEBUG_ACCOUNT")
     '("irc" "EMPATHY_DEBUG_IRC")
     '("dispatcher" "EMPATHY_DEBUG_DISPATCHER")
+    '("ft" "EMPATHY_DEBUG_FT")
     '("other" "EMPATHY_DEBUG_OTHER")
   )
 )
@@ -561,6 +570,12 @@
 (define-method can_voip
   (of-object "EmpathyContact")
   (c-name "empathy_contact_can_voip")
+  (return-type "gboolean")
+)
+
+(define-method can_send_files
+  (of-object "EmpathyContact")
+  (c-name "empathy_contact_can_send_files")
   (return-type "gboolean")
 )
 
@@ -992,6 +1007,15 @@
   (return-type "none")
   (parameters
     '("EmpathyContact*" "contact")
+  )
+)
+
+(define-function dispatcher_send_file
+  (c-name "empathy_dispatcher_send_file")
+  (return-type "none")
+  (parameters
+    '("EmpathyContact*" "contact")
+    '("GFile*" "gfile")
   )
 )
 
@@ -1879,6 +1903,108 @@
   (of-object "EmpathyTpContactList")
   (c-name "empathy_tp_contact_list_get_account")
   (return-type "McAccount*")
+)
+
+
+
+;; From empathy-tp-file.h
+
+(define-function tp_file_get_type
+  (c-name "empathy_tp_file_get_type")
+  (return-type "GType")
+)
+
+(define-function tp_file_new
+  (c-name "empathy_tp_file_new")
+  (is-constructor-of "EmpathyTpFile")
+  (return-type "EmpathyTpFile*")
+  (parameters
+    '("TpChannel*" "channel")
+  )
+)
+
+(define-method get_channel
+  (of-object "EmpathyTpFile")
+  (c-name "empathy_tp_file_get_channel")
+  (return-type "TpChannel*")
+)
+
+(define-method accept
+  (of-object "EmpathyTpFile")
+  (c-name "empathy_tp_file_accept")
+  (return-type "none")
+  (parameters
+    '("guint64" "offset")
+    '("GFile*" "gfile")
+    '("GError**" "error")
+  )
+)
+
+(define-method cancel
+  (of-object "EmpathyTpFile")
+  (c-name "empathy_tp_file_cancel")
+  (return-type "none")
+)
+
+(define-method offer
+  (of-object "EmpathyTpFile")
+  (c-name "empathy_tp_file_offer")
+  (return-type "none")
+  (parameters
+    '("GFile*" "gfile")
+    '("GError**" "error")
+  )
+)
+
+(define-method get_contact
+  (of-object "EmpathyTpFile")
+  (c-name "empathy_tp_file_get_contact")
+  (return-type "EmpathyContact*")
+)
+
+(define-method get_filename
+  (of-object "EmpathyTpFile")
+  (c-name "empathy_tp_file_get_filename")
+  (return-type "const-gchar*")
+)
+
+(define-method is_incoming
+  (of-object "EmpathyTpFile")
+  (c-name "empathy_tp_file_is_incoming")
+  (return-type "gboolean")
+)
+
+(define-method get_state
+  (of-object "EmpathyTpFile")
+  (c-name "empathy_tp_file_get_state")
+  (return-type "EmpFileTransferState")
+  (parameters
+    '("EmpFileTransferStateChangeReason*" "reason")
+  )
+)
+
+(define-method get_size
+  (of-object "EmpathyTpFile")
+  (c-name "empathy_tp_file_get_size")
+  (return-type "guint64")
+)
+
+(define-method get_transferred_bytes
+  (of-object "EmpathyTpFile")
+  (c-name "empathy_tp_file_get_transferred_bytes")
+  (return-type "guint64")
+)
+
+(define-method get_remaining_time
+  (of-object "EmpathyTpFile")
+  (c-name "empathy_tp_file_get_remaining_time")
+  (return-type "gint")
+)
+
+(define-method get_content_type
+  (of-object "EmpathyTpFile")
+  (c-name "empathy_tp_file_get_content_type")
+  (return-type "const-gchar*")
 )
 
 

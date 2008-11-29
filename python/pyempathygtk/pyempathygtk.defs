@@ -1164,6 +1164,18 @@
   (return-type "GtkWidget*")
 )
 
+(define-method invite_menu_item_new
+  (of-object "EmpathyContact")
+  (c-name "empathy_contact_invite_menu_item_new")
+  (return-type "GtkWidget*")
+)
+
+(define-method file_transfer_menu_item_new
+  (of-object "EmpathyContact")
+  (c-name "empathy_contact_file_transfer_menu_item_new")
+  (return-type "GtkWidget*")
+)
+
 
 
 ;; From empathy-contact-widget.h
@@ -1690,6 +1702,16 @@
   )
 )
 
+(define-function pixbuf_from_data_and_mime
+  (c-name "empathy_pixbuf_from_data_and_mime")
+  (return-type "GdkPixbuf*")
+  (parameters
+    '("gchar*" "data")
+    '("gsize" "data_size")
+    '("gchar**" "mime_type")
+  )
+)
+
 (define-function pixbuf_from_avatar_scaled
   (c-name "empathy_pixbuf_from_avatar_scaled")
   (return-type "GdkPixbuf*")
@@ -1824,6 +1846,14 @@
     '("const-gchar*" "first_property_name")
   )
   (varargs #t)
+)
+
+(define-function send_file_with_file_chooser
+  (c-name "empathy_send_file_with_file_chooser")
+  (return-type "none")
+  (parameters
+    '("EmpathyContact*" "contact")
+  )
 )
 
 
