@@ -1027,7 +1027,7 @@ empathy_dispatcher_send_file (EmpathyContact *contact,
 	filename = g_file_get_basename (request->gfile);
 	tp_connection_run_until_ready (connection, FALSE, NULL, NULL);
 
-	DEBUG ("Sending %s from a stream to %s (size %llu, content-type %s)",
+	DEBUG ("Sending %s from a stream to %s (size %li, content-type %s)",
 	       filename, empathy_contact_get_name (contact),
 	       g_file_info_get_size (info),
 	       g_file_info_get_content_type (info));
