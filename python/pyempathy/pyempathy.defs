@@ -931,6 +931,7 @@
     '("gsize" "len")
     '("gchar*" "format")
     '("gchar*" "token")
+    '("gchar*" "filename")
   )
 )
 

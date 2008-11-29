@@ -1618,17 +1618,6 @@
   (varargs #t)
 )
 
-(define-method add_from_pixbuf
-  (of-object "EmpathySmileyManager")
-  (c-name "empathy_smiley_manager_add_from_pixbuf")
-  (return-type "none")
-  (parameters
-    '("GdkPixbuf*" "smiley")
-    '("const-gchar*" "first_str")
-  )
-  (varargs #t)
-)
-
 (define-method get_all
   (of-object "EmpathySmileyManager")
   (c-name "empathy_smiley_manager_get_all")
@@ -1901,6 +1890,15 @@
   (parameters
     '("const-gchar*" "icon_name")
     '("gint" "size")
+  )
+)
+
+(define-function filename_from_icon_name
+  (c-name "empathy_filename_from_icon_name")
+  (return-type "gchar*")
+  (parameters
+    '("const-gchar*" "icon_name")
+    '("GtkIconSize" "icon_size")
   )
 )
 
