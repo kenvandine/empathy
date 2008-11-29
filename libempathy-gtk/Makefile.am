@@ -47,6 +47,7 @@ libempathy_gtk_handwritten_source =            	\
 	empathy-video-src.c			\
 	empathy-video-widget.c			\
 	empathy-irc-network-dialog.c		\
+	empathy-location-manager.c		\
 	empathy-log-window.c			\
 	empathy-new-message-dialog.c		\
 	empathy-presence-chooser.c		\
@@ -105,6 +106,7 @@ libempathy_gtk_headers =			\
 	empathy-video-widget.h			\
 	empathy-images.h			\
 	empathy-irc-network-dialog.h		\
+	empathy-location-manager.h		\
 	empathy-log-window.h			\
 	empathy-new-message-dialog.h		\
 	empathy-presence-chooser.h		\

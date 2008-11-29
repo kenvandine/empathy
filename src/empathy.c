@@ -55,6 +55,7 @@
 
 #include <libempathy-gtk/empathy-conf.h>
 #include <libempathy-gtk/empathy-ui-utils.h>
+#include <libempathy-gtk/empathy-location-manager.h>
 
 #include "empathy-accounts-dialog.h"
 #include "empathy-main-window.h"
@@ -421,6 +422,7 @@ int
 main (int argc, char *argv[])
 {
 	guint32            startup_timestamp;
+	EmpathyLocationManager *location_manager;
 	EmpathyStatusIcon *icon;
 	EmpathyDispatcher *dispatcher;
 	EmpathyLogManager *log_manager;
@@ -582,6 +584,9 @@ main (int argc, char *argv[])
 	g_signal_connect (G_OBJECT (call_factory), "new-call-handler",
 		G_CALLBACK (new_call_handler_cb), NULL);
 
+	/* Location mananger */
+	location_manager = empathy_location_manager_get_default ();
+
 	gtk_main ();
 
 	empathy_idle_set_state (idle, TP_CONNECTION_PRESENCE_TYPE_OFFLINE);
@@ -593,6 +598,7 @@ main (int argc, char *argv[])
 	g_object_unref (dispatcher);
 	g_object_unref (chatroom_manager);
 	g_object_unref (ft_manager);
+	g_object_unref (location_manager);
 
 	notify_uninit ();
 
