@@ -27,6 +27,7 @@
 #include <string.h>
 
 #include "empathy-message.h"
+#include "empathy-utils.h"
 #include "empathy-enum-types.h"
 
 #define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyMessage)
