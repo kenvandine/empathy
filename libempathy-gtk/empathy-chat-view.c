@@ -113,7 +113,7 @@ static gboolean chat_view_url_event_cb               (GtkTextTag               *
 						      GObject                  *object,
 						      GdkEvent                 *event,
 						      GtkTextIter              *iter,
-						      GtkTextBuffer            *buffer);
+						      EmpathyChatView          *view);
 static void     chat_view_open_address_cb            (GtkMenuItem              *menuitem,
 						      const gchar              *url);
 static void     chat_view_copy_address_cb            (GtkMenuItem              *menuitem,
@@ -289,7 +289,7 @@ chat_view_setup_tags (EmpathyChatView *view)
 	g_signal_connect (tag,
 			  "event",
 			  G_CALLBACK (chat_view_url_event_cb),
-			  priv->buffer);
+			  view);
 
 	g_signal_connect (view,
 			  "motion-notify-event",
@@ -497,17 +497,20 @@ chat_view_event_cb (EmpathyChatView *view,
 }
 
 static gboolean
-chat_view_url_event_cb (GtkTextTag    *tag,
-			GObject       *object,
-			GdkEvent      *event,
-			GtkTextIter   *iter,
-			GtkTextBuffer *buffer)
+chat_view_url_event_cb (GtkTextTag      *tag,
+			GObject         *object,
+			GdkEvent        *event,
+			GtkTextIter     *iter,
+			EmpathyChatView *view)
 {
-	GtkTextIter  start, end;
-	gchar       *str;
+	GtkTextIter          start, end;
+	gchar               *str;
+	EmpathyChatViewPriv *priv;
+
+	priv = GET_PRIV (view);
 
 	/* If the link is being selected, don't do anything. */
-	gtk_text_buffer_get_selection_bounds (buffer, &start, &end);
+	gtk_text_buffer_get_selection_bounds (priv->buffer, &start, &end);
 	if (gtk_text_iter_get_offset (&start) != gtk_text_iter_get_offset (&end)) {
 		return FALSE;
 	}
@@ -517,12 +520,12 @@ chat_view_url_event_cb (GtkTextTag    *tag,
 
 		if (gtk_text_iter_backward_to_tag_toggle (&start, tag) &&
 		    gtk_text_iter_forward_to_tag_toggle (&end, tag)) {
-			str = gtk_text_buffer_get_text (buffer,
+			str = gtk_text_buffer_get_text (priv->buffer,
 							&start,
 							&end,
 							FALSE);
 
-			empathy_url_show (str);
+			empathy_url_show (GTK_WIDGET (view), str);
 			g_free (str);
 		}
 	}
@@ -533,7 +536,7 @@ chat_view_url_event_cb (GtkTextTag    *tag,
 static void
 chat_view_open_address_cb (GtkMenuItem *menuitem, const gchar *url)
 {
-	empathy_url_show (url);
+	empathy_url_show (GTK_WIDGET (menuitem), url);
 }
 
 static void

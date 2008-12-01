@@ -1332,7 +1332,8 @@ fixup_url (const gchar *url)
 }
 
 void
-empathy_url_show (const char *url)
+empathy_url_show (GtkWidget *parent,
+		  const char *url)
 {
 	gchar  *real_url;
 	GError *error = NULL;
@@ -1342,10 +1343,9 @@ empathy_url_show (const char *url)
 		url = real_url;
 	}
 
-	/* FIXME: this does not work for multihead, we should use
-	 * GdkAppLaunchContext or gtk_show_url, see bug #514396.
-	 */
-	g_app_info_launch_default_for_uri (url, NULL, &error);
+	gtk_show_uri (gtk_widget_get_screen (parent), url,
+		      gtk_get_current_event_time (), &error);
+
 	if (error) {
 		GtkWidget *dialog;
 
@@ -1371,7 +1371,7 @@ link_button_hook (GtkLinkButton *button,
 		  const gchar *link,
 		  gpointer user_data)
 {
-	empathy_url_show (link);
+	empathy_url_show (GTK_WIDGET (button), link);
 }
 
 GtkWidget *

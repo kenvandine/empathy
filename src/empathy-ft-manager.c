@@ -556,7 +556,7 @@ ft_manager_open (EmpathyFTManager *ft_manager)
 
   uri = g_object_get_data (G_OBJECT (tp_file), "uri");
   DEBUG ("Opening URI: %s", uri);
-  empathy_url_show (uri);
+  empathy_url_show (GTK_WIDGET (ft_manager->priv->window), uri);
   g_object_unref (tp_file);
 }
 

@@ -102,7 +102,8 @@ void        empathy_window_present                      (GtkWindow        *windo
 void        empathy_window_iconify                      (GtkWindow        *window,
 							 GtkStatusIcon    *status_icon);
 GtkWindow * empathy_get_toplevel_window                 (GtkWidget        *widget);
-void        empathy_url_show                            (const char       *url);
+void        empathy_url_show                            (GtkWidget        *parent,
+							 const char       *url);
 void        empathy_toggle_button_set_state_quietly     (GtkWidget        *widget,
 							 GCallback         callback,
 							 gpointer          user_data,

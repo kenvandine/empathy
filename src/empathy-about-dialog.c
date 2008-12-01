@@ -99,7 +99,7 @@ about_dialog_activate_link_cb (GtkAboutDialog *about,
 			       const gchar    *link,
 			       gpointer        data)
 {
-	empathy_url_show (link);
+	empathy_url_show (GTK_WIDGET (about), link);
 }
 
 void

@@ -1812,6 +1812,7 @@
   (c-name "empathy_url_show")
   (return-type "none")
   (parameters
+    '("GtkWidget*" "parent")
     '("const-char*" "url")
   )
 )
