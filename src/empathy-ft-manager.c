@@ -33,7 +33,6 @@
 
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
-#include <libgnomeui/libgnomeui.h>
 
 #define DEBUG_FLAG EMPATHY_DEBUG_FT
 #include <libempathy/empathy-debug.h>
@@ -485,22 +484,18 @@ ft_manager_add_tp_file_to_list (EmpathyFTManager *ft_manager,
   GtkTreeIter iter;
   GtkTreeSelection *selection;
   GtkTreePath *path;
-  GtkIconTheme *theme;
-  gchar *icon_name;
+  GIcon *icon;
   const gchar *content_type;
 
-  /* Get the icon name from the mime-type of the file.
-   * FIXME: Use g_content_type_get_icon instead of gnome_icon_lookup and drop
-   * libgnomeui. We need the "gicon" property on GtkCellRendererPixbuf which is
-   * in GTK+ 2.14 */
+  /* Get the icon name from the mime-type of the file. */
   content_type = empathy_tp_file_get_content_type (tp_file);
-  theme = gtk_icon_theme_get_default ();
-  icon_name = gnome_icon_lookup (theme, NULL, NULL, NULL, NULL,
-      content_type, GNOME_ICON_LOOKUP_FLAGS_NONE, NULL);
+  icon = g_content_type_get_icon (content_type);
 
   /* Append the ft in the store */
   gtk_list_store_insert_with_values (GTK_LIST_STORE (ft_manager->priv->model),
-      &iter, G_MAXINT, COL_FT_OBJECT, tp_file, COL_ICON, icon_name, -1);
+      &iter, G_MAXINT, COL_FT_OBJECT, tp_file, COL_ICON, icon, -1);
+
+  g_object_unref (icon);
 
   /* Insert the new row_ref in the hash table  */
   path = gtk_tree_model_get_path (GTK_TREE_MODEL (ft_manager->priv->model),
@@ -524,7 +519,6 @@ ft_manager_add_tp_file_to_list (EmpathyFTManager *ft_manager,
       G_CALLBACK (ft_manager_transferred_bytes_changed_cb), ft_manager);
 
   gtk_window_present (GTK_WINDOW (ft_manager->priv->window));
-  g_free (icon_name);
 }
 
 static void
@@ -687,7 +681,7 @@ ft_manager_build_ui (EmpathyFTManager *ft_manager)
   /* Setup the model */
   liststore = gtk_list_store_new (5,
       G_TYPE_INT,     /* percent */
-      G_TYPE_STRING,  /* icon */
+      G_TYPE_ICON,    /* icon */
       G_TYPE_STRING,  /* message */
       G_TYPE_STRING,  /* remaining */
       G_TYPE_OBJECT); /* ft_file */
@@ -721,7 +715,7 @@ ft_manager_build_ui (EmpathyFTManager *ft_manager)
       "stock-size", GTK_ICON_SIZE_DND, NULL);
   gtk_tree_view_column_pack_start (column, renderer, FALSE);
   gtk_tree_view_column_set_attributes (column, renderer,
-      "icon-name", COL_ICON, NULL);
+      "gicon", COL_ICON, NULL);
 
   renderer = gtk_cell_renderer_text_new ();
   g_object_set (renderer, "ellipsize", PANGO_ELLIPSIZE_END, NULL);
