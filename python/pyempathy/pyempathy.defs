@@ -211,20 +211,6 @@
   )
 )
 
-(define-enum RegExType
-  (in-module "Empathy")
-  (c-name "EmpathyRegExType")
-  (gtype-id "EMPATHY_TYPE_REG_EX_TYPE")
-  (values
-    '("as-is" "EMPATHY_REGEX_AS_IS")
-    '("browser" "EMPATHY_REGEX_BROWSER")
-    '("apt" "EMPATHY_REGEX_APT")
-    '("email" "EMPATHY_REGEX_EMAIL")
-    '("other" "EMPATHY_REGEX_OTHER")
-    '("all" "EMPATHY_REGEX_ALL")
-  )
-)
-
 
 ;; From empathy-chatroom.h
 
@@ -2276,17 +2262,6 @@
     '("const-gchar*" "str")
     '("gint" "start")
     '("gint" "end")
-  )
-)
-
-(define-function regex_match
-  (c-name "empathy_regex_match")
-  (return-type "gint")
-  (parameters
-    '("EmpathyRegExType" "type")
-    '("const-gchar*" "msg")
-    '("GArray*" "start")
-    '("GArray*" "end")
   )
 )
 
