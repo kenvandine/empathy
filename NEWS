@@ -1,3 +1,49 @@
+NEW in 2.25.2
+==============
+ - Use GRegex instead of custom code and use a new regex to detect URIs (Xavier Claessens).
+ - Replace Q_() with C_() for translation context. (Xavier Claessens).
+ - Add file transfer support (Xavier Claessens, Guillaume Desmottes, Jonny Lamb, Marco Barisione).
+ - Use markup for chat-window tooltips (hasselmm).
+ - Convert avatar to fit the resolution and size requirements (Xavier Claessens, Will Thompson).
+
+Bugs fixed:
+ - Fixed #554938, Misspelled word in docs, help/C/empathy.xml:114 (fpeters)
+ - Fixed #496100, Invites to Chat Rooms unimplemented (Guillaume Desmottes)
+ - Fixed #541060, import accounts from Pidgin when first run (Xavier Claessens, Jonny Lamb)
+ - Fixed #542176, EmpathyChatroomManager doesn't contain active chat rooms (Guillaume Desmottes)
+ - Fixed #544029, empathy's configure.ac doesn't detect python 2.6 (fpeters)
+ - Fixed #553066, Some strings are not translatable in megaphone-applet (kelemeng)
+ - Fixed #554284, Bad email link (fpeters)
+ - Fixed #558370, empathy do not link on os x 10.5 (Michael Scherer)
+ - Fixed #560387, Crash when joining a chatroom (Guillaume Desmottes)
+ - Fixed #560611, Cannot distinguish IRC chats: They all have the label "Conversation". (Xavier Claessens)
+ - Fixed #560622, Show account name in conversation label. (hasselmm)
+ - Fixed #562071, Empathy logview crashes if no accout exitsts. (Xavier Claessens)
+ - Fixed #562588, Bugfix for the compile time libempathy/empathy-dispatcher.c (Stephane Wirtel)
+
+Translations:
+ - Updated Turkish translation  (Baris Cicek).
+ - Updated es translation  (Jorge Gonzalez).
+ - Updated ps translation  (Zabeeh Khan).
+ - Updated German translation. (Hendrik Richter).
+ - Updated Lithuanian translation  (Gintautas Miliauskas).
+ - Updated ku translation (eronahi).
+ - Added Russian translation (Nikita Belobrov, aprokoudine).
+ - Updated Greek translation  (Nick Agianniotis).
+ - Updated th translation  (Theppitak Karoonboonyanan).
+ - Updated el translation (frolix68).
+ - Updated Danish translation  (Kenneth Nielsen).
+ - Updated sv translation  (Daniel Nylander).
+ - Updated cs translation (Martin Picek and Lucas Lommer).
+ - Updated Hungarian translation (kelemeng).
+ - Updated Galician Translation. (icq).
+ - Updated Finnish translation (ituohela).
+ - Updated Brazilian Portuguese translation. (ogmaciel).
+ - Updated Bulgarian translation (Alexander Shopov).
+ - Updated zh_CN translation. (fwang, zyang).
+ - Updated Arabic Translation (Anas Afif Emad).
+ - Updated sr translation (grakic).
+
 NEW in 2.23.92
 ==============
 
