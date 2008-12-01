@@ -37,30 +37,15 @@
 
 #include "empathy-contact.h"
 
-G_BEGIN_DECLS
-
 #define EMPATHY_GET_PRIV(obj,type) ((type##Priv*) ((type*)obj)->priv)
 #define G_STR_EMPTY(x) ((x) == NULL || (x)[0] == '\0')
 
-typedef enum {
-	EMPATHY_REGEX_AS_IS,
-	EMPATHY_REGEX_BROWSER,
-	EMPATHY_REGEX_APT,
-	EMPATHY_REGEX_EMAIL,
-	EMPATHY_REGEX_OTHER,
-	EMPATHY_REGEX_ALL,
-} EmpathyRegExType;
+G_BEGIN_DECLS
 
-/* Regular expressions */
+/* Strings */
 gchar *      empathy_substring                      (const gchar     *str,
 						    gint             start,
 						    gint             end);
-gint         empathy_regex_match                    (EmpathyRegExType  type,
-						    const gchar     *msg,
-						    GArray          *start,
-						    GArray          *end);
-
-/* Strings */
 gint         empathy_strcasecmp                     (const gchar     *s1,
 						    const gchar     *s2);
 gint         empathy_strncasecmp                    (const gchar     *s1,

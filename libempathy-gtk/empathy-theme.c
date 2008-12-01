@@ -34,7 +34,17 @@
 /* Number of seconds between timestamps when using normal mode, 5 minutes. */
 #define TIMESTAMP_INTERVAL 300
 
+#define SHEMES "(https?|ftps?|nntp|news|javascript|about|ghelp|apt|telnet|"\
+	       "file|webcal|mailto)"
+#define SEPARATOR "([^,;\?><()\\ ])"
+#define BODY "([^\\ ]*(\\\\ )?)+"
+#define URI_REGEX "("SHEMES"://"BODY SEPARATOR")" \
+		  "|((mailto:)?"BODY"@"BODY"."BODY SEPARATOR")"\
+		  "|((www|ftp)."BODY SEPARATOR")"
+static GRegex *uri_regex = NULL;
+
 #define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyTheme)
+
 typedef struct {
 	EmpathySmileyManager *smiley_manager;
 	gboolean show_avatars;
@@ -254,8 +264,11 @@ empathy_theme_append_text (EmpathyTheme        *theme,
 	GtkTextIter      start_iter, end_iter;
 	GtkTextMark     *mark;
 	GtkTextIter      iter;
-	gint             num_matches, i;
-	GArray          *start, *end;
+	GMatchInfo      *match_info;
+	gboolean         match;
+	gint             last = 0;
+	gint             s = 0, e = 0;
+	gchar           *tmp;
 
 	priv = GET_PRIV (theme);
 	buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
@@ -263,57 +276,17 @@ empathy_theme_append_text (EmpathyTheme        *theme,
 	gtk_text_buffer_get_end_iter (buffer, &start_iter);
 	mark = gtk_text_buffer_create_mark (buffer, NULL, &start_iter, TRUE);
 
-	start = g_array_new (FALSE, FALSE, sizeof (gint));
-	end = g_array_new (FALSE, FALSE, sizeof (gint));
+	if (!uri_regex) {
+		uri_regex = g_regex_new (URI_REGEX, 0, 0, NULL);
+	}
 
-	num_matches = empathy_regex_match (EMPATHY_REGEX_ALL, body, start, end);
+	for (match = g_regex_match (uri_regex, body, 0, &match_info); match;
+	     match = g_match_info_next (match_info, NULL)) {
+		if (!g_match_info_fetch_pos (match_info, 0, &s, &e))
+			continue;
 
-	if (num_matches == 0) {
-		gtk_text_buffer_get_end_iter (buffer, &iter);
-		theme_insert_text_with_emoticons (buffer, &iter, body, priv->smiley_manager);
-	} else {
-		gint   last = 0;
-		gint   s = 0, e = 0;
-		gchar *tmp;
-
-		for (i = 0; i < num_matches; i++) {
-			s = g_array_index (start, gint, i);
-			e = g_array_index (end, gint, i);
-
-			if (s > last) {
-				tmp = empathy_substring (body, last, s);
-
-				gtk_text_buffer_get_end_iter (buffer, &iter);
-				theme_insert_text_with_emoticons (buffer,
-								  &iter,
-								  tmp,
-								  priv->smiley_manager);
-				g_free (tmp);
-			}
-
-			tmp = empathy_substring (body, s, e);
-
-			gtk_text_buffer_get_end_iter (buffer, &iter);
-			if (!link_tag) {
-				gtk_text_buffer_insert (buffer, &iter,
-							tmp, -1);
-			} {
-				gtk_text_buffer_insert_with_tags_by_name (buffer,
-									  &iter,
-									  tmp,
-									  -1,
-									  link_tag,
-									  "link",
-									  NULL);
-			}
-
-			g_free (tmp);
-
-			last = e;
-		}
-
-		if (e < strlen (body)) {
-			tmp = empathy_substring (body, e, strlen (body));
+		if (s > last) {
+			tmp = empathy_substring (body, last, s);
 
 			gtk_text_buffer_get_end_iter (buffer, &iter);
 			theme_insert_text_with_emoticons (buffer,
@@ -322,10 +295,35 @@ empathy_theme_append_text (EmpathyTheme        *theme,
 							  priv->smiley_manager);
 			g_free (tmp);
 		}
-	}
 
-	g_array_free (start, TRUE);
-	g_array_free (end, TRUE);
+		tmp = empathy_substring (body, s, e);
+
+		gtk_text_buffer_get_end_iter (buffer, &iter);
+		if (!link_tag) {
+			gtk_text_buffer_insert (buffer, &iter,
+						tmp, -1);
+		} else {
+			gtk_text_buffer_insert_with_tags_by_name (buffer,
+								  &iter,
+								  tmp,
+								  -1,
+								  link_tag,
+								  "link",
+								  NULL);
+		}
+
+		g_free (tmp);
+		last = e;
+	}
+	g_match_info_free (match_info);
+
+	if (last < strlen (body)) {
+		gtk_text_buffer_get_end_iter (buffer, &iter);
+		theme_insert_text_with_emoticons (buffer,
+						  &iter,
+						  body + last,
+						  priv->smiley_manager);
+	}
 
 	gtk_text_buffer_get_end_iter (buffer, &iter);
 	gtk_text_buffer_insert (buffer, &iter, "\n", 1);
