@@ -46,6 +46,7 @@ glade_DATA = 					\
 	empathy-chatrooms-window.glade		\
 	empathy-chat-window.glade		\
 	empathy-ft-manager.glade		\
+	empathy-import-dialog.glade		\
 	empathy-main-window.glade		\
 	empathy-new-chatroom-dialog.glade	\
 	empathy-preferences.glade		\
