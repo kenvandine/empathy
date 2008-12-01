@@ -6,6 +6,10 @@ include $(top_srcdir)/rules/check.mak
 
 SUPPRESSIONS=valgrind.supp dlopen.supp
 
+EXTRA_DIST = 		\
+	test.manager	\
+	test.profile
+
 AM_CPPFLAGS =						\
 	-I$(top_srcdir)                          	\
 	$(EMPATHY_CFLAGS)				\
