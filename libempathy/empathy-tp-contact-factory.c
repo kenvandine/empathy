@@ -122,6 +122,17 @@ tp_contact_factory_set_aliases_cb (TpConnection *connection,
 }
 
 static void
+tp_contact_factory_set_location_cb (TpProxy *proxy,
+				    const GError *error,
+				    gpointer user_data,
+				    GObject *weak_object)
+{
+	if (error) {
+		DEBUG ("Error setting location: %s", error->message);
+	}
+}
+
+static void
 tp_contact_factory_set_avatar_cb (TpConnection *connection,
 				  const gchar  *token,
 				  const GError *error,
@@ -407,6 +418,20 @@ tp_contact_factory_capabilities_changed_cb (TpConnection    *connection,
 							generic,
 							specific);
 	}
+}
+
+static void
+tp_contact_factory_location_updated_cb (TpProxy      *proxy,
+					guint         handle,
+					GHashTable   *location,
+					gpointer      user_data,
+					GObject      *weak_object)
+{
+	EmpathyTpContactFactory *tp_factory = EMPATHY_TP_CONTACT_FACTORY (weak_object);
+	EmpathyContact          *contact;
+
+	contact = tp_contact_factory_find_by_handle (tp_factory, handle);
+	empathy_contact_set_location (contact, location);
 }
 
 static void
@@ -943,6 +968,24 @@ empathy_tp_contact_factory_set_avatar (EmpathyTpContactFactory *tp_factory,
 	}
 }
 
+void
+empathy_tp_contact_factory_set_location (EmpathyTpContactFactory *tp_factory,
+					 GHashTable              *location)
+{
+	EmpathyTpContactFactoryPriv *priv = GET_PRIV (tp_factory);
+
+	g_return_if_fail (EMPATHY_IS_TP_CONTACT_FACTORY (tp_factory));
+
+	DEBUG ("Setting location");
+
+	emp_cli_connection_interface_location_call_set_location (TP_PROXY (priv->connection),
+								 -1,
+								 location,
+								 tp_contact_factory_set_location_cb,
+								 NULL, NULL,
+								 G_OBJECT (tp_factory));
+}
+
 static void
 tp_contact_factory_get_property (GObject    *object,
 				 guint       param_id,
@@ -1047,7 +1090,11 @@ tp_contact_factory_constructor (GType                  type,
 										  NULL, NULL,
 										  tp_factory,
 										  NULL);
-
+	emp_cli_connection_interface_location_connect_to_location_updated (TP_PROXY (priv->connection),
+									   tp_contact_factory_location_updated_cb,
+									   NULL, NULL,
+									   G_OBJECT (tp_factory),
+									   NULL);
 
 	/* FIXME: This should be moved to TpConnection */
 	tp_cli_connection_interface_avatars_call_get_avatar_requirements (priv->connection,

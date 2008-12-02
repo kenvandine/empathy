@@ -108,7 +108,8 @@ void                     empathy_tp_contact_factory_set_avatar       (EmpathyTpC
 								      const gchar             *data,
 								      gsize                    size,
 								      const gchar             *mime_type);
-
+void                     empathy_tp_contact_factory_set_location     (EmpathyTpContactFactory *tp_factory,
+								      GHashTable              *location);
 G_END_DECLS
 
 #endif /* __EMPATHY_TP_CONTACT_FACTORY_H__ */
