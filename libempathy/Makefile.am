@@ -83,6 +83,7 @@ libempathy_headers =				\
 	empathy-irc-network.h			\
 	empathy-irc-network-manager.h		\
 	empathy-irc-server.h			\
+	empathy-location.h			\
 	empathy-log-manager.h			\
 	empathy-log-store.h			\
 	empathy-log-store-empathy.h		\

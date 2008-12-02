@@ -119,6 +119,10 @@ void empathy_avatar_unref (EmpathyAvatar *avatar);
 gboolean empathy_avatar_save_to_file (EmpathyAvatar *avatar,
     const gchar *filename, GError **error);
 
+GHashTable * empathy_contact_get_location (EmpathyContact *contact);
+void empathy_contact_set_location (EmpathyContact *contact,
+  GHashTable *location);
+
 G_END_DECLS
 
 #endif /* __EMPATHY_CONTACT_H__ */

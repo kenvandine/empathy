@@ -50,6 +50,7 @@ typedef struct {
   EmpathyCapabilities capabilities;
   gboolean is_user;
   guint hash;
+  GHashTable *location;
 } EmpathyContactPriv;
 
 static void contact_finalize (GObject *object);
@@ -73,6 +74,7 @@ enum
   PROP_HANDLE,
   PROP_CAPABILITIES,
   PROP_IS_USER,
+  PROP_LOCATION
 };
 
 enum {
@@ -225,6 +227,15 @@ empathy_contact_class_init (EmpathyContactClass *class)
         FALSE,
         G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
+
+  g_object_class_install_property (object_class,
+      PROP_LOCATION,
+      g_param_spec_boxed ("location",
+        "Contact location",
+        "Physical location of the contact",
+        G_TYPE_HASH_TABLE,
+        G_PARAM_READABLE));
+
   signals[PRESENCE_CHANGED] =
     g_signal_new ("presence-changed",
                   G_TYPE_FROM_CLASS (class),
@@ -246,6 +257,10 @@ empathy_contact_init (EmpathyContact *contact)
     EMPATHY_TYPE_CONTACT, EmpathyContactPriv);
 
   contact->priv = priv;
+
+  priv->location = g_hash_table_new_full (g_str_hash, g_str_equal,
+                       (GDestroyNotify) g_free,
+                       (GDestroyNotify) tp_g_value_slice_free);
 }
 
 static void
@@ -1001,3 +1016,48 @@ empathy_avatar_save_to_file (EmpathyAvatar *self,
   return g_file_set_contents (filename, self->data, self->len, error);
 }
 
+/**
+ * empathy_contact_get_location:
+ * @contact: the contact
+ *
+ * Returns the user's location if available.  The keys are defined in
+ * empathy-location.h. If the contact doesn't have location
+ * information, the GHashTable will be empthy.
+ *
+ * Returns: a #GHashTable of location values
+ */
+GHashTable *
+empathy_contact_get_location (EmpathyContact *contact)
+{
+  EmpathyContactPriv *priv;
+
+  g_return_val_if_fail (EMPATHY_CONTACT (contact), NULL);
+
+  priv = GET_PRIV (contact);
+
+  return priv->location;
+}
+
+/**
+ * empathy_contact_set_location:
+ * @contact: the contact
+ * @location: the location
+ *
+ * Sets the user's location based on the location #GHashTable passed.
+ */
+void 
+empathy_contact_set_location (EmpathyContact *contact,
+                              GHashTable *location)
+{
+  EmpathyContactPriv *priv;
+
+  g_return_if_fail (EMPATHY_CONTACT (contact));
+  g_return_if_fail (location != NULL);
+
+  priv = GET_PRIV (contact);
+
+  g_hash_table_unref (priv->location);
+
+  priv->location = g_hash_table_ref (location);
+  g_object_notify (G_OBJECT (contact), "location");
+}
