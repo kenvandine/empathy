@@ -36,8 +36,10 @@ ENCHANT_REQUIRED=1.2.0
 ISO_CODES_REQUIRED=0.35
 
 # Uncomment that to build without deprecated symbols
-# AC_DEFINE(GTK_DISABLE_DEPRECATED, 1, [Disable deprecated GTK symbols])
 # AC_DEFINE(G_DISABLE_DEPRECATED, 1, [Disable deprecated GLib symbols])
+# AC_DEFINE(GDK_PIXBUF_DISABLE_DEPRECATED, 1, [Disable deprecated GDK pixbuf symbols])
+# AC_DEFINE(GDK_DISABLE_DEPRECATED, 1, [Disable deprecated GDK symbols])
+# AC_DEFINE(GTK_DISABLE_DEPRECATED, 1, [Disable deprecated GTK symbols])
 
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_HEADERS([config.h])
