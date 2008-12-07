@@ -32,8 +32,12 @@
 #include <libmissioncontrol/mission-control.h>
 
 #include <libempathy/empathy-contact-factory.h>
+#include <libempathy/empathy-contact-manager.h>
 #include <libempathy/empathy-dispatcher.h>
 #include <libempathy/empathy-utils.h>
+
+#define DEBUG_FLAG EMPATHY_DEBUG_CONTACT
+#include <libempathy/empathy-debug.h>
 
 #include <libempathy-gtk/empathy-ui-utils.h>
 
@@ -47,7 +51,119 @@ typedef struct {
 	GtkWidget *entry_id;
 	GtkWidget *button_chat;
 	GtkWidget *button_call;
+	EmpathyContactManager *contact_manager;
 } EmpathyNewMessageDialog;
+
+enum {
+	COMPLETION_COL_TEXT,
+	COMPLETION_COL_ID,
+	COMPLETION_COL_NAME,
+} CompletionCol;
+
+static void
+new_message_dialog_account_changed_cb (GtkWidget               *widget,
+				       EmpathyNewMessageDialog *dialog)
+{
+	EmpathyAccountChooser *chooser;
+	McAccount            *account;
+	EmpathyTpContactList *contact_list;
+	GList                *members, *l;
+	GtkListStore         *store;
+	GtkEntryCompletion   *completion;
+	GtkTreeIter           iter;
+	gchar                *tmpstr;
+
+	chooser = EMPATHY_ACCOUNT_CHOOSER (dialog->account_chooser);
+	account = empathy_account_chooser_get_account (chooser);
+	contact_list = empathy_contact_manager_get_list (dialog->contact_manager,
+							 account);
+	members = empathy_contact_list_get_members (EMPATHY_CONTACT_LIST (contact_list));
+	completion = gtk_entry_get_completion (GTK_ENTRY (dialog->entry_id));
+	store = GTK_LIST_STORE (gtk_entry_completion_get_model (completion));
+	gtk_list_store_clear (store);
+
+	for (l = members; l; l = l->next) {
+		EmpathyContact *contact = l->data;
+
+		if (!empathy_contact_is_online (contact)) {
+			continue;
+		}
+
+		DEBUG ("Adding contact ID %s, Name %s",
+		       empathy_contact_get_id (contact),
+		       empathy_contact_get_name (contact));
+
+		tmpstr = g_strdup_printf ("%s (%s)",
+					  empathy_contact_get_name (contact),
+					  empathy_contact_get_id (contact));
+
+		gtk_list_store_insert_with_values (store, &iter, -1,
+			COMPLETION_COL_TEXT, tmpstr,
+			COMPLETION_COL_ID, empathy_contact_get_id (contact),
+			COMPLETION_COL_NAME, empathy_contact_get_name (contact),
+			-1);
+
+		g_free (tmpstr);
+	}
+
+	g_object_unref (account);
+}
+
+static gboolean
+new_message_dialog_match_selected_cb (GtkEntryCompletion *widget,
+				      GtkTreeModel       *model,
+				      GtkTreeIter        *iter,
+				      EmpathyNewMessageDialog *dialog)
+{
+	gchar *id;
+
+	if (!iter || !model) {
+		return FALSE;
+	}
+
+	gtk_tree_model_get (model, iter, COMPLETION_COL_ID, &id, -1);
+	gtk_entry_set_text (GTK_ENTRY (dialog->entry_id), id);
+
+	DEBUG ("Got selected match **%s**", id);
+
+	g_free (id);
+
+	return TRUE;
+}
+
+static gboolean
+new_message_dialog_match_func (GtkEntryCompletion *completion,
+			       const gchar        *key,
+			       GtkTreeIter        *iter,
+			       gpointer            user_data)
+{
+	GtkTreeModel *model;
+	gchar        *id;
+	gchar        *name;
+
+	model = gtk_entry_completion_get_model (completion);
+	if (!model || !iter) {
+		return FALSE;
+	}
+
+	gtk_tree_model_get (model, iter, COMPLETION_COL_NAME, &name, -1);
+	if (strstr (name, key)) {
+		DEBUG ("Key %s is matching name **%s**", key, name);
+		g_free (name);
+		return TRUE;
+	}
+	g_free (name);
+
+	gtk_tree_model_get (model, iter, COMPLETION_COL_ID, &id, -1);
+	if (strstr (id, key)) {
+		DEBUG ("Key %s is matching ID **%s**", key, id);
+		g_free (id);
+		return TRUE;
+	}
+	g_free (id);
+
+	return FALSE;
+}
 
 static void
 new_message_dialog_response_cb (GtkWidget               *widget,
@@ -69,7 +185,7 @@ new_message_dialog_response_cb (GtkWidget               *widget,
 
 	if (response == 1) {
 		empathy_dispatcher_call_with_contact_id (account, id);
-	}	
+	}
 	else if (response == 2) {
 		empathy_dispatcher_chat_with_contact_id (account, id);
 	}
@@ -95,7 +211,8 @@ new_message_change_state_button_cb  (GtkEditable             *editable,
 static void
 new_message_dialog_destroy_cb (GtkWidget               *widget,
 			       EmpathyNewMessageDialog *dialog)
-{	
+{
+	g_object_unref (dialog->contact_manager);
 	g_free (dialog);
 }
 
@@ -105,6 +222,8 @@ empathy_new_message_dialog_show (GtkWindow *parent)
 	static EmpathyNewMessageDialog *dialog = NULL;
 	GladeXML                       *glade;
 	gchar                          *filename;
+	GtkEntryCompletion             *completion;
+	GtkListStore                   *model;
 
 	if (dialog) {
 		gtk_window_present (GTK_WINDOW (dialog->dialog));
@@ -112,6 +231,9 @@ empathy_new_message_dialog_show (GtkWindow *parent)
 	}
 
 	dialog = g_new0 (EmpathyNewMessageDialog, 1);
+
+	/* create a contact manager */
+	dialog->contact_manager = empathy_contact_manager_new ();
 
 	filename = empathy_file_lookup ("empathy-new-message-dialog.glade",
 					"libempathy-gtk");
@@ -126,8 +248,22 @@ empathy_new_message_dialog_show (GtkWindow *parent)
 				        NULL);
 	g_free (filename);
 
-	empathy_glade_connect (glade,
-			       dialog,
+	/* text completion */
+	completion = gtk_entry_completion_new ();
+	model = gtk_list_store_new (3, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
+	gtk_entry_completion_set_text_column (completion, COMPLETION_COL_TEXT);
+	gtk_entry_completion_set_match_func (completion,
+					     new_message_dialog_match_func,
+					     NULL, NULL);
+	gtk_entry_completion_set_model (completion, GTK_TREE_MODEL (model));
+	gtk_entry_set_completion (GTK_ENTRY (dialog->entry_id), completion);
+	g_signal_connect (completion, "match-selected",
+			  G_CALLBACK (new_message_dialog_match_selected_cb),
+			  dialog);
+	g_object_unref(completion);
+	g_object_unref(model);
+
+	empathy_glade_connect (glade, dialog,
 			       "new_message_dialog", "destroy", new_message_dialog_destroy_cb,
 			       "new_message_dialog", "response", new_message_dialog_response_cb,
 			       "entry_id", "changed", new_message_change_state_button_cb,
@@ -146,6 +282,11 @@ empathy_new_message_dialog_show (GtkWindow *parent)
 					    empathy_account_chooser_filter_is_connected,
 					    NULL);
 	gtk_widget_show (dialog->account_chooser);
+
+	new_message_dialog_account_changed_cb (dialog->account_chooser, dialog);
+	g_signal_connect (dialog->account_chooser, "changed", 
+			  G_CALLBACK (new_message_dialog_account_changed_cb),
+			  dialog);
 
 	if (parent) {
 		gtk_window_set_transient_for (GTK_WINDOW (dialog->dialog),
