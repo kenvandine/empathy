@@ -1,6 +1,7 @@
 *.omf
 *.mo
 
+ca/*.xml
 cs/*.xml
 de/*.xml
 es/*.xml
