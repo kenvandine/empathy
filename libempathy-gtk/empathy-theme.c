@@ -39,7 +39,7 @@
 #define SEPARATOR "([^,;\?><()\\ ])"
 #define BODY "([^\\ ]*(\\\\ )?)+"
 #define URI_REGEX "("SHEMES"://"BODY SEPARATOR")" \
-		  "|((mailto:)?"BODY"@"BODY"."BODY SEPARATOR")"\
+		  "|((mailto:)?"BODY"@"BODY"\\."BODY SEPARATOR")"\
 		  "|((www|ftp)."BODY SEPARATOR")"
 static GRegex *uri_regex = NULL;
 
