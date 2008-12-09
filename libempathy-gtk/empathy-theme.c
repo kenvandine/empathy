@@ -35,12 +35,12 @@
 #define TIMESTAMP_INTERVAL 300
 
 #define SCHEMES "(https?|ftps?|nntp|news|javascript|about|ghelp|apt|telnet|"\
-	       "file|webcal|mailto)"
-#define SEPARATOR "([^,;\?><()\\ ])"
-#define BODY "([^\\ ]*(\\\\ )?)+"
+		"file|webcal|mailto)"
+#define SEPARATOR "([^,;\?><()\\ \"\\.])"
+#define BODY "([^\\ ]+)"
 #define URI_REGEX "("SCHEMES"://"BODY SEPARATOR")" \
 		  "|((mailto:)?"BODY"@"BODY"\\."BODY SEPARATOR")"\
-		  "|((www|ftp)."BODY SEPARATOR")"
+		  "|((www|ftp)\\."BODY SEPARATOR")"
 static GRegex *uri_regex = NULL;
 
 #define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyTheme)
