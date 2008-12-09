@@ -34,11 +34,11 @@
 /* Number of seconds between timestamps when using normal mode, 5 minutes. */
 #define TIMESTAMP_INTERVAL 300
 
-#define SHEMES "(https?|ftps?|nntp|news|javascript|about|ghelp|apt|telnet|"\
+#define SCHEMES "(https?|ftps?|nntp|news|javascript|about|ghelp|apt|telnet|"\
 	       "file|webcal|mailto)"
 #define SEPARATOR "([^,;\?><()\\ ])"
 #define BODY "([^\\ ]*(\\\\ )?)+"
-#define URI_REGEX "("SHEMES"://"BODY SEPARATOR")" \
+#define URI_REGEX "("SCHEMES"://"BODY SEPARATOR")" \
 		  "|((mailto:)?"BODY"@"BODY"\\."BODY SEPARATOR")"\
 		  "|((www|ftp)."BODY SEPARATOR")"
 static GRegex *uri_regex = NULL;
