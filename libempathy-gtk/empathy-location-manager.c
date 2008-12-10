@@ -31,11 +31,14 @@
 #include <geoclue/geoclue-master.h>
 #endif
 
+#include <extensions/extensions.h>
+
 #include "empathy-location-manager.h"
 #include "empathy-conf.h"
 
 #include "libempathy/empathy-enum-types.h"
 #include "libempathy/empathy-location.h"
+#include "libempathy/empathy-contact-factory.h"
 #include "libempathy/empathy-utils.h"
 
 #define DEBUG_FLAG EMPATHY_DEBUG_LOCATION
@@ -44,7 +47,9 @@
 #define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyLocationManager)
 typedef struct {
     gboolean is_setup;
-    EmpathyContact *contact;
+    MissionControl *mc;
+    GHashTable *location;
+    gpointer token;
 #if HAVE_GEOCLUE
     GeoclueResourceFlags resources;
     GeoclueMasterClient *gc_client;
@@ -94,6 +99,60 @@ empathy_location_manager_class_init (EmpathyLocationManagerClass *class)
   g_type_class_add_private (object_class, sizeof (EmpathyLocationManagerPriv));
 }
 
+static void
+publish_location (EmpathyLocationManager *location_manager, McAccount *account)
+{
+  EmpathyLocationManagerPriv *priv;
+  guint connection_status = -1;
+  gboolean can_publish;
+  EmpathyConf *conf = empathy_conf_get ();
+  EmpathyContactFactory *factory = empathy_contact_factory_new ();
+  priv = GET_PRIV (location_manager);
+
+  if (!empathy_conf_get_bool (conf, EMPATHY_PREFS_LOCATION_PUBLISH, &can_publish))
+    return;
+
+  if (!can_publish)
+    return;
+
+  connection_status = mission_control_get_connection_status (priv->mc,
+      account, NULL);
+
+  if (connection_status != TP_CONNECTION_STATUS_CONNECTED)
+    return;
+
+  DEBUG ("Publishing location to account %s", mc_account_get_display_name (account));
+
+  empathy_contact_factory_set_location (factory, account, priv->location);
+}
+
+static void
+publish_location_to_all_accounts (EmpathyLocationManager *location_manager)
+{
+  GList *accounts = NULL, *l;
+
+  accounts = mc_accounts_list_by_enabled (TRUE);
+  for (l = accounts; l; l = l->next)
+    {
+      publish_location (location_manager, l->data);
+    }
+
+  mc_accounts_list_free (accounts);
+}
+
+static void
+account_status_changed_cb (MissionControl *mc,
+                           TpConnectionStatus status,
+                           McPresence presence,
+                           TpConnectionStatusReason reason,
+                           const gchar *unique_name,
+                           gpointer *location_manager)
+{
+  DEBUG ("Account %s changed status to %d", unique_name, status);
+  McAccount *account = mc_account_lookup (unique_name);
+  if (account && status == TP_CONNECTION_STATUS_CONNECTED)
+    publish_location (EMPATHY_LOCATION_MANAGER (location_manager), account);
+}
 
 static void
 empathy_location_manager_init (EmpathyLocationManager *location_manager)
@@ -104,7 +163,11 @@ empathy_location_manager_init (EmpathyLocationManager *location_manager)
 
   location_manager->priv = priv;
   priv->is_setup = FALSE;
+  priv->mc = empathy_mission_control_new ();
+  priv->location = g_hash_table_new_full (g_direct_hash, g_direct_equal, NULL,
+        (GDestroyNotify) tp_g_value_slice_free);
 
+  // Setup settings status callbacks
   conf = empathy_conf_get ();
   empathy_conf_notify_add (conf, EMPATHY_PREFS_LOCATION_PUBLISH, publish_cb,
       location_manager);
@@ -120,6 +183,9 @@ empathy_location_manager_init (EmpathyLocationManager *location_manager)
   resource_cb (conf, EMPATHY_PREFS_LOCATION_RESOURCE_CELL, location_manager);
   resource_cb (conf, EMPATHY_PREFS_LOCATION_RESOURCE_GPS, location_manager);
 
+  // Setup account status callbacks
+  priv->token = empathy_connect_to_account_status_changed (priv->mc,
+      G_CALLBACK (account_status_changed_cb), location_manager, NULL);
 }
 
 
@@ -198,16 +264,17 @@ position_changed_cb (GeocluePosition *position,
   GeoclueAccuracyLevel level;
 
   geoclue_accuracy_get_details (accuracy, &level, NULL, NULL);
-  g_print ("New position (accuracy level %d):\n", level);
+  DEBUG ("New position (accuracy level %d)", level);
+  if (level == GEOCLUE_ACCURACY_LEVEL_NONE)
+    return;
 
   if (fields & GEOCLUE_POSITION_FIELDS_LATITUDE &&
       fields & GEOCLUE_POSITION_FIELDS_LONGITUDE) {
-    g_print ("\t%f, %f\n\n", latitude, longitude);
-    //empathy_location_set_latitude (location, latitude);
-    //empathy_location_set_longitude (location, longitude);
+    DEBUG ("\t%f, %f", latitude, longitude);
 
+    publish_location_to_all_accounts (EMPATHY_LOCATION_MANAGER (user_data));
   } else {
-    g_print ("\nlatitude and longitude not valid.\n");
+    DEBUG ("- latitude and longitude not valid.");
   }
 }
 
@@ -221,9 +288,9 @@ address_changed_cb (GeoclueAddress *address,
 {
   GeoclueAccuracyLevel level;
   geoclue_accuracy_get_details (accuracy, &level, NULL, NULL);
-  g_print ("New address (accuracy level %d):\n", level);
-  //g_hash_table_foreach (details, (GHFunc)set_location_from_address, location);
-  g_print ("\n");
+  DEBUG ("New address (accuracy level %d):\n", level);
+  // XXX todo
+  publish_location_to_all_accounts (EMPATHY_LOCATION_MANAGER (user_data));
 }
 
 
@@ -233,6 +300,9 @@ update_resources (EmpathyLocationManager *location_manager)
   EmpathyLocationManagerPriv *priv;
 
   priv = GET_PRIV (location_manager);
+
+  if (!priv->is_setup)
+    return;
 
   DEBUG ("Updating resources");
 
@@ -294,14 +364,14 @@ publish_cb (EmpathyConf *conf,
 {
   EmpathyLocationManager *manager = EMPATHY_LOCATION_MANAGER (user_data);
   EmpathyLocationManagerPriv *priv;
-  gboolean publish_location;
+  gboolean can_publish;
 
   DEBUG ("Publish Conf changed");
   priv = GET_PRIV (manager);
-  if (!empathy_conf_get_bool (conf, key, &publish_location))
+  if (!empathy_conf_get_bool (conf, key, &can_publish))
     return;
 
-  if (publish_location && !priv->is_setup)
+  if (can_publish && !priv->is_setup)
     setup_geoclue (manager);
 }
 
