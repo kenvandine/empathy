@@ -278,19 +278,43 @@ position_changed_cb (GeocluePosition *position,
   }
 }
 
+static void
+address_foreach_cb (gpointer key,
+                    gpointer value,
+                    gpointer location_manager)
+{
+  if (location_manager == NULL)
+    return;
+
+  EmpathyLocationManagerPriv *priv;
+  priv = GET_PRIV (location_manager);
+
+  GValue *new_value =  tp_g_value_slice_new (G_TYPE_STRING);
+  g_value_set_string (new_value, value);
+
+  g_hash_table_insert (priv->location, g_strdup (key), new_value);
+  DEBUG ("\t - %s: %s", (char*) key, (char*) value);
+}
 
 static void
 address_changed_cb (GeoclueAddress *address,
                     int timestamp,
                     GHashTable *details,
                     GeoclueAccuracy *accuracy,
-                    gpointer user_data)
+                    gpointer location_manager)
 {
   GeoclueAccuracyLevel level;
   geoclue_accuracy_get_details (accuracy, &level, NULL, NULL);
-  DEBUG ("New address (accuracy level %d):\n", level);
-  // XXX todo
-  publish_location_to_all_accounts (EMPATHY_LOCATION_MANAGER (user_data));
+  EmpathyLocationManagerPriv *priv;
+
+  DEBUG ("New address (accuracy level %d):", level);
+
+  priv = GET_PRIV (location_manager);
+  g_hash_table_remove_all (priv->location);
+
+  g_hash_table_foreach (details, address_foreach_cb, (gpointer)location_manager);
+
+  publish_location_to_all_accounts (EMPATHY_LOCATION_MANAGER (location_manager));
 }
 
 
