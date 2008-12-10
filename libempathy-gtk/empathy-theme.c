@@ -36,11 +36,11 @@
 
 #define SCHEMES "(https?|ftps?|nntp|news|javascript|about|ghelp|apt|telnet|"\
 		"file|webcal|mailto)"
-#define SEPARATOR "([^,;\?><()\\ \"\\.])"
 #define BODY "([^\\ ]+)"
-#define URI_REGEX "("SCHEMES"://"BODY SEPARATOR")" \
-		  "|((mailto:)?"BODY"@"BODY"\\."BODY SEPARATOR")"\
-		  "|((www|ftp)\\."BODY SEPARATOR")"
+#define END_BODY "([^\\ ]*[^,;\?><()\\ \"\\.])"
+#define URI_REGEX "("SCHEMES"://"END_BODY")" \
+		  "|((mailto:)?"BODY"@"BODY"\\."END_BODY")"\
+		  "|((www|ftp)\\."END_BODY")"
 static GRegex *uri_regex = NULL;
 
 #define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyTheme)
