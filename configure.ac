@@ -35,11 +35,16 @@ MISSION_CONTROL_REQUIRED=4.61
 ENCHANT_REQUIRED=1.2.0
 ISO_CODES_REQUIRED=0.35
 
-# Uncomment that to build without deprecated symbols
-# AC_DEFINE(G_DISABLE_DEPRECATED, 1, [Disable deprecated GLib symbols])
-# AC_DEFINE(GDK_PIXBUF_DISABLE_DEPRECATED, 1, [Disable deprecated GDK pixbuf symbols])
-# AC_DEFINE(GDK_DISABLE_DEPRECATED, 1, [Disable deprecated GDK symbols])
-# AC_DEFINE(GTK_DISABLE_DEPRECATED, 1, [Disable deprecated GTK symbols])
+# Uncomment that to build with deprecated symbols disabled
+#AC_DEFINE(G_DISABLE_DEPRECATED, [], [Disable deprecated GLib symbols])
+#AC_DEFINE(GDK_PIXBUF_DISABLE_DEPRECATED, [], [Disable deprecated GDK pixbuf symbols])
+#AC_DEFINE(GDK_DISABLE_DEPRECATED, [], [Disable deprecated GDK symbols])
+#AC_DEFINE(GTK_DISABLE_DEPRECATED, [], [Disable deprecated GTK symbols])
+
+# Uncomment that to build with single include disabled
+#AC_DEFINE(G_DISABLE_SINGLE_INCLUDES, [], [Disable single includes for GLib])
+#AC_DEFINE(GDK_PIXBUF_DISABLE_SINGLE_INCLUDES, [], [Disable single includes for GDK pixbuf])
+#AC_DEFINE(GTK_DISABLE_SINGLE_INCLUDES, [], [Disable single includes for GTK])
 
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_HEADERS([config.h])
@@ -146,7 +151,7 @@ if test "x$enable_spell" != "xno"; then
       if $PKG_CONFIG --variable=domains iso-codes | grep 639 > /dev/null && \
          $PKG_CONFIG --variable=domains iso-codes | grep 3166 > /dev/null ; then
             AC_DEFINE_UNQUOTED(ISO_CODES_PREFIX, ["`$PKG_CONFIG --variable=prefix iso-codes`"], [ISO codes prefix])
-            AC_DEFINE(HAVE_ENCHANT, 1, [Define if you have libenchant])
+            AC_DEFINE(HAVE_ENCHANT, [], [Define if you have libenchant])
             result=yes
       else
             result=no
