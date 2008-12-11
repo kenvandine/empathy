@@ -428,8 +428,12 @@ publish_cb (EmpathyConf *conf,
   if (!empathy_conf_get_bool (conf, key, &can_publish))
     return;
 
-  if (can_publish && !priv->is_setup)
-    setup_geoclue (manager);
+  if (can_publish)
+    {
+      if (!priv->is_setup)
+        setup_geoclue (manager);
+      publish_location_to_all_accounts (manager);
+    }
 }
 
 
