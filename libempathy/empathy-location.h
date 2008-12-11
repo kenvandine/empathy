@@ -42,6 +42,7 @@ G_BEGIN_DECLS
 #define EMPATHY_LOCATION_LAT "lat"
 #define EMPATHY_LOCATION_LON "lon"
 #define EMPATHY_LOCATION_ALT "alt"
+#define EMPATHY_LOCATION_ACCURACY "accuracy"
 #define EMPATHY_LOCATION_ACCURACY_LEVEL "accuracy-level"
 #define EMPATHY_LOCATION_ERROR "error"
 #define EMPATHY_LOCATION_VERTICAL_ERROR_M "vertical-error-m"

@@ -259,24 +259,56 @@ position_changed_cb (GeocluePosition *position,
                      double longitude,
                      double altitude,
                      GeoclueAccuracy *accuracy,
-                     gpointer user_data)
+                     gpointer location_manager)
 {
+  EmpathyLocationManagerPriv *priv;
+  priv = GET_PRIV (location_manager);
   GeoclueAccuracyLevel level;
+  GValue *new_value;
 
   geoclue_accuracy_get_details (accuracy, &level, NULL, NULL);
   DEBUG ("New position (accuracy level %d)", level);
   if (level == GEOCLUE_ACCURACY_LEVEL_NONE)
     return;
 
-  if (fields & GEOCLUE_POSITION_FIELDS_LATITUDE &&
-      fields & GEOCLUE_POSITION_FIELDS_LONGITUDE) {
-    DEBUG ("\t%f, %f", latitude, longitude);
+  if (fields & GEOCLUE_POSITION_FIELDS_LONGITUDE)
+    {
+      new_value = tp_g_value_slice_new (G_TYPE_DOUBLE);
+      g_value_set_double (new_value, latitude);
+      g_hash_table_insert (priv->location, EMPATHY_LOCATION_LON, new_value);
+      DEBUG ("\t - Longitude: %f", longitude);
+    }
+  else if (fields & GEOCLUE_POSITION_FIELDS_LATITUDE)
+    {
+      new_value = tp_g_value_slice_new (G_TYPE_DOUBLE);
+      g_value_set_double (new_value, latitude);
+      g_hash_table_insert (priv->location, EMPATHY_LOCATION_LAT, new_value);
+      DEBUG ("\t - Latitude: %f", latitude);
+    }
+  else if (fields & GEOCLUE_POSITION_FIELDS_ALTITUDE)
+    {
+      new_value = tp_g_value_slice_new (G_TYPE_DOUBLE);
+      g_value_set_double (new_value, altitude);
+      g_hash_table_insert (priv->location, EMPATHY_LOCATION_ALT, new_value);
+      DEBUG ("\t - Altitude: %f", altitude);
+    }
 
-    publish_location_to_all_accounts (EMPATHY_LOCATION_MANAGER (user_data));
-  } else {
-    DEBUG ("- latitude and longitude not valid.");
-  }
+  if (level == GEOCLUE_ACCURACY_LEVEL_DETAILED)
+    {
+      gdouble mean, horizontal, vertical;
+
+      geoclue_accuracy_get_details (accuracy, &level, &horizontal, &vertical);
+      mean = (horizontal + vertical) / 2.0;
+
+      new_value = tp_g_value_slice_new (G_TYPE_DOUBLE);
+      g_value_set_double (new_value, mean);
+      g_hash_table_insert (priv->location, EMPATHY_LOCATION_ACCURACY, new_value);
+      DEBUG ("\t - Accuracy: %f", mean);
+    }
+
+  publish_location_to_all_accounts (EMPATHY_LOCATION_MANAGER (location_manager));
 }
+
 
 static void
 address_foreach_cb (gpointer key,
@@ -289,12 +321,13 @@ address_foreach_cb (gpointer key,
   EmpathyLocationManagerPriv *priv;
   priv = GET_PRIV (location_manager);
 
-  GValue *new_value =  tp_g_value_slice_new (G_TYPE_STRING);
+  GValue *new_value = tp_g_value_slice_new (G_TYPE_STRING);
   g_value_set_string (new_value, value);
 
   g_hash_table_insert (priv->location, g_strdup (key), new_value);
   DEBUG ("\t - %s: %s", (char*) key, (char*) value);
 }
+
 
 static void
 address_changed_cb (GeoclueAddress *address,
