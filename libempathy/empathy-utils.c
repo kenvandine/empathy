@@ -52,7 +52,9 @@ empathy_init (void)
 		return;
 
 	/* Setup glib. Threads are required for async GIO. */
-	g_thread_init (NULL);
+	if (!g_thread_supported ()) {
+		g_thread_init (NULL);
+	}
 	g_type_init ();
 
 	/* Setup gettext */
