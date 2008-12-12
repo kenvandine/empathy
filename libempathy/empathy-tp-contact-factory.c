@@ -420,6 +420,15 @@ tp_contact_factory_capabilities_changed_cb (TpConnection    *connection,
 	}
 }
 
+static void 
+update_location_for_each (gpointer key,
+			  gpointer value,
+			  gpointer user_data)
+{
+	GHashTable *location = (GHashTable*) user_data;
+	g_hash_table_insert (location, g_strdup(key), tp_g_value_slice_dup (value));
+}
+
 static void
 tp_contact_factory_location_updated_cb (TpProxy      *proxy,
 					guint         handle,
@@ -429,9 +438,16 @@ tp_contact_factory_location_updated_cb (TpProxy      *proxy,
 {
 	EmpathyTpContactFactory *tp_factory = EMPATHY_TP_CONTACT_FACTORY (weak_object);
 	EmpathyContact          *contact;
+	GHashTable              *new_location;
+
+	new_location = g_hash_table_new_full (g_str_hash, g_str_equal, NULL,
+		(GDestroyNotify) tp_g_value_slice_free);
+
+	// Copy keys
+	g_hash_table_foreach (location, update_location_for_each, new_location);
 
 	contact = tp_contact_factory_find_by_handle (tp_factory, handle);
-	empathy_contact_set_location (contact, location);
+	empathy_contact_set_location (contact, new_location);
 }
 
 static void
