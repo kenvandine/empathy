@@ -103,6 +103,7 @@ megaphone_applet_class_init (MegaphoneAppletClass *class)
 	object_class->finalize = megaphone_applet_finalize;
 
 	g_type_class_add_private (object_class, sizeof (MegaphoneAppletPriv));
+	empathy_gtk_init ();
 }
 
 static void

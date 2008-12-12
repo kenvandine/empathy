@@ -29,6 +29,7 @@
 
 #include <libmissioncontrol/mission-control.h>
 #include <libempathy-gtk/empathy-presence-chooser.h>
+#include <libempathy-gtk/empathy-ui-utils.h>
 
 #include "nothere-applet.h"
 
@@ -54,8 +55,7 @@ nothere_applet_class_init (NotHereAppletClass *class)
 {
 	GTK_OBJECT_CLASS (class)->destroy = nothere_applet_destroy;
 
-	gtk_icon_theme_append_search_path (gtk_icon_theme_get_default (),
-			PKGDATADIR G_DIR_SEPARATOR_S "icons");
+	empathy_gtk_init ();
 }
 
 static gboolean

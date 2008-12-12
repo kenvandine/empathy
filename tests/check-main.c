@@ -34,6 +34,7 @@ main (void)
 
     check_helpers_init ();
     g_type_init ();
+    empathy_init ();
 
     s = make_libempathy_suite ();
     sr = srunner_create (s);
