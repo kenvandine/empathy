@@ -178,10 +178,10 @@ empathy_location_manager_init (EmpathyLocationManager *location_manager)
   empathy_conf_notify_add (conf, EMPATHY_PREFS_LOCATION_RESOURCE_GPS,
       resource_cb, location_manager);
 
-  publish_cb (conf, EMPATHY_PREFS_LOCATION_PUBLISH, location_manager);
   resource_cb (conf, EMPATHY_PREFS_LOCATION_RESOURCE_NETWORK, location_manager);
   resource_cb (conf, EMPATHY_PREFS_LOCATION_RESOURCE_CELL, location_manager);
   resource_cb (conf, EMPATHY_PREFS_LOCATION_RESOURCE_GPS, location_manager);
+  publish_cb (conf, EMPATHY_PREFS_LOCATION_PUBLISH, location_manager);
 
   // Setup account status callbacks
   priv->token = empathy_connect_to_account_status_changed (priv->mc,
@@ -392,13 +392,10 @@ update_resources (EmpathyLocationManager *location_manager)
 
   priv = GET_PRIV (location_manager);
 
-  if (!priv->is_setup)
-    return;
-
   DEBUG ("Updating resources");
 
   if (!geoclue_master_client_set_requirements (priv->gc_client,
-          GEOCLUE_ACCURACY_LEVEL_LOCALITY, 0, FALSE, priv->resources,
+          GEOCLUE_ACCURACY_LEVEL_LOCALITY, 0, TRUE, priv->resources,
           NULL))
     g_printerr ("set_requirements failed");
 }
@@ -427,13 +424,12 @@ setup_geoclue (EmpathyLocationManager *location_manager)
   if (priv->gc_position == NULL)
     {
       g_printerr ("Failed to create GeocluePosition: %s", error->message);
+      g_error_free (error);
       return;
     }
 
   g_signal_connect (G_OBJECT (priv->gc_position), "position-changed",
       G_CALLBACK (position_changed_cb), location_manager);
-  geoclue_position_get_position_async (priv->gc_position,
-      initial_position_cb, location_manager);
 
   /* Get updated when the address changes */
   priv->gc_address = geoclue_master_client_create_address (
@@ -441,15 +437,19 @@ setup_geoclue (EmpathyLocationManager *location_manager)
   if (priv->gc_address == NULL)
     {
       g_printerr ("Failed to create GeoclueAddress: %s", error->message);
+      g_error_free (error);
       return;
     }
 
   g_signal_connect (G_OBJECT (priv->gc_address), "address-changed",
       G_CALLBACK (address_changed_cb), location_manager);
-  geoclue_address_get_address_async (priv->gc_address,
-      initial_address_cb, location_manager);
 
   priv->is_setup = TRUE;
+
+  geoclue_address_get_address_async (priv->gc_address,
+      initial_address_cb, location_manager);
+  geoclue_position_get_position_async (priv->gc_position,
+      initial_position_cb, location_manager);
 }
 
 static void
@@ -488,21 +488,23 @@ resource_cb (EmpathyConf  *conf,
   priv = GET_PRIV (manager);
   DEBUG ("%s changed", key);
 
-  if (empathy_conf_get_bool (conf, key, &resource_enabled))
-    {
-      if (strcmp (key, EMPATHY_PREFS_LOCATION_RESOURCE_NETWORK) == 0)
-        resource = GEOCLUE_RESOURCE_NETWORK;
-      if (strcmp (key, EMPATHY_PREFS_LOCATION_RESOURCE_CELL) == 0)
-        resource = GEOCLUE_RESOURCE_CELL;
-      if (strcmp (key, EMPATHY_PREFS_LOCATION_RESOURCE_GPS) == 0)
-        resource = GEOCLUE_RESOURCE_GPS;
-    }
+  if (!empathy_conf_get_bool (conf, key, &resource_enabled))
+    return;
+
+  if (strcmp (key, EMPATHY_PREFS_LOCATION_RESOURCE_NETWORK) == 0)
+    resource = GEOCLUE_RESOURCE_NETWORK;
+  if (strcmp (key, EMPATHY_PREFS_LOCATION_RESOURCE_CELL) == 0)
+    resource = GEOCLUE_RESOURCE_CELL;
+  if (strcmp (key, EMPATHY_PREFS_LOCATION_RESOURCE_GPS) == 0)
+    resource = GEOCLUE_RESOURCE_GPS;
+
   if (resource_enabled)
     priv->resources |= resource;
   else
-    priv->resources &= resource;
+    priv->resources &= ~resource;
 
-  update_resources (manager);
+  if (priv->is_setup)
+    update_resources (manager);
 }
 
 #endif
