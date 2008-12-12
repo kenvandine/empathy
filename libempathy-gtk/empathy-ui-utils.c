@@ -49,20 +49,40 @@
 #include <libempathy/empathy-utils.h>
 #include <libempathy/empathy-dispatcher.h>
 
-void
-empathy_gtk_init (int *argc, char ***argv)
+static gboolean
+init (gboolean abort_if_fail,
+      int *argc,
+      char ***argv,
+      char *parameter_string,
+      GOptionEntry *entries,
+      char *translation_domain,
+      GError **error)
 {
 	static gboolean initialized = FALSE;
+	gboolean ret = TRUE;
 
 	if (initialized)
-		return;
+		return TRUE;
 
 	empathy_init ();
-	gtk_init (argc, argv);
+	if (abort_if_fail) {
+		gtk_init (argc, argv);
+	} else {
+		ret = gtk_init_with_args (argc, argv, parameter_string, entries,
+					  translation_domain, error);
+	}
 	gtk_icon_theme_append_search_path (gtk_icon_theme_get_default (),
 					   PKGDATADIR G_DIR_SEPARATOR_S "icons");
 
 	initialized = TRUE;
+
+	return ret;
+}
+
+void
+empathy_gtk_init (int *argc, char ***argv)
+{
+	init (FALSE, argc, argv, NULL, NULL, NULL, NULL);
 }
 
 gboolean
@@ -73,21 +93,8 @@ empathy_gtk_init_with_args (int *argc,
 			    char *translation_domain,
 			    GError **error)
 {
-	static gboolean initialized = FALSE;
-	gboolean ret;
-
-	if (initialized)
-		return TRUE;
-
-	empathy_init ();
-	ret = gtk_init_with_args (argc, argv, parameter_string, entries,
-				  translation_domain, error);
-	gtk_icon_theme_append_search_path (gtk_icon_theme_get_default (),
-					   PKGDATADIR G_DIR_SEPARATOR_S "icons");
-
-	initialized = TRUE;
-
-	return ret;
+	return init (TRUE, argc, argv, parameter_string, entries,
+		     translation_domain, error);
 }
 
 struct SizeData {
