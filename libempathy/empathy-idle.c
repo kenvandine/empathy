@@ -23,7 +23,7 @@
 
 #include <string.h>
 
-#include <glib/gi18n.h>
+#include <glib/gi18n-lib.h>
 #include <dbus/dbus-glib.h>
 
 #include <telepathy-glib/dbus.h>

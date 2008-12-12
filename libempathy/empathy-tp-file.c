@@ -29,7 +29,7 @@
 #include <sys/socket.h>
 #include <sys/un.h>
 
-#include <glib/gi18n.h>
+#include <glib/gi18n-lib.h>
 
 #include <gio/gio.h>
 #include <gio/gunixinputstream.h>

@@ -22,7 +22,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <glib.h>
-#include <glib/gi18n.h>
+#include <glib/gi18n-lib.h>
 
 #include <telepathy-glib/util.h>
 

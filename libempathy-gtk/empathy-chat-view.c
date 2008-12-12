@@ -28,7 +28,7 @@
 #include <string.h>
 #include <time.h>
 
-#include <glib/gi18n.h>
+#include <glib/gi18n-lib.h>
 #include <gtk/gtkbutton.h>
 #include <gtk/gtkimage.h>
 #include <gtk/gtkmenu.h>

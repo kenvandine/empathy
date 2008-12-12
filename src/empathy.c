@@ -411,6 +411,7 @@ main (int argc, char *argv[])
 	}
 	g_set_application_name (PACKAGE_NAME);
 	gtk_window_set_default_icon_name ("empathy");
+	textdomain (GETTEXT_PACKAGE);
 
         /* Setting up the bacon connection */
 	connection = bacon_message_connection_new ("empathy");

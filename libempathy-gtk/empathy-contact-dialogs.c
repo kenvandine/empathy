@@ -26,7 +26,7 @@
 
 #include <gtk/gtk.h>
 #include <glade/glade.h>
-#include <glib/gi18n.h>
+#include <glib/gi18n-lib.h>
 
 #include <libmissioncontrol/mission-control.h>
 

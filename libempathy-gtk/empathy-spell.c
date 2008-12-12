@@ -26,7 +26,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include <glib/gi18n.h>
+#include <glib/gi18n-lib.h>
 
 #ifdef HAVE_ENCHANT
 #include <enchant.h>

@@ -34,7 +34,7 @@
 #include <string.h>
 #include <X11/Xatom.h>
 #include <gdk/gdkx.h>
-#include <glib/gi18n.h>
+#include <glib/gi18n-lib.h>
 #include <gtk/gtk.h>
 #include <gio/gio.h>
 #include <glade/glade.h>

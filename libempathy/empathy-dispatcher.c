@@ -23,7 +23,7 @@
 
 #include <string.h>
 
-#include <glib/gi18n.h>
+#include <glib/gi18n-lib.h>
 
 #include <telepathy-glib/enums.h>
 #include <telepathy-glib/connection.h>

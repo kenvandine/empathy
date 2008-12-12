@@ -29,7 +29,7 @@
 #include <time.h>
 #include <sys/types.h>
 
-#include <glib/gi18n.h>
+#include <glib/gi18n-lib.h>
 
 #include <libxml/uri.h>
 #include <telepathy-glib/connection.h>
@@ -58,7 +58,6 @@ empathy_init (void)
 	/* Setup gettext */
 	bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
 	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
-	textdomain (GETTEXT_PACKAGE);
 
 	/* Setup debug output for empathy and telepathy-glib */
 	if (g_getenv ("EMPATHY_TIMING") != NULL) {
