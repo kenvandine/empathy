@@ -18,7 +18,8 @@ main (int argc, char **argv)
 	GtkWidget *window;
 	GtkCellRenderer *renderer;
 
-	empathy_gtk_init (&argc, &argv);
+	gtk_init (&argc, &argv);
+	empathy_gtk_init ();
 
 	empathy_debug_set_flags (g_getenv ("EMPATHY_DEBUG"));
 	main_loop = g_main_loop_new (NULL, FALSE);

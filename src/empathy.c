@@ -401,19 +401,21 @@ main (int argc, char *argv[])
 		{ NULL }
 	};
 
-	startup_timestamp = get_startup_timestamp ();
-
-	if (!empathy_gtk_init_with_args (&argc, &argv,
-					 _("- Empathy Instant Messenger"),
-					 options, GETTEXT_PACKAGE, &error)) {
+	/* Init */
+	g_thread_init (NULL);
+	if (!gtk_init_with_args (&argc, &argv,
+				 _("- Empathy Instant Messenger"),
+				 options, GETTEXT_PACKAGE, &error)) {
 		g_warning ("Error in empathy init: %s", error->message);
 		return EXIT_FAILURE;
 	}
+	empathy_gtk_init ();
 	g_set_application_name (PACKAGE_NAME);
 	gtk_window_set_default_icon_name ("empathy");
 	textdomain (GETTEXT_PACKAGE);
 
         /* Setting up the bacon connection */
+	startup_timestamp = get_startup_timestamp ();
 	connection = bacon_message_connection_new ("empathy");
 	if (connection != NULL) {
 		if (!bacon_message_connection_get_is_server (connection)) {

@@ -41,7 +41,9 @@ main (int argc, char *argv[])
 {
 	GtkWidget *window;
 
-	empathy_gtk_init (&argc, &argv);
+	g_thread_init (NULL);
+	gtk_init (&argc, &argv);
+	empathy_gtk_init ();
 	g_set_application_name (PACKAGE_NAME);
 	gtk_window_set_default_icon_name ("empathy");
 

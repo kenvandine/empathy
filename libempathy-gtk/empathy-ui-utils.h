@@ -46,14 +46,7 @@ G_BEGIN_DECLS
 
 #define G_STR_EMPTY(x) ((x) == NULL || (x)[0] == '\0')
 
-void            empathy_gtk_init                        (int *argc,
-                                                         char ***argv);
-gboolean        empathy_gtk_init_with_args              (int *argc,
-                                                         char ***argv,
-                                                         char *parameter_string,
-                                                         GOptionEntry *entries,
-                                                         char *translation_domain,
-                                                         GError **error);
+void            empathy_gtk_init                        (void);
 /* Glade */
 void            empathy_glade_get_file_simple           (const gchar      *filename,
 							 const gchar      *root,
