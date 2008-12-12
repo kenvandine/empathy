@@ -86,6 +86,7 @@ EmpathyPendingInfo *empathy_pending_info_new             (EmpathyContact     *me
 							  EmpathyContact     *actor,
 							  const gchar        *message);
 void                empathy_pending_info_free            (EmpathyPendingInfo *info);
+TpChannelGroupFlags empathy_tp_group_get_flags         (EmpathyTpGroup     *group);
 
 G_END_DECLS
 

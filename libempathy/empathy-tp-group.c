@@ -27,6 +27,7 @@
 #include <telepathy-glib/channel.h>
 #include <telepathy-glib/util.h>
 #include <telepathy-glib/interfaces.h>
+#include <telepathy-glib/channel.h>
 
 #include "empathy-tp-group.h"
 #include "empathy-contact-factory.h"
@@ -968,3 +969,13 @@ empathy_tp_group_get_invitation (EmpathyTpGroup  *group,
 	return invitation;
 }
 
+TpChannelGroupFlags
+empathy_tp_group_get_flags (EmpathyTpGroup *self)
+{
+  EmpathyTpGroupPriv *priv = GET_PRIV (self);
+
+  if (priv->channel == NULL)
+    return 0;
+
+  return tp_channel_group_get_flags (priv->channel);
+}
