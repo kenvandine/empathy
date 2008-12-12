@@ -239,31 +239,14 @@ static gboolean
 can_add_contact_to_account (McAccount *account,
 			    gpointer   user_data)
 {
-	MissionControl     *mc;
-	TpConnectionStatus  status;
-	McProfile          *profile;
-	const gchar        *protocol_name;
+  EmpathyContactManager *mgr;
+  gboolean result;
 
-	mc = empathy_mission_control_new ();
-	status = mission_control_get_connection_status (mc, account, NULL);
-	g_object_unref (mc);
-	if (status != TP_CONNECTION_STATUS_CONNECTED) {
-		/* Account is disconnected */
-		return FALSE;
-	}
+  mgr = empathy_contact_manager_new ();
+  result = empathy_contact_manager_can_add (mgr, account);
+  g_object_unref (mgr);
 
-	profile = mc_account_get_profile (account);
-	protocol_name = mc_profile_get_protocol_name (profile);
-	if (strcmp (protocol_name, "local-xmpp") == 0) {
-		/* We can't add accounts to a XMPP LL connection
-		 * FIXME: We should inspect the flags of the contact list group interface
-		 */
-		g_object_unref (profile);
-		return FALSE;
-	}
-
-	g_object_unref (profile);
-	return TRUE;
+  return result;
 }
 
 static void
