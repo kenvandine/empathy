@@ -24,10 +24,8 @@
 
 #include <libmissioncontrol/mc-account.h>
 
-#include <telepathy-glib/channel.h>
 #include <telepathy-glib/util.h>
 #include <telepathy-glib/interfaces.h>
-#include <telepathy-glib/channel.h>
 
 #include "empathy-tp-group.h"
 #include "empathy-contact-factory.h"
@@ -972,10 +970,12 @@ empathy_tp_group_get_invitation (EmpathyTpGroup  *group,
 TpChannelGroupFlags
 empathy_tp_group_get_flags (EmpathyTpGroup *self)
 {
-  EmpathyTpGroupPriv *priv = GET_PRIV (self);
+	EmpathyTpGroupPriv *priv = GET_PRIV (self);
 
-  if (priv->channel == NULL)
-    return 0;
+	g_return_val_if_fail (EMPATHY_IS_TP_GROUP (self), 0);
 
-  return tp_channel_group_get_flags (priv->channel);
+	if (priv->channel == NULL)
+		return 0;
+
+	return tp_channel_group_get_flags (priv->channel);
 }

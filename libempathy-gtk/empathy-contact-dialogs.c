@@ -239,14 +239,14 @@ static gboolean
 can_add_contact_to_account (McAccount *account,
 			    gpointer   user_data)
 {
-  EmpathyContactManager *mgr;
-  gboolean result;
+	EmpathyContactManager *mgr;
+	gboolean               result;
 
-  mgr = empathy_contact_manager_new ();
-  result = empathy_contact_manager_can_add (mgr, account);
-  g_object_unref (mgr);
+	mgr = empathy_contact_manager_new ();
+	result = empathy_contact_manager_can_add (mgr, account);
+	g_object_unref (mgr);
 
-  return result;
+	return result;
 }
 
 static void
