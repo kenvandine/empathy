@@ -55,6 +55,8 @@ GType                  empathy_contact_manager_get_type (void) G_GNUC_CONST;
 EmpathyContactManager *empathy_contact_manager_new      (void);
 EmpathyTpContactList * empathy_contact_manager_get_list (EmpathyContactManager *manager,
 							 McAccount             *account);
+gboolean empathy_contact_manager_can_add (EmpathyContactManager *manager,
+							 McAccount             *account);
 
 G_END_DECLS
 

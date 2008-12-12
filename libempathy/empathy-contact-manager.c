@@ -507,3 +507,18 @@ contact_manager_iface_init (EmpathyContactListIface *iface)
 	iface->remove_group	 = contact_manager_remove_group;
 }
 
+gboolean
+empathy_contact_manager_can_add (EmpathyContactManager *manager,
+			      McAccount *account)
+{
+	EmpathyContactManagerPriv *priv = GET_PRIV (manager);
+  EmpathyTpContactList *list;
+	
+	g_return_val_if_fail (EMPATHY_IS_CONTACT_MANAGER (manager), FALSE);
+
+  list = g_hash_table_lookup (priv->lists, account);
+  if (list == NULL)
+    return FALSE;
+
+	return empathy_tp_contact_list_can_add (list);
+}
