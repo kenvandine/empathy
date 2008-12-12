@@ -274,18 +274,18 @@ position_changed_cb (GeocluePosition *position,
   if (fields & GEOCLUE_POSITION_FIELDS_LONGITUDE)
     {
       new_value = tp_g_value_slice_new (G_TYPE_DOUBLE);
-      g_value_set_double (new_value, latitude);
+      g_value_set_double (new_value, longitude);
       g_hash_table_insert (priv->location, EMPATHY_LOCATION_LON, new_value);
       DEBUG ("\t - Longitude: %f", longitude);
     }
-  else if (fields & GEOCLUE_POSITION_FIELDS_LATITUDE)
+  if (fields & GEOCLUE_POSITION_FIELDS_LATITUDE)
     {
       new_value = tp_g_value_slice_new (G_TYPE_DOUBLE);
       g_value_set_double (new_value, latitude);
       g_hash_table_insert (priv->location, EMPATHY_LOCATION_LAT, new_value);
       DEBUG ("\t - Latitude: %f", latitude);
     }
-  else if (fields & GEOCLUE_POSITION_FIELDS_ALTITUDE)
+  if (fields & GEOCLUE_POSITION_FIELDS_ALTITUDE)
     {
       new_value = tp_g_value_slice_new (G_TYPE_DOUBLE);
       g_value_set_double (new_value, altitude);
