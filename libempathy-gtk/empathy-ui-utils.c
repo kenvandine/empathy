@@ -49,6 +49,47 @@
 #include <libempathy/empathy-utils.h>
 #include <libempathy/empathy-dispatcher.h>
 
+void
+empathy_gtk_init (int *argc, char ***argv)
+{
+	static gboolean initialized = FALSE;
+
+	if (initialized)
+		return;
+
+	empathy_init ();
+	gtk_init (argc, argv);
+	gtk_icon_theme_append_search_path (gtk_icon_theme_get_default (),
+					   PKGDATADIR G_DIR_SEPARATOR_S "icons");
+
+	initialized = TRUE;
+}
+
+gboolean
+empathy_gtk_init_with_args (int *argc,
+			    char ***argv,
+			    char *parameter_string,
+			    GOptionEntry *entries,
+			    char *translation_domain,
+			    GError **error)
+{
+	static gboolean initialized = FALSE;
+	gboolean ret;
+
+	if (initialized)
+		return TRUE;
+
+	empathy_init ();
+	ret = gtk_init_with_args (argc, argv, parameter_string, entries,
+				  translation_domain, error);
+	gtk_icon_theme_append_search_path (gtk_icon_theme_get_default (),
+					   PKGDATADIR G_DIR_SEPARATOR_S "icons");
+
+	initialized = TRUE;
+
+	return ret;
+}
+
 struct SizeData {
 	gint     width;
 	gint     height;

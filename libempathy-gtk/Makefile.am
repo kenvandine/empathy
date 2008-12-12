@@ -2,6 +2,7 @@ AM_CPPFLAGS =                                           \
 	-I.                                             \
 	-I$(top_srcdir)                                 \
 	-DDATADIR=\""$(datadir)"\"              	\
+	-DPKGDATADIR=\""$(pkgdatadir)"\"		\
 	$(EMPATHY_CFLAGS)				\
 	$(ENCHANT_CFLAGS)				\
 	$(WARN_CFLAGS)

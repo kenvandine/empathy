@@ -1,11 +1,5 @@
 AM_CPPFLAGS =						\
 	-I$(top_srcdir)                          	\
-	-DPREFIX="\"$(prefix)"\"			\
-	-DSYSCONFDIR=\""$(sysconfdir)"\"		\
-	-DDATADIR=\""$(datadir)"\"              	\
-	-DPKGDATADIR=\""$(pkgdatadir)"\"		\
-	-DLIBDIR=\""$(libdir)"\"			\
-	-DLOCALEDIR=\""$(datadir)/locale"\"		\
 	$(EMPATHY_CFLAGS)				\
 	$(WARN_CFLAGS)
 

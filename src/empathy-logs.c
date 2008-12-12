@@ -21,15 +21,13 @@
  */
 
 #include <config.h>
-
-#include <string.h>
 #include <stdlib.h>
-
 #include <glib.h>
 #include <gtk/gtk.h>
 
 #include <libempathy/empathy-debug.h>
 #include <libempathy-gtk/empathy-log-window.h>
+#include <libempathy-gtk/empathy-ui-utils.h>
 
 static void
 destroy_cb (GtkWidget *dialog,
@@ -43,16 +41,10 @@ main (int argc, char *argv[])
 {
 	GtkWidget *window;
 
-	gtk_init (&argc, &argv);
+	empathy_gtk_init (&argc, &argv);
+	g_set_application_name (PACKAGE_NAME);
+	gtk_window_set_default_icon_name ("empathy");
 
-	if (g_getenv ("EMPATHY_TIMING") != NULL) {
-		g_log_set_default_handler (tp_debug_timestamped_log_handler, NULL);
-	}
-	empathy_debug_set_flags (g_getenv ("EMPATHY_DEBUG"));
-	tp_debug_divert_messages (g_getenv ("EMPATHY_LOGFILE"));
-
-	gtk_icon_theme_append_search_path (gtk_icon_theme_get_default (),
-					   PKGDATADIR G_DIR_SEPARATOR_S "icons");
 	window = empathy_log_window_show (NULL, NULL, FALSE, NULL);
 
 	g_signal_connect (window, "destroy",

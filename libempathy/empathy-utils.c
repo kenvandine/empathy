@@ -43,6 +43,33 @@
 #define DEBUG_FLAG EMPATHY_DEBUG_OTHER
 #include "empathy-debug.h"
 
+void
+empathy_init (void)
+{
+	static gboolean initialized = FALSE;
+
+	if (initialized)
+		return;
+
+	/* Setup glib. Threads are required for async GIO. */
+	g_thread_init (NULL);
+	g_type_init ();
+
+	/* Setup gettext */
+	bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
+	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
+	textdomain (GETTEXT_PACKAGE);
+
+	/* Setup debug output for empathy and telepathy-glib */
+	if (g_getenv ("EMPATHY_TIMING") != NULL) {
+		g_log_set_default_handler (tp_debug_timestamped_log_handler, NULL);
+	}
+	empathy_debug_set_flags (g_getenv ("EMPATHY_DEBUG"));
+	tp_debug_divert_messages (g_getenv ("EMPATHY_LOGFILE"));
+
+	initialized = TRUE;
+}
+
 gchar *
 empathy_substring (const gchar *str,
 		  gint         start,

@@ -44,6 +44,7 @@
 #include <libempathy/empathy-tp-group.h>
 
 #include <libempathy-gtk/empathy-conf.h>
+#include <libempathy-gtk/empathy-ui-utils.h>
 
 #include <extensions/extensions.h>
 
@@ -400,30 +401,16 @@ main (int argc, char *argv[])
 		{ NULL }
 	};
 
-	bindtextdomain (GETTEXT_PACKAGE, LOCALEDIR);
-	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
-	textdomain (GETTEXT_PACKAGE);
-
 	startup_timestamp = get_startup_timestamp ();
 
-	if (!gtk_init_with_args (&argc, &argv,
-				 _("- Empathy Instant Messenger"),
-				 options, GETTEXT_PACKAGE, &error)) {
-		g_warning ("Error in gtk init: %s", error->message);
+	if (!empathy_gtk_init_with_args (&argc, &argv,
+					 _("- Empathy Instant Messenger"),
+					 options, GETTEXT_PACKAGE, &error)) {
+		g_warning ("Error in empathy init: %s", error->message);
 		return EXIT_FAILURE;
 	}
-
-	if (g_getenv ("EMPATHY_TIMING") != NULL) {
-		g_log_set_default_handler (tp_debug_timestamped_log_handler, NULL);
-	}
-	empathy_debug_set_flags (g_getenv ("EMPATHY_DEBUG"));
-	tp_debug_divert_messages (g_getenv ("EMPATHY_LOGFILE"));
-
 	g_set_application_name (PACKAGE_NAME);
-
 	gtk_window_set_default_icon_name ("empathy");
-	gtk_icon_theme_append_search_path (gtk_icon_theme_get_default (),
-					   PKGDATADIR G_DIR_SEPARATOR_S "icons");
 
         /* Setting up the bacon connection */
 	connection = bacon_message_connection_new ("empathy");

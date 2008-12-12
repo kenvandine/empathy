@@ -3,6 +3,7 @@ AM_CPPFLAGS =                                           \
 	-I$(top_srcdir)                                 \
 	-I$(top_builddir)                               \
 	-DDATADIR=\""$(datadir)"\"              	\
+	-DLOCALEDIR=\""$(datadir)/locale"\"		\
 	$(LIBEMPATHY_CFLAGS)				\
 	$(WARN_CFLAGS)
 

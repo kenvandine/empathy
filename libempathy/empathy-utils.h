@@ -42,6 +42,7 @@
 
 G_BEGIN_DECLS
 
+void         empathy_init                           (void);
 /* Strings */
 gchar *      empathy_substring                      (const gchar     *str,
 						    gint             start,
