@@ -252,6 +252,27 @@ empathy_location_manager_get_default (void)
 
 #if HAVE_GEOCLUE
 static void
+initial_position_cb (GeocluePosition *position,
+                     GeocluePositionFields fields,
+                     int timestamp,
+                     double latitude,
+                     double longitude,
+                     double altitude,
+                     GeoclueAccuracy *accuracy,
+                     GError *error,
+                     gpointer location_manager)
+{
+  if (error)
+    {
+      DEBUG ("Error: %s", error->message);
+      g_error_free (error);
+    }
+  else
+    position_changed_cb (position, fields, timestamp, latitude, longitude,
+      altitude, accuracy, location_manager);
+}
+
+static void
 position_changed_cb (GeocluePosition *position,
                      GeocluePositionFields fields,
                      int timestamp,
@@ -264,9 +285,10 @@ position_changed_cb (GeocluePosition *position,
   EmpathyLocationManagerPriv *priv;
   priv = GET_PRIV (location_manager);
   GeoclueAccuracyLevel level;
+  gdouble mean, horizontal, vertical;
   GValue *new_value;
 
-  geoclue_accuracy_get_details (accuracy, &level, NULL, NULL);
+  geoclue_accuracy_get_details (accuracy, &level, &horizontal, &vertical);
   DEBUG ("New position (accuracy level %d)", level);
   if (level == GEOCLUE_ACCURACY_LEVEL_NONE)
     return;
@@ -295,11 +317,7 @@ position_changed_cb (GeocluePosition *position,
 
   if (level == GEOCLUE_ACCURACY_LEVEL_DETAILED)
     {
-      gdouble mean, horizontal, vertical;
-
-      geoclue_accuracy_get_details (accuracy, &level, &horizontal, &vertical);
       mean = (horizontal + vertical) / 2.0;
-
       new_value = tp_g_value_slice_new (G_TYPE_DOUBLE);
       g_value_set_double (new_value, mean);
       g_hash_table_insert (priv->location, EMPATHY_LOCATION_ACCURACY, new_value);
@@ -328,6 +346,22 @@ address_foreach_cb (gpointer key,
   DEBUG ("\t - %s: %s", (char*) key, (char*) value);
 }
 
+static void
+initial_address_cb (GeoclueAddress *address,
+                    int timestamp,
+                    GHashTable *details,
+                    GeoclueAccuracy *accuracy,
+                    GError *error,
+                    gpointer location_manager)
+{
+  if (error)
+    {
+      DEBUG ("Error: %s", error->message);
+      g_error_free (error);
+    }
+  else
+    address_changed_cb (address, timestamp, details, accuracy, location_manager);
+}
 
 static void
 address_changed_cb (GeoclueAddress *address,
@@ -364,7 +398,7 @@ update_resources (EmpathyLocationManager *location_manager)
   DEBUG ("Updating resources");
 
   if (!geoclue_master_client_set_requirements (priv->gc_client,
-          GEOCLUE_ACCURACY_LEVEL_COUNTRY, 0, TRUE, priv->resources,
+          GEOCLUE_ACCURACY_LEVEL_LOCALITY, 0, FALSE, priv->resources,
           NULL))
     g_printerr ("set_requirements failed");
 }
@@ -398,6 +432,8 @@ setup_geoclue (EmpathyLocationManager *location_manager)
 
   g_signal_connect (G_OBJECT (priv->gc_position), "position-changed",
       G_CALLBACK (position_changed_cb), location_manager);
+  geoclue_position_get_position_async (priv->gc_position,
+      initial_position_cb, location_manager);
 
   /* Get updated when the address changes */
   priv->gc_address = geoclue_master_client_create_address (
@@ -410,6 +446,8 @@ setup_geoclue (EmpathyLocationManager *location_manager)
 
   g_signal_connect (G_OBJECT (priv->gc_address), "address-changed",
       G_CALLBACK (address_changed_cb), location_manager);
+  geoclue_address_get_address_async (priv->gc_address,
+      initial_address_cb, location_manager);
 
   priv->is_setup = TRUE;
 }
@@ -448,15 +486,15 @@ resource_cb (EmpathyConf  *conf,
   gboolean resource_enabled;
 
   priv = GET_PRIV (manager);
-  DEBUG ("A Resource Conf changed");
+  DEBUG ("%s changed", key);
 
   if (empathy_conf_get_bool (conf, key, &resource_enabled))
     {
-      if (strcmp (key, EMPATHY_PREFS_LOCATION_RESOURCE_NETWORK))
+      if (strcmp (key, EMPATHY_PREFS_LOCATION_RESOURCE_NETWORK) == 0)
         resource = GEOCLUE_RESOURCE_NETWORK;
-      if (strcmp (key, EMPATHY_PREFS_LOCATION_RESOURCE_CELL))
+      if (strcmp (key, EMPATHY_PREFS_LOCATION_RESOURCE_CELL) == 0)
         resource = GEOCLUE_RESOURCE_CELL;
-      if (strcmp (key, EMPATHY_PREFS_LOCATION_RESOURCE_GPS))
+      if (strcmp (key, EMPATHY_PREFS_LOCATION_RESOURCE_GPS) == 0)
         resource = GEOCLUE_RESOURCE_GPS;
     }
   if (resource_enabled)
