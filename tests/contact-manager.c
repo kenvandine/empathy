@@ -6,6 +6,7 @@
 #include <libempathy/empathy-debug.h>
 
 #include <libempathy-gtk/empathy-contact-list-store.h>
+#include <libempathy-gtk/empathy-ui-utils.h>
 
 int
 main (int argc, char **argv)
@@ -17,7 +18,7 @@ main (int argc, char **argv)
 	GtkWidget *window;
 	GtkCellRenderer *renderer;
 
-	gtk_init (&argc, &argv);
+	empathy_gtk_init (&argc, &argv);
 
 	empathy_debug_set_flags (g_getenv ("EMPATHY_DEBUG"));
 	main_loop = g_main_loop_new (NULL, FALSE);
