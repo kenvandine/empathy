@@ -1,3 +1,24 @@
+NEW in 2.25.3
+==============
+ - Use gi18n-lib.h instead of gi18n.h for libraries. (Xavier Claessens).
+ - Add empathy_init(), empathy_gtk_init(). They have to be called by any process
+   using libempathy and libempathy-gtk. (Xavier Claessens).
+ - Do not make allow to add a contact to accounts that do not have contact list,
+   like IRC or SIP. (Guillaume Desmottes)
+ - Improve URI regex. (Xavier Claessens).
+ - Drop libgnomeui dependency  (Cosimo Cecchi).
+ - Use GTK+ 2.14.0 and gtk_show_uri  (Cosimo Cecchi).
+
+Bugs fixed:
+ - Fixed #552296, Autocompletion on contact names for "new message" dialog box (Emmanuel Bretelle, Xavier Claessens)
+ - Fixed #562873, doesn't build with werror on x86_64 (Xavier Claessens)
+ - Fixed #563713, linkifies "@name", and captures the next word (Xavier Claessens)
+
+Translations:
+ - Updated it translation  (Milo Casagrande).
+ - Updated ca translation  (Joan Duran).
+ - Added Catalan translation (Joan Duran).
+
 NEW in 2.25.2
 ==============
  - Use GRegex instead of custom code and use a new regex to detect URIs (Xavier Claessens).
