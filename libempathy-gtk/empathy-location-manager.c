@@ -397,7 +397,19 @@ update_resources (EmpathyLocationManager *location_manager)
   if (!geoclue_master_client_set_requirements (priv->gc_client,
           GEOCLUE_ACCURACY_LEVEL_LOCALITY, 0, TRUE, priv->resources,
           NULL))
-    g_printerr ("set_requirements failed");
+    {
+      g_printerr ("set_requirements failed");
+      return;
+    }
+
+  if (!priv->is_setup)
+    return;
+
+  geoclue_address_get_address_async (priv->gc_address,
+      initial_address_cb, location_manager);
+  geoclue_position_get_position_async (priv->gc_position,
+      initial_position_cb, location_manager);
+
 }
 
 
@@ -450,6 +462,7 @@ setup_geoclue (EmpathyLocationManager *location_manager)
       initial_address_cb, location_manager);
   geoclue_position_get_position_async (priv->gc_position,
       initial_position_cb, location_manager);
+
 }
 
 static void
