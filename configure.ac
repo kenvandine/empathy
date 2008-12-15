@@ -2,7 +2,7 @@ AC_INIT(Empathy, 2.25.3, http://bugzilla.gnome.org/browse.cgi?product=empathy)
 AC_PREREQ(2.59)
 AC_COPYRIGHT([
   Copyright (C) 2003-2007 Imendio AB
-  Copyright (C) 2007 Collabora Ltd.
+  Copyright (C) 2007-2008 Collabora Ltd.
 ])
 
 # LT Version numbers, remember to change them just *before* a release.
