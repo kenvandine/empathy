@@ -7,6 +7,7 @@
 
 #include "check-helpers.h"
 #include "check-libempathy.h"
+#include <libempathy/empathy-utils.h>
 
 #include "config.h"
 
