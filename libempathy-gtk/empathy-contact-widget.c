@@ -1239,6 +1239,8 @@ contact_widget_location_update (EmpathyContactWidget *information)
   GHashTable *location = empathy_contact_get_location (information->contact);
   GValue *value;
   gdouble lat, lon;
+  ClutterActor *marker;
+  ChamplainLayer *layer;
 
   value = g_hash_table_lookup (location, EMPATHY_LOCATION_LAT);
   if (value == NULL)
@@ -1291,6 +1293,14 @@ contact_widget_location_update (EmpathyContactWidget *information)
           information->map_view_embed);
       g_object_set (G_OBJECT (information->map_view), "show-license", FALSE,
           NULL);
+
+      layer = champlain_layer_new ();
+      champlain_view_add_layer (CHAMPLAIN_VIEW (information->map_view), layer);
+
+      marker = champlain_marker_new_with_label (
+          empathy_contact_get_name (information->contact), NULL, NULL, NULL);
+      champlain_marker_set_position (CHAMPLAIN_MARKER (marker), lat, lon);
+      clutter_container_add (CLUTTER_CONTAINER (layer), marker, NULL);
 
       champlain_view_center_on (CHAMPLAIN_VIEW(information->map_view), lat, lon);
       gtk_widget_show_all (information->vbox_location);
