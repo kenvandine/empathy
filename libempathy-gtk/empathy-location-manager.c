@@ -22,6 +22,7 @@
 #include "config.h"
 
 #include <string.h>
+#include <time.h>
 
 #include <glib/gi18n.h>
 
@@ -249,6 +250,25 @@ empathy_location_manager_get_default (void)
   return singleton;
 }
 
+static void
+update_timestamp (EmpathyLocationManager *location_manager,
+                  int timestamp)
+{
+  EmpathyLocationManagerPriv *priv;
+  priv = GET_PRIV (location_manager);
+  GValue *new_value;
+  gchar str_time [100];
+  time_t time = timestamp;
+  struct tm *ptm = gmtime (&time);
+
+  if (strftime (str_time, 100, "%Y%m%dT%TZ", ptm) == 0)
+    return;
+
+  new_value = tp_g_value_slice_new (G_TYPE_STRING);
+  g_value_set_string (new_value, str_time);
+  g_hash_table_insert (priv->location, EMPATHY_LOCATION_TIMESTAMP, new_value);
+  DEBUG ("\t - Timestamp: %s", str_time);
+}
 
 #if HAVE_GEOCLUE
 static void
@@ -324,6 +344,7 @@ position_changed_cb (GeocluePosition *position,
       DEBUG ("\t - Accuracy: %f", mean);
     }
 
+  update_timestamp (location_manager, timestamp);
   publish_location_to_all_accounts (EMPATHY_LOCATION_MANAGER (location_manager));
 }
 
@@ -381,6 +402,7 @@ address_changed_cb (GeoclueAddress *address,
 
   g_hash_table_foreach (details, address_foreach_cb, (gpointer)location_manager);
 
+  update_timestamp (location_manager, timestamp);
   publish_location_to_all_accounts (EMPATHY_LOCATION_MANAGER (location_manager));
 }
 
