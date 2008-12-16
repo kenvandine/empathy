@@ -1416,54 +1416,6 @@ empathy_toggle_button_set_state_quietly (GtkWidget *widget,
 	g_signal_handlers_unblock_by_func (widget, callback, user_data);
 }
 
-GtkTextTag *
-empathy_text_buffer_tag_set (GtkTextBuffer *buffer,
-			     const gchar   *tag_name,
-			     const gchar   *first_property_name,
-			     ...)
-{
-	GtkTextTagTable *table;
-	GtkTextTag      *tag;
-
-	g_return_val_if_fail (GTK_IS_TEXT_BUFFER (buffer), NULL);
-	g_return_val_if_fail (tag_name != NULL, NULL);
-
-	table = gtk_text_buffer_get_tag_table (buffer);
-	tag = gtk_text_tag_table_lookup (table, tag_name);
-
-	if (!tag) {
-		tag = gtk_text_tag_new (tag_name);
-		gtk_text_tag_table_add (table, tag);
-		g_object_unref (tag);
-	} else {
-		/* Clear the old values so that we don't affect the new theme. */
-		g_object_set (tag,
-			      "background-set", FALSE,
-			      "foreground-set", FALSE,
-			      "invisible-set", FALSE,
-			      "justification-set", FALSE,
-			      "paragraph-background-set", FALSE,
-			      "pixels-above-lines-set", FALSE,
-			      "pixels-below-lines-set", FALSE,
-			      "rise-set", FALSE,
-			      "scale-set", FALSE,
-			      "size-set", FALSE,
-			      "style-set", FALSE,
-			      "weight-set", FALSE,
-			      NULL);
-	}
-
-	if (first_property_name) {
-		va_list list;
-
-		va_start (list, first_property_name);
-		g_object_set_valist (G_OBJECT (tag), first_property_name, list);
-		va_end (list);
-	}
-
-	return tag;
-}
-
 /* Sending files with the file chooser */
 
 static void
@@ -1537,3 +1489,4 @@ empathy_send_file_with_file_chooser (EmpathyContact *contact)
 
 	gtk_widget_show (widget);
 }
+
