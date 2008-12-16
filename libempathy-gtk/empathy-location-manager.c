@@ -57,6 +57,8 @@ typedef struct {
     GeocluePosition *gc_position;
     GeoclueAddress *gc_address;
 #endif
+    gboolean reduce_accuracy;
+    gdouble reduce_value;
 } EmpathyLocationManagerPriv;
 
 static void location_manager_finalize (GObject *object);
@@ -76,6 +78,8 @@ static void publish_cb (EmpathyConf  *conf, const gchar *key,
     gpointer user_data);
 static void update_resources (EmpathyLocationManager *location_manager);
 static void resource_cb (EmpathyConf  *conf, const gchar *key,
+    gpointer user_data);
+static void accuracy_cb (EmpathyConf  *conf, const gchar *key,
     gpointer user_data);
 #endif
 
@@ -178,10 +182,13 @@ empathy_location_manager_init (EmpathyLocationManager *location_manager)
       resource_cb, location_manager);
   empathy_conf_notify_add (conf, EMPATHY_PREFS_LOCATION_RESOURCE_GPS,
       resource_cb, location_manager);
+  empathy_conf_notify_add (conf, EMPATHY_PREFS_LOCATION_REDUCE_ACCURACY,
+      accuracy_cb, location_manager);
 
   resource_cb (conf, EMPATHY_PREFS_LOCATION_RESOURCE_NETWORK, location_manager);
   resource_cb (conf, EMPATHY_PREFS_LOCATION_RESOURCE_CELL, location_manager);
   resource_cb (conf, EMPATHY_PREFS_LOCATION_RESOURCE_GPS, location_manager);
+  accuracy_cb (conf, EMPATHY_PREFS_LOCATION_REDUCE_ACCURACY, location_manager);
   publish_cb (conf, EMPATHY_PREFS_LOCATION_PUBLISH, location_manager);
 
   // Setup account status callbacks
@@ -315,6 +322,7 @@ position_changed_cb (GeocluePosition *position,
 
   if (fields & GEOCLUE_POSITION_FIELDS_LONGITUDE)
     {
+      longitude += priv->reduce_value;
       new_value = tp_g_value_slice_new (G_TYPE_DOUBLE);
       g_value_set_double (new_value, longitude);
       g_hash_table_insert (priv->location, EMPATHY_LOCATION_LON, new_value);
@@ -322,6 +330,7 @@ position_changed_cb (GeocluePosition *position,
     }
   if (fields & GEOCLUE_POSITION_FIELDS_LATITUDE)
     {
+      latitude += priv->reduce_value;
       new_value = tp_g_value_slice_new (G_TYPE_DOUBLE);
       g_value_set_double (new_value, latitude);
       g_hash_table_insert (priv->location, EMPATHY_LOCATION_LAT, new_value);
@@ -359,6 +368,10 @@ address_foreach_cb (gpointer key,
 
   EmpathyLocationManagerPriv *priv;
   priv = GET_PRIV (location_manager);
+
+  // Discard street information if reduced accuracy is on
+  if (priv->reduce_accuracy && strcmp (key, EMPATHY_LOCATION_STREET) == 0)
+    return;
 
   GValue *new_value = tp_g_value_slice_new (G_TYPE_STRING);
   g_value_set_string (new_value, value);
@@ -510,7 +523,42 @@ publish_cb (EmpathyConf *conf,
 }
 
 
-static void 
+static void
+accuracy_cb (EmpathyConf  *conf,
+             const gchar *key,
+             gpointer user_data)
+{
+  EmpathyLocationManager *manager = EMPATHY_LOCATION_MANAGER (user_data);
+  EmpathyLocationManagerPriv *priv;
+
+  gboolean enabled;
+
+  priv = GET_PRIV (manager);
+  DEBUG ("%s changed", key);
+
+  if (!empathy_conf_get_bool (conf, key, &enabled))
+    return;
+  priv->reduce_accuracy = enabled;
+
+  if (enabled)
+    {
+      GRand *rand = g_rand_new_with_seed (time (NULL));
+      priv->reduce_value = g_rand_double_range (rand, -0.25, 0.25);
+      g_rand_free (rand);
+    }
+  else
+    priv->reduce_value = 0.0;
+
+  if (!priv->is_setup)
+    return;
+
+  geoclue_address_get_address_async (priv->gc_address,
+      initial_address_cb, manager);
+  geoclue_position_get_position_async (priv->gc_position,
+      initial_position_cb, manager);
+}
+
+static void
 resource_cb (EmpathyConf  *conf,
              const gchar *key,
              gpointer user_data)
