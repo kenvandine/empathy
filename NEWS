@@ -1,5 +1,7 @@
 NEW in 2.25.3
 ==============
+ - Refactor EmpathyChatView to make possible to use other backends than
+   GtkTextView. Required to use Webkit and adium themes.
  - Use gi18n-lib.h instead of gi18n.h for libraries. (Xavier Claessens).
  - Add empathy_init(), empathy_gtk_init(). They have to be called by any process
    using libempathy and libempathy-gtk. (Xavier Claessens).
