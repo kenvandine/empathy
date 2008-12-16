@@ -380,6 +380,10 @@ theme_manager_notify_name_cb (EmpathyConf *conf,
 	if (!empathy_conf_get_string (conf, key, &name) ||
 	    !theme_manager_ensure_theme_exists (name) ||
 	    !tp_strdiff (priv->name, name)) {
+		if (!priv->name) {
+			priv->name = g_strdup ("classic");
+		}
+
 		g_free (name);
 		return;
 	}
