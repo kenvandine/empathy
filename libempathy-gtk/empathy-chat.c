@@ -48,7 +48,7 @@
 #include "empathy-contact-list-store.h"
 #include "empathy-contact-list-view.h"
 #include "empathy-contact-menu.h"
-#include "empathy-chat-simple-view.h"
+#include "empathy-chat-text-view.h"
 #include "empathy-smiley-manager.h"
 #include "empathy-ui-utils.h"
 
@@ -1270,7 +1270,7 @@ chat_create_ui (EmpathyChat *chat)
 	g_object_unref (glade);
 
 	/* Add message GtkTextView. */
-	chat->view = EMPATHY_CHAT_VIEW (empathy_chat_simple_view_new ());
+	chat->view = EMPATHY_CHAT_VIEW (empathy_chat_text_view_new ());
 	g_signal_connect (chat->view, "focus_in_event",
 			  G_CALLBACK (chat_text_view_focus_in_event_cb),
 			  chat);

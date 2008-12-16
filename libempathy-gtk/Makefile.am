@@ -27,7 +27,7 @@ libempathy_gtk_la_SOURCES =             	\
 	empathy-cell-renderer-expander.c	\
 	empathy-cell-renderer-text.c		\
 	empathy-chat.c				\
-	empathy-chat-simple-view.c		\
+	empathy-chat-text-view.c		\
 	empathy-chat-view.c			\
 	empathy-conf.c				\
 	empathy-contact-dialogs.c		\
@@ -75,7 +75,7 @@ libempathy_gtk_headers =			\
 	empathy-cell-renderer-expander.h	\
 	empathy-cell-renderer-text.h		\
 	empathy-chat.h				\
-	empathy-chat-simple-view.h		\
+	empathy-chat-text-view.h		\
 	empathy-chat-view.h			\
 	empathy-conf.h				\
 	empathy-contact-dialogs.h		\

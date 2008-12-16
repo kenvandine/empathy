@@ -1,6 +1,7 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /*
  * Copyright (C) 2002-2007 Imendio AB
+ * Copyright (C) 2008 Collabora Ltd.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -20,10 +21,11 @@
  * Authors: Mikael Hallendal <micke@imendio.com>
  *          Richard Hult <richard@imendio.com>
  *          Martyn Russell <martyn@imendio.com>
+ *          Xavier Claessens <xclaesse@gmail.com>
  */
 
-#ifndef __EMPATHY_CHAT_SIMPLE_VIEW_H__
-#define __EMPATHY_CHAT_SIMPLE_VIEW_H__
+#ifndef __EMPATHY_CHAT_TEXT_VIEW_H__
+#define __EMPATHY_CHAT_TEXT_VIEW_H__
 
 #include <gtk/gtktextview.h>
 
@@ -34,30 +36,30 @@
 
 G_BEGIN_DECLS
 
-#define EMPATHY_TYPE_CHAT_SIMPLE_VIEW         (empathy_chat_simple_view_get_type ())
-#define EMPATHY_CHAT_SIMPLE_VIEW(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), EMPATHY_TYPE_CHAT_SIMPLE_VIEW, EmpathyChatSimpleView))
-#define EMPATHY_CHAT_SIMPLE_VIEW_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST((k), EMPATHY_TYPE_CHAT_SIMPLE_VIEW, EmpathyChatViewClass))
-#define EMPATHY_IS_CHAT_SIMPLE_VIEW(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), EMPATHY_TYPE_CHAT_SIMPLE_VIEW))
-#define EMPATHY_IS_CHAT_SIMPLE_VIEW_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), EMPATHY_TYPE_CHAT_SIMPLE_VIEW))
-#define EMPATHY_CHAT_SIMPLE_VIEW_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), EMPATHY_TYPE_CHAT_SIMPLE_VIEW, EmpathyChatViewClass))
+#define EMPATHY_TYPE_CHAT_TEXT_VIEW         (empathy_chat_text_view_get_type ())
+#define EMPATHY_CHAT_TEXT_VIEW(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), EMPATHY_TYPE_CHAT_TEXT_VIEW, EmpathyChatTextView))
+#define EMPATHY_CHAT_TEXT_VIEW_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST((k), EMPATHY_TYPE_CHAT_TEXT_VIEW, EmpathyChatViewClass))
+#define EMPATHY_IS_CHAT_TEXT_VIEW(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), EMPATHY_TYPE_CHAT_TEXT_VIEW))
+#define EMPATHY_IS_CHAT_TEXT_VIEW_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), EMPATHY_TYPE_CHAT_TEXT_VIEW))
+#define EMPATHY_CHAT_TEXT_VIEW_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), EMPATHY_TYPE_CHAT_TEXT_VIEW, EmpathyChatViewClass))
 
-typedef struct _EmpathyChatSimpleView      EmpathyChatSimpleView;
-typedef struct _EmpathyChatSimpleViewClass EmpathyChatSimpleViewClass;
+typedef struct _EmpathyChatTextView      EmpathyChatTextView;
+typedef struct _EmpathyChatTextViewClass EmpathyChatTextViewClass;
 
 #include "empathy-theme.h"
 
-struct _EmpathyChatSimpleView {
+struct _EmpathyChatTextView {
 	GtkTextView parent;
 	gpointer priv;
 };
 
-struct _EmpathyChatSimpleViewClass {
+struct _EmpathyChatTextViewClass {
 	GtkTextViewClass parent_class;
 };
 
-GType                  empathy_chat_simple_view_get_type (void) G_GNUC_CONST;
-EmpathyChatSimpleView *empathy_chat_simple_view_new      (void);
+GType                empathy_chat_text_view_get_type (void) G_GNUC_CONST;
+EmpathyChatTextView *empathy_chat_text_view_new      (void);
 
 G_END_DECLS
 
-#endif /* __EMPATHY_CHAT_SIMPLE_VIEW_H__ */
+#endif /* __EMPATHY_CHAT_TEXT_VIEW_H__ */
