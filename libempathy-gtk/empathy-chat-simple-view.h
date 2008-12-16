@@ -55,8 +55,8 @@ struct _EmpathyChatSimpleViewClass {
 	GtkTextViewClass parent_class;
 };
 
-GType            empathy_chat_simple_view_get_type             (void) G_GNUC_CONST;
-EmpathyChatSimpleView *empathy_chat_simple_view_new                  (void);
+GType                  empathy_chat_simple_view_get_type (void) G_GNUC_CONST;
+EmpathyChatSimpleView *empathy_chat_simple_view_new      (void);
 
 G_END_DECLS
 

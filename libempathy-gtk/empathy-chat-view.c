@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /*
- * Copyright (C) 2002-2007 Imendio AB
+ * Copyright (C) 2008 Collabora Ltd.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -17,28 +17,16 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  * 
- * Authors: Mikael Hallendal <micke@imendio.com>
- *          Richard Hult <richard@imendio.com>
- *          Martyn Russell <martyn@imendio.com>
+ * Authors: Xavier Claessens <xclaesse@gmail.com>
  */
 
 #include "config.h"
 
 #include <telepathy-glib/util.h>
-#include <libmissioncontrol/mc-account.h>
-
-#include <libempathy/empathy-utils.h>
 
 #include "empathy-chat-view.h"
-
-#include "empathy-chat.h"
-#include "empathy-conf.h"
-#include "empathy-ui-utils.h"
-
 #include "empathy-smiley-manager.h"
-
-#define DEBUG_FLAG EMPATHY_DEBUG_CHAT
-#include <libempathy/empathy-debug.h>
+#include "empathy-ui-utils.h"
 
 static void chat_view_base_init (gpointer klass);
 
@@ -72,99 +60,6 @@ chat_view_base_init (gpointer klass)
 	if (!initialized) {
 		initialized = TRUE;
 	}
-}
-
-/* Pads a pixbuf to the specified size, by centering it in a larger transparent
- * pixbuf. Returns a new ref.
- */
-static GdkPixbuf *
-chat_view_pad_to_size (GdkPixbuf *pixbuf,
-		       gint       width,
-		       gint       height,
-		       gint       extra_padding_right)
-{
-	gint       src_width, src_height;
-	GdkPixbuf *padded;
-	gint       x_offset, y_offset;
-
-	src_width = gdk_pixbuf_get_width (pixbuf);
-	src_height = gdk_pixbuf_get_height (pixbuf);
-
-	x_offset = (width - src_width) / 2;
-	y_offset = (height - src_height) / 2;
-
-	padded = gdk_pixbuf_new (gdk_pixbuf_get_colorspace (pixbuf),
-				 TRUE, /* alpha */
-				 gdk_pixbuf_get_bits_per_sample (pixbuf),
-				 width + extra_padding_right,
-				 height);
-
-	gdk_pixbuf_fill (padded, 0);
-
-	gdk_pixbuf_copy_area (pixbuf,
-			      0, /* source coords */
-			      0,
-			      src_width,
-			      src_height,
-			      padded,
-			      x_offset, /* dest coords */
-			      y_offset);
-
-	return padded;
-}
-
-typedef struct {
-	GdkPixbuf *pixbuf;
-	gchar     *token;
-} AvatarData;
-
-static void
-chat_view_avatar_cache_data_free (gpointer ptr)
-{
-	AvatarData *data = ptr;
-
-	g_object_unref (data->pixbuf);
-	g_free (data->token);
-	g_slice_free (AvatarData, data);
-}
-
-GdkPixbuf *
-empathy_chat_view_get_avatar_pixbuf_with_cache (EmpathyContact *contact)
-{
-	AvatarData        *data;
-	EmpathyAvatar     *avatar;
-	GdkPixbuf         *tmp_pixbuf;
-	GdkPixbuf         *pixbuf = NULL;
-
-	/* Check if avatar is in cache and if it's up to date */
-	avatar = empathy_contact_get_avatar (contact);
-	data = g_object_get_data (G_OBJECT (contact), "chat-view-avatar-cache");
-	if (data) {
-		if (avatar && !tp_strdiff (avatar->token, data->token)) {
-			/* We have the avatar in cache */
-			return data->pixbuf;
-		}
-	}
-
-	/* Avatar not in cache, create pixbuf */
-	tmp_pixbuf = empathy_pixbuf_avatar_from_contact_scaled (contact, 32, 32);
-	if (tmp_pixbuf) {
-		pixbuf = chat_view_pad_to_size (tmp_pixbuf, 32, 32, 6);
-		g_object_unref (tmp_pixbuf);
-	}
-	if (!pixbuf) {
-		return NULL;
-	}
-
-	/* Insert new pixbuf in cache */
-	data = g_slice_new0 (AvatarData);
-	data->token = g_strdup (avatar->token);
-	data->pixbuf = pixbuf;
-
-	g_object_set_data_full (G_OBJECT (contact), "chat-view-avatar-cache",
-				data, chat_view_avatar_cache_data_free);
-
-	return data->pixbuf;
 }
 
 void
@@ -354,6 +249,132 @@ empathy_chat_view_set_margin (EmpathyChatView *view,
 	}
 }
 
+time_t
+empathy_chat_view_get_last_timestamp (EmpathyChatView *view)
+{
+	g_return_val_if_fail (EMPATHY_IS_CHAT_VIEW (view), 0);
+	
+	if (EMPATHY_TYPE_CHAT_VIEW_GET_IFACE (view)->get_last_timestamp) {
+		return EMPATHY_TYPE_CHAT_VIEW_GET_IFACE (view)->get_last_timestamp (view);
+	}
+	return 0;
+}
+
+void
+empathy_chat_view_set_last_timestamp (EmpathyChatView *view,
+				      time_t          timestamp)
+{
+	g_return_if_fail (EMPATHY_IS_CHAT_VIEW (view));
+	
+	if (EMPATHY_TYPE_CHAT_VIEW_GET_IFACE (view)->set_last_timestamp) {
+		EMPATHY_TYPE_CHAT_VIEW_GET_IFACE (view)->set_last_timestamp (view, timestamp);
+	}
+}
+
+EmpathyContact *
+empathy_chat_view_get_last_contact (EmpathyChatView *view)
+{
+	g_return_val_if_fail (EMPATHY_IS_CHAT_VIEW (view), NULL);
+	
+	if (EMPATHY_TYPE_CHAT_VIEW_GET_IFACE (view)->get_last_contact) {
+		return EMPATHY_TYPE_CHAT_VIEW_GET_IFACE (view)->get_last_contact (view);
+	}
+	return NULL;
+}
+
+/* Pads a pixbuf to the specified size, by centering it in a larger transparent
+ * pixbuf. Returns a new ref.
+ */
+static GdkPixbuf *
+chat_view_pad_to_size (GdkPixbuf *pixbuf,
+		       gint       width,
+		       gint       height,
+		       gint       extra_padding_right)
+{
+	gint       src_width, src_height;
+	GdkPixbuf *padded;
+	gint       x_offset, y_offset;
+
+	src_width = gdk_pixbuf_get_width (pixbuf);
+	src_height = gdk_pixbuf_get_height (pixbuf);
+
+	x_offset = (width - src_width) / 2;
+	y_offset = (height - src_height) / 2;
+
+	padded = gdk_pixbuf_new (gdk_pixbuf_get_colorspace (pixbuf),
+				 TRUE, /* alpha */
+				 gdk_pixbuf_get_bits_per_sample (pixbuf),
+				 width + extra_padding_right,
+				 height);
+
+	gdk_pixbuf_fill (padded, 0);
+
+	gdk_pixbuf_copy_area (pixbuf,
+			      0, /* source coords */
+			      0,
+			      src_width,
+			      src_height,
+			      padded,
+			      x_offset, /* dest coords */
+			      y_offset);
+
+	return padded;
+}
+
+typedef struct {
+	GdkPixbuf *pixbuf;
+	gchar     *token;
+} AvatarData;
+
+static void
+chat_view_avatar_cache_data_free (gpointer ptr)
+{
+	AvatarData *data = ptr;
+
+	g_object_unref (data->pixbuf);
+	g_free (data->token);
+	g_slice_free (AvatarData, data);
+}
+
+GdkPixbuf *
+empathy_chat_view_get_avatar_pixbuf_with_cache (EmpathyContact *contact)
+{
+	AvatarData        *data;
+	EmpathyAvatar     *avatar;
+	GdkPixbuf         *tmp_pixbuf;
+	GdkPixbuf         *pixbuf = NULL;
+
+	/* Check if avatar is in cache and if it's up to date */
+	avatar = empathy_contact_get_avatar (contact);
+	data = g_object_get_data (G_OBJECT (contact), "chat-view-avatar-cache");
+	if (data) {
+		if (avatar && !tp_strdiff (avatar->token, data->token)) {
+			/* We have the avatar in cache */
+			return data->pixbuf;
+		}
+	}
+
+	/* Avatar not in cache, create pixbuf */
+	tmp_pixbuf = empathy_pixbuf_avatar_from_contact_scaled (contact, 32, 32);
+	if (tmp_pixbuf) {
+		pixbuf = chat_view_pad_to_size (tmp_pixbuf, 32, 32, 6);
+		g_object_unref (tmp_pixbuf);
+	}
+	if (!pixbuf) {
+		return NULL;
+	}
+
+	/* Insert new pixbuf in cache */
+	data = g_slice_new0 (AvatarData);
+	data->token = g_strdup (avatar->token);
+	data->pixbuf = pixbuf;
+
+	g_object_set_data_full (G_OBJECT (contact), "chat-view-avatar-cache",
+				data, chat_view_avatar_cache_data_free);
+
+	return data->pixbuf;
+}
+
 GtkWidget *
 empathy_chat_view_get_smiley_menu (GCallback    callback,
 				   gpointer     user_data)
@@ -401,38 +422,5 @@ empathy_chat_view_get_smiley_menu (GCallback    callback,
 	gtk_widget_show_all (menu);
 
 	return menu;
-}
-
-time_t
-empathy_chat_view_get_last_timestamp (EmpathyChatView *view)
-{
-	g_return_val_if_fail (EMPATHY_IS_CHAT_VIEW (view), 0);
-	
-	if (EMPATHY_TYPE_CHAT_VIEW_GET_IFACE (view)->get_last_timestamp) {
-		return EMPATHY_TYPE_CHAT_VIEW_GET_IFACE (view)->get_last_timestamp (view);
-	}
-	return 0;
-}
-
-void
-empathy_chat_view_set_last_timestamp (EmpathyChatView *view,
-				      time_t          timestamp)
-{
-	g_return_if_fail (EMPATHY_IS_CHAT_VIEW (view));
-	
-	if (EMPATHY_TYPE_CHAT_VIEW_GET_IFACE (view)->set_last_timestamp) {
-		EMPATHY_TYPE_CHAT_VIEW_GET_IFACE (view)->set_last_timestamp (view, timestamp);
-	}
-}
-
-EmpathyContact *
-empathy_chat_view_get_last_contact (EmpathyChatView *view)
-{
-	g_return_val_if_fail (EMPATHY_IS_CHAT_VIEW (view), NULL);
-	
-	if (EMPATHY_TYPE_CHAT_VIEW_GET_IFACE (view)->get_last_contact) {
-		return EMPATHY_TYPE_CHAT_VIEW_GET_IFACE (view)->get_last_contact (view);
-	}
-	return NULL;
 }
 

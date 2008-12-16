@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /*
- * Copyright (C) 2002-2007 Imendio AB
+ * Copyright (C) 2008 Collabora Ltd.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -17,9 +17,7 @@
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
  * 
- * Authors: Mikael Hallendal <micke@imendio.com>
- *          Richard Hult <richard@imendio.com>
- *          Martyn Russell <martyn@imendio.com>
+ * Authors: Xavier Claessens <xclaesse@gmail.com>
  */
 
 #ifndef __EMPATHY_CHAT_VIEW_H__
@@ -36,7 +34,6 @@ G_BEGIN_DECLS
 #define EMPATHY_CHAT_VIEW(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), EMPATHY_TYPE_CHAT_VIEW, EmpathyChatView))
 #define EMPATHY_IS_CHAT_VIEW(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), EMPATHY_TYPE_CHAT_VIEW))
 #define EMPATHY_TYPE_CHAT_VIEW_GET_IFACE(o) (G_TYPE_INSTANCE_GET_INTERFACE ((o), EMPATHY_TYPE_CHAT_VIEW, EmpathyChatViewIface))
-#define empathy_chat_view_new(o)	EMPATHY_CHAT_VIEW(empathy_chat_simple_view_new(o))
 
 typedef struct _EmpathyChatView      EmpathyChatView;
 typedef struct _EmpathyChatViewIface EmpathyChatViewIface;
@@ -47,47 +44,47 @@ struct _EmpathyChatViewIface {
 	GTypeInterface   base_iface;
 
 	/* VTabled */
-void             (*append_message)       (EmpathyChatView *view,
-							 EmpathyMessage  *msg);
-void             (*append_event)         (EmpathyChatView *view,
-							 const gchar     *str);
-void             (*append_button)        (EmpathyChatView *view,
-							 const gchar     *message,
-							 GtkWidget       *button1,
-							 GtkWidget       *button2);
-void             (*set_margin)           (EmpathyChatView *view,
-							 gint             margin);
-void             (*scroll)               (EmpathyChatView *view,
-							 gboolean         allow_scrolling);
-void             (*scroll_down)          (EmpathyChatView *view);
-gboolean         (*get_selection_bounds) (EmpathyChatView *view,
-							 GtkTextIter     *start,
-							 GtkTextIter     *end);
-void             (*clear)                (EmpathyChatView *view);
-gboolean         (*find_previous)        (EmpathyChatView *view,
-							 const gchar     *search_criteria,
-							 gboolean         new_search);
-gboolean         (*find_next)            (EmpathyChatView *view,
-							 const gchar     *search_criteria,
-							 gboolean         new_search);
-void             (*find_abilities)       (EmpathyChatView *view,
-							 const gchar     *search_criteria,
-							 gboolean        *can_do_previous,
-							 gboolean        *can_do_next);
-void             (*highlight)            (EmpathyChatView *view,
-							 const gchar     *text);
-void             (*copy_clipboard)       (EmpathyChatView *view);
-EmpathyTheme *   (*get_theme)            (EmpathyChatView *view);
-void             (*set_theme)            (EmpathyChatView *view,
-							 EmpathyTheme    *theme);
-time_t           (*get_last_timestamp)   (EmpathyChatView *view);
-void             (*set_last_timestamp)   (EmpathyChatView *view,
-							 time_t           timestamp);
-EmpathyContact * (*get_last_contact)     (EmpathyChatView *view);
+	void             (*append_message)       (EmpathyChatView *view,
+						  EmpathyMessage  *msg);
+	void             (*append_event)         (EmpathyChatView *view,
+						  const gchar     *str);
+	void             (*append_button)        (EmpathyChatView *view,
+						  const gchar     *message,
+						  GtkWidget       *button1,
+						  GtkWidget       *button2);
+	void             (*set_margin)           (EmpathyChatView *view,
+						  gint             margin);
+	void             (*scroll)               (EmpathyChatView *view,
+						  gboolean         allow_scrolling);
+	void             (*scroll_down)          (EmpathyChatView *view);
+	gboolean         (*get_selection_bounds) (EmpathyChatView *view,
+						  GtkTextIter     *start,
+						  GtkTextIter     *end);
+	void             (*clear)                (EmpathyChatView *view);
+	gboolean         (*find_previous)        (EmpathyChatView *view,
+						  const gchar     *search_criteria,
+						  gboolean         new_search);
+	gboolean         (*find_next)            (EmpathyChatView *view,
+						  const gchar     *search_criteria,
+						  gboolean         new_search);
+	void             (*find_abilities)       (EmpathyChatView *view,
+						  const gchar     *search_criteria,
+						  gboolean        *can_do_previous,
+						  gboolean        *can_do_next);
+	void             (*highlight)            (EmpathyChatView *view,
+						  const gchar     *text);
+	void             (*copy_clipboard)       (EmpathyChatView *view);
+	EmpathyTheme *   (*get_theme)            (EmpathyChatView *view);
+	void             (*set_theme)            (EmpathyChatView *view,
+						  EmpathyTheme    *theme);
+	time_t           (*get_last_timestamp)   (EmpathyChatView *view);
+	void             (*set_last_timestamp)   (EmpathyChatView *view,
+						  time_t           timestamp);
+	EmpathyContact * (*get_last_contact)     (EmpathyChatView *view);
 
 };
 
-GType    empathy_chat_view_get_type          (void) G_GNUC_CONST;
+GType            empathy_chat_view_get_type             (void) G_GNUC_CONST;
 void             empathy_chat_view_append_message       (EmpathyChatView *view,
 							 EmpathyMessage  *msg);
 void             empathy_chat_view_append_event         (EmpathyChatView *view,
@@ -121,17 +118,16 @@ void             empathy_chat_view_set_theme            (EmpathyChatView *view,
 							 EmpathyTheme    *theme);
 void             empathy_chat_view_set_margin           (EmpathyChatView *view,
 							 gint             margin);
-GtkWidget *      empathy_chat_view_get_smiley_menu      (GCallback        callback,
-							 gpointer         user_data);
 time_t           empathy_chat_view_get_last_timestamp   (EmpathyChatView *view);
 void             empathy_chat_view_set_last_timestamp   (EmpathyChatView *view,
 							 time_t           timestamp);
 EmpathyContact * empathy_chat_view_get_last_contact     (EmpathyChatView *view);
+
 GdkPixbuf *      empathy_chat_view_get_avatar_pixbuf_with_cache (EmpathyContact *contact);
+GtkWidget *      empathy_chat_view_get_smiley_menu      (GCallback        callback,
+							 gpointer         user_data);
 
 G_END_DECLS
-
-#include "empathy-chat-simple-view.h"
 
 #endif /* __EMPATHY_CHAT_VIEW_H__ */
 

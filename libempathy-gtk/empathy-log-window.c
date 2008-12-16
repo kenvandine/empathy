@@ -41,6 +41,7 @@
 #include "empathy-log-window.h"
 #include "empathy-account-chooser.h"
 #include "empathy-chat-view.h"
+#include "empathy-chat-simple-view.h"
 #include "empathy-ui-utils.h"
 
 #define DEBUG_FLAG EMPATHY_DEBUG_OTHER
@@ -207,13 +208,13 @@ empathy_log_window_show (McAccount   *account,
 			  window);
 
 	/* Configure Search EmpathyChatView */
-	window->chatview_find = empathy_chat_view_new ();
+	window->chatview_find = EMPATHY_CHAT_VIEW (empathy_chat_simple_view_new ());
 	gtk_container_add (GTK_CONTAINER (window->scrolledwindow_find),
 			   GTK_WIDGET (window->chatview_find));
 	gtk_widget_show (GTK_WIDGET (window->chatview_find));
 
 	/* Configure Contacts EmpathyChatView */
-	window->chatview_chats = empathy_chat_view_new ();
+	window->chatview_chats = EMPATHY_CHAT_VIEW (empathy_chat_simple_view_new ());
 	gtk_container_add (GTK_CONTAINER (window->scrolledwindow_chats),
 			   GTK_WIDGET (window->chatview_chats));
 	gtk_widget_show (GTK_WIDGET (window->chatview_chats));
