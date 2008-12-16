@@ -45,7 +45,6 @@ typedef struct {
 	gchar       *name;
 	guint        name_notify_id;
 	GtkSettings *settings;
-	GList       *irc_views;
 	GList       *boxes_views;
 } EmpathyThemeManagerPriv;
 
@@ -284,8 +283,32 @@ theme_manager_create_irc_view (EmpathyThemeManager *manager)
 	return EMPATHY_CHAT_VIEW (view);
 }
 
+static void
+theme_manager_boxes_weak_notify_cb (gpointer data,
+				    GObject *where_the_object_was)
+{
+	EmpathyThemeManagerPriv *priv = GET_PRIV (data);
+
+	priv->boxes_views = g_list_remove (priv->boxes_views, where_the_object_was);
+}
+
 static EmpathyChatView *
-theme_manager_create_boxes_view (EmpathyThemeManager *manager,
+theme_manager_create_boxes_view (EmpathyThemeManager *manager)
+{
+	EmpathyThemeManagerPriv *priv = GET_PRIV (manager);
+	EmpathyThemeBoxes       *view;
+
+	view = empathy_theme_boxes_new ();
+	priv->boxes_views = g_list_prepend (priv->boxes_views, view);
+	g_object_weak_ref (G_OBJECT (view),
+			   theme_manager_boxes_weak_notify_cb,
+			   manager);
+
+	return EMPATHY_CHAT_VIEW (view);
+}
+
+static void
+theme_manager_update_boxes_view (EmpathyChatTextView *view,
 				 const gchar         *header_foreground,
 				 const gchar         *header_background,
 				 const gchar         *header_line_background,
@@ -298,10 +321,7 @@ theme_manager_create_boxes_view (EmpathyThemeManager *manager,
 				 const gchar         *highlight_foreground)
 
 {
-	EmpathyChatTextView *view;
-	GtkTextTag          *tag;
-
-	view = EMPATHY_CHAT_TEXT_VIEW (empathy_theme_boxes_new ());
+	GtkTextTag *tag;
 
 	/* FIXME: GtkTextTag don't support to set color properties to NULL.
 	 * See bug #542523 */
@@ -361,12 +381,10 @@ theme_manager_create_boxes_view (EmpathyThemeManager *manager,
 	TAG_SET ("paragraph-background", header_line_background);
 
 	#undef TAG_SET
-
-	return EMPATHY_CHAT_VIEW (view);
 }
 
-static EmpathyChatView *
-theme_manager_create_simple_view (EmpathyThemeManager *manager)
+static void
+theme_manager_update_simple_view (EmpathyChatTextView *view)
 {
 	GtkStyle *style;
 	gchar     color1[10];
@@ -381,62 +399,66 @@ theme_manager_create_simple_view (EmpathyThemeManager *manager)
 	theme_manager_gdk_color_to_hex (&style->dark[GTK_STATE_SELECTED], color3);
 	theme_manager_gdk_color_to_hex (&style->fg[GTK_STATE_SELECTED], color4);
 
-	return theme_manager_create_boxes_view (manager,
-						color4,     /* header_foreground */
-						color2,     /* header_background */
-						color3,     /* header_line_background */
-						color1,     /* action_foreground */
-						"darkgrey", /* time_foreground */
-						"darkgrey", /* event_foreground */
-						color1,     /* link_foreground */
-						NULL,       /* text_foreground */
-						NULL,       /* text_background */
-						NULL);      /* highlight_foreground */
+	theme_manager_update_boxes_view (view,
+					 color4,     /* header_foreground */
+					 color2,     /* header_background */
+					 color3,     /* header_line_background */
+					 color1,     /* action_foreground */
+					 "darkgrey", /* time_foreground */
+					 "darkgrey", /* event_foreground */
+					 color1,     /* link_foreground */
+					 NULL,       /* text_foreground */
+					 NULL,       /* text_background */
+					 NULL);      /* highlight_foreground */
 }
 
 EmpathyChatView *
 empathy_theme_manager_create_view (EmpathyThemeManager *manager)
 {
 	EmpathyThemeManagerPriv *priv = GET_PRIV (manager);
+	EmpathyChatView         *view = NULL;
 
 	g_return_val_if_fail (EMPATHY_IS_THEME_MANAGER (manager), NULL);
 
 	DEBUG ("Using theme %s", priv->name);
 
 	if (strcmp (priv->name, "classic") == 0)  {
-		return theme_manager_create_irc_view (manager);
+		view = theme_manager_create_irc_view (manager);
 	}
 	else if (strcmp (priv->name, "simple") == 0) {
-		return theme_manager_create_simple_view (manager);
+		view = theme_manager_create_boxes_view (manager);
+		theme_manager_update_simple_view (EMPATHY_CHAT_TEXT_VIEW (view));
 	}
 	else if (strcmp (priv->name, "clean") == 0) {
-		return theme_manager_create_boxes_view (manager,
-							"black",    /* header_foreground */
-							"#efefdf",  /* header_background */
-							"#e3e3d3",  /* header_line_background */
-							"brown4",   /* action_foreground */
-							"darkgrey", /* time_foreground */
-							"darkgrey", /* event_foreground */
-							"#49789e",  /* link_foreground */
-							NULL,       /* text_foreground */
-							NULL,       /* text_background */
-							NULL);      /* highlight_foreground */
+		view = theme_manager_create_boxes_view (manager);
+		theme_manager_update_boxes_view (EMPATHY_CHAT_TEXT_VIEW (view),
+						 "black",    /* header_foreground */
+						 "#efefdf",  /* header_background */
+						 "#e3e3d3",  /* header_line_background */
+						 "brown4",   /* action_foreground */
+						 "darkgrey", /* time_foreground */
+						 "darkgrey", /* event_foreground */
+						 "#49789e",  /* link_foreground */
+						 NULL,       /* text_foreground */
+						 NULL,       /* text_background */
+						 NULL);      /* highlight_foreground */
 	}
 	else if (strcmp (priv->name, "blue") == 0) {
-		return theme_manager_create_boxes_view (manager,
-							"black",    /* header_foreground */
-							"#88a2b4",  /* header_background */
-							"#7f96a4",  /* header_line_background */
-							"brown4",   /* action_foreground */
-							"darkgrey", /* time_foreground */
-							"#7f96a4",  /* event_foreground */
-							"#49789e",  /* link_foreground */
-							"black",    /* text_foreground */
-							"#adbdc8",  /* text_background */
-							"black");   /* highlight_foreground */
+		view = theme_manager_create_boxes_view (manager);
+		theme_manager_update_boxes_view (EMPATHY_CHAT_TEXT_VIEW (view),
+						 "black",    /* header_foreground */
+						 "#88a2b4",  /* header_background */
+						 "#7f96a4",  /* header_line_background */
+						 "brown4",   /* action_foreground */
+						 "darkgrey", /* time_foreground */
+						 "#7f96a4",  /* event_foreground */
+						 "#49789e",  /* link_foreground */
+						 "black",    /* text_foreground */
+						 "#adbdc8",  /* text_background */
+						 "black");   /* highlight_foreground */
 	}
 
-	return NULL;
+	return view;
 }
 
 EmpathyThemeManager *
