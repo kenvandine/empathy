@@ -45,6 +45,8 @@ typedef struct {
 	gchar       *name;
 	guint        name_notify_id;
 	GtkSettings *settings;
+	GList       *irc_views;
+	GList       *boxes_views;
 } EmpathyThemeManagerPriv;
 
 enum {
@@ -81,9 +83,6 @@ theme_manager_color_hash_notify_cb (EmpathyThemeManager *manager)
 
 FIXME: Make that work, it should update color when theme changes but it
        doesnt seems to work with all themes.
-
-  
---------
 
 	g_object_get (priv->settings,
 		      "color-hash", &color_hash,
@@ -247,7 +246,6 @@ theme_manager_create_irc_view (EmpathyThemeManager *manager)
 	view = EMPATHY_CHAT_TEXT_VIEW (empathy_theme_irc_new ());
 
 	/* Define base tags */
-	/* FIXME: Missing define for highlight */
 	empathy_chat_text_view_tag_set (view, EMPATHY_CHAT_TEXT_VIEW_TAG_SPACING,
 					"size", 2000,
 					NULL);
@@ -305,6 +303,8 @@ theme_manager_create_boxes_view (EmpathyThemeManager *manager,
 
 	view = EMPATHY_CHAT_TEXT_VIEW (empathy_theme_boxes_new ());
 
+	/* FIXME: GtkTextTag don't support to set color properties to NULL.
+	 * See bug #542523 */
 	#define TAG_SET(prop, value) \
 		if (value != NULL) { \
 			g_object_set (tag, prop, value, NULL); \
@@ -376,7 +376,7 @@ theme_manager_create_simple_view (EmpathyThemeManager *manager)
 
 	style = gtk_widget_get_default_style ();
 
-	theme_manager_gdk_color_to_hex (&style->base[GTK_STATE_SELECTED], color1); 
+	theme_manager_gdk_color_to_hex (&style->base[GTK_STATE_SELECTED], color1);
 	theme_manager_gdk_color_to_hex (&style->bg[GTK_STATE_SELECTED], color2);
 	theme_manager_gdk_color_to_hex (&style->dark[GTK_STATE_SELECTED], color3);
 	theme_manager_gdk_color_to_hex (&style->fg[GTK_STATE_SELECTED], color4);
