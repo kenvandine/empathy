@@ -88,183 +88,100 @@ typedef struct {
 	guint          notify_show_avatars_id;
 } EmpathyChatSimpleViewPriv;
 
-static void     chat_view_finalize                   (GObject                  *object);
-static gboolean chat_view_drag_motion                (GtkWidget                *widget,
-						      GdkDragContext           *context,
-						      gint                      x,
-						      gint                      y,
-						      guint                     time);
-static void     chat_view_size_allocate              (GtkWidget                *widget,
-						      GtkAllocation            *alloc);
-static void     chat_view_setup_tags                 (EmpathyChatSimpleView           *view);
-static void     chat_view_system_font_update         (EmpathyChatSimpleView           *view);
-static void     chat_view_notify_system_font_cb      (EmpathyConf               *conf,
-						      const gchar              *key,
-						      gpointer                  user_data);
-static void     chat_view_notify_show_avatars_cb     (EmpathyConf               *conf,
-						      const gchar              *key,
-						      gpointer                  user_data);
-static void     chat_view_populate_popup             (EmpathyChatSimpleView           *view,
-						      GtkMenu                  *menu,
-						      gpointer                  user_data);
-static gboolean chat_view_event_cb                   (EmpathyChatSimpleView           *view,
-						      GdkEventMotion           *event,
-						      GtkTextTag               *tag);
-static gboolean chat_view_url_event_cb               (GtkTextTag               *tag,
-						      GObject                  *object,
-						      GdkEvent                 *event,
-						      GtkTextIter              *iter,
-						      EmpathyChatView          *view);
-static void     chat_view_open_address_cb            (GtkMenuItem              *menuitem,
-						      const gchar              *url);
-static void     chat_view_copy_address_cb            (GtkMenuItem              *menuitem,
-						      const gchar              *url);
-static void     chat_view_clear_view_cb              (GtkMenuItem              *menuitem,
-						      EmpathyChatSimpleView           *view);
-static gboolean chat_view_is_scrolled_down           (EmpathyChatSimpleView           *view);
-static void     chat_view_theme_changed_cb           (EmpathyThemeManager       *manager,
-						      EmpathyChatSimpleView           *view);
-static void     chat_view_theme_notify_cb            (EmpathyTheme              *theme,
-						      GParamSpec                *param,
-						      EmpathyChatSimpleView           *view);
+static void chat_view_iface_init (EmpathyChatViewIface *iface);
 
-static void chat_view_iface_init         (EmpathyChatViewIface    *iface);
-
-G_DEFINE_TYPE_WITH_CODE (EmpathyChatSimpleView, empathy_chat_simple_view, GTK_TYPE_TEXT_VIEW,
+G_DEFINE_TYPE_WITH_CODE (EmpathyChatSimpleView, empathy_chat_simple_view,
+			 GTK_TYPE_TEXT_VIEW,
 			 G_IMPLEMENT_INTERFACE (EMPATHY_TYPE_CHAT_VIEW,
 						chat_view_iface_init));
 
-static void
-empathy_chat_simple_view_class_init (EmpathyChatSimpleViewClass *klass)
-{
-	GObjectClass   *object_class = G_OBJECT_CLASS (klass);
-	GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
-	
-	object_class->finalize = chat_view_finalize;
-	widget_class->size_allocate = chat_view_size_allocate;
-	widget_class->drag_motion = chat_view_drag_motion; 
-	
-	g_type_class_add_private (object_class, sizeof (EmpathyChatSimpleViewPriv));
-}
-
-static void
-empathy_chat_simple_view_init (EmpathyChatSimpleView *view)
-{
-	gboolean             show_avatars;
-	EmpathyChatSimpleViewPriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (view,
-		EMPATHY_TYPE_CHAT_SIMPLE_VIEW, EmpathyChatSimpleViewPriv);
-
-	view->priv = priv;	
-	priv->buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
-	priv->last_timestamp = 0;
-	priv->allow_scrolling = TRUE;
-	
-	g_object_set (view,
-		      "wrap-mode", GTK_WRAP_WORD_CHAR,
-		      "editable", FALSE,
-		      "cursor-visible", FALSE,
-		      NULL);
-	
-	priv->notify_system_fonts_id =
-		empathy_conf_notify_add (empathy_conf_get (),
-					 "/desktop/gnome/interface/document_font_name",
-					 chat_view_notify_system_font_cb,
-					 view);
-	chat_view_system_font_update (view);
-	
-	priv->notify_show_avatars_id =
-		empathy_conf_notify_add (empathy_conf_get (),
-					 EMPATHY_PREFS_UI_SHOW_AVATARS,
-					 chat_view_notify_show_avatars_cb,
-					 view);
-	
-	chat_view_setup_tags (view);
-	
-	empathy_theme_manager_apply_saved (empathy_theme_manager_get (), EMPATHY_CHAT_VIEW(view));
-	
-	show_avatars = FALSE;
-	empathy_conf_get_bool (empathy_conf_get (),
-			       EMPATHY_PREFS_UI_SHOW_AVATARS,
-			       &show_avatars);
-	
-	empathy_theme_set_show_avatars (priv->theme, show_avatars);
-	
-	g_signal_connect (view,
-			  "populate-popup",
-			  G_CALLBACK (chat_view_populate_popup),
-			  NULL);
-	
-	g_signal_connect_object (empathy_theme_manager_get (),
-				 "theme-changed",
-				 G_CALLBACK (chat_view_theme_changed_cb),
-				 EMPATHY_CHAT_VIEW(view),
-				 0);
-}
-
-static void
-chat_view_finalize (GObject *object)
-{
-	EmpathyChatSimpleView     *view;
-	EmpathyChatSimpleViewPriv *priv;
-	
-	view = EMPATHY_CHAT_SIMPLE_VIEW (object);
-	priv = GET_PRIV (view);
-	
-	DEBUG ("%p", object);
-	
-	empathy_conf_notify_remove (empathy_conf_get (), priv->notify_system_fonts_id);
-	empathy_conf_notify_remove (empathy_conf_get (), priv->notify_show_avatars_id);
-	
-	if (priv->last_contact) {
-		g_object_unref (priv->last_contact);
-	}
-	if (priv->scroll_time) {
-		g_timer_destroy (priv->scroll_time);
-	}
-	if (priv->scroll_timeout) {
-		g_source_remove (priv->scroll_timeout);
-	}
-	
-	if (priv->theme) {
-		g_signal_handlers_disconnect_by_func (priv->theme,
-						      chat_view_theme_notify_cb,
-						      view);
-		g_object_unref (priv->theme);
-	}
-	
-	G_OBJECT_CLASS (empathy_chat_simple_view_parent_class)->finalize (object);
-}
-
 static gboolean
-chat_view_drag_motion (GtkWidget        *widget,
-		       GdkDragContext   *context,
-		       gint              x,
-		       gint              y,
-		       guint             time)
+chat_view_url_event_cb (GtkTextTag      *tag,
+			GObject         *object,
+			GdkEvent        *event,
+			GtkTextIter     *iter,
+			EmpathyChatView *view)
 {
-	/* Don't handle drag motion, since we don't want the view to scroll as
-	  * the result of dragging something across it.
-	  */
+	GtkTextIter          start, end;
+	gchar               *str;
+	EmpathyChatViewPriv *priv;
+
+	priv = GET_PRIV (view);
+
+	/* If the link is being selected, don't do anything. */
+	gtk_text_buffer_get_selection_bounds (priv->buffer, &start, &end);
+	if (gtk_text_iter_get_offset (&start) != gtk_text_iter_get_offset (&end)) {
+		return FALSE;
+	}
+	
+	if (event->type == GDK_BUTTON_RELEASE && event->button.button == 1) {
+		start = end = *iter;
+		
+		if (gtk_text_iter_backward_to_tag_toggle (&start, tag) &&
+		    gtk_text_iter_forward_to_tag_toggle (&end, tag)) {
+			    str = gtk_text_buffer_get_text (priv->buffer,
+							    &start,
+							    &end,
+							    FALSE);
+			    
+			    empathy_url_show (GTK_WIDGET (view), str);
+			    g_free (str);
+		    }
+	}
 	
 	return FALSE;
 }
 
-static void
-chat_view_size_allocate (GtkWidget     *widget,
-			 GtkAllocation *alloc)
+static gboolean
+chat_view_event_cb (EmpathyChatSimpleView *view,
+		    GdkEventMotion *event,
+		    GtkTextTag     *tag)
 {
-	gboolean down;
+	static GdkCursor  *hand = NULL;
+	static GdkCursor  *beam = NULL;
+	GtkTextWindowType  type;
+	GtkTextIter        iter;
+	GdkWindow         *win;
+	gint               x, y, buf_x, buf_y;
 	
-	down = chat_view_is_scrolled_down (EMPATHY_CHAT_SIMPLE_VIEW (widget));
+	type = gtk_text_view_get_window_type (GTK_TEXT_VIEW (view),
+					      event->window);
 	
-	GTK_WIDGET_CLASS (empathy_chat_simple_view_parent_class)->size_allocate (widget, alloc);
-	
-	if (down) {
-		GtkAdjustment *adj;
-		
-		adj = GTK_TEXT_VIEW (widget)->vadjustment;
-		gtk_adjustment_set_value (adj, adj->upper - adj->page_size);
+	if (type != GTK_TEXT_WINDOW_TEXT) {
+		return FALSE;
 	}
+	
+	/* Get where the pointer really is. */
+	win = gtk_text_view_get_window (GTK_TEXT_VIEW (view), type);
+	if (!win) {
+		return FALSE;
+	}
+	
+	gdk_window_get_pointer (win, &x, &y, NULL);
+	
+	/* Get the iter where the cursor is at */
+	gtk_text_view_window_to_buffer_coords (GTK_TEXT_VIEW (view), type,
+					       x, y,
+					       &buf_x, &buf_y);
+	
+	gtk_text_view_get_iter_at_location (GTK_TEXT_VIEW (view),
+					    &iter,
+					    buf_x, buf_y);
+	
+	if (gtk_text_iter_has_tag (&iter, tag)) {
+		if (!hand) {
+			hand = gdk_cursor_new (GDK_HAND2);
+			beam = gdk_cursor_new (GDK_XTERM);
+		}
+		gdk_window_set_cursor (win, hand);
+	} else {
+		if (!beam) {
+			beam = gdk_cursor_new (GDK_XTERM);
+		}
+		gdk_window_set_cursor (win, beam);
+	}
+	
+	return FALSE;
 }
 
 static void
@@ -280,8 +197,7 @@ chat_view_setup_tags (EmpathyChatSimpleView *view)
 				    NULL);
 	
 	/* FIXME: Move to the theme and come up with something that looks a bit
-	  * nicer.
-	  */
+	 * nicer. */
 	gtk_text_buffer_create_tag (priv->buffer,
 				    "highlight",
 				    "background", "yellow",
@@ -369,7 +285,25 @@ chat_view_notify_show_avatars_cb (EmpathyConf  *conf,
 static void
 chat_view_clear_view_cb (GtkMenuItem *menuitem, EmpathyChatSimpleView *view)
 {
-	chat_simple_view_clear (EMPATHY_CHAT_VIEW (view));
+	empathy_chat_view_clear (EMPATHY_CHAT_VIEW (view));
+}
+
+static void
+chat_view_open_address_cb (GtkMenuItem *menuitem, const gchar *url)
+{
+	empathy_url_show (GTK_WIDGET (menuitem), url);
+}
+
+static void
+chat_view_copy_address_cb (GtkMenuItem *menuitem, const gchar *url)
+{
+	GtkClipboard *clipboard;
+	
+	clipboard = gtk_clipboard_get (GDK_SELECTION_CLIPBOARD);
+	gtk_clipboard_set_text (clipboard, url, -1);
+	
+	clipboard = gtk_clipboard_get (GDK_SELECTION_PRIMARY);
+	gtk_clipboard_set_text (clipboard, url, -1);
 }
 
 static void
@@ -456,113 +390,6 @@ chat_view_populate_popup (EmpathyChatSimpleView *view,
 }
 
 static gboolean
-chat_view_event_cb (EmpathyChatSimpleView *view,
-		    GdkEventMotion *event,
-		    GtkTextTag     *tag)
-{
-	static GdkCursor  *hand = NULL;
-	static GdkCursor  *beam = NULL;
-	GtkTextWindowType  type;
-	GtkTextIter        iter;
-	GdkWindow         *win;
-	gint               x, y, buf_x, buf_y;
-	
-	type = gtk_text_view_get_window_type (GTK_TEXT_VIEW (view),
-					      event->window);
-	
-	if (type != GTK_TEXT_WINDOW_TEXT) {
-		return FALSE;
-	}
-	
-	/* Get where the pointer really is. */
-	win = gtk_text_view_get_window (GTK_TEXT_VIEW (view), type);
-	if (!win) {
-		return FALSE;
-	}
-	
-	gdk_window_get_pointer (win, &x, &y, NULL);
-	
-	/* Get the iter where the cursor is at */
-	gtk_text_view_window_to_buffer_coords (GTK_TEXT_VIEW (view), type,
-					       x, y,
-					       &buf_x, &buf_y);
-	
-	gtk_text_view_get_iter_at_location (GTK_TEXT_VIEW (view),
-					    &iter,
-					    buf_x, buf_y);
-	
-	if (gtk_text_iter_has_tag (&iter, tag)) {
-		if (!hand) {
-			hand = gdk_cursor_new (GDK_HAND2);
-			beam = gdk_cursor_new (GDK_XTERM);
-		}
-		gdk_window_set_cursor (win, hand);
-	} else {
-		if (!beam) {
-			beam = gdk_cursor_new (GDK_XTERM);
-		}
-		gdk_window_set_cursor (win, beam);
-	}
-	
-	return FALSE;
-}
-
-static gboolean
-chat_view_url_event_cb (GtkTextTag      *tag,
-			GObject         *object,
-			GdkEvent        *event,
-			GtkTextIter     *iter,
-			EmpathyChatView *view)
-{
-	EmpathyChatViewPriv *priv;
-	GtkTextIter          start, end;
-	gchar               *str;
-
-	priv = GET_PRIV (view);
-
-	/* If the link is being selected, don't do anything. */
-	gtk_text_buffer_get_selection_bounds (priv->buffer, &start, &end);
-	if (gtk_text_iter_get_offset (&start) != gtk_text_iter_get_offset (&end)) {
-		return FALSE;
-	}
-	
-	if (event->type == GDK_BUTTON_RELEASE && event->button.button == 1) {
-		start = end = *iter;
-		
-		if (gtk_text_iter_backward_to_tag_toggle (&start, tag) &&
-		    gtk_text_iter_forward_to_tag_toggle (&end, tag)) {
-			    str = gtk_text_buffer_get_text (priv->buffer,
-							    &start,
-							    &end,
-							    FALSE);
-			    
-			    empathy_url_show (GTK_WIDGET (view), str);
-			    g_free (str);
-		    }
-	}
-	
-	return FALSE;
-}
-
-static void
-chat_view_open_address_cb (GtkMenuItem *menuitem, const gchar *url)
-{
-	empathy_url_show (GTK_WIDGET (menuitem), url);
-}
-
-static void
-chat_view_copy_address_cb (GtkMenuItem *menuitem, const gchar *url)
-{
-	GtkClipboard *clipboard;
-	
-	clipboard = gtk_clipboard_get (GDK_SELECTION_CLIPBOARD);
-	gtk_clipboard_set_text (clipboard, url, -1);
-	
-	clipboard = gtk_clipboard_get (GDK_SELECTION_PRIMARY);
-	gtk_clipboard_set_text (clipboard, url, -1);
-}
-
-static gboolean
 chat_view_is_scrolled_down (EmpathyChatSimpleView *view)
 {
 	GtkWidget *sw;
@@ -643,6 +470,146 @@ chat_view_theme_changed_cb (EmpathyThemeManager *manager,
 			       EMPATHY_PREFS_UI_SHOW_AVATARS,
 			       &show_avatars);
 	empathy_theme_set_show_avatars (priv->theme, show_avatars);
+}
+
+static void
+chat_view_size_allocate (GtkWidget     *widget,
+			 GtkAllocation *alloc)
+{
+	gboolean down;
+	
+	down = chat_view_is_scrolled_down (EMPATHY_CHAT_SIMPLE_VIEW (widget));
+	
+	GTK_WIDGET_CLASS (empathy_chat_simple_view_parent_class)->size_allocate (widget, alloc);
+	
+	if (down) {
+		GtkAdjustment *adj;
+		
+		adj = GTK_TEXT_VIEW (widget)->vadjustment;
+		gtk_adjustment_set_value (adj, adj->upper - adj->page_size);
+	}
+}
+
+static gboolean
+chat_view_drag_motion (GtkWidget        *widget,
+		       GdkDragContext   *context,
+		       gint              x,
+		       gint              y,
+		       guint             time)
+{
+	/* Don't handle drag motion, since we don't want the view to scroll as
+	 * the result of dragging something across it. */
+	
+	return FALSE;
+}
+
+static void
+chat_view_theme_notify_cb (EmpathyTheme    *theme,
+			   GParamSpec      *param,
+			   EmpathyChatSimpleView *view)
+{
+	empathy_theme_update_view (theme, EMPATHY_CHAT_VIEW (view));
+}
+
+static void
+chat_view_finalize (GObject *object)
+{
+	EmpathyChatSimpleView     *view;
+	EmpathyChatSimpleViewPriv *priv;
+	
+	view = EMPATHY_CHAT_SIMPLE_VIEW (object);
+	priv = GET_PRIV (view);
+	
+	DEBUG ("%p", object);
+	
+	empathy_conf_notify_remove (empathy_conf_get (), priv->notify_system_fonts_id);
+	empathy_conf_notify_remove (empathy_conf_get (), priv->notify_show_avatars_id);
+	
+	if (priv->last_contact) {
+		g_object_unref (priv->last_contact);
+	}
+	if (priv->scroll_time) {
+		g_timer_destroy (priv->scroll_time);
+	}
+	if (priv->scroll_timeout) {
+		g_source_remove (priv->scroll_timeout);
+	}
+	
+	if (priv->theme) {
+		g_signal_handlers_disconnect_by_func (priv->theme,
+						      chat_view_theme_notify_cb,
+						      view);
+		g_object_unref (priv->theme);
+	}
+	
+	G_OBJECT_CLASS (empathy_chat_simple_view_parent_class)->finalize (object);
+}
+
+static void
+empathy_chat_simple_view_class_init (EmpathyChatSimpleViewClass *klass)
+{
+	GObjectClass   *object_class = G_OBJECT_CLASS (klass);
+	GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
+	
+	object_class->finalize = chat_view_finalize;
+	widget_class->size_allocate = chat_view_size_allocate;
+	widget_class->drag_motion = chat_view_drag_motion; 
+	
+	g_type_class_add_private (object_class, sizeof (EmpathyChatSimpleViewPriv));
+}
+
+static void
+empathy_chat_simple_view_init (EmpathyChatSimpleView *view)
+{
+	gboolean             show_avatars;
+	EmpathyChatSimpleViewPriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (view,
+		EMPATHY_TYPE_CHAT_SIMPLE_VIEW, EmpathyChatSimpleViewPriv);
+
+	view->priv = priv;	
+	priv->buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
+	priv->last_timestamp = 0;
+	priv->allow_scrolling = TRUE;
+	
+	g_object_set (view,
+		      "wrap-mode", GTK_WRAP_WORD_CHAR,
+		      "editable", FALSE,
+		      "cursor-visible", FALSE,
+		      NULL);
+	
+	priv->notify_system_fonts_id =
+		empathy_conf_notify_add (empathy_conf_get (),
+					 "/desktop/gnome/interface/document_font_name",
+					 chat_view_notify_system_font_cb,
+					 view);
+	chat_view_system_font_update (view);
+	
+	priv->notify_show_avatars_id =
+		empathy_conf_notify_add (empathy_conf_get (),
+					 EMPATHY_PREFS_UI_SHOW_AVATARS,
+					 chat_view_notify_show_avatars_cb,
+					 view);
+	
+	chat_view_setup_tags (view);
+	
+	empathy_theme_manager_apply_saved (empathy_theme_manager_get (), EMPATHY_CHAT_VIEW(view));
+	
+	show_avatars = FALSE;
+	empathy_conf_get_bool (empathy_conf_get (),
+			       EMPATHY_PREFS_UI_SHOW_AVATARS,
+			       &show_avatars);
+	
+	empathy_theme_set_show_avatars (priv->theme, show_avatars);
+	
+	g_signal_connect (view,
+			  "populate-popup",
+			  G_CALLBACK (chat_view_populate_popup),
+			  NULL);
+	
+	g_signal_connect_object (empathy_theme_manager_get (),
+				 "theme-changed",
+				 G_CALLBACK (chat_view_theme_changed_cb),
+				 EMPATHY_CHAT_VIEW(view),
+				 0);
 }
 
 EmpathyChatSimpleView *
@@ -1239,14 +1206,6 @@ chat_simple_view_get_theme (EmpathyChatView *view)
 	priv = GET_PRIV (view);
 	
 	return priv->theme;
-}
-
-static void
-chat_view_theme_notify_cb (EmpathyTheme    *theme,
-			   GParamSpec      *param,
-			   EmpathyChatSimpleView *view)
-{
-	empathy_theme_update_view (theme, EMPATHY_CHAT_VIEW(view));
 }
 
 static void
