@@ -45,7 +45,6 @@ libempathy_gtk_la_SOURCES =             	\
 	empathy-spell.c				\
 	empathy-spell-dialog.c			\
 	empathy-theme-boxes.c			\
-	empathy-theme.c				\
 	empathy-theme-irc.c			\
 	empathy-theme-manager.c			\
 	empathy-ui-utils.c			\
@@ -94,7 +93,6 @@ libempathy_gtk_headers =			\
 	empathy-spell.h				\
 	empathy-spell-dialog.h			\
 	empathy-theme-boxes.h			\
-	empathy-theme.h				\
 	empathy-theme-irc.h			\
 	empathy-theme-manager.h			\
 	empathy-ui-utils.h
