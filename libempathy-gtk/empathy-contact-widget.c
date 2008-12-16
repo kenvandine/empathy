@@ -21,8 +21,10 @@
 
 #include <config.h>
 
+#define _GNU_SOURCE
 #include <string.h>
 #include <stdlib.h>
+#include <time.h>
 
 #include <gtk/gtk.h>
 #include <glib/gi18n-lib.h>
@@ -38,6 +40,7 @@
 #include <libempathy/empathy-tp-contact-factory.h>
 #include <libempathy/empathy-contact-manager.h>
 #include <libempathy/empathy-contact-list.h>
+#include <libempathy/empathy-location.h>
 #include <libempathy/empathy-utils.h>
 
 #include "empathy-contact-widget.h"
@@ -149,10 +152,6 @@ static void contact_widget_presence_notify_cb (
     EmpathyContactWidget *information);
 static void contact_widget_avatar_notify_cb (
     EmpathyContactWidget *information);
-#if HAVE_LIBCHAMPLAIN
-static void contact_widget_location_setup (
-    EmpathyContactWidget *information);
-#endif 
 static void contact_widget_groups_setup (
     EmpathyContactWidget *information);
 static void contact_widget_groups_update (EmpathyContactWidget *information);
@@ -179,6 +178,9 @@ static void contact_widget_details_setup (EmpathyContactWidget *information);
 static void contact_widget_details_update (EmpathyContactWidget *information);
 static void contact_widget_client_setup (EmpathyContactWidget *information);
 static void contact_widget_client_update (EmpathyContactWidget *information);
+#if HAVE_LIBCHAMPLAIN
+static void contact_widget_location_update (EmpathyContactWidget *information);
+#endif
 
 enum
 {
@@ -252,9 +254,6 @@ empathy_contact_widget_new (EmpathyContact *contact,
 
   /* Create widgets */
   contact_widget_contact_setup (information);
-#if HAVE_LIBCHAMPLAIN
-  contact_widget_location_setup (information);
-#endif
   contact_widget_groups_setup (information);
   contact_widget_details_setup (information);
   contact_widget_client_setup (information);
@@ -405,6 +404,9 @@ contact_widget_set_contact (EmpathyContactWidget *information,
   contact_widget_groups_update (information);
   contact_widget_details_update (information);
   contact_widget_client_update (information);
+#if HAVE_LIBCHAMPLAIN
+  contact_widget_location_update (information);
+#endif
 }
 
 static gboolean
@@ -906,28 +908,6 @@ contact_widget_avatar_notify_cb (EmpathyContactWidget *information)
           EMPATHY_AVATAR_IMAGE (information->widget_avatar), avatar);
 }
 
-#if HAVE_LIBCHAMPLAIN
-static void
-contact_widget_location_setup (EmpathyContactWidget *information)
-{
-  if (/* information->flags & EMPATHY_CONTACT_WIDGET_FOR_TOOLTIP || */
-      information->flags & EMPATHY_CONTACT_WIDGET_SHOW_LOCATION)
-    {
-      information->map_view = champlain_view_new (CHAMPLAIN_VIEW_MODE_KINETIC);
-      information->map_view_embed = champlain_view_embed_new (
-          CHAMPLAIN_VIEW (information->map_view));
-
-      gtk_container_add (GTK_CONTAINER (information->viewport_map),
-          information->map_view_embed);
-      g_object_set (G_OBJECT (information->map_view), "show-license", FALSE,
-          NULL);
-      champlain_view_center_on (CHAMPLAIN_VIEW(information->map_view), 45, -73);
-
-      gtk_widget_show_all (information->vbox_location);
-    }
-}
-#endif
-
 static void
 contact_widget_groups_setup (EmpathyContactWidget *information)
 {
@@ -1251,3 +1231,70 @@ contact_widget_client_update (EmpathyContactWidget *information)
 {
   /* FIXME: Needs new telepathy spec */
 }
+
+#if HAVE_LIBCHAMPLAIN
+static void
+contact_widget_location_update (EmpathyContactWidget *information)
+{
+  GHashTable *location = empathy_contact_get_location (information->contact);
+  GValue *value;
+  gdouble lat, lon;
+
+  value = g_hash_table_lookup (location, EMPATHY_LOCATION_LAT);
+  if (value == NULL)
+    {
+      gtk_widget_hide (information->vbox_location);
+      return;
+    }
+  lat = g_value_get_double (value);
+
+  value = g_hash_table_lookup (location, EMPATHY_LOCATION_LON);
+  if (value == NULL)
+    {
+      gtk_widget_hide (information->vbox_location);
+      return;
+    }
+  lon = g_value_get_double (value);
+
+  value = g_hash_table_lookup (location, EMPATHY_LOCATION_TIMESTAMP);
+  if (value == NULL)
+    gtk_label_set_markup (GTK_LABEL (information->label_location), _("<b>Location</b>"));
+  else
+    {
+      const gchar *str_date = g_value_get_string (value);
+      struct tm * ptm = g_new0 (struct tm, 1);
+
+      gchar * p = strptime (str_date, "%Y%m%dT%T", ptm);
+      if (p != NULL)
+      {
+        gchar *text;
+        gchar user_date [100];
+        if (strftime (user_date, 100, _("%B %e, %Y at %R UTC"), ptm) > 0)
+          {
+            text = g_strconcat ( _("<b>Location</b> on "), user_date, NULL);
+            gtk_label_set_markup (GTK_LABEL (information->label_location), text);
+            g_free (text);
+          }
+        else
+          gtk_label_set_markup (GTK_LABEL (information->label_location), _("<b>Location</b>"));
+      }
+    }
+
+  if (/* information->flags & EMPATHY_CONTACT_WIDGET_FOR_TOOLTIP || */
+      information->flags & EMPATHY_CONTACT_WIDGET_SHOW_LOCATION)
+    {
+      information->map_view = champlain_view_new (CHAMPLAIN_VIEW_MODE_KINETIC);
+      information->map_view_embed = champlain_view_embed_new (
+          CHAMPLAIN_VIEW (information->map_view));
+
+      gtk_container_add (GTK_CONTAINER (information->viewport_map),
+          information->map_view_embed);
+      g_object_set (G_OBJECT (information->map_view), "show-license", FALSE,
+          NULL);
+
+      champlain_view_center_on (CHAMPLAIN_VIEW(information->map_view), lat, lon);
+      gtk_widget_show_all (information->vbox_location);
+    }
+
+}
+#endif
