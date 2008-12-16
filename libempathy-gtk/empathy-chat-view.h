@@ -38,8 +38,6 @@ G_BEGIN_DECLS
 typedef struct _EmpathyChatView      EmpathyChatView;
 typedef struct _EmpathyChatViewIface EmpathyChatViewIface;
 
-#include "empathy-theme.h"
-
 struct _EmpathyChatViewIface {
 	GTypeInterface   base_iface;
 
