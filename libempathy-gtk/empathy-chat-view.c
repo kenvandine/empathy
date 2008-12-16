@@ -43,7 +43,7 @@ empathy_chat_view_get_type (void)
 					       "EmpathyChatView",
 					       &type_info, 0);
 		
-		g_type_interface_add_prerequisite (type, G_TYPE_OBJECT);
+		g_type_interface_add_prerequisite (type, GTK_TYPE_WIDGET);
 	}
 	
 	return type;
