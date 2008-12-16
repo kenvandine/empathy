@@ -1361,9 +1361,8 @@ empathy_chat_text_view_tag_set (EmpathyChatTextView *view,
 
 	table = gtk_text_buffer_get_tag_table (priv->buffer);
 	tag = gtk_text_tag_table_lookup (table, tag_name);
-	g_return_val_if_fail (tag != NULL, NULL);
 
-	if (first_property_name) {
+	if (tag && first_property_name) {
 		va_start (list, first_property_name);
 		g_object_set_valist (G_OBJECT (tag), first_property_name, list);
 		va_end (list);
