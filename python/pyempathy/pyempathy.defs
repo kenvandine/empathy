@@ -1445,15 +1445,6 @@
   )
 )
 
-(define-method get_date_and_time
-  (of-object "EmpathyMessage")
-  (c-name "empathy_message_get_date_and_time")
-  (return-type "GDate*")
-  (parameters
-    '("time_t*" "timestamp")
-  )
-)
-
 (define-method should_highlight
   (of-object "EmpathyMessage")
   (c-name "empathy_message_should_highlight")

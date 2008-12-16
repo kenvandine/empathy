@@ -48,6 +48,7 @@ python /usr/share/pygobject/2.0/codegen/h2def.py	\
 	empathy-cell-renderer-expander.h	\
 	empathy-cell-renderer-text.h		\
 	empathy-chat.h				\
+	empathy-chat-text-view.h		\
 	empathy-chat-view.h			\
 	empathy-conf.h				\
 	empathy-contact-dialogs.h		\
@@ -66,7 +67,6 @@ python /usr/share/pygobject/2.0/codegen/h2def.py	\
 	empathy-spell.h				\
 	empathy-spell-dialog.h			\
 	empathy-theme-boxes.h			\
-	empathy-theme.h				\
 	empathy-theme-irc.h			\
 	empathy-theme-manager.h			\
 	empathy-ui-utils.h			\

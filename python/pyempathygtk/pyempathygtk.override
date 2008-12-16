@@ -29,7 +29,6 @@ headers
 #include "empathy-spell-dialog.h"
 #include "empathy-spell.h"
 #include "empathy-theme-boxes.h"
-#include "empathy-theme.h"
 #include "empathy-theme-irc.h"
 #include "empathy-theme-manager.h"
 #include "empathy-ui-utils.h"

@@ -49,9 +49,15 @@
   (gtype-id "EMPATHY_TYPE_CHAT")
 )
 
-(define-object ChatView
+(define-object ChatTextView
   (in-module "Empathy")
   (parent "GtkTextView")
+  (c-name "EmpathyChatTextView")
+  (gtype-id "EMPATHY_TYPE_CHAT_TEXT_VIEW")
+)
+
+(define-object ChatView
+  (in-module "Empathy")
   (c-name "EmpathyChatView")
   (gtype-id "EMPATHY_TYPE_CHAT_VIEW")
 )
@@ -91,23 +97,16 @@
   (gtype-id "EMPATHY_TYPE_SMILEY_MANAGER")
 )
 
-(define-object Theme
-  (in-module "Empathy")
-  (parent "GObject")
-  (c-name "EmpathyTheme")
-  (gtype-id "EMPATHY_TYPE_THEME")
-)
-
 (define-object ThemeBoxes
   (in-module "Empathy")
-  (parent "EmpathyTheme")
+  (parent "EmpathyChatTextView")
   (c-name "EmpathyThemeBoxes")
   (gtype-id "EMPATHY_TYPE_THEME_BOXES")
 )
 
 (define-object ThemeIrc
   (in-module "Empathy")
-  (parent "EmpathyTheme")
+  (parent "EmpathyChatTextView")
   (c-name "EmpathyThemeIrc")
   (gtype-id "EMPATHY_TYPE_THEME_IRC")
 )
@@ -614,17 +613,62 @@
 
 
 
+;; From empathy-chat-text-view.h
+
+(define-function chat_text_view_get_type
+  (c-name "empathy_chat_text_view_get_type")
+  (return-type "GType")
+)
+
+(define-method get_last_contact
+  (of-object "EmpathyChatTextView")
+  (c-name "empathy_chat_text_view_get_last_contact")
+  (return-type "EmpathyContact*")
+)
+
+(define-method set_only_if_date
+  (of-object "EmpathyChatTextView")
+  (c-name "empathy_chat_text_view_set_only_if_date")
+  (return-type "none")
+  (parameters
+    '("gboolean" "only_if_date")
+  )
+)
+
+(define-method append_body
+  (of-object "EmpathyChatTextView")
+  (c-name "empathy_chat_text_view_append_body")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "body")
+    '("const-gchar*" "tag")
+  )
+)
+
+(define-method append_spacing
+  (of-object "EmpathyChatTextView")
+  (c-name "empathy_chat_text_view_append_spacing")
+  (return-type "none")
+)
+
+(define-method tag_set
+  (of-object "EmpathyChatTextView")
+  (c-name "empathy_chat_text_view_tag_set")
+  (return-type "GtkTextTag*")
+  (parameters
+    '("const-gchar*" "tag_name")
+    '("const-gchar*" "first_property_name")
+  )
+  (varargs #t)
+)
+
+
+
 ;; From empathy-chat-view.h
 
 (define-function chat_view_get_type
   (c-name "empathy_chat_view_get_type")
   (return-type "GType")
-)
-
-(define-function chat_view_new
-  (c-name "empathy_chat_view_new")
-  (is-constructor-of "EmpathyChatView")
-  (return-type "EmpathyChatView*")
 )
 
 (define-method append_message
@@ -645,17 +689,6 @@
   )
 )
 
-(define-method append_button
-  (of-object "EmpathyChatView")
-  (c-name "empathy_chat_view_append_button")
-  (return-type "none")
-  (parameters
-    '("const-gchar*" "message")
-    '("GtkWidget*" "button1")
-    '("GtkWidget*" "button2")
-  )
-)
-
 (define-method scroll
   (of-object "EmpathyChatView")
   (c-name "empathy_chat_view_scroll")
@@ -671,14 +704,10 @@
   (return-type "none")
 )
 
-(define-method get_selection_bounds
+(define-method get_has_selection
   (of-object "EmpathyChatView")
-  (c-name "empathy_chat_view_get_selection_bounds")
+  (c-name "empathy_chat_view_get_has_selection")
   (return-type "gboolean")
-  (parameters
-    '("GtkTextIter*" "start")
-    '("GtkTextIter*" "end")
-  )
 )
 
 (define-method clear
@@ -731,68 +760,6 @@
   (of-object "EmpathyChatView")
   (c-name "empathy_chat_view_copy_clipboard")
   (return-type "none")
-)
-
-(define-method get_theme
-  (of-object "EmpathyChatView")
-  (c-name "empathy_chat_view_get_theme")
-  (return-type "EmpathyTheme*")
-)
-
-(define-method set_theme
-  (of-object "EmpathyChatView")
-  (c-name "empathy_chat_view_set_theme")
-  (return-type "none")
-  (parameters
-    '("EmpathyTheme*" "theme")
-  )
-)
-
-(define-method set_margin
-  (of-object "EmpathyChatView")
-  (c-name "empathy_chat_view_set_margin")
-  (return-type "none")
-  (parameters
-    '("gint" "margin")
-  )
-)
-
-(define-function chat_view_get_smiley_menu
-  (c-name "empathy_chat_view_get_smiley_menu")
-  (return-type "GtkWidget*")
-  (parameters
-    '("GCallback" "callback")
-    '("gpointer" "user_data")
-  )
-)
-
-(define-method get_last_timestamp
-  (of-object "EmpathyChatView")
-  (c-name "empathy_chat_view_get_last_timestamp")
-  (return-type "time_t")
-)
-
-(define-method set_last_timestamp
-  (of-object "EmpathyChatView")
-  (c-name "empathy_chat_view_set_last_timestamp")
-  (return-type "none")
-  (parameters
-    '("time_t" "timestamp")
-  )
-)
-
-(define-method get_last_contact
-  (of-object "EmpathyChatView")
-  (c-name "empathy_chat_view_get_last_contact")
-  (return-type "EmpathyContact*")
-)
-
-(define-function chat_view_get_avatar_pixbuf_with_cache
-  (c-name "empathy_chat_view_get_avatar_pixbuf_with_cache")
-  (return-type "GdkPixbuf*")
-  (parameters
-    '("EmpathyContact*" "contact")
-  )
 )
 
 
@@ -1392,6 +1359,17 @@
   )
 )
 
+(define-function smiley_menu_new
+  (c-name "empathy_smiley_menu_new")
+  (is-constructor-of "EmpathySmileyMenu")
+  (return-type "GtkWidget*")
+  (parameters
+    '("EmpathySmileyManager*" "manager")
+    '("EmpathySmileyMenuFunc" "func")
+    '("gpointer" "user_data")
+  )
+)
+
 (define-method free
   (of-object "EmpathySmiley")
   (c-name "empathy_smiley_free")
@@ -1476,100 +1454,10 @@
   (return-type "GType")
 )
 
-
-
-;; From empathy-theme.h
-
-(define-function theme_get_type
-  (c-name "empathy_theme_get_type")
-  (return-type "GType")
-)
-
-(define-method update_view
-  (of-object "EmpathyTheme")
-  (c-name "empathy_theme_update_view")
-  (return-type "none")
-  (parameters
-    '("EmpathyChatView*" "view")
-  )
-)
-
-(define-method append_message
-  (of-object "EmpathyTheme")
-  (c-name "empathy_theme_append_message")
-  (return-type "none")
-  (parameters
-    '("EmpathyChatView*" "view")
-    '("EmpathyMessage*" "msg")
-  )
-)
-
-(define-method append_text
-  (of-object "EmpathyTheme")
-  (c-name "empathy_theme_append_text")
-  (return-type "none")
-  (parameters
-    '("EmpathyChatView*" "view")
-    '("const-gchar*" "body")
-    '("const-gchar*" "tag")
-    '("const-gchar*" "link_tag")
-  )
-)
-
-(define-method append_spacing
-  (of-object "EmpathyTheme")
-  (c-name "empathy_theme_append_spacing")
-  (return-type "none")
-  (parameters
-    '("EmpathyChatView*" "view")
-  )
-)
-
-(define-method append_event
-  (of-object "EmpathyTheme")
-  (c-name "empathy_theme_append_event")
-  (return-type "none")
-  (parameters
-    '("EmpathyChatView*" "view")
-    '("const-gchar*" "str")
-  )
-)
-
-(define-method append_timestamp
-  (of-object "EmpathyTheme")
-  (c-name "empathy_theme_append_timestamp")
-  (return-type "none")
-  (parameters
-    '("EmpathyChatView*" "view")
-    '("EmpathyMessage*" "message")
-    '("gboolean" "show_date")
-    '("gboolean" "show_time")
-  )
-)
-
-(define-method maybe_append_date_and_time
-  (of-object "EmpathyTheme")
-  (c-name "empathy_theme_maybe_append_date_and_time")
-  (return-type "none")
-  (parameters
-    '("EmpathyChatView*" "view")
-    '("EmpathyMessage*" "message")
-  )
-)
-
-(define-method get_show_avatars
-  (of-object "EmpathyTheme")
-  (c-name "empathy_theme_get_show_avatars")
-  (return-type "gboolean")
-)
-
-(define-method set_show_avatars
-  (of-object "EmpathyTheme")
-  (c-name "empathy_theme_set_show_avatars")
-  (return-type "none")
-  (parameters
-    '("gboolean" "show")
-  )
+(define-function theme_boxes_new
+  (c-name "empathy_theme_boxes_new")
+  (is-constructor-of "EmpathyThemeBoxes")
+  (return-type "EmpathyThemeBoxes*")
 )
 
 
@@ -1579,6 +1467,12 @@
 (define-function theme_irc_get_type
   (c-name "empathy_theme_irc_get_type")
   (return-type "GType")
+)
+
+(define-function theme_irc_new
+  (c-name "empathy_theme_irc_new")
+  (is-constructor-of "EmpathyThemeIrc")
+  (return-type "EmpathyThemeIrc*")
 )
 
 
@@ -1600,23 +1494,10 @@
   (return-type "const-gchar**")
 )
 
-(define-method apply
+(define-method create_view
   (of-object "EmpathyThemeManager")
-  (c-name "empathy_theme_manager_apply")
-  (return-type "none")
-  (parameters
-    '("EmpathyChatView*" "view")
-    '("const-gchar*" "theme")
-  )
-)
-
-(define-method apply_saved
-  (of-object "EmpathyThemeManager")
-  (c-name "empathy_theme_manager_apply_saved")
-  (return-type "none")
-  (parameters
-    '("EmpathyChatView*" "view")
-  )
+  (c-name "empathy_theme_manager_create_view")
+  (return-type "EmpathyChatView*")
 )
 
 
@@ -1836,17 +1717,6 @@
     '("const-gchar*" "url")
     '("const-gchar*" "title")
   )
-)
-
-(define-function text_buffer_tag_set
-  (c-name "empathy_text_buffer_tag_set")
-  (return-type "GtkTextTag*")
-  (parameters
-    '("GtkTextBuffer*" "buffer")
-    '("const-gchar*" "tag_name")
-    '("const-gchar*" "first_property_name")
-  )
-  (varargs #t)
 )
 
 (define-function send_file_with_file_chooser
