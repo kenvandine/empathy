@@ -1,6 +1,7 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /*
  * Copyright (C) 2007 Imendio AB
+ * Copyright (C) 2008 Collabora Ltd.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -16,6 +17,8 @@
  * License along with this program; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
+ *
+ * Authors: Xavier Claessens <xclaesse@gmail.com>
  */
 
 #ifndef __EMPATHY_THEME_BOXES_H__
@@ -23,7 +26,7 @@
 
 #include <glib-object.h>
 
-#include "empathy-theme.h"
+#include "empathy-chat-text-view.h"
 
 G_BEGIN_DECLS
 
@@ -38,15 +41,19 @@ typedef struct _EmpathyThemeBoxes      EmpathyThemeBoxes;
 typedef struct _EmpathyThemeBoxesClass EmpathyThemeBoxesClass;
 
 struct _EmpathyThemeBoxes {
-	EmpathyTheme parent;
+	EmpathyChatTextView parent;
 	gpointer priv;
 };
 
 struct _EmpathyThemeBoxesClass {
-	EmpathyThemeClass parent_class;
+	EmpathyChatTextViewClass parent_class;
 };
 
-GType empathy_theme_boxes_get_type (void) G_GNUC_CONST;
+#define EMPATHY_THEME_BOXES_TAG_HEADER "fancy-header"
+#define EMPATHY_THEME_BOXES_TAG_HEADER_LINE "fancy-header-line"
+
+GType              empathy_theme_boxes_get_type (void) G_GNUC_CONST;
+EmpathyThemeBoxes *empathy_theme_boxes_new      (void);
 
 G_END_DECLS
 

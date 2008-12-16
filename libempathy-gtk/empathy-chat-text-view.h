@@ -38,15 +38,13 @@ G_BEGIN_DECLS
 
 #define EMPATHY_TYPE_CHAT_TEXT_VIEW         (empathy_chat_text_view_get_type ())
 #define EMPATHY_CHAT_TEXT_VIEW(o)           (G_TYPE_CHECK_INSTANCE_CAST ((o), EMPATHY_TYPE_CHAT_TEXT_VIEW, EmpathyChatTextView))
-#define EMPATHY_CHAT_TEXT_VIEW_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST((k), EMPATHY_TYPE_CHAT_TEXT_VIEW, EmpathyChatViewClass))
+#define EMPATHY_CHAT_TEXT_VIEW_CLASS(k)     (G_TYPE_CHECK_CLASS_CAST((k), EMPATHY_TYPE_CHAT_TEXT_VIEW, EmpathyChatTextViewClass))
 #define EMPATHY_IS_CHAT_TEXT_VIEW(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), EMPATHY_TYPE_CHAT_TEXT_VIEW))
 #define EMPATHY_IS_CHAT_TEXT_VIEW_CLASS(k)  (G_TYPE_CHECK_CLASS_TYPE ((k), EMPATHY_TYPE_CHAT_TEXT_VIEW))
-#define EMPATHY_CHAT_TEXT_VIEW_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), EMPATHY_TYPE_CHAT_TEXT_VIEW, EmpathyChatViewClass))
+#define EMPATHY_CHAT_TEXT_VIEW_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), EMPATHY_TYPE_CHAT_TEXT_VIEW, EmpathyChatTextViewClass))
 
 typedef struct _EmpathyChatTextView      EmpathyChatTextView;
 typedef struct _EmpathyChatTextViewClass EmpathyChatTextViewClass;
-
-#include "empathy-theme.h"
 
 struct _EmpathyChatTextView {
 	GtkTextView parent;
@@ -55,10 +53,33 @@ struct _EmpathyChatTextView {
 
 struct _EmpathyChatTextViewClass {
 	GtkTextViewClass parent_class;
+
+	/* <vtable> */
+	void (*append_message) (EmpathyChatTextView *view,
+				EmpathyMessage      *message);
 };
 
-GType                empathy_chat_text_view_get_type (void) G_GNUC_CONST;
-EmpathyChatTextView *empathy_chat_text_view_new      (void);
+#define EMPATHY_CHAT_TEXT_VIEW_TAG_CUT "cut"
+#define EMPATHY_CHAT_TEXT_VIEW_TAG_HIGHLIGHT "highlight"
+#define EMPATHY_CHAT_TEXT_VIEW_TAG_SPACING "spacing"
+#define EMPATHY_CHAT_TEXT_VIEW_TAG_TIME "time"
+#define EMPATHY_CHAT_TEXT_VIEW_TAG_ACTION "action"
+#define EMPATHY_CHAT_TEXT_VIEW_TAG_BODY "body"
+#define EMPATHY_CHAT_TEXT_VIEW_TAG_EVENT "event"
+#define EMPATHY_CHAT_TEXT_VIEW_TAG_LINK "link"
+
+GType                empathy_chat_text_view_get_type         (void) G_GNUC_CONST;
+EmpathyContact *     empathy_chat_text_view_get_last_contact (EmpathyChatTextView *view);
+void                 empathy_chat_text_view_set_only_if_date (EmpathyChatTextView *view,
+							      gboolean             only_if_date);
+void                 empathy_chat_text_view_append_body      (EmpathyChatTextView *view,
+							      const gchar         *body,
+							      const gchar         *tag);
+void                 empathy_chat_text_view_append_spacing   (EmpathyChatTextView *view);
+GtkTextTag *         empathy_chat_text_view_tag_set          (EmpathyChatTextView *view,
+							      const gchar         *tag_name,
+							      const gchar         *first_property_name,
+							      ...);
 
 G_END_DECLS
 

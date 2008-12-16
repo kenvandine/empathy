@@ -49,7 +49,6 @@
 #include "empathy-chat-text-view.h"
 #include "empathy-chat.h"
 #include "empathy-conf.h"
-#include "empathy-theme-manager.h"
 #include "empathy-ui-utils.h"
 #include "empathy-smiley-manager.h"
 
@@ -63,31 +62,31 @@
 #define MAX_SCROLL_TIME 0.4 /* seconds */
 #define SCROLL_DELAY 33     /* milliseconds */
 
+#define SCHEMES "(https?|ftps?|nntp|news|javascript|about|ghelp|apt|telnet|"\
+		"file|webcal|mailto)"
+#define BODY "([^\\ ]+)"
+#define END_BODY "([^\\ ]*[^,;\?><()\\ \"\\.])"
+#define URI_REGEX "("SCHEMES"://"END_BODY")" \
+		  "|((mailto:)?"BODY"@"BODY"\\."END_BODY")"\
+		  "|((www|ftp)\\."END_BODY")"
+static GRegex *uri_regex = NULL;
+
 #define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyChatTextView)
 
 typedef struct {
-	GtkTextBuffer *buffer;
-	
-	EmpathyTheme   *theme;
-	
-	time_t         last_timestamp;
-	
-	gboolean       allow_scrolling;
-	guint          scroll_timeout;
-	GTimer        *scroll_time;
-	
-	GtkTextMark   *find_mark_previous;
-	GtkTextMark   *find_mark_next;
-	gboolean       find_wrapped;
-	gboolean       find_last_direction;
-	
-	/* This is for the group chat so we know if the "other" last contact
-	  * changed, so we know whether to insert a header or not.
-	  */
-	EmpathyContact *last_contact;
-	
-	guint          notify_system_fonts_id;
-	guint          notify_show_avatars_id;
+	GtkTextBuffer        *buffer;
+	guint                 scroll_timeout;
+	GTimer               *scroll_time;
+	GtkTextMark          *find_mark_previous;
+	GtkTextMark          *find_mark_next;
+	gboolean              find_wrapped;
+	gboolean              find_last_direction;
+	EmpathyContact       *last_contact;
+	time_t                last_timestamp;
+	gboolean              allow_scrolling;
+	guint                 notify_system_fonts_id;
+	EmpathySmileyManager *smiley_manager;
+	gboolean              only_if_date;
 } EmpathyChatTextViewPriv;
 
 static void chat_text_view_iface_init (EmpathyChatViewIface *iface);
@@ -96,6 +95,12 @@ G_DEFINE_TYPE_WITH_CODE (EmpathyChatTextView, empathy_chat_text_view,
 			 GTK_TYPE_TEXT_VIEW,
 			 G_IMPLEMENT_INTERFACE (EMPATHY_TYPE_CHAT_VIEW,
 						chat_text_view_iface_init));
+
+enum {
+	PROP_0,
+	PROP_LAST_CONTACT,
+	PROP_ONLY_IF_DATE
+};
 
 static gboolean
 chat_text_view_url_event_cb (GtkTextTag          *tag,
@@ -187,35 +192,25 @@ chat_text_view_event_cb (EmpathyChatTextView *view,
 }
 
 static void
-chat_text_view_setup_tags (EmpathyChatTextView *view)
+chat_text_view_create_tags (EmpathyChatTextView *view)
 {
-	EmpathyChatTextViewPriv *priv;
-	GtkTextTag         *tag;
-	
-	priv = GET_PRIV (view);
-	
-	gtk_text_buffer_create_tag (priv->buffer,
-				    "cut",
-				    NULL);
-	
-	/* FIXME: Move to the theme and come up with something that looks a bit
-	 * nicer. */
-	gtk_text_buffer_create_tag (priv->buffer,
-				    "highlight",
-				    "background", "yellow",
-				    NULL);
-	
-	tag = gtk_text_buffer_create_tag (priv->buffer,
-					  "link",
-					  NULL);
-	
-	g_signal_connect (tag,
-			  "event",
+	EmpathyChatTextViewPriv *priv = GET_PRIV (view);
+	GtkTextTag              *tag;
+
+	gtk_text_buffer_create_tag (priv->buffer, EMPATHY_CHAT_TEXT_VIEW_TAG_CUT, NULL);
+	gtk_text_buffer_create_tag (priv->buffer, EMPATHY_CHAT_TEXT_VIEW_TAG_HIGHLIGHT, NULL);
+	gtk_text_buffer_create_tag (priv->buffer, EMPATHY_CHAT_TEXT_VIEW_TAG_SPACING, NULL);
+	gtk_text_buffer_create_tag (priv->buffer, EMPATHY_CHAT_TEXT_VIEW_TAG_TIME, NULL);
+	gtk_text_buffer_create_tag (priv->buffer, EMPATHY_CHAT_TEXT_VIEW_TAG_ACTION, NULL);
+	gtk_text_buffer_create_tag (priv->buffer, EMPATHY_CHAT_TEXT_VIEW_TAG_BODY, NULL);
+	gtk_text_buffer_create_tag (priv->buffer, EMPATHY_CHAT_TEXT_VIEW_TAG_EVENT, NULL);
+
+	tag = gtk_text_buffer_create_tag (priv->buffer, EMPATHY_CHAT_TEXT_VIEW_TAG_LINK, NULL);
+	g_signal_connect (tag, "event",
 			  G_CALLBACK (chat_text_view_url_event_cb),
 			  view);
 	
-	g_signal_connect (view,
-			  "motion-notify-event",
+	g_signal_connect (view, "motion-notify-event",
 			  G_CALLBACK (chat_text_view_event_cb),
 			  tag);
 }
@@ -247,38 +242,9 @@ chat_text_view_notify_system_font_cb (EmpathyConf *conf,
 				      const gchar *key,
 				      gpointer     user_data)
 {
-	EmpathyChatTextView     *view = user_data;
-	EmpathyChatTextViewPriv *priv = GET_PRIV (view);
-	gboolean                 show_avatars = FALSE;
+	EmpathyChatTextView *view = user_data;
 	
 	chat_text_view_system_font_update (view);
-	
-	/* Ugly, again, to adjust the vertical position of the nick... Will fix
-	  * this when reworking the theme manager so that view register
-	  * themselves with it instead of the other way around.
-	  */
-	empathy_conf_get_bool (conf,
-			       EMPATHY_PREFS_UI_SHOW_AVATARS,
-			       &show_avatars);
-	
-	empathy_theme_set_show_avatars (priv->theme, show_avatars);
-}
-
-static void
-chat_text_view_notify_show_avatars_cb (EmpathyConf *conf,
-				       const gchar *key,
-				       gpointer     user_data)
-{
-	EmpathyChatTextView     *view;
-	EmpathyChatTextViewPriv *priv;
-	gboolean            show_avatars = FALSE;
-	
-	view = user_data;
-	priv = GET_PRIV (view);
-	
-	empathy_conf_get_bool (conf, key, &show_avatars);
-	
-	empathy_theme_set_show_avatars (priv->theme, show_avatars);
 }
 
 static void
@@ -338,7 +304,7 @@ chat_text_view_populate_popup (EmpathyChatTextView *view,
 	
 	/* Link context menu items */
 	table = gtk_text_buffer_get_tag_table (priv->buffer);
-	tag = gtk_text_tag_table_lookup (table, "link");
+	tag = gtk_text_tag_table_lookup (table, EMPATHY_CHAT_TEXT_VIEW_TAG_LINK);
 	
 	gtk_widget_get_pointer (GTK_WIDGET (view), &x, &y);
 	
@@ -437,7 +403,7 @@ chat_text_view_maybe_trim_buffer (EmpathyChatTextView *view)
 	  * the middle of a tag.
 	  */
 	table = gtk_text_buffer_get_tag_table (priv->buffer);
-	tag = gtk_text_tag_table_lookup (table, "cut");
+	tag = gtk_text_tag_table_lookup (table, EMPATHY_CHAT_TEXT_VIEW_TAG_CUT);
 	if (!tag) {
 		return;
 	}
@@ -452,23 +418,85 @@ chat_text_view_maybe_trim_buffer (EmpathyChatTextView *view)
 }
 
 static void
-chat_text_view_theme_changed_cb (EmpathyThemeManager *manager,
-			    EmpathyChatTextView     *view)
+chat_text_view_append_timestamp (EmpathyChatTextView *view,
+				 time_t               timestamp,
+				 gboolean             show_date)
 {
-	EmpathyChatTextViewPriv *priv;
-	gboolean            show_avatars = FALSE;
-	
-	priv = GET_PRIV (view);
-	
-	empathy_theme_manager_apply_saved (manager, EMPATHY_CHAT_VIEW (view));
+	EmpathyChatTextViewPriv *priv = GET_PRIV (view);
+	GtkTextIter              iter;
+	gchar                   *tmp;
+	GString                 *str;
 
-	/* Needed for now to update the "rise" property of the names to get it
-	  * vertically centered.
-	  */
-	empathy_conf_get_bool (empathy_conf_get (),
-			       EMPATHY_PREFS_UI_SHOW_AVATARS,
-			       &show_avatars);
-	empathy_theme_set_show_avatars (priv->theme, show_avatars);
+	str = g_string_new ("- ");
+
+	/* Append date if needed */
+	if (show_date) {
+		GDate *date;
+		gchar  buf[256];
+
+		date = g_date_new ();
+		g_date_set_time_t (date, timestamp);
+		g_date_strftime (buf, 256, _("%A %d %B %Y"), date);
+		g_string_append (str, buf);
+		g_string_append (str, ", ");
+		g_date_free (date);
+	}
+
+	/* Append time */
+	tmp = empathy_time_to_string_local (timestamp, EMPATHY_TIME_FORMAT_DISPLAY_SHORT);
+	g_string_append (str, tmp);
+	g_free (tmp);
+
+	g_string_append (str, " -\n");
+
+	/* Insert the string in the buffer */
+	empathy_chat_text_view_append_spacing (view);
+	gtk_text_buffer_get_end_iter (priv->buffer, &iter);
+	gtk_text_buffer_insert_with_tags_by_name (priv->buffer,
+						  &iter,
+						  str->str, -1,
+						  EMPATHY_CHAT_TEXT_VIEW_TAG_TIME,
+						  NULL);
+
+	priv->last_timestamp = timestamp;
+
+	g_string_free (str, TRUE);	
+}
+
+static void
+chat_text_maybe_append_date_and_time (EmpathyChatTextView *view,
+				      time_t               timestamp)
+{
+	EmpathyChatTextViewPriv *priv = GET_PRIV (view);
+	GDate                   *date, *last_date;
+	gboolean                 append_date = FALSE;
+	gboolean                 append_time = FALSE;
+
+	/* Get the date from last message */
+	last_date = g_date_new ();
+	g_date_set_time_t (last_date, priv->last_timestamp);
+
+	/* Get the date of the message we are appending */
+	date = g_date_new ();
+	g_date_set_time_t (date, timestamp);
+
+	/* If last message was from another day we append date and time */
+	if (g_date_compare (date, last_date) > 0) {
+		append_date = TRUE;
+		append_time = TRUE;
+	}
+	
+	g_date_free (last_date);
+	g_date_free (date);
+
+	/* If last message is 'old' append the time */
+	if (timestamp - priv->last_timestamp >= TIMESTAMP_INTERVAL) {
+		append_time = TRUE;
+	}
+
+	if (append_date || (!priv->only_if_date && append_time)) {
+		chat_text_view_append_timestamp (view, timestamp, append_date);
+	}
 }
 
 static void
@@ -503,11 +531,42 @@ chat_text_view_drag_motion (GtkWidget      *widget,
 }
 
 static void
-chat_text_view_theme_notify_cb (EmpathyTheme        *theme,
-				GParamSpec          *param,
-				EmpathyChatTextView *view)
+chat_text_view_get_property (GObject    *object,
+			     guint       param_id,
+			     GValue     *value,
+			     GParamSpec *pspec)
 {
-	empathy_theme_update_view (theme, EMPATHY_CHAT_VIEW (view));
+	EmpathyChatTextViewPriv *priv = GET_PRIV (object);
+
+	switch (param_id) {
+	case PROP_LAST_CONTACT:
+		g_value_set_object (value, priv->last_contact);
+		break;
+	case PROP_ONLY_IF_DATE:
+		g_value_set_boolean (value, priv->only_if_date);
+		break;
+	default:
+		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
+		break;
+	};
+}
+
+static void
+chat_text_view_set_property (GObject      *object,
+			     guint         param_id,
+			     const GValue *value,
+			     GParamSpec   *pspec)
+{
+	EmpathyChatTextViewPriv *priv = GET_PRIV (object);
+
+	switch (param_id) {
+	case PROP_ONLY_IF_DATE:
+		priv->only_if_date = g_value_get_boolean (value);
+		break;
+	default:
+		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
+		break;
+	};
 }
 
 static void
@@ -522,7 +581,6 @@ chat_text_view_finalize (GObject *object)
 	DEBUG ("%p", object);
 	
 	empathy_conf_notify_remove (empathy_conf_get (), priv->notify_system_fonts_id);
-	empathy_conf_notify_remove (empathy_conf_get (), priv->notify_show_avatars_id);
 	
 	if (priv->last_contact) {
 		g_object_unref (priv->last_contact);
@@ -532,13 +590,6 @@ chat_text_view_finalize (GObject *object)
 	}
 	if (priv->scroll_timeout) {
 		g_source_remove (priv->scroll_timeout);
-	}
-	
-	if (priv->theme) {
-		g_signal_handlers_disconnect_by_func (priv->theme,
-						      chat_text_view_theme_notify_cb,
-						      view);
-		g_object_unref (priv->theme);
 	}
 	
 	G_OBJECT_CLASS (empathy_chat_text_view_parent_class)->finalize (object);
@@ -551,16 +602,34 @@ empathy_chat_text_view_class_init (EmpathyChatTextViewClass *klass)
 	GtkWidgetClass *widget_class = GTK_WIDGET_CLASS (klass);
 	
 	object_class->finalize = chat_text_view_finalize;
+	object_class->get_property = chat_text_view_get_property;
+	object_class->set_property = chat_text_view_set_property;
+
 	widget_class->size_allocate = chat_text_view_size_allocate;
 	widget_class->drag_motion = chat_text_view_drag_motion; 
-	
+
+	g_object_class_install_property (object_class,
+					 PROP_LAST_CONTACT,
+					 g_param_spec_object ("last-contact",
+							      "Last contact",
+							      "The sender of the last received message",
+							      EMPATHY_TYPE_CONTACT,
+							      G_PARAM_READABLE));
+	g_object_class_install_property (object_class,
+					 PROP_ONLY_IF_DATE,
+					 g_param_spec_boolean ("only-if-date",
+							      "Only if date",
+							      "Display timestamp only if the date changes",
+							      FALSE,
+							      G_PARAM_READWRITE));
+
+
 	g_type_class_add_private (object_class, sizeof (EmpathyChatTextViewPriv));
 }
 
 static void
 empathy_chat_text_view_init (EmpathyChatTextView *view)
 {
-	gboolean             show_avatars;
 	EmpathyChatTextViewPriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (view,
 		EMPATHY_TYPE_CHAT_TEXT_VIEW, EmpathyChatTextViewPriv);
 
@@ -568,6 +637,7 @@ empathy_chat_text_view_init (EmpathyChatTextView *view)
 	priv->buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
 	priv->last_timestamp = 0;
 	priv->allow_scrolling = TRUE;
+	priv->smiley_manager = empathy_smiley_manager_new ();
 	
 	g_object_set (view,
 		      "wrap-mode", GTK_WRAP_WORD_CHAR,
@@ -581,40 +651,12 @@ empathy_chat_text_view_init (EmpathyChatTextView *view)
 					 chat_text_view_notify_system_font_cb,
 					 view);
 	chat_text_view_system_font_update (view);
-	
-	priv->notify_show_avatars_id =
-		empathy_conf_notify_add (empathy_conf_get (),
-					 EMPATHY_PREFS_UI_SHOW_AVATARS,
-					 chat_text_view_notify_show_avatars_cb,
-					 view);
-	
-	chat_text_view_setup_tags (view);
-	
-	empathy_theme_manager_apply_saved (empathy_theme_manager_get (), EMPATHY_CHAT_VIEW(view));
-	
-	show_avatars = FALSE;
-	empathy_conf_get_bool (empathy_conf_get (),
-			       EMPATHY_PREFS_UI_SHOW_AVATARS,
-			       &show_avatars);
-	
-	empathy_theme_set_show_avatars (priv->theme, show_avatars);
-	
+	chat_text_view_create_tags (view);
+
 	g_signal_connect (view,
 			  "populate-popup",
 			  G_CALLBACK (chat_text_view_populate_popup),
 			  NULL);
-	
-	g_signal_connect_object (empathy_theme_manager_get (),
-				 "theme-changed",
-				 G_CALLBACK (chat_text_view_theme_changed_cb),
-				 EMPATHY_CHAT_VIEW(view),
-				 0);
-}
-
-EmpathyChatTextView *
-empathy_chat_text_view_new (void)
-{
-	return g_object_new (EMPATHY_TYPE_CHAT_TEXT_VIEW, NULL);
 }
 
 /* Code stolen from pidgin/gtkimhtml.c */
@@ -672,10 +714,12 @@ chat_text_view_scroll_down (EmpathyChatView *view)
 
 static void
 chat_text_view_append_message (EmpathyChatView *view,
-				 EmpathyMessage  *msg)
+			       EmpathyMessage  *msg)
 {
-	EmpathyChatTextViewPriv *priv = GET_PRIV (view);
-	gboolean             bottom;
+	EmpathyChatTextView     *text_view = EMPATHY_CHAT_TEXT_VIEW (view);
+	EmpathyChatTextViewPriv *priv = GET_PRIV (text_view);
+	gboolean                 bottom;
+	time_t                   timestamp;
 	
 	g_return_if_fail (EMPATHY_IS_CHAT_TEXT_VIEW (view));
 	g_return_if_fail (EMPATHY_IS_MESSAGE (msg));
@@ -684,11 +728,16 @@ chat_text_view_append_message (EmpathyChatView *view,
 		return;
 	}
 	
-	bottom = chat_text_view_is_scrolled_down (EMPATHY_CHAT_TEXT_VIEW (view));
+	bottom = chat_text_view_is_scrolled_down (text_view);
 	
 	chat_text_view_maybe_trim_buffer (EMPATHY_CHAT_TEXT_VIEW (view));
 	
-	empathy_theme_append_message (priv->theme, EMPATHY_CHAT_VIEW(view), msg);
+	timestamp = empathy_message_get_timestamp (msg);
+	chat_text_maybe_append_date_and_time (text_view, timestamp);
+	if (EMPATHY_CHAT_TEXT_VIEW_GET_CLASS (view)->append_message) {
+		EMPATHY_CHAT_TEXT_VIEW_GET_CLASS (view)->append_message (text_view,
+									 msg);
+	}
 	
 	if (bottom) {
 		chat_text_view_scroll_down (view);
@@ -698,26 +747,36 @@ chat_text_view_append_message (EmpathyChatView *view,
 		g_object_unref (priv->last_contact);
 	}
 	priv->last_contact = g_object_ref (empathy_message_get_sender (msg));
+	g_object_notify (G_OBJECT (view), "last-contact");
 }
 
 static void
 chat_text_view_append_event (EmpathyChatView *view,
-			       const gchar     *str)
+			     const gchar     *str)
 {
-	EmpathyChatTextViewPriv *priv;
-	gboolean            bottom;
-	
+	EmpathyChatTextView     *text_view = EMPATHY_CHAT_TEXT_VIEW (view);
+	EmpathyChatTextViewPriv *priv = GET_PRIV (text_view);
+	gboolean                 bottom;
+	GtkTextIter              iter;
+	gchar                   *msg;
+
+
 	g_return_if_fail (EMPATHY_IS_CHAT_TEXT_VIEW (view));
 	g_return_if_fail (!G_STR_EMPTY (str));
-	
-	priv = GET_PRIV (view);
-	
-	bottom = chat_text_view_is_scrolled_down (EMPATHY_CHAT_TEXT_VIEW (view));
-	
+
+	bottom = chat_text_view_is_scrolled_down (text_view);
 	chat_text_view_maybe_trim_buffer (EMPATHY_CHAT_TEXT_VIEW (view));
-	
-	empathy_theme_append_event (priv->theme, EMPATHY_CHAT_VIEW(view), str);
-	
+	chat_text_maybe_append_date_and_time (text_view,
+					      empathy_time_get_current ());
+
+	gtk_text_buffer_get_end_iter (priv->buffer, &iter);
+	msg = g_strdup_printf (" - %s\n", str);
+	gtk_text_buffer_insert_with_tags_by_name (priv->buffer, &iter,
+						  msg, -1,
+						  EMPATHY_CHAT_TEXT_VIEW_TAG_EVENT,
+						  NULL);
+	g_free (msg);
+
 	if (bottom) {
 		chat_text_view_scroll_down (view);
 	}
@@ -725,12 +784,13 @@ chat_text_view_append_event (EmpathyChatView *view,
 	if (priv->last_contact) {
 		g_object_unref (priv->last_contact);
 		priv->last_contact = NULL;
+		g_object_notify (G_OBJECT (view), "last-contact");
 	}
 }
 
 static void
 chat_text_view_scroll (EmpathyChatView *view,
-			 gboolean         allow_scrolling)
+		       gboolean         allow_scrolling)
 {
 	EmpathyChatTextViewPriv *priv = GET_PRIV (view);
 	
@@ -1013,10 +1073,10 @@ chat_text_view_find_abilities (EmpathyChatView *view,
 				 gboolean       *can_do_next)
 {
 	EmpathyChatTextViewPriv *priv;
-	GtkTextBuffer      *buffer;
-	GtkTextIter         iter_at_mark;
-	GtkTextIter         iter_match_start;
-	GtkTextIter         iter_match_end;
+	GtkTextBuffer           *buffer;
+	GtkTextIter              iter_at_mark;
+	GtkTextIter              iter_match_start;
+	GtkTextIter              iter_match_end;
 	
 	g_return_if_fail (EMPATHY_IS_CHAT_TEXT_VIEW (view));
 	g_return_if_fail (search_criteria != NULL);
@@ -1078,7 +1138,7 @@ chat_text_view_highlight (EmpathyChatView *view,
 	gtk_text_buffer_get_start_iter (buffer, &iter);
 	
 	gtk_text_buffer_get_bounds (buffer, &iter_start, &iter_end);
-	gtk_text_buffer_remove_tag_by_name (buffer, "highlight",
+	gtk_text_buffer_remove_tag_by_name (buffer, EMPATHY_CHAT_TEXT_VIEW_TAG_HIGHLIGHT,
 					    &iter_start,
 					    &iter_end);
 	
@@ -1097,7 +1157,7 @@ chat_text_view_highlight (EmpathyChatView *view,
 			break;
 		}
 		
-		gtk_text_buffer_apply_tag_by_name (buffer, "highlight",
+		gtk_text_buffer_apply_tag_by_name (buffer, EMPATHY_CHAT_TEXT_VIEW_TAG_HIGHLIGHT,
 						   &iter_match_start,
 						   &iter_match_end);
 		
@@ -1120,104 +1180,11 @@ chat_text_view_copy_clipboard (EmpathyChatView *view)
 	gtk_text_buffer_copy_clipboard (buffer, clipboard);
 }
 
-static EmpathyTheme *
-chat_text_view_get_theme (EmpathyChatView *view)
-{
-	EmpathyChatTextViewPriv *priv;
-	
-	g_return_val_if_fail (EMPATHY_IS_CHAT_TEXT_VIEW (view), NULL);
-	
-	priv = GET_PRIV (view);
-	
-	return priv->theme;
-}
-
-static void
-chat_text_view_set_theme (EmpathyChatView *view, EmpathyTheme *theme)
-{
-	EmpathyChatTextViewPriv *priv;
-	
-	g_return_if_fail (EMPATHY_IS_CHAT_TEXT_VIEW (view));
-	g_return_if_fail (EMPATHY_IS_THEME (theme));
-	
-	priv = GET_PRIV (view);
-	
-	if (priv->theme) {
-		g_signal_handlers_disconnect_by_func (priv->theme,
-						      chat_text_view_theme_notify_cb,
-						      EMPATHY_CHAT_TEXT_VIEW (view));
-		g_object_unref (priv->theme);
-	}
-	
-	priv->theme = g_object_ref (theme);
-	
-	empathy_theme_update_view (theme, view);
-	g_signal_connect (priv->theme, "notify",
-			  G_CALLBACK (chat_text_view_theme_notify_cb),
-			  EMPATHY_CHAT_TEXT_VIEW (view));
-	
-	/* FIXME: Redraw all messages using the new theme */
-}
-
-static void
-chat_text_view_set_margin (EmpathyChatView *view,
-			     gint             margin)
-{
-	EmpathyChatTextViewPriv *priv;
-	
-	g_return_if_fail (EMPATHY_IS_CHAT_TEXT_VIEW (view));
-	
-	priv = GET_PRIV (view);
-	
-	g_object_set (view,
-		      "left-margin", margin,
-		      "right-margin", margin,
-		      NULL);
-}
-
-static time_t
-chat_text_view_get_last_timestamp (EmpathyChatView *view)
-{
-	EmpathyChatTextViewPriv *priv;
-	
-	g_return_val_if_fail (EMPATHY_IS_CHAT_TEXT_VIEW (view), 0);
-	
-	priv = GET_PRIV (view);
-	
-	return priv->last_timestamp;
-}
-
-static void
-chat_text_view_set_last_timestamp (EmpathyChatView *view,
-				     time_t           timestamp)
-{
-	EmpathyChatTextViewPriv *priv;
-	
-	g_return_if_fail (EMPATHY_IS_CHAT_TEXT_VIEW (view));
-	
-	priv = GET_PRIV (view);
-	
-	priv->last_timestamp = timestamp;
-}
-
-static EmpathyContact *
-chat_text_view_get_last_contact (EmpathyChatView *view)
-{
-	EmpathyChatTextViewPriv *priv;
-	
-	g_return_val_if_fail (EMPATHY_IS_CHAT_TEXT_VIEW (view), NULL);
-	
-	priv = GET_PRIV (view);
-	
-	return priv->last_contact;
-}
-
 static void
 chat_text_view_iface_init (EmpathyChatViewIface *iface)
 {
 	iface->append_message = chat_text_view_append_message;
 	iface->append_event = chat_text_view_append_event;
-	iface->set_margin = chat_text_view_set_margin;
 	iface->scroll = chat_text_view_scroll;
 	iface->scroll_down = chat_text_view_scroll_down;
 	iface->get_has_selection = chat_text_view_get_has_selection;
@@ -1227,10 +1194,181 @@ chat_text_view_iface_init (EmpathyChatViewIface *iface)
 	iface->find_abilities = chat_text_view_find_abilities;
 	iface->highlight = chat_text_view_highlight;
 	iface->copy_clipboard = chat_text_view_copy_clipboard;
-	iface->get_theme = chat_text_view_get_theme;
-	iface->set_theme = chat_text_view_set_theme;
-	iface->get_last_timestamp = chat_text_view_get_last_timestamp;
-	iface->set_last_timestamp = chat_text_view_set_last_timestamp;
-	iface->get_last_contact = chat_text_view_get_last_contact;
+}
+
+EmpathyContact *
+empathy_chat_text_view_get_last_contact (EmpathyChatTextView *view)
+{
+	EmpathyChatTextViewPriv *priv = GET_PRIV (view);
+	
+	g_return_val_if_fail (EMPATHY_IS_CHAT_TEXT_VIEW (view), NULL);
+	
+	return priv->last_contact;
+}
+
+void
+empathy_chat_text_view_set_only_if_date (EmpathyChatTextView *view,
+					 gboolean             only_if_date)
+{
+	EmpathyChatTextViewPriv *priv = GET_PRIV (view);
+	
+	g_return_if_fail (EMPATHY_IS_CHAT_TEXT_VIEW (view));
+
+	if (only_if_date != priv->only_if_date) {
+		priv->only_if_date = only_if_date;
+		g_object_notify (G_OBJECT (view), "only-if-date");
+	}
+}
+
+static void
+chat_text_view_insert_text_with_emoticons (EmpathyChatTextView *view,
+					   GtkTextIter         *iter,
+					   const gchar         *str)
+{
+	EmpathyChatTextViewPriv *priv = GET_PRIV (view);
+	gboolean                 use_smileys = FALSE;
+	GSList                  *smileys, *l;
+
+	empathy_conf_get_bool (empathy_conf_get (),
+			       EMPATHY_PREFS_CHAT_SHOW_SMILEYS,
+			       &use_smileys);
+
+	if (!use_smileys) {
+		gtk_text_buffer_insert (priv->buffer, iter, str, -1);
+		return;
+	}
+
+	smileys = empathy_smiley_manager_parse (priv->smiley_manager, str);
+	for (l = smileys; l; l = l->next) {
+		EmpathySmiley *smiley;
+
+		smiley = l->data;
+		if (smiley->pixbuf) {
+			gtk_text_buffer_insert_pixbuf (priv->buffer, iter, smiley->pixbuf);
+		} else {
+			gtk_text_buffer_insert (priv->buffer, iter, smiley->str, -1);
+		}
+		empathy_smiley_free (smiley);
+	}
+	g_slist_free (smileys);
+}
+
+void
+empathy_chat_text_view_append_body (EmpathyChatTextView *view,
+				    const gchar         *body,
+				    const gchar         *tag)
+{
+	EmpathyChatTextViewPriv *priv = GET_PRIV (view);
+	GtkTextIter              start_iter, end_iter;
+	GtkTextMark             *mark;
+	GtkTextIter              iter;
+	GMatchInfo              *match_info;
+	gboolean                 match;
+	gint                     last = 0;
+	gint                     s = 0, e = 0;
+	gchar                   *tmp;
+
+	priv = GET_PRIV (view);
+
+	gtk_text_buffer_get_end_iter (priv->buffer, &start_iter);
+	mark = gtk_text_buffer_create_mark (priv->buffer, NULL, &start_iter, TRUE);
+
+	if (!uri_regex) {
+		uri_regex = g_regex_new (URI_REGEX, 0, 0, NULL);
+	}
+
+	for (match = g_regex_match (uri_regex, body, 0, &match_info); match;
+	     match = g_match_info_next (match_info, NULL)) {
+		if (!g_match_info_fetch_pos (match_info, 0, &s, &e))
+			continue;
+
+		if (s > last) {
+			tmp = empathy_substring (body, last, s);
+
+			gtk_text_buffer_get_end_iter (priv->buffer, &iter);
+			chat_text_view_insert_text_with_emoticons (view,
+								   &iter,
+								   tmp);
+			g_free (tmp);
+		}
+
+		tmp = empathy_substring (body, s, e);
+
+		gtk_text_buffer_get_end_iter (priv->buffer, &iter);
+		gtk_text_buffer_insert_with_tags_by_name (priv->buffer,
+							  &iter,
+							  tmp,
+							  -1,
+							  EMPATHY_CHAT_TEXT_VIEW_TAG_LINK,
+							  NULL);
+
+		g_free (tmp);
+		last = e;
+	}
+	g_match_info_free (match_info);
+
+	if (last < strlen (body)) {
+		gtk_text_buffer_get_end_iter (priv->buffer, &iter);
+		chat_text_view_insert_text_with_emoticons (view,
+							   &iter,
+							   body + last);
+	}
+
+	gtk_text_buffer_get_end_iter (priv->buffer, &iter);
+	gtk_text_buffer_insert (priv->buffer, &iter, "\n", 1);
+
+	/* Apply the style to the inserted text. */
+	gtk_text_buffer_get_iter_at_mark (priv->buffer, &start_iter, mark);
+	gtk_text_buffer_get_end_iter (priv->buffer, &end_iter);
+
+	gtk_text_buffer_apply_tag_by_name (priv->buffer,
+					   tag,
+					   &start_iter,
+					   &end_iter);
+
+	gtk_text_buffer_delete_mark (priv->buffer, mark);
+}
+
+void
+empathy_chat_text_view_append_spacing (EmpathyChatTextView *view)
+{
+	EmpathyChatTextViewPriv *priv = GET_PRIV (view);
+	GtkTextIter              iter;
+
+	gtk_text_buffer_get_end_iter (priv->buffer, &iter);
+	gtk_text_buffer_insert_with_tags_by_name (priv->buffer,
+						  &iter,
+						  "\n",
+						  -1,
+						  EMPATHY_CHAT_TEXT_VIEW_TAG_CUT,
+						  EMPATHY_CHAT_TEXT_VIEW_TAG_SPACING,
+						  NULL);
+}
+
+GtkTextTag *
+empathy_chat_text_view_tag_set (EmpathyChatTextView *view,
+				const gchar         *tag_name,
+				const gchar         *first_property_name,
+				...)
+{
+	EmpathyChatTextViewPriv *priv = GET_PRIV (view);
+	GtkTextTag              *tag;
+	GtkTextTagTable         *table;
+	va_list                  list;
+
+	g_return_val_if_fail (EMPATHY_IS_CHAT_TEXT_VIEW (view), NULL);
+	g_return_val_if_fail (tag_name != NULL, NULL);
+
+	table = gtk_text_buffer_get_tag_table (priv->buffer);
+	tag = gtk_text_tag_table_lookup (table, tag_name);
+	g_return_val_if_fail (tag != NULL, NULL);
+
+	if (first_property_name) {
+		va_start (list, first_property_name);
+		g_object_set_valist (G_OBJECT (tag), first_property_name, list);
+		va_end (list);
+	}
+
+	return tag;
 }
 

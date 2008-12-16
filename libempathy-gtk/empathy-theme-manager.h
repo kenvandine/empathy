@@ -1,6 +1,7 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /*
  * Copyright (C) 2005-2007 Imendio AB
+ * Copyright (C) 2008 Collabora Ltd.
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
@@ -16,12 +17,15 @@
  * License along with this program; if not, write to the
  * Free Software Foundation, Inc., 59 Temple Place - Suite 330,
  * Boston, MA 02111-1307, USA.
+ *
+ * Authors: Xavier Claessens <xclaesse@gmail.com>
  */
 
 #ifndef __EMPATHY_THEME_MANAGER_H__
 #define __EMPATHY_THEME_MANAGER_H__
 
 #include <glib-object.h>
+#include "empathy-chat-view.h"
 
 G_BEGIN_DECLS
 
@@ -44,14 +48,10 @@ struct _EmpathyThemeManagerClass {
 	GObjectClass parent_class;
 };
 
-GType               empathy_theme_manager_get_type            (void) G_GNUC_CONST;
-EmpathyThemeManager *empathy_theme_manager_get                 (void);
-const gchar **      empathy_theme_manager_get_themes          (void);
-void                empathy_theme_manager_apply               (EmpathyThemeManager *manager,
-							      EmpathyChatView     *view,
-							      const gchar        *theme);
-void                empathy_theme_manager_apply_saved         (EmpathyThemeManager *manager,
-							      EmpathyChatView     *view);
+GType                   empathy_theme_manager_get_type    (void) G_GNUC_CONST;
+EmpathyThemeManager *   empathy_theme_manager_get         (void);
+const gchar **          empathy_theme_manager_get_themes  (void);
+EmpathyChatView *       empathy_theme_manager_create_view (EmpathyThemeManager *manager);
 
 G_END_DECLS
 
