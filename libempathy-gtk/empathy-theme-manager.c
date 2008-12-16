@@ -63,7 +63,7 @@ static const gchar *themes[] = {
 };
 
 G_DEFINE_TYPE (EmpathyThemeManager, empathy_theme_manager, G_TYPE_OBJECT);
-/*
+
 static void
 theme_manager_gdk_color_to_hex (GdkColor *gdk_color, gchar *str_color)
 {
@@ -73,7 +73,7 @@ theme_manager_gdk_color_to_hex (GdkColor *gdk_color, gchar *str_color)
 		    gdk_color->green >> 8,
 		    gdk_color->blue >> 8);
 }
-*/ 
+
 static void
 theme_manager_color_hash_notify_cb (EmpathyThemeManager *manager)
 {
@@ -82,34 +82,6 @@ theme_manager_color_hash_notify_cb (EmpathyThemeManager *manager)
 FIXME: Make that work, it should update color when theme changes but it
        doesnt seems to work with all themes.
 
-	EmpathyThemeManagerPriv *priv;
-	GtkStyle                *style;
-	gchar                    color[10];
-
-	priv = GET_PRIV (manager);
-
-	style = gtk_widget_get_default_style ();
-
-	theme_manager_gdk_color_to_hex (&style->base[GTK_STATE_SELECTED], color);
-	g_object_set (priv->simple_theme,
-		      "action-foreground", color,
-		      "link-foreground", color,
-		      NULL);
- 
-	theme_manager_gdk_color_to_hex (&style->bg[GTK_STATE_SELECTED], color);
-	g_object_set (priv->simple_theme,
-		      "header-background", color,
-		      NULL);
-
-	theme_manager_gdk_color_to_hex (&style->dark[GTK_STATE_SELECTED], color);
-	g_object_set (priv->simple_theme,
-		      "header-line-background", color,
-		      NULL);
-
-	theme_manager_gdk_color_to_hex (&style->fg[GTK_STATE_SELECTED], color);
-	g_object_set (priv->simple_theme,
-		      "header-foreground", color,
-		      NULL);
   
 --------
 
@@ -393,6 +365,35 @@ theme_manager_create_boxes_view (EmpathyThemeManager *manager,
 	return EMPATHY_CHAT_VIEW (view);
 }
 
+static EmpathyChatView *
+theme_manager_create_simple_view (EmpathyThemeManager *manager)
+{
+	GtkStyle *style;
+	gchar     color1[10];
+	gchar     color2[10];
+	gchar     color3[10];
+	gchar     color4[10];
+
+	style = gtk_widget_get_default_style ();
+
+	theme_manager_gdk_color_to_hex (&style->base[GTK_STATE_SELECTED], color1); 
+	theme_manager_gdk_color_to_hex (&style->bg[GTK_STATE_SELECTED], color2);
+	theme_manager_gdk_color_to_hex (&style->dark[GTK_STATE_SELECTED], color3);
+	theme_manager_gdk_color_to_hex (&style->fg[GTK_STATE_SELECTED], color4);
+
+	return theme_manager_create_boxes_view (manager,
+						color4,     /* header_foreground */
+						color2,     /* header_background */
+						color3,     /* header_line_background */
+						color1,     /* action_foreground */
+						"darkgrey", /* time_foreground */
+						"darkgrey", /* event_foreground */
+						color1,     /* link_foreground */
+						NULL,       /* text_foreground */
+						NULL,       /* text_background */
+						NULL);      /* highlight_foreground */
+}
+
 EmpathyChatView *
 empathy_theme_manager_create_view (EmpathyThemeManager *manager)
 {
@@ -406,7 +407,7 @@ empathy_theme_manager_create_view (EmpathyThemeManager *manager)
 		return theme_manager_create_irc_view (manager);
 	}
 	else if (strcmp (priv->name, "simple") == 0) {
-		return theme_manager_create_irc_view (manager);
+		return theme_manager_create_simple_view (manager);
 	}
 	else if (strcmp (priv->name, "clean") == 0) {
 		return theme_manager_create_boxes_view (manager,
