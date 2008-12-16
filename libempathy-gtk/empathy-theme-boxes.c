@@ -25,6 +25,7 @@
 #include <glib/gi18n-lib.h>
 #include <gtk/gtk.h>
 
+#include <telepathy-glib/util.h>
 #include <libempathy/empathy-utils.h>
 #include "empathy-ui-utils.h"
 #include "empathy-theme-boxes.h"
@@ -518,6 +519,99 @@ table_size_allocate_cb (GtkWidget     *view,
         gtk_widget_set_size_request (box, width, height);
 }
 
+/* Pads a pixbuf to the specified size, by centering it in a larger transparent
+ * pixbuf. Returns a new ref.
+ */
+static GdkPixbuf *
+theme_boxes_pad_to_size (GdkPixbuf *pixbuf,
+			 gint       width,
+			 gint       height,
+			 gint       extra_padding_right)
+{
+	gint       src_width, src_height;
+	GdkPixbuf *padded;
+	gint       x_offset, y_offset;
+
+	src_width = gdk_pixbuf_get_width (pixbuf);
+	src_height = gdk_pixbuf_get_height (pixbuf);
+
+	x_offset = (width - src_width) / 2;
+	y_offset = (height - src_height) / 2;
+
+	padded = gdk_pixbuf_new (gdk_pixbuf_get_colorspace (pixbuf),
+				 TRUE, /* alpha */
+				 gdk_pixbuf_get_bits_per_sample (pixbuf),
+				 width + extra_padding_right,
+				 height);
+
+	gdk_pixbuf_fill (padded, 0);
+
+	gdk_pixbuf_copy_area (pixbuf,
+			      0, /* source coords */
+			      0,
+			      src_width,
+			      src_height,
+			      padded,
+			      x_offset, /* dest coords */
+			      y_offset);
+
+	return padded;
+}
+
+typedef struct {
+	GdkPixbuf *pixbuf;
+	gchar     *token;
+} AvatarData;
+
+static void
+theme_boxes_avatar_cache_data_free (gpointer ptr)
+{
+	AvatarData *data = ptr;
+
+	g_object_unref (data->pixbuf);
+	g_free (data->token);
+	g_slice_free (AvatarData, data);
+}
+
+static GdkPixbuf *
+theme_boxes_get_avatar_pixbuf_with_cache (EmpathyContact *contact)
+{
+	AvatarData        *data;
+	EmpathyAvatar     *avatar;
+	GdkPixbuf         *tmp_pixbuf;
+	GdkPixbuf         *pixbuf = NULL;
+
+	/* Check if avatar is in cache and if it's up to date */
+	avatar = empathy_contact_get_avatar (contact);
+	data = g_object_get_data (G_OBJECT (contact), "chat-view-avatar-cache");
+	if (data) {
+		if (avatar && !tp_strdiff (avatar->token, data->token)) {
+			/* We have the avatar in cache */
+			return data->pixbuf;
+		}
+	}
+
+	/* Avatar not in cache, create pixbuf */
+	tmp_pixbuf = empathy_pixbuf_avatar_from_contact_scaled (contact, 32, 32);
+	if (tmp_pixbuf) {
+		pixbuf = theme_boxes_pad_to_size (tmp_pixbuf, 32, 32, 6);
+		g_object_unref (tmp_pixbuf);
+	}
+	if (!pixbuf) {
+		return NULL;
+	}
+
+	/* Insert new pixbuf in cache */
+	data = g_slice_new0 (AvatarData);
+	data->token = g_strdup (avatar->token);
+	data->pixbuf = pixbuf;
+
+	g_object_set_data_full (G_OBJECT (contact), "chat-view-avatar-cache",
+				data, theme_boxes_avatar_cache_data_free);
+
+	return data->pixbuf;
+}
+
 static void
 theme_boxes_maybe_append_header (EmpathyTheme        *theme,
 				 EmpathyChatView     *view,
@@ -573,7 +667,7 @@ theme_boxes_maybe_append_header (EmpathyTheme        *theme,
 
 
 	if (empathy_theme_get_show_avatars (theme)) {
-		avatar = empathy_chat_view_get_avatar_pixbuf_with_cache (contact);
+		avatar = theme_boxes_get_avatar_pixbuf_with_cache (contact);
 		if (avatar) {
 			GtkWidget *image;
 

@@ -123,7 +123,6 @@ void             empathy_chat_view_set_last_timestamp   (EmpathyChatView *view,
 							 time_t           timestamp);
 EmpathyContact * empathy_chat_view_get_last_contact     (EmpathyChatView *view);
 
-GdkPixbuf *      empathy_chat_view_get_avatar_pixbuf_with_cache (EmpathyContact *contact);
 GtkWidget *      empathy_chat_view_get_smiley_menu      (GCallback        callback,
 							 gpointer         user_data);
 
