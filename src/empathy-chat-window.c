@@ -1260,6 +1260,7 @@ empathy_chat_window_init (EmpathyChatWindow *window)
 					window);
 	gtk_menu_item_set_submenu (GTK_MENU_ITEM (priv->menu_conv_insert_smiley),
 				   menu);
+	g_object_unref (smiley_manager);
 
 	/* Set up signals we can't do with glade since we may need to
 	 * block/unblock them at some later stage.
