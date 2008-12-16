@@ -104,12 +104,6 @@ theme_irc_append_message (EmpathyChatTextView *view,
 }
 
 static void
-theme_irc_finalize (GObject *object)
-{
-	(G_OBJECT_CLASS (empathy_theme_irc_parent_class)->finalize) (object);
-}
-
-static void
 empathy_theme_irc_class_init (EmpathyThemeIrcClass *class)
 {
 	GObjectClass             *object_class;
@@ -118,7 +112,6 @@ empathy_theme_irc_class_init (EmpathyThemeIrcClass *class)
 	object_class = G_OBJECT_CLASS (class);
 	chat_text_view_class = EMPATHY_CHAT_TEXT_VIEW_CLASS (class);
 
-	object_class->finalize = theme_irc_finalize;
 	chat_text_view_class->append_message = theme_irc_append_message;
 
 	g_type_class_add_private (object_class, sizeof (EmpathyThemeIrcPriv));
