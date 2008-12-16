@@ -60,16 +60,6 @@ chat_view_base_init (gpointer klass)
 }
 
 void
-empathy_chat_view_scroll_down (EmpathyChatView *view)
-{
-	g_return_if_fail (EMPATHY_IS_CHAT_VIEW (view));
-	
-	if (EMPATHY_TYPE_CHAT_VIEW_GET_IFACE (view)->scroll_down) {
-		EMPATHY_TYPE_CHAT_VIEW_GET_IFACE (view)->scroll_down (view);
-	}
-}
-
-void
 empathy_chat_view_append_message (EmpathyChatView *view,
 				  EmpathyMessage  *msg)
 {
@@ -102,6 +92,16 @@ empathy_chat_view_scroll (EmpathyChatView *view,
 	if (EMPATHY_TYPE_CHAT_VIEW_GET_IFACE (view)->scroll) {
 		EMPATHY_TYPE_CHAT_VIEW_GET_IFACE (view)->scroll (view, 
 								 allow_scrolling);
+	}
+}
+
+void
+empathy_chat_view_scroll_down (EmpathyChatView *view)
+{
+	g_return_if_fail (EMPATHY_IS_CHAT_VIEW (view));
+	
+	if (EMPATHY_TYPE_CHAT_VIEW_GET_IFACE (view)->scroll_down) {
+		EMPATHY_TYPE_CHAT_VIEW_GET_IFACE (view)->scroll_down (view);
 	}
 }
 
@@ -192,70 +192,5 @@ empathy_chat_view_copy_clipboard (EmpathyChatView *view)
 	if (EMPATHY_TYPE_CHAT_VIEW_GET_IFACE (view)->copy_clipboard) {
 		EMPATHY_TYPE_CHAT_VIEW_GET_IFACE (view)->copy_clipboard (view);
 	}
-}
-
-EmpathyTheme *
-empathy_chat_view_get_theme (EmpathyChatView *view)
-{
-	g_return_val_if_fail (EMPATHY_IS_CHAT_VIEW (view), NULL);
-	
-	if (EMPATHY_TYPE_CHAT_VIEW_GET_IFACE (view)->get_theme) {
-		return EMPATHY_TYPE_CHAT_VIEW_GET_IFACE (view)->get_theme (view);
-	}
-	return NULL;
-}
-
-void
-empathy_chat_view_set_theme (EmpathyChatView *view, EmpathyTheme *theme)
-{
-	g_return_if_fail (EMPATHY_IS_CHAT_VIEW (view));
-	
-	if (EMPATHY_TYPE_CHAT_VIEW_GET_IFACE (view)->set_theme) {
-		EMPATHY_TYPE_CHAT_VIEW_GET_IFACE (view)->set_theme (view, theme);
-	}
-}
-
-void
-empathy_chat_view_set_margin (EmpathyChatView *view,
-			      gint            margin)
-{
-	g_return_if_fail (EMPATHY_IS_CHAT_VIEW (view));
-	
-	if (EMPATHY_TYPE_CHAT_VIEW_GET_IFACE (view)->set_margin) {
-		EMPATHY_TYPE_CHAT_VIEW_GET_IFACE (view)->set_margin (view, margin);
-	}
-}
-
-time_t
-empathy_chat_view_get_last_timestamp (EmpathyChatView *view)
-{
-	g_return_val_if_fail (EMPATHY_IS_CHAT_VIEW (view), 0);
-	
-	if (EMPATHY_TYPE_CHAT_VIEW_GET_IFACE (view)->get_last_timestamp) {
-		return EMPATHY_TYPE_CHAT_VIEW_GET_IFACE (view)->get_last_timestamp (view);
-	}
-	return 0;
-}
-
-void
-empathy_chat_view_set_last_timestamp (EmpathyChatView *view,
-				      time_t          timestamp)
-{
-	g_return_if_fail (EMPATHY_IS_CHAT_VIEW (view));
-	
-	if (EMPATHY_TYPE_CHAT_VIEW_GET_IFACE (view)->set_last_timestamp) {
-		EMPATHY_TYPE_CHAT_VIEW_GET_IFACE (view)->set_last_timestamp (view, timestamp);
-	}
-}
-
-EmpathyContact *
-empathy_chat_view_get_last_contact (EmpathyChatView *view)
-{
-	g_return_val_if_fail (EMPATHY_IS_CHAT_VIEW (view), NULL);
-	
-	if (EMPATHY_TYPE_CHAT_VIEW_GET_IFACE (view)->get_last_contact) {
-		return EMPATHY_TYPE_CHAT_VIEW_GET_IFACE (view)->get_last_contact (view);
-	}
-	return NULL;
 }
 

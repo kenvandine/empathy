@@ -48,8 +48,6 @@ struct _EmpathyChatViewIface {
 						  EmpathyMessage  *msg);
 	void             (*append_event)         (EmpathyChatView *view,
 						  const gchar     *str);
-	void             (*set_margin)           (EmpathyChatView *view,
-						  gint             margin);
 	void             (*scroll)               (EmpathyChatView *view,
 						  gboolean         allow_scrolling);
 	void             (*scroll_down)          (EmpathyChatView *view);
@@ -68,14 +66,6 @@ struct _EmpathyChatViewIface {
 	void             (*highlight)            (EmpathyChatView *view,
 						  const gchar     *text);
 	void             (*copy_clipboard)       (EmpathyChatView *view);
-	EmpathyTheme *   (*get_theme)            (EmpathyChatView *view);
-	void             (*set_theme)            (EmpathyChatView *view,
-						  EmpathyTheme    *theme);
-	time_t           (*get_last_timestamp)   (EmpathyChatView *view);
-	void             (*set_last_timestamp)   (EmpathyChatView *view,
-						  time_t           timestamp);
-	EmpathyContact * (*get_last_contact)     (EmpathyChatView *view);
-
 };
 
 GType            empathy_chat_view_get_type             (void) G_GNUC_CONST;
@@ -101,15 +91,6 @@ void             empathy_chat_view_find_abilities       (EmpathyChatView *view,
 void             empathy_chat_view_highlight            (EmpathyChatView *view,
 							 const gchar     *text);
 void             empathy_chat_view_copy_clipboard       (EmpathyChatView *view);
-EmpathyTheme *   empathy_chat_view_get_theme            (EmpathyChatView *view);
-void             empathy_chat_view_set_theme            (EmpathyChatView *view,
-							 EmpathyTheme    *theme);
-void             empathy_chat_view_set_margin           (EmpathyChatView *view,
-							 gint             margin);
-time_t           empathy_chat_view_get_last_timestamp   (EmpathyChatView *view);
-void             empathy_chat_view_set_last_timestamp   (EmpathyChatView *view,
-							 time_t           timestamp);
-EmpathyContact * empathy_chat_view_get_last_contact     (EmpathyChatView *view);
 
 G_END_DECLS
 
