@@ -28,6 +28,7 @@
 #include <glib/gi18n-lib.h>
 #include <gtk/gtk.h>
 
+#include <telepathy-glib/util.h>
 #include <libempathy/empathy-utils.h>
 
 #include "empathy-theme-manager.h"
@@ -75,12 +76,14 @@ theme_manager_gdk_color_to_hex (GdkColor *gdk_color, gchar *str_color)
 		    gdk_color->blue >> 8);
 }
 
-static EmpathyChatView *
+static EmpathyThemeIrc *
 theme_manager_create_irc_view (EmpathyThemeManager *manager)
 {
 	EmpathyChatTextView *view;
+	EmpathyThemeIrc     *theme;
 
-	view = EMPATHY_CHAT_TEXT_VIEW (empathy_theme_irc_new ());
+	theme = empathy_theme_irc_new ();
+	view = EMPATHY_CHAT_TEXT_VIEW (theme);
 
 	/* Define base tags */
 	empathy_chat_text_view_tag_set (view, EMPATHY_CHAT_TEXT_VIEW_TAG_SPACING,
@@ -118,7 +121,7 @@ theme_manager_create_irc_view (EmpathyThemeManager *manager)
 					"weight", PANGO_WEIGHT_BOLD,
 					NULL);
 
-	return EMPATHY_CHAT_VIEW (view);
+	return theme;
 }
 
 static void
@@ -130,36 +133,37 @@ theme_manager_boxes_weak_notify_cb (gpointer data,
 	priv->boxes_views = g_list_remove (priv->boxes_views, where_the_object_was);
 }
 
-static EmpathyChatView *
+static EmpathyThemeBoxes *
 theme_manager_create_boxes_view (EmpathyThemeManager *manager)
 {
 	EmpathyThemeManagerPriv *priv = GET_PRIV (manager);
-	EmpathyThemeBoxes       *view;
+	EmpathyThemeBoxes       *theme;
 
-	view = empathy_theme_boxes_new ();
-	priv->boxes_views = g_list_prepend (priv->boxes_views, view);
-	g_object_weak_ref (G_OBJECT (view),
+	theme = empathy_theme_boxes_new ();
+	priv->boxes_views = g_list_prepend (priv->boxes_views, theme);
+	g_object_weak_ref (G_OBJECT (theme),
 			   theme_manager_boxes_weak_notify_cb,
 			   manager);
 
-	return EMPATHY_CHAT_VIEW (view);
+	return theme;
 }
 
 static void
-theme_manager_update_boxes_view (EmpathyChatTextView *view,
-				 const gchar         *header_foreground,
-				 const gchar         *header_background,
-				 const gchar         *header_line_background,
-				 const gchar         *action_foreground,
-				 const gchar         *time_foreground,
-				 const gchar         *event_foreground,
-				 const gchar         *link_foreground,
-				 const gchar         *text_foreground,
-				 const gchar         *text_background,
-				 const gchar         *highlight_foreground)
+theme_manager_update_boxes_tags (EmpathyThemeBoxes *theme,
+				 const gchar       *header_foreground,
+				 const gchar       *header_background,
+				 const gchar       *header_line_background,
+				 const gchar       *action_foreground,
+				 const gchar       *time_foreground,
+				 const gchar       *event_foreground,
+				 const gchar       *link_foreground,
+				 const gchar       *text_foreground,
+				 const gchar       *text_background,
+				 const gchar       *highlight_foreground)
 
 {
-	GtkTextTag *tag;
+	EmpathyChatTextView *view = EMPATHY_CHAT_TEXT_VIEW (theme);
+	GtkTextTag          *tag;
 
 	DEBUG ("Update view with new colors:\n"
 		"header_foreground = %s\n"
@@ -180,9 +184,12 @@ theme_manager_update_boxes_view (EmpathyChatTextView *view,
 
 	/* FIXME: GtkTextTag don't support to set color properties to NULL.
 	 * See bug #542523 */
-	#define TAG_SET(prop, value) \
+	
+	#define TAG_SET(prop, prop_set, value) \
 		if (value != NULL) { \
 			g_object_set (tag, prop, value, NULL); \
+		} else { \
+			g_object_set (tag, prop_set, FALSE, NULL); \
 		}
 
 	/* Define base tags */
@@ -190,8 +197,8 @@ theme_manager_update_boxes_view (EmpathyChatTextView *view,
 					      "weight", PANGO_WEIGHT_BOLD,
 					      "pixels-above-lines", 4,
 					      NULL);
-	TAG_SET ("paragraph-background", text_background);
-	TAG_SET ("foreground", highlight_foreground);
+	TAG_SET ("paragraph-background", "paragraph-background-set", text_background);
+	TAG_SET ("foreground", "foreground-set",highlight_foreground);
 
 	empathy_chat_text_view_tag_set (view, EMPATHY_CHAT_TEXT_VIEW_TAG_SPACING,
 					"size", 3000,
@@ -200,26 +207,26 @@ theme_manager_update_boxes_view (EmpathyChatTextView *view,
 	tag = empathy_chat_text_view_tag_set (view, EMPATHY_CHAT_TEXT_VIEW_TAG_TIME,
 					      "justification", GTK_JUSTIFY_CENTER,
 					      NULL);
-	TAG_SET ("foreground", time_foreground);
+	TAG_SET ("foreground", "foreground-set", time_foreground);
 	tag = empathy_chat_text_view_tag_set (view, EMPATHY_CHAT_TEXT_VIEW_TAG_ACTION,
 					      "style", PANGO_STYLE_ITALIC,
 					      "pixels-above-lines", 4,
 					      NULL);
-	TAG_SET ("paragraph-background", text_background);
-	TAG_SET ("foreground", action_foreground);
+	TAG_SET ("paragraph-background", "paragraph-background-set", text_background);
+	TAG_SET ("foreground", "foreground-set", action_foreground);
 	tag = empathy_chat_text_view_tag_set (view, EMPATHY_CHAT_TEXT_VIEW_TAG_BODY,
 					      "pixels-above-lines", 4,
 					      NULL);
-	TAG_SET ("paragraph-background", text_background);
-	TAG_SET ("foreground", text_foreground);
+	TAG_SET ("paragraph-background", "paragraph-background-set", text_background);
+	TAG_SET ("foreground", "foreground-set", text_foreground);
 	tag = empathy_chat_text_view_tag_set (view, EMPATHY_CHAT_TEXT_VIEW_TAG_EVENT,
 					      "justification", GTK_JUSTIFY_LEFT,
 					      NULL);
-	TAG_SET ("foreground", event_foreground);
+	TAG_SET ("foreground", "foreground-set", event_foreground);
 	tag = empathy_chat_text_view_tag_set (view, EMPATHY_CHAT_TEXT_VIEW_TAG_LINK,
 					      "underline", PANGO_UNDERLINE_SINGLE,
 					      NULL);
-	TAG_SET ("foreground", link_foreground);
+	TAG_SET ("foreground", "foreground-set", link_foreground);
 
 	/* Define BOXES tags */
 	tag = empathy_chat_text_view_tag_set (view, EMPATHY_THEME_BOXES_TAG_HEADER,
@@ -227,19 +234,19 @@ theme_manager_update_boxes_view (EmpathyChatTextView *view,
 					      "foreground", header_foreground,
 					      "paragraph-background", header_background,
 					      NULL);
-	TAG_SET ("foreground", header_foreground);
-	TAG_SET ("paragraph-background", header_background);
+	TAG_SET ("foreground", "foreground-set", header_foreground);
+	TAG_SET ("paragraph-background", "paragraph-background-set", header_background);
 	tag = empathy_chat_text_view_tag_set (view, EMPATHY_THEME_BOXES_TAG_HEADER_LINE,
 					      "size", 1,
 					      "paragraph-background", header_line_background,
 					      NULL);
-	TAG_SET ("paragraph-background", header_line_background);
+	TAG_SET ("paragraph-background", "paragraph-background-set", header_line_background);
 
 	#undef TAG_SET
 }
 
 static void
-theme_manager_update_simple_view (EmpathyChatTextView *view)
+theme_manager_update_simple_tags (EmpathyThemeBoxes *theme)
 {
 	GtkStyle *style;
 	gchar     color1[10];
@@ -254,7 +261,7 @@ theme_manager_update_simple_view (EmpathyChatTextView *view)
 	theme_manager_gdk_color_to_hex (&style->dark[GTK_STATE_SELECTED], color3);
 	theme_manager_gdk_color_to_hex (&style->fg[GTK_STATE_SELECTED], color4);
 
-	theme_manager_update_boxes_view (view,
+	theme_manager_update_boxes_tags (theme,
 					 color4,     /* header_foreground */
 					 color2,     /* header_background */
 					 color3,     /* header_line_background */
@@ -267,26 +274,17 @@ theme_manager_update_simple_view (EmpathyChatTextView *view)
 					 NULL);      /* highlight_foreground */
 }
 
-EmpathyChatView *
-empathy_theme_manager_create_view (EmpathyThemeManager *manager)
+static void
+theme_manager_update_boxes_theme (EmpathyThemeManager *manager,
+				  EmpathyThemeBoxes   *theme)
 {
 	EmpathyThemeManagerPriv *priv = GET_PRIV (manager);
-	EmpathyChatView         *view = NULL;
 
-	g_return_val_if_fail (EMPATHY_IS_THEME_MANAGER (manager), NULL);
-
-	DEBUG ("Using theme %s", priv->name);
-
-	if (strcmp (priv->name, "classic") == 0)  {
-		view = theme_manager_create_irc_view (manager);
-	}
-	else if (strcmp (priv->name, "simple") == 0) {
-		view = theme_manager_create_boxes_view (manager);
-		theme_manager_update_simple_view (EMPATHY_CHAT_TEXT_VIEW (view));
+	if (strcmp (priv->name, "simple") == 0) {
+		theme_manager_update_simple_tags (theme);
 	}
 	else if (strcmp (priv->name, "clean") == 0) {
-		view = theme_manager_create_boxes_view (manager);
-		theme_manager_update_boxes_view (EMPATHY_CHAT_TEXT_VIEW (view),
+		theme_manager_update_boxes_tags (theme,
 						 "black",    /* header_foreground */
 						 "#efefdf",  /* header_background */
 						 "#e3e3d3",  /* header_line_background */
@@ -299,8 +297,7 @@ empathy_theme_manager_create_view (EmpathyThemeManager *manager)
 						 NULL);      /* highlight_foreground */
 	}
 	else if (strcmp (priv->name, "blue") == 0) {
-		view = theme_manager_create_boxes_view (manager);
-		theme_manager_update_boxes_view (EMPATHY_CHAT_TEXT_VIEW (view),
+		theme_manager_update_boxes_tags (theme,
 						 "black",    /* header_foreground */
 						 "#88a2b4",  /* header_background */
 						 "#7f96a4",  /* header_line_background */
@@ -312,8 +309,26 @@ empathy_theme_manager_create_view (EmpathyThemeManager *manager)
 						 "#adbdc8",  /* text_background */
 						 "black");   /* highlight_foreground */
 	}
+}
 
-	return view;
+EmpathyChatView *
+empathy_theme_manager_create_view (EmpathyThemeManager *manager)
+{
+	EmpathyThemeManagerPriv *priv = GET_PRIV (manager);
+	EmpathyThemeBoxes       *theme;
+
+	g_return_val_if_fail (EMPATHY_IS_THEME_MANAGER (manager), NULL);
+
+	DEBUG ("Using theme %s", priv->name);
+
+	if (strcmp (priv->name, "classic") == 0)  {
+		return EMPATHY_CHAT_VIEW (theme_manager_create_irc_view (manager));
+	}
+
+	theme = theme_manager_create_boxes_view (manager);
+	theme_manager_update_boxes_theme (manager, theme);
+
+	return EMPATHY_CHAT_VIEW (theme);
 }
 
 static void
@@ -330,7 +345,7 @@ theme_manager_color_hash_notify_cb (EmpathyThemeManager *manager)
 		/* We are using the simple theme which use the GTK theme color,
 		 * Update views to use the new color. */
 		for (l = priv->boxes_views; l; l = l->next) {
-			theme_manager_update_simple_view (EMPATHY_CHAT_TEXT_VIEW (l->data));
+			theme_manager_update_simple_tags (EMPATHY_THEME_BOXES (l->data));
 		}
 	}
 }
@@ -360,17 +375,28 @@ theme_manager_notify_name_cb (EmpathyConf *conf,
 {
 	EmpathyThemeManager     *manager = EMPATHY_THEME_MANAGER (user_data);
 	EmpathyThemeManagerPriv *priv = GET_PRIV (manager);
-	gchar                   *name;
+	gchar                   *name = NULL;
+
+	if (!empathy_conf_get_string (conf, key, &name) ||
+	    !theme_manager_ensure_theme_exists (name) ||
+	    !tp_strdiff (priv->name, name)) {
+		g_free (name);
+		return;
+	}
 
 	g_free (priv->name);
+	priv->name = name;
 
-	name = NULL;
-	if (!empathy_conf_get_string (conf, key, &name) ||
-	    !theme_manager_ensure_theme_exists (name)) {
-		priv->name = g_strdup ("classic");
-		g_free (name);
-	} else {
-		priv->name = name;
+	if (!tp_strdiff (priv->name, "simple") ||
+	    !tp_strdiff (priv->name, "clean") ||
+	    !tp_strdiff (priv->name, "blue")) {
+		GList *l;
+
+		/* The theme changes to a boxed one, we can update boxed views */
+		for (l = priv->boxes_views; l; l = l->next) {
+			theme_manager_update_boxes_theme (manager,
+							  EMPATHY_THEME_BOXES (l->data));
+		}
 	}
 
 	g_signal_emit (manager, signals[THEME_CHANGED], 0, NULL);
