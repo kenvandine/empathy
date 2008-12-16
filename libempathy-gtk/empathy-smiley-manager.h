@@ -52,6 +52,10 @@ typedef struct {
 	gchar     *str;
 } EmpathySmiley;
 
+typedef void (*EmpathySmileyMenuFunc) (EmpathySmileyManager *manager,
+				       EmpathySmiley        *smiley,
+				       gpointer              user_data);
+
 GType                 empathy_smiley_manager_get_type        (void) G_GNUC_CONST;
 EmpathySmileyManager *empathy_smiley_manager_new             (void);
 void                  empathy_smiley_manager_load            (EmpathySmileyManager *manager);
@@ -66,6 +70,9 @@ void                  empathy_smiley_manager_add_from_pixbuf (EmpathySmileyManag
 GSList *              empathy_smiley_manager_get_all         (EmpathySmileyManager *manager);
 GSList *              empathy_smiley_manager_parse           (EmpathySmileyManager *manager,
 							      const gchar          *text);
+GtkWidget *           empathy_smiley_menu_new                (EmpathySmileyManager *manager,
+							      EmpathySmileyMenuFunc func,
+							      gpointer              user_data);
 void                  empathy_smiley_free                    (EmpathySmiley        *smiley);
 
 G_END_DECLS

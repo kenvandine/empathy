@@ -49,6 +49,7 @@
 #include "empathy-contact-list-view.h"
 #include "empathy-contact-menu.h"
 #include "empathy-chat-simple-view.h"
+#include "empathy-smiley-manager.h"
 #include "empathy-ui-utils.h"
 
 #define DEBUG_FLAG EMPATHY_DEBUG_CHAT
@@ -868,19 +869,18 @@ chat_input_realize_cb (GtkWidget   *widget,
 }
 
 static void
-chat_insert_smiley_activate_cb (GtkWidget   *menuitem,
-				EmpathyChat *chat)
+chat_insert_smiley_activate_cb (EmpathySmileyManager *manager,
+				EmpathySmiley        *smiley,
+				gpointer              user_data)
 {
+	EmpathyChat   *chat = EMPATHY_CHAT (user_data);
 	GtkTextBuffer *buffer;
 	GtkTextIter    iter;
-	const gchar   *smiley;
-
-	smiley = g_object_get_data (G_OBJECT (menuitem), "smiley_text");
 
 	buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (chat->input_text_view));
 
 	gtk_text_buffer_get_end_iter (buffer, &iter);
-	gtk_text_buffer_insert (buffer, &iter, smiley, -1);
+	gtk_text_buffer_insert (buffer, &iter, smiley->str, -1);
 
 	gtk_text_buffer_get_end_iter (buffer, &iter);
 	gtk_text_buffer_insert (buffer, &iter, " ", -1);
@@ -942,17 +942,18 @@ chat_input_populate_popup_cb (GtkTextView *view,
 			      GtkMenu     *menu,
 			      EmpathyChat *chat)
 {
-	EmpathyChatPriv  *priv;
-	GtkTextBuffer   *buffer;
-	GtkTextTagTable *table;
-	GtkTextTag      *tag;
-	gint             x, y;
-	GtkTextIter      iter, start, end;
-	GtkWidget       *item;
-	gchar           *str = NULL;
-	EmpathyChatSpell *chat_spell;
-	GtkWidget       *smiley_menu;
-	GtkWidget       *image;
+	EmpathyChatPriv      *priv;
+	GtkTextBuffer        *buffer;
+	GtkTextTagTable      *table;
+	GtkTextTag           *tag;
+	gint                  x, y;
+	GtkTextIter           iter, start, end;
+	GtkWidget            *item;
+	gchar                *str = NULL;
+	EmpathyChatSpell      *chat_spell;
+	EmpathySmileyManager *smiley_manager;
+	GtkWidget            *smiley_menu;
+	GtkWidget            *image;
 
 	priv = GET_PRIV (chat);
 	buffer = gtk_text_view_get_buffer (view);
@@ -969,10 +970,12 @@ chat_input_populate_popup_cb (GtkTextView *view,
 	gtk_menu_shell_prepend (GTK_MENU_SHELL (menu), item);
 	gtk_widget_show (item);
 
-	smiley_menu = empathy_chat_view_get_smiley_menu (
-		G_CALLBACK (chat_insert_smiley_activate_cb),
-		chat);
+	smiley_manager = empathy_smiley_manager_new ();
+	smiley_menu = empathy_smiley_menu_new (smiley_manager,
+					       chat_insert_smiley_activate_cb,
+					       chat);
 	gtk_menu_item_set_submenu (GTK_MENU_ITEM (item), smiley_menu);
+	g_object_unref (smiley_manager);
 
 	/* Add the Send menu item. */
 	gtk_text_buffer_get_bounds (buffer, &start, &end);

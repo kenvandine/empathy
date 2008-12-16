@@ -347,3 +347,87 @@ empathy_smiley_manager_get_all (EmpathySmileyManager *manager)
 	return priv->smileys;
 }
 
+typedef struct {
+	EmpathySmileyManager *manager;
+	EmpathySmiley        *smiley;
+	EmpathySmileyMenuFunc func;    
+	gpointer              user_data;         
+} ActivateData;
+
+static void
+smiley_menu_data_free (gpointer  user_data,
+		       GClosure *closure)
+{
+	ActivateData *data = (ActivateData*) user_data;
+
+	g_object_unref (data->manager);
+	g_slice_free (ActivateData, data);
+}
+
+static void
+smiley_menu_activate_cb (GtkMenuItem *menuitem,
+			 gpointer     user_data)
+{
+	ActivateData *data = (ActivateData*) user_data;
+
+	data->func (data->manager, data->smiley, data->user_data);
+}
+
+GtkWidget *
+empathy_smiley_menu_new (EmpathySmileyManager *manager,
+			 EmpathySmileyMenuFunc func,
+			 gpointer              user_data)
+{
+	EmpathySmileyManagerPriv *priv = GET_PRIV (manager);
+	GSList                   *l;
+	GtkWidget                *menu;
+	gint                      x = 0;
+	gint                      y = 0;
+
+	g_return_val_if_fail (EMPATHY_IS_SMILEY_MANAGER (manager), NULL);
+	g_return_val_if_fail (func != NULL, NULL);
+
+	menu = gtk_menu_new ();
+
+	for (l = priv->smileys; l; l = l->next) {
+		EmpathySmiley *smiley;
+		GtkWidget     *item;
+		GtkWidget     *image;
+		ActivateData  *data;
+
+		smiley = l->data;
+		image = gtk_image_new_from_pixbuf (smiley->pixbuf);
+
+		item = gtk_image_menu_item_new_with_label ("");
+		gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
+
+		gtk_menu_attach (GTK_MENU (menu), item,
+				 x, x + 1, y, y + 1);
+
+		gtk_widget_set_tooltip_text (item, smiley->str);
+
+		data = g_slice_new (ActivateData);
+		data->manager = g_object_ref (manager);
+		data->smiley = smiley;
+		data->func = func;
+		data->user_data = user_data;
+
+		g_signal_connect_data (item, "activate",
+				       G_CALLBACK (smiley_menu_activate_cb),
+				       data,
+				       smiley_menu_data_free,
+				       0);
+
+		if (x > 3) {
+			y++;
+			x = 0;
+		} else {
+			x++;
+		}
+	}
+
+	gtk_widget_show_all (menu);
+
+	return menu;
+}
+

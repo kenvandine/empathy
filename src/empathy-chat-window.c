@@ -49,6 +49,7 @@
 #include <libempathy-gtk/empathy-contact-dialogs.h>
 #include <libempathy-gtk/empathy-log-window.h>
 #include <libempathy-gtk/empathy-geometry.h>
+#include <libempathy-gtk/empathy-smiley-manager.h>
 #include <libempathy-gtk/empathy-ui-utils.h>
 
 #include "empathy-chat-window.h"
@@ -465,25 +466,20 @@ chat_window_chat_notify_cb (EmpathyChat *chat)
 }
 
 static void
-chat_window_insert_smiley_activate_cb (GtkWidget         *menuitem,
-				       EmpathyChatWindow *window)
+chat_window_insert_smiley_activate_cb (EmpathySmileyManager *manager,
+				       EmpathySmiley        *smiley,
+				       gpointer              window)
 {
-	EmpathyChatWindowPriv *priv;
+	EmpathyChatWindowPriv *priv = GET_PRIV (window);
 	EmpathyChat           *chat;
-	GtkTextBuffer        *buffer;
-	GtkTextIter           iter;
-	const gchar          *smiley;
-
-	priv = GET_PRIV (window);
+	GtkTextBuffer         *buffer;
+	GtkTextIter            iter;
 
 	chat = priv->current_chat;
 
-	smiley = g_object_get_data (G_OBJECT (menuitem), "smiley_text");
-
 	buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (chat->input_text_view));
 	gtk_text_buffer_get_end_iter (buffer, &iter);
-	gtk_text_buffer_insert (buffer, &iter,
-				smiley, -1);
+	gtk_text_buffer_insert (buffer, &iter, smiley->str, -1);
 }
 
 static void
@@ -1183,6 +1179,7 @@ empathy_chat_window_init (EmpathyChatWindow *window)
 	gint                   i;
 	GtkWidget             *chat_vbox;
 	gchar                 *filename;
+	EmpathySmileyManager  *smiley_manager;
 	EmpathyChatWindowPriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (window,
 		EMPATHY_TYPE_CHAT_WINDOW, EmpathyChatWindowPriv);
 
@@ -1257,10 +1254,12 @@ empathy_chat_window_init (EmpathyChatWindow *window)
 	g_object_unref (accel_group);
 
 	/* Set up smiley menu */
-	menu = empathy_chat_view_get_smiley_menu (
-		G_CALLBACK (chat_window_insert_smiley_activate_cb),
-		window);
-	gtk_menu_item_set_submenu (GTK_MENU_ITEM (priv->menu_conv_insert_smiley), menu);
+	smiley_manager = empathy_smiley_manager_new ();
+	menu = empathy_smiley_menu_new (smiley_manager,
+					chat_window_insert_smiley_activate_cb,
+					window);
+	gtk_menu_item_set_submenu (GTK_MENU_ITEM (priv->menu_conv_insert_smiley),
+				   menu);
 
 	/* Set up signals we can't do with glade since we may need to
 	 * block/unblock them at some later stage.
