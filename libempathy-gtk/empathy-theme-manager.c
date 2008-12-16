@@ -161,6 +161,23 @@ theme_manager_update_boxes_view (EmpathyChatTextView *view,
 {
 	GtkTextTag *tag;
 
+	DEBUG ("Update view with new colors:\n"
+		"header_foreground = %s\n"
+		"header_background = %s\n"
+		"header_line_background = %s\n"
+		"action_foreground = %s\n"
+		"time_foreground = %s\n"
+		"event_foreground = %s\n"
+		"link_foreground = %s\n"
+		"text_foreground = %s\n"
+		"text_background = %s\n"
+		"highlight_foreground = %s\n",
+		header_foreground, header_background, header_line_background,
+		action_foreground, time_foreground, event_foreground,
+		link_foreground, text_foreground, text_background,
+		highlight_foreground);
+
+
 	/* FIXME: GtkTextTag don't support to set color properties to NULL.
 	 * See bug #542523 */
 	#define TAG_SET(prop, value) \
@@ -302,66 +319,20 @@ empathy_theme_manager_create_view (EmpathyThemeManager *manager)
 static void
 theme_manager_color_hash_notify_cb (EmpathyThemeManager *manager)
 {
-#if 0
+	EmpathyThemeManagerPriv *priv = GET_PRIV (manager);
 
-FIXME: Make that work, it should update color when theme changes but it
-       doesnt seems to work with all themes.
+	/* FIXME: Make that work, it should update color when theme changes but
+	 * it doesnt seems to work with all themes. */
 
-	g_object_get (priv->settings,
-		      "color-hash", &color_hash,
-		      NULL);
+	if (strcmp (priv->name, "simple") == 0) {
+		GList *l;
 
-	/*
-	 * base_color: #ffffffffffff
-	 * fg_color: #000000000000
-	 * bg_color: #e6e6e7e7e8e8
-	 * text_color: #000000000000
-	 * selected_bg_color: #58589a9adbdb
-	 * selected_fg_color: #ffffffffffff
-	 */
-
-	color = g_hash_table_lookup (color_hash, "base_color");
-	if (color) {
-		theme_manager_gdk_color_to_hex (color, color_str);
-		g_object_set (priv->simple_theme,
-			      "action-foreground", color_str,
-			      "link-foreground", color_str,
-			      NULL);
+		/* We are using the simple theme which use the GTK theme color,
+		 * Update views to use the new color. */
+		for (l = priv->boxes_views; l; l = l->next) {
+			theme_manager_update_simple_view (EMPATHY_CHAT_TEXT_VIEW (l->data));
+		}
 	}
-
-	color = g_hash_table_lookup (color_hash, "selected_bg_color");
-	if (color) {
-		theme_manager_gdk_color_to_hex (color, color_str);
-		g_object_set (priv->simple_theme,
-			      "header-background", color_str,
-			      NULL);
-	}
-
-	color = g_hash_table_lookup (color_hash, "bg_color");
-	if (color) {
-		GdkColor tmp;
-
-		tmp = *color;
-		tmp.red /= 2;
-		tmp.green /= 2;
-		tmp.blue /= 2;
-		theme_manager_gdk_color_to_hex (&tmp, color_str);
-		g_object_set (priv->simple_theme,
-			      "header-line-background", color_str,
-			      NULL);
-	}
-
-	color = g_hash_table_lookup (color_hash, "selected_fg_color");
-	if (color) {
-		theme_manager_gdk_color_to_hex (color, color_str);
-		g_object_set (priv->simple_theme,
-			      "header-foreground", color_str,
-			      NULL);
-	}
-
-	g_hash_table_unref (color_hash);
-
-#endif
 }
 
 static gboolean
