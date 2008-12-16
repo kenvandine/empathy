@@ -75,168 +75,6 @@ theme_manager_gdk_color_to_hex (GdkColor *gdk_color, gchar *str_color)
 		    gdk_color->blue >> 8);
 }
 
-static void
-theme_manager_color_hash_notify_cb (EmpathyThemeManager *manager)
-{
-#if 0
-
-FIXME: Make that work, it should update color when theme changes but it
-       doesnt seems to work with all themes.
-
-	g_object_get (priv->settings,
-		      "color-hash", &color_hash,
-		      NULL);
-
-	/*
-	 * base_color: #ffffffffffff
-	 * fg_color: #000000000000
-	 * bg_color: #e6e6e7e7e8e8
-	 * text_color: #000000000000
-	 * selected_bg_color: #58589a9adbdb
-	 * selected_fg_color: #ffffffffffff
-	 */
-
-	color = g_hash_table_lookup (color_hash, "base_color");
-	if (color) {
-		theme_manager_gdk_color_to_hex (color, color_str);
-		g_object_set (priv->simple_theme,
-			      "action-foreground", color_str,
-			      "link-foreground", color_str,
-			      NULL);
-	}
-
-	color = g_hash_table_lookup (color_hash, "selected_bg_color");
-	if (color) {
-		theme_manager_gdk_color_to_hex (color, color_str);
-		g_object_set (priv->simple_theme,
-			      "header-background", color_str,
-			      NULL);
-	}
-
-	color = g_hash_table_lookup (color_hash, "bg_color");
-	if (color) {
-		GdkColor tmp;
-
-		tmp = *color;
-		tmp.red /= 2;
-		tmp.green /= 2;
-		tmp.blue /= 2;
-		theme_manager_gdk_color_to_hex (&tmp, color_str);
-		g_object_set (priv->simple_theme,
-			      "header-line-background", color_str,
-			      NULL);
-	}
-
-	color = g_hash_table_lookup (color_hash, "selected_fg_color");
-	if (color) {
-		theme_manager_gdk_color_to_hex (color, color_str);
-		g_object_set (priv->simple_theme,
-			      "header-foreground", color_str,
-			      NULL);
-	}
-
-	g_hash_table_unref (color_hash);
-
-#endif
-}
-
-static gboolean
-theme_manager_ensure_theme_exists (const gchar *name)
-{
-	gint i;
-
-	if (G_STR_EMPTY (name)) {
-		return FALSE;
-	}
-
-	for (i = 0; themes[i]; i += 2) {
-		if (strcmp (themes[i], name) == 0) {
-			return TRUE;
-		}
-	}
-
-	return FALSE;
-}
-
-static void
-theme_manager_notify_name_cb (EmpathyConf *conf,
-			      const gchar *key,
-			      gpointer     user_data)
-{
-	EmpathyThemeManager     *manager = EMPATHY_THEME_MANAGER (user_data);
-	EmpathyThemeManagerPriv *priv = GET_PRIV (manager);
-	gchar                   *name;
-
-	g_free (priv->name);
-
-	name = NULL;
-	if (!empathy_conf_get_string (conf, key, &name) ||
-	    !theme_manager_ensure_theme_exists (name)) {
-		priv->name = g_strdup ("classic");
-		g_free (name);
-	} else {
-		priv->name = name;
-	}
-
-	g_signal_emit (manager, signals[THEME_CHANGED], 0, NULL);
-}
-
-static void
-theme_manager_finalize (GObject *object)
-{
-	EmpathyThemeManagerPriv *priv = GET_PRIV (object);
-
-	empathy_conf_notify_remove (empathy_conf_get (), priv->name_notify_id);
-	g_free (priv->name);
-
-	G_OBJECT_CLASS (empathy_theme_manager_parent_class)->finalize (object);
-}
-
-static void
-empathy_theme_manager_class_init (EmpathyThemeManagerClass *klass)
-{
-	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-	signals[THEME_CHANGED] =
-		g_signal_new ("theme-changed",
-			      G_OBJECT_CLASS_TYPE (object_class),
-			      G_SIGNAL_RUN_LAST,
-			      0,
-			      NULL, NULL,
-			      g_cclosure_marshal_VOID__VOID,
-			      G_TYPE_NONE,
-			      0);
-
-	g_type_class_add_private (object_class, sizeof (EmpathyThemeManagerPriv));
-
-	object_class->finalize = theme_manager_finalize;
-}
-
-static void
-empathy_theme_manager_init (EmpathyThemeManager *manager)
-{
-	EmpathyThemeManagerPriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (manager,
-		EMPATHY_TYPE_THEME_MANAGER, EmpathyThemeManagerPriv);
-
-	manager->priv = priv;
-
-	/* Take the theme name and track changes */
-	priv->name_notify_id =
-		empathy_conf_notify_add (empathy_conf_get (),
-					 EMPATHY_PREFS_CHAT_THEME,
-					 theme_manager_notify_name_cb,
-					 manager);
-	theme_manager_notify_name_cb (empathy_conf_get (),
-				      EMPATHY_PREFS_CHAT_THEME,
-				      manager);
-
-	/* Track GTK color changes */
-	priv->settings = gtk_settings_get_default ();
-	g_signal_connect_swapped (priv->settings, "notify::color-hash",
-				  G_CALLBACK (theme_manager_color_hash_notify_cb),
-				  manager);
-}
-
 static EmpathyChatView *
 theme_manager_create_irc_view (EmpathyThemeManager *manager)
 {
@@ -459,6 +297,176 @@ empathy_theme_manager_create_view (EmpathyThemeManager *manager)
 	}
 
 	return view;
+}
+
+static void
+theme_manager_color_hash_notify_cb (EmpathyThemeManager *manager)
+{
+#if 0
+
+FIXME: Make that work, it should update color when theme changes but it
+       doesnt seems to work with all themes.
+
+	g_object_get (priv->settings,
+		      "color-hash", &color_hash,
+		      NULL);
+
+	/*
+	 * base_color: #ffffffffffff
+	 * fg_color: #000000000000
+	 * bg_color: #e6e6e7e7e8e8
+	 * text_color: #000000000000
+	 * selected_bg_color: #58589a9adbdb
+	 * selected_fg_color: #ffffffffffff
+	 */
+
+	color = g_hash_table_lookup (color_hash, "base_color");
+	if (color) {
+		theme_manager_gdk_color_to_hex (color, color_str);
+		g_object_set (priv->simple_theme,
+			      "action-foreground", color_str,
+			      "link-foreground", color_str,
+			      NULL);
+	}
+
+	color = g_hash_table_lookup (color_hash, "selected_bg_color");
+	if (color) {
+		theme_manager_gdk_color_to_hex (color, color_str);
+		g_object_set (priv->simple_theme,
+			      "header-background", color_str,
+			      NULL);
+	}
+
+	color = g_hash_table_lookup (color_hash, "bg_color");
+	if (color) {
+		GdkColor tmp;
+
+		tmp = *color;
+		tmp.red /= 2;
+		tmp.green /= 2;
+		tmp.blue /= 2;
+		theme_manager_gdk_color_to_hex (&tmp, color_str);
+		g_object_set (priv->simple_theme,
+			      "header-line-background", color_str,
+			      NULL);
+	}
+
+	color = g_hash_table_lookup (color_hash, "selected_fg_color");
+	if (color) {
+		theme_manager_gdk_color_to_hex (color, color_str);
+		g_object_set (priv->simple_theme,
+			      "header-foreground", color_str,
+			      NULL);
+	}
+
+	g_hash_table_unref (color_hash);
+
+#endif
+}
+
+static gboolean
+theme_manager_ensure_theme_exists (const gchar *name)
+{
+	gint i;
+
+	if (G_STR_EMPTY (name)) {
+		return FALSE;
+	}
+
+	for (i = 0; themes[i]; i += 2) {
+		if (strcmp (themes[i], name) == 0) {
+			return TRUE;
+		}
+	}
+
+	return FALSE;
+}
+
+static void
+theme_manager_notify_name_cb (EmpathyConf *conf,
+			      const gchar *key,
+			      gpointer     user_data)
+{
+	EmpathyThemeManager     *manager = EMPATHY_THEME_MANAGER (user_data);
+	EmpathyThemeManagerPriv *priv = GET_PRIV (manager);
+	gchar                   *name;
+
+	g_free (priv->name);
+
+	name = NULL;
+	if (!empathy_conf_get_string (conf, key, &name) ||
+	    !theme_manager_ensure_theme_exists (name)) {
+		priv->name = g_strdup ("classic");
+		g_free (name);
+	} else {
+		priv->name = name;
+	}
+
+	g_signal_emit (manager, signals[THEME_CHANGED], 0, NULL);
+}
+
+static void
+theme_manager_finalize (GObject *object)
+{
+	EmpathyThemeManagerPriv *priv = GET_PRIV (object);
+	GList                   *l;
+
+	empathy_conf_notify_remove (empathy_conf_get (), priv->name_notify_id);
+	g_free (priv->name);
+
+	for (l = priv->boxes_views; l; l = l->next) {
+		g_object_weak_unref (G_OBJECT (l->data),
+				     theme_manager_boxes_weak_notify_cb,
+				     object);
+	}
+	g_list_free (priv->boxes_views);
+
+	G_OBJECT_CLASS (empathy_theme_manager_parent_class)->finalize (object);
+}
+
+static void
+empathy_theme_manager_class_init (EmpathyThemeManagerClass *klass)
+{
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+	signals[THEME_CHANGED] =
+		g_signal_new ("theme-changed",
+			      G_OBJECT_CLASS_TYPE (object_class),
+			      G_SIGNAL_RUN_LAST,
+			      0,
+			      NULL, NULL,
+			      g_cclosure_marshal_VOID__VOID,
+			      G_TYPE_NONE,
+			      0);
+
+	g_type_class_add_private (object_class, sizeof (EmpathyThemeManagerPriv));
+
+	object_class->finalize = theme_manager_finalize;
+}
+
+static void
+empathy_theme_manager_init (EmpathyThemeManager *manager)
+{
+	EmpathyThemeManagerPriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (manager,
+		EMPATHY_TYPE_THEME_MANAGER, EmpathyThemeManagerPriv);
+
+	manager->priv = priv;
+
+	/* Take the theme name and track changes */
+	priv->name_notify_id =
+		empathy_conf_notify_add (empathy_conf_get (),
+					 EMPATHY_PREFS_CHAT_THEME,
+					 theme_manager_notify_name_cb,
+					 manager);
+	theme_manager_notify_name_cb (empathy_conf_get (),
+				      EMPATHY_PREFS_CHAT_THEME,
+				      manager);
+
+	/* Track GTK color changes */
+	priv->settings = gtk_settings_get_default ();
+	g_signal_connect_swapped (priv->settings, "notify::color-hash",
+				  G_CALLBACK (theme_manager_color_hash_notify_cb),
+				  manager);
 }
 
 EmpathyThemeManager *
