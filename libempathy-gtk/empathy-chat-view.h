@@ -48,10 +48,6 @@ struct _EmpathyChatViewIface {
 						  EmpathyMessage  *msg);
 	void             (*append_event)         (EmpathyChatView *view,
 						  const gchar     *str);
-	void             (*append_button)        (EmpathyChatView *view,
-						  const gchar     *message,
-						  GtkWidget       *button1,
-						  GtkWidget       *button2);
 	void             (*set_margin)           (EmpathyChatView *view,
 						  gint             margin);
 	void             (*scroll)               (EmpathyChatView *view,
@@ -89,10 +85,6 @@ void             empathy_chat_view_append_message       (EmpathyChatView *view,
 							 EmpathyMessage  *msg);
 void             empathy_chat_view_append_event         (EmpathyChatView *view,
 							 const gchar     *str);
-void             empathy_chat_view_append_button        (EmpathyChatView *view,
-							 const gchar     *message,
-							 GtkWidget       *button1,
-							 GtkWidget       *button2);
 void             empathy_chat_view_scroll               (EmpathyChatView *view,
 							 gboolean         allow_scrolling);
 void             empathy_chat_view_scroll_down          (EmpathyChatView *view);

@@ -730,79 +730,6 @@ chat_simple_view_append_event (EmpathyChatView *view,
 }
 
 static void
-chat_simple_view_append_button (EmpathyChatView *view,
-				const gchar    *message,
-				GtkWidget      *button1,
-				GtkWidget      *button2)
-{
-	EmpathyChatSimpleViewPriv   *priv;
-	GtkTextChildAnchor   *anchor;
-	GtkTextIter           iter;
-	gboolean              bottom;
-	const gchar          *tag;
-	
-	g_return_if_fail (EMPATHY_IS_CHAT_SIMPLE_VIEW (view));
-	g_return_if_fail (button1 != NULL);
-	
-	priv = GET_PRIV (view);
-	
-	tag = "invite";
-	
-	bottom = chat_view_is_scrolled_down (EMPATHY_CHAT_SIMPLE_VIEW (view));
-	
-	empathy_theme_append_timestamp (priv->theme, EMPATHY_CHAT_VIEW(view), NULL, TRUE, TRUE);
-	
-	if (message) {
-		empathy_theme_append_text (priv->theme, EMPATHY_CHAT_VIEW(view), message, tag, NULL);
-	}
-	
-	gtk_text_buffer_get_end_iter (priv->buffer, &iter);
-	
-	anchor = gtk_text_buffer_create_child_anchor (priv->buffer, &iter);
-	gtk_text_view_add_child_at_anchor (GTK_TEXT_VIEW (view), button1, anchor);
-	gtk_widget_show (button1);
-	
-	gtk_text_buffer_insert_with_tags_by_name (priv->buffer,
-						  &iter,
-						  " ",
-						  1,
-						  tag,
-						  NULL);
-	
-	if (button2) {
-		gtk_text_buffer_get_end_iter (priv->buffer, &iter);
-		
-		anchor = gtk_text_buffer_create_child_anchor (priv->buffer, &iter);
-		gtk_text_view_add_child_at_anchor (GTK_TEXT_VIEW (view), button2, anchor);
-		gtk_widget_show (button2);
-		
-		gtk_text_buffer_insert_with_tags_by_name (priv->buffer,
-							  &iter,
-							  " ",
-							  1,
-							  tag,
-							  NULL);
-	}
-	
-	gtk_text_buffer_get_end_iter (priv->buffer, &iter);
-	gtk_text_buffer_insert_with_tags_by_name (priv->buffer,
-						  &iter,
-						  "\n\n",
-						  2,
-						  tag,
-						  NULL);
-	
-	if (bottom) {
-		chat_simple_view_scroll_down (EMPATHY_CHAT_VIEW(view));
-	}
-	
-	if (priv->last_contact) {
-		g_object_unref (priv->last_contact);
-		priv->last_contact = NULL;
-	}
-}
-
-static void
 chat_simple_view_scroll (EmpathyChatView *view,
 			 gboolean         allow_scrolling)
 {
@@ -1293,7 +1220,6 @@ chat_view_iface_init (EmpathyChatViewIface *iface)
 {
 	iface->append_message = chat_simple_view_append_message;
 	iface->append_event = chat_simple_view_append_event;
-	iface->append_button = chat_simple_view_append_button;
 	iface->set_margin = chat_simple_view_set_margin;
 	iface->scroll = chat_simple_view_scroll;
 	iface->scroll_down = chat_simple_view_scroll_down;

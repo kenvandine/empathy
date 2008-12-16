@@ -94,22 +94,6 @@ empathy_chat_view_append_event (EmpathyChatView *view,
 }
 
 void
-empathy_chat_view_append_button (EmpathyChatView *view,
-				 const gchar    *message,
-				 GtkWidget      *button1,
-				 GtkWidget      *button2)
-{
-	g_return_if_fail (EMPATHY_IS_CHAT_VIEW (view));
-	
-	if (EMPATHY_TYPE_CHAT_VIEW_GET_IFACE (view)->append_button) {
-		EMPATHY_TYPE_CHAT_VIEW_GET_IFACE (view)->append_button (view, 
-									message,
-									button1,
-									button2);
-	}
-}
-
-void
 empathy_chat_view_scroll (EmpathyChatView *view,
 			  gboolean        allow_scrolling)
 {
