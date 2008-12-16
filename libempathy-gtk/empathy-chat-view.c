@@ -106,16 +106,12 @@ empathy_chat_view_scroll (EmpathyChatView *view,
 }
 
 gboolean
-empathy_chat_view_get_selection_bounds (EmpathyChatView *view,
-					GtkTextIter    *start,
-					GtkTextIter    *end)
+empathy_chat_view_get_has_selection (EmpathyChatView *view)
 {
 	g_return_val_if_fail (EMPATHY_IS_CHAT_VIEW (view), FALSE);
 	
-	if (EMPATHY_TYPE_CHAT_VIEW_GET_IFACE (view)->get_selection_bounds) {
-		return EMPATHY_TYPE_CHAT_VIEW_GET_IFACE (view)->get_selection_bounds (view, 
-										      start, 
-										      end);
+	if (EMPATHY_TYPE_CHAT_VIEW_GET_IFACE (view)->get_has_selection) {
+		return EMPATHY_TYPE_CHAT_VIEW_GET_IFACE (view)->get_has_selection (view);
 	}
 	return FALSE;
 }

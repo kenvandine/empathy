@@ -1740,7 +1740,7 @@ empathy_chat_cut (EmpathyChat *chat)
 	g_return_if_fail (EMPATHY_IS_CHAT (chat));
 
 	buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (chat->input_text_view));
-	if (gtk_text_buffer_get_selection_bounds (buffer, NULL, NULL)) {
+	if (gtk_text_buffer_get_has_selection (buffer)) {
 		GtkClipboard *clipboard;
 
 		clipboard = gtk_clipboard_get (GDK_SELECTION_CLIPBOARD);
@@ -1756,13 +1756,13 @@ empathy_chat_copy (EmpathyChat *chat)
 
 	g_return_if_fail (EMPATHY_IS_CHAT (chat));
 
-	if (empathy_chat_view_get_selection_bounds (chat->view, NULL, NULL)) {
+	if (empathy_chat_view_get_has_selection (chat->view)) {
 		empathy_chat_view_copy_clipboard (chat->view);
 		return;
 	}
 
 	buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (chat->input_text_view));
-	if (gtk_text_buffer_get_selection_bounds (buffer, NULL, NULL)) {
+	if (gtk_text_buffer_get_has_selection (buffer)) {
 		GtkClipboard *clipboard;
 
 		clipboard = gtk_clipboard_get (GDK_SELECTION_CLIPBOARD);

@@ -746,9 +746,7 @@ chat_simple_view_scroll (EmpathyChatView *view,
 }
 
 static gboolean
-chat_simple_view_get_selection_bounds (EmpathyChatView *view,
-				       GtkTextIter     *start,
-				       GtkTextIter     *end)
+chat_simple_view_get_has_selection (EmpathyChatView *view)
 {
 	GtkTextBuffer *buffer;
 	
@@ -756,7 +754,7 @@ chat_simple_view_get_selection_bounds (EmpathyChatView *view,
 	
 	buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
 	
-	return gtk_text_buffer_get_selection_bounds (buffer, start, end);
+	return gtk_text_buffer_get_has_selection (buffer);
 }
 
 static void
@@ -1223,7 +1221,7 @@ chat_view_iface_init (EmpathyChatViewIface *iface)
 	iface->set_margin = chat_simple_view_set_margin;
 	iface->scroll = chat_simple_view_scroll;
 	iface->scroll_down = chat_simple_view_scroll_down;
-	iface->get_selection_bounds = chat_simple_view_get_selection_bounds;
+	iface->get_has_selection = chat_simple_view_get_has_selection;
 	iface->clear = chat_simple_view_clear;
 	iface->find_previous = chat_simple_view_find_previous;
 	iface->find_next = chat_simple_view_find_next;

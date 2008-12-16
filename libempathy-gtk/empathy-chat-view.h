@@ -53,9 +53,7 @@ struct _EmpathyChatViewIface {
 	void             (*scroll)               (EmpathyChatView *view,
 						  gboolean         allow_scrolling);
 	void             (*scroll_down)          (EmpathyChatView *view);
-	gboolean         (*get_selection_bounds) (EmpathyChatView *view,
-						  GtkTextIter     *start,
-						  GtkTextIter     *end);
+	gboolean         (*get_has_selection)    (EmpathyChatView *view);
 	void             (*clear)                (EmpathyChatView *view);
 	gboolean         (*find_previous)        (EmpathyChatView *view,
 						  const gchar     *search_criteria,
@@ -88,9 +86,7 @@ void             empathy_chat_view_append_event         (EmpathyChatView *view,
 void             empathy_chat_view_scroll               (EmpathyChatView *view,
 							 gboolean         allow_scrolling);
 void             empathy_chat_view_scroll_down          (EmpathyChatView *view);
-gboolean         empathy_chat_view_get_selection_bounds (EmpathyChatView *view,
-							 GtkTextIter     *start,
-							 GtkTextIter     *end);
+gboolean         empathy_chat_view_get_has_selection    (EmpathyChatView *view);
 void             empathy_chat_view_clear                (EmpathyChatView *view);
 gboolean         empathy_chat_view_find_previous        (EmpathyChatView *view,
 							 const gchar     *search_criteria,

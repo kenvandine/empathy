@@ -656,14 +656,13 @@ chat_window_edit_activate_cb (GtkWidget        *menuitem,
 	}
 
 	buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (priv->current_chat->input_text_view));
-	if (gtk_text_buffer_get_selection_bounds (buffer, NULL, NULL)) {
+	if (gtk_text_buffer_get_has_selection (buffer)) {
 		gtk_widget_set_sensitive (priv->menu_edit_copy, TRUE);
 		gtk_widget_set_sensitive (priv->menu_edit_cut, TRUE);
 	} else {
 		gboolean selection;
 
-		selection = empathy_chat_view_get_selection_bounds (priv->current_chat->view, 
-								   NULL, NULL);
+		selection = empathy_chat_view_get_has_selection (priv->current_chat->view);
 
 		gtk_widget_set_sensitive (priv->menu_edit_cut, FALSE);
 		gtk_widget_set_sensitive (priv->menu_edit_copy, selection);
