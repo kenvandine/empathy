@@ -122,6 +122,10 @@ tp_roomlist_got_rooms_cb (TpChannel       *channel,
 	for (i = 0; i < rooms->len; i++) {
 		const GValue *room_name_value;
 		const GValue *handle_name_value;
+		const GValue *room_members_value;
+		const GValue *room_subject_value;
+		const GValue *room_invite_value;
+		const GValue *room_password_value;
 		GValueArray  *room_struct;
 		guint         handle;
 		const gchar  *channel_type;
@@ -134,6 +138,10 @@ tp_roomlist_got_rooms_cb (TpChannel       *channel,
 		info = g_value_get_boxed (g_value_array_get_nth (room_struct, 2));
 		room_name_value = g_hash_table_lookup (info, "name");
 		handle_name_value = g_hash_table_lookup (info, "handle-name");
+		room_subject_value = g_hash_table_lookup (info, "subject");
+		room_members_value = g_hash_table_lookup (info, "members");
+		room_invite_value = g_hash_table_lookup (info, "invite-only");
+		room_password_value = g_hash_table_lookup (info, "password");
 
 		if (tp_strdiff (channel_type, TP_IFACE_CHANNEL_TYPE_TEXT)) {
 			continue;
@@ -144,6 +152,26 @@ tp_roomlist_got_rooms_cb (TpChannel       *channel,
 		if (room_name_value != NULL) {
 			empathy_chatroom_set_name (chatroom,
 						   g_value_get_string (room_name_value));
+		}
+
+		if (room_members_value != NULL) {
+			empathy_chatroom_set_members_count (chatroom,
+						   g_value_get_uint (room_members_value));
+		}
+
+		if (room_subject_value != NULL) {
+			empathy_chatroom_set_subject (chatroom,
+						   g_value_get_string (room_subject_value));
+		}
+
+		if (room_invite_value != NULL) {
+			empathy_chatroom_set_invite_only (chatroom,
+						   g_value_get_boolean (room_invite_value));
+		}
+
+		if (room_password_value != NULL) {
+			empathy_chatroom_set_need_password (chatroom,
+						   g_value_get_boolean (room_password_value));
 		}
 
 		if (handle_name_value != NULL) {

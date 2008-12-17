@@ -69,6 +69,18 @@ void            empathy_chatroom_set_name         (EmpathyChatroom *chatroom,
 gboolean        empathy_chatroom_get_auto_connect (EmpathyChatroom *chatroom);
 void            empathy_chatroom_set_auto_connect (EmpathyChatroom *chatroom,
 						   gboolean         auto_connect);
+const gchar *   empathy_chatroom_get_subject      (EmpathyChatroom *chatroom);
+void            empathy_chatroom_set_subject      (EmpathyChatroom *chatroom,
+						   const gchar     *subject);
+guint           empathy_chatroom_get_members_count (EmpathyChatroom *chatroom);
+void            empathy_chatroom_set_members_count (EmpathyChatroom *chatroom,
+						    guint            count);
+gboolean        empathy_chatroom_get_need_password (EmpathyChatroom *chatroom);
+void            empathy_chatroom_set_need_password (EmpathyChatroom *chatroom,
+						    gboolean         need_password);
+gboolean        empathy_chatroom_get_invite_only  (EmpathyChatroom *chatroom);
+void            empathy_chatroom_set_invite_only  (EmpathyChatroom *chatroom,
+						   gboolean         invite_only);
 gboolean        empathy_chatroom_equal            (gconstpointer    v1,
 						   gconstpointer    v2);
 EmpathyTpChat * empathy_chatroom_get_tp_chat      (EmpathyChatroom *chatroom);

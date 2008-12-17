@@ -37,6 +37,10 @@ typedef struct {
 	gboolean   auto_connect;
 	gboolean favorite;
 	EmpathyTpChat *tp_chat;
+	gchar *subject;
+	guint members_count;
+	gboolean invite_only;
+	gboolean need_password;
 } EmpathyChatroomPriv;
 
 
@@ -58,6 +62,10 @@ enum {
 	PROP_AUTO_CONNECT,
 	PROP_FAVORITE,
 	PROP_TP_CHAT,
+	PROP_SUBJECT,
+	PROP_MEMBERS_COUNT,
+	PROP_NEED_PASSWORD,
+	PROP_INVITE_ONLY
 };
 
 G_DEFINE_TYPE (EmpathyChatroom, empathy_chatroom, G_TYPE_OBJECT);
@@ -123,6 +131,56 @@ empathy_chatroom_class_init (EmpathyChatroomClass *klass)
 							      EMPATHY_TYPE_TP_CHAT,
 							      G_PARAM_READWRITE));
 
+  g_object_class_install_property (object_class,
+      PROP_SUBJECT,
+      g_param_spec_string ("subject",
+        "Subject",
+        "The chatroom's subject",
+        "",
+        G_PARAM_READWRITE |
+        G_PARAM_CONSTRUCT |
+        G_PARAM_STATIC_NAME |
+        G_PARAM_STATIC_NICK |
+        G_PARAM_STATIC_BLURB));
+
+  g_object_class_install_property (object_class,
+      PROP_MEMBERS_COUNT,
+      g_param_spec_uint ("members-count",
+        "Members count",
+        "The chatroom's members count",
+        0,
+        G_MAXUINT,
+        0,
+        G_PARAM_READWRITE |
+        G_PARAM_CONSTRUCT |
+        G_PARAM_STATIC_NAME |
+        G_PARAM_STATIC_NICK |
+        G_PARAM_STATIC_BLURB));
+
+  g_object_class_install_property (object_class,
+      PROP_INVITE_ONLY,
+      g_param_spec_boolean ("invite-only",
+        "Invite Only",
+        "The chatroom is invite only",
+        FALSE,
+        G_PARAM_READWRITE |
+        G_PARAM_CONSTRUCT |
+        G_PARAM_STATIC_NAME |
+        G_PARAM_STATIC_NICK |
+        G_PARAM_STATIC_BLURB));
+
+  g_object_class_install_property (object_class,
+      PROP_NEED_PASSWORD,
+      g_param_spec_boolean ("need-password",
+        "Password Needed",
+        "The chatroom is password protected",
+        FALSE,
+        G_PARAM_READWRITE |
+        G_PARAM_CONSTRUCT |
+        G_PARAM_STATIC_NAME |
+        G_PARAM_STATIC_NICK |
+        G_PARAM_STATIC_BLURB));
+
 	g_type_class_add_private (object_class, sizeof (EmpathyChatroomPriv));
 }
 
@@ -175,12 +233,24 @@ chatroom_get_property (GObject    *object,
 	case PROP_AUTO_CONNECT:
 		g_value_set_boolean (value, priv->auto_connect);
 		break;
-  case PROP_FAVORITE:
-    g_value_set_boolean (value, priv->favorite);
-    break;
+	case PROP_FAVORITE:
+		g_value_set_boolean (value, priv->favorite);
+		break;
 	case PROP_TP_CHAT:
 		g_value_set_object (value, priv->tp_chat);
 		break;
+  case PROP_SUBJECT:
+    g_value_set_string (value, priv->subject);
+    break;
+  case PROP_MEMBERS_COUNT:
+    g_value_set_uint (value, priv->members_count);
+    break;
+  case PROP_INVITE_ONLY:
+    g_value_set_boolean (value, priv->invite_only);
+    break;
+  case PROP_NEED_PASSWORD:
+    g_value_set_boolean (value, priv->need_password);
+    break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
 		break;
@@ -238,6 +308,22 @@ chatroom_set_property (GObject      *object,
 		}
 		break;
 	}
+  case PROP_SUBJECT:
+    empathy_chatroom_set_subject (EMPATHY_CHATROOM (object),
+        g_value_get_string (value));
+    break;
+  case PROP_MEMBERS_COUNT:
+    empathy_chatroom_set_members_count (EMPATHY_CHATROOM (object),
+        g_value_get_uint (value));
+    break;
+  case PROP_NEED_PASSWORD:
+    empathy_chatroom_set_need_password (EMPATHY_CHATROOM (object),
+        g_value_get_boolean (value));
+    break;
+  case PROP_INVITE_ONLY:
+    empathy_chatroom_set_invite_only (EMPATHY_CHATROOM (object),
+        g_value_get_boolean (value));
+    break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
 		break;
@@ -432,3 +518,116 @@ empathy_chatroom_get_tp_chat (EmpathyChatroom *chatroom) {
 
 	return priv->tp_chat;
 }
+
+const gchar *
+empathy_chatroom_get_subject (EmpathyChatroom *chatroom)
+{
+  EmpathyChatroomPriv *priv;
+
+  g_return_val_if_fail (EMPATHY_IS_CHATROOM (chatroom), NULL);
+
+  priv = GET_PRIV (chatroom);
+
+  return priv->subject;
+}
+
+void
+empathy_chatroom_set_subject (EmpathyChatroom *chatroom,
+                              const gchar *subject)
+{
+  EmpathyChatroomPriv *priv;
+
+  g_return_if_fail (EMPATHY_IS_CHATROOM (chatroom));
+
+  priv = GET_PRIV (chatroom);
+
+  g_free (priv->subject);
+  priv->subject = NULL;
+
+  if (subject)
+    priv->subject = g_strdup (subject);
+
+  g_object_notify (G_OBJECT (chatroom), "subject");
+}
+
+guint
+empathy_chatroom_get_members_count (EmpathyChatroom *chatroom)
+{
+  EmpathyChatroomPriv *priv;
+
+  g_return_val_if_fail (EMPATHY_IS_CHATROOM (chatroom), 0);
+
+  priv = GET_PRIV (chatroom);
+
+  return priv->members_count;
+}
+
+void
+empathy_chatroom_set_members_count (EmpathyChatroom *chatroom,
+                                    guint count)
+{
+  EmpathyChatroomPriv *priv;
+
+  g_return_if_fail (EMPATHY_IS_CHATROOM (chatroom));
+
+  priv = GET_PRIV (chatroom);
+
+  priv->members_count = count;
+
+  g_object_notify (G_OBJECT (chatroom), "members-count");
+}
+
+gboolean
+empathy_chatroom_get_need_password (EmpathyChatroom *chatroom)
+{
+  EmpathyChatroomPriv *priv;
+
+  g_return_val_if_fail (EMPATHY_IS_CHATROOM (chatroom), FALSE);
+
+  priv = GET_PRIV (chatroom);
+
+  return priv->need_password;
+}
+
+void
+empathy_chatroom_set_need_password (EmpathyChatroom *chatroom,
+                                    gboolean need_password)
+{
+  EmpathyChatroomPriv *priv;
+
+  g_return_if_fail (EMPATHY_IS_CHATROOM (chatroom));
+
+  priv = GET_PRIV (chatroom);
+
+  priv->need_password = need_password;
+
+  g_object_notify (G_OBJECT (chatroom), "need-password");
+}
+
+gboolean
+empathy_chatroom_get_invite_only (EmpathyChatroom *chatroom)
+{
+  EmpathyChatroomPriv *priv;
+
+  g_return_val_if_fail (EMPATHY_IS_CHATROOM (chatroom), FALSE);
+
+  priv = GET_PRIV (chatroom);
+
+  return priv->invite_only;
+}
+
+void
+empathy_chatroom_set_invite_only (EmpathyChatroom *chatroom,
+                                  gboolean invite_only)
+{
+  EmpathyChatroomPriv *priv;
+
+  g_return_if_fail (EMPATHY_IS_CHATROOM (chatroom));
+
+  priv = GET_PRIV (chatroom);
+
+  priv->invite_only = invite_only;
+
+  g_object_notify (G_OBJECT (chatroom), "invite-only");
+}
+
