@@ -843,6 +843,7 @@ get_requestable_channel_classes_cb (TpProxy *connection,
 		GValue class = {0,};
 		GValue *chan_type, *handle_type;
 		GHashTable *fixed_prop;
+		GList *l;
 
 		g_value_init (&class, TP_STRUCT_TYPE_REQUESTABLE_CHANNEL_CLASS);
 		g_value_set_static_boxed (&class, g_ptr_array_index (classes, i));
@@ -868,6 +869,16 @@ get_requestable_channel_classes_cb (TpProxy *connection,
 
 		/* We can request file transfer channel to contacts. */
 		priv->can_request_ft = TRUE;
+
+		/* Update the capabilities of all contacts */
+		for (l = priv->contacts; l != NULL; l = g_list_next (l)) {
+			EmpathyContact *contact = l->data;
+			EmpathyCapabilities caps;
+
+			caps = empathy_contact_get_capabilities (contact);
+			empathy_contact_set_capabilities (contact, caps |
+				EMPATHY_CAPABILITIES_FT);
+		}
 
 		break;
 	}
