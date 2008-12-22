@@ -753,6 +753,9 @@ tp_file_method_cb (TpProxy *proxy,
   tp_file->priv->unix_socket_path = g_value_dup_string (address);
 
   DEBUG ("Got unix socket path: %s", tp_file->priv->unix_socket_path);
+
+  if (tp_file->priv->state == EMP_FILE_TRANSFER_STATE_OPEN)
+    tp_file_start_transfer (tp_file);
 }
 
 /**
