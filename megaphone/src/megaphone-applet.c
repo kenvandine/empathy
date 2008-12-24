@@ -30,7 +30,6 @@
 #include <bonobo/bonobo-ui-component.h>
 #include <panel-2.0/panel-applet-gconf.h>
 #include <gconf/gconf-client.h>
-#include <libgnomevfs/gnome-vfs-utils.h>
 
 #include <libmissioncontrol/mission-control.h>
 #include <libmissioncontrol/mc-account.h>
