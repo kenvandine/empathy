@@ -75,8 +75,8 @@ empathy_contact_menu_new (EmpathyContact             *contact,
 		gtk_widget_show (item);
 	}
 
-  /* Invite */
-  item = empathy_contact_invite_menu_item_new (contact);
+	/* Invite */
+	item = empathy_contact_invite_menu_item_new (contact);
 	gtk_menu_shell_append (shell, item);
 	gtk_widget_show (item);
 
