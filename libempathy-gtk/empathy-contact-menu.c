@@ -268,79 +268,67 @@ empathy_contact_edit_menu_item_new (EmpathyContact *contact)
 	return item;
 }
 
-typedef struct 
+typedef struct  {
+	EmpathyContact *contact;
+	EmpathyChatroom *chatroom;
+} RoomSubMenuData;
+
+static RoomSubMenuData *
+room_sub_menu_data_new (EmpathyContact *contact,
+			EmpathyChatroom *chatroom)
 {
-  EmpathyContact *contact;
-  EmpathyChatroom *chatroom;
-} contact_room_sub_menu_item_activate_cb_ctx;
+	RoomSubMenuData *data;
 
-static contact_room_sub_menu_item_activate_cb_ctx *
-contact_room_sub_menu_item_activate_cb_ctx_new (EmpathyContact *contact,
-                                                EmpathyChatroom *chatroom)
-{
-  contact_room_sub_menu_item_activate_cb_ctx *ctx;
+	data = g_slice_new (RoomSubMenuData);
+	data->contact = g_object_ref (contact);
+	data->chatroom = g_object_ref (chatroom);
 
-  ctx = g_slice_new (contact_room_sub_menu_item_activate_cb_ctx);
-
-  ctx->contact = g_object_ref (contact);
-  ctx->chatroom = g_object_ref (chatroom);
-
-  return ctx;
+	return data;
 }
 
 static void
-contact_room_sub_menu_item_activate_cb_ctx_free (
-    contact_room_sub_menu_item_activate_cb_ctx *ctx)
+room_sub_menu_data_free (RoomSubMenuData *data)
 {
-  /* FIXME: seems this is never called... */
-  g_object_unref (ctx->contact);
-  g_object_unref (ctx->chatroom);
-
-  g_slice_free (contact_room_sub_menu_item_activate_cb_ctx, ctx);
+	/* FIXME: seems this is never called... */
+	g_object_unref (data->contact);
+	g_object_unref (data->chatroom);
+	g_slice_free (RoomSubMenuData, data);
 }
 
 static void
-contact_room_sub_menu_item_activate_cb (
-    GtkWidget *item,
-    contact_room_sub_menu_item_activate_cb_ctx *ctx)
+room_sub_menu_activate_cb (GtkWidget *item,
+			   RoomSubMenuData *data)
 {
-  GArray *handles;
-  TpHandle handle;
-  TpChannel *channel;
+	TpHandle handle;
+	GArray handles = {(gchar *) &handle, 1};
+	TpChannel *channel;
 
-  g_object_get (ctx->chatroom, "tp-channel", &channel, NULL);
-  if (channel == NULL)
-    /* channel was invalidated. Ignoring */
-    return;
+	g_object_get (data->chatroom, "tp-channel", &channel, NULL);
+	if (channel == NULL) {
+		/* channel was invalidated. Ignoring */
+		return;
+	}
 
-  /* send invitation */
-  handles = g_array_new (FALSE, FALSE, sizeof (TpHandle));
-  handle = empathy_contact_get_handle (ctx->contact);
-  g_array_append_val (handles, handle);
+	/* send invitation */
+	handle = empathy_contact_get_handle (data->contact);
+	tp_cli_channel_interface_group_call_add_members (channel, -1, &handles,
+		_("Inviting to this room"), NULL, NULL, NULL, NULL);
 
-  tp_cli_channel_interface_group_call_add_members (channel, -1, handles,
-      _("Inviting to this room"), NULL, NULL, NULL, NULL);
-
-  g_array_free (handles, TRUE);
-  g_object_unref (channel);
+	g_object_unref (channel);
 }
 
 static GtkWidget *
-create_room_sub_menu_item (EmpathyContact *contact,
-                           EmpathyChatroom *chatroom)
+create_room_sub_menu (EmpathyContact *contact,
+                      EmpathyChatroom *chatroom)
 {
 	GtkWidget *item;
-  contact_room_sub_menu_item_activate_cb_ctx *ctx;
+	RoomSubMenuData *data;
 
-	g_return_val_if_fail (EMPATHY_IS_CONTACT (contact), NULL);
-
-  item = gtk_menu_item_new_with_label (empathy_chatroom_get_name (chatroom));
-
-  ctx = contact_room_sub_menu_item_activate_cb_ctx_new (contact, chatroom);
-
-  g_signal_connect_data (item, "activate",
-      G_CALLBACK (contact_room_sub_menu_item_activate_cb), ctx,
-      (GClosureNotify) contact_room_sub_menu_item_activate_cb_ctx_free, 0);
+	item = gtk_menu_item_new_with_label (empathy_chatroom_get_name (chatroom));
+	data = room_sub_menu_data_new (contact, chatroom);
+	g_signal_connect_data (item, "activate",
+			       G_CALLBACK (room_sub_menu_activate_cb), data,
+			       (GClosureNotify) room_sub_menu_data_free, 0);
 
 	return item;
 }
@@ -350,12 +338,12 @@ empathy_contact_invite_menu_item_new (EmpathyContact *contact)
 {
 	GtkWidget *item;
 	GtkWidget *image;
-  GtkWidget *room_item;
-  EmpathyChatroomManager *mgr;
-  GList *rooms, *l;
-  GtkWidget *submenu;
-  GtkMenuShell *submenu_shell;
-  gboolean have_rooms = FALSE;
+	GtkWidget *room_item;
+	EmpathyChatroomManager *mgr;
+	GList *rooms, *l;
+	GtkWidget *submenu;
+	GtkMenuShell *submenu_shell;
+	gboolean have_rooms = FALSE;
 
 	g_return_val_if_fail (EMPATHY_IS_CONTACT (contact), NULL);
 
@@ -364,46 +352,42 @@ empathy_contact_invite_menu_item_new (EmpathyContact *contact)
 					      GTK_ICON_SIZE_MENU);
 	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
 
-  mgr = empathy_chatroom_manager_new (NULL);
-  rooms = empathy_chatroom_manager_get_chatrooms (mgr,
-      empathy_contact_get_account (contact));
+	mgr = empathy_chatroom_manager_new (NULL);
+	rooms = empathy_chatroom_manager_get_chatrooms (mgr,
+		empathy_contact_get_account (contact));
 
-  /* create rooms sub menu */
-  submenu = gtk_menu_new ();
-  submenu_shell = GTK_MENU_SHELL (submenu);
+	/* create rooms sub menu */
+	submenu = gtk_menu_new ();
+	submenu_shell = GTK_MENU_SHELL (submenu);
 
-  for (l = rooms; l != NULL; l = g_list_next (l))
-    {
-      EmpathyChatroom *chatroom = l->data;
-      TpChannel *channel;
+	for (l = rooms; l != NULL; l = g_list_next (l)) {
+		EmpathyChatroom *chatroom = l->data;
+		TpChannel *channel;
 
-      g_object_get (chatroom, "tp-channel", &channel, NULL);
-      if (channel != NULL)
-        {
-          have_rooms = TRUE;
+		g_object_get (chatroom, "tp-channel", &channel, NULL);
+		if (channel != NULL) {
+			have_rooms = TRUE;
 
-          room_item = create_room_sub_menu_item (contact, chatroom);
-          gtk_menu_shell_append (submenu_shell, room_item);
-          gtk_widget_show (room_item);
+			room_item = create_room_sub_menu (contact, chatroom);
+			gtk_menu_shell_append (submenu_shell, room_item);
+			gtk_widget_show (room_item);
 
-          g_object_unref (channel);
-        }
-    }
+			g_object_unref (channel);
+		}
+	}
 
-  if (have_rooms)
-    {
-      gtk_menu_item_set_submenu (GTK_MENU_ITEM (item), submenu);
-    }
-  else
-    {
-      gtk_widget_set_sensitive (item, FALSE);
-      gtk_widget_destroy (submenu);
-    }
+	if (have_rooms) {
+		gtk_menu_item_set_submenu (GTK_MENU_ITEM (item), submenu);
+	} else {
+		gtk_widget_set_sensitive (item, FALSE);
+		gtk_widget_destroy (submenu);
+	}
 
 	gtk_widget_show (image);
 
-  g_object_unref (mgr);
-  g_list_free (rooms);
+	g_object_unref (mgr);
+	g_list_free (rooms);
 
 	return item;
 }
+
