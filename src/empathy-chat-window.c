@@ -325,7 +325,10 @@ chat_window_update (EmpathyChatWindow *window)
 			remote_contact = empathy_chat_get_remote_contact (priv->current_chat);
 			icon = empathy_pixbuf_avatar_from_contact_scaled (remote_contact, 0, 0);
 			gtk_window_set_icon (GTK_WINDOW (priv->dialog), icon);
-			g_object_unref (icon);
+
+			if (icon != NULL) {
+				g_object_unref (icon);
+			}
 		} else {
 			gtk_window_set_icon_name (GTK_WINDOW (priv->dialog), NULL);
 		}
