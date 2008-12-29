@@ -192,16 +192,20 @@ empathy_tube_handler_build_bus_name (TpTubeType type, const gchar *service)
 {
   gchar *service_escaped;
   gchar *str = NULL;
+  const gchar *prefix = NULL;
 
   g_return_val_if_fail (type <= TP_TUBE_TYPE_STREAM, NULL);
   g_return_val_if_fail (service != NULL, NULL);
 
-  service_escaped = tp_escape_as_identifier (service);
   if (type == TP_TUBE_TYPE_DBUS)
-      str = g_strdup_printf ("org.gnome.Empathy.DTubeHandler.%s", service);
+    prefix = "org.gnome.Empathy.DTubeHandler.%s";
   else if (type == TP_TUBE_TYPE_STREAM)
-      str = g_strdup_printf ("org.gnome.Empathy.StreamTubeHandler.%s", service);
+    prefix = "org.gnome.Empathy.StreamTubeHandler.%s";
+  else
+    g_return_val_if_reached (NULL);
 
+  service_escaped = tp_escape_as_identifier (service);
+  str = g_strdup_printf (prefix, service_escaped);
   g_free (service_escaped);
 
   return str;
@@ -212,16 +216,20 @@ empathy_tube_handler_build_object_path (TpTubeType type, const gchar *service)
 {
   gchar *service_escaped;
   gchar *str = NULL;
+  const gchar *prefix = NULL;
 
   g_return_val_if_fail (type <= TP_TUBE_TYPE_STREAM, NULL);
   g_return_val_if_fail (service != NULL, NULL);
 
-  service_escaped = tp_escape_as_identifier (service);
   if (type == TP_TUBE_TYPE_DBUS)
-      str = g_strdup_printf ("/org/gnome/Empathy/DTubeHandler/%s", service);
+    prefix = "/org/gnome/Empathy/DTubeHandler/%s";
   else if (type == TP_TUBE_TYPE_STREAM)
-      str = g_strdup_printf ("/org/gnome/Empathy/StreamTubeHandler/%s", service);
+    prefix = "/org/gnome/Empathy/StreamTubeHandler/%s";
+  else
+    g_return_val_if_reached (NULL);
 
+  service_escaped = tp_escape_as_identifier (service);
+  str = g_strdup_printf (prefix, service_escaped);
   g_free (service_escaped);
 
   return str;
