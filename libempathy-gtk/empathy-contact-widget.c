@@ -1236,12 +1236,13 @@ contact_widget_client_update (EmpathyContactWidget *information)
 static void
 contact_widget_location_update (EmpathyContactWidget *information)
 {
-  GHashTable *location = empathy_contact_get_location (information->contact);
+  GHashTable *location;
   GValue *value;
   gdouble lat, lon;
   ClutterActor *marker;
   ChamplainLayer *layer;
 
+  location = empathy_contact_get_location (information->contact);
   value = g_hash_table_lookup (location, EMPATHY_LOCATION_LAT);
   if (value == NULL)
     {
