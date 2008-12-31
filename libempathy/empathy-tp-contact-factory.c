@@ -315,6 +315,21 @@ tp_contact_factory_avatar_updated_cb (TpConnection *connection,
 }
 
 static void
+tp_contact_factory_update_location (EmpathyTpContactFactory *tp_factory,
+				    guint                    handle,
+				    GHashTable              *location)
+{
+	EmpathyContact      *contact;
+
+	contact = tp_contact_factory_find_by_handle (tp_factory, handle);
+	if (!contact) {
+		return;
+	}
+
+	empathy_contact_set_location (contact, location);
+}
+
+static void
 tp_contact_factory_update_capabilities (EmpathyTpContactFactory *tp_factory,
 					guint                    handle,
 					const gchar             *channel_type,
@@ -388,6 +403,35 @@ tp_contact_factory_got_capabilities (EmpathyTpContactFactory *tp_factory,
 	}
 
 	g_ptr_array_free (capabilities, TRUE);
+}
+
+static void
+tp_contact_factory_got_locations (EmpathyTpContactFactory *tp_factory,
+				  GHashTable              *locations,
+				  const GError            *error)
+{
+	GHashTableIter iter;
+	gpointer key, value;
+
+	if (error) {
+		DEBUG ("Error: %s", error->message);
+		/* FIXME Should set the capabilities of the contacts for which this request
+		 * originated to NONE */
+		return;
+	}
+
+	g_hash_table_iter_init (&iter, locations);
+	while (g_hash_table_iter_next (&iter, &key, &value)) {
+		/* do something with key and value */
+		guint        handle = GPOINTER_TO_INT (key);
+		GHashTable  *location = value;
+
+		tp_contact_factory_update_location (tp_factory,
+						    handle,
+						    location);
+	}
+
+	g_hash_table_unref (locations);
 }
 
 static void
@@ -548,6 +592,7 @@ tp_contact_factory_add_contact (EmpathyTpContactFactory *tp_factory,
 	GArray handles = {(gchar*) &handle, 1};
 	GHashTable *tokens;
 	GPtrArray *capabilities;
+	GHashTable *locations;
 	GError *error = NULL;
 
 	/* Keep a weak ref to that contact */
@@ -595,6 +640,14 @@ tp_contact_factory_add_contact (EmpathyTpContactFactory *tp_factory,
 									&error,
 									NULL);
 	tp_contact_factory_got_capabilities (tp_factory, capabilities, error);
+
+	emp_cli_connection_interface_location_run_get_locations (TP_PROXY (priv->connection),
+								 -1,
+								 &handles,
+								 &locations,
+								 &error,
+								 NULL);
+	tp_contact_factory_got_locations (tp_factory, locations, error);
 	g_clear_error (&error);
 
 	DEBUG ("Contact added: %s (%d)",
