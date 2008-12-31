@@ -337,23 +337,22 @@ map_view_contacts_foreach (GtkTreeModel *model,
   g_object_set_data (G_OBJECT (contact), "map-view-handle",
       GINT_TO_POINTER (handle_id));
 
-  texture = clutter_texture_new ();
-  avatar = empathy_pixbuf_avatar_from_contact_scaled (contact, 32, 32);
-
-  if (!avatar)
-    goto cleanup;
-
-  gtk_clutter_texture_set_from_pixbuf (CLUTTER_TEXTURE (texture), avatar);
-  clutter_actor_set_position (CLUTTER_ACTOR (texture), 5, 5);
-
   clutter_container_add (CLUTTER_CONTAINER (marker), texture, NULL);
-  clutter_actor_set_anchor_point (marker, 25, 50);
+  clutter_actor_set_anchor_point (marker, 16, 16);
+
+  avatar = empathy_pixbuf_avatar_from_contact_scaled (contact, 32, 32);
+  if (avatar)
+    {
+      texture = clutter_texture_new ();
+      gtk_clutter_texture_set_from_pixbuf (CLUTTER_TEXTURE (texture), avatar);
+      clutter_actor_set_position (CLUTTER_ACTOR (texture), 5, 5);
+      clutter_container_add (CLUTTER_CONTAINER (marker), texture, NULL);
+    }
 
   map_view_marker_update (CHAMPLAIN_MARKER (marker), contact);
 
   clutter_container_add (CLUTTER_CONTAINER (window->layer), marker, NULL);
 
-cleanup:
   g_object_unref (contact);
   return FALSE;
 }
