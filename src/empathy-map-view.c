@@ -79,6 +79,8 @@ static void map_view_destroy_cb (GtkWidget *widget,
     EmpathyMapView *window);
 static gboolean map_view_contacts_foreach (GtkTreeModel *model,
     GtkTreePath *path, GtkTreeIter *iter, gpointer user_data);
+static gboolean map_view_contacts_foreach_disconnect (GtkTreeModel *model,
+    GtkTreePath *path, GtkTreeIter *iter, gpointer user_data);
 static void map_view_zoom_in_cb (GtkWidget *widget, EmpathyMapView *window);
 static void map_view_zoom_out_cb (GtkWidget *widget, EmpathyMapView *window);
 static void map_view_contact_location_notify (GObject *gobject,
@@ -143,11 +145,35 @@ empathy_map_view_show (EmpathyContactListStore *list_store)
   return window->window;
 }
 
+static gboolean
+map_view_contacts_foreach_disconnect (GtkTreeModel *model,
+                                      GtkTreePath *path,
+                                      GtkTreeIter *iter,
+                                      gpointer user_data)
+{
+  EmpathyContact *contact;
+  guint handle_id;
+
+  gtk_tree_model_get (model, iter, EMPATHY_CONTACT_LIST_STORE_COL_CONTACT,
+     &contact, -1);
+  if (!contact)
+    return FALSE;
+
+  handle_id = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (contact), "map-view-handle"));
+
+  g_signal_handler_disconnect (contact, handle_id);
+  return FALSE;
+}
 
 static void
 map_view_destroy_cb (GtkWidget *widget,
                      EmpathyMapView *window)
 {
+  GtkTreeModel *model;
+
+  /* Set up contact list. */
+  model = GTK_TREE_MODEL (window->list_store);
+  gtk_tree_model_foreach (model, map_view_contacts_foreach_disconnect, window);
   g_free (window);
 }
 
@@ -202,6 +228,7 @@ map_view_geocode_cb (GeoclueGeocode *geocode,
     empathy_contact_set_location (EMPATHY_CONTACT (userdata), location);
   g_hash_table_unref (location);
 }
+
 
 static gchar *
 get_dup_string (GHashTable *location, gchar *key)
@@ -296,6 +323,7 @@ map_view_contacts_foreach (GtkTreeModel *model,
   GHashTable *location;
   GValue *value;
   GdkPixbuf *avatar;
+  guint handle_id;
 
   gtk_tree_model_get (model, iter, EMPATHY_CONTACT_LIST_STORE_COL_CONTACT,
      &contact, -1);
@@ -304,8 +332,10 @@ map_view_contacts_foreach (GtkTreeModel *model,
 
   marker = champlain_marker_new ();
 
-  g_signal_connect (contact, "notify::location",
+  handle_id = g_signal_connect (contact, "notify::location",
       G_CALLBACK (map_view_contact_location_notify), marker);
+  g_object_set_data (G_OBJECT (contact), "map-view-handle",
+      GINT_TO_POINTER (handle_id));
 
   texture = clutter_texture_new ();
   avatar = empathy_pixbuf_avatar_from_contact_scaled (contact, 32, 32);
