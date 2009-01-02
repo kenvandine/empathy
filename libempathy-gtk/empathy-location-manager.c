@@ -105,7 +105,9 @@ empathy_location_manager_class_init (EmpathyLocationManagerClass *class)
 }
 
 static void
-publish_location (EmpathyLocationManager *location_manager, McAccount *account)
+publish_location (EmpathyLocationManager *location_manager,
+                  McAccount *account,
+                  gboolean force_publication)
 {
   EmpathyLocationManagerPriv *priv;
   guint connection_status = -1;
@@ -114,11 +116,14 @@ publish_location (EmpathyLocationManager *location_manager, McAccount *account)
   EmpathyContactFactory *factory = empathy_contact_factory_new ();
   priv = GET_PRIV (location_manager);
 
-  if (!empathy_conf_get_bool (conf, EMPATHY_PREFS_LOCATION_PUBLISH, &can_publish))
-    return;
+  if (force_publication == FALSE)
+    {
+      if (!empathy_conf_get_bool (conf, EMPATHY_PREFS_LOCATION_PUBLISH, &can_publish))
+        return;
 
-  if (!can_publish)
-    return;
+      if (can_publish == FALSE)
+        return;
+    }
 
   connection_status = mission_control_get_connection_status (priv->mc,
       account, NULL);
@@ -132,14 +137,15 @@ publish_location (EmpathyLocationManager *location_manager, McAccount *account)
 }
 
 static void
-publish_location_to_all_accounts (EmpathyLocationManager *location_manager)
+publish_location_to_all_accounts (EmpathyLocationManager *location_manager,
+                                  gboolean force_publication)
 {
   GList *accounts = NULL, *l;
 
   accounts = mc_accounts_list_by_enabled (TRUE);
   for (l = accounts; l; l = l->next)
     {
-      publish_location (location_manager, l->data);
+      publish_location (location_manager, l->data, force_publication);
     }
 
   mc_accounts_list_free (accounts);
@@ -156,7 +162,8 @@ account_status_changed_cb (MissionControl *mc,
   DEBUG ("Account %s changed status to %d", unique_name, status);
   McAccount *account = mc_account_lookup (unique_name);
   if (account && status == TP_CONNECTION_STATUS_CONNECTED)
-    publish_location (EMPATHY_LOCATION_MANAGER (location_manager), account);
+    publish_location (EMPATHY_LOCATION_MANAGER (location_manager), account,
+        FALSE);
 }
 
 static void
@@ -354,7 +361,7 @@ position_changed_cb (GeocluePosition *position,
     }
 
   update_timestamp (location_manager, timestamp);
-  publish_location_to_all_accounts (EMPATHY_LOCATION_MANAGER (location_manager));
+  publish_location_to_all_accounts (EMPATHY_LOCATION_MANAGER (location_manager), FALSE);
 }
 
 
@@ -416,7 +423,7 @@ address_changed_cb (GeoclueAddress *address,
   g_hash_table_foreach (details, address_foreach_cb, (gpointer)location_manager);
 
   update_timestamp (location_manager, timestamp);
-  publish_location_to_all_accounts (EMPATHY_LOCATION_MANAGER (location_manager));
+  publish_location_to_all_accounts (EMPATHY_LOCATION_MANAGER (location_manager), FALSE);
 }
 
 
@@ -492,12 +499,6 @@ setup_geoclue (EmpathyLocationManager *location_manager)
       G_CALLBACK (address_changed_cb), location_manager);
 
   priv->is_setup = TRUE;
-
-  geoclue_address_get_address_async (priv->gc_address,
-      initial_address_cb, location_manager);
-  geoclue_position_get_position_async (priv->gc_position,
-      initial_position_cb, location_manager);
-
 }
 
 static void
@@ -518,8 +519,21 @@ publish_cb (EmpathyConf *conf,
     {
       if (!priv->is_setup)
         setup_geoclue (manager);
-      publish_location_to_all_accounts (manager);
+      geoclue_address_get_address_async (priv->gc_address,
+          initial_address_cb, manager);
+      geoclue_position_get_position_async (priv->gc_position,
+          initial_position_cb, manager);
+      publish_location_to_all_accounts (manager, FALSE);
     }
+  else
+    {
+      /* As per XEP-0080: send an empty location to have remove current
+       * location from the servers
+       */
+      g_hash_table_remove_all (priv->location);
+      publish_location_to_all_accounts (manager, TRUE);
+    }
+
 }
 
 
