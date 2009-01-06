@@ -472,7 +472,7 @@ main_window_contact_presence_changed_cb (EmpathyContactMonitor *monitor,
 		/* someone is logging in */
 		empathy_sound_play (GTK_WIDGET (window->window),
 				    EMPATHY_PREFS_SOUNDS_CONTACT_LOGIN,
-				    "service-login", _("Contact logged in"));
+				    "service-login", _("Contact connected"));
 		return;
 	}
 
@@ -480,7 +480,7 @@ main_window_contact_presence_changed_cb (EmpathyContactMonitor *monitor,
 		/* someone is logging off */
 		empathy_sound_play (GTK_WIDGET (window->window),
 				    EMPATHY_PREFS_SOUNDS_CONTACT_LOGOUT,
-				    "service-logout", _("Contact logged out"));
+				    "service-logout", _("Contact disconnected"));
 	}
 }
 

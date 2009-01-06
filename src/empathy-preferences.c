@@ -153,10 +153,10 @@ static SoundEventEntry sound_entries [] = {
 	{ N_("Message received"), EMPATHY_PREFS_SOUNDS_INCOMING_MESSAGE },
 	{ N_("Message sent"), EMPATHY_PREFS_SOUNDS_OUTGOING_MESSAGE },
 	{ N_("New conversation"), EMPATHY_PREFS_SOUNDS_NEW_CONVERSATION },
-	{ N_("Contact logs in"), EMPATHY_PREFS_SOUNDS_CONTACT_LOGIN },
-	{ N_("Contact logs out"), EMPATHY_PREFS_SOUNDS_CONTACT_LOGOUT },
-	{ N_("Logging in a network"), EMPATHY_PREFS_SOUNDS_SERVICE_LOGIN },
-	{ N_("Logging off a network"), EMPATHY_PREFS_SOUNDS_SERVICE_LOGOUT }
+	{ N_("Contact goes online"), EMPATHY_PREFS_SOUNDS_CONTACT_LOGIN },
+	{ N_("Contact goes offline"), EMPATHY_PREFS_SOUNDS_CONTACT_LOGOUT },
+	{ N_("Account connected"), EMPATHY_PREFS_SOUNDS_SERVICE_LOGIN },
+	{ N_("Account disconnected"), EMPATHY_PREFS_SOUNDS_SERVICE_LOGOUT }
 };
 
 static void
