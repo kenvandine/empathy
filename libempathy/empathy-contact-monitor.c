@@ -34,7 +34,7 @@
 
 typedef struct {
   EmpathyContactList *iface;
-  GPtrArray *contacts;
+  GList *contacts;
 
   gboolean dispose_run;
 } EmpathyContactMonitorPriv;
@@ -55,15 +55,142 @@ enum {
   PROP_IFACE
 };
 
-static void  contact_remove_foreach (EmpathyContact *contact,
-    EmpathyContactMonitor *monitor);
-static void  cl_members_changed_cb  (EmpathyContactList    *cl,
-    EmpathyContact *contact, EmpathyContact *actor, guint reason,
-    gchar *message, gboolean is_member, EmpathyContactMonitor *monitor);
-
 static guint signals[LAST_SIGNAL];
 
 G_DEFINE_TYPE (EmpathyContactMonitor, empathy_contact_monitor, G_TYPE_OBJECT);
+
+static void
+contact_monitor_presence_changed_cb (EmpathyContact *contact,
+                                     McPresence current_presence,
+                                     McPresence previous_presence,
+                                     EmpathyContactMonitor *self)
+{
+  g_signal_emit (self, signals[CONTACT_PRESENCE_CHANGED], 0, contact,
+                 current_presence, previous_presence);
+}
+
+static void
+contact_monitor_presence_message_changed_cb (EmpathyContact *contact,
+                                             GParamSpec *pspec,
+                                             EmpathyContactMonitor *self)
+{
+  const char *status;
+
+  /* use the status so that we always have a presence message */
+  status = empathy_contact_get_status (contact);
+
+  g_signal_emit (self, signals[CONTACT_PRESENCE_MESSAGE_CHANGED], 0,
+                 contact, status);
+}
+
+static void
+contact_monitor_name_changed_cb (EmpathyContact *contact,
+                                 GParamSpec *pspec,
+                                 EmpathyContactMonitor *self)
+{
+  const char *name;
+
+  name = empathy_contact_get_name (contact);
+
+  g_signal_emit (self, signals[CONTACT_NAME_CHANGED], 0, contact, name);
+}
+
+static void
+contact_monitor_avatar_changed_cb (EmpathyContact *contact,
+                                   GParamSpec *pspec,
+                                   EmpathyContactMonitor *self)
+{
+  /* don't emit a pixbuf in the signal, as we don't depend on GTK+ here
+   */
+
+  g_signal_emit (self, signals[CONTACT_AVATAR_CHANGED], 0, contact);
+}
+
+static void
+contact_monitor_capabilities_changed_cb (EmpathyContact *contact,
+                                         GParamSpec *pspec,
+                                         EmpathyContactMonitor *self)
+{
+  g_signal_emit (self, signals[CONTACT_CAPABILITIES_CHANGED], 0, contact);
+}
+
+static void
+contact_add (EmpathyContactMonitor *monitor,
+             EmpathyContact *contact)
+{
+  EmpathyContactMonitorPriv *priv = GET_PRIV (monitor);
+
+  g_signal_connect (contact, "presence-changed",
+                    G_CALLBACK (contact_monitor_presence_changed_cb),
+                    monitor);
+  g_signal_connect (contact, "notify::presence-message",
+                    G_CALLBACK (contact_monitor_presence_message_changed_cb),
+                    monitor);
+  g_signal_connect (contact, "notify::name",
+                    G_CALLBACK (contact_monitor_name_changed_cb),
+                    monitor);
+  g_signal_connect (contact, "notify::avatar",
+                    G_CALLBACK (contact_monitor_avatar_changed_cb),
+                    monitor);
+  g_signal_connect (contact, "notify::capabilities",
+                    G_CALLBACK (contact_monitor_capabilities_changed_cb),
+                    monitor);
+
+  priv->contacts = g_list_prepend (priv->contacts, g_object_ref (contact));
+
+  g_signal_emit (monitor, signals[CONTACT_ADDED], 0, contact);
+}
+
+static void
+contact_remove (EmpathyContactMonitor *monitor,
+                EmpathyContact *contact)
+{
+  EmpathyContactMonitorPriv *priv = GET_PRIV (monitor);
+
+  g_signal_handlers_disconnect_by_func (contact,
+                                        G_CALLBACK (contact_monitor_presence_changed_cb),
+                                        monitor);
+  g_signal_handlers_disconnect_by_func (contact,
+                                        G_CALLBACK (contact_monitor_presence_message_changed_cb),
+                                        monitor);
+  g_signal_handlers_disconnect_by_func (contact,
+                                        G_CALLBACK (contact_monitor_name_changed_cb),
+                                        monitor);
+  g_signal_handlers_disconnect_by_func (contact,
+                                        G_CALLBACK (contact_monitor_avatar_changed_cb),
+                                        monitor);
+  g_signal_handlers_disconnect_by_func (contact,
+                                        G_CALLBACK (contact_monitor_capabilities_changed_cb),
+                                        monitor);
+
+  priv->contacts = g_list_remove (priv->contacts, contact);
+
+  g_signal_emit (monitor, signals[CONTACT_REMOVED], 0, contact);
+
+  g_object_unref (contact);
+}
+
+static void
+contact_remove_foreach (EmpathyContact *contact,
+                        EmpathyContactMonitor *monitor)
+{
+  contact_remove (monitor, contact);
+}
+
+static void
+cl_members_changed_cb (EmpathyContactList    *cl,
+                       EmpathyContact        *contact,
+                       EmpathyContact        *actor,
+                       guint                  reason,
+                       gchar                 *message,
+                       gboolean               is_member,
+                       EmpathyContactMonitor *monitor)
+{
+  if (is_member)
+    contact_add (monitor, contact);
+  else
+    contact_remove (monitor, contact);
+}
 
 static void
 do_set_property (GObject      *object,
@@ -111,7 +238,7 @@ do_finalize (GObject *obj)
 
   if (priv->contacts)
     {
-      g_ptr_array_free (priv->contacts, TRUE);
+      g_list_free (priv->contacts);
       priv->contacts = NULL;
     }
 
@@ -135,8 +262,8 @@ do_dispose (GObject *obj)
   priv->dispose_run = TRUE;
 
   if (priv->contacts)
-    g_ptr_array_foreach (priv->contacts,
-                         (GFunc) contact_remove_foreach, obj);
+    g_list_foreach (priv->contacts,
+                    (GFunc) contact_remove_foreach, obj);
 
   if (priv->iface)
     g_signal_handlers_disconnect_by_func (priv->iface,
@@ -249,140 +376,6 @@ empathy_contact_monitor_init (EmpathyContactMonitor *self)
   priv->dispose_run = FALSE;
 }
 
-static void
-contact_monitor_presence_changed_cb (EmpathyContact *contact,
-                                     McPresence current_presence,
-                                     McPresence previous_presence,
-                                     EmpathyContactMonitor *self)
-{
-  g_signal_emit (self, signals[CONTACT_PRESENCE_CHANGED], 0, contact,
-                 current_presence, previous_presence);
-}
-
-static void
-contact_monitor_presence_message_changed_cb (EmpathyContact *contact,
-                                             GParamSpec *pspec,
-                                             EmpathyContactMonitor *self)
-{
-  const char *status;
-
-  /* use the status so that we always have a presence message */
-  status = empathy_contact_get_status (contact);
-
-  g_signal_emit (self, signals[CONTACT_PRESENCE_MESSAGE_CHANGED], 0,
-                 contact, status);
-}
-
-static void
-contact_monitor_name_changed_cb (EmpathyContact *contact,
-                                 GParamSpec *pspec,
-                                 EmpathyContactMonitor *self)
-{
-  const char *name;
-
-  name = empathy_contact_get_name (contact);
-
-  g_signal_emit (self, signals[CONTACT_NAME_CHANGED], 0, contact, name);
-}
-
-static void
-contact_monitor_avatar_changed_cb (EmpathyContact *contact,
-                                   GParamSpec *pspec,
-                                   EmpathyContactMonitor *self)
-{
-  /* don't emit a pixbuf in the signal, as we don't know how large
-   * a client would like it to be.
-   */
-
-  g_signal_emit (self, signals[CONTACT_AVATAR_CHANGED], 0, contact);
-}
-
-static void
-contact_monitor_capabilities_changed_cb (EmpathyContact *contact,
-                                         GParamSpec *pspec,
-                                         EmpathyContactMonitor *self)
-{
-  g_signal_emit (self, signals[CONTACT_CAPABILITIES_CHANGED], 0, contact);
-}
-
-static void
-contact_add (EmpathyContactMonitor *monitor,
-             EmpathyContact *contact)
-{
-  EmpathyContactMonitorPriv *priv = GET_PRIV (monitor);
-
-  g_signal_connect (contact, "presence-changed",
-                    G_CALLBACK (contact_monitor_presence_changed_cb),
-                    monitor);
-  g_signal_connect (contact, "notify::presence-message",
-                    G_CALLBACK (contact_monitor_presence_message_changed_cb),
-                    monitor);
-  g_signal_connect (contact, "notify::name",
-                    G_CALLBACK (contact_monitor_name_changed_cb),
-                    monitor);
-  g_signal_connect (contact, "notify::avatar",
-                    G_CALLBACK (contact_monitor_avatar_changed_cb),
-                    monitor);
-  g_signal_connect (contact, "notify::capabilities",
-                    G_CALLBACK (contact_monitor_capabilities_changed_cb),
-                    monitor);
-
-  g_ptr_array_add (priv->contacts, g_object_ref (contact));
-
-  g_signal_emit (monitor, signals[CONTACT_ADDED], 0, contact);
-}
-
-static void
-contact_remove (EmpathyContactMonitor *monitor,
-                EmpathyContact *contact)
-{
-  EmpathyContactMonitorPriv *priv = GET_PRIV (monitor);
-
-  g_signal_handlers_disconnect_by_func (contact,
-                                        G_CALLBACK (contact_monitor_presence_changed_cb),
-                                        monitor);
-  g_signal_handlers_disconnect_by_func (contact,
-                                        G_CALLBACK (contact_monitor_presence_message_changed_cb),
-                                        monitor);
-  g_signal_handlers_disconnect_by_func (contact,
-                                        G_CALLBACK (contact_monitor_name_changed_cb),
-                                        monitor);
-  g_signal_handlers_disconnect_by_func (contact,
-                                        G_CALLBACK (contact_monitor_avatar_changed_cb),
-                                        monitor);
-  g_signal_handlers_disconnect_by_func (contact,
-                                        G_CALLBACK (contact_monitor_capabilities_changed_cb),
-                                        monitor);
-
-  g_ptr_array_remove (priv->contacts, contact);
-
-  g_signal_emit (monitor, signals[CONTACT_REMOVED], 0, contact);
-
-  g_object_unref (contact);
-}
-
-static void
-contact_remove_foreach (EmpathyContact *contact,
-                        EmpathyContactMonitor *monitor)
-{
-  contact_remove (monitor, contact);
-}
-
-static void
-cl_members_changed_cb (EmpathyContactList    *cl,
-                       EmpathyContact        *contact,
-                       EmpathyContact        *actor,
-                       guint                  reason,
-                       gchar                 *message,
-                       gboolean               is_member,
-                       EmpathyContactMonitor *monitor)
-{
-  if (is_member)
-    contact_add (monitor, contact);
-  else
-    contact_remove (monitor, contact);
-}
-
 /* public methods */
 
 void
@@ -398,14 +391,13 @@ empathy_contact_monitor_set_iface (EmpathyContactMonitor *self,
 
   if (priv->contacts != NULL)
     {
-      g_ptr_array_foreach (priv->contacts,
-                           (GFunc) contact_remove_foreach, self);
-      g_ptr_array_free (priv->contacts, TRUE);
+      g_list_foreach (priv->contacts,
+                      (GFunc) contact_remove_foreach, self);
+      g_list_free (priv->contacts);
       priv->contacts = NULL;
     }
 
   priv->iface = iface;
-  priv->contacts = g_ptr_array_new ();
 
   g_signal_connect (iface, "members-changed",
                     G_CALLBACK (cl_members_changed_cb), self);
