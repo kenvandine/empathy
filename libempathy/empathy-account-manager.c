@@ -36,6 +36,7 @@ typedef struct {
   GHashTable       *accounts;
   int               connected;
   int               connecting;
+  gboolean          dispose_run;
 } EmpathyAccountManagerPriv;
 
 typedef struct {
@@ -260,6 +261,7 @@ account_status_changed_cb (MissionControl *mc,
   AccountData *data;
   McPresence old_p;
   TpConnectionStatus old_c;
+  gboolean emit_presence = FALSE, emit_connection = FALSE;
 
   account = mc_account_lookup (unique_name);
 
@@ -272,16 +274,12 @@ account_status_changed_cb (MissionControl *mc,
 
     if (old_p != presence) {
       data->presence = presence;
-      g_signal_emit (manager, signals[ACCOUNT_PRESENCE_CHANGED], 0,
-                     account, presence, old_p);
+      emit_presence = TRUE;
     }
 
     if (old_c != connection) {
       data->connection = connection;
       update_connection_numbers (manager, connection, old_c);
-
-      g_signal_emit (manager, signals[ACCOUNT_CONNECTION_CHANGED], 0,
-                     account, reason, connection, old_c);
 
       if (old_c == TP_CONNECTION_STATUS_CONNECTING &&
           connection == TP_CONNECTION_STATUS_CONNECTED) {
@@ -293,7 +291,19 @@ account_status_changed_cb (MissionControl *mc,
             data->source_id = g_timeout_add_seconds (10,
                                                      remove_data_timeout,
                                                      data);
-          }
+      }
+      emit_connection = TRUE;
+    }
+
+    if (emit_presence) {
+      g_signal_emit (manager, signals[ACCOUNT_PRESENCE_CHANGED], 0,
+                     account, presence, old_p);
+    }
+
+    if (emit_connection) {
+      g_signal_emit (manager, signals[ACCOUNT_CONNECTION_CHANGED], 0,
+                     account, reason, connection, old_c);
+
     }
 
     g_object_unref (account);
@@ -313,6 +323,7 @@ empathy_account_manager_init (EmpathyAccountManager *manager)
   priv->monitor = mc_account_monitor_new ();
   priv->mc = empathy_mission_control_new ();
   priv->connected = priv->connecting = 0;
+  priv->dispose_run = FALSE;
 
   priv->accounts = g_hash_table_new_full (empathy_account_hash,
                                           empathy_account_equal,
@@ -366,6 +377,21 @@ do_finalize (GObject *obj)
   EmpathyAccountManager *manager = EMPATHY_ACCOUNT_MANAGER (obj);
   EmpathyAccountManagerPriv *priv = GET_PRIV (manager);
 
+  g_hash_table_unref (priv->accounts);
+
+  G_OBJECT_CLASS (empathy_account_manager_parent_class)->finalize (obj);
+}
+
+static void
+do_dispose (GObject *obj)
+{
+  EmpathyAccountManager *manager = EMPATHY_ACCOUNT_MANAGER (obj);
+  EmpathyAccountManagerPriv *priv = GET_PRIV (manager);
+
+  if (priv->dispose_run) {
+    return;
+  }
+
   dbus_g_proxy_disconnect_signal (DBUS_G_PROXY (priv->mc),
                                   "AccountStatusChanged",
                                   G_CALLBACK (account_status_changed_cb),
@@ -373,12 +399,18 @@ do_finalize (GObject *obj)
 
   disconnect_monitor_signals (priv->monitor, obj);
 
-  g_object_unref (priv->monitor);
-  g_object_unref (priv->mc);
+  if (priv->monitor) {
+    g_object_unref (priv->monitor);
+    priv->monitor = NULL;
+  }
 
-  g_hash_table_destroy (priv->accounts);
+  if (priv->mc) {
+    g_object_unref (priv->mc);
+  }
 
-  G_OBJECT_CLASS (empathy_account_manager_parent_class)->finalize (obj);
+  g_hash_table_remove_all (priv->accounts);
+
+  G_OBJECT_CLASS (empathy_account_manager_parent_class)->dispose (obj);
 }
 
 static void
@@ -387,6 +419,7 @@ empathy_account_manager_class_init (EmpathyAccountManagerClass *klass)
   GObjectClass *oclass = G_OBJECT_CLASS (klass);
 
   oclass->finalize = do_finalize;
+  oclass->dispose = do_dispose;
 
   signals[ACCOUNT_CREATED] =
     g_signal_new ("account-created",
