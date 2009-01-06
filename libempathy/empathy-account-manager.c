@@ -367,12 +367,12 @@ account_status_changed_cb (MissionControl *mc,
 static void
 empathy_account_manager_init (EmpathyAccountManager *manager)
 {
-  EmpathyAccountManagerPriv *priv =
-      G_TYPE_INSTANCE_GET_PRIVATE (manager,
-                                   EMPATHY_TYPE_ACCOUNT_MANAGER, EmpathyAccountManagerPriv);
+  EmpathyAccountManagerPriv *priv;
   GList *mc_accounts, *l;
   AccountData *data;
 
+  priv = G_TYPE_INSTANCE_GET_PRIVATE (manager,
+				      EMPATHY_TYPE_ACCOUNT_MANAGER, EmpathyAccountManagerPriv);
   manager->priv = priv;
   priv->monitor = mc_account_monitor_new ();
   priv->mc = empathy_mission_control_new ();
