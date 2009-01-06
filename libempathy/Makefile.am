@@ -25,6 +25,7 @@ libempathy_la_SOURCES =					\
 	empathy-contact-groups.c			\
 	empathy-contact-list.c				\
 	empathy-contact-manager.c			\
+	empathy-contact-monitor.c			\
 	empathy-debug.c					\
 	empathy-dispatcher.c				\
 	empathy-idle.c					\
@@ -67,6 +68,7 @@ libempathy_headers =				\
 	empathy-contact-groups.h		\
 	empathy-contact-list.h			\
 	empathy-contact-manager.h		\
+	empathy-contact-monitor.h		\
 	empathy-debug.h				\
 	empathy-dispatcher.h			\
 	empathy-idle.h				\
@@ -86,6 +88,7 @@ libempathy_headers =				\
 	empathy-tp-roomlist.h			\
 	empathy-tp-tube.h			\
 	empathy-tube-handler.h			\
+	empathy-types.h				\
 	empathy-utils.h
 
 libempathy_includedir = $(includedir)/libempathy/

@@ -24,6 +24,7 @@
 
 #include <glib-object.h>
 
+#include "empathy-types.h"
 #include "empathy-contact.h"
 #include "empathy-tp-group.h"
 
@@ -34,7 +35,6 @@ G_BEGIN_DECLS
 #define EMPATHY_IS_CONTACT_LIST(o)        (G_TYPE_CHECK_INSTANCE_TYPE ((o), EMPATHY_TYPE_CONTACT_LIST))
 #define EMPATHY_CONTACT_LIST_GET_IFACE(o) (G_TYPE_INSTANCE_GET_INTERFACE ((o), EMPATHY_TYPE_CONTACT_LIST, EmpathyContactListIface))
 
-typedef struct _EmpathyContactList      EmpathyContactList;
 typedef struct _EmpathyContactListIface EmpathyContactListIface;
 
 struct _EmpathyContactListIface {
@@ -63,6 +63,8 @@ struct _EmpathyContactListIface {
 					       const gchar        *new_group);
 	void		 (*remove_group)      (EmpathyContactList *list,
 					       const gchar	  *group);
+	EmpathyContactMonitor *
+			 (*get_monitor)       (EmpathyContactList *list);
 };
 
 GType    empathy_contact_list_get_type          (void) G_GNUC_CONST;
@@ -88,6 +90,8 @@ void     empathy_contact_list_rename_group      (EmpathyContactList *list,
 						 const gchar        *new_group);
 void	 empathy_contact_list_remove_group	(EmpathyContactList *list,
 						 const gchar	    *group);
+EmpathyContactMonitor *
+         empathy_contact_list_get_monitor       (EmpathyContactList *list);
 
 G_END_DECLS
 
