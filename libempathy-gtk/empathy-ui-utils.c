@@ -1573,6 +1573,10 @@ empathy_sound_play (GtkWidget *widget,
 	}
 
 	if (should_play) {
+		DEBUG ("Play sound \"%s\" (%s)",
+		       entry->event_ca_id,
+		       entry->event_ca_description);
+
 		ca_gtk_play_for_widget (widget, 0,
 					CA_PROP_EVENT_ID, entry->event_ca_id,
 					CA_PROP_EVENT_DESCRIPTION, gettext (entry->event_ca_description),
