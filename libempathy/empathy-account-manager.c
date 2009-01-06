@@ -285,6 +285,11 @@ account_status_changed_cb (MissionControl *mc,
 
 			if (old_c == TP_CONNECTION_STATUS_CONNECTING &&
 			    connection == TP_CONNECTION_STATUS_CONNECTED) {
+				if (data->source_id > 0) {
+					g_source_remove (data->source_id);
+					data->source_id = 0;
+				}
+
 				data->source_id = g_timeout_add_seconds (10,
 									 remove_data_timeout,
 									 data);
