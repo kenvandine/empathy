@@ -38,6 +38,7 @@
 #include <gtk/gtk.h>
 #include <gio/gio.h>
 #include <glade/glade.h>
+#include <canberra-gtk.h>
 
 #include <libmissioncontrol/mc-profile.h>
 
@@ -1492,7 +1493,7 @@ empathy_send_file_with_file_chooser (EmpathyContact *contact)
 	gtk_widget_show (widget);
 }
 
-gboolean
+static gboolean
 empathy_sound_pref_is_enabled (const char *key)
 {
 	EmpathyConf *conf;
@@ -1525,4 +1526,18 @@ empathy_sound_pref_is_enabled (const char *key)
 	empathy_conf_get_bool (conf, key, &res);
 
 	return res;
+}
+
+void
+empathy_sound_play (GtkWidget *widget,
+		    const char *key,
+		    const char *event_id,
+		    const char *description)
+{
+	if (empathy_sound_pref_is_enabled (key)) {
+		ca_gtk_play_for_widget (widget, 0,
+					CA_PROP_EVENT_ID, event_id,
+					CA_PROP_EVENT_DESCRIPTION, description,
+					NULL);
+	}
 }

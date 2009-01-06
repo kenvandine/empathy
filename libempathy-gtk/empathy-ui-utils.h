@@ -114,7 +114,11 @@ GtkWidget * empathy_link_button_new                     (const gchar      *url,
 
 void        empathy_send_file_with_file_chooser         (EmpathyContact   *contact);
 
-gboolean    empathy_sound_pref_is_enabled               (const char       *key);     
+/* Sounds */
+void        empathy_sound_play                          (GtkWidget        *widget,
+							 const char       *key,
+							 const char       *event_id,
+							 const char       *description);
 
 G_END_DECLS
 

@@ -33,7 +33,6 @@
 #include <gdk/gdkkeysyms.h>
 #include <glade/glade.h>
 #include <glib/gi18n.h>
-#include <canberra-gtk.h>
 
 #include <telepathy-glib/util.h>
 #include <libmissioncontrol/mission-control.h>
@@ -858,19 +857,14 @@ chat_window_new_message_cb (EmpathyChat       *chat,
 	sender = empathy_message_get_sender (message);
 
 	if (empathy_contact_is_user (sender) != FALSE) {
-		if (empathy_sound_pref_is_enabled (EMPATHY_PREFS_SOUNDS_OUTGOING_MESSAGE)) {
-			ca_gtk_play_for_widget (GTK_WIDGET (priv->dialog), 0,
-						CA_PROP_EVENT_ID, "message-sent-instant",
-			                        CA_PROP_EVENT_DESCRIPTION, _("Sent an instant message"),
-			                        NULL);
-		}
+		empathy_sound_play (GTK_WIDGET (priv->dialog),
+				    EMPATHY_PREFS_SOUNDS_OUTGOING_MESSAGE,
+				    "message-sent-instant", _("Sent an instant message"));
 	} else {
-		if ((!has_focus || priv->current_chat != chat) &&
-		    empathy_sound_pref_is_enabled (EMPATHY_PREFS_SOUNDS_INCOMING_MESSAGE)) {
-			ca_gtk_play_for_widget (GTK_WIDGET (priv->dialog), 0,
-			                        CA_PROP_EVENT_ID, "message-new-instant",
-			                        CA_PROP_EVENT_DESCRIPTION, _("Received an instant message"),
-			                        NULL);
+		if ((!has_focus || priv->current_chat != chat)) {
+			empathy_sound_play (GTK_WIDGET (priv->dialog),
+					    EMPATHY_PREFS_SOUNDS_INCOMING_MESSAGE,
+					    "message-new-instant", _("Received an instant message"));
 		}
 	}
 

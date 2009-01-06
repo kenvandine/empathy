@@ -27,7 +27,6 @@
 #include <gtk/gtk.h>
 #include <glade/glade.h>
 #include <glib/gi18n.h>
-#include <canberra-gtk.h>
 
 #include <libempathy/empathy-contact.h>
 #include <libempathy/empathy-utils.h>
@@ -284,12 +283,9 @@ main_window_flash_cb (EmpathyMainWindow *window)
 static void
 main_window_flash_start (EmpathyMainWindow *window)
 {
-	if (empathy_sound_pref_is_enabled (EMPATHY_PREFS_SOUNDS_NEW_CONVERSATION)) {
-		ca_gtk_play_for_widget (GTK_WIDGET (window->window), 0,
-					CA_PROP_EVENT_ID, "message-new-instant",
-					CA_PROP_EVENT_DESCRIPTION, _("Incoming chat request"),
-					NULL);
-	}
+	empathy_sound_play (GTK_WIDGET (window->window),
+			    EMPATHY_PREFS_SOUNDS_NEW_CONVERSATION,
+			    "message-new-instant", _("Incoming chat request"));
 
 	if (window->flash_timeout_id != 0) {
 		return;
@@ -433,23 +429,18 @@ main_window_connection_changed_cb (EmpathyAccountManager *manager,
 		main_window_error_display (window, account, message);
 	}
 
-	if (current == TP_CONNECTION_STATUS_DISCONNECTED &&
-	    empathy_sound_pref_is_enabled (EMPATHY_PREFS_SOUNDS_SERVICE_LOGOUT)) {
-		ca_gtk_play_for_widget (GTK_WIDGET (window->window), 0,
-		                        CA_PROP_EVENT_ID, "service-logout",
-		                        CA_PROP_EVENT_DESCRIPTION, _("Disconnected from server"),
-		                        NULL);
+	if (current == TP_CONNECTION_STATUS_DISCONNECTED) {
+		empathy_sound_play (GTK_WIDGET (window->window),
+				    EMPATHY_PREFS_SOUNDS_SERVICE_LOGOUT,
+				    "service-logout", _("Disconnected from server"));
 	}
 
 	if (current == TP_CONNECTION_STATUS_CONNECTED) {
 		GtkWidget *error_widget;
 
-		if (empathy_sound_pref_is_enabled (EMPATHY_PREFS_SOUNDS_SERVICE_LOGIN)) {
-			ca_gtk_play_for_widget (GTK_WIDGET (window->window), 0,
-						CA_PROP_EVENT_ID, "service-login",
-						CA_PROP_EVENT_DESCRIPTION, _("Connected to server"),
-						NULL);
-		}
+		empathy_sound_play (GTK_WIDGET (window->window),
+				    EMPATHY_PREFS_SOUNDS_SERVICE_LOGIN,
+				    "service-login", _("Connected to server"));
 
 		/* Account connected without error, remove error message if any */
 		error_widget = g_hash_table_lookup (window->errors, account);
@@ -479,23 +470,17 @@ main_window_contact_presence_changed_cb (EmpathyContactMonitor *monitor,
 
 	if (previous < MC_PRESENCE_AVAILABLE && current > MC_PRESENCE_OFFLINE) {
 		/* someone is logging in */
-		if (empathy_sound_pref_is_enabled (EMPATHY_PREFS_SOUNDS_CONTACT_LOGIN)) {
-			ca_gtk_play_for_widget (GTK_WIDGET (window->window), 0,
-						CA_PROP_EVENT_ID, "service-login",
-						CA_PROP_EVENT_DESCRIPTION, _("Contact logged in"),
-						NULL);
-		}
+		empathy_sound_play (GTK_WIDGET (window->window),
+				    EMPATHY_PREFS_SOUNDS_CONTACT_LOGIN,
+				    "service-login", _("Contact logged in"));
 		return;
 	}
 
 	if (previous > MC_PRESENCE_OFFLINE && current < MC_PRESENCE_AVAILABLE) {
 		/* someone is logging off */
-		if (empathy_sound_pref_is_enabled (EMPATHY_PREFS_SOUNDS_CONTACT_LOGOUT)) {
-			ca_gtk_play_for_widget (GTK_WIDGET (window->window), 0,
-						CA_PROP_EVENT_ID, "service-logout",
-						CA_PROP_EVENT_DESCRIPTION, _("Contact logged out"),
-						NULL);
-		}
+		empathy_sound_play (GTK_WIDGET (window->window),
+				    EMPATHY_PREFS_SOUNDS_CONTACT_LOGOUT,
+				    "service-logout", _("Contact logged out"));
 	}
 }
 

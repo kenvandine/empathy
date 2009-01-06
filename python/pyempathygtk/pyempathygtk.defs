@@ -1732,11 +1732,14 @@
   )
 )
 
-(define-function sound_pref_is_enabled
-  (c-name "empathy_sound_pref_is_enabled")
-  (return-type "gboolean")
+(define-function sound_play
+  (c-name "empathy_sound_play")
+  (return-type "none")
   (parameters
+    '("GtkWidget*" "widget")
     '("const-char*" "key")
+    '("const-char*" "event_id")
+    '("const-char*" "description")
   )
 )
 
