@@ -185,7 +185,12 @@ contact_manager_finalize (GObject *object)
 			      contact_manager_disconnect_foreach,
 			      object);
 	g_hash_table_destroy (priv->lists);
+
+	g_signal_handlers_disconnect_by_func (priv->account_manager,
+					      contact_manager_connection_changed_cb,
+					      object);
 	g_object_unref (priv->account_manager);
+
 	g_object_unref (priv->contact_monitor);
 }
 

@@ -1392,6 +1392,9 @@ chat_finalize (GObject *object)
 
 	chat_composing_remove_timeout (chat);
 
+	g_signal_handlers_disconnect_by_func (priv->account_manager,
+					      chat_connection_changed_cb, object);
+
 	g_object_unref (priv->account_manager);
 	g_object_unref (priv->log_manager);
 

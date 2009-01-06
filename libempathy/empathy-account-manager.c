@@ -341,8 +341,23 @@ empathy_account_manager_init (EmpathyAccountManager *manager)
 
 	dbus_g_proxy_connect_signal (DBUS_G_PROXY (priv->mc), "AccountStatusChanged",
 				     G_CALLBACK (account_status_changed_cb),
-				     g_object_ref (manager),
-				     (GClosureNotify) g_object_unref);
+				     manager, NULL);
+}
+
+static void
+disconnect_monitor_signals (McAccountMonitor *monitor,
+			    GObject *obj)
+{
+	g_signal_handlers_disconnect_by_func (monitor,
+					      account_created_cb, obj);
+	g_signal_handlers_disconnect_by_func (monitor,
+					      account_deleted_cb, obj);
+	g_signal_handlers_disconnect_by_func (monitor,
+					      account_disabled_cb, obj);
+	g_signal_handlers_disconnect_by_func (monitor,
+					      account_enabled_cb, obj);
+	g_signal_handlers_disconnect_by_func (monitor,
+					      account_changed_cb, obj);
 }
 					   
 static void
@@ -355,6 +370,8 @@ do_finalize (GObject *obj)
 					"AccountStatusChanged",
 					G_CALLBACK (account_status_changed_cb),
 					obj);
+
+	disconnect_monitor_signals (priv->monitor, obj);
 
 	g_object_unref (priv->monitor);
 	g_object_unref (priv->mc);

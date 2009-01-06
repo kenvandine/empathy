@@ -143,6 +143,8 @@ static gboolean         contact_list_store_update_list_mode_foreach  (GtkTreeMod
 								      GtkTreeIter                   *iter,
 								      EmpathyContactListStore       *store);
 static gboolean         contact_list_store_iface_setup               (gpointer                       user_data);
+static void             disconnect_monitor_signals                   (EmpathyContactMonitor         *monitor,
+								      GObject                       *obj);
 
 enum {
 	PROP_0,
@@ -249,6 +251,10 @@ static void
 contact_list_store_finalize (GObject *object)
 {
 	EmpathyContactListStorePriv *priv = GET_PRIV (object);
+	EmpathyContactMonitor *monitor;
+
+	monitor = empathy_contact_list_get_monitor (priv->list);
+	disconnect_monitor_signals (monitor, object);
 
 	g_signal_handlers_disconnect_by_func (priv->list,
 					      G_CALLBACK (contact_list_store_groups_changed_cb),
@@ -1065,6 +1071,27 @@ contact_monitor_contact_removed_cb (EmpathyContactMonitor *monitor,
 				    EmpathyContactListStore *store)
 {
 	contact_list_store_remove_contact (store, contact);
+}
+
+
+static void
+disconnect_monitor_signals (EmpathyContactMonitor *monitor,
+			    GObject *obj)
+{
+	g_signal_handlers_disconnect_by_func (monitor,
+					      contact_monitor_avatar_changed_cb, obj);
+	g_signal_handlers_disconnect_by_func (monitor,
+					      contact_monitor_capabilities_changed_cb, obj);
+	g_signal_handlers_disconnect_by_func (monitor,
+					      contact_monitor_contact_added_cb, obj);
+	g_signal_handlers_disconnect_by_func (monitor,
+					      contact_monitor_contact_removed_cb, obj);
+	g_signal_handlers_disconnect_by_func (monitor,
+					      contact_monitor_name_changed_cb, obj);
+	g_signal_handlers_disconnect_by_func (monitor,
+					      contact_monitor_presence_changed_cb, obj);
+	g_signal_handlers_disconnect_by_func (monitor,
+					      contact_monitor_presence_message_changed_cb, obj);
 }
 
 static gboolean
