@@ -84,11 +84,6 @@ void          empathy_run_until_ready_full          (gpointer         object,
 						     gpointer         user_data,
 						     GMainLoop      **loop);
 McAccount *  empathy_channel_get_account            (TpChannel       *channel);
-gpointer     empathy_connect_to_account_status_changed (MissionControl *mc,
-							 GCallback       handler,
-							 gpointer        user_data,
-							 GClosureNotify  free_func);
-void         empathy_disconnect_account_status_changed (gpointer      token);
 gboolean     empathy_proxy_equal                    (gconstpointer    a,
 						     gconstpointer    b);
 guint        empathy_proxy_hash                     (gconstpointer    key);
