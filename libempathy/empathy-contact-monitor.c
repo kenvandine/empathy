@@ -391,8 +391,8 @@ empathy_contact_monitor_set_proxy (EmpathyContactMonitor *self,
 {
   EmpathyContactMonitorPriv *priv;
 
-  g_assert (EMPATHY_IS_CONTACT_MONITOR (self));
-  g_assert (EMPATHY_IS_CONTACT_LIST (proxy));
+  g_return_if_fail (EMPATHY_IS_CONTACT_MONITOR (self));
+  g_return_if_fail (EMPATHY_IS_CONTACT_LIST (proxy));
 
   priv = GET_PRIV (self);
 
@@ -416,7 +416,7 @@ empathy_contact_monitor_new_for_proxy (EmpathyContactList *proxy)
 {
   EmpathyContactMonitor *retval;
 
-  g_assert (EMPATHY_IS_CONTACT_LIST (proxy));
+  g_return_val_if_fail (EMPATHY_IS_CONTACT_LIST (proxy), NULL);
 
   retval = g_object_new (EMPATHY_TYPE_CONTACT_MONITOR,
                          "proxy", proxy, NULL);

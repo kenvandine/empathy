@@ -585,7 +585,7 @@ empathy_account_manager_get_connected_accounts (EmpathyAccountManager *manager)
 {
   EmpathyAccountManagerPriv *priv;
 
-  g_assert (EMPATHY_IS_ACCOUNT_MANAGER (manager));
+  g_return_val_if_fail (EMPATHY_IS_ACCOUNT_MANAGER (manager), 0);
 
   priv = GET_PRIV (manager);
 
@@ -597,7 +597,7 @@ empathy_account_manager_get_connecting_accounts (EmpathyAccountManager *manager)
 {
   EmpathyAccountManagerPriv *priv;
 
-  g_assert (EMPATHY_IS_ACCOUNT_MANAGER (manager));
+  g_return_val_if_fail (EMPATHY_IS_ACCOUNT_MANAGER (manager), 0);
 
   priv = GET_PRIV (manager);
 
@@ -611,7 +611,7 @@ empathy_account_manager_is_account_just_connected (EmpathyAccountManager *manage
   EmpathyAccountManagerPriv *priv;
   AccountData *data;
 
-  g_assert (EMPATHY_IS_ACCOUNT_MANAGER (manager));
+  g_return_val_if_fail (EMPATHY_IS_ACCOUNT_MANAGER (manager), FALSE);
 
   priv = GET_PRIV (manager);
   data = g_hash_table_lookup (priv->accounts, account);
