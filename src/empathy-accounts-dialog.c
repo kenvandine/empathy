@@ -34,11 +34,10 @@
 
 #include <libmissioncontrol/mc-account.h>
 #include <libmissioncontrol/mc-profile.h>
-#include <libmissioncontrol/mission-control.h>
-#include <libmissioncontrol/mc-account-monitor.h>
 #include <telepathy-glib/util.h>
 
 #include <libempathy/empathy-utils.h>
+#include <libempathy/empathy-account-manager.h>
 #include <libempathy-gtk/empathy-ui-utils.h>
 #include <libempathy-gtk/empathy-profile-chooser.h>
 #include <libempathy-gtk/empathy-account-widget.h>
@@ -84,9 +83,8 @@ typedef struct {
 	gboolean          connecting_show;
 	guint             connecting_id;
 
-	MissionControl   *mc;
-	McAccountMonitor *monitor;
-	gpointer          token;
+	EmpathyAccountManager *account_manager;
+	MissionControl    *mc;
 } EmpathyAccountsDialog;
 
 enum {
@@ -119,11 +117,11 @@ static void       accounts_dialog_model_selection_changed   (GtkTreeSelection   
 							     EmpathyAccountsDialog    *dialog);
 static void       accounts_dialog_add_or_update_account     (EmpathyAccountsDialog    *dialog,
 							     McAccount                *account);
-static void       accounts_dialog_account_added_cb          (McAccountMonitor         *monitor,
-							     gchar                    *unique_name,
+static void       accounts_dialog_account_added_cb          (EmpathyAccountManager    *manager,
+							     McAccount                *account,
 							     EmpathyAccountsDialog    *dialog);
-static void       accounts_dialog_account_removed_cb        (McAccountMonitor         *monitor,
-							     gchar                    *unique_name,
+static void       accounts_dialog_account_removed_cb        (EmpathyAccountManager    *manager,
+							     McAccount                *account,
 							     EmpathyAccountsDialog    *dialog);
 static gboolean   accounts_dialog_row_changed_foreach       (GtkTreeModel             *model,
 							     GtkTreePath              *path,
@@ -131,11 +129,11 @@ static gboolean   accounts_dialog_row_changed_foreach       (GtkTreeModel       
 							     gpointer                  user_data);
 static gboolean   accounts_dialog_flash_connecting_cb       (EmpathyAccountsDialog    *dialog);
 static gboolean   accounts_dialog_are_accounts_connecting   (MissionControl           *mc);
-static void       accounts_dialog_status_changed_cb         (MissionControl           *mc,
-							     TpConnectionStatus        status,
-							     McPresence                presence,
+static void       accounts_dialog_connection_changed_cb     (EmpathyAccountManager    *manager,
+							     McAccount                *account,
 							     TpConnectionStatusReason  reason,
-							     const gchar              *unique_name,
+							     TpConnectionStatus        current,
+							     TpConnectionStatus        previous,
 							     EmpathyAccountsDialog    *dialog);
 static void       accounts_dialog_button_create_clicked_cb  (GtkWidget                *button,
 							     EmpathyAccountsDialog    *dialog);
@@ -636,24 +634,22 @@ accounts_dialog_add_or_update_account (EmpathyAccountsDialog *dialog,
 			    COL_ACCOUNT_POINTER, account,
 			    -1);
 
-	accounts_dialog_status_changed_cb (dialog->mc,
-					   status,
-					   MC_PRESENCE_UNSET,
-					   TP_CONNECTION_STATUS_REASON_NONE_SPECIFIED,
-					   mc_account_get_unique_name (account),
-					   dialog);
+	accounts_dialog_connection_changed_cb (dialog->account_manager,
+					       account,
+					       TP_CONNECTION_STATUS_REASON_NONE_SPECIFIED,
+					       status,
+					       TP_CONNECTION_STATUS_DISCONNECTED,
+					       dialog);
 }
 
 static void
-accounts_dialog_account_added_cb (McAccountMonitor     *monitor,
-				  gchar                *unique_name,
+accounts_dialog_account_added_cb (EmpathyAccountManager *manager,
+				  McAccount *account,
 				  EmpathyAccountsDialog *dialog)
 {
-	McAccount   *account;
 	const gchar *current_name;
 	gchar       *account_param = NULL;
 
-	account = mc_account_lookup (unique_name);
 	accounts_dialog_add_or_update_account (dialog, account);
 
 	/* Change the display name to "%s (%s)" % (protocol, account).
@@ -674,7 +670,7 @@ accounts_dialog_account_added_cb (McAccountMonitor     *monitor,
 					    account_param);
 
 		DEBUG ("Setting new display name for account %s: '%s'",
-		       unique_name, new_name);
+		       mc_account_get_unique_name (account), new_name);
 
 		mc_account_set_display_name (account, new_name);
 		g_free (new_name);
@@ -683,22 +679,16 @@ accounts_dialog_account_added_cb (McAccountMonitor     *monitor,
 		/* FIXME: This CM has no account parameter, what can be done? */
 	}
 	g_free (account_param);
-  	g_object_unref (account);
 }
 
 static void
-accounts_dialog_account_removed_cb (McAccountMonitor     *monitor,
-				    gchar                *unique_name,
+accounts_dialog_account_removed_cb (EmpathyAccountManager *manager,
+				    McAccount            *account,
 				    EmpathyAccountsDialog *dialog)
 {
-	McAccount *account;
-
-	account = mc_account_lookup (unique_name);
 
 	accounts_dialog_model_set_selected (dialog, account);
 	accounts_dialog_model_remove_selected (dialog);
-
-	g_object_unref (account);
 }
 
 static gboolean
@@ -753,42 +743,33 @@ accounts_dialog_are_accounts_connecting (MissionControl *mc)
 }
 
 static void
-accounts_dialog_status_changed_cb (MissionControl           *mc,
-				   TpConnectionStatus        status,
-				   McPresence                presence,
-				   TpConnectionStatusReason  reason,
-				   const gchar              *unique_name,
-				   EmpathyAccountsDialog    *dialog)
+accounts_dialog_connection_changed_cb     (EmpathyAccountManager    *manager,
+					   McAccount                *account,
+					   TpConnectionStatusReason  reason,
+					   TpConnectionStatus        current,
+					   TpConnectionStatus        previous,
+					   EmpathyAccountsDialog    *dialog)
 {
 	GtkTreeModel *model;
 	GtkTreeIter   iter;
-	McAccount    *account;
-	gboolean      found = FALSE;
+	gboolean      found;
 	
 	/* Update the status in the model */
 	model = gtk_tree_view_get_model (GTK_TREE_VIEW (dialog->treeview));
-	account = mc_account_lookup (unique_name);
-	if (!account) {
-		return;
-	}
-
-	DEBUG ("Status changed for account %s: status=%d presence=%d",
-		unique_name, status, presence);
 
 	if (accounts_dialog_get_account_iter (dialog, account, &iter)) {
 		GtkTreePath *path;
 
 		gtk_list_store_set (GTK_LIST_STORE (model), &iter,
-				    COL_STATUS, status,
+				    COL_STATUS, current,
 				    -1);
 
 		path = gtk_tree_model_get_path (model, &iter);
 		gtk_tree_model_row_changed (model, path, &iter);
 		gtk_tree_path_free (path);
 	}
-	g_object_unref (account);
 
-	found = accounts_dialog_are_accounts_connecting (mc);
+	found = accounts_dialog_are_accounts_connecting (dialog->mc);		
 
 	if (!found && dialog->connecting_id) {
 		g_source_remove (dialog->connecting_id);
@@ -802,19 +783,15 @@ accounts_dialog_status_changed_cb (MissionControl           *mc,
 }
 
 static void
-accounts_dialog_account_enabled_cb (McAccountMonitor      *monitor,
-				    gchar                 *unique_name,
-				    EmpathyAccountsDialog *dialog)
+enable_or_disable_account (EmpathyAccountsDialog *dialog,
+			   McAccount *account,
+			   gboolean enabled)
 {
 	GtkTreeModel *model;
 	GtkTreeIter   iter;
-	McAccount    *account;
-	gboolean      enabled;
 
 	/* Update the status in the model */
 	model = gtk_tree_view_get_model (GTK_TREE_VIEW (dialog->treeview));
-	account = mc_account_lookup (unique_name);
-	enabled = mc_account_is_enabled (account);
 
 	DEBUG ("Account %s is now %s",
 		mc_account_get_display_name (account),
@@ -825,23 +802,30 @@ accounts_dialog_account_enabled_cb (McAccountMonitor      *monitor,
 				    COL_ENABLED, enabled,
 				    -1);
 	}
-
-	g_object_unref (account);
 }
 
 static void
-accounts_dialog_account_changed_cb (McAccountMonitor       *monitor,
-				    gchar                  *unique_name,
+accounts_dialog_account_disabled_cb (EmpathyAccountManager *manager,
+				     McAccount             *account,
+				     EmpathyAccountsDialog *dialog)
+{
+	enable_or_disable_account (dialog, account, FALSE);
+}
+
+static void
+accounts_dialog_account_enabled_cb (EmpathyAccountManager *manager,
+				    McAccount             *account,
+				    EmpathyAccountsDialog *dialog)
+{
+	enable_or_disable_account (dialog, account, TRUE);
+}
+
+static void
+accounts_dialog_account_changed_cb (EmpathyAccountManager *manager,
+				    McAccount             *account,
 				    EmpathyAccountsDialog  *dialog)
 {
-
-	McAccount *account;
 	McAccount *selected_account;
-
-	account = mc_account_lookup (unique_name);
-	if (!account) {
-		return;
-	}
 
 	accounts_dialog_add_or_update_account (dialog, account);
 	selected_account = accounts_dialog_model_get_selected (dialog);
@@ -1027,19 +1011,24 @@ accounts_dialog_destroy_cb (GtkWidget            *widget,
 	GList *accounts, *l;
 
 	/* Disconnect signals */
-	g_signal_handlers_disconnect_by_func (dialog->monitor,
+	g_signal_handlers_disconnect_by_func (dialog->account_manager,
 					      accounts_dialog_account_added_cb,
 					      dialog);
-	g_signal_handlers_disconnect_by_func (dialog->monitor,
+	g_signal_handlers_disconnect_by_func (dialog->account_manager,
 					      accounts_dialog_account_removed_cb,
 					      dialog);
-	g_signal_handlers_disconnect_by_func (dialog->monitor,
+	g_signal_handlers_disconnect_by_func (dialog->account_manager,
 					      accounts_dialog_account_enabled_cb,
 					      dialog);
-	g_signal_handlers_disconnect_by_func (dialog->monitor,
+	g_signal_handlers_disconnect_by_func (dialog->account_manager,
+					      accounts_dialog_account_disabled_cb,
+					      dialog);
+	g_signal_handlers_disconnect_by_func (dialog->account_manager,
 					      accounts_dialog_account_changed_cb,
 					      dialog);
-	empathy_disconnect_account_status_changed (dialog->token);
+	g_signal_handlers_disconnect_by_func (dialog->account_manager,
+					      accounts_dialog_connection_changed_cb,
+					      dialog);
 
 	/* Delete incomplete accounts */
 	accounts = mc_accounts_list ();
@@ -1061,8 +1050,8 @@ accounts_dialog_destroy_cb (GtkWidget            *widget,
 		g_source_remove (dialog->connecting_id);
 	}
 
+	g_object_unref (dialog->account_manager);
 	g_object_unref (dialog->mc);
-	g_object_unref (dialog->monitor);
 	
 	g_free (dialog);
 }
@@ -1134,27 +1123,27 @@ empathy_accounts_dialog_show (GtkWindow *parent,
 			  dialog);
 
 	/* Set up signalling */
+	dialog->account_manager = empathy_account_manager_new ();
 	dialog->mc = empathy_mission_control_new ();
-	dialog->monitor = mc_account_monitor_new ();
 
-	g_signal_connect (dialog->monitor, "account-created",
+	g_signal_connect (dialog->account_manager, "account-created",
 			  G_CALLBACK (accounts_dialog_account_added_cb),
 			  dialog);
-	g_signal_connect (dialog->monitor, "account-deleted",
+	g_signal_connect (dialog->account_manager, "account-deleted",
 			  G_CALLBACK (accounts_dialog_account_removed_cb),
 			  dialog);
-	g_signal_connect (dialog->monitor, "account-enabled",
+	g_signal_connect (dialog->account_manager, "account-enabled",
 			  G_CALLBACK (accounts_dialog_account_enabled_cb),
 			  dialog);
-	g_signal_connect (dialog->monitor, "account-disabled",
-			  G_CALLBACK (accounts_dialog_account_enabled_cb),
+	g_signal_connect (dialog->account_manager, "account-disabled",
+			  G_CALLBACK (accounts_dialog_account_disabled_cb),
 			  dialog);
-	g_signal_connect (dialog->monitor, "account-changed",
+	g_signal_connect (dialog->account_manager, "account-changed",
 			  G_CALLBACK (accounts_dialog_account_changed_cb),
 			  dialog);
-	dialog->token = empathy_connect_to_account_status_changed (dialog->mc,
-						   G_CALLBACK (accounts_dialog_status_changed_cb),
-						   dialog, NULL);
+	g_signal_connect (dialog->account_manager, "account-connection-changed",
+			  G_CALLBACK (accounts_dialog_connection_changed_cb),
+			  dialog);
 
 	accounts_dialog_model_setup (dialog);
 
