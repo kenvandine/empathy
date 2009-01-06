@@ -1509,11 +1509,13 @@ empathy_sound_pref_is_enabled (const char *key)
 		return FALSE;
 	}
 
-	idle = empathy_idle_new ();	
+	idle = empathy_idle_new ();
 	presence = empathy_idle_get_state (idle);
 	g_object_unref (idle);
 
-	if (presence > MC_PRESENCE_AVAILABLE) {
+
+	if (presence != MC_PRESENCE_AVAILABLE &&
+	    presence != MC_PRESENCE_UNSET) {
 		empathy_conf_get_bool (conf, EMPATHY_PREFS_SOUNDS_DISABLED_AWAY,
 				       &res);
 		if (res) {

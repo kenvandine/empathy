@@ -36,6 +36,7 @@
 #include <libempathy/empathy-contact-list.h>
 #include <libempathy/empathy-contact-manager.h>
 #include <libempathy/empathy-contact-factory.h>
+#include <libempathy/empathy-idle.h>
 #include <libempathy/empathy-status-presets.h>
 
 #include <libempathy-gtk/empathy-contact-dialogs.h>
@@ -1183,13 +1184,23 @@ main_window_status_changed_cb (MissionControl           *mc,
 
 	if (status == TP_CONNECTION_STATUS_CONNECTED) {
 		GtkWidget *error_widget;
+		EmpathyIdle *idle;
 
-		if (empathy_sound_pref_is_enabled (EMPATHY_PREFS_SOUNDS_SERVICE_LOGIN)) {
+		idle = empathy_idle_new ();
+
+		/* emit the sound only on first connect, i.e. when the saved
+		 * idle state is MC_PRESENCE_UNSET.
+		 */
+
+		if (empathy_idle_get_state (idle) == MC_PRESENCE_UNSET &&
+		    empathy_sound_pref_is_enabled (EMPATHY_PREFS_SOUNDS_SERVICE_LOGIN)) {
 			ca_gtk_play_for_widget (GTK_WIDGET (window->window), 0,
 						CA_PROP_EVENT_ID, "service-login",
 						CA_PROP_EVENT_DESCRIPTION, _("Connected to server"),
 						NULL);
 		}
+
+		g_object_unref (idle);
 
 		/* Account connected without error, remove error message if any */
 		error_widget = g_hash_table_lookup (window->errors, account);
