@@ -1500,6 +1500,7 @@ typedef struct {
 	const char * gconf_key;
 } EmpathySoundEntry;
 
+/* NOTE: these entries MUST be in the same order of the EmpathySound enum */
 static EmpathySoundEntry sound_entries[LAST_EMPATHY_SOUND] = {
 	{ EMPATHY_SOUND_MESSAGE_INCOMING, "message-new-instant",
 	  N_("Received an instant message"), EMPATHY_PREFS_SOUNDS_INCOMING_MESSAGE } ,
@@ -1565,6 +1566,8 @@ empathy_sound_play (GtkWidget *widget,
 	EmpathySoundEntry *entry = &(sound_entries[sound_id]);
 	gboolean should_play = TRUE;
 
+	g_assert (entry->sound_id == sound_id);
+
 	if (entry->gconf_key != NULL) {
 		should_play = empathy_sound_pref_is_enabled (entry->gconf_key);
 	}
@@ -1572,7 +1575,7 @@ empathy_sound_play (GtkWidget *widget,
 	if (should_play) {
 		ca_gtk_play_for_widget (widget, 0,
 					CA_PROP_EVENT_ID, entry->event_ca_id,
-					CA_PROP_EVENT_DESCRIPTION, entry->event_ca_description,
+					CA_PROP_EVENT_DESCRIPTION, gettext (entry->event_ca_description),
 					NULL);
 	}
 }
