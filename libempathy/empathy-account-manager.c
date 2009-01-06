@@ -414,6 +414,8 @@ do_dispose (GObject *obj)
 
   g_hash_table_remove_all (priv->accounts);
 
+  priv->dispose_run = TRUE;
+
   G_OBJECT_CLASS (empathy_account_manager_parent_class)->dispose (obj);
 }
 
