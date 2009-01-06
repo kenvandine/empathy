@@ -41,7 +41,9 @@ typedef struct {
 typedef struct {
 	McPresence presence;
 	TpConnectionStatus connection;
-	gboolean is_enabled;	
+	gboolean is_enabled;
+
+	guint source_id;
 } AccountData;
 
 enum {
@@ -70,6 +72,7 @@ account_data_new (McPresence presence, TpConnectionStatus connection,
 	retval->presence = presence;
 	retval->connection = connection;
 	retval->is_enabled = is_enabled;
+	retval->source_id = 0;
 
 	return retval;
 }
@@ -100,6 +103,11 @@ account_data_new_default (MissionControl *mc,
 static void
 account_data_free (AccountData *data)
 {
+	if (data->source_id > 0) {
+		g_source_remove (data->source_id);
+		data->source_id = 0;
+	}
+
 	g_slice_free (AccountData, data);
 }
 
@@ -229,6 +237,16 @@ update_connection_numbers (EmpathyAccountManager *manager,
 	}
 }
 
+static gboolean
+remove_data_timeout (gpointer _data)
+{
+	AccountData *data = _data;
+
+	data->source_id = 0;
+
+	return FALSE;
+}
+
 static void
 account_status_changed_cb (MissionControl *mc,
 			   TpConnectionStatus connection,
@@ -264,8 +282,15 @@ account_status_changed_cb (MissionControl *mc,
 
 			g_signal_emit (manager, signals[ACCOUNT_CONNECTION_CHANGED], 0,
 				       account, reason, connection, old_c);
+
+			if (old_c == TP_CONNECTION_STATUS_CONNECTING &&
+			    connection == TP_CONNECTION_STATUS_CONNECTED) {
+				data->source_id = g_timeout_add_seconds (10,
+									 remove_data_timeout,
+									 data);
+			}
 		}
-	
+
 		g_object_unref (account);
 	}
 }
@@ -458,3 +483,19 @@ empathy_account_manager_get_connecting_accounts (EmpathyAccountManager *manager)
 	return priv->connecting;
 }
 
+gboolean
+empathy_account_manager_is_account_just_connected (EmpathyAccountManager *manager,
+						   McAccount *account)
+{
+	EmpathyAccountManagerPriv *priv;
+	AccountData *data;
+
+	g_assert (EMPATHY_IS_ACCOUNT_MANAGER (manager));
+
+	priv = GET_PRIV (manager);
+	data = g_hash_table_lookup (priv->accounts, account);
+
+	g_assert (data);
+
+	return (data->source_id > 0);
+}

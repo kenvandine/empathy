@@ -24,6 +24,8 @@
 
 #include <glib-object.h>
 
+#include <libmissioncontrol/mc-account.h>
+
 G_BEGIN_DECLS
 
 #define EMPATHY_TYPE_ACCOUNT_MANAGER         (empathy_account_manager_get_type ())
@@ -54,6 +56,10 @@ int                     empathy_account_manager_get_connected_accounts
 				(EmpathyAccountManager *manager);
 int                     empathy_account_manager_get_connecting_accounts
 				(EmpathyAccountManager *manager);
+gboolean                empathy_account_manager_is_account_just_connected
+				(EmpathyAccountManager *manager,
+				 McAccount             *account);
+
 G_END_DECLS
 
 #endif /* __EMPATHY_ACCOUNT_MANAGER_H__ */
