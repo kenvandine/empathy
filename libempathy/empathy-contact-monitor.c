@@ -35,6 +35,8 @@
 typedef struct {
   EmpathyContactList *proxy;
   GPtrArray *contacts;
+
+  gboolean dispose_run;
 } EmpathyContactMonitorPriv;
 
 enum {
@@ -111,8 +113,6 @@ do_finalize (GObject *obj)
   priv = GET_PRIV (obj);
 
   if (priv->contacts) {
-    g_ptr_array_foreach (priv->contacts,
-                         (GFunc) contact_remove_foreach, obj);
     g_ptr_array_free (priv->contacts, TRUE);
     priv->contacts = NULL;
   }
@@ -126,11 +126,38 @@ do_finalize (GObject *obj)
 }
 
 static void
+do_dispose (GObject *obj)
+{
+  EmpathyContactMonitorPriv *priv;
+
+  priv = GET_PRIV (obj);
+
+  if (priv->dispose_run) {
+    return;
+  }
+
+  if (priv->contacts) {
+    g_ptr_array_foreach (priv->contacts,
+                         (GFunc) contact_remove_foreach, obj);
+  }
+
+  if (priv->proxy) {
+    g_signal_handlers_disconnect_by_func (priv->proxy,
+                                          cl_members_changed_cb, obj);
+  }
+
+  priv->dispose_run = TRUE;
+
+  G_OBJECT_CLASS (empathy_contact_monitor_parent_class)->dispose (obj);
+}
+
+static void
 empathy_contact_monitor_class_init (EmpathyContactMonitorClass *klass)
 {
   GObjectClass *oclass = G_OBJECT_CLASS (klass);
 
   oclass->finalize = do_finalize;
+  oclass->dispose = do_dispose;
   oclass->get_property = do_get_property;
   oclass->set_property = do_set_property;
 
@@ -225,6 +252,7 @@ empathy_contact_monitor_init (EmpathyContactMonitor *self)
   self->priv = priv;
   priv->contacts = NULL;
   priv->proxy = NULL;
+  priv->dispose_run = FALSE;
 }
 
 static void
