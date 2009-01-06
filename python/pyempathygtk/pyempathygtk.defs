@@ -198,6 +198,25 @@
   )
 )
 
+(define-enum Sound
+  (in-module "Empathy")
+  (c-name "EmpathySound")
+  (gtype-id "EMPATHY_TYPE_SOUND")
+  (values
+    '("empathy-sound-message-incoming" "EMPATHY_SOUND_MESSAGE_INCOMING")
+    '("empathy-sound-message-outgoing" "EMPATHY_SOUND_MESSAGE_OUTGOING")
+    '("empathy-sound-conversation-new" "EMPATHY_SOUND_CONVERSATION_NEW")
+    '("empathy-sound-contact-connected" "EMPATHY_SOUND_CONTACT_CONNECTED")
+    '("empathy-sound-contact-disconnected" "EMPATHY_SOUND_CONTACT_DISCONNECTED")
+    '("empathy-sound-account-connected" "EMPATHY_SOUND_ACCOUNT_CONNECTED")
+    '("empathy-sound-account-disconnected" "EMPATHY_SOUND_ACCOUNT_DISCONNECTED")
+    '("empathy-sound-phone-incoming" "EMPATHY_SOUND_PHONE_INCOMING")
+    '("empathy-sound-phone-outgoing" "EMPATHY_SOUND_PHONE_OUTGOING")
+    '("empathy-sound-phone-hangup" "EMPATHY_SOUND_PHONE_HANGUP")
+    '("last-empathy-sound" "LAST_EMPATHY_SOUND")
+  )
+)
+
 
 ;; From empathy-account-chooser.h
 
@@ -1737,9 +1756,7 @@
   (return-type "none")
   (parameters
     '("GtkWidget*" "widget")
-    '("const-char*" "key")
-    '("const-char*" "event_id")
-    '("const-char*" "description")
+    '("EmpathySound" "sound_id")
   )
 )
 

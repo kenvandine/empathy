@@ -284,8 +284,7 @@ static void
 main_window_flash_start (EmpathyMainWindow *window)
 {
 	empathy_sound_play (GTK_WIDGET (window->window),
-			    EMPATHY_PREFS_SOUNDS_NEW_CONVERSATION,
-			    "message-new-instant", _("Incoming chat request"));
+			    EMPATHY_SOUND_CONVERSATION_NEW);
 
 	if (window->flash_timeout_id != 0) {
 		return;
@@ -431,16 +430,14 @@ main_window_connection_changed_cb (EmpathyAccountManager *manager,
 
 	if (current == TP_CONNECTION_STATUS_DISCONNECTED) {
 		empathy_sound_play (GTK_WIDGET (window->window),
-				    EMPATHY_PREFS_SOUNDS_SERVICE_LOGOUT,
-				    "service-logout", _("Disconnected from server"));
+				    EMPATHY_SOUND_ACCOUNT_DISCONNECTED);
 	}
 
 	if (current == TP_CONNECTION_STATUS_CONNECTED) {
 		GtkWidget *error_widget;
 
 		empathy_sound_play (GTK_WIDGET (window->window),
-				    EMPATHY_PREFS_SOUNDS_SERVICE_LOGIN,
-				    "service-login", _("Connected to server"));
+				    EMPATHY_SOUND_ACCOUNT_CONNECTED);
 
 		/* Account connected without error, remove error message if any */
 		error_widget = g_hash_table_lookup (window->errors, account);
@@ -471,16 +468,14 @@ main_window_contact_presence_changed_cb (EmpathyContactMonitor *monitor,
 	if (previous < MC_PRESENCE_AVAILABLE && current > MC_PRESENCE_OFFLINE) {
 		/* someone is logging in */
 		empathy_sound_play (GTK_WIDGET (window->window),
-				    EMPATHY_PREFS_SOUNDS_CONTACT_LOGIN,
-				    "service-login", _("Contact connected"));
+				    EMPATHY_SOUND_CONTACT_CONNECTED);
 		return;
 	}
 
 	if (previous > MC_PRESENCE_OFFLINE && current < MC_PRESENCE_AVAILABLE) {
 		/* someone is logging off */
 		empathy_sound_play (GTK_WIDGET (window->window),
-				    EMPATHY_PREFS_SOUNDS_CONTACT_LOGOUT,
-				    "service-logout", _("Contact disconnected"));
+				    EMPATHY_SOUND_CONTACT_DISCONNECTED);
 	}
 }
 

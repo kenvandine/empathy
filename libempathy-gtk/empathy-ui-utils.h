@@ -44,6 +44,20 @@
 
 G_BEGIN_DECLS
 
+typedef enum {
+	EMPATHY_SOUND_MESSAGE_INCOMING,
+	EMPATHY_SOUND_MESSAGE_OUTGOING,
+	EMPATHY_SOUND_CONVERSATION_NEW,
+	EMPATHY_SOUND_CONTACT_CONNECTED,
+	EMPATHY_SOUND_CONTACT_DISCONNECTED,
+	EMPATHY_SOUND_ACCOUNT_CONNECTED,
+	EMPATHY_SOUND_ACCOUNT_DISCONNECTED,
+	EMPATHY_SOUND_PHONE_INCOMING,
+	EMPATHY_SOUND_PHONE_OUTGOING,
+	EMPATHY_SOUND_PHONE_HANGUP,
+	LAST_EMPATHY_SOUND
+} EmpathySound;
+
 #define G_STR_EMPTY(x) ((x) == NULL || (x)[0] == '\0')
 
 void            empathy_gtk_init                        (void);
@@ -116,9 +130,7 @@ void        empathy_send_file_with_file_chooser         (EmpathyContact   *conta
 
 /* Sounds */
 void        empathy_sound_play                          (GtkWidget        *widget,
-							 const char       *key,
-							 const char       *event_id,
-							 const char       *description);
+							 EmpathySound      sound_id);
 
 G_END_DECLS
 

@@ -858,13 +858,11 @@ chat_window_new_message_cb (EmpathyChat       *chat,
 
 	if (empathy_contact_is_user (sender) != FALSE) {
 		empathy_sound_play (GTK_WIDGET (priv->dialog),
-				    EMPATHY_PREFS_SOUNDS_OUTGOING_MESSAGE,
-				    "message-sent-instant", _("Sent an instant message"));
+				    EMPATHY_SOUND_MESSAGE_OUTGOING);
 	} else {
 		if ((!has_focus || priv->current_chat != chat)) {
 			empathy_sound_play (GTK_WIDGET (priv->dialog),
-					    EMPATHY_PREFS_SOUNDS_INCOMING_MESSAGE,
-					    "message-new-instant", _("Received an instant message"));
+					    EMPATHY_SOUND_MESSAGE_INCOMING);
 		}
 	}
 

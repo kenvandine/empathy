@@ -1493,6 +1493,36 @@ empathy_send_file_with_file_chooser (EmpathyContact *contact)
 	gtk_widget_show (widget);
 }
 
+typedef struct {
+	EmpathySound sound_id;
+	const char * event_ca_id;
+	const char * event_ca_description;
+	const char * gconf_key;
+} EmpathySoundEntry;
+
+static EmpathySoundEntry sound_entries[LAST_EMPATHY_SOUND] = {
+	{ EMPATHY_SOUND_MESSAGE_INCOMING, "message-new-instant",
+	  N_("Received an instant message"), EMPATHY_PREFS_SOUNDS_INCOMING_MESSAGE } ,
+	{ EMPATHY_SOUND_MESSAGE_OUTGOING, "message-sent-instant",
+	  N_("Sent an instant message"), EMPATHY_PREFS_SOUNDS_OUTGOING_MESSAGE } ,
+	{ EMPATHY_SOUND_CONVERSATION_NEW, "message-new-instant",
+	  N_("Incoming chat request"), EMPATHY_PREFS_SOUNDS_NEW_CONVERSATION },
+	{ EMPATHY_SOUND_CONTACT_CONNECTED, "service-login",
+	  N_("Contact connected"), EMPATHY_PREFS_SOUNDS_CONTACT_LOGIN },
+	{ EMPATHY_SOUND_CONTACT_DISCONNECTED, "service-logout",
+	  N_("Contact disconnected"), EMPATHY_PREFS_SOUNDS_CONTACT_LOGOUT },
+	{ EMPATHY_SOUND_ACCOUNT_CONNECTED, "service-login",
+	  N_("Connected to server"), EMPATHY_PREFS_SOUNDS_SERVICE_LOGIN },
+	{ EMPATHY_SOUND_ACCOUNT_DISCONNECTED, "service-logout",
+	  N_("Disconnected from server"), EMPATHY_PREFS_SOUNDS_SERVICE_LOGOUT },
+	{ EMPATHY_SOUND_PHONE_INCOMING, "phone-incoming-call",
+	  N_("Incoming voice call"), NULL },
+	{ EMPATHY_SOUND_PHONE_OUTGOING, "phone-outgoing-calling",
+	  N_("Outgoing voice call"), NULL },
+	{ EMPATHY_SOUND_PHONE_HANGUP, "phone-hangup",
+	  N_("Voice call ended"), NULL },
+};
+
 static gboolean
 empathy_sound_pref_is_enabled (const char *key)
 {
@@ -1530,14 +1560,19 @@ empathy_sound_pref_is_enabled (const char *key)
 
 void
 empathy_sound_play (GtkWidget *widget,
-		    const char *key,
-		    const char *event_id,
-		    const char *description)
+		    EmpathySound sound_id)
 {
-	if (empathy_sound_pref_is_enabled (key)) {
+	EmpathySoundEntry *entry = &(sound_entries[sound_id]);
+	gboolean should_play = TRUE;
+
+	if (entry->gconf_key != NULL) {
+		should_play = empathy_sound_pref_is_enabled (entry->gconf_key);
+	}
+
+	if (should_play) {
 		ca_gtk_play_for_widget (widget, 0,
-					CA_PROP_EVENT_ID, event_id,
-					CA_PROP_EVENT_DESCRIPTION, description,
+					CA_PROP_EVENT_ID, entry->event_ca_id,
+					CA_PROP_EVENT_DESCRIPTION, entry->event_ca_description,
 					NULL);
 	}
 }
