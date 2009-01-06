@@ -226,9 +226,8 @@
   (return-type "GType")
 )
 
-(define-function account_manager_new
-  (c-name "empathy_account_manager_new")
-  (is-constructor-of "EmpathyAccountManager")
+(define-function account_manager_dup_singleton
+  (c-name "empathy_account_manager_dup_singleton")
   (return-type "EmpathyAccountManager*")
 )
 
