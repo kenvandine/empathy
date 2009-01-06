@@ -123,7 +123,7 @@ account_created_cb (McAccountMonitor *mon,
 {
   McAccount *account;
   EmpathyAccountManagerPriv *priv = GET_PRIV (manager);
-  guint initial_status;
+  TpConnectionStatus initial_status;
 
   account = mc_account_lookup (account_name);
 
