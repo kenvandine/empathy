@@ -55,6 +55,13 @@ enum {
 
 static void  contact_remove_foreach (EmpathyContact *contact,
 				     EmpathyContactMonitor *monitor);
+static void  cl_members_changed_cb  (EmpathyContactList    *cl,
+				     EmpathyContact        *contact,
+				     EmpathyContact        *actor,
+				     guint                  reason,
+				     gchar                 *message,
+				     gboolean               is_member,
+				     EmpathyContactMonitor *monitor);
 
 static guint signals[LAST_SIGNAL];
 
@@ -102,12 +109,17 @@ do_finalize (GObject *obj)
 	EmpathyContactMonitorPriv *priv;
 
 	priv = GET_PRIV (obj);
-
+	
 	if (priv->contacts) {
 		g_ptr_array_foreach (priv->contacts,
 				     (GFunc) contact_remove_foreach, obj);
 		g_ptr_array_free (priv->contacts, TRUE);
 		priv->contacts = NULL;
+	}
+
+	if (priv->proxy) {
+		g_signal_handlers_disconnect_by_func (priv->proxy,
+						      cl_members_changed_cb, obj);
 	}
 
 	G_OBJECT_CLASS (empathy_contact_monitor_parent_class)->finalize (obj);
@@ -370,12 +382,7 @@ empathy_contact_monitor_set_proxy (EmpathyContactMonitor *self,
 		priv->contacts = NULL;
 	}
 
-	if (priv->proxy != NULL) {
-		g_object_unref (priv->proxy);
-		priv->proxy = NULL;
-	}
-
-	priv->proxy = g_object_ref (proxy);
+	priv->proxy = proxy;
 	priv->contacts = g_ptr_array_new ();
 
 	g_signal_connect (proxy, "members-changed",
