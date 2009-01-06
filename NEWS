@@ -1,3 +1,13 @@
+NEW in 2.25.4
+==============
+ - Add sound notifications using libcanberra-gtk (Cosimo Cecchi)
+
+Bugs fixed:
+
+Translations:
+ - Updated Norwegian bokmål translation. (kmaraas).
+ - Updated pt_BR translation  (Taylon Silmer).
+
 NEW in 2.25.3
 ==============
  - Refactor EmpathyChatView to make possible to use other backends than
