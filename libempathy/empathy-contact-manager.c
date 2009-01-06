@@ -26,6 +26,7 @@
 #include <telepathy-glib/enums.h>
 
 #include "empathy-contact-manager.h"
+#include "empathy-account-manager.h"
 #include "empathy-contact-list.h"
 #include "empathy-utils.h"
 
@@ -217,7 +218,7 @@ empathy_contact_manager_init (EmpathyContactManager *manager)
 	mc = empathy_mission_control_new ();
 
 	/* Get ContactList for existing connections */
-	accounts = mission_control_get_online_connections (priv->mc, NULL);
+	accounts = mission_control_get_online_connections (mc, NULL);
 	for (l = accounts; l; l = l->next) {
 		contact_manager_add_account (manager, l->data);
 		g_object_unref (l->data);
