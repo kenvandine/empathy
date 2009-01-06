@@ -290,7 +290,8 @@ preferences_sound_load (EmpathyPreferences *preferences)
 
 		gtk_list_store_insert_with_values (store, &iter, i,
 						   COL_SOUND_NAME, gettext (sound_entries[i].name),
-						   COL_SOUND_KEY, sound_entries[i].key, -1);
+						   COL_SOUND_KEY, sound_entries[i].key,
+						   COL_SOUND_ENABLED, set, -1);
 	}
 }
 
