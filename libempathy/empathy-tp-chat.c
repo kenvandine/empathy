@@ -29,6 +29,7 @@
 
 #include "empathy-tp-chat.h"
 #include "empathy-contact-factory.h"
+#include "empathy-contact-monitor.h"
 #include "empathy-contact-list.h"
 #include "empathy-marshal.h"
 #include "empathy-time.h"
