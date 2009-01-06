@@ -270,22 +270,28 @@ remove_data_timeout (gpointer _data)
   return FALSE;
 }
 
-static void
-account_status_changed_cb (MissionControl *mc,
-                           TpConnectionStatus status,
-                           McPresence presence,
-                           TpConnectionStatusReason reason,
-                           const gchar *unique_name,
-                           EmpathyAccountManager *manager)
+typedef struct {
+  TpConnectionStatus status;
+  McPresence presence;
+  TpConnectionStatusReason reason;
+  gchar *unique_name;
+  EmpathyAccountManager *manager;
+} ChangedSignalData;
+
+static gboolean
+account_status_changed_idle_cb (ChangedSignalData *signal_data)
 {
   McAccount *account;
-  EmpathyAccountManagerPriv *priv = GET_PRIV (manager);
   AccountData *data;
-  McPresence old_p;
-  TpConnectionStatus old_s;
+  McPresence presence, old_p;
+  TpConnectionStatus status, old_s;
   gboolean emit_presence = FALSE, emit_connection = FALSE;
+  EmpathyAccountManager *manager = signal_data->manager;
+  EmpathyAccountManagerPriv *priv = GET_PRIV (manager);
 
-  account = mc_account_lookup (unique_name);
+  presence = signal_data->presence;
+  status = signal_data->status;
+  account = mc_account_lookup (signal_data->unique_name);
 
   if (account)
     {
@@ -326,10 +332,36 @@ account_status_changed_cb (MissionControl *mc,
 
       if (emit_connection)
         g_signal_emit (manager, signals[ACCOUNT_CONNECTION_CHANGED], 0,
-                       account, reason, status, old_s);
+                       account, signal_data->reason, status, old_s);
 
       g_object_unref (account);
     }
+
+  g_object_unref (signal_data->manager);
+  g_free (signal_data->unique_name);
+  g_slice_free (ChangedSignalData, signal_data);
+
+  return FALSE;
+}
+
+static void
+account_status_changed_cb (MissionControl *mc,
+                           TpConnectionStatus status,
+                           McPresence presence,
+                           TpConnectionStatusReason reason,
+                           const gchar *unique_name,
+                           EmpathyAccountManager *manager)
+{
+  ChangedSignalData *data;
+
+  data = g_slice_new0 (ChangedSignalData);
+  data->status = status;
+  data->presence = presence;
+  data->reason = reason;
+  data->unique_name = g_strdup (unique_name);
+  data->manager = g_object_ref (manager);
+
+  g_idle_add ((GSourceFunc) account_status_changed_idle_cb, data);
 }
 
 static void
