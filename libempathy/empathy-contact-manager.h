@@ -29,7 +29,6 @@
 #include "empathy-contact.h"
 #include "empathy-tp-contact-list.h"
 #include "empathy-contact-list.h"
-#include "empathy-contact-monitor.h"
 
 G_BEGIN_DECLS
 
