@@ -60,3 +60,4 @@ empathy_contact_monitor_new_for_proxy (EmpathyContactList *proxy);
 G_END_DECLS
 
 #endif /* __EMPATHY_CONTACT_MONITOR_H__ */
+

@@ -560,3 +560,4 @@ empathy_account_manager_is_account_just_connected (EmpathyAccountManager *manage
 
   return (data->source_id > 0);
 }
+

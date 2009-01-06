@@ -429,3 +429,4 @@ empathy_contact_monitor_new_for_proxy (EmpathyContactList *proxy)
 
   return retval;
 }
+
