@@ -128,7 +128,6 @@ static gboolean   accounts_dialog_row_changed_foreach       (GtkTreeModel       
 							     GtkTreeIter              *iter,
 							     gpointer                  user_data);
 static gboolean   accounts_dialog_flash_connecting_cb       (EmpathyAccountsDialog    *dialog);
-static gboolean   accounts_dialog_are_accounts_connecting   (MissionControl           *mc);
 static void       accounts_dialog_connection_changed_cb     (EmpathyAccountManager    *manager,
 							     McAccount                *account,
 							     TpConnectionStatusReason  reason,
@@ -315,7 +314,7 @@ accounts_dialog_name_edited_cb (GtkCellRendererText   *renderer,
 	GtkTreePath  *treepath;
 	GtkTreeIter   iter;
 
-	if (accounts_dialog_are_accounts_connecting (dialog->mc)) {
+	if (empathy_account_manager_get_connecting_accounts (dialog->account_manager) > 0) {
 		dialog->connecting_id = g_timeout_add (FLASH_TIMEOUT,
 						       (GSourceFunc) accounts_dialog_flash_connecting_cb,
 						       dialog);
@@ -718,30 +717,6 @@ accounts_dialog_flash_connecting_cb (EmpathyAccountsDialog *dialog)
 	return TRUE;
 }
 
-static gboolean
-accounts_dialog_are_accounts_connecting (MissionControl *mc)
-{
-	GList    *accounts, *l;
-	gboolean  found = FALSE;
-
-	/* Check if there is still accounts in CONNECTING state */
-	accounts = mc_accounts_list_by_enabled (TRUE);
-	for (l = accounts; l; l = l->next) {
-		McAccount          *this_account = l->data;
-		TpConnectionStatus  status;
-
-		status = mission_control_get_connection_status (mc, this_account,
-								NULL);
-		if (status == TP_CONNECTION_STATUS_CONNECTING) {
-			found = TRUE;
-			break;
-		}
-	}
-	mc_accounts_list_free (accounts);
-
-	return found;
-}
-
 static void
 accounts_dialog_connection_changed_cb     (EmpathyAccountManager    *manager,
 					   McAccount                *account,
@@ -769,12 +744,13 @@ accounts_dialog_connection_changed_cb     (EmpathyAccountManager    *manager,
 		gtk_tree_path_free (path);
 	}
 
-	found = accounts_dialog_are_accounts_connecting (dialog->mc);		
+	found = (empathy_account_manager_get_connecting_accounts (manager) > 0);
 
 	if (!found && dialog->connecting_id) {
 		g_source_remove (dialog->connecting_id);
 		dialog->connecting_id = 0;
 	}
+
 	if (found && !dialog->connecting_id) {
 		dialog->connecting_id = g_timeout_add (FLASH_TIMEOUT,
 						       (GSourceFunc) accounts_dialog_flash_connecting_cb,
