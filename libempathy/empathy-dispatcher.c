@@ -39,6 +39,7 @@
 #include "empathy-dispatcher.h"
 #include "empathy-utils.h"
 #include "empathy-tube-handler.h"
+#include "empathy-account-manager.h"
 #include "empathy-contact-factory.h"
 #include "empathy-tp-group.h"
 #include "empathy-tp-file.h"
@@ -51,10 +52,10 @@
 #define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyDispatcher)
 typedef struct {
 	GHashTable     *connections;
-	gpointer        token;
+	EmpathyAccountManager *account_manager;
 	MissionControl *mc;
 	GSList         *tubes;
-  EmpathyChatroomManager *chatroom_mgr;
+	EmpathyChatroomManager *chatroom_mgr;
 } EmpathyDispatcherPriv;
 
 G_DEFINE_TYPE (EmpathyDispatcher, empathy_dispatcher, G_TYPE_OBJECT);
@@ -656,18 +657,14 @@ dispatcher_update_account (EmpathyDispatcher *dispatcher,
 }
 
 static void
-dispatcher_status_changed_cb (MissionControl           *mc,
-			      TpConnectionStatus        status,
-			      McPresence                presence,
-			      TpConnectionStatusReason  reason,
-			      const gchar              *unique_name,
-			      EmpathyDispatcher            *dispatcher)
+dispatcher_account_connection_cb (EmpathyAccountManager *manager,
+				  McAccount *account,
+				  TpConnectionStatusReason reason,
+				  TpConnectionStatus status,
+				  TpConnectionStatus previous,
+				  EmpathyDispatcher *dispatcher)
 {
-	McAccount *account;
-
-	account = mc_account_lookup (unique_name);
 	dispatcher_update_account (dispatcher, account);
-	g_object_unref (account);
 }
 
 static void
@@ -676,7 +673,10 @@ dispatcher_finalize (GObject *object)
 	EmpathyDispatcherPriv *priv = GET_PRIV (object);
 	GSList                *l;
 
-	empathy_disconnect_account_status_changed (priv->token);
+	g_signal_handlers_disconnect_by_func (priv->account_manager,
+					      dispatcher_account_connection_cb,
+					      object);
+	g_object_unref (priv->account_manager);
 	g_object_unref (priv->mc);
 
 	for (l = priv->tubes; l; l = l->next) {
@@ -689,7 +689,7 @@ dispatcher_finalize (GObject *object)
 
 	g_hash_table_destroy (priv->connections);
 
-  g_object_unref (priv->chatroom_mgr);
+	g_object_unref (priv->chatroom_mgr);
 }
 
 static void
@@ -739,9 +739,12 @@ empathy_dispatcher_init (EmpathyDispatcher *dispatcher)
 
 	dispatcher->priv = priv;
 	priv->mc = empathy_mission_control_new ();
-	priv->token = empathy_connect_to_account_status_changed (priv->mc,
-		G_CALLBACK (dispatcher_status_changed_cb),
-		dispatcher, NULL);
+	priv->account_manager = empathy_account_manager_new ();
+
+	g_signal_connect (priv->account_manager,
+			  "account-connection-changed",
+			  G_CALLBACK (dispatcher_account_connection_cb),
+			  dispatcher);
 
 	priv->connections = g_hash_table_new_full (empathy_account_hash,
 						   empathy_account_equal,
@@ -754,7 +757,7 @@ empathy_dispatcher_init (EmpathyDispatcher *dispatcher)
 	}
 	g_list_free (accounts);
 
-  priv->chatroom_mgr = empathy_chatroom_manager_new (NULL);
+	priv->chatroom_mgr = empathy_chatroom_manager_new (NULL);
 }
 
 EmpathyDispatcher *
