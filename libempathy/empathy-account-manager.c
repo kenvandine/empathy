@@ -89,7 +89,7 @@ account_data_new_default (MissionControl *mc,
 	actual_c = mission_control_get_connection_status (mc,
 							  account, &err);
 	if (err) {
-		actual_c = TP_CONNECTION_STATUS_DISCONNECTED;
+		actual_c = -1;
 	}
 
 	return account_data_new (actual_p, actual_c, mc_account_is_enabled (account));
