@@ -89,43 +89,129 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/empathy/notifications/play_sounds</key>
-      <applyto>/apps/empathy/notifications/play_sounds</applyto>
+      <key>/schemas/apps/empathy/sounds/sounds_enabled</key>
+      <applyto>/apps/empathy/sounds/sounds_enabled</applyto>
       <owner>empathy</owner>
       <type>bool</type>
       <default>true</default>
       <locale name="C">
          <short>Use notification sounds</short>
          <long>
-         Whether or not to play a sound when messages arrive.
+         Whether or not to play a sound to notify for events.
          </long>
       </locale>
     </schema>
 
     <schema>
-      <key>/schemas/apps/empathy/notifications/sound_when_away</key>
-      <applyto>/apps/empathy/notifications/sound_when_away</applyto>
-      <owner>empathy</owner>
-      <type>bool</type>
-      <default>false</default>
-      <locale name="C">
-         <short>Enable sound when away</short>
-         <long>
-         Whether or not to play sounds when away.
-         </long>
-      </locale>
-    </schema>
-
-    <schema>
-      <key>/schemas/apps/empathy/notifications/sound_when_busy</key>
-      <applyto>/apps/empathy/notifications/sound_when_busy</applyto>
+      <key>/schemas/apps/empathy/sounds/sounds_disabled_away</key>
+      <applyto>/apps/empathy/sounds/sounds_disabled_away</applyto>
       <owner>empathy</owner>
       <type>bool</type>
       <default>true</default>
       <locale name="C">
-         <short>Enable sound when busy</short>
+         <short>Disable sounds when away</short>
          <long>
-         Whether or not to play sounds when busy.
+         Whether or not to play a sound notifications when away or busy.
+         </long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/empathy/sounds/sounds_incoming_message</key>
+      <applyto>/apps/empathy/sounds/sounds_incoming_message</applyto>
+      <owner>empathy</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+         <short>Play a sound for incoming messages</short>
+         <long>
+         Whether or not to play a sound to notify for incoming messages.
+         </long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/empathy/sounds/sounds_outgoing_message</key>
+      <applyto>/apps/empathy/sounds/sounds_outgoing_message</applyto>
+      <owner>empathy</owner>
+      <type>bool</type>
+      <default>false</default>
+      <locale name="C">
+         <short>Play a sound for outgoing messages</short>
+         <long>
+         Whether or not to play a sound to notify for outgoing messages.
+         </long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/empathy/sounds/sounds_new_conversation</key>
+      <applyto>/apps/empathy/sounds/sounds_new_conversation</applyto>
+      <owner>empathy</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+         <short>Play a sound for new conversations</short>
+         <long>
+         Whether or not to play a sound to notify for new conversations.
+         </long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/empathy/sounds/sounds_contact_login</key>
+      <applyto>/apps/empathy/sounds/sounds_contact_login/applyto>
+      <owner>empathy</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+         <short>Play a sound when a contact logs in</short>
+         <long>
+         Whether or not to play a sound to notify for contacts logging in the
+         network.
+         </long>
+      </locale>
+    </schema>
+    
+    <schema>
+      <key>/schemas/apps/empathy/sounds/sounds_contact_logout</key>
+      <applyto>/apps/empathy/sounds/sounds_contact_logout/applyto>
+      <owner>empathy</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+         <short>Play a sound when a contact logs out</short>
+         <long>
+         Whether or not to play a sound to notify for contacts logging off the
+         network.
+         </long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/empathy/sounds/sounds_service_login</key>
+      <applyto>/apps/empathy/sounds/sounds_service_login/applyto>
+      <owner>empathy</owner>
+      <type>bool</type>
+      <default>false</default>
+      <locale name="C">
+         <short>Play a sound when we log in</short>
+         <long>
+         Whether or not to play a sound when logging in a network.
+         </long>
+      </locale>
+    </schema>
+    
+    <schema>
+      <key>/schemas/apps/empathy/sounds/sounds_service_logout</key>
+      <applyto>/apps/empathy/sounds/sounds_service_logout/applyto>
+      <owner>empathy</owner>
+      <type>bool</type>
+      <default>false</default>
+      <locale name="C">
+         <short>Play a sound when we log out</short>
+         <long>
+         Whether or not to play a sound when logging off a network.
          </long>
       </locale>
     </schema>

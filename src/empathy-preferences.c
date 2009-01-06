@@ -55,10 +55,9 @@ typedef struct {
 	GtkWidget *radiobutton_contact_list_sort_by_name;
 	GtkWidget *radiobutton_contact_list_sort_by_state;
 
-	GtkWidget *checkbutton_sounds_for_messages;
-	GtkWidget *checkbutton_sounds_when_busy;
-	GtkWidget *checkbutton_sounds_when_away;
-	GtkWidget *checkbutton_popups_when_available;
+	GtkWidget *checkbutton_sounds_enabled;
+	GtkWidget *checkbutton_sounds_disabled_away;
+	GtkWidget *treeview_sounds;
 
 	GtkWidget *treeview_spell_checker;
 
@@ -137,6 +136,29 @@ enum {
 	COL_COMBO_COUNT
 };
 
+enum {
+	COL_SOUND_ENABLED,
+	COL_SOUND_NAME,
+	COL_SOUND_KEY,
+	COL_SOUND_COUNT
+};
+
+typedef struct {
+	const char *name;
+	const char *key;
+} SoundEventEntry;
+
+/* TODO: add phone related sounds also? */
+static SoundEventEntry sound_entries [] = {
+	{ N_("Message received"), EMPATHY_PREFS_SOUNDS_INCOMING_MESSAGE },
+	{ N_("Message sent"), EMPATHY_PREFS_SOUNDS_OUTGOING_MESSAGE },
+	{ N_("New conversation"), EMPATHY_PREFS_SOUNDS_NEW_CONVERSATION },
+	{ N_("Contact logs in"), EMPATHY_PREFS_SOUNDS_CONTACT_LOGIN },
+	{ N_("Contact logs out"), EMPATHY_PREFS_SOUNDS_CONTACT_LOGOUT },
+	{ N_("Logging in a network"), EMPATHY_PREFS_SOUNDS_SERVICE_LOGIN },
+	{ N_("Logging off a network"), EMPATHY_PREFS_SOUNDS_SERVICE_LOGOUT }
+};
+
 static void
 preferences_add_id (EmpathyPreferences *preferences, guint id)
 {
@@ -164,24 +186,18 @@ preferences_setup_widgets (EmpathyPreferences *preferences)
 	guint id;
 
 	preferences_hookup_toggle_button (preferences,
-					  EMPATHY_PREFS_SOUNDS_FOR_MESSAGES,
-					  preferences->checkbutton_sounds_for_messages);
+					  EMPATHY_PREFS_SOUNDS_ENABLED,
+					  preferences->checkbutton_sounds_enabled);
 	preferences_hookup_toggle_button (preferences,
-					  EMPATHY_PREFS_SOUNDS_WHEN_AWAY,
-					  preferences->checkbutton_sounds_when_away);
-	preferences_hookup_toggle_button (preferences,
-					  EMPATHY_PREFS_SOUNDS_WHEN_BUSY,
-					  preferences->checkbutton_sounds_when_busy);
-	preferences_hookup_toggle_button (preferences,
-					  EMPATHY_PREFS_POPUPS_WHEN_AVAILABLE,
-					  preferences->checkbutton_popups_when_available);
+					  EMPATHY_PREFS_SOUNDS_DISABLED_AWAY,
+					  preferences->checkbutton_sounds_disabled_away);
 
 	preferences_hookup_sensitivity (preferences,
-					EMPATHY_PREFS_SOUNDS_FOR_MESSAGES,
-					preferences->checkbutton_sounds_when_away);
+					EMPATHY_PREFS_SOUNDS_ENABLED,
+					preferences->checkbutton_sounds_disabled_away);
 	preferences_hookup_sensitivity (preferences,
-					EMPATHY_PREFS_SOUNDS_FOR_MESSAGES,
-					preferences->checkbutton_sounds_when_busy);
+					EMPATHY_PREFS_SOUNDS_ENABLED,
+					preferences->treeview_sounds);
 
 	preferences_hookup_toggle_button (preferences,
 					  EMPATHY_PREFS_UI_SEPARATE_CHAT_WINDOWS,
@@ -221,6 +237,102 @@ preferences_setup_widgets (EmpathyPreferences *preferences)
 	preferences_compact_contact_list_changed_cb (empathy_conf_get (),
 						     EMPATHY_PREFS_UI_COMPACT_CONTACT_LIST,
 						     preferences);
+}
+
+static void
+preferences_sound_cell_toggled_cb (GtkCellRendererToggle *toggle,
+				   char *path_string,
+				   EmpathyPreferences *preferences)
+{
+	GtkTreePath *path;
+	gboolean toggled, instore;
+	GtkTreeIter iter;
+	GtkTreeView *view;
+	GtkTreeModel *model;
+	char *key;
+
+	view = GTK_TREE_VIEW (preferences->treeview_sounds);
+	model = gtk_tree_view_get_model (view);
+
+	path = gtk_tree_path_new_from_string (path_string);
+	toggled = gtk_cell_renderer_toggle_get_active (toggle);
+
+	gtk_tree_model_get_iter (model, &iter, path);
+	gtk_tree_model_get (model, &iter, COL_SOUND_KEY, &key,
+			    COL_SOUND_ENABLED, &instore, -1);
+
+	instore ^= 1;
+
+	gtk_list_store_set (GTK_LIST_STORE (model), &iter,
+			    COL_SOUND_ENABLED, instore, -1);
+
+	empathy_conf_set_bool (empathy_conf_get (), key, instore);
+
+	gtk_tree_path_free (path);
+}
+
+static void
+preferences_sound_load (EmpathyPreferences *preferences)
+{
+	int i;
+	GtkTreeView *view;
+	GtkListStore *store;
+	GtkTreeIter iter;
+	gboolean set;
+	EmpathyConf *conf;
+
+	view = GTK_TREE_VIEW (preferences->treeview_sounds);
+	store = GTK_LIST_STORE (gtk_tree_view_get_model (view));
+	conf = empathy_conf_get ();
+
+	for (i = 0; i < G_N_ELEMENTS (sound_entries); i++) {
+		empathy_conf_get_bool (conf, sound_entries[i].key, &set);
+
+		gtk_list_store_append (store, &iter);
+		gtk_list_store_set (store, &iter, COL_SOUND_ENABLED, set,
+				    COL_SOUND_NAME, sound_entries[i].name,
+				    COL_SOUND_KEY, sound_entries[i].key, -1);
+	}
+}
+
+static void
+preferences_sound_setup (EmpathyPreferences *preferences)
+{
+	GtkTreeView *view;
+	GtkListStore *store;
+	GtkCellRenderer *renderer;
+	GtkTreeViewColumn *column;
+
+	view = GTK_TREE_VIEW (preferences->treeview_sounds);
+
+	store = gtk_list_store_new (COL_SOUND_COUNT,
+				    G_TYPE_BOOLEAN, /* enabled */
+				    G_TYPE_STRING,  /* name */
+				    G_TYPE_STRING); /* key */
+
+	gtk_tree_view_set_model (view, GTK_TREE_MODEL (store));
+
+	renderer = gtk_cell_renderer_toggle_new ();
+	g_signal_connect (renderer, "toggled",
+			  G_CALLBACK (preferences_sound_cell_toggled_cb),
+			  preferences);
+
+	column = gtk_tree_view_column_new ();
+	gtk_tree_view_column_pack_start (column, renderer, FALSE);
+	gtk_tree_view_column_add_attribute (column, renderer,
+					    "active", COL_SOUND_ENABLED);
+
+	renderer = gtk_cell_renderer_text_new ();
+	gtk_tree_view_column_pack_start (column, renderer, FALSE);
+	gtk_tree_view_column_add_attribute (column, renderer,
+					    "text", COL_SOUND_NAME);
+
+	gtk_tree_view_append_column (view, column);
+
+	gtk_tree_view_column_set_resizable (column, FALSE);
+	gtk_tree_view_column_set_clickable (GTK_TREE_VIEW_COLUMN (column), TRUE);
+
+	g_object_unref (store);
 }
 
 static void
@@ -949,10 +1061,9 @@ empathy_preferences_show (GtkWindow *parent)
 		"checkbutton_autoconnect", &preferences->checkbutton_autoconnect,
 		"radiobutton_contact_list_sort_by_name", &preferences->radiobutton_contact_list_sort_by_name,
 		"radiobutton_contact_list_sort_by_state", &preferences->radiobutton_contact_list_sort_by_state,
-		"checkbutton_sounds_for_messages", &preferences->checkbutton_sounds_for_messages,
-		"checkbutton_sounds_when_busy", &preferences->checkbutton_sounds_when_busy,
-		"checkbutton_sounds_when_away", &preferences->checkbutton_sounds_when_away,
-		"checkbutton_popups_when_available", &preferences->checkbutton_popups_when_available,
+		"checkbutton_sounds_enabled", &preferences->checkbutton_sounds_enabled,
+		"checkbutton_sounds_disabled_away", &preferences->checkbutton_sounds_disabled_away,
+		"treeview_sounds", &preferences->treeview_sounds,
 		"treeview_spell_checker", &preferences->treeview_spell_checker,
 		NULL);
 	g_free (filename);
@@ -974,6 +1085,9 @@ empathy_preferences_show (GtkWindow *parent)
 	preferences_languages_setup (preferences);
 	preferences_languages_add (preferences);
 	preferences_languages_load (preferences);
+
+	preferences_sound_setup (preferences);
+	preferences_sound_load (preferences);
 
 	if (empathy_spell_supported ()) {
 		GtkWidget *page;

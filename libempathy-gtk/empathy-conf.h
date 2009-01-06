@@ -45,9 +45,15 @@ struct _EmpathyConfClass {
 };
 
 #define EMPATHY_PREFS_PATH "/apps/empathy"
-#define EMPATHY_PREFS_SOUNDS_FOR_MESSAGES          EMPATHY_PREFS_PATH "/notifications/sounds_for_messages"
-#define EMPATHY_PREFS_SOUNDS_WHEN_AWAY             EMPATHY_PREFS_PATH "/notifications/sounds_when_away"
-#define EMPATHY_PREFS_SOUNDS_WHEN_BUSY             EMPATHY_PREFS_PATH "/notifications/sounds_when_busy"
+#define EMPATHY_PREFS_SOUNDS_ENABLED               EMPATHY_PREFS_PATH "/sounds/sounds_enabled"
+#define EMPATHY_PREFS_SOUNDS_DISABLED_AWAY         EMPATHY_PREFS_PATH "/sounds/sounds_disabled_away"
+#define EMPATHY_PREFS_SOUNDS_INCOMING_MESSAGE      EMPATHY_PREFS_PATH "/sounds/sounds_incoming_message"
+#define EMPATHY_PREFS_SOUNDS_OUTGOING_MESSAGE      EMPATHY_PREFS_PATH "/sounds/sounds_outgoing_message"
+#define EMPATHY_PREFS_SOUNDS_NEW_CONVERSATION      EMPATHY_PREFS_PATH "/sounds/sounds_new_conversation"
+#define EMPATHY_PREFS_SOUNDS_SERVICE_LOGIN         EMPATHY_PREFS_PATH "/sounds/sounds_service_login"
+#define EMPATHY_PREFS_SOUNDS_SERVICE_LOGOUT        EMPATHY_PREFS_PATH "/sounds/sounds_service_logout"
+#define EMPATHY_PREFS_SOUNDS_CONTACT_LOGIN         EMPATHY_PREFS_PATH "/sounds/sounds_contact_login"
+#define EMPATHY_PREFS_SOUNDS_CONTACT_LOGOUT        EMPATHY_PREFS_PATH "/sounds/sounds_contact_logout"
 #define EMPATHY_PREFS_POPUPS_WHEN_AVAILABLE        EMPATHY_PREFS_PATH "/notifications/popups_when_available"
 #define EMPATHY_PREFS_CHAT_SHOW_SMILEYS            EMPATHY_PREFS_PATH "/conversation/graphical_smileys"
 #define EMPATHY_PREFS_CHAT_THEME                   EMPATHY_PREFS_PATH "/conversation/theme"
