@@ -40,6 +40,7 @@
 #define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyTpChat)
 typedef struct {
 	EmpathyContactFactory *factory;
+	EmpathyContactMonitor *contact_monitor;
 	EmpathyContact        *user;
 	EmpathyContact        *remote_contact;
 	EmpathyTpGroup        *group;
@@ -246,6 +247,18 @@ tp_chat_get_members (EmpathyContactList *list)
 	}
 
 	return members;
+}
+
+static EmpathyContactMonitor *
+tp_chat_get_monitor (EmpathyContactList *list)
+{
+	EmpathyTpChatPriv *priv;
+
+	g_return_val_if_fail (EMPATHY_IS_TP_CHAT (list), NULL);
+
+	priv = GET_PRIV (list);
+
+	return priv->contact_monitor;
 }
 
 static EmpathyMessage *
@@ -894,6 +907,7 @@ tp_chat_finalize (GObject *object)
 		g_object_unref (priv->group);
 	}
 
+	g_object_unref (priv->contact_monitor);
 	g_object_unref (priv->factory);
 	g_object_unref (priv->user);
 	g_object_unref (priv->account);
@@ -1097,6 +1111,7 @@ empathy_tp_chat_init (EmpathyTpChat *chat)
 		EMPATHY_TYPE_TP_CHAT, EmpathyTpChatPriv);
 
 	chat->priv = priv;
+	priv->contact_monitor = empathy_contact_monitor_new_for_proxy (EMPATHY_CONTACT_LIST (chat));
 }
 
 static void
@@ -1105,6 +1120,7 @@ tp_chat_iface_init (EmpathyContactListIface *iface)
 	iface->add         = tp_chat_add;
 	iface->remove      = tp_chat_remove;
 	iface->get_members = tp_chat_get_members;
+	iface->get_monitor = tp_chat_get_monitor;
 }
 
 EmpathyTpChat *
