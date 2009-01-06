@@ -404,11 +404,15 @@ empathy_idle_init (EmpathyIdle *idle)
 	priv->mc = empathy_mission_control_new ();
 	priv->state = mission_control_get_presence_actual (priv->mc, &error);
 	if (error) {
+		DEBUG ("Error getting actual presence: %s", error->message);
+
 		priv->state = MC_PRESENCE_UNSET;
 		g_clear_error (&error);
 	}
 	priv->status = mission_control_get_presence_message_actual (priv->mc, &error);
 	if (error) {
+		DEBUG ("Error getting actual presence message: %s", error->message);
+
 		g_free (priv->status);
 		priv->status = NULL;
 		g_clear_error (&error);
