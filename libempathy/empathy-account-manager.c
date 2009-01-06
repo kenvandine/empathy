@@ -40,7 +40,7 @@ typedef struct {
 
 typedef struct {
   McPresence presence;
-  TpConnectionStatus connection;
+  TpConnectionStatus status;
   gboolean is_enabled;
 
   guint source_id;
@@ -64,14 +64,14 @@ G_DEFINE_TYPE (EmpathyAccountManager, empathy_account_manager, G_TYPE_OBJECT);
 
 static AccountData *
 account_data_new (McPresence presence,
-                  TpConnectionStatus connection,
+                  TpConnectionStatus status,
                   gboolean is_enabled)
 {
   AccountData *retval;
 
   retval = g_slice_new0 (AccountData);
   retval->presence = presence;
-  retval->connection = connection;
+  retval->status = status;
   retval->is_enabled = is_enabled;
   retval->source_id = 0;
 
@@ -123,6 +123,7 @@ account_created_cb (McAccountMonitor *mon,
 {
   McAccount *account;
   EmpathyAccountManagerPriv *priv = GET_PRIV (manager);
+  guint initial_status;
 
   account = mc_account_lookup (account_name);
 
@@ -131,6 +132,14 @@ account_created_cb (McAccountMonitor *mon,
       AccountData *data;
 
       data = account_data_new_default (priv->mc, account);
+
+      initial_status = mission_control_get_connection_status (priv->mc,
+							      account, NULL);
+
+      if (initial_status == TP_CONNECTION_STATUS_CONNECTED)
+	priv->connected++;
+      else if (initial_status == TP_CONNECTION_STATUS_CONNECTING)
+	priv->connecting++;
 
       /* the reference returned by mc_account_lookup is owned by the
        * hash table.
@@ -222,31 +231,31 @@ account_enabled_cb (McAccountMonitor *mon,
 
 static void
 update_connection_numbers (EmpathyAccountManager *manager,
-                           TpConnectionStatus conn,
-                           TpConnectionStatus old_c)
+                           TpConnectionStatus status,
+                           TpConnectionStatus old_s)
 {
   EmpathyAccountManagerPriv *priv = GET_PRIV (manager);
 
-  if (conn == TP_CONNECTION_STATUS_CONNECTED)
+  if (status == TP_CONNECTION_STATUS_CONNECTED)
     {
       priv->connected++;
-      if (old_c == TP_CONNECTION_STATUS_CONNECTING)
+      if (old_s == TP_CONNECTION_STATUS_CONNECTING)
         priv->connecting--;
     }
 
-  if (conn == TP_CONNECTION_STATUS_CONNECTING)
+  if (status == TP_CONNECTION_STATUS_CONNECTING)
     {
       priv->connecting++;
-      if (old_c == TP_CONNECTION_STATUS_CONNECTED)
+      if (old_s == TP_CONNECTION_STATUS_CONNECTED)
         priv->connected--;
     }
 
-  if (conn == TP_CONNECTION_STATUS_DISCONNECTED)
+  if (status == TP_CONNECTION_STATUS_DISCONNECTED)
     {
-      if (old_c == TP_CONNECTION_STATUS_CONNECTED)
+      if (old_s == TP_CONNECTION_STATUS_CONNECTED)
         priv->connected--;
 
-      if (old_c == TP_CONNECTION_STATUS_CONNECTING)
+      if (old_s == TP_CONNECTION_STATUS_CONNECTING)
         priv->connecting--;
     }
 }
@@ -263,7 +272,7 @@ remove_data_timeout (gpointer _data)
 
 static void
 account_status_changed_cb (MissionControl *mc,
-                           TpConnectionStatus connection,
+                           TpConnectionStatus status,
                            McPresence presence,
                            TpConnectionStatusReason reason,
                            const gchar *unique_name,
@@ -273,7 +282,7 @@ account_status_changed_cb (MissionControl *mc,
   EmpathyAccountManagerPriv *priv = GET_PRIV (manager);
   AccountData *data;
   McPresence old_p;
-  TpConnectionStatus old_c;
+  TpConnectionStatus old_s;
   gboolean emit_presence = FALSE, emit_connection = FALSE;
 
   account = mc_account_lookup (unique_name);
@@ -284,7 +293,7 @@ account_status_changed_cb (MissionControl *mc,
       g_assert (data);
 
       old_p = data->presence;
-      old_c = data->connection;
+      old_s = data->status;
 
       if (old_p != presence)
         {
@@ -292,13 +301,12 @@ account_status_changed_cb (MissionControl *mc,
           emit_presence = TRUE;
         }
 
-      if (old_c != connection)
+      if (old_s != status)
         {
-          data->connection = connection;
-          update_connection_numbers (manager, connection, old_c);
+          data->status = status;
+          update_connection_numbers (manager, status, old_s);
 
-          if (old_c == TP_CONNECTION_STATUS_CONNECTING &&
-              connection == TP_CONNECTION_STATUS_CONNECTED)
+          if (status == TP_CONNECTION_STATUS_CONNECTED)
             {
                 if (data->source_id > 0) {
                   g_source_remove (data->source_id);
@@ -318,7 +326,7 @@ account_status_changed_cb (MissionControl *mc,
 
       if (emit_connection)
         g_signal_emit (manager, signals[ACCOUNT_CONNECTION_CHANGED], 0,
-                       account, reason, connection, old_c);
+                       account, reason, status, old_s);
 
       g_object_unref (account);
     }
@@ -331,7 +339,6 @@ empathy_account_manager_init (EmpathyAccountManager *manager)
       G_TYPE_INSTANCE_GET_PRIVATE (manager,
                                    EMPATHY_TYPE_ACCOUNT_MANAGER, EmpathyAccountManagerPriv);
   GList *mc_accounts, *l;
-  guint initial_connection;
   AccountData *data;
 
   manager->priv = priv;
@@ -351,18 +358,7 @@ empathy_account_manager_init (EmpathyAccountManager *manager)
     {
       data = account_data_new_default (priv->mc, l->data);
 
-      initial_connection = mission_control_get_connection_status (priv->mc,
-								  l->data, NULL);
-      if (initial_connection == TP_CONNECTION_STATUS_CONNECTED) {
-	priv->connected++;
-      } else if (initial_connection == TP_CONNECTION_STATUS_CONNECTING) {
-	priv->connecting++;
-      }
-
-      /* no need to g_object_ref () the account here, as mc_accounts_list ()
-       * already increases the refcount.
-       */
-      g_hash_table_insert (priv->accounts, l->data, data);
+      account_created_cb (priv->monitor, (char *) mc_account_get_unique_name (l->data), manager);
     }
 
   g_signal_connect (priv->monitor, "account-created",
@@ -380,7 +376,7 @@ empathy_account_manager_init (EmpathyAccountManager *manager)
                                G_CALLBACK (account_status_changed_cb),
                                manager, NULL);
 
-  g_list_free (mc_accounts);
+  mc_accounts_list_free (mc_accounts);
 }
 
 static void
