@@ -134,6 +134,20 @@ empathy_account_chooser_init (EmpathyAccountChooser *chooser)
 	priv->set_active_item = FALSE;
 	priv->filter = NULL;
 	priv->filter_data = NULL;
+
+	priv->manager = empathy_account_manager_new ();
+
+	g_signal_connect (priv->manager, "account-created",
+			  G_CALLBACK (account_chooser_account_created_cb),
+			  chooser);
+	g_signal_connect (priv->manager, "account-deleted",
+			  G_CALLBACK (account_chooser_account_deleted_cb),
+			  chooser);
+	g_signal_connect (priv->manager, "account-connection-changed",
+			  G_CALLBACK (account_chooser_connection_changed_cb),
+			  chooser);
+
+	account_chooser_setup (EMPATHY_ACCOUNT_CHOOSER (chooser));
 }
 
 static void
@@ -193,26 +207,9 @@ account_chooser_set_property (GObject      *object,
 GtkWidget *
 empathy_account_chooser_new (void)
 {
-	EmpathyAccountChooserPriv *priv;
 	GtkWidget                *chooser;
 
 	chooser = g_object_new (EMPATHY_TYPE_ACCOUNT_CHOOSER, NULL);
-
-	priv = GET_PRIV (chooser);
-
-	priv->manager = empathy_account_manager_new ();
-
-	g_signal_connect (priv->manager, "account-created",
-			  G_CALLBACK (account_chooser_account_created_cb),
-			  chooser);
-	g_signal_connect (priv->manager, "account-deleted",
-			  G_CALLBACK (account_chooser_account_deleted_cb),
-			  chooser);
-	g_signal_connect (priv->manager, "account-connection-changed",
-			  G_CALLBACK (account_chooser_connection_changed_cb),
-			  chooser);
-
-	account_chooser_setup (EMPATHY_ACCOUNT_CHOOSER (chooser));
 
 	return chooser;
 }
