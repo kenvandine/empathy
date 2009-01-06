@@ -32,20 +32,20 @@
 
 #include "empathy-tp-contact-factory.h"
 #include "empathy-utils.h"
+#include "empathy-account-manager.h"
 
 #define DEBUG_FLAG EMPATHY_DEBUG_TP | EMPATHY_DEBUG_CONTACT
 #include "empathy-debug.h"
 
 #define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyTpContactFactory)
 typedef struct {
-	MissionControl *mc;
+	EmpathyAccountManager *account_manager;
 	McAccount      *account;
 	TpConnection   *connection;
 	gboolean        ready;
 
 	GList          *contacts;
 	EmpathyContact *user;
-	gpointer        token;
 
 	gchar         **avatar_mime_types;
 	guint           avatar_min_width;
@@ -966,13 +966,15 @@ tp_contact_factory_status_updated (EmpathyTpContactFactory *tp_factory)
 {
 	EmpathyTpContactFactoryPriv *priv = GET_PRIV (tp_factory);
 	gboolean                     connection_ready;
+	MissionControl              *mc;
 
 	if (priv->connection) {
 		/* We already have our connection object */
 		return;
 	}
 
-	priv->connection = mission_control_get_tpconnection (priv->mc, priv->account, NULL);
+	mc = empathy_mission_control_new ();
+	priv->connection = mission_control_get_tpconnection (mc, priv->account, NULL);
 	if (!priv->connection) {
 		return;
 	}
@@ -990,24 +992,23 @@ tp_contact_factory_status_updated (EmpathyTpContactFactory *tp_factory)
 					  G_CALLBACK (tp_contact_factory_connection_ready_cb),
 					  tp_factory);
 	}
+
+	g_object_unref (mc);
 }
 
 static void
-tp_contact_factory_status_changed_cb (MissionControl           *mc,
-				      TpConnectionStatus        status,
-				      McPresence                presence,
-				      TpConnectionStatusReason  reason,
-				      const gchar              *unique_name,
-				      EmpathyTpContactFactory  *tp_factory)
+tp_contact_factory_account_connection_cb (EmpathyAccountManager *account_manager,
+					  McAccount *account,
+					  TpConnectionStatusReason reason,
+					  TpConnectionStatus current,
+					  TpConnectionStatus previous,
+					  EmpathyTpContactFactory  *tp_factory)
 {
 	EmpathyTpContactFactoryPriv *priv = GET_PRIV (tp_factory);
-	McAccount                   *account;
 
-	account = mc_account_lookup (unique_name);
 	if (account && empathy_account_equal (account, priv->account)) {
 		tp_contact_factory_status_updated (tp_factory);
 	}
-	g_object_unref (account);
 }
 
 static void
@@ -1367,7 +1368,9 @@ tp_contact_factory_finalize (GObject *object)
 	DEBUG ("Finalized: %p (%s)", object,
 		mc_account_get_normalized_name (priv->account));
 
-	empathy_disconnect_account_status_changed (priv->token);
+	g_signal_handlers_disconnect_by_func (priv->account_manager,
+					      tp_contact_factory_account_connection_cb,
+					      object);
 
 	for (l = priv->contacts; l; l = l->next) {
 		g_object_weak_unref (G_OBJECT (l->data),
@@ -1376,7 +1379,7 @@ tp_contact_factory_finalize (GObject *object)
 	}
 
 	g_list_free (priv->contacts);
-	g_object_unref (priv->mc);
+	g_object_unref (priv->account_manager);
 	g_object_unref (priv->account);
 	g_object_unref (priv->user);
 
@@ -1519,12 +1522,13 @@ empathy_tp_contact_factory_init (EmpathyTpContactFactory *tp_factory)
 		EMPATHY_TYPE_TP_CONTACT_FACTORY, EmpathyTpContactFactoryPriv);
 
 	tp_factory->priv = priv;
-	priv->mc = empathy_mission_control_new ();
-	priv->token = empathy_connect_to_account_status_changed (priv->mc,
-						   G_CALLBACK (tp_contact_factory_status_changed_cb),
-						   tp_factory, NULL);
+	priv->account_manager = empathy_account_manager_new ();
 
-  priv->can_request_ft = FALSE;
+	g_signal_connect (priv->account_manager, "account-connection-changed",
+			  G_CALLBACK (tp_contact_factory_account_connection_cb),
+			  tp_factory);
+
+	priv->can_request_ft = FALSE;
 }
 
 EmpathyTpContactFactory *
