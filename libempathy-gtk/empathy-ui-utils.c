@@ -43,11 +43,13 @@
 
 #include "empathy-ui-utils.h"
 #include "empathy-images.h"
+#include "empathy-conf.h"
 
 #define DEBUG_FLAG EMPATHY_DEBUG_OTHER
 #include <libempathy/empathy-debug.h>
 #include <libempathy/empathy-utils.h>
 #include <libempathy/empathy-dispatcher.h>
+#include <libempathy/empathy-idle.h>
 
 void
 empathy_gtk_init (void)
@@ -1490,3 +1492,36 @@ empathy_send_file_with_file_chooser (EmpathyContact *contact)
 	gtk_widget_show (widget);
 }
 
+gboolean
+empathy_sound_pref_is_enabled (const char *key)
+{
+	EmpathyConf *conf;
+	McPresence presence;
+	gboolean res;
+	EmpathyIdle *idle;
+
+	conf = empathy_conf_get ();
+	res = FALSE;
+
+	empathy_conf_get_bool (conf, EMPATHY_PREFS_SOUNDS_ENABLED, &res);
+
+	if (!res) {
+		return FALSE;
+	}
+
+	idle = empathy_idle_new ();	
+	presence = empathy_idle_get_state (idle);
+	g_object_unref (idle);
+
+	if (presence > MC_PRESENCE_AVAILABLE) {
+		empathy_conf_get_bool (conf, EMPATHY_PREFS_SOUNDS_DISABLED_AWAY,
+				       &res);
+		if (res) {
+			return FALSE;
+		}
+	}
+
+	empathy_conf_get_bool (conf, key, &res);
+
+	return res;
+}
