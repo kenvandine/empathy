@@ -160,7 +160,7 @@
 
     <schema>
       <key>/schemas/apps/empathy/sounds/sounds_contact_login</key>
-      <applyto>/apps/empathy/sounds/sounds_contact_login/applyto>
+      <applyto>/apps/empathy/sounds/sounds_contact_login</applyto>
       <owner>empathy</owner>
       <type>bool</type>
       <default>true</default>
@@ -175,7 +175,7 @@
     
     <schema>
       <key>/schemas/apps/empathy/sounds/sounds_contact_logout</key>
-      <applyto>/apps/empathy/sounds/sounds_contact_logout/applyto>
+      <applyto>/apps/empathy/sounds/sounds_contact_logout</applyto>
       <owner>empathy</owner>
       <type>bool</type>
       <default>true</default>
@@ -190,7 +190,7 @@
 
     <schema>
       <key>/schemas/apps/empathy/sounds/sounds_service_login</key>
-      <applyto>/apps/empathy/sounds/sounds_service_login/applyto>
+      <applyto>/apps/empathy/sounds/sounds_service_login</applyto>
       <owner>empathy</owner>
       <type>bool</type>
       <default>false</default>
@@ -204,7 +204,7 @@
     
     <schema>
       <key>/schemas/apps/empathy/sounds/sounds_service_logout</key>
-      <applyto>/apps/empathy/sounds/sounds_service_logout/applyto>
+      <applyto>/apps/empathy/sounds/sounds_service_logout</applyto>
       <owner>empathy</owner>
       <type>bool</type>
       <default>false</default>
