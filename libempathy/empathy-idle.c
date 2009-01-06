@@ -410,12 +410,14 @@ empathy_idle_init (EmpathyIdle *idle)
 		g_clear_error (&error);
 	}
 	priv->status = mission_control_get_presence_message_actual (priv->mc, &error);
-	if (error) {
-		DEBUG ("Error getting actual presence message: %s", error->message);
-
+	if (error || G_STR_EMPTY (priv->status)) {
 		g_free (priv->status);
 		priv->status = NULL;
-		g_clear_error (&error);
+
+		if (error) {
+			DEBUG ("Error getting actual presence message: %s", error->message);
+			g_clear_error (&error);
+		}
 	}
 
 	dbus_g_proxy_connect_signal (DBUS_G_PROXY (priv->mc),
