@@ -288,10 +288,9 @@ preferences_sound_load (EmpathyPreferences *preferences)
 	for (i = 0; i < G_N_ELEMENTS (sound_entries); i++) {
 		empathy_conf_get_bool (conf, sound_entries[i].key, &set);
 
-		gtk_list_store_append (store, &iter);
-		gtk_list_store_set (store, &iter, COL_SOUND_ENABLED, set,
-				    COL_SOUND_NAME, gettext (sound_entries[i].name),
-				    COL_SOUND_KEY, sound_entries[i].key, -1);
+		gtk_list_store_insert_with_values (store, &iter, i,
+						   COL_SOUND_NAME, gettext (sound_entries[i].name),
+						   COL_SOUND_KEY, sound_entries[i].key, -1);
 	}
 }
 
