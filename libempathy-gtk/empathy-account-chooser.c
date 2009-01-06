@@ -158,6 +158,12 @@ account_chooser_finalize (GObject *object)
 	g_signal_handlers_disconnect_by_func (priv->manager,
 					      account_chooser_connection_changed_cb,
 					      object);
+	g_signal_handlers_disconnect_by_func (priv->manager,
+					      account_chooser_account_created_cb,
+					      object);
+	g_signal_handlers_disconnect_by_func (priv->manager,
+					      account_chooser_account_deleted_cb,
+					      object);
 	g_object_unref (priv->manager);
 
 	G_OBJECT_CLASS (empathy_account_chooser_parent_class)->finalize (object);
