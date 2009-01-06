@@ -334,9 +334,11 @@ empathy_account_manager_init (EmpathyAccountManager *manager)
 
   for (l = mc_accounts; l; l = l->next) {
     data = account_data_new_default (priv->mc, l->data);
-    
-    g_hash_table_insert (priv->accounts, g_object_ref (l->data),
-                         data);
+
+    /* no need to g_object_ref () the account here, as mc_accounts_list ()
+     * already increases the refcount.
+     */
+    g_hash_table_insert (priv->accounts, l->data, data);
   }
 
   g_signal_connect (priv->monitor, "account-created",
@@ -353,6 +355,8 @@ empathy_account_manager_init (EmpathyAccountManager *manager)
   dbus_g_proxy_connect_signal (DBUS_G_PROXY (priv->mc), "AccountStatusChanged",
                                G_CALLBACK (account_status_changed_cb),
                                manager, NULL);
+
+  g_list_free (mc_accounts);
 }
 
 static void
