@@ -460,11 +460,55 @@ main_window_connection_changed_cb (EmpathyAccountManager *manager,
 	}
 }
 
+static void
+main_window_contact_presence_changed_cb (EmpathyContactMonitor *monitor,
+					 EmpathyContact *contact,
+					 McPresence current,
+					 McPresence previous,
+					 EmpathyMainWindow *window)
+{
+	EmpathyAccountManager *acc_manager;
+	McAccount *account;
+	gboolean should_play;
+
+	acc_manager = empathy_account_manager_new ();
+	account = empathy_contact_get_account (contact);
+	should_play = !empathy_account_manager_is_account_just_connected (acc_manager, account);
+
+	if (!should_play) {
+		goto out;
+	}
+
+	if (previous < MC_PRESENCE_AVAILABLE && current > MC_PRESENCE_OFFLINE) {
+		/* someone is logging in */
+		if (empathy_sound_pref_is_enabled (EMPATHY_PREFS_SOUNDS_CONTACT_LOGIN)) {
+			ca_gtk_play_for_widget (GTK_WIDGET (window->window), 0,
+						CA_PROP_EVENT_ID, "service-login",
+						CA_PROP_EVENT_DESCRIPTION, _("Contact logged in"),
+						NULL);
+		}
+		goto out;
+	}
+
+	if (previous > MC_PRESENCE_OFFLINE && current < MC_PRESENCE_AVAILABLE) {
+		/* someone is logging off */
+		if (empathy_sound_pref_is_enabled (EMPATHY_PREFS_SOUNDS_CONTACT_LOGOUT)) {
+			ca_gtk_play_for_widget (GTK_WIDGET (window->window), 0,
+						CA_PROP_EVENT_ID, "service-logout",
+						CA_PROP_EVENT_DESCRIPTION, _("Contact logged out"),
+						NULL);
+		}
+	}
+out:
+	g_object_unref (acc_manager);
+}
+
 GtkWidget *
 empathy_main_window_show (void)
 {
 	static EmpathyMainWindow *window = NULL;
 	EmpathyContactList       *list_iface;
+	EmpathyContactMonitor    *monitor;
 	GladeXML                 *glade;
 	EmpathyConf               *conf;
 	GtkWidget                *sw;
@@ -580,10 +624,13 @@ empathy_main_window_show (void)
 	empathy_status_presets_get_all ();
 
 	list_iface = EMPATHY_CONTACT_LIST (empathy_contact_manager_new ());
+	monitor = empathy_contact_list_get_monitor (list_iface);
 	window->list_store = empathy_contact_list_store_new (list_iface);
 	window->list_view = empathy_contact_list_view_new (window->list_store,
 							   EMPATHY_CONTACT_LIST_FEATURE_ALL,
 							   EMPATHY_CONTACT_FEATURE_ALL);
+	g_signal_connect (monitor, "contact-presence-changed",
+			  G_CALLBACK (main_window_contact_presence_changed_cb), window);
 	g_object_unref (list_iface);
 
 	gtk_widget_show (GTK_WIDGET (window->list_view));
