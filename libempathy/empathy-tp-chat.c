@@ -259,6 +259,10 @@ tp_chat_get_monitor (EmpathyContactList *list)
 
 	priv = GET_PRIV (list);
 
+	if (priv->contact_monitor == NULL) {
+		priv->contact_monitor = empathy_contact_monitor_new_for_iface (list);
+	}
+
 	return priv->contact_monitor;
 }
 
@@ -908,7 +912,10 @@ tp_chat_finalize (GObject *object)
 		g_object_unref (priv->group);
 	}
 
-	g_object_unref (priv->contact_monitor);
+	if (priv->contact_monitor) {
+		g_object_unref (priv->contact_monitor);
+	}
+
 	g_object_unref (priv->factory);
 	g_object_unref (priv->user);
 	g_object_unref (priv->account);
@@ -1112,7 +1119,7 @@ empathy_tp_chat_init (EmpathyTpChat *chat)
 		EMPATHY_TYPE_TP_CHAT, EmpathyTpChatPriv);
 
 	chat->priv = priv;
-	priv->contact_monitor = empathy_contact_monitor_new_for_proxy (EMPATHY_CONTACT_LIST (chat));
+	priv->contact_monitor = NULL;
 }
 
 static void

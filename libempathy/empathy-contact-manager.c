@@ -191,7 +191,9 @@ contact_manager_finalize (GObject *object)
 					      object);
 	g_object_unref (priv->account_manager);
 
-	g_object_unref (priv->contact_monitor);
+	if (priv->contact_monitor) {
+		g_object_unref (priv->contact_monitor);
+	}
 }
 
 static void
@@ -218,7 +220,7 @@ empathy_contact_manager_init (EmpathyContactManager *manager)
 					     (GDestroyNotify) g_object_unref,
 					     (GDestroyNotify) g_object_unref);
 	priv->account_manager = empathy_account_manager_dup_singleton ();
-	priv->contact_monitor = empathy_contact_monitor_new_for_proxy (EMPATHY_CONTACT_LIST (manager));
+	priv->contact_monitor = NULL;
 
 	g_signal_connect (priv->account_manager,
 			  "account-connection-changed",
@@ -332,6 +334,10 @@ static EmpathyContactMonitor *
 contact_manager_get_monitor (EmpathyContactList *manager)
 {
 	EmpathyContactManagerPriv *priv = GET_PRIV (manager);
+
+	if (priv->contact_monitor == NULL) {
+		priv->contact_monitor = empathy_contact_monitor_new_for_iface (manager);
+	}
 
 	return priv->contact_monitor;
 }
