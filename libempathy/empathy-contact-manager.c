@@ -35,8 +35,7 @@
 #define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyContactManager)
 typedef struct {
 	GHashTable     *lists;
-	MissionControl *mc;
-	gpointer        token;
+	EmpathyAccountManager *account_manager;
 } EmpathyContactManagerPriv;
 
 static void contact_manager_iface_init         (EmpathyContactListIface    *iface);
@@ -159,23 +158,19 @@ contact_manager_add_account (EmpathyContactManager *manager,
 }
 
 static void
-contact_manager_status_changed_cb (MissionControl           *mc,
-				   TpConnectionStatus        status,
-				   McPresence                presence,
-				   TpConnectionStatusReason  reason,
-				   const gchar              *unique_name,
-				   EmpathyContactManager    *manager)
+contact_manager_connection_changed_cb (EmpathyAccountManager *account_manager,
+				       McAccount *account,
+				       TpConnectionStatusReason  reason,
+				       TpConnectionStatus current,
+				       TpConnectionStatus previous,
+				       EmpathyContactManager *manager)
 {
-	McAccount *account;
-
-	if (status != TP_CONNECTION_STATUS_CONNECTED) {
+	if (current != TP_CONNECTION_STATUS_CONNECTED) {
 		/* We only care about newly connected accounts */
 		return;
 	}
 
-	account = mc_account_lookup (unique_name);
 	contact_manager_add_account (manager, account);
-	g_object_unref (account);
 }
 
 static void
@@ -183,12 +178,11 @@ contact_manager_finalize (GObject *object)
 {
 	EmpathyContactManagerPriv *priv = GET_PRIV (object);
 
-	empathy_disconnect_account_status_changed (priv->token);
 	g_hash_table_foreach (priv->lists,
 			      contact_manager_disconnect_foreach,
 			      object);
 	g_hash_table_destroy (priv->lists);
-	g_object_unref (priv->mc);
+	g_object_unref (priv->account_manager);
 }
 
 static void
@@ -205,6 +199,7 @@ static void
 empathy_contact_manager_init (EmpathyContactManager *manager)
 {
 	GSList                    *accounts, *l;
+	MissionControl            *mc;
 	EmpathyContactManagerPriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (manager,
 		EMPATHY_TYPE_CONTACT_MANAGER, EmpathyContactManagerPriv);
 
@@ -213,11 +208,13 @@ empathy_contact_manager_init (EmpathyContactManager *manager)
 					     empathy_account_equal,
 					     (GDestroyNotify) g_object_unref,
 					     (GDestroyNotify) g_object_unref);
+	priv->account_manager = empathy_account_manager_new ();
 
-	priv->mc = empathy_mission_control_new ();
-	priv->token = empathy_connect_to_account_status_changed (priv->mc,
-		G_CALLBACK (contact_manager_status_changed_cb),
-		manager, NULL);
+	g_signal_connect (priv->account_manager,
+			  "account-connection-changed",
+			  G_CALLBACK (contact_manager_connection_changed_cb), manager);
+
+	mc = empathy_mission_control_new ();
 
 	/* Get ContactList for existing connections */
 	accounts = mission_control_get_online_connections (priv->mc, NULL);
@@ -225,7 +222,9 @@ empathy_contact_manager_init (EmpathyContactManager *manager)
 		contact_manager_add_account (manager, l->data);
 		g_object_unref (l->data);
 	}
+
 	g_slist_free (accounts);
+	g_object_unref (mc);
 }
 
 EmpathyContactManager *
