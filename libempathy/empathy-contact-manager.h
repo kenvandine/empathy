@@ -58,7 +58,6 @@ EmpathyTpContactList * empathy_contact_manager_get_list (EmpathyContactManager *
 							 McAccount             *account);
 gboolean               empathy_contact_manager_can_add  (EmpathyContactManager *manager,
 							 McAccount             *account);
-EmpathyContactMonitor *empathy_contact_manager_get_monitor (EmpathyContactManager *manager);
 
 G_END_DECLS
 

@@ -186,6 +186,7 @@ contact_manager_finalize (GObject *object)
 			      object);
 	g_hash_table_destroy (priv->lists);
 	g_object_unref (priv->account_manager);
+	g_object_unref (priv->contact_monitor);
 }
 
 static void
