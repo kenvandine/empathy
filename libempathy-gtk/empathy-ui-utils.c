@@ -1563,10 +1563,12 @@ void
 empathy_sound_play (GtkWidget *widget,
 		    EmpathySound sound_id)
 {
-	EmpathySoundEntry *entry = &(sound_entries[sound_id]);
+	EmpathySoundEntry *entry;
 	gboolean should_play = TRUE;
 
-	g_return_if_fail (entry->sound_id < LAST_EMPATHY_SOUND);
+	g_return_if_fail (sound_id < LAST_EMPATHY_SOUND);
+
+	entry = &(sound_entries[sound_id]);
 	g_return_if_fail (entry->sound_id == sound_id);
 
 	if (entry->gconf_key != NULL) {
