@@ -46,8 +46,15 @@ struct _EmpathyAccountManagerClass {
 };
 
 GType empathy_account_manager_get_type (void);
-EmpathyAccountManager * empathy_account_manager_new (void);
 
+/* public methods */
+
+EmpathyAccountManager * empathy_account_manager_new (void);
+int                     empathy_account_manager_get_connected_accounts 
+				(EmpathyAccountManager *manager);
+int                     empathy_account_manager_get_connecting_accounts
+				(EmpathyAccountManager *manager);
 G_END_DECLS
 
 #endif /* __EMPATHY_ACCOUNT_MANAGER_H__ */
+

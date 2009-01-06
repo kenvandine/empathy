@@ -31,9 +31,11 @@
 
 typedef struct {
 	McAccountMonitor *monitor;
-	MissionControl *mc;
+	MissionControl   *mc;
 
-	GHashTable *accounts;
+	GHashTable       *accounts;
+	int               connected;
+	int               connecting;
 } EmpathyAccountManagerPriv;
 
 typedef struct {
@@ -89,7 +91,7 @@ account_data_new_default (MissionControl *mc,
 	actual_c = mission_control_get_connection_status (mc,
 							  account, &err);
 	if (err) {
-		actual_c = -1;
+		actual_c = TP_CONNECTION_STATUS_DISCONNECTED;
 	}
 
 	return account_data_new (actual_p, actual_c, mc_account_is_enabled (account));
@@ -197,6 +199,37 @@ account_enabled_cb (McAccountMonitor *mon,
 }
 
 static void
+update_connection_numbers (EmpathyAccountManager *manager,
+			   TpConnectionStatus conn,
+			   TpConnectionStatus old_c)
+{
+	EmpathyAccountManagerPriv *priv = GET_PRIV (manager);
+
+	if (conn == TP_CONNECTION_STATUS_CONNECTED) {
+		priv->connected++;
+		if (old_c == TP_CONNECTION_STATUS_CONNECTING) {
+			priv->connecting--;
+		}
+	}
+
+	if (conn == TP_CONNECTION_STATUS_CONNECTING) {
+		priv->connecting++;
+		if (old_c == TP_CONNECTION_STATUS_CONNECTED) {
+			priv->connected--;
+		}
+	}
+
+	if (conn == TP_CONNECTION_STATUS_DISCONNECTED) {
+		if (old_c == TP_CONNECTION_STATUS_CONNECTED) {
+			priv->connected--;
+		}
+		if (old_c == TP_CONNECTION_STATUS_CONNECTING) {
+			priv->connecting--;
+		}
+	}
+}
+
+static void
 account_status_changed_cb (MissionControl *mc,
 			   TpConnectionStatus connection,
 			   McPresence presence,
@@ -227,6 +260,8 @@ account_status_changed_cb (MissionControl *mc,
 
 		if (old_c != connection) {
 			data->connection = connection;
+			update_connection_numbers (manager, connection, old_c);
+
 			g_signal_emit (manager, signals[ACCOUNT_CONNECTION_CHANGED], 0,
 				       account, reason, connection, old_c);
 		}
@@ -247,6 +282,7 @@ empathy_account_manager_init (EmpathyAccountManager *manager)
 	manager->priv = priv;
 	priv->monitor = mc_account_monitor_new ();
 	priv->mc = empathy_mission_control_new ();
+	priv->connected = priv->connecting = 0;
 
 	priv->accounts = g_hash_table_new_full (empathy_account_hash,
 						empathy_account_equal,
@@ -383,6 +419,8 @@ empathy_account_manager_class_init (EmpathyAccountManagerClass *klass)
 	g_type_class_add_private (oclass, sizeof (EmpathyAccountManagerPriv));
 }
 
+/* public methods */
+
 EmpathyAccountManager *
 empathy_account_manager_new (void)
 {
@@ -395,3 +433,28 @@ empathy_account_manager_new (void)
 
 	return manager;
 }
+
+int
+empathy_account_manager_get_connected_accounts (EmpathyAccountManager *manager)
+{
+	EmpathyAccountManagerPriv *priv;
+
+	g_assert (EMPATHY_IS_ACCOUNT_MANAGER (manager));
+
+	priv = GET_PRIV (manager);
+
+	return priv->connected;
+}
+
+int
+empathy_account_manager_get_connecting_accounts (EmpathyAccountManager *manager)
+{
+	EmpathyAccountManagerPriv *priv;
+
+	g_assert (EMPATHY_IS_ACCOUNT_MANAGER (manager));
+
+	priv = GET_PRIV (manager);
+
+	return priv->connecting;
+}
+
