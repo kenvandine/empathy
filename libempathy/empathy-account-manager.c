@@ -327,6 +327,7 @@ empathy_account_manager_init (EmpathyAccountManager *manager)
       G_TYPE_INSTANCE_GET_PRIVATE (manager,
                                    EMPATHY_TYPE_ACCOUNT_MANAGER, EmpathyAccountManagerPriv);
   GList *mc_accounts, *l;
+  guint initial_connection;
   AccountData *data;
 
   manager->priv = priv;
@@ -345,6 +346,14 @@ empathy_account_manager_init (EmpathyAccountManager *manager)
   for (l = mc_accounts; l; l = l->next)
     {
       data = account_data_new_default (priv->mc, l->data);
+
+      initial_connection = mission_control_get_connection_status (priv->mc,
+								  l->data, NULL);
+      if (initial_connection == TP_CONNECTION_STATUS_CONNECTED) {
+	priv->connected++;
+      } else if (initial_connection == TP_CONNECTION_STATUS_CONNECTING) {
+	priv->connecting++;
+      }
 
       /* no need to g_object_ref () the account here, as mc_accounts_list ()
        * already increases the refcount.
