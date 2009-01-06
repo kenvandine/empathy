@@ -226,7 +226,7 @@ account_status_changed_cb (MissionControl *mc,
 
 		if (old_c != connection) {
 			data->connection = connection;
-			g_signal_emit (manager, signals[ACCOUNT_PRESENCE_CHANGED], 0,
+			g_signal_emit (manager, signals[ACCOUNT_CONNECTION_CHANGED], 0,
 				       account, reason, connection, old_c);
 		}
 	
