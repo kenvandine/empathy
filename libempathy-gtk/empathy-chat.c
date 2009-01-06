@@ -192,6 +192,7 @@ chat_connection_changed_cb (EmpathyAccountManager *manager,
 						    priv->id, TRUE,
 						    NULL, NULL, NULL, NULL);
 		g_object_unref (connection);
+		g_object_unref (mc);
 	}
 }
 
