@@ -24,6 +24,7 @@
 #include <libmissioncontrol/mc-account-monitor.h>
 
 #include "empathy-account-manager.h"
+#include "empathy-marshal.h"
 #include "empathy-utils.h"
 
 #define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyAccountManager)
@@ -359,7 +360,7 @@ empathy_account_manager_class_init (EmpathyAccountManagerClass *klass)
 			      G_SIGNAL_RUN_LAST,
 			      0,
 			      NULL, NULL,
-			      g_cclosure_marshal_VOID__OBJECT,
+			      _empathy_marshal_VOID__OBJECT_INT_UINT_UINT,
 			      G_TYPE_NONE,
 			      4, MC_TYPE_ACCOUNT,
 			      G_TYPE_INT,   /* reason */
@@ -372,7 +373,7 @@ empathy_account_manager_class_init (EmpathyAccountManagerClass *klass)
 			      G_SIGNAL_RUN_LAST,
 			      0,
 			      NULL, NULL,
-			      g_cclosure_marshal_VOID__OBJECT,
+			      _empathy_marshal_VOID__OBJECT_INT_INT,
 			      G_TYPE_NONE,
 			      3, MC_TYPE_ACCOUNT,
 			      G_TYPE_INT,  /* actual presence */
