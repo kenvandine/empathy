@@ -1116,7 +1116,9 @@ main_window_status_changed_cb (MissionControl           *mc,
 			       const gchar              *unique_name,
 			       EmpathyMainWindow        *window)
 {
-	McAccount *account;
+	McAccount   *account;
+	McPresence   old_state;
+	EmpathyIdle *idle;
 
 	main_window_update_status (window);
 
@@ -1174,7 +1176,14 @@ main_window_status_changed_cb (MissionControl           *mc,
 		main_window_error_display (window, account, message);
 	}
 
+	idle = empathy_idle_new ();
+	old_state = empathy_idle_get_state (idle);
+
+	/* play the sound only when the state changes from the current to
+	 * UNSET, as we receive this signal two times when disconnecting.
+	 */
 	if (status == TP_CONNECTION_STATUS_DISCONNECTED &&
+	    old_state != MC_PRESENCE_UNSET &&
 	    empathy_sound_pref_is_enabled (EMPATHY_PREFS_SOUNDS_SERVICE_LOGOUT)) {
 		ca_gtk_play_for_widget (GTK_WIDGET (window->window), 0,
 		                        CA_PROP_EVENT_ID, "service-logout",
@@ -1184,23 +1193,18 @@ main_window_status_changed_cb (MissionControl           *mc,
 
 	if (status == TP_CONNECTION_STATUS_CONNECTED) {
 		GtkWidget *error_widget;
-		EmpathyIdle *idle;
-
-		idle = empathy_idle_new ();
 
 		/* emit the sound only on first connect, i.e. when the saved
 		 * idle state is MC_PRESENCE_UNSET.
 		 */
 
-		if (empathy_idle_get_state (idle) == MC_PRESENCE_UNSET &&
+		if (old_state == MC_PRESENCE_UNSET &&
 		    empathy_sound_pref_is_enabled (EMPATHY_PREFS_SOUNDS_SERVICE_LOGIN)) {
 			ca_gtk_play_for_widget (GTK_WIDGET (window->window), 0,
 						CA_PROP_EVENT_ID, "service-login",
 						CA_PROP_EVENT_DESCRIPTION, _("Connected to server"),
 						NULL);
 		}
-
-		g_object_unref (idle);
 
 		/* Account connected without error, remove error message if any */
 		error_widget = g_hash_table_lookup (window->errors, account);
@@ -1211,6 +1215,7 @@ main_window_status_changed_cb (MissionControl           *mc,
 	}
 
 	g_object_unref (account);
+	g_object_unref (idle);
 }
 
 static void
