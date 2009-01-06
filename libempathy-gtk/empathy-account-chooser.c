@@ -30,9 +30,9 @@
 #include <gtk/gtk.h>
 #include <glade/glade.h>
 
-#include <libmissioncontrol/mc-account-monitor.h>
 #include <libmissioncontrol/mission-control.h>
 
+#include <libempathy/empathy-account-manager.h>
 #include <libempathy/empathy-utils.h>
 
 #include "empathy-ui-utils.h"
@@ -40,13 +40,11 @@
 
 #define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyAccountChooser)
 typedef struct {
-	MissionControl                 *mc;
-	McAccountMonitor               *monitor;
+	EmpathyAccountManager          *manager;
 	gboolean                        set_active_item;
 	gboolean                        has_all_option;
 	EmpathyAccountChooserFilterFunc filter;
 	gpointer                        filter_data;
-	gpointer                        token;
 } EmpathyAccountChooserPriv;
 
 typedef struct {
@@ -73,23 +71,23 @@ static void     account_chooser_set_property           (GObject                 
 							const GValue             *value,
 							GParamSpec               *pspec);
 static void     account_chooser_setup                  (EmpathyAccountChooser    *chooser);
-static void     account_chooser_account_created_cb     (McAccountMonitor         *monitor,
-							const gchar              *unique_name,
+static void     account_chooser_account_created_cb     (EmpathyAccountManager    *manager,
+							McAccount                *account,
 							EmpathyAccountChooser    *chooser);
 static void     account_chooser_account_add_foreach    (McAccount                *account,
 							EmpathyAccountChooser    *chooser);
-static void     account_chooser_account_deleted_cb     (McAccountMonitor         *monitor,
-							const gchar              *unique_name,
+static void     account_chooser_account_deleted_cb     (EmpathyAccountManager    *manager,
+							McAccount                *account,
 							EmpathyAccountChooser    *chooser);
 static void     account_chooser_account_remove_foreach (McAccount                *account,
 							EmpathyAccountChooser    *chooser);
 static void     account_chooser_update_iter            (EmpathyAccountChooser    *chooser,
 							GtkTreeIter              *iter);
-static void     account_chooser_status_changed_cb      (MissionControl           *mc,
-							TpConnectionStatus        status,
-							McPresence                presence,
+static void     account_chooser_connection_changed_cb  (EmpathyAccountManager    *manager,
+							McAccount                *account,
 							TpConnectionStatusReason  reason,
-							const gchar              *unique_name,
+							TpConnectionStatus        new_status,
+							TpConnectionStatus        old_status,
 							EmpathyAccountChooser    *chooser);
 static gboolean account_chooser_separator_func         (GtkTreeModel             *model,
 							GtkTreeIter              *iter,
@@ -147,15 +145,7 @@ account_chooser_finalize (GObject *object)
 	chooser = EMPATHY_ACCOUNT_CHOOSER (object);
 	priv = GET_PRIV (object);
 
-	g_signal_handlers_disconnect_by_func (priv->monitor,
-					      account_chooser_account_created_cb,
-					      chooser);
-	g_signal_handlers_disconnect_by_func (priv->monitor,
-					      account_chooser_account_deleted_cb,
-					      chooser);
-	empathy_disconnect_account_status_changed (priv->token);
-	g_object_unref (priv->mc);
-	g_object_unref (priv->monitor);
+	g_object_unref (priv->manager);
 
 	G_OBJECT_CLASS (empathy_account_chooser_parent_class)->finalize (object);
 }
@@ -205,26 +195,23 @@ GtkWidget *
 empathy_account_chooser_new (void)
 {
 	EmpathyAccountChooserPriv *priv;
-	McAccountMonitor         *monitor;
 	GtkWidget                *chooser;
 
-	monitor = mc_account_monitor_new ();
 	chooser = g_object_new (EMPATHY_TYPE_ACCOUNT_CHOOSER, NULL);
 
 	priv = GET_PRIV (chooser);
 
-	priv->mc = empathy_mission_control_new ();
-	priv->monitor = mc_account_monitor_new ();
+	priv->manager = empathy_account_manager_new ();
 
-	g_signal_connect (priv->monitor, "account-created",
+	g_signal_connect (priv->manager, "account-created",
 			  G_CALLBACK (account_chooser_account_created_cb),
 			  chooser);
-	g_signal_connect (priv->monitor, "account-deleted",
+	g_signal_connect (priv->manager, "account-deleted",
 			  G_CALLBACK (account_chooser_account_deleted_cb),
 			  chooser);
-	priv->token = empathy_connect_to_account_status_changed (priv->mc,
-						   G_CALLBACK (account_chooser_status_changed_cb),
-						   chooser, NULL);
+	g_signal_connect (priv->manager, "account-connection-changed",
+			  G_CALLBACK (account_chooser_connection_changed_cb),
+			  chooser);
 
 	account_chooser_setup (EMPATHY_ACCOUNT_CHOOSER (chooser));
 
@@ -405,15 +392,11 @@ account_chooser_setup (EmpathyAccountChooser *chooser)
 }
 
 static void
-account_chooser_account_created_cb (McAccountMonitor     *monitor,
-				    const gchar          *unique_name,
+account_chooser_account_created_cb (EmpathyAccountManager *manager,
+				    McAccount             *account,
 				    EmpathyAccountChooser *chooser)
 {
-	McAccount *account;
-
-	account = mc_account_lookup (unique_name);
 	account_chooser_account_add_foreach (account, chooser);
-	g_object_unref (account);
 }
 
 static void
@@ -436,15 +419,11 @@ account_chooser_account_add_foreach (McAccount             *account,
 }
 
 static void
-account_chooser_account_deleted_cb (McAccountMonitor     *monitor,
-				    const gchar          *unique_name,
+account_chooser_account_deleted_cb (EmpathyAccountManager *manager,
+				    McAccount             *account,
 				    EmpathyAccountChooser *chooser)
 {
-	McAccount *account;
-
-	account = mc_account_lookup (unique_name);
 	account_chooser_account_remove_foreach (account, chooser);
-	g_object_unref (account);
 }
 
 typedef struct {
@@ -555,21 +534,18 @@ account_chooser_update_iter (EmpathyAccountChooser *chooser,
 }
 
 static void
-account_chooser_status_changed_cb (MissionControl           *mc,
-				   TpConnectionStatus        status,
-				   McPresence                presence,
-				   TpConnectionStatusReason  reason,
-				   const gchar              *unique_name,
-				   EmpathyAccountChooser    *chooser)
+account_chooser_connection_changed_cb (EmpathyAccountManager   *manager,
+				       McAccount               *account,
+				       TpConnectionStatusReason reason,
+				       TpConnectionStatus       new_status,
+				       TpConnectionStatus       old_status,
+				       EmpathyAccountChooser   *chooser)
 {
-	McAccount   *account;
-	GtkTreeIter  iter;
+	GtkTreeIter iter;
 
-	account = mc_account_lookup (unique_name);
 	if (account_chooser_find_account (chooser, account, &iter)) {
 		account_chooser_update_iter (chooser, &iter);
 	}
-	g_object_unref (account);
 }
 
 static gboolean
