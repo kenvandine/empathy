@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
+/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2; -*- */
 /*
  * Copyright (C) 2008 Collabora Ltd.
  *
@@ -38,12 +38,12 @@ G_BEGIN_DECLS
 typedef struct _EmpathyContactMonitorClass EmpathyContactMonitorClass;
 
 struct _EmpathyContactMonitor {
-	GObject parent;
-	gpointer priv;
+  GObject parent;
+  gpointer priv;
 };
 
 struct _EmpathyContactMonitorClass {
-	GObjectClass parent_class;
+  GObjectClass parent_class;
 };
 
 GType empathy_contact_monitor_get_type (void);
@@ -52,7 +52,7 @@ GType empathy_contact_monitor_get_type (void);
 
 void
 empathy_contact_monitor_set_proxy (EmpathyContactMonitor *self,
-				   EmpathyContactList *proxy);
+                                   EmpathyContactList *proxy);
 				   
 EmpathyContactMonitor * 
 empathy_contact_monitor_new_for_proxy (EmpathyContactList *proxy);

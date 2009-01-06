@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
+/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2; -*- */
 /*
  * Copyright (C) 2008 Collabora Ltd.
  *
@@ -39,12 +39,12 @@ typedef struct _EmpathyAccountManager      EmpathyAccountManager;
 typedef struct _EmpathyAccountManagerClass EmpathyAccountManagerClass;
 
 struct _EmpathyAccountManager {
-	GObject parent;
-	gpointer priv;
+  GObject parent;
+  gpointer priv;
 };
 
 struct _EmpathyAccountManagerClass {
-	GObjectClass parent_class;
+  GObjectClass parent_class;
 };
 
 GType empathy_account_manager_get_type (void);
@@ -53,12 +53,12 @@ GType empathy_account_manager_get_type (void);
 
 EmpathyAccountManager * empathy_account_manager_new (void);
 int                     empathy_account_manager_get_connected_accounts 
-				(EmpathyAccountManager *manager);
+                                (EmpathyAccountManager *manager);
 int                     empathy_account_manager_get_connecting_accounts
-				(EmpathyAccountManager *manager);
+                                (EmpathyAccountManager *manager);
 gboolean                empathy_account_manager_is_account_just_connected
-				(EmpathyAccountManager *manager,
-				 McAccount             *account);
+                                (EmpathyAccountManager *manager,
+                                 McAccount             *account);
 
 G_END_DECLS
 
