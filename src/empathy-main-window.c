@@ -31,12 +31,12 @@
 
 #include <libempathy/empathy-contact.h>
 #include <libempathy/empathy-utils.h>
+#include <libempathy/empathy-account-manager.h>
 #include <libempathy/empathy-chatroom-manager.h>
 #include <libempathy/empathy-chatroom.h>
 #include <libempathy/empathy-contact-list.h>
 #include <libempathy/empathy-contact-manager.h>
 #include <libempathy/empathy-contact-factory.h>
-#include <libempathy/empathy-idle.h>
 #include <libempathy/empathy-status-presets.h>
 
 #include <libempathy-gtk/empathy-contact-dialogs.h>
@@ -78,11 +78,11 @@ typedef struct {
 	EmpathyContactListView  *list_view;
 	EmpathyContactListStore *list_store;
 	MissionControl          *mc;
+	EmpathyAccountManager   *account_manager;
 	EmpathyChatroomManager  *chatroom_manager;
 	EmpathyEventManager     *event_manager;
 	guint                    flash_timeout_id;
 	gboolean                 flash_on;
-	gpointer                 token;
 
 	GtkWidget              *window;
 	GtkWidget              *main_vbox;
@@ -101,9 +101,8 @@ typedef struct {
 	guint                   size_timeout_id;
 	GHashTable             *errors;
 
-	/* Widgets that are enabled when there is... */
-	GList                  *widgets_connected;	/* ... connected accounts */
-	GList                  *widgets_disconnected;	/* ... disconnected accounts */
+	/* Widgets that are enabled when there are connected accounts */
+	GList                  *widgets_connected;
 } EmpathyMainWindow;
 
 static void     main_window_destroy_cb                         (GtkWidget                *widget,
@@ -153,13 +152,11 @@ static void     main_window_help_contents_cb                   (GtkWidget       
 static gboolean main_window_throbber_button_press_event_cb     (GtkWidget                *throbber_ebox,
 								GdkEventButton           *event,
 								EmpathyMainWindow        *window);
-static void     main_window_status_changed_cb                  (MissionControl           *mc,
-								TpConnectionStatus        status,
-								McPresence                presence,
-								TpConnectionStatusReason  reason,
-								const gchar              *unique_name,
-								EmpathyMainWindow        *window);
-static void     main_window_update_status                      (EmpathyMainWindow        *window);
+static void     main_window_update_status                      (EmpathyMainWindow        *window,
+								EmpathyAccountManager    *manager);
+static void     main_window_error_display		       (EmpathyMainWindow        *window,
+								McAccount                *account,
+								const gchar              *message);
 static void     main_window_accels_load                        (void);
 static void     main_window_accels_save                        (void);
 static void     main_window_connection_items_setup             (EmpathyMainWindow        *window,
@@ -374,6 +371,95 @@ main_window_row_activated_cb (EmpathyContactListView *view,
 	g_object_unref (contact);
 }
 
+static void
+main_window_connection_changed_cb (EmpathyAccountManager *manager,
+				   McAccount *account,
+				   TpConnectionStatusReason reason,
+				   TpConnectionStatus current,
+				   TpConnectionStatus previous,
+				   EmpathyMainWindow *window)
+{
+	main_window_update_status (window, manager);
+
+	if (current == TP_CONNECTION_STATUS_DISCONNECTED &&
+	    reason != TP_CONNECTION_STATUS_REASON_REQUESTED) {
+		const gchar *message;
+
+		switch (reason) {
+		case TP_CONNECTION_STATUS_REASON_NONE_SPECIFIED:
+			message = _("No error specified");
+			break;
+		case TP_CONNECTION_STATUS_REASON_NETWORK_ERROR:
+			message = _("Network error");
+			break;
+		case TP_CONNECTION_STATUS_REASON_AUTHENTICATION_FAILED:
+			message = _("Authentication failed");
+			break;
+		case TP_CONNECTION_STATUS_REASON_ENCRYPTION_ERROR:
+			message = _("Encryption error");
+			break;
+		case TP_CONNECTION_STATUS_REASON_NAME_IN_USE:
+			message = _("Name in use");
+			break;
+		case TP_CONNECTION_STATUS_REASON_CERT_NOT_PROVIDED:
+			message = _("Certificate not provided");
+			break;
+		case TP_CONNECTION_STATUS_REASON_CERT_UNTRUSTED:
+			message = _("Certificate untrusted");
+			break;
+		case TP_CONNECTION_STATUS_REASON_CERT_EXPIRED:
+			message = _("Certificate expired");
+			break;
+		case TP_CONNECTION_STATUS_REASON_CERT_NOT_ACTIVATED:
+			message = _("Certificate not activated");
+			break;
+		case TP_CONNECTION_STATUS_REASON_CERT_HOSTNAME_MISMATCH:
+			message = _("Certificate hostname mismatch");
+			break;
+		case TP_CONNECTION_STATUS_REASON_CERT_FINGERPRINT_MISMATCH:
+			message = _("Certificate fingerprint mismatch");
+			break;
+		case TP_CONNECTION_STATUS_REASON_CERT_SELF_SIGNED:
+			message = _("Certificate self-signed");
+			break;
+		case TP_CONNECTION_STATUS_REASON_CERT_OTHER_ERROR:
+			message = _("Certificate error");
+			break;
+		default:
+			message = _("Unknown error");
+			break;
+		}
+
+		main_window_error_display (window, account, message);
+	}
+
+	if (current == TP_CONNECTION_STATUS_DISCONNECTED &&
+	    empathy_sound_pref_is_enabled (EMPATHY_PREFS_SOUNDS_SERVICE_LOGOUT)) {
+		ca_gtk_play_for_widget (GTK_WIDGET (window->window), 0,
+		                        CA_PROP_EVENT_ID, "service-logout",
+		                        CA_PROP_EVENT_DESCRIPTION, _("Disconnected from server"),
+		                        NULL);
+	}
+
+	if (current == TP_CONNECTION_STATUS_CONNECTED) {
+		GtkWidget *error_widget;
+
+		if (empathy_sound_pref_is_enabled (EMPATHY_PREFS_SOUNDS_SERVICE_LOGIN)) {
+			ca_gtk_play_for_widget (GTK_WIDGET (window->window), 0,
+						CA_PROP_EVENT_ID, "service-login",
+						CA_PROP_EVENT_DESCRIPTION, _("Connected to server"),
+						NULL);
+		}
+
+		/* Account connected without error, remove error message if any */
+		error_widget = g_hash_table_lookup (window->errors, account);
+		if (error_widget) {
+			gtk_widget_destroy (error_widget);
+			g_hash_table_remove (window->errors, account);
+		}
+	}
+}
+
 GtkWidget *
 empathy_main_window_show (void)
 {
@@ -443,9 +529,11 @@ empathy_main_window_show (void)
 	g_object_unref (glade);
 
 	window->mc = empathy_mission_control_new ();
-	window->token = empathy_connect_to_account_status_changed (window->mc,
-						   G_CALLBACK (main_window_status_changed_cb),
-						   window, NULL);
+	window->account_manager = empathy_account_manager_new ();
+
+	g_signal_connect (window->account_manager,
+			  "account-connection-changed",
+			  G_CALLBACK (main_window_connection_changed_cb), window);
 
 	window->errors = g_hash_table_new_full (empathy_account_hash,
 						empathy_account_equal,
@@ -586,7 +674,7 @@ empathy_main_window_show (void)
 					      EMPATHY_PREFS_CONTACTS_SORT_CRITERIUM,
 					      window);
 
-	main_window_update_status (window);
+	main_window_update_status (window, window->account_manager);
 
 	return window->window;
 }
@@ -598,16 +686,18 @@ main_window_destroy_cb (GtkWidget         *widget,
 	/* Save user-defined accelerators. */
 	main_window_accels_save ();
 
-	empathy_disconnect_account_status_changed (window->token);
+	g_signal_handlers_disconnect_by_func (window->account_manager,
+					      main_window_connection_changed_cb,
+					      window);
 
 	if (window->size_timeout_id) {
 		g_source_remove (window->size_timeout_id);
 	}
 
 	g_list_free (window->widgets_connected);
-	g_list_free (window->widgets_disconnected);
 
 	g_object_unref (window->mc);
+	g_object_unref (window->account_manager);
 	g_object_unref (window->list_store);
 	g_hash_table_destroy (window->errors);
 
@@ -1109,146 +1199,15 @@ main_window_error_display (EmpathyMainWindow *window,
 }
 
 static void
-main_window_status_changed_cb (MissionControl           *mc,
-			       TpConnectionStatus        status,
-			       McPresence                presence,
-			       TpConnectionStatusReason  reason,
-			       const gchar              *unique_name,
-			       EmpathyMainWindow        *window)
+main_window_update_status (EmpathyMainWindow *window, EmpathyAccountManager *manager)
 {
-	McAccount   *account;
-	McPresence   old_state;
-	EmpathyIdle *idle;
-
-	main_window_update_status (window);
-
-	account = mc_account_lookup (unique_name);
-
-	if (status == TP_CONNECTION_STATUS_DISCONNECTED &&
-	    reason != TP_CONNECTION_STATUS_REASON_REQUESTED) {
-		const gchar *message;
-
-		switch (reason) {
-		case TP_CONNECTION_STATUS_REASON_NONE_SPECIFIED:
-			message = _("No error specified");
-			break;
-		case TP_CONNECTION_STATUS_REASON_NETWORK_ERROR:
-			message = _("Network error");
-			break;
-		case TP_CONNECTION_STATUS_REASON_AUTHENTICATION_FAILED:
-			message = _("Authentication failed");
-			break;
-		case TP_CONNECTION_STATUS_REASON_ENCRYPTION_ERROR:
-			message = _("Encryption error");
-			break;
-		case TP_CONNECTION_STATUS_REASON_NAME_IN_USE:
-			message = _("Name in use");
-			break;
-		case TP_CONNECTION_STATUS_REASON_CERT_NOT_PROVIDED:
-			message = _("Certificate not provided");
-			break;
-		case TP_CONNECTION_STATUS_REASON_CERT_UNTRUSTED:
-			message = _("Certificate untrusted");
-			break;
-		case TP_CONNECTION_STATUS_REASON_CERT_EXPIRED:
-			message = _("Certificate expired");
-			break;
-		case TP_CONNECTION_STATUS_REASON_CERT_NOT_ACTIVATED:
-			message = _("Certificate not activated");
-			break;
-		case TP_CONNECTION_STATUS_REASON_CERT_HOSTNAME_MISMATCH:
-			message = _("Certificate hostname mismatch");
-			break;
-		case TP_CONNECTION_STATUS_REASON_CERT_FINGERPRINT_MISMATCH:
-			message = _("Certificate fingerprint mismatch");
-			break;
-		case TP_CONNECTION_STATUS_REASON_CERT_SELF_SIGNED:
-			message = _("Certificate self-signed");
-			break;
-		case TP_CONNECTION_STATUS_REASON_CERT_OTHER_ERROR:
-			message = _("Certificate error");
-			break;
-		default:
-			message = _("Unknown error");
-			break;
-		}
-
-		main_window_error_display (window, account, message);
-	}
-
-	idle = empathy_idle_new ();
-	old_state = empathy_idle_get_state (idle);
-
-	/* play the sound only when the state changes from the current to
-	 * UNSET, as we receive this signal two times when disconnecting.
-	 */
-	if (status == TP_CONNECTION_STATUS_DISCONNECTED &&
-	    old_state != MC_PRESENCE_UNSET &&
-	    empathy_sound_pref_is_enabled (EMPATHY_PREFS_SOUNDS_SERVICE_LOGOUT)) {
-		ca_gtk_play_for_widget (GTK_WIDGET (window->window), 0,
-		                        CA_PROP_EVENT_ID, "service-logout",
-		                        CA_PROP_EVENT_DESCRIPTION, _("Disconnected from server"),
-		                        NULL);
-	}
-
-	if (status == TP_CONNECTION_STATUS_CONNECTED) {
-		GtkWidget *error_widget;
-
-		/* emit the sound only on first connect, i.e. when the saved
-		 * idle state is MC_PRESENCE_UNSET.
-		 */
-
-		if (old_state == MC_PRESENCE_UNSET &&
-		    empathy_sound_pref_is_enabled (EMPATHY_PREFS_SOUNDS_SERVICE_LOGIN)) {
-			ca_gtk_play_for_widget (GTK_WIDGET (window->window), 0,
-						CA_PROP_EVENT_ID, "service-login",
-						CA_PROP_EVENT_DESCRIPTION, _("Connected to server"),
-						NULL);
-		}
-
-		/* Account connected without error, remove error message if any */
-		error_widget = g_hash_table_lookup (window->errors, account);
-		if (error_widget) {
-			gtk_widget_destroy (error_widget);
-			g_hash_table_remove (window->errors, account);
-		}
-	}
-
-	g_object_unref (account);
-	g_object_unref (idle);
-}
-
-static void
-main_window_update_status (EmpathyMainWindow *window)
-{
-	GList *accounts, *l;
-	guint  connected = 0;
-	guint  connecting = 0;
-	guint  disconnected = 0;
+	int  connected;
+	int  connecting;
+	GList *l;
 
 	/* Count number of connected/connecting/disconnected accounts */
-	accounts = mc_accounts_list ();	
-	for (l = accounts; l; l = l->next) {
-		McAccount *account;
-		guint      status;
-
-		account = l->data;
-
-		status = mission_control_get_connection_status (window->mc,
-								account,
-								NULL);
-
-		if (status == 0) {
-			connected++;
-		} else if (status == 1) {
-			connecting++;
-		} else if (status == 2) {
-			disconnected++;
-		}
-
-		g_object_unref (account);
-	}
-	g_list_free (accounts);
+	connected = empathy_account_manager_get_connected_accounts (manager);
+	connecting = empathy_account_manager_get_connecting_accounts (manager);
 
 	/* Update the spinner state */
 	if (connecting > 0) {
@@ -1260,10 +1219,6 @@ main_window_update_status (EmpathyMainWindow *window)
 	/* Update widgets sensibility */
 	for (l = window->widgets_connected; l; l = l->next) {
 		gtk_widget_set_sensitive (l->data, (connected > 0));
-	}
-
-	for (l = window->widgets_disconnected; l; l = l->next) {
-		gtk_widget_set_sensitive (l->data, (disconnected > 0));
 	}
 }
 
@@ -1314,8 +1269,6 @@ main_window_connection_items_setup (EmpathyMainWindow *window,
 		"chat_add_contact",
 		"edit_personal_information"
 	};
-	const gchar *widgets_disconnected[] = {
-	};
 
 	for (i = 0, list = NULL; i < G_N_ELEMENTS (widgets_connected); i++) {
 		w = glade_xml_get_widget (glade, widgets_connected[i]);
@@ -1323,13 +1276,6 @@ main_window_connection_items_setup (EmpathyMainWindow *window,
 	}
 
 	window->widgets_connected = list;
-
-	for (i = 0, list = NULL; i < G_N_ELEMENTS (widgets_disconnected); i++) {
-		w = glade_xml_get_widget (glade, widgets_disconnected[i]);
-		list = g_list_prepend (list, w);
-	}
-
-	window->widgets_disconnected = list;
 }
 
 static gboolean
