@@ -1,4 +1,3 @@
-/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2; -*- */
 /*
  * Copyright (C) 2008 Collabora Ltd.
  *
@@ -19,8 +18,9 @@
  * Authors: Cosimo Cecchi <cosimo.cecchi@collabora.co.uk>
  */
 
-#include <glib-object.h>
+#include "config.h"
 
+#include <glib-object.h>
 #include <libmissioncontrol/mc-enum-types.h>
 
 #include "empathy-contact-monitor.h"
@@ -56,14 +56,10 @@ enum {
 };
 
 static void  contact_remove_foreach (EmpathyContact *contact,
-                                     EmpathyContactMonitor *monitor);
+    EmpathyContactMonitor *monitor);
 static void  cl_members_changed_cb  (EmpathyContactList    *cl,
-                                     EmpathyContact        *contact,
-                                     EmpathyContact        *actor,
-                                     guint                  reason,
-                                     gchar                 *message,
-                                     gboolean               is_member,
-                                     EmpathyContactMonitor *monitor);
+    EmpathyContact *contact, EmpathyContact *actor, guint reason,
+    gchar *message, gboolean is_member, EmpathyContactMonitor *monitor);
 
 static guint signals[LAST_SIGNAL];
 
@@ -75,16 +71,16 @@ do_set_property (GObject      *object,
                  const GValue *value,
                  GParamSpec   *pspec)
 {
-  switch (param_id) {
-    case PROP_PROXY:
-      empathy_contact_monitor_set_proxy
-        (EMPATHY_CONTACT_MONITOR (object),
-         g_value_get_object (value));
-      break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
-      break;
-  };
+  switch (param_id)
+    {
+      case PROP_PROXY:
+        empathy_contact_monitor_set_proxy (EMPATHY_CONTACT_MONITOR (object),
+                                           g_value_get_object (value));
+        break;
+      default:
+        G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
+        break;
+    };
 }
 
 static void
@@ -95,14 +91,15 @@ do_get_property (GObject    *object,
 {
   EmpathyContactMonitorPriv *priv = GET_PRIV (object);
 
-  switch (param_id) {
-    case PROP_PROXY:
-      g_value_set_object (value, priv->proxy);
-      break;
-    default:
-      G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
-      break;
-  };
+  switch (param_id)
+    {
+      case PROP_PROXY:
+        g_value_set_object (value, priv->proxy);
+        break;
+      default:
+        G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
+        break;
+    };
 }
 
 static void
@@ -112,15 +109,15 @@ do_finalize (GObject *obj)
 
   priv = GET_PRIV (obj);
 
-  if (priv->contacts) {
-    g_ptr_array_free (priv->contacts, TRUE);
-    priv->contacts = NULL;
-  }
+  if (priv->contacts)
+    {
+      g_ptr_array_free (priv->contacts, TRUE);
+      priv->contacts = NULL;
+    }
 
-  if (priv->proxy) {
+  if (priv->proxy)
     g_signal_handlers_disconnect_by_func (priv->proxy,
                                           cl_members_changed_cb, obj);
-  }
 
   G_OBJECT_CLASS (empathy_contact_monitor_parent_class)->finalize (obj);
 }
@@ -132,21 +129,18 @@ do_dispose (GObject *obj)
 
   priv = GET_PRIV (obj);
 
-  if (priv->dispose_run) {
+  if (priv->dispose_run)
     return;
-  }
-
-  if (priv->contacts) {
-    g_ptr_array_foreach (priv->contacts,
-                         (GFunc) contact_remove_foreach, obj);
-  }
-
-  if (priv->proxy) {
-    g_signal_handlers_disconnect_by_func (priv->proxy,
-                                          cl_members_changed_cb, obj);
-  }
 
   priv->dispose_run = TRUE;
+
+  if (priv->contacts)
+    g_ptr_array_foreach (priv->contacts,
+                         (GFunc) contact_remove_foreach, obj);
+
+  if (priv->proxy)
+    g_signal_handlers_disconnect_by_func (priv->proxy,
+                                          cl_members_changed_cb, obj);
 
   G_OBJECT_CLASS (empathy_contact_monitor_parent_class)->dispose (obj);
 }
@@ -246,8 +240,8 @@ static void
 empathy_contact_monitor_init (EmpathyContactMonitor *self)
 {
   EmpathyContactMonitorPriv *priv =
-    G_TYPE_INSTANCE_GET_PRIVATE (self,
-                                 EMPATHY_TYPE_CONTACT_MONITOR, EmpathyContactMonitorPriv);
+      G_TYPE_INSTANCE_GET_PRIVATE (self, EMPATHY_TYPE_CONTACT_MONITOR,
+                                   EmpathyContactMonitorPriv);
 
   self->priv = priv;
   priv->contacts = NULL;
@@ -383,11 +377,10 @@ cl_members_changed_cb (EmpathyContactList    *cl,
                        gboolean               is_member,
                        EmpathyContactMonitor *monitor)
 {
-  if (is_member) {
+  if (is_member)
     contact_add (monitor, contact);
-  } else {
+  else
     contact_remove (monitor, contact);
-  }
 }
 
 /* public methods */
@@ -403,12 +396,13 @@ empathy_contact_monitor_set_proxy (EmpathyContactMonitor *self,
 
   priv = GET_PRIV (self);
 
-  if (priv->contacts != NULL) {
-    g_ptr_array_foreach (priv->contacts,
-                         (GFunc) contact_remove_foreach, self);
-    g_ptr_array_free (priv->contacts, TRUE);
-    priv->contacts = NULL;
-  }
+  if (priv->contacts != NULL)
+    {
+      g_ptr_array_foreach (priv->contacts,
+                           (GFunc) contact_remove_foreach, self);
+      g_ptr_array_free (priv->contacts, TRUE);
+      priv->contacts = NULL;
+    }
 
   priv->proxy = proxy;
   priv->contacts = g_ptr_array_new ();

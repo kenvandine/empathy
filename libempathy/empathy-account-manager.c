@@ -1,4 +1,3 @@
-/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2; -*- */
 /*
  * Copyright (C) 2008 Collabora Ltd.
  *
@@ -19,7 +18,7 @@
  * Authors: Cosimo Cecchi <cosimo.cecchi@collabora.co.uk>
  */
 
-#include <config.h>
+#include "config.h"
 
 #include <libmissioncontrol/mc-account-monitor.h>
 
@@ -64,7 +63,8 @@ static EmpathyAccountManager *manager_singleton = NULL;
 G_DEFINE_TYPE (EmpathyAccountManager, empathy_account_manager, G_TYPE_OBJECT);
 
 static AccountData *
-account_data_new (McPresence presence, TpConnectionStatus connection,
+account_data_new (McPresence presence,
+                  TpConnectionStatus connection,
                   gboolean is_enabled)
 {
   AccountData *retval;
@@ -87,16 +87,16 @@ account_data_new_default (MissionControl *mc,
   GError *err = NULL;
 
   actual_p = mission_control_get_presence_actual (mc, &err);
-  if (err) {
-    actual_p = MC_PRESENCE_UNSET;
-    g_clear_error (&err);
-  }
+  if (err != NULL)
+    {
+      actual_p = MC_PRESENCE_UNSET;
+      g_clear_error (&err);
+    }
 
-  actual_c = mission_control_get_connection_status (mc,
-                                                    account, &err);
-  if (err) {
+  actual_c = mission_control_get_connection_status (mc, account, &err);
+
+  if (err != NULL)
     actual_c = TP_CONNECTION_STATUS_DISCONNECTED;
-  }
 
   return account_data_new (actual_p, actual_c, mc_account_is_enabled (account));
 }
@@ -104,10 +104,11 @@ account_data_new_default (MissionControl *mc,
 static void
 account_data_free (AccountData *data)
 {
-  if (data->source_id > 0) {
-    g_source_remove (data->source_id);
-    data->source_id = 0;
-  }
+  if (data->source_id > 0)
+    {
+      g_source_remove (data->source_id);
+      data->source_id = 0;
+    }
 
   g_slice_free (AccountData, data);
 }
@@ -122,15 +123,16 @@ account_created_cb (McAccountMonitor *mon,
 
   account = mc_account_lookup (account_name);
 
-  if (account) {
-    AccountData *data;
+  if (account)
+    {
+      AccountData *data;
 
-    data = account_data_new_default (priv->mc, account);
+      data = account_data_new_default (priv->mc, account);
 
-    g_hash_table_insert (priv->accounts, account, data);
+      g_hash_table_insert (priv->accounts, account, data);
 
-    g_signal_emit (manager, signals[ACCOUNT_CREATED], 0, account);
-  }
+      g_signal_emit (manager, signals[ACCOUNT_CREATED], 0, account);
+    }
 }
 
 static void
@@ -143,12 +145,13 @@ account_deleted_cb (McAccountMonitor *mon,
 
   account = mc_account_lookup (account_name);
 
-  if (account) {
-    g_signal_emit (manager, signals[ACCOUNT_DELETED], 0, account);
-    
-    g_hash_table_remove (priv->accounts, account);
-    g_object_unref (account);
-  }
+  if (account)
+    {
+      g_signal_emit (manager, signals[ACCOUNT_DELETED], 0, account);
+
+      g_hash_table_remove (priv->accounts, account);
+      g_object_unref (account);
+    }
 }
 
 static void
@@ -160,10 +163,11 @@ account_changed_cb (McAccountMonitor *mon,
 
   account = mc_account_lookup (account_name);
 
-  if (account) {
-    g_signal_emit (manager, signals[ACCOUNT_CHANGED], 0, account);
-    g_object_unref (account);
-  }
+  if (account)
+    {
+      g_signal_emit (manager, signals[ACCOUNT_CHANGED], 0, account);
+      g_object_unref (account);
+    }
 }
 
 static void
@@ -177,13 +181,14 @@ account_disabled_cb (McAccountMonitor *mon,
 
   account = mc_account_lookup (account_name);
 
-  if (account) {
-    data = g_hash_table_lookup (priv->accounts, account);
-    g_assert (data);
-    data->is_enabled = FALSE;
+  if (account)
+    {
+      data = g_hash_table_lookup (priv->accounts, account);
+      g_assert (data);
+      data->is_enabled = FALSE;
 
-    g_signal_emit (manager, signals[ACCOUNT_DISABLED], 0, account);
-  }
+      g_signal_emit (manager, signals[ACCOUNT_DISABLED], 0, account);
+    }
 }
 
 static void
@@ -197,14 +202,15 @@ account_enabled_cb (McAccountMonitor *mon,
 
   account = mc_account_lookup (account_name);
 
-  if (account) {
-    data = g_hash_table_lookup (priv->accounts, account);
-    g_assert (data);
-    data->is_enabled = TRUE;
+  if (account)
+    {
+      data = g_hash_table_lookup (priv->accounts, account);
+      g_assert (data);
+      data->is_enabled = TRUE;
 
-    g_signal_emit (manager, signals[ACCOUNT_ENABLED], 0, account);
-    g_object_unref (account);
-  }
+      g_signal_emit (manager, signals[ACCOUNT_ENABLED], 0, account);
+      g_object_unref (account);
+    }
 }
 
 static void
@@ -214,28 +220,28 @@ update_connection_numbers (EmpathyAccountManager *manager,
 {
   EmpathyAccountManagerPriv *priv = GET_PRIV (manager);
 
-  if (conn == TP_CONNECTION_STATUS_CONNECTED) {
-    priv->connected++;
-    if (old_c == TP_CONNECTION_STATUS_CONNECTING) {
-      priv->connecting--;
+  if (conn == TP_CONNECTION_STATUS_CONNECTED)
+    {
+      priv->connected++;
+      if (old_c == TP_CONNECTION_STATUS_CONNECTING)
+        priv->connecting--;
     }
-  }
 
-  if (conn == TP_CONNECTION_STATUS_CONNECTING) {
-    priv->connecting++;
-    if (old_c == TP_CONNECTION_STATUS_CONNECTED) {
-      priv->connected--;
+  if (conn == TP_CONNECTION_STATUS_CONNECTING)
+    {
+      priv->connecting++;
+      if (old_c == TP_CONNECTION_STATUS_CONNECTED)
+        priv->connected--;
     }
-  }
 
-  if (conn == TP_CONNECTION_STATUS_DISCONNECTED) {
-    if (old_c == TP_CONNECTION_STATUS_CONNECTED) {
-      priv->connected--;
+  if (conn == TP_CONNECTION_STATUS_DISCONNECTED)
+    {
+      if (old_c == TP_CONNECTION_STATUS_CONNECTED)
+        priv->connected--;
+
+      if (old_c == TP_CONNECTION_STATUS_CONNECTING)
+        priv->connecting--;
     }
-    if (old_c == TP_CONNECTION_STATUS_CONNECTING) {
-      priv->connecting--;
-    }
-  }
 }
 
 static gboolean
@@ -265,57 +271,58 @@ account_status_changed_cb (MissionControl *mc,
 
   account = mc_account_lookup (unique_name);
 
-  if (account) {
-    data = g_hash_table_lookup (priv->accounts, account);
-    g_assert (data);
+  if (account)
+    {
+      data = g_hash_table_lookup (priv->accounts, account);
+      g_assert (data);
 
-    old_p = data->presence;
-    old_c = data->connection;
+      old_p = data->presence;
+      old_c = data->connection;
 
-    if (old_p != presence) {
-      data->presence = presence;
-      emit_presence = TRUE;
-    }
+      if (old_p != presence)
+        {
+          data->presence = presence;
+          emit_presence = TRUE;
+        }
 
-    if (old_c != connection) {
-      data->connection = connection;
-      update_connection_numbers (manager, connection, old_c);
+      if (old_c != connection)
+        {
+          data->connection = connection;
+          update_connection_numbers (manager, connection, old_c);
 
-      if (old_c == TP_CONNECTION_STATUS_CONNECTING &&
-          connection == TP_CONNECTION_STATUS_CONNECTED) {
-            if (data->source_id > 0) {
-              g_source_remove (data->source_id);
-              data->source_id = 0;
+          if (old_c == TP_CONNECTION_STATUS_CONNECTING &&
+              connection == TP_CONNECTION_STATUS_CONNECTED)
+            {
+                if (data->source_id > 0) {
+                  g_source_remove (data->source_id);
+                  data->source_id = 0;
+                }
+
+                data->source_id = g_timeout_add_seconds (10,
+                                                         remove_data_timeout,
+                                                         data);
             }
+          emit_connection = TRUE;
+        }
 
-            data->source_id = g_timeout_add_seconds (10,
-                                                     remove_data_timeout,
-                                                     data);
-      }
-      emit_connection = TRUE;
+      if (emit_presence)
+        g_signal_emit (manager, signals[ACCOUNT_PRESENCE_CHANGED], 0,
+                       account, presence, old_p);
+
+      if (emit_connection)
+        g_signal_emit (manager, signals[ACCOUNT_CONNECTION_CHANGED], 0,
+                       account, reason, connection, old_c);
+
+      g_object_unref (account);
     }
-
-    if (emit_presence) {
-      g_signal_emit (manager, signals[ACCOUNT_PRESENCE_CHANGED], 0,
-                     account, presence, old_p);
-    }
-
-    if (emit_connection) {
-      g_signal_emit (manager, signals[ACCOUNT_CONNECTION_CHANGED], 0,
-                     account, reason, connection, old_c);
-
-    }
-
-    g_object_unref (account);
-  }
 }
 
 static void
 empathy_account_manager_init (EmpathyAccountManager *manager)
 {
   EmpathyAccountManagerPriv *priv =
-    G_TYPE_INSTANCE_GET_PRIVATE (manager,
-                                 EMPATHY_TYPE_ACCOUNT_MANAGER, EmpathyAccountManagerPriv);
+      G_TYPE_INSTANCE_GET_PRIVATE (manager,
+                                   EMPATHY_TYPE_ACCOUNT_MANAGER, EmpathyAccountManagerPriv);
   GList *mc_accounts, *l;
   AccountData *data;
 
@@ -332,14 +339,15 @@ empathy_account_manager_init (EmpathyAccountManager *manager)
 
   mc_accounts = mc_accounts_list ();
 
-  for (l = mc_accounts; l; l = l->next) {
-    data = account_data_new_default (priv->mc, l->data);
+  for (l = mc_accounts; l; l = l->next)
+    {
+      data = account_data_new_default (priv->mc, l->data);
 
-    /* no need to g_object_ref () the account here, as mc_accounts_list ()
-     * already increases the refcount.
-     */
-    g_hash_table_insert (priv->accounts, l->data, data);
-  }
+      /* no need to g_object_ref () the account here, as mc_accounts_list ()
+       * already increases the refcount.
+       */
+      g_hash_table_insert (priv->accounts, l->data, data);
+    }
 
   g_signal_connect (priv->monitor, "account-created",
                     G_CALLBACK (account_created_cb), manager);
@@ -392,9 +400,10 @@ do_dispose (GObject *obj)
   EmpathyAccountManager *manager = EMPATHY_ACCOUNT_MANAGER (obj);
   EmpathyAccountManagerPriv *priv = GET_PRIV (manager);
 
-  if (priv->dispose_run) {
+  if (priv->dispose_run)
     return;
-  }
+
+  priv->dispose_run = TRUE;
 
   dbus_g_proxy_disconnect_signal (DBUS_G_PROXY (priv->mc),
                                   "AccountStatusChanged",
@@ -403,18 +412,16 @@ do_dispose (GObject *obj)
 
   disconnect_monitor_signals (priv->monitor, obj);
 
-  if (priv->monitor) {
-    g_object_unref (priv->monitor);
-    priv->monitor = NULL;
-  }
+  if (priv->monitor)
+    {
+      g_object_unref (priv->monitor);
+      priv->monitor = NULL;
+    }
 
-  if (priv->mc) {
+  if (priv->mc)
     g_object_unref (priv->mc);
-  }
 
   g_hash_table_remove_all (priv->accounts);
-
-  priv->dispose_run = TRUE;
 
   G_OBJECT_CLASS (empathy_account_manager_parent_class)->dispose (obj);
 }
@@ -426,14 +433,15 @@ do_constructor (GType type,
 {
   GObject *retval;
 
-  if (!manager_singleton) {
-    retval = G_OBJECT_CLASS (empathy_account_manager_parent_class)->constructor (type,
-                                                                                 n_construct_params,
-                                                                                 construct_params);
-    manager_singleton = EMPATHY_ACCOUNT_MANAGER (retval);
-  } else {
+  if (!manager_singleton)
+    {
+      retval = G_OBJECT_CLASS (empathy_account_manager_parent_class)->constructor (type,
+                                                                                   n_construct_params,
+                                                                                   construct_params);
+      manager_singleton = EMPATHY_ACCOUNT_MANAGER (retval);
+    } 
+  else
     retval = g_object_ref (manager_singleton);
-  }
 
   return retval;
 }
