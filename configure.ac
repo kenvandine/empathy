@@ -107,6 +107,7 @@ PKG_CHECK_MODULES(EMPATHY,
    x11
    libglade-2.0 >= $LIBGLADE_REQUIRED
    libebook-1.2
+   libcanberra-gtk >= 0.4
 ])
 
 # -----------------------------------------------------------

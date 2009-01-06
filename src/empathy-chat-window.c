@@ -33,6 +33,7 @@
 #include <gdk/gdkkeysyms.h>
 #include <glade/glade.h>
 #include <glib/gi18n.h>
+#include <canberra-gtk.h>
 
 #include <telepathy-glib/util.h>
 #include <libmissioncontrol/mission-control.h>
@@ -841,10 +842,33 @@ chat_window_new_message_cb (EmpathyChat       *chat,
 	EmpathyChatWindowPriv *priv;
 	gboolean              has_focus;
 	gboolean              needs_urgency;
+	gboolean              action_sounds_enabled;
+	EmpathyContact        *sender;
 
 	priv = GET_PRIV (window);
 
 	has_focus = empathy_chat_window_has_focus (window);
+
+	empathy_conf_get_bool (empathy_conf_get (),
+	                       EMPATHY_PREFS_INPUT_FEEDBACK_SOUNDS,
+	                       &action_sounds_enabled);
+	/* always play sounds if enabled, otherwise only play if chat is not in focus */
+	if (action_sounds_enabled || !has_focus || priv->current_chat != chat) {
+		sender = empathy_message_get_sender(message);
+		if (empathy_contact_is_user (sender) != FALSE) {
+			ca_gtk_play_for_widget (GTK_WIDGET (priv->dialog), 0,
+			                        CA_PROP_EVENT_ID, "message-sent-instant",
+			                        CA_PROP_EVENT_DESCRIPTION, _("Sent an instant message"),
+			                        CA_PROP_APPLICATION_NAME, g_get_application_name (),
+			                        NULL);
+		} else {
+			ca_gtk_play_for_widget (GTK_WIDGET (priv->dialog), 0,
+			                        CA_PROP_EVENT_ID, "message-new-instant",
+			                        CA_PROP_EVENT_DESCRIPTION, _("Received an instant message"),
+			                        CA_PROP_APPLICATION_NAME, g_get_application_name (),
+			                        NULL);
+		}
+	}
 
 	if (has_focus && priv->current_chat == chat) {
 		return;

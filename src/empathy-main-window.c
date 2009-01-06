@@ -27,6 +27,7 @@
 #include <gtk/gtk.h>
 #include <glade/glade.h>
 #include <glib/gi18n.h>
+#include <canberra-gtk.h>
 
 #include <libempathy/empathy-contact.h>
 #include <libempathy/empathy-utils.h>
@@ -212,7 +213,7 @@ main_window_flash_foreach (GtkTreeModel *model,
 	/* To be used with gtk_tree_model_foreach, update the status icon
 	 * of the contact to show the event icon (on=TRUE) or the presence
 	 * (on=FALSE) */
- 	gtk_tree_model_get (model, iter,
+	gtk_tree_model_get (model, iter,
 			    EMPATHY_CONTACT_LIST_STORE_COL_CONTACT, &contact,
 			    -1);
 
@@ -285,6 +286,11 @@ main_window_flash_cb (EmpathyMainWindow *window)
 static void
 main_window_flash_start (EmpathyMainWindow *window)
 {
+	ca_gtk_play_for_widget (GTK_WIDGET (window->window), 0,
+	                        CA_PROP_EVENT_ID, "message-new-instant",
+	                        CA_PROP_EVENT_DESCRIPTION, _("Incoming chat request"),
+	                        CA_PROP_APPLICATION_NAME, g_get_application_name (),
+	                        NULL);
 
 	if (window->flash_timeout_id != 0) {
 		return;
@@ -1166,9 +1172,22 @@ main_window_status_changed_cb (MissionControl           *mc,
 		main_window_error_display (window, account, message);
 	}
 
+	if (status == TP_CONNECTION_STATUS_DISCONNECTED) {
+		ca_gtk_play_for_widget (GTK_WIDGET (window->window), 0,
+		                        CA_PROP_EVENT_ID, "service-logout",
+		                        CA_PROP_EVENT_DESCRIPTION, _("Disconnected from server"),
+		                        CA_PROP_APPLICATION_NAME, g_get_application_name (),
+		                        NULL);
+	}
+
 	if (status == TP_CONNECTION_STATUS_CONNECTED) {
 		GtkWidget *error_widget;
 
+		ca_gtk_play_for_widget (GTK_WIDGET (window->window), 0,
+		                        CA_PROP_EVENT_ID, "service-login",
+		                        CA_PROP_EVENT_DESCRIPTION, _("Connected to server"),
+		                        CA_PROP_APPLICATION_NAME, g_get_application_name (),
+		                        NULL);
 		/* Account connected without error, remove error message if any */
 		error_widget = g_hash_table_lookup (window->errors, account);
 		if (error_widget) {

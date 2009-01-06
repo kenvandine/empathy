@@ -25,6 +25,7 @@
 
 #include <glade/glade.h>
 #include <glib/gi18n.h>
+#include <canberra-gtk.h>
 
 #include <telepathy-glib/enums.h>
 
@@ -194,6 +195,11 @@ static void
 call_window_hang_up_button_clicked_cb (GtkWidget *widget,
                                        EmpathyCallWindow *window)
 {
+  ca_gtk_play_for_widget (GTK_WIDGET (window->window), 0,
+                          CA_PROP_EVENT_ID, "phone-hangup",
+                          CA_PROP_EVENT_DESCRIPTION, _("Voice call ended"),
+                          CA_PROP_APPLICATION_NAME, g_get_application_name (),
+                          NULL);
   DEBUG ("Call clicked, end call");
   call_window_finalize (window);
 }
@@ -394,8 +400,25 @@ call_window_update (EmpathyCallWindow *window)
       gtk_window_set_title (GTK_WINDOW (window->window), title);
       gtk_label_set_text (GTK_LABEL (window->status_label), _("Ringing"));
       gtk_widget_set_sensitive (window->hang_up_button, TRUE);
+
       if (is_incoming)
+        {
           call_window_show_confirmation_dialog (window);
+          ca_gtk_play_for_widget (GTK_WIDGET (window->window), 0,
+                                  CA_PROP_EVENT_ID, "phone-incoming-call",
+                                  CA_PROP_EVENT_DESCRIPTION, _("Incoming voice call"),
+                                  CA_PROP_APPLICATION_NAME, g_get_application_name (),
+                                  NULL);
+        }
+      else
+        {
+          ca_gtk_play_for_widget (GTK_WIDGET (window->window), 0,
+                                  CA_PROP_EVENT_ID, "phone-outgoing-calling",
+                                  CA_PROP_EVENT_DESCRIPTION, _("Outgoing voice call"),
+                                  CA_PROP_APPLICATION_NAME, g_get_application_name (),
+                                  NULL);
+        }
+
     }
   else if (window->status == EMPATHY_TP_CALL_STATUS_ACCEPTED)
     {
