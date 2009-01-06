@@ -1504,6 +1504,11 @@
 
 ;; From empathy-ui-utils.h
 
+(define-function gtk_init
+  (c-name "empathy_gtk_init")
+  (return-type "none")
+)
+
 (define-function glade_get_file_simple
   (c-name "empathy_glade_get_file_simple")
   (return-type "none")

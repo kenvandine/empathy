@@ -244,6 +244,15 @@
   (return-type "int")
 )
 
+(define-method is_account_just_connected
+  (of-object "EmpathyAccountManager")
+  (c-name "empathy_account_manager_is_account_just_connected")
+  (return-type "gboolean")
+  (parameters
+    '("McAccount*" "account")
+  )
+)
+
 
 
 ;; From empathy-chatroom.h
@@ -892,6 +901,12 @@
   )
 )
 
+(define-method get_monitor
+  (of-object "EmpathyContactList")
+  (c-name "empathy_contact_list_get_monitor")
+  (return-type "EmpathyContactMonitor*")
+)
+
 
 
 ;; From empathy-contact-manager.h
@@ -911,6 +926,15 @@
   (of-object "EmpathyContactManager")
   (c-name "empathy_contact_manager_get_list")
   (return-type "EmpathyTpContactList*")
+  (parameters
+    '("McAccount*" "account")
+  )
+)
+
+(define-method can_add
+  (of-object "EmpathyContactManager")
+  (c-name "empathy_contact_manager_can_add")
+  (return-type "gboolean")
   (parameters
     '("McAccount*" "account")
   )
@@ -1916,6 +1940,12 @@
   (return-type "McAccount*")
 )
 
+(define-method can_add
+  (of-object "EmpathyTpContactList")
+  (c-name "empathy_tp_contact_list_can_add")
+  (return-type "gboolean")
+)
+
 
 
 ;; From empathy-tp-file.h
@@ -2153,6 +2183,12 @@
   (return-type "none")
 )
 
+(define-method get_flags
+  (of-object "EmpathyTpGroup")
+  (c-name "empathy_tp_group_get_flags")
+  (return-type "TpChannelGroupFlags")
+)
+
 
 
 ;; From empathy-tp-roomlist.h
@@ -2279,6 +2315,11 @@
 
 
 ;; From empathy-utils.h
+
+(define-function init
+  (c-name "empathy_init")
+  (return-type "none")
+)
 
 (define-function substring
   (c-name "empathy_substring")

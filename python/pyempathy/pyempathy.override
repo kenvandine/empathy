@@ -2,6 +2,7 @@
 headers
 #include <Python.h>
 #include <pygobject.h>
+#include "empathy-account-manager.h"
 #include "empathy-chatroom.h"
 #include "empathy-chatroom-manager.h"
 #include "empathy-contact.h"
@@ -9,6 +10,7 @@ headers
 #include "empathy-contact-groups.h"
 #include "empathy-contact-list.h"
 #include "empathy-contact-manager.h"
+#include "empathy-contact-monitor.h"
 #include "empathy-debug.h"
 #include "empathy-dispatcher.h"
 #include "empathy-enum-types.h"
