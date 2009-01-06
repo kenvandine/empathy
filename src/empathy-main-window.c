@@ -286,11 +286,12 @@ main_window_flash_cb (EmpathyMainWindow *window)
 static void
 main_window_flash_start (EmpathyMainWindow *window)
 {
-	ca_gtk_play_for_widget (GTK_WIDGET (window->window), 0,
-	                        CA_PROP_EVENT_ID, "message-new-instant",
-	                        CA_PROP_EVENT_DESCRIPTION, _("Incoming chat request"),
-	                        CA_PROP_APPLICATION_NAME, g_get_application_name (),
-	                        NULL);
+	if (empathy_sound_pref_is_enabled (EMPATHY_PREFS_SOUNDS_NEW_CONVERSATION)) {
+		ca_gtk_play_for_widget (GTK_WIDGET (window->window), 0,
+					CA_PROP_EVENT_ID, "message-new-instant",
+					CA_PROP_EVENT_DESCRIPTION, _("Incoming chat request"),
+					NULL);
+	}
 
 	if (window->flash_timeout_id != 0) {
 		return;
@@ -1172,22 +1173,24 @@ main_window_status_changed_cb (MissionControl           *mc,
 		main_window_error_display (window, account, message);
 	}
 
-	if (status == TP_CONNECTION_STATUS_DISCONNECTED) {
+	if (status == TP_CONNECTION_STATUS_DISCONNECTED &&
+	    empathy_sound_pref_is_enabled (EMPATHY_PREFS_SOUNDS_SERVICE_LOGOUT)) {
 		ca_gtk_play_for_widget (GTK_WIDGET (window->window), 0,
 		                        CA_PROP_EVENT_ID, "service-logout",
 		                        CA_PROP_EVENT_DESCRIPTION, _("Disconnected from server"),
-		                        CA_PROP_APPLICATION_NAME, g_get_application_name (),
 		                        NULL);
 	}
 
 	if (status == TP_CONNECTION_STATUS_CONNECTED) {
 		GtkWidget *error_widget;
 
-		ca_gtk_play_for_widget (GTK_WIDGET (window->window), 0,
-		                        CA_PROP_EVENT_ID, "service-login",
-		                        CA_PROP_EVENT_DESCRIPTION, _("Connected to server"),
-		                        CA_PROP_APPLICATION_NAME, g_get_application_name (),
-		                        NULL);
+		if (empathy_sound_pref_is_enabled (EMPATHY_PREFS_SOUNDS_SERVICE_LOGIN)) {
+			ca_gtk_play_for_widget (GTK_WIDGET (window->window), 0,
+						CA_PROP_EVENT_ID, "service-login",
+						CA_PROP_EVENT_DESCRIPTION, _("Connected to server"),
+						NULL);
+		}
+
 		/* Account connected without error, remove error message if any */
 		error_widget = g_hash_table_lookup (window->errors, account);
 		if (error_widget) {

@@ -74,7 +74,6 @@ struct _EmpathyConfClass {
 #define EMPATHY_PREFS_AUTOCONNECT                  EMPATHY_PREFS_PATH "/autoconnect"
 #define EMPATHY_PREFS_IMPORT_ASKED                 EMPATHY_PREFS_PATH "/import_asked"
 #define EMPATHY_PREFS_FILE_TRANSFER_DEFAULT_FOLDER EMPATHY_PREFS_PATH "/file_transfer/default_folder"
-#define EMPATHY_PREFS_INPUT_FEEDBACK_SOUNDS        "/desktop/gnome/sound/input_feedback_sounds"
 
 typedef void (*EmpathyConfNotifyFunc) (EmpathyConf  *conf, 
 				      const gchar *key,

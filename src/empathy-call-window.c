@@ -198,7 +198,6 @@ call_window_hang_up_button_clicked_cb (GtkWidget *widget,
   ca_gtk_play_for_widget (GTK_WIDGET (window->window), 0,
                           CA_PROP_EVENT_ID, "phone-hangup",
                           CA_PROP_EVENT_DESCRIPTION, _("Voice call ended"),
-                          CA_PROP_APPLICATION_NAME, g_get_application_name (),
                           NULL);
   DEBUG ("Call clicked, end call");
   call_window_finalize (window);
@@ -407,7 +406,6 @@ call_window_update (EmpathyCallWindow *window)
           ca_gtk_play_for_widget (GTK_WIDGET (window->window), 0,
                                   CA_PROP_EVENT_ID, "phone-incoming-call",
                                   CA_PROP_EVENT_DESCRIPTION, _("Incoming voice call"),
-                                  CA_PROP_APPLICATION_NAME, g_get_application_name (),
                                   NULL);
         }
       else
@@ -415,7 +413,6 @@ call_window_update (EmpathyCallWindow *window)
           ca_gtk_play_for_widget (GTK_WIDGET (window->window), 0,
                                   CA_PROP_EVENT_ID, "phone-outgoing-calling",
                                   CA_PROP_EVENT_DESCRIPTION, _("Outgoing voice call"),
-                                  CA_PROP_APPLICATION_NAME, g_get_application_name (),
                                   NULL);
         }
 
