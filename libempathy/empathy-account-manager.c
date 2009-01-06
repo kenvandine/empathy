@@ -59,7 +59,7 @@ enum {
 };
 
 static guint signals[LAST_SIGNAL];
-static EmpathyAccountManager *manager = NULL;
+static EmpathyAccountManager *manager_singleton = NULL;
 
 G_DEFINE_TYPE (EmpathyAccountManager, empathy_account_manager, G_TYPE_OBJECT);
 
@@ -419,6 +419,25 @@ do_dispose (GObject *obj)
   G_OBJECT_CLASS (empathy_account_manager_parent_class)->dispose (obj);
 }
 
+static GObject*
+do_constructor (GType type,
+                guint n_construct_params,
+                GObjectConstructParam *construct_params)
+{
+  GObject *retval;
+
+  if (!manager_singleton) {
+    retval = G_OBJECT_CLASS (empathy_account_manager_parent_class)->constructor (type,
+                                                                                 n_construct_params,
+                                                                                 construct_params);
+    manager_singleton = EMPATHY_ACCOUNT_MANAGER (retval);
+  } else {
+    retval = g_object_ref (manager_singleton);
+  }
+
+  return retval;
+}
+
 static void
 empathy_account_manager_class_init (EmpathyAccountManagerClass *klass)
 {
@@ -426,6 +445,7 @@ empathy_account_manager_class_init (EmpathyAccountManagerClass *klass)
 
   oclass->finalize = do_finalize;
   oclass->dispose = do_dispose;
+  oclass->constructor = do_constructor;
 
   signals[ACCOUNT_CREATED] =
     g_signal_new ("account-created",
@@ -510,14 +530,7 @@ empathy_account_manager_class_init (EmpathyAccountManagerClass *klass)
 EmpathyAccountManager *
 empathy_account_manager_new (void)
 {
-  if (!manager) {
-    manager = g_object_new (EMPATHY_TYPE_ACCOUNT_MANAGER, NULL);
-    g_object_add_weak_pointer (G_OBJECT (manager), (gpointer) &manager);
-  } else {
-    g_object_ref (manager);
-  }
-
-  return manager;
+  return g_object_new (EMPATHY_TYPE_ACCOUNT_MANAGER, NULL);
 }
 
 int
