@@ -6,6 +6,7 @@ empathy_contact_get_type
 empathy_avatar_get_type
 empathy_contact_list_get_type
 empathy_contact_manager_get_type
+empathy_contact_monitor_get_type
 empathy_dispatcher_get_type
 empathy_dispatcher_tube_get_type
 empathy_capabilities_get_type
