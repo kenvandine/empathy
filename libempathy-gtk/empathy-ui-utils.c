@@ -1566,7 +1566,8 @@ empathy_sound_play (GtkWidget *widget,
 	EmpathySoundEntry *entry = &(sound_entries[sound_id]);
 	gboolean should_play = TRUE;
 
-	g_assert (entry->sound_id == sound_id);
+	g_return_if_fail (entry->sound_id < LAST_EMPATHY_SOUND);
+	g_return_if_fail (entry->sound_id == sound_id);
 
 	if (entry->gconf_key != NULL) {
 		should_play = empathy_sound_pref_is_enabled (entry->gconf_key);
