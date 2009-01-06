@@ -1727,4 +1727,12 @@
   )
 )
 
+(define-function sound_pref_is_enabled
+  (c-name "empathy_sound_pref_is_enabled")
+  (return-type "gboolean")
+  (parameters
+    '("const-char*" "key")
+  )
+)
+
 

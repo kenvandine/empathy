@@ -5,6 +5,7 @@
 cd ../libempathy
 python /usr/share/pygobject/2.0/codegen/h2def.py	\
         -m empathy				\
+	empathy-account-manager.h		\
 	empathy-chatroom.h			\
 	empathy-chatroom-manager.h		\
 	empathy-contact.h			\

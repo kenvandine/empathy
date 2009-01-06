@@ -1,5 +1,12 @@
 ;; -*- scheme -*-
 ; object definitions ...
+(define-object AccountManager
+  (in-module "Empathy")
+  (parent "GObject")
+  (c-name "EmpathyAccountManager")
+  (gtype-id "EMPATHY_TYPE_ACCOUNT_MANAGER")
+)
+
 (define-object Chatroom
   (in-module "Empathy")
   (parent "GObject")
@@ -210,6 +217,33 @@
     '("closed" "EMPATHY_TP_CALL_STATUS_CLOSED")
   )
 )
+
+
+;; From empathy-account-manager.h
+
+(define-function account_manager_get_type
+  (c-name "empathy_account_manager_get_type")
+  (return-type "GType")
+)
+
+(define-function account_manager_new
+  (c-name "empathy_account_manager_new")
+  (is-constructor-of "EmpathyAccountManager")
+  (return-type "EmpathyAccountManager*")
+)
+
+(define-method get_connected_accounts
+  (of-object "EmpathyAccountManager")
+  (c-name "empathy_account_manager_get_connected_accounts")
+  (return-type "int")
+)
+
+(define-method get_connecting_accounts
+  (of-object "EmpathyAccountManager")
+  (c-name "empathy_account_manager_get_connecting_accounts")
+  (return-type "int")
+)
+
 
 
 ;; From empathy-chatroom.h
@@ -2393,25 +2427,6 @@
   (return-type "McAccount*")
   (parameters
     '("TpChannel*" "channel")
-  )
-)
-
-(define-function connect_to_account_status_changed
-  (c-name "empathy_connect_to_account_status_changed")
-  (return-type "gpointer")
-  (parameters
-    '("MissionControl*" "mc")
-    '("GCallback" "handler")
-    '("gpointer" "user_data")
-    '("GClosureNotify" "free_func")
-  )
-)
-
-(define-function disconnect_account_status_changed
-  (c-name "empathy_disconnect_account_status_changed")
-  (return-type "none")
-  (parameters
-    '("gpointer" "token")
   )
 )
 
