@@ -29,6 +29,7 @@
 #include "empathy-contact.h"
 #include "empathy-tp-contact-list.h"
 #include "empathy-contact-list.h"
+#include "empathy-contact-monitor.h"
 
 G_BEGIN_DECLS
 
@@ -57,6 +58,7 @@ EmpathyTpContactList * empathy_contact_manager_get_list (EmpathyContactManager *
 							 McAccount             *account);
 gboolean               empathy_contact_manager_can_add  (EmpathyContactManager *manager,
 							 McAccount             *account);
+EmpathyContactMonitor *empathy_contact_manager_get_monitor (EmpathyContactManager *manager);
 
 G_END_DECLS
 

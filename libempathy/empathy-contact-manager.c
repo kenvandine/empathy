@@ -27,6 +27,7 @@
 
 #include "empathy-contact-manager.h"
 #include "empathy-account-manager.h"
+#include "empathy-contact-monitor.h"
 #include "empathy-contact-list.h"
 #include "empathy-utils.h"
 
@@ -37,6 +38,7 @@
 typedef struct {
 	GHashTable     *lists;
 	EmpathyAccountManager *account_manager;
+	EmpathyContactMonitor *contact_monitor;
 } EmpathyContactManagerPriv;
 
 static void contact_manager_iface_init         (EmpathyContactListIface    *iface);
@@ -210,6 +212,7 @@ empathy_contact_manager_init (EmpathyContactManager *manager)
 					     (GDestroyNotify) g_object_unref,
 					     (GDestroyNotify) g_object_unref);
 	priv->account_manager = empathy_account_manager_new ();
+	priv->contact_monitor = empathy_contact_monitor_new_for_proxy (EMPATHY_CONTACT_LIST (manager));
 
 	g_signal_connect (priv->account_manager,
 			  "account-connection-changed",
@@ -317,6 +320,14 @@ contact_manager_get_members (EmpathyContactList *manager)
 			      &contacts);
 
 	return contacts;
+}
+
+static EmpathyContactMonitor *
+contact_manager_get_monitor (EmpathyContactList *manager)
+{
+	EmpathyContactManagerPriv *priv = GET_PRIV (manager);
+
+	return priv->contact_monitor;
 }
 
 static void
@@ -498,6 +509,7 @@ contact_manager_iface_init (EmpathyContactListIface *iface)
 	iface->add               = contact_manager_add;
 	iface->remove            = contact_manager_remove;
 	iface->get_members       = contact_manager_get_members;
+	iface->get_monitor       = contact_manager_get_monitor;
 	iface->get_pendings      = contact_manager_get_pendings;
 	iface->get_all_groups    = contact_manager_get_all_groups;
 	iface->get_groups        = contact_manager_get_groups;
