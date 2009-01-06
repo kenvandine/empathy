@@ -16,6 +16,7 @@
     <title>API Reference</title>
     <chapter id="libempathy_api">
       <title>libempathy API reference</title>
+      <xi:include href="xml/empathy-account-manager.xml"/>
       <xi:include href="xml/empathy-chatroom-manager.xml"/>
       <xi:include href="xml/empathy-chatroom.xml"/>
       <xi:include href="xml/empathy-contact-factory.xml"/>

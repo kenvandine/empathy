@@ -1,3 +1,4 @@
+empathy_account_manager_get_type
 empathy_chatroom_get_type
 empathy_chatroom_manager_get_type
 empathy_contact_factory_get_type
