@@ -284,6 +284,11 @@ do_finalize (GObject *obj)
 	EmpathyAccountManager *manager = EMPATHY_ACCOUNT_MANAGER (obj);
 	EmpathyAccountManagerPriv *priv = GET_PRIV (manager);
 
+	dbus_g_proxy_disconnect_signal (DBUS_G_PROXY (priv->mc),
+					"AccountStatusChanged",
+					G_CALLBACK (account_status_changed_cb),
+					obj);
+
 	g_object_unref (priv->monitor);
 	g_object_unref (priv->mc);
 
