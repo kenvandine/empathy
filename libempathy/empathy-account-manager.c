@@ -191,6 +191,7 @@ account_disabled_cb (McAccountMonitor *mon,
       data->is_enabled = FALSE;
 
       g_signal_emit (manager, signals[ACCOUNT_DISABLED], 0, account);
+      g_object_unref (account);
     }
 }
 
