@@ -34,9 +34,9 @@
 #include <glib/gi18n-lib.h>
 #include <gtk/gtk.h>
 
-#include <libmissioncontrol/mission-control.h>
 #include <telepathy-glib/util.h>
 
+#include <libempathy/empathy-account-manager.h>
 #include <libempathy/empathy-log-manager.h>
 #include <libempathy/empathy-contact-list.h>
 #include <libempathy/empathy-utils.h>
@@ -71,7 +71,7 @@ typedef struct {
 	EmpathyContact    *remote_contact;
 
 	EmpathyLogManager *log_manager;
-	MissionControl    *mc;
+	EmpathyAccountManager *account_manager;
 	GSList            *sent_messages;
 	gint               sent_messages_index;
 	GList             *compositors;
@@ -79,7 +79,6 @@ typedef struct {
 	guint              composing_stop_timeout_id;
 	guint              block_events_timeout_id;
 	TpHandleType       handle_type;
-	gpointer           token;
 	gint               contacts_width;
 	gboolean           has_input_vscroll;
 
@@ -167,24 +166,24 @@ chat_set_property (GObject      *object,
 }
 
 static void
-chat_status_changed_cb (MissionControl           *mc,
-			TpConnectionStatus        status,
-			McPresence                presence,
-			TpConnectionStatusReason  reason,
-			const gchar              *unique_name,
-			EmpathyChat              *chat)
+chat_connection_changed_cb (EmpathyAccountManager *manager,
+			    McAccount *account,
+			    TpConnectionStatusReason reason,
+			    TpConnectionStatus current,
+			    TpConnectionStatus previous,
+			    EmpathyChat *chat)
 {
 	EmpathyChatPriv *priv = GET_PRIV (chat);
-	McAccount       *account;
 
-	account = mc_account_lookup (unique_name);
-
-	if (status == TP_CONNECTION_STATUS_CONNECTED && !priv->tp_chat &&
+	if (current == TP_CONNECTION_STATUS_CONNECTED && !priv->tp_chat &&
 	    empathy_account_equal (account, priv->account) &&
 	    priv->handle_type != TP_HANDLE_TYPE_NONE) {
 		TpConnection *connection;
+		MissionControl *mc;
 
 		DEBUG ("Account reconnected, request a new Text channel");
+
+		mc = empathy_mission_control_new ();
 		connection = mission_control_get_tpconnection (mc, account, NULL);
 		tp_connection_run_until_ready (connection, FALSE, NULL, NULL);
 		empathy_connection_request_channel (connection, -1,
@@ -194,8 +193,6 @@ chat_status_changed_cb (MissionControl           *mc,
 						    NULL, NULL, NULL, NULL);
 		g_object_unref (connection);
 	}
-
-	g_object_unref (account);
 }
 
 static void
@@ -1394,8 +1391,7 @@ chat_finalize (GObject *object)
 
 	chat_composing_remove_timeout (chat);
 
-	empathy_disconnect_account_status_changed (priv->token);
-	g_object_unref (priv->mc);
+	g_object_unref (priv->account_manager);
 	g_object_unref (priv->log_manager);
 
 	if (priv->tp_chat) {
@@ -1530,11 +1526,12 @@ empathy_chat_init (EmpathyChat *chat)
 	priv->contacts_width = -1;
 	priv->sent_messages = NULL;
 	priv->sent_messages_index = -1;
-	priv->mc = empathy_mission_control_new ();
+	priv->account_manager = empathy_account_manager_new ();
 
-	priv->token = empathy_connect_to_account_status_changed (priv->mc,
-						   G_CALLBACK (chat_status_changed_cb),
-						   chat, NULL);
+	g_signal_connect (priv->account_manager,
+			  "account-connection-changed",
+			  G_CALLBACK (chat_connection_changed_cb),
+			  chat);
 
 	/* Block events for some time to avoid having "has come online" or
 	 * "joined" messages. */
