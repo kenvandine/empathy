@@ -1099,7 +1099,7 @@ empathy_accounts_dialog_show (GtkWindow *parent,
 			  dialog);
 
 	/* Set up signalling */
-	dialog->account_manager = empathy_account_manager_new ();
+	dialog->account_manager = empathy_account_manager_dup_singleton ();
 	dialog->mc = empathy_mission_control_new ();
 
 	g_signal_connect (dialog->account_manager, "account-created",

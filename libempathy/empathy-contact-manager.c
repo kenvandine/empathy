@@ -217,7 +217,7 @@ empathy_contact_manager_init (EmpathyContactManager *manager)
 					     empathy_account_equal,
 					     (GDestroyNotify) g_object_unref,
 					     (GDestroyNotify) g_object_unref);
-	priv->account_manager = empathy_account_manager_new ();
+	priv->account_manager = empathy_account_manager_dup_singleton ();
 	priv->contact_monitor = empathy_contact_monitor_new_for_proxy (EMPATHY_CONTACT_LIST (manager));
 
 	g_signal_connect (priv->account_manager,

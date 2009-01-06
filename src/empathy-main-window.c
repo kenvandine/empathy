@@ -467,16 +467,14 @@ main_window_contact_presence_changed_cb (EmpathyContactMonitor *monitor,
 					 McPresence previous,
 					 EmpathyMainWindow *window)
 {
-	EmpathyAccountManager *acc_manager;
 	McAccount *account;
 	gboolean should_play;
 
-	acc_manager = empathy_account_manager_new ();
 	account = empathy_contact_get_account (contact);
-	should_play = !empathy_account_manager_is_account_just_connected (acc_manager, account);
+	should_play = !empathy_account_manager_is_account_just_connected (window->account_manager, account);
 
 	if (!should_play) {
-		goto out;
+		return;
 	}
 
 	if (previous < MC_PRESENCE_AVAILABLE && current > MC_PRESENCE_OFFLINE) {
@@ -487,7 +485,7 @@ main_window_contact_presence_changed_cb (EmpathyContactMonitor *monitor,
 						CA_PROP_EVENT_DESCRIPTION, _("Contact logged in"),
 						NULL);
 		}
-		goto out;
+		return;
 	}
 
 	if (previous > MC_PRESENCE_OFFLINE && current < MC_PRESENCE_AVAILABLE) {
@@ -499,8 +497,6 @@ main_window_contact_presence_changed_cb (EmpathyContactMonitor *monitor,
 						NULL);
 		}
 	}
-out:
-	g_object_unref (acc_manager);
 }
 
 GtkWidget *
@@ -573,7 +569,7 @@ empathy_main_window_show (void)
 	g_object_unref (glade);
 
 	window->mc = empathy_mission_control_new ();
-	window->account_manager = empathy_account_manager_new ();
+	window->account_manager = empathy_account_manager_dup_singleton ();
 
 	g_signal_connect (window->account_manager,
 			  "account-connection-changed",

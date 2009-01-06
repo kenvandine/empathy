@@ -395,7 +395,7 @@ empathy_status_icon_init (EmpathyStatusIcon *icon)
 
 	icon->priv = priv;
 	priv->icon = gtk_status_icon_new ();
-	priv->account_manager = empathy_account_manager_new ();
+	priv->account_manager = empathy_account_manager_dup_singleton ();
 	priv->idle = empathy_idle_new ();
 	priv->event_manager = empathy_event_manager_new ();
 

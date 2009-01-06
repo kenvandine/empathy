@@ -1522,7 +1522,7 @@ empathy_tp_contact_factory_init (EmpathyTpContactFactory *tp_factory)
 		EMPATHY_TYPE_TP_CONTACT_FACTORY, EmpathyTpContactFactoryPriv);
 
 	tp_factory->priv = priv;
-	priv->account_manager = empathy_account_manager_new ();
+	priv->account_manager = empathy_account_manager_dup_singleton ();
 
 	g_signal_connect (priv->account_manager, "account-connection-changed",
 			  G_CALLBACK (tp_contact_factory_account_connection_cb),

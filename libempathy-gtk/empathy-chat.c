@@ -1530,7 +1530,7 @@ empathy_chat_init (EmpathyChat *chat)
 	priv->contacts_width = -1;
 	priv->sent_messages = NULL;
 	priv->sent_messages_index = -1;
-	priv->account_manager = empathy_account_manager_new ();
+	priv->account_manager = empathy_account_manager_dup_singleton ();
 
 	g_signal_connect (priv->account_manager,
 			  "account-connection-changed",

@@ -51,7 +51,7 @@ GType empathy_account_manager_get_type (void);
 
 /* public methods */
 
-EmpathyAccountManager * empathy_account_manager_new (void);
+EmpathyAccountManager * empathy_account_manager_dup_singleton (void);
 int                     empathy_account_manager_get_connected_accounts 
                                 (EmpathyAccountManager *manager);
 int                     empathy_account_manager_get_connecting_accounts

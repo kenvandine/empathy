@@ -96,7 +96,10 @@ account_data_new_default (MissionControl *mc,
   actual_c = mission_control_get_connection_status (mc, account, &err);
 
   if (err != NULL)
-    actual_c = TP_CONNECTION_STATUS_DISCONNECTED;
+    {
+      actual_c = TP_CONNECTION_STATUS_DISCONNECTED;
+      g_error_free (err);
+    }
 
   return account_data_new (actual_p, actual_c, mc_account_is_enabled (account));
 }
@@ -538,7 +541,7 @@ empathy_account_manager_class_init (EmpathyAccountManagerClass *klass)
 /* public methods */
 
 EmpathyAccountManager *
-empathy_account_manager_new (void)
+empathy_account_manager_dup_singleton (void)
 {
   return g_object_new (EMPATHY_TYPE_ACCOUNT_MANAGER, NULL);
 }

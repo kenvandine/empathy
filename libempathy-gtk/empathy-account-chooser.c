@@ -135,7 +135,7 @@ empathy_account_chooser_init (EmpathyAccountChooser *chooser)
 	priv->filter = NULL;
 	priv->filter_data = NULL;
 
-	priv->manager = empathy_account_manager_new ();
+	priv->manager = empathy_account_manager_dup_singleton ();
 
 	g_signal_connect (priv->manager, "account-created",
 			  G_CALLBACK (account_chooser_account_created_cb),
