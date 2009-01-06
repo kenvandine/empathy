@@ -132,6 +132,9 @@ account_created_cb (McAccountMonitor *mon,
 
       data = account_data_new_default (priv->mc, account);
 
+      /* the reference returned by mc_account_lookup is owned by the
+       * hash table.
+       */
       g_hash_table_insert (priv->accounts, account, data);
 
       g_signal_emit (manager, signals[ACCOUNT_CREATED], 0, account);
