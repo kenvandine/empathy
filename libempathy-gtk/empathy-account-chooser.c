@@ -139,12 +139,11 @@ empathy_account_chooser_init (EmpathyAccountChooser *chooser)
 static void
 account_chooser_finalize (GObject *object)
 {
-	EmpathyAccountChooser     *chooser;
-	EmpathyAccountChooserPriv *priv;
+	EmpathyAccountChooserPriv *priv = GET_PRIV (object);
 
-	chooser = EMPATHY_ACCOUNT_CHOOSER (object);
-	priv = GET_PRIV (object);
-
+	g_signal_handlers_disconnect_by_func (priv->manager,
+					      account_chooser_connection_changed_cb,
+					      object);
 	g_object_unref (priv->manager);
 
 	G_OBJECT_CLASS (empathy_account_chooser_parent_class)->finalize (object);
