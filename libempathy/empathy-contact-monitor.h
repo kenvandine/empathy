@@ -51,11 +51,11 @@ GType empathy_contact_monitor_get_type (void);
 /* public methods */
 
 void
-empathy_contact_monitor_set_proxy (EmpathyContactMonitor *self,
-                                   EmpathyContactList *proxy);
+empathy_contact_monitor_set_iface (EmpathyContactMonitor *self,
+                                   EmpathyContactList *iface);
 				   
 EmpathyContactMonitor * 
-empathy_contact_monitor_new_for_proxy (EmpathyContactList *proxy);
+empathy_contact_monitor_new_for_iface (EmpathyContactList *iface);
 
 G_END_DECLS
 

@@ -33,7 +33,7 @@
 #define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyContactMonitor)
 
 typedef struct {
-  EmpathyContactList *proxy;
+  EmpathyContactList *iface;
   GPtrArray *contacts;
 
   gboolean dispose_run;
@@ -52,7 +52,7 @@ enum {
 
 enum {
   PROP_0,
-  PROP_PROXY
+  PROP_IFACE
 };
 
 static void  contact_remove_foreach (EmpathyContact *contact,
@@ -73,8 +73,8 @@ do_set_property (GObject      *object,
 {
   switch (param_id)
     {
-      case PROP_PROXY:
-        empathy_contact_monitor_set_proxy (EMPATHY_CONTACT_MONITOR (object),
+      case PROP_IFACE:
+        empathy_contact_monitor_set_iface (EMPATHY_CONTACT_MONITOR (object),
                                            g_value_get_object (value));
         break;
       default:
@@ -93,8 +93,8 @@ do_get_property (GObject    *object,
 
   switch (param_id)
     {
-      case PROP_PROXY:
-        g_value_set_object (value, priv->proxy);
+      case PROP_IFACE:
+        g_value_set_object (value, priv->iface);
         break;
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
@@ -115,8 +115,8 @@ do_finalize (GObject *obj)
       priv->contacts = NULL;
     }
 
-  if (priv->proxy)
-    g_signal_handlers_disconnect_by_func (priv->proxy,
+  if (priv->iface)
+    g_signal_handlers_disconnect_by_func (priv->iface,
                                           cl_members_changed_cb, obj);
 
   G_OBJECT_CLASS (empathy_contact_monitor_parent_class)->finalize (obj);
@@ -138,8 +138,8 @@ do_dispose (GObject *obj)
     g_ptr_array_foreach (priv->contacts,
                          (GFunc) contact_remove_foreach, obj);
 
-  if (priv->proxy)
-    g_signal_handlers_disconnect_by_func (priv->proxy,
+  if (priv->iface)
+    g_signal_handlers_disconnect_by_func (priv->iface,
                                           cl_members_changed_cb, obj);
 
   G_OBJECT_CLASS (empathy_contact_monitor_parent_class)->dispose (obj);
@@ -156,10 +156,10 @@ empathy_contact_monitor_class_init (EmpathyContactMonitorClass *klass)
   oclass->set_property = do_set_property;
 
   g_object_class_install_property (oclass,
-                                   PROP_PROXY,
-                                   g_param_spec_object ("proxy",
-                                                        "Monitor's proxy",
-                                                        "The contact list associated we're monitoring",
+                                   PROP_IFACE,
+                                   g_param_spec_object ("iface",
+                                                        "Monitor's iface",
+                                                        "The contact list we're monitoring",
                                                         EMPATHY_TYPE_CONTACT_LIST,
                                                         G_PARAM_READWRITE |
                                                         G_PARAM_CONSTRUCT_ONLY |
@@ -245,7 +245,7 @@ empathy_contact_monitor_init (EmpathyContactMonitor *self)
 
   self->priv = priv;
   priv->contacts = NULL;
-  priv->proxy = NULL;
+  priv->iface = NULL;
   priv->dispose_run = FALSE;
 }
 
@@ -386,13 +386,13 @@ cl_members_changed_cb (EmpathyContactList    *cl,
 /* public methods */
 
 void
-empathy_contact_monitor_set_proxy (EmpathyContactMonitor *self,
-                                   EmpathyContactList *proxy)
+empathy_contact_monitor_set_iface (EmpathyContactMonitor *self,
+                                   EmpathyContactList *iface)
 {
   EmpathyContactMonitorPriv *priv;
 
   g_return_if_fail (EMPATHY_IS_CONTACT_MONITOR (self));
-  g_return_if_fail (EMPATHY_IS_CONTACT_LIST (proxy));
+  g_return_if_fail (EMPATHY_IS_CONTACT_LIST (iface));
 
   priv = GET_PRIV (self);
 
@@ -404,22 +404,22 @@ empathy_contact_monitor_set_proxy (EmpathyContactMonitor *self,
       priv->contacts = NULL;
     }
 
-  priv->proxy = proxy;
+  priv->iface = iface;
   priv->contacts = g_ptr_array_new ();
 
-  g_signal_connect (proxy, "members-changed",
+  g_signal_connect (iface, "members-changed",
                     G_CALLBACK (cl_members_changed_cb), self);
 }
 
 EmpathyContactMonitor *
-empathy_contact_monitor_new_for_proxy (EmpathyContactList *proxy)
+empathy_contact_monitor_new_for_iface (EmpathyContactList *iface)
 {
   EmpathyContactMonitor *retval;
 
-  g_return_val_if_fail (EMPATHY_IS_CONTACT_LIST (proxy), NULL);
+  g_return_val_if_fail (EMPATHY_IS_CONTACT_LIST (iface), NULL);
 
   retval = g_object_new (EMPATHY_TYPE_CONTACT_MONITOR,
-                         "proxy", proxy, NULL);
+                         "iface", iface, NULL);
 
   return retval;
 }
