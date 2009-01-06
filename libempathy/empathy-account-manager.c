@@ -441,7 +441,9 @@ do_constructor (GType type,
       manager_singleton = EMPATHY_ACCOUNT_MANAGER (retval);
     } 
   else
-    retval = g_object_ref (manager_singleton);
+    {
+      retval = g_object_ref (manager_singleton);
+    }
 
   return retval;
 }
