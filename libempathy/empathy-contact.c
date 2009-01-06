@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
+/* -*- Mode: C; tab-width: 2; indent-tabs-mode: nil; c-basic-offset: 2; -*- */
 /*
  * Copyright (C) 2004 Imendio AB
  * Copyright (C) 2007-2008 Collabora Ltd.
@@ -30,10 +30,12 @@
 #include <glib/gi18n-lib.h>
 
 #include <telepathy-glib/util.h>
+#include <libmissioncontrol/mc-enum-types.h>
 
 #include "empathy-contact.h"
 #include "empathy-utils.h"
 #include "empathy-enum-types.h"
+#include "empathy-marshal.h"
 
 #define DEBUG_FLAG EMPATHY_DEBUG_CONTACT
 #include "empathy-debug.h"
@@ -75,6 +77,13 @@ enum
   PROP_IS_USER,
   PROP_READY
 };
+
+enum {
+  PRESENCE_CHANGED,
+  LAST_SIGNAL
+};
+
+static guint signals[LAST_SIGNAL];
 
 static void
 empathy_contact_class_init (EmpathyContactClass *class)
@@ -172,6 +181,17 @@ empathy_contact_class_init (EmpathyContactClass *class)
         EMPATHY_TYPE_CONTACT_READY,
         EMPATHY_CONTACT_READY_NONE,
         G_PARAM_READABLE));
+
+  signals[PRESENCE_CHANGED] =
+    g_signal_new ("presence-changed",
+                  G_TYPE_FROM_CLASS (class),
+                  G_SIGNAL_RUN_LAST,
+                  0,
+                  NULL, NULL,
+                  _empathy_marshal_VOID__ENUM_ENUM,
+                  G_TYPE_NONE,
+                  2, MC_TYPE_PRESENCE,
+                  MC_TYPE_PRESENCE);
 
   g_type_class_add_private (object_class, sizeof (EmpathyContactPriv));
 }
@@ -506,6 +526,7 @@ empathy_contact_set_presence (EmpathyContact *contact,
                               McPresence presence)
 {
   EmpathyContactPriv *priv;
+  McPresence old_presence;
 
   g_return_if_fail (EMPATHY_IS_CONTACT (contact));
 
@@ -514,7 +535,10 @@ empathy_contact_set_presence (EmpathyContact *contact,
   if (presence == priv->presence)
     return;
 
+  old_presence = priv->presence;
   priv->presence = presence;
+
+  g_signal_emit (contact, signals[PRESENCE_CHANGED], 0, presence, old_presence);
 
   g_object_notify (G_OBJECT (contact), "presence");
 }
