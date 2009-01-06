@@ -412,22 +412,6 @@ empathy_account_manager_init (EmpathyAccountManager *manager)
 }
 
 static void
-disconnect_monitor_signals (McAccountMonitor *monitor,
-                            GObject *obj)
-{
-  g_signal_handlers_disconnect_by_func (monitor,
-                                        account_created_cb, obj);
-  g_signal_handlers_disconnect_by_func (monitor,
-                                        account_deleted_cb, obj);
-  g_signal_handlers_disconnect_by_func (monitor,
-                                        account_disabled_cb, obj);
-  g_signal_handlers_disconnect_by_func (monitor,
-                                        account_enabled_cb, obj);
-  g_signal_handlers_disconnect_by_func (monitor,
-                                        account_changed_cb, obj);
-}
-
-static void
 do_finalize (GObject *obj)
 {
   EmpathyAccountManager *manager = EMPATHY_ACCOUNT_MANAGER (obj);
@@ -454,10 +438,18 @@ do_dispose (GObject *obj)
                                   G_CALLBACK (account_status_changed_cb),
                                   obj);
 
-  disconnect_monitor_signals (priv->monitor, obj);
-
   if (priv->monitor)
     {
+      g_signal_handlers_disconnect_by_func (priv->monitor,
+                                            account_created_cb, obj);
+      g_signal_handlers_disconnect_by_func (priv->monitor,
+                                            account_deleted_cb, obj);
+      g_signal_handlers_disconnect_by_func (priv->monitor,
+                                            account_disabled_cb, obj);
+      g_signal_handlers_disconnect_by_func (priv->monitor,
+                                            account_enabled_cb, obj);
+      g_signal_handlers_disconnect_by_func (priv->monitor,
+                                            account_changed_cb, obj);
       g_object_unref (priv->monitor);
       priv->monitor = NULL;
     }
