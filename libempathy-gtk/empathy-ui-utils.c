@@ -1500,7 +1500,7 @@ typedef struct {
 	const char * gconf_key;
 } EmpathySoundEntry;
 
-/* NOTE: these entries MUST be in the same order of the EmpathySound enum */
+/* NOTE: these entries MUST be in the same order than EmpathySound enum */
 static EmpathySoundEntry sound_entries[LAST_EMPATHY_SOUND] = {
 	{ EMPATHY_SOUND_MESSAGE_INCOMING, "message-new-instant",
 	  N_("Received an instant message"), EMPATHY_PREFS_SOUNDS_INCOMING_MESSAGE } ,

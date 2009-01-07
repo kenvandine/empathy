@@ -44,6 +44,7 @@
 
 G_BEGIN_DECLS
 
+/* NOTE: Keep this sync with sound_entries in empathy-ui-utils.c */
 typedef enum {
 	EMPATHY_SOUND_MESSAGE_INCOMING,
 	EMPATHY_SOUND_MESSAGE_OUTGOING,
