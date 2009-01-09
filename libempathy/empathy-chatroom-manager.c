@@ -31,6 +31,7 @@
 #include <libxml/parser.h>
 #include <libxml/tree.h>
 
+#include "empathy-tp-chat.h"
 #include "empathy-chatroom-manager.h"
 #include "empathy-utils.h"
 
@@ -651,4 +652,91 @@ chatroom_manager_file_save (EmpathyChatroomManager *manager)
 	xmlMemoryDump ();
 
 	return TRUE;
+}
+
+static void
+empathy_chatroom_manager_chat_destroyed_cb (EmpathyTpChat *chat,
+  gpointer user_data)
+{
+  EmpathyChatroomManager *manager = EMPATHY_CHATROOM_MANAGER (user_data);
+  McAccount *account = empathy_tp_chat_get_account (chat);
+  EmpathyChatroom *chatroom;
+  const gchar *roomname;
+  gboolean favorite;
+
+  roomname = empathy_tp_chat_get_id (chat);
+  chatroom = empathy_chatroom_manager_find (manager, account, roomname);
+
+  if (chatroom == NULL)
+    return;
+
+  g_object_get (chatroom, "favorite", &favorite, NULL);
+
+  if (!favorite)
+    {
+      /* Remove the chatroom from the list, unless it's in the list of
+       * favourites.. (seems strange to handle this at such a low level.. */
+      empathy_chatroom_manager_remove (manager, chatroom);
+    }
+}
+
+static void
+empathy_chatroom_manager_observe_channel_cb (EmpathyDispatcher *dispatcher,
+  EmpathyDispatchOperation *operation, gpointer user_data)
+{
+  EmpathyChatroomManager *manager = EMPATHY_CHATROOM_MANAGER (user_data);
+  EmpathyChatroom *chatroom;
+  TpChannel *channel;
+  EmpathyTpChat *chat;
+  const gchar *roomname;
+  GQuark channel_type;
+  TpHandleType handle_type;
+  McAccount *account;
+
+  channel_type = empathy_dispatch_operation_get_channel_type_id (operation);
+
+  /* Observe Text channels to rooms only */
+  if (channel_type != TP_IFACE_QUARK_CHANNEL_TYPE_TEXT)
+    return;
+
+  channel = empathy_dispatch_operation_get_channel (operation);
+  tp_channel_get_handle (channel, &handle_type);
+
+  if (handle_type != TP_HANDLE_TYPE_ROOM)
+    goto out;
+
+  chat = EMPATHY_TP_CHAT (
+    empathy_dispatch_operation_get_channel_wrapper (operation));
+  account = empathy_tp_chat_get_account (chat);
+
+  roomname = empathy_tp_chat_get_id (chat);
+
+  chatroom = empathy_chatroom_manager_find (manager, account, roomname);
+
+  if (chatroom == NULL)
+    {
+      chatroom = empathy_chatroom_new_full (account, roomname, roomname,
+        FALSE);
+      empathy_chatroom_manager_add (manager, chatroom);
+      g_object_unref (chatroom);
+    }
+
+  /* A TpChat is always destroyed as it only gets unreffed after the channel
+   * has been invalidated in the dispatcher..  */
+  g_signal_connect (chat, "destroy",
+    G_CALLBACK (empathy_chatroom_manager_chat_destroyed_cb),
+    manager);
+
+  g_object_unref (account);
+  g_object_unref (chat);
+out:
+  g_object_unref (channel);
+}
+
+void
+empathy_chatroom_manager_observe (EmpathyChatroomManager *manager,
+  EmpathyDispatcher *dispatcher)
+{
+  g_signal_connect (dispatcher, "observe",
+    G_CALLBACK (empathy_chatroom_manager_observe_channel_cb), manager);
 }

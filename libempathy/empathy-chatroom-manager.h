@@ -30,6 +30,7 @@
 #include <libmissioncontrol/mc-account.h>
 
 #include "empathy-chatroom.h"
+#include "empathy-dispatcher.h"
 
 G_BEGIN_DECLS
 
@@ -65,6 +66,8 @@ GList *                empathy_chatroom_manager_get_chatrooms (EmpathyChatroomMa
 							      McAccount             *account);
 guint                  empathy_chatroom_manager_get_count     (EmpathyChatroomManager *manager,
 							      McAccount             *account);
+void                   empathy_chatroom_manager_observe       (EmpathyChatroomManager *manager,
+							      EmpathyDispatcher *dispatcher);
 
 G_END_DECLS
 
