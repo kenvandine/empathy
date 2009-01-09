@@ -139,22 +139,42 @@ empathy_tube_dispatch_constructed (GObject *object)
   TpChannel *channel;
   GHashTable *properties;
   const gchar *service;
+  const gchar *channel_type;
+  EmpathyTubeType type;
 
   priv->dbus = tp_dbus_daemon_new (tp_get_bus());
 
   channel = empathy_dispatch_operation_get_channel (priv->operation);
   properties = tp_channel_borrow_immutable_properties (channel);
 
-  service = tp_asv_get_string (properties,
-    EMP_IFACE_CHANNEL_TYPE_STREAM_TUBE  ".Service");
+  channel_type = tp_asv_get_string (properties,
+    TP_IFACE_CHANNEL ".ChannelType");
+  if (channel_type == NULL)
+    goto failed;
+
+  if (!tp_strdiff (channel_type, EMP_IFACE_CHANNEL_TYPE_STREAM_TUBE))
+    {
+      type = EMPATHY_TYPE_STREAM_TUBE;
+      service = tp_asv_get_string (properties,
+        EMP_IFACE_CHANNEL_TYPE_STREAM_TUBE  ".Service");
+    }
+  else if (!tp_strdiff (channel_type, EMP_IFACE_CHANNEL_TYPE_DBUS_TUBE))
+    {
+      type = EMPATHY_TYPE_DBUS_TUBE;
+      service = tp_asv_get_string (properties,
+        EMP_IFACE_CHANNEL_TYPE_DBUS_TUBE  ".ServiceName");
+    }
+  else
+    {
+      goto failed;
+    }
+
 
   if (service == NULL)
     goto failed;
 
-  priv->bus_name = empathy_tube_handler_build_bus_name (
-    TP_TUBE_TYPE_STREAM, service);
-  priv->object_path =
-    empathy_tube_handler_build_object_path (TP_TUBE_TYPE_STREAM, service);
+  priv->bus_name = empathy_tube_handler_build_bus_name (type, service);
+  priv->object_path = empathy_tube_handler_build_object_path (type, service);
 
   priv->service = g_strdup (service);
 
