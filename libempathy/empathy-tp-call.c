@@ -294,29 +294,19 @@ tp_call_member_added_cb (EmpathyTpGroup *group,
   g_object_unref (call);
 }
 
-static void
-tp_call_remote_pending_cb (EmpathyTpGroup *group,
-                           EmpathyContact *contact,
-                           EmpathyContact *actor,
-                           guint reason,
-                           const gchar *message,
-                           EmpathyTpCall *call)
+void
+empathy_tp_call_to (EmpathyTpCall *call, EmpathyContact *contact)
 {
   EmpathyTpCallPriv *priv = GET_PRIV (call);
 
-  g_object_ref (call);
-  if (!priv->contact && !empathy_contact_is_user (contact))
-    {
-      priv->contact = g_object_ref (contact);
-      priv->is_incoming = FALSE;
-      priv->status = EMPATHY_TP_CALL_STATUS_PENDING;
-      g_object_notify (G_OBJECT (call), "is-incoming");
-      g_object_notify (G_OBJECT (call), "contact"); 
-      g_object_notify (G_OBJECT (call), "status");	
-      tp_call_request_streams_for_capabilities (call,
-          EMPATHY_CAPABILITIES_AUDIO);
-    }
-  g_object_unref (call);
+  priv->contact = g_object_ref (contact);
+  priv->is_incoming = FALSE;
+  priv->status = EMPATHY_TP_CALL_STATUS_PENDING;
+  g_object_notify (G_OBJECT (call), "is-incoming");
+  g_object_notify (G_OBJECT (call), "contact");
+  g_object_notify (G_OBJECT (call), "status");
+  tp_call_request_streams_for_capabilities (call,
+     EMPATHY_CAPABILITIES_AUDIO);
 }
 
 static void
@@ -481,8 +471,6 @@ tp_call_constructor (GType type,
 
   g_signal_connect (priv->group, "member-added",
       G_CALLBACK (tp_call_member_added_cb), call);
-  g_signal_connect (priv->group, "remote-pending",
-      G_CALLBACK (tp_call_remote_pending_cb), call);
 
   /* Start stream engine */
   tp_call_stream_engine_handle_channel (call);
@@ -624,7 +612,7 @@ static void
 empathy_tp_call_init (EmpathyTpCall *call)
 {
   EmpathyTpCallPriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (call,
-		EMPATHY_TYPE_TP_CALL, EmpathyTpCallPriv);
+    EMPATHY_TYPE_TP_CALL, EmpathyTpCallPriv);
 
   call->priv = priv;
   priv->status = EMPATHY_TP_CALL_STATUS_READYING;
