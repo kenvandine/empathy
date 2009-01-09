@@ -655,7 +655,7 @@ chatroom_manager_file_save (EmpathyChatroomManager *manager)
 }
 
 static void
-empathy_chatroom_manager_chat_destroyed_cb (EmpathyTpChat *chat,
+chatroom_manager_chat_destroyed_cb (EmpathyTpChat *chat,
   gpointer user_data)
 {
   EmpathyChatroomManager *manager = EMPATHY_CHATROOM_MANAGER (user_data);
@@ -675,13 +675,14 @@ empathy_chatroom_manager_chat_destroyed_cb (EmpathyTpChat *chat,
   if (!favorite)
     {
       /* Remove the chatroom from the list, unless it's in the list of
-       * favourites.. (seems strange to handle this at such a low level.. */
+       * favourites..
+       * FIXME this policy should probably not be in libempathy */
       empathy_chatroom_manager_remove (manager, chatroom);
     }
 }
 
 static void
-empathy_chatroom_manager_observe_channel_cb (EmpathyDispatcher *dispatcher,
+chatroom_manager_observe_channel_cb (EmpathyDispatcher *dispatcher,
   EmpathyDispatchOperation *operation, gpointer user_data)
 {
   EmpathyChatroomManager *manager = EMPATHY_CHATROOM_MANAGER (user_data);
@@ -724,10 +725,9 @@ empathy_chatroom_manager_observe_channel_cb (EmpathyDispatcher *dispatcher,
   /* A TpChat is always destroyed as it only gets unreffed after the channel
    * has been invalidated in the dispatcher..  */
   g_signal_connect (chat, "destroy",
-    G_CALLBACK (empathy_chatroom_manager_chat_destroyed_cb),
+    G_CALLBACK (chatroom_manager_chat_destroyed_cb),
     manager);
 
-  g_object_unref (account);
   g_object_unref (chat);
 out:
   g_object_unref (channel);
@@ -738,5 +738,5 @@ empathy_chatroom_manager_observe (EmpathyChatroomManager *manager,
   EmpathyDispatcher *dispatcher)
 {
   g_signal_connect (dispatcher, "observe",
-    G_CALLBACK (empathy_chatroom_manager_observe_channel_cb), manager);
+    G_CALLBACK (chatroom_manager_observe_channel_cb), manager);
 }
