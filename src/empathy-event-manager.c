@@ -1,4 +1,3 @@
-/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /*
  * Copyright (C) 2007-2008 Collabora Ltd.
  *
@@ -44,10 +43,20 @@
 #include <libempathy/empathy-debug.h>
 
 #define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyEventManager)
+
+typedef struct {
+	EmpathyEventManager *manager;
+	EmpathyDispatchOperation *operation;
+	guint approved_handler;
+	guint claimed_handler;
+} EventManagerApproval;
+
 typedef struct {
 	EmpathyDispatcher     *dispatcher;
 	EmpathyContactManager *contact_manager;
 	GSList                *events;
+	/* Ongoing approvals */
+	GSList                *approvals;
 } EmpathyEventManagerPriv;
 
 typedef struct _EventPriv EventPriv;
@@ -55,8 +64,8 @@ typedef void (*EventFunc) (EventPriv *event);
 
 struct _EventPriv {
 	EmpathyEvent         public;
-	TpChannel           *channel;
 	EmpathyEventManager *manager;
+	EventManagerApproval *approval;
 	EventFunc            func;
 	gpointer             user_data;
 };
@@ -73,6 +82,28 @@ G_DEFINE_TYPE (EmpathyEventManager, empathy_event_manager, G_TYPE_OBJECT);
 
 static EmpathyEventManager * manager_singleton = NULL;
 
+static EventManagerApproval *
+event_manager_approval_new (EmpathyEventManager *manager,
+	EmpathyDispatchOperation *operation)
+{
+	EventManagerApproval *result = g_slice_new0 (EventManagerApproval);
+	result->operation = g_object_ref (operation);
+	result->manager = manager;
+
+	return result;
+}
+
+static void
+event_manager_approval_free (EventManagerApproval *approval)
+{
+  g_signal_handler_disconnect (approval->operation,
+    approval->approved_handler);
+  g_signal_handler_disconnect (approval->operation,
+    approval->claimed_handler);
+  g_object_unref (approval->operation);
+  g_slice_free (EventManagerApproval, approval);
+}
+
 static void event_remove (EventPriv *event);
 
 static void
@@ -85,12 +116,6 @@ event_free (EventPriv *event)
 		g_object_unref (event->public.contact);
 	}
 
-	if (event->channel) {
-		g_signal_handlers_disconnect_by_func (event->channel,
-						      event_remove,
-						      event);
-		g_object_unref (event->channel);
-	}
 	g_slice_free (EventPriv, event);
 }
 
@@ -110,7 +135,7 @@ event_manager_add (EmpathyEventManager *manager,
 		   EmpathyContact      *contact,
 		   const gchar         *icon_name,
 		   const gchar         *message,
-		   TpChannel           *channel,
+		   EventManagerApproval *approval,
 		   EventFunc            func,
 		   gpointer             user_data)
 {
@@ -121,15 +146,17 @@ event_manager_add (EmpathyEventManager *manager,
 	event->public.contact = contact ? g_object_ref (contact) : NULL;
 	event->public.icon_name = g_strdup (icon_name);
 	event->public.message = g_strdup (message);
-	event->manager = manager;
 	event->func = func;
 	event->user_data = user_data;
+	event->manager = manager;
 
-	if (channel) {
-		event->channel = g_object_ref (channel);
+	if (approval) {
+		event->approval = approval;
+#if 0 /* FIXME */
 		g_signal_connect_swapped (channel, "invalidated",
 					  G_CALLBACK (event_remove),
 					  event);
+#endif
 	}
 
 	DEBUG ("Adding event %p", event);
@@ -140,33 +167,21 @@ event_manager_add (EmpathyEventManager *manager,
 static void
 event_channel_process_func (EventPriv *event)
 {
-	EmpathyEventManagerPriv *priv = GET_PRIV (event->manager);
-
-	/* This will emit "dispatch-channel" and the event will be removed
-	 * in the callback of that signal, no need to remove the event here. */	
-	empathy_dispatcher_channel_process (priv->dispatcher, event->channel);
-}
-
-static gboolean
-event_manager_chat_unref_idle (gpointer user_data)
-{
-	g_object_unref (user_data);
-	return FALSE;
+	empathy_dispatch_operation_approve (event->approval->operation);
 }
 
 static void
 event_manager_chat_message_received_cb (EmpathyTpChat       *tp_chat,
 					EmpathyMessage      *message,
-					EmpathyEventManager *manager)
+					EventManagerApproval *approval)
 {
 	EmpathyContact  *sender;
 	gchar           *msg;
 	TpChannel       *channel;
 
-	g_idle_add (event_manager_chat_unref_idle, tp_chat);
 	g_signal_handlers_disconnect_by_func (tp_chat,
 					      event_manager_chat_message_received_cb,
-					      manager);
+					      approval);
 
 	sender = empathy_message_get_sender (message);
 	msg = g_strdup_printf (_("New message from %s:\n%s"),
@@ -174,28 +189,77 @@ event_manager_chat_message_received_cb (EmpathyTpChat       *tp_chat,
 			       empathy_message_get_body (message));
 
 	channel = empathy_tp_chat_get_channel (tp_chat);
-	event_manager_add (manager, sender, EMPATHY_IMAGE_NEW_MESSAGE, msg,
-			   channel, event_channel_process_func, NULL);
+	event_manager_add (approval->manager, sender, EMPATHY_IMAGE_NEW_MESSAGE, msg,
+			   approval, event_channel_process_func, NULL);
 
 	g_free (msg);
 }
 
 static void
-event_manager_filter_channel_cb (EmpathyDispatcher   *dispatcher,
-				 TpChannel           *channel,
-				 EmpathyEventManager *manager)
+event_manager_approval_done (EventManagerApproval *approval)
 {
-	gchar *channel_type;
+  EmpathyEventManagerPriv *priv = GET_PRIV (approval->manager);
+  GSList                  *l;
 
-	g_object_get (channel, "channel-type", &channel_type, NULL);
-	if (!tp_strdiff (channel_type, TP_IFACE_CHANNEL_TYPE_TEXT)) {
-		EmpathyTpChat *tp_chat;
+  priv->approvals = g_slist_remove (priv->approvals, approval);
 
-		tp_chat = empathy_tp_chat_new (channel);
-		g_signal_connect (tp_chat, "message-received",
-				  G_CALLBACK (event_manager_chat_message_received_cb),
-				  manager);
-	}
+  for (l = priv->events; l; l = l->next) {
+    EventPriv *event = l->data;
+
+    if (event->approval == approval) {
+      event_remove (event);
+      break;
+    }
+  }
+
+  event_manager_approval_free (approval);
+}
+
+static void
+event_manager_operation_approved_cb (EmpathyDispatchOperation *operation,
+  EventManagerApproval *approval)
+{
+  event_manager_approval_done (approval);
+}
+
+static void
+event_manager_operation_claimed_cb (EmpathyDispatchOperation *operation,
+  EventManagerApproval *approval)
+{
+  event_manager_approval_done (approval);
+}
+
+static void
+event_manager_approve_channel_cb (EmpathyDispatcher *dispatcher,
+  EmpathyDispatchOperation  *operation, EmpathyEventManager *manager)
+{
+  const gchar *channel_type;
+  EventManagerApproval *approval;
+  EmpathyEventManagerPriv *priv = GET_PRIV (manager);
+
+  channel_type = empathy_dispatch_operation_get_channel_type (operation);
+
+  if (!tp_strdiff (channel_type, TP_IFACE_CHANNEL_TYPE_TEXT))
+    {
+      EmpathyTpChat *tp_chat =
+        EMPATHY_TP_CHAT (
+          empathy_dispatch_operation_get_channel_wrapper (operation));
+
+      approval = event_manager_approval_new (manager, operation);
+      priv->approvals = g_slist_prepend (priv->approvals, approval);
+
+      g_signal_connect (tp_chat, "message-received",
+        G_CALLBACK (event_manager_chat_message_received_cb), approval);
+      g_object_unref (G_OBJECT (tp_chat));
+
+      approval->approved_handler = g_signal_connect (operation, "approved",
+        G_CALLBACK (event_manager_operation_approved_cb), approval);
+
+      approval->claimed_handler = g_signal_connect (operation, "claimed",
+        G_CALLBACK (event_manager_operation_claimed_cb), approval);
+
+    }
+#if 0
 	else if (!tp_strdiff (channel_type, TP_IFACE_CHANNEL_TYPE_STREAMED_MEDIA)) {
 		EmpathyTpGroup *tp_group;
 		EmpathyContact *contact;
@@ -249,30 +313,15 @@ event_manager_filter_channel_cb (EmpathyDispatcher   *dispatcher,
 	}
 
 	g_free (channel_type);
+#endif
 }
 
-static void
-event_manager_dispatch_channel_cb (EmpathyDispatcher   *dispatcher,
-				   TpChannel           *channel,
-				   EmpathyEventManager *manager)
-{
-	EmpathyEventManagerPriv *priv = GET_PRIV (manager);
-	GSList                  *l;
-
-	for (l = priv->events; l; l = l->next) {
-		EventPriv *event = l->data;
-
-		if (event->channel &&
-		    empathy_proxy_equal (channel, event->channel)) {
-			event_remove (event);
-			break;
-		}
-	}
-}
+#if 0 /* FIXME dispatcher */
 
 #define TUBE_NO_APP_MESSAGE _("%s is offering you an invitation, but " \
 			      "you don't have the needed external " \
 			      "application to handle it.")
+
 
 static void
 event_tube_process_func (EventPriv *event)
@@ -336,6 +385,7 @@ event_manager_filter_tube_cb (EmpathyDispatcher     *dispatcher,
 
 	g_free (msg);
 }
+#endif
 
 static void
 event_pending_subscribe_func (EventPriv *event)
@@ -415,6 +465,7 @@ event_manager_finalize (GObject *object)
 	EmpathyEventManagerPriv *priv = GET_PRIV (object);
 
 	g_slist_foreach (priv->events, (GFunc) event_free, NULL);
+	g_slist_foreach (priv->approvals, (GFunc) event_manager_approval_free, NULL);
 	g_slist_free (priv->events);
 	g_object_unref (priv->contact_manager);
 	g_object_unref (priv->dispatcher);
@@ -459,17 +510,20 @@ empathy_event_manager_init (EmpathyEventManager *manager)
 
 	manager->priv = priv;
 
-	priv->dispatcher = empathy_dispatcher_new ();
+	priv->dispatcher = empathy_get_dispatcher ();
 	priv->contact_manager = empathy_contact_manager_dup_singleton ();
-	g_signal_connect (priv->dispatcher, "filter-channel",
-			  G_CALLBACK (event_manager_filter_channel_cb),
+	g_signal_connect (priv->dispatcher, "approve",
+			  G_CALLBACK (event_manager_approve_channel_cb),
 			  manager);
-	g_signal_connect (priv->dispatcher, "dispatch-channel",
+	/*g_signal_connect (priv->dispatcher, "dispatch-channel",
 			  G_CALLBACK (event_manager_dispatch_channel_cb),
 			  manager);
+  */
+#if 0 /* FIXME  dispatcher */
 	g_signal_connect (priv->dispatcher, "filter-tube",
 			  G_CALLBACK (event_manager_filter_tube_cb),
 			  manager);
+#endif
 	g_signal_connect (priv->contact_manager, "pendings-changed",
 			  G_CALLBACK (event_manager_pendings_changed_cb),
 			  manager);

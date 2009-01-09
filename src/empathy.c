@@ -40,6 +40,7 @@
 #include <libempathy/empathy-idle.h>
 #include <libempathy/empathy-utils.h>
 #include <libempathy/empathy-dispatcher.h>
+#include <libempathy/empathy-dispatch-operation.h>
 #include <libempathy/empathy-tp-chat.h>
 #include <libempathy/empathy-tp-group.h>
 
@@ -62,19 +63,21 @@
 static BaconMessageConnection *connection = NULL;
 
 static void
-dispatch_channel_cb (EmpathyDispatcher *dispatcher,
-		     TpChannel         *channel,
+dispatch_cb (EmpathyDispatcher *dispatcher,
+		     EmpathyDispatchOperation *operation,
 		     gpointer           user_data)
 {
-	const gchar *channel_type;
+	GQuark channel_type;
 
-	channel_type = tp_channel_get_channel_type (channel);
-	if (!tp_strdiff (channel_type, TP_IFACE_CHANNEL_TYPE_TEXT)) {
+	channel_type = empathy_dispatch_operation_get_channel_type_id (operation);
+
+	if (channel_type == TP_IFACE_QUARK_CHANNEL_TYPE_TEXT) {
 		EmpathyTpChat *tp_chat;
 		EmpathyChat   *chat = NULL;
 		const gchar   *id;
 
-		tp_chat = empathy_tp_chat_new (channel);
+		tp_chat = EMPATHY_TP_CHAT (
+			empathy_dispatch_operation_get_channel_wrapper (operation));
 		empathy_run_until_ready (tp_chat);
 
 		id = empathy_tp_chat_get_id (tp_chat);
@@ -102,7 +105,10 @@ dispatch_channel_cb (EmpathyDispatcher *dispatcher,
 
 		empathy_chat_window_present_chat (chat);
 		g_object_unref (tp_chat);
+
+		empathy_dispatch_operation_claim (operation);
 	}
+#if 0
 	else if (!tp_strdiff (channel_type, TP_IFACE_CHANNEL_TYPE_STREAMED_MEDIA)) {
 		empathy_call_window_new (channel);
 	}
@@ -115,6 +121,7 @@ dispatch_channel_cb (EmpathyDispatcher *dispatcher,
 		empathy_ft_manager_add_tp_file (ft_manager, tp_file);
 		g_object_unref (tp_file);
 	}
+#endif
 }
 
 static void
@@ -502,10 +509,8 @@ main (int argc, char *argv[])
 	}
 
 	/* Handle channels */
-	dispatcher = empathy_dispatcher_new ();
-	g_signal_connect (dispatcher, "dispatch-channel",
-			  G_CALLBACK (dispatch_channel_cb),
-			  NULL);
+	dispatcher = empathy_get_dispatcher ();
+	g_signal_connect (dispatcher, "dispatch", G_CALLBACK (dispatch_cb), NULL);
 
 	gtk_main ();
 
