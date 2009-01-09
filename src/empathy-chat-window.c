@@ -1081,7 +1081,7 @@ chat_window_drag_data_received (GtkWidget        *widget,
 		chat = empathy_chat_window_find_chat (account, strv[1]);
 
 		if (!chat) {
-			empathy_dispatcher_chat_with_contact_id (account, strv[2]);
+			empathy_dispatcher_chat_with_contact_id (account, strv[2], NULL, NULL);
 			g_object_unref (account);
 			g_strfreev (strv);
 			return;

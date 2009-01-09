@@ -542,7 +542,7 @@ contact_list_view_row_activated (GtkTreeView       *view,
 
 	if (contact) {
 		DEBUG ("Starting a chat");
-		empathy_dispatcher_chat_with_contact (contact);
+		empathy_dispatcher_chat_with_contact (contact, NULL, NULL);
 		g_object_unref (contact);
 	}
 }
@@ -571,7 +571,7 @@ contact_list_view_voip_activated_cb (EmpathyCellRendererActivatable *cell,
 			    -1);
 
 	if (contact) {
-		empathy_dispatcher_call_with_contact (contact);
+		empathy_dispatcher_call_with_contact (contact, NULL, NULL);
 		g_object_unref (contact);
 	}
 }

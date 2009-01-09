@@ -184,10 +184,9 @@ new_message_dialog_response_cb (GtkWidget               *widget,
 	}
 
 	if (response == 1) {
-		empathy_dispatcher_call_with_contact_id (account, id);
-	}
-	else if (response == 2) {
-		empathy_dispatcher_chat_with_contact_id (account, id);
+		empathy_dispatcher_call_with_contact_id (account, id, NULL, NULL);
+	} else if (response == 2) {
+		empathy_dispatcher_chat_with_contact_id (account, id, NULL, NULL);
 	}
 
 	g_object_unref (account);
