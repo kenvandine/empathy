@@ -40,8 +40,11 @@
 #include "empathy-contact-factory.h"
 #include "empathy-contact-manager.h"
 
+#include <extensions/extensions.h>
+
 #define DEBUG_FLAG EMPATHY_DEBUG_OTHER
 #include "empathy-debug.h"
+
 
 void
 empathy_init (void)
@@ -63,6 +66,8 @@ empathy_init (void)
 	}
 	empathy_debug_set_flags (g_getenv ("EMPATHY_DEBUG"));
 	tp_debug_divert_messages (g_getenv ("EMPATHY_LOGFILE"));
+
+	emp_cli_init ();
 
 	initialized = TRUE;
 }

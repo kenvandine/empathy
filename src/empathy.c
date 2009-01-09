@@ -47,8 +47,6 @@
 #include <libempathy-gtk/empathy-conf.h>
 #include <libempathy-gtk/empathy-ui-utils.h>
 
-#include <extensions/extensions.h>
-
 #include "empathy-accounts-dialog.h"
 #include "empathy-main-window.h"
 #include "empathy-status-icon.h"
@@ -457,8 +455,6 @@ main (int argc, char *argv[])
 	} else {
 		g_warning ("Cannot create the 'empathy' bacon connection.");
 	}
-
-	emp_cli_init ();
 
 	/* Setting up MC */
 	mc = empathy_mission_control_new ();
