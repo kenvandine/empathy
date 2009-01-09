@@ -21,6 +21,7 @@
  * Authors: Mikael Hallendal <micke@imendio.com>
  *          Martyn Russell <martyn@imendio.com>
  *          Xavier Claessens <xclaesse@gmail.com>
+ *          Sjoerd Simons <sjoerd.simons@collabora.co.uk>
  */
 
 #include "config.h"
@@ -60,6 +61,8 @@ typedef struct {
     EmpathyContactReady ready;
     EmpathyContactReadyCb *callback;
     gpointer user_data;
+    GDestroyNotify destroy;
+    GObject *weak_object;
 } ReadyCbData;
 
 static void contact_finalize (GObject *object);
@@ -351,6 +354,43 @@ contact_is_ready (EmpathyContact *contact, EmpathyContactReady ready)
   return (priv->ready & ready) == ready;
 }
 
+static void
+contact_weak_object_notify (gpointer data, GObject *old_object)
+{
+  EmpathyContact *contact = EMPATHY_CONTACT (data);
+  EmpathyContactPriv *priv = GET_PRIV (contact);
+
+  GList *l, *ln;
+
+  for (l = priv->ready_callbacks ; l != NULL ; l = ln )
+    {
+      ReadyCbData *d = (ReadyCbData *)l->data;
+      ln = g_list_next (l);
+
+      if (d->weak_object == old_object)
+        {
+          if (d->destroy != NULL)
+            d->destroy (d->user_data);
+
+           priv->ready_callbacks = g_list_delete_link (priv->ready_callbacks,
+            l);
+        }
+    }
+}
+
+static void
+contact_call_ready_callback (EmpathyContact *contact, GError *error,
+  ReadyCbData *data)
+{
+  data->callback (contact, error, data->user_data, data->weak_object);
+  if (data->destroy != NULL)
+    data->destroy (data->user_data);
+
+  if (data->weak_object)
+    g_object_weak_unref (data->weak_object,
+      contact_weak_object_notify, contact);
+}
+
 
 static void
 contact_set_ready_flag (EmpathyContact *contact,
@@ -372,8 +412,7 @@ contact_set_ready_flag (EmpathyContact *contact,
 
           if (contact_is_ready (contact, d->ready))
             {
-              d->callback (contact, d->user_data);
-
+              contact_call_ready_callback (contact, NULL, d);
               priv->ready_callbacks = g_list_delete_link
                 (priv->ready_callbacks, l);
             }
@@ -807,8 +846,8 @@ empathy_contact_hash (gconstpointer key)
 }
 
 void empathy_contact_call_when_ready (EmpathyContact *contact,
-  EmpathyContactReady ready, EmpathyContactReadyCb *callback, gpointer
-  user_data)
+  EmpathyContactReady ready, EmpathyContactReadyCb *callback,
+  gpointer user_data, GDestroyNotify destroy, GObject *weak_object)
 {
   EmpathyContactPriv *priv = GET_PRIV (contact);
 
@@ -817,7 +856,9 @@ void empathy_contact_call_when_ready (EmpathyContact *contact,
 
   if (contact_is_ready (contact, ready))
     {
-      callback (contact, user_data);
+      callback (contact, NULL, user_data, weak_object);
+      if (destroy != NULL)
+        destroy (user_data);
     }
   else
     {
@@ -825,8 +866,13 @@ void empathy_contact_call_when_ready (EmpathyContact *contact,
       d->ready = ready;
       d->callback = callback;
       d->user_data = user_data;
-      priv->ready_callbacks = g_list_prepend (priv->ready_callbacks,
-        d);
+      d->destroy = destroy;
+      d->weak_object = weak_object;
+
+      if (weak_object != NULL)
+        g_object_weak_ref (weak_object, contact_weak_object_notify, contact);
+
+      priv->ready_callbacks = g_list_prepend (priv->ready_callbacks, d);
     }
 }
 
