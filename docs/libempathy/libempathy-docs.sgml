@@ -26,6 +26,7 @@
       <xi:include href="xml/empathy-contact-monitor.xml"/>
       <xi:include href="xml/empathy-contact.xml"/>
       <xi:include href="xml/empathy-dispatcher.xml"/>
+      <xi:include href="xml/empathy-dispatch-operation.xml"/>
       <xi:include href="xml/empathy-enum-types.xml"/>
       <xi:include href="xml/empathy-idle.xml"/>
       <xi:include href="xml/empathy-irc-network-manager.xml"/>
@@ -44,6 +45,7 @@
       <xi:include href="xml/empathy-tp-roomlist.xml"/>
       <xi:include href="xml/empathy-tp-tube.xml"/>
       <xi:include href="xml/empathy-tube-handler.xml"/>
+      <xi:include href="xml/empathy-types.xml"/>
       <xi:include href="xml/empathy-utils.xml"/>
     </chapter>
   </part>
