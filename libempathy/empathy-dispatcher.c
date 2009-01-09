@@ -753,6 +753,7 @@ dispatcher_connection_ready_cb (TpConnection  *connection,
     }
 
   /* Advertise VoIP capabilities */
+  /* FIXME: Capabilities is leaked */
   capabilities = g_ptr_array_sized_new (1);
   cap_type = dbus_g_type_get_struct ("GValueArray", G_TYPE_STRING,
     G_TYPE_UINT, G_TYPE_INVALID);
