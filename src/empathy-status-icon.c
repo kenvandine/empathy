@@ -396,8 +396,8 @@ empathy_status_icon_init (EmpathyStatusIcon *icon)
 	icon->priv = priv;
 	priv->icon = gtk_status_icon_new ();
 	priv->account_manager = empathy_account_manager_dup_singleton ();
-	priv->idle = empathy_idle_new ();
-	priv->event_manager = empathy_event_manager_new ();
+	priv->idle = empathy_idle_dup_singleton ();
+	priv->event_manager = empathy_event_manager_dup_singleton ();
 
 	g_signal_connect (priv->account_manager,
 			  "account-connection-changed",

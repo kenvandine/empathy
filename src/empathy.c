@@ -473,7 +473,7 @@ main (int argc, char *argv[])
 	}
 
 	/* Setting up Idle */
-	idle = empathy_idle_new ();
+	idle = empathy_idle_dup_singleton ();
 	empathy_idle_set_auto_away (idle, TRUE);
 	use_nm_notify_cb (empathy_conf_get (), EMPATHY_PREFS_USE_NM, idle);
 	empathy_conf_notify_add (empathy_conf_get (), EMPATHY_PREFS_USE_NM,

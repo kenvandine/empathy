@@ -48,7 +48,7 @@ struct _EmpathyIdleClass {
 };
 
 GType        empathy_idle_get_type            (void) G_GNUC_CONST;
-EmpathyIdle *empathy_idle_new                 (void);
+EmpathyIdle *empathy_idle_dup_singleton       (void);
 McPresence   empathy_idle_get_state           (EmpathyIdle *idle);
 void         empathy_idle_set_state           (EmpathyIdle *idle,
 					       McPresence   state);

@@ -203,7 +203,7 @@ empathy_presence_chooser_init (EmpathyPresenceChooser *chooser)
 			  G_CALLBACK (presence_chooser_scroll_event_cb),
 			  NULL);
 
-	priv->idle = empathy_idle_new ();
+	priv->idle = empathy_idle_dup_singleton ();
 	presence_chooser_presence_changed_cb (chooser);
 	g_signal_connect_swapped (priv->idle, "notify",
 				  G_CALLBACK (presence_chooser_presence_changed_cb),
@@ -747,7 +747,7 @@ presence_chooser_set_state (McPresence   state,
 {
 	EmpathyIdle *idle;
 
-	idle = empathy_idle_new ();
+	idle = empathy_idle_dup_singleton ();
 	empathy_idle_set_presence (idle, state, status);
 	g_object_unref (idle);
 }

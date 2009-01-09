@@ -76,7 +76,9 @@ enum {
 	PROP_USE_NM
 };
 
-G_DEFINE_TYPE (EmpathyIdle, empathy_idle, G_TYPE_OBJECT)
+G_DEFINE_TYPE (EmpathyIdle, empathy_idle, G_TYPE_OBJECT);
+
+static EmpathyIdle * idle_singleton = NULL;
 
 static void
 idle_presence_changed_cb (MissionControl *mc,
@@ -271,6 +273,26 @@ idle_finalize (GObject *object)
 	idle_ext_away_stop (EMPATHY_IDLE (object));
 }
 
+static GObject *
+idle_constructor (GType type,
+		  guint n_props,
+		  GObjectConstructParam *props)
+{
+	GObject *retval;
+
+	if (idle_singleton) {
+		retval = g_object_ref (idle_singleton);
+	} else {
+		retval = G_OBJECT_CLASS (empathy_idle_parent_class)->constructor
+			(type, n_props, props);
+		g_object_add_weak_pointer (retval, (gpointer *) &retval);
+
+		idle_singleton = EMPATHY_IDLE (retval);
+	}
+
+	return retval;
+}
+
 static void
 idle_get_property (GObject    *object,
 		   guint       param_id,
@@ -345,6 +367,7 @@ empathy_idle_class_init (EmpathyIdleClass *klass)
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
 	object_class->finalize = idle_finalize;
+	object_class->constructor = idle_constructor;
 	object_class->get_property = idle_get_property;
 	object_class->set_property = idle_set_property;
 
@@ -465,18 +488,9 @@ empathy_idle_init (EmpathyIdle *idle)
 }
 
 EmpathyIdle *
-empathy_idle_new (void)
+empathy_idle_dup_singleton (void)
 {
-	static EmpathyIdle *idle = NULL;
-
-	if (!idle) {
-		idle = g_object_new (EMPATHY_TYPE_IDLE, NULL);
-		g_object_add_weak_pointer (G_OBJECT (idle), (gpointer) &idle);
-	} else {
-		g_object_ref (idle);
-	}
-
-	return idle;
+	return g_object_new (EMPATHY_TYPE_IDLE, NULL);
 }
 
 McPresence
