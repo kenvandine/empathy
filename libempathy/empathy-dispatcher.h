@@ -71,9 +71,6 @@ GType empathy_dispatcher_get_type             (void) G_GNUC_CONST;
 /* Requesting 1 to 1 stream media channels */
 void empathy_dispatcher_call_with_contact (EmpathyContact *contact,
   EmpathyDispatcherRequestCb *callback, gpointer user_data);
-void empathy_dispatcher_call_with_contact_id (McAccount *account,
-  const gchar           *contact_id, EmpathyDispatcherRequestCb *callback,
-  gpointer user_data);
 
 /* Requesting 1 to 1 text channels */
 void empathy_dispatcher_chat_with_contact_id (McAccount *account,

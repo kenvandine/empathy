@@ -89,6 +89,7 @@ typedef struct {
   guint handle_type;
   guint handle;
   EmpathyContact *contact;
+
   /* Properties to pass to the channel when requesting it */
   GHashTable *request;
   EmpathyDispatcherRequestCb *cb;
@@ -1417,21 +1418,6 @@ dispatcher_request_channel_cb (TpConnection *connection,
     request_data, object_path, NULL, error);
 }
 
-void
-empathy_dispatcher_call_with_contact ( EmpathyContact *contact,
-  EmpathyDispatcherRequestCb *callback, gpointer user_data)
-{
-  g_assert_not_reached ();
-}
-
-void
-empathy_dispatcher_call_with_contact_id (McAccount *account,
-  const gchar  *contact_id, EmpathyDispatcherRequestCb *callback,
-  gpointer user_data)
-{
-  g_assert_not_reached ();
-}
-
 static void
 dispatcher_request_channel (DispatcherRequestData *request_data)
 {
@@ -1442,6 +1428,35 @@ dispatcher_request_channel (DispatcherRequestData *request_data)
     TRUE, dispatcher_request_channel_cb,
     request_data, NULL, G_OBJECT (request_data->dispatcher));
 }
+
+void
+empathy_dispatcher_call_with_contact ( EmpathyContact *contact,
+  EmpathyDispatcherRequestCb *callback, gpointer user_data)
+{
+  EmpathyDispatcher *dispatcher = empathy_get_dispatcher();
+  EmpathyDispatcherPriv *priv = GET_PRIV (dispatcher);
+  McAccount *account;
+  TpConnection *connection;
+  ConnectionData *cd;
+  DispatcherRequestData *request_data;
+
+  account = empathy_contact_get_account (contact);
+  connection = g_hash_table_lookup (priv->accounts, account);
+
+  g_assert (connection != NULL);
+  cd = g_hash_table_lookup (priv->connections, connection);
+  request_data  = new_dispatcher_request_data (dispatcher, connection,
+    TP_IFACE_CHANNEL_TYPE_STREAMED_MEDIA, TP_HANDLE_TYPE_NONE, 0, NULL,
+    contact, callback, user_data);
+
+  cd->outstanding_requests = g_list_prepend
+    (cd->outstanding_requests, request_data);
+
+  dispatcher_request_channel (request_data);
+
+  g_object_unref (dispatcher);
+}
+
 
 static void
 dispatcher_chat_with_contact_cb (EmpathyContact *contact, gpointer user_data)
