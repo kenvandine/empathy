@@ -57,7 +57,6 @@ typedef struct {
   GHashTable     *accounts;
   gpointer       token;
   GSList         *tubes;
-  EmpathyChatroomManager *chatroom_mgr;
 } EmpathyDispatcherPriv;
 
 G_DEFINE_TYPE (EmpathyDispatcher, empathy_dispatcher, G_TYPE_OBJECT);
@@ -820,9 +819,8 @@ dispatcher_finalize (GObject *object)
   g_object_unref (priv->account_manager);
   g_object_unref (priv->mc);
 
+  g_hash_table_destroy (priv->accounts);
   g_hash_table_destroy (priv->connections);
-
-  g_object_unref (priv->chatroom_mgr);
 }
 
 static void
@@ -896,10 +894,6 @@ empathy_dispatcher_init (EmpathyDispatcher *dispatcher)
     g_object_unref (l->data);
   }
   g_list_free (accounts);
-
-  /* FIXME thisshould probably be created by another object.. */
-  priv->chatroom_mgr = empathy_chatroom_manager_dup_singleton (NULL);
-  empathy_chatroom_manager_observe (priv->chatroom_mgr, dispatcher);
 }
 
 EmpathyDispatcher *

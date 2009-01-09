@@ -39,6 +39,7 @@
 
 #include <libempathy/empathy-idle.h>
 #include <libempathy/empathy-utils.h>
+#include <libempathy/empathy-chatroom-manager.h>
 #include <libempathy/empathy-dispatcher.h>
 #include <libempathy/empathy-dispatch-operation.h>
 #include <libempathy/empathy-tp-chat.h>
@@ -390,6 +391,7 @@ main (int argc, char *argv[])
 	guint32            startup_timestamp;
 	EmpathyStatusIcon *icon;
 	EmpathyDispatcher *dispatcher;
+	EmpathyChatroomManager *chatroom_manager;
 	GtkWidget         *window;
 	MissionControl    *mc;
 	EmpathyIdle       *idle;
@@ -516,6 +518,9 @@ main (int argc, char *argv[])
 	dispatcher = empathy_dispatcher_dup_singleton ();
 	g_signal_connect (dispatcher, "dispatch", G_CALLBACK (dispatch_cb), NULL);
 
+	chatroom_manager = empathy_chatroom_manager_dup_singleton (NULL);
+	empathy_chatroom_manager_observe (chatroom_manager, dispatcher);
+
 	gtk_main ();
 
 	empathy_idle_set_state (idle, MC_PRESENCE_OFFLINE);
@@ -524,6 +529,7 @@ main (int argc, char *argv[])
 	g_object_unref (idle);
 	g_object_unref (icon);
 	g_object_unref (dispatcher);
+	g_object_unref (chatroom_manager);
 
 	return EXIT_SUCCESS;
 }
