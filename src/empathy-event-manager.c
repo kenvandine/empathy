@@ -29,6 +29,7 @@
 #include <libempathy/empathy-contact-factory.h>
 #include <libempathy/empathy-contact-manager.h>
 #include <libempathy/empathy-tp-chat.h>
+#include <libempathy/empathy-tp-call.h>
 #include <libempathy/empathy-tp-group.h>
 #include <libempathy/empathy-utils.h>
 
@@ -244,6 +245,46 @@ event_manager_operation_claimed_cb (EmpathyDispatchOperation *operation,
 }
 
 static void
+event_manager_media_channel_got_name_cb (EmpathyContact *contact,
+  gpointer user_data)
+{
+  EventManagerApproval *approval = user_data;
+  gchar *msg;
+
+  msg = g_strdup_printf (_("Incoming call from %s"),
+    empathy_contact_get_name (contact));
+
+  event_manager_add (approval->manager,
+    approval->contact, EMPATHY_IMAGE_VOIP, msg,
+    approval, event_channel_process_func, NULL);
+
+  g_free (msg);
+}
+
+static void
+event_manager_media_channel_got_contact (EventManagerApproval *approval)
+{
+  empathy_contact_call_when_ready (approval->contact,
+     EMPATHY_CONTACT_READY_NAME, event_manager_media_channel_got_name_cb,
+        approval);
+}
+
+static void
+event_manager_media_channel_contact_changed_cb (EmpathyTpCall *call,
+  GParamSpec *param, EventManagerApproval *approval)
+{
+  EmpathyContact *contact;
+
+  g_object_get (G_OBJECT (call), "contact", &contact, NULL);
+
+  if (contact == NULL)
+    return;
+
+  approval->contact = contact;
+  event_manager_media_channel_got_contact (approval);
+}
+
+static void
 event_manager_tube_approved_cb (EventPriv *event)
 {
   empathy_tube_dispatch_handle (event->approval->tube_dispatch);
@@ -351,30 +392,27 @@ event_manager_approve_channel_cb (EmpathyDispatcher *dispatcher,
       g_object_unref (G_OBJECT (tp_chat));
 
     }
-#if 0
-	else if (!tp_strdiff (channel_type, TP_IFACE_CHANNEL_TYPE_STREAMED_MEDIA)) {
-		EmpathyTpGroup *tp_group;
-		EmpathyContact *contact;
-		gchar          *msg;
+  else if (!tp_strdiff (channel_type, TP_IFACE_CHANNEL_TYPE_STREAMED_MEDIA))
+    {
+      EmpathyContact *contact;
+      EmpathyTpCall *call = EMPATHY_TP_CALL (
+          empathy_dispatch_operation_get_channel_wrapper (operation));
 
-		tp_group = empathy_tp_group_new (channel);
-		empathy_run_until_ready (tp_group);
-		empathy_tp_group_get_invitation (tp_group, &contact);
-		empathy_contact_run_until_ready (contact,
-						 EMPATHY_CONTACT_READY_NAME,
-						 NULL);
+      g_object_get (G_OBJECT (call), "contact", &contact, NULL);
 
-		msg = g_strdup_printf (_("Incoming call from %s"),
-				       empathy_contact_get_name (contact));
+      if (contact == NULL)
+        {
+          g_signal_connect (call, "notify::contact",
+            G_CALLBACK (event_manager_media_channel_contact_changed_cb),
+            approval);
+        }
+      else
+        {
+          approval->contact = contact;
+          event_manager_media_channel_got_contact (approval);
+        }
 
-		event_manager_add (manager, contact, EMPATHY_IMAGE_VOIP, msg,
-				   channel, event_channel_process_func, NULL);
-
-		g_free (msg);
-		g_object_unref (contact);
-		g_object_unref (tp_group);
-	}
-#endif
+    }
   else if (!tp_strdiff (channel_type, EMP_IFACE_CHANNEL_TYPE_FILE_TRANSFER))
     {
       EmpathyContact        *contact;
