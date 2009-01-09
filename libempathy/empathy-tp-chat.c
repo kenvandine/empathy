@@ -40,7 +40,7 @@
 
 #define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyTpChat)
 typedef struct {
-	gboolean dispose_has_run;
+	gboolean               dispose_has_run;
 	EmpathyContactFactory *factory;
 	EmpathyContactMonitor *contact_monitor;
 	EmpathyContact        *user;
@@ -58,7 +58,6 @@ typedef struct {
 	GPtrArray             *properties;
 	gboolean               ready;
 	guint                  members_count;
-	guint                  invalidated_handler;
 } EmpathyTpChatPriv;
 
 typedef struct {
@@ -100,11 +99,13 @@ tp_chat_invalidated_cb (TpProxy       *proxy,
 			EmpathyTpChat *chat)
 {
 	EmpathyTpChatPriv *priv = GET_PRIV (chat);
-	DEBUG ("Channel invalidated: %s", message);
-	g_signal_emit (chat, signals[DESTROY], 0);
 
 	g_object_unref (priv->channel);
 	priv->channel = NULL;
+
+	DEBUG ("Channel invalidated: %s", message);
+	g_signal_emit (chat, signals[DESTROY], 0);
+
 }
 
 static void
@@ -886,53 +887,56 @@ tp_chat_channel_ready_cb (EmpathyTpChat *chat)
 static void
 tp_chat_dispose (GObject *object)
 {
-  EmpathyTpChat *self = EMPATHY_TP_CHAT (object);
-  EmpathyTpChatPriv *priv = GET_PRIV (self);
+	EmpathyTpChat *self = EMPATHY_TP_CHAT (object);
+	EmpathyTpChatPriv *priv = GET_PRIV (self);
 
-  if (priv->dispose_has_run)
-    return;
+	if (priv->dispose_has_run)
+		return;
 
-  priv->dispose_has_run = TRUE;
+	priv->dispose_has_run = TRUE;
 
-  if (priv->channel != NULL)
-    empathy_tp_chat_close (self);
+	if (priv->channel != NULL)
+		empathy_tp_chat_close (self);
 
-  if (priv->remote_contact != NULL)
-    g_object_unref (priv->remote_contact);
-  priv->remote_contact = NULL;
+	if (priv->remote_contact != NULL)
+		g_object_unref (priv->remote_contact);
 
-  if (priv->group != NULL)
-    g_object_unref (priv->group);
-  priv->group = NULL;
+	priv->remote_contact = NULL;
 
-  g_object_unref (priv->factory);
-  priv->factory = NULL;
+	if (priv->group != NULL)
+		g_object_unref (priv->group);
+	priv->group = NULL;
 
-  g_object_unref (priv->user);
-  priv->user = NULL;
+	if (priv->factory != NULL)
+		g_object_unref (priv->factory);
+	priv->factory = NULL;
 
-  g_object_unref (priv->account);
-  priv->account = NULL;
+	if (priv->user != NULL);
+		g_object_unref (priv->user);
+	priv->user = NULL;
 
-  if (g_queue_get_length (priv->messages_queue) > 0) {
-    EmpathyMessage *message;
-    EmpathyContact *contact;
+	if (priv->account != NULL);
+		g_object_unref (priv->account);
+	priv->account = NULL;
 
-    message = g_queue_peek_head (priv->messages_queue);
-    contact = empathy_message_get_sender (message);
-    g_signal_handlers_disconnect_by_func (contact,
-      tp_chat_sender_ready_notify_cb, object);
-  }
+	if (!g_queue_is_empty (priv->messages_queue)) {
+		EmpathyMessage *message;
+		EmpathyContact *contact;
 
-  g_list_foreach (priv->messages_queue->head, (GFunc) g_object_unref, NULL);
-  g_queue_free (priv->messages_queue);
+		message = g_queue_peek_head (priv->messages_queue);
+		contact = empathy_message_get_sender (message);
+		g_signal_handlers_disconnect_by_func (contact,
+		tp_chat_sender_ready_notify_cb, object);
+	}
 
-  g_list_foreach (priv->pending_messages_queue->head,
-    (GFunc) g_object_unref, NULL);
-  g_queue_free (priv->pending_messages_queue);
+	g_list_foreach (priv->messages_queue->head,
+		(GFunc) g_object_unref, NULL);
 
-  if (G_OBJECT_CLASS (empathy_tp_chat_parent_class)->dispose)
-    G_OBJECT_CLASS (empathy_tp_chat_parent_class)->dispose (object);
+	g_list_foreach (priv->pending_messages_queue->head,
+		(GFunc) g_object_unref, NULL);
+
+	if (G_OBJECT_CLASS (empathy_tp_chat_parent_class)->dispose)
+		G_OBJECT_CLASS (empathy_tp_chat_parent_class)->dispose (object);
 }
 
 static void
@@ -942,7 +946,6 @@ tp_chat_finalize (GObject *object)
 	guint              i;
 
 	DEBUG ("Finalize: %p", object);
-
 
 	if (priv->properties) {
 		for (i = 0; i < priv->properties->len; i++) {
@@ -973,7 +976,8 @@ tp_chat_finalize (GObject *object)
 	g_object_unref (priv->user);
 	g_object_unref (priv->account);
 	g_free (priv->id);
-
+	g_queue_free (priv->messages_queue);
+	g_queue_free (priv->pending_messages_queue);
 
 	G_OBJECT_CLASS (empathy_tp_chat_parent_class)->finalize (object);
 }
@@ -1171,20 +1175,20 @@ empathy_tp_chat_new (TpChannel *channel)
 }
 
 void
-empathy_tp_chat_close (EmpathyTpChat *chat)
-{
-  EmpathyTpChatPriv *priv = GET_PRIV (chat);
+empathy_tp_chat_close (EmpathyTpChat *chat) {
+	EmpathyTpChatPriv *priv = GET_PRIV (chat);
 
-  /* If there are still messages left, it'll come back..
-     We loose the ordering of sent messages though */
-  g_signal_handlers_disconnect_by_func (priv->channel,
-     tp_chat_invalidated_cb, chat);
-  tp_cli_channel_call_close (priv->channel, -1, tp_chat_async_cb,
-     "closing channel", NULL, NULL);
-  g_object_unref (priv->channel);
+	/* If there are still messages left, it'll come back..
+	   We loose the ordering of sent messages though */
+	g_signal_handlers_disconnect_by_func (priv->channel,
+		tp_chat_invalidated_cb, chat);
+	tp_cli_channel_call_close (priv->channel, -1, tp_chat_async_cb,
+		"closing channel", NULL, NULL);
 
-  g_signal_emit (chat, signals[DESTROY], 0);
-  priv->channel = NULL;
+	g_object_unref (priv->channel);
+	priv->channel = NULL;
+
+	g_signal_emit (chat, signals[DESTROY], 0);
 }
 
 const gchar *
@@ -1301,72 +1305,74 @@ empathy_tp_chat_get_pending_messages (EmpathyTpChat *chat)
 }
 
 static void
-acknowledge_messages (EmpathyTpChat *chat, GArray *ids)
-{
-  EmpathyTpChatPriv *priv = GET_PRIV (chat);
+acknowledge_messages (EmpathyTpChat *chat, GArray *ids) {
+	EmpathyTpChatPriv *priv = GET_PRIV (chat);
 
-  tp_cli_channel_type_text_call_acknowledge_pending_messages (priv->channel,
-    -1, ids, tp_chat_async_cb, "acknowledging received message",
-    NULL, G_OBJECT (chat));
+	tp_cli_channel_type_text_call_acknowledge_pending_messages (
+		priv->channel, -1, ids, tp_chat_async_cb,
+		"acknowledging received message", NULL, G_OBJECT (chat));
 }
 
 void
 empathy_tp_chat_acknowledge_message (EmpathyTpChat *chat,
-  EmpathyMessage *message)
-{
-  EmpathyTpChatPriv *priv = GET_PRIV (chat);
-  GArray *message_ids;
-  GList *m;
-  guint id;
+				     EmpathyMessage *message) {
+	EmpathyTpChatPriv *priv = GET_PRIV (chat);
+	GArray *message_ids;
+	GList *m;
+	guint id;
 
-  if (empathy_message_get_sender (message) == priv->user)
-    goto out;
+	if (empathy_message_get_sender (message) == priv->user)
+		goto out;
 
-  message_ids = g_array_sized_new (FALSE, FALSE, sizeof (guint), 1);
+	message_ids = g_array_sized_new (FALSE, FALSE, sizeof (guint), 1);
 
-  id = empathy_message_get_id (message);
-  g_array_append_val (message_ids, id);
-  acknowledge_messages (chat, message_ids);
-  g_array_free (message_ids, TRUE);
+	id = empathy_message_get_id (message);
+	g_array_append_val (message_ids, id);
+	acknowledge_messages (chat, message_ids);
+	g_array_free (message_ids, TRUE);
 
 out:
-  m = g_queue_find (priv->pending_messages_queue, message);
-  g_assert (m != NULL);
-  g_queue_delete_link (priv->pending_messages_queue, m);
-  g_object_unref (message);
+	m = g_queue_find (priv->pending_messages_queue, message);
+	g_assert (m != NULL);
+	g_queue_delete_link (priv->pending_messages_queue, m);
+	g_object_unref (message);
 }
 
 void
 empathy_tp_chat_acknowledge_messages (EmpathyTpChat *chat,
-  const GList *messages)
-{
-  EmpathyTpChatPriv *priv = GET_PRIV (chat);
-  /* Copy messages as the messges list (probably is) our own */
-  GList *msgs = g_list_copy ((GList *) messages);
-  GList *l;
+				      const GList *messages) {
+	EmpathyTpChatPriv *priv = GET_PRIV (chat);
+	/* Copy messages as the messges list (probably is) our own */
+	GList *msgs = g_list_copy ((GList *) messages);
+	GList *l;
+	guint length;
+	GArray *message_ids;
 
-  GArray *message_ids;
-  message_ids = g_array_new (FALSE, FALSE, sizeof (guint));
+	length = g_list_length ((GList *)messages);
 
-  for (l = msgs; l != NULL; l = g_list_next (l))
-    {
-      GList *m;
-      EmpathyMessage *message = EMPATHY_MESSAGE (l->data);
+	if (length == 0)
+		return;
 
-      m = g_queue_find (priv->pending_messages_queue, message);
-      g_assert (m != NULL);
-      g_queue_delete_link (priv->pending_messages_queue, m);
+	message_ids = g_array_sized_new (FALSE, FALSE, sizeof (guint), length);
 
-      if (empathy_message_get_sender (message) != priv->user)
-        {
-          guint id = empathy_message_get_id (message);
-          g_array_append_val (message_ids, id);
-        }
-    }
+	for (l = msgs; l != NULL; l = g_list_next (l)) {
+		GList *m;
 
-  if (message_ids->len > 0)
-    acknowledge_messages (chat, message_ids);
+		EmpathyMessage *message = EMPATHY_MESSAGE (l->data);
 
-  g_array_free (message_ids, TRUE);
-  g_list_free (msgs);
+		m = g_queue_find (priv->pending_messages_queue, message);
+		g_assert (m != NULL);
+		g_queue_delete_link (priv->pending_messages_queue, m);
+
+		if (empathy_message_get_sender (message) != priv->user) {
+			guint id = empathy_message_get_id (message);
+			g_array_append_val (message_ids, id);
+		}
+	}
+
+	if (message_ids->len > 0)
+		acknowledge_messages (chat, message_ids);
+
+	g_array_free (message_ids, TRUE);
+	g_list_free (msgs);
 }
