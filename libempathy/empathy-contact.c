@@ -219,6 +219,7 @@ static void
 contact_finalize (GObject *object)
 {
   EmpathyContactPriv *priv;
+  GList *l;
 
   priv = GET_PRIV (object);
 
@@ -227,6 +228,18 @@ contact_finalize (GObject *object)
   g_free (priv->name);
   g_free (priv->id);
   g_free (priv->presence_message);
+
+  for (l = priv->ready_callbacks; l != NULL; l = g_list_next (l))
+    {
+      ReadyCbData *d = (ReadyCbData *)l->data;
+
+      if (d->destroy != NULL)
+        d->destroy (d->user_data);
+      g_slice_free (ReadyCbData, d);
+    }
+
+  g_list_free (priv->ready_callbacks);
+  priv->ready_callbacks = NULL;
 
   if (priv->avatar)
       empathy_avatar_unref (priv->avatar);
@@ -372,8 +385,10 @@ contact_weak_object_notify (gpointer data, GObject *old_object)
           if (d->destroy != NULL)
             d->destroy (d->user_data);
 
-           priv->ready_callbacks = g_list_delete_link (priv->ready_callbacks,
+          priv->ready_callbacks = g_list_delete_link (priv->ready_callbacks,
             l);
+
+          g_slice_free (ReadyCbData, d);
         }
     }
 }
@@ -415,6 +430,7 @@ contact_set_ready_flag (EmpathyContact *contact,
               contact_call_ready_callback (contact, NULL, d);
               priv->ready_callbacks = g_list_delete_link
                 (priv->ready_callbacks, l);
+              g_slice_free (ReadyCbData, d);
             }
         }
     }
