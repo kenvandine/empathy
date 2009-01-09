@@ -90,6 +90,8 @@ typedef struct {
   guint handle_type;
   guint handle;
   EmpathyContact *contact;
+  /* Properties to pass to the channel when requesting it */
+  GHashTable *properties;
   EmpathyDispatcherRequestCb *cb;
   gpointer user_data;
   gpointer *request_data;
@@ -136,8 +138,8 @@ free_dispatch_data (DispatchData *data)
 static DispatcherRequestData *
 new_dispatcher_request_data (EmpathyDispatcher *dispatcher,
   TpConnection *connection, const gchar *channel_type, guint handle_type,
-  guint handle, EmpathyContact *contact,
-  EmpathyDispatcherRequestCb *cb, gpointer user_data)
+  guint handle, GHashTable *properties,
+  EmpathyContact *contact, EmpathyDispatcherRequestCb *cb, gpointer user_data)
 {
   DispatcherRequestData *result = g_slice_new0 (DispatcherRequestData);
 
@@ -164,6 +166,9 @@ free_dispatcher_request_data (DispatcherRequestData *r)
 
   if (r->contact != NULL)
     g_object_unref (r->contact);
+
+  if (r->properties != NULL)
+    g_hash_table_unref (r->properties);
 
   g_slice_free (DispatcherRequestData, r);
 }
@@ -1435,8 +1440,8 @@ empathy_dispatcher_chat_with_contact (EmpathyContact *contact,
 
   /* The contact handle might not be known yet */
   request_data  = new_dispatcher_request_data (dispatcher, connection,
-    TP_IFACE_CHANNEL_TYPE_TEXT, TP_HANDLE_TYPE_CONTACT, 0, contact, callback,
-    user_data);
+    TP_IFACE_CHANNEL_TYPE_TEXT, TP_HANDLE_TYPE_CONTACT, 0, NULL,
+    contact, callback, user_data);
 
   connection_data->outstanding_requests = g_list_prepend
     (connection_data->outstanding_requests, request_data);
