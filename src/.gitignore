@@ -4,6 +4,8 @@ empathy-logs
 empathy-chat-chandler
 empathy-call-chandler
 empathy-tubes-chandler
+empathy-tube-dispatch-enumtypes.c
+empathy-tube-dispatch-enumtypes.h
 org.gnome.Empathy.Chat.service
 org.gnome.Empathy.Call.service
 org.gnome.Empathy.Tubes.service
