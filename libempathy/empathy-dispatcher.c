@@ -1045,13 +1045,19 @@ void
 empathy_dispatcher_chat_with_contact (EmpathyContact *contact,
   EmpathyDispatcherRequestCb *callback, gpointer user_data)
 {
-  EmpathyDispatcher *dispatcher = empathy_get_dispatcher();
-  EmpathyDispatcherPriv *priv = GET_PRIV (dispatcher);
-  McAccount *account = empathy_contact_get_account (contact);
-  TpConnection *connection = g_hash_table_lookup (priv->accounts, account);
-  ConnectionData *connection_data =
-    g_hash_table_lookup (priv->connections, connection);
+  EmpathyDispatcher *dispatcher;
+  EmpathyDispatcherPriv *priv;
+  McAccount *account;
+  TpConnection *connection;
+  ConnectionData *connection_data;
   DispatcherRequestData *request_data;
+
+  dispatcher = empathy_get_dispatcher();
+  priv = GET_PRIV (dispatcher);
+
+  account = empathy_contact_get_account (contact);
+  connection = g_hash_table_lookup (priv->accounts, account);
+  connection_data = g_hash_table_lookup (priv->connections, connection);
 
   /* The contact handle might not be known yet */
   request_data  = new_dispatcher_request_data (dispatcher, connection,
@@ -1122,13 +1128,19 @@ void
 empathy_dispatcher_join_muc (McAccount *account, const gchar *roomname,
   EmpathyDispatcherRequestCb *callback, gpointer user_data)
 {
-  EmpathyDispatcher *dispatcher = empathy_get_dispatcher();
-  EmpathyDispatcherPriv *priv = GET_PRIV (dispatcher);
+  EmpathyDispatcher *dispatcher;
+  EmpathyDispatcherPriv *priv;
   DispatcherRequestData *request_data;
-  TpConnection *connection = g_hash_table_lookup (priv->accounts, account);
-  ConnectionData *connection_data =
-    g_hash_table_lookup (priv->connections, connection);
+  TpConnection *connection;
+  ConnectionData *connection_data;
   const gchar *names[] = { roomname, NULL };
+
+  dispatcher = empathy_get_dispatcher();
+  priv = GET_PRIV (dispatcher);
+
+  connection = g_hash_table_lookup (priv->accounts, account);
+  connection_data = g_hash_table_lookup (priv->connections, connection);
+
 
   /* Don't know the room handle yet */
   request_data  = new_dispatcher_request_data (dispatcher, connection,
