@@ -71,7 +71,7 @@ tube_handler_handle_tube_idle_cb (gpointer data)
   EmpathyTpTube *tube;
   static TpDBusDaemon *daemon = NULL;
 
-  DEBUG ("New tube to be handled id=%d", idle_data->id);
+  DEBUG ("New tube to be handled");
 
   if (!daemon)
     daemon = tp_dbus_daemon_new (tp_get_bus ());
@@ -83,7 +83,7 @@ tube_handler_handle_tube_idle_cb (gpointer data)
       idle_data->handle, NULL);
   tp_channel_run_until_ready (channel, NULL, NULL);
 
-  tube = empathy_tp_tube_new (channel, idle_data->id);
+  tube = empathy_tp_tube_new (channel);
   g_signal_emit (idle_data->thandler, signals[NEW_TUBE], 0, tube);
 
   g_object_unref (tube);
