@@ -436,6 +436,8 @@ ft_manager_remove_file_from_model (EmpathyFTManager *ft_manager,
 
   if (update_selection)
     gtk_tree_selection_select_iter (selection, &iter);
+
+  empathy_tp_file_close (tp_file);
 }
 
 static gboolean
