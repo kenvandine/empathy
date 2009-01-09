@@ -54,15 +54,13 @@ struct _EmpathyTpChatClass {
 
 GType          empathy_tp_chat_get_type             (void) G_GNUC_CONST;
 EmpathyTpChat *empathy_tp_chat_new                  (TpChannel          *channel);
+void           empathy_tp_chat_close                (EmpathyTpChat      *chat);
 const gchar *  empathy_tp_chat_get_id               (EmpathyTpChat      *chat);
 EmpathyContact*empathy_tp_chat_get_remote_contact   (EmpathyTpChat      *chat);
 McAccount *    empathy_tp_chat_get_account          (EmpathyTpChat      *chat);
 TpChannel *    empathy_tp_chat_get_channel          (EmpathyTpChat      *chat);
 gboolean       empathy_tp_chat_is_ready             (EmpathyTpChat      *chat);
 guint          empathy_tp_chat_get_members_count    (EmpathyTpChat      *chat);
-void           empathy_tp_chat_set_acknowledge      (EmpathyTpChat      *chat,
-						     gboolean            acknowledge);
-void           empathy_tp_chat_emit_pendings        (EmpathyTpChat      *chat);
 void           empathy_tp_chat_send                 (EmpathyTpChat      *chat,
 						     EmpathyMessage     *message);
 void           empathy_tp_chat_set_state            (EmpathyTpChat      *chat,
@@ -70,6 +68,13 @@ void           empathy_tp_chat_set_state            (EmpathyTpChat      *chat,
 void           empathy_tp_chat_set_property         (EmpathyTpChat      *chat,
 						     const gchar        *name,
 						     const GValue       *value);
+
+/* Returns a read-only list of pending messages (should be a copy maybe ?) */
+const GList *  empathy_tp_chat_get_pending_messages (EmpathyTpChat *chat);
+void           empathy_tp_chat_acknowledge_message (EmpathyTpChat *chat,
+						     EmpathyMessage *message);
+void           empathy_tp_chat_acknowledge_messages (EmpathyTpChat *chat,
+						     const GList *messages);
 
 G_END_DECLS
 
