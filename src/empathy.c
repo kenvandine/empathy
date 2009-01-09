@@ -112,16 +112,18 @@ dispatch_cb (EmpathyDispatcher *dispatcher,
 	else if (!tp_strdiff (channel_type, TP_IFACE_CHANNEL_TYPE_STREAMED_MEDIA)) {
 		empathy_call_window_new (channel);
 	}
-	else if (!tp_strdiff (channel_type, EMP_IFACE_CHANNEL_TYPE_FILE_TRANSFER)) {
+#endif
+	else if (channel_type == EMP_IFACE_QUARK_CHANNEL_TYPE_FILE_TRANSFER) {
 		EmpathyFTManager *ft_manager;
 		EmpathyTpFile    *tp_file;
 
 		ft_manager = empathy_ft_manager_dup_singleton ();
-		tp_file = empathy_tp_file_new (channel);
+		tp_file = EMPATHY_TP_FILE (
+			empathy_dispatch_operation_get_channel_wrapper (operation));
 		empathy_ft_manager_add_tp_file (ft_manager, tp_file);
 		g_object_unref (tp_file);
+		empathy_dispatch_operation_claim (operation);
 	}
-#endif
 }
 
 static void
