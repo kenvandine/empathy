@@ -167,11 +167,6 @@ event_manager_add (EmpathyEventManager *manager,
 
 	if (approval) {
 		event->approval = approval;
-#if 0 /* FIXME */
-		g_signal_connect_swapped (channel, "invalidated",
-					  G_CALLBACK (event_remove),
-					  event);
-#endif
 	}
 
 	DEBUG ("Adding event %p", event);
@@ -479,77 +474,6 @@ event_manager_approve_channel_cb (EmpathyDispatcher *dispatcher,
     }
 }
 
-#if 0 /* FIXME dispatcher */
-
-#define TUBE_NO_APP_MESSAGE _("%s is offering you an invitation, but " \
-			      "you don't have the needed external " \
-			      "application to handle it.")
-
-
-static void
-event_tube_process_func (EventPriv *event)
-{
-	EmpathyEventManagerPriv *priv = GET_PRIV (event->manager);
-	EmpathyDispatcherTube   *tube = (EmpathyDispatcherTube*) event->user_data;
-
-	if (tube->activatable) {
-		empathy_dispatcher_tube_process (priv->dispatcher, tube);
-	} else {
-		GtkWidget *dialog;
-		gchar     *str;
-
-		/* Tell the user that the tube can't be handled */
-		str = g_strdup_printf (TUBE_NO_APP_MESSAGE,
-				       empathy_contact_get_name (tube->initiator));
-
-		dialog = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL,
-						 GTK_MESSAGE_ERROR,
-						 GTK_BUTTONS_OK,
-						 "%s", str);
-		gtk_window_set_title (GTK_WINDOW (dialog),
-				      _("Invitation Error"));
-		g_free (str);
-
-		gtk_widget_show (dialog);
-		g_signal_connect (dialog, "response",
-				  G_CALLBACK (gtk_widget_destroy),
-				  NULL);
-	}
-
-	empathy_dispatcher_tube_unref (tube);
-	event_remove (event);
-}
-
-static void
-event_manager_filter_tube_cb (EmpathyDispatcher     *dispatcher,
-			      EmpathyDispatcherTube *tube,
-			      EmpathyEventManager   *manager)
-{
-	const gchar *icon_name;
-	gchar       *msg;
-
-	empathy_contact_run_until_ready (tube->initiator,
-					 EMPATHY_CONTACT_READY_NAME, NULL);
-
-	if (tube->activatable) {
-		icon_name = GTK_STOCK_EXECUTE;
-		msg = g_strdup_printf (_("%s is offering you an invitation. An external "
-					 "application will be started to handle it."),
-				       empathy_contact_get_name (tube->initiator));
-	} else {
-		icon_name = GTK_STOCK_DIALOG_ERROR;
-		msg = g_strdup_printf (TUBE_NO_APP_MESSAGE,
-				       empathy_contact_get_name (tube->initiator));
-	}
-
-	event_manager_add (manager, tube->initiator, icon_name, msg,
-			   tube->channel, event_tube_process_func,
-			   empathy_dispatcher_tube_ref (tube));
-
-	g_free (msg);
-}
-#endif
-
 static void
 event_pending_subscribe_func (EventPriv *event)
 {
@@ -678,15 +602,6 @@ empathy_event_manager_init (EmpathyEventManager *manager)
 	g_signal_connect (priv->dispatcher, "approve",
 			  G_CALLBACK (event_manager_approve_channel_cb),
 			  manager);
-	/*g_signal_connect (priv->dispatcher, "dispatch-channel",
-			  G_CALLBACK (event_manager_dispatch_channel_cb),
-			  manager);
-  */
-#if 0 /* FIXME  dispatcher */
-	g_signal_connect (priv->dispatcher, "filter-tube",
-			  G_CALLBACK (event_manager_filter_tube_cb),
-			  manager);
-#endif
 	g_signal_connect (priv->contact_manager, "pendings-changed",
 			  G_CALLBACK (event_manager_pendings_changed_cb),
 			  manager);
