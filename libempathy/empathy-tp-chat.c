@@ -914,6 +914,16 @@ tp_chat_dispose (GObject *object)
   g_object_unref (priv->account);
   priv->account = NULL;
 
+  if (g_queue_get_length (priv->messages_queue) > 0) {
+    EmpathyMessage *message;
+    EmpathyContact *contact;
+
+    message = g_queue_peek_head (priv->messages_queue);
+    contact = empathy_message_get_sender (message);
+    g_signal_handlers_disconnect_by_func (contact,
+      tp_chat_sender_ready_notify_cb, object);
+  }
+
   g_list_foreach (priv->messages_queue->head, (GFunc) g_object_unref, NULL);
   g_queue_free (priv->messages_queue);
 
@@ -963,17 +973,6 @@ tp_chat_finalize (GObject *object)
 	g_object_unref (priv->user);
 	g_object_unref (priv->account);
 	g_free (priv->id);
-
-	if (g_queue_get_length (priv->messages_queue) > 0) {
-		EmpathyMessage *message;
-		EmpathyContact *contact;
-
-		message = g_queue_peek_head (priv->messages_queue);
-		contact = empathy_message_get_sender (message);
-		g_signal_handlers_disconnect_by_func (contact,
-						      tp_chat_sender_ready_notify_cb,
-						      object);
-	}
 
 
 	G_OBJECT_CLASS (empathy_tp_chat_parent_class)->finalize (object);
