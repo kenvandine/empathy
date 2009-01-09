@@ -64,6 +64,7 @@
 #define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyChat)
 typedef struct {
 	EmpathyTpChat     *tp_chat;
+	gulong            tp_chat_destroy_handler;
 	McAccount         *account;
 	gchar             *id;
 	gchar             *name;
@@ -452,9 +453,7 @@ chat_state_changed_cb (EmpathyTpChat      *tp_chat,
 }
 
 static void
-chat_message_received_cb (EmpathyTpChat  *tp_chat,
-			  EmpathyMessage *message,
-			  EmpathyChat    *chat)
+chat_message_received (EmpathyChat  *chat, EmpathyMessage *message)
 {
 	EmpathyChatPriv *priv = GET_PRIV (chat);
 	EmpathyContact  *sender;
@@ -476,12 +475,21 @@ chat_message_received_cb (EmpathyTpChat  *tp_chat,
 
 	empathy_chat_view_append_message (chat->view, message);
 
-	/* We received a message so the contact is no more composing */
-	chat_state_changed_cb (tp_chat, sender,
+	/* We received a message so the contact is no longer composing */
+	chat_state_changed_cb (priv->tp_chat, sender,
 			       TP_CHANNEL_CHAT_STATE_ACTIVE,
 			       chat);
 
 	g_signal_emit (chat, signals[NEW_MESSAGE], 0, message);
+}
+
+static void
+chat_message_received_cb (EmpathyTpChat  *tp_chat,
+			  EmpathyMessage *message,
+			  EmpathyChat    *chat)
+{
+	chat_message_received (chat, message);
+	empathy_tp_chat_acknowledge_message (tp_chat, message);
 }
 
 static void
@@ -1242,6 +1250,25 @@ chat_destroy_cb (EmpathyTpChat *tp_chat,
 }
 
 static void
+show_pending_messages (EmpathyChat *chat)
+{
+  EmpathyChatPriv *priv = GET_PRIV (chat);
+  const GList *messages, *l;
+
+  if (chat->view == NULL || priv->tp_chat == NULL)
+    return;
+
+  messages = empathy_tp_chat_get_pending_messages (priv->tp_chat);
+
+  for (l = messages; l != NULL ; l = g_list_next (l))
+    {
+      EmpathyMessage *message = EMPATHY_MESSAGE (l->data);
+      chat_message_received (chat, message);
+    }
+  empathy_tp_chat_acknowledge_messages (priv->tp_chat, messages);
+}
+
+static void
 chat_create_ui (EmpathyChat *chat)
 {
 	EmpathyChatPriv *priv = GET_PRIV (chat);
@@ -1331,6 +1358,8 @@ chat_create_ui (EmpathyChat *chat)
 
 	/* Add the main widget in the chat widget */
 	gtk_container_add (GTK_CONTAINER (chat), priv->widget);
+
+  show_pending_messages (chat);
 }
 
 static void
@@ -1399,6 +1428,8 @@ chat_finalize (GObject *object)
 	g_object_unref (priv->log_manager);
 
 	if (priv->tp_chat) {
+		g_signal_handler_disconnect (priv->tp_chat, priv->tp_chat_destroy_handler);
+		empathy_tp_chat_close (priv->tp_chat);
 		g_object_unref (priv->tp_chat);
 	}
 	if (priv->account) {
@@ -1602,7 +1633,8 @@ empathy_chat_set_tp_chat (EmpathyChat   *chat,
 	g_signal_connect_swapped (tp_chat, "notify::remote-contact",
 				  G_CALLBACK (chat_remote_contact_changed_cb),
 				  chat);
-	g_signal_connect (tp_chat, "destroy",
+	priv->tp_chat_destroy_handler =
+		g_signal_connect (tp_chat, "destroy",
 			  G_CALLBACK (chat_destroy_cb),
 			  chat);
 
@@ -1615,12 +1647,11 @@ empathy_chat_set_tp_chat (EmpathyChat   *chat,
 		}
 	}
 
-	empathy_tp_chat_set_acknowledge (priv->tp_chat, TRUE);
-	empathy_tp_chat_emit_pendings (priv->tp_chat);
-
 	g_object_notify (G_OBJECT (chat), "tp-chat");
 	g_object_notify (G_OBJECT (chat), "id");
 	g_object_notify (G_OBJECT (chat), "account");
+
+  show_pending_messages (chat);
 }
 
 McAccount *
