@@ -51,7 +51,7 @@ struct _EmpathyContactFactoryClass {
 };
 
 GType                  empathy_contact_factory_get_type         (void) G_GNUC_CONST;
-EmpathyContactFactory *empathy_contact_factory_new              (void);
+EmpathyContactFactory *empathy_contact_factory_dup_singleton    (void);
 EmpathyTpContactFactory *empathy_contact_factory_get_tp_factory (EmpathyContactFactory *factory,
 								 McAccount             *account);
 EmpathyContact *       empathy_contact_factory_get_user         (EmpathyContactFactory *factory,

@@ -351,7 +351,7 @@ empathy_tp_tube_init (EmpathyTpTube *tube)
 
   tube->priv = priv;
 
-  priv->factory = empathy_contact_factory_new ();
+  priv->factory = empathy_contact_factory_dup_singleton ();
 }
 
 EmpathyTpTube *

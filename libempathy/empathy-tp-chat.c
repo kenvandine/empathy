@@ -950,7 +950,7 @@ tp_chat_constructor (GType                  type,
 
 	priv = GET_PRIV (chat);
 	priv->account = empathy_channel_get_account (priv->channel);
-	priv->factory = empathy_contact_factory_new ();
+	priv->factory = empathy_contact_factory_dup_singleton ();
 	priv->user = empathy_contact_factory_get_user (priv->factory, priv->account);
 
 	g_signal_connect (priv->channel, "invalidated",

@@ -570,7 +570,7 @@ tp_group_constructed (GObject *group)
 	EmpathyTpGroupPriv *priv = GET_PRIV (group);
 	gboolean            channel_ready;
 
-	priv->factory = empathy_contact_factory_new ();
+	priv->factory = empathy_contact_factory_dup_singleton ();
 	priv->account = empathy_channel_get_account (priv->channel);
 
 	g_signal_connect (priv->channel, "invalidated",

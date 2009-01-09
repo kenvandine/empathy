@@ -31,6 +31,8 @@ typedef struct {
 
 G_DEFINE_TYPE (EmpathyContactFactory, empathy_contact_factory, G_TYPE_OBJECT);
 
+static EmpathyContactFactory * factory_singleton = NULL;
+
 EmpathyTpContactFactory *
 empathy_contact_factory_get_tp_factory (EmpathyContactFactory *factory,
 					McAccount             *account)
@@ -133,12 +135,33 @@ contact_factory_finalize (GObject *object)
 	G_OBJECT_CLASS (empathy_contact_factory_parent_class)->finalize (object);
 }
 
+static GObject *
+contact_factory_constructor (GType type,
+			     guint n_props,
+			     GObjectConstructParam *props)
+{
+	GObject *retval;
+
+	if (factory_singleton) {
+		retval = g_object_ref (factory_singleton);
+	} else {
+		retval = G_OBJECT_CLASS (empathy_contact_factory_parent_class)->constructor
+			(type, n_props, props);
+		g_object_add_weak_pointer (retval, (gpointer *) &retval);
+
+		factory_singleton = EMPATHY_CONTACT_FACTORY (retval);
+	}
+
+	return retval;
+}
+
 static void
 empathy_contact_factory_class_init (EmpathyContactFactoryClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
 	object_class->finalize = contact_factory_finalize;
+	object_class->constructor = contact_factory_constructor;
 
 	g_type_class_add_private (object_class, sizeof (EmpathyContactFactoryPriv));
 }
@@ -157,17 +180,8 @@ empathy_contact_factory_init (EmpathyContactFactory *factory)
 }
 
 EmpathyContactFactory *
-empathy_contact_factory_new (void)
+empathy_contact_factory_dup_singleton (void)
 {
-	static EmpathyContactFactory *factory = NULL;
-
-	if (!factory) {
-		factory = g_object_new (EMPATHY_TYPE_CONTACT_FACTORY, NULL);
-		g_object_add_weak_pointer (G_OBJECT (factory), (gpointer) &factory);
-	} else {
-		g_object_ref (factory);
-	}
-
-	return factory;
+	return g_object_new (EMPATHY_TYPE_CONTACT_FACTORY, NULL);
 }
 

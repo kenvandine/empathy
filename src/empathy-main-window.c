@@ -1009,7 +1009,7 @@ main_window_edit_personal_information_cb (GtkWidget         *widget,
 		McAccount             *account;
 
 		account = accounts->data;
-		factory = empathy_contact_factory_new ();
+		factory = empathy_contact_factory_dup_singleton ();
 		contact = empathy_contact_factory_get_user (factory, account);
 		empathy_contact_run_until_ready (contact,
 						 EMPATHY_CONTACT_READY_HANDLE |

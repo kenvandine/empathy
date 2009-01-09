@@ -162,7 +162,7 @@ empathy_contact_widget_new (EmpathyContact *contact,
 
   information = g_slice_new0 (EmpathyContactWidget);
   information->flags = flags;
-  information->factory = empathy_contact_factory_new ();
+  information->factory = empathy_contact_factory_dup_singleton ();
 
   filename = empathy_file_lookup ("empathy-contact-widget.glade",
       "libempathy-gtk");

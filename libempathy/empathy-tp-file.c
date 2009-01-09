@@ -507,7 +507,7 @@ tp_file_constructor (GType type,
 
   tp_file = EMPATHY_TP_FILE (file_obj);
 
-  tp_file->priv->factory = empathy_contact_factory_new ();
+  tp_file->priv->factory = empathy_contact_factory_dup_singleton ();
   tp_file->priv->mc = empathy_mission_control_new ();
 
   g_signal_connect (tp_file->priv->channel, "invalidated",

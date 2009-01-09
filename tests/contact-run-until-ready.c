@@ -13,7 +13,7 @@ callback (gpointer data)
 	EmpathyContact        *contact;
 	EmpathyContactReady    ready_flags;
 
-	factory = empathy_contact_factory_new ();
+	factory = empathy_contact_factory_dup_singleton ();
 	account = mc_account_lookup ("jabber0");
 	contact = empathy_contact_factory_get_from_handle (factory, account, 2);
 

@@ -112,7 +112,7 @@ megaphone_applet_init (MegaphoneApplet *applet)
 		MEGAPHONE_TYPE_APPLET, MegaphoneAppletPriv);
 
 	applet->priv = priv;
-	priv->factory = empathy_contact_factory_new ();
+	priv->factory = empathy_contact_factory_dup_singleton ();
 	priv->gconf = gconf_client_get_default ();
 
 	/* Image holds the contact avatar */

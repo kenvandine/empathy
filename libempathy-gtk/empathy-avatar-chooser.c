@@ -213,7 +213,7 @@ empathy_avatar_chooser_init (EmpathyAvatarChooser *chooser)
 			  G_CALLBACK (avatar_chooser_clicked_cb),
 			  chooser);
 
-	priv->contact_factory = empathy_contact_factory_new ();
+	priv->contact_factory = empathy_contact_factory_dup_singleton ();
 
 	empathy_avatar_chooser_set (chooser, NULL);
 }

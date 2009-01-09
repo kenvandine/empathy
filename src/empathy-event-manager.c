@@ -223,7 +223,7 @@ event_manager_filter_channel_cb (EmpathyDispatcher   *dispatcher,
 		McAccount             *account;
 		EmpathyContactFactory *factory;
 
-		factory = empathy_contact_factory_new ();
+		factory = empathy_contact_factory_dup_singleton ();
 		handle = tp_channel_get_handle (channel, NULL);
 		account = empathy_channel_get_account (channel);
 

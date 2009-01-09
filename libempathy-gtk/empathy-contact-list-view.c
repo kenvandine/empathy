@@ -213,7 +213,7 @@ contact_list_view_drag_data_received (GtkWidget         *widget,
 		id);
 
 	strv = g_strsplit (id, "/", 2);
-	factory = empathy_contact_factory_new ();
+	factory = empathy_contact_factory_dup_singleton ();
 	account = mc_account_lookup (strv[0]);
 	if (account) {
 		contact = empathy_contact_factory_get_from_id (factory,

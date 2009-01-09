@@ -235,7 +235,7 @@ dispatcher_tubes_new_tube_cb (TpChannel   *channel,
 	tube = g_slice_new (DispatcherTube);
 	tube->ref_count = 1;
 	tube->handled = FALSE;
-	tube->factory = empathy_contact_factory_new ();
+	tube->factory = empathy_contact_factory_dup_singleton ();
 	tube->bus_name = empathy_tube_handler_build_bus_name (type, service);
 	tube->object_path = empathy_tube_handler_build_object_path (type, service);
 	tube->public.activatable = FALSE;
@@ -850,7 +850,7 @@ empathy_dispatcher_call_with_contact (EmpathyContact *contact)
 	group = empathy_tp_group_new (channel);
 	empathy_run_until_ready (group);
 
-	factory = empathy_contact_factory_new ();
+	factory = empathy_contact_factory_dup_singleton ();
 	self_contact = empathy_contact_factory_get_user (factory, account);
 	empathy_contact_run_until_ready (self_contact,
 					 EMPATHY_CONTACT_READY_HANDLE,
@@ -873,7 +873,7 @@ empathy_dispatcher_call_with_contact_id (McAccount *account, const gchar *contac
 	EmpathyContactFactory *factory;
 	EmpathyContact        *contact;
 
-	factory = empathy_contact_factory_new ();
+	factory = empathy_contact_factory_dup_singleton ();
 	contact = empathy_contact_factory_get_from_id (factory, account, contact_id);
 	empathy_contact_run_until_ready (contact, EMPATHY_CONTACT_READY_HANDLE, NULL);
 
@@ -922,7 +922,7 @@ empathy_dispatcher_chat_with_contact_id (McAccount   *account,
 	EmpathyContactFactory *factory;
 	EmpathyContact        *contact;
 
-	factory = empathy_contact_factory_new ();
+	factory = empathy_contact_factory_dup_singleton ();
 	contact = empathy_contact_factory_get_from_id (factory, account, contact_id);
 	empathy_contact_run_until_ready (contact, EMPATHY_CONTACT_READY_HANDLE, NULL);
 
