@@ -80,13 +80,22 @@ void empathy_dispatcher_chat_with_contact_id (McAccount *account,
 void  empathy_dispatcher_chat_with_contact (EmpathyContact *contact,
   EmpathyDispatcherRequestCb *callback, gpointer user_data);
 
+void empathy_dispatcher_chat_with_contact_id (McAccount *account,
+  const gchar *contact_id, EmpathyDispatcherRequestCb *callback,
+  gpointer user_data);
+void  empathy_dispatcher_chat_with_contact (EmpathyContact *contact,
+  EmpathyDispatcherRequestCb *callback, gpointer user_data);
+
+void empathy_dispatcher_send_file_to_contact (EmpathyContact *contact,
+  const gchar *filename, guint64 size, guint64 date,
+  const gchar *content_type, EmpathyDispatcherRequestCb *callback,
+  gpointer user_data);
+
+
 /* Get the dispatcher singleton */
 EmpathyDispatcher *    empathy_get_dispatcher (void);
 GType                  empathy_dispatcher_tube_get_type        (void);
 
-
-void  empathy_dispatcher_send_file            (EmpathyContact        *contact,
-								GFile                 *gfile);
 
 /* tube stuff */
 EmpathyDispatcherTube *empathy_dispatcher_tube_ref             (EmpathyDispatcherTube *tube);

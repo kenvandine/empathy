@@ -1,5 +1,4 @@
-/*
- * Copyright (C) 2007-2008 Collabora Ltd.
+/* * Copyright (C) 2007-2008 Collabora Ltd.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -91,7 +90,7 @@ typedef struct {
   guint handle;
   EmpathyContact *contact;
   /* Properties to pass to the channel when requesting it */
-  GHashTable *properties;
+  GHashTable *request;
   EmpathyDispatcherRequestCb *cb;
   gpointer user_data;
   gpointer *request_data;
@@ -138,7 +137,7 @@ free_dispatch_data (DispatchData *data)
 static DispatcherRequestData *
 new_dispatcher_request_data (EmpathyDispatcher *dispatcher,
   TpConnection *connection, const gchar *channel_type, guint handle_type,
-  guint handle, GHashTable *properties,
+  guint handle, GHashTable *request,
   EmpathyContact *contact, EmpathyDispatcherRequestCb *cb, gpointer user_data)
 {
   DispatcherRequestData *result = g_slice_new0 (DispatcherRequestData);
@@ -149,6 +148,7 @@ new_dispatcher_request_data (EmpathyDispatcher *dispatcher,
   result->channel_type = g_strdup (channel_type);
   result->handle_type = handle_type;
   result->handle = handle;
+  result->request = request;
 
   if (contact != NULL)
     result->contact = g_object_ref (contact);
@@ -167,8 +167,8 @@ free_dispatcher_request_data (DispatcherRequestData *r)
   if (r->contact != NULL)
     g_object_unref (r->contact);
 
-  if (r->properties != NULL)
-    g_hash_table_unref (r->properties);
+  if (r->request != NULL)
+    g_hash_table_unref (r->request);
 
   g_slice_free (DispatcherRequestData, r);
 }
@@ -643,6 +643,9 @@ dispatcher_channel_invalidated_cb (TpProxy *proxy, guint domain, gint code,
   g_object_get (G_OBJECT (proxy), "connection", &connection, NULL);
 
   cd = g_hash_table_lookup (priv->connections, connection);
+  /* Connection itself invalidated? */
+  if (cd == NULL)
+    return;
 
   object_path = tp_proxy_get_object_path (proxy);
 
@@ -1313,12 +1316,11 @@ empathy_get_dispatcher (void)
 }
 
 static void
-dispatcher_request_channel_cb (TpConnection *connection,
-  const gchar  *object_path, const GError *error,
-  gpointer      user_data, GObject      *weak_object)
+dispatcher_connection_new_requested_channel (EmpathyDispatcher *dispatcher,
+  DispatcherRequestData *request_data, const gchar *object_path,
+  GHashTable *properties, const GError *error)
 {
-  DispatcherRequestData *request_data = (DispatcherRequestData*) user_data;
-  EmpathyDispatcherPriv *priv = GET_PRIV (request_data->dispatcher);
+  EmpathyDispatcherPriv *priv = GET_PRIV (dispatcher);
   EmpathyDispatchOperation *operation = NULL;
   ConnectionData *conn_data;
 
@@ -1348,7 +1350,6 @@ dispatcher_request_channel_cb (TpConnection *connection,
     operation = g_hash_table_lookup (conn_data->dispatching_channels,
         object_path);
 
-  /* FIXME check if we got an existing channel back */
   if (operation == NULL)
     {
       DispatchData *data = g_hash_table_lookup (conn_data->dispatched_channels,
@@ -1356,22 +1357,29 @@ dispatcher_request_channel_cb (TpConnection *connection,
 
       if (data != NULL)
         {
-          operation = empathy_dispatch_operation_new_with_wrapper (connection,
+          operation = empathy_dispatch_operation_new_with_wrapper (
+            request_data->connection,
             data->channel, request_data->contact, FALSE,
             data->channel_wrapper);
         }
       else
         {
-          TpChannel *channel = tp_channel_new (connection, object_path,
-            request_data->channel_type, request_data->handle_type,
-            request_data->handle, NULL);
+          TpChannel *channel;
+
+          if (properties != NULL)
+            channel = tp_channel_new_from_properties (request_data->connection,
+              object_path, properties, NULL);
+          else
+            channel = tp_channel_new (request_data->connection, object_path,
+              request_data->channel_type, request_data->handle_type,
+              request_data->handle, NULL);
 
           g_signal_connect (channel, "invalidated",
             G_CALLBACK (dispatcher_channel_invalidated_cb),
             request_data->dispatcher);
 
-          operation = empathy_dispatch_operation_new (connection, channel,
-            request_data->contact, FALSE);
+          operation = empathy_dispatch_operation_new (request_data->connection,
+             channel, request_data->contact, FALSE);
           g_object_unref (channel);
         }
     }
@@ -1393,6 +1401,19 @@ dispatcher_request_channel_cb (TpConnection *connection,
 out:
   dispatcher_flush_outstanding_operations (request_data->dispatcher,
     conn_data);
+
+}
+
+static void
+dispatcher_request_channel_cb (TpConnection *connection,
+  const gchar  *object_path, const GError *error,
+  gpointer      user_data, GObject      *weak_object)
+{
+  EmpathyDispatcher *dispatcher = EMPATHY_DISPATCHER (weak_object);
+  DispatcherRequestData *request_data = (DispatcherRequestData*) user_data;
+
+  dispatcher_connection_new_requested_channel (dispatcher,
+    request_data, object_path, NULL, error);
 }
 
 void
@@ -1417,13 +1438,12 @@ dispatcher_chat_with_contact_cb (EmpathyContact *contact, gpointer user_data)
 
   request_data->handle = empathy_contact_get_handle (contact);
 
-  /* Note this does rape the surpress handler semantics */
   tp_cli_connection_call_request_channel (request_data->connection, -1,
     request_data->channel_type,
     request_data->handle_type,
     request_data->handle,
     TRUE, dispatcher_request_channel_cb,
-    request_data, NULL, NULL);
+    request_data, NULL, G_OBJECT (request_data->dispatcher));
 }
 
 void
@@ -1529,12 +1549,106 @@ file_channel_create_cb (TpConnection *connection,
 
 #endif
 
-void
-empathy_dispatcher_send_file (EmpathyContact *contact,
-			      GFile          *gfile)
+
+static void
+dispatcher_create_channel_cb (TpConnection *connect,
+  const gchar *object_path, GHashTable *properties, const GError *error,
+  gpointer user_data, GObject *weak_object)
 {
-  g_assert_not_reached();
-  return;
+  EmpathyDispatcher *dispatcher = EMPATHY_DISPATCHER (weak_object);
+  DispatcherRequestData *request_data = (DispatcherRequestData*) user_data;
+
+  dispatcher_connection_new_requested_channel (dispatcher,
+    request_data, object_path, properties, error);
+}
+
+
+static void
+dispatcher_create_channel_with_contact_cb (EmpathyContact *contact,
+  gpointer user_data)
+{
+  DispatcherRequestData *request_data = (DispatcherRequestData *) user_data;
+  GValue *target_handle;
+
+  g_assert (request_data->request);
+
+  request_data->handle = empathy_contact_get_handle (contact);
+
+  target_handle = tp_g_value_slice_new (G_TYPE_UINT);
+  g_value_set_uint (target_handle, request_data->handle);
+  g_hash_table_insert (request_data->request,
+    TP_IFACE_CHANNEL ".TargetHandle", target_handle);
+
+  tp_cli_connection_interface_requests_call_create_channel (
+    request_data->connection, -1,
+    request_data->request, dispatcher_create_channel_cb, request_data, NULL,
+    G_OBJECT (request_data->dispatcher));
+}
+
+void
+empathy_dispatcher_send_file_to_contact (EmpathyContact *contact,
+  const gchar *filename, guint64 size, guint64 date,
+  const gchar *content_type, EmpathyDispatcherRequestCb *callback,
+  gpointer user_data)
+{
+  EmpathyDispatcher *dispatcher = empathy_get_dispatcher();
+  EmpathyDispatcherPriv *priv = GET_PRIV (dispatcher);
+  McAccount *account = empathy_contact_get_account (contact);
+  TpConnection *connection = g_hash_table_lookup (priv->accounts, account);
+  ConnectionData *connection_data =
+    g_hash_table_lookup (priv->connections, connection);
+  DispatcherRequestData *request_data;
+  GValue *value;
+  GHashTable *request = g_hash_table_new_full (g_str_hash, g_str_equal, NULL,
+      (GDestroyNotify) tp_g_value_slice_free);
+
+  /* org.freedesktop.Telepathy.Channel.ChannelType */
+  value = tp_g_value_slice_new (G_TYPE_STRING);
+  g_value_set_string (value, EMP_IFACE_CHANNEL_TYPE_FILE_TRANSFER);
+  g_hash_table_insert (request, TP_IFACE_CHANNEL ".ChannelType", value);
+
+  /* org.freedesktop.Telepathy.Channel.TargetHandleType */
+  value = tp_g_value_slice_new (G_TYPE_UINT);
+  g_value_set_uint (value, TP_HANDLE_TYPE_CONTACT);
+  g_hash_table_insert (request, TP_IFACE_CHANNEL ".TargetHandleType", value);
+
+  /* org.freedesktop.Telepathy.Channel.Type.FileTransfer.ContentType */
+  value = tp_g_value_slice_new (G_TYPE_STRING);
+  g_value_set_string (value, content_type);
+  g_hash_table_insert (request,
+    EMP_IFACE_CHANNEL_TYPE_FILE_TRANSFER ".ContentType", value);
+
+  /* org.freedesktop.Telepathy.Channel.Type.FileTransfer.Filename */
+  value = tp_g_value_slice_new (G_TYPE_STRING);
+  g_value_set_string (value, filename);
+  g_hash_table_insert (request,
+    EMP_IFACE_CHANNEL_TYPE_FILE_TRANSFER ".Filename", value);
+
+  /* org.freedesktop.Telepathy.Channel.Type.FileTransfer.Size */
+  value = tp_g_value_slice_new (G_TYPE_UINT64);
+  g_value_set_uint64 (value, size);
+  g_hash_table_insert (request,
+    EMP_IFACE_CHANNEL_TYPE_FILE_TRANSFER ".Size", value);
+
+  /* org.freedesktop.Telepathy.Channel.Type.FileTransfer.Date */
+  value = tp_g_value_slice_new (G_TYPE_UINT64);
+  g_value_set_uint64 (value, date);
+  g_hash_table_insert (request,
+    EMP_IFACE_CHANNEL_TYPE_FILE_TRANSFER ".Date", value);
+
+
+  /* The contact handle might not be known yet */
+  request_data  = new_dispatcher_request_data (dispatcher, connection,
+    EMP_IFACE_CHANNEL_TYPE_FILE_TRANSFER, TP_HANDLE_TYPE_CONTACT, 0, request,
+    contact, callback, user_data);
+  connection_data->outstanding_requests = g_list_prepend
+    (connection_data->outstanding_requests, request_data);
+
+  empathy_contact_call_when_ready (contact,
+    EMPATHY_CONTACT_READY_HANDLE, dispatcher_create_channel_with_contact_cb,
+    request_data);
+
+  g_object_unref (dispatcher);
 }
 
 #if 0
