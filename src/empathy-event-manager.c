@@ -239,24 +239,24 @@ event_manager_approve_channel_cb (EmpathyDispatcher *dispatcher,
 
   channel_type = empathy_dispatch_operation_get_channel_type (operation);
 
+  approval = event_manager_approval_new (manager, operation);
+  priv->approvals = g_slist_prepend (priv->approvals, approval);
+
+  approval->approved_handler = g_signal_connect (operation, "approved",
+    G_CALLBACK (event_manager_operation_approved_cb), approval);
+
+  approval->claimed_handler = g_signal_connect (operation, "claimed",
+     G_CALLBACK (event_manager_operation_claimed_cb), approval);
+
   if (!tp_strdiff (channel_type, TP_IFACE_CHANNEL_TYPE_TEXT))
     {
       EmpathyTpChat *tp_chat =
         EMPATHY_TP_CHAT (
           empathy_dispatch_operation_get_channel_wrapper (operation));
 
-      approval = event_manager_approval_new (manager, operation);
-      priv->approvals = g_slist_prepend (priv->approvals, approval);
-
       g_signal_connect (tp_chat, "message-received",
         G_CALLBACK (event_manager_chat_message_received_cb), approval);
       g_object_unref (G_OBJECT (tp_chat));
-
-      approval->approved_handler = g_signal_connect (operation, "approved",
-        G_CALLBACK (event_manager_operation_approved_cb), approval);
-
-      approval->claimed_handler = g_signal_connect (operation, "claimed",
-        G_CALLBACK (event_manager_operation_claimed_cb), approval);
 
     }
 #if 0
@@ -282,38 +282,40 @@ event_manager_approve_channel_cb (EmpathyDispatcher *dispatcher,
 		g_object_unref (contact);
 		g_object_unref (tp_group);
 	}
-	else if (!tp_strdiff (channel_type, EMP_IFACE_CHANNEL_TYPE_FILE_TRANSFER)) {
-		EmpathyContact        *contact;
-		gchar                 *msg;
-		TpHandle               handle;
-		McAccount             *account;
-		EmpathyContactFactory *factory;
-
-		factory = empathy_contact_factory_dup_singleton ();
-		handle = tp_channel_get_handle (channel, NULL);
-		account = empathy_channel_get_account (channel);
-
-		contact = empathy_contact_factory_get_from_handle (factory,
-								   account,
-								   handle);
-
-		empathy_contact_run_until_ready (contact,
-			EMPATHY_CONTACT_READY_NAME, NULL);
-
-		msg = g_strdup_printf (_("Incoming file transfer from %s"),
-				       empathy_contact_get_name (contact));
-
-		event_manager_add (manager, contact,
-				   EMPATHY_IMAGE_DOCUMENT_SEND,
-				   msg, channel,
-				   event_channel_process_func, NULL);
-
-		g_object_unref (factory);
-		g_object_unref (account);
-	}
-
-	g_free (channel_type);
 #endif
+  else if (!tp_strdiff (channel_type, EMP_IFACE_CHANNEL_TYPE_FILE_TRANSFER)) 
+    {
+      EmpathyContact        *contact;
+      gchar                 *msg;
+      TpHandle               handle;
+      McAccount             *account;
+      EmpathyContactFactory *factory;
+      TpChannel *channel = empathy_dispatch_operation_get_channel (operation);
+
+      factory = empathy_contact_factory_dup_singleton ();
+      handle = tp_channel_get_handle (channel, NULL);
+      account = empathy_channel_get_account (channel);
+
+      contact = empathy_contact_factory_get_from_handle (factory, account,
+        handle);
+
+      empathy_contact_run_until_ready (contact,
+        EMPATHY_CONTACT_READY_NAME, NULL);
+
+      msg = g_strdup_printf (_("Incoming file transfer from %s"),
+        empathy_contact_get_name (contact));
+
+      event_manager_add (manager, contact, EMPATHY_IMAGE_DOCUMENT_SEND,
+        msg, approval, event_channel_process_func, NULL);
+
+      g_object_unref (channel);
+      g_object_unref (factory);
+      g_object_unref (account);
+    }
+  else
+    {
+      DEBUG ("Unknown channel type, ignoring..");
+    }
 }
 
 #if 0 /* FIXME dispatcher */
