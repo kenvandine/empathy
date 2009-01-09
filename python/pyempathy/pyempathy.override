@@ -77,7 +77,8 @@ _wrap_empathy_dispatcher_chat_with_contact_id(PyObject *self, PyObject *args, Py
 
     account = mc_account_lookup (account_id);
     if (account) {
-        empathy_dispatcher_chat_with_contact_id(account, contact_id);
+        empathy_dispatcher_chat_with_contact_id(account, contact_id,
+          NULL, NULL);
         g_object_unref (account);
     }
     

@@ -218,6 +218,16 @@
   )
 )
 
+(define-enum TubeType
+  (in-module "Empathy")
+  (c-name "EmpathyTubeType")
+  (gtype-id "EMPATHY_TYPE_TUBE_TYPE")
+  (values
+    '("stream-tube" "EMPATHY_TYPE_STREAM_TUBE")
+    '("dbus-tube" "EMPATHY_TYPE_DBUS_TUBE")
+  )
+)
+
 
 ;; From empathy-account-manager.h
 
@@ -350,6 +360,12 @@
   )
 )
 
+(define-method get_tp_chat
+  (of-object "EmpathyChatroom")
+  (c-name "empathy_chatroom_get_tp_chat")
+  (return-type "EmpathyTpChat*")
+)
+
 
 
 ;; From empathy-chatroom-manager.h
@@ -359,9 +375,8 @@
   (return-type "GType")
 )
 
-(define-function chatroom_manager_new
-  (c-name "empathy_chatroom_manager_new")
-  (is-constructor-of "EmpathyChatroomManager")
+(define-function chatroom_manager_dup_singleton
+  (c-name "empathy_chatroom_manager_dup_singleton")
   (return-type "EmpathyChatroomManager*")
   (parameters
     '("const-gchar*" "file")
@@ -411,6 +426,15 @@
   (return-type "guint")
   (parameters
     '("McAccount*" "account")
+  )
+)
+
+(define-method observe
+  (of-object "EmpathyChatroomManager")
+  (c-name "empathy_chatroom_manager_observe")
+  (return-type "none")
+  (parameters
+    '("EmpathyDispatcher*" "dispatcher")
   )
 )
 
@@ -621,6 +645,19 @@
   (return-type "guint")
   (parameters
     '("gconstpointer" "key")
+  )
+)
+
+(define-method call_when_ready
+  (of-object "EmpathyContact")
+  (c-name "empathy_contact_call_when_ready")
+  (return-type "none")
+  (parameters
+    '("EmpathyContactReady" "ready")
+    '("EmpathyContactReadyCb*" "callback")
+    '("gpointer" "user_data")
+    '("GDestroyNotify" "destroy")
+    '("GObject*" "weak_object")
   )
 )
 
@@ -976,61 +1013,13 @@
   (return-type "GType")
 )
 
-(define-function dispatcher_new
-  (c-name "empathy_dispatcher_new")
-  (is-constructor-of "EmpathyDispatcher")
-  (return-type "EmpathyDispatcher*")
-)
-
-(define-method channel_process
-  (of-object "EmpathyDispatcher")
-  (c-name "empathy_dispatcher_channel_process")
-  (return-type "none")
-  (parameters
-    '("TpChannel*" "channel")
-  )
-)
-
-(define-function dispatcher_tube_get_type
-  (c-name "empathy_dispatcher_tube_get_type")
-  (return-type "GType")
-)
-
-(define-method ref
-  (of-object "EmpathyDispatcherTube")
-  (c-name "empathy_dispatcher_tube_ref")
-  (return-type "EmpathyDispatcherTube*")
-)
-
-(define-method unref
-  (of-object "EmpathyDispatcherTube")
-  (c-name "empathy_dispatcher_tube_unref")
-  (return-type "none")
-)
-
-(define-method tube_process
-  (of-object "EmpathyDispatcher")
-  (c-name "empathy_dispatcher_tube_process")
-  (return-type "none")
-  (parameters
-    '("EmpathyDispatcherTube*" "tube")
-  )
-)
-
 (define-function dispatcher_call_with_contact
   (c-name "empathy_dispatcher_call_with_contact")
   (return-type "none")
   (parameters
     '("EmpathyContact*" "contact")
-  )
-)
-
-(define-function dispatcher_call_with_contact_id
-  (c-name "empathy_dispatcher_call_with_contact_id")
-  (return-type "none")
-  (parameters
-    '("McAccount*" "account")
-    '("const-gchar*" "contact_id")
+    '("EmpathyDispatcherRequestCb*" "callback")
+    '("gpointer" "user_data")
   )
 )
 
@@ -1040,6 +1029,8 @@
   (parameters
     '("McAccount*" "account")
     '("const-gchar*" "contact_id")
+    '("EmpathyDispatcherRequestCb*" "callback")
+    '("gpointer" "user_data")
   )
 )
 
@@ -1048,16 +1039,44 @@
   (return-type "none")
   (parameters
     '("EmpathyContact*" "contact")
+    '("EmpathyDispatcherRequestCb*" "callback")
+    '("gpointer" "user_data")
   )
 )
 
-(define-function dispatcher_send_file
-  (c-name "empathy_dispatcher_send_file")
+(define-function dispatcher_send_file_to_contact
+  (c-name "empathy_dispatcher_send_file_to_contact")
   (return-type "none")
   (parameters
     '("EmpathyContact*" "contact")
-    '("GFile*" "gfile")
+    '("const-gchar*" "filename")
+    '("guint64" "size")
+    '("guint64" "date")
+    '("const-gchar*" "content_type")
+    '("EmpathyDispatcherRequestCb*" "callback")
+    '("gpointer" "user_data")
   )
+)
+
+(define-function dispatcher_join_muc
+  (c-name "empathy_dispatcher_join_muc")
+  (return-type "none")
+  (parameters
+    '("McAccount*" "account")
+    '("const-gchar*" "roomname")
+    '("EmpathyDispatcherRequestCb*" "callback")
+    '("gpointer" "user_data")
+  )
+)
+
+(define-function dispatcher_dup_singleton
+  (c-name "empathy_dispatcher_dup_singleton")
+  (return-type "EmpathyDispatcher*")
+)
+
+(define-function dispatcher_tube_get_type
+  (c-name "empathy_dispatcher_tube_get_type")
+  (return-type "GType")
 )
 
 
@@ -1520,6 +1539,21 @@
   )
 )
 
+(define-method get_id
+  (of-object "EmpathyMessage")
+  (c-name "empathy_message_get_id")
+  (return-type "guint")
+)
+
+(define-method set_id
+  (of-object "EmpathyMessage")
+  (c-name "empathy_message_set_id")
+  (return-type "none")
+  (parameters
+    '("guint" "id")
+  )
+)
+
 
 
 ;; From empathy-status-presets.h
@@ -1646,6 +1680,21 @@
   )
 )
 
+(define-method close
+  (of-object "EmpathyTpCall")
+  (c-name "empathy_tp_call_close")
+  (return-type "none")
+)
+
+(define-method to
+  (of-object "EmpathyTpCall")
+  (c-name "empathy_tp_call_to")
+  (return-type "none")
+  (parameters
+    '("EmpathyContact*" "contact")
+  )
+)
+
 (define-method accept_incoming_call
   (of-object "EmpathyTpCall")
   (c-name "empathy_tp_call_accept_incoming_call")
@@ -1754,6 +1803,12 @@
   )
 )
 
+(define-method close
+  (of-object "EmpathyTpChat")
+  (c-name "empathy_tp_chat_close")
+  (return-type "none")
+)
+
 (define-method get_id
   (of-object "EmpathyTpChat")
   (c-name "empathy_tp_chat_get_id")
@@ -1790,21 +1845,6 @@
   (return-type "guint")
 )
 
-(define-method set_acknowledge
-  (of-object "EmpathyTpChat")
-  (c-name "empathy_tp_chat_set_acknowledge")
-  (return-type "none")
-  (parameters
-    '("gboolean" "acknowledge")
-  )
-)
-
-(define-method emit_pendings
-  (of-object "EmpathyTpChat")
-  (c-name "empathy_tp_chat_emit_pendings")
-  (return-type "none")
-)
-
 (define-method send
   (of-object "EmpathyTpChat")
   (c-name "empathy_tp_chat_send")
@@ -1830,6 +1870,30 @@
   (parameters
     '("const-gchar*" "name")
     '("const-GValue*" "value")
+  )
+)
+
+(define-method get_pending_messages
+  (of-object "EmpathyTpChat")
+  (c-name "empathy_tp_chat_get_pending_messages")
+  (return-type "const-GList*")
+)
+
+(define-method acknowledge_message
+  (of-object "EmpathyTpChat")
+  (c-name "empathy_tp_chat_acknowledge_message")
+  (return-type "none")
+  (parameters
+    '("EmpathyMessage*" "message")
+  )
+)
+
+(define-method acknowledge_messages
+  (of-object "EmpathyTpChat")
+  (c-name "empathy_tp_chat_acknowledge_messages")
+  (return-type "none")
+  (parameters
+    '("const-GList*" "messages")
   )
 )
 
@@ -1979,6 +2043,12 @@
 (define-method cancel
   (of-object "EmpathyTpFile")
   (c-name "empathy_tp_file_cancel")
+  (return-type "none")
+)
+
+(define-method close
+  (of-object "EmpathyTpFile")
+  (c-name "empathy_tp_file_close")
   (return-type "none")
 )
 
@@ -2235,7 +2305,6 @@
   (return-type "EmpathyTpTube*")
   (parameters
     '("TpChannel*" "channel")
-    '("guint" "tube_id")
   )
 )
 
@@ -2257,16 +2326,8 @@
   (return-type "none")
   (parameters
     '("TpSocketAddressType" "type")
-  )
-)
-
-(define-method get_socket
-  (of-object "EmpathyTpTube")
-  (c-name "empathy_tp_tube_get_socket")
-  (return-type "none")
-  (parameters
-    '("gchar**" "hostname")
-    '("guint*" "port")
+    '("EmpatyTpTubeAcceptStreamTubeCb*" "callback")
+    '("gpointer" "user_data")
   )
 )
 
@@ -2284,7 +2345,7 @@
   (is-constructor-of "EmpathyTubeHandler")
   (return-type "EmpathyTubeHandler*")
   (parameters
-    '("TpTubeType" "type")
+    '("EmpathyTubeType" "type")
     '("const-gchar*" "service")
   )
 )
@@ -2293,7 +2354,7 @@
   (c-name "empathy_tube_handler_build_bus_name")
   (return-type "gchar*")
   (parameters
-    '("TpTubeType" "type")
+    '("EmpathyTubeType" "type")
     '("const-gchar*" "service")
   )
 )
@@ -2302,7 +2363,7 @@
   (c-name "empathy_tube_handler_build_object_path")
   (return-type "gchar*")
   (parameters
-    '("TpTubeType" "type")
+    '("EmpathyTubeType" "type")
     '("const-gchar*" "service")
   )
 )
@@ -2483,20 +2544,11 @@
   )
 )
 
-(define-function connection_request_channel
-  (c-name "empathy_connection_request_channel")
+(define-function start_call_with_contact
+  (c-name "empathy_start_call_with_contact")
   (return-type "none")
   (parameters
-    '("TpConnection*" "proxy")
-    '("gint" "timeout_ms")
-    '("const-gchar*" "channel_type")
-    '("guint" "handle_type")
-    '("const-gchar*" "name")
-    '("gboolean" "suppress_handler")
-    '("empathy_connection_callback_for_request_channel" "callback")
-    '("gpointer" "user_data")
-    '("GDestroyNotify" "destroy")
-    '("GObject*" "weak_object")
+    '("EmpathyContact*" "contact")
   )
 )
 
