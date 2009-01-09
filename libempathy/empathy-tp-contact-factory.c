@@ -879,7 +879,6 @@ get_requestable_channel_classes_cb (TpProxy *connection,
 			empathy_contact_set_capabilities (contact, caps |
 				EMPATHY_CAPABILITIES_FT);
 		}
-
 		break;
 	}
 
