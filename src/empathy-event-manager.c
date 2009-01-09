@@ -461,10 +461,12 @@ event_manager_approve_channel_cb (EmpathyDispatcher *dispatcher,
       g_object_unref (factory);
       g_object_unref (account);
     }
-  else if (!tp_strdiff (channel_type, EMP_IFACE_CHANNEL_TYPE_STREAM_TUBE))
+  else if (!tp_strdiff (channel_type, EMP_IFACE_CHANNEL_TYPE_STREAM_TUBE) ||
+      !tp_strdiff (channel_type, EMP_IFACE_CHANNEL_TYPE_DBUS_TUBE))
     {
       EmpathyContact        *contact;
       TpHandle               handle;
+      TpHandleType           handle_type;
       McAccount             *account;
       EmpathyContactFactory *factory;
       EmpathyTubeDispatch *tube_dispatch;
@@ -472,8 +474,13 @@ event_manager_approve_channel_cb (EmpathyDispatcher *dispatcher,
 
       channel = empathy_dispatch_operation_get_channel (operation);
 
+      handle = tp_channel_get_handle (channel, &handle_type);
+
+      /* Only understand p2p tubes */
+      if (handle_type != TP_HANDLE_TYPE_CONTACT)
+        return;
+
       factory = empathy_contact_factory_new ();
-      handle = tp_channel_get_handle (channel, NULL);
       account = empathy_channel_get_account (channel);
 
       contact = empathy_contact_factory_get_from_handle (factory, account,
