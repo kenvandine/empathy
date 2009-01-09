@@ -5,6 +5,7 @@
 <tp:title>Extensions for empathy</tp:title>
 
 <xi:include href="misc.xml"/>
+<xi:include href="generic-types.xml"/>
 
 <tp:generic-types>
   <tp:external-type name="Contact_Handle" type="u"
@@ -28,5 +29,6 @@
   <tp:external-type name="Tube_ID" type="u"
     from="Telepathy specification"/>
 </tp:generic-types>
+
 
 </tp:spec>
