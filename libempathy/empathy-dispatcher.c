@@ -786,6 +786,29 @@ dispatcher_account_connection_cb (EmpathyAccountManager *manager,
   dispatcher_update_account (dispatcher, account);
 }
 
+
+static GObject*
+dispatcher_constructor (GType type, guint n_construct_params,
+  GObjectConstructParam *construct_params)
+{
+  GObject *retval;
+
+  if (dispatcher == NULL)
+    {
+      retval = G_OBJECT_CLASS (empathy_dispatcher_parent_class)->constructor
+          (type, n_construct_params, construct_params);
+
+      dispatcher = EMPATHY_DISPATCHER (retval);
+      g_object_add_weak_pointer (retval, (gpointer *) &dispatcher);
+    }
+  else
+    {
+      retval = g_object_ref (dispatcher);
+    }
+
+  return retval;
+}
+
 static void
 dispatcher_finalize (GObject *object)
 {
@@ -808,6 +831,7 @@ empathy_dispatcher_class_init (EmpathyDispatcherClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->finalize = dispatcher_finalize;
+  object_class->constructor = dispatcher_constructor;
 
   signals[OBSERVE] =
     g_signal_new ("observe",
@@ -879,16 +903,9 @@ empathy_dispatcher_init (EmpathyDispatcher *dispatcher)
 }
 
 EmpathyDispatcher *
-empathy_get_dispatcher (void)
+empathy_dispatcher_dup_singleton (void)
 {
-  if (!dispatcher) {
-    dispatcher = g_object_new (EMPATHY_TYPE_DISPATCHER, NULL);
-    g_object_add_weak_pointer (G_OBJECT (dispatcher), (gpointer) &dispatcher);
-  } else {
-    g_object_ref (dispatcher);
-  }
-
-  return dispatcher;
+  return EMPATHY_DISPATCHER (g_object_new (EMPATHY_TYPE_DISPATCHER, NULL));
 }
 
 static void
@@ -1006,7 +1023,7 @@ void
 empathy_dispatcher_call_with_contact ( EmpathyContact *contact,
   EmpathyDispatcherRequestCb *callback, gpointer user_data)
 {
-  EmpathyDispatcher *dispatcher = empathy_get_dispatcher();
+  EmpathyDispatcher *dispatcher = empathy_dispatcher_dup_singleton();
   EmpathyDispatcherPriv *priv = GET_PRIV (dispatcher);
   McAccount *account;
   TpConnection *connection;
@@ -1052,7 +1069,7 @@ empathy_dispatcher_chat_with_contact (EmpathyContact *contact,
   ConnectionData *connection_data;
   DispatcherRequestData *request_data;
 
-  dispatcher = empathy_get_dispatcher();
+  dispatcher = empathy_dispatcher_dup_singleton();
   priv = GET_PRIV (dispatcher);
 
   account = empathy_contact_get_account (contact);
@@ -1078,7 +1095,7 @@ void
 empathy_dispatcher_chat_with_contact_id (McAccount *account, const gchar
   *contact_id, EmpathyDispatcherRequestCb *callback, gpointer user_data)
 {
-  EmpathyDispatcher *dispatcher = empathy_get_dispatcher ();
+  EmpathyDispatcher *dispatcher = empathy_dispatcher_dup_singleton ();
   EmpathyContactFactory *factory;
   EmpathyContact        *contact;
 
@@ -1135,7 +1152,7 @@ empathy_dispatcher_join_muc (McAccount *account, const gchar *roomname,
   ConnectionData *connection_data;
   const gchar *names[] = { roomname, NULL };
 
-  dispatcher = empathy_get_dispatcher();
+  dispatcher = empathy_dispatcher_dup_singleton();
   priv = GET_PRIV (dispatcher);
 
   connection = g_hash_table_lookup (priv->accounts, account);
@@ -1199,7 +1216,7 @@ empathy_dispatcher_send_file_to_contact (EmpathyContact *contact,
   const gchar *content_type, EmpathyDispatcherRequestCb *callback,
   gpointer user_data)
 {
-  EmpathyDispatcher *dispatcher = empathy_get_dispatcher();
+  EmpathyDispatcher *dispatcher = empathy_dispatcher_dup_singleton();
   EmpathyDispatcherPriv *priv = GET_PRIV (dispatcher);
   McAccount *account = empathy_contact_get_account (contact);
   TpConnection *connection = g_hash_table_lookup (priv->accounts, account);

@@ -592,7 +592,7 @@ empathy_event_manager_init (EmpathyEventManager *manager)
 
   manager->priv = priv;
 
-  priv->dispatcher = empathy_get_dispatcher ();
+  priv->dispatcher = empathy_dispatcher_dup_singleton ();
   priv->contact_manager = empathy_contact_manager_dup_singleton ();
   g_signal_connect (priv->dispatcher, "approve",
     G_CALLBACK (event_manager_approve_channel_cb), manager);

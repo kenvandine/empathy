@@ -513,7 +513,7 @@ main (int argc, char *argv[])
 	}
 
 	/* Handle channels */
-	dispatcher = empathy_get_dispatcher ();
+	dispatcher = empathy_dispatcher_dup_singleton ();
 	g_signal_connect (dispatcher, "dispatch", G_CALLBACK (dispatch_cb), NULL);
 
 	gtk_main ();

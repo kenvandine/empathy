@@ -91,7 +91,7 @@ void empathy_dispatcher_join_muc (McAccount *account,
   gpointer user_data);
 
 /* Get the dispatcher singleton */
-EmpathyDispatcher *    empathy_get_dispatcher (void);
+EmpathyDispatcher *    empathy_dispatcher_dup_singleton (void);
 GType                  empathy_dispatcher_tube_get_type        (void);
 
 /* tube stuff */
