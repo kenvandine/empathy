@@ -424,8 +424,8 @@ empathy_tube_dispatch_handle (EmpathyTubeDispatch *tube_dispatch)
       channel = empathy_dispatch_operation_get_channel (priv->operation);
 
       msg = g_strdup_printf (
-        _(" An invitation was offered for service %s, but you don't have the"
-          " needed application to handle it "), priv->service);
+        _("An invitation was offered for service %s, but you don't have the "
+          "needed application to handle it"), priv->service);
 
       empathy_tube_dispatch_show_error (tube_dispatch, msg);
 
