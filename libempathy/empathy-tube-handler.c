@@ -144,7 +144,7 @@ empathy_tube_handler_init (EmpathyTubeHandler *thandler)
 }
 
 EmpathyTubeHandler *
-empathy_tube_handler_new (TpTubeType type, const gchar *service)
+empathy_tube_handler_new (EmpathyTubeType type, const gchar *service)
 {
   EmpathyTubeHandler *thandler = NULL;
   DBusGProxy *proxy;
@@ -153,7 +153,7 @@ empathy_tube_handler_new (TpTubeType type, const gchar *service)
   gchar *object_path;
   GError *error = NULL;
 
-  g_return_val_if_fail (type <= TP_TUBE_TYPE_STREAM, NULL);
+  g_return_val_if_fail (type <= EMPATHY_TYPE_DBUS_TUBE, NULL);
   g_return_val_if_fail (service != NULL, NULL);
 
   bus_name = empathy_tube_handler_build_bus_name (type, service);
@@ -185,12 +185,13 @@ OUT:
 }
 
 gchar *
-empathy_tube_handler_build_bus_name (TpTubeType type, const gchar *service)
+empathy_tube_handler_build_bus_name (EmpathyTubeType type,
+  const gchar *service)
 {
   gchar *str = NULL;
   const gchar *prefix = NULL;
 
-  g_return_val_if_fail (type <= TP_TUBE_TYPE_STREAM, NULL);
+  g_return_val_if_fail (type <= EMPATHY_TYPE_DBUS_TUBE, NULL);
   g_return_val_if_fail (service != NULL, NULL);
 
   if (type == TP_TUBE_TYPE_DBUS)
@@ -206,12 +207,13 @@ empathy_tube_handler_build_bus_name (TpTubeType type, const gchar *service)
 }
 
 gchar *
-empathy_tube_handler_build_object_path (TpTubeType type, const gchar *service)
+empathy_tube_handler_build_object_path (EmpathyTubeType type,
+  const gchar *service)
 {
   gchar *bus_name;
   gchar *str;
 
-  g_return_val_if_fail (type <= TP_TUBE_TYPE_STREAM, NULL);
+  g_return_val_if_fail (type <= EMPATHY_TYPE_DBUS_TUBE, NULL);
   g_return_val_if_fail (service != NULL, NULL);
 
   bus_name = empathy_tube_handler_build_bus_name (type, service);
