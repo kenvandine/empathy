@@ -1329,9 +1329,8 @@
   (return-type "GType")
 )
 
-(define-function smiley_manager_new
-  (c-name "empathy_smiley_manager_new")
-  (is-constructor-of "EmpathySmileyManager")
+(define-function smiley_manager_dup_singleton
+  (c-name "empathy_smiley_manager_dup_singleton")
   (return-type "EmpathySmileyManager*")
 )
 

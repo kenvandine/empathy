@@ -703,9 +703,8 @@
   (return-type "GType")
 )
 
-(define-function contact_factory_new
-  (c-name "empathy_contact_factory_new")
-  (is-constructor-of "EmpathyContactFactory")
+(define-function contact_factory_dup_singleton
+  (c-name "empathy_contact_factory_dup_singleton")
   (return-type "EmpathyContactFactory*")
 )
 
@@ -1071,9 +1070,8 @@
   (return-type "GType")
 )
 
-(define-function idle_new
-  (c-name "empathy_idle_new")
-  (is-constructor-of "EmpathyIdle")
+(define-function idle_dup_singleton
+  (c-name "empathy_idle_dup_singleton")
   (return-type "EmpathyIdle*")
 )
 
@@ -1295,9 +1293,8 @@
   (return-type "GType")
 )
 
-(define-function log_manager_new
-  (c-name "empathy_log_manager_new")
-  (is-constructor-of "EmpathyLogManager")
+(define-function log_manager_dup_singleton
+  (c-name "empathy_log_manager_dup_singleton")
   (return-type "EmpathyLogManager*")
 )
 
