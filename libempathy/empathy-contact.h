@@ -114,7 +114,7 @@ gboolean empathy_contact_equal (gconstpointer v1, gconstpointer v2);
 guint empathy_contact_hash (gconstpointer key);
 
 typedef void (EmpathyContactReadyCb)
-  (EmpathyContact *contact, GError *error, gpointer user_data,
+  (EmpathyContact *contact, const GError *error, gpointer user_data,
    GObject *weak_object);
 void empathy_contact_call_when_ready (EmpathyContact *contact,
   EmpathyContactReady ready, EmpathyContactReadyCb *callback, gpointer

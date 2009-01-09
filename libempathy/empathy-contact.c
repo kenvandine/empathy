@@ -394,7 +394,7 @@ contact_weak_object_notify (gpointer data, GObject *old_object)
 }
 
 static void
-contact_call_ready_callback (EmpathyContact *contact, GError *error,
+contact_call_ready_callback (EmpathyContact *contact, const GError *error,
   ReadyCbData *data)
 {
   data->callback (contact, error, data->user_data, data->weak_object);
