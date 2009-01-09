@@ -1357,8 +1357,6 @@ chat_create_ui (EmpathyChat *chat)
 
 	/* Add the main widget in the chat widget */
 	gtk_container_add (GTK_CONTAINER (chat), priv->widget);
-
-	show_pending_messages (chat);
 }
 
 static void
@@ -1456,6 +1454,7 @@ chat_constructed (GObject *object)
 
 	chat_create_ui (chat);
 	chat_add_logs (chat);
+	show_pending_messages (chat);
 }
 
 static void
@@ -1650,7 +1649,10 @@ empathy_chat_set_tp_chat (EmpathyChat   *chat,
 	g_object_notify (G_OBJECT (chat), "id");
 	g_object_notify (G_OBJECT (chat), "account");
 
-  show_pending_messages (chat);
+	/* This is a noop when tp-chat is set at object construction time and causes
+	 * the pending messages to be show when it's set on the object after it has
+	 * been created */
+	show_pending_messages (chat);
 }
 
 McAccount *
