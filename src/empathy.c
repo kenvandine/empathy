@@ -76,7 +76,6 @@ dispatch_cb (EmpathyDispatcher *dispatcher,
 
 		tp_chat = EMPATHY_TP_CHAT (
 			empathy_dispatch_operation_get_channel_wrapper (operation));
-		empathy_run_until_ready (tp_chat);
 
 		id = empathy_tp_chat_get_id (tp_chat);
 		if (!id) {
