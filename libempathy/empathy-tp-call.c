@@ -487,7 +487,6 @@ tp_call_finalize (GObject *object)
 
   g_slice_free (EmpathyTpCallStream, priv->audio);
   g_slice_free (EmpathyTpCallStream, priv->video);
-  g_object_unref (priv->group);
 
   if (priv->group != NULL)
     g_object_unref (priv->group);
