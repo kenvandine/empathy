@@ -33,6 +33,33 @@
 #define DEBUG_FLAG EMPATHY_DEBUG_TP
 #include "empathy-debug.h"
 
+typedef struct {
+  TpSocketAddressType type;
+  EmpatyTpTubeAcceptStreamTubeCb *callback;
+  gpointer user_data;
+} EmpathyTpTubeAcceptData;
+
+static EmpathyTpTubeAcceptData *
+new_empathy_tp_tube_accept_data (TpSocketAddressType type,
+  EmpatyTpTubeAcceptStreamTubeCb *callback, gpointer user_data)
+{
+  EmpathyTpTubeAcceptData *r;
+
+  r = g_slice_new0 (EmpathyTpTubeAcceptData);
+  r->type = type;
+  r->callback = callback;
+  r->user_data = user_data;
+
+  return r;
+}
+
+static void
+free_empathy_tp_tube_accept_data (gpointer data)
+{
+  g_slice_free (EmpathyTpTubeAcceptData, data);
+}
+
+
 #define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyTpTube)
 typedef struct
 {
@@ -40,6 +67,7 @@ typedef struct
   guint initiator;
   guint type;
   gchar *service;
+  /* FIXME readd support for parameters.. */
   GHashTable *parameters;
   guint state;
   EmpathyContact *initiator_contact;
@@ -182,6 +210,8 @@ tp_tube_finalize (GObject *object)
       g_object_unref (priv->factory);
 
   g_free (priv->service);
+
+  if (priv->parameters != NULL)
   g_hash_table_destroy (priv->parameters);
 
   G_OBJECT_CLASS (empathy_tp_tube_parent_class)->finalize (object);
@@ -348,74 +378,57 @@ tp_tube_accept_stream_cb (TpProxy *proxy,
                           gpointer user_data,
                           GObject *weak_object)
 {
+  EmpathyTpTube *tube = EMPATHY_TP_TUBE (weak_object);
+  EmpathyTpTubeAcceptData *data = (EmpathyTpTubeAcceptData *)user_data;
+  EmpathyTpTubeAddress eaddress;
+
+  eaddress.type = data->type;
+
   if (error)
+    {
       DEBUG ("Error accepting tube: %s", error->message);
+      data->callback (tube, NULL, error, data->user_data);
+      return;
+    }
+
+  switch (eaddress.type)
+    {
+      case TP_SOCKET_ADDRESS_TYPE_UNIX:
+      case TP_SOCKET_ADDRESS_TYPE_ABSTRACT_UNIX:
+        eaddress.a.socket.path = g_value_get_boxed (address);
+        break;
+     case TP_SOCKET_ADDRESS_TYPE_IPV4:
+     case TP_SOCKET_ADDRESS_TYPE_IPV6:
+        dbus_g_type_struct_get (address,
+          0, &eaddress.a.inet.hostname,
+          1, &eaddress.a.inet.port, G_MAXUINT);
+        break;
+    }
+
+   data->callback (tube, &eaddress, NULL, data->user_data);
 }
 
 void
 empathy_tp_tube_accept_stream_tube (EmpathyTpTube *tube,
-                                    TpSocketAddressType type)
+  TpSocketAddressType type, EmpatyTpTubeAcceptStreamTubeCb *callback,
+  gpointer user_data)
 {
   EmpathyTpTubePriv *priv = GET_PRIV (tube);
   GValue *control_param;
+  EmpathyTpTubeAcceptData *data;
 
   g_return_if_fail (EMPATHY_IS_TP_TUBE (tube));
 
   DEBUG ("Accepting stream tube");
-
+  /* FIXME allow other acls */
   control_param = tp_g_value_slice_new (G_TYPE_STRING);
+
+  data = new_empathy_tp_tube_accept_data (type, callback, user_data);
+
   emp_cli_channel_type_stream_tube_call_accept_stream_tube (
      TP_PROXY (priv->channel), -1, type, TP_SOCKET_ACCESS_CONTROL_LOCALHOST,
-     control_param, tp_tube_accept_stream_cb, NULL, NULL, G_OBJECT (tube));
+     control_param, tp_tube_accept_stream_cb, data,
+     free_empathy_tp_tube_accept_data, G_OBJECT (tube));
 
   tp_g_value_slice_free (control_param);
 }
-
-void
-empathy_tp_tube_get_socket (EmpathyTpTube *tube,
-                            gchar **hostname,
-                            guint *port)
-{
-  EmpathyTpTubePriv *priv = GET_PRIV (tube);
-  GValue *address;
-  guint address_type;
-  gchar *ret_hostname = NULL;
-  guint ret_port;
-  GError *error = NULL;
-
-  g_assert_not_reached ();
-
-  g_return_if_fail (EMPATHY_IS_TP_TUBE (tube));
-  g_return_if_fail (hostname != NULL || port != NULL);
-
-  DEBUG ("Getting stream tube socket address");
-
-  if (!tp_cli_channel_type_tubes_run_get_stream_tube_socket_address (priv->channel,
-      -1, 0, &address_type, &address, &error, NULL))
-    {
-      DEBUG ("Couldn't get socket address: %s", error->message);
-      g_clear_error (&error);
-      return;
-    }
-
-  switch (address_type)
-    {
-    case TP_SOCKET_ADDRESS_TYPE_UNIX:
-    case TP_SOCKET_ADDRESS_TYPE_ABSTRACT_UNIX:
-        dbus_g_type_struct_get (address, 0, &ret_hostname, G_MAXUINT);
-        break;
-    case TP_SOCKET_ADDRESS_TYPE_IPV4:
-    case TP_SOCKET_ADDRESS_TYPE_IPV6:
-        dbus_g_type_struct_get (address, 0, &ret_hostname, 1, &ret_port, G_MAXUINT);    
-        break;
-    }
-
-  if (hostname) {
-  	*hostname = g_strdup (ret_hostname);
-  }
-  if (port) {
-  	*port = ret_port;
-  }
-  g_boxed_free (G_TYPE_VALUE, address);
-}
-

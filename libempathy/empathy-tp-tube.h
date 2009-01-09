@@ -45,6 +45,19 @@ G_BEGIN_DECLS
 typedef struct _EmpathyTpTube EmpathyTpTube;
 typedef struct _EmpathyTpTubeClass EmpathyTpTubeClass;
 
+typedef struct {
+  TpSocketAddressType type;
+  union {
+    struct socket_address_t {
+      GArray *path;
+    } socket;
+    struct inet_address_t {
+      gchar *hostname;
+      guint port;
+    } inet;
+  } a;
+} EmpathyTpTubeAddress;
+
 struct _EmpathyTpTube {
   GObject parent;
   gpointer priv;
@@ -59,10 +72,14 @@ EmpathyTpTube *empathy_tp_tube_new (TpChannel *channel);
 EmpathyTpTube *empathy_tp_tube_new_stream_tube (EmpathyContact *contact,
     TpSocketAddressType type, const gchar *hostname, guint port,
     const gchar *service);
+
+typedef void (EmpatyTpTubeAcceptStreamTubeCb) (EmpathyTpTube *tube,
+  const EmpathyTpTubeAddress *address, const GError *error,
+  gpointer user_data);
+
 void empathy_tp_tube_accept_stream_tube (EmpathyTpTube *tube,
-    TpSocketAddressType type);
-void empathy_tp_tube_get_socket (EmpathyTpTube *tube, gchar **hostname,
-    guint *port);
+  TpSocketAddressType type, EmpatyTpTubeAcceptStreamTubeCb *callback,
+  gpointer user_data);
 
 G_END_DECLS
 
