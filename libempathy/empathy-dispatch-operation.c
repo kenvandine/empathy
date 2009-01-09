@@ -439,7 +439,12 @@ empathy_dispatch_operation_new_with_wrapper (TpConnection *connection,
 void
 empathy_dispatch_operation_start (EmpathyDispatchOperation *operation)
 {
-  EmpathyDispatchOperationPriv *priv = GET_PRIV (operation);
+  EmpathyDispatchOperationPriv *priv;
+
+  g_return_if_fail (EMPATHY_IS_DISPATCH_OPERATION (operation));
+
+  priv = GET_PRIV (operation);
+
   g_return_if_fail (
     priv->status == EMPATHY_DISPATCHER_OPERATION_STATE_PENDING);
 
@@ -454,7 +459,11 @@ empathy_dispatch_operation_start (EmpathyDispatchOperation *operation)
 void
 empathy_dispatch_operation_approve (EmpathyDispatchOperation *operation)
 {
-  EmpathyDispatchOperationPriv *priv = GET_PRIV (operation);
+  EmpathyDispatchOperationPriv *priv;
+
+  g_return_if_fail (EMPATHY_IS_DISPATCH_OPERATION (operation));
+
+  priv = GET_PRIV (operation);
 
   if (priv->status == EMPATHY_DISPATCHER_OPERATION_STATE_APPROVING)
     {
@@ -478,7 +487,11 @@ empathy_dispatch_operation_approve (EmpathyDispatchOperation *operation)
 gboolean
 empathy_dispatch_operation_claim (EmpathyDispatchOperation *operation)
 {
-  EmpathyDispatchOperationPriv *priv = GET_PRIV (operation);
+  EmpathyDispatchOperationPriv *priv;
+
+  g_return_val_if_fail (EMPATHY_IS_DISPATCH_OPERATION (operation), FALSE);
+
+  priv = GET_PRIV (operation);
 
   if (priv->status == EMPATHY_DISPATCHER_OPERATION_STATE_CLAIMED)
     return FALSE;
@@ -495,7 +508,11 @@ TpConnection *
 empathy_dispatch_operation_get_tp_connection (
   EmpathyDispatchOperation *operation)
 {
-  EmpathyDispatchOperationPriv *priv = GET_PRIV (operation);
+  EmpathyDispatchOperationPriv *priv;
+
+  g_return_val_if_fail (EMPATHY_IS_DISPATCH_OPERATION (operation), NULL);
+
+  priv = GET_PRIV (operation);
 
   return g_object_ref (priv->connection);
 }
@@ -503,7 +520,11 @@ empathy_dispatch_operation_get_tp_connection (
 TpChannel *
 empathy_dispatch_operation_get_channel (EmpathyDispatchOperation *operation)
 {
-  EmpathyDispatchOperationPriv *priv = GET_PRIV (operation);
+  EmpathyDispatchOperationPriv *priv;
+
+  g_return_val_if_fail (EMPATHY_IS_DISPATCH_OPERATION (operation), NULL);
+
+  priv = GET_PRIV (operation);
 
   return TP_CHANNEL (g_object_ref (priv->channel));
 }
@@ -512,7 +533,11 @@ GObject *
 empathy_dispatch_operation_get_channel_wrapper (
   EmpathyDispatchOperation *operation)
 {
-  EmpathyDispatchOperationPriv *priv = GET_PRIV (operation);
+  EmpathyDispatchOperationPriv *priv;
+
+  g_return_val_if_fail (EMPATHY_IS_DISPATCH_OPERATION (operation), NULL);
+
+  priv = GET_PRIV (operation);
 
   if (priv->channel_wrapper != NULL)
     g_object_ref (priv->channel_wrapper);
@@ -524,7 +549,11 @@ const gchar *
 empathy_dispatch_operation_get_channel_type (
   EmpathyDispatchOperation *operation)
 {
-  EmpathyDispatchOperationPriv *priv = GET_PRIV (operation);
+  EmpathyDispatchOperationPriv *priv;
+
+  g_return_val_if_fail (EMPATHY_IS_DISPATCH_OPERATION (operation), NULL);
+
+  priv = GET_PRIV (operation);
 
   return tp_channel_get_channel_type (priv->channel);
 }
@@ -533,7 +562,11 @@ GQuark
 empathy_dispatch_operation_get_channel_type_id (
   EmpathyDispatchOperation *operation)
 {
-  EmpathyDispatchOperationPriv *priv = GET_PRIV (operation);
+  EmpathyDispatchOperationPriv *priv;
+
+  g_return_val_if_fail (EMPATHY_IS_DISPATCH_OPERATION (operation), 0);
+
+  priv = GET_PRIV (operation);
 
   return tp_channel_get_channel_type_id (priv->channel);
 }
@@ -542,7 +575,11 @@ const gchar *
 empathy_dispatch_operation_get_object_path (
   EmpathyDispatchOperation *operation)
 {
-  EmpathyDispatchOperationPriv *priv = GET_PRIV (operation);
+  EmpathyDispatchOperationPriv *priv;
+
+  g_return_val_if_fail (EMPATHY_IS_DISPATCH_OPERATION (operation), NULL);
+
+  priv = GET_PRIV (operation);
 
   return tp_proxy_get_object_path (TP_PROXY (priv->channel));
 }
@@ -550,7 +587,12 @@ empathy_dispatch_operation_get_object_path (
 EmpathyDispatchOperationState
 empathy_dispatch_operation_get_status (EmpathyDispatchOperation *operation)
 {
-  EmpathyDispatchOperationPriv *priv = GET_PRIV (operation);
+  EmpathyDispatchOperationPriv *priv;
+
+  g_return_val_if_fail (EMPATHY_IS_DISPATCH_OPERATION (operation),
+    EMPATHY_DISPATCHER_OPERATION_STATE_PREPARING);
+
+  priv = GET_PRIV (operation);
 
   return priv->status;
 }
@@ -558,7 +600,11 @@ empathy_dispatch_operation_get_status (EmpathyDispatchOperation *operation)
 gboolean
 empathy_dispatch_operation_is_incoming (EmpathyDispatchOperation *operation)
 {
-  EmpathyDispatchOperationPriv *priv = GET_PRIV (operation);
+  EmpathyDispatchOperationPriv *priv;
+
+  g_return_val_if_fail (EMPATHY_IS_DISPATCH_OPERATION (operation), FALSE);
+
+  priv = GET_PRIV (operation);
 
   return priv->incoming;
 }
