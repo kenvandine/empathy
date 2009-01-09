@@ -475,11 +475,17 @@ empathy_dispatch_operation_approve (EmpathyDispatchOperation *operation)
 
       g_signal_emit (operation, signals[APPROVED], 0);
     }
-  else
+  else if (priv->status < EMPATHY_DISPATCHER_OPERATION_STATE_APPROVING)
     {
       DEBUG ("Pre-approving operation %s",
         empathy_dispatch_operation_get_object_path (operation));
       priv->approved = TRUE;
+    }
+  else
+    {
+      DEBUG (
+        "Ignoring approval for %s as it's already past the approval stage",
+        empathy_dispatch_operation_get_object_path (operation));
     }
 }
 
