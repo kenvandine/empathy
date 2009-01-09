@@ -28,6 +28,7 @@ libempathy_la_SOURCES =					\
 	empathy-contact-monitor.c			\
 	empathy-debug.c					\
 	empathy-dispatcher.c				\
+	empathy-dispatch-operation.c				\
 	empathy-idle.c					\
 	empathy-irc-network.c				\
 	empathy-irc-network-manager.c			\
@@ -71,6 +72,7 @@ libempathy_headers =				\
 	empathy-contact-monitor.h		\
 	empathy-debug.h				\
 	empathy-dispatcher.h			\
+	empathy-dispatch-operation.h	\
 	empathy-idle.h				\
 	empathy-irc-network.h			\
 	empathy-irc-network-manager.h		\

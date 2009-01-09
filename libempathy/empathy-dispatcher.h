@@ -28,6 +28,7 @@
 #include <telepathy-glib/channel.h>
 
 #include "empathy-contact.h"
+#include "empathy-dispatch-operation.h"
 
 G_BEGIN_DECLS
 
@@ -58,23 +59,40 @@ typedef struct {
 	gboolean        activatable;
 } EmpathyDispatcherTube;
 
-GType                  empathy_dispatcher_get_type             (void) G_GNUC_CONST;
-EmpathyDispatcher *    empathy_dispatcher_new                  (void);
-void                   empathy_dispatcher_channel_process      (EmpathyDispatcher     *dispatcher,
-								TpChannel             *channel);
+
+/* Will be called when the channel is ready for dispatching. The requestor
+ * handle the channel itself by calling empathy_dispatch_operation_handles */
+typedef void (EmpathyDispatcherRequestCb) (
+  EmpathyDispatchOperation *dispatch,  const GError *error,
+  gpointer user_data);
+
+GType empathy_dispatcher_get_type             (void) G_GNUC_CONST;
+
+void empathy_dispatcher_call_with_contact (EmpathyContact *contact,
+  EmpathyDispatcherRequestCb *callback, gpointer user_data);
+void empathy_dispatcher_call_with_contact_id (McAccount *account,
+  const gchar           *contact_id, EmpathyDispatcherRequestCb *callback,
+  gpointer user_data);
+
+void empathy_dispatcher_chat_with_contact_id (McAccount *account,
+  const gchar *contact_id, EmpathyDispatcherRequestCb *callback,
+  gpointer user_data);
+void  empathy_dispatcher_chat_with_contact (EmpathyContact *contact,
+  EmpathyDispatcherRequestCb *callback, gpointer user_data);
+
+/* Get the dispatcher singleton */
+EmpathyDispatcher *    empathy_get_dispatcher (void);
 GType                  empathy_dispatcher_tube_get_type        (void);
+
+
+void  empathy_dispatcher_send_file            (EmpathyContact        *contact,
+								GFile                 *gfile);
+
+/* tube stuff */
 EmpathyDispatcherTube *empathy_dispatcher_tube_ref             (EmpathyDispatcherTube *tube);
 void                   empathy_dispatcher_tube_unref           (EmpathyDispatcherTube *tube);
 void                   empathy_dispatcher_tube_process         (EmpathyDispatcher     *dispatcher,
-								EmpathyDispatcherTube *tube);
-void                   empathy_dispatcher_call_with_contact    (EmpathyContact        *contact);
-void                   empathy_dispatcher_call_with_contact_id (McAccount             *account,
-								const gchar           *contact_id);
-void                   empathy_dispatcher_chat_with_contact_id (McAccount             *account,
-								const gchar           *contact_id);
-void                   empathy_dispatcher_chat_with_contact    (EmpathyContact        *contact);
-void                   empathy_dispatcher_send_file            (EmpathyContact        *contact,
-								GFile                 *gfile);
+								EmpathyDispatcherTube *etube);
 
 G_END_DECLS
 
