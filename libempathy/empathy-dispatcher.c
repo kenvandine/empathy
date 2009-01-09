@@ -795,6 +795,8 @@ dispatcher_update_account (EmpathyDispatcher *dispatcher, McAccount *account)
 
   tp_connection_call_when_ready (connection, dispatcher_connection_ready_cb,
     dispatcher);
+
+  g_object_unref (connection);
 }
 
 static void
