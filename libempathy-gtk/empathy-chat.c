@@ -184,17 +184,17 @@ chat_connection_changed_cb (EmpathyAccountManager *manager,
 		DEBUG ("Account reconnected, request a new Text channel");
 
 		switch (priv->handle_type) {
-				case TP_HANDLE_TYPE_CONTACT:
-					empathy_dispatcher_chat_with_contact_id (account, unique_name,
-						NULL, NULL);
-					break;
-				case TP_HANDLE_TYPE_ROOM:
-					empathy_dispatcher_join_muc (account, unique_name, NULL, NULL);
-					break;
-				default:
-					g_assert_not_reached ();
-					break;
-			}
+			case TP_HANDLE_TYPE_CONTACT:
+				empathy_dispatcher_chat_with_contact_id (account, priv->id,
+					NULL, NULL);
+				break;
+			case TP_HANDLE_TYPE_ROOM:
+				empathy_dispatcher_join_muc (account, priv->id, NULL, NULL);
+				break;
+			default:
+				g_assert_not_reached ();
+				break;
+		}
 	}
 }
 
@@ -454,7 +454,7 @@ chat_state_changed_cb (EmpathyTpChat      *tp_chat,
 }
 
 static void
-chat_message_received (EmpathyChat  *chat, EmpathyMessage *message)
+chat_message_received (EmpathyChat *chat, EmpathyMessage *message)
 {
 	EmpathyChatPriv *priv = GET_PRIV (chat);
 	EmpathyContact  *sender;
@@ -1251,22 +1251,20 @@ chat_destroy_cb (EmpathyTpChat *tp_chat,
 }
 
 static void
-show_pending_messages (EmpathyChat *chat)
-{
-  EmpathyChatPriv *priv = GET_PRIV (chat);
-  const GList *messages, *l;
+show_pending_messages (EmpathyChat *chat) {
+	EmpathyChatPriv *priv = GET_PRIV (chat);
+	const GList *messages, *l;
 
-  if (chat->view == NULL || priv->tp_chat == NULL)
-    return;
+	if (chat->view == NULL || priv->tp_chat == NULL)
+		return;
 
-  messages = empathy_tp_chat_get_pending_messages (priv->tp_chat);
+	messages = empathy_tp_chat_get_pending_messages (priv->tp_chat);
 
-  for (l = messages; l != NULL ; l = g_list_next (l))
-    {
-      EmpathyMessage *message = EMPATHY_MESSAGE (l->data);
-      chat_message_received (chat, message);
-    }
-  empathy_tp_chat_acknowledge_messages (priv->tp_chat, messages);
+	for (l = messages; l != NULL ; l = g_list_next (l)) {
+		EmpathyMessage *message = EMPATHY_MESSAGE (l->data);
+		chat_message_received (chat, message);
+	}
+	empathy_tp_chat_acknowledge_messages (priv->tp_chat, messages);
 }
 
 static void
@@ -1360,7 +1358,7 @@ chat_create_ui (EmpathyChat *chat)
 	/* Add the main widget in the chat widget */
 	gtk_container_add (GTK_CONTAINER (chat), priv->widget);
 
-  show_pending_messages (chat);
+	show_pending_messages (chat);
 }
 
 static void
