@@ -51,15 +51,6 @@ struct _EmpathyDispatcherClass {
 	GObjectClass parent_class;
 };
 
-#define EMPATHY_TYPE_DISPATCHER_TUBE (empathy_dispatcher_tube_get_type ())
-typedef struct {
-	EmpathyContact *initiator;
-	TpChannel      *channel;
-	guint           id;
-	gboolean        activatable;
-} EmpathyDispatcherTube;
-
-
 /* Will be called when the channel is ready for dispatching. The requestor
  * handle the channel itself by calling empathy_dispatch_operation_handles */
 typedef void (EmpathyDispatcherRequestCb) (
@@ -92,7 +83,6 @@ void empathy_dispatcher_join_muc (McAccount *account,
 
 /* Get the dispatcher singleton */
 EmpathyDispatcher *    empathy_dispatcher_dup_singleton (void);
-GType                  empathy_dispatcher_tube_get_type        (void);
 
 G_END_DECLS
 

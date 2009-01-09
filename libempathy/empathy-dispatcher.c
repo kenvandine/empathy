@@ -72,15 +72,6 @@ static guint signals[LAST_SIGNAL];
 static EmpathyDispatcher *dispatcher = NULL;
 
 typedef struct {
-  EmpathyDispatcherTube  public;
-  EmpathyContactFactory *factory;
-  gchar                 *bus_name;
-  gchar                 *object_path;
-  guint                  ref_count;
-  gboolean               handled;
-} DispatcherTube;
-
-typedef struct {
   EmpathyDispatcher *dispatcher;
   EmpathyDispatchOperation *operation;
   TpConnection *connection;
