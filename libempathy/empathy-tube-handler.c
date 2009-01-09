@@ -59,7 +59,6 @@ typedef struct
   gchar *channel;
   guint handle_type;
   guint handle;
-  guint id;
 } IdleData;
 
 static gboolean
@@ -104,7 +103,6 @@ tube_handler_handle_tube (EmpSvcTubeHandler *self,
                           const gchar *channel,
                           guint handle_type,
                           guint handle,
-                          guint id,
                           DBusGMethodInvocation *context)
 {
   EmpathyTubeHandler *thandler = EMPATHY_TUBE_HANDLER (self);
@@ -117,7 +115,6 @@ tube_handler_handle_tube (EmpSvcTubeHandler *self,
   data->channel = g_strdup (channel);
   data->handle_type = handle_type;
   data->handle = handle;
-  data->id = id;
 
   g_idle_add_full (G_PRIORITY_HIGH, tube_handler_handle_tube_idle_cb,
       data, NULL);
