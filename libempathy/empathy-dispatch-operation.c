@@ -26,6 +26,7 @@
 #include <libempathy/empathy-enum-types.h>
 #include <libempathy/empathy-tp-chat.h>
 #include <libempathy/empathy-tp-call.h>
+#include <libempathy/empathy-tp-file.h>
 
 #include "empathy-marshal.h"
 
@@ -358,6 +359,11 @@ empathy_dispatch_operation_channel_ready_cb (TpChannel *channel,
     {
        EmpathyTpCall *call = empathy_tp_call_new (channel);
        priv->channel_wrapper = G_OBJECT (call);
+    }
+  else if (channel_type == EMP_IFACE_QUARK_CHANNEL_TYPE_FILE_TRANSFER)
+    {
+       EmpathyTpFile *file = empathy_tp_file_new (channel);
+       priv->channel_wrapper = G_OBJECT (file);
     }
 
 out:
