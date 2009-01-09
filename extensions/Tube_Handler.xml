@@ -42,11 +42,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.</
         <tp:docstring>The handle that the channel communicates with,
           or 0 if there is no associated handle</tp:docstring>
       </arg>
-      <arg direction="in" type="u" tp:type="Tube_ID" name="id">
-        <tp:docstring>
-        The ID of the new tube.
-        </tp:docstring>
-      </arg>
       <tp:docstring>
         Called when a tube handler should handle a new tube within a tubes channel.
       </tp:docstring>
