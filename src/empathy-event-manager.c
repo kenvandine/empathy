@@ -381,7 +381,6 @@ event_manager_approve_channel_cb (EmpathyDispatcher *dispatcher,
 
       g_signal_connect (tp_chat, "message-received",
         G_CALLBACK (event_manager_chat_message_received_cb), approval);
-      g_object_unref (G_OBJECT (tp_chat));
 
     }
   else if (!tp_strdiff (channel_type, TP_IFACE_CHANNEL_TYPE_STREAMED_MEDIA))
@@ -430,7 +429,6 @@ event_manager_approve_channel_cb (EmpathyDispatcher *dispatcher,
       event_manager_add (manager, contact, EMPATHY_IMAGE_DOCUMENT_SEND,
         msg, approval, event_channel_process_func, NULL);
 
-      g_object_unref (channel);
       g_object_unref (factory);
       g_object_unref (account);
     }
@@ -461,7 +459,6 @@ event_manager_approve_channel_cb (EmpathyDispatcher *dispatcher,
         EMPATHY_CONTACT_READY_NAME, event_manager_tube_got_contact_name_cb,
         approval);
 
-      g_object_unref (channel);
       g_object_unref (factory);
       g_object_unref (account);
     }

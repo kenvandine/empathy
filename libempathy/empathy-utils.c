@@ -470,8 +470,6 @@ empathy_call_request_cb (EmpathyDispatchOperation *operation,
           empathy_dispatch_operation_get_channel_wrapper (operation));
 
       empathy_tp_call_to (call, contact);
-
-      g_object_unref (call);
     }
 
   g_object_unref (contact);

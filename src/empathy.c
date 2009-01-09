@@ -102,7 +102,6 @@ dispatch_cb (EmpathyDispatcher *dispatcher,
 		}
 
 		empathy_chat_window_present_chat (chat);
-		g_object_unref (tp_chat);
 
 		empathy_dispatch_operation_claim (operation);
 	} else if (channel_type == TP_IFACE_QUARK_CHANNEL_TYPE_STREAMED_MEDIA) {
@@ -114,11 +113,7 @@ dispatch_cb (EmpathyDispatcher *dispatcher,
 		empathy_dispatch_operation_claim (operation);
 
 		empathy_call_window_new (call);
-
-		g_object_unref (call);
-
-	}
-	else if (channel_type == EMP_IFACE_QUARK_CHANNEL_TYPE_FILE_TRANSFER) {
+	} else if (channel_type == EMP_IFACE_QUARK_CHANNEL_TYPE_FILE_TRANSFER) {
 		EmpathyFTManager *ft_manager;
 		EmpathyTpFile    *tp_file;
 
@@ -126,7 +121,6 @@ dispatch_cb (EmpathyDispatcher *dispatcher,
 		tp_file = EMPATHY_TP_FILE (
 			empathy_dispatch_operation_get_channel_wrapper (operation));
 		empathy_ft_manager_add_tp_file (ft_manager, tp_file);
-		g_object_unref (tp_file);
 		empathy_dispatch_operation_claim (operation);
 	}
 }

@@ -118,8 +118,8 @@ static DispatchData *
 new_dispatch_data (TpChannel *channel, GObject *channel_wrapper)
 {
   DispatchData *d = g_slice_new0 (DispatchData);
-  d->channel = channel;
-  d->channel_wrapper = channel_wrapper;
+  d->channel = g_object_ref (channel);
+  d->channel_wrapper = g_object_ref (channel_wrapper);
 
   return d;
 }

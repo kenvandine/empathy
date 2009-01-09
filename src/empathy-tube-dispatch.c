@@ -161,8 +161,6 @@ empathy_tube_dispatch_constructed (GObject *object)
   tp_cli_dbus_daemon_call_name_has_owner (priv->dbus, -1, priv->bus_name,
     empathy_tube_dispatch_name_has_owner_cb, NULL, NULL, G_OBJECT (self));
 
-
-  g_object_unref (channel);
   return;
 
 failed:
@@ -359,7 +357,6 @@ empathy_tube_do_dispatch (EmpathyTubeDispatch *self)
 
   channel = empathy_dispatch_operation_get_channel (priv->operation);
 
-
   /* Create the proxy for the tube handler */
   thandler = g_object_new (TP_TYPE_PROXY,
     "dbus-connection", tp_get_bus (),
@@ -382,7 +379,6 @@ empathy_tube_do_dispatch (EmpathyTubeDispatch *self)
     object_path, handle_type, handle,
     empathy_tube_dispatch_handle_tube_cb, NULL, NULL, G_OBJECT (self));
 
-  g_object_unref (channel);
   g_object_unref (thandler);
   g_object_unref (connection);
   g_free (object_path);
@@ -416,7 +412,6 @@ empathy_tube_dispatch_handle (EmpathyTubeDispatch *tube_dispatch)
       g_free (msg);
 
       tp_cli_channel_call_close (channel, -1, NULL, NULL, NULL, NULL);
-      g_object_unref (channel);
 
       goto done;
     }

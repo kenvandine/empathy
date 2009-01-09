@@ -1443,7 +1443,6 @@ file_manager_send_file_request_cb (EmpathyDispatchOperation *operation,
 	empathy_tp_file_offer (tp_file, file, NULL);
 
 	g_object_unref (file);
-	g_object_unref (tp_file);
 }
 
 static void

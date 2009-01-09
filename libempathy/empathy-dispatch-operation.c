@@ -526,7 +526,7 @@ empathy_dispatch_operation_get_channel (EmpathyDispatchOperation *operation)
 
   priv = GET_PRIV (operation);
 
-  return TP_CHANNEL (g_object_ref (priv->channel));
+  return priv->channel;
 }
 
 GObject *
@@ -538,9 +538,6 @@ empathy_dispatch_operation_get_channel_wrapper (
   g_return_val_if_fail (EMPATHY_IS_DISPATCH_OPERATION (operation), NULL);
 
   priv = GET_PRIV (operation);
-
-  if (priv->channel_wrapper != NULL)
-    g_object_ref (priv->channel_wrapper);
 
   return priv->channel_wrapper;
 }

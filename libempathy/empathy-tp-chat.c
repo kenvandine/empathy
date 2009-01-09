@@ -1053,7 +1053,7 @@ tp_chat_set_property (GObject      *object,
 
 	switch (param_id) {
 	case PROP_CHANNEL:
-		priv->channel = g_object_ref (g_value_get_object (value));
+		priv->channel = g_value_dup_object (value);
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
@@ -1187,6 +1187,7 @@ empathy_tp_chat_close (EmpathyTpChat *chat) {
 	   We loose the ordering of sent messages though */
 	g_signal_handlers_disconnect_by_func (priv->channel,
 		tp_chat_invalidated_cb, chat);
+
 	tp_cli_channel_call_close (priv->channel, -1, tp_chat_async_cb,
 		"closing channel", NULL, NULL);
 

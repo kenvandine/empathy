@@ -701,7 +701,7 @@ chatroom_manager_observe_channel_cb (EmpathyDispatcher *dispatcher,
   tp_channel_get_handle (channel, &handle_type);
 
   if (handle_type != TP_HANDLE_TYPE_ROOM)
-    goto out;
+    return;
 
   chat = EMPATHY_TP_CHAT (
     empathy_dispatch_operation_get_channel_wrapper (operation));
@@ -724,10 +724,6 @@ chatroom_manager_observe_channel_cb (EmpathyDispatcher *dispatcher,
   g_signal_connect (chat, "destroy",
     G_CALLBACK (chatroom_manager_chat_destroyed_cb),
     manager);
-
-  g_object_unref (chat);
-out:
-  g_object_unref (channel);
 }
 
 void
