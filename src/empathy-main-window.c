@@ -31,6 +31,7 @@
 #include <libempathy/empathy-contact.h>
 #include <libempathy/empathy-utils.h>
 #include <libempathy/empathy-account-manager.h>
+#include <libempathy/empathy-dispatcher.h>
 #include <libempathy/empathy-chatroom-manager.h>
 #include <libempathy/empathy-chatroom.h>
 #include <libempathy/empathy-contact-list.h>
@@ -48,6 +49,8 @@
 #include <libempathy-gtk/empathy-log-window.h>
 #include <libempathy-gtk/empathy-new-message-dialog.h>
 #include <libempathy-gtk/empathy-gtk-enum-types.h>
+
+#include <libmissioncontrol/mission-control.h>
 
 #include "empathy-accounts-dialog.h"
 #include "empathy-main-window.h"
@@ -843,25 +846,20 @@ main_window_favorite_chatroom_join (EmpathyChatroom *chatroom)
 {
 	MissionControl *mc;
 	McAccount      *account;
-	TpConnection   *connection;
 	const gchar    *room;
 
 	mc = empathy_mission_control_new ();
 	account = empathy_chatroom_get_account (chatroom);
 	room = empathy_chatroom_get_room (chatroom);
 
-	DEBUG ("Requesting channel for '%s'", room);
-
-	connection = mission_control_get_tpconnection (mc, account, NULL);
-	if (connection) {
-		tp_connection_run_until_ready (connection, TRUE, NULL, NULL);	
-		empathy_connection_request_channel (connection, -1,
-						    TP_IFACE_CHANNEL_TYPE_TEXT,
-						    TP_HANDLE_TYPE_ROOM,
-						    room, TRUE,
-						    NULL, NULL, NULL, NULL);
-		g_object_unref (connection);
+	 if (mission_control_get_connection_status (mc, account, NULL) !=
+			TP_CONNECTION_STATUS_CONNECTED) {
+		return;
 	}
+
+	DEBUG ("Requesting channel for '%s'", room);
+	empathy_dispatcher_join_muc (account, room, NULL, NULL);
+
 	g_object_unref (mc);
 }
 

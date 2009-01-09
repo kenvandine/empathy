@@ -40,6 +40,7 @@
 #include <libempathy/empathy-log-manager.h>
 #include <libempathy/empathy-contact-list.h>
 #include <libempathy/empathy-utils.h>
+#include <libempathy/empathy-dispatcher.h>
 
 #include "empathy-chat.h"
 #include "empathy-conf.h"
@@ -179,21 +180,21 @@ chat_connection_changed_cb (EmpathyAccountManager *manager,
 	if (current == TP_CONNECTION_STATUS_CONNECTED && !priv->tp_chat &&
 	    empathy_account_equal (account, priv->account) &&
 	    priv->handle_type != TP_HANDLE_TYPE_NONE) {
-		TpConnection *connection;
-		MissionControl *mc;
-
+		
 		DEBUG ("Account reconnected, request a new Text channel");
 
-		mc = empathy_mission_control_new ();
-		connection = mission_control_get_tpconnection (mc, account, NULL);
-		tp_connection_run_until_ready (connection, FALSE, NULL, NULL);
-		empathy_connection_request_channel (connection, -1,
-						    TP_IFACE_CHANNEL_TYPE_TEXT,
-						    priv->handle_type,
-						    priv->id, TRUE,
-						    NULL, NULL, NULL, NULL);
-		g_object_unref (connection);
-		g_object_unref (mc);
+		switch (priv->handle_type) {
+				case TP_HANDLE_TYPE_CONTACT:
+					empathy_dispatcher_chat_with_contact_id (account, unique_name,
+						NULL, NULL);
+					break;
+				case TP_HANDLE_TYPE_ROOM:
+					empathy_dispatcher_join_muc (account, unique_name, NULL, NULL);
+					break;
+				default:
+					g_assert_not_reached ();
+					break;
+			}
 	}
 }
 

@@ -39,6 +39,7 @@
 #include <libempathy/empathy-tp-roomlist.h>
 #include <libempathy/empathy-chatroom.h>
 #include <libempathy/empathy-utils.h>
+#include <libempathy/empathy-dispatcher.h>
 
 #include <libempathy-gtk/empathy-account-chooser.h>
 #include <libempathy-gtk/empathy-ui-utils.h>
@@ -489,8 +490,6 @@ new_chatroom_dialog_join (EmpathyNewChatroomDialog *dialog)
 {
 	EmpathyAccountChooser *account_chooser;
 	McAccount             *account;
-	MissionControl        *mc;
-	TpConnection          *connection;
 	const gchar           *room;
 	const gchar           *server = NULL;
 	gchar                 *room_name = NULL;
@@ -508,18 +507,9 @@ new_chatroom_dialog_join (EmpathyNewChatroomDialog *dialog)
 	}
 
 	DEBUG ("Requesting channel for '%s'", room_name);
+	empathy_dispatcher_join_muc (account, room_name, NULL, NULL);
 
-	mc = empathy_mission_control_new ();
-	connection = mission_control_get_tpconnection (mc, account, NULL);
-	tp_connection_run_until_ready (connection, TRUE, NULL, NULL);	
-	empathy_connection_request_channel (connection, -1,
-					    TP_IFACE_CHANNEL_TYPE_TEXT,
-					    TP_HANDLE_TYPE_ROOM,
-					    room_name, TRUE,
-					    NULL, NULL, NULL, NULL);
 	g_free (room_name);
-	g_object_unref (connection);
-	g_object_unref (mc);
 }
 
 static void
