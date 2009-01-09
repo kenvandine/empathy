@@ -68,34 +68,34 @@ typedef void (EmpathyDispatcherRequestCb) (
 
 GType empathy_dispatcher_get_type             (void) G_GNUC_CONST;
 
+/* Requesting 1 to 1 stream media channels */
 void empathy_dispatcher_call_with_contact (EmpathyContact *contact,
   EmpathyDispatcherRequestCb *callback, gpointer user_data);
 void empathy_dispatcher_call_with_contact_id (McAccount *account,
   const gchar           *contact_id, EmpathyDispatcherRequestCb *callback,
   gpointer user_data);
 
+/* Requesting 1 to 1 text channels */
 void empathy_dispatcher_chat_with_contact_id (McAccount *account,
   const gchar *contact_id, EmpathyDispatcherRequestCb *callback,
   gpointer user_data);
 void  empathy_dispatcher_chat_with_contact (EmpathyContact *contact,
   EmpathyDispatcherRequestCb *callback, gpointer user_data);
 
-void empathy_dispatcher_chat_with_contact_id (McAccount *account,
-  const gchar *contact_id, EmpathyDispatcherRequestCb *callback,
-  gpointer user_data);
-void  empathy_dispatcher_chat_with_contact (EmpathyContact *contact,
-  EmpathyDispatcherRequestCb *callback, gpointer user_data);
-
+/* Request a file channel to a specific contact */
 void empathy_dispatcher_send_file_to_contact (EmpathyContact *contact,
   const gchar *filename, guint64 size, guint64 date,
   const gchar *content_type, EmpathyDispatcherRequestCb *callback,
   gpointer user_data);
 
+/* Request a muc channel */
+void empathy_dispatcher_join_muc (McAccount *account,
+  const gchar *roomname, EmpathyDispatcherRequestCb *callback,
+  gpointer user_data);
 
 /* Get the dispatcher singleton */
 EmpathyDispatcher *    empathy_get_dispatcher (void);
 GType                  empathy_dispatcher_tube_get_type        (void);
-
 
 /* tube stuff */
 EmpathyDispatcherTube *empathy_dispatcher_tube_ref             (EmpathyDispatcherTube *tube);

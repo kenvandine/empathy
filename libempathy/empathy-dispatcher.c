@@ -1401,7 +1401,6 @@ dispatcher_connection_new_requested_channel (EmpathyDispatcher *dispatcher,
 out:
   dispatcher_flush_outstanding_operations (request_data->dispatcher,
     conn_data);
-
 }
 
 static void
@@ -1432,18 +1431,24 @@ empathy_dispatcher_call_with_contact_id (McAccount *account,
 }
 
 static void
-dispatcher_chat_with_contact_cb (EmpathyContact *contact, gpointer user_data)
+dispatcher_request_channel (DispatcherRequestData *request_data)
 {
-  DispatcherRequestData *request_data = (DispatcherRequestData *) user_data;
-
-  request_data->handle = empathy_contact_get_handle (contact);
-
   tp_cli_connection_call_request_channel (request_data->connection, -1,
     request_data->channel_type,
     request_data->handle_type,
     request_data->handle,
     TRUE, dispatcher_request_channel_cb,
     request_data, NULL, G_OBJECT (request_data->dispatcher));
+}
+
+static void
+dispatcher_chat_with_contact_cb (EmpathyContact *contact, gpointer user_data)
+{
+  DispatcherRequestData *request_data = (DispatcherRequestData *) user_data;
+
+  request_data->handle = empathy_contact_get_handle (contact);
+
+  dispatcher_request_channel (request_data);
 }
 
 void
@@ -1488,6 +1493,66 @@ empathy_dispatcher_chat_with_contact_id (McAccount *account, const gchar
 
   g_object_unref (contact);
   g_object_unref (factory);
+  g_object_unref (dispatcher);
+}
+
+
+static void
+dispatcher_request_handles_cb (TpConnection *connection,
+   const GArray *handles, const GError *error, gpointer user_data,
+   GObject *object)
+{
+  DispatcherRequestData *request_data = (DispatcherRequestData *) user_data;
+
+  if (error != NULL)
+    {
+      EmpathyDispatcher *dispatcher = EMPATHY_DISPATCHER (object);
+      EmpathyDispatcherPriv *priv = GET_PRIV (dispatcher);
+      ConnectionData *cd;
+
+      cd = g_hash_table_lookup (priv->connections, request_data->connection);
+
+      if (request_data->cb)
+        request_data->cb (NULL, error, request_data->user_data);
+
+      cd->outstanding_requests = g_list_remove (cd->outstanding_requests,
+        request_data);
+
+      free_dispatcher_request_data (request_data);
+
+      dispatcher_flush_outstanding_operations (dispatcher, cd);
+      return;
+    }
+
+  request_data->handle = g_array_index (handles, guint, 0);
+  dispatcher_request_channel (request_data);
+}
+
+void
+empathy_dispatcher_join_muc (McAccount *account, const gchar *roomname,
+  EmpathyDispatcherRequestCb *callback, gpointer user_data)
+{
+  EmpathyDispatcher *dispatcher = empathy_get_dispatcher();
+  EmpathyDispatcherPriv *priv = GET_PRIV (dispatcher);
+  DispatcherRequestData *request_data;
+  TpConnection *connection = g_hash_table_lookup (priv->accounts, account);
+  ConnectionData *connection_data =
+    g_hash_table_lookup (priv->connections, connection);
+  const gchar *names[] = { roomname, NULL };
+
+  /* Don't know the room handle yet */
+  request_data  = new_dispatcher_request_data (dispatcher, connection,
+    TP_IFACE_CHANNEL_TYPE_TEXT, TP_HANDLE_TYPE_ROOM, 0, NULL,
+    NULL, callback, user_data);
+
+  connection_data->outstanding_requests = g_list_prepend
+    (connection_data->outstanding_requests, request_data);
+
+  tp_cli_connection_call_request_handles (connection, -1,
+    TP_HANDLE_TYPE_ROOM, names,
+    dispatcher_request_handles_cb, request_data, NULL,
+    G_OBJECT (dispatcher));
+
   g_object_unref (dispatcher);
 }
 
