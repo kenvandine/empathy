@@ -50,8 +50,8 @@
 typedef struct {
   EmpathyEventManager *manager;
   EmpathyDispatchOperation *operation;
-  guint approved_handler;
-  guint claimed_handler;
+  gulong approved_handler;
+  gulong claimed_handler;
   /* Remove contact if applicable */
   EmpathyContact *contact;
   /* Tube dispatcher if applicable */
