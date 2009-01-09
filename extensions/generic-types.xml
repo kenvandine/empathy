@@ -53,6 +53,14 @@
       with dbus-glib)</tp:docstring>
   </tp:simple-type>
 
+  <tp:struct name="DBus_Tube_Member" array-name="DBus_Tube_Member_List">
+     <tp:docstring>A struct (handle, unique name) representing a participant
+       in a D-Bus tube, as returned by GetDBusNames on the Tubes channel
+       type, and as seen in the DBusNamesChanged signal.</tp:docstring>
+     <tp:member type="u" tp:type="Contact_Handle" name="Handle"/>
+     <tp:member type="s" tp:type="DBus_Unique_Name" name="Unique_Name"/>
+  </tp:struct>
+
   <tp:simple-type name="DBus_Member" type="s">
     <tp:docstring>An ASCII string representing a D-Bus method, signal
       or property name - a non-empty string of ASCII letters, digits and
