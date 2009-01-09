@@ -503,10 +503,7 @@ tp_call_finalize (GObject *object)
 
   if (priv->channel != NULL)
     {
-      g_signal_handlers_disconnect_by_func (priv->channel,
-          tp_call_channel_invalidated_cb, object);
-      tp_call_close_channel (EMPATHY_TP_CALL (object));
-      g_object_unref (priv->channel);
+      empathy_tp_call_close (EMPATHY_TP_CALL (object));
     }
 
   if (priv->stream_engine != NULL)
@@ -663,6 +660,20 @@ empathy_tp_call_accept_incoming_call (EmpathyTpCall *call)
   self_contact = empathy_tp_group_get_self_contact (priv->group);
   empathy_tp_group_add_member (priv->group, self_contact, NULL);
   g_object_unref (self_contact);
+}
+
+void
+empathy_tp_call_close (EmpathyTpCall *call)
+{
+  EmpathyTpCallPriv *priv = GET_PRIV (call);
+
+  g_signal_handlers_disconnect_by_func (priv->channel,
+    tp_call_channel_invalidated_cb, call);
+
+  tp_call_close_channel (call);
+
+  g_object_unref (priv->channel);
+  priv->channel = NULL;
 }
 
 void

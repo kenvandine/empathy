@@ -71,6 +71,7 @@ typedef struct
 
 GType empathy_tp_call_get_type (void) G_GNUC_CONST;
 EmpathyTpCall *empathy_tp_call_new (TpChannel *channel);
+void empathy_tp_call_close (EmpathyTpCall *call);
 
 void empathy_tp_call_accept_incoming_call (EmpathyTpCall *call);
 void empathy_tp_call_request_video_stream_direction (EmpathyTpCall *call,
