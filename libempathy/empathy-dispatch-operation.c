@@ -370,6 +370,10 @@ empathy_dispatch_operation_channel_ready_cb (TpChannel *channel,
   EmpathyDispatchOperationPriv *priv = GET_PRIV (self);
   GQuark channel_type;
 
+  /* The error will be handled in empathy_dispatch_operation_invalidated */
+  if (error != NULL)
+    return;
+
   g_assert (channel == priv->channel);
 
   /* If the channel wrapper is defined, we assume it's ready */
