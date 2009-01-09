@@ -13,8 +13,10 @@ python /usr/share/pygobject/2.0/codegen/h2def.py	\
 	empathy-contact-groups.h		\
 	empathy-contact-list.h			\
 	empathy-contact-manager.h		\
+	empathy-contact-monitor.h		\
 	empathy-debug.h				\
 	empathy-dispatcher.h			\
+	empathy-dispatch-operation.h		\
 	empathy-idle.h				\
 	empathy-irc-network.h			\
 	empathy-irc-network-manager.h		\
@@ -32,6 +34,7 @@ python /usr/share/pygobject/2.0/codegen/h2def.py	\
 	empathy-tp-roomlist.h			\
 	empathy-tp-tube.h			\
 	empathy-tube-handler.h			\
+	empathy-types.h				\
 	empathy-utils.h				\
  > ../python/pyempathy/pyempathy.defs
 

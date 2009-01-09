@@ -49,6 +49,20 @@
   (gtype-id "EMPATHY_TYPE_CONTACT_MANAGER")
 )
 
+(define-object ContactMonitor
+  (in-module "Empathy")
+  (parent "GObject")
+  (c-name "EmpathyContactMonitor")
+  (gtype-id "EMPATHY_TYPE_CONTACT_MONITOR")
+)
+
+(define-object DispatchOperation
+  (in-module "Empathy")
+  (parent "GObject")
+  (c-name "EmpathyDispatchOperation")
+  (gtype-id "EMPATHY_TYPE_DISPATCH_OPERATION")
+)
+
 (define-object Dispatcher
   (in-module "Empathy")
   (parent "GObject")
@@ -203,6 +217,20 @@
     '("dispatcher" "EMPATHY_DEBUG_DISPATCHER")
     '("ft" "EMPATHY_DEBUG_FT")
     '("other" "EMPATHY_DEBUG_OTHER")
+  )
+)
+
+(define-enum DispatchOperationState
+  (in-module "Empathy")
+  (c-name "EmpathyDispatchOperationState")
+  (gtype-id "EMPATHY_TYPE_DISPATCH_OPERATION_STATE")
+  (values
+    '("preparing" "EMPATHY_DISPATCHER_OPERATION_STATE_PREPARING")
+    '("pending" "EMPATHY_DISPATCHER_OPERATION_STATE_PENDING")
+    '("approving" "EMPATHY_DISPATCHER_OPERATION_STATE_APPROVING")
+    '("dispatching" "EMPATHY_DISPATCHER_OPERATION_STATE_DISPATCHING")
+    '("claimed" "EMPATHY_DISPATCHER_OPERATION_STATE_CLAIMED")
+    '("invalidated" "EMPATHY_DISPATCHER_OPERATION_STATE_INVALIDATED")
   )
 )
 
@@ -976,6 +1004,32 @@
 
 
 
+;; From empathy-contact-monitor.h
+
+(define-function contact_monitor_get_type
+  (c-name "empathy_contact_monitor_get_type")
+  (return-type "GType")
+)
+
+(define-method set_iface
+  (of-object "EmpathyContactMonitor")
+  (c-name "empathy_contact_monitor_set_iface")
+  (return-type "none")
+  (parameters
+    '("EmpathyContactList*" "iface")
+  )
+)
+
+(define-function contact_monitor_new_for_iface
+  (c-name "empathy_contact_monitor_new_for_iface")
+  (return-type "EmpathyContactMonitor*")
+  (parameters
+    '("EmpathyContactList*" "iface")
+  )
+)
+
+
+
 ;; From empathy-debug.h
 
 (define-function debug_flag_is_set
@@ -1074,9 +1128,103 @@
   (return-type "EmpathyDispatcher*")
 )
 
-(define-function dispatcher_tube_get_type
-  (c-name "empathy_dispatcher_tube_get_type")
+
+
+;; From empathy-dispatch-operation.h
+
+(define-function dispatch_operation_get_type
+  (c-name "empathy_dispatch_operation_get_type")
   (return-type "GType")
+)
+
+(define-function dispatch_operation_new
+  (c-name "empathy_dispatch_operation_new")
+  (is-constructor-of "EmpathyDispatchOperation")
+  (return-type "EmpathyDispatchOperation*")
+  (parameters
+    '("TpConnection*" "connection")
+    '("TpChannel*" "channel")
+    '("EmpathyContact*" "contact")
+    '("gboolean" "incoming")
+  )
+)
+
+(define-function dispatch_operation_new_with_wrapper
+  (c-name "empathy_dispatch_operation_new_with_wrapper")
+  (return-type "EmpathyDispatchOperation*")
+  (parameters
+    '("TpConnection*" "connection")
+    '("TpChannel*" "channel")
+    '("EmpathyContact*" "contact")
+    '("gboolean" "incoming")
+    '("GObject*" "channel_wrapper")
+  )
+)
+
+(define-method start
+  (of-object "EmpathyDispatchOperation")
+  (c-name "empathy_dispatch_operation_start")
+  (return-type "none")
+)
+
+(define-method approve
+  (of-object "EmpathyDispatchOperation")
+  (c-name "empathy_dispatch_operation_approve")
+  (return-type "none")
+)
+
+(define-method claim
+  (of-object "EmpathyDispatchOperation")
+  (c-name "empathy_dispatch_operation_claim")
+  (return-type "gboolean")
+)
+
+(define-method get_channel
+  (of-object "EmpathyDispatchOperation")
+  (c-name "empathy_dispatch_operation_get_channel")
+  (return-type "TpChannel*")
+)
+
+(define-method get_channel_wrapper
+  (of-object "EmpathyDispatchOperation")
+  (c-name "empathy_dispatch_operation_get_channel_wrapper")
+  (return-type "GObject*")
+)
+
+(define-method get_tp_connection
+  (of-object "EmpathyDispatchOperation")
+  (c-name "empathy_dispatch_operation_get_tp_connection")
+  (return-type "TpConnection*")
+)
+
+(define-method get_channel_type
+  (of-object "EmpathyDispatchOperation")
+  (c-name "empathy_dispatch_operation_get_channel_type")
+  (return-type "const-gchar*")
+)
+
+(define-method get_channel_type_id
+  (of-object "EmpathyDispatchOperation")
+  (c-name "empathy_dispatch_operation_get_channel_type_id")
+  (return-type "GQuark")
+)
+
+(define-method get_object_path
+  (of-object "EmpathyDispatchOperation")
+  (c-name "empathy_dispatch_operation_get_object_path")
+  (return-type "const-gchar*")
+)
+
+(define-method get_status
+  (of-object "EmpathyDispatchOperation")
+  (c-name "empathy_dispatch_operation_get_status")
+  (return-type "EmpathyDispatchOperationState")
+)
+
+(define-method is_incoming
+  (of-object "EmpathyDispatchOperation")
+  (c-name "empathy_dispatch_operation_is_incoming")
+  (return-type "gboolean")
 )
 
 
@@ -2367,6 +2515,10 @@
     '("const-gchar*" "service")
   )
 )
+
+
+
+;; From empathy-types.h
 
 
 
