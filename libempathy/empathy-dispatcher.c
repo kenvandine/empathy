@@ -246,7 +246,7 @@ dispatcher_tubes_new_tube_cb (TpChannel   *channel,
 									  initiator);
 	g_object_unref (account);
 
-  DEBUG ("Looking for tube handler: %s", tube->bus_name);
+	DEBUG ("Looking for tube handler: %s", tube->bus_name);
 	/* Check if that bus-name has an owner, if it has one that means the
 	 * app is already running and we can directly give the channel. */
 	tp_cli_dbus_daemon_run_name_has_owner (daemon, -1, tube->bus_name,
@@ -260,7 +260,7 @@ dispatcher_tubes_new_tube_cb (TpChannel   *channel,
 		return;
 	}
 
-  DEBUG ("Tube handler is not running. Try to activate it");
+	DEBUG ("Tube handler is not running. Try to activate it");
 	/* Check if that bus-name is activatable, if not that means the
 	 * application needed to handle this tube isn't installed. */
 	if (!tp_cli_dbus_daemon_run_list_activatable_names (daemon, -1,
@@ -273,7 +273,7 @@ dispatcher_tubes_new_tube_cb (TpChannel   *channel,
 
 		for (name = names; *name; name++) {
 			if (!tp_strdiff (*name, tube->bus_name)) {
-        DEBUG ("Found tube handler");
+				DEBUG ("Found tube handler");
 				tube->public.activatable = TRUE;
 				break;
 			}
@@ -281,8 +281,8 @@ dispatcher_tubes_new_tube_cb (TpChannel   *channel,
 		g_strfreev (names);
 	}
 
-  if (!tube->public.activatable)
-    DEBUG ("Didn't find tube handler");
+	if (!tube->public.activatable)
+		DEBUG ("Didn't find tube handler");
 
 	g_signal_emit (dispatcher, signals[FILTER_TUBE], 0, tube);
 	empathy_dispatcher_tube_unref ((EmpathyDispatcherTube*) tube);
