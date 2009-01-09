@@ -478,7 +478,7 @@ tp_call_constructor (GType type,
   return object;
 }
 
-static void 
+static void
 tp_call_finalize (GObject *object)
 {
   EmpathyTpCallPriv *priv = GET_PRIV (object);
@@ -489,9 +489,18 @@ tp_call_finalize (GObject *object)
   g_slice_free (EmpathyTpCallStream, priv->video);
   g_object_unref (priv->group);
 
+  if (priv->group != NULL)
+    g_object_unref (priv->group);
+
+  priv->group = NULL;
+
   if (priv->channel != NULL)
     {
-      empathy_tp_call_close (EMPATHY_TP_CALL (object));
+      g_signal_handlers_disconnect_by_func (priv->channel,
+        tp_call_channel_invalidated_cb, object);
+
+      g_object_unref (priv->channel);
+      priv->channel = NULL;
     }
 
   if (priv->stream_engine != NULL)

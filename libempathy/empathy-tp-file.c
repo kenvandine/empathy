@@ -352,12 +352,10 @@ tp_file_finalize (GObject *object)
 
   if (tp_file->priv->channel)
     {
-      DEBUG ("Closing channel..");
       g_signal_handlers_disconnect_by_func (tp_file->priv->channel,
           tp_file_invalidated_cb, object);
-      tp_cli_channel_call_close (tp_file->priv->channel, -1, NULL, NULL,
-          NULL, NULL);
       g_object_unref (tp_file->priv->channel);
+      tp_file->priv->channel = NULL;
     }
 
   if (tp_file->priv->factory)
@@ -913,6 +911,7 @@ empathy_tp_file_cancel (EmpathyTpFile *tp_file)
 {
   g_return_if_fail (EMPATHY_IS_TP_FILE (tp_file));
 
+  DEBUG ("Closing channel..");
   tp_cli_channel_call_close (tp_file->priv->channel, -1,
     NULL, NULL, NULL, NULL);
 

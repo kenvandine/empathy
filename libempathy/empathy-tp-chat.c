@@ -896,7 +896,12 @@ tp_chat_dispose (GObject *object)
 	priv->dispose_has_run = TRUE;
 
 	if (priv->channel != NULL)
-		empathy_tp_chat_close (self);
+		{
+			g_signal_handlers_disconnect_by_func (priv->channel,
+				tp_chat_invalidated_cb, self);
+			g_object_unref (priv->channel);
+			priv->channel = NULL;
+		}
 
 	if (priv->remote_contact != NULL)
 		g_object_unref (priv->remote_contact);
