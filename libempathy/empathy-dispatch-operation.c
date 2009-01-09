@@ -391,7 +391,7 @@ empathy_dispatch_operation_channel_ready_cb (TpChannel *channel,
         {
           priv->ready_handler = g_signal_connect (chat, "notify::ready",
             G_CALLBACK (empathy_dispatcher_operation_tp_chat_ready_cb), self);
-          goto readying;
+          return;
         }
 
     }
@@ -410,8 +410,6 @@ empathy_dispatch_operation_channel_ready_cb (TpChannel *channel,
 ready:
   empathy_dispatch_operation_set_status (self,
     EMPATHY_DISPATCHER_OPERATION_STATE_PENDING);
-readying:
-  return;
 }
 
 EmpathyDispatchOperation *
