@@ -531,7 +531,7 @@ dispatcher_connection_new_channel (EmpathyDispatcher *dispatcher,
 
   if (handle_type == TP_CONN_HANDLE_TYPE_CONTACT)
     {
-      EmpathyContactFactory *factory = empathy_contact_factory_new ();
+      EmpathyContactFactory *factory = empathy_contact_factory_dup_singleton ();
       contact = empathy_contact_factory_get_from_handle (factory,
         cd->account, handle);
       g_object_unref (factory);

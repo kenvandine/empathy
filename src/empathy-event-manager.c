@@ -480,7 +480,7 @@ event_manager_approve_channel_cb (EmpathyDispatcher *dispatcher,
       if (handle_type != TP_HANDLE_TYPE_CONTACT)
         return;
 
-      factory = empathy_contact_factory_new ();
+      factory = empathy_contact_factory_dup_singleton ();
       account = empathy_channel_get_account (channel);
 
       contact = empathy_contact_factory_get_from_handle (factory, account,
