@@ -478,6 +478,16 @@ dispatcher_connection_new_channel (EmpathyDispatcher *dispatcher,
   ConnectionData *cd;
   EmpathyDispatchOperation *operation;
   EmpathyContact *contact = NULL;
+  int i;
+  /* Channel types we never want to dispatch because they're either deprecated
+   * or can't sensibly be dispatch (e.g. channels that should always be
+   * requested) */
+  const char *blacklist[] = {
+    TP_IFACE_CHANNEL_TYPE_CONTACT_LIST,
+    TP_IFACE_CHANNEL_TYPE_TUBES,
+    TP_IFACE_CHANNEL_TYPE_ROOM_LIST,
+    NULL
+  };
 
   cd = g_hash_table_lookup (priv->connections, connection);
 
@@ -495,8 +505,27 @@ dispatcher_connection_new_channel (EmpathyDispatcher *dispatcher,
   if (g_hash_table_lookup (cd->outstanding_channels, object_path) != NULL)
     return;
 
-  DEBUG ("New channel of type %s on %s",
-    channel_type, object_path);
+  /* Only pick up non-requested text channels. For all other it doesn't make
+   * sense to handle it if we didn't request it. The same goes for channels we
+   * discovered by the Channels property or ListChannels */
+  if (!incoming && tp_strdiff (channel_type, TP_IFACE_CHANNEL_TYPE_TEXT))
+    {
+      DEBUG ("Ignoring incoming channel of type %s on %s",
+        channel_type, object_path);
+      return;
+    }
+
+  for (i = 0 ; blacklist[i] != NULL; i++)
+    {
+      if (!tp_strdiff (channel_type, blacklist[i]))
+        {
+          DEBUG ("Ignoring blacklisted channel type %s on %s",
+            channel_type, object_path);
+          return;
+        }
+    }
+
+  DEBUG ("New channel of type %s on %s", channel_type, object_path);
 
   if (properties == NULL)
     channel = tp_channel_new (connection, object_path, channel_type,
