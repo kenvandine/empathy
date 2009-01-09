@@ -39,6 +39,9 @@
 #include "empathy-utils.h"
 #include "empathy-contact-factory.h"
 #include "empathy-contact-manager.h"
+#include "empathy-dispatcher.h"
+#include "empathy-dispatch-operation.h"
+#include "empathy-tp-call.h"
 
 #include <extensions/extensions.h>
 
@@ -447,4 +450,37 @@ empathy_proxy_equal (gconstpointer a,
 
 	return g_str_equal (proxy_a->object_path, proxy_b->object_path) &&
 	       g_str_equal (proxy_a->bus_name, proxy_b->bus_name);
+}
+
+static void
+empathy_call_request_cb (EmpathyDispatchOperation *operation,
+  const GError *error, gpointer user_data)
+{
+  EmpathyContact *contact = EMPATHY_CONTACT (user_data);
+
+  if (error != NULL)
+    {
+      DEBUG ("Failed to request streamed media channel %s",
+        error->message);
+    }
+  else
+    {
+      EmpathyTpCall *call =
+        EMPATHY_TP_CALL (
+          empathy_dispatch_operation_get_channel_wrapper (operation));
+
+      empathy_tp_call_to (call, contact);
+
+      g_object_unref (call);
+    }
+
+  g_object_unref (contact);
+}
+
+void
+empathy_start_call_with_contact (EmpathyContact *contact)
+{
+  g_object_ref (contact);
+  empathy_dispatcher_call_with_contact (contact, empathy_call_request_cb,
+    contact);
 }
