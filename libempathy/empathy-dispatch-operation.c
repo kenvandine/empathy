@@ -235,7 +235,7 @@ empathy_dispatch_operation_class_init (
       0,
       NULL, NULL,
       _empathy_marshal_VOID__UINT_INT_STRING,
-      G_TYPE_NONE, 0);
+      G_TYPE_NONE, 3, G_TYPE_UINT, G_TYPE_INT, G_TYPE_STRING);
 
   param_spec = g_param_spec_object ("connection",
     "connection", "The telepathy connection",
