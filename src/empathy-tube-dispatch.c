@@ -26,8 +26,13 @@
 #include <telepathy-glib/util.h>
 #include <telepathy-glib/proxy-subclass.h>
 
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
+
+
 #include <libempathy/empathy-tube-handler.h>
 #include <extensions/extensions.h>
+
 
 #include "empathy-tube-dispatch.h"
 #include "empathy-tube-dispatch-enumtypes.h"
@@ -54,6 +59,7 @@ struct _EmpathyTubeDispatchPriv
   gboolean dispose_has_run;
   EmpathyDispatchOperation *operation;
   EmpathyTubeDispatchAbility dispatchability;
+  gchar *service;
   gchar *bus_name;
   gchar *object_path;
   TpDBusDaemon *dbus;
@@ -142,7 +148,6 @@ empathy_tube_dispatch_constructed (GObject *object)
   service = tp_asv_get_string (properties,
     EMP_IFACE_CHANNEL_TYPE_STREAM_TUBE  ".Service");
 
-
   if (service == NULL)
     goto failed;
 
@@ -150,6 +155,8 @@ empathy_tube_dispatch_constructed (GObject *object)
     TP_TUBE_TYPE_STREAM, service);
   priv->object_path =
     empathy_tube_handler_build_object_path (TP_TUBE_TYPE_STREAM, service);
+
+  priv->service = g_strdup (service);
 
   tp_cli_dbus_daemon_call_name_has_owner (priv->dbus, -1, priv->bus_name,
     empathy_tube_dispatch_name_has_owner_cb, NULL, NULL, G_OBJECT (self));
@@ -270,6 +277,7 @@ empathy_tube_dispatch_finalize (GObject *object)
 
   g_free (priv->bus_name);
   g_free (priv->object_path);
+  g_free (priv->service);
 
   /* free any data held directly by the object here */
 
@@ -305,6 +313,40 @@ empathy_tube_dispatch_set_ability (EmpathyTubeDispatch *tube_dispatch,
 }
 
 static void
+empathy_tube_dispatch_show_error (EmpathyTubeDispatch *self, gchar *message)
+{
+  GtkWidget *dialog;
+
+  dialog = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL,
+      GTK_MESSAGE_WARNING, GTK_BUTTONS_CLOSE, message);
+
+  gtk_dialog_run (GTK_DIALOG (dialog));
+
+  gtk_widget_destroy (dialog);
+}
+
+static void
+empathy_tube_dispatch_handle_tube_cb (TpProxy *proxy, const GError *error,
+  gpointer user_data, GObject *object)
+{
+  EmpathyTubeDispatch *self = EMPATHY_TUBE_DISPATCH (object);
+  EmpathyTubeDispatchPriv *priv = GET_PRIV (self);
+
+  if (error != NULL)
+    {
+      gchar *msg = g_strdup_printf (
+        _("Unable to start application for service %s: %s"),
+          priv->service,  error->message);
+
+      empathy_tube_dispatch_show_error (self, msg);
+      g_free (msg);
+    }
+
+  /* Remove the ref we were holding because of the dispatching */
+  g_object_unref (object);
+}
+
+static void
 empathy_tube_do_dispatch (EmpathyTubeDispatch *self)
 {
   EmpathyTubeDispatchPriv *priv = GET_PRIV (self);
@@ -337,7 +379,8 @@ empathy_tube_do_dispatch (EmpathyTubeDispatch *self)
 
   emp_cli_tube_handler_call_handle_tube (thandler, -1,
     connection->bus_name, connection->object_path,
-    object_path, handle_type, handle, NULL, NULL, NULL, NULL);
+    object_path, handle_type, handle,
+    empathy_tube_dispatch_handle_tube_cb, NULL, NULL, G_OBJECT (self));
 
   g_object_unref (channel);
   g_object_unref (thandler);
@@ -359,16 +402,28 @@ empathy_tube_dispatch_handle (EmpathyTubeDispatch *tube_dispatch)
 
   if (priv->dispatchability != EMPATHY_TUBE_DISPATCHABILITY_POSSIBLE)
     {
-      TpChannel *channel = empathy_dispatch_operation_get_channel (
-        priv->operation);
+      gchar *msg;
+      TpChannel *channel;
+
+      channel = empathy_dispatch_operation_get_channel (priv->operation);
+
+      msg = g_strdup_printf (
+        _(" An invitation was offered for service %s, but you don't have the"
+          " needed application to handle it "), priv->service);
+
+      empathy_tube_dispatch_show_error (tube_dispatch, msg);
+
+      g_free (msg);
 
       tp_cli_channel_call_close (channel, -1, NULL, NULL, NULL, NULL);
-
       g_object_unref (channel);
+
       goto done;
     }
-
-  empathy_tube_do_dispatch (tube_dispatch);
+  else
+    {
+      empathy_tube_do_dispatch (tube_dispatch);
+    }
 
   return;
 done:
