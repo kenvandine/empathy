@@ -743,7 +743,7 @@ main_window_favorite_chatroom_menu_setup (EmpathyMainWindow *window)
 {
 	GList *chatrooms, *l;
 
-	window->chatroom_manager = empathy_chatroom_manager_new (NULL);
+	window->chatroom_manager = empathy_chatroom_manager_dup_singleton (NULL);
 	chatrooms = empathy_chatroom_manager_get_chatrooms (window->chatroom_manager, NULL);
 	window->room_menu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (window->room));
 

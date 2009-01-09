@@ -42,6 +42,8 @@
 #define CHATROOMS_DTD_FILENAME "empathy-chatroom-manager.dtd"
 #define SAVE_TIMER 4
 
+static EmpathyChatroomManager *chatroom_manager_singleton = NULL;
+
 #define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyChatroomManager)
 typedef struct {
 	GList      *chatrooms;
@@ -126,12 +128,18 @@ empathy_chatroom_manager_constructor (GType type,
   EmpathyChatroomManager *self;
   EmpathyChatroomManagerPriv *priv;
 
+  if (chatroom_manager_singleton != NULL)
+    return g_object_ref (chatroom_manager_singleton);
+
   /* Parent constructor chain */
   obj = G_OBJECT_CLASS (empathy_chatroom_manager_parent_class)->
         constructor (type, n_props, props);
 
   self = EMPATHY_CHATROOM_MANAGER (obj);
   priv = GET_PRIV (self);
+
+  chatroom_manager_singleton = self;
+  g_object_add_weak_pointer (obj, (gpointer *) &chatroom_manager_singleton);
 
   if (priv->file == NULL)
     {
@@ -247,21 +255,10 @@ chatroom_manager_finalize (GObject *object)
 }
 
 EmpathyChatroomManager *
-empathy_chatroom_manager_new (const gchar *file)
+empathy_chatroom_manager_dup_singleton (const gchar *file)
 {
-	static EmpathyChatroomManager *manager = NULL;
-
-	if (!manager) {
-		manager = g_object_new (EMPATHY_TYPE_CHATROOM_MANAGER,
-        "file", file,
-        NULL);
-	
-		g_object_add_weak_pointer (G_OBJECT (manager), (gpointer) &manager);
-	} else {
-		g_object_ref (manager);
-	}
-
-	return manager;
+	return EMPATHY_CHATROOM_MANAGER (g_object_new (EMPATHY_TYPE_CHATROOM_MANAGER,
+		"file", file, NULL));
 }
 
 static gboolean

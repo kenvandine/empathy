@@ -352,7 +352,7 @@ empathy_contact_invite_menu_item_new (EmpathyContact *contact)
 					      GTK_ICON_SIZE_MENU);
 	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
 
-	mgr = empathy_chatroom_manager_new (NULL);
+	mgr = empathy_chatroom_manager_dup_singleton (NULL);
 	rooms = empathy_chatroom_manager_get_chatrooms (mgr,
 		empathy_contact_get_account (contact));
 

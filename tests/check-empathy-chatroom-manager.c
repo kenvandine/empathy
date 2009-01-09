@@ -102,7 +102,7 @@ change_account_name_in_file (McAccount *account,
   return TRUE;
 }
 
-START_TEST (test_empathy_chatroom_manager_new)
+START_TEST (test_empathy_chatroom_manager_dup_singleton)
 {
   EmpathyChatroomManager *mgr;
   gchar *file;
@@ -121,7 +121,7 @@ START_TEST (test_empathy_chatroom_manager_new)
   if (!change_account_name_in_file (account, file))
     return;
 
-  mgr = empathy_chatroom_manager_new (file);
+  mgr = empathy_chatroom_manager_dup_singleton (file);
   check_chatrooms_list (mgr, account, chatrooms, 2);
 
   g_free (file);
@@ -152,7 +152,7 @@ START_TEST (test_empathy_chatroom_manager_add)
   if (!change_account_name_in_file (account, file))
     return;
 
-  mgr = empathy_chatroom_manager_new (file);
+  mgr = empathy_chatroom_manager_dup_singleton (file);
 
   /* add a favorite chatroom */
   chatroom = empathy_chatroom_new_full (account, "room3", "name3", FALSE);
@@ -164,7 +164,7 @@ START_TEST (test_empathy_chatroom_manager_add)
 
   /* reload chatrooms file */
   g_object_unref (mgr);
-  mgr = empathy_chatroom_manager_new (file);
+  mgr = empathy_chatroom_manager_dup_singleton (file);
 
   /* chatroom has been added to the XML file as it's a favorite */
   check_chatrooms_list (mgr, account, chatrooms, 3);
@@ -179,7 +179,7 @@ START_TEST (test_empathy_chatroom_manager_add)
 
   /* reload chatrooms file */
   g_object_unref (mgr);
-  mgr = empathy_chatroom_manager_new (file);
+  mgr = empathy_chatroom_manager_dup_singleton (file);
 
   /* chatrooms has not been added to the XML file */
   check_chatrooms_list (mgr, account, chatrooms, 3);
@@ -209,7 +209,7 @@ START_TEST (test_empathy_chatroom_manager_remove)
   if (!change_account_name_in_file (account, file))
     return;
 
-  mgr = empathy_chatroom_manager_new (file);
+  mgr = empathy_chatroom_manager_dup_singleton (file);
 
   /* remove room1 */
   chatroom = empathy_chatroom_manager_find (mgr, account, "room1");
@@ -220,7 +220,7 @@ START_TEST (test_empathy_chatroom_manager_remove)
 
   /* reload chatrooms file */
   g_object_unref (mgr);
-  mgr = empathy_chatroom_manager_new (file);
+  mgr = empathy_chatroom_manager_dup_singleton (file);
 
   check_chatrooms_list (mgr, account, chatrooms, 1);
 
@@ -234,7 +234,7 @@ START_TEST (test_empathy_chatroom_manager_remove)
 
   /* reload chatrooms file */
   g_object_unref (mgr);
-  mgr = empathy_chatroom_manager_new (file);
+  mgr = empathy_chatroom_manager_dup_singleton (file);
 
   check_chatrooms_list (mgr, account, chatrooms, 0);
 
@@ -264,7 +264,7 @@ START_TEST (test_empathy_chatroom_manager_change_favorite)
   if (!change_account_name_in_file (account, file))
     return;
 
-  mgr = empathy_chatroom_manager_new (file);
+  mgr = empathy_chatroom_manager_dup_singleton (file);
 
   /* room2 is not favorite anymore */
   chatroom = empathy_chatroom_manager_find (mgr, account, "room2");
@@ -275,7 +275,7 @@ START_TEST (test_empathy_chatroom_manager_change_favorite)
 
   /* reload chatrooms file */
   g_object_unref (mgr);
-  mgr = empathy_chatroom_manager_new (file);
+  mgr = empathy_chatroom_manager_dup_singleton (file);
 
   /* room2 is not present in the XML file anymore as it's not a favorite */
   check_chatrooms_list (mgr, account, chatrooms, 1);
@@ -294,7 +294,7 @@ START_TEST (test_empathy_chatroom_manager_change_favorite)
 
   /* reload chatrooms file */
   g_object_unref (mgr);
-  mgr = empathy_chatroom_manager_new (file);
+  mgr = empathy_chatroom_manager_dup_singleton (file);
 
   /* room2 is back in the XML file now */
   check_chatrooms_list (mgr, account, chatrooms, 2);
@@ -326,7 +326,7 @@ START_TEST (test_empathy_chatroom_manager_change_chatroom)
   if (!change_account_name_in_file (account, file))
     return;
 
-  mgr = empathy_chatroom_manager_new (file);
+  mgr = empathy_chatroom_manager_dup_singleton (file);
 
   check_chatrooms_list (mgr, account, chatrooms, 2);
 
@@ -337,7 +337,7 @@ START_TEST (test_empathy_chatroom_manager_change_chatroom)
 
   /* reload chatrooms file */
   g_object_unref (mgr);
-  mgr = empathy_chatroom_manager_new (file);
+  mgr = empathy_chatroom_manager_dup_singleton (file);
 
   chatrooms[1].name = "new_name";
   check_chatrooms_list (mgr, account, chatrooms, 2);
@@ -349,7 +349,7 @@ START_TEST (test_empathy_chatroom_manager_change_chatroom)
 
   /* reload chatrooms file */
   g_object_unref (mgr);
-  mgr = empathy_chatroom_manager_new (file);
+  mgr = empathy_chatroom_manager_dup_singleton (file);
 
   chatrooms[1].auto_connect = TRUE;
   check_chatrooms_list (mgr, account, chatrooms, 2);
@@ -361,7 +361,7 @@ START_TEST (test_empathy_chatroom_manager_change_chatroom)
 
   /* reload chatrooms file */
   g_object_unref (mgr);
-  mgr = empathy_chatroom_manager_new (file);
+  mgr = empathy_chatroom_manager_dup_singleton (file);
 
   chatrooms[1].room = "new_room";
   check_chatrooms_list (mgr, account, chatrooms, 2);
@@ -376,7 +376,7 @@ TCase *
 make_empathy_chatroom_manager_tcase (void)
 {
     TCase *tc = tcase_create ("empathy-chatroom-manager");
-    tcase_add_test (tc, test_empathy_chatroom_manager_new);
+    tcase_add_test (tc, test_empathy_chatroom_manager_dup_singleton);
     tcase_add_test (tc, test_empathy_chatroom_manager_add);
     tcase_add_test (tc, test_empathy_chatroom_manager_remove);
     tcase_add_test (tc, test_empathy_chatroom_manager_change_favorite);

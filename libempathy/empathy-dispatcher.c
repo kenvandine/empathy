@@ -898,7 +898,7 @@ empathy_dispatcher_init (EmpathyDispatcher *dispatcher)
   g_list_free (accounts);
 
   /* FIXME thisshould probably be created by another object.. */
-  priv->chatroom_mgr = empathy_chatroom_manager_new (NULL);
+  priv->chatroom_mgr = empathy_chatroom_manager_dup_singleton (NULL);
   empathy_chatroom_manager_observe (priv->chatroom_mgr, dispatcher);
 }
 

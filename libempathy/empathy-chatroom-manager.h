@@ -54,7 +54,7 @@ struct _EmpathyChatroomManagerClass {
 };
 
 GType                  empathy_chatroom_manager_get_type      (void) G_GNUC_CONST;
-EmpathyChatroomManager *empathy_chatroom_manager_new           (const gchar *file);
+EmpathyChatroomManager *empathy_chatroom_manager_dup_singleton (const gchar *file);
 gboolean               empathy_chatroom_manager_add           (EmpathyChatroomManager *manager,
 							      EmpathyChatroom        *chatroom);
 void                   empathy_chatroom_manager_remove        (EmpathyChatroomManager *manager,
