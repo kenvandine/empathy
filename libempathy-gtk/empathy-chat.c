@@ -968,7 +968,7 @@ chat_input_populate_popup_cb (GtkTextView *view,
 	gtk_menu_shell_prepend (GTK_MENU_SHELL (menu), item);
 	gtk_widget_show (item);
 
-	smiley_manager = empathy_smiley_manager_new ();
+	smiley_manager = empathy_smiley_manager_dup_singleton ();
 	smiley_menu = empathy_smiley_menu_new (smiley_manager,
 					       chat_insert_smiley_activate_cb,
 					       chat);

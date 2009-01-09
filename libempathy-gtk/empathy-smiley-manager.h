@@ -57,7 +57,7 @@ typedef void (*EmpathySmileyMenuFunc) (EmpathySmileyManager *manager,
 				       gpointer              user_data);
 
 GType                 empathy_smiley_manager_get_type        (void) G_GNUC_CONST;
-EmpathySmileyManager *empathy_smiley_manager_new             (void);
+EmpathySmileyManager *empathy_smiley_manager_dup_singleton   (void);
 void                  empathy_smiley_manager_load            (EmpathySmileyManager *manager);
 void                  empathy_smiley_manager_add             (EmpathySmileyManager *manager,
 							      const gchar          *icon_name,

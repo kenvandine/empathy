@@ -102,7 +102,7 @@ empathy_theme_init (EmpathyTheme *theme)
 		EMPATHY_TYPE_THEME, EmpathyThemePriv);
 
 	theme->priv = priv;
-	priv->smiley_manager = empathy_smiley_manager_new ();
+	priv->smiley_manager = empathy_smiley_manager_dup_singleton ();
 }
 
 static void

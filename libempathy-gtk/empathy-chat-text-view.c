@@ -637,7 +637,7 @@ empathy_chat_text_view_init (EmpathyChatTextView *view)
 	priv->buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (view));
 	priv->last_timestamp = 0;
 	priv->allow_scrolling = TRUE;
-	priv->smiley_manager = empathy_smiley_manager_new ();
+	priv->smiley_manager = empathy_smiley_manager_dup_singleton ();
 	
 	g_object_set (view,
 		      "wrap-mode", GTK_WRAP_WORD_CHAR,

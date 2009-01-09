@@ -1277,7 +1277,7 @@ empathy_chat_window_init (EmpathyChatWindow *window)
 	g_object_unref (accel_group);
 
 	/* Set up smiley menu */
-	smiley_manager = empathy_smiley_manager_new ();
+	smiley_manager = empathy_smiley_manager_dup_singleton ();
 	menu = empathy_smiley_menu_new (smiley_manager,
 					chat_window_insert_smiley_activate_cb,
 					window);

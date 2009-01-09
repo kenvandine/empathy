@@ -44,6 +44,8 @@ struct _SmileyManagerTree {
 
 G_DEFINE_TYPE (EmpathySmileyManager, empathy_smiley_manager, G_TYPE_OBJECT);
 
+static EmpathySmileyManager *manager_singleton = NULL;
+
 static SmileyManagerTree *
 smiley_manager_tree_new (gunichar c)
 {
@@ -115,12 +117,33 @@ smiley_manager_finalize (GObject *object)
 	g_slist_free (priv->smileys);
 }
 
+static GObject *
+smiley_manager_constructor (GType type,
+			    guint n_props,
+			    GObjectConstructParam *props)
+{
+	GObject *retval;
+
+	if (manager_singleton) {
+		retval = g_object_ref (manager_singleton);
+	} else {
+		retval = G_OBJECT_CLASS (empathy_smiley_manager_parent_class)->constructor
+			(type, n_props, props);
+		g_object_add_weak_pointer (retval, (gpointer *) &retval);
+
+		manager_singleton = EMPATHY_SMILEY_MANAGER (retval);
+	}
+
+	return retval;
+}
+
 static void
 empathy_smiley_manager_class_init (EmpathySmileyManagerClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
 	object_class->finalize = smiley_manager_finalize;
+	object_class->constructor = smiley_manager_constructor;
 
 	g_type_class_add_private (object_class, sizeof (EmpathySmileyManagerPriv));
 }
@@ -134,22 +157,14 @@ empathy_smiley_manager_init (EmpathySmileyManager *manager)
 	manager->priv = priv;
 	priv->tree = smiley_manager_tree_new ('\0');
 	priv->smileys = NULL;
+
+	empathy_smiley_manager_load (manager);
 }
 
 EmpathySmileyManager *
-empathy_smiley_manager_new (void)
+empathy_smiley_manager_dup_singleton (void)
 {
-	static EmpathySmileyManager *manager = NULL;
-
-	if (!manager) {
-		manager = g_object_new (EMPATHY_TYPE_SMILEY_MANAGER, NULL);
-		g_object_add_weak_pointer (G_OBJECT (manager), (gpointer) &manager);
-		empathy_smiley_manager_load (manager);
-	} else {
-		g_object_ref (manager);
-	}
-
-	return manager;
+	return g_object_new (EMPATHY_TYPE_SMILEY_MANAGER, NULL);
 }
 
 static SmileyManagerTree *
