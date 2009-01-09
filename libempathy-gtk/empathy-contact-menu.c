@@ -147,7 +147,7 @@ empathy_contact_call_menu_item_new (EmpathyContact *contact)
 	gtk_widget_show (image);
 
 	g_signal_connect_swapped (item, "activate",
-				  G_CALLBACK (empathy_dispatcher_call_with_contact),
+				  G_CALLBACK (empathy_start_call_with_contact),
 				  contact);
 	
 	return item;

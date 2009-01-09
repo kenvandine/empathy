@@ -184,7 +184,15 @@ new_message_dialog_response_cb (GtkWidget               *widget,
 	}
 
 	if (response == 1) {
-		empathy_dispatcher_call_with_contact_id (account, id, NULL, NULL);
+		EmpathyContactFactory *factory;
+		EmpathyContact *contact;
+
+		factory = empathy_contact_factory_new ();
+		contact = empathy_contact_factory_get_from_id (factory, account, id);
+		empathy_start_call_with_contact (contact);
+
+		g_object_unref (contact);
+		g_object_unref (factory);
 	} else if (response == 2) {
 		empathy_dispatcher_chat_with_contact_id (account, id, NULL, NULL);
 	}

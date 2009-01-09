@@ -571,7 +571,7 @@ contact_list_view_voip_activated_cb (EmpathyCellRendererActivatable *cell,
 			    -1);
 
 	if (contact) {
-		empathy_dispatcher_call_with_contact (contact, NULL, NULL);
+		empathy_start_call_with_contact (contact);
 		g_object_unref (contact);
 	}
 }
