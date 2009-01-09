@@ -233,7 +233,7 @@ empathy_new_message_dialog_show (GtkWindow *parent)
 	dialog = g_new0 (EmpathyNewMessageDialog, 1);
 
 	/* create a contact manager */
-	dialog->contact_manager = empathy_contact_manager_new ();
+	dialog->contact_manager = empathy_contact_manager_dup_singleton ();
 
 	filename = empathy_file_lookup ("empathy-new-message-dialog.glade",
 					"libempathy-gtk");

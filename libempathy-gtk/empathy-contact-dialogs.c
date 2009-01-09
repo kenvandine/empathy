@@ -68,7 +68,7 @@ subscription_dialog_response_cb (GtkDialog *dialog,
 	EmpathyContactManager *manager;
 	EmpathyContact        *contact;
 
-	manager = empathy_contact_manager_new ();
+	manager = empathy_contact_manager_dup_singleton ();
 	contact = empathy_contact_widget_get_contact (contact_widget);
 
 	if (response == GTK_RESPONSE_YES) {
@@ -242,7 +242,7 @@ can_add_contact_to_account (McAccount *account,
 	EmpathyContactManager *mgr;
 	gboolean               result;
 
-	mgr = empathy_contact_manager_new ();
+	mgr = empathy_contact_manager_dup_singleton ();
 	result = empathy_contact_manager_can_add (mgr, account);
 	g_object_unref (mgr);
 
@@ -257,7 +257,7 @@ new_contact_response_cb (GtkDialog *dialog,
 	EmpathyContactManager *manager;
 	EmpathyContact         *contact;
 
-	manager = empathy_contact_manager_new ();
+	manager = empathy_contact_manager_dup_singleton ();
 	contact = empathy_contact_widget_get_contact (contact_widget);
 
 	if (contact && response == GTK_RESPONSE_OK) {

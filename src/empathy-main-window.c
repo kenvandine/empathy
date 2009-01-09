@@ -599,7 +599,7 @@ empathy_main_window_show (void)
 	/* Set up contact list. */
 	empathy_status_presets_get_all ();
 
-	list_iface = EMPATHY_CONTACT_LIST (empathy_contact_manager_new ());
+	list_iface = EMPATHY_CONTACT_LIST (empathy_contact_manager_dup_singleton ());
 	monitor = empathy_contact_list_get_monitor (list_iface);
 	window->list_store = empathy_contact_list_store_new (list_iface);
 	window->list_view = empathy_contact_list_view_new (window->list_store,

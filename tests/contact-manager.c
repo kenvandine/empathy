@@ -23,7 +23,7 @@ main (int argc, char **argv)
 
 	empathy_debug_set_flags (g_getenv ("EMPATHY_DEBUG"));
 	main_loop = g_main_loop_new (NULL, FALSE);
-	manager = empathy_contact_manager_new ();
+	manager = empathy_contact_manager_dup_singleton ();
 	store = empathy_contact_list_store_new (EMPATHY_CONTACT_LIST (manager));
 	empathy_contact_list_store_set_is_compact (store, TRUE);
 	empathy_contact_list_store_set_show_groups (store, FALSE);

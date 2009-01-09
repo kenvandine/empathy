@@ -41,7 +41,7 @@ callback (gpointer data)
 {
 	EmpathyContactManager *manager;
 
-	manager = empathy_contact_manager_new ();
+	manager = empathy_contact_manager_dup_singleton ();
 	g_signal_connect (manager, "pendings-changed",
 			  G_CALLBACK (pending_cb),
 			  NULL);

@@ -828,7 +828,7 @@ contact_widget_groups_setup (EmpathyContactWidget *information)
 {
   if (information->flags & EMPATHY_CONTACT_WIDGET_EDIT_GROUPS)
     {
-      information->manager = empathy_contact_manager_new ();
+      information->manager = empathy_contact_manager_dup_singleton ();
       contact_widget_model_setup (information);
     }
 }

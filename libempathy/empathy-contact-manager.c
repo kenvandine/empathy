@@ -47,6 +47,8 @@ G_DEFINE_TYPE_WITH_CODE (EmpathyContactManager, empathy_contact_manager, G_TYPE_
 			 G_IMPLEMENT_INTERFACE (EMPATHY_TYPE_CONTACT_LIST,
 						contact_manager_iface_init));
 
+static EmpathyContactManager *manager_singleton = NULL;
+
 static void
 contact_manager_members_changed_cb (EmpathyTpContactList  *list,
 				    EmpathyContact        *contact,
@@ -196,12 +198,33 @@ contact_manager_finalize (GObject *object)
 	}
 }
 
+static GObject *
+contact_manager_constructor (GType type,
+			     guint n_props,
+			     GObjectConstructParam *props)
+{
+	GObject *retval;
+
+	if (manager_singleton) {
+		retval = g_object_ref (manager_singleton);
+	} else {
+		retval = G_OBJECT_CLASS (empathy_contact_manager_parent_class)->constructor
+			(type, n_props, props);
+
+		manager_singleton = EMPATHY_CONTACT_MANAGER (retval);
+		g_object_add_weak_pointer (retval, (gpointer *) &manager_singleton);
+	}
+
+	return retval;
+}
+
 static void
 empathy_contact_manager_class_init (EmpathyContactManagerClass *klass)
 {
 	GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
 	object_class->finalize = contact_manager_finalize;
+	object_class->constructor = contact_manager_constructor;
 
 	g_type_class_add_private (object_class, sizeof (EmpathyContactManagerPriv));
 }
@@ -240,18 +263,9 @@ empathy_contact_manager_init (EmpathyContactManager *manager)
 }
 
 EmpathyContactManager *
-empathy_contact_manager_new (void)
+empathy_contact_manager_dup_singleton (void)
 {
-	static EmpathyContactManager *manager = NULL;
-
-	if (!manager) {
-		manager = g_object_new (EMPATHY_TYPE_CONTACT_MANAGER, NULL);
-		g_object_add_weak_pointer (G_OBJECT (manager), (gpointer) &manager);
-	} else {
-		g_object_ref (manager);
-	}
-
-	return manager;
+	return g_object_new (EMPATHY_TYPE_CONTACT_MANAGER, NULL);
 }
 
 EmpathyTpContactList *
