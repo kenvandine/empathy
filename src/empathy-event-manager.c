@@ -52,6 +52,7 @@ typedef struct {
   EmpathyDispatchOperation *operation;
   gulong approved_handler;
   gulong claimed_handler;
+  gulong invalidated_handler;
   /* Remove contact if applicable */
   EmpathyContact *contact;
   /* Tube dispatcher if applicable */
@@ -109,6 +110,8 @@ event_manager_approval_free (EventManagerApproval *approval)
     approval->approved_handler);
   g_signal_handler_disconnect (approval->operation,
     approval->claimed_handler);
+  g_signal_handler_disconnect (approval->operation,
+    approval->invalidated_handler);
   g_object_unref (approval->operation);
 
   if (approval->contact != NULL)
@@ -231,6 +234,14 @@ event_manager_operation_approved_cb (EmpathyDispatchOperation *operation,
 
 static void
 event_manager_operation_claimed_cb (EmpathyDispatchOperation *operation,
+  EventManagerApproval *approval)
+{
+  event_manager_approval_done (approval);
+}
+
+static void
+event_manager_operation_invalidated_cb (EmpathyDispatchOperation *operation,
+  guint domain, gint code, gchar *message,
   EventManagerApproval *approval)
 {
   event_manager_approval_done (approval);
@@ -387,6 +398,9 @@ event_manager_approve_channel_cb (EmpathyDispatcher *dispatcher,
 
   approval->claimed_handler = g_signal_connect (operation, "claimed",
      G_CALLBACK (event_manager_operation_claimed_cb), approval);
+
+  approval->invalidated_handler = g_signal_connect (operation, "invalidated",
+     G_CALLBACK (event_manager_operation_invalidated_cb), approval);
 
   if (!tp_strdiff (channel_type, TP_IFACE_CHANNEL_TYPE_TEXT))
     {
