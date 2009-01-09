@@ -1541,7 +1541,7 @@ empathy_sound_pref_is_enabled (const char *key)
 		return FALSE;
 	}
 
-	idle = empathy_idle_new ();
+	idle = empathy_idle_dup_singleton ();
 	presence = empathy_idle_get_state (idle);
 	g_object_unref (idle);
 
