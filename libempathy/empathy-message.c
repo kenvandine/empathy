@@ -37,6 +37,7 @@ typedef struct {
 	EmpathyContact           *receiver;
 	gchar                    *body;
 	time_t                    timestamp;
+	guint		                  id;
 } EmpathyMessagePriv;
 
 static void empathy_message_finalize   (GObject            *object);
@@ -479,3 +480,18 @@ empathy_message_type_to_str (TpChannelTextMessageType type)
 	}
 }
 
+guint
+empathy_message_get_id (EmpathyMessage *message)
+{
+	EmpathyMessagePriv *priv = GET_PRIV (message);
+
+	return priv->id;
+}
+
+void
+empathy_message_set_id (EmpathyMessage *message, guint id)
+{
+	EmpathyMessagePriv *priv = GET_PRIV (message);
+
+	priv->id = id;
+}
