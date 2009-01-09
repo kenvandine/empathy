@@ -1526,7 +1526,7 @@ empathy_chat_init (EmpathyChat *chat)
 		EMPATHY_TYPE_CHAT, EmpathyChatPriv);
 
 	chat->priv = priv;
-	priv->log_manager = empathy_log_manager_new ();
+	priv->log_manager = empathy_log_manager_dup_singleton ();
 	priv->contacts_width = -1;
 	priv->sent_messages = NULL;
 	priv->sent_messages_index = -1;

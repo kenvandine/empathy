@@ -55,7 +55,6 @@ typedef struct {
 	gchar *basedir;
 } EmpathyLogManagerPriv;
 
-static void                 log_manager_finalize                   (GObject                *object);
 static const gchar *        log_manager_get_basedir                (EmpathyLogManager      *manager);
 static GList *              log_manager_get_all_files              (EmpathyLogManager      *manager,
 								    const gchar            *dir);
@@ -83,15 +82,7 @@ static void                 log_manager_search_hit_free            (EmpathyLogSe
 
 G_DEFINE_TYPE (EmpathyLogManager, empathy_log_manager, G_TYPE_OBJECT);
 
-static void
-empathy_log_manager_class_init (EmpathyLogManagerClass *klass)
-{
-	GObjectClass *object_class = G_OBJECT_CLASS (klass);
-
-	object_class->finalize = log_manager_finalize;
-
-	g_type_class_add_private (object_class, sizeof (EmpathyLogManagerPriv));
-}
+static EmpathyLogManager * manager_singleton = NULL;
 
 static void
 empathy_log_manager_init (EmpathyLogManager *manager)
@@ -112,19 +103,41 @@ log_manager_finalize (GObject *object)
 	g_free (priv->basedir);
 }
 
-EmpathyLogManager *
-empathy_log_manager_new (void)
+static GObject *
+log_manager_constructor (GType type,
+			 guint n_props,
+			 GObjectConstructParam *props)
 {
-	static EmpathyLogManager *manager = NULL;
+	GObject *retval;
 
-	if (!manager) {
-		manager = g_object_new (EMPATHY_TYPE_LOG_MANAGER, NULL);
-		g_object_add_weak_pointer (G_OBJECT (manager), (gpointer) &manager);
+	if (manager_singleton) {
+		retval = g_object_ref (manager_singleton);
 	} else {
-		g_object_ref (manager);
+		retval = G_OBJECT_CLASS (empathy_log_manager_parent_class)->constructor
+			(type, n_props, props);
+		g_object_add_weak_pointer (retval, (gpointer *) &retval);
+
+		manager_singleton = EMPATHY_LOG_MANAGER (retval);
 	}
 
-	return manager;
+	return retval;
+}
+
+static void
+empathy_log_manager_class_init (EmpathyLogManagerClass *klass)
+{
+	GObjectClass *object_class = G_OBJECT_CLASS (klass);
+
+	object_class->finalize = log_manager_finalize;
+	object_class->constructor = log_manager_constructor;
+
+	g_type_class_add_private (object_class, sizeof (EmpathyLogManagerPriv));
+}
+
+EmpathyLogManager *
+empathy_log_manager_dup_singleton (void)
+{
+	return g_object_new (EMPATHY_TYPE_LOG_MANAGER, NULL);
 }
 
 void

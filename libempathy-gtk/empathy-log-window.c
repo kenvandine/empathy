@@ -160,7 +160,7 @@ empathy_log_window_show (McAccount   *account,
 	}
 
 	window = g_new0 (EmpathyLogWindow, 1);
-	window->log_manager = empathy_log_manager_new ();
+	window->log_manager = empathy_log_manager_dup_singleton ();
 
 	filename = empathy_file_lookup ("empathy-log-window.glade",
 					"libempathy-gtk");

@@ -171,7 +171,7 @@ empathy_contact_log_menu_item_new (EmpathyContact *contact)
 
 	g_return_val_if_fail (EMPATHY_IS_CONTACT (contact), NULL);
 
-	manager = empathy_log_manager_new ();
+	manager = empathy_log_manager_dup_singleton ();
 	have_log = empathy_log_manager_exists (manager,
 					       empathy_contact_get_account (contact),
 					       empathy_contact_get_id (contact),
