@@ -26,6 +26,8 @@
 
 #include <libmissioncontrol/mc-account.h>
 
+#include <libempathy/empathy-tp-chat.h>
+
 G_BEGIN_DECLS
 
 #define EMPATHY_TYPE_CHATROOM             (empathy_chatroom_get_type ())
@@ -69,8 +71,8 @@ void            empathy_chatroom_set_auto_connect (EmpathyChatroom *chatroom,
 						   gboolean         auto_connect);
 gboolean        empathy_chatroom_equal            (gconstpointer    v1,
 						   gconstpointer    v2);
+EmpathyTpChat * empathy_chatroom_get_tp_chat      (EmpathyChatroom *chatroom);
 
-
-G_BEGIN_DECLS
+G_END_DECLS
 
 #endif /* __EMPATHY_CHATROOM_H__ */

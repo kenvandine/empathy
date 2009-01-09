@@ -301,20 +301,20 @@ room_sub_menu_activate_cb (GtkWidget *item,
 {
 	TpHandle handle;
 	GArray handles = {(gchar *) &handle, 1};
+	EmpathyTpChat *chat;
 	TpChannel *channel;
 
-	g_object_get (data->chatroom, "tp-channel", &channel, NULL);
-	if (channel == NULL) {
+	chat = empathy_chatroom_get_tp_chat (data->chatroom);
+	if (chat == NULL) {
 		/* channel was invalidated. Ignoring */
 		return;
 	}
 
 	/* send invitation */
 	handle = empathy_contact_get_handle (data->contact);
+	channel = empathy_tp_chat_get_channel (chat);
 	tp_cli_channel_interface_group_call_add_members (channel, -1, &handles,
 		_("Inviting to this room"), NULL, NULL, NULL, NULL);
-
-	g_object_unref (channel);
 }
 
 static GtkWidget *
@@ -362,17 +362,13 @@ empathy_contact_invite_menu_item_new (EmpathyContact *contact)
 
 	for (l = rooms; l != NULL; l = g_list_next (l)) {
 		EmpathyChatroom *chatroom = l->data;
-		TpChannel *channel;
 
-		g_object_get (chatroom, "tp-channel", &channel, NULL);
-		if (channel != NULL) {
+		if (empathy_chatroom_get_tp_chat (chatroom) != NULL) {
 			have_rooms = TRUE;
 
 			room_item = create_room_sub_menu (contact, chatroom);
 			gtk_menu_shell_append (submenu_shell, room_item);
 			gtk_widget_show (room_item);
-
-			g_object_unref (channel);
 		}
 	}
 

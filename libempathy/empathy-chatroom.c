@@ -35,7 +35,8 @@ typedef struct {
 	gchar     *room;
 	gchar     *name;
 	gboolean   auto_connect;
-  gboolean favorite;
+	gboolean favorite;
+	EmpathyTpChat *tp_chat;
 } EmpathyChatroomPriv;
 
 
@@ -55,7 +56,8 @@ enum {
 	PROP_ROOM,
 	PROP_NAME,
 	PROP_AUTO_CONNECT,
-  PROP_FAVORITE,
+	PROP_FAVORITE,
+	PROP_TP_CHAT,
 };
 
 G_DEFINE_TYPE (EmpathyChatroom, empathy_chatroom, G_TYPE_OBJECT);
@@ -113,6 +115,14 @@ empathy_chatroom_class_init (EmpathyChatroomClass *klass)
         G_PARAM_STATIC_NICK |
         G_PARAM_STATIC_BLURB));
 
+	g_object_class_install_property (object_class,
+					 PROP_TP_CHAT,
+					 g_param_spec_object ("tp-chat",
+							      "Chatroom channel wrapper",
+							      "The wrapper for the chatroom channel if there is one",
+							      EMPATHY_TYPE_TP_CHAT,
+							      G_PARAM_READWRITE));
+
 	g_type_class_add_private (object_class, sizeof (EmpathyChatroomPriv));
 }
 
@@ -131,6 +141,9 @@ chatroom_finalize (GObject *object)
 	EmpathyChatroomPriv *priv;
 
 	priv = GET_PRIV (object);
+
+	if (priv->tp_chat != NULL)
+		g_object_unref (priv->tp_chat);
 
 	g_object_unref (priv->account);
 	g_free (priv->room);
@@ -165,6 +178,9 @@ chatroom_get_property (GObject    *object,
   case PROP_FAVORITE:
     g_value_set_boolean (value, priv->favorite);
     break;
+	case PROP_TP_CHAT:
+		g_value_set_object (value, priv->tp_chat);
+		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
 		break;
@@ -206,6 +222,22 @@ chatroom_set_property (GObject      *object,
             FALSE);
       }
     break;
+	case PROP_TP_CHAT: {
+		GObject *chat = g_value_dup_object (value);
+
+		if (chat == (GObject *) priv->tp_chat)
+			break;
+
+		g_assert (chat == NULL || priv->tp_chat == NULL);
+
+		if (priv->tp_chat != NULL) {
+			g_object_unref (priv->tp_chat);
+			priv->tp_chat = NULL;
+		} else {
+			priv->tp_chat = EMPATHY_TP_CHAT (chat);
+		}
+		break;
+	}
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
 		break;
@@ -388,4 +420,15 @@ empathy_chatroom_equal (gconstpointer v1,
 
 	return empathy_account_equal (account_a, account_b) && !tp_strdiff (room_a,
       room_b);
+}
+
+EmpathyTpChat *
+empathy_chatroom_get_tp_chat (EmpathyChatroom *chatroom) {
+	EmpathyChatroomPriv *priv;
+
+	g_return_val_if_fail (EMPATHY_IS_CHATROOM (chatroom), NULL);
+
+	priv = GET_PRIV (chatroom);
+
+	return priv->tp_chat;
 }

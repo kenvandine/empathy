@@ -667,6 +667,7 @@ chatroom_manager_chat_destroyed_cb (EmpathyTpChat *chat,
   if (chatroom == NULL)
     return;
 
+  g_object_set (chatroom, "tp-chat", NULL, NULL);
   g_object_get (chatroom, "favorite", &favorite, NULL);
 
   if (!favorite)
@@ -715,8 +716,13 @@ chatroom_manager_observe_channel_cb (EmpathyDispatcher *dispatcher,
     {
       chatroom = empathy_chatroom_new_full (account, roomname, roomname,
         FALSE);
+      g_object_set (G_OBJECT (chatroom), "tp-chat", chat, NULL);
       empathy_chatroom_manager_add (manager, chatroom);
       g_object_unref (chatroom);
+    }
+  else
+    {
+      g_object_set (G_OBJECT (chatroom), "tp-chat", chat, NULL);
     }
 
   /* A TpChat is always destroyed as it only gets unreffed after the channel
