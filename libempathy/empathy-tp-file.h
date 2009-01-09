@@ -70,6 +70,7 @@ TpChannel *empathy_tp_file_get_channel (EmpathyTpFile *tp_file);
 void empathy_tp_file_accept (EmpathyTpFile *tp_file, guint64 offset,
   GFile *gfile, GError **error);
 void empathy_tp_file_cancel (EmpathyTpFile *tp_file);
+void empathy_tp_file_close (EmpathyTpFile *tp_file);
 void empathy_tp_file_offer (EmpathyTpFile *tp_file, GFile *gfile,
   GError **error);
 

@@ -913,10 +913,17 @@ empathy_tp_file_cancel (EmpathyTpFile *tp_file)
 {
   g_return_if_fail (EMPATHY_IS_TP_FILE (tp_file));
 
-  tp_cli_channel_call_close (tp_file->priv->channel, -1, NULL, NULL, NULL, NULL);
+  tp_cli_channel_call_close (tp_file->priv->channel, -1,
+    NULL, NULL, NULL, NULL);
 
   if (tp_file->priv->cancellable != NULL)
     g_cancellable_cancel (tp_file->priv->cancellable);
+}
+
+void
+empathy_tp_file_close (EmpathyTpFile *tp_file)
+{
+  empathy_tp_file_cancel (tp_file);
 }
 
 static void
