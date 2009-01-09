@@ -547,8 +547,9 @@ event_manager_finalize (GObject *object)
   EmpathyEventManagerPriv *priv = GET_PRIV (object);
 
   g_slist_foreach (priv->events, (GFunc) event_free, NULL);
-  g_slist_foreach (priv->approvals, (GFunc) event_manager_approval_free, NULL);
   g_slist_free (priv->events);
+  g_slist_foreach (priv->approvals, (GFunc) event_manager_approval_free, NULL);
+  g_slist_free (priv->approvals);
   g_object_unref (priv->contact_manager);
   g_object_unref (priv->dispatcher);
 }
