@@ -23,6 +23,7 @@
 
 #include <telepathy-glib/connection.h>
 #include <telepathy-glib/util.h>
+#include <extensions/extensions.h>
 
 #include "empathy-contact-factory.h"
 #include "empathy-enum-types.h"
@@ -36,7 +37,6 @@
 typedef struct
 {
   TpChannel *channel;
-  guint id;
   guint initiator;
   guint type;
   gchar *service;
@@ -50,14 +50,7 @@ enum
 {
   PROP_0,
   PROP_CHANNEL,
-  PROP_TP_TUBES,
-  PROP_ID,
-  PROP_INITIATOR,
-  PROP_TYPE,
-  PROP_SERVICE,
-  PROP_PARAMETERS,
   PROP_STATE,
-  PROP_INITIATOR_CONTACT
 };
 
 enum
@@ -71,16 +64,12 @@ static guint signals[LAST_SIGNAL];
 G_DEFINE_TYPE (EmpathyTpTube, empathy_tp_tube, G_TYPE_OBJECT)
 
 static void
-tp_tube_state_changed_cb (TpChannel *channel,
-                          guint id,
+tp_tube_state_changed_cb (TpProxy *proxy,
                           guint state,
                           gpointer user_data,
                           GObject *tube)
 {
   EmpathyTpTubePriv *priv = GET_PRIV (tube);
-
-  if (id != priv->id)
-      return;
 
   DEBUG ("Tube state changed");
 
@@ -96,21 +85,6 @@ tp_tube_invalidated_cb (TpChannel     *channel,
                         EmpathyTpTube *tube)
 {
   DEBUG ("Channel invalidated: %s", message);
-  g_signal_emit (tube, signals[DESTROY], 0);
-}
-
-static void
-tp_tube_closed_cb (TpChannel *channel,
-                   guint id,
-                   gpointer user_data,
-                   GObject *tube)
-{
-  EmpathyTpTubePriv *priv = GET_PRIV (tube);
-
-  if (id != priv->id)
-      return;
-
-  DEBUG ("Tube closed");
   g_signal_emit (tube, signals[DESTROY], 0);
 }
 
@@ -137,9 +111,6 @@ tp_tube_set_property (GObject *object,
       case PROP_CHANNEL:
         priv->channel = g_value_dup_object (value);
         break;
-      case PROP_ID:
-        priv->id = g_value_get_uint (value);
-        break;
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
         break;
@@ -159,26 +130,8 @@ tp_tube_get_property (GObject *object,
       case PROP_CHANNEL:
         g_value_set_object (value, priv->channel);
         break;
-      case PROP_ID:
-        g_value_set_uint (value, priv->id);
-        break;
-      case PROP_INITIATOR:
-        g_value_set_uint (value, priv->initiator);
-        break;
-      case PROP_TYPE:
-        g_value_set_uint (value, priv->type);
-        break;
-      case PROP_SERVICE:
-        g_value_set_string (value, priv->service);
-        break;
-      case PROP_PARAMETERS:
-        g_value_set_boxed (value, priv->parameters);
-        break;
       case PROP_STATE:
         g_value_set_uint (value, priv->state);
-        break;
-      case PROP_INITIATOR_CONTACT:
-        g_value_set_object (value, priv->initiator_contact);
         break;
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -193,9 +146,6 @@ tp_tube_constructor (GType type,
 {
   GObject *self;
   EmpathyTpTubePriv *priv;
-  GPtrArray *tubes;
-  guint i;
-  GError *error = NULL;
 
   self = G_OBJECT_CLASS (empathy_tp_tube_parent_class)->constructor (
       type, n_props, props);
@@ -203,56 +153,10 @@ tp_tube_constructor (GType type,
 
   g_signal_connect (priv->channel, "invalidated",
       G_CALLBACK (tp_tube_invalidated_cb), self);
-  tp_cli_channel_type_tubes_connect_to_tube_closed (priv->channel,
-      tp_tube_closed_cb, NULL, NULL, self, NULL);
-  tp_cli_channel_type_tubes_connect_to_tube_state_changed (priv->channel,
-      tp_tube_state_changed_cb, NULL, NULL, self, NULL);
 
-  /* FIXME: It is absolutely not opimized to list all tubes to get information
-   * about our tube, but we don't really have the choice to avoid races. */
-  if (!tp_cli_channel_type_tubes_run_list_tubes (priv->channel, -1, &tubes,
-      &error, NULL))
-    {
-      DEBUG ("Couldn't list tubes: %s", error->message);
-      g_clear_error (&error);
-      return self;
-    }
-
-  for (i = 0; i < tubes->len; i++)
-    {
-      GValueArray *values;
-      guint id;
-
-      values = g_ptr_array_index (tubes, i);
-      id = g_value_get_uint (g_value_array_get_nth (values, 0));
-
-      if (id == priv->id)
-        {
-          TpConnection *connection;
-          MissionControl *mc;
-          McAccount *account;
-
-          g_object_get (priv->channel, "connection", &connection, NULL);
-          mc = empathy_mission_control_new ();
-          account = mission_control_get_account_for_tpconnection (mc,
-              connection, NULL);
-
-          priv->initiator = g_value_get_uint (g_value_array_get_nth (values, 1));
-          priv->type = g_value_get_uint (g_value_array_get_nth (values, 2));
-          priv->service = g_value_dup_string (g_value_array_get_nth (values, 3));
-          priv->parameters = g_value_dup_boxed (g_value_array_get_nth (values, 4));
-          priv->state = g_value_get_uint (g_value_array_get_nth (values, 5));
-          priv->initiator_contact = empathy_contact_factory_get_from_handle (
-              priv->factory, account, priv->initiator);
-
-          g_object_unref (connection);
-          g_object_unref (mc);
-          g_object_unref (account);
-        }
-
-      g_value_array_free (values);
-    }
-  g_ptr_array_free (tubes, TRUE);
+  emp_cli_channel_interface_tube_connect_to_tube_channel_state_changed (
+    TP_PROXY (priv->channel), tp_tube_state_changed_cb, NULL, NULL,
+    self, NULL);
 
   return self;
 }
@@ -268,8 +172,8 @@ tp_tube_finalize (GObject *object)
     {
       g_signal_handlers_disconnect_by_func (priv->channel,
           tp_tube_invalidated_cb, object);
-      tp_cli_channel_type_tubes_call_close_tube (priv->channel, -1, priv->id,
-          tp_tube_async_cb, "closing tube", NULL, NULL);
+      tp_cli_channel_call_close (priv->channel, -1, tp_tube_async_cb,
+        "closing tube", NULL, NULL);
       g_object_unref (priv->channel);
     }
   if (priv->initiator_contact)
@@ -298,40 +202,10 @@ empathy_tp_tube_class_init (EmpathyTpTubeClass *klass)
       G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME |
         G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
-  g_object_class_install_property (object_class, PROP_ID,
-      g_param_spec_uint ("id", "id", "id", 0, G_MAXUINT, 0,
-        G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_NAME |
-        G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-
-  g_object_class_install_property (object_class, PROP_INITIATOR,
-      g_param_spec_uint ("initiator", "initiator", "initiator",
-        0, G_MAXUINT, 0, G_PARAM_READABLE | G_PARAM_STATIC_NAME |
-        G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-
-  g_object_class_install_property (object_class, PROP_TYPE,
-      g_param_spec_uint ("type", "type", "type", 0, G_MAXUINT, 0,
-        G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK |
-        G_PARAM_STATIC_BLURB));
-
-  g_object_class_install_property (object_class, PROP_SERVICE,
-      g_param_spec_string ("service", "service", "service", NULL,
-      G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK |
-      G_PARAM_STATIC_BLURB));
-
-  g_object_class_install_property (object_class, PROP_PARAMETERS,
-      g_param_spec_boxed ("parameters", "parameters", "parameters",
-      G_TYPE_HASH_TABLE, G_PARAM_READABLE | G_PARAM_STATIC_NAME |
-      G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
-
   g_object_class_install_property (object_class, PROP_STATE,
       g_param_spec_uint ("state", "state", "state", 0, G_MAXUINT, 0,
         G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK |
         G_PARAM_STATIC_BLURB));
-
-  g_object_class_install_property (object_class, PROP_INITIATOR_CONTACT,
-     g_param_spec_object ("initiator-contact", "initiator contact",
-     "initiator contact", EMPATHY_TYPE_CONTACT, G_PARAM_READABLE |
-     G_PARAM_STATIC_NAME | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 
   signals[DESTROY] = g_signal_new ("destroy",
       G_TYPE_FROM_CLASS (klass),
@@ -355,12 +229,11 @@ empathy_tp_tube_init (EmpathyTpTube *tube)
 }
 
 EmpathyTpTube *
-empathy_tp_tube_new (TpChannel *channel, guint tube_id)
+empathy_tp_tube_new (TpChannel *channel)
 {
   g_return_val_if_fail (TP_IS_CHANNEL (channel), NULL);
 
-  return g_object_new (EMPATHY_TYPE_TP_TUBE,
-      "channel", channel, "id", tube_id, NULL);
+  return g_object_new (EMPATHY_TYPE_TP_TUBE, "channel", channel,  NULL);
 }
 
 EmpathyTpTube *
@@ -375,12 +248,14 @@ empathy_tp_tube_new_stream_tube (EmpathyContact *contact,
   TpConnection *connection;
   TpChannel *channel;
   gchar *object_path;
-  guint id;
   GHashTable *params;
   GValue *address;
   GValue *control_param;
   EmpathyTpTube *tube = NULL;
   GError *error = NULL;
+  GHashTable *request;
+  GHashTable *channel_properties;
+  GValue *value;
 
   g_return_val_if_fail (EMPATHY_IS_CONTACT (contact), NULL);
   g_return_val_if_fail (hostname != NULL, NULL);
@@ -391,9 +266,34 @@ empathy_tp_tube_new_stream_tube (EmpathyContact *contact,
   connection = mission_control_get_tpconnection (mc, account, NULL);
   g_object_unref (mc);
 
-  if (!tp_cli_connection_run_request_channel (connection, -1,
-      TP_IFACE_CHANNEL_TYPE_TUBES, TP_HANDLE_TYPE_CONTACT,
-      empathy_contact_get_handle (contact), FALSE, &object_path, &error, NULL))
+  tp_connection_run_until_ready (connection, FALSE, NULL, NULL);
+
+  request = g_hash_table_new_full (g_str_hash, g_str_equal, NULL,
+      (GDestroyNotify) tp_g_value_slice_free);
+
+  /* org.freedesktop.Telepathy.Channel.ChannelType */
+  value = tp_g_value_slice_new (G_TYPE_STRING);
+  g_value_set_string (value, EMP_IFACE_CHANNEL_TYPE_STREAM_TUBE);
+  g_hash_table_insert (request, TP_IFACE_CHANNEL ".ChannelType", value);
+
+  /* org.freedesktop.Telepathy.Channel.TargetHandleType */
+  value = tp_g_value_slice_new (G_TYPE_UINT);
+  g_value_set_uint (value, TP_HANDLE_TYPE_CONTACT);
+  g_hash_table_insert (request, TP_IFACE_CHANNEL ".TargetHandleType", value);
+
+  /* org.freedesktop.Telepathy.Channel.TargetHandleType */
+  value = tp_g_value_slice_new (G_TYPE_UINT);
+  g_value_set_uint (value, empathy_contact_get_handle (contact));
+  g_hash_table_insert (request, TP_IFACE_CHANNEL ".TargetHandle", value);
+
+  /* org.freedesktop.Telepathy.Channel.Type.StreamTube.Service */
+  value = tp_g_value_slice_new (G_TYPE_STRING);
+  g_value_set_string (value, service);
+  g_hash_table_insert (request,
+    EMP_IFACE_CHANNEL_TYPE_STREAM_TUBE  ".Service", value);
+
+  if (!tp_cli_connection_interface_requests_run_create_channel (connection, -1,
+    request, &object_path, &channel_properties, &error, NULL))
     {
       DEBUG ("Error requesting channel: %s", error->message);
       g_clear_error (&error);
@@ -403,9 +303,10 @@ empathy_tp_tube_new_stream_tube (EmpathyContact *contact,
 
   DEBUG ("Offering a new stream tube");
 
-  channel = tp_channel_new (connection, object_path,
-      TP_IFACE_CHANNEL_TYPE_TUBES, TP_HANDLE_TYPE_CONTACT,
-      empathy_contact_get_handle (contact), NULL);
+  channel = tp_channel_new_from_properties (connection, object_path,
+      channel_properties, NULL);
+
+  tp_channel_run_until_ready (channel, NULL, NULL);
 
   #define ADDRESS_TYPE dbus_g_type_get_struct ("GValueArray",\
       G_TYPE_STRING, G_TYPE_UINT, G_TYPE_INVALID)
@@ -415,23 +316,24 @@ empathy_tp_tube_new_stream_tube (EmpathyContact *contact,
   dbus_g_type_struct_set (address, 0, hostname, 1, port, G_MAXUINT);
   control_param = tp_g_value_slice_new (G_TYPE_STRING);
 
-  if (!tp_cli_channel_type_tubes_run_offer_stream_tube (channel, -1,
-        service, params, type, address,
-        TP_SOCKET_ACCESS_CONTROL_LOCALHOST, control_param, &id, &error, NULL))
+  if (!emp_cli_channel_type_stream_tube_run_offer_stream_tube (
+        TP_PROXY(channel), -1, type, address,
+        TP_SOCKET_ACCESS_CONTROL_LOCALHOST, control_param, &error, NULL))
     {
       DEBUG ("Couldn't offer tube: %s", error->message);
       g_clear_error (&error);
       goto OUT;
     }
 
-  DEBUG ("Stream tube id=%d offered", id);
+  DEBUG ("Stream tube offered");
 
-  tube = empathy_tp_tube_new (channel, id);
+  tube = empathy_tp_tube_new (channel);
 
 OUT:
   g_object_unref (channel);
   g_free (object_path);
-  g_hash_table_destroy (params);
+  g_hash_table_destroy (request);
+  g_hash_table_destroy (channel_properties);
   tp_g_value_slice_free (address);
   tp_g_value_slice_free (control_param);
   g_object_unref (connection);
@@ -440,7 +342,7 @@ OUT:
 }
 
 static void
-tp_tube_accept_stream_cb (TpChannel *proxy,
+tp_tube_accept_stream_cb (TpProxy *proxy,
                           const GValue *address,
                           const GError *error,
                           gpointer user_data,
@@ -459,12 +361,12 @@ empathy_tp_tube_accept_stream_tube (EmpathyTpTube *tube,
 
   g_return_if_fail (EMPATHY_IS_TP_TUBE (tube));
 
-  DEBUG ("Accepting stream tube - id: %d", priv->id);
+  DEBUG ("Accepting stream tube");
 
   control_param = tp_g_value_slice_new (G_TYPE_STRING);
-  tp_cli_channel_type_tubes_call_accept_stream_tube (priv->channel, -1, priv->id,
-      type, TP_SOCKET_ACCESS_CONTROL_LOCALHOST, control_param,
-      tp_tube_accept_stream_cb, NULL, NULL, G_OBJECT (tube));
+  emp_cli_channel_type_stream_tube_call_accept_stream_tube (
+     TP_PROXY (priv->channel), -1, type, TP_SOCKET_ACCESS_CONTROL_LOCALHOST,
+     control_param, tp_tube_accept_stream_cb, NULL, NULL, G_OBJECT (tube));
 
   tp_g_value_slice_free (control_param);
 }
@@ -481,13 +383,15 @@ empathy_tp_tube_get_socket (EmpathyTpTube *tube,
   guint ret_port;
   GError *error = NULL;
 
+  g_assert_not_reached ();
+
   g_return_if_fail (EMPATHY_IS_TP_TUBE (tube));
   g_return_if_fail (hostname != NULL || port != NULL);
 
   DEBUG ("Getting stream tube socket address");
 
   if (!tp_cli_channel_type_tubes_run_get_stream_tube_socket_address (priv->channel,
-      -1, priv->id, &address_type, &address, &error, NULL))
+      -1, 0, &address_type, &address, &error, NULL))
     {
       DEBUG ("Couldn't get socket address: %s", error->message);
       g_clear_error (&error);

@@ -55,7 +55,7 @@ struct _EmpathyTpTubeClass {
 };
 
 GType empathy_tp_tube_get_type (void) G_GNUC_CONST;
-EmpathyTpTube *empathy_tp_tube_new (TpChannel *channel, guint tube_id);
+EmpathyTpTube *empathy_tp_tube_new (TpChannel *channel);
 EmpathyTpTube *empathy_tp_tube_new_stream_tube (EmpathyContact *contact,
     TpSocketAddressType type, const gchar *hostname, guint port,
     const gchar *service);
