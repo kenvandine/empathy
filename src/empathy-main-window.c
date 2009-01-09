@@ -639,7 +639,7 @@ empathy_main_window_show (void)
 	}
 
 	/* Enable event handling */
-	window->event_manager = empathy_event_manager_new ();
+	window->event_manager = empathy_event_manager_dup_singleton ();
 	g_signal_connect (window->event_manager, "event-added",
 			  G_CALLBACK (main_window_event_added_cb),
 			  window);

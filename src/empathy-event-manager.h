@@ -55,7 +55,7 @@ typedef struct {
 } EmpathyEvent;
 
 GType                empathy_event_manager_get_type      (void) G_GNUC_CONST;
-EmpathyEventManager *empathy_event_manager_new           (void);
+EmpathyEventManager *empathy_event_manager_dup_singleton (void);
 EmpathyEvent *       empathy_event_manager_get_top_event (EmpathyEventManager *manager);
 GSList *             empathy_event_manager_get_events    (EmpathyEventManager *manager);
 void                 empathy_event_activate              (EmpathyEvent        *event);
