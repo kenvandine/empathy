@@ -336,7 +336,7 @@ empathy_tube_dispatch_show_error (EmpathyTubeDispatch *self, gchar *message)
   GtkWidget *dialog;
 
   dialog = gtk_message_dialog_new (NULL, GTK_DIALOG_MODAL,
-      GTK_MESSAGE_WARNING, GTK_BUTTONS_CLOSE, message);
+      GTK_MESSAGE_WARNING, GTK_BUTTONS_CLOSE, "%s", message);
 
   gtk_dialog_run (GTK_DIALOG (dialog));
 
