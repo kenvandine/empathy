@@ -77,4 +77,5 @@ src/empathy-preferences.c
 src/empathy-preferences.glade
 src/empathy-status-icon.c
 src/empathy-status-icon.glade
+src/empathy-tube-dispatch.c
 
