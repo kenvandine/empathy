@@ -147,9 +147,9 @@ contact_factory_constructor (GType type,
 	} else {
 		retval = G_OBJECT_CLASS (empathy_contact_factory_parent_class)->constructor
 			(type, n_props, props);
-		g_object_add_weak_pointer (retval, (gpointer *) &retval);
 
 		factory_singleton = EMPATHY_CONTACT_FACTORY (retval);
+		g_object_add_weak_pointer (retval, (gpointer *) &factory_singleton);
 	}
 
 	return retval;

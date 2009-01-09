@@ -285,9 +285,9 @@ idle_constructor (GType type,
 	} else {
 		retval = G_OBJECT_CLASS (empathy_idle_parent_class)->constructor
 			(type, n_props, props);
-		g_object_add_weak_pointer (retval, (gpointer *) &retval);
 
 		idle_singleton = EMPATHY_IDLE (retval);
+		g_object_add_weak_pointer (retval, (gpointer *) &idle_singleton);
 	}
 
 	return retval;

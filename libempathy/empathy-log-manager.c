@@ -115,9 +115,9 @@ log_manager_constructor (GType type,
 	} else {
 		retval = G_OBJECT_CLASS (empathy_log_manager_parent_class)->constructor
 			(type, n_props, props);
-		g_object_add_weak_pointer (retval, (gpointer *) &retval);
 
 		manager_singleton = EMPATHY_LOG_MANAGER (retval);
+		g_object_add_weak_pointer (retval, (gpointer *) &manager_singleton);
 	}
 
 	return retval;
