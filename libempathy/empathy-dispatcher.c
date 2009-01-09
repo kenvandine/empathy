@@ -275,7 +275,7 @@ dispatcher_channel_invalidated_cb (TpProxy *proxy, guint domain, gint code,
   ConnectionData *cd;
   const gchar *object_path;
 
-  g_object_get (G_OBJECT (proxy), "connection", &connection, NULL);
+  connection = tp_channel_borrow_connection (TP_CHANNEL (proxy));
 
   cd = g_hash_table_lookup (priv->connections, connection);
   /* Connection itself invalidated? */
