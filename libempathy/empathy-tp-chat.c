@@ -924,6 +924,10 @@ tp_chat_dispose (GObject *object)
 		g_object_unref (priv->account);
 	priv->account = NULL;
 
+	if (priv->contact_monitor)
+		g_object_unref (priv->contact_monitor);
+	priv->contact_monitor = NULL;
+
 	if (!g_queue_is_empty (priv->messages_queue)) {
 		EmpathyMessage *message;
 		EmpathyContact *contact;
@@ -966,20 +970,7 @@ tp_chat_finalize (GObject *object)
 		g_ptr_array_free (priv->properties, TRUE);
 	}
 
-	if (priv->remote_contact) {
-		g_object_unref (priv->remote_contact);
-	}
-	if (priv->group) {
-		g_object_unref (priv->group);
-	}
 
-	if (priv->contact_monitor) {
-		g_object_unref (priv->contact_monitor);
-	}
-
-	g_object_unref (priv->factory);
-	g_object_unref (priv->user);
-	g_object_unref (priv->account);
 	g_free (priv->id);
 	g_queue_free (priv->messages_queue);
 	g_queue_free (priv->pending_messages_queue);
