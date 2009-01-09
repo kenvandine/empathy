@@ -42,7 +42,7 @@
 #include <libempathy/empathy-dispatcher.h>
 #include <libempathy/empathy-dispatch-operation.h>
 #include <libempathy/empathy-tp-chat.h>
-#include <libempathy/empathy-tp-group.h>
+#include <libempathy/empathy-tp-call.h>
 
 #include <libempathy-gtk/empathy-conf.h>
 #include <libempathy-gtk/empathy-ui-utils.h>
@@ -105,12 +105,19 @@ dispatch_cb (EmpathyDispatcher *dispatcher,
 		g_object_unref (tp_chat);
 
 		empathy_dispatch_operation_claim (operation);
+	} else if (channel_type == TP_IFACE_QUARK_CHANNEL_TYPE_STREAMED_MEDIA) {
+		EmpathyTpCall *call;
+
+		call = EMPATHY_TP_CALL (
+			empathy_dispatch_operation_get_channel_wrapper (operation));
+
+		empathy_dispatch_operation_claim (operation);
+
+		empathy_call_window_new (call);
+
+		g_object_unref (call);
+
 	}
-#if 0
-	else if (!tp_strdiff (channel_type, TP_IFACE_CHANNEL_TYPE_STREAMED_MEDIA)) {
-		empathy_call_window_new (channel);
-	}
-#endif
 	else if (channel_type == EMP_IFACE_QUARK_CHANNEL_TYPE_FILE_TRANSFER) {
 		EmpathyFTManager *ft_manager;
 		EmpathyTpFile    *tp_file;
