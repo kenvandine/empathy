@@ -238,10 +238,17 @@ event_manager_operation_claimed_cb (EmpathyDispatchOperation *operation,
 
 static void
 event_manager_media_channel_got_name_cb (EmpathyContact *contact,
-  gpointer user_data)
+  const GError *error, gpointer user_data, GObject *object)
 {
   EventManagerApproval *approval = user_data;
   gchar *msg;
+
+  if (error != NULL)
+    {
+      /* FIXME just returning assuming the operation will be invalidated as
+       * well */
+      return;
+    }
 
   msg = g_strdup_printf (_("Incoming call from %s"),
     empathy_contact_get_name (contact));
@@ -258,7 +265,7 @@ event_manager_media_channel_got_contact (EventManagerApproval *approval)
 {
   empathy_contact_call_when_ready (approval->contact,
      EMPATHY_CONTACT_READY_NAME, event_manager_media_channel_got_name_cb,
-        approval);
+        approval, NULL, G_OBJECT (approval->manager));
 }
 
 static void
@@ -331,13 +338,21 @@ event_manager_tube_dispatch_ability_cb (GObject *object,
 
 static void
 event_manager_tube_got_contact_name_cb (EmpathyContact *contact,
-  gpointer user_data)
+  const GError *error, gpointer user_data, GObject *object)
 {
   EventManagerApproval *approval = (EventManagerApproval *)user_data;
   EmpathyTubeDispatchAbility dispatchability;
 
+  if (error != NULL)
+    {
+      /* FIXME?, we assume that the operation gets invalidated as well (if it
+       * didn't already */
+       return;
+    }
+
   dispatchability = empathy_tube_dispatch_is_dispatchable
     (approval->tube_dispatch);
+
 
   switch (dispatchability)
     {
@@ -457,7 +472,7 @@ event_manager_approve_channel_cb (EmpathyDispatcher *dispatcher,
 
       empathy_contact_call_when_ready (contact,
         EMPATHY_CONTACT_READY_NAME, event_manager_tube_got_contact_name_cb,
-        approval);
+        approval, NULL, G_OBJECT (manager));
 
       g_object_unref (factory);
       g_object_unref (account);

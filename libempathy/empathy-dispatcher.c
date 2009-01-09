@@ -903,6 +903,22 @@ empathy_dispatcher_dup_singleton (void)
 }
 
 static void
+dispatcher_request_failed (EmpathyDispatcher *dispatcher,
+  DispatcherRequestData *request_data, const GError *error)
+{
+  EmpathyDispatcherPriv *priv = GET_PRIV (dispatcher);
+  ConnectionData *conn_data;
+
+  conn_data = g_hash_table_lookup (priv->connections, request_data->connection);
+  if (request_data->cb != NULL)
+    request_data->cb (NULL, error, request_data->user_data);
+
+  conn_data->outstanding_requests =
+      g_list_remove (conn_data->outstanding_requests, request_data);
+  free_dispatcher_request_data (request_data);
+}
+
+static void
 dispatcher_connection_new_requested_channel (EmpathyDispatcher *dispatcher,
   DispatcherRequestData *request_data, const gchar *object_path,
   GHashTable *properties, const GError *error)
@@ -918,12 +934,7 @@ dispatcher_connection_new_requested_channel (EmpathyDispatcher *dispatcher,
     {
       DEBUG ("Channel request failed: %s", error->message);
 
-      if (request_data->cb != NULL)
-          request_data->cb (NULL, error, request_data->user_data);
-
-      conn_data->outstanding_requests =
-        g_list_remove (conn_data->outstanding_requests, request_data);
-      free_dispatcher_request_data (request_data);
+      dispatcher_request_failed (dispatcher, request_data, error);
 
       goto out;
   }
@@ -1043,7 +1054,8 @@ empathy_dispatcher_call_with_contact ( EmpathyContact *contact,
 
 
 static void
-dispatcher_chat_with_contact_cb (EmpathyContact *contact, gpointer user_data)
+dispatcher_chat_with_contact_cb (EmpathyContact *contact,
+  const GError *error, gpointer user_data, GObject *object)
 {
   DispatcherRequestData *request_data = (DispatcherRequestData *) user_data;
 
@@ -1080,7 +1092,7 @@ empathy_dispatcher_chat_with_contact (EmpathyContact *contact,
 
   empathy_contact_call_when_ready (contact,
     EMPATHY_CONTACT_READY_HANDLE, dispatcher_chat_with_contact_cb,
-    request_data);
+    request_data, NULL, G_OBJECT (dispatcher));
 
   g_object_unref (dispatcher);
 }
@@ -1184,12 +1196,19 @@ dispatcher_create_channel_cb (TpConnection *connect,
 
 static void
 dispatcher_create_channel_with_contact_cb (EmpathyContact *contact,
-  gpointer user_data)
+  const GError *error, gpointer user_data, GObject *object)
 {
   DispatcherRequestData *request_data = (DispatcherRequestData *) user_data;
   GValue *target_handle;
 
   g_assert (request_data->request);
+
+  if (error != NULL)
+    {
+      dispatcher_request_failed (request_data->dispatcher,
+        request_data, error);
+      return;
+    }
 
   request_data->handle = empathy_contact_get_handle (contact);
 
@@ -1265,7 +1284,7 @@ empathy_dispatcher_send_file_to_contact (EmpathyContact *contact,
 
   empathy_contact_call_when_ready (contact,
     EMPATHY_CONTACT_READY_HANDLE, dispatcher_create_channel_with_contact_cb,
-    request_data);
+    request_data, NULL, G_OBJECT (dispatcher));
 
   g_object_unref (dispatcher);
 }
