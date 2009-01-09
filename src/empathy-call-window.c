@@ -62,6 +62,8 @@ typedef struct
   GtkWidget *keypad_expander;
 } EmpathyCallWindow;
 
+static void call_window_update (EmpathyCallWindow *window);
+
 static GSList *windows = NULL;
 
 static gboolean
@@ -152,6 +154,11 @@ call_window_finalize (EmpathyCallWindow *window)
       call_window_set_output_video_is_drawing (window, FALSE);
       empathy_tp_call_remove_preview_video (window->call,
           gtk_socket_get_id (GTK_SOCKET (window->preview_video_socket)));
+
+      g_signal_handlers_disconnect_by_func (window->call,
+        call_window_update, window);
+
+      empathy_tp_call_close (window->call);
       g_object_unref (window->call);
       window->call = NULL;
     }
@@ -491,21 +498,21 @@ call_window_dtmf_connect (GladeXML *glade,
 }
 
 GtkWidget *
-empathy_call_window_new (TpChannel *channel)
+empathy_call_window_new (EmpathyTpCall *call)
 {
   EmpathyCallWindow *window;
   GladeXML *glade;
   gchar *filename;
   const gchar *icons[] = {"audio-input-microphone", NULL};
 
-  g_return_val_if_fail (TP_IS_CHANNEL (channel), NULL);
+  g_return_val_if_fail (EMPATHY_IS_TP_CALL (call), NULL);
 
   if (windows)
     {
       window = (EmpathyCallWindow*) windows->data;
       if (!window->call)
         {
-          window->call = empathy_tp_call_new (channel);
+          window->call = g_object_ref (call);
           g_signal_connect_swapped (G_OBJECT (window->call), "notify",
               G_CALLBACK (call_window_update), window);
           call_window_update (window);
@@ -520,11 +527,13 @@ empathy_call_window_new (TpChannel *channel)
         {
           GtkWidget *dialog;
           EmpathyContact *contact;
-          EmpathyTpGroup *tp_group;
+          TpChannel *channel;
 
-          tp_group = empathy_tp_group_new (channel);
-          empathy_run_until_ready (tp_group);
-          empathy_tp_group_get_invitation (tp_group, &contact);
+          g_object_get ( G_OBJECT (call),
+            "contact", &contact,
+            "channel", &channel,
+            NULL);
+
           empathy_contact_run_until_ready (contact, EMPATHY_CONTACT_READY_NAME,
               NULL);
 
@@ -538,7 +547,7 @@ empathy_call_window_new (TpChannel *channel)
                 " running call."), empathy_contact_get_name (contact));
 
           g_object_unref (contact);
-          g_object_unref (tp_group);
+          g_object_unref (channel);
 
           g_signal_connect (dialog, "response", G_CALLBACK (gtk_widget_destroy),
               NULL);
@@ -551,7 +560,7 @@ empathy_call_window_new (TpChannel *channel)
 
   window = g_slice_new0 (EmpathyCallWindow);
   windows = g_slist_prepend (windows, window);
-  window->call = empathy_tp_call_new (channel);
+  window->call = g_object_ref (call);
 
   filename = empathy_file_lookup ("empathy-call-window.glade", "src");
   glade = empathy_glade_get_file (filename,

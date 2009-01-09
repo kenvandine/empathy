@@ -26,11 +26,11 @@
 
 #include <gtk/gtk.h>
 
-#include <telepathy-glib/channel.h>
+#include <libempathy/empathy-tp-call.h>
 
 G_BEGIN_DECLS
 
-GtkWidget *empathy_call_window_new (TpChannel *channel);
+GtkWidget *empathy_call_window_new (EmpathyTpCall *call);
 
 G_END_DECLS
 
