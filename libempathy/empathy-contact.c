@@ -53,7 +53,14 @@ typedef struct {
   gboolean is_user;
   guint hash;
   EmpathyContactReady ready;
+  GList *ready_callbacks;
 } EmpathyContactPriv;
+
+typedef struct {
+    EmpathyContactReady ready;
+    EmpathyContactReadyCb *callback;
+    gpointer user_data;
+} ReadyCbData;
 
 static void contact_finalize (GObject *object);
 static void contact_get_property (GObject *object, guint param_id,
@@ -330,6 +337,21 @@ contact_set_property (GObject *object,
     };
 }
 
+static gboolean
+contact_is_ready (EmpathyContact *contact, EmpathyContactReady ready)
+{
+  EmpathyContactPriv *priv = GET_PRIV (contact);
+
+  /* When the name is NULL, empathy_contact_get_name() fallback to the id.
+   * When the caller want to wait the name to be ready, it also want to wait
+   * the id to be ready in case of fallback. */
+  if ((ready & EMPATHY_CONTACT_READY_NAME) && G_STR_EMPTY (priv->name))
+      ready |= EMPATHY_CONTACT_READY_ID;
+
+  return (priv->ready & ready) == ready;
+}
+
+
 static void
 contact_set_ready_flag (EmpathyContact *contact,
                         EmpathyContactReady flag)
@@ -338,8 +360,24 @@ contact_set_ready_flag (EmpathyContact *contact,
 
   if (!(priv->ready & flag))
     {
+      GList *l, *ln;
+
       priv->ready |= flag;
       g_object_notify (G_OBJECT (contact), "ready");
+
+      for (l = priv->ready_callbacks ; l != NULL ; l = ln )
+        {
+          ReadyCbData *d = (ReadyCbData *)l->data;
+          ln = g_list_next (l);
+
+          if (contact_is_ready (contact, d->ready))
+            {
+              d->callback (contact, d->user_data);
+
+              priv->ready_callbacks = g_list_delete_link
+                (priv->ready_callbacks, l);
+            }
+        }
     }
 }
 
@@ -768,22 +806,36 @@ empathy_contact_hash (gconstpointer key)
   return priv->hash;
 }
 
+void empathy_contact_call_when_ready (EmpathyContact *contact,
+  EmpathyContactReady ready, EmpathyContactReadyCb *callback, gpointer
+  user_data)
+{
+  EmpathyContactPriv *priv = GET_PRIV (contact);
+
+  g_return_if_fail (contact != NULL);
+  g_return_if_fail (callback != NULL);
+
+  if (contact_is_ready (contact, ready))
+    {
+      callback (contact, user_data);
+    }
+  else
+    {
+      ReadyCbData *d = g_slice_new0 (ReadyCbData);
+      d->ready = ready;
+      d->callback = callback;
+      d->user_data = user_data;
+      priv->ready_callbacks = g_list_prepend (priv->ready_callbacks,
+        d);
+    }
+}
+
 static gboolean
 contact_is_ready_func (GObject *contact,
                        gpointer user_data)
 {
-  EmpathyContactPriv *priv = GET_PRIV (contact);
-  EmpathyContactReady ready;
-
-  ready = GPOINTER_TO_UINT (user_data);
-
-  /* When the name is NULL, empathy_contact_get_name() fallback to the id.
-   * When the caller want to wait the name to be ready, it also want to wait
-   * the id to be ready in case of fallback. */
-  if ((ready & EMPATHY_CONTACT_READY_NAME) && G_STR_EMPTY (priv->name))
-      ready |= EMPATHY_CONTACT_READY_ID;
-
-  return (priv->ready & ready) == ready;
+  return contact_is_ready (EMPATHY_CONTACT (contact),
+    GPOINTER_TO_UINT (user_data));
 }
 
 void

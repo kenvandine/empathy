@@ -112,13 +112,22 @@ gboolean empathy_contact_can_voip (EmpathyContact *contact);
 gboolean empathy_contact_can_send_files (EmpathyContact *contact);
 gboolean empathy_contact_equal (gconstpointer v1, gconstpointer v2);
 guint empathy_contact_hash (gconstpointer key);
+
+typedef void (EmpathyContactReadyCb)
+  (EmpathyContact *contact, gpointer user_data);
+void empathy_contact_call_when_ready (EmpathyContact *contact,
+  EmpathyContactReady ready, EmpathyContactReadyCb *callback, gpointer
+  user_data);
+
 void empathy_contact_run_until_ready (EmpathyContact *contact,
     EmpathyContactReady ready, GMainLoop **loop);
+
 void empathy_contact_load_avatar_data (EmpathyContact *contact,
     const guchar *data, const gsize len, const gchar *format,
     const gchar *token);
 gboolean empathy_contact_load_avatar_cache (EmpathyContact *contact,
     const gchar *token);
+
 
 #define EMPATHY_TYPE_AVATAR (empathy_avatar_get_type ())
 GType empathy_avatar_get_type (void) G_GNUC_CONST;
