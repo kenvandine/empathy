@@ -62,8 +62,8 @@ static BaconMessageConnection *connection = NULL;
 
 static void
 dispatch_cb (EmpathyDispatcher *dispatcher,
-		     EmpathyDispatchOperation *operation,
-		     gpointer           user_data)
+	     EmpathyDispatchOperation *operation,
+	     gpointer           user_data)
 {
 	GQuark channel_type;
 
