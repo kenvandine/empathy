@@ -94,6 +94,8 @@ enum
 
 G_DEFINE_TYPE (EmpathyFTManager, empathy_ft_manager, G_TYPE_OBJECT);
 
+static EmpathyFTManager *manager_singleton = NULL;
+
 static gchar *
 ft_manager_format_interval (gint interval)
 {
@@ -768,36 +770,51 @@ empathy_ft_manager_init (EmpathyFTManager *ft_manager)
   ft_manager_build_ui (ft_manager);
 }
 
+static GObject *
+empathy_ft_manager_constructor (GType type,
+                                guint n_props,
+                                GObjectConstructParam *props)
+{
+  GObject *retval;
+
+  if (manager_singleton)
+    {
+      retval = g_object_ref (manager_singleton);
+    }
+  else
+    {
+      retval = G_OBJECT_CLASS (empathy_ft_manager_parent_class)->constructor
+          (type, n_props, props);
+      g_object_add_weak_pointer (retval, (gpointer *) &retval);
+
+      manager_singleton = EMPATHY_FT_MANAGER (retval);
+    }
+
+  return retval;
+}
+
 static void
 empathy_ft_manager_class_init (EmpathyFTManagerClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->finalize = empathy_ft_manager_finalize;
+  object_class->constructor = empathy_ft_manager_constructor;
 
   g_type_class_add_private (object_class, sizeof (EmpathyFTManagerPriv));
 }
 
 /**
- * empathy_ft_manager_get_default:
+ * empathy_ft_manager_dup_singleton:
  *
- * Returns a new #EmpathyFTManager if there is not already one, or the existing
- * one if it exists.
+ * Returns a reference to the #EmpathyFTManager singleton object.
  *
  * Returns: a #EmpathyFTManager
  */
 EmpathyFTManager *
-empathy_ft_manager_get_default (void)
+empathy_ft_manager_dup_singleton (void)
 {
-  static EmpathyFTManager *manager_p = NULL;
-
-  if (!manager_p)
-    {
-      manager_p = g_object_new (EMPATHY_TYPE_FT_MANAGER, NULL);
-      g_object_add_weak_pointer (G_OBJECT (manager_p), (gpointer) &manager_p);
-    }
-
-  return manager_p;
+  return g_object_new (EMPATHY_TYPE_FT_MANAGER, NULL);
 }
 
 /**

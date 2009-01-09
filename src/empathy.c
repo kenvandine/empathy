@@ -110,7 +110,7 @@ dispatch_channel_cb (EmpathyDispatcher *dispatcher,
 		EmpathyFTManager *ft_manager;
 		EmpathyTpFile    *tp_file;
 
-		ft_manager = empathy_ft_manager_get_default ();
+		ft_manager = empathy_ft_manager_dup_singleton ();
 		tp_file = empathy_tp_file_new (channel);
 		empathy_ft_manager_add_tp_file (ft_manager, tp_file);
 		g_object_unref (tp_file);
