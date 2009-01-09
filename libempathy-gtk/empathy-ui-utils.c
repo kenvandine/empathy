@@ -1424,27 +1424,26 @@ empathy_toggle_button_set_state_quietly (GtkWidget *widget,
 
 static void
 file_manager_send_file_request_cb (EmpathyDispatchOperation *operation,
-  const GError *error, gpointer user_data)
+				   const GError *error, gpointer user_data)
 {
-  GFile *file = (GFile *)user_data;
-  EmpathyTpFile *tp_file;
+	GFile *file = (GFile *)user_data;
+	EmpathyTpFile *tp_file;
 
-  if (error != NULL)
-    {
-      DEBUG ("Couldn't request channel: %s", error->message);
-      g_object_unref (file);
-      return;
-    }
+	if (error != NULL) {
+		DEBUG ("Couldn't request channel: %s", error->message);
+		g_object_unref (file);
+		return;
+	}
 
-  DEBUG ("Starting to send file");
+	DEBUG ("Starting to send file");
 
-  tp_file = EMPATHY_TP_FILE (
-    empathy_dispatch_operation_get_channel_wrapper (operation));
+	tp_file = EMPATHY_TP_FILE (
+		empathy_dispatch_operation_get_channel_wrapper (operation));
 
-  empathy_tp_file_offer (tp_file, file, NULL);
+	empathy_tp_file_offer (tp_file, file, NULL);
 
-  g_object_unref (file);
-  g_object_unref (tp_file);
+	g_object_unref (file);
+	g_object_unref (tp_file);
 }
 
 static void
