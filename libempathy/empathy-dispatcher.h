@@ -94,12 +94,6 @@ void empathy_dispatcher_join_muc (McAccount *account,
 EmpathyDispatcher *    empathy_dispatcher_dup_singleton (void);
 GType                  empathy_dispatcher_tube_get_type        (void);
 
-/* tube stuff */
-EmpathyDispatcherTube *empathy_dispatcher_tube_ref             (EmpathyDispatcherTube *tube);
-void                   empathy_dispatcher_tube_unref           (EmpathyDispatcherTube *tube);
-void                   empathy_dispatcher_tube_process         (EmpathyDispatcher     *dispatcher,
-								EmpathyDispatcherTube *etube);
-
 G_END_DECLS
 
 #endif /* __EMPATHY_DISPATCHER_H__ */
