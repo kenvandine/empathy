@@ -36,10 +36,6 @@ typedef struct {
 	gchar     *name;
 	gboolean   auto_connect;
   gboolean favorite;
-  /* FIXME: This is crack. We should store EmapthyTpChat but can't
-   * as it's not created in the dispatcher. At some point it should be
-   * automatically created by tp-glib */
-  TpChannel *tp_channel;
 } EmpathyChatroomPriv;
 
 
@@ -60,7 +56,6 @@ enum {
 	PROP_NAME,
 	PROP_AUTO_CONNECT,
   PROP_FAVORITE,
-  PROP_TP_CHANNEL
 };
 
 G_DEFINE_TYPE (EmpathyChatroom, empathy_chatroom, G_TYPE_OBJECT);
@@ -118,19 +113,6 @@ empathy_chatroom_class_init (EmpathyChatroomClass *klass)
         G_PARAM_STATIC_NICK |
         G_PARAM_STATIC_BLURB));
 
-  g_object_class_install_property (object_class,
-      PROP_TP_CHANNEL,
-      g_param_spec_object ("tp-channel",
-        "TpChannel object",
-        "The TpChannel associated with this chatroom if we are in the"
-        " room. NULL otherwise.",
-        TP_TYPE_CHANNEL,
-        G_PARAM_READWRITE |
-        G_PARAM_CONSTRUCT |
-        G_PARAM_STATIC_NAME |
-        G_PARAM_STATIC_NICK |
-        G_PARAM_STATIC_BLURB));
-
 	g_type_class_add_private (object_class, sizeof (EmpathyChatroomPriv));
 }
 
@@ -149,12 +131,6 @@ chatroom_finalize (GObject *object)
 	EmpathyChatroomPriv *priv;
 
 	priv = GET_PRIV (object);
-
-  if (priv->tp_channel != NULL)
-    {
-      g_object_unref (priv->tp_channel);
-      priv->tp_channel = NULL;
-    }
 
 	g_object_unref (priv->account);
 	g_free (priv->room);
@@ -188,9 +164,6 @@ chatroom_get_property (GObject    *object,
 		break;
   case PROP_FAVORITE:
     g_value_set_boolean (value, priv->favorite);
-    break;
-  case PROP_TP_CHANNEL:
-    g_value_set_object (value, priv->tp_channel);
     break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
@@ -232,14 +205,6 @@ chatroom_set_property (GObject      *object,
         empathy_chatroom_set_auto_connect (EMPATHY_CHATROOM (object),
             FALSE);
       }
-    break;
-  case PROP_TP_CHANNEL:
-    if (priv->tp_channel != NULL)
-      {
-        g_object_unref (priv->tp_channel);
-      }
-
-    priv->tp_channel = g_value_dup_object (value);
     break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
