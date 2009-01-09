@@ -53,7 +53,7 @@ typedef enum {
     EMPATHY_DISPATCHER_OPERATION_STATE_INVALIDATED,
 } EmpathyDispatchOperationState;
 
-GType empathy_dispatch_operation_get_type(void);
+GType empathy_dispatch_operation_get_type (void);
 
 /* TYPE MACROS */
 #define EMPATHY_TYPE_DISPATCH_OPERATION \
