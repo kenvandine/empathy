@@ -82,6 +82,7 @@ struct _EmpathyDispatchOperationPriv
   gboolean incoming;
   gboolean approved;
   gulong invalidated_handler;
+  gulong ready_handler;
 };
 
 #define GET_PRIV(o)  \
@@ -295,8 +296,17 @@ empathy_dispatch_operation_dispose (GObject *object)
 
   g_object_unref (priv->connection);
 
+  if (priv->channel_wrapper != NULL)
+    g_object_unref (priv->channel_wrapper);
+
+  if (priv->ready_handler != 0)
+    g_signal_handler_disconnect (priv->channel_wrapper,
+      priv->invalidated_handler);
+
+
   g_signal_handler_disconnect (priv->channel, priv->invalidated_handler);
   g_object_unref (priv->channel);
+
 
   if (priv->contact != NULL)
     g_object_unref (priv->contact);
@@ -336,6 +346,23 @@ empathy_dispatch_operation_set_status (EmpathyDispatchOperation *self,
 }
 
 static void
+empathy_dispatcher_operation_tp_chat_ready_cb (GObject *object,
+  GParamSpec *spec, gpointer user_data)
+{
+  EmpathyDispatchOperation *self = EMPATHY_DISPATCH_OPERATION (user_data);
+  EmpathyDispatchOperationPriv *priv = GET_PRIV (self);
+
+  if (!empathy_tp_chat_is_ready (EMPATHY_TP_CHAT (priv->channel_wrapper)))
+    return;
+
+  g_signal_handler_disconnect (priv->channel_wrapper, priv->ready_handler);
+  priv->ready_handler = 0;
+
+  empathy_dispatch_operation_set_status (self,
+    EMPATHY_DISPATCHER_OPERATION_STATE_PENDING);
+}
+
+static void
 empathy_dispatch_operation_channel_ready_cb (TpChannel *channel,
   const GError *error, gpointer user_data)
 {
@@ -345,8 +372,9 @@ empathy_dispatch_operation_channel_ready_cb (TpChannel *channel,
 
   g_assert (channel == priv->channel);
 
+  /* If the channel wrapper is defined, we assume it's ready */
   if (priv->channel_wrapper != NULL)
-    goto out;
+    goto ready;
 
   channel_type = tp_channel_get_channel_type_id (channel);
 
@@ -354,11 +382,20 @@ empathy_dispatch_operation_channel_ready_cb (TpChannel *channel,
     {
       EmpathyTpChat *chat= empathy_tp_chat_new (channel);
       priv->channel_wrapper = G_OBJECT (chat);
+
+      if (!empathy_tp_chat_is_ready (chat))
+        {
+          priv->ready_handler = g_signal_connect (chat, "notify::ready",
+            G_CALLBACK (empathy_dispatcher_operation_tp_chat_ready_cb), self);
+          goto readying;
+        }
+
     }
   else if (channel_type == TP_IFACE_QUARK_CHANNEL_TYPE_STREAMED_MEDIA)
     {
        EmpathyTpCall *call = empathy_tp_call_new (channel);
        priv->channel_wrapper = G_OBJECT (call);
+
     }
   else if (channel_type == EMP_IFACE_QUARK_CHANNEL_TYPE_FILE_TRANSFER)
     {
@@ -366,9 +403,11 @@ empathy_dispatch_operation_channel_ready_cb (TpChannel *channel,
        priv->channel_wrapper = G_OBJECT (file);
     }
 
-out:
+ready:
   empathy_dispatch_operation_set_status (self,
     EMPATHY_DISPATCHER_OPERATION_STATE_PENDING);
+readying:
+  return;
 }
 
 EmpathyDispatchOperation *
