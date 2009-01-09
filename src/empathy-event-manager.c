@@ -151,10 +151,9 @@ event_remove (EventPriv *event)
 }
 
 static void
-event_manager_add (EmpathyEventManager *manager, EmpathyContact      *contact,
-  const gchar         *icon_name, const gchar         *message,
-  EventManagerApproval *approval, EventFunc            func,
-  gpointer             user_data)
+event_manager_add (EmpathyEventManager *manager, EmpathyContact *contact,
+  const gchar *icon_name, const gchar *message, EventManagerApproval *approval,
+  EventFunc func, gpointer user_data)
 {
   EmpathyEventManagerPriv *priv = GET_PRIV (manager);
   EventPriv               *event;
@@ -166,9 +165,7 @@ event_manager_add (EmpathyEventManager *manager, EmpathyContact      *contact,
   event->func = func;
   event->user_data = user_data;
   event->manager = manager;
-
-  if (approval)
-    event->approval = approval;
+  event->approval = approval;
 
   DEBUG ("Adding event %p", event);
   priv->events = g_slist_prepend (priv->events, event);
@@ -182,8 +179,8 @@ event_channel_process_func (EventPriv *event)
 }
 
 static void
-event_manager_chat_message_received_cb (EmpathyTpChat       *tp_chat,
-  EmpathyMessage      *message, EventManagerApproval *approval)
+event_manager_chat_message_received_cb (EmpathyTpChat *tp_chat,
+  EmpathyMessage *message, EventManagerApproval *approval)
 {
   EmpathyContact  *sender;
   gchar           *msg;
