@@ -914,9 +914,8 @@
   (return-type "GType")
 )
 
-(define-function contact_manager_new
-  (c-name "empathy_contact_manager_new")
-  (is-constructor-of "EmpathyContactManager")
+(define-function contact_manager_dup_singleton
+  (c-name "empathy_contact_manager_dup_singleton")
   (return-type "EmpathyContactManager*")
 )
 
