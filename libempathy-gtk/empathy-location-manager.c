@@ -271,17 +271,13 @@ update_timestamp (EmpathyLocationManager *location_manager,
   EmpathyLocationManagerPriv *priv;
   priv = GET_PRIV (location_manager);
   GValue *new_value;
-  gchar str_time [100];
-  time_t time = timestamp;
-  struct tm *ptm = gmtime (&time);
+  gint64 stamp64 = (gint64) timestamp;
 
-  if (strftime (str_time, 100, "%Y%m%dT%TZ", ptm) == 0)
-    return;
-
-  new_value = tp_g_value_slice_new (G_TYPE_STRING);
-  g_value_set_string (new_value, str_time);
-  g_hash_table_insert (priv->location, g_strdup (EMPATHY_LOCATION_TIMESTAMP), new_value);
-  DEBUG ("\t - Timestamp: %s", str_time);
+  new_value = tp_g_value_slice_new (G_TYPE_INT64);
+  g_value_set_int64 (new_value, stamp64);
+  g_hash_table_insert (priv->location, g_strdup (EMPATHY_LOCATION_TIMESTAMP),
+      new_value);
+  DEBUG ("\t - Timestamp: %" G_GINT64_FORMAT, stamp64);
 }
 
 #if HAVE_GEOCLUE
