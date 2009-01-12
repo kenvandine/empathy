@@ -228,13 +228,17 @@ tp_chat_add (EmpathyContactList *list,
 	     const gchar        *message)
 {
 	EmpathyTpChatPriv *priv = GET_PRIV (list);
+	TpHandle           handle;
+	GArray             handles = {(gchar *) &handle, 1};
 
 	g_return_if_fail (EMPATHY_IS_TP_CHAT (list));
 	g_return_if_fail (EMPATHY_IS_CONTACT (contact));
 
-	if (priv->group) {
-		empathy_tp_group_add_member (priv->group, contact, message);
-	}
+	handle = empathy_contact_get_handle (contact);
+	tp_cli_channel_interface_group_call_add_members (priv->channel, -1,
+							 &handles, NULL,
+							 NULL, NULL, NULL,
+							 NULL);
 }
 
 static void
@@ -243,13 +247,17 @@ tp_chat_remove (EmpathyContactList *list,
 		const gchar        *message)
 {
 	EmpathyTpChatPriv *priv = GET_PRIV (list);
+	TpHandle           handle;
+	GArray             handles = {(gchar *) &handle, 1};
 
 	g_return_if_fail (EMPATHY_IS_TP_CHAT (list));
 	g_return_if_fail (EMPATHY_IS_CONTACT (contact));
 
-	if (priv->group) {
-		empathy_tp_group_remove_member (priv->group, contact, message);
-	}
+	handle = empathy_contact_get_handle (contact);
+	tp_cli_channel_interface_group_call_remove_members (priv->channel, -1,
+							    &handles, NULL,
+							    NULL, NULL, NULL,
+							    NULL);
 }
 
 static GList *
