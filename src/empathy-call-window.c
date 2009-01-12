@@ -30,7 +30,6 @@
 
 #include <libempathy/empathy-contact.h>
 #include <libempathy/empathy-tp-call.h>
-#include <libempathy/empathy-tp-group.h>
 #include <libempathy/empathy-utils.h>
 #include <libempathy-gtk/empathy-ui-utils.h>
 

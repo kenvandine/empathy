@@ -31,7 +31,6 @@
 #include <libempathy/empathy-contact-manager.h>
 #include <libempathy/empathy-tp-chat.h>
 #include <libempathy/empathy-tp-call.h>
-#include <libempathy/empathy-tp-group.h>
 #include <libempathy/empathy-utils.h>
 
 #include <extensions/extensions.h>

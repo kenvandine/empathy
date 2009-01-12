@@ -39,7 +39,6 @@
 #include "empathy-tube-handler.h"
 #include "empathy-account-manager.h"
 #include "empathy-contact-factory.h"
-#include "empathy-tp-group.h"
 #include "empathy-tp-file.h"
 #include "empathy-chatroom-manager.h"
 #include "empathy-utils.h"

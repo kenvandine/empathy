@@ -28,6 +28,7 @@
 #include <telepathy-glib/util.h>
 
 #include "empathy-tp-chat.h"
+#include "empathy-tp-group.h"
 #include "empathy-contact-factory.h"
 #include "empathy-contact-monitor.h"
 #include "empathy-contact-list.h"

@@ -26,7 +26,6 @@
 
 #include "empathy-types.h"
 #include "empathy-contact.h"
-#include "empathy-tp-group.h"
 
 G_BEGIN_DECLS
 
