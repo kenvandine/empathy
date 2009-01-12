@@ -34,6 +34,7 @@
 #include <libmissioncontrol/mc-enum-types.h>
 
 #include "empathy-contact.h"
+#include "empathy-contact-factory.h"
 #include "empathy-utils.h"
 #include "empathy-enum-types.h"
 #include "empathy-marshal.h"
@@ -43,6 +44,7 @@
 
 #define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyContact)
 typedef struct {
+  EmpathyContactFactory *factory;
   gchar *id;
   gchar *name;
   EmpathyAvatar *avatar;
@@ -96,6 +98,22 @@ enum {
 static guint signals[LAST_SIGNAL];
 
 static void
+contact_dispose (GObject *object)
+{
+  EmpathyContactPriv *priv = GET_PRIV (object);
+
+  if (priv->account)
+    g_object_unref (priv->account);
+  priv->account = NULL;
+
+  if (priv->factory)
+    g_object_unref (priv->factory);
+  priv->factory = NULL;
+
+  G_OBJECT_CLASS (empathy_contact_parent_class)->dispose (object);
+}
+
+static void
 empathy_contact_class_init (EmpathyContactClass *class)
 {
   GObjectClass *object_class;
@@ -103,6 +121,7 @@ empathy_contact_class_init (EmpathyContactClass *class)
   object_class = G_OBJECT_CLASS (class);
 
   object_class->finalize = contact_finalize;
+  object_class->dispose = contact_dispose;
   object_class->get_property = contact_get_property;
   object_class->set_property = contact_set_property;
 
@@ -213,6 +232,10 @@ empathy_contact_init (EmpathyContact *contact)
     EMPATHY_TYPE_CONTACT, EmpathyContactPriv);
 
   contact->priv = priv;
+
+  /* Keep a ref to the factory to be sure it is not finalized while there is
+   * still contacts alive. */
+  priv->factory = empathy_contact_factory_dup_singleton ();
 }
 
 static void
@@ -243,9 +266,6 @@ contact_finalize (GObject *object)
 
   if (priv->avatar)
       empathy_avatar_unref (priv->avatar);
-
-  if (priv->account)
-      g_object_unref (priv->account);
 
   G_OBJECT_CLASS (empathy_contact_parent_class)->finalize (object);
 }
