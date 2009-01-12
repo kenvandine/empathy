@@ -48,6 +48,7 @@ typedef struct {
 	EmpathyContactFactory   *contact_factory;
 	McAccount               *account;
 	EmpathyTpContactFactory *tp_contact_factory;
+	GtkFileChooser          *chooser_dialog;
 
 	gulong ready_handler_id;
 
@@ -897,6 +898,8 @@ avatar_chooser_response_cb (GtkWidget            *widget,
 {
 	EmpathyAvatarChooserPriv *priv = GET_PRIV (chooser);
 
+	priv->chooser_dialog = NULL;
+
 	if (response == GTK_RESPONSE_CANCEL) {
 		goto out;
 	}
@@ -942,8 +945,14 @@ avatar_chooser_clicked_cb (GtkWidget            *button,
 	const gchar    *default_dir = DEFAULT_DIR;
 	const gchar    *pics_dir;
 	GtkFileFilter  *filter;
+	EmpathyAvatarChooserPriv *priv = GET_PRIV (chooser);
 
-	chooser_dialog = GTK_FILE_CHOOSER (
+	if (priv->chooser_dialog) {
+		gtk_window_present (GTK_WINDOW (priv->chooser_dialog));
+		return;
+	}
+
+	priv->chooser_dialog = GTK_FILE_CHOOSER (
 		gtk_file_chooser_dialog_new (_("Select Your Avatar Image"),
 					     empathy_get_toplevel_window (GTK_WIDGET (chooser)),
 					     GTK_FILE_CHOOSER_ACTION_OPEN,
@@ -954,6 +963,8 @@ avatar_chooser_clicked_cb (GtkWidget            *button,
 					     GTK_STOCK_OPEN,
 					     GTK_RESPONSE_OK,
 					     NULL));
+	chooser_dialog = priv->chooser_dialog;
+	gtk_window_set_destroy_with_parent (GTK_WINDOW (chooser_dialog), TRUE);
 
 	/* Get special dirs */
 	empathy_conf_get_string (empathy_conf_get (),
