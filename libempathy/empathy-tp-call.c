@@ -1,4 +1,3 @@
-/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /*
  * Copyright (C) 2007 Elliot Fairweather
  * Copyright (C) 2007-2008 Collabora Ltd.
@@ -31,7 +30,6 @@
 
 #include "empathy-tp-call.h"
 #include "empathy-contact-factory.h"
-#include "empathy-tp-group.h"
 #include "empathy-utils.h"
 
 #define DEBUG_FLAG EMPATHY_DEBUG_TP
@@ -46,7 +44,6 @@ typedef struct
   TpChannel *channel;
   TpProxy *stream_engine;
   TpDBusDaemon *dbus_daemon;
-  EmpathyTpGroup *group;
   EmpathyContact *contact;
   gboolean is_incoming;
   guint status;
@@ -263,35 +260,74 @@ tp_call_request_streams_for_capabilities (EmpathyTpCall *call,
   g_array_free (stream_types, TRUE);
 }
 
-static void
-tp_call_member_added_cb (EmpathyTpGroup *group,
-                         EmpathyContact *contact,
-                         EmpathyContact *actor,
-                         guint reason,
-                         const gchar *message,
-                         EmpathyTpCall *call)
+static EmpathyContact *
+tp_call_dup_contact_from_handle (EmpathyTpCall *call, TpHandle handle)
 {
   EmpathyTpCallPriv *priv = GET_PRIV (call);
+  EmpathyContactFactory *factory;
+  McAccount *account;
+  EmpathyContact *contact;
+
+  factory = empathy_contact_factory_dup_singleton ();
+  account = empathy_channel_get_account (priv->channel);
+  contact = empathy_contact_factory_get_from_handle (factory, account, handle);
+
+  g_object_unref (factory);
+  g_object_unref (account);
+
+  return contact;
+}
+
+static void
+tp_call_update_status (EmpathyTpCall *call)
+{
+  EmpathyTpCallPriv *priv = GET_PRIV (call);
+  TpHandle self_handle;
+  const TpIntSet *set;
+  TpIntSetIter iter;
 
   g_object_ref (call);
-  if (!priv->contact && !empathy_contact_is_user (contact))
+
+  self_handle = tp_channel_group_get_self_handle (priv->channel);
+  set = tp_channel_group_get_members (priv->channel);
+  tp_intset_iter_init (&iter, set);
+  while (tp_intset_iter_next (&iter))
     {
-      priv->contact = g_object_ref (contact);
-      priv->is_incoming = TRUE;
-      priv->status = EMPATHY_TP_CALL_STATUS_PENDING;
-      g_object_notify (G_OBJECT (call), "is-incoming");
-      g_object_notify (G_OBJECT (call), "contact");
-      g_object_notify (G_OBJECT (call), "status");
+      if (priv->contact == NULL && iter.element != self_handle)
+        {
+          /* We found the remote contact */
+          priv->contact = tp_call_dup_contact_from_handle (call, iter.element);
+          priv->is_incoming = TRUE;
+          priv->status = EMPATHY_TP_CALL_STATUS_PENDING;
+          g_object_notify (G_OBJECT (call), "is-incoming");
+          g_object_notify (G_OBJECT (call), "contact");
+          g_object_notify (G_OBJECT (call), "status");
+        }
+
+      if (priv->status == EMPATHY_TP_CALL_STATUS_PENDING &&
+          ((priv->is_incoming && iter.element == self_handle) ||
+           (!priv->is_incoming && iter.element != self_handle)))
+        {
+          priv->status = EMPATHY_TP_CALL_STATUS_ACCEPTED;
+          g_object_notify (G_OBJECT (call), "status");
+        }
     }
 
-  if (priv->status == EMPATHY_TP_CALL_STATUS_PENDING &&
-      ((priv->is_incoming && contact != priv->contact) ||
-       (!priv->is_incoming && contact == priv->contact)))
-    {
-      priv->status = EMPATHY_TP_CALL_STATUS_ACCEPTED;
-      g_object_notify (G_OBJECT (call), "status");
-    }
   g_object_unref (call);
+}
+
+static void
+tp_call_members_changed_cb (TpChannel *channel,
+                            gchar *message,
+                            GArray *added,
+                            GArray *removed,
+                            GArray *local_pending,
+                            GArray *remote_pending,
+                            guint actor,
+                            guint reason,
+                            EmpathyTpCall *call)
+{
+  tp_call_update_status (call);
 }
 
 void
@@ -466,11 +502,10 @@ tp_call_constructor (GType type,
   tp_cli_channel_type_streamed_media_call_list_streams (priv->channel, -1,
       tp_call_request_streams_cb, NULL, NULL, G_OBJECT (call));
 
-  /* Setup group interface */
-  priv->group = empathy_tp_group_new (priv->channel);
-
-  g_signal_connect (priv->group, "member-added",
-      G_CALLBACK (tp_call_member_added_cb), call);
+  /* Update status when members changes */
+  tp_call_update_status (call);
+  g_signal_connect (priv->channel, "group-members-changed",
+      G_CALLBACK (tp_call_members_changed_cb), call);
 
   /* Start stream engine */
   tp_call_stream_engine_handle_channel (call);
@@ -487,11 +522,6 @@ tp_call_finalize (GObject *object)
 
   g_slice_free (EmpathyTpCallStream, priv->audio);
   g_slice_free (EmpathyTpCallStream, priv->video);
-
-  if (priv->group != NULL)
-    g_object_unref (priv->group);
-
-  priv->group = NULL;
 
   if (priv->channel != NULL)
     {
@@ -646,16 +676,18 @@ void
 empathy_tp_call_accept_incoming_call (EmpathyTpCall *call)
 {
   EmpathyTpCallPriv *priv = GET_PRIV (call);
-  EmpathyContact *self_contact;
+  TpHandle self_handle;
+  GArray handles = {(gchar *) &self_handle, 1};
 
   g_return_if_fail (EMPATHY_IS_TP_CALL (call));
   g_return_if_fail (priv->status == EMPATHY_TP_CALL_STATUS_PENDING);
+  g_return_if_fail (priv->is_incoming);
 
   DEBUG ("Accepting incoming call");
 
-  self_contact = empathy_tp_group_get_self_contact (priv->group);
-  empathy_tp_group_add_member (priv->group, self_contact, NULL);
-  g_object_unref (self_contact);
+  self_handle = tp_channel_group_get_self_handle (priv->channel);
+  tp_cli_channel_interface_group_call_add_members (priv->channel, -1,
+      &handles, NULL, NULL, NULL, NULL, NULL);
 }
 
 void
