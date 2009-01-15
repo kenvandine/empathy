@@ -1245,6 +1245,25 @@ dispatcher_create_channel_with_contact_cb (EmpathyContact *contact,
     G_OBJECT (request_data->dispatcher));
 }
 
+static void
+dispatcher_send_file_connection_ready_cb (TpConnection *connection,
+                                          const GError *error,
+                                          gpointer user_data)
+{
+  DispatcherRequestData *request_data = (DispatcherRequestData *) user_data;
+
+  if (error !=  NULL)
+    {
+      dispatcher_request_failed (request_data->dispatcher,
+          request_data, error);
+      return;
+    }
+
+  empathy_contact_call_when_ready (request_data->contact,
+    EMPATHY_CONTACT_READY_HANDLE, dispatcher_create_channel_with_contact_cb,
+    request_data, NULL, G_OBJECT (request_data->dispatcher));
+}
+
 void
 empathy_dispatcher_send_file_to_contact (EmpathyContact *contact,
   const gchar *filename, guint64 size, guint64 date,
@@ -1304,9 +1323,8 @@ empathy_dispatcher_send_file_to_contact (EmpathyContact *contact,
   connection_data->outstanding_requests = g_list_prepend
     (connection_data->outstanding_requests, request_data);
 
-  empathy_contact_call_when_ready (contact,
-    EMPATHY_CONTACT_READY_HANDLE, dispatcher_create_channel_with_contact_cb,
-    request_data, NULL, G_OBJECT (dispatcher));
+  tp_connection_call_when_ready (connection,
+      dispatcher_send_file_connection_ready_cb, (gpointer) request_data);
 
   g_object_unref (dispatcher);
 }
