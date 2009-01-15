@@ -2612,9 +2612,8 @@
   )
 )
 
-(define-function mission_control_new
-  (c-name "empathy_mission_control_new")
-  (is-constructor-of "EmpathyMissionControl")
+(define-function mission_control_dup_singleton
+  (c-name "empathy_mission_control_dup_singleton")
   (return-type "MissionControl*")
 )
 
