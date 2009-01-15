@@ -370,23 +370,6 @@ tp_call_async_cb (TpProxy *proxy,
 }
 
 static void
-tp_call_close_channel (EmpathyTpCall *call)
-{
-  EmpathyTpCallPriv *priv = GET_PRIV (call);
-
-  if (priv->status == EMPATHY_TP_CALL_STATUS_CLOSED)
-      return;
-
-  DEBUG ("Closing channel");
-
-  tp_cli_channel_call_close (priv->channel, -1,
-      NULL, NULL, NULL, NULL);
-
-  priv->status = EMPATHY_TP_CALL_STATUS_CLOSED;
-  g_object_notify (G_OBJECT (call), "status");
-}
-
-static void
 tp_call_stream_engine_invalidated_cb (TpProxy       *stream_engine,
 				      GQuark         domain,
 				      gint           code,
@@ -394,7 +377,7 @@ tp_call_stream_engine_invalidated_cb (TpProxy       *stream_engine,
 				      EmpathyTpCall *call)
 {
   DEBUG ("Stream engine proxy invalidated: %s", message);
-  tp_call_close_channel (call);
+  empathy_tp_call_close (call);
 }
 
 static void
@@ -414,7 +397,7 @@ tp_call_stream_engine_watch_name_owner_cb (TpDBusDaemon *daemon,
   if (priv->stream_engine_running && G_STR_EMPTY (new_owner))
     {
       DEBUG ("Stream engine falled off the bus");
-      tp_call_close_channel (call);
+      empathy_tp_call_close (call);
       return;
     }
 
@@ -695,13 +678,18 @@ empathy_tp_call_close (EmpathyTpCall *call)
 {
   EmpathyTpCallPriv *priv = GET_PRIV (call);
 
-  g_signal_handlers_disconnect_by_func (priv->channel,
-    tp_call_channel_invalidated_cb, call);
+  g_return_if_fail (EMPATHY_IS_TP_CALL (call));
 
-  tp_call_close_channel (call);
+  if (priv->status == EMPATHY_TP_CALL_STATUS_CLOSED)
+      return;
 
-  g_object_unref (priv->channel);
-  priv->channel = NULL;
+  DEBUG ("Closing channel");
+
+  tp_cli_channel_call_close (priv->channel, -1,
+      NULL, NULL, NULL, NULL);
+
+  priv->status = EMPATHY_TP_CALL_STATUS_CLOSED;
+  g_object_notify (G_OBJECT (call), "status");
 }
 
 void
