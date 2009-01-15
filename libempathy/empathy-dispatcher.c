@@ -926,7 +926,7 @@ empathy_dispatcher_init (EmpathyDispatcher *dispatcher)
     EMPATHY_TYPE_DISPATCHER, EmpathyDispatcherPriv);
 
   dispatcher->priv = priv;
-  priv->mc = empathy_mission_control_new ();
+  priv->mc = empathy_mission_control_dup_singleton ();
   priv->account_manager = empathy_account_manager_dup_singleton ();
 
   g_signal_connect (priv->account_manager,

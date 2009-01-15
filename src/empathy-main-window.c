@@ -551,7 +551,7 @@ empathy_main_window_show (void)
 	main_window_connection_items_setup (window, glade);
 	g_object_unref (glade);
 
-	window->mc = empathy_mission_control_new ();
+	window->mc = empathy_mission_control_dup_singleton ();
 	window->account_manager = empathy_account_manager_dup_singleton ();
 
 	g_signal_connect (window->account_manager,
@@ -848,7 +848,7 @@ main_window_favorite_chatroom_join (EmpathyChatroom *chatroom)
 	McAccount      *account;
 	const gchar    *room;
 
-	mc = empathy_mission_control_new ();
+	mc = empathy_mission_control_dup_singleton ();
 	account = empathy_chatroom_get_account (chatroom);
 	room = empathy_chatroom_get_room (chatroom);
 

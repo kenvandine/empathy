@@ -229,7 +229,7 @@ empathy_account_equal (gconstpointer a,
 }
 
 MissionControl *
-empathy_mission_control_new (void)
+empathy_mission_control_dup_singleton (void)
 {
 	static MissionControl *mc = NULL;
 

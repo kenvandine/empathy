@@ -291,7 +291,7 @@ empathy_tp_tube_new_stream_tube (EmpathyContact *contact,
   g_return_val_if_fail (hostname != NULL, NULL);
   g_return_val_if_fail (service != NULL, NULL);
 
-  mc = empathy_mission_control_new ();
+  mc = empathy_mission_control_dup_singleton ();
   account = empathy_contact_get_account (contact);
   connection = mission_control_get_tpconnection (mc, account, NULL);
   g_object_unref (mc);

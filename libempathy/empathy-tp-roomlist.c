@@ -279,7 +279,7 @@ tp_roomlist_constructed (GObject *list)
 	EmpathyTpRoomlistPriv *priv = GET_PRIV (list);
 	MissionControl        *mc;
 
-	mc = empathy_mission_control_new ();
+	mc = empathy_mission_control_dup_singleton ();
 	priv->account = mission_control_get_account_for_tpconnection (mc,
 								      priv->connection,
 								      NULL);
@@ -401,7 +401,7 @@ empathy_tp_roomlist_new (McAccount *account)
 
 	g_return_val_if_fail (MC_IS_ACCOUNT (account), NULL);
 
-	mc = empathy_mission_control_new ();
+	mc = empathy_mission_control_dup_singleton ();
 	connection = mission_control_get_tpconnection (mc, account, NULL);
 
 	list = g_object_new (EMPATHY_TYPE_TP_ROOMLIST,

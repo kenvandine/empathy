@@ -711,7 +711,7 @@ tp_contact_list_constructed (GObject *list)
 	const gchar              *protocol_name;
 
 	/* Get the connection. status==0 means CONNECTED */
-	mc = empathy_mission_control_new ();
+	mc = empathy_mission_control_dup_singleton ();
 	status = mission_control_get_connection_status (mc, priv->account, NULL);
 	g_return_if_fail (status == 0);
 	priv->connection = mission_control_get_tpconnection (mc, priv->account, NULL);

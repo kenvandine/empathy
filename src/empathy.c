@@ -459,7 +459,7 @@ main (int argc, char *argv[])
 	}
 
 	/* Setting up MC */
-	mc = empathy_mission_control_new ();
+	mc = empathy_mission_control_dup_singleton ();
 	g_signal_connect (mc, "ServiceEnded",
 			  G_CALLBACK (service_ended_cb),
 			  NULL);

@@ -424,7 +424,7 @@ empathy_idle_init (EmpathyIdle *idle)
 
 	idle->priv = priv;
 	priv->is_idle = FALSE;
-	priv->mc = empathy_mission_control_new ();
+	priv->mc = empathy_mission_control_dup_singleton ();
 	priv->state = mission_control_get_presence_actual (priv->mc, &error);
 	if (error) {
 		DEBUG ("Error getting actual presence: %s", error->message);

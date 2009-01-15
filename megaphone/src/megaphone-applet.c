@@ -443,7 +443,7 @@ megaphone_applet_button_press_event_cb (GtkWidget       *widget,
 		empathy_contact_get_id (priv->contact),
 		empathy_contact_get_handle (priv->contact));
 
-	mc = empathy_mission_control_new ();
+	mc = empathy_mission_control_dup_singleton ();
 	mission_control_request_channel (mc,
 					 empathy_contact_get_account (priv->contact),
 					 TP_IFACE_CHANNEL_TYPE_TEXT,

@@ -68,7 +68,7 @@ xmlNodePtr   empathy_xml_node_find_child_prop_value (xmlNodePtr       node,
 guint        empathy_account_hash                   (gconstpointer    key);
 gboolean     empathy_account_equal                  (gconstpointer    a,
 						    gconstpointer    b);
-MissionControl *empathy_mission_control_new         (void);
+MissionControl *empathy_mission_control_dup_singleton (void);
 const gchar * empathy_presence_get_default_message  (McPresence       presence);
 const gchar * empathy_presence_to_str               (McPresence       presence);
 McPresence    empathy_presence_from_str             (const gchar     *str);

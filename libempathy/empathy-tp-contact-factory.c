@@ -972,7 +972,7 @@ tp_contact_factory_status_updated (EmpathyTpContactFactory *tp_factory)
 		return;
 	}
 
-	mc = empathy_mission_control_new ();
+	mc = empathy_mission_control_dup_singleton ();
 	priv->connection = mission_control_get_tpconnection (mc, priv->account, NULL);
 	if (!priv->connection) {
 		return;

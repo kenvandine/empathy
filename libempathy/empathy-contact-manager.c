@@ -249,7 +249,7 @@ empathy_contact_manager_init (EmpathyContactManager *manager)
 			  "account-connection-changed",
 			  G_CALLBACK (contact_manager_connection_changed_cb), manager);
 
-	mc = empathy_mission_control_new ();
+	mc = empathy_mission_control_dup_singleton ();
 
 	/* Get ContactList for existing connections */
 	accounts = mission_control_get_online_connections (mc, NULL);

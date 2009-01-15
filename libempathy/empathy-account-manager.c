@@ -375,7 +375,7 @@ empathy_account_manager_init (EmpathyAccountManager *manager)
 				      EMPATHY_TYPE_ACCOUNT_MANAGER, EmpathyAccountManagerPriv);
   manager->priv = priv;
   priv->monitor = mc_account_monitor_new ();
-  priv->mc = empathy_mission_control_new ();
+  priv->mc = empathy_mission_control_dup_singleton ();
   priv->connected = priv->connecting = 0;
   priv->dispose_run = FALSE;
 

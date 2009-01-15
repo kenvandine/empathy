@@ -649,7 +649,7 @@ empathy_account_chooser_filter_is_connected (McAccount *account,
 
 	g_return_val_if_fail (MC_IS_ACCOUNT (account), FALSE);
 
-	mc = empathy_mission_control_new ();
+	mc = empathy_mission_control_dup_singleton ();
 	status = mission_control_get_connection_status (mc, account, NULL);
 	g_object_unref (mc);
 
