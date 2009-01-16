@@ -515,10 +515,11 @@ dispatcher_connection_new_channel (EmpathyDispatcher *dispatcher,
   if (g_hash_table_lookup (cd->outstanding_channels, object_path) != NULL)
     return;
 
-  /* Only pick up non-requested text channels. For all other it doesn't make
-   * sense to handle it if we didn't request it. The same goes for channels we
-   * discovered by the Channels property or ListChannels */
-  if (!incoming && tp_strdiff (channel_type, TP_IFACE_CHANNEL_TYPE_TEXT))
+  /* Only pick up non-requested text and file channels. For all other it
+   * doesn't make sense to handle it if we didn't request it. The same goes
+   * for channels we discovered by the Channels property or ListChannels */
+  if (!incoming && tp_strdiff (channel_type, TP_IFACE_CHANNEL_TYPE_TEXT)
+        && tp_strdiff (channel_type, EMP_IFACE_CHANNEL_TYPE_FILE_TRANSFER))
     {
       DEBUG ("Ignoring incoming channel of type %s on %s",
         channel_type, object_path);
