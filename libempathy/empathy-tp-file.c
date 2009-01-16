@@ -43,6 +43,8 @@
 #include "empathy-time.h"
 #include "empathy-utils.h"
 
+#include "extensions/extensions.h"
+
 #define DEBUG_FLAG EMPATHY_DEBUG_FT
 #include "empathy-debug.h"
 
@@ -846,9 +848,9 @@ empathy_tp_file_is_incoming (EmpathyTpFile *tp_file)
   return tp_file->priv->incoming;
 }
 
-EmpFileTransferState
+guint
 empathy_tp_file_get_state (EmpathyTpFile *tp_file,
-                           EmpFileTransferStateChangeReason *reason)
+                           guint *reason)
 {
   g_return_val_if_fail (EMPATHY_IS_TP_FILE (tp_file),
       EMP_FILE_TRANSFER_STATE_NONE);

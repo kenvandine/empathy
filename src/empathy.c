@@ -56,6 +56,8 @@
 #include "empathy-ft-manager.h"
 #include "bacon-message-connection.h"
 
+#include "extensions/extensions.h"
+
 #define DEBUG_FLAG EMPATHY_DEBUG_OTHER
 #include <libempathy/empathy-debug.h>
 

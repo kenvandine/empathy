@@ -30,6 +30,8 @@
 
 #include "empathy-marshal.h"
 
+#include "extensions/extensions.h"
+
 #define DEBUG_FLAG EMPATHY_DEBUG_DISPATCHER
 #include <libempathy/empathy-debug.h>
 
