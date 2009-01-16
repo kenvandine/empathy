@@ -414,7 +414,7 @@ empathy_channel_get_account (TpChannel *channel)
 	MissionControl *mc;
 
 	g_object_get (channel, "connection", &connection, NULL);
-	mc = empathy_mission_control_new ();
+	mc = empathy_mission_control_dup_singleton ();
 	account = mission_control_get_account_for_tpconnection (mc, connection, NULL);
 	g_object_unref (connection);
 	g_object_unref (mc);
