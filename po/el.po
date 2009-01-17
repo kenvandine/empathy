@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: el\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-01-17 19:23+0000\n"
-"PO-Revision-Date: 2009-01-17 21:02+0200\n"
+"POT-Creation-Date: 2009-01-17 21:44+0000\n"
+"PO-Revision-Date: 2009-01-17 23:01+0200\n"
 "Last-Translator: Marios Zindilis <m.zindilis@dmajor.org>\n"
 "Language-Team: Greek <team@gnome.gr>\n"
 "MIME-Version: 1.0\n"
@@ -2008,7 +2008,7 @@ msgstr "_Λογαριασμοί"
 
 #: ../src/empathy-main-window.glade.h:8
 msgid "_Add Contact..."
-msgstr "Πρόσ_θεση επαφής..."
+msgstr "Προσ_θήκη επαφής..."
 
 #: ../src/empathy-main-window.glade.h:13 ../src/empathy-status-icon.glade.h:2
 msgid "_New Conversation..."
