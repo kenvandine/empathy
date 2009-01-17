@@ -1,14 +1,14 @@
 # Hungarian translation of gossip
 # This file is distributed under the same license as the gossip package.
-# Copyright (C) 2005, 2006, 2007, 2008, Free Software Foundation, Inc.
+# Copyright (C) 2005, 2006, 2007, 2008, 2009, Free Software Foundation, Inc.
 #
-# Gabor Kelemen <kelemeng@gnome.hu>, 2005, 2006, 2007, 2008.
+# Gabor Kelemen <kelemeng@gnome.hu>, 2005, 2006, 2007, 2008, 2009.
 msgid ""
 msgstr ""
 "Project-Id-Version: empathy HEAD\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-03 17:51+0000\n"
-"PO-Revision-Date: 2008-10-06 02:36+0200\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=empathy&component=general\n"
+"POT-Creation-Date: 2009-01-11 22:12+0000\n"
+"PO-Revision-Date: 2009-01-17 01:55+0100\n"
 "Last-Translator: Gabor Kelemen <kelemeng@gnome.hu>\n"
 "Language-Team: Hungarian <gnome@fsf.hu>\n"
 "MIME-Version: 1.0\n"
@@ -60,138 +60,228 @@ msgid "Default directory to select an avatar image from"
 msgstr "Alapértelmezett könyvtár avatar kép kiválasztásához"
 
 #: ../data/empathy.schemas.in.h:8
+#| msgid "Enable sounds when _away"
+msgid "Disable sounds when away"
+msgstr "Hangok tiltása ha nincs itt"
+
+#: ../data/empathy.schemas.in.h:9
+msgid "Empathy default download folder"
+msgstr "Az Empathy alapértelmezett letöltési mappája"
+
+#: ../data/empathy.schemas.in.h:10
+msgid "Empathy has asked about importing accounts"
+msgstr "Az Empathy rákérdezett a fiókok importálására"
+
+#: ../data/empathy.schemas.in.h:11
 msgid "Empathy should auto-connect on startup"
 msgstr "Az Empathy automatikusan csatlakozzon-e induláskor?"
 
-#: ../data/empathy.schemas.in.h:9
+#: ../data/empathy.schemas.in.h:12
 msgid "Empathy should use the avatar of the contact as the chat window icon"
 msgstr "Az Empathy a partner avatarját használja-e a csevegésablak ikonjaként"
 
-#: ../data/empathy.schemas.in.h:10
+#: ../data/empathy.schemas.in.h:13
 msgid "Enable popup when contact is available"
 msgstr "Felugró ablak engedélyezése partner elérhetővé válásakor"
 
-#: ../data/empathy.schemas.in.h:11
-msgid "Enable sound when away"
-msgstr "Hang engedélyezése, ha távol vagyok"
-
-#: ../data/empathy.schemas.in.h:12
-msgid "Enable sound when busy"
-msgstr "Hang engedélyezése, ha elfoglalt vagyok"
-
-#: ../data/empathy.schemas.in.h:13
+#: ../data/empathy.schemas.in.h:14
 msgid "Enable spell checker"
 msgstr "Helyesírás-ellenőrző engedélyezése"
 
-#: ../data/empathy.schemas.in.h:14
+#: ../data/empathy.schemas.in.h:15
 msgid "Hide main window"
 msgstr "Főablak elrejtése"
 
-#: ../data/empathy.schemas.in.h:15
+#: ../data/empathy.schemas.in.h:16
 msgid "Hide the main window."
 msgstr "A főablak elrejtése."
 
-#: ../data/empathy.schemas.in.h:16
+#: ../data/empathy.schemas.in.h:17
 msgid "NetworkManager should be used"
 msgstr "Használandó-e a Hálózatkezelő?"
 
-#: ../data/empathy.schemas.in.h:17
+#: ../data/empathy.schemas.in.h:18
 msgid "Nick completed character"
 msgstr "Kiegészített becenevet jelző karakter"
 
-#: ../data/empathy.schemas.in.h:18
+#: ../data/empathy.schemas.in.h:19
 msgid "Open new chats in separate windows"
 msgstr "Új csevegések megnyitása külön ablakokban"
 
-#: ../data/empathy.schemas.in.h:19
+#: ../data/empathy.schemas.in.h:20
+#| msgid "_Play sound when messages arrive"
+msgid "Play a sound for incoming messages"
+msgstr "Hang lejátszása érkező üzenetekhez"
+
+#: ../data/empathy.schemas.in.h:21
+msgid "Play a sound for new conversations"
+msgstr "Hang lejátszása új társalgásokhoz"
+
+#: ../data/empathy.schemas.in.h:22
+#| msgid "_Play sound when messages arrive"
+msgid "Play a sound for outgoing messages"
+msgstr "Hang lejátszása kimenő üzenetekhez"
+
+#: ../data/empathy.schemas.in.h:23
+#| msgid "_Play sound when messages arrive"
+msgid "Play a sound when a contact logs in"
+msgstr "Hang lejátszása partner bejelentkezésekor"
+
+#: ../data/empathy.schemas.in.h:24
+msgid "Play a sound when a contact logs out"
+msgstr "Hang lejátszása partner kijelentkezésekor"
+
+#: ../data/empathy.schemas.in.h:25
+#| msgid "_Play sound when messages arrive"
+msgid "Play a sound when we log in"
+msgstr "Hang lejátszása bejelentkezéskor"
+
+#: ../data/empathy.schemas.in.h:26
+#| msgid "_Play sound when messages arrive"
+msgid "Play a sound when we log out"
+msgstr "Hang lejátszása kijelentkezéskor"
+
+#: ../data/empathy.schemas.in.h:27
 msgid "Salut account is created"
 msgstr "Salut fiók létrehozva"
 
-#: ../data/empathy.schemas.in.h:20
+#: ../data/empathy.schemas.in.h:28
 msgid "Show avatars"
 msgstr "Avatarok mutatása"
 
-#: ../data/empathy.schemas.in.h:21
+#: ../data/empathy.schemas.in.h:29
 msgid "Show hint about closing the main window"
 msgstr "Tanács megjelenítése a főablak bezárásakor"
 
-#: ../data/empathy.schemas.in.h:22
+#: ../data/empathy.schemas.in.h:30
 msgid "Show offline contacts"
 msgstr "Kilépett partnerek mutatása"
 
-#: ../data/empathy.schemas.in.h:23
+#: ../data/empathy.schemas.in.h:31
 msgid "Spell checking languages"
 msgstr "Helyesírás-ellenőrző nyelvei"
 
-#: ../data/empathy.schemas.in.h:24
+#: ../data/empathy.schemas.in.h:32
+msgid "The default folder to save file transfers in."
+msgstr "Alapértelmezett mappa átvitt fájlok mentéséhez."
+
+#: ../data/empathy.schemas.in.h:33
 msgid "The last directory that an avatar image was chosen from."
 msgstr "Az utolsó könyvtár, amelyből egy avatar kép kiválasztásra került."
 
-#: ../data/empathy.schemas.in.h:25
+#: ../data/empathy.schemas.in.h:34
 msgid "The theme that is used to display the conversation in chat windows."
 msgstr "A társalgás megjelenítésére használt téma a csevegőablakokban."
 
-#: ../data/empathy.schemas.in.h:26
+#: ../data/empathy.schemas.in.h:35
 msgid "Use graphical smileys"
 msgstr "Grafikus hangulatjelek használata"
 
-#: ../data/empathy.schemas.in.h:27
+#: ../data/empathy.schemas.in.h:36
 msgid "Use notification sounds"
 msgstr "Értesítő hangok használata"
 
-#: ../data/empathy.schemas.in.h:28
+#: ../data/empathy.schemas.in.h:37
 msgid "Use theme for chat rooms"
 msgstr "Téma használata a csevegőszobákhoz"
 
-#: ../data/empathy.schemas.in.h:29
+#: ../data/empathy.schemas.in.h:38
+#| msgid ""
+#| "Whether or not Empathy should automatically log in to your accounts on "
+#| "startup."
+msgid ""
+"Whether or not Empathy has asked about importing accounts from other "
+"programs."
+msgstr "Az Empathy rákérdezett-e fiókok importálására más programokból."
+
+#: ../data/empathy.schemas.in.h:39
 msgid ""
 "Whether or not Empathy should automatically log in to your accounts on "
 "startup."
 msgstr "Az Empathy automatikusan bejelentkezzen-e a fiókjaiba induláskor?"
 
-#: ../data/empathy.schemas.in.h:30
+#: ../data/empathy.schemas.in.h:40
 msgid ""
 "Whether or not Empathy should use the avatar of the contact as the chat "
 "window icon."
 msgstr "Az Empathy a partner avatarját használja-e a csevegésablak ikonjaként?"
 
-#: ../data/empathy.schemas.in.h:31
+#: ../data/empathy.schemas.in.h:41
 msgid "Whether or not the Salut account has been created on the first Empathy run."
 msgstr "A Salut fiók létrejött-e az Empathy első futtatásakor?"
 
-#: ../data/empathy.schemas.in.h:32
+#: ../data/empathy.schemas.in.h:42
 msgid ""
 "Whether or not the network manager should be used to automatically "
 "disconnect/reconnect."
 msgstr "A Hálózatkezelő használandó-e az automatikus bontáshoz/újracsatlakozáshoz."
 
-#: ../data/empathy.schemas.in.h:33
+#: ../data/empathy.schemas.in.h:43
 msgid ""
 "Whether or not to check words typed against the languages you want to check "
 "with."
 msgstr "A beírt szavak ellenőrzése az ellenőrizni kívánt nyelveken."
 
-#: ../data/empathy.schemas.in.h:34
+#: ../data/empathy.schemas.in.h:44
 msgid "Whether or not to convert smileys into graphical images in conversations."
 msgstr "Hangulatjelek képekké alakítása társalgások közben."
 
-#: ../data/empathy.schemas.in.h:35
-msgid "Whether or not to play a sound when messages arrive."
-msgstr "Lejátsszon-e hangot üzenetek érkezésekor?"
+#: ../data/empathy.schemas.in.h:45
+#| msgid "Whether or not to play sounds when away."
+msgid "Whether or not to play a sound notifications when away or busy."
+msgstr "Lejátsszon-e hangos értesítéseket, ha Ön távol van vagy elfoglalt?"
 
-#: ../data/empathy.schemas.in.h:36
-msgid "Whether or not to play sounds when away."
-msgstr "Lejátsszon-e hangot ha Ön távol van?"
+#: ../data/empathy.schemas.in.h:46
+#| msgid ""
+#| "Whether or not to show avatars for contacts in the contact list and chat "
+#| "windows."
+msgid "Whether or not to play a sound to notify for contacts logging in the network."
+msgstr "Lejátsszon-e hangos értesítéseket, ha a partnerek bejelentkeznek a hálózatra?"
 
-#: ../data/empathy.schemas.in.h:37
-msgid "Whether or not to play sounds when busy."
-msgstr "Lejátsszon-e hangot ha Ön elfoglalt?"
+#: ../data/empathy.schemas.in.h:47
+#| msgid ""
+#| "Whether or not to show avatars for contacts in the contact list and chat "
+#| "windows."
+msgid ""
+"Whether or not to play a sound to notify for contacts logging off the "
+"network."
+msgstr "Lejátsszon-e hangos értesítéseket, ha a partnerek kijelentkeznek a hálózatból?"
 
-#: ../data/empathy.schemas.in.h:38
+#: ../data/empathy.schemas.in.h:48
+#| msgid "Whether or not to play sounds when busy."
+msgid "Whether or not to play a sound to notify for events."
+msgstr "Lejátsszon-e hangot az eseményekre figyelmeztetésként?"
+
+#: ../data/empathy.schemas.in.h:49
+#| msgid "Whether or not to play a sound when messages arrive."
+msgid "Whether or not to play a sound to notify for incoming messages."
+msgstr "Lejátsszon-e hangot bejövő üzenetekre figyelmeztetésként?"
+
+#: ../data/empathy.schemas.in.h:50
+#| msgid "Whether or not to play a sound when messages arrive."
+msgid "Whether or not to play a sound to notify for new conversations."
+msgstr "Lejátsszon-e hangot új társalgásokra figyelmeztetésként?"
+
+#: ../data/empathy.schemas.in.h:51
+#| msgid "Whether or not to play a sound when messages arrive."
+msgid "Whether or not to play a sound to notify for outgoing messages."
+msgstr "Lejátsszon-e hangot kimenő üzenetekre figyelmeztetésként?"
+
+#: ../data/empathy.schemas.in.h:52
+#| msgid "Whether or not to play sounds when away."
+msgid "Whether or not to play a sound when logging in a network."
+msgstr "Lejátsszon-e hangot a hálózatba bejelentkezéskor?"
+
+#: ../data/empathy.schemas.in.h:53
+#| msgid "Whether or not to play sounds when away."
+msgid "Whether or not to play a sound when logging off a network."
+msgstr "Lejátsszon-e hangot a hálózatból kijelentkezéskor?"
+
+#: ../data/empathy.schemas.in.h:54
 msgid "Whether or not to show a popup when a contact becomes available."
 msgstr "Megjelenjen-e egy felugró ablak egy partner elérhetővé válásakor?"
 
-#: ../data/empathy.schemas.in.h:39
+#: ../data/empathy.schemas.in.h:55
 msgid ""
 "Whether or not to show avatars for contacts in the contact list and chat "
 "windows."
@@ -199,25 +289,25 @@ msgstr ""
 "Megjelenjenek-e az avatarok a partnerekhez a partnerlistában és "
 "csevegőablakokban?"
 
-#: ../data/empathy.schemas.in.h:40
+#: ../data/empathy.schemas.in.h:56
 msgid "Whether or not to show contacts that are offline in the contact list."
 msgstr "Kilépett partnerek mutatása a partnerlistában."
 
-#: ../data/empathy.schemas.in.h:41
+#: ../data/empathy.schemas.in.h:57
 msgid ""
 "Whether or not to show the message dialog about closing the main window with "
 "the 'x' button in the title bar."
 msgstr "Megjelenjen-e párbeszédablak a főablak bezárásakor a címsor X gombjával."
 
-#: ../data/empathy.schemas.in.h:42
+#: ../data/empathy.schemas.in.h:58
 msgid "Whether to show the contact list in compact mode or not."
 msgstr "Megjelenjen-e a partnerlista tömör módban."
 
-#: ../data/empathy.schemas.in.h:43
+#: ../data/empathy.schemas.in.h:59
 msgid "Whether to use the theme for chat rooms or not."
 msgstr "A téma használata csevegőszobákhoz."
 
-#: ../data/empathy.schemas.in.h:44
+#: ../data/empathy.schemas.in.h:60
 msgid ""
 "Which criterium to use when sorting the contact list. Default is to use sort "
 "by the contact's name with the value \"name\". A value of \"state\" will "
@@ -226,31 +316,31 @@ msgstr ""
 "A partnerlista rendezéséhez használandó feltétel. A lehetséges értékek: "
 "„name” (név, ez az alapértelmezett) és „state” (állapot)."
 
-#: ../libempathy/empathy-tp-contact-list.c:731 ../src/empathy.c:248
+#: ../libempathy/empathy-tp-contact-list.c:731 ../src/empathy.c:267
 msgid "People nearby"
 msgstr "Közeli emberek"
 
-#: ../libempathy/empathy-utils.c:345
+#: ../libempathy/empathy-utils.c:251
 msgid "Available"
 msgstr "Elérhető"
 
-#: ../libempathy/empathy-utils.c:347
+#: ../libempathy/empathy-utils.c:253
 msgid "Busy"
 msgstr "Elfoglalt"
 
-#: ../libempathy/empathy-utils.c:350
+#: ../libempathy/empathy-utils.c:256
 msgid "Away"
 msgstr "Távol"
 
-#: ../libempathy/empathy-utils.c:352
+#: ../libempathy/empathy-utils.c:258
 msgid "Hidden"
 msgstr "Rejtett"
 
-#: ../libempathy/empathy-utils.c:355
+#: ../libempathy/empathy-utils.c:261
 msgid "Offline"
 msgstr "Kilépett"
 
-#: ../libempathy-gtk/empathy-account-chooser.c:337
+#: ../libempathy-gtk/empathy-account-chooser.c:326
 msgid "All"
 msgstr "Minden"
 
@@ -464,19 +554,28 @@ msgstr "Konferencia- és csevegőszoba-meghívások _figyelmen kívül hagyása"
 msgid "_Room List locale:"
 msgstr "Sz_obalista területi beállítása:"
 
-#: ../libempathy-gtk/empathy-avatar-chooser.c:457
+#: ../libempathy-gtk/empathy-avatar-chooser.c:461
+#: ../libempathy-gtk/empathy-avatar-chooser.c:536
+msgid "Couldn't convert image"
+msgstr "A kép nem alakítható át"
+
+#: ../libempathy-gtk/empathy-avatar-chooser.c:462
+msgid "None of the accepted image formats is supported on your system"
+msgstr "Az elfogadott képformátumok egyikét sem támogatja a rendszere"
+
+#: ../libempathy-gtk/empathy-avatar-chooser.c:947
 msgid "Select Your Avatar Image"
 msgstr "Válassza ki az avatarját"
 
-#: ../libempathy-gtk/empathy-avatar-chooser.c:460
+#: ../libempathy-gtk/empathy-avatar-chooser.c:950
 msgid "No Image"
 msgstr "Nincs kép"
 
-#: ../libempathy-gtk/empathy-avatar-chooser.c:520
+#: ../libempathy-gtk/empathy-avatar-chooser.c:1010
 msgid "Images"
 msgstr "Képek"
 
-#: ../libempathy-gtk/empathy-avatar-chooser.c:524
+#: ../libempathy-gtk/empathy-avatar-chooser.c:1014
 msgid "All Files"
 msgstr "Minden fájl"
 
@@ -484,73 +583,80 @@ msgstr "Minden fájl"
 msgid "Click to enlarge"
 msgstr "Kattintson ide a nagyításhoz"
 
-#: ../libempathy-gtk/empathy-chat.c:497
+#: ../libempathy-gtk/empathy-chat.c:507
 msgid "offline"
 msgstr "kilépett"
 
-#: ../libempathy-gtk/empathy-chat.c:500
+#: ../libempathy-gtk/empathy-chat.c:510
 msgid "invalid contact"
 msgstr "érvénytelen partner"
 
-#: ../libempathy-gtk/empathy-chat.c:503
+#: ../libempathy-gtk/empathy-chat.c:513
 msgid "permission denied"
 msgstr "hozzáférés megtagadva"
 
-#: ../libempathy-gtk/empathy-chat.c:506
+#: ../libempathy-gtk/empathy-chat.c:516
 msgid "too long message"
 msgstr "túl hosszú üzenet"
 
-#: ../libempathy-gtk/empathy-chat.c:509
+#: ../libempathy-gtk/empathy-chat.c:519
 msgid "not implemented"
 msgstr "nincs megvalósítva"
 
-#: ../libempathy-gtk/empathy-chat.c:512
+#: ../libempathy-gtk/empathy-chat.c:522
 msgid "unknown"
 msgstr "ismeretlen"
 
-#: ../libempathy-gtk/empathy-chat.c:516
+#: ../libempathy-gtk/empathy-chat.c:526
 #, c-format
 msgid "Error sending message '%s': %s"
 msgstr "hiba a(z) „%s” üzenet elküldésekor: %s"
 
-#: ../libempathy-gtk/empathy-chat.c:546
+#: ../libempathy-gtk/empathy-chat.c:556
 #, c-format
 msgid "Topic set to: %s"
 msgstr "Téma beállítva: %s"
 
-#: ../libempathy-gtk/empathy-chat.c:548
+#: ../libempathy-gtk/empathy-chat.c:558
 msgid "No topic defined"
 msgstr "Nincs megadva témakör"
 
-#: ../libempathy-gtk/empathy-chat.c:963
+#: ../libempathy-gtk/empathy-chat.c:973
 msgid "Insert Smiley"
 msgstr "Hangulatjel beszúrása"
 
-#: ../libempathy-gtk/empathy-chat.c:979
+#. send button
+#: ../libempathy-gtk/empathy-chat.c:991
+#: ../libempathy-gtk/empathy-ui-utils.c:1526
 msgid "_Send"
 msgstr "_Küldés"
 
-#: ../libempathy-gtk/empathy-chat.c:1013
+#: ../libempathy-gtk/empathy-chat.c:1025
 msgid "_Check Word Spelling..."
 msgstr "Szó _helyesírásának ellenőrzése…"
 
-#: ../libempathy-gtk/empathy-chat.c:1119
+#: ../libempathy-gtk/empathy-chat.c:1131
 #, c-format
 msgid "%s has joined the room"
 msgstr "%s belépett a szobába"
 
-#: ../libempathy-gtk/empathy-chat.c:1122
+#: ../libempathy-gtk/empathy-chat.c:1134
 #, c-format
 msgid "%s has left the room"
 msgstr "%s elhagyta a szobát"
 
-#: ../libempathy-gtk/empathy-chat.c:1236 ../src/empathy-call-window.c:406
+#: ../libempathy-gtk/empathy-chat.c:1248 ../src/empathy-call-window.c:426
 msgid "Disconnected"
 msgstr "Kapcsolat bontva"
 
-#: ../libempathy-gtk/empathy-chat.c:1608
+#: ../libempathy-gtk/empathy-chat.c:1644
 msgid "Connected"
 msgstr "Kapcsolódva"
+
+#: ../libempathy-gtk/empathy-chat.c:1694
+#: ../libempathy-gtk/empathy-log-window.c:505
+msgid "Conversation"
+msgstr "Társalgás"
 
 #: ../libempathy-gtk/empathy-chat.glade.h:1
 msgid "<b>Topic:</b>"
@@ -560,13 +666,17 @@ msgstr "<b>Téma:</b>"
 msgid "Group Chat"
 msgstr "Csoport"
 
-#: ../libempathy-gtk/empathy-chat-view.c:430
+#: ../libempathy-gtk/empathy-chat-text-view.c:340
 msgid "_Copy Link Address"
 msgstr "Hivatkozás cí_mének másolása"
 
-#: ../libempathy-gtk/empathy-chat-view.c:438
+#: ../libempathy-gtk/empathy-chat-text-view.c:348
 msgid "_Open Link"
 msgstr "_Hivatkozás megnyitása"
+
+#: ../libempathy-gtk/empathy-chat-text-view.c:439
+msgid "%A %d %B %Y"
+msgstr "%y. %B %e %A"
 
 #: ../libempathy-gtk/empathy-contact-dialogs.c:180
 msgid "Personal Information"
@@ -580,11 +690,11 @@ msgstr "Partnerinformációk szerkesztése"
 msgid "Contact Information"
 msgstr "Partnerinformációk"
 
-#: ../libempathy-gtk/empathy-contact-dialogs.c:283
+#: ../libempathy-gtk/empathy-contact-dialogs.c:266
 msgid "I would like to add you to my contact list."
 msgstr "Szeretném hozzáadni Önt a partnerlistámhoz."
 
-#: ../libempathy-gtk/empathy-contact-dialogs.c:307
+#: ../libempathy-gtk/empathy-contact-dialogs.c:290
 msgid "New Contact"
 msgstr "Új partner"
 
@@ -623,28 +733,42 @@ msgstr "Partner eltávolítása"
 msgid "Sorry, I don't want you in my contact list anymore."
 msgstr "Elnézést, már nem szeretném a partnerlistámon látni."
 
-#: ../libempathy-gtk/empathy-contact-menu.c:109
+#: ../libempathy-gtk/empathy-contact-menu.c:121
 #: ../src/empathy-main-window.glade.h:9
 msgid "_Chat"
 msgstr "_Csevegés"
 
-#: ../libempathy-gtk/empathy-contact-menu.c:130
+#: ../libempathy-gtk/empathy-contact-menu.c:142
 msgid "_Call"
 msgstr "_Hívás"
 
-#: ../libempathy-gtk/empathy-contact-menu.c:169
+#: ../libempathy-gtk/empathy-contact-menu.c:181
 #: ../src/empathy-main-window.glade.h:17
 msgid "_View Previous Conversations"
 msgstr "K_orábbi társalgások megjelenítése"
 
-#: ../libempathy-gtk/empathy-contact-menu.c:197
+#: ../libempathy-gtk/empathy-contact-menu.c:203
+#| msgid "Send Video"
+msgid "Send file"
+msgstr "Fájl küldése"
+
+#: ../libempathy-gtk/empathy-contact-menu.c:231
 msgid "Infor_mation"
 msgstr "_Információk"
 
-#: ../libempathy-gtk/empathy-contact-menu.c:224
+#: ../libempathy-gtk/empathy-contact-menu.c:258
 #: ../src/empathy-chat-window.glade.h:14 ../src/empathy-main-window.glade.h:11
 msgid "_Edit"
 msgstr "S_zerkesztés"
+
+#: ../libempathy-gtk/empathy-contact-menu.c:317
+msgid "Inviting to this room"
+msgstr "Meghívás ebbe a szobába"
+
+#: ../libempathy-gtk/empathy-contact-menu.c:350
+#| msgid "_Favorite Chatroom"
+msgid "_Invite to chatroom"
+msgstr "_Meghívás csevegőszobába"
 
 #: ../libempathy-gtk/empathy-contact-widget.c:358
 msgid "Save Avatar"
@@ -654,12 +778,12 @@ msgstr "Avatar mentése"
 msgid "Unable to save avatar"
 msgstr "Az avatar nem menthető"
 
-#: ../libempathy-gtk/empathy-contact-widget.c:875
+#: ../libempathy-gtk/empathy-contact-widget.c:895
 msgid "Select"
 msgstr "Kijelölés"
 
-#: ../libempathy-gtk/empathy-contact-widget.c:884
-#: ../src/empathy-main-window.c:855
+#: ../libempathy-gtk/empathy-contact-widget.c:904
+#: ../src/empathy-main-window.c:974
 msgid "Group"
 msgstr "Csoport"
 
@@ -759,15 +883,12 @@ msgstr "Port"
 msgid "SSL"
 msgstr "SSL"
 
-#: ../libempathy-gtk/empathy-log-window.c:497
+#: ../libempathy-gtk/empathy-log-window.c:498
+#: ../src/empathy-import-dialog.c:271
 msgid "Account"
 msgstr "Fiók"
 
-#: ../libempathy-gtk/empathy-log-window.c:504 ../src/empathy-chat-window.c:280
-msgid "Conversation"
-msgstr "Társalgás"
-
-#: ../libempathy-gtk/empathy-log-window.c:514
+#: ../libempathy-gtk/empathy-log-window.c:515
 msgid "Date"
 msgstr "Dátum"
 
@@ -843,30 +964,78 @@ msgstr "Helyesírás-ellenőrző"
 msgid "Suggestions for the word:"
 msgstr "Javaslatok a szóhoz:"
 
-#: ../libempathy-gtk/empathy-theme-boxes.c:745
-#: ../libempathy-gtk/empathy-theme-irc.c:293
-msgid "%A %d %B %Y"
-msgstr "%y. %B %e %A"
-
-#: ../libempathy-gtk/empathy-theme-manager.c:73
+#: ../libempathy-gtk/empathy-theme-manager.c:60
 msgid "Classic"
 msgstr "Klasszikus"
 
-#: ../libempathy-gtk/empathy-theme-manager.c:74
+#: ../libempathy-gtk/empathy-theme-manager.c:61
 msgid "Simple"
 msgstr "Egyszerű"
 
-#: ../libempathy-gtk/empathy-theme-manager.c:75
+#: ../libempathy-gtk/empathy-theme-manager.c:62
 msgid "Clean"
 msgstr "Tiszta"
 
-#: ../libempathy-gtk/empathy-theme-manager.c:76
+#: ../libempathy-gtk/empathy-theme-manager.c:63
 msgid "Blue"
 msgstr "Kék"
 
-#: ../libempathy-gtk/empathy-ui-utils.c:1330
+#: ../libempathy-gtk/empathy-ui-utils.c:1373
 msgid "Unable to open URI"
 msgstr "Az URI nem nyitható meg"
+
+#: ../libempathy-gtk/empathy-ui-utils.c:1518
+#| msgid "Select"
+msgid "Select a file"
+msgstr "Válasszon ki egy fájlt"
+
+#: ../libempathy-gtk/empathy-ui-utils.c:1554
+#| msgid "Send and receive instant messages"
+msgid "Received an instant message"
+msgstr "Azonnali üzenet érkezett"
+
+#: ../libempathy-gtk/empathy-ui-utils.c:1556
+#| msgid "Send and receive instant messages"
+msgid "Sent an instant message"
+msgstr "Azonnali üzenet elküldve"
+
+#: ../libempathy-gtk/empathy-ui-utils.c:1558
+#| msgid "Incoming call from %s"
+msgid "Incoming chat request"
+msgstr "Bejövő csevegéskérés"
+
+#: ../libempathy-gtk/empathy-ui-utils.c:1560
+#| msgid "Connected"
+msgid "Contact connected"
+msgstr "A partner kapcsolódott"
+
+#: ../libempathy-gtk/empathy-ui-utils.c:1562
+#| msgid "Disconnected"
+msgid "Contact disconnected"
+msgstr "A partner kilépett"
+
+#: ../libempathy-gtk/empathy-ui-utils.c:1564
+#| msgid "Connected"
+msgid "Connected to server"
+msgstr "Kapcsolódva a kiszolgálóhoz"
+
+#: ../libempathy-gtk/empathy-ui-utils.c:1566
+#| msgid "Disconnected"
+msgid "Disconnected from server"
+msgstr "Kapcsolat bontva a kiszolgálóval"
+
+#: ../libempathy-gtk/empathy-ui-utils.c:1568
+#| msgid "Incoming call"
+msgid "Incoming voice call"
+msgstr "Bejövő hanghívás"
+
+#: ../libempathy-gtk/empathy-ui-utils.c:1570
+msgid "Outgoing voice call"
+msgstr "Kimenő hanghívás"
+
+#: ../libempathy-gtk/empathy-ui-utils.c:1572
+msgid "Voice call ended"
+msgstr "A hanghívás befejeződött"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:158
 msgid "Current Locale"
@@ -1086,19 +1255,19 @@ msgstr "Jelenlét"
 msgid "Set your own presence"
 msgstr "Saját jelenlétének beállítása"
 
-#: ../src/empathy.c:380
+#: ../src/empathy.c:400
 msgid "Don't connect on startup"
 msgstr "Ne kapcsolódjon indításkor"
 
-#: ../src/empathy.c:384
+#: ../src/empathy.c:404
 msgid "Don't show the contact list on startup"
 msgstr "Ne jelenjen meg a partnerlista indításkor"
 
-#: ../src/empathy.c:388
+#: ../src/empathy.c:408
 msgid "Show the accounts dialog"
 msgstr "A fiókok ablak megjelenítése"
 
-#: ../src/empathy.c:400
+#: ../src/empathy.c:416
 msgid "- Empathy Instant Messenger"
 msgstr "– Empathy azonnali üzenő"
 
@@ -1143,22 +1312,22 @@ msgstr "Egy azonnaliüzenő-kliens a GNOME-hoz"
 msgid "translator-credits"
 msgstr "Kelemen Gábor <kelemeng@gnome.hu>"
 
-#: ../src/empathy-accounts-dialog.c:389
+#: ../src/empathy-accounts-dialog.c:391
 msgid "Enabled"
 msgstr "Engedélyezve"
 
-#: ../src/empathy-accounts-dialog.c:399
+#: ../src/empathy-accounts-dialog.c:401
 #: ../src/empathy-accounts-dialog.glade.h:4
 msgid "Accounts"
 msgstr "Fiókok"
 
 #. To translator: %s is the protocol name
-#: ../src/empathy-accounts-dialog.c:862
+#: ../src/empathy-accounts-dialog.c:827
 #, c-format
 msgid "New %s account"
 msgstr "Új %s fiók"
 
-#: ../src/empathy-accounts-dialog.c:972
+#: ../src/empathy-accounts-dialog.c:937
 #, c-format
 msgid ""
 "You are about to remove your %s account!\n"
@@ -1167,7 +1336,7 @@ msgstr ""
 "A(z) %s fiókjának eltávolítására készül!\n"
 "Biztosan folytatni akarja?"
 
-#: ../src/empathy-accounts-dialog.c:978
+#: ../src/empathy-accounts-dialog.c:943
 msgid ""
 "Any associated conversations and chat rooms will NOT be removed if you "
 "decide to proceed.\n"
@@ -1201,6 +1370,11 @@ msgid "I already have an account I want to use"
 msgstr "Már van fiókom, amit használni kívánok"
 
 #: ../src/empathy-accounts-dialog.glade.h:7
+#| msgid "Accounts"
+msgid "Import Accounts..."
+msgstr "Fiókok importálása…"
+
+#: ../src/empathy-accounts-dialog.glade.h:8
 msgid ""
 "To add a new account, you first have to install a backend for each protocol "
 "you want to use."
@@ -1208,67 +1382,67 @@ msgstr ""
 "Új fiók létrehozásához először telepítenie kell egy háttérprogramot minden "
 "használandó protokollhoz."
 
-#: ../src/empathy-accounts-dialog.glade.h:8
+#: ../src/empathy-accounts-dialog.glade.h:9
 msgid "Type:"
 msgstr "Típus:"
 
-#: ../src/empathy-call-window.c:142
+#: ../src/empathy-call-window.c:144
 msgid "Closed"
 msgstr "Lezárva"
 
-#: ../src/empathy-call-window.c:254
+#: ../src/empathy-call-window.c:264
 msgid "End this call?"
 msgstr "Befejezi a hívást?"
 
-#: ../src/empathy-call-window.c:256
+#: ../src/empathy-call-window.c:266
 msgid "Closing this window will end the call in progress."
 msgstr "Az ablak bezárása befejezi a folyamatban lévő hívást."
 
-#: ../src/empathy-call-window.c:257
+#: ../src/empathy-call-window.c:267
 msgid "_End Call"
 msgstr "Hívás be_fejezése"
 
-#: ../src/empathy-call-window.c:311
+#: ../src/empathy-call-window.c:321
 msgid "Incoming call"
 msgstr "Bejövő hívás"
 
-#: ../src/empathy-call-window.c:313
+#: ../src/empathy-call-window.c:323
 #, c-format
 msgid "%s is calling you, do you want to answer?"
 msgstr "%s hívja, válaszol?"
 
-#: ../src/empathy-call-window.c:319
+#: ../src/empathy-call-window.c:329
 msgid "_Reject"
 msgstr "_Elutasítás"
 
-#: ../src/empathy-call-window.c:324
+#: ../src/empathy-call-window.c:334
 msgid "_Answer"
 msgstr "_Válasz"
 
-#: ../src/empathy-call-window.c:379
+#: ../src/empathy-call-window.c:389
 msgid "Empathy Call"
 msgstr "Empathy hívás"
 
 #. To translators: Readying is the first state of the call, it is
 #. * preparing the connection and it does not yet ring.
-#: ../src/empathy-call-window.c:382
+#: ../src/empathy-call-window.c:392
 msgid "Readying"
 msgstr "Előkészítés"
 
-#: ../src/empathy-call-window.c:391
+#: ../src/empathy-call-window.c:401
 #, c-format
 msgid "%s - Empathy Call"
 msgstr "%s – Empathy hívás"
 
-#: ../src/empathy-call-window.c:395
+#: ../src/empathy-call-window.c:405
 msgid "Ringing"
 msgstr "Kicseng"
 
-#: ../src/empathy-call-window.c:408
+#: ../src/empathy-call-window.c:428
 msgid "Connecting"
 msgstr "Kapcsolódás"
 
-#: ../src/empathy-call-window.c:524
+#: ../src/empathy-call-window.c:546
 #, c-format
 msgid "Incoming call from %s rejected because there is already a running call."
 msgstr "%s bejövő hívása elutasítva, mivel már folyamatban van egy hívás."
@@ -1338,16 +1512,16 @@ msgstr "Befejezés"
 msgid "Send Video"
 msgstr "Videó küldése"
 
-#: ../src/empathy-chat-window.c:326
+#: ../src/empathy-chat-window.c:310
 #, c-format
 msgid "Conversations (%d)"
 msgstr "Társalgások (%d)"
 
-#: ../src/empathy-chat-window.c:418
+#: ../src/empathy-chat-window.c:415
 msgid "Topic:"
 msgstr "Téma:"
 
-#: ../src/empathy-chat-window.c:421
+#: ../src/empathy-chat-window.c:420
 msgid "Typing a message."
 msgstr "Üzenet írása."
 
@@ -1464,7 +1638,7 @@ msgstr "_Kiszolgáló:"
 msgid "_Room:"
 msgstr "Sz_oba:"
 
-#: ../src/empathy-event-manager.c:166
+#: ../src/empathy-event-manager.c:193
 #, c-format
 msgid ""
 "New message from %s:\n"
@@ -1473,12 +1647,19 @@ msgstr ""
 "Új üzenet %s partnertől:\n"
 "%s"
 
-#: ../src/empathy-event-manager.c:205
+#: ../src/empathy-event-manager.c:261
 #, c-format
 msgid "Incoming call from %s"
 msgstr "Bejövő hívás %s partnertől"
 
-#: ../src/empathy-event-manager.c:238
+#: ../src/empathy-event-manager.c:310
+#, c-format
+msgid ""
+"%s is offering you an invitation. An external application will be started to "
+"handle it."
+msgstr "%s meghívót küldött. A kezeléséhez egy külső alkalmazás kerül elindításra."
+
+#: ../src/empathy-event-manager.c:317
 #, c-format
 msgid ""
 "%s is offering you an invitation, but you don't have the needed external "
@@ -1487,23 +1668,18 @@ msgstr ""
 "%s meghívót ajánl fel, de nem Ön rendelkezik a kezeléséhez szükséges külső "
 "alkalmazással."
 
-#: ../src/empathy-event-manager.c:263
-msgid "Invitation Error"
-msgstr "Meghívási hiba"
-
-#: ../src/empathy-event-manager.c:289
+#: ../src/empathy-event-manager.c:452
 #, c-format
-msgid ""
-"%s is offering you an invitation. An external application will be started to "
-"handle it."
-msgstr "%s meghívót küldött. A kezeléséhez egy külső alkalmazás kerül elindításra."
+#| msgid "Incoming call from %s"
+msgid "Incoming file transfer from %s"
+msgstr "Bejövő fájlátvitel %s partnertől"
 
-#: ../src/empathy-event-manager.c:345
+#: ../src/empathy-event-manager.c:542
 #, c-format
 msgid "Subscription requested by %s"
 msgstr "%s feliratkozást kért"
 
-#: ../src/empathy-event-manager.c:348
+#: ../src/empathy-event-manager.c:546
 #, c-format
 msgid ""
 "\n"
@@ -1512,73 +1688,279 @@ msgstr ""
 "\n"
 "Üzenet: %s"
 
-#: ../src/empathy-main-window.c:466
-msgid "Show and edit accounts"
-msgstr "Fiókok megjelenítése és szerkesztése"
+#: ../src/empathy-ft-manager.c:111
+#, c-format
+msgid "%u:%02u.%02u"
+msgstr "%u:%02u.%02u"
 
-#: ../src/empathy-main-window.c:838
-msgid "Contact"
-msgstr "Partner"
+#: ../src/empathy-ft-manager.c:113
+#, c-format
+msgid "%02u.%02u"
+msgstr "%02u.%02u"
 
-#: ../src/empathy-main-window.c:1040
-msgid "_Edit account"
-msgstr "_Fiók szerkesztése"
+#: ../src/empathy-ft-manager.c:162
+#| msgid "No error specified"
+msgid "No reason was specified"
+msgstr "Nincs megadva ok"
 
-#: ../src/empathy-main-window.c:1123
+#: ../src/empathy-ft-manager.c:164
+msgid "The change in state was requested"
+msgstr "Állapotváltozás kérve"
+
+#: ../src/empathy-ft-manager.c:166
+msgid "You canceled the file transfer"
+msgstr "Megszakította a fájlátvitelt"
+
+#: ../src/empathy-ft-manager.c:168
+msgid "The other participant canceled the file transfer"
+msgstr "A partner megszakította a fájlátvitelt"
+
+#: ../src/empathy-ft-manager.c:170
+msgid "Error while trying to transfer the file"
+msgstr "Hiba a fájl átvitelekor"
+
+#: ../src/empathy-ft-manager.c:172
+msgid "The other participant is unable to transfer the file"
+msgstr "A partner nem képes a fájl átvitelére"
+
+#: ../src/empathy-ft-manager.c:174
+#| msgid "Unknown error"
+msgid "Unknown reason"
+msgstr "Ismeretlen ok"
+
+#. translators: first %s is filename, second %s is the contact name
+#: ../src/empathy-ft-manager.c:222
+#, c-format
+#| msgid "Incoming call from %s"
+msgid "Receiving \"%s\" from %s"
+msgstr "„%s” fogadása %s partnertől"
+
+#. translators: first %s is filename, second %s is the contact name
+#: ../src/empathy-ft-manager.c:225
+#, c-format
+msgid "Sending \"%s\" to %s"
+msgstr "„%s” küldése %s partnernek"
+
+#: ../src/empathy-ft-manager.c:235
+#| msgid "unknown"
+msgctxt "file size"
+msgid "Unknown"
+msgstr "Ismeretlen"
+
+#. translators: first %s is the transferred size, second %s is
+#. * the total file size
+#: ../src/empathy-ft-manager.c:243
+#, c-format
+msgid "%s of %s"
+msgstr "%s / %s"
+
+#: ../src/empathy-ft-manager.c:250
+msgid "Waiting the other participant's response"
+msgstr "Várakozás a partner válaszára"
+
+#: ../src/empathy-ft-manager.c:260
+#, c-format
+msgid "\"%s\" received from %s"
+msgstr "„%s” érkezett %s partnertől"
+
+#: ../src/empathy-ft-manager.c:266
+#, c-format
+#| msgid "Topic set to: %s"
+msgid "\"%s\" sent to %s"
+msgstr "„%s” elküldve %s partnernek"
+
+#: ../src/empathy-ft-manager.c:269
+msgid "File transfer completed"
+msgstr "A fájlátvitel befejeződött"
+
+#: ../src/empathy-ft-manager.c:278
+#, c-format
+msgid "\"%s\" receiving from %s"
+msgstr "„%s” fogadása %s partnernek"
+
+#: ../src/empathy-ft-manager.c:284
+#, c-format
+msgid "\"%s\" sending to %s"
+msgstr "„%s” küldése %s partnernek"
+
+#: ../src/empathy-ft-manager.c:287
+#, c-format
+msgid "File transfer canceled: %s"
+msgstr "A fájlátvitel megszakítva: %s"
+
+#: ../src/empathy-ft-manager.c:302
+#| msgid "unknown"
+msgctxt "remaining time"
+msgid "Unknown"
+msgstr "Ismeretlen"
+
+#: ../src/empathy-ft-manager.c:362
+#| msgid "unknown"
+msgctxt "file transfer percent"
+msgid "Unknown"
+msgstr "Ismeretlen"
+
+#: ../src/empathy-ft-manager.c:698
+msgid "%"
+msgstr "%"
+
+#: ../src/empathy-ft-manager.c:710
+#| msgid "All Files"
+msgid "File"
+msgstr "Fájl"
+
+#: ../src/empathy-ft-manager.c:732
+#| msgid "Ringing"
+msgid "Remaining"
+msgstr "Hátralévő"
+
+#: ../src/empathy-ft-manager.c:883
+msgid "Cannot save file to this location"
+msgstr "A fájl nem menthető erre a helyre"
+
+#: ../src/empathy-ft-manager.c:929
+msgid "Save file as..."
+msgstr "Fájl mentése másként…"
+
+#: ../src/empathy-ft-manager.c:999
+#| msgid "unknown"
+msgid "unknown size"
+msgstr "ismeretlen méret"
+
+#: ../src/empathy-ft-manager.c:1005
+#, c-format
+#| msgid "I would like to add you to my contact list."
+msgid "%s would like to send you a file"
+msgstr "%s egy fájlt szeretne küldeni Önnek"
+
+#: ../src/empathy-ft-manager.c:1010
+#, c-format
+msgid "Do you want to accept the file \"%s\" (%s)?"
+msgstr "El kívánja fogadni a(z) „%s” fájlt (%s)?"
+
+#. Decline button
+#: ../src/empathy-ft-manager.c:1019
+msgid "_Decline"
+msgstr "_Elutasítás"
+
+#. Accept button
+#: ../src/empathy-ft-manager.c:1028
+#| msgid "_Accounts"
+msgid "_Accept"
+msgstr "Elfog_adás"
+
+#: ../src/empathy-ft-manager.glade.h:1
+msgid "File transfers"
+msgstr "Fájlátvitelek"
+
+#: ../src/empathy-ft-manager.glade.h:2
+msgid "Remove completed, canceled and failed file transfers from the list"
+msgstr "Befejezett, megszakított és meghiúsult átvitelek eltávolítása a listából"
+
+#: ../src/empathy-ft-manager.glade.h:3
+msgid "gtk-clear"
+msgstr ""
+
+#: ../src/empathy-import-dialog.c:249
+#| msgid "Port"
+msgid "Import"
+msgstr "Importálás"
+
+#: ../src/empathy-import-dialog.c:258
+msgid "Protocol"
+msgstr "Protokoll"
+
+#: ../src/empathy-import-dialog.c:284
+#| msgid "Reso_urce:"
+msgid "Source"
+msgstr "Forrás"
+
+#: ../src/empathy-import-dialog.c:372
+msgid ""
+"No accounts to import could be found. Empathy currently only supports "
+"importing accounts from Pidgin."
+msgstr "Nem találhatók importálható fiókok. Az Empathy jelenleg csak a Pidginből támogatja a fiókok importálását."
+
+#: ../src/empathy-import-dialog.glade.h:1
+#| msgid "Accounts"
+msgid "Import Accounts"
+msgstr "Fiókok importálása"
+
+#: ../src/empathy-import-dialog.glade.h:2
+msgid "gtk-cancel"
+msgstr ""
+
+#: ../src/empathy-import-dialog.glade.h:3
+msgid "gtk-ok"
+msgstr ""
+
+#: ../src/empathy-main-window.c:388
 msgid "No error specified"
 msgstr "Nincs megadva hiba"
 
-#: ../src/empathy-main-window.c:1126
+#: ../src/empathy-main-window.c:391
 msgid "Network error"
 msgstr "Hálózati hiba"
 
-#: ../src/empathy-main-window.c:1129
+#: ../src/empathy-main-window.c:394
 msgid "Authentication failed"
 msgstr "A hitelesítés meghiúsult"
 
-#: ../src/empathy-main-window.c:1132
+#: ../src/empathy-main-window.c:397
 msgid "Encryption error"
 msgstr "Titkosítási hiba"
 
-#: ../src/empathy-main-window.c:1135
+#: ../src/empathy-main-window.c:400
 msgid "Name in use"
 msgstr "A név használatban"
 
-#: ../src/empathy-main-window.c:1138
+#: ../src/empathy-main-window.c:403
 msgid "Certificate not provided"
 msgstr "Nincs megadva tanúsítvány"
 
-#: ../src/empathy-main-window.c:1141
+#: ../src/empathy-main-window.c:406
 msgid "Certificate untrusted"
 msgstr "A tanúsítvány nem megbízható"
 
-#: ../src/empathy-main-window.c:1144
+#: ../src/empathy-main-window.c:409
 msgid "Certificate expired"
 msgstr "A tanúsítvány lejárt"
 
-#: ../src/empathy-main-window.c:1147
+#: ../src/empathy-main-window.c:412
 msgid "Certificate not activated"
 msgstr "A tanúsítvány nincs aktiválva"
 
-#: ../src/empathy-main-window.c:1150
+#: ../src/empathy-main-window.c:415
 msgid "Certificate hostname mismatch"
 msgstr "A tanúsítvány gépneve eltér"
 
-#: ../src/empathy-main-window.c:1153
+#: ../src/empathy-main-window.c:418
 msgid "Certificate fingerprint mismatch"
 msgstr "A tanúsítvány ujjlenyomata eltér"
 
-#: ../src/empathy-main-window.c:1156
+#: ../src/empathy-main-window.c:421
 msgid "Certificate self-signed"
 msgstr "A tanúsítvány saját aláírású"
 
-#: ../src/empathy-main-window.c:1159
+#: ../src/empathy-main-window.c:424
 msgid "Certificate error"
 msgstr "Tanúsítványhiba"
 
-#: ../src/empathy-main-window.c:1162
+#: ../src/empathy-main-window.c:427
 msgid "Unknown error"
 msgstr "Ismeretlen hiba"
+
+#: ../src/empathy-main-window.c:585
+msgid "Show and edit accounts"
+msgstr "Fiókok megjelenítése és szerkesztése"
+
+#: ../src/empathy-main-window.c:957
+msgid "Contact"
+msgstr "Partner"
+
+#: ../src/empathy-main-window.c:1159
+msgid "_Edit account"
+msgstr "_Fiók szerkesztése"
 
 #: ../src/empathy-main-window.glade.h:1
 msgid "Contact List"
@@ -1624,7 +2006,7 @@ msgstr "S_zemélyes információk"
 msgid "_Room"
 msgstr "Sz_oba"
 
-#: ../src/empathy-new-chatroom-dialog.c:290
+#: ../src/empathy-new-chatroom-dialog.c:291
 msgid "Chat Rooms"
 msgstr "Csevegőszobák"
 
@@ -1662,7 +2044,41 @@ msgstr "_Frissítés"
 msgid "This list represents all chat rooms hosted on the server you have entered."
 msgstr "A lista a kiszolgálón található összes csevegőszobát képviseli."
 
-#: ../src/empathy-preferences.c:264
+#: ../src/empathy-preferences.c:153
+msgid "Message received"
+msgstr "Üzenet érkezett"
+
+#: ../src/empathy-preferences.c:154
+#| msgid ""
+#| "\n"
+#| "Message: %s"
+msgid "Message sent"
+msgstr "Üzenet elküldve"
+
+#: ../src/empathy-preferences.c:155
+#| msgid "New Conversation"
+msgid "New conversation"
+msgstr "Új társalgás"
+
+#: ../src/empathy-preferences.c:156
+msgid "Contact goes online"
+msgstr "A partner belép"
+
+#: ../src/empathy-preferences.c:157
+msgid "Contact goes offline"
+msgstr "A partner kilép"
+
+#: ../src/empathy-preferences.c:158
+#| msgid "Disconnected"
+msgid "Account connected"
+msgstr "Fiók kapcsolódott"
+
+#: ../src/empathy-preferences.c:159
+#| msgid "Disconnected"
+msgid "Account disconnected"
+msgstr "Fiók kapcsolata bontva"
+
+#: ../src/empathy-preferences.c:376
 msgid "Language"
 msgstr "Nyelv"
 
@@ -1670,29 +2086,23 @@ msgstr "Nyelv"
 msgid "<b>Appearance</b>"
 msgstr "<b>Megjelenés</b>"
 
-#. To translators: Audio notifications preferences
-#: ../src/empathy-preferences.glade.h:3
-msgid "<b>Audio</b>"
-msgstr "<b>Audio</b>"
-
-#: ../src/empathy-preferences.glade.h:4
+#: ../src/empathy-preferences.glade.h:2
 msgid "<b>Behaviour</b>"
 msgstr "<b>Viselkedés</b>"
 
-#: ../src/empathy-preferences.glade.h:5
+#: ../src/empathy-preferences.glade.h:3
 msgid "<b>Contact List</b>"
 msgstr "<b>Partnerlista</b>"
 
-#: ../src/empathy-preferences.glade.h:6
+#: ../src/empathy-preferences.glade.h:4
 msgid "<b>Enable spell checking for languages:</b>"
 msgstr "<b>Helyesírás-ellenőrzés ezen nyelveken:</b>"
 
-#. To translators: Visual notifications preferences, like notify bubbles, etc.
-#: ../src/empathy-preferences.glade.h:8
-msgid "<b>Visual</b>"
-msgstr "<b>Látvány</b>"
+#: ../src/empathy-preferences.glade.h:5
+msgid "<b>Play sound for events</b>"
+msgstr "<b>Hang lejátszása eseményekhez</b>"
 
-#: ../src/empathy-preferences.glade.h:9
+#: ../src/empathy-preferences.glade.h:6
 msgid ""
 "<small>The list of languages reflects only the languages for which you have "
 "a dictionary installed.</small>"
@@ -1700,79 +2110,73 @@ msgstr ""
 "<small>Ezen az oldalon csak azok a nyelvek vannak felsorolva, amelyekhez "
 "telepítve van szótár.</small>"
 
-#: ../src/empathy-preferences.glade.h:10
+#: ../src/empathy-preferences.glade.h:7
 msgid "Automatically _connect on startup "
 msgstr "A_utomatikus kapcsolódás indításkor"
 
-#: ../src/empathy-preferences.glade.h:11
+#: ../src/empathy-preferences.glade.h:8
 msgid "Avatars are user chosen images shown in the contact list"
 msgstr ""
 "Az avatarok a felhasználó által kiválasztott és a partnerlistában megjelenő "
 "képek"
 
-#: ../src/empathy-preferences.glade.h:12
+#: ../src/empathy-preferences.glade.h:9
 msgid "Chat Th_eme:"
 msgstr "Csevegés té_mája:"
 
-#: ../src/empathy-preferences.glade.h:13
-msgid "Display notifications when contacts come _online"
-msgstr "Értesítések _megjelenítése, ha a partnerek elérhetővé válnak"
+#: ../src/empathy-preferences.glade.h:10
+#| msgid "Enable sounds when _away"
+msgid "Disable sounds when _away or busy"
+msgstr "Hangok tiltása, ha _távol vagy elfoglalt vagyok"
 
-#: ../src/empathy-preferences.glade.h:14
-msgid "Enable sounds when _away"
-msgstr "Hangok engedélyezése, ha _távol vagyok"
-
-#: ../src/empathy-preferences.glade.h:15
-msgid "Enable sounds when _busy"
-msgstr "Hangok engedélyezése, ha el_foglalt vagyok"
-
-#: ../src/empathy-preferences.glade.h:16
+#: ../src/empathy-preferences.glade.h:11
 msgid "General"
 msgstr "Általános"
 
-#: ../src/empathy-preferences.glade.h:17
-msgid "Notifications"
-msgstr "Értesítések"
-
-#: ../src/empathy-preferences.glade.h:18
+#: ../src/empathy-preferences.glade.h:12
 msgid "Preferences"
 msgstr "Beállítások"
 
-#: ../src/empathy-preferences.glade.h:19
+#: ../src/empathy-preferences.glade.h:13
 msgid "Show _avatars"
 msgstr "_Avatarok megjelenítése"
 
-#: ../src/empathy-preferences.glade.h:20
+#: ../src/empathy-preferences.glade.h:14
 msgid "Show _smileys as images"
 msgstr "_Hangulatjelek képekké alakítása"
 
-#: ../src/empathy-preferences.glade.h:21
+#: ../src/empathy-preferences.glade.h:15
 msgid "Show co_mpact contact list"
 msgstr "_Tömör partnerlista mutatása"
 
-#: ../src/empathy-preferences.glade.h:22
+#: ../src/empathy-preferences.glade.h:16
 msgid "Sort by _name"
 msgstr "Rendezés _név szerint"
 
-#: ../src/empathy-preferences.glade.h:23
+#: ../src/empathy-preferences.glade.h:17
 msgid "Sort by s_tate"
 msgstr "Rendezés álla_pot szerint"
 
-#: ../src/empathy-preferences.glade.h:24
+#: ../src/empathy-preferences.glade.h:18
+msgid "Sounds"
+msgstr "Hangok"
+
+#: ../src/empathy-preferences.glade.h:19
 msgid "Spell Checking"
 msgstr "Helyesírás-ellenőrzés"
 
-#: ../src/empathy-preferences.glade.h:25
+#: ../src/empathy-preferences.glade.h:20
 msgid "Themes"
 msgstr "Témák"
 
-#: ../src/empathy-preferences.glade.h:26
+#: ../src/empathy-preferences.glade.h:21
+#| msgid "Enable sound when away"
+msgid "_Enable sound notifications"
+msgstr "H_angos értesítések engedélyezése"
+
+#: ../src/empathy-preferences.glade.h:22
 msgid "_Open new chats in separate windows"
 msgstr "Új csevegések megnyitása _külön ablakokban"
-
-#: ../src/empathy-preferences.glade.h:27
-msgid "_Play sound when messages arrive"
-msgstr "_Hang lejátszása üzenetek érkezésekor"
 
 #: ../src/empathy-status-icon.glade.h:1
 msgid "Status"
@@ -1785,4 +2189,19 @@ msgstr "_Kilépés"
 #: ../src/empathy-status-icon.glade.h:4
 msgid "_Show Contact List"
 msgstr "Partnerlista m_utatása"
+
+#: ../src/empathy-tube-dispatch.c:356
+#, c-format
+msgid "Unable to start application for service %s: %s"
+msgstr "Nem indítható alkalmazás a(z) %s szolgáltatáshoz: %s"
+
+#: ../src/empathy-tube-dispatch.c:427
+#, c-format
+#| msgid ""
+#| "%s is offering you an invitation, but you don't have the needed external "
+#| "application to handle it."
+msgid ""
+"An invitation was offered for service %s, but you don't have the needed "
+"application to handle it"
+msgstr "Meghívót kapott a(z) %s szolgáltatáshoz, de nem Ön rendelkezik a kezeléséhez szükséges alkalmazással."
 
