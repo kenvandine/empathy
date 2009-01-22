@@ -4,9 +4,10 @@ AM_CPPFLAGS =						\
 	-I$(top_srcdir)                          	\
 	$(EMPATHY_CFLAGS)				\
 	$(LIBNOTIFY_CFLAGS)				\
+	$(GEOCLUE_CFLAGS)				\
 	$(LIBCHAMPLAIN_CFLAGS)				\
-	$(WARN_CFLAGS)					\
 	$(DISABLE_DEPRECATED)
+	$(WARN_CFLAGS)
 
 LDADD =								\
 	$(top_builddir)/libempathy-gtk/libempathy-gtk.la	\
@@ -14,7 +15,8 @@ LDADD =								\
 	$(top_builddir)/extensions/libemp-extensions.la		\
 	$(LIBNOTIFY_LIBS)					\
 	$(EMPATHY_LIBS)						\
-	$(LIBCHAMPLAIN_LIBS)
+	$(LIBCHAMPLAIN_LIBS)					\
+	$(GEOCLUE_LIBS)
 
 bin_PROGRAMS =			\
 	empathy			\

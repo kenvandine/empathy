@@ -252,6 +252,8 @@ if test "x$enable_map" = "xyes" -a "x$have_geoclue" != "xyes"; then
 fi
 
 AM_CONDITIONAL(HAVE_GEOCLUE, test "x$have_geoclue" = "xyes")
+AC_SUBST(GEOCLUE_CFLAGS)
+AC_SUBST(GEOCLUE_LIBS)
 
 # -----------------------------------------------------------
 # Megaphone
