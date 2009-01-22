@@ -37,6 +37,7 @@
 #include "empathy-location-manager.h"
 #include "empathy-conf.h"
 
+#include "libempathy/empathy-account-manager.h"
 #include "libempathy/empathy-enum-types.h"
 #include "libempathy/empathy-location.h"
 #include "libempathy/empathy-contact-factory.h"
@@ -59,6 +60,7 @@ typedef struct {
 #endif
     gboolean reduce_accuracy;
     gdouble reduce_value;
+    EmpathyAccountManager *account_manager;
 } EmpathyLocationManagerPriv;
 
 static void location_manager_finalize (GObject *object);
@@ -82,6 +84,10 @@ static void resource_cb (EmpathyConf  *conf, const gchar *key,
 static void accuracy_cb (EmpathyConf  *conf, const gchar *key,
     gpointer user_data);
 #endif
+static void account_connection_changed_cb (EmpathyAccountManager *manager,
+    McAccount *account, TpConnectionStatusReason reason,
+    TpConnectionStatus current, TpConnectionStatus previous,
+    gpointer *location_manager);
 
 G_DEFINE_TYPE (EmpathyLocationManager, empathy_location_manager, G_TYPE_OBJECT);
 
@@ -113,7 +119,7 @@ publish_location (EmpathyLocationManager *location_manager,
   guint connection_status = -1;
   gboolean can_publish;
   EmpathyConf *conf = empathy_conf_get ();
-  EmpathyContactFactory *factory = empathy_contact_factory_new ();
+  EmpathyContactFactory *factory = empathy_contact_factory_dup_singleton ();
 
   priv = GET_PRIV (location_manager);
 
@@ -155,16 +161,17 @@ publish_location_to_all_accounts (EmpathyLocationManager *location_manager,
 }
 
 static void
-account_status_changed_cb (MissionControl *mc,
-                           TpConnectionStatus status,
-                           McPresence presence,
-                           TpConnectionStatusReason reason,
-                           const gchar *unique_name,
-                           gpointer *location_manager)
+account_connection_changed_cb (EmpathyAccountManager *manager,
+                               McAccount *account,
+                               TpConnectionStatusReason reason,
+                               TpConnectionStatus current,
+                               TpConnectionStatus previous,
+                               gpointer *location_manager)
 {
-  DEBUG ("Account %s changed status to %d", unique_name, status);
-  McAccount *account = mc_account_lookup (unique_name);
-  if (account && status == TP_CONNECTION_STATUS_CONNECTED)
+  DEBUG ("Account %s changed status from %d to %d", mc_account_get_display_name (account),
+      previous, current);
+
+  if (account && current == TP_CONNECTION_STATUS_CONNECTED)
     publish_location (EMPATHY_LOCATION_MANAGER (location_manager), account,
         FALSE);
 }
@@ -178,7 +185,7 @@ empathy_location_manager_init (EmpathyLocationManager *location_manager)
 
   location_manager->priv = priv;
   priv->is_setup = FALSE;
-  priv->mc = empathy_mission_control_new ();
+  priv->mc = empathy_mission_control_dup_singleton ();
   priv->location = g_hash_table_new_full (g_direct_hash, g_direct_equal,
       g_free, (GDestroyNotify) tp_g_value_slice_free);
 
@@ -202,8 +209,10 @@ empathy_location_manager_init (EmpathyLocationManager *location_manager)
   publish_cb (conf, EMPATHY_PREFS_LOCATION_PUBLISH, location_manager);
 
   // Setup account status callbacks
-  priv->token = empathy_connect_to_account_status_changed (priv->mc,
-      G_CALLBACK (account_status_changed_cb), location_manager, NULL);
+  priv->account_manager = empathy_account_manager_dup_singleton ();
+  g_signal_connect (priv->account_manager,
+    "account-connection-changed",
+    G_CALLBACK (account_connection_changed_cb), location_manager);
 }
 
 
@@ -215,6 +224,7 @@ location_manager_finalize (GObject *object)
   priv = GET_PRIV (object);
 
   DEBUG ("finalize: %p", object);
+  g_object_unref (priv->account_manager);
 
   G_OBJECT_CLASS (empathy_location_manager_parent_class)->finalize (object);
 }
