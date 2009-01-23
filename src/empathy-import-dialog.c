@@ -64,7 +64,7 @@ empathy_import_account_data_new (const gchar *source)
 {
   EmpathyImportAccountData *data;
 
-  g_return_val_if_fail (!G_STR_EMPTY (source), NULL);
+  g_return_val_if_fail (!EMP_STR_EMPTY (source), NULL);
 
   data = g_slice_new0 (EmpathyImportAccountData);
   data->settings = g_hash_table_new_full (g_str_hash, g_str_equal, NULL,
