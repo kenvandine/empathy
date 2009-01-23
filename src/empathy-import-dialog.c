@@ -60,13 +60,16 @@ enum
 };
 
 EmpathyImportAccountData *
-empathy_import_account_data_new (void)
+empathy_import_account_data_new (const gchar *source)
 {
   EmpathyImportAccountData *data;
+
+  g_return_val_if_fail (!G_STR_EMPTY (source), NULL);
 
   data = g_slice_new0 (EmpathyImportAccountData);
   data->settings = g_hash_table_new_full (g_str_hash, g_str_equal, NULL,
     (GDestroyNotify) tp_g_value_slice_free);
+  data->source = g_strdup (source);
 
   return data;
 }
@@ -80,6 +83,8 @@ empathy_import_account_data_free (EmpathyImportAccountData *data)
     g_object_unref (data->profile);
   if (data->settings != NULL)
     g_hash_table_destroy (data->settings);
+  if (data->source != NULL)
+    g_free (data->source);
 
   g_slice_free (EmpathyImportAccountData, data);
 }
@@ -197,7 +202,7 @@ import_dialog_add_accounts_to_model (EmpathyImportDialog *dialog)
           COL_IMPORT, import,
           COL_PROTOCOL, mc_profile_get_display_name (data->profile),
           COL_NAME, g_value_get_string (value),
-          COL_SOURCE, "Pidgin",
+          COL_SOURCE, data->source,
           COL_ACCOUNT_DATA, data,
           -1);
     }

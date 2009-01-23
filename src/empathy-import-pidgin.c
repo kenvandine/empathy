@@ -188,7 +188,7 @@ empathy_import_pidgin_load (void)
         continue;
 
       /* Create account data struct */
-      data = empathy_import_account_data_new ();
+      data = empathy_import_account_data_new ("Pidgin");
 
       /* Parse account's child nodes to fill the account data struct */
       for (child = node->children; child; child = child->next)

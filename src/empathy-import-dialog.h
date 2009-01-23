@@ -32,9 +32,11 @@ typedef struct
   GHashTable *settings;
   /* The profile to use for this account */
   McProfile *profile;
+  /* The name of the account import source */
+  gchar *source;
 } EmpathyImportAccountData;
 
-EmpathyImportAccountData *empathy_import_account_data_new (void);
+EmpathyImportAccountData *empathy_import_account_data_new (const gchar *source);
 void empathy_import_account_data_free (EmpathyImportAccountData *data);
 void empathy_import_dialog_show (GtkWindow *parent, gboolean warning);
 
