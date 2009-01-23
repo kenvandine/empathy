@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
-<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN" 
-"http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd" [
+<!DOCTYPE article PUBLIC "-//OASIS//DTD DocBook XML V4.3//EN" 
+"http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd" [
 <!ENTITY legal SYSTEM "legal.xml">
-<!ENTITY appversion "2.24">
-<!ENTITY manrevision "2.0">
-<!ENTITY date "April 2008">
+<!ENTITY appversion "2.26">
+<!ENTITY manrevision "2.1">
+<!ENTITY date "January 2009">
 <!ENTITY app "<application>Empathy</application>">
 <!ENTITY appname "Empathy">
 <!ENTITY gtalk "http://www.google.com/talk/">
@@ -14,8 +14,10 @@
 <!ENTITY yahoo "https://login.yahoo.com/config/login">
 <!ENTITY fwd
 "http://account2.freeworlddialup.com/index.php?section_id=94">
-<!ENTITY ekiga "http://www.ekiga.net/user/reg/">
-<!ENTITY sipphone "https://signup.sipphone.com/new-users/app?class=NewUser;proc=start">
+<!ENTITY ekiga "https://www.ekiga.net/index.php?page=register">
+<!ENTITY sipphone
+"https://signup.sipphone.com/new-users/app?class=NewUser;proc=start">
+<!ENTITY jabber "http://www.jabber.org/web/Jabber.org">
 ]>
 <?db.chunk.max_depth 2?>
 <article id="index" lang="en">
@@ -25,7 +27,7 @@
     <title>&app; Manual V&manrevision;</title>       
 
     <copyright> 
-      <year>2008</year> 
+      <year>2008, 2009</year> 
       <holder>Ubuntu Documentation Project</holder> 
     </copyright> 
     <!-- An address can be added to the publisher information.  If a role is 
@@ -44,9 +46,9 @@
 	<surname>Casagrande</surname> 
 	<affiliation> 
 	  <orgname>Ubuntu Documentation Project</orgname> 
-	  <address><email>milo_casagrande@yahoo.it</email></address> 
+	  <address><email>milo@ubuntu.com</email></address> 
 	</affiliation> 
-      </author> 
+      </author>
       <author> 
 	<firstname>Seth</firstname> 
 	<surname>Dudenhofer</surname> 
@@ -56,6 +58,11 @@
 	</affiliation> 
       </author> 
     </authorgroup>
+
+    <releaseinfo revision="2.26" role="incomplete">
+      <ulink type="bug" url="http://bugzilla.gnome.org/show_bug.cgi?id=561033" />
+      <ulink type="planning" url="http://live.gnome.org/Empathy/Documentation" />
+    </releaseinfo>
 
 <!-- According to GNU FDL, revision history is mandatory if you are -->
 <!-- modifying/reusing someone else's document.  If not, you can omit it. -->
@@ -75,7 +82,18 @@
 	<date>&date;</date> 
 	<revdescription> 
 	  <para role="author">Milo Casagrande
-	    <email>milo_casagrande@yahoo.it</email>
+	    <email>milo@ubuntu.com</email>
+	  </para>
+	  <para role="publisher">Ubuntu Documentation Project</para>
+	</revdescription> 
+      </revision> 
+
+      <revision> 
+	<revnumber>Empathy Manual V2.0</revnumber> 
+	<date>April 2008</date> 
+	<revdescription> 
+	  <para role="author">Milo Casagrande
+	    <email>milo@ubuntu.com</email>
 	  </para>
 	  <para role="author">Seth Dudenhofer
 	    <email>sdudenhofer@gmail.com</email>
@@ -145,7 +163,7 @@
 	</listitem>
 	<listitem>
 	  <para>
-	    Jabber
+	    Jabber (or <acronym>XMPP</acronym>)
 	  </para>
 	</listitem>
 	<listitem>
@@ -166,6 +184,11 @@
 	<listitem>
 	  <para>
 	    Yahoo
+	  </para>
+	</listitem>
+	<listitem>
+	  <para>
+	    And many others...
 	  </para>
 	</listitem>
       </itemizedlist>
@@ -261,7 +284,7 @@
 		</entry>
 		<entry valign="top">
 		  <para>
-		    Allows to update the user's status.
+		    Allows to update the status.
 		  </para>
 		</entry>
 	      </row>
@@ -291,36 +314,6 @@
 	</table>
       </para>
     </sect2>
-
-    <sect2 id="empathy-when-start-new">
-      <title>When You Start &appname; for the First Time</title>
-      <para>
-	When you start &app; for the first time and you don't have
-	configured any account yet, the following dialog is shown.
-	<!-- Figure 2 -->
-	<figure id="empathy-FIG-newaccount"> 
-	  <title>&app; Accounts Dialog</title> 
-	  <screenshot> 
-	    <mediaobject> 
-	      <imageobject>
-		<imagedata fileref="figures/empathy-new-account.png" format="PNG"/> 
-	      </imageobject>
-	      <textobject> 
-		<phrase>
-		  Shows &app; account creation dialog.
-		</phrase> 
-	      </textobject> 
-	    </mediaobject> 
-	  </screenshot> 
-	</figure>
-	<!-- End of Figure -->
-      </para>
-      <para>
-	From here, you can configure and create your accounts. See
-	<xref linkend="empathy-accounts" /> for more information.
-      </para>
-    </sect2>
-
   </sect1>
 
   <sect1 id="empathy-accounts">
@@ -334,11 +327,11 @@
 	register a new account (see <xref linkend="empathy-register-account" />).
     </para>
     <para>
-      In order to talk with other users (called
-      <emphasis>contatcs</emphasis>), you need to use the same service
+      In order to talk with other users, also called
+      <emphasis>contacts</emphasis>, you need to use the same service
       they are using. If, for example, one contact is using the <emphasis
       role="strong">Jabber</emphasis> service, you need to have an
-      account registerd with that service.
+      account registered with that service.
     </para>
     <para>
       &app; can handle as many accounts on any supported services as you want and
@@ -431,8 +424,17 @@
 	</itemizedlist>
       </para>
       <para>
-	You can use one of the following services if you already have
-	a <emphasis role="strong">Jabber</emphasis> account:
+	For registering a <emphasis role="strong">Jabber</emphasis>
+	account, you can use the automatic
+	account creation of &app;. Not all Jabber service
+	providers support the automatic creation of accounts, one
+	service provider known to work with &app; is <ulink
+	type="http" url="&jabber;">jabber.org</ulink>.
+      </para>
+      <para>
+	If you already have a <emphasis
+	role="strong">Jabber</emphasis> account, you can use one of
+	the following services:
       </para>
       <para>
 	<itemizedlist>
@@ -446,43 +448,126 @@
     </sect2>
 
     <sect2 id="empathy-create-account">
-      <title>Creating an Account</title>
+      <title>Adding your Account to &app;</title>
       <para>
-	To create an account, proceed as follow:
+	To add your account to &app;, proceed as follows:
 	<orderedlist>
 	  <listitem>
 	    <para>
 	      From the <link linkend="empathy-FIG-mainwindow">main window
 	      </link> (<guilabel>Contact List</guilabel>)
-	      click on the account button to open the
+	      click on the account button or press <keycap>F4</keycap> to open the
 	      <guilabel>Accounts</guilabel> dialog.
 	    </para>
 	  </listitem>
 	  <listitem>
 	    <para>
-	      Click on the <guibutton>Add</guibutton> button.
+	      If it is the first time you launch &app;:
+	      <orderedlist>
+		<listitem>
+		  <para>
+		    From the <guilabel>Type</guilabel> drop-down list choose
+		    the service you wish to add an account for, then click
+		    on the <guibutton>Create</guibutton> button.
+		  </para>
+		</listitem>
+	      </orderedlist>
 	    </para>
-	  </listitem>
-	  <listitem>
 	    <para>
-	      From the <guilabel>Type</guilabel> drop-down list choose
-	      the service you wish to create an account for, then click
-	      on the <guibutton>Create</guibutton> button.
+	      Otherwise:
+	      <orderedlist>
+		<listitem>
+		  <para>
+		    Click on the <guilabel>Add</guilabel> button.
+		  </para>
+		</listitem>
+		<listitem>
+		  <para>
+		    From the <guilabel>Type</guilabel> drop-down list choose
+		    the service you wish to add an account for, then click
+		    on the <guibutton>Create</guibutton> button.
+		  </para>
+		</listitem>
+	      </orderedlist>
 	    </para>
 	  </listitem>
 	  <listitem>
 	    <para>
 	      Fill the required fields with your <emphasis>user
-		name</emphasis> and <emphasis>password</emphasis>.
+		name</emphasis> and
+		<emphasis>password</emphasis>. Optionally, you can
+		modify some advanced options. For more information,
+	      see <xref linkend="empathy-advanced-options"/>.
 	    </para>
 	  </listitem>
 	  <listitem>
 	    <para>
 	      To enable the new account, select the
 	      <guilabel>Enabled</guilabel> check-box next to
-	      the name of the account.
-	      <!-- in the box on the left of the
-	      <guilabel>Accounts</guilabel> dialog. -->
+	      the name of the account in the box on the left.
+	    </para>
+	  </listitem>
+	</orderedlist>
+      </para>
+    </sect2>
+
+    <sect2 id="empathy-edit-account">
+      <title>Editing an Account</title>
+      <para>
+	To edit one of your accounts, i.e. to change the
+	<emphasis>password</emphasis> or your <emphasis>user
+	name</emphasis>, proceed as follows:
+	<orderedlist>
+	  <listitem>
+	    <para>
+	      From the <link linkend="empathy-FIG-mainwindow">main window
+	      </link> (<guilabel>Contact List</guilabel>)
+	      click on the account button or press <keycap>F4</keycap> to open the
+	      <guilabel>Accounts</guilabel> dialog.
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para>
+	      Select the account you wish to edit in the box on the
+	      left.
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para>
+	      Modify the desired data.
+	    </para>
+	  </listitem>
+	</orderedlist>
+      </para>
+      <para>
+	<note>
+	  <para>
+	    Based on the type of the account, it is possibile to edit
+	    different settings.
+	  </para>
+	</note>
+      </para>
+      <para>
+	To modify the identifier of an account, how &app; identifies
+	an account, proceed as follows:
+	<orderedlist>
+	  <listitem>
+	    <para>
+	      From the <link linkend="empathy-FIG-mainwindow">main window
+	      </link> (<guilabel>Contact List</guilabel>)
+	      click on the account button or press <keycap>F4</keycap> to open the
+	      <guilabel>Accounts</guilabel> dialog.
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para>
+	      Select the account you wish to edit in the box on the
+	      left and double-click on it's name.
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para>
+	      Change the name of the account as you desire.
 	    </para>
 	  </listitem>
 	</orderedlist>
@@ -492,7 +577,7 @@
     <sect2 id="empathy-disabling-removing-account">
       <title>Disabling and Removing an Account</title>
       <para>
-	To disable an account, proceed as follow:
+	To disable an account, proceed as follows:
       </para>
       <para>
 	<orderedlist>
@@ -500,7 +585,8 @@
 	    <para>
 	      From the <link linkend="empathy-FIG-mainwindow">main window
 	      </link> (<guilabel>Contact List</guilabel>)
-	      click on the account button to open the
+	      click on the account button or press <keycap>F4</keycap>
+	      to open the
 	      <guilabel>Accounts</guilabel> dialog.
 	    </para>
 	  </listitem>
@@ -514,7 +600,7 @@
 	</orderedlist>
       </para>
       <para>
-	To remove an account, proceed as follow:
+	To remove an account, proceed as follows:
       </para>
       <para>
 	<orderedlist>
@@ -522,7 +608,8 @@
 	    <para>
 	      From the <link linkend="empathy-FIG-mainwindow">main window
 	      </link> (<guilabel>Contact List</guilabel>)
-	      click on the account button to open the
+	      click on the account button or press <keycap>F4</keycap>
+	      to open the
 	      <guilabel>Accounts</guilabel> dialog.
 	    </para>
 	  </listitem>
@@ -546,18 +633,26 @@
 	</orderedlist>
       </para>
     </sect2>
+    
+    <sect2 id="empathy-advanced-options">
+      <title>Advanced Options</title> 
+      <para>
+	TODO
+      </para>
+    </sect2>
+    
   </sect1>
 
-  <sect1 id="empathy-contacts">
-    <title>Contacts</title>
+  <sect1 id="empathy-contacts-groups">
+    <title>Contacts and Groups</title>
     <para>
       All the contacts are handled within &app;'s <link
       linkend="empathy-FIG-mainwindow">main window</link>.
     </para>
     <sect2 id="empathy-add-contact">
-      <title>Adding a Contact</title>
+      <title>Adding and Removing a Contact</title>
       <para>
-	To add a new contact, proceed as follow:
+	To add a new contact, proceed as follows:
       </para>
       <para>
 	<orderedlist>
@@ -579,7 +674,7 @@
 	  </listitem>
 	  <listitem>
 	    <para>
-	      In the <guilabel>Identifier</guilabel> text-box type the
+	      In the <guilabel>Identifier</guilabel> text box type the
 	      <emphasis>address</emphasis> of the contact in the form
 	      of
 	      <userinput><replaceable>user name</replaceable>@<replaceable>service
@@ -588,7 +683,7 @@
 	  </listitem>
 	  <listitem>
 	    <para>
-	      In the <guilabel>Alias</guilabel> text-box type the name
+	      In the <guilabel>Alias</guilabel> text box type the name
 	      you want to give at the the new contact.
 	    </para>
 	  </listitem>
@@ -599,11 +694,8 @@
 	  </listitem>
 	</orderedlist>
       </para>
-    </sect2>
-    <sect2 id="empathy-remove-contact">
-      <title>Removing a Contact</title>
       <para>
-	To remove a contact, proceed as follow:
+	To remove a contact, proceed as follows:
       </para>
       <para>
 	<orderedlist>
@@ -622,13 +714,194 @@
 	  </listitem>
 	</orderedlist>
       </para>
-    </sect2>
-    <sect2>
-      <title>Modifying a Contact</title>
       <para>
+	<note>
+	  <para>
+	    An <emphasis>alias</emphasis> is an alternative way you
+	    can identify that particular contact. You can use the real
+	    name or the nickname of that person.
+	  </para>
+	</note>
       </para>
+    </sect2>
+    <sect2 id="empathy-edit-contact">
+      <title>Editing a Contact</title>
+      <para>
+	To edit a contact, proceed as follows:
+      </para>
+      <para>
+	<orderedlist>
+	  <listitem>
+	    <para>
+	      From the <link linkend="empathy-FIG-mainwindow">main
+	      window</link>, select the contact you would like
+	      to modify and right-click on it.
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para>
+	      From the popup menu, choose <guilabel>Modify</guilabel>
+	      to modify the contact.
+	    </para>
+	  </listitem>
+	</orderedlist>
+      </para>
+      <para>
+	From the <guilabel>Edit Contact Information</guilabel> dialog,
+	you can modify the <emphasis>alias</emphasis>
+	and the <emphasis>group</emphasis> of the contact.
+      </para>
+      <para>
+	<note>
+	  <para>
+	    An <emphasis>alias</emphasis> is an alternative way you
+	    can identify that particular contact. You can use the real
+	    name or the nickname of that person.
+	  </para>
+	</note>
+      </para>
+      <para>
+	For more information about groups, see <xref
+	  linkend="empathy-add-contact-group"/> and <xref
+	  linkend="empathy-add-group"/>.
+      </para>
+    </sect2>
+    
+    <sect2 id="empathy-add-contact-group">
+      <title>Adding a Contact to a Group</title>
+      <para>
+	To add a contact to one or more groups, proceed as follows:
+      </para>
+      <para>
+	<orderedlist>
+	  <listitem>
+	    <para>
+	      From the <link linkend="empathy-FIG-mainwindow">main
+		window</link>, select the contact you would like
+	      to modify and right-click on it.
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para>
+	      From the popup menu, choose <guilabel>Modify</guilabel>.
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para>
+	      From the <guilabel>Groups</guilabel> section, select the
+	      group, or groups, you want to add the contact to.
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para>
+	      When done, click <guibutton>Close</guibutton>.
+	    </para>
+	  </listitem>
+	</orderedlist>
+      </para>
+    </sect2>
+
+    <sect2 id="empathy-add-group">
+      <title>Adding a New Group</title>
+      <para>
+	To add a new group, proceed as follows:
+      </para>
+      <para>
+	<orderedlist>
+	  <listitem>
+	    <para>
+	      From the <link linkend="empathy-FIG-mainwindow">main
+		window</link>, select one contact and right-click on it.
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para>
+	      From the popup menu, choose <guilabel>Modify</guilabel>.
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para>
+	      In the <guilabel>Groups</guilabel> section, write the
+	      name of the group you want to add and then click on
+	      <guibutton>Add Group</guibutton>.
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para>
+	      When done, click <guibutton>Close</guibutton>.
+	    </para>
+	  </listitem>
+	</orderedlist>
+      </para>	
     </sect2>
   </sect1>
 
+  <sect1 id="empathy-edit-personal-information">
+    <title>Editing Personal Information</title>
+    <para>
+      To change your personal information, your alias and your
+      icon (the image that other contacts will see of you), for each
+      of your accounts, proceed as follows:
+    </para>
+    <para>
+      <orderedlist>
+	<listitem>
+	  <para>
+	    From the <link linkend="empathy-FIG-mainwindow">main
+	      window</link>, select <menuchoice>
+	      <guimenu>Edit</guimenu>
+	      <guimenuitem>Personal Information</guimenuitem>
+	    </menuchoice>.
+	  </para>
+	</listitem>
+	<listitem>
+	  <para>
+	    From the <guilabel>Account</guilabel> drop-down list, choose
+	    the account you want to edit.
+	  </para>
+	</listitem>
+	<listitem>
+	  <para>
+	    In the <guilabel>Alias</guilabel> text box, write your new
+	    alias.
+	  </para>
+	</listitem>
+	<listitem>
+	  <para>
+	    To change your icon, click on the person-looking button and
+	    choose an image file.
+	  </para>
+	</listitem>
+	<listitem>
+	  <para>
+	    When done, click <guibutton>Close</guibutton>.
+	  </para>
+	</listitem>
+      </orderedlist>
+    </para>
+      <para>
+	<note>
+	  <para>
+	    An <emphasis>alias</emphasis> is an alternative way you
+	    can identify yourself. You can use your real
+	    name or your nickname.
+	  </para>
+	</note>
+      </para>
+  </sect1>
 
+<!--
+  <sect1 id="empathy-send-receive-message">
+    <title>Sending and Receiving Messages</title>
+    <para>
+    </para>
+  </sect1>
+
+  <sect1 id="empathy-preferences">
+    <title>Preferences</title>
+    <para>
+    </para>
+  </sect1>
+-->
+  
 </article>
