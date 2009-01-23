@@ -59,8 +59,6 @@ typedef enum {
 	LAST_EMPATHY_SOUND
 } EmpathySound;
 
-#define G_STR_EMPTY(x) ((x) == NULL || (x)[0] == '\0')
-
 void            empathy_gtk_init                        (void);
 /* Glade */
 void            empathy_glade_get_file_simple           (const gchar      *filename,
