@@ -51,7 +51,7 @@ account_widget_entry_focus_cb (GtkWidget     *widget,
 	str = gtk_entry_get_text (GTK_ENTRY (widget));
 	param_name = g_object_get_data (G_OBJECT (widget), "param_name");
 
-	if (G_STR_EMPTY (str)) {
+	if (EMP_STR_EMPTY (str)) {
 		gchar *value = NULL;
 
 		mc_account_unset_param (account, param_name);
@@ -154,7 +154,7 @@ account_widget_password_changed_cb (GtkWidget *entry,
 	const gchar *str;
 
 	str = gtk_entry_get_text (GTK_ENTRY (entry));
-	gtk_widget_set_sensitive (button, !G_STR_EMPTY (str));
+	gtk_widget_set_sensitive (button, !EMP_STR_EMPTY (str));
 }
 
 static void  
@@ -445,7 +445,7 @@ empathy_account_widget_add_forget_button (McAccount   *account,
 	entry_password = glade_xml_get_widget (glade, entry);
 
 	mc_account_get_param_string (account, "password", &password);
-	gtk_widget_set_sensitive (button_forget, !G_STR_EMPTY (password));
+	gtk_widget_set_sensitive (button_forget, !EMP_STR_EMPTY (password));
 	g_free (password);
 
 	g_signal_connect (button_forget, "clicked",

@@ -290,7 +290,7 @@ log_window_entry_find_changed_cb (GtkWidget       *entry,
 
 	str = gtk_entry_get_text (GTK_ENTRY (window->entry_find));
 
-	is_sensitive &= !G_STR_EMPTY (str);
+	is_sensitive &= !EMP_STR_EMPTY (str);
 	is_sensitive &= 
 		!window->last_find || 
 		(window->last_find && strcmp (window->last_find, str) != 0);
@@ -400,7 +400,7 @@ log_window_find_populate (EmpathyLogWindow *window,
 
 	gtk_list_store_clear (store);
 
-	if (G_STR_EMPTY (search_criteria)) {
+	if (EMP_STR_EMPTY (search_criteria)) {
 		/* Just clear the search. */
 		return;
 	}

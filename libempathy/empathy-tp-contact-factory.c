@@ -130,7 +130,7 @@ tp_contact_factory_presences_table_foreach (const gchar    *state_str,
 		message_str = g_value_get_string (message);
 	}
 
-	if (!G_STR_EMPTY (message_str)) {
+	if (!EMP_STR_EMPTY (message_str)) {
 		empathy_contact_set_presence_message (contact, message_str);
 	} else {
 		empathy_contact_set_presence_message (contact, NULL);
@@ -384,7 +384,7 @@ tp_contact_factory_avatar_maybe_update (EmpathyTpContactFactory *tp_factory,
 	}
 
 	/* Check if we have an avatar */
-	if (G_STR_EMPTY (token)) {
+	if (EMP_STR_EMPTY (token)) {
 		empathy_contact_set_avatar (contact, NULL);
 		return TRUE;
 	}
@@ -783,12 +783,12 @@ tp_contact_factory_ready (EmpathyTpContactFactory *tp_factory)
 		handle = empathy_contact_get_handle (contact);
 		id = empathy_contact_get_id (contact);
 		if (handle == 0) {
-			g_assert (!G_STR_EMPTY (id));
+			g_assert (!EMP_STR_EMPTY (id));
 			g_array_append_val (handle_needed, id);
 			handle_needed_contacts = g_list_prepend (handle_needed_contacts,
 								 g_object_ref (contact));
 		}
-		if (G_STR_EMPTY (id)) {
+		if (EMP_STR_EMPTY (id)) {
 			g_array_append_val (id_needed, handle);
 			id_needed_contacts = g_list_prepend (id_needed_contacts,
 							     g_object_ref (contact));

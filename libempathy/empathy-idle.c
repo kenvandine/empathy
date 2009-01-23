@@ -95,7 +95,7 @@ idle_presence_changed_cb (MissionControl *mc,
 	g_free (priv->status);
 	priv->state = state;
 	priv->status = NULL;
-	if (!G_STR_EMPTY (status)) {
+	if (!EMP_STR_EMPTY (status)) {
 		priv->status = g_strdup (status);
 	}
 
@@ -433,7 +433,7 @@ empathy_idle_init (EmpathyIdle *idle)
 		g_clear_error (&error);
 	}
 	priv->status = mission_control_get_presence_message_actual (priv->mc, &error);
-	if (error || G_STR_EMPTY (priv->status)) {
+	if (error || EMP_STR_EMPTY (priv->status)) {
 		g_free (priv->status);
 		priv->status = NULL;
 
@@ -590,7 +590,7 @@ empathy_idle_set_presence (EmpathyIdle *idle,
 		if (tp_strdiff (priv->status, status)) {
 			g_free (priv->status);
 			priv->status = NULL;
-			if (!G_STR_EMPTY (status)) {
+			if (!EMP_STR_EMPTY (status)) {
 				priv->status = g_strdup (status);
 			}
 			g_object_notify (G_OBJECT (idle), "status");

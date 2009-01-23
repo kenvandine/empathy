@@ -355,7 +355,7 @@ theme_manager_ensure_theme_exists (const gchar *name)
 {
 	gint i;
 
-	if (G_STR_EMPTY (name)) {
+	if (EMP_STR_EMPTY (name)) {
 		return FALSE;
 	}
 

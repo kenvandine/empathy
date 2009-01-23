@@ -170,7 +170,7 @@ empathy_log_manager_add_message (EmpathyLogManager *manager,
 	body_str = empathy_message_get_body (message);
 	msg_type = empathy_message_get_tptype (message);
 
-	if (G_STR_EMPTY (body_str)) {
+	if (EMP_STR_EMPTY (body_str)) {
 		return;
 	}
 
@@ -384,7 +384,7 @@ empathy_log_manager_get_messages_for_file (EmpathyLogManager *manager,
 
 		sender = empathy_contact_new_full (account, sender_id, sender_name);
 		empathy_contact_set_is_user (sender, is_user);
-		if (!G_STR_EMPTY (sender_avatar_token)) {
+		if (!EMP_STR_EMPTY (sender_avatar_token)) {
 			empathy_contact_load_avatar_cache (sender,
 							   sender_avatar_token);
 		}
@@ -489,7 +489,7 @@ empathy_log_manager_search_new (EmpathyLogManager *manager,
 	gchar *text_casefold;
 
 	g_return_val_if_fail (EMPATHY_IS_LOG_MANAGER (manager), NULL);
-	g_return_val_if_fail (!G_STR_EMPTY (text), NULL);
+	g_return_val_if_fail (!EMP_STR_EMPTY (text), NULL);
 
 	text_casefold = g_utf8_casefold (text, -1);
 

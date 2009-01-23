@@ -381,7 +381,7 @@ contact_is_ready (EmpathyContact *contact, EmpathyContactReady ready)
   /* When the name is NULL, empathy_contact_get_name() fallback to the id.
    * When the caller want to wait the name to be ready, it also want to wait
    * the id to be ready in case of fallback. */
-  if ((ready & EMPATHY_CONTACT_READY_NAME) && G_STR_EMPTY (priv->name))
+  if ((ready & EMPATHY_CONTACT_READY_NAME) && EMP_STR_EMPTY (priv->name))
       ready |= EMPATHY_CONTACT_READY_ID;
 
   return (priv->ready & ready) == ready;
@@ -508,7 +508,7 @@ empathy_contact_set_id (EmpathyContact *contact,
       priv->id = g_strdup (id);
 
       g_object_notify (G_OBJECT (contact), "id");
-      if (G_STR_EMPTY (priv->name))
+      if (EMP_STR_EMPTY (priv->name))
           g_object_notify (G_OBJECT (contact), "name");
     }
   contact_set_ready_flag (contact, EMPATHY_CONTACT_READY_ID);
@@ -525,7 +525,7 @@ empathy_contact_get_name (EmpathyContact *contact)
 
   priv = GET_PRIV (contact);
 
-  if (G_STR_EMPTY (priv->name))
+  if (EMP_STR_EMPTY (priv->name))
       return empathy_contact_get_id (contact);
 
   return priv->name;
@@ -940,7 +940,7 @@ contact_get_avatar_filename (EmpathyContact *contact,
   gchar *token_escaped;
   gchar *contact_escaped;
 
-  if (G_STR_EMPTY (priv->id))
+  if (EMP_STR_EMPTY (priv->id))
     return NULL;
 
   contact_escaped = tp_escape_as_identifier (priv->id);
@@ -978,7 +978,7 @@ empathy_contact_load_avatar_data (EmpathyContact *contact,
   g_return_if_fail (data != NULL);
   g_return_if_fail (len > 0);
   g_return_if_fail (format != NULL);
-  g_return_if_fail (!G_STR_EMPTY (token));
+  g_return_if_fail (!EMP_STR_EMPTY (token));
 
   /* Load and set the avatar */
   avatar = empathy_avatar_new (g_memdup (data, len), len, g_strdup (format),
@@ -1013,7 +1013,7 @@ empathy_contact_load_avatar_cache (EmpathyContact *contact,
   GError *error = NULL;
 
   g_return_val_if_fail (EMPATHY_IS_CONTACT (contact), FALSE);
-  g_return_val_if_fail (!G_STR_EMPTY (token), FALSE);
+  g_return_val_if_fail (!EMP_STR_EMPTY (token), FALSE);
 
   /* Load the avatar from file if it exists */
   filename = contact_get_avatar_filename (contact, token);

@@ -323,7 +323,7 @@ chat_text_view_populate_popup (EmpathyChatTextView *view,
 						    &start, &end, FALSE);
 	    }
 	
-	if (G_STR_EMPTY (str)) {
+	if (EMP_STR_EMPTY (str)) {
 		g_free (str);
 		return;
 	}
@@ -762,7 +762,7 @@ chat_text_view_append_event (EmpathyChatView *view,
 
 
 	g_return_if_fail (EMPATHY_IS_CHAT_TEXT_VIEW (view));
-	g_return_if_fail (!G_STR_EMPTY (str));
+	g_return_if_fail (!EMP_STR_EMPTY (str));
 
 	bottom = chat_text_view_is_scrolled_down (text_view);
 	chat_text_view_maybe_trim_buffer (EMPATHY_CHAT_TEXT_VIEW (view));
@@ -856,7 +856,7 @@ chat_text_view_find_previous (EmpathyChatView *view,
 	
 	buffer = priv->buffer;
 	
-	if (G_STR_EMPTY (search_criteria)) {
+	if (EMP_STR_EMPTY (search_criteria)) {
 		if (priv->find_mark_previous) {
 			gtk_text_buffer_get_start_iter (buffer, &iter_at_mark);
 			
@@ -971,7 +971,7 @@ chat_text_view_find_next (EmpathyChatView *view,
 	
 	buffer = priv->buffer;
 	
-	if (G_STR_EMPTY (search_criteria)) {
+	if (EMP_STR_EMPTY (search_criteria)) {
 		if (priv->find_mark_next) {
 			gtk_text_buffer_get_start_iter (buffer, &iter_at_mark);
 			
@@ -1142,7 +1142,7 @@ chat_text_view_highlight (EmpathyChatView *view,
 					    &iter_start,
 					    &iter_end);
 	
-	if (G_STR_EMPTY (text)) {
+	if (EMP_STR_EMPTY (text)) {
 		return;
 	}
 	

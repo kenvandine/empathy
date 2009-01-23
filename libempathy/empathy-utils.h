@@ -38,7 +38,7 @@
 #include "empathy-contact.h"
 
 #define EMPATHY_GET_PRIV(obj,type) ((type##Priv*) ((type*)obj)->priv)
-#define G_STR_EMPTY(x) ((x) == NULL || (x)[0] == '\0')
+#define EMP_STR_EMPTY(x) ((x) == NULL || (x)[0] == '\0')
 
 G_BEGIN_DECLS
 

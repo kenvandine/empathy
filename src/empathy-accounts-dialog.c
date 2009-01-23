@@ -658,7 +658,7 @@ accounts_dialog_account_added_cb (EmpathyAccountManager *manager,
 	 *    parameter for CM that have it. */
 	current_name = mc_account_get_display_name (account);
 	mc_account_get_param_string (account, "account", &account_param);
-	if (!G_STR_EMPTY (account_param)) {
+	if (!EMP_STR_EMPTY (account_param)) {
 		McProfile   *profile;
 		const gchar *profile_name;
 		gchar       *new_name;

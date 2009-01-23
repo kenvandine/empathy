@@ -176,7 +176,7 @@ megaphone_applet_update_icon (MegaphoneApplet *applet)
 		avatar_token = panel_applet_gconf_get_string (PANEL_APPLET (applet),
 							      "avatar_token",
 							      NULL);
-		if (!G_STR_EMPTY (avatar_token)) {
+		if (!EMP_STR_EMPTY (avatar_token)) {
 			empathy_contact_load_avatar_cache (priv->contact, avatar_token);
 			avatar = empathy_contact_get_avatar (priv->contact);
 		}

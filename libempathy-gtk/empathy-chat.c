@@ -352,7 +352,7 @@ chat_send (EmpathyChat  *chat,
 
 	priv = GET_PRIV (chat);
 
-	if (G_STR_EMPTY (msg)) {
+	if (EMP_STR_EMPTY (msg)) {
 		return;
 	}
 
@@ -543,7 +543,7 @@ chat_property_changed_cb (EmpathyTpChat *tp_chat,
 		priv->subject = g_value_dup_string (value);
 		g_object_notify (G_OBJECT (chat), "subject");
 
-		if (G_STR_EMPTY (priv->subject)) {
+		if (EMP_STR_EMPTY (priv->subject)) {
 			gtk_widget_hide (priv->hbox_topic);
 		} else {
 			gtk_label_set_text (GTK_LABEL (priv->label_topic), priv->subject);
@@ -552,7 +552,7 @@ chat_property_changed_cb (EmpathyTpChat *tp_chat,
 		if (priv->block_events_timeout_id == 0) {
 			gchar *str;
 
-			if (!G_STR_EMPTY (priv->subject)) {
+			if (!EMP_STR_EMPTY (priv->subject)) {
 				str = g_strdup_printf (_("Topic set to: %s"), priv->subject);
 			} else {
 				str = g_strdup (_("No topic defined"));
@@ -987,7 +987,7 @@ chat_input_populate_popup_cb (GtkTextView *view,
 	/* Add the Send menu item. */
 	gtk_text_buffer_get_bounds (buffer, &start, &end);
 	str = gtk_text_buffer_get_text (buffer, &start, &end, FALSE);
-	if (!G_STR_EMPTY (str)) {
+	if (!EMP_STR_EMPTY (str)) {
 		item = gtk_menu_item_new_with_mnemonic (_("_Send"));
 		g_signal_connect (G_OBJECT (item), "activate",
 				  G_CALLBACK (chat_text_send_cb), chat);
@@ -1012,7 +1012,7 @@ chat_input_populate_popup_cb (GtkTextView *view,
 		str = gtk_text_buffer_get_text (buffer,
 						&start, &end, FALSE);
 	}
-	if (!G_STR_EMPTY (str)) {
+	if (!EMP_STR_EMPTY (str)) {
 		chat_spell = chat_spell_new (chat, str, start, end);
 		g_object_set_data_full (G_OBJECT (menu),
 					"chat_spell", chat_spell,

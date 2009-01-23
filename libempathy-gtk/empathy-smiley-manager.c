@@ -242,8 +242,8 @@ empathy_smiley_manager_add (EmpathySmileyManager *manager,
 	va_list    var_args;
 
 	g_return_if_fail (EMPATHY_IS_SMILEY_MANAGER (manager));
-	g_return_if_fail (!G_STR_EMPTY (icon_name));
-	g_return_if_fail (!G_STR_EMPTY (first_str));
+	g_return_if_fail (!EMP_STR_EMPTY (icon_name));
+	g_return_if_fail (!EMP_STR_EMPTY (first_str));
 
 	smiley = empathy_pixbuf_from_icon_name (icon_name, GTK_ICON_SIZE_MENU);
 	if (smiley) {
@@ -264,7 +264,7 @@ empathy_smiley_manager_add_from_pixbuf (EmpathySmileyManager *manager,
 
 	g_return_if_fail (EMPATHY_IS_SMILEY_MANAGER (manager));
 	g_return_if_fail (GDK_IS_PIXBUF (smiley));
-	g_return_if_fail (!G_STR_EMPTY (first_str));
+	g_return_if_fail (!EMP_STR_EMPTY (first_str));
 
 	va_start (var_args, first_str);
 	smiley_manager_add_valist (manager, smiley, first_str, var_args);

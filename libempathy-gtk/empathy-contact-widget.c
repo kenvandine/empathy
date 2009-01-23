@@ -703,7 +703,7 @@ contact_widget_change_contact (EmpathyContactWidget *information)
       const gchar *id;
 
       id = gtk_entry_get_text (GTK_ENTRY (information->widget_id));
-      if (G_STR_EMPTY (id))
+      if (EMP_STR_EMPTY (id))
           return;
 
       contact = empathy_contact_factory_get_from_id (information->factory,
@@ -979,7 +979,7 @@ contact_widget_model_find_name (EmpathyContactWidget *information,
   GtkTreeModel *model;
   FindName data;
 
-  if (G_STR_EMPTY (name))
+  if (EMP_STR_EMPTY (name))
       return FALSE;
 
   data.information = information;
@@ -1091,7 +1091,7 @@ contact_widget_entry_group_changed_cb (GtkEditable *editable,
       gtk_widget_set_sensitive (GTK_WIDGET (information->button_group), FALSE);
   else
       gtk_widget_set_sensitive (GTK_WIDGET (information->button_group),
-          !G_STR_EMPTY (group));
+          !EMP_STR_EMPTY (group));
 }
 
 static void

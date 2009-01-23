@@ -388,20 +388,20 @@ tp_call_stream_engine_watch_name_owner_cb (TpDBusDaemon *daemon,
 {
   EmpathyTpCallPriv *priv = GET_PRIV (call);
 
-  /* G_STR_EMPTY(new_owner) means either stream-engine has not started yet or
+  /* EMP_STR_EMPTY(new_owner) means either stream-engine has not started yet or
    * has crashed. We want to close the channel if stream-engine has crashed.
    * */
   DEBUG ("Watch SE: name='%s' SE running='%s' new_owner='%s'",
       name, priv->stream_engine_running ? "yes" : "no",
       new_owner ? new_owner : "none");
-  if (priv->stream_engine_running && G_STR_EMPTY (new_owner))
+  if (priv->stream_engine_running && EMP_STR_EMPTY (new_owner))
     {
       DEBUG ("Stream engine falled off the bus");
       empathy_tp_call_close (call);
       return;
     }
 
-  priv->stream_engine_running = !G_STR_EMPTY (new_owner);
+  priv->stream_engine_running = !EMP_STR_EMPTY (new_owner);
 }
 
 static void

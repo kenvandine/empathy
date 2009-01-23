@@ -541,7 +541,7 @@ event_manager_pendings_changed_cb (EmpathyContactList  *list,
   g_string_printf (str, _("Subscription requested by %s"),
     empathy_contact_get_name (contact));
 
-  if (!G_STR_EMPTY (message))
+  if (!EMP_STR_EMPTY (message))
     g_string_append_printf (str, _("\nMessage: %s"), message);
 
   event_manager_add (manager, contact, GTK_STOCK_DIALOG_QUESTION, str->str,

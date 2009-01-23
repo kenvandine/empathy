@@ -1556,7 +1556,7 @@ empathy_chat_window_find_chat (McAccount   *account,
 	GList *l;
 
 	g_return_val_if_fail (MC_IS_ACCOUNT (account), NULL);
-	g_return_val_if_fail (!G_STR_EMPTY (id), NULL);
+	g_return_val_if_fail (!EMP_STR_EMPTY (id), NULL);
 
 	for (l = chat_windows; l; l = l->next) {
 		EmpathyChatWindowPriv *priv;

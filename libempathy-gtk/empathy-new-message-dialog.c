@@ -175,7 +175,7 @@ new_message_dialog_response_cb (GtkWidget               *widget,
 
 	account = empathy_account_chooser_get_account (EMPATHY_ACCOUNT_CHOOSER (dialog->account_chooser));
 	id = gtk_entry_get_text (GTK_ENTRY (dialog->entry_id));
-	if (!account || G_STR_EMPTY (id)) {
+	if (!account || EMP_STR_EMPTY (id)) {
 		if (account) {
 			g_object_unref (account);
 		}
@@ -209,7 +209,7 @@ new_message_change_state_button_cb  (GtkEditable             *editable,
 	gboolean     sensitive;
 
 	id = gtk_entry_get_text (GTK_ENTRY (editable));
-	sensitive = !G_STR_EMPTY (id);
+	sensitive = !EMP_STR_EMPTY (id);
 	
 	gtk_widget_set_sensitive (dialog->button_chat, sensitive);
 	gtk_widget_set_sensitive (dialog->button_call, sensitive);

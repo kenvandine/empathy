@@ -332,7 +332,7 @@ new_chatroom_dialog_update_widgets (EmpathyNewChatroomDialog *dialog)
 	}
 
 	room = gtk_entry_get_text (GTK_ENTRY (dialog->entry_room));
-	gtk_widget_set_sensitive (dialog->button_join, !G_STR_EMPTY (room));
+	gtk_widget_set_sensitive (dialog->button_join, !EMP_STR_EMPTY (room));
 
 	/* Final set up of the dialog */
 	gtk_widget_grab_focus (dialog->entry_room);
@@ -500,7 +500,7 @@ new_chatroom_dialog_join (EmpathyNewChatroomDialog *dialog)
 	account_chooser = EMPATHY_ACCOUNT_CHOOSER (dialog->account_chooser);
 	account = empathy_account_chooser_get_account (account_chooser);
 
-	if (!G_STR_EMPTY (server)) {
+	if (!EMP_STR_EMPTY (server)) {
 		room_name = g_strconcat (room, "@", server, NULL);
 	} else {
 		room_name = g_strdup (room);
@@ -520,7 +520,7 @@ new_chatroom_dialog_entry_changed_cb (GtkWidget                *entry,
 		const gchar *room;
 
 		room = gtk_entry_get_text (GTK_ENTRY (dialog->entry_room));
-		gtk_widget_set_sensitive (dialog->button_join, !G_STR_EMPTY (room));
+		gtk_widget_set_sensitive (dialog->button_join, !EMP_STR_EMPTY (room));
 		/* FIXME: Select the room in the list */
 	}
 }
