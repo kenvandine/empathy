@@ -1264,23 +1264,24 @@ contact_widget_location_update (EmpathyContactWidget *information)
     gtk_label_set_markup (GTK_LABEL (information->label_location), _("<b>Location</b>"));
   else
     {
-      const gchar *str_date = g_value_get_string (value);
-      struct tm * ptm = g_new0 (struct tm, 1);
+      gchar user_date [100];
+      gint64 stamp;
+      struct tm *ptm;
+      time_t time;
 
-      gchar * p = strptime (str_date, "%Y%m%dT%T", ptm);
-      if (p != NULL)
-      {
-        gchar *text;
-        gchar user_date [100];
-        if (strftime (user_date, 100, _("%B %e, %Y at %R UTC"), ptm) > 0)
-          {
-            text = g_strconcat ( _("<b>Location</b> on "), user_date, NULL);
-            gtk_label_set_markup (GTK_LABEL (information->label_location), text);
-            g_free (text);
-          }
-        else
-          gtk_label_set_markup (GTK_LABEL (information->label_location), _("<b>Location</b>"));
-      }
+      stamp = g_value_get_int64 (value);
+      time = stamp;
+      ptm = gmtime (&time);
+
+      if (strftime (user_date, 100, _("%B %e, %Y at %R UTC"), ptm) > 0)
+        {
+          gchar *text;
+          text = g_strconcat ( _("<b>Location</b> on "), user_date, NULL);
+          gtk_label_set_markup (GTK_LABEL (information->label_location), text);
+          g_free (text);
+        }
+      else
+        gtk_label_set_markup (GTK_LABEL (information->label_location), _("<b>Location</b>"));
     }
 
   if (/* information->flags & EMPATHY_CONTACT_WIDGET_FOR_TOOLTIP || */
