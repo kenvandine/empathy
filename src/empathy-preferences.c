@@ -1107,6 +1107,7 @@ empathy_preferences_show (GtkWindow *parent)
 	static EmpathyPreferences *preferences;
 	GtkBuilder                *gui;
 	gchar                     *filename;
+	GtkWidget                 *page;
 
 	if (preferences) {
 		gtk_window_present (GTK_WINDOW (preferences->dialog));
@@ -1169,12 +1170,13 @@ empathy_preferences_show (GtkWindow *parent)
 		gtk_widget_show (page);
 	}
 
-	if (TRUE) { /* FIXME */
-		GtkWidget *page;
+	page = gtk_notebook_get_nth_page (GTK_NOTEBOOK (preferences->notebook), 3);
+#if HAVE_GEOCLUE
+	gtk_widget_show (page);
+#else
+	gtk_widget_hide (page);
+#endif
 
-		page = gtk_notebook_get_nth_page (GTK_NOTEBOOK (preferences->notebook), 4);
-		gtk_widget_show (page);
-	}
 
 	if (parent) {
 		gtk_window_set_transient_for (GTK_WINDOW (preferences->dialog),
