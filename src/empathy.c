@@ -422,7 +422,9 @@ int
 main (int argc, char *argv[])
 {
 	guint32            startup_timestamp;
-	EmpathyLocationManager *location_manager;
+#if HAVE_GEOCLUE
+	EmpathyLocationManager *location_manager = NULL;
+#endif
 	EmpathyStatusIcon *icon;
 	EmpathyDispatcher *dispatcher;
 	EmpathyLogManager *log_manager;
@@ -585,7 +587,9 @@ main (int argc, char *argv[])
 		G_CALLBACK (new_call_handler_cb), NULL);
 
 	/* Location mananger */
+#if HAVE_GEOCLUE
 	location_manager = empathy_location_manager_get_default ();
+#endif
 
 	gtk_main ();
 
@@ -598,7 +602,9 @@ main (int argc, char *argv[])
 	g_object_unref (dispatcher);
 	g_object_unref (chatroom_manager);
 	g_object_unref (ft_manager);
+#if HAVE_GEOCLUE
 	g_object_unref (location_manager);
+#endif
 
 	notify_uninit ();
 

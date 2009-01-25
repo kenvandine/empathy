@@ -30,7 +30,6 @@
 
 #if HAVE_GEOCLUE
 #include <geoclue/geoclue-master.h>
-#endif
 
 #include <extensions/extensions.h>
 
@@ -52,12 +51,12 @@ typedef struct {
     MissionControl *mc;
     GHashTable *location;
     gpointer token;
-#if HAVE_GEOCLUE
+
     GeoclueResourceFlags resources;
     GeoclueMasterClient *gc_client;
     GeocluePosition *gc_position;
     GeoclueAddress *gc_address;
-#endif
+
     gboolean reduce_accuracy;
     gdouble reduce_value;
     EmpathyAccountManager *account_manager;
@@ -68,7 +67,6 @@ static void location_manager_get_property (GObject *object, guint param_id,
     GValue *value, GParamSpec *pspec);
 static void location_manager_set_property (GObject *object, guint param_id,
     const GValue *value, GParamSpec *pspec);
-#if HAVE_GEOCLUE
 static void position_changed_cb (GeocluePosition *position,
     GeocluePositionFields fields, int timestamp, double latitude,
     double longitude, double altitude, GeoclueAccuracy *accuracy,
@@ -83,7 +81,6 @@ static void resource_cb (EmpathyConf  *conf, const gchar *key,
     gpointer user_data);
 static void accuracy_cb (EmpathyConf  *conf, const gchar *key,
     gpointer user_data);
-#endif
 static void account_connection_changed_cb (EmpathyAccountManager *manager,
     McAccount *account, TpConnectionStatusReason reason,
     TpConnectionStatus current, TpConnectionStatus previous,
@@ -293,7 +290,6 @@ update_timestamp (EmpathyLocationManager *location_manager,
   DEBUG ("\t - Timestamp: %" G_GINT64_FORMAT, stamp64);
 }
 
-#if HAVE_GEOCLUE
 static void
 initial_position_cb (GeocluePosition *position,
                      GeocluePositionFields fields,
