@@ -823,6 +823,12 @@ accounts_dialog_button_create_clicked_cb (GtkWidget             *button,
 
 	/* Create account */
 	account = mc_account_create (profile);
+	if (account == NULL) {
+		/* We can't display an error to the user as MC doesn't give us
+		 * any clue about the reason of the failure... */
+		return;
+	}
+
 	/* To translator: %s is the protocol name */
 	str = g_strdup_printf (_("New %s account"),
 			       mc_profile_get_display_name (profile));
