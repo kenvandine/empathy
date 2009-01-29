@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: empathy\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-12-06 16:06+0100\n"
-"PO-Revision-Date: 2008-12-06 16:07+0100\n"
+"POT-Creation-Date: 2009-01-29 14:08+0100\n"
+"PO-Revision-Date: 2009-01-28 21:59+0100\n"
 "Last-Translator: Gil Forcada <gilforcada@guifi.net>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "MIME-Version: 1.0\n"
@@ -61,119 +61,143 @@ msgid "Default directory to select an avatar image from"
 msgstr "El directori predeterminat des d'on seleccionar una imatge d'avatar"
 
 #: ../data/empathy.schemas.in.h:8
-msgid "Empathy default download folder"
-msgstr ""
+msgid "Disable sounds when away"
+msgstr "Inhabilita els sons quan s'estigui absent"
 
 #: ../data/empathy.schemas.in.h:9
-msgid "Empathy has asked about importing accounts"
-msgstr ""
+msgid "Empathy default download folder"
+msgstr "Carpeta predeterminada de les baixades de l'Empathy"
 
 #: ../data/empathy.schemas.in.h:10
+msgid "Empathy has asked about importing accounts"
+msgstr "Si l'Empathy ha preguntat sobre la importació de comptes"
+
+#: ../data/empathy.schemas.in.h:11
 msgid "Empathy should auto-connect on startup"
 msgstr "Fes que l'Empathy es connecti automàticament en iniciar-se"
 
-#: ../data/empathy.schemas.in.h:11
+#: ../data/empathy.schemas.in.h:12
 msgid "Empathy should use the avatar of the contact as the chat window icon"
 msgstr ""
 "Fes que l'Empathy utilitzi l'avatar del contacte com a icona de la finestra "
 "de xat"
 
-#: ../data/empathy.schemas.in.h:12
+#: ../data/empathy.schemas.in.h:13
 msgid "Enable popup when contact is available"
 msgstr "Habilita les finestres emergents quan un contacte és disponible"
 
-#: ../data/empathy.schemas.in.h:13
-msgid "Enable sound when away"
-msgstr "Habilita els sons quan s'està absent"
-
 #: ../data/empathy.schemas.in.h:14
-msgid "Enable sound when busy"
-msgstr "Habilita els sons quan s'està ocupat"
-
-#: ../data/empathy.schemas.in.h:15
 msgid "Enable spell checker"
 msgstr "Habilita el verificador ortogràfic"
 
-#: ../data/empathy.schemas.in.h:16
+#: ../data/empathy.schemas.in.h:15
 msgid "Hide main window"
 msgstr "Oculta la finestra principal"
 
-#: ../data/empathy.schemas.in.h:17
+#: ../data/empathy.schemas.in.h:16
 msgid "Hide the main window."
 msgstr "Oculta la finestra principal."
 
-#: ../data/empathy.schemas.in.h:18
+#: ../data/empathy.schemas.in.h:17
 msgid "NetworkManager should be used"
 msgstr "S'hauria d'utilitzar el NetworkManager"
 
-#: ../data/empathy.schemas.in.h:19
+#: ../data/empathy.schemas.in.h:18
 msgid "Nick completed character"
 msgstr "Caràcter de compleció de sobrenom"
 
-#: ../data/empathy.schemas.in.h:20
+#: ../data/empathy.schemas.in.h:19
 msgid "Open new chats in separate windows"
 msgstr "Obre les finestres de xat noves en finestres separades"
 
+#: ../data/empathy.schemas.in.h:20
+msgid "Play a sound for incoming messages"
+msgstr "Reprodueix un so quan arribin missatges"
+
 #: ../data/empathy.schemas.in.h:21
+msgid "Play a sound for new conversations"
+msgstr "Reprodueix un so per a les converses noves"
+
+#: ../data/empathy.schemas.in.h:22
+msgid "Play a sound for outgoing messages"
+msgstr "Reprodueix un so per als missatges de sortida"
+
+#: ../data/empathy.schemas.in.h:23
+msgid "Play a sound when a contact logs in"
+msgstr "Reprodueix un so quan entri algun contacte"
+
+#: ../data/empathy.schemas.in.h:24
+msgid "Play a sound when a contact logs out"
+msgstr "Reprodueix un so si un contacte surt"
+
+#: ../data/empathy.schemas.in.h:25
+msgid "Play a sound when we log in"
+msgstr "Reprodueix un so en entrar"
+
+#: ../data/empathy.schemas.in.h:26
+msgid "Play a sound when we log out"
+msgstr "Reprodueix un so en sortir"
+
+#: ../data/empathy.schemas.in.h:27
 msgid "Salut account is created"
 msgstr "S'ha creat el compte del Salut"
 
-#: ../data/empathy.schemas.in.h:22
+#: ../data/empathy.schemas.in.h:28
 msgid "Show avatars"
 msgstr "Mostra els avatars"
 
-#: ../data/empathy.schemas.in.h:23
+#: ../data/empathy.schemas.in.h:29
 msgid "Show hint about closing the main window"
 msgstr "Mostra un consell sobre tancar la finestra principal"
 
-#: ../data/empathy.schemas.in.h:24
+#: ../data/empathy.schemas.in.h:30
 msgid "Show offline contacts"
 msgstr "Mostra els contactes desconnectats"
 
-#: ../data/empathy.schemas.in.h:25
+#: ../data/empathy.schemas.in.h:31
 msgid "Spell checking languages"
 msgstr "Llengües per a la verificació ortogràfica"
 
-#: ../data/empathy.schemas.in.h:26
-#, fuzzy
+#: ../data/empathy.schemas.in.h:32
 msgid "The default folder to save file transfers in."
-msgstr "La ubicació per defecte per a les transferències de fitxers desades"
+msgstr "La carpeta predeterminada on es desaran els fitxers transferits."
 
-#: ../data/empathy.schemas.in.h:27
+#: ../data/empathy.schemas.in.h:33
 msgid "The last directory that an avatar image was chosen from."
 msgstr "L'últim directori des d'on es va seleccionar una imatge d'avatar."
 
-#: ../data/empathy.schemas.in.h:28
+#: ../data/empathy.schemas.in.h:34
 msgid "The theme that is used to display the conversation in chat windows."
 msgstr ""
 "El tema que s'utilitza per a mostrar la conversa a les finestres de xat."
 
-#: ../data/empathy.schemas.in.h:29
+#: ../data/empathy.schemas.in.h:35
 msgid "Use graphical smileys"
 msgstr "Utilitza emoticones gràfiques"
 
-#: ../data/empathy.schemas.in.h:30
+#: ../data/empathy.schemas.in.h:36
 msgid "Use notification sounds"
 msgstr "Utilitza sons de notificació"
 
-#: ../data/empathy.schemas.in.h:31
+#: ../data/empathy.schemas.in.h:37
 msgid "Use theme for chat rooms"
 msgstr "Usa el tema per a les sales de xat"
 
-#: ../data/empathy.schemas.in.h:32
-#, fuzzy
+#: ../data/empathy.schemas.in.h:38
 msgid ""
 "Whether or not Empathy has asked about importing accounts from other "
 "programs."
-msgstr "Si l'Empathy ha d'entrar en els comptes automàticament en iniciar-se."
+msgstr ""
+"Si l'Empathy ha preguntat si es volen importar els comptes d'altres "
+"programes."
 
-#: ../data/empathy.schemas.in.h:33
+#: ../data/empathy.schemas.in.h:39
 msgid ""
 "Whether or not Empathy should automatically log in to your accounts on "
 "startup."
 msgstr "Si l'Empathy ha d'entrar en els comptes automàticament en iniciar-se."
 
-#: ../data/empathy.schemas.in.h:34
+#: ../data/empathy.schemas.in.h:40
 msgid ""
 "Whether or not Empathy should use the avatar of the contact as the chat "
 "window icon."
@@ -181,12 +205,12 @@ msgstr ""
 "Si l'Empathy ha d'utilitzar l'avatar del contacte com a icona de la finestra "
 "de xat."
 
-#: ../data/empathy.schemas.in.h:35
+#: ../data/empathy.schemas.in.h:41
 msgid ""
 "Whether or not the Salut account has been created on the first Empathy run."
 msgstr "Si s'ha creat el compte del Salut en la primera execució de l'Empathy."
 
-#: ../data/empathy.schemas.in.h:36
+#: ../data/empathy.schemas.in.h:42
 msgid ""
 "Whether or not the network manager should be used to automatically "
 "disconnect/reconnect."
@@ -194,7 +218,7 @@ msgstr ""
 "Si s'hauria d'utilitzar el gestor de xarxa per a desconnectar/tornar a "
 "connectar automàticament."
 
-#: ../data/empathy.schemas.in.h:37
+#: ../data/empathy.schemas.in.h:43
 msgid ""
 "Whether or not to check words typed against the languages you want to check "
 "with."
@@ -202,30 +226,61 @@ msgstr ""
 "Si s'han de verificar les paraules introduïdes comparant-les les llengües "
 "escollides per a la verificació ortogràfica."
 
-#: ../data/empathy.schemas.in.h:38
+#: ../data/empathy.schemas.in.h:44
 msgid ""
 "Whether or not to convert smileys into graphical images in conversations."
 msgstr ""
 "Si s'han de convertir les emoticones a imatges gràfiques a les converses."
 
-#: ../data/empathy.schemas.in.h:39
-msgid "Whether or not to play a sound when messages arrive."
-msgstr "Si s'ha de reproduir un so quan arriba un missatge."
+#: ../data/empathy.schemas.in.h:45
+msgid "Whether or not to play a sound notifications when away or busy."
+msgstr "Si s'han de reproduir sons quan s'estigui absent o ocupat."
 
-#: ../data/empathy.schemas.in.h:40
-msgid "Whether or not to play sounds when away."
-msgstr "Si s'han de reproduir sons quan s'està absent."
+#: ../data/empathy.schemas.in.h:46
+msgid ""
+"Whether or not to play a sound to notify for contacts logging in the network."
+msgstr ""
+"Si s'ha de reproduir un so per a notificar que els contactes entren a la "
+"xarxa."
 
-#: ../data/empathy.schemas.in.h:41
-msgid "Whether or not to play sounds when busy."
-msgstr "Si s'han de reproduir sons quan s'està ocupat."
+#: ../data/empathy.schemas.in.h:47
+msgid ""
+"Whether or not to play a sound to notify for contacts logging off the "
+"network."
+msgstr ""
+"Si s'ha de reproduir un so per a notificar que els contactes surten de la "
+"xarxa."
 
-#: ../data/empathy.schemas.in.h:42
+#: ../data/empathy.schemas.in.h:48
+msgid "Whether or not to play a sound to notify for events."
+msgstr "Si s'ha de reproduir un so per a notificar esdeveniments."
+
+#: ../data/empathy.schemas.in.h:49
+msgid "Whether or not to play a sound to notify for incoming messages."
+msgstr "Si s'ha de reproduir un so quan arriben missatges."
+
+#: ../data/empathy.schemas.in.h:50
+msgid "Whether or not to play a sound to notify for new conversations."
+msgstr "Si s'ha de reproduir un so quan s'inicien converses noves."
+
+#: ../data/empathy.schemas.in.h:51
+msgid "Whether or not to play a sound to notify for outgoing messages."
+msgstr "Si s'ha de reproduir un so quan s'envien missatges."
+
+#: ../data/empathy.schemas.in.h:52
+msgid "Whether or not to play a sound when logging in a network."
+msgstr "Si s'ha de reproduir un so quan s'entra a una xarxa."
+
+#: ../data/empathy.schemas.in.h:53
+msgid "Whether or not to play a sound when logging off a network."
+msgstr "Si s'ha de reproduir un so quan se surt d'una xarxa."
+
+#: ../data/empathy.schemas.in.h:54
 msgid "Whether or not to show a popup when a contact becomes available."
 msgstr ""
 "Si s'ha de mostrar una finestra emergent quan un contacte esdevé disponible."
 
-#: ../data/empathy.schemas.in.h:43
+#: ../data/empathy.schemas.in.h:55
 msgid ""
 "Whether or not to show avatars for contacts in the contact list and chat "
 "windows."
@@ -233,13 +288,13 @@ msgstr ""
 "Si s'han de mostrar els avatars per als contactes a la llista de contactes i "
 "les finestres de xat."
 
-#: ../data/empathy.schemas.in.h:44
+#: ../data/empathy.schemas.in.h:56
 msgid "Whether or not to show contacts that are offline in the contact list."
 msgstr ""
 "Si s'han de mostrar els contactes que estan desconnectats a la llista de "
 "contactes."
 
-#: ../data/empathy.schemas.in.h:45
+#: ../data/empathy.schemas.in.h:57
 msgid ""
 "Whether or not to show the message dialog about closing the main window with "
 "the 'x' button in the title bar."
@@ -247,15 +302,15 @@ msgstr ""
 "Si s'ha de mostrar el diàleg de missatge sobre tancar la finestra principal "
 "amb el botó «x» de la barra de títol."
 
-#: ../data/empathy.schemas.in.h:46
+#: ../data/empathy.schemas.in.h:58
 msgid "Whether to show the contact list in compact mode or not."
 msgstr "Si s'ha de mostrar la llista de contactes en mode compacte."
 
-#: ../data/empathy.schemas.in.h:47
+#: ../data/empathy.schemas.in.h:59
 msgid "Whether to use the theme for chat rooms or not."
 msgstr "Si s'ha d'utilitzar el tema per a les sales de xat."
 
-#: ../data/empathy.schemas.in.h:48
+#: ../data/empathy.schemas.in.h:60
 msgid ""
 "Which criterium to use when sorting the contact list. Default is to use sort "
 "by the contact's name with the value \"name\". A value of \"state\" will "
@@ -266,31 +321,31 @@ msgstr ""
 "«name» (nom). Un valor «state» (estat) ordenarà la llista de contactes per "
 "estat."
 
-#: ../libempathy/empathy-tp-contact-list.c:731 ../src/empathy.c:258
+#: ../libempathy/empathy-tp-contact-list.c:731 ../src/empathy.c:269
 msgid "People nearby"
 msgstr "Gent propera"
 
-#: ../libempathy/empathy-utils.c:219
+#: ../libempathy/empathy-utils.c:251
 msgid "Available"
 msgstr "Disponible"
 
-#: ../libempathy/empathy-utils.c:221
+#: ../libempathy/empathy-utils.c:253
 msgid "Busy"
 msgstr "Ocupat"
 
-#: ../libempathy/empathy-utils.c:224
+#: ../libempathy/empathy-utils.c:256
 msgid "Away"
 msgstr "Absent"
 
-#: ../libempathy/empathy-utils.c:226
+#: ../libempathy/empathy-utils.c:258
 msgid "Hidden"
 msgstr "Amagat"
 
-#: ../libempathy/empathy-utils.c:229
+#: ../libempathy/empathy-utils.c:261
 msgid "Offline"
 msgstr "Desconnectat"
 
-#: ../libempathy-gtk/empathy-account-chooser.c:337
+#: ../libempathy-gtk/empathy-account-chooser.c:326
 msgid "All"
 msgstr "Tots"
 
@@ -451,8 +506,8 @@ msgid "_Email:"
 msgstr "Corr_eu electrònic:"
 
 #: ../libempathy-gtk/empathy-account-widget-salut.glade.h:3
-msgid "_First Name: "
-msgstr "_Nom: "
+msgid "_First Name:"
+msgstr "_Nom:"
 
 #: ../libempathy-gtk/empathy-account-widget-salut.glade.h:4
 msgid "_Jabber ID:"
@@ -504,29 +559,28 @@ msgstr "_Ignora les invitacions de conferència i sala de xat"
 msgid "_Room List locale:"
 msgstr "_Localització de la llista de la sala:"
 
-#: ../libempathy-gtk/empathy-avatar-chooser.c:461
-#: ../libempathy-gtk/empathy-avatar-chooser.c:536
-#, fuzzy
-msgid "Couldn't convert image"
-msgstr "No s'ha pogut enviar el missatge!"
-
 #: ../libempathy-gtk/empathy-avatar-chooser.c:462
-msgid "None of the accepted image formats is supported on your system"
-msgstr ""
+#: ../libempathy-gtk/empathy-avatar-chooser.c:537
+msgid "Couldn't convert image"
+msgstr "No s'ha pogut convertir la imatge"
 
-#: ../libempathy-gtk/empathy-avatar-chooser.c:947
+#: ../libempathy-gtk/empathy-avatar-chooser.c:463
+msgid "None of the accepted image formats is supported on your system"
+msgstr "El vostre sistema no sap gestionar cap dels formats d'imatge acceptats"
+
+#: ../libempathy-gtk/empathy-avatar-chooser.c:956
 msgid "Select Your Avatar Image"
 msgstr "Seleccioneu la vostra imatge d'avatar"
 
-#: ../libempathy-gtk/empathy-avatar-chooser.c:950
+#: ../libempathy-gtk/empathy-avatar-chooser.c:959
 msgid "No Image"
 msgstr "Cap imatge"
 
-#: ../libempathy-gtk/empathy-avatar-chooser.c:1010
+#: ../libempathy-gtk/empathy-avatar-chooser.c:1021
 msgid "Images"
 msgstr "Imatges"
 
-#: ../libempathy-gtk/empathy-avatar-chooser.c:1014
+#: ../libempathy-gtk/empathy-avatar-chooser.c:1025
 msgid "All Files"
 msgstr "Tots els fitxers"
 
@@ -534,78 +588,78 @@ msgstr "Tots els fitxers"
 msgid "Click to enlarge"
 msgstr "Feu clic per a fer més gran"
 
-#: ../libempathy-gtk/empathy-chat.c:498
+#: ../libempathy-gtk/empathy-chat.c:507
 msgid "offline"
 msgstr "desconnectat"
 
-#: ../libempathy-gtk/empathy-chat.c:501
+#: ../libempathy-gtk/empathy-chat.c:510
 msgid "invalid contact"
 msgstr "contacte no vàlid"
 
-#: ../libempathy-gtk/empathy-chat.c:504
+#: ../libempathy-gtk/empathy-chat.c:513
 msgid "permission denied"
 msgstr "s'ha denegat el permís"
 
-#: ../libempathy-gtk/empathy-chat.c:507
+#: ../libempathy-gtk/empathy-chat.c:516
 msgid "too long message"
 msgstr "el missatge és massa llarg"
 
-#: ../libempathy-gtk/empathy-chat.c:510
+#: ../libempathy-gtk/empathy-chat.c:519
 msgid "not implemented"
 msgstr "no implementat"
 
-#: ../libempathy-gtk/empathy-chat.c:513
+#: ../libempathy-gtk/empathy-chat.c:522
 msgid "unknown"
 msgstr "desconegut"
 
-#: ../libempathy-gtk/empathy-chat.c:517
+#: ../libempathy-gtk/empathy-chat.c:526
 #, c-format
 msgid "Error sending message '%s': %s"
 msgstr "S'ha produït un error en enviar el missatge «%s»: %s"
 
-#: ../libempathy-gtk/empathy-chat.c:547
+#: ../libempathy-gtk/empathy-chat.c:556
 #, c-format
 msgid "Topic set to: %s"
 msgstr "Tema establert a: %s"
 
-#: ../libempathy-gtk/empathy-chat.c:549
+#: ../libempathy-gtk/empathy-chat.c:558
 msgid "No topic defined"
 msgstr "No s'ha definit cap tema"
 
-#: ../libempathy-gtk/empathy-chat.c:964
+#: ../libempathy-gtk/empathy-chat.c:973
 msgid "Insert Smiley"
 msgstr "Insereix una emoticona"
 
 #. send button
-#: ../libempathy-gtk/empathy-chat.c:980
-#: ../libempathy-gtk/empathy-ui-utils.c:1508
+#: ../libempathy-gtk/empathy-chat.c:991
+#: ../libempathy-gtk/empathy-ui-utils.c:1526
 msgid "_Send"
 msgstr "_Envia"
 
-#: ../libempathy-gtk/empathy-chat.c:1014
+#: ../libempathy-gtk/empathy-chat.c:1025
 msgid "_Check Word Spelling..."
 msgstr "_Verifica l'ortografia de la paraula..."
 
-#: ../libempathy-gtk/empathy-chat.c:1120
+#: ../libempathy-gtk/empathy-chat.c:1131
 #, c-format
 msgid "%s has joined the room"
 msgstr "%s ha entrat a la sala"
 
-#: ../libempathy-gtk/empathy-chat.c:1123
+#: ../libempathy-gtk/empathy-chat.c:1134
 #, c-format
 msgid "%s has left the room"
 msgstr "%s ha sortit de la sala"
 
-#: ../libempathy-gtk/empathy-chat.c:1237 ../src/empathy-call-window.c:406
+#: ../libempathy-gtk/empathy-chat.c:1248 ../src/empathy-call-window.c:425
 msgid "Disconnected"
 msgstr "Fora de línia"
 
-#: ../libempathy-gtk/empathy-chat.c:1609
+#: ../libempathy-gtk/empathy-chat.c:1644
 msgid "Connected"
 msgstr "Connectat"
 
-#: ../libempathy-gtk/empathy-chat.c:1657
-#: ../libempathy-gtk/empathy-log-window.c:504
+#: ../libempathy-gtk/empathy-chat.c:1694
+#: ../libempathy-gtk/empathy-log-window.c:505
 msgid "Conversation"
 msgstr "Conversa"
 
@@ -617,13 +671,17 @@ msgstr "<b>Tema:</b>"
 msgid "Group Chat"
 msgstr "Xat en grup"
 
-#: ../libempathy-gtk/empathy-chat-view.c:430
+#: ../libempathy-gtk/empathy-chat-text-view.c:340
 msgid "_Copy Link Address"
 msgstr "_Copia l'adreça de l'enllaç"
 
-#: ../libempathy-gtk/empathy-chat-view.c:438
+#: ../libempathy-gtk/empathy-chat-text-view.c:348
 msgid "_Open Link"
 msgstr "_Obre l'enllaç"
+
+#: ../libempathy-gtk/empathy-chat-text-view.c:439
+msgid "%A %d %B %Y"
+msgstr "%A %d %B %Y"
 
 #: ../libempathy-gtk/empathy-contact-dialogs.c:180
 msgid "Personal Information"
@@ -637,11 +695,11 @@ msgstr "Edita la informació del contacte"
 msgid "Contact Information"
 msgstr "Informació del contacte"
 
-#: ../libempathy-gtk/empathy-contact-dialogs.c:283
+#: ../libempathy-gtk/empathy-contact-dialogs.c:266
 msgid "I would like to add you to my contact list."
 msgstr "Voldria afegir-te a la meva llista de contactes."
 
-#: ../libempathy-gtk/empathy-contact-dialogs.c:307
+#: ../libempathy-gtk/empathy-contact-dialogs.c:290
 msgid "New Contact"
 msgstr "Contacte nou"
 
@@ -695,7 +753,6 @@ msgid "_View Previous Conversations"
 msgstr "_Visualitza les converses anteriors"
 
 #: ../libempathy-gtk/empathy-contact-menu.c:203
-#, fuzzy
 msgid "Send file"
 msgstr "Envia un fitxer"
 
@@ -708,14 +765,13 @@ msgstr "Infor_mació"
 msgid "_Edit"
 msgstr "_Edita"
 
-#: ../libempathy-gtk/empathy-contact-menu.c:322
+#: ../libempathy-gtk/empathy-contact-menu.c:317
 msgid "Inviting to this room"
-msgstr ""
+msgstr "S'està convidant a aquesta sala"
 
-#: ../libempathy-gtk/empathy-contact-menu.c:362
-#, fuzzy
+#: ../libempathy-gtk/empathy-contact-menu.c:350
 msgid "_Invite to chatroom"
-msgstr "Sala de xat _preferida"
+msgstr "_Convida a la sala de xat"
 
 #: ../libempathy-gtk/empathy-contact-widget.c:358
 msgid "Save Avatar"
@@ -730,7 +786,7 @@ msgid "Select"
 msgstr "Selecciona"
 
 #: ../libempathy-gtk/empathy-contact-widget.c:904
-#: ../src/empathy-main-window.c:855
+#: ../src/empathy-main-window.c:974
 msgid "Group"
 msgstr "Grup"
 
@@ -830,12 +886,12 @@ msgstr "Port"
 msgid "SSL"
 msgstr "SSL"
 
-#: ../libempathy-gtk/empathy-log-window.c:497
-#: ../src/empathy-import-dialog.c:271
+#: ../libempathy-gtk/empathy-log-window.c:498
+#: ../src/empathy-import-dialog.c:276
 msgid "Account"
 msgstr "Compte"
 
-#: ../libempathy-gtk/empathy-log-window.c:514
+#: ../libempathy-gtk/empathy-log-window.c:515
 msgid "Date"
 msgstr "Data"
 
@@ -911,34 +967,69 @@ msgstr "Verificador ortogràfic"
 msgid "Suggestions for the word:"
 msgstr "Suggeriments per a la paraula:"
 
-#: ../libempathy-gtk/empathy-theme-boxes.c:745
-#: ../libempathy-gtk/empathy-theme-irc.c:293
-msgid "%A %d %B %Y"
-msgstr "%A %d %B %Y"
-
-#: ../libempathy-gtk/empathy-theme-manager.c:73
+#: ../libempathy-gtk/empathy-theme-manager.c:60
 msgid "Classic"
 msgstr "Clàssic"
 
-#: ../libempathy-gtk/empathy-theme-manager.c:74
+#: ../libempathy-gtk/empathy-theme-manager.c:61
 msgid "Simple"
 msgstr "Simple"
 
-#: ../libempathy-gtk/empathy-theme-manager.c:75
+#: ../libempathy-gtk/empathy-theme-manager.c:62
 msgid "Clean"
 msgstr "Net"
 
-#: ../libempathy-gtk/empathy-theme-manager.c:76
+#: ../libempathy-gtk/empathy-theme-manager.c:63
 msgid "Blue"
 msgstr "Blau"
 
-#: ../libempathy-gtk/empathy-ui-utils.c:1354
+#: ../libempathy-gtk/empathy-ui-utils.c:1373
 msgid "Unable to open URI"
 msgstr "No s'ha pogut obrir l'URI"
 
-#: ../libempathy-gtk/empathy-ui-utils.c:1500
+#: ../libempathy-gtk/empathy-ui-utils.c:1518
 msgid "Select a file"
 msgstr "Seleccioneu un fitxer"
+
+#: ../libempathy-gtk/empathy-ui-utils.c:1554
+msgid "Received an instant message"
+msgstr "Heu rebut un missatge instantani"
+
+#: ../libempathy-gtk/empathy-ui-utils.c:1556
+msgid "Sent an instant message"
+msgstr "Heu enviat un missatge instantani"
+
+#: ../libempathy-gtk/empathy-ui-utils.c:1558
+msgid "Incoming chat request"
+msgstr "Sol·licitud de xat"
+
+#: ../libempathy-gtk/empathy-ui-utils.c:1560
+msgid "Contact connected"
+msgstr "S'ha connectat un contacte"
+
+#: ../libempathy-gtk/empathy-ui-utils.c:1562
+msgid "Contact disconnected"
+msgstr "S'ha desconnectat un contacte"
+
+#: ../libempathy-gtk/empathy-ui-utils.c:1564
+msgid "Connected to server"
+msgstr "Connectat al servidor"
+
+#: ../libempathy-gtk/empathy-ui-utils.c:1566
+msgid "Disconnected from server"
+msgstr "Desconnectat del servidor"
+
+#: ../libempathy-gtk/empathy-ui-utils.c:1568
+msgid "Incoming voice call"
+msgstr "Trucada de veu entrant"
+
+#: ../libempathy-gtk/empathy-ui-utils.c:1570
+msgid "Outgoing voice call"
+msgstr "Trucada de veu de sortida"
+
+#: ../libempathy-gtk/empathy-ui-utils.c:1572
+msgid "Voice call ended"
+msgstr "La trucada de veu ha finalitzat"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:158
 msgid "Current Locale"
@@ -1146,12 +1237,11 @@ msgstr "_Preferències"
 
 #: ../megaphone/src/megaphone-applet.c:255
 msgid "Please configure a contact."
-msgstr ""
+msgstr "Configureu un contacte."
 
 #: ../megaphone/src/megaphone-applet.c:348
-#, fuzzy
 msgid "Select contact..."
-msgstr "_Afegeix un contacte..."
+msgstr "Seleccioneu un contacte..."
 
 #: ../nothere/data/GNOME_NotHere_Applet.server.in.in.h:1
 msgid "Presence"
@@ -1162,19 +1252,19 @@ msgstr "Presència"
 msgid "Set your own presence"
 msgstr "Establiu la vostra presència"
 
-#: ../src/empathy.c:390
+#: ../src/empathy.c:402
 msgid "Don't connect on startup"
 msgstr "No connecits en iniciar"
 
-#: ../src/empathy.c:394
+#: ../src/empathy.c:406
 msgid "Don't show the contact list on startup"
 msgstr "No mostris la llista de contactes en iniciar"
 
-#: ../src/empathy.c:398
+#: ../src/empathy.c:410
 msgid "Show the accounts dialog"
 msgstr "Mostra el diàleg dels comptes"
 
-#: ../src/empathy.c:410
+#: ../src/empathy.c:418
 msgid "- Empathy Instant Messenger"
 msgstr "- Missatgeria instantània Empathy"
 
@@ -1222,22 +1312,22 @@ msgstr ""
 "Jordi Mallach <jordi@sindominio.net>\n"
 "Gil Forcada  <gilforcada@guifi.net>"
 
-#: ../src/empathy-accounts-dialog.c:394
+#: ../src/empathy-accounts-dialog.c:391
 msgid "Enabled"
 msgstr "Habilitat"
 
-#: ../src/empathy-accounts-dialog.c:404
+#: ../src/empathy-accounts-dialog.c:401
 #: ../src/empathy-accounts-dialog.glade.h:4
 msgid "Accounts"
 msgstr "Comptes"
 
 #. To translator: %s is the protocol name
-#: ../src/empathy-accounts-dialog.c:867
+#: ../src/empathy-accounts-dialog.c:833
 #, c-format
 msgid "New %s account"
 msgstr "Compte de %s nou"
 
-#: ../src/empathy-accounts-dialog.c:977
+#: ../src/empathy-accounts-dialog.c:943
 #, c-format
 msgid ""
 "You are about to remove your %s account!\n"
@@ -1246,7 +1336,7 @@ msgstr ""
 "Esteu a punt de suprimir el compte %s.\n"
 "Segur que voleu continuar?"
 
-#: ../src/empathy-accounts-dialog.c:983
+#: ../src/empathy-accounts-dialog.c:949
 msgid ""
 "Any associated conversations and chat rooms will NOT be removed if you "
 "decide to proceed.\n"
@@ -1281,9 +1371,8 @@ msgid "I already have an account I want to use"
 msgstr "Ja tinc un compte i el vull utilitzar"
 
 #: ../src/empathy-accounts-dialog.glade.h:7
-#, fuzzy
 msgid "Import Accounts..."
-msgstr "Comptes de transports"
+msgstr "Importació de comptes..."
 
 #: ../src/empathy-accounts-dialog.glade.h:8
 msgid ""
@@ -1297,63 +1386,63 @@ msgstr ""
 msgid "Type:"
 msgstr "Tipus:"
 
-#: ../src/empathy-call-window.c:142
+#: ../src/empathy-call-window.c:143
 msgid "Closed"
 msgstr "Tancat"
 
-#: ../src/empathy-call-window.c:254
+#: ../src/empathy-call-window.c:263
 msgid "End this call?"
 msgstr "Voleu finalitzar la trucada?"
 
-#: ../src/empathy-call-window.c:256
+#: ../src/empathy-call-window.c:265
 msgid "Closing this window will end the call in progress."
 msgstr "Si tanqueu aquesta finestra finalitzareu la trucada actual."
 
-#: ../src/empathy-call-window.c:257
+#: ../src/empathy-call-window.c:266
 msgid "_End Call"
 msgstr "_Finalitza la trucada"
 
-#: ../src/empathy-call-window.c:311
+#: ../src/empathy-call-window.c:320
 msgid "Incoming call"
 msgstr "Trucada entrant"
 
-#: ../src/empathy-call-window.c:313
+#: ../src/empathy-call-window.c:322
 #, c-format
 msgid "%s is calling you, do you want to answer?"
 msgstr "%s us està trucant, voleu contestar?"
 
-#: ../src/empathy-call-window.c:319
+#: ../src/empathy-call-window.c:328
 msgid "_Reject"
 msgstr "_Refusa"
 
-#: ../src/empathy-call-window.c:324
+#: ../src/empathy-call-window.c:333
 msgid "_Answer"
 msgstr "_Contesta"
 
-#: ../src/empathy-call-window.c:379
+#: ../src/empathy-call-window.c:388
 msgid "Empathy Call"
 msgstr "Trucada de l'Empathy"
 
 #. To translators: Readying is the first state of the call, it is
 #. * preparing the connection and it does not yet ring.
-#: ../src/empathy-call-window.c:382
+#: ../src/empathy-call-window.c:391
 msgid "Readying"
 msgstr "S'està marcant"
 
-#: ../src/empathy-call-window.c:391
+#: ../src/empathy-call-window.c:400
 #, c-format
 msgid "%s - Empathy Call"
 msgstr "%s - Trucada de l'Empathy"
 
-#: ../src/empathy-call-window.c:395
+#: ../src/empathy-call-window.c:404
 msgid "Ringing"
 msgstr "Trucant"
 
-#: ../src/empathy-call-window.c:408
+#: ../src/empathy-call-window.c:427
 msgid "Connecting"
 msgstr "S'està connectant"
 
-#: ../src/empathy-call-window.c:524
+#: ../src/empathy-call-window.c:545
 #, c-format
 msgid "Incoming call from %s rejected because there is already a running call."
 msgstr ""
@@ -1424,16 +1513,16 @@ msgstr "Penja"
 msgid "Send Video"
 msgstr "Envia vídeo"
 
-#: ../src/empathy-chat-window.c:309
+#: ../src/empathy-chat-window.c:310
 #, c-format
 msgid "Conversations (%d)"
 msgstr "Converses (%d)"
 
-#: ../src/empathy-chat-window.c:411
+#: ../src/empathy-chat-window.c:415
 msgid "Topic:"
 msgstr "Tema:"
 
-#: ../src/empathy-chat-window.c:416
+#: ../src/empathy-chat-window.c:420
 msgid "Typing a message."
 msgstr "S'està teclejant un missatge."
 
@@ -1551,7 +1640,7 @@ msgstr "S_ervidor:"
 msgid "_Room:"
 msgstr "Sa_la:"
 
-#: ../src/empathy-event-manager.c:170
+#: ../src/empathy-event-manager.c:192
 #, c-format
 msgid ""
 "New message from %s:\n"
@@ -1560,30 +1649,12 @@ msgstr ""
 "Missatge nou de %s:\n"
 "%s"
 
-#: ../src/empathy-event-manager.c:209
+#: ../src/empathy-event-manager.c:260
 #, c-format
 msgid "Incoming call from %s"
 msgstr "Trucada entrant de %s"
 
-#: ../src/empathy-event-manager.c:237
-#, fuzzy, c-format
-msgid "Incoming file transfer from %s"
-msgstr "Trucada entrant de %s"
-
-#: ../src/empathy-event-manager.c:271
-#, c-format
-msgid ""
-"%s is offering you an invitation, but you don't have the needed external "
-"application to handle it."
-msgstr ""
-"%s us ofereix una invitació, però no teniu l'aplicació externa necessària "
-"per a gestionar-la."
-
-#: ../src/empathy-event-manager.c:296
-msgid "Invitation Error"
-msgstr "S'ha produït un error en la invitació"
-
-#: ../src/empathy-event-manager.c:322
+#: ../src/empathy-event-manager.c:309
 #, c-format
 msgid ""
 "%s is offering you an invitation. An external application will be started to "
@@ -1592,12 +1663,26 @@ msgstr ""
 "%s us ofereix una invitació. S'iniciarà l'aplicació externa necessària per a "
 "gestionar-la."
 
-#: ../src/empathy-event-manager.c:378
+#: ../src/empathy-event-manager.c:316
+#, c-format
+msgid ""
+"%s is offering you an invitation, but you don't have the needed external "
+"application to handle it."
+msgstr ""
+"%s us ofereix una invitació, però no teniu l'aplicació externa necessària "
+"per a gestionar-la."
+
+#: ../src/empathy-event-manager.c:451
+#, c-format
+msgid "Incoming file transfer from %s"
+msgstr "Transferència de fitxers entrant de %s"
+
+#: ../src/empathy-event-manager.c:541
 #, c-format
 msgid "Subscription requested by %s"
 msgstr "Sol·licitud de subscripció de %s"
 
-#: ../src/empathy-event-manager.c:381
+#: ../src/empathy-event-manager.c:545
 #, c-format
 msgid ""
 "\n"
@@ -1606,285 +1691,256 @@ msgstr ""
 "\n"
 "Missatge: %s"
 
-#: ../src/empathy-ft-manager.c:109
+#: ../src/empathy-ft-manager.c:113
 #, c-format
 msgid "%u:%02u.%02u"
-msgstr ""
+msgstr "%u:%02u.%02u"
 
-#: ../src/empathy-ft-manager.c:111
+#: ../src/empathy-ft-manager.c:115
 #, c-format
 msgid "%02u.%02u"
-msgstr ""
-
-#: ../src/empathy-ft-manager.c:160
-#, fuzzy
-msgid "No reason was specified"
-msgstr "No s'ha especificat l'error"
-
-#: ../src/empathy-ft-manager.c:162
-msgid "The change in state was requested"
-msgstr ""
+msgstr "%02u.%02u"
 
 #: ../src/empathy-ft-manager.c:164
-#, fuzzy
-msgid "You canceled the file transfer"
-msgstr "No s'ha pogut completar la transferència del fitxer."
+msgid "No reason was specified"
+msgstr "No s'ha especificat el motiu"
 
 #: ../src/empathy-ft-manager.c:166
-#, fuzzy
-msgid "The other participant canceled the file transfer"
-msgstr "No s'ha pogut completar la transferència del fitxer."
+msgid "The change in state was requested"
+msgstr "S'ha demanat el canvi d'estat"
 
 #: ../src/empathy-ft-manager.c:168
-msgid "Error while trying to transfer the file"
-msgstr ""
+msgid "You canceled the file transfer"
+msgstr "Heu cancel·lat la transferència del fitxer"
 
 #: ../src/empathy-ft-manager.c:170
-msgid "The other participant is unable to transfer the file"
-msgstr ""
+msgid "The other participant canceled the file transfer"
+msgstr "L'interlocutor ha cancel·lat la transferència del fitxer"
 
 #: ../src/empathy-ft-manager.c:172
-#, fuzzy
+msgid "Error while trying to transfer the file"
+msgstr "S'ha produït un error en enviar el fitxer"
+
+#: ../src/empathy-ft-manager.c:174
+msgid "The other participant is unable to transfer the file"
+msgstr "L'interlocutor no pot enviar el fitxer"
+
+#: ../src/empathy-ft-manager.c:176
 msgid "Unknown reason"
-msgstr "Error desconegut"
+msgstr "Motiu desconegut"
 
 #. translators: first %s is filename, second %s is the contact name
-#: ../src/empathy-ft-manager.c:220
-#, fuzzy, c-format
+#: ../src/empathy-ft-manager.c:224
+#, c-format
 msgid "Receiving \"%s\" from %s"
-msgstr "Trucada entrant de %s"
+msgstr "S'està rebent «%s» de %s"
 
 #. translators: first %s is filename, second %s is the contact name
-#: ../src/empathy-ft-manager.c:223
-#, fuzzy, c-format
+#: ../src/empathy-ft-manager.c:227
+#, c-format
 msgid "Sending \"%s\" to %s"
-msgstr "S'està enviant la petició"
+msgstr "S'està enviant «%s» a %s"
 
-#: ../src/empathy-ft-manager.c:233
-#, fuzzy
+#: ../src/empathy-ft-manager.c:237
 msgctxt "file size"
 msgid "Unknown"
-msgstr "desconegut"
+msgstr "Desconegut"
 
 #. translators: first %s is the transferred size, second %s is
 #. * the total file size
-#: ../src/empathy-ft-manager.c:241
-#, fuzzy, c-format
+#: ../src/empathy-ft-manager.c:245
+#, c-format
 msgid "%s of %s"
-msgstr "%sXat - %s"
+msgstr "%s de %s"
 
-#: ../src/empathy-ft-manager.c:248
-#, fuzzy
+#: ../src/empathy-ft-manager.c:252
 msgid "Waiting the other participant's response"
-msgstr "Espereu mentre l'altre participant respon"
+msgstr "S'està esperant que l'interlocutor respongui"
 
-#: ../src/empathy-ft-manager.c:258
+#: ../src/empathy-ft-manager.c:262
 #, c-format
 msgid "\"%s\" received from %s"
-msgstr ""
+msgstr "S'ha rebut «%s» de %s"
 
-#: ../src/empathy-ft-manager.c:264
-#, fuzzy, c-format
+#: ../src/empathy-ft-manager.c:268
+#, c-format
 msgid "\"%s\" sent to %s"
-msgstr "Tema establert a: %s"
+msgstr "S'ha enviat «%s» a %s"
 
-#: ../src/empathy-ft-manager.c:267
-#, fuzzy
+#: ../src/empathy-ft-manager.c:271
 msgid "File transfer completed"
-msgstr "Transferència completa"
+msgstr "S'ha completat la transferència"
 
-#: ../src/empathy-ft-manager.c:276
+#: ../src/empathy-ft-manager.c:280
 #, c-format
 msgid "\"%s\" receiving from %s"
-msgstr ""
+msgstr "S'està rebent «%s» de %s"
 
-#: ../src/empathy-ft-manager.c:282
+#: ../src/empathy-ft-manager.c:286
 #, c-format
 msgid "\"%s\" sending to %s"
-msgstr ""
+msgstr "S'està enviant «%s» a %s"
 
-#: ../src/empathy-ft-manager.c:285
-#, fuzzy, c-format
+#: ../src/empathy-ft-manager.c:289
+#, c-format
 msgid "File transfer canceled: %s"
-msgstr "%d petició de transferència de fitxer"
+msgstr "S'ha cancel·lat la transferència del ftixer: %s"
 
-#: ../src/empathy-ft-manager.c:300
-#, fuzzy
+#: ../src/empathy-ft-manager.c:304
 msgctxt "remaining time"
 msgid "Unknown"
-msgstr "desconegut"
+msgstr "Desconegut"
 
-#: ../src/empathy-ft-manager.c:360
-#, fuzzy
+#: ../src/empathy-ft-manager.c:364
 msgctxt "file transfer percent"
 msgid "Unknown"
-msgstr "desconegut"
+msgstr "Desconegut"
 
-#: ../src/empathy-ft-manager.c:694
+#: ../src/empathy-ft-manager.c:700
 msgid "%"
-msgstr ""
+msgstr "%"
 
-#: ../src/empathy-ft-manager.c:706
-#, fuzzy
+#: ../src/empathy-ft-manager.c:712
 msgid "File"
-msgstr "Tots els fitxers"
+msgstr "Fitxer"
 
-#: ../src/empathy-ft-manager.c:728
-#, fuzzy
+#: ../src/empathy-ft-manager.c:734
 msgid "Remaining"
-msgstr "Trucant"
+msgstr "Restant"
 
-#: ../src/empathy-ft-manager.c:864
+#: ../src/empathy-ft-manager.c:885
 msgid "Cannot save file to this location"
-msgstr ""
+msgstr "No es pot desar el fitxer en aquesta ubicació"
 
-#: ../src/empathy-ft-manager.c:910
-#, fuzzy
+#: ../src/empathy-ft-manager.c:931
 msgid "Save file as..."
-msgstr "E_nvia un fitxer..."
+msgstr "Anomena i desa el fitxer..."
 
-#: ../src/empathy-ft-manager.c:980
-#, fuzzy
+#: ../src/empathy-ft-manager.c:1001
 msgid "unknown size"
-msgstr "desconegut"
+msgstr "mida desconeguda"
 
-#: ../src/empathy-ft-manager.c:986
+#: ../src/empathy-ft-manager.c:1007
 #, c-format
 msgid "%s would like to send you a file"
 msgstr "%s vol enviar-vos un fitxer"
 
-#: ../src/empathy-ft-manager.c:991
-#, fuzzy, c-format
+#: ../src/empathy-ft-manager.c:1012
+#, c-format
 msgid "Do you want to accept the file \"%s\" (%s)?"
-msgstr "Voleu acceptar aquest fitxer?"
+msgstr "Voleu acceptar el fitxer? «%s» (%s)?"
 
 #. Decline button
-#: ../src/empathy-ft-manager.c:1000
-#, fuzzy
+#: ../src/empathy-ft-manager.c:1021
 msgid "_Decline"
-msgstr "Declina"
+msgstr "_Declina"
 
 #. Accept button
-#: ../src/empathy-ft-manager.c:1009
+#: ../src/empathy-ft-manager.c:1030
 msgid "_Accept"
 msgstr "_Accepta"
 
 #: ../src/empathy-ft-manager.glade.h:1
-#, fuzzy
 msgid "File transfers"
-msgstr "Transferència de fitxer"
+msgstr "Transferències de fitxers"
 
 #: ../src/empathy-ft-manager.glade.h:2
 msgid "Remove completed, canceled and failed file transfers from the list"
 msgstr ""
+"Treu de la llista les transferències de fitxers completades, cancel·lades i "
+"fallades"
 
-#: ../src/empathy-ft-manager.glade.h:3
-#, fuzzy
-msgid "gtk-clear"
-msgstr "gtk-close"
-
-#: ../src/empathy-import-dialog.c:249
-#, fuzzy
+#: ../src/empathy-import-dialog.c:254
 msgid "Import"
-msgstr "Port"
+msgstr "Importa"
 
-#: ../src/empathy-import-dialog.c:258
+#: ../src/empathy-import-dialog.c:263
 msgid "Protocol"
-msgstr ""
+msgstr "Protocol"
 
-#: ../src/empathy-import-dialog.c:284
-#, fuzzy
+#: ../src/empathy-import-dialog.c:289
 msgid "Source"
-msgstr "Recurs:"
+msgstr "Font"
 
-#: ../src/empathy-import-dialog.c:372
+#: ../src/empathy-import-dialog.c:377
 msgid ""
 "No accounts to import could be found. Empathy currently only supports "
 "importing accounts from Pidgin."
 msgstr ""
+"No s'han trobat comptes per a importar. L'Empathy de moment només pot "
+"importar comptes del Pidgin."
 
 #: ../src/empathy-import-dialog.glade.h:1
-#, fuzzy
 msgid "Import Accounts"
-msgstr "Comptes de transports"
+msgstr "Importa els comptes"
 
-#: ../src/empathy-import-dialog.glade.h:2
-#, fuzzy
-msgid "gtk-cancel"
-msgstr "gtk-close"
-
-#: ../src/empathy-import-dialog.glade.h:3
-#, fuzzy
-msgid "gtk-ok"
-msgstr "gtk-copy"
-
-#: ../src/empathy-main-window.c:466
-msgid "Show and edit accounts"
-msgstr "Mostra i edita els comptes"
-
-#: ../src/empathy-main-window.c:838
-msgid "Contact"
-msgstr "Contacte"
-
-#: ../src/empathy-main-window.c:1040
-msgid "_Edit account"
-msgstr "_Edita el compte"
-
-#: ../src/empathy-main-window.c:1123
+#: ../src/empathy-main-window.c:388
 msgid "No error specified"
 msgstr "No s'ha especificat l'error"
 
-#: ../src/empathy-main-window.c:1126
+#: ../src/empathy-main-window.c:391
 msgid "Network error"
 msgstr "Error de la xarxa"
 
-#: ../src/empathy-main-window.c:1129
+#: ../src/empathy-main-window.c:394
 msgid "Authentication failed"
 msgstr "Ha fallat l'autenticació"
 
-#: ../src/empathy-main-window.c:1132
+#: ../src/empathy-main-window.c:397
 msgid "Encryption error"
 msgstr "Error de xifratge"
 
-#: ../src/empathy-main-window.c:1135
+#: ../src/empathy-main-window.c:400
 msgid "Name in use"
 msgstr "Nom utilitzat"
 
-#: ../src/empathy-main-window.c:1138
+#: ../src/empathy-main-window.c:403
 msgid "Certificate not provided"
 msgstr "No s'ha proporcionat el certificat"
 
-#: ../src/empathy-main-window.c:1141
+#: ../src/empathy-main-window.c:406
 msgid "Certificate untrusted"
 msgstr "El certificat no és de confiança"
 
-#: ../src/empathy-main-window.c:1144
+#: ../src/empathy-main-window.c:409
 msgid "Certificate expired"
 msgstr "El certificat ha expirat"
 
-#: ../src/empathy-main-window.c:1147
+#: ../src/empathy-main-window.c:412
 msgid "Certificate not activated"
 msgstr "El certificat no està activat"
 
-#: ../src/empathy-main-window.c:1150
+#: ../src/empathy-main-window.c:415
 msgid "Certificate hostname mismatch"
 msgstr "No coincideix el nom de la màquina del certificat"
 
-#: ../src/empathy-main-window.c:1153
+#: ../src/empathy-main-window.c:418
 msgid "Certificate fingerprint mismatch"
 msgstr "No coincideix l'empremta digital del certificat"
 
-#: ../src/empathy-main-window.c:1156
+#: ../src/empathy-main-window.c:421
 msgid "Certificate self-signed"
 msgstr "Certificat signat per un mateix"
 
-#: ../src/empathy-main-window.c:1159
+#: ../src/empathy-main-window.c:424
 msgid "Certificate error"
 msgstr "Error en el certificat"
 
-#: ../src/empathy-main-window.c:1162
+#: ../src/empathy-main-window.c:427
 msgid "Unknown error"
 msgstr "Error desconegut"
+
+#: ../src/empathy-main-window.c:585
+msgid "Show and edit accounts"
+msgstr "Mostra i edita els comptes"
+
+#: ../src/empathy-main-window.c:957
+msgid "Contact"
+msgstr "Contacte"
+
+#: ../src/empathy-main-window.c:1159
+msgid "_Edit account"
+msgstr "_Edita el compte"
 
 #: ../src/empathy-main-window.glade.h:1
 msgid "Contact List"
@@ -1930,7 +1986,7 @@ msgstr "Informació _personal"
 msgid "_Room"
 msgstr "_Sala"
 
-#: ../src/empathy-new-chatroom-dialog.c:290
+#: ../src/empathy-new-chatroom-dialog.c:291
 msgid "Chat Rooms"
 msgstr "Sales de xat"
 
@@ -1972,7 +2028,35 @@ msgstr ""
 "Aquesta llista representa totes les sales de xat hostatjades al servidor que "
 "heu introduït."
 
-#: ../src/empathy-preferences.c:264
+#: ../src/empathy-preferences.c:153
+msgid "Message received"
+msgstr "Missatge rebut"
+
+#: ../src/empathy-preferences.c:154
+msgid "Message sent"
+msgstr "Missatge enviat"
+
+#: ../src/empathy-preferences.c:155
+msgid "New conversation"
+msgstr "Conversa nova"
+
+#: ../src/empathy-preferences.c:156
+msgid "Contact goes online"
+msgstr "El contacte s'ha connectat"
+
+#: ../src/empathy-preferences.c:157
+msgid "Contact goes offline"
+msgstr "El contacte s'ha desconnectat"
+
+#: ../src/empathy-preferences.c:158
+msgid "Account connected"
+msgstr "Compte connectat"
+
+#: ../src/empathy-preferences.c:159
+msgid "Account disconnected"
+msgstr "Compte desconnectat"
+
+#: ../src/empathy-preferences.c:376
 msgid "Language"
 msgstr "Llengua"
 
@@ -1980,29 +2064,23 @@ msgstr "Llengua"
 msgid "<b>Appearance</b>"
 msgstr "<b>Aparença</b>"
 
-#. To translators: Audio notifications preferences
-#: ../src/empathy-preferences.glade.h:3
-msgid "<b>Audio</b>"
-msgstr "<b>Àudio</b>"
-
-#: ../src/empathy-preferences.glade.h:4
+#: ../src/empathy-preferences.glade.h:2
 msgid "<b>Behaviour</b>"
 msgstr "<b>Comportament</b>"
 
-#: ../src/empathy-preferences.glade.h:5
+#: ../src/empathy-preferences.glade.h:3
 msgid "<b>Contact List</b>"
 msgstr "<b>Llista de contactes</b>"
 
-#: ../src/empathy-preferences.glade.h:6
+#: ../src/empathy-preferences.glade.h:4
 msgid "<b>Enable spell checking for languages:</b>"
 msgstr "<b>Habilita la verificació ortogràfica per a les llengües:</b>"
 
-#. To translators: Visual notifications preferences, like notify bubbles, etc.
-#: ../src/empathy-preferences.glade.h:8
-msgid "<b>Visual</b>"
-msgstr "<b>Visual</b>"
+#: ../src/empathy-preferences.glade.h:5
+msgid "<b>Play sound for events</b>"
+msgstr "<b>Reprodueix un so pels esdeveniments</b>"
 
-#: ../src/empathy-preferences.glade.h:9
+#: ../src/empathy-preferences.glade.h:6
 msgid ""
 "<small>The list of languages reflects only the languages for which you have "
 "a dictionary installed.</small>"
@@ -2010,79 +2088,71 @@ msgstr ""
 "<small>La llista de llengües només reflecteix les llengües per a les quals "
 "teniu un diccionari instal·lat.</small>"
 
-#: ../src/empathy-preferences.glade.h:10
+#: ../src/empathy-preferences.glade.h:7
 msgid "Automatically _connect on startup "
 msgstr "_Connecta automàticament en iniciar "
 
-#: ../src/empathy-preferences.glade.h:11
+#: ../src/empathy-preferences.glade.h:8
 msgid "Avatars are user chosen images shown in the contact list"
 msgstr ""
 "Els avatar són imatges seleccionades per l'usuari que es mostren a la llista "
 "de contactes"
 
-#: ../src/empathy-preferences.glade.h:12
+#: ../src/empathy-preferences.glade.h:9
 msgid "Chat Th_eme:"
 msgstr "T_ema de xat:"
 
-#: ../src/empathy-preferences.glade.h:13
-msgid "Display notifications when contacts come _online"
-msgstr "Mostra les notificacions quan els contactes es c_onnecten"
+#: ../src/empathy-preferences.glade.h:10
+msgid "Disable sounds when _away or busy"
+msgstr "Inhabilita els sons quan s'està _absent o ocupat"
 
-#: ../src/empathy-preferences.glade.h:14
-msgid "Enable sounds when _away"
-msgstr "Habilita els sons quan s'està _absent"
-
-#: ../src/empathy-preferences.glade.h:15
-msgid "Enable sounds when _busy"
-msgstr "Habilita els sons quan s'està _ocupat"
-
-#: ../src/empathy-preferences.glade.h:16
+#: ../src/empathy-preferences.glade.h:11
 msgid "General"
 msgstr "General"
 
-#: ../src/empathy-preferences.glade.h:17
-msgid "Notifications"
-msgstr "Notificacions"
-
-#: ../src/empathy-preferences.glade.h:18
+#: ../src/empathy-preferences.glade.h:12
 msgid "Preferences"
 msgstr "Preferències"
 
-#: ../src/empathy-preferences.glade.h:19
+#: ../src/empathy-preferences.glade.h:13
 msgid "Show _avatars"
 msgstr "Mostra els av_atars"
 
-#: ../src/empathy-preferences.glade.h:20
+#: ../src/empathy-preferences.glade.h:14
 msgid "Show _smileys as images"
 msgstr "Mo_stra les emoticones com a imatges"
 
-#: ../src/empathy-preferences.glade.h:21
+#: ../src/empathy-preferences.glade.h:15
 msgid "Show co_mpact contact list"
 msgstr "_Mostra la llista de contactes compacta"
 
-#: ../src/empathy-preferences.glade.h:22
+#: ../src/empathy-preferences.glade.h:16
 msgid "Sort by _name"
 msgstr "Ordena per _nom"
 
-#: ../src/empathy-preferences.glade.h:23
+#: ../src/empathy-preferences.glade.h:17
 msgid "Sort by s_tate"
 msgstr "Ordena per es_tat"
 
-#: ../src/empathy-preferences.glade.h:24
+#: ../src/empathy-preferences.glade.h:18
+msgid "Sounds"
+msgstr "Sons"
+
+#: ../src/empathy-preferences.glade.h:19
 msgid "Spell Checking"
 msgstr "Verificació ortogràfica"
 
-#: ../src/empathy-preferences.glade.h:25
+#: ../src/empathy-preferences.glade.h:20
 msgid "Themes"
 msgstr "Temes"
 
-#: ../src/empathy-preferences.glade.h:26
+#: ../src/empathy-preferences.glade.h:21
+msgid "_Enable sound notifications"
+msgstr "_Habilita les notificacions de so"
+
+#: ../src/empathy-preferences.glade.h:22
 msgid "_Open new chats in separate windows"
 msgstr "_Obre xats nous en finestres separades"
-
-#: ../src/empathy-preferences.glade.h:27
-msgid "_Play sound when messages arrive"
-msgstr "Re_produeix un so quan arribin missatges"
 
 #: ../src/empathy-status-icon.glade.h:1
 msgid "Status"
@@ -2095,6 +2165,53 @@ msgstr "_Surt"
 #: ../src/empathy-status-icon.glade.h:4
 msgid "_Show Contact List"
 msgstr "_Mostra la llista de contactes"
+
+#: ../src/empathy-tube-dispatch.c:356
+#, c-format
+msgid "Unable to start application for service %s: %s"
+msgstr "No s'ha pogut iniciar l'aplicació per al sevei %s: %s"
+
+#: ../src/empathy-tube-dispatch.c:427
+#, c-format
+msgid ""
+"An invitation was offered for service %s, but you don't have the needed "
+"application to handle it"
+msgstr ""
+"Heu rebut una invitació del servei %s, però no teniu l'aplicació necessària "
+"per a gestionar-la"
+
+#, fuzzy
+#~ msgid "gtk-clear"
+#~ msgstr "gtk-close"
+
+#, fuzzy
+#~ msgid "gtk-cancel"
+#~ msgstr "gtk-close"
+
+#, fuzzy
+#~ msgid "gtk-ok"
+#~ msgstr "gtk-copy"
+
+#~ msgid "Enable sound when busy"
+#~ msgstr "Habilita els sons quan s'està ocupat"
+
+#~ msgid "Invitation Error"
+#~ msgstr "S'ha produït un error en la invitació"
+
+#~ msgid "<b>Audio</b>"
+#~ msgstr "<b>Àudio</b>"
+
+#~ msgid "<b>Visual</b>"
+#~ msgstr "<b>Visual</b>"
+
+#~ msgid "Display notifications when contacts come _online"
+#~ msgstr "Mostra les notificacions quan els contactes es c_onnecten"
+
+#~ msgid "Enable sounds when _busy"
+#~ msgstr "Habilita els sons quan s'està _ocupat"
+
+#~ msgid "Notifications"
+#~ msgstr "Notificacions"
 
 #~ msgid "J_apan server:"
 #~ msgstr "Servidor j_aponès:"
@@ -2470,9 +2587,6 @@ msgstr "_Mostra la llista de contactes"
 #~ msgid "A specific protocol error occurred that was unexpected."
 #~ msgstr "S'ha produït un error de protocol específic inesperat."
 
-#~ msgid "The other party disconnected"
-#~ msgstr "L'altra part s'ha desconnectat"
-
 #~ msgid "A protocol error occurred during the transfer"
 #~ msgstr "S'ha produït un error de protocol durant la transferència"
 
@@ -2819,12 +2933,6 @@ msgstr "_Mostra la llista de contactes"
 
 #~ msgid "Change"
 #~ msgstr "Canvia"
-
-#~ msgid "Contact goes offline"
-#~ msgstr "El contacte s'ha desconnectat"
-
-#~ msgid "Contact goes online"
-#~ msgstr "El contacte s'ha connectat"
 
 #~ msgid "Change Na_me..."
 #~ msgstr "Canvia el no_m..."
@@ -3900,9 +4008,6 @@ msgstr "_Mostra la llista de contactes"
 #~ msgid "_Reply..."
 #~ msgstr "_Respon..."
 
-#~ msgid "<b>Connect to server</b>"
-#~ msgstr "<b>Connecta a un servidor</b>"
-
 #~ msgid "C_onnect"
 #~ msgstr "C_onnecta"
 
@@ -4049,9 +4154,6 @@ msgstr "_Mostra la llista de contactes"
 
 #~ msgid "What request message do you want to send to ...?"
 #~ msgstr "Quin missatge de petició voleu enviar a ...?"
-
-#~ msgid "Sound"
-#~ msgstr "So"
 
 #~ msgid "Make sure that your account information is correct."
 #~ msgstr "Assegureu-vos que la informació del vostre compte és correcta."
@@ -4240,9 +4342,6 @@ msgstr "_Mostra la llista de contactes"
 
 #~ msgid "Available:"
 #~ msgstr "Disponible:"
-
-#~ msgid "Use ta_bs instead of windows for conversations"
-#~ msgstr "Utilitza pes_tanyes en comptes de finestres per als xats"
 
 #~ msgid "Auto away enabled"
 #~ msgstr "Absència automàtica habilitada"
