@@ -62,7 +62,7 @@
 #define MAX_SCROLL_TIME 0.4 /* seconds */
 #define SCROLL_DELAY 33     /* milliseconds */
 
-#define SCHEMES "(https?|ftps?|nntp|news|javascript|about|ghelp|apt|telnet|"\
+#define SCHEMES "(https?|s?ftps?|nntp|news|javascript|about|ghelp|apt|telnet|"\
 		"file|webcal|mailto)"
 #define BODY "([^\\ \\n]+)"
 #define END_BODY "([^\\ \\n]*[^,;\?><()\\ \"\\.\\n])"
