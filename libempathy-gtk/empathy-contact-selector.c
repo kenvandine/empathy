@@ -133,10 +133,6 @@ contact_selector_manage_sensitivity (EmpathyContactSelector *selector)
   EmpathyContactSelectorPriv *priv = GET_PRIV (selector);
   guint number_online_contacts;
 
-  /* FIXME - make this work when offline contacts are shown.
-   * The following value needs to be the number of entries shown
-   * excluding the blank entry (if present).
-   */
   number_online_contacts = contact_selector_get_number_online_contacts (
       GTK_TREE_STORE (priv->store));
 
