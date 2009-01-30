@@ -44,6 +44,7 @@ enum
 typedef struct
 {
   EmpathyContactListStore *store;
+  gboolean dispose_run;
 } EmpathyContactSelectorPriv;
 
 static void contact_selector_changed_cb (
@@ -279,6 +280,8 @@ empathy_contact_selector_init (EmpathyContactSelector *empathy_contact_selector)
       EMPATHY_TYPE_CONTACT_SELECTOR, EmpathyContactSelectorPriv);
 
   empathy_contact_selector->priv = priv;
+
+  priv->dispose_run = FALSE;
 }
 
 static void
@@ -326,6 +329,11 @@ contact_selector_dispose (GObject *object)
 {
   EmpathyContactSelector *selector = EMPATHY_CONTACT_SELECTOR (object);
   EmpathyContactSelectorPriv *priv = GET_PRIV (selector);
+
+  if (priv->dispose_run)
+    return;
+
+  priv->dispose_run = TRUE;
 
   if (priv->store)
     {
