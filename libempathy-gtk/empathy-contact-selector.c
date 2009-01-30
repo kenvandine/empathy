@@ -52,6 +52,7 @@ struct _EmpathyContactSelectorPriv
 {
   EmpathyContactListStore *store;
   GtkListStore *list_store;
+  gboolean is_blank_set;
 };
 
 static void changed_cb (GtkComboBox *widget, gpointer data);
@@ -88,6 +89,7 @@ set_blank_contact (EmpathyContactSelector *selector)
   g_signal_handlers_block_by_func(selector, changed_cb, NULL);
   gtk_combo_box_set_active_iter (GTK_COMBO_BOX (selector), &blank_iter);
   g_signal_handlers_unblock_by_func(selector, changed_cb, NULL);
+  priv->is_blank_set = TRUE;
 }
 
 
@@ -107,7 +109,10 @@ notify_popup_shown_cb (GtkComboBox *widget,
     return;
 
   if (get_iter_for_contact (priv->list_store, &blank_iter, NULL))
-    gtk_list_store_remove (priv->list_store, &blank_iter);
+    {
+      gtk_list_store_remove (priv->list_store, &blank_iter);
+      priv->is_blank_set = FALSE;
+    }
 }
 
 
@@ -122,12 +127,16 @@ changed_cb (GtkComboBox *widget,
   if (gtk_combo_box_get_active (widget) == -1)
     {
       set_blank_contact (selector);
+      if (gtk_tree_model_iter_n_children (GTK_TREE_MODEL (priv->list_store),
+        NULL) == 1)
+        gtk_widget_set_sensitive (GTK_WIDGET (selector), FALSE);
     }
   else
     {
       if (get_iter_for_contact (priv->list_store, &blank_iter, NULL))
         {
           gtk_list_store_remove (priv->list_store, &blank_iter);
+          priv->is_blank_set = FALSE;
         }
     }
 }
@@ -179,6 +188,7 @@ empathy_store_row_changed_cb (EmpathyContactListStore *empathy_store,
   gchar *name;
   gchar *icon_name;
   gboolean is_online;
+  gint children;
 
   /* Synchronize the GtkListStore with the EmpathyContactListStore. */
   gtk_tree_model_get (GTK_TREE_MODEL (empathy_store), empathy_iter,
@@ -189,8 +199,6 @@ empathy_store_row_changed_cb (EmpathyContactListStore *empathy_store,
 
   if (!contact)
     {
-      if (contact)
-        g_object_unref (contact);
       g_free (name);
       g_free (icon_name);
       return;
@@ -215,11 +223,15 @@ empathy_store_row_changed_cb (EmpathyContactListStore *empathy_store,
       gtk_list_store_remove (priv->list_store, &list_iter);
     }
 
-  if (!gtk_tree_model_iter_n_children (GTK_TREE_MODEL (priv->list_store),
-        NULL))
+  children = gtk_tree_model_iter_n_children (GTK_TREE_MODEL (priv->list_store),
+      NULL);
+
+  if (children == 1 && priv->is_blank_set)
       gtk_widget_set_sensitive (GTK_WIDGET (selector), FALSE);
-  else
+  else if (children)
       gtk_widget_set_sensitive (GTK_WIDGET (selector), TRUE);
+  else
+      gtk_widget_set_sensitive (GTK_WIDGET (selector), FALSE);
 }
 
 
