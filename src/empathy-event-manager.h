@@ -51,6 +51,7 @@ struct _EmpathyEventManagerClass {
 typedef struct {
 	EmpathyContact *contact;
 	gchar          *icon_name;
+	gchar          *header;
 	gchar          *message;
 } EmpathyEvent;
 
