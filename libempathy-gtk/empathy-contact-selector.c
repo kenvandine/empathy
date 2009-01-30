@@ -220,12 +220,17 @@ contact_selector_constructor (GType type,
                               guint n_construct_params,
                               GObjectConstructParam *construct_params)
 {
-  GObject *object =
-      G_OBJECT_CLASS (empathy_contact_selector_parent_class)->constructor (
-          type, n_construct_params, construct_params);
-  EmpathyContactSelector *contact_selector = EMPATHY_CONTACT_SELECTOR (object);
-  EmpathyContactSelectorPriv *priv = GET_PRIV (contact_selector);
+  GObject *object;
+  EmpathyContactSelector *contact_selector;
+  EmpathyContactSelectorPriv *priv;
+  GtkCellLayout *cell_layout;
   GtkCellRenderer *renderer;
+
+  object = G_OBJECT_CLASS (empathy_contact_selector_parent_class)->constructor 
+    (type, n_construct_params, construct_params);
+  priv = GET_PRIV (object);
+  contact_selector = EMPATHY_CONTACT_SELECTOR (object);
+  cell_layout = GTK_CELL_LAYOUT (object);
 
   g_object_set (priv->store, "is-compact", TRUE, "show-avatars", FALSE,
       "show-offline", FALSE, "show-groups", FALSE,
@@ -244,21 +249,18 @@ contact_selector_constructor (GType type,
   gtk_widget_set_sensitive (GTK_WIDGET (contact_selector), FALSE);
 
   renderer = gtk_cell_renderer_pixbuf_new ();
-  gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (contact_selector),
-      renderer, FALSE);
-  gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (contact_selector), renderer,
+  gtk_cell_layout_pack_start (cell_layout, renderer, FALSE);
+  gtk_cell_layout_set_attributes (cell_layout, renderer,
       "icon-name", EMPATHY_CONTACT_LIST_STORE_COL_ICON_STATUS, NULL);
 
   renderer = gtk_cell_renderer_text_new ();
-  gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (contact_selector),
-      renderer, TRUE);
-  gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (contact_selector), renderer,
+  gtk_cell_layout_pack_start (cell_layout, renderer, TRUE);
+  gtk_cell_layout_set_attributes (cell_layout, renderer,
       "text", EMPATHY_CONTACT_LIST_STORE_COL_NAME, NULL);
 
   contact_selector_manage_blank_contact (contact_selector);
   contact_selector_manage_sensitivity (contact_selector);
 
-  object = G_OBJECT (contact_selector);
   return object;
 }
 
