@@ -559,7 +559,7 @@ dispatcher_connection_new_channel (EmpathyDispatcher *dispatcher,
     G_CALLBACK (dispatcher_channel_invalidated_cb),
     dispatcher);
 
-  priv->channels = g_list_append (priv->channels, channel);
+  priv->channels = g_list_prepend (priv->channels, channel);
 
   if (handle_type == TP_CONN_HANDLE_TYPE_CONTACT)
     {
@@ -1065,7 +1065,7 @@ dispatcher_connection_new_requested_channel (EmpathyDispatcher *dispatcher,
             G_CALLBACK (dispatcher_channel_invalidated_cb),
             request_data->dispatcher);
 
-          priv->channels = g_list_append (priv->channels, channel);
+          priv->channels = g_list_prepend (priv->channels, channel);
 
           operation = empathy_dispatch_operation_new (request_data->connection,
              channel, request_data->contact, FALSE);
