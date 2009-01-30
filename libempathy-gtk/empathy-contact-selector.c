@@ -56,6 +56,8 @@ empathy_contact_selector_get_selected (EmpathyContactSelector *selector)
   EmpathyContact *contact = NULL;
   GtkTreeIter iter;
 
+  g_return_val_if_fail (EMPATHY_IS_CONTACT_SELECTOR (selector), NULL);
+
   if (!gtk_combo_box_get_active_iter (GTK_COMBO_BOX (selector), &iter))
     return NULL;
 
@@ -372,5 +374,7 @@ empathy_contact_selector_class_init (EmpathyContactSelectorClass *klass)
 EmpathyContactSelector *
 empathy_contact_selector_new (EmpathyContactListStore *store)
 {
+  g_return_val_if_fail (EMPATHY_IS_CONTACT_LIST_STORE (store), NULL);
+
   return g_object_new (EMPATHY_TYPE_CONTACT_SELECTOR, "store", store, NULL);
 }
