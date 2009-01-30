@@ -59,6 +59,7 @@ typedef struct {
 	guint                blink_timeout;
 	EmpathyEventManager *event_manager;
 	EmpathyEvent        *event;
+	NotifyNotification  *notification;
 
 	GtkWindow           *window;
 	GtkWidget           *popup_menu;
@@ -94,9 +95,40 @@ status_icon_notification_cb (NotifyNotification *notification,
 
 static void
 status_icon_notification_closed_cb (NotifyNotification *notification,
-				    gpointer            user_data)
+				    gpointer            data)
 {
-	g_object_unref (notification);
+	EmpathyStatusIcon *icon = EMPATHY_STATUS_ICON (data);
+	EmpathyStatusIconPriv *priv = GET_PRIV (icon);
+
+	if (priv->notification) {
+		g_object_unref (priv->notification);
+		priv->notification = NULL;
+	}
+}
+
+static void
+status_icon_update_notification (EmpathyStatusIcon *icon)
+{
+	EmpathyStatusIconPriv *priv = GET_PRIV (icon);
+
+	if (priv->event) {
+		priv->notification = notify_notification_new_with_status_icon ("New Event", priv->event->message, priv->event->icon_name, priv->icon);
+		notify_notification_add_action (priv->notification,
+						"activate",
+						"Activate",
+						status_icon_notification_cb,
+						icon, NULL);
+		notify_notification_set_timeout (priv->notification,
+						 NOTIFY_EXPIRES_DEFAULT);
+		g_signal_connect (priv->notification, "closed", G_CALLBACK (status_icon_notification_closed_cb), (gpointer) icon);
+		notify_notification_show (priv->notification, NULL);
+	} else {
+		if (priv->notification) {
+			notify_notification_close (priv->notification, NULL);
+			g_object_unref (priv->notification);
+			priv->notification = NULL;
+		}
+	}
 }
 
 static void
@@ -162,25 +194,13 @@ status_icon_event_added_cb (EmpathyEventManager *manager,
 
 	status_icon_update_icon (icon);
 	status_icon_update_tooltip (icon);
+	status_icon_update_notification (icon);
 
 	if (!priv->blink_timeout) {
 		priv->blink_timeout = g_timeout_add (BLINK_TIMEOUT,
 						     (GSourceFunc) status_icon_blink_timeout_cb,
 						     icon);
 	}
-
-	if (!priv->event)
-		return;
-	NotifyNotification *notification = notify_notification_new_with_status_icon ("Incoming Something", priv->event->message, priv->event->icon_name, priv->icon);
-	notify_notification_add_action (notification,
-					"activate",
-					"Activate",
-					status_icon_notification_cb,
-					icon, NULL);
-	notify_notification_set_timeout (notification,
-					 NOTIFY_EXPIRES_NEVER);
-	g_signal_connect (G_OBJECT (notification), "closed", G_CALLBACK (status_icon_notification_closed_cb), NULL);
-	notify_notification_show (notification, NULL);
 }
 
 static void
@@ -198,6 +218,7 @@ status_icon_event_removed_cb (EmpathyEventManager *manager,
 
 	status_icon_update_tooltip (icon);
 	status_icon_update_icon (icon);
+	status_icon_update_notification (icon);
 
 	if (!priv->event && priv->blink_timeout) {
 		g_source_remove (priv->blink_timeout);
@@ -414,6 +435,11 @@ status_icon_finalize (GObject *object)
 	g_signal_handlers_disconnect_by_func (priv->account_manager,
 					      status_icon_connection_changed_cb,
 					      object);
+
+	if (priv->notification) {
+		notify_notification_close (priv->notification, NULL);
+		g_object_unref (priv->notification);
+	}
 
 	g_object_unref (priv->icon);
 	g_object_unref (priv->idle);
