@@ -20,6 +20,7 @@
 *           Elliot Fairweather <elliot.fairweather@collabora.co.uk>
 */
 
+#include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
 #include <libempathy/empathy-contact.h>
@@ -53,6 +54,9 @@ struct _EmpathyContactSelectorPriv
   GtkListStore *list_store;
 };
 
+static void changed_cb (GtkComboBox *widget, gpointer data);
+static gboolean get_iter_for_contact (GtkListStore *list_store,
+    GtkTreeIter *list_iter, EmpathyContact *contact);
 
 
 EmpathyContact *
@@ -63,10 +67,7 @@ empathy_contact_selector_get_selected (EmpathyContactSelector *selector)
   GtkTreeIter iter;
 
   if (!gtk_combo_box_get_active_iter (GTK_COMBO_BOX (selector), &iter))
-    {
-      /* FIXME what to do? */
-      return NULL;
-    }
+    return NULL;
 
   gtk_tree_model_get (GTK_TREE_MODEL (priv->list_store), &iter,
       CONTACT_COL, &contact, -1);
@@ -76,9 +77,66 @@ empathy_contact_selector_get_selected (EmpathyContactSelector *selector)
 
 
 static void
-get_iter_from_contact (GtkListStore *list_store,
-                       GtkTreeIter *list_iter,
-                       EmpathyContact *contact)
+set_blank_contact (EmpathyContactSelector *selector)
+{
+  EmpathyContactSelectorPriv *priv = GET_PRIV (selector);
+  GtkTreeIter blank_iter;
+
+  gtk_list_store_insert (priv->list_store, &blank_iter, 0);
+  gtk_list_store_set (priv->list_store, &blank_iter, CONTACT_COL, NULL,
+      NAME_COL, _("Select a contact"), -1);
+  g_signal_handlers_block_by_func(selector, changed_cb, NULL);
+  gtk_combo_box_set_active_iter (GTK_COMBO_BOX (selector), &blank_iter);
+  g_signal_handlers_unblock_by_func(selector, changed_cb, NULL);
+}
+
+
+static void
+notify_popup_shown_cb (GtkComboBox *widget,
+                       GParamSpec *property,
+                       gpointer data)
+{
+  EmpathyContactSelector *selector = EMPATHY_CONTACT_SELECTOR (widget);
+  EmpathyContactSelectorPriv *priv = GET_PRIV (selector);
+  GtkTreeIter blank_iter;
+  gboolean shown;
+
+  g_object_get (widget, property->name, &shown, NULL);
+
+  if (!shown)
+    return;
+
+  if (get_iter_for_contact (priv->list_store, &blank_iter, NULL))
+    gtk_list_store_remove (priv->list_store, &blank_iter);
+}
+
+
+static void
+changed_cb (GtkComboBox *widget,
+            gpointer data)
+{
+  EmpathyContactSelector *selector = EMPATHY_CONTACT_SELECTOR (widget);
+  EmpathyContactSelectorPriv *priv = GET_PRIV (selector);
+  GtkTreeIter blank_iter;
+
+  if (gtk_combo_box_get_active (widget) == -1)
+    {
+      set_blank_contact (selector);
+    }
+  else
+    {
+      if (get_iter_for_contact (priv->list_store, &blank_iter, NULL))
+        {
+          gtk_list_store_remove (priv->list_store, &blank_iter);
+        }
+    }
+}
+
+
+static gboolean
+get_iter_for_contact (GtkListStore *list_store,
+                      GtkTreeIter *list_iter,
+                      EmpathyContact *contact)
 {
   GtkTreePath *path;
   GtkTreeIter tmp_iter;
@@ -94,7 +152,6 @@ get_iter_from_contact (GtkListStore *list_store,
           gtk_tree_model_get (GTK_TREE_MODEL (list_store),
               &tmp_iter, CONTACT_COL, &tmp_contact, -1);
           found = (tmp_contact == contact);
-          g_object_unref (tmp_contact);
           if (found)
             {
               *list_iter = tmp_iter;
@@ -104,14 +161,8 @@ get_iter_from_contact (GtkListStore *list_store,
               &tmp_iter));
     }
 
-  /* The store does not contain the contact, so create a new row and set it. */
-  if (!found)
-    {
-      gtk_list_store_append (list_store, list_iter);
-      gtk_list_store_set (list_store, list_iter, CONTACT_COL, contact, -1);
-    }
-
   gtk_tree_path_free (path);
+  return found;
 }
 
 
@@ -128,10 +179,6 @@ empathy_store_row_changed_cb (EmpathyContactListStore *empathy_store,
   gchar *name;
   gchar *icon_name;
   gboolean is_online;
-  gboolean had_active;
-
-  /* Something is currently selected or not. */
-  had_active = gtk_combo_box_get_active (GTK_COMBO_BOX (selector)) != -1;
 
   /* Synchronize the GtkListStore with the EmpathyContactListStore. */
   gtk_tree_model_get (GTK_TREE_MODEL (empathy_store), empathy_iter,
@@ -149,7 +196,13 @@ empathy_store_row_changed_cb (EmpathyContactListStore *empathy_store,
       return;
     }
 
-  get_iter_from_contact (priv->list_store, &list_iter, contact);
+  /* The store does not contain the contact, so create a new row and set it. */
+  if (!get_iter_for_contact (priv->list_store, &list_iter, contact))
+    {
+      gtk_list_store_append (priv->list_store, &list_iter);
+      gtk_list_store_set (priv->list_store, &list_iter, CONTACT_COL,
+          contact, -1);
+    }
 
   if (is_online)
     {
@@ -160,15 +213,6 @@ empathy_store_row_changed_cb (EmpathyContactListStore *empathy_store,
     {
       /* We display only online contacts. */
       gtk_list_store_remove (priv->list_store, &list_iter);
-
-      if (had_active &&
-          gtk_combo_box_get_active (GTK_COMBO_BOX (selector)) == -1)
-        {
-          /* There was an active contact but we removed it from
-           * the list, so select the first one.
-           */
-          gtk_combo_box_set_active (GTK_COMBO_BOX (selector), 0);
-        }
     }
 
   if (!gtk_tree_model_iter_n_children (GTK_TREE_MODEL (priv->list_store),
@@ -176,22 +220,6 @@ empathy_store_row_changed_cb (EmpathyContactListStore *empathy_store,
       gtk_widget_set_sensitive (GTK_WIDGET (selector), FALSE);
   else
       gtk_widget_set_sensitive (GTK_WIDGET (selector), TRUE);
-}
-
-static gboolean
-select_first_timeout_cb (gpointer data)
-{
-  /* If there is not an active contact select the first element in the list.
-   * Contacts are not added in alphabetical order to the list store, so
-   * we cannot select the first element in empathy_store_row_changed_cb()
-   * because we would probably select a random contact.
-   */
-  EmpathyContactSelector *selector = EMPATHY_CONTACT_SELECTOR (data);
-
-  if (gtk_combo_box_get_active (GTK_COMBO_BOX (selector)) == 0)
-    gtk_combo_box_set_active (GTK_COMBO_BOX (selector), 0);
-
-  return FALSE;
 }
 
 
@@ -218,6 +246,10 @@ empathy_contact_selector_constructor (GType type,
 
   g_signal_connect (priv->store, "row-changed",
       G_CALLBACK (empathy_store_row_changed_cb), (gpointer) contact_selector);
+  g_signal_connect (GTK_COMBO_BOX (contact_selector), "changed",
+      G_CALLBACK (changed_cb), NULL);
+  g_signal_connect (GTK_COMBO_BOX (contact_selector), "notify::popup-shown",
+      G_CALLBACK (notify_popup_shown_cb), NULL);
 
   gtk_combo_box_set_model (GTK_COMBO_BOX (contact_selector),
       GTK_TREE_MODEL (priv->list_store));
@@ -237,7 +269,7 @@ empathy_contact_selector_constructor (GType type,
   gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (contact_selector), renderer,
       "text", NAME_COL, NULL);
 
-  g_timeout_add (200, select_first_timeout_cb, (gpointer) contact_selector);
+  set_blank_contact (contact_selector);
 
   object = G_OBJECT (contact_selector);
   return object;
