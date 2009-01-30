@@ -860,8 +860,8 @@ chat_window_notification_closed_cb (NotifyNotification *notify,
 }
 
 static void
-chat_window_show_or_update_notification (EmpathyMessage *message,
-					 EmpathyChatWindow *window,
+chat_window_show_or_update_notification (EmpathyChatWindow *window,
+					 EmpathyMessage *message,
 					 EmpathyChat *chat)
 {
 	EmpathyContact *sender;
@@ -944,7 +944,7 @@ chat_window_new_message_cb (EmpathyChat       *chat,
 	}
 
 	if (!has_focus) {
-		chat_window_show_or_update_notification (message, window, chat);
+		chat_window_show_or_update_notification (window, message, chat);
 	}
 
 	if (has_focus && priv->current_chat == chat) {
