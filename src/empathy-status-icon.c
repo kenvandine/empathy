@@ -106,12 +106,29 @@ status_icon_update_notification (EmpathyStatusIcon *icon)
 	EmpathyStatusIconPriv *priv = GET_PRIV (icon);
 
 	if (priv->event) {
+		GdkPixbuf *pixbuf = NULL;
+
+		if (g_strcmp0 (priv->event->icon_name, EMPATHY_IMAGE_NEW_MESSAGE) == 0) {
+			pixbuf = empathy_pixbuf_avatar_from_contact_scaled (priv->event->contact,
+									    48, 48);
+		}
+
+		if (!pixbuf) {
+			/* we use INVALID here so we fall pack to 48px */
+			pixbuf = empathy_pixbuf_from_icon_name (priv->event->icon_name,
+								GTK_ICON_SIZE_INVALID);
+		}
+
 		priv->notification = notify_notification_new_with_status_icon
-			("New Event", priv->event->message, priv->event->icon_name, priv->icon);
+			(priv->event->header, priv->event->message, NULL, priv->icon);
 		notify_notification_set_timeout (priv->notification,
 						 NOTIFY_EXPIRES_DEFAULT);
+		notify_notification_set_icon_from_pixbuf (priv->notification,
+							  pixbuf);
+
 		g_signal_connect (priv->notification, "closed",
-				  G_CALLBACK (status_icon_notification_closed_cb), icon);		
+				  G_CALLBACK (status_icon_notification_closed_cb), icon);
+
 		notify_notification_show (priv->notification, NULL);
 	} else {
 		if (priv->notification) {
