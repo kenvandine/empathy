@@ -57,6 +57,9 @@ typedef struct
   GHashTable *accounts;
   gpointer token;
   GSList *tubes;
+
+  /* channels which the dispatcher is listening "invalidated" */
+  GList *channels;
 } EmpathyDispatcherPriv;
 
 G_DEFINE_TYPE (EmpathyDispatcher, empathy_dispatcher, G_TYPE_OBJECT);
@@ -142,7 +145,7 @@ new_dispatcher_request_data (EmpathyDispatcher *dispatcher,
 {
   DispatcherRequestData *result = g_slice_new0 (DispatcherRequestData);
 
-  result->dispatcher = dispatcher;
+  result->dispatcher = g_object_ref (dispatcher);
   result->connection = connection;
 
   result->channel_type = g_strdup (channel_type);
@@ -163,6 +166,9 @@ static void
 free_dispatcher_request_data (DispatcherRequestData *r)
 {
   g_free (r->channel_type);
+
+  if (r->dispatcher != NULL)
+    g_object_unref (r->dispatcher);
 
   if (r->contact != NULL)
     g_object_unref (r->contact);
@@ -306,6 +312,8 @@ dispatcher_channel_invalidated_cb (TpProxy *proxy,
   g_hash_table_remove (cd->dispatched_channels, object_path);
   g_hash_table_remove (cd->dispatching_channels, object_path);
 
+  priv->channels = g_list_remove (priv->channels, proxy);
+
   operation = g_hash_table_lookup (cd->outstanding_channels, object_path);
   if (operation != NULL)
     {
@@ -387,6 +395,7 @@ dispatch_operation_ready_cb (EmpathyDispatchOperation *operation,
   g_object_unref (G_OBJECT (connection));
 
   g_object_ref (operation);
+  g_object_ref (dispatcher);
 
   dispatch_operation_flush_requests (dispatcher, operation, NULL, cd);
   status = empathy_dispatch_operation_get_status (operation);
@@ -409,6 +418,7 @@ dispatch_operation_ready_cb (EmpathyDispatchOperation *operation,
       g_signal_emit (dispatcher, signals[DISPATCH], 0, operation);
     }
 
+  g_object_unref (dispatcher);
 }
 
 static void
@@ -548,6 +558,8 @@ dispatcher_connection_new_channel (EmpathyDispatcher *dispatcher,
   g_signal_connect (channel, "invalidated",
     G_CALLBACK (dispatcher_channel_invalidated_cb),
     dispatcher);
+
+  priv->channels = g_list_append (priv->channels, channel);
 
   if (handle_type == TP_CONN_HANDLE_TYPE_CONTACT)
     {
@@ -755,7 +767,6 @@ dispatcher_connection_ready_cb (TpConnection *connection,
   g_signal_connect (connection, "invalidated",
     G_CALLBACK (dispatcher_connection_invalidated_cb), dispatcher);
 
-
   if (tp_proxy_has_interface_by_id (TP_PROXY (connection),
       TP_IFACE_QUARK_CONNECTION_INTERFACE_REQUESTS))
     {
@@ -866,9 +877,27 @@ static void
 dispatcher_finalize (GObject *object)
 {
   EmpathyDispatcherPriv *priv = GET_PRIV (object);
+  GList *l;
+  GHashTableIter iter;
+  gpointer connection;
 
   g_signal_handlers_disconnect_by_func (priv->account_manager,
       dispatcher_account_connection_cb, object);
+
+  for (l = priv->channels; l; l = l->next)
+    {
+      g_signal_handlers_disconnect_by_func (l->data,
+          dispatcher_channel_invalidated_cb, object);
+    }
+
+  g_list_free (priv->channels);
+
+  g_hash_table_iter_init (&iter, priv->connections);
+  while (g_hash_table_iter_next (&iter, &connection, NULL))
+    {
+      g_signal_handlers_disconnect_by_func (connection,
+          dispatcher_connection_invalidated_cb, object);
+    }
 
   g_object_unref (priv->account_manager);
   g_object_unref (priv->mc);
@@ -940,6 +969,8 @@ empathy_dispatcher_init (EmpathyDispatcher *dispatcher)
 
   priv->connections = g_hash_table_new_full (g_direct_hash, g_direct_equal,
     g_object_unref, (GDestroyNotify) free_connection_data);
+
+  priv->channels = NULL;
 
   accounts = mc_accounts_list_by_enabled (TRUE);
 
@@ -1033,6 +1064,8 @@ dispatcher_connection_new_requested_channel (EmpathyDispatcher *dispatcher,
           g_signal_connect (channel, "invalidated",
             G_CALLBACK (dispatcher_channel_invalidated_cb),
             request_data->dispatcher);
+
+          priv->channels = g_list_append (priv->channels, channel);
 
           operation = empathy_dispatch_operation_new (request_data->connection,
              channel, request_data->contact, FALSE);
