@@ -99,6 +99,7 @@ typedef struct {
 	GtkWidget              *room_join_favorites;
 	GtkWidget              *edit_context;
 	GtkWidget              *edit_context_separator;
+	GtkWidget              *chat_history_menu_item;
 
 	guint                   size_timeout_id;
 	GHashTable             *errors;
@@ -178,6 +179,9 @@ static void     main_window_notify_compact_contact_list_cb     (EmpathyConf     
 								EmpathyMainWindow        *window);
 static void     main_window_notify_sort_criterium_cb           (EmpathyConf              *conf,
 								const gchar              *key,
+								EmpathyMainWindow        *window);
+static void     main_window_account_created_or_deleted_cb      (EmpathyAccountManager    *manager,
+								McAccount                *account,
 								EmpathyMainWindow        *window);
 
 static void
@@ -524,6 +528,7 @@ empathy_main_window_show (void)
 				       "edit_context_separator", &window->edit_context_separator,
 				       "presence_toolbar", &window->presence_toolbar,
 				       "roster_scrolledwindow", &sw,
+				       "chat_history", &window->chat_history_menu_item,
 				       NULL);
 	g_free (filename);
 
@@ -649,6 +654,14 @@ empathy_main_window_show (void)
 	g_signal_connect (window->event_manager, "event-removed",
 			  G_CALLBACK (main_window_event_removed_cb),
 			  window);
+
+	g_signal_connect (window->account_manager, "account-created",
+			  G_CALLBACK (main_window_account_created_or_deleted_cb),
+			  window);
+	g_signal_connect (window->account_manager, "account-deleted",
+			  G_CALLBACK (main_window_account_created_or_deleted_cb),
+			  window);
+	main_window_account_created_or_deleted_cb (window->account_manager, NULL, window);
 
 	l = empathy_event_manager_get_events (window->event_manager);
 	while (l) {
@@ -1393,3 +1406,11 @@ main_window_notify_sort_criterium_cb (EmpathyConf       *conf,
 	}
 }
 
+static void
+main_window_account_created_or_deleted_cb (EmpathyAccountManager  *manager,
+					   McAccount              *account,
+					   EmpathyMainWindow      *window)
+{
+	gtk_widget_set_sensitive (GTK_WIDGET (window->chat_history_menu_item),
+		empathy_account_manager_get_count (manager) > 0);
+}
