@@ -8,6 +8,7 @@
 #include <libempathy-gtk/empathy-contact-list-store.h>
 #include <libempathy-gtk/empathy-contact-selector.h>
 
+static GtkWidget *window = NULL;
 
 static void
 destroy_cb (GtkWidget *widget,
@@ -16,6 +17,25 @@ destroy_cb (GtkWidget *widget,
   gtk_main_quit ();
 }
 
+
+static void
+chat_cb (EmpathyDispatchOperation *dispatch,
+         const GError *error,
+         gpointer user_data)
+{
+  GtkWidget *dialog;
+
+  if (error != NULL)
+    {
+      dialog = gtk_message_dialog_new (GTK_WINDOW (window), GTK_DIALOG_MODAL,
+          GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE,
+          error->message ? error->message : "No error message");
+
+      gtk_dialog_run (GTK_DIALOG (dialog));
+    }
+
+  gtk_widget_destroy (window);
+}
 
 static void
 clicked_cb (GtkButton *button,
@@ -29,9 +49,12 @@ clicked_cb (GtkButton *button,
   if (!contact)
     return;
 
-  empathy_dispatcher_chat_with_contact (contact);
+  /* This is required otherwise the dispatcher isn't ref'd, and so it
+   * disappears by the time the callback gets called. It's deliberately not
+   * freed otherwise it segfaults... sigh */
+  empathy_dispatcher_dup_singleton ();
+  empathy_dispatcher_chat_with_contact (contact, chat_cb, NULL);
 }
-
 
 int main (int argc,
           char *argv[])
@@ -39,7 +62,7 @@ int main (int argc,
   EmpathyContactManager *manager;
   EmpathyContactListStore *store;
   EmpathyContactSelector *selector;
-  GtkWidget *window, *vbox, *button;
+  GtkWidget *vbox, *button;
   gchar *icon_path;
 
   gtk_init (&argc, &argv);
