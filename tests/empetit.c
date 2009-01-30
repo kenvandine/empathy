@@ -48,7 +48,7 @@ int main (int argc,
   gtk_icon_theme_append_search_path (gtk_icon_theme_get_default (), icon_path);
   g_free (icon_path);
 
-  manager = empathy_contact_manager_new ();
+  manager = empathy_contact_manager_dup_singleton ();
   store = empathy_contact_list_store_new (EMPATHY_CONTACT_LIST (manager));
 
   vbox = gtk_vbox_new (FALSE, 2);
