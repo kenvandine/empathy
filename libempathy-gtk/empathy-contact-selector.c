@@ -133,9 +133,26 @@ unset_blank_contact (EmpathyContactSelector *selector)
 
 
 static void
-manage_blank_contact (EmpathyContactSelector *selector)
+manage_sensitivity (EmpathyContactSelector *selector)
 {
   EmpathyContactSelectorPriv *priv = GET_PRIV (selector);
+  gint children;
+
+  children = gtk_tree_model_iter_n_children (GTK_TREE_MODEL (priv->store), NULL);
+  g_print ("Number of children %d\n", children);
+
+  if (children == 1 && priv->is_blank_set)
+      gtk_widget_set_sensitive (GTK_WIDGET (selector), FALSE);
+  else if (children)
+      gtk_widget_set_sensitive (GTK_WIDGET (selector), TRUE);
+  else
+      gtk_widget_set_sensitive (GTK_WIDGET (selector), FALSE);
+}
+
+
+static void
+manage_blank_contact (EmpathyContactSelector *selector)
+{
   gboolean is_popup_shown;
 
   g_object_get (selector, "popup-shown", &is_popup_shown, NULL);
@@ -149,15 +166,14 @@ manage_blank_contact (EmpathyContactSelector *selector)
       if (gtk_combo_box_get_active (GTK_COMBO_BOX (selector)) == -1)
         {
           set_blank_contact (selector);
-          if (gtk_tree_model_iter_n_children (GTK_TREE_MODEL (priv->store),
-              NULL) == 1)
-          gtk_widget_set_sensitive (GTK_WIDGET (selector), FALSE);
         }
       else
         {
           unset_blank_contact (selector);
         }
     }
+
+    manage_sensitivity (selector);
 }
 
 
@@ -189,17 +205,9 @@ empathy_store_row_changed_cb (EmpathyContactListStore *empathy_store,
                               gpointer data)
 {
   EmpathyContactSelector *selector = EMPATHY_CONTACT_SELECTOR (data);
-  EmpathyContactSelectorPriv *priv = GET_PRIV (selector);
-  gint children;
 
-  children = gtk_tree_model_iter_n_children (GTK_TREE_MODEL (priv->store), NULL);
-
-  if (children == 1 && priv->is_blank_set)
-      gtk_widget_set_sensitive (GTK_WIDGET (selector), FALSE);
-  else if (children)
-      gtk_widget_set_sensitive (GTK_WIDGET (selector), TRUE);
-  else
-      gtk_widget_set_sensitive (GTK_WIDGET (selector), FALSE);
+  g_print ("Row changed\n");
+  manage_sensitivity (selector);
 }
 
 
@@ -244,7 +252,8 @@ empathy_contact_selector_constructor (GType type,
   gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (contact_selector), renderer,
       "text", EMPATHY_CONTACT_LIST_STORE_COL_NAME, NULL);
 
-  set_blank_contact (contact_selector);
+  manage_blank_contact (contact_selector);
+  manage_sensitivity (contact_selector);
 
   object = G_OBJECT (contact_selector);
   return object;
