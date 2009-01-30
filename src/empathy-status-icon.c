@@ -92,11 +92,18 @@ status_icon_notification_closed_cb (NotifyNotification *notification,
 		priv->notification = NULL;
 	}
 
+	if (!priv->event) {
+		return;
+	}
+
 	/* the notification has been closed by the user, see the
 	 * DesktopNotification spec.
 	 */
-	if (reason == 2 && priv->event) {
+	if (reason == 2) {
 		g_idle_add ((GSourceFunc) activate_event, priv->event);
+	} else {
+		/* inhibit other updates for this event */
+		empathy_event_inhibit_updates (priv->event);
 	}
 }
 

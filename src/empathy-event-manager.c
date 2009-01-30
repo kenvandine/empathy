@@ -76,6 +76,7 @@ struct _EventPriv {
   EmpathyEventManager *manager;
   EventManagerApproval *approval;
   EventFunc func;
+  gboolean inhibit;
   gpointer user_data;
 };
 
@@ -164,6 +165,7 @@ event_manager_add (EmpathyEventManager *manager, EmpathyContact *contact,
   event->public.icon_name = g_strdup (icon_name);
   event->public.header = g_strdup (header);
   event->public.message = g_strdup (message);
+  event->inhibit = FALSE;
   event->func = func;
   event->user_data = user_data;
   event->manager = manager;
@@ -226,10 +228,17 @@ event_manager_chat_message_received_cb (EmpathyTpChat *tp_chat,
   TpChannel       *channel;
   EventPriv       *event;
 
-  /* update the event if it's referring to a chat which is already in the
+  /* try to update the event if it's referring to a chat which is already in the
    * queue. */
 
   event = event_lookup_by_approval (approval->manager, approval);
+
+  if (event != NULL && event->inhibit)
+    {
+      g_signal_handlers_disconnect_by_func (tp_chat,
+        event_manager_chat_message_received_cb, approval);
+      return;
+    }
 
   sender = empathy_message_get_sender (message);
   header = g_strdup_printf (_("New message from %s"),
@@ -239,7 +248,7 @@ event_manager_chat_message_received_cb (EmpathyTpChat *tp_chat,
   channel = empathy_tp_chat_get_channel (tp_chat);
 
   if (event != NULL)
-    event_update (approval->manager, event, EMPATHY_IMAGE_NEW_MESSAGE, header, msg);
+      event_update (approval->manager, event, EMPATHY_IMAGE_NEW_MESSAGE, header, msg);
   else
     event_manager_add (approval->manager, sender, EMPATHY_IMAGE_NEW_MESSAGE, header,
       msg, approval, event_channel_process_func, NULL);
@@ -728,3 +737,14 @@ empathy_event_activate (EmpathyEvent *event_public)
   else
     event_remove (event);
 }
+
+void
+empathy_event_inhibit_updates (EmpathyEvent *event_public)
+{
+  EventPriv *event = (EventPriv *) event_public;
+
+  g_return_if_fail (event_public != NULL);
+
+  event->inhibit = TRUE;
+}
+

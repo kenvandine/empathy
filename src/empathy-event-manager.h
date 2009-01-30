@@ -60,6 +60,7 @@ EmpathyEventManager *empathy_event_manager_dup_singleton (void);
 EmpathyEvent *       empathy_event_manager_get_top_event (EmpathyEventManager *manager);
 GSList *             empathy_event_manager_get_events    (EmpathyEventManager *manager);
 void                 empathy_event_activate              (EmpathyEvent        *event);
+void                 empathy_event_inhibit_updates       (EmpathyEvent        *event);
 
 G_END_DECLS
 
