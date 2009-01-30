@@ -84,7 +84,7 @@ status_icon_notification_closed_cb (NotifyNotification *notification,
 				    EmpathyStatusIcon  *icon)
 {
 	EmpathyStatusIconPriv *priv = GET_PRIV (icon);
-	int reason = 1;
+	EmpathyNotificationClosedReason reason = 0;
 
 #ifdef notify_notification_get_closed_reason
 	reason = notify_notification_get_closed_reason (notification);
@@ -101,7 +101,7 @@ status_icon_notification_closed_cb (NotifyNotification *notification,
 	/* the notification has been closed by the user, see the
 	 * DesktopNotification spec.
 	 */
-	if (reason == NOTIFICATION_CLOSED_DISMISSED) {
+	if (reason == EMPATHY_NOTIFICATION_CLOSED_DISMISSED) {
 		/* use an idle here, as this callback is called from a
 		 * DBus signal handler inside libnotify, and we might call
 		 * a *_run_* method when activating the event.

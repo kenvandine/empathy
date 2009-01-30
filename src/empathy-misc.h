@@ -33,12 +33,12 @@ G_BEGIN_DECLS
 
 /* FIXME: this should *really* belong to libnotify. */
 typedef enum {
-	NOTIFICATION_CLOSED_INVALID = 0,
-	NOTIFICATION_CLOSED_EXPIRED = 1,
-	NOTIFICATION_CLOSED_DISMISSED = 2,
-	NOTIFICATION_CLOSED_PROGRAMMATICALY = 3,
-	NOTIFICATION_CLOSED_RESERVED = 4
-} NotificationClosedReason;
+	EMPATHY_NOTIFICATION_CLOSED_INVALID = 0,
+	EMPATHY_NOTIFICATION_CLOSED_EXPIRED = 1,
+	EMPATHY_NOTIFICATION_CLOSED_DISMISSED = 2,
+	EMPATHY_NOTIFICATION_CLOSED_PROGRAMMATICALY = 3,
+	EMPATHY_NOTIFICATION_CLOSED_RESERVED = 4
+} EmpathyNotificationClosedReason;
 
 gboolean    empathy_notification_is_enabled  (void);
 GdkPixbuf * empathy_misc_get_pixbuf_for_notification (EmpathyContact *contact,
