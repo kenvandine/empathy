@@ -105,8 +105,8 @@ contact_selector_add_blank_contact (EmpathyContactSelector *selector)
   EmpathyContactSelectorPriv *priv = GET_PRIV (selector);
   GtkTreeIter blank_iter;
 
-  gtk_tree_store_insert (GTK_TREE_STORE (priv->store), &blank_iter, NULL, 0);
-  gtk_tree_store_set (GTK_TREE_STORE (priv->store), &blank_iter,
+  gtk_tree_store_insert_with_values (
+      GTK_TREE_STORE (priv->store),&blank_iter, NULL, 0,
       EMPATHY_CONTACT_LIST_STORE_COL_CONTACT, NULL,
       EMPATHY_CONTACT_LIST_STORE_COL_NAME, (_("Select a contact")),
       EMPATHY_CONTACT_LIST_STORE_COL_IS_ONLINE, FALSE, -1);
