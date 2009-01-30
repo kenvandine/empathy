@@ -10,6 +10,7 @@ empathy_chat_view_get_type
 empathy_conf_get_type
 empathy_contact_list_store_get_type
 empathy_contact_list_view_get_type
+empathy_contact_selector_get_type
 empathy_contact_list_store_sort_get_type
 empathy_contact_list_store_col_get_type
 empathy_contact_list_feature_flags_get_type
@@ -21,4 +22,3 @@ empathy_smiley_manager_get_type
 empathy_theme_boxes_get_type
 empathy_theme_irc_get_type
 empathy_theme_manager_get_type
-
