@@ -89,24 +89,33 @@ set_blank_contact (EmpathyContactSelector *selector)
 
 
 static void
+unset_blank_contact (EmpathyContactSelector *selector)
+{
+  EmpathyContactSelectorPriv *priv = GET_PRIV (selector);
+  GtkTreeIter blank_iter;
+
+  if (get_iter_for_blank_contact (GTK_TREE_STORE (priv->store), &blank_iter))
+    {
+      gtk_tree_store_remove (GTK_TREE_STORE (priv->store), &blank_iter);
+      priv->is_blank_set = FALSE;
+    }
+}
+
+
+static void
 notify_popup_shown_cb (GtkComboBox *widget,
                        GParamSpec *property,
                        gpointer data)
 {
   EmpathyContactSelector *selector = EMPATHY_CONTACT_SELECTOR (widget);
   EmpathyContactSelectorPriv *priv = GET_PRIV (selector);
-  GtkTreeIter blank_iter;
-  gboolean shown;
+  gboolean is_popup_shown;
 
-  g_object_get (widget, property->name, &shown, NULL);
+  g_object_get (widget, property->name, &is_popup_shown, NULL);
 
-  if (shown)
+  if (is_popup_shown)
     {
-      if (get_iter_for_blank_contact (GTK_TREE_STORE (priv->store), &blank_iter))
-        {
-          gtk_tree_store_remove (GTK_TREE_STORE (priv->store), &blank_iter);
-          priv->is_blank_set = FALSE;
-        }
+      unset_blank_contact (selector);
     }
   else
     {
@@ -127,12 +136,11 @@ changed_cb (GtkComboBox *widget,
 {
   EmpathyContactSelector *selector = EMPATHY_CONTACT_SELECTOR (widget);
   EmpathyContactSelectorPriv *priv = GET_PRIV (selector);
-  GtkTreeIter blank_iter;
-  gboolean shown;
+  gboolean is_popup_shown;
 
-  g_object_get (widget, "popup-shown", &shown, NULL);
+  g_object_get (widget, "popup-shown", &is_popup_shown, NULL);
 
-  if (shown)
+  if (is_popup_shown)
     return;
 
   if (gtk_combo_box_get_active (widget) == -1)
@@ -144,11 +152,7 @@ changed_cb (GtkComboBox *widget,
     }
   else
     {
-      if (get_iter_for_blank_contact (GTK_TREE_STORE (priv->store), &blank_iter))
-        {
-          gtk_tree_store_remove (GTK_TREE_STORE (priv->store), &blank_iter);
-          priv->is_blank_set = FALSE;
-        }
+      unset_blank_contact (selector);
     }
 }
 
