@@ -56,17 +56,16 @@ contact_selector_get_number_online_contacts (GtkTreeStore *store)
   GtkTreeIter tmp_iter;
   gboolean is_online;
   guint number_online_contacts = 0;
+  gboolean ok;
 
-  if (gtk_tree_model_get_iter_first (GTK_TREE_MODEL (store), &tmp_iter))
+  for (ok = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (store), &tmp_iter);
+      ok; ok = gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &tmp_iter))
     {
-      do
-        {
-          gtk_tree_model_get (GTK_TREE_MODEL (store),
-              &tmp_iter, EMPATHY_CONTACT_LIST_STORE_COL_IS_ONLINE,
-              &is_online, -1);
-          if (is_online)
-            number_online_contacts++;
-        } while (gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &tmp_iter));
+      gtk_tree_model_get (GTK_TREE_MODEL (store),
+          &tmp_iter, EMPATHY_CONTACT_LIST_STORE_COL_IS_ONLINE,
+          &is_online, -1);
+      if (is_online)
+        number_online_contacts++;
     }
 
   return number_online_contacts;
@@ -79,21 +78,20 @@ contact_selector_get_iter_for_blank_contact (GtkTreeStore *store,
   GtkTreeIter tmp_iter;
   EmpathyContact *tmp_contact;
   gboolean is_present = FALSE;
+  gboolean ok;
 
-  if (gtk_tree_model_get_iter_first (GTK_TREE_MODEL (store), &tmp_iter))
+  for (ok = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (store), &tmp_iter);
+      ok; ok = gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &tmp_iter))
     {
-      do
+      gtk_tree_model_get (GTK_TREE_MODEL (store),
+          &tmp_iter, EMPATHY_CONTACT_LIST_STORE_COL_CONTACT,
+          &tmp_contact, -1);
+      if (tmp_contact == NULL)
         {
-          gtk_tree_model_get (GTK_TREE_MODEL (store),
-              &tmp_iter, EMPATHY_CONTACT_LIST_STORE_COL_CONTACT,
-              &tmp_contact, -1);
-          if (tmp_contact == NULL)
-            {
-              *blank_iter = tmp_iter;
-              is_present = TRUE;
-              break;
-            }
-        } while (gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &tmp_iter));
+          *blank_iter = tmp_iter;
+          is_present = TRUE;
+          break;
+        }
     }
 
   return is_present;
