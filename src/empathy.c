@@ -518,8 +518,11 @@ main (int argc, char *argv[])
 	chatroom_manager = empathy_chatroom_manager_dup_singleton (NULL);
 	empathy_chatroom_manager_observe (chatroom_manager, dispatcher);
 
-	notify_init ("Empathy");
+	notify_init ("empathy");
+
 	gtk_main ();
+
+	notify_uninit ();
 
 	empathy_idle_set_state (idle, MC_PRESENCE_OFFLINE);
 
