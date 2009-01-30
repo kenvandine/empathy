@@ -320,7 +320,7 @@ empathy_contact_selector_new (EmpathyContactList *contact_list)
 }
 
 EmpathyContact *
-empathy_contact_selector_get_selected (EmpathyContactSelector *selector)
+empathy_contact_selector_dup_selected (EmpathyContactSelector *selector)
 {
   EmpathyContactSelectorPriv *priv = GET_PRIV (selector);
   EmpathyContact *contact = NULL;

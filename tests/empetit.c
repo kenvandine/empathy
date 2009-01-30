@@ -37,12 +37,14 @@ clicked_cb (GtkButton *button,
   EmpathyContactSelector *selector = EMPATHY_CONTACT_SELECTOR (data);
   EmpathyContact *contact;
 
-  contact = empathy_contact_selector_get_selected (selector);
+  contact = empathy_contact_selector_dup_selected (selector);
 
   if (!contact)
     return;
 
   empathy_dispatcher_chat_with_contact (contact, chat_cb, NULL);
+
+  g_object_unref (contact);
 }
 
 int main (int argc,
