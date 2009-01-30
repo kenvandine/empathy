@@ -544,24 +544,18 @@ empathy_pixbuf_scale_down_if_necessary (GdkPixbuf *pixbuf, gint max_size)
 }
 
 GdkPixbuf *
-empathy_pixbuf_from_icon_name (const gchar *icon_name,
-			      GtkIconSize  icon_size)
+empathy_pixbuf_from_icon_name_sized (const gchar *icon_name,
+				     gint size)
 {
-	GtkIconTheme  *theme;
-	GdkPixbuf     *pixbuf = NULL;
-	GError        *error = NULL;
-	gint           w, h;
-	gint           size = 48;
+	GtkIconTheme *theme;
+	GdkPixbuf *pixbuf;
+	GError *error;
 
 	if (!icon_name) {
 		return NULL;
 	}
 
 	theme = gtk_icon_theme_get_default ();
-
-	if (gtk_icon_size_lookup (icon_size, &w, &h)) {
-		size = (w + h) / 2;
-	}
 
 	pixbuf = gtk_icon_theme_load_icon (theme,
 					   icon_name,
@@ -574,6 +568,24 @@ empathy_pixbuf_from_icon_name (const gchar *icon_name,
 	}
 
 	return pixbuf;
+}
+
+GdkPixbuf *
+empathy_pixbuf_from_icon_name (const gchar *icon_name,
+			      GtkIconSize  icon_size)
+{
+	gint           w, h;
+	gint           size = 48;
+
+	if (!icon_name) {
+		return NULL;
+	}
+
+	if (gtk_icon_size_lookup (icon_size, &w, &h)) {
+		size = (w + h) / 2;
+	}
+
+	return empathy_pixbuf_from_icon_name_sized (icon_name, size);
 }
 
 /* Stolen from GtkSourceView, hence the weird intendation. Please keep it like

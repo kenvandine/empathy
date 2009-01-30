@@ -98,6 +98,8 @@ GdkPixbuf * empathy_pixbuf_scale_down_if_necessary      (GdkPixbuf        *pixbu
 							 gint              max_size);
 GdkPixbuf * empathy_pixbuf_from_icon_name               (const gchar      *icon_name,
 							 GtkIconSize       icon_size);
+GdkPixbuf * empathy_pixbuf_from_icon_name_sized         (const gchar      *icon_name,
+               gint              size);
 /* Text view */
 gboolean    empathy_text_iter_forward_search            (const GtkTextIter*iter,
 							 const gchar      *str,

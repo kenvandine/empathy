@@ -126,9 +126,8 @@ status_icon_update_notification (EmpathyStatusIcon *icon)
 			}
 
 			if (!pixbuf) {
-				/* we use INVALID here so we fall pack to 48px */
-				pixbuf = empathy_pixbuf_from_icon_name (priv->event->icon_name,
-									GTK_ICON_SIZE_INVALID);
+				pixbuf = empathy_pixbuf_from_icon_name_sized
+						(priv->event->icon_name, 48);
 			}
 
 			priv->notification = notify_notification_new_with_status_icon

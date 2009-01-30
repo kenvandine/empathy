@@ -852,7 +852,7 @@ chat_window_notification_closed_cb (NotifyNotification *notify,
 	reason = notify_notification_get_closed_reason (notify);
 
 	if (reason == 2) {
-		empathy_chat_window_present_chat (chat);
+		g_idle_add ((GSourceFunc) notification_closed_idle_cb, chat);
 	}
 }
 
@@ -877,9 +877,8 @@ chat_window_show_or_update_notification (EmpathyMessage *message,
 	body = empathy_message_get_body (message);
 	pixbuf = empathy_pixbuf_avatar_from_contact_scaled (sender, 48, 48);
 	if (pixbuf == NULL) {
-		/* we use INVALID here so we fall pack to 48px */
-		pixbuf = empathy_pixbuf_from_icon_name (EMPATHY_IMAGE_NEW_MESSAGE,
-							GTK_ICON_SIZE_INVALID);
+		pixbuf = empathy_pixbuf_from_icon_name_sized
+				(EMPATHY_IMAGE_NEW_MESSAGE, 48);
 	}
 
 	if (priv->notification != NULL) {
