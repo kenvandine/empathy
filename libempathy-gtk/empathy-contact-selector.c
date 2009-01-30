@@ -50,24 +50,6 @@ typedef struct
 static void contact_selector_changed_cb (
     EmpathyContactSelector *selector, gpointer data);
 
-EmpathyContact *
-empathy_contact_selector_get_selected (EmpathyContactSelector *selector)
-{
-  EmpathyContactSelectorPriv *priv = GET_PRIV (selector);
-  EmpathyContact *contact = NULL;
-  GtkTreeIter iter;
-
-  g_return_val_if_fail (EMPATHY_IS_CONTACT_SELECTOR (selector), NULL);
-
-  if (!gtk_combo_box_get_active_iter (GTK_COMBO_BOX (selector), &iter))
-    return NULL;
-
-  gtk_tree_model_get (GTK_TREE_MODEL (priv->store), &iter,
-      EMPATHY_CONTACT_LIST_STORE_COL_CONTACT, &contact, -1);
-
-  return contact;
-}
-
 static guint
 contact_selector_get_number_online_contacts (GtkTreeStore *store)
 {
@@ -350,10 +332,30 @@ empathy_contact_selector_class_init (EmpathyContactSelectorClass *klass)
       G_PARAM_READWRITE | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 }
 
+/* public methods */
+
 EmpathyContactSelector *
 empathy_contact_selector_new (EmpathyContactListStore *store)
 {
   g_return_val_if_fail (EMPATHY_IS_CONTACT_LIST_STORE (store), NULL);
 
   return g_object_new (EMPATHY_TYPE_CONTACT_SELECTOR, "store", store, NULL);
+}
+
+EmpathyContact *
+empathy_contact_selector_get_selected (EmpathyContactSelector *selector)
+{
+  EmpathyContactSelectorPriv *priv = GET_PRIV (selector);
+  EmpathyContact *contact = NULL;
+  GtkTreeIter iter;
+
+  g_return_val_if_fail (EMPATHY_IS_CONTACT_SELECTOR (selector), NULL);
+
+  if (!gtk_combo_box_get_active_iter (GTK_COMBO_BOX (selector), &iter))
+    return NULL;
+
+  gtk_tree_model_get (GTK_TREE_MODEL (priv->store), &iter,
+      EMPATHY_CONTACT_LIST_STORE_COL_CONTACT, &contact, -1);
+
+  return contact;
 }
