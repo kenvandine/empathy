@@ -836,27 +836,29 @@ chat_window_set_urgency_hint (EmpathyChatWindow *window,
 	gtk_window_set_urgency_hint (GTK_WINDOW (priv->dialog), urgent);
 }
 
-static gboolean
-notification_closed_idle_cb (EmpathyChat *chat)
-{
-	empathy_chat_window_present_chat (chat);
-
-	return FALSE;
-}
+typedef struct {
+	EmpathyChatWindow *window;
+	EmpathyChat *chat;
+} NotificationData;
 
 static void
 chat_window_notification_closed_cb (NotifyNotification *notify,
-				    EmpathyChat *chat)
+				    NotificationData *cb_data)
 {
 	int reason = 1;
+	EmpathyChatWindowPriv *priv = GET_PRIV (cb_data->window);
 
 #ifdef notify_notification_get_closed_reason
 	reason = notify_notification_get_closed_reason (notify);
 #endif
-
 	if (reason == 2) {
-		g_idle_add ((GSourceFunc) notification_closed_idle_cb, chat);
+		empathy_chat_window_present_chat (cb_data->chat);
 	}
+
+	g_object_unref (notify);
+	priv->notification = NULL;
+	g_object_unref (cb_data->chat);
+	g_slice_free (NotificationData, cb_data);
 }
 
 static void
@@ -868,6 +870,7 @@ chat_window_show_or_update_notification (EmpathyChatWindow *window,
 	char *header, *escaped;
 	const char *body;
 	GdkPixbuf *pixbuf;
+	NotificationData *cb_data;
 	EmpathyChatWindowPriv *priv = GET_PRIV (window);
 	gboolean res;
 
@@ -880,6 +883,10 @@ chat_window_show_or_update_notification (EmpathyChatWindow *window,
 			return;
 		}
 	}
+
+	cb_data = g_slice_new0 (NotificationData);
+	cb_data->chat = g_object_ref (chat);
+	cb_data->window = window;
 
 	sender = empathy_message_get_sender (message);
 	header = g_strdup_printf (_("New message from %s"),
@@ -902,7 +909,7 @@ chat_window_show_or_update_notification (EmpathyChatWindow *window,
 		notify_notification_set_icon_from_pixbuf (priv->notification, pixbuf);
 
 		g_signal_connect (priv->notification, "closed",
-				  G_CALLBACK (chat_window_notification_closed_cb), chat);
+				  G_CALLBACK (chat_window_notification_closed_cb), cb_data);
 	}
 
 	notify_notification_show (priv->notification, NULL);
