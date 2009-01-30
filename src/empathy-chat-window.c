@@ -836,37 +836,30 @@ chat_window_set_urgency_hint (EmpathyChatWindow *window,
 }
 
 static gboolean
-notification_closed_idle_cb (EmpathyChatWindow *window)
+notification_closed_idle_cb (EmpathyChat *chat)
 {
-	EmpathyChatWindowPriv *priv = GET_PRIV (window);
-
-	gtk_widget_grab_focus (priv->dialog);
+	empathy_chat_window_present_chat (chat);
 
 	return FALSE;
 }
 
 static void
 chat_window_notification_closed_cb (NotifyNotification *notify,
-				    EmpathyChatWindow *window)
+				    EmpathyChat *chat)
 {
-	EmpathyChatWindowPriv *priv = GET_PRIV (window);
 	int reason;
 
 	reason = notify_notification_get_closed_reason (notify);
 
-	if (priv->notification) {
-		g_object_unref (priv->notification);
-		priv->notification = NULL;
-	}
-
 	if (reason == 2) {
-		g_idle_add ((GSourceFunc) notification_closed_idle_cb, window);
+		empathy_chat_window_present_chat (chat);
 	}
 }
 
 static void
-show_or_update_notification (EmpathyMessage *message,
-			     EmpathyChatWindow *window)
+chat_window_show_or_update_notification (EmpathyMessage *message,
+					 EmpathyChatWindow *window,
+					 EmpathyChat *chat)
 {
 	EmpathyContact *sender;
 	char *header;
@@ -894,12 +887,12 @@ show_or_update_notification (EmpathyMessage *message,
 					    header, body, NULL);
 		notify_notification_set_icon_from_pixbuf (priv->notification, pixbuf);
 	} else {
-		priv->notification = notify_notification_new (header, body, NULL, priv->dialog);
+		priv->notification = notify_notification_new (header, body, NULL, NULL);
 		notify_notification_set_timeout (priv->notification, NOTIFY_EXPIRES_DEFAULT);
 		notify_notification_set_icon_from_pixbuf (priv->notification, pixbuf);
 
 		g_signal_connect (priv->notification, "closed",
-				  G_CALLBACK (chat_window_notification_closed_cb), window);
+				  G_CALLBACK (chat_window_notification_closed_cb), chat);
 	}
 
 	notify_notification_show (priv->notification, NULL);
@@ -942,7 +935,7 @@ chat_window_new_message_cb (EmpathyChat       *chat,
 	}
 
 	if (!has_focus) {
-		show_or_update_notification (message, window);
+		chat_window_show_or_update_notification (message, window, chat);
 	}
 
 	if (has_focus && priv->current_chat == chat) {

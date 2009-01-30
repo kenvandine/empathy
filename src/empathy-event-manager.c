@@ -182,6 +182,23 @@ event_channel_process_func (EventPriv *event)
   empathy_dispatch_operation_approve (event->approval->operation);
 }
 
+static void
+event_text_channel_process_func (EventPriv *event)
+{
+  EmpathyTpChat *tp_chat;
+
+  if (event->approval->handler != 0)
+    {
+      tp_chat = EMPATHY_TP_CHAT
+        (empathy_dispatch_operation_get_channel_wrapper (event->approval->operation));
+  
+      g_signal_handler_disconnect (tp_chat, event->approval->handler);
+      event->approval->handler = 0;
+    }
+
+  empathy_dispatch_operation_approve (event->approval->operation);
+}
+
 static EventPriv *
 event_lookup_by_approval (EmpathyEventManager *manager,
   EventManagerApproval *approval)
@@ -233,10 +250,10 @@ event_manager_chat_message_received_cb (EmpathyTpChat *tp_chat,
    * queue. */
   event = event_lookup_by_approval (approval->manager, approval);
 
-  if (event != NULL && event->inhibit)
+  if (event != NULL && event->inhibit && approval->handler != 0)
     {
-      g_signal_handlers_disconnect_by_func (tp_chat,
-        event_manager_chat_message_received_cb, approval);
+      g_signal_handler_disconnect (tp_chat, approval->handler);
+      approval->handler = 0;
       return;
     }
 
@@ -251,7 +268,7 @@ event_manager_chat_message_received_cb (EmpathyTpChat *tp_chat,
     event_update (approval->manager, event, EMPATHY_IMAGE_NEW_MESSAGE, header, msg);
   else
     event_manager_add (approval->manager, sender, EMPATHY_IMAGE_NEW_MESSAGE, header,
-      msg, approval, event_channel_process_func, NULL);
+      msg, approval, event_text_channel_process_func, NULL);
 
   g_free (header);
 }
@@ -461,7 +478,7 @@ event_manager_approve_channel_cb (EmpathyDispatcher *dispatcher,
         EMPATHY_TP_CHAT (
           empathy_dispatch_operation_get_channel_wrapper (operation));
 
-      g_signal_connect (tp_chat, "message-received",
+      approval->handler = g_signal_connect (tp_chat, "message-received",
         G_CALLBACK (event_manager_chat_message_received_cb), approval);
 
     }
