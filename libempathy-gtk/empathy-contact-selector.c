@@ -27,13 +27,12 @@
 
 #include <libempathy/empathy-contact.h>
 #include <libempathy-gtk/empathy-contact-list-store.h>
+#include <libempathy/empathy-utils.h>
+
 #include "empathy-contact-selector.h"
 
 G_DEFINE_TYPE (EmpathyContactSelector, empathy_contact_selector,
     GTK_TYPE_COMBO_BOX)
-
-#define GET_PRIV(object) (G_TYPE_INSTANCE_GET_PRIVATE \
-    ((object), EMPATHY_TYPE_CONTACT_SELECTOR, EmpathyContactSelectorPriv))
 
 enum
 {
@@ -41,13 +40,12 @@ enum
   PROP_STORE
 };
 
-typedef struct _EmpathyContactSelectorPriv EmpathyContactSelectorPriv;
-
-struct _EmpathyContactSelectorPriv
+#define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyContactSelector)
+typedef struct
 {
   EmpathyContactListStore *store;
   gboolean is_blank_set;
-};
+} EmpathyContactSelectorPriv;
 
 static void changed_cb (GtkComboBox *widget, gpointer data);
 
@@ -288,6 +286,11 @@ empathy_contact_selector_constructor (GType type,
 static void
 empathy_contact_selector_init (EmpathyContactSelector *empathy_contact_selector)
 {
+  EmpathyContactSelectorPriv *priv =
+      G_TYPE_INSTANCE_GET_PRIVATE (empathy_contact_selector,
+      EMPATHY_TYPE_CONTACT_SELECTOR, EmpathyContactSelectorPriv);
+
+  empathy_contact_selector->priv = priv;
 }
 
 

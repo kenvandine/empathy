@@ -49,6 +49,7 @@ typedef struct _EmpathyContactSelectorClass EmpathyContactSelectorClass;
 struct _EmpathyContactSelector
 {
   GtkComboBox parent;
+  gpointer priv;
 };
 
 struct _EmpathyContactSelectorClass
