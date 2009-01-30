@@ -21,7 +21,7 @@ chat_cb (EmpathyDispatchOperation *dispatch,
   if (error != NULL)
     {
       dialog = gtk_message_dialog_new (GTK_WINDOW (window), GTK_DIALOG_MODAL,
-          GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE,
+          GTK_MESSAGE_ERROR, GTK_BUTTONS_CLOSE, "%s",
           error->message ? error->message : "No error message");
 
       gtk_dialog_run (GTK_DIALOG (dialog));
