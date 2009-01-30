@@ -82,6 +82,7 @@ struct _EventPriv {
 enum {
   EVENT_ADDED,
   EVENT_REMOVED,
+  EVENT_UPDATED,
   LAST_SIGNAL
 };
 
@@ -128,6 +129,7 @@ static void
 event_free (EventPriv *event)
 {
   g_free (event->public.icon_name);
+  g_free (event->public.header);
   g_free (event->public.message);
 
   if (event->public.contact)
@@ -151,8 +153,8 @@ event_remove (EventPriv *event)
 
 static void
 event_manager_add (EmpathyEventManager *manager, EmpathyContact *contact,
-  const gchar *icon_name, const gchar *message, EventManagerApproval *approval,
-  EventFunc func, gpointer user_data)
+  const gchar *icon_name, const gchar *header, const gchar *message,
+  EventManagerApproval *approval, EventFunc func, gpointer user_data)
 {
   EmpathyEventManagerPriv *priv = GET_PRIV (manager);
   EventPriv               *event;
@@ -160,6 +162,7 @@ event_manager_add (EmpathyEventManager *manager, EmpathyContact *contact,
   event = g_slice_new0 (EventPriv);
   event->public.contact = contact ? g_object_ref (contact) : NULL;
   event->public.icon_name = g_strdup (icon_name);
+  event->public.header = g_strdup (header);
   event->public.message = g_strdup (message);
   event->func = func;
   event->user_data = user_data;
@@ -177,26 +180,71 @@ event_channel_process_func (EventPriv *event)
   empathy_dispatch_operation_approve (event->approval->operation);
 }
 
+static EventPriv *
+event_lookup_by_approval (EmpathyEventManager *manager,
+  EventManagerApproval *approval)
+{
+  EmpathyEventManagerPriv *priv = GET_PRIV (manager);
+  GSList *l;
+  EventPriv *retval = NULL;
+
+  for (l = priv->events; l; l = l->next)
+    {
+      EventPriv *event = l->data;
+
+      if (event->approval == approval)
+        {
+          retval = event;
+        }
+    }
+
+  return retval;
+}
+
+static void
+event_update (EmpathyEventManager *manager, EventPriv *event,
+  const char *icon_name, const char *header, const char *msg)
+{
+  g_free (event->public.icon_name);
+  g_free (event->public.header);
+  g_free (event->public.message);
+
+  event->public.icon_name = g_strdup (icon_name);
+  event->public.header = g_strdup (header);
+  event->public.message = g_strdup (msg);
+
+  g_signal_emit (manager, signals[EVENT_UPDATED], 0, event);
+}
+
 static void
 event_manager_chat_message_received_cb (EmpathyTpChat *tp_chat,
   EmpathyMessage *message, EventManagerApproval *approval)
 {
   EmpathyContact  *sender;
-  gchar           *msg;
+  gchar           *header;
+  const gchar     *msg;
   TpChannel       *channel;
+  EventPriv       *event;
 
-  g_signal_handlers_disconnect_by_func (tp_chat,
-    event_manager_chat_message_received_cb, approval);
+  /* update the event if it's referring to a chat which is already in the
+   * queue. */
+
+  event = event_lookup_by_approval (approval->manager, approval);
 
   sender = empathy_message_get_sender (message);
-  msg = g_strdup_printf (_("New message from %s:\n%s"),
-    empathy_contact_get_name (sender), empathy_message_get_body (message));
+  header = g_strdup_printf (_("New message from %s"),
+                            empathy_contact_get_name (sender));
+  msg = empathy_message_get_body (message);
 
   channel = empathy_tp_chat_get_channel (tp_chat);
-  event_manager_add (approval->manager, sender, EMPATHY_IMAGE_NEW_MESSAGE, msg,
-    approval, event_channel_process_func, NULL);
 
-  g_free (msg);
+  if (event != NULL)
+    event_update (approval->manager, event, EMPATHY_IMAGE_NEW_MESSAGE, header, msg);
+  else
+    event_manager_add (approval->manager, sender, EMPATHY_IMAGE_NEW_MESSAGE, header,
+      msg, approval, event_channel_process_func, NULL);
+
+  g_free (header);
 }
 
 static void
@@ -248,7 +296,7 @@ event_manager_media_channel_got_name_cb (EmpathyContact *contact,
   const GError *error, gpointer user_data, GObject *object)
 {
   EventManagerApproval *approval = user_data;
-  gchar *msg;
+  gchar *header;
 
   if (error != NULL)
     {
@@ -257,14 +305,14 @@ event_manager_media_channel_got_name_cb (EmpathyContact *contact,
       return;
     }
 
-  msg = g_strdup_printf (_("Incoming call from %s"),
+  header = g_strdup_printf (_("Incoming call from %s"),
     empathy_contact_get_name (contact));
 
   event_manager_add (approval->manager,
-    approval->contact, EMPATHY_IMAGE_VOIP, msg,
+    approval->contact, EMPATHY_IMAGE_VOIP, header, NULL,
     approval, event_channel_process_func, NULL);
 
-  g_free (msg);
+  g_free (header);
 }
 
 static void
@@ -301,28 +349,28 @@ event_manager_add_tube_approval (EventManagerApproval *approval,
   EmpathyTubeDispatchAbility ability)
 {
   const gchar *icon_name;
-  gchar       *msg;
+  gchar       *header;
+  const gchar *msg;
+
+  header = g_strdup_printf (_("%s is offering you an invitation"),
+    empathy_contact_get_name (approval->contact));
 
   if (ability == EMPATHY_TUBE_DISPATCHABILITY_POSSIBLE)
     {
       icon_name = GTK_STOCK_EXECUTE;
-      msg = g_strdup_printf (_("%s is offering you an invitation."
-        " An external application will be started to handle it."),
-      empathy_contact_get_name (approval->contact));
+      msg = _("An external application will be started to handle it.");
     }
   else
     {
       icon_name = GTK_STOCK_DIALOG_ERROR;
-      msg = g_strdup_printf (_("%s is offering you an invitation, but "
-        "you don't have the needed external "
-        "application to handle it."),
-        empathy_contact_get_name (approval->contact));
+      msg = _("You don't have the needed external "
+              "application to handle it.");
     }
 
-  event_manager_add (approval->manager, approval->contact, icon_name, msg,
-    approval, event_manager_tube_approved_cb, approval);
+  event_manager_add (approval->manager, approval->contact, icon_name, header,
+    msg, approval, event_manager_tube_approved_cb, approval);
 
-  g_free (msg);
+  g_free (header);
 }
 
 static void
@@ -432,7 +480,7 @@ event_manager_approve_channel_cb (EmpathyDispatcher *dispatcher,
   else if (!tp_strdiff (channel_type, EMP_IFACE_CHANNEL_TYPE_FILE_TRANSFER))
     {
       EmpathyContact        *contact;
-      gchar                 *msg;
+      gchar                 *header;
       TpHandle               handle;
       McAccount             *account;
       EmpathyContactFactory *factory;
@@ -448,14 +496,15 @@ event_manager_approve_channel_cb (EmpathyDispatcher *dispatcher,
       empathy_contact_run_until_ready (contact,
         EMPATHY_CONTACT_READY_NAME, NULL);
 
-      msg = g_strdup_printf (_("Incoming file transfer from %s"),
+      header = g_strdup_printf (_("Incoming file transfer from %s"),
         empathy_contact_get_name (contact));
 
       event_manager_add (manager, contact, EMPATHY_IMAGE_DOCUMENT_SEND,
-        msg, approval, event_channel_process_func, NULL);
+        header, NULL, approval, event_channel_process_func, NULL);
 
       g_object_unref (factory);
       g_object_unref (account);
+      g_free (header);
     }
   else if (!tp_strdiff (channel_type, EMP_IFACE_CHANNEL_TYPE_STREAM_TUBE) ||
       !tp_strdiff (channel_type, EMP_IFACE_CHANNEL_TYPE_DBUS_TUBE))
@@ -514,7 +563,7 @@ event_manager_pendings_changed_cb (EmpathyContactList  *list,
   EmpathyEventManager *manager)
 {
   EmpathyEventManagerPriv *priv = GET_PRIV (manager);
-  GString                 *str;
+  gchar                   *header, *event_msg;
 
   if (!is_pending)
     {
@@ -537,17 +586,19 @@ event_manager_pendings_changed_cb (EmpathyContactList  *list,
 
   empathy_contact_run_until_ready (contact, EMPATHY_CONTACT_READY_NAME, NULL);
 
-  str = g_string_new (NULL);
-  g_string_printf (str, _("Subscription requested by %s"),
+  header = g_strdup_printf (_("Subscription requested by %s"),
     empathy_contact_get_name (contact));
 
   if (!EMP_STR_EMPTY (message))
-    g_string_append_printf (str, _("\nMessage: %s"), message);
+    event_msg = g_strdup_printf (_("\nMessage: %s"), message);
+  else
+    event_msg = NULL;
 
-  event_manager_add (manager, contact, GTK_STOCK_DIALOG_QUESTION, str->str,
-    NULL, event_pending_subscribe_func, NULL);
+  event_manager_add (manager, contact, GTK_STOCK_DIALOG_QUESTION, header,
+    event_msg, NULL, event_pending_subscribe_func, NULL);
 
-  g_string_free (str, TRUE);
+  g_free (event_msg);
+  g_free (header);
 }
 
 static GObject *
@@ -609,6 +660,16 @@ empathy_event_manager_class_init (EmpathyEventManagerClass *klass)
       NULL, NULL,
       g_cclosure_marshal_VOID__POINTER,
       G_TYPE_NONE, 1, G_TYPE_POINTER);
+
+  signals[EVENT_UPDATED] =
+  g_signal_new ("event-updated",
+      G_TYPE_FROM_CLASS (klass),
+      G_SIGNAL_RUN_LAST,
+      0,
+      NULL, NULL,
+      g_cclosure_marshal_VOID__POINTER,
+      G_TYPE_NONE, 1, G_TYPE_POINTER);
+
 
   g_type_class_add_private (object_class, sizeof (EmpathyEventManagerPriv));
 }
