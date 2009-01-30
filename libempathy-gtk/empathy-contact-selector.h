@@ -59,7 +59,7 @@ struct _EmpathyContactSelectorClass
 
 GType empathy_contact_selector_get_type (void) G_GNUC_CONST;
 GtkWidget *
-empathy_contact_selector_new (EmpathyContactListStore *store);
+empathy_contact_selector_new (EmpathyContactList *contact_list);
 
 EmpathyContact *
 empathy_contact_selector_get_selected (EmpathyContactSelector *selector);

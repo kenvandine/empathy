@@ -308,9 +308,13 @@ empathy_contact_selector_class_init (EmpathyContactSelectorClass *klass)
 /* public methods */
 
 GtkWidget *
-empathy_contact_selector_new (EmpathyContactListStore *store)
+empathy_contact_selector_new (EmpathyContactList *contact_list)
 {
-  g_return_val_if_fail (EMPATHY_IS_CONTACT_LIST_STORE (store), NULL);
+  EmpathyContactListStore *store;
+
+  g_return_val_if_fail (EMPATHY_IS_CONTACT_LIST (contact_list), NULL);
+
+  store = empathy_contact_list_store_new (contact_list);
 
   return GTK_WIDGET (g_object_new (EMPATHY_TYPE_CONTACT_SELECTOR, "store", store, NULL));
 }

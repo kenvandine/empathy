@@ -53,7 +53,6 @@ int main (int argc,
           char *argv[])
 {
   EmpathyContactManager *manager;
-  EmpathyContactListStore *store;
   GtkWidget *vbox, *button, *selector;
 
   gtk_init (&argc, &argv);
@@ -61,11 +60,10 @@ int main (int argc,
   empathy_gtk_init ();
 
   manager = empathy_contact_manager_dup_singleton ();
-  store = empathy_contact_list_store_new (EMPATHY_CONTACT_LIST (manager));
+  selector = empathy_contact_selector_new (EMPATHY_CONTACT_LIST (manager));
 
   vbox = gtk_vbox_new (FALSE, 2);
 
-  selector = empathy_contact_selector_new (store);
   gtk_box_pack_start (GTK_BOX (vbox), selector, FALSE, FALSE, 5);
 
   button = gtk_button_new_with_label ("Chat");
@@ -83,7 +81,6 @@ int main (int argc,
 
   gtk_main ();
 
-  g_object_unref (store);
   g_object_unref (manager);
 
   return 0;
