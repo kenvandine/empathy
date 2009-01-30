@@ -197,6 +197,7 @@ event_lookup_by_approval (EmpathyEventManager *manager,
       if (event->approval == approval)
         {
           retval = event;
+          break;
         }
     }
 
