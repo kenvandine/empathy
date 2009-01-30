@@ -44,7 +44,6 @@ enum
 typedef struct
 {
   EmpathyContactListStore *store;
-  gboolean is_blank_set;
 } EmpathyContactSelectorPriv;
 
 static void changed_cb (GtkComboBox *widget, gpointer data);
@@ -142,7 +141,6 @@ add_blank_contact (EmpathyContactSelector *selector)
   g_signal_handlers_block_by_func(selector, changed_cb, NULL);
   gtk_combo_box_set_active_iter (GTK_COMBO_BOX (selector), &blank_iter);
   g_signal_handlers_unblock_by_func(selector, changed_cb, NULL);
-  priv->is_blank_set = TRUE;
 }
 
 
@@ -155,7 +153,6 @@ remove_blank_contact (EmpathyContactSelector *selector)
   if (get_iter_for_blank_contact (GTK_TREE_STORE (priv->store), &blank_iter))
     {
       gtk_tree_store_remove (GTK_TREE_STORE (priv->store), &blank_iter);
-      priv->is_blank_set = FALSE;
     }
 }
 
@@ -164,12 +161,15 @@ static void
 manage_sensitivity (EmpathyContactSelector *selector)
 {
   EmpathyContactSelectorPriv *priv = GET_PRIV (selector);
+
+  /* FIXME - make this work when offline contacts are shown.
+   * The following value needs to be the number of entries shown
+   * excluding the blank entry (if present).
+   */
   guint number_online_contacts =
       get_number_online_contacts (GTK_TREE_STORE (priv->store));
 
-  if (number_online_contacts == 0 && priv->is_blank_set)
-      gtk_widget_set_sensitive (GTK_WIDGET (selector), FALSE);
-  else if (number_online_contacts)
+  if (number_online_contacts)
       gtk_widget_set_sensitive (GTK_WIDGET (selector), TRUE);
   else
       gtk_widget_set_sensitive (GTK_WIDGET (selector), FALSE);
