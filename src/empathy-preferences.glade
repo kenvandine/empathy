@@ -279,7 +279,7 @@
                           </widget>
                         </child>
                         <child>
-                          <widget class="GtkCheckButton" id="checkbutton_notification_focus">
+                          <widget class="GtkCheckButton" id="checkbutton_notifications_focus">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="label" translatable="yes">Enable notifications when the _chat is not focused</property>
