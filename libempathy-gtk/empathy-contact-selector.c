@@ -234,7 +234,6 @@ empathy_store_row_changed_cb (EmpathyContactListStore *empathy_store,
 {
   EmpathyContactSelector *selector = EMPATHY_CONTACT_SELECTOR (data);
 
-  g_print ("Row changed\n");
   manage_sensitivity (selector);
 }
 
@@ -266,14 +265,12 @@ empathy_contact_selector_constructor (GType type,
       GTK_TREE_MODEL (priv->store));
   gtk_widget_set_sensitive (GTK_WIDGET (contact_selector), FALSE);
 
-  /* Status icon */
   renderer = gtk_cell_renderer_pixbuf_new ();
   gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (contact_selector),
       renderer, FALSE);
   gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (contact_selector), renderer,
       "icon-name", EMPATHY_CONTACT_LIST_STORE_COL_ICON_STATUS, NULL);
 
-  /* Contact name */
   renderer = gtk_cell_renderer_text_new ();
   gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (contact_selector),
       renderer, TRUE);
