@@ -71,38 +71,32 @@ typedef struct {
 G_DEFINE_TYPE (EmpathyStatusIcon, empathy_status_icon, G_TYPE_OBJECT);
 
 static gboolean
-status_icon_idle_event_activate (gpointer data)
+activate_event (EmpathyEvent *event)
 {
-	EmpathyStatusIcon     *icon = EMPATHY_STATUS_ICON (data);
-	EmpathyStatusIconPriv *priv = GET_PRIV (icon);
-
-	if (priv->event) {
-		empathy_event_activate (priv->event);
-	}
+	empathy_event_activate (event);
 
 	return FALSE;
 }
 
 static void
-status_icon_notification_cb (NotifyNotification *notification,
-			     gchar *action_id,
-			     gpointer data)
-{
-	EmpathyStatusIcon *icon = EMPATHY_STATUS_ICON (data);
-
-	g_idle_add (status_icon_idle_event_activate, icon);
-}
-
-static void
 status_icon_notification_closed_cb (NotifyNotification *notification,
-				    gpointer            data)
+				    EmpathyStatusIcon  *icon)
 {
-	EmpathyStatusIcon *icon = EMPATHY_STATUS_ICON (data);
 	EmpathyStatusIconPriv *priv = GET_PRIV (icon);
+	int reason;
+
+	reason = notify_notification_get_closed_reason (notification);
 
 	if (priv->notification) {
 		g_object_unref (priv->notification);
 		priv->notification = NULL;
+	}
+
+	/* the notification has been closed by the user, see the
+	 * DesktopNotification spec.
+	 */
+	if (reason == 2 && priv->event) {
+		g_idle_add ((GSourceFunc) activate_event, priv->event);
 	}
 }
 
@@ -112,15 +106,12 @@ status_icon_update_notification (EmpathyStatusIcon *icon)
 	EmpathyStatusIconPriv *priv = GET_PRIV (icon);
 
 	if (priv->event) {
-		priv->notification = notify_notification_new_with_status_icon ("New Event", priv->event->message, priv->event->icon_name, priv->icon);
-		notify_notification_add_action (priv->notification,
-						"activate",
-						"Activate",
-						status_icon_notification_cb,
-						icon, NULL);
+		priv->notification = notify_notification_new_with_status_icon
+			("New Event", priv->event->message, priv->event->icon_name, priv->icon);
 		notify_notification_set_timeout (priv->notification,
 						 NOTIFY_EXPIRES_DEFAULT);
-		g_signal_connect (priv->notification, "closed", G_CALLBACK (status_icon_notification_closed_cb), (gpointer) icon);
+		g_signal_connect (priv->notification, "closed",
+				  G_CALLBACK (status_icon_notification_closed_cb), icon);		
 		notify_notification_show (priv->notification, NULL);
 	} else {
 		if (priv->notification) {

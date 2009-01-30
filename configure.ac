@@ -34,6 +34,7 @@ TELEPATHY_GLIB_REQUIRED=0.7.19
 MISSION_CONTROL_REQUIRED=4.61
 ENCHANT_REQUIRED=1.2.0
 ISO_CODES_REQUIRED=0.35
+LIBNOTIFY_REQUIRED=0.4.5
 
 # Uncomment that to build with deprecated symbols disabled
 #AC_DEFINE(G_DISABLE_DEPRECATED, [], [Disable deprecated GLib symbols])
@@ -108,7 +109,7 @@ PKG_CHECK_MODULES(EMPATHY,
    libglade-2.0 >= $LIBGLADE_REQUIRED
    libebook-1.2
    libcanberra-gtk >= 0.4
-   libnotify
+   libnotify >= $LIBNOTIFY_REQUIRED
 ])
 
 # -----------------------------------------------------------
