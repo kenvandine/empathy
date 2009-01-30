@@ -336,7 +336,11 @@ empathy_contact_selector_get_property (GObject *object,
 static void
 empathy_contact_selector_dispose (GObject *object)
 {
+  EmpathyContactSelector *selector = EMPATHY_CONTACT_SELECTOR (object);
+  EmpathyContactSelectorPriv *priv = GET_PRIV (selector);
+
   g_debug ("EmpathyContactSelector - dispose: %p",  object);
+  g_object_unref (priv->store);
 
   (G_OBJECT_CLASS (empathy_contact_selector_parent_class)->dispose) (object);
 }
