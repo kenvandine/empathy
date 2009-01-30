@@ -50,8 +50,8 @@ struct _EmpathyContactSelectorPriv
 };
 
 static void changed_cb (GtkComboBox *widget, gpointer data);
-static gboolean get_iter_for_contact (GtkTreeStore *store,
-    GtkTreeIter *list_iter, EmpathyContact *contact);
+static gboolean get_iter_for_blank_contact (GtkTreeStore *store,
+    GtkTreeIter *blank_iter);
 
 
 EmpathyContact *
@@ -102,7 +102,7 @@ notify_popup_shown_cb (GtkComboBox *widget,
 
   if (shown)
     {
-      if (get_iter_for_contact (GTK_TREE_STORE (priv->store), &blank_iter, NULL))
+      if (get_iter_for_blank_contact (GTK_TREE_STORE (priv->store), &blank_iter))
         {
           gtk_tree_store_remove (GTK_TREE_STORE (priv->store), &blank_iter);
           priv->is_blank_set = FALSE;
@@ -144,7 +144,7 @@ changed_cb (GtkComboBox *widget,
     }
   else
     {
-      if (get_iter_for_contact (GTK_TREE_STORE (priv->store), &blank_iter, NULL))
+      if (get_iter_for_blank_contact (GTK_TREE_STORE (priv->store), &blank_iter))
         {
           gtk_tree_store_remove (GTK_TREE_STORE (priv->store), &blank_iter);
           priv->is_blank_set = FALSE;
@@ -154,16 +154,14 @@ changed_cb (GtkComboBox *widget,
 
 
 static gboolean
-get_iter_for_contact (GtkTreeStore *store,
-                      GtkTreeIter *list_iter,
-                      EmpathyContact *contact)
+get_iter_for_blank_contact (GtkTreeStore *store,
+                            GtkTreeIter *blank_iter)
 {
   GtkTreePath *path;
   GtkTreeIter tmp_iter;
   EmpathyContact *tmp_contact;
-  gboolean found = FALSE;
+  gboolean is_present = FALSE;
 
-  /* Do a linear search to find the row with CONTACT_COL set to contact. */
   path = gtk_tree_path_new_first ();
   if (gtk_tree_model_get_iter (GTK_TREE_MODEL (store), &tmp_iter, path))
     {
@@ -172,18 +170,18 @@ get_iter_for_contact (GtkTreeStore *store,
           gtk_tree_model_get (GTK_TREE_MODEL (store),
               &tmp_iter, EMPATHY_CONTACT_LIST_STORE_COL_CONTACT,
               &tmp_contact, -1);
-          found = (tmp_contact == contact);
-          if (found)
+          if (tmp_contact == NULL)
             {
-              *list_iter = tmp_iter;
+              *blank_iter = tmp_iter;
+              is_present = TRUE;
               break;
             }
-        } while (gtk_tree_model_iter_next (GTK_TREE_MODEL (store),
-              &tmp_iter));
+        } while (gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &tmp_iter));
     }
 
   gtk_tree_path_free (path);
-  return found;
+
+  return is_present;
 }
 
 
