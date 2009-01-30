@@ -865,7 +865,7 @@ chat_window_show_or_update_notification (EmpathyChatWindow *window,
 					 EmpathyChat *chat)
 {
 	EmpathyContact *sender;
-	char *header;
+	char *header, *escaped;
 	const char *body;
 	GdkPixbuf *pixbuf;
 	EmpathyChatWindowPriv *priv = GET_PRIV (window);
@@ -885,6 +885,7 @@ chat_window_show_or_update_notification (EmpathyChatWindow *window,
 	header = g_strdup_printf (_("New message from %s"),
 				  empathy_contact_get_name (sender));
 	body = empathy_message_get_body (message);
+	escaped = g_markup_escape_text (body, -1);
 	pixbuf = empathy_pixbuf_avatar_from_contact_scaled (sender, 48, 48);
 	if (pixbuf == NULL) {
 		pixbuf = empathy_pixbuf_from_icon_name_sized
@@ -893,10 +894,10 @@ chat_window_show_or_update_notification (EmpathyChatWindow *window,
 
 	if (priv->notification != NULL) {
 		notify_notification_update (priv->notification,
-					    header, body, NULL);
+					    header, escaped, NULL);
 		notify_notification_set_icon_from_pixbuf (priv->notification, pixbuf);
 	} else {
-		priv->notification = notify_notification_new (header, body, NULL, NULL);
+		priv->notification = notify_notification_new (header, escaped, NULL, NULL);
 		notify_notification_set_timeout (priv->notification, NOTIFY_EXPIRES_DEFAULT);
 		notify_notification_set_icon_from_pixbuf (priv->notification, pixbuf);
 
@@ -908,6 +909,7 @@ chat_window_show_or_update_notification (EmpathyChatWindow *window,
 
 	g_object_unref (pixbuf);
 	g_free (header);
+	g_free (escaped);
 }
 
 static void
