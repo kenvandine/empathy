@@ -272,7 +272,10 @@ status_icon_event_updated_cb (EmpathyEventManager *manager,
 		return;
 	}
 
-	status_icon_update_notification (icon);
+	if (empathy_notification_should_show ()) {
+		status_icon_update_notification (icon);
+	}
+
 	status_icon_update_tooltip (icon);
 }
 
