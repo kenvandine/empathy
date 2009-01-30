@@ -12,6 +12,7 @@ EXTRA_DIST = 		\
 
 AM_CPPFLAGS =						\
 	-I$(top_srcdir)                          	\
+	-DPKGDATADIR=\""$(pkgdatadir)"\"		\
 	$(EMPATHY_CFLAGS)				\
 	$(WARN_CFLAGS)
 
@@ -23,11 +24,13 @@ LDADD =								\
 noinst_PROGRAMS =			\
 	contact-manager			\
 	contact-run-until-ready		\
-	contact-run-until-ready-2
+	contact-run-until-ready-2	\
+	empetit
 
 contact_manager_SOURCES = contact-manager.c
 contact_run_until_ready_SOURCES = contact-run-until-ready.c
 contact_run_until_ready_2_SOURCES = contact-run-until-ready-2.c
+empetit_SOURCES = empetit.c
 
 check_PROGRAMS = check-main
 TESTS = check-main
