@@ -133,15 +133,12 @@ unset_blank_contact (EmpathyContactSelector *selector)
 
 
 static void
-notify_popup_shown_cb (GtkComboBox *widget,
-                       GParamSpec *property,
-                       gpointer data)
+manage_blank_contact (EmpathyContactSelector *selector)
 {
-  EmpathyContactSelector *selector = EMPATHY_CONTACT_SELECTOR (widget);
   EmpathyContactSelectorPriv *priv = GET_PRIV (selector);
   gboolean is_popup_shown;
 
-  g_object_get (widget, property->name, &is_popup_shown, NULL);
+  g_object_get (selector, "popup-shown", &is_popup_shown, NULL);
 
   if (is_popup_shown)
     {
@@ -149,14 +146,29 @@ notify_popup_shown_cb (GtkComboBox *widget,
     }
   else
     {
-      if (gtk_combo_box_get_active (widget) == -1)
+      if (gtk_combo_box_get_active (GTK_COMBO_BOX (selector)) == -1)
         {
           set_blank_contact (selector);
           if (gtk_tree_model_iter_n_children (GTK_TREE_MODEL (priv->store),
               NULL) == 1)
           gtk_widget_set_sensitive (GTK_WIDGET (selector), FALSE);
         }
+      else
+        {
+          unset_blank_contact (selector);
+        }
     }
+}
+
+
+static void
+notify_popup_shown_cb (GtkComboBox *widget,
+                       GParamSpec *property,
+                       gpointer data)
+{
+  EmpathyContactSelector *selector = EMPATHY_CONTACT_SELECTOR (widget);
+
+  manage_blank_contact (selector);
 }
 
 
@@ -165,25 +177,8 @@ changed_cb (GtkComboBox *widget,
             gpointer data)
 {
   EmpathyContactSelector *selector = EMPATHY_CONTACT_SELECTOR (widget);
-  EmpathyContactSelectorPriv *priv = GET_PRIV (selector);
-  gboolean is_popup_shown;
 
-  g_object_get (widget, "popup-shown", &is_popup_shown, NULL);
-
-  if (is_popup_shown)
-    return;
-
-  if (gtk_combo_box_get_active (widget) == -1)
-    {
-      set_blank_contact (selector);
-      if (gtk_tree_model_iter_n_children (GTK_TREE_MODEL (priv->store),
-        NULL) == 1)
-        gtk_widget_set_sensitive (GTK_WIDGET (selector), FALSE);
-    }
-  else
-    {
-      unset_blank_contact (selector);
-    }
+  manage_blank_contact (selector);
 }
 
 
