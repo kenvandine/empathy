@@ -71,14 +71,11 @@ empathy_contact_selector_get_selected (EmpathyContactSelector *selector)
 static guint
 contact_selector_get_number_online_contacts (GtkTreeStore *store)
 {
-  GtkTreePath *path;
   GtkTreeIter tmp_iter;
   gboolean is_online;
   guint number_online_contacts = 0;
 
-  path = gtk_tree_path_new_first ();
-
-  if (gtk_tree_model_get_iter (GTK_TREE_MODEL (store), &tmp_iter, path))
+  if (gtk_tree_model_get_iter_first (GTK_TREE_MODEL (store), &tmp_iter))
     {
       do
         {
@@ -90,8 +87,6 @@ contact_selector_get_number_online_contacts (GtkTreeStore *store)
         } while (gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &tmp_iter));
     }
 
-  gtk_tree_path_free (path);
-
   return number_online_contacts;
 }
 
@@ -99,14 +94,11 @@ static gboolean
 contact_selector_get_iter_for_blank_contact (GtkTreeStore *store,
                                              GtkTreeIter *blank_iter)
 {
-  GtkTreePath *path;
   GtkTreeIter tmp_iter;
   EmpathyContact *tmp_contact;
   gboolean is_present = FALSE;
 
-  path = gtk_tree_path_new_first ();
-
-  if (gtk_tree_model_get_iter (GTK_TREE_MODEL (store), &tmp_iter, path))
+  if (gtk_tree_model_get_iter_first (GTK_TREE_MODEL (store), &tmp_iter))
     {
       do
         {
@@ -121,8 +113,6 @@ contact_selector_get_iter_for_blank_contact (GtkTreeStore *store,
             }
         } while (gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &tmp_iter));
     }
-
-  gtk_tree_path_free (path);
 
   return is_present;
 }
