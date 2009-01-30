@@ -572,10 +572,10 @@ empathy_pixbuf_from_icon_name_sized (const gchar *icon_name,
 
 GdkPixbuf *
 empathy_pixbuf_from_icon_name (const gchar *icon_name,
-			      GtkIconSize  icon_size)
+			       GtkIconSize  icon_size)
 {
-	gint           w, h;
-	gint           size = 48;
+	gint  w, h;
+	gint  size = 48;
 
 	if (!icon_name) {
 		return NULL;
