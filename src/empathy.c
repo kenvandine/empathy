@@ -32,6 +32,7 @@
 #include <gdk/gdkx.h>
 
 #include <libebook/e-book.h>
+#include <libnotify/notify.h>
 
 #include <telepathy-glib/util.h>
 #include <libmissioncontrol/mc-account.h>
@@ -517,6 +518,7 @@ main (int argc, char *argv[])
 	chatroom_manager = empathy_chatroom_manager_dup_singleton (NULL);
 	empathy_chatroom_manager_observe (chatroom_manager, dispatcher);
 
+	notify_init ("Empathy");
 	gtk_main ();
 
 	empathy_idle_set_state (idle, MC_PRESENCE_OFFLINE);
