@@ -33,13 +33,6 @@ G_DEFINE_TYPE (EmpathyContactSelector, empathy_contact_selector,
 #define GET_PRIV(object) (G_TYPE_INSTANCE_GET_PRIVATE \
     ((object), EMPATHY_TYPE_CONTACT_SELECTOR, EmpathyContactSelectorPriv))
 
-enum {
-  CONTACT_COL,
-  NAME_COL,
-  STATUS_ICON_NAME_COL,
-  NUM_COLS
-};
-
 enum
 {
   PROP_0,
@@ -51,12 +44,11 @@ typedef struct _EmpathyContactSelectorPriv EmpathyContactSelectorPriv;
 struct _EmpathyContactSelectorPriv
 {
   EmpathyContactListStore *store;
-  GtkListStore *list_store;
   gboolean is_blank_set;
 };
 
 static void changed_cb (GtkComboBox *widget, gpointer data);
-static gboolean get_iter_for_contact (GtkListStore *list_store,
+static gboolean get_iter_for_contact (GtkTreeStore *store,
     GtkTreeIter *list_iter, EmpathyContact *contact);
 
 
@@ -70,8 +62,8 @@ empathy_contact_selector_get_selected (EmpathyContactSelector *selector)
   if (!gtk_combo_box_get_active_iter (GTK_COMBO_BOX (selector), &iter))
     return NULL;
 
-  gtk_tree_model_get (GTK_TREE_MODEL (priv->list_store), &iter,
-      CONTACT_COL, &contact, -1);
+  gtk_tree_model_get (GTK_TREE_MODEL (priv->store), &iter,
+      EMPATHY_CONTACT_LIST_STORE_COL_CONTACT, &contact, -1);
 
   return contact;
 }
@@ -83,9 +75,10 @@ set_blank_contact (EmpathyContactSelector *selector)
   EmpathyContactSelectorPriv *priv = GET_PRIV (selector);
   GtkTreeIter blank_iter;
 
-  gtk_list_store_insert (priv->list_store, &blank_iter, 0);
-  gtk_list_store_set (priv->list_store, &blank_iter, CONTACT_COL, NULL,
-      NAME_COL, _("Select a contact"), -1);
+  gtk_tree_store_insert (GTK_TREE_STORE (priv->store), &blank_iter, NULL, 0);
+  gtk_tree_store_set (GTK_TREE_STORE (priv->store), &blank_iter,
+      EMPATHY_CONTACT_LIST_STORE_COL_CONTACT, NULL,
+      EMPATHY_CONTACT_LIST_STORE_COL_NAME, ("Select a contact"), -1);
   g_signal_handlers_block_by_func(selector, changed_cb, NULL);
   gtk_combo_box_set_active_iter (GTK_COMBO_BOX (selector), &blank_iter);
   g_signal_handlers_unblock_by_func(selector, changed_cb, NULL);
@@ -107,9 +100,9 @@ notify_popup_shown_cb (GtkComboBox *widget,
 
   if (shown)
     {
-      if (get_iter_for_contact (priv->list_store, &blank_iter, NULL))
+      if (get_iter_for_contact (GTK_TREE_STORE (priv->store), &blank_iter, NULL))
         {
-          gtk_list_store_remove (priv->list_store, &blank_iter);
+          gtk_tree_store_remove (GTK_TREE_STORE (priv->store), &blank_iter);
           priv->is_blank_set = FALSE;
         }
     }
@@ -118,7 +111,7 @@ notify_popup_shown_cb (GtkComboBox *widget,
       if (gtk_combo_box_get_active (widget) == -1)
         {
           set_blank_contact (selector);
-          if (gtk_tree_model_iter_n_children (GTK_TREE_MODEL (priv->list_store),
+          if (gtk_tree_model_iter_n_children (GTK_TREE_MODEL (priv->store),
               NULL) == 1)
           gtk_widget_set_sensitive (GTK_WIDGET (selector), FALSE);
         }
@@ -143,15 +136,15 @@ changed_cb (GtkComboBox *widget,
   if (gtk_combo_box_get_active (widget) == -1)
     {
       set_blank_contact (selector);
-      if (gtk_tree_model_iter_n_children (GTK_TREE_MODEL (priv->list_store),
+      if (gtk_tree_model_iter_n_children (GTK_TREE_MODEL (priv->store),
         NULL) == 1)
         gtk_widget_set_sensitive (GTK_WIDGET (selector), FALSE);
     }
   else
     {
-      if (get_iter_for_contact (priv->list_store, &blank_iter, NULL))
+      if (get_iter_for_contact (GTK_TREE_STORE (priv->store), &blank_iter, NULL))
         {
-          gtk_list_store_remove (priv->list_store, &blank_iter);
+          gtk_tree_store_remove (GTK_TREE_STORE (priv->store), &blank_iter);
           priv->is_blank_set = FALSE;
         }
     }
@@ -159,7 +152,7 @@ changed_cb (GtkComboBox *widget,
 
 
 static gboolean
-get_iter_for_contact (GtkListStore *list_store,
+get_iter_for_contact (GtkTreeStore *store,
                       GtkTreeIter *list_iter,
                       EmpathyContact *contact)
 {
@@ -170,19 +163,20 @@ get_iter_for_contact (GtkListStore *list_store,
 
   /* Do a linear search to find the row with CONTACT_COL set to contact. */
   path = gtk_tree_path_new_first ();
-  if (gtk_tree_model_get_iter (GTK_TREE_MODEL (list_store), &tmp_iter, path))
+  if (gtk_tree_model_get_iter (GTK_TREE_MODEL (store), &tmp_iter, path))
     {
       do
         {
-          gtk_tree_model_get (GTK_TREE_MODEL (list_store),
-              &tmp_iter, CONTACT_COL, &tmp_contact, -1);
+          gtk_tree_model_get (GTK_TREE_MODEL (store),
+              &tmp_iter, EMPATHY_CONTACT_LIST_STORE_COL_CONTACT,
+              &tmp_contact, -1);
           found = (tmp_contact == contact);
           if (found)
             {
               *list_iter = tmp_iter;
               break;
             }
-        } while (gtk_tree_model_iter_next (GTK_TREE_MODEL (list_store),
+        } while (gtk_tree_model_iter_next (GTK_TREE_MODEL (store),
               &tmp_iter));
     }
 
@@ -199,48 +193,9 @@ empathy_store_row_changed_cb (EmpathyContactListStore *empathy_store,
 {
   EmpathyContactSelector *selector = EMPATHY_CONTACT_SELECTOR (data);
   EmpathyContactSelectorPriv *priv = GET_PRIV (selector);
-  GtkTreeIter list_iter;
-  EmpathyContact *contact;
-  gchar *name;
-  gchar *icon_name;
-  gboolean is_online;
   gint children;
 
-  /* Synchronize the GtkListStore with the EmpathyContactListStore. */
-  gtk_tree_model_get (GTK_TREE_MODEL (empathy_store), empathy_iter,
-      EMPATHY_CONTACT_LIST_STORE_COL_CONTACT, &contact,
-      EMPATHY_CONTACT_LIST_STORE_COL_NAME, &name,
-      EMPATHY_CONTACT_LIST_STORE_COL_ICON_STATUS, &icon_name,
-      EMPATHY_CONTACT_LIST_STORE_COL_IS_ONLINE, &is_online, -1);
-
-  if (!contact)
-    {
-      g_free (name);
-      g_free (icon_name);
-      return;
-    }
-
-  /* The store does not contain the contact, so create a new row and set it. */
-  if (!get_iter_for_contact (priv->list_store, &list_iter, contact))
-    {
-      gtk_list_store_append (priv->list_store, &list_iter);
-      gtk_list_store_set (priv->list_store, &list_iter, CONTACT_COL,
-          contact, -1);
-    }
-
-  if (is_online)
-    {
-      gtk_list_store_set (priv->list_store, &list_iter, NAME_COL, name,
-          STATUS_ICON_NAME_COL, icon_name, -1);
-    }
-  else
-    {
-      /* We display only online contacts. */
-      gtk_list_store_remove (priv->list_store, &list_iter);
-    }
-
-  children = gtk_tree_model_iter_n_children (GTK_TREE_MODEL (priv->list_store),
-      NULL);
+  children = gtk_tree_model_iter_n_children (GTK_TREE_MODEL (priv->store), NULL);
 
   if (children == 1 && priv->is_blank_set)
       gtk_widget_set_sensitive (GTK_WIDGET (selector), FALSE);
@@ -264,13 +219,12 @@ empathy_contact_selector_constructor (GType type,
   GtkCellRenderer *renderer;
 
   g_object_set (priv->store, "is-compact", TRUE, "show-avatars", FALSE,
-      "show-offline", FALSE, "sort-criterium",
+      "show-offline", FALSE, "sort-criterium", "show-groups", FALSE,
       EMPATHY_CONTACT_LIST_STORE_SORT_NAME, NULL);
+  empathy_contact_list_store_set_show_groups (priv->store, FALSE);
 
-  priv->list_store = gtk_list_store_new (NUM_COLS, EMPATHY_TYPE_CONTACT,
-        G_TYPE_STRING, G_TYPE_STRING);
-  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (priv->list_store),
-        NAME_COL, GTK_SORT_ASCENDING);
+  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (priv->store),
+        EMPATHY_CONTACT_LIST_STORE_COL_NAME, GTK_SORT_ASCENDING);
 
   g_signal_connect (priv->store, "row-changed",
       G_CALLBACK (empathy_store_row_changed_cb), (gpointer) contact_selector);
@@ -280,7 +234,7 @@ empathy_contact_selector_constructor (GType type,
       G_CALLBACK (notify_popup_shown_cb), NULL);
 
   gtk_combo_box_set_model (GTK_COMBO_BOX (contact_selector),
-      GTK_TREE_MODEL (priv->list_store));
+      GTK_TREE_MODEL (priv->store));
   gtk_widget_set_sensitive (GTK_WIDGET (contact_selector), FALSE);
 
   /* Status icon */
@@ -288,14 +242,14 @@ empathy_contact_selector_constructor (GType type,
   gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (contact_selector),
       renderer, FALSE);
   gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (contact_selector), renderer,
-      "icon-name", STATUS_ICON_NAME_COL, NULL);
+      "icon-name", EMPATHY_CONTACT_LIST_STORE_COL_ICON_STATUS, NULL);
 
   /* Contact name */
   renderer = gtk_cell_renderer_text_new ();
   gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (contact_selector),
       renderer, TRUE);
   gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (contact_selector), renderer,
-      "text", NAME_COL, NULL);
+      "text", EMPATHY_CONTACT_LIST_STORE_COL_NAME, NULL);
 
   set_blank_contact (contact_selector);
 
