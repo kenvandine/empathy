@@ -1,4 +1,5 @@
 /*
+*  Copyright (C) 2007 Marco Barisione <marco@barisione.org>
 *  Copyright (C) 2008 Collabora Ltd.
 *
 *  This library is free software; you can redistribute it and/or
@@ -16,6 +17,7 @@
 *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 *
 *  Authors: Elliot Fairweather <elliot.fairweather@collabora.co.uk>
+*           Marco Barisione <marco@barisione.org>
 */
 
 #ifndef __EMPATHY_CONTACT_SELECTOR_H__
