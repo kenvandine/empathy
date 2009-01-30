@@ -65,11 +65,39 @@ typedef struct {
 	GtkWidget           *show_window_item;
 	GtkWidget           *message_item;
 	GtkWidget           *status_item;
-
-	NotifyNotification  *notification;
 } EmpathyStatusIconPriv;
 
 G_DEFINE_TYPE (EmpathyStatusIcon, empathy_status_icon, G_TYPE_OBJECT);
+
+static gboolean
+status_icon_idle_event_activate (gpointer data)
+{
+	EmpathyStatusIcon     *icon = EMPATHY_STATUS_ICON (data);
+	EmpathyStatusIconPriv *priv = GET_PRIV (icon);
+
+	if (priv->event) {
+		empathy_event_activate (priv->event);
+	}
+
+	return FALSE;
+}
+
+static void
+status_icon_notification_cb (NotifyNotification *notification,
+			     gchar *action_id,
+			     gpointer data)
+{
+	EmpathyStatusIcon *icon = EMPATHY_STATUS_ICON (data);
+
+	g_idle_add (status_icon_idle_event_activate, icon);
+}
+
+static void
+status_icon_notification_closed_cb (NotifyNotification *notification,
+				    gpointer            user_data)
+{
+	g_object_unref (notification);
+}
 
 static void
 status_icon_update_tooltip (EmpathyStatusIcon *icon)
@@ -116,18 +144,6 @@ status_icon_blink_timeout_cb (EmpathyStatusIcon *icon)
 
 	return TRUE;
 }
-
-static void
-notify_call_cb (NotifyNotification * notification,
-		gchar *action_id,
-		gpointer data)
-{
-	if (strcmp (action_id, "accept") == 0)
-		g_print ("ACCEPTED");
-	else
-		g_print ("REJECTED");
-}
-
 static void
 status_icon_event_added_cb (EmpathyEventManager *manager,
 			    EmpathyEvent        *event,
@@ -155,14 +171,16 @@ status_icon_event_added_cb (EmpathyEventManager *manager,
 
 	if (!priv->event)
 		return;
-	priv->notification =
-		notify_notification_new_with_status_icon (priv->event->message,
-		"Accept incoming call?", priv->event->icon_name, priv->icon);
-	notify_notification_add_action (priv->notification,
-		"accept", "Accept", notify_call_cb, icon, NULL);
-	notify_notification_add_action (priv->notification,
-		"reject", "Reject", notify_call_cb, icon, NULL);
-	notify_notification_show (priv->notification, NULL);
+	NotifyNotification *notification = notify_notification_new_with_status_icon ("Incoming Something", priv->event->message, priv->event->icon_name, priv->icon);
+	notify_notification_add_action (notification,
+					"activate",
+					"Activate",
+					status_icon_notification_cb,
+					icon, NULL);
+	notify_notification_set_timeout (notification,
+					 NOTIFY_EXPIRES_NEVER);
+	g_signal_connect (G_OBJECT (notification), "closed", G_CALLBACK (status_icon_notification_closed_cb), NULL);
+	notify_notification_show (notification, NULL);
 }
 
 static void
