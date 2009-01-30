@@ -47,8 +47,8 @@ typedef struct
   gboolean dispose_run;
 } EmpathyContactSelectorPriv;
 
-static void contact_selector_changed_cb (
-    EmpathyContactSelector *selector, gpointer data);
+static void contact_selector_manage_blank_contact (
+    EmpathyContactSelector *selector);
 
 static guint
 contact_selector_get_number_online_contacts (GtkTreeStore *store)
@@ -110,10 +110,10 @@ contact_selector_add_blank_contact (EmpathyContactSelector *selector)
       EMPATHY_CONTACT_LIST_STORE_COL_NAME, (_("Select a contact")),
       EMPATHY_CONTACT_LIST_STORE_COL_IS_ONLINE, FALSE, -1);
   g_signal_handlers_block_by_func (selector,
-      contact_selector_changed_cb, NULL);
+      contact_selector_manage_blank_contact, selector);
   gtk_combo_box_set_active_iter (GTK_COMBO_BOX (selector), &blank_iter);
   g_signal_handlers_unblock_by_func (selector,
-      contact_selector_changed_cb, NULL);
+      contact_selector_manage_blank_contact, selector);
 }
 
 static void
@@ -171,31 +171,6 @@ contact_selector_manage_blank_contact (EmpathyContactSelector *selector)
   contact_selector_manage_sensitivity (selector);
 }
 
-static void
-contact_selector_notify_popup_shown_cb (EmpathyContactSelector *selector,
-                                        GParamSpec *property,
-                                        gpointer data)
-{
-  contact_selector_manage_blank_contact (selector);
-}
-
-static void
-contact_selector_changed_cb (EmpathyContactSelector *selector,
-                             gpointer data)
-{
-  contact_selector_manage_blank_contact (selector);
-}
-
-static void
-contact_selector_store_row_changed_cb (EmpathyContactListStore *empathy_store,
-                                       GtkTreePath *empathy_path,
-                                       GtkTreeIter *empathy_iter,
-                                       EmpathyContactSelector *selector)
-{
-  contact_selector_manage_sensitivity (selector);
-}
-
-
 static GObject *
 contact_selector_constructor (GType type,
                               guint n_construct_params,
@@ -217,13 +192,15 @@ contact_selector_constructor (GType type,
       "show-offline", FALSE, "show-groups", FALSE,
       "sort-criterium", EMPATHY_CONTACT_LIST_STORE_SORT_NAME, NULL);
 
-  g_signal_connect (priv->store, "row-changed",
-      G_CALLBACK (contact_selector_store_row_changed_cb),
+  g_signal_connect_swapped (priv->store, "row-changed",
+      G_CALLBACK (contact_selector_manage_sensitivity),
       contact_selector);
-  g_signal_connect (contact_selector, "changed",
-      G_CALLBACK (contact_selector_changed_cb), NULL);
-  g_signal_connect (contact_selector, "notify::popup-shown",
-      G_CALLBACK (contact_selector_notify_popup_shown_cb), NULL);
+  g_signal_connect_swapped (contact_selector, "changed",
+      G_CALLBACK (contact_selector_manage_blank_contact),
+      contact_selector);
+  g_signal_connect_swapped (contact_selector, "notify::popup-shown",
+      G_CALLBACK (contact_selector_manage_blank_contact),
+      contact_selector);
 
   gtk_combo_box_set_model (GTK_COMBO_BOX (contact_selector),
       GTK_TREE_MODEL (priv->store));
