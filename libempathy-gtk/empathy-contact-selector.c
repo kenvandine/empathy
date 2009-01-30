@@ -46,7 +46,8 @@ typedef struct
   EmpathyContactListStore *store;
 } EmpathyContactSelectorPriv;
 
-static void contact_selector_changed_cb (GtkComboBox *widget, gpointer data);
+static void contact_selector_changed_cb (
+    EmpathyContactSelector *selector, gpointer data);
 
 EmpathyContact *
 empathy_contact_selector_get_selected (EmpathyContactSelector *selector)
@@ -195,25 +196,21 @@ contact_selector_manage_blank_contact (EmpathyContactSelector *selector)
         }
     }
 
-    contact_selector_manage_sensitivity (selector);
+  contact_selector_manage_sensitivity (selector);
 }
 
 static void
-contact_selector_notify_popup_shown_cb (GtkComboBox *widget,
+contact_selector_notify_popup_shown_cb (EmpathyContactSelector *selector,
                                         GParamSpec *property,
                                         gpointer data)
 {
-  EmpathyContactSelector *selector = EMPATHY_CONTACT_SELECTOR (widget);
-
   contact_selector_manage_blank_contact (selector);
 }
 
 static void
-contact_selector_changed_cb (GtkComboBox *widget,
+contact_selector_changed_cb (EmpathyContactSelector *selector,
                              gpointer data)
 {
-  EmpathyContactSelector *selector = EMPATHY_CONTACT_SELECTOR (widget);
-
   contact_selector_manage_blank_contact (selector);
 }
 
@@ -221,10 +218,8 @@ static void
 contact_selector_store_row_changed_cb (EmpathyContactListStore *empathy_store,
                                        GtkTreePath *empathy_path,
                                        GtkTreeIter *empathy_iter,
-                                       gpointer data)
+                                       EmpathyContactSelector *selector)
 {
-  EmpathyContactSelector *selector = EMPATHY_CONTACT_SELECTOR (data);
-
   contact_selector_manage_sensitivity (selector);
 }
 
@@ -247,10 +242,10 @@ contact_selector_constructor (GType type,
 
   g_signal_connect (priv->store, "row-changed",
       G_CALLBACK (contact_selector_store_row_changed_cb),
-      (gpointer) contact_selector);
-  g_signal_connect (GTK_COMBO_BOX (contact_selector), "changed",
+      contact_selector);
+  g_signal_connect (contact_selector, "changed",
       G_CALLBACK (contact_selector_changed_cb), NULL);
-  g_signal_connect (GTK_COMBO_BOX (contact_selector), "notify::popup-shown",
+  g_signal_connect (contact_selector, "notify::popup-shown",
       G_CALLBACK (contact_selector_notify_popup_shown_cb), NULL);
 
   gtk_combo_box_set_model (GTK_COMBO_BOX (contact_selector),
