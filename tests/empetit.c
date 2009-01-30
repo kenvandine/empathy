@@ -42,10 +42,6 @@ clicked_cb (GtkButton *button,
   if (!contact)
     return;
 
-  /* This is required otherwise the dispatcher isn't ref'd, and so it
-   * disappears by the time the callback gets called. It's deliberately not
-   * freed otherwise it segfaults... sigh */
-  empathy_dispatcher_dup_singleton ();
   empathy_dispatcher_chat_with_contact (contact, chat_cb, NULL);
 }
 
