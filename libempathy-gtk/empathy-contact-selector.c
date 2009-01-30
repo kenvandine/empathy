@@ -339,7 +339,11 @@ empathy_contact_selector_dispose (GObject *object)
   EmpathyContactSelector *selector = EMPATHY_CONTACT_SELECTOR (object);
   EmpathyContactSelectorPriv *priv = GET_PRIV (selector);
 
-  g_object_unref (priv->store);
+  if (priv->store)
+    {
+      g_object_unref (priv->store);
+      priv->store = NULL;
+    }
 
   (G_OBJECT_CLASS (empathy_contact_selector_parent_class)->dispose) (object);
 }
