@@ -16,8 +16,8 @@
 *  License along with this library; if not, write to the Free Software
 *  Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 *
-*  Authors: Elliot Fairweather <elliot.fairweather@collabora.co.uk>
-*           Marco Barisione <marco@barisione.org>
+*  Authors: Marco Barisione <marco@barisione.org>
+*           Elliot Fairweather <elliot.fairweather@collabora.co.uk>
 */
 
 #ifndef __EMPATHY_CONTACT_SELECTOR_H__
