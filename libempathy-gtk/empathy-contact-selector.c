@@ -137,7 +137,7 @@ add_blank_contact (EmpathyContactSelector *selector)
   gtk_tree_store_insert (GTK_TREE_STORE (priv->store), &blank_iter, NULL, 0);
   gtk_tree_store_set (GTK_TREE_STORE (priv->store), &blank_iter,
       EMPATHY_CONTACT_LIST_STORE_COL_CONTACT, NULL,
-      EMPATHY_CONTACT_LIST_STORE_COL_NAME, ("Select a contact"),
+      EMPATHY_CONTACT_LIST_STORE_COL_NAME, (_("Select a contact")),
       EMPATHY_CONTACT_LIST_STORE_COL_IS_ONLINE, FALSE, -1);
   g_signal_handlers_block_by_func(selector, changed_cb, NULL);
   gtk_combo_box_set_active_iter (GTK_COMBO_BOX (selector), &blank_iter);
