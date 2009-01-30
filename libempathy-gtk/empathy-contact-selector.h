@@ -29,6 +29,7 @@ G_BEGIN_DECLS
 #include <gtk/gtk.h>
 
 #include <libempathy/empathy-contact.h>
+#include <libempathy-gtk/empathy-contact-list-store.h>
 
 #define EMPATHY_TYPE_CONTACT_SELECTOR (empathy_contact_selector_get_type ())
 #define EMPATHY_CONTACT_SELECTOR(object) (G_TYPE_CHECK_INSTANCE_CAST \
