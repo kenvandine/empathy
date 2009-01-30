@@ -33,6 +33,7 @@
 #include <gdk/gdkkeysyms.h>
 #include <glade/glade.h>
 #include <glib/gi18n.h>
+#include <libnotify/notification.h>
 
 #include <telepathy-glib/util.h>
 #include <libmissioncontrol/mission-control.h>
@@ -70,6 +71,7 @@ typedef struct {
 	EmpathyChatroomManager *chatroom_manager;
 	GtkWidget   *dialog;
 	GtkWidget   *notebook;
+	NotifyNotification *notification;
 
 	/* Menu items. */
 	GtkWidget   *menu_conv_clear;
@@ -833,6 +835,79 @@ chat_window_set_urgency_hint (EmpathyChatWindow *window,
 	gtk_window_set_urgency_hint (GTK_WINDOW (priv->dialog), urgent);
 }
 
+static gboolean
+notification_closed_idle_cb (EmpathyChatWindow *window)
+{
+	EmpathyChatWindowPriv *priv = GET_PRIV (window);
+
+	gtk_widget_grab_focus (priv->dialog);
+
+	return FALSE;
+}
+
+static void
+chat_window_notification_closed_cb (NotifyNotification *notify,
+				    EmpathyChatWindow *window)
+{
+	EmpathyChatWindowPriv *priv = GET_PRIV (window);
+	int reason;
+
+	reason = notify_notification_get_closed_reason (notify);
+
+	if (priv->notification) {
+		g_object_unref (priv->notification);
+		priv->notification = NULL;
+	}
+
+	if (reason == 2) {
+		g_idle_add ((GSourceFunc) notification_closed_idle_cb, window);
+	}
+}
+
+static void
+show_or_update_notification (EmpathyMessage *message,
+			     EmpathyChatWindow *window)
+{
+	EmpathyContact *sender;
+	char *header;
+	const char *body;
+	GdkPixbuf *pixbuf;
+	EmpathyChatWindowPriv *priv = GET_PRIV (window);
+
+	if (!empathy_notification_should_show (TRUE)) {
+		return;
+	}
+
+	sender = empathy_message_get_sender (message);
+	header = g_strdup_printf (_("New message from %s"),
+				  empathy_contact_get_name (sender));
+	body = empathy_message_get_body (message);
+	pixbuf = empathy_pixbuf_avatar_from_contact_scaled (sender, 48, 48);
+	if (pixbuf == NULL) {
+		/* we use INVALID here so we fall pack to 48px */
+		pixbuf = empathy_pixbuf_from_icon_name (EMPATHY_IMAGE_NEW_MESSAGE,
+							GTK_ICON_SIZE_INVALID);
+	}
+
+	if (priv->notification != NULL) {
+		notify_notification_update (priv->notification,
+					    header, body, NULL);
+		notify_notification_set_icon_from_pixbuf (priv->notification, pixbuf);
+	} else {
+		priv->notification = notify_notification_new (header, body, NULL, priv->dialog);
+		notify_notification_set_timeout (priv->notification, NOTIFY_EXPIRES_DEFAULT);
+		notify_notification_set_icon_from_pixbuf (priv->notification, pixbuf);
+
+		g_signal_connect (priv->notification, "closed",
+				  G_CALLBACK (chat_window_notification_closed_cb), window);
+	}
+
+	notify_notification_show (priv->notification, NULL);
+
+	g_object_unref (pixbuf);
+	g_free (header);
+}
+
 static void
 chat_window_new_message_cb (EmpathyChat       *chat,
 			    EmpathyMessage    *message,
@@ -864,6 +939,10 @@ chat_window_new_message_cb (EmpathyChat       *chat,
 			empathy_sound_play (GTK_WIDGET (priv->dialog),
 					    EMPATHY_SOUND_MESSAGE_INCOMING);
 		}
+	}
+
+	if (!has_focus) {
+		show_or_update_notification (message, window);
 	}
 
 	if (has_focus && priv->current_chat == chat) {
@@ -1161,6 +1240,12 @@ chat_window_finalize (GObject *object)
 	g_object_unref (priv->chatroom_manager);
 	if (priv->save_geometry_id != 0) {
 		g_source_remove (priv->save_geometry_id);
+	}
+
+	if (priv->notification != NULL) {
+		notify_notification_close (priv->notification, NULL);
+		g_object_unref (priv->notification);
+		priv->notification = NULL;
 	}
 
 	chat_windows = g_list_remove (chat_windows, window);

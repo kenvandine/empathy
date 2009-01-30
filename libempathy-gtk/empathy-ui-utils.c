@@ -1647,7 +1647,7 @@ empathy_sound_play (GtkWidget *widget,
 }
 
 gboolean
-empathy_notification_should_show (void)
+empathy_notification_should_show (gboolean check_focus)
 {
 	EmpathyConf *conf;
 	gboolean res;
@@ -1670,6 +1670,12 @@ empathy_notification_should_show (void)
 		}
 	}
 
-	return TRUE;
+	if (check_focus) {
+		empathy_conf_get_bool (conf,
+				       EMPATHY_PREFS_NOTIFICATIONS_FOCUS, &res);
+		return res;
+	} else {
+		return TRUE;
+	}
 }
 

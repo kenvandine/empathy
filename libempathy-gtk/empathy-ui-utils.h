@@ -132,7 +132,7 @@ void        empathy_sound_play                          (GtkWidget        *widge
 							 EmpathySound      sound_id);
 
 /* Notifications */
-gboolean    empathy_notification_should_show            (void);
+gboolean    empathy_notification_should_show            (gboolean          check_focus);
 
 G_END_DECLS
 

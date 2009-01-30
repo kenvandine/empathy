@@ -230,7 +230,6 @@ event_manager_chat_message_received_cb (EmpathyTpChat *tp_chat,
 
   /* try to update the event if it's referring to a chat which is already in the
    * queue. */
-
   event = event_lookup_by_approval (approval->manager, approval);
 
   if (event != NULL && event->inhibit)
@@ -248,7 +247,7 @@ event_manager_chat_message_received_cb (EmpathyTpChat *tp_chat,
   channel = empathy_tp_chat_get_channel (tp_chat);
 
   if (event != NULL)
-      event_update (approval->manager, event, EMPATHY_IMAGE_NEW_MESSAGE, header, msg);
+    event_update (approval->manager, event, EMPATHY_IMAGE_NEW_MESSAGE, header, msg);
   else
     event_manager_add (approval->manager, sender, EMPATHY_IMAGE_NEW_MESSAGE, header,
       msg, approval, event_channel_process_func, NULL);

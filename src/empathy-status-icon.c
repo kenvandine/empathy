@@ -140,6 +140,8 @@ status_icon_update_notification (EmpathyStatusIcon *icon)
 
 			g_signal_connect (priv->notification, "closed",
 					  G_CALLBACK (status_icon_notification_closed_cb), icon);
+
+			g_object_unref (pixbuf);
  		}
 
 		notify_notification_show (priv->notification, NULL);
@@ -223,7 +225,7 @@ status_icon_event_added_cb (EmpathyEventManager *manager,
 	status_icon_update_icon (icon);
 	status_icon_update_tooltip (icon);
 
-	if (empathy_notification_should_show ()) {
+	if (empathy_notification_should_show (FALSE)) {
 		status_icon_update_notification (icon);
 	}
 
@@ -272,7 +274,7 @@ status_icon_event_updated_cb (EmpathyEventManager *manager,
 		return;
 	}
 
-	if (empathy_notification_should_show ()) {
+	if (empathy_notification_should_show (FALSE)) {
 		status_icon_update_notification (icon);
 	}
 
@@ -340,7 +342,7 @@ status_icon_idle_notify_cb (EmpathyStatusIcon *icon)
 	status_icon_update_icon (icon);
 	status_icon_update_tooltip (icon);
 
-	if (!empathy_notification_should_show ()) {
+	if (!empathy_notification_should_show (FALSE)) {
 		/* dismiss the outstanding notification if present */
 
 		if (priv->notification) {
@@ -504,6 +506,7 @@ status_icon_finalize (GObject *object)
 	if (priv->notification) {
 		notify_notification_close (priv->notification, NULL);
 		g_object_unref (priv->notification);
+		priv->notification = NULL;
 	}
 
 	g_object_unref (priv->icon);
