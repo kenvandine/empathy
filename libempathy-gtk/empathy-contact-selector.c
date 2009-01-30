@@ -339,19 +339,9 @@ empathy_contact_selector_dispose (GObject *object)
   EmpathyContactSelector *selector = EMPATHY_CONTACT_SELECTOR (object);
   EmpathyContactSelectorPriv *priv = GET_PRIV (selector);
 
-  g_debug ("EmpathyContactSelector - dispose: %p",  object);
   g_object_unref (priv->store);
 
   (G_OBJECT_CLASS (empathy_contact_selector_parent_class)->dispose) (object);
-}
-
-
-static void
-empathy_contact_selector_finalize (GObject *object)
-{
-  g_debug ("EmpathyContactSelector - finalize: %p",  object);
-
-  (G_OBJECT_CLASS (empathy_contact_selector_parent_class)->finalize) (object);
 }
 
 
@@ -361,7 +351,6 @@ empathy_contact_selector_class_init (EmpathyContactSelectorClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
   object_class->constructor = empathy_contact_selector_constructor;
   object_class->dispose = empathy_contact_selector_dispose;
-  object_class->finalize = empathy_contact_selector_finalize;
   object_class->set_property = empathy_contact_selector_set_property;
   object_class->get_property = empathy_contact_selector_get_property;
   g_type_class_add_private (klass, sizeof (EmpathyContactSelectorPriv));
