@@ -105,13 +105,23 @@ notify_popup_shown_cb (GtkComboBox *widget,
 
   g_object_get (widget, property->name, &shown, NULL);
 
-  if (!shown)
-    return;
-
-  if (get_iter_for_contact (priv->list_store, &blank_iter, NULL))
+  if (shown)
     {
-      gtk_list_store_remove (priv->list_store, &blank_iter);
-      priv->is_blank_set = FALSE;
+      if (get_iter_for_contact (priv->list_store, &blank_iter, NULL))
+        {
+          gtk_list_store_remove (priv->list_store, &blank_iter);
+          priv->is_blank_set = FALSE;
+        }
+    }
+  else
+    {
+      if (gtk_combo_box_get_active (widget) == -1)
+        {
+          set_blank_contact (selector);
+          if (gtk_tree_model_iter_n_children (GTK_TREE_MODEL (priv->list_store),
+              NULL) == 1)
+          gtk_widget_set_sensitive (GTK_WIDGET (selector), FALSE);
+        }
     }
 }
 
@@ -123,6 +133,12 @@ changed_cb (GtkComboBox *widget,
   EmpathyContactSelector *selector = EMPATHY_CONTACT_SELECTOR (widget);
   EmpathyContactSelectorPriv *priv = GET_PRIV (selector);
   GtkTreeIter blank_iter;
+  gboolean shown;
+
+  g_object_get (widget, "popup-shown", &shown, NULL);
+
+  if (shown)
+    return;
 
   if (gtk_combo_box_get_active (widget) == -1)
     {
