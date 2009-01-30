@@ -5,6 +5,7 @@
 #include <libempathy/empathy-contact-manager.h>
 #include <libempathy/empathy-dispatcher.h>
 
+#include <libempathy-gtk/empathy-ui-utils.h>
 #include <libempathy-gtk/empathy-contact-list-store.h>
 #include <libempathy-gtk/empathy-contact-selector.h>
 
@@ -54,13 +55,10 @@ int main (int argc,
   EmpathyContactManager *manager;
   EmpathyContactListStore *store;
   GtkWidget *vbox, *button, *selector;
-  gchar *icon_path;
 
   gtk_init (&argc, &argv);
 
-  icon_path = g_build_path (G_DIR_SEPARATOR_S, PKGDATADIR, "icons", NULL);
-  gtk_icon_theme_append_search_path (gtk_icon_theme_get_default (), icon_path);
-  g_free (icon_path);
+  empathy_gtk_init ();
 
   manager = empathy_contact_manager_dup_singleton ();
   store = empathy_contact_list_store_new (EMPATHY_CONTACT_LIST (manager));
