@@ -549,7 +549,7 @@ empathy_pixbuf_from_icon_name_sized (const gchar *icon_name,
 {
 	GtkIconTheme *theme;
 	GdkPixbuf *pixbuf;
-	GError *error;
+	GError *error = NULL;
 
 	if (!icon_name) {
 		return NULL;
