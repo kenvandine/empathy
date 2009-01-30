@@ -69,6 +69,34 @@ empathy_contact_selector_get_selected (EmpathyContactSelector *selector)
 }
 
 
+static guint
+get_number_online_contacts (GtkTreeStore *store)
+{
+  GtkTreePath *path;
+  GtkTreeIter tmp_iter;
+  gboolean is_online;
+  guint number_online_contacts = 0;
+
+  path = gtk_tree_path_new_first ();
+
+  if (gtk_tree_model_get_iter (GTK_TREE_MODEL (store), &tmp_iter, path))
+    {
+      do
+        {
+          gtk_tree_model_get (GTK_TREE_MODEL (store),
+              &tmp_iter, EMPATHY_CONTACT_LIST_STORE_COL_IS_ONLINE,
+              &is_online, -1);
+          if (is_online)
+            number_online_contacts++;
+        } while (gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &tmp_iter));
+    }
+
+  gtk_tree_path_free (path);
+
+  return number_online_contacts;
+}
+
+
 static gboolean
 get_iter_for_blank_contact (GtkTreeStore *store,
                             GtkTreeIter *blank_iter)
@@ -79,6 +107,7 @@ get_iter_for_blank_contact (GtkTreeStore *store,
   gboolean is_present = FALSE;
 
   path = gtk_tree_path_new_first ();
+
   if (gtk_tree_model_get_iter (GTK_TREE_MODEL (store), &tmp_iter, path))
     {
       do
@@ -110,7 +139,8 @@ set_blank_contact (EmpathyContactSelector *selector)
   gtk_tree_store_insert (GTK_TREE_STORE (priv->store), &blank_iter, NULL, 0);
   gtk_tree_store_set (GTK_TREE_STORE (priv->store), &blank_iter,
       EMPATHY_CONTACT_LIST_STORE_COL_CONTACT, NULL,
-      EMPATHY_CONTACT_LIST_STORE_COL_NAME, ("Select a contact"), -1);
+      EMPATHY_CONTACT_LIST_STORE_COL_NAME, ("Select a contact"),
+      EMPATHY_CONTACT_LIST_STORE_COL_IS_ONLINE, FALSE, -1);
   g_signal_handlers_block_by_func(selector, changed_cb, NULL);
   gtk_combo_box_set_active_iter (GTK_COMBO_BOX (selector), &blank_iter);
   g_signal_handlers_unblock_by_func(selector, changed_cb, NULL);
@@ -136,14 +166,12 @@ static void
 manage_sensitivity (EmpathyContactSelector *selector)
 {
   EmpathyContactSelectorPriv *priv = GET_PRIV (selector);
-  gint children;
+  guint number_online_contacts =
+      get_number_online_contacts (GTK_TREE_STORE (priv->store));
 
-  children = gtk_tree_model_iter_n_children (GTK_TREE_MODEL (priv->store), NULL);
-  g_print ("Number of children %d\n", children);
-
-  if (children == 1 && priv->is_blank_set)
+  if (number_online_contacts == 0 && priv->is_blank_set)
       gtk_widget_set_sensitive (GTK_WIDGET (selector), FALSE);
-  else if (children)
+  else if (number_online_contacts)
       gtk_widget_set_sensitive (GTK_WIDGET (selector), TRUE);
   else
       gtk_widget_set_sensitive (GTK_WIDGET (selector), FALSE);
