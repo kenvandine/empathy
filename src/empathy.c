@@ -522,8 +522,6 @@ main (int argc, char *argv[])
 
 	gtk_main ();
 
-	notify_uninit ();
-
 	empathy_idle_set_state (idle, MC_PRESENCE_OFFLINE);
 
 	g_object_unref (mc);
@@ -531,6 +529,8 @@ main (int argc, char *argv[])
 	g_object_unref (icon);
 	g_object_unref (dispatcher);
 	g_object_unref (chatroom_manager);
+
+	notify_uninit ();
 
 	return EXIT_SUCCESS;
 }
