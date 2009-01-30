@@ -140,7 +140,7 @@ contact_selector_manage_sensitivity (EmpathyContactSelector *selector)
   guint number_online_contacts = contact_selector_get_number_online_contacts (
       GTK_TREE_STORE (priv->store));
 
-  if (number_online_contacts)
+  if (number_online_contacts != 0)
     gtk_widget_set_sensitive (GTK_WIDGET (selector), TRUE);
   else
     gtk_widget_set_sensitive (GTK_WIDGET (selector), FALSE);
