@@ -109,43 +109,52 @@ status_icon_notification_closed_cb (NotifyNotification *notification,
 	}
 }
 
+static GdkPixbuf *
+get_pixbuf_for_event (EmpathyEvent *event)
+{
+	GdkPixbuf *pixbuf = NULL;
+
+	if (event->contact != NULL) {
+		pixbuf = empathy_pixbuf_avatar_from_contact_scaled (event->contact,
+								    48, 48);
+	}
+
+	if (!pixbuf) {
+		pixbuf = empathy_pixbuf_from_icon_name_sized
+					(event->icon_name, 48);
+	}
+
+	return pixbuf;
+}
+
 static void
 status_icon_update_notification (EmpathyStatusIcon *icon)
 {
 	EmpathyStatusIconPriv *priv = GET_PRIV (icon);
+	GdkPixbuf *pixbuf = NULL;
 
 	if (priv->event) {
+		pixbuf = get_pixbuf_for_event (priv->event);
+
 		if (priv->notification) {
 			notify_notification_update (priv->notification,
 						    priv->event->header, priv->event->message,
 						    NULL);
 		} else {
-			GdkPixbuf *pixbuf = NULL;
-
-			if (priv->event->contact != NULL) {
-				pixbuf = empathy_pixbuf_avatar_from_contact_scaled (priv->event->contact,
-										    48, 48);
-			}
-
-			if (!pixbuf) {
-				pixbuf = empathy_pixbuf_from_icon_name_sized
-						(priv->event->icon_name, 48);
-			}
-
 			priv->notification = notify_notification_new_with_status_icon
 				(priv->event->header, priv->event->message, NULL, priv->icon);
 			notify_notification_set_timeout (priv->notification,
 							 NOTIFY_EXPIRES_DEFAULT);
-			notify_notification_set_icon_from_pixbuf (priv->notification,
-								  pixbuf);
 
 			g_signal_connect (priv->notification, "closed",
 					  G_CALLBACK (status_icon_notification_closed_cb), icon);
 
-			g_object_unref (pixbuf);
  		}
-
+		notify_notification_set_icon_from_pixbuf (priv->notification,
+							  pixbuf);
 		notify_notification_show (priv->notification, NULL);
+
+		g_object_unref (pixbuf);
 	} else {
 		if (priv->notification) {
 			notify_notification_close (priv->notification, NULL);
