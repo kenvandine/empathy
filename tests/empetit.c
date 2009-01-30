@@ -11,14 +11,6 @@
 static GtkWidget *window = NULL;
 
 static void
-destroy_cb (GtkWidget *widget,
-            gpointer data)
-{
-  gtk_main_quit ();
-}
-
-
-static void
 chat_cb (EmpathyDispatchOperation *dispatch,
          const GError *error,
          gpointer user_data)
@@ -86,7 +78,7 @@ int main (int argc,
 
   window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
   g_signal_connect (G_OBJECT (window), "destroy",
-      G_CALLBACK (destroy_cb), NULL);
+      gtk_main_quit, NULL);
   gtk_window_set_title (GTK_WINDOW (window),"Empetit");
   gtk_container_set_border_width (GTK_CONTAINER (window), 5);
   gtk_container_add (GTK_CONTAINER (window), vbox);
