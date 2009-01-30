@@ -92,6 +92,7 @@ contact_selector_get_iter_for_blank_contact (GtkTreeStore *store,
           is_present = TRUE;
           break;
         }
+      g_object_unref (tmp_contact);
     }
 
   return is_present;
