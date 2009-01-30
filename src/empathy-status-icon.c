@@ -126,17 +126,24 @@ static void
 status_icon_update_tooltip (EmpathyStatusIcon *icon)
 {
 	EmpathyStatusIconPriv *priv = GET_PRIV (icon);
-	const gchar           *tooltip = NULL;
+	gchar                 *tooltip = NULL;
 
 	if (priv->event) {
-		tooltip = priv->event->message;
+		tooltip = g_strdup_printf ("%s\n%s",
+					   priv->event->header,
+					   priv->event->message);
 	}
 
 	if (!tooltip) {
-		tooltip = empathy_idle_get_status (priv->idle);
+		tooltip = g_strdup (empathy_idle_get_status (priv->idle));
 	}
 
-	gtk_status_icon_set_tooltip (priv->icon, tooltip);	
+	/* FIXME: when we will depend on GTK+ 2.16.0, we should use
+	 * gtk_status_icon_set_tooltip_markup () and make the header italic.
+	 */
+	gtk_status_icon_set_tooltip (priv->icon, tooltip);
+
+	g_free (tooltip);
 }
 
 static void
