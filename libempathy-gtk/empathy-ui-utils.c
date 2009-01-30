@@ -1573,12 +1573,28 @@ static EmpathySoundEntry sound_entries[LAST_EMPATHY_SOUND] = {
 };
 
 static gboolean
+check_available (void)
+{
+	McPresence presence;
+	EmpathyIdle *idle;
+
+	idle = empathy_idle_dup_singleton ();
+	presence = empathy_idle_get_state (idle);
+	g_object_unref (idle);
+
+	if (presence != MC_PRESENCE_AVAILABLE &&
+	    presence != MC_PRESENCE_UNSET) {
+		return FALSE;    
+	}
+
+	return TRUE;
+}
+
+static gboolean
 empathy_sound_pref_is_enabled (const char *key)
 {
 	EmpathyConf *conf;
-	McPresence presence;
 	gboolean res;
-	EmpathyIdle *idle;
 
 	conf = empathy_conf_get ();
 	res = FALSE;
@@ -1589,12 +1605,7 @@ empathy_sound_pref_is_enabled (const char *key)
 		return FALSE;
 	}
 
-	idle = empathy_idle_dup_singleton ();
-	presence = empathy_idle_get_state (idle);
-	g_object_unref (idle);
-
-	if (presence != MC_PRESENCE_AVAILABLE &&
-	    presence != MC_PRESENCE_UNSET) {
+	if (!check_available ()) {
 		empathy_conf_get_bool (conf, EMPATHY_PREFS_SOUNDS_DISABLED_AWAY,
 				       &res);
 		if (res) {
@@ -1634,3 +1645,31 @@ empathy_sound_play (GtkWidget *widget,
 					NULL);
 	}
 }
+
+gboolean
+empathy_notification_should_show (void)
+{
+	EmpathyConf *conf;
+	gboolean res;
+
+	conf = empathy_conf_get ();
+	res = FALSE;
+
+	empathy_conf_get_bool (conf, EMPATHY_PREFS_NOTIFICATIONS_ENABLED, &res);
+
+	if (!res) {
+		return FALSE;
+	}
+
+	if (!check_available ()) {
+		empathy_conf_get_bool (conf,
+				       EMPATHY_PREFS_NOTIFICATIONS_DISABLED_AWAY,
+				       &res);
+		if (res) {
+			return FALSE;
+		}
+	}
+
+	return TRUE;
+}
+

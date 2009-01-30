@@ -131,6 +131,9 @@ void        empathy_send_file_with_file_chooser         (EmpathyContact   *conta
 void        empathy_sound_play                          (GtkWidget        *widget,
 							 EmpathySound      sound_id);
 
+/* Notifications */
+gboolean    empathy_notification_should_show            (void);
+
 G_END_DECLS
 
 #endif /*  __EMPATHY_UI_UTILS_H__ */

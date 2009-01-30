@@ -222,7 +222,10 @@ status_icon_event_added_cb (EmpathyEventManager *manager,
 
 	status_icon_update_icon (icon);
 	status_icon_update_tooltip (icon);
-	status_icon_update_notification (icon);
+
+	if (empathy_notification_should_show ()) {
+		status_icon_update_notification (icon);
+	}
 
 	if (!priv->blink_timeout) {
 		priv->blink_timeout = g_timeout_add (BLINK_TIMEOUT,
@@ -246,6 +249,10 @@ status_icon_event_removed_cb (EmpathyEventManager *manager,
 
 	status_icon_update_tooltip (icon);
 	status_icon_update_icon (icon);
+
+	/* update notification anyway, as it's safe and we might have been
+	 * changed presence in the meanwhile
+	 */	
 	status_icon_update_notification (icon);
 
 	if (!priv->event && priv->blink_timeout) {
@@ -325,8 +332,20 @@ status_icon_toggle_visibility (EmpathyStatusIcon *icon)
 static void
 status_icon_idle_notify_cb (EmpathyStatusIcon *icon)
 {
+	EmpathyStatusIconPriv *priv = GET_PRIV (icon);
+
 	status_icon_update_icon (icon);
 	status_icon_update_tooltip (icon);
+
+	if (!empathy_notification_should_show ()) {
+		/* dismiss the outstanding notification if present */
+
+		if (priv->notification) {
+			notify_notification_close (priv->notification, NULL);
+			g_object_unref (priv->notification);
+			priv->notification = NULL;
+		}
+	}
 }
 
 static gboolean
