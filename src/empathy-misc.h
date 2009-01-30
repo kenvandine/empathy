@@ -28,6 +28,15 @@
 
 G_BEGIN_DECLS
 
+/* FIXME: this should *really* belong to libnotify. */
+typedef enum {
+	NOTIFICATION_CLOSED_INVALID = 0,
+	NOTIFICATION_CLOSED_EXPIRED = 1,
+	NOTIFICATION_CLOSED_DISMISSED = 2,
+	NOTIFICATION_CLOSED_PROGRAMMATICALY = 3,
+	NOTIFICATION_CLOSED_RESERVED = 4
+} NotificationClosedReason;
+
 gboolean    empathy_notification_is_enabled  (void);
 
 G_END_DECLS
