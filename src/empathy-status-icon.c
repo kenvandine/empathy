@@ -122,7 +122,7 @@ status_icon_update_notification (EmpathyStatusIcon *icon)
 		} else {
 			GdkPixbuf *pixbuf = NULL;
 
-			if (g_strcmp0 (priv->event->icon_name, EMPATHY_IMAGE_NEW_MESSAGE) == 0) {
+			if (priv->event->contact != NULL) {
 				pixbuf = empathy_pixbuf_avatar_from_contact_scaled (priv->event->contact,
 										    48, 48);
 			}
