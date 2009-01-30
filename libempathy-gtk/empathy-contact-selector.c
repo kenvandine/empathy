@@ -129,7 +129,7 @@ get_iter_for_blank_contact (GtkTreeStore *store,
 
 
 static void
-set_blank_contact (EmpathyContactSelector *selector)
+add_blank_contact (EmpathyContactSelector *selector)
 {
   EmpathyContactSelectorPriv *priv = GET_PRIV (selector);
   GtkTreeIter blank_iter;
@@ -147,7 +147,7 @@ set_blank_contact (EmpathyContactSelector *selector)
 
 
 static void
-unset_blank_contact (EmpathyContactSelector *selector)
+remove_blank_contact (EmpathyContactSelector *selector)
 {
   EmpathyContactSelectorPriv *priv = GET_PRIV (selector);
   GtkTreeIter blank_iter;
@@ -185,17 +185,17 @@ manage_blank_contact (EmpathyContactSelector *selector)
 
   if (is_popup_shown)
     {
-      unset_blank_contact (selector);
+      remove_blank_contact (selector);
     }
   else
     {
       if (gtk_combo_box_get_active (GTK_COMBO_BOX (selector)) == -1)
         {
-          set_blank_contact (selector);
+          add_blank_contact (selector);
         }
       else
         {
-          unset_blank_contact (selector);
+          remove_blank_contact (selector);
         }
     }
 
