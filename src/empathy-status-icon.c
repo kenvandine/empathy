@@ -43,6 +43,7 @@
 #include "empathy-status-icon.h"
 #include "empathy-preferences.h"
 #include "empathy-event-manager.h"
+#include "empathy-misc.h"
 
 #define DEBUG_FLAG EMPATHY_DEBUG_DISPATCHER
 #include <libempathy/empathy-debug.h>
@@ -225,7 +226,7 @@ status_icon_event_added_cb (EmpathyEventManager *manager,
 	status_icon_update_icon (icon);
 	status_icon_update_tooltip (icon);
 
-	if (empathy_notification_should_show (FALSE)) {
+	if (empathy_notification_is_enabled ()) {
 		status_icon_update_notification (icon);
 	}
 
@@ -274,7 +275,7 @@ status_icon_event_updated_cb (EmpathyEventManager *manager,
 		return;
 	}
 
-	if (empathy_notification_should_show (FALSE)) {
+	if (empathy_notification_is_enabled ()) {
 		status_icon_update_notification (icon);
 	}
 
@@ -342,7 +343,7 @@ status_icon_idle_notify_cb (EmpathyStatusIcon *icon)
 	status_icon_update_icon (icon);
 	status_icon_update_tooltip (icon);
 
-	if (!empathy_notification_should_show (FALSE)) {
+	if (!empathy_notification_is_enabled ()) {
 		/* dismiss the outstanding notification if present */
 
 		if (priv->notification) {

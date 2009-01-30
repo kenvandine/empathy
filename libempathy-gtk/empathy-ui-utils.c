@@ -1584,23 +1584,6 @@ static EmpathySoundEntry sound_entries[LAST_EMPATHY_SOUND] = {
 	  N_("Voice call ended"), NULL },
 };
 
-static gboolean
-check_available (void)
-{
-	McPresence presence;
-	EmpathyIdle *idle;
-
-	idle = empathy_idle_dup_singleton ();
-	presence = empathy_idle_get_state (idle);
-	g_object_unref (idle);
-
-	if (presence != MC_PRESENCE_AVAILABLE &&
-	    presence != MC_PRESENCE_UNSET) {
-		return FALSE;    
-	}
-
-	return TRUE;
-}
 
 static gboolean
 empathy_sound_pref_is_enabled (const char *key)
@@ -1617,7 +1600,7 @@ empathy_sound_pref_is_enabled (const char *key)
 		return FALSE;
 	}
 
-	if (!check_available ()) {
+	if (!empathy_check_available_state ()) {
 		empathy_conf_get_bool (conf, EMPATHY_PREFS_SOUNDS_DISABLED_AWAY,
 				       &res);
 		if (res) {
@@ -1655,39 +1638,6 @@ empathy_sound_play (GtkWidget *widget,
 					CA_PROP_EVENT_ID, entry->event_ca_id,
 					CA_PROP_EVENT_DESCRIPTION, gettext (entry->event_ca_description),
 					NULL);
-	}
-}
-
-gboolean
-empathy_notification_should_show (gboolean check_focus)
-{
-	EmpathyConf *conf;
-	gboolean res;
-
-	conf = empathy_conf_get ();
-	res = FALSE;
-
-	empathy_conf_get_bool (conf, EMPATHY_PREFS_NOTIFICATIONS_ENABLED, &res);
-
-	if (!res) {
-		return FALSE;
-	}
-
-	if (!check_available ()) {
-		empathy_conf_get_bool (conf,
-				       EMPATHY_PREFS_NOTIFICATIONS_DISABLED_AWAY,
-				       &res);
-		if (res) {
-			return FALSE;
-		}
-	}
-
-	if (check_focus) {
-		empathy_conf_get_bool (conf,
-				       EMPATHY_PREFS_NOTIFICATIONS_FOCUS, &res);
-		return res;
-	} else {
-		return TRUE;
 	}
 }
 

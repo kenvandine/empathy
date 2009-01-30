@@ -41,6 +41,7 @@
 #include "empathy-contact-manager.h"
 #include "empathy-dispatcher.h"
 #include "empathy-dispatch-operation.h"
+#include "empathy-idle.h"
 #include "empathy-tp-call.h"
 
 #include <extensions/extensions.h>
@@ -482,3 +483,22 @@ empathy_start_call_with_contact (EmpathyContact *contact)
   empathy_dispatcher_call_with_contact (contact, empathy_call_request_cb,
     contact);
 }
+
+gboolean
+empathy_check_available_state (void)
+{
+	McPresence presence;
+	EmpathyIdle *idle;
+
+	idle = empathy_idle_dup_singleton ();
+	presence = empathy_idle_get_state (idle);
+	g_object_unref (idle);
+
+	if (presence != MC_PRESENCE_AVAILABLE &&
+	    presence != MC_PRESENCE_UNSET) {
+		return FALSE;    
+	}
+
+	return TRUE;
+}
+

@@ -32,6 +32,7 @@ empathy_SOURCES =							\
 	empathy-import-dialog.c empathy-import-dialog.h			\
 	empathy-import-pidgin.c empathy-import-pidgin.h			\
 	empathy-main-window.c empathy-main-window.h			\
+	empathy-misc.c empathy-misc.h					\
 	empathy-new-chatroom-dialog.c empathy-new-chatroom-dialog.h	\
 	empathy-preferences.c empathy-preferences.h			\
 	empathy-status-icon.c empathy-status-icon.h			\

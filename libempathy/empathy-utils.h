@@ -87,7 +87,7 @@ McAccount *  empathy_channel_get_account            (TpChannel       *channel);
 gboolean     empathy_proxy_equal                    (gconstpointer    a,
 						     gconstpointer    b);
 guint        empathy_proxy_hash                     (gconstpointer    key);
-
+gboolean     empathy_check_available_state          (void);
 /* Temporary utility function, should be replaces by better voip infrastructure
  * soon */
 void empathy_start_call_with_contact (EmpathyContact *contact);

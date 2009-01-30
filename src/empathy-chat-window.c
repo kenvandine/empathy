@@ -55,6 +55,7 @@
 
 #include "empathy-chat-window.h"
 #include "empathy-about-dialog.h"
+#include "empathy-misc.h"
 
 #define DEBUG_FLAG EMPATHY_DEBUG_CHAT
 #include <libempathy/empathy-debug.h>
@@ -868,9 +869,16 @@ chat_window_show_or_update_notification (EmpathyMessage *message,
 	const char *body;
 	GdkPixbuf *pixbuf;
 	EmpathyChatWindowPriv *priv = GET_PRIV (window);
+	gboolean res;
 
-	if (!empathy_notification_should_show (TRUE)) {
+	if (!empathy_notification_is_enabled ()) {
 		return;
+	} else {
+		empathy_conf_get_bool (empathy_conf_get (),
+				       EMPATHY_PREFS_NOTIFICATIONS_FOCUS, &res);
+		if (!res) {
+			return;
+		}
 	}
 
 	sender = empathy_message_get_sender (message);
