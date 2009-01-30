@@ -128,10 +128,26 @@ get_pixbuf_for_event (EmpathyEvent *event)
 }
 
 static void
+notification_close_helper (EmpathyStatusIconPriv *priv)
+{
+	if (priv->notification) {
+		notify_notification_close (priv->notification, NULL);
+		g_object_unref (priv->notification);
+		priv->notification = NULL;
+	}
+}
+
+static void
 status_icon_update_notification (EmpathyStatusIcon *icon)
 {
 	EmpathyStatusIconPriv *priv = GET_PRIV (icon);
 	GdkPixbuf *pixbuf = NULL;
+
+	if (!empathy_notification_is_enabled ()) {
+		/* always close the notification if this happens */
+		notification_close_helper (priv);
+		return;
+	}
 
 	if (priv->event) {
 		pixbuf = get_pixbuf_for_event (priv->event);
@@ -156,11 +172,7 @@ status_icon_update_notification (EmpathyStatusIcon *icon)
 
 		g_object_unref (pixbuf);
 	} else {
-		if (priv->notification) {
-			notify_notification_close (priv->notification, NULL);
-			g_object_unref (priv->notification);
-			priv->notification = NULL;
-		}
+		notification_close_helper (priv);
 	}
 }
 
@@ -234,10 +246,7 @@ status_icon_event_added_cb (EmpathyEventManager *manager,
 
 	status_icon_update_icon (icon);
 	status_icon_update_tooltip (icon);
-
-	if (empathy_notification_is_enabled ()) {
-		status_icon_update_notification (icon);
-	}
+	status_icon_update_notification (icon);
 
 	if (!priv->blink_timeout) {
 		priv->blink_timeout = g_timeout_add (BLINK_TIMEOUT,
