@@ -221,12 +221,8 @@ empathy_contact_selector_constructor (GType type,
   GtkCellRenderer *renderer;
 
   g_object_set (priv->store, "is-compact", TRUE, "show-avatars", FALSE,
-      "show-offline", FALSE, "sort-criterium", "show-groups", FALSE,
-      EMPATHY_CONTACT_LIST_STORE_SORT_NAME, NULL);
-  empathy_contact_list_store_set_show_groups (priv->store, FALSE);
-
-  gtk_tree_sortable_set_sort_column_id (GTK_TREE_SORTABLE (priv->store),
-        EMPATHY_CONTACT_LIST_STORE_COL_NAME, GTK_SORT_ASCENDING);
+      "show-offline", FALSE, "show-groups", FALSE,
+      "sort-criterium", EMPATHY_CONTACT_LIST_STORE_SORT_NAME, NULL);
 
   g_signal_connect (priv->store, "row-changed",
       G_CALLBACK (empathy_store_row_changed_cb), (gpointer) contact_selector);
