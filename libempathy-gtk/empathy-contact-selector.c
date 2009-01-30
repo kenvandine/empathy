@@ -50,8 +50,6 @@ struct _EmpathyContactSelectorPriv
 };
 
 static void changed_cb (GtkComboBox *widget, gpointer data);
-static gboolean get_iter_for_blank_contact (GtkTreeStore *store,
-    GtkTreeIter *blank_iter);
 
 
 EmpathyContact *
@@ -68,6 +66,38 @@ empathy_contact_selector_get_selected (EmpathyContactSelector *selector)
       EMPATHY_CONTACT_LIST_STORE_COL_CONTACT, &contact, -1);
 
   return contact;
+}
+
+
+static gboolean
+get_iter_for_blank_contact (GtkTreeStore *store,
+                            GtkTreeIter *blank_iter)
+{
+  GtkTreePath *path;
+  GtkTreeIter tmp_iter;
+  EmpathyContact *tmp_contact;
+  gboolean is_present = FALSE;
+
+  path = gtk_tree_path_new_first ();
+  if (gtk_tree_model_get_iter (GTK_TREE_MODEL (store), &tmp_iter, path))
+    {
+      do
+        {
+          gtk_tree_model_get (GTK_TREE_MODEL (store),
+              &tmp_iter, EMPATHY_CONTACT_LIST_STORE_COL_CONTACT,
+              &tmp_contact, -1);
+          if (tmp_contact == NULL)
+            {
+              *blank_iter = tmp_iter;
+              is_present = TRUE;
+              break;
+            }
+        } while (gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &tmp_iter));
+    }
+
+  gtk_tree_path_free (path);
+
+  return is_present;
 }
 
 
@@ -154,38 +184,6 @@ changed_cb (GtkComboBox *widget,
     {
       unset_blank_contact (selector);
     }
-}
-
-
-static gboolean
-get_iter_for_blank_contact (GtkTreeStore *store,
-                            GtkTreeIter *blank_iter)
-{
-  GtkTreePath *path;
-  GtkTreeIter tmp_iter;
-  EmpathyContact *tmp_contact;
-  gboolean is_present = FALSE;
-
-  path = gtk_tree_path_new_first ();
-  if (gtk_tree_model_get_iter (GTK_TREE_MODEL (store), &tmp_iter, path))
-    {
-      do
-        {
-          gtk_tree_model_get (GTK_TREE_MODEL (store),
-              &tmp_iter, EMPATHY_CONTACT_LIST_STORE_COL_CONTACT,
-              &tmp_contact, -1);
-          if (tmp_contact == NULL)
-            {
-              *blank_iter = tmp_iter;
-              is_present = TRUE;
-              break;
-            }
-        } while (gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &tmp_iter));
-    }
-
-  gtk_tree_path_free (path);
-
-  return is_present;
 }
 
 
