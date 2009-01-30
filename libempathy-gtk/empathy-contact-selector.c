@@ -37,12 +37,13 @@ G_DEFINE_TYPE (EmpathyContactSelector, empathy_contact_selector,
 enum
 {
   PROP_0,
-  PROP_STORE
+  PROP_CONTACT_LIST
 };
 
 #define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyContactSelector)
 typedef struct
 {
+  EmpathyContactList *contact_list;
   EmpathyContactListStore *store;
   gboolean dispose_run;
 } EmpathyContactSelectorPriv;
@@ -185,6 +186,8 @@ contact_selector_constructor (GType type,
   contact_selector = EMPATHY_CONTACT_SELECTOR (object);
   cell_layout = GTK_CELL_LAYOUT (object);
 
+  priv->store = empathy_contact_list_store_new (priv->contact_list);
+
   g_object_set (priv->store, "is-compact", TRUE, "show-avatars", FALSE,
       "show-offline", FALSE, "show-groups", FALSE,
       "sort-criterium", EMPATHY_CONTACT_LIST_STORE_SORT_NAME, NULL);
@@ -241,8 +244,8 @@ contact_selector_set_property (GObject *object,
 
   switch (prop_id)
     {
-      case PROP_STORE:
-        priv->store = g_value_dup_object (value);
+      case PROP_CONTACT_LIST:
+        priv->contact_list = g_value_dup_object (value);
         break;
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -260,8 +263,8 @@ contact_selector_get_property (GObject *object,
 
   switch (prop_id)
     {
-      case PROP_STORE:
-        g_value_set_object (value, priv->store);
+      case PROP_CONTACT_LIST:
+        g_value_set_object (value, priv->contact_list);
         break;
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
@@ -279,6 +282,12 @@ contact_selector_dispose (GObject *object)
     return;
 
   priv->dispose_run = TRUE;
+
+  if (priv->contact_list)
+    {
+      g_object_unref (priv->contact_list);
+      priv->contact_list = NULL;
+    }
 
   if (priv->store)
     {
@@ -299,9 +308,9 @@ empathy_contact_selector_class_init (EmpathyContactSelectorClass *klass)
   object_class->get_property = contact_selector_get_property;
   g_type_class_add_private (klass, sizeof (EmpathyContactSelectorPriv));
 
-  g_object_class_install_property (object_class, PROP_STORE,
-      g_param_spec_object ("store", "store", "store",
-      EMPATHY_TYPE_CONTACT_LIST_STORE, G_PARAM_CONSTRUCT_ONLY |
+  g_object_class_install_property (object_class, PROP_CONTACT_LIST,
+      g_param_spec_object ("contact-list", "contact list", "contact list",
+      EMPATHY_TYPE_CONTACT_LIST, G_PARAM_CONSTRUCT_ONLY |
       G_PARAM_READWRITE | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 }
 
@@ -310,13 +319,10 @@ empathy_contact_selector_class_init (EmpathyContactSelectorClass *klass)
 GtkWidget *
 empathy_contact_selector_new (EmpathyContactList *contact_list)
 {
-  EmpathyContactListStore *store;
-
   g_return_val_if_fail (EMPATHY_IS_CONTACT_LIST (contact_list), NULL);
 
-  store = empathy_contact_list_store_new (contact_list);
-
-  return GTK_WIDGET (g_object_new (EMPATHY_TYPE_CONTACT_SELECTOR, "store", store, NULL));
+  return GTK_WIDGET (g_object_new (EMPATHY_TYPE_CONTACT_SELECTOR,
+      "contact-list", contact_list, NULL));
 }
 
 EmpathyContact *
