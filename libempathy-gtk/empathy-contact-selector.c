@@ -46,8 +46,7 @@ typedef struct
   EmpathyContactListStore *store;
 } EmpathyContactSelectorPriv;
 
-static void changed_cb (GtkComboBox *widget, gpointer data);
-
+static void contact_selector_changed_cb (GtkComboBox *widget, gpointer data);
 
 EmpathyContact *
 empathy_contact_selector_get_selected (EmpathyContactSelector *selector)
@@ -67,9 +66,8 @@ empathy_contact_selector_get_selected (EmpathyContactSelector *selector)
   return contact;
 }
 
-
 static guint
-get_number_online_contacts (GtkTreeStore *store)
+contact_selector_get_number_online_contacts (GtkTreeStore *store)
 {
   GtkTreePath *path;
   GtkTreeIter tmp_iter;
@@ -95,10 +93,9 @@ get_number_online_contacts (GtkTreeStore *store)
   return number_online_contacts;
 }
 
-
 static gboolean
-get_iter_for_blank_contact (GtkTreeStore *store,
-                            GtkTreeIter *blank_iter)
+contact_selector_get_iter_for_blank_contact (GtkTreeStore *store,
+                                             GtkTreeIter *blank_iter)
 {
   GtkTreePath *path;
   GtkTreeIter tmp_iter;
@@ -128,9 +125,8 @@ get_iter_for_blank_contact (GtkTreeStore *store,
   return is_present;
 }
 
-
 static void
-add_blank_contact (EmpathyContactSelector *selector)
+contact_selector_add_blank_contact (EmpathyContactSelector *selector)
 {
   EmpathyContactSelectorPriv *priv = GET_PRIV (selector);
   GtkTreeIter blank_iter;
@@ -140,27 +136,26 @@ add_blank_contact (EmpathyContactSelector *selector)
       EMPATHY_CONTACT_LIST_STORE_COL_CONTACT, NULL,
       EMPATHY_CONTACT_LIST_STORE_COL_NAME, (_("Select a contact")),
       EMPATHY_CONTACT_LIST_STORE_COL_IS_ONLINE, FALSE, -1);
-  g_signal_handlers_block_by_func(selector, changed_cb, NULL);
+  g_signal_handlers_block_by_func (selector,
+      contact_selector_changed_cb, NULL);
   gtk_combo_box_set_active_iter (GTK_COMBO_BOX (selector), &blank_iter);
-  g_signal_handlers_unblock_by_func(selector, changed_cb, NULL);
+  g_signal_handlers_unblock_by_func (selector,
+      contact_selector_changed_cb, NULL);
 }
 
-
 static void
-remove_blank_contact (EmpathyContactSelector *selector)
+contact_selector_remove_blank_contact (EmpathyContactSelector *selector)
 {
   EmpathyContactSelectorPriv *priv = GET_PRIV (selector);
   GtkTreeIter blank_iter;
 
-  if (get_iter_for_blank_contact (GTK_TREE_STORE (priv->store), &blank_iter))
-    {
-      gtk_tree_store_remove (GTK_TREE_STORE (priv->store), &blank_iter);
-    }
+  if (contact_selector_get_iter_for_blank_contact (
+        GTK_TREE_STORE (priv->store), &blank_iter))
+    gtk_tree_store_remove (GTK_TREE_STORE (priv->store), &blank_iter);
 }
 
-
 static void
-manage_sensitivity (EmpathyContactSelector *selector)
+contact_selector_manage_sensitivity (EmpathyContactSelector *selector)
 {
   EmpathyContactSelectorPriv *priv = GET_PRIV (selector);
 
@@ -168,18 +163,17 @@ manage_sensitivity (EmpathyContactSelector *selector)
    * The following value needs to be the number of entries shown
    * excluding the blank entry (if present).
    */
-  guint number_online_contacts =
-      get_number_online_contacts (GTK_TREE_STORE (priv->store));
+  guint number_online_contacts = contact_selector_get_number_online_contacts (
+      GTK_TREE_STORE (priv->store));
 
   if (number_online_contacts)
-      gtk_widget_set_sensitive (GTK_WIDGET (selector), TRUE);
+    gtk_widget_set_sensitive (GTK_WIDGET (selector), TRUE);
   else
-      gtk_widget_set_sensitive (GTK_WIDGET (selector), FALSE);
+    gtk_widget_set_sensitive (GTK_WIDGET (selector), FALSE);
 }
 
-
 static void
-manage_blank_contact (EmpathyContactSelector *selector)
+contact_selector_manage_blank_contact (EmpathyContactSelector *selector)
 {
   gboolean is_popup_shown;
 
@@ -187,65 +181,62 @@ manage_blank_contact (EmpathyContactSelector *selector)
 
   if (is_popup_shown)
     {
-      remove_blank_contact (selector);
+      contact_selector_remove_blank_contact (selector);
     }
   else
     {
       if (gtk_combo_box_get_active (GTK_COMBO_BOX (selector)) == -1)
         {
-          add_blank_contact (selector);
+          contact_selector_add_blank_contact (selector);
         }
       else
         {
-          remove_blank_contact (selector);
+          contact_selector_remove_blank_contact (selector);
         }
     }
 
-    manage_sensitivity (selector);
+    contact_selector_manage_sensitivity (selector);
 }
 
-
 static void
-notify_popup_shown_cb (GtkComboBox *widget,
-                       GParamSpec *property,
-                       gpointer data)
+contact_selector_notify_popup_shown_cb (GtkComboBox *widget,
+                                        GParamSpec *property,
+                                        gpointer data)
 {
   EmpathyContactSelector *selector = EMPATHY_CONTACT_SELECTOR (widget);
 
-  manage_blank_contact (selector);
+  contact_selector_manage_blank_contact (selector);
 }
 
-
 static void
-changed_cb (GtkComboBox *widget,
-            gpointer data)
+contact_selector_changed_cb (GtkComboBox *widget,
+                             gpointer data)
 {
   EmpathyContactSelector *selector = EMPATHY_CONTACT_SELECTOR (widget);
 
-  manage_blank_contact (selector);
+  contact_selector_manage_blank_contact (selector);
 }
 
-
 static void
-empathy_store_row_changed_cb (EmpathyContactListStore *empathy_store,
-                              GtkTreePath *empathy_path,
-                              GtkTreeIter *empathy_iter,
-                              gpointer data)
+contact_selector_store_row_changed_cb (EmpathyContactListStore *empathy_store,
+                                       GtkTreePath *empathy_path,
+                                       GtkTreeIter *empathy_iter,
+                                       gpointer data)
 {
   EmpathyContactSelector *selector = EMPATHY_CONTACT_SELECTOR (data);
 
-  manage_sensitivity (selector);
+  contact_selector_manage_sensitivity (selector);
 }
 
 
 static GObject *
-empathy_contact_selector_constructor (GType type,
-                                      guint n_construct_params,
-                                      GObjectConstructParam *construct_params)
+contact_selector_constructor (GType type,
+                              guint n_construct_params,
+                              GObjectConstructParam *construct_params)
 {
   GObject *object =
-      G_OBJECT_CLASS (empathy_contact_selector_parent_class)->constructor (type,
-      n_construct_params, construct_params);
+      G_OBJECT_CLASS (empathy_contact_selector_parent_class)->constructor (
+          type, n_construct_params, construct_params);
   EmpathyContactSelector *contact_selector = EMPATHY_CONTACT_SELECTOR (object);
   EmpathyContactSelectorPriv *priv = GET_PRIV (contact_selector);
   GtkCellRenderer *renderer;
@@ -255,11 +246,12 @@ empathy_contact_selector_constructor (GType type,
       "sort-criterium", EMPATHY_CONTACT_LIST_STORE_SORT_NAME, NULL);
 
   g_signal_connect (priv->store, "row-changed",
-      G_CALLBACK (empathy_store_row_changed_cb), (gpointer) contact_selector);
+      G_CALLBACK (contact_selector_store_row_changed_cb),
+      (gpointer) contact_selector);
   g_signal_connect (GTK_COMBO_BOX (contact_selector), "changed",
-      G_CALLBACK (changed_cb), NULL);
+      G_CALLBACK (contact_selector_changed_cb), NULL);
   g_signal_connect (GTK_COMBO_BOX (contact_selector), "notify::popup-shown",
-      G_CALLBACK (notify_popup_shown_cb), NULL);
+      G_CALLBACK (contact_selector_notify_popup_shown_cb), NULL);
 
   gtk_combo_box_set_model (GTK_COMBO_BOX (contact_selector),
       GTK_TREE_MODEL (priv->store));
@@ -277,13 +269,12 @@ empathy_contact_selector_constructor (GType type,
   gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (contact_selector), renderer,
       "text", EMPATHY_CONTACT_LIST_STORE_COL_NAME, NULL);
 
-  manage_blank_contact (contact_selector);
-  manage_sensitivity (contact_selector);
+  contact_selector_manage_blank_contact (contact_selector);
+  contact_selector_manage_sensitivity (contact_selector);
 
   object = G_OBJECT (contact_selector);
   return object;
 }
-
 
 static void
 empathy_contact_selector_init (EmpathyContactSelector *empathy_contact_selector)
@@ -295,12 +286,11 @@ empathy_contact_selector_init (EmpathyContactSelector *empathy_contact_selector)
   empathy_contact_selector->priv = priv;
 }
 
-
 static void
-empathy_contact_selector_set_property (GObject *object,
-                                       guint prop_id,
-                                       const GValue *value,
-                                       GParamSpec *pspec)
+contact_selector_set_property (GObject *object,
+                               guint prop_id,
+                               const GValue *value,
+                               GParamSpec *pspec)
 {
   EmpathyContactSelector *contact_selector = EMPATHY_CONTACT_SELECTOR (object);
   EmpathyContactSelectorPriv *priv = GET_PRIV (contact_selector);
@@ -316,12 +306,11 @@ empathy_contact_selector_set_property (GObject *object,
     }
 }
 
-
 static void
-empathy_contact_selector_get_property (GObject *object,
-                                       guint prop_id,
-                                       GValue *value,
-                                       GParamSpec *pspec)
+contact_selector_get_property (GObject *object,
+                               guint prop_id,
+                               GValue *value,
+                               GParamSpec *pspec)
 {
   EmpathyContactSelector *contact_selector = EMPATHY_CONTACT_SELECTOR (object);
   EmpathyContactSelectorPriv *priv = GET_PRIV (contact_selector);
@@ -337,9 +326,8 @@ empathy_contact_selector_get_property (GObject *object,
     }
 }
 
-
 static void
-empathy_contact_selector_dispose (GObject *object)
+contact_selector_dispose (GObject *object)
 {
   EmpathyContactSelector *selector = EMPATHY_CONTACT_SELECTOR (object);
   EmpathyContactSelectorPriv *priv = GET_PRIV (selector);
@@ -353,15 +341,14 @@ empathy_contact_selector_dispose (GObject *object)
   (G_OBJECT_CLASS (empathy_contact_selector_parent_class)->dispose) (object);
 }
 
-
 static void
 empathy_contact_selector_class_init (EmpathyContactSelectorClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
-  object_class->constructor = empathy_contact_selector_constructor;
-  object_class->dispose = empathy_contact_selector_dispose;
-  object_class->set_property = empathy_contact_selector_set_property;
-  object_class->get_property = empathy_contact_selector_get_property;
+  object_class->constructor = contact_selector_constructor;
+  object_class->dispose = contact_selector_dispose;
+  object_class->set_property = contact_selector_set_property;
+  object_class->get_property = contact_selector_get_property;
   g_type_class_add_private (klass, sizeof (EmpathyContactSelectorPriv));
 
   g_object_class_install_property (object_class, PROP_STORE,
@@ -369,7 +356,6 @@ empathy_contact_selector_class_init (EmpathyContactSelectorClass *klass)
       EMPATHY_TYPE_CONTACT_LIST_STORE, G_PARAM_CONSTRUCT_ONLY |
       G_PARAM_READWRITE | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 }
-
 
 EmpathyContactSelector *
 empathy_contact_selector_new (EmpathyContactListStore *store)
