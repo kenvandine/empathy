@@ -102,6 +102,10 @@ status_icon_notification_closed_cb (NotifyNotification *notification,
 	 * DesktopNotification spec.
 	 */
 	if (reason == NOTIFICATION_CLOSED_DISMISSED) {
+		/* use an idle here, as this callback is called from a
+		 * DBus signal handler inside libnotify, and we might call
+		 * a *_run_* method when activating the event.
+		 */
 		g_idle_add ((GSourceFunc) activate_event, priv->event);
 	} else {
 		/* inhibit other updates for this event */
