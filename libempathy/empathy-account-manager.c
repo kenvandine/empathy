@@ -162,9 +162,8 @@ account_deleted_cb (McAccountMonitor *mon,
 
   if (account)
     {
-      g_signal_emit (manager, signals[ACCOUNT_DELETED], 0, account);
-
       g_hash_table_remove (priv->accounts, account);
+      g_signal_emit (manager, signals[ACCOUNT_DELETED], 0, account);
       g_object_unref (account);
     }
 }
@@ -621,3 +620,22 @@ empathy_account_manager_is_account_just_connected (EmpathyAccountManager *manage
   return (data->source_id > 0);
 }
 
+/**
+ * empathy_account_manager_get_count:
+ * @manager: a #EmpathyAccountManager
+ *
+ * Get the number of accounts.
+ *
+ * Returns: the number of accounts.
+ **/
+int
+empathy_account_manager_get_count (EmpathyAccountManager *manager)
+{
+  EmpathyAccountManagerPriv *priv;
+
+  g_return_val_if_fail (EMPATHY_IS_ACCOUNT_MANAGER (manager), 0);
+
+  priv = GET_PRIV (manager);
+
+  return g_hash_table_size (priv->accounts);
+}
