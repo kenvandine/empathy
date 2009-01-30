@@ -847,9 +847,11 @@ static void
 chat_window_notification_closed_cb (NotifyNotification *notify,
 				    EmpathyChat *chat)
 {
-	int reason;
+	int reason = 1;
 
+#ifdef notify_notification_get_closed_reason
 	reason = notify_notification_get_closed_reason (notify);
+#endif
 
 	if (reason == 2) {
 		g_idle_add ((GSourceFunc) notification_closed_idle_cb, chat);

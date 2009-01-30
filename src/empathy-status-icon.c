@@ -83,10 +83,11 @@ status_icon_notification_closed_cb (NotifyNotification *notification,
 				    EmpathyStatusIcon  *icon)
 {
 	EmpathyStatusIconPriv *priv = GET_PRIV (icon);
-	int reason;
+	int reason = 1;
 
+#ifdef notify_notification_get_closed_reason
 	reason = notify_notification_get_closed_reason (notification);
-
+#endif
 	if (priv->notification) {
 		g_object_unref (priv->notification);
 		priv->notification = NULL;
