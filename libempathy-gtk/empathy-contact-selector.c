@@ -280,8 +280,7 @@ contact_selector_set_property (GObject *object,
                                const GValue *value,
                                GParamSpec *pspec)
 {
-  EmpathyContactSelector *contact_selector = EMPATHY_CONTACT_SELECTOR (object);
-  EmpathyContactSelectorPriv *priv = GET_PRIV (contact_selector);
+  EmpathyContactSelectorPriv *priv = GET_PRIV (object);
 
   switch (prop_id)
     {
@@ -300,8 +299,7 @@ contact_selector_get_property (GObject *object,
                                GValue *value,
                                GParamSpec *pspec)
 {
-  EmpathyContactSelector *contact_selector = EMPATHY_CONTACT_SELECTOR (object);
-  EmpathyContactSelectorPriv *priv = GET_PRIV (contact_selector);
+  EmpathyContactSelectorPriv *priv = GET_PRIV (object);
 
   switch (prop_id)
     {
