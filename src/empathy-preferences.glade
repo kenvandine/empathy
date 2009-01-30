@@ -269,7 +269,7 @@
                         <property name="visible">True</property>
                         <property name="spacing">6</property>
                         <child>
-                          <widget class="GtkCheckButton" id="checkbutton_notifications_away">
+                          <widget class="GtkCheckButton" id="checkbutton_notifications_disabled_away">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="label" translatable="yes">Disable notifications when _away or busy</property>

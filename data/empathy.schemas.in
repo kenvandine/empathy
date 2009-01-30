@@ -217,15 +217,45 @@
     </schema>
 
     <schema>
-      <key>/schemas/apps/empathy/notifications/popup_when_contact_available</key>
-      <applyto>/apps/empathy/notifications/popup_when_contact_available</applyto>
+      <key>/schemas/apps/empathy/notifications/notifications_enabled</key>
+      <applyto>/apps/empathy/notifications/notifications_enabled</applyto>
       <owner>empathy</owner>
       <type>bool</type>
       <default>true</default>
       <locale name="C">
-         <short>Enable popup when contact is available</short>
+         <short>Enable popup notifications for new messages</short>
          <long>
-         Whether or not to show a popup when a contact becomes available.
+         Whether or not to show a popup notification when receiving a new
+         message.
+         </long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/empathy/notifications/notifications_disabled_away</key>
+      <applyto>/apps/empathy/notifications/notifications_disabled_away</applyto>
+      <owner>empathy</owner>
+      <type>bool</type>
+      <default>true</default>
+      <locale name="C">
+         <short>Disable popup notifications when away</short>
+         <long>
+         Whether or not to show popup notifications when away or busy.
+         </long>
+      </locale>
+    </schema>
+
+    <schema>
+      <key>/schemas/apps/empathy/notifications/notifications_focus</key>
+      <applyto>/apps/empathy/notifications/notifications_focus</applyto>
+      <owner>empathy</owner>
+      <type>bool</type>
+      <default>false</default>
+      <locale name="C">
+         <short>Popup notifications if the chat isn't focused</short>
+         <long>
+         Whether or not to show a popup notification when receiving a new
+         message even if the chat is already opened, but not focused.
          </long>
       </locale>
     </schema>

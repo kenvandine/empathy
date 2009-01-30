@@ -59,6 +59,10 @@ typedef struct {
 	GtkWidget *checkbutton_sounds_disabled_away;
 	GtkWidget *treeview_sounds;
 
+	GtkWidget *checkbutton_notifications_enabled;
+	GtkWidget *checkbutton_notifications_disabled_away;
+	GtkWidget *checkbutton_notifications_focus;
+
 	GtkWidget *treeview_spell_checker;
 
 	GList     *notify_ids;
@@ -184,6 +188,23 @@ static void
 preferences_setup_widgets (EmpathyPreferences *preferences)
 {
 	guint id;
+
+	preferences_hookup_toggle_button (preferences,
+					  EMPATHY_PREFS_NOTIFICATIONS_ENABLED,
+					  preferences->checkbutton_notifications_enabled);
+	preferences_hookup_toggle_button (preferences,
+					  EMPATHY_PREFS_NOTIFICATIONS_DISABLED_AWAY,
+					  preferences->checkbutton_notifications_disabled_away);
+	preferences_hookup_toggle_button (preferences,
+					  EMPATHY_PREFS_NOTIFICATIONS_FOCUS,
+					  preferences->checkbutton_notifications_focus);
+
+	preferences_hookup_sensitivity (preferences,
+					EMPATHY_PREFS_NOTIFICATIONS_ENABLED,
+					preferences->checkbutton_notifications_disabled_away);
+	preferences_hookup_sensitivity (preferences,
+					EMPATHY_PREFS_NOTIFICATIONS_ENABLED,
+					preferences->checkbutton_notifications_focus);
 
 	preferences_hookup_toggle_button (preferences,
 					  EMPATHY_PREFS_SOUNDS_ENABLED,
@@ -1061,6 +1082,9 @@ empathy_preferences_show (GtkWindow *parent)
 		"checkbutton_autoconnect", &preferences->checkbutton_autoconnect,
 		"radiobutton_contact_list_sort_by_name", &preferences->radiobutton_contact_list_sort_by_name,
 		"radiobutton_contact_list_sort_by_state", &preferences->radiobutton_contact_list_sort_by_state,
+		"checkbutton_notifications_enabled", &preferences->checkbutton_notifications_enabled,
+		"checkbutton_notifications_disabled_away", &preferences->checkbutton_notifications_disabled_away,
+		"checkbutton_notifications_focus", &preferences->checkbutton_notifications_focus,
 		"checkbutton_sounds_enabled", &preferences->checkbutton_sounds_enabled,
 		"checkbutton_sounds_disabled_away", &preferences->checkbutton_sounds_disabled_away,
 		"treeview_sounds", &preferences->treeview_sounds,

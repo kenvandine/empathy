@@ -45,6 +45,9 @@ struct _EmpathyConfClass {
 };
 
 #define EMPATHY_PREFS_PATH "/apps/empathy"
+#define EMPATHY_PREFS_NOTIFICATIONS_ENABLED        EMPATHY_PREFS_PATH "/notifications/notifications_enabled"
+#define EMPATHY_PREFS_NOTIFICATIONS_DISABLED_AWAY  EMPATHY_PREFS_PATH "/notifications/notifications_disabled_away"
+#define EMPATHY_PREFS_NOTIFICATIONS_FOCUS          EMPATHY_PREFS_PATH "/notifications/notifications_focus"
 #define EMPATHY_PREFS_SOUNDS_ENABLED               EMPATHY_PREFS_PATH "/sounds/sounds_enabled"
 #define EMPATHY_PREFS_SOUNDS_DISABLED_AWAY         EMPATHY_PREFS_PATH "/sounds/sounds_disabled_away"
 #define EMPATHY_PREFS_SOUNDS_INCOMING_MESSAGE      EMPATHY_PREFS_PATH "/sounds/sounds_incoming_message"
