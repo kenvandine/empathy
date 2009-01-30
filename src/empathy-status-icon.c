@@ -101,30 +101,12 @@ status_icon_notification_closed_cb (NotifyNotification *notification,
 	/* the notification has been closed by the user, see the
 	 * DesktopNotification spec.
 	 */
-	if (reason == 2) {
+	if (reason == NOTIFICATION_CLOSED_DISMISSED) {
 		g_idle_add ((GSourceFunc) activate_event, priv->event);
 	} else {
 		/* inhibit other updates for this event */
 		empathy_event_inhibit_updates (priv->event);
 	}
-}
-
-static GdkPixbuf *
-get_pixbuf_for_event (EmpathyEvent *event)
-{
-	GdkPixbuf *pixbuf = NULL;
-
-	if (event->contact != NULL) {
-		pixbuf = empathy_pixbuf_avatar_from_contact_scaled (event->contact,
-								    48, 48);
-	}
-
-	if (!pixbuf) {
-		pixbuf = empathy_pixbuf_from_icon_name_sized
-					(event->icon_name, 48);
-	}
-
-	return pixbuf;
 }
 
 static void
@@ -150,7 +132,8 @@ status_icon_update_notification (EmpathyStatusIcon *icon)
 	}
 
 	if (priv->event) {
-		pixbuf = get_pixbuf_for_event (priv->event);
+		pixbuf = empathy_misc_get_pixbuf_for_notification (priv->event->contact,
+								   priv->event->icon_name);
 
 		if (priv->notification) {
 			notify_notification_update (priv->notification,

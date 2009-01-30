@@ -24,9 +24,30 @@
 #include "empathy-misc.h"
 
 #include <libempathy/empathy-utils.h>
+#include <libempathy-gtk/empathy-ui-utils.h>
 #include <libempathy-gtk/empathy-conf.h>
 
 /* public methods */
+
+GdkPixbuf *
+empathy_misc_get_pixbuf_for_notification (EmpathyContact *contact,
+					  const char *icon_name)
+{
+	GdkPixbuf *pixbuf = NULL;
+
+	if (contact != NULL) {
+		pixbuf = empathy_pixbuf_avatar_from_contact_scaled (contact,
+								    48, 48);
+	}
+
+	if (!pixbuf) {
+		pixbuf = empathy_pixbuf_from_icon_name_sized
+					(icon_name, 48);
+	}
+
+	return pixbuf;
+}
+
 gboolean
 empathy_notification_is_enabled (void)
 {

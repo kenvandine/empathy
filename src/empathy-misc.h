@@ -25,6 +25,9 @@
 #define __EMPATHY_MISC_H__
 
 #include <glib.h>
+#include <gdk-pixbuf/gdk-pixbuf.h>
+
+#include <libempathy/empathy-contact.h>
 
 G_BEGIN_DECLS
 
@@ -38,6 +41,8 @@ typedef enum {
 } NotificationClosedReason;
 
 gboolean    empathy_notification_is_enabled  (void);
+GdkPixbuf * empathy_misc_get_pixbuf_for_notification (EmpathyContact *contact,
+                                                      const char *icon_name);
 
 G_END_DECLS
 

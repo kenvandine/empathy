@@ -893,11 +893,8 @@ chat_window_show_or_update_notification (EmpathyChatWindow *window,
 				  empathy_contact_get_name (sender));
 	body = empathy_message_get_body (message);
 	escaped = g_markup_escape_text (body, -1);
-	pixbuf = empathy_pixbuf_avatar_from_contact_scaled (sender, 48, 48);
-	if (pixbuf == NULL) {
-		pixbuf = empathy_pixbuf_from_icon_name_sized
-				(EMPATHY_IMAGE_NEW_MESSAGE, 48);
-	}
+
+	pixbuf = empathy_misc_get_pixbuf_for_notification (sender, EMPATHY_IMAGE_NEW_MESSAGE);
 
 	if (priv->notification != NULL) {
 		notify_notification_update (priv->notification,
