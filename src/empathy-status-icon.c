@@ -27,6 +27,8 @@
 #include <glade/glade.h>
 #include <gdk/gdkkeysyms.h>
 
+#include <libnotify/notification.h>
+
 #include <libempathy/empathy-utils.h>
 #include <libempathy/empathy-idle.h>
 #include <libempathy/empathy-account-manager.h>
@@ -63,6 +65,8 @@ typedef struct {
 	GtkWidget           *show_window_item;
 	GtkWidget           *message_item;
 	GtkWidget           *status_item;
+
+	NotifyNotification  *notification;
 } EmpathyStatusIconPriv;
 
 G_DEFINE_TYPE (EmpathyStatusIcon, empathy_status_icon, G_TYPE_OBJECT);
@@ -114,6 +118,17 @@ status_icon_blink_timeout_cb (EmpathyStatusIcon *icon)
 }
 
 static void
+notify_call_cb (NotifyNotification * notification,
+		gchar *action_id,
+		gpointer data)
+{
+	if (strcmp (action_id, "accept") == 0)
+		g_print ("ACCEPTED");
+	else
+		g_print ("REJECTED");
+}
+
+static void
 status_icon_event_added_cb (EmpathyEventManager *manager,
 			    EmpathyEvent        *event,
 			    EmpathyStatusIcon   *icon)
@@ -137,6 +152,17 @@ status_icon_event_added_cb (EmpathyEventManager *manager,
 						     (GSourceFunc) status_icon_blink_timeout_cb,
 						     icon);
 	}
+
+	if (!priv->event)
+		return;
+	priv->notification =
+		notify_notification_new_with_status_icon (priv->event->message,
+		"Accept incoming call?", priv->event->icon_name, priv->icon);
+	notify_notification_add_action (priv->notification,
+		"accept", "Accept", notify_call_cb, icon, NULL);
+	notify_notification_add_action (priv->notification,
+		"reject", "Reject", notify_call_cb, icon, NULL);
+	notify_notification_show (priv->notification, NULL);
 }
 
 static void
