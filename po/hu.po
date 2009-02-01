@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: empathy HEAD\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-01 11:23+0100\n"
-"PO-Revision-Date: 2009-02-01 12:04+0100\n"
+"POT-Creation-Date: 2009-02-01 12:09+0100\n"
+"PO-Revision-Date: 2009-02-01 12:11+0100\n"
 "Last-Translator: Gabor Kelemen <kelemeng@gnome.hu>\n"
 "Language-Team: Hungarian <gnome@fsf.hu>\n"
 "MIME-Version: 1.0\n"
@@ -269,7 +269,9 @@ msgstr "Lejátsszon-e hangot a hálózatból kijelentkezéskor?"
 msgid ""
 "Whether or not to show a popup notification when receiving a new message "
 "even if the chat is already opened, but not focused."
-msgstr "Megjelenjenek-e felugró értesítések új üzenet érkezésekor akkor is, ha a csevegés meg van nyitva, de nincs fókuszban."
+msgstr ""
+"Megjelenjenek-e felugró értesítések új üzenet érkezésekor akkor is, ha a "
+"csevegés meg van nyitva, de nincs fókuszban."
 
 #: ../data/empathy.schemas.in.h:57
 msgid "Whether or not to show a popup notification when receiving a new message."
@@ -1720,6 +1722,11 @@ msgstr "„%s” fogadása %s partnertől"
 msgid "Sending \"%s\" to %s"
 msgstr "„%s” küldése %s partnernek"
 
+#: ../src/empathy-ft-manager.c:237
+msgctxt "file size"
+msgid "Unknown"
+msgstr "Ismeretlen"
+
 #. translators: first %s is the transferred size, second %s is
 #. * the total file size
 #: ../src/empathy-ft-manager.c:245
@@ -1759,6 +1766,16 @@ msgstr "„%s” küldése %s partnernek"
 #, c-format
 msgid "File transfer canceled: %s"
 msgstr "A fájlátvitel megszakítva: %s"
+
+#: ../src/empathy-ft-manager.c:304
+msgctxt "remaining time"
+msgid "Unknown"
+msgstr "Ismeretlen"
+
+#: ../src/empathy-ft-manager.c:364
+msgctxt "file transfer percent"
+msgid "Unknown"
+msgstr "Ismeretlen"
 
 #: ../src/empathy-ft-manager.c:700
 msgid "%"
