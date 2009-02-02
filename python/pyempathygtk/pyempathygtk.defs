@@ -56,7 +56,7 @@
   (gtype-id "EMPATHY_TYPE_CHAT_TEXT_VIEW")
 )
 
-(define-object ChatView
+(define-interface ChatView
   (in-module "Empathy")
   (c-name "EmpathyChatView")
   (gtype-id "EMPATHY_TYPE_CHAT_VIEW")
