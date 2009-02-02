@@ -290,6 +290,12 @@
   )
 )
 
+(define-method get_count
+  (of-object "EmpathyAccountManager")
+  (c-name "empathy_account_manager_get_count")
+  (return-type "int")
+)
+
 
 
 ;; From empathy-chatroom.h
@@ -2693,6 +2699,11 @@
   (parameters
     '("gconstpointer" "key")
   )
+)
+
+(define-function check_available_state
+  (c-name "empathy_check_available_state")
+  (return-type "gboolean")
 )
 
 (define-function start_call_with_contact

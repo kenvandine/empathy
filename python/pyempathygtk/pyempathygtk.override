@@ -16,6 +16,7 @@ headers
 #include "empathy-contact-dialogs.h"
 #include "empathy-contact-list-store.h"
 #include "empathy-contact-list-view.h"
+#include "empathy-contact-selector.h"
 #include "empathy-contact-widget.h"
 #include "empathy-geometry.h"
 #include "empathy-gtk-enum-types.h"

@@ -1,14 +1,5 @@
 --- /home/zdra/Desktop/pyempathy.defs	2008-04-02 11:08:02.000000000 +0200
 +++ pyempathy/pyempathy.defs	2008-04-02 11:28:00.000000000 +0200
-@@ -35,7 +35,7 @@
-   (gtype-id "EMPATHY_TYPE_CONTACT_FACTORY")
- )
- 
--(define-object ContactList
-+(define-interface ContactList
-   (in-module "Empathy")
-   (c-name "EmpathyContactList")
-   (gtype-id "EMPATHY_TYPE_CONTACT_LIST")
 @@ -44,6 +44,7 @@
  (define-object ContactManager
    (in-module "Empathy")

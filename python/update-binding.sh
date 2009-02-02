@@ -59,6 +59,7 @@ python /usr/share/pygobject/2.0/codegen/h2def.py	\
 	empathy-contact-list-store.h		\
 	empathy-contact-list-view.h		\
 	empathy-contact-menu.h			\
+	empathy-contact-selector.h		\
 	empathy-contact-widget.h		\
 	empathy-geometry.h			\
 	empathy-images.h			\
@@ -85,9 +86,11 @@ cp pyempathygtk/pyempathygtk.defs /tmp
 patch -p0 < pyempathy.patch
 patch -p0 < pyempathygtk.patch
 
-# Chatview is an interface not an object
+# Fix define of interfaces, they are not objects
 sed -e 's/define-object \(ChatView$\)/define-interface \1/' \
     -i pyempathygtk/pyempathygtk.defs
+sed -e 's/define-object \(ContactList$\)/define-interface \1/' \
+    -i pyempathy/pyempathy.defs
 
 # Make modification then run that:
 #diff -up /tmp/pyempathy.defs pyempathy/pyempathy.defs > pyempathy.patch

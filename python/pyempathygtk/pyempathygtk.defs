@@ -83,6 +83,13 @@
   (gtype-id "EMPATHY_TYPE_CONTACT_LIST_VIEW")
 )
 
+(define-object ContactSelector
+  (in-module "Empathy")
+  (parent "GtkComboBox")
+  (c-name "EmpathyContactSelector")
+  (gtype-id "EMPATHY_TYPE_CONTACT_SELECTOR")
+)
+
 (define-object PresenceChooser
   (in-module "Empathy")
   (parent "GtkToggleButton")
@@ -1164,6 +1171,30 @@
 
 
 
+;; From empathy-contact-selector.h
+
+(define-function contact_selector_get_type
+  (c-name "empathy_contact_selector_get_type")
+  (return-type "GType")
+)
+
+(define-function contact_selector_new
+  (c-name "empathy_contact_selector_new")
+  (is-constructor-of "EmpathyContactSelector")
+  (return-type "GtkWidget*")
+  (parameters
+    '("EmpathyContactList*" "contact_list")
+  )
+)
+
+(define-method dup_selected
+  (of-object "EmpathyContactSelector")
+  (c-name "empathy_contact_selector_dup_selected")
+  (return-type "EmpathyContact*")
+)
+
+
+
 ;; From empathy-contact-widget.h
 
 (define-method widget_new
@@ -1651,6 +1682,15 @@
   (parameters
     '("const-gchar*" "icon_name")
     '("GtkIconSize" "icon_size")
+  )
+)
+
+(define-function pixbuf_from_icon_name_sized
+  (c-name "empathy_pixbuf_from_icon_name_sized")
+  (return-type "GdkPixbuf*")
+  (parameters
+    '("const-gchar*" "icon_name")
+    '("gint" "size")
   )
 )
 
