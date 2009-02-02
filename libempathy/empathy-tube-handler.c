@@ -194,9 +194,9 @@ empathy_tube_handler_build_bus_name (EmpathyTubeType type,
   g_return_val_if_fail (type <= EMPATHY_TYPE_DBUS_TUBE, NULL);
   g_return_val_if_fail (service != NULL, NULL);
 
-  if (type == TP_TUBE_TYPE_DBUS)
+  if (type == EMPATHY_TYPE_DBUS_TUBE)
     prefix = "org.gnome.Empathy.DTubeHandler.";
-  else if (type == TP_TUBE_TYPE_STREAM)
+  else if (type == EMPATHY_TYPE_STREAM_TUBE)
     prefix = "org.gnome.Empathy.StreamTubeHandler.";
   else
     g_return_val_if_reached (NULL);
