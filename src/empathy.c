@@ -382,6 +382,19 @@ get_startup_timestamp ()
 	return (retval > 0) ? retval : 0;
 }
 
+static gboolean
+show_version_cb (const char *option_name,
+                 const char *value,
+                 gpointer data,
+                 GError **error)
+{
+	g_print ("%s\n", PACKAGE_STRING);
+
+	exit (EXIT_SUCCESS);
+
+	return FALSE;
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -410,6 +423,8 @@ main (int argc, char *argv[])
 		  0, G_OPTION_ARG_NONE, &accounts_dialog,
 		  N_("Show the accounts dialog"),
 		  NULL },
+		{ "version", 'v',
+		  G_OPTION_FLAG_NO_ARG, G_OPTION_ARG_CALLBACK, show_version_cb, NULL, NULL },
 		{ NULL }
 	};
 
