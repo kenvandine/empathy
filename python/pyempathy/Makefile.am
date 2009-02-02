@@ -3,6 +3,7 @@ PYDEFS=`pkg-config --variable=defsdir pygtk-2.0`
 AM_CPPFLAGS =                                           \
 	-I.                                             \
 	-I$(top_srcdir)/libempathy			\
+	-I$(top_builddir)/libempathy			\
 	-I$(top_srcdir)                                 \
 	-DDATADIR=\""$(datadir)"\"              	\
 	$(PYTHON_BINDING_CFLAGS)			\
@@ -16,7 +17,9 @@ pyempathydir = $(pyexecdir)
 pyempathy_LTLIBRARIES = empathy.la
 
 empathy_la_SOURCES =					\
-	pyempathymodule.c				\
+	pyempathymodule.c
+
+nodist_empathy_la_SOURCES =				\
 	pyempathy.c
 
 empathy_la_LIBADD =					\
@@ -31,8 +34,8 @@ pyempathy.c: pyempathy.override pyempathy.defs
 		--prefix empathy 			\
 		--register $(PYDEFS)/gdk-types.defs 	\
 		--register $(PYDEFS)/gtk-types.defs 	\
-		--override pyempathy.override 		\
-		pyempathy.defs > $@ 
+		--override $(srcdir)/pyempathy.override \
+		$(srcdir)/pyempathy.defs > $@ 
 
 EXTRA_DIST =			\
 	pyempathy.override	\
