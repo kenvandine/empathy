@@ -85,6 +85,10 @@ cp pyempathygtk/pyempathygtk.defs /tmp
 patch -p0 < pyempathy.patch
 patch -p0 < pyempathygtk.patch
 
+# Chatview is an interface not an object
+sed -e 's/define-object \(ChatView$\)/define-interface \1/' \
+    -i pyempathygtk/pyempathygtk.defs
+
 # Make modification then run that:
 #diff -up /tmp/pyempathy.defs pyempathy/pyempathy.defs > pyempathy.patch
 #diff -up /tmp/pyempathygtk.defs pyempathygtk/pyempathygtk.defs > pyempathygtk.patch
