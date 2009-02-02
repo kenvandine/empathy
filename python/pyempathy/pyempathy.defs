@@ -2231,9 +2231,9 @@
 (define-method get_state
   (of-object "EmpathyTpFile")
   (c-name "empathy_tp_file_get_state")
-  (return-type "EmpFileTransferState")
+  (return-type "guint")
   (parameters
-    '("EmpFileTransferStateChangeReason*" "reason")
+    '("guint*" "reason")
   )
 )
 
