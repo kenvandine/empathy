@@ -509,6 +509,70 @@
 	  </listitem>
 	</orderedlist>
       </para>
+      
+      <sect3 id="empathy-importing-accounts">
+	<title>Importing Accounts</title>
+	<para>
+	  If you use another instant messaging program, you can import
+	  the accounts from that program into &app;
+	</para>
+	<para>
+	  <note>
+	    <para>
+	      At the moment &app; can import the accounts only from
+	      the instant messaging program
+	      <application>Pidgin</application>. For more information
+	      about <application>Pidgin</application>, see the <ulink
+	      type="http" url="http://www.pidgin.im/">Pidgin website</ulink>.
+	    </para>
+	  </note>
+	</para>
+	<para>
+	  To import the accounts into &app;, proceed as follows:
+	  <orderedlist>
+	    <listitem>
+	      <para>
+		From the <link linkend="empathy-FIG-mainwindow">main window
+		</link> (<guilabel>Contact List</guilabel>)
+		click on the account button or press <keycap>F4</keycap> to open the
+		<guilabel>Accounts</guilabel> dialog.
+	      </para>
+	    </listitem>
+	    <listitem>
+	      <para>
+		Click on the <guibutton>Import Accounts...</guibutton>
+		button to open the <guilabel>Import
+		Accounts</guilabel> dialog.
+	      </para>
+	    </listitem>
+	    <listitem>
+	      <para>
+		Select the accounts you would like to import by
+		clicking on the <guilabel>Import</guilabel> check-box.
+	      </para>
+	    </listitem>
+	    <listitem>
+	      <para>
+		When you have selected all the desired accounts, click
+		<guibutton>OK</guibutton> to import them. If you don't
+		want to import the accounts, click
+		<guibutton>Cancel</guibutton>.
+	      </para>
+	    </listitem>
+	    <listitem>
+	      <para>
+		When you import a new account into &app;, it will not be
+		enabled by default.
+	      </para>
+	      <para>
+		To enable the new account, select the
+		<guilabel>Enabled</guilabel> check-box next to
+		the name of the account in the box on the left.
+	      </para>
+	    </listitem>
+	  </orderedlist>
+	</para>
+      </sect3>
     </sect2>
 
     <sect2 id="empathy-edit-account">
@@ -634,6 +698,60 @@
       </para>
     </sect2>
     
+    <sect2 id="empathy-edit-personal-information">
+      <title>Editing Personal Information</title>
+      <para>
+	To change your personal information, your alias and your
+	icon (the image that other contacts will see of you), for each
+	of your accounts, proceed as follows:
+      </para>
+      <para>
+	<orderedlist>
+	  <listitem>
+	    <para>
+	      From the <link linkend="empathy-FIG-mainwindow">main
+		window</link>, select <menuchoice>
+		<guimenu>Edit</guimenu>
+		<guimenuitem>Personal Information</guimenuitem>
+	      </menuchoice>.
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para>
+	      From the <guilabel>Account</guilabel> drop-down list, choose
+	      the account you want to edit.
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para>
+	      In the <guilabel>Alias</guilabel> text box, write your new
+	      alias.
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para>
+	      To change your icon, click on the person-looking button and
+	      choose an image file.
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para>
+	      When done, click <guibutton>Close</guibutton>.
+	    </para>
+	  </listitem>
+	</orderedlist>
+      </para>
+      <para>
+	<note>
+	  <para>
+	    An <emphasis>alias</emphasis> is an alternative way you
+	    can identify yourself. You can use your real
+	    name or your nickname.
+	  </para>
+	</note>
+      </para>
+    </sect2>
+    
     <sect2 id="empathy-advanced-options">
       <title>Advanced Options</title> 
       <para>
@@ -649,7 +767,13 @@
       All the contacts are handled within &app;'s <link
       linkend="empathy-FIG-mainwindow">main window</link>.
     </para>
-    <sect2 id="empathy-add-contact">
+    <para>
+      You can add or remove a contact or you can edit the information
+      of a particular contact. It is also possibile to arrange
+      contacts in groups. You can have a group for your work contacts,
+      one for you family contacts, and so on.
+    </para>
+     <sect2 id="empathy-add-contact">
       <title>Adding and Removing a Contact</title>
       <para>
 	To add a new contact, proceed as follows:
@@ -734,14 +858,13 @@
 	  <listitem>
 	    <para>
 	      From the <link linkend="empathy-FIG-mainwindow">main
-	      window</link>, select the contact you would like
-	      to modify and right-click on it.
-	    </para>
-	  </listitem>
-	  <listitem>
-	    <para>
-	      From the popup menu, choose <guilabel>Modify</guilabel>
-	      to modify the contact.
+		window</link>, select the contact you would like
+	      to modify and choose <menuchoice>
+		<guimenu>Edit</guimenu>
+		<guisubmenu>Account</guisubmenu>
+		<guimenuitem>Modify</guimenuitem>
+	      </menuchoice>, or right-click on it
+	      and choose <guilabel>Modify</guilabel>.
 	    </para>
 	  </listitem>
 	</orderedlist>
@@ -778,12 +901,12 @@
 	    <para>
 	      From the <link linkend="empathy-FIG-mainwindow">main
 		window</link>, select the contact you would like
-	      to modify and right-click on it.
-	    </para>
-	  </listitem>
-	  <listitem>
-	    <para>
-	      From the popup menu, choose <guilabel>Modify</guilabel>.
+	      to modify and choose <menuchoice>
+		<guimenu>Edit</guimenu>
+		<guisubmenu>Account</guisubmenu>
+		<guimenuitem>Modify</guimenuitem>
+	      </menuchoice>, or right-click on it
+	      and choose <guilabel>Modify</guilabel>.
 	    </para>
 	  </listitem>
 	  <listitem>
@@ -811,12 +934,12 @@
 	  <listitem>
 	    <para>
 	      From the <link linkend="empathy-FIG-mainwindow">main
-		window</link>, select one contact and right-click on it.
-	    </para>
-	  </listitem>
-	  <listitem>
-	    <para>
-	      From the popup menu, choose <guilabel>Modify</guilabel>.
+		window</link>, select one contact and choose <menuchoice>
+		<guimenu>Edit</guimenu>
+		<guisubmenu>Account</guisubmenu>
+		<guimenuitem>Modify</guimenuitem>
+	      </menuchoice>, or right-click on it
+	      and choose <guilabel>Modify</guilabel>.
 	    </para>
 	  </listitem>
 	  <listitem>
@@ -836,59 +959,7 @@
     </sect2>
   </sect1>
 
-  <sect1 id="empathy-edit-personal-information">
-    <title>Editing Personal Information</title>
-    <para>
-      To change your personal information, your alias and your
-      icon (the image that other contacts will see of you), for each
-      of your accounts, proceed as follows:
-    </para>
-    <para>
-      <orderedlist>
-	<listitem>
-	  <para>
-	    From the <link linkend="empathy-FIG-mainwindow">main
-	      window</link>, select <menuchoice>
-	      <guimenu>Edit</guimenu>
-	      <guimenuitem>Personal Information</guimenuitem>
-	    </menuchoice>.
-	  </para>
-	</listitem>
-	<listitem>
-	  <para>
-	    From the <guilabel>Account</guilabel> drop-down list, choose
-	    the account you want to edit.
-	  </para>
-	</listitem>
-	<listitem>
-	  <para>
-	    In the <guilabel>Alias</guilabel> text box, write your new
-	    alias.
-	  </para>
-	</listitem>
-	<listitem>
-	  <para>
-	    To change your icon, click on the person-looking button and
-	    choose an image file.
-	  </para>
-	</listitem>
-	<listitem>
-	  <para>
-	    When done, click <guibutton>Close</guibutton>.
-	  </para>
-	</listitem>
-      </orderedlist>
-    </para>
-      <para>
-	<note>
-	  <para>
-	    An <emphasis>alias</emphasis> is an alternative way you
-	    can identify yourself. You can use your real
-	    name or your nickname.
-	  </para>
-	</note>
-      </para>
-  </sect1>
+
 
 <!--
   <sect1 id="empathy-send-receive-message">
