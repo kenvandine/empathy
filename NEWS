@@ -1,3 +1,39 @@
+NEW in 2.25.90
+==============
+ - Add libnotify support (Jonny Lamb, Elliot Fairweather).
+ - Add EmpathyContactSelector (Jonny Lamb, Elliot Fairweather).
+ - Renamed G_STR_EMPTY to EMP_STR_EMPTY (Jonny Lamb).
+ - Update the user documentation  (Milo Casagrande).
+ - Rename _new -> _dup_singleton. (xclaesse).
+ - Remove usage of EmpathyTpGroup from EmpathyTpCall. (xclaesse).
+ - Remove some usage of EmpathyTpGroup from EmpathyTpChat (xclaesse).
+ - Rework internal dispatcher (Sjoerd Simons).
+
+Bugs fixed:
+ - Fixed #548768, You can open several avatar file pickers for the same account (Frederic Peters)
+ - Fixed #562554, "Chat -> View Previous Conversations" should be disabled if no account (fpeters)
+ - Fixed #566549, Please remove trailing space (Leonardo Ferreira Fontenelle)
+ - Fixed #566676, There should not be any "gtk-ok", "gtk-cancel" etc. string in .pot (Lucas Lommer)
+ - Fixed #569884, no --version command-line option (xclaesse)
+ - Fixed #569901, i18n problems in main() (xclaesse)
+ - Fixed #570066, Missing file from POTFILES.in (xclaesse)
+ - Fixed #570080, empathy fails to build outside source tree (xclaesse)
+
+Translations:
+ - Updated pt_BR translation  (Michel Recondo).
+ - Updated Hungarian translation (kelemeng).
+ - Updated es translation  (Jorge Gonzalez).
+ - Updated ca translation  (Gil Forcada).
+ - Updated Greek translation  (Marios Zindilis).
+ - Updated Spanish translation (jorgegonz).
+ - Updated ko translation. (cwryu).
+ - updated hebrew translation (yairhr).
+ - Updated gr translation  (Marios Zindilis).
+ - Updated Slovenian translation (mateju).
+ - Updated Norwegian bokmål translation. (kmaraas).
+ - Updated th translation  (Theppitak Karoonboonyanan).
+ - Updated sv translation  (Daniel Nylander).
+
 NEW in 2.25.4
 ==============
  - Add sound notifications using libcanberra-gtk (Cosimo Cecchi)
