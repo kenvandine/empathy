@@ -430,14 +430,17 @@ main (int argc, char *argv[])
 
 	/* Init */
 	g_thread_init (NULL);
+	empathy_init ();
+
 	if (!gtk_init_with_args (&argc, &argv,
-				 _("- Empathy Instant Messenger"),
+				 N_("- Empathy Instant Messenger"),
 				 options, GETTEXT_PACKAGE, &error)) {
 		g_warning ("Error in empathy init: %s", error->message);
 		return EXIT_FAILURE;
 	}
+
 	empathy_gtk_init ();
-	g_set_application_name (PACKAGE_NAME);
+	g_set_application_name (_(PACKAGE_NAME));
 	gtk_window_set_default_icon_name ("empathy");
 	textdomain (GETTEXT_PACKAGE);
 
@@ -533,7 +536,7 @@ main (int argc, char *argv[])
 	chatroom_manager = empathy_chatroom_manager_dup_singleton (NULL);
 	empathy_chatroom_manager_observe (chatroom_manager, dispatcher);
 
-	notify_init (PACKAGE_NAME);
+	notify_init (_(PACKAGE_NAME));
 
 	gtk_main ();
 
