@@ -40,6 +40,7 @@
 
 #include <libempathy/empathy-idle.h>
 #include <libempathy/empathy-utils.h>
+#include <libempathy/empathy-call-factory.h>
 #include <libempathy/empathy-chatroom-manager.h>
 #include <libempathy/empathy-dispatcher.h>
 #include <libempathy/empathy-dispatch-operation.h>
@@ -110,14 +111,10 @@ dispatch_cb (EmpathyDispatcher *dispatcher,
 
 		empathy_dispatch_operation_claim (operation);
 	} else if (channel_type == TP_IFACE_QUARK_CHANNEL_TYPE_STREAMED_MEDIA) {
-		EmpathyTpCall *call;
+		EmpathyCallFactory *factory;
 
-		call = EMPATHY_TP_CALL (
-			empathy_dispatch_operation_get_channel_wrapper (operation));
-
-		empathy_dispatch_operation_claim (operation);
-
-		empathy_call_window_new (call);
+		factory = empathy_call_factory_get ();
+		empathy_call_factory_claim_channel (factory, operation);
 	} else if (channel_type == EMP_IFACE_QUARK_CHANNEL_TYPE_FILE_TRANSFER) {
 		EmpathyFTManager *ft_manager;
 		EmpathyTpFile    *tp_file;
@@ -397,6 +394,16 @@ show_version_cb (const char *option_name,
 	return FALSE;
 }
 
+static void
+new_call_handler_cb (EmpathyCallFactory *factory, EmpathyCallHandler *handler,
+	gboolean outgoing, gpointer user_data)
+{
+		EmpathyCallWindow *window;
+
+		window = empathy_call_window_new (handler);
+		gtk_widget_show (GTK_WIDGET (window));
+}
+
 int
 main (int argc, char *argv[])
 {
@@ -404,6 +411,7 @@ main (int argc, char *argv[])
 	EmpathyStatusIcon *icon;
 	EmpathyDispatcher *dispatcher;
 	EmpathyChatroomManager *chatroom_manager;
+	EmpathyCallFactory *call_factory;
 	GtkWidget         *window;
 	MissionControl    *mc;
 	EmpathyIdle       *idle;
@@ -543,6 +551,10 @@ main (int argc, char *argv[])
 	empathy_chatroom_manager_observe (chatroom_manager, dispatcher);
 
 	notify_init (_(PACKAGE_NAME));
+	/* Create the call factory */
+	call_factory = empathy_call_factory_initialise ();
+	g_signal_connect (G_OBJECT (call_factory), "new-call-handler",
+		G_CALLBACK (new_call_handler_cb), NULL);
 
 	gtk_main ();
 

@@ -46,7 +46,6 @@ empathy_logs_SOURCES = empathy-logs.c
 gladedir = $(datadir)/empathy
 glade_DATA = 					\
 	empathy-accounts-dialog.glade		\
-	empathy-call-window.glade		\
 	empathy-chatrooms-window.glade		\
 	empathy-chat-window.glade		\
 	empathy-ft-manager.glade		\
