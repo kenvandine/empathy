@@ -191,7 +191,6 @@ new_message_dialog_response_cb (GtkWidget               *widget,
 
 		factory = empathy_contact_factory_dup_singleton ();
 		contact = empathy_contact_factory_get_from_id (factory, account, id);
-		empathy_start_call_with_contact (contact);
 
 		call_factory = empathy_call_factory_get();
 		empathy_call_factory_new_call (call_factory, contact);
