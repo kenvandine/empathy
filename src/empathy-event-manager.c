@@ -325,6 +325,7 @@ event_update (EmpathyEventManager *manager, EventPriv *event,
   g_signal_emit (manager, signals[EVENT_UPDATED], 0, event);
 }
 
+static void
 event_manager_call_window_confirmation_dialog_response_cb (GtkDialog *dialog,
   gint response, gpointer user_data)
 {
@@ -435,8 +436,6 @@ event_manager_chat_message_received_cb (EmpathyTpChat *tp_chat,
   g_free (header);
   empathy_sound_play (empathy_main_window_get (),
     EMPATHY_SOUND_CONVERSATION_NEW);
-
-  g_free (msg);
 }
 
 static void
@@ -513,13 +512,11 @@ event_manager_media_channel_got_name_cb (EmpathyContact *contact,
     empathy_contact_get_name (contact));
 
   event_manager_add (approval->manager,
-    approval->contact, EMPATHY_IMAGE_VOIP, msg,
+    approval->contact, EMPATHY_IMAGE_VOIP, header, NULL,
     approval, event_channel_process_voip_func, NULL);
 
   g_free (header);
   event_manager_start_ringing (approval->manager);
-
-  g_free (msg);
 }
 
 static void
@@ -581,8 +578,6 @@ event_manager_add_tube_approval (EventManagerApproval *approval,
   /* FIXME better sound for incoming tubes ? */
   empathy_sound_play (empathy_main_window_get (),
     EMPATHY_SOUND_CONVERSATION_NEW);
-
-  g_free (msg);
 }
 
 static void
