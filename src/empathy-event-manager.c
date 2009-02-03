@@ -32,6 +32,7 @@
 #include <libempathy/empathy-tp-chat.h>
 #include <libempathy/empathy-tp-call.h>
 #include <libempathy/empathy-utils.h>
+#include <libempathy/empathy-call-factory.h>
 
 #include <extensions/extensions.h>
 
@@ -60,6 +61,8 @@ typedef struct {
   EmpathyTubeDispatch *tube_dispatch;
   /* option signal handler */
   gulong handler;
+  /* optional accept widget */
+  GtkWidget *dialog;
 } EventManagerApproval;
 
 typedef struct {
@@ -126,6 +129,11 @@ event_manager_approval_free (EventManagerApproval *approval)
 
   if (approval->tube_dispatch != NULL)
     g_object_unref (approval->tube_dispatch);
+
+  if (approval->dialog != NULL)
+    {
+      gtk_widget_destroy (approval->dialog);
+    }
 
   g_slice_free (EventManagerApproval, approval);
 }
@@ -317,6 +325,79 @@ event_update (EmpathyEventManager *manager, EventPriv *event,
   g_signal_emit (manager, signals[EVENT_UPDATED], 0, event);
 }
 
+event_manager_call_window_confirmation_dialog_response_cb (GtkDialog *dialog,
+  gint response, gpointer user_data)
+{
+  EventManagerApproval *approval = user_data;
+
+  gtk_widget_destroy (approval->dialog);
+  approval->dialog = NULL;
+
+  if (response != GTK_RESPONSE_ACCEPT)
+    {
+      EmpathyTpCall *call =
+        EMPATHY_TP_CALL (
+          empathy_dispatch_operation_get_channel_wrapper (
+            approval->operation));
+
+      g_object_ref (call);
+      if (empathy_dispatch_operation_claim (approval->operation))
+        empathy_tp_call_close (call);
+      g_object_unref (call);
+
+    }
+  else
+    {
+      EmpathyCallFactory *factory = empathy_call_factory_get ();
+      empathy_call_factory_claim_channel (factory, approval->operation);
+    }
+}
+
+static void
+event_channel_process_voip_func (EventPriv *event)
+{
+  GtkWidget *dialog;
+  GtkWidget *button;
+  GtkWidget *image;
+
+  if (event->approval->dialog != NULL)
+    {
+      gtk_window_present (GTK_WINDOW (event->approval->dialog));
+      return;
+    }
+
+  dialog = gtk_message_dialog_new (GTK_WINDOW (empathy_main_window_get()),
+      GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+      GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE, _("Incoming call"));
+  gtk_message_dialog_format_secondary_text (
+    GTK_MESSAGE_DIALOG (dialog),
+      _("%s is calling you, do you want to answer?"),
+      empathy_contact_get_name (event->approval->contact));
+
+  gtk_dialog_set_default_response (GTK_DIALOG (dialog),
+      GTK_RESPONSE_OK);
+
+  button = gtk_dialog_add_button (GTK_DIALOG (dialog),
+      _("_Reject"), GTK_RESPONSE_REJECT);
+  image = gtk_image_new_from_icon_name (GTK_STOCK_CANCEL,
+    GTK_ICON_SIZE_BUTTON);
+  gtk_button_set_image (GTK_BUTTON (button), image);
+
+  button = gtk_dialog_add_button (GTK_DIALOG (dialog),
+      _("_Answer"), GTK_RESPONSE_ACCEPT);
+
+  image = gtk_image_new_from_icon_name (GTK_STOCK_APPLY, GTK_ICON_SIZE_BUTTON);
+  gtk_button_set_image (GTK_BUTTON (button), image);
+
+  g_signal_connect (dialog, "response",
+      G_CALLBACK (event_manager_call_window_confirmation_dialog_response_cb),
+      event->approval);
+
+  gtk_widget_show (dialog);
+
+  event->approval->dialog = dialog;
+}
+
 static void
 event_manager_chat_message_received_cb (EmpathyTpChat *tp_chat,
   EmpathyMessage *message, EventManagerApproval *approval)
@@ -432,8 +513,8 @@ event_manager_media_channel_got_name_cb (EmpathyContact *contact,
     empathy_contact_get_name (contact));
 
   event_manager_add (approval->manager,
-    approval->contact, EMPATHY_IMAGE_VOIP, header, NULL,
-    approval, event_channel_process_func, NULL);
+    approval->contact, EMPATHY_IMAGE_VOIP, msg,
+    approval, event_channel_process_voip_func, NULL);
 
   g_free (header);
   event_manager_start_ringing (approval->manager);
