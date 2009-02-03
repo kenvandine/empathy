@@ -453,37 +453,6 @@ empathy_proxy_equal (gconstpointer a,
 	       g_str_equal (proxy_a->bus_name, proxy_b->bus_name);
 }
 
-static void
-empathy_call_request_cb (EmpathyDispatchOperation *operation,
-  const GError *error, gpointer user_data)
-{
-  EmpathyContact *contact = EMPATHY_CONTACT (user_data);
-
-  if (error != NULL)
-    {
-      DEBUG ("Failed to request streamed media channel %s",
-        error->message);
-    }
-  else
-    {
-      EmpathyTpCall *call =
-        EMPATHY_TP_CALL (
-          empathy_dispatch_operation_get_channel_wrapper (operation));
-
-      empathy_tp_call_to (call, contact);
-    }
-
-  g_object_unref (contact);
-}
-
-void
-empathy_start_call_with_contact (EmpathyContact *contact)
-{
-  g_object_ref (contact);
-  empathy_dispatcher_call_with_contact (contact, empathy_call_request_cb,
-    contact);
-}
-
 gboolean
 empathy_check_available_state (void)
 {
@@ -495,10 +464,9 @@ empathy_check_available_state (void)
 	g_object_unref (idle);
 
 	if (presence != MC_PRESENCE_AVAILABLE &&
-	    presence != MC_PRESENCE_UNSET) {
+		presence != MC_PRESENCE_UNSET) {
 		return FALSE;    
 	}
 
 	return TRUE;
 }
-

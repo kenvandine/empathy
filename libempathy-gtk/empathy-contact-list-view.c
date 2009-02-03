@@ -34,6 +34,7 @@
 
 #include <libmissioncontrol/mc-account.h>
 
+#include <libempathy/empathy-call-factory.h>
 #include <libempathy/empathy-contact-factory.h>
 #include <libempathy/empathy-contact-list.h>
 #include <libempathy/empathy-contact-groups.h>
@@ -571,7 +572,11 @@ contact_list_view_voip_activated_cb (EmpathyCellRendererActivatable *cell,
 			    -1);
 
 	if (contact) {
-		empathy_start_call_with_contact (contact);
+		EmpathyCallFactory *factory;
+
+		factory = empathy_call_factory_get ();
+		empathy_call_factory_new_call (factory, contact);
+
 		g_object_unref (contact);
 	}
 }

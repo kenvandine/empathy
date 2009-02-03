@@ -31,6 +31,7 @@
 #include <libmissioncontrol/mc-account.h>
 #include <libmissioncontrol/mission-control.h>
 
+#include <libempathy/empathy-call-factory.h>
 #include <libempathy/empathy-contact-factory.h>
 #include <libempathy/empathy-contact-manager.h>
 #include <libempathy/empathy-dispatcher.h>
@@ -186,10 +187,14 @@ new_message_dialog_response_cb (GtkWidget               *widget,
 	if (response == 1) {
 		EmpathyContactFactory *factory;
 		EmpathyContact *contact;
+		EmpathyCallFactory *call_factory;
 
 		factory = empathy_contact_factory_dup_singleton ();
 		contact = empathy_contact_factory_get_from_id (factory, account, id);
 		empathy_start_call_with_contact (contact);
+
+		call_factory = empathy_call_factory_get();
+		empathy_call_factory_new_call (call_factory, contact);
 
 		g_object_unref (contact);
 		g_object_unref (factory);
@@ -307,4 +312,3 @@ empathy_new_message_dialog_show (GtkWindow *parent)
 
 	return dialog->dialog;
 }
-

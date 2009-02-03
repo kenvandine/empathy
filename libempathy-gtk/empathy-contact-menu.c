@@ -26,6 +26,7 @@
 #include <glib/gi18n-lib.h>
 #include <gtk/gtk.h>
 
+#include <libempathy/empathy-call-factory.h>
 #include <libempathy/empathy-log-manager.h>
 #include <libempathy/empathy-dispatcher.h>
 #include <libempathy/empathy-utils.h>
@@ -131,6 +132,16 @@ empathy_contact_chat_menu_item_new (EmpathyContact *contact)
 	return item;
 }
 
+static void
+empathy_contact_call_menu_item_activated (GtkMenuItem *item,
+	EmpathyContact *contact)
+{
+	EmpathyCallFactory *factory;
+
+	factory = empathy_call_factory_get ();
+	empathy_call_factory_new_call (factory, contact);
+}
+
 GtkWidget *
 empathy_contact_call_menu_item_new (EmpathyContact *contact)
 {
@@ -146,8 +157,8 @@ empathy_contact_call_menu_item_new (EmpathyContact *contact)
 	gtk_widget_set_sensitive (item, empathy_contact_can_voip (contact));
 	gtk_widget_show (image);
 
-	g_signal_connect_swapped (item, "activate",
-				  G_CALLBACK (empathy_start_call_with_contact),
+	g_signal_connect (item, "activate",
+				  G_CALLBACK (empathy_contact_call_menu_item_activated),
 				  contact);
 	
 	return item;
