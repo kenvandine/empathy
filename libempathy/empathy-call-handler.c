@@ -149,7 +149,7 @@ empathy_call_handler_class_init (EmpathyCallHandlerClass *klass)
 
   param_spec = g_param_spec_object ("tp-call",
     "tp-call", "The calls channel wrapper",
-    EMPATHY_TYPE_CONTACT,
+    EMPATHY_TYPE_TP_CALL,
     G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
   g_object_class_install_property (object_class, PROP_TP_CALL, param_spec);
 
@@ -297,6 +297,26 @@ empathy_call_handler_tf_channel_stream_created_cb (TfChannel *tfchannel,
   gst_object_unref (spad);
 }
 
+static void
+empathy_call_handler_start_tpfs (EmpathyCallHandler *self)
+{
+  EmpathyCallHandlerPriv *priv = GET_PRIV (self);
+  TpChannel *channel;
+
+  g_object_get (priv->call, "channel", &channel, NULL);
+
+  g_assert (channel != NULL);
+
+  priv->tfchannel = tf_channel_new (channel);
+
+  /* Set up the telepathy farsight channel */
+  g_signal_connect (priv->tfchannel, "session-created",
+      G_CALLBACK (empathy_call_handler_tf_channel_session_created_cb), self);
+  g_signal_connect (priv->tfchannel, "stream-created",
+      G_CALLBACK (empathy_call_handler_tf_channel_stream_created_cb), self);
+
+  g_object_unref (channel);
+}
 
 static void
 empathy_call_handler_request_cb (EmpathyDispatchOperation *operation,
@@ -310,16 +330,10 @@ empathy_call_handler_request_cb (EmpathyDispatchOperation *operation,
 
   priv->call = EMPATHY_TP_CALL (
     empathy_dispatch_operation_get_channel_wrapper (operation));
+
   g_object_ref (priv->call);
 
-  priv->tfchannel = tf_channel_new (
-    empathy_dispatch_operation_get_channel (operation));
-
-  /* Set up the telepathy farsight channel */
-  g_signal_connect (priv->tfchannel, "session-created",
-      G_CALLBACK (empathy_call_handler_tf_channel_session_created_cb), self);
-  g_signal_connect (priv->tfchannel, "stream-created",
-      G_CALLBACK (empathy_call_handler_tf_channel_stream_created_cb), self);
+  empathy_call_handler_start_tpfs (self);
 
   empathy_tp_call_to (priv->call, priv->contact);
 
@@ -377,11 +391,17 @@ empathy_call_handler_start_call (EmpathyCallHandler *handler)
 
   EmpathyCallHandlerPriv *priv = GET_PRIV (handler);
 
-  g_assert (priv->contact != NULL);
-
-  empathy_contact_call_when_ready (priv->contact,
-    EMPATHY_CONTACT_READY_ID,
-    empathy_call_handler_contact_ready_cb, NULL, NULL, G_OBJECT (handler));
+  if (priv->call == NULL)
+    {
+      empathy_contact_call_when_ready (priv->contact,
+        EMPATHY_CONTACT_READY_ID,
+        empathy_call_handler_contact_ready_cb, NULL, NULL, G_OBJECT (handler));
+    }
+  else
+    {
+      empathy_call_handler_start_tpfs (handler);
+      empathy_tp_call_accept_incoming_call (priv->call);
+    }
 }
 
 void
