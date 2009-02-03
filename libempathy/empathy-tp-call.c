@@ -427,9 +427,6 @@ tp_call_dispose (GObject *object)
 
   priv->dispose_has_run = TRUE;
 
-  g_slice_free (EmpathyTpCallStream, priv->audio);
-  g_slice_free (EmpathyTpCallStream, priv->video);
-
   if (priv->channel != NULL)
     {
       g_signal_handlers_disconnect_by_func (priv->channel,
