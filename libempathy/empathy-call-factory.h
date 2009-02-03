@@ -63,11 +63,11 @@ EmpathyCallFactory *empathy_call_factory_initialise (void);
 
 EmpathyCallFactory *empathy_call_factory_get (void);
 
-EmpathyCallHandler *empathy_call_factory_new_call (
-  EmpathyCallFactory *factory, EmpathyContact *contact);
+void empathy_call_factory_new_call (EmpathyCallFactory *factory,
+  EmpathyContact *contact);
 
-EmpathyCallHandler *empathy_call_factory_claim_channel (
-  EmpathyCallFactory *factory, EmpathyDispatchOperation *operation);
+void empathy_call_factory_claim_channel (EmpathyCallFactory *factory,
+  EmpathyDispatchOperation *operation);
 
 G_END_DECLS
 

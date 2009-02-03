@@ -141,32 +141,32 @@ empathy_call_factory_get (void)
   return EMPATHY_CALL_FACTORY (call_factory);
 }
 
-EmpathyCallHandler *
+void
 empathy_call_factory_new_call (EmpathyCallFactory *factory,
   EmpathyContact *contact)
 {
   EmpathyCallHandler *handler;
 
-  g_return_val_if_fail (factory != NULL, NULL);
-  g_return_val_if_fail (contact != NULL, NULL);
+  g_return_if_fail (factory != NULL);
+  g_return_if_fail (contact != NULL);
 
   handler = empathy_call_handler_new_for_contact (contact);
 
   g_signal_emit (G_OBJECT (factory), signals[NEW_CALL_HANDLER], 0,
     handler, TRUE);
 
-  return handler;
+  g_object_unref (handler);
 }
 
-EmpathyCallHandler *
+void
 empathy_call_factory_claim_channel (EmpathyCallFactory *factory,
   EmpathyDispatchOperation *operation)
 {
   EmpathyCallHandler *handler;
   EmpathyTpCall *call;
 
-  g_return_val_if_fail (factory != NULL, NULL);
-  g_return_val_if_fail (operation != NULL, NULL);
+  g_return_if_fail (factory != NULL);
+  g_return_if_fail (operation != NULL);
 
   call = EMPATHY_TP_CALL (
     empathy_dispatch_operation_get_channel_wrapper (operation));
@@ -178,6 +178,6 @@ empathy_call_factory_claim_channel (EmpathyCallFactory *factory,
   g_signal_emit (G_OBJECT (factory), signals[NEW_CALL_HANDLER], 0,
     handler, FALSE);
 
-  return handler;
+  g_object_unref (handler);
 }
 
