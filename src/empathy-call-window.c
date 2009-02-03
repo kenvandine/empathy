@@ -26,6 +26,7 @@
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
 
+#include <telepathy-farsight/channel.h>
 
 #include <libempathy/empathy-utils.h>
 #include <libempathy-gtk/empathy-video-widget.h>
@@ -66,6 +67,7 @@ struct _EmpathyCallWindowPriv
   GtkWidget *video_preview;
   GtkWidget *sidebar;
   GtkWidget *sidebar_button;
+  GtkWidget *statusbar;
 
   GstElement *video_input;
   GstElement *audio_input;
@@ -74,6 +76,7 @@ struct _EmpathyCallWindowPriv
   GstElement *video_tee;
 
   GladeXML *glade;
+  guint context_id;
 };
 
 #define GET_PRIV(o) \
@@ -96,6 +99,14 @@ static void empathy_call_window_sidebar_hidden_cb (EmpathySidebar *sidebar,
   EmpathyCallWindow *window);
 
 static void empathy_call_window_hangup (EmpathyCallWindow *window);
+
+static void empathy_call_window_status_message (EmpathyCallWindow *window,
+  gchar *message);
+
+static void
+empathy_call_window_session_created_cb (TfChannel *tfchannel,
+  FsConference  *conference, FsParticipant *participant,
+  gpointer user_data);
 
 static void
 empathy_call_window_setup_menubar (EmpathyCallWindow *self)
@@ -231,6 +242,7 @@ empathy_call_window_init (EmpathyCallWindow *self)
   priv->glade = empathy_glade_get_file (filename, "call_window", NULL,
     "call_window_vbox", &top_vbox,
     "pane", &pane,
+    "statusbar", &priv->statusbar,
     NULL);
 
   gtk_widget_reparent (top_vbox, GTK_WIDGET (self));
@@ -310,6 +322,8 @@ empathy_call_window_init (EmpathyCallWindow *self)
 
   g_signal_connect (G_OBJECT (self), "delete-event",
     G_CALLBACK (empathy_call_window_delete_cb), self);
+
+  empathy_call_window_status_message (self, _("Connecting..."));
 }
 
 static void empathy_call_window_dispose (GObject *object);
@@ -442,8 +456,23 @@ empathy_call_window_conference_added_cb (EmpathyCallHandler *handler,
   gst_bin_add (GST_BIN (priv->pipeline), conference);
 
   gst_element_set_state (conference, GST_STATE_PLAYING);
+}
 
-  printf ("ADDING CONFERENCE\n");
+static void
+empathy_call_window_channel_closed_cb (TfChannel *channel, gpointer user_data)
+{
+  EmpathyCallWindow *self = EMPATHY_CALL_WINDOW (user_data);
+
+  empathy_call_window_status_message (self, _("Disconnected"));
+}
+
+static void
+empathy_call_window_session_created_cb (TfChannel *tfchannel,
+  FsConference  *conference, FsParticipant *participant,
+  gpointer user_data)
+{
+  g_signal_connect (G_OBJECT (tfchannel), "closed",
+    G_CALLBACK (empathy_call_window_channel_closed_cb), user_data);
 }
 
 static void
@@ -455,8 +484,11 @@ empathy_call_window_src_added_cb (EmpathyCallHandler *handler,
 
   GstPad *pad;
   GstElement *element;
+  gchar *str;
 
-  printf ("ADDING SRC PAD %d\n", media_type);
+  str = g_strdup_printf (_("Connected -- %d:%02dm"), 0, 0);
+  empathy_call_window_status_message (self, str);
+  g_free (str);
 
   switch (media_type)
     {
@@ -489,8 +521,6 @@ empathy_call_window_sink_added_cb (EmpathyCallHandler *handler,
   EmpathyCallWindowPriv *priv = GET_PRIV (self);
   GstPad *pad;
 
-  printf ("ADDING SINK PAD %d\n", media_type);
-
   switch (media_type)
     {
       case TP_MEDIA_STREAM_TYPE_AUDIO:
@@ -519,6 +549,8 @@ empathy_call_window_realized_cb (GtkWidget *widget, EmpathyCallWindow *window)
 
   g_signal_connect (priv->handler, "conference-added",
     G_CALLBACK (empathy_call_window_conference_added_cb), window);
+  g_signal_connect (priv->handler, "session-created",
+    G_CALLBACK (empathy_call_window_session_created_cb), window);
   g_signal_connect (priv->handler, "src-pad-added",
     G_CALLBACK (empathy_call_window_src_added_cb), window);
   g_signal_connect (priv->handler, "sink-pad-added",
@@ -607,4 +639,24 @@ empathy_call_window_hangup (EmpathyCallWindow *window)
 
   gst_element_set_state (priv->pipeline, GST_STATE_NULL);
   gtk_widget_destroy (GTK_WIDGET (window));
+}
+
+static void
+empathy_call_window_status_message (EmpathyCallWindow *window,
+  gchar *message)
+{
+  EmpathyCallWindowPriv *priv = GET_PRIV (window);
+
+  if (priv->context_id == 0)
+    {
+      priv->context_id = gtk_statusbar_get_context_id (
+        GTK_STATUSBAR (priv->statusbar), "voip call status messages");
+    }
+  else
+    {
+      gtk_statusbar_pop (GTK_STATUSBAR (priv->statusbar), priv->context_id);
+    }
+
+  gtk_statusbar_push (GTK_STATUSBAR (priv->statusbar), priv->context_id,
+    message);
 }
