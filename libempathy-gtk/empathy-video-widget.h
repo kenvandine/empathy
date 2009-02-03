@@ -41,20 +41,20 @@ struct _EmpathyVideoWidget {
 GType empathy_video_widget_get_type (void);
 
 /* TYPE MACROS */
-#define EMPATHY_TYPE_GST_GTK_WIDGET \
+#define EMPATHY_TYPE_VIDEO_WIDGET \
   (empathy_video_widget_get_type())
 #define EMPATHY_VIDEO_WIDGET(obj) \
-  (G_TYPE_CHECK_INSTANCE_CAST((obj), EMPATHY_TYPE_GST_GTK_WIDGET, \
+  (G_TYPE_CHECK_INSTANCE_CAST((obj), EMPATHY_TYPE_VIDEO_WIDGET, \
     EmpathyVideoWidget))
 #define EMPATHY_VIDEO_WIDGET_CLASS(klass) \
-  (G_TYPE_CHECK_CLASS_CAST((klass), EMPATHY_TYPE_GST_GTK_WIDGET, \
+  (G_TYPE_CHECK_CLASS_CAST((klass), EMPATHY_TYPE_VIDEO_WIDGET, \
   EmpathyVideoWidgetClass))
-#define EMPATHY_IS_GST_GTK_WIDGET(obj) \
-  (G_TYPE_CHECK_INSTANCE_TYPE((obj), EMPATHY_TYPE_GST_GTK_WIDGET))
-#define EMPATHY_IS_GST_GTK_WIDGET_CLASS(klass) \
-  (G_TYPE_CHECK_CLASS_TYPE((klass), EMPATHY_TYPE_GST_GTK_WIDGET))
+#define EMPATHY_IS_VIDEO_WIDGET(obj) \
+  (G_TYPE_CHECK_INSTANCE_TYPE((obj), EMPATHY_TYPE_VIDEO_WIDGET))
+#define EMPATHY_IS_VIDEO_WIDGET_CLASS(klass) \
+  (G_TYPE_CHECK_CLASS_TYPE((klass), EMPATHY_TYPE_VIDEO_WIDGET))
 #define EMPATHY_VIDEO_WIDGET_GET_CLASS(obj) \
-  (G_TYPE_INSTANCE_GET_CLASS ((obj), EMPATHY_TYPE_GST_GTK_WIDGET, \
+  (G_TYPE_INSTANCE_GET_CLASS ((obj), EMPATHY_TYPE_VIDEO_WIDGET, \
   EmpathyVideoWidgetClass))
 
 GtkWidget *empathy_video_widget_new (GstBus *bus);

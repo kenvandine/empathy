@@ -71,7 +71,7 @@ struct _EmpathyVideoWidgetPriv
 };
 
 #define GET_PRIV(o)     (G_TYPE_INSTANCE_GET_PRIVATE ((o), \
-  EMPATHY_TYPE_GST_GTK_WIDGET, EmpathyVideoWidgetPriv))
+  EMPATHY_TYPE_VIDEO_WIDGET, EmpathyVideoWidgetPriv))
 
 static void
 empathy_video_widget_init (EmpathyVideoWidget *obj)
@@ -320,7 +320,7 @@ empathy_video_widget_new_with_size (GstBus *bus, gint width, gint height)
 {
   g_return_val_if_fail (bus != NULL, NULL);
 
-  return GTK_WIDGET (g_object_new (EMPATHY_TYPE_GST_GTK_WIDGET,
+  return GTK_WIDGET (g_object_new (EMPATHY_TYPE_VIDEO_WIDGET,
     "gst-bus", bus,
     "min-width", width,
     "min-height", height,
@@ -332,7 +332,7 @@ empathy_video_widget_new (GstBus *bus)
 {
   g_return_val_if_fail (bus != NULL, NULL);
 
-  return GTK_WIDGET (g_object_new (EMPATHY_TYPE_GST_GTK_WIDGET,
+  return GTK_WIDGET (g_object_new (EMPATHY_TYPE_VIDEO_WIDGET,
     "gst-bus", bus,
     NULL));
 }
