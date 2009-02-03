@@ -302,7 +302,7 @@ empathy_call_window_init (EmpathyCallWindow *self)
   gtk_paned_pack2 (GTK_PANED(pane), priv->sidebar, FALSE, FALSE);
 
   page = empathy_call_window_create_dtmf (self);
-  empathy_sidebar_add_page (EMPATHY_SIDEBAR (priv->sidebar), _("Dailpad"),
+  empathy_sidebar_add_page (EMPATHY_SIDEBAR (priv->sidebar), _("Dialpad"),
     page);
 
   page = empathy_call_window_create_audio_input (self);
