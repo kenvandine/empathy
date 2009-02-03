@@ -112,6 +112,7 @@ PKG_CHECK_MODULES(EMPATHY,
    libcanberra-gtk >= 0.4
    gstreamer-0.10
    gstreamer-interfaces-0.10
+   telepathy-farsight
 ])
 
 PKG_CHECK_MODULES(LIBNOTIFY, libnotify >= $LIBNOTIFY_REQUIRED)
@@ -274,6 +275,9 @@ if test "x$enable_python" != "xno"; then
       libmissioncontrol >= $MISSION_CONTROL_REQUIRED
       gtk+-2.0 >= $GTK_REQUIRED
       libglade-2.0 >= $LIBGLADE_REQUIRED
+      gstreamer-0.10
+      gstreamer-interfaces-0.10
+      telepathy-farsight
    ], have_python="yes", have_python="no")
    if test "x$have_python" = "xyes" ; then
       AM_CHECK_PYTHON_HEADERS(,have_python="no")
