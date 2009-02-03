@@ -20,6 +20,8 @@ libempathy_la_SOURCES =					\
 	empathy-account-manager.c			\
 	empathy-chatroom.c				\
 	empathy-chatroom-manager.c			\
+	empathy-call-factory.c			\
+	empathy-call-handler.c			\
 	empathy-contact.c				\
 	empathy-contact-factory.c			\
 	empathy-contact-groups.c			\
@@ -64,6 +66,8 @@ libempathy_headers =				\
 	empathy-account-manager.h		\
 	empathy-chatroom.h			\
 	empathy-chatroom-manager.h		\
+	empathy-call-factory.h			\
+	empathy-call-handler.h			\
 	empathy-contact.h			\
 	empathy-contact-factory.h		\
 	empathy-contact-groups.h		\
