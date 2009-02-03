@@ -352,6 +352,9 @@ call_window_update (EmpathyCallWindow *window)
   gboolean is_incoming;
   gchar *title;
 
+  if (window->call == NULL)
+    return;
+
   g_object_get (window->call,
       "status", &window->status,
       "audio-stream", &audio_stream,

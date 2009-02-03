@@ -62,6 +62,8 @@
 #define DEBUG_FLAG EMPATHY_DEBUG_OTHER
 #include <libempathy/empathy-debug.h>
 
+#include <gst/gst.h>
+
 static BaconMessageConnection *connection = NULL;
 
 static void
@@ -441,6 +443,10 @@ main (int argc, char *argv[])
 
 	empathy_gtk_init ();
 	g_set_application_name (_(PACKAGE_NAME));
+
+	gst_init (&argc, &argv);
+
+	g_set_application_name (PACKAGE_NAME);
 	gtk_window_set_default_icon_name ("empathy");
 	textdomain (GETTEXT_PACKAGE);
 

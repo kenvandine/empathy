@@ -25,8 +25,10 @@
 #include <telepathy-glib/proxy-subclass.h>
 #include <telepathy-glib/dbus.h>
 #include <telepathy-glib/interfaces.h>
+#include <telepathy-farsight/channel.h>
+#include <telepathy-farsight/stream.h>
 
-#include <extensions/extensions.h>
+#include <gst/gst.h>
 
 #include "empathy-tp-call.h"
 #include "empathy-contact-factory.h"
@@ -35,19 +37,17 @@
 #define DEBUG_FLAG EMPATHY_DEBUG_TP
 #include "empathy-debug.h"
 
-#define STREAM_ENGINE_BUS_NAME "org.freedesktop.Telepathy.StreamEngine"
-#define STREAM_ENGINE_OBJECT_PATH "/org/freedesktop/Telepathy/StreamEngine"
-
 #define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyTpCall)
 typedef struct
 {
+  gboolean dispose_has_run;
   TpChannel *channel;
-  TpProxy *stream_engine;
-  TpDBusDaemon *dbus_daemon;
+  TfChannel *tfchannel;
   EmpathyContact *contact;
   gboolean is_incoming;
   guint status;
-  gboolean stream_engine_running;
+
+  GstElement *pipeline;
 
   EmpathyTpCallStream *audio;
   EmpathyTpCallStream *video;
@@ -370,90 +370,131 @@ tp_call_async_cb (TpProxy *proxy,
 }
 
 static void
-tp_call_stream_engine_invalidated_cb (TpProxy       *stream_engine,
-				      GQuark         domain,
-				      gint           code,
-				      gchar         *message,
-				      EmpathyTpCall *call)
-{
-  DEBUG ("Stream engine proxy invalidated: %s", message);
-  empathy_tp_call_close (call);
-}
-
-static void
-tp_call_stream_engine_watch_name_owner_cb (TpDBusDaemon *daemon,
-					   const gchar *name,
-					   const gchar *new_owner,
-					   gpointer call)
+tp_call_close_channel (EmpathyTpCall *call)
 {
   EmpathyTpCallPriv *priv = GET_PRIV (call);
 
-  /* EMP_STR_EMPTY(new_owner) means either stream-engine has not started yet or
-   * has crashed. We want to close the channel if stream-engine has crashed.
-   * */
-  DEBUG ("Watch SE: name='%s' SE running='%s' new_owner='%s'",
-      name, priv->stream_engine_running ? "yes" : "no",
-      new_owner ? new_owner : "none");
-  if (priv->stream_engine_running && EMP_STR_EMPTY (new_owner))
-    {
-      DEBUG ("Stream engine falled off the bus");
-      empathy_tp_call_close (call);
+  if (priv->status == EMPATHY_TP_CALL_STATUS_CLOSED)
       return;
+
+  DEBUG ("Closing channel");
+
+  tp_cli_channel_call_close (priv->channel, -1,
+      NULL, NULL, NULL, NULL);
+
+  priv->status = EMPATHY_TP_CALL_STATUS_CLOSED;
+  g_object_notify (G_OBJECT (call), "status");
+}
+
+static gboolean
+tp_call_pipeline_bus_watch (GstBus *bus, GstMessage *message,
+  gpointer user_data)
+{
+  EmpathyTpCall *call = EMPATHY_TP_CALL (user_data);
+  EmpathyTpCallPriv *priv = GET_PRIV (call);
+
+  g_assert (priv->tfchannel != NULL);
+
+  tf_channel_bus_message (priv->tfchannel, message);
+
+  return TRUE;
+}
+
+static void
+tp_call_tf_channel_session_created_cb (TfChannel *tfchannel,
+  FsConference *conference, FsParticipant *participant, EmpathyTpCall *call)
+{
+  EmpathyTpCallPriv *priv = GET_PRIV (call);
+  GstBus *bus;
+
+  g_assert (priv->pipeline == NULL);
+
+  priv->pipeline = gst_pipeline_new ("call-pipeline");
+
+  bus = gst_pipeline_get_bus (GST_PIPELINE (priv->pipeline));
+  gst_bus_add_watch (bus, tp_call_pipeline_bus_watch, call);
+  gst_object_unref (bus);
+
+  gst_bin_add ( GST_BIN (priv->pipeline), GST_ELEMENT (conference));
+  gst_element_set_state ( GST_ELEMENT(priv->pipeline), GST_STATE_PLAYING);
+}
+
+static void
+tp_call_tf_stream_src_pad_added_cb (TfStream *stream, GstPad   *pad,
+  FsCodec  *codec, EmpathyTpCall  *call)
+{
+  EmpathyTpCallPriv *priv = GET_PRIV (call);
+  guint media_type;
+  GstElement *sink;
+  GstPad *spad;
+
+  g_object_get (stream, "media-type", &media_type, NULL);
+
+  switch (media_type)
+    {
+      case TP_MEDIA_STREAM_TYPE_AUDIO:
+        sink = gst_element_factory_make ("gconfaudiosink", NULL);
+        break;
+      case TP_MEDIA_STREAM_TYPE_VIDEO:
+        sink = gst_element_factory_make ("gconfvideosink", NULL);
+        break;
+      default:
+        g_assert_not_reached();
     }
 
-  priv->stream_engine_running = !EMP_STR_EMPTY (new_owner);
+  gst_bin_add ( GST_BIN (priv->pipeline), sink);
+  gst_element_set_state (sink, GST_STATE_PLAYING);
+
+  spad = gst_element_get_static_pad (sink, "sink");
+  gst_pad_link (pad, spad);
+  gst_object_unref (spad);
+}
+
+
+static gboolean
+tp_call_tf_stream_request_resource_cb (TfStream *stream,
+  guint direction, EmpathyTpCall *call)
+{
+  return TRUE;
 }
 
 static void
-tp_call_stream_engine_handle_channel (EmpathyTpCall *call)
+tp_call_tf_channel_stream_created_cb (TfChannel *tfchannel, TfStream *stream,
+  EmpathyTpCall *call)
 {
   EmpathyTpCallPriv *priv = GET_PRIV (call);
-  gchar *channel_type;
-  gchar *object_path;
-  guint handle_type;
-  guint handle;
-  TpProxy *connection;
+  guint media_type;
+  GstElement *src;
+  GstPad *pad, *spad;
 
-  DEBUG ("Revving up the stream engine");
+  g_signal_connect (stream, "src-pad-added",
+      G_CALLBACK (tp_call_tf_stream_src_pad_added_cb), call);
+  g_signal_connect (stream, "request-resource",
+      G_CALLBACK (tp_call_tf_stream_request_resource_cb), call);
 
-  priv->stream_engine = g_object_new (TP_TYPE_PROXY,
-      "bus-name", STREAM_ENGINE_BUS_NAME,
-      "dbus-connection", tp_get_bus (),
-      "object-path", STREAM_ENGINE_OBJECT_PATH,
-       NULL);
-  tp_proxy_add_interface_by_id (priv->stream_engine,
-      EMP_IFACE_QUARK_STREAM_ENGINE);
-  tp_proxy_add_interface_by_id (priv->stream_engine,
-      EMP_IFACE_QUARK_CHANNEL_HANDLER);
 
-  g_signal_connect (priv->stream_engine, "invalidated",
-      G_CALLBACK (tp_call_stream_engine_invalidated_cb),
-      call);
-  
-  /* FIXME: dbus daemon should be unique */
-  priv->dbus_daemon = tp_dbus_daemon_new (tp_get_bus ());
-  tp_dbus_daemon_watch_name_owner (priv->dbus_daemon, STREAM_ENGINE_BUS_NAME,
-      tp_call_stream_engine_watch_name_owner_cb,
-      call, NULL);
+  g_object_get (stream, "media-type", &media_type,
+    "sink-pad", &spad, NULL);
 
-  g_object_get (priv->channel,
-      "connection", &connection,
-      "channel-type", &channel_type,
-      "object-path", &object_path,
-      "handle_type", &handle_type,
-      "handle", &handle,
-      NULL);
+  switch (media_type)
+    {
+      case TP_MEDIA_STREAM_TYPE_AUDIO:
+        src = gst_element_factory_make ("gconfaudiosrc", NULL);
+        break;
+      case TP_MEDIA_STREAM_TYPE_VIDEO:
+        src = gst_element_factory_make ("gconfvideosrc", NULL);
+        break;
+      default:
+        g_assert_not_reached();
+    }
 
-  emp_cli_channel_handler_call_handle_channel (priv->stream_engine, -1,
-        connection->bus_name,
-        connection->object_path,
-        channel_type, object_path, handle_type, handle,
-        tp_call_async_cb, "calling handle channel", NULL,
-        G_OBJECT (call));
+  gst_bin_add (GST_BIN (priv->pipeline), src);
 
-  g_object_unref (connection);
-  g_free (channel_type);
-  g_free (object_path);
+  pad = gst_element_get_static_pad (src, "src");
+  gst_pad_link (pad, spad);
+  gst_object_unref (spad);
+
+  gst_element_set_state (src, GST_STATE_PLAYING);
 }
 
 static GObject *
@@ -490,18 +531,27 @@ tp_call_constructor (GType type,
   g_signal_connect (priv->channel, "group-members-changed",
       G_CALLBACK (tp_call_members_changed_cb), call);
 
-  /* Start stream engine */
-  tp_call_stream_engine_handle_channel (call);
+
+  /* Set up the telepathy farsight channel */
+  priv->tfchannel = tf_channel_new (priv->channel);
+  g_signal_connect (priv->tfchannel, "session-created",
+      G_CALLBACK (tp_call_tf_channel_session_created_cb), call);
+  g_signal_connect (priv->tfchannel, "stream-created",
+      G_CALLBACK (tp_call_tf_channel_stream_created_cb), call);
 
   return object;
 }
-
 static void
-tp_call_finalize (GObject *object)
+tp_call_dispose (GObject *object)
 {
   EmpathyTpCallPriv *priv = GET_PRIV (object);
 
-  DEBUG ("Finalizing: %p", object);
+  DEBUG ("Disposing: %p, %d", object, priv->dispose_has_run);
+
+  if (priv->dispose_has_run)
+    return;
+
+  priv->dispose_has_run = TRUE;
 
   g_slice_free (EmpathyTpCallStream, priv->audio);
   g_slice_free (EmpathyTpCallStream, priv->video);
@@ -515,29 +565,40 @@ tp_call_finalize (GObject *object)
       priv->channel = NULL;
     }
 
-  if (priv->stream_engine != NULL)
+  if (priv->pipeline != NULL)
     {
-      g_signal_handlers_disconnect_by_func (priv->stream_engine,
-          tp_call_stream_engine_invalidated_cb, object);
-      g_object_unref (priv->stream_engine);
+      gst_element_set_state (priv->pipeline, GST_STATE_NULL);
+      gst_object_unref (priv->pipeline);
+      priv->pipeline = NULL;
+    }
+
+  if (priv->tfchannel != NULL)
+    {
+      g_object_unref (priv->tfchannel);
+      priv->tfchannel = NULL;
     }
 
   if (priv->contact != NULL)
       g_object_unref (priv->contact);
 
-  if (priv->dbus_daemon != NULL)
-    {
-      tp_dbus_daemon_cancel_name_owner_watch (priv->dbus_daemon,
-          STREAM_ENGINE_BUS_NAME,
-          tp_call_stream_engine_watch_name_owner_cb,
-          object);
-      g_object_unref (priv->dbus_daemon);
-    }
+  if (G_OBJECT_CLASS (empathy_tp_call_parent_class)->dispose)
+    G_OBJECT_CLASS (empathy_tp_call_parent_class)->dispose (object);
+}
+
+static void
+tp_call_finalize (GObject *object)
+{
+  EmpathyTpCallPriv *priv = GET_PRIV (object);
+
+  DEBUG ("Finalizing: %p", object);
+
+  g_slice_free (EmpathyTpCallStream, priv->audio);
+  g_slice_free (EmpathyTpCallStream, priv->video);
 
   (G_OBJECT_CLASS (empathy_tp_call_parent_class)->finalize) (object);
 }
 
-static void 
+static void
 tp_call_set_property (GObject *object,
                       guint prop_id,
                       const GValue *value,
@@ -596,6 +657,7 @@ empathy_tp_call_class_init (EmpathyTpCallClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->constructor = tp_call_constructor;
+  object_class->dispose = tp_call_dispose;
   object_class->finalize = tp_call_finalize;
   object_class->set_property = tp_call_set_property;
   object_class->get_property = tp_call_get_property;
@@ -638,7 +700,6 @@ empathy_tp_call_init (EmpathyTpCall *call)
   call->priv = priv;
   priv->status = EMPATHY_TP_CALL_STATUS_READYING;
   priv->contact = NULL;
-  priv->stream_engine_running = FALSE;
   priv->audio = g_slice_new0 (EmpathyTpCallStream);
   priv->video = g_slice_new0 (EmpathyTpCallStream);
   priv->audio->exists = FALSE;
@@ -727,52 +788,39 @@ void
 empathy_tp_call_add_preview_video (EmpathyTpCall *call,
                                    guint preview_video_socket_id)
 {
-  EmpathyTpCallPriv *priv = GET_PRIV (call);
+  //EmpathyTpCallPriv *priv = GET_PRIV (call);
 
   g_return_if_fail (EMPATHY_IS_TP_CALL (call));
 
   DEBUG ("Adding preview video");
 
-  emp_cli_stream_engine_call_add_preview_window (priv->stream_engine, -1,
-      preview_video_socket_id,
-      tp_call_async_cb,
-      "adding preview window", NULL,
-      G_OBJECT (call));
+  /* FIXME add the preview window */
 }
 
 void
 empathy_tp_call_remove_preview_video (EmpathyTpCall *call,
                                       guint preview_video_socket_id)
 {
-  EmpathyTpCallPriv *priv = GET_PRIV (call);
+  //EmpathyTpCallPriv *priv = GET_PRIV (call);
 
   g_return_if_fail (EMPATHY_IS_TP_CALL (call));
 
   DEBUG ("Removing preview video");
 
-  emp_cli_stream_engine_call_remove_preview_window (priv->stream_engine, -1,
-      preview_video_socket_id,
-      tp_call_async_cb,
-      "removing preview window", NULL,
-      G_OBJECT (call));
+  /* FIXME remove the preview window */
 }
 
 void
 empathy_tp_call_add_output_video (EmpathyTpCall *call,
                                   guint output_video_socket_id)
 {
-  EmpathyTpCallPriv *priv = GET_PRIV (call);
+  //EmpathyTpCallPriv *priv = GET_PRIV (call);
 
   g_return_if_fail (EMPATHY_IS_TP_CALL (call));
 
   DEBUG ("Adding output video - socket: %d", output_video_socket_id);
 
-  emp_cli_stream_engine_call_set_output_window (priv->stream_engine, -1,
-      TP_PROXY (priv->channel)->object_path,
-      priv->video->id, output_video_socket_id,
-      tp_call_async_cb,
-      "setting output window", NULL,
-      G_OBJECT (call));
+  /* FIXME add output window */
 }
 
 void
@@ -786,48 +834,32 @@ empathy_tp_call_set_output_volume (EmpathyTpCall *call,
 
   DEBUG ("Setting output volume: %d", volume);
 
-  emp_cli_stream_engine_call_set_output_volume (priv->stream_engine, -1,
-      TP_PROXY (priv->channel)->object_path,
-      priv->audio->id, volume,
-      tp_call_async_cb,
-      "setting output volume", NULL,
-      G_OBJECT (call));
+  /* FIXME set volume */
 }
 
 void
 empathy_tp_call_mute_output (EmpathyTpCall *call,
                              gboolean is_muted)
 {
-  EmpathyTpCallPriv *priv = GET_PRIV (call);
+  //EmpathyTpCallPriv *priv = GET_PRIV (call);
 
   g_return_if_fail (EMPATHY_IS_TP_CALL (call));
 
   DEBUG ("Setting output mute: %d", is_muted);
-
-  emp_cli_stream_engine_call_mute_output (priv->stream_engine, -1,
-      TP_PROXY (priv->channel)->object_path,
-      priv->audio->id, is_muted,
-      tp_call_async_cb,
-      "muting output", NULL,
-      G_OBJECT (call));
+  /* FIXME mute output */
 }
 
 void
 empathy_tp_call_mute_input (EmpathyTpCall *call,
                             gboolean is_muted)
 {
-  EmpathyTpCallPriv *priv = GET_PRIV (call);
+  //EmpathyTpCallPriv *priv = GET_PRIV (call);
 
   g_return_if_fail (EMPATHY_IS_TP_CALL (call));
 
   DEBUG ("Setting input mute: %d", is_muted);
 
-  emp_cli_stream_engine_call_mute_input (priv->stream_engine, -1,
-      TP_PROXY (priv->channel)->object_path,
-      priv->audio->id, is_muted,
-      tp_call_async_cb,
-      "muting input", NULL,
-      G_OBJECT (call));
+  /* FIXME mute input */
 }
 
 void

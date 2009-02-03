@@ -94,6 +94,7 @@ PKG_CHECK_MODULES(LIBEMPATHY,
    libmissioncontrol >= $MISSION_CONTROL_REQUIRED
    gio-2.0 >= $GLIB_REQUIRED
    gio-unix-2.0 >= $GLIB_REQUIRED
+   telepathy-farsight
 ])
 
 PKG_CHECK_MODULES(EMPATHY,
@@ -109,6 +110,7 @@ PKG_CHECK_MODULES(EMPATHY,
    libglade-2.0 >= $LIBGLADE_REQUIRED
    libebook-1.2
    libcanberra-gtk >= 0.4
+   gstreamer-0.10
 ])
 
 PKG_CHECK_MODULES(LIBNOTIFY, libnotify >= $LIBNOTIFY_REQUIRED)

@@ -22,7 +22,6 @@ IGNORE_HFILES=				\
 	empathy-filter-glue.h		\
 	empathy-debug.h			\
 	empathy-marshal.h		\
-	tp-stream-engine-gen.h		\
 	stamp-empathy-enum-types.h	\
 	empathy-chandler-glue.h		\
 	$(NULL)
