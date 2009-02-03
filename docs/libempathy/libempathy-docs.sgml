@@ -17,6 +17,8 @@
     <chapter id="libempathy_api">
       <title>libempathy API reference</title>
       <xi:include href="xml/empathy-account-manager.xml"/>
+      <xi:include href="xml/empathy-call-factory.xml"/>
+      <xi:include href="xml/empathy-call-handler.xml"/>
       <xi:include href="xml/empathy-chatroom-manager.xml"/>
       <xi:include href="xml/empathy-chatroom.xml"/>
       <xi:include href="xml/empathy-contact-factory.xml"/>
@@ -25,8 +27,8 @@
       <xi:include href="xml/empathy-contact-manager.xml"/>
       <xi:include href="xml/empathy-contact-monitor.xml"/>
       <xi:include href="xml/empathy-contact.xml"/>
-      <xi:include href="xml/empathy-dispatcher.xml"/>
       <xi:include href="xml/empathy-dispatch-operation.xml"/>
+      <xi:include href="xml/empathy-dispatcher.xml"/>
       <xi:include href="xml/empathy-enum-types.xml"/>
       <xi:include href="xml/empathy-idle.xml"/>
       <xi:include href="xml/empathy-irc-network-manager.xml"/>
