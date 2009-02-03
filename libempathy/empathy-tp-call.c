@@ -25,10 +25,6 @@
 #include <telepathy-glib/proxy-subclass.h>
 #include <telepathy-glib/dbus.h>
 #include <telepathy-glib/interfaces.h>
-#include <telepathy-farsight/channel.h>
-#include <telepathy-farsight/stream.h>
-
-#include <gst/gst.h>
 
 #include "empathy-tp-call.h"
 #include "empathy-contact-factory.h"
@@ -42,12 +38,9 @@ typedef struct
 {
   gboolean dispose_has_run;
   TpChannel *channel;
-  TfChannel *tfchannel;
   EmpathyContact *contact;
   gboolean is_incoming;
   guint status;
-
-  GstElement *pipeline;
 
   EmpathyTpCallStream *audio;
   EmpathyTpCallStream *video;
@@ -342,7 +335,7 @@ empathy_tp_call_to (EmpathyTpCall *call, EmpathyContact *contact)
   g_object_notify (G_OBJECT (call), "contact");
   g_object_notify (G_OBJECT (call), "status");
   tp_call_request_streams_for_capabilities (call,
-     EMPATHY_CAPABILITIES_AUDIO);
+     EMPATHY_CAPABILITIES_VIDEO | EMPATHY_CAPABILITIES_AUDIO);
 }
 
 static void
@@ -386,117 +379,6 @@ tp_call_close_channel (EmpathyTpCall *call)
   g_object_notify (G_OBJECT (call), "status");
 }
 
-static gboolean
-tp_call_pipeline_bus_watch (GstBus *bus, GstMessage *message,
-  gpointer user_data)
-{
-  EmpathyTpCall *call = EMPATHY_TP_CALL (user_data);
-  EmpathyTpCallPriv *priv = GET_PRIV (call);
-
-  g_assert (priv->tfchannel != NULL);
-
-  tf_channel_bus_message (priv->tfchannel, message);
-
-  return TRUE;
-}
-
-static void
-tp_call_tf_channel_session_created_cb (TfChannel *tfchannel,
-  FsConference *conference, FsParticipant *participant, EmpathyTpCall *call)
-{
-  EmpathyTpCallPriv *priv = GET_PRIV (call);
-  GstBus *bus;
-
-  g_assert (priv->pipeline == NULL);
-
-  priv->pipeline = gst_pipeline_new ("call-pipeline");
-
-  bus = gst_pipeline_get_bus (GST_PIPELINE (priv->pipeline));
-  gst_bus_add_watch (bus, tp_call_pipeline_bus_watch, call);
-  gst_object_unref (bus);
-
-  gst_bin_add ( GST_BIN (priv->pipeline), GST_ELEMENT (conference));
-  gst_element_set_state ( GST_ELEMENT(priv->pipeline), GST_STATE_PLAYING);
-}
-
-static void
-tp_call_tf_stream_src_pad_added_cb (TfStream *stream, GstPad   *pad,
-  FsCodec  *codec, EmpathyTpCall  *call)
-{
-  EmpathyTpCallPriv *priv = GET_PRIV (call);
-  guint media_type;
-  GstElement *sink;
-  GstPad *spad;
-
-  g_object_get (stream, "media-type", &media_type, NULL);
-
-  switch (media_type)
-    {
-      case TP_MEDIA_STREAM_TYPE_AUDIO:
-        sink = gst_element_factory_make ("gconfaudiosink", NULL);
-        break;
-      case TP_MEDIA_STREAM_TYPE_VIDEO:
-        sink = gst_element_factory_make ("gconfvideosink", NULL);
-        break;
-      default:
-        g_assert_not_reached();
-    }
-
-  gst_bin_add ( GST_BIN (priv->pipeline), sink);
-  gst_element_set_state (sink, GST_STATE_PLAYING);
-
-  spad = gst_element_get_static_pad (sink, "sink");
-  gst_pad_link (pad, spad);
-  gst_object_unref (spad);
-}
-
-
-static gboolean
-tp_call_tf_stream_request_resource_cb (TfStream *stream,
-  guint direction, EmpathyTpCall *call)
-{
-  return TRUE;
-}
-
-static void
-tp_call_tf_channel_stream_created_cb (TfChannel *tfchannel, TfStream *stream,
-  EmpathyTpCall *call)
-{
-  EmpathyTpCallPriv *priv = GET_PRIV (call);
-  guint media_type;
-  GstElement *src;
-  GstPad *pad, *spad;
-
-  g_signal_connect (stream, "src-pad-added",
-      G_CALLBACK (tp_call_tf_stream_src_pad_added_cb), call);
-  g_signal_connect (stream, "request-resource",
-      G_CALLBACK (tp_call_tf_stream_request_resource_cb), call);
-
-
-  g_object_get (stream, "media-type", &media_type,
-    "sink-pad", &spad, NULL);
-
-  switch (media_type)
-    {
-      case TP_MEDIA_STREAM_TYPE_AUDIO:
-        src = gst_element_factory_make ("gconfaudiosrc", NULL);
-        break;
-      case TP_MEDIA_STREAM_TYPE_VIDEO:
-        src = gst_element_factory_make ("gconfvideosrc", NULL);
-        break;
-      default:
-        g_assert_not_reached();
-    }
-
-  gst_bin_add (GST_BIN (priv->pipeline), src);
-
-  pad = gst_element_get_static_pad (src, "src");
-  gst_pad_link (pad, spad);
-  gst_object_unref (spad);
-
-  gst_element_set_state (src, GST_STATE_PLAYING);
-}
-
 static GObject *
 tp_call_constructor (GType type,
                      guint n_construct_params,
@@ -531,14 +413,6 @@ tp_call_constructor (GType type,
   g_signal_connect (priv->channel, "group-members-changed",
       G_CALLBACK (tp_call_members_changed_cb), call);
 
-
-  /* Set up the telepathy farsight channel */
-  priv->tfchannel = tf_channel_new (priv->channel);
-  g_signal_connect (priv->tfchannel, "session-created",
-      G_CALLBACK (tp_call_tf_channel_session_created_cb), call);
-  g_signal_connect (priv->tfchannel, "stream-created",
-      G_CALLBACK (tp_call_tf_channel_stream_created_cb), call);
-
   return object;
 }
 static void
@@ -563,19 +437,6 @@ tp_call_dispose (GObject *object)
 
       g_object_unref (priv->channel);
       priv->channel = NULL;
-    }
-
-  if (priv->pipeline != NULL)
-    {
-      gst_element_set_state (priv->pipeline, GST_STATE_NULL);
-      gst_object_unref (priv->pipeline);
-      priv->pipeline = NULL;
-    }
-
-  if (priv->tfchannel != NULL)
-    {
-      g_object_unref (priv->tfchannel);
-      priv->tfchannel = NULL;
     }
 
   if (priv->contact != NULL)

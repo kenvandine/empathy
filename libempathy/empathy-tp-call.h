@@ -40,7 +40,8 @@ G_BEGIN_DECLS
     EMPATHY_TYPE_TP_CALL))
 #define EMPATHY_IS_TP_CALL_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), \
     EMPATHY_TYPE_TP_CALL))
-#define EMPATHY_TP_CALL_GET_CLASS(object) (G_TYPE_INSTANCE_GET_CLASS ((object), \
+#define EMPATHY_TP_CALL_GET_CLASS(object) \
+  (G_TYPE_INSTANCE_GET_CLASS ((object), \
     EMPATHY_TYPE_TP_CALL, EmpathyTpCallClass))
 
 typedef struct _EmpathyTpCall EmpathyTpCall;

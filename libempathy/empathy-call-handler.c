@@ -22,36 +22,54 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <telepathy-glib/util.h>
+
+#include <telepathy-farsight/channel.h>
+#include <telepathy-farsight/stream.h>
+
 #include "empathy-call-handler.h"
+#include "empathy-dispatcher.h"
+#include "empathy-marshal.h"
 
 G_DEFINE_TYPE(EmpathyCallHandler, empathy_call_handler, G_TYPE_OBJECT)
 
-#if 0
 /* signal enum */
 enum
 {
-    LAST_SIGNAL
+  CONFERENCE_ADDED,
+  SRC_PAD_ADDED,
+  SINK_PAD_ADDED,
+  LAST_SIGNAL
 };
 
 static guint signals[LAST_SIGNAL] = {0};
-#endif
 
-/* private structure */
-typedef struct _EmpathyCallHandlerPrivate EmpathyCallHandlerPrivate;
-
-struct _EmpathyCallHandlerPrivate
-{
-  gboolean dispose_has_run;
+enum {
+  PROP_TP_CALL = 1,
+  PROP_GST_BUS,
+  PROP_CONTACT
 };
 
-#define EMPATHY_CALL_HANDLER_GET_PRIVATE(o) \
+/* private structure */
+typedef struct _EmpathyCallHandlerPriv EmpathyCallHandlerPriv;
+
+struct _EmpathyCallHandlerPriv
+{
+  gboolean dispose_has_run;
+  EmpathyTpCall *call;
+  EmpathyContact *contact;
+  TfChannel *tfchannel;
+  GstBus *bus;
+};
+
+#define GET_PRIV(o) \
   (G_TYPE_INSTANCE_GET_PRIVATE ((o), EMPATHY_TYPE_CALL_HANDLER,\
-    EmpathyCallHandlerPrivate))
+    EmpathyCallHandlerPriv))
 
 static void
 empathy_call_handler_init (EmpathyCallHandler *obj)
 {
-  //EmpathyCallHandlerPrivate *priv = EMPATHY_CALL_HANDLER_GET_PRIVATE (obj);
+  //EmpathyCallHandlerPriv *priv = GET_PRIV (obj);
 
   /* allocate any data required by the object here */
 }
@@ -60,32 +78,125 @@ static void empathy_call_handler_dispose (GObject *object);
 static void empathy_call_handler_finalize (GObject *object);
 
 static void
-empathy_call_handler_class_init (
-  EmpathyCallHandlerClass *empathy_call_handler_class)
+empathy_call_handler_set_property (GObject *object,
+  guint property_id, const GValue *value, GParamSpec *pspec)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (empathy_call_handler_class);
+  EmpathyCallHandlerPriv *priv = GET_PRIV (object);
 
-  g_type_class_add_private (empathy_call_handler_class,
-    sizeof (EmpathyCallHandlerPrivate));
+  switch (property_id)
+    {
+      case PROP_CONTACT:
+        priv->contact = g_value_dup_object (value);
+        break;
+      case PROP_TP_CALL:
+        priv->call = g_value_dup_object (value);
+        break;
+      case PROP_GST_BUS:
+        priv->bus = g_value_dup_object (value);
+        break;
+      default:
+        G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+    }
+}
 
+static void
+empathy_call_handler_get_property (GObject *object,
+  guint property_id, GValue *value, GParamSpec *pspec)
+{
+  EmpathyCallHandlerPriv *priv = GET_PRIV (object);
+
+  switch (property_id)
+    {
+      case PROP_CONTACT:
+        g_value_set_object (value, priv->contact);
+        break;
+      case PROP_TP_CALL:
+        g_value_set_object (value, priv->call);
+        break;
+      case PROP_GST_BUS:
+        g_value_set_object (value, priv->bus);
+        break;
+      default:
+        G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
+    }
+}
+
+
+static void
+empathy_call_handler_class_init (EmpathyCallHandlerClass *klass)
+{
+  GObjectClass *object_class = G_OBJECT_CLASS (klass);
+  GParamSpec *param_spec;
+
+  g_type_class_add_private (klass, sizeof (EmpathyCallHandlerPriv));
+
+  object_class->set_property = empathy_call_handler_set_property;
+  object_class->get_property = empathy_call_handler_get_property;
   object_class->dispose = empathy_call_handler_dispose;
   object_class->finalize = empathy_call_handler_finalize;
 
+  param_spec = g_param_spec_object ("contact",
+    "contact", "The remote contact",
+    EMPATHY_TYPE_CONTACT,
+    G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+  g_object_class_install_property (object_class, PROP_CONTACT, param_spec);
+
+  param_spec = g_param_spec_object ("gst-bus",
+    "gst-bus", "The gstreamer bus",
+    GST_TYPE_BUS,
+    G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+  g_object_class_install_property (object_class, PROP_GST_BUS, param_spec);
+
+  param_spec = g_param_spec_object ("tp-call",
+    "tp-call", "The calls channel wrapper",
+    EMPATHY_TYPE_CONTACT,
+    G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+  g_object_class_install_property (object_class, PROP_TP_CALL, param_spec);
+
+  signals[CONFERENCE_ADDED] =
+    g_signal_new ("conference-added", G_TYPE_FROM_CLASS (klass),
+      G_SIGNAL_RUN_LAST, 0, NULL, NULL,
+      g_cclosure_marshal_VOID__OBJECT,
+      G_TYPE_NONE,
+      1, FS_TYPE_CONFERENCE);
+
+  signals[SRC_PAD_ADDED] =
+    g_signal_new ("src-pad-added", G_TYPE_FROM_CLASS (klass),
+      G_SIGNAL_RUN_LAST, 0, NULL, NULL,
+      _empathy_marshal_VOID__OBJECT_UINT,
+      G_TYPE_NONE,
+      2, GST_TYPE_PAD, G_TYPE_UINT);
+
+  signals[SINK_PAD_ADDED] =
+    g_signal_new ("sink-pad-added", G_TYPE_FROM_CLASS (klass),
+      G_SIGNAL_RUN_LAST, 0, NULL, NULL,
+      _empathy_marshal_VOID__OBJECT_UINT,
+      G_TYPE_NONE,
+      2, GST_TYPE_PAD, G_TYPE_UINT);
 }
 
 void
 empathy_call_handler_dispose (GObject *object)
 {
   EmpathyCallHandler *self = EMPATHY_CALL_HANDLER (object);
-  EmpathyCallHandlerPrivate *priv = EMPATHY_CALL_HANDLER_GET_PRIVATE (self);
+  EmpathyCallHandlerPriv *priv = GET_PRIV (self);
 
   if (priv->dispose_has_run)
     return;
 
   priv->dispose_has_run = TRUE;
 
-  /* release any references held by the object here */
+  if (priv->contact != NULL)
+    g_object_unref (priv->contact);
 
+  /* FIXME close the call ? */
+  if (priv->call != NULL)
+    g_object_unref (priv->call);
+
+  priv->call = NULL;
+
+
+  /* release any references held by the object here */
   if (G_OBJECT_CLASS (empathy_call_handler_parent_class)->dispose)
     G_OBJECT_CLASS (empathy_call_handler_parent_class)->dispose (object);
 }
@@ -94,22 +205,192 @@ void
 empathy_call_handler_finalize (GObject *object)
 {
   //EmpathyCallHandler *self = EMPATHY_CALL_HANDLER (object);
-  //EmpathyCallHandlerPrivate *priv = EMPATHY_CALL_HANDLER_GET_PRIVATE (self);
+  //EmpathyCallHandlerPriv *priv = GET_PRIV (self);
 
   /* free any data held directly by the object here */
 
   G_OBJECT_CLASS (empathy_call_handler_parent_class)->finalize (object);
 }
 
-
 EmpathyCallHandler *
 empathy_call_handler_new_for_contact (EmpathyContact *contact)
 {
-  return EMPATHY_CALL_HANDLER (g_object_new (EMPATHY_TYPE_CALL_HANDLER, NULL));
+  return EMPATHY_CALL_HANDLER (g_object_new (EMPATHY_TYPE_CALL_HANDLER,
+    "contact", contact, NULL));
 }
 
 EmpathyCallHandler *
 empathy_call_handler_new_for_channel (EmpathyTpCall *call)
 {
-  return EMPATHY_CALL_HANDLER (g_object_new (EMPATHY_TYPE_CALL_HANDLER, NULL));
+  return EMPATHY_CALL_HANDLER (g_object_new (EMPATHY_TYPE_CALL_HANDLER,
+    "tp-call", call, NULL));
 }
+
+static gboolean
+empathy_call_handler_pipeline_bus_watch (GstBus *bus, GstMessage *message,
+  gpointer user_data)
+{
+  EmpathyCallHandler *handler = EMPATHY_CALL_HANDLER (user_data);
+  EmpathyCallHandlerPriv *priv = GET_PRIV (handler);
+
+  g_assert (priv->tfchannel != NULL);
+
+  tf_channel_bus_message (priv->tfchannel, message);
+
+  return TRUE;
+}
+
+static void
+empathy_call_handler_tf_channel_session_created_cb (TfChannel *tfchannel,
+  FsConference *conference, FsParticipant *participant,
+  EmpathyCallHandler *self)
+{
+  EmpathyCallHandlerPriv *priv = GET_PRIV (self);
+
+  //gst_bus_enable_essage_emission (priv->bus);
+
+  gst_bus_add_watch (priv->bus, empathy_call_handler_pipeline_bus_watch, self);
+
+  g_signal_emit (G_OBJECT (self), signals[CONFERENCE_ADDED], 0,
+    GST_ELEMENT (conference));
+}
+
+static void
+empathy_call_handler_tf_stream_src_pad_added_cb (TfStream *stream,
+  GstPad *pad, FsCodec *codec, EmpathyCallHandler  *handler)
+{
+  guint media_type;
+
+  g_object_get (stream, "media-type", &media_type, NULL);
+
+  g_signal_emit (G_OBJECT (handler), signals[SRC_PAD_ADDED], 0,
+    pad, media_type);
+}
+
+
+static gboolean
+empathy_call_handler_tf_stream_request_resource_cb (TfStream *stream,
+  guint direction, EmpathyTpCall *call)
+{
+  return TRUE;
+}
+
+static void
+empathy_call_handler_tf_channel_stream_created_cb (TfChannel *tfchannel,
+  TfStream *stream, EmpathyCallHandler *handler)
+{
+  guint media_type;
+  GstPad *spad;
+
+  g_signal_connect (stream, "src-pad-added",
+      G_CALLBACK (empathy_call_handler_tf_stream_src_pad_added_cb), handler);
+  g_signal_connect (stream, "request-resource",
+      G_CALLBACK (empathy_call_handler_tf_stream_request_resource_cb),
+        handler);
+
+  g_object_get (stream, "media-type", &media_type,
+    "sink-pad", &spad, NULL);
+
+  g_signal_emit (G_OBJECT (handler), signals[SINK_PAD_ADDED], 0,
+    spad, media_type);
+
+  gst_object_unref (spad);
+}
+
+
+static void
+empathy_call_handler_request_cb (EmpathyDispatchOperation *operation,
+  const GError *error, gpointer user_data)
+{
+  EmpathyCallHandler *self = EMPATHY_CALL_HANDLER (user_data);
+  EmpathyCallHandlerPriv *priv = GET_PRIV (self);
+
+  if (error != NULL)
+    return;
+
+  priv->call = EMPATHY_TP_CALL (
+    empathy_dispatch_operation_get_channel_wrapper (operation));
+  g_object_ref (priv->call);
+
+  priv->tfchannel = tf_channel_new (
+    empathy_dispatch_operation_get_channel (operation));
+
+  /* Set up the telepathy farsight channel */
+  g_signal_connect (priv->tfchannel, "session-created",
+      G_CALLBACK (empathy_call_handler_tf_channel_session_created_cb), self);
+  g_signal_connect (priv->tfchannel, "stream-created",
+      G_CALLBACK (empathy_call_handler_tf_channel_stream_created_cb), self);
+
+  empathy_tp_call_to (priv->call, priv->contact);
+
+  empathy_dispatch_operation_claim (operation);
+}
+
+static void
+empathy_call_handler_contact_ready_cb (EmpathyContact *contact,
+  const GError *error, gpointer user_data, GObject *object)
+{
+  EmpathyCallHandler *self = EMPATHY_CALL_HANDLER (object);
+  EmpathyCallHandlerPriv *priv = GET_PRIV (self);
+  EmpathyDispatcher *dispatcher;
+  McAccount *account;
+  GStrv allowed;
+  GValue *value;
+  GHashTable *request = g_hash_table_new_full (g_str_hash, g_str_equal, NULL,
+      (GDestroyNotify) tp_g_value_slice_free);
+
+  g_assert (priv->contact != NULL);
+
+  dispatcher = empathy_dispatcher_dup_singleton ();
+  account = empathy_contact_get_account (priv->contact);
+  allowed = empathy_dispatcher_find_channel_class (dispatcher, account,
+    TP_IFACE_CHANNEL_TYPE_STREAMED_MEDIA, TP_HANDLE_TYPE_CONTACT);
+
+  if (!tp_strv_contains ((const gchar * const *)allowed,
+      TP_IFACE_CHANNEL ".TargetHandle"))
+    g_assert_not_reached ();
+
+  /* org.freedesktop.Telepathy.Channel.ChannelType */
+  value = tp_g_value_slice_new (G_TYPE_STRING);
+  g_value_set_string (value, TP_IFACE_CHANNEL_TYPE_STREAMED_MEDIA);
+  g_hash_table_insert (request, TP_IFACE_CHANNEL ".ChannelType", value);
+
+  /* org.freedesktop.Telepathy.Channel.TargetHandleType */
+  value = tp_g_value_slice_new (G_TYPE_UINT);
+  g_value_set_uint (value, TP_HANDLE_TYPE_CONTACT);
+  g_hash_table_insert (request, TP_IFACE_CHANNEL ".TargetHandleType", value);
+
+  /* org.freedesktop.Telepathy.Channel.TargetHandle*/
+  value = tp_g_value_slice_new (G_TYPE_UINT);
+  g_value_set_uint (value, empathy_contact_get_handle (priv->contact));
+  g_hash_table_insert (request, TP_IFACE_CHANNEL ".TargetHandle", value);
+
+  empathy_dispatcher_create_channel (dispatcher, account,
+    request, empathy_call_handler_request_cb, self);
+
+  g_object_unref (dispatcher);
+}
+
+void
+empathy_call_handler_start_call (EmpathyCallHandler *handler)
+{
+
+  EmpathyCallHandlerPriv *priv = GET_PRIV (handler);
+
+  g_assert (priv->contact != NULL);
+
+  empathy_contact_call_when_ready (priv->contact,
+    EMPATHY_CONTACT_READY_ID,
+    empathy_call_handler_contact_ready_cb, NULL, NULL, G_OBJECT (handler));
+}
+
+void
+empathy_call_handler_set_bus (EmpathyCallHandler *handler, GstBus *bus)
+{
+  EmpathyCallHandlerPriv *priv = GET_PRIV (handler);
+
+  g_assert (priv->bus == NULL);
+
+  priv->bus = g_object_ref (bus);
+}
+
