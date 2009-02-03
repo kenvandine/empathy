@@ -7,6 +7,20 @@
   (gtype-id "EMPATHY_TYPE_ACCOUNT_MANAGER")
 )
 
+(define-object CallFactory
+  (in-module "Empathy")
+  (parent "GObject")
+  (c-name "EmpathyCallFactory")
+  (gtype-id "EMPATHY_TYPE_CALL_FACTORY")
+)
+
+(define-object CallHandler
+  (in-module "Empathy")
+  (parent "GObject")
+  (c-name "EmpathyCallHandler")
+  (gtype-id "EMPATHY_TYPE_CALL_HANDLER")
+)
+
 (define-object Chatroom
   (in-module "Empathy")
   (parent "GObject")
@@ -469,6 +483,83 @@
   (return-type "none")
   (parameters
     '("EmpathyDispatcher*" "dispatcher")
+  )
+)
+
+
+
+;; From empathy-call-factory.h
+
+(define-function call_factory_get_type
+  (c-name "empathy_call_factory_get_type")
+  (return-type "GType")
+)
+
+(define-function call_factory_initialise
+  (c-name "empathy_call_factory_initialise")
+  (return-type "EmpathyCallFactory*")
+)
+
+(define-function call_factory_get
+  (c-name "empathy_call_factory_get")
+  (return-type "EmpathyCallFactory*")
+)
+
+(define-method new_call
+  (of-object "EmpathyCallFactory")
+  (c-name "empathy_call_factory_new_call")
+  (return-type "none")
+  (parameters
+    '("EmpathyContact*" "contact")
+  )
+)
+
+(define-method claim_channel
+  (of-object "EmpathyCallFactory")
+  (c-name "empathy_call_factory_claim_channel")
+  (return-type "none")
+  (parameters
+    '("EmpathyDispatchOperation*" "operation")
+  )
+)
+
+
+
+;; From empathy-call-handler.h
+
+(define-function call_handler_get_type
+  (c-name "empathy_call_handler_get_type")
+  (return-type "GType")
+)
+
+(define-function call_handler_new_for_contact
+  (c-name "empathy_call_handler_new_for_contact")
+  (return-type "EmpathyCallHandler*")
+  (parameters
+    '("EmpathyContact*" "contact")
+  )
+)
+
+(define-function call_handler_new_for_channel
+  (c-name "empathy_call_handler_new_for_channel")
+  (return-type "EmpathyCallHandler*")
+  (parameters
+    '("EmpathyTpCall*" "call")
+  )
+)
+
+(define-method start_call
+  (of-object "EmpathyCallHandler")
+  (c-name "empathy_call_handler_start_call")
+  (return-type "none")
+)
+
+(define-method set_bus
+  (of-object "EmpathyCallHandler")
+  (c-name "empathy_call_handler_set_bus")
+  (return-type "none")
+  (parameters
+    '("GstBus*" "bus")
   )
 )
 

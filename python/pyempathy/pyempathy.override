@@ -3,6 +3,7 @@ headers
 #include <Python.h>
 #include <pygobject.h>
 #include "empathy-account-manager.h"
+#include "empathy-call-factory.h"
 #include "empathy-chatroom.h"
 #include "empathy-chatroom-manager.h"
 #include "empathy-contact.h"

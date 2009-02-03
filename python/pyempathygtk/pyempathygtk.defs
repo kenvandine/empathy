@@ -90,6 +90,27 @@
   (gtype-id "EMPATHY_TYPE_CONTACT_SELECTOR")
 )
 
+(define-object GstAudioSink
+  (in-module "Empathy")
+  (parent "GstBin")
+  (c-name "EmpathyGstAudioSink")
+  (gtype-id "EMPATHY_TYPE_GST_AUDIO_SINK")
+)
+
+(define-object GstAudioSrc
+  (in-module "Empathy")
+  (parent "GstBin")
+  (c-name "EmpathyGstAudioSrc")
+  (gtype-id "EMPATHY_TYPE_GST_AUDIO_SRC")
+)
+
+(define-object GstVideoSrc
+  (in-module "Empathy")
+  (parent "GstBin")
+  (c-name "EmpathyGstVideoSrc")
+  (gtype-id "EMPATHY_TYPE_GST_VIDEO_SRC")
+)
+
 (define-object PresenceChooser
   (in-module "Empathy")
   (parent "GtkToggleButton")
@@ -123,6 +144,13 @@
   (parent "GObject")
   (c-name "EmpathyThemeManager")
   (gtype-id "EMPATHY_TYPE_THEME_MANAGER")
+)
+
+(define-object VideoWidget
+  (in-module "Empathy")
+  (parent "GtkDrawingArea")
+  (c-name "EmpathyVideoWidget")
+  (gtype-id "EMPATHY_TYPE_VIDEO_WIDGET")
 )
 
 ;; Enumerations and flags ...
@@ -1259,6 +1287,91 @@
     '("gint*" "w")
     '("gint*" "h")
   )
+)
+
+
+
+;; From empathy-audio-sink.h
+
+(define-function audio_sink_get_type
+  (c-name "empathy_audio_sink_get_type")
+  (return-type "GType")
+)
+
+(define-function audio_sink_new
+  (c-name "empathy_audio_sink_new")
+  (is-constructor-of "EmpathyAudioSink")
+  (return-type "GstElement*")
+)
+
+
+
+;; From empathy-audio-src.h
+
+(define-function audio_src_get_type
+  (c-name "empathy_audio_src_get_type")
+  (return-type "GType")
+)
+
+(define-function audio_src_new
+  (c-name "empathy_audio_src_new")
+  (is-constructor-of "EmpathyAudioSrc")
+  (return-type "GstElement*")
+)
+
+
+
+;; From empathy-video-src.h
+
+(define-function video_src_get_type
+  (c-name "empathy_video_src_get_type")
+  (return-type "GType")
+)
+
+(define-function video_src_new
+  (c-name "empathy_video_src_new")
+  (is-constructor-of "EmpathyVideoSrc")
+  (return-type "GstElement*")
+)
+
+
+
+;; From empathy-video-widget.h
+
+(define-function video_widget_get_type
+  (c-name "empathy_video_widget_get_type")
+  (return-type "GType")
+)
+
+(define-function video_widget_new
+  (c-name "empathy_video_widget_new")
+  (is-constructor-of "EmpathyVideoWidget")
+  (return-type "GtkWidget*")
+  (parameters
+    '("GstBus*" "bus")
+  )
+)
+
+(define-function video_widget_new_with_size
+  (c-name "empathy_video_widget_new_with_size")
+  (return-type "GtkWidget*")
+  (parameters
+    '("GstBus*" "bus")
+    '("gint" "width")
+    '("gint" "height")
+  )
+)
+
+(define-method get_element
+  (of-object "EmpathyVideoWidget")
+  (c-name "empathy_video_widget_get_element")
+  (return-type "GstElement*")
+)
+
+(define-method get_sink
+  (of-object "EmpathyVideoWidget")
+  (c-name "empathy_video_widget_get_sink")
+  (return-type "GstPad*")
 )
 
 

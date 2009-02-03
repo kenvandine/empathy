@@ -8,6 +8,8 @@ python /usr/share/pygobject/2.0/codegen/h2def.py	\
 	empathy-account-manager.h		\
 	empathy-chatroom.h			\
 	empathy-chatroom-manager.h		\
+	empathy-call-factory.h			\
+	empathy-call-handler.h			\
 	empathy-contact.h			\
 	empathy-contact-factory.h		\
 	empathy-contact-groups.h		\
@@ -62,6 +64,10 @@ python /usr/share/pygobject/2.0/codegen/h2def.py	\
 	empathy-contact-selector.h		\
 	empathy-contact-widget.h		\
 	empathy-geometry.h			\
+	empathy-audio-sink.h			\
+	empathy-audio-src.h			\
+	empathy-video-src.h			\
+	empathy-video-widget.h			\
 	empathy-images.h			\
 	empathy-irc-network-dialog.h		\
 	empathy-log-window.h			\
