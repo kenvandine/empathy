@@ -92,6 +92,8 @@ G_DEFINE_TYPE_WITH_CODE (EmpathyTpChat, empathy_tp_chat, G_TYPE_OBJECT,
 			 G_IMPLEMENT_INTERFACE (EMPATHY_TYPE_CONTACT_LIST,
 						tp_chat_iface_init));
 
+static void acknowledge_messages (EmpathyTpChat *chat, GArray *ids);
+
 static void
 tp_chat_invalidated_cb (TpProxy       *proxy,
 			guint          domain,
@@ -432,6 +434,20 @@ tp_chat_received_cb (TpChannel   *channel,
  
  	DEBUG ("Message received: %s", message_body);
 
+	if (message_flags & TP_CHANNEL_TEXT_MESSAGE_FLAG_NON_TEXT_CONTENT &&
+	    !tp_strdiff (message_body, "")) {
+		GArray *ids;
+
+		DEBUG ("Empty message with NonTextContent, ignoring and acking.");
+
+		ids = g_array_sized_new (FALSE, FALSE, sizeof (guint), 1);
+		g_array_append_val (ids, message_id);
+		acknowledge_messages (EMPATHY_TP_CHAT (chat), ids);
+		g_array_free (ids, TRUE);
+
+		return;
+	}
+
 	message = tp_chat_build_message (EMPATHY_TP_CHAT (chat),
 					 message_id,
 					 message_type,
@@ -546,6 +562,7 @@ tp_chat_list_pending_messages_cb (TpChannel       *channel,
 {
 	EmpathyTpChatPriv *priv = GET_PRIV (chat);
 	guint              i;
+	GArray            *empty_non_text_content_ids = NULL;
 
 	priv->listing_pending_messages = FALSE;
 
@@ -578,6 +595,18 @@ tp_chat_list_pending_messages_cb (TpChannel       *channel,
 
 		DEBUG ("Message pending: %s", message_body);
 
+		if (message_flags & TP_CHANNEL_TEXT_MESSAGE_FLAG_NON_TEXT_CONTENT &&
+		    !tp_strdiff (message_body, "")) {
+			DEBUG ("Empty message with NonTextContent, ignoring and acking.");
+
+			if (empty_non_text_content_ids == NULL) {
+				empty_non_text_content_ids = g_array_new (FALSE, FALSE, sizeof (guint));
+			}
+
+			g_array_append_val (empty_non_text_content_ids, message_id);
+			continue;
+		}
+
 		message = tp_chat_build_message (EMPATHY_TP_CHAT (chat),
 						 message_id,
 						 message_type,
@@ -587,6 +616,11 @@ tp_chat_list_pending_messages_cb (TpChannel       *channel,
 
 		tp_chat_emit_or_queue_message (EMPATHY_TP_CHAT (chat), message);
 		g_object_unref (message);
+	}
+
+	if (empty_non_text_content_ids != NULL) {
+		acknowledge_messages (EMPATHY_TP_CHAT (chat), empty_non_text_content_ids);
+		g_array_free (empty_non_text_content_ids, TRUE);
 	}
 }
 
