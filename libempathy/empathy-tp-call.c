@@ -361,23 +361,6 @@ tp_call_async_cb (TpProxy *proxy,
       DEBUG ("Error %s: %s", (gchar*) user_data, error->message);
 }
 
-static void
-tp_call_close_channel (EmpathyTpCall *call)
-{
-  EmpathyTpCallPriv *priv = GET_PRIV (call);
-
-  if (priv->status == EMPATHY_TP_CALL_STATUS_CLOSED)
-      return;
-
-  DEBUG ("Closing channel");
-
-  tp_cli_channel_call_close (priv->channel, -1,
-      NULL, NULL, NULL, NULL);
-
-  priv->status = EMPATHY_TP_CALL_STATUS_CLOSED;
-  g_object_notify (G_OBJECT (call), "status");
-}
-
 static GObject *
 tp_call_constructor (GType type,
                      guint n_construct_params,
