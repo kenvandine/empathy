@@ -249,8 +249,6 @@ empathy_call_handler_tf_channel_session_created_cb (TfChannel *tfchannel,
 {
   EmpathyCallHandlerPriv *priv = GET_PRIV (self);
 
-  //gst_bus_enable_essage_emission (priv->bus);
-
   gst_bus_add_watch (priv->bus, empathy_call_handler_pipeline_bus_watch, self);
 
   g_signal_emit (G_OBJECT (self), signals[CONFERENCE_ADDED], 0,
