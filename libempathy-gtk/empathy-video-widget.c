@@ -90,6 +90,9 @@ empathy_video_widget_constructed (GObject *object)
   EmpathyVideoWidgetPriv *priv = GET_PRIV (object);
 
   priv->videosink = gst_element_factory_make ("gconfvideosink", NULL);
+  gst_object_ref (priv->videosink);
+  gst_object_sink (priv->videosink);
+
   priv->sink_pad = gst_element_get_static_pad (priv->videosink, "sink");
 
   fs_element_added_notifier_add (priv->notifier, GST_BIN (priv->videosink));
@@ -191,6 +194,12 @@ empathy_video_widget_dispose (GObject *object)
     g_object_unref (priv->bus);
 
   priv->bus = NULL;
+
+  if (priv->videosink != NULL)
+    g_object_unref (priv->videosink);
+
+  priv->videosink = NULL;
+
 
   /* release any references held by the object here */
 
