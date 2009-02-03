@@ -51,6 +51,8 @@ static guint signals[LAST_SIGNAL] = {0};
 enum {
   PROP_GST_ELEMENT = 1,
   PROP_GST_BUS,
+  PROP_MIN_WIDTH,
+  PROP_MIN_HEIGHT,
 };
 
 /* private structure */
@@ -64,6 +66,8 @@ struct _EmpathyVideoWidgetPriv
   GstPad *sink_pad;
   GstElement *overlay;
   FsElementAddedNotifier *notifier;
+  gint min_width;
+  gint min_height;
 };
 
 #define GET_PRIV(o)     (G_TYPE_INSTANCE_GET_PRIVATE ((o), \
@@ -73,13 +77,16 @@ static void
 empathy_video_widget_init (EmpathyVideoWidget *obj)
 {
   EmpathyVideoWidgetPriv *priv = GET_PRIV (obj);
+  GdkColor black;
 
   priv->notifier = fs_element_added_notifier_new ();
   g_signal_connect (priv->notifier, "element-added",
     G_CALLBACK (empathy_video_widget_element_added_cb),
     obj);
 
-  gtk_widget_set_size_request (GTK_WIDGET (obj), 320, 240);
+  if (gdk_color_parse ("Black", &black))
+    gtk_widget_modify_bg (GTK_WIDGET (obj), GTK_STATE_NORMAL,
+      &black);
 
   GTK_WIDGET_UNSET_FLAGS (GTK_WIDGET (obj), GTK_DOUBLE_BUFFERED);
 }
@@ -101,6 +108,8 @@ empathy_video_widget_constructed (GObject *object)
   g_signal_connect (priv->bus, "sync-message",
     G_CALLBACK (empathy_video_widget_sync_message_cb), object);
 
+  gtk_widget_set_size_request (GTK_WIDGET (object), priv->min_width,
+    priv->min_height);
 }
 
 static void empathy_video_widget_dispose (GObject *object);
@@ -118,6 +127,12 @@ empathy_video_widget_set_property (GObject *object,
     {
       case PROP_GST_BUS:
         priv->bus = g_value_dup_object (value);
+        break;
+      case PROP_MIN_WIDTH:
+        priv->min_width = g_value_get_int (value);
+        break;
+      case PROP_MIN_HEIGHT:
+        priv->min_height = g_value_get_int (value);
         break;
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -137,6 +152,12 @@ empathy_video_widget_get_property (GObject *object,
         break;
       case PROP_GST_BUS:
         g_value_set_object (value, priv->bus);
+        break;
+      case PROP_MIN_WIDTH:
+        g_value_set_int (value, priv->min_width);
+        break;
+      case PROP_MIN_HEIGHT:
+        g_value_set_int (value, priv->min_height);
         break;
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -177,6 +198,21 @@ empathy_video_widget_class_init (
     GST_TYPE_BUS,
     G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
   g_object_class_install_property (object_class, PROP_GST_BUS, param_spec);
+
+  param_spec = g_param_spec_int ("min-width",
+    "min-width",
+    "Minimal width of the widget",
+    0, G_MAXINT, 320,
+    G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+  g_object_class_install_property (object_class, PROP_MIN_WIDTH, param_spec);
+
+  param_spec = g_param_spec_int ("min-height",
+    "min-height",
+    "Minimal height of the widget",
+    0, G_MAXINT, 240,
+    G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+  g_object_class_install_property (object_class, PROP_MIN_HEIGHT, param_spec);
+
 }
 
 void
@@ -279,6 +315,17 @@ empathy_video_widget_expose_event (GtkWidget *widget, GdkEventExpose *event)
   return TRUE;
 }
 
+GtkWidget *
+empathy_video_widget_new_with_size (GstBus *bus, gint width, gint height)
+{
+  g_return_val_if_fail (bus != NULL, NULL);
+
+  return GTK_WIDGET (g_object_new (EMPATHY_TYPE_GST_GTK_WIDGET,
+    "gst-bus", bus,
+    "min-width", width,
+    "min-height", height,
+    NULL));
+}
 
 GtkWidget *
 empathy_video_widget_new (GstBus *bus)

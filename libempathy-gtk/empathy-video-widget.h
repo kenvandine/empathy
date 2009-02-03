@@ -58,6 +58,8 @@ GType empathy_video_widget_get_type(void);
   EmpathyVideoWidgetClass))
 
 GtkWidget *empathy_video_widget_new (GstBus *bus);
+GtkWidget *empathy_video_widget_new_with_size (GstBus *bus,
+  gint width, gint height);
 
 GstElement *empathy_video_widget_get_element (EmpathyVideoWidget *widget);
 GstPad *empathy_video_widget_get_sink (EmpathyVideoWidget *widget);
