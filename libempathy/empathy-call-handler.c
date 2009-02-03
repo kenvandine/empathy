@@ -189,7 +189,13 @@ empathy_call_handler_dispose (GObject *object)
   if (priv->contact != NULL)
     g_object_unref (priv->contact);
 
-  /* FIXME close the call ? */
+  priv->contact = NULL;
+
+  if (priv->tfchannel != NULL)
+    g_object_unref (priv->tfchannel);
+
+  priv->tfchannel = NULL;
+
   if (priv->call != NULL)
     {
       empathy_tp_call_close (priv->call);
