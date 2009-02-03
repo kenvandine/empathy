@@ -1614,30 +1614,77 @@ empathy_sound_pref_is_enabled (const char *key)
 }
 
 void
-empathy_sound_play (GtkWidget *widget,
-		    EmpathySound sound_id)
+empathy_sound_stop (EmpathySound sound_id)
 {
 	EmpathySoundEntry *entry;
-	gboolean should_play = TRUE;
 
 	g_return_if_fail (sound_id < LAST_EMPATHY_SOUND);
 
 	entry = &(sound_entries[sound_id]);
 	g_return_if_fail (entry->sound_id == sound_id);
 
+	ca_context_cancel (ca_gtk_context_get (), entry->sound_id);
+}
+
+
+gboolean
+empathy_sound_play_full (GtkWidget *widget, EmpathySound sound_id,
+	ca_finish_callback_t callback, gpointer user_data)
+{
+	EmpathySoundEntry *entry;
+	gboolean should_play = TRUE;
+	ca_proplist *p = NULL;
+	ca_context *c;
+
+	g_return_val_if_fail (sound_id < LAST_EMPATHY_SOUND, FALSE);
+
+	entry = &(sound_entries[sound_id]);
+	g_return_val_if_fail (entry->sound_id == sound_id, FALSE);
+
 	if (entry->gconf_key != NULL) {
 		should_play = empathy_sound_pref_is_enabled (entry->gconf_key);
 	}
 
-	if (should_play) {
-		DEBUG ("Play sound \"%s\" (%s)",
-		       entry->event_ca_id,
-		       entry->event_ca_description);
+	if (!should_play)
+		return FALSE;
 
-		ca_gtk_play_for_widget (widget, 0,
-					CA_PROP_EVENT_ID, entry->event_ca_id,
-					CA_PROP_EVENT_DESCRIPTION, gettext (entry->event_ca_description),
-					NULL);
-	}
+	c = ca_gtk_context_get ();
+	ca_context_cancel (c, entry->sound_id);
+
+	DEBUG ("Play sound \"%s\" (%s)",
+	       entry->event_ca_id,
+	       entry->event_ca_description);
+
+	if (ca_proplist_create(&p) < 0)
+		goto failed;
+
+	if (ca_proplist_sets (p, CA_PROP_EVENT_ID, entry->event_ca_id) < 0)
+		goto failed;
+
+	if (ca_proplist_sets (p, CA_PROP_EVENT_DESCRIPTION,
+			gettext (entry->event_ca_id)) < 0)
+		goto failed;
+
+	if (ca_gtk_proplist_set_for_widget (p, widget) < 0)
+		goto failed;
+
+	ca_context_play_full (ca_gtk_context_get (), entry->sound_id,
+		p, callback, user_data);
+
+	ca_proplist_destroy (p);
+
+	return TRUE;
+
+failed:
+	if (p != NULL)
+		ca_proplist_destroy (p);
+
+	return FALSE;
+}
+
+void
+empathy_sound_play (GtkWidget *widget, EmpathySound sound_id)
+{
+	empathy_sound_play_full (widget, sound_id, NULL, NULL);
 }
 

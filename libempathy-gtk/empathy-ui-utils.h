@@ -35,8 +35,11 @@
 #include <gtk/gtk.h>
 #include <glade/glade.h>
 
+#include <canberra-gtk.h>
+
 #include <libmissioncontrol/mc-account.h>
 #include <libmissioncontrol/mc-profile.h>
+
 
 #include <libempathy/empathy-contact.h>
 
@@ -46,7 +49,7 @@ G_BEGIN_DECLS
 
 /* NOTE: Keep this sync with sound_entries in empathy-ui-utils.c */
 typedef enum {
-	EMPATHY_SOUND_MESSAGE_INCOMING,
+	EMPATHY_SOUND_MESSAGE_INCOMING = 0,
 	EMPATHY_SOUND_MESSAGE_OUTGOING,
 	EMPATHY_SOUND_CONVERSATION_NEW,
 	EMPATHY_SOUND_CONTACT_CONNECTED,
@@ -56,7 +59,7 @@ typedef enum {
 	EMPATHY_SOUND_PHONE_INCOMING,
 	EMPATHY_SOUND_PHONE_OUTGOING,
 	EMPATHY_SOUND_PHONE_HANGUP,
-	LAST_EMPATHY_SOUND
+	LAST_EMPATHY_SOUND,
 } EmpathySound;
 
 void            empathy_gtk_init                        (void);
@@ -132,6 +135,11 @@ void        empathy_send_file_with_file_chooser         (EmpathyContact   *conta
 /* Sounds */
 void        empathy_sound_play                          (GtkWidget        *widget,
 							 EmpathySound      sound_id);
+gboolean    empathy_sound_play_full                     (GtkWidget *widget,
+							 EmpathySound sound_id,
+							 ca_finish_callback_t callback,
+							 gpointer user_data);
+void        empathy_sound_stop                          (EmpathySound sound_id);
 
 G_END_DECLS
 
