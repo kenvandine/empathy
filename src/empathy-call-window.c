@@ -23,13 +23,20 @@
 #include <stdlib.h>
 
 #include <gst/gst.h>
+#include <gtk/gtk.h>
+#include <glib/gi18n.h>
 
+
+#include <libempathy/empathy-utils.h>
 #include <libempathy-gtk/empathy-video-widget.h>
 #include <libempathy-gtk/empathy-audio-src.h>
 #include <libempathy-gtk/empathy-audio-sink.h>
 #include <libempathy-gtk/empathy-video-src.h>
+#include <libempathy-gtk/empathy-ui-utils.h>
 
 #include "empathy-call-window.h"
+
+#include "empathy-sidebar.h"
 
 G_DEFINE_TYPE(EmpathyCallWindow, empathy_call_window, GTK_TYPE_WINDOW)
 
@@ -54,13 +61,19 @@ struct _EmpathyCallWindowPriv
 {
   gboolean dispose_has_run;
   EmpathyCallHandler *handler;
+
   GtkWidget *video_output;
   GtkWidget *video_preview;
+  GtkWidget *sidebar;
+  GtkWidget *sidebar_button;
+
   GstElement *video_input;
   GstElement *audio_input;
   GstElement *audio_output;
   GstElement *pipeline;
   GstElement *video_tee;
+
+  GladeXML *glade;
 };
 
 #define GET_PRIV(o) \
@@ -73,27 +86,171 @@ static void empathy_call_window_realized_cb (GtkWidget *widget,
 static gboolean empathy_call_window_delete_cb (GtkWidget *widget,
   GdkEvent*event, EmpathyCallWindow *window);
 
+static void empathy_call_window_sidebar_toggled_cb (GtkToggleButton *toggle,
+  EmpathyCallWindow *window);
+
+static void empathy_call_window_sidebar_hidden_cb (EmpathySidebar *sidebar,
+  EmpathyCallWindow *window);
+
+static void empathy_call_window_hangup (EmpathyCallWindow *window);
+
+static void
+empathy_call_window_setup_menubar (EmpathyCallWindow *self)
+{
+  EmpathyCallWindowPriv *priv = GET_PRIV (self);
+  GtkWidget *hangup;
+
+  hangup = glade_xml_get_widget (priv->glade, "menuhangup");
+  g_signal_connect_swapped (G_OBJECT (hangup), "activate",
+    G_CALLBACK (empathy_call_window_hangup), self);
+}
+
+static void
+empathy_call_window_setup_toolbar (EmpathyCallWindow *self)
+{
+  EmpathyCallWindowPriv *priv = GET_PRIV (self);
+  GtkWidget *hangup;
+  GtkWidget *mic;
+  GtkWidget *volume;
+  GtkWidget *volume_button;
+  GtkWidget *camera;
+
+  hangup = glade_xml_get_widget (priv->glade, "hangup");
+
+  g_signal_connect_swapped (G_OBJECT (hangup), "clicked",
+    G_CALLBACK (empathy_call_window_hangup), self);
+
+  mic = glade_xml_get_widget (priv->glade, "microphone");
+  gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (mic), TRUE);
+
+  volume = glade_xml_get_widget (priv->glade, "volume");
+  volume_button = gtk_volume_button_new ();
+  gtk_container_add (GTK_CONTAINER (volume), volume_button);
+  gtk_scale_button_set_value (GTK_SCALE_BUTTON (volume_button), 0.5);
+
+  camera = glade_xml_get_widget (priv->glade, "camera");
+  gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (camera), FALSE);
+}
+
+static GtkWidget *
+empathy_call_window_create_dtmf (EmpathyCallWindow *self)
+{
+  GtkWidget *table;
+  int i;
+  const gchar *strings[] = { "1", "2", "3",
+                             "4", "5", "6",
+                             "7", "8", "9",
+                             "#", "0", "*",
+                             NULL };
+
+  table = gtk_table_new (4, 3, TRUE);
+
+  for (i = 0; strings[i] != NULL; i++)
+    {
+      GtkWidget *button = gtk_button_new_with_label (strings[i]);
+      gtk_table_attach (GTK_TABLE (table), button, i % 3, i % 3 + 1,
+        i/3, i/3 + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, 1, 1);
+    }
+
+  return table;
+}
+
+static GtkWidget *
+empathy_call_window_create_video_input (EmpathyCallWindow *self)
+{
+  GtkWidget *hbox;
+  int i;
+  gchar *controls[] = { _("Contrast"), _("Brightness"), _("Gamma"), NULL };
+
+  hbox = gtk_hbox_new (TRUE, 3);
+
+  for (i = 0; controls[i] != NULL; i++)
+    {
+      GtkWidget *vbox = gtk_vbox_new (FALSE, 2);
+      GtkWidget *scale = gtk_vscale_new_with_range (0, 100, 10);
+      GtkWidget *label = gtk_label_new (controls[i]);
+
+      gtk_container_add (GTK_CONTAINER (hbox), vbox);
+
+      gtk_range_set_inverted (GTK_RANGE (scale), TRUE);
+      gtk_box_pack_start (GTK_BOX (vbox), scale, TRUE, TRUE, 0);
+      gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
+    }
+
+  return hbox;
+}
+
+static GtkWidget *
+empathy_call_window_create_audio_input (EmpathyCallWindow *self)
+{
+  GtkWidget *hbox, *vbox, *scale, *progress, *label;
+
+  hbox = gtk_hbox_new (TRUE, 3);
+
+  vbox = gtk_vbox_new (FALSE, 3);
+  gtk_box_pack_start (GTK_BOX (hbox), vbox, FALSE, FALSE, 3);
+
+  scale = gtk_vscale_new_with_range (0, 100, 10);
+  gtk_range_set_inverted (GTK_RANGE (scale), TRUE);
+  label = gtk_label_new (_("Volume"));
+
+  gtk_box_pack_start (GTK_BOX (vbox), scale, TRUE, TRUE, 3);
+  gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 3);
+
+
+  progress = gtk_progress_bar_new ();
+  gtk_progress_bar_set_orientation (GTK_PROGRESS_BAR (progress),
+    GTK_PROGRESS_BOTTOM_TO_TOP);
+  gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (progress), 0.5);
+
+  gtk_box_pack_start (GTK_BOX (hbox), progress, FALSE, FALSE, 3);
+
+  return hbox;
+}
+
 static void
 empathy_call_window_init (EmpathyCallWindow *self)
 {
   EmpathyCallWindowPriv *priv = GET_PRIV (self);
-  GtkWidget *hbox;
+  GtkWidget *vbox, *top_vbox;
+  GtkWidget *hbox, *h;
+  GtkWidget *arrow;
+  GtkWidget *page;
   GstBus *bus;
+  gchar *filename;
+  GtkWidget *pane;
+
+  filename = empathy_file_lookup ("empathy-call-window.glade", "src");
+
+  priv->glade = empathy_glade_get_file (filename, "call_window", NULL,
+    "call_window_vbox", &top_vbox,
+    "pane", &pane,
+    NULL);
+
+  gtk_widget_reparent (top_vbox, GTK_WIDGET (self));
+
+  empathy_call_window_setup_menubar (self);
+  empathy_call_window_setup_toolbar (self);
 
   priv->pipeline = gst_pipeline_new (NULL);
 
-  hbox = gtk_hbox_new (TRUE, 3);
-  gtk_container_add (GTK_CONTAINER (self), hbox);
+  hbox = gtk_hbox_new (FALSE, 3);
+  gtk_paned_pack1 (GTK_PANED(pane), hbox, TRUE, FALSE);
 
   bus = gst_pipeline_get_bus (GST_PIPELINE (priv->pipeline));
 
   priv->video_output = empathy_video_widget_new (bus);
+  gtk_box_pack_start (GTK_BOX (hbox), priv->video_output, TRUE, TRUE, 3);
 
   priv->video_tee = gst_element_factory_make ("tee", NULL);
   gst_object_ref (priv->video_tee);
   gst_object_sink (priv->video_tee);
 
-  priv->video_preview = empathy_video_widget_new (bus);
+  vbox = gtk_vbox_new (FALSE, 3);
+  gtk_box_pack_start (GTK_BOX (hbox), vbox, FALSE, FALSE, 3);
+
+  priv->video_preview = empathy_video_widget_new_with_size (bus, 160, 120);
+  gtk_box_pack_start (GTK_BOX (vbox), priv->video_preview, FALSE, FALSE, 3);
 
   priv->video_input = empathy_video_src_new ();
   gst_object_ref (priv->video_input);
@@ -109,10 +266,38 @@ empathy_call_window_init (EmpathyCallWindow *self)
 
   g_object_unref (bus);
 
-  gtk_box_pack_start (GTK_BOX (hbox), priv->video_preview, TRUE, TRUE, 3);
-  gtk_box_pack_start (GTK_BOX (hbox), priv->video_output, TRUE, TRUE, 3);
+  priv->sidebar_button = gtk_toggle_button_new_with_mnemonic (_("_Sidebar"));
+  arrow = gtk_arrow_new (GTK_ARROW_RIGHT, GTK_SHADOW_NONE);
+  g_signal_connect (G_OBJECT (priv->sidebar_button), "toggled",
+    G_CALLBACK (empathy_call_window_sidebar_toggled_cb), self);
 
-  gtk_widget_show_all (hbox);
+  gtk_button_set_image (GTK_BUTTON (priv->sidebar_button), arrow);
+
+  h = gtk_hbox_new (FALSE, 3);
+  gtk_box_pack_end (GTK_BOX (vbox), h, FALSE, FALSE, 3);
+  gtk_box_pack_end (GTK_BOX (h), priv->sidebar_button, FALSE, FALSE, 3);
+
+  priv->sidebar = empathy_sidebar_new ();
+  g_signal_connect (G_OBJECT (priv->sidebar),
+    "hide", G_CALLBACK (empathy_call_window_sidebar_hidden_cb),
+    self);
+  gtk_paned_pack2 (GTK_PANED(pane), priv->sidebar, FALSE, FALSE);
+
+  page = empathy_call_window_create_dtmf (self);
+  empathy_sidebar_add_page (EMPATHY_SIDEBAR (priv->sidebar), _("DTMF"),
+    page);
+
+  page = empathy_call_window_create_audio_input (self);
+  empathy_sidebar_add_page (EMPATHY_SIDEBAR (priv->sidebar), _("Audio input"),
+    page);
+
+  page = empathy_call_window_create_video_input (self);
+  empathy_sidebar_add_page (EMPATHY_SIDEBAR (priv->sidebar), _("Video input"),
+    page);
+
+  gtk_widget_show_all (top_vbox);
+
+  gtk_widget_hide (priv->sidebar);
 
   g_signal_connect (G_OBJECT (self), "realize",
     G_CALLBACK (empathy_call_window_realized_cb), self);
@@ -359,4 +544,44 @@ empathy_call_window_delete_cb (GtkWidget *widget, GdkEvent*event,
   gst_element_set_state (priv->pipeline, GST_STATE_NULL);
 
   return FALSE;
+}
+
+static void
+empathy_call_window_sidebar_toggled_cb (GtkToggleButton *toggle,
+  EmpathyCallWindow *window)
+{
+  EmpathyCallWindowPriv *priv = GET_PRIV (window);
+  GtkWidget *arrow;
+
+  if (gtk_toggle_button_get_active (toggle))
+    {
+      arrow = gtk_arrow_new (GTK_ARROW_LEFT, GTK_SHADOW_NONE);
+      gtk_widget_show (priv->sidebar);
+    }
+  else
+    {
+      arrow = gtk_arrow_new (GTK_ARROW_RIGHT, GTK_SHADOW_NONE);
+      gtk_widget_hide (priv->sidebar);
+    }
+
+  gtk_button_set_image (GTK_BUTTON (priv->sidebar_button), arrow);
+}
+
+static void
+empathy_call_window_sidebar_hidden_cb (EmpathySidebar *sidebar,
+  EmpathyCallWindow *window)
+{
+  EmpathyCallWindowPriv *priv = GET_PRIV (window);
+
+  gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (priv->sidebar_button),
+    FALSE);
+}
+
+static void
+empathy_call_window_hangup (EmpathyCallWindow *window)
+{
+  EmpathyCallWindowPriv *priv = GET_PRIV (window);
+
+  gst_element_set_state (priv->pipeline, GST_STATE_NULL);
+  gtk_widget_destroy (GTK_WIDGET (window));
 }
