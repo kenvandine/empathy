@@ -108,6 +108,8 @@ typedef struct {
 	GList                  *widgets_connected;
 } EmpathyMainWindow;
 
+static EmpathyMainWindow *window = NULL;
+
 static void     main_window_destroy_cb                         (GtkWidget                *widget,
 								EmpathyMainWindow        *window);
 static void     main_window_favorite_chatroom_menu_setup       (EmpathyMainWindow        *window);
@@ -487,9 +489,14 @@ main_window_contact_presence_changed_cb (EmpathyContactMonitor *monitor,
 }
 
 GtkWidget *
+empathy_main_window_get (void)
+{
+  return window != NULL ? window->window : NULL;
+}
+
+GtkWidget *
 empathy_main_window_show (void)
 {
-	static EmpathyMainWindow *window = NULL;
 	EmpathyContactList       *list_iface;
 	EmpathyContactMonitor    *monitor;
 	GladeXML                 *glade;

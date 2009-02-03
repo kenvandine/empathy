@@ -28,6 +28,7 @@
 
 G_BEGIN_DECLS
 
+GtkWidget *empathy_main_window_get (void);
 GtkWidget *empathy_main_window_show (void);
 
 G_END_DECLS
