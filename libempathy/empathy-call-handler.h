@@ -41,7 +41,7 @@ struct _EmpathyCallHandler {
     GObject parent;
 };
 
-GType empathy_call_handler_get_type(void);
+GType empathy_call_handler_get_type (void);
 
 /* TYPE MACROS */
 #define EMPATHY_TYPE_CALL_HANDLER \

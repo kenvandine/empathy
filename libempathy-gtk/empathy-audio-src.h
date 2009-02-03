@@ -37,7 +37,7 @@ struct _EmpathyGstAudioSrc {
     GstBin parent;
 };
 
-GType empathy_audio_src_get_type(void);
+GType empathy_audio_src_get_type (void);
 
 /* TYPE MACROS */
 #define EMPATHY_TYPE_GST_AUDIO_SRC \

@@ -39,7 +39,7 @@ struct _EmpathyCallFactory {
     GObject parent;
 };
 
-GType empathy_call_factory_get_type(void);
+GType empathy_call_factory_get_type (void);
 
 /* TYPE MACROS */
 #define EMPATHY_TYPE_CALL_FACTORY \

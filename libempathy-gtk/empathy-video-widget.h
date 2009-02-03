@@ -38,7 +38,7 @@ struct _EmpathyVideoWidget {
     GtkDrawingArea parent;
 };
 
-GType empathy_video_widget_get_type(void);
+GType empathy_video_widget_get_type (void);
 
 /* TYPE MACROS */
 #define EMPATHY_TYPE_GST_GTK_WIDGET \

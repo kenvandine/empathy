@@ -37,7 +37,7 @@ struct _EmpathyGstVideoSrc {
     GstBin parent;
 };
 
-GType empathy_video_src_get_type(void);
+GType empathy_video_src_get_type (void);
 
 /* TYPE MACROS */
 #define EMPATHY_TYPE_GST_VIDEO_SRC \
