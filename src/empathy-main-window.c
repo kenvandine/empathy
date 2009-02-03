@@ -292,9 +292,6 @@ main_window_flash_cb (EmpathyMainWindow *window)
 static void
 main_window_flash_start (EmpathyMainWindow *window)
 {
-	empathy_sound_play (GTK_WIDGET (window->window),
-			    EMPATHY_SOUND_CONVERSATION_NEW);
-
 	if (window->flash_timeout_id != 0) {
 		return;
 	}

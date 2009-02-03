@@ -37,8 +37,10 @@
 
 #include <libempathy-gtk/empathy-images.h>
 #include <libempathy-gtk/empathy-contact-dialogs.h>
+#include <libempathy-gtk/empathy-ui-utils.h>
 
 #include "empathy-event-manager.h"
+#include "empathy-main-window.h"
 #include "empathy-tube-dispatch.h"
 
 #define DEBUG_FLAG EMPATHY_DEBUG_DISPATCHER
@@ -66,6 +68,10 @@ typedef struct {
   GSList *events;
   /* Ongoing approvals */
   GSList *approvals;
+
+  /* voip ringing sound */
+  guint voip_timeout;
+  gint ringing;
 } EmpathyEventManagerPriv;
 
 typedef struct _EventPriv EventPriv;
@@ -139,6 +145,81 @@ event_free (EventPriv *event)
     }
 
   g_slice_free (EventPriv, event);
+}
+
+static void event_manager_ringing_finished_cb (ca_context *c, guint id,
+  int error_code, gpointer user_data);
+
+static gboolean
+event_manager_ringing_timeout_cb (gpointer data)
+{
+  EmpathyEventManager *manager = EMPATHY_EVENT_MANAGER (data);
+  EmpathyEventManagerPriv *priv = GET_PRIV (manager);
+
+  priv->voip_timeout = 0;
+
+  empathy_sound_play_full (empathy_main_window_get (),
+      EMPATHY_SOUND_PHONE_INCOMING, event_manager_ringing_finished_cb,
+      manager);
+
+  return FALSE;
+}
+
+static gboolean
+event_manager_ringing_idle_cb (gpointer data)
+{
+  EmpathyEventManager *manager = EMPATHY_EVENT_MANAGER (data);
+  EmpathyEventManagerPriv *priv = GET_PRIV (manager);
+
+  if (priv->ringing > 0)
+    priv->voip_timeout = g_timeout_add (500, event_manager_ringing_timeout_cb,
+      data);
+
+  return FALSE;
+}
+
+static void
+event_manager_ringing_finished_cb (ca_context *c, guint id, int error_code,
+  gpointer user_data)
+{
+  if (error_code == CA_ERROR_CANCELED)
+    return;
+
+  g_idle_add (event_manager_ringing_idle_cb, user_data);
+}
+
+static void
+event_manager_start_ringing (EmpathyEventManager *manager)
+{
+  EmpathyEventManagerPriv *priv = GET_PRIV (manager);
+
+  priv->ringing++;
+
+  if (priv->ringing == 1)
+    {
+      empathy_sound_play_full (empathy_main_window_get (),
+        EMPATHY_SOUND_PHONE_INCOMING, event_manager_ringing_finished_cb,
+        manager);
+    }
+}
+
+static void
+event_manager_stop_ringing (EmpathyEventManager *manager)
+{
+  EmpathyEventManagerPriv *priv = GET_PRIV (manager);
+
+  priv->ringing--;
+
+  if (priv->ringing > 0)
+    return;
+
+  empathy_sound_stop (EMPATHY_SOUND_PHONE_INCOMING);
+
+  if (priv->voip_timeout != 0)
+    {
+      g_source_remove (priv->voip_timeout);
+      priv->voip_timeout = 0;
+    }
 }
 
 static void
@@ -271,6 +352,10 @@ event_manager_chat_message_received_cb (EmpathyTpChat *tp_chat,
       msg, approval, event_text_channel_process_func, NULL);
 
   g_free (header);
+  empathy_sound_play (empathy_main_window_get (),
+    EMPATHY_SOUND_CONVERSATION_NEW);
+
+  g_free (msg);
 }
 
 static void
@@ -278,6 +363,18 @@ event_manager_approval_done (EventManagerApproval *approval)
 {
   EmpathyEventManagerPriv *priv = GET_PRIV (approval->manager);
   GSList                  *l;
+
+  if (approval->operation != NULL)
+    {
+      GQuark channel_type;
+
+      channel_type = empathy_dispatch_operation_get_channel_type_id (
+          approval->operation);
+      if (channel_type == TP_IFACE_QUARK_CHANNEL_TYPE_STREAMED_MEDIA)
+        {
+          event_manager_stop_ringing (approval->manager);
+        }
+    }
 
   priv->approvals = g_slist_remove (priv->approvals, approval);
 
@@ -339,6 +436,9 @@ event_manager_media_channel_got_name_cb (EmpathyContact *contact,
     approval, event_channel_process_func, NULL);
 
   g_free (header);
+  event_manager_start_ringing (approval->manager);
+
+  g_free (msg);
 }
 
 static void
@@ -397,6 +497,11 @@ event_manager_add_tube_approval (EventManagerApproval *approval,
     msg, approval, event_manager_tube_approved_cb, approval);
 
   g_free (header);
+  /* FIXME better sound for incoming tubes ? */
+  empathy_sound_play (empathy_main_window_get (),
+    EMPATHY_SOUND_CONVERSATION_NEW);
+
+  g_free (msg);
 }
 
 static void
@@ -527,6 +632,10 @@ event_manager_approve_channel_cb (EmpathyDispatcher *dispatcher,
 
       event_manager_add (manager, contact, EMPATHY_IMAGE_DOCUMENT_SEND,
         header, NULL, approval, event_channel_process_func, NULL);
+
+      /* FIXME better sound for incoming file transfers ?*/
+      empathy_sound_play (empathy_main_window_get (),
+        EMPATHY_SOUND_CONVERSATION_NEW);
 
       g_object_unref (factory);
       g_object_unref (account);
