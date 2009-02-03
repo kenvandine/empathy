@@ -1,5 +1,6 @@
 NEW in 2.25.90
 ==============
+ - Rewrite Voice/Video call UI, and use farsight2 instead of stream-engine. (Sjoerd Simons).
  - Add libnotify support (Jonny Lamb, Elliot Fairweather).
  - Add EmpathyContactSelector (Jonny Lamb, Elliot Fairweather).
  - Renamed G_STR_EMPTY to EMP_STR_EMPTY (Jonny Lamb).
