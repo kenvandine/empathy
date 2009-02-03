@@ -420,8 +420,9 @@ tp_chat_received_cb (TpChannel   *channel,
 		     guint        message_flags,
 		     const gchar *message_body,
 		     gpointer     user_data,
-		     GObject     *chat)
+		     GObject     *chat_)
 {
+	EmpathyTpChat *chat = EMPATHY_TP_CHAT (chat_);
 	EmpathyTpChatPriv *priv = GET_PRIV (chat);
 	EmpathyMessage    *message;
 
@@ -442,20 +443,20 @@ tp_chat_received_cb (TpChannel   *channel,
 
 		ids = g_array_sized_new (FALSE, FALSE, sizeof (guint), 1);
 		g_array_append_val (ids, message_id);
-		acknowledge_messages (EMPATHY_TP_CHAT (chat), ids);
+		acknowledge_messages (chat, ids);
 		g_array_free (ids, TRUE);
 
 		return;
 	}
 
-	message = tp_chat_build_message (EMPATHY_TP_CHAT (chat),
+	message = tp_chat_build_message (chat,
 					 message_id,
 					 message_type,
 					 timestamp,
 					 from_handle,
 					 message_body);
 
-	tp_chat_emit_or_queue_message (EMPATHY_TP_CHAT (chat), message);
+	tp_chat_emit_or_queue_message (chat, message);
 	g_object_unref (message);
 }
 
@@ -465,8 +466,9 @@ tp_chat_sent_cb (TpChannel   *channel,
 		 guint        message_type,
 		 const gchar *message_body,
 		 gpointer     user_data,
-		 GObject     *chat)
+		 GObject     *chat_)
 {
+	EmpathyTpChat *chat = EMPATHY_TP_CHAT (chat_);
 	EmpathyTpChatPriv *priv = GET_PRIV (chat);
 	EmpathyMessage *message;
 
@@ -475,14 +477,14 @@ tp_chat_sent_cb (TpChannel   *channel,
 
 	DEBUG ("Message sent: %s", message_body);
 
-	message = tp_chat_build_message (EMPATHY_TP_CHAT (chat),
+	message = tp_chat_build_message (chat,
 					 0,
 					 message_type,
 					 timestamp,
 					 0,
 					 message_body);
 
-	tp_chat_emit_or_queue_message (EMPATHY_TP_CHAT (chat), message);
+	tp_chat_emit_or_queue_message (chat, message);
 	g_object_unref (message);
 }
 
@@ -558,8 +560,9 @@ tp_chat_list_pending_messages_cb (TpChannel       *channel,
 				  const GPtrArray *messages_list,
 				  const GError    *error,
 				  gpointer         user_data,
-				  GObject         *chat)
+				  GObject         *chat_)
 {
+	EmpathyTpChat     *chat = EMPATHY_TP_CHAT (chat_);
 	EmpathyTpChatPriv *priv = GET_PRIV (chat);
 	guint              i;
 	GArray            *empty_non_text_content_ids = NULL;
@@ -607,19 +610,19 @@ tp_chat_list_pending_messages_cb (TpChannel       *channel,
 			continue;
 		}
 
-		message = tp_chat_build_message (EMPATHY_TP_CHAT (chat),
+		message = tp_chat_build_message (chat,
 						 message_id,
 						 message_type,
 						 timestamp,
 						 from_handle,
 						 message_body);
 
-		tp_chat_emit_or_queue_message (EMPATHY_TP_CHAT (chat), message);
+		tp_chat_emit_or_queue_message (chat, message);
 		g_object_unref (message);
 	}
 
 	if (empty_non_text_content_ids != NULL) {
-		acknowledge_messages (EMPATHY_TP_CHAT (chat), empty_non_text_content_ids);
+		acknowledge_messages (chat, empty_non_text_content_ids);
 		g_array_free (empty_non_text_content_ids, TRUE);
 	}
 }
