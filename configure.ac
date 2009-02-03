@@ -111,6 +111,7 @@ PKG_CHECK_MODULES(EMPATHY,
    libebook-1.2
    libcanberra-gtk >= 0.4
    gstreamer-0.10
+   gstreamer-interfaces-0.10
 ])
 
 PKG_CHECK_MODULES(LIBNOTIFY, libnotify >= $LIBNOTIFY_REQUIRED)

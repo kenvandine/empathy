@@ -37,6 +37,10 @@ libempathy_gtk_la_SOURCES =             	\
 	empathy-contact-selector.c		\
 	empathy-contact-widget.c		\
 	empathy-geometry.c			\
+	empathy-audio-sink.c			\
+	empathy-audio-src.c			\
+	empathy-video-src.c			\
+	empathy-video-widget.c			\
 	empathy-irc-network-dialog.c		\
 	empathy-log-window.c			\
 	empathy-new-message-dialog.c		\
@@ -85,6 +89,10 @@ libempathy_gtk_headers =			\
 	empathy-contact-selector.h		\
 	empathy-contact-widget.h		\
 	empathy-geometry.h			\
+	empathy-audio-sink.h			\
+	empathy-audio-src.h			\
+	empathy-video-src.h			\
+	empathy-video-widget.h			\
 	empathy-images.h			\
 	empathy-irc-network-dialog.h		\
 	empathy-log-window.h			\
