@@ -28,6 +28,7 @@
 #include <telepathy-glib/util.h>
 #include <telepathy-glib/dbus.h>
 #include <telepathy-glib/proxy-subclass.h>
+#include <telepathy-glib/gtypes.h>
 
 #include <libmissioncontrol/mission-control.h>
 #include <libmissioncontrol/mc-account.h>
@@ -110,6 +111,8 @@ typedef struct
   GHashTable *outstanding_channels;
   /* List of DispatcherRequestData */
   GList *outstanding_requests;
+  /* List of requestable channel classes */
+  GPtrArray *requestable_channels;
 } ConnectionData;
 
 static DispatchData *
@@ -204,10 +207,19 @@ free_connection_data (ConnectionData *cd)
   g_object_unref (cd->account);
   g_hash_table_destroy (cd->dispatched_channels);
   g_hash_table_destroy (cd->dispatching_channels);
+  int i;
 
   for (l = cd->outstanding_requests ; l != NULL; l = g_list_delete_link (l,l))
     {
       free_dispatcher_request_data (l->data);
+    }
+
+  if (cd->requestable_channels  != NULL)
+    {
+      for (i = 0 ; i < cd->requestable_channels->len ; i++)
+          g_value_array_free (
+            g_ptr_array_index (cd->requestable_channels, i));
+      g_ptr_array_free (cd->requestable_channels, TRUE);
     }
 }
 
@@ -686,22 +698,43 @@ dispatcher_connection_new_channels_cb (TpConnection *connection,
 }
 
 static void
-dispatcher_connection_got_channels_property (TpProxy *proxy,
-                                             const GValue *channels_prop,
-                                             const GError *error,
-                                             gpointer user_data,
-                                             GObject *object)
+dispatcher_connection_got_all (TpProxy *proxy, GHashTable *properties,
+  const GError *error, gpointer user_data, GObject *object)
 {
+  EmpathyDispatcher *dispatcher = EMPATHY_DISPATCHER (object);
+  EmpathyDispatcherPriv *priv = GET_PRIV (dispatcher);
   GPtrArray *channels;
+  GPtrArray *requestable_channels;
 
   if (error) {
     DEBUG ("Error: %s", error->message);
     return;
   }
 
-  channels = g_value_get_boxed (channels_prop);
-  dispatcher_connection_new_channels_cb (TP_CONNECTION (proxy),
-    channels, NULL, object);
+  channels = tp_asv_get_boxed (properties, "Channels",
+    TP_ARRAY_TYPE_CHANNEL_DETAILS_LIST);
+
+  if (channels == NULL)
+    DEBUG ("No Channels property !?! on connection");
+  else
+    dispatcher_connection_new_channels_cb (TP_CONNECTION (proxy),
+      channels, NULL, object);
+
+  requestable_channels = tp_asv_get_boxed (properties,
+    "RequestableChannelClasses", TP_ARRAY_TYPE_REQUESTABLE_CHANNEL_CLASS_LIST);
+
+  if (requestable_channels == NULL)
+    DEBUG ("No RequestableChannelClasses property !?! on connection");
+  else
+    {
+      ConnectionData *cd;
+
+      cd = g_hash_table_lookup (priv->connections, proxy);
+      g_assert (cd != NULL);
+
+      cd->requestable_channels = g_boxed_copy (
+        TP_ARRAY_TYPE_REQUESTABLE_CHANNEL_CLASS_LIST, requestable_channels);
+    }
 }
 
 static void
@@ -774,9 +807,9 @@ dispatcher_connection_ready_cb (TpConnection *connection,
         dispatcher_connection_new_channels_cb,
         NULL, NULL, G_OBJECT (dispatcher), NULL);
 
-      tp_cli_dbus_properties_call_get (connection, -1,
-        TP_IFACE_CONNECTION_INTERFACE_REQUESTS, "Channels",
-        dispatcher_connection_got_channels_property,
+      tp_cli_dbus_properties_call_get_all (connection, -1,
+        TP_IFACE_CONNECTION_INTERFACE_REQUESTS,
+        dispatcher_connection_got_all,
         NULL, NULL, dispatcher);
     }
   else
@@ -1297,6 +1330,48 @@ dispatcher_create_channel_cb (TpConnection *connect,
     request_data, object_path, properties, error);
 }
 
+void
+empathy_dispatcher_create_channel (EmpathyDispatcher *dispatcher,
+  McAccount *account, GHashTable *request,
+  EmpathyDispatcherRequestCb *callback, gpointer user_data)
+{
+  EmpathyDispatcherPriv *priv = GET_PRIV (dispatcher);
+  ConnectionData *connection_data;
+  DispatcherRequestData *request_data;
+  const gchar *channel_type;
+  guint handle_type;
+  guint handle;
+  gboolean valid;
+  TpConnection *connection;
+
+  connection = g_hash_table_lookup (priv->accounts, account);
+  g_assert (connection != NULL);
+
+  connection_data = g_hash_table_lookup (priv->connections, connection);
+  g_assert (connection_data != NULL);
+
+  channel_type = tp_asv_get_string (request, TP_IFACE_CHANNEL ".ChannelType");
+
+  handle_type = tp_asv_get_uint32 (request,
+    TP_IFACE_CHANNEL ".TargetHandleType", &valid);
+  if (!valid)
+    handle_type = TP_UNKNOWN_HANDLE_TYPE;
+
+  handle = tp_asv_get_uint32 (request, TP_IFACE_CHANNEL ".TargetHandle", NULL);
+
+  request_data  = new_dispatcher_request_data (dispatcher, connection,
+    channel_type, handle_type, handle, request,
+    NULL, callback, user_data);
+
+  connection_data->outstanding_requests = g_list_prepend
+    (connection_data->outstanding_requests, request_data);
+
+  tp_cli_connection_interface_requests_call_create_channel (
+    request_data->connection, -1,
+    request_data->request, dispatcher_create_channel_cb, request_data, NULL,
+    G_OBJECT (request_data->dispatcher));
+}
+
 static void
 dispatcher_create_channel_with_contact_cb (EmpathyContact *contact,
                                            const GError *error,
@@ -1414,3 +1489,65 @@ empathy_dispatcher_send_file_to_contact (EmpathyContact *contact,
 
   g_object_unref (dispatcher);
 }
+
+GStrv
+empathy_dispatcher_find_channel_class (EmpathyDispatcher *dispatcher,
+  McAccount *account, const gchar *channel_type, guint handle_type)
+{
+  EmpathyDispatcherPriv *priv = GET_PRIV (dispatcher);
+  ConnectionData *cd;
+  TpConnection *connection;
+  int i;
+  GPtrArray *classes;
+
+  g_return_val_if_fail (channel_type != NULL, NULL);
+  g_return_val_if_fail (handle_type != 0, NULL);
+
+  connection = g_hash_table_lookup (priv->accounts, account);
+
+  if (connection == NULL)
+    return NULL;
+
+  cd = g_hash_table_lookup (priv->connections, connection);
+
+  if (cd == NULL)
+    return NULL;
+
+
+  classes = cd->requestable_channels;
+  if (classes == NULL)
+    return NULL;
+
+  for (i = 0; i < classes->len; i++)
+    {
+      GValueArray *class;
+      GValue *fixed;
+      GValue *allowed;
+      GHashTable *fprops;
+      const gchar *c_type;
+      guint32 h_type;
+      gboolean valid;
+
+      class = g_ptr_array_index (classes, i);
+      fixed = g_value_array_get_nth (class, 0);
+
+      fprops = g_value_get_boxed (fixed);
+      c_type = tp_asv_get_string (fprops, TP_IFACE_CHANNEL ".ChannelType");
+
+      if (tp_strdiff (channel_type, c_type))
+        continue;
+
+      h_type = tp_asv_get_uint32 (fprops,
+        TP_IFACE_CHANNEL ".TargetHandleType", &valid);
+
+      if (!valid || handle_type != h_type)
+        continue;
+
+      allowed = g_value_array_get_nth (class, 1);
+
+      return g_value_get_boxed (allowed);
+    }
+
+  return NULL;
+}
+
