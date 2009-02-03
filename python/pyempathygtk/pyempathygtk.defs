@@ -1799,4 +1799,21 @@
   )
 )
 
+(define-function sound_play_full
+  (c-name "empathy_sound_play_full")
+  (return-type "gboolean")
+  (parameters
+    '("GtkWidget*" "widget")
+    '("EmpathySound" "sound_id")
+    '("ca_finish_callback_t" "callback")
+    '("gpointer" "user_data")
+  )
+)
+
+(define-method stop
+  (of-object "EmpathySound")
+  (c-name "empathy_sound_stop")
+  (return-type "none")
+)
+
 

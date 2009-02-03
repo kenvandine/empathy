@@ -2729,12 +2729,4 @@
   (return-type "gboolean")
 )
 
-(define-function start_call_with_contact
-  (c-name "empathy_start_call_with_contact")
-  (return-type "none")
-  (parameters
-    '("EmpathyContact*" "contact")
-  )
-)
-
 
