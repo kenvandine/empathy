@@ -35,6 +35,7 @@ empathy_SOURCES =							\
 	empathy-misc.c empathy-misc.h					\
 	empathy-new-chatroom-dialog.c empathy-new-chatroom-dialog.h	\
 	empathy-preferences.c empathy-preferences.h			\
+	empathy-sidebar.c empathy-sidebar.h			\
 	empathy-status-icon.c empathy-status-icon.h			\
 	empathy-tube-dispatch.c empathy-tube-dispatch.h			\
 	ephy-spinner.c ephy-spinner.h
