@@ -70,6 +70,9 @@ struct _EmpathyCallWindowPriv
 static void empathy_call_window_realized_cb (GtkWidget *widget,
   EmpathyCallWindow *window);
 
+static gboolean empathy_call_window_delete_cb (GtkWidget *widget,
+  GdkEvent*event, EmpathyCallWindow *window);
+
 static void
 empathy_call_window_init (EmpathyCallWindow *self)
 {
@@ -87,23 +90,22 @@ empathy_call_window_init (EmpathyCallWindow *self)
   priv->video_output = empathy_video_widget_new (bus);
 
   priv->video_tee = gst_element_factory_make ("tee", NULL);
-  priv->video_input = empathy_video_src_new ();
+  gst_object_ref (priv->video_tee);
+  gst_object_sink (priv->video_tee);
+
   priv->video_preview = empathy_video_widget_new (bus);
 
-  priv->audio_input = empathy_audio_src_new ();
-  priv->audio_output = empathy_audio_sink_new ();
+  priv->video_input = empathy_video_src_new ();
+  gst_object_ref (priv->video_input);
+  gst_object_sink (priv->video_input);
 
-/*
-  gst_bin_add_many (GST_BIN (priv->pipeline),
-    empathy_gtk_widget_get_element (
-      EMPATHY_GST_GTK_WIDGET (priv->video_preview)),
-    empathy_gtk_widget_get_element (
-      EMPATHY_GST_GTK_WIDGET (priv->video_output)),
-    priv->video_input,
-    priv->audio_input,
-    priv->audio_output,
-    NULL);
-  */
+  priv->audio_input = empathy_audio_src_new ();
+  gst_object_ref (priv->audio_input);
+  gst_object_sink (priv->audio_input);
+
+  priv->audio_output = empathy_audio_sink_new ();
+  gst_object_ref (priv->audio_output);
+  gst_object_sink (priv->audio_output);
 
   g_object_unref (bus);
 
@@ -114,6 +116,9 @@ empathy_call_window_init (EmpathyCallWindow *self)
 
   g_signal_connect (G_OBJECT (self), "realize",
     G_CALLBACK (empathy_call_window_realized_cb), self);
+
+  g_signal_connect (G_OBJECT (self), "delete-event",
+    G_CALLBACK (empathy_call_window_delete_cb), self);
 }
 
 static void empathy_call_window_dispose (GObject *object);
@@ -192,8 +197,27 @@ empathy_call_window_dispose (GObject *object)
 
   priv->handler = NULL;
 
-  /* release any references held by the object here */
+  if (priv->pipeline != NULL)
+    g_object_unref (priv->pipeline);
+  priv->pipeline = NULL;
 
+  if (priv->video_input != NULL)
+    g_object_unref (priv->video_input);
+  priv->video_input = NULL;
+
+  if (priv->audio_input != NULL)
+    g_object_unref (priv->audio_input);
+  priv->audio_input = NULL;
+
+  if (priv->audio_output != NULL)
+    g_object_unref (priv->audio_output);
+  priv->audio_output = NULL;
+
+  if (priv->video_tee != NULL)
+    g_object_unref (priv->video_tee);
+  priv->video_tee = NULL;
+
+  /* release any references held by the object here */
   if (G_OBJECT_CLASS (empathy_call_window_parent_class)->dispose)
     G_OBJECT_CLASS (empathy_call_window_parent_class)->dispose (object);
 }
@@ -247,6 +271,7 @@ empathy_call_window_src_added_cb (EmpathyCallHandler *handler,
     {
       case TP_MEDIA_STREAM_TYPE_AUDIO:
         element = priv->audio_output;
+        g_object_ref (element);
         break;
       case TP_MEDIA_STREAM_TYPE_VIDEO:
         element =
@@ -325,3 +350,13 @@ empathy_call_window_realized_cb (GtkWidget *widget, EmpathyCallWindow *window)
   g_object_unref (bus);
 }
 
+static gboolean
+empathy_call_window_delete_cb (GtkWidget *widget, GdkEvent*event,
+  EmpathyCallWindow *window)
+{
+  EmpathyCallWindowPriv *priv = GET_PRIV (window);
+
+  gst_element_set_state (priv->pipeline, GST_STATE_NULL);
+
+  return FALSE;
+}
