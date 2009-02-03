@@ -334,8 +334,7 @@ empathy_tp_call_to (EmpathyTpCall *call, EmpathyContact *contact)
   g_object_notify (G_OBJECT (call), "is-incoming");
   g_object_notify (G_OBJECT (call), "contact");
   g_object_notify (G_OBJECT (call), "status");
-  tp_call_request_streams_for_capabilities (call,
-     EMPATHY_CAPABILITIES_VIDEO | EMPATHY_CAPABILITIES_AUDIO);
+  tp_call_request_streams_for_capabilities (call, EMPATHY_CAPABILITIES_AUDIO);
 }
 
 static void
