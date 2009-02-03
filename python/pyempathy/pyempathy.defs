@@ -1073,6 +1073,18 @@
   (return-type "GType")
 )
 
+(define-method create_channel
+  (of-object "EmpathyDispatcher")
+  (c-name "empathy_dispatcher_create_channel")
+  (return-type "none")
+  (parameters
+    '("McAccount*" "account")
+    '("GHashTable*" "request")
+    '("EmpathyDispatcherRequestCb*" "callback")
+    '("gpointer" "user_data")
+  )
+)
+
 (define-function dispatcher_call_with_contact
   (c-name "empathy_dispatcher_call_with_contact")
   (return-type "none")
@@ -1126,6 +1138,17 @@
     '("const-gchar*" "roomname")
     '("EmpathyDispatcherRequestCb*" "callback")
     '("gpointer" "user_data")
+  )
+)
+
+(define-method find_channel_class
+  (of-object "EmpathyDispatcher")
+  (c-name "empathy_dispatcher_find_channel_class")
+  (return-type "GStrv")
+  (parameters
+    '("McAccount*" "account")
+    '("const-gchar*" "channel_type")
+    '("guint" "handle_type")
   )
 )
 
