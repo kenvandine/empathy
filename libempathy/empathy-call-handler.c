@@ -191,10 +191,12 @@ empathy_call_handler_dispose (GObject *object)
 
   /* FIXME close the call ? */
   if (priv->call != NULL)
-    g_object_unref (priv->call);
+    {
+      empathy_tp_call_close (priv->call);
+      g_object_unref (priv->call);
+    }
 
   priv->call = NULL;
-
 
   /* release any references held by the object here */
   if (G_OBJECT_CLASS (empathy_call_handler_parent_class)->dispose)
