@@ -89,6 +89,9 @@ static gboolean empathy_call_window_delete_cb (GtkWidget *widget,
 static void empathy_call_window_sidebar_toggled_cb (GtkToggleButton *toggle,
   EmpathyCallWindow *window);
 
+static void empathy_call_window_camera_toggled_cb (GtkToggleToolButton *toggle,
+  EmpathyCallWindow *window);
+
 static void empathy_call_window_sidebar_hidden_cb (EmpathySidebar *sidebar,
   EmpathyCallWindow *window);
 
@@ -130,6 +133,9 @@ empathy_call_window_setup_toolbar (EmpathyCallWindow *self)
 
   camera = glade_xml_get_widget (priv->glade, "camera");
   gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (camera), FALSE);
+
+  g_signal_connect (G_OBJECT (camera), "toggled",
+    G_CALLBACK (empathy_call_window_camera_toggled_cb), self);
 }
 
 static GtkWidget *
@@ -565,6 +571,23 @@ empathy_call_window_sidebar_toggled_cb (GtkToggleButton *toggle,
     }
 
   gtk_button_set_image (GTK_BUTTON (priv->sidebar_button), arrow);
+}
+
+static void
+empathy_call_window_camera_toggled_cb (GtkToggleToolButton *toggle,
+  EmpathyCallWindow *window)
+{
+  EmpathyCallWindowPriv *priv = GET_PRIV (window);
+  gboolean active;
+  EmpathyTpCall *call;
+
+  active = (gtk_toggle_tool_button_get_active (toggle));
+
+  g_object_get (priv->handler, "tp-call", &call, NULL);
+
+  empathy_tp_call_request_video_stream_direction (call, active);
+
+  g_object_unref (call);
 }
 
 static void
