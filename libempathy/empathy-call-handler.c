@@ -30,12 +30,12 @@
 #include "empathy-call-handler.h"
 #include "empathy-dispatcher.h"
 #include "empathy-marshal.h"
+#include "empathy-utils.h"
 
 G_DEFINE_TYPE(EmpathyCallHandler, empathy_call_handler, G_TYPE_OBJECT)
 
 /* signal enum */
-enum
-{
+enum {
   CONFERENCE_ADDED,
   SRC_PAD_ADDED,
   SINK_PAD_ADDED,
@@ -51,31 +51,66 @@ enum {
 };
 
 /* private structure */
-typedef struct _EmpathyCallHandlerPriv EmpathyCallHandlerPriv;
 
-struct _EmpathyCallHandlerPriv
-{
+typedef struct {
   gboolean dispose_has_run;
   EmpathyTpCall *call;
   EmpathyContact *contact;
   TfChannel *tfchannel;
   GstBus *bus;
-};
+} EmpathyCallHandlerPriv;
 
-#define GET_PRIV(o) \
-  (G_TYPE_INSTANCE_GET_PRIVATE ((o), EMPATHY_TYPE_CALL_HANDLER,\
-    EmpathyCallHandlerPriv))
+#define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyCallHandler)
+
+static void
+empathy_call_handler_dispose (GObject *object)
+{
+  EmpathyCallHandlerPriv *priv = GET_PRIV (object);
+
+  if (priv->dispose_has_run)
+    return;
+
+  priv->dispose_has_run = TRUE;
+
+  if (priv->contact != NULL)
+    g_object_unref (priv->contact);
+
+  priv->contact = NULL;
+
+  if (priv->tfchannel != NULL)
+    g_object_unref (priv->tfchannel);
+
+  priv->tfchannel = NULL;
+
+  if (priv->call != NULL)
+    {
+      empathy_tp_call_close (priv->call);
+      g_object_unref (priv->call);
+    }
+
+  priv->call = NULL;
+
+  /* release any references held by the object here */
+  if (G_OBJECT_CLASS (empathy_call_handler_parent_class)->dispose)
+    G_OBJECT_CLASS (empathy_call_handler_parent_class)->dispose (object);
+}
+
+static void
+empathy_call_handler_finalize (GObject *object)
+{
+  /* free any data held directly by the object here */
+  if (G_OBJECT_CLASS (empathy_call_handler_parent_class)->finalize)
+    G_OBJECT_CLASS (empathy_call_handler_parent_class)->finalize (object);
+}
 
 static void
 empathy_call_handler_init (EmpathyCallHandler *obj)
 {
-  //EmpathyCallHandlerPriv *priv = GET_PRIV (obj);
+  EmpathyCallHandlerPriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (obj,
+    EMPATHY_TYPE_CALL_HANDLER, EmpathyCallHandlerPriv);
 
-  /* allocate any data required by the object here */
+  obj->priv = priv;
 }
-
-static void empathy_call_handler_dispose (GObject *object);
-static void empathy_call_handler_finalize (GObject *object);
 
 static void
 empathy_call_handler_set_property (GObject *object,
@@ -173,51 +208,6 @@ empathy_call_handler_class_init (EmpathyCallHandlerClass *klass)
       _empathy_marshal_VOID__OBJECT_UINT,
       G_TYPE_NONE,
       2, GST_TYPE_PAD, G_TYPE_UINT);
-}
-
-void
-empathy_call_handler_dispose (GObject *object)
-{
-  EmpathyCallHandler *self = EMPATHY_CALL_HANDLER (object);
-  EmpathyCallHandlerPriv *priv = GET_PRIV (self);
-
-  if (priv->dispose_has_run)
-    return;
-
-  priv->dispose_has_run = TRUE;
-
-  if (priv->contact != NULL)
-    g_object_unref (priv->contact);
-
-  priv->contact = NULL;
-
-  if (priv->tfchannel != NULL)
-    g_object_unref (priv->tfchannel);
-
-  priv->tfchannel = NULL;
-
-  if (priv->call != NULL)
-    {
-      empathy_tp_call_close (priv->call);
-      g_object_unref (priv->call);
-    }
-
-  priv->call = NULL;
-
-  /* release any references held by the object here */
-  if (G_OBJECT_CLASS (empathy_call_handler_parent_class)->dispose)
-    G_OBJECT_CLASS (empathy_call_handler_parent_class)->dispose (object);
-}
-
-void
-empathy_call_handler_finalize (GObject *object)
-{
-  //EmpathyCallHandler *self = EMPATHY_CALL_HANDLER (object);
-  //EmpathyCallHandlerPriv *priv = GET_PRIV (self);
-
-  /* free any data held directly by the object here */
-
-  G_OBJECT_CLASS (empathy_call_handler_parent_class)->finalize (object);
 }
 
 EmpathyCallHandler *

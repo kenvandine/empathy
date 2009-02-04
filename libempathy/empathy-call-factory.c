@@ -24,6 +24,7 @@
 
 #include "empathy-marshal.h"
 #include "empathy-call-factory.h"
+#include "empathy-utils.h"
 
 G_DEFINE_TYPE(EmpathyCallFactory, empathy_call_factory, G_TYPE_OBJECT)
 
@@ -37,29 +38,22 @@ enum
 static guint signals[LAST_SIGNAL] = {0};
 
 /* private structure */
-typedef struct _EmpathyCallFactoryPrivate EmpathyCallFactoryPrivate;
-
-struct _EmpathyCallFactoryPrivate
-{
+typedef struct {
   gboolean dispose_has_run;
-};
+} EmpathyCallFactoryPriv;
 
-#define EMPATHY_CALL_FACTORY_GET_PRIVATE(o)  \
- (G_TYPE_INSTANCE_GET_PRIVATE ((o), \
-  EMPATHY_TYPE_CALL_FACTORY, EmpathyCallFactoryPrivate))
+#define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyCallFactory)
+
+static GObject *call_factory = NULL;
 
 static void
 empathy_call_factory_init (EmpathyCallFactory *obj)
 {
-  //EmpathyCallFactoryPrivate *priv = EMPATHY_CALL_FACTORY_GET_PRIVATE (obj);
+  EmpathyCallFactoryPriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (obj,
+    EMPATHY_TYPE_CALL_FACTORY, EmpathyCallFactoryPriv);
 
-  /* allocate any data required by the object here */
+  obj->priv = priv;
 }
-
-static void empathy_call_factory_dispose (GObject *object);
-static void empathy_call_factory_finalize (GObject *object);
-
-static GObject *call_factory = NULL;
 
 static GObject *
 empathy_call_factory_constructor (GType type, guint n_construct_params,
@@ -75,33 +69,18 @@ empathy_call_factory_constructor (GType type, guint n_construct_params,
 }
 
 static void
-empathy_call_factory_class_init (
-  EmpathyCallFactoryClass *empathy_call_factory_class)
+empathy_call_factory_finalize (GObject *object)
 {
-  GObjectClass *object_class = G_OBJECT_CLASS (empathy_call_factory_class);
+  /* free any data held directly by the object here */
 
-  g_type_class_add_private (empathy_call_factory_class,
-    sizeof (EmpathyCallFactoryPrivate));
-
-  object_class->constructor = empathy_call_factory_constructor;
-  object_class->dispose = empathy_call_factory_dispose;
-  object_class->finalize = empathy_call_factory_finalize;
-
-  signals[NEW_CALL_HANDLER] =
-    g_signal_new ("new-call-handler",
-      G_TYPE_FROM_CLASS (empathy_call_factory_class),
-      G_SIGNAL_RUN_LAST, 0,
-      NULL, NULL,
-      _empathy_marshal_VOID__OBJECT_BOOLEAN,
-      G_TYPE_NONE,
-      2, EMPATHY_TYPE_CALL_HANDLER, G_TYPE_BOOLEAN);
+  if (G_OBJECT_CLASS (empathy_call_factory_parent_class)->finalize)
+    G_OBJECT_CLASS (empathy_call_factory_parent_class)->finalize (object);
 }
 
-void
+static void
 empathy_call_factory_dispose (GObject *object)
 {
-  EmpathyCallFactory *self = EMPATHY_CALL_FACTORY (object);
-  EmpathyCallFactoryPrivate *priv = EMPATHY_CALL_FACTORY_GET_PRIVATE (self);
+  EmpathyCallFactoryPriv *priv = GET_PRIV (object);
 
   if (priv->dispose_has_run)
     return;
@@ -114,15 +93,27 @@ empathy_call_factory_dispose (GObject *object)
     G_OBJECT_CLASS (empathy_call_factory_parent_class)->dispose (object);
 }
 
-void
-empathy_call_factory_finalize (GObject *object)
+static void
+empathy_call_factory_class_init (
+  EmpathyCallFactoryClass *empathy_call_factory_class)
 {
-  //EmpathyCallFactory *self = EMPATHY_CALL_FACTORY (object);
-  //EmpathyCallFactoryPrivate *priv = EMPATHY_CALL_FACTORY_GET_PRIVATE (self);
+  GObjectClass *object_class = G_OBJECT_CLASS (empathy_call_factory_class);
 
-  /* free any data held directly by the object here */
+  g_type_class_add_private (empathy_call_factory_class,
+    sizeof (EmpathyCallFactoryPriv));
 
-  G_OBJECT_CLASS (empathy_call_factory_parent_class)->finalize (object);
+  object_class->constructor = empathy_call_factory_constructor;
+  object_class->dispose = empathy_call_factory_dispose;
+  object_class->finalize = empathy_call_factory_finalize;  
+
+  signals[NEW_CALL_HANDLER] =
+    g_signal_new ("new-call-handler",
+      G_TYPE_FROM_CLASS (empathy_call_factory_class),
+      G_SIGNAL_RUN_LAST, 0,
+      NULL, NULL,
+      _empathy_marshal_VOID__OBJECT_BOOLEAN,
+      G_TYPE_NONE,
+      2, EMPATHY_TYPE_CALL_HANDLER, G_TYPE_BOOLEAN);
 }
 
 EmpathyCallFactory *
@@ -152,7 +143,7 @@ empathy_call_factory_new_call (EmpathyCallFactory *factory,
 
   handler = empathy_call_handler_new_for_contact (contact);
 
-  g_signal_emit (G_OBJECT (factory), signals[NEW_CALL_HANDLER], 0,
+  g_signal_emit (factory, signals[NEW_CALL_HANDLER], 0,
     handler, TRUE);
 
   g_object_unref (handler);
@@ -175,7 +166,7 @@ empathy_call_factory_claim_channel (EmpathyCallFactory *factory,
   empathy_dispatch_operation_claim (operation);
 
   /* FIXME should actually look at the channel */
-  g_signal_emit (G_OBJECT (factory), signals[NEW_CALL_HANDLER], 0,
+  g_signal_emit (factory, signals[NEW_CALL_HANDLER], 0,
     handler, FALSE);
 
   g_object_unref (handler);

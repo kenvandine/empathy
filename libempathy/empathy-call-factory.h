@@ -37,6 +37,7 @@ struct _EmpathyCallFactoryClass {
 
 struct _EmpathyCallFactory {
     GObject parent;
+    gpointer priv;
 };
 
 GType empathy_call_factory_get_type (void);

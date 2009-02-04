@@ -39,6 +39,7 @@ struct _EmpathyCallHandlerClass {
 
 struct _EmpathyCallHandler {
     GObject parent;
+    gpointer priv;
 };
 
 GType empathy_call_handler_get_type (void);
