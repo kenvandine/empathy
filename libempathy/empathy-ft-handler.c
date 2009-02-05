@@ -597,7 +597,7 @@ empathy_ft_handler_new_outgoing (EmpathyContact *contact,
                                  GFile *source)
 {
   g_return_val_if_fail (EMPATHY_IS_CONTACT (contact), NULL);
-  g_return_val_if_fail (G_IS_FILE (file), NULL);
+  g_return_val_if_fail (G_IS_FILE (source), NULL);
 
   return g_object_new (EMPATHY_TYPE_FT_HANDLER,
       "contact", contact, "gfile", source, NULL);
@@ -607,7 +607,8 @@ EmpathyFTHandler *
 empathy_ft_handler_new_incoming (EmpathyTpFile *tp_file,
                                  GFile *destination)
 {
-  g_return_val_if_fail (EMPATHY_IS_TP_FILE (file), NULL);
+  g_return_val_if_fail (EMPATHY_IS_TP_FILE (tp_file), NULL);
+  g_return_val_if_fail (G_IS_FILE (destination), NULL);
 
   return g_object_new (EMPATHY_TYPE_FT_HANDLER,
       "tp-file", tp_file, "gfile", destination, NULL);

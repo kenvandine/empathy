@@ -132,7 +132,7 @@ empathy_ft_factory_new_transfer (EmpathyFTFactory *factory,
   g_return_if_fail (EMPATHY_IS_CONTACT (contact));
   g_return_if_fail (G_IS_FILE (file));
 
-  handler = empathy_ft_handler_new (contact, file);
+  handler = empathy_ft_handler_new_outgoing (contact, file);
   g_signal_emit (factory, signals[NEW_FT_HANDLER], 0, handler, TRUE);
 
   g_object_unref (handler);
