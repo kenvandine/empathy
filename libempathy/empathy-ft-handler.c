@@ -26,6 +26,7 @@
 #include <telepathy-glib/util.h>
 
 #include "empathy-ft-handler.h"
+#include "empathy-dispatcher.h"
 #include "empathy-utils.h"
 
 G_DEFINE_TYPE (EmpathyFTHandler, empathy_ft_handler, G_TYPE_OBJECT)
@@ -256,9 +257,67 @@ request_data_new (EmpathyFTHandler *handler, GFile *gfile)
 }
 
 static void
+ft_handler_create_channel_cb (EmpathyDispatchOperation *operation,
+                              const GError *error,
+                              gpointer user_data)
+{
+  RequestData *req_data = user_data;
+  GError *myerr = NULL;
+  EmpathyFTHandlerPriv *priv = GET_PRIV (req_data->handler);
+
+  if (error != NULL)
+    {
+      /* TODO: error handling */
+      goto out;
+    }
+
+  priv->tpfile = g_object_ref
+      (empathy_dispatch_operation_get_channel_wrapper (operation));
+  empathy_tp_file_offer (priv->tpfile, req_data->gfile, &myerr);
+  empathy_dispatch_operation_claim (operation);
+
+out:
+  request_data_free (req_data);
+}
+
+static void
 ft_handler_push_to_dispatcher (RequestData *req_data)
 {
-  /* TODO: */
+  EmpathyDispatcher *dispatcher;
+  McAccount *account;
+  EmpathyFTHandlerPriv *priv = GET_PRIV (req_data->handler);
+
+  dispatcher = empathy_dispatcher_dup_singleton ();
+  account = empathy_contact_get_account (priv->contact);
+
+  empathy_dispatcher_create_channel (dispatcher, account, req_data->request,
+      ft_handler_create_channel_cb, req_data);
+
+  g_object_unref (dispatcher);
+}
+
+static gboolean
+ft_handler_check_if_allowed (EmpathyFTHandler *handler)
+{
+  EmpathyDispatcher *dispatcher;
+  EmpathyFTHandlerPriv *priv = GET_PRIV (handler);
+  McAccount *account;
+  GStrv allowed;
+  gboolean res = TRUE;
+
+  dispatcher = empathy_dispatcher_dup_singleton ();
+  account = empathy_contact_get_account (priv->contact);
+
+  allowed = empathy_dispatcher_find_channel_class (dispatcher, account,
+      EMP_IFACE_CHANNEL_TYPE_FILE_TRANSFER, TP_HANDLE_TYPE_CONTACT);
+
+  if (!tp_strv_contains ((const gchar * const *) allowed,
+      TP_IFACE_CHANNEL ".TargetHandle"))
+    res = FALSE;
+
+  g_object_unref (dispatcher);
+
+  return res;
 }
 
 static void
@@ -501,16 +560,24 @@ ft_handler_gfile_ready_cb (GObject *source,
 }
 
 static void
-empathy_ft_handler_contact_ready_cb (EmpathyContact *contact,
-                                     const GError *error,
-                                     gpointer user_data,
-                                     GObject *weak_object)  
+ft_handler_contact_ready_cb (EmpathyContact *contact,
+                             const GError *error,
+                             gpointer user_data,
+                             GObject *weak_object)  
 {
   RequestData *req_data = user_data;
   EmpathyFTHandlerPriv *priv = GET_PRIV (req_data->handler);
 
   g_assert (priv->contact != NULL);
   g_assert (priv->gfile != NULL);
+
+  /* check if FT is allowed before firing up the I/O machinery */
+  if (!ft_handler_check_if_allowed (req_data->handler))
+    {
+      /* TODO: error handling. */
+      request_data_free (req_data);
+      return;
+    }
 
   /* start collecting info about the file */
   g_file_query_info_async (req_data->gfile,
@@ -560,7 +627,7 @@ empathy_ft_handler_start_transfer (EmpathyFTHandler *handler)
       data = request_data_new (handler, priv->gfile);
       empathy_contact_call_when_ready (priv->contact,
           EMPATHY_CONTACT_READY_HANDLE,
-          empathy_ft_handler_contact_ready_cb, data, NULL, G_OBJECT (handler));
+          ft_handler_contact_ready_cb, data, NULL, G_OBJECT (handler));
     }
   else
     {
