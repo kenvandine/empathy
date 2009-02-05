@@ -25,6 +25,10 @@
 #define __EMPATHY_FT_HANDLER_H__
 
 #include <glib-object.h>
+#include <gio/gio.h>
+
+#include "empathy-tp-file.h"
+#include "empathy-contact.h"
 
 G_BEGIN_DECLS
 

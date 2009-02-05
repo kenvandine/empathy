@@ -172,8 +172,8 @@ empathy_ft_handler_contact_ready_cb (EmpathyContact *contact,
 {
   EmpathyFTHandler *handler = EMPATHY_FT_HANDLER (weak_object);
   EmpathyFTHandlerPriv *priv = GET_PRIV (handler);
-  GHashTable *request;
-  GValue *value;
+
+  /* start collecting info about the file */
 }
 
 /* public methods */
@@ -206,7 +206,7 @@ empathy_ft_handler_start_transfer (EmpathyFTHandler *handler)
   if (priv->tpfile == NULL)
     {
       empathy_contact_call_when_ready (priv->contact,
-        EMPATHY_CONTACT_READY_ID,
+        EMPATHY_CONTACT_READY_HANDLE,
         empathy_ft_handler_contact_ready_cb, NULL, NULL, G_OBJECT (handler));
     }
   else
