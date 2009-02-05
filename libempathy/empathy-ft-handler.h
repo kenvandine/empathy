@@ -56,9 +56,10 @@ typedef struct {
 GType empathy_ft_handler_get_type (void);
 
 /* public methods */
-EmpathyFTHandler * empathy_ft_handler_new (EmpathyContact *contact,
-  GFile *file);
-EmpathyFTHandler * empathy_ft_handler_new_for_channel (EmpathyTpFile *file);
+EmpathyFTHandler * empathy_ft_handler_new_outgoing (EmpathyContact *contact,
+    GFile *source);
+EmpathyFTHandler * empathy_ft_handler_new_incoming (EmpathyTpFile *tp_file,
+    GFile *destination);
 void               empathy_ft_handler_start_transfer (EmpathyFTHandler *handler);
 
 G_END_DECLS

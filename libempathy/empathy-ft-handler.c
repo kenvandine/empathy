@@ -593,23 +593,24 @@ ft_handler_contact_ready_cb (EmpathyContact *contact,
 /* public methods */
 
 EmpathyFTHandler*
-empathy_ft_handler_new (EmpathyContact *contact,
-                        GFile *file)
+empathy_ft_handler_new_outgoing (EmpathyContact *contact,
+                                 GFile *source)
 {
   g_return_val_if_fail (EMPATHY_IS_CONTACT (contact), NULL);
   g_return_val_if_fail (G_IS_FILE (file), NULL);
 
   return g_object_new (EMPATHY_TYPE_FT_HANDLER,
-      "contact", contact, "gfile", file, NULL);
+      "contact", contact, "gfile", source, NULL);
 }
 
 EmpathyFTHandler *
-empathy_ft_handler_new_for_channel (EmpathyTpFile *file)
+empathy_ft_handler_new_incoming (EmpathyTpFile *tp_file,
+                                 GFile *destination)
 {
   g_return_val_if_fail (EMPATHY_IS_TP_FILE (file), NULL);
 
   return g_object_new (EMPATHY_TYPE_FT_HANDLER,
-      "tp-file", file, NULL);
+      "tp-file", tp_file, "gfile", destination, NULL);
 }
 
 void
@@ -617,6 +618,7 @@ empathy_ft_handler_start_transfer (EmpathyFTHandler *handler)
 {
   RequestData *data;
   EmpathyFTHandlerPriv *priv;
+  GError *error = NULL;
 
   g_return_if_fail (EMPATHY_IS_FT_HANDLER (handler));
 
@@ -631,6 +633,7 @@ empathy_ft_handler_start_transfer (EmpathyFTHandler *handler)
     }
   else
     {
-      /* TODO: */
+      /* TODO: add support for resume. */
+      empathy_tp_file_accept (priv->tpfile, 0, priv->gfile, &error);
     }
 }
