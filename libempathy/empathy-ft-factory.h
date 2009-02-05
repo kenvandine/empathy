@@ -25,6 +25,10 @@
 #define __EMPATHY_FT_FACTORY_H__
 
 #include <glib-object.h>
+#include <gio/gio.h>
+
+#include "empathy-contact.h"
+#include "empathy-dispatch-operation.h"
 
 G_BEGIN_DECLS
 

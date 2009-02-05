@@ -21,18 +21,21 @@
  
 /* empathy-ft-factory.c */
 
+#include <glib.h>
+
 #include "empathy-ft-factory.h"
+#include "empathy-ft-handler.h"
 #include "empathy-marshal.h"
 #include "empathy-utils.h"
 
 G_DEFINE_TYPE (EmpathyFTFactory, empathy_ft_factory, G_TYPE_OBJECT);
 
-#define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyFTFactoryPriv)
+#define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyFTFactory)
 
 enum {
   NEW_FT_HANDLER,
   LAST_SIGNAL
-}
+};
 
 typedef struct {
   gboolean dispose_run;
@@ -93,7 +96,7 @@ empathy_ft_factory_class_init (EmpathyFTFactoryClass *klass)
 
   signals[NEW_FT_HANDLER] =
     g_signal_new ("new-ft-handler",
-      G_TYPE_FROM_CLASS (empathy_call_factory_class),
+      G_TYPE_FROM_CLASS (klass),
       G_SIGNAL_RUN_LAST, 0,
       NULL, NULL,
       _empathy_marshal_VOID__OBJECT_BOOLEAN,
@@ -139,8 +142,8 @@ void
 empathy_ft_factory_claim_channel (EmpathyFTFactory *factory,
                                   EmpathyDispatchOperation *operation)
 {
-  g_return_val_if_fail (EMPATHY_IS_FACTORY (factory));
-  g_return_val_if_fail (EMPATHY_IS_DISPATCH_OPERATION (operation));
+  g_return_if_fail (EMPATHY_IS_FT_FACTORY (factory));
+  g_return_if_fail (EMPATHY_IS_DISPATCH_OPERATION (operation));
 
   /* TODO */
 }
