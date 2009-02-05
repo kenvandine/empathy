@@ -58,9 +58,9 @@ GType empathy_ft_factory_get_type (void);
 /* public methods */
 EmpathyFTFactory* empathy_ft_factory_dup_singleton (void);
 void              empathy_ft_factory_new_transfer (EmpathyFTFactory *factory,
-  EmpathyContact *contact, GFile *file);
+  EmpathyContact *contact, GFile *source);
 void              empathy_ft_factory_claim_channel (EmpathyFTFactory *factory,
-  EmpathyDispatchOperation *operation);
+  EmpathyDispatchOperation *operation, GFile *destination);
 
 G_END_DECLS
 

@@ -124,15 +124,15 @@ empathy_ft_factory_dup_singleton (void)
 void
 empathy_ft_factory_new_transfer (EmpathyFTFactory *factory,
                                  EmpathyContact *contact,
-                                 GFile *file)
+                                 GFile *source)
 {
   EmpathyFTHandler *handler;
 
   g_return_if_fail (EMPATHY_IS_FT_FACTORY (factory));
   g_return_if_fail (EMPATHY_IS_CONTACT (contact));
-  g_return_if_fail (G_IS_FILE (file));
+  g_return_if_fail (G_IS_FILE (source));
 
-  handler = empathy_ft_handler_new_outgoing (contact, file);
+  handler = empathy_ft_handler_new_outgoing (contact, source);
   g_signal_emit (factory, signals[NEW_FT_HANDLER], 0, handler, TRUE);
 
   g_object_unref (handler);
@@ -140,11 +140,24 @@ empathy_ft_factory_new_transfer (EmpathyFTFactory *factory,
 
 void
 empathy_ft_factory_claim_channel (EmpathyFTFactory *factory,
-                                  EmpathyDispatchOperation *operation)
+                                  EmpathyDispatchOperation *operation,
+                                  GFile *destination)
 {
+  EmpathyFTHandler *handler;
+  EmpathyTpFile *tp_file;
+
   g_return_if_fail (EMPATHY_IS_FT_FACTORY (factory));
   g_return_if_fail (EMPATHY_IS_DISPATCH_OPERATION (operation));
+  g_return_if_fail (G_IS_FILE (destination));
 
-  /* TODO */
+  tp_file = EMPATHY_TP_FILE
+      (empathy_dispatch_operation_get_channel_wrapper (operation));
+  handler = empathy_ft_handler_new_incoming (tp_file, destination);
+
+  empathy_dispatch_operation_claim (operation);
+
+  g_signal_emit (factory, signals[NEW_FT_HANDLER], 0, handler, FALSE);
+
+  g_object_unref (handler);
 }
 
