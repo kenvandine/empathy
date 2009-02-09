@@ -27,6 +27,7 @@
 
 #include "empathy-ft-handler.h"
 #include "empathy-dispatcher.h"
+#include "empathy-marshal.h"
 #include "empathy-utils.h"
 
 G_DEFINE_TYPE (EmpathyFTHandler, empathy_ft_handler, G_TYPE_OBJECT)
@@ -49,6 +50,7 @@ enum {
   TRANSFER_PROGRESS,
   TRANSFER_DONE,
   TRANSFER_ERROR,
+  LAST_SIGNAL
 };
 
 typedef struct {
@@ -74,6 +76,8 @@ typedef struct {
   EmpathyTpFile *tpfile;
   GCancellable *cancellable;
 } EmpathyFTHandlerPriv;
+
+static guint signals[LAST_SIGNAL] = { 0 };
 
 /* prototypes */
 static void schedule_hash_chunk (HashingData *hash_data);
@@ -157,7 +161,7 @@ do_dispose (GObject *object)
     g_object_unref (priv->cancellable);
     priv->cancellable = NULL;
   }
-
+  
   G_OBJECT_CLASS (empathy_ft_handler_parent_class)->dispose (object);
 }
 
@@ -217,7 +221,7 @@ empathy_ft_handler_class_init (EmpathyFTHandlerClass *klass)
   signals[TRANSFER_ERROR] =
     g_signal_new ("transfer-error", G_TYPE_FROM_CLASS (klass),
         G_SIGNAL_RUN_LAST, 0, NULL, NULL,
-        g_cclosure_marshal_VOID__OBJECT_POINTER,
+        _empathy_marshal_VOID__OBJECT_POINTER,
         G_TYPE_NONE,
         2, EMPATHY_TYPE_TP_FILE, G_TYPE_POINTER);
 

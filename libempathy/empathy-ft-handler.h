@@ -60,7 +60,8 @@ EmpathyFTHandler * empathy_ft_handler_new_outgoing (EmpathyContact *contact,
     GFile *source);
 EmpathyFTHandler * empathy_ft_handler_new_incoming (EmpathyTpFile *tp_file,
     GFile *destination);
-void               empathy_ft_handler_start_transfer (EmpathyFTHandler *handler);
+void empathy_ft_handler_start_transfer (EmpathyFTHandler *handler,
+    GCancellable *cancellable);
 
 G_END_DECLS
 
