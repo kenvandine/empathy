@@ -41,6 +41,16 @@ enum {
   PROP_CONTACT
 };
 
+enum {
+  HASHING_STARTED,
+  HASHING_PROGRESS,
+  HASHING_DONE,
+  TRANSFER_STARTED,
+  TRANSFER_PROGRESS,
+  TRANSFER_DONE,
+  TRANSFER_ERROR,
+};
+
 typedef struct {
   EmpathyFTHandler *handler;
   GFile *gfile;
@@ -62,6 +72,7 @@ typedef struct {
   EmpathyContact *contact;
   GFile *gfile;
   EmpathyTpFile *tpfile;
+  GCancellable *cancellable;
 } EmpathyFTHandlerPriv;
 
 /* prototypes */
@@ -142,6 +153,11 @@ do_dispose (GObject *object)
     priv->tpfile = NULL;
   }
 
+  if (priv->cancellable) {
+    g_object_unref (priv->cancellable);
+    priv->cancellable = NULL;
+  }
+
   G_OBJECT_CLASS (empathy_ft_handler_parent_class)->dispose (object);
 }
 
@@ -164,6 +180,7 @@ empathy_ft_handler_class_init (EmpathyFTHandlerClass *klass)
   object_class->dispose = do_dispose;
   object_class->finalize = do_finalize;
 
+  /* properties */
   param_spec = g_param_spec_object ("contact",
     "contact", "The remote contact",
     EMPATHY_TYPE_CONTACT,
@@ -181,6 +198,54 @@ empathy_ft_handler_class_init (EmpathyFTHandlerClass *klass)
     EMPATHY_TYPE_TP_FILE,
     G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
   g_object_class_install_property (object_class, PROP_TP_FILE, param_spec);
+
+  /* signals */
+  signals[TRANSFER_STARTED] =
+    g_signal_new ("transfer-started", G_TYPE_FROM_CLASS (klass),
+        G_SIGNAL_RUN_LAST, 0, NULL, NULL,
+        g_cclosure_marshal_VOID__OBJECT,
+        G_TYPE_NONE,
+        1, EMPATHY_TYPE_TP_FILE);
+
+  signals[TRANSFER_DONE] =
+    g_signal_new ("transfer-done", G_TYPE_FROM_CLASS (klass),
+        G_SIGNAL_RUN_LAST, 0, NULL, NULL,
+        g_cclosure_marshal_VOID__OBJECT,
+        G_TYPE_NONE,
+        1, EMPATHY_TYPE_TP_FILE);
+
+  signals[TRANSFER_ERROR] =
+    g_signal_new ("transfer-error", G_TYPE_FROM_CLASS (klass),
+        G_SIGNAL_RUN_LAST, 0, NULL, NULL,
+        g_cclosure_marshal_VOID__OBJECT_POINTER,
+        G_TYPE_NONE,
+        2, EMPATHY_TYPE_TP_FILE, G_TYPE_POINTER);
+
+  signals[TRANSFER_PROGRESS] =
+    g_signal_new ("transfer-progress", G_TYPE_FROM_CLASS (klass),
+        G_SIGNAL_RUN_LAST, 0, NULL, NULL,
+        _empathy_marshal_VOID__OBJECT_UINT64_UINT64,
+        G_TYPE_NONE,
+        2, EMPATHY_TYPE_TP_FILE, G_TYPE_UINT64, G_TYPE_UINT64);
+
+  signals[HASHING_STARTED] =
+    g_signal_new ("hashing-started", G_TYPE_FROM_CLASS (klass),
+        G_SIGNAL_RUN_LAST, 0, NULL, NULL,
+        g_cclosure_marshal_VOID__VOID,
+        G_TYPE_NONE, 0);
+
+  signals[HASHING_PROGRESS] =
+    g_signal_new ("hashing-progress", G_TYPE_FROM_CLASS (klass),
+        G_SIGNAL_RUN_LAST, 0, NULL, NULL,
+        _empathy_marshal_VOID__UINT64_UINT64,
+        G_TYPE_NONE,
+        2, G_TYPE_UINT64, G_TYPE_UINT64);
+
+  signals[HASHING_DONE] =
+    g_signal_new ("hashing-done", G_TYPE_FROM_CLASS (klass),
+        G_SIGNAL_RUN_LAST, 0, NULL, NULL,
+        g_cclosure_marshal_VOID__VOID,
+        G_TYPE_NONE, 0);
 }
 
 static void
@@ -472,6 +537,9 @@ hash_job_async_read_cb (GObject *source,
     }
 
 out:
+  g_free (hash_data->buffer);
+  hash_data->buffer = NULL;
+
   schedule_hash_chunk (hash_data);
 }
 
@@ -485,11 +553,8 @@ schedule_hash_chunk (HashingData *hash_data)
     }
   else
     {
-      if (hash_data->buffer != NULL)
-        {
-          g_free (hash_data->buffer);
-          hash_data->buffer = g_malloc0 (BUFFER_SIZE);
-        }
+      if (hash_data->buffer == NULL)
+        hash_data->buffer = g_malloc0 (BUFFER_SIZE);
 
       g_input_stream_read_async (hash_data->stream, hash_data->buffer,
           BUFFER_SIZE, G_PRIORITY_DEFAULT, NULL,
@@ -520,7 +585,6 @@ ft_handler_read_async_cb (GObject *source,
   hash_data->stream = G_INPUT_STREAM (stream);
   hash_data->done_reading = FALSE;
   hash_data->req_data = req_data;
-  hash_data->error = NULL;
   /* FIXME: should look at the CM capabilities before setting the
    * checksum type?
    */
@@ -615,7 +679,8 @@ empathy_ft_handler_new_incoming (EmpathyTpFile *tp_file,
 }
 
 void
-empathy_ft_handler_start_transfer (EmpathyFTHandler *handler)
+empathy_ft_handler_start_transfer (EmpathyFTHandler *handler,
+                                   GCancellable *cancellable)
 {
   RequestData *data;
   EmpathyFTHandlerPriv *priv;
@@ -624,6 +689,7 @@ empathy_ft_handler_start_transfer (EmpathyFTHandler *handler)
   g_return_if_fail (EMPATHY_IS_FT_HANDLER (handler));
 
   priv = GET_PRIV (handler);
+  priv->cancellable = g_object_ref (cancellable);
 
   if (priv->tpfile == NULL)
     {
