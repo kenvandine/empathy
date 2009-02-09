@@ -551,7 +551,6 @@ hash_job_async_read_cb (GObject *source,
   if (bytes_read == 0)
     {
       hash_data->done_reading = TRUE;
-      schedule_hash_chunk (hash_data);
       goto out;
     }
   else
