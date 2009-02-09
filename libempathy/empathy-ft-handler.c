@@ -31,6 +31,9 @@
 #include "empathy-marshal.h"
 #include "empathy-utils.h"
 
+#define DEBUG_FLAG EMPATHY_DEBUG_FT
+#include "empathy-debug.h"
+
 G_DEFINE_TYPE (EmpathyFTHandler, empathy_ft_handler, G_TYPE_OBJECT)
 
 #define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyFTHandler)
@@ -337,6 +340,8 @@ ft_handler_create_channel_cb (EmpathyDispatchOperation *operation,
   GError *myerr = NULL;
   EmpathyFTHandlerPriv *priv = GET_PRIV (req_data->handler);
 
+  DEBUG ("FT: dispatcher create channel CB");
+
   if (error != NULL)
     {
       /* TODO: error handling */
@@ -358,6 +363,8 @@ ft_handler_push_to_dispatcher (RequestData *req_data)
   EmpathyDispatcher *dispatcher;
   McAccount *account;
   EmpathyFTHandlerPriv *priv = GET_PRIV (req_data->handler);
+
+  DEBUG ("FT: pushing request to the dispatcher");
 
   dispatcher = empathy_dispatcher_dup_singleton ();
   account = empathy_contact_get_account (priv->contact);
@@ -464,6 +471,8 @@ hash_job_async_close_stream_cb (GObject *source,
   GValue *value;
   GHashTable *request;
 
+  DEBUG ("FT: closing stream after hashing.");
+
   /* if we're here we for sure have done reading, check if we stopped due
    * to an error.
    */
@@ -491,6 +500,8 @@ hash_job_async_close_stream_cb (GObject *source,
 
   /* set the checksum in the request */
   request = req_data->request;
+
+  DEBUG ("FT: got file hash %s", g_checksum_get_string (hash_data->checksum));
 
   /* org.freedesktop.Telepathy.Channel.Type.FileTransfer.ContentHash */
   value = tp_g_value_slice_new (G_TYPE_STRING);
@@ -523,6 +534,8 @@ hash_job_async_read_cb (GObject *source,
   RequestData *req_data = hash_data->req_data;
   gssize bytes_read;
   GError *error = NULL;
+
+  DEBUG ("FT: reading a chunk for hashing.");
 
   bytes_read = g_input_stream_read_finish (hash_data->stream, res, &error);
   if (error != NULL)
@@ -591,6 +604,8 @@ ft_handler_read_async_cb (GObject *source,
   GValue *value;
   RequestData *req_data = user_data;
 
+  DEBUG ("FT: GFile read async CB.");
+
   stream = g_file_read_finish (req_data->gfile, res, &error);
   if (error != NULL)
     {
@@ -633,6 +648,8 @@ ft_handler_gfile_ready_cb (GObject *source,
   GError *error = NULL;
   EmpathyFTHandlerPriv *priv = GET_PRIV (req_data->handler);
 
+  DEBUG ("FT: got GFileInfo.");
+
   info = g_file_query_info_finish (req_data->gfile, res, &error);
   if (error != NULL)
     {
@@ -665,6 +682,8 @@ ft_handler_contact_ready_cb (EmpathyContact *contact,
 
   g_assert (priv->contact != NULL);
   g_assert (priv->gfile != NULL);
+
+  DEBUG ("FT: contact is ready.");
 
   g_cancellable_set_error_if_cancelled (priv->cancellable, &myerr);
 
