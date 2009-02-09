@@ -23,6 +23,7 @@
 
 #include <extensions/extensions.h>
 #include <glib.h>
+#include <glib/gi18n.h>
 #include <telepathy-glib/util.h>
 
 #include "empathy-ft-handler.h"
@@ -57,6 +58,7 @@ typedef struct {
   EmpathyFTHandler *handler;
   GFile *gfile;
   GHashTable *request;
+  goffset total_size;
 } RequestData;
 
 typedef struct {
@@ -66,6 +68,7 @@ typedef struct {
   GError *error;
   guchar *buffer;
   GChecksum *checksum;
+  gssize total_read;
 } HashingData;
 
 /* private data */
@@ -221,9 +224,9 @@ empathy_ft_handler_class_init (EmpathyFTHandlerClass *klass)
   signals[TRANSFER_ERROR] =
     g_signal_new ("transfer-error", G_TYPE_FROM_CLASS (klass),
         G_SIGNAL_RUN_LAST, 0, NULL, NULL,
-        _empathy_marshal_VOID__OBJECT_POINTER,
+        g_cclosure_marshal_VOID__POINTER,
         G_TYPE_NONE,
-        2, EMPATHY_TYPE_TP_FILE, G_TYPE_POINTER);
+        1, G_TYPE_POINTER);
 
   signals[TRANSFER_PROGRESS] =
     g_signal_new ("transfer-progress", G_TYPE_FROM_CLASS (klass),
@@ -500,7 +503,9 @@ cleanup:
 
   if (error != NULL)
     {
-      /* TODO: error handling. */
+      g_signal_emit (req_data->handler, signals[TRANSFER_ERROR], 0, error);
+      g_clear_error (&error);
+      request_data_free (req_data);
     }
   else
     {
@@ -515,6 +520,7 @@ hash_job_async_read_cb (GObject *source,
                         gpointer user_data)
 {
   HashingData *hash_data = user_data;
+  RequestData *req_data = hash_data->req_data;
   gssize bytes_read;
   GError *error = NULL;
 
@@ -526,7 +532,7 @@ hash_job_async_read_cb (GObject *source,
       goto out;
     }
 
-  /* TODO: notify progress */
+  hash_data->total_read += bytes_read;
 
   /* we now have the chunk */
   if (bytes_read == 0)
@@ -538,6 +544,8 @@ hash_job_async_read_cb (GObject *source,
   else
     {
       g_checksum_update (hash_data->checksum, hash_data->buffer, bytes_read);
+      g_signal_emit (req_data->handler, signals[HASHING_PROGRESS], 0,
+          (guint64) hash_data->total_read, (guint64) req_data->total_size);
     }
 
 out:
@@ -550,10 +558,15 @@ out:
 static void
 schedule_hash_chunk (HashingData *hash_data)
 {
+  EmpathyFTHandlerPriv *priv;
+  RequestData *req_data = hash_data->req_data;
+
+  priv = GET_PRIV (req_data->handler);
+
   if (hash_data->done_reading)
     {
       g_input_stream_close_async (hash_data->stream, G_PRIORITY_DEFAULT,
-          NULL, hash_job_async_close_stream_cb, hash_data);
+          priv->cancellable, hash_job_async_close_stream_cb, hash_data);
     }
   else
     {
@@ -561,7 +574,7 @@ schedule_hash_chunk (HashingData *hash_data)
         hash_data->buffer = g_malloc0 (BUFFER_SIZE);
 
       g_input_stream_read_async (hash_data->stream, hash_data->buffer,
-          BUFFER_SIZE, G_PRIORITY_DEFAULT, NULL,
+          BUFFER_SIZE, G_PRIORITY_DEFAULT, priv->cancellable,
           hash_job_async_read_cb, hash_data);
     }
 }
@@ -581,7 +594,11 @@ ft_handler_read_async_cb (GObject *source,
   stream = g_file_read_finish (req_data->gfile, res, &error);
   if (error != NULL)
     {
-      /* TODO: error handling. */
+      g_signal_emit (req_data->handler, signals[TRANSFER_ERROR], 0, error);
+
+      request_data_free (req_data);
+      g_clear_error (&error);
+
       return;
     }
 
@@ -602,6 +619,8 @@ ft_handler_read_async_cb (GObject *source,
   g_hash_table_insert (request,
       EMP_IFACE_CHANNEL_TYPE_FILE_TRANSFER ".ContentHashType", value);
 
+  g_signal_emit (req_data->handler, signals[HASHING_STARTED], 0);
+
   schedule_hash_chunk (hash_data);
 }
 
@@ -612,19 +631,26 @@ ft_handler_gfile_ready_cb (GObject *source,
 {
   GFileInfo *info;
   GError *error = NULL;
+  EmpathyFTHandlerPriv *priv = GET_PRIV (req_data->handler);
 
   info = g_file_query_info_finish (req_data->gfile, res, &error);
   if (error != NULL)
     {
-      /* TODO: error handling. */
+      g_signal_emit (req_data->handler, signals[TRANSFER_ERROR], 0, error);
+
+      request_data_free (req_data);
+      g_clear_error (&error);
+
       return;
     }
 
   ft_handler_populate_outgoing_request (req_data, info);
 
+  req_data->total_size = g_file_info_get_size (info);
+
   /* now start hashing the file */
   g_file_read_async (req_data->gfile, G_PRIORITY_DEFAULT,
-      NULL, ft_handler_read_async_cb, req_data);
+      priv->cancellable, ft_handler_read_async_cb, req_data);
 }
 
 static void
@@ -635,15 +661,38 @@ ft_handler_contact_ready_cb (EmpathyContact *contact,
 {
   RequestData *req_data = user_data;
   EmpathyFTHandlerPriv *priv = GET_PRIV (req_data->handler);
+  GError *myerr = NULL;
 
   g_assert (priv->contact != NULL);
   g_assert (priv->gfile != NULL);
 
-  /* check if FT is allowed before firing up the I/O machinery */
-  if (!ft_handler_check_if_allowed (req_data->handler))
+  g_cancellable_set_error_if_cancelled (priv->cancellable, &myerr);
+
+  if (myerr == NULL)
     {
-      /* TODO: error handling. */
+      if (error != NULL)
+        {
+          myerr = g_error_copy (error);
+        }
+      else
+        {
+          /* check if FT is allowed before firing up the I/O machinery */
+          if (!ft_handler_check_if_allowed (req_data->handler))
+            {
+              g_set_error_literal (&myerr, EMPATHY_FT_ERROR_QUARK,
+                  EMPATHY_FT_ERROR_NOT_SUPPORTED,
+                  _("File transfer not supported by remote contact"));
+            }
+        }
+    }
+
+  if (myerr != NULL)
+    {
+      g_signal_emit (req_data->handler, signals[TRANSFER_ERROR], 0, myerr);
+
       request_data_free (req_data);
+      g_clear_error (&myerr);
+
       return;
     }
 
@@ -654,7 +703,7 @@ ft_handler_contact_ready_cb (EmpathyContact *contact,
       G_FILE_ATTRIBUTE_STANDARD_CONTENT_TYPE ","
       G_FILE_ATTRIBUTE_TIME_MODIFIED,
       G_FILE_QUERY_INFO_NONE, G_PRIORITY_DEFAULT,
-      NULL, (GAsyncReadyCallback) ft_handler_gfile_ready_cb,
+      priv->cancellable, (GAsyncReadyCallback) ft_handler_gfile_ready_cb,
       req_data);
 }
 

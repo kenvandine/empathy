@@ -40,7 +40,14 @@
 #define EMPATHY_GET_PRIV(obj,type) ((type##Priv *) ((type *) obj)->priv)
 #define EMP_STR_EMPTY(x) ((x) == NULL || (x)[0] == '\0')
 
+#define EMPATHY_FT_ERROR_QUARK g_quark_from_static_string ("EmpathyFTError")
+
 G_BEGIN_DECLS
+
+typedef enum {
+  EMPATHY_FT_ERROR_FAILED,
+  EMPATHY_FT_ERROR_NOT_SUPPORTED
+} EmpathyFTErrorEnum;
 
 void         empathy_init                           (void);
 /* Strings */
