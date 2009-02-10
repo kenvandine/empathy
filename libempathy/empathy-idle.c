@@ -53,6 +53,7 @@ typedef struct {
 
 	McPresence      away_saved_state;
 	McPresence      nm_saved_state;
+	gchar          *nm_saved_status;
 
 	gboolean        is_idle;
 	gboolean        nm_connected;
@@ -242,15 +243,23 @@ idle_nm_state_change_cb (DBusGProxy  *proxy,
 
 	if (old_nm_connected && !new_nm_connected) {
 		/* We are no more connected */
-		DEBUG ("Disconnected: Save state %d", priv->state);
+		DEBUG ("Disconnected: Save state %d (%s)",
+				priv->state, priv->status);
 		priv->nm_saved_state = priv->state;
+		g_free (priv->nm_saved_status);
+		priv->nm_saved_status = g_strdup (priv->status);
 		empathy_idle_set_state (idle, MC_PRESENCE_OFFLINE);
 	}
 	else if (!old_nm_connected && new_nm_connected) {
 		/* We are now connected */
-		DEBUG ("Reconnected: Restore state %d", priv->nm_saved_state);
-		empathy_idle_set_state (idle, priv->nm_saved_state);
+		DEBUG ("Reconnected: Restore state %d (%s)",
+				priv->nm_saved_state, priv->nm_saved_status);
+		empathy_idle_set_presence (idle,
+				priv->nm_saved_state,
+				priv->nm_saved_status);
 		priv->nm_saved_state = MC_PRESENCE_UNSET;
+		g_free (priv->nm_saved_status);
+		priv->nm_saved_status = NULL;
 	}
 
 	priv->nm_connected = new_nm_connected;
