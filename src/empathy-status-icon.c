@@ -170,9 +170,12 @@ status_icon_update_tooltip (EmpathyStatusIcon *icon)
 	gchar                 *tooltip = NULL;
 
 	if (priv->event) {
-		tooltip = g_strdup_printf ("%s\n%s",
-					   priv->event->header,
-					   priv->event->message);
+		if (priv->event->message != NULL)
+				tooltip = g_strdup_printf ("%s\n%s",
+							   priv->event->header,
+							   priv->event->message);
+		else
+				tooltip = g_strdup (priv->event->header);
 	}
 
 	if (!tooltip) {
