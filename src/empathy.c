@@ -454,7 +454,6 @@ main (int argc, char *argv[])
 
 	gst_init (&argc, &argv);
 
-	g_set_application_name (PACKAGE_NAME);
 	gtk_window_set_default_icon_name ("empathy");
 	textdomain (GETTEXT_PACKAGE);
 
