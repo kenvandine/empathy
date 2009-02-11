@@ -512,6 +512,8 @@ empathy_call_window_src_added_cb (EmpathyCallHandler *handler,
   gst_element_set_state (element, GST_STATE_PLAYING);
 
   gst_pad_link (src, pad);
+
+  gst_object_unref (pad);
 }
 
 static void
