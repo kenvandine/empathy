@@ -111,6 +111,14 @@ empathy_contact_menu_new (EmpathyContact             *contact,
 	return menu;
 }
 
+static void
+empathy_contact_chat_menu_item_activated (GtkMenuItem *item,
+	EmpathyContact *contact)
+{
+  empathy_dispatcher_chat_with_contact (contact, NULL, NULL);
+}
+
+
 GtkWidget *
 empathy_contact_chat_menu_item_new (EmpathyContact *contact)
 {
@@ -125,8 +133,8 @@ empathy_contact_chat_menu_item_new (EmpathyContact *contact)
 	gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
 	gtk_widget_show (image);
 
-	g_signal_connect_swapped (item, "activate",
-				  G_CALLBACK (empathy_dispatcher_chat_with_contact),
+	g_signal_connect (item, "activate",
+				  G_CALLBACK (empathy_contact_chat_menu_item_activated),
 				  contact);
 	
 	return item;
