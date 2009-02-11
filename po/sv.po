@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: empathy\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-01 17:52+0100\n"
-"PO-Revision-Date: 2009-02-01 17:57+0100\n"
+"POT-Creation-Date: 2009-02-11 13:12+0100\n"
+"PO-Revision-Date: 2009-02-11 13:14+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "MIME-Version: 1.0\n"
@@ -288,7 +288,7 @@ msgid "Which criterium to use when sorting the contact list. Default is to use s
 msgstr "Vilket kriteria som ska användas när kontaktlistan sorteras. Standard är att sortera efter kontaktens namn med värdet \"name\". Värdet \"state\" kommer att sortera kontaktlistan efter tillstånd."
 
 #: ../libempathy/empathy-tp-contact-list.c:731
-#: ../src/empathy.c:270
+#: ../src/empathy.c:269
 msgid "People nearby"
 msgstr "Personer i närheten"
 
@@ -618,7 +618,7 @@ msgid "%s has left the room"
 msgstr "%s har lämnat rummet"
 
 #: ../libempathy-gtk/empathy-chat.c:1248
-#: ../src/empathy-call-window.c:425
+#: ../src/empathy-call-window.c:466
 msgid "Disconnected"
 msgstr "Frånkopplad"
 
@@ -679,68 +679,73 @@ msgstr "Bestäm _senare"
 msgid "Subscription Request"
 msgstr "Prenumerationsbegäran"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1244
+#: ../libempathy-gtk/empathy-contact-list-view.c:1249
 #, c-format
 msgid "Do you really want to remove the group '%s'?"
 msgstr "Vill du verkligen ta bort gruppen \"%s\"?"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1246
+#: ../libempathy-gtk/empathy-contact-list-view.c:1251
 msgid "Removing group"
 msgstr "Tar bort grupp"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1293
-#: ../libempathy-gtk/empathy-contact-list-view.c:1372
+#: ../libempathy-gtk/empathy-contact-list-view.c:1298
+#: ../libempathy-gtk/empathy-contact-list-view.c:1377
 msgid "_Remove"
 msgstr "_Ta bort"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1323
+#: ../libempathy-gtk/empathy-contact-list-view.c:1328
 #, c-format
 msgid "Do you really want to remove the contact '%s'?"
 msgstr "Vill du verkligen ta bort kontakten \"%s\"?"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1325
+#: ../libempathy-gtk/empathy-contact-list-view.c:1330
 msgid "Removing contact"
 msgstr "Tar bort kontakt"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1330
+#: ../libempathy-gtk/empathy-contact-list-view.c:1335
 msgid "Sorry, I don't want you in my contact list anymore."
 msgstr "Tyvärr, jag vill inte längre ha dig i min kontaktlista."
 
-#: ../libempathy-gtk/empathy-contact-menu.c:121
+#: ../libempathy-gtk/empathy-contact-menu.c:122
 #: ../src/empathy-main-window.glade.h:9
 msgid "_Chat"
 msgstr "_Chatt"
 
-#: ../libempathy-gtk/empathy-contact-menu.c:142
+#: ../libempathy-gtk/empathy-contact-menu.c:153
+#: ../src/empathy-call-window.glade.h:5
 msgid "_Call"
 msgstr "_Ring"
 
-#: ../libempathy-gtk/empathy-contact-menu.c:181
+#: ../libempathy-gtk/empathy-contact-menu.c:192
 #: ../src/empathy-main-window.glade.h:17
 msgid "_View Previous Conversations"
 msgstr "_Visa tidigare samtal"
 
-#: ../libempathy-gtk/empathy-contact-menu.c:203
+#: ../libempathy-gtk/empathy-contact-menu.c:214
 msgid "Send file"
 msgstr "Skicka fil"
 
-#: ../libempathy-gtk/empathy-contact-menu.c:231
+#: ../libempathy-gtk/empathy-contact-menu.c:242
 msgid "Infor_mation"
 msgstr "Infor_mation"
 
-#: ../libempathy-gtk/empathy-contact-menu.c:258
+#: ../libempathy-gtk/empathy-contact-menu.c:269
 #: ../src/empathy-chat-window.glade.h:14
 #: ../src/empathy-main-window.glade.h:11
 msgid "_Edit"
 msgstr "R_edigera"
 
-#: ../libempathy-gtk/empathy-contact-menu.c:317
+#: ../libempathy-gtk/empathy-contact-menu.c:328
 msgid "Inviting to this room"
 msgstr "Bjuder in till detta rum"
 
-#: ../libempathy-gtk/empathy-contact-menu.c:350
+#: ../libempathy-gtk/empathy-contact-menu.c:361
 msgid "_Invite to chatroom"
 msgstr "_Bjud in till chattrum"
+
+#: ../libempathy-gtk/empathy-contact-selector.c:111
+msgid "Select a contact"
+msgstr "Välj en kontakt"
 
 #: ../libempathy-gtk/empathy-contact-widget.c:358
 msgid "Save Avatar"
@@ -755,7 +760,7 @@ msgid "Select"
 msgstr "Markera"
 
 #: ../libempathy-gtk/empathy-contact-widget.c:904
-#: ../src/empathy-main-window.c:987
+#: ../src/empathy-main-window.c:991
 msgid "Group"
 msgstr "Grupp"
 
@@ -1216,19 +1221,19 @@ msgstr "Närvaro"
 msgid "Set your own presence"
 msgstr "Ställ in din egna närvaro"
 
-#: ../src/empathy.c:403
+#: ../src/empathy.c:426
 msgid "Don't connect on startup"
 msgstr "Anslut inte vid uppstart"
 
-#: ../src/empathy.c:407
+#: ../src/empathy.c:430
 msgid "Don't show the contact list on startup"
 msgstr "Visa inte kontaktlistan vid uppstart"
 
-#: ../src/empathy.c:411
+#: ../src/empathy.c:434
 msgid "Show the accounts dialog"
 msgstr "Visa kontodialogrutan"
 
-#: ../src/empathy.c:419
+#: ../src/empathy.c:446
 msgid "- Empathy Instant Messenger"
 msgstr "- Empathy snabbmeddelandeklient"
 
@@ -1324,131 +1329,70 @@ msgstr "För att lägga till ett nytt konto måste du först installera en bakä
 msgid "Type:"
 msgstr "Typ:"
 
-#: ../src/empathy-call-window.c:143
-msgid "Closed"
-msgstr "Stängd"
+#: ../src/empathy-call-window.c:180
+msgid "Contrast"
+msgstr "Kontrast"
 
-#: ../src/empathy-call-window.c:263
-msgid "End this call?"
-msgstr "Avsluta samtalet?"
+#: ../src/empathy-call-window.c:180
+msgid "Brightness"
+msgstr "Ljusstyrka"
 
-#: ../src/empathy-call-window.c:265
-msgid "Closing this window will end the call in progress."
-msgstr "Stängning av detta fönster gör att alla pågående samtal avslutas."
+#: ../src/empathy-call-window.c:180
+msgid "Gamma"
+msgstr "Gamma"
 
-#: ../src/empathy-call-window.c:266
-msgid "_End Call"
-msgstr "A_vsluta samtal"
+#: ../src/empathy-call-window.c:212
+msgid "Volume"
+msgstr "Volym"
 
-#: ../src/empathy-call-window.c:320
-msgid "Incoming call"
-msgstr "Inkommande samtal"
+#: ../src/empathy-call-window.c:287
+msgid "_Sidebar"
+msgstr "_Sidopanel"
 
-#: ../src/empathy-call-window.c:322
+#: ../src/empathy-call-window.c:305
+msgid "Dialpad"
+msgstr "Knappsats"
+
+#: ../src/empathy-call-window.c:309
+msgid "Audio input"
+msgstr "Ljudingång"
+
+#: ../src/empathy-call-window.c:313
+msgid "Video input"
+msgstr "Videoingång"
+
+#: ../src/empathy-call-window.c:326
+msgid "Connecting..."
+msgstr "Ansluter..."
+
+#: ../src/empathy-call-window.c:489
 #, c-format
-msgid "%s is calling you, do you want to answer?"
-msgstr "%s ringer dig. Vill du svara?"
-
-#: ../src/empathy-call-window.c:328
-msgid "_Reject"
-msgstr "Avv_isa"
-
-#: ../src/empathy-call-window.c:333
-msgid "_Answer"
-msgstr "_Svara"
-
-#: ../src/empathy-call-window.c:388
-msgid "Empathy Call"
-msgstr "Empathy-samtal"
-
-#. To translators: Readying is the first state of the call, it is
-#. * preparing the connection and it does not yet ring.
-#: ../src/empathy-call-window.c:391
-msgid "Readying"
-msgstr "Förbereder"
-
-#: ../src/empathy-call-window.c:400
-#, c-format
-msgid "%s - Empathy Call"
-msgstr "%s - Empathy-samtal"
-
-#: ../src/empathy-call-window.c:404
-msgid "Ringing"
-msgstr "Ringer"
-
-#: ../src/empathy-call-window.c:427
-msgid "Connecting"
-msgstr "Ansluter"
-
-#: ../src/empathy-call-window.c:545
-#, c-format
-msgid "Incoming call from %s rejected because there is already a running call."
-msgstr "Inkommande samtal från %s avvisades därför att det redan finns ett pågående samtal."
+msgid "Connected -- %d:%02dm"
+msgstr "Ansluten -- %d:%02dm"
 
 #: ../src/empathy-call-window.glade.h:1
-msgid "#"
-msgstr "#"
-
-#: ../src/empathy-call-window.glade.h:2
-msgid "*"
-msgstr "*"
-
-#: ../src/empathy-call-window.glade.h:3
-msgid "0"
-msgstr "0"
-
-#: ../src/empathy-call-window.glade.h:4
-msgid "1"
-msgstr "1"
-
-#: ../src/empathy-call-window.glade.h:5
-msgid "2"
-msgstr "2"
-
-#: ../src/empathy-call-window.glade.h:6
-msgid "3"
-msgstr "3"
-
-#: ../src/empathy-call-window.glade.h:7
-msgid "4"
-msgstr "4"
-
-#: ../src/empathy-call-window.glade.h:8
-msgid "5"
-msgstr "5"
-
-#: ../src/empathy-call-window.glade.h:9
-msgid "6"
-msgstr "6"
-
-#: ../src/empathy-call-window.glade.h:10
-msgid "7"
-msgstr "7"
-
-#: ../src/empathy-call-window.glade.h:11
-msgid "8"
-msgstr "8"
-
-#: ../src/empathy-call-window.glade.h:12
-msgid "9"
-msgstr "9"
-
-#. To translators: The keypad is numbers [0-9], asterisk (*) and hash (#). Presented like on any phone
-#: ../src/empathy-call-window.glade.h:14
-msgid "<b>Keypad</b>"
-msgstr "<b>Knappsats</b>"
-
-#: ../src/empathy-call-window.glade.h:15
-msgid "<b>Volume</b>"
-msgstr "<b>Volym</b>"
-
-#: ../src/empathy-call-window.glade.h:16
-msgid "Hang Up"
+msgid "Hang up"
 msgstr "Lägg på"
 
-#: ../src/empathy-call-window.glade.h:17
+#: ../src/empathy-call-window.glade.h:2
 msgid "Send Video"
 msgstr "Skicka video"
+
+#: ../src/empathy-call-window.glade.h:3
+msgid "Send video"
+msgstr "Skicka video"
+
+#: ../src/empathy-call-window.glade.h:4
+msgid "Video preview"
+msgstr "Videoförhandsvisning"
+
+#: ../src/empathy-call-window.glade.h:6
+msgid "_View"
+msgstr "_Visa"
+
+#: ../src/empathy-call-window.glade.h:7
+msgid "menuitem2"
+msgstr "menyobjekt2"
 
 #: ../src/empathy-chat-window.c:313
 #, c-format
@@ -1464,7 +1408,7 @@ msgid "Typing a message."
 msgstr "Skriver ett meddelande."
 
 #: ../src/empathy-chat-window.c:892
-#: ../src/empathy-event-manager.c:261
+#: ../src/empathy-event-manager.c:424
 #, c-format
 msgid "New message from %s"
 msgstr "Nytt meddelande från %s"
@@ -1584,35 +1528,52 @@ msgstr "S_erver:"
 msgid "_Room:"
 msgstr "_Rum:"
 
-#: ../src/empathy-event-manager.c:334
+#: ../src/empathy-event-manager.c:372
+msgid "Incoming call"
+msgstr "Inkommande samtal"
+
+#: ../src/empathy-event-manager.c:375
+#, c-format
+msgid "%s is calling you, do you want to answer?"
+msgstr "%s ringer dig. Vill du svara?"
+
+#: ../src/empathy-event-manager.c:382
+msgid "_Reject"
+msgstr "Avv_isa"
+
+#: ../src/empathy-event-manager.c:388
+msgid "_Answer"
+msgstr "_Svara"
+
+#: ../src/empathy-event-manager.c:511
 #, c-format
 msgid "Incoming call from %s"
 msgstr "Inkommande samtal från %s"
 
-#: ../src/empathy-event-manager.c:381
+#: ../src/empathy-event-manager.c:559
 #, c-format
 msgid "%s is offering you an invitation"
 msgstr "%s erbjuder dig en inbjudan"
 
-#: ../src/empathy-event-manager.c:387
+#: ../src/empathy-event-manager.c:565
 msgid "An external application will be started to handle it."
 msgstr "Ett externt program kommer att startas för att hantera den."
 
-#: ../src/empathy-event-manager.c:392
+#: ../src/empathy-event-manager.c:570
 msgid "You don't have the needed external application to handle it."
 msgstr "Du har inte det nödvändiga externa programmet att hantera den med."
 
-#: ../src/empathy-event-manager.c:525
+#: ../src/empathy-event-manager.c:706
 #, c-format
 msgid "Incoming file transfer from %s"
 msgstr "Inkommande filöverföring från %s"
 
-#: ../src/empathy-event-manager.c:615
+#: ../src/empathy-event-manager.c:800
 #, c-format
 msgid "Subscription requested by %s"
 msgstr "Prenumeration begärd av %s"
 
-#: ../src/empathy-event-manager.c:619
+#: ../src/empathy-event-manager.c:804
 #, c-format
 msgid ""
 "\n"
@@ -1798,71 +1759,71 @@ msgstr "Inga konton att importera kunde hittas. Empathy har för närvarande end
 msgid "Import Accounts"
 msgstr "Importera konton"
 
-#: ../src/empathy-main-window.c:392
+#: ../src/empathy-main-window.c:391
 msgid "No error specified"
 msgstr "Inget fel angivet"
 
-#: ../src/empathy-main-window.c:395
+#: ../src/empathy-main-window.c:394
 msgid "Network error"
 msgstr "Nätverksfel"
 
-#: ../src/empathy-main-window.c:398
+#: ../src/empathy-main-window.c:397
 msgid "Authentication failed"
 msgstr "Autentisering misslyckades"
 
-#: ../src/empathy-main-window.c:401
+#: ../src/empathy-main-window.c:400
 msgid "Encryption error"
 msgstr "Krypteringsfel"
 
-#: ../src/empathy-main-window.c:404
+#: ../src/empathy-main-window.c:403
 msgid "Name in use"
 msgstr "Namnet används"
 
-#: ../src/empathy-main-window.c:407
+#: ../src/empathy-main-window.c:406
 msgid "Certificate not provided"
 msgstr "Certifikat inte tillhandahållet"
 
-#: ../src/empathy-main-window.c:410
+#: ../src/empathy-main-window.c:409
 msgid "Certificate untrusted"
 msgstr "Certifikatet är inte betrott"
 
-#: ../src/empathy-main-window.c:413
+#: ../src/empathy-main-window.c:412
 msgid "Certificate expired"
 msgstr "Certifikatet har gått ut"
 
-#: ../src/empathy-main-window.c:416
+#: ../src/empathy-main-window.c:415
 msgid "Certificate not activated"
 msgstr "Certifikatet är inte aktiverat"
 
-#: ../src/empathy-main-window.c:419
+#: ../src/empathy-main-window.c:418
 msgid "Certificate hostname mismatch"
 msgstr "Värdnamnet i certifikatet stämmer inte"
 
-#: ../src/empathy-main-window.c:422
+#: ../src/empathy-main-window.c:421
 msgid "Certificate fingerprint mismatch"
 msgstr "Certifikatets fingeravtryck stämmer inte"
 
-#: ../src/empathy-main-window.c:425
+#: ../src/empathy-main-window.c:424
 msgid "Certificate self-signed"
 msgstr "Självsignerat certifikat"
 
-#: ../src/empathy-main-window.c:428
+#: ../src/empathy-main-window.c:427
 msgid "Certificate error"
 msgstr "Certifikatfel"
 
-#: ../src/empathy-main-window.c:431
+#: ../src/empathy-main-window.c:430
 msgid "Unknown error"
 msgstr "Okänt fel"
 
-#: ../src/empathy-main-window.c:590
+#: ../src/empathy-main-window.c:594
 msgid "Show and edit accounts"
 msgstr "Visa och redigera konton"
 
-#: ../src/empathy-main-window.c:970
+#: ../src/empathy-main-window.c:974
 msgid "Contact"
 msgstr "Kontakt"
 
-#: ../src/empathy-main-window.c:1172
+#: ../src/empathy-main-window.c:1176
 msgid "_Edit account"
 msgstr "_Redigera konto"
 
@@ -2102,6 +2063,57 @@ msgstr "Kunde inte starta program för tjänsten %s: %s"
 msgid "An invitation was offered for service %s, but you don't have the needed application to handle it"
 msgstr "Du blev erbjuden en inbjudan för tjänsten %s, men du har inte det nödvändiga programmet att hantera den med"
 
+#~ msgid "Closed"
+#~ msgstr "Stängd"
+#~ msgid "End this call?"
+#~ msgstr "Avsluta samtalet?"
+#~ msgid "Closing this window will end the call in progress."
+#~ msgstr "Stängning av detta fönster gör att alla pågående samtal avslutas."
+#~ msgid "_End Call"
+#~ msgstr "A_vsluta samtal"
+#~ msgid "Empathy Call"
+#~ msgstr "Empathy-samtal"
+#~ msgid "Readying"
+#~ msgstr "Förbereder"
+#~ msgid "%s - Empathy Call"
+#~ msgstr "%s - Empathy-samtal"
+#~ msgid "Ringing"
+#~ msgstr "Ringer"
+#~ msgid "Connecting"
+#~ msgstr "Ansluter"
+#~ msgid ""
+#~ "Incoming call from %s rejected because there is already a running call."
+#~ msgstr ""
+#~ "Inkommande samtal från %s avvisades därför att det redan finns ett "
+#~ "pågående samtal."
+#~ msgid "#"
+#~ msgstr "#"
+#~ msgid "*"
+#~ msgstr "*"
+#~ msgid "0"
+#~ msgstr "0"
+#~ msgid "1"
+#~ msgstr "1"
+#~ msgid "2"
+#~ msgstr "2"
+#~ msgid "3"
+#~ msgstr "3"
+#~ msgid "4"
+#~ msgstr "4"
+#~ msgid "5"
+#~ msgstr "5"
+#~ msgid "6"
+#~ msgstr "6"
+#~ msgid "7"
+#~ msgstr "7"
+#~ msgid "8"
+#~ msgstr "8"
+#~ msgid "9"
+#~ msgstr "9"
+#~ msgid "<b>Keypad</b>"
+#~ msgstr "<b>Knappsats</b>"
+#~ msgid "<b>Volume</b>"
+#~ msgstr "<b>Volym</b>"
 #~ msgid "Enable popup when contact is available"
 #~ msgstr "Aktivera popup när kontakt är tillgänglig"
 #~ msgid "Whether or not to show a popup when a contact becomes available."
@@ -2203,8 +2215,6 @@ msgstr "Du blev erbjuden en inbjudan för tjänsten %s, men du har inte det nöd
 #~ msgstr "Visa tidigare samtal med denna kontakt"
 #~ msgid "Start a voice or video conversation with this contact"
 #~ msgstr "Starta röst- eller videosamtal med denna kontakt"
-#~ msgid "No video output"
-#~ msgstr "Inget videoutdata"
 #~ msgid "Start Call"
 #~ msgstr "Påbörja samtal"
 #~ msgid "gtk-cut"
@@ -2233,8 +2243,6 @@ msgstr "Du blev erbjuden en inbjudan för tjänsten %s, men du har inte det nöd
 # Det måste finnas ett bättre ord
 #~ msgid "Output"
 #~ msgstr "Utgång"
-#~ msgid "Volume"
-#~ msgstr "Volym"
 #~ msgid "Ca_ll"
 #~ msgstr "R_ing"
 #~ msgid "Change _Topic..."
@@ -2448,8 +2456,6 @@ msgstr "Du blev erbjuden en inbjudan för tjänsten %s, men du har inte det nöd
 #~ msgstr "_Lösenord:"
 #~ msgid "_Retrieve"
 #~ msgstr "_Hämta"
-#~ msgid "_Search"
-#~ msgstr "_Sök"
 #~ msgid "_Subscribe"
 #~ msgstr "_Prenumerera"
 # "Web site" är "webbplats". "Web page" är "webbsida".
@@ -2664,8 +2670,6 @@ msgstr "Du blev erbjuden en inbjudan för tjänsten %s, men du har inte det nöd
 #~ msgstr "Ett okänt fel inträffade under filöverföringen."
 #~ msgid "Someone would like to send you a file."
 #~ msgstr "Någon vill skicka en fil till dig."
-#~ msgid "Connecting..."
-#~ msgstr "Ansluter..."
 #~ msgid "Retry connection"
 #~ msgstr "Återanslut"
 #~ msgid "Invited %s to join this chat conference."
