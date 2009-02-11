@@ -1978,60 +1978,6 @@
   )
 )
 
-(define-method add_preview_video
-  (of-object "EmpathyTpCall")
-  (c-name "empathy_tp_call_add_preview_video")
-  (return-type "none")
-  (parameters
-    '("guint" "preview_video_socket_id")
-  )
-)
-
-(define-method remove_preview_video
-  (of-object "EmpathyTpCall")
-  (c-name "empathy_tp_call_remove_preview_video")
-  (return-type "none")
-  (parameters
-    '("guint" "preview_video_socket_id")
-  )
-)
-
-(define-method add_output_video
-  (of-object "EmpathyTpCall")
-  (c-name "empathy_tp_call_add_output_video")
-  (return-type "none")
-  (parameters
-    '("guint" "output_video_socket_id")
-  )
-)
-
-(define-method set_output_volume
-  (of-object "EmpathyTpCall")
-  (c-name "empathy_tp_call_set_output_volume")
-  (return-type "none")
-  (parameters
-    '("guint" "volume")
-  )
-)
-
-(define-method mute_output
-  (of-object "EmpathyTpCall")
-  (c-name "empathy_tp_call_mute_output")
-  (return-type "none")
-  (parameters
-    '("gboolean" "is_muted")
-  )
-)
-
-(define-method mute_input
-  (of-object "EmpathyTpCall")
-  (c-name "empathy_tp_call_mute_input")
-  (return-type "none")
-  (parameters
-    '("gboolean" "is_muted")
-  )
-)
-
 (define-method start_tone
   (of-object "EmpathyTpCall")
   (c-name "empathy_tp_call_start_tone")
