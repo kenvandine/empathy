@@ -1,4 +1,6 @@
-<?xml version="1.0"?>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
+<!--Generated with glade3 3.4.5 on Tue Feb  3 22:03:45 2009 -->
 <glade-interface>
   <widget class="GtkWindow" id="call_window">
     <child>
@@ -23,13 +25,6 @@
                       </widget>
                     </child>
                     <child>
-                      <widget class="GtkSeparatorMenuItem" id="menuitem2">
-                        <property name="visible">True</property>
-                        <property name="label" translatable="yes">menuitem2</property>
-                        <property name="use_underline">True</property>
-                      </widget>
-                    </child>
-                    <child>
                       <widget class="GtkImageMenuItem" id="menuhangup">
                         <property name="visible">True</property>
                         <property name="label" translatable="yes">Hang up</property>
@@ -37,7 +32,8 @@
                         <child internal-child="image">
                           <widget class="GtkImage" id="menu-item-image1">
                             <property name="visible">True</property>
-                            <property name="stock">gtk-stop</property>
+                            <property name="stock">gtk-cancel</property>
+                            <property name="icon_size">1</property>
                           </widget>
                         </child>
                       </widget>
