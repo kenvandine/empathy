@@ -896,7 +896,7 @@ dispatcher_constructor (GType type,
           (type, n_construct_params, construct_params);
 
       dispatcher = EMPATHY_DISPATCHER (retval);
-      g_object_add_weak_pointer (retval, (gpointer *) &dispatcher);
+      g_object_add_weak_pointer (retval, (gpointer) &dispatcher);
     }
   else
     {

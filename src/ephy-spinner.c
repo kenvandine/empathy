@@ -489,7 +489,7 @@ ephy_spinner_cache_ref (void)
 		spinner_cache = g_object_new (EPHY_TYPE_SPINNER_CACHE, NULL);
 		cache_ptr = &spinner_cache;
 		g_object_add_weak_pointer (G_OBJECT (spinner_cache),
-					   (gpointer *) cache_ptr);
+					   (gpointer) cache_ptr);
 
 		return spinner_cache;
 	}

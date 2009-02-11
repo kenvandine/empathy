@@ -296,7 +296,7 @@ idle_constructor (GType type,
 			(type, n_props, props);
 
 		idle_singleton = EMPATHY_IDLE (retval);
-		g_object_add_weak_pointer (retval, (gpointer *) &idle_singleton);
+		g_object_add_weak_pointer (retval, (gpointer) &idle_singleton);
 	}
 
 	return retval;

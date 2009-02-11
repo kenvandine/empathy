@@ -63,7 +63,7 @@ empathy_call_factory_constructor (GType type, guint n_construct_params,
 
   call_factory = G_OBJECT_CLASS (empathy_call_factory_parent_class)->constructor
           (type, n_construct_params, construct_params);
-  g_object_add_weak_pointer (call_factory, (gpointer *)&call_factory);
+  g_object_add_weak_pointer (call_factory, (gpointer)&call_factory);
 
   return call_factory;
 }

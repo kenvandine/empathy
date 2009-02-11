@@ -139,7 +139,7 @@ empathy_chatroom_manager_constructor (GType type,
   priv = GET_PRIV (self);
 
   chatroom_manager_singleton = self;
-  g_object_add_weak_pointer (obj, (gpointer *) &chatroom_manager_singleton);
+  g_object_add_weak_pointer (obj, (gpointer) &chatroom_manager_singleton);
 
   if (priv->file == NULL)
     {

@@ -826,7 +826,7 @@ event_manager_constructor (GType type,
 			(type, n_props, props);
 
 		manager_singleton = EMPATHY_EVENT_MANAGER (retval);
-		g_object_add_weak_pointer (retval, (gpointer *) &manager_singleton);
+		g_object_add_weak_pointer (retval, (gpointer) &manager_singleton);
 	}
 
 	return retval;

@@ -474,8 +474,8 @@ do_constructor (GType type,
                                                                                    n_construct_params,
                                                                                    construct_params);
       manager_singleton = EMPATHY_ACCOUNT_MANAGER (retval);
-      g_object_add_weak_pointer (retval, (gpointer *) &manager_singleton);
-    } 
+      g_object_add_weak_pointer (retval, (gpointer) &manager_singleton);
+    }
   else
     {
       retval = g_object_ref (manager_singleton);
