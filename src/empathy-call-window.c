@@ -253,6 +253,7 @@ empathy_call_window_init (EmpathyCallWindow *self)
   priv->pipeline = gst_pipeline_new (NULL);
 
   hbox = gtk_hbox_new (FALSE, 3);
+  gtk_container_set_border_width (GTK_CONTAINER (hbox), 6);
   gtk_paned_pack1 (GTK_PANED(pane), hbox, TRUE, FALSE);
 
   bus = gst_pipeline_get_bus (GST_PIPELINE (priv->pipeline));
@@ -268,7 +269,7 @@ empathy_call_window_init (EmpathyCallWindow *self)
   gtk_box_pack_start (GTK_BOX (hbox), vbox, FALSE, FALSE, 3);
 
   priv->video_preview = empathy_video_widget_new_with_size (bus, 160, 120);
-  gtk_box_pack_start (GTK_BOX (vbox), priv->video_preview, FALSE, FALSE, 3);
+  gtk_box_pack_start (GTK_BOX (vbox), priv->video_preview, FALSE, FALSE, 0);
 
   priv->video_input = empathy_video_src_new ();
   gst_object_ref (priv->video_input);
