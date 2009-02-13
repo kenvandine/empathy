@@ -777,10 +777,6 @@ event_manager_approve_channel_cb (EmpathyDispatcher *dispatcher,
         EMPATHY_TP_CHAT (
           empathy_dispatch_operation_get_channel_wrapper (operation));
       TpChannel *channel = empathy_tp_chat_get_channel (tp_chat);
-      TpHandle handle;
-      TpHandleType handle_type;
-
-      handle = tp_channel_get_handle (channel, &handle_type);
 
       if (tp_proxy_has_interface (channel, TP_IFACE_CHANNEL_INTERFACE_GROUP))
         {
