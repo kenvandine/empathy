@@ -811,7 +811,7 @@ event_manager_approve_channel_cb (EmpathyDispatcher *dispatcher,
           approval->contact = g_object_ref (info->actor);
 
           event_manager_add (approval->manager,
-            info->actor, EMPATHY_IMAGE_GROUP_MESSAGE, msg, NULL,
+            info->actor, EMPATHY_IMAGE_GROUP_MESSAGE, msg, info->message,
             approval, event_room_channel_process_func, NULL);
 
           empathy_sound_play (empathy_main_window_get (),
