@@ -760,41 +760,44 @@ event_manager_approve_channel_cb (EmpathyDispatcher *dispatcher,
         }
       else if (handle_type == TP_HANDLE_TYPE_ROOM)
         {
-          EmpathyTpGroup *group;
-          EmpathyPendingInfo *info;
           gchar *msg;
+          const gchar *invite_msg;
+          TpHandle self_handle, inviter;
+          EmpathyContactFactory *contact_factory;
+          McAccount *account;
 
-          group = empathy_tp_group_new (channel);
-          empathy_run_until_ready (group);
-          info = empathy_tp_group_get_invitation (group, NULL);
+          self_handle = tp_channel_group_get_self_handle (channel);
 
-          if (info == NULL)
+          if (self_handle == 0 || !tp_channel_group_get_local_pending_info (
+                channel, self_handle, &inviter, NULL, &invite_msg))
             {
               DEBUG ("can't handle a incoming muc to which we have not been "
                   "invited");
 
               if (empathy_dispatch_operation_claim (approval->operation))
                 empathy_tp_chat_close (tp_chat);
-
-              g_object_unref (group);
               return;
             }
 
+          account = empathy_tp_chat_get_account (tp_chat);
+          contact_factory = empathy_contact_factory_dup_singleton ();
+
+          approval->contact = empathy_contact_factory_get_from_handle (
+              contact_factory, account, inviter);
+
           /* We are invited to a room */
           msg = g_strdup_printf ("%s invited you to join %s",
-              empathy_contact_get_name (info->actor),
+              empathy_contact_get_name (approval->contact),
               tp_channel_get_identifier (channel));
 
-          approval->contact = g_object_ref (info->actor);
-
           event_manager_add (approval->manager,
-            info->actor, EMPATHY_IMAGE_GROUP_MESSAGE, msg, info->message,
+            approval->contact, EMPATHY_IMAGE_GROUP_MESSAGE, msg, invite_msg,
             approval, event_room_channel_process_func, NULL);
 
           empathy_sound_play (empathy_main_window_get (),
             EMPATHY_SOUND_CONVERSATION_NEW);
 
-          g_object_unref (group);
+          g_object_unref (contact_factory);
         }
     }
   else if (!tp_strdiff (channel_type, TP_IFACE_CHANNEL_TYPE_STREAMED_MEDIA))
