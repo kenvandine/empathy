@@ -720,6 +720,36 @@ event_room_channel_process_func (EventPriv *event)
 }
 
 static void
+event_manager_muc_invite_got_contact_name_cb (EmpathyContact *contact,
+                                              const GError *error,
+                                              gpointer user_data,
+                                              GObject *object)
+{
+  EventManagerApproval *approval = (EventManagerApproval *) user_data;
+  TpChannel *channel;
+  const gchar *invite_msg;
+  gchar *msg;
+  TpHandle self_handle;
+
+  channel = empathy_dispatch_operation_get_channel (approval->operation);
+
+  self_handle = tp_channel_group_get_self_handle (channel);
+  tp_channel_group_get_local_pending_info (channel, self_handle, NULL, NULL,
+      &invite_msg);
+
+  msg = g_strdup_printf ("%s invited you to join %s",
+      empathy_contact_get_name (approval->contact),
+      tp_channel_get_identifier (channel));
+
+  event_manager_add (approval->manager,
+    approval->contact, EMPATHY_IMAGE_GROUP_MESSAGE, msg, invite_msg,
+    approval, event_room_channel_process_func, NULL);
+
+  empathy_sound_play (empathy_main_window_get (),
+    EMPATHY_SOUND_CONVERSATION_NEW);
+}
+
+static void
 event_manager_approve_channel_cb (EmpathyDispatcher *dispatcher,
   EmpathyDispatchOperation  *operation, EmpathyEventManager *manager)
 {
@@ -760,8 +790,6 @@ event_manager_approve_channel_cb (EmpathyDispatcher *dispatcher,
         }
       else if (handle_type == TP_HANDLE_TYPE_ROOM)
         {
-          gchar *msg;
-          const gchar *invite_msg;
           TpHandle self_handle, inviter;
           EmpathyContactFactory *contact_factory;
           McAccount *account;
@@ -769,7 +797,7 @@ event_manager_approve_channel_cb (EmpathyDispatcher *dispatcher,
           self_handle = tp_channel_group_get_self_handle (channel);
 
           if (self_handle == 0 || !tp_channel_group_get_local_pending_info (
-                channel, self_handle, &inviter, NULL, &invite_msg))
+                channel, self_handle, &inviter, NULL, NULL))
             {
               DEBUG ("can't handle a incoming muc to which we have not been "
                   "invited");
@@ -779,23 +807,17 @@ event_manager_approve_channel_cb (EmpathyDispatcher *dispatcher,
               return;
             }
 
+          /* We are invited to a room */
           account = empathy_tp_chat_get_account (tp_chat);
           contact_factory = empathy_contact_factory_dup_singleton ();
 
           approval->contact = empathy_contact_factory_get_from_handle (
               contact_factory, account, inviter);
 
-          /* We are invited to a room */
-          msg = g_strdup_printf ("%s invited you to join %s",
-              empathy_contact_get_name (approval->contact),
-              tp_channel_get_identifier (channel));
-
-          event_manager_add (approval->manager,
-            approval->contact, EMPATHY_IMAGE_GROUP_MESSAGE, msg, invite_msg,
-            approval, event_room_channel_process_func, NULL);
-
-          empathy_sound_play (empathy_main_window_get (),
-            EMPATHY_SOUND_CONVERSATION_NEW);
+          empathy_contact_call_when_ready (approval->contact,
+            EMPATHY_CONTACT_READY_NAME,
+            event_manager_muc_invite_got_contact_name_cb, approval, NULL,
+            G_OBJECT (manager));
 
           g_object_unref (contact_factory);
           g_object_unref (account);
