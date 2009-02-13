@@ -655,7 +655,6 @@ invite_dialog_response_cb (GtkDialog *dialog,
 
       if (empathy_dispatch_operation_claim (approval->operation))
         empathy_tp_chat_close (tp_chat);
-      empathy_tp_chat_close (tp_chat);
       return;
     }
 
