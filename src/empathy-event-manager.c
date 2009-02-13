@@ -782,45 +782,44 @@ event_manager_approve_channel_cb (EmpathyDispatcher *dispatcher,
 
       handle = tp_channel_get_handle (channel, &handle_type);
 
-      if (handle_type == TP_HANDLE_TYPE_CONTACT)
+      if (tp_proxy_has_interface (channel, TP_IFACE_CHANNEL_INTERFACE_GROUP))
         {
-          /* 1-1 text channel, wait for the first message */
-          approval->handler = g_signal_connect (tp_chat, "message-received",
-            G_CALLBACK (event_manager_chat_message_received_cb), approval);
-        }
-      else if (handle_type == TP_HANDLE_TYPE_ROOM)
-        {
+          /* Are we in local-pending ? */
           TpHandle self_handle, inviter;
-          EmpathyContactFactory *contact_factory;
-          McAccount *account;
 
           self_handle = tp_channel_group_get_self_handle (channel);
 
-          if (self_handle == 0 || !tp_channel_group_get_local_pending_info (
+          if (self_handle != 0 || tp_channel_group_get_local_pending_info (
                 channel, self_handle, &inviter, NULL, NULL))
             {
-              DEBUG ("can't handle a incoming muc to which we have not been "
-                  "invited");
+              /* We are invited to a room */
+              EmpathyContactFactory *contact_factory;
+              McAccount *account;
 
-              if (empathy_dispatch_operation_claim (approval->operation))
-                empathy_tp_chat_close (tp_chat);
+              DEBUG ("Have been invited to %s. Ask user if he wants to accept",
+                  tp_channel_get_identifier (channel));
+
+              account = empathy_tp_chat_get_account (tp_chat);
+              contact_factory = empathy_contact_factory_dup_singleton ();
+
+              approval->contact = empathy_contact_factory_get_from_handle (
+                  contact_factory, account, inviter);
+
+              empathy_contact_call_when_ready (approval->contact,
+                EMPATHY_CONTACT_READY_NAME,
+                event_manager_muc_invite_got_contact_name_cb, approval, NULL,
+                G_OBJECT (manager));
+
+              g_object_unref (contact_factory);
               return;
             }
 
-          /* We are invited to a room */
-          account = empathy_tp_chat_get_account (tp_chat);
-          contact_factory = empathy_contact_factory_dup_singleton ();
-
-          approval->contact = empathy_contact_factory_get_from_handle (
-              contact_factory, account, inviter);
-
-          empathy_contact_call_when_ready (approval->contact,
-            EMPATHY_CONTACT_READY_NAME,
-            event_manager_muc_invite_got_contact_name_cb, approval, NULL,
-            G_OBJECT (manager));
-
-          g_object_unref (contact_factory);
+          /* if we are not invited, let's wait for the first message */
         }
+
+      /* 1-1 text channel, wait for the first message */
+      approval->handler = g_signal_connect (tp_chat, "message-received",
+        G_CALLBACK (event_manager_chat_message_received_cb), approval);
     }
   else if (!tp_strdiff (channel_type, TP_IFACE_CHANNEL_TYPE_STREAMED_MEDIA))
     {
