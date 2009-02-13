@@ -737,7 +737,7 @@ event_manager_muc_invite_got_contact_name_cb (EmpathyContact *contact,
   tp_channel_group_get_local_pending_info (channel, self_handle, NULL, NULL,
       &invite_msg);
 
-  msg = g_strdup_printf ("%s invited you to join %s",
+  msg = g_strdup_printf (_("%s invited you to join %s"),
       empathy_contact_get_name (approval->contact),
       tp_channel_get_identifier (channel));
 
