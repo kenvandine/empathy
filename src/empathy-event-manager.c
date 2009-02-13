@@ -31,6 +31,7 @@
 #include <libempathy/empathy-contact-manager.h>
 #include <libempathy/empathy-tp-chat.h>
 #include <libempathy/empathy-tp-call.h>
+#include <libempathy/empathy-tp-group.h>
 #include <libempathy/empathy-utils.h>
 #include <libempathy/empathy-call-factory.h>
 
@@ -632,6 +633,109 @@ event_manager_tube_got_contact_name_cb (EmpathyContact *contact,
 }
 
 static void
+invite_dialog_response_cb (GtkDialog *dialog,
+                           gint response,
+                           EventManagerApproval *approval)
+{
+  EmpathyTpChat *tp_chat;
+  TpChannel *channel;
+  EmpathyTpGroup *group;
+  EmpathyContact *self_contact;
+
+  gtk_widget_destroy (GTK_WIDGET (approval->dialog));
+  approval->dialog = NULL;
+
+  tp_chat = EMPATHY_TP_CHAT (empathy_dispatch_operation_get_channel_wrapper (
+        approval->operation));
+
+  if (response != GTK_RESPONSE_OK)
+    {
+      /* close channel */
+      DEBUG ("Muc invitation rejected");
+
+      if (empathy_dispatch_operation_claim (approval->operation))
+        empathy_tp_chat_close (tp_chat);
+      empathy_tp_chat_close (tp_chat);
+      return;
+    }
+
+  DEBUG ("Muc invitation accepted");
+
+  /* join the room */
+  channel = empathy_tp_chat_get_channel (tp_chat);
+
+  group = empathy_tp_group_new (channel);
+  empathy_run_until_ready (group);
+
+  self_contact = empathy_tp_group_get_self_contact (group);
+  empathy_tp_group_add_member (group, self_contact, NULL);
+
+  empathy_dispatch_operation_approve (approval->operation);
+
+  g_object_unref (group);
+  g_object_unref (self_contact);
+}
+
+static void
+event_room_channel_process_func (EventPriv *event)
+{
+  GtkWidget *dialog, *button, *image;
+  TpHandle room_handle;
+  GArray *handles;
+  gchar **names;
+  TpChannel *channel = empathy_dispatch_operation_get_channel (
+      event->approval->operation);
+
+  if (event->approval->dialog != NULL)
+    {
+      gtk_window_present (GTK_WINDOW (event->approval->dialog));
+      return;
+    }
+
+  /* get room name */
+  room_handle = tp_channel_get_handle (channel, NULL);
+
+  handles = g_array_new (FALSE, FALSE, sizeof (guint));
+  g_array_append_val (handles, room_handle);
+
+  tp_cli_connection_run_inspect_handles (
+      tp_channel_borrow_connection (channel), -1,
+      TP_HANDLE_TYPE_ROOM, handles, &names, NULL, NULL);
+
+  /* create dialog */
+  dialog = gtk_message_dialog_new (NULL, 0,
+      GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE, _("Room invitation"));
+
+  gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
+      _("%s is inviting you to join %s"),
+      empathy_contact_get_name (event->approval->contact),
+      *names);
+
+  gtk_dialog_set_default_response (GTK_DIALOG (dialog),
+      GTK_RESPONSE_OK);
+
+  button = gtk_dialog_add_button (GTK_DIALOG (dialog),
+      _("_Decline"), GTK_RESPONSE_CANCEL);
+  image = gtk_image_new_from_icon_name (GTK_STOCK_CANCEL, GTK_ICON_SIZE_BUTTON);
+  gtk_button_set_image (GTK_BUTTON (button), image);
+
+  button = gtk_dialog_add_button (GTK_DIALOG (dialog),
+      _("_Join"), GTK_RESPONSE_OK);
+  image = gtk_image_new_from_icon_name (GTK_STOCK_APPLY, GTK_ICON_SIZE_BUTTON);
+  gtk_button_set_image (GTK_BUTTON (button), image);
+
+  g_signal_connect (dialog, "response",
+      G_CALLBACK (invite_dialog_response_cb), event->approval);
+
+  gtk_widget_show (dialog);
+
+  g_array_free (handles, TRUE);
+  g_free (names);
+
+  event->approval->dialog = dialog;
+}
+
+static void
 event_manager_approve_channel_cb (EmpathyDispatcher *dispatcher,
   EmpathyDispatchOperation  *operation, EmpathyEventManager *manager)
 {
@@ -658,10 +762,65 @@ event_manager_approve_channel_cb (EmpathyDispatcher *dispatcher,
       EmpathyTpChat *tp_chat =
         EMPATHY_TP_CHAT (
           empathy_dispatch_operation_get_channel_wrapper (operation));
+      TpChannel *channel = empathy_tp_chat_get_channel (tp_chat);
+      TpHandle handle;
+      TpHandleType handle_type;
 
-      approval->handler = g_signal_connect (tp_chat, "message-received",
-        G_CALLBACK (event_manager_chat_message_received_cb), approval);
+      handle = tp_channel_get_handle (channel, &handle_type);
 
+      if (handle_type == TP_HANDLE_TYPE_CONTACT)
+        {
+          /* 1-1 text channel, wait for the first message */
+          approval->handler = g_signal_connect (tp_chat, "message-received",
+            G_CALLBACK (event_manager_chat_message_received_cb), approval);
+        }
+      else if (handle_type == TP_HANDLE_TYPE_ROOM)
+        {
+          EmpathyTpGroup *group;
+          EmpathyPendingInfo *info;
+          gchar *msg;
+          GArray *handles;
+          gchar **names;
+
+          group = empathy_tp_group_new (channel);
+          empathy_run_until_ready (group);
+          info = empathy_tp_group_get_invitation (group, NULL);
+
+          if (info == NULL)
+            {
+              DEBUG ("can't handle a incoming muc to which we have not been "
+                  "invited");
+
+              if (empathy_dispatch_operation_claim (approval->operation))
+                empathy_tp_chat_close (tp_chat);
+
+              g_object_unref (group);
+              return;
+            }
+
+          /* We are invited to a room */
+          handles = g_array_new (FALSE, FALSE, sizeof (guint));
+          g_array_append_val (handles, handle);
+          tp_cli_connection_run_inspect_handles (
+              tp_channel_borrow_connection (channel), -1,
+              TP_HANDLE_TYPE_ROOM, handles, &names, NULL, NULL);
+
+          msg = g_strdup_printf ("%s invited you to join %s",
+              empathy_contact_get_name (info->actor), *names);
+
+          approval->contact = g_object_ref (info->actor);
+
+          event_manager_add (approval->manager,
+            info->actor, EMPATHY_IMAGE_GROUP_MESSAGE, msg, NULL,
+            approval, event_room_channel_process_func, NULL);
+
+          empathy_sound_play (empathy_main_window_get (),
+            EMPATHY_SOUND_CONVERSATION_NEW);
+
+          g_array_free (handles, TRUE);
+          g_free (names);
+          g_object_unref (group);
+        }
     }
   else if (!tp_strdiff (channel_type, TP_IFACE_CHANNEL_TYPE_STREAMED_MEDIA))
     {
