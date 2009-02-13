@@ -820,7 +820,6 @@ event_manager_approve_channel_cb (EmpathyDispatcher *dispatcher,
             G_OBJECT (manager));
 
           g_object_unref (contact_factory);
-          g_object_unref (account);
         }
     }
   else if (!tp_strdiff (channel_type, TP_IFACE_CHANNEL_TYPE_STREAMED_MEDIA))
