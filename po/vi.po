@@ -6,8 +6,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: empathy TRUNK\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=empathy&component=general\n"
-"POT-Creation-Date: 2009-02-03 22:21+0000\n"
-"PO-Revision-Date: 2009-02-08 23:50+0930\n"
+"POT-Creation-Date: 2009-02-13 10:26+0000\n"
+"PO-Revision-Date: 2009-02-13 21:44+0930\n"
 "Last-Translator: Clytie Siddall <clytie@riverland.net.au>\n"
 "Language-Team: Vietnamese <vi-VN@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -53,12 +53,10 @@ msgid "Default directory to select an avatar image from"
 msgstr "Thư mục mặc định từ đó cần chọn một ảnh riêng"
 
 #: ../data/empathy.schemas.in.h:8
-#| msgid "Enable sounds when _away"
 msgid "Disable popup notifications when away"
 msgstr "Không tự mở thông báo khi vắng mặt"
 
 #: ../data/empathy.schemas.in.h:9
-#| msgid "Enable sounds when _away"
 msgid "Disable sounds when away"
 msgstr "Tắt âm thanh khi vắng mặt"
 
@@ -107,7 +105,6 @@ msgid "Open new chats in separate windows"
 msgstr "Mở mỗi cuộc trò chuyện mới trong cửa sổ riêng"
 
 #: ../data/empathy.schemas.in.h:21
-#| msgid "_Play sound when messages arrive"
 msgid "Play a sound for incoming messages"
 msgstr "Phát âm thanh khi mới nhận tin nhẳn"
 
@@ -116,12 +113,10 @@ msgid "Play a sound for new conversations"
 msgstr "Phát âm khi cuộc trao đổi bắt đầu"
 
 #: ../data/empathy.schemas.in.h:23
-#| msgid "_Play sound when messages arrive"
 msgid "Play a sound for outgoing messages"
 msgstr "Phát âm thanh khi mới gửi tin nhẳn"
 
 #: ../data/empathy.schemas.in.h:24
-#| msgid "_Play sound when messages arrive"
 msgid "Play a sound when a contact logs in"
 msgstr "Phát âm thanh khi một liên lạc đăng nhập"
 
@@ -130,12 +125,10 @@ msgid "Play a sound when a contact logs out"
 msgstr "Phát âm khi liên lạc đăng xuất"
 
 #: ../data/empathy.schemas.in.h:26
-#| msgid "_Play sound when messages arrive"
 msgid "Play a sound when we log in"
 msgstr "Phát âm thanh khi mình đăng nhập"
 
 #: ../data/empathy.schemas.in.h:27
-#| msgid "_Play sound when messages arrive"
 msgid "Play a sound when we log out"
 msgstr "Phát âm thanh khi mình đăng xuất"
 
@@ -188,9 +181,6 @@ msgid "Use theme for chat rooms"
 msgstr "Dùng sắc thái cho phòng trò chuyện"
 
 #: ../data/empathy.schemas.in.h:40
-#| msgid ""
-#| "Whether or not Empathy should automatically log in to your accounts on "
-#| "startup."
 msgid "Whether or not Empathy has asked about importing accounts from other programs."
 msgstr "Empathy đã hỏi chưa về chức năng nhập tài khoản từ chương trình khác."
 
@@ -219,51 +209,38 @@ msgid "Whether or not to convert smileys into graphical images in conversations.
 msgstr "Bật/tắt chuyển đổi ký tự miêu tả mặt cười thành biểu tượng xúc cảm trong đối thoại."
 
 #: ../data/empathy.schemas.in.h:47
-#| msgid "Whether or not to play sounds when away."
 msgid "Whether or not to play a sound notifications when away or busy."
 msgstr "Có nên phát âm thanh báo khi vắng mặt hay bận, hay không."
 
 #: ../data/empathy.schemas.in.h:48
-#| msgid ""
-#| "Whether or not to show avatars for contacts in the contact list and chat "
-#| "windows."
 msgid "Whether or not to play a sound to notify for contacts logging in the network."
 msgstr "Có nên phát âm thanh báo khi liên lạc đăng nhập vào mạng, hay không."
 
 #: ../data/empathy.schemas.in.h:49
-#| msgid ""
-#| "Whether or not to show avatars for contacts in the contact list and chat "
-#| "windows."
 msgid "Whether or not to play a sound to notify for contacts logging off the network."
 msgstr "Có nên phát âm thanh báo khi liên lạc đăng xuất ra mạng, hay không."
 
 #: ../data/empathy.schemas.in.h:50
-#| msgid "Whether or not to play sounds when busy."
 msgid "Whether or not to play a sound to notify for events."
 msgstr "Có nên phát âm thanh báo khi sự kiện xảy ra, hay không."
 
 #: ../data/empathy.schemas.in.h:51
-#| msgid "Whether or not to play a sound when messages arrive."
 msgid "Whether or not to play a sound to notify for incoming messages."
 msgstr "Có nên phát âm thanh báo khi nhận được tin nhẳn, hay không."
 
 #: ../data/empathy.schemas.in.h:52
-#| msgid "Whether or not to play a sound when messages arrive."
 msgid "Whether or not to play a sound to notify for new conversations."
 msgstr "Có nên phát âm thanh báo khi nhận được cuộc đối thoại mới, hay không."
 
 #: ../data/empathy.schemas.in.h:53
-#| msgid "Whether or not to play a sound when messages arrive."
 msgid "Whether or not to play a sound to notify for outgoing messages."
 msgstr "Có nên phát âm thanh báo khi gửi tin nhẳn, hay không."
 
 #: ../data/empathy.schemas.in.h:54
-#| msgid "Whether or not to play sounds when away."
 msgid "Whether or not to play a sound when logging in a network."
 msgstr "Có nên phát âm thanh báo khi đăng nhập vào một mạng, hay không."
 
 #: ../data/empathy.schemas.in.h:55
-#| msgid "Whether or not to play sounds when away."
 msgid "Whether or not to play a sound when logging off a network."
 msgstr "Có nên phát âm thanh báo khi đăng xuất ra một mạng, hay không."
 
@@ -272,7 +249,6 @@ msgid "Whether or not to show a popup notification when receiving a new message 
 msgstr "Có nên hiển thị hay không một thông báo tự mở khi nhận một tin nhẳn mới, ngay cả nếu cửa sổ chát đã mở nhưng không có tiêu điểm."
 
 #: ../data/empathy.schemas.in.h:57
-#| msgid "Whether or not to show a popup when a contact becomes available."
 msgid "Whether or not to show a popup notification when receiving a new message."
 msgstr "Có nên phát âm thanh báo khi nhận được một tin nhẳn mới, hay không."
 
@@ -285,7 +261,6 @@ msgid "Whether or not to show contacts that are offline in the contact list."
 msgstr "Bật/tắt hiển thị các liên lác đang ngoại tuyến trong danh sách liên lạc."
 
 #: ../data/empathy.schemas.in.h:60
-#| msgid "Whether or not to play sounds when away."
 msgid "Whether or not to show popup notifications when away or busy."
 msgstr "Có nên phát âm thanh báo khi vắng mặt hay bận, hay không."
 
@@ -494,7 +469,6 @@ msgid "_Email:"
 msgstr "Đị_a chỉ thư :"
 
 #: ../libempathy-gtk/empathy-account-widget-salut.glade.h:3
-#| msgid "_First Name: "
 msgid "_First Name:"
 msgstr "_Tên:"
 
@@ -640,7 +614,7 @@ msgid "%s has left the room"
 msgstr "%s rời phòng"
 
 #: ../libempathy-gtk/empathy-chat.c:1248
-#: ../src/empathy-call-window.c:466
+#: ../src/empathy-call-window.c:467
 msgid "Disconnected"
 msgstr "Bị ngắt kết nối"
 
@@ -728,42 +702,40 @@ msgstr "Đang gỡ bỏ liên lạc"
 msgid "Sorry, I don't want you in my contact list anymore."
 msgstr "Tiếc là tôi đã gỡ bỏ bạn khỏi danh sách liên lạc của mình."
 
-#: ../libempathy-gtk/empathy-contact-menu.c:122
+#: ../libempathy-gtk/empathy-contact-menu.c:130
 #: ../src/empathy-main-window.glade.h:9
 msgid "_Chat"
 msgstr "_Trò chuyện"
 
-#: ../libempathy-gtk/empathy-contact-menu.c:153
+#: ../libempathy-gtk/empathy-contact-menu.c:161
 #: ../src/empathy-call-window.glade.h:5
 msgid "_Call"
 msgstr "_Gọi"
 
-#: ../libempathy-gtk/empathy-contact-menu.c:192
+#: ../libempathy-gtk/empathy-contact-menu.c:200
 #: ../src/empathy-main-window.glade.h:17
 msgid "_View Previous Conversations"
 msgstr "_Xem cuộc nói chuyện trước"
 
-#: ../libempathy-gtk/empathy-contact-menu.c:214
-#| msgid "Send Video"
+#: ../libempathy-gtk/empathy-contact-menu.c:222
 msgid "Send file"
 msgstr "Gửi tập tin"
 
-#: ../libempathy-gtk/empathy-contact-menu.c:242
+#: ../libempathy-gtk/empathy-contact-menu.c:250
 msgid "Infor_mation"
 msgstr "Thôn_g tin"
 
-#: ../libempathy-gtk/empathy-contact-menu.c:269
+#: ../libempathy-gtk/empathy-contact-menu.c:277
 #: ../src/empathy-chat-window.glade.h:14
 #: ../src/empathy-main-window.glade.h:11
 msgid "_Edit"
 msgstr "_Sửa"
 
-#: ../libempathy-gtk/empathy-contact-menu.c:328
+#: ../libempathy-gtk/empathy-contact-menu.c:336
 msgid "Inviting to this room"
 msgstr "Mời vào phòng này"
 
-#: ../libempathy-gtk/empathy-contact-menu.c:361
-#| msgid "_Favorite Chatroom"
+#: ../libempathy-gtk/empathy-contact-menu.c:369
 msgid "_Invite to chatroom"
 msgstr "Mờ_i vào phòng chát"
 
@@ -982,47 +954,38 @@ msgid "Unable to open URI"
 msgstr "Không thể mở địa chỉ URI"
 
 #: ../libempathy-gtk/empathy-ui-utils.c:1530
-#| msgid "Select"
 msgid "Select a file"
 msgstr "Chọn một tập tin"
 
 #: ../libempathy-gtk/empathy-ui-utils.c:1566
-#| msgid "Send and receive instant messages"
 msgid "Received an instant message"
 msgstr "Nhận được một tin nhắn"
 
 #: ../libempathy-gtk/empathy-ui-utils.c:1568
-#| msgid "Send and receive instant messages"
 msgid "Sent an instant message"
 msgstr "Đã gửi một tin nhắn"
 
 #: ../libempathy-gtk/empathy-ui-utils.c:1570
-#| msgid "Incoming call from %s"
 msgid "Incoming chat request"
 msgstr "Yêu cầu chát gửi đến"
 
 #: ../libempathy-gtk/empathy-ui-utils.c:1572
-#| msgid "Connected"
 msgid "Contact connected"
 msgstr "Liên lạc mới kết nối"
 
 #: ../libempathy-gtk/empathy-ui-utils.c:1574
-#| msgid "Disconnected"
 msgid "Contact disconnected"
 msgstr "Liên lạc mới bị ngắt kết nối"
 
 #: ../libempathy-gtk/empathy-ui-utils.c:1576
-#| msgid "Connected"
 msgid "Connected to server"
 msgstr "Mới kết nối tới máy phục vụ"
 
 #: ../libempathy-gtk/empathy-ui-utils.c:1578
-#| msgid "Disconnected"
 msgid "Disconnected from server"
 msgstr "Bị ngắt kết nối ra máy phục vụ"
 
 #: ../libempathy-gtk/empathy-ui-utils.c:1580
-#| msgid "Incoming call"
 msgid "Incoming voice call"
 msgstr "Cuộc gọi nói tiếng gửi đến"
 
@@ -1240,7 +1203,6 @@ msgid "Please configure a contact."
 msgstr "Hãy cấu hình một liên lạc."
 
 #: ../megaphone/src/megaphone-applet.c:348
-#| msgid "_Add Contact..."
 msgid "Select contact..."
 msgstr "Chọn liên lạc..."
 
@@ -1348,7 +1310,6 @@ msgid "I already have an account I want to use"
 msgstr "Tôi đã có tài khoản muốn dùng rồi"
 
 #: ../src/empathy-accounts-dialog.glade.h:7
-#| msgid "Accounts"
 msgid "Import Accounts..."
 msgstr "Nhập tài khoản..."
 
@@ -1361,7 +1322,6 @@ msgid "Type:"
 msgstr "Kiểu :"
 
 #: ../src/empathy-call-window.c:180
-#| msgid "Contact"
 msgid "Contrast"
 msgstr "Độ tương phản"
 
@@ -1374,39 +1334,35 @@ msgid "Gamma"
 msgstr "Gama (γ)"
 
 #: ../src/empathy-call-window.c:212
-#| msgid "<b>Volume</b>"
 msgid "Volume"
 msgstr "Âm"
 
-#: ../src/empathy-call-window.c:287
+#: ../src/empathy-call-window.c:288
 msgid "_Sidebar"
 msgstr "Khung _lề"
 
-#: ../src/empathy-call-window.c:305
+#: ../src/empathy-call-window.c:306
 msgid "Dialpad"
 msgstr "Vùng quay số"
 
-#: ../src/empathy-call-window.c:309
+#: ../src/empathy-call-window.c:310
 msgid "Audio input"
 msgstr "Âm vào"
 
-#: ../src/empathy-call-window.c:313
+#: ../src/empathy-call-window.c:314
 msgid "Video input"
 msgstr "Phim vào"
 
-#: ../src/empathy-call-window.c:326
-#| msgid "Connecting"
+#: ../src/empathy-call-window.c:327
 msgid "Connecting..."
 msgstr "Đang kết nối..."
 
-#: ../src/empathy-call-window.c:489
+#: ../src/empathy-call-window.c:490
 #, c-format
-#| msgid "Connected"
 msgid "Connected -- %d:%02dm"
 msgstr "Có kết nối -- %d:%02dm"
 
 #: ../src/empathy-call-window.glade.h:1
-#| msgid "Hang Up"
 msgid "Hang up"
 msgstr "Ngừng nói"
 
@@ -1415,7 +1371,6 @@ msgid "Send Video"
 msgstr "Gửi phim"
 
 #: ../src/empathy-call-window.glade.h:3
-#| msgid "Send Video"
 msgid "Send video"
 msgstr "Gửi phim"
 
@@ -1426,10 +1381,6 @@ msgstr "Xem thử phim"
 #: ../src/empathy-call-window.glade.h:6
 msgid "_View"
 msgstr "_Xem"
-
-#: ../src/empathy-call-window.glade.h:7
-msgid "menuitem2"
-msgstr "menuitem2"
 
 #: ../src/empathy-chat-window.c:313
 #, c-format
@@ -1445,11 +1396,8 @@ msgid "Typing a message."
 msgstr "Đang gõ tin nhẳn."
 
 #: ../src/empathy-chat-window.c:892
-#: ../src/empathy-event-manager.c:424
+#: ../src/empathy-event-manager.c:425
 #, c-format
-#| msgid ""
-#| "New message from %s:\n"
-#| "%s"
 msgid "New message from %s"
 msgstr "Tin nhẳn mới từ %s"
 
@@ -1568,59 +1516,78 @@ msgstr "_Máy phục vụ:"
 msgid "_Room:"
 msgstr "_Phòng:"
 
-#: ../src/empathy-event-manager.c:372
+#: ../src/empathy-event-manager.c:373
 msgid "Incoming call"
 msgstr "Cuộc gọi gửi đến"
 
-#: ../src/empathy-event-manager.c:375
+#: ../src/empathy-event-manager.c:376
 #, c-format
 msgid "%s is calling you, do you want to answer?"
 msgstr "%s đang gọi: bạn có muốn đáp ứng không?"
 
-#: ../src/empathy-event-manager.c:382
+#: ../src/empathy-event-manager.c:383
 msgid "_Reject"
 msgstr "_Từ chối"
 
-#: ../src/empathy-event-manager.c:388
+#: ../src/empathy-event-manager.c:389
 msgid "_Answer"
 msgstr "T_rả lời"
 
-#: ../src/empathy-event-manager.c:511
+#: ../src/empathy-event-manager.c:512
 #, c-format
 msgid "Incoming call from %s"
 msgstr "Cuộc gọi gửi đến từ %s"
 
-#: ../src/empathy-event-manager.c:559
+#: ../src/empathy-event-manager.c:560
 #, c-format
 msgid "%s is offering you an invitation"
 msgstr "%s gửi cho bạn một lời mời"
 
-#: ../src/empathy-event-manager.c:565
-#| msgid ""
-#| "%s is offering you an invitation. An external application will be started "
-#| "to handle it."
+#: ../src/empathy-event-manager.c:566
 msgid "An external application will be started to handle it."
 msgstr "Một ứng dụng bên ngoài sẽ được khởi chạy để xử lý nó."
 
-#: ../src/empathy-event-manager.c:570
-#| msgid ""
-#| "%s offered you an invitation, but you don't have the needed external "
-#| "application to handle it."
+#: ../src/empathy-event-manager.c:571
 msgid "You don't have the needed external application to handle it."
 msgstr "Bạn không có ứng dụng bên ngoài cần thiết để xử lý nó."
 
-#: ../src/empathy-event-manager.c:706
+#: ../src/empathy-event-manager.c:694
+#| msgid "Romanian"
+msgid "Room invitation"
+msgstr "Mời vào phòng"
+
+#: ../src/empathy-event-manager.c:697
 #, c-format
-#| msgid "Incoming call from %s"
+msgid "%s is inviting you to join %s"
+msgstr "%s mời bạn tham gia %s"
+
+#. Decline button
+#: ../src/empathy-event-manager.c:705
+#: ../src/empathy-ft-manager.c:1021
+msgid "_Decline"
+msgstr "_Từ chối"
+
+#: ../src/empathy-event-manager.c:710
+#| msgid "Join"
+msgid "_Join"
+msgstr "_Vào"
+
+#: ../src/empathy-event-manager.c:740
+#, c-format
+msgid "%s invited you to join %s"
+msgstr "%s đã mời bạn tham gia %s"
+
+#: ../src/empathy-event-manager.c:865
+#, c-format
 msgid "Incoming file transfer from %s"
 msgstr "Tập tin gửi đến từ %s"
 
-#: ../src/empathy-event-manager.c:800
+#: ../src/empathy-event-manager.c:959
 #, c-format
 msgid "Subscription requested by %s"
 msgstr "%s yêu cầu đang ký"
 
-#: ../src/empathy-event-manager.c:804
+#: ../src/empathy-event-manager.c:963
 #, c-format
 msgid ""
 "\n"
@@ -1640,7 +1607,6 @@ msgid "%02u.%02u"
 msgstr "%02u.%02u"
 
 #: ../src/empathy-ft-manager.c:164
-#| msgid "No error specified"
 msgid "No reason was specified"
 msgstr "Không cung cấp lý do"
 
@@ -1665,14 +1631,12 @@ msgid "The other participant is unable to transfer the file"
 msgstr "Người dự khác không thể truyền tập tin đó"
 
 #: ../src/empathy-ft-manager.c:176
-#| msgid "Unknown error"
 msgid "Unknown reason"
 msgstr "Lỗi không rõ"
 
 #. translators: first %s is filename, second %s is the contact name
 #: ../src/empathy-ft-manager.c:224
 #, c-format
-#| msgid "Incoming call from %s"
 msgid "Receiving \"%s\" from %s"
 msgstr "Đang nhận « %s » từ %s"
 
@@ -1683,7 +1647,6 @@ msgid "Sending \"%s\" to %s"
 msgstr "Đang gửi « %s » cho %s"
 
 #: ../src/empathy-ft-manager.c:237
-#| msgid "unknown"
 msgctxt "file size"
 msgid "Unknown"
 msgstr "Không rõ"
@@ -1706,7 +1669,6 @@ msgstr "« %s » được nhận từ %s"
 
 #: ../src/empathy-ft-manager.c:268
 #, c-format
-#| msgid "Topic set to: %s"
 msgid "\"%s\" sent to %s"
 msgstr "« %s » được gửi cho %s"
 
@@ -1730,13 +1692,11 @@ msgid "File transfer canceled: %s"
 msgstr "Tiến trình truyền tập tin bị thôi: %s"
 
 #: ../src/empathy-ft-manager.c:304
-#| msgid "unknown"
 msgctxt "remaining time"
 msgid "Unknown"
 msgstr "Không rõ"
 
 #: ../src/empathy-ft-manager.c:364
-#| msgid "unknown"
 msgctxt "file transfer percent"
 msgid "Unknown"
 msgstr "Không rõ"
@@ -1746,12 +1706,10 @@ msgid "%"
 msgstr "%"
 
 #: ../src/empathy-ft-manager.c:712
-#| msgid "All Files"
 msgid "File"
 msgstr "Tập tin"
 
 #: ../src/empathy-ft-manager.c:734
-#| msgid "Ringing"
 msgid "Remaining"
 msgstr "Còn lại"
 
@@ -1764,13 +1722,11 @@ msgid "Save file as..."
 msgstr "Lưu tập tin dạng..."
 
 #: ../src/empathy-ft-manager.c:1001
-#| msgid "unknown"
 msgid "unknown size"
 msgstr "kích cỡ không rõ"
 
 #: ../src/empathy-ft-manager.c:1007
 #, c-format
-#| msgid "I would like to add you to my contact list."
 msgid "%s would like to send you a file"
 msgstr "%s muốn gửi cho bạn một tập tin"
 
@@ -1779,14 +1735,8 @@ msgstr "%s muốn gửi cho bạn một tập tin"
 msgid "Do you want to accept the file \"%s\" (%s)?"
 msgstr "Bạn có muốn chấp nhận tập tin « %s » (%s) không?"
 
-#. Decline button
-#: ../src/empathy-ft-manager.c:1021
-msgid "_Decline"
-msgstr "_Từ chối"
-
 #. Accept button
 #: ../src/empathy-ft-manager.c:1030
-#| msgid "_Accounts"
 msgid "_Accept"
 msgstr "_Chấp nhận"
 
@@ -1799,7 +1749,6 @@ msgid "Remove completed, canceled and failed file transfers from the list"
 msgstr "Gỡ bỏ khỏi danh sách các việc truyền tập tin là hoàn tất, bị thôi hay bị lỗi"
 
 #: ../src/empathy-import-dialog.c:254
-#| msgid "Port"
 msgid "Import"
 msgstr "Nhập"
 
@@ -1808,7 +1757,6 @@ msgid "Protocol"
 msgstr "Giao thức"
 
 #: ../src/empathy-import-dialog.c:289
-#| msgid "Reso_urce:"
 msgid "Source"
 msgstr "Nguồn"
 
@@ -1817,7 +1765,6 @@ msgid "No accounts to import could be found. Empathy currently only supports imp
 msgstr "Không tìm thấy tài khoản có thể nhập vào. Trình Empathy hiện thời chỉ hỗ trợ chức năng nhập tài khoản từ Pidgin (đã Gaim)."
 
 #: ../src/empathy-import-dialog.glade.h:1
-#| msgid "Accounts"
 msgid "Import Accounts"
 msgstr "Nhập tài khoản"
 
@@ -1971,34 +1918,26 @@ msgid "Message received"
 msgstr "Nhận được tin nhẳn"
 
 #: ../src/empathy-preferences.c:158
-#| msgid ""
-#| "\n"
-#| "Message: %s"
 msgid "Message sent"
 msgstr "Tin nhẳn được gửi"
 
 #: ../src/empathy-preferences.c:159
-#| msgid "New Conversation"
 msgid "New conversation"
 msgstr "Cuộc trao đổi mới"
 
 #: ../src/empathy-preferences.c:160
-#| msgid "Contact does not support voice"
 msgid "Contact goes online"
 msgstr "Liên lạc mới trực tuyến"
 
 #: ../src/empathy-preferences.c:161
-#| msgid "Contact does not support voice"
 msgid "Contact goes offline"
 msgstr "Liên lạc mới ngoại tuyến"
 
 #: ../src/empathy-preferences.c:162
-#| msgid "Disconnected"
 msgid "Account connected"
 msgstr "Tài khoản đã kết nối"
 
 #: ../src/empathy-preferences.c:163
-#| msgid "Disconnected"
 msgid "Account disconnected"
 msgstr "Tài khoản bị ngắt kết nối"
 
@@ -2043,17 +1982,14 @@ msgid "Chat Th_eme:"
 msgstr "_Sắc thái trò chuyện: "
 
 #: ../src/empathy-preferences.glade.h:10
-#| msgid "Display notifications when contacts come _online"
 msgid "Disable notifications when _away or busy"
 msgstr "Tắt thông báo khi vắng mặt h_ay bận"
 
 #: ../src/empathy-preferences.glade.h:11
-#| msgid "Enable sounds when _away"
 msgid "Disable sounds when _away or busy"
 msgstr "Tắt phát âm khi vắng mặt h_ay bận"
 
 #: ../src/empathy-preferences.glade.h:12
-#| msgid "Display notifications when contacts come _online"
 msgid "Enable notifications when the _chat is not focused"
 msgstr "Thông báo khi _cửa sổ chát không có tiêu điểm"
 
@@ -2106,7 +2042,6 @@ msgid "_Enable bubble notifications"
 msgstr "_Bật thông báo trong bóng"
 
 #: ../src/empathy-preferences.glade.h:25
-#| msgid "Enable sound when away"
 msgid "_Enable sound notifications"
 msgstr "_Phát âm thông báo"
 
@@ -2133,9 +2068,6 @@ msgstr "Không thể khởi chạy ứng dụng cho dịch vụ %s: %s"
 
 #: ../src/empathy-tube-dispatch.c:427
 #, c-format
-#| msgid ""
-#| "%s offered you an invitation, but you don't have the needed external "
-#| "application to handle it."
 msgid "An invitation was offered for service %s, but you don't have the needed application to handle it"
 msgstr "Bạn đã nhận một lời mời sử dụng dịch vụ %s, nhưng không có ứng dụng cần thiết để xử lý nó"
 
