@@ -789,7 +789,7 @@ event_manager_approve_channel_cb (EmpathyDispatcher *dispatcher,
 
           self_handle = tp_channel_group_get_self_handle (channel);
 
-          if (self_handle != 0 || tp_channel_group_get_local_pending_info (
+          if (self_handle != 0 && tp_channel_group_get_local_pending_info (
                 channel, self_handle, &inviter, NULL, NULL))
             {
               /* We are invited to a room */
