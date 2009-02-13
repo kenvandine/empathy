@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: empathy.HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=empathy&component=general\n"
-"POT-Creation-Date: 2009-02-03 22:21+0000\n"
-"PO-Revision-Date: 2009-02-04 20:27+0100\n"
+"POT-Creation-Date: 2009-02-13 10:26+0000\n"
+"PO-Revision-Date: 2009-02-13 21:48+0100\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -684,7 +684,7 @@ msgstr "%s ha entrado en la sala"
 msgid "%s has left the room"
 msgstr "%s ha dejado la sala"
 
-#: ../libempathy-gtk/empathy-chat.c:1248 ../src/empathy-call-window.c:466
+#: ../libempathy-gtk/empathy-chat.c:1248 ../src/empathy-call-window.c:467
 msgid "Disconnected"
 msgstr "Desconectado"
 
@@ -772,39 +772,39 @@ msgstr "Quitando el contacto"
 msgid "Sorry, I don't want you in my contact list anymore."
 msgstr "Lo siento, no te quiero en mi lista de contactos."
 
-#: ../libempathy-gtk/empathy-contact-menu.c:122
+#: ../libempathy-gtk/empathy-contact-menu.c:130
 #: ../src/empathy-main-window.glade.h:9
 msgid "_Chat"
 msgstr "_Chat"
 
-#: ../libempathy-gtk/empathy-contact-menu.c:153
+#: ../libempathy-gtk/empathy-contact-menu.c:161
 #: ../src/empathy-call-window.glade.h:5
 msgid "_Call"
 msgstr "_Llamar"
 
-#: ../libempathy-gtk/empathy-contact-menu.c:192
+#: ../libempathy-gtk/empathy-contact-menu.c:200
 #: ../src/empathy-main-window.glade.h:17
 msgid "_View Previous Conversations"
 msgstr "_Ver conversaciones previas"
 
-#: ../libempathy-gtk/empathy-contact-menu.c:214
+#: ../libempathy-gtk/empathy-contact-menu.c:222
 msgid "Send file"
 msgstr "Enviar archivo"
 
-#: ../libempathy-gtk/empathy-contact-menu.c:242
+#: ../libempathy-gtk/empathy-contact-menu.c:250
 msgid "Infor_mation"
 msgstr "Infor_mación"
 
-#: ../libempathy-gtk/empathy-contact-menu.c:269
+#: ../libempathy-gtk/empathy-contact-menu.c:277
 #: ../src/empathy-chat-window.glade.h:14 ../src/empathy-main-window.glade.h:11
 msgid "_Edit"
 msgstr "_Editar"
 
-#: ../libempathy-gtk/empathy-contact-menu.c:328
+#: ../libempathy-gtk/empathy-contact-menu.c:336
 msgid "Inviting to this room"
 msgstr "Invitando a esta sala"
 
-#: ../libempathy-gtk/empathy-contact-menu.c:361
+#: ../libempathy-gtk/empathy-contact-menu.c:369
 msgid "_Invite to chatroom"
 msgstr "_Invitar a la sala"
 
@@ -1438,28 +1438,27 @@ msgstr "Gamma"
 msgid "Volume"
 msgstr "Volumen"
 
-#: ../src/empathy-call-window.c:287
+#: ../src/empathy-call-window.c:288
 msgid "_Sidebar"
 msgstr "Barra _lateral"
 
-#: ../src/empathy-call-window.c:305
-#| msgid "Dailpad"
+#: ../src/empathy-call-window.c:306
 msgid "Dialpad"
 msgstr "Teclado de llamada"
 
-#: ../src/empathy-call-window.c:309
+#: ../src/empathy-call-window.c:310
 msgid "Audio input"
 msgstr "Entrada de sonido"
 
-#: ../src/empathy-call-window.c:313
+#: ../src/empathy-call-window.c:314
 msgid "Video input"
 msgstr "Entrada de vídeo"
 
-#: ../src/empathy-call-window.c:326
+#: ../src/empathy-call-window.c:327
 msgid "Connecting..."
 msgstr "Conectando..."
 
-#: ../src/empathy-call-window.c:489
+#: ../src/empathy-call-window.c:490
 #, c-format
 msgid "Connected -- %d:%02dm"
 msgstr "Conectado -- %d:%02dm"
@@ -1484,10 +1483,6 @@ msgstr "Vista preliminar de vídeo"
 msgid "_View"
 msgstr "_Ver"
 
-#: ../src/empathy-call-window.glade.h:7
-msgid "menuitem2"
-msgstr "elemento de menú 2"
-
 #: ../src/empathy-chat-window.c:313
 #, c-format
 msgid "Conversations (%d)"
@@ -1501,7 +1496,7 @@ msgstr "Tema:"
 msgid "Typing a message."
 msgstr "Tecleando un mensaje."
 
-#: ../src/empathy-chat-window.c:892 ../src/empathy-event-manager.c:424
+#: ../src/empathy-chat-window.c:892 ../src/empathy-event-manager.c:425
 #, c-format
 msgid "New message from %s"
 msgstr "Nuevo mensaje de %s"
@@ -1619,52 +1614,77 @@ msgstr "_Servidor:"
 msgid "_Room:"
 msgstr "_Sala:"
 
-#: ../src/empathy-event-manager.c:372
+#: ../src/empathy-event-manager.c:373
 msgid "Incoming call"
 msgstr "Llamada entrante"
 
-#: ../src/empathy-event-manager.c:375
+#: ../src/empathy-event-manager.c:376
 #, c-format
 msgid "%s is calling you, do you want to answer?"
 msgstr "%s le está llamando, ¿quiere responder?"
 
-#: ../src/empathy-event-manager.c:382
+#: ../src/empathy-event-manager.c:383
 msgid "_Reject"
 msgstr "_Rechazar"
 
-#: ../src/empathy-event-manager.c:388
+#: ../src/empathy-event-manager.c:389
 msgid "_Answer"
 msgstr "Re_spuesta"
 
-#: ../src/empathy-event-manager.c:511
+#: ../src/empathy-event-manager.c:512
 #, c-format
 msgid "Incoming call from %s"
 msgstr "Llamada entrante de %s"
 
-#: ../src/empathy-event-manager.c:559
+#: ../src/empathy-event-manager.c:560
 #, c-format
 msgid "%s is offering you an invitation"
 msgstr "%s le está ofreciendo una invitación"
 
-#: ../src/empathy-event-manager.c:565
+#: ../src/empathy-event-manager.c:566
 msgid "An external application will be started to handle it."
 msgstr "Se iniciará una aplicación externa para manejarla."
 
-#: ../src/empathy-event-manager.c:570
+#: ../src/empathy-event-manager.c:571
 msgid "You don't have the needed external application to handle it."
 msgstr "No tiene la aplicación externa necesaria para manejarla."
 
-#: ../src/empathy-event-manager.c:706
+#: ../src/empathy-event-manager.c:694
+#| msgid "Romanian"
+msgid "Room invitation"
+msgstr "Invitación a una sala"
+
+#: ../src/empathy-event-manager.c:697
+#, c-format
+msgid "%s is inviting you to join %s"
+msgstr "%s le está invitando a unirse a %s"
+
+#. Decline button
+#: ../src/empathy-event-manager.c:705 ../src/empathy-ft-manager.c:1021
+msgid "_Decline"
+msgstr "_Rechazar"
+
+#: ../src/empathy-event-manager.c:710
+#| msgid "Join"
+msgid "_Join"
+msgstr "_Unirse"
+
+#: ../src/empathy-event-manager.c:740
+#, c-format
+msgid "%s invited you to join %s"
+msgstr "%s le ha invitado a unirse a %s"
+
+#: ../src/empathy-event-manager.c:865
 #, c-format
 msgid "Incoming file transfer from %s"
 msgstr "Transferencia de archivo entrante de %s"
 
-#: ../src/empathy-event-manager.c:800
+#: ../src/empathy-event-manager.c:959
 #, c-format
 msgid "Subscription requested by %s"
 msgstr "Petición de suscripción de %s"
 
-#: ../src/empathy-event-manager.c:804
+#: ../src/empathy-event-manager.c:963
 #, c-format
 msgid ""
 "\n"
@@ -1811,11 +1831,6 @@ msgstr "%s quiere enviarle un archivo"
 #, c-format
 msgid "Do you want to accept the file \"%s\" (%s)?"
 msgstr "¿Quiere aceptar el archivo «%s» (%s)?"
-
-#. Decline button
-#: ../src/empathy-ft-manager.c:1021
-msgid "_Decline"
-msgstr "_Rechazar"
 
 #. Accept button
 #: ../src/empathy-ft-manager.c:1030
@@ -2177,6 +2192,9 @@ msgid ""
 msgstr ""
 "Se le ha ofrecido una invitación para el servicio %s pero no tiene la "
 "aplicación necesaria para manejarla"
+
+#~ msgid "menuitem2"
+#~ msgstr "elemento de menú 2"
 
 #~ msgid "Closed"
 #~ msgstr "Cerrado"
