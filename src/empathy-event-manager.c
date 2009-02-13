@@ -779,8 +779,6 @@ event_manager_approve_channel_cb (EmpathyDispatcher *dispatcher,
           EmpathyTpGroup *group;
           EmpathyPendingInfo *info;
           gchar *msg;
-          GArray *handles;
-          gchar **names;
 
           group = empathy_tp_group_new (channel);
           empathy_run_until_ready (group);
@@ -799,14 +797,9 @@ event_manager_approve_channel_cb (EmpathyDispatcher *dispatcher,
             }
 
           /* We are invited to a room */
-          handles = g_array_new (FALSE, FALSE, sizeof (guint));
-          g_array_append_val (handles, handle);
-          tp_cli_connection_run_inspect_handles (
-              tp_channel_borrow_connection (channel), -1,
-              TP_HANDLE_TYPE_ROOM, handles, &names, NULL, NULL);
-
           msg = g_strdup_printf ("%s invited you to join %s",
-              empathy_contact_get_name (info->actor), *names);
+              empathy_contact_get_name (info->actor),
+              tp_channel_get_identifier (channel));
 
           approval->contact = g_object_ref (info->actor);
 
@@ -817,8 +810,6 @@ event_manager_approve_channel_cb (EmpathyDispatcher *dispatcher,
           empathy_sound_play (empathy_main_window_get (),
             EMPATHY_SOUND_CONVERSATION_NEW);
 
-          g_array_free (handles, TRUE);
-          g_free (names);
           g_object_unref (group);
         }
     }
