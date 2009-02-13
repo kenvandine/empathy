@@ -639,8 +639,8 @@ invite_dialog_response_cb (GtkDialog *dialog,
 {
   EmpathyTpChat *tp_chat;
   TpChannel *channel;
-  EmpathyTpGroup *group;
-  EmpathyContact *self_contact;
+  TpHandle self_handle;
+  GArray *members;
 
   gtk_widget_destroy (GTK_WIDGET (approval->dialog));
   approval->dialog = NULL;
@@ -664,16 +664,16 @@ invite_dialog_response_cb (GtkDialog *dialog,
   /* join the room */
   channel = empathy_tp_chat_get_channel (tp_chat);
 
-  group = empathy_tp_group_new (channel);
-  empathy_run_until_ready (group);
+  self_handle = tp_channel_group_get_self_handle (channel);
+  members = g_array_sized_new (FALSE, FALSE, sizeof (TpHandle), 1);
+  g_array_append_val (members, self_handle);
 
-  self_contact = empathy_tp_group_get_self_contact (group);
-  empathy_tp_group_add_member (group, self_contact, NULL);
+  tp_cli_channel_interface_group_call_add_members (channel, -1, members,
+      "", NULL, NULL, NULL, NULL);
 
   empathy_dispatch_operation_approve (approval->operation);
 
-  g_object_unref (group);
-  g_object_unref (self_contact);
+  g_array_free (members, TRUE);
 }
 
 static void
