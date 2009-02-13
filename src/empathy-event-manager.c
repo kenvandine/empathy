@@ -680,9 +680,6 @@ static void
 event_room_channel_process_func (EventPriv *event)
 {
   GtkWidget *dialog, *button, *image;
-  TpHandle room_handle;
-  GArray *handles;
-  gchar **names;
   TpChannel *channel = empathy_dispatch_operation_get_channel (
       event->approval->operation);
 
@@ -692,16 +689,6 @@ event_room_channel_process_func (EventPriv *event)
       return;
     }
 
-  /* get room name */
-  room_handle = tp_channel_get_handle (channel, NULL);
-
-  handles = g_array_new (FALSE, FALSE, sizeof (guint));
-  g_array_append_val (handles, room_handle);
-
-  tp_cli_connection_run_inspect_handles (
-      tp_channel_borrow_connection (channel), -1,
-      TP_HANDLE_TYPE_ROOM, handles, &names, NULL, NULL);
-
   /* create dialog */
   dialog = gtk_message_dialog_new (NULL, 0,
       GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE, _("Room invitation"));
@@ -709,7 +696,7 @@ event_room_channel_process_func (EventPriv *event)
   gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
       _("%s is inviting you to join %s"),
       empathy_contact_get_name (event->approval->contact),
-      *names);
+      tp_channel_get_identifier (channel));
 
   gtk_dialog_set_default_response (GTK_DIALOG (dialog),
       GTK_RESPONSE_OK);
@@ -728,9 +715,6 @@ event_room_channel_process_func (EventPriv *event)
       G_CALLBACK (invite_dialog_response_cb), event->approval);
 
   gtk_widget_show (dialog);
-
-  g_array_free (handles, TRUE);
-  g_free (names);
 
   event->approval->dialog = dialog;
 }
