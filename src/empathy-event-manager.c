@@ -747,6 +747,8 @@ event_manager_muc_invite_got_contact_name_cb (EmpathyContact *contact,
 
   empathy_sound_play (empathy_main_window_get (),
     EMPATHY_SOUND_CONVERSATION_NEW);
+
+  g_free (msg);
 }
 
 static void
