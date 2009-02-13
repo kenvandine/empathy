@@ -798,6 +798,7 @@ event_manager_approve_channel_cb (EmpathyDispatcher *dispatcher,
             EMPATHY_SOUND_CONVERSATION_NEW);
 
           g_object_unref (contact_factory);
+          g_object_unref (account);
         }
     }
   else if (!tp_strdiff (channel_type, TP_IFACE_CHANNEL_TYPE_STREAMED_MEDIA))
