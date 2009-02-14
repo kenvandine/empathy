@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: empathy\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-11 13:12+0100\n"
-"PO-Revision-Date: 2009-02-11 13:14+0100\n"
+"POT-Creation-Date: 2009-02-14 09:42+0100\n"
+"PO-Revision-Date: 2009-02-14 09:43+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "MIME-Version: 1.0\n"
@@ -618,7 +618,7 @@ msgid "%s has left the room"
 msgstr "%s har lämnat rummet"
 
 #: ../libempathy-gtk/empathy-chat.c:1248
-#: ../src/empathy-call-window.c:466
+#: ../src/empathy-call-window.c:467
 msgid "Disconnected"
 msgstr "Frånkopplad"
 
@@ -663,11 +663,11 @@ msgstr "Redigera kontaktinformation"
 msgid "Contact Information"
 msgstr "Kontaktinformation"
 
-#: ../libempathy-gtk/empathy-contact-dialogs.c:266
+#: ../libempathy-gtk/empathy-contact-dialogs.c:267
 msgid "I would like to add you to my contact list."
 msgstr "Jag vill lägga till dig i min kontaktlista."
 
-#: ../libempathy-gtk/empathy-contact-dialogs.c:290
+#: ../libempathy-gtk/empathy-contact-dialogs.c:291
 msgid "New Contact"
 msgstr "Ny kontakt"
 
@@ -706,40 +706,40 @@ msgstr "Tar bort kontakt"
 msgid "Sorry, I don't want you in my contact list anymore."
 msgstr "Tyvärr, jag vill inte längre ha dig i min kontaktlista."
 
-#: ../libempathy-gtk/empathy-contact-menu.c:122
+#: ../libempathy-gtk/empathy-contact-menu.c:130
 #: ../src/empathy-main-window.glade.h:9
 msgid "_Chat"
 msgstr "_Chatt"
 
-#: ../libempathy-gtk/empathy-contact-menu.c:153
+#: ../libempathy-gtk/empathy-contact-menu.c:161
 #: ../src/empathy-call-window.glade.h:5
 msgid "_Call"
 msgstr "_Ring"
 
-#: ../libempathy-gtk/empathy-contact-menu.c:192
+#: ../libempathy-gtk/empathy-contact-menu.c:200
 #: ../src/empathy-main-window.glade.h:17
 msgid "_View Previous Conversations"
 msgstr "_Visa tidigare samtal"
 
-#: ../libempathy-gtk/empathy-contact-menu.c:214
+#: ../libempathy-gtk/empathy-contact-menu.c:222
 msgid "Send file"
 msgstr "Skicka fil"
 
-#: ../libempathy-gtk/empathy-contact-menu.c:242
+#: ../libempathy-gtk/empathy-contact-menu.c:250
 msgid "Infor_mation"
 msgstr "Infor_mation"
 
-#: ../libempathy-gtk/empathy-contact-menu.c:269
+#: ../libempathy-gtk/empathy-contact-menu.c:277
 #: ../src/empathy-chat-window.glade.h:14
 #: ../src/empathy-main-window.glade.h:11
 msgid "_Edit"
 msgstr "R_edigera"
 
-#: ../libempathy-gtk/empathy-contact-menu.c:328
+#: ../libempathy-gtk/empathy-contact-menu.c:336
 msgid "Inviting to this room"
 msgstr "Bjuder in till detta rum"
 
-#: ../libempathy-gtk/empathy-contact-menu.c:361
+#: ../libempathy-gtk/empathy-contact-menu.c:369
 msgid "_Invite to chatroom"
 msgstr "_Bjud in till chattrum"
 
@@ -1345,27 +1345,27 @@ msgstr "Gamma"
 msgid "Volume"
 msgstr "Volym"
 
-#: ../src/empathy-call-window.c:287
+#: ../src/empathy-call-window.c:288
 msgid "_Sidebar"
 msgstr "_Sidopanel"
 
-#: ../src/empathy-call-window.c:305
+#: ../src/empathy-call-window.c:306
 msgid "Dialpad"
 msgstr "Knappsats"
 
-#: ../src/empathy-call-window.c:309
+#: ../src/empathy-call-window.c:310
 msgid "Audio input"
 msgstr "Ljudingång"
 
-#: ../src/empathy-call-window.c:313
+#: ../src/empathy-call-window.c:314
 msgid "Video input"
 msgstr "Videoingång"
 
-#: ../src/empathy-call-window.c:326
+#: ../src/empathy-call-window.c:327
 msgid "Connecting..."
 msgstr "Ansluter..."
 
-#: ../src/empathy-call-window.c:489
+#: ../src/empathy-call-window.c:490
 #, c-format
 msgid "Connected -- %d:%02dm"
 msgstr "Ansluten -- %d:%02dm"
@@ -1389,10 +1389,6 @@ msgstr "Videoförhandsvisning"
 #: ../src/empathy-call-window.glade.h:6
 msgid "_View"
 msgstr "_Visa"
-
-#: ../src/empathy-call-window.glade.h:7
-msgid "menuitem2"
-msgstr "menyobjekt2"
 
 #: ../src/empathy-chat-window.c:313
 #, c-format
@@ -1563,17 +1559,41 @@ msgstr "Ett externt program kommer att startas för att hantera den."
 msgid "You don't have the needed external application to handle it."
 msgstr "Du har inte det nödvändiga externa programmet att hantera den med."
 
-#: ../src/empathy-event-manager.c:706
+#: ../src/empathy-event-manager.c:692
+msgid "Room invitation"
+msgstr "Rumsinbjudan"
+
+#: ../src/empathy-event-manager.c:695
+#, c-format
+msgid "%s is inviting you to join %s"
+msgstr "%s bjuder in dig till %s"
+
+#. Decline button
+#: ../src/empathy-event-manager.c:703
+#: ../src/empathy-ft-manager.c:1021
+msgid "_Decline"
+msgstr "_Neka"
+
+#: ../src/empathy-event-manager.c:708
+msgid "_Join"
+msgstr "_Gå in"
+
+#: ../src/empathy-event-manager.c:738
+#, c-format
+msgid "%s invited you to join %s"
+msgstr "%s har bjudit in dig till %s"
+
+#: ../src/empathy-event-manager.c:860
 #, c-format
 msgid "Incoming file transfer from %s"
 msgstr "Inkommande filöverföring från %s"
 
-#: ../src/empathy-event-manager.c:800
+#: ../src/empathy-event-manager.c:954
 #, c-format
 msgid "Subscription requested by %s"
 msgstr "Prenumeration begärd av %s"
 
-#: ../src/empathy-event-manager.c:804
+#: ../src/empathy-event-manager.c:958
 #, c-format
 msgid ""
 "\n"
@@ -1720,11 +1740,6 @@ msgstr "%s vill skicka en fil till dig"
 #, c-format
 msgid "Do you want to accept the file \"%s\" (%s)?"
 msgstr "Vill du ta emot filen \"%s\" (%s)?"
-
-#. Decline button
-#: ../src/empathy-ft-manager.c:1021
-msgid "_Decline"
-msgstr "_Neka"
 
 #. Accept button
 #: ../src/empathy-ft-manager.c:1030
@@ -2063,6 +2078,8 @@ msgstr "Kunde inte starta program för tjänsten %s: %s"
 msgid "An invitation was offered for service %s, but you don't have the needed application to handle it"
 msgstr "Du blev erbjuden en inbjudan för tjänsten %s, men du har inte det nödvändiga programmet att hantera den med"
 
+#~ msgid "menuitem2"
+#~ msgstr "menyobjekt2"
 #~ msgid "Closed"
 #~ msgstr "Stängd"
 #~ msgid "End this call?"
@@ -2497,8 +2514,6 @@ msgstr "Du blev erbjuden en inbjudan för tjänsten %s, men du har inte det nöd
 #~ msgid_plural "Members"
 #~ msgstr[0] "Medlem"
 #~ msgstr[1] "Medlemmar"
-#~ msgid "No affiliation"
-#~ msgstr "Ingen anknytning"
 #~ msgid "The nickname you have chosen is already in use."
 #~ msgstr "Smeknamnet du har valt är upptaget."
 #~ msgid "The chat room you tried to join requires a password."
