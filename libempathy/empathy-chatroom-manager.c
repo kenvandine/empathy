@@ -32,6 +32,7 @@
 
 #include "empathy-tp-chat.h"
 #include "empathy-chatroom-manager.h"
+#include "empathy-account-manager.h"
 #include "empathy-utils.h"
 
 #define DEBUG_FLAG EMPATHY_DEBUG_OTHER
@@ -48,6 +49,7 @@ typedef struct
 {
   GList *chatrooms;
   gchar *file;
+  EmpathyAccountManager *account_manager;
   /* source id of the autosave timer */
   gint save_timer_id;
 } EmpathyChatroomManagerPriv;
@@ -353,6 +355,8 @@ chatroom_manager_finalize (GObject *object)
 
   priv = GET_PRIV (object);
 
+  g_object_unref (priv->account_manager);
+
   if (priv->save_timer_id > 0)
     {
       /* have to save before destroy the object */
@@ -398,6 +402,8 @@ empathy_chatroom_manager_constructor (GType type,
 
   chatroom_manager_singleton = self;
   g_object_add_weak_pointer (obj, (gpointer) &chatroom_manager_singleton);
+
+  priv->account_manager = empathy_account_manager_dup_singleton ();
 
   if (priv->file == NULL)
     {
@@ -638,14 +644,18 @@ empathy_chatroom_manager_get_count (EmpathyChatroomManager *manager,
 
 static void
 chatroom_manager_chat_destroyed_cb (EmpathyTpChat *chat,
-  gpointer user_data)
+  gpointer manager)
 {
-  EmpathyChatroomManager *manager = EMPATHY_CHATROOM_MANAGER (user_data);
-  McAccount *account = empathy_tp_chat_get_account (chat);
+  EmpathyChatroomManagerPriv *priv = GET_PRIV (manager);
+  McAccount *account;
+  TpConnection *connection;
   EmpathyChatroom *chatroom;
   const gchar *roomname;
   gboolean favorite;
 
+  connection = empathy_tp_chat_get_connection (chat);
+  account = empathy_account_manager_get_account (priv->account_manager,
+      connection);
   roomname = empathy_tp_chat_get_id (chat);
   chatroom = empathy_chatroom_manager_find (manager, account, roomname);
 
@@ -666,9 +676,9 @@ chatroom_manager_chat_destroyed_cb (EmpathyTpChat *chat,
 
 static void
 chatroom_manager_observe_channel_cb (EmpathyDispatcher *dispatcher,
-  EmpathyDispatchOperation *operation, gpointer user_data)
+  EmpathyDispatchOperation *operation, gpointer manager)
 {
-  EmpathyChatroomManager *manager = EMPATHY_CHATROOM_MANAGER (user_data);
+  EmpathyChatroomManagerPriv *priv = GET_PRIV (manager);
   EmpathyChatroom *chatroom;
   TpChannel *channel;
   EmpathyTpChat *chat;
@@ -676,6 +686,7 @@ chatroom_manager_observe_channel_cb (EmpathyDispatcher *dispatcher,
   GQuark channel_type;
   TpHandleType handle_type;
   McAccount *account;
+  TpConnection *connection;
 
   channel_type = empathy_dispatch_operation_get_channel_type_id (operation);
 
@@ -691,7 +702,9 @@ chatroom_manager_observe_channel_cb (EmpathyDispatcher *dispatcher,
 
   chat = EMPATHY_TP_CHAT (
     empathy_dispatch_operation_get_channel_wrapper (operation));
-  account = empathy_tp_chat_get_account (chat);
+  connection = empathy_tp_chat_get_connection (chat);
+  account = empathy_account_manager_get_account (priv->account_manager,
+      connection);
 
   roomname = empathy_tp_chat_get_id (chat);
 
