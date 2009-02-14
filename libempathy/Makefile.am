@@ -46,7 +46,6 @@ libempathy_la_SOURCES =					\
 	empathy-tp-contact-factory.c			\
 	empathy-tp-contact-list.c			\
 	empathy-tp-file.c				\
-	empathy-tp-group.c				\
 	empathy-tp-roomlist.c				\
 	empathy-tp-tube.c				\
 	empathy-tube-handler.c				\
@@ -93,7 +92,6 @@ libempathy_headers =				\
 	empathy-tp-contact-factory.h		\
 	empathy-tp-contact-list.h		\
 	empathy-tp-file.h			\
-	empathy-tp-group.h			\
 	empathy-tp-roomlist.h			\
 	empathy-tp-tube.h			\
 	empathy-tube-handler.h			\
