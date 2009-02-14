@@ -1231,6 +1231,16 @@ empathy_tp_chat_get_channel (EmpathyTpChat *chat)
 	return priv->channel;
 }
 
+TpConnection *
+empathy_tp_chat_get_connection (EmpathyTpChat *chat)
+{
+	EmpathyTpChatPriv *priv = GET_PRIV (chat);
+
+	g_return_val_if_fail (EMPATHY_IS_TP_CHAT (chat), NULL);
+
+	return tp_channel_borrow_connection (priv->channel);
+}
+
 gboolean
 empathy_tp_chat_is_ready (EmpathyTpChat *chat)
 {
