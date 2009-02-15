@@ -37,7 +37,6 @@
 #include <telepathy-glib/dbus.h>
 
 #include "empathy-utils.h"
-#include "empathy-contact-factory.h"
 #include "empathy-contact-manager.h"
 #include "empathy-dispatcher.h"
 #include "empathy-dispatch-operation.h"
