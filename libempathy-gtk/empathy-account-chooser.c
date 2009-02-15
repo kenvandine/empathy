@@ -241,6 +241,24 @@ empathy_account_chooser_get_account (EmpathyAccountChooser *chooser)
 	return account;
 }
 
+TpConnection *
+empathy_account_chooser_get_connection (EmpathyAccountChooser *chooser)
+{
+	EmpathyAccountChooserPriv *priv;
+	McAccount                 *account;
+	TpConnection              *connection;
+
+	g_return_val_if_fail (EMPATHY_IS_ACCOUNT_CHOOSER (chooser), NULL);
+
+	priv = GET_PRIV (chooser);
+
+	account = empathy_account_chooser_get_account (chooser);
+	connection = empathy_account_manager_get_connection (priv->manager, account);
+	g_object_unref (account);
+
+	return connection;
+}
+
 gboolean
 empathy_account_chooser_set_account (EmpathyAccountChooser *chooser,
 				     McAccount             *account)
