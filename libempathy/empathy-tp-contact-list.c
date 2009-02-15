@@ -40,7 +40,6 @@
 
 #define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyTpContactList)
 typedef struct {
-	McAccount      *account;
 	TpConnection   *connection;
 	const gchar    *protocol_group;
 	gboolean        ready;
@@ -63,16 +62,9 @@ typedef enum {
 static void tp_contact_list_iface_init         (EmpathyContactListIface   *iface);
 
 enum {
-	DESTROY,
-	LAST_SIGNAL
-};
-
-enum {
 	PROP_0,
-	PROP_ACCOUNT,
+	PROP_CONNECTION,
 };
-
-static guint signals[LAST_SIGNAL];
 
 G_DEFINE_TYPE_WITH_CODE (EmpathyTpContactList, empathy_tp_contact_list, G_TYPE_OBJECT,
 			 G_IMPLEMENT_INTERFACE (EMPATHY_TYPE_CONTACT_LIST,
@@ -334,40 +326,6 @@ tp_contact_list_pending_cb (EmpathyTpGroup       *group,
 					       TRUE);
 		}
 	}
-}
-
-static void
-tp_contact_list_invalidated_cb (TpConnection         *connection,
-				guint                 domain,
-				gint                  code,
-				gchar                *message,
-				EmpathyTpContactList *list)
-{
-	EmpathyTpContactListPriv *priv = GET_PRIV (list);
-	GList                    *l;
-
-	DEBUG ("Connection invalidated");
-
-	/* Remove all contacts */
-	for (l = priv->members; l; l = l->next) {
-		g_signal_emit_by_name (list, "members-changed", l->data,
-				       NULL, 0, NULL,
-				       FALSE);
-		g_object_unref (l->data);
-	}
-	for (l = priv->pendings; l; l = l->next) {
-		g_signal_emit_by_name (list, "pendings-changed", l->data,
-				       NULL, 0, NULL,
-				       FALSE);
-		g_object_unref (l->data);
-	}
-	g_list_free (priv->members);
-	g_list_free (priv->pendings);
-	priv->members = NULL;
-	priv->pendings = NULL;
-
-	/* Tell the world to not use us anymore */
-	g_signal_emit (list, signals[DESTROY], 0);
 }
 
 static void
@@ -646,13 +604,8 @@ tp_contact_list_finalize (GObject *object)
 	if (priv->publish) {
 		g_object_unref (priv->publish);
 	}
-	if (priv->account) {
-		g_object_unref (priv->account);
-	}
+
 	if (priv->connection) {
-		g_signal_handlers_disconnect_by_func (priv->connection,
-						      tp_contact_list_invalidated_cb,
-						      object);
 		g_object_unref (priv->connection);
 	}
 
@@ -668,27 +621,14 @@ tp_contact_list_finalize (GObject *object)
 }
 
 static void
-tp_contact_list_connection_ready (TpConnection *connection,
-				  const GError *error,
-				  gpointer      list)
+tp_contact_list_constructed (GObject *list)
 {
+
 	EmpathyTpContactListPriv *priv = GET_PRIV (list);
+	const gchar              *protocol_name = NULL;
 
-	if (error) {
-		tp_contact_list_invalidated_cb (connection,
-						error->domain,
-						error->code,
-						error->message,
-						EMPATHY_TP_CONTACT_LIST (list));
-		return;
-	}
-
-	g_signal_connect (priv->connection, "invalidated",
-			  G_CALLBACK (tp_contact_list_invalidated_cb),
-			  list);
-
-	tp_contact_list_request_list (list, "publish");
-	tp_contact_list_request_list (list, "subscribe");
+	tp_contact_list_request_list (EMPATHY_TP_CONTACT_LIST (list), "publish");
+	tp_contact_list_request_list (EMPATHY_TP_CONTACT_LIST (list), "subscribe");
 
 	tp_cli_connection_call_list_channels (priv->connection, -1,
 					      tp_contact_list_list_channels_cb,
@@ -699,39 +639,14 @@ tp_contact_list_connection_ready (TpConnection *connection,
 						  tp_contact_list_new_channel_cb,
 						  NULL, NULL,
 						  list, NULL);
-}
-
-static void
-tp_contact_list_constructed (GObject *list)
-{
-
-	EmpathyTpContactListPriv *priv = GET_PRIV (list);
-	MissionControl           *mc;
-	guint                     status;
-	McProfile                *profile;
-	const gchar              *protocol_name;
-
-	/* Get the connection. status==0 means CONNECTED */
-	mc = empathy_mission_control_dup_singleton ();
-	status = mission_control_get_connection_status (mc, priv->account, NULL);
-	g_return_if_fail (status == 0);
-	priv->connection = mission_control_get_tpconnection (mc, priv->account, NULL);
-	g_return_if_fail (priv->connection != NULL);
-	g_object_unref (mc);
-
-	tp_connection_call_when_ready (priv->connection,
-				       tp_contact_list_connection_ready,
-				       list);
 
 	/* Check for protocols that does not support contact groups. We can
 	 * put all contacts into a special group in that case.
 	 * FIXME: Default group should be an information in the profile */
-	profile = mc_account_get_profile (priv->account);
-	protocol_name = mc_profile_get_protocol_name (profile);
-	if (strcmp (protocol_name, "local-xmpp") == 0) {
+	//protocol_name = tp_connection_get_protocol (priv->connection);
+	if (!tp_strdiff (protocol_name, "local-xmpp") == 0) {
 		priv->protocol_group = _("People nearby");
 	}
-	g_object_unref (profile);
 }
 
 static void
@@ -743,8 +658,8 @@ tp_contact_list_get_property (GObject    *object,
 	EmpathyTpContactListPriv *priv = GET_PRIV (object);
 
 	switch (param_id) {
-	case PROP_ACCOUNT:
-		g_value_set_object (value, priv->account);
+	case PROP_CONNECTION:
+		g_value_set_object (value, priv->connection);
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
@@ -761,8 +676,8 @@ tp_contact_list_set_property (GObject      *object,
 	EmpathyTpContactListPriv *priv = GET_PRIV (object);
 
 	switch (param_id) {
-	case PROP_ACCOUNT:
-		priv->account = g_object_ref (g_value_get_object (value));
+	case PROP_CONNECTION:
+		priv->connection = g_value_dup_object (value);
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
@@ -781,23 +696,13 @@ empathy_tp_contact_list_class_init (EmpathyTpContactListClass *klass)
 	object_class->set_property = tp_contact_list_set_property;
 
 	g_object_class_install_property (object_class,
-					 PROP_ACCOUNT,
-					 g_param_spec_object ("account",
-							      "The Account",
-							      "The account associated with the contact list",
-							      MC_TYPE_ACCOUNT,
+					 PROP_CONNECTION,
+					 g_param_spec_object ("connection",
+							      "The Connection",
+							      "The connection associated with the contact list",
+							      TP_TYPE_CONNECTION,
 							      G_PARAM_READWRITE |
 							      G_PARAM_CONSTRUCT_ONLY));
-
-	signals[DESTROY] =
-		g_signal_new ("destroy",
-			      G_TYPE_FROM_CLASS (klass),
-			      G_SIGNAL_RUN_LAST,
-			      0,
-			      NULL, NULL,
-			      g_cclosure_marshal_VOID__VOID,
-			      G_TYPE_NONE,
-			      0);
 
 	g_type_class_add_private (object_class, sizeof (EmpathyTpContactListPriv));
 }
@@ -816,15 +721,15 @@ empathy_tp_contact_list_init (EmpathyTpContactList *list)
 }
 
 EmpathyTpContactList *
-empathy_tp_contact_list_new (McAccount *account)
+empathy_tp_contact_list_new (TpConnection *connection)
 {
 	return g_object_new (EMPATHY_TYPE_TP_CONTACT_LIST,
-			     "account", account,
+			     "connection", connection,
 			     NULL);
 }
 
-McAccount *
-empathy_tp_contact_list_get_account (EmpathyTpContactList *list)
+TpConnection *
+empathy_tp_contact_list_get_connection (EmpathyTpContactList *list)
 {
 	EmpathyTpContactListPriv *priv;
 
@@ -832,7 +737,7 @@ empathy_tp_contact_list_get_account (EmpathyTpContactList *list)
 
 	priv = GET_PRIV (list);
 
-	return priv->account;
+	return priv->connection;
 }
 
 static void
@@ -1120,3 +1025,29 @@ empathy_tp_contact_list_can_add (EmpathyTpContactList *list)
 	flags = empathy_tp_group_get_flags (priv->subscribe);
 	return (flags & TP_CHANNEL_GROUP_FLAG_CAN_ADD) != 0;
 }
+
+void
+empathy_tp_contact_list_remove_all (EmpathyTpContactList *list)
+{
+	EmpathyTpContactListPriv *priv = GET_PRIV (list);
+	GList                    *l;
+
+	/* Remove all contacts */
+	for (l = priv->members; l; l = l->next) {
+		g_signal_emit_by_name (list, "members-changed", l->data,
+				       NULL, 0, NULL,
+				       FALSE);
+		g_object_unref (l->data);
+	}
+	for (l = priv->pendings; l; l = l->next) {
+		g_signal_emit_by_name (list, "pendings-changed", l->data,
+				       NULL, 0, NULL,
+				       FALSE);
+		g_object_unref (l->data);
+	}
+	g_list_free (priv->members);
+	g_list_free (priv->pendings);
+	priv->members = NULL;
+	priv->pendings = NULL;
+}
+

@@ -24,7 +24,7 @@
 #define __EMPATHY_TP_CONTACT_LIST_H__
 
 #include <glib.h>
-#include <libmissioncontrol/mc-account.h>
+#include <telepathy-glib/connection.h>
 
 
 G_BEGIN_DECLS
@@ -49,9 +49,10 @@ struct _EmpathyTpContactListClass {
 };
 
 GType                  empathy_tp_contact_list_get_type    (void) G_GNUC_CONST;
-EmpathyTpContactList * empathy_tp_contact_list_new         (McAccount            *account);
-McAccount *            empathy_tp_contact_list_get_account (EmpathyTpContactList *list);
+EmpathyTpContactList * empathy_tp_contact_list_new         (TpConnection         *connection);
+TpConnection *         empathy_tp_contact_list_get_connection (EmpathyTpContactList *list);
 gboolean               empathy_tp_contact_list_can_add     (EmpathyTpContactList *list);
+void                   empathy_tp_contact_list_remove_all  (EmpathyTpContactList *list);
 
 G_END_DECLS
 
