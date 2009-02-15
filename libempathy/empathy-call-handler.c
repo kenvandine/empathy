@@ -402,29 +402,37 @@ empathy_call_handler_request_cb (EmpathyDispatchOperation *operation,
   empathy_dispatch_operation_claim (operation);
 }
 
-static void
-empathy_call_handler_contact_ready_cb (EmpathyContact *contact,
-  const GError *error, gpointer user_data, GObject *object)
+void
+empathy_call_handler_start_call (EmpathyCallHandler *handler)
 {
-  EmpathyCallHandler *self = EMPATHY_CALL_HANDLER (object);
-  EmpathyCallHandlerPriv *priv = GET_PRIV (self);
+
+  EmpathyCallHandlerPriv *priv = GET_PRIV (handler);
   EmpathyDispatcher *dispatcher;
-  McAccount *account;
+  TpConnection *connection;
   GStrv allowed;
   GValue *value;
-  GHashTable *request = g_hash_table_new_full (g_str_hash, g_str_equal, NULL,
-      (GDestroyNotify) tp_g_value_slice_free);
+  GHashTable *request;
+
+  if (priv->call != NULL)
+    {
+      empathy_call_handler_start_tpfs (handler);
+      empathy_tp_call_accept_incoming_call (priv->call);
+      return;
+    }
 
   g_assert (priv->contact != NULL);
 
   dispatcher = empathy_dispatcher_dup_singleton ();
-  account = empathy_contact_get_account (priv->contact);
-  allowed = empathy_dispatcher_find_channel_class (dispatcher, account,
+  connection = empathy_contact_get_connection (priv->contact);
+  allowed = empathy_dispatcher_find_channel_class (dispatcher, connection,
     TP_IFACE_CHANNEL_TYPE_STREAMED_MEDIA, TP_HANDLE_TYPE_CONTACT);
 
   if (!tp_strv_contains ((const gchar * const *) allowed,
       TP_IFACE_CHANNEL ".TargetHandle"))
     return;
+
+  request = g_hash_table_new_full (g_str_hash, g_str_equal, NULL,
+      (GDestroyNotify) tp_g_value_slice_free);
 
   /* org.freedesktop.Telepathy.Channel.ChannelType */
   value = tp_g_value_slice_new (G_TYPE_STRING);
@@ -441,27 +449,9 @@ empathy_call_handler_contact_ready_cb (EmpathyContact *contact,
   g_value_set_uint (value, empathy_contact_get_handle (priv->contact));
   g_hash_table_insert (request, TP_IFACE_CHANNEL ".TargetHandle", value);
 
-  empathy_dispatcher_create_channel (dispatcher, account,
-    request, empathy_call_handler_request_cb, self);
+  empathy_dispatcher_create_channel (dispatcher, connection,
+    request, empathy_call_handler_request_cb, handler);
 
   g_object_unref (dispatcher);
 }
 
-void
-empathy_call_handler_start_call (EmpathyCallHandler *handler)
-{
-
-  EmpathyCallHandlerPriv *priv = GET_PRIV (handler);
-
-  if (priv->call == NULL)
-    {
-      empathy_contact_call_when_ready (priv->contact,
-        EMPATHY_CONTACT_READY_HANDLE,
-        empathy_call_handler_contact_ready_cb, NULL, NULL, G_OBJECT (handler));
-    }
-  else
-    {
-      empathy_call_handler_start_tpfs (handler);
-      empathy_tp_call_accept_incoming_call (priv->call);
-    }
-}
