@@ -1,0 +1,2166 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Empathy\n"
+"Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
+"product=empathy&component=general\n"
+"POT-Creation-Date: 2009-01-27 07:56+0000\n"
+"PO-Revision-Date: 2009-01-29 11:53+0200\n"
+"Last-Translator: alexxed <alexxed@gmail.com>\n"
+"Language-Team: Romanian <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms:  nplurals=3; plural=n==1 ? 0 : (n==0 || (n%100 > 0 && n%100 < "
+"20)) ? 1 : 2;\n"
+"X-Generator: Narro 0.9.3 on http://tradu.softwareliber.ro\n"
+
+#: ../data/empathy.desktop.in.in.h:1
+msgid "Empathy Instant Messenger"
+msgstr "Empathy - Mesagerie instantă"
+
+#: ../data/empathy.desktop.in.in.h:2
+msgid "Send and receive instant messages"
+msgstr "Trimiteți și primiți instant mesaje"
+
+#: ../data/empathy.schemas.in.h:1
+msgid "Always open a separate chat window for new chats."
+msgstr "Deschide întotdeauna o fereastră separată pentru discuțiile noi."
+
+#: ../data/empathy.schemas.in.h:2
+msgid ""
+"Character to add after nickname when using nick completion (tab) in group "
+"chat."
+msgstr ""
+"Caracterul de adăugat după un pseudonim când se folosește completarea cu tab "
+"în grupurile de discuții."
+
+#: ../data/empathy.schemas.in.h:3
+msgid "Chat window theme"
+msgstr "Tema ferestrei de discuții"
+
+#: ../data/empathy.schemas.in.h:4
+msgid ""
+"Comma separated list of spell checker languages to use (e.g. en, fr, nl)."
+msgstr ""
+"Listă de corectoare ortografice de folosit, separate prin virgulă (ex: en, "
+"fr, nl)."
+
+#: ../data/empathy.schemas.in.h:5
+msgid "Compact contact list"
+msgstr "Listă de contacte compactă"
+
+#: ../data/empathy.schemas.in.h:6
+msgid "Contact list sort criterium"
+msgstr "Criteriu de sortare a listei de contacte"
+
+#: ../data/empathy.schemas.in.h:7
+msgid "Default directory to select an avatar image from"
+msgstr "Directorul implicit de unde se alege avatarul"
+
+#: ../data/empathy.schemas.in.h:8
+msgid "Disable sounds when away"
+msgstr "Dezactivează sunetele când sunt în absență"
+
+#: ../data/empathy.schemas.in.h:9
+msgid "Empathy default download folder"
+msgstr "Dosarul implicit de descărcare pentru Empathy"
+
+#: ../data/empathy.schemas.in.h:10
+msgid "Empathy has asked about importing accounts"
+msgstr "Empathy a întrebat despre importul conturilor"
+
+#: ../data/empathy.schemas.in.h:11
+msgid "Empathy should auto-connect on startup"
+msgstr "Empathy ar trebui să se conecteze automat la pornire"
+
+#: ../data/empathy.schemas.in.h:12
+msgid "Empathy should use the avatar of the contact as the chat window icon"
+msgstr ""
+"Empathy ar trebui să folosească avatarul contactului ca iconiță a ferestrei "
+"de discuții"
+
+#: ../data/empathy.schemas.in.h:13
+msgid "Enable popup when contact is available"
+msgstr "Activează notificarea la disponibilitatea unui contact"
+
+#: ../data/empathy.schemas.in.h:14
+msgid "Enable spell checker"
+msgstr "Activează corectorul ortografic"
+
+#: ../data/empathy.schemas.in.h:15
+msgid "Hide main window"
+msgstr "Ascunde fereastra principală"
+
+#: ../data/empathy.schemas.in.h:16
+msgid "Hide the main window."
+msgstr "Ascunde fereastra principală."
+
+#: ../data/empathy.schemas.in.h:17
+msgid "NetworkManager should be used"
+msgstr "Ar trebui folosit NetworkManager"
+
+#: ../data/empathy.schemas.in.h:18
+msgid "Nick completed character"
+msgstr "Caracter de completare a pseudonimului"
+
+#: ../data/empathy.schemas.in.h:19
+msgid "Open new chats in separate windows"
+msgstr "Deschide discuțiile noi în ferestre separate"
+
+#: ../data/empathy.schemas.in.h:20
+msgid "Play a sound for incoming messages"
+msgstr "Redă un sunet la primirea mesajelor"
+
+#: ../data/empathy.schemas.in.h:21
+msgid "Play a sound for new conversations"
+msgstr "Redă un sunet pentru conversațiile noi"
+
+#: ../data/empathy.schemas.in.h:22
+msgid "Play a sound for outgoing messages"
+msgstr "Redă un sunet pentru mesajele trimise"
+
+#: ../data/empathy.schemas.in.h:23
+msgid "Play a sound when a contact logs in"
+msgstr "Redă un sunet la autentificarea unui contact"
+
+#: ../data/empathy.schemas.in.h:24
+msgid "Play a sound when a contact logs out"
+msgstr "Redă un sunet la deconectarea unui contact"
+
+#: ../data/empathy.schemas.in.h:25
+msgid "Play a sound when we log in"
+msgstr "Redă un sunet când ne conectăm"
+
+#: ../data/empathy.schemas.in.h:26
+msgid "Play a sound when we log out"
+msgstr "Redă un sunet când ne deconectăm"
+
+#: ../data/empathy.schemas.in.h:27
+msgid "Salut account is created"
+msgstr "Contul Salut a fost creat"
+
+#: ../data/empathy.schemas.in.h:28
+msgid "Show avatars"
+msgstr "Arată avataruri"
+
+#: ../data/empathy.schemas.in.h:29
+msgid "Show hint about closing the main window"
+msgstr "Arată un indiciu despre închiderea ferestrei principale"
+
+#: ../data/empathy.schemas.in.h:30
+msgid "Show offline contacts"
+msgstr "Arată contactele deconectate"
+
+#: ../data/empathy.schemas.in.h:31
+msgid "Spell checking languages"
+msgstr "Limbi cu corectoare ortografice"
+
+#: ../data/empathy.schemas.in.h:32
+msgid "The default folder to save file transfers in."
+msgstr "Dosarul implicit în care se salvează fișierele transferate."
+
+#: ../data/empathy.schemas.in.h:33
+msgid "The last directory that an avatar image was chosen from."
+msgstr "Ultimul director de unde a fost aleasă o imagine pentru avatar."
+
+#: ../data/empathy.schemas.in.h:34
+msgid "The theme that is used to display the conversation in chat windows."
+msgstr ""
+"Tema care este folosită pentru a afișa conversația în ferestrele de discuții."
+
+#: ../data/empathy.schemas.in.h:35
+msgid "Use graphical smileys"
+msgstr "Folosește pictograme simbolice"
+
+#: ../data/empathy.schemas.in.h:36
+msgid "Use notification sounds"
+msgstr "Folosește sunete de notificare"
+
+#: ../data/empathy.schemas.in.h:37
+msgid "Use theme for chat rooms"
+msgstr "Folosește tema pentru grupurile de discuții"
+
+#: ../data/empathy.schemas.in.h:38
+msgid ""
+"Whether or not Empathy has asked about importing accounts from other programs."
+msgstr ""
+"Dacă Empathy a întrebat sau nu despre importarea conturilor din alte programe."
+
+#: ../data/empathy.schemas.in.h:39
+msgid ""
+"Whether or not Empathy should automatically log in to your accounts on "
+"startup."
+msgstr ""
+"Dacă Empathy ar trebui sau nu să se conecteze automat la conturi la pornire."
+
+#: ../data/empathy.schemas.in.h:40
+msgid ""
+"Whether or not Empathy should use the avatar of the contact as the chat "
+"window icon."
+msgstr ""
+"Dacă Empathy ar trebui sau nu să folosească avatarul contactului ca iconiță a "
+"ferestrei de discuții."
+
+#: ../data/empathy.schemas.in.h:41
+msgid ""
+"Whether or not the Salut account has been created on the first Empathy run."
+msgstr "Dacă contul Salut a fost creat sau nu la prima pornire a Empathy."
+
+#: ../data/empathy.schemas.in.h:42
+msgid ""
+"Whether or not the network manager should be used to automatically disconnect/"
+"reconnect."
+msgstr ""
+"Dacă gestionarul de rețea ar trebui folosit sau nu pentru deconectare/"
+"reconectare automată."
+
+#: ../data/empathy.schemas.in.h:43
+msgid ""
+"Whether or not to check words typed against the languages you want to check "
+"with."
+msgstr ""
+"Dacă să se verifice sau nu corectitudinea scrierii cuvintelor tastate în "
+"limbile alese."
+
+#: ../data/empathy.schemas.in.h:44
+msgid ""
+"Whether or not to convert smileys into graphical images in conversations."
+msgstr ""
+"Dacă să se convertească sau nu în conversații simbolurile emotive în imagini."
+
+#: ../data/empathy.schemas.in.h:45
+msgid "Whether or not to play a sound notifications when away or busy."
+msgstr ""
+"Dacă să se redea sau nu notificări sonore în absență sau când sunteți ocupat"
+"(ă)."
+
+#: ../data/empathy.schemas.in.h:46
+msgid ""
+"Whether or not to play a sound to notify for contacts logging in the network."
+msgstr ""
+"Dacă să se redea sau nu notificări sonore la autentificarea unui contact."
+
+#: ../data/empathy.schemas.in.h:47
+msgid ""
+"Whether or not to play a sound to notify for contacts logging off the network."
+msgstr "Dacă să se redea sau nu notificări sonore la deconectarea unui contact."
+
+#: ../data/empathy.schemas.in.h:48
+msgid "Whether or not to play a sound to notify for events."
+msgstr "Dacă să se redea notificări sonore pentru evenimente sau nu."
+
+#: ../data/empathy.schemas.in.h:49
+msgid "Whether or not to play a sound to notify for incoming messages."
+msgstr "Dacă să se redea sau nu un sunet la primirea mesajelor."
+
+#: ../data/empathy.schemas.in.h:50
+msgid "Whether or not to play a sound to notify for new conversations."
+msgstr "Dacă să se redea sau nu un sunet la începerea unei conversații noi."
+
+#: ../data/empathy.schemas.in.h:51
+msgid "Whether or not to play a sound to notify for outgoing messages."
+msgstr "Dacă să se redea sau nu un sunet la trimiterea mesajelor."
+
+#: ../data/empathy.schemas.in.h:52
+msgid "Whether or not to play a sound when logging in a network."
+msgstr "Dacă să se redea sau nu un sunet la conectarea la rețea."
+
+#: ../data/empathy.schemas.in.h:53
+msgid "Whether or not to play a sound when logging off a network."
+msgstr "Dacă să se redea sau nu un sunet la deconectarea de la o rețea."
+
+#: ../data/empathy.schemas.in.h:54
+msgid "Whether or not to show a popup when a contact becomes available."
+msgstr "Dacă să se afișeze o fereastră când un contact devine disponibil."
+
+#: ../data/empathy.schemas.in.h:55
+msgid ""
+"Whether or not to show avatars for contacts in the contact list and chat "
+"windows."
+msgstr ""
+"Dacă să se afișeze sau nu avataruri pentru contacte în lista de contacte și "
+"ferestrele de discuții."
+
+#: ../data/empathy.schemas.in.h:56
+msgid "Whether or not to show contacts that are offline in the contact list."
+msgstr "Dacă să se arate sau nu contactele deconectate în lista de contacte."
+
+#: ../data/empathy.schemas.in.h:57
+msgid ""
+"Whether or not to show the message dialog about closing the main window with "
+"the 'x' button in the title bar."
+msgstr ""
+"Dacă să se arate sau nu un dialog de confirmare la închiderea ferestrei "
+"principale de la butonul „x” din bara de titlu."
+
+#: ../data/empathy.schemas.in.h:58
+msgid "Whether to show the contact list in compact mode or not."
+msgstr "Dacă să se arate lista de contacte compactă sau nu."
+
+#: ../data/empathy.schemas.in.h:59
+msgid "Whether to use the theme for chat rooms or not."
+msgstr "Dacă să se folosească tema pentru camerele de discuții sau nu."
+
+#: ../data/empathy.schemas.in.h:60
+msgid ""
+"Which criterium to use when sorting the contact list. Default is to use sort "
+"by the contact's name with the value \"name\". A value of \"state\" will sort "
+"the contact list by state."
+msgstr ""
+"Ce criteriu să fie folosit la sortarea listei de contacte. Implicit vor fi "
+"sortate după nume, cu valoarea „nume”. O valoare „stare” va sorta lista de "
+"contacte după starea lor."
+
+#: ../libempathy/empathy-tp-contact-list.c:731 ../src/empathy.c:269
+msgid "People nearby"
+msgstr "Persoane din apropiere"
+
+#: ../libempathy/empathy-utils.c:251
+msgid "Available"
+msgstr "Disponibil"
+
+#: ../libempathy/empathy-utils.c:253
+msgid "Busy"
+msgstr "Ocupat"
+
+#: ../libempathy/empathy-utils.c:256
+msgid "Away"
+msgstr "Absent"
+
+#: ../libempathy/empathy-utils.c:258
+msgid "Hidden"
+msgstr "Ascuns"
+
+#: ../libempathy/empathy-utils.c:261
+msgid "Offline"
+msgstr "Deconectat"
+
+#: ../libempathy-gtk/empathy-account-chooser.c:326
+msgid "All"
+msgstr "Toate"
+
+#: ../libempathy-gtk/empathy-account-widget.c:302
+#: ../libempathy-gtk/empathy-account-widget.c:347
+#, c-format
+msgid "%s:"
+msgstr "%s:"
+
+#: ../libempathy-gtk/empathy-account-widget-aim.glade.h:1
+#: ../libempathy-gtk/empathy-account-widget-generic.glade.h:1
+#: ../libempathy-gtk/empathy-account-widget-groupwise.glade.h:1
+#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:1
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:1
+#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:1
+#: ../libempathy-gtk/empathy-account-widget-salut.glade.h:1
+#: ../libempathy-gtk/empathy-account-widget-sip.glade.h:1
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:1
+msgid "<b>Advanced</b>"
+msgstr "<b>Avansat</b>"
+
+#: ../libempathy-gtk/empathy-account-widget-aim.glade.h:2
+#: ../libempathy-gtk/empathy-account-widget-groupwise.glade.h:2
+#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:2
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:3
+#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:2
+#: ../libempathy-gtk/empathy-account-widget-sip.glade.h:4
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:2
+msgid "Forget password and clear the entry."
+msgstr "Uită parola și curăță intrarea."
+
+#: ../libempathy-gtk/empathy-account-widget-aim.glade.h:3
+#: ../libempathy-gtk/empathy-account-widget-groupwise.glade.h:4
+#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:4
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:5
+#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:4
+#: ../libempathy-gtk/empathy-account-widget-sip.glade.h:5
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:3
+msgid "Pass_word:"
+msgstr "_Parolă:"
+
+#: ../libempathy-gtk/empathy-account-widget-aim.glade.h:4
+msgid "Screen _Name:"
+msgstr "_Nume afișat:"
+
+#: ../libempathy-gtk/empathy-account-widget-aim.glade.h:5
+#: ../libempathy-gtk/empathy-account-widget-groupwise.glade.h:5
+#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:6
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:11
+#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:5
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:8
+msgid "_Port:"
+msgstr "_Port:"
+
+#: ../libempathy-gtk/empathy-account-widget-aim.glade.h:6
+#: ../libempathy-gtk/empathy-account-widget-groupwise.glade.h:6
+#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:7
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:12
+#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:6
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:10
+#: ../src/empathy-new-chatroom-dialog.glade.h:10
+msgid "_Server:"
+msgstr "_Server:"
+
+#: ../libempathy-gtk/empathy-account-widget-groupwise.glade.h:3
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:4
+#: ../libempathy-gtk/empathy-account-widget-msn.glade.h:3
+msgid "Login I_D:"
+msgstr "Login I_D:"
+
+#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:3
+msgid "ICQ _UIN:"
+msgstr "ICQ _UIN:"
+
+#: ../libempathy-gtk/empathy-account-widget-icq.glade.h:5
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:6
+msgid "_Charset:"
+msgstr "Set de _caractere:"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.c:245
+msgid "New Network"
+msgstr "Rețea nouă"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:1
+msgid "<b>Network</b>"
+msgstr "<b>Rețea</b>"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:2
+msgid "<b>Servers</b>"
+msgstr "<b>Servere</b>"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:3
+msgid "Charset:"
+msgstr "Set de caractere:"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:4
+msgid "Create a new IRC network"
+msgstr "Creează o nouă rețea IRC"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:5
+msgid "Edit the selected IRC network"
+msgstr "Editează rețeaua IRC selectată"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:6
+msgid "Network"
+msgstr "Rețea"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:7
+msgid "Network:"
+msgstr "Rețea:"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:8
+msgid "Nickname:"
+msgstr "Pseudonim:"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:9
+msgid "Password:"
+msgstr "Parolă:"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:10
+msgid "Quit message:"
+msgstr "Mesaj de ieșire:"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:11
+msgid "Real name:"
+msgstr "Nume real:"
+
+#: ../libempathy-gtk/empathy-account-widget-irc.glade.h:12
+msgid "Remove the selected IRC network"
+msgstr "Șterge rețeaua IRC selectată"
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:2
+msgid "<b>Override server settings</b>"
+msgstr "<b>Suprascrie setările serverului</b>"
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:6
+msgid "Pri_ority:"
+msgstr "Pri_oritate:"
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:7
+msgid "Reso_urce:"
+msgstr "Res_ursă:"
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:8
+msgid "Use old SS_L"
+msgstr "Folosește SS_L vechi"
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:9
+msgid "_Encryption required (TLS/SSL)"
+msgstr "Criptar_e necesară (TLS/SSL)"
+
+#: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:10
+msgid "_Ignore SSL certificate errors"
+msgstr "_Ignoră erorile de certificat SSL"
+
+#: ../libempathy-gtk/empathy-account-widget-salut.glade.h:2
+msgid "_Email:"
+msgstr "_Email:"
+
+#: ../libempathy-gtk/empathy-account-widget-salut.glade.h:3
+msgid "_First Name:"
+msgstr "_Prenume:"
+
+#: ../libempathy-gtk/empathy-account-widget-salut.glade.h:4
+msgid "_Jabber ID:"
+msgstr "ID _Jabber:"
+
+#: ../libempathy-gtk/empathy-account-widget-salut.glade.h:5
+msgid "_Last Name:"
+msgstr "Nume de fami_lie:"
+
+#: ../libempathy-gtk/empathy-account-widget-salut.glade.h:6
+#: ../src/empathy-chatrooms-window.glade.h:8
+msgid "_Nickname:"
+msgstr "Pseudo_nim:"
+
+#: ../libempathy-gtk/empathy-account-widget-salut.glade.h:7
+msgid "_Published Name:"
+msgstr "Nume _publicat:"
+
+#. look up the DNS SRV record at the service's domain for the host name of a STUN server.
+#: ../libempathy-gtk/empathy-account-widget-sip.glade.h:3
+msgid "Discover STUN"
+msgstr "Descoperă STUN"
+
+#: ../libempathy-gtk/empathy-account-widget-sip.glade.h:6
+msgid "STUN Server:"
+msgstr "Server STUN:"
+
+#: ../libempathy-gtk/empathy-account-widget-sip.glade.h:7
+msgid "STUN port:"
+msgstr "Port STUN:"
+
+#: ../libempathy-gtk/empathy-account-widget-sip.glade.h:8
+msgid "_Username:"
+msgstr "_Utilizator:"
+
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:4
+msgid "Use _Yahoo Japan"
+msgstr "Folosește _Yahoo Japonia"
+
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:5
+msgid "Yahoo I_D:"
+msgstr "I_D Yahoo:"
+
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:7
+msgid "_Ignore conference and chatroom invitations"
+msgstr "_Ignoră invitațiile la conferință și la grupuri de discuții"
+
+#: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:9
+msgid "_Room List locale:"
+msgstr "Limba listei de came_re:"
+
+#: ../libempathy-gtk/empathy-avatar-chooser.c:462
+#: ../libempathy-gtk/empathy-avatar-chooser.c:537
+msgid "Couldn't convert image"
+msgstr "Nu se poate converti imaginea"
+
+#: ../libempathy-gtk/empathy-avatar-chooser.c:463
+msgid "None of the accepted image formats is supported on your system"
+msgstr ""
+"Sistemul dumneavoastră nu suportă niciunul din formatele de imagine acceptate"
+
+#: ../libempathy-gtk/empathy-avatar-chooser.c:956
+msgid "Select Your Avatar Image"
+msgstr "Alegeți-vă avatarul"
+
+#: ../libempathy-gtk/empathy-avatar-chooser.c:959
+msgid "No Image"
+msgstr "Nicio imagine"
+
+#: ../libempathy-gtk/empathy-avatar-chooser.c:1021
+msgid "Images"
+msgstr "Imagini"
+
+#: ../libempathy-gtk/empathy-avatar-chooser.c:1025
+msgid "All Files"
+msgstr "Toate fișierele"
+
+#: ../libempathy-gtk/empathy-avatar-image.c:294
+msgid "Click to enlarge"
+msgstr "Clic pentru mărire"
+
+#: ../libempathy-gtk/empathy-chat.c:507
+msgid "offline"
+msgstr "deconectat"
+
+#: ../libempathy-gtk/empathy-chat.c:510
+msgid "invalid contact"
+msgstr "contact invalid"
+
+#: ../libempathy-gtk/empathy-chat.c:513
+msgid "permission denied"
+msgstr "permisiune respinsă"
+
+#: ../libempathy-gtk/empathy-chat.c:516
+msgid "too long message"
+msgstr "mesaj prea lung"
+
+#: ../libempathy-gtk/empathy-chat.c:519
+msgid "not implemented"
+msgstr "neimplementat"
+
+#: ../libempathy-gtk/empathy-chat.c:522
+msgid "unknown"
+msgstr "necunoscut"
+
+#: ../libempathy-gtk/empathy-chat.c:526
+#, c-format
+msgid "Error sending message '%s': %s"
+msgstr "Eroare la trimiterea mesajului „%s”: %s"
+
+#: ../libempathy-gtk/empathy-chat.c:556
+#, c-format
+msgid "Topic set to: %s"
+msgstr "Subiectul setat la: %s"
+
+#: ../libempathy-gtk/empathy-chat.c:558
+msgid "No topic defined"
+msgstr "Niciun subiect definit"
+
+#: ../libempathy-gtk/empathy-chat.c:973
+msgid "Insert Smiley"
+msgstr "Inserează o pictogramă simbolică"
+
+#. send button
+#: ../libempathy-gtk/empathy-chat.c:991
+#: ../libempathy-gtk/empathy-ui-utils.c:1526
+msgid "_Send"
+msgstr "_Trimite"
+
+#: ../libempathy-gtk/empathy-chat.c:1025
+msgid "_Check Word Spelling..."
+msgstr "Verifi_că ortografia..."
+
+#: ../libempathy-gtk/empathy-chat.c:1131
+#, c-format
+msgid "%s has joined the room"
+msgstr "%s a intrat în cameră"
+
+#: ../libempathy-gtk/empathy-chat.c:1134
+#, c-format
+msgid "%s has left the room"
+msgstr "%s a ieșit din cameră"
+
+#: ../libempathy-gtk/empathy-chat.c:1248 ../src/empathy-call-window.c:425
+msgid "Disconnected"
+msgstr "Deconectat"
+
+#: ../libempathy-gtk/empathy-chat.c:1644
+msgid "Connected"
+msgstr "Conectat"
+
+#: ../libempathy-gtk/empathy-chat.c:1694
+#: ../libempathy-gtk/empathy-log-window.c:505
+msgid "Conversation"
+msgstr "Conversație"
+
+#: ../libempathy-gtk/empathy-chat.glade.h:1
+msgid "<b>Topic:</b>"
+msgstr "<b>Subiect:</b>"
+
+#: ../libempathy-gtk/empathy-chat.glade.h:2
+msgid "Group Chat"
+msgstr "Discuție în grup"
+
+#: ../libempathy-gtk/empathy-chat-text-view.c:340
+msgid "_Copy Link Address"
+msgstr "_Copiază adresa legăturii"
+
+#: ../libempathy-gtk/empathy-chat-text-view.c:348
+msgid "_Open Link"
+msgstr "_Deschide legătura"
+
+#: ../libempathy-gtk/empathy-chat-text-view.c:439
+msgid "%A %d %B %Y"
+msgstr "%A %d %B %Y"
+
+#: ../libempathy-gtk/empathy-contact-dialogs.c:180
+msgid "Personal Information"
+msgstr "Informații personale"
+
+#: ../libempathy-gtk/empathy-contact-dialogs.c:183
+msgid "Edit Contact Information"
+msgstr "Editează informațiile de contact"
+
+#: ../libempathy-gtk/empathy-contact-dialogs.c:186
+msgid "Contact Information"
+msgstr "Informații de contact"
+
+#: ../libempathy-gtk/empathy-contact-dialogs.c:266
+msgid "I would like to add you to my contact list."
+msgstr "Aș dori să te adaug la lista mea de contacte."
+
+#: ../libempathy-gtk/empathy-contact-dialogs.c:290
+msgid "New Contact"
+msgstr "Contact nou"
+
+#: ../libempathy-gtk/empathy-contact-dialogs.glade.h:1
+msgid "Decide _Later"
+msgstr "_Decide mai târziu"
+
+#: ../libempathy-gtk/empathy-contact-dialogs.glade.h:2
+msgid "Subscription Request"
+msgstr "Cerere de abonare"
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:1244
+#, c-format
+msgid "Do you really want to remove the group '%s'?"
+msgstr "Sigur doriți să ștergeți grupul „%s”?"
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:1246
+msgid "Removing group"
+msgstr "Ștergere grup"
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:1293
+#: ../libempathy-gtk/empathy-contact-list-view.c:1372
+msgid "_Remove"
+msgstr "Ște_rge"
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:1323
+#, c-format
+msgid "Do you really want to remove the contact '%s'?"
+msgstr "Sigur doriți să ștergeți contactul „%s”?"
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:1325
+msgid "Removing contact"
+msgstr "Ștergere contact"
+
+#: ../libempathy-gtk/empathy-contact-list-view.c:1330
+msgid "Sorry, I don't want you in my contact list anymore."
+msgstr "Îmi pare rău, nu vreau să te mai am în lista mea de contacte."
+
+#: ../libempathy-gtk/empathy-contact-menu.c:121
+#: ../src/empathy-main-window.glade.h:9
+msgid "_Chat"
+msgstr "Dis_cuție"
+
+#: ../libempathy-gtk/empathy-contact-menu.c:142
+msgid "_Call"
+msgstr "_Apelează"
+
+#: ../libempathy-gtk/empathy-contact-menu.c:181
+#: ../src/empathy-main-window.glade.h:17
+msgid "_View Previous Conversations"
+msgstr "_Vezi conversațiile anterioare"
+
+#: ../libempathy-gtk/empathy-contact-menu.c:203
+msgid "Send file"
+msgstr "Trimite un fișier"
+
+#: ../libempathy-gtk/empathy-contact-menu.c:231
+msgid "Infor_mation"
+msgstr "Infor_mații"
+
+#: ../libempathy-gtk/empathy-contact-menu.c:258
+#: ../src/empathy-chat-window.glade.h:14 ../src/empathy-main-window.glade.h:11
+msgid "_Edit"
+msgstr "_Editare"
+
+#: ../libempathy-gtk/empathy-contact-menu.c:317
+msgid "Inviting to this room"
+msgstr "Invitare în această cameră"
+
+#: ../libempathy-gtk/empathy-contact-menu.c:350
+msgid "_Invite to chatroom"
+msgstr "_Invită într-o cameră"
+
+#: ../libempathy-gtk/empathy-contact-widget.c:358
+msgid "Save Avatar"
+msgstr "Salvează avatarul"
+
+#: ../libempathy-gtk/empathy-contact-widget.c:414
+msgid "Unable to save avatar"
+msgstr "Nu se poate salva avatarul"
+
+#: ../libempathy-gtk/empathy-contact-widget.c:895
+msgid "Select"
+msgstr "Selectează"
+
+#: ../libempathy-gtk/empathy-contact-widget.c:904
+#: ../src/empathy-main-window.c:974
+msgid "Group"
+msgstr "Grup"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:1
+msgid "<b>Client Information</b>"
+msgstr "<b>Informații despre client</b>"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:2
+msgid "<b>Contact Details</b>"
+msgstr "<b>Detaliile contactului</b>"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:3
+msgid "<b>Contact</b>"
+msgstr "<b>Contact</b>"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:4
+msgid "<b>Groups</b>"
+msgstr "<b>Grupuri</b>"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:5
+#: ../libempathy-gtk/empathy-new-message-dialog.glade.h:1
+#: ../src/empathy-chatrooms-window.glade.h:1
+#: ../src/empathy-new-chatroom-dialog.glade.h:1
+msgid "Account:"
+msgstr "Cont:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:6
+msgid "Alias:"
+msgstr "Alias:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:7
+msgid "Birthday:"
+msgstr "Zi de naștere:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:8
+msgid "Client:"
+msgstr "Client:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:9
+msgid "Contact information"
+msgstr "Informații despre contact"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:10
+msgid "Email:"
+msgstr "Email:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:11
+msgid "Fullname:"
+msgstr "Nume întreg:"
+
+#. Identifier to connect to Instant Messaging network
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:13
+msgid "Identifier:"
+msgstr "Identificator:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:14
+msgid "Information requested..."
+msgstr "Informații cerute..."
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:15
+msgid "OS:"
+msgstr "SO:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:16
+msgid ""
+"Select the groups you want this contact to appear in.  Note that you can "
+"select more than one group or no groups."
+msgstr ""
+"Selectați grupurile în care doriți să apară acest contact. Rețineți că puteți "
+"selecta mai mult de un grup sau niciun grup."
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:17
+msgid "Version:"
+msgstr "Versiune:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:18
+msgid "Web site:"
+msgstr "Sait web:"
+
+#: ../libempathy-gtk/empathy-contact-widget.glade.h:19
+msgid "_Add Group"
+msgstr "_Adaugă un grup"
+
+#: ../libempathy-gtk/empathy-irc-network-dialog.c:284
+msgid "new server"
+msgstr "server nou"
+
+#: ../libempathy-gtk/empathy-irc-network-dialog.c:513
+msgid "Server"
+msgstr "Server"
+
+#: ../libempathy-gtk/empathy-irc-network-dialog.c:528
+msgid "Port"
+msgstr "Port"
+
+#: ../libempathy-gtk/empathy-irc-network-dialog.c:541
+msgid "SSL"
+msgstr "SSL"
+
+#: ../libempathy-gtk/empathy-log-window.c:498
+#: ../src/empathy-import-dialog.c:276
+msgid "Account"
+msgstr "Cont"
+
+#: ../libempathy-gtk/empathy-log-window.c:515
+msgid "Date"
+msgstr "Data"
+
+#. Tab Label
+#: ../libempathy-gtk/empathy-log-window.glade.h:2
+msgid "Conversations"
+msgstr "Conversații"
+
+#: ../libempathy-gtk/empathy-log-window.glade.h:3
+msgid "Previous Conversations"
+msgstr "Conversații anterioare"
+
+#. Tab Label
+#: ../libempathy-gtk/empathy-log-window.glade.h:5
+msgid "Search"
+msgstr "Caută"
+
+#. Searching *for* something
+#: ../libempathy-gtk/empathy-log-window.glade.h:7
+msgid "_For:"
+msgstr "_După:"
+
+#: ../libempathy-gtk/empathy-new-message-dialog.glade.h:2
+msgid "C_all"
+msgstr "_Apelează"
+
+#: ../libempathy-gtk/empathy-new-message-dialog.glade.h:3
+msgid "C_hat"
+msgstr "_Discută"
+
+#: ../libempathy-gtk/empathy-new-message-dialog.glade.h:4
+msgid "Contact ID:"
+msgstr "ID contact:"
+
+#: ../libempathy-gtk/empathy-new-message-dialog.glade.h:5
+msgid "New Conversation"
+msgstr "Conversație nouă"
+
+#. Custom messages
+#: ../libempathy-gtk/empathy-presence-chooser.c:685
+msgid "Custom messages..."
+msgstr "Mesaje personalizate..."
+
+#: ../libempathy-gtk/empathy-presence-chooser.glade.h:1
+msgid "Custom message"
+msgstr "Mesaj personalizat"
+
+#: ../libempathy-gtk/empathy-presence-chooser.glade.h:2
+msgid "Message:"
+msgstr "Mesaj:"
+
+#: ../libempathy-gtk/empathy-presence-chooser.glade.h:3
+msgid "Save message"
+msgstr "Salvează mesajul"
+
+#: ../libempathy-gtk/empathy-presence-chooser.glade.h:4
+msgid "Status:"
+msgstr "Stare:"
+
+#: ../libempathy-gtk/empathy-spell-dialog.c:88
+msgid "Word"
+msgstr "Cuvânt"
+
+#: ../libempathy-gtk/empathy-spell-dialog.c:265
+msgid "Suggestions for the word"
+msgstr "Sugestii pentru cuvânt"
+
+#: ../libempathy-gtk/empathy-spell-dialog.glade.h:1
+msgid "Spell Checker"
+msgstr "Corector ortografic"
+
+#: ../libempathy-gtk/empathy-spell-dialog.glade.h:2
+msgid "Suggestions for the word:"
+msgstr "Sugestii pentru cuvânt:"
+
+#: ../libempathy-gtk/empathy-theme-manager.c:60
+msgid "Classic"
+msgstr "Clasic"
+
+#: ../libempathy-gtk/empathy-theme-manager.c:61
+msgid "Simple"
+msgstr "Simplu"
+
+#: ../libempathy-gtk/empathy-theme-manager.c:62
+msgid "Clean"
+msgstr "Curat"
+
+#: ../libempathy-gtk/empathy-theme-manager.c:63
+msgid "Blue"
+msgstr "Albastru"
+
+#: ../libempathy-gtk/empathy-ui-utils.c:1373
+msgid "Unable to open URI"
+msgstr "Nu se poate deschide URI"
+
+#: ../libempathy-gtk/empathy-ui-utils.c:1518
+msgid "Select a file"
+msgstr "Selectați un fișier"
+
+#: ../libempathy-gtk/empathy-ui-utils.c:1554
+msgid "Received an instant message"
+msgstr "Ați primit un mesaj instant"
+
+#: ../libempathy-gtk/empathy-ui-utils.c:1556
+msgid "Sent an instant message"
+msgstr "S-a trimis un mesaj instant"
+
+#: ../libempathy-gtk/empathy-ui-utils.c:1558
+msgid "Incoming chat request"
+msgstr "Cerere de începere a unei discuții"
+
+#: ../libempathy-gtk/empathy-ui-utils.c:1560
+msgid "Contact connected"
+msgstr "Contact conectat"
+
+#: ../libempathy-gtk/empathy-ui-utils.c:1562
+msgid "Contact disconnected"
+msgstr "Contact deconectat"
+
+#: ../libempathy-gtk/empathy-ui-utils.c:1564
+msgid "Connected to server"
+msgstr "Conectat la server"
+
+#: ../libempathy-gtk/empathy-ui-utils.c:1566
+msgid "Disconnected from server"
+msgstr "Deconectat de la server"
+
+#: ../libempathy-gtk/empathy-ui-utils.c:1568
+msgid "Incoming voice call"
+msgstr "Primiți un apel vocal"
+
+#: ../libempathy-gtk/empathy-ui-utils.c:1570
+msgid "Outgoing voice call"
+msgstr "Ați lansat un apel vocal"
+
+#: ../libempathy-gtk/empathy-ui-utils.c:1572
+msgid "Voice call ended"
+msgstr "Apelul vocal s-a terminat"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:158
+msgid "Current Locale"
+msgstr "Localizarea curentă"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:161
+#: ../libempathy-gtk/totem-subtitle-encoding.c:163
+#: ../libempathy-gtk/totem-subtitle-encoding.c:165
+#: ../libempathy-gtk/totem-subtitle-encoding.c:167
+msgid "Arabic"
+msgstr "Arabă"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:170
+msgid "Armenian"
+msgstr "Armeană"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:173
+#: ../libempathy-gtk/totem-subtitle-encoding.c:175
+#: ../libempathy-gtk/totem-subtitle-encoding.c:177
+msgid "Baltic"
+msgstr "Baltică"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:180
+msgid "Celtic"
+msgstr "Celtică"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:183
+#: ../libempathy-gtk/totem-subtitle-encoding.c:185
+#: ../libempathy-gtk/totem-subtitle-encoding.c:187
+#: ../libempathy-gtk/totem-subtitle-encoding.c:189
+msgid "Central European"
+msgstr "Central europeană"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:192
+#: ../libempathy-gtk/totem-subtitle-encoding.c:194
+#: ../libempathy-gtk/totem-subtitle-encoding.c:196
+#: ../libempathy-gtk/totem-subtitle-encoding.c:198
+msgid "Chinese Simplified"
+msgstr "Chineză simplificată"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:201
+#: ../libempathy-gtk/totem-subtitle-encoding.c:203
+#: ../libempathy-gtk/totem-subtitle-encoding.c:205
+msgid "Chinese Traditional"
+msgstr "Chineză tradițională"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:208
+msgid "Croatian"
+msgstr "Croată"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:211
+#: ../libempathy-gtk/totem-subtitle-encoding.c:213
+#: ../libempathy-gtk/totem-subtitle-encoding.c:215
+#: ../libempathy-gtk/totem-subtitle-encoding.c:217
+#: ../libempathy-gtk/totem-subtitle-encoding.c:219
+#: ../libempathy-gtk/totem-subtitle-encoding.c:221
+msgid "Cyrillic"
+msgstr "Chirilică"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:224
+msgid "Cyrillic/Russian"
+msgstr "Chirilică/Rusă"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:227
+#: ../libempathy-gtk/totem-subtitle-encoding.c:229
+msgid "Cyrillic/Ukrainian"
+msgstr "Chirilică/Ucraineană"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:232
+msgid "Georgian"
+msgstr "Georgiană"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:235
+#: ../libempathy-gtk/totem-subtitle-encoding.c:237
+#: ../libempathy-gtk/totem-subtitle-encoding.c:239
+msgid "Greek"
+msgstr "Greacă"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:242
+msgid "Gujarati"
+msgstr "Gujarati"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:245
+msgid "Gurmukhi"
+msgstr "Gurmukhi"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:248
+#: ../libempathy-gtk/totem-subtitle-encoding.c:250
+#: ../libempathy-gtk/totem-subtitle-encoding.c:252
+#: ../libempathy-gtk/totem-subtitle-encoding.c:254
+msgid "Hebrew"
+msgstr "Ebraică"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:257
+msgid "Hebrew Visual"
+msgstr "Ebraică vizuală"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:260
+msgid "Hindi"
+msgstr "Hindusă"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:263
+msgid "Icelandic"
+msgstr "Islandeză"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:266
+#: ../libempathy-gtk/totem-subtitle-encoding.c:268
+#: ../libempathy-gtk/totem-subtitle-encoding.c:270
+msgid "Japanese"
+msgstr "Japoneză"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:273
+#: ../libempathy-gtk/totem-subtitle-encoding.c:275
+#: ../libempathy-gtk/totem-subtitle-encoding.c:277
+#: ../libempathy-gtk/totem-subtitle-encoding.c:279
+msgid "Korean"
+msgstr "Coreeană"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:282
+msgid "Nordic"
+msgstr "Nordică"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:285
+msgid "Persian"
+msgstr "Persiană"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:288
+#: ../libempathy-gtk/totem-subtitle-encoding.c:290
+msgid "Romanian"
+msgstr "Română"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:293
+msgid "South European"
+msgstr "Sud europeană"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:296
+msgid "Thai"
+msgstr "Tailandeză"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:299
+#: ../libempathy-gtk/totem-subtitle-encoding.c:301
+#: ../libempathy-gtk/totem-subtitle-encoding.c:303
+#: ../libempathy-gtk/totem-subtitle-encoding.c:305
+msgid "Turkish"
+msgstr "Turcă"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:308
+#: ../libempathy-gtk/totem-subtitle-encoding.c:310
+#: ../libempathy-gtk/totem-subtitle-encoding.c:312
+#: ../libempathy-gtk/totem-subtitle-encoding.c:314
+#: ../libempathy-gtk/totem-subtitle-encoding.c:316
+msgid "Unicode"
+msgstr "Unicode"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:319
+#: ../libempathy-gtk/totem-subtitle-encoding.c:321
+#: ../libempathy-gtk/totem-subtitle-encoding.c:323
+#: ../libempathy-gtk/totem-subtitle-encoding.c:325
+#: ../libempathy-gtk/totem-subtitle-encoding.c:327
+msgid "Western"
+msgstr "Occidentală"
+
+#: ../libempathy-gtk/totem-subtitle-encoding.c:330
+#: ../libempathy-gtk/totem-subtitle-encoding.c:332
+#: ../libempathy-gtk/totem-subtitle-encoding.c:334
+msgid "Vietnamese"
+msgstr "Vietnameză"
+
+#.
+#. * vim: sw=2 ts=8 cindent noai bs=2
+#.
+#: ../megaphone/data/GNOME_Megaphone_Applet.schemas.in.h:1
+msgid ""
+"The contact to display in the applet. Empty means no contact is displayed."
+msgstr "Contactul de afișat în applet. Gol înseamnă niciun contact afișat."
+
+#: ../megaphone/data/GNOME_Megaphone_Applet.schemas.in.h:2
+msgid "The contact's avatar token. Empty means contact has no avatar."
+msgstr "Avatarul contactului. Gol înseamnă că nu are niciun avatar."
+
+#: ../megaphone/data/GNOME_Megaphone_Applet.server.in.in.h:1
+msgid "Megaphone"
+msgstr "Megaphone"
+
+#: ../megaphone/data/GNOME_Megaphone_Applet.server.in.in.h:2
+#: ../megaphone/src/megaphone-applet.c:417
+msgid "Talk!"
+msgstr "Talk!"
+
+#: ../megaphone/data/GNOME_Megaphone_Applet.xml.h:1
+#: ../nothere/data/GNOME_NotHere_Applet.xml.h:1
+msgid "_About"
+msgstr "_Despre"
+
+#: ../megaphone/data/GNOME_Megaphone_Applet.xml.h:2
+msgid "_Information"
+msgstr "_Informații"
+
+#: ../megaphone/data/GNOME_Megaphone_Applet.xml.h:3
+#: ../src/empathy-main-window.glade.h:15
+msgid "_Preferences"
+msgstr "_Preferințe"
+
+#: ../megaphone/src/megaphone-applet.c:255
+msgid "Please configure a contact."
+msgstr "Vă rugăm să configurați un contact."
+
+#: ../megaphone/src/megaphone-applet.c:348
+msgid "Select contact..."
+msgstr "Selectați contactul..."
+
+#: ../nothere/data/GNOME_NotHere_Applet.server.in.in.h:1
+msgid "Presence"
+msgstr "Prezență"
+
+#: ../nothere/data/GNOME_NotHere_Applet.server.in.in.h:2
+#: ../nothere/src/nothere-applet.c:106
+msgid "Set your own presence"
+msgstr "Setați-vă prezența"
+
+#: ../src/empathy.c:402
+msgid "Don't connect on startup"
+msgstr "Nu te conecta la pornire"
+
+#: ../src/empathy.c:406
+msgid "Don't show the contact list on startup"
+msgstr "Nu arăta lista de contacte la pornire"
+
+#: ../src/empathy.c:410
+msgid "Show the accounts dialog"
+msgstr "Arată dialoguri cu conturile"
+
+#: ../src/empathy.c:418
+msgid "- Empathy Instant Messenger"
+msgstr "- Empathy, mesagerie instantă"
+
+#: ../src/empathy-about-dialog.c:84
+msgid ""
+"Empathy is free software; you can redistribute it and/or modify it under the "
+"terms of the GNU General Public License as published by the Free Software "
+"Foundation; either version 2 of the License, or (at your option) any later "
+"version."
+msgstr ""
+"Empathy este software liber; îl puteți redistribui și/sau modifica respectând "
+"termenii licenței GNU General Public License precum este publicată de "
+"fundația Free Software Foundation; fie versiunea 2 a licenței sau, dacă "
+"doriți, o versiune ulterioară."
+
+#: ../src/empathy-about-dialog.c:88
+msgid ""
+"Empathy is distributed in the hope that it will be useful, but WITHOUT ANY "
+"WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR "
+"A PARTICULAR PURPOSE.  See the GNU General Public License for more details."
+msgstr ""
+"Empathy este distribuit cu speranța că va fi de folos, dar FĂRĂ NICIO "
+"GARANȚIE; chiar fără garanția impusă de VANDABILITATE sau CONFORMITATE PENTRU "
+"UN ANUMIT SCOP. Vedeți textul licenței GNU General Public License pentru mai "
+"multe detalii."
+
+#: ../src/empathy-about-dialog.c:92
+msgid ""
+"You should have received a copy of the GNU General Public License along with "
+"Empathy; if not, write to the Free Software Foundation, Inc., 51 Franklin "
+"Street, Fifth Floor, Boston, MA 02110-130159 USA"
+msgstr ""
+"Ar trebui să fi primit o copie a licenței GNU General Public License împreună "
+"cu Empathy; dacă nu, scrieți fundației Free Software Foundation, Inc., 51 "
+"Franklin Street, Fifth Floor, Boston, MA 02110-130159 USA"
+
+#: ../src/empathy-about-dialog.c:120
+msgid "An Instant Messaging client for GNOME"
+msgstr "Un client de mesagerie instantă pentru GNOME"
+
+#: ../src/empathy-about-dialog.c:126
+msgid "translator-credits"
+msgstr "Alexandru Szasz <alexxed@gmail.com>"
+
+#: ../src/empathy-accounts-dialog.c:391
+msgid "Enabled"
+msgstr "Activ"
+
+#: ../src/empathy-accounts-dialog.c:401
+#: ../src/empathy-accounts-dialog.glade.h:4
+msgid "Accounts"
+msgstr "Conturi"
+
+#. To translator: %s is the protocol name
+#: ../src/empathy-accounts-dialog.c:833
+#, c-format
+msgid "New %s account"
+msgstr "Cont nou de %s"
+
+#: ../src/empathy-accounts-dialog.c:943
+#, c-format
+msgid ""
+"You are about to remove your %s account!\n"
+"Are you sure you want to proceed?"
+msgstr ""
+"Sunteți pe cale să eliminați contul %s!\n"
+"Sigur doriți să continuați?"
+
+#: ../src/empathy-accounts-dialog.c:949
+msgid ""
+"Any associated conversations and chat rooms will NOT be removed if you decide "
+"to proceed.\n"
+"\n"
+"Should you decide to add the account back at a later time, they will still be "
+"available."
+msgstr ""
+"Orice conversații asociate și camere de discuții NU vor fi șterse dacă "
+"decideți să continuați.\n"
+"\n"
+"Dacă decideți să adăugați contul din nou, ele vor fi încă disponibile."
+
+#: ../src/empathy-accounts-dialog.glade.h:1
+msgid "<b>New Account</b>"
+msgstr "<b>Cont nou</b>"
+
+#: ../src/empathy-accounts-dialog.glade.h:2
+msgid "<b>No protocol installed</b>"
+msgstr "<b>Niciun protocol instalat</b>"
+
+#: ../src/empathy-accounts-dialog.glade.h:3
+msgid "<b>Settings</b>"
+msgstr "<b>Setări</b>"
+
+#: ../src/empathy-accounts-dialog.glade.h:5
+msgid "Cr_eate"
+msgstr "Cr_eează"
+
+#: ../src/empathy-accounts-dialog.glade.h:6
+msgid "I already have an account I want to use"
+msgstr "Am deja un cont pe care vreau să-l folosesc"
+
+#: ../src/empathy-accounts-dialog.glade.h:7
+msgid "Import Accounts..."
+msgstr "Importă conturi..."
+
+#: ../src/empathy-accounts-dialog.glade.h:8
+msgid ""
+"To add a new account, you first have to install a backend for each protocol "
+"you want to use."
+msgstr ""
+"Pentru a adăuga un cont nou, trebuie să instalați întâi suportul pentru "
+"fiecare protocol pe care doriți să-l folosiți."
+
+#: ../src/empathy-accounts-dialog.glade.h:9
+msgid "Type:"
+msgstr "Tip:"
+
+#: ../src/empathy-call-window.c:143
+msgid "Closed"
+msgstr "Închis"
+
+#: ../src/empathy-call-window.c:263
+msgid "End this call?"
+msgstr "Încheiați acest apel?"
+
+#: ../src/empathy-call-window.c:265
+msgid "Closing this window will end the call in progress."
+msgstr "Închiderea acestei ferestre duce la încheierea apelului în desfășurare."
+
+#: ../src/empathy-call-window.c:266
+msgid "_End Call"
+msgstr "T_ermină convorbirea"
+
+#: ../src/empathy-call-window.c:320
+msgid "Incoming call"
+msgstr "Apel primit"
+
+#: ../src/empathy-call-window.c:322
+#, c-format
+msgid "%s is calling you, do you want to answer?"
+msgstr "%s vă sună, doriți să răspundeți?"
+
+#: ../src/empathy-call-window.c:328
+msgid "_Reject"
+msgstr "_Respinge"
+
+#: ../src/empathy-call-window.c:333
+msgid "_Answer"
+msgstr "_Răspunde"
+
+#: ../src/empathy-call-window.c:388
+msgid "Empathy Call"
+msgstr "Apel Empathy"
+
+#. To translators: Readying is the first state of the call, it is
+#. * preparing the connection and it does not yet ring.
+#: ../src/empathy-call-window.c:391
+msgid "Readying"
+msgstr "Pregătire"
+
+#: ../src/empathy-call-window.c:400
+#, c-format
+msgid "%s - Empathy Call"
+msgstr "%s - Apel Empathy"
+
+#: ../src/empathy-call-window.c:404
+msgid "Ringing"
+msgstr "Sună"
+
+#: ../src/empathy-call-window.c:427
+msgid "Connecting"
+msgstr "Conectare"
+
+#: ../src/empathy-call-window.c:545
+#, c-format
+msgid "Incoming call from %s rejected because there is already a running call."
+msgstr ""
+"Apelul venit de la %s a fost respins pentru că există deja un apel în "
+"derulare."
+
+#: ../src/empathy-call-window.glade.h:1
+msgid "#"
+msgstr "#"
+
+#: ../src/empathy-call-window.glade.h:2
+msgid "*"
+msgstr "*"
+
+#: ../src/empathy-call-window.glade.h:3
+msgid "0"
+msgstr "0"
+
+#: ../src/empathy-call-window.glade.h:4
+msgid "1"
+msgstr "1"
+
+#: ../src/empathy-call-window.glade.h:5
+msgid "2"
+msgstr "2"
+
+#: ../src/empathy-call-window.glade.h:6
+msgid "3"
+msgstr "3"
+
+#: ../src/empathy-call-window.glade.h:7
+msgid "4"
+msgstr "4"
+
+#: ../src/empathy-call-window.glade.h:8
+msgid "5"
+msgstr "5"
+
+#: ../src/empathy-call-window.glade.h:9
+msgid "6"
+msgstr "6"
+
+#: ../src/empathy-call-window.glade.h:10
+msgid "7"
+msgstr "7"
+
+#: ../src/empathy-call-window.glade.h:11
+msgid "8"
+msgstr "8"
+
+#: ../src/empathy-call-window.glade.h:12
+msgid "9"
+msgstr "9"
+
+#. To translators: The keypad is numbers [0-9], asterisk (*) and hash (#). Presented like on any phone
+#: ../src/empathy-call-window.glade.h:14
+msgid "<b>Keypad</b>"
+msgstr "<b>Tastatură numerică</b>"
+
+#: ../src/empathy-call-window.glade.h:15
+msgid "<b>Volume</b>"
+msgstr "<b>Volum</b>"
+
+#: ../src/empathy-call-window.glade.h:16
+msgid "Hang Up"
+msgstr "Închide"
+
+#: ../src/empathy-call-window.glade.h:17
+msgid "Send Video"
+msgstr "Trimite video"
+
+#: ../src/empathy-chat-window.c:310
+#, c-format
+msgid "Conversations (%d)"
+msgstr "Conversații (%d)"
+
+#: ../src/empathy-chat-window.c:415
+msgid "Topic:"
+msgstr "Subiect:"
+
+#: ../src/empathy-chat-window.c:420
+msgid "Typing a message."
+msgstr "Scrie un mesaj."
+
+#: ../src/empathy-chat-window.glade.h:1
+msgid "C_lear"
+msgstr "_Curăță"
+
+#: ../src/empathy-chat-window.glade.h:2
+msgid "Chat"
+msgstr "Discută"
+
+#: ../src/empathy-chat-window.glade.h:3
+msgid "Insert _Smiley"
+msgstr "In_serează o pictogramă simbolică"
+
+#: ../src/empathy-chat-window.glade.h:4
+msgid "Invitation _message:"
+msgstr "_Mesajul invitației:"
+
+#: ../src/empathy-chat-window.glade.h:5
+msgid "Invite"
+msgstr "Invită"
+
+#: ../src/empathy-chat-window.glade.h:6
+msgid "Move Tab _Left"
+msgstr "Mută tabu_l în stânga"
+
+#: ../src/empathy-chat-window.glade.h:7
+msgid "Move Tab _Right"
+msgstr "Mută tabul în d_reapta"
+
+#: ../src/empathy-chat-window.glade.h:8
+msgid "Select who would you like to invite:"
+msgstr "Selectați pe cine doriți să invitați:"
+
+#: ../src/empathy-chat-window.glade.h:9
+msgid "You have been invited to join a chat conference."
+msgstr "Ați fost invitat să vă alăturați unei conferințe."
+
+#: ../src/empathy-chat-window.glade.h:10
+msgid "_Contact"
+msgstr "_Contact"
+
+#: ../src/empathy-chat-window.glade.h:11 ../src/empathy-main-window.glade.h:10
+msgid "_Contents"
+msgstr "_Manual"
+
+#: ../src/empathy-chat-window.glade.h:12
+msgid "_Conversation"
+msgstr "_Conversație"
+
+#: ../src/empathy-chat-window.glade.h:13
+msgid "_Detach Tab"
+msgstr "_Detașează tabul"
+
+#: ../src/empathy-chat-window.glade.h:15
+msgid "_Favorite Chatroom"
+msgstr "Cameră de discuții _favorită"
+
+#: ../src/empathy-chat-window.glade.h:16 ../src/empathy-main-window.glade.h:12
+msgid "_Help"
+msgstr "_Ajutor"
+
+#: ../src/empathy-chat-window.glade.h:17
+msgid "_Next Tab"
+msgstr "_Tabul următor"
+
+#: ../src/empathy-chat-window.glade.h:18
+msgid "_Previous Tab"
+msgstr "Tabul _precedent"
+
+#: ../src/empathy-chat-window.glade.h:19
+msgid "_Tabs"
+msgstr "_Taburi"
+
+#: ../src/empathy-chatrooms-window.c:262
+msgid "Name"
+msgstr "Nume"
+
+#: ../src/empathy-chatrooms-window.c:280
+msgid "Room"
+msgstr "Cameră"
+
+#: ../src/empathy-chatrooms-window.c:289
+msgid "Auto-Connect"
+msgstr "Conectare automată"
+
+#: ../src/empathy-chatrooms-window.glade.h:2
+msgid "Edit Favorite Room"
+msgstr "Editează camera favorită"
+
+#: ../src/empathy-chatrooms-window.glade.h:3
+msgid "Join room on start_up"
+msgstr "_Intră în cameră la pornire"
+
+#: ../src/empathy-chatrooms-window.glade.h:4
+msgid "Join this chat room when Empathy starts and you are connected"
+msgstr ""
+"Intră în această cameră de discuții când este pornit Empathy și sunteți "
+"conectat"
+
+#: ../src/empathy-chatrooms-window.glade.h:5
+msgid "Manage Favorite Rooms"
+msgstr "Gestionează camerele favorite"
+
+#: ../src/empathy-chatrooms-window.glade.h:6
+msgid "N_ame:"
+msgstr "_Nume:"
+
+#: ../src/empathy-chatrooms-window.glade.h:7
+msgid "S_erver:"
+msgstr "S_erver:"
+
+#: ../src/empathy-chatrooms-window.glade.h:9
+#: ../src/empathy-new-chatroom-dialog.glade.h:9
+msgid "_Room:"
+msgstr "Came_ră:"
+
+#: ../src/empathy-event-manager.c:192
+#, c-format
+msgid ""
+"New message from %s:\n"
+"%s"
+msgstr ""
+"Mesaj nou de la %s:\n"
+"%s"
+
+#: ../src/empathy-event-manager.c:260
+#, c-format
+msgid "Incoming call from %s"
+msgstr "Apel primit de la %s"
+
+#: ../src/empathy-event-manager.c:309
+#, c-format
+msgid ""
+"%s is offering you an invitation. An external application will be started to "
+"handle it."
+msgstr ""
+"%s vă oferă o invitație. Se va porni o aplicație externă pentru gestionarea "
+"ei."
+
+#: ../src/empathy-event-manager.c:316
+#, c-format
+msgid ""
+"%s is offering you an invitation, but you don't have the needed external "
+"application to handle it."
+msgstr ""
+"%s vă oferă o invitație, dar nu aveți aplicația externă necesară manipulării "
+"ei."
+
+#: ../src/empathy-event-manager.c:451
+#, c-format
+msgid "Incoming file transfer from %s"
+msgstr "Transfer de fișiere primit de la %s"
+
+#: ../src/empathy-event-manager.c:541
+#, c-format
+msgid "Subscription requested by %s"
+msgstr "Abonare cerută de %s"
+
+#: ../src/empathy-event-manager.c:545
+#, c-format
+msgid ""
+"\n"
+"Message: %s"
+msgstr ""
+"\n"
+"Mesaj: %s"
+
+#: ../src/empathy-ft-manager.c:113
+#, c-format
+msgid "%u:%02u.%02u"
+msgstr "%u:%02u.%02u"
+
+#: ../src/empathy-ft-manager.c:115
+#, c-format
+msgid "%02u.%02u"
+msgstr "%02u.%02u"
+
+#: ../src/empathy-ft-manager.c:164
+msgid "No reason was specified"
+msgstr "Nu a fost specificat vreun motiv"
+
+#: ../src/empathy-ft-manager.c:166
+msgid "The change in state was requested"
+msgstr "S-a cerut schimbarea de stare"
+
+#: ../src/empathy-ft-manager.c:168
+msgid "You canceled the file transfer"
+msgstr "Ați anulat transferul de fișiere"
+
+#: ../src/empathy-ft-manager.c:170
+msgid "The other participant canceled the file transfer"
+msgstr "Celălalt participant a anulat transferul de fișiere"
+
+#: ../src/empathy-ft-manager.c:172
+msgid "Error while trying to transfer the file"
+msgstr "Eroare la încercarea de a transfera fișierul"
+
+#: ../src/empathy-ft-manager.c:174
+msgid "The other participant is unable to transfer the file"
+msgstr "Celălalt participant nu poate transfera fișierul"
+
+#: ../src/empathy-ft-manager.c:176
+msgid "Unknown reason"
+msgstr "Motiv necunoscut"
+
+#. translators: first %s is filename, second %s is the contact name
+#: ../src/empathy-ft-manager.c:224
+#, c-format
+msgid "Receiving \"%s\" from %s"
+msgstr "Se primește „%s” de la %s"
+
+#. translators: first %s is filename, second %s is the contact name
+#: ../src/empathy-ft-manager.c:227
+#, c-format
+msgid "Sending \"%s\" to %s"
+msgstr "Se trimite „%s” la %s"
+
+#: ../src/empathy-ft-manager.c:237
+msgctxt "file size"
+msgid "Unknown"
+msgstr "Necunoscut"
+
+#. translators: first %s is the transferred size, second %s is
+#. * the total file size
+#: ../src/empathy-ft-manager.c:245
+#, c-format
+msgid "%s of %s"
+msgstr "%s din %s"
+
+#: ../src/empathy-ft-manager.c:252
+msgid "Waiting the other participant's response"
+msgstr "Se așteaptă după răspunsul participantului"
+
+#: ../src/empathy-ft-manager.c:262
+#, c-format
+msgid "\"%s\" received from %s"
+msgstr "„%s” primit de la %s"
+
+#: ../src/empathy-ft-manager.c:268
+#, c-format
+msgid "\"%s\" sent to %s"
+msgstr "„%s” trimis către %s"
+
+#: ../src/empathy-ft-manager.c:271
+msgid "File transfer completed"
+msgstr "Transfer de fișiere încheiat"
+
+#: ../src/empathy-ft-manager.c:280
+#, c-format
+msgid "\"%s\" receiving from %s"
+msgstr "„%s” primește de la %s"
+
+#: ../src/empathy-ft-manager.c:286
+#, c-format
+msgid "\"%s\" sending to %s"
+msgstr "„%s” trimite către %s"
+
+#: ../src/empathy-ft-manager.c:289
+#, c-format
+msgid "File transfer canceled: %s"
+msgstr "Transfer de fișiere anulat: %s"
+
+#: ../src/empathy-ft-manager.c:304
+msgctxt "remaining time"
+msgid "Unknown"
+msgstr "Necunoscut"
+
+#: ../src/empathy-ft-manager.c:364
+msgctxt "file transfer percent"
+msgid "Unknown"
+msgstr "Necunoscut"
+
+#: ../src/empathy-ft-manager.c:700
+msgid "%"
+msgstr "%"
+
+#: ../src/empathy-ft-manager.c:712
+msgid "File"
+msgstr "Fișier"
+
+#: ../src/empathy-ft-manager.c:734
+msgid "Remaining"
+msgstr "Încă"
+
+#: ../src/empathy-ft-manager.c:885
+msgid "Cannot save file to this location"
+msgstr "Nu se poate salva fișierul în locul acesta"
+
+#: ../src/empathy-ft-manager.c:931
+msgid "Save file as..."
+msgstr "Salvează fișierul ca..."
+
+#: ../src/empathy-ft-manager.c:1001
+msgid "unknown size"
+msgstr "mărime necunoscută"
+
+#: ../src/empathy-ft-manager.c:1007
+#, c-format
+msgid "%s would like to send you a file"
+msgstr "%s ar dori să vă trimită un fișier"
+
+#: ../src/empathy-ft-manager.c:1012
+#, c-format
+msgid "Do you want to accept the file \"%s\" (%s)?"
+msgstr "Doriți să acceptați fișierul „%s” (%s)?"
+
+#. Decline button
+#: ../src/empathy-ft-manager.c:1021
+msgid "_Decline"
+msgstr "_Refuză"
+
+#. Accept button
+#: ../src/empathy-ft-manager.c:1030
+msgid "_Accept"
+msgstr "_Acceptă"
+
+#: ../src/empathy-ft-manager.glade.h:1
+msgid "File transfers"
+msgstr "Transferuri de fișiere"
+
+#: ../src/empathy-ft-manager.glade.h:2
+msgid "Remove completed, canceled and failed file transfers from the list"
+msgstr ""
+"Elimină transferurile complete, anulate și eșuate din lista de transferuri"
+
+#: ../src/empathy-import-dialog.c:254
+msgid "Import"
+msgstr "Import"
+
+#: ../src/empathy-import-dialog.c:263
+msgid "Protocol"
+msgstr "Protocol"
+
+#: ../src/empathy-import-dialog.c:289
+msgid "Source"
+msgstr "Sursă"
+
+#: ../src/empathy-import-dialog.c:377
+msgid ""
+"No accounts to import could be found. Empathy currently only supports "
+"importing accounts from Pidgin."
+msgstr ""
+"Nu s-au găsit conturi de importat. Empathy suportă actualmente importul de "
+"conturi din Pidgin."
+
+#: ../src/empathy-import-dialog.glade.h:1
+msgid "Import Accounts"
+msgstr "Importă conturi"
+
+#: ../src/empathy-main-window.c:388
+msgid "No error specified"
+msgstr "Nicio eroare specificată"
+
+#: ../src/empathy-main-window.c:391
+msgid "Network error"
+msgstr "Eroare de rețea"
+
+#: ../src/empathy-main-window.c:394
+msgid "Authentication failed"
+msgstr "Autentificare eșuată"
+
+#: ../src/empathy-main-window.c:397
+msgid "Encryption error"
+msgstr "Eroare de criptare"
+
+#: ../src/empathy-main-window.c:400
+msgid "Name in use"
+msgstr "Nume în uz"
+
+#: ../src/empathy-main-window.c:403
+msgid "Certificate not provided"
+msgstr "Nu s-a furnizat un certificat"
+
+#: ../src/empathy-main-window.c:406
+msgid "Certificate untrusted"
+msgstr "Certificatul nu e de încredere"
+
+#: ../src/empathy-main-window.c:409
+msgid "Certificate expired"
+msgstr "Certificat expirat"
+
+#: ../src/empathy-main-window.c:412
+msgid "Certificate not activated"
+msgstr "Certificat inactiv"
+
+#: ../src/empathy-main-window.c:415
+msgid "Certificate hostname mismatch"
+msgstr "Nepotrivire de nume de gazdă în certificat"
+
+#: ../src/empathy-main-window.c:418
+msgid "Certificate fingerprint mismatch"
+msgstr "Nepotrivire de amprentă în certificat"
+
+#: ../src/empathy-main-window.c:421
+msgid "Certificate self-signed"
+msgstr "Certificat semnat de el însuși"
+
+#: ../src/empathy-main-window.c:424
+msgid "Certificate error"
+msgstr "Eroare de certificat"
+
+#: ../src/empathy-main-window.c:427
+msgid "Unknown error"
+msgstr "Eroare necunoscută"
+
+#: ../src/empathy-main-window.c:585
+msgid "Show and edit accounts"
+msgstr "Arată și editează conturile"
+
+#: ../src/empathy-main-window.c:957
+msgid "Contact"
+msgstr "Contact"
+
+#: ../src/empathy-main-window.c:1159
+msgid "_Edit account"
+msgstr "_Editează contul"
+
+#: ../src/empathy-main-window.glade.h:1
+msgid "Contact List"
+msgstr "Listă de contacte"
+
+#: ../src/empathy-main-window.glade.h:2
+msgid "Context"
+msgstr "Context"
+
+#: ../src/empathy-main-window.glade.h:3
+msgid "Join _Favorites"
+msgstr "Intră în cele _favorite"
+
+#: ../src/empathy-main-window.glade.h:4
+msgid "Join _New..."
+msgstr "I_ntră într-una nouă..."
+
+#: ../src/empathy-main-window.glade.h:5
+msgid "Manage Favorites"
+msgstr "Gestionează favoritele"
+
+#: ../src/empathy-main-window.glade.h:6
+msgid "Show _Offline Contacts"
+msgstr "Arată c_ontactele deconectate"
+
+#: ../src/empathy-main-window.glade.h:7
+msgid "_Accounts"
+msgstr "_Conturi"
+
+#: ../src/empathy-main-window.glade.h:8
+msgid "_Add Contact..."
+msgstr "_Adaugă un contact..."
+
+#: ../src/empathy-main-window.glade.h:13 ../src/empathy-status-icon.glade.h:2
+msgid "_New Conversation..."
+msgstr "Co_nversație nouă..."
+
+#: ../src/empathy-main-window.glade.h:14
+msgid "_Personal Information"
+msgstr "_Informații personale"
+
+#: ../src/empathy-main-window.glade.h:16
+msgid "_Room"
+msgstr "Came_ră"
+
+#: ../src/empathy-new-chatroom-dialog.c:291
+msgid "Chat Rooms"
+msgstr "Camere de discuții"
+
+#: ../src/empathy-new-chatroom-dialog.glade.h:2
+msgid "Browse:"
+msgstr "Răsfoiește:"
+
+#: ../src/empathy-new-chatroom-dialog.glade.h:3
+msgid ""
+"Enter the room name to join here or click on one or more rooms in the list."
+msgstr ""
+"Introduceți numele camerei în care doriți să intrați sau faceți clic pe una "
+"sau mai multe camere din listă."
+
+#: ../src/empathy-new-chatroom-dialog.glade.h:4
+msgid ""
+"Enter the server which hosts the room, or leave it empty if the room is on "
+"the current account's server"
+msgstr ""
+"Introduceți serverul care găzduiește camera sau lăsați spațiul gol dacă "
+"camera este pe serverul contului curent"
+
+#: ../src/empathy-new-chatroom-dialog.glade.h:5
+msgid "Join"
+msgstr "Intră"
+
+#: ../src/empathy-new-chatroom-dialog.glade.h:6
+msgid "Join New"
+msgstr "Intră într-una nouă"
+
+#: ../src/empathy-new-chatroom-dialog.glade.h:7
+msgid "Re_fresh"
+msgstr "_Reîmprospătează"
+
+#: ../src/empathy-new-chatroom-dialog.glade.h:8
+msgid ""
+"This list represents all chat rooms hosted on the server you have entered."
+msgstr ""
+"Această listă reprezintă toate camerele de discuții găzduite pe serverul pe "
+"care ați intrat."
+
+#: ../src/empathy-preferences.c:153
+msgid "Message received"
+msgstr "Mesaj primit"
+
+#: ../src/empathy-preferences.c:154
+msgid "Message sent"
+msgstr "Mesaj trimis"
+
+#: ../src/empathy-preferences.c:155
+msgid "New conversation"
+msgstr "Conversație nouă"
+
+#: ../src/empathy-preferences.c:156
+msgid "Contact goes online"
+msgstr "Contactul se conectează"
+
+#: ../src/empathy-preferences.c:157
+msgid "Contact goes offline"
+msgstr "Contactul se deconectează"
+
+#: ../src/empathy-preferences.c:158
+msgid "Account connected"
+msgstr "Cont conectat"
+
+#: ../src/empathy-preferences.c:159
+msgid "Account disconnected"
+msgstr "Cont deconectat"
+
+#: ../src/empathy-preferences.c:376
+msgid "Language"
+msgstr "Limba"
+
+#: ../src/empathy-preferences.glade.h:1
+msgid "<b>Appearance</b>"
+msgstr "<b>Aspect</b>"
+
+#: ../src/empathy-preferences.glade.h:2
+msgid "<b>Behaviour</b>"
+msgstr "<b>Comportament</b>"
+
+#: ../src/empathy-preferences.glade.h:3
+msgid "<b>Contact List</b>"
+msgstr "<b>Listă de contacte</b>"
+
+#: ../src/empathy-preferences.glade.h:4
+msgid "<b>Enable spell checking for languages:</b>"
+msgstr "<b>Activează verificarea ortografică pentru limbile:</b>"
+
+#: ../src/empathy-preferences.glade.h:5
+msgid "<b>Play sound for events</b>"
+msgstr "<b>Redă sunetele pentru evenimente</b>"
+
+#: ../src/empathy-preferences.glade.h:6
+msgid ""
+"<small>The list of languages reflects only the languages for which you have a "
+"dictionary installed.</small>"
+msgstr ""
+"<small>Lista limbilor reflectă doar limbile pentru care aveți dicționare "
+"instalate.</small>"
+
+#: ../src/empathy-preferences.glade.h:7
+msgid "Automatically _connect on startup "
+msgstr "_Conectare automată la pornire "
+
+#: ../src/empathy-preferences.glade.h:8
+msgid "Avatars are user chosen images shown in the contact list"
+msgstr ""
+"Avatarurile sunt imagini alese de utilizatori afișate în lista de contacte"
+
+#: ../src/empathy-preferences.glade.h:9
+msgid "Chat Th_eme:"
+msgstr "T_ema pentru discuții:"
+
+#: ../src/empathy-preferences.glade.h:10
+msgid "Disable sounds when _away or busy"
+msgstr "Dez_activează sunetele în absență sau când sunt ocupat(ă)"
+
+#: ../src/empathy-preferences.glade.h:11
+msgid "General"
+msgstr "General"
+
+#: ../src/empathy-preferences.glade.h:12
+msgid "Preferences"
+msgstr "Preferințe"
+
+#: ../src/empathy-preferences.glade.h:13
+msgid "Show _avatars"
+msgstr "_Arată avataruri"
+
+#: ../src/empathy-preferences.glade.h:14
+msgid "Show _smileys as images"
+msgstr "Arată _simbolurile emotive ca imagini"
+
+#: ../src/empathy-preferences.glade.h:15
+msgid "Show co_mpact contact list"
+msgstr "Arată listă de contacte co_mpactă"
+
+#: ../src/empathy-preferences.glade.h:16
+msgid "Sort by _name"
+msgstr "Sortează după _nume"
+
+#: ../src/empathy-preferences.glade.h:17
+msgid "Sort by s_tate"
+msgstr "Sor_tează după stare"
+
+#: ../src/empathy-preferences.glade.h:18
+msgid "Sounds"
+msgstr "Sunete"
+
+#: ../src/empathy-preferences.glade.h:19
+msgid "Spell Checking"
+msgstr "Verificare ortografică"
+
+#: ../src/empathy-preferences.glade.h:20
+msgid "Themes"
+msgstr "Teme"
+
+#: ../src/empathy-preferences.glade.h:21
+msgid "_Enable sound notifications"
+msgstr "Activ_ează notificările sonore"
+
+#: ../src/empathy-preferences.glade.h:22
+msgid "_Open new chats in separate windows"
+msgstr "Deschide discuțiile n_oi în ferestre separate"
+
+#: ../src/empathy-status-icon.glade.h:1
+msgid "Status"
+msgstr "Stare"
+
+#: ../src/empathy-status-icon.glade.h:3
+msgid "_Quit"
+msgstr "_Ieșire"
+
+#: ../src/empathy-status-icon.glade.h:4
+msgid "_Show Contact List"
+msgstr "Arată li_sta de contacte"
+
+#: ../src/empathy-tube-dispatch.c:356
+#, c-format
+msgid "Unable to start application for service %s: %s"
+msgstr "Nu se poate porni aplicația pentru serviciul %s: %s"
+
+#: ../src/empathy-tube-dispatch.c:427
+#, c-format
+msgid ""
+"An invitation was offered for service %s, but you don't have the needed "
+"application to handle it"
+msgstr ""
+"S-a oferit o invitație pentru serviciul %s, dar nu aveți aplicația necesară "
+"pentru a o gestiona"
