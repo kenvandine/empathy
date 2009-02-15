@@ -953,7 +953,7 @@ chat_window_new_message_cb (EmpathyChat       *chat,
 	if (has_focus && priv->current_chat == chat) {
 		return;
 	}
-	
+
 	/* If empathy_chat_is_room() returns TRUE, that means it's a named MUC.
 	 * If empathy_chat_get_remote_contact() returns NULL, that means it's
 	 * an unamed MUC (msn-like).
@@ -1700,17 +1700,3 @@ empathy_chat_window_present_chat (EmpathyChat *chat)
  	gtk_widget_grab_focus (chat->input_text_view); 
 }
 
-#if 0
-static gboolean
-chat_window_should_play_sound (EmpathyChatWindow *window)
-{
-	EmpathyChatWindowPriv *priv = GET_PRIV (window);
-	gboolean               has_focus = FALSE;
-
-	g_return_val_if_fail (EMPATHY_IS_CHAT_WINDOW (window), FALSE);
-
-	g_object_get (priv->dialog, "has-toplevel-focus", &has_focus, NULL);
-
-	return !has_focus;
-}
-#endif
