@@ -31,7 +31,7 @@
 #include <libmissioncontrol/mission-control.h>
 
 #include <libempathy/empathy-call-factory.h>
-#include <libempathy/empathy-contact-factory.h>
+#include <libempathy/empathy-tp-contact-factory.h>
 #include <libempathy/empathy-contact-manager.h>
 #include <libempathy/empathy-dispatcher.h>
 #include <libempathy/empathy-utils.h>
@@ -65,48 +65,54 @@ new_message_dialog_account_changed_cb (GtkWidget               *widget,
 				       EmpathyNewMessageDialog *dialog)
 {
 	EmpathyAccountChooser *chooser;
-	McAccount            *account;
+	TpConnection          *connection;
 	EmpathyTpContactList *contact_list;
-	GList                *members, *l;
+	GList                *members;
 	GtkListStore         *store;
 	GtkEntryCompletion   *completion;
 	GtkTreeIter           iter;
 	gchar                *tmpstr;
 
-	chooser = EMPATHY_ACCOUNT_CHOOSER (dialog->account_chooser);
-	account = empathy_account_chooser_get_account (chooser);
-	contact_list = empathy_contact_manager_get_list (dialog->contact_manager,
-							 account);
-	members = empathy_contact_list_get_members (EMPATHY_CONTACT_LIST (contact_list));
+	/* Remove completions */
 	completion = gtk_entry_get_completion (GTK_ENTRY (dialog->entry_id));
 	store = GTK_LIST_STORE (gtk_entry_completion_get_model (completion));
 	gtk_list_store_clear (store);
 
-	for (l = members; l; l = l->next) {
-		EmpathyContact *contact = l->data;
+	/* Get members of the new account */
+	chooser = EMPATHY_ACCOUNT_CHOOSER (dialog->account_chooser);
+	connection = empathy_account_chooser_get_connection (chooser);
+	if (!connection) {
+		return;
+	}
+	contact_list = empathy_contact_manager_get_list (dialog->contact_manager,
+							 connection);
+	members = empathy_contact_list_get_members (EMPATHY_CONTACT_LIST (contact_list));
 
-		if (!empathy_contact_is_online (contact)) {
-			continue;
+	/* Add members to the completion */
+	while (members) {
+		EmpathyContact *contact = members->data;
+
+		if (empathy_contact_is_online (contact)) {
+			DEBUG ("Adding contact ID %s, Name %s",
+			       empathy_contact_get_id (contact),
+			       empathy_contact_get_name (contact));
+
+			tmpstr = g_strdup_printf ("%s (%s)",
+				empathy_contact_get_name (contact),
+				empathy_contact_get_id (contact));
+
+			gtk_list_store_insert_with_values (store, &iter, -1,
+				COMPLETION_COL_TEXT, tmpstr,
+				COMPLETION_COL_ID, empathy_contact_get_id (contact),
+				COMPLETION_COL_NAME, empathy_contact_get_name (contact),
+				-1);
+
+			g_free (tmpstr);
 		}
 
-		DEBUG ("Adding contact ID %s, Name %s",
-		       empathy_contact_get_id (contact),
-		       empathy_contact_get_name (contact));
-
-		tmpstr = g_strdup_printf ("%s (%s)",
-					  empathy_contact_get_name (contact),
-					  empathy_contact_get_id (contact));
-
-		gtk_list_store_insert_with_values (store, &iter, -1,
-			COMPLETION_COL_TEXT, tmpstr,
-			COMPLETION_COL_ID, empathy_contact_get_id (contact),
-			COMPLETION_COL_NAME, empathy_contact_get_name (contact),
-			-1);
-
-		g_free (tmpstr);
+		g_object_unref (contact);
+		members = g_list_delete_link (members, members);
 	}
-
-	g_object_unref (account);
 }
 
 static gboolean
@@ -166,41 +172,45 @@ new_message_dialog_match_func (GtkEntryCompletion *completion,
 }
 
 static void
+new_message_dialog_call_got_contact_cb (EmpathyTpContactFactory *factory,
+					GList                   *contacts,
+					gpointer                 user_data,
+					GObject                 *weak_object)
+{
+	EmpathyCallFactory *call_factory;
+
+	call_factory = empathy_call_factory_get();
+	empathy_call_factory_new_call (call_factory, contacts->data);
+}
+
+static void
 new_message_dialog_response_cb (GtkWidget               *widget,
 				gint                    response,
 				EmpathyNewMessageDialog *dialog)
 {
-	McAccount   *account;
+	TpConnection *connection;
 	const gchar *id;
 
-	account = empathy_account_chooser_get_account (EMPATHY_ACCOUNT_CHOOSER (dialog->account_chooser));
+	connection = empathy_account_chooser_get_connection (
+		EMPATHY_ACCOUNT_CHOOSER (dialog->account_chooser));
 	id = gtk_entry_get_text (GTK_ENTRY (dialog->entry_id));
-	if (!account || EMP_STR_EMPTY (id)) {
-		if (account) {
-			g_object_unref (account);
-		}
+	if (!connection || EMP_STR_EMPTY (id)) {
 		gtk_widget_destroy (widget);
 		return;
 	}
 
 	if (response == 1) {
-		EmpathyContactFactory *factory;
-		EmpathyContact *contact;
-		EmpathyCallFactory *call_factory;
+		EmpathyTpContactFactory *factory;
 
-		factory = empathy_contact_factory_dup_singleton ();
-		contact = empathy_contact_factory_get_from_id (factory, account, id);
-
-		call_factory = empathy_call_factory_get();
-		empathy_call_factory_new_call (call_factory, contact);
-
-		g_object_unref (contact);
+		factory = empathy_tp_contact_factory_dup_singleton (connection);
+		empathy_tp_contact_factory_get_from_ids (factory, 1, &id,
+			new_message_dialog_call_got_contact_cb,
+			NULL, NULL, NULL);
 		g_object_unref (factory);
 	} else if (response == 2) {
-		empathy_dispatcher_chat_with_contact_id (account, id, NULL, NULL);
+		empathy_dispatcher_chat_with_contact_id (connection, id, NULL, NULL);
 	}
 
-	g_object_unref (account);
 	gtk_widget_destroy (widget);
 }
 
