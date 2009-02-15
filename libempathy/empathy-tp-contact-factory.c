@@ -920,8 +920,7 @@ empathy_tp_contact_factory_class_init (EmpathyTpContactFactoryClass *klass)
 					 g_param_spec_boxed ("avatar-mime-types",
 							     "Supported MIME types for avatars",
 							     "Types of images that may be set as "
-							     "avatars on this connection.  Only valid "
-							     "once 'ready' becomes TRUE.",
+							     "avatars on this connection.",
 							     G_TYPE_STRV,
 							     G_PARAM_READABLE |
 							     G_PARAM_STATIC_STRINGS));
@@ -929,8 +928,7 @@ empathy_tp_contact_factory_class_init (EmpathyTpContactFactoryClass *klass)
 					 PROP_MIN_WIDTH,
 					 g_param_spec_uint ("avatar-min-width",
 							    "Minimum width for avatars",
-							    "Minimum width of avatar that may be set. "
-							    "Only valid once 'ready' becomes TRUE.",
+							    "Minimum width of avatar that may be set.",
 							    0,
 							    G_MAXUINT,
 							    0,
@@ -940,8 +938,7 @@ empathy_tp_contact_factory_class_init (EmpathyTpContactFactoryClass *klass)
 					 PROP_MIN_HEIGHT,
 					 g_param_spec_uint ("avatar-min-height",
 							    "Minimum height for avatars",
-							    "Minimum height of avatar that may be set. "
-							    "Only valid once 'ready' becomes TRUE.",
+							    "Minimum height of avatar that may be set.",
 							    0,
 							    G_MAXUINT,
 							    0,
@@ -952,8 +949,7 @@ empathy_tp_contact_factory_class_init (EmpathyTpContactFactoryClass *klass)
 					 g_param_spec_uint ("avatar-max-width",
 							    "Maximum width for avatars",
 							    "Maximum width of avatar that may be set "
-							    "or 0 if there is no maximum. "
-							    "Only valid once 'ready' becomes TRUE.",
+							    "or 0 if there is no maximum.",
 							    0,
 							    G_MAXUINT,
 							    0,
@@ -964,8 +960,7 @@ empathy_tp_contact_factory_class_init (EmpathyTpContactFactoryClass *klass)
 					 g_param_spec_uint ("avatar-max-height",
 							    "Maximum height for avatars",
 							    "Maximum height of avatar that may be set "
-							    "or 0 if there is no maximum. "
-							    "Only valid once 'ready' becomes TRUE.",
+							    "or 0 if there is no maximum.",
 							    0,
 							    G_MAXUINT,
 							    0,
@@ -976,8 +971,7 @@ empathy_tp_contact_factory_class_init (EmpathyTpContactFactoryClass *klass)
 					 g_param_spec_uint ("avatar-max-size",
 							    "Maximum size for avatars in bytes",
 							    "Maximum file size of avatar that may be "
-							    "set or 0 if there is no maximum. "
-							    "Only valid once 'ready' becomes TRUE.",
+							    "set or 0 if there is no maximum.",
 							    0,
 							    G_MAXUINT,
 							    0,
