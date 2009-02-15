@@ -1109,33 +1109,6 @@ dispatcher_request_channel (DispatcherRequestData *request_data)
 }
 
 void
-empathy_dispatcher_call_with_contact (EmpathyContact *contact,
-                                      EmpathyDispatcherRequestCb *callback,
-                                      gpointer user_data)
-{
-  EmpathyDispatcher *dispatcher = empathy_dispatcher_dup_singleton();
-  EmpathyDispatcherPriv *priv = GET_PRIV (dispatcher);
-  TpConnection *connection;
-  ConnectionData *cd;
-  DispatcherRequestData *request_data;
-
-  g_return_if_fail (EMPATHY_IS_CONTACT (contact));
-
-  connection = empathy_contact_get_connection (contact);
-  cd = g_hash_table_lookup (priv->connections, connection);
-  request_data  = new_dispatcher_request_data (dispatcher, connection,
-    TP_IFACE_CHANNEL_TYPE_STREAMED_MEDIA, TP_HANDLE_TYPE_NONE, 0, NULL,
-    contact, callback, user_data);
-
-  cd->outstanding_requests = g_list_prepend
-    (cd->outstanding_requests, request_data);
-
-  dispatcher_request_channel (request_data);
-
-  g_object_unref (dispatcher);
-}
-
-void
 empathy_dispatcher_chat_with_contact (EmpathyContact *contact,
                                       EmpathyDispatcherRequestCb *callback,
                                       gpointer user_data)

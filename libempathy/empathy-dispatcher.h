@@ -65,10 +65,6 @@ void empathy_dispatcher_create_channel (EmpathyDispatcher *dispatcher,
   TpConnection *connection, GHashTable *request,
   EmpathyDispatcherRequestCb *callback, gpointer user_data);
 
-/* Requesting 1 to 1 stream media channels */
-void empathy_dispatcher_call_with_contact (EmpathyContact *contact,
-  EmpathyDispatcherRequestCb *callback, gpointer user_data);
-
 /* Requesting 1 to 1 text channels */
 void empathy_dispatcher_chat_with_contact_id (TpConnection *connection,
   const gchar *contact_id, EmpathyDispatcherRequestCb *callback,
