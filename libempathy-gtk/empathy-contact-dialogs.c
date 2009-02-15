@@ -30,6 +30,7 @@
 #include <libmissioncontrol/mission-control.h>
 
 #include <libempathy/empathy-contact-manager.h>
+#include <libempathy/empathy-account-manager.h>
 #include <libempathy/empathy-contact-list.h>
 #include <libempathy/empathy-utils.h>
 
@@ -242,12 +243,23 @@ static gboolean
 can_add_contact_to_account (McAccount *account,
 			    gpointer   user_data)
 {
-	EmpathyContactManager *mgr;
+	EmpathyAccountManager *account_manager;
+	EmpathyContactManager *contact_manager;
+	TpConnection          *connection;
 	gboolean               result;
 
-	mgr = empathy_contact_manager_dup_singleton ();
-	result = empathy_contact_manager_can_add (mgr, account);
-	g_object_unref (mgr);
+	account_manager = empathy_account_manager_dup_singleton ();
+	connection = empathy_account_manager_get_connection (account_manager,
+							     account);
+	if (!connection) {
+		g_object_unref (account_manager);
+		return FALSE;
+	}
+
+	contact_manager = empathy_contact_manager_dup_singleton ();
+	result = empathy_contact_manager_can_add (contact_manager, connection);
+	g_object_unref (contact_manager);
+	g_object_unref (account_manager);
 
 	return result;
 }
