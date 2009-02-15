@@ -39,7 +39,7 @@
 #include <telepathy-glib/util.h>
 
 #include "empathy-tp-file.h"
-#include "empathy-contact-factory.h"
+#include "empathy-tp-contact-factory.h"
 #include "empathy-marshal.h"
 #include "empathy-time.h"
 #include "empathy-utils.h"
@@ -277,9 +277,10 @@ copy_stream (GInputStream *in,
 /* EmpathyTpFile object */
 
 struct _EmpathyTpFilePriv {
-  EmpathyContactFactory *factory;
+  EmpathyTpContactFactory *factory;
   MissionControl *mc;
   TpChannel *channel;
+  gboolean ready;
 
   EmpathyContact *contact;
   GInputStream *in_stream;
@@ -307,6 +308,7 @@ enum {
   PROP_CHANNEL,
   PROP_STATE,
   PROP_INCOMING,
+  PROP_READY,
   PROP_FILENAME,
   PROP_SIZE,
   PROP_CONTENT_TYPE,
@@ -493,6 +495,105 @@ tp_file_transferred_bytes_changed_cb (TpChannel *channel,
   g_object_notify (G_OBJECT (tp_file), "transferred-bytes");
 }
 
+static void
+tp_file_check_if_ready (EmpathyTpFile *tp_file)
+{
+  if (tp_file->priv->ready || tp_file->priv->contact == NULL ||
+      tp_file->priv->state == 0)
+    return;
+
+  tp_file->priv->ready = TRUE;
+  g_object_notify (G_OBJECT (tp_file), "ready");
+}
+
+static void
+tp_file_got_contact_cb (EmpathyTpContactFactory *factory,
+                        GList *contacts,
+                        gpointer user_data,
+                        GObject *weak_object)
+{
+  EmpathyTpFile *tp_file = EMPATHY_TP_FILE (weak_object);
+
+  tp_file->priv->contact = g_object_ref (contacts->data);
+  g_object_notify (G_OBJECT (tp_file), "contact");
+
+  tp_file_check_if_ready (tp_file);
+}
+
+static void
+tp_file_get_all_cb (TpProxy *proxy,
+                    GHashTable *properties,
+                    const GError *error,
+                    gpointer user_data,
+                    GObject *file_obj)
+{
+  EmpathyTpFile *tp_file = EMPATHY_TP_FILE (file_obj);
+
+  if (error)
+    {
+      DEBUG ("Error: %s", error->message);
+      tp_cli_channel_call_close (tp_file->priv->channel, -1, NULL, NULL, NULL,
+          NULL);
+      return;
+    }
+
+  tp_file->priv->size = g_value_get_uint64 (
+      g_hash_table_lookup (properties, "Size"));
+  g_object_notify (file_obj, "size");
+
+  tp_file->priv->state = g_value_get_uint (
+      g_hash_table_lookup (properties, "State"));
+  g_object_notify (file_obj, "state");
+
+  tp_file->priv->transferred_bytes = g_value_get_uint64 (
+      g_hash_table_lookup (properties, "TransferredBytes"));
+  g_object_notify (file_obj, "transferred-bytes");
+
+  tp_file->priv->filename = g_value_dup_string (
+      g_hash_table_lookup (properties, "Filename"));
+  g_object_notify (file_obj, "filename");
+
+  tp_file->priv->content_hash = g_value_dup_string (
+      g_hash_table_lookup (properties, "ContentHash"));
+  g_object_notify (file_obj, "content-hash");
+
+  tp_file->priv->content_hash_type = g_value_get_uint (
+      g_hash_table_lookup (properties, "ContentHashType"));
+  g_object_notify (file_obj, "content-hash-type");
+
+  tp_file->priv->content_type = g_value_dup_string (
+      g_hash_table_lookup (properties, "ContentType"));
+  g_object_notify (file_obj, "content-type");
+
+  tp_file->priv->description = g_value_dup_string (
+      g_hash_table_lookup (properties, "Description"));
+
+  tp_file_check_if_ready (tp_file);
+}
+
+static void
+tp_file_get_requested_cb (TpProxy *proxy,
+                          const GValue *requested,
+                          const GError *error,
+                          gpointer user_data,
+                          GObject *weak_object)
+{
+  EmpathyTpFile *tp_file = EMPATHY_TP_FILE (weak_object);
+
+  if (error)
+    {
+      DEBUG ("Error: %s", error->message);
+      tp_cli_channel_call_close (tp_file->priv->channel, -1, NULL, NULL, NULL,
+          NULL);
+      return;
+    }
+
+  tp_file->priv->incoming = !g_value_get_boolean (requested);
+  g_object_notify (G_OBJECT (tp_file), "incoming");
+
+  tp_file_check_if_ready (tp_file);
+}
+
 static GObject *
 tp_file_constructor (GType type,
                      guint n_props,
@@ -501,17 +602,18 @@ tp_file_constructor (GType type,
   GObject *file_obj;
   EmpathyTpFile *tp_file;
   TpHandle handle;
-  GHashTable *properties;
-  McAccount *account;
-  GValue *requested;
+  TpConnection *connection;
 
   file_obj = G_OBJECT_CLASS (empathy_tp_file_parent_class)->constructor (type,
       n_props, props);
 
   tp_file = EMPATHY_TP_FILE (file_obj);
 
-  tp_file->priv->factory = empathy_contact_factory_dup_singleton ();
+  connection = tp_channel_borrow_connection (tp_file->priv->channel);
+  tp_file->priv->factory = empathy_tp_contact_factory_dup_singleton (connection);
   tp_file->priv->mc = empathy_mission_control_dup_singleton ();
+  tp_file->priv->state_change_reason =
+      TP_FILE_TRANSFER_STATE_CHANGE_REASON_NONE;
 
   g_signal_connect (tp_file->priv->channel, "invalidated",
     G_CALLBACK (tp_file_invalidated_cb), tp_file);
@@ -524,50 +626,17 @@ tp_file_constructor (GType type,
       tp_file->priv->channel, tp_file_transferred_bytes_changed_cb,
       NULL, NULL, G_OBJECT (tp_file), NULL);
 
-  account = empathy_channel_get_account (tp_file->priv->channel);
+  tp_cli_dbus_properties_call_get (tp_file->priv->channel, -1,
+      TP_IFACE_CHANNEL, "Requested",
+      tp_file_get_requested_cb, NULL, NULL, file_obj);
+
+  tp_cli_dbus_properties_call_get_all (tp_file->priv->channel, -1,
+      TP_IFACE_CHANNEL_TYPE_FILE_TRANSFER,
+      tp_file_get_all_cb, NULL, NULL, file_obj);
 
   handle = tp_channel_get_handle (tp_file->priv->channel, NULL);
-  tp_file->priv->contact = empathy_contact_factory_get_from_handle (
-      tp_file->priv->factory, account, (guint) handle);
-
-  tp_cli_dbus_properties_run_get_all (tp_file->priv->channel,
-      -1, TP_IFACE_CHANNEL_TYPE_FILE_TRANSFER, &properties, NULL, NULL);
-
-  tp_cli_dbus_properties_run_get (tp_file->priv->channel,
-      -1, TP_IFACE_CHANNEL, "Requested", &requested, NULL, NULL);
-
-  tp_file->priv->size = g_value_get_uint64 (
-      g_hash_table_lookup (properties, "Size"));
-
-  tp_file->priv->state = g_value_get_uint (
-      g_hash_table_lookup (properties, "State"));
-
-  tp_file->priv->state_change_reason =
-      TP_FILE_TRANSFER_STATE_CHANGE_REASON_NONE;
-
-  tp_file->priv->transferred_bytes = g_value_get_uint64 (
-      g_hash_table_lookup (properties, "TransferredBytes"));
-
-  tp_file->priv->filename = g_value_dup_string (
-      g_hash_table_lookup (properties, "Filename"));
-
-  tp_file->priv->content_hash = g_value_dup_string (
-      g_hash_table_lookup (properties, "ContentHash"));
-
-  tp_file->priv->content_hash_type = g_value_get_uint (
-      g_hash_table_lookup (properties, "ContentHashType"));
-
-  tp_file->priv->content_type = g_value_dup_string (
-      g_hash_table_lookup (properties, "ContentType"));
-
-  tp_file->priv->description = g_value_dup_string (
-      g_hash_table_lookup (properties, "Description"));
-
-  tp_file->priv->incoming = !g_value_get_boolean (requested);
-
-  g_hash_table_destroy (properties);
-  g_object_unref (account);
-  g_value_unset (requested);
+  empathy_tp_contact_factory_get_from_handles (tp_file->priv->factory,
+      1, &handle, tp_file_got_contact_cb, NULL, NULL, file_obj);
 
   return file_obj;
 }
@@ -956,6 +1025,14 @@ empathy_tp_file_close (EmpathyTpFile *tp_file)
   empathy_tp_file_cancel (tp_file);
 }
 
+gboolean
+empathy_tp_file_is_ready (EmpathyTpFile *tp_file)
+{
+  g_return_val_if_fail (EMPATHY_IS_TP_FILE (tp_file), FALSE);
+
+  return tp_file->priv->ready;
+}
+
 static void
 empathy_tp_file_class_init (EmpathyTpFileClass *klass)
 {
@@ -992,6 +1069,15 @@ empathy_tp_file_class_init (EmpathyTpFileClass *klass)
       g_param_spec_boolean ("incoming",
           "incoming",
           "Whether the transfer is incoming",
+          FALSE,
+          G_PARAM_READWRITE |
+          G_PARAM_CONSTRUCT));
+
+  g_object_class_install_property (object_class,
+      PROP_READY,
+      g_param_spec_boolean ("ready",
+          "ready",
+          "Whether the object is ready",
           FALSE,
           G_PARAM_READWRITE |
           G_PARAM_CONSTRUCT));
