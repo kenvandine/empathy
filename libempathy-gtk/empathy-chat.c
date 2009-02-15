@@ -190,17 +190,15 @@ chat_connect_channel_reconnected (EmpathyDispatchOperation *dispatch,
 }
 
 static void
-chat_connection_changed_cb (EmpathyAccountManager *manager,
-			    McAccount *account,
-			    TpConnectionStatusReason reason,
-			    TpConnectionStatus current,
-			    TpConnectionStatus previous,
-			    EmpathyChat *chat)
+chat_new_connection_cb (EmpathyAccountManager *manager,
+			TpConnection *connection,
+			EmpathyChat *chat)
 {
 	EmpathyChatPriv *priv = GET_PRIV (chat);
+	McAccount *account;
 
-	if (current == TP_CONNECTION_STATUS_CONNECTED && !priv->tp_chat &&
-	    empathy_account_equal (account, priv->account) &&
+	account = empathy_account_manager_get_account (manager, connection);
+	if (!priv->tp_chat && empathy_account_equal (account, priv->account) &&
 	    priv->handle_type != TP_HANDLE_TYPE_NONE &&
 	    !EMP_STR_EMPTY (priv->id)) {
 		
@@ -208,12 +206,14 @@ chat_connection_changed_cb (EmpathyAccountManager *manager,
 
 		switch (priv->handle_type) {
 			case TP_HANDLE_TYPE_CONTACT:
-				empathy_dispatcher_chat_with_contact_id (account, priv->id,
+				empathy_dispatcher_chat_with_contact_id (
+					connection, priv->id,
 					chat_connect_channel_reconnected,
 					chat);
 				break;
 			case TP_HANDLE_TYPE_ROOM:
-				empathy_dispatcher_join_muc (account, priv->id,
+				empathy_dispatcher_join_muc (connection,
+					priv->id,
 					chat_connect_channel_reconnected,
 					chat);
 				break;
@@ -1139,10 +1139,6 @@ chat_members_changed_cb (EmpathyTpChat  *tp_chat,
 	if (priv->block_events_timeout_id == 0) {
 		gchar *str;
 
-		empathy_contact_run_until_ready (contact,
-						 EMPATHY_CONTACT_READY_NAME,
-						 NULL);
-
 		if (is_member) {
 			str = g_strdup_printf (_("%s has joined the room"),
 					       empathy_contact_get_name (contact));
@@ -1434,7 +1430,7 @@ chat_finalize (GObject *object)
 	chat_composing_remove_timeout (chat);
 
 	g_signal_handlers_disconnect_by_func (priv->account_manager,
-					      chat_connection_changed_cb, object);
+					      chat_new_connection_cb, object);
 
 	g_object_unref (priv->account_manager);
 	g_object_unref (priv->log_manager);
@@ -1578,8 +1574,8 @@ empathy_chat_init (EmpathyChat *chat)
 	priv->account_manager = empathy_account_manager_dup_singleton ();
 
 	g_signal_connect (priv->account_manager,
-			  "account-connection-changed",
-			  G_CALLBACK (chat_connection_changed_cb),
+			  "new-connection",
+			  G_CALLBACK (chat_new_connection_cb),
 			  chat);
 
 	/* Block events for some time to avoid having "has come online" or
@@ -1613,6 +1609,7 @@ empathy_chat_set_tp_chat (EmpathyChat   *chat,
 			  EmpathyTpChat *tp_chat)
 {
 	EmpathyChatPriv *priv = GET_PRIV (chat);
+	TpConnection    *connection;
 
 	g_return_if_fail (EMPATHY_IS_CHAT (chat));
 	g_return_if_fail (EMPATHY_IS_TP_CHAT (tp_chat));
@@ -1627,7 +1624,10 @@ empathy_chat_set_tp_chat (EmpathyChat   *chat,
 	}
 
 	priv->tp_chat = g_object_ref (tp_chat);
-	priv->account = g_object_ref (empathy_tp_chat_get_account (tp_chat));
+	connection = empathy_tp_chat_get_connection (priv->tp_chat);
+	priv->account = empathy_account_manager_get_account (priv->account_manager,
+							     connection);
+	g_object_ref (priv->account);
 
 	g_signal_connect (tp_chat, "message-received",
 			  G_CALLBACK (chat_message_received_cb),
@@ -1728,20 +1728,6 @@ empathy_chat_get_remote_contact (EmpathyChat *chat)
 	g_return_val_if_fail (EMPATHY_IS_CHAT (chat), NULL);
 
 	return priv->remote_contact;
-}
-
-guint
-empathy_chat_get_members_count (EmpathyChat *chat)
-{
-	EmpathyChatPriv *priv = GET_PRIV (chat);
-
-	g_return_val_if_fail (EMPATHY_IS_CHAT (chat), 0);
-
-	if (priv->tp_chat) {
-		return empathy_tp_chat_get_members_count (priv->tp_chat);
-	}
-
-	return 0;
 }
 
 GtkWidget *
