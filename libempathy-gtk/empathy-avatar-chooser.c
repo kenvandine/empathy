@@ -30,7 +30,7 @@
 #include <gio/gio.h>
 
 #include <libempathy/empathy-utils.h>
-#include <libempathy/empathy-contact-factory.h>
+#include <libempathy/empathy-tp-contact-factory.h>
 
 #include "empathy-avatar-chooser.h"
 #include "empathy-conf.h"
@@ -45,9 +45,8 @@
 
 #define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyAvatarChooser)
 typedef struct {
-	EmpathyContactFactory   *contact_factory;
-	McAccount               *account;
-	EmpathyTpContactFactory *tp_contact_factory;
+	EmpathyTpContactFactory *factory;
+	TpConnection            *connection;
 	GtkFileChooser          *chooser_dialog;
 
 	gulong ready_handler_id;
@@ -56,8 +55,8 @@ typedef struct {
 } EmpathyAvatarChooserPriv;
 
 static void       avatar_chooser_finalize              (GObject              *object);
-static void       avatar_chooser_set_account           (EmpathyAvatarChooser *self,
-							McAccount            *account);
+static void       avatar_chooser_set_connection        (EmpathyAvatarChooser *self,
+							TpConnection         *connection);
 static void       avatar_chooser_set_image             (EmpathyAvatarChooser *chooser,
 							EmpathyAvatar        *avatar,
 							GdkPixbuf            *pixbuf,
@@ -96,7 +95,7 @@ enum {
 
 enum {
 	PROP_0,
-	PROP_ACCOUNT
+	PROP_CONNECTION
 };
 
 static guint signals [LAST_SIGNAL];
@@ -125,8 +124,8 @@ avatar_chooser_get_property (GObject    *object,
 	EmpathyAvatarChooserPriv *priv = GET_PRIV (object);
 
 	switch (param_id) {
-	case PROP_ACCOUNT:
-		g_value_set_object (value, priv->account);
+	case PROP_CONNECTION:
+		g_value_set_object (value, priv->connection);
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
@@ -143,8 +142,8 @@ avatar_chooser_set_property (GObject      *object,
 	EmpathyAvatarChooser *self = EMPATHY_AVATAR_CHOOSER (object);
 
 	switch (param_id) {
-	case PROP_ACCOUNT:
-		avatar_chooser_set_account (self, g_value_get_object (value));
+	case PROP_CONNECTION:
+		avatar_chooser_set_connection (self, g_value_get_object (value));
 		break;
 	default:
 		G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
@@ -171,15 +170,15 @@ empathy_avatar_chooser_class_init (EmpathyAvatarChooserClass *klass)
 			      g_cclosure_marshal_VOID__VOID,
 			      G_TYPE_NONE, 0);
 
-	param_spec = g_param_spec_object ("account",
-					  "McAccount",
-					  "McAccount whose avatar should be "
+	param_spec = g_param_spec_object ("connection",
+					  "TpConnection",
+					  "TpConnection whose avatar should be "
 					  "shown and modified by this widget",
-					  MC_TYPE_ACCOUNT,
+					  TP_TYPE_CONNECTION,
 					  G_PARAM_READWRITE |
 					  G_PARAM_STATIC_STRINGS);
 	g_object_class_install_property (object_class,
-					 PROP_ACCOUNT,
+					 PROP_CONNECTION,
 					 param_spec);
 
 	g_type_class_add_private (object_class, sizeof (EmpathyAvatarChooserPriv));
@@ -214,8 +213,6 @@ empathy_avatar_chooser_init (EmpathyAvatarChooser *chooser)
 			  G_CALLBACK (avatar_chooser_clicked_cb),
 			  chooser);
 
-	priv->contact_factory = empathy_contact_factory_dup_singleton ();
-
 	empathy_avatar_chooser_set (chooser, NULL);
 }
 
@@ -226,11 +223,9 @@ avatar_chooser_finalize (GObject *object)
 
 	priv = GET_PRIV (object);
 
-	avatar_chooser_set_account (EMPATHY_AVATAR_CHOOSER (object), NULL);
-	g_assert (priv->account == NULL);
-	g_assert (priv->tp_contact_factory == NULL);
-
-	g_object_unref (priv->contact_factory);
+	avatar_chooser_set_connection (EMPATHY_AVATAR_CHOOSER (object), NULL);
+	g_assert (priv->connection == NULL);
+	g_assert (priv->factory == NULL);
 
 	if (priv->avatar != NULL) {
 		empathy_avatar_unref (priv->avatar);
@@ -240,51 +235,22 @@ avatar_chooser_finalize (GObject *object)
 }
 
 static void
-avatar_chooser_tp_cf_ready_cb (EmpathyTpContactFactory *tp_cf,
-			       GParamSpec              *unused,
-			       EmpathyAvatarChooser    *self)
-{
-	EmpathyAvatarChooserPriv *priv = GET_PRIV (self);
-	gboolean ready;
-
-	/* sanity check that we're listening on the right ETpCF */
-	g_assert (priv->tp_contact_factory == tp_cf);
-
-	ready = empathy_tp_contact_factory_is_ready (tp_cf);
-	gtk_widget_set_sensitive (GTK_WIDGET (self), ready);
-}
-
-static void
-avatar_chooser_set_account (EmpathyAvatarChooser *self,
-			    McAccount            *account)
+avatar_chooser_set_connection (EmpathyAvatarChooser *self,
+			       TpConnection         *connection)
 {
 	EmpathyAvatarChooserPriv *priv = GET_PRIV (self);
 
-	if (priv->account != NULL) {
-		g_object_unref (priv->account);
-		priv->account = NULL;
+	if (priv->connection != NULL) {
+		g_object_unref (priv->connection);
+		priv->connection = NULL;
 
-		g_assert (priv->tp_contact_factory != NULL);
-
-		g_signal_handler_disconnect (priv->tp_contact_factory,
-			priv->ready_handler_id);
-		priv->ready_handler_id = 0;
-
-		g_object_unref (priv->tp_contact_factory);
-		priv->tp_contact_factory = NULL;
+		g_object_unref (priv->factory);
+		priv->factory = NULL;
 	}
 
-	if (account != NULL) {
-		priv->account = g_object_ref (account);
-		priv->tp_contact_factory = g_object_ref (
-			empathy_contact_factory_get_tp_factory (
-				priv->contact_factory, priv->account));
-
-		priv->ready_handler_id = g_signal_connect (
-			priv->tp_contact_factory, "notify::ready",
-			G_CALLBACK (avatar_chooser_tp_cf_ready_cb), self);
-		avatar_chooser_tp_cf_ready_cb (priv->tp_contact_factory, NULL,
-			self);
+	if (connection != NULL) {
+		priv->connection = g_object_ref (connection);
+		priv->factory = empathy_tp_contact_factory_dup_singleton (connection);
 	}
 }
 
@@ -412,7 +378,6 @@ avatar_chooser_maybe_convert_and_scale (EmpathyAvatarChooser *chooser,
 					EmpathyAvatar        *avatar)
 {
 	EmpathyAvatarChooserPriv *priv = GET_PRIV (chooser);
-	EmpathyTpContactFactory  *tp_cf = priv->tp_contact_factory;
 	guint                     max_width = 0, max_height = 0, max_size = 0;
 	gchar                   **mime_types = NULL;
 	gboolean                  needs_conversion = FALSE;
@@ -424,15 +389,7 @@ avatar_chooser_maybe_convert_and_scale (EmpathyAvatarChooser *chooser,
 	gchar                    *converted_image_data = NULL;
 	gsize                     converted_image_size = 0;
 
-	/* This should only be called if the user is setting a new avatar,
-	 * which should only be allowed once the avatar requirements have been
-	 * discovered.
-	 */
-	g_return_val_if_fail (tp_cf != NULL, NULL);
-	g_return_val_if_fail (empathy_tp_contact_factory_is_ready (tp_cf),
-		NULL);
-
-	g_object_get (tp_cf,
+	g_object_get (priv->factory,
 		"avatar-mime-types", &mime_types, /* Needs g_strfreev-ing */
 		"avatar-max-width", &max_width,
 		"avatar-max-height", &max_height,
@@ -901,16 +858,6 @@ avatar_chooser_response_cb (GtkWidget            *widget,
 
 	priv->chooser_dialog = NULL;
 
-	if (response == GTK_RESPONSE_CANCEL) {
-		goto out;
-	}
-
-	/* Check if we went non-ready since displaying the dialog. */
-	if (!empathy_tp_contact_factory_is_ready (priv->tp_contact_factory)) {
-		DEBUG ("Can't set avatar when contact factory isn't ready.");
-		goto out;
-	}
-
 	if (response == GTK_RESPONSE_OK) {
 		gchar *filename;
 		gchar *path;
@@ -932,7 +879,6 @@ avatar_chooser_response_cb (GtkWidget            *widget,
 		avatar_chooser_clear_image (chooser);
 	}
 
-out:
 	gtk_widget_destroy (widget);
 }
 
