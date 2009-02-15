@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /*
- * Copyright (C) 2007-2008 Collabora Ltd.
+ * Copyright (C) 2007-2009 Collabora Ltd.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -24,7 +24,7 @@
 
 #include <glib.h>
 
-#include <libmissioncontrol/mc-account.h>
+#include <telepathy-glib/connection.h>
 
 #include "empathy-contact.h"
 
@@ -49,15 +49,27 @@ struct _EmpathyTpContactFactoryClass {
 	GObjectClass parent_class;
 };
 
+typedef void (*EmpathyTpContactFactoryGotContactsCb) (EmpathyTpContactFactory *factory,
+						      GList                   *contacts,
+						      gpointer                 user_data,
+						      GObject                 *weak_object);
+
 GType                    empathy_tp_contact_factory_get_type         (void) G_GNUC_CONST;
-EmpathyTpContactFactory *empathy_tp_contact_factory_new              (McAccount *account);
-EmpathyContact *         empathy_tp_contact_factory_get_user         (EmpathyTpContactFactory *tp_factory);
-EmpathyContact *         empathy_tp_contact_factory_get_from_id      (EmpathyTpContactFactory *tp_factory,
-								      const gchar             *id);
-EmpathyContact *         empathy_tp_contact_factory_get_from_handle  (EmpathyTpContactFactory *tp_factory,
-								      guint                    handle);
-GList *                  empathy_tp_contact_factory_get_from_handles (EmpathyTpContactFactory *tp_factory,
-								      const GArray            *handles);
+EmpathyTpContactFactory *empathy_tp_contact_factory_dup_singleton    (TpConnection *connection);
+void                     empathy_tp_contact_factory_get_from_ids     (EmpathyTpContactFactory *tp_factory,
+								      guint                    n_ids,
+								      const gchar * const     *ids,
+								      EmpathyTpContactFactoryGotContactsCb callback,
+								      gpointer                 user_data,
+								      GDestroyNotify           destroy,
+								      GObject                 *weak_object);
+void                     empathy_tp_contact_factory_get_from_handles (EmpathyTpContactFactory *tp_factory,
+								      guint                    n_handles,
+								      const TpHandle          *handles,
+								      EmpathyTpContactFactoryGotContactsCb callback,
+								      gpointer                 user_data,
+								      GDestroyNotify           destroy,
+								      GObject                 *weak_object);
 void                     empathy_tp_contact_factory_set_alias        (EmpathyTpContactFactory *tp_factory,
 								      EmpathyContact          *contact,
 								      const gchar             *alias);
@@ -65,7 +77,6 @@ void                     empathy_tp_contact_factory_set_avatar       (EmpathyTpC
 								      const gchar             *data,
 								      gsize                    size,
 								      const gchar             *mime_type);
-gboolean                 empathy_tp_contact_factory_is_ready         (EmpathyTpContactFactory *tp_factory);
 
 G_END_DECLS
 
