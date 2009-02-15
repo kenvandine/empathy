@@ -31,7 +31,6 @@
 #include <telepathy-glib/gtypes.h>
 
 #include <libmissioncontrol/mission-control.h>
-#include <libmissioncontrol/mc-account.h>
 
 #include <extensions/extensions.h>
 
@@ -39,7 +38,7 @@
 #include "empathy-utils.h"
 #include "empathy-tube-handler.h"
 #include "empathy-account-manager.h"
-#include "empathy-contact-factory.h"
+#include "empathy-tp-contact-factory.h"
 #include "empathy-tp-file.h"
 #include "empathy-chatroom-manager.h"
 #include "empathy-utils.h"
@@ -54,8 +53,6 @@ typedef struct
   MissionControl *mc;
   /* connection to connection data mapping */
   GHashTable *connections;
-  /* accounts to connection mapping */
-  GHashTable *accounts;
   gpointer token;
   GSList *tubes;
 
@@ -102,7 +99,6 @@ typedef struct
 
 typedef struct
 {
-  McAccount *account;
   /* ObjectPath => DispatchData.. */
   GHashTable *dispatched_channels;
   /* ObjectPath -> EmpathyDispatchOperations */
@@ -185,10 +181,9 @@ free_dispatcher_request_data (DispatcherRequestData *r)
 }
 
 static ConnectionData *
-new_connection_data (McAccount *account)
+new_connection_data (void)
 {
   ConnectionData *cd = g_slice_new0 (ConnectionData);
-  cd->account = g_object_ref (account);
 
   cd->dispatched_channels = g_hash_table_new_full (g_str_hash, g_str_equal,
       g_free, (GDestroyNotify) free_dispatch_data);
@@ -206,7 +201,7 @@ static void
 free_connection_data (ConnectionData *cd)
 {
   GList *l;
-  g_object_unref (cd->account);
+
   g_hash_table_destroy (cd->dispatched_channels);
   g_hash_table_destroy (cd->dispatching_channels);
   int i;
@@ -238,7 +233,6 @@ dispatcher_connection_invalidated_cb (TpConnection *connection,
   DEBUG ("Error: %s", message);
   cd = g_hash_table_lookup (priv->connections, connection);
 
-  g_hash_table_remove (priv->accounts, cd->account);
   g_hash_table_remove (priv->connections, connection);
 }
 
@@ -511,7 +505,6 @@ dispatcher_connection_new_channel (EmpathyDispatcher *dispatcher,
   TpChannel         *channel;
   ConnectionData *cd;
   EmpathyDispatchOperation *operation;
-  EmpathyContact *contact = NULL;
   int i;
   /* Channel types we never want to dispatch because they're either deprecated
    * or can't sensibly be dispatch (e.g. channels that should always be
@@ -575,15 +568,7 @@ dispatcher_connection_new_channel (EmpathyDispatcher *dispatcher,
 
   priv->channels = g_list_prepend (priv->channels, channel);
 
-  if (handle_type == TP_CONN_HANDLE_TYPE_CONTACT)
-    {
-      EmpathyContactFactory *factory = empathy_contact_factory_dup_singleton ();
-      contact = empathy_contact_factory_get_from_handle (factory,
-        cd->account, handle);
-      g_object_unref (factory);
-    }
-
-  operation = empathy_dispatch_operation_new (connection, channel, contact,
+  operation = empathy_dispatch_operation_new (connection, channel, NULL,
     incoming);
 
   g_object_unref (channel);
@@ -786,21 +771,21 @@ dispatcher_connection_advertise_capabilities_cb (TpConnection    *connection,
 }
 
 static void
-dispatcher_connection_ready_cb (TpConnection *connection,
-                                const GError *error,
-                                gpointer dispatcher)
+dispatcher_new_connection_cb (EmpathyAccountManager *manager,
+                              TpConnection *connection,
+                              EmpathyDispatcher *dispatcher)
 {
+  EmpathyDispatcherPriv *priv = GET_PRIV (dispatcher);
   GPtrArray   *capabilities;
   GType        cap_type;
   GValue       cap = {0, };
   const gchar *remove = NULL;
 
-  if (error)
-    {
-      dispatcher_connection_invalidated_cb (connection, error->domain,
-        error->code, error->message, dispatcher);
-      return;
-    }
+  if (g_hash_table_lookup (priv->connections, connection) != NULL)
+    return;
+
+  g_hash_table_insert (priv->connections, g_object_ref (connection),
+    new_connection_data ());
 
   g_signal_connect (connection, "invalidated",
     G_CALLBACK (dispatcher_connection_invalidated_cb), dispatcher);
@@ -815,7 +800,7 @@ dispatcher_connection_ready_cb (TpConnection *connection,
       tp_cli_dbus_properties_call_get_all (connection, -1,
         TP_IFACE_CONNECTION_INTERFACE_REQUESTS,
         dispatcher_connection_got_all,
-        NULL, NULL, dispatcher);
+        NULL, NULL, G_OBJECT (dispatcher));
     }
   else
     {
@@ -852,44 +837,6 @@ dispatcher_connection_ready_cb (TpConnection *connection,
   g_ptr_array_free (capabilities, TRUE);
 }
 
-static void
-dispatcher_update_account (EmpathyDispatcher *dispatcher,
-                           McAccount *account)
-{
-  EmpathyDispatcherPriv *priv = GET_PRIV (dispatcher);
-  TpConnection *connection;
-
-  connection = g_hash_table_lookup (priv->accounts, account);
-  if (connection != NULL)
-    return;
-
-  connection = mission_control_get_tpconnection (priv->mc, account, NULL);
-  if (connection == NULL)
-    return;
-
-  g_hash_table_insert (priv->connections, g_object_ref (connection),
-    new_connection_data (account));
-
-  g_hash_table_insert (priv->accounts, g_object_ref (account),
-    g_object_ref (connection));
-
-  tp_connection_call_when_ready (connection, dispatcher_connection_ready_cb,
-    dispatcher);
-
-  g_object_unref (connection);
-}
-
-static void
-dispatcher_account_connection_cb (EmpathyAccountManager *manager,
-                                  McAccount *account,
-                                  TpConnectionStatusReason reason,
-                                  TpConnectionStatus status,
-                                  TpConnectionStatus previous,
-                                  EmpathyDispatcher *dispatcher)
-{
-  dispatcher_update_account (dispatcher, account);
-}
-
 static GObject*
 dispatcher_constructor (GType type,
                         guint n_construct_params,
@@ -922,7 +869,7 @@ dispatcher_finalize (GObject *object)
   gpointer connection;
 
   g_signal_handlers_disconnect_by_func (priv->account_manager,
-      dispatcher_account_connection_cb, object);
+      dispatcher_new_connection_cb, object);
 
   for (l = priv->channels; l; l = l->next)
     {
@@ -942,7 +889,6 @@ dispatcher_finalize (GObject *object)
   g_object_unref (priv->account_manager);
   g_object_unref (priv->mc);
 
-  g_hash_table_destroy (priv->accounts);
   g_hash_table_destroy (priv->connections);
 }
 
@@ -991,7 +937,7 @@ empathy_dispatcher_class_init (EmpathyDispatcherClass *klass)
 static void
 empathy_dispatcher_init (EmpathyDispatcher *dispatcher)
 {
-  GList *accounts, *l;
+  GList *connections, *l;
   EmpathyDispatcherPriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (dispatcher,
     EMPATHY_TYPE_DISPATCHER, EmpathyDispatcherPriv);
 
@@ -999,27 +945,22 @@ empathy_dispatcher_init (EmpathyDispatcher *dispatcher)
   priv->mc = empathy_mission_control_dup_singleton ();
   priv->account_manager = empathy_account_manager_dup_singleton ();
 
-  g_signal_connect (priv->account_manager,
-    "account-connection-changed",
-    G_CALLBACK (dispatcher_account_connection_cb),
+  g_signal_connect (priv->account_manager, "new-connection",
+    G_CALLBACK (dispatcher_new_connection_cb),
     dispatcher);
-
-  priv->accounts = g_hash_table_new_full (empathy_account_hash,
-        empathy_account_equal, g_object_unref, g_object_unref);
 
   priv->connections = g_hash_table_new_full (g_direct_hash, g_direct_equal,
     g_object_unref, (GDestroyNotify) free_connection_data);
 
   priv->channels = NULL;
 
-  accounts = mc_accounts_list_by_enabled (TRUE);
-
-  for (l = accounts; l; l = l->next)
+  connections = empathy_account_manager_dup_connections (priv->account_manager);
+  for (l = connections; l; l = l->next)
     {
-      dispatcher_update_account (dispatcher, l->data);
+      dispatcher_new_connection_cb (priv->account_manager, l->data, dispatcher);
       g_object_unref (l->data);
     }
-  g_list_free (accounts);
+  g_list_free (connections);
 }
 
 EmpathyDispatcher *
@@ -1174,17 +1115,13 @@ empathy_dispatcher_call_with_contact (EmpathyContact *contact,
 {
   EmpathyDispatcher *dispatcher = empathy_dispatcher_dup_singleton();
   EmpathyDispatcherPriv *priv = GET_PRIV (dispatcher);
-  McAccount *account;
   TpConnection *connection;
   ConnectionData *cd;
   DispatcherRequestData *request_data;
 
   g_return_if_fail (EMPATHY_IS_CONTACT (contact));
 
-  account = empathy_contact_get_account (contact);
-  connection = g_hash_table_lookup (priv->accounts, account);
-
-  g_assert (connection != NULL);
+  connection = empathy_contact_get_connection (contact);
   cd = g_hash_table_lookup (priv->connections, connection);
   request_data  = new_dispatcher_request_data (dispatcher, connection,
     TP_IFACE_CHANNEL_TYPE_STREAMED_MEDIA, TP_HANDLE_TYPE_NONE, 0, NULL,
@@ -1198,19 +1135,6 @@ empathy_dispatcher_call_with_contact (EmpathyContact *contact,
   g_object_unref (dispatcher);
 }
 
-static void
-dispatcher_chat_with_contact_cb (EmpathyContact *contact,
-                                 const GError *error,
-                                 gpointer user_data,
-                                 GObject *object)
-{
-  DispatcherRequestData *request_data = (DispatcherRequestData *) user_data;
-
-  request_data->handle = empathy_contact_get_handle (contact);
-
-  dispatcher_request_channel (request_data);
-}
-
 void
 empathy_dispatcher_chat_with_contact (EmpathyContact *contact,
                                       EmpathyDispatcherRequestCb *callback,
@@ -1218,7 +1142,6 @@ empathy_dispatcher_chat_with_contact (EmpathyContact *contact,
 {
   EmpathyDispatcher *dispatcher;
   EmpathyDispatcherPriv *priv;
-  McAccount *account;
   TpConnection *connection;
   ConnectionData *connection_data;
   DispatcherRequestData *request_data;
@@ -1228,46 +1151,65 @@ empathy_dispatcher_chat_with_contact (EmpathyContact *contact,
   dispatcher = empathy_dispatcher_dup_singleton();
   priv = GET_PRIV (dispatcher);
 
-  account = empathy_contact_get_account (contact);
-  connection = g_hash_table_lookup (priv->accounts, account);
+  connection = empathy_contact_get_connection (contact);
   connection_data = g_hash_table_lookup (priv->connections, connection);
 
   /* The contact handle might not be known yet */
   request_data  = new_dispatcher_request_data (dispatcher, connection,
-    TP_IFACE_CHANNEL_TYPE_TEXT, TP_HANDLE_TYPE_CONTACT, 0, NULL,
-    contact, callback, user_data);
+    TP_IFACE_CHANNEL_TYPE_TEXT, TP_HANDLE_TYPE_CONTACT,
+    empathy_contact_get_handle (contact), NULL, contact, callback, user_data);
 
   connection_data->outstanding_requests = g_list_prepend
     (connection_data->outstanding_requests, request_data);
 
-  empathy_contact_call_when_ready (contact,
-    EMPATHY_CONTACT_READY_HANDLE, dispatcher_chat_with_contact_cb,
-    request_data, NULL, G_OBJECT (dispatcher));
+  dispatcher_request_channel (request_data);
 
   g_object_unref (dispatcher);
 }
 
+typedef struct
+{
+  EmpathyDispatcher *dispatcher;
+  EmpathyDispatcherRequestCb *callback;
+  gpointer user_data;
+} ChatWithContactIdData;
+
+static void
+dispatcher_chat_with_contact_id_cb (EmpathyTpContactFactory *factory,
+                                    GList                   *contacts,
+                                    gpointer                 user_data,
+                                    GObject                 *weak_object)
+{
+  ChatWithContactIdData *data = user_data;
+
+  empathy_dispatcher_chat_with_contact (contacts->data, data->callback, data->user_data);
+  g_object_unref (data->dispatcher);
+  g_slice_free (ChatWithContactIdData, data);
+}
+
 void
-empathy_dispatcher_chat_with_contact_id (McAccount *account,
+empathy_dispatcher_chat_with_contact_id (TpConnection *connection,
                                          const gchar *contact_id,
                                          EmpathyDispatcherRequestCb *callback,
                                          gpointer user_data)
 {
-  EmpathyDispatcher *dispatcher = empathy_dispatcher_dup_singleton ();
-  EmpathyContactFactory *factory;
-  EmpathyContact        *contact;
+  EmpathyDispatcher *dispatcher;
+  EmpathyTpContactFactory *factory;
+  ChatWithContactIdData *data;
 
-  g_return_if_fail (MC_IS_ACCOUNT (account));
+  g_return_if_fail (TP_IS_CONNECTION (connection));
   g_return_if_fail (!EMP_STR_EMPTY (contact_id));
 
-  factory = empathy_contact_factory_dup_singleton ();
-  contact = empathy_contact_factory_get_from_id (factory, account, contact_id);
+  dispatcher = empathy_dispatcher_dup_singleton ();
+  factory = empathy_tp_contact_factory_dup_singleton (connection);
+  data = g_slice_new0 (ChatWithContactIdData);
+  data->dispatcher = dispatcher;
+  data->callback = callback;
+  data->user_data = user_data;
+  empathy_tp_contact_factory_get_from_ids (factory, 1, &contact_id,
+      dispatcher_chat_with_contact_id_cb, data, NULL, NULL);
 
-  empathy_dispatcher_chat_with_contact (contact, callback, user_data);
-
-  g_object_unref (contact);
   g_object_unref (factory);
-  g_object_unref (dispatcher);
 }
 
 static void
@@ -1304,7 +1246,7 @@ dispatcher_request_handles_cb (TpConnection *connection,
 }
 
 void
-empathy_dispatcher_join_muc (McAccount *account,
+empathy_dispatcher_join_muc (TpConnection *connection,
                              const gchar *roomname,
                              EmpathyDispatcherRequestCb *callback,
                              gpointer user_data)
@@ -1312,19 +1254,16 @@ empathy_dispatcher_join_muc (McAccount *account,
   EmpathyDispatcher *dispatcher;
   EmpathyDispatcherPriv *priv;
   DispatcherRequestData *request_data;
-  TpConnection *connection;
   ConnectionData *connection_data;
   const gchar *names[] = { roomname, NULL };
 
-  g_return_if_fail (MC_IS_ACCOUNT (account));
+  g_return_if_fail (TP_IS_CONNECTION (connection));
   g_return_if_fail (!EMP_STR_EMPTY (roomname));
 
   dispatcher = empathy_dispatcher_dup_singleton();
   priv = GET_PRIV (dispatcher);
 
-  connection = g_hash_table_lookup (priv->accounts, account);
   connection_data = g_hash_table_lookup (priv->connections, connection);
-
 
   /* Don't know the room handle yet */
   request_data  = new_dispatcher_request_data (dispatcher, connection,
@@ -1359,7 +1298,7 @@ dispatcher_create_channel_cb (TpConnection *connect,
 
 void
 empathy_dispatcher_create_channel (EmpathyDispatcher *dispatcher,
-                                   McAccount *account,
+                                   TpConnection *connection,
                                    GHashTable *request,
                                    EmpathyDispatcherRequestCb *callback,
                                    gpointer user_data)
@@ -1371,14 +1310,10 @@ empathy_dispatcher_create_channel (EmpathyDispatcher *dispatcher,
   guint handle_type;
   guint handle;
   gboolean valid;
-  TpConnection *connection;
 
   g_return_if_fail (EMPATHY_IS_DISPATCHER (dispatcher));
-  g_return_if_fail (MC_IS_ACCOUNT (account));
+  g_return_if_fail (TP_IS_CONNECTION (connection));
   g_return_if_fail (request != NULL);
-
-  connection = g_hash_table_lookup (priv->accounts, account);
-  g_assert (connection != NULL);
 
   connection_data = g_hash_table_lookup (priv->connections, connection);
   g_assert (connection_data != NULL);
@@ -1405,56 +1340,6 @@ empathy_dispatcher_create_channel (EmpathyDispatcher *dispatcher,
     G_OBJECT (request_data->dispatcher));
 }
 
-static void
-dispatcher_create_channel_with_contact_cb (EmpathyContact *contact,
-                                           const GError *error,
-                                           gpointer user_data,
-                                           GObject *object)
-{
-  DispatcherRequestData *request_data = (DispatcherRequestData *) user_data;
-  GValue *target_handle;
-
-  g_assert (request_data->request);
-
-  if (error != NULL)
-    {
-      dispatcher_request_failed (request_data->dispatcher,
-        request_data, error);
-      return;
-    }
-
-  request_data->handle = empathy_contact_get_handle (contact);
-
-  target_handle = tp_g_value_slice_new (G_TYPE_UINT);
-  g_value_set_uint (target_handle, request_data->handle);
-  g_hash_table_insert (request_data->request,
-    TP_IFACE_CHANNEL ".TargetHandle", target_handle);
-
-  tp_cli_connection_interface_requests_call_create_channel (
-    request_data->connection, -1,
-    request_data->request, dispatcher_create_channel_cb, request_data, NULL,
-    G_OBJECT (request_data->dispatcher));
-}
-
-static void
-dispatcher_send_file_connection_ready_cb (TpConnection *connection,
-                                          const GError *error,
-                                          gpointer user_data)
-{
-  DispatcherRequestData *request_data = (DispatcherRequestData *) user_data;
-
-  if (error !=  NULL)
-    {
-      dispatcher_request_failed (request_data->dispatcher,
-          request_data, error);
-      return;
-    }
-
-  empathy_contact_call_when_ready (request_data->contact,
-    EMPATHY_CONTACT_READY_HANDLE, dispatcher_create_channel_with_contact_cb,
-    request_data, NULL, G_OBJECT (request_data->dispatcher));
-}
-
 void
 empathy_dispatcher_send_file_to_contact (EmpathyContact *contact,
                                          const gchar *filename,
@@ -1466,8 +1351,7 @@ empathy_dispatcher_send_file_to_contact (EmpathyContact *contact,
 {
   EmpathyDispatcher *dispatcher = empathy_dispatcher_dup_singleton();
   EmpathyDispatcherPriv *priv = GET_PRIV (dispatcher);
-  McAccount *account = empathy_contact_get_account (contact);
-  TpConnection *connection = g_hash_table_lookup (priv->accounts, account);
+  TpConnection *connection = empathy_contact_get_connection (contact);
   ConnectionData *connection_data =
     g_hash_table_lookup (priv->connections, connection);
   DispatcherRequestData *request_data;
@@ -1488,6 +1372,11 @@ empathy_dispatcher_send_file_to_contact (EmpathyContact *contact,
   value = tp_g_value_slice_new (G_TYPE_UINT);
   g_value_set_uint (value, TP_HANDLE_TYPE_CONTACT);
   g_hash_table_insert (request, TP_IFACE_CHANNEL ".TargetHandleType", value);
+
+  /* org.freedesktop.Telepathy.Channel.TargetHandle */
+  value = tp_g_value_slice_new (G_TYPE_UINT);
+  g_value_set_uint (value, empathy_contact_get_handle (contact));
+  g_hash_table_insert (request, TP_IFACE_CHANNEL ".TargetHandle", value);
 
   /* org.freedesktop.Telepathy.Channel.Type.FileTransfer.ContentType */
   value = tp_g_value_slice_new (G_TYPE_STRING);
@@ -1513,45 +1402,39 @@ empathy_dispatcher_send_file_to_contact (EmpathyContact *contact,
   g_hash_table_insert (request,
     TP_IFACE_CHANNEL_TYPE_FILE_TRANSFER ".Date", value);
 
-
-  /* The contact handle might not be known yet */
-  request_data  = new_dispatcher_request_data (dispatcher, connection,
-    TP_IFACE_CHANNEL_TYPE_FILE_TRANSFER, TP_HANDLE_TYPE_CONTACT, 0, request,
-    contact, callback, user_data);
+  request_data = new_dispatcher_request_data (dispatcher, connection,
+    TP_IFACE_CHANNEL_TYPE_FILE_TRANSFER, TP_HANDLE_TYPE_CONTACT,
+    empathy_contact_get_handle (contact), request, contact, callback,
+    user_data);
   connection_data->outstanding_requests = g_list_prepend
     (connection_data->outstanding_requests, request_data);
 
-  tp_connection_call_when_ready (connection,
-      dispatcher_send_file_connection_ready_cb, (gpointer) request_data);
+  tp_cli_connection_interface_requests_call_create_channel (
+    request_data->connection, -1,
+    request_data->request, dispatcher_create_channel_cb, request_data, NULL,
+    G_OBJECT (request_data->dispatcher));
 
   g_object_unref (dispatcher);
 }
 
 GStrv
 empathy_dispatcher_find_channel_class (EmpathyDispatcher *dispatcher,
-                                       McAccount *account,
+                                       TpConnection *connection,
                                        const gchar *channel_type,
                                        guint handle_type)
 {
   EmpathyDispatcherPriv *priv = GET_PRIV (dispatcher);
   ConnectionData *cd;
-  TpConnection *connection;
   int i;
   GPtrArray *classes;
 
   g_return_val_if_fail (channel_type != NULL, NULL);
   g_return_val_if_fail (handle_type != 0, NULL);
 
-  connection = g_hash_table_lookup (priv->accounts, account);
-
-  if (connection == NULL)
-    return NULL;
-
   cd = g_hash_table_lookup (priv->connections, connection);
 
   if (cd == NULL)
     return NULL;
-
 
   classes = cd->requestable_channels;
   if (classes == NULL)
