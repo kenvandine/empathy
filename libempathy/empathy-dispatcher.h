@@ -43,12 +43,12 @@ typedef struct _EmpathyDispatcher      EmpathyDispatcher;
 typedef struct _EmpathyDispatcherClass EmpathyDispatcherClass;
 
 struct _EmpathyDispatcher {
-	GObject parent;
-	gpointer priv;
+  GObject parent;
+  gpointer priv;
 };
 
 struct _EmpathyDispatcherClass {
-	GObjectClass parent_class;
+ GObjectClass parent_class;
 };
 
 /* Will be called when the channel is ready for dispatching. The requestor

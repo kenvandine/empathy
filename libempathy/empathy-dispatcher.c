@@ -698,8 +698,11 @@ dispatcher_connection_new_channels_cb (TpConnection *connection,
 }
 
 static void
-dispatcher_connection_got_all (TpProxy *proxy, GHashTable *properties,
-  const GError *error, gpointer user_data, GObject *object)
+dispatcher_connection_got_all (TpProxy *proxy,
+                               GHashTable *properties,
+                               const GError *error,
+                               gpointer user_data,
+                               GObject *object)
 {
   EmpathyDispatcher *dispatcher = EMPATHY_DISPATCHER (object);
   EmpathyDispatcherPriv *priv = GET_PRIV (dispatcher);
@@ -1342,8 +1345,10 @@ dispatcher_create_channel_cb (TpConnection *connect,
 
 void
 empathy_dispatcher_create_channel (EmpathyDispatcher *dispatcher,
-  McAccount *account, GHashTable *request,
-  EmpathyDispatcherRequestCb *callback, gpointer user_data)
+                                   McAccount *account,
+                                   GHashTable *request,
+                                   EmpathyDispatcherRequestCb *callback,
+                                   gpointer user_data)
 {
   EmpathyDispatcherPriv *priv = GET_PRIV (dispatcher);
   ConnectionData *connection_data;
@@ -1510,7 +1515,9 @@ empathy_dispatcher_send_file_to_contact (EmpathyContact *contact,
 
 GStrv
 empathy_dispatcher_find_channel_class (EmpathyDispatcher *dispatcher,
-  McAccount *account, const gchar *channel_type, guint handle_type)
+                                       McAccount *account,
+                                       const gchar *channel_type,
+                                       guint handle_type)
 {
   EmpathyDispatcherPriv *priv = GET_PRIV (dispatcher);
   ConnectionData *cd;
