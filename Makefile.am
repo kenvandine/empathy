@@ -38,7 +38,7 @@ DISTCLEANFILES = 		\
 distuninstallcheck_listfiles = find . -type f -print | grep -v '^\./var/scrollkeeper'
 
 ChangeLog: Makefile.am
-	git-log --pretty=short > ChangeLog
+	git log --pretty=short > ChangeLog
 	
 
 dist: ChangeLog
