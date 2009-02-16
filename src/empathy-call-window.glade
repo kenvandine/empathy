@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Mon Feb 16 11:33:04 2009 -->
+<!--Generated with glade3 3.4.5 on Mon Feb 16 12:20:49 2009 -->
 <glade-interface>
   <widget class="GtkWindow" id="call_window">
     <child>
@@ -93,17 +93,6 @@
                 <property name="visible">True</property>
                 <property name="label" translatable="yes">Send Audio</property>
                 <property name="icon_name">gnome-stock-mic</property>
-              </widget>
-              <packing>
-                <property name="homogeneous">True</property>
-              </packing>
-            </child>
-            <child>
-              <widget class="GtkToolItem" id="volume">
-                <property name="visible">True</property>
-                <child>
-                  <placeholder/>
-                </child>
               </widget>
               <packing>
                 <property name="homogeneous">True</property>

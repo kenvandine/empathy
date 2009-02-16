@@ -120,9 +120,10 @@ empathy_call_window_setup_toolbar (EmpathyCallWindow *self)
   EmpathyCallWindowPriv *priv = GET_PRIV (self);
   GtkWidget *hangup;
   GtkWidget *mic;
-  GtkWidget *volume;
   GtkWidget *volume_button;
   GtkWidget *camera;
+  GtkWidget *toolbar;
+  GtkToolItem *tool_item;
 
   hangup = glade_xml_get_widget (priv->glade, "hangup");
 
@@ -132,10 +133,14 @@ empathy_call_window_setup_toolbar (EmpathyCallWindow *self)
   mic = glade_xml_get_widget (priv->glade, "microphone");
   gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (mic), TRUE);
 
-  volume = glade_xml_get_widget (priv->glade, "volume");
+  toolbar = glade_xml_get_widget (priv->glade, "toolbar1");
+
+  tool_item = gtk_tool_item_new ();
   volume_button = gtk_volume_button_new ();
-  gtk_container_add (GTK_CONTAINER (volume), volume_button);
+  gtk_container_add (GTK_CONTAINER (tool_item), volume_button);
   gtk_scale_button_set_value (GTK_SCALE_BUTTON (volume_button), 0.5);
+  gtk_widget_show_all (GTK_WIDGET (tool_item));
+  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), tool_item, -1);
 
   camera = glade_xml_get_widget (priv->glade, "camera");
   gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (camera), FALSE);
