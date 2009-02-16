@@ -37,6 +37,8 @@
 #include "empathy-tube-dispatch.h"
 #include "empathy-tube-dispatch-enumtypes.h"
 
+#define DEBUG_FLAG EMPATHY_DEBUG_DISPATCHER
+#include <libempathy/empathy-debug.h>
 
 G_DEFINE_TYPE(EmpathyTubeDispatch, empathy_tube_dispatch, G_TYPE_OBJECT)
 
@@ -93,12 +95,14 @@ empathy_tube_dispatch_list_activatable_names_cb (TpDBusDaemon *proxy,
     {
       if (!tp_strdiff (*name, priv->bus_name))
         {
+          DEBUG ("Found tube handler. Can dispatch it");
           empathy_tube_dispatch_set_ability (self,
             EMPATHY_TUBE_DISPATCHABILITY_POSSIBLE);
           return;
         }
     }
 
+  DEBUG ("Didn't find tube handler. Can't dispatch it");
   empathy_tube_dispatch_set_ability (self,
     EMPATHY_TUBE_DISPATCHABILITY_IMPOSSIBLE);
 }
@@ -113,6 +117,7 @@ empathy_tube_dispatch_name_has_owner_cb (TpDBusDaemon *proxy,
 
   if (error != NULL)
     {
+      DEBUG ("NameHasOwner failed. Can't dispatch tube");
       empathy_tube_dispatch_set_ability (self,
         EMPATHY_TUBE_DISPATCHABILITY_IMPOSSIBLE);
       return;
@@ -120,11 +125,13 @@ empathy_tube_dispatch_name_has_owner_cb (TpDBusDaemon *proxy,
 
   if (has_owner)
     {
+      DEBUG ("Tube handler is running. Can dispatch it");
       empathy_tube_dispatch_set_ability (self,
         EMPATHY_TUBE_DISPATCHABILITY_POSSIBLE);
     }
   else
     {
+      DEBUG ("Tube handler is not running. Calling ListActivatableNames");
       tp_cli_dbus_daemon_call_list_activatable_names (priv->dbus, -1,
         empathy_tube_dispatch_list_activatable_names_cb, NULL, NULL,
         G_OBJECT (self));
@@ -178,6 +185,7 @@ empathy_tube_dispatch_constructed (GObject *object)
 
   priv->service = g_strdup (service);
 
+  DEBUG ("Look for tube handler %s\n", priv->bus_name);
   tp_cli_dbus_daemon_call_name_has_owner (priv->dbus, -1, priv->bus_name,
     empathy_tube_dispatch_name_has_owner_cb, NULL, NULL, G_OBJECT (self));
 
