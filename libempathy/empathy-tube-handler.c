@@ -172,6 +172,7 @@ empathy_tube_handler_new (EmpathyTubeType type, const gchar *service)
       goto OUT;
     }
 
+  DEBUG ("Creating tube handler %s", bus_name);
   thandler = g_object_new (EMPATHY_TYPE_TUBE_HANDLER, NULL);
   dbus_g_connection_register_g_object (tp_get_bus (), object_path,
       G_OBJECT (thandler));
