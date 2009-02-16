@@ -58,6 +58,10 @@ GType empathy_audio_sink_get_type (void);
 
 GstElement *empathy_audio_sink_new (void);
 
+void empathy_audio_sink_set_volume (EmpathyGstAudioSink *sink, gdouble volume);
+
+gdouble empathy_audio_sink_get_volume (EmpathyGstAudioSink *sink);
+
 G_END_DECLS
 
 #endif /* #ifndef __EMPATHY_GST_AUDIO_SINK_H__*/
