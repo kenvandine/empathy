@@ -251,6 +251,7 @@ import_dialog_set_up_account_list (EmpathyImportDialog *dialog)
   /* Import column */
   cell = gtk_cell_renderer_toggle_new ();
   gtk_tree_view_insert_column_with_attributes (view, -1,
+      /* Translators: this is the header of a treeview column */
       _("Import"), cell,
       "active", COL_IMPORT,
       NULL);
