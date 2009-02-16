@@ -1162,6 +1162,8 @@ empathy_dispatcher_call_with_contact (EmpathyContact *contact,
   ConnectionData *cd;
   DispatcherRequestData *request_data;
 
+  g_return_if_fail (EMPATHY_IS_CONTACT (contact));
+
   account = empathy_contact_get_account (contact);
   connection = g_hash_table_lookup (priv->accounts, account);
 
@@ -1204,6 +1206,8 @@ empathy_dispatcher_chat_with_contact (EmpathyContact *contact,
   ConnectionData *connection_data;
   DispatcherRequestData *request_data;
 
+  g_return_if_fail (EMPATHY_IS_CONTACT (contact));
+
   dispatcher = empathy_dispatcher_dup_singleton();
   priv = GET_PRIV (dispatcher);
 
@@ -1235,6 +1239,9 @@ empathy_dispatcher_chat_with_contact_id (McAccount *account,
   EmpathyDispatcher *dispatcher = empathy_dispatcher_dup_singleton ();
   EmpathyContactFactory *factory;
   EmpathyContact        *contact;
+
+  g_return_if_fail (MC_IS_ACCOUNT (account));
+  g_return_if_fail (!EMP_STR_EMPTY (contact_id));
 
   factory = empathy_contact_factory_dup_singleton ();
   contact = empathy_contact_factory_get_from_id (factory, account, contact_id);
@@ -1292,6 +1299,9 @@ empathy_dispatcher_join_muc (McAccount *account,
   ConnectionData *connection_data;
   const gchar *names[] = { roomname, NULL };
 
+  g_return_if_fail (MC_IS_ACCOUNT (account));
+  g_return_if_fail (!EMP_STR_EMPTY (roomname));
+
   dispatcher = empathy_dispatcher_dup_singleton();
   priv = GET_PRIV (dispatcher);
 
@@ -1343,6 +1353,10 @@ empathy_dispatcher_create_channel (EmpathyDispatcher *dispatcher,
   guint handle;
   gboolean valid;
   TpConnection *connection;
+
+  g_return_if_fail (EMPATHY_IS_DISPATCHER (dispatcher));
+  g_return_if_fail (MC_IS_ACCOUNT (account));
+  g_return_if_fail (request != NULL);
 
   connection = g_hash_table_lookup (priv->accounts, account);
   g_assert (connection != NULL);
@@ -1441,6 +1455,10 @@ empathy_dispatcher_send_file_to_contact (EmpathyContact *contact,
   GValue *value;
   GHashTable *request = g_hash_table_new_full (g_str_hash, g_str_equal, NULL,
       (GDestroyNotify) tp_g_value_slice_free);
+
+  g_return_if_fail (EMPATHY_IS_CONTACT (contact));
+  g_return_if_fail (!EMP_STR_EMPTY (filename));
+  g_return_if_fail (!EMP_STR_EMPTY (content_type));
 
   /* org.freedesktop.Telepathy.Channel.ChannelType */
   value = tp_g_value_slice_new (G_TYPE_STRING);
