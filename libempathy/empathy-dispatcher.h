@@ -42,12 +42,14 @@ G_BEGIN_DECLS
 typedef struct _EmpathyDispatcher      EmpathyDispatcher;
 typedef struct _EmpathyDispatcherClass EmpathyDispatcherClass;
 
-struct _EmpathyDispatcher {
+struct _EmpathyDispatcher
+{
   GObject parent;
   gpointer priv;
 };
 
-struct _EmpathyDispatcherClass {
+struct _EmpathyDispatcherClass
+{
  GObjectClass parent_class;
 };
 
