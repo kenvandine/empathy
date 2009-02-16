@@ -135,6 +135,13 @@ empathy_call_window_setup_toolbar (EmpathyCallWindow *self)
 
   toolbar = glade_xml_get_widget (priv->glade, "toolbar1");
 
+  /* Add an empty expanded GtkToolItem so the volume button is at the end of
+   * the toolbar. */
+  tool_item = gtk_tool_item_new ();
+  gtk_tool_item_set_expand (tool_item, TRUE);
+  gtk_widget_show (GTK_WIDGET (tool_item));
+  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), tool_item, -1);
+
   tool_item = gtk_tool_item_new ();
   volume_button = gtk_volume_button_new ();
   gtk_container_add (GTK_CONTAINER (tool_item), volume_button);
