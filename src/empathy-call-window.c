@@ -152,6 +152,10 @@ empathy_call_window_setup_toolbar (EmpathyCallWindow *self)
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), tool_item, -1);
 
   priv->volume_button = gtk_volume_button_new ();
+  /* FIXME listen to the audiosinks signals and update the button according to
+   * that, for now starting out at 1.0 and assuming only the app changes the
+   * volume will do */
+  gtk_scale_button_set_value (GTK_SCALE_BUTTON (priv->volume_button), 1.0);
   g_signal_connect (G_OBJECT (priv->volume_button), "value-changed",
     G_CALLBACK (empathy_call_window_volume_changed_cb), self);
 
