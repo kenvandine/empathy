@@ -121,7 +121,8 @@ new_dispatch_data (TpChannel *channel,
 {
   DispatchData *d = g_slice_new0 (DispatchData);
   d->channel = g_object_ref (channel);
-  d->channel_wrapper = g_object_ref (channel_wrapper);
+  if (channel_wrapper != NULL)
+    d->channel_wrapper = g_object_ref (channel_wrapper);
 
   return d;
 }
@@ -130,7 +131,8 @@ static void
 free_dispatch_data (DispatchData *data)
 {
   g_object_unref (data->channel);
-  g_object_unref (data->channel_wrapper);
+  if (data->channel_wrapper != NULL)
+    g_object_unref (data->channel_wrapper);
 
   g_slice_free (DispatchData, data);
 }
