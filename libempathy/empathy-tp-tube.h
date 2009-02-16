@@ -71,7 +71,7 @@ GType empathy_tp_tube_get_type (void) G_GNUC_CONST;
 EmpathyTpTube *empathy_tp_tube_new (TpChannel *channel);
 EmpathyTpTube *empathy_tp_tube_new_stream_tube (EmpathyContact *contact,
     TpSocketAddressType type, const gchar *hostname, guint port,
-    const gchar *service);
+    const gchar *service, GHashTable *parameters);
 
 typedef void (EmpatyTpTubeAcceptStreamTubeCb) (EmpathyTpTube *tube,
   const EmpathyTpTubeAddress *address, const GError *error,

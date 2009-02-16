@@ -271,7 +271,8 @@ empathy_tp_tube_new_stream_tube (EmpathyContact *contact,
                                  TpSocketAddressType type,
                                  const gchar *hostname,
                                  guint port,
-                                 const gchar *service)
+                                 const gchar *service,
+                                 GHashTable *parameters)
 {
   MissionControl *mc;
   McAccount *account;
@@ -348,7 +349,8 @@ empathy_tp_tube_new_stream_tube (EmpathyContact *contact,
 
   if (!emp_cli_channel_type_stream_tube_run_offer_stream_tube (
         TP_PROXY(channel), -1, type, address,
-        TP_SOCKET_ACCESS_CONTROL_LOCALHOST, control_param, &error, NULL))
+        TP_SOCKET_ACCESS_CONTROL_LOCALHOST, control_param, parameters,
+        &error, NULL))
     {
       DEBUG ("Couldn't offer tube: %s", error->message);
       g_clear_error (&error);
