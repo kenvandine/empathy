@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Tue Feb  3 22:03:45 2009 -->
+<!--Generated with glade3 3.4.5 on Mon Feb 16 11:33:04 2009 -->
 <glade-interface>
   <widget class="GtkWindow" id="call_window">
     <child>
@@ -91,6 +91,7 @@
             <child>
               <widget class="GtkToggleToolButton" id="microphone">
                 <property name="visible">True</property>
+                <property name="label" translatable="yes">Send Audio</property>
                 <property name="icon_name">gnome-stock-mic</property>
               </widget>
               <packing>
