@@ -110,6 +110,10 @@ static void empathy_call_window_status_message (EmpathyCallWindow *window,
   gchar *message);
 
 static void
+empathy_call_window_volume_changed_cb (GtkScaleButton *button,
+  gdouble value, EmpathyCallWindow *window);
+
+static void
 empathy_call_window_setup_menubar (EmpathyCallWindow *self)
 {
   EmpathyCallWindowPriv *priv = GET_PRIV (self);
@@ -126,7 +130,6 @@ empathy_call_window_setup_toolbar (EmpathyCallWindow *self)
   EmpathyCallWindowPriv *priv = GET_PRIV (self);
   GtkWidget *hangup;
   GtkWidget *mic;
-  GtkWidget *volume_button;
   GtkWidget *camera;
   GtkWidget *toolbar;
   GtkToolItem *tool_item;
@@ -734,4 +737,14 @@ empathy_call_window_status_message (EmpathyCallWindow *window,
 
   gtk_statusbar_push (GTK_STATUSBAR (priv->statusbar), priv->context_id,
     message);
+}
+
+static void
+empathy_call_window_volume_changed_cb (GtkScaleButton *button,
+  gdouble value, EmpathyCallWindow *window)
+{
+  EmpathyCallWindowPriv *priv = GET_PRIV (window);
+
+  empathy_audio_sink_set_volume (EMPATHY_GST_AUDIO_SINK (priv->audio_output),
+    value);
 }
