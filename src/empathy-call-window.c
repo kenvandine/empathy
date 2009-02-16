@@ -133,7 +133,7 @@ empathy_call_window_setup_toolbar (EmpathyCallWindow *self)
   mic = glade_xml_get_widget (priv->glade, "microphone");
   gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (mic), TRUE);
 
-  toolbar = glade_xml_get_widget (priv->glade, "toolbar1");
+  toolbar = glade_xml_get_widget (priv->glade, "toolbar");
 
   /* Add an empty expanded GtkToolItem so the volume button is at the end of
    * the toolbar. */

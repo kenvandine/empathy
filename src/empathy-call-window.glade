@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
-<!--Generated with glade3 3.4.5 on Mon Feb 16 12:20:49 2009 -->
+<!--Generated with glade3 3.4.5 on Mon Feb 16 12:31:56 2009 -->
 <glade-interface>
   <widget class="GtkWindow" id="call_window">
     <child>
@@ -67,7 +67,7 @@
           </packing>
         </child>
         <child>
-          <widget class="GtkToolbar" id="toolbar1">
+          <widget class="GtkToolbar" id="toolbar">
             <property name="visible">True</property>
             <child>
               <widget class="GtkToolButton" id="hangup">
