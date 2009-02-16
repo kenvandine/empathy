@@ -147,7 +147,7 @@ empathy_tube_dispatch_constructed (GObject *object)
   GHashTable *properties;
   const gchar *service;
   const gchar *channel_type;
-  EmpathyTubeType type;
+  TpTubeType type;
 
   priv->dbus = tp_dbus_daemon_new (tp_get_bus());
 
@@ -161,13 +161,13 @@ empathy_tube_dispatch_constructed (GObject *object)
 
   if (!tp_strdiff (channel_type, EMP_IFACE_CHANNEL_TYPE_STREAM_TUBE))
     {
-      type = EMPATHY_TYPE_STREAM_TUBE;
+      type = TP_TUBE_TYPE_STREAM;
       service = tp_asv_get_string (properties,
         EMP_IFACE_CHANNEL_TYPE_STREAM_TUBE  ".Service");
     }
   else if (!tp_strdiff (channel_type, EMP_IFACE_CHANNEL_TYPE_DBUS_TUBE))
     {
-      type = EMPATHY_TYPE_DBUS_TUBE;
+      type = TP_TUBE_TYPE_DBUS;
       service = tp_asv_get_string (properties,
         EMP_IFACE_CHANNEL_TYPE_DBUS_TUBE  ".ServiceName");
     }
