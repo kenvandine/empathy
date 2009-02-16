@@ -260,16 +260,6 @@
   )
 )
 
-(define-enum TubeType
-  (in-module "Empathy")
-  (c-name "EmpathyTubeType")
-  (gtype-id "EMPATHY_TYPE_TUBE_TYPE")
-  (values
-    '("stream-tube" "EMPATHY_TYPE_STREAM_TUBE")
-    '("dbus-tube" "EMPATHY_TYPE_DBUS_TUBE")
-  )
-)
-
 
 ;; From empathy-account-manager.h
 
@@ -2531,6 +2521,7 @@
     '("const-gchar*" "hostname")
     '("guint" "port")
     '("const-gchar*" "service")
+    '("GHashTable*" "parameters")
   )
 )
 
@@ -2559,7 +2550,7 @@
   (is-constructor-of "EmpathyTubeHandler")
   (return-type "EmpathyTubeHandler*")
   (parameters
-    '("EmpathyTubeType" "type")
+    '("TpTubeType" "type")
     '("const-gchar*" "service")
   )
 )
@@ -2568,7 +2559,7 @@
   (c-name "empathy_tube_handler_build_bus_name")
   (return-type "gchar*")
   (parameters
-    '("EmpathyTubeType" "type")
+    '("TpTubeType" "type")
     '("const-gchar*" "service")
   )
 )
@@ -2577,7 +2568,7 @@
   (c-name "empathy_tube_handler_build_object_path")
   (return-type "gchar*")
   (parameters
-    '("EmpathyTubeType" "type")
+    '("TpTubeType" "type")
     '("const-gchar*" "service")
   )
 )
