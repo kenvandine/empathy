@@ -539,8 +539,11 @@ static void
 empathy_call_window_channel_closed_cb (TfChannel *channel, gpointer user_data)
 {
   EmpathyCallWindow *self = EMPATHY_CALL_WINDOW (user_data);
+  EmpathyCallWindowPriv *priv = GET_PRIV (self);
 
   empathy_call_window_status_message (self, _("Disconnected"));
+
+  gtk_widget_set_sensitive (priv->camera_button, FALSE);
 }
 
 static void
