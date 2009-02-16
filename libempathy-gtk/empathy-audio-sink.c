@@ -64,9 +64,19 @@ empathy_audio_sink_element_added_cb (FsElementAddedNotifier *notifier,
 {
   EmpathyGstAudioSinkPrivate *priv = EMPATHY_GST_AUDIO_SINK_GET_PRIVATE (self);
 
-  if (g_object_class_find_property (G_OBJECT_CLASS (element), "volume"))
+  if (g_object_class_find_property (G_OBJECT_GET_CLASS (element), "volume"))
     {
-      priv->volume = element;
+      gdouble volume;
+
+      volume = empathy_audio_sink_get_volume (self);
+      empathy_audio_sink_set_volume (self, 1.0);
+
+      if (priv->volume != NULL)
+        g_object_unref (priv->volume);
+      priv->volume = g_object_ref (element);
+
+      if (volume != 1.0)
+        empathy_audio_sink_set_volume (self, volume);
     }
 }
 
@@ -82,7 +92,10 @@ empathy_audio_sink_init (EmpathyGstAudioSink *obj)
     G_CALLBACK (empathy_audio_sink_element_added_cb), obj);
 
   resample = gst_element_factory_make ("audioresample", NULL);
+
   priv->volume = gst_element_factory_make ("volume", NULL);
+  g_object_ref (priv->volume);
+
   priv->sink = gst_element_factory_make ("gconfaudiosink", NULL);
 
   fs_element_added_notifier_add (priv->notifier, GST_BIN (priv->sink));
@@ -171,6 +184,9 @@ empathy_audio_sink_dispose (GObject *object)
     g_object_unref (priv->notifier);
   priv->notifier = NULL;
 
+  if (priv->volume != NULL)
+    g_object_unref (priv->volume);
+  priv->volume = NULL;
 
   if (G_OBJECT_CLASS (empathy_audio_sink_parent_class)->dispose)
     G_OBJECT_CLASS (empathy_audio_sink_parent_class)->dispose (object);
