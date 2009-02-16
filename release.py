@@ -129,7 +129,7 @@ class Project:
 		return t.substitute(locals())
 	
 	def get_last_tag(self):
-		tags_str = self.exec_cmd('git-tag')
+		tags_str = self.exec_cmd('git tag')
 		tags = tags_str.splitlines()
 
 		return tags[len(tags)-1]
@@ -208,7 +208,7 @@ class Project:
 		last_tag = self.get_last_tag()
 		ref = None
 
-		changes = self.exec_cmd ("git-log " + last_tag + "..")
+		changes = self.exec_cmd ("git log " + last_tag + "..")
         	for line in changes.splitlines(1):
         		if line.startswith('commit'):
 				if ref != None:
@@ -227,6 +227,10 @@ class Project:
         			date = line[p1:].strip()
         		elif line.startswith('    git-svn-id:'):
         			continue
+        		elif line.startswith('    Signed-off-by:'):
+        			continue
+        		elif line.startswith('    From:'):
+        			continue
         		elif line.startswith('Merge:'):
         			continue
         		else:
@@ -243,11 +247,11 @@ class Project:
 		new_tag = self.package_name.upper() + '_' +\
 			  self.package_version.replace('.', '_')
 
-		url1 = self.exec_cmd('git-config svn-remote.svn.url').strip()
+		url1 = self.exec_cmd('git config svn-remote.svn.url').strip()
 		url2 = url1[:url1.rfind('/')] + '/tags/' + new_tag
 		self.exec_cmd('svn copy %s %s -m "Tagged for release %s."' % (url1, url2, self.package_version))
 
-		self.exec_cmd('git-tag -m "Tagged for release %s." %s' % ( self.package_version, new_tag))
+		self.exec_cmd('git tag -m "Tagged for release %s." %s' % ( self.package_version, new_tag))
 
 	def generate_news(self):
 		self.get_commits()
