@@ -104,11 +104,6 @@ static void empathy_call_window_status_message (EmpathyCallWindow *window,
   gchar *message);
 
 static void
-empathy_call_window_session_created_cb (TfChannel *tfchannel,
-  FsConference  *conference, FsParticipant *participant,
-  gpointer user_data);
-
-static void
 empathy_call_window_setup_menubar (EmpathyCallWindow *self)
 {
   EmpathyCallWindowPriv *priv = GET_PRIV (self);
@@ -468,15 +463,6 @@ empathy_call_window_channel_closed_cb (TfChannel *channel, gpointer user_data)
 }
 
 static void
-empathy_call_window_session_created_cb (TfChannel *tfchannel,
-  FsConference  *conference, FsParticipant *participant,
-  gpointer user_data)
-{
-  g_signal_connect (G_OBJECT (tfchannel), "closed",
-    G_CALLBACK (empathy_call_window_channel_closed_cb), user_data);
-}
-
-static void
 empathy_call_window_src_added_cb (EmpathyCallHandler *handler,
   GstPad *src, guint media_type, gpointer user_data)
 {
@@ -552,8 +538,8 @@ empathy_call_window_realized_cb (GtkWidget *widget, EmpathyCallWindow *window)
 
   g_signal_connect (priv->handler, "conference-added",
     G_CALLBACK (empathy_call_window_conference_added_cb), window);
-  g_signal_connect (priv->handler, "session-created",
-    G_CALLBACK (empathy_call_window_session_created_cb), window);
+  g_signal_connect (priv->handler, "closed",
+    G_CALLBACK (empathy_call_window_channel_closed_cb), window);
   g_signal_connect (priv->handler, "src-pad-added",
     G_CALLBACK (empathy_call_window_src_added_cb), window);
   g_signal_connect (priv->handler, "sink-pad-added",

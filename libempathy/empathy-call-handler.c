@@ -39,6 +39,7 @@ enum {
   CONFERENCE_ADDED,
   SRC_PAD_ADDED,
   SINK_PAD_ADDED,
+  CLOSED,
   LAST_SIGNAL
 };
 
@@ -208,6 +209,13 @@ empathy_call_handler_class_init (EmpathyCallHandlerClass *klass)
       _empathy_marshal_VOID__OBJECT_UINT,
       G_TYPE_NONE,
       2, GST_TYPE_PAD, G_TYPE_UINT);
+
+  signals[CLOSED] =
+    g_signal_new ("closed", G_TYPE_FROM_CLASS (klass),
+      G_SIGNAL_RUN_LAST, 0, NULL, NULL,
+      g_cclosure_marshal_VOID__VOID,
+      G_TYPE_NONE,
+      0);
 }
 
 EmpathyCallHandler *
@@ -294,6 +302,13 @@ empathy_call_handler_tf_channel_stream_created_cb (TfChannel *tfchannel,
 }
 
 static void
+empathy_call_handler_tf_channel_closed_cb (TfChannel *tfchannel,
+  EmpathyCallHandler *handler)
+{
+  g_signal_emit (G_OBJECT (handler), signals[CLOSED], 0);
+}
+
+static void
 empathy_call_handler_start_tpfs (EmpathyCallHandler *self)
 {
   EmpathyCallHandlerPriv *priv = GET_PRIV (self);
@@ -310,6 +325,8 @@ empathy_call_handler_start_tpfs (EmpathyCallHandler *self)
       G_CALLBACK (empathy_call_handler_tf_channel_session_created_cb), self);
   g_signal_connect (priv->tfchannel, "stream-created",
       G_CALLBACK (empathy_call_handler_tf_channel_stream_created_cb), self);
+  g_signal_connect (priv->tfchannel, "closed",
+      G_CALLBACK (empathy_call_handler_tf_channel_closed_cb), self);
 
   g_object_unref (channel);
 }
