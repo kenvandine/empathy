@@ -111,7 +111,7 @@
       <locale name="C">
          <short>Disable sounds when away</short>
          <long>
-         Whether or not to play a sound notifications when away or busy.
+         Whether or not to play sound notifications when away or busy.
          </long>
       </locale>
     </schema>

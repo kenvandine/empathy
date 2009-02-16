@@ -111,7 +111,7 @@
             <child>
               <widget class="GtkToggleToolButton" id="camera">
                 <property name="visible">True</property>
-                <property name="label" translatable="yes">Send Video</property>
+                <property name="label" translatable="yes">Send video</property>
                 <property name="icon_name">camera-web</property>
               </widget>
               <packing>
