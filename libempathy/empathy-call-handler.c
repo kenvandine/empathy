@@ -407,7 +407,7 @@ empathy_call_handler_start_call (EmpathyCallHandler *handler)
   if (priv->call == NULL)
     {
       empathy_contact_call_when_ready (priv->contact,
-        EMPATHY_CONTACT_READY_ID,
+        EMPATHY_CONTACT_READY_HANDLE,
         empathy_call_handler_contact_ready_cb, NULL, NULL, G_OBJECT (handler));
     }
   else
