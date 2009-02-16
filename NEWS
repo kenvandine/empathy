@@ -1,3 +1,35 @@
+NEW in 2.25.91
+==============
+ - Set the intial volume button level to a more correct one (Sjoerd Simons).
+ - Set the camera button insensitive after a call (Sjoerd Simons).
+ - Hook up the volume button (Sjoerd Simons).
+ - Hook up DTFM support (Sjoerd Simons).
+ - Notify when receiving an invitation to join a MUC (Guillaume Desmottes).
+ - Save status message on NetworkManager disconnect and restore on reconnect (Davyd Madeley).
+
+Bugs fixed:
+ - Fixed #525559, Ignore muc invitations (Guillaume Desmottes)
+ - Fixed #562109, Spacing in contact information dialog (Frédéric Peters)
+ - Fixed #570357, make install fails on master (tkaroonb)
+ - Fixed #570397, Menu icon for 'Hang Up' is too large in call UI window (Jonathon Jongsma)
+ - Fixed #571184, Event toolip displayes (null) if no message was provided (Guillaume Desmottes)
+ - Fixed #571635, Minor string fixes (Bruce Cowan)
+
+Translations:
+ - Updated Bulgarian translation (Alexander Shopov)
+ - Updated ro translation (Alexandru Szasz, Mișu Moldovan).
+ - Updated ja translation  (Takeshi AIHANA).
+ - Updated Danish translation (Knneth Nielsen).
+ - Updated Polish translation (Tomasz Dominikowski).
+ - Updated sv translation  (Daniel Nylander).
+ - Updated es translation  (Jorge Gonzalez).
+ - Updated Vietnamese translation (Clytie Siddall).
+ - Updated Hungarian translation (kelemeng).
+ - Updated Basque translation  (Inaki Larranaga Murgoitio).
+ - Updated Swedish translation  (Daniel Nylander).
+ - Updated pt_BR translation  (Andre Gondim).
+ - Updated Norwegian bokmål translation. (kmaraas).
+
 NEW in 2.25.90
 ==============
  - Rewrite Voice/Video call UI, and use farsight2 instead of stream-engine. (Sjoerd Simons).
