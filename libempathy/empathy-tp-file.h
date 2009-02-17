@@ -1,6 +1,6 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /*
- * Copyright (C) 2007-2008 Collabora Ltd.
+ * Copyright (C) 2007-2009 Collabora Ltd.
  * Copyright (C) 2007 Marco Barisione <marco@barisione.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -19,6 +19,7 @@
  *
  * Authors: Marco Barisione <marco@barisione.org>
  *          Jonny Lamb <jonny.lamb@collabora.co.uk>
+ *          Cosimo Cecchi <cosimo.cecchi@collabora.co.uk>
  */
 
 #ifndef __EMPATHY_TP_FILE_H__
@@ -28,10 +29,6 @@
 #include <glib.h>
 
 #include <telepathy-glib/channel.h>
-
-#include "empathy-contact.h"
-
-#include <libmissioncontrol/mc-account.h>
 
 G_BEGIN_DECLS
 
@@ -50,10 +47,9 @@ typedef struct _EmpathyTpFileClass EmpathyTpFileClass;
 
 struct _EmpathyTpFile
 {
-  GObject      parent;
+  GObject  parent;
 
-  /*<private>*/
-  EmpathyTpFilePriv *priv;
+  gpointer priv;
 };
 
 struct _EmpathyTpFileClass
@@ -61,28 +57,46 @@ struct _EmpathyTpFileClass
   GObjectClass parent_class;
 };
 
+/* prototypes for operation callbacks */
+
+typedef void (* EmpathyTpFileProgressCallback)
+    (EmpathyTpFile *tp_file,
+     guint64 current_bytes,
+     guint64 total_bytes,
+     gpointer user_data);
+
+typedef void (* EmpathyTpFileOperationCallback)
+    (EmpathyTpFile *tp_file,
+     const GError *error,
+     gpointer user_data);
+
 GType empathy_tp_file_get_type (void) G_GNUC_CONST;
 
-EmpathyTpFile *empathy_tp_file_new (TpChannel *channel);
+/* public methods */
 
-TpChannel *empathy_tp_file_get_channel (EmpathyTpFile *tp_file);
-void empathy_tp_file_accept (EmpathyTpFile *tp_file, guint64 offset,
-  GFile *gfile, GError **error);
+EmpathyTpFile * empathy_tp_file_new (TpChannel *channel);
+
+void empathy_tp_file_accept (EmpathyTpFile *tp_file,
+  guint64 offset,
+  GFile *gfile,
+  GCancellable *cancellable,
+  EmpathyTpFileProgressCallback progress_callback,
+  gpointer progress_user_data,
+  EmpathyTpFileOperationCallback op_callback,
+  gpointer op_user_data);
+
+void empathy_tp_file_offer (EmpathyTpFile *tp_file,
+  GFile *gfile,
+  GCancellable *cancellable,
+  EmpathyTpFileProgressCallback progress_callback,
+  gpointer progress_user_data,
+  EmpathyTpFileOperationCallback op_callback,
+  gpointer op_user_data);
+
 void empathy_tp_file_cancel (EmpathyTpFile *tp_file);
-void empathy_tp_file_offer (EmpathyTpFile *tp_file, GFile *gfile,
-  GError **error);
+void empathy_tp_file_close (EmpathyTpFile *tp_file);
 
-EmpathyContact *empathy_tp_file_get_contact (EmpathyTpFile *tp_file);
-const gchar *empathy_tp_file_get_filename (EmpathyTpFile *tp_file);
-gboolean empathy_tp_file_is_incoming (EmpathyTpFile *tp_file);
-TpFileTransferState empathy_tp_file_get_state (
-  EmpathyTpFile *tp_file, TpFileTransferStateChangeReason *reason);
-guint64 empathy_tp_file_get_size (EmpathyTpFile *tp_file);
-guint64 empathy_tp_file_get_transferred_bytes (EmpathyTpFile *tp_file);
-gint empathy_tp_file_get_remaining_time (EmpathyTpFile *tp_file);
-gdouble empathy_tp_file_get_speed (EmpathyTpFile *tp_file);
-const gchar *empathy_tp_file_get_content_type (EmpathyTpFile *tp_file);
-gboolean empathy_tp_file_is_ready (EmpathyTpFile *tp_file);
+guint empathy_tp_file_get_state (EmpathyTpFile *tp_file, guint *reason);
 
 G_END_DECLS
 

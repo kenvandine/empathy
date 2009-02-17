@@ -1318,6 +1318,58 @@ empathy_dispatcher_create_channel (EmpathyDispatcher *dispatcher,
     G_OBJECT (request_data->dispatcher));
 }
 
+#if 0
+
+static void
+dispatcher_create_channel_with_contact_cb (EmpathyContact *contact,
+                                           const GError *error,
+                                           gpointer user_data,
+                                           GObject *object)
+{
+  DispatcherRequestData *request_data = (DispatcherRequestData *) user_data;
+  GValue *target_handle;
+
+  g_assert (request_data->request);
+
+  if (error != NULL)
+    {
+      dispatcher_request_failed (request_data->dispatcher,
+        request_data, error);
+      return;
+    }
+
+  request_data->handle = empathy_contact_get_handle (contact);
+
+  target_handle = tp_g_value_slice_new (G_TYPE_UINT);
+  g_value_set_uint (target_handle, request_data->handle);
+  g_hash_table_insert (request_data->request,
+    TP_IFACE_CHANNEL ".TargetHandle", target_handle);
+
+  tp_cli_connection_interface_requests_call_create_channel (
+    request_data->connection, -1,
+    request_data->request, dispatcher_create_channel_cb, request_data, NULL,
+    G_OBJECT (request_data->dispatcher));
+}
+
+static void
+dispatcher_send_file_connection_ready_cb (TpConnection *connection,
+                                          const GError *error,
+                                          gpointer user_data)
+{
+  DispatcherRequestData *request_data = (DispatcherRequestData *) user_data;
+
+  if (error !=  NULL)
+    {
+      dispatcher_request_failed (request_data->dispatcher,
+          request_data, error);
+      return;
+    }
+
+  empathy_contact_call_when_ready (request_data->contact,
+    EMPATHY_CONTACT_READY_HANDLE, dispatcher_create_channel_with_contact_cb,
+    request_data, NULL, G_OBJECT (request_data->dispatcher));
+}
+
 void
 empathy_dispatcher_send_file_to_contact (EmpathyContact *contact,
                                          const gchar *filename,
@@ -1394,6 +1446,8 @@ empathy_dispatcher_send_file_to_contact (EmpathyContact *contact,
 
   g_object_unref (dispatcher);
 }
+
+#endif
 
 GStrv
 empathy_dispatcher_find_channel_class (EmpathyDispatcher *dispatcher,

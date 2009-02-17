@@ -53,13 +53,18 @@ typedef struct {
   GObjectClass parent_class;
 } EmpathyFTHandlerClass;
 
+typedef void (* EmpathyFTHandlerReadyCallback) (EmpathyFTHandler *handler,
+                                                GError *error,
+                                                gpointer user_data);
+
 GType empathy_ft_handler_get_type (void);
 
 /* public methods */
 EmpathyFTHandler * empathy_ft_handler_new_outgoing (EmpathyContact *contact,
     GFile *source);
-EmpathyFTHandler * empathy_ft_handler_new_incoming (EmpathyTpFile *tp_file,
-    GFile *destination);
+void empathy_ft_handler_new_incoming (EmpathyTpFile *tp_file,
+    GFile *destination, EmpathyFTHandlerReadyCallback callback,
+    gpointer user_data);
 void empathy_ft_handler_start_transfer (EmpathyFTHandler *handler,
     GCancellable *cancellable);
 

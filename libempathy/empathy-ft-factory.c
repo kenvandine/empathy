@@ -113,6 +113,22 @@ empathy_ft_factory_init (EmpathyFTFactory *self)
   self->priv = priv;
 }
 
+static void
+ft_handler_incoming_ready_cb (EmpathyFTHandler *handler,
+                              GError *error,
+                              gpointer user_data)
+{
+  EmpathyFTFactory *factory = user_data;
+
+  if (error != NULL)
+    {
+      /* TODO: error handling */
+      return;
+    }
+
+  g_signal_emit (factory, signals[NEW_FT_HANDLER], 0, handler, FALSE);
+}
+
 /* public methods */
 
 EmpathyFTFactory*
@@ -143,7 +159,6 @@ empathy_ft_factory_claim_channel (EmpathyFTFactory *factory,
                                   EmpathyDispatchOperation *operation,
                                   GFile *destination)
 {
-  EmpathyFTHandler *handler;
   EmpathyTpFile *tp_file;
 
   g_return_if_fail (EMPATHY_IS_FT_FACTORY (factory));
@@ -152,12 +167,9 @@ empathy_ft_factory_claim_channel (EmpathyFTFactory *factory,
 
   tp_file = EMPATHY_TP_FILE
       (empathy_dispatch_operation_get_channel_wrapper (operation));
-  handler = empathy_ft_handler_new_incoming (tp_file, destination);
+  empathy_ft_handler_new_incoming (tp_file, destination,
+      ft_handler_incoming_ready_cb, factory);
 
   empathy_dispatch_operation_claim (operation);
-
-  g_signal_emit (factory, signals[NEW_FT_HANDLER], 0, handler, FALSE);
-
-  g_object_unref (handler);
 }
 

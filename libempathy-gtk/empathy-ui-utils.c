@@ -51,6 +51,8 @@
 #include <libempathy/empathy-dispatcher.h>
 #include <libempathy/empathy-idle.h>
 #include <libempathy/empathy-tp-file.h>
+#include <libempathy/empathy-ft-factory.h>
+#include <libempathy/empathy-ft-handler.h>
 
 #define SCHEMES "(https?|s?ftps?|nntp|news|javascript|about|ghelp|apt|telnet|"\
 		"file|webcal|mailto)"
@@ -1403,7 +1405,7 @@ empathy_toggle_button_set_state_quietly (GtkWidget *widget,
 }
 
 /* Sending files with the file chooser */
-
+#if 0
 static void
 file_manager_send_file_request_cb (EmpathyDispatchOperation *operation,
 				   const GError *error, gpointer user_data)
@@ -1426,12 +1428,24 @@ file_manager_send_file_request_cb (EmpathyDispatchOperation *operation,
 
 	g_object_unref (file);
 }
+#endif
+
+static void
+new_ft_handler_cb (EmpathyFTFactory *factory,
+		   EmpathyFTHandler *handler,
+		   gboolean direction,
+		   gpointer user_data)
+{
+	empathy_ft_handler_start_transfer (handler, g_cancellable_new ());
+}
 
 static void
 file_manager_send_file_response_cb (GtkDialog      *widget,
 				    gint            response_id,
 				    EmpathyContact *contact)
 {
+	EmpathyFTFactory *factory;
+
 	if (response_id == GTK_RESPONSE_OK) {
 		GSList *list;
 		GSList *l;
@@ -1467,12 +1481,16 @@ file_manager_send_file_response_cb (GtkDialog      *widget,
 			DEBUG ("\t%s", uri);
 			filename = g_file_get_basename (gfile);
 			g_file_info_get_modification_time (info, &mtime);
-
+#if 0
 			empathy_dispatcher_send_file_to_contact (contact,
 				filename, g_file_info_get_size (info), mtime.tv_sec,
 				g_file_info_get_content_type (info),
 				file_manager_send_file_request_cb, gfile);
-
+#endif
+			factory = empathy_ft_factory_dup_singleton ();
+			g_signal_connect (factory, "new-ft-handler",
+					  G_CALLBACK (new_ft_handler_cb), NULL);
+			empathy_ft_factory_new_transfer (factory, contact, gfile);
 			g_free (filename);
 			g_object_unref (info);
 

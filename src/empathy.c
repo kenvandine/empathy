@@ -50,6 +50,7 @@
 #include <libempathy/empathy-dispatcher.h>
 #include <libempathy/empathy-dispatch-operation.h>
 #include <libempathy/empathy-log-manager.h>
+#include <libempathy/empathy-ft-factory.h>
 #include <libempathy/empathy-tp-chat.h>
 #include <libempathy/empathy-tp-call.h>
 
@@ -128,16 +129,11 @@ dispatch_cb (EmpathyDispatcher *dispatcher,
 
 		factory = empathy_call_factory_get ();
 		empathy_call_factory_claim_channel (factory, operation);
-	} else if (channel_type == TP_IFACE_QUARK_CHANNEL_TYPE_FILE_TRANSFER) {
-		EmpathyFTManager *ft_manager;
-		EmpathyTpFile    *tp_file;
+	} else if (channel_type == EMP_IFACE_QUARK_CHANNEL_TYPE_FILE_TRANSFER) {
+		EmpathyFTFactory *factory;
 
-		ft_manager = empathy_ft_manager_dup_singleton ();
-		tp_file = EMPATHY_TP_FILE (
-			empathy_dispatch_operation_get_channel_wrapper (operation));
-		empathy_ft_manager_add_tp_file (ft_manager, tp_file);
-		empathy_dispatch_operation_claim (operation);
-		g_object_unref (ft_manager);
+		factory = empathy_ft_factory_dup_singleton ();
+		empathy_ft_factory_claim_channel (factory, operation, NULL);
 	}
 }
 
