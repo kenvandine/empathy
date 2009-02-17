@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: empathy HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?product=empathy&component=general\n"
-"POT-Creation-Date: 2009-02-03 22:21+0000\n"
-"PO-Revision-Date: 2009-02-11 08:38+0100\n"
+"POT-Creation-Date: 2009-02-16 21:24+0000\n"
+"PO-Revision-Date: 2009-02-17 19:57+0100\n"
 "Last-Translator: Gabor Kelemen <kelemeng@gnome.hu>\n"
 "Language-Team: Hungarian <gnome@fsf.hu>\n"
 "MIME-Version: 1.0\n"
@@ -226,14 +226,10 @@ msgid "Whether or not to convert smileys into graphical images in conversations.
 msgstr "Hangulatjelek képekké alakítása társalgások közben."
 
 #: ../data/empathy.schemas.in.h:47
-msgid "Whether or not to play a sound notifications when away or busy."
-msgstr "Lejátsszon-e hangos értesítéseket, ha Ön távol van vagy elfoglalt?"
-
-#: ../data/empathy.schemas.in.h:48
 msgid "Whether or not to play a sound to notify for contacts logging in the network."
 msgstr "Lejátsszon-e hangos értesítéseket, ha a partnerek bejelentkeznek a hálózatra?"
 
-#: ../data/empathy.schemas.in.h:49
+#: ../data/empathy.schemas.in.h:48
 msgid ""
 "Whether or not to play a sound to notify for contacts logging off the "
 "network."
@@ -241,29 +237,34 @@ msgstr ""
 "Lejátsszon-e hangos értesítéseket, ha a partnerek kijelentkeznek a "
 "hálózatból?"
 
-#: ../data/empathy.schemas.in.h:50
+#: ../data/empathy.schemas.in.h:49
 msgid "Whether or not to play a sound to notify for events."
 msgstr "Lejátsszon-e hangot az eseményekre figyelmeztetésként?"
 
-#: ../data/empathy.schemas.in.h:51
+#: ../data/empathy.schemas.in.h:50
 msgid "Whether or not to play a sound to notify for incoming messages."
 msgstr "Lejátsszon-e hangot bejövő üzenetekre figyelmeztetésként?"
 
-#: ../data/empathy.schemas.in.h:52
+#: ../data/empathy.schemas.in.h:51
 msgid "Whether or not to play a sound to notify for new conversations."
 msgstr "Lejátsszon-e hangot új társalgásokra figyelmeztetésként?"
 
-#: ../data/empathy.schemas.in.h:53
+#: ../data/empathy.schemas.in.h:52
 msgid "Whether or not to play a sound to notify for outgoing messages."
 msgstr "Lejátsszon-e hangot kimenő üzenetekre figyelmeztetésként?"
 
-#: ../data/empathy.schemas.in.h:54
+#: ../data/empathy.schemas.in.h:53
 msgid "Whether or not to play a sound when logging in a network."
 msgstr "Lejátsszon-e hangot a hálózatba bejelentkezéskor?"
 
-#: ../data/empathy.schemas.in.h:55
+#: ../data/empathy.schemas.in.h:54
 msgid "Whether or not to play a sound when logging off a network."
 msgstr "Lejátsszon-e hangot a hálózatból kijelentkezéskor?"
+
+#: ../data/empathy.schemas.in.h:55
+#| msgid "Whether or not to play a sound notifications when away or busy."
+msgid "Whether or not to play sound notifications when away or busy."
+msgstr "Lejátsszon-e hangos értesítéseket, ha Ön távol van vagy elfoglalt?"
 
 #: ../data/empathy.schemas.in.h:56
 msgid ""
@@ -645,7 +646,7 @@ msgstr "%s belépett a szobába"
 msgid "%s has left the room"
 msgstr "%s elhagyta a szobát"
 
-#: ../libempathy-gtk/empathy-chat.c:1248 ../src/empathy-call-window.c:466
+#: ../libempathy-gtk/empathy-chat.c:1248 ../src/empathy-call-window.c:474
 msgid "Disconnected"
 msgstr "Kapcsolat bontva"
 
@@ -675,8 +676,9 @@ msgid "_Open Link"
 msgstr "_Hivatkozás megnyitása"
 
 #: ../libempathy-gtk/empathy-chat-text-view.c:439
-msgid "%A %d %B %Y"
-msgstr "%y. %B %e %A"
+#| msgid "%A %d %B %Y"
+msgid "%A %B %d %Y"
+msgstr "%Y. %B %e %A"
 
 #: ../libempathy-gtk/empathy-contact-dialogs.c:180
 msgid "Personal Information"
@@ -690,11 +692,11 @@ msgstr "Partnerinformációk szerkesztése"
 msgid "Contact Information"
 msgstr "Partnerinformációk"
 
-#: ../libempathy-gtk/empathy-contact-dialogs.c:266
+#: ../libempathy-gtk/empathy-contact-dialogs.c:267
 msgid "I would like to add you to my contact list."
 msgstr "Szeretném hozzáadni Önt a partnerlistámhoz."
 
-#: ../libempathy-gtk/empathy-contact-dialogs.c:290
+#: ../libempathy-gtk/empathy-contact-dialogs.c:291
 msgid "New Contact"
 msgstr "Új partner"
 
@@ -733,39 +735,39 @@ msgstr "Partner eltávolítása"
 msgid "Sorry, I don't want you in my contact list anymore."
 msgstr "Elnézést, már nem szeretném a partnerlistámon látni."
 
-#: ../libempathy-gtk/empathy-contact-menu.c:122
+#: ../libempathy-gtk/empathy-contact-menu.c:130
 #: ../src/empathy-main-window.glade.h:9
 msgid "_Chat"
 msgstr "_Csevegés"
 
-#: ../libempathy-gtk/empathy-contact-menu.c:153
+#: ../libempathy-gtk/empathy-contact-menu.c:161
 #: ../src/empathy-call-window.glade.h:5
 msgid "_Call"
 msgstr "_Hívás"
 
-#: ../libempathy-gtk/empathy-contact-menu.c:192
+#: ../libempathy-gtk/empathy-contact-menu.c:200
 #: ../src/empathy-main-window.glade.h:17
 msgid "_View Previous Conversations"
 msgstr "K_orábbi társalgások megjelenítése"
 
-#: ../libempathy-gtk/empathy-contact-menu.c:214
+#: ../libempathy-gtk/empathy-contact-menu.c:222
 msgid "Send file"
 msgstr "Fájl küldése"
 
-#: ../libempathy-gtk/empathy-contact-menu.c:242
+#: ../libempathy-gtk/empathy-contact-menu.c:250
 msgid "Infor_mation"
 msgstr "_Információk"
 
-#: ../libempathy-gtk/empathy-contact-menu.c:269
+#: ../libempathy-gtk/empathy-contact-menu.c:277
 #: ../src/empathy-chat-window.glade.h:14 ../src/empathy-main-window.glade.h:11
 msgid "_Edit"
 msgstr "S_zerkesztés"
 
-#: ../libempathy-gtk/empathy-contact-menu.c:328
+#: ../libempathy-gtk/empathy-contact-menu.c:336
 msgid "Inviting to this room"
 msgstr "Meghívás ebbe a szobába"
 
-#: ../libempathy-gtk/empathy-contact-menu.c:361
+#: ../libempathy-gtk/empathy-contact-menu.c:369
 msgid "_Invite to chatroom"
 msgstr "_Meghívás csevegőszobába"
 
@@ -887,7 +889,7 @@ msgid "SSL"
 msgstr "SSL"
 
 #: ../libempathy-gtk/empathy-log-window.c:498
-#: ../src/empathy-import-dialog.c:276
+#: ../src/empathy-import-dialog.c:277
 msgid "Account"
 msgstr "Fiók"
 
@@ -1379,62 +1381,57 @@ msgstr ""
 msgid "Type:"
 msgstr "Típus:"
 
-#: ../src/empathy-call-window.c:180
-#| msgid "Contact"
+#: ../src/empathy-call-window.c:187
 msgid "Contrast"
 msgstr "Kontraszt"
 
-#: ../src/empathy-call-window.c:180
+#: ../src/empathy-call-window.c:187
 msgid "Brightness"
 msgstr "Fényerő"
 
-#: ../src/empathy-call-window.c:180
+#: ../src/empathy-call-window.c:187
 msgid "Gamma"
 msgstr "Gamma"
 
-#: ../src/empathy-call-window.c:212
-#| msgid "<b>Volume</b>"
+#: ../src/empathy-call-window.c:219
 msgid "Volume"
 msgstr "Hangerő"
 
-#: ../src/empathy-call-window.c:287
+#: ../src/empathy-call-window.c:295
 msgid "_Sidebar"
 msgstr "_Oldalsáv"
 
-#: ../src/empathy-call-window.c:305
+#: ../src/empathy-call-window.c:313
 msgid "Dialpad"
 msgstr "Tárcsázókészülék"
 
-#: ../src/empathy-call-window.c:309
+#: ../src/empathy-call-window.c:317
 msgid "Audio input"
 msgstr "Hangbemenet"
 
-#: ../src/empathy-call-window.c:313
+#: ../src/empathy-call-window.c:321
 msgid "Video input"
 msgstr "Videobemenet"
 
-#: ../src/empathy-call-window.c:326
-#| msgid "Connecting"
+#: ../src/empathy-call-window.c:334
 msgid "Connecting..."
 msgstr "Kapcsolódás…"
 
-#: ../src/empathy-call-window.c:489
+#: ../src/empathy-call-window.c:488
 #, c-format
-#| msgid "Connected"
 msgid "Connected -- %d:%02dm"
 msgstr "Kapcsolódva – %d.%02dp"
 
 #: ../src/empathy-call-window.glade.h:1
-#| msgid "Hang Up"
 msgid "Hang up"
 msgstr "Befejezés"
 
 #: ../src/empathy-call-window.glade.h:2
-msgid "Send Video"
-msgstr "Videó küldése"
+#| msgid "Send Video"
+msgid "Send Audio"
+msgstr "Hang küldése"
 
 #: ../src/empathy-call-window.glade.h:3
-#| msgid "Send Video"
 msgid "Send video"
 msgstr "Videó küldése"
 
@@ -1445,10 +1442,6 @@ msgstr "Video előnézet"
 #: ../src/empathy-call-window.glade.h:6
 msgid "_View"
 msgstr "_Nézet"
-
-#: ../src/empathy-call-window.glade.h:7
-msgid "menuitem2"
-msgstr ""
 
 #: ../src/empathy-chat-window.c:313
 #, c-format
@@ -1616,17 +1609,42 @@ msgstr "A kezeléséhez egy külső alkalmazás kerül elindításra."
 msgid "You don't have the needed external application to handle it."
 msgstr "Nem rendelkezik a kezeléséhez szükséges külső alkalmazással."
 
-#: ../src/empathy-event-manager.c:706
+#: ../src/empathy-event-manager.c:692
+#| msgid "Romanian"
+msgid "Room invitation"
+msgstr "Szobameghívás"
+
+#: ../src/empathy-event-manager.c:695
+#, c-format
+msgid "%s is inviting you to join %s"
+msgstr "%s kéri, hogy csatlakozzon ehhez: %s"
+
+#. Decline button
+#: ../src/empathy-event-manager.c:703 ../src/empathy-ft-manager.c:1021
+msgid "_Decline"
+msgstr "_Elutasítás"
+
+#: ../src/empathy-event-manager.c:708
+#| msgid "Join"
+msgid "_Join"
+msgstr "_Csatlakozás"
+
+#: ../src/empathy-event-manager.c:738
+#, c-format
+msgid "%s invited you to join %s"
+msgstr "%s megkérte, hogy csatlakozzon ehhez: %s"
+
+#: ../src/empathy-event-manager.c:860
 #, c-format
 msgid "Incoming file transfer from %s"
 msgstr "Bejövő fájlátvitel %s partnertől"
 
-#: ../src/empathy-event-manager.c:800
+#: ../src/empathy-event-manager.c:954
 #, c-format
 msgid "Subscription requested by %s"
 msgstr "%s feliratkozást kért"
 
-#: ../src/empathy-event-manager.c:804
+#: ../src/empathy-event-manager.c:958
 #, c-format
 msgid ""
 "\n"
@@ -1774,11 +1792,6 @@ msgstr "%s egy fájlt szeretne küldeni Önnek"
 msgid "Do you want to accept the file \"%s\" (%s)?"
 msgstr "El kívánja fogadni a(z) „%s” fájlt (%s)?"
 
-#. Decline button
-#: ../src/empathy-ft-manager.c:1021
-msgid "_Decline"
-msgstr "_Elutasítás"
-
 #. Accept button
 #: ../src/empathy-ft-manager.c:1030
 msgid "_Accept"
@@ -1792,19 +1805,20 @@ msgstr "Fájlátvitelek"
 msgid "Remove completed, canceled and failed file transfers from the list"
 msgstr "Befejezett, megszakított és meghiúsult átvitelek eltávolítása a listából"
 
-#: ../src/empathy-import-dialog.c:254
+#. Translators: this is the header of a treeview column
+#: ../src/empathy-import-dialog.c:255
 msgid "Import"
 msgstr "Importálás"
 
-#: ../src/empathy-import-dialog.c:263
+#: ../src/empathy-import-dialog.c:264
 msgid "Protocol"
 msgstr "Protokoll"
 
-#: ../src/empathy-import-dialog.c:289
+#: ../src/empathy-import-dialog.c:290
 msgid "Source"
 msgstr "Forrás"
 
-#: ../src/empathy-import-dialog.c:377
+#: ../src/empathy-import-dialog.c:378
 msgid ""
 "No accounts to import could be found. Empathy currently only supports "
 "importing accounts from Pidgin."
@@ -2003,7 +2017,8 @@ msgid "<b>Appearance</b>"
 msgstr "<b>Megjelenés</b>"
 
 #: ../src/empathy-preferences.glade.h:2
-msgid "<b>Behaviour</b>"
+#| msgid "<b>Behaviour</b>"
+msgid "<b>Behavior</b>"
 msgstr "<b>Viselkedés</b>"
 
 #: ../src/empathy-preferences.glade.h:3
