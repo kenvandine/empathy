@@ -274,6 +274,9 @@ set_tp_contact (EmpathyContact *contact,
 {
   EmpathyContactPriv *priv = GET_PRIV (contact);
 
+  if (tp_contact == NULL)
+    return;
+
   g_assert (priv->tp_contact == NULL);
   priv->tp_contact = g_object_ref (tp_contact);
   priv->presence = empathy_contact_get_presence (contact);
