@@ -106,8 +106,6 @@ static void contact_widget_contact_update (EmpathyContactWidget *information);
 static void contact_widget_change_contact (EmpathyContactWidget *information);
 static void contact_widget_avatar_changed_cb (EmpathyAvatarChooser *chooser,
     EmpathyContactWidget *information);
-static void contact_widget_account_changed_cb (GtkComboBox *widget,
-    EmpathyContactWidget *information);
 static gboolean contact_widget_id_focus_out_cb (GtkWidget *widget,
     GdkEventFocus *event, EmpathyContactWidget *information);
 static gboolean contact_widget_entry_alias_focus_event_cb (
@@ -162,7 +160,8 @@ empathy_contact_widget_new (EmpathyContact *contact,
   TpConnection *connection;
   gchar *filename;
 
-  connection = empathy_contact_get_connection (contact);
+  g_return_val_if_fail (contact == NULL || EMPATHY_IS_CONTACT (contact), NULL);
+
   information = g_slice_new0 (EmpathyContactWidget);
   information->flags = flags;
 
@@ -207,7 +206,8 @@ empathy_contact_widget_new (EmpathyContact *contact,
   contact_widget_details_setup (information);
   contact_widget_client_setup (information);
 
-  contact_widget_set_contact (information, contact);
+  if (contact != NULL)
+      contact_widget_set_contact (information, contact);
 
   return empathy_builder_unref_and_keep_widget (gui,
     information->vbox_contact_widget);
@@ -510,8 +510,9 @@ contact_widget_contact_setup (EmpathyContactWidget *information)
     {
       information->widget_account = empathy_account_chooser_new ();
 
-      g_signal_connect (information->widget_account, "changed",
-            G_CALLBACK (contact_widget_account_changed_cb),
+      contact_widget_change_contact (information);
+      g_signal_connect_swapped (information->widget_account, "changed",
+            G_CALLBACK (contact_widget_change_contact),
             information);
     }
   else
@@ -641,12 +642,12 @@ contact_widget_contact_update (EmpathyContactWidget *information)
       if (account)
         {
           g_signal_handlers_block_by_func (information->widget_account,
-                   contact_widget_account_changed_cb,
+                   contact_widget_change_contact,
                    information);
           empathy_account_chooser_set_account (
               EMPATHY_ACCOUNT_CHOOSER (information->widget_account), account);
           g_signal_handlers_unblock_by_func (information->widget_account,
-              contact_widget_account_changed_cb, information);
+              contact_widget_change_contact, information);
         }
     }
   else
@@ -773,13 +774,6 @@ contact_widget_avatar_changed_cb (EmpathyAvatarChooser *chooser,
       empathy_tp_contact_factory_set_avatar (information->factory,
           data, size, mime_type);
     }
-}
-
-static void
-contact_widget_account_changed_cb (GtkComboBox *widget,
-                                   EmpathyContactWidget *information)
-{
-  contact_widget_change_contact (information);
 }
 
 static gboolean

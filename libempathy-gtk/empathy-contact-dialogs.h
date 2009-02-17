@@ -29,12 +29,13 @@
 G_BEGIN_DECLS
 
 void empathy_subscription_dialog_show        (EmpathyContact *contact,
-				              GtkWindow     *parent);
+				              GtkWindow      *parent);
 void empathy_contact_information_dialog_show (EmpathyContact *contact,
-					      GtkWindow     *parent,
-					      gboolean       edit,
-					      gboolean       is_user);
-void empathy_new_contact_dialog_show         (GtkWindow     *parent);
+					      GtkWindow      *parent);
+void empathy_contact_edit_dialog_show        (EmpathyContact *contact,
+					      GtkWindow      *parent);
+void empathy_contact_personal_dialog_show    (GtkWindow      *parent);
+void empathy_new_contact_dialog_show         (GtkWindow      *parent);
 
 G_END_DECLS
 

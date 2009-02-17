@@ -40,8 +40,9 @@
 
 static GList *subscription_dialogs = NULL;
 static GList *information_dialogs = NULL;
+static GList *edit_dialogs = NULL;
+static GtkWidget *personal_dialog = NULL;
 static GtkWidget *new_contact_dialog = NULL;
-
 
 static gint
 contact_dialogs_find (GtkDialog      *dialog,
@@ -144,25 +145,22 @@ empathy_subscription_dialog_show (EmpathyContact *contact,
  */
 
 static void
-contact_information_response_cb (GtkDialog *dialog,
-				 gint       response,
-				 GtkWidget *contact_widget)
+contact_dialogs_response_cb (GtkDialog *dialog,
+			     gint       response,
+			     GList    **dialogs)
 {
-	information_dialogs = g_list_remove (information_dialogs, dialog);
+	*dialogs = g_list_remove (*dialogs, dialog);
 	gtk_widget_destroy (GTK_WIDGET (dialog));
 }
 
 void
 empathy_contact_information_dialog_show (EmpathyContact *contact,
-					 GtkWindow      *parent,
-					 gboolean        edit,
-					 gboolean        is_user)
+					 GtkWindow      *parent)
 {
-	GtkWidget                *dialog;
-	GtkWidget                *button;
-	GtkWidget                *contact_widget;
-	GList                    *l;
-	EmpathyContactWidgetFlags flags = 0;
+	GtkWidget *dialog;
+	GtkWidget *button;
+	GtkWidget *contact_widget;
+	GList     *l;
 
 	g_return_if_fail (EMPATHY_IS_CONTACT (contact));
 
@@ -178,15 +176,7 @@ empathy_contact_information_dialog_show (EmpathyContact *contact,
 	dialog = gtk_dialog_new ();
 	gtk_dialog_set_has_separator (GTK_DIALOG (dialog), FALSE);
 	gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
-	if (is_user) {
-		gtk_window_set_title (GTK_WINDOW (dialog), _("Personal Information"));
-	}
-	else if (edit) {
-		gtk_window_set_title (GTK_WINDOW (dialog), _("Edit Contact Information"));
-	}
-	else {
-		gtk_window_set_title (GTK_WINDOW (dialog), _("Contact Information"));
-	}
+	gtk_window_set_title (GTK_WINDOW (dialog), _("Edit Contact Information"));
 
 	/* Close button */
 	button = gtk_button_new_with_label (GTK_STOCK_CLOSE);
@@ -199,40 +189,134 @@ empathy_contact_information_dialog_show (EmpathyContact *contact,
 	gtk_widget_show (button);
 
 	/* Contact info widget */
-	if (edit) {
-		flags |= EMPATHY_CONTACT_WIDGET_EDIT_ALIAS;
-	}
-	if (is_user) {
-		flags |= EMPATHY_CONTACT_WIDGET_EDIT_ACCOUNT;
-		flags |= EMPATHY_CONTACT_WIDGET_EDIT_AVATAR;
-	}
-	if (!is_user && edit) {
-		flags |= EMPATHY_CONTACT_WIDGET_EDIT_GROUPS;
-	}
-	contact_widget = empathy_contact_widget_new (contact, flags);
+	contact_widget = empathy_contact_widget_new (contact,
+		EMPATHY_CONTACT_WIDGET_EDIT_NONE);
 	gtk_container_set_border_width (GTK_CONTAINER (contact_widget), 8);
 	gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox),
 			    contact_widget,
 			    TRUE, TRUE, 0);
-	if (flags & EMPATHY_CONTACT_WIDGET_EDIT_ACCOUNT) {
-		empathy_contact_widget_set_account_filter (contact_widget,
-							   empathy_account_chooser_filter_is_connected,
-							   NULL);
-	}
-	gtk_widget_show (contact_widget);
 
 	g_object_set_data (G_OBJECT (dialog), "contact_widget", contact_widget);
 	information_dialogs = g_list_prepend (information_dialogs, dialog);
 
 	g_signal_connect (dialog, "response",
-			  G_CALLBACK (contact_information_response_cb),
-			  contact_widget);
+			  G_CALLBACK (contact_dialogs_response_cb),
+			  &information_dialogs);
 
 	if (parent) {
 		gtk_window_set_transient_for (GTK_WINDOW (dialog), parent);
 	}
 
 	gtk_widget_show (dialog);
+}
+
+void
+empathy_contact_edit_dialog_show (EmpathyContact *contact,
+				  GtkWindow      *parent)
+{
+	GtkWidget *dialog;
+	GtkWidget *button;
+	GtkWidget *contact_widget;
+	GList     *l;
+
+	g_return_if_fail (EMPATHY_IS_CONTACT (contact));
+
+	l = g_list_find_custom (edit_dialogs,
+				contact,
+				(GCompareFunc) contact_dialogs_find);
+	if (l) {
+		gtk_window_present (GTK_WINDOW (l->data));
+		return;
+	}
+
+	/* Create dialog */
+	dialog = gtk_dialog_new ();
+	gtk_dialog_set_has_separator (GTK_DIALOG (dialog), FALSE);
+	gtk_window_set_resizable (GTK_WINDOW (dialog), FALSE);
+	gtk_window_set_title (GTK_WINDOW (dialog), _("Edit Contact Information"));
+
+	/* Close button */
+	button = gtk_button_new_with_label (GTK_STOCK_CLOSE);
+	gtk_button_set_use_stock (GTK_BUTTON (button), TRUE);
+	gtk_dialog_add_action_widget (GTK_DIALOG (dialog),
+				      button,
+				      GTK_RESPONSE_CLOSE);
+	GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+	gtk_window_set_default (GTK_WINDOW (dialog), button);
+	gtk_widget_show (button);
+
+	/* Contact info widget */
+	contact_widget = empathy_contact_widget_new (contact,
+		EMPATHY_CONTACT_WIDGET_EDIT_ALIAS |
+		EMPATHY_CONTACT_WIDGET_EDIT_GROUPS);
+	gtk_container_set_border_width (GTK_CONTAINER (contact_widget), 8);
+	gtk_box_pack_start (GTK_BOX (GTK_DIALOG (dialog)->vbox),
+			    contact_widget,
+			    TRUE, TRUE, 0);
+	g_object_set_data (G_OBJECT (dialog), "contact_widget", contact_widget);
+	edit_dialogs = g_list_prepend (edit_dialogs, dialog);
+
+	g_signal_connect (dialog, "response",
+			  G_CALLBACK (contact_dialogs_response_cb),
+			  &edit_dialogs);
+
+	if (parent) {
+		gtk_window_set_transient_for (GTK_WINDOW (dialog), parent);
+	}
+
+	gtk_widget_show (dialog);
+}
+
+void
+empathy_contact_personal_dialog_show (GtkWindow *parent)
+{
+	GtkWidget *button;
+	GtkWidget *contact_widget;
+
+	if (personal_dialog) {
+		gtk_window_present (GTK_WINDOW (personal_dialog));
+		return;
+	}
+
+	/* Create dialog */
+	personal_dialog = gtk_dialog_new ();
+	gtk_dialog_set_has_separator (GTK_DIALOG (personal_dialog), FALSE);
+	gtk_window_set_resizable (GTK_WINDOW (personal_dialog), FALSE);
+	gtk_window_set_title (GTK_WINDOW (personal_dialog), _("Personal Information"));
+
+	/* Close button */
+	button = gtk_button_new_with_label (GTK_STOCK_CLOSE);
+	gtk_button_set_use_stock (GTK_BUTTON (button), TRUE);
+	gtk_dialog_add_action_widget (GTK_DIALOG (personal_dialog),
+				      button,
+				      GTK_RESPONSE_CLOSE);
+	GTK_WIDGET_SET_FLAGS (button, GTK_CAN_DEFAULT);
+	gtk_window_set_default (GTK_WINDOW (personal_dialog), button);
+	gtk_widget_show (button);
+
+	/* Contact info widget */
+	contact_widget = empathy_contact_widget_new (NULL,
+		EMPATHY_CONTACT_WIDGET_EDIT_ACCOUNT |
+		EMPATHY_CONTACT_WIDGET_EDIT_ALIAS |
+		EMPATHY_CONTACT_WIDGET_EDIT_AVATAR);
+	gtk_container_set_border_width (GTK_CONTAINER (contact_widget), 8);
+	gtk_box_pack_start (GTK_BOX (GTK_DIALOG (personal_dialog)->vbox),
+			    contact_widget,
+			    TRUE, TRUE, 0);
+	empathy_contact_widget_set_account_filter (contact_widget,
+						   empathy_account_chooser_filter_is_connected,
+						   NULL);
+
+	g_signal_connect (personal_dialog, "response",
+			  G_CALLBACK (gtk_widget_destroy), NULL);
+	g_object_add_weak_pointer (G_OBJECT (personal_dialog),
+				   (gpointer) &personal_dialog);
+
+	if (parent) {
+		gtk_window_set_transient_for (GTK_WINDOW (personal_dialog), parent);
+	}
+
+	gtk_widget_show (personal_dialog);
 }
 
 /*
