@@ -292,7 +292,7 @@ tp_contact_list_group_request_handles_cb (TpConnection *connection,
 		return;
 	}
 
-	data->channel_handle = g_array_index (handles, TpHandle, 1);
+	data->channel_handle = g_array_index (handles, TpHandle, 0);
 	data->ref_count++;
 	tp_cli_connection_call_request_channel (connection, -1,
 						TP_IFACE_CHANNEL_TYPE_CONTACT_LIST,
