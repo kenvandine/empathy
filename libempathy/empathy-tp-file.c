@@ -25,6 +25,7 @@
 
 #include <string.h>
 #include <unistd.h>
+#include <errno.h>
 #include <sys/types.h>
 #include <sys/socket.h>
 #include <sys/un.h>
@@ -90,6 +91,7 @@ struct _EmpathyTpFilePriv {
   gboolean incoming;
   time_t start_time;
   gchar *unix_socket_path;
+  guint64 offset;
 
   /* GCancellable we're passed when offering/accepting the transfer */
   GCancellable *cancellable;
@@ -97,7 +99,7 @@ struct _EmpathyTpFilePriv {
   /* callbacks for the operation */
   EmpathyTpFileProgressCallback progress_callback;
   gpointer progress_user_data;
-  EmpathyTpFileOperationCallback op_callback,
+  EmpathyTpFileOperationCallback op_callback;
   gpointer op_user_data;
 };
 
@@ -106,6 +108,11 @@ enum {
   PROP_CHANNEL,
   PROP_STATE
 };
+
+static void tp_file_state_changed_cb (TpProxy *proxy, guint state,
+    guint reason, gpointer user_data, GObject *weak_object);
+static void tp_file_transferred_bytes_changed_cb (TpProxy *proxy, guint64 count,
+    gpointer user_data, GObject *weak_object);
 
 #define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyTpFile)
 
@@ -162,11 +169,7 @@ tp_file_finalize (GObject *object)
       g_object_unref (priv->factory);
     }
 
-  g_free (priv->filename);
   g_free (priv->unix_socket_path);
-  g_free (priv->description);
-  g_free (priv->content_hash);
-  g_free (priv->content_type);
 
   if (priv->in_stream)
     g_object_unref (priv->in_stream);
@@ -202,7 +205,7 @@ tp_file_get_property (GObject *object,
                       GValue *value,
                       GParamSpec *pspec)
 {
-  EmpathyTpFilePriv = GET_PRIV (object);
+  EmpathyTpFilePriv *priv = GET_PRIV (object);
 
   switch (param_id)
     {
@@ -266,17 +269,12 @@ tp_file_constructor (GType type,
   GObject *file_obj;
   EmpathyTpFile *tp_file;
   EmpathyTpFilePriv *priv;
-  TpHandle handle;
-  GHashTable *properties;
-  McAccount *account;
 
   file_obj = G_OBJECT_CLASS (empathy_tp_file_parent_class)->constructor (type,
       n_props, props);
   
   tp_file = EMPATHY_TP_FILE (file_obj);
   priv = GET_PRIV (tp_file);
-
-  priv->factory = empathy_contact_factory_dup_singleton ();
 
   g_signal_connect (priv->channel, "invalidated",
     G_CALLBACK (tp_file_invalidated_cb), tp_file);
@@ -289,20 +287,12 @@ tp_file_constructor (GType type,
       TP_PROXY (priv->channel), tp_file_transferred_bytes_changed_cb,
       NULL, NULL, G_OBJECT (tp_file), NULL);
 
-  account = empathy_channel_get_account (priv->channel);
-
-  handle = tp_channel_get_handle (priv->channel, NULL);
-  priv->contact = empathy_contact_factory_get_from_handle (
-      priv->factory, account, (guint) handle);
-
   tp_cli_dbus_properties_call_get (priv->channel,
       -1, EMP_IFACE_CHANNEL_TYPE_FILE_TRANSFER, "State", tp_file_get_state_cb,
       NULL, NULL, file_obj);
 
   priv->state_change_reason =
       EMP_FILE_TRANSFER_STATE_CHANGE_REASON_NONE;
-
-  g_object_unref (account);
 
   return file_obj;
 }
@@ -358,59 +348,6 @@ ft_operation_close_with_error (EmpathyTpFile *tp_file,
 
   if (priv->op_callback)
     priv->op_callback (tp_file, error, priv->op_user_data);
-}
-
-static void
-tp_file_state_changed_cb (TpProxy *proxy,
-                          guint state,
-                          guint reason,
-                          gpointer user_data,
-                          GObject *weak_object)
-{
-  EmpathyTpFilePriv *priv = GET_PRIV (weak_object);
-
-  if (state == priv->state)
-    return;
-
-  DEBUG ("File transfer state changed:\n"
-      "\tfilename = %s, old state = %u, state = %u, reason = %u\n"
-      "\tincoming = %s, in_stream = %s, out_stream = %s",
-      priv->filename, priv->state, state, reason,
-      priv->incoming ? "yes" : "no",
-      priv->in_stream ? "present" : "not present",
-      priv->out_stream ? "present" : "not present");
-
-  /* If the channel is open AND we have the socket path, we can start the
-   * transfer. The socket path could be NULL if we are not doing the actual
-   * data transfer but are just an observer for the channel.
-   */
-  if (state == EMP_FILE_TRANSFER_STATE_OPEN &&
-      priv->unix_socket_path != NULL)
-    tp_file_start_transfer (tp_file);
-
-  priv->state = state;
-  priv->state_change_reason = reason;
-
-  g_object_notify (G_OBJECT (tp_file), "state");
-}
-
-static void
-tp_file_transferred_bytes_changed_cb (TpProxy *proxy,
-                                      guint64 count,
-                                      gpointer user_data,
-                                      GObject *weak_object)
-{
-  EmpathyTpFilePriv *priv = GET_PRIV (weak_object);
-
-  if (priv->transferred_bytes == count)
-    return;
-
-  priv->transferred_bytes = count;
-
-  /* notify clients */
-  if (priv->progress_callback)
-    priv->progress_callback (EMPATHY_TP_FILE (weak_object),
-        priv->transferred_bytes, priv->size, priv->progress_user_data);
 }
 
 static void
@@ -487,8 +424,7 @@ tp_file_start_transfer (EmpathyTpFile *tp_file)
 
   /* notify we're starting a transfer */
   if (priv->progress_callback)
-    priv->progress_callback (tp_file, 0, priv->size,
-        priv->progress_callback_user_data);
+    priv->progress_callback (tp_file, 0, priv->progress_user_data);
 
   if (priv->incoming)
     {
@@ -518,6 +454,54 @@ tp_file_start_transfer (EmpathyTpFile *tp_file)
 
       g_object_unref (socket_stream);
     }
+}
+
+static void
+tp_file_state_changed_cb (TpProxy *proxy,
+                          guint state,
+                          guint reason,
+                          gpointer user_data,
+                          GObject *weak_object)
+{
+  EmpathyTpFilePriv *priv = GET_PRIV (weak_object);
+
+  if (state == priv->state)
+    return;
+
+  DEBUG ("File transfer state changed:\n"
+      "old state = %u, state = %u, reason = %u\n"
+      "\tincoming = %s, in_stream = %s, out_stream = %s",
+      priv->state, state, reason,
+      priv->incoming ? "yes" : "no",
+      priv->in_stream ? "present" : "not present",
+      priv->out_stream ? "present" : "not present");
+
+  /* If the channel is open AND we have the socket path, we can start the
+   * transfer. The socket path could be NULL if we are not doing the actual
+   * data transfer but are just an observer for the channel.
+   */
+  if (state == EMP_FILE_TRANSFER_STATE_OPEN &&
+      priv->unix_socket_path != NULL)
+    tp_file_start_transfer (EMPATHY_TP_FILE (weak_object));
+
+  priv->state = state;
+  priv->state_change_reason = reason;
+
+  g_object_notify (weak_object, "state");
+}
+
+static void
+tp_file_transferred_bytes_changed_cb (TpProxy *proxy,
+                                      guint64 count,
+                                      gpointer user_data,
+                                      GObject *weak_object)
+{
+  EmpathyTpFilePriv *priv = GET_PRIV (weak_object);
+
+  /* notify clients */
+  if (priv->progress_callback)
+    priv->progress_callback (EMPATHY_TP_FILE (weak_object),
+        count, priv->progress_user_data);
 }
 
 static void
@@ -589,7 +573,7 @@ file_read_async_cb (GObject *source,
   g_value_set_static_string (&nothing, "");
 
   emp_cli_channel_type_file_transfer_call_provide_file (
-      TP_PROXY (tp_file->priv->channel), -1,
+      TP_PROXY (priv->channel), -1,
       TP_SOCKET_ADDRESS_TYPE_UNIX, TP_SOCKET_ACCESS_CONTROL_LOCALHOST,
       &nothing, ft_operation_provide_or_accept_file_cb, NULL, NULL, G_OBJECT (tp_file));
 }
@@ -617,20 +601,15 @@ file_replace_async_cb (GObject *source,
       return;
     }
 
-  priv->out_stream = out_stream;
-
-  priv->filename = g_file_get_basename (gfile);
-  g_object_notify (G_OBJECT (tp_file), "filename");
-
-  DEBUG ("Accepting file: filename=%s", tp_file->priv->filename);
+  priv->out_stream = G_OUTPUT_STREAM (out_stream);
 
   g_value_init (&nothing, G_TYPE_STRING);
   g_value_set_static_string (&nothing, "");
 
   emp_cli_channel_type_file_transfer_call_accept_file (TP_PROXY (priv->channel),
       -1, TP_SOCKET_ADDRESS_TYPE_UNIX, TP_SOCKET_ACCESS_CONTROL_LOCALHOST,
-      &nothing, offset, ft_operation_provide_or_accept_file_cb, NULL, NULL,
-      G_OBJECT (tp_file));
+      &nothing, priv->offset,
+      ft_operation_provide_or_accept_file_cb, NULL, NULL, G_OBJECT (tp_file));
 }
 
 
@@ -682,9 +661,10 @@ empathy_tp_file_accept (EmpathyTpFile *tp_file,
   priv->op_callback = op_callback;
   priv->op_user_data = op_user_data;
   priv->incoming = TRUE;
+  priv->offset = offset;
 
-  g_file_replace_async (file, G_PRIORITY_DEFAULT, cancellable,
-      file_replace_async_cb, tp_file);
+  g_file_replace_async (gfile, NULL, FALSE, G_FILE_CREATE_NONE,
+      G_PRIORITY_DEFAULT, cancellable, file_replace_async_cb, tp_file);
 }
 
 void
@@ -709,7 +689,7 @@ empathy_tp_file_offer (EmpathyTpFile *tp_file,
   priv->op_user_data = op_user_data;
   priv->incoming = FALSE;
 
-  g_file_read_async (file, G_PRIORITY_DEFAULT, cancellable,
+  g_file_read_async (gfile, G_PRIORITY_DEFAULT, cancellable,
       file_read_async_cb, tp_file);
 }
 
@@ -724,8 +704,13 @@ empathy_tp_file_offer (EmpathyTpFile *tp_file,
 gboolean
 empathy_tp_file_is_incoming (EmpathyTpFile *tp_file)
 {
+  EmpathyTpFilePriv *priv;
+
   g_return_val_if_fail (EMPATHY_IS_TP_FILE (tp_file), FALSE);
-  return tp_file->priv->incoming;
+  
+  priv = GET_PRIV (tp_file);
+
+  return priv->incoming;
 }
 
 /**
@@ -762,14 +747,18 @@ empathy_tp_file_get_state (EmpathyTpFile *tp_file,
 void
 empathy_tp_file_cancel (EmpathyTpFile *tp_file)
 {
+  EmpathyTpFilePriv *priv;
+
   g_return_if_fail (EMPATHY_IS_TP_FILE (tp_file));
+  
+  priv = GET_PRIV (tp_file);
 
   DEBUG ("Closing channel..");
-  tp_cli_channel_call_close (tp_file->priv->channel, -1,
+  tp_cli_channel_call_close (priv->channel, -1,
     NULL, NULL, NULL, NULL);
 
-  if (tp_file->priv->cancellable != NULL)
-    g_cancellable_cancel (tp_file->priv->cancellable);
+  if (priv->cancellable != NULL)
+    g_cancellable_cancel (priv->cancellable);
 }
 
 /**

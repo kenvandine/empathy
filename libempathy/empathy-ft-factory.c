@@ -114,6 +114,22 @@ empathy_ft_factory_init (EmpathyFTFactory *self)
 }
 
 static void
+ft_handler_outgoing_ready_cb (EmpathyFTHandler *handler,
+                              GError *error,
+                              gpointer user_data)
+{
+  EmpathyFTFactory *factory = user_data;
+
+  if (error != NULL)
+    {
+      /* TODO: error handling */
+      return;
+    }
+
+  g_signal_emit (factory, signals[NEW_FT_HANDLER], 0, handler, TRUE);
+}
+
+static void
 ft_handler_incoming_ready_cb (EmpathyFTHandler *handler,
                               GError *error,
                               gpointer user_data)
@@ -142,16 +158,12 @@ empathy_ft_factory_new_transfer (EmpathyFTFactory *factory,
                                  EmpathyContact *contact,
                                  GFile *source)
 {
-  EmpathyFTHandler *handler;
-
   g_return_if_fail (EMPATHY_IS_FT_FACTORY (factory));
   g_return_if_fail (EMPATHY_IS_CONTACT (contact));
   g_return_if_fail (G_IS_FILE (source));
 
-  handler = empathy_ft_handler_new_outgoing (contact, source);
-  g_signal_emit (factory, signals[NEW_FT_HANDLER], 0, handler, TRUE);
-
-  g_object_unref (handler);
+  empathy_ft_handler_new_outgoing (contact, source,
+      ft_handler_outgoing_ready_cb, factory);
 }
 
 void

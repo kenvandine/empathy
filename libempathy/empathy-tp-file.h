@@ -62,7 +62,6 @@ struct _EmpathyTpFileClass
 typedef void (* EmpathyTpFileProgressCallback)
     (EmpathyTpFile *tp_file,
      guint64 current_bytes,
-     guint64 total_bytes,
      gpointer user_data);
 
 typedef void (* EmpathyTpFileOperationCallback)
@@ -95,6 +94,8 @@ void empathy_tp_file_offer (EmpathyTpFile *tp_file,
 
 void empathy_tp_file_cancel (EmpathyTpFile *tp_file);
 void empathy_tp_file_close (EmpathyTpFile *tp_file);
+
+gboolean empathy_tp_file_is_incoming (EmpathyTpFile *tp_file);
 
 guint empathy_tp_file_get_state (EmpathyTpFile *tp_file, guint *reason);
 

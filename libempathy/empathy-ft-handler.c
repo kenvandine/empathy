@@ -334,7 +334,6 @@ ft_transfer_operation_callback (EmpathyTpFile *tp_file,
 static void
 ft_transfer_progress_callback (EmpathyTpFile *tp_file,
                                guint64 transferred_bytes,
-                               guint64 total_bytes,
                                gpointer user_data)
 {
   EmpathyFTHandler *handler = user_data;
@@ -344,7 +343,7 @@ ft_transfer_progress_callback (EmpathyTpFile *tp_file,
     {
       priv->transferred_bytes = transferred_bytes;
       g_signal_emit (handler, signals[TRANSFER_PROGRESS], 0,
-          transferred_bytes, total_bytes);
+          transferred_bytes, priv->total_bytes);
     }
 }
 
