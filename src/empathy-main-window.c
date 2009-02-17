@@ -703,23 +703,21 @@ main_window_chat_show_offline_cb (GtkToggleAction   *action,
 static void
 main_window_favorite_chatroom_join (EmpathyChatroom *chatroom)
 {
-	MissionControl *mc;
+	EmpathyAccountManager *manager;
 	McAccount      *account;
+	TpConnection   *connection;
 	const gchar    *room;
 
-	mc = empathy_mission_control_dup_singleton ();
+	manager = empathy_account_manager_dup_singleton ();
 	account = empathy_chatroom_get_account (chatroom);
+	connection = empathy_account_manager_get_connection (manager, account);
 	room = empathy_chatroom_get_room (chatroom);
+	g_object_unref (manager);
 
-	if (mission_control_get_connection_status (mc, account, NULL) !=
-	    TP_CONNECTION_STATUS_CONNECTED) {
-		return;
+	if (connection != NULL) {
+		DEBUG ("Requesting channel for '%s'", room);
+		empathy_dispatcher_join_muc (connection, room, NULL, NULL);
 	}
-
-	DEBUG ("Requesting channel for '%s'", room);
-	empathy_dispatcher_join_muc (account, room, NULL, NULL);
-
-	g_object_unref (mc);
 }
 
 static void
@@ -906,31 +904,7 @@ static void
 main_window_edit_personal_information_cb (GtkAction         *action,
 					  EmpathyMainWindow *window)
 {
-	GSList *accounts;
-
-	accounts = mission_control_get_online_connections (window->mc, NULL);
-	if (accounts) {
-		EmpathyContactFactory *factory;
-		EmpathyContact        *contact;
-		McAccount             *account;
-
-		account = accounts->data;
-		factory = empathy_contact_factory_dup_singleton ();
-		contact = empathy_contact_factory_get_user (factory, account);
-		empathy_contact_run_until_ready (contact,
-						 EMPATHY_CONTACT_READY_HANDLE |
-						 EMPATHY_CONTACT_READY_ID,
-						 NULL);
-
-		empathy_contact_information_dialog_show (contact,
-							 GTK_WINDOW (window->window),
-							 TRUE, TRUE);
-
-		g_slist_foreach (accounts, (GFunc) g_object_unref, NULL);
-		g_slist_free (accounts);
-		g_object_unref (factory);
-		g_object_unref (contact);
-	}
+	empathy_contact_personal_dialog_show (GTK_WINDOW (window->window));
 }
 
 static void
