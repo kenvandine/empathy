@@ -614,9 +614,11 @@ tp_contact_list_new_channel_cb (TpConnection *proxy,
 				gpointer      user_data,
 				GObject      *list)
 {
-	tp_contact_list_group_add_channel (EMPATHY_TP_CONTACT_LIST (list),
-					   object_path, channel_type,
-					   handle_type, handle);
+	if (!suppress_handler) {
+		tp_contact_list_group_add_channel (EMPATHY_TP_CONTACT_LIST (list),
+						   object_path, channel_type,
+						   handle_type, handle);
+	}
 }
 
 static void
