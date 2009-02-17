@@ -27,10 +27,11 @@
 #include <telepathy-glib/util.h>
 
 #include <libempathy/empathy-dispatcher.h>
-#include <libempathy/empathy-contact-factory.h>
+#include <libempathy/empathy-tp-contact-factory.h>
 #include <libempathy/empathy-contact-manager.h>
 #include <libempathy/empathy-tp-chat.h>
 #include <libempathy/empathy-tp-call.h>
+#include <libempathy/empathy-tp-file.h>
 #include <libempathy/empathy-utils.h>
 #include <libempathy/empathy-call-factory.h>
 
@@ -500,21 +501,12 @@ event_manager_operation_invalidated_cb (EmpathyDispatchOperation *operation,
 }
 
 static void
-event_manager_media_channel_got_name_cb (EmpathyContact *contact,
-  const GError *error, gpointer user_data, GObject *object)
+event_manager_media_channel_got_contact (EventManagerApproval *approval)
 {
-  EventManagerApproval *approval = user_data;
   gchar *header;
 
-  if (error != NULL)
-    {
-      /* FIXME just returning assuming the operation will be invalidated as
-       * well */
-      return;
-    }
-
   header = g_strdup_printf (_("Incoming call from %s"),
-    empathy_contact_get_name (contact));
+    empathy_contact_get_name (approval->contact));
 
   event_manager_add (approval->manager,
     approval->contact, EMPATHY_IMAGE_VOIP, header, NULL,
@@ -522,14 +514,6 @@ event_manager_media_channel_got_name_cb (EmpathyContact *contact,
 
   g_free (header);
   event_manager_start_ringing (approval->manager);
-}
-
-static void
-event_manager_media_channel_got_contact (EventManagerApproval *approval)
-{
-  empathy_contact_call_when_ready (approval->contact,
-     EMPATHY_CONTACT_READY_NAME, event_manager_media_channel_got_name_cb,
-        approval, NULL, G_OBJECT (approval->manager));
 }
 
 static void
@@ -604,22 +588,18 @@ event_manager_tube_dispatch_ability_cb (GObject *object,
 }
 
 static void
-event_manager_tube_got_contact_name_cb (EmpathyContact *contact,
-  const GError *error, gpointer user_data, GObject *object)
+event_manager_tube_got_contact_cb (EmpathyTpContactFactory *factory,
+                                   GList *contacts,
+                                   gpointer user_data,
+                                   GObject *object)
 {
   EventManagerApproval *approval = (EventManagerApproval *)user_data;
   EmpathyTubeDispatchAbility dispatchability;
 
-  if (error != NULL)
-    {
-      /* FIXME?, we assume that the operation gets invalidated as well (if it
-       * didn't already */
-       return;
-    }
+  approval->contact = g_object_ref (contacts->data);
 
   dispatchability = empathy_tube_dispatch_is_dispatchable
     (approval->tube_dispatch);
-
 
   switch (dispatchability)
     {
@@ -724,10 +704,10 @@ event_room_channel_process_func (EventPriv *event)
 }
 
 static void
-event_manager_muc_invite_got_contact_name_cb (EmpathyContact *contact,
-                                              const GError *error,
-                                              gpointer user_data,
-                                              GObject *object)
+event_manager_muc_invite_got_contact_cb (EmpathyTpContactFactory *factory,
+                                         GList *contacts,
+                                         gpointer user_data,
+                                         GObject *object)
 {
   EventManagerApproval *approval = (EventManagerApproval *) user_data;
   TpChannel *channel;
@@ -735,6 +715,7 @@ event_manager_muc_invite_got_contact_name_cb (EmpathyContact *contact,
   gchar *msg;
   TpHandle self_handle;
 
+  approval->contact = g_object_ref (contacts->data);
   channel = empathy_dispatch_operation_get_channel (approval->operation);
 
   self_handle = tp_channel_group_get_self_handle (channel);
@@ -795,24 +776,20 @@ event_manager_approve_channel_cb (EmpathyDispatcher *dispatcher,
                 channel, self_handle, &inviter, NULL, NULL))
             {
               /* We are invited to a room */
-              EmpathyContactFactory *contact_factory;
-              McAccount *account;
+              EmpathyTpContactFactory *factory;
+              TpConnection *connection;
 
               DEBUG ("Have been invited to %s. Ask user if he wants to accept",
                   tp_channel_get_identifier (channel));
 
-              account = empathy_tp_chat_get_account (tp_chat);
-              contact_factory = empathy_contact_factory_dup_singleton ();
+              connection = empathy_tp_chat_get_connection (tp_chat);
+              factory = empathy_tp_contact_factory_dup_singleton (connection);
 
-              approval->contact = empathy_contact_factory_get_from_handle (
-                  contact_factory, account, inviter);
+              empathy_tp_contact_factory_get_from_handles (factory,
+                  1, &inviter, event_manager_muc_invite_got_contact_cb,
+                  approval, NULL, G_OBJECT (manager));
 
-              empathy_contact_call_when_ready (approval->contact,
-                EMPATHY_CONTACT_READY_NAME,
-                event_manager_muc_invite_got_contact_name_cb, approval, NULL,
-                G_OBJECT (manager));
-
-              g_object_unref (contact_factory);
+              g_object_unref (factory);
               return;
             }
 
@@ -847,73 +824,45 @@ event_manager_approve_channel_cb (EmpathyDispatcher *dispatcher,
     }
   else if (!tp_strdiff (channel_type, TP_IFACE_CHANNEL_TYPE_FILE_TRANSFER))
     {
-      EmpathyContact        *contact;
-      gchar                 *header;
-      TpHandle               handle;
-      McAccount             *account;
-      EmpathyContactFactory *factory;
-      TpChannel *channel = empathy_dispatch_operation_get_channel (operation);
+      EmpathyTpFile *file;
+      gchar *header;
 
-      factory = empathy_contact_factory_dup_singleton ();
-      handle = tp_channel_get_handle (channel, NULL);
-      account = empathy_channel_get_account (channel);
-
-      contact = empathy_contact_factory_get_from_handle (factory, account,
-        handle);
-
-      empathy_contact_run_until_ready (contact,
-        EMPATHY_CONTACT_READY_NAME, NULL);
+      file = EMPATHY_TP_FILE (empathy_dispatch_operation_get_channel_wrapper (operation));
+      approval->contact = g_object_ref (empathy_tp_file_get_contact (file));
 
       header = g_strdup_printf (_("Incoming file transfer from %s"),
-        empathy_contact_get_name (contact));
+        empathy_contact_get_name (approval->contact));
 
-      event_manager_add (manager, contact, EMPATHY_IMAGE_DOCUMENT_SEND,
+      event_manager_add (manager, approval->contact, EMPATHY_IMAGE_DOCUMENT_SEND,
         header, NULL, approval, event_channel_process_func, NULL);
 
       /* FIXME better sound for incoming file transfers ?*/
       empathy_sound_play (empathy_main_window_get (),
         EMPATHY_SOUND_CONVERSATION_NEW);
 
-      g_object_unref (factory);
-      g_object_unref (account);
       g_free (header);
     }
   else if (!tp_strdiff (channel_type, EMP_IFACE_CHANNEL_TYPE_STREAM_TUBE) ||
       !tp_strdiff (channel_type, EMP_IFACE_CHANNEL_TYPE_DBUS_TUBE))
     {
-      EmpathyContact        *contact;
-      TpHandle               handle;
-      TpHandleType           handle_type;
-      McAccount             *account;
-      EmpathyContactFactory *factory;
-      EmpathyTubeDispatch *tube_dispatch;
       TpChannel *channel;
+      TpHandle handle;
+      TpHandleType handle_type;
+      TpConnection *connection;
+      EmpathyTpContactFactory *factory;
 
       channel = empathy_dispatch_operation_get_channel (operation);
-
       handle = tp_channel_get_handle (channel, &handle_type);
 
       /* Only understand p2p tubes */
       if (handle_type != TP_HANDLE_TYPE_CONTACT)
         return;
 
-      factory = empathy_contact_factory_dup_singleton ();
-      account = empathy_channel_get_account (channel);
-
-      contact = empathy_contact_factory_get_from_handle (factory, account,
-        handle);
-
-      tube_dispatch = empathy_tube_dispatch_new (operation);
-
-      approval->contact = contact;
-      approval->tube_dispatch = tube_dispatch;
-
-      empathy_contact_call_when_ready (contact,
-        EMPATHY_CONTACT_READY_NAME, event_manager_tube_got_contact_name_cb,
-        approval, NULL, G_OBJECT (manager));
-
-      g_object_unref (factory);
-      g_object_unref (account);
+      approval->tube_dispatch = empathy_tube_dispatch_new (operation);
+      connection = tp_channel_borrow_connection (channel);
+      factory = empathy_tp_contact_factory_dup_singleton (connection);
+      empathy_tp_contact_factory_get_from_handles (factory, 1, &handle,
+        event_manager_tube_got_contact_cb, approval, NULL, G_OBJECT (manager));
     }
   else
     {
@@ -945,18 +894,16 @@ event_manager_pendings_changed_cb (EmpathyContactList  *list,
         {
           EventPriv *event = l->data;
 
-      if (event->public.contact == contact &&
-          event->func == event_pending_subscribe_func)
-        {
-          event_remove (event);
-          break;
+          if (event->public.contact == contact &&
+              event->func == event_pending_subscribe_func)
+            {
+              event_remove (event);
+              break;
+            }
         }
-      }
 
       return;
     }
-
-  empathy_contact_run_until_ready (contact, EMPATHY_CONTACT_READY_NAME, NULL);
 
   header = g_strdup_printf (_("Subscription requested by %s"),
     empathy_contact_get_name (contact));
