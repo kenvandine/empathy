@@ -515,8 +515,6 @@ tp_file_got_contact_cb (EmpathyTpContactFactory *factory,
   EmpathyTpFile *tp_file = EMPATHY_TP_FILE (weak_object);
 
   tp_file->priv->contact = g_object_ref (contacts->data);
-  g_object_notify (G_OBJECT (tp_file), "contact");
-
   tp_file_check_if_ready (tp_file);
 }
 
