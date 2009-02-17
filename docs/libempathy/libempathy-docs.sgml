@@ -21,7 +21,6 @@
       <xi:include href="xml/empathy-call-handler.xml"/>
       <xi:include href="xml/empathy-chatroom-manager.xml"/>
       <xi:include href="xml/empathy-chatroom.xml"/>
-      <xi:include href="xml/empathy-contact-factory.xml"/>
       <xi:include href="xml/empathy-contact-groups.xml"/>
       <xi:include href="xml/empathy-contact-list.xml"/>
       <xi:include href="xml/empathy-contact-manager.xml"/>
@@ -45,7 +44,6 @@
       <xi:include href="xml/empathy-tp-contact-factory.xml"/>
       <xi:include href="xml/empathy-tp-contact-list.xml"/>
       <xi:include href="xml/empathy-tp-file.xml"/>
-      <xi:include href="xml/empathy-tp-group.xml"/>
       <xi:include href="xml/empathy-tp-roomlist.xml"/>
       <xi:include href="xml/empathy-tp-tube.xml"/>
       <xi:include href="xml/empathy-tube-handler.xml"/>

@@ -3,7 +3,6 @@ empathy_call_factory_get_type
 empathy_call_handler_get_type
 empathy_chatroom_get_type
 empathy_chatroom_manager_get_type
-empathy_contact_factory_get_type
 empathy_contact_get_type
 empathy_avatar_get_type
 empathy_contact_list_get_type
@@ -12,7 +11,6 @@ empathy_contact_monitor_get_type
 empathy_dispatcher_get_type
 empathy_dispatch_operation_get_type
 empathy_capabilities_get_type
-empathy_contact_ready_get_type
 empathy_debug_flags_get_type
 empathy_dispatch_operation_state_get_type
 empathy_tp_call_status_get_type
@@ -29,7 +27,6 @@ empathy_tp_chat_get_type
 empathy_tp_contact_factory_get_type
 empathy_tp_contact_list_get_type
 empathy_tp_file_get_type
-empathy_tp_group_get_type
 empathy_tp_roomlist_get_type
 empathy_tp_tube_get_type
 empathy_tube_handler_get_type
