@@ -27,6 +27,7 @@
 #include <telepathy-glib/util.h>
 
 #include "empathy-ft-handler.h"
+#include "empathy-contact-factory.h"
 #include "empathy-dispatcher.h"
 #include "empathy-marshal.h"
 #include "empathy-utils.h"
@@ -58,20 +59,14 @@ enum {
 };
 
 typedef struct {
-  EmpathyFTHandler *handler;
-  GFile *gfile;
-  GHashTable *request;
-  goffset total_size;
-} RequestData;
-
-typedef struct {
-  RequestData *req_data;
   GInputStream *stream;
   gboolean done_reading;
   GError *error;
   guchar *buffer;
   GChecksum *checksum;
   gssize total_read;
+  guint64 total_bytes;
+  EmpathyFTHandler *handler;
 } HashingData;
 
 typedef struct {
@@ -83,17 +78,21 @@ typedef struct {
 /* private data */
 typedef struct {
   gboolean dispose_run;
-  EmpathyContact *contact;
   GFile *gfile;
   EmpathyTpFile *tpfile;
   GCancellable *cancellable;
 
+  /* request for the new transfer */
+  GHashTable *request;
+
   /* transfer properties */
+  EmpathyContact *contact;
   gchar *content_type;
   gchar *filename;
   gchar *description;
   guint64 total_bytes;
   guint64 transferred_bytes;
+  guint64 mtime;
   gchar *content_hash;
   EmpFileHashType content_hash_type;
 } EmpathyFTHandlerPriv;
@@ -310,40 +309,13 @@ hash_data_free (HashingData *data)
       g_error_free (data->error);
       data->error = NULL;
     }
+  if (data->handler != NULL)
+    {
+      g_object_unref (data->handler);
+      data->handler = NULL;
+    }
 
   g_slice_free (HashingData, data);
-}
-
-static void
-request_data_free (RequestData *data)
-{
-  if (data->gfile != NULL)
-    {
-      g_object_unref (data->gfile);
-      data->gfile = NULL;
-    }
-
-  if (data->request != NULL)
-    {
-      g_hash_table_unref (data->request);
-      data->request = NULL;
-    }
-
-  g_slice_free (RequestData, data);
-}
-
-static RequestData *
-request_data_new (EmpathyFTHandler *handler, GFile *gfile)
-{
-  RequestData *ret;
-
-  ret = g_slice_new0 (RequestData);
-  ret->request = g_hash_table_new_full (g_str_hash, g_str_equal, NULL,
-      (GDestroyNotify) tp_g_value_slice_free);
-  ret->handler = g_object_ref (handler);
-  ret->gfile = g_object_ref (gfile);
-
-  return ret;
 }
 
 static void
@@ -351,41 +323,38 @@ ft_handler_create_channel_cb (EmpathyDispatchOperation *operation,
                               const GError *error,
                               gpointer user_data)
 {
-  RequestData *req_data = user_data;
+  EmpathyFTHandler *handler = user_data;
   GError *myerr = NULL;
-  EmpathyFTHandlerPriv *priv = GET_PRIV (req_data->handler);
+  EmpathyFTHandlerPriv *priv = GET_PRIV (handler);
 
   DEBUG ("FT: dispatcher create channel CB");
 
   if (error != NULL)
     {
       /* TODO: error handling */
-      goto out;
+      return;
     }
 
   priv->tpfile = g_object_ref
       (empathy_dispatch_operation_get_channel_wrapper (operation));
-  empathy_tp_file_offer (priv->tpfile, req_data->gfile, &myerr);
+  empathy_tp_file_offer (priv->tpfile, priv->gfile, &myerr);
   empathy_dispatch_operation_claim (operation);
-
-out:
-  request_data_free (req_data);
 }
 
 static void
-ft_handler_push_to_dispatcher (RequestData *req_data)
+ft_handler_push_to_dispatcher (EmpathyFTHandler *handler)
 {
   EmpathyDispatcher *dispatcher;
   McAccount *account;
-  EmpathyFTHandlerPriv *priv = GET_PRIV (req_data->handler);
+  EmpathyFTHandlerPriv *priv = GET_PRIV (handler);
 
   DEBUG ("FT: pushing request to the dispatcher");
 
   dispatcher = empathy_dispatcher_dup_singleton ();
   account = empathy_contact_get_account (priv->contact);
 
-  empathy_dispatcher_create_channel (dispatcher, account, req_data->request,
-      ft_handler_create_channel_cb, req_data);
+  empathy_dispatcher_create_channel (dispatcher, account, priv->request,
+      ft_handler_create_channel_cb, handler);
 
   g_object_unref (dispatcher);
 }
@@ -415,25 +384,17 @@ ft_handler_check_if_allowed (EmpathyFTHandler *handler)
 }
 
 static void
-ft_handler_populate_outgoing_request (RequestData *req_data,
-                                      GFileInfo *file_info)
+ft_handler_populate_outgoing_request (EmpathyFTHandler *handler)
 {
   guint contact_handle;
-  const char *content_type;
-  const char *display_name;
-  goffset size;
-  GTimeVal mtime;
+  GHashTable *request;
   GValue *value;
-  GHashTable *request = req_data->request;
-  EmpathyFTHandlerPriv *priv = GET_PRIV (req_data->handler);
+  EmpathyFTHandlerPriv *priv = GET_PRIV (handler);
 
-  /* gather all the information */
+  request = priv->request = g_hash_table_new_full (g_str_hash, g_str_equal,
+	    NULL, (GDestroyNotify) tp_g_value_slice_free);
+
   contact_handle = empathy_contact_get_handle (priv->contact);
-
-  content_type = g_file_info_get_content_type (file_info);
-  display_name = g_file_info_get_display_name (file_info);
-  size = g_file_info_get_size (file_info);
-  g_file_info_get_modification_time (file_info, &mtime);
 
   /* org.freedesktop.Telepathy.Channel.ChannelType */
   value = tp_g_value_slice_new (G_TYPE_STRING);
@@ -452,25 +413,25 @@ ft_handler_populate_outgoing_request (RequestData *req_data,
 
   /* org.freedesktop.Telepathy.Channel.Type.FileTransfer.ContentType */
   value = tp_g_value_slice_new (G_TYPE_STRING);
-  g_value_set_string (value, content_type);
+  g_value_set_string (value, priv->content_type);
   g_hash_table_insert (request,
       EMP_IFACE_CHANNEL_TYPE_FILE_TRANSFER ".ContentType", value);
 
   /* org.freedesktop.Telepathy.Channel.Type.FileTransfer.Filename */
   value = tp_g_value_slice_new (G_TYPE_STRING);
-  g_value_set_string (value, display_name);
+  g_value_set_string (value, priv->filename);
   g_hash_table_insert (request,
       EMP_IFACE_CHANNEL_TYPE_FILE_TRANSFER ".Filename", value);
 
   /* org.freedesktop.Telepathy.Channel.Type.FileTransfer.Size */
   value = tp_g_value_slice_new (G_TYPE_UINT64);
-  g_value_set_uint64 (value, (guint64) size);
+  g_value_set_uint64 (value, (guint64) priv->total_bytes);
   g_hash_table_insert (request,
       EMP_IFACE_CHANNEL_TYPE_FILE_TRANSFER ".Size", value);
 
   /* org.freedesktop.Telepathy.Channel.Type.FileTransfer.Date */
   value = tp_g_value_slice_new (G_TYPE_UINT64);
-  g_value_set_uint64 (value, (guint64) mtime.tv_sec);
+  g_value_set_uint64 (value, (guint64) priv->mtime);
   g_hash_table_insert (request,
       EMP_IFACE_CHANNEL_TYPE_FILE_TRANSFER ".Date", value);
 }
@@ -481,12 +442,14 @@ hash_job_async_close_stream_cb (GObject *source,
                                 gpointer user_data)
 {
   HashingData *hash_data = user_data;
-  RequestData *req_data = hash_data->req_data;
+  EmpathyFTHandler *handler = hash_data->handler;
+  EmpathyFTHandlerPriv *priv;
   GError *error = NULL;
   GValue *value;
-  GHashTable *request;
 
   DEBUG ("FT: closing stream after hashing.");
+
+  priv = GET_PRIV (handler);
 
   /* if we're here we for sure have done reading, check if we stopped due
    * to an error.
@@ -514,14 +477,13 @@ hash_job_async_close_stream_cb (GObject *source,
     }
 
   /* set the checksum in the request */
-  request = req_data->request;
 
   DEBUG ("FT: got file hash %s", g_checksum_get_string (hash_data->checksum));
 
   /* org.freedesktop.Telepathy.Channel.Type.FileTransfer.ContentHash */
   value = tp_g_value_slice_new (G_TYPE_STRING);
   g_value_set_string (value, g_checksum_get_string (hash_data->checksum));
-  g_hash_table_insert (request,
+  g_hash_table_insert (priv->request,
       EMP_IFACE_CHANNEL_TYPE_FILE_TRANSFER ".ContentHash", value);
 
 cleanup:
@@ -529,14 +491,15 @@ cleanup:
 
   if (error != NULL)
     {
-      g_signal_emit (req_data->handler, signals[TRANSFER_ERROR], 0, error);
+      g_signal_emit (handler, signals[TRANSFER_ERROR], 0, error);
       g_clear_error (&error);
-      request_data_free (req_data);
     }
   else
     {
+      g_signal_emit (handler, signals[HASHING_DONE], 0);
+
       /* the request is complete now, push it to the dispatcher */
-      ft_handler_push_to_dispatcher (req_data);
+      ft_handler_push_to_dispatcher (handler);
     }
 }
 
@@ -546,7 +509,6 @@ hash_job_async_read_cb (GObject *source,
                         gpointer user_data)
 {
   HashingData *hash_data = user_data;
-  RequestData *req_data = hash_data->req_data;
   gssize bytes_read;
   GError *error = NULL;
 
@@ -571,8 +533,8 @@ hash_job_async_read_cb (GObject *source,
   else
     {
       g_checksum_update (hash_data->checksum, hash_data->buffer, bytes_read);
-      g_signal_emit (req_data->handler, signals[HASHING_PROGRESS], 0,
-          (guint64) hash_data->total_read, (guint64) req_data->total_size);
+      g_signal_emit (hash_data->handler, signals[HASHING_PROGRESS], 0,
+          (guint64) hash_data->total_read, (guint64) hash_data->total_bytes);
     }
 
 out:
@@ -586,9 +548,8 @@ static void
 schedule_hash_chunk (HashingData *hash_data)
 {
   EmpathyFTHandlerPriv *priv;
-  RequestData *req_data = hash_data->req_data;
 
-  priv = GET_PRIV (req_data->handler);
+  priv = GET_PRIV (hash_data->handler);
 
   if (hash_data->done_reading)
     {
@@ -614,18 +575,16 @@ ft_handler_read_async_cb (GObject *source,
   GFileInputStream *stream;
   GError *error = NULL;
   HashingData *hash_data;
-  GHashTable *request;
   GValue *value;
-  RequestData *req_data = user_data;
+  EmpathyFTHandler *handler = user_data;
+  EmpathyFTHandlerPriv *priv = GET_PRIV (handler);
 
   DEBUG ("FT: GFile read async CB.");
 
-  stream = g_file_read_finish (req_data->gfile, res, &error);
+  stream = g_file_read_finish (priv->gfile, res, &error);
   if (error != NULL)
     {
-      g_signal_emit (req_data->handler, signals[TRANSFER_ERROR], 0, error);
-
-      request_data_free (req_data);
+      g_signal_emit (handler, signals[TRANSFER_ERROR], 0, error);
       g_clear_error (&error);
 
       return;
@@ -634,21 +593,20 @@ ft_handler_read_async_cb (GObject *source,
   hash_data = g_slice_new0 (HashingData);
   hash_data->stream = G_INPUT_STREAM (stream);
   hash_data->done_reading = FALSE;
-  hash_data->req_data = req_data;
+  hash_data->total_bytes = priv->total_bytes;
+  hash_data->handler = g_object_ref (handler);
   /* FIXME: should look at the CM capabilities before setting the
    * checksum type?
    */
   hash_data->checksum = g_checksum_new (G_CHECKSUM_MD5);
 
-  request = req_data->request;
-
   /* org.freedesktop.Telepathy.Channel.Type.FileTransfer.ContentHashType */
   value = tp_g_value_slice_new (G_TYPE_UINT);
   g_value_set_uint (value, EMP_FILE_HASH_TYPE_MD5);
-  g_hash_table_insert (request,
+  g_hash_table_insert (priv->request,
       EMP_IFACE_CHANNEL_TYPE_FILE_TRANSFER ".ContentHashType", value);
 
-  g_signal_emit (req_data->handler, signals[HASHING_STARTED], 0);
+  g_signal_emit (handler, signals[HASHING_STARTED], 0);
 
   schedule_hash_chunk (hash_data);
 }
@@ -659,36 +617,36 @@ ft_handler_complete_request (EmpathyFTHandler *handler)
   EmpathyFTHandlerPriv *priv = GET_PRIV (handler);
   GError *myerr = NULL;
 
-  g_cancellable_set_error_if_cancelled (priv->cancellable, &myerr);
-
-  if (myerr == NULL)
+  /* check if FT is allowed before firing up the I/O machinery */
+  if (!ft_handler_check_if_allowed (handler))
     {
-      if (error != NULL)
-        {
-          myerr = g_error_copy (error);
-        }
-      else
-        {
-          /* check if FT is allowed before firing up the I/O machinery */
-          if (!ft_handler_check_if_allowed (req_data->handler))
-            {
-              g_set_error_literal (&myerr, EMPATHY_FT_ERROR_QUARK,
-                  EMPATHY_FT_ERROR_NOT_SUPPORTED,
-                  _("File transfer not supported by remote contact"));
-            }
-        }
-    }
+      g_set_error_literal (&myerr, EMPATHY_FT_ERROR_QUARK,
+          EMPATHY_FT_ERROR_NOT_SUPPORTED,
+          _("File transfer not supported by remote contact"));
 
-  if (myerr != NULL)
-    {
-      g_signal_emit (req_data->handler, signals[TRANSFER_ERROR], 0, myerr);
-
-      request_data_free (req_data);
+      g_signal_emit (handler, signals[TRANSFER_ERROR], 0, myerr);
       g_clear_error (&myerr);
 
       return;
     }
 
+  /* populate the request table with all the known properties */
+  ft_handler_populate_outgoing_request (handler);
+
+  /* now start hashing the file */
+  g_file_read_async (priv->gfile, G_PRIORITY_DEFAULT,
+      priv->cancellable, ft_handler_read_async_cb, handler);
+}
+
+static void
+callbacks_data_free (gpointer user_data)
+{
+  CallbacksData *data = user_data;
+
+  if (data->handler)
+    g_object_unref (data->handler);
+
+  g_slice_free (CallbacksData, data);
 }
 
 static void
@@ -698,26 +656,39 @@ ft_handler_gfile_ready_cb (GObject *source,
 {
   GFileInfo *info;
   GError *error = NULL;
-  EmpathyFTHandlerPriv *priv = GET_PRIV (req_data->handler);
+  GTimeVal mtime;
+  EmpathyFTHandlerPriv *priv = GET_PRIV (cb_data->handler);
 
   DEBUG ("FT: got GFileInfo.");
 
-  info = g_file_query_info_finish (req_data->gfile, res, &error);
-  if (error != NULL)
-    {
-      /* TODO: error handling */
-      g_clear_error (&error);
+  info = g_file_query_info_finish (priv->gfile, res, &error);
 
-      return;
+  if (error != NULL)
+    goto out;
+
+  priv->content_type = g_strdup (g_file_info_get_content_type (info));
+  priv->filename = g_strdup (g_file_info_get_display_name (info));
+  priv->total_bytes = g_file_info_get_size (info);
+  g_file_info_get_modification_time (info, &mtime);
+  priv->mtime = mtime.tv_sec;
+  priv->transferred_bytes = 0;
+  priv->description = NULL;
+
+  g_object_unref (info);
+
+out:
+  if (error == NULL)
+    {
+      cb_data->callback (cb_data->handler, NULL, cb_data->user_data);
+    }
+  else
+    {
+      cb_data->callback (NULL, error, cb_data->user_data);
+      g_error_free (error);
+      g_object_unref (cb_data->handler);
     }
 
-  ft_handler_populate_outgoing_request (req_data, info);
-
-  req_data->total_size = g_file_info_get_size (info);
-
-  /* now start hashing the file */
-  g_file_read_async (req_data->gfile, G_PRIORITY_DEFAULT,
-      priv->cancellable, ft_handler_read_async_cb, req_data);
+  callbacks_data_free (cb_data);
 }
 
 static void
@@ -746,16 +717,6 @@ ft_handler_contact_ready_cb (EmpathyContact *contact,
 }
 
 static void
-callbacks_data_free (gpointer user_data)
-{
-  CallbacksData *data = user_data;
-
-  g_object_unref (data->handler);
-
-  g_slice_free (CallbacksData, data);
-}
-
-static void
 channel_get_all_properties_cb (TpProxy *proxy,
                                GHashTable *properties,
                                const GError *error,
@@ -765,10 +726,14 @@ channel_get_all_properties_cb (TpProxy *proxy,
   CallbacksData *cb_data = user_data;
   EmpathyFTHandler *handler = EMPATHY_FT_HANDLER (weak_object);
   EmpathyFTHandlerPriv *priv = GET_PRIV (handler);
+  EmpathyContactFactory *c_factory;
+  guint c_handle;
+  McAccount *account;
 
   if (error != NULL)
     {
-      cb_data->callback (handler, error, cb_data->user_data);
+      cb_data->callback (NULL, error, cb_data->user_data);
+      g_object_unref (handler);
       return;
     }
 
@@ -795,6 +760,15 @@ channel_get_all_properties_cb (TpProxy *proxy,
 
   g_hash_table_destroy (properties);
 
+  c_factory = empathy_contact_factory_dup_singleton ();
+  account = empathy_channel_get_account (TP_CHANNEL (proxy));
+  c_handle = tp_channel_get_handle (TP_CHANNEL (proxy), NULL);
+  priv->contact = empathy_contact_factory_get_from_handle
+      (c_factory, account,c_handle);
+
+  g_object_unref (c_factory);
+  g_object_unref (account);
+
   cb_data->callback (handler, NULL, cb_data->user_data);
 }
 
@@ -808,12 +782,15 @@ empathy_ft_handler_new_outgoing (EmpathyContact *contact,
 {
   EmpathyFTHandler *handler;
   CallbacksData *data;
+  EmpathyFTHandlerPriv *priv;
 
-  g_return_val_if_fail (EMPATHY_IS_CONTACT (contact), NULL);
-  g_return_val_if_fail (G_IS_FILE (source), NULL);
+  g_return_if_fail (EMPATHY_IS_CONTACT (contact));
+  g_return_if_fail (G_IS_FILE (source));
 
   handler = g_object_new (EMPATHY_TYPE_FT_HANDLER,
       "contact", contact, "gfile", source, NULL);
+
+  priv = GET_PRIV (handler);
 
   data = g_slice_new0 (CallbacksData);
   data->callback = callback;
@@ -835,8 +812,8 @@ empathy_ft_handler_new_incoming (EmpathyTpFile *tp_file,
   TpChannel *channel;
   CallbacksData *data;
 
-  g_return_val_if_fail (EMPATHY_IS_TP_FILE (tp_file), NULL);
-  g_return_val_if_fail (G_IS_FILE (destination), NULL);
+  g_return_if_fail (EMPATHY_IS_TP_FILE (tp_file));
+  g_return_if_fail (G_IS_FILE (destination));
 
   handler = g_object_new (EMPATHY_TYPE_FT_HANDLER,
       "tp-file", tp_file, "gfile", destination, NULL);
@@ -857,7 +834,6 @@ void
 empathy_ft_handler_start_transfer (EmpathyFTHandler *handler,
                                    GCancellable *cancellable)
 {
-  RequestData *data;
   EmpathyFTHandlerPriv *priv;
   GError *error = NULL;
 
@@ -868,10 +844,7 @@ empathy_ft_handler_start_transfer (EmpathyFTHandler *handler,
 
   if (priv->tpfile == NULL)
     {
-      data = request_data_new (handler, priv->gfile);
-      empathy_contact_call_when_ready (priv->contact,
-          EMPATHY_CONTACT_READY_HANDLE,
-          ft_handler_contact_ready_cb, data, NULL, G_OBJECT (handler));
+      ft_handler_complete_request (handler);
     }
   else
     {
