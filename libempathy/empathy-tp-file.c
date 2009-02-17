@@ -409,10 +409,8 @@ tp_file_transferred_bytes_changed_cb (TpProxy *proxy,
 
   /* notify clients */
   if (priv->progress_callback)
-    {
-      priv->progress_callback (EMPATHY_TP_FILE (weak_object),
-          priv->transferred_bytes, priv->size, priv->progress_user_data);
-    }
+    priv->progress_callback (EMPATHY_TP_FILE (weak_object),
+        priv->transferred_bytes, priv->size, priv->progress_user_data);
 }
 
 static void

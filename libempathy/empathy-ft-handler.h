@@ -60,8 +60,9 @@ typedef void (* EmpathyFTHandlerReadyCallback) (EmpathyFTHandler *handler,
 GType empathy_ft_handler_get_type (void);
 
 /* public methods */
-EmpathyFTHandler * empathy_ft_handler_new_outgoing (EmpathyContact *contact,
-    GFile *source);
+void empathy_ft_handler_new_outgoing (EmpathyContact *contact,
+    GFile *source, EmpathyFTHandlerReadyCallback callback,
+    gpointer user_data);
 void empathy_ft_handler_new_incoming (EmpathyTpFile *tp_file,
     GFile *destination, EmpathyFTHandlerReadyCallback callback,
     gpointer user_data);

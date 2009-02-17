@@ -248,9 +248,9 @@ empathy_ft_handler_class_init (EmpathyFTHandlerClass *klass)
   signals[TRANSFER_PROGRESS] =
     g_signal_new ("transfer-progress", G_TYPE_FROM_CLASS (klass),
         G_SIGNAL_RUN_LAST, 0, NULL, NULL,
-        _empathy_marshal_VOID__OBJECT_UINT64_UINT64,
+        _empathy_marshal_VOID__UINT64_UINT64,
         G_TYPE_NONE,
-        2, EMPATHY_TYPE_TP_FILE, G_TYPE_UINT64, G_TYPE_UINT64);
+        2, G_TYPE_UINT64, G_TYPE_UINT64);
 
   signals[HASHING_STARTED] =
     g_signal_new ("hashing-started", G_TYPE_FROM_CLASS (klass),
@@ -319,12 +319,41 @@ hash_data_free (HashingData *data)
 }
 
 static void
+ft_transfer_operation_callback (EmpathyTpFile *tp_file,
+                                const GError *error,
+                                gpointer user_data)
+{
+  EmpathyFTHandler *handler = user_data;
+
+  if (error != NULL)
+    g_signal_emit (handler, signals[TRANSFER_ERROR], 0, error);
+  else
+    g_signal_emit (handler, signals[TRANSFER_DONE], 0);
+}
+
+static void
+ft_transfer_progress_callback (EmpathyTpFile *tp_file,
+                               guint64 transferred_bytes,
+                               guint64 total_bytes,
+                               gpointer user_data)
+{
+  EmpathyFTHandler *handler = user_data;
+  EmpathyFTHandlerPriv *priv = GET_PRIV (handler);
+
+  if (priv->transferred_bytes != transferred_bytes)
+    {
+      priv->transferred_bytes = transferred_bytes;
+      g_signal_emit (handler, signals[TRANSFER_PROGRESS], 0,
+          transferred_bytes, total_bytes);
+    }
+}
+
+static void
 ft_handler_create_channel_cb (EmpathyDispatchOperation *operation,
                               const GError *error,
                               gpointer user_data)
 {
   EmpathyFTHandler *handler = user_data;
-  GError *myerr = NULL;
   EmpathyFTHandlerPriv *priv = GET_PRIV (handler);
 
   DEBUG ("FT: dispatcher create channel CB");
@@ -337,7 +366,10 @@ ft_handler_create_channel_cb (EmpathyDispatchOperation *operation,
 
   priv->tpfile = g_object_ref
       (empathy_dispatch_operation_get_channel_wrapper (operation));
-  empathy_tp_file_offer (priv->tpfile, priv->gfile, &myerr);
+  empathy_tp_file_offer (priv->tpfile, priv->gfile, priv->cancellable,
+      ft_transfer_progress_callback, handler,
+      ft_transfer_operation_callback, handler);
+
   empathy_dispatch_operation_claim (operation);
 }
 
@@ -732,7 +764,7 @@ channel_get_all_properties_cb (TpProxy *proxy,
 
   if (error != NULL)
     {
-      cb_data->callback (NULL, error, cb_data->user_data);
+      cb_data->callback (NULL, (GError *) error, cb_data->user_data);
       g_object_unref (handler);
       return;
     }
@@ -835,7 +867,6 @@ empathy_ft_handler_start_transfer (EmpathyFTHandler *handler,
                                    GCancellable *cancellable)
 {
   EmpathyFTHandlerPriv *priv;
-  GError *error = NULL;
 
   g_return_if_fail (EMPATHY_IS_FT_HANDLER (handler));
 
@@ -849,6 +880,8 @@ empathy_ft_handler_start_transfer (EmpathyFTHandler *handler,
   else
     {
       /* TODO: add support for resume. */
-      empathy_tp_file_accept (priv->tpfile, 0, priv->gfile, &error);
+      empathy_tp_file_accept (priv->tpfile, 0, priv->gfile, priv->cancellable,
+          ft_transfer_progress_callback, handler,
+          ft_transfer_operation_callback, handler);
     }
 }
