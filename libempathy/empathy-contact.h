@@ -98,7 +98,6 @@ gboolean empathy_contact_is_online (EmpathyContact *contact);
 const gchar * empathy_contact_get_status (EmpathyContact *contact);
 gboolean empathy_contact_can_voip (EmpathyContact *contact);
 gboolean empathy_contact_can_send_files (EmpathyContact *contact);
-gboolean empathy_contact_equal (gconstpointer v1, gconstpointer v2);
 guint empathy_contact_hash (gconstpointer key);
 
 void empathy_contact_load_avatar_data (EmpathyContact *contact,
