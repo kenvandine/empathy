@@ -762,12 +762,10 @@ contact_widget_avatar_changed_cb (EmpathyAvatarChooser *chooser,
 {
   if (information->contact && empathy_contact_is_user (information->contact))
     {
-      McAccount *account;
       const gchar *data;
       gsize size;
       const gchar *mime_type;
 
-      account = empathy_contact_get_account (information->contact);
       empathy_avatar_chooser_get_image_data (
           EMPATHY_AVATAR_CHOOSER (information->widget_avatar),
           &data, &size, &mime_type);
