@@ -701,6 +701,8 @@ tp_contact_list_constructed (GObject *list)
 	const gchar              *protocol_name = NULL;
 	const gchar              *names[] = {NULL, NULL};
 
+	priv->factory = empathy_tp_contact_factory_dup_singleton (priv->connection);
+
 	names[0] = "publish";
 	tp_cli_connection_call_request_handles (priv->connection,
 						-1,
@@ -732,7 +734,7 @@ tp_contact_list_constructed (GObject *list)
 	 * put all contacts into a special group in that case.
 	 * FIXME: Default group should be an information in the profile */
 	//protocol_name = tp_connection_get_protocol (priv->connection);
-	if (!tp_strdiff (protocol_name, "local-xmpp") == 0) {
+	if (!tp_strdiff (protocol_name, "local-xmpp")) {
 		priv->protocol_group = _("People nearby");
 	}
 }
@@ -802,7 +804,6 @@ empathy_tp_contact_list_init (EmpathyTpContactList *list)
 		EMPATHY_TYPE_TP_CONTACT_LIST, EmpathyTpContactListPriv);
 
 	list->priv = priv;
-	priv->factory = empathy_tp_contact_factory_dup_singleton (priv->connection);
 
 	/* Map group's name to group's channel */
 	priv->groups = g_hash_table_new_full (g_str_hash, g_str_equal,
