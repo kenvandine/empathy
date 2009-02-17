@@ -147,15 +147,15 @@ empathy_contact_class_init (EmpathyContactClass *class)
         "TpContact",
         "The TpContact associated with the contact",
         TP_TYPE_CONTACT,
-        G_PARAM_CONSTRUCT_ONLY | G_PARAM_READABLE));
+        G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE));
 
   g_object_class_install_property (object_class,
-      PROP_TP_CONTACT,
+      PROP_ACCOUNT,
       g_param_spec_object ("account",
         "The account",
         "The account associated with the contact",
         MC_TYPE_ACCOUNT,
-        G_PARAM_CONSTRUCT_ONLY | G_PARAM_READABLE));
+        G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE));
 
   g_object_class_install_property (object_class,
       PROP_ID,
@@ -379,6 +379,8 @@ contact_set_property (GObject *object,
 EmpathyContact *
 empathy_contact_new (TpContact *tp_contact)
 {
+  g_return_val_if_fail (TP_IS_CONTACT (tp_contact), NULL);
+
   return g_object_new (EMPATHY_TYPE_CONTACT,
       "tp-contact", tp_contact,
       NULL);
