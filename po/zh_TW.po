@@ -5,10 +5,10 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: empathy 2.25.90\n"
+"Project-Id-Version: empathy 2.25.92\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-03 07:46+0800\n"
-"PO-Revision-Date: 2009-02-02 06:51+0800\n"
+"POT-Creation-Date: 2009-02-17 21:30+0800\n"
+"PO-Revision-Date: 2009-02-17 21:30+0800\n"
 "Last-Translator: Chao-Hsiung Liao <j_h_liau@yahoo.com.tw>\n"
 "Language-Team: Chinese (traditional) <zh-l10n@lists.linux.org.tw>\n"
 "MIME-Version: 1.0\n"
@@ -47,9 +47,8 @@ msgid "Compact contact list"
 msgstr "精簡連絡人清單"
 
 #: ../data/empathy.schemas.in.h:6
-#, fuzzy
 msgid "Contact list sort criterium"
-msgstr "建立新的連絡人清單"
+msgstr "連絡人清單排序條件"
 
 #: ../data/empathy.schemas.in.h:7
 msgid "Default directory to select an avatar image from"
@@ -224,43 +223,43 @@ msgid ""
 msgstr "在談話中是否將表情符號轉換為圖片形式。"
 
 #: ../data/empathy.schemas.in.h:47
-msgid "Whether or not to play a sound notifications when away or busy."
-msgstr "當狀態為離開或忙碌時是否播放音效。"
-
-#: ../data/empathy.schemas.in.h:48
 msgid ""
 "Whether or not to play a sound to notify for contacts logging in the network."
 msgstr "是否播放音效來通知有連絡人登入網路。"
 
-#: ../data/empathy.schemas.in.h:49
+#: ../data/empathy.schemas.in.h:48
 msgid ""
 "Whether or not to play a sound to notify for contacts logging off the "
 "network."
 msgstr "是否播放音效來通知有連絡人登出網路。"
 
-#: ../data/empathy.schemas.in.h:50
+#: ../data/empathy.schemas.in.h:49
 msgid "Whether or not to play a sound to notify for events."
 msgstr "是否播放音效來通知有事件發生。"
 
-#: ../data/empathy.schemas.in.h:51
+#: ../data/empathy.schemas.in.h:50
 msgid "Whether or not to play a sound to notify for incoming messages."
 msgstr "是否播放音效來通知有訊息抵達。"
 
-#: ../data/empathy.schemas.in.h:52
+#: ../data/empathy.schemas.in.h:51
 msgid "Whether or not to play a sound to notify for new conversations."
 msgstr "是否播放音效來通知開啟新的談話。"
 
-#: ../data/empathy.schemas.in.h:53
+#: ../data/empathy.schemas.in.h:52
 msgid "Whether or not to play a sound to notify for outgoing messages."
 msgstr "是否播放音效來通知有訊息送出。"
 
-#: ../data/empathy.schemas.in.h:54
+#: ../data/empathy.schemas.in.h:53
 msgid "Whether or not to play a sound when logging in a network."
 msgstr "當登入網路時是否播放音效。"
 
-#: ../data/empathy.schemas.in.h:55
+#: ../data/empathy.schemas.in.h:54
 msgid "Whether or not to play a sound when logging off a network."
 msgstr "當登出網路時是否播放音效。"
+
+#: ../data/empathy.schemas.in.h:55
+msgid "Whether or not to play sound notifications when away or busy."
+msgstr "當狀態為離開或忙碌時是否播放音效通知。"
 
 #: ../data/empathy.schemas.in.h:56
 msgid ""
@@ -307,8 +306,10 @@ msgid ""
 "by the contact's name with the value \"name\". A value of \"state\" will "
 "sort the contact list by state."
 msgstr ""
+"排序連絡人清單時要使用哪個條件。預設值是使用連絡人的名稱「name」數值來排序。"
+"而數值「state」則會使用其狀態來排序連絡人清單。"
 
-#: ../libempathy/empathy-tp-contact-list.c:731 ../src/empathy.c:270
+#: ../libempathy/empathy-tp-contact-list.c:731 ../src/empathy.c:269
 msgid "People nearby"
 msgstr "臨近人員"
 
@@ -637,7 +638,7 @@ msgstr "%s 已經加入此聊天室"
 msgid "%s has left the room"
 msgstr "%s 已經離開此聊天室"
 
-#: ../libempathy-gtk/empathy-chat.c:1248 ../src/empathy-call-window.c:425
+#: ../libempathy-gtk/empathy-chat.c:1248 ../src/empathy-call-window.c:548
 msgid "Disconnected"
 msgstr "已斷線"
 
@@ -667,8 +668,8 @@ msgid "_Open Link"
 msgstr "開啟連結(_O)"
 
 #: ../libempathy-gtk/empathy-chat-text-view.c:439
-msgid "%A %d %B %Y"
-msgstr "%A %d %B %Y"
+msgid "%A %B %d %Y"
+msgstr "%Y %B %d %A"
 
 #: ../libempathy-gtk/empathy-contact-dialogs.c:180
 msgid "Personal Information"
@@ -682,11 +683,11 @@ msgstr "編輯連絡人資訊"
 msgid "Contact Information"
 msgstr "連絡人資訊"
 
-#: ../libempathy-gtk/empathy-contact-dialogs.c:266
+#: ../libempathy-gtk/empathy-contact-dialogs.c:267
 msgid "I would like to add you to my contact list."
 msgstr "我想要將您加入我的連絡人清單。"
 
-#: ../libempathy-gtk/empathy-contact-dialogs.c:290
+#: ../libempathy-gtk/empathy-contact-dialogs.c:291
 msgid "New Contact"
 msgstr "新增連絡人"
 
@@ -698,73 +699,72 @@ msgstr "稍後再決定"
 msgid "Subscription Request"
 msgstr "訂閱要求"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1244
+#: ../libempathy-gtk/empathy-contact-list-view.c:1249
 #, c-format
 msgid "Do you really want to remove the group '%s'?"
 msgstr "是否想要移除群組「%s」？"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1246
+#: ../libempathy-gtk/empathy-contact-list-view.c:1251
 msgid "Removing group"
 msgstr "正在移除群組"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1293
-#: ../libempathy-gtk/empathy-contact-list-view.c:1372
+#: ../libempathy-gtk/empathy-contact-list-view.c:1298
+#: ../libempathy-gtk/empathy-contact-list-view.c:1377
 msgid "_Remove"
 msgstr "移除(_R)"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1323
+#: ../libempathy-gtk/empathy-contact-list-view.c:1328
 #, c-format
 msgid "Do you really want to remove the contact '%s'?"
 msgstr "是否想要移除連絡人「%s」？"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1325
+#: ../libempathy-gtk/empathy-contact-list-view.c:1330
 msgid "Removing contact"
 msgstr "正在移除連絡人"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1330
+#: ../libempathy-gtk/empathy-contact-list-view.c:1335
 msgid "Sorry, I don't want you in my contact list anymore."
 msgstr "抱歉，我要將您從我的連絡人清單中移除。"
 
-#: ../libempathy-gtk/empathy-contact-menu.c:121
+#: ../libempathy-gtk/empathy-contact-menu.c:130
 #: ../src/empathy-main-window.glade.h:9
 msgid "_Chat"
 msgstr "聊天(_C)"
 
-#: ../libempathy-gtk/empathy-contact-menu.c:142
+#: ../libempathy-gtk/empathy-contact-menu.c:161
+#: ../src/empathy-call-window.glade.h:5
 msgid "_Call"
 msgstr "通話(_C)"
 
-#: ../libempathy-gtk/empathy-contact-menu.c:181
+#: ../libempathy-gtk/empathy-contact-menu.c:200
 #: ../src/empathy-main-window.glade.h:17
 msgid "_View Previous Conversations"
 msgstr "檢視前一次談話(_V)"
 
-#: ../libempathy-gtk/empathy-contact-menu.c:203
+#: ../libempathy-gtk/empathy-contact-menu.c:222
 msgid "Send file"
 msgstr "傳送檔案"
 
-#: ../libempathy-gtk/empathy-contact-menu.c:231
+#: ../libempathy-gtk/empathy-contact-menu.c:250
 msgid "Infor_mation"
 msgstr "資訊(_M)"
 
-#: ../libempathy-gtk/empathy-contact-menu.c:258
+#: ../libempathy-gtk/empathy-contact-menu.c:277
 #: ../src/empathy-chat-window.glade.h:14 ../src/empathy-main-window.glade.h:11
 msgid "_Edit"
 msgstr "編輯(_E)"
 
-#: ../libempathy-gtk/empathy-contact-menu.c:317
+#: ../libempathy-gtk/empathy-contact-menu.c:336
 msgid "Inviting to this room"
 msgstr "邀請到這個聊天室"
 
-#: ../libempathy-gtk/empathy-contact-menu.c:350
+#: ../libempathy-gtk/empathy-contact-menu.c:369
 msgid "_Invite to chatroom"
 msgstr "邀請到這個聊天室(_I)"
 
 #: ../libempathy-gtk/empathy-contact-selector.c:111
-#, fuzzy
-#| msgid "Select contact..."
 msgid "Select a contact"
-msgstr "選擇連絡人..."
+msgstr "選擇連絡人"
 
 #: ../libempathy-gtk/empathy-contact-widget.c:358
 msgid "Save Avatar"
@@ -779,7 +779,7 @@ msgid "Select"
 msgstr "選擇"
 
 #: ../libempathy-gtk/empathy-contact-widget.c:904
-#: ../src/empathy-main-window.c:987
+#: ../src/empathy-main-window.c:991
 msgid "Group"
 msgstr "群組"
 
@@ -879,7 +879,7 @@ msgid "SSL"
 msgstr "SSL"
 
 #: ../libempathy-gtk/empathy-log-window.c:498
-#: ../src/empathy-import-dialog.c:276
+#: ../src/empathy-import-dialog.c:277
 msgid "Account"
 msgstr "帳號"
 
@@ -1242,19 +1242,19 @@ msgstr "上線狀態"
 msgid "Set your own presence"
 msgstr "設定您自己的上線狀態"
 
-#: ../src/empathy.c:416
+#: ../src/empathy.c:426
 msgid "Don't connect on startup"
 msgstr "啟動時不要自動連線"
 
-#: ../src/empathy.c:420
+#: ../src/empathy.c:430
 msgid "Don't show the contact list on startup"
 msgstr "啟動時不顯示連絡人清單"
 
-#: ../src/empathy.c:424
+#: ../src/empathy.c:434
 msgid "Show the accounts dialog"
 msgstr "顯示帳號對話盒"
 
-#: ../src/empathy.c:436
+#: ../src/empathy.c:446
 msgid "- Empathy Instant Messenger"
 msgstr "- Empathy 即時通訊程式"
 
@@ -1374,131 +1374,66 @@ msgstr "要加入新的帳號，您必須先安裝每個會用到的通訊協定
 msgid "Type:"
 msgstr "類型:"
 
-#: ../src/empathy-call-window.c:143
-msgid "Closed"
-msgstr "已關閉"
+#: ../src/empathy-call-window.c:258
+msgid "Contrast"
+msgstr "對比"
 
-#: ../src/empathy-call-window.c:263
-msgid "End this call?"
-msgstr "結束這次通話？"
+#: ../src/empathy-call-window.c:258
+msgid "Brightness"
+msgstr "亮度"
 
-#: ../src/empathy-call-window.c:265
-msgid "Closing this window will end the call in progress."
-msgstr "關閉這個視窗會結束還在進行中的通話。"
+#: ../src/empathy-call-window.c:258
+msgid "Gamma"
+msgstr "Gamma"
 
-#: ../src/empathy-call-window.c:266
-msgid "_End Call"
-msgstr "結束通話(_E)"
+#: ../src/empathy-call-window.c:290
+msgid "Volume"
+msgstr "音量"
 
-#: ../src/empathy-call-window.c:320
-msgid "Incoming call"
-msgstr "來電"
+#: ../src/empathy-call-window.c:366
+msgid "_Sidebar"
+msgstr "側邊列(_S)"
 
-#: ../src/empathy-call-window.c:322
+#: ../src/empathy-call-window.c:384
+msgid "Dialpad"
+msgstr "播號盤"
+
+#: ../src/empathy-call-window.c:390
+msgid "Audio input"
+msgstr "音效輸入"
+
+#: ../src/empathy-call-window.c:394
+msgid "Video input"
+msgstr "視訊輸入"
+
+#: ../src/empathy-call-window.c:407
+msgid "Connecting..."
+msgstr "連線中..."
+
+#: ../src/empathy-call-window.c:572
 #, c-format
-msgid "%s is calling you, do you want to answer?"
-msgstr "%s 要與您通話，是否要接聽？"
-
-#: ../src/empathy-call-window.c:328
-msgid "_Reject"
-msgstr "拒絕(_R)"
-
-#: ../src/empathy-call-window.c:333
-msgid "_Answer"
-msgstr "接聽(_A)"
-
-#: ../src/empathy-call-window.c:388
-msgid "Empathy Call"
-msgstr "Empathy 電話"
-
-#. To translators: Readying is the first state of the call, it is
-#. * preparing the connection and it does not yet ring.
-#: ../src/empathy-call-window.c:391
-msgid "Readying"
-msgstr "正在準備"
-
-#: ../src/empathy-call-window.c:400
-#, c-format
-msgid "%s - Empathy Call"
-msgstr "%s - Empathy 電話"
-
-#: ../src/empathy-call-window.c:404
-msgid "Ringing"
-msgstr "電話鈴響"
-
-#: ../src/empathy-call-window.c:427
-msgid "Connecting"
-msgstr "連線中"
-
-#: ../src/empathy-call-window.c:545
-#, c-format
-msgid "Incoming call from %s rejected because there is already a running call."
-msgstr "已拒絕 %s 的來電，因為目前已經在通話中。"
+msgid "Connected -- %d:%02dm"
+msgstr "已連線 -- %d:%02dm"
 
 #: ../src/empathy-call-window.glade.h:1
-msgid "#"
-msgstr "#"
-
-#: ../src/empathy-call-window.glade.h:2
-msgid "*"
-msgstr "*"
-
-#: ../src/empathy-call-window.glade.h:3
-msgid "0"
-msgstr "0"
-
-#: ../src/empathy-call-window.glade.h:4
-msgid "1"
-msgstr "1"
-
-#: ../src/empathy-call-window.glade.h:5
-msgid "2"
-msgstr "2"
-
-#: ../src/empathy-call-window.glade.h:6
-msgid "3"
-msgstr "3"
-
-#: ../src/empathy-call-window.glade.h:7
-msgid "4"
-msgstr "4"
-
-#: ../src/empathy-call-window.glade.h:8
-msgid "5"
-msgstr "5"
-
-#: ../src/empathy-call-window.glade.h:9
-msgid "6"
-msgstr "6"
-
-#: ../src/empathy-call-window.glade.h:10
-msgid "7"
-msgstr "7"
-
-#: ../src/empathy-call-window.glade.h:11
-msgid "8"
-msgstr "8"
-
-#: ../src/empathy-call-window.glade.h:12
-msgid "9"
-msgstr "9"
-
-#. To translators: The keypad is numbers [0-9], asterisk (*) and hash (#). Presented like on any phone
-#: ../src/empathy-call-window.glade.h:14
-msgid "<b>Keypad</b>"
-msgstr "<b>撥號盤</b>"
-
-#: ../src/empathy-call-window.glade.h:15
-msgid "<b>Volume</b>"
-msgstr "<b>音量</b>"
-
-#: ../src/empathy-call-window.glade.h:16
-msgid "Hang Up"
+msgid "Hang up"
 msgstr "掛斷"
 
-#: ../src/empathy-call-window.glade.h:17
-msgid "Send Video"
+#: ../src/empathy-call-window.glade.h:2
+msgid "Send Audio"
+msgstr "傳送音訊"
+
+#: ../src/empathy-call-window.glade.h:3
+msgid "Send video"
 msgstr "傳送視訊"
+
+#: ../src/empathy-call-window.glade.h:4
+msgid "Video preview"
+msgstr "視訊預覽"
+
+#: ../src/empathy-call-window.glade.h:6
+msgid "_View"
+msgstr "檢視(_V)"
 
 #: ../src/empathy-chat-window.c:313
 #, c-format
@@ -1513,7 +1448,7 @@ msgstr "主題:"
 msgid "Typing a message."
 msgstr "正在輸入訊息。"
 
-#: ../src/empathy-chat-window.c:892 ../src/empathy-event-manager.c:261
+#: ../src/empathy-chat-window.c:892 ../src/empathy-event-manager.c:424
 #, c-format
 msgid "New message from %s"
 msgstr "來自 %s 的新訊息"
@@ -1631,35 +1566,75 @@ msgstr "伺服器(_E):"
 msgid "_Room:"
 msgstr "聊天室(_R):"
 
-#: ../src/empathy-event-manager.c:334
+#: ../src/empathy-event-manager.c:372
+msgid "Incoming call"
+msgstr "來電"
+
+#: ../src/empathy-event-manager.c:375
+#, c-format
+msgid "%s is calling you, do you want to answer?"
+msgstr "%s 要與您通話，是否要接聽？"
+
+#: ../src/empathy-event-manager.c:382
+msgid "_Reject"
+msgstr "拒絕(_R)"
+
+#: ../src/empathy-event-manager.c:388
+msgid "_Answer"
+msgstr "接聽(_A)"
+
+#: ../src/empathy-event-manager.c:511
 #, c-format
 msgid "Incoming call from %s"
 msgstr "%s 的來電"
 
-#: ../src/empathy-event-manager.c:381
+#: ../src/empathy-event-manager.c:559
 #, c-format
 msgid "%s is offering you an invitation"
 msgstr "%s 正在邀請您"
 
-#: ../src/empathy-event-manager.c:387
+#: ../src/empathy-event-manager.c:565
 msgid "An external application will be started to handle it."
 msgstr "將啟動外部應用程式來處理它。"
 
-#: ../src/empathy-event-manager.c:392
+#: ../src/empathy-event-manager.c:570
 msgid "You don't have the needed external application to handle it."
 msgstr "您沒有處理它所需的外部應用程式。"
 
-#: ../src/empathy-event-manager.c:525
+#: ../src/empathy-event-manager.c:692
+msgid "Room invitation"
+msgstr "聊天邀請"
+
+#: ../src/empathy-event-manager.c:695
+#, c-format
+msgid "%s is inviting you to join %s"
+msgstr "%s 正在邀請您加入 %s"
+
+#. Decline button
+#: ../src/empathy-event-manager.c:703 ../src/empathy-ft-manager.c:1021
+msgid "_Decline"
+msgstr "拒絕(_D)"
+
+#: ../src/empathy-event-manager.c:708
+msgid "_Join"
+msgstr "加入(_J)"
+
+#: ../src/empathy-event-manager.c:738
+#, c-format
+msgid "%s invited you to join %s"
+msgstr "%s 曾邀請您加入 %s"
+
+#: ../src/empathy-event-manager.c:860
 #, c-format
 msgid "Incoming file transfer from %s"
 msgstr "收到來自 %s 的檔案傳輸"
 
-#: ../src/empathy-event-manager.c:615
+#: ../src/empathy-event-manager.c:954
 #, c-format
 msgid "Subscription requested by %s"
 msgstr "來自 %s 的訂閱要求"
 
-#: ../src/empathy-event-manager.c:619
+#: ../src/empathy-event-manager.c:958
 #, c-format
 msgid ""
 "\n"
@@ -1807,11 +1782,6 @@ msgstr " %s 想要傳送給您一個檔案"
 msgid "Do you want to accept the file \"%s\" (%s)?"
 msgstr "是否要接收檔案「%s」(%s)？"
 
-#. Decline button
-#: ../src/empathy-ft-manager.c:1021
-msgid "_Decline"
-msgstr "拒絕(_D)"
-
 #. Accept button
 #: ../src/empathy-ft-manager.c:1030
 msgid "_Accept"
@@ -1825,19 +1795,20 @@ msgstr "檔案傳輸"
 msgid "Remove completed, canceled and failed file transfers from the list"
 msgstr "從清單中移除已完成、已取消和失敗的檔案傳輸"
 
-#: ../src/empathy-import-dialog.c:254
+#. Translators: this is the header of a treeview column
+#: ../src/empathy-import-dialog.c:255
 msgid "Import"
 msgstr "匯入"
 
-#: ../src/empathy-import-dialog.c:263
+#: ../src/empathy-import-dialog.c:264
 msgid "Protocol"
 msgstr "通訊協定"
 
-#: ../src/empathy-import-dialog.c:289
+#: ../src/empathy-import-dialog.c:290
 msgid "Source"
 msgstr "來源"
 
-#: ../src/empathy-import-dialog.c:377
+#: ../src/empathy-import-dialog.c:378
 msgid ""
 "No accounts to import could be found. Empathy currently only supports "
 "importing accounts from Pidgin."
@@ -1847,71 +1818,71 @@ msgstr "找不到可匯入的帳號。Empathy 目前只支援從 Pidgin 匯入�
 msgid "Import Accounts"
 msgstr "匯入帳號"
 
-#: ../src/empathy-main-window.c:392
+#: ../src/empathy-main-window.c:391
 msgid "No error specified"
 msgstr "沒有指定的錯誤"
 
-#: ../src/empathy-main-window.c:395
+#: ../src/empathy-main-window.c:394
 msgid "Network error"
 msgstr "網路錯誤"
 
-#: ../src/empathy-main-window.c:398
+#: ../src/empathy-main-window.c:397
 msgid "Authentication failed"
 msgstr "驗證失敗"
 
-#: ../src/empathy-main-window.c:401
+#: ../src/empathy-main-window.c:400
 msgid "Encryption error"
 msgstr "加密發生錯誤"
 
-#: ../src/empathy-main-window.c:404
+#: ../src/empathy-main-window.c:403
 msgid "Name in use"
 msgstr "使用中的名稱"
 
-#: ../src/empathy-main-window.c:407
+#: ../src/empathy-main-window.c:406
 msgid "Certificate not provided"
 msgstr "沒有提供憑證"
 
-#: ../src/empathy-main-window.c:410
+#: ../src/empathy-main-window.c:409
 msgid "Certificate untrusted"
 msgstr "憑證不被信任"
 
-#: ../src/empathy-main-window.c:413
+#: ../src/empathy-main-window.c:412
 msgid "Certificate expired"
 msgstr "憑證已逾期"
 
-#: ../src/empathy-main-window.c:416
+#: ../src/empathy-main-window.c:415
 msgid "Certificate not activated"
 msgstr "憑證尚未使用"
 
-#: ../src/empathy-main-window.c:419
+#: ../src/empathy-main-window.c:418
 msgid "Certificate hostname mismatch"
 msgstr "憑證主機名稱不符"
 
-#: ../src/empathy-main-window.c:422
+#: ../src/empathy-main-window.c:421
 msgid "Certificate fingerprint mismatch"
 msgstr "憑證指紋檔不符"
 
-#: ../src/empathy-main-window.c:425
+#: ../src/empathy-main-window.c:424
 msgid "Certificate self-signed"
 msgstr "憑證為自我簽署"
 
-#: ../src/empathy-main-window.c:428
+#: ../src/empathy-main-window.c:427
 msgid "Certificate error"
 msgstr "憑證錯誤"
 
-#: ../src/empathy-main-window.c:431
+#: ../src/empathy-main-window.c:430
 msgid "Unknown error"
 msgstr "不明的錯誤"
 
-#: ../src/empathy-main-window.c:590
+#: ../src/empathy-main-window.c:594
 msgid "Show and edit accounts"
 msgstr "顯示並編輯帳號"
 
-#: ../src/empathy-main-window.c:970
+#: ../src/empathy-main-window.c:974
 msgid "Contact"
 msgstr "連絡人"
 
-#: ../src/empathy-main-window.c:1172
+#: ../src/empathy-main-window.c:1176
 msgid "_Edit account"
 msgstr "編輯帳號(_E)"
 
@@ -2033,7 +2004,7 @@ msgid "<b>Appearance</b>"
 msgstr "<b>外觀</b>"
 
 #: ../src/empathy-preferences.glade.h:2
-msgid "<b>Behaviour</b>"
+msgid "<b>Behavior</b>"
 msgstr "<b>行為</b>"
 
 #: ../src/empathy-preferences.glade.h:3
@@ -2146,17 +2117,84 @@ msgstr "結束(_Q)"
 msgid "_Show Contact List"
 msgstr "顯示連絡人清單(_S)"
 
-#: ../src/empathy-tube-dispatch.c:356
+#: ../src/empathy-tube-dispatch.c:364
 #, c-format
 msgid "Unable to start application for service %s: %s"
 msgstr "無法啟動服務 %s 的應用程式：%s"
 
-#: ../src/empathy-tube-dispatch.c:427
+#: ../src/empathy-tube-dispatch.c:435
 #, c-format
 msgid ""
 "An invitation was offered for service %s, but you don't have the needed "
 "application to handle it"
 msgstr "有提出服務 %s 的邀請，但是您沒有處理它所需的外部應用程式。"
+
+#~ msgid "Closed"
+#~ msgstr "已關閉"
+
+#~ msgid "End this call?"
+#~ msgstr "結束這次通話？"
+
+#~ msgid "Closing this window will end the call in progress."
+#~ msgstr "關閉這個視窗會結束還在進行中的通話。"
+
+#~ msgid "_End Call"
+#~ msgstr "結束通話(_E)"
+
+#~ msgid "Empathy Call"
+#~ msgstr "Empathy 電話"
+
+#~ msgid "Readying"
+#~ msgstr "正在準備"
+
+#~ msgid "%s - Empathy Call"
+#~ msgstr "%s - Empathy 電話"
+
+#~ msgid "Ringing"
+#~ msgstr "電話鈴響"
+
+#~ msgid ""
+#~ "Incoming call from %s rejected because there is already a running call."
+#~ msgstr "已拒絕 %s 的來電，因為目前已經在通話中。"
+
+#~ msgid "#"
+#~ msgstr "#"
+
+#~ msgid "*"
+#~ msgstr "*"
+
+#~ msgid "0"
+#~ msgstr "0"
+
+#~ msgid "1"
+#~ msgstr "1"
+
+#~ msgid "2"
+#~ msgstr "2"
+
+#~ msgid "3"
+#~ msgstr "3"
+
+#~ msgid "4"
+#~ msgstr "4"
+
+#~ msgid "5"
+#~ msgstr "5"
+
+#~ msgid "6"
+#~ msgstr "6"
+
+#~ msgid "7"
+#~ msgstr "7"
+
+#~ msgid "8"
+#~ msgstr "8"
+
+#~ msgid "9"
+#~ msgstr "9"
+
+#~ msgid "<b>Keypad</b>"
+#~ msgstr "<b>撥號盤</b>"
 
 #~ msgid "Enable popup when contact is available"
 #~ msgstr "當連絡人有空時啟用彈出視窗"
