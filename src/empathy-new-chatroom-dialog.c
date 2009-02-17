@@ -533,7 +533,7 @@ static void
 new_chatroom_dialog_join (EmpathyNewChatroomDialog *dialog)
 {
 	EmpathyAccountChooser *account_chooser;
-	McAccount             *account;
+	TpConnection          *connection;
 	const gchar           *room;
 	const gchar           *server = NULL;
 	gchar                 *room_name = NULL;
@@ -542,7 +542,7 @@ new_chatroom_dialog_join (EmpathyNewChatroomDialog *dialog)
 	server = gtk_entry_get_text (GTK_ENTRY (dialog->entry_server));
 
 	account_chooser = EMPATHY_ACCOUNT_CHOOSER (dialog->account_chooser);
-	account = empathy_account_chooser_get_account (account_chooser);
+	connection = empathy_account_chooser_get_connection (account_chooser);
 
 	if (!EMP_STR_EMPTY (server)) {
 		room_name = g_strconcat (room, "@", server, NULL);
@@ -551,7 +551,7 @@ new_chatroom_dialog_join (EmpathyNewChatroomDialog *dialog)
 	}
 
 	DEBUG ("Requesting channel for '%s'", room_name);
-	empathy_dispatcher_join_muc (account, room_name, NULL, NULL);
+	empathy_dispatcher_join_muc (connection, room_name, NULL, NULL);
 
 	g_free (room_name);
 }
