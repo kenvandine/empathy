@@ -128,9 +128,9 @@ contact_manager_invalidated_cb (TpProxy *connection,
 }
 
 static void
-contact_manager_new_connection_cb (EmpathyAccountManager *manager,
+contact_manager_new_connection_cb (EmpathyAccountManager *account_manager,
 				   TpConnection *connection,
-				   EmpathyContactManager *self)
+				   EmpathyContactManager *manager)
 {
 	EmpathyContactManagerPriv *priv = GET_PRIV (manager);
 	EmpathyTpContactList      *list;
