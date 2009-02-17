@@ -768,7 +768,7 @@ empathy_contact_get_status (EmpathyContact *contact)
   g_return_val_if_fail (EMPATHY_IS_CONTACT (contact), "");
 
   message = empathy_contact_get_presence_message (contact);
-  if (message)
+  if (!EMP_STR_EMPTY (message))
     return message;
 
   return empathy_presence_get_default_message (
