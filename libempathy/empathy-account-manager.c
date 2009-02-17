@@ -111,6 +111,23 @@ account_data_new_default (MissionControl *mc,
 }
 
 static void
+account_data_free (AccountData *data)
+{
+  if (data->source_id > 0)
+    {
+      g_source_remove (data->source_id);
+      data->source_id = 0;
+    }
+  if (data->connection != NULL)
+    {
+      g_object_unref (data->connection);
+      data->connection = NULL;
+    }
+
+  g_slice_free (AccountData, data);
+}
+
+static void
 connection_invalidated_cb (TpProxy *connection,
                            guint    domain,
                            gint     code,
@@ -130,20 +147,37 @@ connection_invalidated_cb (TpProxy *connection,
 }
 
 static void
-account_data_free (AccountData *data)
+connection_ready_cb (TpConnection *connection,
+                     const GError *error,
+                     gpointer manager)
 {
-  if (data->source_id > 0)
-    {
-      g_source_remove (data->source_id);
-      data->source_id = 0;
-    }
+  /* Errors will be handled in invalidated callback */
+  if (error != NULL)
+    return;
+
+  g_signal_emit (manager, signals[NEW_CONNECTION], 0, connection);
+}
+
+static void
+account_manager_update_connection (EmpathyAccountManager *manager,
+                                   AccountData *data,
+                                   McAccount *account)
+{
+  EmpathyAccountManagerPriv *priv = GET_PRIV (manager);
+
+  if (data->connection)
+    return;
+
+  data->connection = mission_control_get_tpconnection (priv->mc, account, NULL);
   if (data->connection != NULL)
     {
-      g_object_unref (data->connection);
-      data->connection = NULL;
+      g_signal_connect (data->connection, "invalidated",
+          G_CALLBACK (connection_invalidated_cb), manager);
+      g_hash_table_insert (priv->connections, g_object_ref (data->connection),
+          g_object_ref (account));
+      tp_connection_call_when_ready (data->connection, connection_ready_cb,
+          manager);
     }
-
-  g_slice_free (AccountData, data);
 }
 
 static void
@@ -162,6 +196,7 @@ account_created_cb (McAccountMonitor *mon,
       AccountData *data;
 
       data = account_data_new_default (priv->mc, account);
+      g_hash_table_insert (priv->accounts, g_object_ref (account), data);
 
       initial_status = mission_control_get_connection_status (priv->mc,
 							      account, NULL);
@@ -171,12 +206,10 @@ account_created_cb (McAccountMonitor *mon,
       else if (initial_status == TP_CONNECTION_STATUS_CONNECTING)
 	priv->connecting++;
 
-      /* the reference returned by mc_account_lookup is owned by the
-       * hash table.
-       */
-      g_hash_table_insert (priv->accounts, account, data);
+      account_manager_update_connection (manager, data, account);
 
       g_signal_emit (manager, signals[ACCOUNT_CREATED], 0, account);
+      g_object_unref (account);
     }
 }
 
@@ -299,18 +332,6 @@ remove_data_timeout (gpointer _data)
   return FALSE;
 }
 
-static void
-connection_ready_cb (TpConnection *connection,
-                     const GError *error,
-                     gpointer manager)
-{
-  /* Errors will be handled in invalidated callback */
-  if (error != NULL)
-    return;
-
-  g_signal_emit (manager, signals[NEW_CONNECTION], 0, connection);
-}
-
 typedef struct {
   TpConnectionStatus status;
   McPresence presence;
@@ -355,10 +376,11 @@ account_status_changed_idle_cb (ChangedSignalData *signal_data)
 
           if (status == TP_CONNECTION_STATUS_CONNECTED)
             {
-                if (data->source_id > 0) {
-                  g_source_remove (data->source_id);
-                  data->source_id = 0;
-                }
+                if (data->source_id > 0)
+                  {
+                    g_source_remove (data->source_id);
+                    data->source_id = 0;
+                  }
 
                 data->source_id = g_timeout_add_seconds (10,
                                                          remove_data_timeout,
@@ -367,20 +389,7 @@ account_status_changed_idle_cb (ChangedSignalData *signal_data)
           emit_connection = TRUE;
         }
 
-      if (data->connection == NULL)
-        {
-          data->connection = mission_control_get_tpconnection (priv->mc,
-              account, NULL);
-          if (data->connection != NULL)
-            {
-              g_signal_connect (data->connection, "invalidated",
-              	  G_CALLBACK (connection_invalidated_cb), manager);
-              g_hash_table_insert (priv->connections,
-                  g_object_ref (data->connection), g_object_ref (account));
-              tp_connection_call_when_ready (data->connection,
-                  connection_ready_cb, manager);
-            }
-        }
+      account_manager_update_connection (manager, data, account);
 
       if (emit_presence)
         g_signal_emit (manager, signals[ACCOUNT_PRESENCE_CHANGED], 0,
