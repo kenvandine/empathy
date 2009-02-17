@@ -42,6 +42,7 @@
 #include <libempathy/empathy-utils.h>
 #include <libempathy/empathy-call-factory.h>
 #include <libempathy/empathy-chatroom-manager.h>
+#include <libempathy/empathy-account-manager.h>
 #include <libempathy/empathy-dispatcher.h>
 #include <libempathy/empathy-dispatch-operation.h>
 #include <libempathy/empathy-log-manager.h>
@@ -96,10 +97,16 @@ dispatch_cb (EmpathyDispatcher *dispatcher,
 		}
 
 		if (id) {
+			EmpathyAccountManager *manager;
+			TpConnection *connection;
 			McAccount *account;
 
-			account = empathy_tp_chat_get_account (tp_chat);
+			manager = empathy_account_manager_dup_singleton ();
+			connection = empathy_tp_chat_get_connection (tp_chat);
+			account = empathy_account_manager_get_account (manager,
+								       connection);
 			chat = empathy_chat_window_find_chat (account, id);
+			g_object_unref (manager);
 		}
 
 		if (chat) {
