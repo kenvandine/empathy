@@ -74,16 +74,6 @@ const gchar * empathy_presence_to_str               (McPresence       presence);
 McPresence    empathy_presence_from_str             (const gchar     *str);
 gchar *       empathy_file_lookup                   (const gchar     *filename,
 						     const gchar     *subdir);
-
-typedef gboolean (*EmpathyRunUntilReadyFunc)        (GObject         *object,
-						     gpointer         user_data);
-void          empathy_run_until_ready               (gpointer         object);
-void          empathy_run_until_ready_full          (gpointer         object,
-						     const gchar     *signal,
-						     EmpathyRunUntilReadyFunc  func,
-						     gpointer         user_data,
-						     GMainLoop      **loop);
-McAccount *  empathy_channel_get_account            (TpChannel       *channel);
 gboolean     empathy_proxy_equal                    (gconstpointer    a,
 						     gconstpointer    b);
 guint        empathy_proxy_hash                     (gconstpointer    key);
