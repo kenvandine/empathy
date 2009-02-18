@@ -760,18 +760,15 @@ static void
 contact_widget_avatar_changed_cb (EmpathyAvatarChooser *chooser,
                                   EmpathyContactWidget *information)
 {
-  if (information->contact && empathy_contact_is_user (information->contact))
-    {
-      const gchar *data;
-      gsize size;
-      const gchar *mime_type;
+  const gchar *data;
+  gsize size;
+  const gchar *mime_type;
 
-      empathy_avatar_chooser_get_image_data (
-          EMPATHY_AVATAR_CHOOSER (information->widget_avatar),
-          &data, &size, &mime_type);
-      empathy_tp_contact_factory_set_avatar (information->factory,
-          data, size, mime_type);
-    }
+  empathy_avatar_chooser_get_image_data (
+      EMPATHY_AVATAR_CHOOSER (information->widget_avatar),
+      &data, &size, &mime_type);
+  empathy_tp_contact_factory_set_avatar (information->factory,
+      data, size, mime_type);
 }
 
 static gboolean
