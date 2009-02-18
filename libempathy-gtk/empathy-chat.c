@@ -65,7 +65,6 @@
 #define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyChat)
 typedef struct {
 	EmpathyTpChat     *tp_chat;
-	gulong            tp_chat_destroy_handler;
 	McAccount         *account;
 	gchar             *id;
 	gchar             *name;
@@ -1436,7 +1435,20 @@ chat_finalize (GObject *object)
 	g_object_unref (priv->log_manager);
 
 	if (priv->tp_chat) {
-		g_signal_handler_disconnect (priv->tp_chat, priv->tp_chat_destroy_handler);
+		g_signal_handlers_disconnect_by_func (priv->tp_chat,
+			chat_destroy_cb, chat);
+		g_signal_handlers_disconnect_by_func (priv->tp_chat,
+			chat_message_received_cb, chat);
+		g_signal_handlers_disconnect_by_func (priv->tp_chat,
+			chat_send_error_cb, chat);
+		g_signal_handlers_disconnect_by_func (priv->tp_chat,
+			chat_state_changed_cb, chat);
+		g_signal_handlers_disconnect_by_func (priv->tp_chat,
+			chat_property_changed_cb, chat);
+		g_signal_handlers_disconnect_by_func (priv->tp_chat,
+			chat_members_changed_cb, chat);
+		g_signal_handlers_disconnect_by_func (priv->tp_chat,
+			chat_remote_contact_changed_cb, chat);
 		empathy_tp_chat_close (priv->tp_chat);
 		g_object_unref (priv->tp_chat);
 	}
@@ -1629,6 +1641,9 @@ empathy_chat_set_tp_chat (EmpathyChat   *chat,
 							     connection);
 	g_object_ref (priv->account);
 
+	g_signal_connect (tp_chat, "destroy",
+			  G_CALLBACK (chat_destroy_cb),
+			  chat);
 	g_signal_connect (tp_chat, "message-received",
 			  G_CALLBACK (chat_message_received_cb),
 			  chat);
@@ -1647,10 +1662,6 @@ empathy_chat_set_tp_chat (EmpathyChat   *chat,
 	g_signal_connect_swapped (tp_chat, "notify::remote-contact",
 				  G_CALLBACK (chat_remote_contact_changed_cb),
 				  chat);
-	priv->tp_chat_destroy_handler =
-		g_signal_connect (tp_chat, "destroy",
-			  G_CALLBACK (chat_destroy_cb),
-			  chat);
 
 	chat_remote_contact_changed_cb (chat);
 
