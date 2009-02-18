@@ -37,31 +37,8 @@ enum {
   LAST_SIGNAL
 };
 
-typedef struct {
-  gboolean dispose_run;
-} EmpathyFTFactoryPriv;
-
 static EmpathyFTFactory *factory_singleton = NULL;
 static guint signals[LAST_SIGNAL] = { 0 };
-
-static void
-do_dispose (GObject *object)
-{
-  EmpathyFTFactoryPriv *priv = GET_PRIV (object);
-
-  if (priv->dispose_run)
-    return;
-
-  priv->dispose_run = TRUE;
-
-  G_OBJECT_CLASS (empathy_ft_factory_parent_class)->dispose (object);
-}
-
-static void
-do_finalize (GObject *object)
-{
-  G_OBJECT_CLASS (empathy_ft_factory_parent_class)->finalize (object);
-}
 
 static GObject *
 do_constructor (GType type,
@@ -88,10 +65,6 @@ empathy_ft_factory_class_init (EmpathyFTFactoryClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
-  g_type_class_add_private (klass, sizeof (EmpathyFTFactoryPriv));
-
-  object_class->dispose = do_dispose;
-  object_class->finalize = do_finalize;
   object_class->constructor = do_constructor;
 
   signals[NEW_FT_HANDLER] =
@@ -107,10 +80,7 @@ empathy_ft_factory_class_init (EmpathyFTFactoryClass *klass)
 static void
 empathy_ft_factory_init (EmpathyFTFactory *self)
 {
-  EmpathyFTFactoryPriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (self,
-    EMPATHY_TYPE_FT_FACTORY, EmpathyFTFactoryPriv);
-
-  self->priv = priv;
+  /* do nothing */
 }
 
 static void
