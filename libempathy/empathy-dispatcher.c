@@ -228,11 +228,8 @@ dispatcher_connection_invalidated_cb (TpConnection *connection,
                                       EmpathyDispatcher *dispatcher)
 {
   EmpathyDispatcherPriv *priv = GET_PRIV (dispatcher);
-  ConnectionData *cd;
 
   DEBUG ("Error: %s", message);
-  cd = g_hash_table_lookup (priv->connections, connection);
-
   g_hash_table_remove (priv->connections, connection);
 }
 
