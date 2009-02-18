@@ -101,9 +101,6 @@ tp_chat_invalidated_cb (TpProxy       *proxy,
 
 	DEBUG ("Channel invalidated: %s", message);
 	g_signal_emit (chat, signals[DESTROY], 0);
-
-	g_object_unref (priv->channel);
-	priv->channel = NULL;
 }
 
 static void
@@ -881,7 +878,7 @@ tp_chat_group_members_changed_cb (TpChannel     *self,
 			if (handle == g_array_index (removed, TpHandle, i)) {
 				priv->members = g_list_delete_link (priv->members, l);
 				g_signal_emit_by_name (chat, "members-changed",
-						       contact, actor, reason,
+						       contact, NULL, reason,
 						       message, FALSE);
 				g_object_unref (contact);
 				break;
@@ -988,7 +985,7 @@ tp_chat_constructor (GType                  type,
 			handles->len, (TpHandle*) handles->data,
 			tp_chat_got_added_contacts_cb, NULL, NULL, chat);
 
-		g_signal_connect_swapped (priv->channel, "group-members-changed",
+		g_signal_connect (priv->channel, "group-members-changed",
 			G_CALLBACK (tp_chat_group_members_changed_cb), chat);
 	} else {
 		/* Get the self contact from the connection's self handle */
@@ -1187,17 +1184,9 @@ empathy_tp_chat_close (EmpathyTpChat *chat) {
 	EmpathyTpChatPriv *priv = GET_PRIV (chat);
 
 	/* If there are still messages left, it'll come back..
-	   We loose the ordering of sent messages though */
-	g_signal_handlers_disconnect_by_func (priv->channel,
-		tp_chat_invalidated_cb, chat);
-
+	 * We loose the ordering of sent messages though */
 	tp_cli_channel_call_close (priv->channel, -1, tp_chat_async_cb,
 		"closing channel", NULL, NULL);
-
-	g_object_unref (priv->channel);
-	priv->channel = NULL;
-
-	g_signal_emit (chat, signals[DESTROY], 0);
 }
 
 const gchar *
