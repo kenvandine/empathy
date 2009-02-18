@@ -898,6 +898,11 @@ empathy_ft_handler_start_transfer (EmpathyFTHandler *handler,
     }
   else
     {
+      /* emit the start signal now, so that we can catch errors in the
+       * op callback.
+       */
+      g_signal_emit (handler, signals[TRANSFER_STARTED], 0, priv->tpfile);
+
       /* TODO: add support for resume. */
       empathy_tp_file_accept (priv->tpfile, 0, priv->gfile, priv->cancellable,
           ft_transfer_progress_callback, handler,
