@@ -1418,13 +1418,14 @@ file_manager_send_file_response_cb (GtkDialog      *widget,
 
 		factory = empathy_ft_factory_dup_singleton ();
 
-		empathy_ft_factory_new_transfer (factory, contact, file);
+		empathy_ft_factory_new_transfer_outgoing (factory, contact, file);
 
 		manager = gtk_recent_manager_get_default ();
 		gtk_recent_manager_add_item (manager, uri);
 
 		g_free (uri);
 		g_object_unref (factory);
+		g_object_unref (file);
 	}
 
 	gtk_widget_destroy (GTK_WIDGET (widget));
@@ -1462,6 +1463,49 @@ empathy_send_file_with_file_chooser (EmpathyContact *contact)
 	g_signal_connect (widget, "response",
 			  G_CALLBACK (file_manager_send_file_response_cb),
 			  contact);
+
+	gtk_widget_show (widget);
+}
+
+static void
+file_manager_receive_file_response_cb (GtkDialog *dialog,
+				       GtkResponseType response,
+				       EmpathyFTHandler *handler)
+{
+	EmpathyFTFactory *factory;
+	GFile *file;
+
+	if (response == GTK_RESPONSE_OK) {
+		factory = empathy_ft_factory_dup_singleton ();
+		file = gtk_file_chooser_get_file (GTK_FILE_CHOOSER (dialog));
+
+		empathy_ft_factory_set_destination_for_incoming_handler
+			(factory, handler, file);
+
+		g_object_unref (factory);
+		g_object_unref (file);
+	}
+
+	gtk_widget_destroy (GTK_WIDGET (dialog));
+}
+
+void
+empathy_receive_file_with_file_chooser (EmpathyFTHandler *handler)
+{
+	GtkWidget *widget;
+
+	widget = gtk_file_chooser_dialog_new (_("Select a destination"),
+					      NULL,
+					      GTK_FILE_CHOOSER_ACTION_SAVE,
+					      GTK_STOCK_CANCEL,
+					      GTK_RESPONSE_CANCEL,
+					      GTK_STOCK_SAVE,
+					      GTK_RESPONSE_OK,
+					      NULL);
+	gtk_file_chooser_set_current_name (GTK_FILE_CHOOSER (widget),
+		empathy_ft_handler_get_filename (handler));
+	g_signal_connect (widget, "response",
+		G_CALLBACK (file_manager_receive_file_response_cb), handler);
 
 	gtk_widget_show (widget);
 }

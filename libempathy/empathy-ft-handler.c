@@ -855,7 +855,6 @@ empathy_ft_handler_new_outgoing (EmpathyContact *contact,
 
 void
 empathy_ft_handler_new_incoming (EmpathyTpFile *tp_file,
-                                 GFile *destination,
                                  EmpathyFTHandlerReadyCallback callback,
                                  gpointer user_data)
 {
@@ -864,10 +863,9 @@ empathy_ft_handler_new_incoming (EmpathyTpFile *tp_file,
   CallbacksData *data;
 
   g_return_if_fail (EMPATHY_IS_TP_FILE (tp_file));
-  g_return_if_fail (G_IS_FILE (destination));
 
   handler = g_object_new (EMPATHY_TYPE_FT_HANDLER,
-      "tp-file", tp_file, "gfile", destination, NULL);
+      "tp-file", tp_file, NULL);
 
   g_object_get (tp_file, "channel", &channel, NULL);
 
@@ -908,4 +906,26 @@ empathy_ft_handler_start_transfer (EmpathyFTHandler *handler,
           ft_transfer_progress_callback, handler,
           ft_transfer_operation_callback, handler);
     }
+}
+
+void
+empathy_ft_handler_incoming_set_destination (EmpathyFTHandler *handler,
+                                             GFile *destination)
+{
+  g_return_if_fail (EMPATHY_IS_FT_HANDLER (handler));
+  g_return_if_fail (G_IS_FILE (destination));
+
+  g_object_set (handler, "gfile", destination, NULL);
+}
+
+const char *
+empathy_ft_handler_get_filename (EmpathyFTHandler *handler)
+{
+  EmpathyFTHandlerPriv *priv;
+
+  g_return_val_if_fail (EMPATHY_IS_FT_HANDLER (handler), NULL);
+
+  priv = GET_PRIV (handler);
+
+  return priv->filename;
 }

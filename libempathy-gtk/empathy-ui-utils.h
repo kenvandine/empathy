@@ -39,8 +39,8 @@
 #include <libmissioncontrol/mc-account.h>
 #include <libmissioncontrol/mc-profile.h>
 
-
 #include <libempathy/empathy-contact.h>
+#include <libempathy/empathy-ft-handler.h>
 
 #include "empathy-chat-view.h"
 
@@ -124,6 +124,7 @@ GtkWidget * empathy_link_button_new                     (const gchar      *url,
 							 const gchar      *title);
 
 void        empathy_send_file_with_file_chooser         (EmpathyContact   *contact);
+void        empathy_receive_file_with_file_chooser      (EmpathyFTHandler *handler);
 
 /* Sounds */
 void        empathy_sound_play                          (GtkWidget        *widget,

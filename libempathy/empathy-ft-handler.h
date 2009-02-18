@@ -63,11 +63,16 @@ GType empathy_ft_handler_get_type (void);
 void empathy_ft_handler_new_outgoing (EmpathyContact *contact,
     GFile *source, EmpathyFTHandlerReadyCallback callback,
     gpointer user_data);
+
 void empathy_ft_handler_new_incoming (EmpathyTpFile *tp_file,
-    GFile *destination, EmpathyFTHandlerReadyCallback callback,
-    gpointer user_data);
+    EmpathyFTHandlerReadyCallback callback, gpointer user_data);
+void empathy_ft_handler_incoming_set_destination (EmpathyFTHandler *handler,
+    GFile *destination);
+
 void empathy_ft_handler_start_transfer (EmpathyFTHandler *handler,
     GCancellable *cancellable);
+
+const char * empathy_ft_handler_get_filename (EmpathyFTHandler *handler);
 
 G_END_DECLS
 

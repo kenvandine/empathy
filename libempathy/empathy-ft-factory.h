@@ -28,6 +28,7 @@
 #include <gio/gio.h>
 
 #include "empathy-contact.h"
+#include "empathy-ft-handler.h"
 #include "empathy-dispatch-operation.h"
 
 G_BEGIN_DECLS
@@ -57,10 +58,14 @@ GType empathy_ft_factory_get_type (void);
 
 /* public methods */
 EmpathyFTFactory* empathy_ft_factory_dup_singleton (void);
-void empathy_ft_factory_new_transfer (EmpathyFTFactory *factory,
+void empathy_ft_factory_new_transfer_outgoing (EmpathyFTFactory *factory,
   EmpathyContact *contact, GFile *source);
 void empathy_ft_factory_claim_channel (EmpathyFTFactory *factory,
-  EmpathyDispatchOperation *operation, GFile *destination);
+  EmpathyDispatchOperation *operation);
+void empathy_ft_factory_set_destination_for_incoming_handler
+                                                 (EmpathyFTFactory *factory,
+                                                  EmpathyFTHandler *handler,
+                                                  GFile *destination);
 
 G_END_DECLS
 

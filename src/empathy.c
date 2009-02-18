@@ -133,7 +133,7 @@ dispatch_cb (EmpathyDispatcher *dispatcher,
 		EmpathyFTFactory *factory;
 
 		factory = empathy_ft_factory_dup_singleton ();
-		empathy_ft_factory_claim_channel (factory, operation, NULL);
+		empathy_ft_factory_claim_channel (factory, operation);
 	}
 }
 
@@ -405,6 +405,22 @@ show_version_cb (const char *option_name,
 }
 
 static void
+new_incoming_transfer_cb (EmpathyFTFactory *factory,
+			  EmpathyFTHandler *handler,
+			  gpointer user_data)
+{
+	empathy_receive_file_with_file_chooser (handler);
+}
+
+static void
+new_ft_handler_cb (EmpathyFTFactory *factory,
+		   EmpathyFTHandler *handler,
+		   gpointer user_data)
+{
+	/* TODO: add to FT window */
+}
+
+static void
 new_call_handler_cb (EmpathyCallFactory *factory, EmpathyCallHandler *handler,
 	gboolean outgoing, gpointer user_data)
 {
@@ -427,6 +443,7 @@ main (int argc, char *argv[])
 	EmpathyChatroomManager *chatroom_manager;
 	EmpathyFTManager  *ft_manager;
 	EmpathyCallFactory *call_factory;
+	EmpathyFTFactory  *ft_factory;
 	GtkWidget         *window;
 	MissionControl    *mc;
 	EmpathyIdle       *idle;
@@ -581,6 +598,12 @@ main (int argc, char *argv[])
 	call_factory = empathy_call_factory_initialise ();
 	g_signal_connect (G_OBJECT (call_factory), "new-call-handler",
 		G_CALLBACK (new_call_handler_cb), NULL);
+	/* Create the FT factory */
+	ft_factory = empathy_ft_factory_dup_singleton ();
+	g_signal_connect (ft_factory, "new-ft-handler",
+		G_CALLBACK (new_ft_handler_cb), NULL);
+	g_signal_connect (ft_factory, "new-incoming-transfer",
+		G_CALLBACK (new_incoming_transfer_cb), NULL);
 
 	/* Location mananger */
 #if HAVE_GEOCLUE
@@ -601,6 +624,7 @@ main (int argc, char *argv[])
 #if HAVE_GEOCLUE
 	g_object_unref (location_manager);
 #endif
+	g_object_unref (ft_factory);
 
 	notify_uninit ();
 
