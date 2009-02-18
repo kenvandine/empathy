@@ -42,18 +42,14 @@ G_BEGIN_DECLS
 #define EMPATHY_TP_FILE_GET_CLASS(o) (G_TYPE_INSTANCE_GET_CLASS ((o), EMPATHY_TYPE_TP_FILE, EmpathyTpFileClass))
 
 typedef struct _EmpathyTpFile EmpathyTpFile;
-typedef struct _EmpathyTpFilePriv EmpathyTpFilePriv;
 typedef struct _EmpathyTpFileClass EmpathyTpFileClass;
 
-struct _EmpathyTpFile
-{
+struct _EmpathyTpFile {
   GObject  parent;
-
   gpointer priv;
 };
 
-struct _EmpathyTpFileClass
-{
+struct _EmpathyTpFileClass {
   GObjectClass parent_class;
 };
 
