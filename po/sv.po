@@ -10,8 +10,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: empathy\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-14 09:42+0100\n"
-"PO-Revision-Date: 2009-02-14 09:43+0100\n"
+"POT-Creation-Date: 2009-02-19 00:35+0100\n"
+"PO-Revision-Date: 2009-02-19 00:38+0100\n"
 "Last-Translator: Daniel Nylander <po@danielnylander.se>\n"
 "Language-Team: Swedish <tp-sv@listor.tp-sv.se>\n"
 "MIME-Version: 1.0\n"
@@ -216,40 +216,40 @@ msgid "Whether or not to convert smileys into graphical images in conversations.
 msgstr "Huruvida smilisar ska omvandlas till grafiska bilder eller inte i samtal."
 
 #: ../data/empathy.schemas.in.h:47
-msgid "Whether or not to play a sound notifications when away or busy."
-msgstr "Huruvida ljudnotifieringar ska spelas upp eller inte under frånvaro eller upptagen."
-
-#: ../data/empathy.schemas.in.h:48
 msgid "Whether or not to play a sound to notify for contacts logging in the network."
 msgstr "Huruvida ett ljud ska spelas upp eller inte för kontakter som loggar in i nätverket."
 
-#: ../data/empathy.schemas.in.h:49
+#: ../data/empathy.schemas.in.h:48
 msgid "Whether or not to play a sound to notify for contacts logging off the network."
 msgstr "Huruvida ett ljud ska spelas upp eller inte för kontakter som loggar ut från nätverket."
 
-#: ../data/empathy.schemas.in.h:50
+#: ../data/empathy.schemas.in.h:49
 msgid "Whether or not to play a sound to notify for events."
 msgstr "Huruvida ett ljud ska spelas upp eller inte för att notifiera om händelser."
 
-#: ../data/empathy.schemas.in.h:51
+#: ../data/empathy.schemas.in.h:50
 msgid "Whether or not to play a sound to notify for incoming messages."
 msgstr "Huruvida ett ljud ska spelas upp eller inte för inkommande meddelanden."
 
-#: ../data/empathy.schemas.in.h:52
+#: ../data/empathy.schemas.in.h:51
 msgid "Whether or not to play a sound to notify for new conversations."
 msgstr "Huruvida ett ljud ska spelas upp eller inte för nya samtal."
 
-#: ../data/empathy.schemas.in.h:53
+#: ../data/empathy.schemas.in.h:52
 msgid "Whether or not to play a sound to notify for outgoing messages."
 msgstr "Huruvida ett ljud ska spelas upp eller inte för utgående meddelanden."
 
-#: ../data/empathy.schemas.in.h:54
+#: ../data/empathy.schemas.in.h:53
 msgid "Whether or not to play a sound when logging in a network."
 msgstr "Huruvida ett ljud ska spelas upp eller inte vid inloggning i ett nätverk."
 
-#: ../data/empathy.schemas.in.h:55
+#: ../data/empathy.schemas.in.h:54
 msgid "Whether or not to play a sound when logging off a network."
 msgstr "Huruvida ett ljud ska spelas upp eller inte vid utloggning från ett nätverk."
+
+#: ../data/empathy.schemas.in.h:55
+msgid "Whether or not to play sound notifications when away or busy."
+msgstr "Huruvida ljudnotifieringar ska spelas upp eller inte vid frånvaro eller upptagen."
 
 #: ../data/empathy.schemas.in.h:56
 msgid "Whether or not to show a popup notification when receiving a new message even if the chat is already opened, but not focused."
@@ -618,7 +618,7 @@ msgid "%s has left the room"
 msgstr "%s har lämnat rummet"
 
 #: ../libempathy-gtk/empathy-chat.c:1248
-#: ../src/empathy-call-window.c:467
+#: ../src/empathy-call-window.c:548
 msgid "Disconnected"
 msgstr "Frånkopplad"
 
@@ -648,8 +648,8 @@ msgid "_Open Link"
 msgstr "_Öppna länk"
 
 #: ../libempathy-gtk/empathy-chat-text-view.c:439
-msgid "%A %d %B %Y"
-msgstr "%A %d %B %Y"
+msgid "%A %B %d %Y"
+msgstr "%A %e %B %Y"
 
 #: ../libempathy-gtk/empathy-contact-dialogs.c:180
 msgid "Personal Information"
@@ -858,7 +858,7 @@ msgid "SSL"
 msgstr "SSL"
 
 #: ../libempathy-gtk/empathy-log-window.c:498
-#: ../src/empathy-import-dialog.c:276
+#: ../src/empathy-import-dialog.c:277
 msgid "Account"
 msgstr "Konto"
 
@@ -1329,43 +1329,43 @@ msgstr "För att lägga till ett nytt konto måste du först installera en bakä
 msgid "Type:"
 msgstr "Typ:"
 
-#: ../src/empathy-call-window.c:180
+#: ../src/empathy-call-window.c:258
 msgid "Contrast"
 msgstr "Kontrast"
 
-#: ../src/empathy-call-window.c:180
+#: ../src/empathy-call-window.c:258
 msgid "Brightness"
 msgstr "Ljusstyrka"
 
-#: ../src/empathy-call-window.c:180
+#: ../src/empathy-call-window.c:258
 msgid "Gamma"
 msgstr "Gamma"
 
-#: ../src/empathy-call-window.c:212
+#: ../src/empathy-call-window.c:290
 msgid "Volume"
 msgstr "Volym"
 
-#: ../src/empathy-call-window.c:288
+#: ../src/empathy-call-window.c:366
 msgid "_Sidebar"
 msgstr "_Sidopanel"
 
-#: ../src/empathy-call-window.c:306
+#: ../src/empathy-call-window.c:384
 msgid "Dialpad"
 msgstr "Knappsats"
 
-#: ../src/empathy-call-window.c:310
+#: ../src/empathy-call-window.c:390
 msgid "Audio input"
 msgstr "Ljudingång"
 
-#: ../src/empathy-call-window.c:314
+#: ../src/empathy-call-window.c:394
 msgid "Video input"
 msgstr "Videoingång"
 
-#: ../src/empathy-call-window.c:327
+#: ../src/empathy-call-window.c:407
 msgid "Connecting..."
 msgstr "Ansluter..."
 
-#: ../src/empathy-call-window.c:490
+#: ../src/empathy-call-window.c:572
 #, c-format
 msgid "Connected -- %d:%02dm"
 msgstr "Ansluten -- %d:%02dm"
@@ -1375,8 +1375,8 @@ msgid "Hang up"
 msgstr "Lägg på"
 
 #: ../src/empathy-call-window.glade.h:2
-msgid "Send Video"
-msgstr "Skicka video"
+msgid "Send Audio"
+msgstr "Skicka ljud"
 
 #: ../src/empathy-call-window.glade.h:3
 msgid "Send video"
@@ -1754,19 +1754,20 @@ msgstr "Filöverföringar"
 msgid "Remove completed, canceled and failed file transfers from the list"
 msgstr "Ta bort färdiga, avbrutna och misslyckade filöverföringar från listan"
 
-#: ../src/empathy-import-dialog.c:254
+#. Translators: this is the header of a treeview column
+#: ../src/empathy-import-dialog.c:255
 msgid "Import"
 msgstr "Importera"
 
-#: ../src/empathy-import-dialog.c:263
+#: ../src/empathy-import-dialog.c:264
 msgid "Protocol"
 msgstr "Protokoll"
 
-#: ../src/empathy-import-dialog.c:289
+#: ../src/empathy-import-dialog.c:290
 msgid "Source"
 msgstr "Källa"
 
-#: ../src/empathy-import-dialog.c:377
+#: ../src/empathy-import-dialog.c:378
 msgid "No accounts to import could be found. Empathy currently only supports importing accounts from Pidgin."
 msgstr "Inga konton att importera kunde hittas. Empathy har för närvarande endast stöd för att importera konton från Pidgin."
 
@@ -1957,7 +1958,7 @@ msgid "<b>Appearance</b>"
 msgstr "<b>Utseende</b>"
 
 #: ../src/empathy-preferences.glade.h:2
-msgid "<b>Behaviour</b>"
+msgid "<b>Behavior</b>"
 msgstr "<b>Beteende</b>"
 
 #: ../src/empathy-preferences.glade.h:3
@@ -2068,12 +2069,12 @@ msgstr "_Avsluta"
 msgid "_Show Contact List"
 msgstr "_Visa kontaktlista"
 
-#: ../src/empathy-tube-dispatch.c:356
+#: ../src/empathy-tube-dispatch.c:364
 #, c-format
 msgid "Unable to start application for service %s: %s"
 msgstr "Kunde inte starta program för tjänsten %s: %s"
 
-#: ../src/empathy-tube-dispatch.c:427
+#: ../src/empathy-tube-dispatch.c:435
 #, c-format
 msgid "An invitation was offered for service %s, but you don't have the needed application to handle it"
 msgstr "Du blev erbjuden en inbjudan för tjänsten %s, men du har inte det nödvändiga programmet att hantera den med"
