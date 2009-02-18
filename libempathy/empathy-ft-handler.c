@@ -188,6 +188,26 @@ do_dispose (GObject *object)
 static void
 do_finalize (GObject *object)
 {
+  EmpathyFTHandlerPriv *priv = GET_PRIV (object);
+
+  g_free (priv->content_type);
+  priv->content_type = NULL;
+
+  g_free (priv->filename);
+  priv->filename = NULL;
+
+  g_free (priv->description);
+  priv->description = NULL;
+
+  g_free (priv->content_hash);
+  priv->content_hash = NULL;
+
+  if (priv->request != NULL)
+    {
+      g_hash_table_destroy (priv->request);
+      priv->request = NULL;
+    }
+
   G_OBJECT_CLASS (empathy_ft_handler_parent_class)->finalize (object);
 }
 
