@@ -9,8 +9,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: eu\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-11 21:50+0100\n"
-"PO-Revision-Date: 2009-02-11 21:50+0100\n"
+"POT-Creation-Date: 2009-02-18 21:54+0100\n"
+"PO-Revision-Date: 2009-02-18 21:55+0100\n"
 "Last-Translator: Iñaki Larrañaga Murgoitio <dooteo@euskalgnu.org>\n"
 "Language-Team: Basque <itzulpena@euskalgnu.org>\n"
 "MIME-Version: 1.0\n"
@@ -44,8 +44,7 @@ msgid "Chat window theme"
 msgstr "Berriketako leihoaren gaia"
 
 #: ../data/empathy.schemas.in.h:4
-msgid ""
-"Comma separated list of spell checker languages to use (e.g. en, fr, nl)."
+msgid "Comma separated list of spell checker languages to use (e.g. en, fr, nl)."
 msgstr ""
 "Komaz bereiztu erabiltzea nahi diren hizkuntzen zuzentzaile ortografikoen "
 "zerrenda (adib. de, ca, eu)."
@@ -84,8 +83,7 @@ msgstr "Empathy-k automatikoki konektatu behar duen abiatzean"
 
 #: ../data/empathy.schemas.in.h:13
 msgid "Empathy should use the avatar of the contact as the chat window icon"
-msgstr ""
-"Empathy-k berriketako leihoetan kontaktuen avatarrak ikono gisa  erabiltzea"
+msgstr "Empathy-k berriketako leihoetan kontaktuen avatarrak ikono gisa  erabiltzea"
 
 #: ../data/empathy.schemas.in.h:14
 msgid "Enable popup notifications for new messages"
@@ -203,8 +201,7 @@ msgstr ""
 msgid ""
 "Whether or not Empathy should automatically log in to your accounts on "
 "startup."
-msgstr ""
-"Empathy abiatzean zure kontuetan saioa automatikoki hasi behar den ala ez."
+msgstr "Empathy abiatzean zure kontuetan saioa automatikoki hasi behar den ala ez."
 
 #: ../data/empathy.schemas.in.h:42
 msgid ""
@@ -215,8 +212,7 @@ msgstr ""
 "ez adierazten du."
 
 #: ../data/empathy.schemas.in.h:43
-msgid ""
-"Whether or not the Salut account has been created on the first Empathy run."
+msgid "Whether or not the Salut account has been created on the first Empathy run."
 msgstr "Salut kontua sortu den ala ez (Empathy aurreneko aldiz exekutatzean)."
 
 #: ../data/empathy.schemas.in.h:44
@@ -236,24 +232,18 @@ msgstr ""
 "hizkuntzetan)."
 
 #: ../data/empathy.schemas.in.h:46
-msgid ""
-"Whether or not to convert smileys into graphical images in conversations."
+msgid "Whether or not to convert smileys into graphical images in conversations."
 msgstr ""
 "Elkarrizketetan aurpegierak irudi grafikoetara bihurtuko diren ala ez "
 "adierazten du."
 
 #: ../data/empathy.schemas.in.h:47
-msgid "Whether or not to play a sound notifications when away or busy."
-msgstr "Kanpoan edo lanpetuta zaudenean soinua joko duen ala ez adierazten du."
-
-#: ../data/empathy.schemas.in.h:48
-msgid ""
-"Whether or not to play a sound to notify for contacts logging in the network."
+msgid "Whether or not to play a sound to notify for contacts logging in the network."
 msgstr ""
 "Kontaktuen sareko saio-hasierak jakinarazteko soinua joko duen ala ez "
 "adierazten du."
 
-#: ../data/empathy.schemas.in.h:49
+#: ../data/empathy.schemas.in.h:48
 msgid ""
 "Whether or not to play a sound to notify for contacts logging off the "
 "network."
@@ -261,29 +251,33 @@ msgstr ""
 "Kontaktuen sareko saio-amaierak jakinarazteko soinua joko duen ala ez "
 "adierazten du."
 
-#: ../data/empathy.schemas.in.h:50
+#: ../data/empathy.schemas.in.h:49
 msgid "Whether or not to play a sound to notify for events."
 msgstr "Gertaerak jakinarazteko soinua joko duen ala ez adierazten du."
 
-#: ../data/empathy.schemas.in.h:51
+#: ../data/empathy.schemas.in.h:50
 msgid "Whether or not to play a sound to notify for incoming messages."
 msgstr "Sarrerako mezuak jakinarazteko soinua joko duen ala ez adierazten du."
 
-#: ../data/empathy.schemas.in.h:52
+#: ../data/empathy.schemas.in.h:51
 msgid "Whether or not to play a sound to notify for new conversations."
 msgstr "Berriketa berriak jakinarazteko soinua joko duen ala ez adierazten du."
 
-#: ../data/empathy.schemas.in.h:53
+#: ../data/empathy.schemas.in.h:52
 msgid "Whether or not to play a sound to notify for outgoing messages."
 msgstr "Irteerako mezuak jakinarazteko soinua joko duen ala ez adierazten du."
 
-#: ../data/empathy.schemas.in.h:54
+#: ../data/empathy.schemas.in.h:53
 msgid "Whether or not to play a sound when logging in a network."
 msgstr "Sarean saioa hastean soinua joko duen ala ez adierazten du."
 
-#: ../data/empathy.schemas.in.h:55
+#: ../data/empathy.schemas.in.h:54
 msgid "Whether or not to play a sound when logging off a network."
 msgstr "Sareko saioa amaitzean soinua joko duen ala ez adierazten du."
+
+#: ../data/empathy.schemas.in.h:55
+msgid "Whether or not to play sound notifications when away or busy."
+msgstr "Kanpoan edo lanpetuta zaudenean soinua joko duen ala ez adierazten du."
 
 #: ../data/empathy.schemas.in.h:56
 msgid ""
@@ -294,8 +288,7 @@ msgstr ""
 "adierazten du (nahiz eta berriketa jadanik irekita, baina fokurik gabe, egon)"
 
 #: ../data/empathy.schemas.in.h:57
-msgid ""
-"Whether or not to show a popup notification when receiving a new message."
+msgid "Whether or not to show a popup notification when receiving a new message."
 msgstr ""
 "Mezu berri bat jasotzean jakinarazpen-leihoa erakutsiko den ala ez "
 "adierazten du."
@@ -675,7 +668,7 @@ msgstr "%s(e)k gelara elkartzea nahi du"
 msgid "%s has left the room"
 msgstr "%s(e)k gela utzi du"
 
-#: ../libempathy-gtk/empathy-chat.c:1248 ../src/empathy-call-window.c:467
+#: ../libempathy-gtk/empathy-chat.c:1248 ../src/empathy-call-window.c:548
 msgid "Disconnected"
 msgstr "Deskonektatuta"
 
@@ -705,7 +698,7 @@ msgid "_Open Link"
 msgstr "_Ireki esteka"
 
 #: ../libempathy-gtk/empathy-chat-text-view.c:439
-msgid "%A %d %B %Y"
+msgid "%A %B %d %Y"
 msgstr "%A, %Y %B %d"
 
 #: ../libempathy-gtk/empathy-contact-dialogs.c:180
@@ -720,11 +713,11 @@ msgstr "Editatu kontaktuaren informazioa"
 msgid "Contact Information"
 msgstr "Kontaktuaren informazioa"
 
-#: ../libempathy-gtk/empathy-contact-dialogs.c:266
+#: ../libempathy-gtk/empathy-contact-dialogs.c:267
 msgid "I would like to add you to my contact list."
 msgstr "Nire kontaktu-zerrendara gehitu nahi zaitut."
 
-#: ../libempathy-gtk/empathy-contact-dialogs.c:290
+#: ../libempathy-gtk/empathy-contact-dialogs.c:291
 msgid "New Contact"
 msgstr "Kontaktu berria"
 
@@ -917,7 +910,7 @@ msgid "SSL"
 msgstr "SSL"
 
 #: ../libempathy-gtk/empathy-log-window.c:498
-#: ../src/empathy-import-dialog.c:276
+#: ../src/empathy-import-dialog.c:277
 msgid "Account"
 msgstr "Kontua"
 
@@ -1232,8 +1225,7 @@ msgstr "Vietnamera"
 #. * vim: sw=2 ts=8 cindent noai bs=2
 #.
 #: ../megaphone/data/GNOME_Megaphone_Applet.schemas.in.h:1
-msgid ""
-"The contact to display in the applet. Empty means no contact is displayed."
+msgid "The contact to display in the applet. Empty means no contact is displayed."
 msgstr ""
 "Kontaktua applet-ean bistaratzeko. Hutsik utziz gero, ez da kontakturik "
 "bistaratuko."
@@ -1417,43 +1409,43 @@ msgstr ""
 msgid "Type:"
 msgstr "Mota:"
 
-#: ../src/empathy-call-window.c:180
+#: ../src/empathy-call-window.c:258
 msgid "Contrast"
 msgstr "Kontrastea"
 
-#: ../src/empathy-call-window.c:180
+#: ../src/empathy-call-window.c:258
 msgid "Brightness"
 msgstr "Distira"
 
-#: ../src/empathy-call-window.c:180
+#: ../src/empathy-call-window.c:258
 msgid "Gamma"
 msgstr "Gamma"
 
-#: ../src/empathy-call-window.c:212
+#: ../src/empathy-call-window.c:290
 msgid "Volume"
 msgstr "Bolumena"
 
-#: ../src/empathy-call-window.c:288
+#: ../src/empathy-call-window.c:366
 msgid "_Sidebar"
 msgstr "_Albo-barra"
 
-#: ../src/empathy-call-window.c:306
+#: ../src/empathy-call-window.c:384
 msgid "Dialpad"
 msgstr "Dei-teklatua"
 
-#: ../src/empathy-call-window.c:310
+#: ../src/empathy-call-window.c:390
 msgid "Audio input"
 msgstr "Audio-sarrera"
 
-#: ../src/empathy-call-window.c:314
+#: ../src/empathy-call-window.c:394
 msgid "Video input"
 msgstr "Bideo-sarrera"
 
-#: ../src/empathy-call-window.c:327
+#: ../src/empathy-call-window.c:407
 msgid "Connecting..."
 msgstr "Konektatzen..."
 
-#: ../src/empathy-call-window.c:490
+#: ../src/empathy-call-window.c:572
 #, c-format
 msgid "Connected -- %d:%02dm"
 msgstr "Konektatuta -- %d:%02dm"
@@ -1463,8 +1455,8 @@ msgid "Hang up"
 msgstr "Eseki"
 
 #: ../src/empathy-call-window.glade.h:2
-msgid "Send Video"
-msgstr "Bidali bideoa"
+msgid "Send Audio"
+msgstr "Bidali audioa"
 
 #: ../src/empathy-call-window.glade.h:3
 msgid "Send video"
@@ -1644,17 +1636,40 @@ msgstr "Kanpoko aplikazioa abiaraziko da hori kudeatzeko."
 msgid "You don't have the needed external application to handle it."
 msgstr "Ez daukazu beharrezko aplikaziorik hori kudeatzeko."
 
-#: ../src/empathy-event-manager.c:706
+#: ../src/empathy-event-manager.c:692
+msgid "Room invitation"
+msgstr "Gelarako gonbitea"
+
+#: ../src/empathy-event-manager.c:695
+#, c-format
+msgid "%s is inviting you to join %s"
+msgstr "%s(e)k gonbidatzen zaitu '%s'(e)ra elkartzeko"
+
+#. Decline button
+#: ../src/empathy-event-manager.c:703 ../src/empathy-ft-manager.c:1021
+msgid "_Decline"
+msgstr "_Ukatu"
+
+#: ../src/empathy-event-manager.c:708
+msgid "_Join"
+msgstr "_Elkartu"
+
+#: ../src/empathy-event-manager.c:738
+#, c-format
+msgid "%s invited you to join %s"
+msgstr "%s(e)k gonbidatu zaitu '%s'(e)ra elkartzeko"
+
+#: ../src/empathy-event-manager.c:860
 #, c-format
 msgid "Incoming file transfer from %s"
 msgstr "Sarrerako fitxategi-transferentzia %s-(e)ndik"
 
-#: ../src/empathy-event-manager.c:800
+#: ../src/empathy-event-manager.c:954
 #, c-format
 msgid "Subscription requested by %s"
 msgstr "%s-(e)k harpidetzea eskatu du"
 
-#: ../src/empathy-event-manager.c:804
+#: ../src/empathy-event-manager.c:958
 #, c-format
 msgid ""
 "\n"
@@ -1802,11 +1817,6 @@ msgstr "%s(e)k fitxategi bat bidaltzea nahi dizu"
 msgid "Do you want to accept the file \"%s\" (%s)?"
 msgstr "\"%s\" fitxategia onartzen nahi duzu (%s)?"
 
-#. Decline button
-#: ../src/empathy-ft-manager.c:1021
-msgid "_Decline"
-msgstr "_Ukatu"
-
 #. Accept button
 #: ../src/empathy-ft-manager.c:1030
 msgid "_Accept"
@@ -1822,19 +1832,20 @@ msgstr ""
 "Kendu osatutako, bertan behera utzitako eta huts egindako fitxategi-"
 "transferentziak zerrendatik"
 
-#: ../src/empathy-import-dialog.c:254
+#. Translators: this is the header of a treeview column
+#: ../src/empathy-import-dialog.c:255
 msgid "Import"
 msgstr "Inportatu"
 
-#: ../src/empathy-import-dialog.c:263
+#: ../src/empathy-import-dialog.c:264
 msgid "Protocol"
 msgstr "Protokoloa"
 
-#: ../src/empathy-import-dialog.c:289
+#: ../src/empathy-import-dialog.c:290
 msgid "Source"
 msgstr "Iturburua"
 
-#: ../src/empathy-import-dialog.c:377
+#: ../src/empathy-import-dialog.c:378
 msgid ""
 "No accounts to import could be found. Empathy currently only supports "
 "importing accounts from Pidgin."
@@ -1967,8 +1978,7 @@ msgid "Browse:"
 msgstr "Arakatu:"
 
 #: ../src/empathy-new-chatroom-dialog.glade.h:3
-msgid ""
-"Enter the room name to join here or click on one or more rooms in the list."
+msgid "Enter the room name to join here or click on one or more rooms in the list."
 msgstr ""
 "Idatzi gelaren izena bertara elkartzeko edo egin klik gela batean edo "
 "gehiagotan zerrendan."
@@ -1994,8 +2004,7 @@ msgid "Re_fresh"
 msgstr "_Freskatu"
 
 #: ../src/empathy-new-chatroom-dialog.glade.h:8
-msgid ""
-"This list represents all chat rooms hosted on the server you have entered."
+msgid "This list represents all chat rooms hosted on the server you have entered."
 msgstr ""
 "Zerrenda honek emandako zerbitzarian ostatutako berriketa-gela guztiak "
 "adierazten ditu."
@@ -2037,7 +2046,7 @@ msgid "<b>Appearance</b>"
 msgstr "<b>Itxura</b>"
 
 #: ../src/empathy-preferences.glade.h:2
-msgid "<b>Behaviour</b>"
+msgid "<b>Behavior</b>"
 msgstr "<b>Portaera</b>"
 
 #: ../src/empathy-preferences.glade.h:3
@@ -2152,12 +2161,12 @@ msgstr "I_rten"
 msgid "_Show Contact List"
 msgstr "_Erakutsi kontaktu-zerrenda"
 
-#: ../src/empathy-tube-dispatch.c:356
+#: ../src/empathy-tube-dispatch.c:364
 #, c-format
 msgid "Unable to start application for service %s: %s"
 msgstr "Ezin da %s zerbitzuaren aplikazioa abiarazi: %s"
 
-#: ../src/empathy-tube-dispatch.c:427
+#: ../src/empathy-tube-dispatch.c:435
 #, c-format
 msgid ""
 "An invitation was offered for service %s, but you don't have the needed "
@@ -2166,5 +2175,3 @@ msgstr ""
 "%s(e)k gonbidapena eskaintzen ari zaizu, baina ez daukazu "
 "beharrezkoaplikaziorik gonbidapena kudeatzeko."
 
-#~ msgid "menuitem2"
-#~ msgstr "menuitem2"
