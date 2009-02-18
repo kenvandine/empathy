@@ -93,12 +93,10 @@ chatroom_manager_file_save (EmpathyChatroomManager *manager)
 		EmpathyChatroom *chatroom;
 		xmlNodePtr       node;
 		const gchar     *account_id;
-		gboolean         favorite;
 
 		chatroom = l->data;
 
-		g_object_get (chatroom, "favorite", &favorite, NULL);
-		if (!favorite) {
+		if (!empathy_chatroom_is_favorite (chatroom)) {
 			continue;
 		}
 
@@ -231,7 +229,7 @@ chatroom_manager_parse_chatroom (EmpathyChatroomManager *manager,
 	}
 
 	chatroom = empathy_chatroom_new_full (account, room, name, auto_connect);
-	g_object_set (chatroom, "favorite", TRUE, NULL);
+	empathy_chatroom_set_favorite (chatroom, TRUE);
 	add_chatroom (manager, chatroom);
 	g_signal_emit (manager, signals[CHATROOM_ADDED], 0, chatroom);
 
@@ -496,12 +494,9 @@ empathy_chatroom_manager_add (EmpathyChatroomManager *manager,
       empathy_chatroom_get_account (chatroom),
       empathy_chatroom_get_room (chatroom)))
     {
-      gboolean favorite;
-
-      g_object_get (chatroom, "favorite", &favorite, NULL);
       add_chatroom (manager, chatroom);
 
-      if (favorite)
+      if (empathy_chatroom_is_favorite (chatroom))
         reset_save_timeout (manager);
 
       g_signal_emit (manager, signals[CHATROOM_ADDED], 0, chatroom);
@@ -532,11 +527,8 @@ empathy_chatroom_manager_remove (EmpathyChatroomManager *manager,
       if (this_chatroom == chatroom ||
           empathy_chatroom_equal (chatroom, this_chatroom))
         {
-          gboolean favorite;
-
           priv->chatrooms = g_list_delete_link (priv->chatrooms, l);
-          g_object_get (chatroom, "favorite", &favorite, NULL);
-          if (favorite)
+          if (empathy_chatroom_is_favorite (chatroom))
             reset_save_timeout (manager);
 
           g_signal_emit (manager, signals[CHATROOM_REMOVED], 0, this_chatroom);
@@ -647,30 +639,23 @@ chatroom_manager_chat_destroyed_cb (EmpathyTpChat *chat,
   gpointer manager)
 {
   EmpathyChatroomManagerPriv *priv = GET_PRIV (manager);
-  McAccount *account;
-  TpConnection *connection;
-  EmpathyChatroom *chatroom;
-  const gchar *roomname;
-  gboolean favorite;
+  GList *l;
 
-  connection = empathy_tp_chat_get_connection (chat);
-  account = empathy_account_manager_get_account (priv->account_manager,
-      connection);
-  roomname = empathy_tp_chat_get_id (chat);
-  chatroom = empathy_chatroom_manager_find (manager, account, roomname);
-
-  if (chatroom == NULL)
-    return;
-
-  g_object_set (chatroom, "tp-chat", NULL, NULL);
-  g_object_get (chatroom, "favorite", &favorite, NULL);
-
-  if (!favorite)
+  for (l = priv->chatrooms; l; l = l->next)
     {
-      /* Remove the chatroom from the list, unless it's in the list of
-       * favourites..
-       * FIXME this policy should probably not be in libempathy */
-      empathy_chatroom_manager_remove (manager, chatroom);
+      EmpathyChatroom *chatroom = l->data;
+
+      if (empathy_chatroom_get_tp_chat (chatroom) != chat)
+        continue;
+
+      empathy_chatroom_set_tp_chat (chatroom, NULL);
+      if (!empathy_chatroom_is_favorite (chatroom))
+        {
+          /* Remove the chatroom from the list, unless it's in the list of
+           * favourites..
+           * FIXME this policy should probably not be in libempathy */
+          empathy_chatroom_manager_remove (manager, chatroom);
+        }
     }
 }
 
@@ -714,13 +699,13 @@ chatroom_manager_observe_channel_cb (EmpathyDispatcher *dispatcher,
     {
       chatroom = empathy_chatroom_new_full (account, roomname, roomname,
         FALSE);
-      g_object_set (G_OBJECT (chatroom), "tp-chat", chat, NULL);
+      empathy_chatroom_set_tp_chat (chatroom, chat);
       empathy_chatroom_manager_add (manager, chatroom);
       g_object_unref (chatroom);
     }
   else
     {
-      g_object_set (G_OBJECT (chatroom), "tp-chat", chat, NULL);
+        empathy_chatroom_set_tp_chat (chatroom, chat);
     }
 
   /* A TpChat is always destroyed as it only gets unreffed after the channel
