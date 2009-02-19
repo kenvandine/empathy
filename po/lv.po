@@ -313,34 +313,28 @@ msgid "Available"
 msgstr "Pieejams"
 
 #: ../libempathy/empathy-utils.c:254
-#, fuzzy
 msgid "Busy"
 msgstr "Aizņemts"
 
 #: ../libempathy/empathy-utils.c:257
-#, fuzzy
 msgid "Away"
 msgstr "Projām"
 
 #: ../libempathy/empathy-utils.c:259
-#, fuzzy
 msgid "Hidden"
 msgstr "Slēpts"
 
 #: ../libempathy/empathy-utils.c:262
-#, fuzzy
 msgid "Offline"
 msgstr "Nesaistē"
 
 #: ../libempathy-gtk/empathy-account-chooser.c:326
-#, fuzzy
 msgid "All"
 msgstr "Visi"
 
 #: ../libempathy-gtk/empathy-account-widget.c:302
 #: ../libempathy-gtk/empathy-account-widget.c:347
 #, c-format
-#, fuzzy
 msgid "%s:"
 msgstr "%s:"
 
@@ -386,7 +380,6 @@ msgstr ""
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:11
 #: ../libempathy-gtk/empathy-account-widget-msn.glade.h:5
 #: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:8
-#, fuzzy
 msgid "_Port:"
 msgstr "_Ports:"
 
@@ -397,7 +390,6 @@ msgstr "_Ports:"
 #: ../libempathy-gtk/empathy-account-widget-msn.glade.h:6
 #: ../libempathy-gtk/empathy-account-widget-yahoo.glade.h:10
 #: ../src/empathy-new-chatroom-dialog.glade.h:10
-#, fuzzy
 msgid "_Server:"
 msgstr "_Serveris:"
 
@@ -429,7 +421,6 @@ msgid "<b>Servers</b>"
 msgstr ""
 
 #: ../libempathy-gtk/empathy-account-widget-irc.glade.h:3
-#, fuzzy
 msgid "Charset:"
 msgstr "Rakstzīmju kopa:"
 
@@ -442,22 +433,18 @@ msgid "Edit the selected IRC network"
 msgstr ""
 
 #: ../libempathy-gtk/empathy-account-widget-irc.glade.h:6
-#, fuzzy
 msgid "Network"
 msgstr "Tīkls"
 
 #: ../libempathy-gtk/empathy-account-widget-irc.glade.h:7
-#, fuzzy
 msgid "Network:"
 msgstr "Tīkls:"
 
 #: ../libempathy-gtk/empathy-account-widget-irc.glade.h:8
-#, fuzzy
 msgid "Nickname:"
 msgstr "Iesauka:"
 
 #: ../libempathy-gtk/empathy-account-widget-irc.glade.h:9
-#, fuzzy
 msgid "Password:"
 msgstr "Parole:"
 
@@ -466,7 +453,6 @@ msgid "Quit message:"
 msgstr ""
 
 #: ../libempathy-gtk/empathy-account-widget-irc.glade.h:11
-#, fuzzy
 msgid "Real name:"
 msgstr "Īstais vārds:"
 
@@ -479,7 +465,6 @@ msgid "<b>Override server settings</b>"
 msgstr ""
 
 #: ../libempathy-gtk/empathy-account-widget-jabber.glade.h:6
-#, fuzzy
 msgid "Pri_ority:"
 msgstr "Pri_oritāte:"
 
@@ -500,12 +485,10 @@ msgid "_Ignore SSL certificate errors"
 msgstr ""
 
 #: ../libempathy-gtk/empathy-account-widget-salut.glade.h:2
-#, fuzzy
 msgid "_Email:"
 msgstr "_E-pasts:"
 
 #: ../libempathy-gtk/empathy-account-widget-salut.glade.h:3
-#, fuzzy
 msgid "_First Name:"
 msgstr "_Vārds:"
 
@@ -514,13 +497,11 @@ msgid "_Jabber ID:"
 msgstr ""
 
 #: ../libempathy-gtk/empathy-account-widget-salut.glade.h:5
-#, fuzzy
 msgid "_Last Name:"
 msgstr "_Uzvārds:"
 
 #: ../libempathy-gtk/empathy-account-widget-salut.glade.h:6
 #: ../src/empathy-chatrooms-window.glade.h:8
-#, fuzzy
 msgid "_Nickname:"
 msgstr "_Segvārds:"
 
@@ -542,7 +523,6 @@ msgid "STUN port:"
 msgstr ""
 
 #: ../libempathy-gtk/empathy-account-widget-sip.glade.h:8
-#, fuzzy
 msgid "_Username:"
 msgstr "_Lietotājvārds:"
 
@@ -576,17 +556,14 @@ msgid "Select Your Avatar Image"
 msgstr ""
 
 #: ../libempathy-gtk/empathy-avatar-chooser.c:959
-#, fuzzy
 msgid "No Image"
 msgstr "Nav attēla"
 
 #: ../libempathy-gtk/empathy-avatar-chooser.c:1021
-#, fuzzy
 msgid "Images"
 msgstr "Attēli"
 
 #: ../libempathy-gtk/empathy-avatar-chooser.c:1025
-#, fuzzy
 msgid "All Files"
 msgstr "Visi faili"
 
@@ -615,7 +592,6 @@ msgid "not implemented"
 msgstr ""
 
 #: ../libempathy-gtk/empathy-chat.c:522
-#, fuzzy
 msgid "unknown"
 msgstr "nezināms"
 
@@ -640,7 +616,6 @@ msgstr ""
 #. send button
 #: ../libempathy-gtk/empathy-chat.c:991
 #: ../libempathy-gtk/empathy-ui-utils.c:1538
-#, fuzzy
 msgid "_Send"
 msgstr "_Sūtīt"
 
@@ -659,18 +634,15 @@ msgid "%s has left the room"
 msgstr ""
 
 #: ../libempathy-gtk/empathy-chat.c:1248 ../src/empathy-call-window.c:548
-#, fuzzy
 msgid "Disconnected"
 msgstr "Atvienots"
 
 #: ../libempathy-gtk/empathy-chat.c:1644
-#, fuzzy
 msgid "Connected"
 msgstr "Savienots"
 
 #: ../libempathy-gtk/empathy-chat.c:1694
 #: ../libempathy-gtk/empathy-log-window.c:505
-#, fuzzy
 msgid "Conversation"
 msgstr "Saruna"
 
@@ -683,12 +655,10 @@ msgid "Group Chat"
 msgstr ""
 
 #: ../libempathy-gtk/empathy-chat-text-view.c:340
-#, fuzzy
 msgid "_Copy Link Address"
 msgstr "_Kopēt saites adresi"
 
 #: ../libempathy-gtk/empathy-chat-text-view.c:348
-#, fuzzy
 msgid "_Open Link"
 msgstr "_Atvērt saiti"
 
@@ -697,7 +667,6 @@ msgid "%A %B %d %Y"
 msgstr ""
 
 #: ../libempathy-gtk/empathy-contact-dialogs.c:180
-#, fuzzy
 msgid "Personal Information"
 msgstr "Personīga informācija"
 
@@ -706,7 +675,6 @@ msgid "Edit Contact Information"
 msgstr ""
 
 #: ../libempathy-gtk/empathy-contact-dialogs.c:186
-#, fuzzy
 msgid "Contact Information"
 msgstr "Kontaktu informācija"
 
@@ -715,7 +683,6 @@ msgid "I would like to add you to my contact list."
 msgstr ""
 
 #: ../libempathy-gtk/empathy-contact-dialogs.c:291
-#, fuzzy
 msgid "New Contact"
 msgstr "Jauns kontakts"
 
@@ -738,7 +705,6 @@ msgstr ""
 
 #: ../libempathy-gtk/empathy-contact-list-view.c:1298
 #: ../libempathy-gtk/empathy-contact-list-view.c:1377
-#, fuzzy
 msgid "_Remove"
 msgstr "_Izņemt"
 
@@ -762,7 +728,6 @@ msgstr ""
 
 #: ../libempathy-gtk/empathy-contact-menu.c:161
 #: ../src/empathy-call-window.glade.h:5
-#, fuzzy
 msgid "_Call"
 msgstr "_Zvanīt"
 
@@ -805,13 +770,11 @@ msgid "Unable to save avatar"
 msgstr ""
 
 #: ../libempathy-gtk/empathy-contact-widget.c:895
-#, fuzzy
 msgid "Select"
 msgstr "Izvēlēties"
 
 #: ../libempathy-gtk/empathy-contact-widget.c:904
 #: ../src/empathy-main-window.c:991
-#, fuzzy
 msgid "Group"
 msgstr "Grupa"
 
@@ -835,32 +798,26 @@ msgstr ""
 #: ../libempathy-gtk/empathy-new-message-dialog.glade.h:1
 #: ../src/empathy-chatrooms-window.glade.h:1
 #: ../src/empathy-new-chatroom-dialog.glade.h:1
-#, fuzzy
 msgid "Account:"
 msgstr "Konts:"
 
 #: ../libempathy-gtk/empathy-contact-widget.glade.h:6
-#, fuzzy
 msgid "Alias:"
 msgstr "Pseidonīms:"
 
 #: ../libempathy-gtk/empathy-contact-widget.glade.h:7
-#, fuzzy
 msgid "Birthday:"
 msgstr "Dzimšanas diena:"
 
 #: ../libempathy-gtk/empathy-contact-widget.glade.h:8
-#, fuzzy
 msgid "Client:"
 msgstr "Klients:"
 
 #: ../libempathy-gtk/empathy-contact-widget.glade.h:9
-#, fuzzy
 msgid "Contact information"
 msgstr "Kontaktinformācija"
 
 #: ../libempathy-gtk/empathy-contact-widget.glade.h:10
-#, fuzzy
 msgid "Email:"
 msgstr "E-pasts:"
 
@@ -878,7 +835,6 @@ msgid "Information requested..."
 msgstr ""
 
 #: ../libempathy-gtk/empathy-contact-widget.glade.h:15
-#, fuzzy
 msgid "OS:"
 msgstr "OS:"
 
@@ -889,7 +845,6 @@ msgid ""
 msgstr ""
 
 #: ../libempathy-gtk/empathy-contact-widget.glade.h:17
-#, fuzzy
 msgid "Version:"
 msgstr "Versija:"
 
@@ -898,7 +853,6 @@ msgid "Web site:"
 msgstr ""
 
 #: ../libempathy-gtk/empathy-contact-widget.glade.h:19
-#, fuzzy
 msgid "_Add Group"
 msgstr "_Pievienot grupu"
 
@@ -907,34 +861,28 @@ msgid "new server"
 msgstr ""
 
 #: ../libempathy-gtk/empathy-irc-network-dialog.c:513
-#, fuzzy
 msgid "Server"
 msgstr "Serveris"
 
 #: ../libempathy-gtk/empathy-irc-network-dialog.c:528
-#, fuzzy
 msgid "Port"
 msgstr "Ports"
 
 #: ../libempathy-gtk/empathy-irc-network-dialog.c:541
-#, fuzzy
 msgid "SSL"
 msgstr "SSL"
 
 #: ../libempathy-gtk/empathy-log-window.c:498
 #: ../src/empathy-import-dialog.c:277
-#, fuzzy
 msgid "Account"
 msgstr "Konts"
 
 #: ../libempathy-gtk/empathy-log-window.c:515
-#, fuzzy
 msgid "Date"
 msgstr "Datums"
 
 #. Tab Label
 #: ../libempathy-gtk/empathy-log-window.glade.h:2
-#, fuzzy
 msgid "Conversations"
 msgstr "Sarunas"
 
@@ -944,7 +892,6 @@ msgstr ""
 
 #. Tab Label
 #: ../libempathy-gtk/empathy-log-window.glade.h:5
-#, fuzzy
 msgid "Search"
 msgstr "Meklēt"
 
@@ -979,7 +926,6 @@ msgid "Custom message"
 msgstr ""
 
 #: ../libempathy-gtk/empathy-presence-chooser.glade.h:2
-#, fuzzy
 msgid "Message:"
 msgstr "Paziņojums:"
 
@@ -988,12 +934,10 @@ msgid "Save message"
 msgstr ""
 
 #: ../libempathy-gtk/empathy-presence-chooser.glade.h:4
-#, fuzzy
 msgid "Status:"
 msgstr "Statuss:"
 
 #: ../libempathy-gtk/empathy-spell-dialog.c:88
-#, fuzzy
 msgid "Word"
 msgstr "Vārds"
 
@@ -1002,7 +946,6 @@ msgid "Suggestions for the word"
 msgstr ""
 
 #: ../libempathy-gtk/empathy-spell-dialog.glade.h:1
-#, fuzzy
 msgid "Spell Checker"
 msgstr "Pareizrakstības pārbaudītājs"
 
@@ -1011,22 +954,18 @@ msgid "Suggestions for the word:"
 msgstr ""
 
 #: ../libempathy-gtk/empathy-theme-manager.c:60
-#, fuzzy
 msgid "Classic"
 msgstr "Klasiska"
 
 #: ../libempathy-gtk/empathy-theme-manager.c:61
-#, fuzzy
 msgid "Simple"
 msgstr "Vienkāršs"
 
 #: ../libempathy-gtk/empathy-theme-manager.c:62
-#, fuzzy
 msgid "Clean"
 msgstr "Tīrs"
 
 #: ../libempathy-gtk/empathy-theme-manager.c:63
-#, fuzzy
 msgid "Blue"
 msgstr "Zils"
 
@@ -1035,7 +974,6 @@ msgid "Unable to open URI"
 msgstr ""
 
 #: ../libempathy-gtk/empathy-ui-utils.c:1530
-#, fuzzy
 msgid "Select a file"
 msgstr "Izvēlieties failu"
 
@@ -1087,24 +1025,20 @@ msgstr "Pašreizējā lokāle"
 #: ../libempathy-gtk/totem-subtitle-encoding.c:163
 #: ../libempathy-gtk/totem-subtitle-encoding.c:165
 #: ../libempathy-gtk/totem-subtitle-encoding.c:167
-#, fuzzy
 msgid "Arabic"
 msgstr "Arābu"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:170
-#, fuzzy
 msgid "Armenian"
 msgstr "Armēņu"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:173
 #: ../libempathy-gtk/totem-subtitle-encoding.c:175
 #: ../libempathy-gtk/totem-subtitle-encoding.c:177
-#, fuzzy
 msgid "Baltic"
 msgstr "Baltu"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:180
-#, fuzzy
 msgid "Celtic"
 msgstr "Ķeltu"
 
@@ -1112,7 +1046,6 @@ msgstr "Ķeltu"
 #: ../libempathy-gtk/totem-subtitle-encoding.c:185
 #: ../libempathy-gtk/totem-subtitle-encoding.c:187
 #: ../libempathy-gtk/totem-subtitle-encoding.c:189
-#, fuzzy
 msgid "Central European"
 msgstr "Centrāleiropas"
 
@@ -1130,7 +1063,6 @@ msgid "Chinese Traditional"
 msgstr "Ķīniešu tradicionālā"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:208
-#, fuzzy
 msgid "Croatian"
 msgstr "Horvātu"
 
@@ -1140,40 +1072,33 @@ msgstr "Horvātu"
 #: ../libempathy-gtk/totem-subtitle-encoding.c:217
 #: ../libempathy-gtk/totem-subtitle-encoding.c:219
 #: ../libempathy-gtk/totem-subtitle-encoding.c:221
-#, fuzzy
 msgid "Cyrillic"
 msgstr "Kirilica"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:224
-#, fuzzy
 msgid "Cyrillic/Russian"
 msgstr "Kirilica/Krievu"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:227
 #: ../libempathy-gtk/totem-subtitle-encoding.c:229
-#, fuzzy
 msgid "Cyrillic/Ukrainian"
 msgstr "Kirilica/Ukraiņu"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:232
-#, fuzzy
 msgid "Georgian"
 msgstr "Gruzīnu"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:235
 #: ../libempathy-gtk/totem-subtitle-encoding.c:237
 #: ../libempathy-gtk/totem-subtitle-encoding.c:239
-#, fuzzy
 msgid "Greek"
 msgstr "Grieķu"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:242
-#, fuzzy
 msgid "Gujarati"
 msgstr "Gudžarati"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:245
-#, fuzzy
 msgid "Gurmukhi"
 msgstr "Gurmuku"
 
@@ -1181,7 +1106,6 @@ msgstr "Gurmuku"
 #: ../libempathy-gtk/totem-subtitle-encoding.c:250
 #: ../libempathy-gtk/totem-subtitle-encoding.c:252
 #: ../libempathy-gtk/totem-subtitle-encoding.c:254
-#, fuzzy
 msgid "Hebrew"
 msgstr "Ebreju"
 
@@ -1190,19 +1114,16 @@ msgid "Hebrew Visual"
 msgstr "Ebreju vizuāls"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:260
-#, fuzzy
 msgid "Hindi"
 msgstr "Hindu"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:263
-#, fuzzy
 msgid "Icelandic"
 msgstr "Islandiešu"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:266
 #: ../libempathy-gtk/totem-subtitle-encoding.c:268
 #: ../libempathy-gtk/totem-subtitle-encoding.c:270
-#, fuzzy
 msgid "Japanese"
 msgstr "Japāņu"
 
@@ -1210,33 +1131,27 @@ msgstr "Japāņu"
 #: ../libempathy-gtk/totem-subtitle-encoding.c:275
 #: ../libempathy-gtk/totem-subtitle-encoding.c:277
 #: ../libempathy-gtk/totem-subtitle-encoding.c:279
-#, fuzzy
 msgid "Korean"
 msgstr "Korejiešu"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:282
-#, fuzzy
 msgid "Nordic"
 msgstr "Skandināvu"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:285
-#, fuzzy
 msgid "Persian"
 msgstr "Persiešu"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:288
 #: ../libempathy-gtk/totem-subtitle-encoding.c:290
-#, fuzzy
 msgid "Romanian"
 msgstr "Rumāņu"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:293
-#, fuzzy
 msgid "South European"
 msgstr "Dienvideiropiešu"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:296
-#, fuzzy
 msgid "Thai"
 msgstr "Taizemiešu"
 
@@ -1244,7 +1159,6 @@ msgstr "Taizemiešu"
 #: ../libempathy-gtk/totem-subtitle-encoding.c:301
 #: ../libempathy-gtk/totem-subtitle-encoding.c:303
 #: ../libempathy-gtk/totem-subtitle-encoding.c:305
-#, fuzzy
 msgid "Turkish"
 msgstr "Turku"
 
@@ -1253,7 +1167,6 @@ msgstr "Turku"
 #: ../libempathy-gtk/totem-subtitle-encoding.c:312
 #: ../libempathy-gtk/totem-subtitle-encoding.c:314
 #: ../libempathy-gtk/totem-subtitle-encoding.c:316
-#, fuzzy
 msgid "Unicode"
 msgstr "Unikods"
 
@@ -1262,14 +1175,12 @@ msgstr "Unikods"
 #: ../libempathy-gtk/totem-subtitle-encoding.c:323
 #: ../libempathy-gtk/totem-subtitle-encoding.c:325
 #: ../libempathy-gtk/totem-subtitle-encoding.c:327
-#, fuzzy
 msgid "Western"
 msgstr "Rietumu"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:330
 #: ../libempathy-gtk/totem-subtitle-encoding.c:332
 #: ../libempathy-gtk/totem-subtitle-encoding.c:334
-#, fuzzy
 msgid "Vietnamese"
 msgstr "Vjetnamiešu"
 
@@ -1299,7 +1210,6 @@ msgid "_About"
 msgstr "P_ar"
 
 #: ../megaphone/data/GNOME_Megaphone_Applet.xml.h:2
-#, fuzzy
 msgid "_Information"
 msgstr "_Informācija"
 
@@ -1317,7 +1227,6 @@ msgid "Select contact..."
 msgstr ""
 
 #: ../nothere/data/GNOME_NotHere_Applet.server.in.in.h:1
-#, fuzzy
 msgid "Presence"
 msgstr "Klātbūtne"
 
@@ -1370,18 +1279,15 @@ msgid "An Instant Messaging client for GNOME"
 msgstr ""
 
 #: ../src/empathy-about-dialog.c:126
-#, fuzzy
 msgid "translator-credits"
 msgstr "Raivis Dejus <orvils@gmail.com>"
 
 #: ../src/empathy-accounts-dialog.c:391
-#, fuzzy
 msgid "Enabled"
 msgstr "Aktivizēts"
 
 #: ../src/empathy-accounts-dialog.c:401
 #: ../src/empathy-accounts-dialog.glade.h:4
-#, fuzzy
 msgid "Accounts"
 msgstr "Konti"
 
@@ -1438,37 +1344,30 @@ msgid ""
 msgstr ""
 
 #: ../src/empathy-accounts-dialog.glade.h:9
-#, fuzzy
 msgid "Type:"
 msgstr "Tips:"
 
 #: ../src/empathy-call-window.c:258
-#, fuzzy
 msgid "Contrast"
 msgstr "Kontrasts"
 
 #: ../src/empathy-call-window.c:258
-#, fuzzy
 msgid "Brightness"
 msgstr "Spilgtums"
 
 #: ../src/empathy-call-window.c:258
-#, fuzzy
 msgid "Gamma"
 msgstr "Gamma"
 
 #: ../src/empathy-call-window.c:290
-#, fuzzy
 msgid "Volume"
 msgstr "Skaļums"
 
 #: ../src/empathy-call-window.c:366
-#, fuzzy
 msgid "_Sidebar"
 msgstr "_Sānjosla"
 
 #: ../src/empathy-call-window.c:384
-#, fuzzy
 msgid "Dialpad"
 msgstr "Ciparnīca"
 
@@ -1481,7 +1380,6 @@ msgid "Video input"
 msgstr ""
 
 #: ../src/empathy-call-window.c:407
-#, fuzzy
 msgid "Connecting..."
 msgstr "Pieslēdzos..."
 
@@ -1503,12 +1401,10 @@ msgid "Send video"
 msgstr ""
 
 #: ../src/empathy-call-window.glade.h:4
-#, fuzzy
 msgid "Video preview"
 msgstr "Video pirmsapskate"
 
 #: ../src/empathy-call-window.glade.h:6
-#, fuzzy
 msgid "_View"
 msgstr "_Skats"
 
@@ -1535,7 +1431,6 @@ msgid "C_lear"
 msgstr "At_tīrīt"
 
 #: ../src/empathy-chat-window.glade.h:2
-#, fuzzy
 msgid "Chat"
 msgstr "Tērzēšana"
 
@@ -1548,7 +1443,6 @@ msgid "Invitation _message:"
 msgstr ""
 
 #: ../src/empathy-chat-window.glade.h:5
-#, fuzzy
 msgid "Invite"
 msgstr "Uzaicināt"
 
@@ -1569,12 +1463,10 @@ msgid "You have been invited to join a chat conference."
 msgstr ""
 
 #: ../src/empathy-chat-window.glade.h:10
-#, fuzzy
 msgid "_Contact"
 msgstr "_Kontakts"
 
 #: ../src/empathy-chat-window.glade.h:11 ../src/empathy-main-window.glade.h:10
-#, fuzzy
 msgid "_Contents"
 msgstr "_Saturs"
 
@@ -1591,12 +1483,10 @@ msgid "_Favorite Chatroom"
 msgstr ""
 
 #: ../src/empathy-chat-window.glade.h:16 ../src/empathy-main-window.glade.h:12
-#, fuzzy
 msgid "_Help"
 msgstr "_Palīdzība"
 
 #: ../src/empathy-chat-window.glade.h:17
-#, fuzzy
 msgid "_Next Tab"
 msgstr "_Nākamais cilnis"
 
@@ -1609,12 +1499,10 @@ msgid "_Tabs"
 msgstr "_Ciļnes"
 
 #: ../src/empathy-chatrooms-window.c:262
-#, fuzzy
 msgid "Name"
 msgstr "Nosaukums"
 
 #: ../src/empathy-chatrooms-window.c:280
-#, fuzzy
 msgid "Room"
 msgstr "Istaba"
 
@@ -1643,7 +1531,6 @@ msgid "N_ame:"
 msgstr ""
 
 #: ../src/empathy-chatrooms-window.glade.h:7
-#, fuzzy
 msgid "S_erver:"
 msgstr "S_erveris:"
 
@@ -1734,7 +1621,6 @@ msgstr "%u:%02u.%02u"
 
 #: ../src/empathy-ft-manager.c:115
 #, c-format
-#, fuzzy
 msgid "%02u.%02u"
 msgstr "%02u.%02u"
 
@@ -1763,7 +1649,6 @@ msgid "The other participant is unable to transfer the file"
 msgstr ""
 
 #: ../src/empathy-ft-manager.c:176
-#, fuzzy
 msgid "Unknown reason"
 msgstr "Nezināms iemesls"
 
@@ -1780,7 +1665,6 @@ msgid "Sending \"%s\" to %s"
 msgstr ""
 
 #: ../src/empathy-ft-manager.c:237
-#, fuzzy
 msgctxt "file size"
 msgid "Unknown"
 msgstr "Nezināms"
@@ -1826,29 +1710,24 @@ msgid "File transfer canceled: %s"
 msgstr ""
 
 #: ../src/empathy-ft-manager.c:304
-#, fuzzy
 msgctxt "remaining time"
 msgid "Unknown"
 msgstr "Nezināms"
 
 #: ../src/empathy-ft-manager.c:364
-#, fuzzy
 msgctxt "file transfer percent"
 msgid "Unknown"
 msgstr "Nezināms"
 
 #: ../src/empathy-ft-manager.c:700
-#, fuzzy
 msgid "%"
 msgstr "%"
 
 #: ../src/empathy-ft-manager.c:712
-#, fuzzy
 msgid "File"
 msgstr "Fails"
 
 #: ../src/empathy-ft-manager.c:734
-#, fuzzy
 msgid "Remaining"
 msgstr "Atlicis"
 
@@ -1857,7 +1736,6 @@ msgid "Cannot save file to this location"
 msgstr ""
 
 #: ../src/empathy-ft-manager.c:931
-#, fuzzy
 msgid "Save file as..."
 msgstr "Saglabāt failu kā..."
 
@@ -1877,7 +1755,6 @@ msgstr ""
 
 #. Accept button
 #: ../src/empathy-ft-manager.c:1030
-#, fuzzy
 msgid "_Accept"
 msgstr "_Pieņemt"
 
@@ -1891,17 +1768,14 @@ msgstr ""
 
 #. Translators: this is the header of a treeview column
 #: ../src/empathy-import-dialog.c:255
-#, fuzzy
 msgid "Import"
 msgstr "Importēt"
 
 #: ../src/empathy-import-dialog.c:264
-#, fuzzy
 msgid "Protocol"
 msgstr "Protokols"
 
 #: ../src/empathy-import-dialog.c:290
-#, fuzzy
 msgid "Source"
 msgstr "Avots"
 
@@ -1920,12 +1794,10 @@ msgid "No error specified"
 msgstr ""
 
 #: ../src/empathy-main-window.c:394
-#, fuzzy
 msgid "Network error"
 msgstr "Tīkla kļūda"
 
 #: ../src/empathy-main-window.c:397
-#, fuzzy
 msgid "Authentication failed"
 msgstr "Neveiksmīga autentifikācija"
 
@@ -1942,7 +1814,6 @@ msgid "Certificate not provided"
 msgstr ""
 
 #: ../src/empathy-main-window.c:409
-#, fuzzy
 msgid "Certificate untrusted"
 msgstr "Neuzticams sertifikāts"
 
@@ -1971,7 +1842,6 @@ msgid "Certificate error"
 msgstr ""
 
 #: ../src/empathy-main-window.c:430
-#, fuzzy
 msgid "Unknown error"
 msgstr "Nezināma kļūda"
 
@@ -1980,7 +1850,6 @@ msgid "Show and edit accounts"
 msgstr ""
 
 #: ../src/empathy-main-window.c:974
-#, fuzzy
 msgid "Contact"
 msgstr "Kontakts"
 
@@ -1989,12 +1858,10 @@ msgid "_Edit account"
 msgstr ""
 
 #: ../src/empathy-main-window.glade.h:1
-#, fuzzy
 msgid "Contact List"
 msgstr "Kontaktu saraksts"
 
 #: ../src/empathy-main-window.glade.h:2
-#, fuzzy
 msgid "Context"
 msgstr "Konteksts"
 
@@ -2015,7 +1882,6 @@ msgid "Show _Offline Contacts"
 msgstr ""
 
 #: ../src/empathy-main-window.glade.h:7
-#, fuzzy
 msgid "_Accounts"
 msgstr "_Konti"
 
@@ -2070,7 +1936,6 @@ msgid "This list represents all chat rooms hosted on the server you have entered
 msgstr ""
 
 #: ../src/empathy-preferences.c:157
-#, fuzzy
 msgid "Message received"
 msgstr "Vēstule saņemta"
 
@@ -2099,17 +1964,14 @@ msgid "Account disconnected"
 msgstr ""
 
 #: ../src/empathy-preferences.c:397
-#, fuzzy
 msgid "Language"
 msgstr "Valoda"
 
 #: ../src/empathy-preferences.glade.h:1
-#, fuzzy
 msgid "<b>Appearance</b>"
 msgstr "<b>Izskats</b>"
 
 #: ../src/empathy-preferences.glade.h:2
-#, fuzzy
 msgid "<b>Behavior</b>"
 msgstr "<b>Uzvedība</b>"
 
@@ -2156,12 +2018,10 @@ msgid "Enable notifications when the _chat is not focused"
 msgstr ""
 
 #: ../src/empathy-preferences.glade.h:13
-#, fuzzy
 msgid "General"
 msgstr "Pamata"
 
 #: ../src/empathy-preferences.glade.h:14
-#, fuzzy
 msgid "Notifications"
 msgstr "Paziņojumi"
 
@@ -2190,17 +2050,14 @@ msgid "Sort by s_tate"
 msgstr ""
 
 #: ../src/empathy-preferences.glade.h:21
-#, fuzzy
 msgid "Sounds"
 msgstr "Skaņas"
 
 #: ../src/empathy-preferences.glade.h:22
-#, fuzzy
 msgid "Spell Checking"
 msgstr "Pareizrakstības pārbaude"
 
 #: ../src/empathy-preferences.glade.h:23
-#, fuzzy
 msgid "Themes"
 msgstr "Tēmas"
 
@@ -2217,12 +2074,10 @@ msgid "_Open new chats in separate windows"
 msgstr ""
 
 #: ../src/empathy-status-icon.glade.h:1
-#, fuzzy
 msgid "Status"
 msgstr "Statuss"
 
 #: ../src/empathy-status-icon.glade.h:3
-#, fuzzy
 msgid "_Quit"
 msgstr "_Iziet"
 
