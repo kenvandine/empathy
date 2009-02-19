@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: empathy\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-02-17 18:05+0100\n"
-"PO-Revision-Date: 2009-02-17 18:06+0100\n"
+"POT-Creation-Date: 2009-02-19 20:15+0100\n"
+"PO-Revision-Date: 2009-02-19 16:28+0100\n"
 "Last-Translator: Gil Forcada <gilforcada@guifi.net>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "MIME-Version: 1.0\n"
@@ -700,9 +700,8 @@ msgid "_Open Link"
 msgstr "_Obre l'enllaç"
 
 #: ../libempathy-gtk/empathy-chat-text-view.c:439
-#, fuzzy
 msgid "%A %B %d %Y"
-msgstr "%A %d %B %Y"
+msgstr "%A %B %d %Y"
 
 #: ../libempathy-gtk/empathy-contact-dialogs.c:180
 msgid "Personal Information"
@@ -1458,9 +1457,8 @@ msgid "Hang up"
 msgstr "Penja"
 
 #: ../src/empathy-call-window.glade.h:2
-#, fuzzy
 msgid "Send Audio"
-msgstr "Envia vídeo"
+msgstr "Envia àudio"
 
 #: ../src/empathy-call-window.glade.h:3
 msgid "Send video"
@@ -1642,14 +1640,13 @@ msgid "You don't have the needed external application to handle it."
 msgstr "No teniu l'aplicació externa necessària per a gestionar-la."
 
 #: ../src/empathy-event-manager.c:692
-#, fuzzy
 msgid "Room invitation"
-msgstr "Sense afiliació"
+msgstr "Invitació a la sala"
 
 #: ../src/empathy-event-manager.c:695
 #, c-format
 msgid "%s is inviting you to join %s"
-msgstr ""
+msgstr "%s us convida a entrar a %s"
 
 #. Decline button
 #: ../src/empathy-event-manager.c:703 ../src/empathy-ft-manager.c:1021
@@ -1657,14 +1654,13 @@ msgid "_Decline"
 msgstr "_Declina"
 
 #: ../src/empathy-event-manager.c:708
-#, fuzzy
 msgid "_Join"
-msgstr "Uneix-te"
+msgstr "_Uneix-m'hi"
 
 #: ../src/empathy-event-manager.c:738
 #, c-format
 msgid "%s invited you to join %s"
-msgstr ""
+msgstr "%s us ha convidat a entrar a %s"
 
 #: ../src/empathy-event-manager.c:860
 #, c-format
