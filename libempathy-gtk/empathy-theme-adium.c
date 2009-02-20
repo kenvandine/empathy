@@ -259,51 +259,54 @@ theme_adium_parse_body (EmpathyThemeAdium *theme,
 							"<abbr title='%s'><img src=\"%s\"/ alt=\"%s\"/></abbr>",
 							smiley->str, smiley->path, smiley->str);
 			} else {
-				ret = g_markup_escape_text (smiley->str, -1);
-				g_string_append (string, ret);
-				g_free (ret);
+				gchar *str;
+
+				str = g_markup_escape_text (smiley->str, -1);
+				g_string_append (string, str);
+				g_free (str);
 			}
 			empathy_smiley_free (smiley);
 		}
 		g_slist_free (smileys);
 
-		ret = g_string_free (string, FALSE);
+		g_free (ret);
+		text = ret = g_string_free (string, FALSE);
 	}
 
 	/* Add <a href></a> arround links */
 	uri_regex = empathy_uri_regex_dup_singleton ();
-	match = g_regex_match (uri_regex, cur, 0, &match_info);
+	match = g_regex_match (uri_regex, text, 0, &match_info);
 	if (match) {
 		gint last = 0;
 		gint s = 0, e = 0;
 
-		string = g_string_sized_new (strlen (ret));
+		string = g_string_sized_new (strlen (text));
 		do {
 			g_match_info_fetch_pos (match_info, 0, &s, &e);
 
 			if (s > last) {
 				/* Append the text between last link (or the
 				 * start of the message) and this link */
-				g_string_append_len (string, ret + last, s - last);
+				g_string_append_len (string, text + last, s - last);
 			}
 
 			/* Append the link inside <a href=""></a> tag */
 			g_string_append (string, "<a href=\"");
-			g_string_append_len (string, ret + s, e - s);
+			g_string_append_len (string, text + s, e - s);
 			g_string_append (string, "\">");
-			g_string_append_len (string, ret + s, e - s);
+			g_string_append_len (string, text + s, e - s);
 			g_string_append (string, "</a>");
 
 			last = e;
 		} while (g_match_info_next (match_info, NULL));
 
-		if (e < strlen (ret)) {
+		if (e < strlen (text)) {
 			/* Append the text after the last link */
-			g_string_append_len (string, ret + e, strlen (ret) - e);
+			g_string_append_len (string, text + e, strlen (text) - e);
 		}
 
 		g_free (ret);
-		ret = g_string_free (string, FALSE);
+		text = ret = g_string_free (string, FALSE);
 	}
 	g_match_info_free (match_info);
 	g_regex_unref (uri_regex);
@@ -311,20 +314,20 @@ theme_adium_parse_body (EmpathyThemeAdium *theme,
 	/* Replace \n by <br/> */
 	string = NULL;
 	prev = 0;
-	for (i = 0; ret[i] != '\0'; i++) {
-		if (ret[i] == '\n') {
+	for (i = 0; text[i] != '\0'; i++) {
+		if (text[i] == '\n') {
 			if (!string ) {
-				string = g_string_sized_new (strlen (ret));
+				string = g_string_sized_new (strlen (text));
 			}
-			g_string_append_len (string, ret + prev, i - prev);
+			g_string_append_len (string, text + prev, i - prev);
 			g_string_append (string, "<br/>");
 			prev = i + 1;
 		}
 	}
 	if (string) {
-		g_string_append (string, ret + prev);
+		g_string_append (string, text + prev);
 		g_free (ret);
-		ret = g_string_free (string, FALSE);
+		text = ret = g_string_free (string, FALSE);
 	}
 
 	return ret;
@@ -465,6 +468,19 @@ theme_adium_append_message (EmpathyChatView *view,
 		body = dup_body;
 	}
 	name = empathy_contact_get_name (sender);
+
+	/* If this is a /me, append an event */
+	if (empathy_message_get_tptype(msg) == TP_CHANNEL_TEXT_MESSAGE_TYPE_ACTION) {
+		gchar *str;
+
+		str = g_strdup_printf ("%s %s", name, body);
+		empathy_chat_view_append_event (view, str);
+		g_free (str);
+		g_free (dup_body);
+		return;
+	}
+
+	/* Get the avatar filename, or a fallback */
 	avatar = empathy_contact_get_avatar (sender);
 	if (avatar) {
 		avatar_filename = avatar->filename;
@@ -478,7 +494,6 @@ theme_adium_append_message (EmpathyChatView *view,
 		avatar_filename = priv->default_avatar_filename;
 	}
 
-	/* FIXME: What if the message is an action "/me foo"? */
 	/* Get the right html/func to add the message */
 	if (priv->last_contact &&
 	    empathy_contact_equal (priv->last_contact, sender)) {
