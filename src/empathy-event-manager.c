@@ -59,8 +59,9 @@ typedef struct {
   EmpathyContact *contact;
   /* Tube dispatcher if applicable */
   EmpathyTubeDispatch *tube_dispatch;
-  /* option signal handler */
+  /* option signal handler and it's instance */
   gulong handler;
+  GObject *handler_instance;
   /* optional accept widget */
   GtkWidget *dialog;
 } EventManagerApproval;
@@ -123,6 +124,10 @@ event_manager_approval_free (EventManagerApproval *approval)
   g_signal_handler_disconnect (approval->operation,
     approval->invalidated_handler);
   g_object_unref (approval->operation);
+
+  if (approval->handler != 0)
+    g_signal_handler_disconnect (approval->handler_instance,
+      approval->handler);
 
   if (approval->contact != NULL)
     g_object_unref (approval->contact);
@@ -280,7 +285,7 @@ event_text_channel_process_func (EventPriv *event)
     {
       tp_chat = EMPATHY_TP_CHAT
         (empathy_dispatch_operation_get_channel_wrapper (event->approval->operation));
-  
+
       g_signal_handler_disconnect (tp_chat, event->approval->handler);
       event->approval->handler = 0;
     }
@@ -622,6 +627,7 @@ event_manager_tube_got_contact_name_cb (EmpathyContact *contact,
         approval->handler = g_signal_connect (approval->tube_dispatch,
           "notify::dispatchability",
           G_CALLBACK (event_manager_tube_dispatch_ability_cb), approval);
+        approval->handler_instance = G_OBJECT (approval->tube_dispatch);
         break;
       case EMPATHY_TUBE_DISPATCHABILITY_POSSIBLE:
         /* fallthrough */
@@ -816,6 +822,7 @@ event_manager_approve_channel_cb (EmpathyDispatcher *dispatcher,
       /* 1-1 text channel, wait for the first message */
       approval->handler = g_signal_connect (tp_chat, "message-received",
         G_CALLBACK (event_manager_chat_message_received_cb), approval);
+      approval->handler_instance = G_OBJECT (tp_chat);
     }
   else if (!tp_strdiff (channel_type, TP_IFACE_CHANNEL_TYPE_STREAMED_MEDIA))
     {
