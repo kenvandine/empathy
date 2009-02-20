@@ -856,7 +856,7 @@ get_requestable_channel_classes_cb (TpProxy *connection,
 			TP_IFACE_CHANNEL ".ChannelType");
 		if (chan_type == NULL ||
 		    tp_strdiff (g_value_get_string (chan_type),
-		    		EMP_IFACE_CHANNEL_TYPE_FILE_TRANSFER)) {
+		    		TP_IFACE_CHANNEL_TYPE_FILE_TRANSFER)) {
 			continue;
 		}
 

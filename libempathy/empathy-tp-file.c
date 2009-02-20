@@ -285,17 +285,17 @@ struct _EmpathyTpFilePriv {
   GOutputStream *out_stream;
 
   /* org.freedesktop.Telepathy.Channel.Type.FileTransfer D-Bus properties */
-  EmpFileTransferState state;
+  TpFileTransferState state;
   gchar *content_type;
   gchar *filename;
   guint64 size;
-  EmpFileHashType content_hash_type;
+  TpFileHashType content_hash_type;
   gchar *content_hash;
   gchar *description;
   guint64 transferred_bytes;
 
   gboolean incoming;
-  EmpFileTransferStateChangeReason state_change_reason;
+  TpFileTransferStateChangeReason state_change_reason;
   time_t start_time;
   gchar *unix_socket_path;
   GCancellable *cancellable;
@@ -336,13 +336,13 @@ tp_file_invalidated_cb (TpProxy       *proxy,
 {
   DEBUG ("Channel invalidated: %s", message);
 
-  if (tp_file->priv->state != EMP_FILE_TRANSFER_STATE_COMPLETED &&
-      tp_file->priv->state != EMP_FILE_TRANSFER_STATE_CANCELLED)
+  if (tp_file->priv->state != TP_FILE_TRANSFER_STATE_COMPLETED &&
+      tp_file->priv->state != TP_FILE_TRANSFER_STATE_CANCELLED)
     {
       /* The channel is not in a finished state, an error occured */
-      tp_file->priv->state = EMP_FILE_TRANSFER_STATE_CANCELLED;
+      tp_file->priv->state = TP_FILE_TRANSFER_STATE_CANCELLED;
       tp_file->priv->state_change_reason =
-          EMP_FILE_TRANSFER_STATE_CHANGE_REASON_LOCAL_ERROR;
+          TP_FILE_TRANSFER_STATE_CHANGE_REASON_LOCAL_ERROR;
       g_object_notify (G_OBJECT (tp_file), "state");
     }
 }
@@ -443,7 +443,7 @@ tp_file_start_transfer (EmpathyTpFile *tp_file)
 }
 
 static void
-tp_file_state_changed_cb (TpProxy *proxy,
+tp_file_state_changed_cb (TpChannel *channel,
                           guint state,
                           guint reason,
                           gpointer user_data,
@@ -465,7 +465,7 @@ tp_file_state_changed_cb (TpProxy *proxy,
   /* If the channel is open AND we have the socket path, we can start the
    * transfer. The socket path could be NULL if we are not doing the actual
    * data transfer but are just an observer for the channel. */
-  if (state == EMP_FILE_TRANSFER_STATE_OPEN &&
+  if (state == TP_FILE_TRANSFER_STATE_OPEN &&
       tp_file->priv->unix_socket_path != NULL)
     tp_file_start_transfer (tp_file);
 
@@ -476,7 +476,7 @@ tp_file_state_changed_cb (TpProxy *proxy,
 }
 
 static void
-tp_file_transferred_bytes_changed_cb (TpProxy *proxy,
+tp_file_transferred_bytes_changed_cb (TpChannel *channel,
                                       guint64 count,
                                       gpointer user_data,
                                       GObject *weak_object)
@@ -513,12 +513,12 @@ tp_file_constructor (GType type,
   g_signal_connect (tp_file->priv->channel, "invalidated",
     G_CALLBACK (tp_file_invalidated_cb), tp_file);
 
-  emp_cli_channel_type_file_transfer_connect_to_file_transfer_state_changed (
-      TP_PROXY (tp_file->priv->channel), tp_file_state_changed_cb, NULL, NULL,
+  tp_cli_channel_type_file_transfer_connect_to_file_transfer_state_changed (
+      tp_file->priv->channel, tp_file_state_changed_cb, NULL, NULL,
       G_OBJECT (tp_file), NULL);
 
-  emp_cli_channel_type_file_transfer_connect_to_transferred_bytes_changed (
-      TP_PROXY (tp_file->priv->channel), tp_file_transferred_bytes_changed_cb,
+  tp_cli_channel_type_file_transfer_connect_to_transferred_bytes_changed (
+      tp_file->priv->channel, tp_file_transferred_bytes_changed_cb,
       NULL, NULL, G_OBJECT (tp_file), NULL);
 
   account = empathy_channel_get_account (tp_file->priv->channel);
@@ -528,7 +528,7 @@ tp_file_constructor (GType type,
       tp_file->priv->factory, account, (guint) handle);
 
   tp_cli_dbus_properties_run_get_all (tp_file->priv->channel,
-      -1, EMP_IFACE_CHANNEL_TYPE_FILE_TRANSFER, &properties, NULL, NULL);
+      -1, TP_IFACE_CHANNEL_TYPE_FILE_TRANSFER, &properties, NULL, NULL);
 
   tp_cli_dbus_properties_run_get (tp_file->priv->channel,
       -1, TP_IFACE_CHANNEL, "Requested", &requested, NULL, NULL);
@@ -540,7 +540,7 @@ tp_file_constructor (GType type,
       g_hash_table_lookup (properties, "State"));
 
   tp_file->priv->state_change_reason =
-      EMP_FILE_TRANSFER_STATE_CHANGE_REASON_NONE;
+      TP_FILE_TRANSFER_STATE_CHANGE_REASON_NONE;
 
   tp_file->priv->transferred_bytes = g_value_get_uint64 (
       g_hash_table_lookup (properties, "TransferredBytes"));
@@ -621,7 +621,7 @@ tp_file_channel_set_dbus_property (gpointer proxy,
 {
         DEBUG ("Setting %s property", property);
         tp_cli_dbus_properties_call_set (TP_PROXY (proxy), -1,
-            EMP_IFACE_CHANNEL_TYPE_FILE_TRANSFER, property, value,
+            TP_IFACE_CHANNEL_TYPE_FILE_TRANSFER, property, value,
             NULL, NULL, NULL, NULL);
 }
 
@@ -735,7 +735,7 @@ empathy_tp_file_get_channel (EmpathyTpFile *tp_file)
 }
 
 static void
-tp_file_method_cb (TpProxy *proxy,
+tp_file_method_cb (TpChannel *channel,
                    const GValue *address,
                    const GError *error,
                    gpointer user_data,
@@ -754,7 +754,7 @@ tp_file_method_cb (TpProxy *proxy,
 
   DEBUG ("Got unix socket path: %s", tp_file->priv->unix_socket_path);
 
-  if (tp_file->priv->state == EMP_FILE_TRANSFER_STATE_OPEN)
+  if (tp_file->priv->state == TP_FILE_TRANSFER_STATE_OPEN)
     tp_file_start_transfer (tp_file);
 }
 
@@ -766,7 +766,7 @@ tp_file_method_cb (TpProxy *proxy,
  * @error: a #GError set if there is an error when opening @gfile
  *
  * Accepts a file transfer that's in the "local pending" state (i.e.
- * EMP_FILE_TRANSFER_STATE_LOCAL_PENDING).
+ * TP_FILE_TRANSFER_STATE_LOCAL_PENDING).
  */
 void
 empathy_tp_file_accept (EmpathyTpFile *tp_file,
@@ -792,8 +792,7 @@ empathy_tp_file_accept (EmpathyTpFile *tp_file,
   g_value_init (&nothing, G_TYPE_STRING);
   g_value_set_static_string (&nothing, "");
 
-  emp_cli_channel_type_file_transfer_call_accept_file (TP_PROXY (
-      tp_file->priv->channel),
+  tp_cli_channel_type_file_transfer_call_accept_file (tp_file->priv->channel,
       -1, TP_SOCKET_ADDRESS_TYPE_UNIX, TP_SOCKET_ACCESS_CONTROL_LOCALHOST,
       &nothing, offset, tp_file_method_cb, NULL, NULL, G_OBJECT (tp_file));
 }
@@ -805,7 +804,7 @@ empathy_tp_file_accept (EmpathyTpFile *tp_file,
  * @error: a #GError set if there is an error when opening @gfile
  *
  * Offers a file transfer that's in the "not offered" state (i.e.
- * EMP_FILE_TRANSFER_STATE_NOT_OFFERED).
+ * TP_FILE_TRANSFER_STATE_NOT_OFFERED).
  */
 void
 empathy_tp_file_offer (EmpathyTpFile *tp_file, GFile *gfile, GError **error)
@@ -821,9 +820,8 @@ empathy_tp_file_offer (EmpathyTpFile *tp_file, GFile *gfile, GError **error)
   g_value_init (&nothing, G_TYPE_STRING);
   g_value_set_static_string (&nothing, "");
 
-  emp_cli_channel_type_file_transfer_call_provide_file (
-      TP_PROXY (tp_file->priv->channel), -1,
-      TP_SOCKET_ADDRESS_TYPE_UNIX, TP_SOCKET_ACCESS_CONTROL_LOCALHOST,
+  tp_cli_channel_type_file_transfer_call_provide_file (tp_file->priv->channel,
+      -1, TP_SOCKET_ADDRESS_TYPE_UNIX, TP_SOCKET_ACCESS_CONTROL_LOCALHOST,
       &nothing, tp_file_method_cb, NULL, NULL, G_OBJECT (tp_file));
 }
 
@@ -848,12 +846,12 @@ empathy_tp_file_is_incoming (EmpathyTpFile *tp_file)
   return tp_file->priv->incoming;
 }
 
-guint
+TpFileTransferState
 empathy_tp_file_get_state (EmpathyTpFile *tp_file,
-                           guint *reason)
+                           TpFileTransferStateChangeReason *reason)
 {
   g_return_val_if_fail (EMPATHY_IS_TP_FILE (tp_file),
-      EMP_FILE_TRANSFER_STATE_NONE);
+      TP_FILE_TRANSFER_STATE_NONE);
 
   if (reason != NULL)
     *reason = tp_file->priv->state_change_reason;

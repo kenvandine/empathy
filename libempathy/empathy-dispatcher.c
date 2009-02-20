@@ -543,7 +543,7 @@ dispatcher_connection_new_channel (EmpathyDispatcher *dispatcher,
    * doesn't make sense to handle it if we didn't request it. The same goes
    * for channels we discovered by the Channels property or ListChannels */
   if (!incoming && tp_strdiff (channel_type, TP_IFACE_CHANNEL_TYPE_TEXT)
-        && tp_strdiff (channel_type, EMP_IFACE_CHANNEL_TYPE_FILE_TRANSFER))
+        && tp_strdiff (channel_type, TP_IFACE_CHANNEL_TYPE_FILE_TRANSFER))
     {
       DEBUG ("Ignoring incoming channel of type %s on %s",
         channel_type, object_path);
@@ -1469,7 +1469,7 @@ empathy_dispatcher_send_file_to_contact (EmpathyContact *contact,
 
   /* org.freedesktop.Telepathy.Channel.ChannelType */
   value = tp_g_value_slice_new (G_TYPE_STRING);
-  g_value_set_string (value, EMP_IFACE_CHANNEL_TYPE_FILE_TRANSFER);
+  g_value_set_string (value, TP_IFACE_CHANNEL_TYPE_FILE_TRANSFER);
   g_hash_table_insert (request, TP_IFACE_CHANNEL ".ChannelType", value);
 
   /* org.freedesktop.Telepathy.Channel.TargetHandleType */
@@ -1481,30 +1481,30 @@ empathy_dispatcher_send_file_to_contact (EmpathyContact *contact,
   value = tp_g_value_slice_new (G_TYPE_STRING);
   g_value_set_string (value, content_type);
   g_hash_table_insert (request,
-    EMP_IFACE_CHANNEL_TYPE_FILE_TRANSFER ".ContentType", value);
+    TP_IFACE_CHANNEL_TYPE_FILE_TRANSFER ".ContentType", value);
 
   /* org.freedesktop.Telepathy.Channel.Type.FileTransfer.Filename */
   value = tp_g_value_slice_new (G_TYPE_STRING);
   g_value_set_string (value, filename);
   g_hash_table_insert (request,
-    EMP_IFACE_CHANNEL_TYPE_FILE_TRANSFER ".Filename", value);
+    TP_IFACE_CHANNEL_TYPE_FILE_TRANSFER ".Filename", value);
 
   /* org.freedesktop.Telepathy.Channel.Type.FileTransfer.Size */
   value = tp_g_value_slice_new (G_TYPE_UINT64);
   g_value_set_uint64 (value, size);
   g_hash_table_insert (request,
-    EMP_IFACE_CHANNEL_TYPE_FILE_TRANSFER ".Size", value);
+    TP_IFACE_CHANNEL_TYPE_FILE_TRANSFER ".Size", value);
 
   /* org.freedesktop.Telepathy.Channel.Type.FileTransfer.Date */
   value = tp_g_value_slice_new (G_TYPE_UINT64);
   g_value_set_uint64 (value, date);
   g_hash_table_insert (request,
-    EMP_IFACE_CHANNEL_TYPE_FILE_TRANSFER ".Date", value);
+    TP_IFACE_CHANNEL_TYPE_FILE_TRANSFER ".Date", value);
 
 
   /* The contact handle might not be known yet */
   request_data  = new_dispatcher_request_data (dispatcher, connection,
-    EMP_IFACE_CHANNEL_TYPE_FILE_TRANSFER, TP_HANDLE_TYPE_CONTACT, 0, request,
+    TP_IFACE_CHANNEL_TYPE_FILE_TRANSFER, TP_HANDLE_TYPE_CONTACT, 0, request,
     contact, callback, user_data);
   connection_data->outstanding_requests = g_list_prepend
     (connection_data->outstanding_requests, request_data);

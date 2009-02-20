@@ -129,7 +129,7 @@ ft_manager_update_buttons (EmpathyFTManager *ft_manager)
   GtkTreeModel *model;
   GtkTreeIter iter;
   EmpathyTpFile *tp_file;
-  EmpFileTransferState state;
+  TpFileTransferState state;
   gboolean open_enabled = FALSE;
   gboolean abort_enabled = FALSE;
 
@@ -141,12 +141,12 @@ ft_manager_update_buttons (EmpathyFTManager *ft_manager)
       state = empathy_tp_file_get_state (tp_file, NULL);
 
       /* I can open the file if the transfer is completed and was incoming */
-      open_enabled = (state == EMP_FILE_TRANSFER_STATE_COMPLETED &&
+      open_enabled = (state == TP_FILE_TRANSFER_STATE_COMPLETED &&
         empathy_tp_file_is_incoming (tp_file));
 
       /* I can abort if the transfer is not already finished */
-      abort_enabled = (state != EMP_FILE_TRANSFER_STATE_CANCELLED &&
-        state != EMP_FILE_TRANSFER_STATE_COMPLETED);
+      abort_enabled = (state != TP_FILE_TRANSFER_STATE_CANCELLED &&
+        state != TP_FILE_TRANSFER_STATE_COMPLETED);
 
       g_object_unref (tp_file);
     }
@@ -156,21 +156,21 @@ ft_manager_update_buttons (EmpathyFTManager *ft_manager)
 }
 
 static const gchar *
-ft_manager_state_change_reason_to_string (EmpFileTransferStateChangeReason reason)
+ft_manager_state_change_reason_to_string (TpFileTransferStateChangeReason reason)
 {
   switch (reason)
     {
-      case EMP_FILE_TRANSFER_STATE_CHANGE_REASON_NONE:
+      case TP_FILE_TRANSFER_STATE_CHANGE_REASON_NONE:
         return _("No reason was specified");
-      case EMP_FILE_TRANSFER_STATE_CHANGE_REASON_REQUESTED:
+      case TP_FILE_TRANSFER_STATE_CHANGE_REASON_REQUESTED:
         return _("The change in state was requested");      
-      case EMP_FILE_TRANSFER_STATE_CHANGE_REASON_LOCAL_STOPPED:
+      case TP_FILE_TRANSFER_STATE_CHANGE_REASON_LOCAL_STOPPED:
         return _("You canceled the file transfer");
-      case EMP_FILE_TRANSFER_STATE_CHANGE_REASON_REMOTE_STOPPED:
+      case TP_FILE_TRANSFER_STATE_CHANGE_REASON_REMOTE_STOPPED:
         return _("The other participant canceled the file transfer");
-      case EMP_FILE_TRANSFER_STATE_CHANGE_REASON_LOCAL_ERROR:
+      case TP_FILE_TRANSFER_STATE_CHANGE_REASON_LOCAL_ERROR:
         return _("Error while trying to transfer the file");
-      case EMP_FILE_TRANSFER_STATE_CHANGE_REASON_REMOTE_ERROR:
+      case TP_FILE_TRANSFER_STATE_CHANGE_REASON_REMOTE_ERROR:
         return _("The other participant is unable to transfer the file");
     }
   return _("Unknown reason");
@@ -195,8 +195,8 @@ ft_manager_update_ft_row (EmpathyFTManager *ft_manager,
   guint64 total_size;
   gint remaining = -1;
   gint percent;
-  EmpFileTransferState state;
-  EmpFileTransferStateChangeReason reason;
+  TpFileTransferState state;
+  TpFileTransferStateChangeReason reason;
   gboolean incoming;
 
   row_ref = ft_manager_get_row_from_tp_file (ft_manager, tp_file);
@@ -211,14 +211,14 @@ ft_manager_update_ft_row (EmpathyFTManager *ft_manager,
 
   switch (state)
     {
-      case EMP_FILE_TRANSFER_STATE_NONE:
+      case TP_FILE_TRANSFER_STATE_NONE:
         /* This should never happen, the CM is broken. But we avoid warning
          * because it's not our fault. */
         DEBUG ("State is NONE, probably a broken CM");
         break;
-      case EMP_FILE_TRANSFER_STATE_PENDING:
-      case EMP_FILE_TRANSFER_STATE_OPEN:
-      case EMP_FILE_TRANSFER_STATE_ACCEPTED:
+      case TP_FILE_TRANSFER_STATE_PENDING:
+      case TP_FILE_TRANSFER_STATE_OPEN:
+      case TP_FILE_TRANSFER_STATE_ACCEPTED:
         if (incoming)
           /* translators: first %s is filename, second %s is the contact name */
           first_line_format = _("Receiving \"%s\" from %s");
@@ -228,7 +228,7 @@ ft_manager_update_ft_row (EmpathyFTManager *ft_manager,
 
         first_line = g_strdup_printf (first_line_format, filename, contact_name);
 
-        if (state == EMP_FILE_TRANSFER_STATE_OPEN || incoming)
+        if (state == TP_FILE_TRANSFER_STATE_OPEN || incoming)
           {
             gchar *total_size_str;
             gchar *transferred_bytes_str;
@@ -254,7 +254,7 @@ ft_manager_update_ft_row (EmpathyFTManager *ft_manager,
       remaining = empathy_tp_file_get_remaining_time (tp_file);
       break;
 
-    case EMP_FILE_TRANSFER_STATE_COMPLETED:
+    case TP_FILE_TRANSFER_STATE_COMPLETED:
       if (incoming)
         /* translators: first %s is filename, second %s
          * is the contact name */
@@ -272,7 +272,7 @@ ft_manager_update_ft_row (EmpathyFTManager *ft_manager,
 
       break;
 
-    case EMP_FILE_TRANSFER_STATE_CANCELLED:
+    case TP_FILE_TRANSFER_STATE_CANCELLED:
       if (incoming)
         /* translators: first %s is filename, second %s
          * is the contact name */
@@ -299,8 +299,8 @@ ft_manager_update_ft_row (EmpathyFTManager *ft_manager,
 
   if (remaining < 0)
     {
-      if (state != EMP_FILE_TRANSFER_STATE_COMPLETED &&
-          state != EMP_FILE_TRANSFER_STATE_CANCELLED)
+      if (state != TP_FILE_TRANSFER_STATE_COMPLETED &&
+          state != TP_FILE_TRANSFER_STATE_CANCELLED)
         remaining_str = g_strdup (C_("remaining time", "Unknown"));
     }
   else
@@ -449,11 +449,11 @@ remove_finished_transfer_foreach (gpointer key,
 {
   EmpathyTpFile *tp_file = EMPATHY_TP_FILE (key);
   EmpathyFTManager *self = EMPATHY_FT_MANAGER (user_data);
-  EmpFileTransferState state;
+  TpFileTransferState state;
 
   state = empathy_tp_file_get_state (tp_file, NULL);
-  if (state == EMP_FILE_TRANSFER_STATE_COMPLETED ||
-      state == EMP_FILE_TRANSFER_STATE_CANCELLED)
+  if (state == TP_FILE_TRANSFER_STATE_COMPLETED ||
+      state == TP_FILE_TRANSFER_STATE_CANCELLED)
     {
       ft_manager_remove_file_from_model (self, tp_file);
       return TRUE;
@@ -468,7 +468,7 @@ ft_manager_state_changed_cb (EmpathyTpFile *tp_file,
                              EmpathyFTManager *ft_manager)
 {
   if (empathy_tp_file_get_state (tp_file, NULL) ==
-      EMP_FILE_TRANSFER_STATE_COMPLETED)
+      TP_FILE_TRANSFER_STATE_COMPLETED)
     {
       GtkRecentManager *manager;
       const gchar *uri;
@@ -1062,7 +1062,7 @@ void
 empathy_ft_manager_add_tp_file (EmpathyFTManager *ft_manager,
                                 EmpathyTpFile *tp_file)
 {
-  EmpFileTransferState state;
+  TpFileTransferState state;
 
   g_return_if_fail (EMPATHY_IS_FT_MANAGER (ft_manager));
   g_return_if_fail (EMPATHY_IS_TP_FILE (tp_file));
@@ -1073,7 +1073,7 @@ empathy_ft_manager_add_tp_file (EmpathyFTManager *ft_manager,
       empathy_contact_get_name (empathy_tp_file_get_contact (tp_file)),
       empathy_tp_file_get_filename (tp_file), state);
 
-  if (state == EMP_FILE_TRANSFER_STATE_PENDING &&
+  if (state == TP_FILE_TRANSFER_STATE_PENDING &&
       empathy_tp_file_is_incoming (tp_file))
     ft_manager_display_accept_dialog (ft_manager, tp_file);
   else

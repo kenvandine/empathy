@@ -115,7 +115,7 @@ dispatch_cb (EmpathyDispatcher *dispatcher,
 
 		factory = empathy_call_factory_get ();
 		empathy_call_factory_claim_channel (factory, operation);
-	} else if (channel_type == EMP_IFACE_QUARK_CHANNEL_TYPE_FILE_TRANSFER) {
+	} else if (channel_type == TP_IFACE_QUARK_CHANNEL_TYPE_FILE_TRANSFER) {
 		EmpathyFTManager *ft_manager;
 		EmpathyTpFile    *tp_file;
 

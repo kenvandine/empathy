@@ -838,7 +838,7 @@ event_manager_approve_channel_cb (EmpathyDispatcher *dispatcher,
         }
 
     }
-  else if (!tp_strdiff (channel_type, EMP_IFACE_CHANNEL_TYPE_FILE_TRANSFER))
+  else if (!tp_strdiff (channel_type, TP_IFACE_CHANNEL_TYPE_FILE_TRANSFER))
     {
       EmpathyContact        *contact;
       gchar                 *header;

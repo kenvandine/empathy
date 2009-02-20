@@ -403,7 +403,7 @@ empathy_dispatch_operation_channel_ready_cb (TpChannel *channel,
        priv->channel_wrapper = G_OBJECT (call);
 
     }
-  else if (channel_type == EMP_IFACE_QUARK_CHANNEL_TYPE_FILE_TRANSFER)
+  else if (channel_type == TP_IFACE_QUARK_CHANNEL_TYPE_FILE_TRANSFER)
     {
        EmpathyTpFile *file = empathy_tp_file_new (channel);
        priv->channel_wrapper = G_OBJECT (file);

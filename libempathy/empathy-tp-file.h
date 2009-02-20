@@ -75,7 +75,8 @@ void empathy_tp_file_offer (EmpathyTpFile *tp_file, GFile *gfile,
 EmpathyContact *empathy_tp_file_get_contact (EmpathyTpFile *tp_file);
 const gchar *empathy_tp_file_get_filename (EmpathyTpFile *tp_file);
 gboolean empathy_tp_file_is_incoming (EmpathyTpFile *tp_file);
-guint empathy_tp_file_get_state (EmpathyTpFile *tp_file, guint *reason);
+TpFileTransferState empathy_tp_file_get_state (
+  EmpathyTpFile *tp_file, TpFileTransferStateChangeReason *reason);
 guint64 empathy_tp_file_get_size (EmpathyTpFile *tp_file);
 guint64 empathy_tp_file_get_transferred_bytes (EmpathyTpFile *tp_file);
 gint empathy_tp_file_get_remaining_time (EmpathyTpFile *tp_file);
