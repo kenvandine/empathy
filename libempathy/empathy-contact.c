@@ -731,6 +731,20 @@ empathy_contact_is_user (EmpathyContact *contact)
 
   priv = GET_PRIV (contact);
 
+  /* FIXME: Uncomment this once we depend on tp-glib 0.7.26
+  if (priv->tp_contact != NULL)
+    {
+      TpConnection *connection;
+      TpHandle handle;
+      TpHandle self_handle;
+
+      connection = tp_contact_get_connection (priv->tp_contact);
+      self_handle = tp_connection_get_self_handle (connection);
+      handle = tp_contact_get_handle (priv->tp_contact);
+      return self_handle == handle;      
+    }
+  */
+
   return priv->is_user;
 }
 
