@@ -9,7 +9,7 @@ msgstr ""
 "Project-Id-Version: empathy\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2009-02-19 20:15+0100\n"
-"PO-Revision-Date: 2009-02-19 16:28+0100\n"
+"PO-Revision-Date: 2009-02-20 08:52+0100\n"
 "Last-Translator: Gil Forcada <gilforcada@guifi.net>\n"
 "Language-Team: Catalan <tradgnome@softcatala.org>\n"
 "MIME-Version: 1.0\n"
@@ -865,7 +865,7 @@ msgstr "Nom complet:"
 #. Identifier to connect to Instant Messaging network
 #: ../libempathy-gtk/empathy-contact-widget.glade.h:13
 msgid "Identifier:"
-msgstr "Indentificador:"
+msgstr "Identificador:"
 
 #: ../libempathy-gtk/empathy-contact-widget.glade.h:14
 msgid "Information requested..."
