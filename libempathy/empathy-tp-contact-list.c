@@ -700,7 +700,7 @@ tp_contact_list_constructed (GObject *list)
 {
 
 	EmpathyTpContactListPriv *priv = GET_PRIV (list);
-	const gchar              *protocol_name = NULL;
+	gchar                    *protocol_name = NULL;
 	const gchar              *names[] = {NULL, NULL};
 
 	priv->factory = empathy_tp_contact_factory_dup_singleton (priv->connection);
@@ -734,11 +734,13 @@ tp_contact_list_constructed (GObject *list)
 
 	/* Check for protocols that does not support contact groups. We can
 	 * put all contacts into a special group in that case.
-	 * FIXME: Default group should be an information in the profile */
-	//protocol_name = tp_connection_get_protocol (priv->connection);
+	 * FIXME: Default group should be an information in the profile
+	 * FIXME: replace with tp_connection_parse_object_path once released */
+	protocol_name = empathy_connection_get_protocol (priv->connection, NULL);
 	if (!tp_strdiff (protocol_name, "local-xmpp")) {
 		priv->protocol_group = _("People nearby");
 	}
+	g_free (protocol_name);
 }
 
 static void
