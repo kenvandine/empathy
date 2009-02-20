@@ -527,10 +527,7 @@ empathy_contact_get_account (EmpathyContact *contact)
 
   priv = GET_PRIV (contact);
 
-  if (priv->account != NULL)
-    return priv->account;
-
-  if (priv->tp_contact != NULL)
+  if (priv->account == NULL && priv->tp_contact != NULL)
     {
       EmpathyAccountManager *manager;
       TpConnection *connection;
@@ -539,12 +536,11 @@ empathy_contact_get_account (EmpathyContact *contact)
       manager = empathy_account_manager_dup_singleton ();
       connection = tp_contact_get_connection (priv->tp_contact);
       priv->account = empathy_account_manager_get_account (manager, connection);
+      g_object_ref (priv->account);
       g_object_unref (manager);
-
-      return g_object_ref (priv->account);
     }
 
-  return NULL;
+  return priv->account;
 }
 
 TpConnection *
