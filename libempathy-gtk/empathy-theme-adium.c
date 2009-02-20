@@ -752,7 +752,7 @@ empathy_theme_adium_init (EmpathyThemeAdium *theme)
 
 	theme->priv = priv;	
 
-	priv->smiley_manager = empathy_smiley_manager_new ();
+	priv->smiley_manager = empathy_smiley_manager_dup_singleton ();
 
 	g_signal_connect (theme, "load-finished",
 			  G_CALLBACK (theme_adium_load_finished_cb),

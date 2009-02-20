@@ -974,7 +974,7 @@ preferences_theme_adium_path_notify_cb (EmpathyConf *conf,
 		return;
 	}
 
-	if (G_STR_EMPTY (value)) {
+	if (EMP_STR_EMPTY (value)) {
 		path = g_get_home_dir ();
 	} else {
 		path = value;
