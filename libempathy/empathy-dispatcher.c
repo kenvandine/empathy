@@ -1120,11 +1120,21 @@ dispatcher_connection_new_requested_channel (EmpathyDispatcher *dispatcher,
 
   request_data->operation = operation;
 
-  /* (pre)-approve this right away as we requested it */
+  /* (pre)-approve this right away as we requested it
+   * This might cause the channel to be claimed, in which case the operation
+   * will disappear. So ref it, and check the status before starting the
+   * dispatching */
+
+  g_object_ref (operation);
   empathy_dispatch_operation_approve (operation);
 
-  dispatcher_start_dispatching (request_data->dispatcher, operation,
-        conn_data);
+   if (empathy_dispatch_operation_get_status (operation) <
+     EMPATHY_DISPATCHER_OPERATION_STATE_APPROVING)
+      dispatcher_start_dispatching (request_data->dispatcher, operation,
+          conn_data);
+
+  g_object_unref (operation);
+
 out:
   dispatcher_flush_outstanding_operations (request_data->dispatcher,
     conn_data);
