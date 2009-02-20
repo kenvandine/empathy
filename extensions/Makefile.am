@@ -12,7 +12,6 @@ EXTRA_DIST = \
     misc.xml \
     Channel_Handler.xml \
     Tube_Handler.xml \
-    Channel_Type_File_Transfer.xml \
     Channel_Interface_Tube.xml \
     Channel_Type_DBus_Tube.xml \
     Channel_Type_Stream_Tube.xml
