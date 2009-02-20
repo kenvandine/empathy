@@ -1250,7 +1250,6 @@ empathy_chat_text_view_append_body (EmpathyChatTextView *view,
 
 	gtk_text_buffer_get_end_iter (priv->buffer, &start_iter);
 	mark = gtk_text_buffer_create_mark (priv->buffer, NULL, &start_iter, TRUE);
-	regex = empathy_get_uri_regex ();
 
 	uri_regex = empathy_uri_regex_dup_singleton ();
 	for (match = g_regex_match (uri_regex, body, 0, &match_info); match;
