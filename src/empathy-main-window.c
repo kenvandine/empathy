@@ -35,7 +35,6 @@
 #include <libempathy/empathy-chatroom.h>
 #include <libempathy/empathy-contact-list.h>
 #include <libempathy/empathy-contact-manager.h>
-#include <libempathy/empathy-contact-factory.h>
 #include <libempathy/empathy-status-presets.h>
 
 #include <libempathy-gtk/empathy-contact-dialogs.h>

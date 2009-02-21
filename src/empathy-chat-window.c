@@ -37,7 +37,6 @@
 #include <telepathy-glib/util.h>
 #include <libmissioncontrol/mission-control.h>
 
-#include <libempathy/empathy-contact-factory.h>
 #include <libempathy/empathy-contact.h>
 #include <libempathy/empathy-message.h>
 #include <libempathy/empathy-dispatcher.h>
