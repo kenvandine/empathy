@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: empathy\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-10-18 18:02+0700\n"
-"PO-Revision-Date: 2009-01-12 16:07+0700\n"
+"POT-Creation-Date: 2009-02-23 11:22+0700\n"
+"PO-Revision-Date: 2009-02-23 12:57+0700\n"
 "Last-Translator: Theppitak Karoonboonyanan <thep@linux.thai.net>\n"
 "Language-Team: Thai <thai-l10n@googlegroups.com>\n"
 "MIME-Version: 1.0\n"
@@ -55,174 +55,253 @@ msgid "Default directory to select an avatar image from"
 msgstr "ไดเรกทอรีปริยายที่จะใช้เลือกรูปแทนตัว"
 
 #: ../data/empathy.schemas.in.h:8
+msgid "Disable popup notifications when away"
+msgstr "ปิดการผุดข้อความแจ้งเหตุเมื่อไม่อยู่"
+
+#: ../data/empathy.schemas.in.h:9
+msgid "Disable sounds when away"
+msgstr "ปิดการใช้เสียงเมื่อไม่อยู่"
+
+#: ../data/empathy.schemas.in.h:10
+msgid "Empathy default download folder"
+msgstr "โฟลเดอร์ดาวน์โหลดปริยายของ Empathy"
+
+#: ../data/empathy.schemas.in.h:11
 msgid "Empathy has asked about importing accounts"
 msgstr "Empathy ได้ถามเกี่ยวกับการนำเข้าบัญชีไปแล้ว"
 
-#: ../data/empathy.schemas.in.h:9
+#: ../data/empathy.schemas.in.h:12
 msgid "Empathy should auto-connect on startup"
 msgstr "Empathy ควรเชื่อมต่อโดยอัตโนมัติเมื่อเริ่มทำงาน"
 
-#: ../data/empathy.schemas.in.h:10
+#: ../data/empathy.schemas.in.h:13
 msgid "Empathy should use the avatar of the contact as the chat window icon"
 msgstr "Empathy ควรใช้รูปแทนตัวของผู้ติดต่อเป็นไอคอนของหน้าต่างสนทนา"
 
-#: ../data/empathy.schemas.in.h:11
-msgid "Enable popup when contact is available"
-msgstr "แสดงหน้าต่างผุดขึ้นเมื่อผู้ติดต่ออยู่"
-
-#: ../data/empathy.schemas.in.h:12
-msgid "Enable sound when away"
-msgstr "เปิดใช้เสียงเมื่อไม่อยู่"
-
-#: ../data/empathy.schemas.in.h:13
-msgid "Enable sound when busy"
-msgstr "เปิดใช้เสียงเมื่อไม่ว่าง"
-
 #: ../data/empathy.schemas.in.h:14
+msgid "Enable popup notifications for new messages"
+msgstr "เปิดใช้การผุดข้อความแจ้งเหตุสำหรับข้อความใหม่"
+
+#: ../data/empathy.schemas.in.h:15
 msgid "Enable spell checker"
 msgstr "เปิดใช้การตรวจตัวสะกด"
 
-#: ../data/empathy.schemas.in.h:15
+#: ../data/empathy.schemas.in.h:16
 msgid "Hide main window"
 msgstr "ซ่อนหน้าต่างหลัก"
 
-#: ../data/empathy.schemas.in.h:16
+#: ../data/empathy.schemas.in.h:17
 msgid "Hide the main window."
 msgstr "ซ่อนหน้าต่างหลัก"
 
-#: ../data/empathy.schemas.in.h:17
+#: ../data/empathy.schemas.in.h:18
 msgid "NetworkManager should be used"
 msgstr "ใช้ NetworkManager"
 
-#: ../data/empathy.schemas.in.h:18
+#: ../data/empathy.schemas.in.h:19
 msgid "Nick completed character"
 msgstr "อักขระเติมท้ายชื่อเรียก"
 
-#: ../data/empathy.schemas.in.h:19
+#: ../data/empathy.schemas.in.h:20
 msgid "Open new chats in separate windows"
 msgstr "เปิดการสนทนาใหม่ในหน้าต่างแยก"
 
-#: ../data/empathy.schemas.in.h:20
+#: ../data/empathy.schemas.in.h:21
+msgid "Play a sound for incoming messages"
+msgstr "เล่นเสียงเมื่อมีข้อความเข้า"
+
+#: ../data/empathy.schemas.in.h:22
+msgid "Play a sound for new conversations"
+msgstr "เล่นเสียงเมื่อมีการสนทนาใหม่"
+
+#: ../data/empathy.schemas.in.h:23
+msgid "Play a sound for outgoing messages"
+msgstr "เล่นเสียงเมื่อส่งข้อความออก"
+
+#: ../data/empathy.schemas.in.h:24
+msgid "Play a sound when a contact logs in"
+msgstr "เล่นเสียงเมื่อมีผู้ติดต่อเข้าสู่ระบบ"
+
+#: ../data/empathy.schemas.in.h:25
+msgid "Play a sound when a contact logs out"
+msgstr "เล่นเสียงเมื่อมีผู้ติดต่อออกจากระบบ"
+
+#: ../data/empathy.schemas.in.h:26
+msgid "Play a sound when we log in"
+msgstr "เล่นเสียงเมื่อเราเข้าสู่ระบบ"
+
+#: ../data/empathy.schemas.in.h:27
+msgid "Play a sound when we log out"
+msgstr "เล่นเสียงเมื่อเราออกจากระบบ"
+
+#: ../data/empathy.schemas.in.h:28
+msgid "Popup notifications if the chat isn't focused"
+msgstr "ผุดข้อความแจ้งเหตุถ้าหน้าต่างสนทนาไม่ได้โฟกัส"
+
+#: ../data/empathy.schemas.in.h:29
 msgid "Salut account is created"
 msgstr "สร้างบัญชี Salut แล้ว"
 
-#: ../data/empathy.schemas.in.h:21
+#: ../data/empathy.schemas.in.h:30
 msgid "Show avatars"
 msgstr "แสดงรูปแทนตัว"
 
-#: ../data/empathy.schemas.in.h:22
+#: ../data/empathy.schemas.in.h:31
 msgid "Show hint about closing the main window"
 msgstr "แสดงคำแนะนำวิธีปิดหน้าต่างหลัก"
 
-#: ../data/empathy.schemas.in.h:23
+#: ../data/empathy.schemas.in.h:32
 msgid "Show offline contacts"
 msgstr "แสดงผู้ติดต่อที่ออฟไลน์"
 
-#: ../data/empathy.schemas.in.h:24
+#: ../data/empathy.schemas.in.h:33
 msgid "Spell checking languages"
 msgstr "ภาษาที่ตรวจตัวสะกด"
 
-#: ../data/empathy.schemas.in.h:25
+#: ../data/empathy.schemas.in.h:34
+msgid "The default folder to save file transfers in."
+msgstr "โฟลเดอร์ปริยายที่จะบันทึกแฟ้มที่ถ่ายโอนเข้ามา"
+
+#: ../data/empathy.schemas.in.h:35
 msgid "The last directory that an avatar image was chosen from."
 msgstr "ไดเรกทอรีล่าสุดที่ถูกใช้เลือกรูปแทนตัว"
 
-#: ../data/empathy.schemas.in.h:26
+#: ../data/empathy.schemas.in.h:36
 msgid "The theme that is used to display the conversation in chat windows."
 msgstr "ชุดตกแต่งที่จะใช้แสดงการสนทนาในหน้าต่างสนทนา"
 
-#: ../data/empathy.schemas.in.h:27
+#: ../data/empathy.schemas.in.h:37
 msgid "Use graphical smileys"
 msgstr "ใช้รูปสีหน้าแบบกราฟิกส์"
 
-#: ../data/empathy.schemas.in.h:28
+#: ../data/empathy.schemas.in.h:38
 msgid "Use notification sounds"
 msgstr "ใช้เสียงแจ้งเหตุ"
 
-#: ../data/empathy.schemas.in.h:29
+#: ../data/empathy.schemas.in.h:39
 msgid "Use theme for chat rooms"
 msgstr "ใช้ชุดตกแต่งกับห้องสนทนา"
 
-#: ../data/empathy.schemas.in.h:30
+#: ../data/empathy.schemas.in.h:40
 msgid ""
 "Whether or not Empathy has asked about importing accounts from other "
 "programs."
 msgstr "กำหนดว่า Empathy ได้ถามเกี่ยวกับการนำเข้าบัญชีจากโปรแกรมอื่นไปแล้วหรือยัง"
 
-#: ../data/empathy.schemas.in.h:31
+#: ../data/empathy.schemas.in.h:41
 msgid ""
 "Whether or not Empathy should automatically log in to your accounts on "
 "startup."
 msgstr "กำหนดว่าจะให้ Empathy เข้าระบบในบัญชีของคุณโดยอัตโนมัติเมื่อเริ่มทำงานหรือไม่"
 
-#: ../data/empathy.schemas.in.h:32
+#: ../data/empathy.schemas.in.h:42
 msgid ""
 "Whether or not Empathy should use the avatar of the contact as the chat "
 "window icon."
 msgstr "กำหนดว่าจะให้ Empathy ใช้รูปแทนตัวของผู้ติดต่อเป็นไอคอนของหน้าต่างสนทนาหรือไม่"
 
-#: ../data/empathy.schemas.in.h:33
+#: ../data/empathy.schemas.in.h:43
 msgid ""
 "Whether or not the Salut account has been created on the first Empathy run."
 msgstr "กำหนดว่าได้สร้างบัญชี Salut ไปแล้วหรือยัง เมื่อเรียก Empathy ครั้งแรก"
 
-#: ../data/empathy.schemas.in.h:34
+#: ../data/empathy.schemas.in.h:44
 msgid ""
 "Whether or not the network manager should be used to automatically "
 "disconnect/reconnect."
 msgstr "กำหนดว่าจะใช้โปรแกรมจัดการเครือข่ายในการตัดการเชื่อมต่อ/เชื่อมต่อใหม่โดยอัตโนมัติหรือไม่"
 
-#: ../data/empathy.schemas.in.h:35
+#: ../data/empathy.schemas.in.h:45
 msgid ""
 "Whether or not to check words typed against the languages you want to check "
 "with."
 msgstr "กำหนดว่าจะตรวจตัวสะกดของคำที่ป้อนตามภาษาที่คุณต้องการจะตรวจหรือไม่"
 
-#: ../data/empathy.schemas.in.h:36
+#: ../data/empathy.schemas.in.h:46
 msgid ""
 "Whether or not to convert smileys into graphical images in conversations."
 msgstr "กำหนดว่าจะแปลงข้อความรูปสีหน้า (smiley) เป็นภาพกราฟิกส์หรือไม่ในหน้าต่างสนทนา"
 
-#: ../data/empathy.schemas.in.h:37
-msgid "Whether or not to play a sound when messages arrive."
-msgstr "กำหนดว่าจะเล่นเสียงเมื่อมีข้อความเข้าหรือไม่"
+#: ../data/empathy.schemas.in.h:47
+msgid ""
+"Whether or not to play a sound to notify for contacts logging in the network."
+msgstr "กำหนดว่าจะเล่นเสียงเพื่อแจ้งเมื่อมีผู้ติดต่อเข้าสู่ระบบเครือข่ายหรือไม่"
 
-#: ../data/empathy.schemas.in.h:38
-msgid "Whether or not to play sounds when away."
-msgstr "กำหนดว่าจะเล่นเสียงเมื่อไม่อยู่หรือไม่"
+#: ../data/empathy.schemas.in.h:48
+msgid ""
+"Whether or not to play a sound to notify for contacts logging off the "
+"network."
+msgstr "กำหนดว่าจะเล่นเสียงเพื่อแจ้งเมื่อมีผู้ติดต่อออกจากระบบเครือข่ายหรือไม่"
 
-#: ../data/empathy.schemas.in.h:39
-msgid "Whether or not to play sounds when busy."
-msgstr "กำหนดว่าจะเล่นเสียงเมื่อไม่ว่างหรือไม่"
+#: ../data/empathy.schemas.in.h:49
+msgid "Whether or not to play a sound to notify for events."
+msgstr "กำหนดว่าจะเล่นเสียงเพื่อแจ้งเหตุเกี่ยวกับเหตุการณ์ต่างๆ หรือไม่"
 
-#: ../data/empathy.schemas.in.h:40
-msgid "Whether or not to show a popup when a contact becomes available."
-msgstr "กำหนดว่าจะแสดงหน้าต่างผุดขึ้นเมื่อผู้ติดต่อเปลี่ยนสถานะเป็น \"อยู่\" หรือไม่"
+#: ../data/empathy.schemas.in.h:50
+msgid "Whether or not to play a sound to notify for incoming messages."
+msgstr "กำหนดว่าจะเล่นเสียงเพื่อแจ้งข้อความเข้าหรือไม่"
 
-#: ../data/empathy.schemas.in.h:41
+#: ../data/empathy.schemas.in.h:51
+msgid "Whether or not to play a sound to notify for new conversations."
+msgstr "กำหนดว่าจะเล่นเสียงเพื่อแจ้งการสนทนาใหม่หรือไม่"
+
+#: ../data/empathy.schemas.in.h:52
+msgid "Whether or not to play a sound to notify for outgoing messages."
+msgstr "กำหนดว่าจะเล่นเสียงเพื่อแจ้งการส่งข้อความออกหรือไม่"
+
+#: ../data/empathy.schemas.in.h:53
+msgid "Whether or not to play a sound when logging in a network."
+msgstr "กำหนดว่าจะเล่นเสียงเมื่อเข้าสู่ระบบเครือข่ายหรือไม่"
+
+#: ../data/empathy.schemas.in.h:54
+msgid "Whether or not to play a sound when logging off a network."
+msgstr "กำหนดว่าจะเล่นเสียงเมื่อออกจากระบบเครือข่ายหรือไม่"
+
+#: ../data/empathy.schemas.in.h:55
+msgid "Whether or not to play sound notifications when away or busy."
+msgstr "กำหนดว่าจะงดเล่นเสียงเมื่อไม่อยู่หรือไม่ว่างหรือไม่"
+
+#: ../data/empathy.schemas.in.h:56
+msgid ""
+"Whether or not to show a popup notification when receiving a new message "
+"even if the chat is already opened, but not focused."
+msgstr ""
+"กำหนดว่าจะผุดข้อความแจ้งเหตุหรือไม่เมื่อได้รับข้อความใหม่ แม้หน้าต่างสนทนาจะเปิดอยู่ แต่ไม่ได้โฟกัส"
+
+#: ../data/empathy.schemas.in.h:57
+msgid ""
+"Whether or not to show a popup notification when receiving a new message."
+msgstr "กำหนดว่าจะผุดข้อความแจ้งเหตุเมื่อได้รับข้อความใหม่หรือไม่"
+
+#: ../data/empathy.schemas.in.h:58
 msgid ""
 "Whether or not to show avatars for contacts in the contact list and chat "
 "windows."
 msgstr "กำหนดว่าจะแสดงรูปแทนตัวของผู้ติดต่อในรายชื่อผู้ติดต่อและในหน้าต่างสนทนาหรือไม่"
 
-#: ../data/empathy.schemas.in.h:42
+#: ../data/empathy.schemas.in.h:59
 msgid "Whether or not to show contacts that are offline in the contact list."
 msgstr "กำหนดว่าจะแสดงผู้ติดต่อที่ออฟไลน์ในรายชื่อผู้ติดต่อด้วยหรือไม่"
 
-#: ../data/empathy.schemas.in.h:43
+#: ../data/empathy.schemas.in.h:60
+msgid "Whether or not to show popup notifications when away or busy."
+msgstr "กำหนดว่าจะงดผุดข้อความแจ้งเหตุเมื่อไม่อยู่หรือไม่ว่างหรือไม่"
+
+#: ../data/empathy.schemas.in.h:61
 msgid ""
 "Whether or not to show the message dialog about closing the main window with "
 "the 'x' button in the title bar."
 msgstr "กำหนดว่าจะแสดงกล่องข้อความเกี่ยวกับวิธีปิดหน้าต่างหลักด้วยปุ่ม 'x' ในแถบหัวหน้าต่างหรือไม่"
 
-#: ../data/empathy.schemas.in.h:44
+#: ../data/empathy.schemas.in.h:62
 msgid "Whether to show the contact list in compact mode or not."
 msgstr "กำหนดว่าจะแสดงรายชื่อผู้ติดต่อแบบกระชับหรือไม่"
 
-#: ../data/empathy.schemas.in.h:45
+#: ../data/empathy.schemas.in.h:63
 msgid "Whether to use the theme for chat rooms or not."
 msgstr "กำหนดว่าจะใช้ชุดตกแต่งกับห้องสนทนาหรือไม่"
 
-#: ../data/empathy.schemas.in.h:46
+#: ../data/empathy.schemas.in.h:64
 msgid ""
 "Which criterium to use when sorting the contact list. Default is to use sort "
 "by the contact's name with the value \"name\". A value of \"state\" will "
@@ -231,31 +310,31 @@ msgstr ""
 "ข้อกำหนดการเรียงลำดับรายชื่อผู้ติดต่อ ค่าปริยายคือเรียงลำดับตามชื่อผู้ติดต่อ โดยใช้ค่า \"name\" "
 "ถ้าจะเรียงตามสถานะของผู้ติดต่อก็ใช้ \"state\""
 
-#: ../libempathy/empathy-tp-contact-list.c:731 ../src/empathy.c:248
+#: ../libempathy/empathy-tp-contact-list.c:731 ../src/empathy.c:269
 msgid "People nearby"
 msgstr "ผู้คนแถวนี้"
 
-#: ../libempathy/empathy-utils.c:345
+#: ../libempathy/empathy-utils.c:252
 msgid "Available"
 msgstr "อยู่"
 
-#: ../libempathy/empathy-utils.c:347
+#: ../libempathy/empathy-utils.c:254
 msgid "Busy"
 msgstr "ไม่ว่าง"
 
-#: ../libempathy/empathy-utils.c:350
+#: ../libempathy/empathy-utils.c:257
 msgid "Away"
 msgstr "ไม่อยู่"
 
-#: ../libempathy/empathy-utils.c:352
+#: ../libempathy/empathy-utils.c:259
 msgid "Hidden"
 msgstr "ซ่อนตัว"
 
-#: ../libempathy/empathy-utils.c:355
+#: ../libempathy/empathy-utils.c:262
 msgid "Offline"
 msgstr "ออฟไลน์"
 
-#: ../libempathy-gtk/empathy-account-chooser.c:337
+#: ../libempathy-gtk/empathy-account-chooser.c:326
 msgid "All"
 msgstr "ทั้งหมด"
 
@@ -416,7 +495,7 @@ msgid "_Email:"
 msgstr "_อีเมล:"
 
 #: ../libempathy-gtk/empathy-account-widget-salut.glade.h:3
-msgid "_First Name: "
+msgid "_First Name:"
 msgstr "_ชื่อ:"
 
 #: ../libempathy-gtk/empathy-account-widget-salut.glade.h:4
@@ -469,19 +548,28 @@ msgstr "ไ_ม่สนใจการเชิญเข้าห้องป�
 msgid "_Room List locale:"
 msgstr "โลแคลของรายชื่อ_ห้อง:"
 
-#: ../libempathy-gtk/empathy-avatar-chooser.c:457
+#: ../libempathy-gtk/empathy-avatar-chooser.c:462
+#: ../libempathy-gtk/empathy-avatar-chooser.c:537
+msgid "Couldn't convert image"
+msgstr "ไม่สามารถแปลงรูปภาพได้"
+
+#: ../libempathy-gtk/empathy-avatar-chooser.c:463
+msgid "None of the accepted image formats is supported on your system"
+msgstr "ระบบของคุณไม่รองรับฟอร์แมตรูปภาพใดๆ ที่โปรแกรมยอมรับเลย"
+
+#: ../libempathy-gtk/empathy-avatar-chooser.c:956
 msgid "Select Your Avatar Image"
 msgstr "เลือกรูปแทนตัวของคุณ"
 
-#: ../libempathy-gtk/empathy-avatar-chooser.c:460
+#: ../libempathy-gtk/empathy-avatar-chooser.c:959
 msgid "No Image"
 msgstr "ไม่มีรูป"
 
-#: ../libempathy-gtk/empathy-avatar-chooser.c:520
+#: ../libempathy-gtk/empathy-avatar-chooser.c:1021
 msgid "Images"
 msgstr "รูป"
 
-#: ../libempathy-gtk/empathy-avatar-chooser.c:524
+#: ../libempathy-gtk/empathy-avatar-chooser.c:1025
 msgid "All Files"
 msgstr "ทุกแฟ้ม"
 
@@ -489,73 +577,80 @@ msgstr "ทุกแฟ้ม"
 msgid "Click to enlarge"
 msgstr "คลิกเพื่อขยาย"
 
-#: ../libempathy-gtk/empathy-chat.c:497
+#: ../libempathy-gtk/empathy-chat.c:507
 msgid "offline"
 msgstr "ออฟไลน์"
 
-#: ../libempathy-gtk/empathy-chat.c:500
+#: ../libempathy-gtk/empathy-chat.c:510
 msgid "invalid contact"
 msgstr "ข้อมูลผู้ติดต่อผิดพลาด"
 
-#: ../libempathy-gtk/empathy-chat.c:503
+#: ../libempathy-gtk/empathy-chat.c:513
 msgid "permission denied"
 msgstr "ไม่ได้รับอนุญาต"
 
-#: ../libempathy-gtk/empathy-chat.c:506
+#: ../libempathy-gtk/empathy-chat.c:516
 msgid "too long message"
 msgstr "ข้อความยาวเกินไป"
 
-#: ../libempathy-gtk/empathy-chat.c:509
+#: ../libempathy-gtk/empathy-chat.c:519
 msgid "not implemented"
 msgstr "ยังไม่ทำ"
 
-#: ../libempathy-gtk/empathy-chat.c:512
+#: ../libempathy-gtk/empathy-chat.c:522
 msgid "unknown"
 msgstr "ไม่ทราบ"
 
-#: ../libempathy-gtk/empathy-chat.c:516
+#: ../libempathy-gtk/empathy-chat.c:526
 #, c-format
 msgid "Error sending message '%s': %s"
 msgstr "เกิดข้อผิดพลาดขณะส่งข้อความ '%s': %s"
 
-#: ../libempathy-gtk/empathy-chat.c:546
+#: ../libempathy-gtk/empathy-chat.c:556
 #, c-format
 msgid "Topic set to: %s"
 msgstr "หัวข้อถูกตั้งเป็น: %s"
 
-#: ../libempathy-gtk/empathy-chat.c:548
+#: ../libempathy-gtk/empathy-chat.c:558
 msgid "No topic defined"
 msgstr "ไม่มีการกำหนดหัวข้อ"
 
-#: ../libempathy-gtk/empathy-chat.c:963
+#: ../libempathy-gtk/empathy-chat.c:973
 msgid "Insert Smiley"
 msgstr "แทรกรูปสีหน้า"
 
-#: ../libempathy-gtk/empathy-chat.c:979
+#. send button
+#: ../libempathy-gtk/empathy-chat.c:991
+#: ../libempathy-gtk/empathy-ui-utils.c:1538
 msgid "_Send"
 msgstr "_ส่ง"
 
-#: ../libempathy-gtk/empathy-chat.c:1013
+#: ../libempathy-gtk/empathy-chat.c:1025
 msgid "_Check Word Spelling..."
 msgstr "_ตรวจตัวสะกดคำ..."
 
-#: ../libempathy-gtk/empathy-chat.c:1119
+#: ../libempathy-gtk/empathy-chat.c:1131
 #, c-format
 msgid "%s has joined the room"
 msgstr "%s เข้ามาในห้อง"
 
-#: ../libempathy-gtk/empathy-chat.c:1122
+#: ../libempathy-gtk/empathy-chat.c:1134
 #, c-format
 msgid "%s has left the room"
 msgstr "%s ออกจากห้อง"
 
-#: ../libempathy-gtk/empathy-chat.c:1236 ../src/empathy-call-window.c:406
+#: ../libempathy-gtk/empathy-chat.c:1248 ../src/empathy-call-window.c:548
 msgid "Disconnected"
 msgstr "ตัดการเชื่อมต่อแล้ว"
 
-#: ../libempathy-gtk/empathy-chat.c:1608
+#: ../libempathy-gtk/empathy-chat.c:1644
 msgid "Connected"
 msgstr "เชื่อมต่อแล้ว"
+
+#: ../libempathy-gtk/empathy-chat.c:1694
+#: ../libempathy-gtk/empathy-log-window.c:505
+msgid "Conversation"
+msgstr "การสนทนา"
 
 #: ../libempathy-gtk/empathy-chat.glade.h:1
 msgid "<b>Topic:</b>"
@@ -565,13 +660,17 @@ msgstr "<b>หัวข้อ:</b>"
 msgid "Group Chat"
 msgstr "การสนทนากลุ่ม"
 
-#: ../libempathy-gtk/empathy-chat-view.c:430
+#: ../libempathy-gtk/empathy-chat-text-view.c:340
 msgid "_Copy Link Address"
 msgstr "_คัดลอกที่อยู่ลิงก์"
 
-#: ../libempathy-gtk/empathy-chat-view.c:438
+#: ../libempathy-gtk/empathy-chat-text-view.c:348
 msgid "_Open Link"
 msgstr "_เปิดลิงก์"
+
+#: ../libempathy-gtk/empathy-chat-text-view.c:439
+msgid "%A %B %d %Y"
+msgstr "%A %e %B %Ey"
 
 #: ../libempathy-gtk/empathy-contact-dialogs.c:180
 msgid "Personal Information"
@@ -585,11 +684,11 @@ msgstr "แก้ไขข้อมูลผู้ติดต่อ"
 msgid "Contact Information"
 msgstr "ข้อมูลผู้ติดต่อ"
 
-#: ../libempathy-gtk/empathy-contact-dialogs.c:283
+#: ../libempathy-gtk/empathy-contact-dialogs.c:267
 msgid "I would like to add you to my contact list."
 msgstr "ฉันต้องการเพิ่มคุณในรายชื่อผู้ติดต่อ"
 
-#: ../libempathy-gtk/empathy-contact-dialogs.c:307
+#: ../libempathy-gtk/empathy-contact-dialogs.c:291
 msgid "New Contact"
 msgstr "ผู้ติดต่อใหม่"
 
@@ -601,63 +700,72 @@ msgstr "ตัดสินใจภายห_ลัง"
 msgid "Subscription Request"
 msgstr "ขอสมัคร"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1244
+#: ../libempathy-gtk/empathy-contact-list-view.c:1249
 #, c-format
 msgid "Do you really want to remove the group '%s'?"
 msgstr "ยืนยันที่จะลบกลุ่ม '%s' หรือไม่?"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1246
+#: ../libempathy-gtk/empathy-contact-list-view.c:1251
 msgid "Removing group"
 msgstr "กำลังจะลบกลุ่ม"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1293
-#: ../libempathy-gtk/empathy-contact-list-view.c:1372
+#: ../libempathy-gtk/empathy-contact-list-view.c:1298
+#: ../libempathy-gtk/empathy-contact-list-view.c:1377
 msgid "_Remove"
 msgstr "_ลบ"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1323
+#: ../libempathy-gtk/empathy-contact-list-view.c:1328
 #, c-format
 msgid "Do you really want to remove the contact '%s'?"
 msgstr "ยืนยันที่จะลบผู้ติดต่อ '%s' หรือไม่?"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1325
+#: ../libempathy-gtk/empathy-contact-list-view.c:1330
 msgid "Removing contact"
 msgstr "กำลังจะลบผู้ติดต่อ"
 
-#: ../libempathy-gtk/empathy-contact-list-view.c:1330
+#: ../libempathy-gtk/empathy-contact-list-view.c:1335
 msgid "Sorry, I don't want you in my contact list anymore."
 msgstr "ขออภัย ฉันไม่ต้องการให้คุณอยู่ในรายชื่อผู้ติดต่อของฉันอีกต่อไป"
 
-#: ../libempathy-gtk/empathy-contact-menu.c:115
+#: ../libempathy-gtk/empathy-contact-menu.c:130
 #: ../src/empathy-main-window.glade.h:9
 msgid "_Chat"
 msgstr "_สนทนา"
 
-#: ../libempathy-gtk/empathy-contact-menu.c:136
+#: ../libempathy-gtk/empathy-contact-menu.c:161
+#: ../src/empathy-call-window.glade.h:5
 msgid "_Call"
 msgstr "เ_รียก"
 
-#: ../libempathy-gtk/empathy-contact-menu.c:175
+#: ../libempathy-gtk/empathy-contact-menu.c:200
 #: ../src/empathy-main-window.glade.h:17
 msgid "_View Previous Conversations"
 msgstr "ดูการสนทนาก่อนห_น้านี้"
 
-#: ../libempathy-gtk/empathy-contact-menu.c:203
+#: ../libempathy-gtk/empathy-contact-menu.c:222
+msgid "Send file"
+msgstr "ส่งแฟ้ม"
+
+#: ../libempathy-gtk/empathy-contact-menu.c:250
 msgid "Infor_mation"
 msgstr "_ข้อมูล"
 
-#: ../libempathy-gtk/empathy-contact-menu.c:230
+#: ../libempathy-gtk/empathy-contact-menu.c:277
 #: ../src/empathy-chat-window.glade.h:14 ../src/empathy-main-window.glade.h:11
 msgid "_Edit"
 msgstr "แ_ก้ไข"
 
-#: ../libempathy-gtk/empathy-contact-menu.c:294
+#: ../libempathy-gtk/empathy-contact-menu.c:336
 msgid "Inviting to this room"
 msgstr "เชิญเข้ามาห้องนี้"
 
-#: ../libempathy-gtk/empathy-contact-menu.c:334
+#: ../libempathy-gtk/empathy-contact-menu.c:369
 msgid "_Invite to chatroom"
 msgstr "เ_ชิญเข้าห้องสนทนา"
+
+#: ../libempathy-gtk/empathy-contact-selector.c:111
+msgid "Select a contact"
+msgstr "เลือกผู้ติดต่อ"
 
 #: ../libempathy-gtk/empathy-contact-widget.c:358
 msgid "Save Avatar"
@@ -667,12 +775,12 @@ msgstr "บันทึกรูปแทนตัว"
 msgid "Unable to save avatar"
 msgstr "ไม่สามารถบันทึกรูปแทนตัว"
 
-#: ../libempathy-gtk/empathy-contact-widget.c:875
+#: ../libempathy-gtk/empathy-contact-widget.c:895
 msgid "Select"
 msgstr "เลือก"
 
-#: ../libempathy-gtk/empathy-contact-widget.c:884
-#: ../src/empathy-main-window.c:855
+#: ../libempathy-gtk/empathy-contact-widget.c:904
+#: ../src/empathy-main-window.c:991
 msgid "Group"
 msgstr "กลุ่ม"
 
@@ -772,15 +880,12 @@ msgstr "พอร์ต"
 msgid "SSL"
 msgstr "SSL"
 
-#: ../libempathy-gtk/empathy-log-window.c:497
+#: ../libempathy-gtk/empathy-log-window.c:498
+#: ../src/empathy-import-dialog.c:277
 msgid "Account"
 msgstr "บัญชี"
 
-#: ../libempathy-gtk/empathy-log-window.c:504 ../src/empathy-chat-window.c:280
-msgid "Conversation"
-msgstr "การสนทนา"
-
-#: ../libempathy-gtk/empathy-log-window.c:514
+#: ../libempathy-gtk/empathy-log-window.c:515
 msgid "Date"
 msgstr "วันที่"
 
@@ -856,30 +961,69 @@ msgstr "เครื่องมือตรวจตัวสะกด"
 msgid "Suggestions for the word:"
 msgstr "ตัวสะกดที่แนะนำสำหรับคำ:"
 
-#: ../libempathy-gtk/empathy-theme-boxes.c:745
-#: ../libempathy-gtk/empathy-theme-irc.c:293
-msgid "%A %d %B %Y"
-msgstr "%A %e %B %Ey"
-
-#: ../libempathy-gtk/empathy-theme-manager.c:73
+#: ../libempathy-gtk/empathy-theme-manager.c:60
 msgid "Classic"
 msgstr "แบบฉบับ"
 
-#: ../libempathy-gtk/empathy-theme-manager.c:74
+#: ../libempathy-gtk/empathy-theme-manager.c:61
 msgid "Simple"
 msgstr "เรียบๆ"
 
-#: ../libempathy-gtk/empathy-theme-manager.c:75
+#: ../libempathy-gtk/empathy-theme-manager.c:62
 msgid "Clean"
 msgstr "สะอาด"
 
-#: ../libempathy-gtk/empathy-theme-manager.c:76
+#: ../libempathy-gtk/empathy-theme-manager.c:63
 msgid "Blue"
 msgstr "น้ำเงิน"
 
-#: ../libempathy-gtk/empathy-ui-utils.c:1330
+#: ../libempathy-gtk/empathy-ui-utils.c:1385
 msgid "Unable to open URI"
 msgstr "ไม่สามารถเปิด URI"
+
+#: ../libempathy-gtk/empathy-ui-utils.c:1530
+msgid "Select a file"
+msgstr "เลือกแฟ้ม"
+
+#: ../libempathy-gtk/empathy-ui-utils.c:1566
+msgid "Received an instant message"
+msgstr "ได้รับข้อความทันใจ"
+
+#: ../libempathy-gtk/empathy-ui-utils.c:1568
+msgid "Sent an instant message"
+msgstr "ส่งข้อความทันใจ"
+
+#: ../libempathy-gtk/empathy-ui-utils.c:1570
+msgid "Incoming chat request"
+msgstr "การขอสนทนาด้วย"
+
+#: ../libempathy-gtk/empathy-ui-utils.c:1572
+msgid "Contact connected"
+msgstr "เชื่อมต่อกับผู้ติดต่อ"
+
+#: ../libempathy-gtk/empathy-ui-utils.c:1574
+msgid "Contact disconnected"
+msgstr "ตัดการเชื่อมต่อกับผู้ติดต่อ"
+
+#: ../libempathy-gtk/empathy-ui-utils.c:1576
+msgid "Connected to server"
+msgstr "เชื่อมต่อกับเซิร์ฟเวอร์"
+
+#: ../libempathy-gtk/empathy-ui-utils.c:1578
+msgid "Disconnected from server"
+msgstr "ตัดการเชื่อมต่อกับเซิร์ฟเวอร์"
+
+#: ../libempathy-gtk/empathy-ui-utils.c:1580
+msgid "Incoming voice call"
+msgstr "การเรียกเข้าเพื่อสนทนาด้วยเสียง"
+
+#: ../libempathy-gtk/empathy-ui-utils.c:1582
+msgid "Outgoing voice call"
+msgstr "การเรียกสายออกเพื่อสนทนาด้วยเสียง"
+
+#: ../libempathy-gtk/empathy-ui-utils.c:1584
+msgid "Voice call ended"
+msgstr "จบการสนทนาด้วยเสียง"
 
 #: ../libempathy-gtk/totem-subtitle-encoding.c:158
 msgid "Current Locale"
@@ -1100,19 +1244,19 @@ msgstr "สถานะอยู่/ไม่อยู่"
 msgid "Set your own presence"
 msgstr "ตั้งค่าสถานะอยู่/ไม่อยู่ของคุณ"
 
-#: ../src/empathy.c:380
+#: ../src/empathy.c:426
 msgid "Don't connect on startup"
 msgstr "ไม่ต้องเชื่อมต่อขณะเริ่มทำงาน"
 
-#: ../src/empathy.c:384
+#: ../src/empathy.c:430
 msgid "Don't show the contact list on startup"
 msgstr "ไม่ต้องแสดงรายชื่อผู้ติดต่อขณะเริ่มทำงาน"
 
-#: ../src/empathy.c:388
+#: ../src/empathy.c:434
 msgid "Show the accounts dialog"
 msgstr "แสดงกล่องโต้ตอบบัญชี"
 
-#: ../src/empathy.c:400
+#: ../src/empathy.c:446
 msgid "- Empathy Instant Messenger"
 msgstr "- โปรแกรมข้อความทันใจ Empathy"
 
@@ -1161,22 +1305,22 @@ msgstr ""
 "ถ้ามีเวลาโปรดมาช่วยกันแปล :-)\n"
 "http://gnome-th.sf.net"
 
-#: ../src/empathy-accounts-dialog.c:394
+#: ../src/empathy-accounts-dialog.c:391
 msgid "Enabled"
 msgstr "เปิดใช้"
 
-#: ../src/empathy-accounts-dialog.c:404
+#: ../src/empathy-accounts-dialog.c:401
 #: ../src/empathy-accounts-dialog.glade.h:4
 msgid "Accounts"
 msgstr "บัญชี"
 
 #. To translator: %s is the protocol name
-#: ../src/empathy-accounts-dialog.c:867
+#: ../src/empathy-accounts-dialog.c:833
 #, c-format
 msgid "New %s account"
 msgstr "บัญชี %s ใหม่"
 
-#: ../src/empathy-accounts-dialog.c:977
+#: ../src/empathy-accounts-dialog.c:943
 #, c-format
 msgid ""
 "You are about to remove your %s account!\n"
@@ -1185,7 +1329,7 @@ msgstr ""
 "คุณกำลังจะลบบัญชี %s ของคุณ!\n"
 "ยืนยันที่จะดำเนินการต่อหรือไม่?"
 
-#: ../src/empathy-accounts-dialog.c:983
+#: ../src/empathy-accounts-dialog.c:949
 msgid ""
 "Any associated conversations and chat rooms will NOT be removed if you "
 "decide to proceed.\n"
@@ -1231,133 +1375,68 @@ msgstr "ก่อนที่จะเพิ่มบัญชีใหม่ �
 msgid "Type:"
 msgstr "ชนิด:"
 
-#: ../src/empathy-call-window.c:142
-msgid "Closed"
-msgstr "ปิดแล้ว"
+#: ../src/empathy-call-window.c:258
+msgid "Contrast"
+msgstr "ความต่างระดับสี"
 
-#: ../src/empathy-call-window.c:254
-msgid "End this call?"
-msgstr "จบการเรียกนี้หรือไม่?"
+#: ../src/empathy-call-window.c:258
+msgid "Brightness"
+msgstr "ความสว่าง"
 
-#: ../src/empathy-call-window.c:256
-msgid "Closing this window will end the call in progress."
-msgstr "การปิดหน้าต่างนี้ จะจบการเรียกที่ยังดำเนินการอยู่"
+#: ../src/empathy-call-window.c:258
+msgid "Gamma"
+msgstr "แกมมา"
 
-#: ../src/empathy-call-window.c:257
-msgid "_End Call"
-msgstr "_จบการเรียก"
+#: ../src/empathy-call-window.c:290
+msgid "Volume"
+msgstr "ความดัง"
 
-#: ../src/empathy-call-window.c:311
-msgid "Incoming call"
-msgstr "การเรียกเข้า"
+#: ../src/empathy-call-window.c:366
+msgid "_Sidebar"
+msgstr "แถบ_ข้าง"
 
-#: ../src/empathy-call-window.c:313
+#: ../src/empathy-call-window.c:384
+msgid "Dialpad"
+msgstr "แป้นโทรศัพท์"
+
+#: ../src/empathy-call-window.c:390
+msgid "Audio input"
+msgstr "เสียงเข้า"
+
+#: ../src/empathy-call-window.c:394
+msgid "Video input"
+msgstr "ภาพเข้า"
+
+#: ../src/empathy-call-window.c:407
+msgid "Connecting..."
+msgstr "กำลังเชื่อมต่อ..."
+
+#: ../src/empathy-call-window.c:572
 #, c-format
-msgid "%s is calling you, do you want to answer?"
-msgstr "%s กำลังเรียกคุณอยู่ คุณต้องการจะตอบหรือไม่?"
-
-#: ../src/empathy-call-window.c:319
-msgid "_Reject"
-msgstr "_ปฏิเสธ"
-
-#: ../src/empathy-call-window.c:324
-msgid "_Answer"
-msgstr "_ตอบรับ"
-
-#: ../src/empathy-call-window.c:379
-msgid "Empathy Call"
-msgstr "การเรียก Empathy"
-
-#. To translators: Readying is the first state of the call, it is
-#. * preparing the connection and it does not yet ring.
-#: ../src/empathy-call-window.c:382
-msgid "Readying"
-msgstr "กำลังเตรียมพร้อม"
-
-#: ../src/empathy-call-window.c:391
-#, c-format
-msgid "%s - Empathy Call"
-msgstr "%s - การเรียก Empathy"
-
-#: ../src/empathy-call-window.c:395
-msgid "Ringing"
-msgstr "กำลังเรียกสาย"
-
-#: ../src/empathy-call-window.c:408
-msgid "Connecting"
-msgstr "กำลังเชื่อมต่อ"
-
-#: ../src/empathy-call-window.c:524
-#, c-format
-msgid "Incoming call from %s rejected because there is already a running call."
-msgstr "การเรียกเข้าจาก %s ถูกปฏิเสธเพราะมีการคุยสายดำเนินอยู่"
+msgid "Connected -- %d:%02dm"
+msgstr "เชื่อมต่อแล้ว -- %d:%02dm"
 
 #: ../src/empathy-call-window.glade.h:1
-msgid "#"
-msgstr "#"
-
-#: ../src/empathy-call-window.glade.h:2
-msgid "*"
-msgstr "*"
-
-#: ../src/empathy-call-window.glade.h:3
-msgid "0"
-msgstr "0"
-
-#: ../src/empathy-call-window.glade.h:4
-msgid "1"
-msgstr "1"
-
-#: ../src/empathy-call-window.glade.h:5
-msgid "2"
-msgstr "2"
-
-#: ../src/empathy-call-window.glade.h:6
-msgid "3"
-msgstr "3"
-
-#: ../src/empathy-call-window.glade.h:7
-msgid "4"
-msgstr "4"
-
-#: ../src/empathy-call-window.glade.h:8
-msgid "5"
-msgstr "5"
-
-#: ../src/empathy-call-window.glade.h:9
-msgid "6"
-msgstr "6"
-
-#: ../src/empathy-call-window.glade.h:10
-msgid "7"
-msgstr "7"
-
-#: ../src/empathy-call-window.glade.h:11
-msgid "8"
-msgstr "8"
-
-#: ../src/empathy-call-window.glade.h:12
-msgid "9"
-msgstr "9"
-
-#. To translators: The keypad is numbers [0-9], asterisk (*) and hash (#). Presented like on any phone
-#: ../src/empathy-call-window.glade.h:14
-msgid "<b>Keypad</b>"
-msgstr "<b>แป้นตัวเลข</b>"
-
-#: ../src/empathy-call-window.glade.h:15
-msgid "<b>Volume</b>"
-msgstr "<b>ความดัง</b>"
-
-#: ../src/empathy-call-window.glade.h:16
-msgid "Hang Up"
+msgid "Hang up"
 msgstr "วางสาย"
 
-#: ../src/empathy-call-window.glade.h:17
-msgid "Send Video"
+#: ../src/empathy-call-window.glade.h:2
+msgid "Send Audio"
+msgstr "ส่งสัญญาณเสียง"
+
+#: ../src/empathy-call-window.glade.h:3
+msgid "Send video"
 msgstr "ส่งภาพวีดิทัศน์"
 
-#: ../src/empathy-chat-window.c:326
+#: ../src/empathy-call-window.glade.h:4
+msgid "Video preview"
+msgstr "แสดงตัวอย่างวีดิทัศน์"
+
+#: ../src/empathy-call-window.glade.h:6
+msgid "_View"
+msgstr "มุ_มมอง"
+
+#: ../src/empathy-chat-window.c:313
 #, c-format
 msgid "Conversations (%d)"
 msgstr "การสนทนา (%d)"
@@ -1366,9 +1445,14 @@ msgstr "การสนทนา (%d)"
 msgid "Topic:"
 msgstr "หัวข้อ:"
 
-#: ../src/empathy-chat-window.c:421
+#: ../src/empathy-chat-window.c:423
 msgid "Typing a message."
 msgstr "กำลังพิมพ์ข้อความ"
+
+#: ../src/empathy-chat-window.c:892 ../src/empathy-event-manager.c:429
+#, c-format
+msgid "New message from %s"
+msgstr "ข้อความใหม่จาก %s"
 
 #: ../src/empathy-chat-window.glade.h:1
 msgid "C_lear"
@@ -1483,44 +1567,75 @@ msgstr "เซิร์ฟเ_วอร์"
 msgid "_Room:"
 msgstr "_ห้อง"
 
-#: ../src/empathy-event-manager.c:166
-#, c-format
-msgid ""
-"New message from %s:\n"
-"%s"
-msgstr ""
-"ข้อความใหม่จาก %s:\n"
-"%s"
+#: ../src/empathy-event-manager.c:377
+msgid "Incoming call"
+msgstr "การเรียกเข้า"
 
-#: ../src/empathy-event-manager.c:205
+#: ../src/empathy-event-manager.c:380
+#, c-format
+msgid "%s is calling you, do you want to answer?"
+msgstr "%s กำลังเรียกคุณอยู่ คุณต้องการจะตอบหรือไม่?"
+
+#: ../src/empathy-event-manager.c:387
+msgid "_Reject"
+msgstr "_ปฏิเสธ"
+
+#: ../src/empathy-event-manager.c:393
+msgid "_Answer"
+msgstr "_ตอบรับ"
+
+#: ../src/empathy-event-manager.c:516
 #, c-format
 msgid "Incoming call from %s"
 msgstr "การเรียกเข้าจาก %s"
 
-#: ../src/empathy-event-manager.c:238
+#: ../src/empathy-event-manager.c:564
 #, c-format
-msgid ""
-"%s is offering you an invitation, but you don't have the needed external "
-"application to handle it."
-msgstr "%s ได้ส่งคำเชิญถึงคุณ แต่คุณไม่มีโปรแกรมภายนอกที่จะจัดการคำเชิญนี้"
+msgid "%s is offering you an invitation"
+msgstr "%s ส่งคำเชิญถึงคุณ"
 
-#: ../src/empathy-event-manager.c:263
-msgid "Invitation Error"
-msgstr "ข้อผิดพลาดเกี่ยวกับการเชิญ"
+#: ../src/empathy-event-manager.c:570
+msgid "An external application will be started to handle it."
+msgstr "จะเรียกโปรแกรมภายนอกเพื่อจัดการคำเชิญนี้"
 
-#: ../src/empathy-event-manager.c:289
+#: ../src/empathy-event-manager.c:575
+msgid "You don't have the needed external application to handle it."
+msgstr "แต่คุณไม่มีโปรแกรมภายนอกที่จะจัดการคำเชิญนี้"
+
+#: ../src/empathy-event-manager.c:698
+msgid "Room invitation"
+msgstr "คำเชิญสู่ห้องสนทนา"
+
+#: ../src/empathy-event-manager.c:701
 #, c-format
-msgid ""
-"%s is offering you an invitation. An external application will be started to "
-"handle it."
-msgstr "%s ได้ส่งคำเชิญถึงคุณ จะเรียกโปรแกรมภายนอกเพื่อจัดการคำเชิญนี้"
+msgid "%s is inviting you to join %s"
+msgstr "%s เชิญคุณเข้าร่วมสนทนาที่ห้อง %s"
 
-#: ../src/empathy-event-manager.c:345
+#. Decline button
+#: ../src/empathy-event-manager.c:709 ../src/empathy-ft-manager.c:1021
+msgid "_Decline"
+msgstr "_ปฏิเสธ"
+
+#: ../src/empathy-event-manager.c:714
+msgid "_Join"
+msgstr "เ_ข้าห้อง"
+
+#: ../src/empathy-event-manager.c:744
+#, c-format
+msgid "%s invited you to join %s"
+msgstr "%s ได้เชิญคุณเข้าร่วมสนทนาที่ห้อง %s"
+
+#: ../src/empathy-event-manager.c:867
+#, c-format
+msgid "Incoming file transfer from %s"
+msgstr "การถ่านโอนแฟ้มเข้าจาก %s"
+
+#: ../src/empathy-event-manager.c:961
 #, c-format
 msgid "Subscription requested by %s"
 msgstr "มีการขอสมัครจาก %s"
 
-#: ../src/empathy-event-manager.c:348
+#: ../src/empathy-event-manager.c:965
 #, c-format
 msgid ""
 "\n"
@@ -1529,73 +1644,248 @@ msgstr ""
 "\n"
 "ข้อความ: %s"
 
-#: ../src/empathy-main-window.c:466
-msgid "Show and edit accounts"
-msgstr "แสดงและแก้ไขบัญชีต่างๆ"
+#: ../src/empathy-ft-manager.c:113
+#, c-format
+msgid "%u:%02u.%02u"
+msgstr "%u:%02u.%02u"
 
-#: ../src/empathy-main-window.c:838
-msgid "Contact"
-msgstr "ติดต่อ"
+#: ../src/empathy-ft-manager.c:115
+#, c-format
+msgid "%02u.%02u"
+msgstr "%02u.%02u"
 
-#: ../src/empathy-main-window.c:1040
-msgid "_Edit account"
-msgstr "แ_ก้ไขบัญชี"
+#: ../src/empathy-ft-manager.c:164
+msgid "No reason was specified"
+msgstr "ไม่มีการระบุสาเหตุ"
 
-#: ../src/empathy-main-window.c:1123
+#: ../src/empathy-ft-manager.c:166
+msgid "The change in state was requested"
+msgstr "มีการร้องขอการเปลี่ยนสถานะ"
+
+#: ../src/empathy-ft-manager.c:168
+msgid "You canceled the file transfer"
+msgstr "คุณได้ยกเลิกการถ่ายโอนแฟ้ม"
+
+#: ../src/empathy-ft-manager.c:170
+msgid "The other participant canceled the file transfer"
+msgstr "อีกฝ่ายหนึ่งได้ยกเลิกการถ่ายโอนแฟ้ม"
+
+#: ../src/empathy-ft-manager.c:172
+msgid "Error while trying to transfer the file"
+msgstr "เกิดข้อผิดพลาดขณะพยายามถ่ายโอนแฟ้ม"
+
+#: ../src/empathy-ft-manager.c:174
+msgid "The other participant is unable to transfer the file"
+msgstr "อีกฝ่ายหนึ่งไม่สามารถถ่ายโอนแฟ้มได้"
+
+#: ../src/empathy-ft-manager.c:176
+msgid "Unknown reason"
+msgstr "ไม่ทราบสาเหตุ"
+
+#. translators: first %s is filename, second %s is the contact name
+#: ../src/empathy-ft-manager.c:224
+#, c-format
+msgid "Receiving \"%s\" from %s"
+msgstr "กำลังรับ \"%s\" จาก %s"
+
+#. translators: first %s is filename, second %s is the contact name
+#: ../src/empathy-ft-manager.c:227
+#, c-format
+msgid "Sending \"%s\" to %s"
+msgstr "กำลังส่ง \"%s\" ให้กับ %s"
+
+#: ../src/empathy-ft-manager.c:237
+msgctxt "file size"
+msgid "Unknown"
+msgstr "ไม่ทราบ"
+
+#. translators: first %s is the transferred size, second %s is
+#. * the total file size
+#: ../src/empathy-ft-manager.c:245
+#, c-format
+msgid "%s of %s"
+msgstr "%s จาก %s"
+
+#: ../src/empathy-ft-manager.c:252
+msgid "Waiting the other participant's response"
+msgstr "กำลังรอให้อีกฝ่ายหนึ่งตอบกลับ"
+
+#: ../src/empathy-ft-manager.c:262
+#, c-format
+msgid "\"%s\" received from %s"
+msgstr "รับ \"%s\" จาก %s เรียบร้อย"
+
+#: ../src/empathy-ft-manager.c:268
+#, c-format
+msgid "\"%s\" sent to %s"
+msgstr "ส่ง \"%s\" ให้กับ %s เรียบร้อย"
+
+#: ../src/empathy-ft-manager.c:271
+msgid "File transfer completed"
+msgstr "ถ่ายโอนแฟ้มเสร็จสมบูรณ์"
+
+#: ../src/empathy-ft-manager.c:280
+#, c-format
+msgid "\"%s\" receiving from %s"
+msgstr "การรับ \"%s\" จาก %s"
+
+#: ../src/empathy-ft-manager.c:286
+#, c-format
+msgid "\"%s\" sending to %s"
+msgstr "การส่ง \"%s\" ให้กับ %s"
+
+#: ../src/empathy-ft-manager.c:289
+#, c-format
+msgid "File transfer canceled: %s"
+msgstr "ยกเลิกการถ่ายโอนแฟ้ม: %s"
+
+#: ../src/empathy-ft-manager.c:304
+msgctxt "remaining time"
+msgid "Unknown"
+msgstr "ไม่ทราบ"
+
+#: ../src/empathy-ft-manager.c:364
+msgctxt "file transfer percent"
+msgid "Unknown"
+msgstr "ไม่ทราบ"
+
+#: ../src/empathy-ft-manager.c:700
+msgid "%"
+msgstr "%"
+
+#: ../src/empathy-ft-manager.c:712
+msgid "File"
+msgstr "แฟ้ม"
+
+#: ../src/empathy-ft-manager.c:734
+msgid "Remaining"
+msgstr "เหลืออีก"
+
+#: ../src/empathy-ft-manager.c:885
+msgid "Cannot save file to this location"
+msgstr "ไม่สามารถบันทึกแฟ้มลงที่ตำแหน่งนี้"
+
+#: ../src/empathy-ft-manager.c:931
+msgid "Save file as..."
+msgstr "บันทึกแฟ้มเป็น..."
+
+#: ../src/empathy-ft-manager.c:1001
+msgid "unknown size"
+msgstr "ไม่ทราบขนาด"
+
+#: ../src/empathy-ft-manager.c:1007
+#, c-format
+msgid "%s would like to send you a file"
+msgstr "%s ต้องการส่งแฟ้มให้กับคุณ"
+
+#: ../src/empathy-ft-manager.c:1012
+#, c-format
+msgid "Do you want to accept the file \"%s\" (%s)?"
+msgstr "คุณต้องการรับแฟ้ม \"%s\" (%s) หรือไม่?"
+
+#. Accept button
+#: ../src/empathy-ft-manager.c:1030
+msgid "_Accept"
+msgstr "_รับ"
+
+#: ../src/empathy-ft-manager.glade.h:1
+msgid "File transfers"
+msgstr "การถ่ายโอนแฟ้ม"
+
+#: ../src/empathy-ft-manager.glade.h:2
+msgid "Remove completed, canceled and failed file transfers from the list"
+msgstr "ลบรายการถ่ายโอนที่เสร็จแล้ว ที่ถูกยกเลิก หรือที่ไม่สำเร็จ ออกจากรายชื่อ"
+
+#. Translators: this is the header of a treeview column
+#: ../src/empathy-import-dialog.c:255
+msgid "Import"
+msgstr "นำเข้า"
+
+#: ../src/empathy-import-dialog.c:264
+msgid "Protocol"
+msgstr "โพรโทคอล"
+
+#: ../src/empathy-import-dialog.c:290
+msgid "Source"
+msgstr "แหล่งข้อมูล"
+
+#: ../src/empathy-import-dialog.c:378
+msgid ""
+"No accounts to import could be found. Empathy currently only supports "
+"importing accounts from Pidgin."
+msgstr "ไม่พบบัญชีที่จะนำเข้า ขณะนี้ Empathy รองรับการนำเข้าบัญชีจาก Pidgin เท่านั้น"
+
+#: ../src/empathy-import-dialog.glade.h:1
+msgid "Import Accounts"
+msgstr "นำเข้าบัญชี"
+
+#: ../src/empathy-main-window.c:391
 msgid "No error specified"
 msgstr "ไม่มีการระบุสาเหตุข้อผิดพลาด"
 
-#: ../src/empathy-main-window.c:1126
+#: ../src/empathy-main-window.c:394
 msgid "Network error"
 msgstr "ข้อผิดพลาดเกี่ยวกับเครือข่าย"
 
-#: ../src/empathy-main-window.c:1129
+#: ../src/empathy-main-window.c:397
 msgid "Authentication failed"
 msgstr "การยืนยันตัวบุคคลไม่ผ่าน"
 
-#: ../src/empathy-main-window.c:1132
+#: ../src/empathy-main-window.c:400
 msgid "Encryption error"
 msgstr "ข้อผิดพลาดเกี่ยวกับการเข้ารหัสลับ"
 
-#: ../src/empathy-main-window.c:1135
+#: ../src/empathy-main-window.c:403
 msgid "Name in use"
 msgstr "ชื่อถูกใช้อยู่"
 
-#: ../src/empathy-main-window.c:1138
+#: ../src/empathy-main-window.c:406
 msgid "Certificate not provided"
 msgstr "ไม่มีใบรับรอง"
 
-#: ../src/empathy-main-window.c:1141
+#: ../src/empathy-main-window.c:409
 msgid "Certificate untrusted"
 msgstr "ไม่เชื่อถือใบรับรอง"
 
-#: ../src/empathy-main-window.c:1144
+#: ../src/empathy-main-window.c:412
 msgid "Certificate expired"
 msgstr "ใบรับรองหมดอายุแล้ว"
 
-#: ../src/empathy-main-window.c:1147
+#: ../src/empathy-main-window.c:415
 msgid "Certificate not activated"
 msgstr "ใบรับรองยังไม่มีการเริ่มใช้"
 
-#: ../src/empathy-main-window.c:1150
+#: ../src/empathy-main-window.c:418
 msgid "Certificate hostname mismatch"
 msgstr "ชื่อโฮสต์ในใบรับรองไม่ตรงกัน"
 
-#: ../src/empathy-main-window.c:1153
+#: ../src/empathy-main-window.c:421
 msgid "Certificate fingerprint mismatch"
 msgstr "ลายนิ้วมือในใบรับรองไม่ตรงกัน"
 
-#: ../src/empathy-main-window.c:1156
+#: ../src/empathy-main-window.c:424
 msgid "Certificate self-signed"
 msgstr "ใบรับรองเซ็นรับรองตัวเอง"
 
-#: ../src/empathy-main-window.c:1159
+#: ../src/empathy-main-window.c:427
 msgid "Certificate error"
 msgstr "ข้อผิดพลาดเกี่ยวกับใบรับรอง"
 
-#: ../src/empathy-main-window.c:1162
+#: ../src/empathy-main-window.c:430
 msgid "Unknown error"
 msgstr "ข้อผิดพลาดไม่ทราบสาเหตุ"
+
+#: ../src/empathy-main-window.c:594
+msgid "Show and edit accounts"
+msgstr "แสดงและแก้ไขบัญชีต่างๆ"
+
+#: ../src/empathy-main-window.c:974
+msgid "Contact"
+msgstr "ติดต่อ"
+
+#: ../src/empathy-main-window.c:1176
+msgid "_Edit account"
+msgstr "แ_ก้ไขบัญชี"
 
 #: ../src/empathy-main-window.glade.h:1
 msgid "Contact List"
@@ -1641,7 +1931,7 @@ msgstr "_ข้อมูลส่วนบุคคล"
 msgid "_Room"
 msgstr "_ห้อง"
 
-#: ../src/empathy-new-chatroom-dialog.c:290
+#: ../src/empathy-new-chatroom-dialog.c:291
 msgid "Chat Rooms"
 msgstr "ห้องสนทนา"
 
@@ -1677,7 +1967,35 @@ msgid ""
 "This list represents all chat rooms hosted on the server you have entered."
 msgstr "รายชื่อห้องสนทนาทั้งหมดที่อยู่ในเซิร์ฟเวอร์ที่คุณป้อน"
 
-#: ../src/empathy-preferences.c:264
+#: ../src/empathy-preferences.c:157
+msgid "Message received"
+msgstr "ได้รับข้อความ"
+
+#: ../src/empathy-preferences.c:158
+msgid "Message sent"
+msgstr "ส่งข้อความ"
+
+#: ../src/empathy-preferences.c:159
+msgid "New conversation"
+msgstr "การสนทนาใหม่"
+
+#: ../src/empathy-preferences.c:160
+msgid "Contact goes online"
+msgstr "ผู้ติดต่อเข้าสู่ระบบ"
+
+#: ../src/empathy-preferences.c:161
+msgid "Contact goes offline"
+msgstr "ผู้ติดต่อออกจากระบบ"
+
+#: ../src/empathy-preferences.c:162
+msgid "Account connected"
+msgstr "บัญชีมีการเชื่อมต่อ"
+
+#: ../src/empathy-preferences.c:163
+msgid "Account disconnected"
+msgstr "บัญชีตัดการเชื่อมต่อ"
+
+#: ../src/empathy-preferences.c:397
 msgid "Language"
 msgstr "ภาษา"
 
@@ -1685,105 +2003,107 @@ msgstr "ภาษา"
 msgid "<b>Appearance</b>"
 msgstr "<b>หน้าตา</b>"
 
-#. To translators: Audio notifications preferences
-#: ../src/empathy-preferences.glade.h:3
-msgid "<b>Audio</b>"
-msgstr "<b>เสียง</b>"
-
-#: ../src/empathy-preferences.glade.h:4
-msgid "<b>Behaviour</b>"
+#: ../src/empathy-preferences.glade.h:2
+msgid "<b>Behavior</b>"
 msgstr "<b>พฤติกรรม</b>"
 
-#: ../src/empathy-preferences.glade.h:5
+#: ../src/empathy-preferences.glade.h:3
 msgid "<b>Contact List</b>"
 msgstr "<b>รายชื่อผู้ติดต่อ</b>"
 
-#: ../src/empathy-preferences.glade.h:6
+#: ../src/empathy-preferences.glade.h:4
 msgid "<b>Enable spell checking for languages:</b>"
 msgstr "<b>เปิดใช้การตรวจตัวสะกดสำหรับภาษา:</b>"
 
-#. To translators: Visual notifications preferences, like notify bubbles, etc.
-#: ../src/empathy-preferences.glade.h:8
-msgid "<b>Visual</b>"
-msgstr "<b>การแสดงผล</b>"
+#: ../src/empathy-preferences.glade.h:5
+msgid "<b>Play sound for events</b>"
+msgstr "<b>เล่นเสียงสำหรับเหตุการณ์ต่างๆ</b>"
 
-#: ../src/empathy-preferences.glade.h:9
+#: ../src/empathy-preferences.glade.h:6
 msgid ""
 "<small>The list of languages reflects only the languages for which you have "
 "a dictionary installed.</small>"
 msgstr "<small>รายชื่อภาษานี้จะมีเพียงภาษาที่คุณได้ติดตั้งพจนานุกรมไว้เท่านั้น</small>"
 
-#: ../src/empathy-preferences.glade.h:10
+#: ../src/empathy-preferences.glade.h:7
 msgid "Automatically _connect on startup "
 msgstr "เชื่อม_ต่อโดยอัตโนมัติเมื่อเริ่มทำงาน"
 
-#: ../src/empathy-preferences.glade.h:11
+#: ../src/empathy-preferences.glade.h:8
 msgid "Avatars are user chosen images shown in the contact list"
 msgstr "รูปแทนตัวเป็นรูปที่ผู้ใช้เลือกแทนตัวเองในรายชื่อผู้ติดต่อ"
 
-#: ../src/empathy-preferences.glade.h:12
+#: ../src/empathy-preferences.glade.h:9
 msgid "Chat Th_eme:"
 msgstr "ชุด_ตกแต่งหน้าต่างสนทนา:"
 
+#: ../src/empathy-preferences.glade.h:10
+msgid "Disable notifications when _away or busy"
+msgstr "ปิดการแจ้งเหตุเมื่อไ_ม่อยู่หรือไม่ว่าง"
+
+#: ../src/empathy-preferences.glade.h:11
+msgid "Disable sounds when _away or busy"
+msgstr "ปิดการใช้เสียงเมื่อไ_ม่อยู่หรือไม่ว่าง"
+
+#: ../src/empathy-preferences.glade.h:12
+msgid "Enable notifications when the _chat is not focused"
+msgstr "เปิดใช้การแจ้งเหตุเมื่อหน้าต่าง_สนทนาไม่ได้โฟกัส"
+
 #: ../src/empathy-preferences.glade.h:13
-msgid "Display notifications when contacts come _online"
-msgstr "แ_สดงการแจ้งเหตุเมื่อผู้ติดต่อออนไลน์"
-
-#: ../src/empathy-preferences.glade.h:14
-msgid "Enable sounds when _away"
-msgstr "เปิดใช้เสียงเมื่อไม่_อยู่"
-
-#: ../src/empathy-preferences.glade.h:15
-msgid "Enable sounds when _busy"
-msgstr "เปิดใช้เสียงเมื่อไม่_ว่าง"
-
-#: ../src/empathy-preferences.glade.h:16
 msgid "General"
 msgstr "ทั่วไป"
 
-#: ../src/empathy-preferences.glade.h:17
+#: ../src/empathy-preferences.glade.h:14
 msgid "Notifications"
 msgstr "การแจ้งเหตุ"
 
-#: ../src/empathy-preferences.glade.h:18
+#: ../src/empathy-preferences.glade.h:15
 msgid "Preferences"
 msgstr "ปรับแต่ง"
 
-#: ../src/empathy-preferences.glade.h:19
+#: ../src/empathy-preferences.glade.h:16
 msgid "Show _avatars"
 msgstr "แสดงรูปแ_ทนตัว"
 
-#: ../src/empathy-preferences.glade.h:20
+#: ../src/empathy-preferences.glade.h:17
 msgid "Show _smileys as images"
 msgstr "แสดงรูป_สีหน้าแบบรูปภาพ"
 
-#: ../src/empathy-preferences.glade.h:21
+#: ../src/empathy-preferences.glade.h:18
 msgid "Show co_mpact contact list"
 msgstr "แสดงรายชื่อผู้ติดต่อแบบ_กระชับ"
 
-#: ../src/empathy-preferences.glade.h:22
+#: ../src/empathy-preferences.glade.h:19
 msgid "Sort by _name"
 msgstr "เรียงตาม_ชื่อ"
 
-#: ../src/empathy-preferences.glade.h:23
+#: ../src/empathy-preferences.glade.h:20
 msgid "Sort by s_tate"
 msgstr "เรียงตามส_ถานะ"
 
-#: ../src/empathy-preferences.glade.h:24
+#: ../src/empathy-preferences.glade.h:21
+msgid "Sounds"
+msgstr "เสียง"
+
+#: ../src/empathy-preferences.glade.h:22
 msgid "Spell Checking"
 msgstr "การตรวจตัวสะกด"
 
-#: ../src/empathy-preferences.glade.h:25
+#: ../src/empathy-preferences.glade.h:23
 msgid "Themes"
 msgstr "ชุดตกแต่ง"
+
+#: ../src/empathy-preferences.glade.h:24
+msgid "_Enable bubble notifications"
+msgstr "เ_ปิดใช้กรอบคำพูดแจ้งเหตุ"
+
+#: ../src/empathy-preferences.glade.h:25
+msgid "_Enable sound notifications"
+msgstr "เ_ปิดใช้การแจ้งเหตุด้วยเสียง"
 
 #: ../src/empathy-preferences.glade.h:26
 msgid "_Open new chats in separate windows"
 msgstr "_เปิดการสนทนาใหม่ในหน้าต่างแยก"
-
-#: ../src/empathy-preferences.glade.h:27
-msgid "_Play sound when messages arrive"
-msgstr "เ_ล่นเสียงเมื่อมีข้อความเข้า"
 
 #: ../src/empathy-status-icon.glade.h:1
 msgid "Status"
@@ -1796,3 +2116,97 @@ msgstr "_ออก"
 #: ../src/empathy-status-icon.glade.h:4
 msgid "_Show Contact List"
 msgstr "แ_สดงรายชื่อผู้ติดต่อ"
+
+#: ../src/empathy-tube-dispatch.c:364
+#, c-format
+msgid "Unable to start application for service %s: %s"
+msgstr "ไม่สามารถเปิดโปรแกรมสำหรับบริการ %s: %s"
+
+#: ../src/empathy-tube-dispatch.c:435
+#, c-format
+msgid ""
+"An invitation was offered for service %s, but you don't have the needed "
+"application to handle it"
+msgstr "คุณได้รับคำเชิญสำหรับบริการ %s แต่คุณไม่มีโปรแกรมที่จะจัดการคำเชิญนี้"
+
+#~ msgid "Enable popup when contact is available"
+#~ msgstr "แสดงข้อความผุดขึ้นเมื่อผู้ติดต่ออยู่"
+
+#~ msgid "Enable sound when busy"
+#~ msgstr "เปิดใช้เสียงเมื่อไม่ว่าง"
+
+#~ msgid "Closed"
+#~ msgstr "ปิดแล้ว"
+
+#~ msgid "End this call?"
+#~ msgstr "จบการเรียกนี้หรือไม่?"
+
+#~ msgid "Closing this window will end the call in progress."
+#~ msgstr "การปิดหน้าต่างนี้ จะจบการเรียกที่ยังดำเนินการอยู่"
+
+#~ msgid "_End Call"
+#~ msgstr "_จบการเรียก"
+
+#~ msgid "Empathy Call"
+#~ msgstr "การเรียก Empathy"
+
+#~ msgid "Readying"
+#~ msgstr "กำลังเตรียมพร้อม"
+
+#~ msgid "%s - Empathy Call"
+#~ msgstr "%s - การเรียก Empathy"
+
+#~ msgid ""
+#~ "Incoming call from %s rejected because there is already a running call."
+#~ msgstr "การเรียกเข้าจาก %s ถูกปฏิเสธเพราะมีการคุยสายดำเนินอยู่"
+
+#~ msgid "#"
+#~ msgstr "#"
+
+#~ msgid "*"
+#~ msgstr "*"
+
+#~ msgid "0"
+#~ msgstr "0"
+
+#~ msgid "1"
+#~ msgstr "1"
+
+#~ msgid "2"
+#~ msgstr "2"
+
+#~ msgid "3"
+#~ msgstr "3"
+
+#~ msgid "4"
+#~ msgstr "4"
+
+#~ msgid "5"
+#~ msgstr "5"
+
+#~ msgid "6"
+#~ msgstr "6"
+
+#~ msgid "7"
+#~ msgstr "7"
+
+#~ msgid "8"
+#~ msgstr "8"
+
+#~ msgid "9"
+#~ msgstr "9"
+
+#~ msgid "<b>Keypad</b>"
+#~ msgstr "<b>แป้นตัวเลข</b>"
+
+#~ msgid "Invitation Error"
+#~ msgstr "ข้อผิดพลาดเกี่ยวกับการเชิญ"
+
+#~ msgid "<b>Audio</b>"
+#~ msgstr "<b>เสียง</b>"
+
+#~ msgid "<b>Visual</b>"
+#~ msgstr "<b>การแสดงผล</b>"
+
+#~ msgid "Enable sounds when _busy"
+#~ msgstr "เปิดใช้เสียงเมื่อไม่_ว่าง"
