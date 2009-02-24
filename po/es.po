@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: empathy.HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=empathy&component=general\n"
-"POT-Creation-Date: 2009-02-13 20:48+0000\n"
-"PO-Revision-Date: 2009-02-14 14:03+0100\n"
+"POT-Creation-Date: 2009-02-16 21:24+0000\n"
+"PO-Revision-Date: 2009-02-24 15:06+0100\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -247,19 +247,13 @@ msgstr ""
 "conversaciones."
 
 #: ../data/empathy.schemas.in.h:47
-msgid "Whether or not to play a sound notifications when away or busy."
-msgstr ""
-"Indica si se deben reproducir sonidos de notificaciones cuando se esté "
-"ausente u ocupado."
-
-#: ../data/empathy.schemas.in.h:48
 msgid ""
 "Whether or not to play a sound to notify for contacts logging in the network."
 msgstr ""
 "Indica si se debe reproducir un sonido para notificar los inicios de sesión "
 "de los contactos en la red."
 
-#: ../data/empathy.schemas.in.h:49
+#: ../data/empathy.schemas.in.h:48
 msgid ""
 "Whether or not to play a sound to notify for contacts logging off the "
 "network."
@@ -267,32 +261,39 @@ msgstr ""
 "Indica si se debe reproducir un sonido para notificar las finalizaciones de "
 "sesión de los contactos en la red."
 
-#: ../data/empathy.schemas.in.h:50
+#: ../data/empathy.schemas.in.h:49
 msgid "Whether or not to play a sound to notify for events."
 msgstr "Indica si se debe reproducir un sonido para notificar eventos."
 
-#: ../data/empathy.schemas.in.h:51
+#: ../data/empathy.schemas.in.h:50
 msgid "Whether or not to play a sound to notify for incoming messages."
 msgstr ""
 "Indica si se debe reproducir un sonido para notificar mensajes entrantes."
 
-#: ../data/empathy.schemas.in.h:52
+#: ../data/empathy.schemas.in.h:51
 msgid "Whether or not to play a sound to notify for new conversations."
 msgstr ""
 "Indica si se debe reproducir un sonido para notificar conversaciones nuevas."
 
-#: ../data/empathy.schemas.in.h:53
+#: ../data/empathy.schemas.in.h:52
 msgid "Whether or not to play a sound to notify for outgoing messages."
 msgstr ""
 "Indica si se debe reproducir un sonido para notificar mensajes salientes."
 
-#: ../data/empathy.schemas.in.h:54
+#: ../data/empathy.schemas.in.h:53
 msgid "Whether or not to play a sound when logging in a network."
 msgstr "Indica si se debe reproducir un sonido al iniciar sesión en una red."
 
-#: ../data/empathy.schemas.in.h:55
+#: ../data/empathy.schemas.in.h:54
 msgid "Whether or not to play a sound when logging off a network."
 msgstr "Indica si se debe reproducir un sonido al finalizar sesión en una red."
+
+#: ../data/empathy.schemas.in.h:55
+#| msgid "Whether or not to play a sound notifications when away or busy."
+msgid "Whether or not to play sound notifications when away or busy."
+msgstr ""
+"Indica si se deben reproducir sonidos de notificaciones cuando se esté "
+"ausente u ocupado."
 
 #: ../data/empathy.schemas.in.h:56
 msgid ""
@@ -684,7 +685,7 @@ msgstr "%s ha entrado en la sala"
 msgid "%s has left the room"
 msgstr "%s ha dejado la sala"
 
-#: ../libempathy-gtk/empathy-chat.c:1248 ../src/empathy-call-window.c:467
+#: ../libempathy-gtk/empathy-chat.c:1248 ../src/empathy-call-window.c:474
 msgid "Disconnected"
 msgstr "Desconectado"
 
@@ -714,7 +715,8 @@ msgid "_Open Link"
 msgstr "_Abrir enlace"
 
 #: ../libempathy-gtk/empathy-chat-text-view.c:439
-msgid "%A %d %B %Y"
+#| msgid "%A %d %B %Y"
+msgid "%A %B %d %Y"
 msgstr "%A %d %B %Y"
 
 #: ../libempathy-gtk/empathy-contact-dialogs.c:180
@@ -926,7 +928,7 @@ msgid "SSL"
 msgstr "SSL"
 
 #: ../libempathy-gtk/empathy-log-window.c:498
-#: ../src/empathy-import-dialog.c:276
+#: ../src/empathy-import-dialog.c:277
 msgid "Account"
 msgstr "Cuenta"
 
@@ -1422,43 +1424,43 @@ msgstr ""
 msgid "Type:"
 msgstr "Tipo:"
 
-#: ../src/empathy-call-window.c:180
+#: ../src/empathy-call-window.c:187
 msgid "Contrast"
 msgstr "Contraste"
 
-#: ../src/empathy-call-window.c:180
+#: ../src/empathy-call-window.c:187
 msgid "Brightness"
 msgstr "Brillo"
 
-#: ../src/empathy-call-window.c:180
+#: ../src/empathy-call-window.c:187
 msgid "Gamma"
 msgstr "Gamma"
 
-#: ../src/empathy-call-window.c:212
+#: ../src/empathy-call-window.c:219
 msgid "Volume"
 msgstr "Volumen"
 
-#: ../src/empathy-call-window.c:288
+#: ../src/empathy-call-window.c:295
 msgid "_Sidebar"
 msgstr "Barra _lateral"
 
-#: ../src/empathy-call-window.c:306
+#: ../src/empathy-call-window.c:313
 msgid "Dialpad"
 msgstr "Teclado de llamada"
 
-#: ../src/empathy-call-window.c:310
+#: ../src/empathy-call-window.c:317
 msgid "Audio input"
 msgstr "Entrada de sonido"
 
-#: ../src/empathy-call-window.c:314
+#: ../src/empathy-call-window.c:321
 msgid "Video input"
 msgstr "Entrada de vídeo"
 
-#: ../src/empathy-call-window.c:327
+#: ../src/empathy-call-window.c:334
 msgid "Connecting..."
 msgstr "Conectando..."
 
-#: ../src/empathy-call-window.c:490
+#: ../src/empathy-call-window.c:488
 #, c-format
 msgid "Connected -- %d:%02dm"
 msgstr "Conectado -- %d:%02dm"
@@ -1468,8 +1470,9 @@ msgid "Hang up"
 msgstr "Colgar"
 
 #: ../src/empathy-call-window.glade.h:2
-msgid "Send Video"
-msgstr "Envía vídeo"
+#| msgid "Send Video"
+msgid "Send Audio"
+msgstr "Enviar sonido"
 
 #: ../src/empathy-call-window.glade.h:3
 msgid "Send video"
@@ -1845,19 +1848,20 @@ msgstr ""
 "Eliminar transferencias de archivo completadas, canceladas y fallidas de la "
 "lista"
 
-#: ../src/empathy-import-dialog.c:254
+#. Translators: this is the header of a treeview column
+#: ../src/empathy-import-dialog.c:255
 msgid "Import"
 msgstr "Importar"
 
-#: ../src/empathy-import-dialog.c:263
+#: ../src/empathy-import-dialog.c:264
 msgid "Protocol"
 msgstr "Protocolo"
 
-#: ../src/empathy-import-dialog.c:289
+#: ../src/empathy-import-dialog.c:290
 msgid "Source"
 msgstr "Origen"
 
-#: ../src/empathy-import-dialog.c:377
+#: ../src/empathy-import-dialog.c:378
 msgid ""
 "No accounts to import could be found. Empathy currently only supports "
 "importing accounts from Pidgin."
@@ -2060,7 +2064,8 @@ msgid "<b>Appearance</b>"
 msgstr "<b>Apariencia</b>"
 
 #: ../src/empathy-preferences.glade.h:2
-msgid "<b>Behaviour</b>"
+#| msgid "<b>Behaviour</b>"
+msgid "<b>Behavior</b>"
 msgstr "<b>Comportamiento</b>"
 
 #: ../src/empathy-preferences.glade.h:3
