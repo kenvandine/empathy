@@ -110,8 +110,10 @@ ft_manager_format_interval (gint interval)
   secs = interval;
 
   if (hours > 0)
+    /* Translators: time left, when it is more than one hour */
     return g_strdup_printf (_("%u:%02u.%02u"), hours, mins, secs);
   else
+    /* Translators: time left, when is is less than one hour */
     return g_strdup_printf (_("%02u.%02u"), mins, secs);
 }
 

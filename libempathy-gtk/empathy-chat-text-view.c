@@ -436,6 +436,8 @@ chat_text_view_append_timestamp (EmpathyChatTextView *view,
 
 		date = g_date_new ();
 		g_date_set_time_t (date, timestamp);
+		/* Translators: timestamp displayed between conversations in
+		 * chat windows (strftime format string) */
 		g_date_strftime (buf, 256, _("%A %B %d %Y"), date);
 		g_string_append (str, buf);
 		g_string_append (str, ", ");

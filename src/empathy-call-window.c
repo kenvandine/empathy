@@ -569,6 +569,7 @@ empathy_call_window_src_added_cb (EmpathyCallHandler *handler,
 
   g_object_unref (call);
 
+  /* Translators: number of minutes:seconds the caller has been connected */
   str = g_strdup_printf (_("Connected -- %d:%02dm"), 0, 0);
   empathy_call_window_status_message (self, str);
   g_free (str);
