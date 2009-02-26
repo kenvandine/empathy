@@ -13,6 +13,10 @@ public_icons = \
 	hicolor_apps_scalable_empathy.svg \
 	$(NULL)
 
+private_icons_themes = \
+	hicolor	\
+	$(NULL)
+
 private_icons = \
 	hicolor_actions_16x16_im-message-new.png \
 	hicolor_actions_22x22_im-message-new.png \
@@ -132,10 +136,16 @@ update-icon-cache:
 		for theme in $(public_icons_themes); do \
 			$(gtk_update_icon_cache) $(datadir)/icons/$$theme; \
 		done; \
+		for theme in $(private_icons_themes); do \
+			$(gtk_update_icon_cache) $(pkgdatadir)/icons/$$theme; \
+		done; \
 	else \
 		echo "*** Icon cache not updated.  After (un)install, run this:"; \
 		for theme in $(public_icons_themes); do \
 			echo "***   $(gtk_update_icon_cache) $(datadir)/icons/$$theme"; \
+		done; \
+		for theme in $(private_icons_themes); do \
+			echo "***   $(gtk_update_icon_cache) $(pkgdatadir)/icons/$$theme"; \
 		done; \
 	fi
 
