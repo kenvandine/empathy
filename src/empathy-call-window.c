@@ -550,6 +550,7 @@ empathy_call_window_channel_closed_cb (TfChannel *channel, gpointer user_data)
   gtk_widget_set_sensitive (priv->camera_button, FALSE);
 }
 
+/* Called from the streaming thread */
 static void
 empathy_call_window_src_added_cb (EmpathyCallHandler *handler,
   GstPad *src, guint media_type, gpointer user_data)
@@ -603,6 +604,7 @@ empathy_call_window_src_added_cb (EmpathyCallHandler *handler,
   gst_object_unref (pad);
 }
 
+/* Called from the streaming thread */
 static void
 empathy_call_window_sink_added_cb (EmpathyCallHandler *handler,
   GstPad *sink, guint media_type, gpointer user_data)
