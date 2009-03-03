@@ -22,6 +22,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <math.h>
+
 #include <gst/gst.h>
 #include <gtk/gtk.h>
 #include <glib/gi18n.h>
@@ -285,28 +287,60 @@ empathy_call_window_create_video_input (EmpathyCallWindow *self)
   return hbox;
 }
 
+static void
+empathy_call_window_mic_volume_changed_cb (GtkAdjustment *adj,
+  EmpathyCallWindow *self)
+{
+  EmpathyCallWindowPriv *priv = GET_PRIV (self);
+
+  empathy_audio_src_set_volume (EMPATHY_GST_AUDIO_SRC (priv->audio_input),
+    gtk_adjustment_get_value (adj)/100);
+}
+
+static void
+empathy_call_window_audio_input_level_changed_cb (EmpathyGstAudioSrc *src,
+  gdouble level, GtkProgressBar *bar)
+{
+  gdouble value;
+
+  value = CLAMP (pow (10, level / 20), 0.0, 1.0);
+  gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (bar), value);
+}
+
 static GtkWidget *
 empathy_call_window_create_audio_input (EmpathyCallWindow *self)
 {
+  EmpathyCallWindowPriv *priv = GET_PRIV (self);
   GtkWidget *hbox, *vbox, *scale, *progress, *label;
+  GtkAdjustment *adj;
 
   hbox = gtk_hbox_new (TRUE, 3);
 
   vbox = gtk_vbox_new (FALSE, 3);
   gtk_box_pack_start (GTK_BOX (hbox), vbox, FALSE, FALSE, 3);
 
-  scale = gtk_vscale_new_with_range (0, 100, 10);
+  scale = gtk_vscale_new_with_range (0, 150, 100);
   gtk_range_set_inverted (GTK_RANGE (scale), TRUE);
   label = gtk_label_new (_("Volume"));
+
+  adj = gtk_range_get_adjustment (GTK_RANGE (scale));
+  gtk_adjustment_set_value (adj,
+    empathy_audio_src_get_volume (
+      EMPATHY_GST_AUDIO_SRC (priv->audio_input)) * 100);
+
+  g_signal_connect (G_OBJECT (adj), "value-changed",
+    G_CALLBACK (empathy_call_window_mic_volume_changed_cb), self);
 
   gtk_box_pack_start (GTK_BOX (vbox), scale, TRUE, TRUE, 3);
   gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 3);
 
-
   progress = gtk_progress_bar_new ();
   gtk_progress_bar_set_orientation (GTK_PROGRESS_BAR (progress),
     GTK_PROGRESS_BOTTOM_TO_TOP);
-  gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (progress), 0.5);
+  gtk_progress_bar_set_fraction (GTK_PROGRESS_BAR (progress), 0);
+
+  g_signal_connect (priv->audio_input, "peak-level-changed",
+    G_CALLBACK (empathy_call_window_audio_input_level_changed_cb), progress);
 
   gtk_box_pack_start (GTK_BOX (hbox), progress, FALSE, FALSE, 3);
 
