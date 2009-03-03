@@ -94,6 +94,10 @@ struct _EmpathyCallWindowPriv
   GTimer *timer;
   guint timer_id;
 
+  GtkWidget *video_contrast;
+  GtkWidget *video_brightness;
+  GtkWidget *video_gamma;
+
   GMutex *lock;
 };
 
@@ -120,6 +124,9 @@ static void empathy_call_window_hangup (EmpathyCallWindow *window);
 
 static void empathy_call_window_status_message (EmpathyCallWindow *window,
   gchar *message);
+
+static gboolean empathy_call_window_bus_message (GstBus *bus,
+  GstMessage *message, gpointer user_data);
 
 static void
 empathy_call_window_volume_changed_cb (GtkScaleButton *button,
@@ -263,28 +270,126 @@ empathy_call_window_create_dtmf (EmpathyCallWindow *self)
 }
 
 static GtkWidget *
+empathy_call_window_create_video_input_add_slider (EmpathyCallWindow *self,
+  gchar *label_text, GtkWidget *bin)
+{
+   GtkWidget *vbox = gtk_vbox_new (FALSE, 2);
+   GtkWidget *scale = gtk_vscale_new_with_range (0, 100, 10);
+   GtkWidget *label = gtk_label_new (label_text);
+
+   gtk_widget_set_sensitive (scale, FALSE);
+
+   gtk_container_add (GTK_CONTAINER (bin), vbox);
+
+   gtk_range_set_inverted (GTK_RANGE (scale), TRUE);
+   gtk_box_pack_start (GTK_BOX (vbox), scale, TRUE, TRUE, 0);
+   gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
+
+   return scale;
+}
+
+static void
+empathy_call_window_video_contrast_changed_cb (GtkAdjustment *adj,
+  EmpathyCallWindow *self)
+
+{
+  EmpathyCallWindowPriv *priv = GET_PRIV (self);
+
+  empathy_video_src_set_channel (priv->video_input,
+    EMPATHY_GST_VIDEO_SRC_CHANNEL_CONTRAST, gtk_adjustment_get_value (adj));
+}
+
+static void
+empathy_call_window_video_brightness_changed_cb (GtkAdjustment *adj,
+  EmpathyCallWindow *self)
+
+{
+  EmpathyCallWindowPriv *priv = GET_PRIV (self);
+
+  empathy_video_src_set_channel (priv->video_input,
+    EMPATHY_GST_VIDEO_SRC_CHANNEL_BRIGHTNESS, gtk_adjustment_get_value (adj));
+}
+
+static void
+empathy_call_window_video_gamma_changed_cb (GtkAdjustment *adj,
+  EmpathyCallWindow *self)
+
+{
+  EmpathyCallWindowPriv *priv = GET_PRIV (self);
+
+  empathy_video_src_set_channel (priv->video_input,
+    EMPATHY_GST_VIDEO_SRC_CHANNEL_GAMMA, gtk_adjustment_get_value (adj));
+}
+
+
+static GtkWidget *
 empathy_call_window_create_video_input (EmpathyCallWindow *self)
 {
+  EmpathyCallWindowPriv *priv = GET_PRIV (self);
   GtkWidget *hbox;
-  int i;
-  gchar *controls[] = { _("Contrast"), _("Brightness"), _("Gamma"), NULL };
 
   hbox = gtk_hbox_new (TRUE, 3);
 
-  for (i = 0; controls[i] != NULL; i++)
-    {
-      GtkWidget *vbox = gtk_vbox_new (FALSE, 2);
-      GtkWidget *scale = gtk_vscale_new_with_range (0, 100, 10);
-      GtkWidget *label = gtk_label_new (controls[i]);
+  priv->video_contrast = empathy_call_window_create_video_input_add_slider (
+    self,  _("Contrast"), hbox);
 
-      gtk_container_add (GTK_CONTAINER (hbox), vbox);
+  priv->video_brightness = empathy_call_window_create_video_input_add_slider (
+    self,  _("Brightness"), hbox);
 
-      gtk_range_set_inverted (GTK_RANGE (scale), TRUE);
-      gtk_box_pack_start (GTK_BOX (vbox), scale, TRUE, TRUE, 0);
-      gtk_box_pack_start (GTK_BOX (vbox), label, FALSE, FALSE, 0);
-    }
+  priv->video_gamma = empathy_call_window_create_video_input_add_slider (
+    self,  _("Gamma"), hbox);
 
   return hbox;
+}
+
+static void
+empathy_call_window_setup_video_input (EmpathyCallWindow *self)
+{
+  EmpathyCallWindowPriv *priv = GET_PRIV (self);
+  guint supported;
+  GtkAdjustment *adj;
+
+  supported = empathy_video_src_get_supported_channels (priv->video_input);
+
+  if (supported & EMPATHY_GST_VIDEO_SRC_SUPPORTS_CONTRAST)
+    {
+      adj = gtk_range_get_adjustment (GTK_RANGE (priv->video_contrast));
+
+      gtk_adjustment_set_value (adj,
+        empathy_video_src_get_channel (priv->video_input,
+          EMPATHY_GST_VIDEO_SRC_CHANNEL_CONTRAST));
+
+      g_signal_connect (G_OBJECT (adj), "value-changed",
+        G_CALLBACK (empathy_call_window_video_contrast_changed_cb), self);
+
+      gtk_widget_set_sensitive (priv->video_contrast, TRUE);
+    }
+
+  if (supported & EMPATHY_GST_VIDEO_SRC_SUPPORTS_BRIGHTNESS)
+    {
+      adj = gtk_range_get_adjustment (GTK_RANGE (priv->video_brightness));
+
+      gtk_adjustment_set_value (adj,
+        empathy_video_src_get_channel (priv->video_input,
+          EMPATHY_GST_VIDEO_SRC_CHANNEL_BRIGHTNESS));
+
+      g_signal_connect (G_OBJECT (adj), "value-changed",
+        G_CALLBACK (empathy_call_window_video_brightness_changed_cb), self);
+      gtk_widget_set_sensitive (priv->video_brightness, TRUE);
+    }
+
+  if (supported & EMPATHY_GST_VIDEO_SRC_SUPPORTS_GAMMA)
+    {
+      adj = gtk_range_get_adjustment (GTK_RANGE (priv->video_gamma));
+
+      gtk_adjustment_set_value (adj,
+        empathy_video_src_get_channel (priv->video_input,
+          EMPATHY_GST_VIDEO_SRC_CHANNEL_GAMMA));
+
+      g_signal_connect (G_OBJECT (adj), "value-changed",
+        G_CALLBACK (empathy_call_window_video_gamma_changed_cb), self);
+      gtk_widget_set_sensitive (priv->video_gamma, TRUE);
+    }
 }
 
 static void
@@ -381,6 +486,8 @@ empathy_call_window_init (EmpathyCallWindow *self)
   gtk_paned_pack1 (GTK_PANED(pane), hbox, TRUE, FALSE);
 
   bus = gst_pipeline_get_bus (GST_PIPELINE (priv->pipeline));
+
+  gst_bus_add_watch (bus, empathy_call_window_bus_message, self);
 
   priv->video_output = empathy_video_widget_new (bus);
   gtk_box_pack_start (GTK_BOX (hbox), priv->video_output, TRUE, TRUE, 3);
@@ -782,12 +889,39 @@ empathy_call_window_sink_added_cb (EmpathyCallHandler *handler,
 
 }
 
+static gboolean
+empathy_call_window_bus_message (GstBus *bus, GstMessage *message,
+  gpointer user_data)
+{
+  EmpathyCallWindow *self = EMPATHY_CALL_WINDOW (user_data);
+  EmpathyCallWindowPriv *priv = GET_PRIV (self);
+
+  empathy_call_handler_bus_message (priv->handler, bus, message);
+
+  switch (GST_MESSAGE_TYPE (message))
+    {
+      case GST_MESSAGE_STATE_CHANGED:
+        if (GST_MESSAGE_SRC (message) == GST_OBJECT (priv->video_input))
+          {
+            GstState newstate;
+
+            gst_message_parse_state_changed (message, NULL, &newstate, NULL);
+            if (newstate == GST_STATE_PAUSED)
+              empathy_call_window_setup_video_input (self);
+          }
+        break;
+      default:
+        break;
+    }
+
+  return TRUE;
+}
+
 static void
 empathy_call_window_realized_cb (GtkWidget *widget, EmpathyCallWindow *window)
 {
   EmpathyCallWindowPriv *priv = GET_PRIV (window);
   GstElement *preview;
-  GstBus *bus;
 
   g_signal_connect (priv->handler, "conference-added",
     G_CALLBACK (empathy_call_window_conference_added_cb), window);
@@ -798,8 +932,6 @@ empathy_call_window_realized_cb (GtkWidget *widget, EmpathyCallWindow *window)
   g_signal_connect (priv->handler, "sink-pad-added",
     G_CALLBACK (empathy_call_window_sink_added_cb), window);
 
-  bus = gst_pipeline_get_bus (GST_PIPELINE (priv->pipeline));
-  empathy_call_handler_set_bus (priv->handler, bus);
   empathy_call_handler_start_call (priv->handler);
 
   preview = empathy_video_widget_get_element (
@@ -811,8 +943,6 @@ empathy_call_window_realized_cb (GtkWidget *widget, EmpathyCallWindow *window)
     preview, NULL);
 
   gst_element_set_state (priv->pipeline, GST_STATE_PLAYING);
-
-  g_object_unref (bus);
 }
 
 static gboolean
