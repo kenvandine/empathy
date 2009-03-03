@@ -36,6 +36,7 @@ libempathy_la_SOURCES =					\
 	empathy-irc-network-manager.c			\
 	empathy-irc-server.c				\
 	empathy-log-manager.c				\
+	empathy-log-source-empathy.c			\
 	empathy-message.c				\
 	empathy-status-presets.c			\
 	empathy-time.c					\

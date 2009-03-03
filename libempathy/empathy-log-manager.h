@@ -19,6 +19,7 @@
  * Boston, MA 02111-1307, USA.
  *
  * Authors: Xavier Claessens <xclaesse@gmail.com>
+ *          Jonny Lamb <jonny.lamb@collabora.co.uk>
  */
 
 #ifndef __EMPATHY_LOG_MANAGER_H__
@@ -42,6 +43,7 @@ G_BEGIN_DECLS
 typedef struct _EmpathyLogManager      EmpathyLogManager;
 typedef struct _EmpathyLogManagerClass EmpathyLogManagerClass;
 typedef struct _EmpathyLogSearchHit    EmpathyLogSearchHit;
+typedef struct _EmpathyLogSource       EmpathyLogSource;
 
 struct _EmpathyLogManager {
 	GObject parent;
@@ -60,6 +62,40 @@ struct _EmpathyLogSearchHit {
 	gchar     *date;
 };
 
+struct _EmpathyLogSource {
+	gboolean (*exists) (EmpathyLogManager *manager,
+			    McAccount         *account,
+			    const gchar       *chat_id,
+			    gboolean           chatroom);
+
+	void (*add_message) (EmpathyLogManager *manager,
+			     const gchar       *chat_id,
+			     gboolean           chatroom,
+			     EmpathyMessage    *message);
+
+	GList * (*get_dates) (EmpathyLogManager *manager,
+			      McAccount         *account,
+			      const gchar       *chat_id,
+			      gboolean           chatroom);
+
+	GList * (*get_messages_for_date) (EmpathyLogManager *manager,
+					  McAccount         *account,
+					  const gchar       *chat_id,
+					  gboolean           chatroom,
+					  const gchar       *date);
+
+	GList * (*get_last_messages) (EmpathyLogManager *manager,
+				      McAccount         *account,
+				      const gchar       *chat_id,
+				      gboolean           chatroom);
+
+	GList * (*get_chats) (EmpathyLogManager *manager,
+			      McAccount         *account);
+
+	GList * (*search_new) (EmpathyLogManager *manager,
+			       const gchar       *text);
+};
+
 GType              empathy_log_manager_get_type              (void) G_GNUC_CONST;
 EmpathyLogManager *empathy_log_manager_dup_singleton         (void);
 void               empathy_log_manager_add_message           (EmpathyLogManager *manager,
@@ -74,8 +110,6 @@ GList *            empathy_log_manager_get_dates             (EmpathyLogManager 
 							      McAccount         *account,
 							      const gchar       *chat_id,
 							      gboolean           chatroom);
-GList *            empathy_log_manager_get_messages_for_file (EmpathyLogManager *manager,
-							      const gchar       *filename);
 GList *            empathy_log_manager_get_messages_for_date (EmpathyLogManager *manager,
 							      McAccount         *account,
 							      const gchar       *chat_id,
@@ -85,14 +119,13 @@ GList *            empathy_log_manager_get_last_messages     (EmpathyLogManager 
 							      McAccount         *account,
 							      const gchar       *chat_id,
 							      gboolean           chatroom);
-GList *            empathy_log_manager_get_messages_for_file (EmpathyLogManager *manager,
-							      const gchar       *filename);
 GList *            empathy_log_manager_get_chats             (EmpathyLogManager *manager,
 							      McAccount         *account);
 GList *            empathy_log_manager_search_new            (EmpathyLogManager *manager,
 							      const gchar       *text);
 void               empathy_log_manager_search_free           (GList             *hits);
 gchar *            empathy_log_manager_get_date_readable     (const gchar       *date);
+void               empathy_log_manager_search_hit_free       (EmpathyLogSearchHit *hit);
 
 G_END_DECLS
 
