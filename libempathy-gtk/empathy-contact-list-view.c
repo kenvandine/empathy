@@ -31,10 +31,12 @@
 #include <gdk/gdkkeysyms.h>
 #include <gtk/gtk.h>
 
+#include <telepathy-glib/util.h>
 #include <libmissioncontrol/mc-account.h>
 
+#include <libempathy/empathy-account-manager.h>
 #include <libempathy/empathy-call-factory.h>
-#include <libempathy/empathy-contact-factory.h>
+#include <libempathy/empathy-tp-contact-factory.h>
 #include <libempathy/empathy-contact-list.h>
 #include <libempathy/empathy-contact-groups.h>
 #include <libempathy/empathy-dispatcher.h>
@@ -122,8 +124,8 @@ contact_list_view_tooltip_destroy_cb (GtkWidget              *widget,
 	
 	if (priv->tooltip_widget) {
 		DEBUG ("Tooltip destroyed");
+		g_object_unref (priv->tooltip_widget);
 		priv->tooltip_widget = NULL;
-		g_object_unref (widget);
 	}
 }
 
@@ -188,8 +190,48 @@ OUT:
 	return ret;
 }
 
+typedef struct {
+	gchar *new_group;
+	gchar *old_group;
+	GdkDragAction action;
+} DndGetContactData;
+
 static void
-contact_list_view_drag_data_received (GtkWidget         *widget,
+contact_list_view_dnd_get_contact_free (DndGetContactData *data)
+{
+	g_free (data->new_group);
+	g_free (data->old_group);
+	g_slice_free (DndGetContactData, data);
+}
+
+static void
+contact_list_view_drag_got_contact (EmpathyTpContactFactory *factory,
+				    GList                   *contacts,
+				    gpointer                 user_data,
+				    GObject                 *view)
+{
+	EmpathyContactListViewPriv *priv = GET_PRIV (view);
+	DndGetContactData          *data = user_data;
+	EmpathyContactList         *list;
+	EmpathyContact             *contact = contacts->data;
+
+
+	DEBUG ("contact %s (%d) dragged from '%s' to '%s'",
+		empathy_contact_get_id (contact),
+		empathy_contact_get_handle (contact),
+		data->old_group, data->new_group);
+
+	list = empathy_contact_list_store_get_list_iface (priv->store);
+	if (data->new_group) {
+		empathy_contact_list_add_to_group (list, contact, data->new_group);
+	}
+	if (data->old_group && data->action == GDK_ACTION_MOVE) {	
+		empathy_contact_list_remove_from_group (list, contact, data->old_group);
+	}
+}
+
+static void
+contact_list_view_drag_data_received (GtkWidget         *view,
 				      GdkDragContext    *context,
 				      gint               x,
 				      gint               y,
@@ -198,20 +240,53 @@ contact_list_view_drag_data_received (GtkWidget         *widget,
 				      guint              time)
 {
 	EmpathyContactListViewPriv *priv;
-	EmpathyContactList         *list;
-	EmpathyContactFactory      *factory;
+	EmpathyAccountManager      *account_manager;
+	EmpathyTpContactFactory    *factory = NULL;
 	McAccount                  *account;
 	GtkTreeModel               *model;
-	GtkTreePath                *path;
 	GtkTreeViewDropPosition     position;
-	EmpathyContact             *contact = NULL;
+	GtkTreePath                *path;
 	const gchar                *id;
-	gchar                     **strv;
+	gchar                     **strv = NULL;
+	const gchar                *account_id;
+	const gchar                *contact_id;
 	gchar                      *new_group = NULL;
 	gchar                      *old_group = NULL;
+	DndGetContactData          *data;
 	gboolean                    is_row;
+	gboolean                    success = TRUE;
 
-	priv = GET_PRIV (widget);
+	priv = GET_PRIV (view);
+	model = gtk_tree_view_get_model (GTK_TREE_VIEW (view));
+
+	/* Get destination group information. */
+	is_row = gtk_tree_view_get_dest_row_at_pos (GTK_TREE_VIEW (view),
+						    x,
+						    y,
+						    &path,
+						    &position);
+
+	if (is_row) {
+		new_group = empathy_contact_list_store_get_parent_group (model,
+			path, NULL);
+		gtk_tree_path_free (path);
+	}
+
+	/* Get source group information. */
+	if (priv->drag_row) {
+		path = gtk_tree_row_reference_get_path (priv->drag_row);
+		if (path) {
+			old_group = empathy_contact_list_store_get_parent_group (
+				model, path, NULL);
+			gtk_tree_path_free (path);
+		}
+	}
+
+	if (!tp_strdiff (old_group, new_group)) {
+		g_free (new_group);
+		g_free (old_group);
+		goto OUT;
+	}
 
 	id = (const gchar*) selection->data;
 	DEBUG ("Received %s%s drag & drop contact from roster with id:'%s'",
@@ -220,66 +295,45 @@ contact_list_view_drag_data_received (GtkWidget         *widget,
 		id);
 
 	strv = g_strsplit (id, "/", 2);
-	factory = empathy_contact_factory_dup_singleton ();
-	account = mc_account_lookup (strv[0]);
+	account_id = strv[0];
+	contact_id = strv[1];
+	account = mc_account_lookup (account_id);
 	if (account) {
-		contact = empathy_contact_factory_get_from_id (factory,
-							       account,
-							       strv[1]);
-		g_object_unref (account);
-	}
-	g_object_unref (factory);
-	g_strfreev (strv);
+		TpConnection *connection;
 
-	if (!contact) {
-		DEBUG ("No contact found associated with drag & drop");
-		return;
-	}
-
-	empathy_contact_run_until_ready (contact,
-					 EMPATHY_CONTACT_READY_HANDLE,
-					 NULL);
-
-	model = gtk_tree_view_get_model (GTK_TREE_VIEW (widget));
-
-	/* Get source group information. */
-	if (priv->drag_row) {
-		path = gtk_tree_row_reference_get_path (priv->drag_row);
-		if (path) {
-			old_group = empathy_contact_list_store_get_parent_group (model, path, NULL);
-			gtk_tree_path_free (path);
+		/* FIXME: We assume we have already an account manager */
+		account_manager = empathy_account_manager_dup_singleton ();
+		connection = empathy_account_manager_get_connection (account_manager,
+								     account);
+		if (connection) {
+			factory = empathy_tp_contact_factory_dup_singleton (connection);
 		}
+		g_object_unref (account_manager);
 	}
 
-	/* Get destination group information. */
-	is_row = gtk_tree_view_get_dest_row_at_pos (GTK_TREE_VIEW (widget),
-						    x,
-						    y,
-						    &path,
-						    &position);
-
-	if (is_row) {
-		new_group = empathy_contact_list_store_get_parent_group (model, path, NULL);
-		gtk_tree_path_free (path);
+	if (!factory) {
+		DEBUG ("Failed to get factory for account '%s'", account_id);
+		success = FALSE;
+		g_free (new_group);
+		g_free (old_group);
+		goto OUT;
 	}
 
-	DEBUG ("contact %s (%d) dragged from '%s' to '%s'",
-		empathy_contact_get_id (contact),
-		empathy_contact_get_handle (contact),
-		old_group, new_group);
+	data = g_slice_new0 (DndGetContactData);
+	data->new_group = new_group;
+	data->old_group = old_group;
+	data->action = context->action;
 
-	list = empathy_contact_list_store_get_list_iface (priv->store);
-	if (new_group) {
-		empathy_contact_list_add_to_group (list, contact, new_group);
-	}
-	if (old_group && context->action == GDK_ACTION_MOVE) {	
-		empathy_contact_list_remove_from_group (list, contact, old_group);
-	}
+	empathy_tp_contact_factory_get_from_ids (factory, 1, &contact_id,
+		contact_list_view_drag_got_contact,
+		data, (GDestroyNotify) contact_list_view_dnd_get_contact_free,
+		G_OBJECT (view));
 
-	g_free (old_group);
-	g_free (new_group);
+	g_object_unref (factory);
 
-	gtk_drag_finish (context, TRUE, FALSE, GDK_CURRENT_TIME);
+OUT:
+	g_strfreev (strv);
+	gtk_drag_finish (context, success, FALSE, GDK_CURRENT_TIME);
 }
 
 static gboolean
