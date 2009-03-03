@@ -1,3 +1,40 @@
+NEW in 2.25.92
+==============
+ - Hardcode some a default codec preferences
+ - Hook up the video input sidebar item (Sjoerd Simons).
+ - Hook up audio input panel (Sjoerd Simons).
+ - Use undrafted file transfer spec. (Jonny Lamb).
+
+Bugs fixed:
+ - Fixed #572875, Missing translator comments (fpeters)
+
+Translations:
+ - Added British English documentation. (Philip Withnall).
+ - Updated Czech translation (Lucas Lommer).
+ - Updated Slovenian translation (mateju).
+ - Updated Kannada translations (sprasad).
+ - Updated Polish translation (Tomasz Dominikowski).
+ - Updated German translation (joskulj).
+ - Updated Italian translation (Milo Casagrande).
+ - Updated Spanish translation (jorgegonz).
+ - Updated British English translation. (Philip Withnall).
+ - Updated th translation. (tkaroonb).
+ - Updated Malayalam translation (apravi).
+ - Updated German documentation (mariobl).
+ - Updated ja translation  (Takeshi AIHANA).
+ - Updated Swedish translation (dnylande).
+ - Updated Catalan translation (gforcada).
+ - Updated Brazilian Portuguese translation. (ogmaciel).
+ - updated latvian translation (Raivis Dejus).
+ - Updated sv translation  (Daniel Nylander).
+ - Updated Basque translation. (Inaki Larranaga Murgoitio).
+ - Updated Finnish translation (ituohela).
+ - Updated ko translation. (cwryu).
+ - Updated French translation (Laurent Coudeur, Claude Paroz).
+ - Updated ro translation  (Adi Roiban).
+ - Updated Hungarian translation (kelemeng).
+ - Updated ca translation  (Gil Forcada).
+
 NEW in 2.25.91
 ==============
  - Set the intial volume button level to a more correct one (Sjoerd Simons).
