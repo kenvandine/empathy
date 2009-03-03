@@ -41,6 +41,7 @@
 #include <libempathy/empathy-message.h>
 #include <libempathy/empathy-dispatcher.h>
 #include <libempathy/empathy-chatroom-manager.h>
+#include <libempathy/empathy-account-manager.h>
 #include <libempathy/empathy-utils.h>
 
 #include <libempathy-gtk/empathy-images.h>
@@ -1160,17 +1161,33 @@ chat_window_drag_data_received (GtkWidget        *widget,
 		McAccount             *account;
 		const gchar           *id;
 		gchar                **strv;
+		const gchar           *account_id;
+		const gchar           *contact_id;
 
 		id = (const gchar*) selection->data;
 
 		DEBUG ("DND contact from roster with id:'%s'", id);
 		
 		strv = g_strsplit (id, "/", 2);
-		account = mc_account_lookup (strv[0]);
-		chat = empathy_chat_window_find_chat (account, strv[1]);
+		account_id = strv[0];
+		contact_id = strv[1];
+		account = mc_account_lookup (account_id);
+		chat = empathy_chat_window_find_chat (account, contact_id);
 
 		if (!chat) {
-			empathy_dispatcher_chat_with_contact_id (account, strv[2], NULL, NULL);
+			EmpathyAccountManager *account_manager;
+			TpConnection *connection;
+
+			account_manager = empathy_account_manager_dup_singleton ();
+			connection = empathy_account_manager_get_connection (
+				account_manager, account);
+
+			if (connection) {
+				empathy_dispatcher_chat_with_contact_id (
+					connection, contact_id, NULL, NULL);
+			}
+
+			g_object_unref (account_manager);
 			g_object_unref (account);
 			g_strfreev (strv);
 			return;
