@@ -163,7 +163,7 @@ empathy_audio_sink_class_init (EmpathyGstAudioSinkClass
   object_class->set_property = empathy_audio_sink_set_property;
   object_class->get_property = empathy_audio_sink_get_property;
 
-  param_spec = g_param_spec_double ("volume", "Volume", "volume factory",
+  param_spec = g_param_spec_double ("volume", "Volume", "volume control",
     0.0, 5.0, 1.0,
     G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
   g_object_class_install_property (object_class, PROP_VOLUME, param_spec);
