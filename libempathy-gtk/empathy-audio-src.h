@@ -58,6 +58,9 @@ GType empathy_audio_src_get_type (void);
 
 GstElement *empathy_audio_src_new (void);
 
+void empathy_audio_src_set_volume (EmpathyGstAudioSrc *src, gdouble volume);
+gdouble empathy_audio_src_get_volume (EmpathyGstAudioSrc *src);
+
 G_END_DECLS
 
 #endif /* #ifndef __EMPATHY_GST_AUDIO_SRC_H__*/
