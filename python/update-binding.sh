@@ -11,7 +11,6 @@ python /usr/share/pygobject/2.0/codegen/h2def.py	\
 	empathy-call-factory.h			\
 	empathy-call-handler.h			\
 	empathy-contact.h			\
-	empathy-contact-factory.h		\
 	empathy-contact-groups.h		\
 	empathy-contact-list.h			\
 	empathy-contact-manager.h		\
@@ -34,7 +33,6 @@ python /usr/share/pygobject/2.0/codegen/h2def.py	\
 	empathy-tp-contact-factory.h		\
 	empathy-tp-contact-list.h		\
 	empathy-tp-file.h			\
-	empathy-tp-group.h			\
 	empathy-tp-roomlist.h			\
 	empathy-tp-tube.h			\
 	empathy-tube-handler.h			\
