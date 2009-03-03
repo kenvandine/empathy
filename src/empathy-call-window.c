@@ -65,6 +65,8 @@ struct _EmpathyCallWindowPriv
   gboolean dispose_has_run;
   EmpathyCallHandler *handler;
 
+  gboolean connected;
+
   GtkWidget *video_output;
   GtkWidget *video_preview;
   GtkWidget *sidebar;
@@ -86,6 +88,9 @@ struct _EmpathyCallWindowPriv
 
   GladeXML *glade;
   guint context_id;
+
+  GTimer *timer;
+  guint timer_id;
 
   GMutex *lock;
 };
@@ -413,6 +418,8 @@ empathy_call_window_init (EmpathyCallWindow *self)
     G_CALLBACK (empathy_call_window_delete_cb), self);
 
   empathy_call_window_status_message (self, _("Connecting..."));
+
+  priv->timer = g_timer_new ();
 }
 
 static void empathy_call_window_dispose (GObject *object);
@@ -511,6 +518,10 @@ empathy_call_window_dispose (GObject *object)
     g_object_unref (priv->video_tee);
   priv->video_tee = NULL;
 
+  if (priv->timer_id != 0)
+    g_source_remove (priv->timer_id);
+  priv->timer_id = 0;
+
   /* release any references held by the object here */
   if (G_OBJECT_CLASS (empathy_call_window_parent_class)->dispose)
     G_OBJECT_CLASS (empathy_call_window_parent_class)->dispose (object);
@@ -524,6 +535,8 @@ empathy_call_window_finalize (GObject *object)
 
   /* free any data held directly by the object here */
   g_mutex_free (priv->lock);
+
+  g_timer_destroy (priv->timer);
 
   G_OBJECT_CLASS (empathy_call_window_parent_class)->finalize (object);
 }
@@ -554,6 +567,9 @@ empathy_call_window_channel_closed_cb (TfChannel *channel, gpointer user_data)
   EmpathyCallWindow *self = EMPATHY_CALL_WINDOW (user_data);
   EmpathyCallWindowPriv *priv = GET_PRIV (self);
 
+  g_timer_stop (priv->timer);
+  g_source_remove (priv->timer_id);
+  priv->timer_id = 0;
   empathy_call_window_status_message (self, _("Disconnected"));
 
   gtk_widget_set_sensitive (priv->camera_button, FALSE);
@@ -614,6 +630,49 @@ empathy_call_window_get_audio_sink_pad (EmpathyCallWindow *self)
   return pad;
 }
 
+static gboolean
+empathy_call_window_update_timer (gpointer user_data)
+{
+  EmpathyCallWindow *self = EMPATHY_CALL_WINDOW (user_data);
+  EmpathyCallWindowPriv *priv = GET_PRIV (self);
+  gchar *str;
+  gdouble time;
+
+  time = g_timer_elapsed (priv->timer, NULL);
+
+  /* Translators: number of minutes:seconds the caller has been connected */
+  str = g_strdup_printf (_("Connected -- %d:%02dm"), (int) time / 60,
+    (int) time % 60);
+  empathy_call_window_status_message (self, str);
+  g_free (str);
+
+  return TRUE;
+}
+
+static gboolean
+empathy_call_window_connected (gpointer user_data)
+{
+  EmpathyCallWindow *self = EMPATHY_CALL_WINDOW (user_data);
+  EmpathyCallWindowPriv *priv = GET_PRIV (self);
+  EmpathyTpCall *call;
+
+  g_object_get (priv->handler, "tp-call", &call, NULL);
+
+  if (empathy_tp_call_has_dtmf (call))
+    gtk_widget_set_sensitive (priv->dtmf_panel, TRUE);
+
+  g_object_unref (call);
+
+  priv->timer_id = g_timeout_add_seconds (1,
+    empathy_call_window_update_timer, self);
+
+  empathy_call_window_update_timer (self);
+  gdk_threads_leave ();
+
+  return FALSE;
+}
+
+
 /* Called from the streaming thread */
 static void
 empathy_call_window_src_added_cb (EmpathyCallHandler *handler,
@@ -621,27 +680,17 @@ empathy_call_window_src_added_cb (EmpathyCallHandler *handler,
 {
   EmpathyCallWindow *self = EMPATHY_CALL_WINDOW (user_data);
   EmpathyCallWindowPriv *priv = GET_PRIV (self);
-  gchar *str;
-  EmpathyTpCall *call;
+
   GstPad *pad;
 
   g_mutex_lock (priv->lock);
 
-  g_object_get (priv->handler, "tp-call", &call, NULL);
-
-  gdk_threads_enter ();
-
-  if (empathy_tp_call_has_dtmf (call))
-    gtk_widget_set_sensitive (priv->dtmf_panel, TRUE);
-
-  g_object_unref (call);
-
-  /* Translators: number of minutes:seconds the caller has been connected */
-  str = g_strdup_printf (_("Connected -- %d:%02dm"), 0, 0);
-  empathy_call_window_status_message (self, str);
-  g_free (str);
-
-  gdk_threads_leave ();
+  if (priv->connected == FALSE)
+    {
+      g_timer_start (priv->timer);
+      priv->timer_id = g_idle_add  (empathy_call_window_connected, self);
+      priv->connected = TRUE;
+    }
 
   switch (media_type)
     {
