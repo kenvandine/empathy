@@ -100,7 +100,6 @@ empathy_audio_sink_init (EmpathyGstAudioSink *obj)
 
   fs_element_added_notifier_add (priv->notifier, GST_BIN (priv->sink));
 
-
   gst_bin_add_many (GST_BIN (obj), resample, priv->volume, priv->sink, NULL);
   gst_element_link_many (resample, priv->volume, priv->sink, NULL);
 
@@ -144,8 +143,6 @@ empathy_audio_sink_get_property (GObject *object,
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
     }
 }
-
-
 
 static void
 empathy_audio_sink_class_init (EmpathyGstAudioSinkClass
