@@ -247,8 +247,9 @@ class Project:
 		new_tag = self.package_name.upper() + '_' +\
 			  self.package_version.replace('.', '_')
 
-		url1 = self.exec_cmd('git config svn-remote.svn.url').strip()
-		url2 = url1[:url1.rfind('/')] + '/tags/' + new_tag
+		svn_base = self.exec_cmd('git config svn-remote.svn.url').strip()
+		url1 = svn_base + '/trunk'
+		url2 = svn_base + '/tags/' + new_tag
 		self.exec_cmd('svn copy %s %s -m "Tagged for release %s."' % (url1, url2, self.package_version))
 
 		self.exec_cmd('git tag -m "Tagged for release %s." %s' % ( self.package_version, new_tag))
