@@ -22,9 +22,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <gst/interfaces/colorbalance.h>
+
 #include "empathy-video-src.h"
 
 G_DEFINE_TYPE(EmpathyGstVideoSrc, empathy_video_src, GST_TYPE_BIN)
+
+/* Keep in sync with EmpathyGstVideoSrcChannel */
+static gchar *channel_names[NR_EMPATHY_GST_VIDEO_SRC_CHANNELS] = { "contrast",
+  "brightness", "gamma" };
 
 /* signal enum */
 #if 0
@@ -43,6 +49,8 @@ struct _EmpathyGstVideoSrcPrivate
 {
   gboolean dispose_has_run;
   GstElement *src;
+  /* Element implementing a ColorBalance interface */
+  GstElement *balance;
 };
 
 #define EMPATHY_GST_VIDEO_SRC_GET_PRIVATE(o) \
@@ -131,3 +139,120 @@ empathy_video_src_new (void)
 {
   return GST_ELEMENT (g_object_new (EMPATHY_TYPE_GST_VIDEO_SRC, NULL));
 }
+
+void
+empathy_video_src_set_channel (GstElement *src,
+  EmpathyGstVideoSrcChannel channel, guint percent)
+{
+  GstElement *color;
+  GstColorBalance *balance;
+  const GList *channels;
+  GList *l;
+
+  /* Find something supporting GstColorBalance */
+  color = gst_bin_get_by_interface (GST_BIN (src), GST_TYPE_COLOR_BALANCE);
+
+  if (color == NULL)
+    return;
+
+  balance = GST_COLOR_BALANCE (color);
+
+  channels = gst_color_balance_list_channels (balance);
+
+  for (l = (GList *)channels; l != NULL; l = g_list_next (l))
+    {
+      GstColorBalanceChannel *c = GST_COLOR_BALANCE_CHANNEL (l->data);
+
+      if (g_ascii_strcasecmp (c->label, channel_names[channel]) == 0)
+        {
+          gst_color_balance_set_value (balance, c,
+            ((c->max_value - c->min_value) * percent)/100
+              + c->min_value);
+          break;
+        }
+    }
+
+  g_object_unref (color);
+}
+
+guint
+empathy_video_src_get_channel (GstElement *src,
+  EmpathyGstVideoSrcChannel channel)
+{
+  GstElement *color;
+  GstColorBalance *balance;
+  const GList *channels;
+  GList *l;
+  guint percent = 0;
+
+  /* Find something supporting GstColorBalance */
+  color = gst_bin_get_by_interface (GST_BIN (src), GST_TYPE_COLOR_BALANCE);
+
+  if (color == NULL)
+    return percent;
+
+  balance = GST_COLOR_BALANCE (color);
+
+  channels = gst_color_balance_list_channels (balance);
+
+  for (l = (GList *)channels; l != NULL; l = g_list_next (l))
+    {
+      GstColorBalanceChannel *c = GST_COLOR_BALANCE_CHANNEL (l->data);
+
+      if (g_ascii_strcasecmp (c->label, channel_names[channel]) == 0)
+        {
+          percent =
+            ((gst_color_balance_get_value (balance, c)
+                - c->min_value) * 100) /
+              (c->max_value - c->min_value);
+
+          break;
+        }
+    }
+
+  g_object_unref (color);
+
+  return percent;
+}
+
+
+guint
+empathy_video_src_get_supported_channels (GstElement *src)
+{
+  GstElement *color;
+  GstColorBalance *balance;
+  const GList *channels;
+  GList *l;
+  guint result = 0;
+
+  /* Find something supporting GstColorBalance */
+  color = gst_bin_get_by_interface (GST_BIN (src), GST_TYPE_COLOR_BALANCE);
+
+  if (color == NULL)
+    goto out;
+
+  balance = GST_COLOR_BALANCE (color);
+
+  channels = gst_color_balance_list_channels (balance);
+
+  for (l = (GList *)channels; l != NULL; l = g_list_next (l))
+    {
+      GstColorBalanceChannel *channel = GST_COLOR_BALANCE_CHANNEL (l->data);
+      int i;
+
+      for (i = 0; i < NR_EMPATHY_GST_VIDEO_SRC_CHANNELS; i++)
+        {
+          if (g_ascii_strcasecmp (channel->label, channel_names[i]) == 0)
+            {
+              result |= (1 << i);
+              break;
+            }
+        }
+    }
+
+  g_object_unref (color);
+
+out:
+  return result;
+}
+

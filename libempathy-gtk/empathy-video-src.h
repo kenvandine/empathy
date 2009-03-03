@@ -29,6 +29,20 @@ G_BEGIN_DECLS
 typedef struct _EmpathyGstVideoSrc EmpathyGstVideoSrc;
 typedef struct _EmpathyGstVideoSrcClass EmpathyGstVideoSrcClass;
 
+typedef enum {
+  EMPATHY_GST_VIDEO_SRC_CHANNEL_CONTRAST = 0,
+  EMPATHY_GST_VIDEO_SRC_CHANNEL_BRIGHTNESS = 1,
+  EMPATHY_GST_VIDEO_SRC_CHANNEL_GAMMA = 2,
+  NR_EMPATHY_GST_VIDEO_SRC_CHANNELS
+} EmpathyGstVideoSrcChannel;
+
+#define  EMPATHY_GST_VIDEO_SRC_SUPPORTS_CONTRAST \
+  (1 << EMPATHY_GST_VIDEO_SRC_CHANNEL_CONTRAST)
+#define  EMPATHY_GST_VIDEO_SRC_SUPPORTS_BRIGHTNESS \
+  (1 << EMPATHY_GST_VIDEO_SRC_CHANNEL_BRIGHTNESS)
+#define  EMPATHY_GST_VIDEO_SRC_SUPPORTS_GAMMA \
+  (1 << EMPATHY_GST_VIDEO_SRC_CHANNEL_GAMMA)
+
 struct _EmpathyGstVideoSrcClass {
     GstBinClass parent_class;
 };
@@ -57,6 +71,16 @@ GType empathy_video_src_get_type (void);
     EmpathyGstVideoSrcClass))
 
 GstElement *empathy_video_src_new (void);
+
+guint
+empathy_video_src_get_supported_channels (GstElement *src);
+
+void empathy_video_src_set_channel (GstElement *src,
+  EmpathyGstVideoSrcChannel channel, guint percent);
+
+guint empathy_video_src_get_channel (GstElement *src,
+  EmpathyGstVideoSrcChannel channel);
+
 
 G_END_DECLS
 
