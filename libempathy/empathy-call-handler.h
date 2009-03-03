@@ -68,8 +68,9 @@ EmpathyCallHandler * empathy_call_handler_new_for_channel (
   EmpathyTpCall *call);
 
 void empathy_call_handler_start_call (EmpathyCallHandler *handler);
-void empathy_call_handler_set_bus (EmpathyCallHandler *handler,
-  GstBus *bus);
+
+void empathy_call_handler_bus_message (EmpathyCallHandler *handler,
+  GstBus *bus, GstMessage *message);
 
 G_END_DECLS
 

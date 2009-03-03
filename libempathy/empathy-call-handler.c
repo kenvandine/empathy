@@ -58,7 +58,6 @@ typedef struct {
   EmpathyTpCall *call;
   EmpathyContact *contact;
   TfChannel *tfchannel;
-  GstBus *bus;
 } EmpathyCallHandlerPriv;
 
 #define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyCallHandler)
@@ -127,9 +126,6 @@ empathy_call_handler_set_property (GObject *object,
       case PROP_TP_CALL:
         priv->call = g_value_dup_object (value);
         break;
-      case PROP_GST_BUS:
-        priv->bus = g_value_dup_object (value);
-        break;
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
     }
@@ -148,9 +144,6 @@ empathy_call_handler_get_property (GObject *object,
         break;
       case PROP_TP_CALL:
         g_value_set_object (value, priv->call);
-        break;
-      case PROP_GST_BUS:
-        g_value_set_object (value, priv->bus);
         break;
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -176,12 +169,6 @@ empathy_call_handler_class_init (EmpathyCallHandlerClass *klass)
     EMPATHY_TYPE_CONTACT,
     G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
   g_object_class_install_property (object_class, PROP_CONTACT, param_spec);
-
-  param_spec = g_param_spec_object ("gst-bus",
-    "gst-bus", "The gstreamer bus",
-    GST_TYPE_BUS,
-    G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
-  g_object_class_install_property (object_class, PROP_GST_BUS, param_spec);
 
   param_spec = g_param_spec_object ("tp-call",
     "tp-call", "The calls channel wrapper",
@@ -232,18 +219,16 @@ empathy_call_handler_new_for_channel (EmpathyTpCall *call)
     "tp-call", call, NULL));
 }
 
-static gboolean
-empathy_call_handler_pipeline_bus_watch (GstBus *bus, GstMessage *message,
-  gpointer user_data)
+void
+empathy_call_handler_bus_message (EmpathyCallHandler *handler,
+  GstBus *bus, GstMessage *message)
 {
-  EmpathyCallHandler *handler = EMPATHY_CALL_HANDLER (user_data);
   EmpathyCallHandlerPriv *priv = GET_PRIV (handler);
 
-  g_assert (priv->tfchannel != NULL);
+  if (priv->tfchannel == NULL)
+    return;
 
   tf_channel_bus_message (priv->tfchannel, message);
-
-  return TRUE;
 }
 
 static void
@@ -251,10 +236,6 @@ empathy_call_handler_tf_channel_session_created_cb (TfChannel *tfchannel,
   FsConference *conference, FsParticipant *participant,
   EmpathyCallHandler *self)
 {
-  EmpathyCallHandlerPriv *priv = GET_PRIV (self);
-
-  gst_bus_add_watch (priv->bus, empathy_call_handler_pipeline_bus_watch, self);
-
   g_signal_emit (G_OBJECT (self), signals[CONFERENCE_ADDED], 0,
     GST_ELEMENT (conference));
 }
@@ -416,14 +397,3 @@ empathy_call_handler_start_call (EmpathyCallHandler *handler)
       empathy_tp_call_accept_incoming_call (priv->call);
     }
 }
-
-void
-empathy_call_handler_set_bus (EmpathyCallHandler *handler, GstBus *bus)
-{
-  EmpathyCallHandlerPriv *priv = GET_PRIV (handler);
-
-  g_assert (priv->bus == NULL);
-
-  priv->bus = g_object_ref (bus);
-}
-
