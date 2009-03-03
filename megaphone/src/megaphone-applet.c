@@ -1,7 +1,7 @@
 /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /* 
  * Copyright (C) 2007 Raphaël Slinckx <raphael@slinckx.net>
- * Copyright (C) 2007 Collabora Ltd.
+ * Copyright (C) 2007-2009 Collabora Ltd.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,7 +34,8 @@
 #include <libmissioncontrol/mission-control.h>
 #include <libmissioncontrol/mc-account.h>
 
-#include <libempathy/empathy-contact-factory.h>
+#include <libempathy/empathy-tp-contact-factory.h>
+#include <libempathy/empathy-account-manager.h>
 #include <libempathy/empathy-contact.h>
 #include <libempathy/empathy-contact-list.h>
 #include <libempathy/empathy-contact-manager.h>
@@ -52,106 +53,18 @@
 
 #define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, MegaphoneApplet)
 typedef struct {
-	EmpathyContactFactory *factory;
-	GtkWidget             *image;
-	gint                   image_size;
-	EmpathyContact        *contact;
-	GConfClient           *gconf;
-	guint                  gconf_cnxn;
+	EmpathyTpContactFactory *factory;
+	EmpathyAccountManager   *account_manager;
+	McAccount               *account;
+	gchar                   *id;
+	GtkWidget               *image;
+	gint                     image_size;
+	EmpathyContact          *contact;
+	GConfClient             *gconf;
+	guint                    gconf_cnxn;
 } MegaphoneAppletPriv;
 
-static void megaphone_applet_finalize                  (GObject            *object);
-static void megaphone_applet_size_allocate_cb          (GtkWidget          *widget,
-							GtkAllocation      *allocation,
-							MegaphoneApplet    *applet);
-static gboolean megaphone_applet_button_press_event_cb (GtkWidget          *widget,
-							GdkEventButton     *event, 
-							MegaphoneApplet    *applet);
-static void megaphone_applet_information_cb            (BonoboUIComponent  *uic,
-							MegaphoneApplet    *applet, 
-							const gchar        *verb_name);
-static void megaphone_applet_preferences_cb            (BonoboUIComponent  *uic,
-							MegaphoneApplet    *applet, 
-							const gchar        *verb_name);
-static void megaphone_applet_about_cb                  (BonoboUIComponent  *uic,
-							MegaphoneApplet    *applet, 
-							const gchar        *verb_name);
-
 G_DEFINE_TYPE(MegaphoneApplet, megaphone_applet, PANEL_TYPE_APPLET)
-
-static const BonoboUIVerb megaphone_applet_menu_verbs [] = {
-	BONOBO_UI_UNSAFE_VERB ("information", megaphone_applet_information_cb),
-	BONOBO_UI_UNSAFE_VERB ("preferences", megaphone_applet_preferences_cb),
-	BONOBO_UI_UNSAFE_VERB ("about",       megaphone_applet_about_cb),
-	BONOBO_UI_VERB_END
-};
-
-static const char* authors[] = {
-	"Raphaël Slinckx <raphael@slinckx.net>", 
-	"Xavier Claessens <xclaesse@gmail.com>", 
-	NULL
-};
-
-static void
-megaphone_applet_class_init (MegaphoneAppletClass *class)
-{
-	GObjectClass *object_class;
-
-	object_class = G_OBJECT_CLASS (class);
-
-	object_class->finalize = megaphone_applet_finalize;
-
-	g_type_class_add_private (object_class, sizeof (MegaphoneAppletPriv));
-	empathy_gtk_init ();
-}
-
-static void
-megaphone_applet_init (MegaphoneApplet *applet)
-{
-	MegaphoneAppletPriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (applet,
-		MEGAPHONE_TYPE_APPLET, MegaphoneAppletPriv);
-
-	applet->priv = priv;
-	priv->factory = empathy_contact_factory_dup_singleton ();
-	priv->gconf = gconf_client_get_default ();
-
-	/* Image holds the contact avatar */
-	priv->image = gtk_image_new ();
-	gtk_widget_show (priv->image);
-	gtk_container_add (GTK_CONTAINER (applet), priv->image);
-
-	/* We want transparency */
-	panel_applet_set_flags (PANEL_APPLET (applet), PANEL_APPLET_EXPAND_MINOR);
-	panel_applet_set_background_widget (PANEL_APPLET (applet), GTK_WIDGET (applet));
-
-	/* Listen for clicks on the applet to dispatch a channel */
-	g_signal_connect (applet, "button-press-event",
-			  G_CALLBACK (megaphone_applet_button_press_event_cb),
-			  applet);
-
-	/* Allow to resize our avatar when needed */
-	g_signal_connect (applet, "size-allocate",
-			  G_CALLBACK (megaphone_applet_size_allocate_cb),
-			  applet);
-}
-
-static void
-megaphone_applet_finalize (GObject *object)
-{
-	MegaphoneAppletPriv *priv = GET_PRIV (object);
-	
-	if (priv->contact) {
-		g_object_unref (priv->contact);
-	}
-	g_object_unref (priv->factory);
-
-	if (priv->gconf_cnxn != 0) {
-		gconf_client_notify_remove (priv->gconf, priv->gconf_cnxn);
-	}
-	g_object_unref (priv->gconf);
-
-	G_OBJECT_CLASS (megaphone_applet_parent_class)->finalize (object);
-}
 
 static void
 megaphone_applet_update_icon (MegaphoneApplet *applet)
@@ -258,46 +171,37 @@ megaphone_applet_update_contact (MegaphoneApplet *applet)
 }
 
 static void
-megaphone_applet_set_contact (MegaphoneApplet *applet,
-			      const gchar     *str)
+megaphone_applet_got_contact_cb (EmpathyTpContactFactory *factory,
+				 GList                   *contacts,
+				 gpointer                 user_data,
+				 GObject                 *applet)
 {
 	MegaphoneAppletPriv *priv = GET_PRIV (applet);
-	McAccount           *account = NULL;
-	gchar              **strv = NULL;
 
-	DEBUG ("Setting new contact %s", str);
+	priv->contact = g_object_ref (contacts->data);
+	g_signal_connect_swapped (priv->contact, "notify",
+				  G_CALLBACK (megaphone_applet_update_contact),
+				  applet);
+	megaphone_applet_update_contact (MEGAPHONE_APPLET (applet));
+}
 
-	/* Release old contact, if any */
-	if (priv->contact) {
-		g_signal_handlers_disconnect_by_func (priv->contact,
-						      megaphone_applet_update_contact,
-						      applet);
-		g_object_unref (priv->contact),
-		priv->contact = NULL;
+static void
+megaphone_applet_new_connection_cb (EmpathyAccountManager *manager,
+				    TpConnection          *connection,
+				    McAccount             *account,
+				    MegaphoneApplet       *applet)
+{
+	MegaphoneAppletPriv *priv = GET_PRIV (applet);
+	const gchar *id = priv->id;
+
+	if (priv->contact || !empathy_account_equal (account, priv->account)) {
+		return;
 	}
 
-	/* Lookup the new contact */
-	if (str) {
-		strv = g_strsplit (str, "/", 2);
-		account = mc_account_lookup (strv[0]);
-	}
-	if (account) {
-		priv->contact = empathy_contact_factory_get_from_id (priv->factory,
-								     account,
-								     strv[1]);
-		g_object_unref (account);
-	}
-	g_strfreev (strv);
-
-	/* Take hold of the new contact if any */
-	if (priv->contact) {
-		/* Listen for updates on the contact, and force a first update */
-		g_signal_connect_swapped (priv->contact, "notify",
-					  G_CALLBACK (megaphone_applet_update_contact),
-					  applet);
-	}
-
-	megaphone_applet_update_contact (applet);
+	priv->factory = empathy_tp_contact_factory_dup_singleton (connection);
+	empathy_tp_contact_factory_get_from_ids (priv->factory, 1, &id,
+		megaphone_applet_got_contact_cb,
+		NULL, NULL, G_OBJECT (applet));
 }
 
 static void
@@ -384,42 +288,6 @@ megaphone_applet_show_preferences (MegaphoneApplet *applet)
 	gtk_widget_show (dialog);
 }
 
-static void
-megaphone_applet_information_cb (BonoboUIComponent *uic,
-				 MegaphoneApplet   *applet,
-				 const gchar       *verb_name)
-{
-	MegaphoneAppletPriv *priv = GET_PRIV (applet);
-
-	/* FIXME: We should grey out the menu item if there are no available contact */
-	if (priv->contact) {
-		empathy_contact_information_dialog_show (priv->contact, NULL, FALSE, FALSE);
-	}
-}
-
-static void
-megaphone_applet_preferences_cb (BonoboUIComponent *uic, 
-				 MegaphoneApplet   *applet, 
-				 const gchar       *verb_name)
-{
-	megaphone_applet_show_preferences (applet);
-}
-
-static void
-megaphone_applet_about_cb (BonoboUIComponent *uic, 
-			   MegaphoneApplet   *applet, 
-			   const gchar       *verb_name)
-{
-	gtk_show_about_dialog (NULL,
-			       "name", "Megaphone", 
-			       "version", PACKAGE_VERSION,
-			       "copyright", "Raphaël Slinckx 2007\nCollabora Ltd 2007",
-			       "comments", _("Talk!"),
-			       "authors", authors,
-			       "logo-icon-name", "stock_people",
-			       NULL);
-}
-
 static gboolean
 megaphone_applet_button_press_event_cb (GtkWidget       *widget,
 					GdkEventButton  *event, 
@@ -479,6 +347,144 @@ megaphone_applet_size_allocate_cb (GtkWidget       *widget,
 }
 
 static void
+megaphone_applet_finalize (GObject *object)
+{
+	MegaphoneAppletPriv *priv = GET_PRIV (object);
+	
+	if (priv->contact) {
+		g_object_unref (priv->contact);
+	}
+	if (priv->factory) {
+		g_object_unref (priv->factory);
+	}
+	if (priv->account_manager) {
+		g_signal_handlers_disconnect_by_func (priv->account_manager,
+			megaphone_applet_new_connection_cb, object);
+		g_object_unref (priv->account_manager);
+	}
+
+	if (priv->gconf_cnxn != 0) {
+		gconf_client_notify_remove (priv->gconf, priv->gconf_cnxn);
+	}
+	g_object_unref (priv->gconf);
+	g_free (priv->id);
+
+	G_OBJECT_CLASS (megaphone_applet_parent_class)->finalize (object);
+}
+
+static void
+megaphone_applet_class_init (MegaphoneAppletClass *class)
+{
+	GObjectClass *object_class;
+
+	object_class = G_OBJECT_CLASS (class);
+
+	object_class->finalize = megaphone_applet_finalize;
+
+	g_type_class_add_private (object_class, sizeof (MegaphoneAppletPriv));
+	empathy_gtk_init ();
+}
+
+static void
+megaphone_applet_init (MegaphoneApplet *applet)
+{
+	MegaphoneAppletPriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (applet,
+		MEGAPHONE_TYPE_APPLET, MegaphoneAppletPriv);
+
+	applet->priv = priv;
+	priv->gconf = gconf_client_get_default ();
+	priv->account_manager = empathy_account_manager_dup_singleton ();
+	g_signal_connect (priv->account_manager, "new-connection",
+		G_CALLBACK (megaphone_applet_new_connection_cb), applet);
+
+	/* Image holds the contact avatar */
+	priv->image = gtk_image_new ();
+	gtk_widget_show (priv->image);
+	gtk_container_add (GTK_CONTAINER (applet), priv->image);
+
+	/* We want transparency */
+	panel_applet_set_flags (PANEL_APPLET (applet), PANEL_APPLET_EXPAND_MINOR);
+	panel_applet_set_background_widget (PANEL_APPLET (applet), GTK_WIDGET (applet));
+
+	/* Listen for clicks on the applet to dispatch a channel */
+	g_signal_connect (applet, "button-press-event",
+			  G_CALLBACK (megaphone_applet_button_press_event_cb),
+			  applet);
+
+	/* Allow to resize our avatar when needed */
+	g_signal_connect (applet, "size-allocate",
+			  G_CALLBACK (megaphone_applet_size_allocate_cb),
+			  applet);
+}
+
+static void
+megaphone_applet_set_contact (MegaphoneApplet *applet,
+			      const gchar     *str)
+{
+	MegaphoneAppletPriv *priv = GET_PRIV (applet);
+	TpConnection        *connection;
+	gchar              **strv = NULL;
+
+	DEBUG ("Setting new contact %s", str);
+
+	/* Release old contact, if any */
+	if (priv->contact) {
+		g_signal_handlers_disconnect_by_func (priv->contact,
+						      megaphone_applet_update_contact,
+						      applet);
+		g_object_unref (priv->contact),
+		priv->contact = NULL;
+	}
+	if (priv->account) {
+		g_object_unref (priv->account),
+		priv->account = NULL;
+	}
+	if (priv->factory) {
+		g_object_unref (priv->factory),
+		priv->factory = NULL;
+	}
+
+	/* Lookup the new contact */
+	if (str) {
+		strv = g_strsplit (str, "/", 2);
+		priv->account = mc_account_lookup (strv[0]);
+		priv->id = strv[1];
+		g_free (strv[0]);
+		g_free (strv);
+	}
+
+	if (priv->account) {
+		connection = empathy_account_manager_get_connection (
+			priv->account_manager, priv->account);
+		if (connection) {
+			megaphone_applet_new_connection_cb (priv->account_manager,
+				connection, priv->account, applet);
+		}
+	}
+}
+
+static void
+megaphone_applet_information_cb (BonoboUIComponent *uic,
+				 MegaphoneApplet   *applet,
+				 const gchar       *verb_name)
+{
+	MegaphoneAppletPriv *priv = GET_PRIV (applet);
+
+	/* FIXME: We should grey out the menu item if there are no available contact */
+	if (priv->contact) {
+		empathy_contact_information_dialog_show (priv->contact, NULL);
+	}
+}
+
+static void
+megaphone_applet_preferences_cb (BonoboUIComponent *uic, 
+				 MegaphoneApplet   *applet, 
+				 const gchar       *verb_name)
+{
+	megaphone_applet_show_preferences (applet);
+}
+
+static void
 megaphone_applet_gconf_notify_cb (GConfClient     *client,
 				  guint            cnxn_id,
 				  GConfEntry      *entry,
@@ -496,6 +502,34 @@ megaphone_applet_gconf_notify_cb (GConfClient     *client,
 					      gconf_value_get_string (value));
 	}
 }
+
+static void
+megaphone_applet_about_cb (BonoboUIComponent *uic, 
+			   MegaphoneApplet   *applet, 
+			   const gchar       *verb_name)
+{
+	const char* authors[] = {
+		"Raphaël Slinckx <raphael@slinckx.net>", 
+		"Xavier Claessens <xclaesse@gmail.com>", 
+		NULL
+	};
+
+	gtk_show_about_dialog (NULL,
+			       "name", "Megaphone", 
+			       "version", PACKAGE_VERSION,
+			       "copyright", "Raphaël Slinckx 2007\nCollabora Ltd 2007",
+			       "comments", _("Talk!"),
+			       "authors", authors,
+			       "logo-icon-name", "stock_people",
+			       NULL);
+}
+
+static const BonoboUIVerb megaphone_applet_menu_verbs [] = {
+	BONOBO_UI_UNSAFE_VERB ("information", megaphone_applet_information_cb),
+	BONOBO_UI_UNSAFE_VERB ("preferences", megaphone_applet_preferences_cb),
+	BONOBO_UI_UNSAFE_VERB ("about",       megaphone_applet_about_cb),
+	BONOBO_UI_VERB_END
+};
 
 static gboolean
 megaphone_applet_factory (PanelApplet *applet, 
