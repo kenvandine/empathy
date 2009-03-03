@@ -3,6 +3,7 @@
 #include <pygobject.h>
 
 void empathy_register_classes (PyObject *d);
+void empathy_add_constants(PyObject *module, const gchar *strip_prefix);
 DL_EXPORT(void) initempathygtk(void);
 extern PyMethodDef empathy_functions[];
 
@@ -16,6 +17,7 @@ DL_EXPORT(void) initempathygtk(void)
 	d = PyModule_GetDict (m);
 	
 	empathy_register_classes (d);
+	empathy_add_constants(m, "EMPATHY_");
 	
 	if (PyErr_Occurred ()) {
 		PyErr_Print();
