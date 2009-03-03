@@ -53,6 +53,8 @@ enum {
   PROP_GST_BUS,
   PROP_MIN_WIDTH,
   PROP_MIN_HEIGHT,
+  PROP_SYNC,
+  PROP_ASYNC,
 };
 
 /* private structure */
@@ -68,6 +70,10 @@ struct _EmpathyVideoWidgetPriv
   FsElementAddedNotifier *notifier;
   gint min_width;
   gint min_height;
+  gboolean sync;
+  gboolean async;
+
+  GMutex *lock;
 };
 
 #define GET_PRIV(o)     (G_TYPE_INSTANCE_GET_PRIVATE ((o), \
@@ -78,6 +84,8 @@ empathy_video_widget_init (EmpathyVideoWidget *obj)
 {
   EmpathyVideoWidgetPriv *priv = GET_PRIV (obj);
   GdkColor black;
+
+  priv->lock = g_mutex_new ();
 
   priv->notifier = fs_element_added_notifier_new ();
   g_signal_connect (priv->notifier, "element-added",
@@ -114,8 +122,11 @@ empathy_video_widget_constructed (GObject *object)
 
 static void empathy_video_widget_dispose (GObject *object);
 static void empathy_video_widget_finalize (GObject *object);
+
 static gboolean empathy_video_widget_expose_event (GtkWidget *widget,
   GdkEventExpose *event);
+static void
+empathy_video_widget_element_set_sink_properties (EmpathyVideoWidget *self);
 
 static void
 empathy_video_widget_set_property (GObject *object,
@@ -133,6 +144,16 @@ empathy_video_widget_set_property (GObject *object,
         break;
       case PROP_MIN_HEIGHT:
         priv->min_height = g_value_get_int (value);
+        break;
+      case PROP_SYNC:
+        priv->sync = g_value_get_boolean (value);
+        empathy_video_widget_element_set_sink_properties (
+          EMPATHY_VIDEO_WIDGET (object));
+        break;
+      case PROP_ASYNC:
+        priv->async = g_value_get_boolean (value);
+        empathy_video_widget_element_set_sink_properties (
+          EMPATHY_VIDEO_WIDGET (object));
         break;
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -158,6 +179,12 @@ empathy_video_widget_get_property (GObject *object,
         break;
       case PROP_MIN_HEIGHT:
         g_value_set_int (value, priv->min_height);
+        break;
+      case PROP_SYNC:
+        g_value_set_boolean (value, priv->sync);
+        break;
+      case PROP_ASYNC:
+        g_value_set_boolean (value, priv->async);
         break;
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, property_id, pspec);
@@ -213,6 +240,19 @@ empathy_video_widget_class_init (
     G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
   g_object_class_install_property (object_class, PROP_MIN_HEIGHT, param_spec);
 
+  param_spec = g_param_spec_boolean ("sync",
+    "sync",
+    "Whether the underlying sink should be sync or not",
+    TRUE,
+    G_PARAM_CONSTRUCT | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+  g_object_class_install_property (object_class, PROP_SYNC, param_spec);
+
+  param_spec = g_param_spec_boolean ("async",
+    "async",
+    "Whether the underlying sink should be async or not",
+    TRUE,
+    G_PARAM_CONSTRUCT | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS);
+  g_object_class_install_property (object_class, PROP_ASYNC, param_spec);
 }
 
 void
@@ -246,12 +286,46 @@ empathy_video_widget_dispose (GObject *object)
 void
 empathy_video_widget_finalize (GObject *object)
 {
-  //EmpathyVideoWidget *self = EMPATHY_VIDEO_WIDGET (object);
-  //EmpathyVideoWidgetPriv *priv = GET_PRIV (self);
+  EmpathyVideoWidget *self = EMPATHY_VIDEO_WIDGET (object);
+  EmpathyVideoWidgetPriv *priv = GET_PRIV (self);
 
   /* free any data held directly by the object here */
+  g_mutex_free (priv->lock);
 
   G_OBJECT_CLASS (empathy_video_widget_parent_class)->finalize (object);
+}
+
+
+static void
+empathy_video_widget_element_set_sink_properties_unlocked (
+  EmpathyVideoWidget *self)
+{
+  EmpathyVideoWidgetPriv *priv = GET_PRIV (self);
+
+  if (priv->overlay == NULL)
+    return;
+
+  if (g_object_class_find_property (G_OBJECT_GET_CLASS (priv->overlay),
+      "force-aspect-ratio"))
+    g_object_set (G_OBJECT (priv->overlay), "force-aspect-ratio", TRUE, NULL);
+
+  if (g_object_class_find_property (
+      G_OBJECT_GET_CLASS (priv->overlay), "sync"))
+    g_object_set (G_OBJECT (priv->overlay), "sync", priv->sync, NULL);
+
+  if (g_object_class_find_property (G_OBJECT_GET_CLASS (priv->overlay),
+      "async"))
+    g_object_set (G_OBJECT (priv->overlay), "async", priv->async, NULL);
+}
+
+static void
+empathy_video_widget_element_set_sink_properties (EmpathyVideoWidget *self)
+{
+  EmpathyVideoWidgetPriv *priv = GET_PRIV (self);
+
+  g_mutex_lock (priv->lock);
+  empathy_video_widget_element_set_sink_properties_unlocked (self);
+  g_mutex_unlock (priv->lock);
 }
 
 static void
@@ -260,17 +334,15 @@ empathy_video_widget_element_added_cb (FsElementAddedNotifier *notifier,
 {
   EmpathyVideoWidgetPriv *priv = GET_PRIV (self);
 
+  /* We assume the overlay is the sink */
+  g_mutex_lock (priv->lock);
   if (priv->overlay == NULL && GST_IS_X_OVERLAY (element))
     {
       priv->overlay = element;
+      empathy_video_widget_element_set_sink_properties_unlocked (self);
       gst_x_overlay_expose (GST_X_OVERLAY (priv->overlay));
     }
-
-  if (g_object_class_find_property (
-      G_OBJECT_GET_CLASS (element), "force-aspect-ratio"))
-    {
-      g_object_set (G_OBJECT (element), "force-aspect-ratio", TRUE, NULL);
-    }
+  g_mutex_unlock (priv->lock);
 }
 
 static void
