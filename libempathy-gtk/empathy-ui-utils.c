@@ -53,6 +53,14 @@
 #include <libempathy/empathy-idle.h>
 #include <libempathy/empathy-tp-file.h>
 
+#define SCHEMES "(https?|s?ftps?|nntp|news|javascript|about|ghelp|apt|telnet|"\
+		"file|webcal|mailto)"
+#define BODY "([^\\ \\n]+)"
+#define END_BODY "([^\\ \\n]*[^,;\?><()\\ \"\\.\\n])"
+#define URI_REGEX "("SCHEMES"://"END_BODY")" \
+		  "|((mailto:)?"BODY"@"BODY"\\."END_BODY")"\
+		  "|((www|ftp)\\."END_BODY")"
+
 void
 empathy_gtk_init (void)
 {
@@ -66,6 +74,19 @@ empathy_gtk_init (void)
 					   PKGDATADIR G_DIR_SEPARATOR_S "icons");
 
 	initialized = TRUE;
+}
+
+GRegex *
+empathy_uri_regex_dup_singleton (void)
+{
+	static GRegex *uri_regex = NULL;
+
+	/* We intentionally leak the regex so it's not recomputed */
+	if (!uri_regex) {
+		uri_regex = g_regex_new (URI_REGEX, 0, 0, NULL);
+	}
+
+	return g_regex_ref (uri_regex);
 }
 
 struct SizeData {

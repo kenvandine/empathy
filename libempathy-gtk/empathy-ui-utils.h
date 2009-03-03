@@ -63,6 +63,8 @@ typedef enum {
 } EmpathySound;
 
 void            empathy_gtk_init                        (void);
+GRegex *        empathy_uri_regex_dup_singleton         (void);
+
 /* Glade */
 void            empathy_glade_get_file_simple           (const gchar      *filename,
 							 const gchar      *root,

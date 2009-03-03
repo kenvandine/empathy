@@ -62,15 +62,6 @@
 #define MAX_SCROLL_TIME 0.4 /* seconds */
 #define SCROLL_DELAY 33     /* milliseconds */
 
-#define SCHEMES "(https?|s?ftps?|nntp|news|javascript|about|ghelp|apt|telnet|"\
-		"file|webcal|mailto)"
-#define BODY "([^\\ \\n]+)"
-#define END_BODY "([^\\ \\n]*[^,;\?><()\\ \"\\.\\n])"
-#define URI_REGEX "("SCHEMES"://"END_BODY")" \
-		  "|((mailto:)?"BODY"@"BODY"\\."END_BODY")"\
-		  "|((www|ftp)\\."END_BODY")"
-static GRegex *uri_regex = NULL;
-
 #define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyChatTextView)
 
 typedef struct {
@@ -1264,6 +1255,7 @@ empathy_chat_text_view_append_body (EmpathyChatTextView *view,
 	GtkTextIter              start_iter, end_iter;
 	GtkTextMark             *mark;
 	GtkTextIter              iter;
+	GRegex                  *uri_regex;
 	GMatchInfo              *match_info;
 	gboolean                 match;
 	gint                     last = 0;
@@ -1275,10 +1267,7 @@ empathy_chat_text_view_append_body (EmpathyChatTextView *view,
 	gtk_text_buffer_get_end_iter (priv->buffer, &start_iter);
 	mark = gtk_text_buffer_create_mark (priv->buffer, NULL, &start_iter, TRUE);
 
-	if (!uri_regex) {
-		uri_regex = g_regex_new (URI_REGEX, 0, 0, NULL);
-	}
-
+	uri_regex = empathy_uri_regex_dup_singleton ();
 	for (match = g_regex_match (uri_regex, body, 0, &match_info); match;
 	     match = g_match_info_next (match_info, NULL)) {
 		if (!g_match_info_fetch_pos (match_info, 0, &s, &e))
@@ -1308,6 +1297,7 @@ empathy_chat_text_view_append_body (EmpathyChatTextView *view,
 		last = e;
 	}
 	g_match_info_free (match_info);
+	g_regex_unref (uri_regex);
 
 	if (last < strlen (body)) {
 		gtk_text_buffer_get_end_iter (priv->buffer, &iter);
