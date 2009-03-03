@@ -53,13 +53,12 @@ static void
 empathy_video_src_init (EmpathyGstVideoSrc *obj)
 {
   EmpathyGstVideoSrcPrivate *priv = EMPATHY_GST_VIDEO_SRC_GET_PRIVATE (obj);
-  GstElement *scale, *rate, *colorspace, *capsfilter;
+  GstElement *scale, *colorspace, *capsfilter;
   GstPad *ghost, *src;
   GstCaps *caps;
 
   /* allocate any data required by the object here */
   scale = gst_element_factory_make ("videoscale", NULL);
-  rate = gst_element_factory_make ("videorate", NULL);
   colorspace = gst_element_factory_make ("ffmpegcolorspace", NULL);
 
   capsfilter = gst_element_factory_make ("capsfilter", NULL);
@@ -72,9 +71,9 @@ empathy_video_src_init (EmpathyGstVideoSrc *obj)
 
   priv->src = gst_element_factory_make ("gconfvideosrc", NULL);
 
-  gst_bin_add_many (GST_BIN (obj), priv->src, scale, rate,
-    colorspace, capsfilter, NULL);
-  gst_element_link_many (priv->src, scale, rate, colorspace, capsfilter, NULL);
+  gst_bin_add_many (GST_BIN (obj), priv->src, scale, colorspace, capsfilter,
+    NULL);
+  gst_element_link_many (priv->src, scale, colorspace, capsfilter, NULL);
 
   src = gst_element_get_static_pad (capsfilter, "src");
 
