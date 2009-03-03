@@ -347,6 +347,7 @@ empathy_call_window_init (EmpathyCallWindow *self)
   gtk_box_pack_start (GTK_BOX (hbox), vbox, FALSE, FALSE, 3);
 
   priv->video_preview = empathy_video_widget_new_with_size (bus, 160, 120);
+  g_object_set (priv->video_preview, "sync", FALSE, "async", FALSE, NULL);
   gtk_box_pack_start (GTK_BOX (vbox), priv->video_preview, FALSE, FALSE, 0);
 
   priv->video_input = empathy_video_src_new ();
