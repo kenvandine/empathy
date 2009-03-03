@@ -567,9 +567,16 @@ empathy_call_window_channel_closed_cb (TfChannel *channel, gpointer user_data)
   EmpathyCallWindow *self = EMPATHY_CALL_WINDOW (user_data);
   EmpathyCallWindowPriv *priv = GET_PRIV (self);
 
+  g_mutex_lock (priv->lock);
+
   g_timer_stop (priv->timer);
-  g_source_remove (priv->timer_id);
+
+  if (priv->timer_id != 0)
+    g_source_remove (priv->timer_id);
   priv->timer_id = 0;
+
+  g_mutex_unlock (priv->lock);
+
   empathy_call_window_status_message (self, _("Disconnected"));
 
   gtk_widget_set_sensitive (priv->camera_button, FALSE);
@@ -663,11 +670,14 @@ empathy_call_window_connected (gpointer user_data)
 
   g_object_unref (call);
 
+  g_mutex_lock (priv->lock);
+
   priv->timer_id = g_timeout_add_seconds (1,
     empathy_call_window_update_timer, self);
 
+  g_mutex_unlock (priv->lock);
+
   empathy_call_window_update_timer (self);
-  gdk_threads_leave ();
 
   return FALSE;
 }
