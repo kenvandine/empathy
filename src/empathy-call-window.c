@@ -81,8 +81,13 @@ struct _EmpathyCallWindowPriv
   GstElement *pipeline;
   GstElement *video_tee;
 
+  GstElement *funnel;
+  GstElement *liveadder;
+
   GladeXML *glade;
   guint context_id;
+
+  GMutex *lock;
 };
 
 #define GET_PRIV(o) \
@@ -323,6 +328,8 @@ empathy_call_window_init (EmpathyCallWindow *self)
     "statusbar", &priv->statusbar,
     NULL);
 
+  priv->lock = g_mutex_new ();
+
   gtk_widget_reparent (top_vbox, GTK_WIDGET (self));
 
   empathy_call_window_setup_menubar (self);
@@ -512,10 +519,11 @@ empathy_call_window_dispose (GObject *object)
 void
 empathy_call_window_finalize (GObject *object)
 {
-  //EmpathyCallWindow *self = EMPATHY_CALL_WINDOW (object);
-  //EmpathyCallWindowPriv *priv = GET_PRIV (self);
+  EmpathyCallWindow *self = EMPATHY_CALL_WINDOW (object);
+  EmpathyCallWindowPriv *priv = GET_PRIV (self);
 
   /* free any data held directly by the object here */
+  g_mutex_free (priv->lock);
 
   G_OBJECT_CLASS (empathy_call_window_parent_class)->finalize (object);
 }
@@ -551,6 +559,61 @@ empathy_call_window_channel_closed_cb (TfChannel *channel, gpointer user_data)
   gtk_widget_set_sensitive (priv->camera_button, FALSE);
 }
 
+/* Called with global lock held */
+static GstPad *
+empathy_call_window_get_video_sink_pad (EmpathyCallWindow *self)
+{
+  EmpathyCallWindowPriv *priv = GET_PRIV (self);
+  GstPad *pad;
+
+  if (priv->funnel == NULL)
+    {
+      GstElement *output;
+
+      output = empathy_video_widget_get_element (EMPATHY_VIDEO_WIDGET
+        (priv->video_output));
+
+      priv->funnel = gst_element_factory_make ("fsfunnel", NULL);
+
+      gst_bin_add (GST_BIN (priv->pipeline), priv->funnel);
+      gst_bin_add (GST_BIN (priv->pipeline), output);
+
+      gst_element_link (priv->funnel, output);
+
+      gst_element_set_state (priv->funnel, GST_STATE_PLAYING);
+      gst_element_set_state (output, GST_STATE_PLAYING);
+    }
+
+  pad = gst_element_get_request_pad (priv->funnel, "sink%d");
+
+  return pad;
+}
+
+/* Called with global lock held */
+static GstPad *
+empathy_call_window_get_audio_sink_pad (EmpathyCallWindow *self)
+{
+  EmpathyCallWindowPriv *priv = GET_PRIV (self);
+  GstPad *pad;
+
+  if (priv->liveadder == NULL)
+    {
+      priv->liveadder = gst_element_factory_make ("liveadder", NULL);
+
+      gst_bin_add (GST_BIN (priv->pipeline), priv->liveadder);
+      gst_bin_add (GST_BIN (priv->pipeline), priv->audio_output);
+
+      gst_element_link (priv->liveadder, priv->audio_output);
+
+      gst_element_set_state (priv->liveadder, GST_STATE_PLAYING);
+      gst_element_set_state (priv->audio_output, GST_STATE_PLAYING);
+    }
+
+  pad = gst_element_get_request_pad (priv->liveadder, "sink%d");
+
+  return pad;
+}
+
 /* Called from the streaming thread */
 static void
 empathy_call_window_src_added_cb (EmpathyCallHandler *handler,
@@ -558,11 +621,11 @@ empathy_call_window_src_added_cb (EmpathyCallHandler *handler,
 {
   EmpathyCallWindow *self = EMPATHY_CALL_WINDOW (user_data);
   EmpathyCallWindowPriv *priv = GET_PRIV (self);
-  EmpathyTpCall *call;
-
-  GstPad *pad;
-  GstElement *element;
   gchar *str;
+  EmpathyTpCall *call;
+  GstPad *pad;
+
+  g_mutex_lock (priv->lock);
 
   g_object_get (priv->handler, "tp-call", &call, NULL);
 
@@ -583,26 +646,19 @@ empathy_call_window_src_added_cb (EmpathyCallHandler *handler,
   switch (media_type)
     {
       case TP_MEDIA_STREAM_TYPE_AUDIO:
-        element = priv->audio_output;
-        g_object_ref (element);
+        pad = empathy_call_window_get_audio_sink_pad (self);
         break;
       case TP_MEDIA_STREAM_TYPE_VIDEO:
-        element =
-          empathy_video_widget_get_element (
-            EMPATHY_VIDEO_WIDGET (priv->video_output));
+        pad = empathy_call_window_get_video_sink_pad (self);
         break;
       default:
         g_assert_not_reached ();
     }
 
-  gst_bin_add (GST_BIN (priv->pipeline), element);
-
-  pad = gst_element_get_static_pad (element, "sink");
-  gst_element_set_state (element, GST_STATE_PLAYING);
-
   gst_pad_link (src, pad);
-
   gst_object_unref (pad);
+
+  g_mutex_unlock (priv->lock);
 }
 
 /* Called from the streaming thread */
