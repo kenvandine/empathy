@@ -555,7 +555,9 @@ main (int argc, char *argv[])
 	g_signal_connect (G_OBJECT (call_factory), "new-call-handler",
 		G_CALLBACK (new_call_handler_cb), NULL);
 
+	gdk_threads_enter ();
 	gtk_main ();
+	gdk_threads_leave ();
 
 	empathy_idle_set_state (idle, MC_PRESENCE_OFFLINE);
 

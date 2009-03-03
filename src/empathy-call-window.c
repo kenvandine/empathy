@@ -564,6 +564,8 @@ empathy_call_window_src_added_cb (EmpathyCallHandler *handler,
 
   g_object_get (priv->handler, "tp-call", &call, NULL);
 
+  gdk_threads_enter ();
+
   if (empathy_tp_call_has_dtmf (call))
     gtk_widget_set_sensitive (priv->dtmf_panel, TRUE);
 
@@ -573,6 +575,8 @@ empathy_call_window_src_added_cb (EmpathyCallHandler *handler,
   str = g_strdup_printf (_("Connected -- %d:%02dm"), 0, 0);
   empathy_call_window_status_message (self, str);
   g_free (str);
+
+  gdk_threads_leave ();
 
   switch (media_type)
     {
