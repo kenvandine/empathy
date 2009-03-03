@@ -293,7 +293,6 @@ empathy_audio_src_handle_message (GstBin *bin, GstMessage *message)
       gdouble peak = -G_MAXDOUBLE;
       gdouble rms = -G_MAXDOUBLE;
 
-
       s = gst_message_get_structure (message);
       name = gst_structure_get_name (s);
 
@@ -371,7 +370,6 @@ empathy_audio_src_get_volume (EmpathyGstAudioSrc *src)
 {
   EmpathyGstAudioSrcPrivate *priv = EMPATHY_GST_AUDIO_SRC_GET_PRIVATE (src);
   gdouble volume;
-
 
   g_object_get (G_OBJECT (priv->volume), "volume", &volume, NULL);
 
