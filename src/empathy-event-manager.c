@@ -589,14 +589,22 @@ event_manager_tube_dispatch_ability_cb (GObject *object,
 
 static void
 event_manager_tube_got_contact_cb (EmpathyTpContactFactory *factory,
-                                   GList *contacts,
+                                   EmpathyContact *contact,
+                                   const GError *error,
                                    gpointer user_data,
                                    GObject *object)
 {
   EventManagerApproval *approval = (EventManagerApproval *)user_data;
   EmpathyTubeDispatchAbility dispatchability;
 
-  approval->contact = g_object_ref (contacts->data);
+  if (error != NULL)
+    {
+      /* FIXME: We should probably still display the event */
+      DEBUG ("Error: %s", error->message);
+      return;
+    }
+
+  approval->contact = g_object_ref (contact);
 
   dispatchability = empathy_tube_dispatch_is_dispatchable
     (approval->tube_dispatch);
@@ -705,7 +713,8 @@ event_room_channel_process_func (EventPriv *event)
 
 static void
 event_manager_muc_invite_got_contact_cb (EmpathyTpContactFactory *factory,
-                                         GList *contacts,
+                                         EmpathyContact *contact,
+                                         const GError *error,
                                          gpointer user_data,
                                          GObject *object)
 {
@@ -715,7 +724,14 @@ event_manager_muc_invite_got_contact_cb (EmpathyTpContactFactory *factory,
   gchar *msg;
   TpHandle self_handle;
 
-  approval->contact = g_object_ref (contacts->data);
+  if (error != NULL)
+    {
+      /* FIXME: We should probably still display the event */
+      DEBUG ("Error: %s", error->message);
+      return;
+    }
+
+  approval->contact = g_object_ref (contact);
   channel = empathy_dispatch_operation_get_channel (approval->operation);
 
   self_handle = tp_channel_group_get_self_handle (channel);
@@ -785,8 +801,8 @@ event_manager_approve_channel_cb (EmpathyDispatcher *dispatcher,
               connection = empathy_tp_chat_get_connection (tp_chat);
               factory = empathy_tp_contact_factory_dup_singleton (connection);
 
-              empathy_tp_contact_factory_get_from_handles (factory,
-                  1, &inviter, event_manager_muc_invite_got_contact_cb,
+              empathy_tp_contact_factory_get_from_handle (factory,
+                  inviter, event_manager_muc_invite_got_contact_cb,
                   approval, NULL, G_OBJECT (manager));
 
               g_object_unref (factory);
@@ -861,7 +877,7 @@ event_manager_approve_channel_cb (EmpathyDispatcher *dispatcher,
       approval->tube_dispatch = empathy_tube_dispatch_new (operation);
       connection = tp_channel_borrow_connection (channel);
       factory = empathy_tp_contact_factory_dup_singleton (connection);
-      empathy_tp_contact_factory_get_from_handles (factory, 1, &handle,
+      empathy_tp_contact_factory_get_from_handle (factory, handle,
         event_manager_tube_got_contact_cb, approval, NULL, G_OBJECT (manager));
     }
   else

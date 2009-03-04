@@ -206,15 +206,19 @@ contact_list_view_dnd_get_contact_free (DndGetContactData *data)
 
 static void
 contact_list_view_drag_got_contact (EmpathyTpContactFactory *factory,
-				    GList                   *contacts,
+				    EmpathyContact          *contact,
+				    const GError            *error,
 				    gpointer                 user_data,
 				    GObject                 *view)
 {
 	EmpathyContactListViewPriv *priv = GET_PRIV (view);
 	DndGetContactData          *data = user_data;
 	EmpathyContactList         *list;
-	EmpathyContact             *contact = contacts->data;
 
+	if (error != NULL) {
+		DEBUG ("Error: %s", error->message);
+		return;
+	}
 
 	DEBUG ("contact %s (%d) dragged from '%s' to '%s'",
 		empathy_contact_get_id (contact),
@@ -324,7 +328,9 @@ contact_list_view_drag_data_received (GtkWidget         *view,
 	data->old_group = old_group;
 	data->action = context->action;
 
-	empathy_tp_contact_factory_get_from_ids (factory, 1, &contact_id,
+	/* FIXME: We should probably wait for the cb before calling
+	 * gtk_drag_finish */
+	empathy_tp_contact_factory_get_from_id (factory, contact_id,
 		contact_list_view_drag_got_contact,
 		data, (GDestroyNotify) contact_list_view_dnd_get_contact_free,
 		G_OBJECT (view));

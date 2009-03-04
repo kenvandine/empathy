@@ -172,13 +172,19 @@ megaphone_applet_update_contact (MegaphoneApplet *applet)
 
 static void
 megaphone_applet_got_contact_cb (EmpathyTpContactFactory *factory,
-				 GList                   *contacts,
+				 EmpathyContact          *contact,
+				 const GError            *error,
 				 gpointer                 user_data,
 				 GObject                 *applet)
 {
 	MegaphoneAppletPriv *priv = GET_PRIV (applet);
 
-	priv->contact = g_object_ref (contacts->data);
+	if (error != NULL) {
+		DEBUG ("Error: %s", error->message);
+		return;
+	}
+
+	priv->contact = g_object_ref (contact);
 	g_signal_connect_swapped (priv->contact, "notify",
 				  G_CALLBACK (megaphone_applet_update_contact),
 				  applet);
@@ -192,14 +198,13 @@ megaphone_applet_new_connection_cb (EmpathyAccountManager *manager,
 				    MegaphoneApplet       *applet)
 {
 	MegaphoneAppletPriv *priv = GET_PRIV (applet);
-	const gchar *id = priv->id;
 
 	if (priv->contact || !empathy_account_equal (account, priv->account)) {
 		return;
 	}
 
 	priv->factory = empathy_tp_contact_factory_dup_singleton (connection);
-	empathy_tp_contact_factory_get_from_ids (priv->factory, 1, &id,
+	empathy_tp_contact_factory_get_from_id (priv->factory, priv->id,
 		megaphone_applet_got_contact_cb,
 		NULL, NULL, G_OBJECT (applet));
 }

@@ -173,14 +173,20 @@ new_message_dialog_match_func (GtkEntryCompletion *completion,
 
 static void
 new_message_dialog_call_got_contact_cb (EmpathyTpContactFactory *factory,
-					GList                   *contacts,
+					EmpathyContact          *contact,
+					const GError            *error,
 					gpointer                 user_data,
 					GObject                 *weak_object)
 {
 	EmpathyCallFactory *call_factory;
 
+	if (error != NULL) {
+		DEBUG ("Error: %s", error->message);
+		return;
+	}
+
 	call_factory = empathy_call_factory_get();
-	empathy_call_factory_new_call (call_factory, contacts->data);
+	empathy_call_factory_new_call (call_factory, contact);
 }
 
 static void
@@ -203,7 +209,7 @@ new_message_dialog_response_cb (GtkWidget               *widget,
 		EmpathyTpContactFactory *factory;
 
 		factory = empathy_tp_contact_factory_dup_singleton (connection);
-		empathy_tp_contact_factory_get_from_ids (factory, 1, &id,
+		empathy_tp_contact_factory_get_from_id (factory, id,
 			new_message_dialog_call_got_contact_cb,
 			NULL, NULL, NULL);
 		g_object_unref (factory);

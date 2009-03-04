@@ -554,9 +554,15 @@ tp_contact_factory_add_contact (EmpathyTpContactFactory *tp_factory,
 		empathy_contact_get_handle (contact));
 }
 
+typedef union {
+	EmpathyTpContactFactoryContactsByIdCb ids_cb;
+	EmpathyTpContactFactoryContactsByHandleCb handles_cb;
+	EmpathyTpContactFactoryContactCb contact_cb;
+} GetContactsCb;
+
 typedef struct {
 	EmpathyTpContactFactory *tp_factory;
-	EmpathyTpContactFactoryGotContactsCb callback;
+	GetContactsCb callback;
 	gpointer user_data;
 	GDestroyNotify destroy;
 } GetContactsData;
@@ -574,55 +580,51 @@ get_contacts_data_free (gpointer user_data)
 	g_slice_free (GetContactsData, data);
 }
 
-static void
-got_contacts (GetContactsData *data,
-	      GObject *weak_object,
-	      guint n_contacts,
-	      TpContact * const *contacts,
-	      const GError *error)
+static EmpathyContact *
+dup_contact_for_tp_contact (EmpathyTpContactFactory *tp_factory,
+			    TpContact               *tp_contact)
 {
-	GList *ret = NULL;
-	guint i;
+	EmpathyContact *contact;
 
-	if (error) {
-		DEBUG ("Error: %s", error->message);
+	contact = tp_contact_factory_find_by_tp_contact (tp_factory,
+							 tp_contact);
+
+	if (contact != NULL) {
+		g_object_ref (contact);
+	} else {
+		contact = empathy_contact_new (tp_contact);
+		tp_contact_factory_add_contact (tp_factory, contact);
 	}
 
+	return contact;
+}
+
+static EmpathyContact **
+contacts_array_new (EmpathyTpContactFactory *tp_factory,
+		    guint                    n_contacts,
+		    TpContact * const *      contacts)
+{
+	EmpathyContact **ret;
+	guint            i;
+
+	ret = g_new0 (EmpathyContact *, n_contacts);
 	for (i = 0; i < n_contacts; i++) {
-		EmpathyContact *contact;
-
-		contact = tp_contact_factory_find_by_tp_contact (data->tp_factory,
-								 contacts[i]);
-
-		if (contact != NULL) {
-			g_object_ref (contact);
-		} else {
-			contact = empathy_contact_new (contacts[i]);
-			tp_contact_factory_add_contact (data->tp_factory, contact);
-		}
-		ret = g_list_prepend (ret, contact);
+		ret[i] = dup_contact_for_tp_contact (tp_factory, contacts[i]);
 	}
 
-	if (data->callback)
-		data->callback (data->tp_factory, ret, data->user_data, weak_object);
-
-	g_list_foreach (ret, (GFunc) g_object_unref, NULL);
-	g_list_free (ret);
+	return ret;
 }
 
 static void
-get_contacts_by_handle_cb (TpConnection *connection,
-			   guint n_contacts,
-			   TpContact * const *contacts,
-			   guint n_failed,
-			   const TpHandle *failed,
-			   const GError *error,
-			   gpointer user_data,
-			   GObject *weak_object)
+contacts_array_free (guint            n_contacts,
+		     EmpathyContact **contacts)
 {
-	got_contacts (user_data, weak_object,
-		      n_contacts, contacts,
-		      error);
+	guint i;
+
+	for (i = 0; i < n_contacts; i++) {
+		g_object_unref (contacts[i]);
+	}
+	g_free (contacts);
 }
 
 static void
@@ -635,16 +637,28 @@ get_contacts_by_id_cb (TpConnection *connection,
 		       gpointer user_data,
 		       GObject *weak_object)
 {
-	got_contacts (user_data, weak_object,
-		      n_contacts, contacts,
-		      error);
+	GetContactsData *data = user_data;
+	EmpathyContact **empathy_contacts;
+
+	empathy_contacts = contacts_array_new (data->tp_factory,
+					       n_contacts, contacts);
+	if (data->callback.ids_cb) {
+		data->callback.ids_cb (data->tp_factory,
+				       n_contacts, empathy_contacts,
+				       requested_ids,
+				       failed_id_errors,
+				       error,
+				       data->user_data, weak_object);
+	}
+
+	contacts_array_free (n_contacts, empathy_contacts);
 }
 
 void
 empathy_tp_contact_factory_get_from_ids (EmpathyTpContactFactory *tp_factory,
 					 guint                    n_ids,
 					 const gchar * const     *ids,
-					 EmpathyTpContactFactoryGotContactsCb callback,
+					 EmpathyTpContactFactoryContactsByIdCb callback,
 					 gpointer                 user_data,
 					 GDestroyNotify           destroy,
 					 GObject                 *weak_object)
@@ -656,7 +670,7 @@ empathy_tp_contact_factory_get_from_ids (EmpathyTpContactFactory *tp_factory,
 	g_return_if_fail (ids != NULL);
 
 	data = g_slice_new (GetContactsData);
-	data->callback = callback;
+	data->callback.ids_cb = callback;
 	data->user_data = user_data;
 	data->destroy = destroy;
 	data->tp_factory = g_object_ref (tp_factory);
@@ -670,11 +684,104 @@ empathy_tp_contact_factory_get_from_ids (EmpathyTpContactFactory *tp_factory,
 					  weak_object);
 }
 
+static void
+get_contact_by_id_cb (TpConnection *connection,
+		      guint n_contacts,
+		      TpContact * const *contacts,
+		      const gchar * const *requested_ids,
+		      GHashTable *failed_id_errors,
+		      const GError *error,
+		      gpointer user_data,
+		      GObject *weak_object)
+{
+	GetContactsData *data = user_data;
+	EmpathyContact  *contact = NULL;
+
+	if (n_contacts == 1) {
+		contact = dup_contact_for_tp_contact (data->tp_factory,
+						      contacts[0]);
+	}
+	else if (error == NULL) {
+		GHashTableIter iter;
+		gpointer       value;
+
+		g_hash_table_iter_init (&iter, failed_id_errors);
+		while (g_hash_table_iter_next (&iter, NULL, &value)) {
+			if (value) {
+				error = value;
+				break;
+			}
+		}
+	}
+
+	if (data->callback.contact_cb) {
+		data->callback.contact_cb (data->tp_factory,
+				           contact,
+				           error,
+				           data->user_data, weak_object);
+	}
+}
+
+void
+empathy_tp_contact_factory_get_from_id (EmpathyTpContactFactory *tp_factory,
+					const gchar             *id,
+					EmpathyTpContactFactoryContactCb callback,
+					gpointer                 user_data,
+					GDestroyNotify           destroy,
+					GObject                 *weak_object)
+{
+	EmpathyTpContactFactoryPriv *priv = GET_PRIV (tp_factory);
+	GetContactsData *data;
+
+	g_return_if_fail (EMPATHY_IS_TP_CONTACT_FACTORY (tp_factory));
+	g_return_if_fail (id != NULL);
+
+	data = g_slice_new (GetContactsData);
+	data->callback.contact_cb = callback;
+	data->user_data = user_data;
+	data->destroy = destroy;
+	data->tp_factory = g_object_ref (tp_factory);
+	tp_connection_get_contacts_by_id (priv->connection,
+					  1, &id,
+					  G_N_ELEMENTS (contact_features),
+					  contact_features,
+					  get_contact_by_id_cb,
+					  data,
+					  (GDestroyNotify) get_contacts_data_free,
+					  weak_object);
+}
+
+static void
+get_contacts_by_handle_cb (TpConnection *connection,
+			   guint n_contacts,
+			   TpContact * const *contacts,
+			   guint n_failed,
+			   const TpHandle *failed,
+			   const GError *error,
+			   gpointer user_data,
+			   GObject *weak_object)
+{
+	GetContactsData *data = user_data;
+	EmpathyContact **empathy_contacts;
+
+	empathy_contacts = contacts_array_new (data->tp_factory,
+					       n_contacts, contacts);
+	if (data->callback.handles_cb) {
+		data->callback.handles_cb (data->tp_factory,
+					   n_contacts, empathy_contacts,
+					   n_failed, failed,
+					   error,
+					   data->user_data, weak_object);
+	}
+
+	contacts_array_free (n_contacts, empathy_contacts);
+}
+
 void
 empathy_tp_contact_factory_get_from_handles (EmpathyTpContactFactory *tp_factory,
 					     guint n_handles,
 					     const TpHandle *handles,
-					     EmpathyTpContactFactoryGotContactsCb callback,
+					     EmpathyTpContactFactoryContactsByHandleCb callback,
 					     gpointer                 user_data,
 					     GDestroyNotify           destroy,
 					     GObject                 *weak_object)
@@ -686,7 +793,7 @@ empathy_tp_contact_factory_get_from_handles (EmpathyTpContactFactory *tp_factory
 	g_return_if_fail (handles != NULL);
 
 	data = g_slice_new (GetContactsData);
-	data->callback = callback;
+	data->callback.handles_cb = callback;
 	data->user_data = user_data;
 	data->destroy = destroy;
 	data->tp_factory = g_object_ref (tp_factory);
@@ -695,6 +802,60 @@ empathy_tp_contact_factory_get_from_handles (EmpathyTpContactFactory *tp_factory
 					      G_N_ELEMENTS (contact_features),
 					      contact_features,
 					      get_contacts_by_handle_cb,
+					      data,
+					      (GDestroyNotify) get_contacts_data_free,
+					      weak_object);
+}
+
+static void
+get_contact_by_handle_cb (TpConnection *connection,
+			  guint n_contacts,
+			  TpContact * const *contacts,
+			  guint n_failed,
+			  const TpHandle *failed,
+			  const GError *error,
+			  gpointer user_data,
+			  GObject *weak_object)
+{
+	GetContactsData *data = user_data;
+	EmpathyContact  *contact = NULL;
+
+	if (n_contacts == 1) {
+		contact = dup_contact_for_tp_contact (data->tp_factory,
+						      contacts[0]);
+	}
+
+	if (data->callback.contact_cb) {
+		data->callback.contact_cb (data->tp_factory,
+				           contact,
+				           error,
+				           data->user_data, weak_object);
+	}
+}
+
+void
+empathy_tp_contact_factory_get_from_handle (EmpathyTpContactFactory *tp_factory,
+					    TpHandle                 handle,
+					    EmpathyTpContactFactoryContactCb callback,
+					    gpointer                 user_data,
+					    GDestroyNotify           destroy,
+					    GObject                 *weak_object)
+{
+	EmpathyTpContactFactoryPriv *priv = GET_PRIV (tp_factory);
+	GetContactsData *data;
+
+	g_return_if_fail (EMPATHY_IS_TP_CONTACT_FACTORY (tp_factory));
+
+	data = g_slice_new (GetContactsData);
+	data->callback.contact_cb = callback;
+	data->user_data = user_data;
+	data->destroy = destroy;
+	data->tp_factory = g_object_ref (tp_factory);
+	tp_connection_get_contacts_by_handle (priv->connection,
+					      1, &handle,
+					      G_N_ELEMENTS (contact_features),
+					      contact_features,
+					      get_contact_by_handle_cb,
 					      data,
 					      (GDestroyNotify) get_contacts_data_free,
 					      weak_object);

@@ -508,13 +508,21 @@ tp_file_check_if_ready (EmpathyTpFile *tp_file)
 
 static void
 tp_file_got_contact_cb (EmpathyTpContactFactory *factory,
-                        GList *contacts,
+                        EmpathyContact *contact,
+                        const GError *error,
                         gpointer user_data,
                         GObject *weak_object)
 {
   EmpathyTpFile *tp_file = EMPATHY_TP_FILE (weak_object);
 
-  tp_file->priv->contact = g_object_ref (contacts->data);
+  if (error)
+    {
+      DEBUG ("Error: %s", error->message);
+      empathy_tp_file_close (tp_file);
+      return;
+    }
+
+  tp_file->priv->contact = g_object_ref (contact);
   tp_file_check_if_ready (tp_file);
 }
 
@@ -633,8 +641,8 @@ tp_file_constructor (GType type,
       tp_file_get_all_cb, NULL, NULL, file_obj);
 
   handle = tp_channel_get_handle (tp_file->priv->channel, NULL);
-  empathy_tp_contact_factory_get_from_handles (tp_file->priv->factory,
-      1, &handle, tp_file_got_contact_cb, NULL, NULL, file_obj);
+  empathy_tp_contact_factory_get_from_handle (tp_file->priv->factory,
+      handle, tp_file_got_contact_cb, NULL, NULL, file_obj);
 
   return file_obj;
 }

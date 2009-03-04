@@ -690,13 +690,20 @@ contact_widget_contact_update (EmpathyContactWidget *information)
 
 static void
 contact_widget_got_contact_cb (EmpathyTpContactFactory *factory,
-                               GList *contacts,
+                               EmpathyContact *contact,
+                               const GError *error,
                                gpointer user_data,
                                GObject *weak_object)
 {
   EmpathyContactWidget *information = user_data;
 
-  contact_widget_set_contact (information, contacts->data);
+  if (error != NULL)
+    {
+      DEBUG ("Error: %s", error->message);
+      return;
+    }
+
+  contact_widget_set_contact (information, contact);
 }
 
 static void
@@ -715,7 +722,7 @@ contact_widget_get_self_handle_cb (TpConnection *connection,
     }
 
   factory = empathy_tp_contact_factory_dup_singleton (connection);
-  empathy_tp_contact_factory_get_from_handles (factory, 1, &self_handle,
+  empathy_tp_contact_factory_get_from_handle (factory, self_handle,
       contact_widget_got_contact_cb, information, NULL,
       weak_object);
   g_object_unref (factory);
@@ -741,7 +748,7 @@ contact_widget_change_contact (EmpathyContactWidget *information)
           EmpathyTpContactFactory *factory;
 
           factory = empathy_tp_contact_factory_dup_singleton (connection);
-          empathy_tp_contact_factory_get_from_ids (factory, 1, &id,
+          empathy_tp_contact_factory_get_from_id (factory, id,
               contact_widget_got_contact_cb, information, NULL,
               G_OBJECT (information->vbox_contact_widget));
           g_object_unref (factory);

@@ -1146,13 +1146,23 @@ typedef struct
 
 static void
 dispatcher_chat_with_contact_id_cb (EmpathyTpContactFactory *factory,
-                                    GList                   *contacts,
+                                    EmpathyContact          *contact,
+                                    const GError            *error,
                                     gpointer                 user_data,
                                     GObject                 *weak_object)
 {
   ChatWithContactIdData *data = user_data;
 
-  empathy_dispatcher_chat_with_contact (contacts->data, data->callback, data->user_data);
+  if (error)
+    {
+      /* FIXME: Should call data->callback with the error */
+      DEBUG ("Error: %s", error->message);
+    }
+  else
+    {
+      empathy_dispatcher_chat_with_contact (contact, data->callback, data->user_data);
+    }
+
   g_object_unref (data->dispatcher);
   g_slice_free (ChatWithContactIdData, data);
 }
@@ -1176,7 +1186,7 @@ empathy_dispatcher_chat_with_contact_id (TpConnection *connection,
   data->dispatcher = dispatcher;
   data->callback = callback;
   data->user_data = user_data;
-  empathy_tp_contact_factory_get_from_ids (factory, 1, &contact_id,
+  empathy_tp_contact_factory_get_from_id (factory, contact_id,
       dispatcher_chat_with_contact_id_cb, data, NULL, NULL);
 
   g_object_unref (factory);

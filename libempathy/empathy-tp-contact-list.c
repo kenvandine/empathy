@@ -334,15 +334,24 @@ tp_contact_list_group_add (EmpathyTpContactList *list,
 
 static void
 tp_contact_list_got_added_members_cb (EmpathyTpContactFactory *factory,
-				      GList                   *contacts,
+				      guint                    n_contacts,
+				      EmpathyContact * const * contacts,
+				      guint                    n_failed,
+				      const TpHandle          *failed,
+				      const GError            *error,
 				      gpointer                 user_data,
 				      GObject                 *list)
 {
 	EmpathyTpContactListPriv *priv = GET_PRIV (list);
-	GList *l;
+	guint i;
 
-	for (l = contacts; l; l = l->next) {
-		EmpathyContact *contact = l->data;
+	if (error) {
+		DEBUG ("Error: %s", error->message);
+		return;
+	}
+
+	for (i = 0; i < n_contacts; i++) {
+		EmpathyContact *contact = contacts[i];
 		TpHandle handle;
 
 		handle = empathy_contact_get_handle (contact);
@@ -367,15 +376,24 @@ tp_contact_list_got_added_members_cb (EmpathyTpContactFactory *factory,
 
 static void
 tp_contact_list_got_local_pending_cb (EmpathyTpContactFactory *factory,
-				      GList                   *contacts,
-				      gpointer                 info,
+				      guint                    n_contacts,
+				      EmpathyContact * const * contacts,
+				      guint                    n_failed,
+				      const TpHandle          *failed,
+				      const GError            *error,
+				      gpointer                 user_data,
 				      GObject                 *list)
 {
 	EmpathyTpContactListPriv *priv = GET_PRIV (list);
-	GList *l;
+	guint i;
 
-	for (l = contacts; l; l = l->next) {
-		EmpathyContact *contact = l->data;
+	if (error) {
+		DEBUG ("Error: %s", error->message);
+		return;
+	}
+
+	for (i = 0; i < n_contacts; i++) {
+		EmpathyContact *contact = contacts[i];
 		TpHandle handle;
 		const gchar *message;
 		TpChannelGroupChangeReason reason;
