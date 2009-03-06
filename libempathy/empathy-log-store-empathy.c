@@ -575,7 +575,7 @@ log_store_empathy_search_new (EmpathyLogStore *self,
   files = log_store_empathy_get_all_files (self, NULL);
   DEBUG ("Found %d log files in total", g_list_length (files));
 
-  for (l = files; l; l = l->next)
+  for (l = files; l; l = g_list_next (l))
     {
       gchar *filename;
       GMappedFile *file;

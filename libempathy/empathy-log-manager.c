@@ -57,7 +57,7 @@ log_manager_finalize (GObject *object)
 
   priv = GET_PRIV (object);
 
-  for (l = priv->stores; l; l = l->next)
+  for (l = priv->stores; l; l = g_list_next (l))
     {
       EmpathyLogStore *store = (EmpathyLogStore *) l->data;
       g_object_unref (store);
@@ -143,7 +143,7 @@ empathy_log_manager_add_message (EmpathyLogManager *manager,
 
   priv = GET_PRIV (manager);
 
-  for (l = priv->stores; l; l = l->next)
+  for (l = priv->stores; l; l = g_list_next (l))
     {
       if (!tp_strdiff (empathy_log_store_get_name (
               EMPATHY_LOG_STORE (l->data)), add_store))
@@ -176,7 +176,7 @@ empathy_log_manager_exists (EmpathyLogManager *manager,
 
   priv = GET_PRIV (manager);
 
-  for (l = priv->stores; l; l = l->next)
+  for (l = priv->stores; l; l = g_list_next (l))
     {
       if (empathy_log_store_exists (EMPATHY_LOG_STORE (l->data),
             account, chat_id, chatroom))
@@ -212,7 +212,7 @@ empathy_log_manager_get_dates (EmpathyLogManager *manager,
 
   priv = GET_PRIV (manager);
 
-  for (l = priv->stores; l; l = l->next)
+  for (l = priv->stores; l; l = g_list_next (l))
     {
       EmpathyLogStore *store = EMPATHY_LOG_STORE (l->data);
 
@@ -251,7 +251,7 @@ empathy_log_manager_get_messages_for_date (EmpathyLogManager *manager,
 
   priv = GET_PRIV (manager);
 
-  for (l = priv->stores; l; l = l->next)
+  for (l = priv->stores; l; l = g_list_next (l))
     {
       EmpathyLogStore *store = EMPATHY_LOG_STORE (l->data);
 
@@ -297,7 +297,7 @@ empathy_log_manager_get_filtered_messages (EmpathyLogManager *manager,
   priv = GET_PRIV (manager);
 
   /* Get num_messages from each log store */
-  for (l = priv->stores; l; l = l->next)
+  for (l = priv->stores; l; l = g_list_next (l))
     {
       EmpathyLogStore *store = EMPATHY_LOG_STORE (l->data);
 
@@ -335,7 +335,7 @@ empathy_log_manager_get_chats (EmpathyLogManager *manager,
 
   priv = GET_PRIV (manager);
 
-  for (l = priv->stores; l; l = l->next)
+  for (l = priv->stores; l; l = g_list_next (l))
     {
       EmpathyLogStore *store = EMPATHY_LOG_STORE (l->data);
 
@@ -358,7 +358,7 @@ empathy_log_manager_search_new (EmpathyLogManager *manager,
 
   priv = GET_PRIV (manager);
 
-  for (l = priv->stores; l; l = l->next)
+  for (l = priv->stores; l; l = g_list_next (l))
     {
       EmpathyLogStore *store = EMPATHY_LOG_STORE (l->data);
 
@@ -387,7 +387,7 @@ empathy_log_manager_search_free (GList *hits)
 {
   GList *l;
 
-  for (l = hits; l; l = l->next)
+  for (l = hits; l; l = g_list_next (l))
     {
       empathy_log_manager_search_hit_free (l->data);
     }
