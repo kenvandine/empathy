@@ -72,6 +72,7 @@ log_manager_constructor (GType type,
                          GObjectConstructParam *props)
 {
   GObject *retval;
+  EmpathyLogManagerPriv *priv;
 
   if (manager_singleton)
     {
@@ -87,8 +88,8 @@ log_manager_constructor (GType type,
 
       priv = GET_PRIV (manager_singleton);
 
-      priv->sources = g_list_append (priv->sources,
-          empathy_log_source_empathy_get_source ());
+      priv->stores = g_list_append (priv->stores,
+          g_object_new (EMPATHY_TYPE_LOG_STORE_EMPATHY, NULL));
     }
 
   return retval;
