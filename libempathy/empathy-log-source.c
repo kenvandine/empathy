@@ -110,3 +110,13 @@ empathy_log_source_search_new (EmpathyLogSource *self,
 {
   return EMPATHY_LOG_SOURCE_GET_INTERFACE (self)->search_new (self, text);
 }
+
+void
+empathy_log_source_ack_message (EmpathyLogSource *self,
+                                const gchar *chat_id,
+                                gboolean chatroom,
+                                EmpathyMessage *message)
+{
+  EMPATHY_LOG_SOURCE_GET_INTERFACE (self)->ack_message (
+      self, chat_id, chatroom, message);
+}

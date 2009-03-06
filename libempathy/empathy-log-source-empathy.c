@@ -694,4 +694,5 @@ log_source_iface_init (gpointer g_iface,
   iface->get_messages_for_date = log_source_empathy_get_messages_for_date;
   iface->get_chats = log_source_empathy_get_chats;
   iface->search_new = log_source_empathy_search_new;
+  iface->ack_message = NULL;
 }

@@ -62,6 +62,8 @@ struct _EmpathyLogSourceInterface
   GList * (*get_chats) (EmpathyLogSource *self,
             McAccount         *account);
   GList * (*search_new) (EmpathyLogSource *self, const gchar *text);
+  void (*ack_message) (EmpathyLogSource *self, const gchar *chat_id,
+      gboolean chatroom, EmpathyMessage *message);
 };
 
 GType empathy_log_source_get_type (void) G_GNUC_CONST;
@@ -81,6 +83,8 @@ GList *empathy_log_source_get_chats (EmpathyLogSource *self,
     McAccount *account);
 GList *empathy_log_source_search_new (EmpathyLogSource *self,
     const gchar *text);
+void empathy_log_source_ack_message (EmpathyLogSource *self,
+    const gchar *chat_id, gboolean chatroom, EmpathyMessage *message);
 
 G_END_DECLS
 
