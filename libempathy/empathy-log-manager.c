@@ -91,9 +91,6 @@ log_manager_constructor (GType type,
 
       priv = GET_PRIV (manager_singleton);
 
-      manager_singleton = EMPATHY_LOG_MANAGER (retval);
-      g_object_add_weak_pointer (retval, (gpointer), &manager_singleton);
-
       priv->sources = g_list_append (priv->sources,
           empathy_log_source_empathy_get_source ());
     }
@@ -107,9 +104,23 @@ empathy_log_manager_class_init (EmpathyLogManagerClass *klass)
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
   object_class->finalize = log_manager_finalize;
-  object_class->constructor = log_manager_constructor;
 
   g_type_class_add_private (object_class, sizeof (EmpathyLogManagerPriv));
+}
+
+static void
+empathy_log_manager_init (EmpathyLogManager *manager)
+{
+  EmpathyLogManagerPriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (manager,
+      EMPATHY_TYPE_LOG_MANAGER, EmpathyLogManagerPriv);
+
+  priv->sources = g_list_append (priv->sources,
+      empathy_log_source_empathy_get_source ());
+
+  manager->priv = priv;
+
+  priv->sources = g_list_append (priv->sources,
+      empathy_log_source_empathy_get_source ());
 }
 
 EmpathyLogManager *
