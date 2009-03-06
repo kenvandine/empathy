@@ -1031,9 +1031,10 @@ chat_add_logs (EmpathyChat *chat)
 {
 	EmpathyChatPriv *priv = GET_PRIV (chat);
 	gboolean         is_chatroom;
-	GList           *messages, *l;
+	GList           *messages, *l, *c;
 	guint            num_messages;
 	guint            i;
+	const GList     *pending_messages, *m;
 
 	if (!priv->id) {
 		return;
@@ -1048,6 +1049,27 @@ chat_add_logs (EmpathyChat *chat)
 							  priv->account,
 							  priv->id,
 							  is_chatroom);
+
+	pending_messages = empathy_tp_chat_get_pending_messages (priv->tp_chat);
+
+	/* Remove messages that are pending */
+	c = g_list_copy (messages);
+	for (l = messages; l; l = l->next) {
+		for (m = pending_messages; m; m = m->next) {
+			if (empathy_message_equal (l->data, m->data)) {
+				EmpathyMessage *message;
+
+				message = l->data;
+				c = g_list_remove (c, message);
+				g_object_unref (message);
+				break;
+			}
+		}
+	}
+
+	g_list_free (messages);
+	messages = c;
+
 	num_messages  = g_list_length (messages);
 
 	/* Only keep the 10 last messages */
