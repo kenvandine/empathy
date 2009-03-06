@@ -375,30 +375,20 @@ empathy_log_manager_get_date_readable (const gchar *date)
   return empathy_time_to_string_local (t, "%a %d %b %Y");
 }
 
-typedef struct
-{
-  EmpathyLogManager *log_manager;
-  TpChannel *channel;
-} MessageObserveData;
-
-static void
-message_observe_data_free (MessageObserveData *data)
-{
-  g_slice_free (MessageObserveData, data);
-}
-
 static void
 log_manager_chat_received_message_cb (EmpathyTpChat *tp_chat,
                                       EmpathyMessage *message,
-                                      MessageObserveData *data)
+                                      EmpathyLogManager *log_manager)
 {
   GError *error = NULL;
   TpHandleType handle_type;
+  TpChannel *channel;
 
-  tp_channel_get_handle (data->channel, &handle_type);
+  channel = empathy_tp_chat_get_channel (tp_chat);
+  tp_channel_get_handle (channel, &handle_type);
 
-  if (!empathy_log_manager_add_message (data->log_manager,
-        tp_channel_get_identifier (data->channel),
+  if (!empathy_log_manager_add_message (log_manager,
+        tp_channel_get_identifier (channel),
         handle_type == TP_HANDLE_TYPE_ROOM,
         message, &error))
     {
@@ -422,21 +412,12 @@ log_manager_dispatcher_observe_cb (EmpathyDispatcher *dispatcher,
   if (channel_type == TP_IFACE_QUARK_CHANNEL_TYPE_TEXT)
     {
       EmpathyTpChat *tp_chat;
-      TpChannel *channel;
-      MessageObserveData *data;
 
       tp_chat = EMPATHY_TP_CHAT (
           empathy_dispatch_operation_get_channel_wrapper (operation));
 
-      channel = empathy_dispatch_operation_get_channel (operation);
-
-      data = g_slice_new0 (MessageObserveData);
-      data->log_manager = log_manager;
-      data->channel = channel;
-
-      g_signal_connect_data (tp_chat, "message-received",
-          G_CALLBACK (log_manager_chat_received_message_cb), data,
-          (GClosureNotify) message_observe_data_free, 0);
+      g_signal_connect (tp_chat, "message-received",
+          G_CALLBACK (log_manager_chat_received_message_cb), log_manager);
     }
 }
 
