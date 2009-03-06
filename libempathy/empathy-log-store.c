@@ -154,3 +154,20 @@ empathy_log_store_ack_message (EmpathyLogStore *self,
   EMPATHY_LOG_STORE_GET_INTERFACE (self)->ack_message (
       self, chat_id, chatroom, message);
 }
+
+GList *
+empathy_log_store_get_filtered_messages (EmpathyLogStore *self,
+                                         McAccount *account,
+                                         const gchar *chat_id,
+                                         gboolean chatroom,
+                                         guint num_messages,
+                                         EmpathyLogMessageFilter filter,
+                                         gpointer user_data)
+
+{
+  if (!EMPATHY_LOG_STORE_GET_INTERFACE (self)->get_filtered_messages)
+    return NULL;
+
+  return EMPATHY_LOG_STORE_GET_INTERFACE (self)->get_filtered_messages (
+      self, account, chat_id, chatroom, num_messages, filter, user_data);
+}

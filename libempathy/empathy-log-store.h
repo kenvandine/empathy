@@ -28,6 +28,7 @@
 #include <libmissioncontrol/mc-account.h>
 
 #include "empathy-message.h"
+#include "empathy-log-manager.h"
 
 G_BEGIN_DECLS
 
@@ -65,6 +66,9 @@ struct _EmpathyLogStoreInterface
   GList * (*search_new) (EmpathyLogStore *self, const gchar *text);
   void (*ack_message) (EmpathyLogStore *self, const gchar *chat_id,
       gboolean chatroom, EmpathyMessage *message);
+  GList * (*get_filtered_messages) (EmpathyLogStore *self, McAccount *account,
+      const gchar *chat_id, gboolean chatroom, guint num_messages,
+      EmpathyLogMessageFilter filter, gpointer user_data);
 };
 
 GType empathy_log_store_get_type (void) G_GNUC_CONST;
@@ -88,6 +92,9 @@ GList *empathy_log_store_search_new (EmpathyLogStore *self,
     const gchar *text);
 void empathy_log_store_ack_message (EmpathyLogStore *self,
     const gchar *chat_id, gboolean chatroom, EmpathyMessage *message);
+GList *empathy_log_store_get_filtered_messages (EmpathyLogStore *self,
+    McAccount *account, const gchar *chat_id, gboolean chatroom,
+    guint num_messages, EmpathyLogMessageFilter filter, gpointer user_data);
 
 G_END_DECLS
 
