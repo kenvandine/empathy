@@ -280,8 +280,18 @@ empathy_log_manager_get_last_messages (EmpathyLogManager *manager,
 
   l = g_list_last (dates);
   if (l)
-    messages = empathy_log_manager_get_messages_for_date (manager, account,
+    {
+      messages = empathy_log_manager_get_messages_for_date (manager, account,
         chat_id, chatroom, l->data);
+
+      /* The latest date will always be today as messages are logged immediately. */
+      l = g_list_previous (l);
+      if (l)
+        {
+          messages = g_list_concat (messages, empathy_log_manager_get_messages_for_date (
+            manager, account, chat_id, chatroom, l->data));
+        }
+    }
 
   g_list_foreach (dates, (GFunc) g_free, NULL);
   g_list_free (dates);
