@@ -31,8 +31,8 @@
 #include <telepathy-glib/util.h>
 
 #include "empathy-log-manager.h"
-#include "empathy-log-source-empathy.h"
-#include "empathy-log-source.h"
+#include "empathy-log-store-empathy.h"
+#include "empathy-log-store.h"
 #include "empathy-tp-chat.h"
 #include "empathy-utils.h"
 
@@ -42,7 +42,7 @@
 #define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyLogManager)
 typedef struct
 {
-  GList *sources;
+  GList *stores;
 } EmpathyLogManagerPriv;
 
 G_DEFINE_TYPE (EmpathyLogManager, empathy_log_manager, G_TYPE_OBJECT);
@@ -57,13 +57,13 @@ log_manager_finalize (GObject *object)
 
   priv = GET_PRIV (object);
 
-  for (l = priv->sources; l; l = l->next)
+  for (l = priv->stores; l; l = l->next)
     {
-      EmpathyLogSource *source = (EmpathyLogSource *) l->data;
-      g_object_unref (source);
+      EmpathyLogStore *store = (EmpathyLogStore *) l->data;
+      g_object_unref (store);
     }
 
-  g_list_free (priv->sources);
+  g_list_free (priv->stores);
 }
 
 static GObject *
@@ -111,8 +111,8 @@ empathy_log_manager_init (EmpathyLogManager *manager)
   EmpathyLogManagerPriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (manager,
       EMPATHY_TYPE_LOG_MANAGER, EmpathyLogManagerPriv);
 
-  priv->sources = g_list_append (priv->sources,
-      g_object_new (EMPATHY_TYPE_LOG_SOURCE_EMPATHY, NULL));
+  priv->stores = g_list_append (priv->stores,
+      g_object_new (EMPATHY_TYPE_LOG_STORE_EMPATHY, NULL));
 
   manager->priv = priv;
 }
@@ -135,9 +135,9 @@ empathy_log_manager_add_message (EmpathyLogManager *manager,
   gboolean out = FALSE;
   gboolean found = FALSE;
 
-  /* TODO: When multiple log sources appear with add_message implementations
+  /* TODO: When multiple log stores appear with add_message implementations
    * make this customisable. */
-  const gchar *add_source = "Empathy";
+  const gchar *add_store = "Empathy";
 
   g_return_val_if_fail (EMPATHY_IS_LOG_MANAGER (manager), FALSE);
   g_return_val_if_fail (chat_id != NULL, FALSE);
@@ -145,12 +145,12 @@ empathy_log_manager_add_message (EmpathyLogManager *manager,
 
   priv = GET_PRIV (manager);
 
-  for (l = priv->sources; l; l = l->next)
+  for (l = priv->stores; l; l = l->next)
     {
-      if (!tp_strdiff (empathy_log_source_get_name (
-              EMPATHY_LOG_SOURCE (l->data)), add_source))
+      if (!tp_strdiff (empathy_log_store_get_name (
+              EMPATHY_LOG_STORE (l->data)), add_store))
         {
-          out = empathy_log_source_add_message (EMPATHY_LOG_SOURCE (l->data),
+          out = empathy_log_store_add_message (EMPATHY_LOG_STORE (l->data),
               chat_id, chatroom, message, error);
           found = TRUE;
           break;
@@ -158,7 +158,7 @@ empathy_log_manager_add_message (EmpathyLogManager *manager,
     }
 
   if (!found)
-    DEBUG ("Failed to find chosen log source to write to.");
+    DEBUG ("Failed to find chosen log store to write to.");
 
   return out;
 }
@@ -178,9 +178,9 @@ empathy_log_manager_exists (EmpathyLogManager *manager,
 
   priv = GET_PRIV (manager);
 
-  for (l = priv->sources; l; l = l->next)
+  for (l = priv->stores; l; l = l->next)
     {
-      if (empathy_log_source_exists (EMPATHY_LOG_SOURCE (l->data),
+      if (empathy_log_store_exists (EMPATHY_LOG_STORE (l->data),
             account, chat_id, chatroom))
         return TRUE;
     }
@@ -214,15 +214,15 @@ empathy_log_manager_get_dates (EmpathyLogManager *manager,
 
   priv = GET_PRIV (manager);
 
-  for (l = priv->sources; l; l = l->next)
+  for (l = priv->stores; l; l = l->next)
     {
-      EmpathyLogSource *source = EMPATHY_LOG_SOURCE (l->data);
+      EmpathyLogStore *store = EMPATHY_LOG_STORE (l->data);
 
       if (!out)
-        out = empathy_log_source_get_dates (source, account, chat_id, chatroom);
+        out = empathy_log_store_get_dates (store, account, chat_id, chatroom);
       else
         {
-          GList *new = empathy_log_source_get_dates (source, account, chat_id,
+          GList *new = empathy_log_store_get_dates (store, account, chat_id,
               chatroom);
           g_list_foreach (new, log_manager_get_dates_foreach, out);
 
@@ -253,12 +253,12 @@ empathy_log_manager_get_messages_for_date (EmpathyLogManager *manager,
 
   priv = GET_PRIV (manager);
 
-  for (l = priv->sources; l; l = l->next)
+  for (l = priv->stores; l; l = l->next)
     {
-      EmpathyLogSource *source = EMPATHY_LOG_SOURCE (l->data);
+      EmpathyLogStore *store = EMPATHY_LOG_STORE (l->data);
 
-      out = g_list_concat (out, empathy_log_source_get_messages_for_date (
-          source, account, chat_id, chatroom, date));
+      out = g_list_concat (out, empathy_log_store_get_messages_for_date (
+          store, account, chat_id, chatroom, date));
     }
 
   return out;
@@ -303,12 +303,12 @@ empathy_log_manager_get_chats (EmpathyLogManager *manager,
 
   priv = GET_PRIV (manager);
 
-  for (l = priv->sources; l; l = l->next)
+  for (l = priv->stores; l; l = l->next)
     {
-      EmpathyLogSource *source = EMPATHY_LOG_SOURCE (l->data);
+      EmpathyLogStore *store = EMPATHY_LOG_STORE (l->data);
 
       out = g_list_concat (out,
-          empathy_log_source_get_chats (source, account));
+          empathy_log_store_get_chats (store, account));
     }
 
   return out;
@@ -326,12 +326,12 @@ empathy_log_manager_search_new (EmpathyLogManager *manager,
 
   priv = GET_PRIV (manager);
 
-  for (l = priv->sources; l; l = l->next)
+  for (l = priv->stores; l; l = l->next)
     {
-      EmpathyLogSource *source = EMPATHY_LOG_SOURCE (l->data);
+      EmpathyLogStore *store = EMPATHY_LOG_STORE (l->data);
 
       out = g_list_concat (out,
-          empathy_log_source_search_new (source, text));
+          empathy_log_store_search_new (store, text));
     }
 
   return out;
