@@ -50,6 +50,9 @@ empathy_log_source_exists (EmpathyLogSource *self,
                            const gchar *chat_id,
                            gboolean chatroom)
 {
+  if (!EMPATHY_LOG_SOURCE_GET_INTERFACE (self)->exists)
+    return FALSE;
+
   return EMPATHY_LOG_SOURCE_GET_INTERFACE (self)->exists (
       self, account, chat_id, chatroom);
 }
@@ -62,6 +65,9 @@ empathy_log_source_add_message (EmpathyLogSource *self,
                                 gboolean chatroom,
                                 EmpathyMessage *message)
 {
+  if (!EMPATHY_LOG_SOURCE_GET_INTERFACE (self)->add_message)
+    return;
+
   EMPATHY_LOG_SOURCE_GET_INTERFACE (self)->add_message (
       self, chat_id, chatroom, message);
 }
@@ -72,6 +78,9 @@ empathy_log_source_get_dates (EmpathyLogSource *self,
                               const gchar *chat_id,
                               gboolean chatroom)
 {
+  if (!EMPATHY_LOG_SOURCE_GET_INTERFACE (self)->get_dates)
+    return NULL;
+
   return EMPATHY_LOG_SOURCE_GET_INTERFACE (self)->get_dates (
       self, account, chat_id, chatroom);
 }
@@ -83,6 +92,9 @@ empathy_log_source_get_messages_for_date (EmpathyLogSource *self,
                                           gboolean chatroom,
                                           const gchar *date)
 {
+  if (!EMPATHY_LOG_SOURCE_GET_INTERFACE (self)->get_messages_for_date)
+    return NULL;
+
   return EMPATHY_LOG_SOURCE_GET_INTERFACE (self)->get_messages_for_date (
       self, account, chat_id, chatroom, date);
 }
@@ -93,6 +105,9 @@ empathy_log_source_get_last_messages (EmpathyLogSource *self,
                                       const gchar *chat_id,
                                       gboolean chatroom)
 {
+  if (!EMPATHY_LOG_SOURCE_GET_INTERFACE (self)->get_last_messages)
+    return NULL;
+
   return EMPATHY_LOG_SOURCE_GET_INTERFACE (self)->get_last_messages (
       self, account, chat_id, chatroom);
 }
@@ -101,6 +116,9 @@ GList *
 empathy_log_source_get_chats (EmpathyLogSource *self,
                               McAccount *account)
 {
+  if (!EMPATHY_LOG_SOURCE_GET_INTERFACE (self)->get_chats)
+    return NULL;
+
   return EMPATHY_LOG_SOURCE_GET_INTERFACE (self)->get_chats (self, account);
 }
 
@@ -108,6 +126,9 @@ GList *
 empathy_log_source_search_new (EmpathyLogSource *self,
                                const gchar *text)
 {
+  if (!EMPATHY_LOG_SOURCE_GET_INTERFACE (self)->search_new)
+    return NULL;
+
   return EMPATHY_LOG_SOURCE_GET_INTERFACE (self)->search_new (self, text);
 }
 
@@ -117,6 +138,9 @@ empathy_log_source_ack_message (EmpathyLogSource *self,
                                 gboolean chatroom,
                                 EmpathyMessage *message)
 {
+  if (!EMPATHY_LOG_SOURCE_GET_INTERFACE (self)->ack_message)
+    return;
+
   EMPATHY_LOG_SOURCE_GET_INTERFACE (self)->ack_message (
       self, chat_id, chatroom, message);
 }
