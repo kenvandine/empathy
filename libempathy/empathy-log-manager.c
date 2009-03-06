@@ -173,6 +173,17 @@ empathy_log_manager_exists (EmpathyLogManager *manager,
   return FALSE;
 }
 
+static void
+log_manager_get_dates_foreach (gpointer data,
+                               gpointer user_data)
+{
+  /* g_list_first is needed in case an older date was last inserted */
+  GList *orig = g_list_first (user_data);
+
+  if (g_list_find_custom (orig, data, (GCompareFunc) strcmp))
+    orig = g_list_insert_sorted (orig, g_strdup (data), (GCompareFunc) strcmp);
+}
+
 GList *
 empathy_log_manager_get_dates (EmpathyLogManager *manager,
                                McAccount *account,
@@ -198,9 +209,16 @@ empathy_log_manager_get_dates (EmpathyLogManager *manager,
       if (!out)
         out = source->get_dates (manager, account, chat_id, chatroom);
       else
-        /* TODO fix this */
-        out = g_list_concat (out, source->get_dates (manager, account,
-              chat_id, chatroom));
+        {
+          GList *new = source->get_dates (manager, account, chat_id, chatroom);
+          g_list_foreach (new, log_manager_get_dates_foreach, out);
+
+          g_list_foreach (new, (GFunc) g_free, NULL);
+          g_list_free (new);
+
+          /* Similar reason for using g_list_first here as before */
+          out = g_list_first (out);
+        }
     }
 
   return out;
