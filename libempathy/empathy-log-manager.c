@@ -369,7 +369,7 @@ empathy_log_manager_search_new (EmpathyLogManager *manager,
 void
 empathy_log_manager_search_hit_free (EmpathyLogSearchHit *hit)
 {
-  if (hit->account)
+  if (hit->account != NULL)
     g_object_unref (hit->account);
 
   g_free (hit->date);
@@ -423,7 +423,7 @@ log_manager_chat_received_message_cb (EmpathyTpChat *tp_chat,
       DEBUG ("Failed to write message: %s",
           error ? error->message : "No error message");
 
-      if (error)
+      if (error != NULL)
         g_error_free (error);
     }
 }

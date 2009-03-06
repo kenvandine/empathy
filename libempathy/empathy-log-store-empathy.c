@@ -220,7 +220,7 @@ log_store_empathy_add_message (EmpathyLogStore *self,
   if (!g_file_test (filename, G_FILE_TEST_EXISTS))
     {
       file = g_fopen (filename, "w+");
-      if (file)
+      if (file != NULL)
         g_fprintf (file, LOG_HEADER);
 
       g_chmod (filename, LOG_FILE_CREATE_MODE);
@@ -228,7 +228,7 @@ log_store_empathy_add_message (EmpathyLogStore *self,
   else
     {
       file = g_fopen (filename, "r+");
-      if (file)
+      if (file != NULL)
         fseek (file, - strlen (LOG_FOOTER), SEEK_END);
     }
 
@@ -242,7 +242,7 @@ log_store_empathy_add_message (EmpathyLogStore *self,
   contact_id = g_markup_escape_text (str, -1);
 
   avatar = empathy_contact_get_avatar (sender);
-  if (avatar)
+  if (avatar != NULL)
     avatar_token = g_markup_escape_text (avatar->token, -1);
 
   g_fprintf (file,
@@ -730,7 +730,7 @@ log_store_empathy_get_filtered_messages (EmpathyLogStore *self,
           chat_id, chatroom, l->data);
 
       n = new_messages;
-      while (n)
+      while (n != NULL)
         {
           next = g_list_next (n);
           if (!filter (n->data, user_data))
