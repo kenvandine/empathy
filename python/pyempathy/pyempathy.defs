@@ -1577,11 +1577,12 @@
 (define-method add_message
   (of-object "EmpathyLogManager")
   (c-name "empathy_log_manager_add_message")
-  (return-type "none")
+  (return-type "gboolean")
   (parameters
     '("const-gchar*" "chat_id")
     '("gboolean" "chatroom")
     '("EmpathyMessage*" "message")
+    '("GError**" "error")
   )
 )
 
@@ -1607,15 +1608,6 @@
   )
 )
 
-(define-method get_messages_for_file
-  (of-object "EmpathyLogManager")
-  (c-name "empathy_log_manager_get_messages_for_file")
-  (return-type "GList*")
-  (parameters
-    '("const-gchar*" "filename")
-  )
-)
-
 (define-method get_messages_for_date
   (of-object "EmpathyLogManager")
   (c-name "empathy_log_manager_get_messages_for_date")
@@ -1636,15 +1628,6 @@
     '("McAccount*" "account")
     '("const-gchar*" "chat_id")
     '("gboolean" "chatroom")
-  )
-)
-
-(define-method get_messages_for_file
-  (of-object "EmpathyLogManager")
-  (c-name "empathy_log_manager_get_messages_for_file")
-  (return-type "GList*")
-  (parameters
-    '("const-gchar*" "filename")
   )
 )
 
@@ -1679,6 +1662,23 @@
   (return-type "gchar*")
   (parameters
     '("const-gchar*" "date")
+  )
+)
+
+(define-function log_manager_search_hit_free
+  (c-name "empathy_log_manager_search_hit_free")
+  (return-type "none")
+  (parameters
+    '("EmpathyLogSearchHit*" "hit")
+  )
+)
+
+(define-method observe
+  (of-object "EmpathyLogManager")
+  (c-name "empathy_log_manager_observe")
+  (return-type "none")
+  (parameters
+    '("EmpathyDispatcher*" "dispatcher")
   )
 )
 
@@ -2287,9 +2287,9 @@
 (define-method get_state
   (of-object "EmpathyTpFile")
   (c-name "empathy_tp_file_get_state")
-  (return-type "guint")
+  (return-type "TpFileTransferState")
   (parameters
-    '("guint*" "reason")
+    '("TpFileTransferStateChangeReason*" "reason")
   )
 )
 

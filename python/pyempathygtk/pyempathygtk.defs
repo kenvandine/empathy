@@ -1304,6 +1304,23 @@
   (return-type "GstElement*")
 )
 
+(define-function audio_sink_set_volume
+  (c-name "empathy_audio_sink_set_volume")
+  (return-type "none")
+  (parameters
+    '("EmpathyGstAudioSink*" "sink")
+    '("gdouble" "volume")
+  )
+)
+
+(define-function audio_sink_get_volume
+  (c-name "empathy_audio_sink_get_volume")
+  (return-type "gdouble")
+  (parameters
+    '("EmpathyGstAudioSink*" "sink")
+  )
+)
+
 
 
 ;; From empathy-audio-src.h
