@@ -497,3 +497,24 @@ empathy_message_set_id (EmpathyMessage *message, guint id)
 
 	priv->id = id;
 }
+
+gchar *
+empathy_message_get_unique_id (EmpathyMessage *message)
+{
+	EmpathyMessagePriv *priv = GET_PRIV (message);
+
+	return g_strdup_printf ("%d.%d", priv->id, g_str_hash (priv->body));
+}
+
+gboolean
+empathy_message_equal (EmpathyMessage *message1, EmpathyMessage *message2)
+{
+	EmpathyMessagePriv *priv1 = GET_PRIV (message1);
+	EmpathyMessagePriv *priv2 = GET_PRIV (message2);
+
+	if (priv1->id == priv2->id && g_str_hash (priv1->body) == g_str_hash (priv2->body)) {
+		return TRUE;
+	}
+
+	return FALSE;
+}
