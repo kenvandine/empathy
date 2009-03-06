@@ -1026,14 +1026,31 @@ chat_input_populate_popup_cb (GtkTextView *view,
 	}
 }
 
+static gboolean
+chat_log_filter (EmpathyMessage *message,
+		 gpointer user_data)
+{
+	EmpathyChat *chat = (EmpathyChat *) user_data;
+	EmpathyChatPriv *priv = GET_PRIV (chat);
+	const GList *pending;
+
+	pending = empathy_tp_chat_get_pending_messages (priv->tp_chat);
+
+	for (; pending; pending = g_list_next (pending)) {
+		if (empathy_message_equal (message, pending->data)) {
+			return FALSE;
+		}
+	}
+
+	return TRUE;
+}
+
 static void
 chat_add_logs (EmpathyChat *chat)
 {
 	EmpathyChatPriv *priv = GET_PRIV (chat);
 	gboolean         is_chatroom;
 	GList           *messages, *l;
-	guint            i = 0;
-	const GList     *pending_messages, *m;
 
 	if (!priv->id) {
 		return;
@@ -1044,28 +1061,17 @@ chat_add_logs (EmpathyChat *chat)
 
 	/* Add messages from last conversation */
 	is_chatroom = priv->handle_type == TP_HANDLE_TYPE_ROOM;
-	messages = empathy_log_manager_get_last_messages (priv->log_manager,
-							  priv->account,
-							  priv->id,
-							  is_chatroom);
 
-	pending_messages = empathy_tp_chat_get_pending_messages (priv->tp_chat);
+	messages = empathy_log_manager_get_filtered_messages (priv->log_manager,
+							      priv->account,
+							      priv->id,
+							      is_chatroom,
+							      5,
+							      chat_log_filter,
+							      chat);
 
-	for (l = g_list_last (messages); l; l = g_list_previous (l)) {
-		if (i < 10) {
-			gboolean found = FALSE;
-
-			for (m = pending_messages; m; m = g_list_next (m)) {
-				if (empathy_message_equal (l->data, m->data)) {
-					found = TRUE;
-				}
-			}
-
-			if (!found) {
-				empathy_chat_view_append_message (chat->view, l->data);
-				i++;
-			}
-		}
+	for (l = messages; l; l = g_list_next (l)) {
+		empathy_chat_view_append_message (chat->view, l->data);
 		g_object_unref (l->data);
 	}
 
