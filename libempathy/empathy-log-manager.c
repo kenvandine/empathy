@@ -112,9 +112,6 @@ empathy_log_manager_init (EmpathyLogManager *manager)
   EmpathyLogManagerPriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (manager,
       EMPATHY_TYPE_LOG_MANAGER, EmpathyLogManagerPriv);
 
-  priv->stores = g_list_append (priv->stores,
-      g_object_new (EMPATHY_TYPE_LOG_STORE_EMPATHY, NULL));
-
   manager->priv = priv;
 }
 
