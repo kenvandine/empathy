@@ -709,6 +709,46 @@ log_store_empathy_get_name (EmpathyLogStore *self)
   return priv->name;
 }
 
+static GList *
+log_store_empathy_get_filtered_messages (EmpathyLogStore *self,
+                                         McAccount *account,
+                                         const gchar *chat_id,
+                                         gboolean chatroom,
+                                         guint num_messages,
+                                         EmpathyLogMessageFilter filter,
+                                         gpointer user_data)
+{
+  GList *dates, *l, *messages = NULL;
+
+  dates = log_store_empathy_get_dates (self, account, chat_id, chatroom);
+
+  for (l = g_list_last (dates); l && g_list_length (messages) < num_messages; l = g_list_previous (l))
+    {
+      GList *new_messages, *n, *next;
+
+      new_messages = log_store_empathy_get_messages_for_date (self, account,
+          chat_id, chatroom, l->data);
+
+      n = new_messages;
+      while (n)
+        {
+          next = g_list_next (n);
+          if (!filter (n->data, user_data))
+            {
+              g_object_unref (n->data);
+              new_messages = g_list_remove (new_messages, n->data);
+            }
+          n = next;
+        }
+      messages = g_list_concat (messages, new_messages);
+    }
+
+  g_list_foreach (dates, (GFunc) g_free, NULL);
+  g_list_free (dates);
+
+  return messages;
+}
+
 static void
 log_store_iface_init (gpointer g_iface,
                       gpointer iface_data)
@@ -723,4 +763,5 @@ log_store_iface_init (gpointer g_iface,
   iface->get_chats = log_store_empathy_get_chats;
   iface->search_new = log_store_empathy_search_new;
   iface->ack_message = NULL;
+  iface->get_filtered_messages = log_store_empathy_get_filtered_messages;
 }
