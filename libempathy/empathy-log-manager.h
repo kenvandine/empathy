@@ -72,6 +72,9 @@ struct _EmpathyLogSearchHit
   gchar     *date;
 };
 
+typedef gboolean (*EmpathyLogMessageFilter) (EmpathyMessage *message,
+    gpointer user_data);
+
 GType empathy_log_manager_get_type (void) G_GNUC_CONST;
 EmpathyLogManager *empathy_log_manager_dup_singleton (void);
 gboolean empathy_log_manager_add_message (EmpathyLogManager *manager,
@@ -84,8 +87,9 @@ GList *empathy_log_manager_get_dates (EmpathyLogManager *manager,
 GList *empathy_log_manager_get_messages_for_date (EmpathyLogManager *manager,
     McAccount *account, const gchar *chat_id, gboolean chatroom,
     const gchar *date);
-GList *empathy_log_manager_get_last_messages (EmpathyLogManager *manager,
-    McAccount *account, const gchar *chat_id, gboolean chatroom);
+GList *empathy_log_manager_get_filtered_messages (EmpathyLogManager *manager,
+    McAccount *account, const gchar *chat_id, gboolean chatroom,
+    guint num_messages, EmpathyLogMessageFilter filter, gpointer user_data);
 GList *empathy_log_manager_get_chats (EmpathyLogManager *manager,
     McAccount *account);
 GList *empathy_log_manager_search_new (EmpathyLogManager *manager,

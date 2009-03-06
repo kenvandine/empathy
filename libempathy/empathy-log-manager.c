@@ -262,41 +262,74 @@ empathy_log_manager_get_messages_for_date (EmpathyLogManager *manager,
   return out;
 }
 
-GList *
-empathy_log_manager_get_last_messages (EmpathyLogManager *manager,
-                                       McAccount *account,
-                                       const gchar *chat_id,
-                                       gboolean chatroom)
+static gint
+log_manager_sort_message_by_date (gconstpointer a,
+				  gconstpointer b)
 {
-  GList *messages = NULL;
-  GList *dates;
+	EmpathyMessage *one = (EmpathyMessage *) a;
+	EmpathyMessage *two = (EmpathyMessage *) b;
+	time_t one_time, two_time;
+	gint ret = 0;
+
+	one_time = empathy_message_get_timestamp (one);
+	two_time = empathy_message_get_timestamp (two);
+
+	if (one_time < two_time) {
+		ret = -1;
+	} else if (one_time == two_time) {
+		ret = 0;
+	} else if (one_time > two_time) {
+		ret = 1;
+	}
+
+	return ret;
+}
+
+GList *
+empathy_log_manager_get_filtered_messages (EmpathyLogManager *manager,
+					   McAccount *account,
+					   const gchar *chat_id,
+					   gboolean chatroom,
+					   guint num_messages,
+					   EmpathyLogMessageFilter filter,
+					   gpointer user_data)
+{
+  EmpathyLogManagerPriv *priv;
+  GList *out = NULL;
   GList *l;
+  guint out_size, i;
 
   g_return_val_if_fail (EMPATHY_IS_LOG_MANAGER (manager), NULL);
   g_return_val_if_fail (MC_IS_ACCOUNT (account), NULL);
   g_return_val_if_fail (chat_id != NULL, NULL);
 
-  dates = empathy_log_manager_get_dates (manager, account, chat_id, chatroom);
+  priv = GET_PRIV (manager);
 
-  l = g_list_last (dates);
-  if (l)
+  /* Get num_messages from each log store */
+  for (l = priv->stores; l; l = l->next)
     {
-      messages = empathy_log_manager_get_messages_for_date (manager, account,
-        chat_id, chatroom, l->data);
+      EmpathyLogStore *store = EMPATHY_LOG_STORE (l->data);
 
-      /* The latest date will always be today as messages are logged immediately. */
-      l = g_list_previous (l);
-      if (l)
-        {
-          messages = g_list_concat (messages, empathy_log_manager_get_messages_for_date (
-            manager, account, chat_id, chatroom, l->data));
-        }
+      out = g_list_concat (out, empathy_log_store_get_filtered_messages (store,
+          account, chat_id, chatroom, num_messages, filter, user_data));
     }
 
-  g_list_foreach (dates, (GFunc) g_free, NULL);
-  g_list_free (dates);
+  /* Sort the list by time */
+  out = g_list_sort (out, log_manager_sort_message_by_date);
 
-  return messages;
+  /* Cut list down to num_messages length */
+  out_size = g_list_length (out);
+
+  for (i = 0; out_size - i > num_messages; i++)
+    {
+      EmpathyMessage *message;
+
+      message = out->data;
+      out = g_list_remove (out, message);
+      g_object_unref (message);
+    }
+
+  return out;
 }
 
 GList *
