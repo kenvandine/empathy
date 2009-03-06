@@ -246,8 +246,10 @@ log_store_empathy_add_message (EmpathyLogStore *self,
     avatar_token = g_markup_escape_text (avatar->token, -1);
 
   g_fprintf (file,
-       "<message time='%s' id='%s' name='%s' token='%s' isuser='%s' type='%s'>"
-       "%s</message>\n" LOG_FOOTER, timestamp, contact_id, contact_name,
+       "<message time='%s' cm_id='%d' id='%s' name='%s' token='%s' isuser='%s' type='%s'>"
+       "%s</message>\n" LOG_FOOTER, timestamp,
+       empathy_message_get_id (message),
+       contact_id, contact_name,
        avatar_token ? avatar_token : "",
        empathy_contact_is_user (sender) ? "true" : "false",
        empathy_message_type_to_str (msg_type), body);
@@ -452,6 +454,8 @@ log_store_empathy_get_messages_for_file (EmpathyLogStore *self,
       gchar *is_user_str;
       gboolean is_user = FALSE;
       gchar *msg_type_str;
+      gchar *cm_id_str;
+      guint cm_id;
       TpChannelTextMessageType msg_type = TP_CHANNEL_TEXT_MESSAGE_TYPE_NORMAL;
 
       if (strcmp (node->name, "message") != 0)
@@ -464,12 +468,16 @@ log_store_empathy_get_messages_for_file (EmpathyLogStore *self,
       sender_avatar_token = xmlGetProp (node, "token");
       is_user_str = xmlGetProp (node, "isuser");
       msg_type_str = xmlGetProp (node, "type");
+      cm_id_str = xmlGetProp (node, "cm_id");
 
       if (is_user_str)
         is_user = strcmp (is_user_str, "true") == 0;
 
       if (msg_type_str)
         msg_type = empathy_message_type_from_str (msg_type_str);
+
+      if (cm_id_str)
+        sscanf (cm_id_str, "%d", &cm_id);
 
       t = empathy_time_parse (time);
 
@@ -484,6 +492,9 @@ log_store_empathy_get_messages_for_file (EmpathyLogStore *self,
       empathy_message_set_timestamp (message, t);
       empathy_message_set_tptype (message, msg_type);
 
+      if (cm_id_str)
+        empathy_message_set_id (message, cm_id);
+
       messages = g_list_append (messages, message);
 
       g_object_unref (sender);
@@ -493,6 +504,7 @@ log_store_empathy_get_messages_for_file (EmpathyLogStore *self,
       xmlFree (body);
       xmlFree (is_user_str);
       xmlFree (msg_type_str);
+      xmlFree (cm_id_str);
     }
 
   DEBUG ("Parsed %d messages", g_list_length (messages));
