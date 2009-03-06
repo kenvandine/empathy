@@ -50,7 +50,6 @@ G_BEGIN_DECLS
 typedef struct _EmpathyLogManager EmpathyLogManager;
 typedef struct _EmpathyLogManagerClass EmpathyLogManagerClass;
 typedef struct _EmpathyLogSearchHit EmpathyLogSearchHit;
-typedef struct _EmpathyLogSource EmpathyLogSource;
 
 struct _EmpathyLogManager
 {
@@ -70,24 +69,6 @@ struct _EmpathyLogSearchHit
   gboolean   is_chatroom;
   gchar     *filename;
   gchar     *date;
-};
-
-struct _EmpathyLogSource
-{
-  gboolean (*exists) (EmpathyLogManager *manager, McAccount *account,
-      const gchar *chat_id, gboolean chatroom);
-  void (*add_message) (EmpathyLogManager *manager, const gchar *chat_id,
-      gboolean chatroom, EmpathyMessage *message);
-  GList * (*get_dates) (EmpathyLogManager *manager, McAccount *account,
-      const gchar *chat_id, gboolean chatroom);
-  GList * (*get_messages_for_date) (EmpathyLogManager *manager,
-      McAccount *account, const gchar *chat_id, gboolean chatroom,
-      const gchar *date);
-  GList * (*get_last_messages) (EmpathyLogManager *manager, McAccount *account,
-      const gchar *chat_id, gboolean chatroom);
-  GList * (*get_chats) (EmpathyLogManager *manager,
-            McAccount         *account);
-  GList * (*search_new) (EmpathyLogManager *manager, const gchar *text);
 };
 
 GType empathy_log_manager_get_type (void) G_GNUC_CONST;

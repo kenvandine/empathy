@@ -29,8 +29,8 @@
 #include <glib/gstdio.h>
 
 #include "empathy-log-manager.h"
-#include "empathy-contact.h"
-#include "empathy-time.h"
+#include "empathy-log-source-empathy.h"
+#include "empathy-log-source.h"
 #include "empathy-utils.h"
 
 #define DEBUG_FLAG EMPATHY_DEBUG_OTHER
@@ -64,7 +64,8 @@ log_manager_finalize (GObject *object)
 
   for (l = priv->sources; l; l = l->next)
     {
-      g_slice_free (EmpathyLogSource, l->data);
+      EmpathyLogSource *source = (EmpathyLogSource *) l->data;
+      g_object_unref (source);
     }
 
   g_list_free (priv->sources);
@@ -115,7 +116,10 @@ empathy_log_manager_init (EmpathyLogManager *manager)
       EMPATHY_TYPE_LOG_MANAGER, EmpathyLogManagerPriv);
 
   priv->sources = g_list_append (priv->sources,
-      empathy_log_source_empathy_get_source ());
+      g_object_new (EMPATHY_TYPE_LOG_SOURCE_EMPATHY, NULL));
+
+/*  priv->sources = g_list_append (priv->sources,
+      g_object_new (EMPATHY_LOG_SOURCE_PIDGIN, NULL));*/
 
   manager->priv = priv;
 
@@ -146,12 +150,8 @@ empathy_log_manager_add_message (EmpathyLogManager *manager,
 
   for (l = priv->sources; l; l = l->next)
     {
-      EmpathyLogSource *source = (EmpathyLogSource *) l->data;
-
-      if (!source->add_message)
-        continue;
-
-      source->add_message (manager, chat_id, chatroom, message);
+      empathy_log_source_add_message (EMPATHY_LOG_SOURCE (l->data),
+          chat_id, chatroom, message);
     }
 }
 
@@ -172,12 +172,8 @@ empathy_log_manager_exists (EmpathyLogManager *manager,
 
   for (l = priv->sources; l; l = l->next)
     {
-      EmpathyLogSource *source = (EmpathyLogSource *) l->data;
-
-      if (!source->exists)
-        continue;
-
-      if (source->exists (manager, account, chat_id, chatroom))
+      if (empathy_log_source_exists (EMPATHY_LOG_SOURCE (l->data),
+            account, chat_id, chatroom))
         return TRUE;
     }
 
@@ -212,16 +208,14 @@ empathy_log_manager_get_dates (EmpathyLogManager *manager,
 
   for (l = priv->sources; l; l = l->next)
     {
-      EmpathyLogSource *source = (EmpathyLogSource *) l->data;
-
-      if (!source->get_dates)
-        continue;
+      EmpathyLogSource *source = EMPATHY_LOG_SOURCE (l->data);
 
       if (!out)
-        out = source->get_dates (manager, account, chat_id, chatroom);
+        out = empathy_log_source_get_dates (source, account, chat_id, chatroom);
       else
         {
-          GList *new = source->get_dates (manager, account, chat_id, chatroom);
+          GList *new = empathy_log_source_get_dates (source, account, chat_id,
+              chatroom);
           g_list_foreach (new, log_manager_get_dates_foreach, out);
 
           g_list_foreach (new, (GFunc) g_free, NULL);
@@ -253,17 +247,14 @@ empathy_log_manager_get_messages_for_date (EmpathyLogManager *manager,
 
   for (l = priv->sources; l; l = l->next)
     {
-      EmpathyLogSource *source = (EmpathyLogSource *) l->data;
-
-      if (!source->get_messages_for_date)
-        continue;
+      EmpathyLogSource *source = EMPATHY_LOG_SOURCE (l->data);
 
       if (!out)
-        out = source->get_messages_for_date (manager, account, chat_id,
-            chatroom, date);
+        out = empathy_log_source_get_messages_for_date (source, account,
+            chat_id, chatroom, date);
       else
-        out = g_list_concat (out, source->get_messages_for_date (manager,
-              account, chat_id, chatroom, date));
+        out = g_list_concat (out, empathy_log_source_get_messages_for_date (
+              source, account, chat_id, chatroom, date));
     }
 
   return out;
@@ -310,15 +301,13 @@ empathy_log_manager_get_chats (EmpathyLogManager *manager,
 
   for (l = priv->sources; l; l = l->next)
     {
-      EmpathyLogSource *source = (EmpathyLogSource *) l->data;
-
-      if (!source->get_chats)
-        continue;
+      EmpathyLogSource *source = EMPATHY_LOG_SOURCE (l->data);
 
       if (!out)
-        out = source->get_chats (manager, account);
+        out = empathy_log_source_get_chats (source, account);
       else
-        out = g_list_concat (out, source->get_chats (manager, account));
+        out = g_list_concat (out,
+            empathy_log_source_get_chats (source, account));
     }
 
   return out;
@@ -338,15 +327,13 @@ empathy_log_manager_search_new (EmpathyLogManager *manager,
 
   for (l = priv->sources; l; l = l->next)
     {
-      EmpathyLogSource *source = (EmpathyLogSource *) l->data;
-
-      if (!source->search_new)
-        continue;
+      EmpathyLogSource *source = EMPATHY_LOG_SOURCE (l->data);
 
       if (!out)
-        out = source->search_new (manager, text);
+        out = empathy_log_source_search_new (source, text);
       else
-        out = g_list_concat (out, source->search_new (manager, text));
+        out = g_list_concat (out,
+            empathy_log_source_search_new (source, text));
     }
 
   return out;
