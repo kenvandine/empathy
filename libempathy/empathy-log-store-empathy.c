@@ -719,13 +719,16 @@ log_store_empathy_get_filtered_messages (EmpathyLogStore *self,
                                          gpointer user_data)
 {
   GList *dates, *l, *messages = NULL;
+  guint i = 0;
 
   dates = log_store_empathy_get_dates (self, account, chat_id, chatroom);
 
-  for (l = g_list_last (dates); l && g_list_length (messages) < num_messages; l = g_list_previous (l))
+  for (l = g_list_last (dates); l && i < num_messages; l = g_list_previous (l))
     {
       GList *new_messages, *n, *next;
 
+      /* FIXME: We should really restrict the message parsing to get only
+       * the newest num_messages. */
       new_messages = log_store_empathy_get_messages_for_date (self, account,
           chat_id, chatroom, l->data);
 
@@ -737,6 +740,10 @@ log_store_empathy_get_filtered_messages (EmpathyLogStore *self,
             {
               g_object_unref (n->data);
               new_messages = g_list_delete_link (new_messages, n);
+            }
+          else
+            {
+              i++;
             }
           n = next;
         }
