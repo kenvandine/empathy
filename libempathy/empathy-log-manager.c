@@ -299,7 +299,7 @@ empathy_log_manager_get_filtered_messages (EmpathyLogManager *manager,
             }
           else if (log_manager_message_date_cmp (new->data, out->data) > 0)
             {
-              /* This message is newer than the older message we have in out
+              /* This message is newer than the oldest message we have in out
                * list. Remove the head of out list and insert this message */
               g_object_unref (out->data);
               out = g_list_delete_link (out, out);
@@ -308,7 +308,7 @@ empathy_log_manager_get_filtered_messages (EmpathyLogManager *manager,
             }
           else
             {
-              /* This message is older than the older message we have in out
+              /* This message is older than the oldest message we have in out
                * list. Drop it. */
               g_object_unref (new->data);
             }
