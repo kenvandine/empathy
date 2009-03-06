@@ -180,17 +180,6 @@ empathy_log_manager_exists (EmpathyLogManager *manager,
   return FALSE;
 }
 
-static void
-log_manager_get_dates_foreach (gpointer data,
-                               gpointer user_data)
-{
-  /* g_list_first is needed in case an older date was last inserted */
-  GList *orig = g_list_first (user_data);
-
-  if (g_list_find_custom (orig, data, (GCompareFunc) strcmp))
-    orig = g_list_insert_sorted (orig, g_strdup (data), (GCompareFunc) strcmp);
-}
-
 GList *
 empathy_log_manager_get_dates (EmpathyLogManager *manager,
                                McAccount *account,
@@ -209,20 +198,19 @@ empathy_log_manager_get_dates (EmpathyLogManager *manager,
   for (l = priv->stores; l; l = g_list_next (l))
     {
       EmpathyLogStore *store = EMPATHY_LOG_STORE (l->data);
+      GList *new;
 
-      if (!out)
-        out = empathy_log_store_get_dates (store, account, chat_id, chatroom);
-      else
+      /* Insert dates of each store in the out list. Keep the out list sorted
+       * and avoid to insert dups. */
+      new = empathy_log_store_get_dates (store, account, chat_id, chatroom);
+      while (new)
         {
-          GList *new = empathy_log_store_get_dates (store, account, chat_id,
-              chatroom);
-          g_list_foreach (new, log_manager_get_dates_foreach, out);
+          if (g_list_find_custom (out, new->data, (GCompareFunc) strcmp))
+            g_free (new->data);
+          else
+            out = g_list_insert_sorted (out, new->data, (GCompareFunc) strcmp);
 
-          g_list_foreach (new, (GFunc) g_free, NULL);
-          g_list_free (new);
-
-          /* Similar reason for using g_list_first here as before */
-          out = g_list_first (out);
+          new = g_list_delete_link (new, new);
         }
     }
 
@@ -257,8 +245,8 @@ empathy_log_manager_get_messages_for_date (EmpathyLogManager *manager,
 }
 
 static gint
-log_manager_sort_message_by_date (gconstpointer a,
-				  gconstpointer b)
+log_manager_message_date_cmp (gconstpointer a,
+			      gconstpointer b)
 {
 	EmpathyMessage *one = (EmpathyMessage *) a;
 	EmpathyMessage *two = (EmpathyMessage *) b;
@@ -267,6 +255,7 @@ log_manager_sort_message_by_date (gconstpointer a,
 	one_time = empathy_message_get_timestamp (one);
 	two_time = empathy_message_get_timestamp (two);
 
+        /* Return -1 of message1 is older than message2 */
 	return one_time < two_time ? -1 : one_time - two_time;
 }
 
@@ -282,7 +271,7 @@ empathy_log_manager_get_filtered_messages (EmpathyLogManager *manager,
   EmpathyLogManagerPriv *priv;
   GList *out = NULL;
   GList *l;
-  guint out_size, i;
+  guint i = 0;
 
   g_return_val_if_fail (EMPATHY_IS_LOG_MANAGER (manager), NULL);
   g_return_val_if_fail (MC_IS_ACCOUNT (account), NULL);
@@ -294,21 +283,37 @@ empathy_log_manager_get_filtered_messages (EmpathyLogManager *manager,
   for (l = priv->stores; l; l = g_list_next (l))
     {
       EmpathyLogStore *store = EMPATHY_LOG_STORE (l->data);
+      GList *new;
 
-      out = g_list_concat (out, empathy_log_store_get_filtered_messages (store,
-          account, chat_id, chatroom, num_messages, filter, user_data));
-    }
+      new = empathy_log_store_get_filtered_messages (store, account, chat_id,
+          chatroom, num_messages, filter, user_data);
+      while (new)
+        {
+          if (i < num_messages)
+            {
+              /* We have less message than needed so far. Keep this message */
+              out = g_list_insert_sorted (out, new->data,
+                  (GCompareFunc) log_manager_message_date_cmp);
+              i++;
+            }
+          else if (log_manager_message_date_cmp (new->data, out->data) > 0)
+            {
+              /* This message is newer than the older message we have in out
+               * list. Remove the head of out list and insert this message */
+              g_object_unref (out->data);
+              out = g_list_delete_link (out, out);
+              out = g_list_insert_sorted (out, new->data,
+                  (GCompareFunc) log_manager_message_date_cmp);
+            }
+          else
+            {
+              /* This message is older than the older message we have in out
+               * list. Drop it. */
+              g_object_unref (new->data);
+            }
 
-  /* Sort the list by time */
-  out = g_list_sort (out, log_manager_sort_message_by_date);
-
-  /* Cut list down to num_messages length */
-  out_size = g_list_length (out);
-
-  for (i = 0; out_size - i > num_messages; i++)
-    {
-      g_object_unref (out->data);
-      out = g_list_delete_link (out, out);
+          new = g_list_delete_link (new, new);
+        }
     }
 
   return out;
