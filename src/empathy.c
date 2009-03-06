@@ -130,94 +130,21 @@ dispatch_cb (EmpathyDispatcher *dispatcher,
 }
 
 static void
-received_message_cb (TpChannel   *channel,
-		     guint        message_id,
-		     guint        timestamp,
-		     guint        from_handle,
-		     guint        message_type,
-		     guint        message_flags,
-		     const gchar *message_body,
-		     gpointer     user_data,
-		     GObject     *weak_object)
+received_message_cb (EmpathyTpChat  *tp_chat,
+		     EmpathyMessage *message,
+		     gboolean        is_chatroom)
 {
-	EmpathyMessage        *message;
-	EmpathyContact        *sender, *recipient;
-	EmpathyContactFactory *contact_factory;
-	EmpathyLogManager     *log_manager;
-	McAccount             *account;
-	TpHandleType           handle_type;
-	gboolean               is_chatroom;
+	EmpathyLogManager *log_manager;
+	EmpathyContact    *contact;
 
-	contact_factory = empathy_contact_factory_dup_singleton ();
-
-	account = empathy_channel_get_account (channel);
-
-	sender = empathy_contact_factory_get_from_handle (contact_factory,
-		account, from_handle);
-	recipient = empathy_contact_factory_get_user (contact_factory, account);
-
-	message = empathy_message_new (message_body);
-	empathy_message_set_tptype (message, message_type);
-	empathy_message_set_sender (message, sender);
-	empathy_message_set_receiver (message, recipient);
-	empathy_message_set_timestamp (message, timestamp);
-	empathy_message_set_id (message, message_id);
+	contact = empathy_tp_chat_get_remote_contact (tp_chat);
 
 	log_manager = empathy_log_manager_dup_singleton ();
 
-	tp_channel_get_handle (channel, &handle_type);
-	is_chatroom = (handle_type == TP_HANDLE_TYPE_ROOM);
-
 	empathy_log_manager_add_message (log_manager,
-		empathy_contact_get_id (sender), FALSE, message);
+		empathy_contact_get_id (contact), is_chatroom, message);
 
-	g_object_unref (sender);
-	g_object_unref (recipient);
-	g_object_unref (message);
-	g_object_unref (contact_factory);
-	g_object_unref (log_manager);
-}
-
-static void
-sent_message_cb (TpChannel   *channel,
-		 guint        timestamp,
-		 guint        message_type,
-		 const gchar *text,
-		 gpointer     user_data,
-		 GObject     *weak_object)
-{
-	EmpathyContactFactory *contact_factory;
-	EmpathyLogManager     *log_manager;
-	EmpathyMessage        *message;
-	McAccount             *account;
-	EmpathyContact        *sender, *recipient;
-	TpHandleType           handle_type;
-	gboolean               is_chatroom;
-
-	contact_factory = empathy_contact_factory_dup_singleton ();
-
-	account = empathy_channel_get_account (channel);
-
-	sender = empathy_contact_factory_get_user (contact_factory, account);
-	recipient = empathy_contact_factory_get_from_handle (contact_factory,
-		account, tp_channel_get_handle (channel, &handle_type));
-
-	message = empathy_message_new (text);
-	empathy_message_set_tptype (message, message_type);
-	empathy_message_set_sender (message, sender);
-	empathy_message_set_receiver (message, recipient);
-	empathy_message_set_timestamp (message, timestamp);
-
-	log_manager = empathy_log_manager_dup_singleton ();
-
-	is_chatroom = (handle_type == TP_HANDLE_TYPE_ROOM);
-	empathy_log_manager_add_message (log_manager,
-		empathy_contact_get_id (recipient), FALSE, message);
-
-	g_object_unref (sender);
-	g_object_unref (recipient);
-	g_object_unref (message);
-	g_object_unref (contact_factory);
+	g_object_unref (contact);
 	g_object_unref (log_manager);
 }
 
@@ -231,28 +158,21 @@ observe_cb (EmpathyDispatcher        *dispatcher,
 	channel_type = empathy_dispatch_operation_get_channel_type_id (operation);
 
 	if (channel_type == TP_IFACE_QUARK_CHANNEL_TYPE_TEXT) {
+		EmpathyTpChat *tp_chat;
 		TpChannel *channel;
-		GError *error = NULL;
+		TpHandleType handle_type;
+		gboolean is_chatroom;
+
+		tp_chat = EMPATHY_TP_CHAT (
+			empathy_dispatch_operation_get_channel_wrapper (operation));
 
 		channel = empathy_dispatch_operation_get_channel (operation);
+		tp_channel_get_handle (channel, &handle_type);
 
-		tp_cli_channel_type_text_connect_to_received (channel,
-			received_message_cb, NULL, NULL, NULL, &error);
+		is_chatroom = (handle_type == TP_HANDLE_TYPE_ROOM);
 
-		if (error) {
-			DEBUG ("Could not connect to Received: %s",
-				error->message ? error->message : "No error message");
-			g_error_free (error);
-		}
-
-		tp_cli_channel_type_text_connect_to_sent (channel,
-			sent_message_cb, NULL, NULL, NULL, &error);
-
-		if (error) {
-			DEBUG ("Could not connect to Sent: %s",
-				error->message ? error->message : "No error message");
-			g_error_free (error);
-		}
+		g_signal_connect (tp_chat, "message-received",
+			G_CALLBACK (received_message_cb), GINT_TO_POINTER (is_chatroom));
 	}
 }
 
