@@ -33,6 +33,7 @@
 #include "empathy-log-manager.h"
 #include "empathy-log-source-empathy.h"
 #include "empathy-log-source.h"
+#include "empathy-tp-chat.h"
 #include "empathy-utils.h"
 
 #define DEBUG_FLAG EMPATHY_DEBUG_OTHER
@@ -371,4 +372,78 @@ empathy_log_manager_get_date_readable (const gchar *date)
   t = empathy_time_parse (date);
 
   return empathy_time_to_string_local (t, "%a %d %b %Y");
+}
+
+typedef struct
+{
+  EmpathyLogManager *log_manager;
+  TpChannel *channel;
+} MessageObserveData;
+
+static void
+message_observe_data_free (MessageObserveData *data)
+{
+  g_slice_free (MessageObserveData, data);
+}
+
+static void
+log_manager_chat_received_message_cb (EmpathyTpChat *tp_chat,
+                                      EmpathyMessage *message,
+                                      MessageObserveData *data)
+{
+  GError *error = NULL;
+  TpHandleType handle_type;
+
+  tp_channel_get_handle (data->channel, &handle_type);
+
+  if (!empathy_log_manager_add_message (data->log_manager,
+        tp_channel_get_identifier (data->channel),
+        handle_type == TP_HANDLE_TYPE_ROOM,
+        message, &error))
+    {
+      DEBUG ("Failed to write message: %s",
+          error ? error->message : "No error message");
+
+      if (error)
+        g_error_free (error);
+    }
+}
+
+static void
+log_manager_dispatcher_observe_cb (EmpathyDispatcher *dispatcher,
+                                   EmpathyDispatchOperation *operation,
+                                   EmpathyLogManager *log_manager)
+{
+  GQuark channel_type;
+
+  channel_type = empathy_dispatch_operation_get_channel_type_id (operation);
+
+  if (channel_type == TP_IFACE_QUARK_CHANNEL_TYPE_TEXT)
+    {
+      EmpathyTpChat *tp_chat;
+      TpChannel *channel;
+      MessageObserveData *data;
+
+      tp_chat = EMPATHY_TP_CHAT (
+          empathy_dispatch_operation_get_channel_wrapper (operation));
+
+      channel = empathy_dispatch_operation_get_channel (operation);
+
+      data = g_slice_new0 (MessageObserveData);
+      data->log_manager = log_manager;
+      data->channel = channel;
+
+      g_signal_connect_data (tp_chat, "message-received",
+          G_CALLBACK (log_manager_chat_received_message_cb), data,
+          (GClosureNotify) message_observe_data_free, 0);
+    }
+}
+
+
+void
+empathy_log_manager_observe (EmpathyLogManager *log_manager,
+                             EmpathyDispatcher *dispatcher)
+{
+  g_signal_connect (dispatcher, "observe",
+      G_CALLBACK (log_manager_dispatcher_observe_cb), log_manager);
 }

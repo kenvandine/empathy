@@ -130,58 +130,6 @@ dispatch_cb (EmpathyDispatcher *dispatcher,
 }
 
 static void
-received_message_cb (EmpathyTpChat  *tp_chat,
-		     EmpathyMessage *message,
-		     TpChannel      *channel)
-{
-	EmpathyLogManager *log_manager;
-	GError            *error = NULL;
-	TpHandleType       handle_type;
-
-	tp_channel_get_handle (channel, &handle_type);
-
-	log_manager = empathy_log_manager_dup_singleton ();
-
-	if (!empathy_log_manager_add_message (log_manager,
-					     tp_channel_get_identifier (channel),
-					     handle_type == TP_HANDLE_TYPE_ROOM,
-					     message,
-					     &error)) {
-		DEBUG ("Failed to write message: %s",
-			error ? error->message : "No error message");
-
-		if (error) {
-			g_error_free (error);
-		}
-	}
-
-	g_object_unref (log_manager);
-}
-
-static void
-observe_cb (EmpathyDispatcher        *dispatcher,
-	    EmpathyDispatchOperation *operation,
-	    gpointer                  user_data)
-{
-	GQuark channel_type;
-
-	channel_type = empathy_dispatch_operation_get_channel_type_id (operation);
-
-	if (channel_type == TP_IFACE_QUARK_CHANNEL_TYPE_TEXT) {
-		EmpathyTpChat *tp_chat;
-		TpChannel *channel;
-
-		tp_chat = EMPATHY_TP_CHAT (
-			empathy_dispatch_operation_get_channel_wrapper (operation));
-
-		channel = empathy_dispatch_operation_get_channel (operation);
-
-		g_signal_connect (tp_chat, "message-received",
-			G_CALLBACK (received_message_cb), channel);
-	}
-}
-
-static void
 service_ended_cb (MissionControl *mc,
 		  gpointer        user_data)
 {
@@ -464,6 +412,7 @@ main (int argc, char *argv[])
 	guint32            startup_timestamp;
 	EmpathyStatusIcon *icon;
 	EmpathyDispatcher *dispatcher;
+	EmpathyLogManager *log_manager;
 	EmpathyChatroomManager *chatroom_manager;
 	EmpathyCallFactory *call_factory;
 	GtkWidget         *window;
@@ -599,7 +548,10 @@ main (int argc, char *argv[])
 	/* Handle channels */
 	dispatcher = empathy_dispatcher_dup_singleton ();
 	g_signal_connect (dispatcher, "dispatch", G_CALLBACK (dispatch_cb), NULL);
-	g_signal_connect (dispatcher, "observe", G_CALLBACK (observe_cb), NULL);
+
+	/* Logging */
+	log_manager = empathy_log_manager_dup_singleton ();
+	empathy_log_manager_observe (log_manager, dispatcher);
 
 	chatroom_manager = empathy_chatroom_manager_dup_singleton (NULL);
 	empathy_chatroom_manager_observe (chatroom_manager, dispatcher);
@@ -617,6 +569,7 @@ main (int argc, char *argv[])
 	g_object_unref (mc);
 	g_object_unref (idle);
 	g_object_unref (icon);
+	g_object_unref (log_manager);
 	g_object_unref (dispatcher);
 	g_object_unref (chatroom_manager);
 

@@ -29,6 +29,7 @@
 #include <libmissioncontrol/mc-account.h>
 
 #include "empathy-message.h"
+#include "empathy-dispatcher.h"
 
 G_BEGIN_DECLS
 
@@ -92,6 +93,8 @@ GList *empathy_log_manager_search_new (EmpathyLogManager *manager,
 void empathy_log_manager_search_free (GList *hits);
 gchar *empathy_log_manager_get_date_readable (const gchar *date);
 void empathy_log_manager_search_hit_free (EmpathyLogSearchHit *hit);
+void empathy_log_manager_observe (EmpathyLogManager *log_manager,
+    EmpathyDispatcher *dispatcher);
 
 G_END_DECLS
 
