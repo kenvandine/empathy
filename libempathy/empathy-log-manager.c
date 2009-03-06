@@ -53,16 +53,10 @@ static void
 log_manager_finalize (GObject *object)
 {
   EmpathyLogManagerPriv *priv;
-  GList *l;
 
   priv = GET_PRIV (object);
 
-  for (l = priv->stores; l; l = g_list_next (l))
-    {
-      EmpathyLogStore *store = (EmpathyLogStore *) l->data;
-      g_object_unref (store);
-    }
-
+  g_list_foreach (priv->stores, (GFunc) g_object_unref, NULL);
   g_list_free (priv->stores);
 }
 
