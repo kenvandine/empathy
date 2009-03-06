@@ -269,20 +269,11 @@ log_manager_sort_message_by_date (gconstpointer a,
 	EmpathyMessage *one = (EmpathyMessage *) a;
 	EmpathyMessage *two = (EmpathyMessage *) b;
 	time_t one_time, two_time;
-	gint ret = 0;
 
 	one_time = empathy_message_get_timestamp (one);
 	two_time = empathy_message_get_timestamp (two);
 
-	if (one_time < two_time) {
-		ret = -1;
-	} else if (one_time == two_time) {
-		ret = 0;
-	} else if (one_time > two_time) {
-		ret = 1;
-	}
-
-	return ret;
+	return one_time < two_time ? -1 : one_time - two_time;
 }
 
 GList *
