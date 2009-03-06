@@ -75,8 +75,6 @@ const gchar *            empathy_message_type_to_str       (TpChannelTextMessage
 guint                    empathy_message_get_id (EmpathyMessage *message);
 void                     empathy_message_set_id (EmpathyMessage *message, guint id);
 
-gchar *                  empathy_message_get_unique_id (EmpathyMessage *message);
-
 gboolean                 empathy_message_equal (EmpathyMessage *message1, EmpathyMessage *message2);
 
 G_END_DECLS

@@ -498,14 +498,6 @@ empathy_message_set_id (EmpathyMessage *message, guint id)
 	priv->id = id;
 }
 
-gchar *
-empathy_message_get_unique_id (EmpathyMessage *message)
-{
-	EmpathyMessagePriv *priv = GET_PRIV (message);
-
-	return g_strdup_printf ("%d.%d", priv->id, g_str_hash (priv->body));
-}
-
 gboolean
 empathy_message_equal (EmpathyMessage *message1, EmpathyMessage *message2)
 {
