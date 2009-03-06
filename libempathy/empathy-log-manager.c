@@ -47,14 +47,6 @@ G_DEFINE_TYPE (EmpathyLogManager, empathy_log_manager, G_TYPE_OBJECT);
 static EmpathyLogManager * manager_singleton = NULL;
 
 static void
-empathy_log_manager_init (EmpathyLogManager *manager)
-{
-  EmpathyLogManagerPriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (manager,
-      EMPATHY_TYPE_LOG_MANAGER, EmpathyLogManagerPriv);
-  manager->priv = priv;
-}
-
-static void
 log_manager_finalize (GObject *object)
 {
   EmpathyLogManagerPriv *priv;
@@ -104,6 +96,7 @@ empathy_log_manager_class_init (EmpathyLogManagerClass *klass)
 {
   GObjectClass *object_class = G_OBJECT_CLASS (klass);
 
+  object_class->constructor = log_manager_constructor;
   object_class->finalize = log_manager_finalize;
 
   g_type_class_add_private (object_class, sizeof (EmpathyLogManagerPriv));
@@ -118,13 +111,7 @@ empathy_log_manager_init (EmpathyLogManager *manager)
   priv->sources = g_list_append (priv->sources,
       g_object_new (EMPATHY_TYPE_LOG_SOURCE_EMPATHY, NULL));
 
-/*  priv->sources = g_list_append (priv->sources,
-      g_object_new (EMPATHY_LOG_SOURCE_PIDGIN, NULL));*/
-
   manager->priv = priv;
-
-  priv->sources = g_list_append (priv->sources,
-      empathy_log_source_empathy_get_source ());
 }
 
 EmpathyLogManager *
