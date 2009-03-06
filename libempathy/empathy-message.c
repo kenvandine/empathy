@@ -26,6 +26,8 @@
 
 #include <string.h>
 
+#include <telepathy-glib/util.h>
+
 #include "empathy-message.h"
 #include "empathy-utils.h"
 #include "empathy-enum-types.h"
@@ -510,7 +512,7 @@ empathy_message_equal (EmpathyMessage *message1, EmpathyMessage *message2)
 	priv1 = GET_PRIV (message1);
 	priv2 = GET_PRIV (message2);
 
-	if (priv1->id == priv2->id && g_str_hash (priv1->body) == g_str_hash (priv2->body)) {
+	if (priv1->id == priv2->id && !tp_strdiff (priv1->body, priv2->body)) {
 		return TRUE;
 	}
 
