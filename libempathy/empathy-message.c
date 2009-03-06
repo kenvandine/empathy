@@ -512,6 +512,9 @@ empathy_message_equal (EmpathyMessage *message1, EmpathyMessage *message2)
 	EmpathyMessagePriv *priv1 = GET_PRIV (message1);
 	EmpathyMessagePriv *priv2 = GET_PRIV (message2);
 
+	g_return_val_if_fail (EMPATHY_IS_MESSAGE (message1), FALSE);
+	g_return_val_if_fail (EMPATHY_IS_MESSAGE (message2), FALSE);
+
 	if (priv1->id == priv2->id && g_str_hash (priv1->body) == g_str_hash (priv2->body)) {
 		return TRUE;
 	}
