@@ -465,15 +465,6 @@ chat_message_received (EmpathyChat *chat, EmpathyMessage *message)
 		empathy_contact_get_name (sender),
 		empathy_contact_get_handle (sender));
 
-	if (priv->id) {
-		gboolean is_chatroom;
-
-		is_chatroom = priv->handle_type == TP_HANDLE_TYPE_ROOM;
-		empathy_log_manager_add_message (priv->log_manager,
-						 priv->id, is_chatroom,
-						 message);
-	}
-
 	empathy_chat_view_append_message (chat->view, message);
 
 	/* We received a message so the contact is no longer composing */
