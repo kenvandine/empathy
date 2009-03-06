@@ -73,8 +73,9 @@ struct _EmpathyLogSearchHit
 
 GType empathy_log_manager_get_type (void) G_GNUC_CONST;
 EmpathyLogManager *empathy_log_manager_dup_singleton (void);
-void empathy_log_manager_add_message (EmpathyLogManager *manager,
-    const gchar *chat_id, gboolean chatroom, EmpathyMessage *message);
+gboolean empathy_log_manager_add_message (EmpathyLogManager *manager,
+    const gchar *chat_id, gboolean chatroom, EmpathyMessage *message,
+    GError **error);
 gboolean empathy_log_manager_exists (EmpathyLogManager *manager,
     McAccount *account, const gchar *chat_id, gboolean chatroom);
 GList *empathy_log_manager_get_dates (EmpathyLogManager *manager,

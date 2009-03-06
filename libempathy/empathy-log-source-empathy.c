@@ -172,11 +172,12 @@ log_source_empathy_get_filename (EmpathyLogSource *self,
   return filename;
 }
 
-static void
+static gboolean
 log_source_empathy_add_message (EmpathyLogSource *self,
                                 const gchar *chat_id,
                                 gboolean chatroom,
-                                EmpathyMessage *message)
+                                EmpathyMessage *message,
+                                GError **error)
 {
   FILE *file;
   McAccount *account;
@@ -193,9 +194,9 @@ log_source_empathy_add_message (EmpathyLogSource *self,
   gchar *contact_id;
   TpChannelTextMessageType msg_type;
 
-  g_return_if_fail (EMPATHY_IS_LOG_SOURCE (self));
-  g_return_if_fail (chat_id != NULL);
-  g_return_if_fail (EMPATHY_IS_MESSAGE (message));
+  g_return_val_if_fail (EMPATHY_IS_LOG_SOURCE (self), FALSE);
+  g_return_val_if_fail (chat_id != NULL, FALSE);
+  g_return_val_if_fail (EMPATHY_IS_MESSAGE (message), FALSE);
 
   sender = empathy_message_get_sender (message);
   account = empathy_contact_get_account (sender);
@@ -203,7 +204,7 @@ log_source_empathy_add_message (EmpathyLogSource *self,
   msg_type = empathy_message_get_tptype (message);
 
   if (G_STR_EMPTY (body_str))
-    return;
+    return FALSE;
 
   filename = log_source_empathy_get_filename (self, account, chat_id, chatroom);
   basedir = g_path_get_dirname (filename);
@@ -258,6 +259,8 @@ log_source_empathy_add_message (EmpathyLogSource *self,
   g_free (timestamp);
   g_free (body);
   g_free (avatar_token);
+
+  return TRUE;
 }
 
 static gboolean

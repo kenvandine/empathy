@@ -51,8 +51,8 @@ struct _EmpathyLogSourceInterface
   const gchar * (*get_name) (EmpathyLogSource *self);
   gboolean (*exists) (EmpathyLogSource *self, McAccount *account,
       const gchar *chat_id, gboolean chatroom);
-  void (*add_message) (EmpathyLogSource *self, const gchar *chat_id,
-      gboolean chatroom, EmpathyMessage *message);
+  gboolean (*add_message) (EmpathyLogSource *self, const gchar *chat_id,
+      gboolean chatroom, EmpathyMessage *message, GError **error);
   GList * (*get_dates) (EmpathyLogSource *self, McAccount *account,
       const gchar *chat_id, gboolean chatroom);
   GList * (*get_messages_for_date) (EmpathyLogSource *self,
@@ -72,8 +72,9 @@ GType empathy_log_source_get_type (void) G_GNUC_CONST;
 const gchar *empathy_log_source_get_name (EmpathyLogSource *self);
 gboolean empathy_log_source_exists (EmpathyLogSource *self,
     McAccount *account, const gchar *chat_id, gboolean chatroom);
-void empathy_log_source_add_message (EmpathyLogSource *self,
-    const gchar *chat_id, gboolean chatroom, EmpathyMessage *message);
+gboolean empathy_log_source_add_message (EmpathyLogSource *self,
+    const gchar *chat_id, gboolean chatroom, EmpathyMessage *message,
+    GError **error);
 GList *empathy_log_source_get_dates (EmpathyLogSource *self,
     McAccount *account, const gchar *chat_id, gboolean chatroom);
 GList *empathy_log_source_get_messages_for_date (EmpathyLogSource *self,

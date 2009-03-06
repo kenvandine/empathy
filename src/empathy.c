@@ -136,13 +136,21 @@ received_message_cb (EmpathyTpChat  *tp_chat,
 {
 	EmpathyLogManager *log_manager;
 	EmpathyContact    *contact;
+	GError            *error = NULL;
 
 	contact = empathy_tp_chat_get_remote_contact (tp_chat);
 
 	log_manager = empathy_log_manager_dup_singleton ();
 
-	empathy_log_manager_add_message (log_manager,
-		empathy_contact_get_id (contact), is_chatroom, message);
+	if (!empathy_log_manager_add_message (log_manager,
+					     empathy_contact_get_id (contact),
+					     is_chatroom,
+					     message,
+					     &error)) {
+		DEBUG ("Failed to write message: %s",
+			error ? error->message : "No error message");
+	}
+
 
 	g_object_unref (contact);
 	g_object_unref (log_manager);

@@ -28,6 +28,8 @@
 #include <stdlib.h>
 #include <glib/gstdio.h>
 
+#include <telepathy-glib/util.h>
+
 #include "empathy-log-manager.h"
 #include "empathy-log-source-empathy.h"
 #include "empathy-log-source.h"
@@ -120,26 +122,44 @@ empathy_log_manager_dup_singleton (void)
   return g_object_new (EMPATHY_TYPE_LOG_MANAGER, NULL);
 }
 
-void
+gboolean
 empathy_log_manager_add_message (EmpathyLogManager *manager,
                                  const gchar *chat_id,
                                  gboolean chatroom,
-                                 EmpathyMessage *message)
+                                 EmpathyMessage *message,
+                                 GError **error)
 {
   EmpathyLogManagerPriv *priv;
   GList *l;
+  gboolean out = FALSE;
+  gboolean found = FALSE;
 
-  g_return_if_fail (EMPATHY_IS_LOG_MANAGER (manager));
-  g_return_if_fail (chat_id != NULL);
-  g_return_if_fail (EMPATHY_IS_MESSAGE (message));
+  /* TODO: When multiple log sources appear with add_message implementations
+   * make this customisable. */
+  const gchar *add_source = "Empathy";
+
+  g_return_val_if_fail (EMPATHY_IS_LOG_MANAGER (manager), FALSE);
+  g_return_val_if_fail (chat_id != NULL, FALSE);
+  g_return_val_if_fail (EMPATHY_IS_MESSAGE (message), FALSE);
 
   priv = GET_PRIV (manager);
 
   for (l = priv->sources; l; l = l->next)
     {
-      empathy_log_source_add_message (EMPATHY_LOG_SOURCE (l->data),
-          chat_id, chatroom, message);
+      if (!tp_strdiff (empathy_log_source_get_name (
+              EMPATHY_LOG_SOURCE (l->data)), add_source))
+        {
+          out = empathy_log_source_add_message (EMPATHY_LOG_SOURCE (l->data),
+              chat_id, chatroom, message, error);
+          found = TRUE;
+          break;
+        }
     }
+
+  if (!found)
+    DEBUG ("Failed to find chosen log source to write to.");
+
+  return out;
 }
 
 gboolean

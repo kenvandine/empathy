@@ -68,17 +68,18 @@ empathy_log_source_exists (EmpathyLogSource *self,
 
 
 
-void
+gboolean
 empathy_log_source_add_message (EmpathyLogSource *self,
                                 const gchar *chat_id,
                                 gboolean chatroom,
-                                EmpathyMessage *message)
+                                EmpathyMessage *message,
+                                GError **error)
 {
   if (!EMPATHY_LOG_SOURCE_GET_INTERFACE (self)->add_message)
-    return;
+    return FALSE;
 
-  EMPATHY_LOG_SOURCE_GET_INTERFACE (self)->add_message (
-      self, chat_id, chatroom, message);
+  return EMPATHY_LOG_SOURCE_GET_INTERFACE (self)->add_message (
+      self, chat_id, chatroom, message, error);
 }
 
 GList *
