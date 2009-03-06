@@ -132,27 +132,29 @@ dispatch_cb (EmpathyDispatcher *dispatcher,
 static void
 received_message_cb (EmpathyTpChat  *tp_chat,
 		     EmpathyMessage *message,
-		     gboolean        is_chatroom)
+		     TpChannel      *channel)
 {
 	EmpathyLogManager *log_manager;
-	EmpathyContact    *contact;
 	GError            *error = NULL;
+	TpHandleType       handle_type;
 
-	contact = empathy_tp_chat_get_remote_contact (tp_chat);
+	tp_channel_get_handle (channel, &handle_type);
 
 	log_manager = empathy_log_manager_dup_singleton ();
 
 	if (!empathy_log_manager_add_message (log_manager,
-					     empathy_contact_get_id (contact),
-					     is_chatroom,
+					     tp_channel_get_identifier (channel),
+					     handle_type == TP_HANDLE_TYPE_ROOM,
 					     message,
 					     &error)) {
 		DEBUG ("Failed to write message: %s",
 			error ? error->message : "No error message");
+
+		if (error) {
+			g_error_free (error);
+		}
 	}
 
-
-	g_object_unref (contact);
 	g_object_unref (log_manager);
 }
 
@@ -168,19 +170,14 @@ observe_cb (EmpathyDispatcher        *dispatcher,
 	if (channel_type == TP_IFACE_QUARK_CHANNEL_TYPE_TEXT) {
 		EmpathyTpChat *tp_chat;
 		TpChannel *channel;
-		TpHandleType handle_type;
-		gboolean is_chatroom;
 
 		tp_chat = EMPATHY_TP_CHAT (
 			empathy_dispatch_operation_get_channel_wrapper (operation));
 
 		channel = empathy_dispatch_operation_get_channel (operation);
-		tp_channel_get_handle (channel, &handle_type);
-
-		is_chatroom = (handle_type == TP_HANDLE_TYPE_ROOM);
 
 		g_signal_connect (tp_chat, "message-received",
-			G_CALLBACK (received_message_cb), GINT_TO_POINTER (is_chatroom));
+			G_CALLBACK (received_message_cb), channel);
 	}
 }
 
