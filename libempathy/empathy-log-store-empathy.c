@@ -736,7 +736,7 @@ log_store_empathy_get_filtered_messages (EmpathyLogStore *self,
           if (!filter (n->data, user_data))
             {
               g_object_unref (n->data);
-              new_messages = g_list_remove (new_messages, n->data);
+              new_messages = g_list_delete_link (new_messages, n);
             }
           n = next;
         }

@@ -313,11 +313,8 @@ empathy_log_manager_get_filtered_messages (EmpathyLogManager *manager,
 
   for (i = 0; out_size - i > num_messages; i++)
     {
-      EmpathyMessage *message;
-
-      message = out->data;
-      out = g_list_remove (out, message);
-      g_object_unref (message);
+      g_object_unref (out->data);
+      out = g_list_delete_link (out, out);
     }
 
   return out;
