@@ -42,7 +42,6 @@
 #include <libempathy/empathy-utils.h>
 #include <libempathy/empathy-call-factory.h>
 #include <libempathy/empathy-chatroom-manager.h>
-#include <libempathy/empathy-contact-factory.h>
 #include <libempathy/empathy-dispatcher.h>
 #include <libempathy/empathy-dispatch-operation.h>
 #include <libempathy/empathy-log-manager.h>
