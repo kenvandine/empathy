@@ -477,7 +477,7 @@ log_store_empathy_get_messages_for_file (EmpathyLogStore *self,
         msg_type = empathy_message_type_from_str (msg_type_str);
 
       if (cm_id_str)
-        sscanf (cm_id_str, "%d", &cm_id);
+        cm_id = atoi (cm_id_str);
 
       t = empathy_time_parse (time);
 
