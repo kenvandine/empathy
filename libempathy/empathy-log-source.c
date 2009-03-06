@@ -44,6 +44,15 @@ empathy_log_source_get_type (void)
   return type;
 }
 
+const gchar *
+empathy_log_source_get_name (EmpathyLogSource *self)
+{
+  if (!EMPATHY_LOG_SOURCE_GET_INTERFACE (self)->get_name)
+    return NULL;
+
+  return EMPATHY_LOG_SOURCE_GET_INTERFACE (self)->get_name (self);
+}
+
 gboolean
 empathy_log_source_exists (EmpathyLogSource *self,
                            McAccount *account,

@@ -48,6 +48,7 @@ struct _EmpathyLogSourceInterface
 {
   GTypeInterface parent;
 
+  const gchar * (*get_name) (EmpathyLogSource *self);
   gboolean (*exists) (EmpathyLogSource *self, McAccount *account,
       const gchar *chat_id, gboolean chatroom);
   void (*add_message) (EmpathyLogSource *self, const gchar *chat_id,
@@ -68,6 +69,7 @@ struct _EmpathyLogSourceInterface
 
 GType empathy_log_source_get_type (void) G_GNUC_CONST;
 
+const gchar *empathy_log_source_get_name (EmpathyLogSource *self);
 gboolean empathy_log_source_exists (EmpathyLogSource *self,
     McAccount *account, const gchar *chat_id, gboolean chatroom);
 void empathy_log_source_add_message (EmpathyLogSource *self,

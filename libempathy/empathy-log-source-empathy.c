@@ -58,6 +58,7 @@
 typedef struct
 {
   gchar *basedir;
+  gchar *name;
 } EmpathyLogSourceEmpathyPriv;
 
 static void log_source_iface_init (gpointer g_iface,gpointer iface_data);
@@ -73,6 +74,7 @@ log_source_empathy_finalize (GObject *object)
   EmpathyLogSourceEmpathyPriv *priv = GET_PRIV (self);
 
   g_free (priv->basedir);
+  g_free (priv->name);
 }
 
 static void
@@ -95,6 +97,8 @@ empathy_log_source_empathy_init (EmpathyLogSourceEmpathy *self)
 
   priv->basedir = g_build_path (G_DIR_SEPARATOR_S, g_get_home_dir (),
       ".gnome2", PACKAGE_NAME, "logs", NULL);
+
+  priv->name = g_strdup ("Empathy");
 }
 
 static gchar *
@@ -682,12 +686,21 @@ log_source_empathy_get_chats (EmpathyLogSource *self,
   return hits;
 }
 
+static const gchar *
+log_source_empathy_get_name (EmpathyLogSource *self)
+{
+  EmpathyLogSourceEmpathyPriv *priv = GET_PRIV (self);
+
+  return priv->name;
+}
+
 static void
 log_source_iface_init (gpointer g_iface,
                        gpointer iface_data)
 {
   EmpathyLogSourceInterface *iface = (EmpathyLogSourceInterface *) g_iface;
 
+  iface->get_name = log_source_empathy_get_name;
   iface->exists = log_source_empathy_exists;
   iface->add_message = log_source_empathy_add_message;
   iface->get_dates = log_source_empathy_get_dates;
