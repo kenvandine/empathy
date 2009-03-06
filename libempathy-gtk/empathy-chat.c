@@ -1031,9 +1031,8 @@ chat_add_logs (EmpathyChat *chat)
 {
 	EmpathyChatPriv *priv = GET_PRIV (chat);
 	gboolean         is_chatroom;
-	GList           *messages, *l, *c;
-	guint            num_messages;
-	guint            i;
+	GList           *messages, *l;
+	guint            i = 0;
 	const GList     *pending_messages, *m;
 
 	if (!priv->id) {
@@ -1052,39 +1051,24 @@ chat_add_logs (EmpathyChat *chat)
 
 	pending_messages = empathy_tp_chat_get_pending_messages (priv->tp_chat);
 
-	/* Remove messages that are pending */
-	c = g_list_copy (messages);
-	for (l = messages; l; l = l->next) {
-		for (m = pending_messages; m; m = m->next) {
-			if (empathy_message_equal (l->data, m->data)) {
-				EmpathyMessage *message;
+	for (l = g_list_last (messages); l; l = g_list_previous (l)) {
+		if (i < 10) {
+			gboolean found = FALSE;
 
-				message = l->data;
-				c = g_list_remove (c, message);
-				g_object_unref (message);
-				break;
+			for (m = pending_messages; m; m = g_list_next (m)) {
+				if (empathy_message_equal (l->data, m->data)) {
+					found = TRUE;
+				}
+			}
+
+			if (!found) {
+				empathy_chat_view_append_message (chat->view, l->data);
+				i++;
 			}
 		}
-	}
-
-	g_list_free (messages);
-	messages = c;
-
-	num_messages  = g_list_length (messages);
-
-	/* Only keep the 10 last messages */
-	for (i = 0; num_messages - i > 10; i++) {
-		EmpathyMessage *message;
-
-		message = messages->data;
-		messages = g_list_remove (messages, message);
-		g_object_unref (message);
-	}
-
-	for (l = messages; l; l = l->next) {
-		empathy_chat_view_append_message (chat->view, l->data);
 		g_object_unref (l->data);
 	}
+
 	g_list_free (messages);
 
 	/* Turn back on scrolling */
