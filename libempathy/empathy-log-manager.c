@@ -246,29 +246,25 @@ empathy_log_manager_get_last_messages (EmpathyLogManager *manager,
                                        const gchar *chat_id,
                                        gboolean chatroom)
 {
-  GList *l, *out = NULL;
-  EmpathyLogManagerPriv *priv;
+  GList *messages = NULL;
+  GList *dates;
+  GList *l;
 
   g_return_val_if_fail (EMPATHY_IS_LOG_MANAGER (manager), NULL);
   g_return_val_if_fail (MC_IS_ACCOUNT (account), NULL);
   g_return_val_if_fail (chat_id != NULL, NULL);
 
-  priv = GET_PRIV (manager);
+  dates = empathy_log_manager_get_dates (manager, account, chat_id, chatroom);
 
-  for (l = priv->sources; l; l = l->next)
-    {
-      EmpathyLogSource *source = (EmpathyLogSource *) l->data;
+  l = g_list_last (dates);
+  if (l)
+    messages = empathy_log_manager_get_messages_for_date (manager, account,
+        chat_id, chatroom, l->data);
 
-      if (!source->get_last_messages)
-        continue;
+  g_list_foreach (dates, (GFunc) g_free, NULL);
+  g_list_free (dates);
 
-      if (!out)
-        out = source->get_last_messages (manager, account, chat_id, chatroom);
-      else
-        out = g_list_concat (out, source->get_last_messages (manager, account, chat_id, chatroom));
-    }
-
-  return out;
+  return messages;
 }
 
 GList *

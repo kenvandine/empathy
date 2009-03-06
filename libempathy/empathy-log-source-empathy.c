@@ -624,33 +624,6 @@ log_source_empathy_get_messages_for_date (EmpathyLogManager *manager,
 }
 
 static GList *
-log_source_empathy_get_last_messages (EmpathyLogManager *manager,
-                                      McAccount *account,
-                                      const gchar *chat_id,
-                                      gboolean chatroom)
-{
-  GList *messages = NULL;
-  GList *dates;
-  GList *l;
-
-  g_return_val_if_fail (EMPATHY_IS_LOG_MANAGER (manager), NULL);
-  g_return_val_if_fail (MC_IS_ACCOUNT (account), NULL);
-  g_return_val_if_fail (chat_id != NULL, NULL);
-
-  dates = log_source_empathy_get_dates (manager, account, chat_id, chatroom);
-
-  l = g_list_last (dates);
-  if (l)
-    messages = log_source_empathy_get_messages_for_date (manager, account,
-        chat_id, chatroom, l->data);
-
-  g_list_foreach (dates, (GFunc) g_free, NULL);
-  g_list_free (dates);
-
-  return messages;
-}
-
-static GList *
 log_source_empathy_get_chats (EmpathyLogManager *manager,
                               McAccount *account)
 {
@@ -679,7 +652,6 @@ empathy_log_source_empathy_get_source (void)
   source->exists = log_source_empathy_exists;
   source->add_message = log_source_empathy_add_message;
   source->get_dates = log_source_empathy_get_dates;
-  source->get_last_messages = log_source_empathy_get_last_messages;
   source->get_messages_for_date = log_source_empathy_get_messages_for_date;
   source->get_chats = log_source_empathy_get_chats;
   source->search_new = log_source_empathy_search_new;
