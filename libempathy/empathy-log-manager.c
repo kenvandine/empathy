@@ -279,7 +279,8 @@ empathy_log_manager_get_filtered_messages (EmpathyLogManager *manager,
 
   priv = GET_PRIV (manager);
 
-  /* Get num_messages from each log store */
+  /* Get num_messages from each log store and keep only the
+   * newest ones in the out list. Keep that list sorted: Older first. */
   for (l = priv->stores; l; l = g_list_next (l))
     {
       EmpathyLogStore *store = EMPATHY_LOG_STORE (l->data);
