@@ -236,12 +236,8 @@ empathy_log_manager_get_messages_for_date (EmpathyLogManager *manager,
     {
       EmpathyLogSource *source = EMPATHY_LOG_SOURCE (l->data);
 
-      if (!out)
-        out = empathy_log_source_get_messages_for_date (source, account,
-            chat_id, chatroom, date);
-      else
-        out = g_list_concat (out, empathy_log_source_get_messages_for_date (
-              source, account, chat_id, chatroom, date));
+      out = g_list_concat (out, empathy_log_source_get_messages_for_date (
+          source, account, chat_id, chatroom, date));
     }
 
   return out;
@@ -290,11 +286,8 @@ empathy_log_manager_get_chats (EmpathyLogManager *manager,
     {
       EmpathyLogSource *source = EMPATHY_LOG_SOURCE (l->data);
 
-      if (!out)
-        out = empathy_log_source_get_chats (source, account);
-      else
-        out = g_list_concat (out,
-            empathy_log_source_get_chats (source, account));
+      out = g_list_concat (out,
+          empathy_log_source_get_chats (source, account));
     }
 
   return out;
@@ -316,11 +309,8 @@ empathy_log_manager_search_new (EmpathyLogManager *manager,
     {
       EmpathyLogSource *source = EMPATHY_LOG_SOURCE (l->data);
 
-      if (!out)
-        out = empathy_log_source_search_new (source, text);
-      else
-        out = g_list_concat (out,
-            empathy_log_source_search_new (source, text));
+      out = g_list_concat (out,
+          empathy_log_source_search_new (source, text));
     }
 
   return out;
