@@ -99,6 +99,7 @@ struct _EmpathyCallWindowPriv
   GtkWidget *video_gamma;
 
   GMutex *lock;
+  gboolean call_started;
 };
 
 #define GET_PRIV(o) \
@@ -500,7 +501,7 @@ empathy_call_window_init (EmpathyCallWindow *self)
   gtk_box_pack_start (GTK_BOX (hbox), vbox, FALSE, FALSE, 3);
 
   priv->video_preview = empathy_video_widget_new_with_size (bus, 160, 120);
-  g_object_set (priv->video_preview, "sync", FALSE, "async", FALSE, NULL);
+  g_object_set (priv->video_preview, "sync", FALSE, "async", TRUE, NULL);
   gtk_box_pack_start (GTK_BOX (vbox), priv->video_preview, FALSE, FALSE, 0);
 
   priv->video_input = empathy_video_src_new ();
@@ -703,9 +704,8 @@ empathy_call_window_conference_added_cb (EmpathyCallHandler *handler,
 }
 
 static void
-empathy_call_window_channel_closed_cb (TfChannel *channel, gpointer user_data)
+empathy_call_window_disconnected (EmpathyCallWindow *self)
 {
-  EmpathyCallWindow *self = EMPATHY_CALL_WINDOW (user_data);
   EmpathyCallWindowPriv *priv = GET_PRIV (self);
 
   g_mutex_lock (priv->lock);
@@ -721,6 +721,15 @@ empathy_call_window_channel_closed_cb (TfChannel *channel, gpointer user_data)
   empathy_call_window_status_message (self, _("Disconnected"));
 
   gtk_widget_set_sensitive (priv->camera_button, FALSE);
+}
+
+
+static void
+empathy_call_window_channel_closed_cb (TfChannel *channel, gpointer user_data)
+{
+  EmpathyCallWindow *self = EMPATHY_CALL_WINDOW (user_data);
+
+  empathy_call_window_disconnected (self);
 }
 
 /* Called with global lock held */
@@ -890,11 +899,69 @@ empathy_call_window_sink_added_cb (EmpathyCallHandler *handler,
 }
 
 static gboolean
+empathy_gst_bin_has_child (GstBin *bin, GstElement *element)
+{
+  GstIterator *it;
+  gboolean ret = FALSE;
+  GstElement *item;
+
+  it = gst_bin_iterate_recurse (bin);
+
+  for (;;)
+    {
+      switch (gst_iterator_next (it, (gpointer *)&item))
+       {
+         case GST_ITERATOR_OK:
+           if (item == element)
+            {
+              gst_object_unref (GST_OBJECT (item));
+              ret = TRUE;
+              goto out;
+            }
+           gst_object_unref (GST_OBJECT (item));
+           break;
+         case GST_ITERATOR_RESYNC:
+           gst_iterator_resync (it);
+           break;
+        case GST_ITERATOR_ERROR:
+           g_assert_not_reached ();
+           /* fallthrough */
+        case GST_ITERATOR_DONE:
+           goto out;
+           break;
+      }
+    }
+    gst_iterator_free (it);
+
+out:
+  return ret;
+}
+
+static void
+empathy_call_window_remove_video_input (EmpathyCallWindow *self)
+{
+  EmpathyCallWindowPriv *priv = GET_PRIV (self);
+  GstElement *preview;
+
+  preview = empathy_video_widget_get_element (
+    EMPATHY_VIDEO_WIDGET (priv->video_preview));
+
+  gst_element_set_state (priv->video_input, GST_STATE_NULL);
+  gst_element_set_state (priv->video_tee, GST_STATE_NULL);
+  gst_element_set_state (preview, GST_STATE_NULL);
+
+  gst_bin_remove_many (GST_BIN (priv->pipeline), priv->video_input,
+    priv->video_tee, preview, NULL);
+}
+
+
+static gboolean
 empathy_call_window_bus_message (GstBus *bus, GstMessage *message,
   gpointer user_data)
 {
   EmpathyCallWindow *self = EMPATHY_CALL_WINDOW (user_data);
   EmpathyCallWindowPriv *priv = GET_PRIV (self);
+  GstState newstate;
 
   empathy_call_handler_bus_message (priv->handler, bus, message);
 
@@ -903,13 +970,46 @@ empathy_call_window_bus_message (GstBus *bus, GstMessage *message,
       case GST_MESSAGE_STATE_CHANGED:
         if (GST_MESSAGE_SRC (message) == GST_OBJECT (priv->video_input))
           {
-            GstState newstate;
-
             gst_message_parse_state_changed (message, NULL, &newstate, NULL);
             if (newstate == GST_STATE_PAUSED)
-              empathy_call_window_setup_video_input (self);
+                empathy_call_window_setup_video_input (self);
+          }
+        if (GST_MESSAGE_SRC (message) == GST_OBJECT (priv->pipeline) &&
+            !priv->call_started)
+          {
+            gst_message_parse_state_changed (message, NULL, &newstate, NULL);
+            if (newstate == GST_STATE_PAUSED)
+              {
+                priv->call_started = TRUE;
+                empathy_call_handler_start_call (priv->handler);
+                gst_element_set_state (priv->pipeline, GST_STATE_PLAYING);
+              }
           }
         break;
+      case GST_MESSAGE_ERROR:
+        {
+          GError *error;
+          gchar *debug;
+
+          gst_message_parse_error (message, &error, &debug);
+
+          g_message ("Element error: %s -- %s\n", error->message, debug);
+
+          if (empathy_gst_bin_has_child (GST_BIN (priv->video_input),
+              GST_ELEMENT (GST_MESSAGE_SRC (message))))
+            {
+              /* Remove the video input and continue */
+              empathy_call_window_remove_video_input (self);
+              gst_element_set_state (priv->pipeline, GST_STATE_PAUSED);
+            }
+          else
+            {
+              gst_element_set_state (priv->pipeline, GST_STATE_NULL);
+              empathy_call_window_disconnected (self);
+            }
+          g_error_free (error);
+          g_free (debug);
+        }
       default:
         break;
     }
@@ -932,7 +1032,6 @@ empathy_call_window_realized_cb (GtkWidget *widget, EmpathyCallWindow *window)
   g_signal_connect (priv->handler, "sink-pad-added",
     G_CALLBACK (empathy_call_window_sink_added_cb), window);
 
-  empathy_call_handler_start_call (priv->handler);
 
   preview = empathy_video_widget_get_element (
     EMPATHY_VIDEO_WIDGET (priv->video_preview));
@@ -942,7 +1041,7 @@ empathy_call_window_realized_cb (GtkWidget *widget, EmpathyCallWindow *window)
   gst_element_link_many (priv->video_input, priv->video_tee,
     preview, NULL);
 
-  gst_element_set_state (priv->pipeline, GST_STATE_PLAYING);
+  gst_element_set_state (priv->pipeline, GST_STATE_PAUSED);
 }
 
 static gboolean
