@@ -703,6 +703,23 @@ empathy_call_window_conference_added_cb (EmpathyCallHandler *handler,
   gst_element_set_state (conference, GST_STATE_PLAYING);
 }
 
+static gboolean
+empathy_call_window_request_resource_cb (EmpathyCallHandler *handler,
+  FsMediaType type, FsStreamDirection direction, gpointer user_data)
+{
+  EmpathyCallWindow *self = EMPATHY_CALL_WINDOW (user_data);
+  EmpathyCallWindowPriv *priv = GET_PRIV (self);
+
+  if (type != TP_MEDIA_STREAM_TYPE_VIDEO)
+    return TRUE;
+
+  if (direction == FS_DIRECTION_RECV)
+    return TRUE;
+
+  /* video and direction is send */
+  return priv->video_input != NULL;
+}
+
 static void
 empathy_call_window_disconnected (EmpathyCallWindow *self)
 {
@@ -1033,6 +1050,8 @@ empathy_call_window_realized_cb (GtkWidget *widget, EmpathyCallWindow *window)
 
   g_signal_connect (priv->handler, "conference-added",
     G_CALLBACK (empathy_call_window_conference_added_cb), window);
+  g_signal_connect (priv->handler, "request-resource",
+    G_CALLBACK (empathy_call_window_request_resource_cb), window);
   g_signal_connect (priv->handler, "closed",
     G_CALLBACK (empathy_call_window_channel_closed_cb), window);
   g_signal_connect (priv->handler, "src-pad-added",
