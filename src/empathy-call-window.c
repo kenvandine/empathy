@@ -188,6 +188,7 @@ empathy_call_window_setup_toolbar (EmpathyCallWindow *self)
   camera = glade_xml_get_widget (priv->glade, "camera");
   priv->camera_button = camera;
   gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (camera), FALSE);
+  gtk_widget_set_sensitive (priv->camera_button, FALSE);
 
   g_signal_connect (G_OBJECT (camera), "toggled",
     G_CALLBACK (empathy_call_window_camera_toggled_cb), self);
@@ -834,6 +835,9 @@ empathy_call_window_connected (gpointer user_data)
 
   if (empathy_tp_call_has_dtmf (call))
     gtk_widget_set_sensitive (priv->dtmf_panel, TRUE);
+
+  if (priv->video_input != NULL)
+    gtk_widget_set_sensitive (priv->camera_button, TRUE);
 
   g_object_unref (call);
 
