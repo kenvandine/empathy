@@ -150,11 +150,6 @@ contact_list_view_query_tooltip_cb (EmpathyContactListView *view,
 	}
 	running++;
 
-	/* FIXME: We need GTK version >= 2.12.10. See GNOME bug #504087 */
-	if (gtk_check_version (2, 12, 10)) {
-		goto OUT;
-	}
-
 	if (!gtk_tree_view_get_tooltip_context (GTK_TREE_VIEW (view), &x, &y,
 						keyboard_mode,
 						&model, &path, &iter)) {
