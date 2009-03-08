@@ -1118,19 +1118,32 @@ empathy_call_window_sidebar_toggled_cb (GtkToggleButton *toggle,
 {
   EmpathyCallWindowPriv *priv = GET_PRIV (window);
   GtkWidget *arrow;
+  GtkWidget *pane;
+  int w,h, handle_size;
+
+  w = GTK_WIDGET (window)->allocation.width;
+  h = GTK_WIDGET (window)->allocation.height;
+
+  pane = glade_xml_get_widget (priv->glade, "pane");
+  gtk_widget_style_get (pane, "handle_size", &handle_size, NULL);
 
   if (gtk_toggle_button_get_active (toggle))
     {
       arrow = gtk_arrow_new (GTK_ARROW_LEFT, GTK_SHADOW_NONE);
       gtk_widget_show (priv->sidebar);
+      w += priv->sidebar->allocation.width + handle_size;
     }
   else
     {
       arrow = gtk_arrow_new (GTK_ARROW_RIGHT, GTK_SHADOW_NONE);
+      w -= priv->sidebar->allocation.width + handle_size;
       gtk_widget_hide (priv->sidebar);
     }
 
   gtk_button_set_image (GTK_BUTTON (priv->sidebar_button), arrow);
+
+  if (w > 0 && h > 0)
+    gtk_window_resize (GTK_WINDOW (window), w, h);
 }
 
 static void
