@@ -485,51 +485,6 @@ ft_manager_state_changed_cb (EmpathyTpFile *tp_file,
 }
 
 static void
-ft_manager_add_tp_file_to_list (EmpathyFTManager *ft_manager,
-                                EmpathyTpFile *tp_file)
-{
-  GtkTreeRowReference *row_ref;
-  GtkTreeIter iter;
-  GtkTreeSelection *selection;
-  GtkTreePath *path;
-  GIcon *icon;
-  const gchar *content_type;
-
-  /* Get the icon name from the mime-type of the file. */
-  content_type = empathy_tp_file_get_content_type (tp_file);
-  icon = g_content_type_get_icon (content_type);
-
-  /* Append the ft in the store */
-  gtk_list_store_insert_with_values (GTK_LIST_STORE (ft_manager->priv->model),
-      &iter, G_MAXINT, COL_FT_OBJECT, tp_file, COL_ICON, icon, -1);
-
-  g_object_unref (icon);
-
-  /* Insert the new row_ref in the hash table  */
-  path = gtk_tree_model_get_path (GTK_TREE_MODEL (ft_manager->priv->model),
-      &iter);
-  row_ref = gtk_tree_row_reference_new (GTK_TREE_MODEL (
-      ft_manager->priv->model), path);
-  gtk_tree_path_free (path);
-  g_hash_table_insert (ft_manager->priv->tp_file_to_row_ref,
-      g_object_ref (tp_file), row_ref);
-
-  /* Select the new row */
-  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (
-      ft_manager->priv->treeview));
-  gtk_tree_selection_select_iter (selection, &iter);
-
-  /* Update the row with the initial values, and keep track of changes */
-  ft_manager_update_ft_row (ft_manager, tp_file);
-  g_signal_connect (tp_file, "notify::state",
-      G_CALLBACK (ft_manager_state_changed_cb), ft_manager);
-  g_signal_connect (tp_file, "notify::transferred-bytes",
-      G_CALLBACK (ft_manager_transferred_bytes_changed_cb), ft_manager);
-
-  gtk_window_present (GTK_WINDOW (ft_manager->priv->window));
-}
-
-static void
 ft_manager_clear (EmpathyFTManager *ft_manager)
 {
   DEBUG ("Clearing file transfer list");
@@ -626,7 +581,10 @@ static void
 ft_manager_destroy_cb (GtkWidget *widget,
                        EmpathyFTManager *ft_manager)
 {
-  g_object_unref (ft_manager);
+  ft_manager->priv->window = NULL;
+  if (ft_manager->priv->save_geometry_id != 0)
+    g_source_remove (ft_manager->priv->save_geometry_id);
+  g_hash_table_remove_all (ft_manager->priv->tp_file_to_row_ref);
 }
 
 static void
@@ -640,6 +598,9 @@ ft_manager_build_ui (EmpathyFTManager *ft_manager)
   GtkCellRenderer *renderer;
   GtkTreeSelection *selection;
   gchar *filename;
+
+  if (ft_manager->priv->window != NULL)
+    return;
 
   filename = empathy_file_lookup ("empathy-ft-manager.glade", "src");
   glade = empathy_glade_get_file (filename,
@@ -751,10 +712,10 @@ empathy_ft_manager_finalize (GObject *object)
 
   DEBUG ("%p", object);
 
-  g_hash_table_destroy (ft_manager->priv->tp_file_to_row_ref);
+  if (ft_manager->priv->window)
+    gtk_widget_destroy (ft_manager->priv->window);
 
-  if (ft_manager->priv->save_geometry_id != 0)
-    g_source_remove (ft_manager->priv->save_geometry_id);
+  g_hash_table_destroy (ft_manager->priv->tp_file_to_row_ref);
 
   G_OBJECT_CLASS (empathy_ft_manager_parent_class)->finalize (object);
 }
@@ -772,8 +733,6 @@ empathy_ft_manager_init (EmpathyFTManager *ft_manager)
   priv->tp_file_to_row_ref = g_hash_table_new_full (g_direct_hash,
       g_direct_equal, (GDestroyNotify) g_object_unref,
       (GDestroyNotify) gtk_tree_row_reference_free);
-
-  ft_manager_build_ui (ft_manager);
 }
 
 static GObject *
@@ -837,6 +796,53 @@ empathy_ft_manager_get_dialog (EmpathyFTManager *ft_manager)
   g_return_val_if_fail (EMPATHY_IS_FT_MANAGER (ft_manager), NULL);
 
   return ft_manager->priv->window;
+}
+
+static void
+ft_manager_add_tp_file_to_list (EmpathyFTManager *ft_manager,
+                                EmpathyTpFile *tp_file)
+{
+  GtkTreeRowReference *row_ref;
+  GtkTreeIter iter;
+  GtkTreeSelection *selection;
+  GtkTreePath *path;
+  GIcon *icon;
+  const gchar *content_type;
+
+  ft_manager_build_ui (ft_manager);
+
+  /* Get the icon name from the mime-type of the file. */
+  content_type = empathy_tp_file_get_content_type (tp_file);
+  icon = g_content_type_get_icon (content_type);
+
+  /* Append the ft in the store */
+  gtk_list_store_insert_with_values (GTK_LIST_STORE (ft_manager->priv->model),
+      &iter, G_MAXINT, COL_FT_OBJECT, tp_file, COL_ICON, icon, -1);
+
+  g_object_unref (icon);
+
+  /* Insert the new row_ref in the hash table  */
+  path = gtk_tree_model_get_path (GTK_TREE_MODEL (ft_manager->priv->model),
+      &iter);
+  row_ref = gtk_tree_row_reference_new (GTK_TREE_MODEL (
+      ft_manager->priv->model), path);
+  gtk_tree_path_free (path);
+  g_hash_table_insert (ft_manager->priv->tp_file_to_row_ref,
+      g_object_ref (tp_file), row_ref);
+
+  /* Select the new row */
+  selection = gtk_tree_view_get_selection (GTK_TREE_VIEW (
+      ft_manager->priv->treeview));
+  gtk_tree_selection_select_iter (selection, &iter);
+
+  /* Update the row with the initial values, and keep track of changes */
+  ft_manager_update_ft_row (ft_manager, tp_file);
+  g_signal_connect (tp_file, "notify::state",
+      G_CALLBACK (ft_manager_state_changed_cb), ft_manager);
+  g_signal_connect (tp_file, "notify::transferred-bytes",
+      G_CALLBACK (ft_manager_transferred_bytes_changed_cb), ft_manager);
+
+  gtk_window_present (GTK_WINDOW (ft_manager->priv->window));
 }
 
 typedef struct {

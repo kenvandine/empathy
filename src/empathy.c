@@ -125,6 +125,7 @@ dispatch_cb (EmpathyDispatcher *dispatcher,
 			empathy_dispatch_operation_get_channel_wrapper (operation));
 		empathy_ft_manager_add_tp_file (ft_manager, tp_file);
 		empathy_dispatch_operation_claim (operation);
+		g_object_unref (ft_manager);
 	}
 }
 
@@ -413,6 +414,7 @@ main (int argc, char *argv[])
 	EmpathyDispatcher *dispatcher;
 	EmpathyLogManager *log_manager;
 	EmpathyChatroomManager *chatroom_manager;
+	EmpathyFTManager  *ft_manager;
 	EmpathyCallFactory *call_factory;
 	GtkWidget         *window;
 	MissionControl    *mc;
@@ -555,6 +557,8 @@ main (int argc, char *argv[])
 	chatroom_manager = empathy_chatroom_manager_dup_singleton (NULL);
 	empathy_chatroom_manager_observe (chatroom_manager, dispatcher);
 
+	ft_manager = empathy_ft_manager_dup_singleton ();
+
 	notify_init (_(PACKAGE_NAME));
 	/* Create the call factory */
 	call_factory = empathy_call_factory_initialise ();
@@ -571,6 +575,7 @@ main (int argc, char *argv[])
 	g_object_unref (log_manager);
 	g_object_unref (dispatcher);
 	g_object_unref (chatroom_manager);
+	g_object_unref (ft_manager);
 
 	notify_uninit ();
 
