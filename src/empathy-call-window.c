@@ -1049,8 +1049,9 @@ empathy_call_window_bus_message (GstBus *bus, GstMessage *message,
 
           g_message ("Element error: %s -- %s\n", error->message, debug);
 
-          if (empathy_gst_bin_has_child (GST_BIN (priv->video_input),
-              GST_ELEMENT (GST_MESSAGE_SRC (message))))
+          if (priv->video_input != NULL &&
+              empathy_gst_bin_has_child (GST_BIN (priv->video_input),
+                GST_ELEMENT (GST_MESSAGE_SRC (message))))
             {
               /* Remove the video input and continue */
               empathy_call_window_remove_video_input (self);
