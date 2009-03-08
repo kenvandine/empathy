@@ -39,6 +39,7 @@ enum {
   CONFERENCE_ADDED,
   SRC_PAD_ADDED,
   SINK_PAD_ADDED,
+  REQUEST_RESOURCE,
   CLOSED,
   LAST_SIGNAL
 };
@@ -197,6 +198,13 @@ empathy_call_handler_class_init (EmpathyCallHandlerClass *klass)
       G_TYPE_NONE,
       2, GST_TYPE_PAD, G_TYPE_UINT);
 
+  signals[REQUEST_RESOURCE] =
+    g_signal_new ("request-resource", G_TYPE_FROM_CLASS (klass),
+      G_SIGNAL_RUN_LAST, 0,
+      g_signal_accumulator_true_handled, NULL,
+      _empathy_marshal_BOOLEAN__UINT_UINT,
+      G_TYPE_BOOLEAN, 2, G_TYPE_UINT, G_TYPE_UINT);
+
   signals[CLOSED] =
     g_signal_new ("closed", G_TYPE_FROM_CLASS (klass),
       G_SIGNAL_RUN_LAST, 0, NULL, NULL,
@@ -257,7 +265,15 @@ static gboolean
 empathy_call_handler_tf_stream_request_resource_cb (TfStream *stream,
   guint direction, EmpathyTpCall *call)
 {
-  return TRUE;
+  gboolean ret;
+  guint media_type;
+
+  g_object_get (G_OBJECT (stream), "media-type", &media_type, NULL);
+
+  g_signal_emit (G_OBJECT (call),
+    signals[REQUEST_RESOURCE], 0, media_type, direction, &ret);
+
+  return ret;
 }
 
 static void
