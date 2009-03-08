@@ -364,6 +364,7 @@ empathy_video_widget_sync_message_cb (GstBus *bus, GstMessage *message,
 
   if (gst_structure_has_name (s, "prepare-xwindow-id"))
     {
+      g_assert (GTK_WIDGET_REALIZED (GTK_WIDGET (self)));
       gst_x_overlay_set_xwindow_id (GST_X_OVERLAY (priv->overlay),
         GDK_WINDOW_XID (GTK_WIDGET (self)->window));
     }
