@@ -141,14 +141,14 @@ contact_list_view_query_tooltip_cb (EmpathyContactListView *view,
 	GtkTreeModel               *model;
 	GtkTreeIter                 iter;
 	GtkTreePath                *path;
-	static gboolean             running = FALSE;
+	static gint                 running = 0;
 	gboolean                    ret = FALSE;
 
 	/* Avoid an infinite loop. See GNOME bug #574377 */
-	if (running) {
+	if (running > 0) {
 		return FALSE;
 	}
-	running = TRUE;
+	running++;
 
 	/* FIXME: We need GTK version >= 2.12.10. See GNOME bug #504087 */
 	if (gtk_check_version (2, 12, 10)) {
@@ -188,7 +188,7 @@ contact_list_view_query_tooltip_cb (EmpathyContactListView *view,
 
 	g_object_unref (contact);
 OUT:
-	running = FALSE;
+	running--;
 
 	return ret;
 }
