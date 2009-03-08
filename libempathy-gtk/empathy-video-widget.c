@@ -380,7 +380,11 @@ empathy_video_widget_expose_event (GtkWidget *widget, GdkEventExpose *event)
     return TRUE;
 
   if (priv->overlay == NULL)
-    return TRUE;
+    {
+      gdk_window_clear_area (widget->window, 0, 0,
+        widget->allocation.width, widget->allocation.height);
+      return TRUE;
+    }
 
   gst_x_overlay_set_xwindow_id (GST_X_OVERLAY (priv->overlay),
     GDK_WINDOW_XID (widget->window));
