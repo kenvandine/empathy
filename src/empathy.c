@@ -455,6 +455,7 @@ main (int argc, char *argv[])
 
 	empathy_gtk_init ();
 	g_set_application_name (_(PACKAGE_NAME));
+	g_setenv("PULSE_PROP_media.role", "phone", TRUE);
 
 	gst_init (&argc, &argv);
 
