@@ -75,7 +75,11 @@ struct _EmpathyCallWindowPriv
   GtkWidget *sidebar_button;
   GtkWidget *statusbar;
   GtkWidget *volume_button;
+  GtkWidget *mic_button;
   GtkWidget *camera_button;
+
+  gdouble volume;
+  GtkAdjustment *audio_input_adj;
 
   GtkWidget *dtmf_panel;
 
@@ -117,6 +121,9 @@ static void empathy_call_window_sidebar_toggled_cb (GtkToggleButton *toggle,
 
 static void empathy_call_window_camera_toggled_cb (GtkToggleToolButton *toggle,
   EmpathyCallWindow *window);
+
+static void empathy_call_window_mic_toggled_cb (
+  GtkToggleToolButton *toggle, EmpathyCallWindow *window);
 
 static void empathy_call_window_sidebar_hidden_cb (EmpathySidebar *sidebar,
   EmpathyCallWindow *window);
@@ -162,6 +169,10 @@ empathy_call_window_setup_toolbar (EmpathyCallWindow *self)
   mic = glade_xml_get_widget (priv->glade, "microphone");
   gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (mic), TRUE);
 
+  priv->mic_button = mic;
+  g_signal_connect (G_OBJECT (priv->mic_button), "toggled",
+    G_CALLBACK (empathy_call_window_mic_toggled_cb), self);
+
   toolbar = glade_xml_get_widget (priv->glade, "toolbar");
 
   /* Add an empty expanded GtkToolItem so the volume button is at the end of
@@ -183,7 +194,6 @@ empathy_call_window_setup_toolbar (EmpathyCallWindow *self)
   gtk_container_add (GTK_CONTAINER (tool_item), priv->volume_button);
   gtk_widget_show_all (GTK_WIDGET (tool_item));
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), tool_item, -1);
-
 
   camera = glade_xml_get_widget (priv->glade, "camera");
   priv->camera_button = camera;
@@ -399,9 +409,24 @@ empathy_call_window_mic_volume_changed_cb (GtkAdjustment *adj,
   EmpathyCallWindow *self)
 {
   EmpathyCallWindowPriv *priv = GET_PRIV (self);
+  gdouble volume;
+
+  volume =  gtk_adjustment_get_value (adj)/100.0;
+
+  /* Don't store the volume because of muting */
+  if (volume > 0 || gtk_toggle_tool_button_get_active (
+        GTK_TOGGLE_TOOL_BUTTON (priv->mic_button)))
+    priv->volume = volume;
+
+  /* Ensure that the toggle button is active if the volume is > 0 and inactive
+   * if it's smaller then 0 */
+  if ((volume > 0) != gtk_toggle_tool_button_get_active (
+        GTK_TOGGLE_TOOL_BUTTON (priv->mic_button)))
+    gtk_toggle_tool_button_set_active (
+      GTK_TOGGLE_TOOL_BUTTON (priv->mic_button), volume > 0);
 
   empathy_audio_src_set_volume (EMPATHY_GST_AUDIO_SRC (priv->audio_input),
-    gtk_adjustment_get_value (adj)/100);
+    volume);
 }
 
 static void
@@ -430,10 +455,10 @@ empathy_call_window_create_audio_input (EmpathyCallWindow *self)
   gtk_range_set_inverted (GTK_RANGE (scale), TRUE);
   label = gtk_label_new (_("Volume"));
 
-  adj = gtk_range_get_adjustment (GTK_RANGE (scale));
-  gtk_adjustment_set_value (adj,
-    empathy_audio_src_get_volume (
-      EMPATHY_GST_AUDIO_SRC (priv->audio_input)) * 100);
+  priv->audio_input_adj = adj = gtk_range_get_adjustment (GTK_RANGE (scale));
+  priv->volume =  empathy_audio_src_get_volume (EMPATHY_GST_AUDIO_SRC
+    (priv->audio_input));
+  gtk_adjustment_set_value (adj, priv->volume * 100);
 
   g_signal_connect (G_OBJECT (adj), "value-changed",
     G_CALLBACK (empathy_call_window_mic_volume_changed_cb), self);
@@ -1122,6 +1147,34 @@ empathy_call_window_camera_toggled_cb (GtkToggleToolButton *toggle,
   empathy_tp_call_request_video_stream_direction (call, active);
 
   g_object_unref (call);
+}
+
+static void
+empathy_call_window_mic_toggled_cb (GtkToggleToolButton *toggle,
+  EmpathyCallWindow *window)
+{
+  EmpathyCallWindowPriv *priv = GET_PRIV (window);
+  gboolean active;
+
+  active = (gtk_toggle_tool_button_get_active (toggle));
+
+  if (active)
+    {
+      empathy_audio_src_set_volume (EMPATHY_GST_AUDIO_SRC (priv->audio_input),
+        priv->volume);
+      gtk_adjustment_set_value (priv->audio_input_adj, priv->volume * 100);
+    }
+  else
+    {
+      /* TODO, Instead of setting the input volume to 0 we should probably
+       * stop sending but this would cause the audio call to drop if both
+       * sides mute at the same time on certain CMs AFAIK. Need to revisit this
+       * in the future
+       */
+      empathy_audio_src_set_volume (EMPATHY_GST_AUDIO_SRC (priv->audio_input),
+        0);
+      gtk_adjustment_set_value (priv->audio_input_adj, 0);
+    }
 }
 
 static void
