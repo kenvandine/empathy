@@ -795,6 +795,8 @@ empathy_ft_manager_get_dialog (EmpathyFTManager *ft_manager)
 {
   g_return_val_if_fail (EMPATHY_IS_FT_MANAGER (ft_manager), NULL);
 
+  ft_manager_build_ui (ft_manager);
+
   return ft_manager->priv->window;
 }
 
