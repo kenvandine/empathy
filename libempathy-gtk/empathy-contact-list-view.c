@@ -141,16 +141,24 @@ contact_list_view_query_tooltip_cb (EmpathyContactListView *view,
 	GtkTreeModel               *model;
 	GtkTreeIter                 iter;
 	GtkTreePath                *path;
+	static gboolean             running = FALSE;
+	gboolean                    ret = FALSE;
+
+	/* Avoid an infinite loop. See GNOME bug #574377 */
+	if (running) {
+		return FALSE;
+	}
+	running = TRUE;
 
 	/* FIXME: We need GTK version >= 2.12.10. See GNOME bug #504087 */
 	if (gtk_check_version (2, 12, 10)) {
-		return FALSE;
+		goto OUT;
 	}
 
 	if (!gtk_tree_view_get_tooltip_context (GTK_TREE_VIEW (view), &x, &y,
 						keyboard_mode,
 						&model, &path, &iter)) {
-		return FALSE;
+		goto OUT;
 	}
 
 	gtk_tree_view_set_tooltip_row (GTK_TREE_VIEW (view), tooltip, path);
@@ -160,7 +168,7 @@ contact_list_view_query_tooltip_cb (EmpathyContactListView *view,
 			    EMPATHY_CONTACT_LIST_STORE_COL_CONTACT, &contact,
 			    -1);
 	if (!contact) {
-		return FALSE;
+		goto OUT;
 	}
 
 	if (!priv->tooltip_widget) {
@@ -176,10 +184,13 @@ contact_list_view_query_tooltip_cb (EmpathyContactListView *view,
 	}
 
 	gtk_tooltip_set_custom (tooltip, priv->tooltip_widget);
+	ret = TRUE;
 
 	g_object_unref (contact);
+OUT:
+	running = FALSE;
 
-	return TRUE;
+	return ret;
 }
 
 static void
