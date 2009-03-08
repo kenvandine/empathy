@@ -339,6 +339,8 @@ empathy_video_widget_element_added_cb (FsElementAddedNotifier *notifier,
   if (priv->overlay == NULL && GST_IS_X_OVERLAY (element))
     {
       priv->overlay = element;
+      g_object_add_weak_pointer (G_OBJECT (element),
+        (gpointer) &priv->overlay);
       empathy_video_widget_element_set_sink_properties_unlocked (self);
       gst_x_overlay_expose (GST_X_OVERLAY (priv->overlay));
     }
