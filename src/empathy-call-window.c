@@ -889,8 +889,11 @@ empathy_call_window_sink_added_cb (EmpathyCallHandler *handler,
         gst_pad_link (pad, sink);
         break;
       case TP_MEDIA_STREAM_TYPE_VIDEO:
-        pad =  gst_element_get_request_pad (priv->video_tee, "src%d");
-        gst_pad_link (pad, sink);
+        if (priv->video_input != NULL)
+          {
+            pad =  gst_element_get_request_pad (priv->video_tee, "src%d");
+            gst_pad_link (pad, sink);
+          }
         break;
       default:
         g_assert_not_reached ();
@@ -952,6 +955,11 @@ empathy_call_window_remove_video_input (EmpathyCallWindow *self)
 
   gst_bin_remove_many (GST_BIN (priv->pipeline), priv->video_input,
     priv->video_tee, preview, NULL);
+
+  g_object_unref (priv->video_input);
+  priv->video_input = NULL;
+  g_object_unref (priv->video_tee);
+  priv->video_tee = NULL;
 }
 
 
