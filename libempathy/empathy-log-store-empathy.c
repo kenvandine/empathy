@@ -627,10 +627,15 @@ log_store_empathy_get_chats_for_dir (EmpathyLogStore *self,
   GDir *gdir;
   GList *hits = NULL;
   const gchar *name;
+  GError *error = NULL;
 
-  gdir = g_dir_open (dir, 0, NULL);
+  gdir = g_dir_open (dir, 0, &error);
   if (!gdir)
-    return NULL;
+    {
+      DEBUG ("Failed to open directory: %s, error: %s", dir, error->message);
+      g_error_free (error);
+      return NULL;
+    }
 
   while ((name = g_dir_read_name (gdir)) != NULL)
     {
