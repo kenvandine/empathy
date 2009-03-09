@@ -643,7 +643,7 @@ log_store_empathy_get_chats_for_dir (EmpathyLogStore *self,
       gchar *filename;
 
       filename = g_build_filename (dir, name, NULL);
-      if (strcmp (name, LOG_DIR_CHATROOMS) == 0)
+      if (!is_chatroom && strcmp (name, LOG_DIR_CHATROOMS) == 0)
         {
           hits = g_list_concat (hits, log_store_empathy_get_chats_for_dir (
                 self, filename, TRUE));
