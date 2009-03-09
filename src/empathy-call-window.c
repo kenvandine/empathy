@@ -929,10 +929,11 @@ empathy_call_window_sink_added_cb (EmpathyCallHandler *handler,
     {
       case TP_MEDIA_STREAM_TYPE_AUDIO:
         gst_bin_add (GST_BIN (priv->pipeline), priv->audio_input);
-        gst_element_set_state (priv->audio_input, GST_STATE_PLAYING);
 
         pad = gst_element_get_static_pad (priv->audio_input, "src");
         gst_pad_link (pad, sink);
+
+        gst_element_set_state (priv->audio_input, GST_STATE_PLAYING);
         break;
       case TP_MEDIA_STREAM_TYPE_VIDEO:
         if (priv->video_input != NULL)
