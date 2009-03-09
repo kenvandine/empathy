@@ -1183,7 +1183,7 @@ empathy_call_window_mic_toggled_cb (GtkToggleToolButton *toggle,
       /* TODO, Instead of setting the input volume to 0 we should probably
        * stop sending but this would cause the audio call to drop if both
        * sides mute at the same time on certain CMs AFAIK. Need to revisit this
-       * in the future
+       * in the future. GNOME #574574
        */
       empathy_audio_src_set_volume (EMPATHY_GST_AUDIO_SRC (priv->audio_input),
         0);
