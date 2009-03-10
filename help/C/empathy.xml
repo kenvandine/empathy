@@ -816,7 +816,7 @@
 		  <guilabel>Priority</guilabel> one, you can
 		  use your account simultaneously in two different
 		  devices. For example, if you set one device to
-		  <replaceable>desktop</replaceable> and of the other
+		  <replaceable>desktop</replaceable> and the other
 		  one to <replaceable>mobile</replaceable>, you can
 		  connect with both of them and based on the
 		  <guilabel>Priority</guilabel> value you will receive
@@ -1261,10 +1261,10 @@
 		window</link>, select the contact you would like
 	      to modify and choose <menuchoice>
 		<guimenu>Edit</guimenu>
-		<guisubmenu>Account</guisubmenu>
-		<guimenuitem>Modify</guimenuitem>
+		<guisubmenu>Contact</guisubmenu>
+		<guimenuitem>Edit</guimenuitem>
 	      </menuchoice>, or right-click on it
-	      and choose <guilabel>Modify</guilabel>.
+	      and choose <guilabel>Edit</guilabel>.
 	    </para>
 	  </listitem>
 	</orderedlist>
@@ -1303,10 +1303,10 @@
 		window</link>, select the contact you would like
 	      to modify and choose <menuchoice>
 		<guimenu>Edit</guimenu>
-		<guisubmenu>Account</guisubmenu>
-		<guimenuitem>Modify</guimenuitem>
+		<guisubmenu>Contact</guisubmenu>
+		<guimenuitem>Edit</guimenuitem>
 	      </menuchoice>, or right-click on it
-	      and choose <guilabel>Modify</guilabel>.
+	      and choose <guilabel>Edit</guilabel>.
 	    </para>
 	  </listitem>
 	  <listitem>
@@ -1336,10 +1336,10 @@
 	      From the <link linkend="empathy-FIG-mainwindow">main
 		window</link>, select one contact and choose <menuchoice>
 		<guimenu>Edit</guimenu>
-		<guisubmenu>Account</guisubmenu>
-		<guimenuitem>Modify</guimenuitem>
+		<guisubmenu>Contact</guisubmenu>
+		<guimenuitem>Edit</guimenuitem>
 	      </menuchoice>, or right-click on it
-	      and choose <guilabel>Modify</guilabel>.
+	      and choose <guilabel>Edit</guilabel>.
 	    </para>
 	  </listitem>
 	  <listitem>
@@ -1358,8 +1358,6 @@
       </para>	
     </sect2>
   </sect1>
-
-
 
 <!--
   <sect1 id="empathy-send-receive-message">
