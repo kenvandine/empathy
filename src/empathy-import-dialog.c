@@ -347,6 +347,12 @@ import_dialog_destroy_cb (GtkWidget *widget,
   g_slice_free (EmpathyImportDialog, dialog);
 }
 
+gboolean
+empathy_import_dialog_accounts_to_import (void)
+{
+  return empathy_import_pidgin_accounts_to_import ();
+}
+
 void
 empathy_import_dialog_show (GtkWindow *parent,
                             gboolean warning)

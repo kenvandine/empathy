@@ -27,6 +27,7 @@
 G_BEGIN_DECLS
 
 GList *empathy_import_pidgin_load (void);
+gboolean empathy_import_pidgin_accounts_to_import (void);
 
 G_END_DECLS
 

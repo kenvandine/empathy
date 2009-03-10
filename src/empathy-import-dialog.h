@@ -38,6 +38,7 @@ typedef struct
 
 EmpathyImportAccountData *empathy_import_account_data_new (const gchar *source);
 void empathy_import_account_data_free (EmpathyImportAccountData *data);
+gboolean empathy_import_dialog_accounts_to_import (void);
 void empathy_import_dialog_show (GtkWindow *parent, gboolean warning);
 
 G_END_DECLS

@@ -1153,11 +1153,17 @@ empathy_accounts_dialog_show (GtkWindow *parent,
 	empathy_conf_get_bool (empathy_conf_get (),
 			       EMPATHY_PREFS_IMPORT_ASKED, &import_asked);
 
-	if (!import_asked) {
-		empathy_conf_set_bool (empathy_conf_get (),
-				       EMPATHY_PREFS_IMPORT_ASKED, TRUE);
-		empathy_import_dialog_show (GTK_WINDOW (dialog->window),
-					    FALSE);
+
+	if (empathy_import_dialog_accounts_to_import ()) {
+
+		if (!import_asked) {
+			empathy_conf_set_bool (empathy_conf_get (),
+					       EMPATHY_PREFS_IMPORT_ASKED, TRUE);
+			empathy_import_dialog_show (GTK_WINDOW (dialog->window),
+						    FALSE);
+		}
+	} else {
+		gtk_widget_set_sensitive (dialog->button_import, FALSE);
 	}
 
 	return dialog->window;
