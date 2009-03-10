@@ -241,7 +241,8 @@ class Project:
 					message += '\n'
 				message += msg
 
-		self.query_bug_commits ()
+		if len (self.bug_commits) > 0:
+			self.query_bug_commits ()
 
 	def make_tag(self):
 		new_tag = self.package_name.upper() + '_' +\
@@ -256,8 +257,13 @@ class Project:
 
 	def generate_news(self):
 		self.get_commits()
-		news = 'NEW in '+ self.package_version + '\n==============\n' 
-		news += self.commits + '\nBugs fixed:\n' + self.bugs + '\nTranslations:\n' + self.translations + '\n'
+		news = 'NEW in '+ self.package_version + '\n==============\n'
+		if self.commits != '':
+			news += self.commits + '\n'
+		if self.bugs != '':
+			news += 'Bugs fixed:\n' + self.bugs + '\n'
+		if self.translations != '':
+			news += 'Translations:\n' + self.translations + '\n'
 
 		return news
 
