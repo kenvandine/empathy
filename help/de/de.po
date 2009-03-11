@@ -9,8 +9,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: empathy\n"
-"POT-Creation-Date: 2009-02-02 20:10+0000\n"
-"PO-Revision-Date: 2009-02-21 15:15+0100\n"
+"POT-Creation-Date: 2009-03-10 21:14+0000\n"
+"PO-Revision-Date: 2009-03-11 20:19+0100\n"
 "Last-Translator: Mario Blättermann <mariobl@gnome.org>\n"
 "Language-Team: German <gnome-de@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -29,7 +29,6 @@ msgid ""
 msgstr "translated"
 
 #: C/empathy.xml:27(title)
-#| msgid "<application>Empathy</application> Manual V2.0"
 msgid "<application>Empathy</application> Manual V2.1"
 msgstr "<application>Empathy</application>-Handbuch V2.1"
 
@@ -177,7 +176,6 @@ msgid "sdudenhofer@gmail.com"
 msgstr "sdudenhofer@gmail.com"
 
 #: C/empathy.xml:81(revnumber)
-#| msgid "Empathy Manual V2.0"
 msgid "Empathy Manual V2.1"
 msgstr "Empathy-Handbuch V2.1"
 
@@ -186,7 +184,6 @@ msgid "January 2009"
 msgstr "Januar 2009"
 
 #: C/empathy.xml:84(para) C/empathy.xml:95(para)
-#| msgid "Milo Casagrande <email>milo_casagrande@yahoo.it</email>"
 msgid "Milo Casagrande <email>milo@ubuntu.com</email>"
 msgstr "Milo Casagrande <email>milo@ubuntu.com</email>"
 
@@ -203,7 +200,6 @@ msgid "Seth Dudenhofer <email>sdudenhofer@gmail.com</email>"
 msgstr "Seth Dudenhofer <email>sdudenhofer@gmail.com</email>"
 
 #: C/empathy.xml:106(releaseinfo)
-#| msgid "This manual describes version 2.24 of Empathy."
 msgid "This manual describes version 2.26 of Empathy."
 msgstr "Dieses Handbuch beschreibt Version 2.26 von Empathy."
 
@@ -262,7 +258,7 @@ msgstr "AIM"
 msgid "Google Talk"
 msgstr "Google Talk"
 
-#: C/empathy.xml:155(para)
+#: C/empathy.xml:155(para) C/empathy.xml:1090(title)
 msgid "ICQ"
 msgstr "ICQ"
 
@@ -278,7 +274,7 @@ msgstr "Jabber (oder <acronym>XMPP</acronym>)"
 msgid "MSN"
 msgstr "MSN"
 
-#: C/empathy.xml:175(para) C/empathy.xml:442(para)
+#: C/empathy.xml:175(para) C/empathy.xml:442(para) C/empathy.xml:1050(title)
 msgid "Salut"
 msgstr "Salut"
 
@@ -286,7 +282,7 @@ msgstr "Salut"
 msgid "SIP"
 msgstr "SIP"
 
-#: C/empathy.xml:185(para)
+#: C/empathy.xml:185(para) C/empathy.xml:920(title)
 msgid "Yahoo"
 msgstr "Yahoo"
 
@@ -389,7 +385,6 @@ msgid "Status Drop-Down List"
 msgstr "Status-Aufklappliste"
 
 #: C/empathy.xml:286(para)
-#| msgid "Allows to update the user's status."
 msgid "Allows to update the status."
 msgstr "Ermöglicht die Aktualisierung des Benutzerstatus."
 
@@ -449,11 +444,6 @@ msgstr ""
 "\"empathy-register-account\"/>)."
 
 #: C/empathy.xml:329(para)
-#| msgid ""
-#| "In order to talk with other users (called <emphasis>contatcs</emphasis>), "
-#| "you need to use the same service they are using. If, for example, one "
-#| "contact is using the <emphasis role=\"strong\">Jabber</emphasis> service, "
-#| "you need to have an account registerd with that service."
 msgid ""
 "In order to talk with other users, also called <emphasis>contacts</emphasis>, "
 "you need to use the same service they are using. If, for example, one contact "
@@ -562,9 +552,6 @@ msgstr ""
 #. Translators: try to find a localized version of the
 #. 	    registration service website
 #: C/empathy.xml:405(para)
-#| msgid ""
-#| "The <ulink type=\"http\" url=\"https://www.icq.com/register/\">ICQ</ulink> "
-#| "service."
 msgid ""
 "The <ulink type=\"http\" url=\"https://www.ekiga.net/index.php?page=register"
 "\">Ekiga</ulink> service."
@@ -609,9 +596,6 @@ msgstr ""
 "url=\"http://www.jabber.org/web/Jabber.org\">jabber.org</ulink>."
 
 #: C/empathy.xml:434(para)
-#| msgid ""
-#| "For registering a <acronym>SIP</acronym> account, you can use one of the "
-#| "following service:"
 msgid ""
 "If you already have a <emphasis role=\"strong\">Jabber</emphasis> account, "
 "you can use one of the following services:"
@@ -620,18 +604,11 @@ msgstr ""
 "einen der folgenden Dienste nutzen:"
 
 #: C/empathy.xml:451(title)
-#| msgid ""
-#| "Contains menus used to perform actions in <application>Empathy</"
-#| "application>."
 msgid "Adding your Account to <application>Empathy</application>"
 msgstr "Hinzufügen Ihres Kontos in <application>Empathy</application>."
 
 #: C/empathy.xml:456(para) C/empathy.xml:534(para) C/empathy.xml:586(para)
 #: C/empathy.xml:619(para) C/empathy.xml:649(para) C/empathy.xml:672(para)
-#| msgid ""
-#| "From the <link linkend=\"empathy-FIG-mainwindow\">main window </link> "
-#| "(<guilabel>Contact List</guilabel>) click on the account button to open "
-#| "the <guilabel>Accounts</guilabel> dialog."
 msgid ""
 "From the <link linkend=\"empathy-FIG-mainwindow\">main window </link> "
 "(<guilabel>Contact List</guilabel>) click on the account button or press "
@@ -643,10 +620,6 @@ msgstr ""
 "öffnen."
 
 #: C/empathy.xml:468(para) C/empathy.xml:485(para)
-#| msgid ""
-#| "From the <guilabel>Type</guilabel> drop-down list choose the service you "
-#| "wish to create an account for, then click on the <guibutton>Create</"
-#| "guibutton> button."
 msgid ""
 "From the <guilabel>Type</guilabel> drop-down list choose the service you wish "
 "to add an account for, then click on the <guibutton>Create</guibutton> button."
@@ -656,9 +629,6 @@ msgstr ""
 "<guibutton>Anlegen</guibutton>."
 
 #: C/empathy.xml:464(para)
-#| msgid ""
-#| "When you start <application>Empathy</application> the following window is "
-#| "shown. <placeholder-1/>"
 msgid ""
 "If it is the first time you launch <application>Empathy</application>: "
 "<placeholder-1/>"
@@ -667,7 +637,6 @@ msgstr ""
 "<placeholder-1/>"
 
 #: C/empathy.xml:480(para)
-#| msgid "Click on the <guibutton>Add</guibutton> button."
 msgid "Click on the <guilabel>Add</guilabel> button."
 msgstr "Klicken Sie auf den Knopf <guibutton>Hinzufügen</guibutton>."
 
@@ -676,11 +645,6 @@ msgid "Otherwise: <placeholder-1/>"
 msgstr "Anderenfalls: <placeholder-1/>"
 
 #: C/empathy.xml:495(para)
-#| msgid ""
-#| "If you don't already have an account and you don't have your "
-#| "<emphasis>user name</emphasis> and <emphasis>password</emphasis>, you need "
-#| "to register a new account (see <xref linkend=\"empathy-register-account\"/"
-#| ">)."
 msgid ""
 "Fill the required fields with your <emphasis>user name</emphasis> and "
 "<emphasis>password</emphasis>. Optionally, you can modify some advanced "
@@ -693,9 +657,6 @@ msgstr ""
 "\"empathy-advanced-options\"/>."
 
 #: C/empathy.xml:504(para) C/empathy.xml:567(para)
-#| msgid ""
-#| "To enable the new account, select the <guilabel>Enabled</guilabel> check-"
-#| "box next to the name of the account."
 msgid ""
 "To enable the new account, select the <guilabel>Enabled</guilabel> check-box "
 "next to the name of the account in the box on the left."
@@ -705,9 +666,6 @@ msgstr ""
 "Teilfenster."
 
 #: C/empathy.xml:452(para)
-#| msgid ""
-#| "When you start <application>Empathy</application> the following window is "
-#| "shown. <placeholder-1/>"
 msgid ""
 "To add your account to <application>Empathy</application>, proceed as "
 "follows: <placeholder-1/>"
@@ -716,7 +674,6 @@ msgstr ""
 "wie folgt vor: <placeholder-1/>"
 
 #: C/empathy.xml:514(title)
-#| msgid "Creating an Account"
 msgid "Importing Accounts"
 msgstr "Importieren von Konten"
 
@@ -751,9 +708,6 @@ msgstr ""
 "<guilabel>Konten importieren</guilabel> zu öffnen."
 
 #: C/empathy.xml:549(para)
-#| msgid ""
-#| "Select the account you wish to disable in the box on the left of the "
-#| "dialog and deselect the <guilabel>Enabled</guilabel> check-box."
 msgid ""
 "Select the accounts you would like to import by clicking on the "
 "<guilabel>Import</guilabel> check-box."
@@ -773,9 +727,6 @@ msgstr ""
 "guibutton>."
 
 #: C/empathy.xml:563(para)
-#| msgid ""
-#| "When you start <application>Empathy</application> the following window is "
-#| "shown. <placeholder-1/>"
 msgid ""
 "When you import a new account into <application>Empathy</application>, it "
 "will not be enabled by default."
@@ -784,9 +735,6 @@ msgstr ""
 "wird dieser standardmäßig nicht aktiviert."
 
 #: C/empathy.xml:530(para)
-#| msgid ""
-#| "When you start <application>Empathy</application> the following window is "
-#| "shown. <placeholder-1/>"
 msgid ""
 "To import the accounts into <application>Empathy</application>, proceed as "
 "follows: <placeholder-1/>"
@@ -795,14 +743,10 @@ msgstr ""
 "folgt vor: <placeholder-1/>"
 
 #: C/empathy.xml:579(title)
-#| msgid "Creating an Account"
 msgid "Editing an Account"
 msgstr "Bearbeiten eines Kontos"
 
 #: C/empathy.xml:594(para)
-#| msgid ""
-#| "Select the account you wish to disable in the box on the left of the "
-#| "dialog."
 msgid "Select the account you wish to edit in the box on the left."
 msgstr ""
 "Wählen Sie das Konto, das Sie bearbeiten wollen, im Teilfenster an der linken "
@@ -829,12 +773,9 @@ msgstr ""
 "Abhängig von der art des Kontos können Sie verschiedene Einstellungen ändern."
 
 #: C/empathy.xml:627(para)
-#| msgid ""
-#| "Select the account you wish to disable in the box on the left of the "
-#| "dialog."
 msgid ""
 "Select the account you wish to edit in the box on the left and double-click "
-"on it's name."
+"on its name."
 msgstr ""
 "Wählen Sie das Konto, das Sie bearbeiten wollen, im Teilfenster an der linken "
 "Seite aus und doppelklicken Sie auf dessen Namen."
@@ -844,9 +785,6 @@ msgid "Change the name of the account as you desire."
 msgstr "Ändern Sie den Namen des Kontos nach Ihren Wünschen."
 
 #: C/empathy.xml:614(para)
-#| msgid ""
-#| "When you start <application>Empathy</application> the following window is "
-#| "shown. <placeholder-1/>"
 msgid ""
 "To modify the identifier of an account, how <application>Empathy</"
 "application> identifies an account, proceed as follows: <placeholder-1/>"
@@ -860,7 +798,6 @@ msgid "Disabling and Removing an Account"
 msgstr "Deaktivieren und Entfernen eines Kontos"
 
 #: C/empathy.xml:643(para)
-#| msgid "To disable an account, proceed as follow:"
 msgid "To disable an account, proceed as follows:"
 msgstr "Um ein Konto zu deaktivieren, gehen Sie wie folgt vor:"
 
@@ -874,7 +811,6 @@ msgstr ""
 "guilabel>."
 
 #: C/empathy.xml:666(para)
-#| msgid "To remove an account, proceed as follow:"
 msgid "To remove an account, proceed as follows:"
 msgstr "Um ein Konto zu löschen, gehen Sie wie folgt vor:"
 
@@ -912,11 +848,6 @@ msgstr ""
 "wie folgt vor:"
 
 #: C/empathy.xml:711(para)
-#| msgid ""
-#| "From the <link linkend=\"empathy-FIG-mainwindow\">main window</link> "
-#| "choose <menuchoice><guimenu>Chat</guimenu><guimenuitem>Add Contact...</"
-#| "guimenuitem></menuchoice>. The <guilabel>New Contact</guilabel> dialog "
-#| "will be shown."
 msgid ""
 "From the <link linkend=\"empathy-FIG-mainwindow\">main window</link>, select "
 "<menuchoice><guimenu>Edit</guimenu><guimenuitem>Personal Information</"
@@ -927,9 +858,6 @@ msgstr ""
 "Informationen</guimenuitem></menuchoice>."
 
 #: C/empathy.xml:720(para)
-#| msgid ""
-#| "From the <guilabel>Account</guilabel> drop-down list, choose the service "
-#| "used by the contact you are adding."
 msgid ""
 "From the <guilabel>Account</guilabel> drop-down list, choose the account you "
 "want to edit."
@@ -938,9 +866,6 @@ msgstr ""
 "welches Sie bearbeiten wollen."
 
 #: C/empathy.xml:726(para)
-#| msgid ""
-#| "In the <guilabel>Alias</guilabel> text-box type the name you want to give "
-#| "at the the new contact."
 msgid "In the <guilabel>Alias</guilabel> text box, write your new alias."
 msgstr ""
 "Geben Sie in das <guilabel>Alias</guilabel>-Textfeld den Namen für den Alias "
@@ -954,15 +879,14 @@ msgstr ""
 "Um Ihr Symbol zu ändern, klicken Sie auf den nach einer Person aussehenden "
 "Knopf und ändern Sie die Bilddatei."
 
-#: C/empathy.xml:738(para) C/empathy.xml:919(para) C/empathy.xml:953(para)
-#| msgid "Click on the <guibutton>Remove</guibutton> button."
+#: C/empathy.xml:738(para) C/empathy.xml:1319(para) C/empathy.xml:1353(para)
 msgid "When done, click <guibutton>Close</guibutton>."
 msgstr "Wenn Sie fertig sind, klicken Sie auf <guibutton>Schließen</guibutton>."
 
 #: C/empathy.xml:746(para)
 msgid ""
 "An <emphasis>alias</emphasis> is an alternative way you can identify "
-"yourself. You can use your real name or your nickname."
+"yourself. You can use your real name or a nickname."
 msgstr ""
 "Ein <emphasis>Alias</emphasis> ist eine weitere Möglichkeit, wie Sie sich "
 "selbst identifizieren können. Sie können Ihren wirklichen Namen oder Ihren "
@@ -973,14 +897,326 @@ msgid "Advanced Options"
 msgstr "Erweiterte Optionen"
 
 #: C/empathy.xml:757(para)
-msgid "TODO"
-msgstr "TODO"
+msgid ""
+"Based on the service you are using, it is possible to configure more advanced "
+"options to modify the normal behavior of <application>Empathy</application>."
+msgstr ""
+"Abhängig von dem von Ihnen verwendeten Dienst ist es möglich, erweiterte "
+"Einstellungen vorzunehmen, um das Verhalten von <application>Empathy</"
+"application> anzupassen."
 
-#: C/empathy.xml:765(title)
+#: C/empathy.xml:762(para)
+msgid ""
+"To configure these options, when you are <link linkend=\"empathy-create-"
+"account\">adding a new account</link>, click on the drop-down section "
+"<guilabel>Advanced</guilabel>."
+msgstr ""
+"Um diese Optionen zu ändern, wenn Sie <link linkend=\"empathy-create-account"
+"\">ein neues Konto hinzufügen</link> , klicken Sie auf die Auswahlliste "
+"<guilabel>Fortgeschritten</guilabel>."
+
+#: C/empathy.xml:770(title)
+msgid "Jabber (or <acronym>XMPP</acronym>) and Google Talk"
+msgstr "Jabber (oder <acronym>XMPP</acronym>)"
+
+#: C/empathy.xml:777(guilabel)
+msgid "Encryption required (TLS/SSL)"
+msgstr "Verschlüsselung erforderlich (TLS/SSL)"
+
+#: C/empathy.xml:780(para)
+msgid ""
+"Select this option in order to use some sort of encryption during your "
+"conversations."
+msgstr ""
+"Wählen Sie diese Option, um Verschlüsselungen während Ihren Unterhaltungen zu "
+"verwenden."
+
+#: C/empathy.xml:788(guilabel)
+msgid "Ignore SSL certificate errors"
+msgstr "SSL-Zertifikat-_Fehler ignorieren"
+
+#: C/empathy.xml:791(para)
+msgid ""
+"Select this option in order to ignore the errors that can be generated by "
+"some types of security certificates. Usually these certificates are called "
+"auto-signed."
+msgstr ""
+"Wählen Sie diese Option, um die von einigen Sicherheitszertifikaten "
+"hervorgerufenen Fehler zu ignorieren. Üblicherweise werden diese Zertifikate "
+"»Auto-signiert« genannt."
+
+#: C/empathy.xml:799(para)
+msgid ""
+"Select this option only if you are sure the certificate is secure and you can "
+"trust it."
+msgstr ""
+"Wählen Sie diese Option, wenn sie von der Sicherheit des Zertifikats "
+"überzeugt sind und Sie es als vertrauenswürdig einstufen."
+
+#: C/empathy.xml:809(guilabel)
+msgid "Resource"
+msgstr "Ressource"
+
+#: C/empathy.xml:812(para)
+#| msgid ""
+#| "Use this text box to set a name with which you can identify the running "
+#| "program based on where you are running it. With this option, and the "
+#| "<guilabel>Priority</guilabel> one, you can use your account simultaneously "
+#| "in two different devices. For example, if you set one device to "
+#| "<replaceable>desktop</replaceable> and of the other one to "
+#| "<replaceable>mobile</replaceable>, you can connect with both of them and "
+#| "based on the <guilabel>Priority</guilabel> value you will receive messages "
+#| "on one of the two devices or both."
+msgid ""
+"Use this text box to set a name with which you can identify the running "
+"program based on where you are running it. With this option, and the "
+"<guilabel>Priority</guilabel> one, you can use your account simultaneously in "
+"two different devices. For example, if you set one device to "
+"<replaceable>desktop</replaceable> and the other one to <replaceable>mobile</"
+"replaceable>, you can connect with both of them and based on the "
+"<guilabel>Priority</guilabel> value you will receive messages on one of the "
+"two devices or both."
+msgstr ""
+"Geben Sie in diesem Textfeld den Namen an, anhand dessen Sie das Programm "
+"identifizieren können, abhängig davon, wo Sie es ausführen. Mit dieser Option "
+"und der Option <guilabel>Priorität</guilabel> können Sie Ihr Konto auf beiden "
+"Geräten gleichzeitig verwenden. Beispielsweise bezeichnen Sie eines als "
+"<replaceable>Desktop</replaceable> und das andere als <replaceable>Mobil</"
+"replaceable>, dann können sie sich mit beiden Geräten verbinden. Abhängig vom "
+"eingestellten Wert in <guilabel>Priorität</guilabel> empfangen Sie "
+"Nachrichten auf einem der Geräte oder auf beiden."
+
+#: C/empathy.xml:825(para)
+msgid ""
+"This can be useful if you have two devices, a main one and a portable one, "
+"and you move away from the main one bringing with you the other: you can "
+"still receive messages from your account with the portable device even if you "
+"do not disconnet from the main one."
+msgstr ""
+"Dies könnte nützlich sein, wenn sie über zwei Geräte verfügen, ein Hauptgerät "
+"und ein tragbares Gerät. Wenn Sie weggehen und sich damit vom Hauptgerät "
+"entfernen, können Sie mit Ihrem tragbaren Gerät noch immer Nachrichten Ihres "
+"Kontos empfangen, ohne sich am Hauptgerät abzumelden."
+
+#: C/empathy.xml:834(para)
+msgid ""
+"If you set the same value for this text box on both the devices, when you "
+"connect with one of them, the other one will be disconnected, even if you set "
+"a different value with the <guilabel>Priority</guilabel> spin box."
+msgstr ""
+"Falls Sie in diesem Textfeld für beide Geräte das Gleiche eintragen, wird die "
+"Verbindung des einen Gerätes getrennt, wenn Sie sich mit Ihrem anderen Gerät "
+"anmelden. Das geschieht auch dann wenn Sie im Einstellfeld "
+"<guilabel>Priorität</guilabel> verschiedene Werte eingegeben haben."
+
+#: C/empathy.xml:847(guilabel)
+msgid "Priority"
+msgstr "Priorität"
+
+#: C/empathy.xml:850(para)
+msgid ""
+"Use this spin box to indicate wich device, set in the <guilabel>Resource</"
+"guilabel> text box, will receive the new messages. The higher the number, the "
+"higher the priority: you will receive the new messages on the device with the "
+"highest number."
+msgstr ""
+"Geben Sie in diesem Einstellfeld an, welches der im Textfeld "
+"<guilabel>Ressource</guilabel> die neuen Nachrichten empfängt. Je größer der "
+"Wert, desto höher die Priorität: Die neuen Nachrichten werden auf dem Gerät "
+"empfangen, für das der größere Zahlenwert eingestellt wurde."
+
+#: C/empathy.xml:857(para)
+msgid ""
+"You can set values in the range from <literal>-128</literal> to <literal>127</"
+"literal>."
+msgstr ""
+"Sie können Werte im Bereich zwischen <literal>-128</literal> und "
+"<literal>127</literal> angeben."
+
+#: C/empathy.xml:863(para)
+msgid ""
+"If you set the same value of this spin box in both the devices, you will "
+"receive messages on both of them."
+msgstr ""
+"Falls Sie den Wert dieses Einstellfeldes für beide Geräte gleich angeben, "
+"erhalten Sie auch die Nachrichten auf beiden Geräten."
+
+#: C/empathy.xml:880(guilabel) C/empathy.xml:973(guilabel)
+#: C/empathy.xml:1021(guilabel) C/empathy.xml:1115(guilabel)
+msgid "Server"
+msgstr "Server"
+
+#: C/empathy.xml:883(para) C/empathy.xml:976(para) C/empathy.xml:1024(para)
+#: C/empathy.xml:1118(para)
+msgid ""
+"Use this text box to write the name of the server you want to use for this "
+"service."
+msgstr ""
+"Geben Sie in diesem Textfeld den Namen des für diesen Dienst zu verwendenden "
+"Servers an."
+
+#: C/empathy.xml:891(guilabel) C/empathy.xml:984(guilabel)
+#: C/empathy.xml:1032(guilabel) C/empathy.xml:1126(guilabel)
+msgid "Port"
+msgstr "Port"
+
+#: C/empathy.xml:894(para) C/empathy.xml:987(para) C/empathy.xml:1035(para)
+#: C/empathy.xml:1129(para)
+msgid "Use this spin box to set the number of the port of the server to use."
+msgstr ""
+"Geben Sie in diesem Einstellfeld die Nummer des Ports auf dem zu benutzenden "
+"Server an."
+
+#: C/empathy.xml:898(para) C/empathy.xml:991(para) C/empathy.xml:1039(para)
+#: C/empathy.xml:1133(para)
+msgid ""
+"You can set values in the range from <literal>0</literal> to <literal>65,555</"
+"literal>."
+msgstr ""
+"Sie können Werte im Bereich von <literal>0</literal> bis <literal>65,555</"
+"literal> einstellen."
+
+#: C/empathy.xml:906(guilabel)
+msgid "Use old SSL"
+msgstr "Alte SSL-Verschlüsselung verwenden"
+
+#: C/empathy.xml:909(para)
+msgid ""
+"Select this option to use the old version of the secure protocol for "
+"encrypting your connection."
+msgstr ""
+"Wählen Sie diese Option, um die alte Version des SSL-Protokolls zur "
+"Verschlüsselung Ihrer Verbindungen zu verwenden."
+
+#: C/empathy.xml:874(para)
+msgid ""
+"In the <guilabel>Override server settings</guilabel> section you can set "
+"options that take precedence over the default settings. <placeholder-1/>"
+msgstr ""
+"Im Abschnitt <guilabel>Server-Einstellungen überschreiben</guilabel> können "
+"Sie Optionen auswählen, die sich auf folgende Einstellungen auswirken: "
+"<placeholder-1/>"
+
+#: C/empathy.xml:925(guilabel)
+msgid "Ignore conference and chatrooms invitations"
+msgstr "Konferenz- und Chatraumeinladungen ignorieren"
+
+#: C/empathy.xml:929(para)
+msgid ""
+"Select this option to ignore the invitations that other people may send you."
+msgstr ""
+"Wählen Sie diese Option, um eventuelle Einladungen anderer Teilnehmer zu "
+"ignorieren."
+
+#: C/empathy.xml:937(guilabel)
+msgid "Room List locale"
+msgstr "Standorteinstellungen für Raumliste"
+
+#: C/empathy.xml:940(para)
+msgid ""
+"The value of this text box identifies the language used to retrieve the room "
+"list when connecting to the Yahoo service."
+msgstr ""
+"Der Inhalt dieses Textfeldes legt die Sprache fest, die zum Holen der "
+"Raumliste bei der Verbindung zum Yahoo-Dienst benutzt wird."
+
+#: C/empathy.xml:945(para)
+msgid ""
+"If you need to change this value, use the two letter code of your language."
+msgstr ""
+"Falls es notwendig sein sollte, dies zu ändern, geben Sie den aus zwei "
+"Buchstaben bestehenden Code für Ihre Sprache ein."
+
+#: C/empathy.xml:953(guilabel) C/empathy.xml:1095(guilabel)
+msgid "Charset"
+msgstr "Zeichensatz"
+
+#: C/empathy.xml:956(para) C/empathy.xml:1098(para)
+msgid ""
+"The value of this text box identifies the set of the characters used by "
+"<application>Empathy</application>."
+msgstr ""
+"Der Inhalt dieses Textfeldes gibt den von <application>Empathy</application> "
+"verwendeten Zeichensatz an."
+
+#: C/empathy.xml:962(para) C/empathy.xml:1104(para)
+msgid ""
+"It is advise to leave this value to <literal>UTF-8</literal>. Change it only "
+"if that charset does not cover your language."
+msgstr ""
+"Es ist empfehlenswert, diesen Wert auf <literal>UTF-8</literal> zu belassen. "
+"Ändern Sie dies nur, wenn dieser Zeichensatz nicht für Ihre Sprache geeignet "
+"ist."
+
+#: C/empathy.xml:999(guilabel)
+msgid "Use Yahoo Japan"
+msgstr "Yahoo Japan verwenden"
+
+#: C/empathy.xml:1002(para)
+msgid ""
+"Select this option only if you have a Yahoo! Japan account. With the Yahoo! "
+"Japan service you can only use a Yahoo! Japan account: if you have registered "
+"an account with the English version of the service, that account will not "
+"work."
+msgstr ""
+"Wählen Sie diese Option nur dann, wenn sie über ein Konto bei »Yahoo! Japan« "
+"verfügen. Dieser Dienst funktioniert nur mit einem solchen Konto. Falls Sie "
+"ein Konto mit der deutschen Version registriert haben, funktioniert dieses "
+"nicht."
+
+#: C/empathy.xml:1016(title)
+msgid "<acronym>AIM</acronym>, GroupWise and <acronym>MSN</acronym>"
+msgstr "<acronym>AIM</acronym>, GroupWise und <acronym>MSN</acronym>"
+
+#: C/empathy.xml:1055(guilabel)
+msgid "Published Name"
+msgstr "Veröffentlichter Name"
+
+#: C/empathy.xml:1058(para)
+msgid ""
+"Use this text box to write the name that will be visible to the other users "
+"of the network."
+msgstr ""
+"Geben Sie in diesem Textfeld den Namen ein, wie er für andere Benutzer des "
+"Netzwerks angezeigt werden soll."
+
+#: C/empathy.xml:1066(guilabel)
+msgid "Email"
+msgstr "E-Mail"
+
+#: C/empathy.xml:1069(para)
+msgid "Use this text box to write your email."
+msgstr "Geben Sie in diesem Textfeld Ihre E-Mail-Adresse ein."
+
+#: C/empathy.xml:1076(guilabel)
+msgid "Jabber ID"
+msgstr "Jabber-Kennung"
+
+#: C/empathy.xml:1079(para)
+msgid "Use this text box to write your Jabber ID, if you have one."
+msgstr ""
+"Geben Sie in diesem Textfeld Ihre Jabber-Kennung ein, falls Sie über eine "
+"solche verfügen."
+
+#: C/empathy.xml:1144(title)
+msgid "Gadu Gadu"
+msgstr "Gada-Gadu"
+
+#: C/empathy.xml:1148(guilabel)
+msgid "Nick"
+msgstr "Spitzname"
+
+#: C/empathy.xml:1150(para)
+msgid "Use this text box to write an alternative name to use with this service."
+msgstr ""
+"Geben Sie in diesem Textfeld einen alternativen Namen ein, den Sie mit diesem "
+"Dienst verwenden wollen."
+
+#: C/empathy.xml:1165(title)
 msgid "Contacts and Groups"
 msgstr "Kontakte und Gruppen"
 
-#: C/empathy.xml:766(para)
+#: C/empathy.xml:1166(para)
 msgid ""
 "All the contacts are handled within <application>Empathy</application>'s "
 "<link linkend=\"empathy-FIG-mainwindow\">main window</link>."
@@ -988,7 +1224,7 @@ msgstr ""
 "Alle Kontakte werden im <application>Empathy</application>-<link linkend="
 "\"empathy-FIG-mainwindow\">Hauptfenster</link> angezeigt."
 
-#: C/empathy.xml:770(para)
+#: C/empathy.xml:1170(para)
 msgid ""
 "You can add or remove a contact or you can edit the information of a "
 "particular contact. It is also possibile to arrange contacts in groups. You "
@@ -1000,17 +1236,15 @@ msgstr ""
 "Gruppen zu ordnen. Beispielsweise in einer Gruppe für berufliche Kontakte, in "
 "einer Gruppe für familiäre Kontakte usw."
 
-#: C/empathy.xml:777(title)
-#| msgid "Removing a Contact"
+#: C/empathy.xml:1177(title)
 msgid "Adding and Removing a Contact"
 msgstr "Hinzufügen und Entfernen eines Kontakts"
 
-#: C/empathy.xml:778(para)
-#| msgid "To add a new contact, proceed as follow:"
+#: C/empathy.xml:1178(para)
 msgid "To add a new contact, proceed as follows:"
 msgstr "Um einen neuen Kontakt hinzuzufügen, gehen Sie wie folgt vor:"
 
-#: C/empathy.xml:784(para)
+#: C/empathy.xml:1184(para)
 msgid ""
 "From the <link linkend=\"empathy-FIG-mainwindow\">main window</link> choose "
 "<menuchoice><guimenu>Chat</guimenu><guimenuitem>Add Contact...</guimenuitem></"
@@ -1021,7 +1255,7 @@ msgstr ""
 "guimenuitem></menuchoice>. Der Dialog <guilabel>Neuer Kontakt</guilabel> wird "
 "angezeigt."
 
-#: C/empathy.xml:794(para)
+#: C/empathy.xml:1194(para)
 msgid ""
 "From the <guilabel>Account</guilabel> drop-down list, choose the service used "
 "by the contact you are adding."
@@ -1029,12 +1263,7 @@ msgstr ""
 "Aus der <guilabel>Konto</guilabel>-Aufklappliste wählen Sie den Anbieter, "
 "über den Sie mit dem neuen Kontakt kommunizieren wollen."
 
-#: C/empathy.xml:800(para)
-#| msgid ""
-#| "In the <guilabel>Identifier</guilabel> text-box type the "
-#| "<emphasis>address</emphasis> of the contact in the form of "
-#| "<userinput><replaceable>user name</replaceable>@<replaceable>service\n"
-#| "\t      domain</replaceable></userinput>."
+#: C/empathy.xml:1200(para)
 msgid ""
 "In the <guilabel>Identifier</guilabel> text box type the <emphasis>address</"
 "emphasis> of the contact in the form of <userinput><replaceable>user name</"
@@ -1046,10 +1275,7 @@ msgstr ""
 "replaceable>@<replaceable>anbieter\n"
 "\t      domain</replaceable></userinput> ein."
 
-#: C/empathy.xml:809(para)
-#| msgid ""
-#| "In the <guilabel>Alias</guilabel> text-box type the name you want to give "
-#| "at the the new contact."
+#: C/empathy.xml:1209(para)
 msgid ""
 "In the <guilabel>Alias</guilabel> text box type the name you want to give at "
 "the the new contact."
@@ -1057,18 +1283,17 @@ msgstr ""
 "Geben Sie in das <guilabel>Alias</guilabel>-Textfeld den Namen ein, unter dem "
 "Sie den neuen Kontakt speichern wollen."
 
-#: C/empathy.xml:815(para)
+#: C/empathy.xml:1215(para)
 msgid "Click on <guibutton>Add</guibutton> to add the new contact."
 msgstr ""
 "Klicken Sie auf <guibutton>Hinzufügen</guibutton>, um den neuen Kontakt "
 "hinzuzufügen."
 
-#: C/empathy.xml:821(para)
-#| msgid "To remove a contact, proceed as follow:"
+#: C/empathy.xml:1221(para)
 msgid "To remove a contact, proceed as follows:"
 msgstr "Um einen Kontakt zu entfernen, gehen Sie wie folgt vor:"
 
-#: C/empathy.xml:827(para)
+#: C/empathy.xml:1227(para)
 msgid ""
 "From the <link linkend=\"empathy-FIG-mainwindow\">main window</link>, select "
 "the contact you would like to remove and right-click on it."
@@ -1077,14 +1302,14 @@ msgstr ""
 "den Kontakt, den Sie entfernen wollen, und klicken Sie mit der rechten "
 "Maustaste darauf."
 
-#: C/empathy.xml:834(para)
+#: C/empathy.xml:1234(para)
 msgid ""
 "From the popup menu, choose <guilabel>Remove</guilabel> to remove the contact."
 msgstr ""
 "Aus dem Kontextmenü wählen Sie <guilabel>Entfernen</guilabel>, um den Kontakt "
 "zu entfernen."
 
-#: C/empathy.xml:843(para) C/empathy.xml:879(para)
+#: C/empathy.xml:1243(para) C/empathy.xml:1279(para)
 msgid ""
 "An <emphasis>alias</emphasis> is an alternative way you can identify that "
 "particular contact. You can use the real name or the nickname of that person."
@@ -1093,36 +1318,35 @@ msgstr ""
 "bestimmten Kontakt identifizieren können. Sie können dafür den wirklichen "
 "Namen oder den Spitznamen der jeweiligen Person verwenden."
 
-#: C/empathy.xml:852(title)
-#| msgid "Adding a Contact"
+#: C/empathy.xml:1252(title)
 msgid "Editing a Contact"
 msgstr "Bearbeiten eines Kontakts"
 
-#: C/empathy.xml:853(para)
-#| msgid "To remove a contact, proceed as follow:"
+#: C/empathy.xml:1253(para)
 msgid "To edit a contact, proceed as follows:"
 msgstr "Um einen Kontakt zu bearbeiten, gehen Sie wie folgt vor:"
 
-#: C/empathy.xml:859(para) C/empathy.xml:901(para)
-#, fuzzy
+#: C/empathy.xml:1259(para) C/empathy.xml:1301(para)
 #| msgid ""
-#| "From the <link linkend=\"empathy-FIG-mainwindow\">main window</link> "
-#| "choose <menuchoice><guimenu>Chat</guimenu><guimenuitem>Add Contact...</"
-#| "guimenuitem></menuchoice>. The <guilabel>New Contact</guilabel> dialog "
-#| "will be shown."
+#| "From the <link linkend=\"empathy-FIG-mainwindow\">main window</link>, "
+#| "select the contact you would like to modify and choose "
+#| "<menuchoice><guimenu>Edit</guimenu><guisubmenu>Account</"
+#| "guisubmenu><guimenuitem>Modify</guimenuitem></menuchoice>, or right-click "
+#| "on it and choose <guilabel>Modify</guilabel>."
 msgid ""
 "From the <link linkend=\"empathy-FIG-mainwindow\">main window</link>, select "
 "the contact you would like to modify and choose <menuchoice><guimenu>Edit</"
-"guimenu><guisubmenu>Account</guisubmenu><guimenuitem>Modify</guimenuitem></"
-"menuchoice>, or right-click on it and choose <guilabel>Modify</guilabel>."
+"guimenu><guisubmenu>Contact</guisubmenu><guimenuitem>Edit</guimenuitem></"
+"menuchoice>, or right-click on it and choose <guilabel>Edit</guilabel>."
 msgstr ""
 "Im <link linkend=\"empathy-FIG-mainwindow\">Hauptfenster</link> wählen Sie "
-"einen Kontakt  und wählen dann <menuchoice><guimenu>Bearbeiten</"
-"guimenu><guisubmenu>Konto</guisubmenu><guimenuitem>Modify</guimenuitem></"
-"menuchoice>, oder klicken Sie mit der rechten Maustaste darauf und wählen "
-"dann <guilabel>Modify</guilabel>."
+"einen Kontakt, dessen Einstellungen Sie ändern wollen und wählen dann "
+"<menuchoice><guimenu>Bearbeiten</guimenu><guisubmenu>Kontakt</"
+"guisubmenu><guimenuitem>Bearbeiten</guimenuitem></menuchoice>, oder klicken "
+"Sie mit der rechten Maustaste darauf und wählen dann <guilabel>Bearbeiten</"
+"guilabel>."
 
-#: C/empathy.xml:872(para)
+#: C/empathy.xml:1272(para)
 msgid ""
 "From the <guilabel>Edit Contact Information</guilabel> dialog, you can modify "
 "the <emphasis>alias</emphasis> and the <emphasis>group</emphasis> of the "
@@ -1132,7 +1356,7 @@ msgstr ""
 "<emphasis>Alias</emphasis> und die <emphasis>Gruppe</emphasis> des Kontakts "
 "bearbeiten."
 
-#: C/empathy.xml:886(para)
+#: C/empathy.xml:1286(para)
 msgid ""
 "For more information about groups, see <xref linkend=\"empathy-add-contact-"
 "group\"/> and <xref linkend=\"empathy-add-group\"/>."
@@ -1140,22 +1364,17 @@ msgstr ""
 "Weitere Informationen über Gruppen finden Sie in <xref linkend=\"empathy-add-"
 "contact-group\"/> und <xref linkend=\"empathy-add-group\"/>."
 
-#: C/empathy.xml:894(title)
-#| msgid "Adding a Contact"
+#: C/empathy.xml:1294(title)
 msgid "Adding a Contact to a Group"
 msgstr "Hinzufügen eines Kontakts zu einer Gruppe"
 
-#: C/empathy.xml:895(para)
-#| msgid "To add a new contact, proceed as follow:"
+#: C/empathy.xml:1295(para)
 msgid "To add a contact to one or more groups, proceed as follows:"
 msgstr ""
 "Um einen neuen Kontakt zu einer oder mehreren Gruppen hinzuzufügen, gehen Sie "
 "wie folgt vor:"
 
-#: C/empathy.xml:913(para)
-#| msgid ""
-#| "In the <guilabel>Alias</guilabel> text-box type the name you want to give "
-#| "at the the new contact."
+#: C/empathy.xml:1313(para)
 msgid ""
 "From the <guilabel>Groups</guilabel> section, select the group, or groups, "
 "you want to add the contact to."
@@ -1163,39 +1382,33 @@ msgstr ""
 "Wählen Sie im Abschnitt <guilabel>Gruppen</guilabel> die Gruppe oder die "
 "Gruppen aus, zu denen Sie den Kontakt hinzufügen wollen."
 
-#: C/empathy.xml:928(title)
+#: C/empathy.xml:1328(title)
 msgid "Adding a New Group"
 msgstr "Hinzufügen einer neuen Gruppe"
 
-#: C/empathy.xml:929(para)
-#| msgid "To add a new contact, proceed as follow:"
+#: C/empathy.xml:1329(para)
 msgid "To add a new group, proceed as follows:"
 msgstr "Um eine neue Gruppe hinzuzufügen, gehen Sie wie folgt vor:"
 
-#: C/empathy.xml:935(para)
-#, fuzzy
+#: C/empathy.xml:1335(para)
 #| msgid ""
-#| "From the <link linkend=\"empathy-FIG-mainwindow\">main window</link> "
-#| "choose <menuchoice><guimenu>Chat</guimenu><guimenuitem>Add Contact...</"
-#| "guimenuitem></menuchoice>. The <guilabel>New Contact</guilabel> dialog "
-#| "will be shown."
+#| "From the <link linkend=\"empathy-FIG-mainwindow\">main window</link>, "
+#| "select one contact and choose <menuchoice><guimenu>Edit</"
+#| "guimenu><guisubmenu>Account</guisubmenu><guimenuitem>Modify</guimenuitem></"
+#| "menuchoice>, or right-click on it and choose <guilabel>Modify</guilabel>."
 msgid ""
 "From the <link linkend=\"empathy-FIG-mainwindow\">main window</link>, select "
 "one contact and choose <menuchoice><guimenu>Edit</"
-"guimenu><guisubmenu>Account</guisubmenu><guimenuitem>Modify</guimenuitem></"
-"menuchoice>, or right-click on it and choose <guilabel>Modify</guilabel>."
+"guimenu><guisubmenu>Contact</guisubmenu><guimenuitem>Edit</guimenuitem></"
+"menuchoice>, or right-click on it and choose <guilabel>Edit</guilabel>."
 msgstr ""
 "Im <link linkend=\"empathy-FIG-mainwindow\">Hauptfenster</link> wählen Sie "
 "einen Kontakt  und wählen dann <menuchoice><guimenu>Bearbeiten</"
-"guimenu><guisubmenu>Konto</guisubmenu><guimenuitem>Modify</guimenuitem></"
-"menuchoice>, oder klicken Sie mit der rechten Maustaste darauf und wählen "
-"dann <guilabel>Modify</guilabel>."
+"guimenu><guisubmenu>Kontakt</guisubmenu><guimenuitem>Bearbeiten</"
+"guimenuitem></menuchoice>, oder klicken Sie mit der rechten Maustaste darauf "
+"und wählen dann <guilabel>Bearbeiten</guilabel>."
 
-#: C/empathy.xml:946(para)
-#| msgid ""
-#| "From the <guilabel>Type</guilabel> drop-down list choose the service you "
-#| "wish to create an account for, then click on the <guibutton>Create</"
-#| "guibutton> button."
+#: C/empathy.xml:1346(para)
 msgid ""
 "In the <guilabel>Groups</guilabel> section, write the name of the group you "
 "want to add and then click on <guibutton>Add Group</guibutton>."
@@ -1211,6 +1424,9 @@ msgstr ""
 "Mario Blättermann <mariobl@gnome.org>, 2008, 2009\n"
 "Philipp Kerling <k.philipp@gmail.com>, 2008"
 
+#~ msgid "TODO"
+#~ msgstr "TODO"
+
 #~ msgid ""
 #~ "@@image: 'figures/empathy-new-account.png'; "
 #~ "md5=6c1e0d8c709125d387e975e5738b8c0f"
@@ -1221,9 +1437,6 @@ msgstr ""
 
 #~ msgid "milo_casagrande@yahoo.it"
 #~ msgstr "milo_casagrande@yahoo.it"
-
-#~ msgid "Jabber"
-#~ msgstr "Jabber"
 
 #~ msgid "When You Start Empathy for the First Time"
 #~ msgstr "Wenn Sie Empathy zum ersten Mal starten"
