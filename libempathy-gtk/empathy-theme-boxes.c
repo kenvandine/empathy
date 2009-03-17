@@ -275,10 +275,12 @@ theme_boxes_maybe_append_header (EmpathyThemeBoxes *theme,
 	tag = gtk_text_tag_table_lookup (table, EMPATHY_THEME_BOXES_TAG_HEADER);
 	g_object_get (tag, "foreground-set", &color_set, NULL);
 	if (color_set) {
-		GdkColor color;
+		GdkColor *color;
+
 		g_object_get (tag, "foreground-gdk", &color, NULL);
-		gtk_widget_modify_fg (label1, GTK_STATE_NORMAL, &color);
-		gtk_widget_modify_fg (label2, GTK_STATE_NORMAL, &color);
+		gtk_widget_modify_fg (label1, GTK_STATE_NORMAL, color);
+		gtk_widget_modify_fg (label2, GTK_STATE_NORMAL, color);
+		gdk_color_free (color);
 	}
 
 	/* Pack labels into the box */

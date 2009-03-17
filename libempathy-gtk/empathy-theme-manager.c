@@ -231,14 +231,11 @@ theme_manager_update_boxes_tags (EmpathyThemeBoxes *theme,
 	/* Define BOXES tags */
 	tag = empathy_chat_text_view_tag_set (view, EMPATHY_THEME_BOXES_TAG_HEADER,
 					      "weight", PANGO_WEIGHT_BOLD,
-					      "foreground", header_foreground,
-					      "paragraph-background", header_background,
 					      NULL);
 	TAG_SET ("foreground", "foreground-set", header_foreground);
 	TAG_SET ("paragraph-background", "paragraph-background-set", header_background);
 	tag = empathy_chat_text_view_tag_set (view, EMPATHY_THEME_BOXES_TAG_HEADER_LINE,
 					      "size", 1,
-					      "paragraph-background", header_line_background,
 					      NULL);
 	TAG_SET ("paragraph-background", "paragraph-background-set", header_line_background);
 
