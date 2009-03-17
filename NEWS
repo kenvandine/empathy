@@ -1,3 +1,28 @@
+NEW in 2.26.0
+==============
+ - Fix various VoIP bugs
+ - Hook up audio mute button (Sjoerd Simons).
+ - Set the camera button sensitive while connected and there is a video input (Sjoerd Simons).
+ - Set empathy's media role to phone for so pulse can do policy on it.
+   For more information see:
+   http://pulseaudio.org/wiki/ApplicationProperties (Sjoerd Simons).
+ - Updated Greek tramslation by Jennie Petoumenou (pkst).
+ - Refactor log backend, it now make possible to implement other backends to
+   read logs from other clients, and it logs messages sooner to avoid losing
+   messages if empathy crash at any time (Jonny Lamb)
+
+Translations:
+ - Updated British English manual translation. (pwithnall).
+ - Updated Spanish translation (jorgegonz).
+ - Updated Czech translation (Martin Picek).
+ - Updated Marathi Translations (sandeeps).
+ - Updated Slovenian translation (mateju).
+ - Updated Lithuanian translation. (Gintautas Miliauskas).
+ - Updated French translation (Frédéric Peters, Bruno Brouard).
+ - Updated Portuguese translation (Duarte Loreto).
+ - Updated Russian translation. (Nickolay V. Shmyrev).
+ - Updated Danish translation (kennethn).
+
 NEW in 2.25.92
 ==============
  - Hardcode some a default codec preferences
