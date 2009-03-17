@@ -12,16 +12,24 @@ NEW in 2.26.0
    messages if empathy crash at any time (Jonny Lamb)
 
 Translations:
- - Updated British English manual translation. (pwithnall).
+ - Updated British English manual translation (pwithnall).
  - Updated Spanish translation (jorgegonz).
  - Updated Czech translation (Martin Picek).
  - Updated Marathi Translations (sandeeps).
- - Updated Slovenian translation (mateju).
- - Updated Lithuanian translation. (Gintautas Miliauskas).
+ - Updated Lithuanian translation (Gintautas Miliauskas).
  - Updated French translation (Frédéric Peters, Bruno Brouard).
  - Updated Portuguese translation (Duarte Loreto).
- - Updated Russian translation. (Nickolay V. Shmyrev).
+ - Updated Russian translation (Nickolay V. Shmyrev).
  - Updated Danish translation (kennethn).
+ - Updated assamese translations (amitakhya).
+ - Updated Bulgarian translation (Alexander Shopov).
+ - Updated Norwegian bokmål translation (Kjartan Maraas).
+ - Updated Oriya Translation (mgiri).
+ - Updated tamil translation (ifelix).
+ - Updated German translation (Mario Blättermann).
+ - Updated Telugu Translation (kkrothap).
+ - Updated Italian translation (miloc).
+ - Updated Slovenian translation (mateju).
 
 NEW in 2.25.92
 ==============
