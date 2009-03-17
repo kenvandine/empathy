@@ -24,6 +24,8 @@ python /usr/share/pygobject/2.0/codegen/h2def.py	\
 	empathy-irc-network-manager.h		\
 	empathy-irc-server.h			\
 	empathy-log-manager.h			\
+	empathy-log-store.h			\
+	empathy-log-store-empathy.h		\
 	empathy-message.h			\
 	empathy-status-presets.h		\
 	empathy-time.h				\

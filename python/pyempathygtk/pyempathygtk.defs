@@ -233,6 +233,18 @@
   )
 )
 
+(define-enum GstVideoSrcChannel
+  (in-module "Empathy")
+  (c-name "EmpathyGstVideoSrcChannel")
+  (gtype-id "EMPATHY_TYPE_GST_VIDEO_SRC_CHANNEL")
+  (values
+    '("empathy-gst-video-src-channel-contrast" "EMPATHY_GST_VIDEO_SRC_CHANNEL_CONTRAST")
+    '("empathy-gst-video-src-channel-brightness" "EMPATHY_GST_VIDEO_SRC_CHANNEL_BRIGHTNESS")
+    '("empathy-gst-video-src-channel-gamma" "EMPATHY_GST_VIDEO_SRC_CHANNEL_GAMMA")
+    '("nr-empathy-gst-video-src-channels" "NR_EMPATHY_GST_VIDEO_SRC_CHANNELS")
+  )
+)
+
 (define-enum Sound
   (in-module "Empathy")
   (c-name "EmpathySound")
@@ -1336,6 +1348,23 @@
   (return-type "GstElement*")
 )
 
+(define-function audio_src_set_volume
+  (c-name "empathy_audio_src_set_volume")
+  (return-type "none")
+  (parameters
+    '("EmpathyGstAudioSrc*" "src")
+    '("gdouble" "volume")
+  )
+)
+
+(define-function audio_src_get_volume
+  (c-name "empathy_audio_src_get_volume")
+  (return-type "gdouble")
+  (parameters
+    '("EmpathyGstAudioSrc*" "src")
+  )
+)
+
 
 
 ;; From empathy-video-src.h
@@ -1349,6 +1378,33 @@
   (c-name "empathy_video_src_new")
   (is-constructor-of "EmpathyVideoSrc")
   (return-type "GstElement*")
+)
+
+(define-function video_src_get_supported_channels
+  (c-name "empathy_video_src_get_supported_channels")
+  (return-type "guint")
+  (parameters
+    '("GstElement*" "src")
+  )
+)
+
+(define-function video_src_set_channel
+  (c-name "empathy_video_src_set_channel")
+  (return-type "none")
+  (parameters
+    '("GstElement*" "src")
+    '("EmpathyGstVideoSrcChannel" "channel")
+    '("guint" "percent")
+  )
+)
+
+(define-function video_src_get_channel
+  (c-name "empathy_video_src_get_channel")
+  (return-type "guint")
+  (parameters
+    '("GstElement*" "src")
+    '("EmpathyGstVideoSrcChannel" "channel")
+  )
 )
 
 
@@ -1686,6 +1742,11 @@
 (define-function gtk_init
   (c-name "empathy_gtk_init")
   (return-type "none")
+)
+
+(define-function uri_regex_dup_singleton
+  (c-name "empathy_uri_regex_dup_singleton")
+  (return-type "GRegex*")
 )
 
 (define-function glade_get_file_simple

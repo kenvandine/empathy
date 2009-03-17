@@ -20,6 +20,7 @@ headers
 #include "empathy-irc-network-manager.h"
 #include "empathy-irc-server.h"
 #include "empathy-log-manager.h"
+#include "empathy-log-store-empathy.h"
 #include "empathy-message.h"
 #include "empathy-status-presets.h"
 #include "empathy-time.h"

@@ -119,6 +119,13 @@
   (gtype-id "EMPATHY_TYPE_LOG_MANAGER")
 )
 
+(define-object LogStoreEmpathy
+  (in-module "Empathy")
+  (parent "GObject")
+  (c-name "EmpathyLogStoreEmpathy")
+  (gtype-id "EMPATHY_TYPE_LOG_STORE_EMPATHY")
+)
+
 (define-object Message
   (in-module "Empathy")
   (parent "GObject")
@@ -544,12 +551,13 @@
   (return-type "none")
 )
 
-(define-method set_bus
+(define-method bus_message
   (of-object "EmpathyCallHandler")
-  (c-name "empathy_call_handler_set_bus")
+  (c-name "empathy_call_handler_bus_message")
   (return-type "none")
   (parameters
     '("GstBus*" "bus")
+    '("GstMessage*" "message")
   )
 )
 
@@ -1620,14 +1628,17 @@
   )
 )
 
-(define-method get_last_messages
+(define-method get_filtered_messages
   (of-object "EmpathyLogManager")
-  (c-name "empathy_log_manager_get_last_messages")
+  (c-name "empathy_log_manager_get_filtered_messages")
   (return-type "GList*")
   (parameters
     '("McAccount*" "account")
     '("const-gchar*" "chat_id")
     '("gboolean" "chatroom")
+    '("guint" "num_messages")
+    '("EmpathyLogMessageFilter" "filter")
+    '("gpointer" "user_data")
   )
 )
 
@@ -1680,6 +1691,130 @@
   (parameters
     '("EmpathyDispatcher*" "dispatcher")
   )
+)
+
+
+
+;; From empathy-log-store.h
+
+(define-function log_store_get_type
+  (c-name "empathy_log_store_get_type")
+  (return-type "GType")
+)
+
+(define-method get_name
+  (of-object "EmpathyLogStore")
+  (c-name "empathy_log_store_get_name")
+  (return-type "const-gchar*")
+)
+
+(define-method exists
+  (of-object "EmpathyLogStore")
+  (c-name "empathy_log_store_exists")
+  (return-type "gboolean")
+  (parameters
+    '("McAccount*" "account")
+    '("const-gchar*" "chat_id")
+    '("gboolean" "chatroom")
+  )
+)
+
+(define-method add_message
+  (of-object "EmpathyLogStore")
+  (c-name "empathy_log_store_add_message")
+  (return-type "gboolean")
+  (parameters
+    '("const-gchar*" "chat_id")
+    '("gboolean" "chatroom")
+    '("EmpathyMessage*" "message")
+    '("GError**" "error")
+  )
+)
+
+(define-method get_dates
+  (of-object "EmpathyLogStore")
+  (c-name "empathy_log_store_get_dates")
+  (return-type "GList*")
+  (parameters
+    '("McAccount*" "account")
+    '("const-gchar*" "chat_id")
+    '("gboolean" "chatroom")
+  )
+)
+
+(define-method get_messages_for_date
+  (of-object "EmpathyLogStore")
+  (c-name "empathy_log_store_get_messages_for_date")
+  (return-type "GList*")
+  (parameters
+    '("McAccount*" "account")
+    '("const-gchar*" "chat_id")
+    '("gboolean" "chatroom")
+    '("const-gchar*" "date")
+  )
+)
+
+(define-method get_last_messages
+  (of-object "EmpathyLogStore")
+  (c-name "empathy_log_store_get_last_messages")
+  (return-type "GList*")
+  (parameters
+    '("McAccount*" "account")
+    '("const-gchar*" "chat_id")
+    '("gboolean" "chatroom")
+  )
+)
+
+(define-method get_chats
+  (of-object "EmpathyLogStore")
+  (c-name "empathy_log_store_get_chats")
+  (return-type "GList*")
+  (parameters
+    '("McAccount*" "account")
+  )
+)
+
+(define-method search_new
+  (of-object "EmpathyLogStore")
+  (c-name "empathy_log_store_search_new")
+  (return-type "GList*")
+  (parameters
+    '("const-gchar*" "text")
+  )
+)
+
+(define-method ack_message
+  (of-object "EmpathyLogStore")
+  (c-name "empathy_log_store_ack_message")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "chat_id")
+    '("gboolean" "chatroom")
+    '("EmpathyMessage*" "message")
+  )
+)
+
+(define-method get_filtered_messages
+  (of-object "EmpathyLogStore")
+  (c-name "empathy_log_store_get_filtered_messages")
+  (return-type "GList*")
+  (parameters
+    '("McAccount*" "account")
+    '("const-gchar*" "chat_id")
+    '("gboolean" "chatroom")
+    '("guint" "num_messages")
+    '("EmpathyLogMessageFilter" "filter")
+    '("gpointer" "user_data")
+  )
+)
+
+
+
+;; From empathy-log-store-empathy.h
+
+(define-function log_store_empathy_get_type
+  (c-name "empathy_log_store_empathy_get_type")
+  (return-type "GType")
 )
 
 
@@ -1809,6 +1944,15 @@
   (return-type "none")
   (parameters
     '("guint" "id")
+  )
+)
+
+(define-method equal
+  (of-object "EmpathyMessage")
+  (c-name "empathy_message_equal")
+  (return-type "gboolean")
+  (parameters
+    '("EmpathyMessage*" "message2")
   )
 )
 
