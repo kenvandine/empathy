@@ -27,14 +27,16 @@
       <xi:include href="xml/empathy-contact-manager.xml"/>
       <xi:include href="xml/empathy-contact-monitor.xml"/>
       <xi:include href="xml/empathy-contact.xml"/>
-      <xi:include href="xml/empathy-dispatch-operation.xml"/>
       <xi:include href="xml/empathy-dispatcher.xml"/>
+      <xi:include href="xml/empathy-dispatch-operation.xml"/>
       <xi:include href="xml/empathy-enum-types.xml"/>
       <xi:include href="xml/empathy-idle.xml"/>
       <xi:include href="xml/empathy-irc-network-manager.xml"/>
       <xi:include href="xml/empathy-irc-network.xml"/>
       <xi:include href="xml/empathy-irc-server.xml"/>
       <xi:include href="xml/empathy-log-manager.xml"/>
+      <xi:include href="xml/empathy-log-store-empathy.xml"/>
+      <xi:include href="xml/empathy-log-store.xml"/>
       <xi:include href="xml/empathy-message.xml"/>
       <xi:include href="xml/empathy-status-presets.xml"/>
       <xi:include href="xml/empathy-time.xml"/>
