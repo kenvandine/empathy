@@ -36,6 +36,7 @@
 #include <gio/gunixoutputstream.h>
 
 #include <telepathy-glib/proxy-subclass.h>
+#include <telepathy-glib/util.h>
 
 #include "empathy-tp-file.h"
 #include "empathy-contact-factory.h"
@@ -297,7 +298,7 @@ struct _EmpathyTpFilePriv {
   gboolean incoming;
   TpFileTransferStateChangeReason state_change_reason;
   time_t start_time;
-  gchar *unix_socket_path;
+  GValue *socket_address;
   GCancellable *cancellable;
 };
 
@@ -370,7 +371,8 @@ tp_file_finalize (GObject *object)
     }
 
   g_free (tp_file->priv->filename);
-  g_free (tp_file->priv->unix_socket_path);
+  if (tp_file->priv->socket_address != NULL)
+    tp_g_value_slice_free (tp_file->priv->socket_address);
   g_free (tp_file->priv->description);
   g_free (tp_file->priv->content_hash);
   g_free (tp_file->priv->content_type);
@@ -394,8 +396,8 @@ static void
 tp_file_start_transfer (EmpathyTpFile *tp_file)
 {
   gint fd;
-  size_t path_len;
   struct sockaddr_un addr;
+  GArray *array;
 
   fd = socket (PF_UNIX, SOCK_STREAM, 0);
   if (fd < 0)
@@ -405,10 +407,11 @@ tp_file_start_transfer (EmpathyTpFile *tp_file)
       return;
     }
 
+  array = g_value_get_boxed (tp_file->priv->socket_address);
+
   memset (&addr, 0, sizeof (addr));
   addr.sun_family = AF_UNIX;
-  path_len = strlen (tp_file->priv->unix_socket_path);
-  strncpy (addr.sun_path, tp_file->priv->unix_socket_path, path_len);
+  strncpy (addr.sun_path, array->data, array->len);
 
   if (connect (fd, (struct sockaddr*) &addr, sizeof (addr)) < 0)
     {
@@ -466,7 +469,7 @@ tp_file_state_changed_cb (TpChannel *channel,
    * transfer. The socket path could be NULL if we are not doing the actual
    * data transfer but are just an observer for the channel. */
   if (state == TP_FILE_TRANSFER_STATE_OPEN &&
-      tp_file->priv->unix_socket_path != NULL)
+      tp_file->priv->socket_address != NULL)
     tp_file_start_transfer (tp_file);
 
   tp_file->priv->state = state;
@@ -742,6 +745,7 @@ tp_file_method_cb (TpChannel *channel,
                    GObject *weak_object)
 {
   EmpathyTpFile *tp_file = (EmpathyTpFile *) weak_object;
+  GArray *array;
 
   if (error)
     {
@@ -750,9 +754,35 @@ tp_file_method_cb (TpChannel *channel,
       return;
     }
 
-  tp_file->priv->unix_socket_path = g_value_dup_string (address);
+  if (G_VALUE_TYPE (address) == DBUS_TYPE_G_UCHAR_ARRAY)
+    {
+      tp_file->priv->socket_address = tp_g_value_slice_dup (address);
+    }
+  else if (G_VALUE_TYPE (address) == G_TYPE_STRING)
+    {
+      /* Old bugged version of telepathy-salut used to store the address
+       * as a 's' instead of an 'ay' */
+      const gchar *path;
 
-  DEBUG ("Got unix socket path: %s", tp_file->priv->unix_socket_path);
+      path = g_value_get_string (address);
+      array = g_array_sized_new (TRUE, FALSE, sizeof (gchar), strlen (path));
+      g_array_insert_vals (array, 0, path, strlen (path));
+
+      tp_file->priv->socket_address = tp_g_value_slice_new (
+          DBUS_TYPE_G_UCHAR_ARRAY);
+      g_value_set_boxed (tp_file->priv->socket_address, array);
+
+      g_array_free (array, TRUE);
+    }
+  else
+    {
+      DEBUG ("Wrong address type: %s", G_VALUE_TYPE_NAME (address));
+      empathy_tp_file_cancel (tp_file);
+      return;
+    }
+
+  array = g_value_get_boxed (tp_file->priv->socket_address);
+  DEBUG ("Got unix socket path: %s", array->data);
 
   if (tp_file->priv->state == TP_FILE_TRANSFER_STATE_OPEN)
     tp_file_start_transfer (tp_file);
