@@ -962,27 +962,6 @@ tp_chat_got_self_contact_cb (EmpathyTpContactFactory *factory,
 	tp_chat_check_if_ready (EMPATHY_TP_CHAT (chat));
 }
 
-static void
-tp_chat_get_self_handle_cb (TpConnection *connection,
-			    TpHandle self_handle,
-			    const GError *error,
-			    gpointer user_data,
-			    GObject *chat)
-{
-	EmpathyTpChatPriv *priv = GET_PRIV (chat);
-
-	if (error) {
-		DEBUG ("Error: %s", error->message);
-		tp_cli_channel_call_close (priv->channel, -1,
-					   NULL, NULL, NULL, NULL);
-		return;
-	}
-
-	empathy_tp_contact_factory_get_from_handle (priv->factory,
-		self_handle, tp_chat_got_self_contact_cb,
-		NULL, NULL, chat);
-}
-
 static GObject *
 tp_chat_constructor (GType                  type,
 		     guint                  n_props,
@@ -1025,8 +1004,10 @@ tp_chat_constructor (GType                  type,
 			G_CALLBACK (tp_chat_group_members_changed_cb), chat);
 	} else {
 		/* Get the self contact from the connection's self handle */
-		tp_cli_connection_call_get_self_handle (connection, -1,
-			tp_chat_get_self_handle_cb, NULL, NULL, chat);
+		handle = tp_connection_get_self_handle (connection);
+		empathy_tp_contact_factory_get_from_handle (priv->factory,
+			handle, tp_chat_got_self_contact_cb,
+			NULL, NULL, chat);
 
 		/* Get the remote contact */
 		handle = tp_channel_get_handle (priv->channel, NULL);

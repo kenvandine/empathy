@@ -502,6 +502,7 @@ tp_contact_factory_add_contact (EmpathyTpContactFactory *tp_factory,
 				EmpathyContact          *contact)
 {
 	EmpathyTpContactFactoryPriv *priv = GET_PRIV (tp_factory);
+	TpHandle self_handle;
 	TpHandle handle;
 	GArray handles = {(gchar*) &handle, 1};
 	GHashTable *tokens;
@@ -529,8 +530,14 @@ tp_contact_factory_add_contact (EmpathyTpContactFactory *tp_factory,
 		empathy_contact_set_capabilities (contact, caps);
 	}
 
-	/* FIXME: This should be done by TpContact */
+	/* Set is-user property. Note that it could still be the handle is
+	 * different from the connection's self handle, in the case the handle
+	 * comes from a group interface. */
+	self_handle = tp_connection_get_self_handle (priv->connection);
 	handle = empathy_contact_get_handle (contact);
+	empathy_contact_set_is_user (contact, self_handle == handle);
+
+	/* FIXME: This should be done by TpContact */
 	tp_cli_connection_interface_avatars_run_get_known_avatar_tokens (priv->connection,
 									 -1,
 									 &handles,

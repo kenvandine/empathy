@@ -707,30 +707,9 @@ contact_widget_got_contact_cb (EmpathyTpContactFactory *factory,
 }
 
 static void
-contact_widget_get_self_handle_cb (TpConnection *connection,
-                                   TpHandle self_handle,
-                                   const GError *error,
-                                   gpointer information,
-                                   GObject *weak_object)
-{
-  EmpathyTpContactFactory *factory;
-
-  if (error != NULL)
-    {
-      DEBUG ("Error: %s", error->message);
-      return;
-    }
-
-  factory = empathy_tp_contact_factory_dup_singleton (connection);
-  empathy_tp_contact_factory_get_from_handle (factory, self_handle,
-      contact_widget_got_contact_cb, information, NULL,
-      weak_object);
-  g_object_unref (factory);
-}
-
-static void
 contact_widget_change_contact (EmpathyContactWidget *information)
 {
+  EmpathyTpContactFactory *factory;
   TpConnection *connection;
 
   connection = empathy_account_chooser_get_connection (
@@ -738,6 +717,7 @@ contact_widget_change_contact (EmpathyContactWidget *information)
   if (!connection)
       return;
 
+  factory = empathy_tp_contact_factory_dup_singleton (connection);
   if (information->flags & EMPATHY_CONTACT_WIDGET_EDIT_ID)
     {
       const gchar *id;
@@ -745,22 +725,20 @@ contact_widget_change_contact (EmpathyContactWidget *information)
       id = gtk_entry_get_text (GTK_ENTRY (information->widget_id));
       if (!EMP_STR_EMPTY (id))
         {
-          EmpathyTpContactFactory *factory;
-
-          factory = empathy_tp_contact_factory_dup_singleton (connection);
           empathy_tp_contact_factory_get_from_id (factory, id,
               contact_widget_got_contact_cb, information, NULL,
               G_OBJECT (information->vbox_contact_widget));
-          g_object_unref (factory);
         }
     }
   else
     {
-      /* FIXME: TpConnection should have a SelfHandle property */
-      tp_cli_connection_call_get_self_handle (connection, -1,
-          contact_widget_get_self_handle_cb, information, NULL,
+      empathy_tp_contact_factory_get_from_handle (factory,
+          tp_connection_get_self_handle (connection),
+          contact_widget_got_contact_cb, information, NULL,
           G_OBJECT (information->vbox_contact_widget));
     }
+
+  g_object_unref (factory);
 }
 
 static void
