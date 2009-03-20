@@ -49,7 +49,6 @@ typedef struct {
 	EmpathyTpGroup        *group;
 	McAccount             *account;
 	TpChannel             *channel;
-	gchar                 *id;
 	gboolean               listing_pending_messages;
 	/* Queue of messages not signalled yet */
 	GQueue                *messages_queue;
@@ -843,20 +842,6 @@ tp_chat_channel_ready_cb (EmpathyTpChat *chat)
 		      "handle_type", &handle_type,
 		      NULL);
 
-	if (handle_type != TP_HANDLE_TYPE_NONE && handle != 0) {
-		GArray *handles;
-		gchar **names;
-
-		handles = g_array_new (FALSE, FALSE, sizeof (guint));
-		g_array_append_val (handles, handle);
-		tp_cli_connection_run_inspect_handles (connection, -1,
-						       handle_type, handles,
-						       &names, NULL, NULL);
-		priv->id = *names;
-		g_array_free (handles, TRUE);
-		g_free (names);
-	}
-
 	if (handle_type == TP_HANDLE_TYPE_CONTACT && handle != 0) {
 		priv->remote_contact = empathy_contact_factory_get_from_handle (priv->factory,
 										priv->account,
@@ -1016,8 +1001,6 @@ tp_chat_finalize (GObject *object)
 		g_ptr_array_free (priv->properties, TRUE);
 	}
 
-
-	g_free (priv->id);
 	g_queue_free (priv->messages_queue);
 	g_queue_free (priv->pending_messages_queue);
 
@@ -1242,7 +1225,7 @@ empathy_tp_chat_get_id (EmpathyTpChat *chat)
 	g_return_val_if_fail (EMPATHY_IS_TP_CHAT (chat), NULL);
 	g_return_val_if_fail (priv->ready, NULL);
 
-	return priv->id;
+	return tp_channel_get_identifier (priv->channel);
 }
 
 EmpathyContact *
