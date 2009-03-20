@@ -1245,6 +1245,7 @@ chat_destroy_cb (EmpathyTpChat *tp_chat,
 		return;
 	}
 
+	chat_composing_remove_timeout (chat);
 	g_object_unref (priv->tp_chat);
 	priv->tp_chat = NULL;
 	g_object_notify (G_OBJECT (chat), "tp-chat");
