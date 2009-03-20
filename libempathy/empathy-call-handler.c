@@ -422,9 +422,9 @@ empathy_call_handler_contact_ready_cb (EmpathyContact *contact,
   allowed = empathy_dispatcher_find_channel_class (dispatcher, account,
     TP_IFACE_CHANNEL_TYPE_STREAMED_MEDIA, TP_HANDLE_TYPE_CONTACT);
 
-  if (!tp_strv_contains ((const gchar * const *)allowed,
+  if (!tp_strv_contains ((const gchar * const *) allowed,
       TP_IFACE_CHANNEL ".TargetHandle"))
-    g_assert_not_reached ();
+    return;
 
   /* org.freedesktop.Telepathy.Channel.ChannelType */
   value = tp_g_value_slice_new (G_TYPE_STRING);
