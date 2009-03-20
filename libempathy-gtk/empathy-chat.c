@@ -180,7 +180,7 @@ chat_connection_changed_cb (EmpathyAccountManager *manager,
 	if (current == TP_CONNECTION_STATUS_CONNECTED && !priv->tp_chat &&
 	    empathy_account_equal (account, priv->account) &&
 	    priv->handle_type != TP_HANDLE_TYPE_NONE &&
-	    !EMP_IS_EMPTY (priv->id)) {
+	    !EMP_STR_EMPTY (priv->id)) {
 		
 		DEBUG ("Account reconnected, request a new Text channel");
 
