@@ -99,6 +99,11 @@ import_dialog_add_account (EmpathyImportAccountData *data)
   GValue *username;
 
   account = mc_account_create (data->profile);
+  if (account == NULL)
+    {
+      DEBUG ("Failed to create account");
+      return;
+    }
 
   g_hash_table_iter_init (&iter, data->settings);
   while (g_hash_table_iter_next (&iter, &key, &value))
