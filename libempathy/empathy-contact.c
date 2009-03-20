@@ -456,6 +456,19 @@ contact_set_ready_flag (EmpathyContact *contact,
     }
 }
 
+static void
+contact_remove_ready_flag (EmpathyContact *contact,
+                           EmpathyContactReady flag)
+{
+  EmpathyContactPriv *priv = GET_PRIV (contact);
+
+  if (priv->ready & flag)
+    {
+      priv->ready ^= flag;
+      g_object_notify (G_OBJECT (contact), "ready");
+    }
+}
+
 EmpathyContact *
 empathy_contact_new (McAccount *account)
 {
@@ -713,7 +726,12 @@ empathy_contact_set_handle (EmpathyContact *contact,
       priv->handle = handle;
       g_object_notify (G_OBJECT (contact), "handle");
     }
-  contact_set_ready_flag (contact, EMPATHY_CONTACT_READY_HANDLE);
+
+  if (handle != 0)
+    contact_set_ready_flag (contact, EMPATHY_CONTACT_READY_HANDLE);
+  else
+    contact_remove_ready_flag (contact, EMPATHY_CONTACT_READY_HANDLE);
+
   g_object_unref (contact);
 }
 
