@@ -1,6 +1,10 @@
+2009-03-23  Wouter Bolsterlee  <wbolster@svn.gnome.org>
+
+	* nl.po: Updated Dutch translation by Wouter Bolsterlee.
+
 2009-03-18  Ignacio Casal Quinteiro  <icq@gnome.org>
 
-	 * gl.po: Updated Galician translation by Suso Baleato.
+	* gl.po: Updated Galician translation by Suso Baleato.
 
 2009-03-17  Jorge Gonzalez  <jorgegonz@svn.gnome.org>
 
@@ -13,7 +17,7 @@
 
 2009-03-15  Shankar Prasad  <svenkate@redhat.com>
 
-        * kn.po: Updated Kannada translations
+	* kn.po: Updated Kannada translations
 
 2009-03-09  Jorge Gonzalez  <jorgegonz@svn.gnome.org>
 
@@ -26,7 +30,7 @@
 2009-03-09  Rajesh Ranjan <rranjan@redhat.com>
 
 	* hi.po: Updated Hindi Translation.
-	
+
 2009-03-08  Kostas Papadimas <pkst@gnome.org>
 
 	* el.po: Updated Greek Translation by Jennie Petoumenou.
@@ -61,7 +65,7 @@
 
 2009-03-02  Shankar Prasad  <svenkate@redhat.com>
 
-        * kn.po: Updated Kannada translations.
+	* kn.po: Updated Kannada translations.
 
 2009-03-01  Tomasz Dominikowski  <tdominikowski@aviary.pl>
 
