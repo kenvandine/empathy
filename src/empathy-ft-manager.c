@@ -1019,6 +1019,7 @@ ft_manager_display_accept_dialog (EmpathyFTManager *ft_manager,
 
   gtk_message_dialog_format_secondary_text
       (GTK_MESSAGE_DIALOG (dialog),
+       /* Translators: the first %s is the file name, the second %s is the file size */
        _("Do you want to accept the file \"%s\" (%s)?"),
        filename, size_str);
 
