@@ -841,7 +841,7 @@ empathy_call_window_update_timer (gpointer user_data)
   time = g_timer_elapsed (priv->timer, NULL);
 
   /* Translators: number of minutes:seconds the caller has been connected */
-  str = g_strdup_printf (_("Connected -- %d:%02dm"), (int) time / 60,
+  str = g_strdup_printf (_("Connected — %d:%02dm"), (int) time / 60,
     (int) time % 60);
   empathy_call_window_status_message (self, str);
   g_free (str);
