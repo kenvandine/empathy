@@ -103,12 +103,46 @@ static void
 empathy_video_widget_constructed (GObject *object)
 {
   EmpathyVideoWidgetPriv *priv = GET_PRIV (object);
+  GstElement *colorspace, *videoscale, *sink;
+  GstPad *pad;
 
-  priv->videosink = gst_element_factory_make ("gconfvideosink", NULL);
+  priv->videosink = gst_bin_new (NULL);
+
   gst_object_ref (priv->videosink);
   gst_object_sink (priv->videosink);
 
   priv->sink_pad = gst_element_get_static_pad (priv->videosink, "sink");
+
+  sink = gst_element_factory_make ("gconfvideosink", NULL);
+  g_assert (sink != NULL);
+
+  videoscale = gst_element_factory_make ("videoscale", NULL);
+  g_assert (videoscale != NULL);
+
+  g_object_set (videoscale, "qos", FALSE, NULL);
+
+  colorspace = gst_element_factory_make ("ffmpegcolorspace", NULL);
+  g_assert (colorspace != NULL);
+
+  g_object_set (colorspace, "qos", FALSE, NULL);
+
+  gst_bin_add_many (GST_BIN (priv->videosink), colorspace, videoscale,
+    sink, NULL);
+
+  if (!gst_element_link (colorspace, videoscale))
+    g_error ("Failed to link ffmpegcolorspace and videoscale");
+
+  if (!gst_element_link (videoscale, sink))
+    g_error ("Failed to link videoscale and gconfvideosink");
+
+  pad = gst_element_get_static_pad (colorspace, "sink");
+  g_assert (pad != NULL);
+
+  priv->sink_pad = gst_ghost_pad_new ("sink", pad);
+  if (!gst_element_add_pad  (priv->videosink, priv->sink_pad))
+    g_error ("Couldn't add sink ghostpad to the bin");
+
+  gst_object_unref (pad);
 
   fs_element_added_notifier_add (priv->notifier, GST_BIN (priv->videosink));
   gst_bus_enable_sync_message_emission (priv->bus);
