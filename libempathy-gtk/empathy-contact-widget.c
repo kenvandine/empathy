@@ -42,6 +42,9 @@
 #include "empathy-avatar-image.h"
 #include "empathy-ui-utils.h"
 
+#define DEBUG_FLAG EMPATHY_DEBUG_CONTACT
+#include <libempathy/empathy-debug.h>
+
 /* Delay before updating the widget when the id entry changed (seconds) */
 #define ID_CHANGED_TIMEOUT 1
 
@@ -688,6 +691,19 @@ contact_widget_contact_update (EmpathyContactWidget *information)
 }
 
 static void
+contact_widget_change_contact_cb (EmpathyContact *contact,
+                                  const GError *error,
+                                  gpointer information,
+                                  GObject *weak_object)
+{
+  if (error)
+    DEBUG ("Error: %s", error->message);
+  else
+    contact_widget_set_contact (information, contact);
+  g_object_unref (contact);
+}
+
+static void
 contact_widget_change_contact (EmpathyContactWidget *information)
 {
   EmpathyContact *contact;
@@ -717,12 +733,13 @@ contact_widget_change_contact (EmpathyContactWidget *information)
 
   if (contact)
     {
-      empathy_contact_run_until_ready (contact,
+      /* Give the contact ref to the callback */
+      empathy_contact_call_when_ready (contact,
           EMPATHY_CONTACT_READY_HANDLE |
           EMPATHY_CONTACT_READY_ID,
-          NULL);
-      contact_widget_set_contact (information, contact);
-      g_object_unref (contact);
+          contact_widget_change_contact_cb,
+          information, NULL,
+          G_OBJECT (information->vbox_contact_widget));
     }
 }
 
