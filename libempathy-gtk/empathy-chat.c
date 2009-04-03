@@ -1448,6 +1448,7 @@ chat_finalize (GObject *object)
 	g_free (priv->id);
 	g_free (priv->name);
 	g_free (priv->subject);
+	g_completion_free (priv->completion);
 
 	G_OBJECT_CLASS (empathy_chat_parent_class)->finalize (object);
 }
