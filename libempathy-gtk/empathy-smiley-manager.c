@@ -79,8 +79,9 @@ smiley_manager_tree_free (SmileyManagerTree *tree)
 	g_slice_free (SmileyManagerTree, tree);
 }
 
+/* Note: This function takes the ownership of str */
 static EmpathySmiley *
-smiley_new (GdkPixbuf *pixbuf, const gchar *str)
+smiley_new (GdkPixbuf *pixbuf, gchar *str)
 {
 	EmpathySmiley *smiley;
 
@@ -88,7 +89,7 @@ smiley_new (GdkPixbuf *pixbuf, const gchar *str)
 	if (pixbuf) {
 		smiley->pixbuf = g_object_ref (pixbuf);
 	}
-	smiley->str = g_strdup (str);
+	smiley->str = str;
 
 	return smiley;
 }
@@ -229,7 +230,8 @@ smiley_manager_add_valist (EmpathySmileyManager *manager,
 		smiley_manager_tree_insert (priv->tree, smiley, str);
 	}
 
-	priv->smileys = g_slist_prepend (priv->smileys, smiley_new (smiley, first_str));
+	priv->smileys = g_slist_prepend (priv->smileys,
+		smiley_new (smiley, g_strdup (first_str)));
 }
 
 void
