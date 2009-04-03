@@ -349,26 +349,33 @@ chat_send (EmpathyChat  *chat,
 	   const gchar *msg)
 {
 	EmpathyChatPriv *priv;
-	EmpathyMessage  *message;
-
-	priv = GET_PRIV (chat);
 
 	if (EMP_STR_EMPTY (msg)) {
 		return;
 	}
 
+	priv = GET_PRIV (chat);
+
 	chat_sent_message_add (chat, msg);
 
+	/* If this is not a command, send the message */
+	if (msg[0] != '/') {
+		EmpathyMessage  *message;
+
+		message = empathy_message_new (msg);
+		empathy_tp_chat_send (priv->tp_chat, message);
+		g_object_unref (message);
+		return;
+	}
+
+	/* Check for all supported commands */
 	if (g_str_has_prefix (msg, "/clear")) {
 		empathy_chat_view_clear (chat->view);
 		return;
 	}
 
-	message = empathy_message_new (msg);
-
-	empathy_tp_chat_send (priv->tp_chat, message);
-
-	g_object_unref (message);
+	/* This is an unknown command, display a message to the user */
+	empathy_chat_view_append_event (chat->view, _("Unsupported command"));
 }
 
 static void
