@@ -840,17 +840,13 @@ get_requestable_channel_classes_cb (TpProxy *connection,
 
 	classes = g_value_get_boxed (value);
 	for (i = 0; i < classes->len; i++) {
-		GValue class = {0,};
-		GValue *chan_type, *handle_type;
+		GValueArray *class_struct;
 		GHashTable *fixed_prop;
+		GValue *chan_type, *handle_type;
 		GList *l;
 
-		g_value_init (&class, TP_STRUCT_TYPE_REQUESTABLE_CHANNEL_CLASS);
-		g_value_set_static_boxed (&class, g_ptr_array_index (classes, i));
-
-		dbus_g_type_struct_get (&class,
-					0, &fixed_prop,
-					G_MAXUINT);
+		class_struct = g_ptr_array_index (classes, i);
+		fixed_prop = g_value_get_boxed (g_value_array_get_nth (class_struct, 0));
 
 		chan_type = g_hash_table_lookup (fixed_prop,
 			TP_IFACE_CHANNEL ".ChannelType");
