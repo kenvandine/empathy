@@ -26,7 +26,7 @@
 
 G_BEGIN_DECLS
 
-GtkWidget *empathy_map_view_show (EmpathyContactListStore *list_store);
+GtkWidget *empathy_map_view_show (void);
 
 G_END_DECLS
 

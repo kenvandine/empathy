@@ -720,7 +720,7 @@ static void
 main_window_view_show_map_cb (GtkCheckMenuItem  *item,
 			      EmpathyMainWindow *window)
 {
-	empathy_map_view_show (window->list_store);
+	empathy_map_view_show ();
 }
 #endif
 

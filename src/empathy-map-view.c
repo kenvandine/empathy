@@ -89,7 +89,7 @@ static gchar * get_dup_string (GHashTable *location, gchar *key);
 
 // FIXME: Make it so that only one window can be shown
 GtkWidget *
-empathy_map_view_show (EmpathyContactListStore *list_store)
+empathy_map_view_show ()
 {
   static EmpathyMapView *window = NULL;
   GtkBuilder *gui;
@@ -97,6 +97,8 @@ empathy_map_view_show (EmpathyContactListStore *list_store)
   GtkWidget *embed;
   gchar *filename;
   GtkTreeModel *model;
+  EmpathyContactList *list_iface;
+  EmpathyContactListStore *list_store;
 
   /*
   if (window)
@@ -120,6 +122,10 @@ empathy_map_view_show (EmpathyContactListStore *list_store)
       "zoom_out", "clicked", map_view_zoom_out_cb, NULL);
 
   g_object_unref (gui);
+
+  list_iface = EMPATHY_CONTACT_LIST (empathy_contact_manager_dup_singleton ());
+  list_store = empathy_contact_list_store_new (list_iface);
+  g_object_unref (list_iface);
 
   window->list_store = list_store;
 
