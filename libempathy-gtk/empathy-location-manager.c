@@ -39,7 +39,7 @@
 #include "libempathy/empathy-account-manager.h"
 #include "libempathy/empathy-enum-types.h"
 #include "libempathy/empathy-location.h"
-#include "libempathy/empathy-contact-factory.h"
+#include "libempathy/empathy-tp-contact-factory.h"
 #include "libempathy/empathy-utils.h"
 
 #define DEBUG_FLAG EMPATHY_DEBUG_LOCATION
@@ -116,9 +116,13 @@ publish_location (EmpathyLocationManager *location_manager,
   guint connection_status = -1;
   gboolean can_publish;
   EmpathyConf *conf = empathy_conf_get ();
-  EmpathyContactFactory *factory = empathy_contact_factory_dup_singleton ();
+  TpConnection *conn;
+  EmpathyTpContactFactory *factory;
 
   priv = GET_PRIV (location_manager);
+
+  conn = mission_control_get_tpconnection (priv->mc, account, NULL);
+  factory = empathy_tp_contact_factory_dup_singleton (conn);
 
   if (force_publication == FALSE)
     {
@@ -139,7 +143,8 @@ publish_location (EmpathyLocationManager *location_manager,
   DEBUG ("Publishing location to account %s",
       mc_account_get_display_name (account));
 
-  empathy_contact_factory_set_location (factory, account, priv->location);
+  empathy_tp_contact_factory_set_location (factory, priv->location);
+  g_object_unref (factory);
 }
 
 static void
