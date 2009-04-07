@@ -27,6 +27,11 @@
 #include <gtk/gtk.h>
 #include <glib/gi18n-lib.h>
 
+#if HAVE_LIBCHAMPLAIN
+#include <champlain/champlain.h>
+#include <champlain-gtk/champlain-gtk.h>
+#endif
+
 #include <libmissioncontrol/mc-account.h>
 #include <telepathy-glib/util.h>
 
@@ -90,6 +95,15 @@ typedef struct
   GtkWidget *table_contact;
   GtkWidget *vbox_avatar;
 
+#if HAVE_LIBCHAMPLAIN
+  /* Location */
+  GtkWidget *vbox_location;
+  GtkWidget *label_location;
+  GtkWidget *viewport_map;
+  GtkWidget *map_view_embed;
+  ClutterActor *map_view;
+#endif
+
   /* Groups */
   GtkWidget *vbox_groups;
   GtkWidget *entry_group;
@@ -135,6 +149,10 @@ static void contact_widget_presence_notify_cb (
     EmpathyContactWidget *information);
 static void contact_widget_avatar_notify_cb (
     EmpathyContactWidget *information);
+#if HAVE_LIBCHAMPLAIN
+static void contact_widget_location_setup (
+    EmpathyContactWidget *information);
+#endif 
 static void contact_widget_groups_setup (
     EmpathyContactWidget *information);
 static void contact_widget_groups_update (EmpathyContactWidget *information);
@@ -203,6 +221,11 @@ empathy_contact_widget_new (EmpathyContact *contact,
        "label_status", &information->label_status,
        "table_contact", &information->table_contact,
        "vbox_avatar", &information->vbox_avatar,
+#if HAVE_LIBCHAMPLAIN
+       "vbox_location", &information->vbox_location,
+       "label_location", &information->label_location,
+       "viewport_map", &information->viewport_map,
+#endif
        "vbox_groups", &information->vbox_groups,
        "entry_group", &information->entry_group,
        "button_group", &information->button_group,
@@ -229,6 +252,9 @@ empathy_contact_widget_new (EmpathyContact *contact,
 
   /* Create widgets */
   contact_widget_contact_setup (information);
+#if HAVE_LIBCHAMPLAIN
+  contact_widget_location_setup (information);
+#endif
   contact_widget_groups_setup (information);
   contact_widget_details_setup (information);
   contact_widget_client_setup (information);
@@ -879,6 +905,28 @@ contact_widget_avatar_notify_cb (EmpathyContactWidget *information)
       empathy_avatar_image_set (
           EMPATHY_AVATAR_IMAGE (information->widget_avatar), avatar);
 }
+
+#if HAVE_LIBCHAMPLAIN
+static void
+contact_widget_location_setup (EmpathyContactWidget *information)
+{
+  if (/* information->flags & EMPATHY_CONTACT_WIDGET_FOR_TOOLTIP || */
+      information->flags & EMPATHY_CONTACT_WIDGET_SHOW_LOCATION)
+    {
+      information->map_view = champlain_view_new (CHAMPLAIN_VIEW_MODE_KINETIC);
+      information->map_view_embed = champlain_view_embed_new (
+          CHAMPLAIN_VIEW (information->map_view));
+
+      gtk_container_add (GTK_CONTAINER (information->viewport_map),
+          information->map_view_embed);
+      g_object_set (G_OBJECT (information->map_view), "show-license", FALSE,
+          NULL);
+      champlain_view_center_on (CHAMPLAIN_VIEW(information->map_view), 45, -73);
+
+      gtk_widget_show_all (information->vbox_location);
+    }
+}
+#endif
 
 static void
 contact_widget_groups_setup (EmpathyContactWidget *information)

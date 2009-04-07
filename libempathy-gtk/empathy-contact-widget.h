@@ -59,6 +59,7 @@ typedef enum
   EMPATHY_CONTACT_WIDGET_EDIT_ID      = 1 << 3,
   EMPATHY_CONTACT_WIDGET_EDIT_GROUPS  = 1 << 4,
   EMPATHY_CONTACT_WIDGET_FOR_TOOLTIP  = 1 << 5,
+  EMPATHY_CONTACT_WIDGET_SHOW_LOCATION  = 1 << 6,
 } EmpathyContactWidgetFlags;
 
 GtkWidget * empathy_contact_widget_new (EmpathyContact *contact,
