@@ -166,8 +166,9 @@ map_view_contacts_foreach_disconnect (GtkTreeModel *model,
     return FALSE;
 
   handle_id = GPOINTER_TO_INT (g_object_get_data (G_OBJECT (contact), "map-view-handle"));
+  if (handle_id > 0)
+    g_signal_handler_disconnect (contact, handle_id);
 
-  g_signal_handler_disconnect (contact, handle_id);
   return FALSE;
 }
 
@@ -180,6 +181,7 @@ map_view_destroy_cb (GtkWidget *widget,
   /* Set up contact list. */
   model = GTK_TREE_MODEL (window->list_store);
   gtk_tree_model_foreach (model, map_view_contacts_foreach_disconnect, window);
+  g_object_unref (window->list_store);
   g_free (window);
 }
 
