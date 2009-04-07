@@ -122,6 +122,9 @@ publish_location (EmpathyLocationManager *location_manager,
   priv = GET_PRIV (location_manager);
 
   conn = mission_control_get_tpconnection (priv->mc, account, NULL);
+  if (!conn)
+    return;
+
   factory = empathy_tp_contact_factory_dup_singleton (conn);
 
   if (force_publication == FALSE)
