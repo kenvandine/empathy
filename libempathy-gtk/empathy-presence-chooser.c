@@ -136,6 +136,8 @@ enum
 	ENTRY_TYPE_BUILTIN,
 	ENTRY_TYPE_SAVED,
 	ENTRY_TYPE_CUSTOM,
+	ENTRY_TYPE_SEPARATOR,
+	ENTRY_TYPE_EDIT_CUSTOM,
 };
 
 static GtkTreeModel *
@@ -192,6 +194,20 @@ create_model (void)
 		}
 
 	}
+	
+	/* add a separator */
+	gtk_list_store_append (store, &iter);
+	gtk_list_store_set (store, &iter,
+			COL_TYPE, ENTRY_TYPE_SEPARATOR,
+			-1);
+	
+	gtk_list_store_append (store, &iter);
+	gtk_list_store_set (store, &iter,
+			COL_STATE_ICON_NAME, GTK_STOCK_EDIT,
+			COL_STATUS_TEXT, "",
+			COL_DISPLAY_MARKUP, "Edit Custom Messages...",
+			COL_TYPE, ENTRY_TYPE_EDIT_CUSTOM,
+			-1);
 
 	return GTK_TREE_MODEL (store);
 }
@@ -353,14 +369,36 @@ changed_cb (GtkComboBox *self, gpointer user_data)
 			-1);
 
 	GtkWidget *entry = gtk_bin_get_child (GTK_BIN (self));
-	gtk_entry_set_icon_from_icon_name (GTK_ENTRY (entry),
-			GTK_ENTRY_ICON_PRIMARY,
-			icon_name);
 
-	if (type == ENTRY_TYPE_CUSTOM)
+	if (type == ENTRY_TYPE_EDIT_CUSTOM)
 	{
+		/* recover the status that was unset because COL_STATUS_TEXT
+		 * is "". Unfortunately if you try and set COL_STATUS_TEXT to
+		 * NULL, it generates a g_critical. I wonder if there is a
+		 * better way around this. */
+		const char *status = empathy_idle_get_status (priv->idle);
+		priv->block_set_editing++;
+		gtk_entry_set_text (GTK_ENTRY (entry), status);
+		priv->block_set_editing--;
+
+		/* attempt to get the toplevel for this widget */
+		GtkWidget *window = gtk_widget_get_toplevel (GTK_WIDGET (self));
+		if (!GTK_WIDGET_TOPLEVEL (window) || !GTK_IS_WINDOW (window))
+		{
+			window = NULL;
+		}
+
+		presence_chooser_dialog_show (GTK_WINDOW (window));
+	}
+	else if (type == ENTRY_TYPE_CUSTOM)
+	{
+		gtk_entry_set_icon_from_icon_name (GTK_ENTRY (entry),
+				GTK_ENTRY_ICON_PRIMARY,
+				icon_name);
+
 		/* grab the focus */
 		gtk_widget_grab_focus (entry);
+
 		set_status_editing (EMPATHY_PRESENCE_CHOOSER (self), TRUE);
 	}
 	else
@@ -382,6 +420,19 @@ changed_cb (GtkComboBox *self, gpointer user_data)
 	g_free (icon_name);
 }
 
+static gboolean
+combo_row_separator_func (GtkTreeModel	*model,
+			  GtkTreeIter	*iter,
+			  gpointer	 data)
+{
+	int type;
+	gtk_tree_model_get (model, iter,
+			COL_TYPE, &type,
+			-1);
+
+	return (type == ENTRY_TYPE_SEPARATOR);
+}
+
 static void
 empathy_presence_chooser_init (EmpathyPresenceChooser *chooser)
 {
@@ -393,7 +444,11 @@ empathy_presence_chooser_init (EmpathyPresenceChooser *chooser)
 	GtkTreeModel *model = create_model ();
 
 	gtk_combo_box_set_model (GTK_COMBO_BOX (chooser), GTK_TREE_MODEL (model));
-	gtk_combo_box_entry_set_text_column (GTK_COMBO_BOX_ENTRY (chooser), COL_STATUS_TEXT);
+	gtk_combo_box_entry_set_text_column (GTK_COMBO_BOX_ENTRY (chooser),
+			COL_STATUS_TEXT);
+	gtk_combo_box_set_row_separator_func (GTK_COMBO_BOX (chooser),
+			combo_row_separator_func,
+			NULL, NULL);
 	
 	GtkWidget *entry = gtk_bin_get_child (GTK_BIN (chooser));
 	gtk_entry_set_icon_activatable (GTK_ENTRY (entry),
