@@ -60,6 +60,9 @@ int main (int argc,
   manager = empathy_contact_manager_dup_singleton ();
   selector = empathy_contact_selector_new (EMPATHY_CONTACT_LIST (manager));
 
+  empathy_contact_selector_set_visible (EMPATHY_CONTACT_SELECTOR (selector),
+      (EmpathyContactSelectorFilterFunc) empathy_contact_can_send_files, NULL);
+
   vbox = gtk_vbox_new (FALSE, 2);
 
   gtk_box_pack_start (GTK_BOX (vbox), selector, FALSE, FALSE, 5);
