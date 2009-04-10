@@ -30,11 +30,14 @@
 int
 main (int argc, char **argv)
 {
+	GtkWidget *window;
+	GtkWidget *chooser;
+
 	gtk_init (&argc, &argv);
 	empathy_gtk_init ();
 
-	GtkWidget *window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-	GtkWidget *chooser = empathy_presence_chooser_new ();
+	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
+	chooser = empathy_presence_chooser_new ();
 	gtk_container_add (GTK_CONTAINER (window), chooser);
 
 	gtk_window_set_default_size (GTK_WINDOW (window), 150, -1);
