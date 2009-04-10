@@ -465,6 +465,20 @@ combo_row_separator_func (GtkTreeModel	*model,
 	return (type == ENTRY_TYPE_SEPARATOR);
 }
 
+static gboolean
+focus_out_cb (EmpathyPresenceChooser *chooser, GdkEventFocus *event,
+              GtkEntry *entry)
+{
+	EmpathyPresenceChooserPriv *priv = GET_PRIV (chooser);
+
+	if (priv->editing_status)
+	{
+		entry_activate_cb (chooser, entry);
+	}
+
+	return FALSE;
+}
+
 static void
 empathy_presence_chooser_init (EmpathyPresenceChooser *chooser)
 {
@@ -520,6 +534,8 @@ empathy_presence_chooser_init (EmpathyPresenceChooser *chooser)
 			G_CALLBACK (changed_cb), NULL);
 	g_signal_connect_swapped (entry, "changed",
 			G_CALLBACK (changed_cb), chooser);
+	g_signal_connect_swapped (entry, "focus-out-event",
+			G_CALLBACK (focus_out_cb), chooser);
 
 	priv->idle = empathy_idle_dup_singleton ();
 	presence_chooser_presence_changed_cb (chooser);
