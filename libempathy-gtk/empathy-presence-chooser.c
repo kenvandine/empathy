@@ -85,36 +85,12 @@ static guint states[] = {MC_PRESENCE_AVAILABLE, TRUE,
 
 static void            presence_chooser_finalize               (GObject                    *object);
 static void            presence_chooser_presence_changed_cb    (EmpathyPresenceChooser      *chooser);
-static void            presence_chooser_reset_scroll_timeout   (EmpathyPresenceChooser      *chooser);
-static gboolean        presence_chooser_scroll_timeout_cb      (EmpathyPresenceChooser      *chooser);
-static gboolean        presence_chooser_scroll_event_cb        (EmpathyPresenceChooser      *chooser,
-								GdkEventScroll             *event,
-								gpointer                    user_data);
-static GList *         presence_chooser_get_presets            (EmpathyPresenceChooser      *chooser);
 static gboolean        presence_chooser_flash_timeout_cb       (EmpathyPresenceChooser      *chooser);
 static void            presence_chooser_flash_start            (EmpathyPresenceChooser      *chooser,
 								McPresence                  state_1,
 								McPresence                  state_2);
 static void            presence_chooser_flash_stop             (EmpathyPresenceChooser      *chooser,
 								McPresence                  state);
-static gboolean        presence_chooser_button_press_event_cb  (GtkWidget                  *chooser,
-								GdkEventButton             *event,
-								gpointer                    user_data);
-static void            presence_chooser_toggled_cb             (GtkWidget                  *chooser,
-								gpointer                    user_data);
-static void            presence_chooser_menu_popup             (EmpathyPresenceChooser      *chooser);
-static void            presence_chooser_menu_popdown           (EmpathyPresenceChooser      *chooser);
-static void            presence_chooser_menu_selection_done_cb (GtkMenuShell               *menushell,
-								EmpathyPresenceChooser      *chooser);
-static void            presence_chooser_menu_destroy_cb        (GtkWidget                  *menu,
-								EmpathyPresenceChooser      *chooser);
-static void            presence_chooser_menu_detach            (GtkWidget                  *attach_widget,
-								GtkMenu                    *menu);
-static void            presence_chooser_menu_align_func        (GtkMenu                    *menu,
-								gint                       *x,
-								gint                       *y,
-								gboolean                   *push_in,
-								GtkWidget                  *widget);
 static void            presence_chooser_menu_add_item          (GtkWidget                  *menu,
 								const gchar                *str,
 								McPresence                  state);
@@ -525,9 +501,6 @@ presence_chooser_presence_changed_cb (EmpathyPresenceChooser *chooser)
 		ui_set_custom_state (chooser, state, status);
 	}
 
-	//presence_chooser_reset_scroll_timeout (chooser);
-	//gtk_label_set_text (GTK_LABEL (priv->label), status);
-
 	if (flash_state != MC_PRESENCE_UNSET) {
 		presence_chooser_flash_start (chooser, state, flash_state);
 	} else {
@@ -565,7 +538,6 @@ presence_chooser_flash_start (EmpathyPresenceChooser *chooser,
 			      McPresence             state_1,
 			      McPresence             state_2)
 {
-#if 0
 	EmpathyPresenceChooserPriv *priv;
 
 	g_return_if_fail (EMPATHY_IS_PRESENCE_CHOOSER (chooser));
@@ -580,14 +552,12 @@ presence_chooser_flash_start (EmpathyPresenceChooser *chooser,
 							(GSourceFunc) presence_chooser_flash_timeout_cb,
 							chooser);
 	}
-#endif
 }
 
 static void
 presence_chooser_flash_stop (EmpathyPresenceChooser *chooser,
 			     McPresence             state)
 {
-#if 0
 	EmpathyPresenceChooserPriv *priv;
 
 	g_return_if_fail (EMPATHY_IS_PRESENCE_CHOOSER (chooser));
@@ -599,12 +569,14 @@ presence_chooser_flash_stop (EmpathyPresenceChooser *chooser,
 		priv->flash_timeout_id = 0;
 	}
 
+	/*
 	gtk_image_set_from_icon_name (GTK_IMAGE (priv->image),
 				      empathy_icon_name_for_presence (state),
 				      GTK_ICON_SIZE_MENU);
+	 */
 
-	priv->last_state = state;
-#endif
+	// FIXME - what does this do?
+	// priv->last_state = state;
 }
 
 GtkWidget *
