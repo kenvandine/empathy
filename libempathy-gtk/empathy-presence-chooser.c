@@ -49,6 +49,7 @@
 typedef struct {
 	EmpathyIdle *idle;
 
+	gboolean     editing_status;
 	int          block_set_editing;
 	int          block_changed;
 
@@ -198,8 +199,6 @@ popup_shown_cb (GObject *self, GParamSpec *pspec, gpointer user_data)
 
 	if (!shown) return;
 
-	g_print ("popup shown\n");
-
 	GtkTreeModel *model = create_model ();
 
 	gtk_combo_box_set_model (GTK_COMBO_BOX (self), GTK_TREE_MODEL (model));
@@ -217,13 +216,13 @@ set_status_editing (EmpathyPresenceChooser *self, gboolean editing)
 
 	if (editing)
 	{
+		priv->editing_status = TRUE;
 		gtk_entry_set_icon_from_stock (GTK_ENTRY (entry),
 				GTK_ENTRY_ICON_SECONDARY,
 				GTK_STOCK_OK);
 		gtk_entry_set_icon_tooltip_text (GTK_ENTRY (entry),
 				GTK_ENTRY_ICON_SECONDARY,
 				"Set status");
-		// FIXME - is this nice?
 		gtk_entry_set_icon_sensitive (GTK_ENTRY (entry),
 				GTK_ENTRY_ICON_PRIMARY,
 				FALSE);
@@ -236,17 +235,25 @@ set_status_editing (EmpathyPresenceChooser *self, gboolean editing)
 		gtk_entry_set_icon_tooltip_text (GTK_ENTRY (entry),
 				GTK_ENTRY_ICON_SECONDARY,
 				NULL);
-		// FIXME - also this
 		gtk_entry_set_icon_sensitive (GTK_ENTRY (entry),
 				GTK_ENTRY_ICON_PRIMARY,
 				TRUE);
 
 		// FIXME - move the focus somewhere
 
-		/* update the status with MC */
-		const char *status = gtk_entry_get_text (GTK_ENTRY (entry));
-		empathy_idle_set_presence (priv->idle, priv->state, status);
+		priv->editing_status = FALSE;
 	}
+}
+
+static void
+mc_set_custom_state (EmpathyPresenceChooser *self)
+{
+	EmpathyPresenceChooserPriv *priv = GET_PRIV (self);
+	GtkWidget *entry = gtk_bin_get_child (GTK_BIN (self));
+
+	/* update the status with MC */
+	const char *status = gtk_entry_get_text (GTK_ENTRY (entry));
+	empathy_idle_set_presence (priv->idle, priv->state, status);
 }
 
 static void
@@ -259,6 +266,7 @@ ui_set_custom_state (EmpathyPresenceChooser *self,
 	const char *icon_name;
 
 	priv->block_set_editing++;
+	priv->block_changed++;
 
 	icon_name = empathy_icon_name_for_presence (state);
 	gtk_entry_set_icon_from_icon_name (GTK_ENTRY (entry),
@@ -266,6 +274,7 @@ ui_set_custom_state (EmpathyPresenceChooser *self,
 			icon_name);
 	gtk_entry_set_text (GTK_ENTRY (entry), status);
 
+	priv->block_changed--;
 	priv->block_set_editing--;
 }
 
@@ -276,15 +285,15 @@ entry_icon_release_cb (EmpathyPresenceChooser	*self,
 		       GtkEntry		*entry)
 {
 	set_status_editing (self, FALSE);
+	mc_set_custom_state (self);
 }
 
 static void
 entry_activate_cb (EmpathyPresenceChooser	*self,
 		   GtkEntry			*entry)
 {
-	g_print ("ACTIVATE! (form of a dragon)\n");
-	
 	set_status_editing (self, FALSE);
+	mc_set_custom_state (self);
 }
 
 static void
@@ -294,8 +303,6 @@ changed_cb (GtkComboBox *self, gpointer user_data)
 
 	if (priv->block_changed) return;
 
-	g_print ("Changed\n");
-
 	GtkTreeIter iter;
 	char *icon_name;
 	int type = -1;
@@ -304,7 +311,10 @@ changed_cb (GtkComboBox *self, gpointer user_data)
 	if (!gtk_combo_box_get_active_iter (self, &iter))
 	{
 		/* the combo is being edited to a custom entry */
-		set_status_editing (EMPATHY_PRESENCE_CHOOSER (self), TRUE);
+		if (!priv->editing_status)
+		{
+			set_status_editing (EMPATHY_PRESENCE_CHOOSER (self), TRUE);
+		}
 		return;
 	}
 
@@ -347,11 +357,8 @@ changed_cb (GtkComboBox *self, gpointer user_data)
 static void
 empathy_presence_chooser_init (EmpathyPresenceChooser *chooser)
 {
-	//GtkWidget                  *arrow;
-	//GtkWidget                  *alignment;
 	EmpathyPresenceChooserPriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (chooser,
 		EMPATHY_TYPE_PRESENCE_CHOOSER, EmpathyPresenceChooserPriv);
-
 
 	chooser->priv = priv;
 	
@@ -369,6 +376,7 @@ empathy_presence_chooser_init (EmpathyPresenceChooser *chooser)
 	g_signal_connect_object (entry, "activate",
 			G_CALLBACK (entry_activate_cb), chooser,
 			G_CONNECT_SWAPPED);
+	// FIXME - should this also happen when the user presses TAB ?
 
 	GtkCellRenderer *renderer;
 	gtk_cell_layout_clear (GTK_CELL_LAYOUT (chooser));
@@ -437,17 +445,13 @@ presence_chooser_presence_changed_cb (EmpathyPresenceChooser *chooser)
 	McPresence                 flash_state;
 	const gchar               *status;
 
-	g_print (" > presence_chooser_presence_changed_cb\n");
-
 	priv = GET_PRIV (chooser);
 
 	state = empathy_idle_get_state (priv->idle);
 	status = empathy_idle_get_status (priv->idle);
 	flash_state = empathy_idle_get_flash_state (priv->idle);
 
-	g_print ("status = %s\n", status);
-
-	// FIXME - we need to either find an entry in the model or add one
+	/* look through the model and attempt to find a matching state */
 	GtkTreeModel *model = gtk_combo_box_get_model (GTK_COMBO_BOX (chooser));
 	GtkTreeIter iter;
 	gboolean valid, match_state = FALSE, match = FALSE;
@@ -495,14 +499,12 @@ presence_chooser_presence_changed_cb (EmpathyPresenceChooser *chooser)
 
 	if (match)
 	{
-		g_print ("GOT MATCH\n");
 		priv->block_changed++;
 		gtk_combo_box_set_active_iter (GTK_COMBO_BOX (chooser), &iter);
 		priv->block_changed--;
 	}
 	else
 	{
-		g_print ("NO MATCH\n");
 		// FIXME - do we insert the match into the menu?
 		ui_set_custom_state (chooser, state, status);
 	}
