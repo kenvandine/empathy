@@ -41,8 +41,7 @@
 #include <libempathy/empathy-utils.h>
 #include <libempathy/empathy-status-presets.h>
 
-// FIXME - what's the correct debug flag?
-#define DEBUG_FLAG EMPATHY_DEBUG_DISPATCHER
+#define DEBUG_FLAG EMPATHY_DEBUG_OTHER
 #include <libempathy/empathy-debug.h>
 
 #include "empathy-ui-utils.h"
@@ -146,27 +145,30 @@ enum
 };
 
 static GtkTreeModel *
-create_model (void)
+presence_chooser_create_model (void)
 {
-	GtkListStore *store = gtk_list_store_new (N_COLUMNS,
+	GtkListStore *store;
+	char *custom_message;
+
+	store = gtk_list_store_new (N_COLUMNS,
 			G_TYPE_STRING,		/* COL_STATE_ICON_NAME */
 			MC_TYPE_PRESENCE,	/* COL_STATE */
 			G_TYPE_STRING,		/* COL_STATUS_TEXT */
 			G_TYPE_STRING,		/* COL_DISPLAY_MARKUP */
 			G_TYPE_BOOLEAN,		/* COL_STATUS_CUSTOMISABLE */
 			G_TYPE_INT);		/* COL_TYPE */
-	
-	GtkTreeIter iter;
-	
+
+	custom_message = g_strdup_printf ("<i>%s</i>", _("Custom Message..."));
+
 	int i;
 	for (i = 0; i < G_N_ELEMENTS (states); i += 2) {
 		GList       *list, *l;
+		const char *status, *icon_name;
 
-		const char *status = empathy_presence_get_default_message (states[i]);
-		const char *icon_name = empathy_icon_name_for_presence (states[i]);
+		status = empathy_presence_get_default_message (states[i]);
+		icon_name = empathy_icon_name_for_presence (states[i]);
 
-		gtk_list_store_append (store, &iter);
-		gtk_list_store_set (store, &iter,
+		gtk_list_store_insert_with_values (store, NULL, -1,
 				COL_STATE_ICON_NAME, icon_name,
 				COL_STATE, states[i],
 				COL_STATUS_TEXT, status,
@@ -176,11 +178,12 @@ create_model (void)
 				-1);
 
 		if (states[i+1]) {
+
 			/* Set custom messages if wanted */
 			list = empathy_status_presets_get (states[i], 5);
 			for (l = list; l; l = l->next) {
-				gtk_list_store_append (store, &iter);
-				gtk_list_store_set (store, &iter,
+				gtk_list_store_insert_with_values (store,
+						NULL, -1,
 						COL_STATE_ICON_NAME, icon_name,
 						COL_STATE, states[i],
 						COL_STATUS_TEXT, l->data,
@@ -190,33 +193,32 @@ create_model (void)
 						-1);
 			}
 			g_list_free (list);
-		
-			gtk_list_store_append (store, &iter);
-			gtk_list_store_set (store, &iter,
+
+			gtk_list_store_insert_with_values (store, NULL, -1,
 					COL_STATE_ICON_NAME, icon_name,
 					COL_STATE, states[i],
 					COL_STATUS_TEXT, "",
-					COL_DISPLAY_MARKUP, "<i>Custom Message...</i>",
+					COL_DISPLAY_MARKUP, custom_message,
 					COL_STATUS_CUSTOMISABLE, TRUE,
 					COL_TYPE, ENTRY_TYPE_CUSTOM,
 					-1);
 		}
 
 	}
-	
+
 	/* add a separator */
-	gtk_list_store_append (store, &iter);
-	gtk_list_store_set (store, &iter,
+	gtk_list_store_insert_with_values (store, NULL, -1,
 			COL_TYPE, ENTRY_TYPE_SEPARATOR,
 			-1);
-	
-	gtk_list_store_append (store, &iter);
-	gtk_list_store_set (store, &iter,
+
+	gtk_list_store_insert_with_values (store, NULL, -1,
 			COL_STATE_ICON_NAME, GTK_STOCK_EDIT,
 			COL_STATUS_TEXT, "",
-			COL_DISPLAY_MARKUP, "Edit Custom Messages...",
+			COL_DISPLAY_MARKUP, _("Edit Custom Messages..."),
 			COL_TYPE, ENTRY_TYPE_EDIT_CUSTOM,
 			-1);
+
+	g_free (custom_message);
 
 	return GTK_TREE_MODEL (store);
 }
@@ -240,10 +242,10 @@ presence_chooser_popup_shown_cb (GObject *self,
 		priv->focus_out_idle_source = 0;
 	}
 
-	GtkTreeModel *model = create_model ();
+	GtkTreeModel *model = presence_chooser_create_model ();
 
 	gtk_combo_box_set_model (GTK_COMBO_BOX (self), GTK_TREE_MODEL (model));
-	
+
 	g_object_unref (model);
 }
 
@@ -256,8 +258,7 @@ presence_chooser_set_status_editing (EmpathyPresenceChooser *self,
 
 	if (priv->block_set_editing) return;
 
-	if (editing)
-	{
+	if (editing) {
 		priv->editing_status = TRUE;
 
 		gtk_entry_set_icon_from_stock (GTK_ENTRY (entry),
@@ -270,8 +271,7 @@ presence_chooser_set_status_editing (EmpathyPresenceChooser *self,
 				GTK_ENTRY_ICON_PRIMARY,
 				FALSE);
 	}
-	else
-	{
+	else {
 		gtk_entry_set_icon_from_stock (GTK_ENTRY (entry),
 				GTK_ENTRY_ICON_SECONDARY,
 				NULL);
@@ -284,16 +284,14 @@ presence_chooser_set_status_editing (EmpathyPresenceChooser *self,
 
 		/* attempt to get the toplevel for this widget */
 		GtkWidget *window = gtk_widget_get_toplevel (GTK_WIDGET (self));
-		if (GTK_WIDGET_TOPLEVEL (window) && GTK_IS_WINDOW (window))
-		{
+		if (GTK_WIDGET_TOPLEVEL (window) && GTK_IS_WINDOW (window)) {
 			/* unset the focus */
 			gtk_window_set_focus (GTK_WINDOW (window), NULL);
 		}
 
 		/* see presence_chooser_entry_focus_out_cb()
 		 * for what this does */
-		if (priv->focus_out_idle_source != 0)
-		{
+		if (priv->focus_out_idle_source != 0) {
 			g_source_remove (priv->focus_out_idle_source);
 			priv->focus_out_idle_source = 0;
 		}
@@ -308,10 +306,13 @@ static void
 mc_set_custom_state (EmpathyPresenceChooser *self)
 {
 	EmpathyPresenceChooserPriv *priv = GET_PRIV (self);
-	GtkWidget *entry = gtk_bin_get_child (GTK_BIN (self));
+	GtkWidget *entry;
+	const char *status;
 
+	entry = gtk_bin_get_child (GTK_BIN (self));
 	/* update the status with MC */
-	const char *status = gtk_entry_get_text (GTK_ENTRY (entry));
+	status = gtk_entry_get_text (GTK_ENTRY (entry));
+
 	DEBUG ("Sending state to MC-> %s (%s)\n",
 			g_enum_get_value (g_type_class_peek (MC_TYPE_PRESENCE),
 				priv->state)->value_name,
@@ -325,8 +326,10 @@ ui_set_custom_state (EmpathyPresenceChooser *self,
 			   const char *status)
 {
 	EmpathyPresenceChooserPriv *priv = GET_PRIV (self);
-	GtkWidget *entry = gtk_bin_get_child (GTK_BIN (self));
+	GtkWidget *entry;
 	const char *icon_name;
+
+	entry = gtk_bin_get_child (GTK_BIN (self));
 
 	priv->block_set_editing++;
 	priv->block_changed++;
@@ -374,16 +377,13 @@ presence_chooser_entry_key_press_event_cb (EmpathyPresenceChooser	*self,
 {
 	EmpathyPresenceChooserPriv *priv = GET_PRIV (self);
 
-	if (priv->editing_status && event->keyval == GDK_Escape)
-	{
+	if (priv->editing_status && event->keyval == GDK_Escape) {
 		/* the user pressed Escape, undo the editing */
-		presence_chooser_set_status_editing (self, FALSE);
 		presence_chooser_reset_status (self);
 
 		return TRUE;
 	}
-	else if (event->keyval == GDK_Up || event->keyval == GDK_Down)
-	{
+	else if (event->keyval == GDK_Up || event->keyval == GDK_Down) {
 		/* ignore */
 		return TRUE;
 	}
@@ -400,8 +400,7 @@ presence_chooser_entry_button_press_event_cb (EmpathyPresenceChooser *self,
 
 	if (!priv->editing_status &&
 	    event->button == 1 &&
-	    !GTK_WIDGET_HAS_FOCUS (entry))
-	{
+	    !GTK_WIDGET_HAS_FOCUS (entry)) {
 		gtk_widget_grab_focus (entry);
 		gtk_editable_select_region (GTK_EDITABLE (entry), 0, -1);
 
@@ -420,8 +419,7 @@ presence_chooser_entry_changed_cb (EmpathyPresenceChooser *self,
 	if (priv->block_changed) return;
 
 	/* the combo is being edited to a custom entry */
-	if (!priv->editing_status)
-	{
+	if (!priv->editing_status) {
 		presence_chooser_set_status_editing (self, TRUE);
 	}
 }
@@ -438,10 +436,10 @@ presence_chooser_changed_cb (GtkComboBox *self, gpointer user_data)
 	McPresence new_state;
 	gboolean customisable = TRUE;
 	int type = -1;
+	GtkWidget *entry;
 
 	GtkTreeModel *model = gtk_combo_box_get_model (self);
-	if (!gtk_combo_box_get_active_iter (self, &iter))
-	{
+	if (!gtk_combo_box_get_active_iter (self, &iter)) {
 		return;
 	}
 
@@ -452,56 +450,51 @@ presence_chooser_changed_cb (GtkComboBox *self, gpointer user_data)
 			COL_TYPE, &type,
 			-1);
 
-	GtkWidget *entry = gtk_bin_get_child (GTK_BIN (self));
+	entry = gtk_bin_get_child (GTK_BIN (self));
 
 	/* some types of status aren't editable, set the editability of the
 	 * entry appropriately. Unless we're just about to reset it anyway,
 	 * in which case, don't fiddle with it */
-	if (type != ENTRY_TYPE_EDIT_CUSTOM)
-	{
+	if (type != ENTRY_TYPE_EDIT_CUSTOM) {
 		gtk_editable_set_editable (GTK_EDITABLE (entry), customisable);
 		priv->state = new_state;
 	}
 
-	if (type == ENTRY_TYPE_EDIT_CUSTOM)
-	{
+	if (type == ENTRY_TYPE_EDIT_CUSTOM) {
 		presence_chooser_reset_status (EMPATHY_PRESENCE_CHOOSER (self));
 
 		/* attempt to get the toplevel for this widget */
 		GtkWidget *window = gtk_widget_get_toplevel (GTK_WIDGET (self));
-		if (!GTK_WIDGET_TOPLEVEL (window) || !GTK_IS_WINDOW (window))
-		{
+		if (!GTK_WIDGET_TOPLEVEL (window) || !GTK_IS_WINDOW (window)) {
 			window = NULL;
 		}
 
 		presence_chooser_dialog_show (GTK_WINDOW (window));
 	}
-	else if (type == ENTRY_TYPE_CUSTOM)
-	{
+	else if (type == ENTRY_TYPE_CUSTOM) {
 		gtk_entry_set_icon_from_icon_name (GTK_ENTRY (entry),
 				GTK_ENTRY_ICON_PRIMARY,
 				icon_name);
 
 		/* preseed the status */
-		if (priv->previous_type == ENTRY_TYPE_BUILTIN)
-		{
+		if (priv->previous_type == ENTRY_TYPE_BUILTIN) {
 			/* if their previous entry was a builtin, don't
 			 * preseed */
 			gtk_entry_set_text (GTK_ENTRY (entry), "");
 		}
-		else
-		{
+		else {
 			/* else preseed the text of their currently entered
 			 * status message */
-			const char *status = empathy_idle_get_status (priv->idle);
+			const char *status;
+
+			status = empathy_idle_get_status (priv->idle);
 			gtk_entry_set_text (GTK_ENTRY (entry), status);
 		}
 
 		/* grab the focus */
 		gtk_widget_grab_focus (entry);
 	}
-	else
-	{
+	else {
 		char *status;
 		/* just in case we were setting a new status when
 		 * things were changed */
@@ -518,8 +511,7 @@ presence_chooser_changed_cb (GtkComboBox *self, gpointer user_data)
 		g_free (status);
 	}
 
-	if (type != ENTRY_TYPE_EDIT_CUSTOM)
-	{
+	if (type != ENTRY_TYPE_EDIT_CUSTOM) {
 		priv->previous_type = type;
 	}
 	g_free (icon_name);
@@ -541,10 +533,13 @@ combo_row_separator_func (GtkTreeModel	*model,
 static gboolean
 presence_chooser_entry_focus_out_idle_cb (gpointer user_data)
 {
+	EmpathyPresenceChooser *chooser;
+	GtkWidget *entry;
+
 	DEBUG ("Autocommiting status message\n");
 
-	EmpathyPresenceChooser *chooser = EMPATHY_PRESENCE_CHOOSER (user_data);
-	GtkWidget *entry = gtk_bin_get_child (GTK_BIN (chooser));
+	chooser = EMPATHY_PRESENCE_CHOOSER (user_data);
+	entry = gtk_bin_get_child (GTK_BIN (chooser));
 
 	presence_chooser_entry_activate_cb (chooser, GTK_ENTRY (entry));
 
@@ -558,8 +553,7 @@ presence_chooser_entry_focus_out_cb (EmpathyPresenceChooser *chooser,
 {
 	EmpathyPresenceChooserPriv *priv = GET_PRIV (chooser);
 
-	if (priv->editing_status)
-	{
+	if (priv->editing_status) {
 		/* this seems a bit evil and maybe it will be fragile,
 		 * someone should think of a better way to do it.
 		 *
@@ -587,10 +581,13 @@ empathy_presence_chooser_init (EmpathyPresenceChooser *chooser)
 {
 	EmpathyPresenceChooserPriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (chooser,
 		EMPATHY_TYPE_PRESENCE_CHOOSER, EmpathyPresenceChooserPriv);
+	GtkTreeModel *model;
+	GtkWidget *entry;
+	GtkCellRenderer *renderer;
 
 	chooser->priv = priv;
-	
-	GtkTreeModel *model = create_model ();
+
+	model = presence_chooser_create_model ();
 
 	gtk_combo_box_set_model (GTK_COMBO_BOX (chooser), GTK_TREE_MODEL (model));
 	gtk_combo_box_entry_set_text_column (GTK_COMBO_BOX_ENTRY (chooser),
@@ -598,8 +595,8 @@ empathy_presence_chooser_init (EmpathyPresenceChooser *chooser)
 	gtk_combo_box_set_row_separator_func (GTK_COMBO_BOX (chooser),
 			combo_row_separator_func,
 			NULL, NULL);
-	
-	GtkWidget *entry = gtk_bin_get_child (GTK_BIN (chooser));
+
+	entry = gtk_bin_get_child (GTK_BIN (chooser));
 	gtk_entry_set_icon_activatable (GTK_ENTRY (entry),
 			GTK_ENTRY_ICON_PRIMARY, FALSE);
 	g_signal_connect_object (entry, "icon-release",
@@ -619,7 +616,6 @@ empathy_presence_chooser_init (EmpathyPresenceChooser *chooser)
 			chooser,
 			G_CONNECT_SWAPPED);
 
-	GtkCellRenderer *renderer;
 	gtk_cell_layout_clear (GTK_CELL_LAYOUT (chooser));
 
 	renderer = gtk_cell_renderer_pixbuf_new ();
@@ -699,7 +695,10 @@ presence_chooser_presence_changed_cb (EmpathyPresenceChooser *chooser)
 	EmpathyPresenceChooserPriv *priv;
 	McPresence                 state;
 	McPresence                 flash_state;
-	const gchar               *status;
+	const gchar                *status;
+	GtkTreeModel               *model;
+	GtkTreeIter                iter;
+	gboolean valid, match_state = FALSE, match = FALSE;
 
 	priv = GET_PRIV (chooser);
 
@@ -708,13 +707,10 @@ presence_chooser_presence_changed_cb (EmpathyPresenceChooser *chooser)
 	flash_state = empathy_idle_get_flash_state (priv->idle);
 
 	/* look through the model and attempt to find a matching state */
-	GtkTreeModel *model = gtk_combo_box_get_model (GTK_COMBO_BOX (chooser));
-	GtkTreeIter iter;
-	gboolean valid, match_state = FALSE, match = FALSE;
+	model = gtk_combo_box_get_model (GTK_COMBO_BOX (chooser));
 	for (valid = gtk_tree_model_get_iter_first (model, &iter);
 	     valid;
-	     valid = gtk_tree_model_iter_next (model, &iter))
-	{
+	     valid = gtk_tree_model_iter_next (model, &iter)) {
 		int m_type;
 		McPresence m_state;
 		char *m_status;
@@ -726,18 +722,15 @@ presence_chooser_presence_changed_cb (EmpathyPresenceChooser *chooser)
 
 		if (m_type == ENTRY_TYPE_CUSTOM ||
 		    m_type == ENTRY_TYPE_SEPARATOR ||
-		    m_type == ENTRY_TYPE_EDIT_CUSTOM)
-		{
+		    m_type == ENTRY_TYPE_EDIT_CUSTOM) {
 			continue;
 		}
-		else if (!match_state && state == m_state)
-		{
+		else if (!match_state && state == m_state) {
 			/* we are now in the section that can contain our
 			 * match */
 			match_state = TRUE;
 		}
-		else if (match_state && state != m_state)
-		{
+		else if (match_state && state != m_state) {
 			/* we have passed the section that can contain our
 			 * match */
 			break;
@@ -755,20 +748,19 @@ presence_chooser_presence_changed_cb (EmpathyPresenceChooser *chooser)
 
 	}
 
-	if (match)
-	{
+	if (match) {
 		priv->block_changed++;
 		gtk_combo_box_set_active_iter (GTK_COMBO_BOX (chooser), &iter);
 		priv->block_changed--;
 	}
-	else
-	{
+	else {
 		ui_set_custom_state (chooser, state, status);
 	}
 
 	if (flash_state != MC_PRESENCE_UNSET) {
 		presence_chooser_flash_start (chooser, state, flash_state);
-	} else {
+	}
+	else {
 		presence_chooser_flash_stop (chooser, state);
 	}
 }
@@ -784,7 +776,8 @@ presence_chooser_flash_timeout_cb (EmpathyPresenceChooser *chooser)
 
 	if (on) {
 		state = priv->flash_state_1;
-	} else {
+	}
+	else {
 		state = priv->flash_state_2;
 	}
 
@@ -834,13 +827,10 @@ presence_chooser_flash_stop (EmpathyPresenceChooser *chooser,
 		priv->flash_timeout_id = 0;
 	}
 	GtkWidget *entry = gtk_bin_get_child (GTK_BIN (chooser));
-	
+
 	gtk_entry_set_icon_from_icon_name (GTK_ENTRY (entry),
 			GTK_ENTRY_ICON_PRIMARY,
 			empathy_icon_name_for_presence (state));
-
-	// FIXME - what does this do?
-	// priv->last_state = state;
 }
 
 GtkWidget *
@@ -875,7 +865,7 @@ empathy_presence_chooser_create_menu (void)
 
 	}
 
-	/* Separator. */
+	/* Separator */
 	item = gtk_menu_item_new ();
 	gtk_menu_shell_append (GTK_MENU_SHELL (menu), item);
 	gtk_widget_show (item);
@@ -1043,7 +1033,8 @@ presence_chooser_dialog_save_toggled_cb (GtkWidget           *widget,
 
 	if (active) {
 		empathy_status_presets_set_last (state, text);
-	} else {
+	}
+	else {
 		empathy_status_presets_remove (state, text);
 	}
 }
