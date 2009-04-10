@@ -318,6 +318,13 @@ ui_set_custom_state (EmpathyPresenceChooser *self,
 }
 
 static void
+reset_status (EmpathyPresenceChooser *self)
+{
+	/* recover the status that was unset */
+	presence_chooser_presence_changed_cb (self);
+}
+
+static void
 entry_icon_release_cb (EmpathyPresenceChooser	*self,
 		       GtkEntryIconPosition	 icon_pos,
 		       GdkEvent		*event,
@@ -346,7 +353,7 @@ entry_key_press_event_cb (EmpathyPresenceChooser	*self,
 	{
 		/* the user pressed Escape, undo the editing */
 		set_status_editing (self, FALSE);
-		presence_chooser_presence_changed_cb (self);
+		reset_status (self);
 
 		return TRUE;
 	}
@@ -363,6 +370,7 @@ changed_cb (GtkComboBox *self, gpointer user_data)
 
 	GtkTreeIter iter;
 	char *icon_name;
+	McPresence new_state;
 	gboolean customisable = TRUE;
 	int type = -1;
 
@@ -379,7 +387,7 @@ changed_cb (GtkComboBox *self, gpointer user_data)
 
 	gtk_tree_model_get (model, &iter,
 			COL_STATE_ICON_NAME, &icon_name,
-			COL_STATE, &priv->state,
+			COL_STATE, &new_state,
 			COL_STATUS_CUSTOMISABLE, &customisable,
 			COL_TYPE, &type,
 			-1);
@@ -394,18 +402,12 @@ changed_cb (GtkComboBox *self, gpointer user_data)
 	if (type != ENTRY_TYPE_EDIT_CUSTOM)
 	{
 		gtk_editable_set_editable (GTK_EDITABLE (entry), customisable);
+		priv->state = new_state;
 	}
 
 	if (type == ENTRY_TYPE_EDIT_CUSTOM)
 	{
-		/* recover the status that was unset because COL_STATUS_TEXT
-		 * is "". Unfortunately if you try and set COL_STATUS_TEXT to
-		 * NULL, it generates a g_critical. I wonder if there is a
-		 * better way around this. */
-		const char *status = empathy_idle_get_status (priv->idle);
-		priv->block_set_editing++;
-		gtk_entry_set_text (GTK_ENTRY (entry), status);
-		priv->block_set_editing--;
+		reset_status (EMPATHY_PRESENCE_CHOOSER (self));
 
 		/* attempt to get the toplevel for this widget */
 		GtkWidget *window = gtk_widget_get_toplevel (GTK_WIDGET (self));
@@ -473,7 +475,7 @@ focus_out_cb (EmpathyPresenceChooser *chooser, GdkEventFocus *event,
 
 	if (priv->editing_status)
 	{
-		entry_activate_cb (chooser, entry);
+		// entry_activate_cb (chooser, entry);
 	}
 
 	return FALSE;
