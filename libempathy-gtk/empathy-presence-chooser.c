@@ -377,9 +377,10 @@ presence_chooser_entry_button_press_event_cb (EmpathyPresenceChooser *self,
 {
 	EmpathyPresenceChooserPriv *priv = GET_PRIV (self);
 
-	if (!priv->editing_status && event->button == 1)
+	if (!priv->editing_status &&
+	    event->button == 1 &&
+	    !GTK_WIDGET_HAS_FOCUS (entry))
 	{
-		presence_chooser_set_status_editing (self, TRUE);
 		gtk_widget_grab_focus (entry);
 		gtk_editable_select_region (GTK_EDITABLE (entry), 0, -1);
 
