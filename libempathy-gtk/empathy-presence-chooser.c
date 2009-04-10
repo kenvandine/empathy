@@ -275,7 +275,27 @@ set_status_editing (EmpathyPresenceChooser *self, gboolean editing)
 		gtk_entry_set_icon_sensitive (GTK_ENTRY (entry),
 				GTK_ENTRY_ICON_PRIMARY,
 				TRUE);
+
+		// FIXME - move the focus somewhere
 	}
+}
+
+static void
+entry_icon_release_cb (EmpathyPresenceChooser	*self,
+		       GtkEntryIconPosition	 icon_pos,
+		       GdkEvent		*event,
+		       GtkEntry		*entry)
+{
+	set_status_editing (self, FALSE);
+}
+
+static void
+entry_activate_cb (EmpathyPresenceChooser	*self,
+		   GtkEntry			*entry)
+{
+	g_print ("ACTIVATE! (form of a dragon)\n");
+	
+	set_status_editing (self, FALSE);
 }
 
 static void
@@ -290,7 +310,8 @@ changed_cb (GtkComboBox *self, gpointer user_data)
 	GtkTreeModel *model = gtk_combo_box_get_model (self);
 	if (!gtk_combo_box_get_active_iter (self, &iter))
 	{
-		g_print ("not an iter!\n");
+		/* the combo is being edited to a custom entry */
+		set_status_editing (self, TRUE);
 		return;
 	}
 
@@ -309,6 +330,12 @@ changed_cb (GtkComboBox *self, gpointer user_data)
 		/* grab the focus */
 		gtk_widget_grab_focus (entry);
 		set_status_editing (self, TRUE);
+	}
+	else
+	{
+		/* just in case we were setting a new status when
+		 * things were changed */
+		set_status_editing (self, FALSE);
 	}
 
 	g_free (icon_name);
@@ -333,6 +360,12 @@ empathy_presence_chooser_init (EmpathyPresenceChooser *chooser)
 	GtkWidget *entry = gtk_bin_get_child (GTK_BIN (chooser));
 	gtk_entry_set_icon_activatable (GTK_ENTRY (entry),
 			GTK_ENTRY_ICON_PRIMARY, FALSE);
+	g_signal_connect_object (entry, "icon-release",
+			G_CALLBACK (entry_icon_release_cb), chooser,
+			G_CONNECT_SWAPPED);
+	g_signal_connect_object (entry, "activate",
+			G_CALLBACK (entry_activate_cb), chooser,
+			G_CONNECT_SWAPPED);
 
 	GtkCellRenderer *renderer;
 	gtk_cell_layout_clear (GTK_CELL_LAYOUT (chooser));
