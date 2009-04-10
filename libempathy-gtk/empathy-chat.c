@@ -349,6 +349,7 @@ chat_send (EmpathyChat  *chat,
 	   const gchar *msg)
 {
 	EmpathyChatPriv *priv;
+	EmpathyMessage  *message;
 
 	if (EMP_STR_EMPTY (msg)) {
 		return;
@@ -358,24 +359,25 @@ chat_send (EmpathyChat  *chat,
 
 	chat_sent_message_add (chat, msg);
 
-	/* If this is not a command, send the message */
-	if (msg[0] != '/') {
-		EmpathyMessage  *message;
-
-		message = empathy_message_new (msg);
-		empathy_tp_chat_send (priv->tp_chat, message);
-		g_object_unref (message);
-		return;
-	}
-
-	/* Check for all supported commands */
 	if (g_str_has_prefix (msg, "/clear")) {
 		empathy_chat_view_clear (chat->view);
 		return;
 	}
 
-	/* This is an unknown command, display a message to the user */
-	empathy_chat_view_append_event (chat->view, _("Unsupported command"));
+	/* Blacklist messages begining by '/', except for "/me" and "/say"
+	 * because they are handled in EmpathyMessage */
+	if (msg[0] == '/' &&
+	    !g_str_has_prefix (msg, "/me") &&
+	    !g_str_has_prefix (msg, "/say")) {
+		empathy_chat_view_append_event (chat->view,
+			_("Unsupported command"));
+		return;
+	}
+
+	/* We can send the message */
+	message = empathy_message_new (msg);
+	empathy_tp_chat_send (priv->tp_chat, message);
+	g_object_unref (message);
 }
 
 static void
@@ -567,28 +569,6 @@ chat_property_changed_cb (EmpathyTpChat *tp_chat,
 	}
 }
 
-static gboolean
-chat_get_is_command (const gchar *str)
-{
-	g_return_val_if_fail (str != NULL, FALSE);
-
-	if (str[0] != '/') {
-		return FALSE;
-	}
-
-	if (g_str_has_prefix (str, "/me")) {
-		return TRUE;
-	}
-	else if (g_str_has_prefix (str, "/nick")) {
-		return TRUE;
-	}
-	else if (g_str_has_prefix (str, "/topic")) {
-		return TRUE;
-	}
-
-	return FALSE;
-}
-
 static void
 chat_input_text_buffer_changed_cb (GtkTextBuffer *buffer,
 				   EmpathyChat    *chat)
@@ -648,8 +628,8 @@ chat_input_text_buffer_changed_cb (GtkTextBuffer *buffer,
 
 		str = gtk_text_buffer_get_text (buffer, &start, &end, FALSE);
 
-		/* spell check string */
-		if (!chat_get_is_command (str)) {
+		/* spell check string if not a command */
+		if (str[0] != '/') {
 			correct = empathy_spell_check (str);
 		} else {
 			correct = TRUE;
