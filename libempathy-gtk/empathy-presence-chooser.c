@@ -269,6 +269,7 @@ set_status_editing (EmpathyPresenceChooser *self, gboolean editing)
 			/* unset the focus */
 			gtk_window_set_focus (GTK_WINDOW (window), NULL);
 		}
+		gtk_editable_set_position (GTK_EDITABLE (entry), 0);
 
 		priv->editing_status = FALSE;
 	}
@@ -403,6 +404,12 @@ changed_cb (GtkComboBox *self, gpointer user_data)
 		gtk_entry_set_icon_from_icon_name (GTK_ENTRY (entry),
 				GTK_ENTRY_ICON_PRIMARY,
 				icon_name);
+
+		/* preseed the status */
+		const char *status = empathy_idle_get_status (priv->idle);
+		priv->block_set_editing++;
+		gtk_entry_set_text (GTK_ENTRY (entry), status);
+		priv->block_set_editing--;
 
 		/* grab the focus */
 		gtk_widget_grab_focus (entry);
