@@ -567,7 +567,9 @@ presence_chooser_presence_changed_cb (EmpathyPresenceChooser *chooser)
 				COL_TYPE, &m_type,
 				-1);
 
-		if (m_type == ENTRY_TYPE_CUSTOM)
+		if (m_type == ENTRY_TYPE_CUSTOM ||
+		    m_type == ENTRY_TYPE_SEPARATOR ||
+		    m_type == ENTRY_TYPE_EDIT_CUSTOM)
 		{
 			continue;
 		}
