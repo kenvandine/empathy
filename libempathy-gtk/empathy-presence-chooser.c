@@ -358,6 +358,11 @@ entry_key_press_event_cb (EmpathyPresenceChooser	*self,
 
 		return TRUE;
 	}
+	else if (event->keyval == GDK_Up || event->keyval == GDK_Down)
+	{
+		/* ignore */
+		return TRUE;
+	}
 
 	return FALSE; /* send this event elsewhere */
 }
