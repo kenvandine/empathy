@@ -52,6 +52,16 @@
 #define FLASH_TIMEOUT 500
 
 #define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyPresenceChooser)
+typedef enum _PresenceChooserEntryType PresenceChooserEntryType;
+enum _PresenceChooserEntryType
+{
+	ENTRY_TYPE_BUILTIN,
+	ENTRY_TYPE_SAVED,
+	ENTRY_TYPE_CUSTOM,
+	ENTRY_TYPE_SEPARATOR,
+	ENTRY_TYPE_EDIT_CUSTOM,
+};
+
 typedef struct {
 	EmpathyIdle *idle;
 
@@ -61,7 +71,7 @@ typedef struct {
 	guint        focus_out_idle_source;
 
 	McPresence   state;
-	int          previous_type;
+	PresenceChooserEntryType          previous_type;
 
 	McPresence   flash_state_1;
 	McPresence   flash_state_2;
@@ -133,15 +143,6 @@ enum
 	COL_STATUS_CUSTOMISABLE,
 	COL_TYPE,
 	N_COLUMNS
-};
-
-enum
-{
-	ENTRY_TYPE_BUILTIN,
-	ENTRY_TYPE_SAVED,
-	ENTRY_TYPE_CUSTOM,
-	ENTRY_TYPE_SEPARATOR,
-	ENTRY_TYPE_EDIT_CUSTOM,
 };
 
 static GtkTreeModel *
@@ -435,7 +436,7 @@ presence_chooser_changed_cb (GtkComboBox *self, gpointer user_data)
 	char *icon_name;
 	McPresence new_state;
 	gboolean customisable = TRUE;
-	int type = -1;
+	PresenceChooserEntryType type = -1;
 	GtkWidget *entry;
 
 	GtkTreeModel *model = gtk_combo_box_get_model (self);
@@ -522,7 +523,7 @@ combo_row_separator_func (GtkTreeModel	*model,
 			  GtkTreeIter	*iter,
 			  gpointer	 data)
 {
-	int type;
+	PresenceChooserEntryType type;
 	gtk_tree_model_get (model, iter,
 			COL_TYPE, &type,
 			-1);
