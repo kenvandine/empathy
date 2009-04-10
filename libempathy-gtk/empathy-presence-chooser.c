@@ -39,6 +39,10 @@
 #include <libempathy/empathy-utils.h>
 #include <libempathy/empathy-status-presets.h>
 
+// FIXME - what's the correct debug flag?
+#define DEBUG_FLAG EMPATHY_DEBUG_DISPATCHER
+#include <libempathy/empathy-debug.h>
+
 #include "empathy-ui-utils.h"
 #include "empathy-images.h"
 #include "empathy-presence-chooser.h"
@@ -254,6 +258,10 @@ mc_set_custom_state (EmpathyPresenceChooser *self)
 
 	/* update the status with MC */
 	const char *status = gtk_entry_get_text (GTK_ENTRY (entry));
+	DEBUG ("Sending state to MC-> %s (%s)\n",
+			g_enum_get_value (g_type_class_peek (MC_TYPE_PRESENCE),
+				priv->state)->value_name,
+			status);
 	empathy_idle_set_presence (priv->idle, priv->state, status);
 }
 
@@ -470,7 +478,7 @@ presence_chooser_presence_changed_cb (EmpathyPresenceChooser *chooser)
 
 	priv = GET_PRIV (chooser);
 
-	state = empathy_idle_get_state (priv->idle);
+	priv->state = state = empathy_idle_get_state (priv->idle);
 	status = empathy_idle_get_status (priv->idle);
 	flash_state = empathy_idle_get_flash_state (priv->idle);
 
