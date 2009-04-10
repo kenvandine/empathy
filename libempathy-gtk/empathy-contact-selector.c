@@ -45,6 +45,7 @@ typedef struct
 {
   EmpathyContactList *contact_list;
   EmpathyContactListStore *store;
+  GtkTreeModel *model;
   gboolean dispose_run;
 } EmpathyContactSelectorPriv;
 
@@ -52,17 +53,17 @@ static void contact_selector_manage_blank_contact (
     EmpathyContactSelector *selector);
 
 static guint
-contact_selector_get_number_online_contacts (GtkTreeStore *store)
+contact_selector_get_number_online_contacts (GtkTreeModel *model)
 {
   GtkTreeIter tmp_iter;
   gboolean is_online;
   guint number_online_contacts = 0;
   gboolean ok;
 
-  for (ok = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (store), &tmp_iter);
-      ok; ok = gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &tmp_iter))
+  for (ok = gtk_tree_model_get_iter_first (model, &tmp_iter);
+      ok; ok = gtk_tree_model_iter_next (model, &tmp_iter))
     {
-      gtk_tree_model_get (GTK_TREE_MODEL (store),
+      gtk_tree_model_get (model,
           &tmp_iter, EMPATHY_CONTACT_LIST_STORE_COL_IS_ONLINE,
           &is_online, -1);
       if (is_online)
@@ -73,7 +74,7 @@ contact_selector_get_number_online_contacts (GtkTreeStore *store)
 }
 
 static gboolean
-contact_selector_get_iter_for_blank_contact (GtkTreeStore *store,
+contact_selector_get_iter_for_blank_contact (GtkTreeModel *model,
                                              GtkTreeIter *blank_iter)
 {
   GtkTreeIter tmp_iter;
@@ -81,10 +82,10 @@ contact_selector_get_iter_for_blank_contact (GtkTreeStore *store,
   gboolean is_present = FALSE;
   gboolean ok;
 
-  for (ok = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (store), &tmp_iter);
-      ok; ok = gtk_tree_model_iter_next (GTK_TREE_MODEL (store), &tmp_iter))
+  for (ok = gtk_tree_model_get_iter_first (model, &tmp_iter);
+      ok; ok = gtk_tree_model_iter_next (model, &tmp_iter))
     {
-      gtk_tree_model_get (GTK_TREE_MODEL (store),
+      gtk_tree_model_get (model,
           &tmp_iter, EMPATHY_CONTACT_LIST_STORE_COL_CONTACT,
           &tmp_contact, -1);
       if (tmp_contact == NULL)
@@ -106,7 +107,7 @@ contact_selector_add_blank_contact (EmpathyContactSelector *selector)
   GtkTreeIter blank_iter;
 
   gtk_tree_store_insert_with_values (
-      GTK_TREE_STORE (priv->store),&blank_iter, NULL, 0,
+      GTK_TREE_STORE (priv->store), &blank_iter, NULL, 0,
       EMPATHY_CONTACT_LIST_STORE_COL_CONTACT, NULL,
       EMPATHY_CONTACT_LIST_STORE_COL_NAME, (_("Select a contact")),
       EMPATHY_CONTACT_LIST_STORE_COL_IS_ONLINE, FALSE, -1);
@@ -123,8 +124,7 @@ contact_selector_remove_blank_contact (EmpathyContactSelector *selector)
   EmpathyContactSelectorPriv *priv = GET_PRIV (selector);
   GtkTreeIter blank_iter;
 
-  if (contact_selector_get_iter_for_blank_contact (
-        GTK_TREE_STORE (priv->store), &blank_iter))
+  if (contact_selector_get_iter_for_blank_contact (priv->model, &blank_iter))
     gtk_tree_store_remove (GTK_TREE_STORE (priv->store), &blank_iter);
 }
 
@@ -134,8 +134,7 @@ contact_selector_manage_sensitivity (EmpathyContactSelector *selector)
   EmpathyContactSelectorPriv *priv = GET_PRIV (selector);
   guint number_online_contacts;
 
-  number_online_contacts = contact_selector_get_number_online_contacts (
-      GTK_TREE_STORE (priv->store));
+  number_online_contacts = contact_selector_get_number_online_contacts (priv->model);
 
   if (number_online_contacts != 0)
     gtk_widget_set_sensitive (GTK_WIDGET (selector), TRUE);
@@ -202,8 +201,9 @@ contact_selector_constructor (GType type,
       G_CALLBACK (contact_selector_manage_blank_contact),
       contact_selector);
 
-  gtk_combo_box_set_model (GTK_COMBO_BOX (contact_selector),
-      GTK_TREE_MODEL (priv->store));
+  priv->model = gtk_tree_model_filter_new (GTK_TREE_MODEL (priv->store), NULL);
+
+  gtk_combo_box_set_model (GTK_COMBO_BOX (contact_selector), priv->model);
   gtk_widget_set_sensitive (GTK_WIDGET (contact_selector), FALSE);
 
   renderer = gtk_cell_renderer_pixbuf_new ();
@@ -289,6 +289,12 @@ contact_selector_dispose (GObject *object)
       priv->contact_list = NULL;
     }
 
+  if (priv->model)
+    {
+      g_object_unref (priv->model);
+      priv->model = NULL;
+    }
+
   if (priv->store)
     {
       g_object_unref (priv->store);
@@ -337,8 +343,60 @@ empathy_contact_selector_dup_selected (EmpathyContactSelector *selector)
   if (!gtk_combo_box_get_active_iter (GTK_COMBO_BOX (selector), &iter))
     return NULL;
 
-  gtk_tree_model_get (GTK_TREE_MODEL (priv->store), &iter,
+  gtk_tree_model_get (priv->model, &iter,
       EMPATHY_CONTACT_LIST_STORE_COL_CONTACT, &contact, -1);
 
   return contact;
+}
+
+typedef struct
+{
+  EmpathyContactSelectorFilterFunc func;
+  gpointer user_data;
+} FilterData;
+
+static void
+filter_data_free (gpointer data)
+{
+  g_slice_free (FilterData, data);
+}
+
+static gboolean
+contact_selector_filter_visible_func (GtkTreeModel *model,
+				      GtkTreeIter *iter,
+				      gpointer user_data)
+{
+  EmpathyContact *contact;
+  gboolean visible = FALSE;
+  FilterData *data = (FilterData *) user_data;
+
+  gtk_tree_model_get (model, iter, 0, &contact, -1);
+
+  if (contact != NULL)
+    {
+      visible = data->func(contact, data->user_data);
+
+      g_object_unref (contact);
+    }
+
+  return visible;
+
+}
+
+void
+empathy_contact_selector_set_visible (EmpathyContactSelector *selector,
+                                      EmpathyContactSelectorFilterFunc func,
+                                      gpointer user_data)
+{
+  EmpathyContactSelectorPriv *priv = GET_PRIV (selector);
+  FilterData *data;
+
+  data = g_slice_new0 (FilterData);
+  data->func = func;
+  data->user_data = user_data;
+
+  gtk_tree_model_filter_set_visible_func (GTK_TREE_MODEL_FILTER (priv->model),
+      contact_selector_filter_visible_func, data, filter_data_free);
+
+  gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (priv->model));
 }

@@ -63,6 +63,11 @@ GtkWidget * empathy_contact_selector_new (EmpathyContactList *contact_list);
 
 EmpathyContact * empathy_contact_selector_dup_selected (EmpathyContactSelector *selector);
 
+typedef gboolean (*EmpathyContactSelectorFilterFunc) (EmpathyContact *contact, gpointer user_data);
+
+void empathy_contact_selector_set_visible (EmpathyContactSelector *selector,
+   EmpathyContactSelectorFilterFunc func, gpointer user_data);
+
 G_END_DECLS
 
 #endif /* __EMPATHY_CONTACT_SELECTOR_H__ */
