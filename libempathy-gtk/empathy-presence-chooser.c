@@ -129,6 +129,7 @@ enum
 	COL_STATE,
 	COL_STATUS_TEXT,
 	COL_DISPLAY_MARKUP,
+	COL_STATUS_CUSTOMISABLE,
 	COL_TYPE,
 	N_COLUMNS
 };
@@ -150,6 +151,7 @@ create_model (void)
 			MC_TYPE_PRESENCE,	/* COL_STATE */
 			G_TYPE_STRING,		/* COL_STATUS_TEXT */
 			G_TYPE_STRING,		/* COL_DISPLAY_MARKUP */
+			G_TYPE_BOOLEAN,		/* COL_STATUS_CUSTOMISABLE */
 			G_TYPE_INT);		/* COL_TYPE */
 	
 	GtkTreeIter iter;
@@ -167,6 +169,7 @@ create_model (void)
 				COL_STATE, states[i],
 				COL_STATUS_TEXT, status,
 				COL_DISPLAY_MARKUP, status,
+				COL_STATUS_CUSTOMISABLE, states[i+1],
 				COL_TYPE, ENTRY_TYPE_BUILTIN,
 				-1);
 
@@ -180,6 +183,7 @@ create_model (void)
 						COL_STATE, states[i],
 						COL_STATUS_TEXT, l->data,
 						COL_DISPLAY_MARKUP, l->data,
+						COL_STATUS_CUSTOMISABLE, TRUE,
 						COL_TYPE, ENTRY_TYPE_SAVED,
 						-1);
 			}
@@ -191,6 +195,7 @@ create_model (void)
 					COL_STATE, states[i],
 					COL_STATUS_TEXT, "",
 					COL_DISPLAY_MARKUP, "<i>Custom Message...</i>",
+					COL_STATUS_CUSTOMISABLE, TRUE,
 					COL_TYPE, ENTRY_TYPE_CUSTOM,
 					-1);
 		}
@@ -358,6 +363,7 @@ changed_cb (GtkComboBox *self, gpointer user_data)
 
 	GtkTreeIter iter;
 	char *icon_name;
+	gboolean customisable = TRUE;
 	int type = -1;
 
 	GtkTreeModel *model = gtk_combo_box_get_model (self);
@@ -374,10 +380,21 @@ changed_cb (GtkComboBox *self, gpointer user_data)
 	gtk_tree_model_get (model, &iter,
 			COL_STATE_ICON_NAME, &icon_name,
 			COL_STATE, &priv->state,
+			COL_STATUS_CUSTOMISABLE, &customisable,
 			COL_TYPE, &type,
 			-1);
 
 	GtkWidget *entry = gtk_bin_get_child (GTK_BIN (self));
+
+	/* some types of status aren't editable, set the editability of the
+	 * entry appropriately. Unless we're just about to reset it anyway,
+	 * in which case, don't fiddle with it */
+	/* FIXME: there is a bug here, if we start in the Hidden state, it
+	 * will be editable. It's not something that often occurs though. */
+	if (type != ENTRY_TYPE_EDIT_CUSTOM)
+	{
+		gtk_editable_set_editable (GTK_EDITABLE (entry), customisable);
+	}
 
 	if (type == ENTRY_TYPE_EDIT_CUSTOM)
 	{
