@@ -49,21 +49,13 @@
 typedef struct {
 	EmpathyIdle *idle;
 
-	GtkWidget   *hbox;
-	GtkWidget   *image;
-	GtkWidget   *label;
-	GtkWidget   *menu;
+	int          block_set_editing;
 
-	McPresence   last_state;
+	McPresence   state;
 
 	McPresence   flash_state_1;
 	McPresence   flash_state_2;
 	guint        flash_timeout_id;
-
-	/* The handle the kind of unnessecary scroll support. */
-	guint        scroll_timeout_id;
-	McPresence   scroll_state;
-	gchar       *scroll_status;
 } EmpathyPresenceChooserPriv;
 
 typedef struct {
@@ -82,11 +74,6 @@ enum {
 	COL_COUNT
 };
 
-typedef struct {
-	McPresence   state;
-	const gchar *status;
-} StateAndStatus;
-
 static CustomMessageDialog *message_dialog = NULL;
 /* States to be listed in the menu.
  * Each state has a boolean telling if it can have custom message */
@@ -104,8 +91,6 @@ static gboolean        presence_chooser_scroll_event_cb        (EmpathyPresenceC
 								GdkEventScroll             *event,
 								gpointer                    user_data);
 static GList *         presence_chooser_get_presets            (EmpathyPresenceChooser      *chooser);
-static StateAndStatus *presence_chooser_state_and_status_new   (McPresence                  state,
-								const gchar                *status);
 static gboolean        presence_chooser_flash_timeout_cb       (EmpathyPresenceChooser      *chooser);
 static void            presence_chooser_flash_start            (EmpathyPresenceChooser      *chooser,
 								McPresence                  state_1,
@@ -248,7 +233,10 @@ popup_shown_cb (GObject *self, GParamSpec *pspec, gpointer user_data)
 static void
 set_status_editing (EmpathyPresenceChooser *self, gboolean editing)
 {
+	EmpathyPresenceChooserPriv *priv = GET_PRIV (self);
 	GtkWidget *entry = gtk_bin_get_child (GTK_BIN (self));
+
+	if (priv->block_set_editing) return;
 
 	if (editing)
 	{
@@ -277,7 +265,31 @@ set_status_editing (EmpathyPresenceChooser *self, gboolean editing)
 				TRUE);
 
 		// FIXME - move the focus somewhere
+
+		/* update the status with MC */
+		const char *status = gtk_entry_get_text (GTK_ENTRY (entry));
+		empathy_idle_set_presence (priv->idle, priv->state, status);
 	}
+}
+
+static void
+ui_set_custom_state (EmpathyPresenceChooser *self,
+		           McPresence state,
+			   const char *status)
+{
+	EmpathyPresenceChooserPriv *priv = GET_PRIV (self);
+	GtkWidget *entry = gtk_bin_get_child (GTK_BIN (self));
+	const char *icon_name;
+
+	priv->block_set_editing++;
+
+	icon_name = empathy_icon_name_for_presence (state);
+	gtk_entry_set_icon_from_icon_name (GTK_ENTRY (entry),
+			GTK_ENTRY_ICON_PRIMARY,
+			icon_name);
+	gtk_entry_set_text (GTK_ENTRY (entry), status);
+
+	priv->block_set_editing--;
 }
 
 static void
@@ -301,6 +313,7 @@ entry_activate_cb (EmpathyPresenceChooser	*self,
 static void
 changed_cb (GtkComboBox *self, gpointer user_data)
 {
+	EmpathyPresenceChooserPriv *priv = GET_PRIV (self);
 	g_print ("Changed\n");
 
 	GtkTreeIter iter;
@@ -317,6 +330,7 @@ changed_cb (GtkComboBox *self, gpointer user_data)
 
 	gtk_tree_model_get (model, &iter,
 			COL_STATE_ICON_NAME, &icon_name,
+			COL_STATE, &priv->state,
 			COL_TYPE, &type,
 			-1);
 
@@ -333,9 +347,18 @@ changed_cb (GtkComboBox *self, gpointer user_data)
 	}
 	else
 	{
+		char *status;
 		/* just in case we were setting a new status when
 		 * things were changed */
 		set_status_editing (EMPATHY_PRESENCE_CHOOSER (self), FALSE);
+
+		gtk_tree_model_get (model, &iter,
+				COL_STATUS_TEXT, &status,
+				-1);
+
+		empathy_idle_set_presence (priv->idle, priv->state, status);
+
+		g_free (status);
 	}
 
 	g_free (icon_name);
@@ -390,9 +413,6 @@ empathy_presence_chooser_init (EmpathyPresenceChooser *chooser)
 	g_signal_connect (chooser, "changed",
 			G_CALLBACK (changed_cb), NULL);
 
-	// FIXME - no!
-	gtk_combo_box_set_active (GTK_COMBO_BOX (chooser), 0);
-
 	priv->idle = empathy_idle_dup_singleton ();
 	presence_chooser_presence_changed_cb (chooser);
 	g_signal_connect_swapped (priv->idle, "notify",
@@ -409,10 +429,6 @@ presence_chooser_finalize (GObject *object)
 
 	if (priv->flash_timeout_id) {
 		g_source_remove (priv->flash_timeout_id);
-	}
-
-	if (priv->scroll_timeout_id) {
-		g_source_remove (priv->scroll_timeout_id);
 	}
 
 	g_signal_handlers_disconnect_by_func (priv->idle,
@@ -500,10 +516,13 @@ presence_chooser_presence_changed_cb (EmpathyPresenceChooser *chooser)
 	if (match)
 	{
 		g_print ("GOT MATCH\n");
+		gtk_combo_box_set_active_iter (GTK_COMBO_BOX (chooser), &iter);
 	}
 	else
 	{
 		g_print ("NO MATCH\n");
+		// FIXME - do we insert the match into the menu?
+		ui_set_custom_state (chooser, state, status);
 	}
 
 	//presence_chooser_reset_scroll_timeout (chooser);
@@ -514,177 +533,6 @@ presence_chooser_presence_changed_cb (EmpathyPresenceChooser *chooser)
 	} else {
 		presence_chooser_flash_stop (chooser, state);
 	}
-}
-
-#if 0
-static void
-presence_chooser_reset_scroll_timeout (EmpathyPresenceChooser *chooser)
-{
-	EmpathyPresenceChooserPriv *priv;
-
-	priv = GET_PRIV (chooser);
-
-	if (priv->scroll_timeout_id) {
-		g_source_remove (priv->scroll_timeout_id);
-		priv->scroll_timeout_id = 0;
-	}
-
-	g_free (priv->scroll_status);
-	priv->scroll_status = NULL;
-}
-#endif
-
-#if 0
-static gboolean
-presence_chooser_scroll_timeout_cb (EmpathyPresenceChooser *chooser)
-{
-	EmpathyPresenceChooserPriv *priv;
-
-	priv = GET_PRIV (chooser);
-
-	priv->scroll_timeout_id = 0;
-
-	empathy_idle_set_presence (priv->idle,
-				   priv->scroll_state,
-				   priv->scroll_status);
-
-	g_free (priv->scroll_status);
-	priv->scroll_status = NULL;
-
-	return FALSE;
-}
-#endif
-
-static gboolean
-presence_chooser_scroll_event_cb (EmpathyPresenceChooser *chooser,
-				  GdkEventScroll        *event,
-				  gpointer               user_data)
-{
-#if 0
-	EmpathyPresenceChooserPriv *priv;
-	GList                     *list, *l;
-	const gchar               *current_status;
-	StateAndStatus            *sas;
-	gboolean                   match;
-
-	priv = GET_PRIV (chooser);
-
-	switch (event->direction) {
-	case GDK_SCROLL_UP:
-		break;
-	case GDK_SCROLL_DOWN:
-		break;
-	default:
-		return FALSE;
-	}
-
-	current_status = gtk_label_get_text (GTK_LABEL (priv->label));
-
-	/* Get the list of presets, which in this context means all the items
-	 * without a trailing "...".
-	 */
-	list = presence_chooser_get_presets (chooser);
-	sas = NULL;
-	match = FALSE;
-	for (l = list; l; l = l->next) {
-		sas = l->data;
-
-		if (sas->state == priv->last_state &&
-		    strcmp (sas->status, current_status) == 0) {
-			sas = NULL;
-			match = TRUE;
-			if (event->direction == GDK_SCROLL_UP) {
-				if (l->prev) {
-					sas = l->prev->data;
-				}
-			}
-			else if (event->direction == GDK_SCROLL_DOWN) {
-				if (l->next) {
-					sas = l->next->data;
-				}
-			}
-			break;
-		}
-
-		sas = NULL;
-	}
-
-	if (sas) {
-		presence_chooser_reset_scroll_timeout (chooser);
-
-		priv->scroll_status = g_strdup (sas->status);
-		priv->scroll_state = sas->state;
-
-		priv->scroll_timeout_id =
-			g_timeout_add_seconds (1,
-					       (GSourceFunc) presence_chooser_scroll_timeout_cb,
-					       chooser);
-
-		presence_chooser_flash_stop (chooser, sas->state);
-		gtk_label_set_text (GTK_LABEL (priv->label), sas->status);	
-	}
-	else if (!match) {
-		const gchar *status;
-		/* If we didn't get any match at all, it means the last state
-		 * was a custom one. Just switch to the first one.
-		 */
-		status = empathy_presence_get_default_message (states[0]);
-
-		presence_chooser_reset_scroll_timeout (chooser);
-		empathy_idle_set_presence (priv->idle, states[0], status);
-	}
-
-	g_list_foreach (list, (GFunc) g_free, NULL);
-	g_list_free (list);
-
-#endif
-	return TRUE;
-}
-
-static GList *
-presence_chooser_get_presets (EmpathyPresenceChooser *chooser)
-{
-	GList      *list = NULL;
-	guint       i;
-
-	for (i = 0; i < G_N_ELEMENTS (states); i += 2) {
-		GList          *presets, *p;
-		StateAndStatus *sas;
-		const gchar    *status;
-
-		status = empathy_presence_get_default_message (states[i]);
-		sas = presence_chooser_state_and_status_new (states[i], status);
-		list = g_list_prepend (list, sas);
-
-		/* Go to next state if we don't want messages for that state */
-		if (!states[i+1]) {
-			continue;
-		}
-
-		presets = empathy_status_presets_get (states[i], 5);
-		for (p = presets; p; p = p->next) {
-			sas = presence_chooser_state_and_status_new (states[i], p->data);
-			list = g_list_prepend (list, sas);
-		}
-		g_list_free (presets);
-	}
-	list = g_list_reverse (list);
-
-	return list;
-}
-
-static StateAndStatus *
-presence_chooser_state_and_status_new (McPresence   state,
-				       const gchar *status)
-{
-	StateAndStatus *sas;
-
-	sas = g_new0 (StateAndStatus, 1);
-
-	sas->state = state;
-	sas->status = status;
-
-	return sas;
 }
 
 static gboolean
