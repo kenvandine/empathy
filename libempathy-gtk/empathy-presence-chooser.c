@@ -59,6 +59,7 @@ typedef struct {
 	gboolean     editing_status;
 	int          block_set_editing;
 	int          block_changed;
+	guint        focus_out_idle_source;
 
 	McPresence   state;
 	int          previous_type;
@@ -225,10 +226,19 @@ presence_chooser_popup_shown_cb (GObject *self,
                                  GParamSpec *pspec,
 				 gpointer user_data)
 {
+	EmpathyPresenceChooserPriv *priv = GET_PRIV (self);
 	gboolean shown;
+
 	g_object_get (self, "popup-shown", &shown, NULL);
 
 	if (!shown) return;
+
+	/* see presence_chooser_entry_focus_out_cb() for what this does */
+	if (priv->focus_out_idle_source != 0)
+	{
+		g_source_remove (priv->focus_out_idle_source);
+		priv->focus_out_idle_source = 0;
+	}
 
 	GtkTreeModel *model = create_model ();
 
@@ -249,6 +259,7 @@ presence_chooser_set_status_editing (EmpathyPresenceChooser *self,
 	if (editing)
 	{
 		priv->editing_status = TRUE;
+
 		gtk_entry_set_icon_from_stock (GTK_ENTRY (entry),
 				GTK_ENTRY_ICON_SECONDARY,
 				GTK_STOCK_OK);
@@ -278,6 +289,15 @@ presence_chooser_set_status_editing (EmpathyPresenceChooser *self,
 			/* unset the focus */
 			gtk_window_set_focus (GTK_WINDOW (window), NULL);
 		}
+
+		/* see presence_chooser_entry_focus_out_cb()
+		 * for what this does */
+		if (priv->focus_out_idle_source != 0)
+		{
+			g_source_remove (priv->focus_out_idle_source);
+			priv->focus_out_idle_source = 0;
+		}
+
 		gtk_editable_set_position (GTK_EDITABLE (entry), 0);
 
 		priv->editing_status = FALSE;
@@ -392,7 +412,7 @@ presence_chooser_entry_button_press_event_cb (EmpathyPresenceChooser *self,
 
 static void
 presence_chooser_entry_changed_cb (EmpathyPresenceChooser *self,
-				   gpointer user_data)
+				   GtkEntry               *entry)
 {
 	EmpathyPresenceChooserPriv *priv = GET_PRIV (self);
 
@@ -462,12 +482,23 @@ presence_chooser_changed_cb (GtkComboBox *self, gpointer user_data)
 				icon_name);
 
 		/* preseed the status */
-		if (priv->previous_type == ENTRY_TYPE_BUILTIN)
+		if (priv->editing_status)
 		{
+			/* if the user is already in editing mode and changes
+			 * the status type, preseed the text they've already
+			 * entered */
+			/* FIXME: make this work */
+		}
+		else if (priv->previous_type == ENTRY_TYPE_BUILTIN)
+		{
+			/* if their previous entry was a builtin, don't
+			 * preseed */
 			gtk_entry_set_text (GTK_ENTRY (entry), "");
 		}
 		else
 		{
+			/* else preseed the text of their currently entered
+			 * status message */
 			const char *status = empathy_idle_get_status (priv->idle);
 			gtk_entry_set_text (GTK_ENTRY (entry), status);
 		}
@@ -514,6 +545,19 @@ combo_row_separator_func (GtkTreeModel	*model,
 }
 
 static gboolean
+presence_chooser_entry_focus_out_idle_cb (gpointer user_data)
+{
+	DEBUG ("Autocommiting status message\n");
+
+	EmpathyPresenceChooser *chooser = EMPATHY_PRESENCE_CHOOSER (user_data);
+	GtkWidget *entry = gtk_bin_get_child (GTK_BIN (chooser));
+
+	presence_chooser_entry_activate_cb (chooser, GTK_ENTRY (entry));
+
+	return FALSE;
+}
+
+static gboolean
 presence_chooser_entry_focus_out_cb (EmpathyPresenceChooser *chooser,
                                      GdkEventFocus *event,
 				     GtkEntry *entry)
@@ -522,8 +566,24 @@ presence_chooser_entry_focus_out_cb (EmpathyPresenceChooser *chooser,
 
 	if (priv->editing_status)
 	{
-		// entry_activate_cb (chooser, entry);
+		/* this seems a bit evil and maybe it will be fragile,
+		 * someone should think of a better way to do it.
+		 *
+		 * The entry has focused out, but we don't know where the focus
+		 * has gone. If it goes to the combo box, we don't want to
+		 * do anything. If it's gone anywhere else, we want to commit
+		 * the result.
+		 *
+		 * Thus we install this idle handler and store its source.
+		 * If the source is scheduled when the popup handler runs,
+		 * it will remove it, else the callback will commit the result.
+		 */
+		priv->focus_out_idle_source = g_idle_add (
+				presence_chooser_entry_focus_out_idle_cb,
+				chooser);
 	}
+
+	gtk_editable_set_position (GTK_EDITABLE (entry), 0);
 
 	return FALSE;
 }
@@ -615,6 +675,10 @@ presence_chooser_finalize (GObject *object)
 
 	if (priv->flash_timeout_id) {
 		g_source_remove (priv->flash_timeout_id);
+	}
+
+	if (priv->focus_out_idle_source) {
+		g_source_remove (priv->focus_out_idle_source);
 	}
 
 	g_signal_handlers_disconnect_by_func (priv->idle,
