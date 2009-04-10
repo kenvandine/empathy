@@ -501,6 +501,8 @@ empathy_presence_chooser_init (EmpathyPresenceChooser *chooser)
 			G_CALLBACK (popup_shown_cb), NULL);
 	g_signal_connect (chooser, "changed",
 			G_CALLBACK (changed_cb), NULL);
+	g_signal_connect_swapped (entry, "changed",
+			G_CALLBACK (changed_cb), chooser);
 
 	priv->idle = empathy_idle_dup_singleton ();
 	presence_chooser_presence_changed_cb (chooser);
