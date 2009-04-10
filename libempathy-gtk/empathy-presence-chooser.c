@@ -107,7 +107,7 @@ static void            presence_chooser_set_state              (McPresence      
 								const gchar                *status);
 static void            presence_chooser_custom_activate_cb     (GtkWidget                  *item,
 								gpointer                    user_data);
-static void            presence_chooser_dialog_show            (void);
+static void            presence_chooser_dialog_show            (GtkWindow                  *parent);
 
 G_DEFINE_TYPE (EmpathyPresenceChooser, empathy_presence_chooser, GTK_TYPE_COMBO_BOX_ENTRY);
 
@@ -734,7 +734,7 @@ static void
 presence_chooser_custom_activate_cb (GtkWidget *item,
 				     gpointer   user_data)
 {
-	presence_chooser_dialog_show ();
+	presence_chooser_dialog_show (NULL);
 }
 
 static McPresence
@@ -899,7 +899,7 @@ presence_chooser_dialog_destroy_cb (GtkWidget           *widget,
 }
 
 static void
-presence_chooser_dialog_show (void)
+presence_chooser_dialog_show (GtkWindow *parent)
 {
 	GladeXML *glade;
 	gchar    *filename;
@@ -945,7 +945,12 @@ presence_chooser_dialog_show (void)
 
 	gtk_combo_box_entry_set_text_column (GTK_COMBO_BOX_ENTRY (message_dialog->comboboxentry_message), 0);
 
-	/* FIXME: Set transian for a window ? */
+	if (parent)
+	{
+		gtk_window_set_transient_for (
+				GTK_WINDOW (message_dialog->dialog),
+				parent);
+	}
 
 	gtk_widget_show_all (message_dialog->dialog);
 }
