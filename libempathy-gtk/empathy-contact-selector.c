@@ -74,7 +74,7 @@ contact_selector_get_number_online_contacts (GtkTreeModel *model)
 }
 
 static gboolean
-contact_selector_get_iter_for_blank_contact (GtkTreeModel *model,
+contact_selector_get_iter_for_blank_contact (GtkTreeStore *model,
                                              GtkTreeIter *blank_iter)
 {
   GtkTreeIter tmp_iter;
@@ -82,10 +82,10 @@ contact_selector_get_iter_for_blank_contact (GtkTreeModel *model,
   gboolean is_present = FALSE;
   gboolean ok;
 
-  for (ok = gtk_tree_model_get_iter_first (model, &tmp_iter);
-      ok; ok = gtk_tree_model_iter_next (model, &tmp_iter))
+  for (ok = gtk_tree_model_get_iter_first (GTK_TREE_MODEL (model), &tmp_iter);
+      ok; ok = gtk_tree_model_iter_next (GTK_TREE_MODEL (model), &tmp_iter))
     {
-      gtk_tree_model_get (model,
+      gtk_tree_model_get (GTK_TREE_MODEL (model),
           &tmp_iter, EMPATHY_CONTACT_LIST_STORE_COL_CONTACT,
           &tmp_contact, -1);
       if (tmp_contact == NULL)
@@ -129,7 +129,8 @@ contact_selector_remove_blank_contact (EmpathyContactSelector *selector)
   EmpathyContactSelectorPriv *priv = GET_PRIV (selector);
   GtkTreeIter blank_iter;
 
-  if (contact_selector_get_iter_for_blank_contact (priv->model, &blank_iter))
+  if (contact_selector_get_iter_for_blank_contact
+      (GTK_TREE_STORE (priv->store), &blank_iter))
     gtk_tree_store_remove (GTK_TREE_STORE (priv->store), &blank_iter);
 }
 
