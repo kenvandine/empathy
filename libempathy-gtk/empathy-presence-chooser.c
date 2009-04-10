@@ -50,6 +50,7 @@ typedef struct {
 	EmpathyIdle *idle;
 
 	int          block_set_editing;
+	int          block_changed;
 
 	McPresence   state;
 
@@ -290,6 +291,9 @@ static void
 changed_cb (GtkComboBox *self, gpointer user_data)
 {
 	EmpathyPresenceChooserPriv *priv = GET_PRIV (self);
+
+	if (priv->block_changed) return;
+
 	g_print ("Changed\n");
 
 	GtkTreeIter iter;
@@ -492,7 +496,9 @@ presence_chooser_presence_changed_cb (EmpathyPresenceChooser *chooser)
 	if (match)
 	{
 		g_print ("GOT MATCH\n");
+		priv->block_changed++;
 		gtk_combo_box_set_active_iter (GTK_COMBO_BOX (chooser), &iter);
+		priv->block_changed--;
 	}
 	else
 	{
@@ -511,7 +517,6 @@ presence_chooser_presence_changed_cb (EmpathyPresenceChooser *chooser)
 static gboolean
 presence_chooser_flash_timeout_cb (EmpathyPresenceChooser *chooser)
 {
-#if 0
 	EmpathyPresenceChooserPriv *priv;
 	McPresence                 state;
 	static gboolean            on = FALSE;
@@ -524,12 +529,13 @@ presence_chooser_flash_timeout_cb (EmpathyPresenceChooser *chooser)
 		state = priv->flash_state_2;
 	}
 
-	gtk_image_set_from_icon_name (GTK_IMAGE (priv->image),
-				      empathy_icon_name_for_presence (state),
-				      GTK_ICON_SIZE_MENU);
+	GtkWidget *entry = gtk_bin_get_child (GTK_BIN (chooser));
+	gtk_entry_set_icon_from_icon_name (GTK_ENTRY (entry),
+			GTK_ENTRY_ICON_PRIMARY,
+			empathy_icon_name_for_presence (state));
 
 	on = !on;
-#endif
+
 	return TRUE;
 }
 
@@ -568,12 +574,11 @@ presence_chooser_flash_stop (EmpathyPresenceChooser *chooser,
 		g_source_remove (priv->flash_timeout_id);
 		priv->flash_timeout_id = 0;
 	}
-
-	/*
-	gtk_image_set_from_icon_name (GTK_IMAGE (priv->image),
-				      empathy_icon_name_for_presence (state),
-				      GTK_ICON_SIZE_MENU);
-	 */
+	GtkWidget *entry = gtk_bin_get_child (GTK_BIN (chooser));
+	
+	gtk_entry_set_icon_from_icon_name (GTK_ENTRY (entry),
+			GTK_ENTRY_ICON_PRIMARY,
+			empathy_icon_name_for_presence (state));
 
 	// FIXME - what does this do?
 	// priv->last_state = state;
