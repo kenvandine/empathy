@@ -349,8 +349,8 @@ static void
 presence_chooser_reset_status (EmpathyPresenceChooser *self)
 {
 	/* recover the status that was unset */
-	presence_chooser_presence_changed_cb (self);
 	presence_chooser_set_status_editing (self, FALSE);
+	presence_chooser_presence_changed_cb (self);
 }
 
 static void
@@ -702,6 +702,8 @@ presence_chooser_presence_changed_cb (EmpathyPresenceChooser *chooser)
 	gboolean valid, match_state = FALSE, match = FALSE;
 
 	priv = GET_PRIV (chooser);
+
+	if (priv->editing_status) return;
 
 	priv->state = state = empathy_idle_get_state (priv->idle);
 	status = empathy_idle_get_status (priv->idle);
