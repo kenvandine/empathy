@@ -482,14 +482,7 @@ presence_chooser_changed_cb (GtkComboBox *self, gpointer user_data)
 				icon_name);
 
 		/* preseed the status */
-		if (priv->editing_status)
-		{
-			/* if the user is already in editing mode and changes
-			 * the status type, preseed the text they've already
-			 * entered */
-			/* FIXME: make this work */
-		}
-		else if (priv->previous_type == ENTRY_TYPE_BUILTIN)
+		if (priv->previous_type == ENTRY_TYPE_BUILTIN)
 		{
 			/* if their previous entry was a builtin, don't
 			 * preseed */
