@@ -393,13 +393,11 @@ empathy_presence_chooser_init (EmpathyPresenceChooser *chooser)
 	// FIXME - no!
 	gtk_combo_box_set_active (GTK_COMBO_BOX (chooser), 0);
 
-#if 0
 	priv->idle = empathy_idle_dup_singleton ();
 	presence_chooser_presence_changed_cb (chooser);
 	g_signal_connect_swapped (priv->idle, "notify",
 				  G_CALLBACK (presence_chooser_presence_changed_cb),
 				  chooser);
-#endif
 }
 
 static void
@@ -438,11 +436,12 @@ empathy_presence_chooser_new (void)
 static void
 presence_chooser_presence_changed_cb (EmpathyPresenceChooser *chooser)
 {
-#if 0
 	EmpathyPresenceChooserPriv *priv;
 	McPresence                 state;
 	McPresence                 flash_state;
 	const gchar               *status;
+
+	g_print (" > presence_chooser_presence_changed_cb\n");
 
 	priv = GET_PRIV (chooser);
 
@@ -450,15 +449,71 @@ presence_chooser_presence_changed_cb (EmpathyPresenceChooser *chooser)
 	status = empathy_idle_get_status (priv->idle);
 	flash_state = empathy_idle_get_flash_state (priv->idle);
 
-	presence_chooser_reset_scroll_timeout (chooser);
-	gtk_label_set_text (GTK_LABEL (priv->label), status);
+	g_print ("status = %s\n", status);
+
+	// FIXME - we need to either find an entry in the model or add one
+	GtkTreeModel *model = gtk_combo_box_get_model (GTK_COMBO_BOX (chooser));
+	GtkTreeIter iter;
+	gboolean valid, match_state = FALSE, match = FALSE;
+	for (valid = gtk_tree_model_get_iter_first (model, &iter);
+	     valid;
+	     valid = gtk_tree_model_iter_next (model, &iter))
+	{
+		int m_type;
+		McPresence m_state;
+		char *m_status;
+
+		gtk_tree_model_get (model, &iter,
+				COL_STATE, &m_state,
+				COL_TYPE, &m_type,
+				-1);
+
+		if (m_type == ENTRY_TYPE_CUSTOM)
+		{
+			continue;
+		}
+		else if (!match_state && state == m_state)
+		{
+			/* we are now in the section that can contain our
+			 * match */
+			match_state = TRUE;
+		}
+		else if (match_state && state != m_state)
+		{
+			/* we have passed the section that can contain our
+			 * match */
+			break;
+		}
+
+		gtk_tree_model_get (model, &iter,
+				COL_STATUS_TEXT, &m_status,
+				-1);
+
+		match = !strcmp (status, m_status);
+
+		g_free (m_status);
+
+		if (match) break;
+
+	}
+
+	if (match)
+	{
+		g_print ("GOT MATCH\n");
+	}
+	else
+	{
+		g_print ("NO MATCH\n");
+	}
+
+	//presence_chooser_reset_scroll_timeout (chooser);
+	//gtk_label_set_text (GTK_LABEL (priv->label), status);
 
 	if (flash_state != MC_PRESENCE_UNSET) {
 		presence_chooser_flash_start (chooser, state, flash_state);
 	} else {
 		presence_chooser_flash_stop (chooser, state);
 	}
-#endif
 }
 
 #if 0
