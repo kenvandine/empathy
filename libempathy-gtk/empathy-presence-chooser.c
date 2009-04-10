@@ -346,6 +346,7 @@ presence_chooser_reset_status (EmpathyPresenceChooser *self)
 {
 	/* recover the status that was unset */
 	presence_chooser_presence_changed_cb (self);
+	presence_chooser_set_status_editing (self, FALSE);
 }
 
 static void
