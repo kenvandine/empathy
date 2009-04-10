@@ -260,7 +260,13 @@ set_status_editing (EmpathyPresenceChooser *self, gboolean editing)
 				GTK_ENTRY_ICON_PRIMARY,
 				TRUE);
 
-		// FIXME - move the focus somewhere
+		/* attempt to get the toplevel for this widget */
+		GtkWidget *window = gtk_widget_get_toplevel (GTK_WIDGET (self));
+		if (GTK_WIDGET_TOPLEVEL (window) && GTK_IS_WINDOW (window))
+		{
+			/* unset the focus */
+			gtk_window_set_focus (GTK_WINDOW (window), NULL);
+		}
 
 		priv->editing_status = FALSE;
 	}
