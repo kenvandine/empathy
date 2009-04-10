@@ -227,7 +227,7 @@ set_status_editing (EmpathyPresenceChooser *self, gboolean editing)
 				GTK_STOCK_OK);
 		gtk_entry_set_icon_tooltip_text (GTK_ENTRY (entry),
 				GTK_ENTRY_ICON_SECONDARY,
-				"Set status");
+				_("Set status"));
 		gtk_entry_set_icon_sensitive (GTK_ENTRY (entry),
 				GTK_ENTRY_ICON_PRIMARY,
 				FALSE);
@@ -437,6 +437,11 @@ empathy_presence_chooser_init (EmpathyPresenceChooser *chooser)
 	g_signal_connect_swapped (priv->idle, "notify",
 				  G_CALLBACK (presence_chooser_presence_changed_cb),
 				  chooser);
+
+	g_object_set (chooser,
+			// FIXME: this string sucks
+			"tooltip-text", _("Set your presence and current status"),
+			NULL);
 }
 
 static void
