@@ -698,11 +698,12 @@ presence_chooser_presence_changed_cb (EmpathyPresenceChooser *chooser)
 
 	if (match)
 	{
+		priv->block_changed++;
 		gtk_combo_box_set_active_iter (GTK_COMBO_BOX (chooser), &iter);
+		priv->block_changed--;
 	}
 	else
 	{
-		// FIXME - do we insert the match into the menu?
 		ui_set_custom_state (chooser, state, status);
 	}
 
