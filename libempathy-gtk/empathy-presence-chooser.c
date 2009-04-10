@@ -30,6 +30,7 @@
 #include <glib/gi18n-lib.h>
 #include <gtk/gtk.h>
 #include <glade/glade.h>
+#include <gdk/gdkkeysyms.h>
 
 #include <telepathy-glib/util.h>
 #include <libmissioncontrol/mc-enum-types.h>
@@ -296,6 +297,25 @@ entry_activate_cb (EmpathyPresenceChooser	*self,
 	mc_set_custom_state (self);
 }
 
+static gboolean
+entry_key_press_event_cb (EmpathyPresenceChooser	*self,
+		          GdkEventKey			*event,
+			  GtkWidget			*entry)
+{
+	EmpathyPresenceChooserPriv *priv = GET_PRIV (self);
+
+	if (priv->editing_status && event->keyval == GDK_Escape)
+	{
+		/* the user pressed Escape, undo the editing */
+		set_status_editing (self, FALSE);
+		presence_chooser_presence_changed_cb (self);
+
+		return TRUE;
+	}
+
+	return FALSE; /* send this event elsewhere */
+}
+
 static void
 changed_cb (GtkComboBox *self, gpointer user_data)
 {
@@ -375,6 +395,9 @@ empathy_presence_chooser_init (EmpathyPresenceChooser *chooser)
 			G_CONNECT_SWAPPED);
 	g_signal_connect_object (entry, "activate",
 			G_CALLBACK (entry_activate_cb), chooser,
+			G_CONNECT_SWAPPED);
+	g_signal_connect_object (entry, "key-press-event",
+			G_CALLBACK (entry_key_press_event_cb), chooser,
 			G_CONNECT_SWAPPED);
 	// FIXME - should this also happen when the user presses TAB ?
 

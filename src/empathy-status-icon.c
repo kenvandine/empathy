@@ -589,7 +589,7 @@ empathy_status_icon_new (GtkWindow *window, gboolean hide_contact_list)
 
 	priv->window = g_object_ref (window);
 
-	g_signal_connect (priv->window, "key-press-event",
+	g_signal_connect_after (priv->window, "key-press-event",
 			  G_CALLBACK (status_icon_key_press_event_cb),
 			  icon);
 
