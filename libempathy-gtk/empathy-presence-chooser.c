@@ -61,6 +61,7 @@ typedef struct {
 	int          block_changed;
 
 	McPresence   state;
+	int          previous_type;
 
 	McPresence   flash_state_1;
 	McPresence   flash_state_2;
@@ -362,6 +363,20 @@ entry_key_press_event_cb (EmpathyPresenceChooser	*self,
 }
 
 static void
+text_changed_cb (EmpathyPresenceChooser *self, gpointer user_data)
+{
+	EmpathyPresenceChooserPriv *priv = GET_PRIV (self);
+
+	if (priv->block_changed) return;
+
+	/* the combo is being edited to a custom entry */
+	if (!priv->editing_status)
+	{
+		set_status_editing (self, TRUE);
+	}
+}
+
+static void
 changed_cb (GtkComboBox *self, gpointer user_data)
 {
 	EmpathyPresenceChooserPriv *priv = GET_PRIV (self);
@@ -377,11 +392,6 @@ changed_cb (GtkComboBox *self, gpointer user_data)
 	GtkTreeModel *model = gtk_combo_box_get_model (self);
 	if (!gtk_combo_box_get_active_iter (self, &iter))
 	{
-		/* the combo is being edited to a custom entry */
-		if (!priv->editing_status)
-		{
-			set_status_editing (EMPATHY_PRESENCE_CHOOSER (self), TRUE);
-		}
 		return;
 	}
 
@@ -397,8 +407,6 @@ changed_cb (GtkComboBox *self, gpointer user_data)
 	/* some types of status aren't editable, set the editability of the
 	 * entry appropriately. Unless we're just about to reset it anyway,
 	 * in which case, don't fiddle with it */
-	/* FIXME: there is a bug here, if we start in the Hidden state, it
-	 * will be editable. It's not something that often occurs though. */
 	if (type != ENTRY_TYPE_EDIT_CUSTOM)
 	{
 		gtk_editable_set_editable (GTK_EDITABLE (entry), customisable);
@@ -425,15 +433,18 @@ changed_cb (GtkComboBox *self, gpointer user_data)
 				icon_name);
 
 		/* preseed the status */
-		const char *status = empathy_idle_get_status (priv->idle);
-		priv->block_set_editing++;
-		gtk_entry_set_text (GTK_ENTRY (entry), status);
-		priv->block_set_editing--;
+		if (priv->previous_type == ENTRY_TYPE_BUILTIN)
+		{
+			gtk_entry_set_text (GTK_ENTRY (entry), "");
+		}
+		else
+		{
+			const char *status = empathy_idle_get_status (priv->idle);
+			gtk_entry_set_text (GTK_ENTRY (entry), status);
+		}
 
 		/* grab the focus */
 		gtk_widget_grab_focus (entry);
-
-		set_status_editing (EMPATHY_PRESENCE_CHOOSER (self), TRUE);
 	}
 	else
 	{
@@ -451,6 +462,10 @@ changed_cb (GtkComboBox *self, gpointer user_data)
 		g_free (status);
 	}
 
+	if (type != ENTRY_TYPE_EDIT_CUSTOM)
+	{
+		priv->previous_type = type;
+	}
 	g_free (icon_name);
 }
 
@@ -535,7 +550,7 @@ empathy_presence_chooser_init (EmpathyPresenceChooser *chooser)
 	g_signal_connect (chooser, "changed",
 			G_CALLBACK (changed_cb), NULL);
 	g_signal_connect_swapped (entry, "changed",
-			G_CALLBACK (changed_cb), chooser);
+			G_CALLBACK (text_changed_cb), chooser);
 	g_signal_connect_swapped (entry, "focus-out-event",
 			G_CALLBACK (focus_out_cb), chooser);
 
@@ -644,9 +659,7 @@ presence_chooser_presence_changed_cb (EmpathyPresenceChooser *chooser)
 
 	if (match)
 	{
-		priv->block_changed++;
 		gtk_combo_box_set_active_iter (GTK_COMBO_BOX (chooser), &iter);
-		priv->block_changed--;
 	}
 	else
 	{
