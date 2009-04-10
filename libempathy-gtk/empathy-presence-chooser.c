@@ -362,6 +362,25 @@ entry_key_press_event_cb (EmpathyPresenceChooser	*self,
 	return FALSE; /* send this event elsewhere */
 }
 
+static gboolean
+entry_button_press_event_cb (EmpathyPresenceChooser *self,
+                             GdkEventButton         *event,
+			     GtkWidget              *entry)
+{
+	EmpathyPresenceChooserPriv *priv = GET_PRIV (self);
+
+	if (!priv->editing_status && event->button == 1)
+	{
+		set_status_editing (self, TRUE);
+		gtk_widget_grab_focus (entry);
+		gtk_editable_select_region (GTK_EDITABLE (entry), 0, -1);
+
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
 static void
 text_changed_cb (EmpathyPresenceChooser *self, gpointer user_data)
 {
@@ -525,7 +544,9 @@ empathy_presence_chooser_init (EmpathyPresenceChooser *chooser)
 	g_signal_connect_object (entry, "key-press-event",
 			G_CALLBACK (entry_key_press_event_cb), chooser,
 			G_CONNECT_SWAPPED);
-	// FIXME - should this also happen when the user presses TAB ?
+	g_signal_connect_object (entry, "button-press-event",
+			G_CALLBACK (entry_button_press_event_cb), chooser,
+			G_CONNECT_SWAPPED);
 
 	GtkCellRenderer *renderer;
 	gtk_cell_layout_clear (GTK_CELL_LAYOUT (chooser));
