@@ -40,12 +40,12 @@ typedef struct _EmpathyPresenceChooser      EmpathyPresenceChooser;
 typedef struct _EmpathyPresenceChooserClass EmpathyPresenceChooserClass;
 
 struct _EmpathyPresenceChooser {
-	GtkToggleButton parent;
+	GtkComboBoxEntry parent;
 	gpointer priv;
 };
 
 struct _EmpathyPresenceChooserClass {
-	GtkToggleButtonClass parent_class;
+	GtkComboBoxEntryClass parent_class;
 };
 
 GType      empathy_presence_chooser_get_type           (void) G_GNUC_CONST;

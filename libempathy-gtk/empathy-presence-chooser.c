@@ -141,7 +141,7 @@ static void            presence_chooser_custom_activate_cb     (GtkWidget       
 								gpointer                    user_data);
 static void            presence_chooser_dialog_show            (void);
 
-G_DEFINE_TYPE (EmpathyPresenceChooser, empathy_presence_chooser, GTK_TYPE_TOGGLE_BUTTON);
+G_DEFINE_TYPE (EmpathyPresenceChooser, empathy_presence_chooser, GTK_TYPE_COMBO_BOX_ENTRY);
 
 static void
 empathy_presence_chooser_class_init (EmpathyPresenceChooserClass *klass)
@@ -153,61 +153,220 @@ empathy_presence_chooser_class_init (EmpathyPresenceChooserClass *klass)
 	g_type_class_add_private (object_class, sizeof (EmpathyPresenceChooserPriv));
 }
 
+enum
+{
+	COL_STATE_ICON_NAME,
+	COL_STATE,
+	COL_STATUS_TEXT,
+	COL_DISPLAY_MARKUP,
+	COL_TYPE,
+	N_COLUMNS
+};
+
+enum
+{
+	ENTRY_TYPE_BUILTIN,
+	ENTRY_TYPE_SAVED,
+	ENTRY_TYPE_CUSTOM,
+};
+
+static GtkTreeModel *
+create_model (void)
+{
+	GtkListStore *store = gtk_list_store_new (N_COLUMNS,
+			G_TYPE_STRING,		/* COL_STATE_ICON_NAME */
+			MC_TYPE_PRESENCE,	/* COL_STATE */
+			G_TYPE_STRING,		/* COL_STATUS_TEXT */
+			G_TYPE_STRING,		/* COL_DISPLAY_MARKUP */
+			G_TYPE_INT);		/* COL_TYPE */
+	
+	GtkTreeIter iter;
+	
+	int i;
+	for (i = 0; i < G_N_ELEMENTS (states); i += 2) {
+		GList       *list, *l;
+
+		const char *status = empathy_presence_get_default_message (states[i]);
+		const char *icon_name = empathy_icon_name_for_presence (states[i]);
+
+		gtk_list_store_append (store, &iter);
+		gtk_list_store_set (store, &iter,
+				COL_STATE_ICON_NAME, icon_name,
+				COL_STATE, states[i],
+				COL_STATUS_TEXT, status,
+				COL_DISPLAY_MARKUP, status,
+				COL_TYPE, ENTRY_TYPE_BUILTIN,
+				-1);
+
+		if (states[i+1]) {
+			/* Set custom messages if wanted */
+			list = empathy_status_presets_get (states[i], 5);
+			for (l = list; l; l = l->next) {
+				gtk_list_store_append (store, &iter);
+				gtk_list_store_set (store, &iter,
+						COL_STATE_ICON_NAME, icon_name,
+						COL_STATE, states[i],
+						COL_STATUS_TEXT, l->data,
+						COL_DISPLAY_MARKUP, l->data,
+						COL_TYPE, ENTRY_TYPE_SAVED,
+						-1);
+			}
+			g_list_free (list);
+		
+			gtk_list_store_append (store, &iter);
+			gtk_list_store_set (store, &iter,
+					COL_STATE_ICON_NAME, icon_name,
+					COL_STATE, states[i],
+					COL_STATUS_TEXT, "",
+					COL_DISPLAY_MARKUP, "<i>Custom Message...</i>",
+					COL_TYPE, ENTRY_TYPE_CUSTOM,
+					-1);
+		}
+
+	}
+
+	return GTK_TREE_MODEL (store);
+}
+
+static void
+popup_shown_cb (GObject *self, GParamSpec *pspec, gpointer user_data)
+{
+	gboolean shown;
+	g_object_get (self, "popup-shown", &shown, NULL);
+
+	if (!shown) return;
+
+	g_print ("popup shown\n");
+
+	GtkTreeModel *model = create_model ();
+
+	gtk_combo_box_set_model (GTK_COMBO_BOX (self), GTK_TREE_MODEL (model));
+	
+	g_object_unref (model);
+}
+
+static void
+set_status_editing (EmpathyPresenceChooser *self, gboolean editing)
+{
+	GtkWidget *entry = gtk_bin_get_child (GTK_BIN (self));
+
+	if (editing)
+	{
+		gtk_entry_set_icon_from_stock (GTK_ENTRY (entry),
+				GTK_ENTRY_ICON_SECONDARY,
+				GTK_STOCK_OK);
+		gtk_entry_set_icon_tooltip_text (GTK_ENTRY (entry),
+				GTK_ENTRY_ICON_SECONDARY,
+				"Set status");
+		// FIXME - is this nice?
+		gtk_entry_set_icon_sensitive (GTK_ENTRY (entry),
+				GTK_ENTRY_ICON_PRIMARY,
+				FALSE);
+	}
+	else
+	{
+		gtk_entry_set_icon_from_stock (GTK_ENTRY (entry),
+				GTK_ENTRY_ICON_SECONDARY,
+				NULL);
+		gtk_entry_set_icon_tooltip_text (GTK_ENTRY (entry),
+				GTK_ENTRY_ICON_SECONDARY,
+				NULL);
+		// FIXME - also this
+		gtk_entry_set_icon_sensitive (GTK_ENTRY (entry),
+				GTK_ENTRY_ICON_PRIMARY,
+				TRUE);
+	}
+}
+
+static void
+changed_cb (GtkComboBox *self, gpointer user_data)
+{
+	g_print ("Changed\n");
+
+	GtkTreeIter iter;
+	char *icon_name;
+	int type = -1;
+
+	GtkTreeModel *model = gtk_combo_box_get_model (self);
+	if (!gtk_combo_box_get_active_iter (self, &iter))
+	{
+		g_print ("not an iter!\n");
+		return;
+	}
+
+	gtk_tree_model_get (model, &iter,
+			COL_STATE_ICON_NAME, &icon_name,
+			COL_TYPE, &type,
+			-1);
+
+	GtkWidget *entry = gtk_bin_get_child (GTK_BIN (self));
+	gtk_entry_set_icon_from_icon_name (GTK_ENTRY (entry),
+			GTK_ENTRY_ICON_PRIMARY,
+			icon_name);
+
+	if (type == ENTRY_TYPE_CUSTOM)
+	{
+		/* grab the focus */
+		gtk_widget_grab_focus (entry);
+		set_status_editing (self, TRUE);
+	}
+
+	g_free (icon_name);
+}
+
 static void
 empathy_presence_chooser_init (EmpathyPresenceChooser *chooser)
 {
-	GtkWidget                  *arrow;
-	GtkWidget                  *alignment;
+	//GtkWidget                  *arrow;
+	//GtkWidget                  *alignment;
 	EmpathyPresenceChooserPriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (chooser,
 		EMPATHY_TYPE_PRESENCE_CHOOSER, EmpathyPresenceChooserPriv);
 
+
 	chooser->priv = priv;
-	gtk_button_set_relief (GTK_BUTTON (chooser), GTK_RELIEF_NONE);
-	gtk_button_set_focus_on_click (GTK_BUTTON (chooser), FALSE);
+	
+	GtkTreeModel *model = create_model ();
 
-	alignment = gtk_alignment_new (0.5, 0.5, 1, 1);
-	gtk_widget_show (alignment);
-	gtk_container_add (GTK_CONTAINER (chooser), alignment);
-	gtk_alignment_set_padding (GTK_ALIGNMENT (alignment), 0, 0, 1, 0);
+	gtk_combo_box_set_model (GTK_COMBO_BOX (chooser), GTK_TREE_MODEL (model));
+	gtk_combo_box_entry_set_text_column (GTK_COMBO_BOX_ENTRY (chooser), COL_STATUS_TEXT);
+	
+	GtkWidget *entry = gtk_bin_get_child (GTK_BIN (chooser));
+	gtk_entry_set_icon_activatable (GTK_ENTRY (entry),
+			GTK_ENTRY_ICON_PRIMARY, FALSE);
 
-	priv->hbox = gtk_hbox_new (FALSE, 1);
-	gtk_widget_show (priv->hbox);
-	gtk_container_add (GTK_CONTAINER (alignment), priv->hbox);
+	GtkCellRenderer *renderer;
+	gtk_cell_layout_clear (GTK_CELL_LAYOUT (chooser));
 
-	priv->image = gtk_image_new ();
-	gtk_widget_show (priv->image);
-	gtk_box_pack_start (GTK_BOX (priv->hbox), priv->image, FALSE, TRUE, 0);
+	renderer = gtk_cell_renderer_pixbuf_new ();
+	gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (chooser), renderer, FALSE);
+	gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (chooser), renderer,
+			"icon-name", COL_STATE_ICON_NAME,
+			NULL);
+	g_object_set (renderer, "stock-size", GTK_ICON_SIZE_MENU, NULL);
 
-	priv->label = gtk_label_new (NULL);
-	gtk_widget_show (priv->label);
-	gtk_box_pack_start (GTK_BOX (priv->hbox), priv->label, TRUE, TRUE, 0);
-	gtk_label_set_ellipsize (GTK_LABEL (priv->label), PANGO_ELLIPSIZE_END);
-	gtk_misc_set_alignment (GTK_MISC (priv->label), 0, 0.5);
-	gtk_misc_set_padding (GTK_MISC (priv->label), 4, 1);
+	renderer = gtk_cell_renderer_text_new ();
+	gtk_cell_layout_pack_start (GTK_CELL_LAYOUT (chooser), renderer, TRUE);
+	gtk_cell_layout_set_attributes (GTK_CELL_LAYOUT (chooser), renderer,
+			"markup", COL_DISPLAY_MARKUP,
+			NULL);
 
-	alignment = gtk_alignment_new (0.5, 0.5, 1, 1);
-	gtk_widget_show (alignment);
-	gtk_box_pack_start (GTK_BOX (priv->hbox), alignment, FALSE, FALSE, 0);
+	g_object_unref (model);
 
-	arrow = gtk_arrow_new (GTK_ARROW_DOWN, GTK_SHADOW_OUT);
-	gtk_widget_show (arrow);
-	gtk_container_add (GTK_CONTAINER (alignment), arrow);
+	g_signal_connect (chooser, "notify::popup-shown",
+			G_CALLBACK (popup_shown_cb), NULL);
+	g_signal_connect (chooser, "changed",
+			G_CALLBACK (changed_cb), NULL);
 
-	g_signal_connect (chooser, "toggled",
-			  G_CALLBACK (presence_chooser_toggled_cb),
-			  NULL);
-	g_signal_connect (chooser, "button-press-event",
-			  G_CALLBACK (presence_chooser_button_press_event_cb),
-			  NULL);
-	g_signal_connect (chooser, "scroll-event",
-			  G_CALLBACK (presence_chooser_scroll_event_cb),
-			  NULL);
+	// FIXME - no!
+	gtk_combo_box_set_active (GTK_COMBO_BOX (chooser), 0);
 
+#if 0
 	priv->idle = empathy_idle_dup_singleton ();
 	presence_chooser_presence_changed_cb (chooser);
 	g_signal_connect_swapped (priv->idle, "notify",
 				  G_CALLBACK (presence_chooser_presence_changed_cb),
 				  chooser);
+#endif
 }
 
 static void
@@ -246,6 +405,7 @@ empathy_presence_chooser_new (void)
 static void
 presence_chooser_presence_changed_cb (EmpathyPresenceChooser *chooser)
 {
+#if 0
 	EmpathyPresenceChooserPriv *priv;
 	McPresence                 state;
 	McPresence                 flash_state;
@@ -265,8 +425,10 @@ presence_chooser_presence_changed_cb (EmpathyPresenceChooser *chooser)
 	} else {
 		presence_chooser_flash_stop (chooser, state);
 	}
+#endif
 }
 
+#if 0
 static void
 presence_chooser_reset_scroll_timeout (EmpathyPresenceChooser *chooser)
 {
@@ -282,7 +444,9 @@ presence_chooser_reset_scroll_timeout (EmpathyPresenceChooser *chooser)
 	g_free (priv->scroll_status);
 	priv->scroll_status = NULL;
 }
+#endif
 
+#if 0
 static gboolean
 presence_chooser_scroll_timeout_cb (EmpathyPresenceChooser *chooser)
 {
@@ -301,12 +465,14 @@ presence_chooser_scroll_timeout_cb (EmpathyPresenceChooser *chooser)
 
 	return FALSE;
 }
+#endif
 
 static gboolean
 presence_chooser_scroll_event_cb (EmpathyPresenceChooser *chooser,
 				  GdkEventScroll        *event,
 				  gpointer               user_data)
 {
+#if 0
 	EmpathyPresenceChooserPriv *priv;
 	GList                     *list, *l;
 	const gchar               *current_status;
@@ -383,6 +549,7 @@ presence_chooser_scroll_event_cb (EmpathyPresenceChooser *chooser,
 	g_list_foreach (list, (GFunc) g_free, NULL);
 	g_list_free (list);
 
+#endif
 	return TRUE;
 }
 
@@ -435,6 +602,7 @@ presence_chooser_state_and_status_new (McPresence   state,
 static gboolean
 presence_chooser_flash_timeout_cb (EmpathyPresenceChooser *chooser)
 {
+#if 0
 	EmpathyPresenceChooserPriv *priv;
 	McPresence                 state;
 	static gboolean            on = FALSE;
@@ -452,7 +620,7 @@ presence_chooser_flash_timeout_cb (EmpathyPresenceChooser *chooser)
 				      GTK_ICON_SIZE_MENU);
 
 	on = !on;
-
+#endif
 	return TRUE;
 }
 
@@ -461,6 +629,7 @@ presence_chooser_flash_start (EmpathyPresenceChooser *chooser,
 			      McPresence             state_1,
 			      McPresence             state_2)
 {
+#if 0
 	EmpathyPresenceChooserPriv *priv;
 
 	g_return_if_fail (EMPATHY_IS_PRESENCE_CHOOSER (chooser));
@@ -475,12 +644,14 @@ presence_chooser_flash_start (EmpathyPresenceChooser *chooser,
 							(GSourceFunc) presence_chooser_flash_timeout_cb,
 							chooser);
 	}
+#endif
 }
 
 static void
 presence_chooser_flash_stop (EmpathyPresenceChooser *chooser,
 			     McPresence             state)
 {
+#if 0
 	EmpathyPresenceChooserPriv *priv;
 
 	g_return_if_fail (EMPATHY_IS_PRESENCE_CHOOSER (chooser));
@@ -497,151 +668,7 @@ presence_chooser_flash_stop (EmpathyPresenceChooser *chooser,
 				      GTK_ICON_SIZE_MENU);
 
 	priv->last_state = state;
-}
-
-static gboolean
-presence_chooser_button_press_event_cb (GtkWidget      *chooser,
-					GdkEventButton *event,
-					gpointer        user_data)
-{
-	if (event->button != 1 || event->type != GDK_BUTTON_PRESS) {
-		return FALSE;
-	}
-
-	if (!gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (chooser))) {
-			gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (chooser), TRUE);
-			return TRUE;
-		}
-
-	return FALSE;
-}
-
-static void
-presence_chooser_toggled_cb (GtkWidget *chooser,
-			     gpointer   user_data)
-{
-	if (gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (chooser))) {
-		presence_chooser_menu_popup (EMPATHY_PRESENCE_CHOOSER (chooser));
-	} else {
-		presence_chooser_menu_popdown (EMPATHY_PRESENCE_CHOOSER (chooser));
-	}
-}
-
-static void
-presence_chooser_menu_popup (EmpathyPresenceChooser *chooser)
-{
-	EmpathyPresenceChooserPriv *priv;
-	GtkWidget                 *menu;
-
-	priv = GET_PRIV (chooser);
-
-	if (priv->menu) {
-		return;
-	}
-
-	menu = empathy_presence_chooser_create_menu ();
-
-	g_signal_connect_after (menu, "selection-done",
-				G_CALLBACK (presence_chooser_menu_selection_done_cb),
-				chooser);
-
-	g_signal_connect (menu, "destroy",
-			  G_CALLBACK (presence_chooser_menu_destroy_cb),
-			  chooser);
-
-	gtk_menu_attach_to_widget (GTK_MENU (menu),
-				   GTK_WIDGET (chooser),
-				   presence_chooser_menu_detach);
-
-	gtk_menu_popup (GTK_MENU (menu),
-			NULL, NULL,
-			(GtkMenuPositionFunc) presence_chooser_menu_align_func,
-			chooser,
-			1,
-			gtk_get_current_event_time ());
-
-	priv->menu = menu;
-}
-
-static void
-presence_chooser_menu_popdown (EmpathyPresenceChooser *chooser)
-{
-	EmpathyPresenceChooserPriv *priv;
-
-	priv = GET_PRIV (chooser);
-
-	if (priv->menu) {
-		gtk_widget_destroy (priv->menu);
-	}
-}
-
-static void
-presence_chooser_menu_selection_done_cb (GtkMenuShell          *menushell,
-					 EmpathyPresenceChooser *chooser)
-{
-	gtk_widget_destroy (GTK_WIDGET (menushell));
-
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (chooser), FALSE);
-}
-
-static void
-presence_chooser_menu_destroy_cb (GtkWidget             *menu,
-				  EmpathyPresenceChooser *chooser)
-{
-	EmpathyPresenceChooserPriv *priv;
-
-	priv = GET_PRIV (chooser);
-
-	priv->menu = NULL;
-}
-
-static void
-presence_chooser_menu_detach (GtkWidget *attach_widget,
-			      GtkMenu   *menu)
-{
-	/* We don't need to do anything, but attaching the menu means
-	 * we don't own the ref count and it is cleaned up properly.
-	 */
-}
-
-static void
-presence_chooser_menu_align_func (GtkMenu   *menu,
-				  gint      *x,
-				  gint      *y,
-				  gboolean  *push_in,
-				  GtkWidget *widget)
-{
-	GtkRequisition  req;
-	GdkScreen      *screen;
-	gint            screen_height;
-
-	gtk_widget_size_request (GTK_WIDGET (menu), &req);
-
-	gdk_window_get_origin (widget->window, x, y);
-
-	*x += widget->allocation.x + 1;
-	*y += widget->allocation.y;
-
-	screen = gtk_widget_get_screen (GTK_WIDGET (menu));
-	screen_height = gdk_screen_get_height (screen);
-
-	if (req.height > screen_height) {
-		/* Too big for screen height anyway. */
-		*y = 0;
-		return;
-	}
-
-	if ((*y + req.height + widget->allocation.height) > screen_height) {
-		/* Can't put it below the button. */
-		*y -= req.height;
-		*y += 1;
-	} else {
-		/* Put menu below button. */
-		*y += widget->allocation.height;
-		*y -= 1;
-	}
-
-	*push_in = FALSE;
+#endif
 }
 
 GtkWidget *
