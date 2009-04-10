@@ -311,7 +311,7 @@ changed_cb (GtkComboBox *self, gpointer user_data)
 	if (!gtk_combo_box_get_active_iter (self, &iter))
 	{
 		/* the combo is being edited to a custom entry */
-		set_status_editing (self, TRUE);
+		set_status_editing (EMPATHY_PRESENCE_CHOOSER (self), TRUE);
 		return;
 	}
 
@@ -329,13 +329,13 @@ changed_cb (GtkComboBox *self, gpointer user_data)
 	{
 		/* grab the focus */
 		gtk_widget_grab_focus (entry);
-		set_status_editing (self, TRUE);
+		set_status_editing (EMPATHY_PRESENCE_CHOOSER (self), TRUE);
 	}
 	else
 	{
 		/* just in case we were setting a new status when
 		 * things were changed */
-		set_status_editing (self, FALSE);
+		set_status_editing (EMPATHY_PRESENCE_CHOOSER (self), FALSE);
 	}
 
 	g_free (icon_name);
