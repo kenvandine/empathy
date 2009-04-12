@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: empathy.HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=empathy&component=general\n"
-"POT-Creation-Date: 2009-03-09 21:52+0000\n"
-"PO-Revision-Date: 2009-03-17 08:19+0100\n"
+"POT-Creation-Date: 2009-04-10 16:55+0000\n"
+"PO-Revision-Date: 2009-04-12 15:54+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -622,77 +622,82 @@ msgstr "Todos los archivos"
 msgid "Click to enlarge"
 msgstr "Pulse para agrandar"
 
-#: ../libempathy-gtk/empathy-chat.c:498
+#. This is an unknown command, display a message to the user
+#: ../libempathy-gtk/empathy-chat.c:378
+msgid "Unsupported command"
+msgstr "Comando no soportado"
+
+#: ../libempathy-gtk/empathy-chat.c:506
 msgid "offline"
 msgstr "desconectado"
 
-#: ../libempathy-gtk/empathy-chat.c:501
+#: ../libempathy-gtk/empathy-chat.c:509
 msgid "invalid contact"
 msgstr "contacto no válido"
 
-#: ../libempathy-gtk/empathy-chat.c:504
+#: ../libempathy-gtk/empathy-chat.c:512
 msgid "permission denied"
 msgstr "permiso denegado"
 
-#: ../libempathy-gtk/empathy-chat.c:507
+#: ../libempathy-gtk/empathy-chat.c:515
 msgid "too long message"
 msgstr "mensaje demasiado largo"
 
-#: ../libempathy-gtk/empathy-chat.c:510
+#: ../libempathy-gtk/empathy-chat.c:518
 msgid "not implemented"
 msgstr "no implementado"
 
-#: ../libempathy-gtk/empathy-chat.c:513
+#: ../libempathy-gtk/empathy-chat.c:521
 msgid "unknown"
 msgstr "desconocido"
 
-#: ../libempathy-gtk/empathy-chat.c:517
+#: ../libempathy-gtk/empathy-chat.c:525
 #, c-format
 msgid "Error sending message '%s': %s"
 msgstr "Error al enviar el mensaje «%s»: %s"
 
-#: ../libempathy-gtk/empathy-chat.c:547
+#: ../libempathy-gtk/empathy-chat.c:555
 #, c-format
 msgid "Topic set to: %s"
 msgstr "El tema se ha establecido a: %s"
 
-#: ../libempathy-gtk/empathy-chat.c:549
+#: ../libempathy-gtk/empathy-chat.c:557
 msgid "No topic defined"
 msgstr "No se ha definido el tema"
 
-#: ../libempathy-gtk/empathy-chat.c:964
+#: ../libempathy-gtk/empathy-chat.c:972
 msgid "Insert Smiley"
 msgstr "Insertar emoticono"
 
 #. send button
-#: ../libempathy-gtk/empathy-chat.c:982
+#: ../libempathy-gtk/empathy-chat.c:990
 #: ../libempathy-gtk/empathy-ui-utils.c:1559
 msgid "_Send"
 msgstr "E_nviar"
 
-#: ../libempathy-gtk/empathy-chat.c:1016
+#: ../libempathy-gtk/empathy-chat.c:1024
 msgid "_Check Word Spelling..."
 msgstr "_Comprobar ortografía…"
 
-#: ../libempathy-gtk/empathy-chat.c:1134
+#: ../libempathy-gtk/empathy-chat.c:1142
 #, c-format
 msgid "%s has joined the room"
 msgstr "%s ha entrado en la sala"
 
-#: ../libempathy-gtk/empathy-chat.c:1137
+#: ../libempathy-gtk/empathy-chat.c:1145
 #, c-format
 msgid "%s has left the room"
 msgstr "%s ha dejado la sala"
 
-#: ../libempathy-gtk/empathy-chat.c:1251 ../src/empathy-call-window.c:764
+#: ../libempathy-gtk/empathy-chat.c:1260 ../src/empathy-call-window.c:764
 msgid "Disconnected"
 msgstr "Desconectado"
 
-#: ../libempathy-gtk/empathy-chat.c:1647
+#: ../libempathy-gtk/empathy-chat.c:1657
 msgid "Connected"
 msgstr "Conectado"
 
-#: ../libempathy-gtk/empathy-chat.c:1697
+#: ../libempathy-gtk/empathy-chat.c:1707
 #: ../libempathy-gtk/empathy-log-window.c:505
 msgid "Conversation"
 msgstr "Conversación"
@@ -814,19 +819,19 @@ msgstr "_Invitar a la sala"
 msgid "Select a contact"
 msgstr "Seleccionar un contacto"
 
-#: ../libempathy-gtk/empathy-contact-widget.c:358
+#: ../libempathy-gtk/empathy-contact-widget.c:361
 msgid "Save Avatar"
 msgstr "Guardar avatar"
 
-#: ../libempathy-gtk/empathy-contact-widget.c:414
+#: ../libempathy-gtk/empathy-contact-widget.c:417
 msgid "Unable to save avatar"
 msgstr "No se pudo guardar el avatar"
 
-#: ../libempathy-gtk/empathy-contact-widget.c:895
+#: ../libempathy-gtk/empathy-contact-widget.c:912
 msgid "Select"
 msgstr "Seleccionar"
 
-#: ../libempathy-gtk/empathy-contact-widget.c:904
+#: ../libempathy-gtk/empathy-contact-widget.c:921
 #: ../src/empathy-main-window.c:991
 msgid "Group"
 msgstr "Grupo"
@@ -928,7 +933,7 @@ msgid "SSL"
 msgstr "SSL"
 
 #: ../libempathy-gtk/empathy-log-window.c:498
-#: ../src/empathy-import-dialog.c:277
+#: ../src/empathy-import-dialog.c:282
 msgid "Account"
 msgstr "Cuenta"
 
@@ -971,8 +976,34 @@ msgstr "ID del contacto:"
 msgid "New Conversation"
 msgstr "Conversación nueva"
 
+#. COL_STATE_ICON_NAME
+#. COL_STATE
+#. COL_STATUS_TEXT
+#. COL_DISPLAY_MARKUP
+#. COL_STATUS_CUSTOMISABLE
+#. COL_TYPE
+#: ../libempathy-gtk/empathy-presence-chooser.c:161
+#| msgid "Custom messages..."
+msgid "Custom Message..."
+msgstr "Mensaje personalizado…"
+
+#: ../libempathy-gtk/empathy-presence-chooser.c:217
+#| msgid "Custom messages..."
+msgid "Edit Custom Messages..."
+msgstr "Editar mensajes personalizados…"
+
+#: ../libempathy-gtk/empathy-presence-chooser.c:269
+#| msgid "Status"
+msgid "Set status"
+msgstr "Establecer estado"
+
+#. FIXME: this string sucks
+#: ../libempathy-gtk/empathy-presence-chooser.c:655
+msgid "Set your presence and current status"
+msgstr "Establecer su presencia y estado actual"
+
 #. Custom messages
-#: ../libempathy-gtk/empathy-presence-chooser.c:685
+#: ../libempathy-gtk/empathy-presence-chooser.c:874
 msgid "Custom messages..."
 msgstr "Mensajes personalizados…"
 
@@ -1410,7 +1441,7 @@ msgstr "Ya tengo una cuenta que quiero usar"
 
 #: ../src/empathy-accounts-dialog.glade.h:7
 msgid "Import Accounts..."
-msgstr "Importar cuentas..."
+msgstr "Importar cuentas…"
 
 #: ../src/empathy-accounts-dialog.glade.h:8
 msgid ""
@@ -1458,13 +1489,14 @@ msgstr "Entrada de vídeo"
 
 #: ../src/empathy-call-window.c:588
 msgid "Connecting..."
-msgstr "Conectando..."
+msgstr "Conectando…"
 
 #. Translators: number of minutes:seconds the caller has been connected
 #: ../src/empathy-call-window.c:844
 #, c-format
-msgid "Connected -- %d:%02dm"
-msgstr "Conectado -- %d:%02dm"
+#| msgid "Connected -- %d:%02dm"
+msgid "Connected — %d:%02dm"
+msgstr "Conectado — %d:%02dm"
 
 #: ../src/empathy-call-window.glade.h:1
 msgid "Hang up"
@@ -1546,7 +1578,7 @@ msgstr "Con_tacto"
 
 #: ../src/empathy-chat-window.glade.h:11 ../src/empathy-main-window.glade.h:10
 msgid "_Contents"
-msgstr "_Índice"
+msgstr "Índ_ice"
 
 #: ../src/empathy-chat-window.glade.h:12
 msgid "_Conversation"
@@ -1662,7 +1694,7 @@ msgid "%s is inviting you to join %s"
 msgstr "%s le está invitando a unirse a %s"
 
 #. Decline button
-#: ../src/empathy-event-manager.c:709 ../src/empathy-ft-manager.c:1031
+#: ../src/empathy-event-manager.c:709 ../src/empathy-ft-manager.c:1032
 msgid "_Decline"
 msgstr "_Rechazar"
 
@@ -1830,13 +1862,14 @@ msgstr "tamaño desconocido"
 msgid "%s would like to send you a file"
 msgstr "%s quiere enviarle un archivo"
 
-#: ../src/empathy-ft-manager.c:1022
+#. Translators: the first %s is the file name, the second %s is the file size
+#: ../src/empathy-ft-manager.c:1023
 #, c-format
 msgid "Do you want to accept the file \"%s\" (%s)?"
 msgstr "¿Quiere aceptar el archivo «%s» (%s)?"
 
 #. Accept button
-#: ../src/empathy-ft-manager.c:1040
+#: ../src/empathy-ft-manager.c:1041
 msgid "_Accept"
 msgstr "_Aceptar"
 
@@ -1851,19 +1884,19 @@ msgstr ""
 "lista"
 
 #. Translators: this is the header of a treeview column
-#: ../src/empathy-import-dialog.c:255
+#: ../src/empathy-import-dialog.c:260
 msgid "Import"
 msgstr "Importar"
 
-#: ../src/empathy-import-dialog.c:264
+#: ../src/empathy-import-dialog.c:269
 msgid "Protocol"
 msgstr "Protocolo"
 
-#: ../src/empathy-import-dialog.c:290
+#: ../src/empathy-import-dialog.c:295
 msgid "Source"
 msgstr "Origen"
 
-#: ../src/empathy-import-dialog.c:378
+#: ../src/empathy-import-dialog.c:389
 msgid ""
 "No accounts to import could be found. Empathy currently only supports "
 "importing accounts from Pidgin."
