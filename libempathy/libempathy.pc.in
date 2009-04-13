@@ -6,7 +6,8 @@ includedir=@includedir@
 Name: libempathy
 Description:  Empathy base library
 Requires: pkg-config >= 0.21
-Requires.private: glib-2.0, gobject-2.0, libxml-2.0, libmissioncontrol, gio-2.0, gio-unix-2.0, telepathy-glib
+Requires.private: glib-2.0, gobject-2.0, libxml-2.0, libmissioncontrol, \
+                  gio-2.0, gio-unix-2.0, telepathy-glib
 Version: @VERSION@
 Libs: -L${libdir} -lempathy
 Cflags: -I${includedir} 
