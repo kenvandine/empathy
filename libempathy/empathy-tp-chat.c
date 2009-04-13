@@ -102,12 +102,11 @@ tp_chat_invalidated_cb (TpProxy       *proxy,
 {
 	EmpathyTpChatPriv *priv = GET_PRIV (chat);
 
-	g_object_unref (priv->channel);
-	priv->channel = NULL;
-
 	DEBUG ("Channel invalidated: %s", message);
 	g_signal_emit (chat, signals[DESTROY], 0);
 
+	g_object_unref (priv->channel);
+	priv->channel = NULL;
 }
 
 static void
