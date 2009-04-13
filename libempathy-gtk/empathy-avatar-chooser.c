@@ -578,12 +578,10 @@ avatar_chooser_clear_image (EmpathyAvatarChooser *chooser)
 	EmpathyAvatarChooserPriv *priv = GET_PRIV (chooser);
 	GtkWidget *image;
 
-	if (priv->avatar == NULL) {
-		return;
+	if (priv->avatar != NULL) {
+		empathy_avatar_unref (priv->avatar);
+		priv->avatar = NULL;
 	}
-
-	empathy_avatar_unref (priv->avatar);
-	priv->avatar = NULL;
 
 	image = gtk_image_new_from_icon_name ("stock_person", GTK_ICON_SIZE_DIALOG);
 	gtk_button_set_image (GTK_BUTTON (chooser), image);
