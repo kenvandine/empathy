@@ -347,6 +347,12 @@ empathy_tp_tube_new_stream_tube (EmpathyContact *contact,
   dbus_g_type_struct_set (address, 0, hostname, 1, port, G_MAXUINT);
   control_param = tp_g_value_slice_new (G_TYPE_STRING);
 
+  if (parameters == NULL)
+    /* Pass an empty dict as parameters */
+    parameters = g_hash_table_new (g_str_hash, g_str_equal);
+  else
+    g_hash_table_ref (parameters);
+
   if (!emp_cli_channel_type_stream_tube_run_offer_stream_tube (
         TP_PROXY(channel), -1, type, address,
         TP_SOCKET_ACCESS_CONTROL_LOCALHOST, control_param, parameters,
@@ -369,6 +375,7 @@ OUT:
   tp_g_value_slice_free (address);
   tp_g_value_slice_free (control_param);
   g_object_unref (connection);
+  g_hash_table_unref (parameters);
 
   return tube;
 }
