@@ -22,8 +22,7 @@ BUILT_SOURCES= \
 	empathy-tube-dispatch-enumtypes.h \
 	empathy-tube-dispatch-enumtypes.c
 
-empathy_SOURCES =							\
-	bacon-message-connection.c bacon-message-connection.h		\
+empathy_handwritten_source = \
 	empathy.c							\
 	empathy-about-dialog.c empathy-about-dialog.h			\
 	empathy-accounts-dialog.c empathy-accounts-dialog.h		\
@@ -41,12 +40,22 @@ empathy_SOURCES =							\
 	empathy-preferences.c empathy-preferences.h			\
 	empathy-sidebar.c empathy-sidebar.h			\
 	empathy-status-icon.c empathy-status-icon.h			\
-	empathy-tube-dispatch.c empathy-tube-dispatch.h			\
+	empathy-tube-dispatch.c empathy-tube-dispatch.h
+
+empathy_SOURCES =							\
+	$(empathy_handwritten_source)					\
+	bacon-message-connection.c bacon-message-connection.h		\
 	ephy-spinner.c ephy-spinner.h
 
 nodist_empathy_SOURCES = $(BUILT_SOURCES)
 
 empathy_logs_SOURCES = empathy-logs.c
+
+check_c_sources = \
+    $(empathy_handwritten_source) \
+    $(empathy_logs_SOURCES)
+include $(top_srcdir)/tools/check-coding-style.mk
+check-local: check-coding-style
 
 uidir = $(datadir)/empathy
 ui_DATA = 					\
