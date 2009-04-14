@@ -17,7 +17,6 @@
  * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
  *
  * Authors: Xavier Claessens <xclaesse@gmail.com>
- *          Sjoerd Simons <sjoerd.simons@collabora.co.uk>
  */
 
 #include "config.h"
