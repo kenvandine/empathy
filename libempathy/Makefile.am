@@ -101,6 +101,12 @@ libempathy_headers =				\
 	empathy-types.h				\
 	empathy-utils.h
 
+check_c_sources = \
+    $(libempathy_la_SOURCES) \
+    $(libempathy_headers)
+include $(top_srcdir)/tools/check-coding-style.mk
+check-local: check-coding-style
+
 libempathy_includedir = $(includedir)/libempathy/
 libempathy_include_HEADERS =			\
 	$(libempathy_headers)			\
