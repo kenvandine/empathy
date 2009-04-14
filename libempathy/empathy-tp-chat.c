@@ -97,8 +97,6 @@ tp_chat_invalidated_cb (TpProxy       *proxy,
 			gchar         *message,
 			EmpathyTpChat *chat)
 {
-	EmpathyTpChatPriv *priv = GET_PRIV (chat);
-
 	DEBUG ("Channel invalidated: %s", message);
 	g_signal_emit (chat, signals[DESTROY], 0);
 }
