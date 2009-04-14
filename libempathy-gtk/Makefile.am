@@ -19,7 +19,7 @@ BUILT_SOURCES = 					\
 
 lib_LTLIBRARIES = libempathy-gtk.la
 
-libempathy_gtk_la_SOURCES =             	\
+libempathy_gtk_handwritten_source =            	\
 	empathy-account-chooser.c		\
 	empathy-account-widget.c		\
 	empathy-account-widget-irc.c		\
@@ -55,7 +55,10 @@ libempathy_gtk_la_SOURCES =             	\
 	empathy-theme-boxes.c			\
 	empathy-theme-irc.c			\
 	empathy-theme-manager.c			\
-	empathy-ui-utils.c			\
+	empathy-ui-utils.c
+
+libempathy_gtk_la_SOURCES =			\
+	$(libempathy_gtk_handwritten_source)	\
 	totem-subtitle-encoding.c totem-subtitle-encoding.h
 
 # do not distribute generated files
@@ -109,6 +112,12 @@ libempathy_gtk_headers =			\
 	empathy-theme-irc.h			\
 	empathy-theme-manager.h			\
 	empathy-ui-utils.h
+
+check_c_sources = \
+    $(libempathy_gtk_handwritten_source) \
+    $(libempathy_gtk_headers)
+include $(top_srcdir)/tools/check-coding-style.mk
+check-local: check-coding-style
 
 libempathy_gtk_includedir = $(includedir)/libempathy-gtk/
 libempathy_gtk_include_HEADERS =		\
