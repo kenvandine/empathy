@@ -1,93 +1,138 @@
 <?xml version="1.0"?>
+<!--Generated with glade3 3.4.5 on Mon Feb 16 12:31:56 2009 -->
 <interface>
-  <requires lib="gtk+" version="2.16"/>
-  <!-- interface-naming-policy toplevel-contextual -->
-  <object class="GtkUIManager" id="uimanager1"/>
-  <object class="GtkVBox" id="call_window_vbox">
-    <property name="visible">True</property>
-    <property name="orientation">vertical</property>
+  <object class="GtkUIManager" id="ui_manager">
     <child>
-      <object class="GtkHPaned" id="pane">
-        <property name="visible">True</property>
-        <property name="can_focus">True</property>
+      <object class="GtkActionGroup" id="actiongroup1">
         <child>
-          <placeholder/>
-        </child>
-      </object>
-      <packing>
-        <property name="position">0</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkToolbar" id="toolbar">
-        <property name="visible">True</property>
-        <child>
-          <object class="GtkToolButton" id="hangup">
-            <property name="visible">True</property>
-            <property name="is_important">True</property>
-            <property name="label" translatable="yes">Hang up</property>
-            <property name="stock_id">gtk-cancel</property>
+          <object class="GtkAction" id="call">
+            <property name="name">call</property>
+            <property name="label" translatable="yes">_Call</property>
           </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="homogeneous">True</property>
-          </packing>
         </child>
         <child>
-          <object class="GtkSeparatorToolItem" id="toolbutton1">
-            <property name="visible">True</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="homogeneous">True</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkToggleToolButton" id="microphone">
-            <property name="visible">True</property>
-            <property name="label" translatable="yes">Send Audio</property>
-            <property name="icon_name">gnome-stock-mic</property>
-          </object>
-          <packing>
-            <property name="expand">False</property>
-            <property name="homogeneous">True</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkToggleToolButton" id="camera">
-            <property name="visible">True</property>
+          <object class="GtkToggleAction" id="send_video">
+            <property name="name">send_video</property>
             <property name="label" translatable="yes">Send video</property>
-            <property name="icon_name">camera-web</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkAction" id="menuhangup">
+            <property name="stock_id">gtk-cancel</property>
+            <property name="name">menuhangup</property>
+            <property name="label" translatable="yes">Hang up</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkAction" id="view">
+            <property name="name">view</property>
+            <property name="label" translatable="yes">_View</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkToggleAction" id="show_preview">
+            <property name="name">show_preview</property>
+            <property name="label" translatable="yes">Video preview</property>
+          </object>
+        </child>
+      </object>
+    </child>
+    <ui>
+      <menubar name="menubar1">
+        <menu action="call">
+          <menuitem action="send_video"/>
+          <menuitem action="menuhangup"/>
+        </menu>
+        <menu action="view">
+          <menuitem action="show_preview"/>
+        </menu>
+      </menubar>
+    </ui>
+  </object>
+      <object class="GtkVBox" id="call_window_vbox">
+        <property name="visible">True</property>
+        <child>
+          <object class="GtkMenuBar" constructor="ui_manager" id="menubar1">
+            <property name="visible">True</property>
           </object>
           <packing>
             <property name="expand">False</property>
-            <property name="homogeneous">True</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkToolbar" id="toolbar">
+            <property name="visible">True</property>
+            <child>
+              <object class="GtkToolButton" id="hangup">
+                <property name="visible">True</property>
+                <property name="is_important">True</property>
+                <property name="label" translatable="yes">Hang up</property>
+                <property name="stock_id">gtk-cancel</property>
+              </object>
+              <packing>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkSeparatorToolItem" id="toolbutton1">
+                <property name="visible">True</property>
+              </object>
+              <packing>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToggleToolButton" id="microphone">
+                <property name="visible">True</property>
+                <property name="active">True</property>
+                <property name="label" translatable="yes">Send Audio</property>
+                <property name="icon_name">gnome-stock-mic</property>
+              </object>
+              <packing>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkToggleToolButton" id="camera">
+                <property name="visible">True</property>
+                <property name="label" translatable="yes">Send video</property>
+                <property name="icon_name">camera-web</property>
+                <property name="sensitive">False</property>
+              </object>
+              <packing>
+                <property name="homogeneous">True</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkHPaned" id="pane">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <child>
+              <placeholder/>
+            </child>
+            <child>
+              <placeholder/>
+            </child>
+          </object>
+          <packing>
+            <property name="position">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkStatusbar" id="statusbar">
+            <property name="visible">True</property>
+            <property name="spacing">2</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="position">3</property>
           </packing>
         </child>
       </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="position">1</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkMenuBar" id="menubar1">
-        <property name="visible">True</property>
-      </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="position">0</property>
-      </packing>
-    </child>
-    <child>
-      <object class="GtkStatusbar" id="statusbar">
-        <property name="visible">True</property>
-        <property name="spacing">2</property>
-      </object>
-      <packing>
-        <property name="expand">False</property>
-        <property name="position">3</property>
-      </packing>
-    </child>
-  </object>
 </interface>

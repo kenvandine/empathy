@@ -69,6 +69,7 @@ struct _EmpathyCallWindowPriv
 
   gboolean connected;
 
+  GtkUIManager *ui_manager;
   GtkWidget *video_output;
   GtkWidget *video_preview;
   GtkWidget *sidebar;
@@ -78,8 +79,8 @@ struct _EmpathyCallWindowPriv
   GtkWidget *mic_button;
   GtkWidget *camera_button;
   GtkWidget *toolbar;
-  GtkWidget *hangup;
   GtkWidget *pane;
+  GtkAction *send_video;
 
   gdouble volume;
   GtkAdjustment *audio_input_adj;
@@ -124,13 +125,20 @@ static void empathy_call_window_sidebar_toggled_cb (GtkToggleButton *toggle,
 static void empathy_call_window_camera_toggled_cb (GtkToggleToolButton *toggle,
   EmpathyCallWindow *window);
 
+static void empathy_call_window_send_video_toggled_cb (GtkToggleAction *toggle,
+  EmpathyCallWindow *window);
+
+static void empathy_call_window_show_preview_toggled_cb (GtkToggleAction *toggle,
+  EmpathyCallWindow *window);
+
 static void empathy_call_window_mic_toggled_cb (
   GtkToggleToolButton *toggle, EmpathyCallWindow *window);
 
 static void empathy_call_window_sidebar_hidden_cb (EmpathySidebar *sidebar,
   EmpathyCallWindow *window);
 
-static void empathy_call_window_hangup (EmpathyCallWindow *window);
+static void empathy_call_window_hangup_cb (gpointer object,
+  EmpathyCallWindow *window);
 
 static void empathy_call_window_status_message (EmpathyCallWindow *window,
   gchar *message);
@@ -143,28 +151,10 @@ empathy_call_window_volume_changed_cb (GtkScaleButton *button,
   gdouble value, EmpathyCallWindow *window);
 
 static void
-empathy_call_window_setup_menubar (EmpathyCallWindow *self)
-{
-  EmpathyCallWindowPriv *priv = GET_PRIV (self);
-
-  g_signal_connect_swapped (priv->hangup, "activate",
-    G_CALLBACK (empathy_call_window_hangup), self);
-}
-
-static void
 empathy_call_window_setup_toolbar (EmpathyCallWindow *self)
 {
   EmpathyCallWindowPriv *priv = GET_PRIV (self);
   GtkToolItem *tool_item;
-
-  g_signal_connect_swapped (priv->hangup, "clicked",
-    G_CALLBACK (empathy_call_window_hangup), self);
-
-  gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (priv->mic_button),
-      TRUE);
-
-  g_signal_connect (G_OBJECT (priv->mic_button), "toggled",
-    G_CALLBACK (empathy_call_window_mic_toggled_cb), self);
 
   /* Add an empty expanded GtkToolItem so the volume button is at the end of
    * the toolbar. */
@@ -185,13 +175,6 @@ empathy_call_window_setup_toolbar (EmpathyCallWindow *self)
   gtk_container_add (GTK_CONTAINER (tool_item), priv->volume_button);
   gtk_widget_show_all (GTK_WIDGET (tool_item));
   gtk_toolbar_insert (GTK_TOOLBAR (priv->toolbar), tool_item, -1);
-
-  gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (priv->camera_button),
-      FALSE);
-  gtk_widget_set_sensitive (priv->camera_button, FALSE);
-
-  g_signal_connect (priv->camera_button, "toggled",
-    G_CALLBACK (empathy_call_window_camera_toggled_cb), self);
 }
 
 static void
@@ -489,14 +472,23 @@ empathy_call_window_init (EmpathyCallWindow *self)
     "microphone", &priv->mic_button,
     "camera", &priv->camera_button,
     "toolbar", &priv->toolbar,
-    "hangup", &priv->hangup,
+    "send_video", &priv->send_video,
+    "ui_manager", &priv->ui_manager,
+    NULL);
+
+  empathy_builder_connect (gui, self,
+    "menuhangup", "activate", empathy_call_window_hangup_cb,
+    "hangup", "clicked", empathy_call_window_hangup_cb,
+    "microphone", "toggled", empathy_call_window_mic_toggled_cb,
+    "camera", "toggled", empathy_call_window_camera_toggled_cb,
+    "send_video", "toggled", empathy_call_window_send_video_toggled_cb,
+    "show_preview", "toggled", empathy_call_window_show_preview_toggled_cb,
     NULL);
 
   priv->lock = g_mutex_new ();
 
   gtk_container_add (GTK_CONTAINER (self), top_vbox);
 
-  empathy_call_window_setup_menubar (self);
   empathy_call_window_setup_toolbar (self);
 
   priv->pipeline = gst_pipeline_new (NULL);
@@ -582,6 +574,7 @@ empathy_call_window_init (EmpathyCallWindow *self)
 
   priv->timer = g_timer_new ();
 
+  g_object_ref (priv->ui_manager);
   g_object_unref (gui);
 }
 
@@ -685,6 +678,10 @@ empathy_call_window_dispose (GObject *object)
     g_source_remove (priv->timer_id);
   priv->timer_id = 0;
 
+  if (priv->ui_manager != NULL)
+    g_object_unref (priv->ui_manager);
+  priv->ui_manager = NULL;
+
   /* release any references held by the object here */
   if (G_OBJECT_CLASS (empathy_call_window_parent_class)->dispose)
     G_OBJECT_CLASS (empathy_call_window_parent_class)->dispose (object);
@@ -759,6 +756,7 @@ empathy_call_window_disconnected (EmpathyCallWindow *self)
   empathy_call_window_status_message (self, _("Disconnected"));
 
   gtk_widget_set_sensitive (priv->camera_button, FALSE);
+  gtk_action_set_sensitive (priv->send_video, FALSE);
 }
 
 
@@ -857,7 +855,10 @@ empathy_call_window_connected (gpointer user_data)
     gtk_widget_set_sensitive (priv->dtmf_panel, TRUE);
 
   if (priv->video_input != NULL)
-    gtk_widget_set_sensitive (priv->camera_button, TRUE);
+    {
+      gtk_widget_set_sensitive (priv->camera_button, TRUE);
+      gtk_action_set_sensitive (priv->send_video, TRUE);
+    }
 
   g_object_unref (call);
 
@@ -1141,20 +1142,42 @@ empathy_call_window_sidebar_toggled_cb (GtkToggleButton *toggle,
 }
 
 static void
+empathy_call_window_set_send_video (EmpathyCallWindow *window,
+  gboolean send)
+{
+  EmpathyCallWindowPriv *priv = GET_PRIV (window);
+  EmpathyTpCall *call;
+
+  g_object_get (priv->handler, "tp-call", &call, NULL);
+  empathy_tp_call_request_video_stream_direction (call, send);
+  g_object_unref (call);
+}
+
+static void
 empathy_call_window_camera_toggled_cb (GtkToggleToolButton *toggle,
   EmpathyCallWindow *window)
 {
-  EmpathyCallWindowPriv *priv = GET_PRIV (window);
   gboolean active;
-  EmpathyTpCall *call;
 
   active = (gtk_toggle_tool_button_get_active (toggle));
+  empathy_call_window_set_send_video (window, active);
+}
 
-  g_object_get (priv->handler, "tp-call", &call, NULL);
+static void
+empathy_call_window_send_video_toggled_cb (GtkToggleAction *toggle,
+  EmpathyCallWindow *window)
+{
+  gboolean active;
 
-  empathy_tp_call_request_video_stream_direction (call, active);
+  active = (gtk_toggle_action_get_active (toggle));
+  empathy_call_window_set_send_video (window, active);
+}
 
-  g_object_unref (call);
+static void
+empathy_call_window_show_preview_toggled_cb (GtkToggleAction *toggle,
+  EmpathyCallWindow *window)
+{
+  /* FIXME: Not implemented */
 }
 
 static void
@@ -1196,7 +1219,8 @@ empathy_call_window_sidebar_hidden_cb (EmpathySidebar *sidebar,
 }
 
 static void
-empathy_call_window_hangup (EmpathyCallWindow *window)
+empathy_call_window_hangup_cb (gpointer object,
+                               EmpathyCallWindow *window)
 {
   EmpathyCallWindowPriv *priv = GET_PRIV (window);
 
