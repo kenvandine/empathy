@@ -72,6 +72,8 @@ void            empathy_builder_connect                 (GtkBuilder       *gui,
 							 gpointer          user_data,
 							 gchar            *first_object,
 							 ...);
+GtkWidget     *empathy_builder_unref_and_keep_widget    (GtkBuilder       *gui,
+							 GtkWidget        *root);
 
 /* Pixbufs */
 const gchar * empathy_icon_name_from_account            (McAccount        *account);

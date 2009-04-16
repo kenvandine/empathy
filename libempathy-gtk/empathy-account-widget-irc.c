@@ -505,9 +505,5 @@ empathy_account_widget_irc_new (McAccount *account)
       "combobox_network", "changed", account_widget_irc_combobox_network_changed_cb,
       NULL);
 
-  g_object_ref (settings->vbox_settings);
-  g_object_force_floating (G_OBJECT (settings->vbox_settings));
-  g_object_unref (gui);
-
-  return settings->vbox_settings;
+  return empathy_builder_unref_and_keep_widget (gui, settings->vbox_settings);
 }

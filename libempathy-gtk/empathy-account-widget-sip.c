@@ -115,9 +115,5 @@ empathy_account_widget_sip_new (McAccount *account)
       "checkbutton_discover-stun", "toggled", account_widget_sip_discover_stun_toggled_cb,
       NULL);
 
-  g_object_ref (settings->vbox_settings);
-  g_object_force_floating (G_OBJECT (settings->vbox_settings));
-  g_object_unref (gui);
-
-  return settings->vbox_settings;
+  return empathy_builder_unref_and_keep_widget (gui, settings->vbox_settings);
 }

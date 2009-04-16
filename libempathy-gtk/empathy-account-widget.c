@@ -481,11 +481,7 @@ empathy_account_widget_generic_new (McAccount *account)
 
 	accounts_widget_generic_setup (account, table_common_settings, table_advanced_settings);
 
-	g_object_ref (widget);
-	g_object_force_floating (G_OBJECT (widget));
-	g_object_unref (gui);
-
-	return widget;
+	return empathy_builder_unref_and_keep_widget (gui, widget);
 }
 
 GtkWidget *
@@ -513,11 +509,7 @@ empathy_account_widget_salut_new (McAccount *account)
 
 	g_object_unref (gui);
 
-	g_object_ref (widget);
-	g_object_force_floating (G_OBJECT (widget));
-	g_object_unref (gui);
-
-	return widget;
+	return empathy_builder_unref_and_keep_widget (gui, widget);
 }
 
 GtkWidget *
@@ -545,11 +537,7 @@ empathy_account_widget_msn_new (McAccount *account)
 						  "button_forget",
 						  "entry_password");
 
-	g_object_ref (widget);
-	g_object_force_floating (G_OBJECT (widget));
-	g_object_unref (gui);
-
-	return widget;
+	return empathy_builder_unref_and_keep_widget (gui, widget);
 }
 
 GtkWidget *
@@ -590,11 +578,7 @@ empathy_account_widget_jabber_new (McAccount *account)
 			  G_CALLBACK (account_widget_jabber_ssl_toggled_cb),
 			  spinbutton_port);
 
-	g_object_ref (widget);
-	g_object_force_floating (G_OBJECT (widget));
-	g_object_unref (gui);
-
-	return widget;
+	return empathy_builder_unref_and_keep_widget (gui, widget);
 }
 
 GtkWidget *
@@ -625,11 +609,7 @@ empathy_account_widget_icq_new (McAccount *account)
 						  "button_forget",
 						  "entry_password");
 
-	g_object_ref (widget);
-	g_object_force_floating (G_OBJECT (widget));
-	g_object_unref (gui);
-
-	return widget;
+	return empathy_builder_unref_and_keep_widget (gui, widget);
 }
 
 GtkWidget *
@@ -659,11 +639,7 @@ empathy_account_widget_aim_new (McAccount *account)
 						  "button_forget",
 						  "entry_password");
 
-	g_object_ref (widget);
-	g_object_force_floating (G_OBJECT (widget));
-	g_object_unref (gui);
-
-	return widget;
+	return empathy_builder_unref_and_keep_widget (gui, widget);
 }
 
 GtkWidget *
@@ -695,11 +671,7 @@ empathy_account_widget_yahoo_new (McAccount *account)
 						  "button_forget",
 						  "entry_password");
 
-	g_object_ref (widget);
-	g_object_force_floating (G_OBJECT (widget));
-	g_object_unref (gui);
-
-	return widget;
+	return empathy_builder_unref_and_keep_widget (gui, widget);
 }
 
 GtkWidget *
@@ -727,10 +699,6 @@ empathy_account_widget_groupwise_new (McAccount *account)
 						  "button_forget",
 						  "entry_password");
 
-	g_object_ref (widget);
-	g_object_force_floating (G_OBJECT (widget));
-	g_object_unref (gui);
-
-	return widget;
+	return empathy_builder_unref_and_keep_widget (gui, widget);
 }
 

@@ -166,6 +166,23 @@ empathy_builder_connect (GtkBuilder *gui,
 	va_end (args);
 }
 
+GtkWidget *
+empathy_builder_unref_and_keep_widget (GtkBuilder *gui,
+				       GtkWidget  *widget)
+{
+	/* On construction gui sinks the initial reference to widget. When gui
+	 * is finalized it will drop its ref to widget. We take our own ref to
+	 * prevent widget being finalised. The widget is forced to have a
+	 * floating reference, like when it was initially unowned so that it can
+	 * be used like any other GtkWidget. */
+
+	g_object_ref (widget);
+	g_object_force_floating (G_OBJECT (widget));
+	g_object_unref (gui);
+
+	return widget;
+}
+
 const gchar *
 empathy_icon_name_from_account (McAccount *account)
 {

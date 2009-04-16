@@ -209,11 +209,8 @@ empathy_contact_widget_new (EmpathyContact *contact,
 
   contact_widget_set_contact (information, contact);
 
-  g_object_ref (information->vbox_contact_widget);
-  g_object_force_floating (G_OBJECT (information->vbox_contact_widget));
-  g_object_unref (gui);
-
-  return information->vbox_contact_widget;
+  return empathy_builder_unref_and_keep_widget (gui,
+    information->vbox_contact_widget);
 }
 
 EmpathyContact *
