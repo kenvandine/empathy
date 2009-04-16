@@ -31,7 +31,6 @@
 
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
-#include <glade/glade.h>
 #include <glib/gi18n.h>
 #include <libnotify/notification.h>
 
@@ -1287,7 +1286,7 @@ empathy_chat_window_class_init (EmpathyChatWindowClass *klass)
 static void
 empathy_chat_window_init (EmpathyChatWindow *window)
 {
-	GladeXML              *glade;
+	GtkBuilder            *gui;
 	GtkAccelGroup         *accel_group;
 	GClosure              *closure;
 	GtkWidget             *menu_conv;
@@ -1300,10 +1299,8 @@ empathy_chat_window_init (EmpathyChatWindow *window)
 		EMPATHY_TYPE_CHAT_WINDOW, EmpathyChatWindowPriv);
 
 	window->priv = priv;
-	filename = empathy_file_lookup ("empathy-chat-window.glade", "src");
-	glade = empathy_glade_get_file (filename,
-				       "chat_window",
-				       NULL,
+	filename = empathy_file_lookup ("empathy-chat-window.ui", "src");
+	gui = empathy_builder_get_file (filename,
 				       "chat_window", &priv->dialog,
 				       "chat_vbox", &chat_vbox,
 				       "menu_conv", &menu_conv,
@@ -1325,8 +1322,7 @@ empathy_chat_window_init (EmpathyChatWindow *window)
 				       NULL);
 	g_free (filename);
 
-	empathy_glade_connect (glade,
-			      window,
+	empathy_builder_connect (gui, window,
 			      "chat_window", "configure-event", chat_window_configure_event_cb,
 			      "menu_conv", "activate", chat_window_conv_activate_cb,
 			      "menu_conv_clear", "activate", chat_window_clear_activate_cb,
@@ -1343,7 +1339,7 @@ empathy_chat_window_init (EmpathyChatWindow *window)
 			      "menu_help_about", "activate", chat_window_help_about_cb,
 			      NULL);
 
-	g_object_unref (glade);
+	g_object_unref (gui);
 
 	priv->chatroom_manager = empathy_chatroom_manager_dup_singleton (NULL);
 
@@ -1378,7 +1374,7 @@ empathy_chat_window_init (EmpathyChatWindow *window)
 				   menu);
 	g_object_unref (smiley_manager);
 
-	/* Set up signals we can't do with glade since we may need to
+	/* Set up signals we can't do with ui file since we may need to
 	 * block/unblock them at some later stage.
 	 */
 
@@ -1516,7 +1512,7 @@ empathy_chat_window_add_chat (EmpathyChatWindow *window,
 		}
 		
 		if (w > 0 && h > 0) {
-			/* Use the defaults from the glade file if we don't have
+			/* Use the defaults from the ui file if we don't have
 			 * good w, h geometry.
 			 */
 			gtk_window_resize (GTK_WINDOW (priv->dialog), w, h);
