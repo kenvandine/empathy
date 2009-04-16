@@ -112,25 +112,25 @@ libempathy_gtk_include_HEADERS =		\
 	$(libempathy_gtk_headers)		\
 	empathy-gtk-enum-types.h
 
-gladedir = $(datadir)/empathy
-glade_DATA = 					\
-	empathy-contact-widget.glade		\
-	empathy-contact-dialogs.glade		\
-	empathy-presence-chooser.glade		\
-	empathy-account-widget-generic.glade	\
-	empathy-account-widget-jabber.glade	\
-	empathy-account-widget-msn.glade	\
-	empathy-account-widget-sip.glade	\
-	empathy-account-widget-salut.glade	\
-	empathy-account-widget-irc.glade	\
-	empathy-account-widget-icq.glade	\
-	empathy-account-widget-yahoo.glade	\
-	empathy-account-widget-groupwise.glade	\
-	empathy-account-widget-aim.glade	\
-	empathy-spell-dialog.glade		\
-	empathy-log-window.glade		\
-	empathy-chat.glade			\
-	empathy-new-message-dialog.glade
+uidir = $(datadir)/empathy
+ui_DATA = 					\
+	empathy-contact-widget.ui		\
+	empathy-contact-dialogs.ui		\
+	empathy-presence-chooser.ui		\
+	empathy-account-widget-generic.ui	\
+	empathy-account-widget-jabber.ui	\
+	empathy-account-widget-msn.ui		\
+	empathy-account-widget-sip.ui		\
+	empathy-account-widget-salut.ui		\
+	empathy-account-widget-irc.ui		\
+	empathy-account-widget-icq.ui		\
+	empathy-account-widget-yahoo.ui		\
+	empathy-account-widget-groupwise.ui	\
+	empathy-account-widget-aim.ui		\
+	empathy-spell-dialog.ui			\
+	empathy-log-window.ui			\
+	empathy-chat.ui				\
+	empathy-new-message-dialog.ui
 
 empathy-gtk-marshal.list: $(libempathy_gtk_la_SOURCES) Makefile.am
 	( cd $(srcdir) && \
@@ -192,7 +192,7 @@ pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = libempathy-gtk.pc
 
 EXTRA_DIST =			\
-	$(glade_DATA)
+	$(ui_DATA)
 
 CLEANFILES =				\
 	$(BUILT_SOURCES)		\

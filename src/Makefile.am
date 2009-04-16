@@ -44,18 +44,18 @@ nodist_empathy_SOURCES = $(BUILT_SOURCES)
 
 empathy_logs_SOURCES = empathy-logs.c
 
-gladedir = $(datadir)/empathy
-glade_DATA = 					\
-	empathy-accounts-dialog.glade		\
-	empathy-call-window.glade		\
-	empathy-chatrooms-window.glade		\
-	empathy-chat-window.glade		\
-	empathy-ft-manager.glade		\
-	empathy-import-dialog.glade		\
-	empathy-main-window.glade		\
-	empathy-new-chatroom-dialog.glade	\
-	empathy-preferences.glade		\
-	empathy-status-icon.glade
+uidir = $(datadir)/empathy
+ui_DATA = 					\
+	empathy-accounts-dialog.ui		\
+	empathy-call-window.ui			\
+	empathy-chatrooms-window.ui		\
+	empathy-chat-window.ui			\
+	empathy-ft-manager.ui			\
+	empathy-import-dialog.ui		\
+	empathy-main-window.ui			\
+	empathy-new-chatroom-dialog.ui		\
+	empathy-preferences.ui			\
+	empathy-status-icon.ui
 
 dist_man_MANS =			\
 	empathy.1
@@ -80,7 +80,7 @@ dist_man_MANS =			\
 
 EXTRA_DIST =			\
 	$(autostart_DATA)	\
-	$(glade_DATA)
+	$(ui_DATA)
 
 CLEANFILES = $(BUILT_SOURCES)
 
