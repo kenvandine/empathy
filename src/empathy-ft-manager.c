@@ -590,7 +590,7 @@ ft_manager_destroy_cb (GtkWidget *widget,
 static void
 ft_manager_build_ui (EmpathyFTManager *ft_manager)
 {
-  GladeXML *glade;
+  GtkBuilder *gui;
   gint x, y, w, h;
   GtkTreeView *view;
   GtkListStore *liststore;
@@ -602,9 +602,8 @@ ft_manager_build_ui (EmpathyFTManager *ft_manager)
   if (ft_manager->priv->window != NULL)
     return;
 
-  filename = empathy_file_lookup ("empathy-ft-manager.glade", "src");
-  glade = empathy_glade_get_file (filename,
-      "ft_manager_dialog", NULL,
+  filename = empathy_file_lookup ("empathy-ft-manager.ui", "src");
+  gui = empathy_builder_get_file (filename,
       "ft_manager_dialog", &ft_manager->priv->window,
       "ft_list", &ft_manager->priv->treeview,
       "open_button", &ft_manager->priv->open_button,
@@ -612,14 +611,14 @@ ft_manager_build_ui (EmpathyFTManager *ft_manager)
       NULL);
   g_free (filename);
 
-  empathy_glade_connect (glade, ft_manager,
+  empathy_builder_connect (gui, ft_manager,
       "ft_manager_dialog", "destroy", ft_manager_destroy_cb,
       "ft_manager_dialog", "response", ft_manager_response_cb,
       "ft_manager_dialog", "delete-event", ft_manager_delete_event_cb,
       "ft_manager_dialog", "configure-event", ft_manager_configure_event_cb,
       NULL);
 
-  g_object_unref (glade);
+  g_object_unref (gui);
 
   /* Window geometry. */
   empathy_geometry_load ("ft-manager", &x, &y, &w, &h);
@@ -633,7 +632,7 @@ ft_manager_build_ui (EmpathyFTManager *ft_manager)
 
   if (w > 0 && h > 0)
     {
-      /* Use the defaults from the glade file if we don't have
+      /* Use the defaults from the ui file if we don't have
        * good w, h geometry. */
       gtk_window_resize (GTK_WINDOW (ft_manager->priv->window), w, h);
     }
