@@ -52,6 +52,11 @@ check_main_SOURCES =                             \
     check-empathy-chatroom.c                     \
     check-empathy-chatroom-manager.c
 
+check_c_sources = \
+    $(check_main_SOURCES)
+include $(top_srcdir)/tools/check-coding-style.mk
+check-local: check-coding-style
+
 check_main_LDADD = \
     @CHECK_LIBS@ \
     $(top_builddir)/libempathy-gtk/libempathy-gtk.la	\
