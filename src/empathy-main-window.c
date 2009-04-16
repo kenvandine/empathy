@@ -109,82 +109,6 @@ typedef struct {
 
 static EmpathyMainWindow *window = NULL;
 
-static void     main_window_destroy_cb                         (GtkWidget                *widget,
-								EmpathyMainWindow        *window);
-static void     main_window_favorite_chatroom_menu_setup       (EmpathyMainWindow        *window);
-static void     main_window_favorite_chatroom_menu_added_cb    (EmpathyChatroomManager   *manager,
-								EmpathyChatroom          *chatroom,
-								EmpathyMainWindow        *window);
-static void     main_window_favorite_chatroom_menu_removed_cb  (EmpathyChatroomManager   *manager,
-								EmpathyChatroom          *chatroom,
-								EmpathyMainWindow        *window);
-static void     main_window_favorite_chatroom_menu_activate_cb (GtkMenuItem              *menu_item,
-								EmpathyChatroom          *chatroom);
-static void     main_window_favorite_chatroom_menu_update      (EmpathyMainWindow        *window);
-static void     main_window_favorite_chatroom_menu_add         (EmpathyMainWindow        *window,
-								EmpathyChatroom          *chatroom);
-static void     main_window_favorite_chatroom_join             (EmpathyChatroom          *chatroom);
-static void     main_window_chat_quit_cb                       (GtkWidget                *widget,
-								EmpathyMainWindow        *window);
-static void     main_window_chat_new_message_cb                (GtkWidget                *widget,
-								EmpathyMainWindow        *window);
-static void     main_window_chat_history_cb                    (GtkWidget                *widget,
-								EmpathyMainWindow        *window);
-static void     main_window_room_join_new_cb                   (GtkWidget                *widget,
-								EmpathyMainWindow        *window);
-static void     main_window_room_join_favorites_cb             (GtkWidget                *widget,
-								EmpathyMainWindow        *window);
-static void     main_window_room_manage_favorites_cb           (GtkWidget                *widget,
-								EmpathyMainWindow        *window);
-static void     main_window_chat_add_contact_cb                (GtkWidget                *widget,
-								EmpathyMainWindow        *window);
-static void     main_window_chat_show_offline_cb               (GtkCheckMenuItem         *item,
-								EmpathyMainWindow        *window);
-static gboolean main_window_edit_button_press_event_cb         (GtkWidget                *widget,
-								GdkEventButton           *event,
-								EmpathyMainWindow        *window);
-static void     main_window_edit_accounts_cb                   (GtkWidget                *widget,
-								EmpathyMainWindow        *window);
-static void     main_window_edit_personal_information_cb       (GtkWidget                *widget,
-								EmpathyMainWindow        *window);
-static void     main_window_edit_preferences_cb                (GtkWidget                *widget,
-								EmpathyMainWindow        *window);
-static void     main_window_help_about_cb                      (GtkWidget                *widget,
-								EmpathyMainWindow        *window);
-static void     main_window_help_contents_cb                   (GtkWidget                *widget,
-								EmpathyMainWindow        *window);
-static gboolean main_window_throbber_button_press_event_cb     (GtkWidget                *throbber_ebox,
-								GdkEventButton           *event,
-								EmpathyMainWindow        *window);
-static void     main_window_update_status                      (EmpathyMainWindow        *window,
-								EmpathyAccountManager    *manager);
-static void     main_window_error_display		       (EmpathyMainWindow        *window,
-								McAccount                *account,
-								const gchar              *message);
-static void     main_window_accels_load                        (void);
-static void     main_window_accels_save                        (void);
-static void     main_window_connection_items_setup             (EmpathyMainWindow        *window,
-								GtkBuilder               *gui);
-static gboolean main_window_configure_event_timeout_cb         (EmpathyMainWindow        *window);
-static gboolean main_window_configure_event_cb                 (GtkWidget                *widget,
-								GdkEventConfigure        *event,
-								EmpathyMainWindow        *window);
-static void     main_window_notify_show_offline_cb             (EmpathyConf              *conf,
-								const gchar              *key,
-								gpointer                  check_menu_item);
-static void     main_window_notify_show_avatars_cb             (EmpathyConf              *conf,
-								const gchar              *key,
-								EmpathyMainWindow        *window);
-static void     main_window_notify_compact_contact_list_cb     (EmpathyConf              *conf,
-								const gchar              *key,
-								EmpathyMainWindow        *window);
-static void     main_window_notify_sort_criterium_cb           (EmpathyConf              *conf,
-								const gchar              *key,
-								EmpathyMainWindow        *window);
-static void     main_window_account_created_or_deleted_cb      (EmpathyAccountManager    *manager,
-								McAccount                *account,
-								EmpathyMainWindow        *window);
-
 static void
 main_window_flash_stop (EmpathyMainWindow *window)
 {
@@ -372,6 +296,188 @@ main_window_row_activated_cb (EmpathyContactListView *view,
 }
 
 static void
+main_window_error_edit_clicked_cb (GtkButton         *button,
+				   EmpathyMainWindow *window)
+{
+	McAccount *account;
+	GtkWidget *error_widget;
+
+	account = g_object_get_data (G_OBJECT (button), "account");
+	empathy_accounts_dialog_show (GTK_WINDOW (window->window), account);
+
+	error_widget = g_hash_table_lookup (window->errors, account);
+	gtk_widget_destroy (error_widget);
+	g_hash_table_remove (window->errors, account);
+}
+
+static void
+main_window_error_clear_clicked_cb (GtkButton         *button,
+				    EmpathyMainWindow *window)
+{
+	McAccount *account;
+	GtkWidget *error_widget;
+
+	account = g_object_get_data (G_OBJECT (button), "account");
+	error_widget = g_hash_table_lookup (window->errors, account);
+	gtk_widget_destroy (error_widget);
+	g_hash_table_remove (window->errors, account);
+}
+
+static void
+main_window_error_display (EmpathyMainWindow *window,
+			   McAccount         *account,
+			   const gchar       *message)
+{
+	GtkWidget *child;
+	GtkWidget *table;
+	GtkWidget *image;
+	GtkWidget *button_edit;
+	GtkWidget *alignment;
+	GtkWidget *hbox;
+	GtkWidget *label;
+	GtkWidget *fixed;
+	GtkWidget *vbox;
+	GtkWidget *button_close;
+	gchar     *str;
+
+	child = g_hash_table_lookup (window->errors, account);
+	if (child) {
+		label = g_object_get_data (G_OBJECT (child), "label");
+
+		/* Just set the latest error and return */
+		str = g_markup_printf_escaped ("<b>%s</b>\n%s",
+					       mc_account_get_display_name (account),
+					       message);
+		gtk_label_set_markup (GTK_LABEL (label), str);
+		g_free (str);
+
+		return;
+	}
+
+	child = gtk_vbox_new (FALSE, 0);
+	gtk_box_pack_start (GTK_BOX (window->errors_vbox), child, FALSE, TRUE, 0);
+	gtk_container_set_border_width (GTK_CONTAINER (child), 6);
+	gtk_widget_show (child);
+
+	table = gtk_table_new (2, 4, FALSE);
+	gtk_widget_show (table);
+	gtk_box_pack_start (GTK_BOX (child), table, TRUE, TRUE, 0);
+	gtk_table_set_row_spacings (GTK_TABLE (table), 12);
+	gtk_table_set_col_spacings (GTK_TABLE (table), 6);
+
+	image = gtk_image_new_from_stock (GTK_STOCK_DISCONNECT, GTK_ICON_SIZE_MENU);
+	gtk_widget_show (image);
+	gtk_table_attach (GTK_TABLE (table), image, 0, 1, 0, 2,
+			  (GtkAttachOptions) (GTK_FILL),
+			  (GtkAttachOptions) (GTK_FILL), 0, 0);
+	gtk_misc_set_alignment (GTK_MISC (image), 0.5, 0);
+
+	button_edit = gtk_button_new ();
+	gtk_widget_show (button_edit);
+	gtk_table_attach (GTK_TABLE (table), button_edit, 1, 2, 1, 2,
+			  (GtkAttachOptions) (GTK_FILL),
+			  (GtkAttachOptions) (0), 0, 0);
+
+	alignment = gtk_alignment_new (0.5, 0.5, 0, 0);
+	gtk_widget_show (alignment);
+	gtk_container_add (GTK_CONTAINER (button_edit), alignment);
+
+	hbox = gtk_hbox_new (FALSE, 2);
+	gtk_widget_show (hbox);
+	gtk_container_add (GTK_CONTAINER (alignment), hbox);
+
+	image = gtk_image_new_from_stock (GTK_STOCK_EDIT, GTK_ICON_SIZE_BUTTON);
+	gtk_widget_show (image);
+	gtk_box_pack_start (GTK_BOX (hbox), image, FALSE, FALSE, 0);
+
+	label = gtk_label_new_with_mnemonic (_("_Edit account"));
+	gtk_widget_show (label);
+	gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
+
+	fixed = gtk_fixed_new ();
+	gtk_widget_show (fixed);
+	gtk_table_attach (GTK_TABLE (table), fixed, 2, 3, 1, 2,
+			  (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
+			  (GtkAttachOptions) (GTK_FILL), 0, 0);
+
+	vbox = gtk_vbox_new (FALSE, 6);
+	gtk_widget_show (vbox);
+	gtk_table_attach (GTK_TABLE (table), vbox, 3, 4, 0, 2,
+			  (GtkAttachOptions) (GTK_FILL),
+			  (GtkAttachOptions) (GTK_FILL), 0, 0);
+
+	button_close = gtk_button_new ();
+	gtk_widget_show (button_close);
+	gtk_box_pack_start (GTK_BOX (vbox), button_close, FALSE, FALSE, 0);
+	gtk_button_set_relief (GTK_BUTTON (button_close), GTK_RELIEF_NONE);
+
+
+	image = gtk_image_new_from_stock ("gtk-close", GTK_ICON_SIZE_MENU);
+	gtk_widget_show (image);
+	gtk_container_add (GTK_CONTAINER (button_close), image);
+
+	label = gtk_label_new ("");
+	gtk_widget_show (label);
+	gtk_table_attach (GTK_TABLE (table), label, 1, 3, 0, 1,
+			  (GtkAttachOptions) (GTK_EXPAND | GTK_SHRINK | GTK_FILL),
+			  (GtkAttachOptions) (GTK_EXPAND | GTK_SHRINK | GTK_FILL), 0, 0);
+	gtk_widget_set_size_request (label, 175, -1);
+	gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
+	gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
+	gtk_misc_set_alignment (GTK_MISC (label), 0, 0);
+
+	str = g_markup_printf_escaped ("<b>%s</b>\n%s",
+				       mc_account_get_display_name (account),
+				       message);
+	gtk_label_set_markup (GTK_LABEL (label), str);
+	g_free (str);
+
+	g_object_set_data (G_OBJECT (child), "label", label);
+	g_object_set_data_full (G_OBJECT (button_edit),
+				"account", g_object_ref (account),
+				g_object_unref);
+	g_object_set_data_full (G_OBJECT (button_close),
+				"account", g_object_ref (account),
+				g_object_unref);
+
+	g_signal_connect (button_edit, "clicked",
+			  G_CALLBACK (main_window_error_edit_clicked_cb),
+			  window);
+
+	g_signal_connect (button_close, "clicked",
+			  G_CALLBACK (main_window_error_clear_clicked_cb),
+			  window);
+
+	gtk_widget_show (window->errors_vbox);
+
+	g_hash_table_insert (window->errors, g_object_ref (account), child);
+}
+
+static void
+main_window_update_status (EmpathyMainWindow *window, EmpathyAccountManager *manager)
+{
+	int  connected;
+	int  connecting;
+	GList *l;
+
+	/* Count number of connected/connecting/disconnected accounts */
+	connected = empathy_account_manager_get_connected_accounts (manager);
+	connecting = empathy_account_manager_get_connecting_accounts (manager);
+
+	/* Update the spinner state */
+	if (connecting > 0) {
+		ephy_spinner_start (EPHY_SPINNER (window->throbber));
+	} else {
+		ephy_spinner_stop (EPHY_SPINNER (window->throbber));
+	}
+
+	/* Update widgets sensibility */
+	for (l = window->widgets_connected; l; l = l->next) {
+		gtk_widget_set_sensitive (l->data, (connected > 0));
+	}
+}
+
+static void
 main_window_connection_changed_cb (EmpathyAccountManager *manager,
 				   McAccount *account,
 				   TpConnectionStatusReason reason,
@@ -482,6 +588,509 @@ main_window_contact_presence_changed_cb (EmpathyContactMonitor *monitor,
 		empathy_sound_play (GTK_WIDGET (window->window),
 				    EMPATHY_SOUND_CONTACT_DISCONNECTED);
 	}
+}
+
+static void
+main_window_accels_load (void)
+{
+	gchar *filename;
+
+	filename = g_build_filename (g_get_home_dir (), ".gnome2", PACKAGE_NAME, ACCELS_FILENAME, NULL);
+	if (g_file_test (filename, G_FILE_TEST_EXISTS)) {
+		DEBUG ("Loading from:'%s'", filename);
+		gtk_accel_map_load (filename);
+	}
+
+	g_free (filename);
+}
+
+static void
+main_window_accels_save (void)
+{
+	gchar *dir;
+	gchar *file_with_path;
+
+	dir = g_build_filename (g_get_home_dir (), ".gnome2", PACKAGE_NAME, NULL);
+	g_mkdir_with_parents (dir, S_IRUSR | S_IWUSR | S_IXUSR);
+	file_with_path = g_build_filename (dir, ACCELS_FILENAME, NULL);
+	g_free (dir);
+
+	DEBUG ("Saving to:'%s'", file_with_path);
+	gtk_accel_map_save (file_with_path);
+
+	g_free (file_with_path);
+}
+
+static void
+main_window_destroy_cb (GtkWidget         *widget,
+			EmpathyMainWindow *window)
+{
+	/* Save user-defined accelerators. */
+	main_window_accels_save ();
+
+	g_signal_handlers_disconnect_by_func (window->account_manager,
+					      main_window_connection_changed_cb,
+					      window);
+
+	if (window->size_timeout_id) {
+		g_source_remove (window->size_timeout_id);
+	}
+
+	g_list_free (window->widgets_connected);
+
+	g_object_unref (window->mc);
+	g_object_unref (window->account_manager);
+	g_object_unref (window->list_store);
+	g_hash_table_destroy (window->errors);
+
+	g_signal_handlers_disconnect_by_func (window->event_manager,
+			  		      main_window_event_added_cb,
+			  		      window);
+	g_signal_handlers_disconnect_by_func (window->event_manager,
+			  		      main_window_event_removed_cb,
+			  		      window);
+	g_object_unref (window->event_manager);
+
+	g_free (window);
+}
+
+static void
+main_window_favorite_chatroom_join (EmpathyChatroom *chatroom)
+{
+	MissionControl *mc;
+	McAccount      *account;
+	const gchar    *room;
+
+	mc = empathy_mission_control_dup_singleton ();
+	account = empathy_chatroom_get_account (chatroom);
+	room = empathy_chatroom_get_room (chatroom);
+
+	 if (mission_control_get_connection_status (mc, account, NULL) !=
+			TP_CONNECTION_STATUS_CONNECTED) {
+		return;
+	}
+
+	DEBUG ("Requesting channel for '%s'", room);
+	empathy_dispatcher_join_muc (account, room, NULL, NULL);
+
+	g_object_unref (mc);
+}
+
+static void
+main_window_favorite_chatroom_menu_activate_cb (GtkMenuItem    *menu_item,
+						EmpathyChatroom *chatroom)
+{
+	main_window_favorite_chatroom_join (chatroom);
+}
+
+static void
+main_window_favorite_chatroom_menu_add (EmpathyMainWindow *window,
+					EmpathyChatroom    *chatroom)
+{
+	GtkWidget   *menu_item;
+	const gchar *name;
+
+	if (g_object_get_data (G_OBJECT (chatroom), "menu_item")) {
+		return;
+	}
+
+	name = empathy_chatroom_get_name (chatroom);
+	menu_item = gtk_menu_item_new_with_label (name);
+
+	g_object_set_data (G_OBJECT (chatroom), "menu_item", menu_item);
+	g_signal_connect (menu_item, "activate",
+			  G_CALLBACK (main_window_favorite_chatroom_menu_activate_cb),
+			  chatroom);
+
+	gtk_menu_shell_insert (GTK_MENU_SHELL (window->room_menu),
+			       menu_item, 3);
+
+	gtk_widget_show (menu_item);
+}
+
+static void
+main_window_favorite_chatroom_menu_added_cb (EmpathyChatroomManager *manager,
+					     EmpathyChatroom        *chatroom,
+					     EmpathyMainWindow     *window)
+{
+	main_window_favorite_chatroom_menu_add (window, chatroom);
+	gtk_widget_show (window->room_sep);
+	gtk_widget_set_sensitive (window->room_join_favorites, TRUE);
+}
+
+static void
+main_window_favorite_chatroom_menu_removed_cb (EmpathyChatroomManager *manager,
+					       EmpathyChatroom        *chatroom,
+					       EmpathyMainWindow     *window)
+{
+	GtkWidget *menu_item;
+	GList *chatrooms;
+
+	menu_item = g_object_get_data (G_OBJECT (chatroom), "menu_item");
+	g_object_set_data (G_OBJECT (chatroom), "menu_item", NULL);
+	gtk_widget_destroy (menu_item);
+
+	chatrooms = empathy_chatroom_manager_get_chatrooms (window->chatroom_manager, NULL);
+	if (chatrooms) {
+		gtk_widget_show (window->room_sep);
+	} else {
+		gtk_widget_hide (window->room_sep);
+	}
+
+	gtk_widget_set_sensitive (window->room_join_favorites, chatrooms != NULL);
+	g_list_free (chatrooms);
+}
+
+static void
+main_window_favorite_chatroom_menu_setup (EmpathyMainWindow *window)
+{
+	GList *chatrooms, *l;
+
+	window->chatroom_manager = empathy_chatroom_manager_dup_singleton (NULL);
+	chatrooms = empathy_chatroom_manager_get_chatrooms (window->chatroom_manager, NULL);
+	window->room_menu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (window->room));
+
+	for (l = chatrooms; l; l = l->next) {
+		main_window_favorite_chatroom_menu_add (window, l->data);
+	}
+
+	if (!chatrooms) {
+		gtk_widget_hide (window->room_sep);
+	}
+
+	gtk_widget_set_sensitive (window->room_join_favorites, chatrooms != NULL);
+
+	g_signal_connect (window->chatroom_manager, "chatroom-added",
+			  G_CALLBACK (main_window_favorite_chatroom_menu_added_cb),
+			  window);
+	g_signal_connect (window->chatroom_manager, "chatroom-removed",
+			  G_CALLBACK (main_window_favorite_chatroom_menu_removed_cb),
+			  window);
+
+	g_list_free (chatrooms);
+}
+
+static void
+main_window_chat_quit_cb (GtkWidget         *widget,
+			  EmpathyMainWindow *window)
+{
+	gtk_main_quit ();
+}
+
+static void
+main_window_chat_new_message_cb (GtkWidget         *widget,
+				 EmpathyMainWindow *window)
+{
+	empathy_new_message_dialog_show (GTK_WINDOW (window->window));
+}
+
+static void
+main_window_chat_history_cb (GtkWidget         *widget,
+			     EmpathyMainWindow *window)
+{
+	empathy_log_window_show (NULL, NULL, FALSE, GTK_WINDOW (window->window));
+}
+
+static void
+main_window_room_join_new_cb (GtkWidget         *widget,
+			      EmpathyMainWindow *window)
+{
+	empathy_new_chatroom_dialog_show (GTK_WINDOW (window->window));
+}
+
+static void
+main_window_room_join_favorites_cb (GtkWidget         *widget,
+				    EmpathyMainWindow *window)
+{
+	GList *chatrooms, *l;
+
+	chatrooms = empathy_chatroom_manager_get_chatrooms (window->chatroom_manager, NULL);
+	for (l = chatrooms; l; l = l->next) {
+		main_window_favorite_chatroom_join (l->data);
+	}
+	g_list_free (chatrooms);
+}
+
+static void
+main_window_room_manage_favorites_cb (GtkWidget         *widget,
+				      EmpathyMainWindow *window)
+{
+	empathy_chatrooms_window_show (GTK_WINDOW (window->window));
+}
+
+static void
+main_window_chat_add_contact_cb (GtkWidget         *widget,
+				 EmpathyMainWindow *window)
+{
+	empathy_new_contact_dialog_show (GTK_WINDOW (window->window));
+}
+
+static void
+main_window_chat_show_offline_cb (GtkCheckMenuItem  *item,
+				  EmpathyMainWindow *window)
+{
+	gboolean current;
+
+	current = gtk_check_menu_item_get_active (item);
+
+	empathy_conf_set_bool (empathy_conf_get (),
+			      EMPATHY_PREFS_CONTACTS_SHOW_OFFLINE,
+			      current);
+
+	/* Turn off sound just while we alter the contact list. */
+	// FIXME: empathy_sound_set_enabled (FALSE);
+	empathy_contact_list_store_set_show_offline (window->list_store, current);
+	//empathy_sound_set_enabled (TRUE);
+}
+
+static gboolean
+main_window_edit_button_press_event_cb (GtkWidget         *widget,
+					GdkEventButton    *event,
+					EmpathyMainWindow *window)
+{
+	GtkWidget *submenu;
+
+	if (!event->button == 1) {
+		return FALSE;
+	}
+
+	submenu = empathy_contact_list_view_get_contact_menu (window->list_view);
+	if (submenu) {
+		GtkMenuItem *item;
+		GtkWidget   *label;
+
+		item = GTK_MENU_ITEM (window->edit_context);
+		label = gtk_bin_get_child (GTK_BIN (item));
+		gtk_label_set_text (GTK_LABEL (label), _("Contact"));
+
+		gtk_widget_show (window->edit_context);
+		gtk_widget_show (window->edit_context_separator);
+
+		gtk_menu_item_set_submenu (item, submenu);
+
+		return FALSE;
+	}
+
+	submenu = empathy_contact_list_view_get_group_menu (window->list_view);
+	if (submenu) {
+		GtkMenuItem *item;
+		GtkWidget   *label;
+
+		item = GTK_MENU_ITEM (window->edit_context);
+		label = gtk_bin_get_child (GTK_BIN (item));
+		gtk_label_set_text (GTK_LABEL (label), _("Group"));
+
+		gtk_widget_show (window->edit_context);
+		gtk_widget_show (window->edit_context_separator);
+
+		gtk_menu_item_set_submenu (item, submenu);
+
+		return FALSE;
+	}
+
+	gtk_widget_hide (window->edit_context);
+	gtk_widget_hide (window->edit_context_separator);
+
+	return FALSE;
+}
+
+static void
+main_window_edit_accounts_cb (GtkWidget         *widget,
+			      EmpathyMainWindow *window)
+{
+	empathy_accounts_dialog_show (GTK_WINDOW (window->window), NULL);
+}
+
+static void
+main_window_edit_personal_information_cb (GtkWidget         *widget,
+					  EmpathyMainWindow *window)
+{
+	GSList *accounts;
+
+	accounts = mission_control_get_online_connections (window->mc, NULL);
+	if (accounts) {
+		EmpathyContactFactory *factory;
+		EmpathyContact        *contact;
+		McAccount             *account;
+
+		account = accounts->data;
+		factory = empathy_contact_factory_dup_singleton ();
+		contact = empathy_contact_factory_get_user (factory, account);
+		empathy_contact_run_until_ready (contact,
+						 EMPATHY_CONTACT_READY_HANDLE |
+						 EMPATHY_CONTACT_READY_ID,
+						 NULL);
+
+		empathy_contact_information_dialog_show (contact,
+							 GTK_WINDOW (window->window),
+							 TRUE, TRUE);
+
+		g_slist_foreach (accounts, (GFunc) g_object_unref, NULL);
+		g_slist_free (accounts);
+		g_object_unref (factory);
+		g_object_unref (contact);
+	}
+}
+
+static void
+main_window_edit_preferences_cb (GtkWidget         *widget,
+				 EmpathyMainWindow *window)
+{
+	empathy_preferences_show (GTK_WINDOW (window->window));
+}
+
+static void
+main_window_help_about_cb (GtkWidget         *widget,
+			   EmpathyMainWindow *window)
+{
+	empathy_about_dialog_new (GTK_WINDOW (window->window));
+}
+
+static void
+main_window_help_contents_cb (GtkWidget         *widget,
+			      EmpathyMainWindow *window)
+{
+	empathy_url_show (widget, "ghelp:empathy");
+}
+
+static gboolean
+main_window_throbber_button_press_event_cb (GtkWidget         *throbber_ebox,
+					    GdkEventButton    *event,
+					    EmpathyMainWindow *window)
+{
+	if (event->type != GDK_BUTTON_PRESS ||
+	    event->button != 1) {
+		return FALSE;
+	}
+
+	empathy_accounts_dialog_show (GTK_WINDOW (window->window), NULL);
+
+	return FALSE;
+}
+
+static gboolean
+main_window_configure_event_timeout_cb (EmpathyMainWindow *window)
+{
+	gint x, y, w, h;
+
+	gtk_window_get_size (GTK_WINDOW (window->window), &w, &h);
+	gtk_window_get_position (GTK_WINDOW (window->window), &x, &y);
+
+	empathy_geometry_save (GEOMETRY_NAME, x, y, w, h);
+
+	window->size_timeout_id = 0;
+
+	return FALSE;
+}
+
+static gboolean
+main_window_configure_event_cb (GtkWidget         *widget,
+				GdkEventConfigure *event,
+				EmpathyMainWindow *window)
+{
+	if (window->size_timeout_id) {
+		g_source_remove (window->size_timeout_id);
+	}
+
+	window->size_timeout_id = g_timeout_add_seconds (1,
+							 (GSourceFunc) main_window_configure_event_timeout_cb,
+							 window);
+
+	return FALSE;
+}
+
+static void
+main_window_account_created_or_deleted_cb (EmpathyAccountManager  *manager,
+					   McAccount              *account,
+					   EmpathyMainWindow      *window)
+{
+	gtk_widget_set_sensitive (GTK_WIDGET (window->chat_history_menu_item),
+		empathy_account_manager_get_count (manager) > 0);
+}
+
+static void
+main_window_notify_show_offline_cb (EmpathyConf  *conf,
+				    const gchar *key,
+				    gpointer     check_menu_item)
+{
+	gboolean show_offline;
+
+	if (empathy_conf_get_bool (conf, key, &show_offline)) {
+		gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (check_menu_item),
+						show_offline);
+	}
+}
+
+static void
+main_window_notify_show_avatars_cb (EmpathyConf        *conf,
+				    const gchar       *key,
+				    EmpathyMainWindow *window)
+{
+	gboolean show_avatars;
+
+	if (empathy_conf_get_bool (conf, key, &show_avatars)) {
+		empathy_contact_list_store_set_show_avatars (window->list_store,
+							    show_avatars);
+	}
+}
+
+static void
+main_window_notify_compact_contact_list_cb (EmpathyConf        *conf,
+					    const gchar       *key,
+					    EmpathyMainWindow *window)
+{
+	gboolean compact_contact_list;
+
+	if (empathy_conf_get_bool (conf, key, &compact_contact_list)) {
+		empathy_contact_list_store_set_is_compact (window->list_store,
+							  compact_contact_list);
+	}
+}
+
+static void
+main_window_notify_sort_criterium_cb (EmpathyConf       *conf,
+				      const gchar       *key,
+				      EmpathyMainWindow *window)
+{
+	gchar *str = NULL;
+
+	if (empathy_conf_get_string (conf, key, &str) && str) {
+		GType       type;
+		GEnumClass *enum_class;
+		GEnumValue *enum_value;
+
+		type = empathy_contact_list_store_sort_get_type ();
+		enum_class = G_ENUM_CLASS (g_type_class_peek (type));
+		enum_value = g_enum_get_value_by_nick (enum_class, str);
+		g_free (str);
+
+		if (enum_value) {
+			empathy_contact_list_store_set_sort_criterium (window->list_store, 
+								       enum_value->value);
+		}
+	}
+}
+
+static void
+main_window_connection_items_setup (EmpathyMainWindow *window,
+				    GtkBuilder        *gui)
+{
+	GList         *list;
+	GObject       *w;
+	gint           i;
+	const gchar *widgets_connected[] = {
+		"room",
+		"chat_new_message",
+		"chat_add_contact",
+		"edit_personal_information"
+	};
+
+	for (i = 0, list = NULL; i < G_N_ELEMENTS (widgets_connected); i++) {
+		w = gtk_builder_get_object (gui, widgets_connected[i]);
+		list = g_list_prepend (list, w);
+	}
+
+	window->widgets_connected = list;
 }
 
 GtkWidget *
@@ -718,699 +1327,3 @@ empathy_main_window_show (void)
 	return window->window;
 }
 
-static void
-main_window_destroy_cb (GtkWidget         *widget,
-			EmpathyMainWindow *window)
-{
-	/* Save user-defined accelerators. */
-	main_window_accels_save ();
-
-	g_signal_handlers_disconnect_by_func (window->account_manager,
-					      main_window_connection_changed_cb,
-					      window);
-
-	if (window->size_timeout_id) {
-		g_source_remove (window->size_timeout_id);
-	}
-
-	g_list_free (window->widgets_connected);
-
-	g_object_unref (window->mc);
-	g_object_unref (window->account_manager);
-	g_object_unref (window->list_store);
-	g_hash_table_destroy (window->errors);
-
-	g_signal_handlers_disconnect_by_func (window->event_manager,
-			  		      main_window_event_added_cb,
-			  		      window);
-	g_signal_handlers_disconnect_by_func (window->event_manager,
-			  		      main_window_event_removed_cb,
-			  		      window);
-	g_object_unref (window->event_manager);
-
-	g_free (window);
-}
-
-static void
-main_window_favorite_chatroom_menu_setup (EmpathyMainWindow *window)
-{
-	GList *chatrooms, *l;
-
-	window->chatroom_manager = empathy_chatroom_manager_dup_singleton (NULL);
-	chatrooms = empathy_chatroom_manager_get_chatrooms (window->chatroom_manager, NULL);
-	window->room_menu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (window->room));
-
-	for (l = chatrooms; l; l = l->next) {
-		main_window_favorite_chatroom_menu_add (window, l->data);
-	}
-
-	if (!chatrooms) {
-		gtk_widget_hide (window->room_sep);
-	}
-
-	gtk_widget_set_sensitive (window->room_join_favorites, chatrooms != NULL);
-
-	g_signal_connect (window->chatroom_manager, "chatroom-added",
-			  G_CALLBACK (main_window_favorite_chatroom_menu_added_cb),
-			  window);
-	g_signal_connect (window->chatroom_manager, "chatroom-removed",
-			  G_CALLBACK (main_window_favorite_chatroom_menu_removed_cb),
-			  window);
-
-	g_list_free (chatrooms);
-}
-
-static void
-main_window_favorite_chatroom_menu_added_cb (EmpathyChatroomManager *manager,
-					     EmpathyChatroom        *chatroom,
-					     EmpathyMainWindow     *window)
-{
-	main_window_favorite_chatroom_menu_add (window, chatroom);
-	gtk_widget_show (window->room_sep);
-	gtk_widget_set_sensitive (window->room_join_favorites, TRUE);
-}
-
-static void
-main_window_favorite_chatroom_menu_removed_cb (EmpathyChatroomManager *manager,
-					       EmpathyChatroom        *chatroom,
-					       EmpathyMainWindow     *window)
-{
-	GtkWidget *menu_item;
-
-	menu_item = g_object_get_data (G_OBJECT (chatroom), "menu_item");
-
-	g_object_set_data (G_OBJECT (chatroom), "menu_item", NULL);
-	gtk_widget_destroy (menu_item);
-
-	main_window_favorite_chatroom_menu_update (window);
-}
-
-static void
-main_window_favorite_chatroom_menu_activate_cb (GtkMenuItem    *menu_item,
-						EmpathyChatroom *chatroom)
-{
-	main_window_favorite_chatroom_join (chatroom);
-}
-
-static void
-main_window_favorite_chatroom_menu_update (EmpathyMainWindow *window)
-{
-	GList *chatrooms;
-
-	chatrooms = empathy_chatroom_manager_get_chatrooms (window->chatroom_manager, NULL);
-
-	if (chatrooms) {
-		gtk_widget_show (window->room_sep);
-	} else {
-		gtk_widget_hide (window->room_sep);
-	}
-
-	gtk_widget_set_sensitive (window->room_join_favorites, chatrooms != NULL);
-	g_list_free (chatrooms);
-}
-
-static void
-main_window_favorite_chatroom_menu_add (EmpathyMainWindow *window,
-					EmpathyChatroom    *chatroom)
-{
-	GtkWidget   *menu_item;
-	const gchar *name;
-
-	if (g_object_get_data (G_OBJECT (chatroom), "menu_item")) {
-		return;
-	}
-
-	name = empathy_chatroom_get_name (chatroom);
-	menu_item = gtk_menu_item_new_with_label (name);
-
-	g_object_set_data (G_OBJECT (chatroom), "menu_item", menu_item);
-	g_signal_connect (menu_item, "activate",
-			  G_CALLBACK (main_window_favorite_chatroom_menu_activate_cb),
-			  chatroom);
-
-	gtk_menu_shell_insert (GTK_MENU_SHELL (window->room_menu),
-			       menu_item, 3);
-
-	gtk_widget_show (menu_item);
-}
-
-static void
-main_window_favorite_chatroom_join (EmpathyChatroom *chatroom)
-{
-	MissionControl *mc;
-	McAccount      *account;
-	const gchar    *room;
-
-	mc = empathy_mission_control_dup_singleton ();
-	account = empathy_chatroom_get_account (chatroom);
-	room = empathy_chatroom_get_room (chatroom);
-
-	 if (mission_control_get_connection_status (mc, account, NULL) !=
-			TP_CONNECTION_STATUS_CONNECTED) {
-		return;
-	}
-
-	DEBUG ("Requesting channel for '%s'", room);
-	empathy_dispatcher_join_muc (account, room, NULL, NULL);
-
-	g_object_unref (mc);
-}
-
-static void
-main_window_chat_quit_cb (GtkWidget         *widget,
-			  EmpathyMainWindow *window)
-{
-	gtk_main_quit ();
-}
-
-static void
-main_window_chat_new_message_cb (GtkWidget         *widget,
-				 EmpathyMainWindow *window)
-{
-	empathy_new_message_dialog_show (GTK_WINDOW (window->window));
-}
-
-static void
-main_window_chat_history_cb (GtkWidget         *widget,
-			     EmpathyMainWindow *window)
-{
-	empathy_log_window_show (NULL, NULL, FALSE, GTK_WINDOW (window->window));
-}
-
-static void
-main_window_room_join_new_cb (GtkWidget         *widget,
-			      EmpathyMainWindow *window)
-{
-	empathy_new_chatroom_dialog_show (GTK_WINDOW (window->window));
-}
-
-static void
-main_window_room_join_favorites_cb (GtkWidget         *widget,
-				    EmpathyMainWindow *window)
-{
-	GList *chatrooms, *l;
-
-	chatrooms = empathy_chatroom_manager_get_chatrooms (window->chatroom_manager, NULL);
-	for (l = chatrooms; l; l = l->next) {
-		main_window_favorite_chatroom_join (l->data);
-	}
-	g_list_free (chatrooms);
-}
-
-static void
-main_window_room_manage_favorites_cb (GtkWidget         *widget,
-				      EmpathyMainWindow *window)
-{
-	empathy_chatrooms_window_show (GTK_WINDOW (window->window));
-}
-
-static void
-main_window_chat_add_contact_cb (GtkWidget         *widget,
-				 EmpathyMainWindow *window)
-{
-	empathy_new_contact_dialog_show (GTK_WINDOW (window->window));
-}
-
-static void
-main_window_chat_show_offline_cb (GtkCheckMenuItem  *item,
-				  EmpathyMainWindow *window)
-{
-	gboolean current;
-
-	current = gtk_check_menu_item_get_active (item);
-
-	empathy_conf_set_bool (empathy_conf_get (),
-			      EMPATHY_PREFS_CONTACTS_SHOW_OFFLINE,
-			      current);
-
-	/* Turn off sound just while we alter the contact list. */
-	// FIXME: empathy_sound_set_enabled (FALSE);
-	empathy_contact_list_store_set_show_offline (window->list_store, current);
-	//empathy_sound_set_enabled (TRUE);
-}
-
-static gboolean
-main_window_edit_button_press_event_cb (GtkWidget         *widget,
-					GdkEventButton    *event,
-					EmpathyMainWindow *window)
-{
-	GtkWidget *submenu;
-
-	if (!event->button == 1) {
-		return FALSE;
-	}
-
-	submenu = empathy_contact_list_view_get_contact_menu (window->list_view);
-	if (submenu) {
-		GtkMenuItem *item;
-		GtkWidget   *label;
-
-		item = GTK_MENU_ITEM (window->edit_context);
-		label = gtk_bin_get_child (GTK_BIN (item));
-		gtk_label_set_text (GTK_LABEL (label), _("Contact"));
-
-		gtk_widget_show (window->edit_context);
-		gtk_widget_show (window->edit_context_separator);
-
-		gtk_menu_item_set_submenu (item, submenu);
-
-		return FALSE;
-	}
-
-	submenu = empathy_contact_list_view_get_group_menu (window->list_view);
-	if (submenu) {
-		GtkMenuItem *item;
-		GtkWidget   *label;
-
-		item = GTK_MENU_ITEM (window->edit_context);
-		label = gtk_bin_get_child (GTK_BIN (item));
-		gtk_label_set_text (GTK_LABEL (label), _("Group"));
-
-		gtk_widget_show (window->edit_context);
-		gtk_widget_show (window->edit_context_separator);
-
-		gtk_menu_item_set_submenu (item, submenu);
-
-		return FALSE;
-	}
-
-	gtk_widget_hide (window->edit_context);
-	gtk_widget_hide (window->edit_context_separator);
-
-	return FALSE;
-}
-
-static void
-main_window_edit_accounts_cb (GtkWidget         *widget,
-			      EmpathyMainWindow *window)
-{
-	empathy_accounts_dialog_show (GTK_WINDOW (window->window), NULL);
-}
-
-static void
-main_window_edit_personal_information_cb (GtkWidget         *widget,
-					  EmpathyMainWindow *window)
-{
-	GSList *accounts;
-
-	accounts = mission_control_get_online_connections (window->mc, NULL);
-	if (accounts) {
-		EmpathyContactFactory *factory;
-		EmpathyContact        *contact;
-		McAccount             *account;
-
-		account = accounts->data;
-		factory = empathy_contact_factory_dup_singleton ();
-		contact = empathy_contact_factory_get_user (factory, account);
-		empathy_contact_run_until_ready (contact,
-						 EMPATHY_CONTACT_READY_HANDLE |
-						 EMPATHY_CONTACT_READY_ID,
-						 NULL);
-
-		empathy_contact_information_dialog_show (contact,
-							 GTK_WINDOW (window->window),
-							 TRUE, TRUE);
-
-		g_slist_foreach (accounts, (GFunc) g_object_unref, NULL);
-		g_slist_free (accounts);
-		g_object_unref (factory);
-		g_object_unref (contact);
-	}
-}
-
-static void
-main_window_edit_preferences_cb (GtkWidget         *widget,
-				 EmpathyMainWindow *window)
-{
-	empathy_preferences_show (GTK_WINDOW (window->window));
-}
-
-static void
-main_window_help_about_cb (GtkWidget         *widget,
-			   EmpathyMainWindow *window)
-{
-	empathy_about_dialog_new (GTK_WINDOW (window->window));
-}
-
-static void
-main_window_help_contents_cb (GtkWidget         *widget,
-			      EmpathyMainWindow *window)
-{
-	empathy_url_show (widget, "ghelp:empathy");
-}
-
-static gboolean
-main_window_throbber_button_press_event_cb (GtkWidget         *throbber_ebox,
-					    GdkEventButton    *event,
-					    EmpathyMainWindow *window)
-{
-	if (event->type != GDK_BUTTON_PRESS ||
-	    event->button != 1) {
-		return FALSE;
-	}
-
-	empathy_accounts_dialog_show (GTK_WINDOW (window->window), NULL);
-
-	return FALSE;
-}
-
-static void
-main_window_error_edit_clicked_cb (GtkButton         *button,
-				   EmpathyMainWindow *window)
-{
-	McAccount *account;
-	GtkWidget *error_widget;
-
-	account = g_object_get_data (G_OBJECT (button), "account");
-	empathy_accounts_dialog_show (GTK_WINDOW (window->window), account);
-
-	error_widget = g_hash_table_lookup (window->errors, account);
-	gtk_widget_destroy (error_widget);
-	g_hash_table_remove (window->errors, account);
-}
-
-static void
-main_window_error_clear_clicked_cb (GtkButton         *button,
-				    EmpathyMainWindow *window)
-{
-	McAccount *account;
-	GtkWidget *error_widget;
-
-	account = g_object_get_data (G_OBJECT (button), "account");
-	error_widget = g_hash_table_lookup (window->errors, account);
-	gtk_widget_destroy (error_widget);
-	g_hash_table_remove (window->errors, account);
-}
-
-static void
-main_window_error_display (EmpathyMainWindow *window,
-			   McAccount         *account,
-			   const gchar       *message)
-{
-	GtkWidget *child;
-	GtkWidget *table;
-	GtkWidget *image;
-	GtkWidget *button_edit;
-	GtkWidget *alignment;
-	GtkWidget *hbox;
-	GtkWidget *label;
-	GtkWidget *fixed;
-	GtkWidget *vbox;
-	GtkWidget *button_close;
-	gchar     *str;
-
-	child = g_hash_table_lookup (window->errors, account);
-	if (child) {
-		label = g_object_get_data (G_OBJECT (child), "label");
-
-		/* Just set the latest error and return */
-		str = g_markup_printf_escaped ("<b>%s</b>\n%s",
-					       mc_account_get_display_name (account),
-					       message);
-		gtk_label_set_markup (GTK_LABEL (label), str);
-		g_free (str);
-
-		return;
-	}
-
-	child = gtk_vbox_new (FALSE, 0);
-	gtk_box_pack_start (GTK_BOX (window->errors_vbox), child, FALSE, TRUE, 0);
-	gtk_container_set_border_width (GTK_CONTAINER (child), 6);
-	gtk_widget_show (child);
-
-	table = gtk_table_new (2, 4, FALSE);
-	gtk_widget_show (table);
-	gtk_box_pack_start (GTK_BOX (child), table, TRUE, TRUE, 0);
-	gtk_table_set_row_spacings (GTK_TABLE (table), 12);
-	gtk_table_set_col_spacings (GTK_TABLE (table), 6);
-
-	image = gtk_image_new_from_stock (GTK_STOCK_DISCONNECT, GTK_ICON_SIZE_MENU);
-	gtk_widget_show (image);
-	gtk_table_attach (GTK_TABLE (table), image, 0, 1, 0, 2,
-			  (GtkAttachOptions) (GTK_FILL),
-			  (GtkAttachOptions) (GTK_FILL), 0, 0);
-	gtk_misc_set_alignment (GTK_MISC (image), 0.5, 0);
-
-	button_edit = gtk_button_new ();
-	gtk_widget_show (button_edit);
-	gtk_table_attach (GTK_TABLE (table), button_edit, 1, 2, 1, 2,
-			  (GtkAttachOptions) (GTK_FILL),
-			  (GtkAttachOptions) (0), 0, 0);
-
-	alignment = gtk_alignment_new (0.5, 0.5, 0, 0);
-	gtk_widget_show (alignment);
-	gtk_container_add (GTK_CONTAINER (button_edit), alignment);
-
-	hbox = gtk_hbox_new (FALSE, 2);
-	gtk_widget_show (hbox);
-	gtk_container_add (GTK_CONTAINER (alignment), hbox);
-
-	image = gtk_image_new_from_stock (GTK_STOCK_EDIT, GTK_ICON_SIZE_BUTTON);
-	gtk_widget_show (image);
-	gtk_box_pack_start (GTK_BOX (hbox), image, FALSE, FALSE, 0);
-
-	label = gtk_label_new_with_mnemonic (_("_Edit account"));
-	gtk_widget_show (label);
-	gtk_box_pack_start (GTK_BOX (hbox), label, FALSE, FALSE, 0);
-
-	fixed = gtk_fixed_new ();
-	gtk_widget_show (fixed);
-	gtk_table_attach (GTK_TABLE (table), fixed, 2, 3, 1, 2,
-			  (GtkAttachOptions) (GTK_EXPAND | GTK_FILL),
-			  (GtkAttachOptions) (GTK_FILL), 0, 0);
-
-	vbox = gtk_vbox_new (FALSE, 6);
-	gtk_widget_show (vbox);
-	gtk_table_attach (GTK_TABLE (table), vbox, 3, 4, 0, 2,
-			  (GtkAttachOptions) (GTK_FILL),
-			  (GtkAttachOptions) (GTK_FILL), 0, 0);
-
-	button_close = gtk_button_new ();
-	gtk_widget_show (button_close);
-	gtk_box_pack_start (GTK_BOX (vbox), button_close, FALSE, FALSE, 0);
-	gtk_button_set_relief (GTK_BUTTON (button_close), GTK_RELIEF_NONE);
-
-
-	image = gtk_image_new_from_stock ("gtk-close", GTK_ICON_SIZE_MENU);
-	gtk_widget_show (image);
-	gtk_container_add (GTK_CONTAINER (button_close), image);
-
-	label = gtk_label_new ("");
-	gtk_widget_show (label);
-	gtk_table_attach (GTK_TABLE (table), label, 1, 3, 0, 1,
-			  (GtkAttachOptions) (GTK_EXPAND | GTK_SHRINK | GTK_FILL),
-			  (GtkAttachOptions) (GTK_EXPAND | GTK_SHRINK | GTK_FILL), 0, 0);
-	gtk_widget_set_size_request (label, 175, -1);
-	gtk_label_set_use_markup (GTK_LABEL (label), TRUE);
-	gtk_label_set_line_wrap (GTK_LABEL (label), TRUE);
-	gtk_misc_set_alignment (GTK_MISC (label), 0, 0);
-
-	str = g_markup_printf_escaped ("<b>%s</b>\n%s",
-				       mc_account_get_display_name (account),
-				       message);
-	gtk_label_set_markup (GTK_LABEL (label), str);
-	g_free (str);
-
-	g_object_set_data (G_OBJECT (child), "label", label);
-	g_object_set_data_full (G_OBJECT (button_edit),
-				"account", g_object_ref (account),
-				g_object_unref);
-	g_object_set_data_full (G_OBJECT (button_close),
-				"account", g_object_ref (account),
-				g_object_unref);
-
-	g_signal_connect (button_edit, "clicked",
-			  G_CALLBACK (main_window_error_edit_clicked_cb),
-			  window);
-
-	g_signal_connect (button_close, "clicked",
-			  G_CALLBACK (main_window_error_clear_clicked_cb),
-			  window);
-
-	gtk_widget_show (window->errors_vbox);
-
-	g_hash_table_insert (window->errors, g_object_ref (account), child);
-}
-
-static void
-main_window_update_status (EmpathyMainWindow *window, EmpathyAccountManager *manager)
-{
-	int  connected;
-	int  connecting;
-	GList *l;
-
-	/* Count number of connected/connecting/disconnected accounts */
-	connected = empathy_account_manager_get_connected_accounts (manager);
-	connecting = empathy_account_manager_get_connecting_accounts (manager);
-
-	/* Update the spinner state */
-	if (connecting > 0) {
-		ephy_spinner_start (EPHY_SPINNER (window->throbber));
-	} else {
-		ephy_spinner_stop (EPHY_SPINNER (window->throbber));
-	}
-
-	/* Update widgets sensibility */
-	for (l = window->widgets_connected; l; l = l->next) {
-		gtk_widget_set_sensitive (l->data, (connected > 0));
-	}
-}
-
-/*
- * Accels
- */
-static void
-main_window_accels_load (void)
-{
-	gchar *filename;
-
-	filename = g_build_filename (g_get_home_dir (), ".gnome2", PACKAGE_NAME, ACCELS_FILENAME, NULL);
-	if (g_file_test (filename, G_FILE_TEST_EXISTS)) {
-		DEBUG ("Loading from:'%s'", filename);
-		gtk_accel_map_load (filename);
-	}
-
-	g_free (filename);
-}
-
-static void
-main_window_accels_save (void)
-{
-	gchar *dir;
-	gchar *file_with_path;
-
-	dir = g_build_filename (g_get_home_dir (), ".gnome2", PACKAGE_NAME, NULL);
-	g_mkdir_with_parents (dir, S_IRUSR | S_IWUSR | S_IXUSR);
-	file_with_path = g_build_filename (dir, ACCELS_FILENAME, NULL);
-	g_free (dir);
-
-	DEBUG ("Saving to:'%s'", file_with_path);
-	gtk_accel_map_save (file_with_path);
-
-	g_free (file_with_path);
-}
-
-static void
-main_window_connection_items_setup (EmpathyMainWindow *window,
-				    GtkBuilder        *gui)
-{
-	GList         *list;
-	GObject       *w;
-	gint           i;
-	const gchar *widgets_connected[] = {
-		"room",
-		"chat_new_message",
-		"chat_add_contact",
-		"edit_personal_information"
-	};
-
-	for (i = 0, list = NULL; i < G_N_ELEMENTS (widgets_connected); i++) {
-		w = gtk_builder_get_object (gui, widgets_connected[i]);
-		list = g_list_prepend (list, w);
-	}
-
-	window->widgets_connected = list;
-}
-
-static gboolean
-main_window_configure_event_timeout_cb (EmpathyMainWindow *window)
-{
-	gint x, y, w, h;
-
-	gtk_window_get_size (GTK_WINDOW (window->window), &w, &h);
-	gtk_window_get_position (GTK_WINDOW (window->window), &x, &y);
-
-	empathy_geometry_save (GEOMETRY_NAME, x, y, w, h);
-
-	window->size_timeout_id = 0;
-
-	return FALSE;
-}
-
-static gboolean
-main_window_configure_event_cb (GtkWidget         *widget,
-				GdkEventConfigure *event,
-				EmpathyMainWindow *window)
-{
-	if (window->size_timeout_id) {
-		g_source_remove (window->size_timeout_id);
-	}
-
-	window->size_timeout_id = g_timeout_add_seconds (1,
-							 (GSourceFunc) main_window_configure_event_timeout_cb,
-							 window);
-
-	return FALSE;
-}
-
-static void
-main_window_notify_show_offline_cb (EmpathyConf  *conf,
-				    const gchar *key,
-				    gpointer     check_menu_item)
-{
-	gboolean show_offline;
-
-	if (empathy_conf_get_bool (conf, key, &show_offline)) {
-		gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (check_menu_item),
-						show_offline);
-	}
-}
-
-static void
-main_window_notify_show_avatars_cb (EmpathyConf        *conf,
-				    const gchar       *key,
-				    EmpathyMainWindow *window)
-{
-	gboolean show_avatars;
-
-	if (empathy_conf_get_bool (conf, key, &show_avatars)) {
-		empathy_contact_list_store_set_show_avatars (window->list_store,
-							    show_avatars);
-	}
-}
-
-static void
-main_window_notify_compact_contact_list_cb (EmpathyConf        *conf,
-					    const gchar       *key,
-					    EmpathyMainWindow *window)
-{
-	gboolean compact_contact_list;
-
-	if (empathy_conf_get_bool (conf, key, &compact_contact_list)) {
-		empathy_contact_list_store_set_is_compact (window->list_store,
-							  compact_contact_list);
-	}
-}
-
-static void
-main_window_notify_sort_criterium_cb (EmpathyConf       *conf,
-				      const gchar       *key,
-				      EmpathyMainWindow *window)
-{
-	gchar *str = NULL;
-
-	if (empathy_conf_get_string (conf, key, &str) && str) {
-		GType       type;
-		GEnumClass *enum_class;
-		GEnumValue *enum_value;
-
-		type = empathy_contact_list_store_sort_get_type ();
-		enum_class = G_ENUM_CLASS (g_type_class_peek (type));
-		enum_value = g_enum_get_value_by_nick (enum_class, str);
-		g_free (str);
-
-		if (enum_value) {
-			empathy_contact_list_store_set_sort_criterium (window->list_store, 
-								       enum_value->value);
-		}
-	}
-}
-
-static void
-main_window_account_created_or_deleted_cb (EmpathyAccountManager  *manager,
-					   McAccount              *account,
-					   EmpathyMainWindow      *window)
-{
-	gtk_widget_set_sensitive (GTK_WIDGET (window->chat_history_menu_item),
-		empathy_account_manager_get_count (manager) > 0);
-}
