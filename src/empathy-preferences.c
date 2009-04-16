@@ -602,28 +602,37 @@ static void
 preferences_themes_setup (EmpathyPreferences *preferences)
 {
 	GtkComboBox   *combo;
-	GtkListStore  *model;
-	GtkTreeIter    iter;
+	GtkCellLayout *cell_layout;
+	GtkCellRenderer *renderer;
+	GtkListStore  *store;
 	const gchar  **themes;
 	gint           i;
 
 	combo = GTK_COMBO_BOX (preferences->combobox_chat_theme);
+	cell_layout = GTK_CELL_LAYOUT (combo);
 
-	model = gtk_list_store_new (COL_COMBO_COUNT,
-				    G_TYPE_STRING,
-				    G_TYPE_STRING);
+	/* Create the model */
+	store = gtk_list_store_new (COL_COMBO_COUNT,
+				    G_TYPE_STRING,  /* Display name */
+				    G_TYPE_STRING); /* Theme name */
 
+	/* Fill the model */
 	themes = empathy_theme_manager_get_themes ();
 	for (i = 0; themes[i]; i += 2) {
-		gtk_list_store_append (model, &iter);
-		gtk_list_store_set (model, &iter,
-				    COL_COMBO_VISIBLE_NAME, _(themes[i + 1]),
-				    COL_COMBO_NAME, themes[i],
-				    -1);
+		gtk_list_store_insert_with_values (store, NULL, -1,
+			COL_COMBO_VISIBLE_NAME, _(themes[i + 1]),
+			COL_COMBO_NAME, themes[i],
+			-1);
 	}
 
-	gtk_combo_box_set_model (combo, GTK_TREE_MODEL (model));
-	g_object_unref (model);
+	/* Add cell renderer */
+	renderer = gtk_cell_renderer_text_new ();
+	gtk_cell_layout_pack_start (cell_layout, renderer, TRUE);
+	gtk_cell_layout_set_attributes (cell_layout, renderer,
+		"text", COL_COMBO_VISIBLE_NAME, NULL);
+
+	gtk_combo_box_set_model (combo, GTK_TREE_MODEL (store));
+	g_object_unref (store);
 }
 
 static void
