@@ -24,7 +24,6 @@
 #include <string.h>
 
 #include <gtk/gtk.h>
-#include <glade/glade.h>
 #include <gdk/gdkkeysyms.h>
 
 #include <libnotify/notification.h>
@@ -454,13 +453,11 @@ static void
 status_icon_create_menu (EmpathyStatusIcon *icon)
 {
 	EmpathyStatusIconPriv *priv = GET_PRIV (icon);
-	GladeXML              *glade;
+	GtkBuilder            *gui;
 	gchar                 *filename;
 
-	filename = empathy_file_lookup ("empathy-status-icon.glade", "src");
-	glade = empathy_glade_get_file (filename,
-				       "tray_menu",
-				       NULL,
+	filename = empathy_file_lookup ("empathy-status-icon.ui", "src");
+	gui = empathy_builder_get_file (filename,
 				       "tray_menu", &priv->popup_menu,
 				       "tray_show_list", &priv->show_window_item,
 				       "tray_new_message", &priv->message_item,
@@ -468,14 +465,13 @@ status_icon_create_menu (EmpathyStatusIcon *icon)
 				       NULL);
 	g_free (filename);
 
-	empathy_glade_connect (glade,
-			      icon,
+	empathy_builder_connect (gui, icon,
 			      "tray_show_list", "toggled", status_icon_show_hide_window_cb,
 			      "tray_new_message", "activate", status_icon_new_message_cb,
 			      "tray_quit", "activate", status_icon_quit_cb,
 			      NULL);
 
-	g_object_unref (glade);
+	g_object_unref (gui);
 }
 
 static void
