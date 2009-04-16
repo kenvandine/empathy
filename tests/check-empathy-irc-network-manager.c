@@ -53,7 +53,7 @@ START_TEST (test_empathy_irc_network_manager_add)
   g_object_get (networks->data, "name", &name, NULL);
   fail_if (name == NULL || strcmp (name, "My Network") != 0);
   g_free (name);
-  g_object_get (g_slist_next(networks)->data, "name", &name, NULL);
+  g_object_get (g_slist_next (networks)->data, "name", &name, NULL);
   fail_if (name == NULL || strcmp (name, "My Network") != 0);
   g_free (name);
   g_slist_foreach (networks, (GFunc) g_object_unref, NULL);
