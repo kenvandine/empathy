@@ -33,7 +33,6 @@
 #define __EMPATHY_UI_UTILS_H__
 
 #include <gtk/gtk.h>
-#include <glade/glade.h>
 
 #include <canberra-gtk.h>
 
@@ -66,24 +65,14 @@ void            empathy_gtk_init                        (void);
 GRegex *        empathy_uri_regex_dup_singleton         (void);
 
 /* Glade */
-void            empathy_glade_get_file_simple           (const gchar      *filename,
-							 const gchar      *root,
-							 const gchar      *domain,
-							 const gchar      *first_required_widget,
+GtkBuilder *    empathy_builder_get_file                (const gchar      *filename,
+							 const gchar      *first_object,
 							 ...);
-GladeXML *      empathy_glade_get_file                  (const gchar      *filename,
-							 const gchar      *root,
-							 const gchar      *domain,
-							 const gchar      *first_required_widget,
-							 ...);
-void            empathy_glade_connect                   (GladeXML         *gui,
+void            empathy_builder_connect                 (GtkBuilder       *gui,
 							 gpointer          user_data,
-							 gchar            *first_widget,
+							 gchar            *first_object,
 							 ...);
-void            empathy_glade_setup_size_group          (GladeXML         *gui,
-							 GtkSizeGroupMode  mode,
-							 gchar            *first_widget,
-							 ...);
+
 /* Pixbufs */
 const gchar * empathy_icon_name_from_account            (McAccount        *account);
 const gchar * empathy_icon_name_for_presence            (McPresence        presence);

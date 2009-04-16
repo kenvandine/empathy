@@ -37,7 +37,6 @@
 #include <glib/gi18n-lib.h>
 #include <gtk/gtk.h>
 #include <gio/gio.h>
-#include <glade/glade.h>
 #include <canberra-gtk.h>
 
 #include <libmissioncontrol/mc-profile.h>
@@ -89,39 +88,33 @@ empathy_uri_regex_dup_singleton (void)
 	return g_regex_ref (uri_regex);
 }
 
-struct SizeData {
-	gint     width;
-	gint     height;
-	gboolean preserve_aspect_ratio;
-};
-
-static GladeXML *
-get_glade_file (const gchar *filename,
-		const gchar *root,
-		const gchar *domain,
-		const gchar *first_required_widget,
-		va_list      args)
+static GtkBuilder *
+builder_get_file_valist (const gchar *filename,
+			 const gchar *first_object,
+			 va_list      args)
 {
-	GladeXML   *gui;
-	const char *name;
-	GtkWidget **widget_ptr;
+	GtkBuilder  *gui;
+	const gchar *name;
+	GObject    **object_ptr;
+	GError      *error = NULL;
 
-	DEBUG ("Loading glade file %s", filename);
+	DEBUG ("Loading file %s", filename);
 
-	gui = glade_xml_new (filename, root, domain);
-
-	if (!gui) {
-		g_warning ("Couldn't find necessary glade file '%s'", filename);
+	gui = gtk_builder_new ();
+	if (!gtk_builder_add_from_file (gui, filename, &error)) {
+		DEBUG ("Error: %s", error->message);
+		g_clear_error (&error);
+		g_object_unref (gui);
+		return NULL;
 	}
 
-	for (name = first_required_widget; name; name = va_arg (args, char *)) {
-		widget_ptr = va_arg (args, void *);
+	for (name = first_object; name; name = va_arg (args, const gchar *)) {
+		object_ptr = va_arg (args, GObject**);
 
-		*widget_ptr = glade_xml_get_widget (gui, name);
+		*object_ptr = gtk_builder_get_object (gui, name);
 
-		if (!*widget_ptr) {
-			g_warning ("Glade file '%s' is missing widget '%s'.",
-				   filename, name);
+		if (!*object_ptr) {
+			g_warning ("File is missing object '%s'.", name);
 			continue;
 		}
 	}
@@ -129,114 +122,46 @@ get_glade_file (const gchar *filename,
 	return gui;
 }
 
-void
-empathy_glade_get_file_simple (const gchar *filename,
-			      const gchar *root,
-			      const gchar *domain,
-			      const gchar *first_required_widget, ...)
+GtkBuilder *
+empathy_builder_get_file (const gchar *filename,
+			  const gchar *first_object,
+			  ...)
 {
-	va_list   args;
-	GladeXML *gui;
+	GtkBuilder *gui;
+	va_list     args;
 
-	va_start (args, first_required_widget);
-
-	gui = get_glade_file (filename,
-			      root,
-			      domain,
-			      first_required_widget,
-			      args);
-
+	va_start (args, first_object);
+	gui = builder_get_file_valist (filename, first_object, args);
 	va_end (args);
-
-	if (gui) {
-		g_object_unref (gui);
-	}
-}
-
-GladeXML *
-empathy_glade_get_file (const gchar *filename,
-		       const gchar *root,
-		       const gchar *domain,
-		       const gchar *first_required_widget, ...)
-{
-	va_list   args;
-	GladeXML *gui;
-
-	va_start (args, first_required_widget);
-
-	gui = get_glade_file (filename,
-			      root,
-			      domain,
-			      first_required_widget,
-			      args);
-
-	va_end (args);
-
-	if (!gui) {
-		return NULL;
-	}
 
 	return gui;
 }
 
 void
-empathy_glade_connect (GladeXML *gui,
-		      gpointer  user_data,
-		      gchar     *first_widget, ...)
+empathy_builder_connect (GtkBuilder *gui,
+			 gpointer    user_data,
+			 gchar      *first_object,
+			 ...)
 {
 	va_list      args;
 	const gchar *name;
 	const gchar *signal;
-	GtkWidget   *widget;
-	gpointer    *callback;
+	GObject     *object;
+	GCallback    callback;
 
-	va_start (args, first_widget);
+	va_start (args, first_object);
+	for (name = first_object; name; name = va_arg (args, const gchar *)) {
+		signal = va_arg (args, const gchar *);
+		callback = va_arg (args, GCallback);
 
-	for (name = first_widget; name; name = va_arg (args, char *)) {
-		signal = va_arg (args, void *);
-		callback = va_arg (args, void *);
-
-		widget = glade_xml_get_widget (gui, name);
-		if (!widget) {
-			g_warning ("Glade file is missing widget '%s', aborting",
-				   name);
+		object = gtk_builder_get_object (gui, name);
+		if (!object) {
+			g_warning ("File is missing object '%s'.", name);
 			continue;
 		}
 
-		g_signal_connect (widget,
-				  signal,
-				  G_CALLBACK (callback),
-				  user_data);
+		g_signal_connect (object, signal, callback, user_data);
 	}
-
-	va_end (args);
-}
-
-void
-empathy_glade_setup_size_group (GladeXML         *gui,
-			       GtkSizeGroupMode  mode,
-			       gchar            *first_widget, ...)
-{
-	va_list       args;
-	GtkWidget    *widget;
-	GtkSizeGroup *size_group;
-	const gchar  *name;
-
-	va_start (args, first_widget);
-
-	size_group = gtk_size_group_new (mode);
-
-	for (name = first_widget; name; name = va_arg (args, char *)) {
-		widget = glade_xml_get_widget (gui, name);
-		if (!widget) {
-			g_warning ("Glade file is missing widget '%s'", name);
-			continue;
-		}
-
-		gtk_size_group_add_widget (size_group, widget);
-	}
-
-	g_object_unref (size_group);
 
 	va_end (args);
 }
@@ -345,6 +270,12 @@ out:
 
 	return pixbuf;
 }
+
+struct SizeData {
+	gint     width;
+	gint     height;
+	gboolean preserve_aspect_ratio;
+};
 
 static void
 pixbuf_from_avatar_size_prepared_cb (GdkPixbufLoader *loader,
