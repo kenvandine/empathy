@@ -113,7 +113,7 @@
 
 (define-object PresenceChooser
   (in-module "Empathy")
-  (parent "GtkToggleButton")
+  (parent "GtkComboBoxEntry")
   (c-name "EmpathyPresenceChooser")
   (gtype-id "EMPATHY_TYPE_PRESENCE_CHOOSER")
 )
@@ -336,8 +336,8 @@
   (return-type "none")
   (parameters
     '("McAccount*" "account")
-    '("GladeXML*" "glade")
-    '("const-gchar*" "first_widget_name")
+    '("GtkBuilder*" "gui")
+    '("const-gchar*" "first_widget")
   )
   (varargs #t)
 )
@@ -347,7 +347,7 @@
   (return-type "none")
   (parameters
     '("McAccount*" "account")
-    '("GladeXML*" "glade")
+    '("GtkBuilder*" "gui")
     '("const-gchar*" "button")
     '("const-gchar*" "entry")
   )
@@ -1233,6 +1233,16 @@
   (return-type "EmpathyContact*")
 )
 
+(define-method set_visible
+  (of-object "EmpathyContactSelector")
+  (c-name "empathy_contact_selector_set_visible")
+  (return-type "none")
+  (parameters
+    '("EmpathyContactSelectorFilterFunc" "func")
+    '("gpointer" "user_data")
+  )
+)
+
 
 
 ;; From empathy-contact-widget.h
@@ -1749,50 +1759,34 @@
   (return-type "GRegex*")
 )
 
-(define-function glade_get_file_simple
-  (c-name "empathy_glade_get_file_simple")
-  (return-type "none")
+(define-function builder_get_file
+  (c-name "empathy_builder_get_file")
+  (return-type "GtkBuilder*")
   (parameters
     '("const-gchar*" "filename")
-    '("const-gchar*" "root")
-    '("const-gchar*" "domain")
-    '("const-gchar*" "first_required_widget")
+    '("const-gchar*" "first_object")
   )
   (varargs #t)
 )
 
-(define-function glade_get_file
-  (c-name "empathy_glade_get_file")
-  (return-type "GladeXML*")
-  (parameters
-    '("const-gchar*" "filename")
-    '("const-gchar*" "root")
-    '("const-gchar*" "domain")
-    '("const-gchar*" "first_required_widget")
-  )
-  (varargs #t)
-)
-
-(define-function glade_connect
-  (c-name "empathy_glade_connect")
+(define-function builder_connect
+  (c-name "empathy_builder_connect")
   (return-type "none")
   (parameters
-    '("GladeXML*" "gui")
+    '("GtkBuilder*" "gui")
     '("gpointer" "user_data")
-    '("gchar*" "first_widget")
+    '("gchar*" "first_object")
   )
   (varargs #t)
 )
 
-(define-function glade_setup_size_group
-  (c-name "empathy_glade_setup_size_group")
-  (return-type "none")
+(define-function builder_unref_and_keep_widget
+  (c-name "empathy_builder_unref_and_keep_widget")
+  (return-type "GtkWidget*")
   (parameters
-    '("GladeXML*" "gui")
-    '("GtkSizeGroupMode" "mode")
-    '("gchar*" "first_widget")
+    '("GtkBuilder*" "gui")
+    '("GtkWidget*" "root")
   )
-  (varargs #t)
 )
 
 (define-function icon_name_from_account
