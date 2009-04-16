@@ -60,6 +60,8 @@ import gtk.CellRendererPixbuf as PyGtkCellRendererPixbuf_Type
 import gtk.gdk.Pixbuf as PyGdkPixbuf_Type
 import gtk.Bin as PyGtkBin_Type
 import gtk.DrawingArea as PyGtkDrawingArea_Type
+import gtk.ComboBoxEntry as PyGtkComboBoxEntry_Type
+import gtk.Builder as PyGtkBuilder_Type
 import gst.GstBin as PyGstBin_Type
 import empathy.Contact as PyEmpathyContact_Type
 import empathy.ContactList as PyEmpathyContactList_Type
