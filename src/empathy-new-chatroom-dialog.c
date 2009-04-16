@@ -59,13 +59,9 @@ typedef struct {
 	GtkWidget         *account_chooser;
 	GtkWidget         *label_server;
 	GtkWidget         *entry_server;
-	GtkWidget         *togglebutton_refresh;
 	GtkWidget         *label_room;
 	GtkWidget         *entry_room;
-	GtkWidget         *vbox_browse;
-	GtkWidget         *image_status;
-	GtkWidget         *label_status;
-	GtkWidget         *hbox_status;
+	GtkWidget         *expander_browse;
 	GtkWidget         *throbber;
 	GtkWidget         *treeview;
 	GtkTreeModel      *model;
@@ -111,7 +107,10 @@ static void     new_chatroom_dialog_browse_start                    (EmpathyNewC
 static void     new_chatroom_dialog_browse_stop                     (EmpathyNewChatroomDialog *dialog);
 static void     new_chatroom_dialog_entry_server_activate_cb        (GtkWidget               *widget,
 								     EmpathyNewChatroomDialog *dialog);
-static void     new_chatroom_dialog_togglebutton_refresh_toggled_cb (GtkWidget               *widget,
+static void     new_chatroom_dialog_expander_browse_activate_cb     (GtkWidget               *widget,
+								     EmpathyNewChatroomDialog *dialog);
+static gboolean new_chatroom_dialog_entry_server_focus_out_cb       (GtkWidget               *widget,
+								     GdkEventFocus           *event,
 								     EmpathyNewChatroomDialog *dialog);
 
 static EmpathyNewChatroomDialog *dialog_p = NULL;
@@ -140,13 +139,9 @@ empathy_new_chatroom_dialog_show (GtkWindow *parent)
 				       "label_room", &dialog->label_room,
 				       "entry_server", &dialog->entry_server,
 				       "entry_room", &dialog->entry_room,
-				       "togglebutton_refresh", &dialog->togglebutton_refresh,
-				       "vbox_browse", &dialog->vbox_browse,
-				       "image_status", &dialog->image_status,
-				       "label_status", &dialog->label_status,
-				       "hbox_status", &dialog->hbox_status,
 				       "treeview", &dialog->treeview,
 				       "button_join", &dialog->button_join,
+				       "expander_browse", &dialog->expander_browse,
 				       NULL);
 	g_free (filename);
 
@@ -155,8 +150,9 @@ empathy_new_chatroom_dialog_show (GtkWindow *parent)
 			      "new_chatroom_dialog", "destroy", new_chatroom_dialog_destroy_cb,
 			      "entry_server", "changed", new_chatroom_dialog_entry_changed_cb,
 			      "entry_server", "activate", new_chatroom_dialog_entry_server_activate_cb,
+			      "entry_server", "focus-out-event", new_chatroom_dialog_entry_server_focus_out_cb,
 			      "entry_room", "changed", new_chatroom_dialog_entry_changed_cb,
-			      "togglebutton_refresh", "toggled", new_chatroom_dialog_togglebutton_refresh_toggled_cb,
+			      "expander_browse", "activate", new_chatroom_dialog_expander_browse_activate_cb,
 			      NULL);
 
 	g_object_unref (gui);
@@ -179,9 +175,10 @@ empathy_new_chatroom_dialog_show (GtkWindow *parent)
 	dialog->throbber = ephy_spinner_new ();
 	ephy_spinner_set_size (EPHY_SPINNER (dialog->throbber), GTK_ICON_SIZE_LARGE_TOOLBAR);
 	gtk_widget_show (dialog->throbber);
-
-	gtk_box_pack_start (GTK_BOX (dialog->hbox_status), dialog->throbber, 
-			    FALSE, FALSE, 0);
+	gtk_table_attach (GTK_TABLE (dialog->table_info),
+			  dialog->throbber,
+			  2, 3, 0, 1,
+			  0, 0, 0, 0);
 
 	/* Account chooser for custom */
 	dialog->account_chooser = empathy_account_chooser_new ();
@@ -190,7 +187,7 @@ empathy_new_chatroom_dialog_show (GtkWindow *parent)
 					    NULL);
 	gtk_table_attach_defaults (GTK_TABLE (dialog->table_info),
 				   dialog->account_chooser,
-				   1, 3, 0, 1);
+				   1, 2, 0, 1);
 	gtk_widget_show (dialog->account_chooser);
 
 	g_signal_connect (GTK_COMBO_BOX (dialog->account_chooser), "changed",
@@ -275,7 +272,6 @@ new_chatroom_dialog_model_add_columns (EmpathyNewChatroomDialog *dialog)
 	GtkCellRenderer   *cell;
 
 	view = GTK_TREE_VIEW (dialog->treeview);
-	gtk_tree_view_set_headers_visible (view, FALSE);
 
 	cell = gtk_cell_renderer_text_new ();
 	g_object_set (cell,
@@ -312,19 +308,15 @@ new_chatroom_dialog_update_widgets (EmpathyNewChatroomDialog *dialog)
 	/* hardcode here known protocols */
 	if (strcmp (protocol, "jabber") == 0) {
 		gtk_widget_set_sensitive (dialog->entry_server, TRUE);
-		gtk_widget_show (dialog->vbox_browse);
-
 	}
 	else if (strcmp (protocol, "local-xmpp") == 0) {
 		gtk_widget_set_sensitive (dialog->entry_server, FALSE);
-		gtk_widget_show (dialog->vbox_browse);		
 	}
 	else if (strcmp (protocol, "irc") == 0) {
 		gtk_widget_set_sensitive (dialog->entry_server, FALSE);
-		gtk_widget_show (dialog->vbox_browse);		
-	} else {
+	}
+	else {
 		gtk_widget_set_sensitive (dialog->entry_server, TRUE);
-		gtk_widget_show (dialog->vbox_browse);
 	}
 
 	room = gtk_entry_get_text (GTK_ENTRY (dialog->entry_room));
@@ -356,7 +348,7 @@ new_chatroom_dialog_account_changed_cb (GtkComboBox             *combobox,
 	account = empathy_account_chooser_get_account (account_chooser);
 	dialog->room_list = empathy_tp_roomlist_new (account);
 
-	if (dialog->room_list)	{
+	if (dialog->room_list) {
 		g_signal_connect (dialog->room_list, "destroy",
 				  G_CALLBACK (new_chatroom_dialog_roomlist_destroy_cb),
 				  dialog);
@@ -425,16 +417,6 @@ new_chatroom_dialog_listing_cb (EmpathyTpRoomlist        *room_list,
 	} else {
 		ephy_spinner_stop (EPHY_SPINNER (dialog->throbber));
 	}
-
-	/* Update the refresh toggle button */
-	g_signal_handlers_block_by_func (dialog->togglebutton_refresh,
-					 new_chatroom_dialog_togglebutton_refresh_toggled_cb,
-					 dialog);
-	gtk_toggle_button_set_active (GTK_TOGGLE_BUTTON (dialog->togglebutton_refresh),
-				      listing);
-	g_signal_handlers_unblock_by_func (dialog->togglebutton_refresh,
-					   new_chatroom_dialog_togglebutton_refresh_toggled_cb,
-					   dialog);
 }
 
 static void
@@ -542,22 +524,35 @@ static void
 new_chatroom_dialog_entry_server_activate_cb (GtkWidget                *widget,
 					      EmpathyNewChatroomDialog  *dialog)
 {
-	new_chatroom_dialog_togglebutton_refresh_toggled_cb (dialog->togglebutton_refresh, 
-							     dialog);
+	new_chatroom_dialog_browse_start (dialog);
 }
 
 static void
-new_chatroom_dialog_togglebutton_refresh_toggled_cb (GtkWidget               *widget,
-						     EmpathyNewChatroomDialog *dialog)
+new_chatroom_dialog_expander_browse_activate_cb (GtkWidget               *widget,
+						 EmpathyNewChatroomDialog *dialog)
 {
-	gboolean toggled;
+	gboolean expanded;
 
-	toggled = gtk_toggle_button_get_active (GTK_TOGGLE_BUTTON (widget));
-	
-	if (toggled) {
-		new_chatroom_dialog_browse_start (dialog);
-	} else {
+	expanded = gtk_expander_get_expanded (GTK_EXPANDER (widget));
+	if (expanded) {
 		new_chatroom_dialog_browse_stop (dialog);
+		gtk_window_set_resizable (GTK_WINDOW (dialog->window), FALSE);
+	} else {
+		new_chatroom_dialog_browse_start (dialog);
+		gtk_window_set_resizable (GTK_WINDOW (dialog->window), TRUE);
 	}
 }
 
+static gboolean
+new_chatroom_dialog_entry_server_focus_out_cb (GtkWidget               *widget,
+					       GdkEventFocus           *event,
+					       EmpathyNewChatroomDialog *dialog)
+{
+	gboolean expanded;
+
+	expanded = gtk_expander_get_expanded (GTK_EXPANDER (dialog->expander_browse));
+	if (expanded) {
+		new_chatroom_dialog_browse_start (dialog);
+	}
+	return FALSE;
+}
