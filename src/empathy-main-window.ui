@@ -88,7 +88,7 @@
         <child>
           <object class="GtkAction" id="room_join_new">
             <property name="name">room_join_new</property>
-            <property name="label" translatable="yes">Join _New...</property>
+            <property name="label" translatable="yes">_Join...</property>
           </object>
         </child>
         <child>
