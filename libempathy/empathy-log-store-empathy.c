@@ -505,6 +505,7 @@ log_store_empathy_get_messages_for_file (EmpathyLogStore *self,
       xmlFree (is_user_str);
       xmlFree (msg_type_str);
       xmlFree (cm_id_str);
+      xmlFree (sender_avatar_token);
     }
 
   DEBUG ("Parsed %d messages", g_list_length (messages));
