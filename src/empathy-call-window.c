@@ -77,6 +77,9 @@ struct _EmpathyCallWindowPriv
   GtkWidget *volume_button;
   GtkWidget *mic_button;
   GtkWidget *camera_button;
+  GtkWidget *toolbar;
+  GtkWidget *hangup;
+  GtkWidget *pane;
 
   gdouble volume;
   GtkAdjustment *audio_input_adj;
@@ -92,7 +95,6 @@ struct _EmpathyCallWindowPriv
   GstElement *funnel;
   GstElement *liveadder;
 
-  GladeXML *glade;
   guint context_id;
 
   GTimer *timer;
@@ -144,10 +146,8 @@ static void
 empathy_call_window_setup_menubar (EmpathyCallWindow *self)
 {
   EmpathyCallWindowPriv *priv = GET_PRIV (self);
-  GtkWidget *hangup;
 
-  hangup = glade_xml_get_widget (priv->glade, "menuhangup");
-  g_signal_connect_swapped (G_OBJECT (hangup), "activate",
+  g_signal_connect_swapped (priv->hangup, "activate",
     G_CALLBACK (empathy_call_window_hangup), self);
 }
 
@@ -155,32 +155,23 @@ static void
 empathy_call_window_setup_toolbar (EmpathyCallWindow *self)
 {
   EmpathyCallWindowPriv *priv = GET_PRIV (self);
-  GtkWidget *hangup;
-  GtkWidget *mic;
-  GtkWidget *camera;
-  GtkWidget *toolbar;
   GtkToolItem *tool_item;
 
-  hangup = glade_xml_get_widget (priv->glade, "hangup");
-
-  g_signal_connect_swapped (G_OBJECT (hangup), "clicked",
+  g_signal_connect_swapped (priv->hangup, "clicked",
     G_CALLBACK (empathy_call_window_hangup), self);
 
-  mic = glade_xml_get_widget (priv->glade, "microphone");
-  gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (mic), TRUE);
+  gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (priv->mic_button),
+      TRUE);
 
-  priv->mic_button = mic;
   g_signal_connect (G_OBJECT (priv->mic_button), "toggled",
     G_CALLBACK (empathy_call_window_mic_toggled_cb), self);
-
-  toolbar = glade_xml_get_widget (priv->glade, "toolbar");
 
   /* Add an empty expanded GtkToolItem so the volume button is at the end of
    * the toolbar. */
   tool_item = gtk_tool_item_new ();
   gtk_tool_item_set_expand (tool_item, TRUE);
   gtk_widget_show (GTK_WIDGET (tool_item));
-  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), tool_item, -1);
+  gtk_toolbar_insert (GTK_TOOLBAR (priv->toolbar), tool_item, -1);
 
   priv->volume_button = gtk_volume_button_new ();
   /* FIXME listen to the audiosinks signals and update the button according to
@@ -193,14 +184,13 @@ empathy_call_window_setup_toolbar (EmpathyCallWindow *self)
   tool_item = gtk_tool_item_new ();
   gtk_container_add (GTK_CONTAINER (tool_item), priv->volume_button);
   gtk_widget_show_all (GTK_WIDGET (tool_item));
-  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), tool_item, -1);
+  gtk_toolbar_insert (GTK_TOOLBAR (priv->toolbar), tool_item, -1);
 
-  camera = glade_xml_get_widget (priv->glade, "camera");
-  priv->camera_button = camera;
-  gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (camera), FALSE);
+  gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (priv->camera_button),
+      FALSE);
   gtk_widget_set_sensitive (priv->camera_button, FALSE);
 
-  g_signal_connect (G_OBJECT (camera), "toggled",
+  g_signal_connect (priv->camera_button, "toggled",
     G_CALLBACK (empathy_call_window_camera_toggled_cb), self);
 }
 
@@ -483,25 +473,28 @@ static void
 empathy_call_window_init (EmpathyCallWindow *self)
 {
   EmpathyCallWindowPriv *priv = GET_PRIV (self);
+  GtkBuilder *gui;
   GtkWidget *vbox, *top_vbox;
   GtkWidget *hbox, *h;
   GtkWidget *arrow;
   GtkWidget *page;
   GstBus *bus;
   gchar *filename;
-  GtkWidget *pane;
 
-  filename = empathy_file_lookup ("empathy-call-window.glade", "src");
-
-  priv->glade = empathy_glade_get_file (filename, "call_window", NULL,
+  filename = empathy_file_lookup ("empathy-call-window.ui", "src");
+  gui = empathy_builder_get_file (filename,
     "call_window_vbox", &top_vbox,
-    "pane", &pane,
+    "pane", &priv->pane,
     "statusbar", &priv->statusbar,
+    "microphone", &priv->mic_button,
+    "camera", &priv->camera_button,
+    "toolbar", &priv->toolbar,
+    "hangup", &priv->hangup,
     NULL);
 
   priv->lock = g_mutex_new ();
 
-  gtk_widget_reparent (top_vbox, GTK_WIDGET (self));
+  gtk_container_add (GTK_CONTAINER (self), top_vbox);
 
   empathy_call_window_setup_menubar (self);
   empathy_call_window_setup_toolbar (self);
@@ -510,7 +503,7 @@ empathy_call_window_init (EmpathyCallWindow *self)
 
   hbox = gtk_hbox_new (FALSE, 3);
   gtk_container_set_border_width (GTK_CONTAINER (hbox), 6);
-  gtk_paned_pack1 (GTK_PANED(pane), hbox, TRUE, FALSE);
+  gtk_paned_pack1 (GTK_PANED (priv->pane), hbox, TRUE, FALSE);
 
   bus = gst_pipeline_get_bus (GST_PIPELINE (priv->pipeline));
 
@@ -559,7 +552,7 @@ empathy_call_window_init (EmpathyCallWindow *self)
   g_signal_connect (G_OBJECT (priv->sidebar),
     "hide", G_CALLBACK (empathy_call_window_sidebar_hidden_cb),
     self);
-  gtk_paned_pack2 (GTK_PANED(pane), priv->sidebar, FALSE, FALSE);
+  gtk_paned_pack2 (GTK_PANED (priv->pane), priv->sidebar, FALSE, FALSE);
 
   priv->dtmf_panel = empathy_call_window_create_dtmf (self);
   empathy_sidebar_add_page (EMPATHY_SIDEBAR (priv->sidebar), _("Dialpad"),
@@ -588,6 +581,8 @@ empathy_call_window_init (EmpathyCallWindow *self)
   empathy_call_window_status_message (self, _("Connecting..."));
 
   priv->timer = g_timer_new ();
+
+  g_object_unref (gui);
 }
 
 static void empathy_call_window_dispose (GObject *object);
@@ -1119,14 +1114,12 @@ empathy_call_window_sidebar_toggled_cb (GtkToggleButton *toggle,
 {
   EmpathyCallWindowPriv *priv = GET_PRIV (window);
   GtkWidget *arrow;
-  GtkWidget *pane;
   int w,h, handle_size;
 
   w = GTK_WIDGET (window)->allocation.width;
   h = GTK_WIDGET (window)->allocation.height;
 
-  pane = glade_xml_get_widget (priv->glade, "pane");
-  gtk_widget_style_get (pane, "handle_size", &handle_size, NULL);
+  gtk_widget_style_get (priv->pane, "handle_size", &handle_size, NULL);
 
   if (gtk_toggle_button_get_active (toggle))
     {
