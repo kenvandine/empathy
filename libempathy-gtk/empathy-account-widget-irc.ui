@@ -1,216 +1,14 @@
 <?xml version="1.0"?>
-<!--Generated with glade3 3.4.1 on Wed Mar  5 15:39:45 2008 -->
 <interface>
-  <object class="GtkWindow" id="account_irc_settings">
-    <property name="title">irc account settings</property>
-    <property name="resizable">False</property>
-    <child>
-      <object class="GtkTable" id="vbox_irc_settings">
-        <property name="visible">True</property>
-        <property name="n_rows">5</property>
-        <property name="n_columns">2</property>
-        <property name="column_spacing">12</property>
-        <property name="row_spacing">6</property>
-        <child>
-          <object class="GtkEntry" id="entry_quit_message">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-          </object>
-          <packing>
-            <property name="left_attach">1</property>
-            <property name="right_attach">2</property>
-            <property name="top_attach">4</property>
-            <property name="bottom_attach">5</property>
-            <property name="y_options"/>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="label_quit_message">
-            <property name="visible">True</property>
-            <property name="xalign">0</property>
-            <property name="label" translatable="yes">Quit message:</property>
-          </object>
-          <packing>
-            <property name="top_attach">4</property>
-            <property name="bottom_attach">5</property>
-            <property name="x_options">GTK_FILL</property>
-            <property name="y_options"/>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkEntry" id="entry_fullname">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-          </object>
-          <packing>
-            <property name="left_attach">1</property>
-            <property name="right_attach">2</property>
-            <property name="top_attach">3</property>
-            <property name="bottom_attach">4</property>
-            <property name="y_options"/>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkEntry" id="entry_password">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-            <property name="visibility">False</property>
-          </object>
-          <packing>
-            <property name="left_attach">1</property>
-            <property name="right_attach">2</property>
-            <property name="top_attach">2</property>
-            <property name="bottom_attach">3</property>
-            <property name="y_options"/>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="label_password">
-            <property name="visible">True</property>
-            <property name="xalign">0</property>
-            <property name="label" translatable="yes">Password:</property>
-          </object>
-          <packing>
-            <property name="top_attach">2</property>
-            <property name="bottom_attach">3</property>
-            <property name="x_options">GTK_FILL</property>
-            <property name="y_options"/>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="label_fullname">
-            <property name="visible">True</property>
-            <property name="xalign">0</property>
-            <property name="label" translatable="yes">Real name:</property>
-          </object>
-          <packing>
-            <property name="top_attach">3</property>
-            <property name="bottom_attach">4</property>
-            <property name="x_options">GTK_FILL</property>
-            <property name="y_options"/>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkEntry" id="entry_nick">
-            <property name="visible">True</property>
-            <property name="can_focus">True</property>
-          </object>
-          <packing>
-            <property name="left_attach">1</property>
-            <property name="right_attach">2</property>
-            <property name="top_attach">1</property>
-            <property name="bottom_attach">2</property>
-            <property name="y_options"/>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="label_nick">
-            <property name="visible">True</property>
-            <property name="xalign">0</property>
-            <property name="label" translatable="yes">Nickname:</property>
-            <property name="use_underline">True</property>
-            <property name="mnemonic_widget">entry_nick</property>
-          </object>
-          <packing>
-            <property name="top_attach">1</property>
-            <property name="bottom_attach">2</property>
-            <property name="x_options">GTK_FILL</property>
-            <property name="y_options"/>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkHBox" id="hbox174">
-            <property name="visible">True</property>
-            <property name="spacing">2</property>
-            <child>
-              <object class="GtkComboBox" id="combobox_network">
-                <property name="visible">True</property>
-              </object>
-            </child>
-            <child>
-              <object class="GtkButton" id="button_add_network">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="tooltip-text" translatable="yes">Create a new IRC network</property>
-                <child>
-                  <object class="GtkImage" id="image2">
-                    <property name="visible">True</property>
-                    <property name="stock">gtk-add</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">1</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="button_network">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="tooltip-text" translatable="yes">Edit the selected IRC network</property>
-                <child>
-                  <object class="GtkImage" id="image834">
-                    <property name="visible">True</property>
-                    <property name="stock">gtk-edit</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">2</property>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkButton" id="button_remove">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-                <property name="tooltip-text" translatable="yes">Remove the selected IRC network</property>
-                <child>
-                  <object class="GtkImage" id="image835">
-                    <property name="visible">True</property>
-                    <property name="stock">gtk-remove</property>
-                  </object>
-                </child>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">False</property>
-                <property name="position">3</property>
-              </packing>
-            </child>
-          </object>
-          <packing>
-            <property name="left_attach">1</property>
-            <property name="right_attach">2</property>
-            <property name="x_options">GTK_FILL</property>
-            <property name="y_options">GTK_FILL</property>
-          </packing>
-        </child>
-        <child>
-          <object class="GtkLabel" id="label_network">
-            <property name="visible">True</property>
-            <property name="xalign">0</property>
-            <property name="label" translatable="yes">Network:</property>
-            <property name="use_underline">True</property>
-          </object>
-          <packing>
-            <property name="x_options">GTK_FILL</property>
-            <property name="y_options"/>
-          </packing>
-        </child>
-      </object>
-    </child>
-  </object>
+  <requires lib="gtk+" version="2.16"/>
+  <!-- interface-naming-policy toplevel-contextual -->
   <object class="GtkDialog" id="irc_network_dialog">
     <property name="visible">True</property>
     <property name="border_width">5</property>
     <property name="title" translatable="yes">Network</property>
-    <property name="window_position">GTK_WIN_POS_CENTER_ON_PARENT</property>
+    <property name="window_position">center-on-parent</property>
     <property name="icon_name">gtk-edit</property>
-    <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
+    <property name="type_hint">dialog</property>
     <property name="skip_taskbar_hint">True</property>
     <property name="skip_pager_hint">True</property>
     <property name="has_separator">False</property>
@@ -222,7 +20,7 @@
           <object class="GtkFrame" id="frame14">
             <property name="visible">True</property>
             <property name="label_xalign">0</property>
-            <property name="shadow_type">GTK_SHADOW_NONE</property>
+            <property name="shadow_type">none</property>
             <child>
               <object class="GtkAlignment" id="alignment28">
                 <property name="visible">True</property>
@@ -243,7 +41,7 @@
                       </object>
                       <packing>
                         <property name="x_options">GTK_FILL</property>
-                        <property name="y_options"/>
+                        <property name="y_options"></property>
                       </packing>
                     </child>
                     <child>
@@ -256,7 +54,7 @@
                         <property name="top_attach">1</property>
                         <property name="bottom_attach">2</property>
                         <property name="x_options">GTK_FILL</property>
-                        <property name="y_options"/>
+                        <property name="y_options"></property>
                       </packing>
                     </child>
                     <child>
@@ -267,7 +65,7 @@
                       <packing>
                         <property name="left_attach">1</property>
                         <property name="right_attach">2</property>
-                        <property name="y_options"/>
+                        <property name="y_options"></property>
                       </packing>
                     </child>
                     <child>
@@ -288,7 +86,7 @@
               </object>
             </child>
             <child type="label">
-              <object class="GtkLabel" id="label_network">
+              <object class="GtkLabel" id="label_network1">
                 <property name="visible">True</property>
                 <property name="label" translatable="yes">&lt;b&gt;Network&lt;/b&gt;</property>
                 <property name="use_markup">True</property>
@@ -303,7 +101,7 @@
           <object class="GtkFrame" id="frame15">
             <property name="visible">True</property>
             <property name="label_xalign">0</property>
-            <property name="shadow_type">GTK_SHADOW_NONE</property>
+            <property name="shadow_type">none</property>
             <child>
               <object class="GtkAlignment" id="alignment29">
                 <property name="visible">True</property>
@@ -312,7 +110,6 @@
                 <child>
                   <object class="GtkTable" id="table15">
                     <property name="visible">True</property>
-                    <property name="n_rows">1</property>
                     <property name="n_columns">2</property>
                     <property name="column_spacing">6</property>
                     <property name="row_spacing">6</property>
@@ -320,9 +117,9 @@
                       <object class="GtkScrolledWindow" id="scrolledwindow19">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="hscrollbar_policy">GTK_POLICY_NEVER</property>
-                        <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
-                        <property name="shadow_type">GTK_SHADOW_IN</property>
+                        <property name="hscrollbar_policy">never</property>
+                        <property name="vscrollbar_policy">automatic</property>
+                        <property name="shadow_type">in</property>
                         <child>
                           <object class="GtkTreeView" id="treeview_servers">
                             <property name="visible">True</property>
@@ -339,49 +136,64 @@
                       <object class="GtkVButtonBox" id="vbuttonbox1">
                         <property name="visible">True</property>
                         <property name="spacing">6</property>
-                        <property name="layout_style">GTK_BUTTONBOX_START</property>
+                        <property name="layout_style">start</property>
                         <child>
                           <object class="GtkButton" id="button_add">
-                            <property name="visible">True</property>
-                            <property name="can_focus">True</property>
-                            <property name="can_default">True</property>
                             <property name="label">gtk-add</property>
-                            <property name="use_stock">True</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="GtkButton" id="button_remove">
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="can_default">True</property>
-                            <property name="label">gtk-remove</property>
+                            <property name="receives_default">False</property>
                             <property name="use_stock">True</property>
                           </object>
                           <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
+                            <property name="position">0</property>
+                          </packing>
+                        </child>
+                        <child>
+                          <object class="GtkButton" id="button_remove">
+                            <property name="label">gtk-remove</property>
+                            <property name="visible">True</property>
+                            <property name="can_focus">True</property>
+                            <property name="can_default">True</property>
+                            <property name="receives_default">False</property>
+                            <property name="use_stock">True</property>
+                          </object>
+                          <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
                             <property name="position">1</property>
                           </packing>
                         </child>
                         <child>
                           <object class="GtkButton" id="button_up">
+                            <property name="label">gtk-go-up</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="can_default">True</property>
-                            <property name="label">gtk-go-up</property>
+                            <property name="receives_default">False</property>
                             <property name="use_stock">True</property>
                           </object>
                           <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
                             <property name="position">2</property>
                           </packing>
                         </child>
                         <child>
                           <object class="GtkButton" id="button_down">
+                            <property name="label">gtk-go-down</property>
                             <property name="visible">True</property>
                             <property name="can_focus">True</property>
                             <property name="can_default">True</property>
-                            <property name="label">gtk-go-down</property>
+                            <property name="receives_default">False</property>
                             <property name="use_stock">True</property>
                           </object>
                           <packing>
+                            <property name="expand">False</property>
+                            <property name="fill">False</property>
                             <property name="position">3</property>
                           </packing>
                         </child>
@@ -411,30 +223,237 @@
         <child internal-child="action_area">
           <object class="GtkHButtonBox" id="dialog-action_area10">
             <property name="visible">True</property>
-            <property name="layout_style">GTK_BUTTONBOX_END</property>
+            <property name="layout_style">end</property>
             <child>
               <object class="GtkButton" id="button_close">
+                <property name="label">gtk-close</property>
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
-                <property name="label">gtk-close</property>
+                <property name="receives_default">False</property>
                 <property name="use_stock">True</property>
               </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">0</property>
+              </packing>
             </child>
           </object>
           <packing>
             <property name="expand">False</property>
-            <property name="pack_type">GTK_PACK_END</property>
+            <property name="pack_type">end</property>
+            <property name="position">0</property>
           </packing>
         </child>
       </object>
     </child>
     <action-widgets>
-      <action-widget response="0">button_add</action-widget>
-      <action-widget response="0">button_remove</action-widget>
-      <action-widget response="0">button_up</action-widget>
-      <action-widget response="0">button_down</action-widget>
       <action-widget response="-7">button_close</action-widget>
     </action-widgets>
+  </object>
+  <object class="GtkTable" id="vbox_irc_settings">
+    <property name="visible">True</property>
+    <property name="n_rows">5</property>
+    <property name="n_columns">2</property>
+    <property name="column_spacing">12</property>
+    <property name="row_spacing">6</property>
+    <child>
+      <object class="GtkEntry" id="entry_quit_message">
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="invisible_char">&#x25CF;</property>
+      </object>
+      <packing>
+        <property name="left_attach">1</property>
+        <property name="right_attach">2</property>
+        <property name="top_attach">4</property>
+        <property name="bottom_attach">5</property>
+        <property name="y_options"></property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="label_quit_message">
+        <property name="visible">True</property>
+        <property name="xalign">0</property>
+        <property name="label" translatable="yes">Quit message:</property>
+      </object>
+      <packing>
+        <property name="top_attach">4</property>
+        <property name="bottom_attach">5</property>
+        <property name="x_options">GTK_FILL</property>
+        <property name="y_options"></property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkEntry" id="entry_fullname">
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="invisible_char">&#x25CF;</property>
+      </object>
+      <packing>
+        <property name="left_attach">1</property>
+        <property name="right_attach">2</property>
+        <property name="top_attach">3</property>
+        <property name="bottom_attach">4</property>
+        <property name="y_options"></property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkEntry" id="entry_password">
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="visibility">False</property>
+        <property name="invisible_char">&#x25CF;</property>
+      </object>
+      <packing>
+        <property name="left_attach">1</property>
+        <property name="right_attach">2</property>
+        <property name="top_attach">2</property>
+        <property name="bottom_attach">3</property>
+        <property name="y_options"></property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="label_password">
+        <property name="visible">True</property>
+        <property name="xalign">0</property>
+        <property name="label" translatable="yes">Password:</property>
+      </object>
+      <packing>
+        <property name="top_attach">2</property>
+        <property name="bottom_attach">3</property>
+        <property name="x_options">GTK_FILL</property>
+        <property name="y_options"></property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="label_fullname">
+        <property name="visible">True</property>
+        <property name="xalign">0</property>
+        <property name="label" translatable="yes">Real name:</property>
+      </object>
+      <packing>
+        <property name="top_attach">3</property>
+        <property name="bottom_attach">4</property>
+        <property name="x_options">GTK_FILL</property>
+        <property name="y_options"></property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkEntry" id="entry_nick">
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <property name="invisible_char">&#x25CF;</property>
+      </object>
+      <packing>
+        <property name="left_attach">1</property>
+        <property name="right_attach">2</property>
+        <property name="top_attach">1</property>
+        <property name="bottom_attach">2</property>
+        <property name="y_options"></property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="label_nick">
+        <property name="visible">True</property>
+        <property name="xalign">0</property>
+        <property name="label" translatable="yes">Nickname:</property>
+        <property name="use_underline">True</property>
+        <property name="mnemonic_widget">entry_nick</property>
+      </object>
+      <packing>
+        <property name="top_attach">1</property>
+        <property name="bottom_attach">2</property>
+        <property name="x_options">GTK_FILL</property>
+        <property name="y_options"></property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkHBox" id="hbox174">
+        <property name="visible">True</property>
+        <property name="spacing">2</property>
+        <child>
+          <object class="GtkComboBox" id="combobox_network">
+            <property name="visible">True</property>
+          </object>
+          <packing>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="button_add_network">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <child>
+              <object class="GtkImage" id="image2">
+                <property name="visible">True</property>
+                <property name="stock">gtk-add</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="button_network">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <child>
+              <object class="GtkImage" id="image834">
+                <property name="visible">True</property>
+                <property name="stock">gtk-edit</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">2</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkButton" id="button_remove">
+            <property name="visible">True</property>
+            <property name="can_focus">True</property>
+            <property name="receives_default">True</property>
+            <child>
+              <object class="GtkImage" id="image835">
+                <property name="visible">True</property>
+                <property name="stock">gtk-remove</property>
+              </object>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+            <property name="position">3</property>
+          </packing>
+        </child>
+      </object>
+      <packing>
+        <property name="left_attach">1</property>
+        <property name="right_attach">2</property>
+        <property name="x_options">GTK_FILL</property>
+        <property name="y_options">GTK_FILL</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkLabel" id="label_network">
+        <property name="visible">True</property>
+        <property name="xalign">0</property>
+        <property name="label" translatable="yes">Network:</property>
+        <property name="use_underline">True</property>
+      </object>
+      <packing>
+        <property name="x_options">GTK_FILL</property>
+        <property name="y_options"></property>
+      </packing>
+    </child>
   </object>
 </interface>

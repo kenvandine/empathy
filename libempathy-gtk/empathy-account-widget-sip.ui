@@ -1,210 +1,213 @@
 <?xml version="1.0"?>
-<!--*- mode: xml -*-->
 <interface>
+  <requires lib="gtk+" version="2.16"/>
+  <!-- interface-naming-policy toplevel-contextual -->
   <object class="GtkAdjustment" id="adjustment1">
     <property name="upper">65535</property>
-    <property name="lower">0</property>
-    <property name="page_increment">10</property>
     <property name="step_increment">1</property>
-    <property name="page_size">0</property>
-    <property name="value">0</property>
+    <property name="page_increment">10</property>
   </object>
-  <object class="GtkWindow" id="account_sip_settings">
-    <property name="resizable">False</property>
+  <object class="GtkVBox" id="vbox_sip_settings">
+    <property name="visible">True</property>
+    <property name="orientation">vertical</property>
     <child>
-      <object class="GtkVBox" id="vbox_sip_settings">
+      <object class="GtkTable" id="table1">
         <property name="visible">True</property>
+        <property name="n_rows">2</property>
+        <property name="n_columns">2</property>
+        <property name="column_spacing">12</property>
+        <property name="row_spacing">6</property>
         <child>
-          <object class="GtkTable" id="table1">
+          <object class="GtkLabel" id="label_password">
             <property name="visible">True</property>
-            <property name="n_rows">2</property>
-            <property name="n_columns">2</property>
-            <property name="column_spacing">12</property>
-            <property name="row_spacing">6</property>
-            <child>
-              <object class="GtkLabel" id="label_password">
-                <property name="visible">True</property>
-                <property name="xalign">0</property>
-                <property name="label" translatable="yes">Pass_word:</property>
-                <property name="use_underline">True</property>
-                <property name="mnemonic_widget">entry_password</property>
-              </object>
-              <packing>
-                <property name="top_attach">1</property>
-                <property name="bottom_attach">2</property>
-                <property name="x_options">GTK_FILL</property>
-                <property name="y_options"/>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkEntry" id="entry_userid">
-                <property name="visible">True</property>
-                <property name="can_focus">True</property>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="right_attach">2</property>
-                <property name="y_options"/>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkLabel" id="label_userid">
-                <property name="visible">True</property>
-                <property name="xalign">0</property>
-                <property name="label" translatable="yes">_Username:</property>
-                <property name="use_underline">True</property>
-                <property name="mnemonic_widget">entry_password</property>
-              </object>
-              <packing>
-                <property name="x_options">GTK_FILL</property>
-                <property name="y_options"/>
-              </packing>
-            </child>
-            <child>
-              <object class="GtkHBox" id="hbox1">
-                <property name="visible">True</property>
-                <child>
-                  <object class="GtkEntry" id="entry_password">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="GtkButton" id="button_forget">
-                    <property name="visible">True</property>
-                    <property name="can_focus">True</property>
-                    <property name="tooltip-text" translatable="yes">Forget password and clear the entry.</property>
-                    <child>
-                      <object class="GtkImage" id="image6">
-                        <property name="visible">True</property>
-                        <property name="stock">gtk-clear</property>
-                        <property name="icon_size">1</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="position">1</property>
-                  </packing>
-                </child>
-              </object>
-              <packing>
-                <property name="left_attach">1</property>
-                <property name="right_attach">2</property>
-                <property name="top_attach">1</property>
-                <property name="bottom_attach">2</property>
-                <property name="y_options"/>
-              </packing>
-            </child>
+            <property name="xalign">0</property>
+            <property name="label" translatable="yes">Pass_word:</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">entry_password</property>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
+            <property name="top_attach">1</property>
+            <property name="bottom_attach">2</property>
+            <property name="x_options">GTK_FILL</property>
+            <property name="y_options"></property>
           </packing>
         </child>
         <child>
-          <object class="GtkExpander" id="expander_advanced">
+          <object class="GtkEntry" id="entry_userid">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
+            <property name="invisible_char">&#x25CF;</property>
+          </object>
+          <packing>
+            <property name="left_attach">1</property>
+            <property name="right_attach">2</property>
+            <property name="y_options"></property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkLabel" id="label_userid">
+            <property name="visible">True</property>
+            <property name="xalign">0</property>
+            <property name="label" translatable="yes">_Username:</property>
+            <property name="use_underline">True</property>
+            <property name="mnemonic_widget">entry_password</property>
+          </object>
+          <packing>
+            <property name="x_options">GTK_FILL</property>
+            <property name="y_options"></property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkHBox" id="hbox1">
+            <property name="visible">True</property>
             <child>
-              <object class="GtkAlignment" id="alignment1">
+              <object class="GtkEntry" id="entry_password">
                 <property name="visible">True</property>
-                <property name="xalign">0</property>
-                <property name="left_padding">12</property>
+                <property name="can_focus">True</property>
+                <property name="invisible_char">&#x25CF;</property>
+              </object>
+              <packing>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="button_forget">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
                 <child>
-                  <object class="GtkTable" id="table_advanced_sip_settings">
+                  <object class="GtkImage" id="image6">
                     <property name="visible">True</property>
-                    <property name="n_rows">3</property>
-                    <property name="n_columns">2</property>
-                    <property name="column_spacing">6</property>
-                    <property name="row_spacing">6</property>
-                    <child>
-                      <object class="GtkEntry" id="entry_stun-server">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="right_attach">2</property>
-                        <property name="top_attach">1</property>
-                        <property name="bottom_attach">2</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="label_stun-port">
-                        <property name="visible">True</property>
-                        <property name="xalign">0</property>
-                        <property name="label" translatable="yes">STUN port:</property>
-                        <property name="mnemonic_widget">spinbutton_stun-port</property>
-                      </object>
-                      <packing>
-                        <property name="top_attach">2</property>
-                        <property name="bottom_attach">3</property>
-                        <property name="x_options">GTK_FILL</property>
-                        <property name="y_options"/>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkLabel" id="label_stun-server">
-                        <property name="visible">True</property>
-                        <property name="xalign">0</property>
-                        <property name="label" translatable="yes">STUN Server:</property>
-                        <property name="mnemonic_widget">entry_stun-server</property>
-                      </object>
-                      <packing>
-                        <property name="top_attach">1</property>
-                        <property name="bottom_attach">2</property>
-                        <property name="x_options">GTK_FILL</property>
-                        <property name="y_options"/>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkSpinButton" id="spinbutton_stun-port">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property name="adjustment">adjustment1</property>
-                        <property name="climb_rate">1</property>
-                      </object>
-                      <packing>
-                        <property name="left_attach">1</property>
-                        <property name="right_attach">2</property>
-                        <property name="top_attach">2</property>
-                        <property name="bottom_attach">3</property>
-                      </packing>
-                    </child>
-                    <child>
-                      <object class="GtkCheckButton" id="checkbutton_discover-stun">
-                        <property name="visible">True</property>
-                        <property name="can_focus">True</property>
-                        <property comments="look up the DNS SRV record at the service's domain for the host name of a STUN server." name="label" translatable="yes">Discover STUN</property>
-                        <property name="use_underline">True</property>
-                        <property name="draw_indicator">True</property>
-                      </object>
-                      <packing>
-                        <property name="right_attach">2</property>
-                        <property name="x_options">GTK_FILL</property>
-                        <property name="y_options"/>
-                      </packing>
-                    </child>
+                    <property name="stock">gtk-clear</property>
+                    <property name="icon-size">1</property>
                   </object>
                 </child>
               </object>
-            </child>
-            <child type="label">
-              <object class="GtkLabel" id="label_expander">
-                <property name="visible">True</property>
-                <property name="label" translatable="yes">&lt;b&gt;Advanced&lt;/b&gt;</property>
-                <property name="use_markup">True</property>
-              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="position">1</property>
+              </packing>
             </child>
           </object>
           <packing>
-            <property name="expand">False</property>
-            <property name="fill">False</property>
-            <property name="position">1</property>
+            <property name="left_attach">1</property>
+            <property name="right_attach">2</property>
+            <property name="top_attach">1</property>
+            <property name="bottom_attach">2</property>
+            <property name="y_options"></property>
           </packing>
         </child>
       </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">False</property>
+        <property name="position">0</property>
+      </packing>
+    </child>
+    <child>
+      <object class="GtkExpander" id="expander_advanced">
+        <property name="visible">True</property>
+        <property name="can_focus">True</property>
+        <child>
+          <object class="GtkAlignment" id="alignment1">
+            <property name="visible">True</property>
+            <property name="xalign">0</property>
+            <property name="left_padding">12</property>
+            <child>
+              <object class="GtkTable" id="table_advanced_sip_settings">
+                <property name="visible">True</property>
+                <property name="n_rows">3</property>
+                <property name="n_columns">2</property>
+                <property name="column_spacing">6</property>
+                <property name="row_spacing">6</property>
+                <child>
+                  <object class="GtkEntry" id="entry_stun-server">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="invisible_char">&#x25CF;</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="right_attach">2</property>
+                    <property name="top_attach">1</property>
+                    <property name="bottom_attach">2</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label_stun-port">
+                    <property name="visible">True</property>
+                    <property name="xalign">0</property>
+                    <property name="label" translatable="yes">STUN port:</property>
+                    <property name="mnemonic_widget">spinbutton_stun-port</property>
+                  </object>
+                  <packing>
+                    <property name="top_attach">2</property>
+                    <property name="bottom_attach">3</property>
+                    <property name="x_options">GTK_FILL</property>
+                    <property name="y_options"></property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="label_stun-server">
+                    <property name="visible">True</property>
+                    <property name="xalign">0</property>
+                    <property name="label" translatable="yes">STUN Server:</property>
+                    <property name="mnemonic_widget">entry_stun-server</property>
+                  </object>
+                  <packing>
+                    <property name="top_attach">1</property>
+                    <property name="bottom_attach">2</property>
+                    <property name="x_options">GTK_FILL</property>
+                    <property name="y_options"></property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkSpinButton" id="spinbutton_stun-port">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="invisible_char">&#x25CF;</property>
+                    <property name="adjustment">adjustment1</property>
+                    <property name="climb_rate">1</property>
+                  </object>
+                  <packing>
+                    <property name="left_attach">1</property>
+                    <property name="right_attach">2</property>
+                    <property name="top_attach">2</property>
+                    <property name="bottom_attach">3</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkCheckButton" id="checkbutton_discover-stun">
+                    <property name="label" translatable="yes" comments="look up the DNS SRV record at the service's domain for the host name of a STUN server.">Discover STUN</property>
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="receives_default">False</property>
+                    <property name="use_underline">True</property>
+                    <property name="draw_indicator">True</property>
+                  </object>
+                  <packing>
+                    <property name="right_attach">2</property>
+                    <property name="x_options">GTK_FILL</property>
+                    <property name="y_options"></property>
+                  </packing>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child type="label">
+          <object class="GtkLabel" id="label_expander">
+            <property name="visible">True</property>
+            <property name="label" translatable="yes">&lt;b&gt;Advanced&lt;/b&gt;</property>
+            <property name="use_markup">True</property>
+          </object>
+        </child>
+      </object>
+      <packing>
+        <property name="expand">False</property>
+        <property name="fill">False</property>
+        <property name="position">1</property>
+      </packing>
     </child>
   </object>
 </interface>
