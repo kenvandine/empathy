@@ -26,7 +26,6 @@
 
 #include <glib/gi18n-lib.h>
 #include <gtk/gtk.h>
-#include <glade/glade.h>
 
 #include <libmissioncontrol/mc-account.h>
 #include <libmissioncontrol/mc-protocol.h>
@@ -457,7 +456,7 @@ empathy_irc_network_dialog_show (EmpathyIrcNetwork *network,
                                  GtkWidget *parent)
 {
   static EmpathyIrcNetworkDialog *dialog = NULL;
-  GladeXML *glade;
+  GtkBuilder *gui;
   GtkListStore *store;
   GtkCellRenderer *renderer;
   GtkAdjustment *adjustment;
@@ -480,11 +479,9 @@ empathy_irc_network_dialog_show (EmpathyIrcNetwork *network,
   dialog->network = network;
   g_object_ref (dialog->network);
 
-  filename = empathy_file_lookup ("empathy-account-widget-irc.glade",
+  filename = empathy_file_lookup ("empathy-account-widget-irc.ui",
       "libempathy-gtk");
-  glade = empathy_glade_get_file (filename,
-      "irc_network_dialog",
-      NULL,
+  gui = empathy_builder_get_file (filename,
       "irc_network_dialog", &dialog->dialog,
       "button_close", &dialog->button_close,
       "entry_network", &dialog->entry_network,
@@ -550,7 +547,7 @@ empathy_irc_network_dialog_show (EmpathyIrcNetwork *network,
 
   irc_network_dialog_setup (dialog);
 
-  empathy_glade_connect (glade, dialog,
+  empathy_builder_connect (gui, dialog,
       "irc_network_dialog", "destroy", irc_network_dialog_destroy_cb,
       "button_close", "clicked", irc_network_dialog_close_clicked_cb,
       "entry_network", "focus-out-event", irc_network_dialog_network_focus_cb,
@@ -561,7 +558,7 @@ empathy_irc_network_dialog_show (EmpathyIrcNetwork *network,
       "combobox_charset", "changed", irc_network_dialog_combobox_charset_changed_cb,
       NULL);
 
-  g_object_unref (glade);
+  g_object_unref (gui);
 
   g_object_add_weak_pointer (G_OBJECT (dialog->dialog),
       (gpointer) &dialog);
