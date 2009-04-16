@@ -70,8 +70,12 @@ typedef struct {
 } EmpathyNewChatroomDialog;
 
 enum {
+	COL_NEED_PASSWORD,
+	COL_INVITE_ONLY,
 	COL_NAME,
 	COL_ROOM,
+	COL_MEMBERS,
+	COL_TOOL_TIP,
 	COL_COUNT
 };
 
@@ -244,12 +248,17 @@ new_chatroom_dialog_model_setup (EmpathyNewChatroomDialog *dialog)
 
 	/* Store/Model */
 	store = gtk_list_store_new (COL_COUNT,
-				    G_TYPE_STRING,       /* Image */
-				    G_TYPE_STRING,       /* Text */
-				    G_TYPE_STRING);      /* Room */
+				    G_TYPE_STRING,       /* Invite */
+				    G_TYPE_STRING,       /* Password */
+				    G_TYPE_STRING,       /* Name */
+				    G_TYPE_STRING,       /* Room */
+				    G_TYPE_STRING,       /* Member count */
+				    G_TYPE_STRING);      /* Tool tip */
 
 	dialog->model = GTK_TREE_MODEL (store);
 	gtk_tree_view_set_model (view, dialog->model);
+	gtk_tree_view_set_tooltip_column (view, COL_TOOL_TIP);
+	gtk_tree_view_set_search_column (view, COL_NAME);
 
 	/* Selection */
 	selection = gtk_tree_view_get_selection (view);
@@ -270,22 +279,56 @@ new_chatroom_dialog_model_add_columns (EmpathyNewChatroomDialog *dialog)
 	GtkTreeView       *view;
 	GtkTreeViewColumn *column;
 	GtkCellRenderer   *cell;
+        gint               width, height;
+
+	gtk_icon_size_lookup (GTK_ICON_SIZE_MENU, &width, &height);
 
 	view = GTK_TREE_VIEW (dialog->treeview);
+
+	cell = gtk_cell_renderer_pixbuf_new ();
+	g_object_set (cell,
+		      "width", width,
+		      "height", height,
+		      "stock-size", GTK_ICON_SIZE_MENU,
+		      NULL);
+	column = gtk_tree_view_column_new_with_attributes (_(" "),
+		                                           cell,
+		                                           "stock-id", COL_INVITE_ONLY,
+		                                           NULL);
+	gtk_tree_view_append_column (view, column);
+
+	column = gtk_tree_view_column_new_with_attributes (_(" "),
+		                                           cell,
+		                                           "stock-id", COL_NEED_PASSWORD,
+		                                           NULL);
+	gtk_tree_view_append_column (view, column);
 
 	cell = gtk_cell_renderer_text_new ();
 	g_object_set (cell,
 		      "xpad", (guint) 4,
-		      "ypad", (guint) 1,
+		      "ypad", (guint) 2,
 		      "ellipsize", PANGO_ELLIPSIZE_END,
 		      NULL);
 
-	column = gtk_tree_view_column_new_with_attributes (_("Chat Rooms"),
+	column = gtk_tree_view_column_new_with_attributes (_("Chat Room"),
 		                                           cell,
 		                                           "text", COL_NAME,
 		                                           NULL);
 
 	gtk_tree_view_column_set_expand (column, TRUE);
+	gtk_tree_view_append_column (view, column);
+
+	cell = gtk_cell_renderer_text_new ();
+	g_object_set (cell,
+		      "xpad", (guint) 4,
+		      "ypad", (guint) 2,
+		      "ellipsize", PANGO_ELLIPSIZE_END,
+		      "alignment", PANGO_ALIGN_RIGHT,
+		      NULL);
+	column = gtk_tree_view_column_new_with_attributes (_("Members"),
+		                                           cell,
+		                                           "text", COL_MEMBERS,
+		                                           NULL);
 	gtk_tree_view_append_column (view, column);
 }
 
@@ -385,6 +428,8 @@ new_chatroom_dialog_new_room_cb (EmpathyTpRoomlist        *room_list,
 	GtkTreeSelection *selection;
 	GtkListStore     *store;
 	GtkTreeIter       iter;
+	gchar            *members;
+	gchar            *tool_tip;
 
 	DEBUG ("New chatroom listed: %s (%s)",
 		empathy_chatroom_get_name (chatroom),
@@ -394,11 +439,22 @@ new_chatroom_dialog_new_room_cb (EmpathyTpRoomlist        *room_list,
 	view = GTK_TREE_VIEW (dialog->treeview);
 	selection = gtk_tree_view_get_selection (view);
 	store = GTK_LIST_STORE (dialog->model);
+	members = g_strdup_printf ("%d", empathy_chatroom_get_members_count (chatroom));
+	tool_tip = g_strdup_printf ("<b>%s</b>\nInvite required: %s\nPassword required: %s\nMembers: %s", 
+			empathy_chatroom_get_name (chatroom),
+			empathy_chatroom_get_invite_only (chatroom) ? _("Yes") : _("No"),
+			empathy_chatroom_get_need_password (chatroom) ? _("Yes") : _("No"),
+			members
+			);
 
 	gtk_list_store_append (store, &iter);
 	gtk_list_store_set (store, &iter,
+			    COL_NEED_PASSWORD, (empathy_chatroom_get_need_password (chatroom) ? GTK_STOCK_DIALOG_AUTHENTICATION : NULL),
+			    COL_INVITE_ONLY, (empathy_chatroom_get_invite_only (chatroom) ? GTK_STOCK_INDEX : NULL),
 			    COL_NAME, empathy_chatroom_get_name (chatroom),
 			    COL_ROOM, empathy_chatroom_get_room (chatroom),
+			    COL_MEMBERS, members,
+			    COL_TOOL_TIP, tool_tip,
 			    -1);
 }
 
