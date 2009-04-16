@@ -64,8 +64,6 @@ free_empathy_tp_tube_accept_data (gpointer data)
 typedef struct
 {
   TpChannel *channel;
-  guint initiator;
-  guint type;
   gchar *service;
   /* FIXME readd support for parameters.. */
   GHashTable *parameters;
