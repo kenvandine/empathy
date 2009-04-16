@@ -1288,16 +1288,14 @@ static void
 chat_create_ui (EmpathyChat *chat)
 {
 	EmpathyChatPriv *priv = GET_PRIV (chat);
-	GladeXML        *glade;
+	GtkBuilder      *gui;
  	GList           *list = NULL; 
 	gchar           *filename;
 	GtkTextBuffer   *buffer;
 
-	filename = empathy_file_lookup ("empathy-chat.glade",
+	filename = empathy_file_lookup ("empathy-chat.ui",
 					"libempathy-gtk");
-	glade = empathy_glade_get_file (filename,
-					"chat_widget",
-					NULL,
+	gui = empathy_builder_get_file (filename,
 					"chat_widget", &priv->widget,
 					"hpaned", &priv->hpaned,
 					"vbox_left", &priv->vbox_left,
@@ -1308,7 +1306,6 @@ chat_create_ui (EmpathyChat *chat)
 					"scrolled_window_contacts", &priv->scrolled_window_contacts,
 					NULL);
 	g_free (filename);
-	g_object_unref (glade);
 
 	/* Add message view. */
 	chat->view = empathy_theme_manager_create_view (empathy_theme_manager_get ());
@@ -1374,6 +1371,7 @@ chat_create_ui (EmpathyChat *chat)
 
 	/* Add the main widget in the chat widget */
 	gtk_container_add (GTK_CONTAINER (chat), priv->widget);
+	g_object_unref (gui);
 }
 
 static void
