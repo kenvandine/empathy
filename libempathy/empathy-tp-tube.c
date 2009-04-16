@@ -232,7 +232,8 @@ empathy_tp_tube_class_init (EmpathyTpTubeClass *klass)
       G_PARAM_READWRITE | G_PARAM_CONSTRUCT_ONLY | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_property (object_class, PROP_STATE,
-      g_param_spec_uint ("state", "state", "state", 0, G_MAXUINT, 0,
+      g_param_spec_uint ("state", "state", "state",
+        0, NUM_EMP_TUBE_CHANNEL_STATES, 0,
         G_PARAM_READABLE | G_PARAM_STATIC_NAME | G_PARAM_STATIC_STRINGS));
 
   signals[DESTROY] = g_signal_new ("destroy",
