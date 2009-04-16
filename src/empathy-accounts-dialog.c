@@ -260,6 +260,7 @@ accounts_dialog_update_account (EmpathyAccountsDialog *dialog,
 
 	gtk_container_add (GTK_CONTAINER (dialog->alignment_settings),
 			   dialog->settings_widget);
+	gtk_widget_show (dialog->settings_widget);
 
 
 	gtk_image_set_from_icon_name (GTK_IMAGE (dialog->image_type),

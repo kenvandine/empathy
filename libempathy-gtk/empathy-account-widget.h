@@ -26,18 +26,17 @@
 #define __EMPATHY_ACCOUNT_WIDGET_GENERIC_H__
 
 #include <gtk/gtk.h>
-#include <glade/glade.h>
 
 #include <libmissioncontrol/mc-account.h>
 
 G_BEGIN_DECLS
 
 void       empathy_account_widget_handle_params     (McAccount   *account,
-						     GladeXML    *glade,
-						     const gchar *first_widget_name,
+						     GtkBuilder  *gui,
+						     const gchar *first_widget,
 						     ...);
 void       empathy_account_widget_add_forget_button (McAccount   *account,
-						     GladeXML    *glade,
+						     GtkBuilder  *gui,
 						     const gchar *button,
 						     const gchar *entry);
 GtkWidget *empathy_account_widget_generic_new       (McAccount   *account);

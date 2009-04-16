@@ -27,7 +27,6 @@
 
 #include <glib/gi18n-lib.h>
 #include <gtk/gtk.h>
-#include <glade/glade.h>
 
 #include <libmissioncontrol/mc-account.h>
 #include <libmissioncontrol/mc-protocol.h>
@@ -80,17 +79,15 @@ GtkWidget *
 empathy_account_widget_sip_new (McAccount *account)
 {
   EmpathyAccountWidgetSip *settings;
-  GladeXML *glade;
+  GtkBuilder *gui;
   gchar *filename;
 
   settings = g_slice_new0 (EmpathyAccountWidgetSip);
   settings->account = g_object_ref (account);
 
-  filename = empathy_file_lookup ("empathy-account-widget-sip.glade",
+  filename = empathy_file_lookup ("empathy-account-widget-sip.ui",
       "libempathy-gtk");
-  glade = empathy_glade_get_file (filename,
-      "vbox_sip_settings",
-      NULL,
+  gui = empathy_builder_get_file (filename,
       "vbox_sip_settings", &settings->vbox_settings,
       "entry_stun-server", &settings->entry_stun_server,
       "spinbutton_stun-port", &settings->spinbutton_stun_part,
@@ -98,7 +95,7 @@ empathy_account_widget_sip_new (McAccount *account)
       NULL);
   g_free (filename);
 
-  empathy_account_widget_handle_params (account, glade,
+  empathy_account_widget_handle_params (account, gui,
       "entry_userid", "account",
       "entry_password", "password",
       "checkbutton_discover-stun", "discover-stun",
@@ -106,19 +103,21 @@ empathy_account_widget_sip_new (McAccount *account)
       "spinbutton_stun-port", "stun-port",
       NULL);
 
-  empathy_account_widget_add_forget_button (account, glade,
+  empathy_account_widget_add_forget_button (account, gui,
                                             "button_forget",
                                             "entry_password");
 
   account_widget_sip_discover_stun_toggled_cb (settings->checkbutton_discover_stun,
                                                settings);
 
-  empathy_glade_connect (glade, settings,
+  empathy_builder_connect (gui, settings,
       "vbox_sip_settings", "destroy", account_widget_sip_destroy_cb,
       "checkbutton_discover-stun", "toggled", account_widget_sip_discover_stun_toggled_cb,
       NULL);
 
-  g_object_unref (glade);
+  g_object_ref (settings->vbox_settings);
+  g_object_force_floating (G_OBJECT (settings->vbox_settings));
+  g_object_unref (gui);
 
   return settings->vbox_settings;
 }

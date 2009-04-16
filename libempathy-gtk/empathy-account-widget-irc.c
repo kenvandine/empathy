@@ -26,7 +26,6 @@
 
 #include <glib/gi18n-lib.h>
 #include <gtk/gtk.h>
-#include <glade/glade.h>
 
 #include <libmissioncontrol/mc-account.h>
 #include <libmissioncontrol/mc-protocol.h>
@@ -429,7 +428,7 @@ empathy_account_widget_irc_new (McAccount *account)
 {
   EmpathyAccountWidgetIrc *settings;
   gchar *dir, *user_file_with_path, *global_file_with_path;
-  GladeXML *glade;
+  GtkBuilder *gui;
   GtkListStore *store;
   GtkCellRenderer *renderer;
   gchar *filename;
@@ -458,11 +457,9 @@ empathy_account_widget_irc_new (McAccount *account)
   g_free (global_file_with_path);
   g_free (user_file_with_path);
 
-  filename = empathy_file_lookup ("empathy-account-widget-irc.glade",
+  filename = empathy_file_lookup ("empathy-account-widget-irc.ui",
       "libempathy-gtk");
-  glade = empathy_glade_get_file (filename,
-      "vbox_irc_settings",
-      NULL,
+  gui = empathy_builder_get_file (filename,
       "vbox_irc_settings", &settings->vbox_settings,
       "combobox_network", &settings->combobox_network,
       "button_network", &settings->button_network,
@@ -493,14 +490,14 @@ empathy_account_widget_irc_new (McAccount *account)
 
   account_widget_irc_setup (settings);
 
-  empathy_account_widget_handle_params (account, glade,
+  empathy_account_widget_handle_params (account, gui,
       "entry_nick", "account",
       "entry_fullname", "fullname",
       "entry_password", "password",
       "entry_quit_message", "quit-message",
       NULL);
 
-  empathy_glade_connect (glade, settings,
+  empathy_builder_connect (gui, settings,
       "vbox_irc_settings", "destroy", account_widget_irc_destroy_cb,
       "button_network", "clicked", account_widget_irc_button_edit_network_clicked_cb,
       "button_add_network", "clicked", account_widget_irc_button_add_network_clicked_cb,
@@ -508,7 +505,9 @@ empathy_account_widget_irc_new (McAccount *account)
       "combobox_network", "changed", account_widget_irc_combobox_network_changed_cb,
       NULL);
 
-  g_object_unref (glade);
+  g_object_ref (settings->vbox_settings);
+  g_object_force_floating (G_OBJECT (settings->vbox_settings));
+  g_object_unref (gui);
 
   return settings->vbox_settings;
 }
