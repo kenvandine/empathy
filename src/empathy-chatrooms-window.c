@@ -437,21 +437,7 @@ chatrooms_window_model_get_selected (EmpathyChatroomsWindow *window)
 static void
 chatrooms_window_model_action_selected (EmpathyChatroomsWindow *window)
 {
-	EmpathyChatroom *chatroom;
-	GtkTreeView    *view;
-	GtkTreeModel   *model;
-
-	view = GTK_TREE_VIEW (window->treeview);
-	model = gtk_tree_view_get_model (view);
-
-	chatroom = chatrooms_window_model_get_selected (window);
-	if (!chatroom) {
-		return;
-	}
-
-	//empathy_edit_chatroom_dialog_show (GTK_WINDOW (window->window), chatroom);
-
-	g_object_unref (chatroom);
+	/* FIXME: This is still not implemented since Gossip fork */
 }
 
 static void
@@ -496,16 +482,7 @@ static void
 chatrooms_window_button_edit_clicked_cb (GtkWidget             *widget,
 					 EmpathyChatroomsWindow *window)
 {
-	EmpathyChatroom *chatroom;
-
-	chatroom = chatrooms_window_model_get_selected (window);
-	if (!chatroom) {
-		return;
-	}
-
-	//empathy_edit_chatroom_dialog_show (GTK_WINDOW (window->window), chatroom);
-
-	g_object_unref (chatroom);
+	/* FIXME: This is still not implemented since Gossip fork */
 }
 
 static void
