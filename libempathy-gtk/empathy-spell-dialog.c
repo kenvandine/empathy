@@ -23,14 +23,7 @@
 #include <string.h>
 
 #include <glib/gi18n-lib.h>
-#include <gtk/gtkcellrenderertext.h>
-#include <gtk/gtkdialog.h>
-#include <gtk/gtklabel.h>
-#include <gtk/gtkliststore.h>
-#include <gtk/gtktreeview.h>
-#include <gtk/gtktreeselection.h>
-#include <gtk/gtksizegroup.h>
-#include <glade/glade.h>
+#include <gtk/gtk.h>
 
 #include <libempathy/empathy-utils.h>
 
@@ -225,9 +218,9 @@ empathy_spell_dialog_show (EmpathyChat  *chat,
 			  const gchar *word)
 {
 	EmpathySpellDialog *dialog;
-	GladeXML          *gui;
-	gchar             *str;
-	gchar             *filename;
+	GtkBuilder         *gui;
+	gchar              *str;
+	gchar              *filename;
 
 	g_return_if_fail (chat != NULL);
 	g_return_if_fail (word != NULL);
@@ -241,11 +234,9 @@ empathy_spell_dialog_show (EmpathyChat  *chat,
 	dialog->start = *start;
 	dialog->end = *end;
 
-	filename = empathy_file_lookup ("empathy-spell-dialog.glade",
+	filename = empathy_file_lookup ("empathy-spell-dialog.ui",
 					"libempathy-gtk");
-	gui = empathy_glade_get_file (filename,
-				     "spell_dialog",
-				     NULL,
+	gui = empathy_builder_get_file (filename,
 				     "spell_dialog", &dialog->window,
 				     "button_replace", &dialog->button_replace,
 				     "label_word", &dialog->label_word,
@@ -253,8 +244,7 @@ empathy_spell_dialog_show (EmpathyChat  *chat,
 				     NULL);
 	g_free (filename);
 
-	empathy_glade_connect (gui,
-			      dialog,
+	empathy_builder_connect (gui, dialog,
 			      "spell_dialog", "response", spell_dialog_response_cb,
 			      "spell_dialog", "destroy", spell_dialog_destroy_cb,
 			      NULL);

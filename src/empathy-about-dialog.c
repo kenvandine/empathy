@@ -27,7 +27,6 @@
 #include <glib/gi18n.h>
 #include <gtk/gtkaboutdialog.h>
 #include <gtk/gtksizegroup.h>
-#include <glade/glade.h>
 
 #include <libempathy-gtk/empathy-ui-utils.h>
 
