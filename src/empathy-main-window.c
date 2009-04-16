@@ -92,19 +92,19 @@ typedef struct {
 	GtkWidget              *presence_chooser;
 	GtkWidget              *errors_vbox;
 
-	GtkWidget              *room;
+	GtkUIManager           *ui_manager;
+	GtkAction              *chat_history;
+	GtkAction              *room_join_favorites;
 	GtkWidget              *room_menu;
-	GtkWidget              *room_sep;
-	GtkWidget              *room_join_favorites;
+	GtkWidget              *room_separator;
 	GtkWidget              *edit_context;
 	GtkWidget              *edit_context_separator;
-	GtkWidget              *chat_history_menu_item;
 
 	guint                   size_timeout_id;
 	GHashTable             *errors;
 
-	/* Widgets that are enabled when there are connected accounts */
-	GList                  *widgets_connected;
+	/* Actions that are enabled when there are connected accounts */
+	GList                  *actions_connected;
 } EmpathyMainWindow;
 
 static EmpathyMainWindow *window = NULL;
@@ -472,8 +472,8 @@ main_window_update_status (EmpathyMainWindow *window, EmpathyAccountManager *man
 	}
 
 	/* Update widgets sensibility */
-	for (l = window->widgets_connected; l; l = l->next) {
-		gtk_widget_set_sensitive (l->data, (connected > 0));
+	for (l = window->actions_connected; l; l = l->next) {
+		gtk_action_set_sensitive (l->data, (connected > 0));
 	}
 }
 
@@ -636,7 +636,7 @@ main_window_destroy_cb (GtkWidget         *widget,
 		g_source_remove (window->size_timeout_id);
 	}
 
-	g_list_free (window->widgets_connected);
+	g_list_free (window->actions_connected);
 
 	g_object_unref (window->mc);
 	g_object_unref (window->account_manager);
@@ -650,8 +650,54 @@ main_window_destroy_cb (GtkWidget         *widget,
 			  		      main_window_event_removed_cb,
 			  		      window);
 	g_object_unref (window->event_manager);
+	g_object_unref (window->ui_manager);
 
 	g_free (window);
+}
+
+static void
+main_window_chat_quit_cb (GtkAction         *action,
+			  EmpathyMainWindow *window)
+{
+	gtk_main_quit ();
+}
+
+static void
+main_window_chat_history_cb (GtkAction         *action,
+			     EmpathyMainWindow *window)
+{
+	empathy_log_window_show (NULL, NULL, FALSE, GTK_WINDOW (window->window));
+}
+
+static void
+main_window_chat_new_message_cb (GtkAction         *action,
+				 EmpathyMainWindow *window)
+{
+	empathy_new_message_dialog_show (GTK_WINDOW (window->window));
+}
+
+static void
+main_window_chat_add_contact_cb (GtkAction         *action,
+				 EmpathyMainWindow *window)
+{
+	empathy_new_contact_dialog_show (GTK_WINDOW (window->window));
+}
+
+static void
+main_window_chat_show_offline_cb (GtkToggleAction   *action,
+				  EmpathyMainWindow *window)
+{
+	gboolean current;
+
+	current = gtk_toggle_action_get_active (action);
+	empathy_conf_set_bool (empathy_conf_get (),
+			      EMPATHY_PREFS_CONTACTS_SHOW_OFFLINE,
+			      current);
+
+	/* Turn off sound just while we alter the contact list. */
+	// FIXME: empathy_sound_set_enabled (FALSE);
+	empathy_contact_list_store_set_show_offline (window->list_store, current);
+	//empathy_sound_set_enabled (TRUE);
 }
 
 static void
@@ -665,8 +711,8 @@ main_window_favorite_chatroom_join (EmpathyChatroom *chatroom)
 	account = empathy_chatroom_get_account (chatroom);
 	room = empathy_chatroom_get_room (chatroom);
 
-	 if (mission_control_get_connection_status (mc, account, NULL) !=
-			TP_CONNECTION_STATUS_CONNECTED) {
+	if (mission_control_get_connection_status (mc, account, NULL) !=
+	    TP_CONNECTION_STATUS_CONNECTED) {
 		return;
 	}
 
@@ -703,7 +749,7 @@ main_window_favorite_chatroom_menu_add (EmpathyMainWindow *window,
 			  chatroom);
 
 	gtk_menu_shell_insert (GTK_MENU_SHELL (window->room_menu),
-			       menu_item, 3);
+			       menu_item, 4);
 
 	gtk_widget_show (menu_item);
 }
@@ -714,8 +760,8 @@ main_window_favorite_chatroom_menu_added_cb (EmpathyChatroomManager *manager,
 					     EmpathyMainWindow     *window)
 {
 	main_window_favorite_chatroom_menu_add (window, chatroom);
-	gtk_widget_show (window->room_sep);
-	gtk_widget_set_sensitive (window->room_join_favorites, TRUE);
+	gtk_widget_show (window->room_separator);
+	gtk_action_set_sensitive (window->room_join_favorites, TRUE);
 }
 
 static void
@@ -732,12 +778,12 @@ main_window_favorite_chatroom_menu_removed_cb (EmpathyChatroomManager *manager,
 
 	chatrooms = empathy_chatroom_manager_get_chatrooms (window->chatroom_manager, NULL);
 	if (chatrooms) {
-		gtk_widget_show (window->room_sep);
+		gtk_widget_show (window->room_separator);
 	} else {
-		gtk_widget_hide (window->room_sep);
+		gtk_widget_hide (window->room_separator);
 	}
 
-	gtk_widget_set_sensitive (window->room_join_favorites, chatrooms != NULL);
+	gtk_action_set_sensitive (window->room_join_favorites, chatrooms != NULL);
 	g_list_free (chatrooms);
 }
 
@@ -745,20 +791,25 @@ static void
 main_window_favorite_chatroom_menu_setup (EmpathyMainWindow *window)
 {
 	GList *chatrooms, *l;
+	GtkWidget *room;
 
 	window->chatroom_manager = empathy_chatroom_manager_dup_singleton (NULL);
 	chatrooms = empathy_chatroom_manager_get_chatrooms (window->chatroom_manager, NULL);
-	window->room_menu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (window->room));
+	room = gtk_ui_manager_get_widget (window->ui_manager,
+		"/menubar/room");
+	window->room_menu = gtk_menu_item_get_submenu (GTK_MENU_ITEM (room));
+	window->room_separator = gtk_ui_manager_get_widget (window->ui_manager,
+		"/menubar/room/room_separator");
 
 	for (l = chatrooms; l; l = l->next) {
 		main_window_favorite_chatroom_menu_add (window, l->data);
 	}
 
 	if (!chatrooms) {
-		gtk_widget_hide (window->room_sep);
+		gtk_widget_hide (window->room_separator);
 	}
 
-	gtk_widget_set_sensitive (window->room_join_favorites, chatrooms != NULL);
+	gtk_action_set_sensitive (window->room_join_favorites, chatrooms != NULL);
 
 	g_signal_connect (window->chatroom_manager, "chatroom-added",
 			  G_CALLBACK (main_window_favorite_chatroom_menu_added_cb),
@@ -771,35 +822,14 @@ main_window_favorite_chatroom_menu_setup (EmpathyMainWindow *window)
 }
 
 static void
-main_window_chat_quit_cb (GtkWidget         *widget,
-			  EmpathyMainWindow *window)
-{
-	gtk_main_quit ();
-}
-
-static void
-main_window_chat_new_message_cb (GtkWidget         *widget,
-				 EmpathyMainWindow *window)
-{
-	empathy_new_message_dialog_show (GTK_WINDOW (window->window));
-}
-
-static void
-main_window_chat_history_cb (GtkWidget         *widget,
-			     EmpathyMainWindow *window)
-{
-	empathy_log_window_show (NULL, NULL, FALSE, GTK_WINDOW (window->window));
-}
-
-static void
-main_window_room_join_new_cb (GtkWidget         *widget,
+main_window_room_join_new_cb (GtkAction         *action,
 			      EmpathyMainWindow *window)
 {
 	empathy_new_chatroom_dialog_show (GTK_WINDOW (window->window));
 }
 
 static void
-main_window_room_join_favorites_cb (GtkWidget         *widget,
+main_window_room_join_favorites_cb (GtkAction         *action,
 				    EmpathyMainWindow *window)
 {
 	GList *chatrooms, *l;
@@ -812,48 +842,19 @@ main_window_room_join_favorites_cb (GtkWidget         *widget,
 }
 
 static void
-main_window_room_manage_favorites_cb (GtkWidget         *widget,
+main_window_room_manage_favorites_cb (GtkAction         *action,
 				      EmpathyMainWindow *window)
 {
 	empathy_chatrooms_window_show (GTK_WINDOW (window->window));
 }
 
 static void
-main_window_chat_add_contact_cb (GtkWidget         *widget,
-				 EmpathyMainWindow *window)
-{
-	empathy_new_contact_dialog_show (GTK_WINDOW (window->window));
-}
-
-static void
-main_window_chat_show_offline_cb (GtkCheckMenuItem  *item,
-				  EmpathyMainWindow *window)
-{
-	gboolean current;
-
-	current = gtk_check_menu_item_get_active (item);
-
-	empathy_conf_set_bool (empathy_conf_get (),
-			      EMPATHY_PREFS_CONTACTS_SHOW_OFFLINE,
-			      current);
-
-	/* Turn off sound just while we alter the contact list. */
-	// FIXME: empathy_sound_set_enabled (FALSE);
-	empathy_contact_list_store_set_show_offline (window->list_store, current);
-	//empathy_sound_set_enabled (TRUE);
-}
-
-static gboolean
-main_window_edit_button_press_event_cb (GtkWidget         *widget,
-					GdkEventButton    *event,
-					EmpathyMainWindow *window)
+main_window_edit_cb (GtkAction *action,
+		     EmpathyMainWindow *window)
 {
 	GtkWidget *submenu;
 
-	if (!event->button == 1) {
-		return FALSE;
-	}
-
+	/* FIXME: It should use the UIManager to merge the contact/group submenu */
 	submenu = empathy_contact_list_view_get_contact_menu (window->list_view);
 	if (submenu) {
 		GtkMenuItem *item;
@@ -868,7 +869,7 @@ main_window_edit_button_press_event_cb (GtkWidget         *widget,
 
 		gtk_menu_item_set_submenu (item, submenu);
 
-		return FALSE;
+		return;
 	}
 
 	submenu = empathy_contact_list_view_get_group_menu (window->list_view);
@@ -885,24 +886,24 @@ main_window_edit_button_press_event_cb (GtkWidget         *widget,
 
 		gtk_menu_item_set_submenu (item, submenu);
 
-		return FALSE;
+		return;
 	}
 
 	gtk_widget_hide (window->edit_context);
 	gtk_widget_hide (window->edit_context_separator);
 
-	return FALSE;
+	return;
 }
 
 static void
-main_window_edit_accounts_cb (GtkWidget         *widget,
+main_window_edit_accounts_cb (GtkAction         *action,
 			      EmpathyMainWindow *window)
 {
 	empathy_accounts_dialog_show (GTK_WINDOW (window->window), NULL);
 }
 
 static void
-main_window_edit_personal_information_cb (GtkWidget         *widget,
+main_window_edit_personal_information_cb (GtkAction         *action,
 					  EmpathyMainWindow *window)
 {
 	GSList *accounts;
@@ -933,24 +934,24 @@ main_window_edit_personal_information_cb (GtkWidget         *widget,
 }
 
 static void
-main_window_edit_preferences_cb (GtkWidget         *widget,
+main_window_edit_preferences_cb (GtkAction         *action,
 				 EmpathyMainWindow *window)
 {
 	empathy_preferences_show (GTK_WINDOW (window->window));
 }
 
 static void
-main_window_help_about_cb (GtkWidget         *widget,
+main_window_help_about_cb (GtkAction         *action,
 			   EmpathyMainWindow *window)
 {
 	empathy_about_dialog_new (GTK_WINDOW (window->window));
 }
 
 static void
-main_window_help_contents_cb (GtkWidget         *widget,
+main_window_help_contents_cb (GtkAction         *action,
 			      EmpathyMainWindow *window)
 {
-	empathy_url_show (widget, "ghelp:empathy");
+	empathy_url_show (window->window, "ghelp:empathy");
 }
 
 static gboolean
@@ -1004,20 +1005,19 @@ main_window_account_created_or_deleted_cb (EmpathyAccountManager  *manager,
 					   McAccount              *account,
 					   EmpathyMainWindow      *window)
 {
-	gtk_widget_set_sensitive (GTK_WIDGET (window->chat_history_menu_item),
+	gtk_action_set_sensitive (window->chat_history,
 		empathy_account_manager_get_count (manager) > 0);
 }
 
 static void
-main_window_notify_show_offline_cb (EmpathyConf  *conf,
+main_window_notify_show_offline_cb (EmpathyConf *conf,
 				    const gchar *key,
-				    gpointer     check_menu_item)
+				    gpointer     toggle_action)
 {
 	gboolean show_offline;
 
 	if (empathy_conf_get_bool (conf, key, &show_offline)) {
-		gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (check_menu_item),
-						show_offline);
+		gtk_toggle_action_set_active (toggle_action, show_offline);
 	}
 }
 
@@ -1076,21 +1076,21 @@ main_window_connection_items_setup (EmpathyMainWindow *window,
 				    GtkBuilder        *gui)
 {
 	GList         *list;
-	GObject       *w;
+	GObject       *action;
 	gint           i;
-	const gchar *widgets_connected[] = {
+	const gchar *actions_connected[] = {
 		"room",
 		"chat_new_message",
 		"chat_add_contact",
 		"edit_personal_information"
 	};
 
-	for (i = 0, list = NULL; i < G_N_ELEMENTS (widgets_connected); i++) {
-		w = gtk_builder_get_object (gui, widgets_connected[i]);
-		list = g_list_prepend (list, w);
+	for (i = 0, list = NULL; i < G_N_ELEMENTS (actions_connected); i++) {
+		action = gtk_builder_get_object (gui, actions_connected[i]);
+		list = g_list_prepend (list, action);
 	}
 
-	window->widgets_connected = list;
+	window->actions_connected = list;
 }
 
 GtkWidget *
@@ -1107,7 +1107,7 @@ empathy_main_window_show (void)
 	GtkBuilder               *gui;
 	EmpathyConf              *conf;
 	GtkWidget                *sw;
-	GtkWidget                *show_offline_widget;
+	GtkToggleAction          *show_offline_widget;
 	GtkWidget                *ebox;
 	GtkToolItem              *item;
 	gboolean                  show_offline;
@@ -1130,15 +1130,12 @@ empathy_main_window_show (void)
 				       "main_window", &window->window,
 				       "main_vbox", &window->main_vbox,
 				       "errors_vbox", &window->errors_vbox,
+				       "ui_manager", &window->ui_manager,
 				       "chat_show_offline", &show_offline_widget,
-				       "room", &window->room,
-				       "room_sep", &window->room_sep,
+				       "chat_history", &window->chat_history,
 				       "room_join_favorites", &window->room_join_favorites,
-				       "edit_context", &window->edit_context,
-				       "edit_context_separator", &window->edit_context_separator,
 				       "presence_toolbar", &window->presence_toolbar,
 				       "roster_scrolledwindow", &sw,
-				       "chat_history", &window->chat_history_menu_item,
 				       NULL);
 	g_free (filename);
 
@@ -1153,7 +1150,7 @@ empathy_main_window_show (void)
 			      "room_manage_favorites", "activate", main_window_room_manage_favorites_cb,
 			      "chat_add_contact", "activate", main_window_chat_add_contact_cb,
 			      "chat_show_offline", "toggled", main_window_chat_show_offline_cb,
-			      "edit", "button-press-event", main_window_edit_button_press_event_cb,
+			      "edit", "activate", main_window_edit_cb,
 			      "edit_accounts", "activate", main_window_edit_accounts_cb,
 			      "edit_personal_information", "activate", main_window_edit_personal_information_cb,
 			      "edit_preferences", "activate", main_window_edit_preferences_cb,
@@ -1163,6 +1160,8 @@ empathy_main_window_show (void)
 
 	/* Set up connection related widgets. */
 	main_window_connection_items_setup (window, gui);
+
+	g_object_ref (window->ui_manager);
 	g_object_unref (gui);
 
 	window->mc = empathy_mission_control_dup_singleton ();
@@ -1180,6 +1179,10 @@ empathy_main_window_show (void)
 	/* Set up menu */
 	main_window_favorite_chatroom_menu_setup (window);
 
+	window->edit_context = gtk_ui_manager_get_widget (window->ui_manager,
+		"/menubar/edit/edit_context");
+	window->edit_context_separator = gtk_ui_manager_get_widget (window->ui_manager,
+		"/menubar/edit/edit_context_separator");
 	gtk_widget_hide (window->edit_context);
 	gtk_widget_hide (window->edit_context_separator);
 
@@ -1290,8 +1293,7 @@ empathy_main_window_show (void)
 				main_window_notify_show_offline_cb,
 				show_offline_widget);
 
-	gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (show_offline_widget),
-					show_offline);
+	gtk_toggle_action_set_active (show_offline_widget, show_offline);
 
 	/* Show avatars ? */
 	empathy_conf_get_bool (conf,

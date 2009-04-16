@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!--*- mode: xml -*-->
 <interface>
-  <object class="GtkUIManager" id="uimanager1">
+  <object class="GtkUIManager" id="ui_manager">
     <child>
       <object class="GtkActionGroup" id="actiongroup1">
         <child>
@@ -125,7 +125,7 @@
       </object>
     </child>
     <ui>
-      <menubar name="menubar2">
+      <menubar name="menubar">
         <menu action="chat">
           <menuitem action="chat_new_message"/>
           <menuitem action="chat_history"/>
@@ -138,7 +138,7 @@
         </menu>
         <menu action="edit">
           <menuitem action="edit_context"/>
-          <separator/>
+          <separator name="edit_context_separator"/>
           <menuitem action="edit_accounts"/>
           <menuitem action="edit_personal_information"/>
           <separator/>
@@ -148,7 +148,7 @@
           <menuitem action="room_join_new"/>
           <menuitem action="room_join_favorites"/>
           <separator/>
-          <separator/>
+          <separator name="room_separator"/>
           <menuitem action="room_manage_favorites"/>
         </menu>
         <menu action="help">
@@ -167,7 +167,7 @@
       <object class="GtkVBox" id="main_vbox">
         <property name="visible">True</property>
         <child>
-          <object class="GtkMenuBar" constructor="uimanager1" id="menubar2">
+          <object class="GtkMenuBar" constructor="ui_manager" id="menubar">
             <property name="visible">True</property>
           </object>
           <packing>
