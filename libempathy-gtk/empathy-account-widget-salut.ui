@@ -1,219 +1,215 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
+<?xml version="1.0"?>
 <!--*- mode: xml -*-->
-<glade-interface>
-  <widget class="GtkWindow" id="account_salut_settings">
+<interface>
+  <object class="GtkWindow" id="account_salut_settings">
     <property name="visible">True</property>
     <property name="title">salut account settings</property>
     <property name="resizable">False</property>
     <child>
-      <widget class="GtkVBox" id="vbox_salut_settings">
+      <object class="GtkVBox" id="vbox_salut_settings">
         <property name="visible">True</property>
         <property name="spacing">6</property>
         <child>
-          <widget class="GtkTable" id="table_common_settings">
+          <object class="GtkTable" id="table_common_settings">
             <property name="visible">True</property>
             <property name="n_rows">3</property>
             <property name="n_columns">3</property>
             <property name="column_spacing">12</property>
             <property name="row_spacing">6</property>
             <child>
-              <widget class="GtkEntry" id="entry_nickname">
+              <object class="GtkEntry" id="entry_nickname">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-              </widget>
+              </object>
               <packing>
                 <property name="left_attach">1</property>
                 <property name="right_attach">3</property>
                 <property name="top_attach">2</property>
                 <property name="bottom_attach">3</property>
-                <property name="y_options"></property>
+                <property name="y_options"/>
               </packing>
             </child>
             <child>
-              <widget class="GtkEntry" id="entry_last_name">
+              <object class="GtkEntry" id="entry_last_name">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-              </widget>
+              </object>
               <packing>
                 <property name="left_attach">1</property>
                 <property name="right_attach">3</property>
                 <property name="top_attach">1</property>
                 <property name="bottom_attach">2</property>
-                <property name="y_options"></property>
+                <property name="y_options"/>
               </packing>
             </child>
             <child>
-              <widget class="GtkEntry" id="entry_first_name">
+              <object class="GtkEntry" id="entry_first_name">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
-              </widget>
+              </object>
               <packing>
                 <property name="left_attach">1</property>
                 <property name="right_attach">3</property>
-                <property name="y_options"></property>
+                <property name="y_options"/>
               </packing>
             </child>
             <child>
-              <widget class="GtkLabel" id="label_nickname">
+              <object class="GtkLabel" id="label_nickname">
                 <property name="visible">True</property>
                 <property name="xalign">0</property>
                 <property name="label" translatable="yes">_Nickname:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">entry_nickname</property>
-              </widget>
+              </object>
               <packing>
                 <property name="top_attach">2</property>
                 <property name="bottom_attach">3</property>
                 <property name="x_options">GTK_FILL</property>
-                <property name="y_options"></property>
+                <property name="y_options"/>
               </packing>
             </child>
             <child>
-              <widget class="GtkLabel" id="label_last_name">
+              <object class="GtkLabel" id="label_last_name">
                 <property name="visible">True</property>
                 <property name="xalign">0</property>
                 <property name="label" translatable="yes">_Last Name:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">entry_last_name</property>
-              </widget>
+              </object>
               <packing>
                 <property name="top_attach">1</property>
                 <property name="bottom_attach">2</property>
                 <property name="x_options">GTK_FILL</property>
-                <property name="y_options"></property>
+                <property name="y_options"/>
               </packing>
             </child>
             <child>
-              <widget class="GtkLabel" id="label_first_name">
+              <object class="GtkLabel" id="label_first_name">
                 <property name="visible">True</property>
                 <property name="xalign">0</property>
                 <property name="label" translatable="yes">_First Name:</property>
                 <property name="use_underline">True</property>
                 <property name="mnemonic_widget">entry_first_name</property>
-              </widget>
+              </object>
               <packing>
                 <property name="x_options">GTK_FILL</property>
-                <property name="y_options"></property>
+                <property name="y_options"/>
               </packing>
             </child>
-          </widget>
+          </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">False</property>
           </packing>
         </child>
         <child>
-          <widget class="GtkExpander" id="expander1">
+          <object class="GtkExpander" id="expander1">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <child>
-              <widget class="GtkTable" id="table_advanced_settings">
+              <object class="GtkTable" id="table_advanced_settings">
                 <property name="visible">True</property>
                 <property name="n_rows">3</property>
                 <property name="n_columns">3</property>
                 <property name="column_spacing">12</property>
                 <property name="row_spacing">6</property>
                 <child>
-                  <widget class="GtkEntry" id="entry_published">
+                  <object class="GtkEntry" id="entry_published">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                  </widget>
+                  </object>
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="right_attach">3</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkLabel" id="label_published">
+                  <object class="GtkLabel" id="label_published">
                     <property name="visible">True</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">_Published Name:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">entry_published</property>
-                  </widget>
+                  </object>
                   <packing>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkEntry" id="entry_jid">
+                  <object class="GtkEntry" id="entry_jid">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                  </widget>
+                  </object>
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="right_attach">3</property>
                     <property name="top_attach">2</property>
                     <property name="bottom_attach">3</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkEntry" id="entry_email">
+                  <object class="GtkEntry" id="entry_email">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                  </widget>
+                  </object>
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="right_attach">3</property>
                     <property name="top_attach">1</property>
                     <property name="bottom_attach">2</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkLabel" id="label_jid">
+                  <object class="GtkLabel" id="label_jid">
                     <property name="visible">True</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">_Jabber ID:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">entry_jid</property>
-                  </widget>
+                  </object>
                   <packing>
                     <property name="top_attach">2</property>
                     <property name="bottom_attach">3</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkLabel" id="label_email">
+                  <object class="GtkLabel" id="label_email">
                     <property name="visible">True</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">_Email:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">entry_email</property>
-                  </widget>
+                  </object>
                   <packing>
                     <property name="top_attach">1</property>
                     <property name="bottom_attach">2</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
-              </widget>
+              </object>
             </child>
-            <child>
-              <widget class="GtkLabel" id="label1">
+            <child type="label">
+              <object class="GtkLabel" id="label1">
                 <property name="visible">True</property>
                 <property name="label" translatable="yes">&lt;b&gt;Advanced&lt;/b&gt;</property>
                 <property name="use_markup">True</property>
-              </widget>
-              <packing>
-                <property name="type">label_item</property>
-              </packing>
+              </object>
             </child>
-          </widget>
+          </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">False</property>
             <property name="position">1</property>
           </packing>
         </child>
-      </widget>
+      </object>
     </child>
-  </widget>
-</glade-interface>
+  </object>
+</interface>

@@ -1,8 +1,7 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE glade-interface SYSTEM "glade-2.0.dtd">
+<?xml version="1.0"?>
 <!--*- mode: xml -*-->
-<glade-interface>
-  <widget class="GtkDialog" id="new_chatroom_dialog">
+<interface>
+  <object class="GtkDialog" id="new_chatroom_dialog">
     <property name="visible">True</property>
     <property name="border_width">5</property>
     <property name="title" translatable="yes">Join New</property>
@@ -12,16 +11,16 @@
     <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
     <property name="has_separator">False</property>
     <child internal-child="vbox">
-      <widget class="GtkVBox" id="dialog-vbox4">
+      <object class="GtkVBox" id="dialog-vbox4">
         <property name="visible">True</property>
         <property name="spacing">6</property>
         <child>
-          <widget class="GtkVBox" id="vbox_widgets">
+          <object class="GtkVBox" id="vbox_widgets">
             <property name="visible">True</property>
             <property name="border_width">5</property>
             <property name="spacing">18</property>
             <child>
-              <widget class="GtkTable" id="table_info">
+              <object class="GtkTable" id="table_info">
                 <property name="visible">True</property>
                 <property name="n_rows">3</property>
                 <property name="n_columns">3</property>
@@ -34,139 +33,138 @@
                   <placeholder/>
                 </child>
                 <child>
-                  <widget class="GtkEntry" id="entry_room">
+                  <object class="GtkEntry" id="entry_room">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="tooltip" translatable="yes">Enter the room name to join here or click on one or more rooms in the list.</property>
+                    <property name="tooltip-text" translatable="yes">Enter the room name to join here or click on one or more rooms in the list.</property>
                     <property name="activates_default">True</property>
                     <property name="width_chars">32</property>
-                  </widget>
+                  </object>
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="right_attach">3</property>
                     <property name="top_attach">2</property>
                     <property name="bottom_attach">3</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkToggleButton" id="togglebutton_refresh">
+                  <object class="GtkToggleButton" id="togglebutton_refresh">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
                     <property name="label" translatable="yes">Re_fresh</property>
                     <property name="use_underline">True</property>
-                    <property name="response_id">0</property>
-                  </widget>
+                  </object>
                   <packing>
                     <property name="left_attach">2</property>
                     <property name="right_attach">3</property>
                     <property name="top_attach">1</property>
                     <property name="bottom_attach">2</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkEntry" id="entry_server">
+                  <object class="GtkEntry" id="entry_server">
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
-                    <property name="tooltip" translatable="yes">Enter the server which hosts the room, or leave it empty if the room is on the current account's server</property>
+                    <property name="tooltip-text" translatable="yes">Enter the server which hosts the room, or leave it empty if the room is on the current account's server</property>
                     <property name="width_chars">25</property>
-                  </widget>
+                  </object>
                   <packing>
                     <property name="left_attach">1</property>
                     <property name="right_attach">2</property>
                     <property name="top_attach">1</property>
                     <property name="bottom_attach">2</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkLabel" id="label_room">
+                  <object class="GtkLabel" id="label_room">
                     <property name="visible">True</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">_Room:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">entry_room</property>
-                  </widget>
+                  </object>
                   <packing>
                     <property name="top_attach">2</property>
                     <property name="bottom_attach">3</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkLabel" id="label_server">
+                  <object class="GtkLabel" id="label_server">
                     <property name="visible">True</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">_Server:</property>
                     <property name="use_underline">True</property>
                     <property name="mnemonic_widget">entry_server</property>
-                  </widget>
+                  </object>
                   <packing>
                     <property name="top_attach">1</property>
                     <property name="bottom_attach">2</property>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
                 <child>
-                  <widget class="GtkLabel" id="label_account">
+                  <object class="GtkLabel" id="label_account">
                     <property name="visible">True</property>
                     <property name="xalign">0</property>
                     <property name="label" translatable="yes">Account:</property>
-                  </widget>
+                  </object>
                   <packing>
                     <property name="x_options">GTK_FILL</property>
-                    <property name="y_options"></property>
+                    <property name="y_options"/>
                   </packing>
                 </child>
-              </widget>
+              </object>
             </child>
             <child>
-              <widget class="GtkVBox" id="vbox_browse">
+              <object class="GtkVBox" id="vbox_browse">
                 <property name="visible">True</property>
                 <property name="spacing">6</property>
                 <child>
-                  <widget class="GtkHBox" id="hbox_status">
+                  <object class="GtkHBox" id="hbox_status">
                     <property name="visible">True</property>
                     <property name="spacing">6</property>
                     <child>
-                      <widget class="GtkHBox" id="hbox35">
+                      <object class="GtkHBox" id="hbox35">
                         <property name="visible">True</property>
                         <property name="spacing">3</property>
                         <child>
-                          <widget class="GtkImage" id="image_status">
+                          <object class="GtkImage" id="image_status">
                             <property name="visible">True</property>
                             <property name="icon_size">2</property>
                             <property name="icon_name">gtk-find</property>
-                          </widget>
+                          </object>
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">False</property>
                           </packing>
                         </child>
                         <child>
-                          <widget class="GtkLabel" id="label_status">
+                          <object class="GtkLabel" id="label_status">
                             <property name="visible">True</property>
                             <property name="xalign">0</property>
                             <property name="label" translatable="yes">Browse:</property>
                             <property name="wrap">True</property>
-                          </widget>
+                          </object>
                           <packing>
                             <property name="position">1</property>
                           </packing>
                         </child>
-                      </widget>
+                      </object>
                     </child>
                     <child>
                       <placeholder/>
                     </child>
-                  </widget>
+                  </object>
                 </child>
                 <child>
-                  <widget class="GtkScrolledWindow" id="scrolledwindow2">
+                  <object class="GtkScrolledWindow" id="scrolledwindow2">
                     <property name="height_request">150</property>
                     <property name="visible">True</property>
                     <property name="can_focus">True</property>
@@ -174,24 +172,24 @@
                     <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
                     <property name="shadow_type">GTK_SHADOW_IN</property>
                     <child>
-                      <widget class="GtkTreeView" id="treeview">
+                      <object class="GtkTreeView" id="treeview">
                         <property name="visible">True</property>
                         <property name="can_focus">True</property>
-                        <property name="tooltip" translatable="yes">This list represents all chat rooms hosted on the server you have entered.</property>
+                        <property name="tooltip-text" translatable="yes">This list represents all chat rooms hosted on the server you have entered.</property>
                         <property name="headers_visible">False</property>
-                      </widget>
+                      </object>
                     </child>
-                  </widget>
+                  </object>
                   <packing>
                     <property name="position">1</property>
                   </packing>
                 </child>
-              </widget>
+              </object>
               <packing>
                 <property name="position">1</property>
               </packing>
             </child>
-          </widget>
+          </object>
           <packing>
             <property name="expand">False</property>
             <property name="fill">False</property>
@@ -199,74 +197,77 @@
           </packing>
         </child>
         <child internal-child="action_area">
-          <widget class="GtkHButtonBox" id="dialog-action_area4">
+          <object class="GtkHButtonBox" id="dialog-action_area4">
             <property name="visible">True</property>
             <property name="layout_style">GTK_BUTTONBOX_END</property>
             <child>
-              <widget class="GtkButton" id="button_cancel">
+              <object class="GtkButton" id="button_cancel">
                 <property name="visible">True</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="label">gtk-close</property>
                 <property name="use_stock">True</property>
-                <property name="response_id">-7</property>
-              </widget>
+              </object>
             </child>
             <child>
-              <widget class="GtkButton" id="button_join">
+              <object class="GtkButton" id="button_join">
                 <property name="visible">True</property>
                 <property name="sensitive">False</property>
                 <property name="can_focus">True</property>
                 <property name="can_default">True</property>
                 <property name="has_default">True</property>
-                <property name="response_id">-5</property>
                 <child>
-                  <widget class="GtkAlignment" id="alignment4">
+                  <object class="GtkAlignment" id="alignment4">
                     <property name="visible">True</property>
                     <property name="xscale">0</property>
                     <property name="yscale">0</property>
                     <child>
-                      <widget class="GtkHBox" id="hbox29">
+                      <object class="GtkHBox" id="hbox29">
                         <property name="visible">True</property>
                         <property name="spacing">2</property>
                         <child>
-                          <widget class="GtkImage" id="image4">
+                          <object class="GtkImage" id="image4">
                             <property name="visible">True</property>
                             <property name="stock">gtk-execute</property>
-                          </widget>
+                          </object>
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">False</property>
                           </packing>
                         </child>
                         <child>
-                          <widget class="GtkLabel" id="label79">
+                          <object class="GtkLabel" id="label79">
                             <property name="visible">True</property>
                             <property name="label" translatable="yes">Join</property>
                             <property name="use_underline">True</property>
-                          </widget>
+                          </object>
                           <packing>
                             <property name="expand">False</property>
                             <property name="fill">False</property>
                             <property name="position">1</property>
                           </packing>
                         </child>
-                      </widget>
+                      </object>
                     </child>
-                  </widget>
+                  </object>
                 </child>
-              </widget>
+              </object>
               <packing>
                 <property name="position">1</property>
               </packing>
             </child>
-          </widget>
+          </object>
           <packing>
             <property name="expand">False</property>
             <property name="pack_type">GTK_PACK_END</property>
           </packing>
         </child>
-      </widget>
+      </object>
     </child>
-  </widget>
-</glade-interface>
+    <action-widgets>
+      <action-widget response="0">togglebutton_refresh</action-widget>
+      <action-widget response="-7">button_cancel</action-widget>
+      <action-widget response="-5">button_join</action-widget>
+    </action-widgets>
+  </object>
+</interface>

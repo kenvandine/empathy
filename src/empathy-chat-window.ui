@@ -1,0 +1,326 @@
+<?xml version="1.0"?>
+<!--*- mode: xml -*-->
+<interface>
+  <object class="GtkUIManager" id="uimanager1">
+    <child>
+      <object class="GtkActionGroup" id="actiongroup1">
+        <child>
+          <object class="GtkAction" id="menu_conv">
+            <property name="name">menu_conv</property>
+            <property name="label" translatable="yes">_Conversation</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkAction" id="menu_conv_clear">
+            <property name="stock_id">gtk-clear</property>
+            <property name="name">menu_conv_clear</property>
+            <property name="label" translatable="yes">C_lear</property>
+          </object>
+          <accelerator key="L" modifiers="GDK_CONTROL_MASK"/>
+        </child>
+        <child>
+          <object class="GtkAction" id="menu_conv_insert_smiley">
+            <property name="name">menu_conv_insert_smiley</property>
+            <property name="label" translatable="yes">Insert _Smiley</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkAction" id="menu_conv_contact">
+            <property name="name">menu_conv_contact</property>
+            <property name="label" translatable="yes">_Contact</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkToggleAction" id="menu_conv_favorite">
+            <property name="name">menu_conv_favorite</property>
+            <property name="label" translatable="yes">_Favorite Chatroom</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkAction" id="menu_conv_close">
+            <property name="stock_id">gtk-close</property>
+            <property name="name">menu_conv_close</property>
+          </object>
+          <accelerator key="W" modifiers="GDK_CONTROL_MASK"/>
+        </child>
+        <child>
+          <object class="GtkAction" id="menu_edit">
+            <property name="name">menu_edit</property>
+            <property name="label" translatable="yes">_Edit</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkAction" id="menu_edit_cut">
+            <property name="stock_id">gtk-cut</property>
+            <property name="name">menu_edit_cut</property>
+          </object>
+          <accelerator key="X" modifiers="GDK_CONTROL_MASK"/>
+        </child>
+        <child>
+          <object class="GtkAction" id="menu_edit_copy">
+            <property name="stock_id">gtk-copy</property>
+            <property name="name">menu_edit_copy</property>
+          </object>
+          <accelerator key="C" modifiers="GDK_CONTROL_MASK"/>
+        </child>
+        <child>
+          <object class="GtkAction" id="menu_edit_paste">
+            <property name="stock_id">gtk-paste</property>
+            <property name="name">menu_edit_paste</property>
+          </object>
+          <accelerator key="V" modifiers="GDK_CONTROL_MASK"/>
+        </child>
+        <child>
+          <object class="GtkAction" id="menu_tabs">
+            <property name="name">menu_tabs</property>
+            <property name="label" translatable="yes">_Tabs</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkAction" id="menu_tabs_prev">
+            <property name="name">menu_tabs_prev</property>
+            <property name="label" translatable="yes">_Previous Tab</property>
+          </object>
+          <accelerator key="Page_Up" modifiers="GDK_CONTROL_MASK"/>
+        </child>
+        <child>
+          <object class="GtkAction" id="menu_tabs_next">
+            <property name="name">menu_tabs_next</property>
+            <property name="label" translatable="yes">_Next Tab</property>
+          </object>
+          <accelerator key="Page_Down" modifiers="GDK_CONTROL_MASK"/>
+        </child>
+        <child>
+          <object class="GtkAction" id="menu_tabs_left">
+            <property name="name">menu_tabs_left</property>
+            <property name="label" translatable="yes">Move Tab _Left</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkAction" id="menu_tabs_right">
+            <property name="name">menu_tabs_right</property>
+            <property name="label" translatable="yes">Move Tab _Right</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkAction" id="menu_tabs_detach">
+            <property name="name">menu_tabs_detach</property>
+            <property name="label" translatable="yes">_Detach Tab</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkAction" id="menu_help">
+            <property name="name">menu_help</property>
+            <property name="label" translatable="yes">_Help</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkAction" id="menu_help_contents">
+            <property name="stock_id">gtk-help</property>
+            <property name="name">menu_help_contents</property>
+            <property name="label" translatable="yes">_Contents</property>
+          </object>
+          <accelerator key="F1" modifiers=""/>
+        </child>
+        <child>
+          <object class="GtkAction" id="menu_help_about">
+            <property name="stock_id">gtk-about</property>
+            <property name="name">menu_help_about</property>
+          </object>
+        </child>
+      </object>
+    </child>
+    <ui>
+      <menubar name="chats_menubar">
+        <menu action="menu_conv">
+          <menuitem action="menu_conv_clear"/>
+          <menuitem action="menu_conv_insert_smiley"/>
+          <menuitem action="menu_conv_contact"/>
+          <menuitem action="menu_conv_favorite"/>
+          <separator/>
+          <menuitem action="menu_conv_close"/>
+        </menu>
+        <menu action="menu_edit">
+          <menuitem action="menu_edit_cut"/>
+          <menuitem action="menu_edit_copy"/>
+          <menuitem action="menu_edit_paste"/>
+        </menu>
+        <menu action="menu_tabs">
+          <menuitem action="menu_tabs_prev"/>
+          <menuitem action="menu_tabs_next"/>
+          <separator/>
+          <menuitem action="menu_tabs_left"/>
+          <menuitem action="menu_tabs_right"/>
+          <menuitem action="menu_tabs_detach"/>
+        </menu>
+        <menu action="menu_help">
+          <menuitem action="menu_help_contents"/>
+          <menuitem action="menu_help_about"/>
+        </menu>
+      </menubar>
+    </ui>
+  </object>
+  <object class="GtkWindow" id="chat_window">
+    <property name="title" translatable="yes">Chat</property>
+    <property name="role">chat</property>
+    <property name="default_width">350</property>
+    <property name="default_height">250</property>
+    <child>
+      <object class="GtkVBox" id="chat_vbox">
+        <property name="visible">True</property>
+        <child>
+          <object class="GtkMenuBar" constructor="uimanager1" id="chats_menubar">
+            <property name="visible">True</property>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="fill">False</property>
+          </packing>
+        </child>
+        <child>
+          <placeholder/>
+        </child>
+      </object>
+    </child>
+  </object>
+  <object class="GtkDialog" id="chat_invite_dialog">
+    <property name="border_width">5</property>
+    <property name="title" translatable="yes">Invite</property>
+    <property name="modal">True</property>
+    <property name="window_position">GTK_WIN_POS_CENTER_ON_PARENT</property>
+    <property name="default_width">275</property>
+    <property name="default_height">225</property>
+    <property name="type_hint">GDK_WINDOW_TYPE_HINT_DIALOG</property>
+    <property name="has_separator">False</property>
+    <child internal-child="vbox">
+      <object class="GtkVBox" id="vbox6">
+        <property name="visible">True</property>
+        <child>
+          <object class="GtkVBox" id="vbox7">
+            <property name="visible">True</property>
+            <property name="border_width">5</property>
+            <property name="spacing">18</property>
+            <child>
+              <object class="GtkVBox" id="vbox7">
+                <property name="visible">True</property>
+                <property name="spacing">6</property>
+                <child>
+                  <object class="GtkLabel" id="label">
+                    <property name="visible">True</property>
+                    <property name="xalign">0</property>
+                    <property name="label" translatable="yes">Select who would you like to invite:</property>
+                    <property name="use_markup">True</property>
+                    <property name="wrap">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkScrolledWindow" id="scrolledwindow1">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="hscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+                    <property name="vscrollbar_policy">GTK_POLICY_AUTOMATIC</property>
+                    <property name="shadow_type">GTK_SHADOW_IN</property>
+                    <child>
+                      <object class="GtkTreeView" id="treeview">
+                        <property name="visible">True</property>
+                        <property name="can_focus">True</property>
+                        <property name="headers_visible">False</property>
+                      </object>
+                    </child>
+                  </object>
+                  <packing>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="GtkVBox" id="vbox8">
+                <property name="visible">True</property>
+                <property name="spacing">6</property>
+                <child>
+                  <object class="GtkLabel" id="label4">
+                    <property name="visible">True</property>
+                    <property name="xalign">0</property>
+                    <property name="label" translatable="yes">Invitation _message:</property>
+                    <property name="use_markup">True</property>
+                    <property name="use_underline">True</property>
+                    <property name="wrap">True</property>
+                    <property name="mnemonic_widget">entry</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkEntry" id="entry">
+                    <property name="visible">True</property>
+                    <property name="can_focus">True</property>
+                    <property name="activates_default">True</property>
+                    <property name="width_chars">40</property>
+                    <property name="text" translatable="yes">You have been invited to join a chat conference.</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="fill">False</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="position">1</property>
+          </packing>
+        </child>
+        <child internal-child="action_area">
+          <object class="GtkHButtonBox" id="hbuttonbox1">
+            <property name="visible">True</property>
+            <property name="layout_style">GTK_BUTTONBOX_END</property>
+            <child>
+              <object class="GtkButton" id="button_cancel">
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="can_default">True</property>
+                <property name="label">gtk-cancel</property>
+                <property name="use_stock">True</property>
+              </object>
+            </child>
+            <child>
+              <object class="GtkButton" id="button_invite">
+                <property name="visible">True</property>
+                <property name="sensitive">False</property>
+                <property name="can_focus">True</property>
+                <property name="can_default">True</property>
+                <property name="has_default">True</property>
+                <property name="label">In_vite</property>
+                <property name="use_underline">True</property>
+              </object>
+              <packing>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="pack_type">GTK_PACK_END</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+    <action-widgets>
+      <action-widget response="-6">button_cancel</action-widget>
+      <action-widget response="-5">button_invite</action-widget>
+    </action-widgets>
+  </object>
+</interface>
