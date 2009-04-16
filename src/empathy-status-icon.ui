@@ -1,48 +1,48 @@
 <?xml version="1.0"?>
 <!--*- mode: xml -*-->
 <interface>
-  <object class="GtkUIManager" id="uimanager1">
+  <object class="GtkUIManager" id="ui_manager">
     <child>
-      <object class="GtkActionGroup" id="actiongroup1">
+      <object class="GtkActionGroup" id="action_group">
         <child>
-          <object class="GtkToggleAction" id="tray_show_list">
-            <property name="name">tray_show_list</property>
+          <object class="GtkToggleAction" id="show_list">
+            <property name="name">show_list</property>
             <property name="label" translatable="yes">_Show Contact List</property>
           </object>
         </child>
         <child>
-          <object class="GtkAction" id="tray_new_message">
-            <property name="name">tray_new_message</property>
+          <object class="GtkAction" id="new_message">
+            <property name="name">new_message</property>
             <property name="label" translatable="yes">_New Conversation...</property>
           </object>
         </child>
         <child>
-          <object class="GtkAction" id="tray_status">
-            <property name="name">tray_status</property>
+          <object class="GtkAction" id="status">
+            <property name="name">status</property>
             <property name="label" translatable="yes">Status</property>
           </object>
         </child>
         <child>
-          <object class="GtkAction" id="tray_quit">
+          <object class="GtkAction" id="quit">
             <property name="stock_id">gtk-quit</property>
-            <property name="name">tray_quit</property>
+            <property name="name">quit</property>
             <property name="label" translatable="yes">_Quit</property>
           </object>
         </child>
       </object>
     </child>
     <ui>
-      <popup name="tray_menu">
-        <menuitem action="tray_show_list"/>
+      <popup name="menu">
+        <menuitem action="show_list"/>
         <separator/>
-        <menuitem action="tray_new_message"/>
-        <menuitem action="tray_status"/>
+        <menuitem action="new_message"/>
+        <menuitem action="status"/>
         <separator/>
-        <menuitem action="tray_quit"/>
+        <menuitem action="quit"/>
       </popup>
     </ui>
   </object>
-  <object class="GtkMenu" constructor="uimanager1" id="tray_menu">
+  <object class="GtkMenu" constructor="ui_manager" id="menu">
     
     
     

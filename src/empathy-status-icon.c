@@ -62,10 +62,11 @@ typedef struct {
 	NotifyNotification  *notification;
 
 	GtkWindow           *window;
+	GtkUIManager        *ui_manager;
 	GtkWidget           *popup_menu;
-	GtkWidget           *show_window_item;
-	GtkWidget           *message_item;
-	GtkWidget           *status_item;
+	GtkAction           *show_window_item;
+	GtkAction           *new_message_item;
+	GtkAction           *status_item;
 } EmpathyStatusIconPriv;
 
 G_DEFINE_TYPE (EmpathyStatusIcon, empathy_status_icon, G_TYPE_OBJECT);
@@ -393,24 +394,24 @@ status_icon_activate_cb (GtkStatusIcon     *status_icon,
 }
 
 static void
-status_icon_show_hide_window_cb (GtkWidget         *widget,
+status_icon_show_hide_window_cb (GtkToggleAction   *action,
 				 EmpathyStatusIcon *icon)
 {
 	gboolean visible;
 
-	visible = gtk_check_menu_item_get_active (GTK_CHECK_MENU_ITEM (widget));
+	visible = gtk_toggle_action_get_active (action);
 	status_icon_set_visibility (icon, visible, TRUE);
 }
 
 static void
-status_icon_new_message_cb (GtkWidget         *widget,
+status_icon_new_message_cb (GtkAction         *action,
 			    EmpathyStatusIcon *icon)
 {
 	empathy_new_message_dialog_show (NULL);
 }
 
 static void
-status_icon_quit_cb (GtkWidget         *window,
+status_icon_quit_cb (GtkAction         *action,
 		     EmpathyStatusIcon *icon)
 {
 	gtk_main_quit ();
@@ -423,6 +424,7 @@ status_icon_popup_menu_cb (GtkStatusIcon     *status_icon,
 			   EmpathyStatusIcon *icon)
 {
 	EmpathyStatusIconPriv *priv = GET_PRIV (icon);
+	GtkWidget             *menu_item;
 	GtkWidget             *submenu;
 	gboolean               show;
 
@@ -431,15 +433,15 @@ status_icon_popup_menu_cb (GtkStatusIcon     *status_icon,
 	g_signal_handlers_block_by_func (priv->show_window_item,
 					 status_icon_show_hide_window_cb,
 					 icon);
-	gtk_check_menu_item_set_active (GTK_CHECK_MENU_ITEM (priv->show_window_item),
-					show);
+	gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (priv->show_window_item),
+				      show);
 	g_signal_handlers_unblock_by_func (priv->show_window_item,
 					   status_icon_show_hide_window_cb,
 					   icon);
 
+	menu_item = gtk_ui_manager_get_widget (priv->ui_manager, "/menu/status");
 	submenu = empathy_presence_chooser_create_menu ();
-	gtk_menu_item_set_submenu (GTK_MENU_ITEM (priv->status_item),
-				   submenu);
+	gtk_menu_item_set_submenu (GTK_MENU_ITEM (menu_item), submenu);
 
 	gtk_menu_popup (GTK_MENU (priv->popup_menu),
 			NULL, NULL,
@@ -458,19 +460,21 @@ status_icon_create_menu (EmpathyStatusIcon *icon)
 
 	filename = empathy_file_lookup ("empathy-status-icon.ui", "src");
 	gui = empathy_builder_get_file (filename,
-				       "tray_menu", &priv->popup_menu,
-				       "tray_show_list", &priv->show_window_item,
-				       "tray_new_message", &priv->message_item,
-				       "tray_status", &priv->status_item,
+					"ui_manager", &priv->ui_manager,
+					"menu", &priv->popup_menu,
+					"show_list", &priv->show_window_item,
+					"new_message", &priv->new_message_item,
+					"status", &priv->status_item,
 				       NULL);
 	g_free (filename);
 
 	empathy_builder_connect (gui, icon,
-			      "tray_show_list", "toggled", status_icon_show_hide_window_cb,
-			      "tray_new_message", "activate", status_icon_new_message_cb,
-			      "tray_quit", "activate", status_icon_quit_cb,
+			      "show_list", "toggled", status_icon_show_hide_window_cb,
+			      "new_message", "activate", status_icon_new_message_cb,
+			      "quit", "activate", status_icon_quit_cb,
 			      NULL);
 
+	g_object_ref (priv->ui_manager);
 	g_object_unref (gui);
 }
 
@@ -488,7 +492,7 @@ status_icon_connection_changed_cb (EmpathyAccountManager *manager,
 	/* Check for a connected account */
 	connected_accounts = empathy_account_manager_get_connected_accounts (manager);
 
-	gtk_widget_set_sensitive (priv->message_item, connected_accounts > 0);
+	gtk_action_set_sensitive (priv->new_message_item, connected_accounts > 0);
 }
 
 static void
@@ -514,6 +518,7 @@ status_icon_finalize (GObject *object)
 	g_object_unref (priv->idle);
 	g_object_unref (priv->account_manager);
 	g_object_unref (priv->event_manager);
+	g_object_unref (priv->ui_manager);
 }
 
 static void
