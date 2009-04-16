@@ -12,6 +12,7 @@
         </child>
         <child>
           <object class="GtkAction" id="chat_new_message">
+            <property name="icon-name">im-message-new</property>
             <property name="name">chat_new_message</property>
             <property name="label" translatable="yes">_New Conversation...</property>
           </object>
@@ -19,6 +20,7 @@
         </child>
         <child>
           <object class="GtkAction" id="chat_history">
+            <property name="icon-name">document-open-recent</property>
             <property name="name">chat_history</property>
             <property name="label" translatable="yes">_View Previous Conversations</property>
           </object>
@@ -98,6 +100,7 @@
         </child>
         <child>
           <object class="GtkAction" id="room_manage_favorites">
+            <property name="icon-name">system-users</property>
             <property name="name">room_manage_favorites</property>
             <property name="label" translatable="yes">Manage Favorites</property>
           </object>

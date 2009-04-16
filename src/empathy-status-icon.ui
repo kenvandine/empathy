@@ -12,6 +12,7 @@
         </child>
         <child>
           <object class="GtkAction" id="new_message">
+            <property name="icon-name">im-message-new</property>
             <property name="name">new_message</property>
             <property name="label" translatable="yes">_New Conversation...</property>
           </object>
