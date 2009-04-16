@@ -25,7 +25,6 @@
 
 #include <glib.h>
 #include <gtk/gtk.h>
-#include <glade/glade.h>
 #include <glib/gi18n.h>
 
 #include <libmissioncontrol/mc-account.h>
@@ -363,7 +362,7 @@ empathy_import_dialog_show (GtkWindow *parent,
                             gboolean warning)
 {
   static EmpathyImportDialog *dialog = NULL;
-  GladeXML *glade;
+  GtkBuilder *gui;
   gchar *filename;
   GList *accounts = NULL;
 
@@ -402,16 +401,13 @@ empathy_import_dialog_show (GtkWindow *parent,
   dialog = g_slice_new0 (EmpathyImportDialog);
   dialog->accounts = accounts;  
 
-  filename = empathy_file_lookup ("empathy-import-dialog.glade", "src");
-  glade = empathy_glade_get_file (filename,
-      "import_dialog",
-      NULL,
+  filename = empathy_file_lookup ("empathy-import-dialog.ui", "src");
+  gui = empathy_builder_get_file (filename,
       "import_dialog", &dialog->window,
       "treeview", &dialog->treeview,
       NULL);
 
-  empathy_glade_connect (glade,
-      dialog,
+  empathy_builder_connect (gui, dialog,
       "import_dialog", "destroy", import_dialog_destroy_cb,
       "import_dialog", "response", import_dialog_response_cb,
       NULL);
@@ -419,7 +415,7 @@ empathy_import_dialog_show (GtkWindow *parent,
   g_object_add_weak_pointer (G_OBJECT (dialog->window), (gpointer) &dialog);
 
   g_free (filename);
-  g_object_unref (glade);
+  g_object_unref (gui);
 
   if (parent)
     gtk_window_set_transient_for (GTK_WINDOW (dialog->window), parent);
