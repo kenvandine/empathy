@@ -74,24 +74,20 @@ typedef struct {
 	NotifyNotification *notification;
 
 	/* Menu items. */
-	GtkWidget   *menu_conv_clear;
-	GtkWidget   *menu_conv_insert_smiley;
-	GtkWidget   *menu_conv_contact;
-	GtkWidget   *menu_conv_favorite;
-	GtkWidget   *menu_conv_close;
+	GtkUIManager *ui_manager;
+	GtkAction   *menu_conv_insert_smiley;
+	GtkAction   *menu_conv_contact;
+	GtkAction   *menu_conv_favorite;
 
-	GtkWidget   *menu_edit_cut;
-	GtkWidget   *menu_edit_copy;
-	GtkWidget   *menu_edit_paste;
+	GtkAction   *menu_edit_cut;
+	GtkAction   *menu_edit_copy;
+	GtkAction   *menu_edit_paste;
 
-	GtkWidget   *menu_tabs_next;
-	GtkWidget   *menu_tabs_prev;
-	GtkWidget   *menu_tabs_left;
-	GtkWidget   *menu_tabs_right;
-	GtkWidget   *menu_tabs_detach;
-	
-	GtkWidget   *menu_help_contents;
-	GtkWidget   *menu_help_about;
+	GtkAction   *menu_tabs_next;
+	GtkAction   *menu_tabs_prev;
+	GtkAction   *menu_tabs_left;
+	GtkAction   *menu_tabs_right;
+	GtkAction   *menu_tabs_detach;
 } EmpathyChatWindowPriv;
 
 static GList *chat_windows = NULL;
@@ -156,7 +152,7 @@ chat_window_find_chat (EmpathyChat *chat)
 }
 
 static void
-chat_window_close_clicked_cb (GtkWidget  *button,
+chat_window_close_clicked_cb (GtkAction   *action,
 			      EmpathyChat *chat)
 {
 	EmpathyChatWindow *window;
@@ -296,12 +292,12 @@ chat_window_update (EmpathyChatWindow *window)
 	DEBUG ("Update window");
 
 	/* Update menu */
-	gtk_widget_set_sensitive (priv->menu_tabs_next, !last_page);
-	gtk_widget_set_sensitive (priv->menu_tabs_prev, !first_page);
-	gtk_widget_set_sensitive (priv->menu_tabs_detach, num_pages > 1);
-	gtk_widget_set_sensitive (priv->menu_tabs_left, !first_page);
-	gtk_widget_set_sensitive (priv->menu_tabs_right, !last_page);
-	gtk_widget_set_sensitive (priv->menu_conv_insert_smiley, is_connected);
+	gtk_action_set_sensitive (priv->menu_tabs_next, !last_page);
+	gtk_action_set_sensitive (priv->menu_tabs_prev, !first_page);
+	gtk_action_set_sensitive (priv->menu_tabs_detach, num_pages > 1);
+	gtk_action_set_sensitive (priv->menu_tabs_left, !first_page);
+	gtk_action_set_sensitive (priv->menu_tabs_right, !last_page);
+	gtk_action_set_sensitive (priv->menu_conv_insert_smiley, is_connected);
 
 	/* Update window title */
 	if (n_chats == 1) {
@@ -488,25 +484,27 @@ chat_window_insert_smiley_activate_cb (EmpathySmileyManager *manager,
 }
 
 static void
-chat_window_conv_activate_cb (GtkWidget         *menuitem,
+chat_window_conv_activate_cb (GtkAction         *action,
 			      EmpathyChatWindow *window)
 {
 	EmpathyChatWindowPriv *priv = GET_PRIV (window);
+	GtkWidget             *menu = NULL;
 	GtkWidget             *submenu = NULL;
+	gboolean               is_room;
 
 	/* Contact submenu */
 	submenu = empathy_chat_get_contact_menu (priv->current_chat);
 	if (submenu) {
-		gtk_menu_item_set_submenu (GTK_MENU_ITEM (priv->menu_conv_contact),
-					   submenu);
-		gtk_widget_show (priv->menu_conv_contact);
+		menu = gtk_ui_manager_get_widget (priv->ui_manager,
+			"/chats_menubar/menu_conv/menu_conv_contact");
+		gtk_menu_item_set_submenu (GTK_MENU_ITEM (menu), submenu);
 		gtk_widget_show (submenu);
-	} else {
-		gtk_widget_hide (priv->menu_conv_contact);
 	}
+	gtk_action_set_visible (priv->menu_conv_contact, submenu != NULL);
 
 	/* Favorite room menu */
-	if (empathy_chat_is_room (priv->current_chat)) {
+	is_room = empathy_chat_is_room (priv->current_chat);
+	if (is_room) {
 		const gchar *room;
 		McAccount   *account;
 		gboolean     found;
@@ -517,16 +515,14 @@ chat_window_conv_activate_cb (GtkWidget         *menuitem,
 						       account, room) != NULL;
 
 		DEBUG ("This room %s favorite", found ? "is" : "is not");
-		gtk_check_menu_item_set_active (
-			GTK_CHECK_MENU_ITEM (priv->menu_conv_favorite), found);
-		gtk_widget_show (priv->menu_conv_favorite);
-	} else {
-		gtk_widget_hide (priv->menu_conv_favorite);
+		gtk_toggle_action_set_active (
+			GTK_TOGGLE_ACTION (priv->menu_conv_favorite), found);
 	}
+	gtk_action_set_visible (priv->menu_conv_favorite, is_room);
 }
 
 static void
-chat_window_clear_activate_cb (GtkWidget        *menuitem,
+chat_window_clear_activate_cb (GtkAction         *action,
 			       EmpathyChatWindow *window)
 {
 	EmpathyChatWindowPriv *priv = GET_PRIV (window);
@@ -535,7 +531,7 @@ chat_window_clear_activate_cb (GtkWidget        *menuitem,
 }
 
 static void
-chat_window_favorite_toggled_cb (GtkCheckMenuItem  *menuitem,
+chat_window_favorite_toggled_cb (GtkToggleAction   *toggle_action,
 				 EmpathyChatWindow *window)
 {
 	EmpathyChatWindowPriv *priv = GET_PRIV (window);
@@ -544,7 +540,7 @@ chat_window_favorite_toggled_cb (GtkCheckMenuItem  *menuitem,
 	const gchar           *room;
 	EmpathyChatroom       *chatroom;
 
-	active = gtk_check_menu_item_get_active (menuitem);
+	active = gtk_toggle_action_get_active (toggle_action);
 	account = empathy_chat_get_account (priv->current_chat);
 	room = empathy_chat_get_id (priv->current_chat);
 
@@ -624,7 +620,7 @@ chat_window_configure_event_cb (GtkWidget         *widget,
 }
 
 static void
-chat_window_close_activate_cb (GtkWidget        *menuitem,
+chat_window_close_activate_cb (GtkAction         *action,
 			       EmpathyChatWindow *window)
 {
 	EmpathyChatWindowPriv *priv;
@@ -637,7 +633,7 @@ chat_window_close_activate_cb (GtkWidget        *menuitem,
 }
 
 static void
-chat_window_edit_activate_cb (GtkWidget        *menuitem,
+chat_window_edit_activate_cb (GtkAction         *action,
 			      EmpathyChatWindow *window)
 {
 	EmpathyChatWindowPriv *priv;
@@ -650,32 +646,32 @@ chat_window_edit_activate_cb (GtkWidget        *menuitem,
 	g_return_if_fail (priv->current_chat != NULL);
 
 	if (!empathy_chat_get_tp_chat (priv->current_chat)) {
-		gtk_widget_set_sensitive (priv->menu_edit_copy, FALSE);
-		gtk_widget_set_sensitive (priv->menu_edit_cut, FALSE);
-		gtk_widget_set_sensitive (priv->menu_edit_paste, FALSE);
+		gtk_action_set_sensitive (priv->menu_edit_copy, FALSE);
+		gtk_action_set_sensitive (priv->menu_edit_cut, FALSE);
+		gtk_action_set_sensitive (priv->menu_edit_paste, FALSE);
 		return;
 	}
 
 	buffer = gtk_text_view_get_buffer (GTK_TEXT_VIEW (priv->current_chat->input_text_view));
 	if (gtk_text_buffer_get_has_selection (buffer)) {
-		gtk_widget_set_sensitive (priv->menu_edit_copy, TRUE);
-		gtk_widget_set_sensitive (priv->menu_edit_cut, TRUE);
+		gtk_action_set_sensitive (priv->menu_edit_copy, TRUE);
+		gtk_action_set_sensitive (priv->menu_edit_cut, TRUE);
 	} else {
 		gboolean selection;
 
 		selection = empathy_chat_view_get_has_selection (priv->current_chat->view);
 
-		gtk_widget_set_sensitive (priv->menu_edit_cut, FALSE);
-		gtk_widget_set_sensitive (priv->menu_edit_copy, selection);
+		gtk_action_set_sensitive (priv->menu_edit_cut, FALSE);
+		gtk_action_set_sensitive (priv->menu_edit_copy, selection);
 	}
 
 	clipboard = gtk_clipboard_get (GDK_SELECTION_CLIPBOARD);
 	text_available = gtk_clipboard_wait_is_text_available (clipboard);
-	gtk_widget_set_sensitive (priv->menu_edit_paste, text_available);
+	gtk_action_set_sensitive (priv->menu_edit_paste, text_available);
 }
 
 static void
-chat_window_cut_activate_cb (GtkWidget        *menuitem,
+chat_window_cut_activate_cb (GtkAction         *action,
 			     EmpathyChatWindow *window)
 {
 	EmpathyChatWindowPriv *priv;
@@ -688,7 +684,7 @@ chat_window_cut_activate_cb (GtkWidget        *menuitem,
 }
 
 static void
-chat_window_copy_activate_cb (GtkWidget        *menuitem,
+chat_window_copy_activate_cb (GtkAction         *action,
 			      EmpathyChatWindow *window)
 {
 	EmpathyChatWindowPriv *priv;
@@ -701,7 +697,7 @@ chat_window_copy_activate_cb (GtkWidget        *menuitem,
 }
 
 static void
-chat_window_paste_activate_cb (GtkWidget        *menuitem,
+chat_window_paste_activate_cb (GtkAction         *action,
 			       EmpathyChatWindow *window)
 {
 	EmpathyChatWindowPriv *priv;
@@ -714,7 +710,7 @@ chat_window_paste_activate_cb (GtkWidget        *menuitem,
 }
 
 static void
-chat_window_tabs_left_activate_cb (GtkWidget        *menuitem,
+chat_window_tabs_left_activate_cb (GtkAction         *action,
 				   EmpathyChatWindow *window)
 {
 	EmpathyChatWindowPriv *priv;
@@ -735,7 +731,7 @@ chat_window_tabs_left_activate_cb (GtkWidget        *menuitem,
 }
 
 static void
-chat_window_tabs_right_activate_cb (GtkWidget        *menuitem,
+chat_window_tabs_right_activate_cb (GtkAction         *action,
 				    EmpathyChatWindow *window)
 {
 	EmpathyChatWindowPriv *priv;
@@ -753,7 +749,7 @@ chat_window_tabs_right_activate_cb (GtkWidget        *menuitem,
 }
 
 static void
-chat_window_detach_activate_cb (GtkWidget        *menuitem,
+chat_window_detach_activate_cb (GtkAction         *action,
 				EmpathyChatWindow *window)
 {
 	EmpathyChatWindowPriv *priv;
@@ -772,15 +768,17 @@ chat_window_detach_activate_cb (GtkWidget        *menuitem,
 }
 
 static void
-chat_window_help_contents_cb (GtkWidget         *menuitem,
-			      EmpathyChatWindow *window)
+chat_window_help_contents_activate_cb (GtkAction         *action,
+				       EmpathyChatWindow *window)
 {
-	empathy_url_show (menuitem, "ghelp:empathy?chat");
+	EmpathyChatWindowPriv *priv = GET_PRIV (window);
+
+	empathy_url_show (priv->dialog, "ghelp:empathy?chat");
 }
 
 static void
-chat_window_help_about_cb (GtkWidget         *menuitem,
-			   EmpathyChatWindow *window)
+chat_window_help_about_activate_cb (GtkAction         *action,
+				    EmpathyChatWindow *window)
 {
 	EmpathyChatWindowPriv *priv = GET_PRIV (window);
 
@@ -1244,6 +1242,7 @@ chat_window_finalize (GObject *object)
 
 	DEBUG ("Finalized: %p", object);
 
+	g_object_unref (priv->ui_manager);
 	g_object_unref (priv->chatroom_manager);
 	if (priv->save_geometry_id != 0) {
 		g_source_remove (priv->save_geometry_id);
@@ -1289,8 +1288,8 @@ empathy_chat_window_init (EmpathyChatWindow *window)
 	GtkBuilder            *gui;
 	GtkAccelGroup         *accel_group;
 	GClosure              *closure;
-	GtkWidget             *menu_conv;
 	GtkWidget             *menu;
+	GtkWidget             *submenu;
 	gint                   i;
 	GtkWidget             *chat_vbox;
 	gchar                 *filename;
@@ -1303,12 +1302,10 @@ empathy_chat_window_init (EmpathyChatWindow *window)
 	gui = empathy_builder_get_file (filename,
 				       "chat_window", &priv->dialog,
 				       "chat_vbox", &chat_vbox,
-				       "menu_conv", &menu_conv,
-				       "menu_conv_clear", &priv->menu_conv_clear,
+				       "ui_manager", &priv->ui_manager,
 				       "menu_conv_insert_smiley", &priv->menu_conv_insert_smiley,
 				       "menu_conv_contact", &priv->menu_conv_contact,
 				       "menu_conv_favorite", &priv->menu_conv_favorite,
-				       "menu_conv_close", &priv->menu_conv_close,
 				       "menu_edit_cut", &priv->menu_edit_cut,
 				       "menu_edit_copy", &priv->menu_edit_copy,
 				       "menu_edit_paste", &priv->menu_edit_paste,
@@ -1317,8 +1314,6 @@ empathy_chat_window_init (EmpathyChatWindow *window)
 				       "menu_tabs_left", &priv->menu_tabs_left,
 				       "menu_tabs_right", &priv->menu_tabs_right,
 				       "menu_tabs_detach", &priv->menu_tabs_detach,
-				       "menu_help_contents", &priv->menu_help_contents,
-				       "menu_help_about", &priv->menu_help_about,
 				       NULL);
 	g_free (filename);
 
@@ -1335,10 +1330,11 @@ empathy_chat_window_init (EmpathyChatWindow *window)
 			      "menu_tabs_left", "activate", chat_window_tabs_left_activate_cb,
 			      "menu_tabs_right", "activate", chat_window_tabs_right_activate_cb,
 			      "menu_tabs_detach", "activate", chat_window_detach_activate_cb,
-			      "menu_help_contents", "activate", chat_window_help_contents_cb,
-			      "menu_help_about", "activate", chat_window_help_about_cb,
+			      "menu_help_contents", "activate", chat_window_help_contents_activate_cb,
+			      "menu_help_about", "activate", chat_window_help_about_activate_cb,
 			      NULL);
 
+	g_object_ref (priv->ui_manager);
 	g_object_unref (gui);
 
 	priv->chatroom_manager = empathy_chatroom_manager_dup_singleton (NULL);
@@ -1367,11 +1363,12 @@ empathy_chat_window_init (EmpathyChatWindow *window)
 
 	/* Set up smiley menu */
 	smiley_manager = empathy_smiley_manager_dup_singleton ();
-	menu = empathy_smiley_menu_new (smiley_manager,
-					chat_window_insert_smiley_activate_cb,
-					window);
-	gtk_menu_item_set_submenu (GTK_MENU_ITEM (priv->menu_conv_insert_smiley),
-				   menu);
+	submenu = empathy_smiley_menu_new (smiley_manager,
+					   chat_window_insert_smiley_activate_cb,
+					   window);
+	menu = gtk_ui_manager_get_widget (priv->ui_manager,
+		"/chats_menubar/menu_conv/menu_conv_insert_smiley");
+	gtk_menu_item_set_submenu (GTK_MENU_ITEM (menu), submenu);
 	g_object_unref (smiley_manager);
 
 	/* Set up signals we can't do with ui file since we may need to
