@@ -437,7 +437,11 @@ chatrooms_window_model_get_selected (EmpathyChatroomsWindow *window)
 static void
 chatrooms_window_model_action_selected (EmpathyChatroomsWindow *window)
 {
+	EmpathyChatroom *chatroom;
+
 	/* FIXME: This is still not implemented since Gossip fork */
+	chatroom = chatrooms_window_model_get_selected (window);
+	g_object_unref (chatroom);
 }
 
 static void
@@ -482,7 +486,11 @@ static void
 chatrooms_window_button_edit_clicked_cb (GtkWidget             *widget,
 					 EmpathyChatroomsWindow *window)
 {
+	EmpathyChatroom *chatroom;
+
 	/* FIXME: This is still not implemented since Gossip fork */
+	chatroom = chatrooms_window_model_get_selected (window);
+	g_object_unref (chatroom);
 }
 
 static void
