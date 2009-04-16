@@ -3,7 +3,7 @@ AM_CPPFLAGS =                                           \
 	-I$(top_srcdir)                                 \
 	-DDATADIR=\""$(datadir)"\"              	\
 	-DPKGDATADIR=\""$(pkgdatadir)"\"		\
-	$(EMPATHY_CFLAGS)				\
+	$(LIBEMPATHYGTK_CFLAGS)				\
 	$(ENCHANT_CFLAGS)				\
 	$(WARN_CFLAGS)
 
@@ -60,7 +60,7 @@ nodist_libempathy_gtk_la_SOURCES =\
 	$(BUILT_SOURCES)
 
 libempathy_gtk_la_LIBADD =			\
-	$(EMPATHY_LIBS)				\
+	$(LIBEMPATHYGTK_LIBS)			\
 	$(ENCHANT_LIBS)				\
 	$(top_builddir)/libempathy/libempathy.la
 

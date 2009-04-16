@@ -35,6 +35,7 @@ MISSION_CONTROL_REQUIRED=4.61
 ENCHANT_REQUIRED=1.2.0
 ISO_CODES_REQUIRED=0.35
 LIBNOTIFY_REQUIRED=0.4.4
+LIBCANBERRA_GTK_REQUIRED=0.4
 
 # Uncomment that to build with deprecated symbols disabled
 #AC_DEFINE(G_DISABLE_DEPRECATED, [], [Disable deprecated GLib symbols])
@@ -89,12 +90,29 @@ PKG_CHECK_MODULES(LIBEMPATHY,
 [
    glib-2.0 >= $GLIB_REQUIRED
    gobject-2.0
+   gio-2.0 >= $GLIB_REQUIRED
+   gio-unix-2.0 >= $GLIB_REQUIRED
    libxml-2.0
    telepathy-glib >= $TELEPATHY_GLIB_REQUIRED
    libmissioncontrol >= $MISSION_CONTROL_REQUIRED
-   gio-2.0 >= $GLIB_REQUIRED
-   gio-unix-2.0 >= $GLIB_REQUIRED
    telepathy-farsight
+])
+
+PKG_CHECK_MODULES(LIBEMPATHYGTK,
+[
+   glib-2.0 >= $GLIB_REQUIRED
+   gobject-2.0
+   gio-2.0 >= $GLIB_REQUIRED
+   gconf-2.0 >= $GCONF_REQUIRED
+   x11
+   gtk+-2.0 >= $GTK_REQUIRED
+   libcanberra-gtk >= $LIBCANBERRA_GTK_REQUIRED
+   libglade-2.0 >= $LIBGLADE_REQUIRED
+   telepathy-glib >= $TELEPATHY_GLIB_REQUIRED
+   libmissioncontrol >= $MISSION_CONTROL_REQUIRED
+   telepathy-farsight
+   gstreamer-0.10
+   gstreamer-interfaces-0.10
 ])
 
 PKG_CHECK_MODULES(EMPATHY,
@@ -103,16 +121,16 @@ PKG_CHECK_MODULES(EMPATHY,
    gobject-2.0
    gio-2.0 >= $GLIB_REQUIRED
    gconf-2.0 >= $GCONF_REQUIRED
-   telepathy-glib >= $TELEPATHY_GLIB_REQUIRED
-   libmissioncontrol >= $MISSION_CONTROL_REQUIRED
-   gtk+-2.0 >= $GTK_REQUIRED
    x11
+   gtk+-2.0 >= $GTK_REQUIRED
+   libcanberra-gtk >= $LIBCANBERRA_GTK_REQUIRED
    libglade-2.0 >= $LIBGLADE_REQUIRED
    libebook-1.2
-   libcanberra-gtk >= 0.4
+   telepathy-glib >= $TELEPATHY_GLIB_REQUIRED
+   libmissioncontrol >= $MISSION_CONTROL_REQUIRED
+   telepathy-farsight
    gstreamer-0.10
    gstreamer-interfaces-0.10
-   telepathy-farsight
 ])
 
 PKG_CHECK_MODULES(LIBNOTIFY, libnotify >= $LIBNOTIFY_REQUIRED)
