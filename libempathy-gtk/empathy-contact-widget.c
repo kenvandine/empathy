@@ -25,7 +25,6 @@
 #include <stdlib.h>
 
 #include <gtk/gtk.h>
-#include <glade/glade.h>
 #include <glib/gi18n-lib.h>
 
 #include <libmissioncontrol/mc-account.h>
@@ -160,18 +159,16 @@ empathy_contact_widget_new (EmpathyContact *contact,
                             EmpathyContactWidgetFlags flags)
 {
   EmpathyContactWidget *information;
-  GladeXML *glade;
+  GtkBuilder *gui;
   gchar *filename;
 
   information = g_slice_new0 (EmpathyContactWidget);
   information->flags = flags;
   information->factory = empathy_contact_factory_dup_singleton ();
 
-  filename = empathy_file_lookup ("empathy-contact-widget.glade",
+  filename = empathy_file_lookup ("empathy-contact-widget.ui",
       "libempathy-gtk");
-  glade = empathy_glade_get_file (filename,
-      "vbox_contact_widget",
-       NULL,
+  gui = empathy_builder_get_file (filename,
        "vbox_contact_widget", &information->vbox_contact_widget,
        "vbox_contact", &information->vbox_contact,
        "hbox_presence", &information->hbox_presence,
@@ -193,15 +190,12 @@ empathy_contact_widget_new (EmpathyContact *contact,
        NULL);
   g_free (filename);
 
-  empathy_glade_connect (glade,
-      information,
+  empathy_builder_connect (gui, information,
       "vbox_contact_widget", "destroy", contact_widget_destroy_cb,
       "entry_group", "changed", contact_widget_entry_group_changed_cb,
       "entry_group", "activate", contact_widget_entry_group_activate_cb,
       "button_group", "clicked", contact_widget_button_group_clicked_cb,
       NULL);
-
-  g_object_unref (glade);
 
   g_object_set_data (G_OBJECT (information->vbox_contact_widget),
       "EmpathyContactWidget",
@@ -215,7 +209,9 @@ empathy_contact_widget_new (EmpathyContact *contact,
 
   contact_widget_set_contact (information, contact);
 
-  gtk_widget_show (information->vbox_contact_widget);
+  g_object_ref (information->vbox_contact_widget);
+  g_object_force_floating (G_OBJECT (information->vbox_contact_widget));
+  g_object_unref (gui);
 
   return information->vbox_contact_widget;
 }

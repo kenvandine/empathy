@@ -172,6 +172,7 @@ contact_list_view_query_tooltip_cb (EmpathyContactListView *view,
 		g_signal_connect (priv->tooltip_widget, "destroy",
 				  G_CALLBACK (contact_list_view_tooltip_destroy_cb),
 				  view);
+		gtk_widget_show (priv->tooltip_widget);
 	} else {
 		empathy_contact_widget_set_contact (priv->tooltip_widget,
 						    contact);

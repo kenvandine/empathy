@@ -121,6 +121,8 @@ empathy_subscription_dialog_show (EmpathyContact *contact,
 			  contact_widget,
 			  TRUE, TRUE,
 			  0);
+	gtk_widget_show (contact_widget);
+
 
 	g_object_set_data (G_OBJECT (dialog), "contact_widget", contact_widget);
 	subscription_dialogs = g_list_prepend (subscription_dialogs, dialog);
@@ -216,6 +218,7 @@ empathy_contact_information_dialog_show (EmpathyContact *contact,
 							   empathy_account_chooser_filter_is_connected,
 							   NULL);
 	}
+	gtk_widget_show (contact_widget);
 
 	g_object_set_data (G_OBJECT (dialog), "contact_widget", contact_widget);
 	information_dialogs = g_list_prepend (information_dialogs, dialog);
@@ -317,6 +320,7 @@ empathy_new_contact_dialog_show (GtkWindow *parent)
 	empathy_contact_widget_set_account_filter (contact_widget,
 						   can_add_contact_to_account,
 						   NULL);
+	gtk_widget_show (contact_widget);
 
 	new_contact_dialog = dialog;
 
