@@ -28,7 +28,6 @@
 #include <stdlib.h>
 
 #include <gtk/gtk.h>
-#include <glade/glade.h>
 #include <glib/gi18n.h>
 #include <dbus/dbus-glib.h>
 
@@ -1044,7 +1043,7 @@ empathy_accounts_dialog_show (GtkWindow *parent,
 			      McAccount *selected_account)
 {
 	static EmpathyAccountsDialog *dialog = NULL;
-	GladeXML                     *glade;
+	GtkBuilder                   *gui;
 	gchar                        *filename;
 	GList                        *accounts, *l;
 	gboolean                      import_asked;
@@ -1056,11 +1055,9 @@ empathy_accounts_dialog_show (GtkWindow *parent,
 
 	dialog = g_new0 (EmpathyAccountsDialog, 1);
 
-	filename = empathy_file_lookup ("empathy-accounts-dialog.glade",
+	filename = empathy_file_lookup ("empathy-accounts-dialog.ui",
 					"src");
-	glade = empathy_glade_get_file (filename,
-				       "accounts_dialog",
-				       NULL,
+	gui = empathy_builder_get_file (filename,
 				       "accounts_dialog", &dialog->window,
 				       "vbox_details", &dialog->vbox_details,
 				       "frame_no_profile", &dialog->frame_no_profile,
@@ -1079,8 +1076,7 @@ empathy_accounts_dialog_show (GtkWindow *parent,
 				       NULL);
 	g_free (filename);
 
-	empathy_glade_connect (glade,
-			      dialog,
+	empathy_builder_connect (gui, dialog,
 			      "accounts_dialog", "destroy", accounts_dialog_destroy_cb,
 			      "accounts_dialog", "response", accounts_dialog_response_cb,
 			      "button_create", "clicked", accounts_dialog_button_create_clicked_cb,
@@ -1093,7 +1089,7 @@ empathy_accounts_dialog_show (GtkWindow *parent,
 
 	g_object_add_weak_pointer (G_OBJECT (dialog->window), (gpointer) &dialog);
 
-	g_object_unref (glade);
+	g_object_unref (gui);
 
 	/* Create profile chooser */
 	dialog->combobox_profile = empathy_profile_chooser_new ();
