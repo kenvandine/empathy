@@ -25,7 +25,6 @@
 #include <stdlib.h>
 
 #include <gtk/gtk.h>
-#include <glade/glade.h>
 #include <glib/gi18n-lib.h>
 
 #include <libmissioncontrol/mission-control.h>
@@ -89,6 +88,7 @@ void
 empathy_subscription_dialog_show (EmpathyContact *contact,
 				  GtkWindow     *parent)
 {
+	GtkBuilder *gui;
 	GtkWidget *dialog;
 	GtkWidget *hbox_subscription;
 	GtkWidget *contact_widget;
@@ -105,15 +105,14 @@ empathy_subscription_dialog_show (EmpathyContact *contact,
 		return;
 	}
 
-	filename = empathy_file_lookup ("empathy-contact-dialogs.glade",
+	filename = empathy_file_lookup ("empathy-contact-dialogs.ui",
 					"libempathy-gtk");
-	empathy_glade_get_file_simple (filename,
-				      "subscription_request_dialog",
-				      NULL,
+	gui = empathy_builder_get_file (filename,
 				      "subscription_request_dialog", &dialog,
 				      "hbox_subscription", &hbox_subscription,
 				      NULL);
 	g_free (filename);
+	g_object_unref (gui);
 
 	contact_widget = empathy_contact_widget_new (contact,
 						     EMPATHY_CONTACT_WIDGET_EDIT_ALIAS |
