@@ -27,7 +27,6 @@
 #include <string.h>
 
 #include <gtk/gtk.h>
-#include <glade/glade.h>
 #include <glib/gi18n.h>
 
 #include <libempathy/empathy-utils.h>
@@ -1058,8 +1057,8 @@ GtkWidget *
 empathy_preferences_show (GtkWindow *parent)
 {
 	static EmpathyPreferences *preferences;
-	GladeXML                 *glade;
-	gchar                    *filename;
+	GtkBuilder                *gui;
+	gchar                     *filename;
 
 	if (preferences) {
 		gtk_window_present (GTK_WINDOW (preferences->dialog));
@@ -1068,10 +1067,8 @@ empathy_preferences_show (GtkWindow *parent)
 
 	preferences = g_new0 (EmpathyPreferences, 1);
 
-	filename = empathy_file_lookup ("empathy-preferences.glade", "src");
-	glade = empathy_glade_get_file (filename,
-		"preferences_dialog",
-		NULL,
+	filename = empathy_file_lookup ("empathy-preferences.ui", "src");
+	gui = empathy_builder_get_file (filename,
 		"preferences_dialog", &preferences->dialog,
 		"notebook", &preferences->notebook,
 		"checkbutton_show_avatars", &preferences->checkbutton_show_avatars,
@@ -1092,13 +1089,12 @@ empathy_preferences_show (GtkWindow *parent)
 		NULL);
 	g_free (filename);
 
-	empathy_glade_connect (glade,
-			      preferences,
+	empathy_builder_connect (gui, preferences,
 			      "preferences_dialog", "destroy", preferences_destroy_cb,
 			      "preferences_dialog", "response", preferences_response_cb,
 			      NULL);
 
-	g_object_unref (glade);
+	g_object_unref (gui);
 
 	g_object_add_weak_pointer (G_OBJECT (preferences->dialog), (gpointer) &preferences);
 
