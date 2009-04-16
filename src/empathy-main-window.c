@@ -25,7 +25,6 @@
 
 #include <sys/stat.h>
 #include <gtk/gtk.h>
-#include <glade/glade.h>
 #include <glib/gi18n.h>
 
 #include <libempathy/empathy-contact.h>
@@ -165,7 +164,7 @@ static void     main_window_error_display		       (EmpathyMainWindow        *win
 static void     main_window_accels_load                        (void);
 static void     main_window_accels_save                        (void);
 static void     main_window_connection_items_setup             (EmpathyMainWindow        *window,
-								GladeXML                 *glade);
+								GtkBuilder               *gui);
 static gboolean main_window_configure_event_timeout_cb         (EmpathyMainWindow        *window);
 static gboolean main_window_configure_event_cb                 (GtkWidget                *widget,
 								GdkEventConfigure        *event,
@@ -496,8 +495,8 @@ empathy_main_window_show (void)
 {
 	EmpathyContactList       *list_iface;
 	EmpathyContactMonitor    *monitor;
-	GladeXML                 *glade;
-	EmpathyConf               *conf;
+	GtkBuilder               *gui;
+	EmpathyConf              *conf;
 	GtkWidget                *sw;
 	GtkWidget                *show_offline_widget;
 	GtkWidget                *ebox;
@@ -517,10 +516,8 @@ empathy_main_window_show (void)
 	window = g_new0 (EmpathyMainWindow, 1);
 
 	/* Set up interface */
-	filename = empathy_file_lookup ("empathy-main-window.glade", "src");
-	glade = empathy_glade_get_file (filename,
-				       "main_window",
-				       NULL,
+	filename = empathy_file_lookup ("empathy-main-window.ui", "src");
+	gui = empathy_builder_get_file (filename,
 				       "main_window", &window->window,
 				       "main_vbox", &window->main_vbox,
 				       "errors_vbox", &window->errors_vbox,
@@ -536,8 +533,7 @@ empathy_main_window_show (void)
 				       NULL);
 	g_free (filename);
 
-	empathy_glade_connect (glade,
-			      window,
+	empathy_builder_connect (gui, window,
 			      "main_window", "destroy", main_window_destroy_cb,
 			      "main_window", "configure_event", main_window_configure_event_cb,
 			      "chat_quit", "activate", main_window_chat_quit_cb,
@@ -557,8 +553,8 @@ empathy_main_window_show (void)
 			      NULL);
 
 	/* Set up connection related widgets. */
-	main_window_connection_items_setup (window, glade);
-	g_object_unref (glade);
+	main_window_connection_items_setup (window, gui);
+	g_object_unref (gui);
 
 	window->mc = empathy_mission_control_dup_singleton ();
 	window->account_manager = empathy_account_manager_dup_singleton ();
@@ -635,7 +631,7 @@ empathy_main_window_show (void)
 	empathy_geometry_load (GEOMETRY_NAME, &x, &y, &w, &h);
 
 	if (w >= 1 && h >= 1) {
-		/* Use the defaults from the glade file if we
+		/* Use the defaults from the ui file if we
 		 * don't have good w, h geometry.
 		 */
 		DEBUG ("Configuring window default size w:%d, h:%d", w, h);
@@ -1296,10 +1292,10 @@ main_window_accels_save (void)
 
 static void
 main_window_connection_items_setup (EmpathyMainWindow *window,
-				    GladeXML          *glade)
+				    GtkBuilder        *gui)
 {
 	GList         *list;
-	GtkWidget     *w;
+	GObject       *w;
 	gint           i;
 	const gchar *widgets_connected[] = {
 		"room",
@@ -1309,7 +1305,7 @@ main_window_connection_items_setup (EmpathyMainWindow *window,
 	};
 
 	for (i = 0, list = NULL; i < G_N_ELEMENTS (widgets_connected); i++) {
-		w = glade_xml_get_widget (glade, widgets_connected[i]);
+		w = gtk_builder_get_object (gui, widgets_connected[i]);
 		list = g_list_prepend (list, w);
 	}
 
