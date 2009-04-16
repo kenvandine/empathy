@@ -29,7 +29,6 @@
 #include <stdio.h>
 
 #include <gtk/gtk.h>
-#include <glade/glade.h>
 #include <glib.h>
 #include <glib/gi18n.h>
 
@@ -107,8 +106,8 @@ void
 empathy_chatrooms_window_show (GtkWindow *parent)
 {
 	static EmpathyChatroomsWindow *window = NULL;
-	GladeXML                     *glade;
-	gchar                        *filename;
+	GtkBuilder                    *gui;
+	gchar                         *filename;
 
 	if (window) {
 		gtk_window_present (GTK_WINDOW (window->window));
@@ -117,10 +116,8 @@ empathy_chatrooms_window_show (GtkWindow *parent)
 
 	window = g_new0 (EmpathyChatroomsWindow, 1);
 
-	filename = empathy_file_lookup ("empathy-chatrooms-window.glade", "src");
-	glade = empathy_glade_get_file (filename,
-				       "chatrooms_window",
-				       NULL,
+	filename = empathy_file_lookup ("empathy-chatrooms-window.ui", "src");
+	gui = empathy_builder_get_file (filename,
 				       "chatrooms_window", &window->window,
 				       "hbox_account", &window->hbox_account,
 				       "label_account", &window->label_account,
@@ -131,15 +128,14 @@ empathy_chatrooms_window_show (GtkWindow *parent)
 				       NULL);
 	g_free (filename);
 
-	empathy_glade_connect (glade,
-			      window,
+	empathy_builder_connect (gui, window,
 			      "chatrooms_window", "destroy", chatrooms_window_destroy_cb,
 			      "button_remove", "clicked", chatrooms_window_button_remove_clicked_cb,
 			      "button_edit", "clicked", chatrooms_window_button_edit_clicked_cb,
 			      "button_close", "clicked", chatrooms_window_button_close_clicked_cb,
 			      NULL);
 
-	g_object_unref (glade);
+	g_object_unref (gui);
 
 	g_object_add_weak_pointer (G_OBJECT (window->window), (gpointer) &window);
 
