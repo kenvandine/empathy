@@ -28,7 +28,6 @@
 #include <stdio.h>
 
 #include <gtk/gtk.h>
-#include <glade/glade.h>
 #include <glib.h>
 #include <glib/gi18n.h>
 
@@ -121,7 +120,7 @@ void
 empathy_new_chatroom_dialog_show (GtkWindow *parent)
 {
 	EmpathyNewChatroomDialog *dialog;
-	GladeXML                 *glade;
+	GtkBuilder               *gui;
 	GtkSizeGroup             *size_group;
 	gchar                    *filename;
 
@@ -132,10 +131,8 @@ empathy_new_chatroom_dialog_show (GtkWindow *parent)
 
 	dialog_p = dialog = g_new0 (EmpathyNewChatroomDialog, 1);
 
-	filename = empathy_file_lookup ("empathy-new-chatroom-dialog.glade", "src");
-	glade = empathy_glade_get_file (filename,
-				       "new_chatroom_dialog",
-				       NULL,
+	filename = empathy_file_lookup ("empathy-new-chatroom-dialog.ui", "src");
+	gui = empathy_builder_get_file (filename,
 				       "new_chatroom_dialog", &dialog->window,
 				       "table_info", &dialog->table_info,
 				       "label_account", &dialog->label_account,
@@ -153,8 +150,7 @@ empathy_new_chatroom_dialog_show (GtkWindow *parent)
 				       NULL);
 	g_free (filename);
 
-	empathy_glade_connect (glade,
-			      dialog,
+	empathy_builder_connect (gui, dialog,
 			      "new_chatroom_dialog", "response", new_chatroom_dialog_response_cb,
 			      "new_chatroom_dialog", "destroy", new_chatroom_dialog_destroy_cb,
 			      "entry_server", "changed", new_chatroom_dialog_entry_changed_cb,
@@ -163,7 +159,7 @@ empathy_new_chatroom_dialog_show (GtkWindow *parent)
 			      "togglebutton_refresh", "toggled", new_chatroom_dialog_togglebutton_refresh_toggled_cb,
 			      NULL);
 
-	g_object_unref (glade);
+	g_object_unref (gui);
 
 	g_object_add_weak_pointer (G_OBJECT (dialog->window), (gpointer) &dialog_p);
 
