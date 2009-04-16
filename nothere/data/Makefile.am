@@ -13,7 +13,6 @@ server_DATA = $(server_in_files:.server.in=.server)
 resourcesdir = $(pkgdatadir)
 resources_DATA = \
 	GNOME_NotHere_Applet.xml
-# 	nothere-applet.glade
 
 notherebindir = $(libexecdir)
 
