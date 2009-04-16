@@ -25,7 +25,6 @@
 #include <stdlib.h>
 
 #include <gtk/gtk.h>
-#include <glade/glade.h>
 #include <glib/gi18n-lib.h>
 
 #include <libmissioncontrol/mc-account.h>
@@ -231,7 +230,7 @@ GtkWidget *
 empathy_new_message_dialog_show (GtkWindow *parent)
 {
 	static EmpathyNewMessageDialog *dialog = NULL;
-	GladeXML                       *glade;
+	GtkBuilder                     *gui;
 	gchar                          *filename;
 	GtkEntryCompletion             *completion;
 	GtkListStore                   *model;
@@ -246,11 +245,9 @@ empathy_new_message_dialog_show (GtkWindow *parent)
 	/* create a contact manager */
 	dialog->contact_manager = empathy_contact_manager_dup_singleton ();
 
-	filename = empathy_file_lookup ("empathy-new-message-dialog.glade",
+	filename = empathy_file_lookup ("empathy-new-message-dialog.ui",
 					"libempathy-gtk");
-	glade = empathy_glade_get_file (filename,
-				        "new_message_dialog",
-				        NULL,
+	gui = empathy_builder_get_file (filename,
 				        "new_message_dialog", &dialog->dialog,
 				        "table_contact", &dialog->table_contact,
 				        "entry_id", &dialog->entry_id,
@@ -274,7 +271,7 @@ empathy_new_message_dialog_show (GtkWindow *parent)
 	g_object_unref(completion);
 	g_object_unref(model);
 
-	empathy_glade_connect (glade, dialog,
+	empathy_builder_connect (gui, dialog,
 			       "new_message_dialog", "destroy", new_message_dialog_destroy_cb,
 			       "new_message_dialog", "response", new_message_dialog_response_cb,
 			       "entry_id", "changed", new_message_change_state_button_cb,
@@ -282,7 +279,7 @@ empathy_new_message_dialog_show (GtkWindow *parent)
 
 	g_object_add_weak_pointer (G_OBJECT (dialog->dialog), (gpointer) &dialog);
 
-	g_object_unref (glade);
+	g_object_unref (gui);
 
 	/* Create account chooser */
 	dialog->account_chooser = empathy_account_chooser_new ();
