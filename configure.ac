@@ -28,7 +28,6 @@ AC_SUBST(LIBEMPATHY_GTK_REVISION)
 GLIB_REQUIRED=2.16.0
 GTK_REQUIRED=2.16.0
 GCONF_REQUIRED=1.2.0
-LIBGLADE_REQUIRED=2.0.0
 LIBPANELAPPLET_REQUIRED=2.10.0
 TELEPATHY_GLIB_REQUIRED=0.7.23
 MISSION_CONTROL_REQUIRED=4.61
@@ -107,7 +106,6 @@ PKG_CHECK_MODULES(LIBEMPATHYGTK,
    x11
    gtk+-2.0 >= $GTK_REQUIRED
    libcanberra-gtk >= $LIBCANBERRA_GTK_REQUIRED
-   libglade-2.0 >= $LIBGLADE_REQUIRED
    telepathy-glib >= $TELEPATHY_GLIB_REQUIRED
    libmissioncontrol >= $MISSION_CONTROL_REQUIRED
    telepathy-farsight
@@ -124,7 +122,6 @@ PKG_CHECK_MODULES(EMPATHY,
    x11
    gtk+-2.0 >= $GTK_REQUIRED
    libcanberra-gtk >= $LIBCANBERRA_GTK_REQUIRED
-   libglade-2.0 >= $LIBGLADE_REQUIRED
    libebook-1.2
    telepathy-glib >= $TELEPATHY_GLIB_REQUIRED
    libmissioncontrol >= $MISSION_CONTROL_REQUIRED
@@ -210,7 +207,6 @@ if test "x$enable_megaphone" != "xno"; then
       glib-2.0 >= $GLIB_REQUIRED
       gtk+-2.0 >= $GTK_REQUIRED
       gconf-2.0 >= $GCONF_REQUIRED
-      libglade-2.0 >= $LIBGLADE_REQUIRED 
       libmissioncontrol >= $MISSION_CONTROL_REQUIRED
    ], have_megaphone="yes", have_megaphone="no")
 else
@@ -238,7 +234,6 @@ if test "x$enable_nothere" != "xno"; then
       glib-2.0 >= $GLIB_REQUIRED
       gtk+-2.0 >= $GTK_REQUIRED
       gconf-2.0 >= $GCONF_REQUIRED
-      libglade-2.0 >= $LIBGLADE_REQUIRED 
       libmissioncontrol >= $MISSION_CONTROL_REQUIRED
    ], have_nothere="yes", have_nothere="no")
 else
@@ -292,7 +287,6 @@ if test "x$enable_python" != "xno"; then
       libxml-2.0
       libmissioncontrol >= $MISSION_CONTROL_REQUIRED
       gtk+-2.0 >= $GTK_REQUIRED
-      libglade-2.0 >= $LIBGLADE_REQUIRED
       gstreamer-0.10
       gstreamer-interfaces-0.10
       telepathy-farsight
