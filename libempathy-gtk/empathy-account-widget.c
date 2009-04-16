@@ -507,8 +507,6 @@ empathy_account_widget_salut_new (McAccount *account)
 			"entry_jid", "jid",
 			NULL);
 
-	g_object_unref (gui);
-
 	return empathy_builder_unref_and_keep_widget (gui, widget);
 }
 
