@@ -69,7 +69,7 @@ typedef struct
   gchar *service;
   /* FIXME readd support for parameters.. */
   GHashTable *parameters;
-  guint state;
+  EmpTubeChannelState state;
   EmpathyContact *initiator_contact;
   EmpathyContactFactory *factory;
 } EmpathyTpTubePriv;
@@ -93,7 +93,7 @@ G_DEFINE_TYPE (EmpathyTpTube, empathy_tp_tube, G_TYPE_OBJECT)
 
 static void
 tp_tube_state_changed_cb (TpProxy *proxy,
-                          guint state,
+                          EmpTubeChannelState state,
                           gpointer user_data,
                           GObject *tube)
 {
