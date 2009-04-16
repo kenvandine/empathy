@@ -29,7 +29,6 @@
 
 #include <glib/gi18n-lib.h>
 #include <gtk/gtk.h>
-#include <glade/glade.h>
 
 #include <libempathy/empathy-log-manager.h>
 #include <libempathy/empathy-chatroom-manager.h>
@@ -144,7 +143,7 @@ empathy_log_window_show (McAccount   *account,
 	EmpathyAccountChooser   *account_chooser;
 	GList                  *accounts;
 	gint                    account_num;
-	GladeXML               *glade;
+	GtkBuilder             *gui;
 	gchar                  *filename;
 
 	if (window) {
@@ -162,11 +161,9 @@ empathy_log_window_show (McAccount   *account,
 	window = g_new0 (EmpathyLogWindow, 1);
 	window->log_manager = empathy_log_manager_dup_singleton ();
 
-	filename = empathy_file_lookup ("empathy-log-window.glade",
+	filename = empathy_file_lookup ("empathy-log-window.ui",
 					"libempathy-gtk");
-	glade = empathy_glade_get_file (filename,
-				       "log_window",
-				       NULL,
+	gui = empathy_builder_get_file (filename,
 				       "log_window", &window->window,
 				       "notebook", &window->notebook,
 				       "entry_find", &window->entry_find,
@@ -183,8 +180,7 @@ empathy_log_window_show (McAccount   *account,
 				       NULL);
 	g_free (filename);
 
-	empathy_glade_connect (glade,
-			      window,
+	empathy_builder_connect (gui, window,
 			      "log_window", "destroy", log_window_destroy_cb,
 			      "entry_find", "changed", log_window_entry_find_changed_cb,
 			      "button_previous", "clicked", log_window_button_previous_clicked_cb,
@@ -194,7 +190,7 @@ empathy_log_window_show (McAccount   *account,
 			      "entry_chats", "activate", log_window_entry_chats_activate_cb,
 			      NULL);
 
-	g_object_unref (glade);
+	g_object_unref (gui);
 
 	g_object_add_weak_pointer (G_OBJECT (window->window),
 				   (gpointer) &window);
