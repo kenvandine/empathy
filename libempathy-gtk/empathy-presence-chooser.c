@@ -31,7 +31,6 @@
 
 #include <glib/gi18n-lib.h>
 #include <gtk/gtk.h>
-#include <glade/glade.h>
 #include <gdk/gdkkeysyms.h>
 
 #include <telepathy-glib/util.h>
@@ -1112,8 +1111,8 @@ presence_chooser_dialog_destroy_cb (GtkWidget           *widget,
 static void
 presence_chooser_dialog_show (GtkWindow *parent)
 {
-	GladeXML *glade;
-	gchar    *filename;
+	GtkBuilder *gui;
+	gchar      *filename;
 
 	if (message_dialog) {
 		gtk_window_present (GTK_WINDOW (message_dialog->dialog));
@@ -1122,11 +1121,9 @@ presence_chooser_dialog_show (GtkWindow *parent)
 
 	message_dialog = g_new0 (CustomMessageDialog, 1);
 
-	filename = empathy_file_lookup ("empathy-presence-chooser.glade",
+	filename = empathy_file_lookup ("empathy-presence-chooser.ui",
 					"libempathy-gtk");
-	glade = empathy_glade_get_file (filename,
-				       "custom_message_dialog",
-				       NULL,
+	gui = empathy_builder_get_file (filename,
 				       "custom_message_dialog", &message_dialog->dialog,
 				       "checkbutton_save", &message_dialog->checkbutton_save,
 				       "comboboxentry_message", &message_dialog->comboboxentry_message,
@@ -1134,15 +1131,14 @@ presence_chooser_dialog_show (GtkWindow *parent)
 				       NULL);
 	g_free (filename);
 
-	empathy_glade_connect (glade,
-			       message_dialog,
+	empathy_builder_connect (gui, message_dialog,
 			       "custom_message_dialog", "destroy", presence_chooser_dialog_destroy_cb,
 			       "custom_message_dialog", "response", presence_chooser_dialog_response_cb,
 			       "combobox_status", "changed", presence_chooser_dialog_status_changed_cb,
 			       "checkbutton_save", "toggled", presence_chooser_dialog_save_toggled_cb,
 			       NULL);
 
-	g_object_unref (glade);
+	g_object_unref (gui);
 
 	/* Setup the message combobox */
 	message_dialog->entry_message = GTK_BIN (message_dialog->comboboxentry_message)->child;
