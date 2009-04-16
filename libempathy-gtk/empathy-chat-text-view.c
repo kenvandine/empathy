@@ -31,15 +31,7 @@
 #include <time.h>
 
 #include <glib/gi18n-lib.h>
-#include <gtk/gtkbutton.h>
-#include <gtk/gtkimage.h>
-#include <gtk/gtkmenu.h>
-#include <gtk/gtkmenuitem.h>
-#include <gtk/gtkimagemenuitem.h>
-#include <gtk/gtkstock.h>
-#include <gtk/gtkscrolledwindow.h>
-#include <gtk/gtksizegroup.h>
-#include <glade/glade.h>
+#include <gtk/gtk.h>
 
 #include <telepathy-glib/util.h>
 #include <libmissioncontrol/mc-account.h>
