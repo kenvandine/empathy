@@ -22,6 +22,7 @@
 #include <config.h>
 
 #include <telepathy-glib/connection.h>
+#include <telepathy-glib/proxy.h>
 #include <telepathy-glib/util.h>
 #include <extensions/extensions.h>
 
@@ -64,6 +65,7 @@ typedef struct
 {
   TpChannel *channel;
   EmpTubeChannelState state;
+  gboolean ready;
 } EmpathyTpTubePriv;
 
 enum
@@ -90,6 +92,10 @@ tp_tube_state_changed_cb (TpProxy *proxy,
                           GObject *tube)
 {
   EmpathyTpTubePriv *priv = GET_PRIV (tube);
+
+  if (!priv->ready)
+    /* We didn't get the state yet */
+    return;
 
   DEBUG ("Tube state changed");
 
@@ -159,6 +165,28 @@ tp_tube_get_property (GObject *object,
   }
 }
 
+static void
+got_tube_state_cb (TpProxy *proxy,
+                   const GValue *out_value,
+                   const GError *error,
+                   gpointer user_data,
+                   GObject *weak_object)
+{
+  EmpathyTpTube *self = EMPATHY_TP_TUBE (user_data);
+  EmpathyTpTubePriv *priv = GET_PRIV (self);
+
+  priv->ready = TRUE;
+
+  if (error != NULL)
+    {
+      DEBUG ("Error getting State property: %s", error->message);
+      return;
+    }
+
+  priv->state = g_value_get_uint (out_value);
+  g_object_notify (G_OBJECT (self), "state");
+}
+
 static GObject *
 tp_tube_constructor (GType type,
                      guint n_props,
@@ -174,9 +202,15 @@ tp_tube_constructor (GType type,
   g_signal_connect (priv->channel, "invalidated",
       G_CALLBACK (tp_tube_invalidated_cb), self);
 
+  priv->ready = FALSE;
+
   emp_cli_channel_interface_tube_connect_to_tube_channel_state_changed (
     TP_PROXY (priv->channel), tp_tube_state_changed_cb, NULL, NULL,
     self, NULL);
+
+  tp_cli_dbus_properties_call_get (priv->channel, -1,
+      EMP_IFACE_CHANNEL_INTERFACE_TUBE, "State", got_tube_state_cb,
+      self, NULL, G_OBJECT (self));
 
   return self;
 }
