@@ -63,7 +63,6 @@ free_empathy_tp_tube_accept_data (gpointer data)
 typedef struct
 {
   TpChannel *channel;
-  gchar *service;
   /* FIXME readd support for parameters.. */
   GHashTable *parameters;
   EmpTubeChannelState state;
@@ -199,8 +198,6 @@ tp_tube_finalize (GObject *object)
         "closing tube", NULL, NULL);
       g_object_unref (priv->channel);
     }
-
-  g_free (priv->service);
 
   if (priv->parameters != NULL)
   g_hash_table_destroy (priv->parameters);
