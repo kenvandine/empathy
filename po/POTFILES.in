@@ -9,37 +9,37 @@ libempathy/empathy-utils.c
 
 libempathy-gtk/empathy-account-chooser.c
 libempathy-gtk/empathy-account-widget.c
-libempathy-gtk/empathy-account-widget-aim.glade
-libempathy-gtk/empathy-account-widget-generic.glade
-libempathy-gtk/empathy-account-widget-groupwise.glade
-libempathy-gtk/empathy-account-widget-icq.glade
+[type: gettext/glade]libempathy-gtk/empathy-account-widget-aim.ui
+[type: gettext/glade]libempathy-gtk/empathy-account-widget-generic.ui
+[type: gettext/glade]libempathy-gtk/empathy-account-widget-groupwise.ui
+[type: gettext/glade]libempathy-gtk/empathy-account-widget-icq.ui
 libempathy-gtk/empathy-account-widget-irc.c
-libempathy-gtk/empathy-account-widget-irc.glade
-libempathy-gtk/empathy-account-widget-jabber.glade
-libempathy-gtk/empathy-account-widget-msn.glade
-libempathy-gtk/empathy-account-widget-salut.glade
-libempathy-gtk/empathy-account-widget-sip.glade
-libempathy-gtk/empathy-account-widget-yahoo.glade
+[type: gettext/glade]libempathy-gtk/empathy-account-widget-irc.ui
+[type: gettext/glade]libempathy-gtk/empathy-account-widget-jabber.ui
+[type: gettext/glade]libempathy-gtk/empathy-account-widget-msn.ui
+[type: gettext/glade]libempathy-gtk/empathy-account-widget-salut.ui
+[type: gettext/glade]libempathy-gtk/empathy-account-widget-sip.ui
+[type: gettext/glade]libempathy-gtk/empathy-account-widget-yahoo.ui
 libempathy-gtk/empathy-avatar-chooser.c
 libempathy-gtk/empathy-avatar-image.c
 libempathy-gtk/empathy-chat.c
-libempathy-gtk/empathy-chat.glade
+[type: gettext/glade]libempathy-gtk/empathy-chat.ui
 libempathy-gtk/empathy-chat-text-view.c
 libempathy-gtk/empathy-contact-dialogs.c
-libempathy-gtk/empathy-contact-dialogs.glade
+[type: gettext/glade]libempathy-gtk/empathy-contact-dialogs.ui
 libempathy-gtk/empathy-contact-list-view.c
 libempathy-gtk/empathy-contact-menu.c
 libempathy-gtk/empathy-contact-selector.c
 libempathy-gtk/empathy-contact-widget.c
-libempathy-gtk/empathy-contact-widget.glade
+[type: gettext/glade]libempathy-gtk/empathy-contact-widget.ui
 libempathy-gtk/empathy-irc-network-dialog.c
 libempathy-gtk/empathy-log-window.c
-libempathy-gtk/empathy-log-window.glade
-libempathy-gtk/empathy-new-message-dialog.glade
+[type: gettext/glade]libempathy-gtk/empathy-log-window.ui
+[type: gettext/glade]libempathy-gtk/empathy-new-message-dialog.ui
 libempathy-gtk/empathy-presence-chooser.c
-libempathy-gtk/empathy-presence-chooser.glade
+[type: gettext/glade]libempathy-gtk/empathy-presence-chooser.ui
 libempathy-gtk/empathy-spell-dialog.c
-libempathy-gtk/empathy-spell-dialog.glade
+[type: gettext/glade]libempathy-gtk/empathy-spell-dialog.ui
 libempathy-gtk/empathy-theme-boxes.c
 libempathy-gtk/empathy-theme-irc.c
 libempathy-gtk/empathy-theme-manager.c
@@ -58,25 +58,25 @@ nothere/src/nothere-applet.c
 src/empathy.c
 src/empathy-about-dialog.c
 src/empathy-accounts-dialog.c
-src/empathy-accounts-dialog.glade
+[type: gettext/glade]src/empathy-accounts-dialog.ui
 src/empathy-call-window.c
-src/empathy-call-window.glade
+[type: gettext/glade]src/empathy-call-window.ui
 src/empathy-chat-window.c
-src/empathy-chat-window.glade
+src/empathy-chat-window.ui
 src/empathy-chatrooms-window.c
-src/empathy-chatrooms-window.glade
+[type: gettext/glade]src/empathy-chatrooms-window.ui
 src/empathy-event-manager.c
 src/empathy-ft-manager.c
-src/empathy-ft-manager.glade
+[type: gettext/glade]src/empathy-ft-manager.ui
 src/empathy-import-dialog.c
-src/empathy-import-dialog.glade
+[type: gettext/glade]src/empathy-import-dialog.ui
 src/empathy-main-window.c
-src/empathy-main-window.glade
+[type: gettext/glade]src/empathy-main-window.ui
 src/empathy-new-chatroom-dialog.c
-src/empathy-new-chatroom-dialog.glade
+[type: gettext/glade]src/empathy-new-chatroom-dialog.ui
 src/empathy-preferences.c
-src/empathy-preferences.glade
+[type: gettext/glade]src/empathy-preferences.ui
 src/empathy-status-icon.c
-src/empathy-status-icon.glade
+[type: gettext/glade]src/empathy-status-icon.ui
 src/empathy-tube-dispatch.c
 
