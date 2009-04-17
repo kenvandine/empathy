@@ -279,7 +279,7 @@ new_chatroom_dialog_model_add_columns (EmpathyNewChatroomDialog *dialog)
 	GtkTreeView       *view;
 	GtkTreeViewColumn *column;
 	GtkCellRenderer   *cell;
-        gint               width, height;
+	gint               width, height;
 
 	gtk_icon_size_lookup (GTK_ICON_SIZE_MENU, &width, &height);
 
@@ -291,13 +291,13 @@ new_chatroom_dialog_model_add_columns (EmpathyNewChatroomDialog *dialog)
 		      "height", height,
 		      "stock-size", GTK_ICON_SIZE_MENU,
 		      NULL);
-	column = gtk_tree_view_column_new_with_attributes (_(" "),
+	column = gtk_tree_view_column_new_with_attributes (NULL,
 		                                           cell,
 		                                           "stock-id", COL_INVITE_ONLY,
 		                                           NULL);
 	gtk_tree_view_append_column (view, column);
 
-	column = gtk_tree_view_column_new_with_attributes (_(" "),
+	column = gtk_tree_view_column_new_with_attributes (NULL,
 		                                           cell,
 		                                           "stock-id", COL_NEED_PASSWORD,
 		                                           NULL);
