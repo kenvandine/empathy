@@ -60,12 +60,21 @@ free_empathy_tp_tube_accept_data (gpointer data)
 }
 
 
+typedef struct {
+    EmpathyTpTubeReadyCb *callback;
+    gpointer user_data;
+    GDestroyNotify destroy;
+    GObject *weak_object;
+} ReadyCbData;
+
+
 #define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyTpTube)
 typedef struct
 {
   TpChannel *channel;
   EmpTubeChannelState state;
   gboolean ready;
+  GSList *ready_callbacks;
 } EmpathyTpTubePriv;
 
 enum
@@ -165,6 +174,86 @@ tp_tube_get_property (GObject *object,
   }
 }
 
+static void weak_object_notify (gpointer data,
+    GObject *old_object);
+
+static ReadyCbData *
+ready_cb_data_new (EmpathyTpTube *self,
+    EmpathyTpTubeReadyCb *callback,
+    gpointer user_data,
+    GDestroyNotify destroy,
+    GObject *weak_object)
+{
+  ReadyCbData *d = g_slice_new0 (ReadyCbData);
+  d->callback = callback;
+  d->user_data = user_data;
+  d->destroy = destroy;
+  d->weak_object = weak_object;
+
+  if (weak_object != NULL)
+    g_object_weak_ref (weak_object, weak_object_notify, self);
+
+  return d;
+}
+
+static void
+ready_cb_data_free (ReadyCbData *data,
+                    EmpathyTpTube *self)
+{
+  if (data->destroy != NULL)
+    data->destroy (data->user_data);
+
+  if (data->weak_object != NULL)
+    g_object_weak_unref (data->weak_object,
+        weak_object_notify, self);
+
+  g_slice_free (ReadyCbData, data);
+}
+
+static void
+weak_object_notify (gpointer data,
+    GObject *old_object)
+{
+  EmpathyTpTube *self = EMPATHY_TP_TUBE (data);
+  EmpathyTpTubePriv *priv = GET_PRIV (self);
+  GSList *l, *ln;
+
+  for (l = priv->ready_callbacks ; l != NULL ; l = ln )
+    {
+      ReadyCbData *d = (ReadyCbData *) l->data;
+      ln = g_slist_next (l);
+
+      if (d->weak_object == old_object)
+        {
+          ready_cb_data_free (d, self);
+          priv->ready_callbacks = g_slist_delete_link (priv->ready_callbacks,
+            l);
+        }
+    }
+}
+
+
+static void
+tube_is_ready (EmpathyTpTube *self,
+               const GError *error)
+{
+  EmpathyTpTubePriv *priv = GET_PRIV (self);
+  GSList *l;
+
+  priv->ready = TRUE;
+
+  for (l = priv->ready_callbacks ; l != NULL ; l = g_slist_next (l))
+    {
+      ReadyCbData *data = (ReadyCbData *) l->data;
+
+      data->callback (self, error, data->user_data, data->weak_object);
+      ready_cb_data_free (data, self);
+    }
+
+  g_slist_free (priv->ready_callbacks);
+  priv->ready_callbacks = NULL;
+}
+
 static void
 got_tube_state_cb (TpProxy *proxy,
                    const GValue *out_value,
@@ -175,16 +264,17 @@ got_tube_state_cb (TpProxy *proxy,
   EmpathyTpTube *self = EMPATHY_TP_TUBE (user_data);
   EmpathyTpTubePriv *priv = GET_PRIV (self);
 
-  priv->ready = TRUE;
-
   if (error != NULL)
     {
       DEBUG ("Error getting State property: %s", error->message);
-      return;
+    }
+  else
+    {
+      priv->state = g_value_get_uint (out_value);
+      g_object_notify (G_OBJECT (self), "state");
     }
 
-  priv->state = g_value_get_uint (out_value);
-  g_object_notify (G_OBJECT (self), "state");
+  tube_is_ready (self, error);
 }
 
 static GObject *
@@ -218,7 +308,9 @@ tp_tube_constructor (GType type,
 static void
 tp_tube_finalize (GObject *object)
 {
+  EmpathyTpTube *self = EMPATHY_TP_TUBE (object);
   EmpathyTpTubePriv *priv = GET_PRIV (object);
+  GSList *l;
 
   DEBUG ("Finalizing: %p", object);
 
@@ -230,6 +322,16 @@ tp_tube_finalize (GObject *object)
         "closing tube", NULL, NULL);
       g_object_unref (priv->channel);
     }
+
+  for (l = priv->ready_callbacks; l != NULL; l = g_slist_next (l))
+    {
+      ReadyCbData *d = (ReadyCbData *) l->data;
+
+      ready_cb_data_free (d, self);
+    }
+
+  g_slist_free (priv->ready_callbacks);
+  priv->ready_callbacks = NULL;
 
   G_OBJECT_CLASS (empathy_tp_tube_parent_class)->finalize (object);
 }
@@ -454,4 +556,29 @@ empathy_tp_tube_accept_stream_tube (EmpathyTpTube *tube,
      free_empathy_tp_tube_accept_data, G_OBJECT (tube));
 
   tp_g_value_slice_free (control_param);
+}
+
+void
+empathy_tp_tube_call_when_ready (EmpathyTpTube *self,
+    EmpathyTpTubeReadyCb *callback,
+    gpointer user_data,
+    GDestroyNotify destroy,
+    GObject *weak_object)
+{
+  EmpathyTpTubePriv *priv = GET_PRIV (self);
+
+  g_return_if_fail (self != NULL);
+  g_return_if_fail (callback != NULL);
+
+  if (priv->ready)
+    {
+      callback (self, NULL, user_data, weak_object);
+      if (destroy != NULL)
+        destroy (user_data);
+    }
+  else
+    {
+      priv->ready_callbacks = g_slist_prepend (priv->ready_callbacks,
+          ready_cb_data_new (self, callback, user_data, destroy, weak_object));
+    }
 }

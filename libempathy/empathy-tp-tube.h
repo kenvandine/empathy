@@ -81,6 +81,14 @@ void empathy_tp_tube_accept_stream_tube (EmpathyTpTube *tube,
   TpSocketAddressType type, EmpatyTpTubeAcceptStreamTubeCb *callback,
   gpointer user_data);
 
+typedef void (EmpathyTpTubeReadyCb)
+  (EmpathyTpTube *tube, const GError *error, gpointer user_data,
+   GObject *weak_object);
+
+void empathy_tp_tube_call_when_ready (EmpathyTpTube *tube,
+  EmpathyTpTubeReadyCb *callback, gpointer user_data, GDestroyNotify destroy,
+  GObject *weak_object);
+
 G_END_DECLS
 
 #endif /* __EMPATHY_TP_TUBE_H__ */
