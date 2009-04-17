@@ -25,7 +25,6 @@
 #include <telepathy-glib/util.h>
 #include <extensions/extensions.h>
 
-#include "empathy-contact-factory.h"
 #include "empathy-enum-types.h"
 #include "empathy-tp-tube.h"
 #include "empathy-utils.h"
@@ -68,8 +67,6 @@ typedef struct
   /* FIXME readd support for parameters.. */
   GHashTable *parameters;
   EmpTubeChannelState state;
-  EmpathyContact *initiator_contact;
-  EmpathyContactFactory *factory;
 } EmpathyTpTubePriv;
 
 enum
@@ -202,10 +199,6 @@ tp_tube_finalize (GObject *object)
         "closing tube", NULL, NULL);
       g_object_unref (priv->channel);
     }
-  if (priv->initiator_contact)
-      g_object_unref (priv->initiator_contact);
-  if (priv->factory)
-      g_object_unref (priv->factory);
 
   g_free (priv->service);
 
@@ -251,8 +244,6 @@ empathy_tp_tube_init (EmpathyTpTube *tube)
 		EMPATHY_TYPE_TP_TUBE, EmpathyTpTubePriv);
 
   tube->priv = priv;
-
-  priv->factory = empathy_contact_factory_dup_singleton ();
 }
 
 EmpathyTpTube *
