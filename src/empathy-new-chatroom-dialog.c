@@ -75,7 +75,7 @@ enum {
 	COL_NAME,
 	COL_ROOM,
 	COL_MEMBERS,
-	COL_TOOL_TIP,
+	COL_TOOLTIP,
 	COL_COUNT
 };
 
@@ -257,7 +257,7 @@ new_chatroom_dialog_model_setup (EmpathyNewChatroomDialog *dialog)
 
 	dialog->model = GTK_TREE_MODEL (store);
 	gtk_tree_view_set_model (view, dialog->model);
-	gtk_tree_view_set_tooltip_column (view, COL_TOOL_TIP);
+	gtk_tree_view_set_tooltip_column (view, COL_TOOLTIP);
 	gtk_tree_view_set_search_column (view, COL_NAME);
 
 	/* Selection */
@@ -430,6 +430,8 @@ new_chatroom_dialog_new_room_cb (EmpathyTpRoomlist        *room_list,
 	GtkTreeIter       iter;
 	gchar            *members;
 	gchar            *tooltip;
+	const gchar      *need_password;
+	const gchar      *invite_only;
 
 	DEBUG ("New chatroom listed: %s (%s)",
 		empathy_chatroom_get_name (chatroom),
@@ -440,20 +442,26 @@ new_chatroom_dialog_new_room_cb (EmpathyTpRoomlist        *room_list,
 	selection = gtk_tree_view_get_selection (view);
 	store = GTK_LIST_STORE (dialog->model);
 	members = g_strdup_printf ("%d", empathy_chatroom_get_members_count (chatroom));
-	tooltip = g_strdup_printf ("<b>%s</b>\nInvite required: %s\nPassword required: %s\nMembers: %s", 
-			empathy_chatroom_get_name (chatroom),
-			empathy_chatroom_get_invite_only (chatroom) ? _("Yes") : _("No"),
-			empathy_chatroom_get_need_password (chatroom) ? _("Yes") : _("No"),
-			members);
+	tooltip = g_strdup_printf (C_("Room/Join's roomlist tooltip. Parameters"
+		"are a channel name, yes/no, yes/no and a number.",
+		"<b>%s</b>\nInvite required: %s\nPassword required: %s\nMembers: %s"),
+		empathy_chatroom_get_name (chatroom),
+		empathy_chatroom_get_invite_only (chatroom) ? _("Yes") : _("No"),
+		empathy_chatroom_get_need_password (chatroom) ? _("Yes") : _("No"),
+		members);
+	invite_only = (empathy_chatroom_get_invite_only (chatroom) ?
+		GTK_STOCK_INDEX : NULL);
+	need_password = (empathy_chatroom_get_need_password (chatroom) ?
+		GTK_STOCK_DIALOG_AUTHENTICATION : NULL);
 
 	gtk_list_store_append (store, &iter);
 	gtk_list_store_set (store, &iter,
-			    COL_NEED_PASSWORD, (empathy_chatroom_get_need_password (chatroom) ? GTK_STOCK_DIALOG_AUTHENTICATION : NULL),
-			    COL_INVITE_ONLY, (empathy_chatroom_get_invite_only (chatroom) ? GTK_STOCK_INDEX : NULL),
+			    COL_NEED_PASSWORD, need_password,
+			    COL_INVITE_ONLY, invite_only,
 			    COL_NAME, empathy_chatroom_get_name (chatroom),
 			    COL_ROOM, empathy_chatroom_get_room (chatroom),
 			    COL_MEMBERS, members,
-			    COL_TOOL_TIP, tooltip,
+			    COL_TOOLTIP, tooltip,
 			    -1);
 
 	g_free (members);
