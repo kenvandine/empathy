@@ -429,7 +429,7 @@ new_chatroom_dialog_new_room_cb (EmpathyTpRoomlist        *room_list,
 	GtkListStore     *store;
 	GtkTreeIter       iter;
 	gchar            *members;
-	gchar            *tool_tip;
+	gchar            *tooltip;
 
 	DEBUG ("New chatroom listed: %s (%s)",
 		empathy_chatroom_get_name (chatroom),
@@ -440,12 +440,11 @@ new_chatroom_dialog_new_room_cb (EmpathyTpRoomlist        *room_list,
 	selection = gtk_tree_view_get_selection (view);
 	store = GTK_LIST_STORE (dialog->model);
 	members = g_strdup_printf ("%d", empathy_chatroom_get_members_count (chatroom));
-	tool_tip = g_strdup_printf ("<b>%s</b>\nInvite required: %s\nPassword required: %s\nMembers: %s", 
+	tooltip = g_strdup_printf ("<b>%s</b>\nInvite required: %s\nPassword required: %s\nMembers: %s", 
 			empathy_chatroom_get_name (chatroom),
 			empathy_chatroom_get_invite_only (chatroom) ? _("Yes") : _("No"),
 			empathy_chatroom_get_need_password (chatroom) ? _("Yes") : _("No"),
-			members
-			);
+			members);
 
 	gtk_list_store_append (store, &iter);
 	gtk_list_store_set (store, &iter,
@@ -454,8 +453,11 @@ new_chatroom_dialog_new_room_cb (EmpathyTpRoomlist        *room_list,
 			    COL_NAME, empathy_chatroom_get_name (chatroom),
 			    COL_ROOM, empathy_chatroom_get_room (chatroom),
 			    COL_MEMBERS, members,
-			    COL_TOOL_TIP, tool_tip,
+			    COL_TOOL_TIP, tooltip,
 			    -1);
+
+	g_free (members);
+	g_free (tooltip);
 }
 
 static void
