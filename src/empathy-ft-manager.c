@@ -251,7 +251,7 @@ ft_manager_update_ft_row (EmpathyFTManager *ft_manager,
 
           }
         else
-          second_line = g_strdup (_("Waiting the other participant's response"));
+          second_line = g_strdup (_("Waiting for the other participant's response"));
 
       remaining = empathy_tp_file_get_remaining_time (tp_file);
       break;
