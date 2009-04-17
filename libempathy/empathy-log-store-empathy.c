@@ -641,17 +641,15 @@ log_store_empathy_get_chats_for_dir (EmpathyLogStore *self,
   while ((name = g_dir_read_name (gdir)) != NULL)
     {
       EmpathyLogSearchHit *hit;
-      gchar *filename;
 
-      filename = g_build_filename (dir, name, NULL);
       if (!is_chatroom && strcmp (name, LOG_DIR_CHATROOMS) == 0)
         {
+          gchar *filename = g_build_filename (dir, name, NULL);
           hits = g_list_concat (hits, log_store_empathy_get_chats_for_dir (
                 self, filename, TRUE));
           g_free (filename);
           continue;
         }
-
       hit = g_slice_new0 (EmpathyLogSearchHit);
       hit->chat_id = g_strdup (name);
       hit->is_chatroom = is_chatroom;
