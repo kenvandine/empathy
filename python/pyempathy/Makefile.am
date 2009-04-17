@@ -8,7 +8,8 @@ AM_CPPFLAGS =                                           \
 	-DDATADIR=\""$(datadir)"\"              	\
 	$(PYTHON_BINDING_CFLAGS)			\
 	$(PYTHON_INCLUDES)				\
-	$(WARN_CFLAGS)
+	$(WARN_CFLAGS)					\
+	$(DISABLE_DEPRECATED)
 
 BUILT_SOURCES = 					\
 	pyempathy.c					

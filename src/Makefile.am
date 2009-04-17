@@ -2,7 +2,8 @@ AM_CPPFLAGS =						\
 	-I$(top_srcdir)                          	\
 	$(EMPATHY_CFLAGS)				\
 	$(LIBNOTIFY_CFLAGS)				\
-	$(WARN_CFLAGS)
+	$(WARN_CFLAGS)					\
+	$(DISABLE_DEPRECATED)
 
 LDADD =								\
 	$(top_builddir)/libempathy-gtk/libempathy-gtk.la	\

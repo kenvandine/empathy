@@ -1,5 +1,7 @@
 tools_dir = $(top_srcdir)/tools
 
+AM_CPPFLAGS = $(DISABLE_DEPRECATED)
+
 AM_CFLAGS = \
     -I$(top_srcdir) \
     -I$(top_builddir) \

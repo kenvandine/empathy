@@ -7,7 +7,8 @@ AM_CPPFLAGS =                                           \
 	-I$(top_srcdir)                                 \
 	-DDATADIR=\""$(datadir)"\"              	\
 	$(PYTHON_BINDING_CFLAGS)			\
-	$(PYTHON_INCLUDES)
+	$(PYTHON_INCLUDES)				\
+	$(DISABLE_DEPRECATED)
 
 BUILT_SOURCES = 					\
 	pyempathygtk.c					

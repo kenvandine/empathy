@@ -36,11 +36,8 @@ ISO_CODES_REQUIRED=0.35
 LIBNOTIFY_REQUIRED=0.4.4
 LIBCANBERRA_GTK_REQUIRED=0.4
 
-# Uncomment that to build with deprecated symbols disabled
-#AC_DEFINE(G_DISABLE_DEPRECATED, [], [Disable deprecated GLib symbols])
-#AC_DEFINE(GDK_PIXBUF_DISABLE_DEPRECATED, [], [Disable deprecated GDK pixbuf symbols])
-#AC_DEFINE(GDK_DISABLE_DEPRECATED, [], [Disable deprecated GDK symbols])
-#AC_DEFINE(GTK_DISABLE_DEPRECATED, [], [Disable deprecated GTK symbols])
+# Use --enable-maintainer-mode to disabled deprecated symbols
+GNOME_MAINTAINER_MODE_DEFINES
 
 # Uncomment that to build with single include disabled
 #AC_DEFINE(G_DISABLE_SINGLE_INCLUDES, [], [Disable single includes for GLib])
