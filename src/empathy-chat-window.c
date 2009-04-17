@@ -954,7 +954,13 @@ chat_window_new_message_cb (EmpathyChat       *chat,
 		return;
 	}
 	
-	if (empathy_chat_get_members_count (chat) > 2) {
+	/* If empathy_chat_is_room() returns TRUE, that means it's a named MUC.
+	 * If empathy_chat_get_remote_contact() returns NULL, that means it's
+	 * an unamed MUC (msn-like).
+	 * In case of a MUC, we set urgency only if the message contains our
+	 * alias. */
+	if (empathy_chat_is_room (chat) ||
+	    empathy_chat_get_remote_contact (chat) == NULL) {
 		needs_urgency = empathy_message_should_highlight (message);
 	} else {
 		needs_urgency = TRUE;
