@@ -368,7 +368,6 @@ empathy_account_manager_init (EmpathyAccountManager *manager)
 {
   EmpathyAccountManagerPriv *priv;
   GList *mc_accounts, *l;
-  AccountData *data;
 
   priv = G_TYPE_INSTANCE_GET_PRIVATE (manager,
 				      EMPATHY_TYPE_ACCOUNT_MANAGER, EmpathyAccountManagerPriv);
@@ -386,11 +385,7 @@ empathy_account_manager_init (EmpathyAccountManager *manager)
   mc_accounts = mc_accounts_list ();
 
   for (l = mc_accounts; l; l = l->next)
-    {
-      data = account_data_new_default (priv->mc, l->data);
-
-      account_created_cb (priv->monitor, (char *) mc_account_get_unique_name (l->data), manager);
-    }
+    account_created_cb (priv->monitor, (char *) mc_account_get_unique_name (l->data), manager);
 
   g_signal_connect (priv->monitor, "account-created",
                     G_CALLBACK (account_created_cb), manager);
