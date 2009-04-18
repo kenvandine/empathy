@@ -1,4 +1,4 @@
-/* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
+    /* -*- Mode: C; tab-width: 8; indent-tabs-mode: t; c-basic-offset: 8 -*- */
 /*
  * Copyright (C) 2003-2007 Imendio AB
  *
@@ -696,9 +696,9 @@ preferences_widget_sync_string_combo (const gchar *key, GtkWidget *widget)
 
 	found = FALSE;
 	if (value && gtk_tree_model_get_iter_first (model, &iter)) {
-		gchar *name;
 
 		do {
+			gchar *name;
 			gtk_tree_model_get (model, &iter,
 					    COL_COMBO_NAME, &name,
 					    -1);
@@ -706,13 +706,10 @@ preferences_widget_sync_string_combo (const gchar *key, GtkWidget *widget)
 			if (strcmp (name, value) == 0) {
 				found = TRUE;
 				gtk_combo_box_set_active_iter (GTK_COMBO_BOX (widget), &iter);
-				break;
-			} else {
-				found = FALSE;
 			}
 
 			g_free (name);
-		} while (gtk_tree_model_iter_next (model, &iter));
+		} while (!found && gtk_tree_model_iter_next (model, &iter));
 	}
 
 	/* Fallback to the first one. */
