@@ -814,6 +814,7 @@ empathy_tp_file_accept (EmpathyTpFile *tp_file,
   if (error && *error)
     return;
 
+  g_free (tp_file->priv->filename);
   tp_file->priv->filename = g_file_get_basename (gfile);
   g_object_notify (G_OBJECT (tp_file), "filename");
 
