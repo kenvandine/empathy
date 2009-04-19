@@ -27,6 +27,7 @@ empathy_SOURCES =							\
 	empathy-accounts-dialog.c empathy-accounts-dialog.h		\
 	empathy-call-window.c empathy-call-window.h			\
 	empathy-chatrooms-window.c empathy-chatrooms-window.h		\
+	empathy-debug-dialog.c empathy-debug-dialog.h			\
 	empathy-chat-window.c empathy-chat-window.h			\
 	empathy-event-manager.c empathy-event-manager.h			\
 	empathy-ft-manager.c empathy-ft-manager.h			\
