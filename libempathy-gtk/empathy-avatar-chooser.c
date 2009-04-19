@@ -529,6 +529,7 @@ avatar_chooser_maybe_convert_and_scale (EmpathyAvatarChooser *chooser,
 						   &converted_image_size,
 						   new_format_name,
 						   &error, NULL);
+		g_object_unref (pixbuf_scaled);
 
 		if (!saved) {
 			g_free (new_format_name);
@@ -885,7 +886,7 @@ avatar_chooser_update_preview_cb (GtkFileChooser       *file_chooser,
 						  GTK_ICON_SIZE_DIALOG);
 		}
 
-        g_free (filename);
+		g_free (filename);
 	}
 
 	gtk_file_chooser_set_preview_widget_active (file_chooser, TRUE);
