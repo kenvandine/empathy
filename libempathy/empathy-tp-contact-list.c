@@ -154,6 +154,7 @@ tp_contact_list_group_member_removed_cb (EmpathyTpGroup       *group,
 			empathy_contact_get_id (contact),
 			empathy_contact_get_handle (contact),
 			group_name);
+		g_free (l->data);
 		*groups = g_list_delete_link (*groups, l);
 		g_signal_emit_by_name (list, "groups-changed", contact,
 				       group_name,
