@@ -395,7 +395,9 @@ empathy_contact_invite_menu_item_new (EmpathyContact *contact)
 		gtk_menu_item_set_submenu (GTK_MENU_ITEM (item), submenu);
 	} else {
 		gtk_widget_set_sensitive (item, FALSE);
-		gtk_widget_destroy (submenu);
+        g_object_ref_sink (submenu);
+        gtk_widget_destroy (submenu);
+		g_object_unref (submenu);
 	}
 
 	gtk_widget_show (image);
