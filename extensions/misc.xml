@@ -9,5 +9,6 @@
 <xi:include href="Channel_Interface_Tube.xml" />
 <xi:include href="Channel_Type_DBus_Tube.xml" />
 <xi:include href="Channel_Type_Stream_Tube.xml" />
+<xi:include href="Debug.xml" />
 
 </tp:spec>
