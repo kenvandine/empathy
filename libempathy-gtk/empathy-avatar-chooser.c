@@ -884,6 +884,8 @@ avatar_chooser_update_preview_cb (GtkFileChooser       *file_chooser,
 						  "gtk-dialog-question",
 						  GTK_ICON_SIZE_DIALOG);
 		}
+
+        g_free (filename);
 	}
 
 	gtk_file_chooser_set_preview_widget_active (file_chooser, TRUE);
