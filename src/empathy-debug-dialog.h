@@ -54,7 +54,7 @@ struct _EmpathyDebugDialogClass
 
 GType empathy_debug_dialog_get_type (void) G_GNUC_CONST;
 
-GtkWidget * empathy_debug_dialog_new (void);
+GtkWidget * empathy_debug_dialog_new (GtkWindow *parent);
 
 G_END_DECLS
 

@@ -33,11 +33,14 @@ G_DEFINE_TYPE (EmpathyDebugDialog, empathy_debug_dialog,
 enum
 {
   PROP_0,
+  PROP_PARENT
 };
 
 #define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyDebugDialog)
 typedef struct
 {
+  GtkWidget *filter;
+  GtkWindow *parent;
   gboolean dispose_run;
 } EmpathyDebugDialogPriv;
 
@@ -48,10 +51,92 @@ debug_dialog_constructor (GType type,
 {
   GObject *object;
   EmpathyDebugDialogPriv *priv;
+  GtkWidget *vbox;
+  GtkWidget *toolbar;
+  GtkWidget *button;
+  GtkWidget *image;
+  GtkToolItem *item;
 
   object = G_OBJECT_CLASS (empathy_debug_dialog_parent_class)->constructor
     (type, n_construct_params, construct_params);
   priv = GET_PRIV (object);
+
+  gtk_window_set_title (GTK_WINDOW (object), _("Debug Window"));
+  gtk_window_set_default_size (GTK_WINDOW (object), 800, 400);
+  gtk_window_set_transient_for (GTK_WINDOW (object), priv->parent);
+
+  vbox = GTK_DIALOG (object)->vbox;
+
+  toolbar = gtk_toolbar_new ();
+  gtk_toolbar_set_style (GTK_TOOLBAR (toolbar), GTK_TOOLBAR_BOTH_HORIZ);
+  gtk_toolbar_set_show_arrow (GTK_TOOLBAR (toolbar), TRUE);
+  gtk_toolbar_set_icon_size (GTK_TOOLBAR (toolbar), GTK_ICON_SIZE_SMALL_TOOLBAR);
+  gtk_widget_show (toolbar);
+
+  gtk_box_pack_start (GTK_BOX (vbox), toolbar, FALSE, FALSE, 0);
+
+  /* Save */
+  item = gtk_tool_button_new_from_stock (GTK_STOCK_SAVE);
+  gtk_widget_show (GTK_WIDGET (item));
+  gtk_tool_item_set_is_important (GTK_TOOL_ITEM (item), TRUE);
+  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
+
+  /* Clear */
+  item = gtk_tool_button_new_from_stock (GTK_STOCK_CLEAR);
+  gtk_widget_show (GTK_WIDGET (item));
+  gtk_tool_item_set_is_important (GTK_TOOL_ITEM (item), TRUE);
+  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
+
+  item = gtk_separator_tool_item_new ();
+  gtk_widget_show (GTK_WIDGET (item));
+  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
+
+  /* Pause */
+  image = gtk_image_new_from_stock (GTK_STOCK_MEDIA_PAUSE, GTK_ICON_SIZE_MENU);
+  gtk_widget_show (image);
+  item = gtk_toggle_tool_button_new ();
+  gtk_widget_show (GTK_WIDGET (item));
+  gtk_tool_item_set_is_important (GTK_TOOL_ITEM (item), TRUE);
+  gtk_tool_button_set_label (GTK_TOOL_BUTTON (item), _("Pause"));
+  gtk_tool_button_set_icon_widget (GTK_TOOL_BUTTON (item), image);
+  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
+
+  item = gtk_separator_tool_item_new ();
+  gtk_widget_show (GTK_WIDGET (item));
+  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
+
+  /* Level */
+  item = gtk_tool_item_new ();
+  gtk_widget_show (GTK_WIDGET (item));
+  gtk_container_add (GTK_CONTAINER (item), gtk_label_new (_("Level ")));
+  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
+
+  priv->filter = gtk_combo_box_new_text ();
+  gtk_widget_show (priv->filter);
+
+  item = gtk_tool_item_new ();
+  gtk_widget_show (GTK_WIDGET (item));
+  gtk_container_add (GTK_CONTAINER (item), priv->filter);
+  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
+
+  gtk_combo_box_append_text (GTK_COMBO_BOX (priv->filter), _("All"));
+  gtk_combo_box_append_text (GTK_COMBO_BOX (priv->filter), _("Debug"));
+  gtk_combo_box_append_text (GTK_COMBO_BOX (priv->filter), _("Info"));
+  gtk_combo_box_append_text (GTK_COMBO_BOX (priv->filter), _("Message"));
+  gtk_combo_box_append_text (GTK_COMBO_BOX (priv->filter), _("Warning"));
+  gtk_combo_box_append_text (GTK_COMBO_BOX (priv->filter), _("Critical"));
+  gtk_combo_box_append_text (GTK_COMBO_BOX (priv->filter), _("Error"));
+
+  gtk_combo_box_set_active (GTK_COMBO_BOX (priv->filter), 0);
+  gtk_widget_show (GTK_WIDGET (priv->filter));
+
+  /* Debug treeview */
+  button = gtk_button_new_with_label ("Foo");
+  gtk_widget_show (button);
+
+  gtk_box_pack_start (GTK_BOX (vbox), button, TRUE, TRUE, 0);
+
+  gtk_widget_show (GTK_WIDGET (object));
 
   return object;
 }
@@ -70,12 +155,17 @@ empathy_debug_dialog_init (EmpathyDebugDialog *empathy_debug_dialog)
 
 static void
 debug_dialog_set_property (GObject *object,
-                               guint prop_id,
-                               const GValue *value,
-                               GParamSpec *pspec)
+                           guint prop_id,
+                           const GValue *value,
+                           GParamSpec *pspec)
 {
+  EmpathyDebugDialogPriv *priv = GET_PRIV (object);
+
   switch (prop_id)
     {
+      case PROP_PARENT:
+	priv->parent = GTK_WINDOW (g_value_dup_object (value));
+	break;
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
         break;
@@ -84,12 +174,17 @@ debug_dialog_set_property (GObject *object,
 
 static void
 debug_dialog_get_property (GObject *object,
-                               guint prop_id,
-                               GValue *value,
-                               GParamSpec *pspec)
+                           guint prop_id,
+                           GValue *value,
+                           GParamSpec *pspec)
 {
+  EmpathyDebugDialogPriv *priv = GET_PRIV (object);
+
   switch (prop_id)
     {
+      case PROP_PARENT:
+	g_value_set_object (value, priv->parent);
+	break;
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
         break;
@@ -107,6 +202,8 @@ debug_dialog_dispose (GObject *object)
 
   priv->dispose_run = TRUE;
 
+  g_object_unref (priv->parent);
+
   (G_OBJECT_CLASS (empathy_debug_dialog_parent_class)->dispose) (object);
 }
 
@@ -119,12 +216,18 @@ empathy_debug_dialog_class_init (EmpathyDebugDialogClass *klass)
   object_class->set_property = debug_dialog_set_property;
   object_class->get_property = debug_dialog_get_property;
   g_type_class_add_private (klass, sizeof (EmpathyDebugDialogPriv));
+
+  g_object_class_install_property (object_class, PROP_PARENT,
+      g_param_spec_object ("parent", "parent", "parent",
+      GTK_TYPE_WINDOW, G_PARAM_CONSTRUCT_ONLY |
+      G_PARAM_READWRITE | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 }
 
 /* public methods */
 
 GtkWidget *
-empathy_debug_dialog_new (void)
+empathy_debug_dialog_new (GtkWindow *parent)
 {
-  return GTK_WIDGET (g_object_new (EMPATHY_TYPE_DEBUG_DIALOG, NULL));
+  return GTK_WIDGET (g_object_new (EMPATHY_TYPE_DEBUG_DIALOG,
+      "parent", parent, NULL));
 }
