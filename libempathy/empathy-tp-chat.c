@@ -1393,6 +1393,7 @@ empathy_tp_chat_acknowledge_messages (EmpathyTpChat *chat,
 			guint id = empathy_message_get_id (message);
 			g_array_append_val (message_ids, id);
 		}
+		g_object_unref (message);
 	}
 
 	if (message_ids->len > 0)
