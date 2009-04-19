@@ -53,7 +53,6 @@ typedef struct
   EmpathyContactManager *manager;
   EmpathyContact *contact;
   EmpathyContactWidgetFlags flags;
-  GtkCellRenderer *renderer;
   guint widget_id_timeout;
 
   GtkWidget *vbox_contact_widget;
@@ -924,11 +923,6 @@ contact_widget_model_populate_columns (EmpathyContactWidget *information)
   gtk_tree_view_column_set_sort_column_id (column, COL_NAME);
   gtk_tree_view_column_set_resizable (column,FALSE);
   gtk_tree_view_column_set_clickable (GTK_TREE_VIEW_COLUMN (column), TRUE);
-
-  if (information->renderer)
-      g_object_unref (information->renderer);
-
-  information->renderer = g_object_ref (renderer);
 }
 
 static void
