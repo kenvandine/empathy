@@ -36,11 +36,23 @@ enum
   PROP_PARENT
 };
 
+enum
+{
+  COL_TIMESTAMP = 0,
+  COL_DOMAIN,
+  COL_CATEGORY,
+  COL_LEVEL,
+  COL_MESSAGE,
+  NUM_COLS
+};
+
 #define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyDebugDialog)
 typedef struct
 {
   GtkWidget *filter;
   GtkWindow *parent;
+  GtkWidget *view;
+  GtkListStore *store;
   gboolean dispose_run;
 } EmpathyDebugDialogPriv;
 
@@ -53,9 +65,13 @@ debug_dialog_constructor (GType type,
   EmpathyDebugDialogPriv *priv;
   GtkWidget *vbox;
   GtkWidget *toolbar;
-  GtkWidget *button;
   GtkWidget *image;
   GtkToolItem *item;
+  GtkCellRenderer *renderer;
+  GtkWidget *scrolled_win;
+
+  /* tmp */
+  GtkTreeIter iter;
 
   object = G_OBJECT_CLASS (empathy_debug_dialog_parent_class)->constructor
     (type, n_construct_params, construct_params);
@@ -131,10 +147,45 @@ debug_dialog_constructor (GType type,
   gtk_widget_show (GTK_WIDGET (priv->filter));
 
   /* Debug treeview */
-  button = gtk_button_new_with_label ("Foo");
-  gtk_widget_show (button);
+  priv->view = gtk_tree_view_new ();
 
-  gtk_box_pack_start (GTK_BOX (vbox), button, TRUE, TRUE, 0);
+  renderer = gtk_cell_renderer_text_new ();
+
+  gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (priv->view),
+      -1, _("Time"), renderer, "text", COL_TIMESTAMP, NULL);
+  gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (priv->view),
+      -1, _("Domain"), renderer, "text", COL_DOMAIN, NULL);
+  gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (priv->view),
+      -1, _("Category"), renderer, "text", COL_CATEGORY, NULL);
+  gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (priv->view),
+      -1, _("Level"), renderer, "text", COL_LEVEL, NULL);
+  gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (priv->view),
+      -1, _("Message"), renderer, "text", COL_MESSAGE, NULL);
+
+  priv->store = gtk_list_store_new (NUM_COLS, G_TYPE_DOUBLE,
+      G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
+
+  gtk_list_store_append (priv->store, &iter);
+  gtk_list_store_set (priv->store, &iter,
+      COL_TIMESTAMP, 2.0,
+      COL_DOMAIN, "domain",
+      COL_CATEGORY, "category",
+      COL_LEVEL, "level",
+      COL_MESSAGE, "message",
+      -1);
+
+  gtk_tree_view_set_model (GTK_TREE_VIEW (priv->view),
+      GTK_TREE_MODEL (priv->store));
+
+  scrolled_win = gtk_scrolled_window_new (NULL, NULL);
+  gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_win),
+      GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+
+  gtk_widget_show (priv->view);
+  gtk_container_add (GTK_CONTAINER (scrolled_win), priv->view);
+
+  gtk_widget_show (scrolled_win);
+  gtk_box_pack_start (GTK_BOX (vbox), scrolled_win, TRUE, TRUE, 0);
 
   gtk_widget_show (GTK_WIDGET (object));
 
@@ -202,7 +253,11 @@ debug_dialog_dispose (GObject *object)
 
   priv->dispose_run = TRUE;
 
-  g_object_unref (priv->parent);
+  if (priv->parent)
+    g_object_unref (priv->parent);
+
+  if (priv->store)
+    g_object_unref (priv->store);
 
   (G_OBJECT_CLASS (empathy_debug_dialog_parent_class)->dispose) (object);
 }
