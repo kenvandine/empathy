@@ -3,7 +3,7 @@ AM_CPPFLAGS = \
 	-DPKGDATADIR=\""$(pkgdatadir)"\" \
 	-DGNOMELOCALEDIR=\""$(prefix)/$(DATADIRNAME)/locale"\" \
 	-DIMAGEDIR=\"$(datadir)/empathy\" \
-	$(MEGAPHONE_CFLAGS) $(WARN_CFLAGS)
+	$(MEGAPHONE_CFLAGS) $(WARN_CFLAGS) $(DISABLE_DEPRECATED)
 
 libexec_PROGRAMS = megaphone-applet
 megaphone_applet_SOURCES = 					\

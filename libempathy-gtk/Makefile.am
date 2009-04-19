@@ -5,7 +5,8 @@ AM_CPPFLAGS =                                           \
 	-DPKGDATADIR=\""$(pkgdatadir)"\"		\
 	$(LIBEMPATHYGTK_CFLAGS)				\
 	$(ENCHANT_CFLAGS)				\
-	$(WARN_CFLAGS)
+	$(WARN_CFLAGS)					\
+	$(DISABLE_DEPRECATED)
 
 BUILT_SOURCES = 					\
 	empathy-gtk-marshal.h				\

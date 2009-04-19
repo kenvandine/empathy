@@ -5,7 +5,8 @@ AM_CPPFLAGS =                                           \
 	-DDATADIR=\""$(datadir)"\"              	\
 	-DLOCALEDIR=\""$(datadir)/locale"\"		\
 	$(LIBEMPATHY_CFLAGS)				\
-	$(WARN_CFLAGS)
+	$(WARN_CFLAGS)					\
+	$(DISABLE_DEPRECATED)
 
 BUILT_SOURCES = 					\
 	empathy-marshal.h				\

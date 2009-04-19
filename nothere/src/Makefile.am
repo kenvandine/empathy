@@ -3,7 +3,7 @@ AM_CPPFLAGS = \
 	-DPKGDATADIR=\""$(pkgdatadir)"\" \
 	-DGNOMELOCALEDIR=\""$(prefix)/$(DATADIRNAME)/locale"\" \
 	-DIMAGEDIR=\"$(datadir)/empathy\" \
-	$(NOTHERE_CFLAGS) $(WARN_CFLAGS)
+	$(NOTHERE_CFLAGS) $(WARN_CFLAGS) $(DISABLE_DEPRECATED)
 
 libexec_PROGRAMS = nothere-applet
 nothere_applet_SOURCES = 					\
