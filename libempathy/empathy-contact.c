@@ -388,6 +388,23 @@ empathy_contact_new (TpContact *tp_contact)
       NULL);
 }
 
+EmpathyContact *
+empathy_contact_new_static (McAccount *account,
+                            const gchar *id,
+                            const gchar *name,
+                            gboolean is_user)
+{
+  g_return_val_if_fail (MC_IS_ACCOUNT (account), NULL);
+  g_return_val_if_fail (id != NULL, NULL);
+
+  return g_object_new (EMPATHY_TYPE_CONTACT,
+      "account", account,
+      "id", id,
+      "name", name,
+      "is-user", is_user,
+      NULL);
+}
+
 TpContact *
 empathy_contact_get_tp_contact (EmpathyContact *contact)
 {
