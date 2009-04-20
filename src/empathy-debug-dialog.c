@@ -471,6 +471,7 @@ debug_dialog_constructor (GType type,
   gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (priv->view), TRUE);
 
   renderer = gtk_cell_renderer_text_new ();
+  g_object_set (renderer, "yalign", 0, NULL);
 
   gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (priv->view),
       -1, _("Time"), renderer, "text", COL_TIMESTAMP, NULL);
