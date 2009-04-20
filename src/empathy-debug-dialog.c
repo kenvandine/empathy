@@ -31,6 +31,7 @@
 
 #include <telepathy-glib/dbus.h>
 #include <telepathy-glib/util.h>
+#include <telepathy-glib/proxy-subclass.h>
 
 #include "extensions/extensions.h"
 
@@ -265,6 +266,8 @@ debug_dialog_cm_chooser_changed_cb (GtkComboBox *cm_chooser,
     g_object_unref (priv->proxy);
 
   priv->proxy = TP_PROXY (connection);
+
+  tp_proxy_add_interface_by_id (priv->proxy, emp_iface_quark_debug ());
 
   emp_cli_debug_call_get_messages (priv->proxy, -1,
       debug_dialog_get_messages_cb, debug_dialog, NULL, NULL);
