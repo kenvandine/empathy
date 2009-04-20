@@ -63,6 +63,7 @@ typedef struct
   GtkWidget *account_chooser;
   GtkListStore *store;
   TpProxySignalConnection *signal_connection;
+  gboolean paused;
   gboolean dispose_run;
 } EmpathyDebugDialogPriv;
 
@@ -175,9 +176,12 @@ debug_dialog_get_messages_cb (TpProxy *proxy,
 	  g_value_get_string (g_value_array_get_nth (values, 3)));
     }
 
-  /* Connect to NewDebugMessage */
-  priv->signal_connection = emp_cli_debug_connect_to_new_debug_message (proxy,
-      debug_dialog_new_debug_message_cb, debug_dialog, NULL, NULL, NULL);
+  if (!priv->paused)
+    {
+      /* Connect to NewDebugMessage */
+      priv->signal_connection = emp_cli_debug_connect_to_new_debug_message (proxy,
+          debug_dialog_new_debug_message_cb, debug_dialog, NULL, NULL, NULL);
+    }
 }
 
 static void
@@ -295,9 +299,11 @@ debug_dialog_constructor (GType type,
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
 
   /* Pause */
+  priv->paused = FALSE;
   image = gtk_image_new_from_stock (GTK_STOCK_MEDIA_PAUSE, GTK_ICON_SIZE_MENU);
   gtk_widget_show (image);
   item = gtk_toggle_tool_button_new ();
+  gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (item), !priv->paused);
   gtk_widget_show (GTK_WIDGET (item));
   gtk_tool_item_set_is_important (GTK_TOOL_ITEM (item), TRUE);
   gtk_tool_button_set_label (GTK_TOOL_BUTTON (item), _("Pause"));
