@@ -157,7 +157,6 @@ empathy_contact_widget_new (EmpathyContact *contact,
 {
   EmpathyContactWidget *information;
   GtkBuilder *gui;
-  TpConnection *connection;
   gchar *filename;
 
   g_return_val_if_fail (contact == NULL || EMPATHY_IS_CONTACT (contact), NULL);

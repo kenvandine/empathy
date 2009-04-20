@@ -146,7 +146,7 @@ empathy_contact_class_init (EmpathyContactClass *class)
         "TpContact",
         "The TpContact associated with the contact",
         TP_TYPE_CONTACT,
-        G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE));
+        G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_property (object_class,
       PROP_ACCOUNT,
@@ -154,7 +154,7 @@ empathy_contact_class_init (EmpathyContactClass *class)
         "The account",
         "The account associated with the contact",
         MC_TYPE_ACCOUNT,
-        G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE));
+        G_PARAM_CONSTRUCT_ONLY | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_property (object_class,
       PROP_ID,
@@ -162,7 +162,7 @@ empathy_contact_class_init (EmpathyContactClass *class)
         "Contact id",
         "String identifying contact",
         NULL,
-        G_PARAM_READWRITE));
+        G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_property (object_class,
       PROP_NAME,
@@ -170,7 +170,7 @@ empathy_contact_class_init (EmpathyContactClass *class)
         "Contact Name",
         "The name of the contact",
         NULL,
-        G_PARAM_READWRITE));
+        G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_property (object_class,
       PROP_AVATAR,
@@ -178,7 +178,7 @@ empathy_contact_class_init (EmpathyContactClass *class)
         "Avatar image",
         "The avatar image",
         EMPATHY_TYPE_AVATAR,
-        G_PARAM_READWRITE));
+        G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_property (object_class,
       PROP_PRESENCE,
@@ -188,7 +188,7 @@ empathy_contact_class_init (EmpathyContactClass *class)
         MC_PRESENCE_UNSET,
         LAST_MC_PRESENCE,
         MC_PRESENCE_UNSET,
-        G_PARAM_READWRITE));
+        G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_property (object_class,
       PROP_PRESENCE_MESSAGE,
@@ -196,7 +196,7 @@ empathy_contact_class_init (EmpathyContactClass *class)
         "Contact presence message",
         "Presence message of contact",
         NULL,
-        G_PARAM_READWRITE));
+        G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_property (object_class,
       PROP_HANDLE,
@@ -206,7 +206,7 @@ empathy_contact_class_init (EmpathyContactClass *class)
         0,
         G_MAXUINT,
         0,
-        G_PARAM_READWRITE));
+        G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_property (object_class,
       PROP_CAPABILITIES,
@@ -215,7 +215,7 @@ empathy_contact_class_init (EmpathyContactClass *class)
         "Capabilities of the contact",
         EMPATHY_TYPE_CAPABILITIES,
         EMPATHY_CAPABILITIES_UNKNOWN,
-        G_PARAM_CONSTRUCT | G_PARAM_READWRITE));
+        G_PARAM_CONSTRUCT | G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   g_object_class_install_property (object_class,
       PROP_IS_USER,
@@ -223,7 +223,7 @@ empathy_contact_class_init (EmpathyContactClass *class)
         "Contact is-user",
         "Is contact the user",
         FALSE,
-        G_PARAM_READWRITE));
+        G_PARAM_READWRITE | G_PARAM_STATIC_STRINGS));
 
   signals[PRESENCE_CHANGED] =
     g_signal_new ("presence-changed",
