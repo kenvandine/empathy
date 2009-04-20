@@ -581,6 +581,8 @@ empathy_debug_dialog_class_init (EmpathyDebugDialogClass *klass)
 GtkWidget *
 empathy_debug_dialog_new (GtkWindow *parent)
 {
+  g_return_val_if_fail (GTK_IS_WINDOW (parent), NULL);
+
   return GTK_WIDGET (g_object_new (EMPATHY_TYPE_DEBUG_DIALOG,
       "parent", parent, NULL));
 }
