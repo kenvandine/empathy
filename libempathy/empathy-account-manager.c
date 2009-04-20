@@ -35,8 +35,8 @@ typedef struct {
   McAccountMonitor *monitor;
   MissionControl   *mc;
 
-  GHashTable       *accounts;
-  GHashTable       *connections;
+  GHashTable       *accounts; /* McAccount -> AccountData */
+  GHashTable       *connections; /* TpConnection -> McAccount */
   int               connected;
   int               connecting;
   gboolean          dispose_run;
