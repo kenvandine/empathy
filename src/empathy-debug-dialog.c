@@ -62,6 +62,7 @@ typedef struct
   GtkWidget *view;
   GtkWidget *account_chooser;
   GtkListStore *store;
+  TpProxySignalConnection *signal_connection;
   gboolean dispose_run;
 } EmpathyDebugDialogPriv;
 
@@ -95,6 +96,58 @@ log_level_to_string (guint level)
 }
 
 static void
+debug_dialog_add_message (EmpathyDebugDialog *debug_dialog,
+			  gdouble timestamp,
+			  const gchar *domain_category,
+			  guint level,
+			  const gchar *message)
+{
+  EmpathyDebugDialogPriv *priv = GET_PRIV (debug_dialog);
+  gchar *domain, *category;
+  GtkTreeIter iter;
+
+  if (g_strrstr (domain_category, "/"))
+    {
+      gchar **parts = g_strsplit (domain_category, "/", 2);
+      domain = g_strdup (parts[0]);
+      category = g_strdup (parts[1]);
+      g_strfreev (parts);
+    }
+  else
+    {
+      domain = g_strdup (domain_category);
+      category = "";
+    }
+
+  gtk_list_store_append (priv->store, &iter);
+  gtk_list_store_set (priv->store, &iter,
+		      COL_TIMESTAMP, timestamp,
+		      COL_DOMAIN, domain,
+		      COL_CATEGORY, category,
+		      COL_LEVEL, log_level_to_string (level),
+		      COL_MESSAGE, message,
+		      -1);
+
+  g_free (domain);
+  g_free (category);
+}
+
+static void
+debug_dialog_new_debug_message_cb (TpProxy *proxy,
+				   gdouble timestamp,
+				   const gchar *domain,
+				   guint level,
+				   const gchar *message,
+				   gpointer user_data,
+				   GObject *weak_object)
+{
+  EmpathyDebugDialog *debug_dialog = (EmpathyDebugDialog *) user_data;
+
+  debug_dialog_add_message (debug_dialog, timestamp, domain, level,
+      message);
+}
+
+static void
 debug_dialog_get_messages_cb (TpProxy *proxy,
 			      const GPtrArray *messages,
 			      const GError *error,
@@ -104,7 +157,6 @@ debug_dialog_get_messages_cb (TpProxy *proxy,
   EmpathyDebugDialog *debug_dialog = (EmpathyDebugDialog *) user_data;
   EmpathyDebugDialogPriv *priv = GET_PRIV (debug_dialog);
   gint i;
-  GtkTreeIter iter;
 
   if (error != NULL)
     {
@@ -114,47 +166,18 @@ debug_dialog_get_messages_cb (TpProxy *proxy,
 
   for (i = 0; i < messages->len; i++)
     {
-      GValueArray *values;
-      gdouble timestamp;
-      const gchar *domain_category;
-      guint level;
-      const gchar *message;
+      GValueArray *values = g_ptr_array_index (messages, i);
 
-      gchar *domain;
-      gchar *category;
-
-      values = g_ptr_array_index (messages, i);
-
-      timestamp = g_value_get_double (g_value_array_get_nth (values, 0));
-      domain_category = g_value_get_string (g_value_array_get_nth (values, 1));
-      level = g_value_get_uint (g_value_array_get_nth (values, 2));
-      message = g_value_get_string (g_value_array_get_nth (values, 3));
-
-      if (g_strrstr (domain_category, "/"))
-	{
-	  gchar **parts = g_strsplit (domain_category, "/", 2);
-	  domain = g_strdup (parts[0]);
-	  category = g_strdup (parts[1]);
-	  g_strfreev (parts);
-	}
-      else
-	{
-	  domain = g_strdup (domain_category);
-	  category = "";
-	}
-
-      gtk_list_store_append (priv->store, &iter);
-      gtk_list_store_set (priv->store, &iter,
-          COL_TIMESTAMP, timestamp,
-          COL_DOMAIN, domain,
-          COL_CATEGORY, category,
-	  COL_LEVEL, log_level_to_string (level),
-          COL_MESSAGE, message,
-          -1);
-
-      g_free (domain);
-      g_free (category);
+      debug_dialog_add_message (debug_dialog,
+          g_value_get_double (g_value_array_get_nth (values, 0)),
+	  g_value_get_string (g_value_array_get_nth (values, 1)),
+	  g_value_get_uint (g_value_array_get_nth (values, 2)),
+	  g_value_get_string (g_value_array_get_nth (values, 3)));
     }
+
+  /* Connect to NewDebugMessage */
+  priv->signal_connection = emp_cli_debug_connect_to_new_debug_message (proxy,
+      debug_dialog_new_debug_message_cb, debug_dialog, NULL, NULL, NULL);
 }
 
 static void
@@ -418,6 +441,9 @@ debug_dialog_dispose (GObject *object)
 
   if (priv->store)
     g_object_unref (priv->store);
+
+  if (priv->signal_connection)
+    tp_proxy_signal_connection_disconnect (priv->signal_connection);
 
   (G_OBJECT_CLASS (empathy_debug_dialog_parent_class)->dispose) (object);
 }
