@@ -360,9 +360,7 @@ empathy_contact_invite_menu_item_new (EmpathyContact *contact)
 	GtkWidget *room_item;
 	EmpathyChatroomManager *mgr;
 	GList *rooms, *l;
-	GtkWidget *submenu;
-	GtkMenuShell *submenu_shell;
-	gboolean have_rooms = FALSE;
+	GtkWidget *submenu = NULL;
 
 	g_return_val_if_fail (EMPATHY_IS_CONTACT (contact), NULL);
 
@@ -375,29 +373,23 @@ empathy_contact_invite_menu_item_new (EmpathyContact *contact)
 	rooms = empathy_chatroom_manager_get_chatrooms (mgr,
 		empathy_contact_get_account (contact));
 
-	/* create rooms sub menu */
-	submenu = gtk_menu_new ();
-	submenu_shell = GTK_MENU_SHELL (submenu);
-
 	for (l = rooms; l != NULL; l = g_list_next (l)) {
 		EmpathyChatroom *chatroom = l->data;
 
 		if (empathy_chatroom_get_tp_chat (chatroom) != NULL) {
-			have_rooms = TRUE;
+			if (G_UNLIKELY (submenu == NULL))
+				submenu = gtk_menu_new ();
 
 			room_item = create_room_sub_menu (contact, chatroom);
-			gtk_menu_shell_append (submenu_shell, room_item);
+			gtk_menu_shell_append ((GtkMenuShell*)submenu, room_item);
 			gtk_widget_show (room_item);
 		}
 	}
 
-	if (have_rooms) {
+	if (submenu) {
 		gtk_menu_item_set_submenu (GTK_MENU_ITEM (item), submenu);
 	} else {
 		gtk_widget_set_sensitive (item, FALSE);
-		g_object_ref_sink (submenu);
-		gtk_widget_destroy (submenu);
-		g_object_unref (submenu);
 	}
 
 	gtk_widget_show (image);
