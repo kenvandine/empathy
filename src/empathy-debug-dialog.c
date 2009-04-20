@@ -151,6 +151,21 @@ debug_dialog_new_debug_message_cb (TpProxy *proxy,
 }
 
 static void
+debug_dialog_set_enabled (EmpathyDebugDialog *debug_dialog,
+			  gboolean enabled)
+{
+  EmpathyDebugDialogPriv *priv = GET_PRIV (debug_dialog);
+  GValue *val;
+
+  val = tp_g_value_slice_new_boolean (enabled);
+
+  tp_cli_dbus_properties_call_set (priv->proxy, -1, EMP_IFACE_DEBUG,
+      "Enabled", val, NULL, NULL, NULL, NULL);
+
+  tp_g_value_slice_free (val);
+}
+
+static void
 debug_dialog_get_messages_cb (TpProxy *proxy,
 			      const GPtrArray *messages,
 			      const GError *error,
@@ -182,6 +197,9 @@ debug_dialog_get_messages_cb (TpProxy *proxy,
   priv->signal_connection = emp_cli_debug_connect_to_new_debug_message (
       proxy, debug_dialog_new_debug_message_cb, debug_dialog,
       NULL, NULL, NULL);
+
+  /* Set Enabled as appropriate */
+  debug_dialog_set_enabled (debug_dialog, !priv->paused);
 }
 
 static void
@@ -222,8 +240,8 @@ debug_dialog_account_chooser_changed_cb (GtkComboBox *account_chooser,
       return;
     }
 
-  if (priv->proxy)
-    g_object_unref (priv->proxy);
+  /* Disable debug signalling */
+  debug_dialog_set_enabled (debug_dialog, FALSE);
 
   /* Disconnect from previous NewDebugMessage signal */
   if (priv->signal_connection)
@@ -231,6 +249,9 @@ debug_dialog_account_chooser_changed_cb (GtkComboBox *account_chooser,
       tp_proxy_signal_connection_disconnect (priv->signal_connection);
       priv->signal_connection = NULL;
     }
+
+  if (priv->proxy)
+    g_object_unref (priv->proxy);
 
   priv->proxy = TP_PROXY (g_object_ref (connection));
 
@@ -247,16 +268,10 @@ debug_dialog_pause_toggled_cb (GtkToggleToolButton *pause,
 			       EmpathyDebugDialog *debug_dialog)
 {
   EmpathyDebugDialogPriv *priv = GET_PRIV (debug_dialog);
-  GValue *val;
 
   priv->paused = gtk_toggle_tool_button_get_active (pause);
 
-  val = tp_g_value_slice_new_boolean (!priv->paused);
-
-  tp_cli_dbus_properties_call_set (priv->proxy, -1, EMP_IFACE_DEBUG,
-      "Enabled", val, NULL, NULL, NULL, NULL);
-
-  tp_g_value_slice_free (val);
+  debug_dialog_set_enabled (debug_dialog, !priv->paused);
 }
 
 static GObject *
@@ -480,6 +495,8 @@ debug_dialog_dispose (GObject *object)
 
   if (priv->store)
     g_object_unref (priv->store);
+
+  debug_dialog_set_enabled (EMPATHY_DEBUG_DIALOG (object), FALSE);
 
   if (priv->proxy)
     g_object_unref (priv->proxy);
