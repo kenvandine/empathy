@@ -305,6 +305,7 @@ tp_contact_list_group_request_handles_cb (TpConnection *connection,
 						list);
 }
 
+/* This function takes ownership of handles array */
 static void
 tp_contact_list_group_add (EmpathyTpContactList *list,
 			   const gchar          *group_name,
