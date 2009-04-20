@@ -73,6 +73,8 @@ private_icons = \
 	hicolor_apps_48x48_im-local-xmpp.png \
 	hicolor_apps_48x48_im-gadugadu.png \
 	hicolor_apps_48x48_im-qq.png \
+	hicolor_apps_48x48_empathy-starred.png \
+	hicolor_apps_48x48_empathy-unstarred.png \
 	hicolor_apps_scalable_im-ekiga.svg \
 	hicolor_apps_scalable_im-gizmo.svg \
 	hicolor_apps_scalable_im-google-talk.svg \
