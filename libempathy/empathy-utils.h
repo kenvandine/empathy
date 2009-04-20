@@ -78,8 +78,7 @@ gboolean     empathy_proxy_equal                    (gconstpointer    a,
 						     gconstpointer    b);
 guint        empathy_proxy_hash                     (gconstpointer    key);
 gboolean     empathy_check_available_state          (void);
-gchar *      empathy_connection_get_protocol        (TpConnection    *connection,
-						     gchar          **cm_name);
+
 G_END_DECLS
 
 #endif /*  __EMPATHY_UTILS_H__ */

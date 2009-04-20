@@ -759,9 +759,8 @@ tp_contact_list_constructed (GObject *list)
 
 	/* Check for protocols that does not support contact groups. We can
 	 * put all contacts into a special group in that case.
-	 * FIXME: Default group should be an information in the profile
-	 * FIXME: replace with tp_connection_parse_object_path once released */
-	protocol_name = empathy_connection_get_protocol (priv->connection, NULL);
+	 * FIXME: Default group should be an information in the profile */
+	tp_connection_parse_object_path (priv->connection, &protocol_name, NULL);
 	if (!tp_strdiff (protocol_name, "local-xmpp")) {
 		priv->protocol_group = _("People nearby");
 	}

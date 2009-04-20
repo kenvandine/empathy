@@ -379,31 +379,3 @@ empathy_check_available_state (void)
 	return TRUE;
 }
 
-gchar *
-empathy_connection_get_protocol (TpConnection    *connection,
-				 gchar          **ret_cmname)
-{
-	const gchar *object_path;
-	const gchar *cmname;
-	const gchar *proto;
-	const gchar *account;
-	gchar *ret;
-
-	g_return_val_if_fail (TP_IS_CONNECTION (connection), NULL);
-
-	/* Object path is in the form:
-	 * /org/freedesktop/Telepathy/Connection/cmname/proto/account */
-	object_path = tp_proxy_get_object_path (TP_PROXY (connection));
-	cmname = object_path + strlen ("/org/freedesktop/Telepathy/Connection/");
-	proto = strstr (cmname, "/") + 1;
-	account = strstr (proto, "/") + 1;
-
-	if (ret_cmname) {
-		*ret_cmname = g_strndup (cmname, proto - cmname - 1);
-		g_strdelimit (*ret_cmname, "_", '-');
-	}
-
-	ret = g_strndup (proto, account - proto - 1);
-	return g_strdelimit (ret, "_", '-');
-}
-
