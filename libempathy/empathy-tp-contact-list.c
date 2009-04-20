@@ -833,7 +833,8 @@ empathy_tp_contact_list_init (EmpathyTpContactList *list)
 
 	list->priv = priv;
 
-	/* Map group's name to group's channel */
+	/* Map group's name to group's TpChannel. The group name string is owned
+	 * by the TpChannel object */
 	priv->groups = g_hash_table_new_full (g_str_hash, g_str_equal,
 					      NULL,
 					      (GDestroyNotify) g_object_unref);
