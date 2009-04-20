@@ -102,10 +102,10 @@ log_level_to_string (guint level)
 
 static void
 debug_dialog_add_message (EmpathyDebugDialog *debug_dialog,
-			  gdouble timestamp,
-			  const gchar *domain_category,
-			  guint level,
-			  const gchar *message)
+                          gdouble timestamp,
+                          const gchar *domain_category,
+                          guint level,
+                          const gchar *message)
 {
   EmpathyDebugDialogPriv *priv = GET_PRIV (debug_dialog);
   gchar *domain, *category;
@@ -126,12 +126,12 @@ debug_dialog_add_message (EmpathyDebugDialog *debug_dialog,
 
   gtk_list_store_append (priv->store, &iter);
   gtk_list_store_set (priv->store, &iter,
-		      COL_TIMESTAMP, timestamp,
-		      COL_DOMAIN, domain,
-		      COL_CATEGORY, category,
-		      COL_LEVEL, log_level_to_string (level),
-		      COL_MESSAGE, message,
-		      -1);
+      COL_TIMESTAMP, timestamp,
+      COL_DOMAIN, domain,
+      COL_CATEGORY, category,
+      COL_LEVEL, log_level_to_string (level),
+      COL_MESSAGE, message,
+      -1);
 
   g_free (domain);
   g_free (category);
@@ -139,12 +139,12 @@ debug_dialog_add_message (EmpathyDebugDialog *debug_dialog,
 
 static void
 debug_dialog_new_debug_message_cb (TpProxy *proxy,
-				   gdouble timestamp,
-				   const gchar *domain,
-				   guint level,
-				   const gchar *message,
-				   gpointer user_data,
-				   GObject *weak_object)
+                                   gdouble timestamp,
+                                   const gchar *domain,
+                                   guint level,
+                                   const gchar *message,
+                                   gpointer user_data,
+                                   GObject *weak_object)
 {
   EmpathyDebugDialog *debug_dialog = (EmpathyDebugDialog *) user_data;
 
@@ -154,7 +154,7 @@ debug_dialog_new_debug_message_cb (TpProxy *proxy,
 
 static void
 debug_dialog_set_enabled (EmpathyDebugDialog *debug_dialog,
-			  gboolean enabled)
+                          gboolean enabled)
 {
   EmpathyDebugDialogPriv *priv = GET_PRIV (debug_dialog);
   GValue *val;
@@ -169,10 +169,10 @@ debug_dialog_set_enabled (EmpathyDebugDialog *debug_dialog,
 
 static void
 debug_dialog_get_messages_cb (TpProxy *proxy,
-			      const GPtrArray *messages,
-			      const GError *error,
-			      gpointer user_data,
-			      GObject *weak_object)
+                              const GPtrArray *messages,
+                              const GError *error,
+                              gpointer user_data,
+                              GObject *weak_object)
 {
   EmpathyDebugDialog *debug_dialog = (EmpathyDebugDialog *) user_data;
   EmpathyDebugDialogPriv *priv = GET_PRIV (debug_dialog);
@@ -190,9 +190,9 @@ debug_dialog_get_messages_cb (TpProxy *proxy,
 
       debug_dialog_add_message (debug_dialog,
           g_value_get_double (g_value_array_get_nth (values, 0)),
-	  g_value_get_string (g_value_array_get_nth (values, 1)),
-	  g_value_get_uint (g_value_array_get_nth (values, 2)),
-	  g_value_get_string (g_value_array_get_nth (values, 3)));
+          g_value_get_string (g_value_array_get_nth (values, 1)),
+          g_value_get_uint (g_value_array_get_nth (values, 2)),
+          g_value_get_string (g_value_array_get_nth (values, 3)));
     }
 
   /* Connect to NewDebugMessage */
@@ -206,7 +206,7 @@ debug_dialog_get_messages_cb (TpProxy *proxy,
 
 static void
 debug_dialog_cm_chooser_changed_cb (GtkComboBox *cm_chooser,
-				    EmpathyDebugDialog *debug_dialog)
+                                    EmpathyDebugDialog *debug_dialog)
 {
   EmpathyDebugDialogPriv *priv = GET_PRIV (debug_dialog);
   MissionControl *mc;
@@ -269,12 +269,12 @@ debug_dialog_cm_chooser_changed_cb (GtkComboBox *cm_chooser,
 
 static void
 debug_dialog_list_connection_names_cb (const gchar * const *names,
-				       gsize n,
-				       const gchar * const *cms,
-				       const gchar * const *protocols,
-				       const GError *error,
-				       gpointer user_data,
-				       GObject *weak_object)
+                                       gsize n,
+                                       const gchar * const *cms,
+                                       const gchar * const *protocols,
+                                       const GError *error,
+                                       gpointer user_data,
+                                       GObject *weak_object)
 {
   EmpathyDebugDialog *debug_dialog = (EmpathyDebugDialog *) user_data;
   EmpathyDebugDialogPriv *priv = GET_PRIV (debug_dialog);
@@ -321,7 +321,7 @@ debug_dialog_fill_cm_chooser (EmpathyDebugDialog *debug_dialog)
 
 static void
 debug_dialog_pause_toggled_cb (GtkToggleToolButton *pause,
-			       EmpathyDebugDialog *debug_dialog)
+                               EmpathyDebugDialog *debug_dialog)
 {
   EmpathyDebugDialogPriv *priv = GET_PRIV (debug_dialog);
 
@@ -501,8 +501,8 @@ debug_dialog_set_property (GObject *object,
   switch (prop_id)
     {
       case PROP_PARENT:
-	priv->parent = GTK_WINDOW (g_value_dup_object (value));
-	break;
+        priv->parent = GTK_WINDOW (g_value_dup_object (value));
+        break;
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
         break;
@@ -520,8 +520,8 @@ debug_dialog_get_property (GObject *object,
   switch (prop_id)
     {
       case PROP_PARENT:
-	g_value_set_object (value, priv->parent);
-	break;
+        g_value_set_object (value, priv->parent);
+        break;
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
         break;
