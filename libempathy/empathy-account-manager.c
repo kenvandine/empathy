@@ -778,6 +778,15 @@ empathy_account_manager_get_connection (EmpathyAccountManager *manager,
   return NULL;
 }
 
+/**
+ * empathy_account_manager_dup_connections:
+ * @manager: a #EmpathyAccountManager
+ *
+ * Get a #GList of all ready #TpConnection. The list must be freed with
+ * g_list_free, and its elements must be unreffed.
+ *
+ * Returns: the list of connections
+ **/
 GList *
 empathy_account_manager_dup_connections (EmpathyAccountManager *manager)
 {
