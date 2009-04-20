@@ -61,7 +61,7 @@ typedef struct
   GtkWidget *filter;
   GtkWindow *parent;
   GtkWidget *view;
-  GtkWidget *account_chooser;
+  GtkWidget *cm_chooser;
   GtkListStore *store;
   TpProxy *proxy;
   TpProxySignalConnection *signal_connection;
@@ -203,44 +203,49 @@ debug_dialog_get_messages_cb (TpProxy *proxy,
 }
 
 static void
-debug_dialog_account_chooser_changed_cb (GtkComboBox *account_chooser,
-					 EmpathyDebugDialog *debug_dialog)
+debug_dialog_cm_chooser_changed_cb (GtkComboBox *cm_chooser,
+				    EmpathyDebugDialog *debug_dialog)
 {
   EmpathyDebugDialogPriv *priv = GET_PRIV (debug_dialog);
-  McAccount *account;
-  TpConnection *connection;
+  gchar *cm;
   MissionControl *mc;
   TpDBusDaemon *dbus;
   GError *error = NULL;
-  const gchar *bus_name;
+  gchar *bus_name;
+  TpConnection *connection;
 
   mc = empathy_mission_control_dup_singleton ();
-  account = empathy_account_chooser_get_account (EMPATHY_ACCOUNT_CHOOSER (account_chooser));
-  connection = mission_control_get_tpconnection (mc, account, &error);
+  cm = gtk_combo_box_get_active_text (cm_chooser);
 
-  if (error != NULL)
+  if (cm == NULL)
     {
-      DEBUG ("Getting the account's TpConnection failed: %s", error->message);
-      g_error_free (error);
-      g_object_unref (account);
+      DEBUG ("No CM is selected");
       g_object_unref (mc);
       return;
     }
 
-  dbus = tp_proxy_get_dbus_daemon (connection);
-  bus_name = tp_proxy_get_bus_name (connection);
-  g_object_unref (connection);
+  dbus = tp_dbus_daemon_dup (&error);
+
+  if (error != NULL)
+    {
+      DEBUG ("Failed at duping the dbus daemon: %s", error->message);
+      g_free (cm);
+      g_object_unref (mc);
+    }
 
   /* TODO: Fix this. */
+  bus_name = g_strdup_printf ("org.freedesktop.Telepathy.ConnectionManager.%s", cm);
+  g_free (cm);
+
   connection = tp_connection_new (dbus, bus_name,
       "/org/freedesktop/Telepathy/debug", &error);
+  g_free (bus_name);
 
   if (error != NULL)
     {
       DEBUG ("Getting a new TpConnection failed: %s", error->message);
       g_error_free (error);
       g_object_unref (dbus);
-      g_object_unref (account);
       g_object_unref (mc);
       return;
     }
@@ -265,8 +270,56 @@ debug_dialog_account_chooser_changed_cb (GtkComboBox *account_chooser,
       debug_dialog_get_messages_cb, debug_dialog, NULL, NULL);
 
   g_object_unref (dbus);
-  g_object_unref (account);
   g_object_unref (mc);
+}
+
+static void
+debug_dialog_list_connection_names_cb (const gchar * const *names,
+				       gsize n,
+				       const gchar * const *cms,
+				       const gchar * const *protocols,
+				       const GError *error,
+				       gpointer user_data,
+				       GObject *weak_object)
+{
+  EmpathyDebugDialog *debug_dialog = (EmpathyDebugDialog *) user_data;
+  EmpathyDebugDialogPriv *priv = GET_PRIV (debug_dialog);
+  int i;
+
+  if (error != NULL)
+    {
+      DEBUG ("list_connection_names failed: %s", error->message);
+      return;
+    }
+
+  for (i = 0; cms[i] != NULL; i++)
+    gtk_combo_box_append_text (GTK_COMBO_BOX (priv->cm_chooser), cms[i]);
+
+  gtk_combo_box_set_active (GTK_COMBO_BOX (priv->cm_chooser), 0);
+
+  /* Fill treeview */
+  debug_dialog_cm_chooser_changed_cb (GTK_COMBO_BOX (priv->cm_chooser), debug_dialog);
+}
+
+static void
+debug_dialog_fill_cm_chooser (EmpathyDebugDialog *debug_dialog)
+{
+  TpDBusDaemon *dbus;
+  GError *error = NULL;
+
+  dbus = tp_dbus_daemon_dup (&error);
+
+  if (error != NULL)
+    {
+      DEBUG ("Failed to dup dbus daemon: %s", error->message);
+      g_error_free (error);
+      return;
+    }
+
+  tp_list_connection_names (dbus, debug_dialog_list_connection_names_cb,
+      debug_dialog, NULL, NULL);
+
+  g_object_unref (dbus);
 }
 
 static void
@@ -313,25 +366,18 @@ debug_dialog_constructor (GType type,
 
   gtk_box_pack_start (GTK_BOX (vbox), toolbar, FALSE, FALSE, 0);
 
-  /* Account */
-  item = gtk_tool_item_new ();
-  gtk_widget_show (GTK_WIDGET (item));
-  label = gtk_label_new (_("Account "));
-  gtk_widget_show (label);
-  gtk_container_add (GTK_CONTAINER (item), label);
-  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
-
-  priv->account_chooser = empathy_account_chooser_new ();
-  empathy_account_chooser_set_filter (EMPATHY_ACCOUNT_CHOOSER (priv->account_chooser),
-      (EmpathyAccountChooserFilterFunc) mc_account_is_enabled, NULL);
-  g_signal_connect (priv->account_chooser, "changed",
-      G_CALLBACK (debug_dialog_account_chooser_changed_cb), object);
-  gtk_widget_show (priv->account_chooser);
+  /* CM */
+  priv->cm_chooser = gtk_combo_box_new_text ();
+  gtk_widget_show (priv->cm_chooser);
 
   item = gtk_tool_item_new ();
   gtk_widget_show (GTK_WIDGET (item));
-  gtk_container_add (GTK_CONTAINER (item), priv->account_chooser);
+  gtk_container_add (GTK_CONTAINER (item), priv->cm_chooser);
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
+  debug_dialog_fill_cm_chooser (EMPATHY_DEBUG_DIALOG (object));
+  g_signal_connect (priv->cm_chooser, "changed",
+      G_CALLBACK (debug_dialog_cm_chooser_changed_cb), object);
+  gtk_widget_show (GTK_WIDGET (priv->cm_chooser));
 
   item = gtk_separator_tool_item_new ();
   gtk_widget_show (GTK_WIDGET (item));
@@ -416,11 +462,6 @@ debug_dialog_constructor (GType type,
 
   priv->store = gtk_list_store_new (NUM_COLS, G_TYPE_DOUBLE,
       G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
-
-  /* Fill treeview */
-  debug_dialog_account_chooser_changed_cb (GTK_COMBO_BOX (priv->account_chooser),
-      EMPATHY_DEBUG_DIALOG (object));
-
   gtk_tree_view_set_model (GTK_TREE_VIEW (priv->view),
       GTK_TREE_MODEL (priv->store));
 
