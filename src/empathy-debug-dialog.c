@@ -443,6 +443,7 @@ debug_dialog_constructor (GType type,
 
   /* Debug treeview */
   priv->view = gtk_tree_view_new ();
+  gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (priv->view), TRUE);
 
   renderer = gtk_cell_renderer_text_new ();
 
