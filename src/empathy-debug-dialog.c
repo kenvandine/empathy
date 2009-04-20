@@ -120,7 +120,7 @@ debug_dialog_add_message (EmpathyDebugDialog *debug_dialog,
   else
     {
       domain = g_strdup (domain_category);
-      category = "";
+      category = g_strdup ("");
     }
 
   gtk_list_store_append (priv->store, &iter);
