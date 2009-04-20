@@ -139,10 +139,16 @@ connection_invalidated_cb (TpProxy *connection,
   AccountData *data;
 
   DEBUG ("Message: %s", message);
+
   account = g_hash_table_lookup (priv->connections, connection);
+  g_assert (account != NULL);
+
   data = g_hash_table_lookup (priv->accounts, account);
+  g_assert (data != NULL);
+
   g_object_unref (data->connection);
   data->connection = NULL;
+
   g_hash_table_remove (priv->connections, connection);
 }
 
