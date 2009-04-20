@@ -56,6 +56,13 @@ enum
   NUM_COLS
 };
 
+enum
+{
+  COL_CM_NAME = 0,
+  COL_CM_BUS,
+  NUM_COLS_CM
+};
+
 #define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyDebugDialog)
 typedef struct
 {
@@ -67,7 +74,7 @@ typedef struct
   TpProxy *proxy;
   TpProxySignalConnection *signal_connection;
   gboolean paused;
-  GList *bus_names;
+  GtkListStore *cms;
   gboolean dispose_run;
 } EmpathyDebugDialogPriv;
 
@@ -212,10 +219,11 @@ debug_dialog_cm_chooser_changed_cb (GtkComboBox *cm_chooser,
   MissionControl *mc;
   TpDBusDaemon *dbus;
   GError *error = NULL;
-  const gchar *bus_name;
+  gchar *bus_name;
   TpConnection *connection;
+  GtkTreeIter iter;
 
-  if (gtk_combo_box_get_active (cm_chooser) == -1)
+  if (!gtk_combo_box_get_active_iter (cm_chooser, &iter))
     {
       DEBUG ("No CM is selected");
       return;
@@ -230,8 +238,10 @@ debug_dialog_cm_chooser_changed_cb (GtkComboBox *cm_chooser,
       g_object_unref (mc);
     }
 
-  bus_name = g_list_nth_data (priv->bus_names, gtk_combo_box_get_active (cm_chooser));
+  gtk_tree_model_get (GTK_TREE_MODEL (priv->cms), &iter,
+      COL_CM_BUS, &bus_name, -1);
   connection = tp_connection_new (dbus, bus_name, DEBUG_OBJECT_PATH, &error);
+  g_free (bus_name);
 
   if (error != NULL)
     {
@@ -287,10 +297,14 @@ debug_dialog_list_connection_names_cb (const gchar * const *names,
     }
 
   for (i = 0; cms[i] != NULL; i++)
-    gtk_combo_box_append_text (GTK_COMBO_BOX (priv->cm_chooser), cms[i]);
-
-  for (i = 0; names[i] != NULL; i++)
-    priv->bus_names = g_list_append (priv->bus_names, g_strdup (names[i]));
+    {
+      GtkTreeIter iter;
+      gtk_list_store_append (priv->cms, &iter);
+      gtk_list_store_set (priv->cms, &iter,
+			  COL_CM_NAME, cms[i],
+			  COL_CM_BUS, names[i],
+			  -1);
+    }
 
   gtk_combo_box_set_active (GTK_COMBO_BOX (priv->cm_chooser), 0);
 
@@ -365,6 +379,9 @@ debug_dialog_constructor (GType type,
 
   /* CM */
   priv->cm_chooser = gtk_combo_box_new_text ();
+  priv->cms = gtk_list_store_new (NUM_COLS_CM, G_TYPE_STRING, G_TYPE_STRING);
+  gtk_combo_box_set_model (GTK_COMBO_BOX (priv->cm_chooser),
+      GTK_TREE_MODEL (priv->cms));
   gtk_widget_show (priv->cm_chooser);
 
   item = gtk_tool_item_new ();
@@ -555,11 +572,8 @@ debug_dialog_dispose (GObject *object)
   if (priv->signal_connection)
     tp_proxy_signal_connection_disconnect (priv->signal_connection);
 
-  if (priv->bus_names)
-    {
-      g_list_foreach (priv->bus_names, (GFunc) g_free, NULL);
-      g_list_free (priv->bus_names);
-    }
+  if (priv->cms)
+    g_object_unref (priv->cms);
 
   (G_OBJECT_CLASS (empathy_debug_dialog_parent_class)->dispose) (object);
 }
