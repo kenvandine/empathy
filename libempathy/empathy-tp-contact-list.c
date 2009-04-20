@@ -228,7 +228,8 @@ tp_contact_list_group_add_data_unref (gpointer user_data)
 {
 	GroupAddData *data = user_data;
 
-	if (--data->ref_count == 0) {
+	data->ref_count--;
+	if (data->ref_count == 0) {
 		g_array_free (data->handles, TRUE);
 		g_slice_free (GroupAddData, data);
 	}
