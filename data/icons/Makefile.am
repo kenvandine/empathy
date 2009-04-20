@@ -33,6 +33,8 @@ private_icons = \
 	hicolor_apps_16x16_im-local-xmpp.png \
 	hicolor_apps_16x16_im-gadugadu.png \
 	hicolor_apps_16x16_im-qq.png \
+	hicolor_apps_16x16_empathy-starred.png \
+	hicolor_apps_16x16_empathy-unstarred.png \
 	hicolor_apps_22x22_im-ekiga.png \
 	hicolor_apps_22x22_im-gizmo.png \
 	hicolor_apps_22x22_im-google-talk.png \
@@ -43,6 +45,8 @@ private_icons = \
 	hicolor_apps_22x22_im-local-xmpp.png \
 	hicolor_apps_22x22_im-gadugadu.png \
 	hicolor_apps_22x22_im-qq.png \
+	hicolor_apps_22x22_empathy-starred.png \
+	hicolor_apps_22x22_empathy-unstarred.png \
 	hicolor_apps_24x24_im-ekiga.png \
 	hicolor_apps_24x24_im-gizmo.png \
 	hicolor_apps_24x24_im-google-talk.png \
@@ -53,6 +57,8 @@ private_icons = \
 	hicolor_apps_24x24_im-local-xmpp.png \
 	hicolor_apps_24x24_im-gadugadu.png \
 	hicolor_apps_24x24_im-qq.png \
+	hicolor_apps_24x24_empathy-starred.png \
+	hicolor_apps_24x24_empathy-unstarred.png \
 	hicolor_apps_32x32_im-ekiga.png \
 	hicolor_apps_32x32_im-gizmo.png \
 	hicolor_apps_32x32_im-google-talk.png \
@@ -63,6 +69,8 @@ private_icons = \
 	hicolor_apps_32x32_im-local-xmpp.png \
 	hicolor_apps_32x32_im-gadugadu.png \
 	hicolor_apps_32x32_im-qq.png \
+	hicolor_apps_32x32_empathy-starred.png \
+	hicolor_apps_32x32_empathy-unstarred.png \
 	hicolor_apps_48x48_im-ekiga.png \
 	hicolor_apps_48x48_im-gizmo.png \
 	hicolor_apps_48x48_im-google-talk.png \
