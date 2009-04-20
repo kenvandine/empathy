@@ -285,6 +285,7 @@ debug_dialog_constructor (GType type,
   GtkWidget *vbox;
   GtkWidget *toolbar;
   GtkWidget *image;
+  GtkWidget *label;
   GtkToolItem *item;
   GtkCellRenderer *renderer;
   GtkWidget *scrolled_win;
@@ -310,7 +311,9 @@ debug_dialog_constructor (GType type,
   /* Account */
   item = gtk_tool_item_new ();
   gtk_widget_show (GTK_WIDGET (item));
-  gtk_container_add (GTK_CONTAINER (item), gtk_label_new (_("Account ")));
+  label = gtk_label_new (_("Account "));
+  gtk_widget_show (label);
+  gtk_container_add (GTK_CONTAINER (item), label);
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
 
   priv->account_chooser = empathy_account_chooser_new ();
@@ -366,7 +369,9 @@ debug_dialog_constructor (GType type,
   /* Level */
   item = gtk_tool_item_new ();
   gtk_widget_show (GTK_WIDGET (item));
-  gtk_container_add (GTK_CONTAINER (item), gtk_label_new (_("Level ")));
+  label = gtk_label_new (_("Level "));
+  gtk_widget_show (label);
+  gtk_container_add (GTK_CONTAINER (item), label);
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
 
   priv->filter = gtk_combo_box_new_text ();
