@@ -117,6 +117,7 @@ debug_dialog_add_message (EmpathyDebugDialog *debug_dialog,
   EmpathyDebugDialogPriv *priv = GET_PRIV (debug_dialog);
   gchar *domain, *category;
   GtkTreeIter iter;
+  gchar *string;
 
   if (g_strrstr (domain_category, "/"))
     {
@@ -131,15 +132,22 @@ debug_dialog_add_message (EmpathyDebugDialog *debug_dialog,
       category = g_strdup ("");
     }
 
+  if (g_str_has_suffix (message, "\n"))
+    string = g_strchomp (g_strdup (message));
+  else
+    string = g_strdup (message);
+
+
   gtk_list_store_append (priv->store, &iter);
   gtk_list_store_set (priv->store, &iter,
       COL_TIMESTAMP, timestamp,
       COL_DOMAIN, domain,
       COL_CATEGORY, category,
       COL_LEVEL, log_level_to_string (level),
-      COL_MESSAGE, message,
+      COL_MESSAGE, string,
       -1);
 
+  g_free (string);
   g_free (domain);
   g_free (category);
 }
