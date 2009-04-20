@@ -30,6 +30,7 @@
 #include <libempathy-gtk/empathy-account-chooser.h>
 
 #include <telepathy-glib/dbus.h>
+#include <telepathy-glib/util.h>
 
 #include "extensions/extensions.h"
 
@@ -62,6 +63,7 @@ typedef struct
   GtkWidget *view;
   GtkWidget *account_chooser;
   GtkListStore *store;
+  TpProxy *proxy;
   TpProxySignalConnection *signal_connection;
   gboolean paused;
   gboolean dispose_run;
@@ -176,18 +178,17 @@ debug_dialog_get_messages_cb (TpProxy *proxy,
 	  g_value_get_string (g_value_array_get_nth (values, 3)));
     }
 
-  if (!priv->paused)
-    {
-      /* Connect to NewDebugMessage */
-      priv->signal_connection = emp_cli_debug_connect_to_new_debug_message (proxy,
-          debug_dialog_new_debug_message_cb, debug_dialog, NULL, NULL, NULL);
-    }
+  /* Connect to NewDebugMessage */
+  priv->signal_connection = emp_cli_debug_connect_to_new_debug_message (
+      proxy, debug_dialog_new_debug_message_cb, debug_dialog,
+      NULL, NULL, NULL);
 }
 
 static void
 debug_dialog_account_chooser_changed_cb (GtkComboBox *account_chooser,
 					 EmpathyDebugDialog *debug_dialog)
 {
+  EmpathyDebugDialogPriv *priv = GET_PRIV (debug_dialog);
   McAccount *account;
   TpConnection *connection;
   MissionControl *mc;
@@ -217,15 +218,45 @@ debug_dialog_account_chooser_changed_cb (GtkComboBox *account_chooser,
     {
       DEBUG ("Getting a new TpConnection failed: %s", error->message);
       g_error_free (error);
+      g_object_unref (dbus);
       return;
     }
 
-  emp_cli_debug_call_get_messages (TP_PROXY (connection), -1,
+  if (priv->proxy)
+    g_object_unref (priv->proxy);
+
+  /* Disconnect from previous NewDebugMessage signal */
+  if (priv->signal_connection)
+    {
+      tp_proxy_signal_connection_disconnect (priv->signal_connection);
+      priv->signal_connection = NULL;
+    }
+
+  priv->proxy = TP_PROXY (g_object_ref (connection));
+
+  emp_cli_debug_call_get_messages (priv->proxy, -1,
       debug_dialog_get_messages_cb, debug_dialog, NULL, NULL);
 
   g_object_unref (connection);
   g_object_unref (account);
   g_object_unref (dbus);
+}
+
+static void
+debug_dialog_pause_toggled_cb (GtkToggleToolButton *pause,
+			       EmpathyDebugDialog *debug_dialog)
+{
+  EmpathyDebugDialogPriv *priv = GET_PRIV (debug_dialog);
+  GValue *val;
+
+  priv->paused = gtk_toggle_tool_button_get_active (pause);
+
+  val = tp_g_value_slice_new_boolean (!priv->paused);
+
+  tp_cli_dbus_properties_call_set (priv->proxy, -1, EMP_IFACE_DEBUG,
+      "Enabled", val, NULL, NULL, NULL, NULL);
+
+  tp_g_value_slice_free (val);
 }
 
 static GObject *
@@ -303,7 +334,9 @@ debug_dialog_constructor (GType type,
   image = gtk_image_new_from_stock (GTK_STOCK_MEDIA_PAUSE, GTK_ICON_SIZE_MENU);
   gtk_widget_show (image);
   item = gtk_toggle_tool_button_new ();
-  gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (item), !priv->paused);
+  gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (item), priv->paused);
+  g_signal_connect (item, "toggled", G_CALLBACK (debug_dialog_pause_toggled_cb),
+      object);
   gtk_widget_show (GTK_WIDGET (item));
   gtk_tool_item_set_is_important (GTK_TOOL_ITEM (item), TRUE);
   gtk_tool_button_set_label (GTK_TOOL_BUTTON (item), _("Pause"));
@@ -447,6 +480,9 @@ debug_dialog_dispose (GObject *object)
 
   if (priv->store)
     g_object_unref (priv->store);
+
+  if (priv->proxy)
+    g_object_unref (priv->proxy);
 
   if (priv->signal_connection)
     tp_proxy_signal_connection_disconnect (priv->signal_connection);
