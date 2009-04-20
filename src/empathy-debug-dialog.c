@@ -23,7 +23,15 @@
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
 
+#define DEBUG_FLAG EMPATHY_DEBUG_OTHER
+#include <libempathy/empathy-debug.h>
 #include <libempathy/empathy-utils.h>
+
+#include <libempathy-gtk/empathy-account-chooser.h>
+
+#include <telepathy-glib/dbus.h>
+
+#include "extensions/extensions.h"
 
 #include "empathy-debug-dialog.h"
 
@@ -52,9 +60,146 @@ typedef struct
   GtkWidget *filter;
   GtkWindow *parent;
   GtkWidget *view;
+  GtkWidget *account_chooser;
   GtkListStore *store;
   gboolean dispose_run;
 } EmpathyDebugDialogPriv;
+
+static const gchar *
+log_level_to_string (guint level)
+{
+  switch (level)
+    {
+    case EMP_DEBUG_LEVEL_ERROR:
+      return _("Error");
+      break;
+    case EMP_DEBUG_LEVEL_CRITICAL:
+      return _("Critical");
+      break;
+    case EMP_DEBUG_LEVEL_WARNING:
+      return _("Warning");
+      break;
+    case EMP_DEBUG_LEVEL_MESSAGE:
+      return _("Message");
+      break;
+    case EMP_DEBUG_LEVEL_INFO:
+      return _("Info");
+      break;
+    case EMP_DEBUG_LEVEL_DEBUG:
+      return _("Debug");
+      break;
+    default:
+      g_assert_not_reached ();
+      break;
+    }
+}
+
+static void
+debug_dialog_get_messages_cb (TpProxy *proxy,
+			      const GPtrArray *messages,
+			      const GError *error,
+			      gpointer user_data,
+			      GObject *weak_object)
+{
+  EmpathyDebugDialog *debug_dialog = (EmpathyDebugDialog *) user_data;
+  EmpathyDebugDialogPriv *priv = GET_PRIV (debug_dialog);
+  gint i;
+  GtkTreeIter iter;
+
+  if (error != NULL)
+    {
+      DEBUG ("GetMessages failed: %s", error->message);
+      return;
+    }
+
+  for (i = 0; i < messages->len; i++)
+    {
+      GValueArray *values;
+      gdouble timestamp;
+      const gchar *domain_category;
+      guint level;
+      const gchar *message;
+
+      gchar *domain;
+      gchar *category;
+
+      values = g_ptr_array_index (messages, i);
+
+      timestamp = g_value_get_double (g_value_array_get_nth (values, 0));
+      domain_category = g_value_get_string (g_value_array_get_nth (values, 1));
+      level = g_value_get_uint (g_value_array_get_nth (values, 2));
+      message = g_value_get_string (g_value_array_get_nth (values, 3));
+
+      if (g_strrstr (domain_category, "/"))
+	{
+	  gchar **parts = g_strsplit (domain_category, "/", 2);
+	  domain = g_strdup (parts[0]);
+	  category = g_strdup (parts[1]);
+	  g_strfreev (parts);
+	}
+      else
+	{
+	  domain = g_strdup (domain_category);
+	  category = "";
+	}
+
+      gtk_list_store_append (priv->store, &iter);
+      gtk_list_store_set (priv->store, &iter,
+          COL_TIMESTAMP, timestamp,
+          COL_DOMAIN, domain,
+          COL_CATEGORY, category,
+	  COL_LEVEL, log_level_to_string (level),
+          COL_MESSAGE, message,
+          -1);
+
+      g_free (domain);
+      g_free (category);
+    }
+}
+
+static void
+debug_dialog_account_chooser_changed_cb (GtkComboBox *account_chooser,
+					 EmpathyDebugDialog *debug_dialog)
+{
+  McAccount *account;
+  TpConnection *connection;
+  MissionControl *mc;
+  TpDBusDaemon *dbus;
+  GError *error = NULL;
+
+  mc = empathy_mission_control_dup_singleton ();
+  account = empathy_account_chooser_get_account (EMPATHY_ACCOUNT_CHOOSER (account_chooser));
+  connection = mission_control_get_tpconnection (mc, account, &error);
+
+  if (error != NULL)
+    {
+      DEBUG ("Getting the account's TpConnection failed: %s", error->message);
+      g_error_free (error);
+      return;
+    }
+
+  dbus = g_object_ref (tp_proxy_get_dbus_daemon (connection));
+
+  /* TODO: Fix this. */
+  connection = tp_connection_new (dbus,
+				  "org.freedesktop.Telepathy.ConnectionManager.gabble",
+				  "/org/freedesktop/Telepathy/debug",
+				  &error);
+
+  if (error != NULL)
+    {
+      DEBUG ("Getting a new TpConnection failed: %s", error->message);
+      g_error_free (error);
+      return;
+    }
+
+  emp_cli_debug_call_get_messages (TP_PROXY (connection), -1,
+      debug_dialog_get_messages_cb, debug_dialog, NULL, NULL);
+
+  g_object_unref (connection);
+  g_object_unref (account);
+  g_object_unref (dbus);
+}
 
 static GObject *
 debug_dialog_constructor (GType type,
@@ -69,9 +214,6 @@ debug_dialog_constructor (GType type,
   GtkToolItem *item;
   GtkCellRenderer *renderer;
   GtkWidget *scrolled_win;
-
-  /* tmp */
-  GtkTreeIter iter;
 
   object = G_OBJECT_CLASS (empathy_debug_dialog_parent_class)->constructor
     (type, n_construct_params, construct_params);
@@ -90,6 +232,28 @@ debug_dialog_constructor (GType type,
   gtk_widget_show (toolbar);
 
   gtk_box_pack_start (GTK_BOX (vbox), toolbar, FALSE, FALSE, 0);
+
+  /* Account */
+  item = gtk_tool_item_new ();
+  gtk_widget_show (GTK_WIDGET (item));
+  gtk_container_add (GTK_CONTAINER (item), gtk_label_new (_("Account ")));
+  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
+
+  priv->account_chooser = empathy_account_chooser_new ();
+  empathy_account_chooser_set_filter (EMPATHY_ACCOUNT_CHOOSER (priv->account_chooser),
+      (EmpathyAccountChooserFilterFunc) mc_account_is_enabled, NULL);
+  g_signal_connect (priv->account_chooser, "changed",
+      G_CALLBACK (debug_dialog_account_chooser_changed_cb), object);
+  gtk_widget_show (priv->account_chooser);
+
+  item = gtk_tool_item_new ();
+  gtk_widget_show (GTK_WIDGET (item));
+  gtk_container_add (GTK_CONTAINER (item), priv->account_chooser);
+  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
+
+  item = gtk_separator_tool_item_new ();
+  gtk_widget_show (GTK_WIDGET (item));
+  gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
 
   /* Save */
   item = gtk_tool_button_new_from_stock (GTK_STOCK_SAVE);
@@ -165,18 +329,14 @@ debug_dialog_constructor (GType type,
   priv->store = gtk_list_store_new (NUM_COLS, G_TYPE_DOUBLE,
       G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
 
-  gtk_list_store_append (priv->store, &iter);
-  gtk_list_store_set (priv->store, &iter,
-      COL_TIMESTAMP, 2.0,
-      COL_DOMAIN, "domain",
-      COL_CATEGORY, "category",
-      COL_LEVEL, "level",
-      COL_MESSAGE, "message",
-      -1);
+  /* Fill treeview */
+  debug_dialog_account_chooser_changed_cb (GTK_COMBO_BOX (priv->account_chooser),
+      EMPATHY_DEBUG_DIALOG (object));
 
   gtk_tree_view_set_model (GTK_TREE_VIEW (priv->view),
       GTK_TREE_MODEL (priv->store));
 
+  /* Scrolled window */
   scrolled_win = gtk_scrolled_window_new (NULL, NULL);
   gtk_scrolled_window_set_policy (GTK_SCROLLED_WINDOW (scrolled_win),
       GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
