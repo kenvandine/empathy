@@ -755,7 +755,7 @@ empathy_account_manager_dup_accounts (EmpathyAccountManager *manager)
  * @account: a #McAccount
  *
  * Get the connection of the accounts, or NULL if account is offline or the
- * connection is not yet ready.
+ * connection is not yet ready. This function does not return a new ref.
  *
  * Returns: the connection of the accounts.
  **/
