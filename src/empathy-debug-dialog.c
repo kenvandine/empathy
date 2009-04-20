@@ -67,6 +67,7 @@ typedef struct
   TpProxy *proxy;
   TpProxySignalConnection *signal_connection;
   gboolean paused;
+  GList *bus_names;
   gboolean dispose_run;
 } EmpathyDebugDialogPriv;
 
@@ -208,39 +209,29 @@ debug_dialog_cm_chooser_changed_cb (GtkComboBox *cm_chooser,
 				    EmpathyDebugDialog *debug_dialog)
 {
   EmpathyDebugDialogPriv *priv = GET_PRIV (debug_dialog);
-  gchar *cm;
   MissionControl *mc;
   TpDBusDaemon *dbus;
   GError *error = NULL;
-  gchar *bus_name;
+  const gchar *bus_name;
   TpConnection *connection;
 
-  mc = empathy_mission_control_dup_singleton ();
-  cm = gtk_combo_box_get_active_text (cm_chooser);
-
-  if (cm == NULL)
+  if (gtk_combo_box_get_active (cm_chooser) == -1)
     {
       DEBUG ("No CM is selected");
-      g_object_unref (mc);
       return;
     }
 
+  mc = empathy_mission_control_dup_singleton ();
   dbus = tp_dbus_daemon_dup (&error);
 
   if (error != NULL)
     {
       DEBUG ("Failed at duping the dbus daemon: %s", error->message);
-      g_free (cm);
       g_object_unref (mc);
     }
 
-  /* TODO: Fix this. */
-  bus_name = g_strdup_printf ("org.freedesktop.Telepathy.ConnectionManager.%s", cm);
-  g_free (cm);
-
-  connection = tp_connection_new (dbus, bus_name,
-      "/org/freedesktop/Telepathy/debug", &error);
-  g_free (bus_name);
+  bus_name = g_list_nth_data (priv->bus_names, gtk_combo_box_get_active (cm_chooser));
+  connection = tp_connection_new (dbus, bus_name, DEBUG_OBJECT_PATH, &error);
 
   if (error != NULL)
     {
@@ -297,6 +288,9 @@ debug_dialog_list_connection_names_cb (const gchar * const *names,
 
   for (i = 0; cms[i] != NULL; i++)
     gtk_combo_box_append_text (GTK_COMBO_BOX (priv->cm_chooser), cms[i]);
+
+  for (i = 0; names[i] != NULL; i++)
+    priv->bus_names = g_list_append (priv->bus_names, g_strdup (names[i]));
 
   gtk_combo_box_set_active (GTK_COMBO_BOX (priv->cm_chooser), 0);
 
@@ -559,6 +553,12 @@ debug_dialog_dispose (GObject *object)
 
   if (priv->signal_connection)
     tp_proxy_signal_connection_disconnect (priv->signal_connection);
+
+  if (priv->bus_names)
+    {
+      g_list_foreach (priv->bus_names, (GFunc) g_free, NULL);
+      g_list_free (priv->bus_names);
+    }
 
   (G_OBJECT_CLASS (empathy_debug_dialog_parent_class)->dispose) (object);
 }

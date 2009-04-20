@@ -38,6 +38,8 @@ G_BEGIN_DECLS
 #define EMPATHY_DEBUG_DIALOG_GET_CLASS(object) (G_TYPE_INSTANCE_GET_CLASS \
     ((object), EMPATHY_TYPE_DEBUG_DIALOG, EmpathyDebugDialogClass))
 
+#define DEBUG_OBJECT_PATH "/org/freedesktop/Telepathy/debug"
+
 typedef struct _EmpathyDebugDialog EmpathyDebugDialog;
 typedef struct _EmpathyDebugDialogClass EmpathyDebugDialogClass;
 
