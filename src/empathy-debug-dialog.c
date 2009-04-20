@@ -241,7 +241,8 @@ debug_dialog_account_chooser_changed_cb (GtkComboBox *account_chooser,
     }
 
   /* Disable debug signalling */
-  debug_dialog_set_enabled (debug_dialog, FALSE);
+  if (priv->proxy != NULL)
+    debug_dialog_set_enabled (debug_dialog, FALSE);
 
   /* Disconnect from previous NewDebugMessage signal */
   if (priv->signal_connection)
