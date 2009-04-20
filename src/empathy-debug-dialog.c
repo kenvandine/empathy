@@ -548,10 +548,11 @@ debug_dialog_dispose (GObject *object)
   if (priv->store)
     g_object_unref (priv->store);
 
-  debug_dialog_set_enabled (EMPATHY_DEBUG_DIALOG (object), FALSE);
-
   if (priv->proxy)
-    g_object_unref (priv->proxy);
+    {
+      debug_dialog_set_enabled (EMPATHY_DEBUG_DIALOG (object), FALSE);
+      g_object_unref (priv->proxy);
+    }
 
   if (priv->signal_connection)
     tp_proxy_signal_connection_disconnect (priv->signal_connection);
