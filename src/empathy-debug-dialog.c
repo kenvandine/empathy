@@ -212,6 +212,7 @@ debug_dialog_account_chooser_changed_cb (GtkComboBox *account_chooser,
   MissionControl *mc;
   TpDBusDaemon *dbus;
   GError *error = NULL;
+  const gchar *bus_name;
 
   mc = empathy_mission_control_dup_singleton ();
   account = empathy_account_chooser_get_account (EMPATHY_ACCOUNT_CHOOSER (account_chooser));
@@ -221,22 +222,26 @@ debug_dialog_account_chooser_changed_cb (GtkComboBox *account_chooser,
     {
       DEBUG ("Getting the account's TpConnection failed: %s", error->message);
       g_error_free (error);
+      g_object_unref (account);
+      g_object_unref (mc);
       return;
     }
 
-  dbus = g_object_ref (tp_proxy_get_dbus_daemon (connection));
+  dbus = tp_proxy_get_dbus_daemon (connection);
+  bus_name = tp_proxy_get_bus_name (connection);
+  g_object_unref (connection);
 
   /* TODO: Fix this. */
-  connection = tp_connection_new (dbus,
-				  "org.freedesktop.Telepathy.ConnectionManager.gabble",
-				  "/org/freedesktop/Telepathy/debug",
-				  &error);
+  connection = tp_connection_new (dbus, bus_name,
+      "/org/freedesktop/Telepathy/debug", &error);
 
   if (error != NULL)
     {
       DEBUG ("Getting a new TpConnection failed: %s", error->message);
       g_error_free (error);
       g_object_unref (dbus);
+      g_object_unref (account);
+      g_object_unref (mc);
       return;
     }
 
@@ -254,14 +259,14 @@ debug_dialog_account_chooser_changed_cb (GtkComboBox *account_chooser,
   if (priv->proxy)
     g_object_unref (priv->proxy);
 
-  priv->proxy = TP_PROXY (g_object_ref (connection));
+  priv->proxy = TP_PROXY (connection);
 
   emp_cli_debug_call_get_messages (priv->proxy, -1,
       debug_dialog_get_messages_cb, debug_dialog, NULL, NULL);
 
-  g_object_unref (connection);
-  g_object_unref (account);
   g_object_unref (dbus);
+  g_object_unref (account);
+  g_object_unref (mc);
 }
 
 static void
