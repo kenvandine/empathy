@@ -315,6 +315,7 @@ tp_contact_list_group_add (EmpathyTpContactList *list,
 	const gchar              *names[] = {group_name, NULL};
 	GroupAddData             *data;
 
+	/* Search the channel for that group name */
 	channel = g_hash_table_lookup (priv->groups, group_name);
 	if (channel) {
 		tp_cli_channel_interface_group_call_add_members (channel, -1,
@@ -323,6 +324,10 @@ tp_contact_list_group_add (EmpathyTpContactList *list,
 		return;
 	}
 
+	/* That group does not exist yet, we have to:
+	 * 1) Request an handle for the group name
+	 * 2) Request a channel
+	 * 3) Add handles in members of the new channel */
 	data = g_slice_new0 (GroupAddData);
 	data->handles = handles;
 	data->ref_count = 1;
