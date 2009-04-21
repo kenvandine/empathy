@@ -396,6 +396,66 @@
   )
 )
 
+(define-method get_subject
+  (of-object "EmpathyChatroom")
+  (c-name "empathy_chatroom_get_subject")
+  (return-type "const-gchar*")
+)
+
+(define-method set_subject
+  (of-object "EmpathyChatroom")
+  (c-name "empathy_chatroom_set_subject")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "subject")
+  )
+)
+
+(define-method get_members_count
+  (of-object "EmpathyChatroom")
+  (c-name "empathy_chatroom_get_members_count")
+  (return-type "guint")
+)
+
+(define-method set_members_count
+  (of-object "EmpathyChatroom")
+  (c-name "empathy_chatroom_set_members_count")
+  (return-type "none")
+  (parameters
+    '("guint" "count")
+  )
+)
+
+(define-method get_need_password
+  (of-object "EmpathyChatroom")
+  (c-name "empathy_chatroom_get_need_password")
+  (return-type "gboolean")
+)
+
+(define-method set_need_password
+  (of-object "EmpathyChatroom")
+  (c-name "empathy_chatroom_set_need_password")
+  (return-type "none")
+  (parameters
+    '("gboolean" "need_password")
+  )
+)
+
+(define-method get_invite_only
+  (of-object "EmpathyChatroom")
+  (c-name "empathy_chatroom_get_invite_only")
+  (return-type "gboolean")
+)
+
+(define-method set_invite_only
+  (of-object "EmpathyChatroom")
+  (c-name "empathy_chatroom_set_invite_only")
+  (return-type "none")
+  (parameters
+    '("gboolean" "invite_only")
+  )
+)
+
 (define-function chatroom_equal
   (c-name "empathy_chatroom_equal")
   (return-type "gboolean")
