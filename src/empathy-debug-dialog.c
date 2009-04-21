@@ -270,6 +270,8 @@ debug_dialog_cm_chooser_changed_cb (GtkComboBox *cm_chooser,
       return;
     }
 
+  gtk_list_store_clear (priv->store);
+
   /* Disable debug signalling */
   if (priv->proxy != NULL)
     debug_dialog_set_enabled (debug_dialog, FALSE);
