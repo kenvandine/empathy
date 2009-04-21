@@ -324,9 +324,9 @@ debug_dialog_list_connection_names_cb (const gchar * const *names,
       GtkTreeIter iter;
       gtk_list_store_append (priv->cms, &iter);
       gtk_list_store_set (priv->cms, &iter,
-			  COL_CM_NAME, cms[i],
-			  COL_CM_BUS, names[i],
-			  -1);
+          COL_CM_NAME, cms[i],
+          COL_CM_BUS, names[i],
+          -1);
     }
 
   gtk_combo_box_set_active (GTK_COMBO_BOX (priv->cm_chooser), 0);
@@ -394,7 +394,7 @@ debug_dialog_visible_func (GtkTreeModel *model,
 
 static void
 debug_dialog_filter_changed_cb (GtkComboBox *filter,
-				EmpathyDebugDialog *debug_dialog)
+                                EmpathyDebugDialog *debug_dialog)
 {
   EmpathyDebugDialogPriv *priv = GET_PRIV (debug_dialog);
 
@@ -573,7 +573,7 @@ OUT:
 
 static void
 debug_dialog_save_clicked_cb (GtkToolButton *tool_button,
-			      EmpathyDebugDialog *debug_dialog)
+                              EmpathyDebugDialog *debug_dialog)
 {
   GtkWidget *file_chooser;
 
