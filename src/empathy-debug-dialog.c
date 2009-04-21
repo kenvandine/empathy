@@ -397,6 +397,15 @@ debug_dialog_filter_changed_cb (GtkComboBox *filter,
       GTK_TREE_MODEL_FILTER (priv->store_filter));
 }
 
+static void
+debug_dialog_clear_clicked_cb (GtkToolButton *clear_button,
+                               EmpathyDebugDialog *debug_dialog)
+{
+  EmpathyDebugDialogPriv *priv = GET_PRIV (debug_dialog);
+
+  gtk_list_store_clear (priv->store);
+}
+
 static GObject *
 debug_dialog_constructor (GType type,
                           guint n_construct_params,
@@ -460,6 +469,8 @@ debug_dialog_constructor (GType type,
 
   /* Clear */
   item = gtk_tool_button_new_from_stock (GTK_STOCK_CLEAR);
+  g_signal_connect (item, "clicked",
+      G_CALLBACK (debug_dialog_clear_clicked_cb), object);
   gtk_widget_show (GTK_WIDGET (item));
   gtk_tool_item_set_is_important (GTK_TOOL_ITEM (item), TRUE);
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
