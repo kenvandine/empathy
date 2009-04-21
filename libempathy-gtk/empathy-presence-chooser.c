@@ -448,8 +448,7 @@ presence_chooser_entry_icon_release_cb (EmpathyPresenceChooser *self,
 {
 	EmpathyPresenceChooserPriv *priv = GET_PRIV (self);
 
-	if (priv->editing_status)
-	{
+	if (priv->editing_status) {
 		presence_chooser_set_status_editing (self, FALSE);
 		mc_set_custom_state (self);
 	}
