@@ -130,9 +130,9 @@ contact_manager_invalidated_cb (TpProxy *connection,
 static void
 contact_manager_new_connection_cb (EmpathyAccountManager *account_manager,
 				   TpConnection *connection,
-				   EmpathyContactManager *manager)
+				   EmpathyContactManager *self)
 {
-	EmpathyContactManagerPriv *priv = GET_PRIV (manager);
+	EmpathyContactManagerPriv *priv = GET_PRIV (self);
 	EmpathyTpContactList      *list;
 
 	if (g_hash_table_lookup (priv->lists, connection)) {
@@ -146,18 +146,18 @@ contact_manager_new_connection_cb (EmpathyAccountManager *account_manager,
 	g_hash_table_insert (priv->lists, g_object_ref (connection), list);
 	g_signal_connect (connection, "invalidated",
 			  G_CALLBACK (contact_manager_invalidated_cb),
-			  manager);
+			  self);
 
 	/* Connect signals */
 	g_signal_connect (list, "members-changed",
 			  G_CALLBACK (contact_manager_members_changed_cb),
-			  manager);
+			  self);
 	g_signal_connect (list, "pendings-changed",
 			  G_CALLBACK (contact_manager_pendings_changed_cb),
-			  manager);
+			  self);
 	g_signal_connect (list, "groups-changed",
 			  G_CALLBACK (contact_manager_groups_changed_cb),
-			  manager);
+			  self);
 }
 
 static void
