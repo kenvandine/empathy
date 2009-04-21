@@ -131,6 +131,7 @@ ui_DATA = 					\
 	empathy-account-widget-groupwise.ui	\
 	empathy-account-widget-aim.ui		\
 	empathy-spell-dialog.ui			\
+	empathy-status-preset-dialog.ui		\
 	empathy-log-window.ui			\
 	empathy-chat.ui				\
 	empathy-new-message-dialog.ui
