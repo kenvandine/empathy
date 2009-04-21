@@ -29,7 +29,6 @@ headers
 #include "empathy-presence-chooser.h"
 #include "empathy-profile-chooser.h"
 #include "empathy-smiley-manager.h"
-#include "empathy-spell-dialog.h"
 #include "empathy-spell.h"
 #include "empathy-theme-boxes.h"
 #include "empathy-theme-irc.h"
@@ -76,6 +75,5 @@ ignore
 	empathy_chat_correct_word
 	empathy_chat_view_set_margin
 	empathy_chat_get_view
-	empathy_spell_dialog_show
 	empathy_window_iconify
 %%

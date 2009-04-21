@@ -49,7 +49,6 @@ libempathy_gtk_la_SOURCES =             	\
 	empathy-profile-chooser.c		\
 	empathy-smiley-manager.c		\
 	empathy-spell.c				\
-	empathy-spell-dialog.c			\
 	empathy-theme-boxes.c			\
 	empathy-theme-irc.c			\
 	empathy-theme-manager.c			\
@@ -102,7 +101,6 @@ libempathy_gtk_headers =			\
 	empathy-profile-chooser.h		\
 	empathy-smiley-manager.h		\
 	empathy-spell.h				\
-	empathy-spell-dialog.h			\
 	empathy-theme-boxes.h			\
 	empathy-theme-irc.h			\
 	empathy-theme-manager.h			\
@@ -128,7 +126,6 @@ ui_DATA = 					\
 	empathy-account-widget-yahoo.ui		\
 	empathy-account-widget-groupwise.ui	\
 	empathy-account-widget-aim.ui		\
-	empathy-spell-dialog.ui			\
 	empathy-log-window.ui			\
 	empathy-chat.ui				\
 	empathy-new-message-dialog.ui
