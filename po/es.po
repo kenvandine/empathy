@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: empathy.HEAD\n"
 "Report-Msgid-Bugs-To: http://bugzilla.gnome.org/enter_bug.cgi?"
 "product=empathy&component=general\n"
-"POT-Creation-Date: 2009-04-17 20:26+0000\n"
-"PO-Revision-Date: 2009-04-18 20:33+0200\n"
+"POT-Creation-Date: 2009-04-21 15:44+0000\n"
+"PO-Revision-Date: 2009-04-21 21:02+0200\n"
 "Last-Translator: Jorge González <jorgegonz@svn.gnome.org>\n"
 "Language-Team: Español <gnome-es-list@gnome.org>\n"
 "MIME-Version: 1.0\n"
@@ -355,7 +355,7 @@ msgstr ""
 "predeterminado es ordenar por el nombre del contacto con el valor \"name"
 "\" (nombre). Un valor \"state\" (estado) ordenará la lista por el estado."
 
-#: ../libempathy/empathy-tp-contact-list.c:731 ../src/empathy.c:271
+#: ../libempathy/empathy-tp-contact-list.c:732 ../src/empathy.c:271
 msgid "People nearby"
 msgstr "Gente cerca"
 
@@ -571,7 +571,7 @@ msgid "_Room List locale:"
 msgstr "Configuración de la lista de _salas:"
 
 #: ../libempathy-gtk/empathy-avatar-chooser.c:462
-#: ../libempathy-gtk/empathy-avatar-chooser.c:537
+#: ../libempathy-gtk/empathy-avatar-chooser.c:538
 msgid "Couldn't convert image"
 msgstr "No se pudo convertir la imagen"
 
@@ -579,19 +579,19 @@ msgstr "No se pudo convertir la imagen"
 msgid "None of the accepted image formats is supported on your system"
 msgstr "Su sistema no soporta ninguno de los formatos de imagen aceptados"
 
-#: ../libempathy-gtk/empathy-avatar-chooser.c:954
+#: ../libempathy-gtk/empathy-avatar-chooser.c:957
 msgid "Select Your Avatar Image"
 msgstr "Seleccione su imagen de avatar"
 
-#: ../libempathy-gtk/empathy-avatar-chooser.c:957
+#: ../libempathy-gtk/empathy-avatar-chooser.c:960
 msgid "No Image"
 msgstr "Sin imagen"
 
-#: ../libempathy-gtk/empathy-avatar-chooser.c:1019
+#: ../libempathy-gtk/empathy-avatar-chooser.c:1022
 msgid "Images"
 msgstr "Imágenes"
 
-#: ../libempathy-gtk/empathy-avatar-chooser.c:1023
+#: ../libempathy-gtk/empathy-avatar-chooser.c:1026
 msgid "All Files"
 msgstr "Todos los archivos"
 
@@ -761,7 +761,8 @@ msgid "_Chat"
 msgstr "_Chat"
 
 #: ../libempathy-gtk/empathy-contact-menu.c:161
-#: ../src/empathy-call-window.ui.h:5
+#| msgid "_Call"
+msgctxt "menu item"
 msgid "_Call"
 msgstr "_Llamar"
 
@@ -787,7 +788,7 @@ msgstr "_Editar"
 msgid "Inviting to this room"
 msgstr "Invitando a esta sala"
 
-#: ../libempathy-gtk/empathy-contact-menu.c:369
+#: ../libempathy-gtk/empathy-contact-menu.c:367
 msgid "_Invite to chatroom"
 msgstr "_Invitar a la sala"
 
@@ -795,19 +796,19 @@ msgstr "_Invitar a la sala"
 msgid "Select a contact"
 msgstr "Seleccionar un contacto"
 
-#: ../libempathy-gtk/empathy-contact-widget.c:354
+#: ../libempathy-gtk/empathy-contact-widget.c:353
 msgid "Save Avatar"
 msgstr "Guardar avatar"
 
-#: ../libempathy-gtk/empathy-contact-widget.c:410
+#: ../libempathy-gtk/empathy-contact-widget.c:409
 msgid "Unable to save avatar"
 msgstr "No se pudo guardar el avatar"
 
-#: ../libempathy-gtk/empathy-contact-widget.c:905
+#: ../libempathy-gtk/empathy-contact-widget.c:904
 msgid "Select"
 msgstr "Seleccionar"
 
-#: ../libempathy-gtk/empathy-contact-widget.c:914
+#: ../libempathy-gtk/empathy-contact-widget.c:913
 #: ../src/empathy-main-window.c:882
 msgid "Group"
 msgstr "Grupo"
@@ -959,16 +960,24 @@ msgstr "Mensaje personalizado…"
 msgid "Edit Custom Messages..."
 msgstr "Editar mensajes personalizados…"
 
-#: ../libempathy-gtk/empathy-presence-chooser.c:269
+#: ../libempathy-gtk/empathy-presence-chooser.c:316
+msgid "Click to remove this status as a favorite"
+msgstr "Pulse pare eliminar este estado de los favoritos"
+
+#: ../libempathy-gtk/empathy-presence-chooser.c:325
+msgid "Click to make this status a favorite"
+msgstr "Pulse para hacer este estado uno favorito"
+
+#: ../libempathy-gtk/empathy-presence-chooser.c:359
 msgid "Set status"
 msgstr "Establecer estado"
 
-#: ../libempathy-gtk/empathy-presence-chooser.c:653
+#: ../libempathy-gtk/empathy-presence-chooser.c:766
 msgid "Set your presence and current status"
 msgstr "Establecer su presencia y estado actual"
 
 #. Custom messages
-#: ../libempathy-gtk/empathy-presence-chooser.c:873
+#: ../libempathy-gtk/empathy-presence-chooser.c:987
 msgid "Custom messages..."
 msgstr "Mensajes personalizados…"
 
@@ -1419,6 +1428,11 @@ msgstr ""
 msgid "Type:"
 msgstr "Tipo:"
 
+#: ../src/empathy-accounts-dialog.ui.h:10
+#| msgid "_Add Contact..."
+msgid "_Add..."
+msgstr "_Añadir…"
+
 #: ../src/empathy-call-window.c:319
 msgid "Contrast"
 msgstr "Contraste"
@@ -1476,6 +1490,10 @@ msgstr "Enviar vídeo"
 #: ../src/empathy-call-window.ui.h:4
 msgid "Video preview"
 msgstr "Vista preliminar de vídeo"
+
+#: ../src/empathy-call-window.ui.h:5
+msgid "_Call"
+msgstr "_Llamar"
 
 #: ../src/empathy-call-window.ui.h:6
 msgid "_View"
@@ -1658,7 +1676,6 @@ msgid "%s of %s"
 msgstr "%s de %s"
 
 #: ../src/empathy-ft-manager.c:254
-#| msgid "Waiting the other participant's response"
 msgid "Waiting for the other participant's response"
 msgstr "Esperando la respuesta del otro participante"
 
@@ -1840,7 +1857,7 @@ msgstr "Error desconocido"
 msgid "Contact"
 msgstr "Contacto"
 
-#: ../src/empathy-main-window.c:1202
+#: ../src/empathy-main-window.c:1205
 msgid "Show and edit accounts"
 msgstr "Mostrar y editar cuentas"
 
@@ -1881,7 +1898,6 @@ msgid "_Help"
 msgstr "Ay_uda"
 
 #: ../src/empathy-main-window.ui.h:12
-#| msgid "_Join"
 msgid "_Join..."
 msgstr "_Unirse…"
 
@@ -1898,12 +1914,10 @@ msgid "_Room"
 msgstr "_Sala"
 
 #: ../src/empathy-new-chatroom-dialog.c:313
-#| msgid "Chat Rooms"
 msgid "Chat Room"
 msgstr "Sala de chat"
 
 #: ../src/empathy-new-chatroom-dialog.c:328
-#| msgid "Themes"
 msgid "Members"
 msgstr "Miembros"
 
@@ -1949,12 +1963,10 @@ msgstr ""
 "la cuenta del servidor actual"
 
 #: ../src/empathy-new-chatroom-dialog.ui.h:4
-#| msgid "Room"
 msgid "Join Room"
 msgstr "Unirse a sala"
 
 #: ../src/empathy-new-chatroom-dialog.ui.h:5
-#| msgid "_Room List locale:"
 msgid "Room List"
 msgstr "Lista de salas"
 
@@ -1990,7 +2002,7 @@ msgstr "Cuenta conectada"
 msgid "Account disconnected"
 msgstr "Cuenta desconectada"
 
-#: ../src/empathy-preferences.c:396
+#: ../src/empathy-preferences.c:397
 msgid "Language"
 msgstr "Idioma"
 
@@ -2116,12 +2128,12 @@ msgstr "_Salir"
 msgid "_Show Contact List"
 msgstr "_Mostrar lista de contactos"
 
-#: ../src/empathy-tube-dispatch.c:364
+#: ../src/empathy-tube-dispatch.c:375
 #, c-format
 msgid "Unable to start application for service %s: %s"
 msgstr "No se pudo iniciar la aplicación para el servicio %s: %s"
 
-#: ../src/empathy-tube-dispatch.c:435
+#: ../src/empathy-tube-dispatch.c:446
 #, c-format
 msgid ""
 "An invitation was offered for service %s, but you don't have the needed "
