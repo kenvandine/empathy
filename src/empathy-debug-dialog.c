@@ -406,6 +406,98 @@ debug_dialog_clear_clicked_cb (GtkToolButton *clear_button,
   gtk_list_store_clear (priv->store);
 }
 
+static void
+debug_dialog_menu_copy_activate_cb (GtkMenuItem *menu_item,
+                                    EmpathyDebugDialog *debug_dialog)
+{
+  EmpathyDebugDialogPriv *priv = GET_PRIV (debug_dialog);
+  GtkTreePath *path;
+  GtkTreeViewColumn *focus_column;
+  GtkTreeIter iter;
+  gchar *message;
+  GtkClipboard *clipboard;
+
+  gtk_tree_view_get_cursor (GTK_TREE_VIEW (priv->view),
+      &path, &focus_column);
+
+  if (path == NULL)
+    {
+      DEBUG ("No row is in focus");
+      return;
+    }
+
+  gtk_tree_model_get_iter (priv->store_filter, &iter, path);
+
+  gtk_tree_model_get (priv->store_filter, &iter,
+      COL_DEBUG_MESSAGE, &message,
+      -1);
+
+  if (EMP_STR_EMPTY (message))
+    {
+      DEBUG ("Log message is empty");
+      return;
+    }
+
+  clipboard = gtk_clipboard_get_for_display (
+      gtk_widget_get_display (GTK_WIDGET (menu_item)),
+      GDK_SELECTION_CLIPBOARD);
+
+  gtk_clipboard_set_text (clipboard, message, -1);
+
+  g_free (message);
+}
+
+typedef struct
+{
+  EmpathyDebugDialog *debug_dialog;
+  guint button;
+  guint32 time;
+} MenuPopupData;
+
+static gboolean
+debug_dialog_show_menu (gpointer user_data)
+{
+  MenuPopupData *data = (MenuPopupData *) user_data;
+  GtkWidget *menu, *item;
+  GtkMenuShell *shell;
+
+  menu = gtk_menu_new ();
+  shell = GTK_MENU_SHELL (menu);
+
+  item = gtk_image_menu_item_new_from_stock (GTK_STOCK_COPY, NULL);
+
+  g_signal_connect (item, "activate",
+      G_CALLBACK (debug_dialog_menu_copy_activate_cb), data->debug_dialog);
+
+  gtk_menu_shell_append (shell, item);
+  gtk_widget_show (item);
+
+  gtk_menu_popup (GTK_MENU (menu), NULL, NULL, NULL, NULL,
+     data->button, data->time);
+
+  g_slice_free (MenuPopupData, user_data);
+
+  return FALSE;
+}
+
+static gboolean
+debug_dialog_button_press_event_cb (GtkTreeView *view,
+                                    GdkEventButton *event,
+                                    gpointer user_data)
+{
+  if (event->button == 3)
+    {
+      MenuPopupData *data;
+      data = g_slice_new0 (MenuPopupData);
+      data->debug_dialog = user_data;
+      data->button = event->button;
+      data->time = event->time;
+      g_idle_add (debug_dialog_show_menu, data);
+    }
+
+  return FALSE;
+}
+
 static GObject *
 debug_dialog_constructor (GType type,
                           guint n_construct_params,
@@ -561,6 +653,9 @@ debug_dialog_constructor (GType type,
   /* Debug treeview */
   priv->view = gtk_tree_view_new ();
   gtk_tree_view_set_rules_hint (GTK_TREE_VIEW (priv->view), TRUE);
+
+  g_signal_connect (priv->view, "button-press-event",
+      G_CALLBACK (debug_dialog_button_press_event_cb), object);
 
   renderer = gtk_cell_renderer_text_new ();
   g_object_set (renderer, "yalign", 0, NULL);
