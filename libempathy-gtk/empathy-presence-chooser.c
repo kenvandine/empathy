@@ -432,7 +432,27 @@ presence_chooser_entry_icon_release_cb (EmpathyPresenceChooser *self,
 		mc_set_custom_state (self);
 	}
 	else {
-		g_print ("FAVOURITE!\n");
+		PresenceChooserEntryType type;
+		McPresence state;
+		const char *status;
+
+		type = presence_chooser_get_entry_type (self);
+		state = empathy_idle_get_state (priv->idle);
+		status = empathy_idle_get_status (priv->idle);
+
+		if (type == ENTRY_TYPE_CUSTOM) {
+			/* save the entry */
+			DEBUG ("SAVING PRESET (%i, %s)\n", state, status);
+			empathy_status_presets_set_last (state, status);
+		}
+		else if (type == ENTRY_TYPE_SAVED) {
+			/* remove the entry */
+			DEBUG ("REMOVING PRESET (%i, %s)\n", state, status);
+			empathy_status_presets_remove (state, status);
+		}
+
+		/* update the icon */
+		presence_chooser_set_favourite_icon (self);
 	}
 }
 
