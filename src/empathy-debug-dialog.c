@@ -20,8 +20,11 @@
 
 #include "config.h"
 
+#include <stdio.h>
+#include <errno.h>
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
+#include <glib/gstdio.h>
 
 #define DEBUG_FLAG EMPATHY_DEBUG_OTHER
 #include <libempathy/empathy-debug.h>
@@ -500,6 +503,97 @@ debug_dialog_button_press_event_cb (GtkTreeView *view,
   return FALSE;
 }
 
+static gboolean
+debug_dialog_store_filter_foreach (GtkTreeModel *model,
+                                   GtkTreePath *path,
+                                   GtkTreeIter *iter,
+                                   gpointer user_data)
+{
+  FILE *file = (FILE *) user_data;
+  gchar *domain, *category, *message, *level_str, *level_upper;
+  gdouble timestamp;
+
+  gtk_tree_model_get (model, iter,
+      COL_DEBUG_TIMESTAMP, &timestamp,
+      COL_DEBUG_DOMAIN, &domain,
+      COL_DEBUG_CATEGORY, &category,
+      COL_DEBUG_LEVEL_STRING, &level_str,
+      COL_DEBUG_MESSAGE, &message,
+      -1);
+
+  level_upper = g_ascii_strup (level_str, -1);
+
+  g_fprintf (file, "%s%s%s-%s: %e: %s\n",
+      domain, EMP_STR_EMPTY (category) ? "" : "/",
+      category, level_upper, timestamp, message);
+
+  g_free (level_upper);
+  g_free (level_str);
+  g_free (domain);
+  g_free (category);
+  g_free (message);
+
+  return FALSE;
+}
+
+static void
+debug_dialog_save_file_chooser_response_cb (GtkDialog *dialog,
+                                            gint response_id,
+                                            EmpathyDebugDialog *debug_dialog)
+{
+  EmpathyDebugDialogPriv *priv = GET_PRIV (debug_dialog);
+  gchar *filename = NULL;
+  FILE *file;
+
+  if (response_id != GTK_RESPONSE_ACCEPT)
+    goto OUT;
+
+  filename = gtk_file_chooser_get_filename (GTK_FILE_CHOOSER (dialog));
+
+  DEBUG ("Saving log as %s", filename);
+
+  file = g_fopen (filename, "w");
+  if (file == NULL)
+    {
+      DEBUG ("Failed to open file: %s", g_strerror (errno));
+      goto OUT;
+    }
+
+  gtk_tree_model_foreach (priv->store_filter,
+      debug_dialog_store_filter_foreach, file);
+
+  fclose (file);
+
+OUT:
+  if (filename != NULL)
+    g_free (filename);
+
+  gtk_widget_destroy (GTK_WIDGET (dialog));
+}
+
+static void
+debug_dialog_save_clicked_cb (GtkToolButton *tool_button,
+			      EmpathyDebugDialog *debug_dialog)
+{
+  GtkWidget *file_chooser;
+
+  file_chooser = gtk_file_chooser_dialog_new (_("Save"),
+      GTK_WINDOW (debug_dialog), GTK_FILE_CHOOSER_ACTION_SAVE,
+      GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+      GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
+      NULL);
+
+  gtk_window_set_modal (GTK_WINDOW (file_chooser), TRUE);
+  gtk_file_chooser_set_do_overwrite_confirmation (
+      GTK_FILE_CHOOSER (file_chooser), TRUE);
+
+  g_signal_connect (file_chooser, "response",
+      G_CALLBACK (debug_dialog_save_file_chooser_response_cb),
+      debug_dialog);
+
+  gtk_widget_show (file_chooser);
+}
+
 static GObject *
 debug_dialog_constructor (GType type,
                           guint n_construct_params,
@@ -557,6 +651,8 @@ debug_dialog_constructor (GType type,
 
   /* Save */
   item = gtk_tool_button_new_from_stock (GTK_STOCK_SAVE);
+  g_signal_connect (item, "clicked",
+      G_CALLBACK (debug_dialog_save_clicked_cb), object);
   gtk_widget_show (GTK_WIDGET (item));
   gtk_tool_item_set_is_important (GTK_TOOL_ITEM (item), TRUE);
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
