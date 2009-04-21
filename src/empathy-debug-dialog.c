@@ -573,6 +573,9 @@ debug_dialog_constructor (GType type,
       -1, _("Category"), renderer, "text", COL_DEBUG_CATEGORY, NULL);
   gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (priv->view),
       -1, _("Level"), renderer, "text", COL_DEBUG_LEVEL_STRING, NULL);
+
+  renderer = gtk_cell_renderer_text_new ();
+  g_object_set (renderer, "family", "Monospace", NULL);
   gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (priv->view),
       -1, _("Message"), renderer, "text", COL_DEBUG_MESSAGE, NULL);
 
