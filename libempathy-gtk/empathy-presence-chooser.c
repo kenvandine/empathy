@@ -246,6 +246,74 @@ presence_chooser_popup_shown_cb (GObject *self,
 	presence_chooser_create_model (EMPATHY_PRESENCE_CHOOSER (self));
 }
 
+static PresenceChooserEntryType
+presence_chooser_get_entry_type (EmpathyPresenceChooser *self)
+{
+	GtkTreeIter iter;
+	PresenceChooserEntryType type = -1;
+
+	if (!gtk_combo_box_get_active_iter (GTK_COMBO_BOX (self), &iter)) {
+		type = ENTRY_TYPE_CUSTOM;
+	}
+	else {
+		GtkTreeModel *model;
+
+		model = gtk_combo_box_get_model (GTK_COMBO_BOX (self));
+		gtk_tree_model_get (model, &iter,
+				    COL_TYPE, &type,
+				    -1);
+	}
+
+	return type;
+}
+
+static void
+presence_chooser_set_favourite_icon (EmpathyPresenceChooser *self)
+{
+	EmpathyPresenceChooserPriv *priv = GET_PRIV (self);
+	GtkWidget *entry;
+	PresenceChooserEntryType type;
+
+	entry = gtk_bin_get_child (GTK_BIN (self));
+	type = presence_chooser_get_entry_type (self);
+
+	/* debug */
+	g_print ("type = %i\n", type);
+	const char *status = empathy_idle_get_status (priv->idle);
+	g_print ("STATUS = '%s'", status);
+	if (type == ENTRY_TYPE_CUSTOM) g_print ("(Custom)");
+	g_print ("\n");
+	/* - */
+
+	if (type == ENTRY_TYPE_CUSTOM) {
+		/* custom entries can be favourited */
+		gtk_entry_set_icon_from_icon_name (GTK_ENTRY (entry),
+				           GTK_ENTRY_ICON_SECONDARY,
+					   "empathy-unstarred");
+		gtk_entry_set_icon_tooltip_text (GTK_ENTRY (entry),
+					 GTK_ENTRY_ICON_SECONDARY,
+					 _("Click to make this status a favourite"));
+	}
+	else if (type == ENTRY_TYPE_SAVED) {
+		/* saved entries can be removed from the list */
+		gtk_entry_set_icon_from_icon_name (GTK_ENTRY (entry),
+				           GTK_ENTRY_ICON_SECONDARY,
+					   "empathy-starred");
+		gtk_entry_set_icon_tooltip_text (GTK_ENTRY (entry),
+					 GTK_ENTRY_ICON_SECONDARY,
+					 _("Click to remove this status as a favourite"));
+	}
+	else {
+		/* built-in entries cannot be favourited */
+		gtk_entry_set_icon_from_stock (GTK_ENTRY (entry),
+				           GTK_ENTRY_ICON_SECONDARY,
+					   NULL);
+		gtk_entry_set_icon_tooltip_text (GTK_ENTRY (entry),
+					 GTK_ENTRY_ICON_SECONDARY,
+					 NULL);
+	}
+}
+
 static void
 presence_chooser_set_status_editing (EmpathyPresenceChooser *self,
                                      gboolean editing)
@@ -273,12 +341,7 @@ presence_chooser_set_status_editing (EmpathyPresenceChooser *self,
 	} else {
 		GtkWidget *window;
 
-		gtk_entry_set_icon_from_stock (GTK_ENTRY (entry),
-					       GTK_ENTRY_ICON_SECONDARY,
-					       NULL);
-		gtk_entry_set_icon_tooltip_text (GTK_ENTRY (entry),
-						 GTK_ENTRY_ICON_SECONDARY,
-						 NULL);
+		presence_chooser_set_favourite_icon (self);
 		gtk_entry_set_icon_sensitive (GTK_ENTRY (entry),
 					      GTK_ENTRY_ICON_PRIMARY,
 					      TRUE);
@@ -341,6 +404,7 @@ ui_set_custom_state (EmpathyPresenceChooser *self,
 					   GTK_ENTRY_ICON_PRIMARY,
 					   icon_name);
 	gtk_entry_set_text (GTK_ENTRY (entry), status);
+	presence_chooser_set_favourite_icon (self);
 
 	priv->block_changed--;
 	priv->block_set_editing--;
@@ -360,8 +424,16 @@ presence_chooser_entry_icon_release_cb (EmpathyPresenceChooser *self,
                                         GdkEvent               *event,
 					GtkEntry               *entry)
 {
-	presence_chooser_set_status_editing (self, FALSE);
-	mc_set_custom_state (self);
+	EmpathyPresenceChooserPriv *priv = GET_PRIV (self);
+
+	if (priv->editing_status)
+	{
+		presence_chooser_set_status_editing (self, FALSE);
+		mc_set_custom_state (self);
+	}
+	else {
+		g_print ("FAVOURITE!\n");
+	}
 }
 
 static void
@@ -752,6 +824,7 @@ presence_chooser_presence_changed_cb (EmpathyPresenceChooser *chooser)
 	if (match) {
 		priv->block_changed++;
 		gtk_combo_box_set_active_iter (GTK_COMBO_BOX (chooser), &iter);
+		presence_chooser_set_favourite_icon (chooser);
 		priv->block_changed--;
 	}
 	else {
