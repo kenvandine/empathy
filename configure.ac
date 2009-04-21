@@ -303,6 +303,8 @@ AM_CONDITIONAL(HAVE_PYTHON, test "x$have_python" = "xyes")
 
 # -----------------------------------------------------------
 
+SHAVE_INIT(.)
+
 AC_OUTPUT([
    Makefile
    data/Makefile
@@ -333,4 +335,6 @@ AC_OUTPUT([
    tests/Makefile
    tests/xml/Makefile
    tools/Makefile
+   shave
+   shave-libtool
 ])

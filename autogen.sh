@@ -13,6 +13,14 @@ REQUIRED_AUTOMAKE_VERSION=1.9
     exit 1
 }
 
+# Fix to make shave + libtool 1.x + gtk-doc work.
+# See http://git.lespiau.name/cgit/shave/tree/README#n83
+sed -e 's#) --mode=compile#) --tag=CC --mode=compile#' gtk-doc.make \
+    > gtk-doc.temp \
+        && mv gtk-doc.temp gtk-doc.make
+sed -e 's#) --mode=link#) --tag=CC --mode=link#' gtk-doc.make \
+                > gtk-doc.temp \
+        && mv gtk-doc.temp gtk-doc.make
 
 which gnome-autogen.sh || {
     echo "You need to install gnome-common from the GNOME CVS"

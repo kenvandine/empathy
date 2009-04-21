@@ -1,3 +1,5 @@
+include $(top_srcdir)/tools/shave.mk
+
 AM_CPPFLAGS =                                           \
 	-I.                                             \
 	-I$(top_srcdir)                                 \
@@ -133,7 +135,7 @@ ui_DATA = 					\
 	empathy-new-message-dialog.ui
 
 empathy-gtk-marshal.list: $(libempathy_gtk_la_SOURCES) Makefile.am
-	( cd $(srcdir) && \
+	$(QUIET_GEN)( cd $(srcdir) && \
 	sed -n -e 's/.*empathy_gtk_marshal_\([[:upper:][:digit:]]*__[[:upper:][:digit:]_]*\).*/\1/p' \
 	$(libempathy_gtk_la_SOURCES) ) \
 	| sed -e 's/__/:/' -e 'y/_/,/' | sort -u > $@.tmp
@@ -144,16 +146,16 @@ empathy-gtk-marshal.list: $(libempathy_gtk_la_SOURCES) Makefile.am
 	fi
 
 %-marshal.h: %-marshal.list Makefile
-	$(GLIB_GENMARSHAL) --header --prefix=_$(subst -,_,$*)_marshal $< > $*-marshal.h
+	$(QUIET_GEN)$(GLIB_GENMARSHAL) --header --prefix=_$(subst -,_,$*)_marshal $< > $*-marshal.h
 
 %-marshal.c: %-marshal.list Makefile
-	echo "#include \"empathy-gtk-marshal.h\"" > $@ && \
+	$(QUIET_GEN)echo "#include \"empathy-gtk-marshal.h\"" > $@ && \
 	$(GLIB_GENMARSHAL) --body --prefix=_$(subst -,_,$*)_marshal $< >> $*-marshal.c
 
 empathy-gtk-enum-types.h: stamp-empathy-gtk-enum-types.h
-	@true
+	$(QUIET_GEN)true
 stamp-empathy-gtk-enum-types.h: Makefile $(libempathy_gtk_headers)
-	(cd $(srcdir) \
+	$(QUIET_GEN)(cd $(srcdir) \
 	&& glib-mkenums \
 			--fhead "#ifndef __LIBEMPATHY_GTK_ENUM_TYPES_H__\n" \
 			--fhead "#define __LIBEMPATHY_GTK_ENUM_TYPES_H__ 1\n\n" \
@@ -170,7 +172,7 @@ stamp-empathy-gtk-enum-types.h: Makefile $(libempathy_gtk_headers)
 	&& echo timestamp > $(@F)
 
 empathy-gtk-enum-types.c: Makefile $(libempathy_gtk_headers)
-	(cd $(srcdir) \
+	$(QUIET_GEN)(cd $(srcdir) \
 	&& glib-mkenums \
 			--fhead "#include <config.h>\n" \
 			--fhead "#include <glib-object.h>\n" \

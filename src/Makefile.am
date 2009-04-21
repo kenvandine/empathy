@@ -1,3 +1,5 @@
+include $(top_srcdir)/tools/shave.mk
+
 AM_CPPFLAGS =						\
 	-I$(top_srcdir)                          	\
 	$(EMPATHY_CFLAGS)				\
@@ -63,7 +65,7 @@ dist_man_MANS =			\
 
 # rules for making the glib enum objects
 %-enumtypes.h: %.h Makefile.in
-	glib-mkenums \
+	$(QUIET_GEN)glib-mkenums \
 	--fhead "#ifndef __$(shell echo $* | tr [:lower:]- [:upper:]_)_ENUM_TYPES_H__\n#define __$(shell echo $* | tr [:lower:]- [:upper:]_)_ENUM_TYPES_H__\n\n#include <glib-object.h>\n\nG_BEGIN_DECLS\n" \
 	--fprod "/* enumerations from \"@filename@\" */\n" \
 	--vhead "GType @enum_name@_get_type (void);\n#define $(shell echo $* | tr [:lower:]- [:upper:]_ | sed 's/_.*//')_TYPE_@ENUMSHORT@ (@enum_name@_get_type())\n"         \
@@ -71,7 +73,7 @@ dist_man_MANS =			\
 	$< > $@
 
 %-enumtypes.c: %.h Makefile.in
-	glib-mkenums \
+	$(QUIET_GEN)glib-mkenums \
 	--fhead "#include <$*.h>\n#include <$*-enumtypes.h>" \
 	--fprod "\n/* enumerations from \"@filename@\" */" \
 	--vhead "GType\n@enum_name@_get_type (void)\n{\n  static GType etype = 0;\n  if (etype == 0) {\n    static const G@Type@Value values[] = {"     \

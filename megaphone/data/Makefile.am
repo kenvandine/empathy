@@ -1,3 +1,5 @@
+include $(top_srcdir)/tools/shave.mk
+
 # Panel applet bonobo stuff
 serverdir = $(libdir)/bonobo/servers
 server_in_files = GNOME_Megaphone_Applet.server.in
@@ -21,7 +23,7 @@ megaphonebindir = $(libexecdir)
 @INTLTOOL_SCHEMAS_RULE@
 
 $(server_in_files): $(server_in_files:.server.in=.server.in.in)
-	sed -e "s|\@LIBEXECDIR\@|$(megaphonebindir)|" $< > $@
+	$(QUIET_GEN)sed -e "s|\@LIBEXECDIR\@|$(megaphonebindir)|" $< > $@
 
 DISTCLEANFILES = \
 	$(server_DATA) \

@@ -38,7 +38,7 @@ DISTCLEANFILES = 		\
 distuninstallcheck_listfiles = find . -type f -print | grep -v '^\./var/scrollkeeper'
 
 distclean-local:
-	if test $(srdcir) = .; then :; else \
+	if test "x$(srdcir)" = "x."; then :; else \
 		rm -f ChangeLog; \
 	fi
 

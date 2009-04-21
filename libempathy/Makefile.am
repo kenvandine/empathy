@@ -1,3 +1,5 @@
+include $(top_srcdir)/tools/shave.mk
+
 AM_CPPFLAGS =                                           \
 	-I.                                             \
 	-I$(top_srcdir)                                 \
@@ -104,7 +106,7 @@ libempathy_include_HEADERS =			\
 	empathy-enum-types.h
 
 empathy-marshal.list: $(libempathy_la_SOURCES) Makefile.am
-	( cd $(srcdir) && \
+	$(QUIET_GEN)( cd $(srcdir) && \
 	sed -n -e 's/.*empathy_marshal_\([[:upper:][:digit:]]*__[[:upper:][:digit:]_]*\).*/\1/p' \
 	$(libempathy_la_SOURCES) ) \
 	| sed -e 's/__/:/' -e 'y/_/,/' | sort -u > $@.tmp
@@ -115,16 +117,16 @@ empathy-marshal.list: $(libempathy_la_SOURCES) Makefile.am
 	fi
 
 %-marshal.h: %-marshal.list Makefile
-	$(GLIB_GENMARSHAL) --header --prefix=_$(subst -,_,$*)_marshal $< > $*-marshal.h
+	$(QUIET_GEN)$(GLIB_GENMARSHAL) --header --prefix=_$(subst -,_,$*)_marshal $< > $*-marshal.h
 
 %-marshal.c: %-marshal.list Makefile
-	echo "#include \"empathy-marshal.h\"" > $@ && \
+	$(QUIET_GEN)echo "#include \"empathy-marshal.h\"" > $@ && \
 	$(GLIB_GENMARSHAL) --body --prefix=_$(subst -,_,$*)_marshal $< >> $*-marshal.c
 
 empathy-enum-types.h: stamp-empathy-enum-types.h
-	@true
+	$(QUIET_GEN)true
 stamp-empathy-enum-types.h: $(libempathy_headers) Makefile
-	(cd $(srcdir) \
+	$(QUIET_GEN)(cd $(srcdir) \
 	&& glib-mkenums \
 			--fhead "#ifndef __LIBEMPATHY_ENUM_TYPES_H__\n" \
 			--fhead "#define __LIBEMPATHY_ENUM_TYPES_H__ 1\n\n" \
@@ -141,7 +143,7 @@ stamp-empathy-enum-types.h: $(libempathy_headers) Makefile
 	&& echo timestamp > $(@F)
 
 empathy-enum-types.c: $(libempathy_headers) Makefile
-	(cd $(srcdir) \
+	$(QUIET_GEN)(cd $(srcdir) \
 	&& glib-mkenums \
 			--fhead "#include <config.h>\n" \
 			--fhead "#include <glib-object.h>\n" \

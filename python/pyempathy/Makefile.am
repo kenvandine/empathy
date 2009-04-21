@@ -1,3 +1,5 @@
+include $(top_srcdir)/tools/shave.mk
+
 PYDEFS=`pkg-config --variable=defsdir pygtk-2.0`
 
 AM_CPPFLAGS =                                           \
@@ -31,7 +33,7 @@ empathy_la_LDFLAGS =					\
 	-module -avoid-version
 
 pyempathy.c: pyempathy.override pyempathy.defs
-	$(PYGOBJECTCODEGEN)				\
+	$(QUIET_GEN)$(PYGOBJECTCODEGEN)				\
 		--prefix empathy 			\
 		--register $(PYDEFS)/gdk-types.defs 	\
 		--register $(PYDEFS)/gtk-types.defs 	\
