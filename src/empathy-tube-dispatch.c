@@ -167,9 +167,20 @@ empathy_tube_dispatch_constructed (GObject *object)
     }
   else if (!tp_strdiff (channel_type, EMP_IFACE_CHANNEL_TYPE_DBUS_TUBE))
     {
+      GError *error = NULL;
+
       type = TP_TUBE_TYPE_DBUS;
       service = tp_asv_get_string (properties,
         EMP_IFACE_CHANNEL_TYPE_DBUS_TUBE  ".ServiceName");
+
+      if (!tp_dbus_check_valid_bus_name (service, TP_DBUS_NAME_TYPE_WELL_KNOWN,
+            &error))
+        {
+          DEBUG ("Can't dispatch tube; invalid ServiceName %s: %s", service,
+              error->message);
+          g_error_free (error);
+          goto failed;
+        }
     }
   else
     {

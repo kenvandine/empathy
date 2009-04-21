@@ -185,12 +185,31 @@ OUT:
   return thandler;
 }
 
+static gchar *
+sanitize_service_name (const gchar *str)
+{
+  guint i;
+  gchar *result;
+
+  g_assert (str != NULL);
+  result = g_strdup (str);
+
+  for (i = 0; result[i] != '\0'; i++)
+    {
+      if (!g_ascii_isalnum (result[i]))
+        result[i] = '_';
+    }
+
+  return result;
+}
+
 gchar *
 empathy_tube_handler_build_bus_name (TpTubeType type,
   const gchar *service)
 {
   gchar *str = NULL;
   const gchar *prefix = NULL;
+  gchar *service_escaped;
 
   g_return_val_if_fail (type < NUM_TP_TUBE_TYPES, NULL);
   g_return_val_if_fail (service != NULL, NULL);
@@ -202,7 +221,9 @@ empathy_tube_handler_build_bus_name (TpTubeType type,
   else
     g_return_val_if_reached (NULL);
 
-  str = g_strconcat (prefix, service, NULL);
+  service_escaped = sanitize_service_name (service);
+  str = g_strconcat (prefix, service_escaped, NULL);
+  g_free (service_escaped);
 
   return str;
 }
