@@ -48,12 +48,13 @@ enum
 
 enum
 {
-  COL_TIMESTAMP = 0,
-  COL_DOMAIN,
-  COL_CATEGORY,
-  COL_LEVEL,
-  COL_MESSAGE,
-  NUM_COLS
+  COL_DEBUG_TIMESTAMP = 0,
+  COL_DEBUG_DOMAIN,
+  COL_DEBUG_CATEGORY,
+  COL_DEBUG_LEVEL_STRING,
+  COL_DEBUG_MESSAGE,
+  COL_DEBUG_LEVEL_VALUE,
+  NUM_DEBUG_COLS
 };
 
 enum
@@ -61,6 +62,13 @@ enum
   COL_CM_NAME = 0,
   COL_CM_BUS,
   NUM_COLS_CM
+};
+
+enum
+{
+  COL_LEVEL_NAME,
+  COL_LEVEL_VALUE,
+  NUM_COLS_LEVEL
 };
 
 #define GET_PRIV(obj) EMPATHY_GET_PRIV (obj, EmpathyDebugDialog)
@@ -71,6 +79,7 @@ typedef struct
   GtkWidget *view;
   GtkWidget *cm_chooser;
   GtkListStore *store;
+  GtkTreeModel *store_filter;
   TpProxy *proxy;
   TpProxySignalConnection *signal_connection;
   gboolean paused;
@@ -140,11 +149,12 @@ debug_dialog_add_message (EmpathyDebugDialog *debug_dialog,
 
   gtk_list_store_append (priv->store, &iter);
   gtk_list_store_set (priv->store, &iter,
-      COL_TIMESTAMP, timestamp,
-      COL_DOMAIN, domain,
-      COL_CATEGORY, category,
-      COL_LEVEL, log_level_to_string (level),
-      COL_MESSAGE, string,
+      COL_DEBUG_TIMESTAMP, timestamp,
+      COL_DEBUG_DOMAIN, domain,
+      COL_DEBUG_CATEGORY, category,
+      COL_DEBUG_LEVEL_STRING, log_level_to_string (level),
+      COL_DEBUG_MESSAGE, string,
+      COL_DEBUG_LEVEL_VALUE, level,
       -1);
 
   g_free (string);
@@ -352,6 +362,41 @@ debug_dialog_pause_toggled_cb (GtkToggleToolButton *pause,
   debug_dialog_set_enabled (debug_dialog, !priv->paused);
 }
 
+static gboolean
+debug_dialog_visible_func (GtkTreeModel *model,
+                           GtkTreeIter *iter,
+                           gpointer user_data)
+{
+  EmpathyDebugDialog *debug_dialog = (EmpathyDebugDialog *) user_data;
+  EmpathyDebugDialogPriv *priv = GET_PRIV (debug_dialog);
+  guint filter_value, level;
+  GtkTreeModel *filter_model;
+  GtkTreeIter filter_iter;
+
+  filter_model = gtk_combo_box_get_model (GTK_COMBO_BOX (priv->filter));
+  gtk_combo_box_get_active_iter (GTK_COMBO_BOX (priv->filter),
+      &filter_iter);
+
+  gtk_tree_model_get (model, iter, COL_DEBUG_LEVEL_VALUE, &level, -1);
+  gtk_tree_model_get (filter_model, &filter_iter,
+      COL_LEVEL_VALUE, &filter_value, -1);
+
+  if (level <= filter_value)
+    return TRUE;
+
+  return FALSE;
+}
+
+static void
+debug_dialog_filter_changed_cb (GtkComboBox *filter,
+				EmpathyDebugDialog *debug_dialog)
+{
+  EmpathyDebugDialogPriv *priv = GET_PRIV (debug_dialog);
+
+  gtk_tree_model_filter_refilter (
+      GTK_TREE_MODEL_FILTER (priv->store_filter));
+}
+
 static GObject *
 debug_dialog_constructor (GType type,
                           guint n_construct_params,
@@ -366,6 +411,8 @@ debug_dialog_constructor (GType type,
   GtkToolItem *item;
   GtkCellRenderer *renderer;
   GtkWidget *scrolled_win;
+  GtkListStore *level_store;
+  GtkTreeIter iter;
 
   object = G_OBJECT_CLASS (empathy_debug_dialog_parent_class)->constructor
     (type, n_construct_params, construct_params);
@@ -455,16 +502,50 @@ debug_dialog_constructor (GType type,
   gtk_container_add (GTK_CONTAINER (item), priv->filter);
   gtk_toolbar_insert (GTK_TOOLBAR (toolbar), item, -1);
 
-  gtk_combo_box_append_text (GTK_COMBO_BOX (priv->filter), _("All"));
-  gtk_combo_box_append_text (GTK_COMBO_BOX (priv->filter), _("Debug"));
-  gtk_combo_box_append_text (GTK_COMBO_BOX (priv->filter), _("Info"));
-  gtk_combo_box_append_text (GTK_COMBO_BOX (priv->filter), _("Message"));
-  gtk_combo_box_append_text (GTK_COMBO_BOX (priv->filter), _("Warning"));
-  gtk_combo_box_append_text (GTK_COMBO_BOX (priv->filter), _("Critical"));
-  gtk_combo_box_append_text (GTK_COMBO_BOX (priv->filter), _("Error"));
+  level_store = gtk_list_store_new (NUM_COLS_LEVEL,
+      G_TYPE_STRING, G_TYPE_UINT);
+  gtk_combo_box_set_model (GTK_COMBO_BOX (priv->filter),
+      GTK_TREE_MODEL (level_store));
+
+  gtk_list_store_append (level_store, &iter);
+  gtk_list_store_set (level_store, &iter,
+      COL_LEVEL_NAME, _("Debug"),
+      COL_LEVEL_VALUE, EMP_DEBUG_LEVEL_DEBUG,
+      -1);
+
+  gtk_list_store_append (level_store, &iter);
+  gtk_list_store_set (level_store, &iter,
+      COL_LEVEL_NAME, _("Info"),
+      COL_LEVEL_VALUE, EMP_DEBUG_LEVEL_INFO,
+      -1);
+
+  gtk_list_store_append (level_store, &iter);
+  gtk_list_store_set (level_store, &iter,
+      COL_LEVEL_NAME, _("Message"),
+      COL_LEVEL_VALUE, EMP_DEBUG_LEVEL_MESSAGE,
+      -1);
+
+  gtk_list_store_append (level_store, &iter);
+  gtk_list_store_set (level_store, &iter,
+      COL_LEVEL_NAME, _("Warning"),
+      COL_LEVEL_VALUE, EMP_DEBUG_LEVEL_WARNING,
+      -1);
+
+  gtk_list_store_append (level_store, &iter);
+  gtk_list_store_set (level_store, &iter,
+      COL_LEVEL_NAME, _("Critical"),
+      COL_LEVEL_VALUE, EMP_DEBUG_LEVEL_CRITICAL,
+      -1);
+
+  gtk_list_store_append (level_store, &iter);
+  gtk_list_store_set (level_store, &iter,
+      COL_LEVEL_NAME, _("Error"),
+      COL_LEVEL_VALUE, EMP_DEBUG_LEVEL_ERROR,
+      -1);
 
   gtk_combo_box_set_active (GTK_COMBO_BOX (priv->filter), 0);
-  gtk_widget_show (GTK_WIDGET (priv->filter));
+  g_signal_connect (priv->filter, "changed",
+      G_CALLBACK (debug_dialog_filter_changed_cb), object);
 
   /* Debug treeview */
   priv->view = gtk_tree_view_new ();
@@ -474,20 +555,28 @@ debug_dialog_constructor (GType type,
   g_object_set (renderer, "yalign", 0, NULL);
 
   gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (priv->view),
-      -1, _("Time"), renderer, "text", COL_TIMESTAMP, NULL);
+      -1, _("Time"), renderer, "text", COL_DEBUG_TIMESTAMP, NULL);
   gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (priv->view),
-      -1, _("Domain"), renderer, "text", COL_DOMAIN, NULL);
+      -1, _("Domain"), renderer, "text", COL_DEBUG_DOMAIN, NULL);
   gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (priv->view),
-      -1, _("Category"), renderer, "text", COL_CATEGORY, NULL);
+      -1, _("Category"), renderer, "text", COL_DEBUG_CATEGORY, NULL);
   gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (priv->view),
-      -1, _("Level"), renderer, "text", COL_LEVEL, NULL);
+      -1, _("Level"), renderer, "text", COL_DEBUG_LEVEL_STRING, NULL);
   gtk_tree_view_insert_column_with_attributes (GTK_TREE_VIEW (priv->view),
-      -1, _("Message"), renderer, "text", COL_MESSAGE, NULL);
+      -1, _("Message"), renderer, "text", COL_DEBUG_MESSAGE, NULL);
 
-  priv->store = gtk_list_store_new (NUM_COLS, G_TYPE_DOUBLE,
-      G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING);
-  gtk_tree_view_set_model (GTK_TREE_VIEW (priv->view),
-      GTK_TREE_MODEL (priv->store));
+  priv->store = gtk_list_store_new (NUM_DEBUG_COLS, G_TYPE_DOUBLE,
+      G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING, G_TYPE_STRING,
+      G_TYPE_UINT);
+
+  priv->store_filter = gtk_tree_model_filter_new (
+      GTK_TREE_MODEL (priv->store), NULL);
+
+  gtk_tree_model_filter_set_visible_func (
+      GTK_TREE_MODEL_FILTER (priv->store_filter),
+      debug_dialog_visible_func, object, NULL);
+
+  gtk_tree_view_set_model (GTK_TREE_VIEW (priv->view), priv->store_filter);
 
   /* Scrolled window */
   scrolled_win = gtk_scrolled_window_new (NULL, NULL);
