@@ -50,6 +50,7 @@ libempathy_gtk_la_SOURCES =             	\
 	empathy-smiley-manager.c		\
 	empathy-spell.c				\
 	empathy-spell-dialog.c			\
+	empathy-status-preset-dialog.c		\
 	empathy-theme-boxes.c			\
 	empathy-theme-irc.c			\
 	empathy-theme-manager.c			\
@@ -103,6 +104,7 @@ libempathy_gtk_headers =			\
 	empathy-smiley-manager.h		\
 	empathy-spell.h				\
 	empathy-spell-dialog.h			\
+	empathy-status-preset-dialog.h		\
 	empathy-theme-boxes.h			\
 	empathy-theme-irc.h			\
 	empathy-theme-manager.h			\
