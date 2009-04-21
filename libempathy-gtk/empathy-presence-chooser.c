@@ -297,7 +297,7 @@ presence_chooser_is_preset (EmpathyPresenceChooser *self)
 }
 
 static void
-presence_chooser_set_favourite_icon (EmpathyPresenceChooser *self)
+presence_chooser_set_favorite_icon (EmpathyPresenceChooser *self)
 {
 	GtkWidget *entry;
 	PresenceChooserEntryType type;
@@ -313,20 +313,20 @@ presence_chooser_set_favourite_icon (EmpathyPresenceChooser *self)
 					   "empathy-starred");
 			gtk_entry_set_icon_tooltip_text (GTK_ENTRY (entry),
 					 GTK_ENTRY_ICON_SECONDARY,
-					 _("Click to remove this status as a favourite"));
+					 _("Click to remove this status as a favorite"));
 		}
 		else {
-			/* custom entries can be favourited */
+			/* custom entries can be favorited */
 			gtk_entry_set_icon_from_icon_name (GTK_ENTRY (entry),
 				           GTK_ENTRY_ICON_SECONDARY,
 					   "empathy-unstarred");
 			gtk_entry_set_icon_tooltip_text (GTK_ENTRY (entry),
 					 GTK_ENTRY_ICON_SECONDARY,
-					 _("Click to make this status a favourite"));
+					 _("Click to make this status a favorite"));
 		}
 	}
 	else {
-		/* built-in entries cannot be favourited */
+		/* built-in entries cannot be favorited */
 		gtk_entry_set_icon_from_stock (GTK_ENTRY (entry),
 				           GTK_ENTRY_ICON_SECONDARY,
 					   NULL);
@@ -363,7 +363,7 @@ presence_chooser_set_status_editing (EmpathyPresenceChooser *self,
 	} else {
 		GtkWidget *window;
 
-		presence_chooser_set_favourite_icon (self);
+		presence_chooser_set_favorite_icon (self);
 		gtk_entry_set_icon_sensitive (GTK_ENTRY (entry),
 					      GTK_ENTRY_ICON_PRIMARY,
 					      TRUE);
@@ -426,7 +426,7 @@ ui_set_custom_state (EmpathyPresenceChooser *self,
 					   GTK_ENTRY_ICON_PRIMARY,
 					   icon_name);
 	gtk_entry_set_text (GTK_ENTRY (entry), status);
-	presence_chooser_set_favourite_icon (self);
+	presence_chooser_set_favorite_icon (self);
 
 	priv->block_changed--;
 	priv->block_set_editing--;
@@ -474,7 +474,7 @@ presence_chooser_entry_icon_release_cb (EmpathyPresenceChooser *self,
 		}
 
 		/* update the icon */
-		presence_chooser_set_favourite_icon (self);
+		presence_chooser_set_favorite_icon (self);
 	}
 }
 
@@ -866,7 +866,7 @@ presence_chooser_presence_changed_cb (EmpathyPresenceChooser *chooser)
 	if (match) {
 		priv->block_changed++;
 		gtk_combo_box_set_active_iter (GTK_COMBO_BOX (chooser), &iter);
-		presence_chooser_set_favourite_icon (chooser);
+		presence_chooser_set_favorite_icon (chooser);
 		priv->block_changed--;
 	}
 	else {
