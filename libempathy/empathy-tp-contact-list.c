@@ -46,9 +46,10 @@ typedef struct {
 
 	TpChannel      *publish;
 	TpChannel      *subscribe;
-	GHashTable     *members;
-	GHashTable     *pendings;
-	GHashTable     *groups;
+	GHashTable     *members; /* handle -> EmpathyContact */
+	GHashTable     *pendings; /* handle -> EmpathyContact */
+	GHashTable     *groups; /* group name -> TpChannel */
+	GHashTable     *add_to_group; /* group name -> GArray of handles */
 } EmpathyTpContactListPriv;
 
 typedef enum {
@@ -112,6 +113,7 @@ tp_contact_list_group_ready_cb (TpChannel *channel,
 				gpointer list)
 {
 	EmpathyTpContactListPriv *priv = GET_PRIV (list);
+	const gchar *group_name;
 
 	if (error) {
 		DEBUG ("Error: %s", error->message);
@@ -119,14 +121,25 @@ tp_contact_list_group_ready_cb (TpChannel *channel,
 		return;
 	}
 	
-	DEBUG ("Add group %s", tp_channel_get_identifier (channel));
-	g_hash_table_insert (priv->groups,
-			     (gpointer) tp_channel_get_identifier (channel),
-			     channel);
+	group_name = tp_channel_get_identifier (channel);
+	g_hash_table_insert (priv->groups, (gpointer) group_name, channel);
+	DEBUG ("Group %s added", group_name);
 
 	g_signal_connect (channel, "invalidated",
 			  G_CALLBACK (tp_contact_list_group_invalidated_cb),
 			  list);
+
+	if (priv->add_to_group) {
+		GArray *handles;
+
+		handles = g_hash_table_lookup (priv->add_to_group, group_name);
+		if (handles) {
+			DEBUG ("Adding initial members to group %s", group_name);
+			tp_cli_channel_interface_group_call_add_members (channel,
+				-1, handles, NULL, NULL, NULL, NULL, NULL);
+			g_hash_table_remove (priv->add_to_group, group_name);
+		}
+	}
 }
 
 static void
@@ -184,7 +197,7 @@ tp_contact_list_group_members_changed_cb (TpChannel     *channel,
 	}	
 }
 
-static TpChannel *
+static void
 tp_contact_list_group_add_channel (EmpathyTpContactList *list,
 				   const gchar          *object_path,
 				   const gchar          *channel_type,
@@ -197,7 +210,7 @@ tp_contact_list_group_add_channel (EmpathyTpContactList *list,
 	/* Only accept server-side contact groups */
 	if (tp_strdiff (channel_type, TP_IFACE_CHANNEL_TYPE_CONTACT_LIST) ||
 	    handle_type != TP_HANDLE_TYPE_GROUP) {
-		return NULL;
+		return;
 	}
 
 	channel = tp_channel_new (priv->connection,
@@ -213,43 +226,6 @@ tp_contact_list_group_add_channel (EmpathyTpContactList *list,
 	tp_channel_call_when_ready (channel,
 				    tp_contact_list_group_ready_cb,
 				    list);
-
-	return channel;
-}
-
-typedef struct {
-	GArray *handles;
-	TpHandle channel_handle;
-	guint ref_count;
-} GroupAddData;
-
-static void
-tp_contact_list_group_add_data_unref (gpointer user_data)
-{
-	GroupAddData *data = user_data;
-
-	data->ref_count--;
-	if (data->ref_count == 0) {
-		g_array_free (data->handles, TRUE);
-		g_slice_free (GroupAddData, data);
-	}
-}
-
-static void
-tp_contact_list_group_add_ready_cb (TpChannel    *channel,
-				    const GError *error,
-				    gpointer      user_data)
-{
-	GroupAddData *data = user_data;
-
-	if (error) {
-		tp_contact_list_group_add_data_unref (data);
-		return;
-	}
-
-	tp_cli_channel_interface_group_call_add_members (channel, -1,
-		data->handles, NULL, NULL, NULL, NULL, NULL);
-	tp_contact_list_group_add_data_unref (data);
 }
 
 static void
@@ -259,24 +235,12 @@ tp_contact_list_group_request_channel_cb (TpConnection *connection,
 					  gpointer      user_data,
 					  GObject      *list)
 {
-	GroupAddData *data = user_data;
-	TpChannel *channel;
-
+	/* The new channel will be handled in NewChannel cb. Here we only
+	 * handle the error if RequestChannel failed */
 	if (error) {
 		DEBUG ("Error: %s", error->message);
 		return;
 	}
-
-	channel = tp_contact_list_group_add_channel (EMPATHY_TP_CONTACT_LIST (list),
-						     object_path,
-						     TP_IFACE_CHANNEL_TYPE_CONTACT_LIST,
-						     TP_HANDLE_TYPE_GROUP,
-						     data->channel_handle);
-
-	data->ref_count++;
-	tp_channel_call_when_ready (channel,
-				    tp_contact_list_group_add_ready_cb,
-				    data);
 }
 
 static void
@@ -286,22 +250,21 @@ tp_contact_list_group_request_handles_cb (TpConnection *connection,
 					  gpointer      user_data,
 					  GObject      *list)
 {
-	GroupAddData *data = user_data;
+	TpHandle channel_handle;
 
 	if (error) {
 		DEBUG ("Error: %s", error->message);
 		return;
 	}
 
-	data->channel_handle = g_array_index (handles, TpHandle, 0);
-	data->ref_count++;
+	channel_handle = g_array_index (handles, TpHandle, 0);
 	tp_cli_connection_call_request_channel (connection, -1,
 						TP_IFACE_CHANNEL_TYPE_CONTACT_LIST,
 						TP_HANDLE_TYPE_GROUP,
-						data->channel_handle,
+						channel_handle,
 						TRUE,
 						tp_contact_list_group_request_channel_cb,
-						data, tp_contact_list_group_add_data_unref,
+						NULL, NULL,
 						list);
 }
 
@@ -314,7 +277,6 @@ tp_contact_list_group_add (EmpathyTpContactList *list,
 	EmpathyTpContactListPriv *priv = GET_PRIV (list);
 	TpChannel                *channel;
 	const gchar              *names[] = {group_name, NULL};
-	GroupAddData             *data;
 
 	/* Search the channel for that group name */
 	channel = g_hash_table_lookup (priv->groups, group_name);
@@ -328,14 +290,15 @@ tp_contact_list_group_add (EmpathyTpContactList *list,
 	/* That group does not exist yet, we have to:
 	 * 1) Request an handle for the group name
 	 * 2) Request a channel
-	 * 3) Add handles in members of the new channel */
-	data = g_slice_new0 (GroupAddData);
-	data->handles = handles;
-	data->ref_count = 1;
+	 * 3) When NewChannel is emitted, add handles in members
+	 */
+	g_hash_table_insert (priv->add_to_group,
+			     g_strdup (group_name),
+			     handles);
 	tp_cli_connection_call_request_handles (priv->connection, -1,
 						TP_HANDLE_TYPE_GROUP, names,
 						tp_contact_list_group_request_handles_cb,
-						data, tp_contact_list_group_add_data_unref,
+						NULL, NULL,
 						G_OBJECT (list));
 }
 
@@ -639,11 +602,9 @@ tp_contact_list_new_channel_cb (TpConnection *proxy,
 				gpointer      user_data,
 				GObject      *list)
 {
-	if (!suppress_handler) {
-		tp_contact_list_group_add_channel (EMPATHY_TP_CONTACT_LIST (list),
-						   object_path, channel_type,
-						   handle_type, handle);
-	}
+	tp_contact_list_group_add_channel (EMPATHY_TP_CONTACT_LIST (list),
+					   object_path, channel_type,
+					   handle_type, handle);
 }
 
 static void
@@ -716,6 +677,7 @@ tp_contact_list_finalize (GObject *object)
 	g_hash_table_destroy (priv->groups);
 	g_hash_table_destroy (priv->members);
 	g_hash_table_destroy (priv->pendings);
+	g_hash_table_destroy (priv->add_to_group);
 
 	G_OBJECT_CLASS (empathy_tp_contact_list_parent_class)->finalize (object);
 }
@@ -826,6 +788,12 @@ empathy_tp_contact_list_class_init (EmpathyTpContactListClass *klass)
 }
 
 static void
+tp_contact_list_array_free (gpointer handles)
+{
+	g_array_free (handles, TRUE);
+}
+
+static void
 empathy_tp_contact_list_init (EmpathyTpContactList *list)
 {
 	EmpathyTpContactListPriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (list,
@@ -848,6 +816,11 @@ empathy_tp_contact_list_init (EmpathyTpContactList *list)
 	priv->pendings = g_hash_table_new_full (g_direct_hash, g_direct_equal,
 						NULL,
 						(GDestroyNotify) g_object_unref);
+
+	/* Map group's name to GArray of handle */
+	priv->add_to_group = g_hash_table_new_full (g_str_hash, g_str_equal,
+						    g_free,
+						    tp_contact_list_array_free);
 }
 
 EmpathyTpContactList *
