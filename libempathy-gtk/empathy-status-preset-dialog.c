@@ -86,6 +86,8 @@ status_preset_dialog_setup_presets_update (EmpathyStatusPresetDialog *self)
 	store = GTK_LIST_STORE (gtk_tree_view_get_model (
 				GTK_TREE_VIEW (priv->presets_treeview)));
 
+	gtk_list_store_clear (store);
+
 	for (i = 0; i < G_N_ELEMENTS (states); i++)
 	{
 		GList *presets, *l;
@@ -153,6 +155,36 @@ status_preset_dialog_preset_selection_changed (GtkTreeSelection *selection,
 }
 
 static void
+status_preset_dialog_preset_remove (GtkWidget *button,
+				    EmpathyStatusPresetDialog *self)
+{
+	EmpathyStatusPresetDialogPriv *priv = GET_PRIV (self);
+	GtkTreeSelection *selection;
+	GtkTreeModel *model;
+	GtkTreeIter iter;
+	McPresence state;
+	char *status;
+
+	selection = gtk_tree_view_get_selection (
+			GTK_TREE_VIEW (priv->presets_treeview));
+
+	g_return_if_fail (gtk_tree_selection_get_selected (selection,
+				&model, &iter));
+
+	gtk_tree_model_get (model, &iter,
+			PRESETS_STORE_STATE, &state,
+			PRESETS_STORE_STATUS, &status,
+			-1);
+
+	DEBUG ("REMOVE PRESET (%i, %s)\n", state, status);
+	empathy_status_presets_remove (state, status);
+
+	g_free (status);
+
+	status_preset_dialog_setup_presets_update (self);
+}
+
+static void
 empathy_status_preset_dialog_init (EmpathyStatusPresetDialog *self)
 {
 	EmpathyStatusPresetDialogPriv *priv = self->priv =
@@ -184,6 +216,9 @@ empathy_status_preset_dialog_init (EmpathyStatusPresetDialog *self)
 			"changed",
 			G_CALLBACK (status_preset_dialog_preset_selection_changed),
 			remove_button);
+	empathy_builder_connect (gui, self,
+			"remove-button", "clicked", status_preset_dialog_preset_remove,
+			NULL);
 
 	gtk_box_pack_start(GTK_BOX (GTK_DIALOG (self)->vbox), toplevel_vbox,
 			TRUE, TRUE, 0);
