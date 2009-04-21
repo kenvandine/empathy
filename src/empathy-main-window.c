@@ -1186,6 +1186,9 @@ empathy_main_window_show (void)
 	gtk_widget_hide (window->edit_context);
 	gtk_widget_hide (window->edit_context_separator);
 
+	/* Set up contact list. */
+	empathy_status_presets_get_all ();
+
 	/* Set up presence chooser */
 	window->presence_chooser = empathy_presence_chooser_new ();
 	gtk_widget_show (window->presence_chooser);
@@ -1215,9 +1218,6 @@ empathy_main_window_show (void)
 	gtk_container_add (GTK_CONTAINER (item), ebox);
 	gtk_toolbar_insert (GTK_TOOLBAR (window->presence_toolbar), item, -1);
 	gtk_widget_show (GTK_WIDGET (item));
-
-	/* Set up contact list. */
-	empathy_status_presets_get_all ();
 
 	list_iface = EMPATHY_CONTACT_LIST (empathy_contact_manager_dup_singleton ());
 	monitor = empathy_contact_list_get_monitor (list_iface);

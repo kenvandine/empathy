@@ -267,41 +267,63 @@ presence_chooser_get_entry_type (EmpathyPresenceChooser *self)
 	return type;
 }
 
+static gboolean
+presence_chooser_is_preset (EmpathyPresenceChooser *self)
+{
+	EmpathyPresenceChooserPriv *priv = GET_PRIV (self);
+	McPresence state;
+	const char *status;
+	GList *presets, *l;
+	gboolean match = FALSE;
+
+	state = empathy_idle_get_state (priv->idle);
+	status = empathy_idle_get_status (priv->idle);
+
+	presets = empathy_status_presets_get (state, -1);
+	for (l = presets; l; l = l->next) {
+		char *preset = (char *) l->data;
+
+		if (!strcmp (status, preset)) {
+			match = TRUE;
+			break;
+		}
+	}
+
+	g_list_free (presets);
+
+	DEBUG ("is_preset(%i, %s) = %i\n", state, status, match);
+
+	return match;
+}
+
 static void
 presence_chooser_set_favourite_icon (EmpathyPresenceChooser *self)
 {
-	EmpathyPresenceChooserPriv *priv = GET_PRIV (self);
 	GtkWidget *entry;
 	PresenceChooserEntryType type;
 
 	entry = gtk_bin_get_child (GTK_BIN (self));
 	type = presence_chooser_get_entry_type (self);
 
-	/* debug */
-	g_print ("type = %i\n", type);
-	const char *status = empathy_idle_get_status (priv->idle);
-	g_print ("STATUS = '%s'", status);
-	if (type == ENTRY_TYPE_CUSTOM) g_print ("(Custom)");
-	g_print ("\n");
-	/* - */
-
-	if (type == ENTRY_TYPE_CUSTOM) {
-		/* custom entries can be favourited */
-		gtk_entry_set_icon_from_icon_name (GTK_ENTRY (entry),
-				           GTK_ENTRY_ICON_SECONDARY,
-					   "empathy-unstarred");
-		gtk_entry_set_icon_tooltip_text (GTK_ENTRY (entry),
-					 GTK_ENTRY_ICON_SECONDARY,
-					 _("Click to make this status a favourite"));
-	}
-	else if (type == ENTRY_TYPE_SAVED) {
-		/* saved entries can be removed from the list */
-		gtk_entry_set_icon_from_icon_name (GTK_ENTRY (entry),
+	if (type == ENTRY_TYPE_CUSTOM || type == ENTRY_TYPE_SAVED) {
+		if (presence_chooser_is_preset (self)) {
+			/* saved entries can be removed from the list */
+			gtk_entry_set_icon_from_icon_name (GTK_ENTRY (entry),
 				           GTK_ENTRY_ICON_SECONDARY,
 					   "empathy-starred");
-		gtk_entry_set_icon_tooltip_text (GTK_ENTRY (entry),
+			gtk_entry_set_icon_tooltip_text (GTK_ENTRY (entry),
 					 GTK_ENTRY_ICON_SECONDARY,
 					 _("Click to remove this status as a favourite"));
+		}
+		else {
+			/* custom entries can be favourited */
+			gtk_entry_set_icon_from_icon_name (GTK_ENTRY (entry),
+				           GTK_ENTRY_ICON_SECONDARY,
+					   "empathy-unstarred");
+			gtk_entry_set_icon_tooltip_text (GTK_ENTRY (entry),
+					 GTK_ENTRY_ICON_SECONDARY,
+					 _("Click to make this status a favourite"));
+		}
 	}
 	else {
 		/* built-in entries cannot be favourited */
@@ -440,15 +462,15 @@ presence_chooser_entry_icon_release_cb (EmpathyPresenceChooser *self,
 		state = empathy_idle_get_state (priv->idle);
 		status = empathy_idle_get_status (priv->idle);
 
-		if (type == ENTRY_TYPE_CUSTOM) {
-			/* save the entry */
-			DEBUG ("SAVING PRESET (%i, %s)\n", state, status);
-			empathy_status_presets_set_last (state, status);
-		}
-		else if (type == ENTRY_TYPE_SAVED) {
+		if (presence_chooser_is_preset (self)) {
 			/* remove the entry */
 			DEBUG ("REMOVING PRESET (%i, %s)\n", state, status);
 			empathy_status_presets_remove (state, status);
+		}
+		else {
+			/* save the entry */
+			DEBUG ("SAVING PRESET (%i, %s)\n", state, status);
+			empathy_status_presets_set_last (state, status);
 		}
 
 		/* update the icon */
