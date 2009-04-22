@@ -47,6 +47,8 @@ typedef struct _EmpathyAccountChooserClass EmpathyAccountChooserClass;
 
 struct _EmpathyAccountChooser {
 	GtkComboBox parent;
+
+	/*<private>*/
 	gpointer priv;
 };
 
