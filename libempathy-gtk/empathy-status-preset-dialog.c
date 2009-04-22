@@ -54,6 +54,8 @@ static McPresence states[] = {
 typedef struct _EmpathyStatusPresetDialogPriv EmpathyStatusPresetDialogPriv;
 struct _EmpathyStatusPresetDialogPriv
 {
+	int block_add_combo_changed;
+
 	GtkWidget *presets_treeview;
 	GtkWidget *add_combobox;
 	GtkWidget *add_button;
@@ -159,7 +161,7 @@ status_preset_dialog_setup_add_combobox (EmpathyStatusPresetDialog *self)
 				ADD_COMBO_STATE, states[i],
 				ADD_COMBO_ICON_NAME, empathy_icon_name_for_presence (states[i]),
 				ADD_COMBO_STATUS, empathy_presence_get_default_message (states[i]),
-				ADD_COMBO_DEFAULT_TEXT, _("Enter Custom Message"),
+				ADD_COMBO_DEFAULT_TEXT, "",
 				-1);
 	}
 
@@ -256,6 +258,36 @@ status_preset_dialog_preset_remove (GtkButton *button,
 }
 
 static void
+status_preset_dialog_set_add_combo_changed (EmpathyStatusPresetDialog *self,
+					    gboolean state,
+					    gboolean reset_text)
+{
+	EmpathyStatusPresetDialogPriv *priv = GET_PRIV (self);
+	GtkWidget *entry;
+
+	entry = gtk_bin_get_child (GTK_BIN (priv->add_combobox));
+
+	priv->add_combo_changed = state;
+	gtk_widget_set_sensitive (priv->add_button, state);
+
+	if (state) {
+		gtk_widget_modify_text (entry, GTK_STATE_NORMAL, NULL);
+	} else {
+		GdkColor colour;
+
+		gdk_color_parse ("Gray", &colour); /* FIXME - theme */
+		gtk_widget_modify_text (entry, GTK_STATE_NORMAL, &colour);
+
+		if (reset_text) {
+			priv->block_add_combo_changed++;
+			gtk_entry_set_text (GTK_ENTRY (entry),
+					_("Enter Custom Message"));
+			priv->block_add_combo_changed--;
+		}
+	}
+}
+
+static void
 status_preset_dialog_add_combo_changed (GtkComboBox *combo,
 					EmpathyStatusPresetDialog *self)
 {
@@ -264,12 +296,13 @@ status_preset_dialog_add_combo_changed (GtkComboBox *combo,
 	GtkTreeModel *model;
 	GtkTreeIter iter;
 
+	if (priv->block_add_combo_changed) return;
+
 	model = gtk_combo_box_get_model (combo);
 	entry = gtk_bin_get_child (GTK_BIN (combo));
 
 	if (gtk_combo_box_get_active_iter (combo, &iter)) {
 		char *icon_name;
-		GdkColor colour;
 
 		gtk_tree_model_get (model, &iter,
 				PRESETS_STORE_STATE, &priv->selected_state,
@@ -282,18 +315,13 @@ status_preset_dialog_add_combo_changed (GtkComboBox *combo,
 
 		g_free (icon_name);
 
-		gtk_widget_grab_focus (entry);
-		gtk_editable_select_region (GTK_EDITABLE (entry), 0, -1);
-
-		priv->add_combo_changed = FALSE;
-		gtk_widget_set_sensitive (priv->add_button, FALSE);
-
-		gdk_color_parse ("Gray", &colour); /* FIXME - theme */
-		gtk_widget_modify_text (entry, GTK_STATE_NORMAL, &colour);
+		status_preset_dialog_set_add_combo_changed (self, FALSE, TRUE);
 	} else {
-		priv->add_combo_changed = TRUE;
-		gtk_widget_set_sensitive (priv->add_button, TRUE);
-		gtk_widget_modify_text (entry, GTK_STATE_NORMAL, NULL);
+		const char *status;
+
+		status = gtk_entry_get_text (GTK_ENTRY (entry));
+		status_preset_dialog_set_add_combo_changed (self,
+				strlen (status) > 0, FALSE);
 	}
 }
 
@@ -317,6 +345,40 @@ status_preset_dialog_add_preset (GtkWidget *widget,
 	status_preset_add_combo_reset (self);
 }
 
+static gboolean
+status_preset_dialog_add_combo_press_event (GtkWidget *widget,
+					    GdkEventButton *event,
+					    EmpathyStatusPresetDialog *self)
+{
+	if (!GTK_WIDGET_HAS_FOCUS (widget)) {
+		/* if the widget isn't focused, focus it and select the text */
+		gtk_widget_grab_focus (widget);
+		gtk_editable_select_region (GTK_EDITABLE (widget), 0, -1);
+
+		return TRUE;
+	}
+
+	return FALSE;
+}
+
+static gboolean
+status_preset_dialog_add_combo_focus_out (GtkWidget *widget,
+					  GdkEventFocus *event,
+					  EmpathyStatusPresetDialog *self)
+{
+	EmpathyStatusPresetDialogPriv *priv = GET_PRIV (self);
+	const char *status;
+
+	gtk_editable_set_position (GTK_EDITABLE (widget), 0);
+
+	status = gtk_entry_get_text (GTK_ENTRY (widget));
+	status_preset_dialog_set_add_combo_changed (self,
+			priv->add_combo_changed && strlen (status) > 0,
+			TRUE);
+
+	return FALSE;
+}
+
 static void
 empathy_status_preset_dialog_init (EmpathyStatusPresetDialog *self)
 {
@@ -325,7 +387,7 @@ empathy_status_preset_dialog_init (EmpathyStatusPresetDialog *self)
 			EMPATHY_TYPE_STATUS_PRESET_DIALOG,
 			EmpathyStatusPresetDialogPriv);
 	GtkBuilder *gui;
-	GtkWidget *toplevel_vbox, *remove_button;
+	GtkWidget *toplevel_vbox, *remove_button, *entry;
 	char *filename;
 
 	gtk_window_set_title (GTK_WINDOW (self),
@@ -351,9 +413,14 @@ empathy_status_preset_dialog_init (EmpathyStatusPresetDialog *self)
 			G_CALLBACK (status_preset_dialog_preset_selection_changed),
 			remove_button);
 
-	g_signal_connect (gtk_bin_get_child (GTK_BIN (priv->add_combobox)),
-			"activate",
-			G_CALLBACK (status_preset_dialog_add_preset),
+	entry = gtk_bin_get_child (GTK_BIN (priv->add_combobox));
+	g_signal_connect (entry, "activate",
+			G_CALLBACK (status_preset_dialog_add_preset), self);
+	g_signal_connect (entry, "button-press-event",
+			G_CALLBACK (status_preset_dialog_add_combo_press_event),
+			self);
+	g_signal_connect (entry, "focus-out-event",
+			G_CALLBACK (status_preset_dialog_add_combo_focus_out),
 			self);
 
 	empathy_builder_connect (gui, self,
