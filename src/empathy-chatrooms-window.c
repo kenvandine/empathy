@@ -318,7 +318,7 @@ chatrooms_window_model_refresh_data (EmpathyChatroomsWindow *window,
 
 	/* Look up chatrooms */
 	account_chooser = EMPATHY_ACCOUNT_CHOOSER (window->account_chooser);
-	account = empathy_account_chooser_get_account (account_chooser);
+	account = empathy_account_chooser_dup_account (account_chooser);
 
 	chatrooms = empathy_chatroom_manager_get_chatrooms (window->manager, account);
 
@@ -509,7 +509,7 @@ chatrooms_window_chatroom_added_cb (EmpathyChatroomManager *manager,
 	McAccount            *account;
 
 	account_chooser = EMPATHY_ACCOUNT_CHOOSER (window->account_chooser);
-	account = empathy_account_chooser_get_account (account_chooser);
+	account = empathy_account_chooser_dup_account (account_chooser);
 
 	if (!account) {
 		chatrooms_window_model_add (window, chatroom, FALSE);

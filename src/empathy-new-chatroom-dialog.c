@@ -342,7 +342,7 @@ new_chatroom_dialog_update_widgets (EmpathyNewChatroomDialog *dialog)
 	const gchar           *room;
 	
 	account_chooser = EMPATHY_ACCOUNT_CHOOSER (dialog->account_chooser);
-	account = empathy_account_chooser_get_account (account_chooser);
+	account = empathy_account_chooser_dup_account (account_chooser);
 	profile = mc_account_get_profile (account);
 	protocol = mc_profile_get_protocol_name (profile);
 
@@ -388,7 +388,7 @@ new_chatroom_dialog_account_changed_cb (GtkComboBox             *combobox,
 	new_chatroom_dialog_model_clear (dialog);
 
 	account_chooser = EMPATHY_ACCOUNT_CHOOSER (dialog->account_chooser);
-	account = empathy_account_chooser_get_account (account_chooser);
+	account = empathy_account_chooser_dup_account (account_chooser);
 	dialog->room_list = empathy_tp_roomlist_new (account);
 
 	if (dialog->room_list) {
@@ -409,6 +409,8 @@ new_chatroom_dialog_account_changed_cb (GtkComboBox             *combobox,
 	}
 
 	new_chatroom_dialog_update_widgets (dialog);
+
+	g_object_unref (account);
 }
 
 static void

@@ -220,7 +220,7 @@ empathy_account_chooser_new (void)
 }
 
 McAccount *
-empathy_account_chooser_get_account (EmpathyAccountChooser *chooser)
+empathy_account_chooser_dup_account (EmpathyAccountChooser *chooser)
 {
 	EmpathyAccountChooserPriv *priv;
 	McAccount                *account;
@@ -252,7 +252,7 @@ empathy_account_chooser_get_connection (EmpathyAccountChooser *chooser)
 
 	priv = GET_PRIV (chooser);
 
-	account = empathy_account_chooser_get_account (chooser);
+	account = empathy_account_chooser_dup_account (chooser);
 	connection = empathy_account_manager_get_connection (priv->manager, account);
 	g_object_unref (account);
 
