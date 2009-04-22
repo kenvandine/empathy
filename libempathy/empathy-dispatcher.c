@@ -353,7 +353,6 @@ dispatch_operation_claimed_cb (EmpathyDispatchOperation *operation,
   connection = empathy_dispatch_operation_get_tp_connection (operation);
   cd = g_hash_table_lookup (priv->connections, connection);
   g_assert (cd != NULL);
-  g_object_unref (G_OBJECT (connection));
 
   object_path = empathy_dispatch_operation_get_object_path (operation);
 
@@ -397,7 +396,6 @@ dispatch_operation_ready_cb (EmpathyDispatchOperation *operation,
   connection =  empathy_dispatch_operation_get_tp_connection (operation);
   cd = g_hash_table_lookup (priv->connections, connection);
   g_assert (cd != NULL);
-  g_object_unref (G_OBJECT (connection));
 
   g_object_ref (operation);
   g_object_ref (dispatcher);

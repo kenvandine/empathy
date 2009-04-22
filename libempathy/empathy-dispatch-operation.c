@@ -587,7 +587,7 @@ empathy_dispatch_operation_get_tp_connection (
 
   priv = GET_PRIV (operation);
 
-  return g_object_ref (priv->connection);
+  return priv->connection;
 }
 
 TpChannel *
