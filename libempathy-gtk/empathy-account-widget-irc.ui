@@ -3,7 +3,6 @@
   <requires lib="gtk+" version="2.16"/>
   <!-- interface-naming-policy toplevel-contextual -->
   <object class="GtkDialog" id="irc_network_dialog">
-    <property name="visible">True</property>
     <property name="border_width">5</property>
     <property name="title" translatable="yes">Network</property>
     <property name="window_position">center-on-parent</property>
