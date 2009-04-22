@@ -474,7 +474,7 @@ contact_list_view_drag_data_get (GtkWidget        *widget,
 
 	gtk_tree_path_free (src_path);
 
-	contact = empathy_contact_list_view_get_selected (EMPATHY_CONTACT_LIST_VIEW (widget));
+	contact = empathy_contact_list_view_dup_selected (EMPATHY_CONTACT_LIST_VIEW (widget));
 	if (!contact) {
 		return;
 	}
@@ -1218,7 +1218,7 @@ empathy_contact_list_view_new (EmpathyContactListStore        *store,
 }
 
 EmpathyContact *
-empathy_contact_list_view_get_selected (EmpathyContactListView *view)
+empathy_contact_list_view_dup_selected (EmpathyContactListView *view)
 {
 	EmpathyContactListViewPriv *priv;
 	GtkTreeSelection          *selection;
@@ -1384,7 +1384,7 @@ contact_list_view_remove_activate_cb (GtkMenuItem            *menuitem,
 	EmpathyContactListViewPriv *priv = GET_PRIV (view);
 	EmpathyContact             *contact;
 		
-	contact = empathy_contact_list_view_get_selected (view);
+	contact = empathy_contact_list_view_dup_selected (view);
 
 	if (contact) {
 		gchar     *text; 
@@ -1417,7 +1417,7 @@ empathy_contact_list_view_get_contact_menu (EmpathyContactListView *view)
 
 	g_return_val_if_fail (EMPATHY_IS_CONTACT_LIST_VIEW (view), NULL);
 
-	contact = empathy_contact_list_view_get_selected (view);
+	contact = empathy_contact_list_view_dup_selected (view);
 	if (!contact) {
 		return NULL;
 	}

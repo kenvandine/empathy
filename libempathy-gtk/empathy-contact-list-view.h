@@ -70,7 +70,7 @@ GType                      empathy_contact_list_view_get_type           (void) G
 EmpathyContactListView *   empathy_contact_list_view_new                (EmpathyContactListStore        *store,
 								         EmpathyContactListFeatureFlags  list_features,
 								         EmpathyContactFeatureFlags      contact_features);
-EmpathyContact *           empathy_contact_list_view_get_selected       (EmpathyContactListView         *view);
+EmpathyContact *           empathy_contact_list_view_dup_selected       (EmpathyContactListView         *view);
 gchar *                    empathy_contact_list_view_get_selected_group (EmpathyContactListView         *view);
 GtkWidget *                empathy_contact_list_view_get_contact_menu   (EmpathyContactListView         *view);
 GtkWidget *                empathy_contact_list_view_get_group_menu     (EmpathyContactListView         *view);

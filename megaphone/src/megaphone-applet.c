@@ -221,7 +221,7 @@ megaphone_applet_preferences_response_cb (GtkWidget       *dialog,
 		/* Retrieve the selected contact, if any and set it up in gconf.
 		 * GConf will notify us from the change and we will adjust ourselves */
 		contact_list = g_object_get_data (G_OBJECT (dialog), "contact-list");
-		contact = empathy_contact_list_view_get_selected (contact_list);
+		contact = empathy_contact_list_view_dup_selected (contact_list);
 		if (contact) {
 			McAccount   *account;
 			const gchar *account_id;
@@ -240,6 +240,7 @@ megaphone_applet_preferences_response_cb (GtkWidget       *dialog,
 						       "contact_id", str,
 						       NULL);
 			g_free (str);
+			g_object_unref (contact);
 		}
 	}
 	gtk_widget_destroy (dialog);
