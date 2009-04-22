@@ -29,6 +29,27 @@
 
 G_BEGIN_DECLS
 
+/**
+ * EmpathyContactWidgetFlags:
+ * @EMPATHY_CONTACT_WIDGET_EDIT_NONE: Don't show any widgets to edit any details
+ *  of the contact. This should be the option for widgets that merely display
+ *  information about a contact.
+ * @EMPATHY_CONTACT_WIDGET_EDIT_ALIAS: Show a #GtkEntry allowing changes to the
+ *  contact's alias.
+ * @EMPATHY_CONTACT_WIDGET_EDIT_AVATAR: Show an #EmpathyAvatarChooser allowing
+ *  changes to the contact's avatar.
+ * @EMPATHY_CONTACT_WIDGET_EDIT_ACCOUNT: Show an #EmpathyAccountChooser allowing
+ *  changes to the contact's account.
+ * @EMPATHY_CONTACT_WIDGET_EDIT_ID: Show a #GtkEntry allowing changes to the
+ *  contact's identifier.
+ * @EMPATHY_CONTACT_WIDGET_EDIT_GROUPS: Show a widget to change the groups the
+ *  contact is in.
+ * @EMPATHY_CONTACT_WIDGET_FOR_TOOLTIP: Make widgets more designed for a tooltip.
+ *  For example, make widgets not selectable.
+ *
+ * Options to instruct the #EmpathyContactWidget what features should be
+ * enabled.
+ */
 typedef enum
 {
   EMPATHY_CONTACT_WIDGET_EDIT_NONE    = 0,

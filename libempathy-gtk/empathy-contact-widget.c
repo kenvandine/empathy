@@ -44,6 +44,25 @@
 #define DEBUG_FLAG EMPATHY_DEBUG_CONTACT
 #include <libempathy/empathy-debug.h>
 
+/**
+ * SECTION:empathy-contact-widget
+ * @title:EmpathyContactWidget
+ * @short_description: A widget used to display and edit details about a contact
+ * @include: libempathy-empathy-contact-widget.h
+ *
+ * #EmpathyContactWidget is a widget which displays appropriate widgets
+ * with details about a contact, also allowing changing these details,
+ * if desired.
+ */
+
+/**
+ * EmpathyContactWidget:
+ * @parent: parent object
+ *
+ * Widget which displays appropriate widgets with details about a contact,
+ * also allowing changing these details, if desired.
+ */
+
 /* Delay before updating the widget when the id entry changed (seconds) */
 #define ID_CHANGED_TIMEOUT 1
 
@@ -151,6 +170,15 @@ enum
   COL_COUNT
 };
 
+/**
+ * empathy_contact_widget_new:
+ * @contact: an #EmpathyContact
+ * @flags: #EmpathyContactWidgetFlags for the new contact widget
+ *
+ * Creates a new #EmpathyContactWidget.
+ *
+ * Return value: a new #EmpathyContactWidget
+ */
 GtkWidget *
 empathy_contact_widget_new (EmpathyContact *contact,
                             EmpathyContactWidgetFlags flags)
@@ -212,6 +240,14 @@ empathy_contact_widget_new (EmpathyContact *contact,
     information->vbox_contact_widget);
 }
 
+/**
+ * empathy_contact_widget_get_contact:
+ * @widget: an #EmpathyContactWidget
+ *
+ * Get the #EmpathyContact related with the #EmpathyContactWidget @widget.
+ *
+ * Returns: the #EmpathyContact associated with @widget
+ */
 EmpathyContact *
 empathy_contact_widget_get_contact (GtkWidget *widget)
 {
@@ -226,6 +262,13 @@ empathy_contact_widget_get_contact (GtkWidget *widget)
   return information->contact;
 }
 
+/**
+ * empathy_contact_widget_set_contact:
+ * @widget: an #EmpathyContactWidget
+ * @contact: a different #EmpathyContact
+ *
+ * Change the #EmpathyContact related with the #EmpathyContactWidget @widget.
+ */
 void
 empathy_contact_widget_set_contact (GtkWidget *widget,
                                     EmpathyContact *contact)
@@ -242,6 +285,15 @@ empathy_contact_widget_set_contact (GtkWidget *widget,
   contact_widget_set_contact (information, contact);
 }
 
+/**
+ * empathy_contact_widget_set_account_filter:
+ * @widget: an #EmpathyContactWidget
+ * @filter: a #EmpathyAccountChooserFilterFunc
+ * @user_data: user data to pass to @filter, or %NULL
+ *
+ * Set a filter on the #EmpathyAccountChooser included in the
+ * #EmpathyContactWidget.
+ */
 void
 empathy_contact_widget_set_account_filter (
     GtkWidget *widget,
