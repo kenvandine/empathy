@@ -24,6 +24,8 @@
 
 #include <gtk/gtk.h>
 
+#include <libempathy/empathy-status-presets.h>
+
 #include <libempathy-gtk/empathy-ui-utils.h>
 #include <libempathy-gtk/empathy-presence-chooser.h>
 
@@ -35,6 +37,8 @@ main (int argc, char **argv)
 
 	gtk_init (&argc, &argv);
 	empathy_gtk_init ();
+
+	empathy_status_presets_get_all ();
 
 	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
 	chooser = empathy_presence_chooser_new ();
