@@ -328,6 +328,8 @@ empathy_status_preset_dialog_init (EmpathyStatusPresetDialog *self)
 	GtkWidget *toplevel_vbox, *remove_button;
 	char *filename;
 
+	gtk_window_set_title (GTK_WINDOW (self),
+			_("Edit Custom Messages"));
 	gtk_dialog_set_has_separator (GTK_DIALOG (self), FALSE);
 	gtk_dialog_add_button (GTK_DIALOG (self),
 			GTK_STOCK_CLOSE, GTK_RESPONSE_CLOSE);

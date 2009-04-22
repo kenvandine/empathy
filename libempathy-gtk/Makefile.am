@@ -119,7 +119,6 @@ uidir = $(datadir)/empathy
 ui_DATA = 					\
 	empathy-contact-widget.ui		\
 	empathy-contact-dialogs.ui		\
-	empathy-presence-chooser.ui		\
 	empathy-account-widget-generic.ui	\
 	empathy-account-widget-jabber.ui	\
 	empathy-account-widget-msn.ui		\
