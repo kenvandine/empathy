@@ -42,6 +42,8 @@ typedef struct _EmpathyAvatarImageClass EmpathyAvatarImageClass;
 
 struct _EmpathyAvatarImage {
 	GtkEventBox parent;
+
+	/*<private>*/
 	gpointer priv;
 };
 
