@@ -39,6 +39,23 @@
 #define DEBUG_FLAG EMPATHY_DEBUG_OTHER
 #include <libempathy/empathy-debug.h>
 
+/**
+ * SECTION:empathy-avatar-chooser
+ * @title: EmpathyAvatarChooser
+ * @short_description: A widget used to change avatar
+ * @include: libempathy-gtk/empathy-avatar-chooser.h
+ *
+ * #EmpathyAvatarChooser is a widget which extends #GtkButton to
+ * provide a way of changing avatar.
+ */
+
+/**
+ * EmpathyAvatarChooser:
+ * @parent: parent object
+ *
+ * Widget which extends #GtkButton to provide a way of changing avatar.
+ */
+
 #define AVATAR_SIZE_SAVE 96
 #define AVATAR_SIZE_VIEW 64
 #define DEFAULT_DIR DATADIR"/pixmaps/faces"
@@ -161,6 +178,13 @@ empathy_avatar_chooser_class_init (EmpathyAvatarChooserClass *klass)
 	object_class->get_property = avatar_chooser_get_property;
 	object_class->set_property = avatar_chooser_set_property;
 
+	/**
+	 * EmpathyAvatarChooser::changed:
+	 * @chooser: an #EmpathyAvatarChooser
+	 *
+	 * Emitted when the chosen avatar has changed.
+	 *
+	 */
 	signals[CHANGED] =
 		g_signal_new ("changed",
 			      G_TYPE_FROM_CLASS (klass),
@@ -170,6 +194,12 @@ empathy_avatar_chooser_class_init (EmpathyAvatarChooserClass *klass)
 			      g_cclosure_marshal_VOID__VOID,
 			      G_TYPE_NONE, 0);
 
+	/**
+	 * EmpathyAvatarChooser:connection:
+	 *
+	 * The #TpConnection whose avatar should be shown and modified by
+	 * the #EmpathyAvatarChooser instance.
+	 */
 	param_spec = g_param_spec_object ("connection",
 					  "TpConnection",
 					  "TpConnection whose avatar should be "
@@ -983,12 +1013,26 @@ avatar_chooser_clicked_cb (GtkWidget            *button,
 	g_free (saved_dir);
 }
 
+/**
+ * empathy_avatar_chooser_new:
+ *
+ * Creates a new #EmpathyAvatarChooser.
+ *
+ * Return value: a new #EmpathyAvatarChooser
+ */
 GtkWidget *
 empathy_avatar_chooser_new ()
 {
 	return g_object_new (EMPATHY_TYPE_AVATAR_CHOOSER, NULL);
 }
 
+/**
+ * empathy_avatar_chooser_set:
+ * @chooser: an #EmpathyAvatarChooser
+ * @avatar: a new #EmpathyAvatar
+ *
+ * Sets the @chooser to display the avatar indicated by @avatar.
+ */
 void
 empathy_avatar_chooser_set (EmpathyAvatarChooser *chooser,
 			    EmpathyAvatar        *avatar)
@@ -1002,6 +1046,15 @@ empathy_avatar_chooser_set (EmpathyAvatarChooser *chooser,
 	}
 }
 
+/**
+ * empathy_avatar_chooser_get_image_data:
+ * @chooser: an #EmpathyAvatarChooser
+ * @data: avatar bytes
+ * @data_size: size of @data
+ * @mime_type: avatar mime-type
+ *
+ * Gets image data about the currently selected avatar.
+ */
 void
 empathy_avatar_chooser_get_image_data (EmpathyAvatarChooser  *chooser,
 				       const gchar          **data,

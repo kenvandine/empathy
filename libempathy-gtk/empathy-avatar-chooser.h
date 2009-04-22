@@ -41,6 +41,8 @@ typedef struct _EmpathyAvatarChooserClass   EmpathyAvatarChooserClass;
 
 struct _EmpathyAvatarChooser {
 	GtkButton parent;
+
+	/*<private>*/
 	gpointer priv;
 };
 
