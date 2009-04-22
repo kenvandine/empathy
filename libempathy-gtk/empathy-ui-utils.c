@@ -102,7 +102,7 @@ builder_get_file_valist (const gchar *filename,
 
 	gui = gtk_builder_new ();
 	if (!gtk_builder_add_from_file (gui, filename, &error)) {
-		DEBUG ("Error: %s", error->message);
+		g_critical ("GtkBuilder Error: %s", error->message);
 		g_clear_error (&error);
 		g_object_unref (gui);
 		return NULL;
