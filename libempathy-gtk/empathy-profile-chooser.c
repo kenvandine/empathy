@@ -38,7 +38,7 @@ enum {
 };
 
 McProfile*
-empathy_profile_chooser_get_selected (GtkWidget *widget)
+empathy_profile_chooser_dup_selected (GtkWidget *widget)
 {
 	GtkTreeModel *model;
 	GtkTreeIter   iter;

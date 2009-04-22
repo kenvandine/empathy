@@ -819,13 +819,14 @@ accounts_dialog_button_create_clicked_cb (GtkWidget             *button,
 	gchar     *str;
 	McProfileCapabilityFlags cap;
 
-	profile = empathy_profile_chooser_get_selected (dialog->combobox_profile);
+	profile = empathy_profile_chooser_dup_selected (dialog->combobox_profile);
 
 	/* Create account */
 	account = mc_account_create (profile);
 	if (account == NULL) {
 		/* We can't display an error to the user as MC doesn't give us
 		 * any clue about the reason of the failure... */
+		g_object_unref (profile);
 		return;
 	}
 
@@ -869,7 +870,7 @@ accounts_dialog_profile_changed_cb (GtkWidget             *widget,
 	McProfile *profile;
 	McProfileCapabilityFlags cap;
 
-	profile = empathy_profile_chooser_get_selected (dialog->combobox_profile);
+	profile = empathy_profile_chooser_dup_selected (dialog->combobox_profile);
 	cap = mc_profile_get_capabilities (profile);
 
 	if (cap & MC_PROFILE_CAPABILITY_REGISTRATION_UI) {
