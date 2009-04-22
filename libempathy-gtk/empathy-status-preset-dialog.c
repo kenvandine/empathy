@@ -60,7 +60,7 @@ struct _EmpathyStatusPresetDialogPriv
 	GtkWidget *add_combobox;
 	GtkWidget *add_button;
 
-	McPresence selected_state;
+	GtkTreeIter selected_iter;
 	gboolean add_combo_changed;
 };
 
@@ -131,7 +131,8 @@ status_preset_add_combo_reset (EmpathyStatusPresetDialog *self)
 {
 	EmpathyStatusPresetDialogPriv *priv = GET_PRIV (self);
 
-	gtk_combo_box_set_active (GTK_COMBO_BOX (priv->add_combobox), 0);
+	gtk_combo_box_set_active_iter (GTK_COMBO_BOX (priv->add_combobox),
+			&priv->selected_iter);
 }
 
 static void
@@ -181,7 +182,7 @@ status_preset_dialog_setup_add_combobox (EmpathyStatusPresetDialog *self)
 			"foreground", "Gray", /* FIXME - theme */
 			NULL);
 
-	status_preset_add_combo_reset (self);
+	gtk_combo_box_set_active (GTK_COMBO_BOX (combobox), 0);
 }
 
 static void
@@ -304,8 +305,8 @@ status_preset_dialog_add_combo_changed (GtkComboBox *combo,
 	if (gtk_combo_box_get_active_iter (combo, &iter)) {
 		char *icon_name;
 
+		priv->selected_iter = iter;
 		gtk_tree_model_get (model, &iter,
-				PRESETS_STORE_STATE, &priv->selected_state,
 				PRESETS_STORE_ICON_NAME, &icon_name,
 				-1);
 
@@ -330,16 +331,23 @@ status_preset_dialog_add_preset (GtkWidget *widget,
 				 EmpathyStatusPresetDialog *self)
 {
 	EmpathyStatusPresetDialogPriv *priv = GET_PRIV (self);
+	GtkTreeModel *model;
 	GtkWidget *entry;
+	McPresence state;
 	const char *status;
 
 	g_return_if_fail (priv->add_combo_changed);
 
+	model = gtk_combo_box_get_model (GTK_COMBO_BOX (priv->add_combobox));
 	entry = gtk_bin_get_child (GTK_BIN (priv->add_combobox));
-	status = gtk_entry_get_text (GTK_ENTRY (entry));
 
-	DEBUG ("ADD PRESET (%i, %s)\n", priv->selected_state, status);
-	empathy_status_presets_set_last (priv->selected_state, status);
+	status = gtk_entry_get_text (GTK_ENTRY (entry));
+	gtk_tree_model_get (model, &priv->selected_iter,
+			PRESETS_STORE_STATE, &state,
+			-1);
+
+	DEBUG ("ADD PRESET (%i, %s)\n", state, status);
+	empathy_status_presets_set_last (state, status);
 
 	status_preset_dialog_setup_presets_update (self);
 	status_preset_add_combo_reset (self);
