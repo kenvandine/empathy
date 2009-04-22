@@ -31,6 +31,23 @@
 
 #include "empathy-contact-selector.h"
 
+/**
+ * SECTION:empathy-contact-selector
+ * @title:EmpathyContactSelector
+ * @short_description: A widget used to choose from a list of contacts.
+ * @include: libempathy-gtk/empathy-contact-selector.h
+ *
+ * #EmpathyContactSelector is a widget which extends #GtkComboBox to provide
+ * a chooser of available contacts.
+ */
+
+/**
+ * EmpathyContactSelector:
+ * @parent: parent object
+ *
+ * Widget which extends #GtkComboBox to provide a chooser of available contacts.
+ */
+
 G_DEFINE_TYPE (EmpathyContactSelector, empathy_contact_selector,
     GTK_TYPE_COMBO_BOX)
 
@@ -320,14 +337,27 @@ empathy_contact_selector_class_init (EmpathyContactSelectorClass *klass)
   object_class->get_property = contact_selector_get_property;
   g_type_class_add_private (klass, sizeof (EmpathyContactSelectorPriv));
 
+  /**
+   * EmpathyContactSelector:contact-list:
+   *
+   * An #EmpathyContactList containing the contacts for the
+   * #EmpathyContactSelector.
+   */
   g_object_class_install_property (object_class, PROP_CONTACT_LIST,
       g_param_spec_object ("contact-list", "contact list", "contact list",
       EMPATHY_TYPE_CONTACT_LIST, G_PARAM_CONSTRUCT_ONLY |
       G_PARAM_READWRITE | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 }
 
-/* public methods */
-
+/**
+ * empathy_contact_selector_new:
+ * @contact_list: an #EmpathyContactList containing the contacts to list in
+ * the contact selector
+ *
+ * Creates a new #EmpathyContactSelector.
+ *
+ * Return value: A new #EmpathyContactSelector
+ */
 GtkWidget *
 empathy_contact_selector_new (EmpathyContactList *contact_list)
 {
@@ -337,6 +367,16 @@ empathy_contact_selector_new (EmpathyContactList *contact_list)
       "contact-list", contact_list, NULL));
 }
 
+/**
+ * empathy_contact_selector_dup_selected:
+ * @selector: An #EmpathyContactSelector
+ *
+ * Returns a new reference to the contact which is currently selected in
+ * @selector, or %NULL if there is no contact selected. The contact should
+ * be unrefed with g_object_unref() when finished with.
+ *
+ * Return value: A new reference to the contact currently selected, or %NULL
+ */
 EmpathyContact *
 empathy_contact_selector_dup_selected (EmpathyContactSelector *selector)
 {
@@ -390,6 +430,19 @@ contact_selector_filter_visible_func (GtkTreeModel *model,
   return visible;
 }
 
+/**
+ * empathy_contact_selector_set_visible:
+ * @selector: an #EmpathyContactSelector
+ * @func: an #EmpathyContactSelectorFilterFunc to filter the contacts
+ * @user_data: data to pass to @func or %NULL
+ *
+ * Sets a filter on the @selector so only contacts that return %TRUE
+ * when passed into @func are visible.
+ *
+ * A typical usage for this function would be to only show contacts that
+ * can send or receive files. In this case, one could use the
+ * empathy_contact_can_send_files() function
+ */
 void
 empathy_contact_selector_set_visible (EmpathyContactSelector *selector,
                                       EmpathyContactSelectorFilterFunc func,
@@ -407,3 +460,14 @@ empathy_contact_selector_set_visible (EmpathyContactSelector *selector,
 
   gtk_tree_model_filter_refilter (GTK_TREE_MODEL_FILTER (priv->model));
 }
+
+/**
+ * EmpathyContactSelectorFilterFunc:
+ * @contact: an #EmpathyContact
+ * @user_data: user data or %NULL
+ *
+ * A function which decides whether the contact indicated by @contact
+ * is visible.
+ *
+ * Return value: whether @contact is visible
+ */
