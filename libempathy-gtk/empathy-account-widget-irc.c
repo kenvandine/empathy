@@ -464,7 +464,7 @@ empathy_account_widget_irc_new (McAccount *account)
       "combobox_network", &settings->combobox_network,
       "button_network", &settings->button_network,
       "button_add_network", &settings->button_add_network,
-      "button_remove", &settings->button_remove,
+      "button_remove_network", &settings->button_remove,
       NULL);
   g_free (filename);
 
@@ -501,7 +501,7 @@ empathy_account_widget_irc_new (McAccount *account)
       "vbox_irc_settings", "destroy", account_widget_irc_destroy_cb,
       "button_network", "clicked", account_widget_irc_button_edit_network_clicked_cb,
       "button_add_network", "clicked", account_widget_irc_button_add_network_clicked_cb,
-      "button_remove", "clicked", account_widget_irc_button_remove_clicked_cb,
+      "button_remove_network", "clicked", account_widget_irc_button_remove_clicked_cb,
       "combobox_network", "changed", account_widget_irc_combobox_network_changed_cb,
       NULL);
 
