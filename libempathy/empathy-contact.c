@@ -389,10 +389,10 @@ empathy_contact_new (TpContact *tp_contact)
 }
 
 EmpathyContact *
-empathy_contact_new_static (McAccount *account,
-                            const gchar *id,
-                            const gchar *name,
-                            gboolean is_user)
+empathy_contact_new_for_log (McAccount *account,
+                             const gchar *id,
+                             const gchar *name,
+                             gboolean is_user)
 {
   g_return_val_if_fail (MC_IS_ACCOUNT (account), NULL);
   g_return_val_if_fail (id != NULL, NULL);
