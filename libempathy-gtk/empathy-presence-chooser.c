@@ -47,6 +47,23 @@
 #include "empathy-images.h"
 #include "empathy-presence-chooser.h"
 
+/**
+ * SECTION:empathy-presence-chooser
+ * @title:EmpathyPresenceChooser
+ * @short_description: A widget used to change presence
+ * @include: libempathy-gtk/empathy-presence-chooser.h
+ *
+ * #EmpathyPresenceChooser is a widget which extends #GtkComboBoxEntry
+ * to change presence.
+ */
+
+/**
+ * EmpathyAccountChooser:
+ * @parent: parent object
+ *
+ * Widget which extends #GtkComboBoxEntry to change presence.
+ */
+
 /* Flashing delay for icons (milliseconds). */
 #define FLASH_TIMEOUT 500
 
@@ -789,6 +806,13 @@ presence_chooser_finalize (GObject *object)
 	G_OBJECT_CLASS (empathy_presence_chooser_parent_class)->finalize (object);
 }
 
+/**
+ * empathy_presence_chooser_new:
+ *
+ * Creates a new #EmpathyPresenceChooser widget.
+ *
+ * Return value: A new #EmpathyPresenceChooser widget
+ */
 GtkWidget *
 empathy_presence_chooser_new (void)
 {
@@ -946,6 +970,13 @@ presence_chooser_flash_stop (EmpathyPresenceChooser *chooser,
 					   empathy_icon_name_for_presence (state));
 }
 
+/**
+ * empathy_presence_chooser_create_menu:
+ *
+ * Creates a new #GtkMenu allowing users to change their presence from a menu.
+ *
+ * Return value: a new #GtkMenu for changing presence in a menu.
+ */
 GtkWidget *
 empathy_presence_chooser_create_menu (void)
 {
