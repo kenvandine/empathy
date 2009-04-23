@@ -332,7 +332,8 @@ debug_dialog_list_connection_names_cb (const gchar * const *names,
   gtk_combo_box_set_active (GTK_COMBO_BOX (priv->cm_chooser), 0);
 
   /* Fill treeview */
-  debug_dialog_cm_chooser_changed_cb (GTK_COMBO_BOX (priv->cm_chooser), debug_dialog);
+  debug_dialog_cm_chooser_changed_cb (
+      GTK_COMBO_BOX (priv->cm_chooser), debug_dialog);
 }
 
 static void
@@ -624,7 +625,8 @@ debug_dialog_constructor (GType type,
   toolbar = gtk_toolbar_new ();
   gtk_toolbar_set_style (GTK_TOOLBAR (toolbar), GTK_TOOLBAR_BOTH_HORIZ);
   gtk_toolbar_set_show_arrow (GTK_TOOLBAR (toolbar), TRUE);
-  gtk_toolbar_set_icon_size (GTK_TOOLBAR (toolbar), GTK_ICON_SIZE_SMALL_TOOLBAR);
+  gtk_toolbar_set_icon_size (GTK_TOOLBAR (toolbar),
+      GTK_ICON_SIZE_SMALL_TOOLBAR);
   gtk_widget_show (toolbar);
 
   gtk_box_pack_start (GTK_BOX (vbox), toolbar, FALSE, FALSE, 0);
@@ -671,12 +673,14 @@ debug_dialog_constructor (GType type,
 
   /* Pause */
   priv->paused = FALSE;
-  image = gtk_image_new_from_stock (GTK_STOCK_MEDIA_PAUSE, GTK_ICON_SIZE_MENU);
+  image = gtk_image_new_from_stock (GTK_STOCK_MEDIA_PAUSE,
+      GTK_ICON_SIZE_MENU);
   gtk_widget_show (image);
   item = gtk_toggle_tool_button_new ();
-  gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (item), priv->paused);
-  g_signal_connect (item, "toggled", G_CALLBACK (debug_dialog_pause_toggled_cb),
-      object);
+  gtk_toggle_tool_button_set_active (GTK_TOGGLE_TOOL_BUTTON (item),
+      priv->paused);
+  g_signal_connect (item, "toggled",
+      G_CALLBACK (debug_dialog_pause_toggled_cb), object);
   gtk_widget_show (GTK_WIDGET (item));
   gtk_tool_item_set_is_important (GTK_TOOL_ITEM (item), TRUE);
   gtk_tool_button_set_label (GTK_TOOL_BUTTON (item), _("Pause"));
