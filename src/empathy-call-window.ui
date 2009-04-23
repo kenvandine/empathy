@@ -14,6 +14,7 @@
           <object class="GtkToggleAction" id="send_video">
             <property name="name">send_video</property>
             <property name="label" translatable="yes">Send video</property>
+            <property name="sensitive">False</property>
           </object>
         </child>
         <child>
