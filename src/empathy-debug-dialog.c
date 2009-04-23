@@ -55,7 +55,7 @@ enum
 enum
 {
   COL_CM_NAME = 0,
-  COL_CM_BUS,
+  COL_CM_UNIQUE_NAME,
   NUM_COLS_CM
 };
 
@@ -251,7 +251,7 @@ debug_dialog_cm_chooser_changed_cb (GtkComboBox *cm_chooser,
     }
 
   gtk_tree_model_get (GTK_TREE_MODEL (priv->cms), &iter,
-      COL_CM_BUS, &bus_name, -1);
+      COL_CM_UNIQUE_NAME, &bus_name, -1);
   connection = tp_connection_new (dbus, bus_name, DEBUG_OBJECT_PATH, &error);
   g_free (bus_name);
 
@@ -291,6 +291,98 @@ debug_dialog_cm_chooser_changed_cb (GtkComboBox *cm_chooser,
   g_object_unref (mc);
 }
 
+typedef struct
+{
+  const gchar *unique_name;
+  gboolean found;
+} CmInModelForeachData;
+
+static gboolean
+debug_dialog_cms_foreach (GtkTreeModel *model,
+    GtkTreePath *path,
+    GtkTreeIter *iter,
+    gpointer user_data)
+{
+  CmInModelForeachData *data = (CmInModelForeachData *) user_data;
+  gchar *unique_name;
+
+  gtk_tree_model_get (model, iter,
+      COL_CM_UNIQUE_NAME, &unique_name,
+      -1);
+
+  if (!tp_strdiff (unique_name, data->unique_name))
+    data->found = TRUE;
+
+  g_free (unique_name);
+
+  return data->found;
+}
+
+static gboolean
+debug_dialog_cm_is_in_model (EmpathyDebugDialog *debug_dialog,
+    const gchar *unique_name)
+{
+  EmpathyDebugDialogPriv *priv = GET_PRIV (debug_dialog);
+  CmInModelForeachData *data;
+  gboolean found;
+
+  data = g_slice_new0 (CmInModelForeachData);
+  data->unique_name = unique_name;
+  data->found = FALSE;
+
+  gtk_tree_model_foreach (GTK_TREE_MODEL (priv->cms),
+      debug_dialog_cms_foreach, data);
+
+  found = data->found;
+
+  g_slice_free (CmInModelForeachData, data);
+
+  return found;
+}
+
+typedef struct
+{
+  EmpathyDebugDialog *debug_dialog;
+  gchar *cm_name;
+} FillCmChooserData;
+
+static void
+debug_dialog_get_name_owner_cb (TpDBusDaemon *proxy,
+    const gchar *out,
+    const GError *error,
+    gpointer user_data,
+    GObject *weak_object)
+{
+  FillCmChooserData *data = (FillCmChooserData *) user_data;
+  EmpathyDebugDialogPriv *priv = GET_PRIV (data->debug_dialog);
+
+  if (error != NULL)
+    {
+      DEBUG ("GetNameOwner failed: %s", error->message);
+      goto OUT;
+    }
+
+  if (!debug_dialog_cm_is_in_model (data->debug_dialog, out))
+    {
+      GtkTreeIter iter;
+
+      DEBUG ("Adding CM to list: %s at unique name: %s",
+          data->cm_name, out);
+
+      gtk_list_store_append (priv->cms, &iter);
+      gtk_list_store_set (priv->cms, &iter,
+          COL_CM_NAME, data->cm_name,
+          COL_CM_UNIQUE_NAME, out,
+          -1);
+
+      gtk_combo_box_set_active (GTK_COMBO_BOX (priv->cm_chooser), 0);
+    }
+
+OUT:
+  g_free (data->cm_name);
+  g_slice_free (FillCmChooserData, data);
+}
+
 static void
 debug_dialog_list_connection_names_cb (const gchar * const *names,
     gsize n,
@@ -301,8 +393,9 @@ debug_dialog_list_connection_names_cb (const gchar * const *names,
     GObject *weak_object)
 {
   EmpathyDebugDialog *debug_dialog = (EmpathyDebugDialog *) user_data;
-  EmpathyDebugDialogPriv *priv = GET_PRIV (debug_dialog);
   guint i;
+  TpDBusDaemon *dbus;
+  GError *error2 = NULL;
 
   if (error != NULL)
     {
@@ -310,36 +403,28 @@ debug_dialog_list_connection_names_cb (const gchar * const *names,
       return;
     }
 
-  for (i = 0; cms[i] != NULL; i++)
+  dbus = tp_dbus_daemon_dup (&error2);
+
+  if (error2 != NULL)
     {
-      GtkTreeIter iter;
-      guint j;
-      gboolean found = FALSE;
-
-      for (j = i + 1; cms[j] != NULL; j++)
-        {
-          if (!tp_strdiff (cms[i], cms[j]))
-            {
-              found = TRUE;
-              break;
-            }
-        }
-
-      if (found)
-        continue;
-
-      gtk_list_store_append (priv->cms, &iter);
-      gtk_list_store_set (priv->cms, &iter,
-          COL_CM_NAME, cms[i],
-          COL_CM_BUS, names[i],
-          -1);
+      DEBUG ("Failed to dup TpDBusDaemon.");
+      return;
     }
 
-  gtk_combo_box_set_active (GTK_COMBO_BOX (priv->cm_chooser), 0);
+  for (i = 0; cms[i] != NULL; i++)
+    {
+      FillCmChooserData *data;
 
-  /* Fill treeview */
-  debug_dialog_cm_chooser_changed_cb (
-      GTK_COMBO_BOX (priv->cm_chooser), debug_dialog);
+      data = g_slice_new0 (FillCmChooserData);
+      data->debug_dialog = debug_dialog;
+      data->cm_name = g_strdup (cms[i]);
+
+      tp_cli_dbus_daemon_call_get_name_owner (dbus, -1,
+          names[i], debug_dialog_get_name_owner_cb,
+          data, NULL, NULL);
+    }
+
+  g_object_unref (dbus);
 }
 
 static void
