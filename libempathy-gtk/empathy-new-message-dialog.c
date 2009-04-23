@@ -44,6 +44,16 @@
 #include "empathy-new-message-dialog.h"
 #include "empathy-account-chooser.h"
 
+/**
+ * SECTION:empathy-new-message-dialog
+ * @title: EmpathyNewMessageDialog
+ * @short_description: A dialog to show a new message
+ * @include: libempathy-gtk/empathy-new-message-dialog.h
+ *
+ * #EmpathyNewMessageDialog is a dialog which allows a text chat or
+ * call to be started with any contact on any enabled account.
+ */
+
 typedef struct {
 	GtkWidget *dialog;
 	GtkWidget *table_contact;
@@ -242,6 +252,14 @@ new_message_dialog_destroy_cb (GtkWidget               *widget,
 	g_free (dialog);
 }
 
+/**
+ * empathy_new_message_dialog_show:
+ * @parent: parent #GtkWindow of the dialog
+ *
+ * Create a new #EmpathyNewMessageDialog and show it.
+ *
+ * Return value: the new #EmpathyNewMessageDialog
+ */
 GtkWidget *
 empathy_new_message_dialog_show (GtkWindow *parent)
 {
