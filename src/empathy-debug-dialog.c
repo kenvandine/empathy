@@ -320,6 +320,21 @@ debug_dialog_list_connection_names_cb (const gchar * const *names,
   for (i = 0; cms[i] != NULL; i++)
     {
       GtkTreeIter iter;
+      guint j;
+      gboolean found = FALSE;
+
+      for (j = i + 1; cms[j] != NULL; j++)
+        {
+          if (!tp_strdiff (cms[i], cms[j]))
+            {
+              found = TRUE;
+              break;
+            }
+        }
+
+      if (found)
+        continue;
+
       gtk_list_store_append (priv->cms, &iter);
       gtk_list_store_set (priv->cms, &iter,
           COL_CM_NAME, cms[i],
