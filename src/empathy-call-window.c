@@ -1157,20 +1157,25 @@ static void
 empathy_call_window_camera_toggled_cb (GtkToggleToolButton *toggle,
   EmpathyCallWindow *window)
 {
+  EmpathyCallWindowPriv *priv = GET_PRIV (window);
   gboolean active;
 
   active = (gtk_toggle_tool_button_get_active (toggle));
   empathy_call_window_set_send_video (window, active);
+  gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (priv->send_video), active);
 }
 
 static void
 empathy_call_window_send_video_toggled_cb (GtkToggleAction *toggle,
   EmpathyCallWindow *window)
 {
+  EmpathyCallWindowPriv *priv = GET_PRIV (window);
   gboolean active;
 
   active = (gtk_toggle_action_get_active (toggle));
   empathy_call_window_set_send_video (window, active);
+  gtk_toggle_tool_button_set_active (
+      GTK_TOGGLE_TOOL_BUTTON (priv->camera_button), active);
 }
 
 static void
