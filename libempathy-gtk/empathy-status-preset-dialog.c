@@ -93,7 +93,7 @@ empathy_status_preset_dialog_class_init (EmpathyStatusPresetDialogClass *class)
 }
 
 static void
-status_preset_dialog_setup_presets_update (EmpathyStatusPresetDialog *self)
+status_preset_dialog_presets_update (EmpathyStatusPresetDialog *self)
 {
 	EmpathyStatusPresetDialogPriv *priv = GET_PRIV (self);
 	GtkListStore *store;
@@ -203,7 +203,7 @@ status_preset_dialog_setup_presets_treeview (EmpathyStatusPresetDialog *self)
 				 GTK_TREE_MODEL (store));
 	g_object_unref (store);
 
-	status_preset_dialog_setup_presets_update (self);
+	status_preset_dialog_presets_update (self);
 
 	column = gtk_tree_view_column_new ();
 	gtk_tree_view_append_column (GTK_TREE_VIEW (treeview), column);
@@ -255,7 +255,7 @@ status_preset_dialog_preset_remove (GtkButton *button,
 
 	g_free (status);
 
-	status_preset_dialog_setup_presets_update (self);
+	status_preset_dialog_presets_update (self);
 }
 
 static void
@@ -349,7 +349,7 @@ status_preset_dialog_add_preset (GtkWidget *widget,
 	DEBUG ("ADD PRESET (%i, %s)\n", state, status);
 	empathy_status_presets_set_last (state, status);
 
-	status_preset_dialog_setup_presets_update (self);
+	status_preset_dialog_presets_update (self);
 	status_preset_add_combo_reset (self);
 }
 
