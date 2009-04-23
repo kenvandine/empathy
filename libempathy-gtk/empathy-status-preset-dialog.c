@@ -54,6 +54,7 @@ static McPresence states[] = {
 typedef struct _EmpathyStatusPresetDialogPriv EmpathyStatusPresetDialogPriv;
 struct _EmpathyStatusPresetDialogPriv
 {
+	/* block status_preset_dialog_add_combo_changed() when > 0 */
 	int block_add_combo_changed;
 
 	GtkWidget *presets_treeview;
