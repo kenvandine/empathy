@@ -63,6 +63,7 @@ struct _EmpathyStatusPresetDialogPriv
 
 	GtkTreeIter selected_iter;
 	gboolean add_combo_changed;
+	char *saved_status;
 };
 
 enum
@@ -83,11 +84,22 @@ enum
 };
 
 static void
+empathy_status_preset_dialog_finalize (GObject *self)
+{
+	EmpathyStatusPresetDialogPriv *priv = GET_PRIV (self);
+
+	g_free (priv->saved_status);
+
+	G_OBJECT_CLASS (empathy_status_preset_dialog_parent_class)->finalize (self);
+}
+
+static void
 empathy_status_preset_dialog_class_init (EmpathyStatusPresetDialogClass *class)
 {
 	GObjectClass *gobject_class;
 
 	gobject_class = G_OBJECT_CLASS (class);
+	gobject_class->finalize = empathy_status_preset_dialog_finalize;
 
 	g_type_class_add_private (gobject_class,
 			sizeof (EmpathyStatusPresetDialogPriv));
@@ -371,12 +383,17 @@ status_preset_dialog_add_combo_changed (GtkComboBox *combo,
 		g_free (icon_name);
 
 		status_preset_dialog_set_add_combo_changed (self, FALSE, TRUE);
+		if (priv->saved_status && strlen (priv->saved_status) > 0) {
+			gtk_entry_set_text (GTK_ENTRY (entry),
+					priv->saved_status);
+		}
 	} else {
-		const char *status;
+		g_free (priv->saved_status);
+		priv->saved_status = g_strdup (
+				gtk_entry_get_text (GTK_ENTRY (entry)));
 
-		status = gtk_entry_get_text (GTK_ENTRY (entry));
 		status_preset_dialog_set_add_combo_changed (self,
-				strlen (status) > 0, FALSE);
+				strlen (priv->saved_status) > 0, FALSE);
 	}
 }
 
