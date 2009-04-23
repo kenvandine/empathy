@@ -186,6 +186,53 @@ status_preset_dialog_setup_add_combobox (EmpathyStatusPresetDialog *self)
 }
 
 static void
+status_preset_dialog_status_edited (GtkCellRendererText *renderer,
+				    char *path_str,
+				    char *new_status,
+				    EmpathyStatusPresetDialog *self)
+{
+	EmpathyStatusPresetDialogPriv *priv = GET_PRIV (self);
+	GtkTreeModel *model;
+	GtkTreePath *path;
+	GtkTreeIter iter;
+	McPresence state;
+	char *old_status;
+	gboolean valid;
+
+	if (strlen (new_status) == 0) {
+		/* status is empty, ignore */
+		return;
+	}
+
+	model = gtk_tree_view_get_model (GTK_TREE_VIEW (priv->presets_treeview));
+	path = gtk_tree_path_new_from_string (path_str);
+	valid = gtk_tree_model_get_iter (model, &iter, path);
+	gtk_tree_path_free (path);
+
+	if (!valid) return;
+
+	gtk_tree_model_get (model, &iter,
+			PRESETS_STORE_STATE, &state,
+			PRESETS_STORE_STATUS, &old_status,
+			-1);
+
+	if (!strcmp (old_status, new_status)) {
+		/* statuses are the same */
+		g_free (old_status);
+		return;
+	}
+
+	DEBUG ("EDITED STATUS (%s) -> (%s)\n", old_status, new_status);
+
+	empathy_status_presets_remove (state, old_status);
+	empathy_status_presets_set_last (state, new_status);
+
+	g_free (old_status);
+
+	status_preset_dialog_presets_update (self);
+}
+
+static void
 status_preset_dialog_setup_presets_treeview (EmpathyStatusPresetDialog *self)
 {
 	EmpathyStatusPresetDialogPriv *priv = GET_PRIV (self);
@@ -217,6 +264,11 @@ status_preset_dialog_setup_presets_treeview (EmpathyStatusPresetDialog *self)
 	gtk_tree_view_column_pack_start (column, renderer, TRUE);
 	gtk_tree_view_column_add_attribute (column, renderer,
 			"text", PRESETS_STORE_STATUS);
+	g_object_set (renderer,
+			"editable", TRUE,
+			NULL);
+	g_signal_connect (renderer, "edited",
+			G_CALLBACK (status_preset_dialog_status_edited), self);
 }
 
 static void
