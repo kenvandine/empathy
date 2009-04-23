@@ -572,6 +572,7 @@ empathy_irc_network_dialog_show (EmpathyIrcNetwork *network,
   gtk_window_set_modal (GTK_WINDOW (dialog->dialog), TRUE);
 
   irc_network_dialog_network_update_buttons (dialog);
+  gtk_widget_show_all (dialog->dialog);
 
   return dialog->dialog;
 }

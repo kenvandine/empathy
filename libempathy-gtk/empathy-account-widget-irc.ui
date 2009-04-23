@@ -3,7 +3,6 @@
   <requires lib="gtk+" version="2.16"/>
   <!-- interface-naming-policy toplevel-contextual -->
   <object class="GtkDialog" id="irc_network_dialog">
-    <property name="visible">True</property>
     <property name="border_width">5</property>
     <property name="title" translatable="yes">Network</property>
     <property name="window_position">center-on-parent</property>
@@ -418,7 +417,7 @@
           </packing>
         </child>
         <child>
-          <object class="GtkButton" id="button_remove">
+          <object class="GtkButton" id="button_remove_network">
             <property name="visible">True</property>
             <property name="can_focus">True</property>
             <property name="receives_default">True</property>
@@ -444,7 +443,7 @@
       </packing>
     </child>
     <child>
-      <object class="GtkLabel" id="label_network">
+      <object class="GtkLabel" id="label_network2">
         <property name="visible">True</property>
         <property name="xalign">0</property>
         <property name="label" translatable="yes">Network:</property>
