@@ -108,8 +108,9 @@ status_preset_dialog_presets_update (EmpathyStatusPresetDialog *self)
 		GList *presets, *l;
 		const char *icon_name;
 
-		presets = empathy_status_presets_get (states[i], -1);
 		icon_name = empathy_icon_name_for_presence (states[i]);
+		presets = empathy_status_presets_get (states[i], -1);
+		presets = g_list_sort (presets, (GCompareFunc) g_utf8_collate);
 
 		for (l = presets; l; l = l->next) {
 			char *preset = (char *) l->data;

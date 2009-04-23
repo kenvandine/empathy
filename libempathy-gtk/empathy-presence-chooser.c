@@ -170,7 +170,8 @@ presence_chooser_create_model (EmpathyPresenceChooser *self)
 		if (states[i+1]) {
 
 			/* Set custom messages if wanted */
-			list = empathy_status_presets_get (states[i], 5);
+			list = empathy_status_presets_get (states[i], -1);
+			list = g_list_sort (list, (GCompareFunc) g_utf8_collate);
 			for (l = list; l; l = l->next) {
 				gtk_list_store_insert_with_values (store,
 					NULL, -1,
