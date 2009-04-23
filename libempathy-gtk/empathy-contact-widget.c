@@ -234,7 +234,11 @@ empathy_contact_widget_new (EmpathyContact *contact,
   contact_widget_client_setup (information);
 
   if (contact != NULL)
-      contact_widget_set_contact (information, contact);
+    contact_widget_set_contact (information, contact);
+
+  else if (information->flags & EMPATHY_CONTACT_WIDGET_EDIT_ACCOUNT ||
+      information->flags & EMPATHY_CONTACT_WIDGET_EDIT_ID)
+    contact_widget_change_contact (information);
 
   return empathy_builder_unref_and_keep_widget (gui,
     information->vbox_contact_widget);
@@ -561,7 +565,6 @@ contact_widget_contact_setup (EmpathyContactWidget *information)
     {
       information->widget_account = empathy_account_chooser_new ();
 
-      contact_widget_change_contact (information);
       g_signal_connect_swapped (information->widget_account, "changed",
             G_CALLBACK (contact_widget_change_contact),
             information);
