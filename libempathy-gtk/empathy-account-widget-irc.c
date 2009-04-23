@@ -52,7 +52,7 @@ typedef struct {
   GtkWidget *combobox_network;
   GtkWidget *button_add_network;
   GtkWidget *button_network;
-  GtkWidget *button_remove;
+  GtkWidget *button_remove_network;
 } EmpathyAccountWidgetIrc;
 
 enum {
@@ -464,7 +464,7 @@ empathy_account_widget_irc_new (McAccount *account)
       "combobox_network", &settings->combobox_network,
       "button_network", &settings->button_network,
       "button_add_network", &settings->button_add_network,
-      "button_remove_network", &settings->button_remove,
+      "button_remove_network", &settings->button_remove_network,
       NULL);
   g_free (filename);
 
