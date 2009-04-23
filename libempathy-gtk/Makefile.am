@@ -50,6 +50,7 @@ libempathy_gtk_la_SOURCES =             	\
 	empathy-smiley-manager.c		\
 	empathy-spell.c				\
 	empathy-spell-dialog.c			\
+	empathy-status-preset-dialog.c		\
 	empathy-theme-boxes.c			\
 	empathy-theme-irc.c			\
 	empathy-theme-manager.c			\
@@ -103,6 +104,7 @@ libempathy_gtk_headers =			\
 	empathy-smiley-manager.h		\
 	empathy-spell.h				\
 	empathy-spell-dialog.h			\
+	empathy-status-preset-dialog.h		\
 	empathy-theme-boxes.h			\
 	empathy-theme-irc.h			\
 	empathy-theme-manager.h			\
@@ -117,7 +119,6 @@ uidir = $(datadir)/empathy
 ui_DATA = 					\
 	empathy-contact-widget.ui		\
 	empathy-contact-dialogs.ui		\
-	empathy-presence-chooser.ui		\
 	empathy-account-widget-generic.ui	\
 	empathy-account-widget-jabber.ui	\
 	empathy-account-widget-msn.ui		\
@@ -129,6 +130,7 @@ ui_DATA = 					\
 	empathy-account-widget-groupwise.ui	\
 	empathy-account-widget-aim.ui		\
 	empathy-spell-dialog.ui			\
+	empathy-status-preset-dialog.ui		\
 	empathy-log-window.ui			\
 	empathy-chat.ui				\
 	empathy-new-message-dialog.ui

@@ -25,11 +25,13 @@ LDADD =								\
 noinst_PROGRAMS =			\
 	contact-manager			\
 	empetit				\
-	test-empathy-presence-chooser
+	test-empathy-presence-chooser	\
+	test-empathy-status-preset-dialog
 
 contact_manager_SOURCES = contact-manager.c
 empetit_SOURCES = empetit.c
 test_empathy_presence_chooser_SOURCES = test-empathy-presence-chooser.c
+test_empathy_status_preset_dialog_SOURCES = test-empathy-status-preset-dialog.c
 
 check_PROGRAMS = check-main
 TESTS = check-main

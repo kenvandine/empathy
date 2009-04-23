@@ -27,28 +27,21 @@
 #include <libempathy/empathy-status-presets.h>
 
 #include <libempathy-gtk/empathy-ui-utils.h>
-#include <libempathy-gtk/empathy-presence-chooser.h>
+#include <libempathy-gtk/empathy-status-preset-dialog.h>
 
 int
 main (int argc, char **argv)
 {
-	GtkWidget *window;
-	GtkWidget *chooser;
+	GtkWidget *dialog;
 
 	gtk_init (&argc, &argv);
 	empathy_gtk_init ();
 
 	empathy_status_presets_get_all ();
 
-	window = gtk_window_new (GTK_WINDOW_TOPLEVEL);
-	chooser = empathy_presence_chooser_new ();
-	gtk_container_add (GTK_CONTAINER (window), chooser);
+	dialog = empathy_status_preset_dialog_new (NULL);
 
-	gtk_window_set_default_size (GTK_WINDOW (window), 150, -1);
-	gtk_widget_show_all (window);
-
-	g_signal_connect_swapped (window, "destroy",
-			G_CALLBACK (gtk_main_quit), NULL);
+	gtk_widget_show (dialog);
 
 	gtk_main ();
 
