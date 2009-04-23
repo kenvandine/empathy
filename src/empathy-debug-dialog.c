@@ -280,13 +280,13 @@ debug_dialog_cm_chooser_changed_cb (GtkComboBox *cm_chooser,
     debug_dialog_set_enabled (debug_dialog, FALSE);
 
   /* Disconnect from previous NewDebugMessage signal */
-  if (priv->signal_connection)
+  if (priv->signal_connection != NULL)
     {
       tp_proxy_signal_connection_disconnect (priv->signal_connection);
       priv->signal_connection = NULL;
     }
 
-  if (priv->proxy)
+  if (priv->proxy != NULL)
     g_object_unref (priv->proxy);
 
   priv->proxy = TP_PROXY (connection);
@@ -869,22 +869,22 @@ debug_dialog_dispose (GObject *object)
 
   priv->dispose_run = TRUE;
 
-  if (priv->parent)
+  if (priv->parent != NULL)
     g_object_unref (priv->parent);
 
-  if (priv->store)
+  if (priv->store != NULL)
     g_object_unref (priv->store);
 
-  if (priv->proxy)
+  if (priv->proxy != NULL)
     {
       debug_dialog_set_enabled (EMPATHY_DEBUG_DIALOG (object), FALSE);
       g_object_unref (priv->proxy);
     }
 
-  if (priv->signal_connection)
+  if (priv->signal_connection != NULL)
     tp_proxy_signal_connection_disconnect (priv->signal_connection);
 
-  if (priv->cms)
+  if (priv->cms != NULL)
     g_object_unref (priv->cms);
 
   (G_OBJECT_CLASS (empathy_debug_dialog_parent_class)->dispose) (object);
