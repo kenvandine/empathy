@@ -200,6 +200,7 @@ ft_manager_update_ft_row (EmpathyFTManager *ft_manager,
   TpFileTransferState state;
   TpFileTransferStateChangeReason reason;
   gboolean incoming;
+  gdouble speed;
 
   row_ref = ft_manager_get_row_from_tp_file (ft_manager, tp_file);
   g_return_if_fail (row_ref != NULL);
@@ -210,6 +211,7 @@ ft_manager_update_ft_row (EmpathyFTManager *ft_manager,
   total_size = empathy_tp_file_get_size (tp_file);
   state = empathy_tp_file_get_state (tp_file, &reason);
   incoming = empathy_tp_file_is_incoming (tp_file);
+  speed = empathy_tp_file_get_speed (tp_file);
 
   switch (state)
     {
@@ -234,6 +236,7 @@ ft_manager_update_ft_row (EmpathyFTManager *ft_manager,
           {
             gchar *total_size_str;
             gchar *transferred_bytes_str;
+            gchar *speed_str;
 
             if (total_size == EMPATHY_TP_FILE_UNKNOWN_SIZE)
               total_size_str = g_strdup (C_("file size", "Unknown"));
@@ -241,13 +244,15 @@ ft_manager_update_ft_row (EmpathyFTManager *ft_manager,
               total_size_str = g_format_size_for_display (total_size);
 
             transferred_bytes_str = g_format_size_for_display (transferred_bytes);
+            speed_str = g_format_size_for_display (speed);
 
             /* translators: first %s is the transferred size, second %s is
              * the total file size */
-            second_line = g_strdup_printf (_("%s of %s"), transferred_bytes_str,
-                total_size_str);
+            second_line = g_strdup_printf (_("%s of %s at %s/s"),
+                transferred_bytes_str, total_size_str, speed_str);
             g_free (transferred_bytes_str);
             g_free (total_size_str);
+            g_free (speed_str);
 
           }
         else
@@ -301,8 +306,10 @@ ft_manager_update_ft_row (EmpathyFTManager *ft_manager,
 
   if (remaining < 0)
     {
-      if (state != TP_FILE_TRANSFER_STATE_COMPLETED &&
-          state != TP_FILE_TRANSFER_STATE_CANCELLED)
+      if (state == TP_FILE_TRANSFER_STATE_OPEN)
+        remaining_str = g_strdup (C_("remaining time", "Stalled"));      
+      else if (state != TP_FILE_TRANSFER_STATE_COMPLETED &&
+               state != TP_FILE_TRANSFER_STATE_CANCELLED)
         remaining_str = g_strdup (C_("remaining time", "Unknown"));
     }
   else
@@ -334,9 +341,8 @@ ft_manager_update_ft_row (EmpathyFTManager *ft_manager,
 }
 
 static void
-ft_manager_transferred_bytes_changed_cb (EmpathyTpFile *tp_file,
-                                         GParamSpec *pspec,
-                                         EmpathyFTManager *ft_manager)
+ft_manager_refresh_cb (EmpathyTpFile *tp_file,
+                       EmpathyFTManager *ft_manager)
 {
   ft_manager_update_ft_row (ft_manager, tp_file);
 }
@@ -840,8 +846,8 @@ ft_manager_add_tp_file_to_list (EmpathyFTManager *ft_manager,
   ft_manager_update_ft_row (ft_manager, tp_file);
   g_signal_connect (tp_file, "notify::state",
       G_CALLBACK (ft_manager_state_changed_cb), ft_manager);
-  g_signal_connect (tp_file, "notify::transferred-bytes",
-      G_CALLBACK (ft_manager_transferred_bytes_changed_cb), ft_manager);
+  g_signal_connect (tp_file, "refresh",
+      G_CALLBACK (ft_manager_refresh_cb), ft_manager);
 
   gtk_window_present (GTK_WINDOW (ft_manager->priv->window));
 }

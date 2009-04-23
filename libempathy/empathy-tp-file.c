@@ -69,6 +69,7 @@
 
 #define N_BUFFERS 2
 #define BUFFER_SIZE 4096
+#define STALLED_TIMEOUT 5
 
 typedef struct {
   GInputStream *in;
@@ -298,7 +299,11 @@ struct _EmpathyTpFilePriv {
 
   gboolean incoming;
   TpFileTransferStateChangeReason state_change_reason;
-  time_t start_time;
+  time_t last_update_time;
+  guint64 last_update_transferred_bytes;
+  gdouble speed;
+  gint remaining_time;
+  guint stalled_id;
   GValue *socket_address;
   GCancellable *cancellable;
 };
@@ -316,6 +321,13 @@ enum {
   PROP_CONTENT_HASH_TYPE,
   PROP_CONTENT_HASH,
 };
+
+enum {
+	REFRESH,
+	LAST_SIGNAL
+};
+
+static guint signals[LAST_SIGNAL];
 
 G_DEFINE_TYPE (EmpathyTpFile, empathy_tp_file, G_TYPE_OBJECT);
 
@@ -391,7 +403,23 @@ tp_file_finalize (GObject *object)
   if (tp_file->priv->cancellable)
     g_object_unref (tp_file->priv->cancellable);
 
+  if (tp_file->priv->stalled_id != 0)
+    g_source_remove (tp_file->priv->stalled_id);
+
   G_OBJECT_CLASS (empathy_tp_file_parent_class)->finalize (object);
+}
+
+static gboolean
+tp_file_stalled_cb (EmpathyTpFile *tp_file)
+{
+  /* We didn't get transferred bytes update for a while, the transfer is
+   * stalled. */
+
+  tp_file->priv->speed = 0;
+  tp_file->priv->remaining_time = -1;
+  g_signal_emit (tp_file, signals[REFRESH], 0);
+
+  return FALSE;
 }
 
 static void
@@ -425,7 +453,11 @@ tp_file_start_transfer (EmpathyTpFile *tp_file)
 
   DEBUG ("Start the transfer");
 
-  tp_file->priv->start_time = empathy_time_get_current ();
+  tp_file->priv->last_update_time = empathy_time_get_current ();
+  tp_file->priv->last_update_transferred_bytes = tp_file->priv->transferred_bytes;
+  tp_file->priv->stalled_id = g_timeout_add_seconds (STALLED_TIMEOUT,
+    (GSourceFunc) tp_file_stalled_cb, tp_file);
+
   tp_file->priv->cancellable = g_cancellable_new ();
   if (tp_file->priv->incoming)
     {
@@ -487,12 +519,40 @@ tp_file_transferred_bytes_changed_cb (TpChannel *channel,
                                       GObject *weak_object)
 {
   EmpathyTpFile *tp_file = EMPATHY_TP_FILE (weak_object);
+  time_t curr_time, elapsed_time;
+  guint64 transferred_bytes;
 
+  /* If we didn't progress since last update, return */
   if (tp_file->priv->transferred_bytes == count)
     return;
 
+  /* Update the transferred bytes count */
   tp_file->priv->transferred_bytes = count;
   g_object_notify (G_OBJECT (tp_file), "transferred-bytes");
+
+  /* We got a progress, reset the stalled timeout */
+  if (tp_file->priv->stalled_id != 0)
+    g_source_remove (tp_file->priv->stalled_id);
+  tp_file->priv->stalled_id = g_timeout_add_seconds (STALLED_TIMEOUT,
+    (GSourceFunc) tp_file_stalled_cb, tp_file);
+
+  /* Calculate the transfer speed and remaining time estimation. We recalculate
+   * that each second to get more dynamic values that react faster to network
+   * changes. This is better than calculating the average from the begining of
+   * the transfer, I think. */
+  curr_time = empathy_time_get_current ();
+  elapsed_time = curr_time - tp_file->priv->last_update_time;
+  if (elapsed_time > 1)
+    {
+      transferred_bytes = count - tp_file->priv->last_update_transferred_bytes;
+      tp_file->priv->speed = (gdouble) transferred_bytes / (gdouble) elapsed_time;
+      tp_file->priv->remaining_time = (tp_file->priv->size - count) /
+        tp_file->priv->speed;
+      tp_file->priv->last_update_transferred_bytes = count;
+      tp_file->priv->last_update_time = curr_time;
+
+      g_signal_emit (tp_file, signals[REFRESH], 0);
+    }
 }
 
 static void
@@ -986,10 +1046,6 @@ empathy_tp_file_get_transferred_bytes (EmpathyTpFile *tp_file)
 gint
 empathy_tp_file_get_remaining_time (EmpathyTpFile *tp_file)
 {
-  time_t curr_time, elapsed_time;
-  gdouble time_per_byte;
-  gdouble remaining_time;
-
   g_return_val_if_fail (EMPATHY_IS_TP_FILE (tp_file), -1);
 
   if (tp_file->priv->size == EMPATHY_TP_FILE_UNKNOWN_SIZE)
@@ -998,14 +1054,18 @@ empathy_tp_file_get_remaining_time (EmpathyTpFile *tp_file)
   if (tp_file->priv->transferred_bytes == tp_file->priv->size)
     return 0;
 
-  curr_time = empathy_time_get_current ();
-  elapsed_time = curr_time - tp_file->priv->start_time;
-  time_per_byte = (gdouble) elapsed_time /
-      (gdouble) tp_file->priv->transferred_bytes;
-  remaining_time = time_per_byte * (tp_file->priv->size -
-      tp_file->priv->transferred_bytes);
+  return tp_file->priv->remaining_time;
+}
 
-  return (gint) remaining_time;
+gdouble
+empathy_tp_file_get_speed (EmpathyTpFile *tp_file)
+{
+  g_return_val_if_fail (EMPATHY_IS_TP_FILE (tp_file), 0);
+
+  if (tp_file->priv->transferred_bytes == tp_file->priv->size)
+    return 0;
+
+  return tp_file->priv->speed;
 }
 
 const gchar *
@@ -1143,6 +1203,10 @@ empathy_tp_file_class_init (EmpathyTpFileClass *klass)
           G_MAXUINT64,
           0,
           G_PARAM_READWRITE));
+
+  signals[REFRESH] = g_signal_new ("refresh", G_TYPE_FROM_CLASS (klass),
+      G_SIGNAL_RUN_LAST, 0, NULL, NULL,
+      g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
 
   g_type_class_add_private (object_class, sizeof (EmpathyTpFilePriv));
 }

@@ -80,6 +80,7 @@ TpFileTransferState empathy_tp_file_get_state (
 guint64 empathy_tp_file_get_size (EmpathyTpFile *tp_file);
 guint64 empathy_tp_file_get_transferred_bytes (EmpathyTpFile *tp_file);
 gint empathy_tp_file_get_remaining_time (EmpathyTpFile *tp_file);
+gdouble empathy_tp_file_get_speed (EmpathyTpFile *tp_file);
 const gchar *empathy_tp_file_get_content_type (EmpathyTpFile *tp_file);
 gboolean empathy_tp_file_is_ready (EmpathyTpFile *tp_file);
 
