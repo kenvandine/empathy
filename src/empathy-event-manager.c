@@ -373,8 +373,7 @@ event_channel_process_voip_func (EventPriv *event)
       return;
     }
 
-  dialog = gtk_message_dialog_new (GTK_WINDOW (empathy_main_window_get()),
-      GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+  dialog = gtk_message_dialog_new (NULL, 0,
       GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE, _("Incoming call"));
   gtk_message_dialog_format_secondary_text (
     GTK_MESSAGE_DIALOG (dialog),
