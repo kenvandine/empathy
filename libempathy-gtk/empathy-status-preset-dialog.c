@@ -24,6 +24,15 @@
  *
  * Authors: Davyd Madeley <davyd.madeley@collabora.co.uk>
  */
+/**
+ * SECTION:empathy-status-preset-dialog
+ * @title: EmpathyStatusPresetDialog
+ * @short_description: a dialog for editing the saved status messages
+ * @include: libempathy-gtk/empathy-status-preset-dialog.h
+ *
+ * #EmpathyStatusPresetDialog is a dialog allowing the user to add/remove/edit
+ * their saved status messages.
+ */
 
 #include "config.h"
 
