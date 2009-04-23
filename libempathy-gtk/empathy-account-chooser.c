@@ -254,7 +254,7 @@ empathy_account_chooser_new (void)
  *
  * Returns the account which is currently selected in the chooser or %NULL
  * if there is no account selected. The #McAccount returned should be
- * unrefed when finished with.
+ * unrefed with g_object_unref() when finished with.
  *
  * Return value: a new ref to the #McAccount currently selected, or %NULL.
  */
@@ -284,9 +284,12 @@ empathy_account_chooser_dup_account (EmpathyAccountChooser *chooser)
  * empathy_account_chooser_get_connection:
  * @chooser: an #EmpathyAccountChooser
  *
- * Returns the #TpConnection associated with the account currently selected.
+ * Returns a borrowed reference to the #TpConnection associated with the
+ * account currently selected. The caller must reference the returned object with
+ * g_object_ref() if it will be kept
  *
- * Return value: the #TpConnection associated with the account curently selected.
+ * Return value: a borrowed reference to the #TpConnection associated with the
+ * account curently selected.
  */
 TpConnection *
 empathy_account_chooser_get_connection (EmpathyAccountChooser *chooser)

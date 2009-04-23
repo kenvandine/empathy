@@ -51,7 +51,8 @@ enum {
  * empathy_profile_chooser_dup_selected:
  * @widget: an #EmpathyProfileChooser
  *
- * Returns a new reference to the selected #McProfile in @widget.
+ * Returns a new reference to the selected #McProfile in @widget. The returned
+ * #McProfile should be unrefed with g_object_unref() when finished with.
  *
  * Return value: a new reference to the selected #McProfile
  */

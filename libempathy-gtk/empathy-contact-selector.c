@@ -372,8 +372,8 @@ empathy_contact_selector_new (EmpathyContactList *contact_list)
  * @selector: An #EmpathyContactSelector
  *
  * Returns a new reference to the contact which is currently selected in
- * @selector, or %NULL if there is no contact selected. The contact should
- * be unrefed with g_object_unref() when finished with.
+ * @selector, or %NULL if there is no contact selected. The returned contact
+ * should be unrefed with g_object_unref() when finished with.
  *
  * Return value: A new reference to the contact currently selected, or %NULL
  */

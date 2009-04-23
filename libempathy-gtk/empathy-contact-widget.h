@@ -47,8 +47,8 @@ G_BEGIN_DECLS
  * @EMPATHY_CONTACT_WIDGET_FOR_TOOLTIP: Make widgets more designed for a tooltip.
  *  For example, make widgets not selectable.
  *
- * Options to instruct the #EmpathyContactWidget what features should be
- * enabled.
+ * Flags used when creating an #EmpathyContactWidget to specify which features
+ * should be available.
  */
 typedef enum
 {
