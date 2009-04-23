@@ -311,7 +311,7 @@ debug_dialog_list_connection_names_cb (const gchar * const *names,
 {
   EmpathyDebugDialog *debug_dialog = (EmpathyDebugDialog *) user_data;
   EmpathyDebugDialogPriv *priv = GET_PRIV (debug_dialog);
-  int i;
+  guint i;
 
   if (error != NULL)
     {
