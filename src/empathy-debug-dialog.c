@@ -491,8 +491,11 @@ debug_dialog_button_press_event_cb (GtkTreeView *view,
     GdkEventButton *event,
     gpointer user_data)
 {
+  /* A mouse button was pressed on the tree view. */
+
   if (event->button == 3)
     {
+      /* The tree view was right-clicked. (3 == third mouse button) */
       MenuPopupData *data;
       data = g_slice_new0 (MenuPopupData);
       data->debug_dialog = user_data;
