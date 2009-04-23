@@ -122,7 +122,7 @@
         <child>
           <object class="GtkAction" id="help_debug">
             <property name="name">help_debug</property>
-            <property name="label" translatable="yes">_Debug Window</property>
+            <property name="label" translatable="yes">_Debug</property>
           </object>
         </child>
         <child>
