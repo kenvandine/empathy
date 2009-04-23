@@ -20,11 +20,9 @@
 
 #include "config.h"
 
-#include <stdio.h>
-#include <errno.h>
 #include <glib/gi18n.h>
 #include <gtk/gtk.h>
-#include <glib/gstdio.h>
+#include <gio/gio.h>
 
 #define DEBUG_FLAG EMPATHY_DEBUG_OTHER
 #include <libempathy/empathy-debug.h>
@@ -513,9 +511,12 @@ debug_dialog_store_filter_foreach (GtkTreeModel *model,
     GtkTreeIter *iter,
     gpointer user_data)
 {
-  FILE *file = (FILE *) user_data;
+  GFileOutputStream *output_stream = (GFileOutputStream *) user_data;
   gchar *domain, *category, *message, *level_str, *level_upper;
   gdouble timestamp;
+  gchar *line;
+  GError *error = NULL;
+  gboolean out = FALSE;
 
   gtk_tree_model_get (model, iter,
       COL_DEBUG_TIMESTAMP, &timestamp,
@@ -527,17 +528,28 @@ debug_dialog_store_filter_foreach (GtkTreeModel *model,
 
   level_upper = g_ascii_strup (level_str, -1);
 
-  g_fprintf (file, "%s%s%s-%s: %e: %s\n",
+  line = g_strdup_printf ("%s%s%s-%s: %e: %s\n",
       domain, EMP_STR_EMPTY (category) ? "" : "/",
       category, level_upper, timestamp, message);
 
+  g_output_stream_write (G_OUTPUT_STREAM (output_stream), line,
+      strlen (line), NULL, &error);
+
+  if (error != NULL)
+    {
+      DEBUG ("Failed to write to file: %s", error->message);
+      g_error_free (error);
+      out = TRUE;
+    }
+
+  g_free (line);
   g_free (level_upper);
   g_free (level_str);
   g_free (domain);
   g_free (category);
   g_free (message);
 
-  return FALSE;
+  return out;
 }
 
 static void
@@ -547,7 +559,9 @@ debug_dialog_save_file_chooser_response_cb (GtkDialog *dialog,
 {
   EmpathyDebugDialogPriv *priv = GET_PRIV (debug_dialog);
   gchar *filename = NULL;
-  FILE *file;
+  GFile *gfile = NULL;
+  GFileOutputStream *output_stream = NULL;
+  GError *error = NULL;
 
   if (response_id != GTK_RESPONSE_ACCEPT)
     goto OUT;
@@ -556,19 +570,27 @@ debug_dialog_save_file_chooser_response_cb (GtkDialog *dialog,
 
   DEBUG ("Saving log as %s", filename);
 
-  file = g_fopen (filename, "w");
-  if (file == NULL)
+  gfile = g_file_new_for_path (filename);
+  output_stream = g_file_replace (gfile, NULL, FALSE,
+      G_FILE_CREATE_NONE, NULL, &error);
+
+  if (error != NULL)
     {
-      DEBUG ("Failed to open file: %s", g_strerror (errno));
+      DEBUG ("Failed to open file for writing: %s", error->message);
+      g_error_free (error);
       goto OUT;
     }
 
   gtk_tree_model_foreach (priv->store_filter,
-      debug_dialog_store_filter_foreach, file);
-
-  fclose (file);
+      debug_dialog_store_filter_foreach, output_stream);
 
 OUT:
+  if (gfile != NULL)
+    g_object_unref (gfile);
+
+  if (output_stream != NULL)
+    g_object_unref (output_stream);
+
   if (filename != NULL)
     g_free (filename);
 
