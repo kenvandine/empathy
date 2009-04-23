@@ -43,12 +43,6 @@ G_DEFINE_TYPE (EmpathyDebugDialog, empathy_debug_dialog,
 
 enum
 {
-  PROP_0,
-  PROP_PARENT
-};
-
-enum
-{
   COL_DEBUG_TIMESTAMP = 0,
   COL_DEBUG_DOMAIN,
   COL_DEBUG_CATEGORY,
@@ -76,7 +70,6 @@ enum
 typedef struct
 {
   GtkWidget *filter;
-  GtkWindow *parent;
   GtkWidget *view;
   GtkWidget *cm_chooser;
   GtkListStore *store;
@@ -658,7 +651,6 @@ debug_dialog_constructor (GType type,
 
   gtk_window_set_title (GTK_WINDOW (object), _("Debug Window"));
   gtk_window_set_default_size (GTK_WINDOW (object), 800, 400);
-  gtk_window_set_transient_for (GTK_WINDOW (object), priv->parent);
 
   vbox = GTK_DIALOG (object)->vbox;
 
@@ -863,13 +855,8 @@ debug_dialog_set_property (GObject *object,
     const GValue *value,
     GParamSpec *pspec)
 {
-  EmpathyDebugDialogPriv *priv = GET_PRIV (object);
-
   switch (prop_id)
     {
-      case PROP_PARENT:
-        priv->parent = GTK_WINDOW (g_value_dup_object (value));
-        break;
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
         break;
@@ -882,13 +869,8 @@ debug_dialog_get_property (GObject *object,
     GValue *value,
     GParamSpec *pspec)
 {
-  EmpathyDebugDialogPriv *priv = GET_PRIV (object);
-
   switch (prop_id)
     {
-      case PROP_PARENT:
-        g_value_set_object (value, priv->parent);
-        break;
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, prop_id, pspec);
         break;
@@ -905,9 +887,6 @@ debug_dialog_dispose (GObject *object)
     return;
 
   priv->dispose_run = TRUE;
-
-  if (priv->parent != NULL)
-    g_object_unref (priv->parent);
 
   if (priv->store != NULL)
     g_object_unref (priv->store);
@@ -936,11 +915,6 @@ empathy_debug_dialog_class_init (EmpathyDebugDialogClass *klass)
   object_class->set_property = debug_dialog_set_property;
   object_class->get_property = debug_dialog_get_property;
   g_type_class_add_private (klass, sizeof (EmpathyDebugDialogPriv));
-
-  g_object_class_install_property (object_class, PROP_PARENT,
-      g_param_spec_object ("parent", "parent", "parent",
-      GTK_TYPE_WINDOW, G_PARAM_CONSTRUCT_ONLY |
-      G_PARAM_READWRITE | G_PARAM_STATIC_NICK | G_PARAM_STATIC_BLURB));
 }
 
 /* public methods */
@@ -951,5 +925,5 @@ empathy_debug_dialog_new (GtkWindow *parent)
   g_return_val_if_fail (GTK_IS_WINDOW (parent), NULL);
 
   return GTK_WIDGET (g_object_new (EMPATHY_TYPE_DEBUG_DIALOG,
-      "parent", parent, NULL));
+      "transient-for", parent, NULL));
 }
