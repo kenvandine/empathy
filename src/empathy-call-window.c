@@ -107,6 +107,7 @@ struct _EmpathyCallWindowPriv
 
   GMutex *lock;
   gboolean call_started;
+  gboolean sending_video;
 };
 
 #define GET_PRIV(o) \
@@ -757,6 +758,7 @@ empathy_call_window_disconnected (EmpathyCallWindow *self)
 
   gtk_widget_set_sensitive (priv->camera_button, FALSE);
   gtk_action_set_sensitive (priv->send_video, FALSE);
+  priv->sending_video = FALSE;
 }
 
 
@@ -1161,8 +1163,13 @@ empathy_call_window_camera_toggled_cb (GtkToggleToolButton *toggle,
   gboolean active;
 
   active = (gtk_toggle_tool_button_get_active (toggle));
+
+  if (priv->sending_video == active)
+    return;
+
   empathy_call_window_set_send_video (window, active);
   gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (priv->send_video), active);
+  priv->sending_video = active;
 }
 
 static void
@@ -1173,9 +1180,14 @@ empathy_call_window_send_video_toggled_cb (GtkToggleAction *toggle,
   gboolean active;
 
   active = (gtk_toggle_action_get_active (toggle));
+
+  if (priv->sending_video == active)
+    return;
+
   empathy_call_window_set_send_video (window, active);
   gtk_toggle_tool_button_set_active (
       GTK_TOGGLE_TOOL_BUTTON (priv->camera_button), active);
+  priv->sending_video = active;
 }
 
 static void
