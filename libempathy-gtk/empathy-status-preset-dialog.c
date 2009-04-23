@@ -498,6 +498,15 @@ empathy_status_preset_dialog_init (EmpathyStatusPresetDialog *self)
 	g_object_unref (gui);
 }
 
+/**
+ * empathy_status_preset_dialog_new:
+ * @parent: the parent window of this dialog (or NULL)
+ *
+ * Creates a new #EmpathyStatusPresetDialog that allows the user to
+ * add/remove/edit their saved status messages.
+ *
+ * Returns: the newly constructed dialog.
+ */
 GtkWidget *
 empathy_status_preset_dialog_new (GtkWindow *parent)
 {
