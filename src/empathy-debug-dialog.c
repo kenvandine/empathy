@@ -121,10 +121,10 @@ log_level_to_string (guint level)
 
 static void
 debug_dialog_add_message (EmpathyDebugDialog *debug_dialog,
-                          gdouble timestamp,
-                          const gchar *domain_category,
-                          guint level,
-                          const gchar *message)
+    gdouble timestamp,
+    const gchar *domain_category,
+    guint level,
+    const gchar *message)
 {
   EmpathyDebugDialogPriv *priv = GET_PRIV (debug_dialog);
   gchar *domain, *category;
@@ -167,12 +167,12 @@ debug_dialog_add_message (EmpathyDebugDialog *debug_dialog,
 
 static void
 debug_dialog_new_debug_message_cb (TpProxy *proxy,
-                                   gdouble timestamp,
-                                   const gchar *domain,
-                                   guint level,
-                                   const gchar *message,
-                                   gpointer user_data,
-                                   GObject *weak_object)
+    gdouble timestamp,
+    const gchar *domain,
+    guint level,
+    const gchar *message,
+    gpointer user_data,
+    GObject *weak_object)
 {
   EmpathyDebugDialog *debug_dialog = (EmpathyDebugDialog *) user_data;
 
@@ -182,7 +182,7 @@ debug_dialog_new_debug_message_cb (TpProxy *proxy,
 
 static void
 debug_dialog_set_enabled (EmpathyDebugDialog *debug_dialog,
-                          gboolean enabled)
+    gboolean enabled)
 {
   EmpathyDebugDialogPriv *priv = GET_PRIV (debug_dialog);
   GValue *val;
@@ -197,10 +197,10 @@ debug_dialog_set_enabled (EmpathyDebugDialog *debug_dialog,
 
 static void
 debug_dialog_get_messages_cb (TpProxy *proxy,
-                              const GPtrArray *messages,
-                              const GError *error,
-                              gpointer user_data,
-                              GObject *weak_object)
+    const GPtrArray *messages,
+    const GError *error,
+    gpointer user_data,
+    GObject *weak_object)
 {
   EmpathyDebugDialog *debug_dialog = (EmpathyDebugDialog *) user_data;
   EmpathyDebugDialogPriv *priv = GET_PRIV (debug_dialog);
@@ -234,7 +234,7 @@ debug_dialog_get_messages_cb (TpProxy *proxy,
 
 static void
 debug_dialog_cm_chooser_changed_cb (GtkComboBox *cm_chooser,
-                                    EmpathyDebugDialog *debug_dialog)
+    EmpathyDebugDialog *debug_dialog)
 {
   EmpathyDebugDialogPriv *priv = GET_PRIV (debug_dialog);
   MissionControl *mc;
@@ -302,12 +302,12 @@ debug_dialog_cm_chooser_changed_cb (GtkComboBox *cm_chooser,
 
 static void
 debug_dialog_list_connection_names_cb (const gchar * const *names,
-                                       gsize n,
-                                       const gchar * const *cms,
-                                       const gchar * const *protocols,
-                                       const GError *error,
-                                       gpointer user_data,
-                                       GObject *weak_object)
+    gsize n,
+    const gchar * const *cms,
+    const gchar * const *protocols,
+    const GError *error,
+    gpointer user_data,
+    GObject *weak_object)
 {
   EmpathyDebugDialog *debug_dialog = (EmpathyDebugDialog *) user_data;
   EmpathyDebugDialogPriv *priv = GET_PRIV (debug_dialog);
@@ -358,7 +358,7 @@ debug_dialog_fill_cm_chooser (EmpathyDebugDialog *debug_dialog)
 
 static void
 debug_dialog_pause_toggled_cb (GtkToggleToolButton *pause,
-                               EmpathyDebugDialog *debug_dialog)
+    EmpathyDebugDialog *debug_dialog)
 {
   EmpathyDebugDialogPriv *priv = GET_PRIV (debug_dialog);
 
@@ -369,8 +369,8 @@ debug_dialog_pause_toggled_cb (GtkToggleToolButton *pause,
 
 static gboolean
 debug_dialog_visible_func (GtkTreeModel *model,
-                           GtkTreeIter *iter,
-                           gpointer user_data)
+    GtkTreeIter *iter,
+    gpointer user_data)
 {
   EmpathyDebugDialog *debug_dialog = (EmpathyDebugDialog *) user_data;
   EmpathyDebugDialogPriv *priv = GET_PRIV (debug_dialog);
@@ -394,7 +394,7 @@ debug_dialog_visible_func (GtkTreeModel *model,
 
 static void
 debug_dialog_filter_changed_cb (GtkComboBox *filter,
-                                EmpathyDebugDialog *debug_dialog)
+    EmpathyDebugDialog *debug_dialog)
 {
   EmpathyDebugDialogPriv *priv = GET_PRIV (debug_dialog);
 
@@ -404,7 +404,7 @@ debug_dialog_filter_changed_cb (GtkComboBox *filter,
 
 static void
 debug_dialog_clear_clicked_cb (GtkToolButton *clear_button,
-                               EmpathyDebugDialog *debug_dialog)
+    EmpathyDebugDialog *debug_dialog)
 {
   EmpathyDebugDialogPriv *priv = GET_PRIV (debug_dialog);
 
@@ -413,7 +413,7 @@ debug_dialog_clear_clicked_cb (GtkToolButton *clear_button,
 
 static void
 debug_dialog_menu_copy_activate_cb (GtkMenuItem *menu_item,
-                                    EmpathyDebugDialog *debug_dialog)
+    EmpathyDebugDialog *debug_dialog)
 {
   EmpathyDebugDialogPriv *priv = GET_PRIV (debug_dialog);
   GtkTreePath *path;
@@ -487,8 +487,8 @@ debug_dialog_show_menu (gpointer user_data)
 
 static gboolean
 debug_dialog_button_press_event_cb (GtkTreeView *view,
-                                    GdkEventButton *event,
-                                    gpointer user_data)
+    GdkEventButton *event,
+    gpointer user_data)
 {
   if (event->button == 3)
     {
@@ -505,9 +505,9 @@ debug_dialog_button_press_event_cb (GtkTreeView *view,
 
 static gboolean
 debug_dialog_store_filter_foreach (GtkTreeModel *model,
-                                   GtkTreePath *path,
-                                   GtkTreeIter *iter,
-                                   gpointer user_data)
+    GtkTreePath *path,
+    GtkTreeIter *iter,
+    gpointer user_data)
 {
   FILE *file = (FILE *) user_data;
   gchar *domain, *category, *message, *level_str, *level_upper;
@@ -538,8 +538,8 @@ debug_dialog_store_filter_foreach (GtkTreeModel *model,
 
 static void
 debug_dialog_save_file_chooser_response_cb (GtkDialog *dialog,
-                                            gint response_id,
-                                            EmpathyDebugDialog *debug_dialog)
+    gint response_id,
+    EmpathyDebugDialog *debug_dialog)
 {
   EmpathyDebugDialogPriv *priv = GET_PRIV (debug_dialog);
   gchar *filename = NULL;
@@ -573,7 +573,7 @@ OUT:
 
 static void
 debug_dialog_save_clicked_cb (GtkToolButton *tool_button,
-                              EmpathyDebugDialog *debug_dialog)
+    EmpathyDebugDialog *debug_dialog)
 {
   GtkWidget *file_chooser;
 
@@ -596,8 +596,8 @@ debug_dialog_save_clicked_cb (GtkToolButton *tool_button,
 
 static GObject *
 debug_dialog_constructor (GType type,
-                          guint n_construct_params,
-                          GObjectConstructParam *construct_params)
+    guint n_construct_params,
+    GObjectConstructParam *construct_params)
 {
   GObject *object;
   EmpathyDebugDialogPriv *priv;
@@ -815,9 +815,9 @@ empathy_debug_dialog_init (EmpathyDebugDialog *empathy_debug_dialog)
 
 static void
 debug_dialog_set_property (GObject *object,
-                           guint prop_id,
-                           const GValue *value,
-                           GParamSpec *pspec)
+    guint prop_id,
+    const GValue *value,
+    GParamSpec *pspec)
 {
   EmpathyDebugDialogPriv *priv = GET_PRIV (object);
 
@@ -834,9 +834,9 @@ debug_dialog_set_property (GObject *object,
 
 static void
 debug_dialog_get_property (GObject *object,
-                           guint prop_id,
-                           GValue *value,
-                           GParamSpec *pspec)
+    guint prop_id,
+    GValue *value,
+    GParamSpec *pspec)
 {
   EmpathyDebugDialogPriv *priv = GET_PRIV (object);
 
