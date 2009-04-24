@@ -52,6 +52,7 @@ struct _EmpathyTpFile
 {
   GObject      parent;
 
+  /*<private>*/
   EmpathyTpFilePriv *priv;
 };
 

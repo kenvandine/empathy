@@ -51,11 +51,18 @@
 
 /**
  * SECTION:empathy-tp-file
- * @short_description: File channel
- * @see_also: #EmpathyTpFile, #EmpathyContact, empathy_dispatcher_send_file()
- * @include: libempthy/empathy-tp-file.h
+ * @title: EmpathyTpFile
+ * @short_description: Object which represents a Telepathy file channel
+ * @include: libempathy/empathy-tp-file.h
  *
- * The #EmpathyTpFile object represents a Telepathy file channel.
+ * #EmpathyTpFile is an object which represents a Telepathy file channel.
+ */
+
+/**
+ * EmpathyTpFile:
+ * @parent: parent object
+ *
+ * Object which represents a Telepathy file channel.
  */
 
 /**
@@ -824,12 +831,13 @@ tp_file_weak_notify_cb (gpointer channel,
 
 /**
  * empathy_tp_file_new:
- * @channel: a Telepathy channel
+ * @channel: a #TpChannel
  *
  * Creates a new #EmpathyTpFile wrapping @channel, or return a new ref to an
- * existing #EmpathyTpFile for that channel.
+ * existing #EmpathyTpFile for that channel. The returned #EmpathyTpFile
+ * should be unrefed with g_object_unref() when finished with.
  *
- * Returns: a new #EmpathyTpFile
+ * Return value: a new #EmpathyTpFile
  */
 EmpathyTpFile *
 empathy_tp_file_new (TpChannel *channel)
@@ -863,9 +871,9 @@ empathy_tp_file_new (TpChannel *channel)
  * empathy_tp_file_get_channel
  * @tp_file: an #EmpathyTpFile
  *
- * Returns the Telepathy file transfer channel
+ * Returns the #TpChannel associated with @tp_file.
  *
- * Returns: the #TpChannel
+ * Returns: the #TpChannel associated with @tp_file
  */
 TpChannel *
 empathy_tp_file_get_channel (EmpathyTpFile *tp_file)
@@ -934,7 +942,7 @@ tp_file_method_cb (TpChannel *channel,
  * @error: a #GError set if there is an error when opening @gfile
  *
  * Accepts a file transfer that's in the "local pending" state (i.e.
- * TP_FILE_TRANSFER_STATE_LOCAL_PENDING).
+ * %TP_FILE_TRANSFER_STATE_LOCAL_PENDING).
  */
 void
 empathy_tp_file_accept (EmpathyTpFile *tp_file,
@@ -973,7 +981,7 @@ empathy_tp_file_accept (EmpathyTpFile *tp_file,
  * @error: a #GError set if there is an error when opening @gfile
  *
  * Offers a file transfer that's in the "not offered" state (i.e.
- * TP_FILE_TRANSFER_STATE_NOT_OFFERED).
+ * %TP_FILE_TRANSFER_STATE_NOT_OFFERED).
  */
 void
 empathy_tp_file_offer (EmpathyTpFile *tp_file, GFile *gfile, GError **error)
@@ -994,6 +1002,14 @@ empathy_tp_file_offer (EmpathyTpFile *tp_file, GFile *gfile, GError **error)
       &nothing, tp_file_method_cb, NULL, NULL, G_OBJECT (tp_file));
 }
 
+/**
+ * empathy_tp_file_get_contact:
+ * @tp_file: an #EmpathyTpFile
+ *
+ * Returns the #EmpathyContact that @tp_file is open with.
+ *
+ * Return value: the #EmpathyContact that @tp_file is open with.
+ */
 EmpathyContact *
 empathy_tp_file_get_contact (EmpathyTpFile *tp_file)
 {
@@ -1008,6 +1024,14 @@ empathy_tp_file_get_filename (EmpathyTpFile *tp_file)
   return tp_file->priv->filename;
 }
 
+/**
+ * empathy_tp_file_is_incoming:
+ * @tp_file: an #EmpathyTpFile
+ *
+ * Returns whether @tp_file is incoming.
+ *
+ * Return value: %TRUE if the @tp_file is incoming, otherwise %FALSE
+ */
 gboolean
 empathy_tp_file_is_incoming (EmpathyTpFile *tp_file)
 {
@@ -1015,6 +1039,16 @@ empathy_tp_file_is_incoming (EmpathyTpFile *tp_file)
   return tp_file->priv->incoming;
 }
 
+/**
+ * empathy_tp_file_get_state:
+ * @tp_file: an #EmpathyTpFile
+ * @reason: return location for state change reason, or %NULL
+ *
+ * Gets the current state of @tp_file. If @reason is not %NULL, then
+ * it is set to the reason of the last state change.
+ *
+ * Return value: a #TpFileTransferState
+ */
 TpFileTransferState
 empathy_tp_file_get_state (EmpathyTpFile *tp_file,
                            TpFileTransferStateChangeReason *reason)
@@ -1028,6 +1062,14 @@ empathy_tp_file_get_state (EmpathyTpFile *tp_file,
   return tp_file->priv->state;
 }
 
+/**
+ * empathy_tp_file_get_size:
+ * @tp_file: an #EmpathyTpFile
+ *
+ * Gets the size of the file being transferred over @tp_file, in bytes.
+ *
+ * Return value: the size of the file being transferred, in bytes
+ */
 guint64
 empathy_tp_file_get_size (EmpathyTpFile *tp_file)
 {
@@ -1036,6 +1078,14 @@ empathy_tp_file_get_size (EmpathyTpFile *tp_file)
   return tp_file->priv->size;
 }
 
+/**
+ * empathy_tp_file_get_transferred_bytes:
+ * @tp_file: an #EmpathyTpFile
+ *
+ * Gets the number of transferred bytes of @tp_file so far, in bytes.
+ *
+ * Return value: number of transferred bytes of @tp_file, in bytes
+ */
 guint64
 empathy_tp_file_get_transferred_bytes (EmpathyTpFile *tp_file)
 {
@@ -1047,9 +1097,9 @@ empathy_tp_file_get_transferred_bytes (EmpathyTpFile *tp_file)
  * empathy_tp_file_get_remaining_time:
  * @tp_file: a #EmpathyTpFile
  *
- * Get the current remaining time estimation, in seconds.
+ * Gets the estimated time remaining of @tp_file, in seconds.
  *
- * Returns: The time remaining.
+ * Return value: the estimated time remaining of @tp_file, in seconds
  **/
 gint
 empathy_tp_file_get_remaining_time (EmpathyTpFile *tp_file)
@@ -1067,11 +1117,13 @@ empathy_tp_file_get_remaining_time (EmpathyTpFile *tp_file)
 
 /**
  * empathy_tp_file_get_speed:
- * @tp_file: a #EmpathyTpFile
+ * @tp_file: an #EmpathyTpFile
  *
- * Get the current speed of the transfer, in bytes per seconds.
+ * Gets the current speed of the transfer @tp_file, in bytes per
+ * second.
  *
- * Returns: The current speed.
+ * Return value: the current speed of the transfer @tp_file, in
+ *               bytes per second
  **/
 gdouble
 empathy_tp_file_get_speed (EmpathyTpFile *tp_file)
@@ -1091,6 +1143,12 @@ empathy_tp_file_get_content_type (EmpathyTpFile *tp_file)
   return tp_file->priv->content_type;
 }
 
+/**
+ * empathy_tp_file_cancel:
+ * @tp_file: an #EmpathyTpFile
+ *
+ * Cancels the file transfer, @tp_file.
+ */
 void
 empathy_tp_file_cancel (EmpathyTpFile *tp_file)
 {
@@ -1110,6 +1168,14 @@ empathy_tp_file_close (EmpathyTpFile *tp_file)
   empathy_tp_file_cancel (tp_file);
 }
 
+/**
+ * empathy_tp_file_is_ready:
+ * @tp_file: an #EmpathyTpFile
+ *
+ * Returns whether the file channel @tp_file is ready for use.
+ *
+ * Return value: %TRUE if @tp_file is ready for use
+ */
 gboolean
 empathy_tp_file_is_ready (EmpathyTpFile *tp_file)
 {
@@ -1129,6 +1195,12 @@ empathy_tp_file_class_init (EmpathyTpFileClass *klass)
   object_class->set_property = tp_file_set_property;
 
   /* Construct-only properties */
+
+  /**
+   * EmpathyTpFile:channel:
+   *
+   * The #TpChannel associated with the #EmpathyTpFile.
+   */
   g_object_class_install_property (object_class,
       PROP_CHANNEL,
       g_param_spec_object ("channel",
@@ -1138,6 +1210,11 @@ empathy_tp_file_class_init (EmpathyTpFileClass *klass)
           G_PARAM_READWRITE |
           G_PARAM_CONSTRUCT_ONLY));
 
+  /**
+   * EmpathyTpFile:state:
+   *
+   * The #TpFileTransferState of the #EmpathyTpFile.
+   */
   g_object_class_install_property (object_class,
       PROP_STATE,
       g_param_spec_uint ("state",
@@ -1149,6 +1226,11 @@ empathy_tp_file_class_init (EmpathyTpFileClass *klass)
           G_PARAM_READWRITE |
           G_PARAM_CONSTRUCT));
 
+  /**
+   * EmpathyTpFile:incoming:
+   *
+   * Whether the #EmpathyTpFile is incoming.
+   */
   g_object_class_install_property (object_class,
       PROP_INCOMING,
       g_param_spec_boolean ("incoming",
@@ -1158,6 +1240,11 @@ empathy_tp_file_class_init (EmpathyTpFileClass *klass)
           G_PARAM_READWRITE |
           G_PARAM_CONSTRUCT));
 
+  /**
+   * EmpathyTpFile:ready:
+   *
+   * Whether the #EmpathyTpFile is ready to use.
+   */
   g_object_class_install_property (object_class,
       PROP_READY,
       g_param_spec_boolean ("ready",
@@ -1166,6 +1253,11 @@ empathy_tp_file_class_init (EmpathyTpFileClass *klass)
           FALSE,
           G_PARAM_READABLE));
 
+  /**
+   * EmpathyTpFile:filename:
+   *
+   * The name of the file being transferred.
+   */
   g_object_class_install_property (object_class,
       PROP_FILENAME,
       g_param_spec_string ("filename",
@@ -1174,6 +1266,11 @@ empathy_tp_file_class_init (EmpathyTpFileClass *klass)
           "",
           G_PARAM_READWRITE));
 
+  /**
+   * EmpathyTpFile:size:
+   *
+   * The size of the file being transferred.
+   */
   g_object_class_install_property (object_class,
       PROP_SIZE,
       g_param_spec_uint64 ("size",
@@ -1184,6 +1281,11 @@ empathy_tp_file_class_init (EmpathyTpFileClass *klass)
           G_MAXUINT64,
           G_PARAM_READWRITE));
 
+  /**
+   * EmpathyTpFile:content-type:
+   *
+   * The content-type of the file being transferred.
+   */
   g_object_class_install_property (object_class,
       PROP_CONTENT_TYPE,
       g_param_spec_string ("content-type",
@@ -1192,6 +1294,12 @@ empathy_tp_file_class_init (EmpathyTpFileClass *klass)
           "",
           G_PARAM_READWRITE));
 
+  /**
+   * EmpathyTpFile:content-hash-type:
+   *
+   * The type of hash type stored in #EmpathyTpFile:content-hash,
+   * from #TpFileHashType.
+   */
   g_object_class_install_property (object_class,
       PROP_CONTENT_HASH_TYPE,
       g_param_spec_uint ("content-hash-type",
@@ -1202,6 +1310,11 @@ empathy_tp_file_class_init (EmpathyTpFileClass *klass)
           0,
           G_PARAM_READWRITE));
 
+  /**
+   * EmpathyTpFile:content-hash:
+   *
+   * A hash of the contents of the file being transferred.
+   */
   g_object_class_install_property (object_class,
       PROP_CONTENT_HASH,
       g_param_spec_string ("content-hash",
@@ -1210,6 +1323,11 @@ empathy_tp_file_class_init (EmpathyTpFileClass *klass)
           "",
           G_PARAM_READWRITE));
 
+  /**
+   * EmpathyTpFile:transferred-bytes:
+   *
+   * The number of bytes transferred in the #EmpathyTpFile.
+   */
   g_object_class_install_property (object_class,
       PROP_TRANSFERRED_BYTES,
       g_param_spec_uint64 ("transferred-bytes",
@@ -1220,6 +1338,19 @@ empathy_tp_file_class_init (EmpathyTpFileClass *klass)
           0,
           G_PARAM_READWRITE));
 
+  /**
+   * EmpathyTpFile::refresh:
+   * @tp_file: the #EmpathyTpFile
+   *
+   * The progress of @tp_file has changed. This can either be an update
+   * in the number of bytes transferred, or it can be to inform of the
+   * transfer stalling.
+   *
+   * This signal is designed for clients to provide more user feedback
+   * when something to do with @tp_file changes. To avoid emitting this
+   * signal too much, it is guaranteed that it will only ever be fired
+   * at least every two seconds.
+   */
   signals[REFRESH] = g_signal_new ("refresh", G_TYPE_FROM_CLASS (klass),
       G_SIGNAL_RUN_LAST, 0, NULL, NULL,
       g_cclosure_marshal_VOID__VOID, G_TYPE_NONE, 0);
