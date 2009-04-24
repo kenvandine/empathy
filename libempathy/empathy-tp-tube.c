@@ -41,7 +41,8 @@ typedef struct {
 
 static EmpathyTpTubeAcceptData *
 new_empathy_tp_tube_accept_data (TpSocketAddressType type,
-  EmpathyTpTubeAcceptStreamTubeCb *callback, gpointer user_data)
+  EmpathyTpTubeAcceptStreamTubeCb *callback,
+  gpointer user_data)
 {
   EmpathyTpTubeAcceptData *r;
 
@@ -113,11 +114,11 @@ tp_tube_state_changed_cb (TpProxy *proxy,
 }
 
 static void
-tp_tube_invalidated_cb (TpChannel     *channel,
-                        GQuark         domain,
-                        gint           code,
-                        gchar         *message,
-                        EmpathyTpTube *tube)
+tp_tube_invalidated_cb (TpChannel *channel,
+    GQuark domain,
+    gint code,
+    gchar *message,
+    EmpathyTpTube *tube)
 {
   DEBUG ("Channel invalidated: %s", message);
   g_signal_emit (tube, signals[DESTROY], 0);
@@ -125,9 +126,9 @@ tp_tube_invalidated_cb (TpChannel     *channel,
 
 static void
 tp_tube_async_cb (TpChannel *channel,
-                  const GError *error,
-                  gpointer user_data,
-                  GObject *tube)
+    const GError *error,
+    gpointer user_data,
+    GObject *tube)
 {
   if (error)
       DEBUG ("Error %s: %s", (gchar*) user_data, error->message);
@@ -135,9 +136,9 @@ tp_tube_async_cb (TpChannel *channel,
 
 static void
 tp_tube_set_property (GObject *object,
-                      guint prop_id,
-                      const GValue *value,
-                      GParamSpec *pspec)
+    guint prop_id,
+    const GValue *value,
+    GParamSpec *pspec)
 {
   EmpathyTpTubePriv *priv = GET_PRIV (object);
 
@@ -154,9 +155,9 @@ tp_tube_set_property (GObject *object,
 
 static void
 tp_tube_get_property (GObject *object,
-                      guint prop_id,
-                      GValue *value,
-                      GParamSpec *pspec)
+    guint prop_id,
+    GValue *value,
+    GParamSpec *pspec)
 {
   EmpathyTpTubePriv *priv = GET_PRIV (object);
 
@@ -198,7 +199,7 @@ ready_cb_data_new (EmpathyTpTube *self,
 
 static void
 ready_cb_data_free (ReadyCbData *data,
-                    EmpathyTpTube *self)
+    EmpathyTpTube *self)
 {
   if (data->destroy != NULL)
     data->destroy (data->user_data);
@@ -235,7 +236,7 @@ weak_object_notify (gpointer data,
 
 static void
 tube_is_ready (EmpathyTpTube *self,
-               const GError *error)
+    const GError *error)
 {
   EmpathyTpTubePriv *priv = GET_PRIV (self);
   GSList *l;
@@ -256,10 +257,10 @@ tube_is_ready (EmpathyTpTube *self,
 
 static void
 got_tube_state_cb (TpProxy *proxy,
-                   const GValue *out_value,
-                   const GError *error,
-                   gpointer user_data,
-                   GObject *weak_object)
+    const GValue *out_value,
+    const GError *error,
+    gpointer user_data,
+    GObject *weak_object)
 {
   EmpathyTpTube *self = EMPATHY_TP_TUBE (user_data);
   EmpathyTpTubePriv *priv = GET_PRIV (self);
@@ -279,8 +280,8 @@ got_tube_state_cb (TpProxy *proxy,
 
 static GObject *
 tp_tube_constructor (GType type,
-                     guint n_props,
-                     GObjectConstructParam *props)
+    guint n_props,
+    GObjectConstructParam *props)
 {
   GObject *self;
   EmpathyTpTubePriv *priv;
@@ -369,7 +370,7 @@ static void
 empathy_tp_tube_init (EmpathyTpTube *tube)
 {
   EmpathyTpTubePriv *priv = G_TYPE_INSTANCE_GET_PRIVATE (tube,
-		EMPATHY_TYPE_TP_TUBE, EmpathyTpTubePriv);
+      EMPATHY_TYPE_TP_TUBE, EmpathyTpTubePriv);
 
   tube->priv = priv;
 }
@@ -384,11 +385,11 @@ empathy_tp_tube_new (TpChannel *channel)
 
 EmpathyTpTube *
 empathy_tp_tube_new_stream_tube (EmpathyContact *contact,
-                                 TpSocketAddressType type,
-                                 const gchar *hostname,
-                                 guint port,
-                                 const gchar *service,
-                                 GHashTable *parameters)
+    TpSocketAddressType type,
+    const gchar *hostname,
+    guint port,
+    const gchar *service,
+    GHashTable *parameters)
 {
   TpConnection *connection;
   TpChannel *channel;
@@ -491,10 +492,10 @@ OUT:
 
 static void
 tp_tube_accept_stream_cb (TpProxy *proxy,
-                          const GValue *address,
-                          const GError *error,
-                          gpointer user_data,
-                          GObject *weak_object)
+    const GValue *address,
+    const GError *error,
+    gpointer user_data,
+    GObject *weak_object)
 {
   EmpathyTpTube *tube = EMPATHY_TP_TUBE (weak_object);
   EmpathyTpTubeAcceptData *data = (EmpathyTpTubeAcceptData *)user_data;
@@ -528,7 +529,8 @@ tp_tube_accept_stream_cb (TpProxy *proxy,
 
 void
 empathy_tp_tube_accept_stream_tube (EmpathyTpTube *tube,
-  TpSocketAddressType type, EmpathyTpTubeAcceptStreamTubeCb *callback,
+  TpSocketAddressType type,
+  EmpathyTpTubeAcceptStreamTubeCb *callback,
   gpointer user_data)
 {
   EmpathyTpTubePriv *priv = GET_PRIV (tube);
@@ -585,7 +587,7 @@ empathy_tp_tube_call_when_ready (EmpathyTpTube *self,
     GDestroyNotify destroy,
     GObject *weak_object)
 {
-EmpathyTpTubePriv *priv = GET_PRIV (self);
+  EmpathyTpTubePriv *priv = GET_PRIV (self);
 
   g_return_if_fail (self != NULL);
   g_return_if_fail (callback != NULL);

@@ -70,23 +70,32 @@ struct _EmpathyTpTubeClass {
 GType empathy_tp_tube_get_type (void) G_GNUC_CONST;
 EmpathyTpTube *empathy_tp_tube_new (TpChannel *channel);
 EmpathyTpTube *empathy_tp_tube_new_stream_tube (EmpathyContact *contact,
-    TpSocketAddressType type, const gchar *hostname, guint port,
-    const gchar *service, GHashTable *parameters);
+    TpSocketAddressType type,
+    const gchar *hostname,
+    guint port,
+    const gchar *service,
+    GHashTable *parameters);
 
 typedef void (EmpathyTpTubeAcceptStreamTubeCb) (EmpathyTpTube *tube,
-  const EmpathyTpTubeAddress *address, const GError *error,
+  const EmpathyTpTubeAddress *address,
+  const GError *error,
   gpointer user_data);
 
 void empathy_tp_tube_accept_stream_tube (EmpathyTpTube *tube,
-  TpSocketAddressType type, EmpathyTpTubeAcceptStreamTubeCb *callback,
+  TpSocketAddressType type,
+  EmpathyTpTubeAcceptStreamTubeCb *callback,
   gpointer user_data);
 
 typedef void (EmpathyTpTubeReadyCb)
-  (EmpathyTpTube *tube, const GError *error, gpointer user_data,
+  (EmpathyTpTube *tube,
+   const GError *error,
+   gpointer user_data,
    GObject *weak_object);
 
 void empathy_tp_tube_call_when_ready (EmpathyTpTube *tube,
-  EmpathyTpTubeReadyCb *callback, gpointer user_data, GDestroyNotify destroy,
+  EmpathyTpTubeReadyCb *callback,
+  gpointer user_data,
+  GDestroyNotify destroy,
   GObject *weak_object);
 
 G_END_DECLS
