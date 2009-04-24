@@ -542,7 +542,7 @@ tp_file_transferred_bytes_changed_cb (TpChannel *channel,
    * the transfer, I think. */
   curr_time = empathy_time_get_current ();
   elapsed_time = curr_time - tp_file->priv->last_update_time;
-  if (elapsed_time > 1)
+  if (elapsed_time >= 1)
     {
       transferred_bytes = count - tp_file->priv->last_update_transferred_bytes;
       tp_file->priv->speed = (gdouble) transferred_bytes / (gdouble) elapsed_time;
