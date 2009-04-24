@@ -1166,10 +1166,10 @@ empathy_call_window_camera_toggled_cb (GtkToggleToolButton *toggle,
 
   if (priv->sending_video == active)
     return;
+  priv->sending_video = active;
 
   empathy_call_window_set_send_video (window, active);
   gtk_toggle_action_set_active (GTK_TOGGLE_ACTION (priv->send_video), active);
-  priv->sending_video = active;
 }
 
 static void
@@ -1183,11 +1183,11 @@ empathy_call_window_send_video_toggled_cb (GtkToggleAction *toggle,
 
   if (priv->sending_video == active)
     return;
+  priv->sending_video = active;
 
   empathy_call_window_set_send_video (window, active);
   gtk_toggle_tool_button_set_active (
       GTK_TOGGLE_TOOL_BUTTON (priv->camera_button), active);
-  priv->sending_video = active;
 }
 
 static void
