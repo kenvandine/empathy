@@ -1043,6 +1043,14 @@ empathy_tp_file_get_transferred_bytes (EmpathyTpFile *tp_file)
   return tp_file->priv->transferred_bytes;
 }
 
+/**
+ * empathy_tp_file_get_remaining_time:
+ * @tp_file: a #EmpathyTpFile
+ *
+ * Get the current remaining time estimation, in seconds.
+ *
+ * Returns: The time remaining.
+ **/
 gint
 empathy_tp_file_get_remaining_time (EmpathyTpFile *tp_file)
 {
@@ -1057,6 +1065,14 @@ empathy_tp_file_get_remaining_time (EmpathyTpFile *tp_file)
   return tp_file->priv->remaining_time;
 }
 
+/**
+ * empathy_tp_file_get_speed:
+ * @tp_file: a #EmpathyTpFile
+ *
+ * Get the current speed of the transfer, in bytes per seconds.
+ *
+ * Returns: The current speed.
+ **/
 gdouble
 empathy_tp_file_get_speed (EmpathyTpFile *tp_file)
 {
