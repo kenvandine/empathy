@@ -35,13 +35,13 @@
 
 typedef struct {
   TpSocketAddressType type;
-  EmpatyTpTubeAcceptStreamTubeCb *callback;
+  EmpathyTpTubeAcceptStreamTubeCb *callback;
   gpointer user_data;
 } EmpathyTpTubeAcceptData;
 
 static EmpathyTpTubeAcceptData *
 new_empathy_tp_tube_accept_data (TpSocketAddressType type,
-  EmpatyTpTubeAcceptStreamTubeCb *callback, gpointer user_data)
+  EmpathyTpTubeAcceptStreamTubeCb *callback, gpointer user_data)
 {
   EmpathyTpTubeAcceptData *r;
 
@@ -528,7 +528,7 @@ tp_tube_accept_stream_cb (TpProxy *proxy,
 
 void
 empathy_tp_tube_accept_stream_tube (EmpathyTpTube *tube,
-  TpSocketAddressType type, EmpatyTpTubeAcceptStreamTubeCb *callback,
+  TpSocketAddressType type, EmpathyTpTubeAcceptStreamTubeCb *callback,
   gpointer user_data)
 {
   EmpathyTpTubePriv *priv = GET_PRIV (tube);

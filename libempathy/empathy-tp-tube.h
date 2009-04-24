@@ -73,12 +73,12 @@ EmpathyTpTube *empathy_tp_tube_new_stream_tube (EmpathyContact *contact,
     TpSocketAddressType type, const gchar *hostname, guint port,
     const gchar *service, GHashTable *parameters);
 
-typedef void (EmpatyTpTubeAcceptStreamTubeCb) (EmpathyTpTube *tube,
+typedef void (EmpathyTpTubeAcceptStreamTubeCb) (EmpathyTpTube *tube,
   const EmpathyTpTubeAddress *address, const GError *error,
   gpointer user_data);
 
 void empathy_tp_tube_accept_stream_tube (EmpathyTpTube *tube,
-  TpSocketAddressType type, EmpatyTpTubeAcceptStreamTubeCb *callback,
+  TpSocketAddressType type, EmpathyTpTubeAcceptStreamTubeCb *callback,
   gpointer user_data);
 
 typedef void (EmpathyTpTubeReadyCb)
