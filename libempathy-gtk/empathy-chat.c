@@ -945,7 +945,7 @@ chat_spelling_build_menu (EmpathyChatSpell *chat_spell)
 {
     GtkWidget *menu, *menu_item;
     GList     *suggestions, *l;
-    
+
     menu = gtk_menu_new ();
     suggestions = empathy_spell_get_suggestions (chat_spell->word);
     if (suggestions == NULL) {
@@ -963,9 +963,9 @@ chat_spelling_build_menu (EmpathyChatSpell *chat_spell)
         }
     }
     empathy_spell_free_suggestions (suggestions);
-    
+
     gtk_widget_show_all (menu);
-    
+
     return menu;
 }
 
@@ -1059,10 +1059,10 @@ chat_input_populate_popup_cb (GtkTextView *view,
 		image = gtk_image_new_from_icon_name (GTK_STOCK_SPELL_CHECK,
 						      GTK_ICON_SIZE_MENU);
 		gtk_image_menu_item_set_image (GTK_IMAGE_MENU_ITEM (item), image);
-		
+
 		spell_menu = chat_spelling_build_menu (chat_spell);
 		gtk_menu_item_set_submenu (GTK_MENU_ITEM (item), spell_menu);
-		
+
 		gtk_menu_shell_prepend (GTK_MENU_SHELL (menu), item);
 		gtk_widget_show (item);
 	}
