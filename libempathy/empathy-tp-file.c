@@ -686,6 +686,9 @@ tp_file_get_property (GObject *object,
       case PROP_TRANSFERRED_BYTES:
         g_value_set_uint64 (value, tp_file->priv->transferred_bytes);
         break;
+      case PROP_READY:
+        g_value_set_boolean (value, tp_file->priv->ready);
+        break;
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
         break;
@@ -743,6 +746,9 @@ tp_file_set_property (GObject *object,
             "ContentHash", value);
         g_free (tp_file->priv->content_hash);
         tp_file->priv->content_hash = g_value_dup_string (value);
+        break;
+      case PROP_READY:
+        tp_file->priv->ready = g_value_get_boolean (value);
         break;
       default:
         G_OBJECT_WARN_INVALID_PROPERTY_ID (object, param_id, pspec);
