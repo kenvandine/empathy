@@ -474,6 +474,30 @@
   (return-type "EmpathyTpChat*")
 )
 
+(define-method set_tp_chat
+  (of-object "EmpathyChatroom")
+  (c-name "empathy_chatroom_set_tp_chat")
+  (return-type "none")
+  (parameters
+    '("EmpathyTpChat*" "tp_chat")
+  )
+)
+
+(define-method is_favorite
+  (of-object "EmpathyChatroom")
+  (c-name "empathy_chatroom_is_favorite")
+  (return-type "gboolean")
+)
+
+(define-method set_favorite
+  (of-object "EmpathyChatroom")
+  (c-name "empathy_chatroom_set_favorite")
+  (return-type "none")
+  (parameters
+    '("gboolean" "favorite")
+  )
+)
+
 
 
 ;; From empathy-chatroom-manager.h
@@ -639,6 +663,17 @@
   (return-type "EmpathyContact*")
   (parameters
     '("TpContact*" "tp_contact")
+  )
+)
+
+(define-function contact_new_for_log
+  (c-name "empathy_contact_new_for_log")
+  (return-type "EmpathyContact*")
+  (parameters
+    '("McAccount*" "account")
+    '("const-gchar*" "id")
+    '("const-gchar*" "name")
+    '("gboolean" "is_user")
   )
 )
 
@@ -2187,7 +2222,7 @@
   (parameters
     '("guint" "n_ids")
     '("const-gchar*-const*" "ids")
-    '("EmpathyTpContactFactoryGotContactsCb" "callback")
+    '("EmpathyTpContactFactoryContactsByIdCb" "callback")
     '("gpointer" "user_data")
     '("GDestroyNotify" "destroy")
     '("GObject*" "weak_object")
@@ -2201,7 +2236,33 @@
   (parameters
     '("guint" "n_handles")
     '("const-TpHandle*" "handles")
-    '("EmpathyTpContactFactoryGotContactsCb" "callback")
+    '("EmpathyTpContactFactoryContactsByHandleCb" "callback")
+    '("gpointer" "user_data")
+    '("GDestroyNotify" "destroy")
+    '("GObject*" "weak_object")
+  )
+)
+
+(define-method get_from_id
+  (of-object "EmpathyTpContactFactory")
+  (c-name "empathy_tp_contact_factory_get_from_id")
+  (return-type "none")
+  (parameters
+    '("const-gchar*" "id")
+    '("EmpathyTpContactFactoryContactCb" "callback")
+    '("gpointer" "user_data")
+    '("GDestroyNotify" "destroy")
+    '("GObject*" "weak_object")
+  )
+)
+
+(define-method get_from_handle
+  (of-object "EmpathyTpContactFactory")
+  (c-name "empathy_tp_contact_factory_get_from_handle")
+  (return-type "none")
+  (parameters
+    '("TpHandle" "handle")
+    '("EmpathyTpContactFactoryContactCb" "callback")
     '("gpointer" "user_data")
     '("GDestroyNotify" "destroy")
     '("GObject*" "weak_object")
@@ -2306,12 +2367,6 @@
   (return-type "none")
 )
 
-(define-method close
-  (of-object "EmpathyTpFile")
-  (c-name "empathy_tp_file_close")
-  (return-type "none")
-)
-
 (define-method offer
   (of-object "EmpathyTpFile")
   (c-name "empathy_tp_file_offer")
@@ -2365,6 +2420,12 @@
   (of-object "EmpathyTpFile")
   (c-name "empathy_tp_file_get_remaining_time")
   (return-type "gint")
+)
+
+(define-method get_speed
+  (of-object "EmpathyTpFile")
+  (c-name "empathy_tp_file_get_speed")
+  (return-type "gdouble")
 )
 
 (define-method get_content_type
