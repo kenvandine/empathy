@@ -551,6 +551,33 @@ empathy_tp_tube_accept_stream_tube (EmpathyTpTube *tube,
   tp_g_value_slice_free (control_param);
 }
 
+/**
+ * EmpathyTpTubeReadyCb:
+ * @tube: an #EmpathyTpTube
+ * @error: %NULL on success, or the reason why the tube can't be ready
+ * @user_data: the @user_data passed to empathy_tp_tube_call_when_ready()
+ * @weak_object: the @weak_object passed to
+ *               empathy_tp_tube_call_when_ready()
+ *
+ * Called as the result of empathy_tp_tube_call_when_ready(). If the
+ * tube's properties could be retrieved,
+ * @error is %NULL and @tube is considered to be ready. Otherwise, @error is
+ * non-%NULL and @tube is not ready.
+ */
+
+/**
+ * empathy_tp_tube_call_when_ready:
+ * @tube: an #EmpathyTpTube
+ * @callback: called when the tube becomes ready
+ * @user_data: arbitrary user-supplied data passed to the callback
+ * @destroy: called to destroy @user_data
+ * @weak_object: object to reference weakly; if it is destroyed, @callback
+ *               will not be called, but @destroy will still be called
+ *
+ * If @tube is ready for use, call @callback immediately, then return.
+ * Otherwise, arrange for @callback to be called when @tube becomes
+ * ready for use.
+ */
 void
 empathy_tp_tube_call_when_ready (EmpathyTpTube *self,
     EmpathyTpTubeReadyCb *callback,
@@ -558,7 +585,7 @@ empathy_tp_tube_call_when_ready (EmpathyTpTube *self,
     GDestroyNotify destroy,
     GObject *weak_object)
 {
-  EmpathyTpTubePriv *priv = GET_PRIV (self);
+EmpathyTpTubePriv *priv = GET_PRIV (self);
 
   g_return_if_fail (self != NULL);
   g_return_if_fail (callback != NULL);
